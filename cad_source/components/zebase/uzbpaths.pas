@@ -263,7 +263,7 @@ begin
   //programlog.LogOutStr('FromDirIterator....{end}',lp_DecPos,LM_Debug);
 end;
 initialization
-  programpath:={$IFNDEF DELPHI}SysToUTF8{$ENDIF}(SysUtils.ExpandFileName(ExtractFilePath(paramstr(0))+'..\..\'));
+  programpath:={$IFNDEF DELPHI}SysToUTF8{$ENDIF}(SysUtils.ExpandFileName(ExtractFilePath(paramstr(0))+'../../'));
   {$IfNDef DELPHI}
     TempPath:=GetTempDir;
   {$Else}

@@ -334,7 +334,7 @@ begin
      if TextNeedOffset(dimdir) then
      begin
           if PDimStyle.Text.DIMGAP>0 then
-                                         l:=PDimStyle.Text.DIMGAP*h
+                                         l:=PDimStyle.Text.DIMGAP{*h Fix https://github.com/zamtmn/zcad/issues/64}
                                      else
                                          l:=-2*PDimStyle.Text.DIMGAP*h;
      if not DimData.TextMoved then

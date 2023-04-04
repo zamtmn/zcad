@@ -315,7 +315,7 @@
         </Mode0>
       </Modes>
     </RunParams>
-    <RequiredPackages Count="26">
+    <RequiredPackages Count="25">
       <Item1>
         <PackageName Value="MetaDarkStyle"/>
       </Item1>
@@ -383,17 +383,14 @@
         <PackageName Value="FCL"/>
       </Item22>
       <Item23>
-        <PackageName Value="fpvectorialpkg"/>
+        <PackageName Value="Printer4Lazarus"/>
       </Item23>
       <Item24>
-        <PackageName Value="Printer4Lazarus"/>
+        <PackageName Value="AnchorDocking"/>
       </Item24>
       <Item25>
-        <PackageName Value="AnchorDocking"/>
-      </Item25>
-      <Item26>
         <PackageName Value="LCL"/>
-      </Item26>
+      </Item25>
     </RequiredPackages>
     <Units Count="201">
       <Unit0>

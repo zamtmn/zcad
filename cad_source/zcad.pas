@@ -201,7 +201,6 @@ uses
   uzccommand_dbgmemsummary,
   uzccommand_executefile,
   uzccommand_dbgClipboard,
-  uzccommand_import,
   uzccommand_dbgCmdList,uzccommand_dbgBlocksList,
   uzccommand_entslist,
   uzccommand_saveoptions,

@@ -6,8 +6,6 @@
       <Separator/>
       <Action Name="ACN_LOAD"/>
       <Action Name="ACN_LOADQS"/>
-      <Separator/>
-      <Action Name="ACN_IMPORT"/>
       <IFONE Сonditions="ActiveDrawing">
         <Separator/>
         <Action Name="ACN_QSAVE"/>

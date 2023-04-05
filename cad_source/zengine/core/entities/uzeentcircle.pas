@@ -125,11 +125,17 @@ begin
      result:=normalizevertex(uzegeometry.vectordot(point,self.Local.basis.oz));
 end;
 procedure GDBObjCircle.ReCalcFromObjMatrix;
-//var
-    //ox:gdbvertex;
+var
+  ox,oy:gdbvertex;
+  m:DMatrix4D;
 begin
      inherited;
-     Local.P_insert:=PGDBVertex(@objmatrix[3])^;
+
+     ox:=GetXfFromZ(Local.basis.oz);
+     oy:=NormalizeVertex(CrossVertex(Local.basis.oz,Local.basis.ox));
+     m:=CreateMatrixFromBasis(ox,oy,Local.basis.oz);
+
+     Local.P_insert:=VectorTransform3D(PGDBVertex(@objmatrix[3])^,m);
      self.Radius:=PGDBVertex(@objmatrix[0])^.x/local.basis.OX.x;
      {scale.y:=PGDBVertex(@objmatrix[1])^.y/local.Oy.y;
      scale.z:=PGDBVertex(@objmatrix[2])^.z/local.Oz.z;}
@@ -758,12 +764,16 @@ begin
   end;
 end;
 procedure GDBObjCircle.rtmodifyonepoint(const rtmod:TRTModifyData);
+var
+   m:DMatrix4D;
 begin
+  m:=ObjMatrix;
+  MatrixInvert(m);
+  m[3]:=NulVector4D;
   if rtmod.point.pointtype=os_center then begin
-    Local.p_insert:=VertexAdd(rtmod.point.worldcoord, rtmod.dist);
-    Radius:=Radius;
+    Local.p_insert:=VectorTransform3D(rtmod.wc*Radius,m);
   end else if (rtmod.point.pointtype=os_q0)or(rtmod.point.pointtype=os_q1)or(rtmod.point.pointtype=os_q2)or(rtmod.point.pointtype=os_q3) then begin
-    Radius:=Vertexlength(Local.p_insert, rtmod.wc);
+    Radius:=Vertexlength(Local.p_insert,VectorTransform3D(rtmod.wc*Radius,m));
   end;
 end;
 function AllocCircle:PGDBObjCircle;

@@ -164,11 +164,17 @@ begin
 end;
 
 procedure GDBObjARC.ReCalcFromObjMatrix;
-//var
-    //ox:gdbvertex;
+var
+  ox,oy:gdbvertex;
+  m:DMatrix4D;
 begin
      inherited;
-     Local.P_insert:=PGDBVertex(@objmatrix[3])^;
+
+     ox:=GetXfFromZ(Local.basis.oz);
+     oy:=NormalizeVertex(CrossVertex(Local.basis.oz,Local.basis.ox));
+     m:=CreateMatrixFromBasis(ox,oy,Local.basis.oz);
+
+     Local.P_insert:=VectorTransform3D(PGDBVertex(@objmatrix[3])^,m);
      self.R:=PGDBVertex(@objmatrix[0])^.x/local.basis.OX.x;
 end;
 function GDBObjARC.CalcTrueInFrustum;
@@ -724,25 +730,28 @@ begin
 end;
 
 procedure GDBObjARC.rtmodifyonepoint(const rtmod:TRTModifyData);
-var //a,b,c,d,e,f,g,p_x,p_y,rr:Double;
-    //tv:gdbvertex2d;
-    tv3d:gdbvertex;
-    ptdata:tarcrtmodify;
-    //m1:DMatrix4D;
-    ad:TArcData;
+var
+  tv3d:gdbvertex;
+  tq0,tq1,tq2:gdbvertex;
+  ptdata:tarcrtmodify;
+  ad:TArcData;
+  m:DMatrix4D;
 begin
-     //rtmod.point.pobject:=;
-     tv3d:=VertexAdd(rtmod.point.worldcoord,rtmod.dist);
-     //m1:=GetMatrix^;
-     //MatrixInvert(m1);
-     //tv3d:=VectorTransform3D(tv3d,m1);
+  m:=ObjMatrix;
+  MatrixInvert(m);
+  m[3]:=NulVector4D;
 
-     ptdata.p1.x:=q0.x;
-     ptdata.p1.y:=q0.y;
-     ptdata.p2.x:=q1.x;
-     ptdata.p2.y:=q1.y;
-     ptdata.p3.x:=q2.x;
-     ptdata.p3.y:=q2.y;
+  tq0:=VectorTransform3D(q0*R,m);
+  tq1:=VectorTransform3D(q1*R,m);
+  tq2:=VectorTransform3D(q2*R,m);
+  tv3d:=VectorTransform3D(rtmod.wc*R,m);
+
+  ptdata.p1.x:=tq0.x;
+  ptdata.p1.y:=tq0.y;
+  ptdata.p2.x:=tq1.x;
+  ptdata.p2.y:=tq1.y;
+  ptdata.p3.x:=tq2.x;
+  ptdata.p3.y:=tq2.y;
 
   if rtmod.point.pointtype=os_begin then begin
     ptdata.p1.x:=tv3d.x;
@@ -755,58 +764,14 @@ begin
     ptdata.p3.y:=tv3d.y;
   end;
 
-        if GetArcParamFrom3Point2D(ptdata,ad) then
-        begin
-              Local.p_insert.x:=ad.p.x;
-              Local.p_insert.y:=ad.p.y;
-              Local.p_insert.z:=0;
-              startangle:=ad.startangle;
-              endangle:=ad.endangle;
-              r:=ad.r;
-              //format;
-        end;
-        {A:= ptdata.p2.x - ptdata.p1.x;
-        B:= ptdata.p2.y - ptdata.p1.y;
-        C:= ptdata.p3.x - ptdata.p1.x;
-        D:= ptdata.p3.y - ptdata.p1.y;
-
-        E:= A*(ptdata.p1.x + ptdata.p2.x) + B*(ptdata.p1.y + ptdata.p2.y);
-        F:= C*(ptdata.p1.x + ptdata.p3.x) + D*(ptdata.p1.y + ptdata.p3.y);
-
-        G:= 2*(A*(ptdata.p3.y - ptdata.p2.y)-B*(ptdata.p3.x - ptdata.p2.x));
-        if abs(g)>eps then
-        begin
-        p_x:= (D*E - B*F) / G;
-        p_y:= (A*F - C*E) / G;
-        rr:= sqrt(sqr(ptdata.p1.x - p_x) + sqr(ptdata.p1.y - p_y));
-        r:=rr;
-        Local.p_insert.x:=p_x;
-        Local.p_insert.y:=p_y;
-        Local.p_insert.z:=0;
-        tv.x:=p_x;
-        tv.y:=p_y;
-        startangle:=vertexangle(tv,ptdata.p1);
-        endangle:=vertexangle(tv,ptdata.p3);
-        if startangle>endangle then
-        begin
-                                                                                      rr:=startangle;
-                                                                                      startangle:=endangle;
-                                                                                      endangle:=rr
-        end;
-        rr:=vertexangle(tv,ptdata.p2);
-        if (rr>startangle) and (rr<endangle) then
-                                                                                 begin
-                                                                                 end
-                                                                             else
-                                                                                 begin
-                                                                                      rr:=startangle;
-                                                                                      startangle:=endangle;
-                                                                                      endangle:=rr
-                                                                                 end;
-        format;
-        //renderfeedback(gdb.GetCurrentDWG.pcamera^.POSCOUNT,gdb.GetCurrentDWG.pcamera^,nil);
-        end;}
-
+  if GetArcParamFrom3Point2D(ptdata,ad) then begin
+    Local.p_insert.x:=ad.p.x;
+    Local.p_insert.y:=ad.p.y;
+    Local.p_insert.z:=0;
+    startangle:=ad.startangle;
+    endangle:=ad.endangle;
+    r:=ad.r;
+  end;
 end;
 function GDBObjARC.Clone;
 var tvo: PGDBObjArc;

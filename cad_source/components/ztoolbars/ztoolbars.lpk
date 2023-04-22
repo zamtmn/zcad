@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CONFIG>
-  <Package Version="4">
+  <Package Version="5">
     <PathDelim Value="\"/>
     <Name Value="ztoolbars"/>
     <Type Value="RunAndDesignTime"/>
@@ -8,31 +8,33 @@
       <Version Value="11"/>
       <PathDelim Value="\"/>
       <SearchPaths>
+        <OtherUnitFiles Value="src"/>
         <UnitOutputDirectory Value="lib\$(TargetCPU)-$(TargetOS)"/>
       </SearchPaths>
     </CompilerOptions>
     <Files Count="5">
       <Item1>
-        <Filename Value="uztoolbarsmanager.pas"/>
-        <UnitName Value="uztoolbarsmanager"/>
+        <Filename Value="src\ugcontextchecker.pas"/>
+        <UnitName Value="ugcontextchecker"/>
       </Item1>
       <Item2>
-        <Filename Value="uzmenusmanager.pas"/>
-        <UnitName Value="uzmenusmanager"/>
+        <Filename Value="src\uzmenusdefaults.pas"/>
+        <UnitName Value="uzmenusdefaults"/>
       </Item2>
       <Item3>
-        <Filename Value="ugcontextchecker.pas"/>
-        <UnitName Value="ugcontextchecker"/>
+        <Filename Value="src\uzmenusmanager.pas"/>
+        <UnitName Value="uzmenusmanager"/>
       </Item3>
       <Item4>
-        <Filename Value="uzmenusdefaults.pas"/>
-        <UnitName Value="uzmenusdefaults"/>
+        <Filename Value="src\uztoolbarsmanager.pas"/>
+        <UnitName Value="uztoolbarsmanager"/>
       </Item4>
       <Item5>
-        <Filename Value="uzxmlnodesutils.pas"/>
+        <Filename Value="src\uzxmlnodesutils.pas"/>
         <UnitName Value="uzxmlnodesutils"/>
       </Item5>
     </Files>
+    <CompatibilityMode Value="True"/>
     <RequiredPkgs Count="3">
       <Item1>
         <PackageName Value="zmacros"/>

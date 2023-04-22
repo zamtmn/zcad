@@ -9,13 +9,13 @@
       <PathDelim Value="\"/>
       <SearchPaths>
         <IncludeFiles Value="$(LazarusDir)\ide\packages\ideconfig\include\$(TargetOS)"/>
-        <OtherUnitFiles Value="$(LazarusDir)\ide;$(LazarusDir)\ide\packages\ideconfig"/>
+        <OtherUnitFiles Value="$(LazarusDir)\ide;$(LazarusDir)\ide\packages\ideconfig;src"/>
         <UnitOutputDirectory Value="lib\$(TargetCPU)-$(TargetOS)"/>
       </SearchPaths>
     </CompilerOptions>
     <Files Count="1">
       <Item1>
-        <Filename Value="uzmacros.pas"/>
+        <Filename Value="src\uzmacros.pas"/>
         <UnitName Value="uzmacros"/>
       </Item1>
     </Files>

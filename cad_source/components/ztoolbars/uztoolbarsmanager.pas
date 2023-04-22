@@ -11,6 +11,7 @@ uses
   Generics.Collections, Generics.Defaults, gvector;
 
 type
+  TMenuType=(TMT_MainMenu,TMT_PopupMenu);
   TPopUpMenyProxyAction=class(TAction)
     ToolButton:TToolButton;
     MainAction:TAction;
@@ -93,14 +94,14 @@ type
     procedure SetupDefaultToolBar(aName,atype: string; tb:TToolBar);
     function CreateDefaultToolBar(aName,atype: string):TToolBar;
     procedure CreateDefaultSeparator(fmf:TForm;actlist:TActionList;aNode: TDomNode; TB:TToolBar);
-    procedure CreateDefaultAction(aNode: TDomNode; TB:TToolBar);
+    procedure CreateDefaultAction(fmf:TForm;actlist:TActionList;aNode: TDomNode; TB:TToolBar);
     procedure FloatDockSiteClose(Sender: TObject; var CloseAction: TCloseAction);
     procedure SetActionChecked(aName:string;newChecked:boolean);
     procedure DefaultShowToolbar(Sender: TObject);
     procedure DefaultAddToolBarToMenu(fmf:TForm;actlist:TActionList;aTBNode: TDomNode;aName,aType: string; Data:Pointer);
 
     procedure DefaultActionsGroupReader(aName: string;aNode: TDomNode;CategoryOverrider:string;actlist:TActionList);
-    procedure DefaultAddToolbars(fmf:TForm;aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem;MPF:TMacroProcessFunc);
+    procedure DefaultAddToolbars(MT:TMenuType;fmf:TForm;aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem;MPF:TMacroProcessFunc);
 
     procedure CreateManagedActions;
   end;
@@ -354,7 +355,7 @@ begin
    AutoSize:={False}True;
  end;
 end;
-procedure TToolBarsManager.CreateDefaultAction(aNode: TDomNode; TB:TToolBar);
+procedure TToolBarsManager.CreateDefaultAction(fmf:TForm;actlist:TActionList;aNode: TDomNode; TB:TToolBar);
 var
   _action:TContainedAction;
   ActionName:string;
@@ -777,7 +778,9 @@ begin
   begin
     TBNode:=TBConfig.FindNode('ToolBarsContent',false);
     if assigned(TBNode) then
-      TBSubNode:=TBNode.FirstChild;
+      TBSubNode:=TBNode.FirstChild
+    else
+      TBSubNode:=nil;
     if assigned(TBSubNode) then
       while assigned(TBSubNode)do
       begin
@@ -1073,7 +1076,7 @@ begin
       end;
 end;
 
-procedure TToolBarsManager.DefaultAddToolbars(fmf:TForm;aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem;MPF:TMacroProcessFunc);
+procedure TToolBarsManager.DefaultAddToolbars(MT:TMenuType;fmf:TForm;aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem;MPF:TMacroProcessFunc);
 begin
   ToolBarsManager.EnumerateToolBars(@ToolBarsManager.DefaultAddToolBarToMenu,pointer(RootMenuItem));
 end;

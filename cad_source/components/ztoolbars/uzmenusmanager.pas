@@ -302,7 +302,7 @@ begin
   if ForceReCreate then
     if result<>nil then
       FreeAndNil(result);
-  result:={TMainMenu(application.FindComponent(MenuNameModifier+aName))}nil;
+  result:=TMainMenu(application.FindComponent(MenuNameModifier+aName)){nil};
   if (result=nil)and(MenuConfig<>nil) then begin
     TBNode:=MenuConfig.FindNode('MenusContent',false);
     if assigned(TBNode) then begin

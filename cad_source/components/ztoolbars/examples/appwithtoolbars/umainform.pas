@@ -37,7 +37,7 @@ type
     procedure SaveTBLayout(Sender: TObject);
     procedure AsyncLoadTBLayout(Sender: TObject);
   private
-    procedure CreateYourOwnTBitem(aNode: TDomNode; TB:TToolBar);
+    procedure CreateYourOwnTBitem(fmf:TForm;actlist:TActionList;aNode: TDomNode; TB:TToolBar);
     procedure DoLoadTBLayout(Data: PtrInt);
     procedure LoadTBLayout(Sender: TObject);
   public
@@ -60,7 +60,8 @@ begin
   DragManager.DragThreshold:=32;
 
   //Create ToolBarsManager
-  ToolBarsManager:=TToolBarsManager.create(self{mainform},ActionList1{main actionlist},-1{default button height});
+  ToolBarsManager:=TToolBarsManager.create;
+  ToolBarsManager.setup(self{mainform},ActionList1{main actionlist},-1{default button height});
 
   //Register 'Separator' node handler for create toolbar content proc
   ToolBarsManager.RegisterTBItemCreateFunc('Separator',@ToolBarsManager.CreateDefaultSeparator);
@@ -75,7 +76,7 @@ begin
   ToolBarsManager.RegisterTBCreateFunc('ToolBar',@ToolBarsManager.CreateDefaultToolBar);
 
   //Load toolbars content from toolbarscontent.xml
-  ToolBarsManager.LoadToolBarsContent('toolbarscontent.xml');
+  ToolBarsManager.LoadToolBarsContent(ExtractFileDir(ParamStr(0))+DirectorySeparator+'toolbarscontent.xml');
 
   //Enumerate all toolbars and add them to view\tooldars menu
   ToolBarsManager.EnumerateToolBars(@ToolBarsManager.DefaultAddToolBarToMenu,pointer(MenuItem6));
@@ -93,7 +94,7 @@ begin
   XMLConfig:=TXMLConfig.Create(nil);
   try
     XMLConfig.StartEmpty:=true;
-    XMLConfig.Filename:='toolbarslayout.xml';
+    XMLConfig.Filename:=ExtractFileDir(ParamStr(0))+DirectorySeparator+'toolbarslayout.xml';
     Config:=TXMLConfigStorage.Create(XMLConfig);
     try
       ToolBarsManager.SaveToolBarsToConfig(Config);
@@ -111,7 +112,7 @@ procedure TForm1.DoLoadTBLayout(Data: PtrInt);
 var
   XMLConfig: TXMLConfigStorage;
 begin
-    XMLConfig:=TXMLConfigStorage.Create('toolbarslayout.xml',True);
+    XMLConfig:=TXMLConfigStorage.Create(ExtractFileDir(ParamStr(0))+DirectorySeparator+'toolbarslayout.xml',True);
     try
       ToolBarsManager.RestoreToolBarsFromConfig(XMLConfig);
     finally
@@ -137,7 +138,7 @@ begin
 end;
 
 //'YourOwnTBitem' node fake handler
-procedure TForm1.CreateYourOwnTBitem(aNode: TDomNode; TB:TToolBar);
+procedure TForm1.CreateYourOwnTBitem(fmf:TForm;actlist:TActionList;aNode: TDomNode; TB:TToolBar);
 begin
    //you need read aNode params to create your own toolbar item
    //but because of laziness, I'll just create a empty button ))

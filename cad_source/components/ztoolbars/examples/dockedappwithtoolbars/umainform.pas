@@ -41,8 +41,8 @@ type
     procedure SaveLayout(Sender: TObject);
 
   private
-    procedure CreateYourOwnTBitem(aNode: TDomNode; TB:TToolBar);
-    procedure EnumerateRegistredForms(fmf:TForm;aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem;MPF:TMacroProcessFunc);
+    procedure CreateYourOwnTBitem(fmf:TForm;actlist:TActionList;aNode: TDomNode; TB:TToolBar);
+    procedure EnumerateRegistredForms(MT:TMenuType;fmf:TForm;aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem;MPF:TMacroProcessFunc);
     procedure DefaultShowForm(Sender: TObject);
   public
     procedure LoadToolBars;
@@ -162,10 +162,12 @@ begin
   DragManager.DragImmediate:=false;
   DragManager.DragThreshold:=32;
 
-  MenusManager:=TGeneralMenuManager.Create(self{mainform},AcnList{main AcnList});
+  MenusManager:=TGeneralMenuManager.Create;
+  MenusManager.setup(self{mainform},AcnList{main AcnList});
 
   //Create ToolBarsManager
-  ToolBarsManager:=TToolBarsManager.create(self{mainform},AcnList{main AcnList},-1{default button height});
+  ToolBarsManager:=TToolBarsManager.create;
+  ToolBarsManager.Setup(self{mainform},AcnList{main AcnList},-1{default button height});
 
   //Register 'Separator' node handler for create toolbar content proc
   ToolBarsManager.RegisterTBItemCreateFunc('Separator',ToolBarsManager.CreateDefaultSeparator);
@@ -180,7 +182,7 @@ begin
   ToolBarsManager.RegisterTBCreateFunc('ToolBar',ToolBarsManager.CreateDefaultToolBar);
 
   //Load toolbars content from toolbarscontent.xml
-  ToolBarsManager.LoadToolBarsContent('toolbarscontent.xml');
+  ToolBarsManager.LoadToolBarsContent(ExtractFileDir(ParamStr(0))+DirectorySeparator+'toolbarscontent.xml');
 
   TMenuDefaults.RegisterMenuCreateFunc('SubMenu',TMenuDefaults.DefaultMainMenuItemReader);
   TMenuDefaults.RegisterMenuCreateFunc('Action',TMenuDefaults.DefaultCreateMenuAction);
@@ -195,7 +197,7 @@ begin
   //ToolBarsManager.EnumerateToolBars(@ToolBarsManager.DefaultAddToolBarToMenu,pointer(MenuItem6));
 
   //Load menus content from menuscontent.xml
-  MenusManager.LoadMenus('menuscontent.xml');
+  MenusManager.LoadMenus(ExtractFileDir(ParamStr(0))+DirectorySeparator+'menuscontent.xml');
 
   DockMaster.ManagerClass:=TAnchorDockManager;
   DockMaster.OnCreateControl:=DockMasterCreateControl;
@@ -215,7 +217,7 @@ begin
   XMLConfig:=TXMLConfig.Create(nil);
   try
     XMLConfig.StartEmpty:=true;
-    XMLConfig.Filename:='toolbarslayout.xml';
+    XMLConfig.Filename:=ExtractFileDir(ParamStr(0))+DirectorySeparator+'toolbarslayout.xml';
     Config:=TXMLConfigStorage.Create(XMLConfig);
     try
       ToolBarsManager.SaveToolBarsToConfig(Config);
@@ -230,7 +232,7 @@ begin
   XMLConfig:=TXMLConfig.Create(nil);
   try
     XMLConfig.StartEmpty:=true;
-    XMLConfig.Filename:='formslayout.xml';
+    XMLConfig.Filename:=ExtractFileDir(ParamStr(0))+DirectorySeparator+'formslayout.xml';
     Config:=TXMLConfigStorage.Create(XMLConfig);
     try
       DockMaster.SaveLayoutToConfig(Config);
@@ -269,7 +271,7 @@ begin
 end;
 
 //'YourOwnTBitem' node fake handler
-procedure TMainForm.CreateYourOwnTBitem(aNode: TDomNode; TB:TToolBar);
+procedure TMainForm.CreateYourOwnTBitem(fmf:TForm;actlist:TActionList;aNode: TDomNode; TB:TToolBar);
 begin
    //you need read aNode params to create your own toolbar item
    //but because of laziness, I'll just create a empty button ))
@@ -288,7 +290,7 @@ procedure TMainForm.LoadToolBars;
 var
   XMLConfig: TXMLConfigStorage;
 begin
-  XMLConfig:=TXMLConfigStorage.Create('toolbarslayout.xml', True);
+  XMLConfig:=TXMLConfigStorage.Create(ExtractFileDir(ParamStr(0))+DirectorySeparator+'toolbarslayout.xml', True);
   try
     ToolBarsManager.RestoreToolBarsFromConfig(XMLConfig);
   finally
@@ -302,7 +304,7 @@ var
 begin
   try
     // load the xml config file
-    XMLConfig:=TXMLConfigStorage.Create('formslayout.xml',True);
+    XMLConfig:=TXMLConfigStorage.Create(ExtractFileDir(ParamStr(0))+DirectorySeparator+'formslayout.xml',True);
     try
       // restore the layout
       // this will close unneeded forms and call OnCreateControl for all needed
@@ -332,7 +334,7 @@ begin
     DockMaster.ShowControl((Sender as TAction).Caption,true)
 end;
 
-procedure TMainForm.EnumerateRegistredForms(fmf:TForm;aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem;MPF:TMacroProcessFunc);
+procedure TMainForm.EnumerateRegistredForms(MT:TMenuType;fmf:TForm;aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem;MPF:TMacroProcessFunc);
 var
   FormData:TPair<string,TFormInfoData>;
   pm1:TMenuItem;

@@ -13,7 +13,6 @@ const
      MenuNameModifier='MENU_';
 
 type
-  TMenuType=(TMT_MainMenu,TMT_PopupMenu);
   TMenuContextNameType=string;
   TContextStateType=boolean;
   TCMenuContextNameManipulator=class

@@ -7,3 +7,9 @@
 [submodule "cad_source/components/metadarkstyle"]
 	path = cad_source/components/metadarkstyle
 	url = https://github.com/zamtmn/metadarkstyle.git
+[submodule "cad_source/components/zmacros"]
+	path = cad_source/components/zmacros
+	url = https://github.com/zamtmn/zmacros.git
+[submodule "cad_source/components/ztoolbars"]
+	path = cad_source/components/ztoolbars
+	url = https://github.com/zamtmn/ztoolbars.git

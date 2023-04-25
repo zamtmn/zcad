@@ -692,6 +692,7 @@ begin
   {Делаем AnchorDockPanel1 докабельной}
   DockMaster.MakeDockPanel(AnchorDockPanel1,admrpChild);
   DockMaster.OnShowOptions:=ShowAnchorDockOptions;
+  HardcodedButtonSize:=21;
   {Грузим раскладку окон}
   if not sysparam.saved.noloadlayout then
     LoadLayout_com(EmptyCommandOperands);

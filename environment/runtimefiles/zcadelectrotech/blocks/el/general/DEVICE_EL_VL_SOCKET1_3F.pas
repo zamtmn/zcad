@@ -1,4 +1,4 @@
-unit DEVICE_EL_VL_SOCKET_YTR;
+unit DEVICE_EL_VL_SOCKET1_3F;
 
 interface
 
@@ -10,7 +10,7 @@ usescopy addtocable;
 
 var
 
-VL_Type:String;(*'Трансформатор'*)
+VL_Type:String;(*'Розетка'*)
 VL_Room:String;(*'Помещение'*)
 VL_Floor:String;(*'Этаж'*)
 VL_Group:String;(*'Группа'*)
@@ -19,7 +19,7 @@ implementation
 
 begin
 
-BTY_TreeCoord:='PLAN_EM_Трансформатор';
+BTY_TreeCoord:='PLAN_EM_Розетка';
 Device_Type:=TDT_SilaPotr;
 Device_Class:=TDC_Shell;
 
@@ -32,7 +32,7 @@ GC_HeadDevice:='ЩО??';
 GC_HDShortName:='??';
 GC_HDGroup:=0;
 
-VL_Type:='ЯТП 36 IP54';
+VL_Type:='Р СП/3Ф ip20';
 VL_Room:='.';
 VL_Floor:='.';
 

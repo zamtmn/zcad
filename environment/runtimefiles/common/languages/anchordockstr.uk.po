@@ -97,10 +97,6 @@ msgstr "Кожне прикріплене вікно має заголовок �
 msgid "Empty name: "
 msgstr "Порожня назва: "
 
-#: anchordockstr.adrsenlarge
-msgid "Enlarge"
-msgstr "Збільшити"
-
 #: anchordockstr.adrsenlargeside
 #, object-pascal-format
 msgid "Enlarge %s side"
@@ -113,6 +109,14 @@ msgstr "Заповнити заголовки"
 #: anchordockstr.adrsfilledheadershint
 msgid "Fill headers of docked controls"
 msgstr "Заповнити заголовки стикованих елементів"
+
+#: anchordockstr.adrsflatheadersbuttons
+msgid "Flat header buttons"
+msgstr ""
+
+#: anchordockstr.adrsflatheadersbuttonshint
+msgid "Flat buttons in headers of docked controls"
+msgstr ""
 
 #: anchordockstr.adrsflattenheaders
 msgid "Flatten headers"

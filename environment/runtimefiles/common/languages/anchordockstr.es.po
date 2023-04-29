@@ -92,10 +92,6 @@ msgstr "Cada ventana acoplada tiene un encabezado que permite arrastrar, tiene u
 msgid "Empty name: "
 msgstr "Nombre vacío: "
 
-#: anchordockstr.adrsenlarge
-msgid "Enlarge"
-msgstr "Ampliar"
-
 #: anchordockstr.adrsenlargeside
 #, object-pascal-format
 msgid "Enlarge %s side"
@@ -108,6 +104,14 @@ msgstr "Llena los encabezados"
 #: anchordockstr.adrsfilledheadershint
 msgid "Fill headers of docked controls"
 msgstr "Llena los encabezados de los controles de acoplamiento"
+
+#: anchordockstr.adrsflatheadersbuttons
+msgid "Flat header buttons"
+msgstr ""
+
+#: anchordockstr.adrsflatheadersbuttonshint
+msgid "Flat buttons in headers of docked controls"
+msgstr ""
 
 #: anchordockstr.adrsflattenheaders
 msgid "Flatten headers"

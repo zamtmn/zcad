@@ -95,10 +95,6 @@ msgstr ""
 msgid "Empty name: "
 msgstr "Pusta nazwa:"
 
-#: anchordockstr.adrsenlarge
-msgid "Enlarge"
-msgstr "Powiększ"
-
 #: anchordockstr.adrsenlargeside
 #, object-pascal-format
 msgid "Enlarge %s side"
@@ -110,6 +106,14 @@ msgstr ""
 
 #: anchordockstr.adrsfilledheadershint
 msgid "Fill headers of docked controls"
+msgstr ""
+
+#: anchordockstr.adrsflatheadersbuttons
+msgid "Flat header buttons"
+msgstr ""
+
+#: anchordockstr.adrsflatheadersbuttonshint
+msgid "Flat buttons in headers of docked controls"
 msgstr ""
 
 #: anchordockstr.adrsflattenheaders

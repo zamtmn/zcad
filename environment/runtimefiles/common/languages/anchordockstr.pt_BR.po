@@ -94,10 +94,6 @@ msgstr "Cada janela ancorada tem um cabeçalho que permite arrastá-la, tem um m
 msgid "Empty name: "
 msgstr "Nome vazio:"
 
-#: anchordockstr.adrsenlarge
-msgid "Enlarge"
-msgstr "Alongar"
-
 #: anchordockstr.adrsenlargeside
 #, object-pascal-format
 msgid "Enlarge %s side"
@@ -110,6 +106,14 @@ msgstr "Preencher cabeçalhos"
 #: anchordockstr.adrsfilledheadershint
 msgid "Fill headers of docked controls"
 msgstr "Preencher cabeçalhos dos controles aportados"
+
+#: anchordockstr.adrsflatheadersbuttons
+msgid "Flat header buttons"
+msgstr ""
+
+#: anchordockstr.adrsflatheadersbuttonshint
+msgid "Flat buttons in headers of docked controls"
+msgstr ""
 
 #: anchordockstr.adrsflattenheaders
 msgid "Flatten headers"

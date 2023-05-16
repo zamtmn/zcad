@@ -157,6 +157,7 @@ var
 begin
   Graphix.DrawPolyLineWithLT(rc,points,vp,closed,ltgen);
   Geometry.Lock;
+  Geometry.SetSize(Points.Count*sizeof(TGeomLine3D));
   ptv:=Points.beginiterate(ir);
   ptvfisrt:=ptv;
   segcounter:=0;

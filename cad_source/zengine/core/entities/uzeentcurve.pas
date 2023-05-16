@@ -75,9 +75,18 @@ procedure BuildSnapArray(const VertexArrayInWCS:GDBPoint3dArray;var snaparray:GD
 function GDBPoint3dArraygetsnap(const VertexArrayInWCS:GDBPoint3dArray; const PProjPoint:PGDBpolyline2DArray; const snaparray:GDBVectorSnapArray; var osp:os_record;const closed:Boolean; const param:OGLWndtype; ProjectProc:GDBProjectProc;SnapMode:TGDBOSMode):Boolean;
 procedure GDBPoint3dArrayAddOnTrackAxis(const VertexArrayInWCS:GDBPoint3dArray;var posr:os_record;const processaxis:taddotrac;const closed:Boolean);
 function GetDirInPoint(const VertexArrayInWCS:GDBPoint3dArray;point:GDBVertex;closed:Boolean):GDBVertex;
+procedure FastAddVertex(Vertex:GDBVertex);
+
+var
+  curveVertexArrayInWCS:GDBPoint3dArray;
+
 implementation
-//uses
-//    log;
+
+procedure FastAddVertex(Vertex:GDBVertex);
+begin
+  curveVertexArrayInWCS.PushBackData(vertex);
+end;
+
 procedure GDBObjCurve.InsertVertex(const PolyData:TPolyData);
 begin
      vertexarrayinocs.InsertElement(PolyData.{nearestline}index,{PolyData.dir,}PolyData.wc);
@@ -324,6 +333,7 @@ var //i,j: Integer;
 begin
   //snaparray.clear;
   VertexArrayInWCS.clear;
+  VertexArrayInWCS.SetSize(VertexArrayInOCS.Count);
   ptv:=VertexArrayInOCS.beginiterate(ir);
   if ptv<>nil then
   repeat
@@ -867,5 +877,8 @@ begin
 *)
 end;
 
-begin
+initialization
+  curveVertexArrayInWCS.init(200);
+finalization
+  curveVertexArrayInWCS.free;
 end.

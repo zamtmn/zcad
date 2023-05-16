@@ -476,16 +476,18 @@ begin
                                                                                 dc:=drawing.CreateDrawingRC;
                                                                                 PBlockDefArray(PGDBObjBlockdefArray(drawing.GetBlockDefArraySimple).parray)^[index].FormatEntity(drawing,dc);
                                                                                end;
-          ConstObjArray.free;
           mainowner:=getmainowner;
           if mainowner<>nil then
           if mainowner.gettype=1 then
                                    exit;
           pblockdef:=PGDBObjBlockdefArray(drawing.GetBlockDefArraySimple).getDataMutable(index);
+
+          ConstObjArray.free;
           if pblockdef.ObjArray.count>0 then
           begin
           dc:=drawing.CreateDrawingRC;
 
+          ConstObjArray.SetSize(pblockdef.ObjArray.Count);
           pvisible:=pblockdef.ObjArray.beginiterate(ir);
           if pvisible<>nil then
           repeat

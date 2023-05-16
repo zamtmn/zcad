@@ -158,23 +158,17 @@ begin
   //inherited;
 end;
 function GDBObjPolyline.Clone;
-var tpo: PGDBObjPolyLine;
-    p:pgdbvertex;
-    i:Integer;
+var
+  tpo: PGDBObjPolyLine;
 begin
   Getmem(Pointer(tpo), sizeof(GDBObjPolyline));
   tpo^.init(bp.ListPos.owner,vp.Layer, vp.LineWeight,closed);
   CopyVPto(tpo^);
   CopyExtensionsTo(tpo^);
   //tpo^.vertexarray.init(1000);
-  p:=vertexarrayinocs.GetParrayAsPointer;
-  for i:=0 to vertexarrayinocs.Count-1 do
-  begin
-      tpo^.vertexarrayinocs.PushBackData(p^);
-      inc(p)
-  end;
-  //tpo^.snaparray:=nil;
-  //tpo^.format;
+  tpo^.vertexarrayinocs.SetSize(vertexarrayinocs.Count);
+  vertexarrayinocs.copyto(tpo^.vertexarrayinocs);
+
   result := tpo;
 end;
 procedure GDBObjPolyline.SaveToDXF;
@@ -213,7 +207,7 @@ begin
                                          begin
                                               if byt=30 then
                                                             if vertexgo then
-                                                                            addvertex(tv);
+                                                                            FastAddVertex(tv);
                                          end
   else if dxfIntegerload(f,70,byt,hlGDBWord) then
                                                    begin
@@ -227,8 +221,10 @@ begin
                                       else s:= f.readString;
     byt:=readmystrtoint(f);
   end;
-vertexarrayinocs.Shrink;
-  //format;
+
+  vertexarrayinocs.SetSize(curveVertexArrayInWCS.Count);
+  curveVertexArrayInWCS.copyto(vertexarrayinocs);
+  curveVertexArrayInWCS.Clear;
 end;
 {procedure GDBObjPolyline.LoadFromDXF;
 var s, layername: String;

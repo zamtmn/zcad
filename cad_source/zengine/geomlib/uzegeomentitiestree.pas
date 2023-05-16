@@ -61,6 +61,7 @@ TZEntsManipulator=class
                    class procedure CreateSeparator(var NodeBB:TBoundingBox;var TestNode:TGeomEntTreeNode.TTestNode;var PFirstStageData:pointer;const NodeNum:integer);
                    class function IterateResult2PEntity(const IterateResult:pointer):PTGeomEntity;
                    class function StoreEntityToArray(var Entity:TGeomEntity;var arr:TEntityArray):TArrayIndex;
+                   class procedure SetSizeInArray(ns:integer;var arr:TEntityArray);
                   end;
 var
    SysVarRDSpatialNodeCount:integer=2;
@@ -68,6 +69,10 @@ var
    FirstStageData:TFirstStageData;
 function GetInNodeCount(_InNodeCount:Integer):Integer;
 implementation
+class procedure TZEntsManipulator.SetSizeInArray(ns:integer;var arr:TEntityArray);
+begin
+  arr.SetSize(ns);
+end;
 class function TZEntsManipulator.StoreEntityToArray(var Entity:TGeomEntity;var arr:TEntityArray):TArrayIndex;
 begin
      //arr.pushBackData(Entity);

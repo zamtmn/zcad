@@ -157,7 +157,7 @@ var
     ir:itrec;
 begin
   nul.clear;
-  //nul.setsize(TestNode.nul.count);//С ЭТИМ ВЫЛЕТ
+  nul.setsize(TestNode.nul.count);
   TestNode.nul.copyto(nul);
   Separator:=TestNode.plane;
   if TestNode.plus.count>0 then

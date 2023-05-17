@@ -168,9 +168,16 @@ var
   newblock:Pointer;
 begin
   newblock:=nil;
-  GetMem(newblock, nevsize);
-  if pblock<>nil then
-    Move(pblock^, newblock^, oldsize);
+  if nevsize>0 then
+    GetMem(newblock,nevsize)
+  else
+    newblock:=nil;
+  if (pblock<>nil)and(newblock<>nil) then begin
+    if oldsize<nevsize then
+      Move(pblock^, newblock^, oldsize)
+    else
+      Move(pblock^, newblock^, nevsize)
+  end;
   result := newblock;
   FreeMem(pblock);
 end;
@@ -412,7 +419,8 @@ else if nsize<max then
                            parray := enlargememblock(parray, SizeOfData*max, SizeOfData*nsize);
                            if count>nsize then count:=nsize;
                       end;
-     max:=nsize;
+     if nsize<>0 then
+       max:=nsize;
 end;
 function GZVector<T>.beginiterate;
 begin

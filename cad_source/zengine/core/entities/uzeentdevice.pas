@@ -215,7 +215,7 @@ begin
          //pvc^.DXFOut(handle, outhandle);
               pv.rtsave(pvc2);
               pvc.rtsave(pv);
-              pv^.State:=pv^.State+[ESCalcWithoutOwner];
+              pv^.State:=pv^.State+[ESCalcWithoutOwner,ESTemp];
               //pvc^.SaveToDXF(outhandle,drawing,IODXFContext);
 
               //if pv^.IsHaveLCS then

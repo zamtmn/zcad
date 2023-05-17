@@ -30,7 +30,7 @@ taddotrac=procedure (var posr:os_record;const axis:GDBVertex) of object;
 PGDBObjEntity=^GDBObjEntity;
 {-}TSelect2Stage=procedure(PEntity,PGripsCreator:PGDBObjEntity;var SelectedObjCount:Integer)of object;{//}
 {-}TDeSelect2Stage=procedure(PV:PGDBObjEntity;var SelectedObjCount:Integer)of object;{//}
-TEntityState=(ESCalcWithoutOwner);
+TEntityState=(ESCalcWithoutOwner,ESTemp);
 {-}TEntityStates=set of TEntityState;{/TEntityStates=Integer;/}
 PTExtAttrib=^TExtAttrib;
 {REGISTERRECORDTYPE TExtAttrib}

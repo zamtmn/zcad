@@ -17,27 +17,17 @@
 }
 
 program zcad;
-//файл с объявлениями директив компилятора - должен быть подключен во все файлы проекта
-{$INCLUDE zengineconfig.inc}
-
-{$IFDEF FPC}
-  {$CODEPAGE UTF8}
-{$endif}
-
-{$IFDEF WINDOWS}
-  {$IFDEF FPC}
-    {$ifdef cpu32}
-      {$setpeflags $20} //winnt.h:#define IMAGE_FILE_LARGE_ADDRESS_AWARE       0x0020  // App can handle >2gb addresses
-    {$endif}
-  {$ENDIF}
-{$ENDIF}
 
 {$IFNDEF LINUX}
   {$APPTYPE GUI}
 {$ENDIF}
 
-{$ifdef WIN64} {$imagebase $400000} {$endif}
+//файл с объявлениями директив компилятора - должен быть подключен во все файлы проекта
+{$INCLUDE zengineconfig.inc}
 
+//zcad/zcadelectrotech compile mode
+//если он отсутствует см. https://github.com/zamtmn/zcad/blob/master/cad_source/docs/userguide/locale/ru/for_developers/building_from_sources.adoc
+//if missing see https://github.com/zamtmn/zcad/blob/master/BUILD_FROM_SOURCES.md
 {$INCLUDE buildmode.inc}
 
 uses
@@ -77,7 +67,7 @@ uses
   {$INCLUDE allgeneratedfiles.inc}//correct defs in system.pas
   uzcregother,//setup SysVar
 
-  uMetaDarkStyle,
+  uMetaDarkStyle,uDarkStyleSchemes,uDarkStyleSchemesLoader,
 
   UUnitManager,
   uzefontmanager,
@@ -331,7 +321,7 @@ begin
   {$ENDIF}
   //создание окна программы
   {$IF DEFINED(MSWINDOWS)}
-  ApplyMetaDarkStyle;
+  ApplyMetaDarkStyle(DefaultDark);
   {$ENDIF}
   Application.CreateForm(TZCADMainWindow,ZCADMainWindow);
   ZCADMainWindow.show;

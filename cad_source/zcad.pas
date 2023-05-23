@@ -328,6 +328,7 @@ begin
   {if sysvar.SYS.SYS_IsHistoryLineCreated<>nil then
                                                   sysvar.SYS.SYS_IsHistoryLineCreated^:=true;}
   ZCMsgCallBackInterface.TextMessage(format(rsZCADStarted,[programname,sysvar.SYS.SYS_Version^]),TMWOHistoryOut);
+  application.ProcessMessages;
 
   //SplashForm.TXTOut(rsStartAutorun,false);commandmanager.executefile('*components/autorun.cmd',drawings.GetCurrentDWG,nil);
   FromDirsIterator(sysvar.PATH.Preload_Path^,'*.cmd','autorun.cmd',RunCmdFile,nil);

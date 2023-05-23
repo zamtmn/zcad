@@ -56,7 +56,7 @@ initialization
   LM_Warning:=ProgramLog.RegisterLogLevel('LM_Warning','W',LLTWarning);
   LM_Error:=ProgramLog.RegisterLogLevel('LM_Error','E',LLTError);
   LM_Fatal:=ProgramLog.RegisterLogLevel('LM_Fatal','F',LLTError);
-  LM_Necessarily:=ProgramLog.RegisterLogLevel('LM_Necessarily','N',LLTInfo);
+  LM_Necessarily:=ProgramLog.RegisterLogLevel('LM_Necessarily','N',LLTNecessarily);
 
   ProgramLog.SetDefaultLogLevel(LM_Debug);
   ProgramLog.SetCurrentLogLevel(LM_Info);

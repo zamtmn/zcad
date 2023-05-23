@@ -25,7 +25,7 @@ type
   TLogMsg=AnsiString;
   TModuleDesk=SizeUInt;
   TModuleDeskNameType=AnsiString;
-  TLogLevelType=(LLTInfo,LLTWarning,LLTError);
+  TLogLevelType=(LLTInfo,LLTWarning,LLTError,LLTNecessarily);
   TLogLevel=Integer;
   TLogLevelHandleNameType=AnsiString;
   TLogExtHandle=SizeInt;

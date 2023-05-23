@@ -664,7 +664,7 @@ else if not dxfStringload(f,2,byt,name)then {s := }f.readString;
           s := f.readworld(#10, #13);
         until s = 'SEQEND'
       end;}
-  zTraceLn('{D-}[DXF_CONTENTS]Name='+name);
+  zTraceLn('{D}[DXF_CONTENTS]Name='+name);
   if name='EL_LIGHT_SWIITH' then
     name:=name;
       //programlog.LogOutFormatStr('BlockInsert name="%s" loaded',[name],lp_OldPos,LM_Debug);

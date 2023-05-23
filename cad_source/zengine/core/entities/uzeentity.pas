@@ -166,6 +166,7 @@ GDBObjEntity= object(GDBObjSubordinated)
                     procedure correctsublayers(var la:GDBLayerArray);virtual;
                     procedure CopyVPto(var toObj:GDBObjEntity);virtual;
                     function CanSimplyDrawInWCS(const DC:TDrawContext;const ParamSize,TargetSize:Double):Boolean;inline;
+                    function SqrCanSimplyDrawInWCS(const DC:TDrawContext;const ParamSize,TargetSize:Double):Boolean;//inline;
                     procedure FormatAfterDXFLoad(var drawing:TDrawingDef;var DC:TDrawContext);virtual;
                     procedure IterateCounter(PCounted:Pointer;var Counter:Integer;proc:TProcCounter);virtual;
                     class function GetDXFIOFeatures:TDXFEntIODataManager;static;
@@ -204,6 +205,20 @@ begin
                         else
                             exit(false);
 end;
+
+function GDBObjEntity.SqrCanSimplyDrawInWCS(const DC:TDrawContext;const ParamSize,TargetSize:Double):Boolean;
+var
+   templod:Double;
+begin
+     if dc.maxdetail then
+                         exit(true);
+  templod:=(ParamSize)/(dc.DrawingContext.zoom*dc.DrawingContext.zoom);
+  if templod>TargetSize then
+                            exit(true)
+                        else
+                            exit(false);
+end;
+
 
 procedure GDBObjEntity.CopyVPto(var toObj:GDBObjEntity);
 begin

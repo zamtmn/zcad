@@ -549,11 +549,15 @@ begin
     myglend();}
     v:=uzegeometry.VertexSub(vp.BoundingBox.RTF,vp.BoundingBox.LBN);
 
-    if not CanSimplyDrawInWCS(DC,uzegeometry.oneVertexlength(v),5) then
+    if not SqrCanSimplyDrawInWCS(DC,uzegeometry.SqrOneVertexlength(v),49) then
     if Width3D_in_WCS_Array.parray<>nil then
            begin
                 q3d:=Width3D_in_WCS_Array.GetParrayAsPointer;
+                ie:=(Width3D_in_WCS_Array.count div 4)+1;
+                for i := 0 to (Width3D_in_WCS_Array.count-2)div ie do begin
                 dc.drawer.DrawLine3DInModelSpace(q3d^[0],q3d^[1],dc.DrawingContext.matrixs);
+                inc(q3d,ie);
+                end;
                 {oglsm.myglbegin(GL_Lines);
                 oglsm.myglVertex3dv(@q3d^[0]);
                 oglsm.myglVertex3dv(@q3d^[1]);
@@ -690,13 +694,13 @@ begin
         begin
           s := f.readString;
           //val(s, PGLLWWidth(Width2D_in_OCS_Array.getelement(hlGDBWord-1)).startw, code);
-          Width2D_in_OCS_Array.SetCount(hlGDBWord);
+          Width2D_in_OCS_Array.SetCount(numv);
           val(s, PGLLWWidth(Width2D_in_OCS_Array.getDataMutable(hlGDBWord-1)).startw, code);
         end;
       41:
         begin
           s := f.readString;
-          Width2D_in_OCS_Array.SetCount(hlGDBWord);
+          Width2D_in_OCS_Array.SetCount(numv);
           val(s, PGLLWWidth(Width2D_in_OCS_Array.getDataMutable(hlGDBWord- 1)).endw, code);
           //Width2D_in_OCS_Array.SetCount(hlGDBWord);
         end;

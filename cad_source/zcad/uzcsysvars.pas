@@ -202,6 +202,7 @@ type
               INTF_DefaultEditorFontHeight:PInteger;(*'Default editor font height'*)
               INTF_OBJINSP_Properties:tobjinspinterface;(*'Object inspector properties'*)
               INTF_AppMode:PTAppMode;(*'Application mode'*)
+              INTF_ColorScheme:PString;(*'Application color scheme'*)
              end;
   {REGISTERRECORDTYPE tdisp}
   tdisp=record

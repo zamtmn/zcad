@@ -321,7 +321,8 @@ begin
   {$ENDIF}
   //создание окна программы
   {$IF DEFINED(MSWINDOWS)}
-  ApplyMetaDarkStyle(DefaultDark);
+  LoadLResources;
+  ApplyMetaDarkStyle(GetScheme(SysVar.INTF.INTF_ColorScheme^));
   {$ENDIF}
   Application.CreateForm(TZCADMainWindow,ZCADMainWindow);
   ZCADMainWindow.show;

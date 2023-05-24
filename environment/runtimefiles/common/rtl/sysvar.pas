@@ -80,6 +80,7 @@ var
   INTF_ThemedDownToolbars:Boolean;
   INTF_ThemedLeftToolbars:Boolean;
   INTF_AppMode:TAppMode;
+  INTF_ColorScheme:String;
   RD_Vendor:String;
   RD_Renderer:String;
   RD_Extensions:String;
@@ -182,6 +183,7 @@ begin
   INTF_ThemedDownToolbars:=False;
   INTF_ThemedLeftToolbars:=False;
   INTF_AppMode:=TAMForceLight;
+  INTF_ColorScheme:='CustomDark';
   RD_Vendor:='';
   RD_Renderer:='';
   RD_Extensions:='';

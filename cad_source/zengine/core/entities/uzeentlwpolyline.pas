@@ -1056,5 +1056,5 @@ initialization
   lwtv.init(200,false);
   RegisterDXFEntity(GDBLWPolylineID,'LWPOLYLINE','LWPolyline',@AllocLWpolyline,@AllocAndInitLWpolyline,@SetLWpolylineGeomProps,@AllocAndCreateLWpolyline);
   finalization
-  lwtv.free;
+  lwtv.done;
 end.

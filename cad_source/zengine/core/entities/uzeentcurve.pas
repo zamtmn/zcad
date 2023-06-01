@@ -880,5 +880,5 @@ end;
 initialization
   curveVertexArrayInWCS.init(200);
 finalization
-  curveVertexArrayInWCS.free;
+  curveVertexArrayInWCS.done;
 end.

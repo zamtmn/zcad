@@ -312,6 +312,8 @@ begin
      FreeAndNil(onKeyDown);
      FreeAndNil(getfocusedcontrol);
 
+  if assigned(GetStateFuncsVector) then
+    FreeAndNil(GetStateFuncsVector);
 end;
 
 function TZCMsgCallBackInterface.GetUniqueZMessageID:TZMessageID;

@@ -829,6 +829,7 @@ begin
      mainline.done;
      MarkLine.done;
      tbl.done;
+     TextContent:='';
 end;
 function AllocElLeader:PGDBObjElLeader;
 begin

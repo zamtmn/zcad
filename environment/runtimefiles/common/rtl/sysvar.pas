@@ -198,6 +198,6 @@ begin
   SYS_Version:='';
   PATH_Device_Library:='$(ZCADPath)/programdb;$(ZCADPath)/userdb';
   PATH_Template_Path:='$(ZCADPath)/template';
-  PATH_Template_File:='default.dxf';
+  PATH_Template_File:='minimal.dxf';
   PATH_LayoutFile:='$(ZCADPath)/defaultlayout.xml';
 end.

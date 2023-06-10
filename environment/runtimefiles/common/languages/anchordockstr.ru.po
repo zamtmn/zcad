@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Language: ru\n"
-"X-Generator: Poedit 2.2.1\n"
+"X-Generator: Poedit 2.4.3\n"
 
 #: anchordockstr.adrsafreesideofasplittermustnotbeanchorednodetypeancho
 #, object-pascal-format
@@ -94,14 +94,10 @@ msgstr "Каждое пристыкованное окно имеет загол
 msgid "Empty name: "
 msgstr "Имя пусто: "
 
-#: anchordockstr.adrsenlarge
-msgid "Enlarge"
-msgstr "Расширить"
-
 #: anchordockstr.adrsenlargeside
 #, object-pascal-format
 msgid "Enlarge %s side"
-msgstr "Расширить край %s"
+msgstr "Вытянуть край %s"
 
 #: anchordockstr.adrsfilledheaders
 msgid "Fill headers"
@@ -110,6 +106,14 @@ msgstr "Отображать заголовки закрашенными"
 #: anchordockstr.adrsfilledheadershint
 msgid "Fill headers of docked controls"
 msgstr "Закрашивать заголовки пристыкованных объектов"
+
+#: anchordockstr.adrsflatheadersbuttons
+msgid "Flat header buttons"
+msgstr "Плоские кнопки в заголовках"
+
+#: anchordockstr.adrsflatheadersbuttonshint
+msgid "Flat buttons in headers of docked controls"
+msgstr "Плоские кнопки в заголовках пристыкованных объектов"
 
 #: anchordockstr.adrsflattenheaders
 msgid "Flatten headers"

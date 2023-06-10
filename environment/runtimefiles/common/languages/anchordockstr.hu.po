@@ -94,10 +94,6 @@ msgstr "Minden dokkolt ablaknak van fejléce, amely lehetővé teszi a húzást,
 msgid "Empty name: "
 msgstr "Üres név:"
 
-#: anchordockstr.adrsenlarge
-msgid "Enlarge"
-msgstr "Bővítés"
-
 #: anchordockstr.adrsenlargeside
 #, object-pascal-format
 msgid "Enlarge %s side"
@@ -110,6 +106,14 @@ msgstr "Fejlécek kitöltése"
 #: anchordockstr.adrsfilledheadershint
 msgid "Fill headers of docked controls"
 msgstr "A dokkolt vezérlők fejléceinek kitöltése"
+
+#: anchordockstr.adrsflatheadersbuttons
+msgid "Flat header buttons"
+msgstr ""
+
+#: anchordockstr.adrsflatheadersbuttonshint
+msgid "Flat buttons in headers of docked controls"
+msgstr ""
 
 #: anchordockstr.adrsflattenheaders
 msgid "Flatten headers"

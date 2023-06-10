@@ -95,6 +95,8 @@ GDBObjLWPolyline= object(GDBObjWithLocalCS)
            end;
 {Export-}
 implementation
+var
+   lwtv:GDBpolyline2DArray;
 procedure GDBObjLWpolyline.higlight(var DC:TDrawContext);
 begin
 end;
@@ -428,10 +430,8 @@ begin
           end;
 end;
 function GDBObjLWpolyline.Clone;
-var tpo: PGDBObjLWPolyline;
-    p:PGDBVertex2D;
-    pw:PGLLWWidth;
-    i:Integer;
+var
+  tpo: PGDBObjLWPolyline;
 begin
   Getmem(Pointer(tpo), sizeof(GDBObjLWPolyline));
   tpo^.init({bp.owner}own,vp.Layer, vp.LineWeight,closed);
@@ -439,16 +439,10 @@ begin
   CopyExtensionsTo(tpo^);
   tpo^.Local:=local;
   //tpo^.vertexarray.init(1000);
-  p:=Vertex2D_in_OCS_Array.GetParrayAsPointer;
-  pw:=Width2D_in_OCS_Array.GetParrayAsPointer;
-  for i:=0 to Vertex2D_in_OCS_Array.Count-1 do
-  begin
-      tpo^.Vertex2D_in_OCS_Array.PushBackData(p^);
-      tpo^.Width2D_in_OCS_Array.PushBackData(pw^);
-      inc(p);
-      inc(pw);
-  end;
-
+  tpo^.Vertex2D_in_OCS_Array.SetSize(Vertex2D_in_OCS_Array.Count);
+  Vertex2D_in_OCS_Array.copyto(tpo^.Vertex2D_in_OCS_Array);
+  tpo^.Width2D_in_OCS_Array.SetSize(Width2D_in_OCS_Array.Count);
+  Width2D_in_OCS_Array.copyto(tpo^.Width2D_in_OCS_Array);
   result := tpo;
 end;
 function GDBObjLWpolyline.GetObjTypeName;
@@ -555,11 +549,15 @@ begin
     myglend();}
     v:=uzegeometry.VertexSub(vp.BoundingBox.RTF,vp.BoundingBox.LBN);
 
-    if not CanSimplyDrawInWCS(DC,uzegeometry.oneVertexlength(v),5) then
+    if not SqrCanSimplyDrawInWCS(DC,uzegeometry.SqrOneVertexlength(v),49) then
     if Width3D_in_WCS_Array.parray<>nil then
            begin
                 q3d:=Width3D_in_WCS_Array.GetParrayAsPointer;
+                ie:=(Width3D_in_WCS_Array.count div 4)+1;
+                for i := 0 to (Width3D_in_WCS_Array.count-2)div ie do begin
                 dc.drawer.DrawLine3DInModelSpace(q3d^[0],q3d^[1],dc.DrawingContext.matrixs);
+                inc(q3d,ie);
+                end;
                 {oglsm.myglbegin(GL_Lines);
                 oglsm.myglVertex3dv(@q3d^[0]);
                 oglsm.myglVertex3dv(@q3d^[1]);
@@ -683,7 +681,7 @@ begin
         begin
           s := f.readString;
           val(s, p.y, code);
-          Vertex2D_in_OCS_Array.PushBackData(p);
+          lwtv.PushBackData(p);
           inc(hlGDBWord);
         end;
       38:
@@ -696,13 +694,13 @@ begin
         begin
           s := f.readString;
           //val(s, PGLLWWidth(Width2D_in_OCS_Array.getelement(hlGDBWord-1)).startw, code);
-          Width2D_in_OCS_Array.SetCount(hlGDBWord);
+          Width2D_in_OCS_Array.SetCount(numv);
           val(s, PGLLWWidth(Width2D_in_OCS_Array.getDataMutable(hlGDBWord-1)).startw, code);
         end;
       41:
         begin
           s := f.readString;
-          Width2D_in_OCS_Array.SetCount(hlGDBWord);
+          Width2D_in_OCS_Array.SetCount(numv);
           val(s, PGLLWWidth(Width2D_in_OCS_Array.getDataMutable(hlGDBWord- 1)).endw, code);
           //Width2D_in_OCS_Array.SetCount(hlGDBWord);
         end;
@@ -751,7 +749,10 @@ begin
     s := f.readString;
     val(s, byt, code);
   end;
-  Vertex2D_in_OCS_Array.Shrink;
+  Vertex2D_in_OCS_Array.SetSize(lwtv.Count);
+  lwtv.copyto(Vertex2D_in_OCS_Array);
+  lwtv.Clear;
+  //Vertex2D_in_OCS_Array.Shrink;
   Width2D_in_OCS_Array.Shrink;
   //Vertex3D_in_WCS_Array.Shrink;
   //Width3D_in_WCS_Array.Shrink;
@@ -1051,6 +1052,9 @@ begin
   SetLWpolylineGeomProps(result,args);
 end;
 
-begin
+initialization
+  lwtv.init(200,false);
   RegisterDXFEntity(GDBLWPolylineID,'LWPOLYLINE','LWPolyline',@AllocLWpolyline,@AllocAndInitLWpolyline,@SetLWpolylineGeomProps,@AllocAndCreateLWpolyline);
+  finalization
+  lwtv.done;
 end.

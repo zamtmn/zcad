@@ -96,10 +96,6 @@ msgstr "Her yuvalanmış pencerenin sürüklemeye izin veren bir üstbilgisi var
 msgid "Empty name: "
 msgstr "Boş isim : "
 
-#: anchordockstr.adrsenlarge
-msgid "Enlarge"
-msgstr "Büyüt"
-
 #: anchordockstr.adrsenlargeside
 #, object-pascal-format
 msgid "Enlarge %s side"
@@ -112,6 +108,14 @@ msgstr "Başlıkları doldur"
 #: anchordockstr.adrsfilledheadershint
 msgid "Fill headers of docked controls"
 msgstr "Yerleşik kontrollerin başlıklarını doldur"
+
+#: anchordockstr.adrsflatheadersbuttons
+msgid "Flat header buttons"
+msgstr ""
+
+#: anchordockstr.adrsflatheadersbuttonshint
+msgid "Flat buttons in headers of docked controls"
+msgstr ""
 
 #: anchordockstr.adrsflattenheaders
 msgid "Flatten headers"

@@ -476,16 +476,18 @@ begin
                                                                                 dc:=drawing.CreateDrawingRC;
                                                                                 PBlockDefArray(PGDBObjBlockdefArray(drawing.GetBlockDefArraySimple).parray)^[index].FormatEntity(drawing,dc);
                                                                                end;
-          ConstObjArray.free;
           mainowner:=getmainowner;
           if mainowner<>nil then
           if mainowner.gettype=1 then
                                    exit;
           pblockdef:=PGDBObjBlockdefArray(drawing.GetBlockDefArraySimple).getDataMutable(index);
+
+          ConstObjArray.free;
           if pblockdef.ObjArray.count>0 then
           begin
           dc:=drawing.CreateDrawingRC;
 
+          ConstObjArray.SetSize(pblockdef.ObjArray.Count);
           pvisible:=pblockdef.ObjArray.beginiterate(ir);
           if pvisible<>nil then
           repeat
@@ -662,7 +664,7 @@ else if not dxfStringload(f,2,byt,name)then {s := }f.readString;
           s := f.readworld(#10, #13);
         until s = 'SEQEND'
       end;}
-  zTraceLn('{D-}[DXF_CONTENTS]Name='+name);
+  zTraceLn('{D}[DXF_CONTENTS]Name='+name);
   if name='EL_LIGHT_SWIITH' then
     name:=name;
       //programlog.LogOutFormatStr('BlockInsert name="%s" loaded',[name],lp_OldPos,LM_Debug);

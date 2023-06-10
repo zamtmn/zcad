@@ -22,20 +22,21 @@ var
 
 implementation
 begin
-   CABLE_Type:=TCT_Control;
-   Amount:=0.0;
    LENGTH_RoundTo:=0;
    LENGTH_Add:=0.0;
-   LENGTH_KReserve:=1.2;
-   Segment:=0;
    LENGTH_Scale:=0.1;
-   CABLE_Material:='не задан ??;
-   CABLE_WireCount:=0;
+   LENGTH_KReserve:=1.2;
+
+   CABLE_Type:=TCT_Control;
    CABLE_MountingMethod:='-';
+   CABLE_Segment:=0;
+   CABLE_WireCount:=0;
+   CABLE_TotalCD:=0;
+   CABLE_AutoGen:=false;
+
+   AmountD:=0.0;
 
    GC_HeadDevice:='??';
    GC_HDShortName:='??';
    GC_HDGroup:=0;
-   CABLE_TotalCD:=0;
-   CABLE_AutoGen:=false;
 end.

@@ -62,6 +62,7 @@ type
             procedure updateenttreeadress;
             procedure CorrectNodeBoundingBox(var Entity:TEntity);
             procedure AddObjectToNodeTree(var Entity:TEntity);
+            procedure SetSize(ns:integer);
             procedure Lock;
             procedure UnLock;
             procedure Separate;virtual;
@@ -156,6 +157,7 @@ var
     ir:itrec;
 begin
   nul.clear;
+  nul.setsize(TestNode.nul.count);
   TestNode.nul.copyto(nul);
   Separator:=TestNode.plane;
   if TestNode.plus.count>0 then
@@ -167,6 +169,7 @@ begin
       end;
       pplusnode.lock;
       pplusnode.root:=@self;
+      pplusnode.setsize(TestNode.plus.count);
        pobj:=TestNode.plus.beginiterate(ir);
        if pobj<>nil then
          repeat
@@ -185,6 +188,7 @@ begin
       end;
       pminusnode.lock;
       pminusnode.root:=@self;
+      pminusnode.setsize(TestNode.minus.count);
       pobj:=TestNode.minus.beginiterate(ir);
       if pobj<>nil then
         repeat
@@ -255,7 +259,6 @@ begin
         pobj:=nul.iterate(ir);
   until pobj=nil;
   end;
-
   OptimalTestNode:=GetOptimalTestNode(TNArray);
   StoreOptimalTestNode(TNArray[OptimalTestNode]);
   updateenttreeadress;
@@ -271,6 +274,11 @@ begin
                     else
                         BoundingBox:=TEntsManipulator.GetEntityBoundingBox(Entity);
 end;
+procedure GZBInarySeparatedGeometry<TBoundingBox,TSeparator,TNodeData,TEntsManipulator,TEntity,TEntityArrayIterateResult,TEntityArray>.SetSize(ns:integer);
+begin
+  TEntsManipulator.SetSizeInArray(ns,nul);
+end;
+
 procedure GZBInarySeparatedGeometry<TBoundingBox,TSeparator,TNodeData,TEntsManipulator,TEntity,TEntityArrayIterateResult,TEntityArray>.CorrectNodeBoundingBox(var Entity:TEntity);
 begin
      TEntsManipulator.CorrectNodeBoundingBox(BoundingBox,Entity);

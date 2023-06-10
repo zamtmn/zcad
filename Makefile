@@ -240,6 +240,7 @@ rmpkgslibs:
 	rm -rf  cad_source$(PATHDELIM)components$(PATHDELIM)ztoolbars$(PATHDELIM)lib$(PATHDELIM)*
 	rm -rf  cad_source$(PATHDELIM)components$(PATHDELIM)zundostack$(PATHDELIM)lib$(PATHDELIM)*
 	rm -rf  cad_source$(PATHDELIM)components$(PATHDELIM)fpdwg$(PATHDELIM)lib$(PATHDELIM)*
+	rm -rf  lib$(PATHDELIM)*
 
 installpkgstolaz: checkvars rmpkgslibs
 ifneq ($(OSDETECT),OSX)

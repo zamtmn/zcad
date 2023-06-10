@@ -1,4 +1,4 @@
-unit DEVICE_EL_VL_VEDOMOSTI3_2;
+unit DEVICE_EL_VL_STAMP5;
 
 interface
 
@@ -8,9 +8,7 @@ usescopy objname;
 
 var
 
-T5:String;(*'Содержание'*)
-T7:String;(*'Лист'*)
-T10:String;(*'Примечание'*)
+T21:String;(*'Сквозная нумерация'*)
 
 implementation
 
@@ -24,8 +22,6 @@ NMO_Name:='ШТ0';
 NMO_BaseName:='ШТ';
 NMO_Suffix:='??';
 
-T5:='??';
-T7:='??';
-T10:='??';
+T21:='??';
 
 end.

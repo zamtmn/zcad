@@ -1,4 +1,4 @@
-unit DEVICE_EL_VL_SOCKET1_3F;
+unit DEVICE_EL_VL_LIGHT8_1;
 
 interface
 
@@ -6,11 +6,12 @@ uses system,devices;
 usescopy blocktype;
 usescopy objname_eo;
 usescopy objgroup;
-usescopy addtocable;
+usescopy _addtocable;
 
 var
 
-VL_Type:String;(*'Розетка'*)
+VL_Code:String;(*'Код'*)
+VL_Type:String;(*'Светильник'*)
 VL_Room:String;(*'Помещение'*)
 VL_Floor:String;(*'Этаж'*)
 VL_Group:String;(*'Группа'*)
@@ -19,7 +20,7 @@ implementation
 
 begin
 
-BTY_TreeCoord:='PLAN_EM_Розетка';
+BTY_TreeCoord:='PLAN_EM_Светильник';
 Device_Type:=TDT_SilaPotr;
 Device_Class:=TDC_Shell;
 
@@ -32,7 +33,7 @@ GC_HeadDevice:='ЩО??';
 GC_HDShortName:='??';
 GC_HDGroup:=0;
 
-VL_Type:='Р СП/3Ф ip20';
+VL_Type:='ЭО ЗВ';
 VL_Room:='.';
 VL_Floor:='0';
 

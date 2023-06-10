@@ -1,4 +1,4 @@
-unit DEVICE_EL_VL_SOCKET1_3F;
+unit DEVICE_EL_VL_SWITH4_1P;
 
 interface
 
@@ -10,7 +10,7 @@ usescopy addtocable;
 
 var
 
-VL_Type:String;(*'Розетка'*)
+VL_Type:String;(*'Выключатель'*)
 VL_Room:String;(*'Помещение'*)
 VL_Floor:String;(*'Этаж'*)
 VL_Group:String;(*'Группа'*)
@@ -19,7 +19,7 @@ implementation
 
 begin
 
-BTY_TreeCoord:='PLAN_EM_Розетка';
+BTY_TreeCoord:='PLAN_EM_Выключатель';
 Device_Type:=TDT_SilaPotr;
 Device_Class:=TDC_Shell;
 
@@ -32,7 +32,7 @@ GC_HeadDevice:='ЩО??';
 GC_HDShortName:='??';
 GC_HDGroup:=0;
 
-VL_Type:='Р СП/3Ф ip20';
+VL_Type:='В СП/1 ip31';
 VL_Room:='.';
 VL_Floor:='0';
 

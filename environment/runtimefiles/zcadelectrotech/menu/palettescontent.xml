@@ -32,6 +32,7 @@
 	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_VEDOMOSTI3_1)" Img='DEVICE_EL_VL_VEDOMOSTI3_1_300' Caption='Изменения, заголовок'/>
 	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_VEDOMOSTI3_2)" Img='DEVICE_EL_VL_VEDOMOSTI3_2_300' Caption='Изменения, строка'/>
 	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_STAMP6)" Img='DEVICE_EL_VL_STAMP6_300' Caption='Записка ГИПа'/>
+	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_STAMP5)" Img='DEVICE_EL_VL_STAMP5_300' Caption='Скозная нумерация'/>
       	</ZTreeNode>
       	<ZTreeNode Caption='Risers'>
       	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_CABLE_BREAK)" Img='DEVICE_EL_VL_CABLE_BREAK_300' Caption='Обрыв'/>
@@ -65,8 +66,11 @@
 	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_LIGHT2_1)" Img='DEVICE_EL_VL_LIGHT2_1_300' Caption='Светильник 4х18'/>
 	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_LIGHT3_1)" Img='DEVICE_EL_VL_LIGHT3_1_300' Caption='Светильник 1х18'/>
 	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_LIGHT4_1)" Img='DEVICE_EL_VL_LIGHT4_1_300' Caption='Световой указатель'/>
-	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_LIGHT5_1)" Img='DEVICE_EL_VL_LIGHT5_1_300' Caption='Колодка клемная'/>
-	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_LIGHT6_1)" Img='DEVICE_EL_VL_LIGHT6_1_300' Caption='Свободный аппарат'/>
+	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_LIGHT5_1)" Img='DEVICE_EL_VL_LIGHT5_1_300' Caption='Свободный аппарат'/>
+	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_LIGHT6_1)" Img='DEVICE_EL_VL_LIGHT6_1_300' Caption='Колодка клемная КВ'/>
+	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_LIGHT7_1)" Img='DEVICE_EL_VL_LIGHT7_1_300' Caption='Настенный патрон КВ'/>
+	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_LIGHT8_1)" Img='DEVICE_EL_VL_LIGHT8_1_300' Caption='Звонок КВ'/>
+	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_LIGHT9_1)" Img='DEVICE_EL_VL_LIGHT9_1_300' Caption='Кнопка КВ'/>
       	</ZTreeNode>
       	<ZTreeNode Caption='Switches'>
 	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_SWITH1_1P)" Img='DEVICE_EL_VL_SWITH1_1P_300' Caption='Выключатель СП31 1P'/>
@@ -78,6 +82,8 @@
 	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_SWITH3_1P)" Img='DEVICE_EL_VL_SWITH3_1P_300' Caption='Выключатель ОП54 1P'/>
 	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_SWITH3_2P)" Img='DEVICE_EL_VL_SWITH3_2P_300' Caption='Выключатель ОП54 2P'/>
 	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_SWITH3_3P)" Img='DEVICE_EL_VL_SWITH3_3P_300' Caption='Выключатель ОП54 проходной'/>
+	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_SWITH4_1P)" Img='DEVICE_EL_VL_SWITH4_1P_300' Caption='Выключатель СП31 1P КВ'/>
+	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_SWITH4_2P)" Img='DEVICE_EL_VL_SWITH4_2P_300' Caption='Выключатель СП31 2P КВ'/>
       	</ZTreeNode>
       	<ZTreeNode Caption='Sockets'>
 	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_SOCKET1_1P)" Img='DEVICE_EL_VL_SOCKET1_1P_300' Caption='Розетка СП31 1P'/>
@@ -92,6 +98,11 @@
 	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_SOCKET3_2P)" Img='DEVICE_EL_VL_SOCKET3_2P_300' Caption='Розетка ОП54 2P'/>
 	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_SOCKET3_3P)" Img='DEVICE_EL_VL_SOCKET3_3P_300' Caption='Розетка ОП54 3P'/>
 	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_SOCKET3_3F)" Img='DEVICE_EL_VL_SOCKET3_3F_300' Caption='Розетка ОП54 3F'/>
+	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_SOCKET4_1P)" Img='DEVICE_EL_VL_SOCKET4_1P_300' Caption='Розетка СП31 1P КВ'/>
+	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_SOCKET4_2P)" Img='DEVICE_EL_VL_SOCKET4_2P_300' Caption='Розетка СП31 2P КВ'/>
+	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_SOCKET4_3P)" Img='DEVICE_EL_VL_SOCKET4_3P_300' Caption='Розетка ОП54 1P КВ'/>
+	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_SOCKET4_4P)" Img='DEVICE_EL_VL_SOCKET4_4P_300' Caption='Плита СП31 1P КВ'/>
+
 	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_SOCKET_YTR)" Img='DEVICE_EL_VL_SOCKET_YTR_300' Caption='Ящик с трансформатором'/>
 	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_SOCKET_HEATER)" Img='DEVICE_EL_VL_SOCKET_HEATER_300' Caption='Электрообогреватель'/>
 	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_SOCKET_BU)" Img='DEVICE_EL_VL_SOCKET_BU_300' Caption='Блок управления'/>

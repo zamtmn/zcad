@@ -15,6 +15,7 @@ VL_Type:String;(*'Светильник'*)
 VL_Room:String;(*'Помещение'*)
 VL_Floor:String;(*'Этаж'*)
 VL_Group:String;(*'Группа'*)
+
 implementation
 
 begin
@@ -32,7 +33,8 @@ GC_HeadDevice:='ЩО??';
 GC_HDShortName:='??';
 GC_HDGroup:=0;
 
+VL_Type:='ЭО РЛ';
 VL_Room:='.';
-VL_Floor:='.';
+VL_Floor:='0';
 
 end.

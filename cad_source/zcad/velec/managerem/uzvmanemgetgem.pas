@@ -115,6 +115,8 @@ uses
    uzeblockdef,
 
   uzvagraphsdev,
+   garrayutils,
+   uzbstrproc,
   uzvconsts;
   //uzvtmasterdev,
   //uzvtestdraw;
@@ -133,6 +135,12 @@ type
  TListDev=specialize TVector<pGDBObjDevice>;
  //список имен группы головного устройства
  TListGroupHeadDev=specialize TVector<string>;
+
+  TSortComparer=class
+   class function c (a, b:string):boolean;{inline;}
+  end;
+
+  devgroupnamesort=specialize TOrderingArrayUtils<TListGroupHeadDev, string, TSortComparer>;
 
  //**Получить список деревьев(графов)
  function getListGrapghEM:TListGraphDev;
@@ -228,6 +236,15 @@ var
 //         graphDev.GetEdge(graphDev.Root,graphDev.Root.Childs[i]).getCable;
 //           getListName(graphDev,graphDev.Root.Childs[i].Index,listGroup);
        end;
+           result.PushBack('6г');
+           result.PushBack('3ф');
+                      result.PushBack('3');
+               for j:=0 to result.Size-1 do
+       begin
+         ZCMsgCallBackInterface.TextMessage(' GroupName= '+result[j],TMWOHistoryOut);
+       end;
+      ZCMsgCallBackInterface.TextMessage(' *************** ',TMWOHistoryOut);
+     devgroupnamesort.Sort(result,result.Size);
 
           for j:=0 to result.Size-1 do
        begin
@@ -1278,6 +1295,14 @@ begin
    //в зависимости что чего меньше-больше
 end;
 
+       //unction Compare (str1, str2:string):boolean;{inline;}
+class function TSortComparer.c(a,b:string):boolean;
+begin
+     if {a.name<b.name}AnsiNaturalCompare(a,b)>0 then
+                          result:=false
+                      else
+                          result:=true;
+end;
 
 function TDummyComparer.Compare (Edge1, Edge2: Pointer): Integer;
 var

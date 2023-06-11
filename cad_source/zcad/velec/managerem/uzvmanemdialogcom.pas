@@ -44,6 +44,7 @@ uses
   uzcenitiesvariablesextender,
   uzvmanemshieldsgroupparams,
   uzegeometry,
+  //garrayutils,
   Varman;
 
 resourcestring
@@ -72,6 +73,8 @@ resourcestring
 
 implementation
 type
+
+
   //  TDiff=(
   //      TD_Diff(*'Diff'*),
   //      TD_NotDiff(*'Not Diff'*)
@@ -92,7 +95,12 @@ type
   //
 
   TListDev=TVector<pGDBObjDevice>;
+
   TListGroupHeadDev=TVector<string>;
+  //TSortComparer=class
+  // function Compare (str11, str2:string):boolean;{inline;}
+  //end;
+  //devgroupnamesort=TOrderingArrayUtils<TListGroupHeadDev, string, TSortComparer>;
 
 var
   clFileParam:CMDLinePromptParser.TGeneralParsedText=nil;
@@ -260,6 +268,8 @@ begin
     //Получить группы которые есть у головного устройства
     listNameGroupDev:=TListGroupHeadDev.Create;
     listNameGroupDev:=uzvmanemgetgem.getListNameGroupHD(graphView);
+
+    //devgroupnamesort.Sort(listNameGroupDev,listNameGroupDev.Size);
 
     visualGraphTree(graphView,insertCoordination,3,depthVisual);
 

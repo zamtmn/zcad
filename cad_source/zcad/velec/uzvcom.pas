@@ -115,6 +115,7 @@ uses
   //ExtType,
   //Pointerv,
   //Graphs,
+  uzvslagcabparams,
   uzcenitiesvariablesextender,
   uzvsgeom,
     gzctnrVectorTypes,                  //itrec
@@ -1546,6 +1547,8 @@ begin
              pSuperLine:=PGDBObjSuperLine(pobj);
              pvd:=FindVariableInEnt(pSuperLine,'NMO_Name');
              tempName:=pString(pvd^.data.Addr.Instance)^;
+             if (uzvslagcabComParams.settingVizCab.vizFullTreeCab = true) then
+                ZCMsgCallBackInterface.TextMessage('**nameCable='+nameCable + '  tempName='+tempName,TMWOHistoryOut);
              if nameCable=tempName then
                begin
                  infoCable.cableEnt:=pSuperLine;

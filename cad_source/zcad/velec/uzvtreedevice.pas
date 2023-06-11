@@ -2378,7 +2378,8 @@ function getListMasterDevNew(listVertexEdge:TGraphBuilder;globalGraph: TGraph;li
     listCableLaying := TVertexofCableLaying.Create;
 
     //counter:=0;
-
+    if (uzvslagcabComParams.settingVizCab.vizFullTreeCab = true) then
+       ZCMsgCallBackInterface.TextMessage('ПОЛУЧАЕМ СПИСОК УСТРОЙСТВ: ',TMWOHistoryOut);
     //на базе listVertexEdge заполняем список головных устройств и все что в них входит
     for i:=0 to listVertexEdge.listVertex.Size-1 do
       begin
@@ -2387,7 +2388,7 @@ function getListMasterDevNew(listVertexEdge:TGraphBuilder;globalGraph: TGraph;li
          begin
              //Получаем список сколько у устройства хозяев
             if (uzvslagcabComParams.settingVizCab.vizFullTreeCab = true) then
-               ZCMsgCallBackInterface.TextMessage('ПОЛУЧАЕМ СПИСОК УСТРОЙСТВ ',TMWOHistoryOut);
+               ZCMsgCallBackInterface.TextMessage('**Устройство='+ listVertexEdge.listVertex[i].deviceEnt^.Name,TMWOHistoryOut);
 
             if listCollectConnect(listVertexEdge.listVertex[i].deviceEnt,listCableLaying,listVertexEdge.nameSuperLine,listSLname) then
              begin
@@ -2399,6 +2400,10 @@ function getListMasterDevNew(listVertexEdge:TGraphBuilder;globalGraph: TGraph;li
                  if (uzvslagcabComParams.settingVizCab.vizFullTreeCab = true) then
                    ZCMsgCallBackInterface.TextMessage('**Номер ПОДКЛЮЧЕНИЯ='+inttostr(infoSubDev.devConnectInfo.numConnect),TMWOHistoryOut);
                  headDevName:=listCableLaying[m].HeadDeviceName;
+
+                 if (uzvslagcabComParams.settingVizCab.vizFullTreeCab = true) then
+                   ZCMsgCallBackInterface.TextMessage('**Имя ГУ='+headDevName,TMWOHistoryOut);
+
                  //Поиск хозяина внутри графа полученного из listVertexEdge и возврат номера устройства
                  numHeadDev:=getNumHeadDevice(listVertexEdge.listVertex,headDevName,globalGraph,i); // если минус значит нету хозяина
 
@@ -2477,6 +2482,8 @@ function getListMasterDevNew(listVertexEdge:TGraphBuilder;globalGraph: TGraph;li
                    end
                    else
                    begin
+                     if (uzvslagcabComParams.settingVizCab.vizFullTreeCab = true) then
+                       ZCMsgCallBackInterface.TextMessage('**********ОШИБКА. Глобальный номер ГУ неопределен='+inttostr(numHeadDev),TMWOHistoryOut);
                      uzvdeverrors.addDevErrors(listVertexEdge.listVertex[i].deviceEnt,'Подкл.'+inttostr(infoSubDev.devConnectInfo.numConnect)+':нет трассы до ГУ или неправильное имя ('+ infoSubDev.devConnectInfo.HeadDeviceName+');'  );
                    end;
                end;

@@ -116,6 +116,7 @@ type
       var
         CurrentLogLevel:TLogLevel;
         DefaultLogLevel:TLogLevel;
+        DisabledModuleAllow:TLogLevelType;
 
         LogLevelAliasDic:TLogLevelAliasDic;
         EnabledMasks,DisabledMasks:TMasks;
@@ -268,11 +269,14 @@ end;}
 function TLog.IsNeedToLog(LogMode:TLogLevel;LMDI:TModuleDesk):boolean;
 begin
   result:=ModulesDesks.GetPLincedData(LMDI)^.enabled;
-  if result then
-  if LogMode<CurrentLogLevel then
-    result:=false
-  else
-    result:=true;
+  if result then begin
+    if LogMode<CurrentLogLevel then
+      result:=false
+    else
+      result:=true;
+  end else begin
+    result:=LogLevels.GetPLincedData(LogMode)^.LogLevelType>=DisabledModuleAllow;
+  end;
 end;
 procedure TLog.LogOutFormatStr(Const Fmt:TLogMsg;const Args :Array of const;LogMode:TLogLevel;LMDI:TModuleDesk;MsgOptions:TMsgOpt=MsgDefaultOptions);
 begin
@@ -564,6 +568,7 @@ begin
   LogLevels.init;
   EnabledMasks:=TMasks.Create;
   DisabledMasks:=TMasks.Create;
+  DisabledModuleAllow:=LLTWarning;
   ModulesDesks.init;
   LogLevelAliasDic:=TLogLevelAliasDic.create;
   LogStampter.init;

@@ -82,6 +82,7 @@ resourcestring
   {files}
   rsUnableToOpenFile='Unable to open file "%s"';
   rsUnableToFindFile='Unable to find file "%s"';
+  rsUnableToFindUnit='Unable to find unit "%s"';
   rsTemplateNotFound='Template file "%s" not found';
 
   {commands messages}

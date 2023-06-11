@@ -503,30 +503,31 @@ begin
   createpoint;
   calcbb(dc);
   Representation.Clear;
-  Representation.Geometry.Lock;
-  hatchTess:=Triangulator.NewTesselator;
+  if not (ESTemp in State) then begin
+    Representation.Geometry.Lock;
+    hatchTess:=Triangulator.NewTesselator;
 
-  pv:=Vertex3D_in_WCS_Array.GetParrayAsPointer;
+    pv:=Vertex3D_in_WCS_Array.GetParrayAsPointer;
 
-  if PPattern=nil then begin
-    Triangulator.BeginPolygon(@Representation,hatchTess);
-    for i:=0 to Path.paths.Count-1 do begin
-      Triangulator.BeginContour(hatchTess);
-      for j:=0 to Path.paths.getData(i).Count-1 do begin
-         Triangulator.TessVertex(hatchTess,pv^);
-         inc(pv);
+    if PPattern=nil then begin
+      Triangulator.BeginPolygon(@Representation,hatchTess);
+      for i:=0 to Path.paths.Count-1 do begin
+        Triangulator.BeginContour(hatchTess);
+        for j:=0 to Path.paths.getData(i).Count-1 do begin
+           Triangulator.TessVertex(hatchTess,pv^);
+           inc(pv);
+        end;
+        Triangulator.EndContour(hatchTess);
       end;
-      Triangulator.EndContour(hatchTess);
+      Triangulator.EndPolygon(hatchTess);
+    end else begin
+      for i:=0 to PPattern^.Count-1 do
+        FillPattern(PPattern^.getDataMutable(i)^,DC);
     end;
-    Triangulator.EndPolygon(hatchTess);
-  end else begin
-    for i:=0 to PPattern^.Count-1 do
-      FillPattern(PPattern^.getDataMutable(i)^,DC);
-  end;
 
-  Representation.Geometry.UnLock;
-  Triangulator.DeleteTess(hatchTess);
-  //Representation.DrawPolyLineWithLT(dc,Vertex3D_in_WCS_Array,vp,true,true);
+    Representation.Geometry.UnLock;
+    Triangulator.DeleteTess(hatchTess);
+  end;
   if assigned(EntExtensions)then
     EntExtensions.RunOnAfterEntityFormat(@self,drawing,DC);
 end;

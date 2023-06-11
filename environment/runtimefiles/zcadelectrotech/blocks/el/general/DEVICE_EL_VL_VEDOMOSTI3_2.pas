@@ -9,7 +9,8 @@ usescopy objname;
 var
 
 T5:String;(*'Содержание'*)
-T10:String;(*'Лист'*)
+T7:String;(*'Лист'*)
+T10:String;(*'Примечание'*)
 
 implementation
 
@@ -24,6 +25,7 @@ NMO_BaseName:='ШТ';
 NMO_Suffix:='??';
 
 T5:='??';
+T7:='??';
 T10:='??';
 
 end.

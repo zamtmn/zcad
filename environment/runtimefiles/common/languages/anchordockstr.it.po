@@ -96,10 +96,6 @@ msgstr "Ogni finestra \"docked\" ha un'intestazione che consente il trascinament
 msgid "Empty name: "
 msgstr "Nome vuoto: "
 
-#: anchordockstr.adrsenlarge
-msgid "Enlarge"
-msgstr "Allarga"
-
 #: anchordockstr.adrsenlargeside
 #, object-pascal-format
 msgid "Enlarge %s side"
@@ -112,6 +108,14 @@ msgstr "Riempi le intestazioni"
 #: anchordockstr.adrsfilledheadershint
 msgid "Fill headers of docked controls"
 msgstr "Riempi le intestazioni dei controlli \"docked\""
+
+#: anchordockstr.adrsflatheadersbuttons
+msgid "Flat header buttons"
+msgstr ""
+
+#: anchordockstr.adrsflatheadersbuttonshint
+msgid "Flat buttons in headers of docked controls"
+msgstr ""
 
 #: anchordockstr.adrsflattenheaders
 msgid "Flatten headers"

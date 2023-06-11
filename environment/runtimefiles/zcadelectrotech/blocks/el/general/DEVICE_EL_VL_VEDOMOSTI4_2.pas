@@ -20,8 +20,8 @@ BTY_TreeCoord:='PLAN_EM_Штамп';
 Device_Type:=TDT_SilaPotr;
 Device_Class:=TDC_Shell;
 
-NMO_Name:='ВЧ0';
-NMO_BaseName:='ВЧ';
+NMO_Name:='СД0';
+NMO_BaseName:='СД';
 NMO_Suffix:='??';
 
 T1:='??';

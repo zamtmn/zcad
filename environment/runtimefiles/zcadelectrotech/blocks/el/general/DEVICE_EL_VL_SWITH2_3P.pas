@@ -34,6 +34,6 @@ GC_HDGroup:=0;
 
 VL_Type:='В ОП/П ip31';
 VL_Room:='.';
-VL_Floor:='.';
+VL_Floor:='0';
 
 end.

@@ -51,8 +51,8 @@ var
 
 procedure SplashTextOutProc(s:string;pm:boolean);
 begin
-     if assigned(SplashForm) then
-                                   SplashForm.TXTOut(s,true);
+  if assigned(SplashForm) then
+    SplashForm.TXTOut(s,{$IF DEFINED(MSWINDOWS)}false{$ELSE}true{$ENDIF});
 end;
 
 procedure TSplashForm.TXTOut;

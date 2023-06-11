@@ -34,6 +34,6 @@ GC_HDGroup:=0;
 
 VL_Type:='Р СП/2 ip20';
 VL_Room:='.';
-VL_Floor:='.';
+VL_Floor:='0';
 
 end.

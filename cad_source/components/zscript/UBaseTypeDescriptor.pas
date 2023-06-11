@@ -431,7 +431,7 @@ begin
 end;
 function BaseTypeDescriptor<T,TManipulator>.AllocInstance:Pointer;
 begin
-  Getmem(result,SizeOf(TManipulator.pt));
+  Getmem(result,SizeOf(T));
 end;
 procedure StringGeneralDescriptor<T,TManipulator>.CopyInstanceTo;
 begin

@@ -32,7 +32,8 @@ GC_HeadDevice:='ЩО??';
 GC_HDShortName:='??';
 GC_HDGroup:=0;
 
+VL_Type:='ЯТП 36 IP54';
 VL_Room:='.';
-VL_Floor:='.';
+VL_Floor:='0';
 
 end.

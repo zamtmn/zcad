@@ -35,6 +35,6 @@ GC_HDGroup:=0;
 
 VL_Code:='А';
 VL_Room:='.';
-VL_Floor:='.';
+VL_Floor:='0';
 
 end.

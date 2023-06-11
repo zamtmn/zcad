@@ -640,9 +640,10 @@ begin
                                   begin
                                   end;
                 end;
-              if uppercase(s)=uppercase(cltype)then
-                                                   //if sysvar.DWG.DWG_CLType<>nil then
-                                                   drawing.CurrentLType:=pltypeprop;
+           if drawing.CurrentLType=nil then
+             drawing.CurrentLType:=pltypeprop
+           else if uppercase(s)=uppercase(cltype)then
+             drawing.CurrentLType:=pltypeprop;
 
          end;
        3:
@@ -772,63 +773,47 @@ begin
       else
           nulisread:=false;
       case byt of
-        2:
-          begin
+        2:begin
             debugln('{D}[DXF_CONTENTS]Found layer  ',s);
             lname:=s;
             player:=drawing.LayerTable.MergeItem(s,LoadMode);
             if player<>nil then
-                               player^.init(s);
+              player^.init(s);
           end;
-        6:
-          begin
-               if player<>nil then
-                                  player^.LT:=drawing.LTypeStyleTable.getAddres(s);
-          end;
-        1001:
-          begin
-               if s='AcAecLayerStandard' then
-                 begin
-                      s := f.readString;
-                      byt:=strtoint(s);
-                      if byt<>0 then
-                      begin
-                          s := f.readString;
-                          begin
-                                s := f.readString;
-                                byt:=strtoint(s);
-                                if byt<>0 then
-                                              begin
-                                                   desk := f.readString;
-                                                   if player<>nil then
-                                                                      player^.desk:=desk;
-                                              end
-                                          else
-                                              begin
-                                              nulisread:=true;
-                                              s := f.readString;
-                                              end;
-
-                          end;
-                      end
-                         else
-                         begin
-                          nulisread:=true;
-                          s := f.readString;
-                         end;
-                 end;
-           end;
-         else begin
-                   if player<>nil then
-                                  player^.SetValueFromDxf(byt,s);
+        6:if player<>nil then
+            player^.LT:=drawing.LTypeStyleTable.getAddres(s);
+        1001:begin
+            if s='AcAecLayerStandard' then begin
+              s := f.readString;
+              byt:=strtoint(s);
+              if byt<>0 then begin
+                s := f.readString;
+                s := f.readString;
+                byt:=strtoint(s);
+                if byt<>0 then begin
+                  desk := f.readString;
+                  if player<>nil then
+                    player^.desk:=desk;
+                end else begin
+                  nulisread:=true;
+                  s:=f.readString;
+                end;
+              end else begin
+                  nulisread:=true;
+                  s := f.readString;
               end;
-
+            end;
+        end;
+        else begin
+          if player<>nil then
+            player^.SetValueFromDxf(byt,s);
+        end;
       end;
     end;
-
-    if uppercase(lname)=uppercase(clayer)then
-                                             //if sysvar.DWG.DWG_CLayer<>nil then
-                                             drawing.CurrentLayer:=player;
+    if drawing.CurrentLayer=nil then
+      drawing.CurrentLayer:=player
+    else if uppercase(lname)=uppercase(clayer)then
+      drawing.CurrentLayer:=player;
   end;
 end;
 procedure ReadTextstyles(var s:ansistring;ctstyle:string;var f:TZctnrVectorBytes; exitString: String;owner:PGDBObjGenericSubEntry;LoadMode:TLoadOpt;var drawing:TSimpleDrawing;var context:TIODXFLoadContext);
@@ -844,7 +829,6 @@ var
    ir,ir2:itrec;
    PSP:PShapeProp;
    PTP:PTextProp;
-   //-ttf-//TDInfo:TTrianglesDataInfo;
 begin
   if GoToDXForENDTAB(f, 0, dxfName_Style) then
   while s = dxfName_Style do
@@ -865,109 +849,71 @@ begin
       byt := strtoint(s);
       s := f.readString;
       case byt of
-        2:
-          begin
-            tstyle.name := s;
-          end;
-        5:begin
-               DWGHandle:=strtoint64('$'+s)
-          end;
-
-        40:
-          begin
-            tstyle.prop.size:=strtofloat(s);
-          end;
-        41:
-          begin
-            tstyle.prop.wfactor:=strtofloat(s);
-          end;
-        50:
-          begin
-            tstyle.prop.oblique:=strtofloat(s)*pi/180;
-          end;
-        70:begin
-                flags:=strtoint(s);
-           end;
-        3:
-          begin
-               FontFile:=s;
-               //FontManager.addFonf(FindInPaths(sysvar.PATH.Fonts_Path^,s));
-               //tstyle.pfont:=FontManager.getAddres(s);
-               //if tstyle.pfont:=;
-           end;
-        1000:
-          begin
-               FontFamily:=s;
-           end;
+            2:tstyle.name := s;
+            5:DWGHandle:=strtoint64('$'+s);
+           40:tstyle.prop.size:=strtofloat(s);
+           41:tstyle.prop.wfactor:=strtofloat(s);
+           50:tstyle.prop.oblique:=strtofloat(s)*pi/180;
+           70:flags:=strtoint(s);
+            3:FontFile:=s;
+         1000:FontFamily:=s;
       end;
     end;
     ti:=nil;
-    if (flags and 1)=0 then
-    begin
-    ti:=drawing.TextStyleTable.FindStyle(tstyle.Name,false);
-    if ti<>nil then
-    begin
-      if LoadMode=TLOLoad then
-                              ti:=drawing.TextStyleTable.setstyle(tstyle.Name,FontFile,FontFamily,tstyle.prop,false);
-    end
-       else
-           ti:=drawing.TextStyleTable.addstyle(tstyle.Name,FontFile,FontFamily,tstyle.prop,false);
-    end
-    else
-        begin
-          if drawing.TextStyleTable.FindStyle(FontFile,true)<>nil then
-          begin
-            if LoadMode=TLOLoad then
-                                    ti:=drawing.TextStyleTable.setstyle(FontFile,FontFile,FontFamily,tstyle.prop,true);
-          end
-             else
-                 ti:=drawing.TextStyleTable.addstyle(FontFile,FontFile,FontFamily,tstyle.prop,true);
-        end;
-    if ti<>nil then
-    begin
-         context.h2p.Add(DWGHandle,ti);
-         ptstyle:={drawing.TextStyleTable.getelement}(ti);
-         pltypeprop:=drawing.LTypeStyleTable.beginiterate(ir);
-         if pltypeprop<>nil then
-         repeat
-               PSP:=pltypeprop^.shapearray.beginiterate(ir2);
-               if PSP<>nil then
-               repeat
-                     if psp^.param.PstyleIsHandle then
-                     if psp^.param.PStyle=pointer(DWGHandle) then
-                     begin
-                        psp^.param.PStyle:=ptstyle;
-                        psp^.FontName:=ptstyle^.FontFile;
-                        if assigned(ptstyle^.pfont) then begin
-                          psp^.Psymbol:=ptstyle^.pfont^.GetOrReplaceSymbolInfo(integer(psp^.ShapeNum){//-ttf-//,tdinfo});
-                          psp^.SymbolName:=psp^.Psymbol^.Name;
-                        end;
-                     end;
+    if (flags and 1)=0 then begin
+      ti:=drawing.TextStyleTable.FindStyle(tstyle.Name,false);
+      if ti<>nil then begin
+        if LoadMode=TLOLoad then
+          ti:=drawing.TextStyleTable.setstyle(tstyle.Name,FontFile,FontFamily,tstyle.prop,false);
+      end else
+        ti:=drawing.TextStyleTable.addstyle(tstyle.Name,FontFile,FontFamily,tstyle.prop,false);
+    end else begin
+      if drawing.TextStyleTable.FindStyle(FontFile,true)<>nil then begin
+        if LoadMode=TLOLoad then
+          ti:=drawing.TextStyleTable.setstyle(FontFile,FontFile,FontFamily,tstyle.prop,true);
+      end else
+        ti:=drawing.TextStyleTable.addstyle(FontFile,FontFile,FontFamily,tstyle.prop,true);
+    end;
+    if ti<>nil then begin
+      context.h2p.Add(DWGHandle,ti);
+      ptstyle:={drawing.TextStyleTable.getelement}(ti);
+      pltypeprop:=drawing.LTypeStyleTable.beginiterate(ir);
+      if pltypeprop<>nil then
+      repeat
+        PSP:=pltypeprop^.shapearray.beginiterate(ir2);
+        if PSP<>nil then
+        repeat
+          if psp^.param.PstyleIsHandle then
+            if psp^.param.PStyle=pointer(DWGHandle) then begin
+              psp^.param.PStyle:=ptstyle;
+              psp^.FontName:=ptstyle^.FontFile;
+              if assigned(ptstyle^.pfont) then begin
+                psp^.Psymbol:=ptstyle^.pfont^.GetOrReplaceSymbolInfo(integer(psp^.ShapeNum){//-ttf-//,tdinfo});
+                psp^.SymbolName:=psp^.Psymbol^.Name;
+              end;
+            end;
+          PSP:=pltypeprop^.shapearray.iterate(ir2);
+        until PSP=nil;
 
-                     PSP:=pltypeprop^.shapearray.iterate(ir2);
-               until PSP=nil;
-
-               PTP:=pltypeprop^.Textarray.beginiterate(ir2);
-               if PTP<>nil then
-               repeat
-                     if pTp^.param.PStyle=pointer(DWGHandle) then
-                     begin
-                        pTp^.param.PStyle:=ptstyle;
-                        {pTp^.FontName:=ptstyle^.FontFile;
-                        pTp^.Psymbol:=ptstyle^.pfont^.GetOrReplaceSymbolInfo(integer(pTp^.Psymbol));
-                        pTp^.SymbolName:=pTp^.Psymbol^.Name;}
-                     end;
-
-                     PTP:=pltypeprop^.Textarray.iterate(ir2);
-               until PTP=nil;
-
-               pltypeprop:=drawing.LTypeStyleTable.iterate(ir);
-         until pltypeprop=nil;
+        PTP:=pltypeprop^.Textarray.beginiterate(ir2);
+        if PTP<>nil then
+        repeat
+          if pTp^.param.PStyle=pointer(DWGHandle) then begin
+            pTp^.param.PStyle:=ptstyle;
+            {pTp^.FontName:=ptstyle^.FontFile;
+            pTp^.Psymbol:=ptstyle^.pfont^.GetOrReplaceSymbolInfo(integer(pTp^.Psymbol));
+            pTp^.SymbolName:=pTp^.Psymbol^.Name;}
+          end;
+          PTP:=pltypeprop^.Textarray.iterate(ir2);
+        until PTP=nil;
+       pltypeprop:=drawing.LTypeStyleTable.iterate(ir);
+      until pltypeprop=nil;
     end;
     debugln('{D}[DXF_CONTENTS]Found style  ',tstyle.Name);
-   if uppercase(tstyle.Name)=uppercase(ctstyle)then
-                //if sysvar.DWG.DWG_CTStyle<>nil then
-                drawing.CurrentTextStyle:=drawing.TextStyleTable.FindStyle(tstyle.Name,false);
+    if drawing.CurrentTextStyle=nil then
+      drawing.CurrentTextStyle:=drawing.TextStyleTable.FindStyle(tstyle.Name,false)
+    else if uppercase(tstyle.Name)=uppercase(ctstyle)then
+      drawing.CurrentTextStyle:=drawing.TextStyleTable.FindStyle(tstyle.Name,false);
     tstyle.Name:='';
   end;
   drawing.LTypeStyleTable.format;
@@ -1152,34 +1098,30 @@ begin
 if GoToDXForENDTAB(f, 0, dxfName_DIMSTYLE) then
 while s = dxfName_DIMSTYLE do
 begin
-     psimstyleprop:=nil;
-     ReadDimStylesMode:=TDSRM_ACAD;
-     byt := 2;
-     while byt <> 0 do
-     begin
-     s := f.readString;
-     byt := strtoint(s);
-     s := f.readString;
-
-
-     if psimstyleprop=nil then
-     begin
-           if byt=2 then
-                         begin
-                              psimstyleprop:=drawing.DimStyleTable.MergeItem(s,LoadMode);
-                              if psimstyleprop<>nil then
-                                                        begin
-                                                          psimstyleprop^.init(s);
-                                                          psimstyleprop^.Name:=s;
-                                                        end;
-                              if uppercase(s)=uppercase(cdimstyle)then
-                              if {(sysvar.DWG.DWG_CDimStyle<>nil)and}(LoadMode=TLOLoad) then
-                                                                                        drawing.CurrentDimStyle{sysvar.DWG.DWG_CDimStyle^}:=psimstyleprop;
-                         end;
-     end
-     else
-         psimstyleprop^.SetValueFromDxf(ReadDimStylesMode,byt,s,context);
-     end;
+  psimstyleprop:=nil;
+  ReadDimStylesMode:=TDSRM_ACAD;
+  byt := 2;
+  while byt <> 0 do
+  begin
+  s := f.readString;
+  byt := strtoint(s);
+  s := f.readString;
+  if psimstyleprop=nil then begin
+    if byt=2 then begin
+      psimstyleprop:=drawing.DimStyleTable.MergeItem(s,LoadMode);
+      if psimstyleprop<>nil then begin
+        psimstyleprop^.init(s);
+        psimstyleprop^.Name:=s;
+      end;
+      if drawing.CurrentDimStyle=nil then
+        drawing.CurrentDimStyle:=psimstyleprop
+      else if uppercase(s)=uppercase(cdimstyle)then
+      if (LoadMode=TLOLoad) then
+        drawing.CurrentDimStyle:=psimstyleprop;
+    end;
+  end else
+     psimstyleprop^.SetValueFromDxf(ReadDimStylesMode,byt,s,context);
+  end;
 end;
 end;
 procedure ReadBlockRecird(const Handle2BlockName:TMapBlockHandle_BlockNames;var s:ansistring;var f:TZctnrVectorBytes; exitString: String;owner:PGDBObjGenericSubEntry;LoadMode:TLoadOpt;var drawing:TSimpleDrawing);

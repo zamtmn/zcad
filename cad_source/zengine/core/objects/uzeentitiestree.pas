@@ -59,6 +59,7 @@ TZEntsManipulator=class
                    class procedure CreateSeparator(var NodeBB:TBoundingBox;var TestNode:TEntTreeNode.TTestNode;var PFirstStageData:pointer;const NodeNum:integer);
                    class function IterateResult2PEntity(const IterateResult:pointer):PGDBObjEntity;
                    class function StoreEntityToArray(var Entity:GDBObjEntity;var arr:TEntityArray):TArrayIndex;
+                   class procedure SetSizeInArray(ns:integer;var arr:TEntityArray);
 
                    {not used in generic, for external use}
                    class procedure treerender(var Node:GZBInarySeparatedGeometry<TBoundingBox,DVector4D,TEntTreeNodeData,TZEntsManipulator,GDBObjEntity,PGDBObjEntity,TEntityArray>;var DC:TDrawContext);
@@ -127,6 +128,10 @@ begin
             end;
        end;
      end;
+end;
+class procedure TZEntsManipulator.SetSizeInArray(ns:integer;var arr:TEntityArray);
+begin
+  arr.SetSize(ns);
 end;
 class function TZEntsManipulator.StoreEntityToArray(var Entity:GDBObjEntity;var arr:TEntityArray):TArrayIndex;
 begin

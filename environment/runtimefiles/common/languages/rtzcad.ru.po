@@ -217,6 +217,14 @@ msgstr "Копировать"
 msgid "Copy primitives"
 msgstr "Копировать примитивы"
 
+#: zcadexternal.acn_createll~caption
+msgid "Creating Leader Lines"
+msgstr ""
+
+#: zcadexternal.acn_createll~textimage
+msgid "CLL"
+msgstr ""
+
 #: zcadexternal.acn_cutclip~caption
 msgid "Cut to clipboard"
 msgstr "Вырезать в буфер обмена"
@@ -306,22 +314,18 @@ msgctxt "zcadexternal.acn_erase~caption"
 msgid "Erase"
 msgstr "Стереть"
 
+#: zcadexternal.acn_generatoronediagram~caption
+msgid "Generator one-level diagram"
+msgstr ""
+
+#: zcadexternal.acn_generatoronediagram~textimage
+msgid "GD1"
+msgstr ""
+
 #: zcadexternal.acn_help~caption
 msgctxt "zcadexternal.acn_help~caption"
 msgid "Help"
 msgstr "Справка"
-
-#: zcadexternal.acn_import~caption
-msgid "Import ..."
-msgstr "Импорт ..."
-
-#: zcadexternal.acn_import~hint
-msgid "Import drawing"
-msgstr "Импортировать чертеж"
-
-#: zcadexternal.acn_import~textimage
-msgid "Import"
-msgstr "Импорт"
 
 #: zcadexternal.acn_inserttodrawing~caption
 msgid "Insert to drawing"
@@ -3226,6 +3230,10 @@ msgctxt "zcadexternal.tintegeroverrider~value"
 msgid "New value"
 msgstr "Новое значение"
 
+#: zcadexternal.tinterface~intf_appmode
+msgid "Application mode"
+msgstr ""
+
 #: zcadexternal.tinterface~intf_commandlineenabled
 msgctxt "zcadexternal.tinterface~intf_commandlineenabled"
 msgid "Command line enabled"
@@ -3436,6 +3444,16 @@ msgstr "по количеству"
 #: zcadexternal.todpcounttype~todpct_by_xy
 msgid "by width/height"
 msgstr "по ширине/длине"
+
+#: zcadexternal.toolpalette_blocklib_instrumentation_itemcaption~unsorted
+msgctxt ""
+"zcadexternal.toolpalette_blocklib_instrumentation_itemcaption~unsorted"
+msgid "Unsorted"
+msgstr "Без сортировки"
+
+#: zcadexternal.toolpalette_blocklib_itemcaption~instrumentation
+msgid "Instrumentation"
+msgstr ""
 
 #: zcadexternal.toolpalette_blocklib_itemcaption~low-current
 msgctxt "zcadexternal.toolpalette_blocklib_itemcaption~low-current"
@@ -3791,6 +3809,10 @@ msgstr "Квадрант"
 msgid "Tangent"
 msgstr "Касательная"
 
+#: zcadexternal.tpath~additionalsupport_path
+msgid "Additional support files"
+msgstr ""
+
 #: zcadexternal.tpath~alternate_font
 msgid "Alternate font file"
 msgstr "Файл альтернативного шрифта"
@@ -3806,6 +3828,10 @@ msgstr "Шрифты"
 #: zcadexternal.tpath~layoutfile
 msgid "Current layout"
 msgstr "Текущая раскладка окон"
+
+#: zcadexternal.tpath~preload_path
+msgid "Preload files"
+msgstr ""
 
 #: zcadexternal.tpath~program_run
 msgid "Program"

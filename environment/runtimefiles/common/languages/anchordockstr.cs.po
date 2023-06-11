@@ -97,10 +97,6 @@ msgstr "Každé dokované okno má hlavičku, která umožňuje přetahování, 
 msgid "Empty name: "
 msgstr "Prázdné jméno:"
 
-#: anchordockstr.adrsenlarge
-msgid "Enlarge"
-msgstr "Rozšířit"
-
 #: anchordockstr.adrsenlargeside
 #, object-pascal-format
 msgid "Enlarge %s side"
@@ -113,6 +109,14 @@ msgstr "Vyplnit záhlaví"
 #: anchordockstr.adrsfilledheadershint
 msgid "Fill headers of docked controls"
 msgstr "Vyplnit záhlaví dokovaných komponent"
+
+#: anchordockstr.adrsflatheadersbuttons
+msgid "Flat header buttons"
+msgstr ""
+
+#: anchordockstr.adrsflatheadersbuttonshint
+msgid "Flat buttons in headers of docked controls"
+msgstr ""
 
 #: anchordockstr.adrsflattenheaders
 msgid "Flatten headers"

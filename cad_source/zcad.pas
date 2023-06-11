@@ -17,27 +17,17 @@
 }
 
 program zcad;
-//файл с объявлениями директив компилятора - должен быть подключен во все файлы проекта
-{$INCLUDE zengineconfig.inc}
-
-{$IFDEF FPC}
-  {$CODEPAGE UTF8}
-{$endif}
-
-{$IFDEF WINDOWS}
-  {$IFDEF FPC}
-    {$ifdef cpu32}
-      {$setpeflags $20} //winnt.h:#define IMAGE_FILE_LARGE_ADDRESS_AWARE       0x0020  // App can handle >2gb addresses
-    {$endif}
-  {$ENDIF}
-{$ENDIF}
 
 {$IFNDEF LINUX}
   {$APPTYPE GUI}
 {$ENDIF}
 
-{$ifdef WIN64} {$imagebase $400000} {$endif}
+//файл с объявлениями директив компилятора - должен быть подключен во все файлы проекта
+{$INCLUDE zengineconfig.inc}
 
+//zcad/zcadelectrotech compile mode
+//если он отсутствует см. https://github.com/zamtmn/zcad/blob/master/cad_source/docs/userguide/locale/ru/for_developers/building_from_sources.adoc
+//if missing see https://github.com/zamtmn/zcad/blob/master/BUILD_FROM_SOURCES.md
 {$INCLUDE buildmode.inc}
 
 uses
@@ -77,7 +67,7 @@ uses
   {$INCLUDE allgeneratedfiles.inc}//correct defs in system.pas
   uzcregother,//setup SysVar
 
-  uMetaDarkStyle,
+  uMetaDarkStyle,uDarkStyleSchemes,uDarkStyleSchemesLoader,
 
   UUnitManager,
   uzefontmanager,
@@ -180,7 +170,7 @@ uses
   uzccommand_polydiv,
   uzccommand_selectobjectbyaddres,
   uzccommand_selectonmouseobjects,
-  uzccommand_VarsEdSel,uzccommand_VarsED,uzccommand_VarsEdBD,
+  uzccommand_VarsEdSel,uzccommand_VarsED,uzccommand_VarsEdBD,uzccommand_VarsEdUnit,
   uzccommand_unitsman,
   uzccommand_rebuildtree,
   uzccommand_changeprojtype,
@@ -250,6 +240,7 @@ uses
 
 
   uzcenitiesvariablesextender,uzcExtdrLayerControl,uzcExtdrSmartTextEnt,
+  uzcExtdrIncludingVolume,
 
   {$IFNDEF DARWIN}
   {$IFDEF ELECTROTECH}
@@ -331,13 +322,15 @@ begin
   {$ENDIF}
   //создание окна программы
   {$IF DEFINED(MSWINDOWS)}
-  ApplyMetaDarkStyle;
+  LoadLResources;
+  ApplyMetaDarkStyle(GetScheme(SysVar.INTF.INTF_ColorScheme^));
   {$ENDIF}
   Application.CreateForm(TZCADMainWindow,ZCADMainWindow);
   ZCADMainWindow.show;
   {if sysvar.SYS.SYS_IsHistoryLineCreated<>nil then
                                                   sysvar.SYS.SYS_IsHistoryLineCreated^:=true;}
   ZCMsgCallBackInterface.TextMessage(format(rsZCADStarted,[programname,sysvar.SYS.SYS_Version^]),TMWOHistoryOut);
+  application.ProcessMessages;
 
   //SplashForm.TXTOut(rsStartAutorun,false);commandmanager.executefile('*components/autorun.cmd',drawings.GetCurrentDWG,nil);
   FromDirsIterator(sysvar.PATH.Preload_Path^,'*.cmd','autorun.cmd',RunCmdFile,nil);

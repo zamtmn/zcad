@@ -238,7 +238,7 @@ begin
     exit(OriginalValue);
 
   result:=RunTimePO.Translate(Identifier, OriginalValue);
-  programlog.LogOutFormatStr('InterfaceTranslate: identifier:"%s" originalValue:"%s" translate to "%s"',[Identifier,OriginalValue,result],0,LM_Debug,TranslateLogModuleId);
+  programlog.LogOutFormatStr('InterfaceTranslate: identifier:"%s" originalValue:"%s" translate to "%s"',[Identifier,OriginalValue,result],LM_Debug,TranslateLogModuleId);
 
   if sysparam.saved.updatepo then begin
     Item:=RunTimePO.FindPoItem(FullIdentifier);

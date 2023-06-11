@@ -15,7 +15,6 @@ VL_Type:String;(*'Светильник'*)
 VL_Room:String;(*'Помещение'*)
 VL_Floor:String;(*'Этаж'*)
 VL_Group:String;(*'Группа'*)
-
 implementation
 
 begin
@@ -34,6 +33,6 @@ GC_HDShortName:='??';
 GC_HDGroup:=0;
 
 VL_Room:='.';
-VL_Floor:='.';
+VL_Floor:='0';
 
 end.

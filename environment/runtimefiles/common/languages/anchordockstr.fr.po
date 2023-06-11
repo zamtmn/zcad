@@ -94,10 +94,6 @@ msgstr "Chaque fenêtre amarrée possède un en-tête qui permet son déplacemen
 msgid "Empty name: "
 msgstr "Nom vide : "
 
-#: anchordockstr.adrsenlarge
-msgid "Enlarge"
-msgstr "Agrandir"
-
 #: anchordockstr.adrsenlargeside
 #, object-pascal-format
 msgid "Enlarge %s side"
@@ -110,6 +106,14 @@ msgstr "Remplir les en-têtes"
 #: anchordockstr.adrsfilledheadershint
 msgid "Fill headers of docked controls"
 msgstr "Remplir les en-têtes des contrôles amarrés"
+
+#: anchordockstr.adrsflatheadersbuttons
+msgid "Flat header buttons"
+msgstr ""
+
+#: anchordockstr.adrsflatheadersbuttonshint
+msgid "Flat buttons in headers of docked controls"
+msgstr ""
 
 #: anchordockstr.adrsflattenheaders
 msgid "Flatten headers"

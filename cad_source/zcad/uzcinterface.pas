@@ -312,6 +312,8 @@ begin
      FreeAndNil(onKeyDown);
      FreeAndNil(getfocusedcontrol);
 
+  if assigned(GetStateFuncsVector) then
+    FreeAndNil(GetStateFuncsVector);
 end;
 
 function TZCMsgCallBackInterface.GetUniqueZMessageID:TZMessageID;
@@ -610,11 +612,14 @@ end;
 function TZCMsgCallBackInterface.GetState:TZState;
 var
   fnc:TGetStateFunc;
+  v:TGetStateFuncsVector;
 begin
    Result:=ZStateCreater.GetEmpty;
-   for fnc in GetStateFuncsVector do begin
-     ZStateCreater.Include(Result,fnc);
-   end;
+   v:=GetStateFuncsVector;
+   if v<>nil then
+     for fnc in v do begin
+       ZStateCreater.Include(Result,fnc);
+     end;
 end;
 
 procedure TZCMsgCallBackInterface.Do_SetNormalFocus;

@@ -230,7 +230,7 @@ begin
 
          pvc^.done;
          pvc2.rtsave(pv);
-         pv^.State:=pv^.State-[ESCalcWithoutOwner];
+         pv^.State:=pv^.State-[ESCalcWithoutOwner,ESTemp];
          //pv^.FormatEntity(drawing,dc);
          Freemem(pointer(pvc));
          Freemem(pointer(pvc2));

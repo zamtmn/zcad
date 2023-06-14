@@ -275,7 +275,7 @@ begin
   Pointer(FileName):=nil;
   FileName:=rsHardUnnamed;
   Changed:=False;
-  UndoStack:=TZctnrVectorUndoCommands.init;
+  UndoStack:=TZctnrVectorUndoCommands.Create;
   UndoStack.onUndoRedo:=self.onUndoRedo;
   zebaseundocommands.onUndoRedoDataOwner:=self.onUndoRedoDataOwner;
 
@@ -315,9 +315,7 @@ end;
 destructor TZCADDrawing.done;
 begin
      inherited;
-     undostack.free;
-     undostack.destroy;
-     //undostack.done;
+     undostack.Destroy;
      DWGUnits.Done;
      FileName:='';
 end;

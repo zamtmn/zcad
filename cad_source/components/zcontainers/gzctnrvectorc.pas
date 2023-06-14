@@ -50,16 +50,16 @@ GZVectorc{-}<T>{//}=class(TZAbsVectorClass)//(TZAbsVector)
         PArray:{-}PTArr{/Pointer/};(*hidden_in_objinsp*)   //**< Указатель на массив данных
         Count:TArrayIndex;(*hidden_in_objinsp*)               //**< Количество занятых элементов массива
         Max:TArrayIndex;(*hidden_in_objinsp*)                 //**< Размер массива (под сколько элементов выделено памяти)
-
+     public
         {**Деструктор}
-        destructor destroy;virtual;
+        destructor Destroy;virtual;
         {**Конструктор}
-        constructor init(m:TArrayIndex);
+        constructor Create(m:TArrayIndex);overload;
         {**Конструктор}
-        constructor initnul;
+        constructor Create;
 
         {**Удаление всех элементов массива}
-        procedure free;virtual;
+        //procedure free;virtual;
 
         {**Начало "перебора" элементов массива
           @param(ir переменная "итератор")
@@ -439,25 +439,34 @@ begin
                       end
                   else result:=nil;
 end;
-constructor GZVectorc<T>.initnul;
+constructor GZVectorc<T>.Create;
 begin
   PArray:=nil;
   Count:=0;
   Max:=0;
 end;
-constructor GZVectorc<T>.init;
+constructor GZVectorc<T>.Create(m:TArrayIndex);
 begin
   PArray:=nil;
   Count:=0;
   Max:=m;
 end;
-destructor GZVectorc<T>.destroy;
+destructor GZVectorc<T>.Destroy;
+var i:integer;
+   _pt:PTypeInfo;
 begin
+  _pt:=TypeInfo(T);
+  if _pt^.Kind = tkClass then
+    for i:=0 to count-1 do
+      TObject(PArray^[i]).destroy;
+  if _pt^.Kind in TypesNeedToFinalize then
+    for i:=0 to count-1 do
+      PArray^[i]:=default(t);
   if PArray<>nil then
     Freemem(PArray);
   PArray:=nil;
 end;
-procedure GZVectorc<T>.free;
+{procedure GZVectorc<T>.free;
 var i:integer;
    _pt:PTypeInfo;
 begin
@@ -466,7 +475,7 @@ begin
        for i:=0 to count-1 do
                              PArray^[i]:=default(t);
   count:=0;
-end;
+end;}
 function GZVectorc<T>.SizeOfData:TArrayIndex;
 begin
   result:=sizeof(T);

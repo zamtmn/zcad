@@ -42,7 +42,7 @@ TZctnrVectorUndoCommands=class(specialize GZVectorClass{-}<{PTElementaryCommand,
                                  function undo(out msg:string;prevheap:TArrayIndex;overlay:Boolean):TUndoRedoResult;
                                  procedure KillLastCommand;
                                  function redo(out msg:string):TUndoRedoResult;
-                                 constructor init;
+                                 constructor Create;
                                  procedure doOnUndoRedo;
                                  function PushBackData(const data:TUCmdBase):TArrayIndex;virtual;
                                  Procedure ClearFrom(cc:TArrayIndex);
@@ -216,9 +216,9 @@ begin
      doOnUndoRedo;
 end;
 
-constructor TZctnrVectorUndoCommands.init;
+constructor TZctnrVectorUndoCommands.Create;
 begin
-     inherited init(1);
+     inherited Create(1);
      CurrentCommand:=0;
      onUndoRedo:=nil;;
 end;

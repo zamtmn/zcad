@@ -22,10 +22,11 @@ interface
 uses gzctnrVectorP;
 type
 {Export+}
-PTZctnrVectorPointer=^TZctnrVectorPointer;
-TZctnrVectorPointer=object(GZVectorP{-}<Pointer>{//}) //TODO:почемуто не работают синонимы с объектами, приходится наследовать
-                                                         //TODO:надо тут поменять GZVectorP на GZVectorSimple
-                    end;
+  PTZctnrVectorPointer=^TZctnrVectorPointer;
+  {REGISTEROBJECTTYPE TZctnrVectorPointer}
+  TZctnrVectorPointer=object(GZVectorP{-}<Pointer>{//}) //TODO:почемуто не работают синонимы с объектами, приходится наследовать
+                                                        //TODO:надо тут поменять GZVectorP на GZVectorSimple
+                      end;
 {Export-}
 implementation
 begin

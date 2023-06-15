@@ -45,13 +45,13 @@ type
   {REGISTERRECORDTYPE TMSPrimitiveDetector}
   TMSPrimitiveDetector=TEnumData;
   {REGISTERRECORDTYPE TMSBlockNamesDetector}
-  TMSBlockNamesDetector=TEnumDataWithOtherData;
+  TMSBlockNamesDetector=TEnumDataWithOtherStrings;
   {REGISTERRECORDTYPE TMSTextsStylesDetector}
-  TMSTextsStylesDetector=TEnumDataWithOtherData;
+  TMSTextsStylesDetector=TEnumDataWithOtherPointers;
   {REGISTERRECORDTYPE TMSEntsLayersDetector}
-  TMSEntsLayersDetector=TEnumDataWithOtherData;
+  TMSEntsLayersDetector=TEnumDataWithOtherPointers;
   {REGISTERRECORDTYPE TMSEntsLinetypesDetector}
-  TMSEntsLinetypesDetector=TEnumDataWithOtherData;
+  TMSEntsLinetypesDetector=TEnumDataWithOtherPointers;
   {REGISTEROBJECTTYPE TMSEditor}
   TMSEditor= object(TWrapper2ObjInsp)
                 TxtEntType:TMSPrimitiveDetector;(*'Process primitives'*)
@@ -853,8 +853,8 @@ var
     count,selected:integer;
     blockname:AnsiString;
 begin
-    selected:=PTEnumDataWithOtherData(PInstance)^.Selected;
-    blockname:=PTZctnrVectorStrings(PTEnumDataWithOtherData(PInstance)^.PData).getData(selected);
+    selected:=PTEnumDataWithOtherStrings(PInstance)^.Selected;
+    blockname:=PTEnumDataWithOtherStrings(PInstance)^.Strings.getData(selected);
     count:=0;
     pv:=drawings.GetCurrentROOT.ObjArray.beginiterate(ir);
     if pv<>nil then
@@ -879,8 +879,8 @@ var
     count,selected:integer;
     ptextstyle:pointer;
 begin
-    selected:=PTEnumDataWithOtherData(PInstance)^.Selected;
-    ptextstyle:=PTZctnrVectorPointer(PTEnumDataWithOtherData(PInstance)^.PData).getData(selected);
+    selected:=PTEnumDataWithOtherPointers(PInstance)^.Selected;
+    ptextstyle:=PTEnumDataWithOtherPointers(PInstance)^.Pointers.getData(selected);
     count:=0;
     pv:=drawings.GetCurrentROOT.ObjArray.beginiterate(ir);
     if pv<>nil then
@@ -906,8 +906,8 @@ var
     count,selected:integer;
     ptextstyle:pointer;
 begin
-    selected:=PTEnumDataWithOtherData(PInstance)^.Selected;
-    ptextstyle:=PTZctnrVectorPointer(PTEnumDataWithOtherData(PInstance)^.PData).getData(selected);
+    selected:=PTEnumDataWithOtherPointers(PInstance)^.Selected;
+    ptextstyle:=PTEnumDataWithOtherPointers(PInstance)^.Pointers.getData(selected);
     count:=0;
     pv:=drawings.GetCurrentROOT.ObjArray.beginiterate(ir);
     if pv<>nil then
@@ -932,8 +932,8 @@ var
     count,selected:integer;
     plinetype:pointer;
 begin
-    selected:=PTEnumDataWithOtherData(PInstance)^.Selected;
-    plinetype:=PTZctnrVectorPointer(PTEnumDataWithOtherData(PInstance)^.PData).getData(selected);
+    selected:=PTEnumDataWithOtherPointers(PInstance)^.Selected;
+    plinetype:=PTEnumDataWithOtherPointers(PInstance)^.Pointers.getData(selected);
     count:=0;
     pv:=drawings.GetCurrentROOT.ObjArray.beginiterate(ir);
     if pv<>nil then
@@ -960,8 +960,8 @@ var
     count,selected:integer;
     blockname:AnsiString;
 begin
-    selected:=PTEnumDataWithOtherData(PInstance)^.Selected;
-    blockname:=PTZctnrVectorStrings(PTEnumDataWithOtherData(PInstance)^.PData).getData(selected);
+    selected:=PTEnumDataWithOtherStrings(PInstance)^.Selected;
+    blockname:=PTEnumDataWithOtherStrings(PInstance)^.Strings.getData(selected);
     //if NeededObjType<>0 then
     begin
       count:=0;
@@ -995,8 +995,8 @@ var
     count,selected:integer;
     ptextstyle:pointer;
 begin
-    selected:=PTEnumDataWithOtherData(PInstance)^.Selected;
-    ptextstyle:=PTZctnrVectorPointer(PTEnumDataWithOtherData(PInstance)^.PData).getData(selected);
+    selected:=PTEnumDataWithOtherPointers(PInstance)^.Selected;
+    ptextstyle:=PTEnumDataWithOtherPointers(PInstance)^.Pointers.getData(selected);
     //if NeededObjType<>0 then
     begin
       count:=0;
@@ -1030,8 +1030,8 @@ var
     count,selected:integer;
     player:pointer;
 begin
-    selected:=PTEnumDataWithOtherData(PInstance)^.Selected;
-    player:=PTZctnrVectorPointer(PTEnumDataWithOtherData(PInstance)^.PData).getData(selected);
+    selected:=PTEnumDataWithOtherPointers(PInstance)^.Selected;
+    player:=PTEnumDataWithOtherPointers(PInstance)^.Pointers.getData(selected);
     //if NeededObjType<>0 then
     begin
       count:=0;
@@ -1065,8 +1065,8 @@ var
     count,selected:integer;
     plinetype:pointer;
 begin
-    selected:=PTEnumDataWithOtherData(PInstance)^.Selected;
-    plinetype:=PTZctnrVectorPointer(PTEnumDataWithOtherData(PInstance)^.PData).getData(selected);
+    selected:=PTEnumDataWithOtherPointers(PInstance)^.Selected;
+    plinetype:=PTEnumDataWithOtherPointers(PInstance)^.Pointers.getData(selected);
     //if NeededObjType<>0 then
     begin
       count:=0;

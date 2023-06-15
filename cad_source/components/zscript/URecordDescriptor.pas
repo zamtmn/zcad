@@ -385,7 +385,8 @@ begin
                                                   if bmodesave2<>0 then
                                                   begin
                                                        if (PTUserTypeDescriptor(pvd^.data.PTD)^.GetFactTypedef^.TypeName='TEnumData')
-                                                       or (PTUserTypeDescriptor(pvd^.data.PTD)^.GetFactTypedef^.TypeName='TEnumDataWithOtherData') then
+                                                       or (PTUserTypeDescriptor(pvd^.data.PTD)^.GetFactTypedef^.TypeName='TEnumDataWithOtherStrings')
+                                                       or (PTUserTypeDescriptor(pvd^.data.PTD)^.GetFactTypedef^.TypeName='TEnumDataWithOtherPointers')then
                                                                    begin
                                                                         SaveDecorators:=GDBEnumDataDescriptorObj.Decorators;
                                                                         SaveFastEditors:=GDBEnumDataDescriptorObj.FastEditors;
@@ -403,7 +404,8 @@ begin
                                                                    begin
                                                   bmodetemp:=property_build;
                                                                         if (PTUserTypeDescriptor(pvd^.data.PTD)^.GetFactTypedef^.TypeName='TEnumData')
-                                                                        or (PTUserTypeDescriptor(pvd^.data.PTD)^.GetFactTypedef^.TypeName='TEnumDataWithOtherData') then                                                                   begin
+                                                                        or (PTUserTypeDescriptor(pvd^.data.PTD)^.GetFactTypedef^.TypeName='TEnumDataWithOtherStrings')
+                                                                        or (PTUserTypeDescriptor(pvd^.data.PTD)^.GetFactTypedef^.TypeName='TEnumDataWithOtherPointers')then                                                                   begin
                                                                         SaveDecorators:=GDBEnumDataDescriptorObj.Decorators;
                                                                         SaveFastEditors:=GDBEnumDataDescriptorObj.FastEditors;
                                                                         GDBEnumDataDescriptorObj.Decorators:=PTUserTypeDescriptor(pvd^.data.PTD)^.Decorators;

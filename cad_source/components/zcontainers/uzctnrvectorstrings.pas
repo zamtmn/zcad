@@ -19,7 +19,7 @@
 unit uzctnrVectorStrings;
 
 interface
-uses gzctnrVectorTypes,{uzbtypes,}gzctnrVectorStr,sysutils;
+uses gzctnrVectorTypes,gzctnrVectorStr,sysutils,uzctnrVectorPointers;
 type
 {EXPORT+}
     PTZctnrVectorStrings=^TZctnrVectorStrings;
@@ -35,12 +35,19 @@ type
                     Selected:Integer;
                     Enums:TZctnrVectorStrings;
               end;
-    PTEnumDataWithOtherData=^TEnumDataWithOtherData;
-    {REGISTERRECORDTYPE TEnumDataWithOtherData}
-    TEnumDataWithOtherData=record
+    PTEnumDataWithOtherPointers=^TEnumDataWithOtherPointers;
+    {REGISTERRECORDTYPE TEnumDataWithOtherPointers}
+    TEnumDataWithOtherPointers=record
                     Selected:Integer;
                     Enums:TZctnrVectorStrings;
-                    PData:Pointer;
+                    Pointers:TZctnrVectorPointer;
+              end;
+    PTEnumDataWithOtherStrings=^TEnumDataWithOtherStrings;
+    {REGISTERRECORDTYPE TEnumDataWithOtherStrings}
+    TEnumDataWithOtherStrings=record
+                    Selected:Integer;
+                    Enums:TZctnrVectorStrings;
+                    Strings:TZctnrVectorStrings;
               end;
 {EXPORT-}
 implementation

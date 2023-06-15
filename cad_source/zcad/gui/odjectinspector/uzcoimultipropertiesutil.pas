@@ -154,16 +154,18 @@ pu - модуль в котором будет создана переменна
 }
 var
   PVD:pvardesk;
+  t:PTEnumDataWithOtherStrings;
 begin
     Getmem(result,sizeof(TStringCounterData));
     PTStringCounterData(result)^.counter:=TStringCounter.Create;
     if FindOrCreateVar(pu,mp.MPName,mp.MPUserName,mp.MPType^.TypeName,PTStringCounterData(result).VDAddr) then begin
       PVD:=PTStringCounterData(result).VDAddr.Instance;
-      PTEnumDataWithOtherData(PVD^.data.Addr.Instance)^.Enums.init(10);
+      t:=PVD^.data.Addr.Instance;
+      t^.Enums.init(10);
       PTStringCounterData(result)^.totalcount:=0;
-      PTEnumDataWithOtherData(PVD^.data.Addr.Instance)^.Selected:=0;
-      Getmem(PTEnumDataWithOtherData(PVD^.data.Addr.Instance)^.PData,sizeof(TZctnrVectorStrings));
-      PTZctnrVectorStrings(PTEnumDataWithOtherData(PVD^.data.Addr.Instance)^.PData)^.init(10);
+      t^.Selected:=0;
+      //Getmem(PTEnumDataWithOtherData(PVD^.data.Addr.Instance)^.PData,sizeof(TZctnrVectorStrings));
+      t^.Strings.init(10);
     end;
     //PTStringCounterData(result).VDAddr:=PVD^.data.Addr;
 end;
@@ -177,20 +179,18 @@ pu - модуль в котором будет создана переменна
 }
 var
   PVD:pvardesk;
-  t:PTEnumDataWithOtherData;
+  t:PTEnumDataWithOtherPointers;
 begin
     Getmem(result,sizeof(TPointerCounterData));
     PTPointerCounterData(result)^.counter:=TPointerCounter.Create;
     if FindOrCreateVar(pu,mp.MPName,mp.MPUserName,mp.MPType^.TypeName,PTPointerCounterData(result).VDAddr) then begin
       PVD:=PTPointerCounterData(result).VDAddr.Instance;
       t:=PVD^.data.Addr.Instance;
-      PTEnumDataWithOtherData(PVD^.data.Addr.Instance)^.Enums.init(10);
+      t^.Enums.init(10);
       PTPointerCounterData(result)^.totalcount:=0;
-      PTEnumDataWithOtherData(PVD^.data.Addr.Instance)^.Selected:=0;
-      Getmem(PTEnumDataWithOtherData(PVD^.data.Addr.Instance)^.PData,sizeof(TZctnrVectorPointer));
-      PTZctnrVectorPointer(PTEnumDataWithOtherData(PVD^.data.Addr.Instance)^.PData)^.init(10);
+      t^.Selected:=0;
+      t^.Pointers.init(10);
     end;
-    //PTPointerCounterData(result).VDAddr:=PVD^.data.Addr;
 end;
 
 
@@ -229,40 +229,42 @@ var
   s:string;
   c:integer;
   PVD:pvardesk;
+  t:PTEnumDataWithOtherStrings;
 {уничтожает созданную GetStringCounterData структуру}
 begin
     //PTStringCounterData(piteratedata)^.StrValue:='';
   PVD:=PTStringCounterData(piteratedata)^.VDAddr.Instance;
-  PTEnumDataWithOtherData(PVD^.data.Addr.Instance)^.Enums.PushBackData(format('Total (%d)',[PTStringCounterData(piteratedata)^.totalcount]));
-  PTZctnrVectorStrings(PTEnumDataWithOtherData(PVD^.data.Addr.Instance)^.PData)^.PushBackData('*');
+  t:=PVD^.data.Addr.Instance;
+  t^.Enums.PushBackData(format('Total (%d)',[PTStringCounterData(piteratedata)^.totalcount]));
+  t^.Strings.PushBackData('*');
   for pair in PTStringCounterData(piteratedata)^.counter do begin
   //iterator:=PTStringCounterData(piteratedata)^.counter.Min;
   //if assigned(iterator) then
   //repeat
         s:=pair.Key;
         c:=pair.Value;
-        PTEnumDataWithOtherData(PVD^.data.Addr.Instance)^.Enums.PushBackData(format('%s (%d)',[Tria_AnsiToUtf8(s),c]));
-        PTZctnrVectorStrings(PTEnumDataWithOtherData(PVD^.data.Addr.Instance)^.PData)^.PushBackData(s);
+        t^.Enums.PushBackData(format('%s (%d)',[Tria_AnsiToUtf8(s),c]));
+        t^.Strings.PushBackData(s);
   //until not iterator.Next;
   end;
   PTStringCounterData(piteratedata)^.counter.Free;
   Freemem(piteratedata);
 end;
+
 procedure FreePNamedObjectCounterData(piteratedata:Pointer;mp:TMultiProperty);
 var
   pair:TPointerCounter.TDictionaryPair;
-  //iterator:TPointerCounter.TIterator;
    s:PGDBNamedObject;
    c:integer;
    name:string;
    PVD:pvardesk;
-   t:PTEnumDataWithOtherData;
+   t:PTEnumDataWithOtherPointers;
 {уничтожает созданную GetPointerCounterData структуру}
 begin
   PVD:=PTPointerCounterData(piteratedata)^.VDAddr.Instance;
   t:=PVD^.data.Addr.Instance;
-  PTEnumDataWithOtherData(PVD^.data.Addr.Instance)^.Enums.PushBackData(format('Total (%d)',[PTPointerCounterData(piteratedata)^.totalcount]));
-  PTZctnrVectorPointer(PTEnumDataWithOtherData(PVD^.data.Addr.Instance)^.PData)^.PushBackData(nil);
+  t^.Enums.PushBackData(format('Total (%d)',[PTPointerCounterData(piteratedata)^.totalcount]));
+  t^.Pointers.PushBackData(nil);
   for pair in PTPointerCounterData(piteratedata)^.counter do begin
   //iterator:=PTPointerCounterData(piteratedata)^.counter.Min;
   //if assigned(iterator) then
@@ -273,13 +275,14 @@ begin
           name:=Tria_AnsiToUtf8(s.GetFullName)
         else
           name:='nil';
-        PTEnumDataWithOtherData(PVD^.data.Addr.Instance)^.Enums.PushBackData(format('%s (%d)',[name,c]));
-        PTZctnrVectorPointer(PTEnumDataWithOtherData(PVD^.data.Addr.Instance)^.PData)^.PushBackData(s);
+        t^.Enums.PushBackData(format('%s (%d)',[name,c]));
+        t^.Pointers.PushBackData(s);
   //until not iterator.Next;
   end;
   PTPointerCounterData(piteratedata)^.counter.Free;
   Freemem(piteratedata);
 end;
+
 procedure FreePNamedObjectCounterDataUTF8(piteratedata:Pointer;mp:TMultiProperty);
 var
   pair:TPointerCounter.TDictionaryPair;
@@ -287,24 +290,27 @@ var
    s:PGDBNamedObject;
    c:integer;
    PVD:pvardesk;
+   t:PTEnumDataWithOtherPointers;
 {уничтожает созданную GetPointerCounterData структуру}
 begin
   PVD:=PTPointerCounterData(piteratedata)^.VDAddr.Instance;
-  PTEnumDataWithOtherData(PVD^.data.Addr.Instance)^.Enums.PushBackData(format('Total (%d)',[PTPointerCounterData(piteratedata)^.totalcount]));
-  PTZctnrVectorPointer(PTEnumDataWithOtherData(PVD^.data.Addr.Instance)^.PData)^.PushBackData(nil);
+  t:=PVD^.data.Addr.Instance;
+  t^.Enums.PushBackData(format('Total (%d)',[PTPointerCounterData(piteratedata)^.totalcount]));
+  t^.Pointers.PushBackData(nil);
   for pair in PTPointerCounterData(piteratedata)^.counter do begin
   //iterator:=PTPointerCounterData(piteratedata)^.counter.Min;
   //if assigned(iterator) then
   //repeat
         s:=pair.Key;
         c:=pair.Value;
-        PTEnumDataWithOtherData(PVD^.data.Addr.Instance)^.Enums.PushBackData(format('%s (%d)',[(s.GetFullName),c]));
-        PTZctnrVectorPointer(PTEnumDataWithOtherData(PVD^.data.Addr.Instance)^.PData)^.PushBackData(s);
+        t^.Enums.PushBackData(format('%s (%d)',[(s.GetFullName),c]));
+        t^.Pointers.PushBackData(s);
   //until not iterator.Next;
   end;
   PTPointerCounterData(piteratedata)^.counter.Free;
   Freemem(piteratedata);
 end;
+
 
 procedure FreeVertex3DControlData(piteratedata:Pointer;mp:TMultiProperty);
 {уничтожает созданную GetVertex3DControlData структуру}

@@ -165,7 +165,7 @@ begin
 end;
 procedure ObjectDescriptor.MagicFreeInstance(PInstance:Pointer);
 begin
-     //RunMetod('Done',PInstance);
+     RunMetod('Done',PInstance);
      inherited;
 end;
 procedure ObjectDescriptor.RegisterTypeinfo(ti:PTypeInfo);

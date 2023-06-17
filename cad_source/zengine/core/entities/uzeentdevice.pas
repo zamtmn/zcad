@@ -228,12 +228,15 @@ begin
               pv^.SaveToDXFFollow(outhandle,drawing,IODXFContext);
               pvc2.rtsave(pv);
 
-         pvc^.done;
          pvc2.rtsave(pv);
          pv^.State:=pv^.State-[ESCalcWithoutOwner,ESTemp];
-         //pv^.FormatEntity(drawing,dc);
+
+         pvc^.done;
          Freemem(pointer(pvc));
+
+         pvc2^.done;
          Freemem(pointer(pvc2));
+
          pv:=VarObjArray.iterate(ir);
      until pv=nil;
      objmatrix:=m4;

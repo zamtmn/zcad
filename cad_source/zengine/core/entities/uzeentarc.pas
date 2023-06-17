@@ -48,7 +48,7 @@ GDBObjArc= object(GDBObjPlain)
                  procedure DrawGeometry(lw:Integer;var DC:TDrawContext{infrustumactualy:TActulity;subrender:Integer});virtual;
                  procedure addcontrolpoints(tdesc:Pointer);virtual;
                  procedure remaponecontrolpoint(pdesc:pcontrolpointdesc);virtual;
-                 procedure CalcObjMatrix;virtual;
+                 procedure CalcObjMatrix(pdrawing:PTDrawingDef=nil);virtual;
                  procedure precalc;
                  procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);virtual;
                  procedure createpoints(var DC:TDrawContext);virtual;

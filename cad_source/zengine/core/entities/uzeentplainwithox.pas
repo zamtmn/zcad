@@ -20,14 +20,14 @@ unit uzeentplainwithox;
 {$INCLUDE zengineconfig.inc}
 
 interface
-uses uzegeometrytypes,uzeentplain,uzegeometry,sysutils;
+uses uzegeometrytypes,uzeentplain,uzegeometry,sysutils,uzedrawingdef;
 type
 //pprojoutbound:{-}PGDBOOutbound2DIArray{/Pointer/};
 {EXPORT+}
 PGDBObjPlainWithOX=^GDBObjPlainWithOX;
 {REGISTEROBJECTTYPE GDBObjPlainWithOX}
 GDBObjPlainWithOX= object(GDBObjPlain)
-               procedure CalcObjMatrix;virtual;
+               procedure CalcObjMatrix(pdrawing:PTDrawingDef=nil);virtual;
          end;
 {EXPORT-}
 implementation

@@ -33,7 +33,6 @@ GDBObjBlockInsert= object(GDBObjComplex)
                      scale:GDBvertex;(*saved_to_shd*)
                      rotate:Double;(*saved_to_shd*)
                      index:Integer;(*saved_to_shd*)(*oi_readonly*)(*hidden_in_objinsp*)
-                     pblockdef:PGDBObjBlockdef;
                      Name:AnsiString;(*saved_to_shd*)(*oi_readonly*)
                      pattrib:Pointer;(*hidden_in_objinsp*)
                      BlockDesc:TBlockDesc;(*'Block params'*)(*saved_to_shd*)(*oi_readonly*)
@@ -42,7 +41,7 @@ GDBObjBlockInsert= object(GDBObjComplex)
                      procedure LoadFromDXF(var f: TZctnrVectorBytes;ptu:PExtensionData;var drawing:TDrawingDef);virtual;
 
                      procedure SaveToDXF(var outhandle:{Integer}TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
-                     procedure CalcObjMatrix;virtual;
+                     procedure CalcObjMatrix(pdrawing:PTDrawingDef=nil);virtual;
                      function Clone(own:Pointer):PGDBObjEntity;virtual;
                      //procedure rtmodifyonepoint(point:pcontrolpointdesc;tobj:PGDBObjEntity;dist,wc:gdbvertex;ptdata:Pointer);virtual;
                      destructor done;virtual;
@@ -306,7 +305,7 @@ begin
     EntExtensions.RunOnBeforeEntityFormat(@self,drawing,DC);
 
   //inferited; //fix https://github.com/zamtmn/zcad/issues/17
-  calcobjmatrix;
+  calcobjmatrix(@drawing);
   ConstObjArray.FormatEntity(drawing,dc);
   calcbb(dc);
   //self.BuildGeometry(drawing); //fix https://github.com/zamtmn/zcad/issues/17
@@ -327,7 +326,9 @@ begin
   PGDBObjBlockInsert(refp)^.scale := scale;
 end;
 procedure GDBObjBlockInsert.CalcObjMatrix;
-var m1:DMatrix4D;
+var
+  m1:DMatrix4D;
+  pblockdef:PGDBObjBlockdef;
 begin
   inherited CalcObjMatrix;
   {m1:= OneMatrix;
@@ -338,10 +339,10 @@ begin
   m1[0,1]:=sin(rotate*pi/180);
   objMatrix:=MatrixMultiply(m1,objMatrix);}
 
-  if pblockdef<>nil then
-  begin
-  m1:=CreateTranslationMatrix(VertexMulOnSc(pblockdef.Base,-1));
-  objMatrix:=MatrixMultiply(m1,objMatrix);
+  if pdrawing<>nil then begin
+    pblockdef:=PGDBObjBlockdefArray(pdrawing^.GetBlockDefArraySimple).getDataMutable(index);
+    m1:=CreateTranslationMatrix(VertexMulOnSc(pblockdef.Base,-1));
+    objMatrix:=MatrixMultiply(m1,objMatrix);
   end;
   setrot(rotate);
 
@@ -380,7 +381,6 @@ constructor GDBObjBlockInsert.init;
 begin
   inherited init(own,layeraddres,LW);
   POINTER(name):=nil;
-  pblockdef:=nil;
   //Getmem(self.varman,sizeof(varmanager));
   bp.ListPos.Owner:=own;
   //vp.ID:=GDBBlockInsertID;
@@ -393,7 +393,6 @@ end;
 constructor GDBObjBlockInsert.initnul;
 begin
   inherited initnul;
-  pblockdef:=nil;
   POINTER(name):=nil;
   //Getmem(self.varman,sizeof(varmanager));
   bp.ListPos.Owner:=nil;
@@ -458,7 +457,7 @@ end;
 procedure GDBObjBlockInsert.BuildGeometry;
 var
     pvisible,pvisible2:PGDBObjEntity;
-    //i:Integer;
+    pblockdef:PGDBObjBlockdef;
     mainowner:PGDBObjSubordinated;
     dc:TDrawContext;
     ir:itrec;

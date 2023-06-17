@@ -457,13 +457,12 @@ begin
   inherited;
 end;
 procedure GDBObjDevice.BuildVarGeometry;
-var //pblockdef:PGDBObjBlockdef;
+var
     pvisible,pvisible2:PGDBObjEntity;
-    //freelayer:PGDBLayerProp;
     i:Integer;
-    //varobject:Boolean;
     devnam:String;
     DC:TDrawContext;
+    pblockdef:PGDBObjBlockdef;
 begin
           //name:=copy(name,8,length(name)-7);
           devnam:=DevicePrefix+name;
@@ -515,13 +514,11 @@ begin
           end;
 end;
 procedure GDBObjDevice.BuildGeometry;
-var //pblockdef:PGDBObjBlockdef;
-    pvisible,pvisible2:PGDBObjEntity;
-    //freelayer:PGDBLayerProp;
-    i:Integer;
-    //varobject:Boolean;
-    //devnam:String;
-    DC:TDrawContext;
+var
+  pblockdef:PGDBObjBlockdef;
+  pvisible,pvisible2:PGDBObjEntity;
+  i:Integer;
+  DC:TDrawContext;
 begin
      inherited;
      exit;
@@ -642,89 +639,17 @@ begin
 end;
 
 procedure GDBObjDevice.FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);
-(*var pvn,{pvnt,}pvp,pvphase,pvi,pvcos:pvardesk;
-    volt:TVoltage;
-    calcip:TCalcIP;
-    u:Double;*)
 begin
   if assigned(EntExtensions)then
     EntExtensions.RunOnBeforeEntityFormat(@self,drawing,DC);
-
-         //if PTObjectUnit(ou.Instance)^.InterfaceVariables.vardescarray.Count=0 then
-                                                        begin
-                                                             //GDB.BlockDefArray.getblockdef(name)^.OU.CopyTo(@ou);
-                                                        end;
-          self.CalcObjMatrix;
-          //index:=gdb.GetCurrentDWG.BlockDefArray.getindex(pansichar(name));
-          index:=PGDBObjBlockdefArray(drawing.GetBlockDefArraySimple).getindex(pansichar(name));
-          FormatFeatures(drawing);
-
-          //CreateDeviceNameProcess(@self,drawing);
-
-          (*pvn:=ou.FindVariable('Device_Type');
-          if pvn<>nil then
-          begin
-               case PTDeviceType(pvn^.Instance)^ of
-               TDT_SilaPotr:
-               begin
-                    pvn:=ou.FindVariable('Voltage');
-                    if pvn<>nil then
-                    begin
-                          volt:=PTVoltage(pvn^.Instance)^;
-                          u:=0;
-                          case volt of
-                                      _AC_220V_50Hz:u:=0.22;
-                                      _AC_380V_50Hz:u:=0.38;
-                          end;{case}
-                          pvn:=ou.FindVariable('CalcIP');
-                          if pvn<>nil then
-                                          calcip:=PTCalcIP(pvn^.Instance)^;
-                          pvp:=ou.FindVariable('Power');
-                          pvi:=ou.FindVariable('Current');
-                          pvcos:=ou.FindVariable('CosPHI');
-                          pvphase:=ou.FindVariable('Phase');
-                          if pvn<>nil then
-                                          calcip:=PTCalcIP(pvn^.Instance)^;
-                          if (pvp<>nil)and(pvi<>nil)and(pvcos<>nil)and(pvphase<>nil) then
-                          begin
-                          if calcip=_ICOS_from_P then
-                          begin
-                               if pDouble(pvp^.Instance)^<1 then pDouble(pvcos^.Instance)^:=0.65
-                          else if pDouble(pvp^.Instance)^<=4 then pDouble(pvcos^.Instance)^:=0.75
-                          else pDouble(pvcos^.Instance)^:=0.85;
-
-                               calcip:=_I_from_p;
-                          end;
-
-                          case calcip of
-                               _I_from_P:begin
-                                              if PTPhase(pvphase^.Instance)^=_ABC
-                                              then pDouble(pvi^.Instance)^:=pDouble(pvp^.Instance)^/u/1.73/pDouble(pvcos^.Instance)^
-                                              else pDouble(pvi^.Instance)^:=pDouble(pvp^.Instance)^/u/pDouble(pvcos^.Instance)^
-                                         end;
-                               _P_from_I:begin
-                                              if PTPhase(pvphase^.Instance)^=_ABC
-                                              then pDouble(pvp^.Instance)^:=pDouble(pvi^.Instance)^*u*1.73*pDouble(pvcos^.Instance)^
-                                              else pDouble(pvp^.Instance)^:=pDouble(pvi^.Instance)^*u*pDouble(pvcos^.Instance)^
-                                         end
-
-
-                          end;{case}
-                          end;
-                    end;
-               end;
-               end;{case}
-          end;*)
-
-          calcobjmatrix;
-          //buildgeometry;
-          //ConstObjArray.Shrink;
-          //VarObjArray.Shrink;
-
-          ConstObjArray.FormatEntity(drawing,dc);
-          VarObjArray.FormatEntity(drawing,dc);
-     self.lstonmouse:=nil;
-     calcbb(dc);
+  index:=PGDBObjBlockdefArray(drawing.GetBlockDefArraySimple).getindex(pansichar(name));
+  CalcObjMatrix(@drawing);
+  FormatFeatures(drawing);
+  CalcObjMatrix(@drawing);
+  ConstObjArray.FormatEntity(drawing,dc);
+  VarObjArray.FormatEntity(drawing,dc);
+  self.lstonmouse:=nil;
+  calcbb(dc);
   if assigned(EntExtensions)then
     EntExtensions.RunOnAfterEntityFormat(@self,drawing,DC);
 end;

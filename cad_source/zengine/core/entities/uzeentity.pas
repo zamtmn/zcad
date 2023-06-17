@@ -161,7 +161,7 @@ GDBObjEntity= object(GDBObjSubordinated)
 
                     procedure EraseMi(pobj:pGDBObjEntity;pobjinarray:Integer;var drawing:TDrawingDef);virtual;
                     function GetTangentInPoint(point:GDBVertex):GDBVertex;virtual;
-                    procedure CalcObjMatrix;virtual;
+                    procedure CalcObjMatrix(pdrawing:PTDrawingDef=nil);virtual;
                     procedure ReCalcFromObjMatrix;virtual;
                     procedure correctsublayers(var la:GDBLayerArray);virtual;
                     procedure CopyVPto(var toObj:GDBObjEntity);virtual;

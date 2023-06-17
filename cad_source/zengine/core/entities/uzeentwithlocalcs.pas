@@ -49,7 +49,7 @@ GDBObjWithLocalCS= object(GDBObjWithMatrix)
                function LoadFromDXFObjShared(var f:TZctnrVectorBytes;dxfcod:Integer;ptu:PExtensionData;var drawing:TDrawingDef):Boolean;
 
                procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);virtual;
-               procedure CalcObjMatrix;virtual;
+               procedure CalcObjMatrix(pdrawing:PTDrawingDef=nil);virtual;
                function CalcObjMatrixWithoutOwner:DMatrix4D;virtual;
                procedure transform(const t_matrix:DMatrix4D);virtual;
                procedure Renderfeedback(pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc;var DC:TDrawContext);virtual;

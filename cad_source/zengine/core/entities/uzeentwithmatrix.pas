@@ -30,7 +30,7 @@ GDBObjWithMatrix= object(GDBObjEntity)
                        ObjMatrix:DMatrix4D;(*'OCS Matrix'*)(*oi_readonly*)(*hidden_in_objinsp*)
                        constructor initnul(owner:PGDBObjGenericWithSubordinated);
                        function GetMatrix:PDMatrix4D;virtual;
-                       procedure CalcObjMatrix;virtual;
+                       procedure CalcObjMatrix(pdrawing:PTDrawingDef=nil);virtual;
                        procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);virtual;
                        procedure createfield;virtual;
                        procedure transform(const t_matrix:DMatrix4D);virtual;

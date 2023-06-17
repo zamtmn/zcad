@@ -23,7 +23,7 @@ uses {эти нужно убрать}{uzglviewareageneral,}UGDBSelectedObjArray,
      uzgldrawcontext,uzeentity,uzecamera,
      uzbstrproc,sysutils,uzeentplainwithox,
      UGDBOutbound2DIArray,uzegeometrytypes,uzbtypes,uzeconsts,uzegeometry,math,
-     uzctnrvectorpgdbaseobjects,uzglviewareadata,uzeSnap;
+     uzctnrvectorpgdbaseobjects,uzglviewareadata,uzeSnap,uzedrawingdef;
 type
 //jstm(*'TopCenter'*)=2,
 {EXPORT+}
@@ -57,7 +57,7 @@ GDBObjAbstractText= object(GDBObjPlainWithOX)
                          P_drawInOCS:GDBvertex;(*saved_to_shd*)(*oi_readonly*)(*hidden_in_objinsp*)
                          DrawMatrix:DMatrix4D;(*oi_readonly*)(*hidden_in_objinsp*)
                          //Vertex3D_in_WCS_Array:GDBPolyPoint3DArray;(*oi_readonly*)(*hidden_in_objinsp*)
-                         procedure CalcObjMatrix;virtual;
+                         procedure CalcObjMatrix(pdrawing:PTDrawingDef=nil);virtual;
                          procedure DrawGeometry(lw:Integer;var DC:TDrawContext{infrustumactualy:TActulity;subrender:Integer});virtual;
                          procedure SimpleDrawGeometry(var DC:TDrawContext);virtual;
                          procedure RenderFeedback(pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc;var DC:TDrawContext);virtual;

@@ -79,7 +79,10 @@ end;
 
 procedure ReCreateClipboardDWG;
 begin
-  ClipboardDWG.done;
+  if ClipboardDWG<>nil then begin
+    ClipboardDWG.done;
+    Freemem(ClipboardDWG);
+  end;
   ClipboardDWG:=drawings.CreateDWG('*rtl/dwg/DrawingVars.pas','');
   //ClipboardDWG.DimStyleTable.AddItem('Standart',pds);
 end;

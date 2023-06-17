@@ -201,26 +201,26 @@ begin
    result:=cmd_ok;
 end;
 function Move_com.AfterClick(wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record): Integer;
-var //i:Integer;
-    //dist:gdbvertex;
-    dispmatr{,im}:DMatrix4D;
-    //ir:itrec;
-    //pcd:PTCopyObjectDesc;
-    //m:tmethod;
-    dc:TDrawContext;
+var
+  dispmatr:DMatrix4D;
+  dc:TDrawContext;
 begin
-      dispmatr:=CalcTransformMatrix(t3dp,wc);
-      drawings.GetCurrentDWG^.ConstructObjRoot.ObjMatrix:=dispmatr;
-      dc:=drawings.GetCurrentDWG^.CreateDrawingRC;
-  if (button and MZW_LBUTTON)<>0 then
-  begin
-   move(dispmatr,self.CommandName);
+  dispmatr:=CalcTransformMatrix(t3dp,wc);
+  drawings.GetCurrentDWG^.ConstructObjRoot.ObjMatrix:=dispmatr;
+  dc:=drawings.GetCurrentDWG^.CreateDrawingRC;
+  if (button and MZW_LBUTTON)<>0 then begin
+    move(dispmatr,self.CommandName);
 
-   drawings.GetCurrentDWG^.ConstructObjRoot.ObjMatrix:=onematrix;
-   drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.free;
-   drawings.GetCurrentROOT^.FormatAfterEdit(drawings.GetCurrentDWG^,dc);
+    drawings.GetCurrentDWG^.ConstructObjRoot.ObjMatrix:=onematrix;
+    drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.free;
+    drawings.GetCurrentROOT^.FormatAfterEdit(drawings.GetCurrentDWG^,dc);
 
-   commandmanager.executecommandend;
+    if pcoa<>nil then begin
+      pcoa^.done;
+      Freemem(pointer(pcoa));
+    end;
+
+    commandmanager.executecommandend;
   end;
   result:=cmd_ok;
 end;

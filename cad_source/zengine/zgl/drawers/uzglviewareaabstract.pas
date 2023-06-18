@@ -176,6 +176,7 @@ begin
   result.DrawingContext.matrixs.pprojMatrix:=nil;
   result.DrawingContext.matrixs.pviewport:=nil;
   result.DrawingContext.pcamera:=nil;
+  result.Options:=[];
 end;
 
 function TCADControl.DoMouseWheel(Shift: TShiftState; WheelDelta: Integer; MousePos: TPoint): Boolean;

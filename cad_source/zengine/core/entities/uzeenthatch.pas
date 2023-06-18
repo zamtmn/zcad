@@ -503,7 +503,7 @@ begin
   createpoint;
   calcbb(dc);
   Representation.Clear;
-  if not (ESTemp in State) then begin
+  if not (ESTemp in State)and(DCODrawable in DC.Options) then begin
     Representation.Geometry.Lock;
     hatchTess:=Triangulator.NewTesselator;
 

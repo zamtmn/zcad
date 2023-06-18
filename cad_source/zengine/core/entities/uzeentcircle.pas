@@ -308,7 +308,7 @@ begin
   //getoutbound;
   calcbb(dc);
   Representation.Clear;
-  if not (ESTemp in State) then
+  if not (ESTemp in State)and(DCODrawable in DC.Options) then
     Representation.DrawPolyLineWithLT(dc,Vertex3D_in_WCS_Array,vp,true,true);
   if assigned(EntExtensions)then
     EntExtensions.RunOnAfterEntityFormat(@self,drawing,DC);

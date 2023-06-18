@@ -1369,6 +1369,7 @@ var
   dc:TDrawContext;
   lph:TLPSHandle;
 begin
+  DefaultFormatSettings.DecimalSeparator:='.';
   debugln('{D+}AddFromDXF("%s")',[name]);
   //programlog.LogOutFormatStr('AddFromDXF("%s")',[name],lp_IncPos,LM_Debug);
   DebugLn('{IH}'+rsLoadingFile,[name]);

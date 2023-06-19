@@ -26,7 +26,7 @@ uses
  varman,varmandef,
  uzegeometry,uzctnrvectorstrings,uzcinterface,uzctreenode,uzclog,strmy,
  uzccommandlineutil,uztoolbarsmanager,uzmenusmanager,uzccommandsabstract,gzctnrVectorTypes,
- uzcctrlcommandlineprompt,uzeparsercmdprompt;
+ uzcctrlcommandlineprompt,uzeparsercmdprompt,uzbtypes;
 
 const
      cheight=48;
@@ -362,7 +362,7 @@ var
   needclean:integer;
 begin
   if assigned(HistoryLine) then begin
-    if (s<>LastHistoryMsg)or(rsMsgRepeatCountStr='') then begin
+    if ((s<>LastHistoryMsg)or(rsMsgRepeatCountStr=''))or(INTFMessagesSuppressDoubles=T3SB_Fale) then begin
       LastHistoryMsg:=s;
       LastHistoryMsgRepeatCounter:=0;
       LastSuffixMsg:='';
@@ -379,7 +379,7 @@ begin
       HistoryLine.SelLength:=length(HistoryLine.Lines.LineBreak);
       HistoryLine.ClearSelection;
       {$ENDIF}
-    end else begin
+    end else if INTFMessagesSuppressDoubles=T3SB_Default then begin
       inc(LastHistoryMsgRepeatCounter);
       needclean:=UTF8Length(LastSuffixMsg);
       LastSuffixMsg:=format(rsMsgRepeatCountStr,[LastHistoryMsgRepeatCounter+1]);

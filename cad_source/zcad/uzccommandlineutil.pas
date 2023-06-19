@@ -22,7 +22,7 @@ interface
 uses uzegeometrytypes,varmandef,uzctnrvectorstrings,uzccommandsmanager,
      gzctnrVectorTypes,sysutils,uzbstrproc,uzcdrawings,uzegeometry,math,
      UGDBTracePropArray,uzglviewareadata,languade,Varman,uzcinterface,uzcstrconsts,
-     strmy,LCLProc,uzccommandsabstract,LazUtilities;
+     strmy,LCLProc,uzccommandsabstract,LazUtilities,uzbtypes;
 const
      commandsuffix='>';
      commandprefix=' ';
@@ -30,6 +30,7 @@ type
   TCLineMode=(CLCOMMANDREDY,CLCOMMANDRUN);
 var
   INTFCommandLineEnabled:Boolean=true;
+  INTFMessagesSuppressDoubles:TGDB3StateBool=T3SB_Default;
   aliases:TZctnrVectorStrings;
   mode:TCLineMode;
 procedure processcommand(var input:string);

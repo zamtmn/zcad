@@ -81,6 +81,7 @@ var
   INTF_ThemedLeftToolbars:Boolean;
   INTF_AppMode:TAppMode;
   INTF_ColorScheme:String;
+  INTF_MessagesSuppressDoubles:TGDB3StateBool;
   RD_Vendor:String;
   RD_Renderer:String;
   RD_Extensions:String;
@@ -184,6 +185,7 @@ begin
   INTF_ThemedLeftToolbars:=False;
   INTF_AppMode:=TAMForceLight;
   INTF_ColorScheme:='CustomDark';
+  INTF_MessagesSuppressDoubles:=T3SB_Default;
   RD_Vendor:='';
   RD_Renderer:='';
   RD_Extensions:='';

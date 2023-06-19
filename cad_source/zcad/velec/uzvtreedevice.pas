@@ -120,6 +120,7 @@ uses
   uzvslagcabparams, //вынесенные параметры
    uzvdeverrors,
    gzctnrVectorTypes,
+   uzestyleslayers,
   uzvtestdraw;
 
 
@@ -1166,6 +1167,29 @@ var
               result:= true;
     end;
 
+    function getLayerProp(createdlayername:string):PGDBLayerProp;
+    var
+        pproglayer:PGDBLayerProp;
+        //pnevlayer:PGDBLayerProp;
+        //pe:PGDBObjEntity;
+    //const
+    //    createdlayername='systemTempVisualLayer';
+    begin
+        result:=nil;
+        //if commandmanager.getentity(rscmSelectSourceEntity,pe) then
+        //begin
+          pproglayer:=BlockBaseDWG^.LayerTable.getAddres(createdlayername);//ищем описание слоя в библиотеке
+                                                                          //возможно оно найдется, а возможно вернется nil
+          result:=drawings.GetCurrentDWG^.LayerTable.createlayerifneedbyname(createdlayername,pproglayer);//эта процедура сначала ищет описание слоя в чертеже
+                                                                                                            //если нашла - возвращает его
+                                                                                                            //не нашла, если pproglayer не nil - создает такойде слой в чертеже
+                                                                                                            //и только если слой в чертеже не найден pproglayer=nil то возвращает nil
+          if result=nil then //предидущие попытки обламались. в чертеже и в библиотеке слоя нет, тогда создаем новый
+            result:=drawings.GetCurrentDWG^.LayerTable.addlayer(createdlayername{имя},ClWhite{цвет},-1{вес},true{on},false{lock},true{print},'???'{описание},TLOLoad{режим создания - в данном случае неважен});
+          //pe^.vp.Layer:=pnevlayer;
+        //end;
+    end;
+
     procedure drawCableLine(listInteger:TVectorofInteger;numLMaster,numLGroup,counterSegment:Integer;cabMounting:string;numConnect:integer;cableNameinGraph:string);
     var
     cableLine:PGDBObjCable;
@@ -1177,7 +1201,9 @@ var
     begin
      cableLine := AllocEnt(GDBCableID);
      cableLine^.init(nil,nil,0);
+
      zcSetEntPropFromCurrentDrawingProp(cableLine);
+     cableLine^.vp.Layer:=getLayerProp(speclayerCABLEname);
 
      for i:=0 to listInteger.Size-1 do
          cableLine^.VertexArrayInOCS.PushBackData(listVertexEdge.listVertex[listInteger[i]].centerPoint);
@@ -1190,7 +1216,7 @@ var
         if psu<>nil then
           pvarext.entityunit.copyfrom(psu);
       end;
-      zcSetEntPropFromCurrentDrawingProp(cableLine);
+      //zcSetEntPropFromCurrentDrawingProp(cableLine);
       //***//
 
       //** Имя мастера устройства

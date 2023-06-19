@@ -24,7 +24,8 @@ uses
   uzctnrVectorBytes,{$IFNDEF DELPHI}LResources,{$ENDIF}LCLProc,uzbpaths,
   uzelclintfex,uzestrconsts,uzbstrproc,uzefont,
   sysutils,uzbtypes,uzegeometry,gzctnrSTL,
-  UGDBNamedObjectsArray,classes,uzefontttfpreloader,uzelongprocesssupport;
+  UGDBNamedObjectsArray,classes,uzefontttfpreloader,uzelongprocesssupport,
+  uzcstrconsts;
 type
   TGeneralFontParam=record
     procedure Init;
@@ -226,7 +227,7 @@ begin
              IsCreated:
                        begin
                             //HistoryOutStr(sysutils.format(rsLoadingFontFile,[FontPathName]));
-                            debugln('{IH+}Loading font "%s"',[FontPathName]);
+                            debugln('{IH+}'+rsLoadingFontFile,[FontPathName]);
                             //programlog.LogOutFormatStr('Loading font "%s"',[FontPathName],lp_IncPos,LM_Info);
                             _key:=lowercase(FontExt);
                             if _key<>'' then

@@ -102,8 +102,8 @@ begin
   if p<>nil then
   repeat
        //programlog.LogOutStr('format entity '+inttostr(ir.itc),lp_OldPos);
-       p^.formatEntity(drawing,dc);
        p^.BuildGeometry(drawing);
+       p^.formatEntity(drawing,dc);
        p^.FromDXFPostProcessAfterAdd;
        p:=ObjArray.iterate(ir);
   until p=nil;

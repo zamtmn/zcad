@@ -107,22 +107,10 @@ begin
   calcbb(dc);
   //-------------BuildSnapArray(VertexArrayInWCS,snaparray,Closed);
   Representation.Clear;
-  if VertexArrayInWCS.Count>1 then
-  begin
-  {ptv:=VertexArrayInWCS.beginiterate(ir);
-  ptvfisrt:=ptv;
-  if ptv<>nil then
-  repeat
-        ptvprev:=ptv;
-        ptv:=VertexArrayInWCS.iterate(ir);
-        if ptv<>nil then
-                        Representation.DrawLineWithLT(ptv^,ptvprev^,vp);
-  until ptv=nil;
-  if closed then
-                Representation.DrawLineWithLT(ptvprev^,ptvfisrt^,vp);
-  end;}
-  Representation.DrawPolyLineWithLT(dc,VertexArrayInWCS,vp,closed,false);
-  end;
+  if (not (ESTemp in State))and(DCODrawable in DC.Options) then
+    if VertexArrayInWCS.Count>1 then
+      Representation.DrawPolyLineWithLT(dc,VertexArrayInWCS,vp,closed,false);
+
 
   if assigned(EntExtensions)then
     EntExtensions.RunOnAfterEntityFormat(@self,drawing,DC);

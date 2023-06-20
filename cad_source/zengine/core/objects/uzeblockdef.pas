@@ -93,18 +93,22 @@ end;}
 procedure GDBObjBlockdef.FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);
 var
   p:pgdbobjEntity;
-      ir:itrec;
+  ir:itrec;
+  SaveDCOptions:TDContextOptions;
 begin
+  SaveDCOptions:=DC.Options;
+  exclude(dc.Options,DCODrawable);
   p:=ObjArray.beginiterate(ir);
   if p<>nil then
   repeat
        //programlog.LogOutStr('format entity '+inttostr(ir.itc),lp_OldPos);
-       p^.formatEntity(drawing,dc);
        p^.BuildGeometry(drawing);
+       p^.formatEntity(drawing,dc);
        p^.FromDXFPostProcessAfterAdd;
        p:=ObjArray.iterate(ir);
   until p=nil;
   Formated:=true;
+  DC.Options:=SaveDCOptions;
 end;
 
 constructor GDBObjBlockdef.initnul;

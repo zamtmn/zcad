@@ -28,6 +28,7 @@ const
 
   vItemAllSLInspector='***';
   vSystemVisualLayerName='systemTempCABLINEVisualLayer';
+  speclayerCABLEname='EL_KABLE';
 
   vGGIndex='indexGlobalVertex';
   vGIsDevice='isDevice';

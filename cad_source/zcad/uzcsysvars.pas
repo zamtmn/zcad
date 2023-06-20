@@ -187,6 +187,10 @@ type
                 INTF_ObjInsp_ShowEmptySections:PBoolean;(*'Show empty sections'*)
                 INTF_ObjInsp_ButtonSizeReducing:PInteger;(*'Button size reducing'*)
                end;
+  {REGISTERRECORDTYPE tmessagesinterface}
+  tmessagesinterface=record
+                INTF_Messages_SuppressDoubles:PTGDB3StateBool;(*'Suppress doubles'*)
+               end;
   {REGISTERRECORDTYPE tinterface}
   tinterface=record
               INTF_CommandLineEnabled:PBoolean;(*'Command line enabled'*)
@@ -201,6 +205,7 @@ type
               INTF_DefaultControlHeight:PInteger;(*'Default control height'*)(*oi_readonly*)
               INTF_DefaultEditorFontHeight:PInteger;(*'Default editor font height'*)
               INTF_OBJINSP_Properties:tobjinspinterface;(*'Object inspector properties'*)
+              INTF_MESSAGES_Properties:tmessagesinterface;(*'Messages properties'*)
               INTF_AppMode:PTAppMode;(*'Application mode'*)
               INTF_ColorScheme:PString;(*'Application color scheme'*)
              end;

@@ -499,7 +499,8 @@ begin
   calcobjmatrix;
   CalcGabarit(drawing);
   //getoutbound;
-  createpoint(drawing,dc);
+  if (not (ESTemp in State))and(DCODrawable in DC.Options) then
+    createpoint(drawing,dc);
   calcbb(dc);
 
   if assigned(EntExtensions)then

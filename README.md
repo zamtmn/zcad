@@ -1,6 +1,6 @@
 # ZCAD
 [![GitHub Release](https://img.shields.io/github/release/zamtmn/zcad.svg)](https://github.com/zamtmn/zcad/releases)[![Build status](https://ci.appveyor.com/api/projects/status/7bsg5me8q1r5jjt4/branch/master?svg=true)](https://ci.appveyor.com/project/zamtmn/zcad/branch/master)
-![screenshot](https://github.com/zamtmn/zcad/raw/master/docs/img/zcadet_qt.png)
+![screenshot](https://github.com/zamtmn/zcad/raw/master/docs/img/zcadet_win32.png)
 ## Overview
 ZCAD is simple CAD program, written in Lazarus / FPC.
 

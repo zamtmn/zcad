@@ -285,7 +285,7 @@ begin
                                          end;
   end;
 end;
-procedure addentitiesfromdxf(var f: TZctnrVectorBytes;exitString: String;owner:PGDBObjSubordinated;var drawing:TSimpleDrawing;var context:TIODXFLoadContext);
+procedure addentitiesfromdxf(var f: TZctnrVectorBytes;exitString: String;owner:PGDBObjSubordinated;var drawing:TSimpleDrawing;DC:TDrawContext;var context:TIODXFLoadContext);
 var
 //  byt,LayerColor: Integer;
   s{, sname, sx1, sy1, sz1,scode,LayerName}: String;
@@ -300,7 +300,6 @@ objid: Integer;
   //additionalunit:TUnit;
   PExtLoadData:Pointer;
   EntInfoData:TEntInfoData;
-  DC:TDrawContext;
   //pentvarext,ppostentvarext:TVariablesExtender;
   bylayerlt:Pointer;
   lph:TLPSHandle;
@@ -314,7 +313,6 @@ begin
   {additionalunit.init('temparraryunit');
   additionalunit.InterfaceUses.addnodouble(@SysUnit);}
   group:=-1;
-  DC:=drawing.CreateDrawingRC;
   bylayerlt:=drawing.LTypeStyleTable.getAddres('ByLayer');
   while (f.notEOF) and (s <> exitString) do
   begin
@@ -366,7 +364,7 @@ begin
                                                          newowner:=owner;
                                                     end;
 
-                                if not trash then
+                                 if not trash then
                                 begin
                                 if (newowner<>owner) then
                                 begin
@@ -488,7 +486,7 @@ begin
   //additionalunit.done;
   lps.EndLongProcess(lph);
 end;
-procedure addfromdxf12(var f:TZctnrVectorBytes;exitString: String;owner:PGDBObjSubordinated;LoadMode:TLoadOpt;var drawing:TSimpleDrawing);
+procedure addfromdxf12(var f:TZctnrVectorBytes;exitString: String;owner:PGDBObjSubordinated;LoadMode:TLoadOpt;var drawing:TSimpleDrawing;var DC:TDrawContext);
 var
   {byt,}LayerColor: Integer;
   s, sname{, sx1, sy1, sz1},scode,LayerName: String;
@@ -558,7 +556,7 @@ begin
             tp := drawing.BlockDefArray.create(s);
             debugln('{D+}[DXF_CONTENTS]Found block ',s);
             //programlog.LogOutFormatStr('Found block "%s"',[s],lp_IncPos,LM_Debug);
-            {addfromdxf12}addentitiesfromdxf(f, 'ENDBLK',tp,drawing,context);
+            {addfromdxf12}addentitiesfromdxf(f, 'ENDBLK',tp,drawing,dc,context);
             debugln('{D-}[DXF_CONTENTS]end; {block}');
             //programlog.LogOutFormatStr('end; {block "%s"}',[s],lp_DecPos,LM_Debug);
           end;
@@ -572,7 +570,7 @@ begin
     begin
          debugln('{D+}[DXF_CONTENTS]Found entities section');
          //programlog.LogOutStr('Found entities section',lp_IncPos,LM_Debug);
-         addentitiesfromdxf(f, 'EOF',owner,drawing,context);
+         addentitiesfromdxf(f, 'EOF',owner,drawing,dc,context);
          debugln('{D-}[DXF_CONTENTS]end {entities section}');
          //programlog.LogOutStr('end {entities section}',lp_DecPos,LM_Debug);
     end;
@@ -1152,7 +1150,7 @@ begin
 end;
 end;
 
-procedure addfromdxf2000(var f:TZctnrVectorBytes; exitString: String;owner:PGDBObjGenericSubEntry;LoadMode:TLoadOpt;var drawing:TSimpleDrawing;var context:TIODXFLoadContext;DWGVarsDict:TString2StringDictionary);
+procedure addfromdxf2000(var f:TZctnrVectorBytes; exitString: String;owner:PGDBObjGenericSubEntry;LoadMode:TLoadOpt;var drawing:TSimpleDrawing;var context:TIODXFLoadContext;var DC:TDrawContext;DWGVarsDict:TString2StringDictionary);
 var
   byt: Integer;
   error: Integer;
@@ -1164,6 +1162,7 @@ var
   clayer,cdimstyle,cltype,ctstyle:String;
   Handle2BlockName:TMapBlockHandle_BlockNames;
   lph:TLPSHandle;
+  SaveOptions:TDContextOptions;
 begin
   ctstyle:='';
   clayer:='';
@@ -1260,7 +1259,7 @@ begin
         debugln('{D+}[DXF_CONTENTS]Found entities section');
         //programlog.LogOutStr('Found entities section',lp_IncPos,LM_Debug);
         //inc(foc);
-        {addfromdxf12}addentitiesfromdxf(f, dxfName_ENDSEC,owner,drawing,context);
+        {addfromdxf12}addentitiesfromdxf(f, dxfName_ENDSEC,owner,drawing,dc,context);
         owner^.ObjArray.pack;
         owner^.correctobjects(nil,0);
         //inc(foc);
@@ -1322,7 +1321,10 @@ begin
                 tp^.Base.z := strtofloat(s);
                 //programlog.LogOutFormatStr('Base x:%g y:%g z:%g',[tp^.Base.x,tp^.Base.y,tp^.Base.z],lp_OldPos,LM_Info);
                 inc(foc);
-                AddEntitiesFromDXF(f,'ENDBLK',tp,drawing,context);
+                SaveOptions:=dc.Options;
+                exclude(dc.Options,DCODrawable);
+                AddEntitiesFromDXF(f,'ENDBLK',tp,drawing,dc,context);
+                dc.Options:=SaveOptions;
                 dec(foc);
                 if tp^.name='TX' then
                                                            tp^.name:=tp^.name;
@@ -1369,10 +1371,12 @@ var
   dc:TDrawContext;
   lph:TLPSHandle;
 begin
+  DefaultFormatSettings.DecimalSeparator:='.';
   debugln('{D+}AddFromDXF("%s")',[name]);
   //programlog.LogOutFormatStr('AddFromDXF("%s")',[name],lp_IncPos,LM_Debug);
   DebugLn('{IH}'+rsLoadingFile,[name]);
   //HistoryOutStr(format(rsLoadingFile,[name]));
+  dc:=ZCDCtx.PDrawing^.CreateDrawingRC;
   f.InitFromFile(name);
   if f.Count<>0 then
   begin
@@ -1396,27 +1400,27 @@ begin
                                          //HistoryOutStr(format(rsFileFormat,['DXF12 ('+s+')']));
                                          DebugLn('{IH}'+rsFileFormat,['DXF12 ('+s+')']);
                                          gotodxf(f, 0, dxfName_ENDSEC);
-                                         addfromdxf12(f,'EOF',ZCDCtx.POwner{owner},ZCDCtx.LoadMode{loadmode},ZCDCtx.PDrawing^{drawing});
+                                         addfromdxf12(f,'EOF',ZCDCtx.POwner{owner},ZCDCtx.LoadMode{loadmode},ZCDCtx.PDrawing^{drawing},dc);
                                     end;
                                1015:begin
                                          //HistoryOutStr(format(rsFileFormat,['DXF2000 ('+s+')']));
                                          DebugLn('{IH}'+rsFileFormat,['DXF2000 ('+s+')']);
-                                         addfromdxf2000(f,'EOF',ZCDCtx.POwner{owner},ZCDCtx.LoadMode{loadmode},ZCDCtx.PDrawing^{drawing},context,DWGVarsDict)
+                                         addfromdxf2000(f,'EOF',ZCDCtx.POwner{owner},ZCDCtx.LoadMode{loadmode},ZCDCtx.PDrawing^{drawing},context,dc,DWGVarsDict)
                                     end;
                                1018:begin
                                          //HistoryOutStr(format(rsFileFormat,['DXF2004 ('+s+')']));
                                          DebugLn('{IH}'+rsFileFormat,['DXF2004 ('+s+')']);
-                                         addfromdxf2000(f,'EOF',ZCDCtx.POwner{owner},ZCDCtx.LoadMode{loadmode},ZCDCtx.PDrawing^{drawing},context,DWGVarsDict)
+                                         addfromdxf2000(f,'EOF',ZCDCtx.POwner{owner},ZCDCtx.LoadMode{loadmode},ZCDCtx.PDrawing^{drawing},context,dc,DWGVarsDict)
                                     end;
                                1021:begin
                                          //HistoryOutStr(format(rsFileFormat,['DXF2007 ('+s+')']));
                                          DebugLn('{IH}'+rsFileFormat,['DXF2007 ('+s+')']);
-                                         addfromdxf2000(f,'EOF',ZCDCtx.POwner{owner},ZCDCtx.LoadMode{loadmode},ZCDCtx.PDrawing^{drawing},context,DWGVarsDict)
+                                         addfromdxf2000(f,'EOF',ZCDCtx.POwner{owner},ZCDCtx.LoadMode{loadmode},ZCDCtx.PDrawing^{drawing},context,dc,DWGVarsDict)
                                     end;
                                1024:begin
                                          //HistoryOutStr(format(rsFileFormat,['DXF2010 ('+s+')']));
                                          DebugLn('{IH}'+rsFileFormat,['DXF2010 ('+s+')']);
-                                         addfromdxf2000(f,'EOF',ZCDCtx.POwner{owner},ZCDCtx.LoadMode{loadmode},ZCDCtx.PDrawing^{drawing},context,DWGVarsDict)
+                                         addfromdxf2000(f,'EOF',ZCDCtx.POwner{owner},ZCDCtx.LoadMode{loadmode},ZCDCtx.PDrawing^{drawing},context,dc,DWGVarsDict)
                                     end;
                                else
                                        begin

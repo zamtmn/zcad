@@ -33,6 +33,8 @@ TDrawingContext=record
                    DrawHeplGeometryProc:TDrawHeplGeometry;
                    ForeGroundColorIndex:Integer;
 end;
+TDContextOption=(DCODrawable);
+TDContextOptions=set of TDContextOption;
 PTDrawContext=^TDrawContext;
 TDrawContext=record
                    DrawingContext:TDrawingContext;
@@ -49,6 +51,7 @@ TDrawContext=record
                    drawer:TZGLAbstractDrawer;
                    SystmGeometryDraw:boolean;
                    SystmGeometryColor:TGDBPaletteColor;
+                   Options:TDContextOptions;
              end;
 function CreateAbstractRC:TDrawContext;
 implementation
@@ -78,6 +81,7 @@ begin
       result.SystmGeometryColor:=1;
       result.DrawingContext.GlobalLTScale:=1;
       result.DrawingContext.ForeGroundColorIndex:=ClWhite;
+      result.Options:=[];
 end;
 begin
 end.

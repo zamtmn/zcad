@@ -246,7 +246,8 @@ begin
   AproxPointInWCS.Shrink;
 
   Representation.Clear;
-  Representation.DrawPolyLineWithLT(dc,AproxPointInWCS,vp,false,false);
+  if (not (ESTemp in State))and(DCODrawable in DC.Options) then
+    Representation.DrawPolyLineWithLT(dc,AproxPointInWCS,vp,false,false);
   calcbb(dc);
   if assigned(EntExtensions)then
     EntExtensions.RunOnAfterEntityFormat(@self,drawing,DC);

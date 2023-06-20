@@ -211,7 +211,8 @@ begin
     calcobjmatrix;
     //getoutbound;
     //createpoint(drawing);
-    Representation.DrawTextContent(dc.drawer,content,TXTStyleIndex^.pfont,DrawMatrix,objmatrix,textprop.size,Outbound);
+    if (not (ESTemp in State))and(DCODrawable in DC.Options) then
+      Representation.DrawTextContent(dc.drawer,content,TXTStyleIndex^.pfont,DrawMatrix,objmatrix,textprop.size,Outbound);
     calcbb(dc);
 
     //P_InsertInWCS:=VectorTransform3D(local.P_insert,vp.owner^.GetMatrix^);

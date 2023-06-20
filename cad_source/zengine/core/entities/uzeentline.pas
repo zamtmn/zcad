@@ -241,7 +241,7 @@ begin
   calcbb(dc);
 
   Representation.Clear;
-  if not (ESTemp in State) then
+  if (not (ESTemp in State))and(DCODrawable in DC.Options) then
     Representation.DrawLineWithLT(dc,CoordInWCS.lBegin,CoordInWCS.lEnd,vp);
   if assigned(EntExtensions)then
     EntExtensions.RunOnAfterEntityFormat(@self,drawing,DC);

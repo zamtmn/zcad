@@ -2,7 +2,7 @@
 <CONFIG>
   <PalettesContent>
     <BlockLib Type="Tree" Caption='Blocks' ImagesWidth='24'>
-      <ZTreeNode Caption='Power suply'>
+      <ZTreeNode Caption='Power supply'>
       	<ZTreeNode Caption='Formats stamps'>
 	   <ZTreeCommand Command="Insert(A4K)" Img='A4K_300' Caption='Рамка А4 книга'/>
 	   <ZTreeCommand Command="Insert(A3A)" Img='A3A_300' Caption='Рамка А3 альбом'/>

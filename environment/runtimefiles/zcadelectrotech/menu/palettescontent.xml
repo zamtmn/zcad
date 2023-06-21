@@ -298,6 +298,16 @@
 		<ZTreeCommand Command="Insert(DEVICE_SS_PRICLOCK)" Img='DEVICE_SS_PRICLOCK_150' Caption='Первичные часы'/>
 		<ZTreeCommand Command="Insert(DEVICE_SS_SECCLOCK)" Img='DEVICE_SS_SECCLOCK_150' Caption='Вторичные часы'/>
       	</ZTreeNode>
+      	<ZTreeNode Caption='Радиофикация'>
+		<ZTreeCommand Command="Insert(DEVICE_SS_RADIODEVICE)" Img='DEVICE_SS_RADIODEVICE_150' Caption='Радиоприемник'/>
+		<ZTreeCommand Command="Insert(DEVICE_SS_RADIOSOCKET)" Img='DEVICE_SS_RADIOSOCKET_150' Caption='Розетка радио'/>
+      	</ZTreeNode>
+      	<ZTreeNode Caption='Телевидение'>
+		<ZTreeCommand Command="Insert(DEVICE_SS_TVANTENNA)" Img='DEVICE_SS_TVANTENNA_150' Caption='Антенна на плане'/>
+		<ZTreeCommand Command="Insert(DEVICE_SS_TVANTENNASCHEMA)" Img='DEVICE_SS_TVANTENNASCHEMA_150' Caption='Антенна на схеме'/>
+		<ZTreeCommand Command="Insert(DEVICE_SS_TVAMPLIFIER)" Img='DEVICE_SS_TVAMPLIFIER_150' Caption='Усилитель TV'/>
+		<ZTreeCommand Command="Insert(DEVICE_SS_TVSOCKET)" Img='DEVICE_SS_TVSOCKET_150' Caption='Розетка TV'/>
+      	</ZTreeNode>
       </ZTreeNode>
       <ZTreeNode Caption='Low-current'>
         <ZTreeNode Caption='Alarm'>

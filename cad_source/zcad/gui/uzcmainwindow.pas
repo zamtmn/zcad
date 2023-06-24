@@ -22,7 +22,7 @@ unit uzcmainwindow;
 interface
 uses
  {LCL}
-  AnchorDockPanel,AnchorDocking,AnchorDockOptionsDlg,ButtonPanel,AnchorDockStr,
+  AnchorDockPanel,AnchorDocking,
   ActnList,LCLType,LCLProc,uzcTranslations,LMessages,LCLIntf,
   Forms, stdctrls, ExtCtrls, ComCtrls,Controls,Classes,SysUtils,LazUTF8,
   menus,graphics,Themes,
@@ -514,34 +514,6 @@ begin
                                            Application.QueueAsyncCall(asynccloseapp, 0);
 end;
 
-function ShowAnchorDockOptions(ADockMaster: TAnchorDockMaster): TModalResult;
-var
-  Dlg: TForm;
-  OptsFrame: TAnchorDockOptionsFrame;
-  BtnPanel: TButtonPanel;
-begin
-  Dlg:=TForm.Create(nil);
-  try
-    Dlg.DisableAutoSizing;
-    Dlg.Position:=poScreenCenter;
-    Dlg.AutoSize:=true;
-    Dlg.Caption:=adrsGeneralDockingOptions;
-
-    OptsFrame:=TAnchorDockOptionsFrame.Create(Dlg);
-    OptsFrame.Align:=alClient;
-    OptsFrame.Parent:=Dlg;
-    OptsFrame.Master:=ADockMaster;
-
-    BtnPanel:=TButtonPanel.Create(Dlg);
-    BtnPanel.ShowButtons:=[pbOK, pbCancel];
-    BtnPanel.OKButton.OnClick:=OptsFrame.OkClick;
-    BtnPanel.Parent:=Dlg;
-    Dlg.EnableAutoSizing;
-    Result:=ZCMsgCallBackInterface.DOShowModal(Dlg);
-  finally
-    Dlg.Free;
-  end;
-end;
 procedure TZCADMainWindow.CloseDWGPageInterf(Sender: TObject);
 begin
      CloseDWGPage(Sender,false,nil);
@@ -691,7 +663,6 @@ begin
   DockMaster.OnCreateControl:=DockMasterCreateControl;
   {Делаем AnchorDockPanel1 докабельной}
   DockMaster.MakeDockPanel(AnchorDockPanel1,admrpChild);
-  DockMaster.OnShowOptions:=ShowAnchorDockOptions;
   HardcodedButtonSize:=21;
   {Грузим раскладку окон}
   if not sysparam.saved.noloadlayout then
@@ -2060,15 +2031,9 @@ begin
       end;
   end;
   end;
-function DockingOptions_com(Operands:pansichar):Integer;
-begin
-     ShowAnchorDockOptions(DockMaster);
-     result:=cmd_ok;
-end;
 initialization
 begin
   LMD:=programlog.RegisterModule('zcad\gui\uzcmainwindow-gui');
-  CreateCommandFastObjectPlugin(@DockingOptions_com,'DockingOptions',0,0);
 end
 finalization
   ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);

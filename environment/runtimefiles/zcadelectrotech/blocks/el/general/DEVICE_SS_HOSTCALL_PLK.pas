@@ -7,4 +7,5 @@ begin
    NMO_BaseName:='PLC';
    DB_link:='PLC';
    BTY_TreeCoord:='PLAN_SS_HOSTCALL_Палатный контроллер';
+   NMO_Template:='@@[NMO_Prefix]@@[NMO_BaseName].@@[NMO_Suffix]';
 end.

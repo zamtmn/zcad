@@ -308,6 +308,17 @@
 		<ZTreeCommand Command="Insert(DEVICE_SS_TVAMPLIFIER)" Img='DEVICE_SS_TVAMPLIFIER_150' Caption='Усилитель TV'/>
 		<ZTreeCommand Command="Insert(DEVICE_SS_TVSOCKET)" Img='DEVICE_SS_TVSOCKET_150' Caption='Розетка TV'/>
       	</ZTreeNode>
+      	<ZTreeNode Caption='Связь МГН'>
+	    <ZTreeNode Caption='СГС Яна'>
+		<ZTreeCommand Command="Insert(DEVICE_SS_HOSTCALL_PLK)" Img='DEVICE_SS_HOSTCALL_PLK_150' Caption='Абонентское устройство AN-BR/BG/BP'/>
+		<ZTreeCommand Command="Insert(DEVICE_SS_BCALL)" Img='DEVICE_SS_BCALL_150' Caption='Устройство вызова AL-RB'/>
+		<ZTreeCommand Command="Insert(DEVICE_SS_BRESET)" Img='DEVICE_SS_BRESET_150' Caption='Устройство отмены вызова AL-CB'/>
+		<ZTreeCommand Command="Insert(DEVICE_SS_HOSTCALL_KL)" Img='DEVICE_SS_HOSTCALL_KL_150' Caption='Светозвуковой сигнализатор AL-DI'/>
+		<ZTreeCommand Command="Insert(DEVICE_SS_HOSTCALL_KC)" Img='DEVICE_SS_HOSTCALL_KC_150' Caption='Блоки коммутации AN-X8MGN'/>
+		<ZTreeCommand Command="Insert(DEVICE_PS_MICSONAR)" Img='DEVICE_PS_MICSONAR_150' Caption='Пульт диспетчера AN-CO8 (AN-CO32)'/>
+		<ZTreeCommand Command="Insert(DEVICE_OPS_GB2)" Img='DEVICE_OPS_GB2_150' Caption='Блок питания 24В'/>
+	    </ZTreeNode>
+      	</ZTreeNode>
       </ZTreeNode>
       <ZTreeNode Caption='Low-current'>
         <ZTreeNode Caption='Alarm'>

@@ -331,27 +331,17 @@ var
   pblockdef:PGDBObjBlockdef;
 begin
   inherited CalcObjMatrix;
-  {m1:= OneMatrix;
 
-  m1[0,0]:=cos(rotate*pi/180);
-  m1[1,1]:=cos(rotate*pi/180);
-  m1[1,0]:=-sin(rotate*pi/180);
-  m1[0,1]:=sin(rotate*pi/180);
-  objMatrix:=MatrixMultiply(m1,objMatrix);}
+  setrot(rotate);
+
+  m1:=CreateScaleMatrix(scale);
+  objMatrix:=MatrixMultiply(m1,objMatrix);
 
   if pdrawing<>nil then begin
     pblockdef:=PGDBObjBlockdefArray(pdrawing^.GetBlockDefArraySimple).getDataMutable(index);
     m1:=CreateTranslationMatrix(VertexMulOnSc(pblockdef.Base,-1));
     objMatrix:=MatrixMultiply(m1,objMatrix);
   end;
-  setrot(rotate);
-
-  m1:=OneMatrix;
-  m1[0].v[0] := scale.x;
-  m1[1].v[1] := scale.y;
-  m1[2].v[2] := scale.z;
-  objMatrix:=MatrixMultiply(m1,objMatrix);
-  //setrot(rotate);
 end;
 procedure GDBObjBlockInsert.TransformAt;
 //var

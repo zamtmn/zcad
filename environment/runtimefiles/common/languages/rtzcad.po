@@ -1993,6 +1993,7 @@ msgid "Polygon"
 msgstr ""
 
 #: zcadexternal.menu~power_supply
+msgctxt "zcadexternal.menu~power_supply"
 msgid "Power supply"
 msgstr ""
 
@@ -3105,6 +3106,10 @@ msgstr ""
 msgid "Application mode"
 msgstr ""
 
+#: zcadexternal.tinterface~intf_colorscheme
+msgid "Application color scheme"
+msgstr ""
+
 #: zcadexternal.tinterface~intf_commandlineenabled
 msgctxt "zcadexternal.tinterface~intf_commandlineenabled"
 msgid "Command line enabled"
@@ -3120,6 +3125,10 @@ msgstr ""
 
 #: zcadexternal.tinterface~intf_dwgtabsposition
 msgid "Drawing tabs position"
+msgstr ""
+
+#: zcadexternal.tinterface~intf_messages_properties
+msgid "Messages properties"
 msgstr ""
 
 #: zcadexternal.tinterface~intf_objinsp_properties
@@ -3198,6 +3207,10 @@ msgstr ""
 #: zcadexternal.tlunits~luscientific
 msgctxt "zcadexternal.tlunits~luscientific"
 msgid "Scientific"
+msgstr ""
+
+#: zcadexternal.tmessagesinterface~intf_messages_suppressdoubles
+msgid "Suppress doubles"
 msgstr ""
 
 #: zcadexternal.tmseditor~extendersunit
@@ -3329,8 +3342,9 @@ msgstr ""
 msgid "Low-current"
 msgstr ""
 
-#: zcadexternal.toolpalette_blocklib_itemcaption~power_suply
-msgid "Power suply"
+#: zcadexternal.toolpalette_blocklib_itemcaption~power_supply
+msgctxt "zcadexternal.toolpalette_blocklib_itemcaption~power_supply"
+msgid "Power supply"
 msgstr ""
 
 #: zcadexternal.toolpalette_blocklib_itemcaption~unsorted
@@ -3353,57 +3367,57 @@ msgctxt "zcadexternal.toolpalette_blocklib_low-current_itemcaption~alarm"
 msgid "Alarm"
 msgstr ""
 
-#: zcadexternal.toolpalette_blocklib_power_suply_itemcaption~calculations
+#: zcadexternal.toolpalette_blocklib_power_supply_itemcaption~calculations
 msgid "Calculations"
 msgstr ""
 
-#: zcadexternal.toolpalette_blocklib_power_suply_itemcaption~detectors
-msgctxt "zcadexternal.toolpalette_blocklib_power_suply_itemcaption~detectors"
+#: zcadexternal.toolpalette_blocklib_power_supply_itemcaption~detectors
+msgctxt "zcadexternal.toolpalette_blocklib_power_supply_itemcaption~detectors"
 msgid "Detectors"
 msgstr ""
 
-#: zcadexternal.toolpalette_blocklib_power_suply_itemcaption~equipment
+#: zcadexternal.toolpalette_blocklib_power_supply_itemcaption~equipment
 msgid "Equipment"
 msgstr ""
 
-#: zcadexternal.toolpalette_blocklib_power_suply_itemcaption~formats_stamps
+#: zcadexternal.toolpalette_blocklib_power_supply_itemcaption~formats_stamps
 msgid "Formats stamps"
 msgstr ""
 
-#: zcadexternal.toolpalette_blocklib_power_suply_itemcaption~high-voltage_networks
+#: zcadexternal.toolpalette_blocklib_power_supply_itemcaption~high-voltage_networks
 msgid "High-voltage networks"
 msgstr ""
 
-#: zcadexternal.toolpalette_blocklib_power_suply_itemcaption~lighting
-msgctxt "zcadexternal.toolpalette_blocklib_power_suply_itemcaption~lighting"
+#: zcadexternal.toolpalette_blocklib_power_supply_itemcaption~lighting
+msgctxt "zcadexternal.toolpalette_blocklib_power_supply_itemcaption~lighting"
 msgid "Lighting"
 msgstr ""
 
-#: zcadexternal.toolpalette_blocklib_power_suply_itemcaption~nodes
+#: zcadexternal.toolpalette_blocklib_power_supply_itemcaption~nodes
 msgid "Nodes"
 msgstr ""
 
-#: zcadexternal.toolpalette_blocklib_power_suply_itemcaption~outdoor_networks
+#: zcadexternal.toolpalette_blocklib_power_supply_itemcaption~outdoor_networks
 msgid "Outdoor networks"
 msgstr ""
 
-#: zcadexternal.toolpalette_blocklib_power_suply_itemcaption~risers
+#: zcadexternal.toolpalette_blocklib_power_supply_itemcaption~risers
 msgid "Risers"
 msgstr ""
 
-#: zcadexternal.toolpalette_blocklib_power_suply_itemcaption~schemes
+#: zcadexternal.toolpalette_blocklib_power_supply_itemcaption~schemes
 msgid "Schemes"
 msgstr ""
 
-#: zcadexternal.toolpalette_blocklib_power_suply_itemcaption~sockets
+#: zcadexternal.toolpalette_blocklib_power_supply_itemcaption~sockets
 msgid "Sockets"
 msgstr ""
 
-#: zcadexternal.toolpalette_blocklib_power_suply_itemcaption~statements
+#: zcadexternal.toolpalette_blocklib_power_supply_itemcaption~statements
 msgid "Statements"
 msgstr ""
 
-#: zcadexternal.toolpalette_blocklib_power_suply_itemcaption~switches
+#: zcadexternal.toolpalette_blocklib_power_supply_itemcaption~switches
 msgid "Switches"
 msgstr ""
 

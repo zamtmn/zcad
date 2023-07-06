@@ -1,10 +1,10 @@
 # Olexandr Pylypchuk <pilipchukap@rambler.ru>, 2017, 2018.
-# lxlalexlxl <lxlalexlxl@ukr.net>, 2021.
+# lxlalexlxl <lxlalexlxl@ukr.net>, 2021, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2021-06-08 00:19+0300\n"
+"PO-Revision-Date: 2023-06-08 18:55+0300\n"
 "Last-Translator: lxlalexlxl <lxlalexlxl@ukr.net>\n"
 "Language-Team: Ukrainian <kde-i18n-doc@kde.org>\n"
 "Language: uk\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Generator: Lokalize 19.12.3\n"
+"X-Generator: Lokalize 21.12.3\n"
 
 #: anchordockstr.adrsafreesideofasplittermustnotbeanchorednodetypeancho
 #, object-pascal-format
@@ -112,11 +112,11 @@ msgstr "Заповнити заголовки стикованих елемен�
 
 #: anchordockstr.adrsflatheadersbuttons
 msgid "Flat header buttons"
-msgstr ""
+msgstr "Плоскі кнопки в заголовку"
 
 #: anchordockstr.adrsflatheadersbuttonshint
 msgid "Flat buttons in headers of docked controls"
-msgstr ""
+msgstr "Плоскі кнопки в заголовках стикованих елементів"
 
 #: anchordockstr.adrsflattenheaders
 msgid "Flatten headers"

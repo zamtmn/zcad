@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: lclstrconsts\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-02-02 16:22+0100\n"
-"PO-Revision-Date: 2022-12-09 08:41+0100\n"
+"PO-Revision-Date: 2023-05-24 07:47+0200\n"
 "Last-Translator: Slavo Gbúr <slavusec@azet.sk>\n"
 "Language-Team: Slovenský <sk@li.org>\n"
 "Language: sk\n"
@@ -88,7 +88,7 @@ msgstr "Zdroj %s nenájdený"
 
 #: lclstrconsts.rs3ddkshadowcolorcaption
 msgid "3D Dark Shadow"
-msgstr "3D tmavo tieňová"
+msgstr "3D tmavý tieň"
 
 #: lclstrconsts.rs3dlightcolorcaption
 msgid "3D Light"
@@ -130,7 +130,7 @@ msgstr "Pracovná plocha"
 
 #: lclstrconsts.rsbackward
 msgid "Backward"
-msgstr "Spätný"
+msgstr "Späť"
 
 #: lclstrconsts.rsbitmaps
 msgid "Bitmap Files"
@@ -183,7 +183,7 @@ msgstr "Plátno nedovoľuje kreslenie"
 
 #: lclstrconsts.rscaptiontextcolorcaption
 msgid "Caption Text"
-msgstr "Text názvu"
+msgstr "Text nadpisu"
 
 #: lclstrconsts.rscasesensitive
 msgid "Case sensitive"
@@ -245,7 +245,7 @@ msgstr "Zmazať"
 
 #: lclstrconsts.rsdirection
 msgid "Direction"
-msgstr "Zložka"
+msgstr "Smer"
 
 #: lclstrconsts.rsdirectory
 msgid "&Directory"
@@ -465,7 +465,7 @@ msgstr "Index mriežky mimo rozsahu."
 
 #: lclstrconsts.rsgroupindexcannotbelessthanprevious
 msgid "GroupIndex cannot be less than a previous menu item's GroupIndex"
-msgstr "GroupIndex nemmôže byť menší ako GroupIndex predchádzajúcej položky menu"
+msgstr "GroupIndex nemôže byť menší ako GroupIndex predchádzajúcej položky ponuky"
 
 #: lclstrconsts.rsgtkfilter
 msgid "Filter:"
@@ -527,7 +527,7 @@ msgstr "Databáza pre téma bola nájdená, ale téma sa nenašlo"
 
 #: lclstrconsts.rshelpdatabasenotfound
 msgid "There is no help database installed for this topic"
-msgstr "Databáza pomoci nenájdená"
+msgstr "Pre túto tému nie je nainštalovaná žiadna databáza pomoci"
 
 #: lclstrconsts.rshelperror
 msgid "Help Error"
@@ -561,7 +561,7 @@ msgstr "Pomoc pre direktívu \"%s\" sa nenašla."
 #: lclstrconsts.rshelphelpfordirectivenotfoundindatabase
 #, object-pascal-format
 msgid "Help for directive \"%s\" not found in Database \"%s\"."
-msgstr "Nápoveda pre direktivu \"%s\" nenájdená v databázi \"%s\"."
+msgstr "Pomoc pre direktívu \"%s\" nebola nájdená v databáze \"%s\"."
 
 #: lclstrconsts.rshelphelpkeywordnotfound
 #, object-pascal-format
@@ -585,11 +585,11 @@ msgstr "Nenájdený pomocník pre riadok %d, stĺpec %d %s."
 
 #: lclstrconsts.rshelpnohelpnodesavailable
 msgid "No help entries available for this topic"
-msgstr "Nie sú dostupné žiadne uzly pomoci pre toto téma"
+msgstr "Pre túto tému nie sú k dispozícii žiadne položky pomoci"
 
 #: lclstrconsts.rshelpnotfound
 msgid "No help found for this topic"
-msgstr "Pre toto téma nebola nájdená pomoc"
+msgstr "Pre túto tému nebola nájdená pomoc"
 
 #: lclstrconsts.rshelpnotregistered
 #, object-pascal-format
@@ -731,7 +731,7 @@ msgstr "Posledný"
 
 #: lclstrconsts.rslimecolorcaption
 msgid "Lime"
-msgstr "Citrusová"
+msgstr "Limetková"
 
 #: lclstrconsts.rslistindexexceedsbounds
 #, object-pascal-format
@@ -749,7 +749,7 @@ msgstr "Skryť %s"
 
 #: lclstrconsts.rsmacosmenuhideothers
 msgid "Hide Others"
-msgstr "Skryť ostatných"
+msgstr "Skryť ostatné"
 
 #: lclstrconsts.rsmacosmenuquit
 #, object-pascal-format
@@ -926,7 +926,7 @@ msgstr "Súbory PPM (Portable Pixmap)"
 
 #: lclstrconsts.rspostrecordhint
 msgid "Post"
-msgstr "Odoslať (pošta)"
+msgstr "Poslať"
 
 #: lclstrconsts.rspressoktoignoreandriskdatacorruptionpressaborttok
 #, object-pascal-format
@@ -936,7 +936,7 @@ msgstr "%s%sStlačte tlačítko OK, ak chcete ignorovať a riskovať poškodenie
 #: lclstrconsts.rspriorrecordhint
 msgctxt "lclstrconsts.rspriorrecordhint"
 msgid "Prior"
-msgstr "Pred"
+msgstr "Predchádzajúci"
 
 #: lclstrconsts.rspromptonreplace
 msgid "Prompt on replace"
@@ -985,7 +985,7 @@ msgstr "-stylesheet stylesheet alebo -stylesheet=stylesheet - nastavuje štýl a
 
 #: lclstrconsts.rsqtoptionsync
 msgid "-sync (only under X11), switches to synchronous mode for debugging."
-msgstr "-sync (iba pod X11) - prepína do synchronného režimu pre ladenie."
+msgstr "-sync (iba pod X11) - prepína do synchrónneho režimu pre ladenie."
 
 #: lclstrconsts.rsqtoptionwidgetcount
 msgid "-widgetcount, prints debug message at the end about number of widgets left undestroyed and maximum number of widgets existed at the same time."
@@ -1037,7 +1037,7 @@ msgstr "-ncols count - obmedzuje počet farieb alokovaných vo farebnej kocke na
 
 #: lclstrconsts.rsqtoptionx11title
 msgid "-title title, sets the application title."
-msgstr "-title titul, nastavte titulok aplikácie."
+msgstr "-title titul, nastavuje titulok aplikácie."
 
 #: lclstrconsts.rsqtoptionx11visual
 msgid "-visual TrueColor, forces the application to use a TrueColor visual on an 8-bit display."
@@ -1158,7 +1158,7 @@ msgstr "Neznáma prípona obrázku"
 
 #: lclstrconsts.rsunknownpictureformat
 msgid "Unknown picture format"
-msgstr "Neznámy obrázkový formát"
+msgstr "Neznámy formát obrázku"
 
 #: lclstrconsts.rsunsupportedbitmapformat
 msgid "Unsupported bitmap format."
@@ -1172,12 +1172,12 @@ msgstr "Nepodporovaný formát schránky: %s"
 #: lclstrconsts.rswarningunreleaseddcsdump
 #, object-pascal-format
 msgid " WARNING: There are %d unreleased DCs, a detailed dump follows:"
-msgstr " UPOZORNENIE: Existuje %d neuvoľnených DCs, detailný výpis nasleduje:"
+msgstr " UPOZORNENIE: Existuje %d neuvoľnených DCs, nasleduje podrobný výpis:"
 
 #: lclstrconsts.rswarningunreleasedgdiobjectsdump
 #, object-pascal-format
 msgid " WARNING: There are %d unreleased GDIObjects, a detailed dump follows:"
-msgstr " UPOZORNENIE: Existuje %d neuvoľnených GDIObjects, detailný výpis nasleduje:"
+msgstr " UPOZORNENIE: Existuje %d neuvoľnených GDIObjects, nasleduje podrobný výpis:"
 
 #: lclstrconsts.rswarningunreleasedmessagesinqueue
 #, object-pascal-format
@@ -1216,7 +1216,7 @@ msgstr "Okno"
 
 #: lclstrconsts.rswindowframecolorcaption
 msgid "Window Frame"
-msgstr "Ramček okna"
+msgstr "Ram okna"
 
 #: lclstrconsts.rswindowtextcolorcaption
 msgid "Window Text"
@@ -1264,7 +1264,7 @@ msgstr "Súčasný text nezodpovedá špecifikovanej maske."
 
 #: lclstrconsts.smenuindexerror
 msgid "Menu index out of range"
-msgstr "Index menu mimo rozsahu"
+msgstr "Index ponuky mimo rozsahu"
 
 #: lclstrconsts.smenuitemisnil
 msgid "MenuItem is nil"
@@ -1272,7 +1272,7 @@ msgstr "MenuItem je nil"
 
 #: lclstrconsts.smenunotfound
 msgid "Sub-menu is not in menu"
-msgstr "Podmenu nie je v menu"
+msgstr "Pod-ponuka nie je v ponuke"
 
 #: lclstrconsts.smkcalt
 msgid "Alt+"

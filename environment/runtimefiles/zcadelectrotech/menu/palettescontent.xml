@@ -294,6 +294,33 @@
 		<ZTreeCommand Command="Insert(DEVICE_ELVELEC_POWER_MOTOR1)" Img='DEVICE_ELVELEC_POWER_MOTOR1_150' Caption='Двигатель'/>
       	</ZTreeNode>
       </ZTreeNode>
+      <ZTreeNode Caption='vELEС.Low-current'>
+      	<ZTreeNode Caption='Часофикация'>
+		<ZTreeCommand Command="Insert(DEVICE_SS_PRICLOCK)" Img='DEVICE_SS_PRICLOCK_150' Caption='Первичные часы'/>
+		<ZTreeCommand Command="Insert(DEVICE_SS_SECCLOCK)" Img='DEVICE_SS_SECCLOCK_150' Caption='Вторичные часы'/>
+      	</ZTreeNode>
+      	<ZTreeNode Caption='Радиофикация'>
+		<ZTreeCommand Command="Insert(DEVICE_SS_RADIODEVICE)" Img='DEVICE_SS_RADIODEVICE_150' Caption='Радиоприемник'/>
+		<ZTreeCommand Command="Insert(DEVICE_SS_RADIOSOCKET)" Img='DEVICE_SS_RADIOSOCKET_150' Caption='Розетка радио'/>
+      	</ZTreeNode>
+      	<ZTreeNode Caption='Телевидение'>
+		<ZTreeCommand Command="Insert(DEVICE_SS_TVANTENNA)" Img='DEVICE_SS_TVANTENNA_150' Caption='Антенна на плане'/>
+		<ZTreeCommand Command="Insert(DEVICE_SS_TVANTENNASCHEMA)" Img='DEVICE_SS_TVANTENNASCHEMA_150' Caption='Антенна на схеме'/>
+		<ZTreeCommand Command="Insert(DEVICE_SS_TVAMPLIFIER)" Img='DEVICE_SS_TVAMPLIFIER_150' Caption='Усилитель TV'/>
+		<ZTreeCommand Command="Insert(DEVICE_SS_TVSOCKET)" Img='DEVICE_SS_TVSOCKET_150' Caption='Розетка TV'/>
+      	</ZTreeNode>
+      	<ZTreeNode Caption='Связь МГН'>
+	    <ZTreeNode Caption='СГС Яна'>
+		<ZTreeCommand Command="Insert(DEVICE_SS_HOSTCALL_PLK)" Img='DEVICE_SS_HOSTCALL_PLK_150' Caption='Абонентское устройство AN-BR/BG/BP'/>
+		<ZTreeCommand Command="Insert(DEVICE_SS_BCALL)" Img='DEVICE_SS_BCALL_150' Caption='Устройство вызова AL-RB'/>
+		<ZTreeCommand Command="Insert(DEVICE_SS_BRESET)" Img='DEVICE_SS_BRESET_150' Caption='Устройство отмены вызова AL-CB'/>
+		<ZTreeCommand Command="Insert(DEVICE_SS_HOSTCALL_KL)" Img='DEVICE_SS_HOSTCALL_KL_150' Caption='Светозвуковой сигнализатор AL-DI'/>
+		<ZTreeCommand Command="Insert(DEVICE_SS_HOSTCALL_KC)" Img='DEVICE_SS_HOSTCALL_KC_150' Caption='Блоки коммутации AN-X8MGN'/>
+		<ZTreeCommand Command="Insert(DEVICE_PS_MICSONAR)" Img='DEVICE_PS_MICSONAR_150' Caption='Пульт диспетчера AN-CO8 (AN-CO32)'/>
+		<ZTreeCommand Command="Insert(DEVICE_OPS_GB2)" Img='DEVICE_OPS_GB2_150' Caption='Блок питания 24В'/>
+	    </ZTreeNode>
+      	</ZTreeNode>
+      </ZTreeNode>
       <ZTreeNode Caption='Low-current'>
         <ZTreeNode Caption='Alarm'>
           <ZTreeCommand Command="Insert(DEVICE_PS_ARK_DEVICE)" Img='DEVICE_PS_ARK_DEVICE' Caption='Прибор'/>

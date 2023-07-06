@@ -8,9 +8,11 @@ usescopy objname;
 
 var
 
-T5:String;(*'Содержание'*)
-T7:String;(*'Лист'*)
-T10:String;(*'Примечание'*)
+T1:String;(*'Изменение'*)
+T2:String;(*'Лист'*)
+T4:String;(*'Содержание'*)
+T5:String;(*'Код'*)
+T6:String;(*'Примечание'*)
 
 implementation
 
@@ -20,12 +22,14 @@ BTY_TreeCoord:='PLAN_EM_Штамп';
 Device_Type:=TDT_SilaPotr;
 Device_Class:=TDC_Shell;
 
-NMO_Name:='ШТ0';
-NMO_BaseName:='ШТ';
+NMO_Name:='СД0';
+NMO_BaseName:='СД';
 NMO_Suffix:='??';
 
+T1:='??';
+T2:='??';
+T4:='??';
 T5:='??';
-T7:='??';
-T10:='??';
+T6:='??';
 
 end.

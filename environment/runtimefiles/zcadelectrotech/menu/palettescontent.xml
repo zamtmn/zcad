@@ -67,6 +67,7 @@
 	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_LIGHT1_2)" Img='DEVICE_EL_VL_LIGHT1_2_300' Caption='Светильник 2х18'/>
 	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_LIGHT2_1)" Img='DEVICE_EL_VL_LIGHT2_1_300' Caption='Светильник 4х18'/>
 	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_LIGHT3_1)" Img='DEVICE_EL_VL_LIGHT3_1_300' Caption='Светильник 1х18'/>
+	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_LIGHT3_2)" Img='DEVICE_EL_VL_LIGHT3_2_300' Caption='Светильник 1х10'/>
 	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_LIGHT4_1)" Img='DEVICE_EL_VL_LIGHT4_1_300' Caption='Световой указатель'/>
 	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_LIGHT5_1)" Img='DEVICE_EL_VL_LIGHT5_1_300' Caption='Свободный аппарат'/>
 	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_LIGHT6_1)" Img='DEVICE_EL_VL_LIGHT6_1_300' Caption='Колодка клемная КВ'/>

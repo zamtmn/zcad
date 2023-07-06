@@ -18,11 +18,10 @@ T7:String;(*'Дата 1'*)
 T8:String;(*'Разработал'*)
 T9:String;(*'Проверил'*)
 T10:String;(*'ГИП'*)
-T11:String;(*'Директор'*)
+T11:String;(*'Утвердил'*)
 T12:String;(*'Дата 2'*)
 T13:String;(*'Лист'*)
 T14:String;(*'Листов'*)
-
 
 implementation
 
@@ -32,18 +31,18 @@ BTY_TreeCoord:='PLAN_EM_Штамп';
 Device_Type:=TDT_SilaPotr;
 Device_Class:=TDC_Shell;
 
-NMO_Name:='ШТ0';
-NMO_BaseName:='ШТ';
+NMO_Name:='ИУЛ0';
+NMO_BaseName:='ИУЛ';
 NMO_Suffix:='??';
 
 T1:='1';
 T2:='??';
 T3:='??';
 T4:='1';
-T5:='';
-T6:='';
+T5:='??';
+T6:='??';
 T7:='??';
-T8:='Абрамов';
+T8:='??';
 T9:='??';
 T10:='??';
 T11:='??';

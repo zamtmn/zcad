@@ -470,10 +470,11 @@ begin
   pcommandrunning^.IData.GetPointMode:=TGPMWaitInput;
   pcommandrunning^.IData.PInteractiveData:=nil;
   pcommandrunning^.IData.PInteractiveProc:=nil;
-  while (pcommandrunning^.IData.GetPointMode=TGPMWaitInput)and(not Application.Terminated) do
-  begin
-       Application.HandleMessage;
-       //Application.ProcessMessages;
+  while (pcommandrunning^.IData.GetPointMode=TGPMWaitInput)and(not Application.Terminated) do begin
+    Application.HandleMessage;
+    //Application.ProcessMessages;
+    if pcommandrunning=nil then
+      exit(GRCancel);
   end;
   if (pcommandrunning^.IData.GetPointMode=TGPMInput)and(not Application.Terminated) then begin
     Input:=pcommandrunning^.IData.Input;
@@ -513,12 +514,11 @@ begin
   pcommandrunning^.IData.GetPointMode:=TGPMWaitEnt;
   pcommandrunning^.IData.PInteractiveData:=nil;
   pcommandrunning^.IData.PInteractiveProc:=nil;
-  while (pcommandrunning^.IData.GetPointMode=TGPMWaitEnt)and(not Application.Terminated) do
-  begin
-       Application.HandleMessage;
-       //Application.ProcessMessages;
+  while (pcommandrunning^.IData.GetPointMode=TGPMWaitEnt)and(not Application.Terminated) do begin
+    Application.HandleMessage;
+    //Application.ProcessMessages;
   end;
-  if (pcommandrunning^.IData.GetPointMode=TGPMEnt)and(not Application.Terminated) then
+  if (pcommandrunning<>nil)and(pcommandrunning^.IData.GetPointMode=TGPMEnt)and(not Application.Terminated) then
                                                                                  begin
                                                                                  p:=PTSimpleDrawing(pcommandrunning.pdwg)^.wa.param.SelDesc.LastSelectedObject;
                                                                                  result:=true;

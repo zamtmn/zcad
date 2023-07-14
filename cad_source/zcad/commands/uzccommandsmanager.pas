@@ -362,10 +362,11 @@ begin
   pcommandrunning^.IData.PInteractiveData:=PInteractiveData;
   pcommandrunning^.IData.PInteractiveProc:=InteractiveProc;
 
-  while (pcommandrunning^.IData.GetPointMode=TGPMWait)and(not Application.Terminated) do
-  begin
-       Application.HandleMessage;
-       //Application.ProcessMessages;
+  while (pcommandrunning^.IData.GetPointMode=TGPMWait)and(not Application.Terminated) do begin
+    Application.HandleMessage;
+    //Application.ProcessMessages;
+    if pcommandrunning=nil then
+      exit(GRCancel);
   end;
 
   if (pcommandrunning^.IData.GetPointMode=TGPMPoint)and(not Application.Terminated) then begin

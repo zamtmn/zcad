@@ -58,12 +58,8 @@ uses
 
 resourcestring
   rsClosed='Closed';
-type
 
-  TmyAnchorDockSplitter = class(TAnchorDockSplitter)
-    public
-      constructor Create(TheOwner: TComponent); override;
-  end;
+type
 
   { TZCADMainWindow }
 
@@ -170,12 +166,6 @@ implementation
 {$R *.lfm}
 var
   LMD:TModuleDesk;
-
-constructor TmyAnchorDockSplitter.Create(TheOwner: TComponent);
-begin
-  inherited Create(TheOwner);
-  //self.MinSize:=1;
-end;
 
 {$ifdef windows}
 procedure TZCADMainWindow.SetTop;
@@ -653,7 +643,6 @@ begin
     DockMaster.FloatingWindowsOnTop:=true;
     DockMaster.MainDockForm:=Self;
   {$ENDIF}
-  DockMaster.SplitterClass:=TmyAnchorDockSplitter;
   DockMaster.ManagerClass:=TAnchorDockManager;
   DockMaster.OnCreateControl:=DockMasterCreateControl;
   {Делаем DockPanel докабельной}

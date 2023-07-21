@@ -2,7 +2,7 @@
 <CONFIG>
   <MainConfig>
     <Nodes ChildCount="1">
-      <Item1 Name="AnchorDockPanel1" Type="CustomSite" ChildCount="1" WindowState="Maximized">
+      <Item1 Name="DockPanel" Type="CustomSite" ChildCount="1" WindowState="Maximized">
         <Bounds Top="-9" Left="-9" Width="2560" Height="1414"/>
         <Anchors Align="Client"/>
         <Item1 Name="AnchorDockSite4" Type="Layout" ChildCount="7" WindowState="Maximized">

@@ -2,7 +2,7 @@
 <CONFIG>
   <MainConfig>
     <Nodes ChildCount="1" PixelsPerInch="0">
-      <Item1 Name="AnchorDockPanel1" Type="CustomSite" ChildCount="1" PixelsPerInch="0">
+      <Item1 Name="DockPanel" Type="CustomSite" ChildCount="1" PixelsPerInch="0">
         <Bounds Top="5" Left="-2" Width="1332" Height="923"/>
         <Anchors Align="Client"/>
         <Item1 Name="AnchorDockSite9" Type="Layout" ChildCount="7" PixelsPerInch="144">

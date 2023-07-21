@@ -28,148 +28,143 @@ uses
   menus,graphics,Themes,
   Types,UniqueInstanceBase,simpleipc,Laz2_XMLCfg,LCLVersion,
  {ZCAD BASE}
-       uzcsysparams,gzctnrVectorTypes,uzemathutils,uzelongprocesssupport,
-       uzgldrawergdi,uzcdrawing,UGDBOpenArrayOfPV,uzedrawingabstract,
-       uzepalette,uzbpaths,uzglviewareadata,uzeentitiesprop,uzcinterface,
-       uzctnrVectorBytes,uzbtypes,
-       uzegeometry,uzcsysvars,uzcstrconsts,uzbstrproc,uzcLog,uzbLogTypes,uzbLog,
-       uzedimensionaltypes,varmandef, varman,UUnitManager,uzcsysinfo,strmy,uzestylestexts,uzestylesdim,
+  uzcsysparams,gzctnrVectorTypes,uzemathutils,uzelongprocesssupport,
+  uzgldrawergdi,uzcdrawing,UGDBOpenArrayOfPV,uzedrawingabstract,
+  uzepalette,uzbpaths,uzglviewareadata,uzeentitiesprop,uzcinterface,
+  uzctnrVectorBytes,uzbtypes,
+  uzegeometry,uzcsysvars,uzcstrconsts,uzbstrproc,uzcLog,uzbLogTypes,uzbLog,
+  uzedimensionaltypes,varmandef, varman,UUnitManager,uzcsysinfo,strmy,uzestylestexts,uzestylesdim,
   uzbexceptionscl,uzbexceptionsgui,
-  {ZCAD ENTITIES}
-       uzegeometrytypes,uzeentity,UGDBSelectedObjArray,uzestyleslayers,uzedrawingsimple,
-       uzeblockdef,uzcdrawings,uzestyleslinetypes,uzeconsts,uzeenttext,uzeentdimension,
-  {ZCAD COMMANDS}
-       uzccommandsabstract,uzccommandsimpl,uzccommandsmanager,
-       uzccommand_loadlayout,
-  {GUI}
-       uzcuitypes,
-       uzcmenucontextcheckfuncs,uzctbextmenus,uzmenusdefaults,uzmenusmanager,uztoolbarsmanager,uzctextenteditor,uzcfcommandline,uzctreenode,uzcctrlcontextmenu,
-       uzcimagesmanager,usupportgui,uzcuidialogs,
-       uzcActionsManager,
+ {ZCAD ENTITIES}
+  uzegeometrytypes,uzeentity,UGDBSelectedObjArray,uzestyleslayers,uzedrawingsimple,
+  uzeblockdef,uzcdrawings,uzestyleslinetypes,uzeconsts,uzeenttext,uzeentdimension,
+ {ZCAD COMMANDS}
+  uzccommandsabstract,uzccommandsimpl,uzccommandsmanager,
+  uzccommand_loadlayout,
+ {GUI}
+  uzcuitypes,
+  uzcmenucontextcheckfuncs,uzctbextmenus,uzmenusdefaults,uzmenusmanager,uztoolbarsmanager,uzctextenteditor,uzcfcommandline,uzctreenode,uzcctrlcontextmenu,
+  uzcimagesmanager,usupportgui,uzcuidialogs,
+  uzcActionsManager,
 
-       //это разделять нельзя, иначе загрузятся невыровенные рекорды
-       {$INCLUDE allgeneratedfiles.inc}uzcregother,
+  //это разделять нельзя, иначе загрузятся невыровенные рекорды
+  {$INCLUDE allgeneratedfiles.inc}uzcregother,
 
-       uzcguiDarkStyleSetup,uMetaDarkStyle,
-  {}
-       uzgldrawcontext,uzglviewareaabstract,uzcguimanager,uzcinterfacedata,
-       uzcenitiesvariablesextender,uzglviewareageneral,UniqueInstanceRaw,
-       uzmacros,uzcviewareacxmenu,uzccommand_quit;
-  {}
+  uzcguiDarkStyleSetup,uMetaDarkStyle,
+ {}
+  uzgldrawcontext,uzglviewareaabstract,uzcguimanager,uzcinterfacedata,
+  uzcenitiesvariablesextender,uzglviewareageneral,UniqueInstanceRaw,
+  uzmacros,uzcviewareacxmenu,uzccommand_quit;
+
 resourcestring
   rsClosed='Closed';
 type
 
   TmyAnchorDockSplitter = class(TAnchorDockSplitter)
-  public
-    constructor Create(TheOwner: TComponent); override;
-
-                          end;
+    public
+      constructor Create(TheOwner: TComponent); override;
+  end;
 
   { TZCADMainWindow }
 
   TZCADMainWindow = class(TForm)
+    private
+      NextLongProcessPos:integer;
+      ProcessBar:TProgressBar;
+      SystemTimer:TTimer;
+      toolbars:tstringlist;
+      MainPanel:TForm;
+      DHPanel:TPanel;
+      HScrollBar,VScrollBar:TScrollBar;
+
     published
-    AnchorDockPanel1:TAnchorDockPanel;
-    CoolBarR: TCoolBar;
-    CoolBarD: TCoolBar;
-    CoolBarL: TCoolBar;
-    CoolBarU: TCoolBar;
-    ToolBarD: TToolBar;
+      DockPanel:TAnchorDockPanel;
+      CoolBarR: TCoolBar;
+      CoolBarD: TCoolBar;
+      CoolBarL: TCoolBar;
+      CoolBarU: TCoolBar;
+      ToolBarD: TToolBar;
 
-    procedure DrawStausBar(Sender: TObject);
-    //onXxxxx handlers
-    procedure _onCreate(Sender: TObject);
-
-    public
-    MainPanel:TForm;
-    PageControl:TmyPageControl;
-    DHPanel:TPanel;
-    HScrollBar,VScrollBar:TScrollBar;
-    //StandartActions:TActionList;
-    SystemTimer: TTimer;
-    toolbars:tstringlist;
-    procedure ZcadException(Sender: TObject; E: Exception);
-    procedure CreateHTPB(tb:TToolBar);//надо убрать
-    procedure ActionUpdate(AAction: TBasicAction; var Handled: Boolean);
-    procedure ChangedDWGTabByClick(Sender: TObject);
-    procedure ChangedDWGTab(Sender: TObject);
-    procedure UpdateControls;
-    procedure EnableControls(enbl:boolean);
-    procedure ShowAllCursors(ShowedForm:TForm);
-    procedure RestoreCursors(ShowedForm:TForm);
-    procedure CloseDWGPageInterf(Sender: TObject);
-
-    procedure PageControlMouseDown(Sender: TObject;Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
-    procedure correctscrollbars;
-    function wamd(Sender:TAbstractViewArea;Button:TMouseButton;Shift:TShiftState;X,Y:Integer;onmouseobject:Pointer;var NeedRedraw:Boolean):boolean;
-    procedure wamm(Sender:TAbstractViewArea;Shift:TShiftState;X,Y:Integer);
-    procedure wams(Sender:TAbstractViewArea;SelectedEntity:Pointer);
-    procedure wakp(Sender:TAbstractViewArea;var Key: Word; Shift: TShiftState);
-    function GetEntsDesc(ents:PGDBObjOpenArrayOfPV):String;
-    procedure waSetObjInsp(Sender:{TAbstractViewArea}tobject;GUIAction:TZMessageID);
-    procedure WaShowCursor(Sender:TAbstractViewArea;var DC:TDrawContext);
-
-    //Long process support - draw progressbar. See uzelongprocesssupport unit
-    procedure StartLongProcess(LPHandle:TLPSHandle;Total:TLPSCounter;processname:TLPName);
-    procedure ProcessLongProcess(LPHandle:TLPSHandle;Current:TLPSCounter);
-    procedure EndLongProcess(LPHandle:TLPSHandle;TotalLPTime:TDateTime);
+      procedure DrawStausBar(Sender: TObject);
+     //onXxxxx handlers
+      procedure _onCreate(Sender: TObject);
 
     public
-    SuppressedShortcuts:TXMLConfig;
-    rt:Integer;
-    procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
-    destructor Destroy;override;
-    procedure CreateAnchorDockingInterface;
 
-    procedure CreateInterfaceLists;
-    procedure InitSystemCalls;
-    procedure LoadActions;
-    procedure myKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+      PageControl:TmyPageControl;
 
-    procedure idle(Sender: TObject; var Done: Boolean);virtual;
-    procedure GeneralTick(Sender: TObject);
-    procedure ShowFastMenu(Sender: TObject);
-    procedure asynccloseapp(Data: PtrInt);
-    procedure processfilehistory(filename:string);
-    procedure processcommandhistory(Command:string);
-    function CreateZCADControl(aName: string;DoDisableAutoSizing:boolean=false):TControl;
+      procedure ZcadException(Sender: TObject; E: Exception);
+      procedure CreateHTPB(tb:TToolBar);//надо убрать
+      procedure ActionUpdate(AAction: TBasicAction; var Handled: Boolean);
+      procedure ChangedDWGTabByClick(Sender: TObject);
+      procedure ChangedDWGTab(Sender: TObject);
+      procedure UpdateControls;
+      procedure EnableControls(enbl:boolean);
+      procedure ShowAllCursors(ShowedForm:TForm);
+      procedure RestoreCursors(ShowedForm:TForm);
+      procedure CloseDWGPageInterf(Sender: TObject);
 
-    procedure DockMasterCreateControl(Sender: TObject; aName: string; var
-    AControl: TControl; DoDisableAutoSizing: boolean);
+      procedure PageControlMouseDown(Sender: TObject;Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
+      procedure correctscrollbars;
+      function wamd(Sender:TAbstractViewArea;Button:TMouseButton;Shift:TShiftState;X,Y:Integer;onmouseobject:Pointer;var NeedRedraw:Boolean):boolean;
+      procedure wamm(Sender:TAbstractViewArea;Shift:TShiftState;X,Y:Integer);
+      procedure wams(Sender:TAbstractViewArea;SelectedEntity:Pointer);
+      procedure wakp(Sender:TAbstractViewArea;var Key: Word; Shift: TShiftState);
+      function GetEntsDesc(ents:PGDBObjOpenArrayOfPV):String;
+      procedure waSetObjInsp(Sender:{TAbstractViewArea}tobject;GUIAction:TZMessageID);
+      procedure WaShowCursor(Sender:TAbstractViewArea;var DC:TDrawContext);
 
-    function IsShortcut(var Message: TLMKey): boolean; override;
+      //Long process support - draw progressbar. See uzelongprocesssupport unit
+      procedure StartLongProcess(LPHandle:TLPSHandle;Total:TLPSCounter;processname:TLPName);
+      procedure ProcessLongProcess(LPHandle:TLPSHandle;Current:TLPSCounter);
+      procedure EndLongProcess(LPHandle:TLPSHandle;TotalLPTime:TDateTime);
 
-    procedure setvisualprop(sender:TObject;GUIAction:TZMessageID);
+    public
+      SuppressedShortcuts:TXMLConfig;
+      RunTime:Integer;
+      procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
+      destructor Destroy;override;
+      procedure CreateAnchorDockingInterface;
 
-    procedure _scroll(Sender: TObject; ScrollCode: TScrollCode;
-           var ScrollPos: Integer);
-    procedure ShowCXMenu;
-    procedure ShowFMenu;
-    procedure MainMouseMove;
-    function MainMouseDown(Sender:TAbstractViewArea):Boolean;
-    procedure MainMouseUp;
-    procedure IPCMessage(Sender: TObject);
-    {$ifdef windows}procedure SetTop;{$endif}
-    procedure AsyncFree(Data:PtrInt);
-    procedure UpdateVisible(sender:TObject;GUIMode:TZMessageID);
-    function GetFocusPriority:TControlWithPriority;
-               end;
-//procedure UpdateVisible(GUIMode:TZMessageID);
+      procedure CreateInterfaceLists;
+      procedure InitSystemCalls;
+      procedure LoadActions;
+      procedure myKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+
+      procedure idle(Sender: TObject; var Done: Boolean);virtual;
+      procedure GeneralTick(Sender: TObject);
+      procedure ShowFastMenu(Sender: TObject);
+      procedure asynccloseapp(Data: PtrInt);
+      procedure processfilehistory(filename:string);
+      procedure processcommandhistory(Command:string);
+      function CreateZCADControl(aName: string;DoDisableAutoSizing:boolean=false):TControl;
+
+      procedure DockMasterCreateControl(Sender: TObject; aName: string; var
+                                        AControl: TControl; DoDisableAutoSizing: boolean);
+
+      function IsShortcut(var Message: TLMKey): boolean; override;
+
+      procedure setvisualprop(sender:TObject;GUIAction:TZMessageID);
+
+      procedure _scroll(Sender: TObject; ScrollCode: TScrollCode;
+                        var ScrollPos: Integer);
+      procedure ShowCXMenu;
+      procedure ShowFMenu;
+      procedure MainMouseMove;
+      function MainMouseDown(Sender:TAbstractViewArea):Boolean;
+      procedure MainMouseUp;
+      procedure IPCMessage(Sender: TObject);
+      {$ifdef windows}procedure SetTop;{$endif}
+      procedure AsyncFree(Data:PtrInt);
+      procedure UpdateVisible(sender:TObject;GUIMode:TZMessageID);
+      function GetFocusPriority:TControlWithPriority;
+  end;
 
 var
   ZCADMainWindow: TZCADMainWindow;
-  //LayerBox:TZCADLayerComboBox;
-  //LineWBox:TComboBox;
-  //LayoutBox:TComboBox;
-  //LPTime:Tdatetime;
-  //pname:String;
-  oldlongprocess:integer;
-  //OLDColor:integer;
-  ProcessBar:TProgressBar;
-  //StoreBackTraceStrFunc:TBackTraceStrFunc;//this unneed after fpc rev 31026 see http://bugs.freepascal.org/view.php?id=13518
-  function IsRealyQuit:Boolean;
-  procedure RunCmdFile(filename:String;pdata:pointer);
+
+function IsRealyQuit:Boolean;
+procedure RunCmdFile(filename:String;pdata:pointer);
 
 implementation
 {$R *.lfm}
@@ -179,7 +174,7 @@ var
 constructor TmyAnchorDockSplitter.Create(TheOwner: TComponent);
 begin
   inherited Create(TheOwner);
-  self.MinSize:=1;
+  //self.MinSize:=1;
 end;
 
 {$ifdef windows}
@@ -661,8 +656,8 @@ begin
   DockMaster.SplitterClass:=TmyAnchorDockSplitter;
   DockMaster.ManagerClass:=TAnchorDockManager;
   DockMaster.OnCreateControl:=DockMasterCreateControl;
-  {Делаем AnchorDockPanel1 докабельной}
-  DockMaster.MakeDockPanel(AnchorDockPanel1,admrpChild);
+  {Делаем DockPanel докабельной}
+  DockMaster.MakeDockPanel(DockPanel,admrpChild);
   HardcodedButtonSize:=21;
   {Грузим раскладку окон}
   if not sysparam.saved.noloadlayout then
@@ -1160,12 +1155,12 @@ begin
           SysVar.SAVE.SAVE_Auto_Current_Interval^:=SysVar.SAVE.SAVE_Auto_Interval^;
         end;
     date:=sysutils.date;
-    if rt<>SysVar.SYS.SYS_RunTime^ then begin
+    if RunTime<>SysVar.SYS.SYS_RunTime^ then begin
       ZCMsgCallBackInterface.Do_GUIaction(self,ZMsgID_GUITimerTick);
       {if assigned(UpdateObjInspProc)then
          UpdateObjInspProc;}
     end;
-    rt:=SysVar.SYS.SYS_RunTime^;
+    RunTime:=SysVar.SYS.SYS_RunTime^;
     if ZCStatekInterface.CheckAndResetState(ZCSGUIChanged) then
       ZCMsgCallBackInterface.Do_SetNormalFocus;
     {if historychanged then begin
@@ -1202,19 +1197,19 @@ begin
     ProcessBar.position:=0;
     HintText.Hide;
     ProcessBar.Show;
-    oldlongprocess:=0;
+    NextLongProcessPos:=0;
   end;
 end;
 
 procedure TZCADMainWindow.ProcessLongProcess(LPHandle:TLPSHandle;Current:TLPSCounter);
 var
-    pos:integer;
+    LongProcessPos:integer;
 begin
   if (assigned(ProcessBar)and assigned(HintText)) then begin
-    pos:=round(clientwidth*(single(current)/single(ProcessBar.max)));
-    if pos>oldlongprocess then begin
-      ProcessBar.position:=current;
-      oldlongprocess:=pos+20;
+    LongProcessPos:=round(clientwidth*(single(current)/single(ProcessBar.max)));
+    if LongProcessPos>NextLongProcessPos then begin
+      ProcessBar.position:=Current;
+      NextLongProcessPos:=LongProcessPos+20;
       ProcessBar.repaint;
     end;
   end;
@@ -1481,52 +1476,39 @@ end;
 
 begin
   ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIStoreAndFreeEditorProc);
-  FreeClick:=true;
   key := MouseButton2ZKey(shift);
- if ssDouble in shift then
-                          begin
-                               if mbMiddle=button then
-                                 begin
-                                      {$IFNDEF DELPHI}
-                                      if ssShift in shift then
-                                                              Application.QueueAsyncCall(sender.asynczoomsel, 0)
-                                                          else
-                                                              Application.QueueAsyncCall(sender.asynczoomall, 0);
-                                      {$ENDIF}
-                                      exit(true);
-                                 end;
-                          end;
-  if ssDouble in shift then
-                           begin
-                                if mbLeft=button then
-                                  begin
-                                       if assigned(OnMouseObject) then
-                                         if (PGDBObjEntity(OnMouseObject).GetObjType=GDBtextID)
-                                         or (PGDBObjEntity(OnMouseObject).GetObjType=GDBMTextID) then
-                                           begin
-                                                 RunTextEditor(OnMouseObject,Sender.PDWG^);
-                                           end;
-                                       exit(true);
-                                  end;
-
-                           end;
-
-
-  if (ssLeft in shift) then
-    begin
-      if (sender.param.md.mode and MGetControlpoint) <> 0 then
-                                                       FreeClick:=not ProcessControlpoint;
-
-        if FreeClick and((sender.param.md.mode and MGetSelectObject) <> 0) then
-        FreeClick:=not ProcessEntSelect;
+  if ssDouble in shift then begin
+    if mbMiddle=button then begin
+      if ssShift in shift then
+        Application.QueueAsyncCall(sender.asynczoomsel, 0)
+      else
+        Application.QueueAsyncCall(sender.asynczoomall, 0);
+      exit(true);
+     end;
+    if mbLeft=button then begin
+      if assigned(OnMouseObject) then
+        if (PGDBObjEntity(OnMouseObject).GetObjType=GDBtextID)
+        or (PGDBObjEntity(OnMouseObject).GetObjType=GDBMTextID) then begin
+                RunTextEditor(OnMouseObject,Sender.PDWG^);
+        end;
+      exit(true);
     end;
-    begin
-      if FreeClick and((sender.param.md.mode and (MGet3DPoint or MGet3DPointWoOP)) <> 0) then
-      begin
-        commandmanager.sendmousecoordwop(sender,key);
-      end;
-    end;
-    ZCMsgCallBackInterface.Do_GUIaction(self,ZMsgID_GUIActionRedraw);
+  end;
+
+  FreeClick:=true;
+
+
+  if (ssLeft in shift) then begin
+    if (sender.param.md.mode and MGetControlpoint) <> 0 then
+      FreeClick:=not ProcessControlpoint;
+    if FreeClick and((sender.param.md.mode and MGetSelectObject) <> 0) then
+      FreeClick:=not ProcessEntSelect;
+  end;
+
+  if FreeClick and((sender.param.md.mode and (MGet3DPoint or MGet3DPointWoOP)) <> 0) then
+    commandmanager.sendmousecoordwop(sender,key);
+
+  ZCMsgCallBackInterface.Do_GUIaction(self,ZMsgID_GUIActionRedraw);
 
   result:=false;
 end;

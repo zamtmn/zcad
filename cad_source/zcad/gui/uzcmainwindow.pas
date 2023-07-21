@@ -60,6 +60,26 @@ resourcestring
   rsClosed='Closed';
 
 type
+  TMouseTimer=class
+  public
+    type
+      TMousePos=record
+        X,Y:Integer;
+        //Constructor CreateRec(AX,AY:Integer);
+      end;
+    private
+      fTmr:TTimer;
+      fPos:TMousePos;
+    public
+      type
+        TOnTimerProc=procedure;
+        TReason=(RMMove,RMDown,RMUp,RReSet);
+        TReasons=set of TReason;
+      //constructor Create;
+      //destructor Destroy;override;
+      //procedure &Set(MP:TMousePos;ACancel:TReasons;AOnTimerProc:TOnTimerProc;Interval:Cardinal);
+      //procedure Touch(MP:TMousePos;AReason:TReasons);
+  end;
 
   { TZCADMainWindow }
 

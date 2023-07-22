@@ -92,6 +92,7 @@ type
                            procedure asynczoomsel(Data: PtrInt);override;
                            procedure asynczoomall(Data: PtrInt);override;
                            procedure asyncupdatemouse(Data: PtrInt);override;
+                           procedure asyncsendmouse(Data: PtrInt);override;
                            procedure set3dmouse;override;
                            procedure SetCameraPosZoom(_pos:gdbvertex;_zoom:Double;finalcalk:Boolean);override;
                            procedure DISP_ZoomFactor(x: double{; MousePos: TPoint});
@@ -1630,6 +1631,10 @@ end;
 procedure TGeneralViewArea.asyncupdatemouse(Data: PtrInt);
 begin
      WaMouseMove(nil,[],param.md.mouse.x,param.md.mouse.y);
+end;
+procedure TGeneralViewArea.asyncsendmouse(Data: PtrInt);
+begin
+  WaMouseDown(nil,mbLeft,[ssLeft],Data and $ffff,(Data and $ffff0000) shr 16);
 end;
 destructor TGeneralViewArea.Destroy;
 begin

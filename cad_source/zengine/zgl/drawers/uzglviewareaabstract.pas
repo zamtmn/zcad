@@ -144,6 +144,7 @@ type
                            function startpaint:boolean;virtual;abstract;
                            procedure endpaint;virtual;abstract;
                            procedure asyncupdatemouse(Data: PtrInt);virtual;abstract;
+                           procedure asyncsendmouse(Data: PtrInt);virtual;abstract;
                            function getParam:pointer;virtual;abstract;
                            function getParamTypeName:String;virtual;abstract;
                            procedure setdeicevariable;virtual;abstract;

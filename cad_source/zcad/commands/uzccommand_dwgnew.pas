@@ -68,6 +68,7 @@ begin
 
   ViewArea:=GetCurrentBackEnd.Create(TabSheet);
   ViewArea.onCameraChanged:=ZCADMainWindow.correctscrollbars;
+  ViewArea.OnWaMouseUp:=ZCADMainWindow.wamu;
   ViewArea.OnWaMouseDown:=ZCADMainWindow.wamd;
   ViewArea.OnWaMouseMove:=ZCADMainWindow.wamm;
   ViewArea.OnWaKeyPress:=ZCADMainWindow.wakp;

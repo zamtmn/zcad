@@ -22,6 +22,7 @@ unit uzcmainwindow;
 interface
 uses
  {LCL}
+  math,
   AnchorDockPanel,AnchorDocking,
   ActnList,LCLType,LCLProc,uzcTranslations,LMessages,LCLIntf,
   Forms, stdctrls, ExtCtrls, ComCtrls,Controls,Classes,SysUtils,LazUTF8,
@@ -61,24 +62,26 @@ resourcestring
 
 type
   TMouseTimer=class
-  public
-    type
-      TMousePos=record
-        X,Y:Integer;
-        //Constructor CreateRec(AX,AY:Integer);
-      end;
-    private
-      fTmr:TTimer;
-      fPos:TMousePos;
     public
       type
-        TOnTimerProc=procedure;
-        TReason=(RMMove,RMDown,RMUp,RReSet);
+        TOnTimerProc=procedure(StartX,StartY,X,Y:Integer) of object;
+        T3StateDo=(T3SDo,T3SCancel,T3SWait);
+        TReason=(RMMove,RMDown,RMUp,RReSet,RLeave);
         TReasons=set of TReason;
-      //constructor Create;
-      //destructor Destroy;override;
-      //procedure &Set(MP:TMousePos;ACancel:TReasons;AOnTimerProc:TOnTimerProc;Interval:Cardinal);
-      //procedure Touch(MP:TMousePos;AReason:TReasons);
+    private
+      fTmr:TTimer;
+      fStartPos,fCurrentPos:TPoint;
+      fCancelReasons:TReasons;
+      fD:Integer;
+      fOnTimerProc:TOnTimerProc;
+      procedure CreateTimer(Interval:Cardinal);
+      procedure ItTime(Sender:TObject);
+    public
+      constructor Create;
+      destructor Destroy;override;
+      procedure &Set(MP:TPoint;ADelta:Integer;ACancel:TReasons;AOnTimerProc:TOnTimerProc;Interval:Cardinal);
+      procedure Cancel;
+      procedure Touch(MP:TPoint;AReason:TReasons);
   end;
 
   { TZCADMainWindow }
@@ -92,6 +95,7 @@ type
       MainPanel:TForm;
       DHPanel:TPanel;
       HScrollBar,VScrollBar:TScrollBar;
+      MouseTimer:TMouseTimer;
 
     published
       DockPanel:TAnchorDockPanel;
@@ -123,6 +127,7 @@ type
       procedure PageControlMouseDown(Sender: TObject;Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
       procedure correctscrollbars;
       function wamd(Sender:TAbstractViewArea;Button:TMouseButton;Shift:TShiftState;X,Y:Integer;onmouseobject:Pointer;var NeedRedraw:Boolean):boolean;
+      function wamu(Sender:TAbstractViewArea;Button:TMouseButton;Shift:TShiftState;X,Y:Integer;onmouseobject:Pointer):boolean;
       procedure wamm(Sender:TAbstractViewArea;Shift:TShiftState;X,Y:Integer);
       procedure wams(Sender:TAbstractViewArea;SelectedEntity:Pointer);
       procedure wakp(Sender:TAbstractViewArea;var Key: Word; Shift: TShiftState);
@@ -174,6 +179,8 @@ type
       procedure AsyncFree(Data:PtrInt);
       procedure UpdateVisible(sender:TObject;GUIMode:TZMessageID);
       function GetFocusPriority:TControlWithPriority;
+
+      procedure StartEntityDrag(StartX,StartY,X,Y:Integer);
   end;
 
 var
@@ -186,6 +193,97 @@ implementation
 {$R *.lfm}
 var
   LMD:TModuleDesk;
+
+procedure TMouseTimer.CreateTimer(Interval:Cardinal);
+begin
+  if fTmr=nil then
+    fTmr:=TTimer.Create(nil);
+  fTmr.Interval:=Interval;
+  fTmr.OnTimer:=ItTime;
+  fTmr.Enabled:=True;
+end;
+
+procedure TMouseTimer.ItTime(Sender:TObject);
+var
+  OnTimerProc:TOnTimerProc;
+  StartPos,CurrentPos:TPoint;
+begin
+  OnTimerProc:=fOnTimerProc;
+  StartPos:=fStartPos;
+  CurrentPos:=fCurrentPos;
+  Cancel;
+  if assigned(OnTimerProc) then
+    OnTimerProc(StartPos.X,StartPos.Y,CurrentPos.X,CurrentPos.Y);
+end;
+
+constructor TMouseTimer.Create;
+begin
+  fTmr:=nil;
+  fD:=0;
+  fStartPos:=Point(0,0);
+  fCurrentPos:=fStartPos;
+end;
+
+destructor TMouseTimer.Destroy;
+begin
+  fTmr.Free;
+end;
+
+procedure TMouseTimer.&Set(MP:TPoint;ADelta:Integer;ACancel:TReasons;AOnTimerProc:TOnTimerProc;Interval:Cardinal);
+begin
+  fStartPos:=MP;
+  fCurrentPos:=MP;
+  fD:=ADelta;
+  fCancelReasons:=ACancel;
+  fOnTimerProc:=AOnTimerProc;
+  if fTmr=nil then
+    fTmr:=TTimer.Create(nil);
+  fTmr.OnTimer:=ItTime;
+  fTmr.Interval:=Interval;
+  fTmr.Enabled:=True;
+ end;
+
+procedure TMouseTimer.Cancel;
+begin
+  fTmr.Enabled:=false;
+  fD:=0;
+  fOnTimerProc:=nil;
+end;
+
+procedure TMouseTimer.Touch(MP:TPoint;AReason:TReasons);
+
+  function Check:T3StateDo;
+  var
+    d:integer;
+  begin
+    if (AReason*fCancelReasons)<>[] then
+      exit(T3SCancel);
+    if fd<>0 then begin
+      d:=max(abs(mp.X-fStartPos.X),abs(mp.Y-fStartPos.Y));
+      if fd>0 then begin
+        if d>=fd then
+          exit(T3SCancel);
+      end else begin
+        if d>=-fd then
+          exit(T3SDo);
+      end;
+    end;
+    result:=T3SWait;
+  end;
+
+begin
+  fCurrentPos:=MP;
+  case Check of
+    T3SCancel:Cancel;
+    T3SDo:ItTime(nil);
+    T3SWait:;
+  end;
+end;
+
+procedure TZCADMainWindow.StartEntityDrag(StartX,StartY,X,Y:Integer);
+begin
+  commandmanager.executecommandsilent('MoveByMouse',drawings.GetCurrentDWG,drawings.GetCurrentOGLWParam);
+end;
 
 {$ifdef windows}
 procedure TZCADMainWindow.SetTop;
@@ -902,6 +1000,7 @@ begin
 
   CreateAnchorDockingInterface;
   ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIActionRedraw);
+  MouseTimer:=TMouseTimer.Create;
   finally programlog.leave(IfEntered);end;end;
 end;
 
@@ -960,6 +1059,7 @@ begin
     freeandnil(SuppressedShortcuts);
     inherited;
   programlog.leave(IfEntered);end;
+  MouseTimer.Destroy;
 end;
 procedure TZCADMainWindow.ActionUpdate(AAction: TBasicAction; var Handled: Boolean);
 var
@@ -1330,6 +1430,7 @@ var
   f:TzeUnitsFormat;
   htext,htext2:string;
 begin
+  MouseTimer.Touch(Point(X,Y),[TMouseTimer.TReason.RMMove]);
   if Sender.param.SelDesc.OnMouseObject<>nil then
                                                          begin
                                                               if PGDBObjEntity(Sender.param.SelDesc.OnMouseObject)^.vp.Layer._lock
@@ -1370,27 +1471,27 @@ begin
        ZCMsgCallBackInterface.TextMessage(htext,TMWOQuickly);
 end;
 
+function TZCADMainWindow.wamu(Sender:TAbstractViewArea;Button:TMouseButton;Shift:TShiftState;X,Y:Integer;onmouseobject:Pointer):boolean;
+begin
+  MouseTimer.Touch(Point(X,Y),[TMouseTimer.TReason.RMUp]);
+end;
+
 function TZCADMainWindow.wamd(Sender:TAbstractViewArea;Button:TMouseButton;Shift:TShiftState;X,Y:Integer;onmouseobject:Pointer;var NeedRedraw:Boolean):boolean;
 var
   key:Byte;
-  //needredraw:boolean;
   FreeClick:boolean;
+  mp:TPoint;
 function ProcessControlpoint:boolean;
 begin
-   begin
+  begin
     key := MouseButton2ZKey(shift);
     result:=false;
-    if Sender.param.gluetocp then
-    begin
+    if Sender.param.gluetocp then begin
       Sender.PDWG.GetSelObjArray.selectcurrentcontrolpoint(key,Sender.param.md.mouseglue.x,Sender.param.md.mouseglue.y,Sender.param.height);
-      //needredraw:=true;
       result:=true;
-      if (key and MZW_SHIFT) = 0 then
-      begin
+      if (key and MZW_SHIFT) = 0 then begin
         Sender.param.startgluepoint:=Sender.param.nearesttcontrolpoint.pcontrolpoint;
         commandmanager.ExecuteCommandSilent('OnDrawingEd',Sender.pdwg,@Sender.param);
-        //wa.param.lastpoint:=wa.param.nearesttcontrolpoint.pcontrolpoint^.worldcoord;
-        //sendmousecoord{wop}(key);  bnmbnm
         if commandmanager.pcommandrunning <> nil then
         begin
           if key=MZW_LBUTTON then
@@ -1484,6 +1585,8 @@ begin
 end;
 
 begin
+  mp:=Point(X,Y);
+  MouseTimer.Touch(mp,[TMouseTimer.TReason.RMDown]);
   ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIStoreAndFreeEditorProc);
   key := MouseButton2ZKey(shift);
   if ssDouble in shift then begin
@@ -1506,7 +1609,6 @@ begin
 
   FreeClick:=true;
 
-
   if (ssLeft in shift) then begin
     if (sender.param.md.mode and MGetControlpoint) <> 0 then
       FreeClick:=not ProcessControlpoint;
@@ -1515,7 +1617,10 @@ begin
   end;
 
   if FreeClick and((sender.param.md.mode and (MGet3DPoint or MGet3DPointWoOP)) <> 0) then
-    commandmanager.sendmousecoordwop(sender,key);
+    commandmanager.sendmousecoordwop(sender,key)
+  else
+    if onmouseobject<>nil then
+      MouseTimer.&Set(mp,-10,[RMDown,RMUp,RReSet,RLeave],StartEntityDrag,1000);
 
   ZCMsgCallBackInterface.Do_GUIaction(self,ZMsgID_GUIActionRedraw);
 

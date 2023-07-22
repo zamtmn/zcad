@@ -1773,6 +1773,8 @@ begin
   end;
   if assigned(MainMouseUp) then
                                MainMouseUp;
+  if assigned(OnWaMouseDown) then
+    OnWaMouseUp(self,Button,Shift,X, Y,param.SelDesc.OnMouseObject);
 end;
 function TGeneralViewArea.CreateRC(_maxdetail:Boolean=false):TDrawContext;
 begin

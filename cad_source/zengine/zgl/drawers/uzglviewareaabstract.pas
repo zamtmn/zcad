@@ -51,6 +51,7 @@ type
     TCameraChangedNotify=procedure of object;
     TAbstractViewArea=class;
     TOnWaMouseDown=function (Sender:TAbstractViewArea;Button:TMouseButton;Shift:TShiftState;X,Y:Integer;OnMouseEntity:Pointer;var NeedRedraw:Boolean):boolean of object;
+    TOnWaMouseUp=function (Sender:TAbstractViewArea;Button:TMouseButton;Shift:TShiftState;X,Y:Integer;OnMouseEntity:Pointer):boolean of object;
     TOnWaMouseMove=procedure (Sender:TAbstractViewArea;Shift:TShiftState;X,Y:Integer) of object;
     TOnWaMouseSelect=procedure (Sender:TAbstractViewArea;SelectedEntity:Pointer) of object;
     TOnWaKeyPress=procedure (Sender:TAbstractViewArea;var Key: Word; Shift: TShiftState) of object;
@@ -72,6 +73,7 @@ type
                            tocommandmcliccount:Integer;
                            currentmousemovesnaptogrid:Boolean;
                            OnWaMouseDown:TOnWaMouseDown;
+                           OnWaMouseUp:TOnWaMouseUp;
                            OnWaMouseSelect:TOnWaMouseSelect;
                            OnWaMouseMove:TOnWaMouseMove;
                            OnWaKeyPress:TOnWaKeyPress;

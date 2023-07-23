@@ -27,6 +27,7 @@ const
 MZW_LBUTTON=1;
 MZW_SHIFT=128;
 MZW_CONTROL=64;
+MZW_ALT=32;
 type
   TShowCursorHandler=procedure (var DC:TDrawContext) of object;
 {Export+}

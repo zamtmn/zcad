@@ -22,6 +22,7 @@ unit uzcCommand_MoveEntsByMouse;
 
 interface
 uses
+  LCLIntf,LCLType,
   uzcLog,
   gzctnrVectorTypes,
   uzccommandsabstract,uzccommandsimpl,
@@ -92,9 +93,14 @@ begin
         p^.transform(t_matrix);
         p:=drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.iterate(ir);
       until p=nil;
-
       if commandmanager.MoveConstructRootTo(rscmSpecifyFirstPoint)=GRNormal then
-        zcMoveEntsFromConstructRootToCurrentDrawingWithUndo('MoveEntsByMouse');
+        if (GetKeyState(VK_CONTROL) and $8000 <> 0) then
+          zcMoveEntsFromConstructRootToCurrentDrawingWithUndo('MoveEntsByMouse[Copy]')
+        else begin
+          p1:=commandmanager.GetLastPoint-p1;
+          zcTransformSelectedEntsInDrawingWithUndo('MoveEntsByMouse',CreateTranslationMatrix(p1));
+          zcFreeEntsInCurrentDrawingConstructRoot;
+        end;
     end;
   end;
   result:=cmd_ok;

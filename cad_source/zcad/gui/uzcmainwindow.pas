@@ -282,7 +282,11 @@ end;
 
 procedure TZCADMainWindow.StartEntityDrag(StartX,StartY,X,Y:Integer);
 begin
-  commandmanager.executecommandsilent('MoveByMouse',drawings.GetCurrentDWG,drawings.GetCurrentOGLWParam);
+  if commandmanager.pcommandrunning=nil then begin
+    //drawings.GetCurrentDWG^.wa.WaMouseMove(nil,[ssRight],StartX,StartY);
+    Application.QueueAsyncCall(drawings.GetCurrentDWG^.wa.asyncsendmouse,(X and $ffff)or((Y and $ffff) shl 16));
+    commandmanager.executecommandsilent('MoveEntsByMouse',drawings.GetCurrentDWG,drawings.GetCurrentOGLWParam);
+  end;
 end;
 
 {$ifdef windows}
@@ -1620,7 +1624,7 @@ begin
     commandmanager.sendmousecoordwop(sender,key)
   else
     if onmouseobject<>nil then
-      MouseTimer.&Set(mp,-10,[RMDown,RMUp,RReSet,RLeave],StartEntityDrag,1000);
+      MouseTimer.&Set(mp,-30,[RMDown,RMUp,RReSet,RLeave],StartEntityDrag,300);
 
   ZCMsgCallBackInterface.Do_GUIaction(self,ZMsgID_GUIActionRedraw);
 

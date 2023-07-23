@@ -238,6 +238,7 @@ uses
 
   uzccommand_cfgAddSupportPath,
   uzccommand_DockingOptions,
+  uzcCommand_MoveEntsByMouse,
 
 
   uzcenitiesvariablesextender,uzcExtdrLayerControl,uzcExtdrSmartTextEnt,

@@ -1706,9 +1706,13 @@ function MouseButton2ZKey(Shift: TShiftState):Byte;
 begin
   result := 0;
   if (ssLeft in shift) then
-                           result := result or MZW_LBUTTON;
-  if (ssShift in shift) then result := result or MZW_SHIFT;
-  if (ssCtrl in shift) then result := result or MZW_CONTROL;
+    result := result or MZW_LBUTTON;
+  if (ssShift in shift) then
+    result := result or MZW_SHIFT;
+  if (ssCtrl in shift) then
+    result := result or MZW_CONTROL;
+  if (ssAlt in shift) then
+    result := result or MZW_ALT;
 end;
 function TGeneralViewArea.getviewcontrol:TCADControl;
 begin

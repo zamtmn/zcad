@@ -197,11 +197,13 @@ begin
       pobj:=pcd^.GetCurrentROOT.ObjArray.beginiterate(ir);
       if pobj<>nil then
       repeat
-        m.Code:=pointer(pobj^.Transform);
-        m.Data:=pobj;
-        AddMethod(m);
-        dec(pobj^.vp.LastCameraPos);
-        pobj^.Formatentity(drawings.GetCurrentDWG^,dc);
+        if pobj^.Selected then begin
+          m.Code:=pointer(pobj^.Transform);
+          m.Data:=pobj;
+          AddMethod(m);
+          dec(pobj^.vp.LastCameraPos);
+          pobj^.Formatentity(drawings.GetCurrentDWG^,dc);
+        end;
       pobj:=pcd^.GetCurrentROOT.ObjArray.iterate(ir);
       until pobj=nil;
       comit;

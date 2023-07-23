@@ -93,7 +93,7 @@ begin
         p^.transform(t_matrix);
         p:=drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.iterate(ir);
       until p=nil;
-      if commandmanager.MoveConstructRootTo(rscmSpecifyFirstPoint)=GRNormal then
+      if commandmanager.MoveConstructRootTo('')=GRNormal then
         if (GetKeyState(VK_CONTROL) and $8000 <> 0) then
           zcMoveEntsFromConstructRootToCurrentDrawingWithUndo('MoveEntsByMouse[Copy]')
         else begin

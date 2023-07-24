@@ -25,10 +25,14 @@ uses
   UGDBTracePropArray,uzgldrawcontext,uzeentsubordinated,uzeSnap;
 const
 MZW_LBUTTON=1;
-MZW_SHIFT=128;
-MZW_CONTROL=64;
+MZW_MBUTTON=2;
+MZW_RBUTTON=4;
+MZW_DOUBLE=8;
 MZW_ALT=32;
+MZW_CONTROL=64;
+MZW_SHIFT=128;
 type
+  TBUTTONSTATE=(BSUP,BSDOWN);
   TShowCursorHandler=procedure (var DC:TDrawContext) of object;
 {Export+}
 pcontrolpointdesc=^controlpointdesc;

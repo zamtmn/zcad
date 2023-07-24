@@ -126,9 +126,9 @@ type
 
       procedure PageControlMouseDown(Sender: TObject;Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
       procedure correctscrollbars;
-      function wamd(Sender:TAbstractViewArea;Button:TMouseButton;Shift:TShiftState;X,Y:Integer;onmouseobject:Pointer;var NeedRedraw:Boolean):boolean;
-      function wamu(Sender:TAbstractViewArea;Button:TMouseButton;Shift:TShiftState;X,Y:Integer;onmouseobject:Pointer):boolean;
-      procedure wamm(Sender:TAbstractViewArea;Shift:TShiftState;X,Y:Integer);
+      function wamd(Sender:TAbstractViewArea;ZC:TZKeys;X,Y:Integer;onmouseobject:Pointer;var NeedRedraw:Boolean):boolean;
+      function wamu(Sender:TAbstractViewArea;ZC:TZKeys;X,Y:Integer;onmouseobject:Pointer;var NeedRedraw:Boolean):boolean;
+      procedure wamm(Sender:TAbstractViewArea;ZC:TZKeys;X,Y:Integer);
       procedure wams(Sender:TAbstractViewArea;SelectedEntity:Pointer);
       procedure wakp(Sender:TAbstractViewArea;var Key: Word; Shift: TShiftState);
       function GetEntsDesc(ents:PGDBObjOpenArrayOfPV):String;
@@ -1429,7 +1429,7 @@ else if sender=VScrollBar then
      pdwg.wa.draworinvalidate;
   end;
 end;
-procedure TZCADMainWindow.wamm(Sender:TAbstractViewArea;Shift:TShiftState;X,Y:Integer);
+procedure TZCADMainWindow.wamm(Sender:TAbstractViewArea;ZC:TZKeys;X,Y:Integer);
 var
   f:TzeUnitsFormat;
   htext,htext2:string;
@@ -1458,9 +1458,10 @@ begin
                                                                                           {else
                                                                                               RemoveCursorIfNeed(getviewcontrol,true)}
                                                                                      end;
-  exclude(shift,ssLeft);
+  //exclude(shift,ssLeft);
+  ZC:=ZC and (not MZW_LBUTTON);
      if (Sender.param.md.mode and (MGet3DPoint or MGet3DPointWoOp)) <> 0 then
-     commandmanager.sendmousecoordwop(sender,MouseButton2ZKey(shift));
+     commandmanager.sendmousecoordwop(sender,{MouseBS2ZKey(shift)}ZC);
 
      f:=Sender.pdwg^.GetUnitsFormat;
        htext:=sysutils.Format('%s, %s, %s',[zeDimensionToString(Sender.param.md.mouse3dcoord.x,f),zeDimensionToString(Sender.param.md.mouse3dcoord.y,f),zeDimensionToString(Sender.param.md.mouse3dcoord.z,f)]);
@@ -1475,33 +1476,33 @@ begin
        ZCMsgCallBackInterface.TextMessage(htext,TMWOQuickly);
 end;
 
-function TZCADMainWindow.wamu(Sender:TAbstractViewArea;Button:TMouseButton;Shift:TShiftState;X,Y:Integer;onmouseobject:Pointer):boolean;
+function TZCADMainWindow.wamu(Sender:TAbstractViewArea;ZC:TZKeys;X,Y:Integer;onmouseobject:Pointer;var NeedRedraw:Boolean):boolean;
 begin
   MouseTimer.Touch(Point(X,Y),[TMouseTimer.TReason.RMUp]);
 end;
 
-function TZCADMainWindow.wamd(Sender:TAbstractViewArea;Button:TMouseButton;Shift:TShiftState;X,Y:Integer;onmouseobject:Pointer;var NeedRedraw:Boolean):boolean;
+function TZCADMainWindow.wamd(Sender:TAbstractViewArea;ZC:TZKeys;X,Y:Integer;onmouseobject:Pointer;var NeedRedraw:Boolean):boolean;
 var
-  key:Byte;
+  //key:Byte;
   FreeClick:boolean;
   mp:TPoint;
 function ProcessControlpoint:boolean;
 begin
   begin
-    key := MouseButton2ZKey(shift);
+    //key := MouseBS2ZKey(shift);
     result:=false;
     if Sender.param.gluetocp then begin
-      Sender.PDWG.GetSelObjArray.selectcurrentcontrolpoint(key,Sender.param.md.mouseglue.x,Sender.param.md.mouseglue.y,Sender.param.height);
+      Sender.PDWG.GetSelObjArray.selectcurrentcontrolpoint(zc,Sender.param.md.mouseglue.x,Sender.param.md.mouseglue.y,Sender.param.height);
       result:=true;
-      if (key and MZW_SHIFT) = 0 then begin
+      if (zc and MZW_SHIFT) = 0 then begin
         Sender.param.startgluepoint:=Sender.param.nearesttcontrolpoint.pcontrolpoint;
         commandmanager.ExecuteCommandSilent('OnDrawingEd',Sender.pdwg,@Sender.param);
         if commandmanager.pcommandrunning <> nil then
         begin
-          if key=MZW_LBUTTON then
+          if (zc and MZW_LBUTTON) <> 0{zc=MZW_LBUTTON} then
                                  Sender.param.lastpoint:=Sender.param.nearesttcontrolpoint.pcontrolpoint^.worldcoord;
           commandmanager.pcommandrunning^.MouseMoveCallback(Sender.param.nearesttcontrolpoint.pcontrolpoint^.worldcoord,
-                                                            Sender.param.md.mouseglue, key,nil)
+                                                            Sender.param.md.mouseglue, zc,nil)
         end;
       end;
     end;
@@ -1512,11 +1513,11 @@ function ProcessEntSelect:boolean;
 //    RelSelectedObjects:Integer;
 begin
   result:=false;
-  key := MouseButton2ZKey(shift);
+  //key := MouseBS2ZKey(shift);
   begin
     sender.getonmouseobjectbytree(sender.PDWG.GetCurrentROOT.ObjArray.ObjTree,sysvarDWGEditInSubEntry);
     //getonmouseobject(@drawings.GetCurrentROOT.ObjArray);
-    if (key and MZW_CONTROL)<>0 then
+    if (zc and MZW_CONTROL)<>0 then
     begin
          commandmanager.ExecuteCommandSilent('SelectOnMouseObjects',sender.pdwg,@sender.param);
          result:=true;
@@ -1541,7 +1542,7 @@ begin
     if sender.param.SelDesc.OnMouseObject <> nil then
     begin
          result:=true;
-         if (key and MZW_SHIFT)=0
+         if (zc and MZW_SHIFT)=0
          then
              begin
                   //if assigned(sysvar.DSGN.DSGN_SelNew)then
@@ -1577,7 +1578,7 @@ begin
          NeedRedraw:=true;
     end
 
-    else if ((sender.param.md.mode and MGetSelectionFrame) <> 0) and ((key and MZW_LBUTTON)<>0) then
+    else if ((sender.param.md.mode and MGetSelectionFrame) <> 0) and ((zc and MZW_LBUTTON)<>0) then
     begin
       result:=true;
     { TODO : Добавить возможность выбора объектов без секрамки во время выполнения команды }
@@ -1592,16 +1593,16 @@ begin
   mp:=Point(X,Y);
   MouseTimer.Touch(mp,[TMouseTimer.TReason.RMDown]);
   ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIStoreAndFreeEditorProc);
-  key := MouseButton2ZKey(shift);
-  if ssDouble in shift then begin
-    if mbMiddle=button then begin
-      if ssShift in shift then
+  //key := MouseBS2ZKey(shift);
+  if (MZW_DOUBLE and zc)<>0 {ssDouble in shift} then begin
+    if (MZW_MBUTTON and zc)<>0{mbMiddle=button} then begin
+      if (MZW_SHIFT and zc)<>0{ssShift in shift} then
         Application.QueueAsyncCall(sender.asynczoomsel, 0)
       else
         Application.QueueAsyncCall(sender.asynczoomall, 0);
       exit(true);
      end;
-    if mbLeft=button then begin
+    if (MZW_LBUTTON and zc)<>0{mbLeft=button} then begin
       if assigned(OnMouseObject) then
         if (PGDBObjEntity(OnMouseObject).GetObjType=GDBtextID)
         or (PGDBObjEntity(OnMouseObject).GetObjType=GDBMTextID) then begin
@@ -1613,7 +1614,7 @@ begin
 
   FreeClick:=true;
 
-  if (ssLeft in shift) then begin
+  if (MZW_LBUTTON and zc)<>0{(ssLeft in shift)} then begin
     if (sender.param.md.mode and MGetControlpoint) <> 0 then
       FreeClick:=not ProcessControlpoint;
     if FreeClick and((sender.param.md.mode and MGetSelectObject) <> 0) then
@@ -1621,7 +1622,7 @@ begin
   end;
 
   if FreeClick and((sender.param.md.mode and (MGet3DPoint or MGet3DPointWoOP)) <> 0) then
-    commandmanager.sendmousecoordwop(sender,key)
+    commandmanager.sendmousecoordwop(sender,zc)
   else
     if onmouseobject<>nil then
       MouseTimer.&Set(mp,-30,[RMDown,RMUp,RReSet,RLeave],StartEntityDrag,300);

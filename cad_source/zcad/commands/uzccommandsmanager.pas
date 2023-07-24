@@ -28,6 +28,7 @@ uses gzctnrVectorPObjects,uzcsysvars,uzegeometry,uzglviewareaabstract,uzbpaths,
      uzcsysparams,uzedrawingsimple,uzcdrawings,uzctnrvectorstrings,forms,
      uzcctrlcommandlineprompt,uzeparsercmdprompt,uzeSnap,
      uzeentity,uzgldrawcontext,Classes,
+     uzglviewareageneral,
      MacroDefIntf,uzmacros;
 const
      tm:tmethod=(Code:nil;Data:nil);
@@ -941,6 +942,7 @@ var
    temp:PCommandRTEdObjectDef;
    temp2:PCommandObjectDef;
 begin
+  InverseMouseClick:=false;
   if DisableExecuteCommandEndCounter>0 then begin
    inc(DisabledExecuteCommandEndCounter);
    exit;

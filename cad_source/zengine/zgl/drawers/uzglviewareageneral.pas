@@ -145,7 +145,9 @@ type
                                                   Operation: TOperation); override;
 
                       end;
-function MouseButton2ZKey(Shift: TShiftState):Byte;
+
+function MouseBS2ZKey(Button:TMouseButton;Shift:TShiftState):TZKeys;
+function MouseS2ZKey(Shift:TShiftState):TZKeys;
 procedure RemoveCursorIfNeed(acontrol:TControl;RemoveCursor:boolean);
 var
    sysvarDISPOSSize:double=10;
@@ -189,6 +191,8 @@ var
    sysvarDISPLWDisplayScale:Integer=10;
    sysvarDISPmaxLWDisplayScale:Integer=20;
    sysvarDISPDefaultLW:TGDBLineWeight=LnWt025;
+
+   InverseMouseClick:Boolean;
 
 implementation
 
@@ -1422,11 +1426,12 @@ begin
   KillOHintTimer(self);
   SetOHintTimer(self);
   currentmousemovesnaptogrid:=false;
-  key:=0;
+  key:=MouseS2ZKey(Shift);
+  {key:=0;
   if (ssShift in Shift) then
                             key := key or MZW_SHIFT;
   if (ssCtrl in Shift) then
-                                    key := key or MZW_CONTROL;
+                                    key := key or MZW_CONTROL;}
   if pdwg=nil then
                             begin
                                    param.md.mouse.y := y;
@@ -1579,7 +1584,7 @@ end;
   reprojectaxis;
 
   if assigned(OnWaMouseMove) then
-                                 OnWaMouseMove(self,shift,x,y);
+                                 OnWaMouseMove(self,MouseS2ZKey(Shift),x,y);
     {if pcommandrunning <> nil then
     begin
       if param.ospoint.ostype <> os_none then pcommandrunning^.MouseMoveCallback(param.ospoint.worldcoord, param.md.mouse, 0)
@@ -1702,7 +1707,26 @@ begin
      WorkArea.onmouseleave:=WaMouseLeave;
      WorkArea.onresize:=WaResize;
 end;
-function MouseButton2ZKey(Shift: TShiftState):Byte;
+function MouseBS2ZKey(Button:TMouseButton;Shift:TShiftState):TZKeys;
+begin
+  result := 0;
+  if (mbLeft = Button) then
+    result := result or MZW_LBUTTON;
+  if (ssShift in shift) then
+    result := result or MZW_SHIFT;
+  if (ssCtrl in shift) then
+    result := result or MZW_CONTROL;
+  if (ssAlt in shift) then
+    result := result or MZW_ALT;
+  if (ssDouble in Shift) then
+    result := result or MZW_DOUBLE;
+  if (mbMiddle = Button) then
+    result := result or MZW_MBUTTON;
+  if (mbRight = Button) then
+    result := result or MZW_RBUTTON;
+end;
+
+function MouseS2ZKey(Shift:TShiftState):TZKeys;
 begin
   result := 0;
   if (ssLeft in shift) then
@@ -1713,7 +1737,14 @@ begin
     result := result or MZW_CONTROL;
   if (ssAlt in shift) then
     result := result or MZW_ALT;
+  if (ssDouble in Shift) then
+    result := result or MZW_DOUBLE;
+  if (ssMiddle in Shift) then
+    result := result or MZW_MBUTTON;
+  if (ssRight in Shift) then
+    result := result or MZW_RBUTTON;
 end;
+
 function TGeneralViewArea.getviewcontrol:TCADControl;
 begin
      result:=WorkArea;
@@ -1733,7 +1764,7 @@ begin
   //ActivePopupMenu:=ActivePopupMenu;
   NeedRedraw:=false;
   if assigned(OnWaMouseDown) then
-  if OnWaMouseDown(self,Button,Shift,X, Y,param.SelDesc.OnMouseObject,needredraw) then
+  if OnWaMouseDown(self,MouseBS2ZKey(Button,Shift),X, Y,param.SelDesc.OnMouseObject,needredraw) then
   begin
     if needredraw then
                     begin
@@ -1751,7 +1782,7 @@ begin
   begin
   //r.handled:=true;
   if pdwg=nil then exit;
-  //key := MouseButton2ZKey(shift);
+  //key := MouseBS2ZKey(shift);
   if (ssMiddle in shift) then
   begin
     WorkArea.cursor := crHandPoint;
@@ -1771,6 +1802,8 @@ begin
 end;
 
 procedure TGeneralViewArea.WaMouseUp(Sender:TObject;Button: TMouseButton; Shift:TShiftState;X, Y: Integer);
+var
+  needredraw:boolean;
 begin
   inherited;
   if button = mbMiddle then
@@ -1782,8 +1815,14 @@ begin
   end;
   if assigned(MainMouseUp) then
                                MainMouseUp;
-  if assigned(OnWaMouseDown) then
-    OnWaMouseUp(self,Button,Shift,X, Y,param.SelDesc.OnMouseObject);
+  needredraw:=false;
+  if InverseMouseClick then begin
+    if assigned(OnWaMouseDown) then
+      OnWaMouseDown(self,MouseBS2ZKey(Button,Shift),X, Y,param.SelDesc.OnMouseObject,needredraw);
+  end else begin
+    if assigned(OnWaMouseDown) then
+      OnWaMouseUp(self,MouseBS2ZKey(Button,shift),X, Y,param.SelDesc.OnMouseObject,needredraw);
+  end;
 end;
 function TGeneralViewArea.CreateRC(_maxdetail:Boolean=false):TDrawContext;
 begin
@@ -3337,6 +3376,7 @@ begin
 end;
 
 initialization
+  InverseMouseClick:=false;
 finalization
   if Assigned(TGeneralViewArea.ShowCursorHandlersVector) then
     FreeAndNil(TGeneralViewArea.ShowCursorHandlersVector);

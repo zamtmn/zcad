@@ -1625,7 +1625,8 @@ begin
     commandmanager.sendmousecoordwop(sender,zc)
   else
     if onmouseobject<>nil then
-      MouseTimer.&Set(mp,-30,[RMDown,RMUp,RReSet,RLeave],StartEntityDrag,300);
+      if (MZW_LBUTTON and zc)<>0 then
+        MouseTimer.&Set(mp,-30,[RMDown,RMUp,RReSet,RLeave],StartEntityDrag,300);
 
   ZCMsgCallBackInterface.Do_GUIaction(self,ZMsgID_GUIActionRedraw);
 

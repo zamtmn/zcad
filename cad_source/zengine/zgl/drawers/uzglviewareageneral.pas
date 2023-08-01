@@ -194,6 +194,10 @@ var
 
    InverseMouseClick:Boolean;
 
+   sysvarDSGNEntityMoveStartTimerInterval:Integer=300;
+   sysvarDSGNEntityMoveStartOffset:Integer=-30;
+   sysvarDSGNEntityMoveByMouseUp:Boolean=True;
+
 implementation
 
 procedure TGeneralViewArea.GDBActivateContext;

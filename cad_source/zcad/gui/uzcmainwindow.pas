@@ -231,13 +231,17 @@ end;
 
 procedure TMouseTimer.&Set(MP:TPoint;ADelta:Integer;ACancel:TReasons;AOnTimerProc:TOnTimerProc;Interval:Cardinal);
 begin
+  if fTmr=nil then
+    fTmr:=TTimer.Create(nil)
+  else
+    if not (RReSet in fCancelReasons) then
+      exit;
+  Cancel;
   fStartPos:=MP;
   fCurrentPos:=MP;
   fD:=ADelta;
   fCancelReasons:=ACancel;
   fOnTimerProc:=AOnTimerProc;
-  if fTmr=nil then
-    fTmr:=TTimer.Create(nil);
   fTmr.OnTimer:=ItTime;
   fTmr.Interval:=Interval;
   fTmr.Enabled:=True;
@@ -1626,7 +1630,7 @@ begin
   else
     if onmouseobject<>nil then
       if (MZW_LBUTTON and zc)<>0 then
-        MouseTimer.&Set(mp,-30,[RMDown,RMUp,RReSet,RLeave],StartEntityDrag,300);
+        MouseTimer.&Set(mp,sysvarDSGNEntityMoveStartOffset,[RMDown,RMUp,RReSet,RLeave],StartEntityDrag,sysvarDSGNEntityMoveStartTimerInterval);
 
   ZCMsgCallBackInterface.Do_GUIaction(self,ZMsgID_GUIActionRedraw);
 

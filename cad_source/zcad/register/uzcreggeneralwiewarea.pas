@@ -80,6 +80,12 @@ units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPath,expandpath('
 units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'RD_MaxLTPatternsInEntity','Integer',@SysVarRDMaxLTPatternsInEntity);
 units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'RD_PanObjectDegradation','Boolean',@SysVarRDPanObjectDegradation);
 units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'DSGN_OTrackTimerInterval','Integer',@sysvarDSGNOTrackTimerInterval);
+
+
+units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'DSGN_EntityMoveStartTimerInterval','Integer',@sysvarDSGNEntityMoveStartTimerInterval);
+units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'DSGN_EntityMoveStartOffset','Integer',@sysvarDSGNEntityMoveStartOffset);
+units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'DSGN_EntityMoveByMouseUp','Boolean',@sysvarDSGNEntityMoveByMouseUp);
+
 units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'DISP_LWDisplayScale','Integer',@sysvarDISPLWDisplayScale);
 units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'RD_Light','Boolean',@sysvarRDLight);
 
@@ -124,6 +130,10 @@ SysVar.RD.RD_PanObjectDegradation:=@SysVarRDPanObjectDegradation;
 sysvar.RD.RD_RendererBackEnd:=@BackendsNames;
 
 sysvar.DSGN.DSGN_OTrackTimerInterval:=@sysvarDSGNOTrackTimerInterval;
+sysvar.DSGN.DSGN_EntityMoveStartTimerInterval:=@sysvarDSGNEntityMoveStartTimerInterval;
+sysvar.DSGN.DSGN_EntityMoveStartOffset:=@sysvarDSGNEntityMoveStartOffset;
+sysvar.DSGN.DSGN_EntityMoveByMouseUp:=@sysvarDSGNEntityMoveByMouseUp;
+
 sysvar.DSGN.DSGN_SelNew:=@sysvarDSGNSelNew;
 sysvar.RD.RD_LastCalcVisible:=@sysvarRDLastCalcVisible;;
 finalization

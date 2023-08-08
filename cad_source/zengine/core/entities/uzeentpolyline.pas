@@ -156,6 +156,7 @@ begin
   //tpo^.vertexarray.init(1000);
   tpo^.vertexarrayinocs.SetSize(vertexarrayinocs.Count);
   vertexarrayinocs.copyto(tpo^.vertexarrayinocs);
+  tpo^.bp.ListPos.owner:=own;
 
   result := tpo;
 end;

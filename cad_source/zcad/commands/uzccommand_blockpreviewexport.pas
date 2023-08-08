@@ -123,13 +123,13 @@ begin
 
     PNG:=TPortableNetworkGraphic.Create;
     PNG.SetSize(sx,sx);
-    PNG.Canvas.Brush.Color:=graphics.clWhite;
+    PNG.Canvas.Brush.Color:=clWindow;
     PNG.Canvas.Brush.Style:=bsSolid;
     PNG.Canvas.FillRect(0,0,sx,sx);
 
     BMP:=TBitmap.Create;
     BMP.SetSize(bmpw,bmpw);
-    BMP.Canvas.Brush.Color:=graphics.clWhite;
+    BMP.Canvas.Brush.Color:=clWindow;
     BMP.Canvas.Brush.Style:=bsSolid;
     BMP.Canvas.FillRect(0,0,bmpw,bmpw);
 

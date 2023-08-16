@@ -2,7 +2,7 @@ unit drawingdevicebase;
 interface
 uses System,devicebase;
 var
-  DBCounter:GDBInteger;
+  DBCounter:Integer;
 implementation
 begin
   DBCounter:=0;

@@ -26,7 +26,8 @@ uses uzeutils,LCLProc,zcmultiobjectcreateundocommand,uzepalette,
      uzeentityfactory,uzgldrawcontext,uzcdrawing,uzestyleslinetypes,uzcsysvars,
      uzestyleslayers,sysutils,uzbtypes,uzcdrawings,varmandef,
      uzeconsts,UGDBVisibleOpenArray,uzeentgenericsubentry,uzeentity,
-     uzegeometrytypes,uzeentblockinsert,uzcinterface,gzctnrVectorTypes,uzeentitiesmanager;
+     uzegeometrytypes,uzeentblockinsert,uzcinterface,gzctnrVectorTypes,uzeentitiesmanager,
+     uzegeometry,zcmultiobjectchangeundocommand;
 
   {**Добавление в чертеж примитива с обвязкой undo
     @param(PEnt Указатель на добавляемый примитив)
@@ -34,6 +35,8 @@ uses uzeutils,LCLProc,zcmultiobjectcreateundocommand,uzepalette,
   procedure zcAddEntToDrawingWithUndo(const PEnt:PGDBObjEntity;var Drawing:TZCADDrawing);
 
   procedure zcMoveEntsFromConstructRootToCurrentDrawingWithUndo(CommandName:String);
+
+  procedure zcTransformSelectedEntsInDrawingWithUndo(CommandName:String;Transform:DMatrix4D);
 
   {**Добавление в текущий чертеж примитива с обвязкой undo
     @param(PEnt Указатель на добавляемый примитив)}
@@ -164,6 +167,49 @@ begin
   until pobj=nil;
   pcd^.UndoStack.PushEndMarker;
   pcd^.ConstructObjRoot.ObjArray.Clear;
+end;
+
+procedure zcTransformSelectedEntsInDrawingWithUndo(CommandName:String;Transform:DMatrix4D);
+var
+  pcd:PTZCADDrawing;
+  pobj: pGDBObjEntity;
+  ir:itrec;
+  dc:TDrawContext;
+  im:DMatrix4D;
+  count:integer;
+  m:tmethod;
+begin
+  pcd:=PTZCADDrawing(drawings.GetCurrentDWG);
+  count:=0;
+  pobj:=pcd^.GetCurrentROOT.ObjArray.beginiterate(ir);
+  if pobj<>nil then
+  repeat
+    if pobj^.Selected then
+      inc(count);
+  pobj:=pcd^.GetCurrentROOT.ObjArray.iterate(ir);
+  until pobj=nil;
+  if count>0 then begin
+    im:=Transform;
+    uzegeometry.MatrixInvert(im);
+    pcd^.UndoStack.PushStartMarker(CommandName);
+    dc:=pcd^.CreateDrawingRC;
+    with PushCreateTGMultiObjectChangeCommand(pcd^.UndoStack,Transform,im,Count) do begin
+      pobj:=pcd^.GetCurrentROOT.ObjArray.beginiterate(ir);
+      if pobj<>nil then
+      repeat
+        if pobj^.Selected then begin
+          m.Code:=pointer(pobj^.Transform);
+          m.Data:=pobj;
+          AddMethod(m);
+          dec(pobj^.vp.LastCameraPos);
+          pobj^.Formatentity(drawings.GetCurrentDWG^,dc);
+        end;
+      pobj:=pcd^.GetCurrentROOT.ObjArray.iterate(ir);
+      until pobj=nil;
+      comit;
+    end;
+    pcd^.UndoStack.PushEndMarker;
+  end;
 end;
 
 procedure zcStartUndoCommand(CommandName:String;PushStone:boolean=false);

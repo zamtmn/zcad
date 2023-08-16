@@ -272,6 +272,7 @@ var
   opstac: operandstack;
   i: Integer;
 begin
+  DecimalSeparator:='.';
   initvardesk(rez);
   initvardesk(hrez);
   initvardesk(subrezult);

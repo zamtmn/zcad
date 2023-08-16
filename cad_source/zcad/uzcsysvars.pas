@@ -172,6 +172,10 @@ type
              DSGN_SelNew:PBoolean;(*'New selection set'*)
              DSGN_SelSameName:PBoolean;(*'Auto select devices with same name'*)
              DSGN_OTrackTimerInterval:PInteger;(*'Object track timer interval'*)
+             DSGN_EntityMoveStartTimerInterval:PInteger;
+             DSGN_EntityMoveStartOffset:PInteger;
+             DSGN_EntityMoveByMouseUp:PBoolean;
+
        end;
   {REGISTERRECORDTYPE tobjinspinterface}
   tobjinspinterface=record

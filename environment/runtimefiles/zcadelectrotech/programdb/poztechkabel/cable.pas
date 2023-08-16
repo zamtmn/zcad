@@ -90,7 +90,7 @@ begin
      _EQ_POZTECHCABEL_PKT_LAN_UUTP_5E_PVC_ZH_ngAHF.Manufacturer:='ООО "ПожТехКабель" г.Саратов';
      _EQ_POZTECHCABEL_PKT_LAN_UUTP_5E_PVC_ZH_ngAHF.Description:='Предназначены для передачи цифрового сигнала в структурированных кабельных сетях и сетях широкополосного доступа(ШПД)';
      _EQ_POZTECHCABEL_PKT_LAN_UUTP_5E_PVC_ZH_ngAHF.NameShortTemplate:='PTK-LAN U/UTP cat. 5Е PVC ZH нг(А)-HF 4x2x0.51';
-     _EQ_POZTECHCABEL_PKT_LAN_UUTP_5E_PVC_ZH_ngAHF.NameTemplate:='Кабель сигнальный огнестойкий PTK-LAN U/UTP cat. 5Е PVC ZH нг(А)-HF 4x2x0.51';
+     _EQ_POZTECHCABEL_PKT_LAN_UUTP_5E_PVC_ZH_ngAHF.NameTemplate:='Кабель сигнальный безгалогенный PTK-LAN U/UTP cat. 5Е PVC ZH нг(А)-HF 4x2x0.51';
      _EQ_POZTECHCABEL_PKT_LAN_UUTP_5E_PVC_ZH_ngAHF.UIDTemplate:='%%[ID]';
      _EQ_POZTECHCABEL_PKT_LAN_UUTP_5E_PVC_ZH_ngAHF.NameFullTemplate:='Кабель для СКС безгалогенный PTK-LAN U/UTP cat. 5Е PVC ZH нг(А)-HF 4x2x0.51';
      _EQ_POZTECHCABEL_PKT_LAN_UUTP_5E_PVC_ZH_ngAHF.TreeCoord:='BP_ПожТехКабель_Сигнальный_PTK-LAN U/UTP cat. 5Е PVC ZH нг(А)-HF|BC_Кабельная продукция_Связи_PTK-LAN U/UTP cat. 5Е PVC ZH нг(А)-HF(ПожТехКабель)';

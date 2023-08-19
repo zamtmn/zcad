@@ -20,6 +20,7 @@ unit uzcExtdrNet;
 
 interface
 uses sysutils,UGDBObjBlockdefArray,uzedrawingdef,uzeentityextender,
+     UGDBOpenArrayOfPV,uzeentgenericsubentry,uzeentline,uzegeometry,
      uzeentdevice,TypeDescriptors,uzctnrVectorBytes,
      uzbtypes,uzeentsubordinated,uzeentity,uzeblockdef,
      varmandef,Varman,UUnitManager,URecordDescriptor,UBaseTypeDescriptor,
@@ -28,6 +29,12 @@ uses sysutils,UGDBObjBlockdefArray,uzedrawingdef,uzeentityextender,
 const
   NetExtenderName='extdrNet';
 type
+TNet=class
+    Entities:GDBObjOpenArrayOfPV;
+    constructor Create;
+    destructor Destroy;override;
+end;
+
 TNetExtender=class(TBaseEntityExtender)
     pThisEntity:PGDBObjEntity;
     class function getExtenderName:string;override;
@@ -47,16 +54,29 @@ TNetExtender=class(TBaseEntityExtender)
     procedure onEntitySupportOldVersions(pEntity:pointer;const drawing:TDrawingDef);override;
 
 
-    class function EntIOLoadIncludingVolumeExtender(_Name,_Value:String;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
+    class function EntIOLoadNetExtender(_Name,_Value:String;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
 
     procedure SaveToDxfObjXData(var outhandle:TZctnrVectorBytes;PEnt:Pointer;var IODXFContext:TIODXFContext);override;
+
+    procedure TryConnectToEnts(var Objects:GDBObjOpenArrayOfPV);
   end;
 
 
-function AddVolumeExtenderToEntity(PEnt:PGDBObjEntity):TNetExtender;
+function AddNetExtenderToEntity(PEnt:PGDBObjEntity):TNetExtender;
+
 implementation
 
-function AddVolumeExtenderToEntity(PEnt:PGDBObjEntity):TNetExtender;
+constructor TNet.Create;
+begin
+  Entities.init(10);
+end;
+
+destructor TNet.Destroy;
+begin
+  Entities.done;
+end;
+
+function AddNetExtenderToEntity(PEnt:PGDBObjEntity):TNetExtender;
 begin
      result:=TNetExtender.Create(PEnt);
      PEnt^.AddExtension(result);
@@ -85,7 +105,19 @@ procedure TNetExtender.onBeforeEntityFormat(pEntity:Pointer;const drawing:TDrawi
 begin
 end;
 procedure TNetExtender.onAfterEntityFormat(pEntity:Pointer;const drawing:TDrawingDef;var DC:TDrawContext);
+var
+  Objects:GDBObjOpenArrayOfPV;
 begin
+  if pThisEntity<>nil then begin
+    if not (ESConstructProxy in pThisEntity^.State) then
+      if pThisEntity^.GetObjType=GDBLineID then begin
+        objects.init(10);
+        if PGDBObjGenericSubEntry(drawing.GetCurrentRootSimple)^.FindObjectsInPoint(PGDBObjLine(pThisEntity)^.CoordInWCS.lBegin,Objects) then
+          TryConnectToEnts(Objects);
+        if PGDBObjGenericSubEntry(drawing.GetCurrentRootSimple)^.FindObjectsInPoint(PGDBObjLine(pThisEntity)^.CoordInWCS.lEnd,Objects) then
+          TryConnectToEnts(Objects);
+      end;
+  end;
 end;
 procedure TNetExtender.CopyExt2Ent(pSourceEntity,pDestEntity:pointer);
 begin
@@ -103,13 +135,13 @@ begin
   result:=NetExtenderName;
 end;
 
-class function TNetExtender.EntIOLoadIncludingVolumeExtender(_Name,_Value:String;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
+class function TNetExtender.EntIOLoadNetExtender(_Name,_Value:String;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
 var
-  VolumeExtender:TNetExtender;
+  NetExtender:TNetExtender;
 begin
-  VolumeExtender:=PGDBObjEntity(PEnt)^.GetExtension<TNetExtender>;
-  if VolumeExtender=nil then begin
-    VolumeExtender:=AddVolumeExtenderToEntity(PEnt);
+  NetExtender:=PGDBObjEntity(PEnt)^.GetExtension<TNetExtender>;
+  if NetExtender=nil then begin
+    NetExtender:=AddNetExtenderToEntity(PEnt);
   end;
   result:=true;
 end;
@@ -119,11 +151,29 @@ begin
    dxfStringout(outhandle,1000,'NETEXTENDER=');
 end;
 
+procedure TNetExtender.TryConnectToEnts(var Objects:GDBObjOpenArrayOfPV);
+var
+  p:PGDBObjLine;
+  ir:itrec;
+  NetExtender:TNetExtender;
+begin
+  p:=Objects.beginiterate(ir);
+  if p<>nil then
+  repeat
+    {if (p<>pThisEntity)and(p^.GetObjType=GDBLineID) then begin
+      NetExtender:=p^.GetExtension<TNetExtender>;
+      if NetExtender<>nil then begin
+        uzegeometry.
+      end;
+    end;}
+  p:=Objects.iterate(ir);
+  until p=nil;
+end;
 
 initialization
-  //extdrAdd(extdrIncludingVolume)
+  //extdrAdd(extdrNet)
   EntityExtenders.RegisterKey(uppercase(NetExtenderName),TNetExtender);
-  GDBObjEntity.GetDXFIOFeatures.RegisterNamedLoadFeature('NETVOLUMEEXTENDER',TNetExtender.EntIOLoadIncludingVolumeExtender);
+  GDBObjEntity.GetDXFIOFeatures.RegisterNamedLoadFeature('NETEXTENDER',TNetExtender.EntIOLoadNetExtender);
 finalization
 end.
 

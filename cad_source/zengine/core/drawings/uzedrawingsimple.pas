@@ -414,6 +414,7 @@ begin
      if PSelectedObjDesc(md).ptempobj=nil then
      begin
           PSelectedObjDesc(md).ptempobj:=obj^.Clone(nil);
+          include(PSelectedObjDesc(md).ptempobj^.State,ESConstructProxy);
           PSelectedObjDesc(md).ptempobj^.bp.ListPos.Owner:=obj^.bp.ListPos.Owner;
           dc:=self.CreateDrawingRC;
           PSelectedObjDesc(md).ptempobj.{format}FormatFast(self,dc);

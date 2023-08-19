@@ -8,17 +8,17 @@ usescopy objname;
 
 var
 
-T1:Boolean;(*'Подвал'*)
-T2:Boolean;(*'1 этаж'*)
-T3:Boolean;(*'2 этаж'*)
-T4:Boolean;(*'3 этаж'*)
-T5:Boolean;(*'4 этаж'*)
-T6:Boolean;(*'5 этаж'*)
-T7:Boolean;(*'6 этаж'*)
-T8:Boolean;(*'7 этаж'*)
-T9:Boolean;(*'8 этаж'*)
+VL_Floor1:Boolean;(*'Подвал'*)
+VL_Floor2:Boolean;(*'1 этаж'*)
+VL_Floor3:Boolean;(*'2 этаж'*)
+VL_Floor4:Boolean;(*'3 этаж'*)
+VL_Floor5:Boolean;(*'4 этаж'*)
+VL_Floor6:Boolean;(*'5 этаж'*)
+VL_Floor7:Boolean;(*'6 этаж'*)
+VL_Floor8:Boolean;(*'7 этаж'*)
+VL_Floor9:Boolean;(*'8 этаж'*)
 
-T31:Integer;(*'Щит'*)
+VL_Shield:Integer;(*'Щит'*)
 
 implementation
 
@@ -32,16 +32,16 @@ NMO_Name:='ЭТ0';
 NMO_BaseName:='ЭТ';
 NMO_Suffix:='??';
 
-T1:=True;
-T2:=False;
-T3:=False;
-T4:=False;
-T5:=False;
-T6:=False;
-T7:=False;
-T8:=False;
-T9:=False;
+VL_Floor1:=True;
+VL_Floor2:=False;
+VL_Floor3:=False;
+VL_Floor4:=False;
+VL_Floor5:=False;
+VL_Floor6:=False;
+VL_Floor7:=False;
+VL_Floor8:=False;
+VL_Floor9:=False;
 
-T31:=1;
+VL_Shield:=1;
 
 end.

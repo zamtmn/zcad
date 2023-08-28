@@ -288,7 +288,7 @@ procedure TZCADMainWindow.StartEntityDrag(StartX,StartY,X,Y:Integer);
 begin
   if commandmanager.pcommandrunning=nil then begin
     //drawings.GetCurrentDWG^.wa.WaMouseMove(nil,[ssRight],StartX,StartY);
-    Application.QueueAsyncCall(drawings.GetCurrentDWG^.wa.asyncsendmouse,(X and $ffff)or((Y and $ffff) shl 16));
+    Application.QueueAsyncCall(drawings.GetCurrentDWG^.wa.asyncsendmouse,(StartX and $ffff)or((StartY and $ffff) shl 16));
     commandmanager.executecommandsilent('MoveEntsByMouse',drawings.GetCurrentDWG,drawings.GetCurrentOGLWParam);
   end;
 end;

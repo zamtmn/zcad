@@ -1784,7 +1784,7 @@ begin
                     end;
     exit;
   end;
-  if ssRight in shift then
+  if [ssRight] = shift then
                            begin
                                 if assigned(ShowCXMenu)then
                                                            ShowCXMenu;

@@ -171,12 +171,17 @@ GDBObjEntity= object(GDBObjSubordinated)
                     procedure IterateCounter(PCounted:Pointer;var Counter:Integer;proc:TProcCounter);virtual;
                     class function GetDXFIOFeatures:TDXFEntIODataManager;static;
                     function GetNameInBlockTable:String;virtual;
+                    procedure addtoconnect2(pobj:pgdbobjEntity;var ConnectedArray:TZctnrVectorPGDBaseObjects);
               end;
 {Export-}
 var onlygetsnapcount:Integer;
     GDBObjEntityDXFFeatures:TDXFEntIODataManager;
 implementation
 uses usimplegenerics,uzeentityfactory{,UGDBSelectedObjArray};
+procedure GDBObjEntity.addtoconnect2(pobj:pgdbobjEntity;var ConnectedArray:TZctnrVectorPGDBaseObjects);
+begin
+  ConnectedArray.PushBackIfNotPresent(pobj);
+end;
 procedure GDBObjEntity.IterateCounter(PCounted:Pointer;var Counter:Integer;proc:TProcCounter);
 begin
     proc(@self,PCounted,Counter);

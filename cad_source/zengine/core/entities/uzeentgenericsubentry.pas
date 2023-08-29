@@ -481,17 +481,17 @@ begin
 end;
 destructor GDBObjGenericSubEntry.done;
 begin
-     ObjArray.Done;
-     ObjCasheArray.Done;
-     //self.ObjArray.ObjTree.done;
-     inherited done;
+  ObjArray.Done;
+  ObjCasheArray.Done;
+  ObjToConnectedArray.Done;
+  inherited done;
 end;
 constructor GDBObjGenericSubEntry.initnul;
 begin
-     inherited initnul(owner);
-     ObjArray.init(10);
-     ObjCasheArray.init(10);
-     //self.ObjArray.ObjTree.initnul;
+  inherited initnul(owner);
+  ObjArray.init(10);
+  ObjCasheArray.init(10);
+  ObjToConnectedArray.init(100);
 end;
 procedure GDBObjGenericSubEntry.DrawGeometry;
 var

@@ -137,35 +137,22 @@ begin
 end;
 destructor GDBObjRoot.done;
 begin
-     ObjArray.Done;
-     self.ObjCasheArray.Done;
-     self.
-     ObjToConnectedArray.Done;
-     inherited done;
+  inherited done;
 end;
 constructor GDBObjRoot.initnul;
-{var
-    prootonit:ptunit;}
 begin
-     inherited initnul(nil);
-     bp.ListPos.owner:=nil;
-     //vp.ID:=GDBRootId;
-     //bp.PSelfInOwnerArray:=nil;
-     bp.ListPos.SelfIndex:=-1;
-     ObjToConnectedArray.init(100);
-     {prootonit:=units.findunit('objroot');
-     if prootonit<>nil then
-                           PTObjectUnit(ou.Instance)^.copyfrom(units.findunit('objroot'));}
-     //uunitmanager.units.loadunit(expandpath('*blocks\objroot.pas'),@ou);
+  inherited initnul(nil);
+  bp.ListPos.owner:=nil;
+  bp.ListPos.SelfIndex:=-1;
 end;
 function GDBObjRoot.GetObjType;
 begin
      result:=GDBRootId;
 end;
 procedure GDBObjRoot.formatafteredit;
-var pobj:PGDBObjConnected;
-    p:pGDBObjEntity;
-    ir:itrec;
+var
+  p:pGDBObjEntity;
+  ir:itrec;
 begin
 
      //inherited formatafteredit;
@@ -186,13 +173,16 @@ begin
        calcbb(dc);
 
 
-     pobj:=self.ObjToConnectedArray.beginiterate(ir);
-     if pobj<>nil then
-     repeat
-           pobj^.connectedtogdb(@self,drawing);
+     p:=self.ObjToConnectedArray.beginiterate(ir);
+     if p<>nil then
+       repeat
+         if IsIt(TypeOf(p^),typeof(GDBObjConnected)) then
+           PGDBObjConnected(p)^.connectedtogdb(@self,drawing);
 
-           pobj:=self.ObjToConnectedArray.iterate(ir);
-     until pobj=nil;
+         p^.EntExtensions.RunOnConnect(p,drawing,DC);
+
+         p:=self.ObjToConnectedArray.iterate(ir);
+       until p=nil;
      self.ObjToConnectedArray.clear;
 
 

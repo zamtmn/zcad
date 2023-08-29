@@ -42,6 +42,8 @@ const
       ScaleOne:GDBVertex=(x:1;y:1;z:1);
       OneVertex:GDBVertex=(x:1;y:1;z:1);
       xy_Z_Vertex:GDBVertex=(x:0;y:0;z:1);
+      _XY_zVertex:GDBVertex=(x:1;y:1;z:0);
+      _MinusXY_zVertex:GDBVertex=(x:-1;y:1;z:0);
       x_Y_zVertex:GDBVertex=(x:0;y:1;z:0);
       _X_yzVertex:GDBVertex=(x:1;y:0;z:0);
       MinusOneVertex:GDBVertex=(x:-1;y:-1;z:-1);

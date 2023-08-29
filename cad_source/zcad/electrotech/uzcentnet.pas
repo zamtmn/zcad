@@ -557,7 +557,7 @@ begin
           //self.correctobjects(pointer(bp.Owner),bp.PSelfInOwnerArray);
           //format;
           TempNet^.Formatentity(drawing,dc);
-          TempNet^.addtoconnect(tempnet,PGDBObjGenericSubEntry(drawing.GetCurrentRootSimple)^.ObjToConnectedArray{gdb.GetCurrentROOT.ObjToConnectedArray});
+          TempNet^.addtoconnect2(tempnet,PGDBObjGenericSubEntry(drawing.GetCurrentRootSimple)^.ObjToConnectedArray{gdb.GetCurrentROOT.ObjToConnectedArray});
           ti.Clear;
           ti.done;
      end;
@@ -568,7 +568,7 @@ begin
      inherited ImEdited(pobj,pobjinarray,drawing);
      YouChanged(drawing);
      //PGDBObjGenericSubEntry(bp.owner)^.ImEdited(@self,bp.PSelfInOwnerArray);
-     addtoconnect(@self,PGDBObjGenericSubEntry(drawing.GetCurrentRootSimple)^.ObjToConnectedArray);
+     addtoconnect2(@self,PGDBObjGenericSubEntry(drawing.GetCurrentRootSimple)^.ObjToConnectedArray);
 end;
 constructor GDBObjNet.initnul;
 begin

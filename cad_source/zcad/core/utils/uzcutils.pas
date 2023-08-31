@@ -163,6 +163,7 @@ begin
   if pobj<>nil then
   repeat
     zcAddEntToDrawingWithUndo(pobj,pcd^);
+    pobj^.State:=pobj^.State-[ESConstructProxy];
   pobj:=pcd^.GetConstructObjRoot.ObjArray.iterate(ir);
   until pobj=nil;
   pcd^.UndoStack.PushEndMarker;

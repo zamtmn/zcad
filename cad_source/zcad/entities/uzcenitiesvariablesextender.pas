@@ -51,6 +51,7 @@ TVariablesExtender=class(TBaseVariablesExtender)
     procedure CopyExt2Ent(pSourceEntity,pDestEntity:pointer);override;
     procedure ReorganizeEnts(OldEnts2NewEntsMap:TMapPointerToPointer);override;
     procedure PostLoad(var context:TIODXFLoadContext);override;
+    procedure onRemoveFromArray(pEntity:Pointer;const drawing:TDrawingDef);override;
 
     function isMainFunction:boolean;
 
@@ -440,6 +441,9 @@ begin
      end;
 end;
 
+procedure TVariablesExtender.onRemoveFromArray(pEntity:Pointer;const drawing:TDrawingDef);
+begin
+end;
 
 initialization
   EntityExtenders.RegisterKey(uppercase(VariablesExtenderName),TVariablesExtender);

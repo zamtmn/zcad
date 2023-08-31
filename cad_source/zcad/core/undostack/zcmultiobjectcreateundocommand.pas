@@ -20,7 +20,7 @@ unit zcmultiobjectcreateundocommand;
 {$INCLUDE zengineconfig.inc}
 interface
 uses UGDBOpenArrayOfPV,zeundostack,zebaseundocommands,uzbtypes,
-     gzctnrVectorTypes,uzeentity,uzcdrawings;
+     gzctnrVectorTypes,uzeentity,uzcdrawings,uzedrawingdef;
 
 type
 generic TGMultiObjectProcessCommand<_LT> =class(TUCmdBase)
@@ -80,8 +80,8 @@ begin
 end;
 procedure TGMultiObjectProcessCommand.Comit;
 type
-    TCangeMethod=procedure(const data:GDBASEOBJECT)of object;
-    //PTMethod=^TMethod;
+ //TCangeMethod=procedure(const data:GDBASEOBJECT)of object;
+ TCangeMethod=procedure(const obj:GDBASEOBJECT;const drawing:TDrawingDef)of object;
 var
   p:PGDBASEOBJECT;
   ir:itrec;
@@ -89,7 +89,7 @@ begin
   p:=ObjArray.beginiterate(ir);
   if p<>nil then
   repeat
-        TCangeMethod(DoData)(p^);
+        TCangeMethod(DoData)(p^,drawings.GetCurrentDWG^);
         if FreeArray then
                              PGDBObjEntity(p)^.YouChanged(drawings.GetCurrentDWG^);
        p:=ObjArray.iterate(ir);

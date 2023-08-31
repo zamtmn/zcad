@@ -68,6 +68,7 @@ begin
         if pobj^.selected then begin
           tv := pobj^.Clone(@drawings.GetCurrentDWG^.ConstructObjRoot);
           if tv<>nil then begin
+            tv^.State:=tv^.State+[ESConstructProxy];
             drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.AddPEntity(tv^);
             tv^.formatentity(drawings.GetCurrentDWG^,RC);
           end;

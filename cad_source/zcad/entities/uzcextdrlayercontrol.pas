@@ -60,6 +60,8 @@ type
       class function EntIOLoadExpression(_Name,_Value:String;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
 
       procedure onEntitySupportOldVersions(pEntity:pointer;const drawing:TDrawingDef);override;
+
+      procedure onRemoveFromArray(pEntity:Pointer;const drawing:TDrawingDef);override;
       published
         property Expr:String read GetExpression write SetExpression;
     end;
@@ -326,6 +328,10 @@ begin
 end;
 
 procedure TLayerControlExtender.onEntitySupportOldVersions(pEntity:pointer;const drawing:TDrawingDef);
+begin
+end;
+
+procedure TLayerControlExtender.onRemoveFromArray(pEntity:Pointer;const drawing:TDrawingDef);
 begin
 end;
 

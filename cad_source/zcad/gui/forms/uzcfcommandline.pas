@@ -267,7 +267,7 @@ begin
     cmdedit:=TComboBox.create(panel);
     cmdedit.Name:='MainCommandLine';
     cmdedit.Caption:='';
-    cmdedit.Style:=csOwnerDrawEditableVariable;
+    cmdedit.Style:=csDropDown;
     clist.init(200);
     p:=commandmanager.beginiterate(ir);
     if p<>nil then

@@ -1650,6 +1650,8 @@ begin
   CalcOptimalMatrix;
   mouseunproject(param.md.glmouse.x,param.md.glmouse.y);
   Set3dmouse;
+  if PDWG^.SnapGrid then
+    param.ospoint.worldcoord:=correcttogrid(param.md.mouse3dcoord,PDWG^.Snap);
   WaMouseDown(nil,mbLeft,[ssLeft],param.md.mouse.x,param.md.mouse.y);
 end;
 destructor TGeneralViewArea.Destroy;

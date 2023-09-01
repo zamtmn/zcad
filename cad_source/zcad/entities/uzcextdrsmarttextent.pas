@@ -100,6 +100,7 @@ type
       procedure SaveToDXFfollow(PEnt:Pointer;var outhandle:TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext)override;
       procedure PostLoad(var context:TIODXFLoadContext);override;
       procedure onEntitySupportOldVersions(pEntity:pointer;const drawing:TDrawingDef);override;
+      procedure onRemoveFromArray(pEntity:Pointer;const drawing:TDrawingDef);override;
 
       procedure DrawGeom(var IODXFContext:TIODXFContext;var outhandle:TZctnrVectorBytes;pEntity:Pointer;const drawing:TDrawingDef;var DC:TDrawContext;tdd:TDummyDtawer);
 
@@ -615,6 +616,10 @@ end;
 
 
 procedure TSmartTextEntExtender.onEntitySupportOldVersions(pEntity:pointer;const drawing:TDrawingDef);
+begin
+end;
+
+procedure TSmartTextEntExtender.onRemoveFromArray(pEntity:Pointer;const drawing:TDrawingDef);
 begin
 end;
 

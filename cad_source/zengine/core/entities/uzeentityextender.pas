@@ -28,7 +28,7 @@ type
 TBaseEntityExtender=class(TBaseExtender)
                   //class function CreateThisExtender(pEntity:Pointer; out ObjSize:Integer):PTBaseEntityExtender;
                   constructor Create(pEntity:Pointer);virtual;abstract;
-                  procedure onEntityDestruct(pEntity:Pointer);virtual;abstract;
+                  procedure onRemoveFromArray(pEntity:Pointer;const drawing:TDrawingDef);virtual;abstract;
                   procedure onBeforeEntityFormat(pEntity:Pointer;const drawing:TDrawingDef;var DC:TDrawContext);virtual;abstract;
                   procedure onAfterEntityFormat(pEntity:Pointer;const drawing:TDrawingDef;var DC:TDrawContext);virtual;abstract;
                   procedure onEntityClone(pSourceEntity,pDestEntity:Pointer);virtual;abstract;
@@ -40,6 +40,7 @@ TBaseEntityExtender=class(TBaseExtender)
                   procedure PostLoad(var context:TIODXFLoadContext);virtual;abstract;
                   procedure SaveToDxfObjXData(var outhandle:TZctnrVectorBytes;PEnt:Pointer;var IODXFContext:TIODXFContext);virtual;abstract;
                   procedure SaveToDXFfollow(PEnt:Pointer;var outhandle:TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext)virtual;
+                  procedure onEntityConnect(pEntity:Pointer;const drawing:TDrawingDef;var DC:TDrawContext);virtual;
 end;
 TMetaEntityExtender=class of TBaseEntityExtender;
 TEntityExtenderVector= TMyVector<TBaseEntityExtender>;
@@ -62,6 +63,7 @@ TEntityExtensions=class
 
 
                        procedure RunOnCloneProcedures(source,dest:pointer);
+                       procedure RunRemoveFromArray(pEntity:Pointer;const drawing:TDrawingDef);
                        procedure RunOnBeforeEntityFormat(pEntity:Pointer;const drawing:TDrawingDef;var DC:TDrawContext);
                        procedure RunOnAfterEntityFormat(pEntity:Pointer;const drawing:TDrawingDef;var DC:TDrawContext);
                        procedure RunOnBuildVarGeometryProcedures(pEntity:pointer;const drawing:TDrawingDef);
@@ -70,12 +72,17 @@ TEntityExtensions=class
                        procedure RunPostload(var context:TIODXFLoadContext);
                        procedure RunSaveToDxf(var outhandle:TZctnrVectorBytes;PEnt:Pointer;var IODXFContext:TIODXFContext);
                        procedure RunSaveToDXFfollow(PEnt:Pointer;var outhandle:TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);
+                       procedure RunOnConnect(pEntity:Pointer;const drawing:TDrawingDef;var DC:TDrawContext);
                   end;
   TEntityExtendersMap=GKey2DataMap<string,TMetaEntityExtender>;
 var
   EntityExtenders:TEntityExtendersMap;
 implementation
 procedure TBaseEntityExtender.SaveToDXFfollow(PEnt:Pointer;var outhandle:TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);
+begin
+end;
+
+procedure TBaseEntityExtender.onEntityConnect(pEntity:Pointer;const drawing:TDrawingDef;var DC:TDrawContext);
 begin
 end;
 
@@ -185,6 +192,17 @@ begin
        if fEntityExtensions[i]<>nil then
          fEntityExtensions[i].onEntityClone(source,dest);
 end;
+
+procedure TEntityExtensions.RunRemoveFromArray(pEntity:Pointer;const drawing:TDrawingDef);
+var
+  i:integer;
+begin
+     if assigned(fEntityExtensions)then
+     for i:=0 to fEntityExtensions.Size-1 do
+       if fEntityExtensions[i]<>nil then
+         fEntityExtensions[i].onRemoveFromArray(pEntity,drawing);
+end;
+
 procedure TEntityExtensions.RunOnBuildVarGeometryProcedures(pEntity:pointer;const drawing:TDrawingDef);
 var
   i:integer;
@@ -269,6 +287,15 @@ begin
      for i:=0 to fEntityExtensions.Size-1 do
        if fEntityExtensions[i]<>nil then
          fEntityExtensions[i].SaveToDXFfollow(PEnt,outhandle,drawing,IODXFContext);
+end;
+procedure TEntityExtensions.RunOnConnect(pEntity:Pointer;const drawing:TDrawingDef;var DC:TDrawContext);
+var
+  i:integer;
+begin
+     if assigned(fEntityExtensions)then
+     for i:=0 to fEntityExtensions.Size-1 do
+       if fEntityExtensions[i]<>nil then
+         fEntityExtensions[i].onEntityConnect(pEntity,drawing,DC);
 end;
 
 initialization

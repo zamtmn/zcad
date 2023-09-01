@@ -25,15 +25,10 @@ type
 PGDBObjConnected=^GDBObjConnected;
 {REGISTEROBJECTTYPE GDBObjConnected}
 GDBObjConnected= object(GDBObjGenericSubEntry)
-                      procedure addtoconnect(pobj:pgdbobjEntity;var ConnectedArray:GDBObjOpenArrayOfPV);virtual;
                       procedure connectedtogdb(ConnectedArea:PGDBObjGenericSubEntry;var drawing:TDrawingDef);virtual;abstract;
                 end;
 {Export-}
 implementation
 //uses {UGDBDescriptor,}log;
-procedure GDBObjConnected.addtoconnect(pobj:pgdbobjEntity;var ConnectedArray:GDBObjOpenArrayOfPV);
-begin
-     ConnectedArray.PushBackIfNotPresent(pobj);
-end;
 begin
 end.

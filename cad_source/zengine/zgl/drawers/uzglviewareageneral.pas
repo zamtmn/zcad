@@ -1643,7 +1643,16 @@ begin
 end;
 procedure TGeneralViewArea.asyncsendmouse(Data: PtrInt);
 begin
-  WaMouseDown(nil,mbLeft,[ssLeft],Data and $ffff,(Data and $ffff0000) shr 16);
+  param.md.mouse.y := (Data and $ffff0000) shr 16;
+  param.md.mouse.x := Data and $ffff;
+  param.md.glmouse.y := getviewcontrol.clientheight-param.md.mouse.y;
+  param.md.glmouse.x := param.md.mouse.x;
+  CalcOptimalMatrix;
+  mouseunproject(param.md.glmouse.x,param.md.glmouse.y);
+  Set3dmouse;
+  if PDWG^.SnapGrid then
+    param.ospoint.worldcoord:=correcttogrid(param.md.mouse3dcoord,PDWG^.Snap);
+  WaMouseDown(nil,mbLeft,[ssLeft],param.md.mouse.x,param.md.mouse.y);
 end;
 destructor TGeneralViewArea.Destroy;
 begin
@@ -1777,7 +1786,7 @@ begin
                     end;
     exit;
   end;
-  if ssRight in shift then
+  if [ssRight] = shift then
                            begin
                                 if assigned(ShowCXMenu)then
                                                            ShowCXMenu;

@@ -61,8 +61,8 @@ GDBObjGenericSubEntry= object(GDBObjWithMatrix)
                             function EubEntryType:Integer;virtual;
                             procedure MigrateTo(new_sub:PGDBObjGenericSubEntry);virtual;
                             procedure EraseMi(pobj:pGDBObjEntity;pobjinarray:Integer;var drawing:TDrawingDef);virtual;
-                            procedure RemoveMiFromArray(pobj:pGDBObjEntity;pobjinarray:Integer);virtual;
-                            procedure GoodRemoveMiFromArray(const obj:GDBObjEntity);virtual;
+                            procedure RemoveMiFromArray(pobj:pGDBObjEntity;pobjinarray:Integer;const drawing:TDrawingDef);virtual;
+                            procedure GoodRemoveMiFromArray(const obj:GDBObjEntity;const drawing:TDrawingDef);virtual;
                             //function SubMi(pobj:pGDBObjEntity):Integer;virtual;
                             //** Добавляет объект в область ConstructObjRoot или mainObjRoot или итд. Пример добавления gdb.GetCurrentDWG^.ConstructObjRoot.AddMi(@sampleObj);
                             procedure AddMi(pobj:PGDBObjSubordinated);virtual;
@@ -399,22 +399,23 @@ begin
            pobj:=self.ObjArray.iterate(ir);
      until pobj=nil;
 end;
-procedure GDBObjGenericSubEntry.GoodRemoveMiFromArray(const obj:GDBObjEntity);
+procedure GDBObjGenericSubEntry.GoodRemoveMiFromArray(const obj:GDBObjEntity;const drawing:TDrawingDef);
 begin
-     RemoveMiFromArray(@obj,obj.bp.ListPos.SelfIndex);
+     RemoveMiFromArray(@obj,obj.bp.ListPos.SelfIndex,drawing);
 end;
-procedure GDBObjGenericSubEntry.RemoveMiFromArray(pobj:pGDBObjEntity;pobjinarray:Integer);
+procedure GDBObjGenericSubEntry.RemoveMiFromArray(pobj:pGDBObjEntity;pobjinarray:Integer;const drawing:TDrawingDef);
 //var
 //p:PGDBObjEntity;
 begin
-     if pobj^.bp.TreePos.Owner<>nil then
-     begin
-          PTEntTreeNode(pobj^.bp.TreePos.Owner)^.nulDeleteElement(pobj^.bp.TreePos.SelfIndex);
-     end;
-     pobj^.bp.TreePos.Owner:=nil;
+  if assigned(pobj^.EntExtensions)then
+    pobj^.EntExtensions.RunRemoveFromArray(pobj,drawing);
 
-     //pointer(p):=ObjArray.getDataMutable(pobjinarray);
-     ObjArray.DeleteElement(pobjinarray);
+  if pobj^.bp.TreePos.Owner<>nil then begin
+    PTEntTreeNode(pobj^.bp.TreePos.Owner)^.nulDeleteElement(pobj^.bp.TreePos.SelfIndex);
+  end;
+  pobj^.bp.TreePos.Owner:=nil;
+  //pointer(p):=ObjArray.getDataMutable(pobjinarray);
+  ObjArray.DeleteElement(pobjinarray);
 end;
 procedure GDBObjGenericSubEntry.EraseMi;
 //var
@@ -430,7 +431,7 @@ begin
 
      //p^.done;
      //memman.Freemem(Pointer(p))}
-     RemoveMiFromArray(pobj,pobjinarray);
+     RemoveMiFromArray(pobj,pobjinarray,drawing);
      pobj^.done;
      Freemem(Pointer(pobj));
 end;
@@ -481,17 +482,17 @@ begin
 end;
 destructor GDBObjGenericSubEntry.done;
 begin
-     ObjArray.Done;
-     ObjCasheArray.Done;
-     //self.ObjArray.ObjTree.done;
-     inherited done;
+  ObjArray.Done;
+  ObjCasheArray.Done;
+  ObjToConnectedArray.Done;
+  inherited done;
 end;
 constructor GDBObjGenericSubEntry.initnul;
 begin
-     inherited initnul(owner);
-     ObjArray.init(10);
-     ObjCasheArray.init(10);
-     //self.ObjArray.ObjTree.initnul;
+  inherited initnul(owner);
+  ObjArray.init(10);
+  ObjCasheArray.init(10);
+  ObjToConnectedArray.init(100);
 end;
 procedure GDBObjGenericSubEntry.DrawGeometry;
 var

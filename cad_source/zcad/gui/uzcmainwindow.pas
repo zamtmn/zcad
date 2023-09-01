@@ -288,7 +288,7 @@ procedure TZCADMainWindow.StartEntityDrag(StartX,StartY,X,Y:Integer);
 begin
   if commandmanager.pcommandrunning=nil then begin
     //drawings.GetCurrentDWG^.wa.WaMouseMove(nil,[ssRight],StartX,StartY);
-    Application.QueueAsyncCall(drawings.GetCurrentDWG^.wa.asyncsendmouse,(X and $ffff)or((Y and $ffff) shl 16));
+    Application.QueueAsyncCall(drawings.GetCurrentDWG^.wa.asyncsendmouse,(StartX and $ffff)or((StartY and $ffff) shl 16));
     commandmanager.executecommandsilent('MoveEntsByMouse',drawings.GetCurrentDWG,drawings.GetCurrentOGLWParam);
   end;
 end;
@@ -1521,12 +1521,12 @@ begin
   begin
     sender.getonmouseobjectbytree(sender.PDWG.GetCurrentROOT.ObjArray.ObjTree,sysvarDWGEditInSubEntry);
     //getonmouseobject(@drawings.GetCurrentROOT.ObjArray);
-    if (zc and MZW_CONTROL)<>0 then
+    if ((zc and MZW_CONTROL)<>0)and((zc and MZW_RBUTTON)<>0) then
     begin
          commandmanager.ExecuteCommandSilent('SelectOnMouseObjects',sender.pdwg,@sender.param);
          result:=true;
     end
-    else
+    else if (zc and MZW_LBUTTON)<>0 then
     begin
     {//Выделение всех объектов под мышью
     if drawings.GetCurrentDWG.OnMouseObj.Count >0 then
@@ -1618,12 +1618,16 @@ begin
 
   FreeClick:=true;
 
-  if (MZW_LBUTTON and zc)<>0{(ssLeft in shift)} then begin
+  if (MZW_LBUTTON and zc)<>0 then begin
     if (sender.param.md.mode and MGetControlpoint) <> 0 then
       FreeClick:=not ProcessControlpoint;
+  end;
+
+  if ((MZW_LBUTTON or MZW_RBUTTON) and zc)<>0 then begin
     if FreeClick and((sender.param.md.mode and MGetSelectObject) <> 0) then
       FreeClick:=not ProcessEntSelect;
   end;
+
 
   if FreeClick and((sender.param.md.mode and (MGet3DPoint or MGet3DPointWoOP)) <> 0) then
     commandmanager.sendmousecoordwop(sender,zc)

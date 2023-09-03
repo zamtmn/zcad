@@ -241,8 +241,13 @@ begin
   calcbb(dc);
 
   Representation.Clear;
-  if (not (ESTemp in State))and(DCODrawable in DC.Options) then
-    Representation.DrawLineWithLT(dc,CoordInWCS.lBegin,CoordInWCS.lEnd,vp);
+  if (not (ESTemp in State))and(DCODrawable in DC.Options) then begin
+    if assigned(EntExtensions)then begin
+      if EntExtensions.NeedStandardDraw(@self,drawing,DC) then
+        Representation.DrawLineWithLT(dc,CoordInWCS.lBegin,CoordInWCS.lEnd,vp);
+    end else
+      Representation.DrawLineWithLT(dc,CoordInWCS.lBegin,CoordInWCS.lEnd,vp);
+  end;
   if assigned(EntExtensions)then
     EntExtensions.RunOnAfterEntityFormat(@self,drawing,DC);
 end;

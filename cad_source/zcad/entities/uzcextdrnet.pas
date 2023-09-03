@@ -66,6 +66,7 @@ TNetExtender=class(TBaseEntityExtender)
 
     procedure TryConnectToEnts(var Objects:GDBObjOpenArrayOfPV;Position:TLineEnd;const drawing:TDrawingDef;var DC:TDrawContext);
     procedure TryConnectToEnts2(const p1,p2:GDBVertex;var Objects:GDBObjOpenArrayOfPV;const drawing:TDrawingDef;var DC:TDrawContext);
+    function NeedStandardDraw(pEntity:Pointer;const drawing:TDrawingDef;var DC:TDrawContext):Boolean;override;
 
     protected
       procedure AddToDWGPostProcs(pEntity:Pointer;const drawing:TDrawingDef);
@@ -322,6 +323,13 @@ begin
   until p=nil;
 end;
 
+function TNetExtender.NeedStandardDraw(pEntity:Pointer;const drawing:TDrawingDef;var DC:TDrawContext):Boolean;
+begin
+  if Intersects.Count>0 then begin
+    result:=false;
+  end else
+    result:=true;
+end;
 
 initialization
   //extdrAdd(extdrNet)

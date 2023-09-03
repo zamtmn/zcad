@@ -41,6 +41,7 @@ TBaseEntityExtender=class(TBaseExtender)
                   procedure SaveToDxfObjXData(var outhandle:TZctnrVectorBytes;PEnt:Pointer;var IODXFContext:TIODXFContext);virtual;abstract;
                   procedure SaveToDXFfollow(PEnt:Pointer;var outhandle:TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext)virtual;
                   procedure onEntityConnect(pEntity:Pointer;const drawing:TDrawingDef;var DC:TDrawContext);virtual;
+                  function NeedStandardDraw(pEntity:Pointer;const drawing:TDrawingDef;var DC:TDrawContext):Boolean;virtual;
 end;
 TMetaEntityExtender=class of TBaseEntityExtender;
 TEntityExtenderVector= TMyVector<TBaseEntityExtender>;
@@ -65,6 +66,7 @@ TEntityExtensions=class
                        procedure RunOnCloneProcedures(source,dest:pointer);
                        procedure RunRemoveFromArray(pEntity:Pointer;const drawing:TDrawingDef);
                        procedure RunOnBeforeEntityFormat(pEntity:Pointer;const drawing:TDrawingDef;var DC:TDrawContext);
+                       function NeedStandardDraw(pEntity:Pointer;const drawing:TDrawingDef;var DC:TDrawContext):Boolean;
                        procedure RunOnAfterEntityFormat(pEntity:Pointer;const drawing:TDrawingDef;var DC:TDrawContext);
                        procedure RunOnBuildVarGeometryProcedures(pEntity:pointer;const drawing:TDrawingDef);
                        procedure RunSupportOldVersions(pEntity:pointer;const drawing:TDrawingDef);
@@ -78,6 +80,11 @@ TEntityExtensions=class
 var
   EntityExtenders:TEntityExtendersMap;
 implementation
+function TBaseEntityExtender.NeedStandardDraw(pEntity:Pointer;const drawing:TDrawingDef;var DC:TDrawContext):Boolean;
+begin
+  result:=true;
+end;
+
 procedure TBaseEntityExtender.SaveToDXFfollow(PEnt:Pointer;var outhandle:TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);
 begin
 end;
@@ -220,6 +227,16 @@ begin
      for i:=0 to fEntityExtensions.Size-1 do
        if fEntityExtensions[i]<>nil then
          fEntityExtensions[i].OnBeforeEntityFormat(pEntity,drawing,DC);
+end;
+function TEntityExtensions.NeedStandardDraw(pEntity:Pointer;const drawing:TDrawingDef;var DC:TDrawContext):Boolean;
+var
+  i:integer;
+begin
+  result:=true;
+  if assigned(fEntityExtensions)then
+    for i:=0 to fEntityExtensions.Size-1 do
+      if fEntityExtensions[i]<>nil then
+        result:=result and fEntityExtensions[i].NeedStandardDraw(pEntity,drawing,DC);
 end;
 procedure TEntityExtensions.RunOnAfterEntityFormat(pEntity:Pointer;const drawing:TDrawingDef;var DC:TDrawContext);
 var

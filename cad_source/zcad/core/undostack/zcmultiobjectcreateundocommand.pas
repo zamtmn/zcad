@@ -62,7 +62,7 @@ begin
 end;
 procedure TGMultiObjectProcessCommand.UnDo;
 type
-    TCangeMethod=procedure(const data:GDBASEOBJECT)of object;
+    TCangeMethod=procedure(const obj:GDBASEOBJECT;const drawing:TDrawingDef)of object;
     //PTMethod=^TMethod;
 var
   p:PGDBASEOBJECT;
@@ -71,7 +71,7 @@ begin
   p:=ObjArray.beginiterate(ir);
   if p<>nil then
   repeat
-        TCangeMethod(UnDoData)(p^);
+        TCangeMethod(UnDoData)(p^,drawings.GetCurrentDWG^);
         if FreeArray then
                              PGDBObjEntity(p)^.YouChanged(drawings.GetCurrentDWG^);
        p:=ObjArray.iterate(ir);

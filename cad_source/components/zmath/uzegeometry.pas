@@ -2043,7 +2043,36 @@ begin
    d2121:= p21.x * p21.x + p21.y * p21.y + p21.z * p21.z;
 
    denom:= d2121 * d4343 - d4321 * d4321;
-   if (ABS(denom) < {EPS}sqreps)  then exit;
+   if (ABS(denom) < {EPS}sqreps)  then begin
+     //бывают случаи соприкосновения линий концами, их надо обработать
+     if IsPointEqual(l1begin,l2begin)then begin
+       result.isintercept:=true;
+       result.t1:=0;
+       result.t2:=0;
+       result.interceptcoord:=l1begin;
+       exit;
+     end else if IsPointEqual(l1begin,l2end)then begin
+       result.isintercept:=true;
+       result.t1:=0;
+       result.t2:=1;
+       result.interceptcoord:=l1begin;
+       exit;
+     end else if IsPointEqual(l1end,l2begin)then begin
+       result.isintercept:=true;
+       result.t1:=1;
+       result.t2:=0;
+       result.interceptcoord:=l1end;
+       exit;
+     end else if IsPointEqual(l1end,l2end)then begin
+       result.isintercept:=true;
+       result.t1:=1;
+       result.t2:=1;
+       result.interceptcoord:=l1end;
+       exit;
+     end;
+     exit;
+   end;
+
    numer:= d1343 * d4321 - d1321 * d4343;
 
    result.t1:=numer/denom;

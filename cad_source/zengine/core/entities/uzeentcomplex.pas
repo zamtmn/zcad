@@ -46,7 +46,7 @@ GDBObjComplex= object(GDBObjWithLocalCS)
                     procedure addcontrolpoints(tdesc:Pointer);virtual;
                     procedure remaponecontrolpoint(pdesc:pcontrolpointdesc);virtual;
                     procedure rtmodifyonepoint(const rtmod:TRTModifyData);virtual;
-                    procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);virtual;
+                    procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext;Stage:TEFStages=EFAllStages);virtual;
                     //procedure feedbackinrect;virtual;
                     //function InRect:TInRect;virtual;
                     //procedure Draw(lw:Integer);virtual;
@@ -281,7 +281,7 @@ begin
   //pdy:=PProjPoint[1].y-PProjPoint[0].y;
      ConstObjArray.RenderFeedbac(infrustumactualy,pcount,camera,ProjectProc,dc);
 end;
-procedure GDBObjComplex.FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);
+procedure GDBObjComplex.FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext;Stage:TEFStages=EFAllStages);
 {var pblockdef:PGDBObjBlockdef;
     pvisible,pvisible2:PGDBObjEntity;
     i:Integer;

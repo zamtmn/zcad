@@ -38,7 +38,7 @@ GDBObjNet= object(GDBObjConnected)
                  function CalcNewName(Net1,Net2:PGDBObjNet):Integer;
                  procedure connectedtogdb(ConnectedArea:PGDBObjGenericSubEntry;var drawing:TDrawingDef);virtual;
                  function GetObjTypeName:String;virtual;
-                 procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);virtual;
+                 procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext;Stage:TEFStages=EFAllStages);virtual;
                  procedure DelSelectedSubitem(var drawing:TDrawingDef);virtual;
                  function Clone(own:Pointer):PGDBObjEntity;virtual;
                  procedure TransformAt(p:PGDBObjEntity;t_matrix:PDMatrix4D);virtual;
@@ -159,7 +159,7 @@ begin
           until pl=nil;
      end;
 end;
-procedure GDBObjNet.FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);
+procedure GDBObjNet.FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext;Stage:TEFStages=EFAllStages);
 begin
      //CreateDeviceNameProcess(@self,drawing);
      if assigned(EntExtensions)then

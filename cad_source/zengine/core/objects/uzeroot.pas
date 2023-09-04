@@ -32,7 +32,7 @@ GDBObjRoot= object(GDBObjGenericSubEntry)
                  constructor initnul;
                  destructor done;virtual;
                  //function ImEdited(pobj:PGDBObjSubordinated;pobjinarray:Integer):Integer;virtual;
-                 procedure FormatAfterEdit(var drawing:TDrawingDef;var DC:TDrawContext);virtual;
+                 procedure FormatAfterEdit(var drawing:TDrawingDef;var DC:TDrawContext;Stage:TEFStages=EFAllStages);virtual;
                  procedure AfterDeSerialize(SaveFlag:Word; membuf:Pointer);virtual;
                  function getowner:PGDBObjSubordinated;virtual;
                  function GetMainOwner:PGDBObjSubordinated;virtual;
@@ -154,9 +154,33 @@ var
   p:pGDBObjEntity;
   ir:itrec;
 begin
+  //ObjCasheArray.Formatafteredit(drawing,dc);
+  p:=ObjCasheArray.beginiterate(ir);
+  if p<>nil then
+    repeat
+      p^.Formatafteredit(drawing,dc,[EFCalcEntityCS]);
+      p:=ObjCasheArray.iterate(ir);
+    until p=nil;
 
-     //inherited formatafteredit;
-       ObjCasheArray.Formatafteredit(drawing,dc);
+  p:=self.ObjToConnectedArray.beginiterate(ir);
+  if p<>nil then
+    repeat
+      if IsIt(TypeOf(p^),typeof(GDBObjConnected)) then
+        PGDBObjConnected(p)^.connectedtogdb(@self,drawing);
+
+      p^.EntExtensions.RunOnConnect(p,drawing,DC);
+
+      p:=self.ObjToConnectedArray.iterate(ir);
+    until p=nil;
+  self.ObjToConnectedArray.clear;
+
+  p:=ObjCasheArray.beginiterate(ir);
+  if p<>nil then
+    repeat
+      if p^.IsStagedFormatEntity then
+        p^.Formatafteredit(drawing,dc,[EFDraw]);
+      p:=ObjCasheArray.iterate(ir);
+    until p=nil;
 
        p:=ObjCasheArray.beginiterate(ir);
        if p<>nil then
@@ -171,19 +195,6 @@ begin
 
        ObjCasheArray.clear;
        calcbb(dc);
-
-
-     p:=self.ObjToConnectedArray.beginiterate(ir);
-     if p<>nil then
-       repeat
-         if IsIt(TypeOf(p^),typeof(GDBObjConnected)) then
-           PGDBObjConnected(p)^.connectedtogdb(@self,drawing);
-
-         p^.EntExtensions.RunOnConnect(p,drawing,DC);
-
-         p:=self.ObjToConnectedArray.iterate(ir);
-       until p=nil;
-     self.ObjToConnectedArray.clear;
 
 
   {ObjCasheArray.Format;

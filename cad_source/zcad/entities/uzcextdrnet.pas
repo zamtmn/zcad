@@ -26,9 +26,12 @@ uses sysutils,UGDBObjBlockdefArray,uzedrawingdef,uzeentityextender,
      varmandef,Varman,UUnitManager,URecordDescriptor,UBaseTypeDescriptor,
      uzeentitiestree,usimplegenerics,uzeffdxfsupport,uzbpaths,uzcTranslations,
      gzctnrVectorTypes,uzeBaseExtender,uzeconsts,uzgldrawcontext,
-     uzegeometrytypes,uzcsysvars,uzctnrVectorDouble;
+     uzegeometrytypes,uzcsysvars,
+     uzctnrVectorDouble,gzctnrVector,garrayutils,math;
 const
   NetExtenderName='extdrNet';
+  IntersectSize=1;
+  ConnectSize=1;
 type
 TLineEnd=(LBegin,LEnd);
 TNet=class
@@ -36,11 +39,21 @@ TNet=class
     constructor Create;
     destructor Destroy;override;
 end;
-
+TConnectPoint=record
+  t:Double;
+  count:Integer;
+  constructor Create(AT:Double);
+end;
+TConnectPoints=GZVector<TConnectPoint>;
+TIntersectPointsLess=class
+  class function c(a,b:Double):boolean;
+end;
+TIntersectPointsUtil=TOrderingArrayUtils<TZctnrVectorDouble,Double,TIntersectPointsLess>;
 TNetExtender=class(TBaseEntityExtender)
     pThisEntity:PGDBObjEntity;
-    Connected:GDBObjOpenArrayOfPV;
+    ConnectedWith,IntersectedWith:GDBObjOpenArrayOfPV;
     Intersects:TZctnrVectorDouble;
+    Connections:TConnectPoints;
     class function getExtenderName:string;override;
     constructor Create(pEntity:Pointer);override;
     destructor Destroy;override;
@@ -76,6 +89,21 @@ TNetExtender=class(TBaseEntityExtender)
 function AddNetExtenderToEntity(PEnt:PGDBObjEntity):TNetExtender;
 
 implementation
+class function TIntersectPointsLess.c(a,b:Double):boolean;
+begin
+  result:=a<b;
+end;
+
+function IsConnectPointEqual(const a,b:TConnectPoint):Boolean;
+begin
+  result:=IsDoubleEqual(a.t,b.t,bigeps);
+end;
+
+constructor TConnectPoint.Create(AT:Double);
+begin
+  t:=AT;
+  count:=1;
+end;
 
 constructor TNet.Create;
 begin
@@ -98,13 +126,17 @@ end;
 constructor TNetExtender.Create;
 begin
   pThisEntity:=pEntity;
-  Connected.init(10);
+  ConnectedWith.init(10);
+  IntersectedWith.init(10);
   Intersects.init(2);
+  Connections.init(3);
 end;
 destructor TNetExtender.Destroy;
 begin
-  Connected.destroy;
+  ConnectedWith.destroy;
+  IntersectedWith.destroy;
   Intersects.destroy;
+  Connections.destroy;
 end;
 procedure TNetExtender.Assign(Source:TBaseExtender);
 begin
@@ -115,15 +147,25 @@ var
   p:PGDBObjLine;
   ir:itrec;
 begin
-  p:=Connected.beginiterate(ir);
+  p:=ConnectedWith.beginiterate(ir);
   if p<>nil then
   repeat
     if p<>nil then
       PGDBObjGenericSubEntry(drawing.GetCurrentRootSimple)^.ObjToConnectedArray.PushBackIfNotPresent(p);
       PGDBObjGenericSubEntry(drawing.GetCurrentRootSimple)^.ObjCasheArray.PushBackIfNotPresent(p);
-  p:=Connected.iterate(ir);
+  p:=ConnectedWith.iterate(ir);
   until p=nil;
-  Connected.Clear;
+  ConnectedWith.Clear;
+
+  p:=IntersectedWith.beginiterate(ir);
+  if p<>nil then
+  repeat
+    if p<>nil then
+      PGDBObjGenericSubEntry(drawing.GetCurrentRootSimple)^.ObjToConnectedArray.PushBackIfNotPresent(p);
+      PGDBObjGenericSubEntry(drawing.GetCurrentRootSimple)^.ObjCasheArray.PushBackIfNotPresent(p);
+  p:=IntersectedWith.iterate(ir);
+  until p=nil;
+  IntersectedWith.Clear;
 end;
 
 procedure TNetExtender.onRemoveFromArray(pEntity:Pointer;const drawing:TDrawingDef);
@@ -138,13 +180,24 @@ begin
 end;
 procedure TNetExtender.onBeforeEntityFormat(pEntity:Pointer;const drawing:TDrawingDef;var DC:TDrawContext);
 begin
+  if pThisEntity<>nil then begin
+    if not (ESConstructProxy in pThisEntity^.State) then
+      if IsIt(TypeOf(pThisEntity^),typeof(GDBObjLine)) then begin
+
+        AddToDWGPostProcs(pThisEntity,drawing);
+
+        pThisEntity^.addtoconnect2(pThisEntity,PGDBObjGenericSubEntry(drawing.GetCurrentRootSimple)^.ObjToConnectedArray);
+      end;
+  end;
 end;
 procedure TNetExtender.onEntityConnect(pEntity:Pointer;const drawing:TDrawingDef;var DC:TDrawContext);
 var
   Objects:GDBObjOpenArrayOfPV;
 begin
-  Connected.Clear;
+  ConnectedWith.Clear;
+  IntersectedWith.Clear;
   Intersects.Clear;
+  Connections.Clear;
   if pThisEntity<>nil then begin
     if not (ESConstructProxy in pThisEntity^.State) then
       if IsIt(TypeOf(pThisEntity^),typeof(GDBObjLine)) then begin
@@ -160,18 +213,11 @@ begin
         objects.done;
       end;
   end;
+  if Intersects.Count>1 then
+    TIntersectPointsUtil.Sort(Intersects,Intersects.Count);
 end;
 procedure TNetExtender.onAfterEntityFormat(pEntity:Pointer;const drawing:TDrawingDef;var DC:TDrawContext);
 begin
-  if pThisEntity<>nil then begin
-    if not (ESConstructProxy in pThisEntity^.State) then
-      if IsIt(TypeOf(pThisEntity^),typeof(GDBObjLine)) then begin
-
-        AddToDWGPostProcs(pThisEntity,drawing);
-
-        pThisEntity^.addtoconnect2(pThisEntity,PGDBObjGenericSubEntry(drawing.GetCurrentRootSimple)^.ObjToConnectedArray);
-      end;
-  end;
 end;
 
 procedure TNetExtender.CopyExt2Ent(pSourceEntity,pDestEntity:pointer);
@@ -212,33 +258,89 @@ var
   tp2,tp3:GDBVertex;
   m,rotmatr:DMatrix4D;
 begin
-
   onel:=l2-l1;
-  if SysVar.DWG.DWG_HelpGeometryDraw^ then
-    if onel.SqrLength>sqreps then begin
-      onel:=onel.NormalizeVertex;
-      tp2:=GetXfFromZ(onel);
-      tp3:=CrossVertex(tp2,onel);
-      tp3:=NormalizeVertex(tp3);
-      tp2:=NormalizeVertex(tp2);
-      rotmatr:=onematrix;
-      PGDBVertex(@rotmatr[0])^:=onel;
-      PGDBVertex(@rotmatr[1])^:=tp2;
-      PGDBVertex(@rotmatr[2])^:=tp3;
-      m:=onematrix;
-      PGDBVertex(@m[3])^:=l2;
-      m:=MatrixMultiply(rotmatr,m);
-      p1:=VectorTransform3D(uzegeometry.CreateVertex(-3*SysVar.DSGN.DSGN_HelpScale^,0.5*SysVar.DSGN.DSGN_HelpScale^,0),m);
-      p2:=VectorTransform3D(uzegeometry.CreateVertex(-3*SysVar.DSGN.DSGN_HelpScale^,-0.5*SysVar.DSGN.DSGN_HelpScale^,0),m);
-      pThisEntity^.Representation.DrawLineWithLT(DC,p1,l2,pThisEntity.vp);
-      pThisEntity^.Representation.DrawLineWithLT(DC,p2,l2,pThisEntity.vp);
-    end;
+  if onel.SqrLength>sqreps then begin
+    onel:=onel.NormalizeVertex;
+    tp2:=GetXfFromZ(onel);
+    tp3:=CrossVertex(tp2,onel);
+    tp3:=NormalizeVertex(tp3);
+    tp2:=NormalizeVertex(tp2);
+    rotmatr:=onematrix;
+    PGDBVertex(@rotmatr[0])^:=onel;
+    PGDBVertex(@rotmatr[1])^:=tp2;
+    PGDBVertex(@rotmatr[2])^:=tp3;
+    m:=onematrix;
+    PGDBVertex(@m[3])^:=l2;
+    m:=MatrixMultiply(rotmatr,m);
+    p1:=VectorTransform3D(uzegeometry.CreateVertex(-3*SysVar.DSGN.DSGN_HelpScale^,0.5*SysVar.DSGN.DSGN_HelpScale^,0),m);
+    p2:=VectorTransform3D(uzegeometry.CreateVertex(-3*SysVar.DSGN.DSGN_HelpScale^,-0.5*SysVar.DSGN.DSGN_HelpScale^,0),m);
+    pThisEntity^.Representation.DrawLineWithoutLT(DC,p1,l2);
+    pThisEntity^.Representation.DrawLineWithoutLT(DC,p2,l2);
+  end;
 end;
 procedure drawCross(p1:GDBVertex;pThisEntity:PGDBObjEntity;var DC:TDrawContext);
 begin
-  if SysVar.DWG.DWG_HelpGeometryDraw^ then begin
-    pThisEntity^.Representation.DrawLineWithLT(DC,p1-_XY_zVertex,p1+_XY_zVertex,pThisEntity.vp);
-    pThisEntity^.Representation.DrawLineWithLT(DC,p1-_MinusXY_zVertex,p1+_MinusXY_zVertex,pThisEntity.vp);
+  pThisEntity^.Representation.DrawLineWithoutLT(DC,p1-_XY_zVertex,p1+_XY_zVertex);
+  pThisEntity^.Representation.DrawLineWithoutLT(DC,p1-_MinusXY_zVertex,p1+_MinusXY_zVertex);
+end;
+procedure drawFilledCircle(p1:GDBVertex;r:Double;pThisEntity:PGDBObjEntity;var DC:TDrawContext);
+begin
+  pThisEntity^.Representation.DrawLineWithoutLT(DC,p1-_XY_zVertex*r,p1+_XY_zVertex*r);
+  pThisEntity^.Representation.DrawLineWithoutLT(DC,p1-_MinusXY_zVertex*r,p1+_MinusXY_zVertex*r);
+end;
+procedure drawIntersectArc(l1,l2:GDBVertex;pThisEntity:PGDBObjEntity;var DC:TDrawContext);
+var
+  v,onel,p1,p2:GDBVertex;
+  tp2,tp3:GDBVertex;
+  m,rotmatr:DMatrix4D;
+  l,x,y,z:double;
+  chg:boolean;
+begin
+  v:=l2-l1;
+  chg:=false;
+  if abs(v.x)<bigeps then begin
+    if v.y<0 then
+      chg:=true;
+  end else begin
+    if v.x<bigeps then
+      chg:=true;
+  end;
+  if chg then begin
+    v:=-v;
+    p1:=l2;
+    l2:=L1+v;
+    l1:=p1+v;
+  end;
+  l:=v.Length;
+  if l>bigeps then begin
+    onel:=v;
+    tp2:=GetXfFromZ(onel);
+    tp3:=CrossVertex(tp2,onel);
+    tp3:=NormalizeVertex(tp3)/2;
+    tp2:=NormalizeVertex(tp2)/2;
+    rotmatr:=onematrix;
+    PGDBVertex(@rotmatr[0])^:=onel;
+    PGDBVertex(@rotmatr[1])^:=tp2;
+    PGDBVertex(@rotmatr[2])^:=tp3;
+    m:=onematrix;
+    PGDBVertex(@m[3])^:=l1;
+    m:=MatrixMultiply(rotmatr,m);
+
+    p1:=VectorTransform3D(uzegeometry.CreateVertex(-1,0,0),m);
+    p2:=VectorTransform3D(uzegeometry.CreateVertex(cos(5*pi/6),sin(5*pi/6),0),m);
+    pThisEntity^.Representation.DrawLineWithoutLT(DC,p1,p2);
+    p1:=VectorTransform3D(uzegeometry.CreateVertex(cos(4*pi/6),sin(4*pi/6),0),m);
+    pThisEntity^.Representation.DrawLineWithoutLT(DC,p2,p1);
+    p2:=VectorTransform3D(uzegeometry.CreateVertex(cos(3*pi/6),sin(3*pi/6),0),m);
+    pThisEntity^.Representation.DrawLineWithoutLT(DC,p1,p2);
+
+    p1:=VectorTransform3D(uzegeometry.CreateVertex(cos(2*pi/6),sin(2*pi/6),0),m);
+    pThisEntity^.Representation.DrawLineWithoutLT(DC,p2,p1);
+    p2:=VectorTransform3D(uzegeometry.CreateVertex(cos(1*pi/6),sin(1*pi/6),0),m);
+    pThisEntity^.Representation.DrawLineWithoutLT(DC,p1,p2);
+
+
+    pThisEntity^.Representation.DrawLineWithoutLT(DC,p2,l2);
   end;
 end;
 
@@ -260,24 +362,24 @@ begin
             if uzegeometry.IsPointEqual(PGDBObjLine(pThisEntity)^.CoordInWCS.lBegin,p^.CoordInWCS.lBegin) then begin
               drawArrow(PGDBObjLine(pThisEntity)^.CoordInWCS.lEnd,PGDBObjLine(pThisEntity)^.CoordInWCS.lBegin,pThisEntity,DC);
               p^.addtoconnect2(p,PGDBObjGenericSubEntry(drawing.GetCurrentRootSimple)^.ObjToConnectedArray);
-              Connected.PushBackIfNotPresent(p);
+              ConnectedWith.PushBackIfNotPresent(p);
             end;
             if uzegeometry.IsPointEqual(PGDBObjLine(pThisEntity)^.CoordInWCS.lBegin,p^.CoordInWCS.lEnd) then begin
               drawArrow(PGDBObjLine(pThisEntity)^.CoordInWCS.lEnd,PGDBObjLine(pThisEntity)^.CoordInWCS.lBegin,pThisEntity,DC);
               p^.addtoconnect2(p,PGDBObjGenericSubEntry(drawing.GetCurrentRootSimple)^.ObjToConnectedArray);
-              Connected.PushBackIfNotPresent(p);
+              ConnectedWith.PushBackIfNotPresent(p);
             end;
           end;
           LEnd:begin
             if uzegeometry.IsPointEqual(PGDBObjLine(pThisEntity)^.CoordInWCS.lEnd,p^.CoordInWCS.lBegin) then begin
               drawArrow(PGDBObjLine(pThisEntity)^.CoordInWCS.lBegin,PGDBObjLine(pThisEntity)^.CoordInWCS.lEnd,pThisEntity,DC);
               p^.addtoconnect2(p,PGDBObjGenericSubEntry(drawing.GetCurrentRootSimple)^.ObjToConnectedArray);
-              Connected.PushBackIfNotPresent(p);
+              ConnectedWith.PushBackIfNotPresent(p);
             end;
             if uzegeometry.IsPointEqual(PGDBObjLine(pThisEntity)^.CoordInWCS.lEnd,p^.CoordInWCS.lEnd) then begin
               drawArrow(PGDBObjLine(pThisEntity)^.CoordInWCS.lBegin,PGDBObjLine(pThisEntity)^.CoordInWCS.lEnd,pThisEntity,DC);
               p^.addtoconnect2(p,PGDBObjGenericSubEntry(drawing.GetCurrentRootSimple)^.ObjToConnectedArray);
-              Connected.PushBackIfNotPresent(p);
+              ConnectedWith.PushBackIfNotPresent(p);
             end;
           end;
         end;
@@ -293,6 +395,18 @@ var
   ir:itrec;
   NetExtender:TNetExtender;
   ip:Intercept3DProp;
+  procedure addToConnections(t:double);
+  var
+    ci:integer;
+    cp:TConnectPoint;
+  begin
+    cp:=TConnectPoint.Create(t);
+    ci:=Connections.IsDataExistWithCompareProc(cp,IsConnectPointEqual);
+    if ci=-1 then
+      Connections.PushBackData(cp)
+    else
+      inc(Connections.getDataMutable(ci)^.count);
+  end;
 begin
   p:=Objects.beginiterate(ir);
   if p<>nil then
@@ -303,19 +417,30 @@ begin
         ip:=uzegeometry.intercept3d(p1,p2,p^.CoordInWCS.lBegin,p^.CoordInWCS.lEnd);
         if ip.isintercept then begin
           if uzegeometry.IsDoubleEqual(ip.t1,0,bigeps)then begin
-            drawArrow(PGDBObjLine(pThisEntity)^.CoordInWCS.lEnd,PGDBObjLine(pThisEntity)^.CoordInWCS.lBegin,pThisEntity,DC);
+            addToConnections(0);
+            //drawArrow(PGDBObjLine(pThisEntity)^.CoordInWCS.lEnd,PGDBObjLine(pThisEntity)^.CoordInWCS.lBegin,pThisEntity,DC);
             p^.addtoconnect2(p,PGDBObjGenericSubEntry(drawing.GetCurrentRootSimple)^.ObjToConnectedArray);
-            Connected.PushBackIfNotPresent(p);
+            p^.addtoconnect2(p,PGDBObjGenericSubEntry(drawing.GetCurrentRootSimple)^.ObjCasheArray);
+            ConnectedWith.PushBackIfNotPresent(p);
           end else if uzegeometry.IsDoubleEqual(ip.t1,1,bigeps)then begin
-            drawArrow(PGDBObjLine(pThisEntity)^.CoordInWCS.lBegin,PGDBObjLine(pThisEntity)^.CoordInWCS.lEnd,pThisEntity,DC);
+            addToConnections(1);
+            //drawArrow(PGDBObjLine(pThisEntity)^.CoordInWCS.lBegin,PGDBObjLine(pThisEntity)^.CoordInWCS.lEnd,pThisEntity,DC);
             p^.addtoconnect2(p,PGDBObjGenericSubEntry(drawing.GetCurrentRootSimple)^.ObjToConnectedArray);
-            Connected.PushBackIfNotPresent(p);
+            p^.addtoconnect2(p,PGDBObjGenericSubEntry(drawing.GetCurrentRootSimple)^.ObjCasheArray);
+            ConnectedWith.PushBackIfNotPresent(p);
           end else if (uzegeometry.IsDoubleEqual(ip.t2,0,bigeps))or(uzegeometry.IsDoubleEqual(ip.t2,1,bigeps))then begin
-            drawCross(ip.interceptcoord,pThisEntity,DC);
+            addToConnections(ip.t1);
+            //drawCross(ip.interceptcoord,pThisEntity,DC);
             p^.addtoconnect2(p,PGDBObjGenericSubEntry(drawing.GetCurrentRootSimple)^.ObjToConnectedArray);
-            Connected.PushBackIfNotPresent(p);
-          end else
-            Intersects.PushBackData(ip.t1);
+            p^.addtoconnect2(p,PGDBObjGenericSubEntry(drawing.GetCurrentRootSimple)^.ObjCasheArray);
+            ConnectedWith.PushBackIfNotPresent(p);
+          end else begin
+            if SqrVertexlength(p1,p2)>SqrVertexlength(p^.CoordInWCS.lBegin,p^.CoordInWCS.lEnd)then
+              Intersects.PushBackData(ip.t1);
+              IntersectedWith.PushBackIfNotPresent(p);
+            p^.addtoconnect2(p,PGDBObjGenericSubEntry(drawing.GetCurrentRootSimple)^.ObjToConnectedArray);
+            p^.addtoconnect2(p,PGDBObjGenericSubEntry(drawing.GetCurrentRootSimple)^.ObjCasheArray);
+          end;
         end;
       end;
     end;
@@ -324,11 +449,40 @@ begin
 end;
 
 function TNetExtender.NeedStandardDraw(pEntity:Pointer;const drawing:TDrawingDef;var DC:TDrawContext):Boolean;
+var
+  i:integer;
+  pc:TConnectPoints.PT;
+  d,l:double;
+  oldP,P:GDBvertex;
 begin
+  result:=true;
+  for i:=0 to Connections.Count-1 do begin
+    pc:=Connections.getDataMutable(i);
+    if SysVar.DISP.DISP_SystmGeometryDraw^ then begin
+      if pc^.t=0 then
+        drawArrow(PGDBObjLine(pThisEntity)^.CoordInWCS.lEnd,PGDBObjLine(pThisEntity)^.CoordInWCS.lBegin,pThisEntity,DC)
+      else if pc^.t=1 then
+        drawArrow(PGDBObjLine(pThisEntity)^.CoordInWCS.lBegin,PGDBObjLine(pThisEntity)^.CoordInWCS.lEnd,pThisEntity,DC)
+      else
+        drawCross(Vertexmorph(PGDBObjLine(pThisEntity)^.CoordInWCS.lBegin,PGDBObjLine(pThisEntity)^.CoordInWCS.lEnd,pc^.t),pThisEntity,DC);
+    end;
+    if (pc^.count>2)or((pc^.t>bigeps)and(pc^.t<(1-bigeps))) then
+      drawFilledCircle(Vertexmorph(PGDBObjLine(pThisEntity)^.CoordInWCS.lBegin,PGDBObjLine(pThisEntity)^.CoordInWCS.lEnd,pc^.t),ConnectSize,pThisEntity,DC);
+  end;
+  oldP:=PGDBObjLine(pThisEntity)^.CoordInWCS.lBegin;
   if Intersects.Count>0 then begin
+    l:=0.5*IntersectSize/Vertexlength(PGDBObjLine(pThisEntity)^.CoordInWCS.lBegin,PGDBObjLine(pThisEntity)^.CoordInWCS.lEnd);
+    for i:=0 to Intersects.Count-1 do begin
+      d:=Intersects.getData(i);
+      P:=Vertexmorph(PGDBObjLine(pThisEntity)^.CoordInWCS.lBegin,PGDBObjLine(pThisEntity)^.CoordInWCS.lEnd,d-l);
+      pThisEntity^.Representation.DrawLineWithLT(DC,oldP,P,pThisEntity.vp);
+      oldP:=Vertexmorph(PGDBObjLine(pThisEntity)^.CoordInWCS.lBegin,PGDBObjLine(pThisEntity)^.CoordInWCS.lEnd,d+l);
+      P:=Vertexmorph(PGDBObjLine(pThisEntity)^.CoordInWCS.lBegin,PGDBObjLine(pThisEntity)^.CoordInWCS.lEnd,d);
+      drawIntersectArc(P,oldP,pThisEntity,DC);
+    end;
+    pThisEntity^.Representation.DrawLineWithLT(DC,oldP,PGDBObjLine(pThisEntity)^.CoordInWCS.lEnd,pThisEntity.vp);
     result:=false;
-  end else
-    result:=true;
+  end;
 end;
 
 initialization

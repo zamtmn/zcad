@@ -31,7 +31,7 @@ GDBObjWithMatrix= object(GDBObjEntity)
                        constructor initnul(owner:PGDBObjGenericWithSubordinated);
                        function GetMatrix:PDMatrix4D;virtual;
                        procedure CalcObjMatrix(pdrawing:PTDrawingDef=nil);virtual;
-                       procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);virtual;
+                       procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext;Stage:TEFStages=EFAllStages);virtual;
                        procedure createfield;virtual;
                        procedure transform(const t_matrix:DMatrix4D);virtual;
                        procedure ReCalcFromObjMatrix;virtual;abstract;
@@ -185,7 +185,7 @@ procedure GDBObjWithMatrix.CalcObjMatrix;
 begin
      //ObjMatrix:=OneMatrix;
 end;
-procedure GDBObjWithMatrix.FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);
+procedure GDBObjWithMatrix.FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext;Stage:TEFStages=EFAllStages);
 begin
      CalcObjMatrix;
 end;

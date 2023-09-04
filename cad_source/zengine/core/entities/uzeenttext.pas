@@ -43,7 +43,7 @@ GDBObjText= object(GDBObjAbstractText)
                  procedure SaveToDXF(var outhandle:{Integer}TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
                  procedure CalcGabarit(const drawing:TDrawingDef);virtual;
                  procedure getoutbound(var DC:TDrawContext);virtual;
-                 procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);virtual;
+                 procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext;Stage:TEFStages=EFAllStages);virtual;
                  //procedure createpoint(const drawing:TDrawingDef);virtual;
                  //procedure CreateSymbol(_symbol:Integer;matr:DMatrix4D;var minx,miny,maxx,maxy:Double;pfont:pgdbfont;ln:Integer);
                  function Clone(own:Pointer):PGDBObjEntity;virtual;
@@ -125,7 +125,7 @@ function GDBObjText.GetObjType;
 begin
      result:=GDBtextID;
 end;
-procedure GDBObjText.FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);
+procedure GDBObjText.FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext;Stage:TEFStages=EFAllStages);
 var
       TCP:TCodePage;
 begin

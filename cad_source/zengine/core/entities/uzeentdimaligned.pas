@@ -47,7 +47,7 @@ GDBObjAlignedDimension= object(GDBObjDimension)
 
 
 
-                      procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);virtual;
+                      procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext;Stage:TEFStages=EFAllStages);virtual;
                       function Clone(own:Pointer):PGDBObjEntity;virtual;
                       //procedure DrawGeometry;
 
@@ -379,7 +379,7 @@ begin
      vectorN:=normalizevertex(vectorN)
 end;
 
-procedure GDBObjAlignedDimension.FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);
+procedure GDBObjAlignedDimension.FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext;Stage:TEFStages=EFAllStages);
 var
   tv:GDBVertex;
   l:double;

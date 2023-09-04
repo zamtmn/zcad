@@ -48,7 +48,7 @@ GDBObjWithLocalCS= object(GDBObjWithMatrix)
                procedure SaveToDXFObjPostfix(var outhandle:{Integer}TZctnrVectorBytes);{todo: проверить использование, выкинуть нах}
                function LoadFromDXFObjShared(var f:TZctnrVectorBytes;dxfcod:Integer;ptu:PExtensionData;var drawing:TDrawingDef):Boolean;
 
-               procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);virtual;
+               procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext;Stage:TEFStages=EFAllStages);virtual;
                procedure CalcObjMatrix(pdrawing:PTDrawingDef=nil);virtual;
                function CalcObjMatrixWithoutOwner:DMatrix4D;virtual;
                procedure transform(const t_matrix:DMatrix4D);virtual;
@@ -197,7 +197,7 @@ begin
   pprojoutbound:=nil;
   //CalcObjMatrix;
 end;
-procedure GDBObjWithLocalCS.FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);
+procedure GDBObjWithLocalCS.FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext;Stage:TEFStages=EFAllStages);
 begin
      CalcObjMatrix;
 end;

@@ -44,7 +44,7 @@ GDBObjElLeader= object(GDBObjComplex)
             procedure remaponecontrolpoint(pdesc:pcontrolpointdesc);virtual;
             function beforertmodify:Pointer;virtual;
             function select(var SelectedObjCount:Integer;s2s:TSelect2Stage):Boolean;virtual;
-            procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);virtual;
+            procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext;Stage:TEFStages=EFAllStages);virtual;
             procedure ImEdited(pobj:PGDBObjSubordinated;pobjinarray:Integer;var drawing:TDrawingDef);virtual;
 
             constructor initnul;
@@ -261,7 +261,7 @@ begin
      //bp.owner^.ImEdited(@self,bp.PSelfInOwnerArray);
      //ObjCasheArray.addnodouble(@pobj);
 end;
-procedure GDBObjElLeader.FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);
+procedure GDBObjElLeader.FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext;Stage:TEFStages=EFAllStages);
 const
   textoffset=0.5;
 var

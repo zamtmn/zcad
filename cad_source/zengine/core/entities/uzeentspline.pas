@@ -48,7 +48,7 @@ GDBObjSpline= object(GDBObjCurve)
                  destructor done;virtual;
                  procedure LoadFromDXF(var f:TZctnrVectorBytes;ptu:PExtensionData;var drawing:TDrawingDef);virtual;
 
-                 procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);virtual;
+                 procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext;Stage:TEFStages=EFAllStages);virtual;
                  procedure startsnap(out osp:os_record; out pdata:Pointer);virtual;
                  function getsnap(var osp:os_record; var pdata:Pointer; const param:OGLWndtype; ProjectProc:GDBProjectProc;SnapMode:TGDBOSMode):Boolean;virtual;
 
@@ -148,7 +148,7 @@ begin
      //tv:=1;
 end;
 
-procedure GDBObjSpline.FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);
+procedure GDBObjSpline.FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext;Stage:TEFStages=EFAllStages);
 var //i,j: Integer;
     ptv: pgdbvertex;
     //tv:gdbvertex;

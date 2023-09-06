@@ -19,21 +19,21 @@ unit uzcExtdrNet;
 {$INCLUDE zengineconfig.inc}
 
 interface
-uses sysutils,UGDBObjBlockdefArray,uzedrawingdef,uzeentityextender,
+uses sysutils,uzedrawingdef,uzeentityextender,
      UGDBOpenArrayOfPV,uzeentgenericsubentry,uzeentline,uzegeometry,
      uzeentdevice,TypeDescriptors,uzctnrVectorBytes,
      uzbtypes,uzeentsubordinated,uzeentity,uzeblockdef,
-     varmandef,Varman,UUnitManager,URecordDescriptor,UBaseTypeDescriptor,
-     uzeentitiestree,usimplegenerics,uzeffdxfsupport,uzbpaths,uzcTranslations,
-     gzctnrVectorTypes,uzeBaseExtender,uzeconsts,uzgldrawcontext,
+     //varmandef,Varman,UUnitManager,URecordDescriptor,UBaseTypeDescriptor,
+     usimplegenerics,uzeffdxfsupport,//uzbpaths,uzcTranslations,
+     gzctnrVectorTypes,uzeBaseExtender,uzgldrawcontext,
      uzegeometrytypes,uzcsysvars,
-     uzctnrVectorDouble,gzctnrVector,garrayutils,math;
+     uzctnrVectorDouble,gzctnrVector,garrayutils;
 const
   NetExtenderName='extdrNet';
   IntersectSize=1;
   ConnectSize=1;
 type
-TLineEnd=(LBegin,LEnd);
+//TLineEnd=(LBegin,LEnd);
 TNet=class
     Entities:GDBObjOpenArrayOfPV;
     constructor Create;
@@ -77,7 +77,7 @@ TNetExtender=class(TBaseEntityExtender)
 
     procedure SaveToDxfObjXData(var outhandle:TZctnrVectorBytes;PEnt:Pointer;var IODXFContext:TIODXFContext);override;
 
-    procedure TryConnectToEnts(var Objects:GDBObjOpenArrayOfPV;Position:TLineEnd;const drawing:TDrawingDef;var DC:TDrawContext);
+    //procedure TryConnectToEnts(var Objects:GDBObjOpenArrayOfPV;Position:TLineEnd;const drawing:TDrawingDef;var DC:TDrawContext);
     procedure TryConnectToEnts2(const p1,p2:GDBVertex;var Objects:GDBObjOpenArrayOfPV;const drawing:TDrawingDef;var DC:TDrawContext);
     function NeedStandardDraw(pEntity:Pointer;const drawing:TDrawingDef;var DC:TDrawContext):Boolean;override;
 
@@ -283,11 +283,51 @@ begin
   pThisEntity^.Representation.DrawLineWithoutLT(DC,p1-_XY_zVertex,p1+_XY_zVertex);
   pThisEntity^.Representation.DrawLineWithoutLT(DC,p1-_MinusXY_zVertex,p1+_MinusXY_zVertex);
 end;
-procedure drawFilledCircle(p1:GDBVertex;r:Double;pThisEntity:PGDBObjEntity;var DC:TDrawContext);
+procedure drawFilledCircle(p0:GDBVertex;r:Double;pThisEntity:PGDBObjEntity;var DC:TDrawContext);
+var
+  p1,p2,p3,p4,p5,p6,p7,p8,p9,p10,p11,p12:GDBVertex;
 begin
-  pThisEntity^.Representation.DrawLineWithoutLT(DC,p1-_XY_zVertex*r,p1+_XY_zVertex*r);
-  pThisEntity^.Representation.DrawLineWithoutLT(DC,p1-_MinusXY_zVertex*r,p1+_MinusXY_zVertex*r);
+  if r>bigeps then begin
+    p1:=CreateVertex(-1,0,0)*r+p0;
+    p2:=CreateVertex(cos(5*pi/6),sin(5*pi/6),0)*r+p0;
+    p3:=CreateVertex(cos(4*pi/6),sin(4*pi/6),0)*r+p0;
+    p4:=CreateVertex(cos(3*pi/6),sin(3*pi/6),0)*r+p0;
+    p5:=CreateVertex(cos(2*pi/6),sin(2*pi/6),0)*r+p0;
+    p6:=CreateVertex(cos(1*pi/6),sin(1*pi/6),0)*r+p0;
+    p7:=CreateVertex(1,0,0)*r+p0;
+    p8:=CreateVertex(cos(-1*pi/6),sin(-1*pi/6),0)*r+p0;
+    p9:=CreateVertex(cos(-2*pi/6),sin(-2*pi/6),0)*r+p0;
+    p10:=CreateVertex(cos(-3*pi/6),sin(-3*pi/6),0)*r+p0;
+    p11:=CreateVertex(cos(-4*pi/6),sin(-4*pi/6),0)*r+p0;
+    p12:=CreateVertex(cos(-5*pi/6),sin(-5*pi/6),0)*r+p0;
+    pThisEntity^.Representation.DrawLineWithoutLT(DC,p1,p2);
+    pThisEntity^.Representation.DrawLineWithoutLT(DC,p2,p3);
+    pThisEntity^.Representation.DrawLineWithoutLT(DC,p3,p4);
+    pThisEntity^.Representation.DrawLineWithoutLT(DC,p4,p5);
+    pThisEntity^.Representation.DrawLineWithoutLT(DC,p5,p6);
+    pThisEntity^.Representation.DrawLineWithoutLT(DC,p6,p7);
+    pThisEntity^.Representation.DrawLineWithoutLT(DC,p7,p8);
+    pThisEntity^.Representation.DrawLineWithoutLT(DC,p8,p9);
+    pThisEntity^.Representation.DrawLineWithoutLT(DC,p9,p10);
+    pThisEntity^.Representation.DrawLineWithoutLT(DC,p10,p11);
+    pThisEntity^.Representation.DrawLineWithoutLT(DC,p11,p12);
+    pThisEntity^.Representation.DrawLineWithoutLT(DC,p12,p1);
+
+    pThisEntity^.Representation.DrawLineWithoutLT(DC,p0,p1);
+    pThisEntity^.Representation.DrawLineWithoutLT(DC,p0,p2);
+    pThisEntity^.Representation.DrawLineWithoutLT(DC,p0,p3);
+    pThisEntity^.Representation.DrawLineWithoutLT(DC,p0,p4);
+    pThisEntity^.Representation.DrawLineWithoutLT(DC,p0,p5);
+    pThisEntity^.Representation.DrawLineWithoutLT(DC,p0,p6);
+    pThisEntity^.Representation.DrawLineWithoutLT(DC,p0,p7);
+    pThisEntity^.Representation.DrawLineWithoutLT(DC,p0,p8);
+    pThisEntity^.Representation.DrawLineWithoutLT(DC,p0,p9);
+    pThisEntity^.Representation.DrawLineWithoutLT(DC,p0,p10);
+    pThisEntity^.Representation.DrawLineWithoutLT(DC,p0,p11);
+    pThisEntity^.Representation.DrawLineWithoutLT(DC,p0,p12);
+  end;
 end;
+
 procedure drawIntersectArc(l1,l2:GDBVertex;pThisEntity:PGDBObjEntity;var DC:TDrawContext);
 var
   v,onel,p1,p2:GDBVertex;
@@ -316,12 +356,12 @@ begin
     onel:=v;
     tp2:=GetXfFromZ(onel);
     tp3:=CrossVertex(tp2,onel);
-    tp3:=NormalizeVertex(tp3)/2;
-    tp2:=NormalizeVertex(tp2)/2;
+    tp3:=NormalizeVertex(tp3);
+    tp2:=NormalizeVertex(tp2);
     rotmatr:=onematrix;
     PGDBVertex(@rotmatr[0])^:=onel;
-    PGDBVertex(@rotmatr[1])^:=tp2;
-    PGDBVertex(@rotmatr[2])^:=tp3;
+    PGDBVertex(@rotmatr[1])^:=tp2*l;
+    PGDBVertex(@rotmatr[2])^:=tp3*l;
     m:=onematrix;
     PGDBVertex(@m[3])^:=l1;
     m:=MatrixMultiply(rotmatr,m);
@@ -339,13 +379,11 @@ begin
     p2:=VectorTransform3D(uzegeometry.CreateVertex(cos(1*pi/6),sin(1*pi/6),0),m);
     pThisEntity^.Representation.DrawLineWithoutLT(DC,p1,p2);
 
-
     pThisEntity^.Representation.DrawLineWithoutLT(DC,p2,l2);
   end;
 end;
 
-
-procedure TNetExtender.TryConnectToEnts(var Objects:GDBObjOpenArrayOfPV;Position:TLineEnd;const drawing:TDrawingDef;var DC:TDrawContext);
+{procedure TNetExtender.TryConnectToEnts(var Objects:GDBObjOpenArrayOfPV;Position:TLineEnd;const drawing:TDrawingDef;var DC:TDrawContext);
 var
   p:PGDBObjLine;
   ir:itrec;
@@ -387,7 +425,7 @@ begin
     end;
   p:=Objects.iterate(ir);
   until p=nil;
-end;
+end;}
 
 procedure TNetExtender.TryConnectToEnts2(const p1,p2:GDBVertex;var Objects:GDBObjOpenArrayOfPV;const drawing:TDrawingDef;var DC:TDrawContext);
 var
@@ -467,7 +505,7 @@ begin
         drawCross(Vertexmorph(PGDBObjLine(pThisEntity)^.CoordInWCS.lBegin,PGDBObjLine(pThisEntity)^.CoordInWCS.lEnd,pc^.t),pThisEntity,DC);
     end;
     if (pc^.count>2)or((pc^.t>bigeps)and(pc^.t<(1-bigeps))) then
-      drawFilledCircle(Vertexmorph(PGDBObjLine(pThisEntity)^.CoordInWCS.lBegin,PGDBObjLine(pThisEntity)^.CoordInWCS.lEnd,pc^.t),ConnectSize,pThisEntity,DC);
+      drawFilledCircle(Vertexmorph(PGDBObjLine(pThisEntity)^.CoordInWCS.lBegin,PGDBObjLine(pThisEntity)^.CoordInWCS.lEnd,pc^.t),ConnectSize/2,pThisEntity,DC);
   end;
   oldP:=PGDBObjLine(pThisEntity)^.CoordInWCS.lBegin;
   if Intersects.Count>0 then begin

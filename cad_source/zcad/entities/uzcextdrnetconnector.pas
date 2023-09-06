@@ -1,0 +1,146 @@
+{
+*****************************************************************************
+*                                                                           *
+*  This file is part of the ZCAD                                            *
+*                                                                           *
+*  See the file COPYING.txt, included in this distribution,                 *
+*  for details about the copyright.                                         *
+*                                                                           *
+*  This program is distributed in the hope that it will be useful,          *
+*  but WITHOUT ANY WARRANTY; without even the implied warranty of           *
+*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.                     *
+*                                                                           *
+*****************************************************************************
+}
+{
+@author(Andrey Zubarev <zamtmn@yandex.ru>) 
+}
+unit uzcExtdrNetConnector;
+{$INCLUDE zengineconfig.inc}
+
+interface
+uses sysutils,uzedrawingdef,uzeentityextender,
+     UGDBOpenArrayOfPV,uzeentgenericsubentry,uzeentline,uzegeometry,
+     uzeentdevice,TypeDescriptors,uzctnrVectorBytes,
+     uzbtypes,uzeentsubordinated,uzeentity,uzeblockdef,
+     //varmandef,Varman,UUnitManager,URecordDescriptor,UBaseTypeDescriptor,
+     usimplegenerics,uzeffdxfsupport,//uzbpaths,uzcTranslations,
+     gzctnrVectorTypes,uzeBaseExtender,uzgldrawcontext,
+     uzegeometrytypes,uzcsysvars,
+     uzctnrVectorDouble,gzctnrVector,garrayutils;
+const
+  NetConnectorExtenderName='extdrNetConnector';
+type
+  TNetConnectorExtender=class(TBaseEntityExtender)
+    public
+      FConnectorRadius:Double;
+    class function getExtenderName:string;override;
+    constructor Create(pEntity:Pointer);override;
+    destructor Destroy;override;
+
+    procedure Assign(Source:TBaseExtender);override;
+
+    procedure onRemoveFromArray(pEntity:Pointer;const drawing:TDrawingDef);override;
+    procedure onEntityClone(pSourceEntity,pDestEntity:pointer);override;
+    procedure onEntityBuildVarGeometry(pEntity:pointer;const drawing:TDrawingDef);override;
+    procedure onBeforeEntityFormat(pEntity:Pointer;const drawing:TDrawingDef;var DC:TDrawContext);override;
+    procedure onAfterEntityFormat(pEntity:Pointer;const drawing:TDrawingDef;var DC:TDrawContext);override;
+    procedure onEntityConnect(pEntity:Pointer;const drawing:TDrawingDef;var DC:TDrawContext);override;
+    procedure CopyExt2Ent(pSourceEntity,pDestEntity:pointer);override;
+    procedure ReorganizeEnts(OldEnts2NewEntsMap:TMapPointerToPointer);override;
+    procedure PostLoad(var context:TIODXFLoadContext);override;
+
+    procedure onEntitySupportOldVersions(pEntity:pointer;const drawing:TDrawingDef);override;
+
+
+    class function EntIOLoadNetConnectorExtender(_Name,_Value:String;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
+
+    procedure SaveToDxfObjXData(var outhandle:TZctnrVectorBytes;PEnt:Pointer;var IODXFContext:TIODXFContext);override;
+
+  end;
+
+
+function AddNetConnectorExtenderToEntity(PEnt:PGDBObjEntity):TNetConnectorExtender;
+
+implementation
+
+function AddNetConnectorExtenderToEntity(PEnt:PGDBObjEntity):TNetConnectorExtender;
+begin
+  result:=TNetConnectorExtender.Create(PEnt);
+  PEnt^.AddExtension(result);
+end;
+procedure TNetConnectorExtender.onEntitySupportOldVersions(pEntity:pointer;const drawing:TDrawingDef);
+begin
+end;
+constructor TNetConnectorExtender.Create;
+begin
+  FConnectorRadius:=0;
+end;
+destructor TNetConnectorExtender.Destroy;
+begin
+end;
+procedure TNetConnectorExtender.Assign(Source:TBaseExtender);
+begin
+  FConnectorRadius:=TNetConnectorExtender(Source).FConnectorRadius;
+end;
+
+
+procedure TNetConnectorExtender.onRemoveFromArray(pEntity:Pointer;const drawing:TDrawingDef);
+begin
+end;
+procedure TNetConnectorExtender.onEntityClone(pSourceEntity,pDestEntity:pointer);
+begin
+end;
+procedure TNetConnectorExtender.onEntityBuildVarGeometry(pEntity:pointer;const drawing:TDrawingDef);
+begin
+end;
+procedure TNetConnectorExtender.onBeforeEntityFormat(pEntity:Pointer;const drawing:TDrawingDef;var DC:TDrawContext);
+begin
+end;
+procedure TNetConnectorExtender.onEntityConnect(pEntity:Pointer;const drawing:TDrawingDef;var DC:TDrawContext);
+begin
+end;
+procedure TNetConnectorExtender.onAfterEntityFormat(pEntity:Pointer;const drawing:TDrawingDef;var DC:TDrawContext);
+begin
+end;
+
+procedure TNetConnectorExtender.CopyExt2Ent(pSourceEntity,pDestEntity:pointer);
+begin
+end;
+procedure TNetConnectorExtender.ReorganizeEnts(OldEnts2NewEntsMap:TMapPointerToPointer);
+begin
+end;
+
+procedure TNetConnectorExtender.PostLoad(var context:TIODXFLoadContext);
+begin
+end;
+
+class function TNetConnectorExtender.getExtenderName:string;
+begin
+  result:=NetConnectorExtenderName;
+end;
+
+class function TNetConnectorExtender.EntIOLoadNetConnectorExtender(_Name,_Value:String;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
+var
+  NetConnectorExtender:TNetConnectorExtender;
+begin
+  NetConnectorExtender:=PGDBObjEntity(PEnt)^.GetExtension<TNetConnectorExtender>;
+  if NetConnectorExtender=nil then begin
+    NetConnectorExtender:=AddNetConnectorExtenderToEntity(PEnt);
+  end;
+  NetConnectorExtender.FConnectorRadius:=StrToFloat(_Value);
+  result:=true;
+end;
+
+procedure TNetConnectorExtender.SaveToDxfObjXData(var outhandle:TZctnrVectorBytes;PEnt:Pointer;var IODXFContext:TIODXFContext);
+begin
+   dxfStringout(outhandle,1000,'NCEConnectorRadius=',FloatToStr(FConnectorRadius));
+end;
+
+initialization
+  //extdrAdd(extdrNetConnector)
+  EntityExtenders.RegisterKey(uppercase(NetConnectorExtenderName),TNetConnectorExtender);
+  GDBObjEntity.GetDXFIOFeatures.RegisterNamedLoadFeature('NCEConnectorRadius',TNetConnectorExtender.EntIOLoadNetConnectorExtender);
+finalization
+end.
+

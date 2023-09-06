@@ -61,7 +61,8 @@ procedure dxfvertexout1(var f:TZctnrVectorBytes;dxfcode:Integer;const v:gdbverte
 procedure dxfvertex2dout(var f:TZctnrVectorBytes;dxfcode:Integer;const v:gdbvertex2d);
 procedure dxfDoubleout(var f:TZctnrVectorBytes;dxfcode:Integer;const v:Double);
 procedure dxfIntegerout(var f:TZctnrVectorBytes;dxfcode:Integer;const v:Integer);
-procedure dxfStringout(var f:TZctnrVectorBytes;dxfcode:Integer;const v:String);
+procedure dxfStringout(var f:TZctnrVectorBytes;dxfcode:Integer;const v:String);overload;
+procedure dxfStringout(var f:TZctnrVectorBytes;dxfcode:Integer;const v1,v2:String);overload;
 function mystrtoint(s:String):Integer;
 function readmystrtoint(var f:TZctnrVectorBytes):Integer;
 function readmystrtodouble(var f:TZctnrVectorBytes):Double;
@@ -178,6 +179,12 @@ begin
      //WriteString_EOL(outfile,inttostr(dxfcode));
      f.TXTAddStringEOL(v);
      //WriteString_EOL(outfile,v);
+end;
+procedure dxfStringout(var f:TZctnrVectorBytes;dxfcode:Integer;const v1,v2:String);
+begin
+     f.TXTAddStringEOL(inttostr(dxfcode));
+     f.TXTAddString(v1);
+     f.TXTAddStringEOL(v2);
 end;
 function mystrtoint(s:String):Integer;
 var code:Integer;

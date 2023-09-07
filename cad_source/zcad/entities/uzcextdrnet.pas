@@ -31,11 +31,11 @@ uses sysutils,uzedrawingdef,uzeentityextender,
      uzcExtdrNetConnector;
 const
   NetExtenderName='extdrNet';
-  IntersectSize=1;
+  IntersectRadius=0.5;
   ConnectSize=1;
 type
   //TLineEnd=(LBegin,LEnd);
-  TKnotType=(KTNormal,KTEmpty,KTArc,KTCircle,KTPoint);
+  TKnotType=(KTNormal,KTEmpty,KTArc,KTCircle,KTFilledCircle);
   TKnot=record
     t,HalfWidth:Double;
     &Type:TKnotType;
@@ -66,7 +66,7 @@ TIntersectPointsUtil=TOrderingArrayUtils<TZctnrVectorDouble,Double,TIntersectPoi
 TNetExtender=class(TBaseEntityExtender)
     pThisEntity:PGDBObjEntity;
     ConnectedWith,IntersectedWith:GDBObjOpenArrayOfPV;
-    Intersects:TZctnrVectorDouble;
+    //Intersects:TZctnrVectorDouble;
     Connections:TConnectPoints;
     Setters:GDBObjOpenArrayOfPV;
     Pins:GDBObjOpenArrayOfPV;
@@ -157,7 +157,7 @@ begin
   pThisEntity:=pEntity;
   ConnectedWith.init(10);
   IntersectedWith.init(10);
-  Intersects.init(2);
+  //Intersects.init(2);
   Connections.init(3);
   Setters.init(2);
   Pins.init(2);
@@ -167,7 +167,7 @@ destructor TNetExtender.Destroy;
 begin
   ConnectedWith.destroy;
   IntersectedWith.destroy;
-  Intersects.destroy;
+  //Intersects.destroy;
   Connections.destroy;
   Setters.destroy;
   Pins.destroy;
@@ -231,7 +231,7 @@ var
 begin
   ConnectedWith.Clear;
   IntersectedWith.Clear;
-  Intersects.Clear;
+  //Intersects.Clear;
   Connections.Clear;
   Setters.Clear;
   Pins.Clear;
@@ -251,8 +251,8 @@ begin
         objects.done;
       end;
   end;
-  if Intersects.Count>1 then
-    TIntersectPointsUtil.Sort(Intersects,Intersects.Count);
+  if Knots.Count>1 then
+    TKnotsUtils.Sort(Knots,Knots.Count);
 end;
 procedure TNetExtender.onAfterEntityFormat(pEntity:Pointer;const drawing:TDrawingDef;var DC:TDrawContext);
 begin
@@ -474,6 +474,7 @@ var
   ip:Intercept3DProp;
   PTI:Pointer;
   dist:DistAndt;
+  knot:TKnot;
   procedure addToConnections(t:double);
   var
     ci:integer;
@@ -517,7 +518,7 @@ begin
               ConnectedWith.PushBackIfNotPresent(p);
             end else begin
               if SqrVertexlength(p1,p2)>SqrVertexlength(p^.CoordInWCS.lBegin,p^.CoordInWCS.lEnd)then
-                Intersects.PushBackData(ip.t1);
+                Knots.PushBackData(TKnot.Create(ip.t1,IntersectRadius,KTArc));
                 IntersectedWith.PushBackIfNotPresent(p);
               p^.addtoconnect2(p,PGDBObjGenericSubEntry(drawing.GetCurrentRootSimple)^.ObjToConnectedArray);
               p^.addtoconnect2(p,PGDBObjGenericSubEntry(drawing.GetCurrentRootSimple)^.ObjCasheArray);
@@ -531,6 +532,10 @@ begin
         else begin
           dist:=distance2ray(PGDBObjDevice(p).P_insert_in_WCS,p1,p2);
           if (abs(dist.d)<bigeps)and((dist.t>-bigeps)and((dist.t<1+bigeps))) then begin
+            knot.Create(dist.t,abs(ConnectorExtender.FConnectorRadius)/2,KTNormal);
+            if ConnectorExtender.FConnectorRadius<>0 then
+              knot.&Type:=KTEmpty;
+            Knots.PushBackData(knot);
             if ConnectorExtender.FSetter then
               Setters.PushBackIfNotPresent(p)
             else
@@ -544,14 +549,52 @@ begin
 end;
 
 procedure TNetExtender.TryConnectToDeviceConnectors(const p1,p2:GDBVertex;var Device:GDBObjDevice;const drawing:TDrawingDef;var DC:TDrawContext);
+var
+  p:PGDBObjDevice;
+  ir:itrec;
+  ConnectorExtender:TNetConnectorExtender;
+  knot:TKnot;
+  t:Double;
+  isConnected:boolean;
 begin
+  p:=Device.VarObjArray.beginiterate(ir);
+  if p<>nil then
+  repeat
+
+    if IsIt(TypeOf(p^),typeof(GDBObjDevice)) then begin
+      ConnectorExtender:=p^.GetExtension<TNetConnectorExtender>;
+      if ConnectorExtender=nil then
+        TryConnectToDeviceConnectors(p1,p2,PGDBObjDevice(p)^,drawing,DC)
+      else begin
+        isConnected:=true;
+        if IsPointEqual(p1,p^.P_insert_in_WCS) then
+          t:=0
+        else if IsPointEqual(p2,p^.P_insert_in_WCS) then
+          t:=1
+        else
+          isConnected:=false;
+        if isConnected then begin
+          knot.Create(t,abs(ConnectorExtender.FConnectorRadius)/2,KTNormal);
+          if ConnectorExtender.FConnectorRadius<>0 then
+            knot.&Type:=KTEmpty;
+          Knots.PushBackData(knot);
+          if ConnectorExtender.FSetter then
+            Setters.PushBackIfNotPresent(p)
+          else
+            Pins.PushBackIfNotPresent(p);
+        end;
+      end;
+    end;
+    p:=Device.VarObjArray.iterate(ir);
+  until p=nil;
 end;
 
 function TNetExtender.NeedStandardDraw(pEntity:Pointer;const drawing:TDrawingDef;var DC:TDrawContext):Boolean;
 var
   i:integer;
   pc:TConnectPoints.PT;
-  d,l:double;
+  linelen,l:double;
+  knot:TKnot;
   oldP,P:GDBvertex;
 begin
   result:=true;
@@ -569,17 +612,30 @@ begin
       drawFilledCircle(Vertexmorph(PGDBObjLine(pThisEntity)^.CoordInWCS.lBegin,PGDBObjLine(pThisEntity)^.CoordInWCS.lEnd,pc^.t),ConnectSize/2,pThisEntity,DC);
   end;
   oldP:=PGDBObjLine(pThisEntity)^.CoordInWCS.lBegin;
-  if Intersects.Count>0 then begin
-    l:=0.5*IntersectSize/Vertexlength(PGDBObjLine(pThisEntity)^.CoordInWCS.lBegin,PGDBObjLine(pThisEntity)^.CoordInWCS.lEnd);
-    for i:=0 to Intersects.Count-1 do begin
-      d:=Intersects.getData(i);
-      P:=Vertexmorph(PGDBObjLine(pThisEntity)^.CoordInWCS.lBegin,PGDBObjLine(pThisEntity)^.CoordInWCS.lEnd,d-l);
-      pThisEntity^.Representation.DrawLineWithLT(DC,oldP,P,pThisEntity.vp);
-      oldP:=Vertexmorph(PGDBObjLine(pThisEntity)^.CoordInWCS.lBegin,PGDBObjLine(pThisEntity)^.CoordInWCS.lEnd,d+l);
-      P:=Vertexmorph(PGDBObjLine(pThisEntity)^.CoordInWCS.lBegin,PGDBObjLine(pThisEntity)^.CoordInWCS.lEnd,d);
-      drawIntersectArc(P,oldP,pThisEntity,DC);
+  if Knots.Count>0 then begin
+    linelen:=Vertexlength(PGDBObjLine(pThisEntity)^.CoordInWCS.lBegin,PGDBObjLine(pThisEntity)^.CoordInWCS.lEnd);
+    for i:=0 to Knots.Count-1 do begin
+      knot:=Knots.getData(i);
+      l:=knot.HalfWidth/linelen;
+      case knot.&Type of
+        KTArc:begin
+          P:=Vertexmorph(PGDBObjLine(pThisEntity)^.CoordInWCS.lBegin,PGDBObjLine(pThisEntity)^.CoordInWCS.lEnd,knot.t-l);
+          pThisEntity^.Representation.DrawLineWithLT(DC,oldP,P,pThisEntity.vp);
+          oldP:=Vertexmorph(PGDBObjLine(pThisEntity)^.CoordInWCS.lBegin,PGDBObjLine(pThisEntity)^.CoordInWCS.lEnd,knot.t+l);
+          P:=Vertexmorph(PGDBObjLine(pThisEntity)^.CoordInWCS.lBegin,PGDBObjLine(pThisEntity)^.CoordInWCS.lEnd,knot.t);
+          drawIntersectArc(P,oldP,pThisEntity,DC);
+        end;
+        KTEmpty:begin
+          if knot.t>bigeps then begin
+            P:=Vertexmorph(PGDBObjLine(pThisEntity)^.CoordInWCS.lBegin,PGDBObjLine(pThisEntity)^.CoordInWCS.lEnd,knot.t-l);
+            pThisEntity^.Representation.DrawLineWithLT(DC,oldP,P,pThisEntity.vp);
+          end;
+          oldP:=Vertexmorph(PGDBObjLine(pThisEntity)^.CoordInWCS.lBegin,PGDBObjLine(pThisEntity)^.CoordInWCS.lEnd,knot.t+l);
+        end;
+      end;
     end;
-    pThisEntity^.Representation.DrawLineWithLT(DC,oldP,PGDBObjLine(pThisEntity)^.CoordInWCS.lEnd,pThisEntity.vp);
+    if IsDoubleNotEqual(knot.t,1,bigeps) then
+      pThisEntity^.Representation.DrawLineWithLT(DC,oldP,PGDBObjLine(pThisEntity)^.CoordInWCS.lEnd,pThisEntity.vp);
     result:=false;
   end;
 end;

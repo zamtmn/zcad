@@ -425,6 +425,7 @@ begin
   MultiPropertiesManager.RegisterPhysMultiproperty('EXTDRSSMARTTEXTENT_RotateOverride','Rotate override value',sysunit^.TypeName2PTD('Double'),MPCExtenders,0,TSmartTextEntExtender,PtrInt(@SmartTextEntExtender.FRotateOverrideValue),PtrInt(@SmartTextEntExtender.FRotateOverrideValue),OneVarDataMIPD,OneVarDataEIPD);
   RegisterVarCategory('EXTDRNETCONNECTOR','Connector control',@InterfaceTranslate);
   MultiPropertiesManager.RegisterPhysMultiproperty('EXTDRNETCONNECTOR_ConnectorRadius','Connector radius',sysunit^.TypeName2PTD('Double'),MPCExtenders,0,TNetConnectorExtender,PtrInt(@NetConnectorExtender.FConnectorRadius),PtrInt(@NetConnectorExtender.FConnectorRadius),OneVarDataMIPD,OneVarDataEIPD);
+  MultiPropertiesManager.RegisterPhysMultiproperty('EXTDRNETCONNECTOR_Setter','Setter',sysunit^.TypeName2PTD('Boolean'),MPCExtenders,0,TNetConnectorExtender,PtrInt(@NetConnectorExtender.FSetter),PtrInt(@NetConnectorExtender.FSetter),OneVarDataMIPD,OneVarDataEIPD);
 
 
   {General section}

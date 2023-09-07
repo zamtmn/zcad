@@ -34,6 +34,7 @@ type
   TNetConnectorExtender=class(TBaseEntityExtender)
     public
       FConnectorRadius:Double;
+      FSetter:Boolean;
     class function getExtenderName:string;override;
     constructor Create(pEntity:Pointer);override;
     destructor Destroy;override;
@@ -53,7 +54,8 @@ type
     procedure onEntitySupportOldVersions(pEntity:pointer;const drawing:TDrawingDef);override;
 
 
-    class function EntIOLoadNetConnectorExtender(_Name,_Value:String;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
+    class function EntIOLoadNetConnectorRadius(_Name,_Value:String;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
+    class function EntIOLoadNetConnectorSetter(_Name,_Value:String;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
 
     procedure SaveToDxfObjXData(var outhandle:TZctnrVectorBytes;PEnt:Pointer;var IODXFContext:TIODXFContext);override;
 
@@ -75,6 +77,7 @@ end;
 constructor TNetConnectorExtender.Create;
 begin
   FConnectorRadius:=0;
+  FSetter:=False;
 end;
 destructor TNetConnectorExtender.Destroy;
 begin
@@ -82,6 +85,7 @@ end;
 procedure TNetConnectorExtender.Assign(Source:TBaseExtender);
 begin
   FConnectorRadius:=TNetConnectorExtender(Source).FConnectorRadius;
+  FSetter:=TNetConnectorExtender(Source).FSetter;
 end;
 
 
@@ -89,7 +93,13 @@ procedure TNetConnectorExtender.onRemoveFromArray(pEntity:Pointer;const drawing:
 begin
 end;
 procedure TNetConnectorExtender.onEntityClone(pSourceEntity,pDestEntity:pointer);
+var
+  NetConnectorExtender:TNetConnectorExtender;
 begin
+  NetConnectorExtender:=PGDBObjEntity(pDestEntity)^.EntExtensions.GetExtension<TNetConnectorExtender>;
+  if NetConnectorExtender=nil then
+    NetConnectorExtender:=AddNetConnectorExtenderToEntity(pDestEntity);
+  NetConnectorExtender.Assign(PGDBObjEntity(pSourceEntity)^.EntExtensions.GetExtension<TNetConnectorExtender>);
 end;
 procedure TNetConnectorExtender.onEntityBuildVarGeometry(pEntity:pointer;const drawing:TDrawingDef);
 begin
@@ -106,6 +116,7 @@ end;
 
 procedure TNetConnectorExtender.CopyExt2Ent(pSourceEntity,pDestEntity:pointer);
 begin
+  onEntityClone(pSourceEntity,pDestEntity);
 end;
 procedure TNetConnectorExtender.ReorganizeEnts(OldEnts2NewEntsMap:TMapPointerToPointer);
 begin
@@ -120,7 +131,7 @@ begin
   result:=NetConnectorExtenderName;
 end;
 
-class function TNetConnectorExtender.EntIOLoadNetConnectorExtender(_Name,_Value:String;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
+class function TNetConnectorExtender.EntIOLoadNetConnectorRadius(_Name,_Value:String;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
 var
   NetConnectorExtender:TNetConnectorExtender;
 begin
@@ -132,15 +143,31 @@ begin
   result:=true;
 end;
 
+class function TNetConnectorExtender.EntIOLoadNetConnectorSetter(_Name,_Value:String;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
+var
+  NetConnectorExtender:TNetConnectorExtender;
+begin
+  NetConnectorExtender:=PGDBObjEntity(PEnt)^.GetExtension<TNetConnectorExtender>;
+  if NetConnectorExtender=nil then begin
+    NetConnectorExtender:=AddNetConnectorExtenderToEntity(PEnt);
+  end;
+  NetConnectorExtender.FSetter:=True;
+  result:=true;
+end;
+
+
 procedure TNetConnectorExtender.SaveToDxfObjXData(var outhandle:TZctnrVectorBytes;PEnt:Pointer;var IODXFContext:TIODXFContext);
 begin
    dxfStringout(outhandle,1000,'NCEConnectorRadius=',FloatToStr(FConnectorRadius));
+   if FSetter then
+     dxfStringout(outhandle,1000,'NCESetter=TRUE');
 end;
 
 initialization
   //extdrAdd(extdrNetConnector)
   EntityExtenders.RegisterKey(uppercase(NetConnectorExtenderName),TNetConnectorExtender);
-  GDBObjEntity.GetDXFIOFeatures.RegisterNamedLoadFeature('NCEConnectorRadius',TNetConnectorExtender.EntIOLoadNetConnectorExtender);
+  GDBObjEntity.GetDXFIOFeatures.RegisterNamedLoadFeature('NCEConnectorRadius',TNetConnectorExtender.EntIOLoadNetConnectorRadius);
+  GDBObjEntity.GetDXFIOFeatures.RegisterNamedLoadFeature('NCESetter',TNetConnectorExtender.EntIOLoadNetConnectorSetter);
 finalization
 end.
 

@@ -216,9 +216,9 @@ TSimpleUnit=object(TAbstractUnit)
                   procedure CopyTo(source:PTSimpleUnit);virtual;
                   procedure CopyFrom(source:PTSimpleUnit);virtual;
             end;
-PTObjectUnit=^TObjectUnit;
-{REGISTEROBJECTWITHOUTCONSTRUCTORTYPE TObjectUnit}
-TObjectUnit=object(TSimpleUnit)
+PTEntityUnit=^TEntityUnit;
+{REGISTEROBJECTWITHOUTCONSTRUCTORTYPE TEntityUnit}
+TEntityUnit=object(TSimpleUnit)
                   //function SaveToMem(var membuf:TZctnrVectorBytes):PUserTypeDescriptor;virtual;
                   procedure free;virtual;
             end;
@@ -648,7 +648,7 @@ begin
     end;
 end;
 
-procedure TObjectUnit.free;
+procedure TEntityUnit.free;
 begin
      self.InterfaceUses.clear;
      self.InterfaceVariables.vardescarray.Freewithproc(vardeskclear);
@@ -670,7 +670,7 @@ begin
        pu:=InterfaceUses.beginiterate(ir);
        if pu<>nil then
          repeat
-           if not IsIt(typeof(pu^),typeof(TObjectUnit)) then begin
+           if not IsIt(typeof(pu^),typeof(TEntityUnit)) then begin
              if realUsesCount=0 then
                membuf.TXTAddString('uses '+pu^.Name)
              else

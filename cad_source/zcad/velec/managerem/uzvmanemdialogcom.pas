@@ -81,7 +81,7 @@ type
   //     );
   //
   //TCmdProp=record
-  // props:TObjectUnit;
+  // props:TEntityUnit;
   //// //SameName:Boolean;(*'Same name'*)
   //// //DiffBlockDevice:TDiff;(*'Block and Device'*)
   ////end;

@@ -41,7 +41,7 @@ resourcestring
 implementation
 type
   TCmdProp=record
-   props:TObjectUnit;
+   props:TEntityUnit;
   end;
 
 var

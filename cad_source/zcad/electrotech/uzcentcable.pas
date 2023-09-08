@@ -93,7 +93,7 @@ begin
   end;
   result := tvo;
   EntExtensions.RunOnCloneProcedures(@self,tvo);
-  //PTObjectUnit(ou.Instance)^.CopyTo(PTObjectUnit(tvo.ou.Instance));
+  //PTEntityUnit(ou.Instance)^.CopyTo(PTEntityUnit(tvo.ou.Instance));
 end;
 procedure GDBObjCable.SaveToDXFFollow;
 var
@@ -471,7 +471,7 @@ begin
   inherited init(own,layeraddres, lw);
   NodePropArray.init(1000);
   //vp.ID := GDBCableID;
-  //PTObjectUnit(self.ou.Instance)^.init('cable');
+  //PTEntityUnit(self.ou.Instance)^.init('cable');
   GetDXFIOFeatures.AddExtendersToEntity(@self);
 end;
 constructor GDBObjCable.initnul;

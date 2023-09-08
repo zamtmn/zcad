@@ -252,11 +252,11 @@ begin
                                                          end;
 end;
 
-procedure GeneralFromPtrEntChangeProc(pu:PTObjectUnit;pdata:PVarDesk;ChangedData:TChangedData;mp:TMultiProperty);
+procedure GeneralFromPtrEntChangeProc(pu:PTEntityUnit;pdata:PVarDesk;ChangedData:TChangedData;mp:TMultiProperty);
 begin
      mp.MPType^.CopyInstanceTo(pdata,ChangedData.PSetDataInEtity);
 end;
-procedure DoubleDiv2EntChangeProc(pu:PTObjectUnit;pdata:PVarDesk;ChangedData:TChangedData;mp:TMultiProperty);
+procedure DoubleDiv2EntChangeProc(pu:PTEntityUnit;pdata:PVarDesk;ChangedData:TChangedData;mp:TMultiProperty);
 var
     l1:Double;
 begin
@@ -264,7 +264,7 @@ begin
      ProcessVariableAttributes(pvardesk(pdata)^.attrib,0,vda_approximately or vda_different);
      GeneralFromPtrEntChangeProc(pu,@l1,ChangedData,mp);
 end;
-procedure DoubleCircumference2REntChangeProc(pu:PTObjectUnit;pdata:PVarDesk;ChangedData:TChangedData;mp:TMultiProperty);
+procedure DoubleCircumference2REntChangeProc(pu:PTEntityUnit;pdata:PVarDesk;ChangedData:TChangedData;mp:TMultiProperty);
 var
     l1:Double;
 begin
@@ -272,7 +272,7 @@ begin
      ProcessVariableAttributes(pvardesk(pdata)^.attrib,0,vda_approximately or vda_different);
      GeneralFromPtrEntChangeProc(pu,@l1,ChangedData,mp);
 end;
-procedure DoubleArcCircumferenceEntChangeProc(pu:PTObjectUnit;pdata:PVarDesk;ChangedData:TChangedData;mp:TMultiProperty);
+procedure DoubleArcCircumferenceEntChangeProc(pu:PTEntityUnit;pdata:PVarDesk;ChangedData:TChangedData;mp:TMultiProperty);
 var
     l1:Double;
 begin
@@ -282,7 +282,7 @@ begin
      GeneralFromPtrEntChangeProc(pu,@l1,ChangedData,mp);
 end;
 
-procedure DoubleArea2REntChangeProc(pu:PTObjectUnit;pdata:PVarDesk;ChangedData:TChangedData;mp:TMultiProperty);
+procedure DoubleArea2REntChangeProc(pu:PTEntityUnit;pdata:PVarDesk;ChangedData:TChangedData;mp:TMultiProperty);
 var
     l1:Double;
 begin
@@ -290,7 +290,7 @@ begin
      ProcessVariableAttributes(pvardesk(pdata)^.attrib,0,vda_approximately or vda_different);
      GeneralFromPtrEntChangeProc(pu,@l1,ChangedData,mp);
 end;
-procedure DoubleDeltaEntChangeProc(pu:PTObjectUnit;pdata:PVarDesk;ChangedData:TChangedData;mp:TMultiProperty);
+procedure DoubleDeltaEntChangeProc(pu:PTEntityUnit;pdata:PVarDesk;ChangedData:TChangedData;mp:TMultiProperty);
 var
     l1:Double;
 begin
@@ -300,7 +300,7 @@ begin
      ProcessVariableAttributes(pvardesk(pdata)^.attrib,0,vda_approximately or vda_different);
      GeneralFromPtrEntChangeProc(pu,@l1,ChangedData,mp);
 end;
-procedure DoubleLengthEntChangeProc(pu:PTObjectUnit;pdata:PVarDesk;ChangedData:TChangedData;mp:TMultiProperty);
+procedure DoubleLengthEntChangeProc(pu:PTEntityUnit;pdata:PVarDesk;ChangedData:TChangedData;mp:TMultiProperty);
 var
     v1,v2:GDBVertex;
     l1:Double;
@@ -315,7 +315,7 @@ begin
      ProcessVariableAttributes(pvardesk(pdata)^.attrib,0,vda_approximately or vda_different);
      PGDBVertex(ChangedData.PSetDataInEtity)^:=VertexAdd(v1,v2);
 end;
-procedure DoubleAngleEntChangeProc(pu:PTObjectUnit;pdata:PVarDesk;ChangedData:TChangedData;mp:TMultiProperty);
+procedure DoubleAngleEntChangeProc(pu:PTEntityUnit;pdata:PVarDesk;ChangedData:TChangedData;mp:TMultiProperty);
 var
     v1,v2:GDBVertex;
     l1,d:Double;
@@ -332,7 +332,7 @@ begin
   ProcessVariableAttributes(pvardesk(pdata)^.attrib,0,vda_approximately or vda_different);
   PGDBVertex(ChangedData.PSetDataInEtity)^:=VertexAdd(v1,v2);
 end;
-procedure DoubleDeg2RadEntChangeProc(pu:PTObjectUnit;pdata:PVarDesk;ChangedData:TChangedData;mp:TMultiProperty);
+procedure DoubleDeg2RadEntChangeProc(pu:PTEntityUnit;pdata:PVarDesk;ChangedData:TChangedData;mp:TMultiProperty);
 var
     l1:Double;
 begin
@@ -340,7 +340,7 @@ begin
      ProcessVariableAttributes(pvardesk(pdata)^.attrib,0,vda_approximately or vda_different);
      GeneralFromPtrEntChangeProc(pu,@l1,ChangedData,mp);
 end;
-procedure DoubleArcArea2REntChangeProc(pu:PTObjectUnit;pdata:PVarDesk;ChangedData:TChangedData;mp:TMultiProperty);
+procedure DoubleArcArea2REntChangeProc(pu:PTEntityUnit;pdata:PVarDesk;ChangedData:TChangedData;mp:TMultiProperty);
 var
     l1:Double;
 begin
@@ -352,7 +352,7 @@ begin
      ProcessVariableAttributes(pvardesk(pdata)^.attrib,0,vda_approximately or vda_different);
      GeneralFromPtrEntChangeProc(pu,@l1,ChangedData,mp);
 end;
-procedure GeneralTextRotateEntChangeProc(pu:PTObjectUnit;pdata:PVarDesk;ChangedData:TChangedData;mp:TMultiProperty);
+procedure GeneralTextRotateEntChangeProc(pu:PTEntityUnit;pdata:PVarDesk;ChangedData:TChangedData;mp:TMultiProperty);
 var
     a:Double;
 begin

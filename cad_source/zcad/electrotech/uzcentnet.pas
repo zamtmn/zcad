@@ -112,7 +112,7 @@ begin
   tvo^.bp.ListPos.Owner:=own;
   result := tvo;
   EntExtensions.RunOnCloneProcedures(@self,tvo);
-  //PTObjectUnit(ou.Instance)^.CopyTo(PTObjectUnit(tvo.ou.Instance));
+  //PTEntityUnit(ou.Instance)^.CopyTo(PTEntityUnit(tvo.ou.Instance));
 end;
 procedure GDBObjNet.DelSelectedSubitem;
 var pv:pGDBObjEntity;

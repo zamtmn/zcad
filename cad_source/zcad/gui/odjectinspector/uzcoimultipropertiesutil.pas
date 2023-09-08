@@ -72,10 +72,10 @@ type
 
 
 
-function GetOneVarData(mp:TMultiProperty;pu:PTObjectUnit):Pointer;
-function GetStringCounterData(mp:TMultiProperty;pu:PTObjectUnit):Pointer;
-function GetPointerCounterData(mp:TMultiProperty;pu:PTObjectUnit):Pointer;
-function GetVertex3DControlData(mp:TMultiProperty;pu:PTObjectUnit):Pointer;
+function GetOneVarData(mp:TMultiProperty;pu:PTEntityUnit):Pointer;
+function GetStringCounterData(mp:TMultiProperty;pu:PTEntityUnit):Pointer;
+function GetPointerCounterData(mp:TMultiProperty;pu:PTEntityUnit):Pointer;
+function GetVertex3DControlData(mp:TMultiProperty;pu:PTEntityUnit):Pointer;
 procedure FreeOneVarData(piteratedata:Pointer;mp:TMultiProperty);
 procedure FreeStringCounterData(piteratedata:Pointer;mp:TMultiProperty);
 procedure FreePNamedObjectCounterData(piteratedata:Pointer;mp:TMultiProperty);
@@ -85,14 +85,14 @@ procedure GeneralEntIterateProc(pdata:Pointer;ChangedData:TChangedData;mp:TMulti
 procedure EntityNameEntIterateProc(pdata:Pointer;ChangedData:TChangedData;mp:TMultiProperty;fistrun:boolean;ecp:TEntChangeProc; const f:TzeUnitsFormat);
 procedure EntityAddressEntIterateProc(pdata:Pointer;ChangedData:TChangedData;mp:TMultiProperty;fistrun:boolean;ecp:TEntChangeProc; const f:TzeUnitsFormat);
 procedure PolylineVertex3DControlEntIterateProc(pdata:Pointer;ChangedData:TChangedData;mp:TMultiProperty;fistrun:boolean;ecp:TEntChangeProc; const f:TzeUnitsFormat);
-procedure PolylineVertex3DControlFromVarEntChangeProc(pu:PTObjectUnit;pdata:PVarDesk;ChangedData:TChangedData;mp:TMultiProperty);
+procedure PolylineVertex3DControlFromVarEntChangeProc(pu:PTEntityUnit;pdata:PVarDesk;ChangedData:TChangedData;mp:TMultiProperty);
 procedure Double2SumEntIterateProc(pdata:Pointer;ChangedData:TChangedData;mp:TMultiProperty;fistrun:boolean;ecp:TEntChangeProc; const f:TzeUnitsFormat);
 procedure TArrayIndex2SumEntIterateProc(pdata:Pointer;ChangedData:TChangedData;mp:TMultiProperty;fistrun:boolean;ecp:TEntChangeProc; const f:TzeUnitsFormat);
 procedure Blockname2BlockNameCounterIterateProc(pdata:Pointer;ChangedData:TChangedData;mp:TMultiProperty;fistrun:boolean;ecp:TEntChangeProc; const f:TzeUnitsFormat);
 procedure PStyle2PStyleCounterIterateProc(pdata:Pointer;ChangedData:TChangedData;mp:TMultiProperty;fistrun:boolean;ecp:TEntChangeProc; const f:TzeUnitsFormat);
 procedure PolylineVertex3DControlBeforeEntIterateProc(pdata:Pointer;ChangedData:TChangedData);
 function CreateChangedData(pentity:pointer;GSData:TGetSetData):TChangedData;
-procedure GeneralFromVarEntChangeProc(pu:PTObjectUnit;pdata:PVarDesk;ChangedData:TChangedData;mp:TMultiProperty);
+procedure GeneralFromVarEntChangeProc(pu:PTEntityUnit;pdata:PVarDesk;ChangedData:TChangedData;mp:TMultiProperty);
 const
   OneVarDataMIPD:TMainIterateProcsData=(BeforeIterateProc:GetOneVarData;
                                         AfterIterateProc:FreeOneVarData);
@@ -109,13 +109,13 @@ implementation
 var
    Vertex3DControl:TArrayIndex=0;
 
-procedure GeneralFromVarEntChangeProc(pu:PTObjectUnit;pdata:PVarDesk;ChangedData:TChangedData;mp:TMultiProperty);
+procedure GeneralFromVarEntChangeProc(pu:PTEntityUnit;pdata:PVarDesk;ChangedData:TChangedData;mp:TMultiProperty);
 begin
      mp.MPType^.CopyInstanceTo(pvardesk(pdata)^.data.Addr.Instance,ChangedData.PSetDataInEtity);
      ProcessVariableAttributes(pvardesk(pdata)^.attrib,0,vda_approximately or vda_different);
 end;
 
-function FindOrCreateVar(pu:PTObjectUnit;varname,username,typename:String;out IVA:TInVectorAddr):Boolean;
+function FindOrCreateVar(pu:PTEntityUnit;varname,username,typename:String;out IVA:TInVectorAddr):Boolean;
 var
    vd:vardesk;
 begin
@@ -127,7 +127,7 @@ begin
   end else
     result:=false;
 end;
-function GetOneVarData(mp:TMultiProperty;pu:PTObjectUnit):Pointer;
+function GetOneVarData(mp:TMultiProperty;pu:PTEntityUnit):Pointer;
 {
 создает структуру с описанием одной переменной необходимой для mp в pu
 mp - описание мультипроперти
@@ -145,7 +145,7 @@ begin
     //PTOneVarData(result).VDAddr:=PVD^.data.Addr;
 end;
 
-function GetStringCounterData(mp:TMultiProperty;pu:PTObjectUnit):Pointer;
+function GetStringCounterData(mp:TMultiProperty;pu:PTEntityUnit):Pointer;
 {
 создает структуру с описанием переменной осуществляющей подсчет стрингов
 mp - описание мультипроперти
@@ -170,7 +170,7 @@ begin
     //PTStringCounterData(result).VDAddr:=PVD^.data.Addr;
 end;
 
-function GetPointerCounterData(mp:TMultiProperty;pu:PTObjectUnit):Pointer;
+function GetPointerCounterData(mp:TMultiProperty;pu:PTEntityUnit):Pointer;
 {
 создает структуру с описанием переменной осуществляющей подсчет указателей
 mp - описание мультипроперти
@@ -194,7 +194,7 @@ begin
 end;
 
 
-function GetVertex3DControlData(mp:TMultiProperty;pu:PTObjectUnit):Pointer;
+function GetVertex3DControlData(mp:TMultiProperty;pu:PTEntityUnit):Pointer;
 {
 создает структуру с описанием контроля 3Д вершин
 mp - описание мультипроперти
@@ -378,7 +378,7 @@ begin
                             ProcessVariableAttributes(pvardesk(PTVertex3DControlVarData(pdata).ZVarDescAddr.Instance)^.attrib,vda_different,vda_approximately);
                     end;
 end;
-procedure PolylineVertex3DControlFromVarEntChangeProc(pu:PTObjectUnit;pdata:PVarDesk;ChangedData:TChangedData;mp:TMultiProperty);
+procedure PolylineVertex3DControlFromVarEntChangeProc(pu:PTEntityUnit;pdata:PVarDesk;ChangedData:TChangedData;mp:TMultiProperty);
 var
    tv:PGDBVertex;
    v:GDBVertex;

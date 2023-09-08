@@ -356,21 +356,21 @@ procedure ConstructorFeature(pEntity:PGDBObjEntity);
 begin
      //if PFCTTD=nil then
      //                  PFCTTD:=sysunit.TypeName2PTD('PTObjectUnit');
-     //memman.Getmem(PGDBObjEntity(pEntity).OU.Instance,sizeof(TObjectUnit));
-     //PTObjectUnit(PGDBObjEntity(pEntity).OU.Instance).init('Entity');
-     //PTObjectUnit(PGDBObjEntity(pEntity).OU.Instance).InterfaceUses.add(@SysUnit);
+     //memman.Getmem(PGDBObjEntity(pEntity).OU.Instance,sizeof(TEntityUnit));
+     //PTEntityUnit(PGDBObjEntity(pEntity).OU.Instance).init('Entity');
+     //PTEntityUnit(PGDBObjEntity(pEntity).OU.Instance).InterfaceUses.add(@SysUnit);
      //PGDBObjEntity(pEntity).OU.PTD:=PFCTTD;
 end;
 
 procedure DestructorFeature(pEntity:PGDBObjEntity);
 begin
-     //PTObjectUnit(PGDBObjEntity(pEntity).OU.Instance).done;
+     //PTEntityUnit(PGDBObjEntity(pEntity).OU.Instance).done;
      //memman.Freemem(PGDBObjEntity(pEntity).OU.Instance);
 end;
 
 procedure GDBObjBlockDefLoadVarsFromFile(pEntity:PGDBObjBlockDef);
 var
-  uou:PTObjectUnit;
+  uou:PTEntityUnit;
   pentvarext:TVariablesExtender;
   //p:PTUnitManager;
   //S:string;

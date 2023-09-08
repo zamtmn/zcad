@@ -26,7 +26,7 @@ uses sysutils,uzbtypes,
 function GetProperty(PEnt:PGDBObjGenericWithSubordinated;propertyname:String; out propertyvalue:String):boolean;
 implementation
 var
-  pu:TObjectUnit;
+  pu:TEntityUnit;
 function GetProperty(PEnt:PGDBObjGenericWithSubordinated;propertyname:String; out propertyvalue:String):boolean;
 var
   mp:TMultiProperty;

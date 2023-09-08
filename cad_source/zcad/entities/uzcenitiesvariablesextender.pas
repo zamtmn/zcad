@@ -31,7 +31,7 @@ type
 TBaseVariablesExtender=class(TBaseEntityExtender)
   end;
 TVariablesExtender=class(TBaseVariablesExtender)
-    entityunit:TObjectUnit;
+    entityunit:TEntityUnit;
     pMainFuncEntity:PGDBObjEntity;
 
     DelegatesArray:TEntityArray;
@@ -241,7 +241,7 @@ begin
      pbdunit:=pblockdef^.EntExtensions.GetExtension<TVariablesExtender>;
      if pbdunit<>nil then
        pbdunit.entityunit.CopyTo(@self.entityunit);
-     //PTObjectUnit(pblockdef^.ou.Instance)^.copyto(PTObjectUnit(ou.Instance));
+     //PTEntityUnit(pblockdef^.ou.Instance)^.copyto(PTEntityUnit(ou.Instance));
 end;
 procedure TVariablesExtender.onBeforeEntityFormat(pEntity:Pointer;const drawing:TDrawingDef;var DC:TDrawContext);
 begin
@@ -336,15 +336,15 @@ begin
      end;
      vardata.entityunit.setvardesc(vd,vn,vun,vt);
      vardata.entityunit.InterfaceVariables.createvariable(vd.name,vd);
-     //PTObjectUnit(PEnt^.ou.Instance)^.setvardesc(vd,vn,vun,vt);
-     //PTObjectUnit(PEnt^.ou.Instance)^.InterfaceVariables.createvariable(vd.name,vd);
+     //PTEntityUnit(PEnt^.ou.Instance)^.setvardesc(vd,vn,vun,vt);
+     //PTEntityUnit(PEnt^.ou.Instance)^.InterfaceVariables.createvariable(vd.name,vd);
      PBaseTypeDescriptor(vd.data.PTD)^.SetValueFromString(vd.data.Addr.Instance,vv);
      result:=true;
 end;
 
 class function TVariablesExtender.EntIOLoadUSES(_Name,_Value:String;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
 var
-    usedunit:PTObjectUnit;
+    usedunit:PTEntityUnit;
     vardata:TVariablesExtender;
 begin
      vardata:=PGDBObjEntity(PEnt)^.GetExtension<TVariablesExtender>;
@@ -394,7 +394,7 @@ begin
        pvu:=vardata.entityunit.InterfaceUses.beginiterate(ir);
        if pvu<>nil then
        repeat
-         if typeof(pvu^)<>typeof(TObjectUnit) then begin
+         if typeof(pvu^)<>typeof(TEntityUnit) then begin
            str:='USES='+pvu^.Name;
            dxfStringout(outhandle,1000,str);
          end;

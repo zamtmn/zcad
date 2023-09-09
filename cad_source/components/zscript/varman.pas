@@ -219,8 +219,13 @@ TSimpleUnit=object(TAbstractUnit)
 PTEntityUnit=^TEntityUnit;
 {REGISTEROBJECTWITHOUTCONSTRUCTORTYPE TEntityUnit}
 TEntityUnit=object(TSimpleUnit)
-                  //function SaveToMem(var membuf:TZctnrVectorBytes):PUserTypeDescriptor;virtual;
+                  ConnectedUses:TZctnrVectorPointer;
                   procedure free;virtual;
+                  constructor init(nam:TInternalScriptString);
+                  destructor done;virtual;
+
+                  function FindVariable(varname:TInternalScriptString;InInterfaceOnly:Boolean=False):pvardesk;virtual;
+                  function FindVarDesc(varname:TInternalScriptString):TInVectorAddr;virtual;
             end;
 {REGISTEROBJECTWITHOUTCONSTRUCTORTYPE TUnit}
 TUnit=object(TSimpleUnit)
@@ -655,6 +660,56 @@ begin
      //self.InterfaceVariables.vardescarray.Clear;
      self.InterfaceVariables.vararray.Clear;
 end;
+constructor TEntityUnit.init;
+begin
+  inherited;
+  ConnectedUses.init(10);
+end;
+destructor TEntityUnit.done;
+begin
+  ConnectedUses.done;
+  inherited;
+end;
+
+function TEntityUnit.findvariable;
+var
+  p:ptunit;
+  ir:itrec;
+begin
+  result:=inherited findvariable(varname,InInterfaceOnly);
+  if (result=nil)and(InInterfaceOnly=False) then begin
+    p:=ConnectedUses.beginiterate(ir);
+    if p<>nil then
+      repeat
+        result:=p^.FindVariable(varname);
+        if result<>nil then
+          exit;
+        p:=ConnectedUses.iterate(ir);
+      until p=nil;
+  end;
+end;
+
+function TEntityUnit.FindVarDesc(varname:TInternalScriptString):TInVectorAddr;
+var
+  p:ptunit;
+  ir:itrec;
+  i:integer;
+begin
+  result:=inherited FindVarDesc(varname);
+  if result.IsNil then begin
+    p:=ConnectedUses.beginiterate(ir);
+    if p<>nil then
+      repeat
+        result:=p^.FindVarDesc(varname);
+        if not result.IsNil then
+          exit;
+        p:=ConnectedUses.iterate(ir);
+    until p=nil;
+  end;
+end;
+
+
+
 function TSimpleUnit.SaveToMem(var membuf:TZctnrVectorBytes;PEntUnits:PTZctnrVectorPointer=nil):PUserTypeDescriptor;
 var
    pu:PTUnit;

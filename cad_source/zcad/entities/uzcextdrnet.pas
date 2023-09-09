@@ -47,12 +47,6 @@ type
   end;
   TKnotsUtils=TOrderingArrayUtils<TKnots,TKnot,TKnotLess>;
 
-
-TNet=class
-    Entities:GDBObjOpenArrayOfPV;
-    constructor Create;
-    destructor Destroy;override;
-end;
 TConnectPoint=record
   t:Double;
   count:Integer;
@@ -63,10 +57,16 @@ TIntersectPointsLess=class
   class function c(a,b:Double):boolean;
 end;
 TIntersectPointsUtil=TOrderingArrayUtils<TZctnrVectorDouble,Double,TIntersectPointsLess>;
+
+  TNet=class
+    Entities:GDBObjOpenArrayOfPV;
+    constructor Create;
+    destructor Destroy;override;
+  end;
+
 TNetExtender=class(TBaseEntityExtender)
     pThisEntity:PGDBObjEntity;
     ConnectedWith,IntersectedWith:GDBObjOpenArrayOfPV;
-    //Intersects:TZctnrVectorDouble;
     Connections:TConnectPoints;
     Setters:GDBObjOpenArrayOfPV;
     Pins:GDBObjOpenArrayOfPV;

@@ -15,7 +15,7 @@
 {
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
-unit uzcenitiesvariablesextender;
+unit uzcEnitiesVariablesExtender;
 {$INCLUDE zengineconfig.inc}
 
 interface
@@ -31,7 +31,7 @@ type
 TBaseVariablesExtender=class(TBaseEntityExtender)
   end;
 TVariablesExtender=class(TBaseVariablesExtender)
-    entityunit:TEntityUnit;
+    EntityUnit:TEntityUnit;
     pMainFuncEntity:PGDBObjEntity;
 
     DelegatesArray:TEntityArray;
@@ -245,6 +245,7 @@ begin
 end;
 procedure TVariablesExtender.onBeforeEntityFormat(pEntity:Pointer;const drawing:TDrawingDef;var DC:TDrawContext);
 begin
+  entityunit.ConnectedUses.Clear;
 end;
 procedure TVariablesExtender.onAfterEntityFormat(pEntity:Pointer;const drawing:TDrawingDef;var DC:TDrawContext);
 begin

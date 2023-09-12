@@ -172,6 +172,18 @@ begin
 
       p:=self.ObjToConnectedArray.iterate(ir);
     until p=nil;
+
+  p:=self.ObjToConnectedArray.beginiterate(ir);
+  if p<>nil then
+    repeat
+      if IsIt(TypeOf(p^),typeof(GDBObjConnected)) then
+        PGDBObjConnected(p)^.connectedtogdb(@self,drawing);
+
+      p^.EntExtensions.RunOnAfterConnect(p,drawing,DC);
+
+      p:=self.ObjToConnectedArray.iterate(ir);
+    until p=nil;
+
   self.ObjToConnectedArray.clear;
 
   p:=ObjCasheArray.beginiterate(ir);

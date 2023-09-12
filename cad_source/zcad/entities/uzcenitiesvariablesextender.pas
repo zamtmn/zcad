@@ -53,6 +53,8 @@ TVariablesExtender=class(TBaseVariablesExtender)
     procedure PostLoad(var context:TIODXFLoadContext);override;
     procedure onRemoveFromArray(pEntity:Pointer;const drawing:TDrawingDef);override;
 
+    procedure onEntityBeforeConnect(pEntity:Pointer;const drawing:TDrawingDef;var DC:TDrawContext);virtual;
+
     function isMainFunction:boolean;
 
     // возвращает сам себя если
@@ -244,6 +246,9 @@ begin
      //PTEntityUnit(pblockdef^.ou.Instance)^.copyto(PTEntityUnit(ou.Instance));
 end;
 procedure TVariablesExtender.onBeforeEntityFormat(pEntity:Pointer;const drawing:TDrawingDef;var DC:TDrawContext);
+begin
+end;
+procedure TVariablesExtender.onEntityBeforeConnect(pEntity:Pointer;const drawing:TDrawingDef;var DC:TDrawContext);
 begin
   entityunit.ConnectedUses.Clear;
 end;

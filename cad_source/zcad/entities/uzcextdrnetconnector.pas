@@ -31,6 +31,7 @@ uses sysutils,uzedrawingdef,uzeentityextender,
 const
   NetConnectorExtenderName='extdrNetConnector';
 type
+
   TNetConnectorExtender=class(TBaseEntityExtender)
     public
       FConnectorRadius:Double;
@@ -58,6 +59,8 @@ type
     class function EntIOLoadNetConnectorSetter(_Name,_Value:String;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
 
     procedure SaveToDxfObjXData(var outhandle:TZctnrVectorBytes;PEnt:Pointer;var IODXFContext:TIODXFContext);override;
+
+    procedure AddToDWGPostProcs(pEntity:Pointer;const drawing:TDrawingDef);
 
   end;
 
@@ -104,8 +107,52 @@ end;
 procedure TNetConnectorExtender.onEntityBuildVarGeometry(pEntity:pointer;const drawing:TDrawingDef);
 begin
 end;
-procedure TNetConnectorExtender.onBeforeEntityFormat(pEntity:Pointer;const drawing:TDrawingDef;var DC:TDrawContext);
+
+procedure TNetConnectorExtender.AddToDWGPostProcs(pEntity:Pointer;const drawing:TDrawingDef);
+var
+  p:PGDBObjLine;
+  ir:itrec;
 begin
+  {p:=ConnectedWith.beginiterate(ir);
+  if p<>nil then
+  repeat
+    if p<>nil then
+      PGDBObjGenericSubEntry(drawing.GetCurrentRootSimple)^.ObjToConnectedArray.PushBackIfNotPresent(p);
+      PGDBObjGenericSubEntry(drawing.GetCurrentRootSimple)^.ObjCasheArray.PushBackIfNotPresent(p);
+  p:=ConnectedWith.iterate(ir);
+  until p=nil;
+  ConnectedWith.Clear;
+
+  p:=IntersectedWith.beginiterate(ir);
+  if p<>nil then
+  repeat
+    if p<>nil then
+      PGDBObjGenericSubEntry(drawing.GetCurrentRootSimple)^.ObjToConnectedArray.PushBackIfNotPresent(p);
+      PGDBObjGenericSubEntry(drawing.GetCurrentRootSimple)^.ObjCasheArray.PushBackIfNotPresent(p);
+  p:=IntersectedWith.iterate(ir);
+  until p=nil;
+  IntersectedWith.Clear;}
+end;
+
+procedure TNetConnectorExtender.onBeforeEntityFormat(pEntity:Pointer;const drawing:TDrawingDef;var DC:TDrawContext);
+//var
+ // CNet:TNet;
+begin
+  if {pThisEntity}pEntity<>nil then begin
+    if not (ESConstructProxy in PGDBObjEntity(pEntity)^.State) then
+      if IsIt(TypeOf(PGDBObjEntity(pEntity)^),typeof(GDBObjLine)) then begin
+        //if Assigned(Net) then begin
+        //  CNet:=Net;
+        //  Net.RemoveMi(Self);
+        //  if CNet.Entities.Count=0 then
+        //    CNet.Destroy;
+        //end;
+
+        AddToDWGPostProcs(pEntity,drawing);
+
+        PGDBObjEntity(pEntity)^.addtoconnect2(pEntity,PGDBObjGenericSubEntry(drawing.GetCurrentRootSimple)^.ObjToConnectedArray);
+      end;
+  end;
 end;
 procedure TNetConnectorExtender.onEntityConnect(pEntity:Pointer;const drawing:TDrawingDef;var DC:TDrawContext);
 begin

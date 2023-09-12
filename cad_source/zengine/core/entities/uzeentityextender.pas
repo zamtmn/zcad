@@ -41,6 +41,8 @@ TBaseEntityExtender=class(TBaseExtender)
                   procedure SaveToDxfObjXData(var outhandle:TZctnrVectorBytes;PEnt:Pointer;var IODXFContext:TIODXFContext);virtual;abstract;
                   procedure SaveToDXFfollow(PEnt:Pointer;var outhandle:TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext)virtual;
                   procedure onEntityConnect(pEntity:Pointer;const drawing:TDrawingDef;var DC:TDrawContext);virtual;
+                  procedure onEntityAfterConnect(pEntity:Pointer;const drawing:TDrawingDef;var DC:TDrawContext);virtual;
+                  procedure onEntityBeforeConnect(pEntity:Pointer;const drawing:TDrawingDef;var DC:TDrawContext);virtual;
                   function NeedStandardDraw(pEntity:Pointer;const drawing:TDrawingDef;var DC:TDrawContext):Boolean;virtual;
 end;
 TMetaEntityExtender=class of TBaseEntityExtender;
@@ -75,6 +77,8 @@ TEntityExtensions=class
                        procedure RunSaveToDxf(var outhandle:TZctnrVectorBytes;PEnt:Pointer;var IODXFContext:TIODXFContext);
                        procedure RunSaveToDXFfollow(PEnt:Pointer;var outhandle:TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);
                        procedure RunOnConnect(pEntity:Pointer;const drawing:TDrawingDef;var DC:TDrawContext);
+                       procedure RunOnAfterConnect(pEntity:Pointer;const drawing:TDrawingDef;var DC:TDrawContext);
+                       procedure RunOnBeforeConnect(pEntity:Pointer;const drawing:TDrawingDef;var DC:TDrawContext);
                   end;
   TEntityExtendersMap=GKey2DataMap<string,TMetaEntityExtender>;
 var
@@ -92,6 +96,15 @@ end;
 procedure TBaseEntityExtender.onEntityConnect(pEntity:Pointer;const drawing:TDrawingDef;var DC:TDrawContext);
 begin
 end;
+
+procedure TBaseEntityExtender.onEntityAfterConnect(pEntity:Pointer;const drawing:TDrawingDef;var DC:TDrawContext);
+begin
+end;
+
+procedure TBaseEntityExtender.onEntityBeforeConnect(pEntity:Pointer;const drawing:TDrawingDef;var DC:TDrawContext);
+begin
+end;
+
 
 function TEntityExtensions.AddExtension(ExtObj:TBaseEntityExtender):TBaseEntityExtender;
 var
@@ -313,6 +326,26 @@ begin
      for i:=0 to fEntityExtensions.Size-1 do
        if fEntityExtensions[i]<>nil then
          fEntityExtensions[i].onEntityConnect(pEntity,drawing,DC);
+end;
+
+procedure TEntityExtensions.RunOnAfterConnect(pEntity:Pointer;const drawing:TDrawingDef;var DC:TDrawContext);
+var
+  i:integer;
+begin
+     if assigned(fEntityExtensions)then
+     for i:=0 to fEntityExtensions.Size-1 do
+       if fEntityExtensions[i]<>nil then
+         fEntityExtensions[i].onEntityAfterConnect(pEntity,drawing,DC);
+end;
+
+procedure TEntityExtensions.RunOnBeforeConnect(pEntity:Pointer;const drawing:TDrawingDef;var DC:TDrawContext);
+var
+  i:integer;
+begin
+     if assigned(fEntityExtensions)then
+     for i:=0 to fEntityExtensions.Size-1 do
+       if fEntityExtensions[i]<>nil then
+         fEntityExtensions[i].onEntityBeforeConnect(pEntity,drawing,DC);
 end;
 
 initialization

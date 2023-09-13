@@ -53,7 +53,7 @@ TVariablesExtender=class(TBaseVariablesExtender)
     procedure PostLoad(var context:TIODXFLoadContext);override;
     procedure onRemoveFromArray(pEntity:Pointer;const drawing:TDrawingDef);override;
 
-    procedure onEntityBeforeConnect(pEntity:Pointer;const drawing:TDrawingDef;var DC:TDrawContext);virtual;
+    procedure onEntityBeforeConnect(pEntity:Pointer;const drawing:TDrawingDef;var DC:TDrawContext);override;
 
     function isMainFunction:boolean;
 

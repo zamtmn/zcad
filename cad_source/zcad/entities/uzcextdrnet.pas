@@ -25,7 +25,7 @@ uses sysutils,uzedrawingdef,uzeentityextender,
      uzbtypes,uzeentsubordinated,uzeentity,uzeblockdef,
      //varmandef,Varman,UUnitManager,URecordDescriptor,UBaseTypeDescriptor,
      usimplegenerics,uzeffdxfsupport,//uzbpaths,uzcTranslations,
-     gzctnrVectorTypes,uzeBaseExtender,uzgldrawcontext,
+     gzctnrVectorSimple,gzctnrVectorTypes,uzeBaseExtender,uzgldrawcontext,
      uzegeometrytypes,uzcsysvars,
      uzctnrVectorDouble,gzctnrVector,garrayutils,
      uzcExtdrNetConnector,uzcEnitiesVariablesExtender;
@@ -57,32 +57,10 @@ TIntersectPointsLess=class
 end;
 TIntersectPointsUtil=TOrderingArrayUtils<TZctnrVectorDouble,Double,TIntersectPointsLess>;
 
-  TNet=class;
-  TBaseNetExtender=class(TBaseEntityExtender)
-    Net:TNet;
-    pThisEntity:PGDBObjEntity;
-    constructor Create(pEntity:Pointer);override;
-    destructor Destroy;override;
-  end;
-
-  //TNetExtendersVector=GZVector<TBaseNetExtender>;
-
-  TNet=class
-    Lines:GDBObjOpenArrayOfPV;
-    Setters:GDBObjOpenArrayOfPV;
-    constructor Create;
-    destructor Destroy;override;
-    procedure AddLine(Extdr:TBaseNetExtender);
-    procedure RemoveLine(Extdr:TBaseNetExtender);
-    function BiggerThat(Net:TNet):Boolean;
-    procedure ConsumeNet(Net:TNet);
-    class procedure ConcatNets(Extdr1,Extdr2:TBaseNetExtender);
-  end;
-
 TNetExtender=class(TBaseNetExtender)
     ConnectedWith,IntersectedWith:GDBObjOpenArrayOfPV;
     Connections:TConnectPoints;
-    Pins:GDBObjOpenArrayOfPV;
+    //Pins:GDBObjOpenArrayOfPV;
     Knots:TKnots;
     class function getExtenderName:string;override;
     constructor Create(pEntity:Pointer);override;
@@ -148,91 +126,10 @@ begin
   count:=1;
 end;
 
-constructor TNet.Create;
-begin
-  Lines.init(10);
-  Setters.init(2);
-end;
-
-destructor TNet.Destroy;
-begin
-  Lines.Clear;
-  Lines.done;
-  Setters.Clear;
-  Setters.done;
-end;
-
-procedure TNet.AddLine(Extdr:TBaseNetExtender);
-begin
-  Lines.PushBackIfNotPresent(Extdr.pThisEntity);
-  Extdr.Net:=Self;
-end;
-procedure TNet.RemoveLine(Extdr:TBaseNetExtender);
-begin
-  Lines.RemoveDataFromArray(Extdr.pThisEntity);
-  Extdr.Net:=nil;
-end;
-function TNet.BiggerThat(Net:TNet):Boolean;
-begin
-  result:=Lines.GetCount>Net.Lines.GetCount;
-end;
-
-procedure TNet.ConsumeNet(Net:TNet);
-var
-  p:PGDBObjEntity;
-  ir:itrec;
-  Extender:TNetExtender;
-begin
-  p:=Net.Lines.beginiterate(ir);
-  if p<>nil then
-  repeat
-    Extender:=p^.GetExtension<TNetExtender>;
-    if Extender<>nil then begin
-      Net.RemoveLine(Extender);
-      AddLine(Extender);
-    end;
-  p:=Net.Lines.iterate(ir);
-  until p=nil;
-end;
-
-class procedure TNet.ConcatNets(Extdr1,Extdr2:TBaseNetExtender);
-var
-  NewNet:TNet;
-begin
-  if (Extdr1.Net=nil)and(Extdr2.Net=nil)then begin
-    NewNet:=TNet.Create;
-    NewNet.AddLine(Extdr1);
-    NewNet.AddLine(Extdr2);
-  end else if Extdr1.Net=Extdr2.Net then begin
-    //уже склеены, ничего не делаем
-  end else if (Extdr1.Net<>nil)and(Extdr2.Net<>nil)then begin
-    if Extdr1.Net.BiggerThat(Extdr2.Net) then begin
-      Extdr1.Net.ConsumeNet(Extdr2.Net);
-      Extdr2.Net.Destroy;
-    end else begin
-      Extdr2.Net.ConsumeNet(Extdr1.Net);
-      FreeAndNil(Extdr1.Net);
-    end;
-  end else if Extdr1.Net<>nil then begin
-    Extdr1.Net.AddLine(Extdr2)
-  end else begin
-    Extdr2.Net.AddLine(Extdr1)
-  end;
-end;
-
 function AddNetExtenderToEntity(PEnt:PGDBObjEntity):TNetExtender;
 begin
   result:=TNetExtender.Create(PEnt);
   PEnt^.AddExtension(result);
-end;
-constructor TBaseNetExtender.Create(pEntity:Pointer);
-begin
-  Net:=nil;
-  pThisEntity:=pEntity;
-end;
-destructor TBaseNetExtender.Destroy;
-begin
-
 end;
 
 procedure TNetExtender.onEntitySupportOldVersions(pEntity:pointer;const drawing:TDrawingDef);
@@ -246,7 +143,7 @@ begin
   //Intersects.init(2);
   Connections.init(3);
   //Setters.init(2);
-  Pins.init(2);
+  //Pins.init(2);
   Knots.init(10);
   Net:=nil;
 end;
@@ -258,7 +155,7 @@ begin
   //Intersects.destroy;
   Connections.destroy;
   //Setters.destroy;
-  Pins.destroy;
+  //Pins.destroy;
   Knots.destroy;
 end;
 procedure TNetExtender.Assign(Source:TBaseExtender);
@@ -270,7 +167,10 @@ var
   p:PGDBObjLine;
   ir:itrec;
 begin
-  p:=ConnectedWith.beginiterate(ir);
+  if Assigned(Net) then
+    Net.AddToDWGPostProcs(pEntity,drawing);
+
+  {p:=ConnectedWith.beginiterate(ir);
   if p<>nil then
   repeat
     if p<>nil then
@@ -278,7 +178,7 @@ begin
       PGDBObjGenericSubEntry(drawing.GetCurrentRootSimple)^.ObjCasheArray.PushBackIfNotPresent(p);
   p:=ConnectedWith.iterate(ir);
   until p=nil;
-  ConnectedWith.Clear;
+  ConnectedWith.Clear;}
 
   p:=IntersectedWith.beginiterate(ir);
   if p<>nil then
@@ -310,8 +210,9 @@ begin
       if IsIt(TypeOf(pThisEntity^),typeof(GDBObjLine)) then begin
         if Assigned(Net) then begin
           CNet:=Net;
-          Net.RemoveLine(Self);
-          if CNet.Lines.Count=0 then
+          Net.RemoveConnection(Self);
+          CNet.AddToDWGPostProcs(pEntity,drawing);
+          if CNet.IsEmpty then
             CNet.Destroy;
         end;
 
@@ -323,27 +224,28 @@ begin
 end;
 procedure TNetExtender.onEntityAfterConnect(pEntity:Pointer;const drawing:TDrawingDef;var DC:TDrawContext);
 var
-  psetter,ppin:PGDBObjEntity;
+  ppin:TBaseNetExtender;
+  setter:TBaseNetExtender;
   ir,eir:itrec;
   SVExtdr,PVExtdr:TVariablesExtender;
   ConnectorExtender:TNetConnectorExtender;
 begin
   if Assigned(Net) then begin
-    psetter:=Net.Setters.beginiterate(ir);
-    if psetter<>nil then
+    setter:=Net.Setters.beginiterate(ir);
+    if setter<>nil then
     repeat
-      SVExtdr:=psetter^.GetExtension<TVariablesExtender>;
+      SVExtdr:=setter.pThisEntity^.GetExtension<TVariablesExtender>;
 
-      ppin:=Pins.beginiterate(eir);
+      ppin:=Net.Pins.beginiterate(eir);
       if ppin<>nil then
       repeat
-        PVExtdr:=ppin^.GetExtension<TVariablesExtender>;
+        PVExtdr:=ppin.pThisEntity^.GetExtension<TVariablesExtender>;
         PVExtdr.EntityUnit.ConnectedUses.PushBackIfNotPresent(@SVExtdr.EntityUnit);
-        ppin:=Pins.iterate(eir);
+        ppin:=Net.Pins.iterate(eir);
       until ppin=nil;
 
-      psetter:=Net.Setters.iterate(ir);
-    until psetter=nil;
+      setter:=Net.Setters.iterate(ir);
+    until setter=nil;
   end;
 end;
 procedure TNetExtender.onEntityConnect(pEntity:Pointer;const drawing:TDrawingDef;var DC:TDrawContext);
@@ -355,7 +257,7 @@ begin
   //Intersects.Clear;
   Connections.Clear;
   //Setters.Clear;
-  Pins.Clear;
+  //Pins.Clear;
   Knots.Clear;
   if pThisEntity<>nil then begin
     if not (ESConstructProxy in pThisEntity^.State) then
@@ -663,12 +565,15 @@ begin
             Knots.PushBackData(knot);
             if not Assigned(Net) then begin
               Net:=TNet.Create;
-              Net.AddLine(Self);
+              Net.AddConnection(Self);
             end;
             if ConnectorExtender.FSetter then
-              Net.Setters.PushBackIfNotPresent(p)
-            else
-              Pins.PushBackIfNotPresent(p);
+              Net.AddSetter(ConnectorExtender)
+            else begin
+              Net.AddPin(ConnectorExtender);
+              PGDBObjGenericSubEntry(drawing.GetCurrentRootSimple)^.ObjToConnectedArray.PushBackIfNotPresent(p);
+              PGDBObjGenericSubEntry(drawing.GetCurrentRootSimple)^.ObjCasheArray.PushBackIfNotPresent(p);
+            end;
           end;
         end;
       end;
@@ -709,12 +614,15 @@ begin
           Knots.PushBackData(knot);
           if not Assigned(Net) then begin
             Net:=TNet.Create;
-            Net.AddLine(Self);
+            Net.AddConnection(Self);
           end;
           if ConnectorExtender.FSetter then
-            Net.Setters.PushBackIfNotPresent(p)
-          else
-            Pins.PushBackIfNotPresent(p);
+            Net.AddSetter(ConnectorExtender)
+          else begin
+            Net.AddPin(ConnectorExtender);
+            PGDBObjGenericSubEntry(drawing.GetCurrentRootSimple)^.ObjToConnectedArray.PushBackIfNotPresent(p);
+            PGDBObjGenericSubEntry(drawing.GetCurrentRootSimple)^.ObjCasheArray.PushBackIfNotPresent(p);
+          end;
         end;
       end;
     end;

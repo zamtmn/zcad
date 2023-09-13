@@ -165,6 +165,16 @@ begin
   p:=self.ObjToConnectedArray.beginiterate(ir);
   if p<>nil then
     repeat
+
+      p^.EntExtensions.RunOnBeforeConnect(p,drawing,DC);
+
+      p:=self.ObjToConnectedArray.iterate(ir);
+    until p=nil;
+
+
+  p:=self.ObjToConnectedArray.beginiterate(ir);
+  if p<>nil then
+    repeat
       if IsIt(TypeOf(p^),typeof(GDBObjConnected)) then
         PGDBObjConnected(p)^.connectedtogdb(@self,drawing);
 
@@ -176,8 +186,6 @@ begin
   p:=self.ObjToConnectedArray.beginiterate(ir);
   if p<>nil then
     repeat
-      if IsIt(TypeOf(p^),typeof(GDBObjConnected)) then
-        PGDBObjConnected(p)^.connectedtogdb(@self,drawing);
 
       p^.EntExtensions.RunOnAfterConnect(p,drawing,DC);
 

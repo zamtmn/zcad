@@ -26,13 +26,44 @@ uses sysutils,uzedrawingdef,uzeentityextender,
      //varmandef,Varman,UUnitManager,URecordDescriptor,UBaseTypeDescriptor,
      usimplegenerics,uzeffdxfsupport,//uzbpaths,uzcTranslations,
      gzctnrVectorTypes,uzeBaseExtender,uzgldrawcontext,
-     uzegeometrytypes,uzcsysvars,
+     uzegeometrytypes,uzcsysvars,gzctnrVectorSimple,gzctnrVectorP,
      uzctnrVectorDouble,gzctnrVector,garrayutils;
 const
   NetConnectorExtenderName='extdrNetConnector';
 type
 
-  TNetConnectorExtender=class(TBaseEntityExtender)
+  TNet=class;
+  TBaseNetExtender=class(TBaseEntityExtender)
+    Net:TNet;
+    pThisEntity:PGDBObjEntity;
+    constructor Create(pEntity:Pointer);override;
+    destructor Destroy;override;
+  end;
+
+  TNetExtendersVector=GZVectorP<TBaseNetExtender>;
+
+  TNet=class
+    Connections:TNetExtendersVector;
+    Setters:TNetExtendersVector;
+    Pins:TNetExtendersVector;
+    constructor Create;
+    destructor Destroy;override;
+    procedure AddConnection(Extdr:TBaseNetExtender);
+    procedure RemoveConnection(Extdr:TBaseNetExtender);
+    procedure AddSetter(Extdr:TBaseNetExtender);
+    procedure RemoveSetter(Extdr:TBaseNetExtender);
+    procedure AddPin(Extdr:TBaseNetExtender);
+    procedure RemovePin(Extdr:TBaseNetExtender);
+
+    function BiggerThat(Net:TNet):Boolean;
+    function IsEmpty:Boolean;
+    procedure ConsumeNet(Net:TNet);
+    class procedure ConcatNets(Extdr1,Extdr2:TBaseNetExtender);
+
+    procedure AddToDWGPostProcs(pEntity:Pointer;const drawing:TDrawingDef);
+  end;
+
+  TNetConnectorExtender=class(TBaseNetExtender)
     public
       FConnectorRadius:Double;
       FSetter:Boolean;
@@ -69,6 +100,166 @@ function AddNetConnectorExtenderToEntity(PEnt:PGDBObjEntity):TNetConnectorExtend
 
 implementation
 
+constructor TBaseNetExtender.Create(pEntity:Pointer);
+begin
+  Net:=nil;
+  pThisEntity:=pEntity;
+end;
+destructor TBaseNetExtender.Destroy;
+begin
+
+end;
+
+constructor TNet.Create;
+begin
+  Connections.init(10);
+  Setters.init(2);
+  Pins.init(10);
+end;
+
+destructor TNet.Destroy;
+begin
+  Connections.Clear;
+  Connections.done;
+
+  Setters.Clear;
+  Setters.done;
+
+  Pins.Clear;
+  Pins.done;
+end;
+
+procedure TNet.AddConnection(Extdr:TBaseNetExtender);
+begin
+  Connections.PushBackIfNotPresent(Extdr);
+  Extdr.Net:=Self;
+end;
+procedure TNet.RemoveConnection(Extdr:TBaseNetExtender);
+begin
+  Connections.RemoveDataFromArray(Extdr);
+  Extdr.Net:=nil;
+end;
+procedure TNet.AddSetter(Extdr:TBaseNetExtender);
+var
+  ir:itrec;
+begin
+  Setters.PushBackIfNotPresent(Extdr);
+  Extdr.Net:=Self;
+end;
+procedure TNet.RemoveSetter(Extdr:TBaseNetExtender);
+begin
+  Setters.RemoveDataFromArray(Extdr);
+  Extdr.Net:=nil;
+end;
+procedure TNet.AddPin(Extdr:TBaseNetExtender);
+var
+  ir:itrec;
+begin
+  Pins.PushBackIfNotPresent(Extdr);
+  Extdr.Net:=Self;
+end;
+procedure TNet.RemovePin(Extdr:TBaseNetExtender);
+begin
+  Pins.RemoveDataFromArray(Extdr);
+  Extdr.Net:=nil;
+end;
+
+function TNet.BiggerThat(Net:TNet):Boolean;
+begin
+  result:=Connections.GetCount>Net.Connections.GetCount;
+end;
+function TNet.IsEmpty:Boolean;
+begin
+  result:=(Connections.GetCount=0)and(Setters.GetCount=0)and(Pins.GetCount=0);
+end;
+
+procedure TNet.ConsumeNet(Net:TNet);
+var
+  p:{PGDBObjEntity}TBaseNetExtender;
+  ir:itrec;
+  //Extender:TNetExtender;
+begin
+  p:=Net.Connections.beginiterate(ir);
+  if p<>nil then
+  repeat
+    //Extender:=p^.GetExtension<TNetExtender>;
+    //if Extender<>nil then begin
+      Net.RemoveConnection({Extender}p);
+      AddConnection({Extender}p);
+    //end;
+  p:=Net.Connections.iterate(ir);
+  until p=nil;
+
+  p:=Net.Setters.beginiterate(ir);
+  if p<>nil then
+  repeat
+    //Extender:=p^.GetExtension<TNetExtender>;
+    //if Extender<>nil then begin
+      Net.RemoveSetter({Extender}p);
+      AddSetter({Extender}p);
+    //end;
+  p:=Net.Setters.iterate(ir);
+  until p=nil;
+end;
+
+procedure TNet.AddToDWGPostProcs(pEntity:Pointer;const drawing:TDrawingDef);
+var
+  p:TBaseNetExtender;
+  ir:itrec;
+begin
+  p:=Connections.beginiterate(ir);
+  if p<>nil then
+  repeat
+    PGDBObjGenericSubEntry(drawing.GetCurrentRootSimple)^.ObjToConnectedArray.PushBackIfNotPresent(p.pThisEntity);
+    PGDBObjGenericSubEntry(drawing.GetCurrentRootSimple)^.ObjCasheArray.PushBackIfNotPresent(p.pThisEntity);
+
+  p:=Connections.iterate(ir);
+  until p=nil;
+
+  p:=Setters.beginiterate(ir);
+  if p<>nil then
+  repeat
+    PGDBObjGenericSubEntry(drawing.GetCurrentRootSimple)^.ObjToConnectedArray.PushBackIfNotPresent(p.pThisEntity);
+    PGDBObjGenericSubEntry(drawing.GetCurrentRootSimple)^.ObjCasheArray.PushBackIfNotPresent(p.pThisEntity);
+
+  p:=Setters.iterate(ir);
+  until p=nil;
+
+  p:=Pins.beginiterate(ir);
+  if p<>nil then
+  repeat
+    PGDBObjGenericSubEntry(drawing.GetCurrentRootSimple)^.ObjToConnectedArray.PushBackIfNotPresent(p.pThisEntity);
+    PGDBObjGenericSubEntry(drawing.GetCurrentRootSimple)^.ObjCasheArray.PushBackIfNotPresent(p.pThisEntity);
+
+  p:=Pins.iterate(ir);
+  until p=nil;
+end;
+
+class procedure TNet.ConcatNets(Extdr1,Extdr2:TBaseNetExtender);
+var
+  NewNet:TNet;
+begin
+  if (Extdr1.Net=nil)and(Extdr2.Net=nil)then begin
+    NewNet:=TNet.Create;
+    NewNet.AddConnection(Extdr1);
+    NewNet.AddConnection(Extdr2);
+  end else if Extdr1.Net=Extdr2.Net then begin
+    //уже склеены, ничего не делаем
+  end else if (Extdr1.Net<>nil)and(Extdr2.Net<>nil)then begin
+    if Extdr1.Net.BiggerThat(Extdr2.Net) then begin
+      Extdr1.Net.ConsumeNet(Extdr2.Net);
+      Extdr2.Net.Destroy;
+    end else begin
+      Extdr2.Net.ConsumeNet(Extdr1.Net);
+      FreeAndNil(Extdr1.Net);
+    end;
+  end else if Extdr1.Net<>nil then begin
+    Extdr1.Net.AddConnection(Extdr2)
+  end else begin
+    Extdr2.Net.AddConnection(Extdr1)
+  end;
+end;
+
 function AddNetConnectorExtenderToEntity(PEnt:PGDBObjEntity):TNetConnectorExtender;
 begin
   result:=TNetConnectorExtender.Create(PEnt);
@@ -79,6 +270,7 @@ begin
 end;
 constructor TNetConnectorExtender.Create;
 begin
+  inherited Create(pEntity);
   FConnectorRadius:=0;
   FSetter:=False;
 end;
@@ -94,6 +286,7 @@ end;
 
 procedure TNetConnectorExtender.onRemoveFromArray(pEntity:Pointer;const drawing:TDrawingDef);
 begin
+  AddToDWGPostProcs(pEntity,drawing);
 end;
 procedure TNetConnectorExtender.onEntityClone(pSourceEntity,pDestEntity:pointer);
 var
@@ -135,25 +328,29 @@ begin
 end;
 
 procedure TNetConnectorExtender.onBeforeEntityFormat(pEntity:Pointer;const drawing:TDrawingDef;var DC:TDrawContext);
-//var
- // CNet:TNet;
+var
+  CNet:TNet;
 begin
   if {pThisEntity}pEntity<>nil then begin
-    if not (ESConstructProxy in PGDBObjEntity(pEntity)^.State) then
-      if IsIt(TypeOf(PGDBObjEntity(pEntity)^),typeof(GDBObjLine)) then begin
-        //if Assigned(Net) then begin
-        //  CNet:=Net;
-        //  Net.RemoveMi(Self);
-        //  if CNet.Entities.Count=0 then
-        //    CNet.Destroy;
-        //end;
-
-        AddToDWGPostProcs(pEntity,drawing);
-
-        PGDBObjEntity(pEntity)^.addtoconnect2(pEntity,PGDBObjGenericSubEntry(drawing.GetCurrentRootSimple)^.ObjToConnectedArray);
+    if not (ESConstructProxy in PGDBObjEntity(pEntity)^.State) then begin
+      if Assigned(net) then begin
+        CNet:=Net;
+        if FSetter then
+          Net.RemoveSetter(Self)
+        else
+          Net.RemovePin(Self);
+        CNet.AddToDWGPostProcs(pEntity,drawing);
+        if CNet.IsEmpty then
+          CNet.Destroy;
       end;
+
+      AddToDWGPostProcs(pEntity,drawing);
+
+      PGDBObjEntity(pEntity)^.addtoconnect2(pEntity,PGDBObjGenericSubEntry(drawing.GetCurrentRootSimple)^.ObjToConnectedArray);
+    end;
   end;
 end;
+
 procedure TNetConnectorExtender.onEntityConnect(pEntity:Pointer;const drawing:TDrawingDef;var DC:TDrawContext);
 begin
 end;

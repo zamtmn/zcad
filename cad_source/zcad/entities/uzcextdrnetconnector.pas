@@ -140,8 +140,6 @@ begin
   Extdr.Net:=nil;
 end;
 procedure TNet.AddSetter(Extdr:TBaseNetExtender);
-var
-  ir:itrec;
 begin
   Setters.PushBackIfNotPresent(Extdr);
   Extdr.Net:=Self;
@@ -166,7 +164,8 @@ end;
 
 function TNet.BiggerThat(Net:TNet):Boolean;
 begin
-  result:=Connections.GetCount>Net.Connections.GetCount;
+  result:=    Connections.GetCount+    Setters.GetCount+    Pins.GetCount
+         >Net.Connections.GetCount+Net.Setters.GetCount+Net.Pins.GetCount;
 end;
 function TNet.IsEmpty:Boolean;
 begin
@@ -175,31 +174,35 @@ end;
 
 procedure TNet.ConsumeNet(Net:TNet);
 var
-  p:{PGDBObjEntity}TBaseNetExtender;
+  Extdr:TBaseNetExtender;
   ir:itrec;
-  //Extender:TNetExtender;
 begin
-  p:=Net.Connections.beginiterate(ir);
-  if p<>nil then
+  Extdr:=Net.Connections.beginiterate(ir);
+  if Extdr<>nil then
   repeat
-    //Extender:=p^.GetExtension<TNetExtender>;
-    //if Extender<>nil then begin
-      Net.RemoveConnection({Extender}p);
-      AddConnection({Extender}p);
-    //end;
-  p:=Net.Connections.iterate(ir);
-  until p=nil;
+    //Net.RemoveConnection(Extdr);
+    AddConnection(Extdr);
+  Extdr:=Net.Connections.iterate(ir);
+  until Extdr=nil;
+  Net.Connections.Clear;
 
-  p:=Net.Setters.beginiterate(ir);
-  if p<>nil then
+  Extdr:=Net.Setters.beginiterate(ir);
+  if Extdr<>nil then
   repeat
-    //Extender:=p^.GetExtension<TNetExtender>;
-    //if Extender<>nil then begin
-      Net.RemoveSetter({Extender}p);
-      AddSetter({Extender}p);
-    //end;
-  p:=Net.Setters.iterate(ir);
-  until p=nil;
+    //Net.RemoveSetter(Extdr);
+    AddSetter(Extdr);
+  Extdr:=Net.Setters.iterate(ir);
+  until Extdr=nil;
+  Net.Setters.Clear;
+
+  Extdr:=Net.Pins.beginiterate(ir);
+  if Extdr<>nil then
+  repeat
+    //Net.RemovePin(Extdr);
+    AddPin(Extdr);
+  Extdr:=Net.Pins.iterate(ir);
+  until Extdr=nil;
+  Net.Pins.Clear;
 end;
 
 procedure TNet.AddToDWGPostProcs(pEntity:Pointer;const drawing:TDrawingDef);
@@ -247,12 +250,13 @@ begin
     //уже склеены, ничего не делаем
   end else if (Extdr1.Net<>nil)and(Extdr2.Net<>nil)then begin
     if Extdr1.Net.BiggerThat(Extdr2.Net) then begin
+      NewNet:=Extdr2.Net;
       Extdr1.Net.ConsumeNet(Extdr2.Net);
-      Extdr2.Net.Destroy;
     end else begin
+      NewNet:=Extdr1.Net;
       Extdr2.Net.ConsumeNet(Extdr1.Net);
-      FreeAndNil(Extdr1.Net);
     end;
+    NewNet.Destroy;
   end else if Extdr1.Net<>nil then begin
     Extdr1.Net.AddConnection(Extdr2)
   end else begin
@@ -331,7 +335,7 @@ procedure TNetConnectorExtender.onBeforeEntityFormat(pEntity:Pointer;const drawi
 var
   CNet:TNet;
 begin
-  if {pThisEntity}pEntity<>nil then begin
+  if pEntity<>nil then begin
     if not (ESConstructProxy in PGDBObjEntity(pEntity)^.State) then begin
       if Assigned(net) then begin
         CNet:=Net;

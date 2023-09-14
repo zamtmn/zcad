@@ -60,7 +60,6 @@ TIntersectPointsUtil=TOrderingArrayUtils<TZctnrVectorDouble,Double,TIntersectPoi
 TNetExtender=class(TBaseNetExtender)
     ConnectedWith,IntersectedWith:GDBObjOpenArrayOfPV;
     Connections:TConnectPoints;
-    //Pins:GDBObjOpenArrayOfPV;
     Knots:TKnots;
     class function getExtenderName:string;override;
     constructor Create(pEntity:Pointer);override;

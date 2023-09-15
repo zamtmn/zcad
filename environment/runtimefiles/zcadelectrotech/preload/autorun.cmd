@@ -12,9 +12,9 @@
 ;ReadBlockLibrary(zcadblocks.lst)
 MergeBlocks(_connector.dxf)
 MergeBlocks(_el.dxf)
-MergeBlocks(_nok.dxf)
+;MergeBlocks(_nok.dxf);убран в preload
 MergeBlocks(_OPS.dxf)
-;MergeBlocks(_KIP.dxf)
+;MergeBlocks(_KIP.dxf);убран в preload
 MergeBlocks(_ss.dxf)
 MergeBlocks(_spds.dxf)
 MergeBlocks(_vl_diagram.dxf)

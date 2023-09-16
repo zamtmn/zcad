@@ -292,6 +292,7 @@ procedure TNetConnectorExtender.onRemoveFromArray(pEntity:Pointer;const drawing:
 begin
   AddToDWGPostProcs(pEntity,drawing);
 end;
+
 procedure TNetConnectorExtender.onEntityClone(pSourceEntity,pDestEntity:pointer);
 var
   NetConnectorExtender:TNetConnectorExtender;
@@ -335,8 +336,8 @@ procedure TNetConnectorExtender.onBeforeEntityFormat(pEntity:Pointer;const drawi
 var
   CNet:TNet;
 begin
-  if pEntity<>nil then begin
-    if not (ESConstructProxy in PGDBObjEntity(pEntity)^.State) then begin
+  if (pEntity<>nil)and(dc.Options*[DCODrawable]<>[]) then begin
+    if not PGDBObjEntity(pEntity)^.CheckState([ESConstructProxy]) then begin
       if Assigned(net) then begin
         CNet:=Net;
         if FSetter then

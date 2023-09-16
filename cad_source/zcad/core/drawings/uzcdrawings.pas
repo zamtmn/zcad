@@ -930,6 +930,7 @@ begin
      psourcevarext.entityunit.CopyTo(@pdestvarext.entityunit);}
 
      dc:=_to^.CreateDrawingRC;
+     exclude(dc.Options,DCODrawable);
 
      pvisible:=_source.ObjArray.beginiterate(ir);
      if pvisible<>nil then

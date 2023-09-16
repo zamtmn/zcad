@@ -178,12 +178,22 @@ GDBObjEntity= object(GDBObjSubordinated)
                     class function GetDXFIOFeatures:TDXFEntIODataManager;static;
                     function GetNameInBlockTable:String;virtual;
                     procedure addtoconnect2(pobj:pgdbobjEntity;var ConnectedArray:TZctnrVectorPGDBaseObjects);
+                    function CheckState(AStates:TEntityStates):Boolean;
               end;
 {Export-}
 var onlygetsnapcount:Integer;
     GDBObjEntityDXFFeatures:TDXFEntIODataManager;
 implementation
 uses usimplegenerics,uzeentityfactory{,UGDBSelectedObjArray};
+function GDBObjEntity.CheckState(AStates:TEntityStates):Boolean;
+begin
+  result:=(AStates*State)<>[];
+  if not result then
+    if bp.ListPos.Owner<>nil then
+      if IsIt(typeof(bp.ListPos.Owner^),typeof(GDBObjEntity)) then
+        result:=PGDBObjEntity(bp.ListPos.Owner)^.CheckState(AStates);
+end;
+
 procedure GDBObjEntity.addtoconnect2(pobj:pgdbobjEntity;var ConnectedArray:TZctnrVectorPGDBaseObjects);
 begin
   ConnectedArray.PushBackIfNotPresent(pobj);

@@ -205,7 +205,8 @@ var
   CNet:TNet;
 begin
   if pThisEntity<>nil then begin
-    if not (ESConstructProxy in pThisEntity^.State) then
+    if not PGDBObjEntity(pThisEntity)^.CheckState([ESConstructProxy]) then
+   // if not (ESConstructProxy in pThisEntity^.State) then
       if IsIt(TypeOf(pThisEntity^),typeof(GDBObjLine)) then begin
         if Assigned(Net) then begin
           CNet:=Net;
@@ -259,7 +260,8 @@ begin
   //Pins.Clear;
   Knots.Clear;
   if pThisEntity<>nil then begin
-    if not (ESConstructProxy in pThisEntity^.State) then
+    if not PGDBObjEntity(pThisEntity)^.CheckState([ESConstructProxy]) then
+    //if not (ESConstructProxy in pThisEntity^.State) then
       if IsIt(TypeOf(pThisEntity^),typeof(GDBObjLine)) then begin
         objects.init(10);
         if PGDBObjGenericSubEntry(drawing.GetCurrentRootSimple)^.FindObjectsInVolume(PGDBObjLine(pThisEntity)^.vp.BoundingBox,Objects)then

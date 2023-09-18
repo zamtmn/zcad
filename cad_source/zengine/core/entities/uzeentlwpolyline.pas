@@ -652,6 +652,7 @@ begin
   val(s, byt, code);
   while byt <> 0 do
   begin
+    if not LoadFromDXFObjShared(f,byt,ptu,drawing) then
     case byt of
       8:
         begin

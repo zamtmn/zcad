@@ -288,7 +288,7 @@ begin
                                                                                                       I3DP:=CurrentSubObj2^.IsIntersect_Line(ptvpred^,ptv^);
                                                                                                       if I3DP.isintercept then
                                                                                                         begin
-                                                                                                             if I3DP.t1<I3DPPrev.t1 then
+                                                                                                             if (I3DP.t1>0-bigeps)and(I3DP.t1<I3DPPrev.t1) then
                                                                                                                                         begin
                                                                                                                                              I3DPPrev:=I3DP;
                                                                                                                                              ptn.PrevP:=I3DP.interceptcoord;
@@ -301,7 +301,7 @@ begin
                                                                                                       I3DP:=CurrentSubObj2^.IsIntersect_Line(ptv^,ptvnext^);
                                                                                                       if I3DP.isintercept then
                                                                                                         begin
-                                                                                                             if I3DP.t1>I3DPNext.t1 then
+                                                                                                             if (I3DP.t1<1+bigeps)and(I3DP.t1>I3DPNext.t1) then
                                                                                                                                         begin
                                                                                                                                              I3DPNext:=I3DP;
                                                                                                                                              ptn.NextP:=I3DP.interceptcoord;

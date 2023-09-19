@@ -337,7 +337,7 @@ var
   CNet:TNet;
 begin
   if (pEntity<>nil)and(dc.Options*[DCODrawable]<>[]) then begin
-    if not PGDBObjEntity(pEntity)^.CheckState([ESConstructProxy]) then begin
+    if not PGDBObjEntity(pEntity)^.CheckState([ESConstructProxy,ESTemp]) then begin
       if Assigned(net) then begin
         CNet:=Net;
         if FSetter then

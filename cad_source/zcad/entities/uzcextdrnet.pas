@@ -205,7 +205,7 @@ var
   CNet:TNet;
 begin
   if pThisEntity<>nil then begin
-    if not PGDBObjEntity(pThisEntity)^.CheckState([ESConstructProxy]) then
+    if not PGDBObjEntity(pThisEntity)^.CheckState([ESConstructProxy,ESTemp]) then
    // if not (ESConstructProxy in pThisEntity^.State) then
       if IsIt(TypeOf(pThisEntity^),typeof(GDBObjLine)) then begin
         if Assigned(Net) then begin
@@ -260,7 +260,7 @@ begin
   //Pins.Clear;
   Knots.Clear;
   if pThisEntity<>nil then begin
-    if not PGDBObjEntity(pThisEntity)^.CheckState([ESConstructProxy]) then
+    if not PGDBObjEntity(pThisEntity)^.CheckState([ESConstructProxy,ESTemp]) then
     //if not (ESConstructProxy in pThisEntity^.State) then
       if IsIt(TypeOf(pThisEntity^),typeof(GDBObjLine)) then begin
         objects.init(10);

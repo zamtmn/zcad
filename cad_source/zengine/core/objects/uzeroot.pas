@@ -165,8 +165,8 @@ begin
   p:=self.ObjToConnectedArray.beginiterate(ir);
   if p<>nil then
     repeat
-
-      p^.EntExtensions.RunOnBeforeConnect(p,drawing,DC);
+      if assigned(p^.EntExtensions)then
+        p^.EntExtensions.RunOnBeforeConnect(p,drawing,DC);
 
       p:=self.ObjToConnectedArray.iterate(ir);
     until p=nil;

@@ -13,3 +13,6 @@
 [submodule "cad_source/components/ztoolbars"]
 	path = cad_source/components/ztoolbars
 	url = https://github.com/zamtmn/ztoolbars.git
+[submodule "cad_source/components/fpspreadsheet"]
+	path = cad_source/components/fpspreadsheet
+	url = https://github.com/veb86/fpspreadsheet.git

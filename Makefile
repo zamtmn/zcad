@@ -240,6 +240,7 @@ rmpkgslibs:
 	rm -rf  cad_source$(PATHDELIM)components$(PATHDELIM)ztoolbars$(PATHDELIM)lib$(PATHDELIM)*
 	rm -rf  cad_source$(PATHDELIM)components$(PATHDELIM)zundostack$(PATHDELIM)lib$(PATHDELIM)*
 	rm -rf  cad_source$(PATHDELIM)components$(PATHDELIM)fpdwg$(PATHDELIM)lib$(PATHDELIM)*
+	rm -rf  cad_source$(PATHDELIM)components$(PATHDELIM)fpspreadsheet$(PATHDELIM)lib$(PATHDELIM)*
 	rm -rf  lib$(PATHDELIM)*
 
 installpkgstolaz: checkvars rmpkgslibs
@@ -263,4 +264,5 @@ endif
 	$(LP)$(PATHDELIM)lazbuild --pcp=$(PCP) --add-package cad_source$(PATHDELIM)components$(PATHDELIM)ztoolbars$(PATHDELIM)ztoolbars.lpk
 	$(LP)$(PATHDELIM)lazbuild --pcp=$(PCP) --add-package cad_source$(PATHDELIM)components$(PATHDELIM)zundostack$(PATHDELIM)zundostack.lpk
 	$(LP)$(PATHDELIM)lazbuild --pcp=$(PCP) --add-package cad_source$(PATHDELIM)components$(PATHDELIM)fpdwg$(PATHDELIM)fpdwg.lpk
+	$(LP)$(PATHDELIM)lazbuild --pcp=$(PCP) --add-package cad_source$(PATHDELIM)components$(PATHDELIM)fpspreadsheet$(PATHDELIM)laz_fpspreadsheet_visual_dsgn.lpk
 	$(LP)$(PATHDELIM)lazbuild --pcp=$(PCP) --build-ide=""

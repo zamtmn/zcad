@@ -338,9 +338,13 @@ begin
   objMatrix:=MatrixMultiply(m1,objMatrix);
 
   if pdrawing<>nil then begin
+    if index=-1 then
+      index:=PGDBObjBlockdefArray(pdrawing^.GetBlockDefArraySimple).getindex(name);
     pblockdef:=PGDBObjBlockdefArray(pdrawing^.GetBlockDefArraySimple).getDataMutable(index);
-    m1:=CreateTranslationMatrix(VertexMulOnSc(pblockdef.Base,-1));
-    objMatrix:=MatrixMultiply(m1,objMatrix);
+    if pblockdef<>nil then begin
+      m1:=CreateTranslationMatrix(VertexMulOnSc(pblockdef.Base,-1));
+      objMatrix:=MatrixMultiply(m1,objMatrix);
+    end;
   end;
 end;
 procedure GDBObjBlockInsert.TransformAt;

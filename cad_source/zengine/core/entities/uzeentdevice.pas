@@ -203,14 +203,14 @@ begin
          self.ObjMatrix:=onematrix;
          if pvc^.IsHaveLCS then
                                begin
-                               pvc^.State:=pv^.State+[ESCalcWithoutOwner];
+                               pvc^.State:=pv^.State+[ESCalcWithoutOwner,ESTemp];
                                pvc^.FormatEntity(drawing,dc);
-                               pvc^.State:=pv^.State-[ESCalcWithoutOwner];
+                               pvc^.State:=pv^.State-[ESCalcWithoutOwner,ESTemp];
                                end;
          pvc^.transform(m4);
-         pvc^.State:=pv^.State+[ESCalcWithoutOwner];
+         pvc^.State:=pv^.State+[ESCalcWithoutOwner,ESTemp];
          pvc^.FormatEntity(drawing,dc);
-         pvc^.State:=pv^.State-[ESCalcWithoutOwner];
+         pvc^.State:=pv^.State-[ESCalcWithoutOwner,ESTemp];
 
 
          //pvc^.DXFOut(handle, outhandle);
@@ -486,7 +486,7 @@ begin
                                           pvisible.BuildGeometry(drawing);
                                           if pvisible^.GetObjType=GDBDeviceID then
                                           begin
-                                                                             PGDBObjDevice(pvisible)^.BuildVarGeometry(drawing);
+                                                                             //PGDBObjDevice(pvisible)^.BuildVarGeometry(drawing);
                                                                              //debp:=PGDBObjDevice(pvisible)^.ConstObjArray.PArray;
                                           end;
                                           VarObjArray.AddPEntity(pvisible^);
@@ -500,7 +500,7 @@ begin
                                           pvisible2.BuildGeometry(drawing);
                                           if pvisible2^.GetObjType=GDBDeviceID then
                                           begin
-                                                                              PGDBObjDevice(pvisible2)^.BuildVarGeometry(drawing);
+                                                                              //PGDBObjDevice(pvisible2)^.BuildVarGeometry(drawing);
                                                                               //debp:=PGDBObjDevice(pvisible)^.ConstObjArray.PArray;
                                           end;
                                           VarObjArray.AddPEntity(pvisible2^);

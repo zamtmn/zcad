@@ -46,6 +46,7 @@ type
   end;
   TKnotsUtils=TOrderingArrayUtils<TKnots,TKnot,TKnotLess>;
 
+PTConnectPoint=^TConnectPoint;
 TConnectPoint=record
   t:Double;
   count:Integer;
@@ -504,13 +505,21 @@ var
   var
     ci:integer;
     cp:TConnectPoint;
+    pcp:PTConnectPoint;
+    //aknot:TKnot;
   begin
     cp:=TConnectPoint.Create(t);
     ci:=Connections.IsDataExistWithCompareProc(cp,IsConnectPointEqual);
     if ci=-1 then
       Connections.PushBackData(cp)
-    else
-      inc(Connections.getDataMutable(ci)^.count);
+    else begin
+      pcp:=Connections.getDataMutable(ci);
+      inc(pcp^.count);
+      {if pcp^.count=3 then begin
+        aknot.Create(dist.t,abs(ConnectorExtender.FConnectorRadius)/2,KTNormal);
+        Knots.PushBackData(aknot);
+      end;}
+    end;
   end;
 begin
   p:=Objects.beginiterate(ir);
@@ -650,7 +659,7 @@ begin
       else
         drawCross(Vertexmorph(PGDBObjLine(pThisEntity)^.CoordInWCS.lBegin,PGDBObjLine(pThisEntity)^.CoordInWCS.lEnd,pc^.t),pThisEntity,DC);
     end;
-    if (pc^.count>2)or((pc^.t>bigeps)and(pc^.t<(1-bigeps))) then
+    if (pc^.count>1)or((pc^.t>bigeps)and(pc^.t<(1-bigeps))) then
       drawFilledCircle(Vertexmorph(PGDBObjLine(pThisEntity)^.CoordInWCS.lBegin,PGDBObjLine(pThisEntity)^.CoordInWCS.lEnd,pc^.t),ConnectSize/2,pThisEntity,DC);
   end;
   oldP:=PGDBObjLine(pThisEntity)^.CoordInWCS.lBegin;

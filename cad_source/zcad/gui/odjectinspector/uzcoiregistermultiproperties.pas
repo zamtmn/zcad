@@ -32,7 +32,7 @@ uses
   uzcoimultipropertiesutil,
   uzeentcircle,uzeentarc,uzeentline,uzeentblockinsert,uzeenttext,uzeentmtext,uzeentpolyline,uzcentelleader,uzeentdimension,uzeentellipse,
   uzegeometry,uzcoimultiproperties,uzcLog,
-  uzcExtdrLayerControl,uzcExtdrSmartTextEnt,uzcExtdrNetConnector;
+  uzcExtdrLayerControl,uzcExtdrSmartTextEnt,uzcExtdrConnector;
 implementation
 procedure DoubleDeltaEntIterateProc(pdata:Pointer;ChangedData:TChangedData;mp:TMultiProperty;fistrun:boolean;ecp:TEntChangeProc; const f:TzeUnitsFormat);
 var
@@ -403,7 +403,7 @@ const
      pellipse:PGDBObjEllipse=nil;
      LayerControlExtender:TLayerControlExtender=nil;
      SmartTextEntExtender:TSmartTextEntExtender=nil;
-     NetConnectorExtender:TNetConnectorExtender=nil;
+     NetConnectorExtender:TConnectorExtender=nil;
 begin
   MultiPropertiesManager.RestartMultipropertySortID;
   RegisterVarCategory('EXTDRLAYERCONTROL','Layer control',@InterfaceTranslate);
@@ -424,8 +424,8 @@ begin
   MultiPropertiesManager.RegisterPhysMultiproperty('EXTDRSSMARTTEXTENT_EnableRotateOverride','Rotate override',sysunit^.TypeName2PTD('Boolean'),MPCExtenders,0,TSmartTextEntExtender,PtrInt(@SmartTextEntExtender.FRotateOverride),PtrInt(@SmartTextEntExtender.FRotateOverride),OneVarDataMIPD,OneVarDataEIPD);
   MultiPropertiesManager.RegisterPhysMultiproperty('EXTDRSSMARTTEXTENT_RotateOverride','Rotate override value',sysunit^.TypeName2PTD('Double'),MPCExtenders,0,TSmartTextEntExtender,PtrInt(@SmartTextEntExtender.FRotateOverrideValue),PtrInt(@SmartTextEntExtender.FRotateOverrideValue),OneVarDataMIPD,OneVarDataEIPD);
   RegisterVarCategory('EXTDRNETCONNECTOR','Connector control',@InterfaceTranslate);
-  MultiPropertiesManager.RegisterPhysMultiproperty('EXTDRNETCONNECTOR_ConnectorRadius','Connector radius',sysunit^.TypeName2PTD('Double'),MPCExtenders,0,TNetConnectorExtender,PtrInt(@NetConnectorExtender.FConnectorRadius),PtrInt(@NetConnectorExtender.FConnectorRadius),OneVarDataMIPD,OneVarDataEIPD);
-  MultiPropertiesManager.RegisterPhysMultiproperty('EXTDRNETCONNECTOR_Setter','Setter',sysunit^.TypeName2PTD('Boolean'),MPCExtenders,0,TNetConnectorExtender,PtrInt(@NetConnectorExtender.FSetter),PtrInt(@NetConnectorExtender.FSetter),OneVarDataMIPD,OneVarDataEIPD);
+  MultiPropertiesManager.RegisterPhysMultiproperty('EXTDRNETCONNECTOR_ConnectorRadius','Connector radius',sysunit^.TypeName2PTD('Double'),MPCExtenders,0,TConnectorExtender,PtrInt(@NetConnectorExtender.FConnectorRadius),PtrInt(@NetConnectorExtender.FConnectorRadius),OneVarDataMIPD,OneVarDataEIPD);
+  MultiPropertiesManager.RegisterPhysMultiproperty('EXTDRNETCONNECTOR_Setter','Setter',sysunit^.TypeName2PTD('Boolean'),MPCExtenders,0,TConnectorExtender,PtrInt(@NetConnectorExtender.FSetter),PtrInt(@NetConnectorExtender.FSetter),OneVarDataMIPD,OneVarDataEIPD);
 
 
   {General section}

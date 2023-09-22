@@ -170,7 +170,7 @@ begin
              pentvarext:=pobj^.GetExtension<TVariablesExtender>;
              if ((pobj^.GetObjType=pgdbobjentity(pcurrobj)^.GetObjType)or(pgdbobjentity(pcurrobj)^.GetObjType=0))and({pobj.ou.Instance}pentvarext<>nil) then
              begin
-                  pv:={PTObjectUnit(pobj.ou.Instance)}pentvarext.entityunit.FindVariable(valkey);
+                  pv:={PTEntityUnit(pobj.ou.Instance)}pentvarext.entityunit.FindVariable(valkey);
                   if pv<>nil then
                   begin
                        vv:=pv.data.PTD.GetValueAsString(pv.data.Addr.Instance);

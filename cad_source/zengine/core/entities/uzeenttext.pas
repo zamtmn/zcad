@@ -43,7 +43,8 @@ GDBObjText= object(GDBObjAbstractText)
                  procedure SaveToDXF(var outhandle:{Integer}TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
                  procedure CalcGabarit(const drawing:TDrawingDef);virtual;
                  procedure getoutbound(var DC:TDrawContext);virtual;
-                 procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);virtual;
+                 function IsStagedFormatEntity:boolean;virtual;
+                 procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext;Stage:TEFStages=EFAllStages);virtual;
                  //procedure createpoint(const drawing:TDrawingDef);virtual;
                  //procedure CreateSymbol(_symbol:Integer;matr:DMatrix4D;var minx,miny,maxx,maxy:Double;pfont:pgdbfont;ln:Integer);
                  function Clone(own:Pointer):PGDBObjEntity;virtual;
@@ -125,14 +126,21 @@ function GDBObjText.GetObjType;
 begin
      result:=GDBtextID;
 end;
-procedure GDBObjText.FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);
+function GDBObjText.IsStagedFormatEntity:boolean;
+begin
+  result:=true;
+end;
+procedure GDBObjText.FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext;Stage:TEFStages=EFAllStages);
 var
       TCP:TCodePage;
 begin
+  if EFCalcEntityCS in stage then begin
   calcobjmatrix;//расширениям нужны матрицы в OnBeforeEntityFormat
   if assigned(EntExtensions)then
     EntExtensions.RunOnBeforeEntityFormat(@self,drawing,DC);
+  end;
 
+  if EFDraw in stage then begin
   Representation.Clear;
 
   TCP:=CodePage;
@@ -218,6 +226,7 @@ begin
     //P_InsertInWCS:=VectorTransform3D(local.P_insert,vp.owner^.GetMatrix^);
     if assigned(EntExtensions)then
       EntExtensions.RunOnAfterEntityFormat(@self,drawing,DC);
+  end;
 end;
 procedure GDBObjText.CalcGabarit;
 var

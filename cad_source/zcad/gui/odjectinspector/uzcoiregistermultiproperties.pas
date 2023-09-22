@@ -32,7 +32,7 @@ uses
   uzcoimultipropertiesutil,
   uzeentcircle,uzeentarc,uzeentline,uzeentblockinsert,uzeenttext,uzeentmtext,uzeentpolyline,uzcentelleader,uzeentdimension,uzeentellipse,
   uzegeometry,uzcoimultiproperties,uzcLog,
-  uzcExtdrLayerControl,uzcExtdrSmartTextEnt;
+  uzcExtdrLayerControl,uzcExtdrSmartTextEnt,uzcExtdrNetConnector;
 implementation
 procedure DoubleDeltaEntIterateProc(pdata:Pointer;ChangedData:TChangedData;mp:TMultiProperty;fistrun:boolean;ecp:TEntChangeProc; const f:TzeUnitsFormat);
 var
@@ -252,11 +252,11 @@ begin
                                                          end;
 end;
 
-procedure GeneralFromPtrEntChangeProc(pu:PTObjectUnit;pdata:PVarDesk;ChangedData:TChangedData;mp:TMultiProperty);
+procedure GeneralFromPtrEntChangeProc(pu:PTEntityUnit;pdata:PVarDesk;ChangedData:TChangedData;mp:TMultiProperty);
 begin
      mp.MPType^.CopyInstanceTo(pdata,ChangedData.PSetDataInEtity);
 end;
-procedure DoubleDiv2EntChangeProc(pu:PTObjectUnit;pdata:PVarDesk;ChangedData:TChangedData;mp:TMultiProperty);
+procedure DoubleDiv2EntChangeProc(pu:PTEntityUnit;pdata:PVarDesk;ChangedData:TChangedData;mp:TMultiProperty);
 var
     l1:Double;
 begin
@@ -264,7 +264,7 @@ begin
      ProcessVariableAttributes(pvardesk(pdata)^.attrib,0,vda_approximately or vda_different);
      GeneralFromPtrEntChangeProc(pu,@l1,ChangedData,mp);
 end;
-procedure DoubleCircumference2REntChangeProc(pu:PTObjectUnit;pdata:PVarDesk;ChangedData:TChangedData;mp:TMultiProperty);
+procedure DoubleCircumference2REntChangeProc(pu:PTEntityUnit;pdata:PVarDesk;ChangedData:TChangedData;mp:TMultiProperty);
 var
     l1:Double;
 begin
@@ -272,7 +272,7 @@ begin
      ProcessVariableAttributes(pvardesk(pdata)^.attrib,0,vda_approximately or vda_different);
      GeneralFromPtrEntChangeProc(pu,@l1,ChangedData,mp);
 end;
-procedure DoubleArcCircumferenceEntChangeProc(pu:PTObjectUnit;pdata:PVarDesk;ChangedData:TChangedData;mp:TMultiProperty);
+procedure DoubleArcCircumferenceEntChangeProc(pu:PTEntityUnit;pdata:PVarDesk;ChangedData:TChangedData;mp:TMultiProperty);
 var
     l1:Double;
 begin
@@ -282,7 +282,7 @@ begin
      GeneralFromPtrEntChangeProc(pu,@l1,ChangedData,mp);
 end;
 
-procedure DoubleArea2REntChangeProc(pu:PTObjectUnit;pdata:PVarDesk;ChangedData:TChangedData;mp:TMultiProperty);
+procedure DoubleArea2REntChangeProc(pu:PTEntityUnit;pdata:PVarDesk;ChangedData:TChangedData;mp:TMultiProperty);
 var
     l1:Double;
 begin
@@ -290,7 +290,7 @@ begin
      ProcessVariableAttributes(pvardesk(pdata)^.attrib,0,vda_approximately or vda_different);
      GeneralFromPtrEntChangeProc(pu,@l1,ChangedData,mp);
 end;
-procedure DoubleDeltaEntChangeProc(pu:PTObjectUnit;pdata:PVarDesk;ChangedData:TChangedData;mp:TMultiProperty);
+procedure DoubleDeltaEntChangeProc(pu:PTEntityUnit;pdata:PVarDesk;ChangedData:TChangedData;mp:TMultiProperty);
 var
     l1:Double;
 begin
@@ -300,7 +300,7 @@ begin
      ProcessVariableAttributes(pvardesk(pdata)^.attrib,0,vda_approximately or vda_different);
      GeneralFromPtrEntChangeProc(pu,@l1,ChangedData,mp);
 end;
-procedure DoubleLengthEntChangeProc(pu:PTObjectUnit;pdata:PVarDesk;ChangedData:TChangedData;mp:TMultiProperty);
+procedure DoubleLengthEntChangeProc(pu:PTEntityUnit;pdata:PVarDesk;ChangedData:TChangedData;mp:TMultiProperty);
 var
     v1,v2:GDBVertex;
     l1:Double;
@@ -315,7 +315,7 @@ begin
      ProcessVariableAttributes(pvardesk(pdata)^.attrib,0,vda_approximately or vda_different);
      PGDBVertex(ChangedData.PSetDataInEtity)^:=VertexAdd(v1,v2);
 end;
-procedure DoubleAngleEntChangeProc(pu:PTObjectUnit;pdata:PVarDesk;ChangedData:TChangedData;mp:TMultiProperty);
+procedure DoubleAngleEntChangeProc(pu:PTEntityUnit;pdata:PVarDesk;ChangedData:TChangedData;mp:TMultiProperty);
 var
     v1,v2:GDBVertex;
     l1,d:Double;
@@ -332,7 +332,7 @@ begin
   ProcessVariableAttributes(pvardesk(pdata)^.attrib,0,vda_approximately or vda_different);
   PGDBVertex(ChangedData.PSetDataInEtity)^:=VertexAdd(v1,v2);
 end;
-procedure DoubleDeg2RadEntChangeProc(pu:PTObjectUnit;pdata:PVarDesk;ChangedData:TChangedData;mp:TMultiProperty);
+procedure DoubleDeg2RadEntChangeProc(pu:PTEntityUnit;pdata:PVarDesk;ChangedData:TChangedData;mp:TMultiProperty);
 var
     l1:Double;
 begin
@@ -340,7 +340,7 @@ begin
      ProcessVariableAttributes(pvardesk(pdata)^.attrib,0,vda_approximately or vda_different);
      GeneralFromPtrEntChangeProc(pu,@l1,ChangedData,mp);
 end;
-procedure DoubleArcArea2REntChangeProc(pu:PTObjectUnit;pdata:PVarDesk;ChangedData:TChangedData;mp:TMultiProperty);
+procedure DoubleArcArea2REntChangeProc(pu:PTEntityUnit;pdata:PVarDesk;ChangedData:TChangedData;mp:TMultiProperty);
 var
     l1:Double;
 begin
@@ -352,7 +352,7 @@ begin
      ProcessVariableAttributes(pvardesk(pdata)^.attrib,0,vda_approximately or vda_different);
      GeneralFromPtrEntChangeProc(pu,@l1,ChangedData,mp);
 end;
-procedure GeneralTextRotateEntChangeProc(pu:PTObjectUnit;pdata:PVarDesk;ChangedData:TChangedData;mp:TMultiProperty);
+procedure GeneralTextRotateEntChangeProc(pu:PTEntityUnit;pdata:PVarDesk;ChangedData:TChangedData;mp:TMultiProperty);
 var
     a:Double;
 begin
@@ -403,6 +403,7 @@ const
      pellipse:PGDBObjEllipse=nil;
      LayerControlExtender:TLayerControlExtender=nil;
      SmartTextEntExtender:TSmartTextEntExtender=nil;
+     NetConnectorExtender:TNetConnectorExtender=nil;
 begin
   MultiPropertiesManager.RestartMultipropertySortID;
   RegisterVarCategory('EXTDRLAYERCONTROL','Layer control',@InterfaceTranslate);
@@ -422,6 +423,10 @@ begin
   MultiPropertiesManager.RegisterPhysMultiproperty('EXTDRSSMARTTEXTENT_VJOverride','Vertical justify oferride',sysunit^.TypeName2PTD('Boolean'),MPCExtenders,0,TSmartTextEntExtender,PtrInt(@SmartTextEntExtender.FVJOverride),PtrInt(@SmartTextEntExtender.FVJOverride),OneVarDataMIPD,OneVarDataEIPD);
   MultiPropertiesManager.RegisterPhysMultiproperty('EXTDRSSMARTTEXTENT_EnableRotateOverride','Rotate override',sysunit^.TypeName2PTD('Boolean'),MPCExtenders,0,TSmartTextEntExtender,PtrInt(@SmartTextEntExtender.FRotateOverride),PtrInt(@SmartTextEntExtender.FRotateOverride),OneVarDataMIPD,OneVarDataEIPD);
   MultiPropertiesManager.RegisterPhysMultiproperty('EXTDRSSMARTTEXTENT_RotateOverride','Rotate override value',sysunit^.TypeName2PTD('Double'),MPCExtenders,0,TSmartTextEntExtender,PtrInt(@SmartTextEntExtender.FRotateOverrideValue),PtrInt(@SmartTextEntExtender.FRotateOverrideValue),OneVarDataMIPD,OneVarDataEIPD);
+  RegisterVarCategory('EXTDRNETCONNECTOR','Connector control',@InterfaceTranslate);
+  MultiPropertiesManager.RegisterPhysMultiproperty('EXTDRNETCONNECTOR_ConnectorRadius','Connector radius',sysunit^.TypeName2PTD('Double'),MPCExtenders,0,TNetConnectorExtender,PtrInt(@NetConnectorExtender.FConnectorRadius),PtrInt(@NetConnectorExtender.FConnectorRadius),OneVarDataMIPD,OneVarDataEIPD);
+  MultiPropertiesManager.RegisterPhysMultiproperty('EXTDRNETCONNECTOR_Setter','Setter',sysunit^.TypeName2PTD('Boolean'),MPCExtenders,0,TNetConnectorExtender,PtrInt(@NetConnectorExtender.FSetter),PtrInt(@NetConnectorExtender.FSetter),OneVarDataMIPD,OneVarDataEIPD);
+
 
   {General section}
   MultiPropertiesManager.RestartMultipropertySortID;

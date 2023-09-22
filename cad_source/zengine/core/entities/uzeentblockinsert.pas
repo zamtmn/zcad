@@ -55,7 +55,7 @@ GDBObjBlockInsert= object(GDBObjComplex)
                      procedure rtsave(refp:Pointer);virtual;
 
                      procedure AddOnTrackAxis(var posr:os_record;const processaxis:taddotrac);virtual;
-                     procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);virtual;
+                     procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext;Stage:TEFStages=EFAllStages);virtual;
 
                      function getrot:Double;virtual;
                      procedure setrot(r:Double);virtual;
@@ -299,7 +299,7 @@ begin
      result:=arccos((objmatrix[0].v[0])/oneVertexlength(PGDBVertex(@objmatrix[0])^))
 end;
 
-procedure GDBObjBlockInsert.FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);
+procedure GDBObjBlockInsert.FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext;Stage:TEFStages=EFAllStages);
 begin
   if assigned(EntExtensions)then
     EntExtensions.RunOnBeforeEntityFormat(@self,drawing,DC);
@@ -338,9 +338,13 @@ begin
   objMatrix:=MatrixMultiply(m1,objMatrix);
 
   if pdrawing<>nil then begin
+    if index=-1 then
+      index:=PGDBObjBlockdefArray(pdrawing^.GetBlockDefArraySimple).getindex(name);
     pblockdef:=PGDBObjBlockdefArray(pdrawing^.GetBlockDefArraySimple).getDataMutable(index);
-    m1:=CreateTranslationMatrix(VertexMulOnSc(pblockdef.Base,-1));
-    objMatrix:=MatrixMultiply(m1,objMatrix);
+    if pblockdef<>nil then begin
+      m1:=CreateTranslationMatrix(VertexMulOnSc(pblockdef.Base,-1));
+      objMatrix:=MatrixMultiply(m1,objMatrix);
+    end;
   end;
 end;
 procedure GDBObjBlockInsert.TransformAt;

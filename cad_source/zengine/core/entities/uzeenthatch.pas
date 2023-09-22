@@ -61,7 +61,7 @@ GDBObjHatch= object(GDBObjWithLocalCS)
                  procedure LoadFromDXF(var f:TZctnrVectorBytes;ptu:PExtensionData;var drawing:TDrawingDef);virtual;
 
                  procedure SaveToDXF(var outhandle:TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
-                 procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);virtual;
+                 procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext;Stage:TEFStages=EFAllStages);virtual;
                  procedure ProcessLine(const c:integer;const l1,l2,c1,c2:GDBvertex2D;var IV:TIntercept2dpropWithLICVector);
                  procedure ProcessLines(const p1,p2:GDBvertex2D;var IV:TIntercept2dpropWithLICVector);
                  procedure ProcessStroke(var Strokes:TPatStrokesArray;var IV:TIntercept2dpropWithLICVector;var DC:TDrawContext);
@@ -490,7 +490,7 @@ begin
   IV.Free;
 end;
 
-procedure GDBObjHatch.FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);
+procedure GDBObjHatch.FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext;Stage:TEFStages=EFAllStages);
 var
    hatchTess:TTriangulator.TTesselator;
    i,j: Integer;

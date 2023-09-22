@@ -42,7 +42,7 @@ GDBObjDiametricDimension= object(GDBObjDimension)
                         constructor initnul(owner:PGDBObjGenericWithSubordinated);
                         function GetObjTypeName:String;virtual;
 
-                        procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);virtual;
+                        procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext;Stage:TEFStages=EFAllStages);virtual;
                         function GetDimStr(var drawing:TDrawingDef):TDXFEntsInternalStringType;virtual;
                         function Clone(own:Pointer):PGDBObjEntity;virtual;
                         procedure addcontrolpoints(tdesc:Pointer);virtual;
@@ -205,7 +205,7 @@ function GDBObjDiametricDimension.GetRadius:Double;
 begin
      result:=Vertexlength(DimData.P15InWCS,DimData.P10InWCS)/2;
 end;
-procedure GDBObjDiametricDimension.FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);
+procedure GDBObjDiametricDimension.FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext;Stage:TEFStages=EFAllStages);
 var
   center:GDBVertex;
   pl:pgdbobjline;

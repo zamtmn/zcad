@@ -47,7 +47,7 @@ GDBObjMText= object(GDBObjText)
                  procedure SaveToDXF(var outhandle:{Integer}TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
                  procedure CalcGabarit(const drawing:TDrawingDef);virtual;
                  //procedure getoutbound;virtual;
-                 procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);virtual;
+                 procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext;Stage:TEFStages=EFAllStages);virtual;
                  procedure FormatContent(var drawing:TDrawingDef);virtual;
                  procedure createpoint(const drawing:TDrawingDef;var DC:TDrawContext);virtual;
                  function Clone(own:Pointer):PGDBObjEntity;virtual;
@@ -487,7 +487,7 @@ begin
     calcbb;
     createpoint(drawing);}
 end;
-procedure GDBObjMText.FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);
+procedure GDBObjMText.FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext;Stage:TEFStages=EFAllStages);
 begin
   calcobjmatrix;
   if assigned(EntExtensions)then

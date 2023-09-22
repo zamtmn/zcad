@@ -44,7 +44,7 @@ GDBObjElLeader= object(GDBObjComplex)
             procedure remaponecontrolpoint(pdesc:pcontrolpointdesc);virtual;
             function beforertmodify:Pointer;virtual;
             function select(var SelectedObjCount:Integer;s2s:TSelect2Stage):Boolean;virtual;
-            procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);virtual;
+            procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext;Stage:TEFStages=EFAllStages);virtual;
             procedure ImEdited(pobj:PGDBObjSubordinated;pobjinarray:Integer;var drawing:TDrawingDef);virtual;
 
             constructor initnul;
@@ -261,7 +261,7 @@ begin
      //bp.owner^.ImEdited(@self,bp.PSelfInOwnerArray);
      //ObjCasheArray.addnodouble(@pobj);
 end;
-procedure GDBObjElLeader.FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);
+procedure GDBObjElLeader.FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext;Stage:TEFStages=EFAllStages);
 const
   textoffset=0.5;
 var
@@ -338,7 +338,7 @@ begin
                      begin
                           pcable:=pobj;
                           pentvarext:=pobj^.GetExtension<TVariablesExtender>;
-                          //pvn:=PTObjectUnit(pobj^.ou.Instance)^.FindVariable('NMO_Name');
+                          //pvn:=PTEntityUnit(pobj^.ou.Instance)^.FindVariable('NMO_Name');
                           pvn:=pentvarext.entityunit.FindVariable('NMO_Name');
                           if pvn<>nil then
                           begin
@@ -385,7 +385,7 @@ begin
                             if pdev=pointer(ptn.DevLink.bp.ListPos.owner) then
                             begin
                                  pentvarext:=pobj^.GetExtension<TVariablesExtender>;
-                                 //pvn:=PTObjectUnit(pobj^.ou.Instance)^.FindVariable('NMO_Name');
+                                 //pvn:=PTEntityUnit(pobj^.ou.Instance)^.FindVariable('NMO_Name');
                                  pvn:=pentvarext.entityunit.FindVariable('NMO_Name');
                                   if pvn<>nil then
                                   begin
@@ -535,14 +535,14 @@ begin
           else begin
             s:='';
             pentvarext:=pdev^.GetExtension<TVariablesExtender>;
-            //pvn:=PTObjectUnit(pdev^.ou.Instance)^.FindVariable('NMO_Name');
+            //pvn:=PTEntityUnit(pdev^.ou.Instance)^.FindVariable('NMO_Name');
             pvn:=pentvarext.entityunit.FindVariable('NMO_Name');
             if pvn<>nil then
             begin
                  s:=pvn^.data.PTD.GetValueAsString(pvn^.data.Addr.Instance);
                  //s:=pstring(pvn^.Instance)^;
             end;
-            //pvn:=PTObjectUnit(pdev^.ou.Instance)^.FindVariable('Text');
+            //pvn:=PTEntityUnit(pdev^.ou.Instance)^.FindVariable('Text');
             pvn:=pentvarext.entityunit.FindVariable('Text');
             if pvn<>nil then
             begin

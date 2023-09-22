@@ -38,7 +38,7 @@ GDBObjCurve= object(GDBObj3d)
                  PProjPoint:PGDBpolyline2DArray;(*hidden_in_objinsp*)
                  constructor init(own:Pointer;layeraddres:PGDBLayerProp;LW:SmallInt);
                  constructor initnul(owner:PGDBObjGenericWithSubordinated);
-                 procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);virtual;
+                 procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext;Stage:TEFStages=EFAllStages);virtual;
                  procedure FormatWithoutSnapArray;virtual;
                  procedure DrawGeometry(lw:Integer;var DC:TDrawContext{infrustumactualy:TActulity;subrender:Integer});virtual;
                  function Clone(own:Pointer):PGDBObjEntity;virtual;
@@ -347,7 +347,7 @@ begin
   length:=GetLength;
 end;
 
-procedure GDBObjCurve.FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);
+procedure GDBObjCurve.FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext;Stage:TEFStages=EFAllStages);
 //var //i,j: Integer;
     //ptv,ptvprev: pgdbvertex;
     //tv:gdbvertex;

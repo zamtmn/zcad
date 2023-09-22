@@ -113,6 +113,7 @@ GZVector{-}<T>{//}=object(TZAbsVector)
         function getDataMutable(index:TArrayIndex):PT;
         {**Возвращает значение по индексу}
         function getData(index:TArrayIndex):T;
+        procedure setData(index:TArrayIndex;const Value:T);
         {**Возвращает последнее значение}
         function getLast:T;
         {**Добавить в конец массива значение, возвращает индекс добавленного значения}
@@ -146,6 +147,8 @@ GZVector{-}<T>{//}=object(TZAbsVector)
         procedure Shrink;virtual;
 
         procedure freewithproc(freeproc:TProcessProc);virtual;
+
+        {-}property Items[i:TArrayIndex]:T read getData write setData; default;{//}
   end;
 {Export-}
 function remapmememblock(pblock:Pointer;sizeblock:Integer):Pointer;
@@ -209,6 +212,14 @@ else if PArray=nil then
                      result:=default(T)
                    else
                      result:=parray[index];
+end;
+procedure GZVector<T>.setData;
+begin
+     if (index>=max)
+        or(index<0)then
+else if PArray=nil then
+                   else
+                     parray[index]:=Value;
 end;
 function GZVector<T>.getLast;
 begin

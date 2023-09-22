@@ -60,7 +60,7 @@ GDBObjLWPolyline= object(GDBObjWithLocalCS)
 
                  procedure SaveToDXF(var outhandle:{Integer}TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
                  procedure DrawGeometry(lw:Integer;var DC:TDrawContext{infrustumactualy:TActulity;subrender:Integer});virtual;
-                 procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);virtual;
+                 procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext;Stage:TEFStages=EFAllStages);virtual;
                  function CalcSquare:Double;virtual;
                  //**попадаетли данная координата внутрь контура
                  function isPointInside(point:GDBVertex):Boolean;virtual;
@@ -652,6 +652,7 @@ begin
   val(s, byt, code);
   while byt <> 0 do
   begin
+    if not LoadFromDXFObjShared(f,byt,ptu,drawing) then
     case byt of
       8:
         begin
@@ -832,7 +833,7 @@ begin
     result:=result/2;
 end;
 
-procedure GDBObjLWpolyline.FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);
+procedure GDBObjLWpolyline.FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext;Stage:TEFStages=EFAllStages);
 begin
   if assigned(EntExtensions)then
     EntExtensions.RunOnBeforeEntityFormat(@self,drawing,DC);

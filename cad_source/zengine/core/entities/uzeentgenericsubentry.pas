@@ -51,8 +51,8 @@ GDBObjGenericSubEntry= object(GDBObjWithMatrix)
                             procedure DrawGeometry(lw:Integer;var DC:TDrawContext{infrustumactualy:TActulity;subrender:Integer});virtual;
                             function CalcInFrustum(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:Integer; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double):Boolean;virtual;
                             function onmouse(var popa:TZctnrVectorPGDBaseObjects;const MF:ClipArray;InSubEntry:Boolean):Boolean;virtual;
-                            procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);virtual;
-                            procedure FormatAfterEdit(var drawing:TDrawingDef;var DC:TDrawContext);virtual;
+                            procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext;Stage:TEFStages=EFAllStages);virtual;
+                            procedure FormatAfterEdit(var drawing:TDrawingDef;var DC:TDrawContext;Stage:TEFStages=EFAllStages);virtual;
                             procedure restructure(var drawing:TDrawingDef);virtual;
                             procedure renderfeedbac(infrustumactualy:TActulity;pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc;var DC:TDrawContext);virtual;
                             //function select:Boolean;virtual;
@@ -521,7 +521,7 @@ procedure GDBObjGenericSubEntry.getonlyoutbound;
 begin
      vp.BoundingBox:=ObjArray.getonlyoutbound(dc);
 end;
-procedure GDBObjGenericSubEntry.FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);
+procedure GDBObjGenericSubEntry.FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext;Stage:TEFStages=EFAllStages);
 begin
   inherited FormatEntity(drawing,dc);
   ObjArray.FormatEntity(drawing,dc);

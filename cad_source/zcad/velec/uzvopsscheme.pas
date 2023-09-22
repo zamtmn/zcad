@@ -292,7 +292,7 @@ function TestModul_com(operands:TCommandOperands):TCommandResult;
 
 
         pCableSSvarext:=PCableSS^.specialize GetExtension<TVariablesExtender>;
-        //pvd:=PTObjectUnit(PCableSS.ou.Instance)^.FindVariable('CABLE_Type');     { TODO : Сделать поиск переменных caseнезависимым }
+        //pvd:=PTEntityUnit(PCableSS.ou.Instance)^.FindVariable('CABLE_Type');     { TODO : Сделать поиск переменных caseнезависимым }
         pvCab:=pCableSSvarext.entityunit.FindVariable('CABLE_Type');
         pvmc:=pCableSSvarext.entityunit.FindVariable('NMO_Name');
         ZCMsgCallBackInterface.TextMessage('Кабель имя группы --- ' + pstring(pvmc^.data.Addr.Instance)^,TMWOHistoryOut);
@@ -1246,7 +1246,7 @@ begin
 
 
         pCableSSvarext:=PCableSS^.specialize GetExtension<TVariablesExtender>;
-        //pvd:=PTObjectUnit(PCableSS.ou.Instance)^.FindVariable('CABLE_Type');     { TODO : Сделать поиск переменных caseнезависимым }
+        //pvd:=PTEntityUnit(PCableSS.ou.Instance)^.FindVariable('CABLE_Type');     { TODO : Сделать поиск переменных caseнезависимым }
         pvCab:=pCableSSvarext.entityunit.FindVariable('CABLE_Type');
 
         if pvCab<>nil then
@@ -1379,7 +1379,7 @@ begin
 
 
                                   //pnodeendvarext:=node^.DevLink^.GetExtension(TVariablesExtender);
-                                  //pvd:=PTObjectUnit(nodeend^.ou.Instance)^.FindVariable('NMO_Name');
+                                  //pvd:=PTEntityUnit(nodeend^.ou.Instance)^.FindVariable('NMO_Name');
                                   //pvd:=pnodeendvarext^.entityunit.FindVariable('NMO_Name');
                                   //pvd:=pnodeendvarext^.entityunit.FindVariable('Name');
                                   //endname:=pvd^.data.PTD^.GetValueAsString(pvd^.Instance);

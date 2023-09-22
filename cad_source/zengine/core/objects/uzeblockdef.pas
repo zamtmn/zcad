@@ -33,7 +33,7 @@ GDBObjBlockdef= object(GDBObjGenericSubEntry)
                      BlockDesc:TBlockDesc;(*'Block params'*)(*saved_to_shd*)(*oi_readonly*)
                      constructor initnul(owner:PGDBObjGenericWithSubordinated);
                      constructor init(_name:String);
-                     procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);virtual;
+                     procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext;Stage:TEFStages=EFAllStages);virtual;
                      //function FindVariable(varname:String):pvardesk;virtual;
                      procedure LoadFromDXF(var f: TZctnrVectorBytes;ptu:PExtensionData;var drawing:TDrawingDef);virtual;
                      function ProcessFromDXFObjXData(_Name,_Value:String;ptu:PExtensionData;const drawing:TDrawingDef):Boolean;virtual;
@@ -90,7 +90,7 @@ end;
 begin
      result:=nil;//ou.FindVariable(varname);
 end;}
-procedure GDBObjBlockdef.FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);
+procedure GDBObjBlockdef.FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext;Stage:TEFStages=EFAllStages);
 var
   p:pgdbobjEntity;
   ir:itrec;

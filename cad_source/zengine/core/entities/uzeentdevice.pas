@@ -41,7 +41,8 @@ GDBObjDevice= object(GDBObjBlockInsert)
                    destructor done;virtual;
                    function CalcInFrustum(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:Integer; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double):Boolean;virtual;
                    function CalcTrueInFrustum(frustum:ClipArray;visibleactualy:TActulity):TInBoundingVolume;virtual;
-                   procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);virtual;
+                   procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext;Stage:TEFStages=EFAllStages);virtual;
+                   function IsStagedFormatEntity:boolean;virtual;
                    procedure FormatFeatures(var drawing:TDrawingDef);virtual;
                    procedure DrawGeometry(lw:Integer;var DC:TDrawContext{infrustumactualy:TActulity;subrender:Integer});virtual;
                    procedure DrawOnlyGeometry(lw:Integer;var DC:TDrawContext{infrustumactualy:TActulity;subrender:Integer});virtual;
@@ -202,14 +203,14 @@ begin
          self.ObjMatrix:=onematrix;
          if pvc^.IsHaveLCS then
                                begin
-                               pvc^.State:=pv^.State+[ESCalcWithoutOwner];
+                               pvc^.State:=pv^.State+[ESCalcWithoutOwner,ESTemp];
                                pvc^.FormatEntity(drawing,dc);
-                               pvc^.State:=pv^.State-[ESCalcWithoutOwner];
+                               pvc^.State:=pv^.State-[ESCalcWithoutOwner,ESTemp];
                                end;
          pvc^.transform(m4);
-         pvc^.State:=pv^.State+[ESCalcWithoutOwner];
+         pvc^.State:=pv^.State+[ESCalcWithoutOwner,ESTemp];
          pvc^.FormatEntity(drawing,dc);
-         pvc^.State:=pv^.State-[ESCalcWithoutOwner];
+         pvc^.State:=pv^.State-[ESCalcWithoutOwner,ESTemp];
 
 
          //pvc^.DXFOut(handle, outhandle);
@@ -485,7 +486,7 @@ begin
                                           pvisible.BuildGeometry(drawing);
                                           if pvisible^.GetObjType=GDBDeviceID then
                                           begin
-                                                                             PGDBObjDevice(pvisible)^.BuildVarGeometry(drawing);
+                                                                             //PGDBObjDevice(pvisible)^.BuildVarGeometry(drawing);
                                                                              //debp:=PGDBObjDevice(pvisible)^.ConstObjArray.PArray;
                                           end;
                                           VarObjArray.AddPEntity(pvisible^);
@@ -499,7 +500,7 @@ begin
                                           pvisible2.BuildGeometry(drawing);
                                           if pvisible2^.GetObjType=GDBDeviceID then
                                           begin
-                                                                              PGDBObjDevice(pvisible2)^.BuildVarGeometry(drawing);
+                                                                              //PGDBObjDevice(pvisible2)^.BuildVarGeometry(drawing);
                                                                               //debp:=PGDBObjDevice(pvisible)^.ConstObjArray.PArray;
                                           end;
                                           VarObjArray.AddPEntity(pvisible2^);
@@ -638,20 +639,29 @@ begin
      GetDXFIOFeatures.RunFormatProcs(drawing,@self);
 end;
 
-procedure GDBObjDevice.FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);
+function GDBObjDevice.IsStagedFormatEntity:boolean;
 begin
-  if assigned(EntExtensions)then
-    EntExtensions.RunOnBeforeEntityFormat(@self,drawing,DC);
-  index:=PGDBObjBlockdefArray(drawing.GetBlockDefArraySimple).getindex(pansichar(name));
+  result:=true;
+end;
+
+procedure GDBObjDevice.FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext;Stage:TEFStages=EFAllStages);
+begin
+  if EFCalcEntityCS in stage then begin
+    if assigned(EntExtensions)then
+      EntExtensions.RunOnBeforeEntityFormat(@self,drawing,DC);
+    index:=PGDBObjBlockdefArray(drawing.GetBlockDefArraySimple).getindex(pansichar(name));
+    CalcObjMatrix(@drawing);
+    FormatFeatures(drawing);
+  end;
   CalcObjMatrix(@drawing);
-  FormatFeatures(drawing);
-  CalcObjMatrix(@drawing);
-  ConstObjArray.FormatEntity(drawing,dc);
-  VarObjArray.FormatEntity(drawing,dc);
-  self.lstonmouse:=nil;
-  calcbb(dc);
-  if assigned(EntExtensions)then
-    EntExtensions.RunOnAfterEntityFormat(@self,drawing,DC);
+  ConstObjArray.FormatEntity(drawing,dc,stage);
+  VarObjArray.FormatEntity(drawing,dc,stage);
+  if EFDraw in stage then begin
+    self.lstonmouse:=nil;
+    calcbb(dc);
+    if assigned(EntExtensions)then
+      EntExtensions.RunOnAfterEntityFormat(@self,drawing,DC);
+  end;
 end;
 function AllocDevice:PGDBObjDevice;
 begin

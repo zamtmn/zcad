@@ -158,7 +158,7 @@ type
 var
   BracketTockenId:TParserEntityPropFilter.TParserTokenizer.TTokenId;
   ExporterParser:TExporterParser;
-  VU:TObjectUnit;
+  VU:TEntityUnit;
   clFilePrompt:CMDLinePromptParser.TGeneralParsedText=nil;
   clOptionsPrompt:CMDLinePromptParser.TGeneralParsedText=nil;
   clOptionsPrompt1:CMDLinePromptParser.TGeneralParsedText=nil;

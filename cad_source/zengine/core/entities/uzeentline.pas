@@ -39,7 +39,8 @@ GDBObjLine= object(GDBObj3d)
                  procedure LoadFromDXF(var f: TZctnrVectorBytes;ptu:PExtensionData;var drawing:TDrawingDef);virtual;
 
                  procedure SaveToDXF(var outhandle:{Integer}TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
-                 procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);virtual;
+                 function IsStagedFormatEntity:boolean;virtual;
+                 procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext;Stage:TEFStages=EFAllStages);virtual;
                  procedure CalcGeometry;virtual;
                  procedure DrawGeometry(lw:Integer;var DC:TDrawContext{infrustumactualy:TActulity;subrender:Integer});virtual;
                  procedure RenderFeedback(pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc;var DC:TDrawContext);virtual;
@@ -232,19 +233,33 @@ begin
                                     end;
 end;
 
-procedure GDBObjLine.FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);
+function GDBObjLine.IsStagedFormatEntity:boolean;
 begin
-  if assigned(EntExtensions)then
-    EntExtensions.RunOnBeforeEntityFormat(@self,drawing,DC);
+  result:=true;
+end;
 
-  calcgeometry;
-  calcbb(dc);
+procedure GDBObjLine.FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext;Stage:TEFStages=EFAllStages);
+begin
+  if EFCalcEntityCS in stage then begin
+    if assigned(EntExtensions)then
+      EntExtensions.RunOnBeforeEntityFormat(@self,drawing,DC);
 
-  Representation.Clear;
-  if (not (ESTemp in State))and(DCODrawable in DC.Options) then
-    Representation.DrawLineWithLT(dc,CoordInWCS.lBegin,CoordInWCS.lEnd,vp);
-  if assigned(EntExtensions)then
-    EntExtensions.RunOnAfterEntityFormat(@self,drawing,DC);
+    calcgeometry;
+    calcbb(dc);
+  end;
+
+  if EFDraw in stage then begin
+    Representation.Clear;
+    if (not (ESTemp in State))and(DCODrawable in DC.Options) then begin
+      if assigned(EntExtensions)then begin
+        if EntExtensions.NeedStandardDraw(@self,drawing,DC) then
+          Representation.DrawLineWithLT(dc,CoordInWCS.lBegin,CoordInWCS.lEnd,vp);
+      end else
+        Representation.DrawLineWithLT(dc,CoordInWCS.lBegin,CoordInWCS.lEnd,vp);
+    end;
+    if assigned(EntExtensions)then
+      EntExtensions.RunOnAfterEntityFormat(@self,drawing,DC);
+  end;
 end;
 function GDBObjLine.CalcInFrustum;
 var i:Integer;

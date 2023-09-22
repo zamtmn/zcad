@@ -56,8 +56,8 @@
               <SyntaxMode Value="Delphi"/>
               <IncludeAssertionCode Value="True"/>
               <AllowLabel Value="False"/>
-              <CPPInline Value="False"/>
               <UseAnsiStrings Value="False"/>
+              <CPPInline Value="False"/>
             </SyntaxOptions>
           </Parsing>
           <Linking>
@@ -72,6 +72,7 @@
             <WriteFPCLogo Value="False"/>
             <ConfigFile>
               <StopAfterErrCount Value="5"/>
+              <WriteConfigFilePath Value="$(ProjOutDir)/fpclaz.cfg"/>
             </ConfigFile>
             <CompilerMessages>
               <IgnoredMessages idx6058="True" idx5062="True" idx5024="True" idx4055="True"/>
@@ -102,8 +103,8 @@
               <SyntaxMode Value="Delphi"/>
               <IncludeAssertionCode Value="True"/>
               <AllowLabel Value="False"/>
-              <CPPInline Value="False"/>
               <UseAnsiStrings Value="False"/>
+              <CPPInline Value="False"/>
             </SyntaxOptions>
           </Parsing>
           <Other>
@@ -113,6 +114,7 @@
             <WriteFPCLogo Value="False"/>
             <ConfigFile>
               <StopAfterErrCount Value="5"/>
+              <WriteConfigFilePath Value="$(ProjOutDir)/fpclaz.cfg"/>
             </ConfigFile>
             <CompilerMessages>
               <IgnoredMessages idx6058="True" idx5062="True" idx5024="True" idx4055="True"/>
@@ -143,8 +145,8 @@
               <SyntaxMode Value="Delphi"/>
               <IncludeAssertionCode Value="True"/>
               <AllowLabel Value="False"/>
-              <CPPInline Value="False"/>
               <UseAnsiStrings Value="False"/>
+              <CPPInline Value="False"/>
             </SyntaxOptions>
           </Parsing>
           <Other>
@@ -154,6 +156,7 @@
             <WriteFPCLogo Value="False"/>
             <ConfigFile>
               <StopAfterErrCount Value="5"/>
+              <WriteConfigFilePath Value="$(ProjOutDir)/fpclaz.cfg"/>
             </ConfigFile>
             <CompilerMessages>
               <IgnoredMessages idx6058="True" idx5062="True" idx5024="True" idx4055="True"/>
@@ -184,8 +187,8 @@
               <SyntaxMode Value="Delphi"/>
               <IncludeAssertionCode Value="True"/>
               <AllowLabel Value="False"/>
-              <CPPInline Value="False"/>
               <UseAnsiStrings Value="False"/>
+              <CPPInline Value="False"/>
             </SyntaxOptions>
           </Parsing>
           <Other>
@@ -195,6 +198,7 @@
             <WriteFPCLogo Value="False"/>
             <ConfigFile>
               <StopAfterErrCount Value="5"/>
+              <WriteConfigFilePath Value="$(ProjOutDir)/fpclaz.cfg"/>
             </ConfigFile>
             <CompilerMessages>
               <IgnoredMessages idx6058="True" idx5062="True" idx5024="True" idx4055="True"/>
@@ -225,8 +229,8 @@
               <SyntaxMode Value="Delphi"/>
               <IncludeAssertionCode Value="True"/>
               <AllowLabel Value="False"/>
-              <CPPInline Value="False"/>
               <UseAnsiStrings Value="False"/>
+              <CPPInline Value="False"/>
             </SyntaxOptions>
           </Parsing>
           <Other>
@@ -236,6 +240,7 @@
             <WriteFPCLogo Value="False"/>
             <ConfigFile>
               <StopAfterErrCount Value="5"/>
+              <WriteConfigFilePath Value="$(ProjOutDir)/fpclaz.cfg"/>
             </ConfigFile>
             <CompilerMessages>
               <IgnoredMessages idx6058="True" idx5062="True" idx5024="True" idx4055="True"/>
@@ -266,8 +271,8 @@
               <SyntaxMode Value="Delphi"/>
               <IncludeAssertionCode Value="True"/>
               <AllowLabel Value="False"/>
-              <CPPInline Value="False"/>
               <UseAnsiStrings Value="False"/>
+              <CPPInline Value="False"/>
             </SyntaxOptions>
           </Parsing>
           <Other>
@@ -277,6 +282,7 @@
             <WriteFPCLogo Value="False"/>
             <ConfigFile>
               <StopAfterErrCount Value="5"/>
+              <WriteConfigFilePath Value="$(ProjOutDir)/fpclaz.cfg"/>
             </ConfigFile>
             <CompilerMessages>
               <IgnoredMessages idx6058="True" idx5062="True" idx5024="True" idx4055="True"/>
@@ -315,82 +321,85 @@
         </Mode0>
       </Modes>
     </RunParams>
-    <RequiredPackages Count="25">
+    <RequiredPackages Count="26">
       <Item1>
-        <PackageName Value="MetaDarkStyle"/>
+        <PackageName Value="laz_fpspreadsheet"/>
       </Item1>
       <Item2>
-        <PackageName Value="SynEdit"/>
+        <PackageName Value="MetaDarkStyle"/>
       </Item2>
       <Item3>
-        <PackageName Value="fpdwg"/>
+        <PackageName Value="SynEdit"/>
       </Item3>
       <Item4>
-        <PackageName Value="lazopenglcontext"/>
+        <PackageName Value="fpdwg"/>
       </Item4>
       <Item5>
-        <PackageName Value="zbaseutils"/>
+        <PackageName Value="lazopenglcontext"/>
       </Item5>
       <Item6>
-        <PackageName Value="zbaseutilsgui"/>
+        <PackageName Value="zbaseutils"/>
       </Item6>
       <Item7>
-        <PackageName Value="ag_vectors"/>
+        <PackageName Value="zbaseutilsgui"/>
       </Item7>
       <Item8>
-        <PackageName Value="ag_graph"/>
+        <PackageName Value="ag_vectors"/>
       </Item8>
       <Item9>
-        <PackageName Value="runtimetypeinfocontrols"/>
+        <PackageName Value="ag_graph"/>
       </Item9>
       <Item10>
-        <PackageName Value="uniqueinstance_package"/>
+        <PackageName Value="runtimetypeinfocontrols"/>
       </Item10>
       <Item11>
-        <PackageName Value="zmacros"/>
+        <PackageName Value="uniqueinstance_package"/>
       </Item11>
       <Item12>
-        <PackageName Value="laz.virtualtreeview_package"/>
+        <PackageName Value="zmacros"/>
       </Item12>
       <Item13>
-        <PackageName Value="ztoolbars"/>
+        <PackageName Value="laz.virtualtreeview_package"/>
       </Item13>
       <Item14>
-        <PackageName Value="zmath"/>
+        <PackageName Value="ztoolbars"/>
       </Item14>
       <Item15>
-        <PackageName Value="zobjectinspector"/>
+        <PackageName Value="zmath"/>
       </Item15>
       <Item16>
-        <PackageName Value="zundostack"/>
+        <PackageName Value="zobjectinspector"/>
       </Item16>
       <Item17>
-        <PackageName Value="zscript"/>
+        <PackageName Value="zundostack"/>
       </Item17>
       <Item18>
-        <PackageName Value="zscriptbase"/>
+        <PackageName Value="zscript"/>
       </Item18>
       <Item19>
-        <PackageName Value="zcontainers"/>
+        <PackageName Value="zscriptbase"/>
       </Item19>
       <Item20>
-        <PackageName Value="zebase"/>
+        <PackageName Value="zcontainers"/>
       </Item20>
       <Item21>
-        <PackageName Value="zcontrols"/>
+        <PackageName Value="zebase"/>
       </Item21>
       <Item22>
-        <PackageName Value="FCL"/>
+        <PackageName Value="zcontrols"/>
       </Item22>
       <Item23>
-        <PackageName Value="Printer4Lazarus"/>
+        <PackageName Value="FCL"/>
       </Item23>
       <Item24>
-        <PackageName Value="AnchorDocking"/>
+        <PackageName Value="Printer4Lazarus"/>
       </Item24>
       <Item25>
-        <PackageName Value="LCL"/>
+        <PackageName Value="AnchorDocking"/>
       </Item25>
+      <Item26>
+        <PackageName Value="LCL"/>
+      </Item26>
     </RequiredPackages>
     <Units Count="201">
       <Unit0>
@@ -532,6 +541,7 @@
       <Unit23>
         <Filename Value="zcad/entities/uzcenitiesvariablesextender.pas"/>
         <IsPartOfProject Value="True"/>
+        <UnitName Value="uzcEnitiesVariablesExtender"/>
       </Unit23>
       <Unit24>
         <Filename Value="zcad/entities/uzcvariablesutils.pas"/>
@@ -1274,8 +1284,8 @@
         <SyntaxMode Value="Delphi"/>
         <IncludeAssertionCode Value="True"/>
         <AllowLabel Value="False"/>
-        <CPPInline Value="False"/>
         <UseAnsiStrings Value="False"/>
+        <CPPInline Value="False"/>
       </SyntaxOptions>
     </Parsing>
     <CodeGeneration>
@@ -1295,6 +1305,7 @@
       <WriteFPCLogo Value="False"/>
       <ConfigFile>
         <StopAfterErrCount Value="5"/>
+        <WriteConfigFilePath Value="$(ProjOutDir)/fpclaz.cfg"/>
       </ConfigFile>
       <CompilerMessages>
         <IgnoredMessages idx6058="True" idx5062="True" idx5024="True" idx4055="True"/>

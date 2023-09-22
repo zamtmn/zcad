@@ -167,6 +167,7 @@ begin
     //pb := Pointer(drawings.GetCurrentDWG^.ConstructObjRoot.CreateObj(GDBBlockInsertID,@drawings.GetCurrentDWG^.ObjRoot));
     //PGDBObjBlockInsert(pb)^.initnul;//(@drawings.GetCurrentDWG^.ObjRoot,drawings.LayerTable.GetSystemLayer,0);
     PGDBObjBlockInsert(pb)^.init(drawings.GetCurrentROOT,drawings.GetCurrentDWG^.GetCurrentLayer,0);
+    pb^.State:=pb^.State+[ESConstructProxy];
     pb^.Name:=PGDBObjBlockdef(drawings.GetCurrentDWG^.BlockDefArray.getDataMutable(BIProp.Blocks.Selected))^.Name;//'NOC';//'TESTBLOCK';
     zcSetEntPropFromCurrentDrawingProp(pb);
     //pb^.vp.ID:=GDBBlockInsertID;
@@ -181,6 +182,7 @@ begin
     tb:=pb^.FromDXFPostProcessBeforeAdd(nil,drawings.GetCurrentDWG^);
     if tb<>nil then begin
                          tb^.bp:=pb^.bp;
+                         PGDBObjEntity(tb)^.State:=PGDBObjEntity(tb)^.State+[ESConstructProxy];
                          //drawings.GetCurrentDWG^.ConstructObjRoot.deliteminarray(pb^.bp.PSelfInOwnerArray);
                          pb^.done;
                          Freemem(pointer(pb));

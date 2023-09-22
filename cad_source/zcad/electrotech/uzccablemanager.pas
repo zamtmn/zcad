@@ -93,7 +93,7 @@ begin
            if pobj^.GetObjType=GDBCableID then                //работа только с кабелями
            begin
                 pentvarext:=pobj^.GetExtension<TVariablesExtender>;   //получаем доступ к расширению с переменными
-                //pvn:=PTObjectUnit(pobj^.ou.Instance)^.FindVariable('NMO_Name');
+                //pvn:=PTEntityUnit(pobj^.ou.Instance)^.FindVariable('NMO_Name');
                 pvn:=pentvarext.entityunit.FindVariable('NMO_Name');      //находим обозначение кабеля (ШС2)
                 if pvn<>nil then
                                 sname:=pString(pvn^.data.Addr.Instance)^
@@ -103,7 +103,7 @@ begin
                                sname:=sname;
                 pcd:=FindOrCreate(sname);                                         //поиск или создание нового элемента в списки. Если такое имя в списке есть, то возвращает указатель на него, если нет то создает новый.
                 pcd^.Segments.PushBackData(pobj);                                 //добавляем к сегменту новый кабель
-                //pvn:=PTObjectUnit(pobj^.ou.Instance)^.FindVariable('AmountD');
+                //pvn:=PTEntityUnit(pobj^.ou.Instance)^.FindVariable('AmountD');
                 pvn:=pentvarext.entityunit.FindVariable('AmountD');              //получаем длину кабеля
                 if pvn<>nil then
                                 pcd^.length:=pcd^.length+pDouble(pvn^.data.Addr.Instance)^; //доюавляем к шлейфу общую длину
@@ -127,8 +127,8 @@ begin
                 if pobj<>nil then
                 repeat
                       pentvarext:=pobj^.GetExtension<TVariablesExtender>;
-                      //pvn :=PTObjectUnit(pobj^.ou.Instance)^.FindVariable('CABLE_Segment');
-                      //pvn2:=PTObjectUnit(pobj2^.ou.Instance)^.FindVariable('CABLE_Segment');
+                      //pvn :=PTEntityUnit(pobj^.ou.Instance)^.FindVariable('CABLE_Segment');
+                      //pvn2:=PTEntityUnit(pobj2^.ou.Instance)^.FindVariable('CABLE_Segment');
                       pvn :=pentvarext.entityunit.FindVariable('CABLE_Segment');
                       pvn2:=pentvarext2.entityunit.FindVariable('CABLE_Segment');
                       if PInteger(pvn^.data.Addr.Instance)^<

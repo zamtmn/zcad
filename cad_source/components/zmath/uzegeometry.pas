@@ -2043,7 +2043,36 @@ begin
    d2121:= p21.x * p21.x + p21.y * p21.y + p21.z * p21.z;
 
    denom:= d2121 * d4343 - d4321 * d4321;
-   if (ABS(denom) < {EPS}sqreps)  then exit;
+   if (ABS(denom) < {EPS}sqreps)  then begin
+     //бывают случаи соприкосновения линий концами, их надо обработать
+     if IsPointEqual(l1begin,l2begin)then begin
+       result.isintercept:=true;
+       result.t1:=0;
+       result.t2:=0;
+       result.interceptcoord:=l1begin;
+       exit;
+     end else if IsPointEqual(l1begin,l2end)then begin
+       result.isintercept:=true;
+       result.t1:=0;
+       result.t2:=1;
+       result.interceptcoord:=l1begin;
+       exit;
+     end else if IsPointEqual(l1end,l2begin)then begin
+       result.isintercept:=true;
+       result.t1:=1;
+       result.t2:=0;
+       result.interceptcoord:=l1end;
+       exit;
+     end else if IsPointEqual(l1end,l2end)then begin
+       result.isintercept:=true;
+       result.t1:=1;
+       result.t2:=1;
+       result.interceptcoord:=l1end;
+       exit;
+     end;
+     exit;
+   end;
+
    numer:= d1343 * d4321 - d1321 * d4343;
 
    result.t1:=numer/denom;
@@ -2327,26 +2356,30 @@ else if IsPointInBB(CreateVertex(bb2.rtf.x,bb2.lbn.y,bb2.rtf.z),bb1) then begin 
 end;}
 function boundingintersect(const bb1,bb2:TBoundingBox):Boolean;
 var
-   b1,b2,b1c,b2c,dist:gdbvertex;
-   //dist:Double;
+  b1,b2,b1c,b2c,dist:gdbvertex;
 begin
-     b1.x:=(bb1.RTF.x-bb1.LBN.x)/2;
-     b1.y:=(bb1.RTF.y-bb1.LBN.y)/2;
-     b1.z:=(bb1.RTF.z-bb1.LBN.z)/2;
-     b2.x:=(bb2.RTF.x-bb2.LBN.x)/2;
-     b2.y:=(bb2.RTF.y-bb2.LBN.y)/2;
-     b2.z:=(bb2.RTF.z-bb2.LBN.z)/2;
-     b1c:=VertexAdd(bb1.LBN,b1);
-     b2c:=VertexAdd(bb2.LBN,b2);
-     dist:=VertexSub(b1c,b2c);
-     dist.x:=abs(dist.x);
-     dist.y:=abs(dist.y);
-     dist.z:=abs(dist.z);
-     result:=false;
-     if (((b1.x+b2.x)-dist.x)>-eps)
-      and(((b1.y+b2.y)-dist.y)>-eps)
-      and(((b1.z+b2.z)-dist.z)>-eps) then
-                                 result:=true
+  //половина диагонали первого бокса
+  b1.x:=(bb1.RTF.x-bb1.LBN.x)/2;
+  b1.y:=(bb1.RTF.y-bb1.LBN.y)/2;
+  b1.z:=(bb1.RTF.z-bb1.LBN.z)/2;
+  //половина диагонали второго бокса
+  b2.x:=(bb2.RTF.x-bb2.LBN.x)/2;
+  b2.y:=(bb2.RTF.y-bb2.LBN.y)/2;
+  b2.z:=(bb2.RTF.z-bb2.LBN.z)/2;
+  //центры боксов
+  b1c:=VertexAdd(bb1.LBN,b1);
+  b2c:=VertexAdd(bb2.LBN,b2);
+  //расстояние между центрами
+  dist:=VertexSub(b1c,b2c);
+  dist.x:=abs(dist.x);
+  dist.y:=abs(dist.y);
+  dist.z:=abs(dist.z);
+  //пересечение боксов
+  result:=false;
+  if (((b1.x+b2.x)-dist.x)>-bigeps)
+     and(((b1.y+b2.y)-dist.y)>-bigeps)
+     and(((b1.z+b2.z)-dist.z)>-bigeps) then
+    result:=true
 end;
 function CreateMatrixFromBasis(const ox,oy,oz:GDBVertex):DMatrix4D;
 begin

@@ -121,7 +121,7 @@ implementation
 
 var
   BracketTockenId:TParserEntityPropFilter.TParserTokenizer.TTokenId;
-  VU:TObjectUnit;
+  VU:TEntityUnit;
 
 procedure TGetEntVariable.GetResult(const Source:TRawByteStringManipulator.TStringType;
                     const Token :TRawByteStringManipulator.TCharRange;

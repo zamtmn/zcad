@@ -56,13 +56,13 @@ type
   TMSEditor= object(TWrapper2ObjInsp)
                 TxtEntType:TMSPrimitiveDetector;(*'Process primitives'*)
                 VariableProcessSelector:TVariableProcessSelector;(*'Process variables'*)
-                RelatedVariablesUnit:TObjectUnit;(*'Related variables'*)
-                VariablesUnit:TObjectUnit;(*'Variables'*)
-                ExtendersUnit:TObjectUnit;(*'Extenders'*)
-                GeneralUnit:TObjectUnit;(*'General'*)
-                GeometryUnit:TObjectUnit;(*'Geometry'*)
-                MiscUnit:TObjectUnit;(*'Misc'*)
-                SummaryUnit:TObjectUnit;(*'Summary'*)
+                RelatedVariablesUnit:TEntityUnit;(*'Related variables'*)
+                VariablesUnit:TEntityUnit;(*'Variables'*)
+                ExtendersUnit:TEntityUnit;(*'Extenders'*)
+                GeneralUnit:TEntityUnit;(*'General'*)
+                GeometryUnit:TEntityUnit;(*'Geometry'*)
+                MiscUnit:TEntityUnit;(*'Misc'*)
+                SummaryUnit:TEntityUnit;(*'Summary'*)
                 ObjIDVector:{-}TObjIDVector{/Pointer/};(*hidden_in_objinsp*)
                 ObjID2Counter:{-}TObjID2Counter{/Pointer/};(*hidden_in_objinsp*)
                 ObjIDWithExtenderCounter:{-}TObjIDWithExtender2Counter{/Pointer/};(*hidden_in_objinsp*)
@@ -73,15 +73,15 @@ type
                 function GetObjType:TObjID;virtual;
                 constructor init;
                 destructor done;virtual;
-                procedure processunit(var entunit:TObjectUnit;linkedunit:boolean=false);
+                procedure processunit(var entunit:TEntityUnit;linkedunit:boolean=false);
 
                 procedure CheckMultiPropertyUse;
                 procedure CreateMultiPropertys(const f:TzeUnitsFormat);
 
                 procedure SetVariables(PSourceVD:pvardesk;NeededObjType:TObjID);
                 procedure SetRelatedVariables(PSourceVD:pvardesk;NeededObjType:TObjID);
-                procedure SetMultiProperty(pu:PTObjectUnit;PSourceVD:pvardesk;NeededObjType:TObjID);
-                procedure processProperty(const ID:TObjID; const pdata: pointer; const pentity: pGDBObjEntity; const PMultiPropertyDataForObjects:PTMultiPropertyDataForObjects; const pu:PTObjectUnit; const PSourceVD:PVarDesk;const mp:TMultiProperty; var DC:TDrawContext);
+                procedure SetMultiProperty(pu:PTEntityUnit;PSourceVD:pvardesk;NeededObjType:TObjID);
+                procedure processProperty(const ID:TObjID; const pdata: pointer; const pentity: pGDBObjEntity; const PMultiPropertyDataForObjects:PTMultiPropertyDataForObjects; const pu:PTEntityUnit; const PSourceVD:PVarDesk;const mp:TMultiProperty; var DC:TDrawContext);
                 procedure ClearErrorRange;
             end;
   PMSEditor=^TMSEditor;
@@ -234,7 +234,7 @@ begin
                                         iterator.destroy;
          end;
 end;
-procedure TMSEditor.processProperty(const ID:TObjID; const pdata: pointer; const pentity: pGDBObjEntity; const PMultiPropertyDataForObjects:PTMultiPropertyDataForObjects; const pu:PTObjectUnit; const PSourceVD:PVarDesk;const mp:TMultiProperty; var DC:TDrawContext);
+procedure TMSEditor.processProperty(const ID:TObjID; const pdata: pointer; const pentity: pGDBObjEntity; const PMultiPropertyDataForObjects:PTMultiPropertyDataForObjects; const pu:PTEntityUnit; const PSourceVD:PVarDesk;const mp:TMultiProperty; var DC:TDrawContext);
 var
    ChangedData:TChangedData;
    CanChangeValue:Boolean;
@@ -274,7 +274,7 @@ begin
      end
 
 end;
-procedure TMSEditor.SetMultiProperty(pu:PTObjectUnit;PSourceVD:PVarDesk;NeededObjType:TObjID);
+procedure TMSEditor.SetMultiProperty(pu:PTEntityUnit;PSourceVD:PVarDesk;NeededObjType:TObjID);
 var
   //pentvarext: TVariablesExtender;
   EntIterator: itrec;
@@ -481,7 +481,7 @@ procedure TMSEditor.CreateMultiPropertys;
 var
     i,j:integer;
     NeedObjID:TObjID;
-    pu:PTObjectUnit;
+    pu:PTEntityUnit;
     MultiPropertyDataForObjects:TMultiPropertyDataForObjects;
     psd:PSelectedObjDesc;
     pv:pGDBObjEntity;
@@ -668,13 +668,13 @@ begin
       if (MultiPropertiesManager.MultiPropertyVector[i].UseMode=MPUM_AllEntsMatched)then
         MultiPropertiesManager.MultiPropertyVector[i].usecounter:=0;
 end;
-procedure TMSEditor.processunit(var entunit:TObjectUnit;linkedunit:boolean=false);
+procedure TMSEditor.processunit(var entunit:TEntityUnit;linkedunit:boolean=false);
 var
     pu:pointer;
     pvd,pvdmy:pvardesk;
     vd:vardesk;
     ir2:itrec;
-    WorkedUnit:PTObjectUnit;
+    WorkedUnit:PTEntityUnit;
 begin
   if (linkedunit)and(VariableProcessSelector=VPS_AllEntsSeparated) then
     WorkedUnit:=@RelatedVariablesUnit
@@ -683,7 +683,7 @@ begin
   pu:=entunit.InterfaceUses.beginiterate(ir2);
   if pu<>nil then
     repeat
-      if typeof(PTSimpleUnit(pu)^)<>typeof(TObjectUnit) then
+      if typeof(PTSimpleUnit(pu)^)<>typeof(TEntityUnit) then
         WorkedUnit.InterfaceUses.PushBackIfNotPresent(pu);
       pu:=entunit.InterfaceUses.iterate(ir2)
     until pu=nil;
@@ -786,8 +786,8 @@ begin
               pu:=pentvarext.entityunit.InterfaceUses.beginiterate(ir2);
               if pu<>nil then
                 repeat
-                  if typeof(PTSimpleUnit(pu)^)=typeof(TObjectUnit) then
-                    processunit(PTObjectUnit(pu)^,true);
+                  if typeof(PTSimpleUnit(pu)^)=typeof(TEntityUnit) then
+                    processunit(PTEntityUnit(pu)^,true);
                   pu:=pentvarext.entityunit.InterfaceUses.iterate(ir2)
                 until pu=nil;
             end;
@@ -1136,8 +1136,8 @@ begin
 end;
 initialization
   startup;
-  i:=SizeOf(TObjectUnit);
-  i:=SizeOf(TObjectUnit);
+  i:=SizeOf(TEntityUnit);
+  i:=SizeOf(TEntityUnit);
 finalization
   ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
   finalize;

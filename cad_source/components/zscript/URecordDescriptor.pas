@@ -325,12 +325,12 @@ begin
 
      {if PCollapsed<>field_no_attrib then
      if pboolean(pcollapsed)^ then exit;}
-     if (self.TypeName='TObjectUnit')or(self.TypeName='TUnit') then
+     if (self.TypeName='TEntityUnit')or(self.TypeName='TUnit') then
                                         begin
                                         //if (bmode=property_build)then
                                               if (bmode=property_correct)then
                                               begin
-                                               if PTPropertyDeskriptorArray(ppd^.SubNode)^.GetRealPropertyDeskriptorsCount<>PTObjectUnit(addr)^.InterfaceVariables.vardescarray.Count then
+                                               if PTPropertyDeskriptorArray(ppd^.SubNode)^.GetRealPropertyDeskriptorsCount<>PTEntityUnit(addr)^.InterfaceVariables.vardescarray.Count then
                                                   begin
                                                   PTPropertyDeskriptorArray(ppd^.SubNode)^.cleareraseobj;
                                                   recreateunitvars:=true;
@@ -341,7 +341,7 @@ begin
                                                   recreateunitvars:=false;
                                              //recreateunitvars:=false;
                                         begin
-                                             pvd:=PTObjectUnit(addr)^.InterfaceVariables.vardescarray.beginiterate(ir2);
+                                             pvd:=PTEntityUnit(addr)^.InterfaceVariables.vardescarray.beginiterate(ir2);
                                              if pvd<>nil then
                                              repeat
                                                   if pvd^.name='BTY_TreeCoord' then
@@ -424,12 +424,12 @@ begin
 
                                                   ppda:=oldppda;
 
-                                                   pvd:=PTObjectUnit(addr)^.InterfaceVariables.vardescarray.iterate(ir2);
+                                                   pvd:=PTEntityUnit(addr)^.InterfaceVariables.vardescarray.iterate(ir2);
                                              until pvd=nil;
                                         end;
                                         if recreateunitvars then
                                                                 bmode:=property_correct;
-                                        //inc(PtrInt(addr),sizeof(TObjectUnit));
+                                        //inc(PtrInt(addr),sizeof(TEntityUnit));
                                         end
                                         else
 
@@ -480,10 +480,10 @@ begin
                             ppd^.valueAddres:=startaddr;
                             ppd^.value:='Empty';
 
-                            //pvd:=PTObjectUnit(startaddr)^.InterfaceVariables.vardescarray.beginiterate(ir2);
+                            //pvd:=PTEntityUnit(startaddr)^.InterfaceVariables.vardescarray.beginiterate(ir2);
                             //taa:=pvd^.Instance;
                             //PTUserTypeDescriptor(pvd^.data.PTD).CreateProperties(PPDA,{ppd^.Name}tname,@pfd^.collapsed,{ppd^.Attr}pfd^.Attributes or ownerattrib,bmode,taa);
-                            inc(integer(startaddr),sizeof(TObjectUnit));
+                            inc(integer(startaddr),sizeof(TEntityUnit));
                        end
                    else*)
            if pfd^.base.ProgramName='#' then begin

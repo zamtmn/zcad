@@ -19,7 +19,7 @@
 unit gzctnrVectorSimple;
 
 interface
-uses gzctnrVector;
+uses gzctnrVector,gzctnrVectorTypes;
 type
 {Export+}
 {----REGISTEROBJECTTYPE GZVectorSimple}
@@ -29,9 +29,28 @@ GZVectorSimple{-}<T>{//}=object
                                    function IsDataExist(pobj:T):Integer;
                                    {**Удалить элемент по содержимому, с уменьшениием размера массива}
                                    procedure EraseData(data:T);
+                                   procedure RemoveDataFromArray(const data:T);virtual;
                                  end;
 {Export-}
 implementation
+
+procedure GZVectorSimple<T>.RemoveDataFromArray(const data:T);
+var p:PT;
+    ir:itrec;
+begin
+       p:=beginiterate(ir);
+       if p<>nil then
+       repeat
+             if p^=data then
+                           begin
+                                //pointer(ir.itp^):=nil;
+                                EraseElement(ir.itc);
+                                exit;
+                           end;
+             p:=iterate(ir);
+       until p=nil;
+end;
+
 
 function GZVectorSimple<T>.IsDataExist;
 var i:integer;

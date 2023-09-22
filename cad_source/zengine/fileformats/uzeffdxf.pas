@@ -368,14 +368,15 @@ begin
                                 begin
                                 if (newowner<>owner) then
                                 begin
+                                     PGDBObjEntity(newowner)^.CalcObjMatrix(@drawing);
                                      m4:=PGDBObjEntity(newowner)^.getmatrix^;
                                      MatrixInvert(m4);
                                      //pobj^.Format;
-                                     pobj^.CalcObjMatrix;
+                                     pobj^.CalcObjMatrix(@drawing);
                                      pobj^.transform(m4);
                                 end
                                 else
-                                    pobj^.CalcObjMatrix;
+                                    pobj^.CalcObjMatrix(@drawing);
                                 end;
                                 if not trash then
                                 begin

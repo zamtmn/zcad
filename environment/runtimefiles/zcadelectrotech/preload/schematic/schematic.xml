@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<CONFIG>
+  <PalettesContent>
+    <BlockLib Type="Tree" Caption='Blocks' ImagesWidth='24'>
+      <ZTreeNode Caption='Schemes'>
+        <ZTreeNode Caption='Unsorted'>
+          <ZTreeCommand Command="Insert(DEVICE_SCH_CONTACT_NOC)"/>
+          <ZTreeCommand Command="Insert(DEVICE_SCH_CONTACT_NOC_CC)"/>
+        </ZTreeNode>
+      </ZTreeNode>
+    </BlockLib>
+  </PalettesContent>
+</CONFIG>

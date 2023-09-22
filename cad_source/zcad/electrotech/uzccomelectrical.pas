@@ -688,7 +688,7 @@ begin
        if psd^.objaddr^.GetObjType=GDBDeviceID then
        begin
             entvarext:=psd^.objaddr^.GetExtension<TVariablesExtender>;
-            //pvd:=PTObjectUnit(psd^.objaddr^.ou.Instance)^.FindVariable('DESC_MountingSite');
+            //pvd:=PTEntityUnit(psd^.objaddr^.ou.Instance)^.FindVariable('DESC_MountingSite');
             pvd:=entvarext.entityunit.FindVariable({'DESC_MountingSite'}'NMO_Name');
             if pvd<>nil then
                             dn.name:=pvd.data.PTD.GetValueAsString(pvd.data.Addr.Instance)
@@ -816,7 +816,7 @@ begin
            if psd^.objaddr^.GetObjType=GDBDeviceID then
            begin
                 pentvarext:=psd^.objaddr^.GetExtension<TVariablesExtender>;
-                //pvd:=PTObjectUnit(psd^.objaddr^.ou.Instance)^.FindVariable('DESC_MountingSite');
+                //pvd:=PTEntityUnit(psd^.objaddr^.ou.Instance)^.FindVariable('DESC_MountingSite');
                 pvd:=pentvarext.entityunit.FindVariable({'DESC_MountingSite'}'NMO_Name');
                 if pvd<>nil then
                                 dn.name:=pvd.data.PTD.GetValueAsString(pvd.data.Addr.Instance)
@@ -963,7 +963,7 @@ begin
     if pobj.GetObjType=GDBDeviceID then
     begin
          pentvarext:=pobj^.GetExtension<TVariablesExtender>;
-         //pvd:=PTObjectUnit(pobj^.ou.Instance)^.FindVariable('Device_Type');
+         //pvd:=PTEntityUnit(pobj^.ou.Instance)^.FindVariable('Device_Type');
          pvd:=pentvarext.entityunit.FindVariable('Device_Type');
          if pvd<>nil then
          if PTDeviceType(pvd^.data.Addr.Instance)^=TDT_SilaIst then
@@ -3291,7 +3291,7 @@ begin
   repeat
     if (pv^.GetObjType=GDBCableID) then
     begin
-         //pvd:=PTObjectUnit(pv^.ou.Instance)^.FindVariable('CABLE_AutoGen');
+         //pvd:=PTEntityUnit(pv^.ou.Instance)^.FindVariable('CABLE_AutoGen');
          pvd:=FindVariableInEnt(pv,'CABLE_AutoGen');
          if pvd<>nil then
                          begin

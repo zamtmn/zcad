@@ -53,7 +53,7 @@ GDBObjCable= object(GDBObjCurve)
                  constructor initnul(owner:PGDBObjGenericWithSubordinated);
                  procedure DrawGeometry(lw:Integer;var DC:TDrawContext{infrustumactualy:TActulity;subrender:Integer});virtual;
                  function GetObjTypeName:String;virtual;
-                 procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);virtual;
+                 procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext;Stage:TEFStages=EFAllStages);virtual;
                  procedure FormatFast(var drawing:TDrawingDef;var DC:TDrawContext);virtual;
                  procedure SaveToDXFObjXData(var outhandle:{Integer}TZctnrVectorBytes;var IODXFContext:TIODXFContext);virtual;
                  procedure SaveToDXF(var outhandle:{Integer}TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
@@ -93,7 +93,7 @@ begin
   end;
   result := tvo;
   EntExtensions.RunOnCloneProcedures(@self,tvo);
-  //PTObjectUnit(ou.Instance)^.CopyTo(PTObjectUnit(tvo.ou.Instance));
+  //PTEntityUnit(ou.Instance)^.CopyTo(PTEntityUnit(tvo.ou.Instance));
 end;
 procedure GDBObjCable.SaveToDXFFollow;
 var
@@ -188,7 +188,7 @@ begin
 
 end;
 
-procedure GDBObjCable.FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);
+procedure GDBObjCable.FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext;Stage:TEFStages=EFAllStages);
 var ir_inGDB,ir_inVertexArray,ir_inNodeArray,ir_inDevice,ir_inDevice2:itrec;
     currentobj,CurrentSubObj,CurrentSubObj2,ptd:PGDBObjDevice;
     devpoint,{cabpoint,}tp,tp2,tp3,{_XWCS,}_YWCS,_ZWCS:GDBVertex;
@@ -288,7 +288,7 @@ begin
                                                                                                       I3DP:=CurrentSubObj2^.IsIntersect_Line(ptvpred^,ptv^);
                                                                                                       if I3DP.isintercept then
                                                                                                         begin
-                                                                                                             if I3DP.t1<I3DPPrev.t1 then
+                                                                                                             if (I3DP.t1>0-bigeps)and(I3DP.t1<I3DPPrev.t1) then
                                                                                                                                         begin
                                                                                                                                              I3DPPrev:=I3DP;
                                                                                                                                              ptn.PrevP:=I3DP.interceptcoord;
@@ -301,7 +301,7 @@ begin
                                                                                                       I3DP:=CurrentSubObj2^.IsIntersect_Line(ptv^,ptvnext^);
                                                                                                       if I3DP.isintercept then
                                                                                                         begin
-                                                                                                             if I3DP.t1>I3DPNext.t1 then
+                                                                                                             if (I3DP.t1<1+bigeps)and(I3DP.t1>I3DPNext.t1) then
                                                                                                                                         begin
                                                                                                                                              I3DPNext:=I3DP;
                                                                                                                                              ptn.NextP:=I3DP.interceptcoord;
@@ -471,7 +471,7 @@ begin
   inherited init(own,layeraddres, lw);
   NodePropArray.init(1000);
   //vp.ID := GDBCableID;
-  //PTObjectUnit(self.ou.Instance)^.init('cable');
+  //PTEntityUnit(self.ou.Instance)^.init('cable');
   GetDXFIOFeatures.AddExtendersToEntity(@self);
 end;
 constructor GDBObjCable.initnul;

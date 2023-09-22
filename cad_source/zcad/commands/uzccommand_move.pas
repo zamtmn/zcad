@@ -120,6 +120,7 @@ begin
                 tv := pobj^.Clone({drawings.GetCurrentROOT}@drawings.GetCurrentDWG^.ConstructObjRoot);
                 if tv<>nil then
                 begin
+                    tv^.State:=tv^.State+[ESConstructProxy];
                     drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.AddPEntity(tv^);
                     tcd.sourceEnt:=pobj;
                     tcd.tmpProxy:=tv;

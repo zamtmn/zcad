@@ -688,7 +688,7 @@ begin
   repeat
         begin
             pcablestartsegmentvarext:=pcabledesk.StartSegment^.GetExtension<TVariablesExtender>;
-            //pvd:=PTObjectUnit(pcabledesk.StartSegment.ou.Instance)^.FindVariable('GC_Metric');
+            //pvd:=PTEntityUnit(pcabledesk.StartSegment.ou.Instance)^.FindVariable('GC_Metric');
             pvd:=pcablestartsegmentvarext.entityunit.FindVariable('GC_Metric');
             if pvd<>nil then
                             begin
@@ -719,7 +719,7 @@ begin
                 repeat
                     begin
                         pptnownervarext:=ptn^.bp.ListPos.Owner^.GetExtension<TVariablesExtender>;
-                        //pvd:=PTObjectUnit(ptn^.bp.ListPos.Owner.ou.Instance)^.FindVariable('GC_Metric');
+                        //pvd:=PTEntityUnit(ptn^.bp.ListPos.Owner.ou.Instance)^.FindVariable('GC_Metric');
                         pvd:=pptnownervarext.entityunit.FindVariable('GC_Metric');
                         if pvd<>nil then
                                         begin
@@ -729,7 +729,7 @@ begin
                                         begin
                                              devicemetric:='';
                                         end;
-                        //pvd:=PTObjectUnit(ptn^.bp.ListPos.Owner.ou.Instance)^.FindVariable('GC_InGroup_Metric');
+                        //pvd:=PTEntityUnit(ptn^.bp.ListPos.Owner.ou.Instance)^.FindVariable('GC_InGroup_Metric');
                         pvd:=pptnownervarext.entityunit.FindVariable('GC_InGroup_Metric');
                                         if pvd<>nil then
                                                         begin
@@ -950,7 +950,7 @@ begin
   repeat
         PCableSS:=pcabledesk^.StartSegment;
         pCableSSvarext:=PCableSS^.GetExtension<TVariablesExtender>;
-        //pvd:=PTObjectUnit(PCableSS.ou.Instance)^.FindVariable('CABLE_Type');     { TODO : Сделать поиск переменных caseнезависимым }
+        //pvd:=PTEntityUnit(PCableSS.ou.Instance)^.FindVariable('CABLE_Type');     { TODO : Сделать поиск переменных caseнезависимым }
         pvd:=pCableSSvarext.entityunit.FindVariable('CABLE_Type');
 
         if pvd<>nil then
@@ -973,7 +973,7 @@ begin
 
                   SysVar.dwg.DWG_CLayer^:=lsave;
                   ppvvarext:=pv^.GetExtension<TVariablesExtender>;
-                  //pvmc:=PTObjectUnit(pv^.ou.Instance)^.FindVariable('CableName');
+                  //pvmc:=PTEntityUnit(pv^.ou.Instance)^.FindVariable('CableName');
                   pvmc:=ppvvarext.entityunit.FindVariable('CableName');
                   if pvmc<>nil then
                   begin
@@ -1003,7 +1003,7 @@ begin
                         if nodeend^.bp.ListPos.Owner<>pointer(drawings.GetCurrentROOT) then
                                                                           nodeend:=pointer(nodeend^.bp.ListPos.Owner);
                         pnodeendvarext:=nodeend^.GetExtension<TVariablesExtender>;
-                        //pvd:=PTObjectUnit(nodeend^.ou.Instance)^.FindVariable('NMO_Name');
+                        //pvd:=PTEntityUnit(nodeend^.ou.Instance)^.FindVariable('NMO_Name');
                         pvd:=pnodeendvarext.entityunit.FindVariable('NMO_Name');
                         if pvd<>nil then
                         begin
@@ -1011,7 +1011,7 @@ begin
                              endname:=pvd^.data.PTD.GetValueAsString(pvd^.data.Addr.Instance);
                         end
                            else endname:='';
-                        //pvd:=PTObjectUnit(nodeend^.ou.Instance)^.FindVariable('DB_link');
+                        //pvd:=PTEntityUnit(nodeend^.ou.Instance)^.FindVariable('DB_link');
                         pvd:=pnodeendvarext.entityunit.FindVariable('DB_link');
                         if pvd<>nil then
                         begin
@@ -1043,7 +1043,7 @@ begin
                                     else
                                         InsertDat('_error_here',startname,endname,count,currentcoord,drawings.GetCurrentDWG.ConstructObjRoot).YouDeleted(drawings.GetCurrentDWG^);
 
-                  //pvd:=PTObjectUnit(PCableSS.ou.Instance)^.FindVariable('CABLE_WireCount');
+                  //pvd:=PTEntityUnit(PCableSS.ou.Instance)^.FindVariable('CABLE_WireCount');
                   pvd:=pCableSSvarext.entityunit.FindVariable('CABLE_WireCount');
                   if pvd=nil then
                                  coord.x:=coord.x+12

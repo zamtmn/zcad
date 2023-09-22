@@ -96,16 +96,12 @@ end;
 function GDBObjBlockdefArray.getindex;
 var
    i:Integer;
-   //debugs:string;
 begin
-  result:=-1;
-  if count = 0 then exit;
+  Name:=UpperCase(Name);
   for i:=0 to count-1 do
-                        begin
-                        //debugs:=PBlockdefArray(parray)[i].Name;
-                        if uppercase(PBlockdefArray(parray)[i].Name)=uppercase(name) then
-                                                                   result := i;
-                        end;
+    if uppercase(PBlockdefArray(parray)[i].Name)=Name then
+      exit(i);
+  result:=-1;
 end;
 procedure GDBObjBlockdefArray.FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);
 var

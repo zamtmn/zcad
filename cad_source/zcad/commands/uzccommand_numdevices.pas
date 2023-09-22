@@ -163,7 +163,7 @@ begin
 
             if NumberingParams.BaseName<>'' then
             begin
-            //pvd:=PTObjectUnit(pdev^.ou.Instance)^.FindVariable('NMO_BaseName');
+            //pvd:=PTEntityUnit(pdev^.ou.Instance)^.FindVariable('NMO_BaseName');
             pvd:=pdevvarext.entityunit.FindVariable('NMO_BaseName');
             if pvd<>nil then
             begin
@@ -183,7 +183,7 @@ begin
                    process:=true;
             if process then
             begin
-            //pvd:=PTObjectUnit(pdev^.ou.Instance)^.FindVariable(NumberingParams.NumberVar);
+            //pvd:=PTEntityUnit(pdev^.ou.Instance)^.FindVariable(NumberingParams.NumberVar);
             pvd:=pdevvarext.entityunit.FindVariable(NumberingParams.NumberVar);
             if pvd<>nil then
             begin

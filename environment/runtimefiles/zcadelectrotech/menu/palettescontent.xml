@@ -181,6 +181,7 @@
            <ZTreeCommand Command="Insert(DEVICE_EL_VL_DIAGRAM_TT1)" Img='DEVICE_EL_VL_DIAGRAM_TT1_300' Caption='Трансформатор тока'/>
            <ZTreeCommand Command="Insert(DEVICE_EL_VL_DIAGRAM_WH1)" Img='DEVICE_EL_VL_DIAGRAM_WH1_300' Caption='Эл.счетчик прямого/включения'/>
            <ZTreeCommand Command="Insert(DEVICE_EL_VL_DIAGRAM_WH2)" Img='DEVICE_EL_VL_DIAGRAM_WH2_300' Caption='Эл.счетчик трансформ./включения '/>
+           <ZTreeCommand Command="Insert(DEVICE_EL_VL_DIAGRAM_BU1)" Img='DEVICE_EL_VL_DIAGRAM_BU1_300' Caption='Блок управления'/>
 	   <ZTreeCommand Command="Insert(DIAGRAM_H0)" Img='DIAGRAM_H0_300' Caption='Кабель боковик'/>
            <ZTreeCommand Command="Insert(DEVICE_EL_VL_DIAGRAM_H1)" Img='DEVICE_EL_VL_DIAGRAM_H1_300' Caption='Кабель в низ'/>
            <ZTreeCommand Command="Insert(DEVICE_EL_VL_DIAGRAM_H2)" Img='DEVICE_EL_VL_DIAGRAM_H2_300' Caption='Кабель в право'/>

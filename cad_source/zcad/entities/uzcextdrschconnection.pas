@@ -15,7 +15,7 @@
 {
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
-unit uzcExtdrConnection;
+unit uzcExtdrSCHConnection;
 {$INCLUDE zengineconfig.inc}
 
 interface
@@ -28,7 +28,7 @@ uses sysutils,uzedrawingdef,uzeentityextender,
      gzctnrVectorSimple,gzctnrVectorTypes,uzeBaseExtender,uzgldrawcontext,
      uzegeometrytypes,uzcsysvars,
      uzctnrVectorDouble,gzctnrVector,garrayutils,
-     uzcExtdrConnector,uzcEnitiesVariablesExtender;
+     uzcExtdrSCHConnector,uzcEnitiesVariablesExtender;
 const
   ConnectionExtenderName='extdrSCHConnection';
   IntersectRadius=0.5;

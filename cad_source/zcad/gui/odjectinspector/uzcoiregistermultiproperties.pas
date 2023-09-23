@@ -32,7 +32,7 @@ uses
   uzcoimultipropertiesutil,
   uzeentcircle,uzeentarc,uzeentline,uzeentblockinsert,uzeenttext,uzeentmtext,uzeentpolyline,uzcentelleader,uzeentdimension,uzeentellipse,
   uzegeometry,uzcoimultiproperties,uzcLog,
-  uzcExtdrLayerControl,uzcExtdrSmartTextEnt,uzcExtdrConnector;
+  uzcExtdrLayerControl,uzcExtdrSmartTextEnt,uzcExtdrSCHConnector;
 implementation
 procedure DoubleDeltaEntIterateProc(pdata:Pointer;ChangedData:TChangedData;mp:TMultiProperty;fistrun:boolean;ecp:TEntChangeProc; const f:TzeUnitsFormat);
 var

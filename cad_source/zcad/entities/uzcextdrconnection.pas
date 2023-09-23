@@ -30,7 +30,7 @@ uses sysutils,uzedrawingdef,uzeentityextender,
      uzctnrVectorDouble,gzctnrVector,garrayutils,
      uzcExtdrConnector,uzcEnitiesVariablesExtender;
 const
-  ConnectionExtenderName='extdrConnection';
+  ConnectionExtenderName='extdrSCHConnection';
   IntersectRadius=0.5;
   ConnectSize=1;
 type
@@ -58,7 +58,7 @@ TIntersectPointsLess=class
 end;
 TIntersectPointsUtil=TOrderingArrayUtils<TZctnrVectorDouble,Double,TIntersectPointsLess>;
 
-TConnectionExtender=class(TBaseConnectExtender)
+TSCHConnectionExtender=class(TBaseSCHConnectExtender)
     ConnectedWith,IntersectedWith:GDBObjOpenArrayOfPV;
     Connections:TConnectPoints;
     Knots:TKnots;
@@ -96,7 +96,7 @@ TConnectionExtender=class(TBaseConnectExtender)
   end;
 
 
-function AddNetExtenderToEntity(PEnt:PGDBObjEntity):TConnectionExtender;
+function AddNetExtenderToEntity(PEnt:PGDBObjEntity):TSCHConnectionExtender;
 
 implementation
 constructor TKnot.Create(const AT,AHW:Double;const AType:TKnotType);
@@ -126,16 +126,16 @@ begin
   count:=1;
 end;
 
-function AddNetExtenderToEntity(PEnt:PGDBObjEntity):TConnectionExtender;
+function AddNetExtenderToEntity(PEnt:PGDBObjEntity):TSCHConnectionExtender;
 begin
-  result:=TConnectionExtender.Create(PEnt);
+  result:=TSCHConnectionExtender.Create(PEnt);
   PEnt^.AddExtension(result);
 end;
 
-procedure TConnectionExtender.onEntitySupportOldVersions(pEntity:pointer;const drawing:TDrawingDef);
+procedure TSCHConnectionExtender.onEntitySupportOldVersions(pEntity:pointer;const drawing:TDrawingDef);
 begin
 end;
-constructor TConnectionExtender.Create;
+constructor TSCHConnectionExtender.Create;
 begin
   inherited;
   ConnectedWith.init(10);
@@ -147,7 +147,7 @@ begin
   Knots.init(10);
   Net:=nil;
 end;
-destructor TConnectionExtender.Destroy;
+destructor TSCHConnectionExtender.Destroy;
 begin
   inherited;
   ConnectedWith.destroy;
@@ -158,11 +158,11 @@ begin
   //Pins.destroy;
   Knots.destroy;
 end;
-procedure TConnectionExtender.Assign(Source:TBaseExtender);
+procedure TSCHConnectionExtender.Assign(Source:TBaseExtender);
 begin
 end;
 
-procedure TConnectionExtender.AddToDWGPostProcs(pEntity:Pointer;const drawing:TDrawingDef);
+procedure TSCHConnectionExtender.AddToDWGPostProcs(pEntity:Pointer;const drawing:TDrawingDef);
 var
   p:PGDBObjLine;
   ir:itrec;
@@ -191,17 +191,17 @@ begin
   IntersectedWith.Clear;
 end;
 
-procedure TConnectionExtender.onRemoveFromArray(pEntity:Pointer;const drawing:TDrawingDef);
+procedure TSCHConnectionExtender.onRemoveFromArray(pEntity:Pointer;const drawing:TDrawingDef);
 begin
   AddToDWGPostProcs(pEntity,drawing);
 end;
-procedure TConnectionExtender.onEntityClone(pSourceEntity,pDestEntity:pointer);
+procedure TSCHConnectionExtender.onEntityClone(pSourceEntity,pDestEntity:pointer);
 begin
 end;
-procedure TConnectionExtender.onEntityBuildVarGeometry(pEntity:pointer;const drawing:TDrawingDef);
+procedure TSCHConnectionExtender.onEntityBuildVarGeometry(pEntity:pointer;const drawing:TDrawingDef);
 begin
 end;
-procedure TConnectionExtender.onBeforeEntityFormat(pEntity:Pointer;const drawing:TDrawingDef;var DC:TDrawContext);
+procedure TSCHConnectionExtender.onBeforeEntityFormat(pEntity:Pointer;const drawing:TDrawingDef;var DC:TDrawContext);
 var
   CNet:TNet;
 begin
@@ -223,13 +223,13 @@ begin
       end;
   end;
 end;
-procedure TConnectionExtender.onEntityAfterConnect(pEntity:Pointer;const drawing:TDrawingDef;var DC:TDrawContext);
+procedure TSCHConnectionExtender.onEntityAfterConnect(pEntity:Pointer;const drawing:TDrawingDef;var DC:TDrawContext);
 var
-  ppin:TBaseConnectExtender;
-  setter:TBaseConnectExtender;
+  ppin:TBaseSCHConnectExtender;
+  setter:TBaseSCHConnectExtender;
   ir,eir:itrec;
   SVExtdr,PVExtdr:TVariablesExtender;
-  ConnectorExtender:TConnectorExtender;
+  ConnectorExtender:TSCHConnectorExtender;
 begin
   if Assigned(Net) then begin
     setter:=Net.Setters.beginiterate(ir);
@@ -249,7 +249,7 @@ begin
     until setter=nil;
   end;
 end;
-procedure TConnectionExtender.onEntityConnect(pEntity:Pointer;const drawing:TDrawingDef;var DC:TDrawContext);
+procedure TSCHConnectionExtender.onEntityConnect(pEntity:Pointer;const drawing:TDrawingDef;var DC:TDrawContext);
 var
   Objects:GDBObjOpenArrayOfPV;
 begin
@@ -279,40 +279,40 @@ begin
   if Knots.Count>1 then
     TKnotsUtils.Sort(Knots,Knots.Count);
 end;
-procedure TConnectionExtender.onAfterEntityFormat(pEntity:Pointer;const drawing:TDrawingDef;var DC:TDrawContext);
+procedure TSCHConnectionExtender.onAfterEntityFormat(pEntity:Pointer;const drawing:TDrawingDef;var DC:TDrawContext);
 begin
 end;
 
-procedure TConnectionExtender.CopyExt2Ent(pSourceEntity,pDestEntity:pointer);
+procedure TSCHConnectionExtender.CopyExt2Ent(pSourceEntity,pDestEntity:pointer);
 begin
 end;
-procedure TConnectionExtender.ReorganizeEnts(OldEnts2NewEntsMap:TMapPointerToPointer);
-begin
-end;
-
-procedure TConnectionExtender.PostLoad(var context:TIODXFLoadContext);
+procedure TSCHConnectionExtender.ReorganizeEnts(OldEnts2NewEntsMap:TMapPointerToPointer);
 begin
 end;
 
-class function TConnectionExtender.getExtenderName:string;
+procedure TSCHConnectionExtender.PostLoad(var context:TIODXFLoadContext);
+begin
+end;
+
+class function TSCHConnectionExtender.getExtenderName:string;
 begin
   result:=ConnectionExtenderName;
 end;
 
-class function TConnectionExtender.EntIOLoadNetExtender(_Name,_Value:String;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
+class function TSCHConnectionExtender.EntIOLoadNetExtender(_Name,_Value:String;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
 var
-  NetExtender:TConnectionExtender;
+  NetExtender:TSCHConnectionExtender;
 begin
-  NetExtender:=PGDBObjEntity(PEnt)^.GetExtension<TConnectionExtender>;
+  NetExtender:=PGDBObjEntity(PEnt)^.GetExtension<TSCHConnectionExtender>;
   if NetExtender=nil then begin
     NetExtender:=AddNetExtenderToEntity(PEnt);
   end;
   result:=true;
 end;
 
-procedure TConnectionExtender.SaveToDxfObjXData(var outhandle:TZctnrVectorBytes;PEnt:Pointer;var IODXFContext:TIODXFContext);
+procedure TSCHConnectionExtender.SaveToDxfObjXData(var outhandle:TZctnrVectorBytes;PEnt:Pointer;var IODXFContext:TIODXFContext);
 begin
-   dxfStringout(outhandle,1000,'CONNECTIONEXTENDER=');
+   dxfStringout(outhandle,1000,'SCHConnection=');
 end;
 
 procedure drawArrow(l1,l2:GDBVertex;pThisEntity:PGDBObjEntity;var DC:TDrawContext);
@@ -446,17 +446,17 @@ begin
   end;
 end;
 
-{procedure TConnectionExtender.TryConnectToEnts(var Objects:GDBObjOpenArrayOfPV;Position:TLineEnd;const drawing:TDrawingDef;var DC:TDrawContext);
+{procedure TSCHConnectionExtender.TryConnectToEnts(var Objects:GDBObjOpenArrayOfPV;Position:TLineEnd;const drawing:TDrawingDef;var DC:TDrawContext);
 var
   p:PGDBObjLine;
   ir:itrec;
-  NetExtender:TConnectionExtender;
+  NetExtender:TSCHConnectionExtender;
 begin
   p:=Objects.beginiterate(ir);
   if p<>nil then
   repeat
     if (pointer(p)<>pThisEntity)and(IsIt(TypeOf(p^),typeof(GDBObjLine))) then begin
-      NetExtender:=p^.GetExtension<TConnectionExtender>;
+      NetExtender:=p^.GetExtension<TSCHConnectionExtender>;
       if NetExtender<>nil then begin
         case Position of
           LBegin:begin
@@ -490,12 +490,12 @@ begin
   until p=nil;
 end;}
 
-procedure TConnectionExtender.TryConnectToEnts2(const p1,p2:GDBVertex;var Objects:GDBObjOpenArrayOfPV;const drawing:TDrawingDef;var DC:TDrawContext);
+procedure TSCHConnectionExtender.TryConnectToEnts2(const p1,p2:GDBVertex;var Objects:GDBObjOpenArrayOfPV;const drawing:TDrawingDef;var DC:TDrawContext);
 var
   p:PGDBObjLine;
   ir:itrec;
-  NetExtender:TConnectionExtender;
-  ConnectorExtender:TConnectorExtender;
+  NetExtender:TSCHConnectionExtender;
+  ConnectorExtender:TSCHConnectorExtender;
   ip:Intercept3DProp;
   PTI:Pointer;
   dist:DistAndt;
@@ -528,7 +528,7 @@ begin
     if pointer(p)<>pThisEntity then begin
       PTI:=TypeOf(p^);
       if IsIt(PTI,typeof(GDBObjLine)) then begin
-        NetExtender:=p^.GetExtension<TConnectionExtender>;
+        NetExtender:=p^.GetExtension<TSCHConnectionExtender>;
         if NetExtender<>nil then begin
           ip:=uzegeometry.intercept3d(p1,p2,p^.CoordInWCS.lBegin,p^.CoordInWCS.lEnd);
           if ip.isintercept then begin
@@ -563,7 +563,7 @@ begin
           end;
         end;
       end else if IsIt(PTI,typeof(GDBObjDevice)) then begin
-        ConnectorExtender:=p^.GetExtension<TConnectorExtender>;
+        ConnectorExtender:=p^.GetExtension<TSCHConnectorExtender>;
         if ConnectorExtender=nil then
           TryConnectToDeviceConnectors(p1,p2,PGDBObjDevice(p)^,drawing,DC)
         else begin
@@ -577,12 +577,18 @@ begin
               Net:=TNet.Create;
               Net.AddConnection(Self);
             end;
-            if ConnectorExtender.FSetter then
-              Net.AddSetter(ConnectorExtender)
-            else begin
-              Net.AddPin(ConnectorExtender);
-              PGDBObjGenericSubEntry(drawing.GetCurrentRootSimple)^.ObjToConnectedArray.PushBackIfNotPresent(p);
-              PGDBObjGenericSubEntry(drawing.GetCurrentRootSimple)^.ObjCasheArray.PushBackIfNotPresent(p);
+            case ConnectorExtender.FConnectorType of
+              CTInfo:begin
+                Net.AddInfo(ConnectorExtender);
+                PGDBObjGenericSubEntry(drawing.GetCurrentRootSimple)^.ObjToConnectedArray.PushBackIfNotPresent(p);
+                PGDBObjGenericSubEntry(drawing.GetCurrentRootSimple)^.ObjCasheArray.PushBackIfNotPresent(p);
+              end;
+              CTPin:begin
+                Net.AddPin(ConnectorExtender);
+                PGDBObjGenericSubEntry(drawing.GetCurrentRootSimple)^.ObjToConnectedArray.PushBackIfNotPresent(p);
+                PGDBObjGenericSubEntry(drawing.GetCurrentRootSimple)^.ObjCasheArray.PushBackIfNotPresent(p);
+              end;
+              CTSetter:Net.AddSetter(ConnectorExtender);
             end;
           end;
         end;
@@ -592,11 +598,11 @@ begin
   until p=nil;
 end;
 
-procedure TConnectionExtender.TryConnectToDeviceConnectors(const p1,p2:GDBVertex;var Device:GDBObjDevice;const drawing:TDrawingDef;var DC:TDrawContext);
+procedure TSCHConnectionExtender.TryConnectToDeviceConnectors(const p1,p2:GDBVertex;var Device:GDBObjDevice;const drawing:TDrawingDef;var DC:TDrawContext);
 var
   p:PGDBObjDevice;
   ir:itrec;
-  ConnectorExtender:TConnectorExtender;
+  ConnectorExtender:TSCHConnectorExtender;
   knot:TKnot;
   t:Double;
   isConnected:boolean;
@@ -606,7 +612,7 @@ begin
   repeat
 
     if IsIt(TypeOf(p^),typeof(GDBObjDevice)) then begin
-      ConnectorExtender:=p^.GetExtension<TConnectorExtender>;
+      ConnectorExtender:=p^.GetExtension<TSCHConnectorExtender>;
       if ConnectorExtender=nil then
         TryConnectToDeviceConnectors(p1,p2,PGDBObjDevice(p)^,drawing,DC)
       else begin
@@ -626,13 +632,20 @@ begin
             Net:=TNet.Create;
             Net.AddConnection(Self);
           end;
-          if ConnectorExtender.FSetter then
-            Net.AddSetter(ConnectorExtender)
-          else begin
-            Net.AddPin(ConnectorExtender);
-            PGDBObjGenericSubEntry(drawing.GetCurrentRootSimple)^.ObjToConnectedArray.PushBackIfNotPresent(p);
-            PGDBObjGenericSubEntry(drawing.GetCurrentRootSimple)^.ObjCasheArray.PushBackIfNotPresent(p);
+          case ConnectorExtender.FConnectorType of
+            CTInfo:begin
+              Net.AddInfo(ConnectorExtender);
+              PGDBObjGenericSubEntry(drawing.GetCurrentRootSimple)^.ObjToConnectedArray.PushBackIfNotPresent(p);
+              PGDBObjGenericSubEntry(drawing.GetCurrentRootSimple)^.ObjCasheArray.PushBackIfNotPresent(p);
+            end;
+            CTPin:begin
+              Net.AddPin(ConnectorExtender);
+              PGDBObjGenericSubEntry(drawing.GetCurrentRootSimple)^.ObjToConnectedArray.PushBackIfNotPresent(p);
+              PGDBObjGenericSubEntry(drawing.GetCurrentRootSimple)^.ObjCasheArray.PushBackIfNotPresent(p);
+            end;
+            CTSetter:Net.AddSetter(ConnectorExtender);
           end;
+
         end;
       end;
     end;
@@ -640,7 +653,7 @@ begin
   until p=nil;
 end;
 
-function TConnectionExtender.NeedStandardDraw(pEntity:Pointer;const drawing:TDrawingDef;var DC:TDrawContext):Boolean;
+function TSCHConnectionExtender.NeedStandardDraw(pEntity:Pointer;const drawing:TDrawingDef;var DC:TDrawContext):Boolean;
 var
   i:integer;
   pc:TConnectPoints.PT;
@@ -683,6 +696,14 @@ begin
           end;
           oldP:=Vertexmorph(PGDBObjLine(pThisEntity)^.CoordInWCS.lBegin,PGDBObjLine(pThisEntity)^.CoordInWCS.lEnd,knot.t+l);
         end;
+        KTNormal:begin
+          if knot.t>bigeps then begin
+            P:=Vertexmorph(PGDBObjLine(pThisEntity)^.CoordInWCS.lBegin,PGDBObjLine(pThisEntity)^.CoordInWCS.lEnd,knot.t);
+            pThisEntity^.Representation.DrawLineWithLT(DC,oldP,P,pThisEntity.vp);
+          end;
+          oldP:=p;
+        end;
+
       end;
     end;
     if IsDoubleNotEqual(knot.t,1,bigeps) then
@@ -693,8 +714,8 @@ end;
 
 initialization
   //extdrAdd(extdrNet)
-  EntityExtenders.RegisterKey(uppercase(ConnectionExtenderName),TConnectionExtender);
-  GDBObjEntity.GetDXFIOFeatures.RegisterNamedLoadFeature('CONNECTIONEXTENDER',TConnectionExtender.EntIOLoadNetExtender);
+  EntityExtenders.RegisterKey(uppercase(ConnectionExtenderName),TSCHConnectionExtender);
+  GDBObjEntity.GetDXFIOFeatures.RegisterNamedLoadFeature('SCHConnection',TSCHConnectionExtender.EntIOLoadNetExtender);
 finalization
 end.
 

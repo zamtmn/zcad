@@ -6,6 +6,7 @@
         <ZTreeNode Caption='Unsorted'>
           <ZTreeCommand Command="Insert(DEVICE_SCH_CONTACT_NOC)"/>
           <ZTreeCommand Command="Insert(DEVICE_SCH_CONTACT_NOC_CC)"/>
+          <ZTreeCommand Command="Insert(DEVICE_SCH_MOTOR_3PH_1)"/>
         </ZTreeNode>
       </ZTreeNode>
     </BlockLib>

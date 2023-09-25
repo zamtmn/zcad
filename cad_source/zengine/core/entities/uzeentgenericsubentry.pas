@@ -129,8 +129,7 @@ begin
     p:=objarray.beginiterate(ir);
     if p<>nil then
     repeat
-      if assigned(p^.EntExtensions) then
-        p^.EntExtensions.RunPostload(context);
+      p^.Postload(context);
     p:=objarray.iterate(ir);
     until p=nil;
 end;

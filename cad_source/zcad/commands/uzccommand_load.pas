@@ -35,6 +35,8 @@ uses
   uzcinterface,
   uzccmdload;
 
+function Load_com(operands:TCommandOperands):TCommandResult;
+
 implementation
 
 var

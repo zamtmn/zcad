@@ -64,6 +64,7 @@ GDBObjEntity= object(GDBObjSubordinated)
                     function ProcessFromDXFObjXData(_Name,_Value:String;ptu:PExtensionData;const drawing:TDrawingDef):Boolean;virtual;
                     function FromDXFPostProcessBeforeAdd(ptu:PExtensionData;const drawing:TDrawingDef):PGDBObjSubordinated;virtual;
                     procedure FromDXFPostProcessAfterAdd;virtual;
+                    procedure postload(var context:TIODXFLoadContext);virtual;
                     function IsHaveObjXData:Boolean;virtual;
 
 
@@ -370,6 +371,11 @@ begin
 end;
 procedure GDBObjEntity.FromDXFPostProcessAfterAdd;
 begin
+end;
+procedure  GDBObjEntity.postload(var context:TIODXFLoadContext);
+begin
+  if assigned(EntExtensions) then
+    EntExtensions.RunPostload(context);
 end;
 function GDBObjEntity.FromDXFPostProcessBeforeAdd;
 var

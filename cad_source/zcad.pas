@@ -146,7 +146,7 @@ uses
   uzccommand_DWGNew,
   uzccommand_DWGNext,uzccommand_DWGPrev,
   uzccommand_DWGClose,
-  uzccommand_load,
+  uzccommand_load,uzcCommand_LoadLibrary,
   uzccommand_mergeblocks,
   uzccommand_merge,
   uzccommand_saveas,

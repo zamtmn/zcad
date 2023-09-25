@@ -61,6 +61,8 @@ GDBObjDevice= object(GDBObjBlockInsert)
                    procedure BuildGeometry(var drawing:TDrawingDef);virtual;
                    procedure BuildVarGeometry(var drawing:TDrawingDef);virtual;
 
+                   procedure postload(var context:TIODXFLoadContext);virtual;
+
                    procedure SaveToDXFFollow(var outhandle:{Integer}TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
                    procedure SaveToDXFObjXData(var outhandle:{Integer}TZctnrVectorBytes;var IODXFContext:TIODXFContext);virtual;
                    procedure AddMi(pobj:PGDBObjSubordinated);virtual;
@@ -176,6 +178,20 @@ begin
      VarObjArray.done;
      inherited done;
 end;
+procedure GDBObjDevice.postload(var context:TIODXFLoadContext);
+var
+  pv:pgdbobjEntity;
+  ir:itrec;
+begin
+  inherited postload(context);
+  pv:=VarObjArray.beginiterate(ir);
+  if pv<>nil then
+  repeat
+      pv^.postload(context);
+    pv:=VarObjArray.iterate(ir);
+  until pv=nil;
+end;
+
 procedure GDBObjDevice.SaveToDXFFollow;
 var
   //i:Integer;

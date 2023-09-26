@@ -6,6 +6,12 @@
         <ZTreeNode Caption='Unsorted'>
           <ZTreeCommand Command="Insert(DEVICE_SCH_CONTACT_NOC)"/>
           <ZTreeCommand Command="Insert(DEVICE_SCH_CONTACT_NOC_CC)"/>
+          <ZTreeCommand Command="Insert(DEVICE_SCH_BUTTON_NOC_CC)"/>
+          <ZTreeCommand Command="Insert(DEVICE_SCH_BUTTON_NC_CC)"/>
+          <ZTreeCommand Command="Insert(DEVICE_SCH_THERMO_NC_CC)"/>
+          <ZTreeCommand Command="Insert(DEVICE_SCH_THERMO)"/>
+          <ZTreeCommand Command="Insert(DEVICE_SCH_COIL)"/>
+          <ZTreeCommand Command="Insert(DEVICE_SCH_LAMP)"/>
           <ZTreeCommand Command="Insert(DEVICE_SCH_MOTOR_3PH_1)"/>
         </ZTreeNode>
       </ZTreeNode>

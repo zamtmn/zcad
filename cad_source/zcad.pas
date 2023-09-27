@@ -67,7 +67,7 @@ uses
   {$INCLUDE allgeneratedfiles.inc}//correct defs in system.pas
   uzcregother,//setup SysVar
 
-  uMetaDarkStyle,uDarkStyleSchemes,uDarkStyleSchemesLoader,
+  {$IFDEF WINDOWS}uMetaDarkStyle,uDarkStyleSchemes,uDarkStyleSchemesLoader,{$ENDIF}
 
   UUnitManager,
   uzefontmanager,

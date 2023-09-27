@@ -272,6 +272,7 @@ uses
   uzccomelectrical,
   uzccomops,
   //uzccommaps,
+  uzceCommand_SCHConnection,
   {$ENDIF}
   uzcmainwindow,
   uzcuidialogs,

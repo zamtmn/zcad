@@ -96,7 +96,7 @@ TSCHConnectionExtender=class(TBaseSCHConnectExtender)
   end;
 
 
-function AddNetExtenderToEntity(PEnt:PGDBObjEntity):TSCHConnectionExtender;
+function AddSCHConnectionExtenderToEntity(PEnt:PGDBObjEntity):TSCHConnectionExtender;
 
 implementation
 constructor TKnot.Create(const AT,AHW:Double;const AType:TKnotType);
@@ -126,7 +126,7 @@ begin
   count:=1;
 end;
 
-function AddNetExtenderToEntity(PEnt:PGDBObjEntity):TSCHConnectionExtender;
+function AddSCHConnectionExtenderToEntity(PEnt:PGDBObjEntity):TSCHConnectionExtender;
 begin
   result:=TSCHConnectionExtender.Create(PEnt);
   PEnt^.AddExtension(result);
@@ -305,7 +305,7 @@ var
 begin
   NetExtender:=PGDBObjEntity(PEnt)^.GetExtension<TSCHConnectionExtender>;
   if NetExtender=nil then begin
-    NetExtender:=AddNetExtenderToEntity(PEnt);
+    NetExtender:=AddSCHConnectionExtenderToEntity(PEnt);
   end;
   result:=true;
 end;

@@ -700,7 +700,8 @@ begin
           if knot.t>bigeps then begin
             P:=Vertexmorph(PGDBObjLine(pThisEntity)^.CoordInWCS.lBegin,PGDBObjLine(pThisEntity)^.CoordInWCS.lEnd,knot.t);
             pThisEntity^.Representation.DrawLineWithLT(DC,oldP,P,pThisEntity.vp);
-          end;
+          end else
+            P:=Vertexmorph(PGDBObjLine(pThisEntity)^.CoordInWCS.lBegin,PGDBObjLine(pThisEntity)^.CoordInWCS.lEnd,knot.t);
           oldP:=p;
         end;
 

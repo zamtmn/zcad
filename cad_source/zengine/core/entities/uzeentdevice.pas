@@ -475,60 +475,50 @@ begin
 end;
 procedure GDBObjDevice.BuildVarGeometry;
 var
-    pvisible,pvisible2:PGDBObjEntity;
-    i:Integer;
-    devnam:String;
-    DC:TDrawContext;
-    pblockdef:PGDBObjBlockdef;
+  pvisible,pvisible2:PGDBObjEntity;
+  devnam:String;
+  DC:TDrawContext;
+  pblockdef:PGDBObjBlockdef;
+  ir:itrec;
 begin
-          //name:=copy(name,8,length(name)-7);
-          devnam:=DevicePrefix+name;
-          //index:=gdb.GetCurrentDWG.BlockDefArray.getindex(@devnam[1]);
-          index:=PGDBObjBlockdefArray(drawing.GetBlockDefArraySimple).getindex(devnam);
-          //pblockdef:=gdb.GetCurrentDWG.BlockDefArray.getDataMutable(index);
-          if index>-1 then
-          begin
-          pblockdef:=PGDBObjBlockdefArray(drawing.GetBlockDefArraySimple).getDataMutable(index);
-          for i:=0 to pblockdef.ObjArray.count-1 do
-          begin
-               pvisible:=Pointer(pblockdef.ObjArray.getDataMutable(i));
-               pvisible:=pvisible^.Clone(@self);
-               pvisible2:=PGDBObjEntity(pvisible^.FromDXFPostProcessBeforeAdd(nil,drawing));
-               dc:=drawing.createdrawingrc;
-               if pvisible2=nil then
-                                     begin
-                                          pvisible^.correctobjects(@self,{pblockdef.ObjArray.getDataMutable(i)}i);
-                                          pvisible^.formatEntity(drawing,dc);
-                                          pvisible.BuildGeometry(drawing);
-                                          if pvisible^.GetObjType=GDBDeviceID then
-                                          begin
-                                                                             //PGDBObjDevice(pvisible)^.BuildVarGeometry(drawing);
-                                                                             //debp:=PGDBObjDevice(pvisible)^.ConstObjArray.PArray;
-                                          end;
-                                          VarObjArray.AddPEntity(pvisible^);
-
-                                     end
-                                 else
-                                     begin
-                                          pvisible2^.correctobjects(@self,{pblockdef.ObjArray.getDataMutable(i)}i);
-                                          pvisible2^.FromDXFPostProcessBeforeAdd(nil,drawing);
-                                          pvisible2^.formatEntity(drawing,dc);
-                                          pvisible2.BuildGeometry(drawing);
-                                          if pvisible2^.GetObjType=GDBDeviceID then
-                                          begin
-                                                                              //PGDBObjDevice(pvisible2)^.BuildVarGeometry(drawing);
-                                                                              //debp:=PGDBObjDevice(pvisible)^.ConstObjArray.PArray;
-                                          end;
-                                          VarObjArray.AddPEntity(pvisible2^);
-                                    end;
-          end;
-          ConstObjArray.Shrink;
-          VarObjArray.Shrink;
-          self.BlockDesc:=pblockdef.BlockDesc;
-          if assigned(EntExtensions)then
-            EntExtensions.RunOnBuildVarGeometryProcedures(@self,drawing);
-          //PTObjectUnit(pblockdef^.ou.Instance)^.copyto(PTObjectUnit(ou.Instance));
-          end;
+  devnam:=DevicePrefix+name;
+  pblockdef:=PGDBObjBlockdefArray(drawing.GetBlockDefArraySimple).getblockdef(devnam);
+  index:=PGDBObjBlockdefArray(drawing.GetBlockDefArraySimple).getindex(devnam);
+  if pblockdef<>nil then begin
+    dc:=drawing.createdrawingrc;
+    pvisible:=pblockdef.ObjArray.beginiterate(ir);
+    if pvisible<>nil then repeat
+      pvisible:=pvisible^.Clone(@self);
+      pvisible2:=PGDBObjEntity(pvisible^.FromDXFPostProcessBeforeAdd(nil,drawing));
+      if pvisible2=nil then begin
+        //вроде сейчас это ненужно//pvisible^.correctobjects(@self,{pblockdef.ObjArray.getDataMutable(i)}i);
+        pvisible^.formatEntity(drawing,dc);
+        pvisible.BuildGeometry(drawing);
+        if pvisible^.GetObjType=GDBDeviceID then begin
+          //PGDBObjDevice(pvisible)^.BuildVarGeometry(drawing);
+          //debp:=PGDBObjDevice(pvisible)^.ConstObjArray.PArray;
+        end;
+        VarObjArray.AddPEntity(pvisible^);
+      end else begin
+        //вроде сейчас это ненужно//pvisible2^.correctobjects(@self,{pblockdef.ObjArray.getDataMutable(i)}i);
+        pvisible2^.FromDXFPostProcessBeforeAdd(nil,drawing);
+        pvisible2^.formatEntity(drawing,dc);
+        pvisible2.BuildGeometry(drawing);
+        if pvisible2^.GetObjType=GDBDeviceID then begin
+          //PGDBObjDevice(pvisible2)^.BuildVarGeometry(drawing);
+          //debp:=PGDBObjDevice(pvisible)^.ConstObjArray.PArray;
+        end;
+        VarObjArray.AddPEntity(pvisible2^);
+      end;
+        pvisible:=pblockdef.ObjArray.iterate(ir);
+    until pvisible=nil;
+    ConstObjArray.Shrink;
+    VarObjArray.Shrink;
+    self.BlockDesc:=pblockdef.BlockDesc;
+    if assigned(EntExtensions)then
+      EntExtensions.RunOnBuildVarGeometryProcedures(@self,drawing);
+    //PTObjectUnit(pblockdef^.ou.Instance)^.copyto(PTObjectUnit(ou.Instance));
+  end;
 end;
 procedure GDBObjDevice.BuildGeometry;
 var

@@ -168,10 +168,14 @@ var
                if listVertex[i].deviceEnt<>nil then
                begin
                    pvd:=FindVariableInEnt(listVertex[i].deviceEnt,'NMO_Name');
-                   if pvd <> nil then
+                   if pvd <> nil then begin
+                   if (uzvslagcabComParams.settingVizCab.vizFullTreeCab = true) then
+                   ZCMsgCallBackInterface.TextMessage('**Имя ГУ='+name + '   Имя подключаемого устройства = ' + pString(pvd^.data.Addr.Instance)^,TMWOHistoryOut);
+
                    if pString(pvd^.data.Addr.Instance)^ = name then begin
                       //result:=-1;
-
+                      if (uzvslagcabComParams.settingVizCab.vizFullTreeCab = true) then
+                         ZCMsgCallBackInterface.TextMessage('**НАЙДЕН',TMWOHistoryOut);
                       //работа с библиотекой Аграф
                       EdgePath:=TClassList.Create;     //Создаем реберный путь
                       VertexPath:=TClassList.Create;   //Создаем вершиный путь
@@ -184,8 +188,12 @@ var
                       if VertexPath.Count > 1 then
                         result:= i;
 
+                      if (uzvslagcabComParams.settingVizCab.vizFullTreeCab = true) then
+                         ZCMsgCallBackInterface.TextMessage('**getNumHeadDevice = ' + inttostr(result),TMWOHistoryOut);
+
                       EdgePath.Free;
                       VertexPath.Free;
+                   end;
                    end;
                end;
 

@@ -386,9 +386,17 @@ var
     i:integer;
 begin
     result:=false;
-    for i:=0 to listVertex.Size-1 do
-        if ((addVertex.x >= listVertex[i].centerPoint.x-inaccuracy) and (addVertex.x <= listVertex[i].centerPoint.x+inaccuracy) and (addVertex.y >= listVertex[i].centerPoint.y-inaccuracy) and (addVertex.y <= listVertex[i].centerPoint.y+inaccuracy)) then
+    for i:=0 to listVertex.Size-1 do begin
+        if (uzvslagcabComParams.settingVizCab.vizFullTreeCab = true) then begin
+            ZCMsgCallBackInterface.TextMessage('**dublicateVertexdublicateVertexdublicateVertexdublicateVertex',TMWOHistoryOut);
+            ZCMsgCallBackInterface.TextMessage('**addVertex.x = ' + floattostr(addVertex.x) + '**addVertex.y = ' + floattostr(addVertex.y) + '**listVertex[i].centerPoint.x = ' + floattostr(listVertex[i].centerPoint.x) + '**listVertex[i].centerPoint.y = ' + floattostr(listVertex[i].centerPoint.y) + '**inaccuracy = ' + floattostr(inaccuracy),TMWOHistoryOut);
+        end;
+        if ((addVertex.x >= listVertex[i].centerPoint.x-inaccuracy) and (addVertex.x <= listVertex[i].centerPoint.x+inaccuracy) and (addVertex.y >= listVertex[i].centerPoint.y-inaccuracy) and (addVertex.y <= listVertex[i].centerPoint.y+inaccuracy)) then begin
            result:=true;
+           if (uzvslagcabComParams.settingVizCab.vizFullTreeCab = true) then
+           ZCMsgCallBackInterface.TextMessage('**result=trueresult=trueresult=trueresult=trueresult=trueresult=trueresult=trueresult=true',TMWOHistoryOut);
+        end;
+    end;
 end;
 
 function TemplateForVeb_com(operands:TCommandOperands):TCommandResult;
@@ -1109,7 +1117,8 @@ begin
           else
             vertexLine:=listCable[i].edPoint;
           areaVertex:=getAreaVertex(vertexLine,accuracy);
-          //testTempDrawLine(areaVertex.LBN,areaVertex.RTF); // показать область
+          //if (uzvslagcabComParams.settingVizCab.vizFullTreeCab = true) then
+          //   testTempDrawLine(areaVertex.LBN,areaVertex.RTF); // показать область
 
           //ZCMsgCallBackInterface.TextMessage('x='+ floattostr(areaVertex.LBN.x)+'---y='+floattostr(areaVertex.LBN.y)); // координата данной точки
 
@@ -1132,7 +1141,14 @@ begin
                  //поиск пересечений с девайсом
                if pobj^.GetObjType=GDBDeviceID then
                  begin
+
+                   //pvd:=FindVariableInEnt(pSuperLine,'NMO_Name');
+                   //tempName:=pString(pvd^.data.Addr.Instance)^;
+
                   pObjDevice:= PGDBObjDevice(pobj); // передача объекта в девайсы
+
+                  if (uzvslagcabComParams.settingVizCab.vizFullTreeCab = true) then
+                     ZCMsgCallBackInterface.TextMessage('**pObjDevice. NMO_Name='+pString(FindVariableInEnt(pObjDevice,'NMO_Name')^.data.Addr.Instance)^,TMWOHistoryOut);
                   inc(colDevice);
                   listDev.PushBack(pObjDevice);
 
@@ -1143,7 +1159,8 @@ begin
              until pobj=nil;
             end;
             NearObjects.Clear;
-
+            if (uzvslagcabComParams.settingVizCab.vizFullTreeCab = true) then
+               ZCMsgCallBackInterface.TextMessage('**colDevice ='+inttostr(colDevice) + '** inAddEdge ='+booltostr(inAddEdge),TMWOHistoryOut);
             if (colDevice > 1) then
             begin
                templength:=uzegeometry.Vertexlength(vertexLine,PGDBObjDevice(listDev[0])^.P_insert_in_WCS);
@@ -1162,6 +1179,9 @@ begin
 
             listDev.Destroy;
 
+            if (uzvslagcabComParams.settingVizCab.vizFullTreeCab = true) then
+               ZCMsgCallBackInterface.TextMessage('**colDevice ='+inttostr(colDevice) + '** inAddEdge ='+booltostr(inAddEdge),TMWOHistoryOut);
+
             if (inAddEdge) and (colDevice = 1) then  //если есть кабель значит устройство не подсоеденино, и если на конце два устройства это что то не так
             begin
 
@@ -1170,12 +1190,22 @@ begin
               //**поиск номера вершины устройства которого мы обноружили кабелем
                for k:=0 to graph.listVertex.Size-1 do
                begin
-                  if graph.listVertex[k].deviceEnt = pObjDevice then
+                  if (uzvslagcabComParams.settingVizCab.vizFullTreeCab = true) then begin
+                  if (graph.listVertex[k].deviceEnt <> nil) and (pObjDevice <> nil) then
+                     ZCMsgCallBackInterface.TextMessage('**graph.listVertex[k].deviceEnt NMO_Name='+pString(FindVariableInEnt(graph.listVertex[k].deviceEnt,'NMO_Name')^.data.Addr.Instance)^ + '**pObjDevice NMO_Name='+pString(FindVariableInEnt(pObjDevice,'NMO_Name')^.data.Addr.Instance)^,TMWOHistoryOut);
+                  end;
+                  if graph.listVertex[k].deviceEnt = pObjDevice then begin
                     numVertDevice:= k;
+                    if (uzvslagcabComParams.settingVizCab.vizFullTreeCab = true) then
+                     ZCMsgCallBackInterface.TextMessage('**НАЙДЕН numVertDevice =' + inttostr(numVertDevice),TMWOHistoryOut);
+
+                  end;
                end;
                //****//
                //** создаем вершину в точки линии в котором обноружилось устройство и прокладываем ребро от этой точки до коннектора устройства
                if dublicateVertex({listDevice}graph.listVertex,vertexLine,accuracy) = false then begin
+                  if (uzvslagcabComParams.settingVizCab.vizFullTreeCab = true) then
+                     ZCMsgCallBackInterface.TextMessage('**РАБОТАЕТ!!!!!!!' + inttostr(numVertDevice),TMWOHistoryOut);
                   infoDevice.deviceEnt:=nil;
                   infoDevice.centerPoint:=vertexLine;
                   infoDevice.centerPoint.z:=0;
@@ -1192,6 +1222,11 @@ begin
                   infoEdge.VPoint2:=graph.listVertex[numVertDevice].centerPoint;
                   infoEdge.VPoint2.z:=0;
                   infoEdge.edgeLength:=uzegeometry.Vertexlength(infoEdge.VPoint1,infoEdge.VPoint2);
+                  if (uzvslagcabComParams.settingVizCab.vizFullTreeCab = true) then
+                     ZCMsgCallBackInterface.TextMessage('**infoEdge.VPoint1.X ='+floattostr(infoEdge.VPoint1.x) + '** infoEdge.VPoint1.Y ='+floattostr(infoEdge.VPoint1.y),TMWOHistoryOut);
+                  if (uzvslagcabComParams.settingVizCab.vizFullTreeCab = true) then
+                     ZCMsgCallBackInterface.TextMessage('**infoEdge.VPoint2.X ='+floattostr(infoEdge.VPoint2.x) + '** infoEdge.VPoint2.Y ='+floattostr(infoEdge.VPoint2.y),TMWOHistoryOut);
+
                   graph.listEdge.PushBack(infoEdge);
                 end;
                //****//
@@ -1456,7 +1491,13 @@ Begin
   currentSubObj:=pObjDevice^.VarObjArray.beginiterate(ir_inDevice); //иследование содержимого девайса
   if (currentSubObj<>nil) then
     repeat
+      if (uzvslagcabComParams.settingVizCab.vizFullTreeCab = true) then
+          ZCMsgCallBackInterface.TextMessage('**CurrentSubObj^.GetObjType='+inttostr(CurrentSubObj^.GetObjType),TMWOHistoryOut);
+
       if (CurrentSubObj^.GetObjType=GDBDeviceID) then begin
+         if (uzvslagcabComParams.settingVizCab.vizFullTreeCab = true) then
+           ZCMsgCallBackInterface.TextMessage('**CurrentSubObj^.Name='+CurrentSubObj^.Name,TMWOHistoryOut);
+
          if (CurrentSubObj^.Name = 'CONNECTOR_SQUARE') or (CurrentSubObj^.Name = 'CONNECTOR_POINT') then
            begin
              pConnect:=CurrentSubObj^.P_insert_in_WCS;
@@ -1637,16 +1678,21 @@ begin
     extMainLine:= extendedLineFunc(listCable[i].stPoint,listCable[i].edPoint,Epsilon) ; // увиличиваем длину кабеля для исключения погрешности
 
     areaLine:= getAreaLine(listCable[i].stPoint,listCable[i].edPoint,Epsilon) ; // находим зону в которой будет находится наш  удлиненый кабель и кабель который его будет пересекать
-
+               if (uzvslagcabComParams.settingVizCab.vizFullTreeCab = true) then
+             testTempDrawLine(areaLine.LBN,areaLine.RTF); // показать область
     NearObjects.init(100); //инициализируем список
     if drawings.GetCurrentROOT^.FindObjectsInVolume(areaLine,NearObjects)then //ищем примитивы оболочка которых пересекается с volume
     begin
        pobj:=NearObjects.beginiterate(ir);//получаем первый примитив из списка
        if pobj<>nil then                  //если он есть то
        repeat
+
          if pobj^.GetObjType=GDBSuperLineID then //если он кабель то
          begin
-             pSuperLine:=PGDBObjSuperLine(pobj);
+           pSuperLine:=PGDBObjSuperLine(pobj);
+           if listCable[i].cableEnt <> pSuperLine then
+           begin
+
              //for j:=1 to pc^.VertexArrayInOCS.GetRealCount-1 do
                  //begin
                   //удлиняем каждую проверяемую линиию, для исключения погрешностей
@@ -1657,6 +1703,8 @@ begin
                     interceptVertex:=uzegeometry.intercept3d(extMainLine.stPoint,extMainLine.edPoint,extNextLine.stPoint,extNextLine.edPoint).interceptcoord;
                     //выполнить проверку на есть ли уже такая вершина
                      if dublicateVertex({listDevice}result.listVertex,interceptVertex,Epsilon) = false then begin
+                      if (uzvslagcabComParams.settingVizCab.vizFullTreeCab = true) then
+                        ZCMsgCallBackInterface.TextMessage('**Добавил вершину =',TMWOHistoryOut);
                       infoDevice.deviceEnt:=nil;
                       infoDevice.centerPoint:=interceptVertex;
                       infoDevice.centerPoint.z:=0;
@@ -1666,7 +1714,7 @@ begin
                       //testTempDrawCircle(interceptVertex,3);
                     end;
                   end;
-                 //end;
+                 end;
            end;
 
        //***********пересечение с кабелями**////

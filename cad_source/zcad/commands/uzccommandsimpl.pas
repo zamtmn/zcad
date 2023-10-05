@@ -51,13 +51,14 @@ type
   CommandRTEdObject =  object(CommandRTEdObjectDef)
     saveosmode:Integer;(*hidden_in_objinsp*)
     commanddata:THardTypedData;(*'Command options'*)
+    ShowParams:Boolean;
     procedure CommandStart(Operands:TCommandOperands); virtual;
     procedure CommandEnd; virtual;
     procedure CommandCancel; virtual;
     procedure CommandInit; virtual;
     procedure Prompt(msg:String);
     procedure Error(msg:String);
-    procedure SetCommandParam(PTypedTata:pointer;TypeName:string);
+    procedure SetCommandParam(PTypedTata:pointer;TypeName:string;AShowParams:Boolean=true);
     constructor init(cn:String;SA,DA:TCStartAttr);
     //function BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; button: Byte;osp:pos_record): Integer; virtual; abstract;
     //function AfterClick(wc: GDBvertex; mc: GDBvertex2DI; button: Byte;osp:pos_record): Integer; virtual; abstract;
@@ -202,6 +203,9 @@ end;
 constructor CommandRTEdObject.init;
 begin
   inherited;
+  commanddata.Instance:=nil;
+  commanddata.PTD:=nil;
+  ShowParams:=False;
   CommandInit;
   CommandName := cn;
   CommandString := '';
@@ -418,11 +422,9 @@ begin
   mouseclic := 0;
   UndoTop:=drawings.GetCurrentDWG.GetUndoTop{UndoStack.CurrentCommand};
 
-  if (commanddata.Instance<>nil)
-  and(commanddata.PTD<>nil) then
-                                begin
-                                  ZCMsgCallBackInterface.Do_PrepareObject(nil,drawings.GetUnitsFormat,SysUnit.TypeName2PTD('CommandRTEdObject'),@self,drawings.GetCurrentDWG);
-                                end; 
+  if ShowParams then
+    if (commanddata.Instance<>nil)and(commanddata.PTD<>nil) then
+      ZCMsgCallBackInterface.Do_PrepareObject(nil,drawings.GetUnitsFormat,SysUnit.TypeName2PTD('CommandRTEdObject'),@self,drawings.GetCurrentDWG);
 
 end;
 
@@ -452,9 +454,10 @@ procedure CommandRTEdObject.Error(msg:String);
 begin
      ZCMsgCallBackInterface.TextMessage(self.CommandName+':'+msg,TMWOShowError);
 end;
-procedure CommandRTEdObject.SetCommandParam(PTypedTata:pointer;TypeName:string);
+procedure CommandRTEdObject.SetCommandParam(PTypedTata:pointer;TypeName:string;AShowParams:Boolean=true);
 begin
-     SetTypedDataVariable(commanddata,pTypedTata,TypeName);
+  SetTypedDataVariable(commanddata,pTypedTata,TypeName);
+  ShowParams:=AShowParams;
 end;
 
 begin

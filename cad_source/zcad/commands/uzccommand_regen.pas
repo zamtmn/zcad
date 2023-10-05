@@ -22,43 +22,37 @@ unit uzccommand_regen;
 
 interface
 uses
-  uzcLog,
+  uzcLog,uzbtypes,
   uzccommandsabstract,uzccommandsimpl,
-  uzeentity,
+  uzeentity,uzeentconnected,
   gzctnrVectorTypes,
   uzedrawingsimple,uzcdrawings,
   uzcinterface,
   uzgldrawcontext,
-  uzelongprocesssupport;
+  uzelongprocesssupport,
+  uzeroot;
 
 function Regen_com(operands:TCommandOperands):TCommandResult;
 
 implementation
 
 function Regen_com(operands:TCommandOperands):TCommandResult;
-var //i: Integer;
-    pv:pGDBObjEntity;
-        ir:itrec;
-    drawing:PTSimpleDrawing;
-    DC:TDrawContext;
-    lpsh:TLPSHandle;
+var
+  drawing:PTSimpleDrawing;
+  DC:TDrawContext;
+  lpsh:TLPSHandle;
+  c:integer;
 begin
-  lpsh:=lps.StartLongProcess('Regenerate drawing',nil,drawings.GetCurrentROOT.ObjArray.count);
-  //if assigned(StartLongProcessProc) then StartLongProcessProc(drawings.GetCurrentROOT.ObjArray.count,'Regenerate drawing');
+  c:=drawings.GetCurrentROOT.ObjArray.count;
+  lpsh:=lps.StartLongProcess('Regenerate drawing',nil,c*2);
   drawing:=drawings.GetCurrentDwg;
   drawing.wa.CalcOptimalMatrix;
   dc:=drawings.GetCurrentDwg^.CreateDrawingRC;
-  pv:=drawings.GetCurrentROOT.ObjArray.beginiterate(ir);
-  if pv<>nil then
-  repeat
-    pv^.FormatEntity(drawing^,dc);
-  pv:=drawings.GetCurrentROOT.ObjArray.iterate(ir);
-  lps.ProgressLongProcess(lpsh,ir.itc);
-  //if assigned(ProcessLongProcessProc) then ProcessLongProcessProc(ir.itc);
-  until pv=nil;
+
+  DoFormat(drawings.GetCurrentROOT^,drawings.GetCurrentROOT.ObjArray,drawings.GetCurrentROOT.ObjToConnectedArray,drawing^,DC,lpsh,[]);
   drawings.GetCurrentROOT.getoutbound(dc);
+
   lps.EndLongProcess(lpsh);
-  //if assigned(EndLongProcessProc) then EndLongProcessProc;
 
   drawings.GetCurrentDWG.wa.param.seldesc.Selectedobjcount:=0;
   drawings.GetCurrentDWG.wa.param.seldesc.OnMouseObject:=nil;

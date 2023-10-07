@@ -25,7 +25,7 @@ uses sysutils,uzedrawingdef,uzeentityextender,
      uzbtypes,uzeentsubordinated,uzeentity,uzeblockdef,
      usimplegenerics,uzeffdxfsupport,
      gzctnrVectorTypes,uzeBaseExtender,uzgldrawcontext,
-     uzcsysvars,gzctnrVectorSimple,gzctnrVectorP,
+     uzcsysvars,gzctnrVectorSimple,gzctnrVectorP,UGDBOpenArrayOfPV,
      gzctnrVector;
 const
   ConnectionExtenderName='extdrSCHConnector';
@@ -66,10 +66,16 @@ type
     procedure AddToDWGPostProcs(pEntity:Pointer;const drawing:TDrawingDef);
   end;
   TConnectorType=(CTInfo,CTPin,CTSetter);
+  TConnectorState=(CSNormal,CSSecondTry);//убрать
+                                         //делал из расчета чтобы только один раз
+                                         //передобавлять коннектор в список
+                                         //на соединение, но работает без этого
   TSCHConnectorExtender=class(TBaseSCHConnectExtender)
     const
       DefaultConnectorRadius=0;
       DefaultConnectorType=CTPin;
+    private
+      FState:TConnectorState;
     public
       FConnectorRadius:Double;
       FConnectorType:TConnectorType;
@@ -104,6 +110,9 @@ type
 function AddConnectorExtenderToEntity(PEnt:PGDBObjEntity):TSCHConnectorExtender;
 
 implementation
+
+uses
+  uzcExtdrSCHConnection;
 
 const
   CT2String:array[TConnectorType] of string=('CTInfo','CTPin','CTSetter');
@@ -295,6 +304,7 @@ end;
 constructor TSCHConnectorExtender.Create;
 begin
   inherited Create(pEntity);
+  FState:=CSNormal;
   FConnectorRadius:=DefaultConnectorRadius;
   FConnectorType:=DefaultConnectorType;
 end;
@@ -378,7 +388,40 @@ begin
 end;
 
 procedure TSCHConnectorExtender.onEntityConnect(pEntity:Pointer;const drawing:TDrawingDef;var DC:TDrawContext);
+var
+  Objects:GDBObjOpenArrayOfPV;
+  p:PGDBObjEntity;
+  ir:itrec;
+  ConnectionExtender:TSCHConnectionExtender;
 begin
+  if FState=CSNormal then begin
+    if pThisEntity<>nil then begin
+      if not PGDBObjEntity(pThisEntity)^.CheckState([ESConstructProxy,ESTemp]) then begin
+        objects.init(10);
+        if PGDBObjGenericSubEntry(drawing.GetCurrentRootSimple)^.FindObjectsInVolume(PGDBObjEntity(pThisEntity)^.vp.BoundingBox,Objects)then begin
+          p:=Objects.beginiterate(ir);
+          if p<>nil then repeat
+            if p<>pThisEntity then begin
+              ConnectionExtender:=p^.GetExtension<TSCHConnectionExtender>;
+              if ConnectionExtender<>nil then begin
+                FState:=CSSecondTry;
+                p^.addtoconnect2(p,PGDBObjGenericSubEntry(drawing.GetCurrentRootSimple)^.ObjToConnectedArray);
+                p^.addtoconnect2(p,PGDBObjGenericSubEntry(drawing.GetCurrentRootSimple)^.ObjCasheArray);
+              end;
+            end;
+            p:=Objects.iterate(ir);
+          until p=nil;
+        end;
+        objects.Clear;
+        objects.done;
+        if FState=CSSecondTry then begin
+          FState:=CSNormal;
+          //PGDBObjGenericSubEntry(drawing.GetCurrentRootSimple)^.ObjToConnectedArray.PushBackData(self.pThisEntity);
+        end;
+      end;
+    end
+  end else
+    FState:=CSNormal;
 end;
 procedure TSCHConnectorExtender.onAfterEntityFormat(pEntity:Pointer;const drawing:TDrawingDef;var DC:TDrawContext);
 begin

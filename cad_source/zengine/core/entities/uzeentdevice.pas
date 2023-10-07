@@ -662,9 +662,9 @@ begin
   CalcObjMatrix(@drawing);
   ConstObjArray.FormatEntity(drawing,dc,stage);
   VarObjArray.FormatEntity(drawing,dc,stage);
+  self.lstonmouse:=nil;
+  calcbb(dc);
   if EFDraw in stage then begin
-    self.lstonmouse:=nil;
-    calcbb(dc);
     if assigned(EntExtensions)then
       EntExtensions.RunOnAfterEntityFormat(@self,drawing,DC);
   end;

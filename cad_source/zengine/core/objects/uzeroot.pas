@@ -157,15 +157,30 @@ var
   p:pGDBObjEntity;
   ir:itrec;
   c:integer;
+  bb:TBoundingBox;
+  HaveNewBB:boolean;
 begin
   c:=ents.count;
+  HaveNewBB:=False;
   p:=ents.beginiterate(ir);
   if p<>nil then repeat
     p^.Formatafteredit(drawing,dc,[EFCalcEntityCS]);
+    if HaveNewBB then
+      ConcatBB(bb,p^.vp.BoundingBox)
+    else begin
+      bb:=p^.vp.BoundingBox;
+      HaveNewBB:=True;
+    end;
     if lpsh<>LPSHEmpty then
       lps.ProgressLongProcess(lpsh,ir.itc);
     p:=ents.iterate(ir);
   until p=nil;
+
+  if @ConnectedArea<>nil then
+    if HaveNewBB then begin
+      ConcatBB(ConnectedArea.vp.BoundingBox,bb);
+      ConcatBB(ConnectedArea.ObjArray.ObjTree.BoundingBox,bb);
+    end;
 
   p:=ents2Connected.beginiterate(ir);
   if p<>nil then repeat

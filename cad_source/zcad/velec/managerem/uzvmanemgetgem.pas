@@ -149,12 +149,18 @@ type
 
  //**получить структурированный граф
  function getListStructurGraphEM(listFullGraphEM:TListGraphDev):TListGraphDev;
+
  //**получить список всех головных устройств (устройств централей)
  function getListMainFuncHeadDev(listFullGraphEM:TListGraphDev):TListDev;
+
  //**получить граф головного устройства с учетом подключенных ТОЛЬКО к нему устройств (с учетом особеностей отказа от ГУ)
  function getGraphHeadDev(listFullGraphEM:TListGraphDev;rootDev:PGDBObjDevice;listAllHeadDev:TListDev):TGraphDev;
+
  //**Получить список имен групп которые есть у головного устройства (рут) у вершины дерева
  function getListNameGroupHD(graphDev:TGraphDev):TListGroupHeadDev;
+
+ //**Получить список устройств внутри группы для данного щита (графа)
+ function getListDevInGroupHD(nameGroup:string;graphDev:TGraphDev):TListDev;
 
  procedure visualGraphTree(G: TGraph; var startPt:GDBVertex;height:double; var depth:double);
 
@@ -199,7 +205,7 @@ var
     //         getListName(graphDev,graphDev.Vertices[intVertex].Childs[i].Index,listGroup);
     //end;
   begin
-     ZCMsgCallBackInterface.TextMessage(' getListNameGroupHD - старт ',TMWOHistoryOut);
+     ZCMsgCallBackInterface.TextMessage('Список имен групп:',TMWOHistoryOut);
      result:=TListGroupHeadDev.Create;
 
      //intRootVertex:=-1;
@@ -210,12 +216,12 @@ var
      for i:=0 to graphDev.Root.ChildCount-1 do
        begin
          cabNowvarext:=graphDev.GetEdge(graphDev.Root,graphDev.Root.Childs[i]).getCableSet^.cab^.specialize GetExtension<TVariablesExtender>;
-         ZCMsgCallBackInterface.TextMessage('1',TMWOHistoryOut);
+         //ZCMsgCallBackInterface.TextMessage('1',TMWOHistoryOut);
          cabNowMF:=cabNowvarext.getMainFuncEntity;
-                  ZCMsgCallBackInterface.TextMessage('2',TMWOHistoryOut);
+                  //ZCMsgCallBackInterface.TextMessage('2',TMWOHistoryOut);
          if cabNowMF^.GetObjType=GDBCableID then
            begin
-                    ZCMsgCallBackInterface.TextMessage('3',TMWOHistoryOut);
+                    //ZCMsgCallBackInterface.TextMessage('3',TMWOHistoryOut);
              pvd:=FindVariableInEnt(cabNowMF,velec_GC_HDGroup);
              if pvd<>nil then
                begin
@@ -236,34 +242,111 @@ var
 //         graphDev.GetEdge(graphDev.Root,graphDev.Root.Childs[i]).getCable;
 //           getListName(graphDev,graphDev.Root.Childs[i].Index,listGroup);
        end;
-           result.PushBack('6г');
-           result.PushBack('3ф');
-                      result.PushBack('3');
-               for j:=0 to result.Size-1 do
-       begin
-         ZCMsgCallBackInterface.TextMessage(' GroupName= '+result[j],TMWOHistoryOut);
-       end;
-      ZCMsgCallBackInterface.TextMessage(' *************** ',TMWOHistoryOut);
-     devgroupnamesort.Sort(result,result.Size);
+           //result.PushBack('6г');
+           //result.PushBack('3ф');
+                      //result.PushBack('3');
+      // for j:=0 to result.Size-1 do
+      // begin
+      //   ZCMsgCallBackInterface.TextMessage(' GroupName= '+result[j],TMWOHistoryOut);
+      // end;
+      //ZCMsgCallBackInterface.TextMessage(' *************** ',TMWOHistoryOut);
 
-          for j:=0 to result.Size-1 do
+      //ВЫполнем сортировку по имени группы
+      devgroupnamesort.Sort(result,result.Size);
+
+      for j:=0 to result.Size-1 do
        begin
-         ZCMsgCallBackInterface.TextMessage(' GroupName= '+result[j],TMWOHistoryOut);
+         ZCMsgCallBackInterface.TextMessage('   Имя группы = '+result[j],TMWOHistoryOut);
        end;
-       //thisGraphDev:=graphDev;
-     //  if intRootVertex > -1 then
-     //    system.break;
-     //end;
-     //ZCMsgCallBackInterface.TextMessage(' intRootVertex= '+inttostr(intRootVertex),TMWOHistoryOut);
-     //
-     //if intRootVertex > -1 then
-     //  createNewGraph(listFullGraphEM[i],intRootVertex,result,-1,nil,false)
-     //else
-     //  ZCMsgCallBackInterface.TextMessage('ОШИБКА! Быть такого не может.',TMWOHistoryOut);
-     //
-     //ZCMsgCallBackInterface.TextMessage(' result vertexcount =  ' + inttostr(result.VertexCount),TMWOHistoryOut);
-     //
-     ZCMsgCallBackInterface.TextMessage(' getListNameGroupHD - ФИНИШ ',TMWOHistoryOut);
+
+     //ZCMsgCallBackInterface.TextMessage('Список групп получен',TMWOHistoryOut);
+  end;
+
+  //**Получить список устройств внутри группы для данного щита (графа)
+  function getListDevInGroupHD(nameGroup:string;graphDev:TGraphDev):TListDev;
+  var
+    i,j:integer;
+    cabNowMF:PGDBObjEntity;
+    cabNowvarext:TVariablesExtender;
+    isHaveList:boolean;
+    pvd:pvardesk;
+    //** Рекурсия получаем номер нужного нам головного устройства внутри нужного нам графа
+    procedure getListDev(intVertex:integer;var listDevInGroup:TListDev);
+    var
+      i:integer;
+      devNowMF:PGDBObjDevice;
+      devNowvarext:TVariablesExtender;
+      devNameGroup:string;
+
+    begin
+       if intVertex <> graphDev.Root.Index then
+         begin
+           devNowvarext:=graphDev.Vertices[intVertex].getDevice^.specialize GetExtension<TVariablesExtender>;
+           devNowMF:=devNowvarext.getMainFuncDevice;
+           if devNowMF <> nil then
+             begin
+               // Проверяем совпадает имя группы подключения внутри устройства с группой которую мы сейчас заполняем
+               pvd:=FindVariableInEnt(devNowMF,velec_GC_HDGroup);
+               if pvd<>nil then
+                 if pstring(pvd^.data.Addr.Instance)^ = nameGroup then
+                   listDevInGroup.PushBack(graphDev.Vertices[intVertex].getDevice);
+             end;
+         end;
+
+         for i:=0 to graphDev.Vertices[intVertex].ChildCount-1 do
+             getListDev(graphDev.Vertices[intVertex].Childs[i].Index,listDevInGroup);
+    end;
+  begin
+     ZCMsgCallBackInterface.TextMessage('Имя группы = ' + nameGroup + '. Список имен устройств:',TMWOHistoryOut);
+     result:=TListDev.Create;
+     getListDev(graphDev.Root.Index,result);
+
+     for j:=0 to result.Size-1 do
+       begin
+         pvd:=FindVariableInEnt(result[j],velec_nameDevice);
+           if pvd<>nil then
+              ZCMsgCallBackInterface.TextMessage('   Имя устройства = '+pstring(pvd^.data.Addr.Instance)^,TMWOHistoryOut);
+       end;
+
+//     for i:=0 to graphDev.Root.ChildCount-1 do
+//       begin
+//         cabNowvarext:=graphDev.GetEdge(graphDev.Root,graphDev.Root.Childs[i]).getCableSet^.cab^.specialize GetExtension<TVariablesExtender>;
+//         //ZCMsgCallBackInterface.TextMessage('1',TMWOHistoryOut);
+//         cabNowMF:=cabNowvarext.getMainFuncEntity;
+//                  //ZCMsgCallBackInterface.TextMessage('2',TMWOHistoryOut);
+//         if cabNowMF^.GetObjType=GDBCableID then
+//           begin
+//                    //ZCMsgCallBackInterface.TextMessage('3',TMWOHistoryOut);
+//             pvd:=FindVariableInEnt(cabNowMF,velec_GC_HDGroup);
+//             if pvd<>nil then
+//               begin
+//                 isHaveList:=true;
+//                 for j:=0 to result.Size-1 do
+//                   begin
+//                      if result[j] = pstring(pvd^.data.Addr.Instance)^ then
+//                         isHaveList:=false;
+//                   end;
+//                 if isHaveList then
+//                   result.PushBack(pstring(pvd^.data.Addr.Instance)^);
+//               end;
+//               //if pboolean(pvd2^.data.Addr.Instance)^ then
+//               //  listDev.PushBack(devNowMF);
+//           end;
+////
+////         graphDev.Root.Childs[i]
+////         graphDev.GetEdge(graphDev.Root,graphDev.Root.Childs[i]).getCable;
+////           getListName(graphDev,graphDev.Root.Childs[i].Index,listGroup);
+//       end;
+//
+//      //Выполнем сортировку по имени группы
+//      devgroupnamesort.Sort(result,result.Size);
+//
+//      for j:=0 to result.Size-1 do
+//       begin
+//         ZCMsgCallBackInterface.TextMessage('   GroupName = '+result[j],TMWOHistoryOut);
+//       end;
+
+     //ZCMsgCallBackInterface.TextMessage('******************************************',TMWOHistoryOut);
   end;
 
  //**получить граф головного устройства с учетом подключенных ТОЛЬКО к нему устройств (с учетом особеностей отказа от ГУ)
@@ -294,7 +377,7 @@ var
          if devNowMF = rootDevMF then
            myIntRootVertex:=intVertex;
 
-         ZCMsgCallBackInterface.TextMessage(' myIntRootVertex= '+inttostr(myIntRootVertex),TMWOHistoryOut);
+         //ZCMsgCallBackInterface.TextMessage(' myIntRootVertex= '+inttostr(myIntRootVertex),TMWOHistoryOut);
 
          for i:=0 to graphDev.Vertices[intVertex].ChildCount-1 do
              getNumMyHeadDevinGraph(graphDev,graphDev.Vertices[intVertex].Childs[i].Index,rootDev,myIntRootVertex);
@@ -351,7 +434,7 @@ var
     lastChild:=false;
   end;
  begin
-   ZCMsgCallBackInterface.TextMessage(' getGraphHeadDev - старт ',TMWOHistoryOut);
+   //ZCMsgCallBackInterface.TextMessage(' getGraphHeadDev - старт ',TMWOHistoryOut);
    result:=TGraphDev.Create;
    result.Features:=[Tree];
    result.CreateVertexAttr(vPTVertexEMTree,AttrPointer);
@@ -365,16 +448,16 @@ var
      if intRootVertex > -1 then
        system.break;
    end;
-   ZCMsgCallBackInterface.TextMessage(' intRootVertex= '+inttostr(intRootVertex),TMWOHistoryOut);
+   //ZCMsgCallBackInterface.TextMessage(' intRootVertex= '+inttostr(intRootVertex),TMWOHistoryOut);
 
    if intRootVertex > -1 then
      createNewGraph(listFullGraphEM[i],intRootVertex,result,-1,nil,false)
    else
      ZCMsgCallBackInterface.TextMessage('ОШИБКА! Быть такого не может.',TMWOHistoryOut);
 
-   ZCMsgCallBackInterface.TextMessage(' result vertexcount =  ' + inttostr(result.VertexCount),TMWOHistoryOut);
+   //ZCMsgCallBackInterface.TextMessage(' result vertexcount =  ' + inttostr(result.VertexCount),TMWOHistoryOut);
 
-   ZCMsgCallBackInterface.TextMessage(' getGraphHeadDev - ФИНИШ ',TMWOHistoryOut);
+   //ZCMsgCallBackInterface.TextMessage(' getGraphHeadDev - ФИНИШ ',TMWOHistoryOut);
  end;
 
 
@@ -482,17 +565,17 @@ var
       getListNameHeadDevinGraph(graphDev,graphDev.Root.Index,listNameHeadDev);
       for tempStr in listNameHeadDev do
         begin
-          ZCMsgCallBackInterface.TextMessage('Имя ГУ без отсева ='+tempStr,TMWOHistoryOut);
+          //ZCMsgCallBackInterface.TextMessage('Имя ГУ без отсева ='+tempStr,TMWOHistoryOut);
           getListMainFuncHeadDevinGraph(graphDev,graphDev.Root.Index,result,tempStr);
         end;
-      for devMaincFunc in result do
-        begin
-          pvd:=FindVariableInEnt(devMaincFunc,velec_nameDevice);
-          if pvd<>nil then
-            begin
-              ZCMsgCallBackInterface.TextMessage('Имя ГУ с учетом особенностей = '+pstring(pvd^.data.Addr.Instance)^,TMWOHistoryOut);
-            end;
-        end;
+      //for devMaincFunc in result do
+      //  begin
+      //    pvd:=FindVariableInEnt(devMaincFunc,velec_nameDevice);
+      //    if pvd<>nil then
+      //      begin
+      //        ZCMsgCallBackInterface.TextMessage('Имя ГУ с учетом особенностей = '+pstring(pvd^.data.Addr.Instance)^,TMWOHistoryOut);
+      //      end;
+      //  end;
       ZCMsgCallBackInterface.TextMessage(' getListMainFuncHeadDevinGraph - финиш',TMWOHistoryOut);
     end;
   end;

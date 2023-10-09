@@ -480,10 +480,9 @@ begin
 end;
 
 initialization
-  //extdrAdd(extdrConnector)
+  //extdrAdd(extdrSCHConnector)
   EntityExtenders.RegisterKey(uppercase(ConnectionExtenderName),TSCHConnectorExtender);
   GDBObjEntity.GetDXFIOFeatures.RegisterNamedLoadFeature('SCHConnectorRadius',TSCHConnectorExtender.EntIOLoadNetConnectorRadius);
   GDBObjEntity.GetDXFIOFeatures.RegisterNamedLoadFeature('SCHConnectorType',TSCHConnectorExtender.EntIOLoadNetConnectorSetter);
 finalization
 end.
-

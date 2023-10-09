@@ -155,9 +155,9 @@ implementation
   begin
         new(pVertex);
         pVertex^.dev:=dev;
-        ZCMsgCallBackInterface.TextMessage('TGraphDev.addVertexDevFunc pVertex^.dev = ' + pVertex^.dev^.Name,TMWOHistoryOut);
+        //ZCMsgCallBackInterface.TextMessage('TGraphDev.addVertexDevFunc pVertex^.dev = ' + pVertex^.dev^.Name,TMWOHistoryOut);
         result:=self.AddVertex;
-        ZCMsgCallBackInterface.TextMessage('result = ' + inttostr(result.Index),TMWOHistoryOut);
+        //ZCMsgCallBackInterface.TextMessage('result = ' + inttostr(result.Index),TMWOHistoryOut);
         result.AsPointer[vPTVertexEMTree]:=pVertex;
 
   end;

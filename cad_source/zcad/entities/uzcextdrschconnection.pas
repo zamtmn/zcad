@@ -23,8 +23,7 @@ uses sysutils,uzedrawingdef,uzeentityextender,
      UGDBOpenArrayOfPV,uzeentgenericsubentry,uzeentline,uzegeometry,
      uzeentdevice,TypeDescriptors,uzctnrVectorBytes,
      uzbtypes,uzeentsubordinated,uzeentity,uzeblockdef,
-     //varmandef,Varman,UUnitManager,URecordDescriptor,UBaseTypeDescriptor,
-     usimplegenerics,uzeffdxfsupport,//uzbpaths,uzcTranslations,
+     usimplegenerics,uzeffdxfsupport,
      gzctnrVectorSimple,gzctnrVectorTypes,uzeBaseExtender,uzgldrawcontext,
      uzegeometrytypes,uzcsysvars,
      uzctnrVectorDouble,gzctnrVector,garrayutils,
@@ -86,8 +85,7 @@ TSCHConnectionExtender=class(TBaseSCHConnectExtender)
 
     procedure SaveToDxfObjXData(var outhandle:TZctnrVectorBytes;PEnt:Pointer;var IODXFContext:TIODXFContext);override;
 
-    //procedure TryConnectToEnts(var Objects:GDBObjOpenArrayOfPV;Position:TLineEnd;const drawing:TDrawingDef;var DC:TDrawContext);
-    procedure TryConnectToEnts2(const p1,p2:GDBVertex;var Objects:GDBObjOpenArrayOfPV;const drawing:TDrawingDef;var DC:TDrawContext);
+    procedure TryConnectToEnts(const p1,p2:GDBVertex;var Objects:GDBObjOpenArrayOfPV;const drawing:TDrawingDef;var DC:TDrawContext);
     procedure TryConnectToDeviceConnectors(const p1,p2:GDBVertex;var Device:GDBObjDevice;const drawing:TDrawingDef;var DC:TDrawContext);
     function NeedStandardDraw(pEntity:Pointer;const drawing:TDrawingDef;var DC:TDrawContext):Boolean;override;
 
@@ -266,7 +264,7 @@ begin
       if IsIt(TypeOf(pThisEntity^),typeof(GDBObjLine)) then begin
         objects.init(10);
         if PGDBObjGenericSubEntry(drawing.GetCurrentRootSimple)^.FindObjectsInVolume(PGDBObjLine(pThisEntity)^.vp.BoundingBox,Objects)then
-          TryConnectToEnts2(PGDBObjLine(pThisEntity)^.CoordInWCS.lBegin,PGDBObjLine(pThisEntity)^.CoordInWCS.lEnd,Objects,drawing,dc);
+          TryConnectToEnts(PGDBObjLine(pThisEntity)^.CoordInWCS.lBegin,PGDBObjLine(pThisEntity)^.CoordInWCS.lEnd,Objects,drawing,dc);
         {if PGDBObjGenericSubEntry(drawing.GetCurrentRootSimple)^.FindObjectsInPoint(PGDBObjLine(pThisEntity)^.CoordInWCS.lBegin,Objects) then
           TryConnectToEnts(Objects,LBegin,drawing,dc);
         objects.Clear;
@@ -446,51 +444,7 @@ begin
   end;
 end;
 
-{procedure TSCHConnectionExtender.TryConnectToEnts(var Objects:GDBObjOpenArrayOfPV;Position:TLineEnd;const drawing:TDrawingDef;var DC:TDrawContext);
-var
-  p:PGDBObjLine;
-  ir:itrec;
-  NetExtender:TSCHConnectionExtender;
-begin
-  p:=Objects.beginiterate(ir);
-  if p<>nil then
-  repeat
-    if (pointer(p)<>pThisEntity)and(IsIt(TypeOf(p^),typeof(GDBObjLine))) then begin
-      NetExtender:=p^.GetExtension<TSCHConnectionExtender>;
-      if NetExtender<>nil then begin
-        case Position of
-          LBegin:begin
-            if uzegeometry.IsPointEqual(PGDBObjLine(pThisEntity)^.CoordInWCS.lBegin,p^.CoordInWCS.lBegin) then begin
-              drawArrow(PGDBObjLine(pThisEntity)^.CoordInWCS.lEnd,PGDBObjLine(pThisEntity)^.CoordInWCS.lBegin,pThisEntity,DC);
-              p^.addtoconnect2(p,PGDBObjGenericSubEntry(drawing.GetCurrentRootSimple)^.ObjToConnectedArray);
-              ConnectedWith.PushBackIfNotPresent(p);
-            end;
-            if uzegeometry.IsPointEqual(PGDBObjLine(pThisEntity)^.CoordInWCS.lBegin,p^.CoordInWCS.lEnd) then begin
-              drawArrow(PGDBObjLine(pThisEntity)^.CoordInWCS.lEnd,PGDBObjLine(pThisEntity)^.CoordInWCS.lBegin,pThisEntity,DC);
-              p^.addtoconnect2(p,PGDBObjGenericSubEntry(drawing.GetCurrentRootSimple)^.ObjToConnectedArray);
-              ConnectedWith.PushBackIfNotPresent(p);
-            end;
-          end;
-          LEnd:begin
-            if uzegeometry.IsPointEqual(PGDBObjLine(pThisEntity)^.CoordInWCS.lEnd,p^.CoordInWCS.lBegin) then begin
-              drawArrow(PGDBObjLine(pThisEntity)^.CoordInWCS.lBegin,PGDBObjLine(pThisEntity)^.CoordInWCS.lEnd,pThisEntity,DC);
-              p^.addtoconnect2(p,PGDBObjGenericSubEntry(drawing.GetCurrentRootSimple)^.ObjToConnectedArray);
-              ConnectedWith.PushBackIfNotPresent(p);
-            end;
-            if uzegeometry.IsPointEqual(PGDBObjLine(pThisEntity)^.CoordInWCS.lEnd,p^.CoordInWCS.lEnd) then begin
-              drawArrow(PGDBObjLine(pThisEntity)^.CoordInWCS.lBegin,PGDBObjLine(pThisEntity)^.CoordInWCS.lEnd,pThisEntity,DC);
-              p^.addtoconnect2(p,PGDBObjGenericSubEntry(drawing.GetCurrentRootSimple)^.ObjToConnectedArray);
-              ConnectedWith.PushBackIfNotPresent(p);
-            end;
-          end;
-        end;
-      end;
-    end;
-  p:=Objects.iterate(ir);
-  until p=nil;
-end;}
-
-procedure TSCHConnectionExtender.TryConnectToEnts2(const p1,p2:GDBVertex;var Objects:GDBObjOpenArrayOfPV;const drawing:TDrawingDef;var DC:TDrawContext);
+procedure TSCHConnectionExtender.TryConnectToEnts(const p1,p2:GDBVertex;var Objects:GDBObjOpenArrayOfPV;const drawing:TDrawingDef;var DC:TDrawContext);
 var
   p:PGDBObjLine;
   ir:itrec;
@@ -714,9 +668,8 @@ begin
 end;
 
 initialization
-  //extdrAdd(extdrNet)
+  //extdrAdd(extdrSCHConnection)
   EntityExtenders.RegisterKey(uppercase(ConnectionExtenderName),TSCHConnectionExtender);
   GDBObjEntity.GetDXFIOFeatures.RegisterNamedLoadFeature('SCHConnection',TSCHConnectionExtender.EntIOLoadNetExtender);
 finalization
 end.
-

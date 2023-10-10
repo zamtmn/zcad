@@ -341,25 +341,8 @@ var
   p:PGDBObjLine;
   ir:itrec;
 begin
-  {p:=ConnectedWith.beginiterate(ir);
-  if p<>nil then
-  repeat
-    if p<>nil then
-      PGDBObjGenericSubEntry(drawing.GetCurrentRootSimple)^.ObjToConnectedArray.PushBackIfNotPresent(p);
-      PGDBObjGenericSubEntry(drawing.GetCurrentRootSimple)^.ObjCasheArray.PushBackIfNotPresent(p);
-  p:=ConnectedWith.iterate(ir);
-  until p=nil;
-  ConnectedWith.Clear;
-
-  p:=IntersectedWith.beginiterate(ir);
-  if p<>nil then
-  repeat
-    if p<>nil then
-      PGDBObjGenericSubEntry(drawing.GetCurrentRootSimple)^.ObjToConnectedArray.PushBackIfNotPresent(p);
-      PGDBObjGenericSubEntry(drawing.GetCurrentRootSimple)^.ObjCasheArray.PushBackIfNotPresent(p);
-  p:=IntersectedWith.iterate(ir);
-  until p=nil;
-  IntersectedWith.Clear;}
+  if Assigned(Net) then
+    Net.AddToDWGPostProcs(pEntity,drawing);
 end;
 
 procedure TSCHConnectorExtender.onBeforeEntityFormat(pEntity:Pointer;const drawing:TDrawingDef;var DC:TDrawContext);
@@ -497,10 +480,9 @@ begin
 end;
 
 initialization
-  //extdrAdd(extdrConnector)
+  //extdrAdd(extdrSCHConnector)
   EntityExtenders.RegisterKey(uppercase(ConnectionExtenderName),TSCHConnectorExtender);
   GDBObjEntity.GetDXFIOFeatures.RegisterNamedLoadFeature('SCHConnectorRadius',TSCHConnectorExtender.EntIOLoadNetConnectorRadius);
   GDBObjEntity.GetDXFIOFeatures.RegisterNamedLoadFeature('SCHConnectorType',TSCHConnectorExtender.EntIOLoadNetConnectorSetter);
 finalization
 end.
-

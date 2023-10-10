@@ -304,7 +304,7 @@ implementation
 {for hide exttype}
 function vardesk.GetValueAsString:TInternalScriptString;
 begin
-  data.PTD^.GetValueAsString(data.Addr.Instance);
+  result:=data.PTD^.GetValueAsString(data.Addr.Instance);
 end;
 procedure vardesk.SetInstance(DS:PZAbsVector;Offs:PtrUInt);
 begin

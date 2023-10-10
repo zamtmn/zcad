@@ -305,7 +305,7 @@ begin
       pvd:=EntityUnit.FindVariable('VariablesContentReplaceFrom',true);
       if pvd<>nil then
         if pvd^.data.PTD=@FundamentalStringDescriptorObj then begin
-          uou:=pointer(units.findunit(GetSupportPath,InterfaceTranslate,pvd^.data.PTD^.GetValueAsString(pvd^.data.Addr.GetInstance)));
+          uou:=pointer(units.findunit(GetSupportPath,InterfaceTranslate,pvd^.GetValueAsString));
           if uou<>nil then begin
             EntityUnit.free;
             EntityUnit.CopyFrom(uou);

@@ -1,6 +1,14 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <CONFIG>
   <STRINGTREE>
+    <Connections Desc="Connections">
+      <Electrotechnics Desc="Electrotechnics">
+        <Power Desc="Power">
+        </Power>
+        <Control Desc="Control">
+        </Control>
+      </Electrotechnics>
+    </Connections>
     <Electrotechnics Desc="Electrotechnics">
       <Power_consumer Desc="Power consumers">
         <Heating Desc="Heating">

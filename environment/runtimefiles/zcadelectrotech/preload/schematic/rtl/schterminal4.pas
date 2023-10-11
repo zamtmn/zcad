@@ -7,6 +7,6 @@ usescopy SCHTerminalNumber;
 implementation
 begin
    NMO_TerminalName:='4';
-   NMO_TerminalNameTemplate:='4';
+   NMO_TerminalNameTemplate:='@@[TERMINAL_Number]';
    TERMINAL_Number:=4;
 end.

@@ -51,7 +51,7 @@ type
   CommandRTEdObject =  object(CommandRTEdObjectDef)
     saveosmode:Integer;(*hidden_in_objinsp*)
     commanddata:THardTypedData;(*'Command options'*)
-    ShowParams:Boolean;
+    ShowParams:Boolean;(*hidden_in_objinsp*)
     procedure CommandStart(Operands:TCommandOperands); virtual;
     procedure CommandEnd; virtual;
     procedure CommandCancel; virtual;

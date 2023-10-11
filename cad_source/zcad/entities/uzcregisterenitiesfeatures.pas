@@ -196,18 +196,24 @@ var
    pvn,pvnt:pvardesk;
    pentvarext:TVariablesExtender;
 begin
-     pentvarext:=pEntity^.GetExtension<TVariablesExtender>;
-     pvn:=pentvarext.entityunit.FindVariable('NMO_Name');
-     pvnt:=pentvarext.entityunit.FindVariable('NMO_Template');
+  pentvarext:=pEntity^.GetExtension<TVariablesExtender>;
+  if pentvarext<>nil then begin
+    pvn:=pentvarext.entityunit.FindVariable('NMO_Name');
+    pvnt:=pentvarext.entityunit.FindVariable('NMO_Template');
+    if (pvnt<>nil) then
+      DeviceNameSubProcess(pvn,pstring(pvnt^.data.Addr.Instance)^,pEntity);
 
-     if (pvnt<>nil) then
-     DeviceNameSubProcess(pvn,pstring(pvnt^.data.Addr.Instance)^,pEntity);
+    pvn:=pentvarext.entityunit.FindVariable('NMO_TerminalName');
+    pvnt:=pentvarext.entityunit.FindVariable('NMO_TerminalNameTemplate');
+    if (pvnt<>nil) then
+      DeviceNameSubProcess(pvn,pstring(pvnt^.data.Addr.Instance)^,pEntity);
 
-     pvnt:=pentvarext.entityunit.FindVariable('RiserName');
-     if (pvnt<>nil)and(pvn<>nil)then
-       pstring(pvnt^.data.Addr.Instance)^:=pstring(pvn^.data.Addr.Instance)^;
+    pvnt:=pentvarext.entityunit.FindVariable('RiserName');
+    if (pvnt<>nil)and(pvn<>nil)then
+      pstring(pvnt^.data.Addr.Instance)^:=pstring(pvn^.data.Addr.Instance)^;
+  end;
 
-     DBLinkProcess(pentity,drawing);
+  DBLinkProcess(pentity,drawing);
 end;
 procedure DeviceSilaProcess(pEntity:PGDBObjEntity;const drawing:TDrawingDef);
 var

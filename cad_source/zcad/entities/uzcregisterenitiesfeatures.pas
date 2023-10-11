@@ -208,6 +208,12 @@ begin
     if (pvnt<>nil) then
       DeviceNameSubProcess(pvn,pstring(pvnt^.data.Addr.Instance)^,pEntity);
 
+    pvn:=pentvarext.entityunit.FindVariable('NMO_NetName');
+    pvnt:=pentvarext.entityunit.FindVariable('NMO_NetNameTemplate');
+    if (pvnt<>nil) then
+      DeviceNameSubProcess(pvn,pstring(pvnt^.data.Addr.Instance)^,pEntity);
+
+
     pvnt:=pentvarext.entityunit.FindVariable('RiserName');
     if (pvnt<>nil)and(pvn<>nil)then
       pstring(pvnt^.data.Addr.Instance)^:=pstring(pvn^.data.Addr.Instance)^;

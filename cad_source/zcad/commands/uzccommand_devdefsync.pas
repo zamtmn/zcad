@@ -50,6 +50,9 @@ begin
     DevDef^.ObjArray.AddPEntity((pv.Clone(DevDef))^);
     pv:=pdev^.VarObjArray.iterate(ir);
   until pv=nil;
+  if assigned(DevDef^.EntExtensions) then
+    freeandnil(DevDef^.EntExtensions);
+  pdev^.CopyExtensionsTo(DevDef^);
 end;
 
 procedure Process(pdev:PGDBObjDevice;BlockDefCounter:TBlockDefCounter);

@@ -26,7 +26,7 @@ uses
   uzccommandsabstract,uzccommandsimpl,
   uzeentity,gzctnrVectorTypes,uzcdrawings,uzcstrconsts,uzeentityextender,
   gzundoCmdChgMethods2,zUndoCmdSaveEntityState,uzcdrawing,
-  uzcinterface;
+  uzcinterface,UGDBSelectedObjArray;
 
 function extdrAdd_com(operands:TCommandOperands):TCommandResult;
 
@@ -43,6 +43,7 @@ var
   count:Integer;
   DoMethod,UndoMethod:TMethod;
   ext:TBaseEntityExtender;
+  psd:PSelectedObjDesc;
 begin
   try
     if EntityExtenders.tryGetValue(uppercase(operands),extdr) then begin
@@ -50,7 +51,7 @@ begin
 
       //обрабатываем последний выбраный примитив
       //на данный момент только так можно работать с примитивами в динамической части устройств
-      pLastSelectedEntity:=drawings.GetCurrentOGLWParam.SelDesc.LastSelectedObject;
+      {pLastSelectedEntity:=drawings.GetCurrentOGLWParam.SelDesc.LastSelectedObject;
       if pLastSelectedEntity<>nil then begin
         if pLastSelectedEntity^.GetExtension(extdr)=nil then begin
           PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack.PushStartMarker(cmdName);
@@ -68,12 +69,13 @@ begin
           end;
           inc(count);
         end;
-      end;
+      end;}
 
-      pEntity:=drawings.GetCurrentROOT^.ObjArray.beginiterate(ir);
-      if pEntity<>nil then
+      psd:=drawings.GetCurrentDWG.SelObjArray.beginiterate(ir);
+      if psd<>nil then
       repeat
-        if (pEntity^.Selected)and(pEntity<>pLastSelectedEntity) then
+        pEntity:=psd^.objaddr;
+        if (pEntity^.Selected){and(pEntity<>pLastSelectedEntity)} then
           if pEntity^.GetExtension(extdr)=nil then begin
             PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack.PushStartMarker(cmdName);
             domethod.Code:=pointer(pEntity^.AddExtension);
@@ -82,7 +84,7 @@ begin
             undomethod.Data:=pEntity;
             ext:=extdr.Create(pEntity);
 
-            TUndoCmdSaveEntityState.CreateAndPush(pLastSelectedEntity,PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack);
+            TUndoCmdSaveEntityState.CreateAndPush(pEntity,PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack);
 
             with GUCmdChgMethods2<TBaseEntityExtender,Pointer>.CreateAndPush(ext,typeof(ext),domethod,undomethod,PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,drawings.AfterNotAutoProcessGDB) do
             begin
@@ -90,8 +92,8 @@ begin
             end;
             inc(count);
           end;
-        pEntity:=drawings.GetCurrentROOT^.ObjArray.iterate(ir);
-      until pEntity=nil;
+        psd:=drawings.GetCurrentDWG.SelObjArray.iterate(ir);
+      until psd=nil;
       ZCMsgCallBackInterface.TextMessage(format(rscmNEntitiesProcessed,[count]),TMWOHistoryOut);
       if count>0 then
         PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack.PushEndMarker;

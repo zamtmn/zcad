@@ -371,12 +371,13 @@ begin
 end;
 procedure CommandRTEdObjectPlugin.FormatAfterFielfmod(PField,PTypeDescriptor:Pointer);
 begin
- Format;
+  if assigned(self.onFormat) then
+    onFormat(PField);
 end;
 procedure CommandRTEdObjectPlugin.Format;
 begin
-     if assigned(self.onFormat) then
-                                     onFormat(@self);
+  if assigned(self.onFormat) then
+    onFormat(nil);
 end;
 function CommandRTEdObjectPlugin.BeforeClick;
 begin

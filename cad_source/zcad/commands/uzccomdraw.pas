@@ -48,7 +48,8 @@ uses
   math,uzeenttable,uzctnrvectorstrings,
   uzeentlwpolyline,UBaseTypeDescriptor,uzeblockdef,Varman,URecordDescriptor,TypeDescriptors,UGDBVisibleTreeArray
   ,uzelongprocesssupport,uzccommand_circle2,uzccommand_erase,uzccmdfloatinsert,
-  uzccommand_rebuildtree, uzeffmanager;
+  uzccommand_rebuildtree, uzeffmanager,
+  masks;
 const
      modelspacename:String='**Модель**';
 type
@@ -88,6 +89,7 @@ end;
   {REGISTERRECORDTYPE TBEditParam}
   TBEditParam=record
                     CurrentEditBlock:String;(*'Current block'*)(*oi_readonly*)
+                    Filter:string;(*'Filter block name'*)
                     Blocks:TEnumData;(*'Select block'*)
               end;
   ptpcoavector=^tpcoavector;
@@ -162,7 +164,7 @@ MapPointOnCurve3DPropArray=specialize TMap<PGDBObjLine,PointOnCurve3DPropArray, 
 devcoordsort=specialize TOrderingArrayUtils<devcoordarray, tdevcoord, TGDBVertexLess>;
 devnamesort=specialize TOrderingArrayUtils<devnamearray, tdevname, TGDBNameLess>;
 
-function GetBlockDefNames(var BDefNames:TZctnrVectorStrings;selname:String):Integer;
+function GetBlockDefNames(var BDefNames:TZctnrVectorStrings;selname:String;filter:String=''):Integer;
 function GetSelectedBlockNames(var BDefNames:TZctnrVectorStrings;selname:String;mode:BRMode):Integer;
 
 var
@@ -193,25 +195,27 @@ var
 //procedure Finalize;
 implementation
 
-function GetBlockDefNames(var BDefNames:TZctnrVectorStrings;selname:String):Integer;
-var pb:PGDBObjBlockdef;
-    ir:itrec;
-    i:Integer;
-    s:String;
+function GetBlockDefNames(var BDefNames:TZctnrVectorStrings;selname:String;filter:String=''):Integer;
+var
+  pb:PGDBObjBlockdef;
+  ir:itrec;
+  i:Integer;
+  s:String;
 begin
-     result:=-1;
-     i:=0;
-     selname:=uppercase(selname);
-     pb:=drawings.GetCurrentDWG^.BlockDefArray.beginiterate(ir);
-     if pb<>nil then
-     repeat
-           if uppercase(pb^.name)=selname then
-                                              result:=i;
-           s:=Tria_AnsiToUtf8(pb^.name);
-           BDefNames.PushBackData(s);
-           pb:=drawings.GetCurrentDWG^.BlockDefArray.iterate(ir);
-           inc(i);
-     until pb=nil;
+  result:=-1;
+  i:=0;
+  selname:=uppercase(selname);
+  pb:=drawings.GetCurrentDWG^.BlockDefArray.beginiterate(ir);
+  if pb<>nil then repeat
+    s:=Tria_AnsiToUtf8(pb^.name);
+    if (filter='') or MatchesMask(s,filter) then begin
+      if uppercase(pb^.name)=selname then
+        result:=i;
+      BDefNames.PushBackData(s);
+      inc(i);
+    end;
+    pb:=drawings.GetCurrentDWG^.BlockDefArray.iterate(ir);
+  until pb=nil;
 end;
 function GetSelectedBlockNames(var BDefNames:TZctnrVectorStrings;selname:String;mode:BRMode):Integer;
 var pb:PGDBObjBlockInsert;
@@ -845,8 +849,26 @@ begin
 end;
 
 procedure bedit_format(_self:pointer);
+var
+  i:integer;
+  sd:TSelEntsDesk;
+  //tn:String;
 begin
-  Application.QueueAsyncCall(@DummyClass.RunBEdit,0);
+  if _self=@BEditParam.Blocks then
+    Application.QueueAsyncCall(@DummyClass.RunBEdit,0)
+  else begin
+    BEditParam.Blocks.Enums.free;
+    i:=GetBlockDefNames(BEditParam.Blocks.Enums,BEditParam.CurrentEditBlock,BEditParam.Filter);
+    BEditParam.Blocks.Enums.PushBackData(modelspacename);
+
+    if BEditParam.CurrentEditBlock=modelspacename then begin
+      BEditParam.Blocks.Selected:=BEditParam.Blocks.Enums.Count-1;
+    end;
+
+    if BEditParam.Blocks.Enums.Count>1 then
+      if i>0 then
+        BEditParam.Blocks.Selected:=i
+  end;
 end;
 function bedit_com(operands:TCommandOperands):TCommandResult;
 var
@@ -865,7 +887,7 @@ begin
   end;
 
   BEditParam.Blocks.Enums.free;
-  i:=GetBlockDefNames(BEditParam.Blocks.Enums,tn);
+  i:=GetBlockDefNames(BEditParam.Blocks.Enums,tn,BEditParam.Filter);
   BEditParam.Blocks.Enums.PushBackData(modelspacename);
 
   if BEditParam.CurrentEditBlock=modelspacename then begin
@@ -1147,6 +1169,7 @@ begin
   pbeditcom:=CreateCommandRTEdObjectPlugin(@bedit_com,nil,nil,@bedit_format,nil,nil,nil,nil,'BEdit',0,0);
   BEditParam.Blocks.Enums.init(100);
   BEditParam.CurrentEditBlock:=modelspacename;
+  BEditParam.Filter:='DEVICE*';
   pbeditcom^.SetCommandParam(@BEditParam,'PTBEditParam',False);
 
   ATO.init('AddToOwner',CADWG,0);

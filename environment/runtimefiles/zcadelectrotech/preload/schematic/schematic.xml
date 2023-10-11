@@ -13,6 +13,7 @@
           <ZTreeCommand Command="Insert(DEVICE_SCH_COIL)"/>
           <ZTreeCommand Command="Insert(DEVICE_SCH_LAMP)"/>
           <ZTreeCommand Command="Insert(DEVICE_SCH_MOTOR_3PH_1)"/>
+          <ZTreeCommand Command="Insert(DEVICE_SCH_CONNECTION_NAME)"/>
           <ZTreeCommand Command="SCHConnection"/>
         </ZTreeNode>
       </ZTreeNode>

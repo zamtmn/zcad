@@ -422,6 +422,8 @@ var
    vardata:TVariablesExtender;
    th: TDWGHandle;
 begin
+  //сохранять переменные определений блоков ненадо, берем их из внешних файлов
+  if not IsIt(typeof(PGDBObjEntity(PEnt)^),typeof(GDBObjBlockdef))then begin
      ishavevars:=false;
      vardata:=PGDBObjEntity(PEnt)^.GetExtension<TVariablesExtender>;
      if vardata<>nil then
@@ -476,6 +478,7 @@ begin
          pvd:=vardata.entityunit.InterfaceVariables.vardescarray.iterate(ir);
          until pvd=nil;
      end;
+  end;
 end;
 
 procedure TVariablesExtender.onRemoveFromArray(pEntity:Pointer;const drawing:TDrawingDef);

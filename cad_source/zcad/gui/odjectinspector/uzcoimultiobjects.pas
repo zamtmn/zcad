@@ -160,11 +160,13 @@ var
   pentvarext,pmainentvarext: TVariablesExtender;
   EntIterator: itrec;
   pentity,pmainentity: pGDBObjEntity;
+  psd:PSelectedObjDesc;
 begin
   PSourceVD.attrib:=PSourceVD.attrib and (not vda_different);
-  pentity:=drawings.GetCurrentROOT.ObjArray.beginiterate(EntIterator);
-  if pentity<>nil then
+  psd:=drawings.GetCurrentDWG.SelObjArray.beginiterate(EntIterator);
+  if psd<>nil then
   repeat
+    pentity:=psd^.objaddr;
     if (pentity^.Selected)and((pentity^.GetObjType=NeededObjType)or(NeededObjType=0)) then begin
       pentvarext:=pentity^.GetExtension<TVariablesExtender>;
       if (VariableProcessSelector<>VPS_OnlyThisEnts)and(VariableProcessSelector<>VPS_AllEntsSeparated) then begin
@@ -178,8 +180,8 @@ begin
         if not SetVariable(pentity,pentvarext,PSourceVD) then
           pentity^.YouChanged(drawings.GetCurrentDWG^);
     end;
-    pentity:=drawings.GetCurrentROOT.ObjArray.iterate(EntIterator);
-  until pentity=nil;
+    psd:=drawings.GetCurrentDWG.SelObjArray.iterate(EntIterator);
+  until psd=nil;
 end;
 
 procedure TMSEditor.SetRelatedVariables(PSourceVD:pvardesk;NeededObjType:TObjID);
@@ -187,11 +189,13 @@ var
   pentvarext,pmainentvarext: TVariablesExtender;
   EntIterator: itrec;
   pentity,pmainentity: pGDBObjEntity;
+  psd:PSelectedObjDesc;
 begin
   PSourceVD.attrib:=PSourceVD.attrib and (not vda_different);
-  pentity:=drawings.GetCurrentROOT.ObjArray.beginiterate(EntIterator);
-  if pentity<>nil then
+  psd:=drawings.GetCurrentDWG.SelObjArray.beginiterate(EntIterator);
+  if psd<>nil then
   repeat
+    pentity:=psd^.objaddr;
     if (pentity^.Selected)and((pentity^.GetObjType=NeededObjType)or(NeededObjType=0)) then begin
       pentvarext:=pentity^.GetExtension<TVariablesExtender>;
       if pentvarext.pMainFuncEntity<>nil then begin
@@ -200,8 +204,8 @@ begin
         SetVariable(pmainentity,pmainentvarext,PSourceVD);
       end;
     end;
-    pentity:=drawings.GetCurrentROOT.ObjArray.iterate(EntIterator);
-  until pentity=nil;
+    psd:=drawings.GetCurrentDWG.SelObjArray.iterate(EntIterator);
+  until psd=nil;
 end;
 
 function ComparePropAndVarNames(pname,vname:String):boolean;

@@ -25,12 +25,15 @@ uses
   uzcLog,
   uzccommandsabstract,uzccommandsimpl,
   uzeentity,gzctnrVectorTypes,uzcdrawings,uzcdrawing,
-  zcmultiobjectcreateundocommand,uzcinterface,uzcutils;
+  zcmultiobjectcreateundocommand,uzcinterface,uzcutils,
+  UGDBSelectedObjArray,gzctnrSTL,uzeentsubordinated;
 
 function Erase_com(operands:TCommandOperands):TCommandResult;
 
 implementation
 
+(*
+//Старый вариант без удаления в дингамической части устройств
 function Erase_com(operands:TCommandOperands):TCommandResult;
 var pv:pGDBObjEntity;
     ir:itrec;
@@ -80,6 +83,67 @@ begin
   ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIReturnToDefaultObject);
   clearcp;
   zcRedrawCurrentDrawing;
+  result:=cmd_ok;
+end;*)
+
+procedure MySetObjCreateManipulator(Owner:PGDBObjGenericWithSubordinated;out domethod,undomethod:tmethod);
+begin
+     domethod.Code:=pointer(Owner^.GoodAddObjectToObjArray);
+     domethod.Data:=Owner;
+     undomethod.Code:=pointer(Owner^.GoodRemoveMiFromArray);
+     undomethod.Data:=Owner;
+end;
+
+
+function Erase_com(operands:TCommandOperands):TCommandResult;
+var
+  pv:pGDBObjEntity;
+  Pair:TMyMapCounter<PGDBObjGenericWithSubordinated>.TDictionaryPair;
+  ir:itrec;
+  Count:integer;
+  domethod,undomethod:tmethod;
+  psd:PSelectedObjDesc;
+  Counter:TMyMapCounter<PGDBObjGenericWithSubordinated>;
+begin
+  if (drawings.GetCurrentROOT^.ObjArray.count = 0)or(drawings.GetCurrentDWG^.wa.param.seldesc.Selectedobjcount=0) then exit;
+  Counter:=TMyMapCounter<PGDBObjGenericWithSubordinated>.Create;
+  Count:=0;
+  psd:=drawings.GetCurrentDWG.SelObjArray.beginiterate(ir);
+  if psd<>nil then repeat
+    pv:=psd^.objaddr;
+    Counter.CountKey(pv^.bp.ListPos.Owner);
+    inc(Count);
+    psd:=drawings.GetCurrentDWG.SelObjArray.iterate(ir);
+  until psd=nil;
+  if Count>0 then begin
+    PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack.PushStartMarker('Erase');
+    for Pair in Counter do begin
+      MySetObjCreateManipulator(Pair.key,undomethod,domethod);
+      with PushMultiObjectCreateCommand(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,tmethod(domethod),tmethod(undomethod),Pair.Value) do begin
+        psd:=drawings.GetCurrentDWG.SelObjArray.beginiterate(ir);
+        if psd<>nil then repeat
+          pv:=psd^.objaddr;
+          if pv^.bp.ListPos.Owner=Pair.key then begin
+            AddObject(pv);
+            pv^.Selected:=false;
+          end;
+
+          psd:=drawings.GetCurrentDWG.SelObjArray.iterate(ir);
+        until psd=nil;
+        FreeArray:=false;
+        comit;
+      end;
+    end;
+    PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack.PushEndMarker;
+
+    drawings.GetCurrentDWG^.wa.param.seldesc.Selectedobjcount:=0;
+    drawings.GetCurrentDWG^.wa.param.seldesc.OnMouseObject:=nil;
+    drawings.GetCurrentDWG^.wa.param.seldesc.LastSelectedObject:=nil;
+    drawings.GetCurrentDWG^.wa.param.lastonmouseobject:=nil;
+    ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIReturnToDefaultObject);
+    clearcp;
+    zcRedrawCurrentDrawing;
+  end;
   result:=cmd_ok;
 end;
 

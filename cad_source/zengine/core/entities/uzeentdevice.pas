@@ -78,11 +78,33 @@ GDBObjDevice= object(GDBObjBlockInsert)
                    function CreateInstance:PGDBObjDevice;static;
                    function GetNameInBlockTable:String;virtual;
                    function GetObjType:TObjID;virtual;
+
+                   procedure GoodAddObjectToObjArray(const obj:PGDBObjSubordinated);virtual;
+                   procedure GoodRemoveMiFromArray(const obj:PGDBObjSubordinated;const drawing:TDrawingDef);virtual;
+
              end;
 {EXPORT-}
 var
     GDBObjDeviceDXFFeatures:TDXFEntIODataManager;
 implementation
+procedure GDBObjDevice.GoodAddObjectToObjArray(const obj:PGDBObjSubordinated);
+begin
+  VarObjArray.AddPEntity(PGDBObjEntity(obj)^);
+  PGDBObjEntity(obj).bp.ListPos.Owner:=@self;
+end;
+procedure GDBObjDevice.GoodRemoveMiFromArray(const obj:PGDBObjSubordinated;const drawing:TDrawingDef);
+begin
+  if assigned(obj^.EntExtensions)then
+    obj^.EntExtensions.RunRemoveFromArray(obj,drawing);
+
+  if obj^.bp.TreePos.Owner<>nil then begin
+    PTEntTreeNode(obj^.bp.TreePos.Owner)^.nulDeleteElement(obj^.bp.TreePos.SelfIndex);
+  end;
+  obj^.bp.TreePos.Owner:=nil;
+  VarObjArray.DeleteElement(obj.bp.ListPos.SelfIndex);
+end;
+
+
 function GDBObjDevice.GetNameInBlockTable:String;
 begin
   result:=DevicePrefix+name;

@@ -198,23 +198,23 @@ var
 begin
   pentvarext:=pEntity^.GetExtension<TVariablesExtender>;
   if pentvarext<>nil then begin
-    pvn:=pentvarext.entityunit.FindVariable('NMO_Name');
-    pvnt:=pentvarext.entityunit.FindVariable('NMO_Template');
-    if (pvnt<>nil) then
+    pvn:=pentvarext.entityunit.FindVariable('NMO_Name',true);
+    pvnt:=pentvarext.entityunit.FindVariable('NMO_Template',true);
+    if (pvnt<>nil)and(pvnt<>nil) then
       DeviceNameSubProcess(pvn,pstring(pvnt^.data.Addr.Instance)^,pEntity);
 
-    pvn:=pentvarext.entityunit.FindVariable('NMO_TerminalName');
-    pvnt:=pentvarext.entityunit.FindVariable('NMO_TerminalNameTemplate');
-    if (pvnt<>nil) then
+    pvn:=pentvarext.entityunit.FindVariable('NMO_TerminalName',true);
+    pvnt:=pentvarext.entityunit.FindVariable('NMO_TerminalNameTemplate',true);
+    if (pvnt<>nil)and(pvnt<>nil) then
       DeviceNameSubProcess(pvn,pstring(pvnt^.data.Addr.Instance)^,pEntity);
 
-    pvn:=pentvarext.entityunit.FindVariable('NMO_NetName');
-    pvnt:=pentvarext.entityunit.FindVariable('NMO_NetNameTemplate');
-    if (pvnt<>nil) then
+    pvn:=pentvarext.entityunit.FindVariable('NMO_NetName',true);
+    pvnt:=pentvarext.entityunit.FindVariable('NMO_NetNameTemplate',true);
+    if (pvnt<>nil)and(pvnt<>nil) then
       DeviceNameSubProcess(pvn,pstring(pvnt^.data.Addr.Instance)^,pEntity);
 
 
-    pvnt:=pentvarext.entityunit.FindVariable('RiserName');
+    pvnt:=pentvarext.entityunit.FindVariable('RiserName',true);
     if (pvnt<>nil)and(pvn<>nil)then
       pstring(pvnt^.data.Addr.Instance)^:=pstring(pvn^.data.Addr.Instance)^;
   end;

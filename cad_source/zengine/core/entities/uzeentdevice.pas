@@ -677,10 +677,9 @@ begin
   if EFCalcEntityCS in stage then begin
     if assigned(EntExtensions)then
       EntExtensions.RunOnBeforeEntityFormat(@self,drawing,DC);
-    index:=PGDBObjBlockdefArray(drawing.GetBlockDefArraySimple).getindex(pansichar(name));
-    CalcObjMatrix(@drawing);
-    FormatFeatures(drawing);
   end;
+  index:=PGDBObjBlockdefArray(drawing.GetBlockDefArraySimple).getindex(pansichar(name));
+  FormatFeatures(drawing);
   CalcObjMatrix(@drawing);
   ConstObjArray.FormatEntity(drawing,dc,stage);
   VarObjArray.FormatEntity(drawing,dc,stage);

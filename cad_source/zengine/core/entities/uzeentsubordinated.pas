@@ -50,6 +50,8 @@ PGDBObjGenericWithSubordinated=^GDBObjGenericWithSubordinated;
 {REGISTEROBJECTTYPE GDBObjGenericWithSubordinated}
 GDBObjGenericWithSubordinated= object(GDBObjDrawable)
                                     {OU:TFaceTypedData;(*'Variables'*)}
+                                    procedure GoodAddObjectToObjArray(const obj:PGDBObjSubordinated);virtual;abstract;
+                                    procedure GoodRemoveMiFromArray(const obj:PGDBObjSubordinated;const drawing:TDrawingDef);virtual;abstract;
                                     procedure ImEdited(pobj:PGDBObjSubordinated;pobjinarray:Integer;var drawing:TDrawingDef);virtual;
                                     procedure ImSelected(pobj:PGDBObjSubordinated;pobjinarray:Integer);virtual;
                                     procedure DelSelectedSubitem(var drawing:TDrawingDef);virtual;

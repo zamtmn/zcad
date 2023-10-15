@@ -772,7 +772,7 @@ if addtype then
                                      varname:=pString(parseresult^.getDataMutable(i))^;
                                      if varname='INTF_ObjInsp_WhiteBackground' then
                                                             varname:=varname;
-                                     if currentunit^.FindVariable(varname)=nil then
+                                     if currentunit^.FindVariable(varname,true)=nil then
                                      begin
                                      currentunit^.setvardesc(vd, varname,vuname, vartype);
                                      currentunit^.InterfaceVariables.createvariable(vd.name, vd);

@@ -95,6 +95,7 @@ function Insert_com_BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; var button: Byt
 var tb:PGDBObjSubordinated;
     domethod,undomethod:tmethod;
     DC:TDrawContext;
+    pbd:PGDBObjBlockdef;
 begin
   result:=mclick;
   dc:=drawings.GetCurrentDWG^.CreateDrawingRC;
@@ -110,7 +111,8 @@ begin
     pb := Pointer(drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.CreateObj(GDBBlockInsertID{,drawings.GetCurrentROOT}));
     //PGDBObjBlockInsert(pb)^.initnul;//(@drawings.GetCurrentDWG^.ObjRoot,drawings.LayerTable.GetSystemLayer,0);
     PGDBObjBlockInsert(pb)^.init(drawings.GetCurrentROOT,drawings.GetCurrentDWG^.GetCurrentLayer,0);
-    pb^.Name:=PGDBObjBlockdef(drawings.GetCurrentDWG^.BlockDefArray.getDataMutable(BIProp.Blocks.Selected))^.Name;//'DEVICE_NOC';
+    pbd:=PGDBObjBlockdef(drawings.GetCurrentDWG^.BlockDefArray.getDataMutable(BIProp.Blocks.Selected));
+    pb^.Name:=pbd^.Name;
     zcSetEntPropFromCurrentDrawingProp(pb);
     //pb^.vp.ID:=GDBBlockInsertID;
     pb^.Local.p_insert:=wc;
@@ -128,6 +130,8 @@ begin
                          Freemem(pointer(pb));
                          pb:=pointer(tb);
     end;
+
+    pbd^.CopyExtensionsTo(pb^);
 
     SetObjCreateManipulator(domethod,undomethod);
     with PushMultiObjectCreateCommand(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,tmethod(domethod),tmethod(undomethod),1) do

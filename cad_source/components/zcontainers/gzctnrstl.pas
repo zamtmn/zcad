@@ -38,7 +38,7 @@ end;
 end;
 {$IFNDEF DELPHI}TMyMapCounter <TKey> = class( TMyMap<TKey, SizeUInt>){$ENDIF}
  {$IFDEF DELPHI}TMyMapCounter <TKey, TCompare> = class( TMyMap<TKey, SizeUInt>){$ENDIF}
-  function CountKey(const key:TKey; const InitialCounter:SizeUInt):SizeUInt;inline;
+  function CountKey(const key:TKey; const InitialCounter:SizeUInt=1):SizeUInt;inline;
 end;
 {$IFNDEF DELPHI}GKey2DataMap <TKey, TValue> = class(TMyMapGen<TKey, TValue>){$ENDIF}
  {$IFDEF DELPHI}GKey2DataMap <TKey, TValue> = class(TDictionary<TKey, TValue>){$ENDIF}

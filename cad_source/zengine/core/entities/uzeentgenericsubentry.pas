@@ -44,7 +44,9 @@ GDBObjGenericSubEntry= object(GDBObjWithMatrix)
                             VisibleOBJBoundingBox:TBoundingBox;
                             //ObjTree:TEntTreeNode;
                             function AddObjectToObjArray(p:Pointer):Integer;virtual;
-                            procedure GoodAddObjectToObjArray(const obj:GDBObjEntity);virtual;
+                            procedure RemoveMiFromArray(pobj:PGDBObjSubordinated;pobjinarray:Integer;const drawing:TDrawingDef);virtual;
+                            procedure GoodAddObjectToObjArray(const obj:PGDBObjSubordinated);virtual;
+                            procedure GoodRemoveMiFromArray(const obj:PGDBObjSubordinated;const drawing:TDrawingDef);virtual;
                             //function AddObjectToNodeTree(pobj:PGDBObjEntity):Integer;virtual;
                             //function CorrectNodeTreeBB(pobj:PGDBObjEntity):Integer;virtual;
                             constructor initnul(owner:PGDBObjGenericWithSubordinated);
@@ -61,8 +63,6 @@ GDBObjGenericSubEntry= object(GDBObjWithMatrix)
                             function EubEntryType:Integer;virtual;
                             procedure MigrateTo(new_sub:PGDBObjGenericSubEntry);virtual;
                             procedure EraseMi(pobj:pGDBObjEntity;pobjinarray:Integer;var drawing:TDrawingDef);virtual;
-                            procedure RemoveMiFromArray(pobj:pGDBObjEntity;pobjinarray:Integer;const drawing:TDrawingDef);virtual;
-                            procedure GoodRemoveMiFromArray(const obj:GDBObjEntity;const drawing:TDrawingDef);virtual;
                             //function SubMi(pobj:pGDBObjEntity):Integer;virtual;
                             //** Добавляет объект в область ConstructObjRoot или mainObjRoot или итд. Пример добавления gdb.GetCurrentDWG^.ConstructObjRoot.AddMi(@sampleObj);
                             procedure AddMi(pobj:PGDBObjSubordinated);virtual;
@@ -129,8 +129,7 @@ begin
     p:=objarray.beginiterate(ir);
     if p<>nil then
     repeat
-      if assigned(p^.EntExtensions) then
-        p^.EntExtensions.RunPostload(context);
+      p^.Postload(context);
     p:=objarray.iterate(ir);
     until p=nil;
 end;
@@ -277,11 +276,11 @@ begin
      else
          result:=false;
 end;
-procedure GDBObjGenericSubEntry.GoodAddObjectToObjArray(const obj:GDBObjEntity);
+procedure GDBObjGenericSubEntry.GoodAddObjectToObjArray(const obj:PGDBObjSubordinated);
 var
     p:pointer;
 begin
-     p:=@obj;
+     p:=obj;
      AddObjectToObjArray(@p);
 end;
 
@@ -399,11 +398,11 @@ begin
            pobj:=self.ObjArray.iterate(ir);
      until pobj=nil;
 end;
-procedure GDBObjGenericSubEntry.GoodRemoveMiFromArray(const obj:GDBObjEntity;const drawing:TDrawingDef);
+procedure GDBObjGenericSubEntry.GoodRemoveMiFromArray(const obj:PGDBObjSubordinated;const drawing:TDrawingDef);
 begin
-     RemoveMiFromArray(@obj,obj.bp.ListPos.SelfIndex,drawing);
+     RemoveMiFromArray(obj,obj.bp.ListPos.SelfIndex,drawing);
 end;
-procedure GDBObjGenericSubEntry.RemoveMiFromArray(pobj:pGDBObjEntity;pobjinarray:Integer;const drawing:TDrawingDef);
+procedure GDBObjGenericSubEntry.RemoveMiFromArray(pobj:PGDBObjSubordinated;pobjinarray:Integer;const drawing:TDrawingDef);
 //var
 //p:PGDBObjEntity;
 begin

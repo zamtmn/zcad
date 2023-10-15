@@ -16,59 +16,35 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>)
 }
 {$mode delphi}
-unit uzccommand_regen;
+unit uzceCommand_SCHConnection;
 
 {$INCLUDE zengineconfig.inc}
 
 interface
 uses
-  uzcLog,uzbtypes,
+  uzcLog,
   uzccommandsabstract,uzccommandsimpl,
-  uzeentity,uzeentconnected,
-  gzctnrVectorTypes,
-  uzedrawingsimple,uzcdrawings,
-  uzcinterface,
-  uzgldrawcontext,
-  uzelongprocesssupport,
-  uzeroot;
-
-function Regen_com(operands:TCommandOperands):TCommandResult;
+  uzcstrconsts,
+  uzccommandsmanager,
+  uzeentity,
+  uzcExtdrSCHConnection,
+  uzccommand_line;
 
 implementation
 
-function Regen_com(operands:TCommandOperands):TCommandResult;
-var
-  drawing:PTSimpleDrawing;
-  DC:TDrawContext;
-  lpsh:TLPSHandle;
-  c:integer;
+procedure AddExtdrSCHConnection(const PEnt:PGDBObjEntity);
 begin
-  c:=drawings.GetCurrentROOT.ObjArray.count;
-  lpsh:=lps.StartLongProcess('Regenerate drawing',nil,c*2);
-  drawing:=drawings.GetCurrentDwg;
-  drawing.wa.CalcOptimalMatrix;
-  dc:=drawings.GetCurrentDwg^.CreateDrawingRC;
-
-  DoFormat(drawings.GetCurrentROOT^,drawings.GetCurrentROOT.ObjArray,drawings.GetCurrentROOT.ObjToConnectedArray,drawing^,DC,lpsh,[]);
-  drawings.GetCurrentROOT.getoutbound(dc);
-
-  lps.EndLongProcess(lpsh);
-
-  drawings.GetCurrentDWG.wa.param.seldesc.Selectedobjcount:=0;
-  drawings.GetCurrentDWG.wa.param.seldesc.OnMouseObject:=nil;
-  drawings.GetCurrentDWG.wa.param.seldesc.LastSelectedObject:=nil;
-  drawings.GetCurrentDWG.wa.param.lastonmouseobject:=nil;
-  {objinsp.GDBobjinsp.}
-  ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIReturnToDefaultObject);
-  clearcp;
-  //redrawoglwnd;
-  result:=cmd_ok;
+  AddSCHConnectionExtenderToEntity(PEnt);
 end;
 
+function SCHConnection_com(operands:TCommandOperands):TCommandResult;
+begin
+ Result:=InteractiveDrawLines(rscmSpecifyFirstPoint,rscmSpecifyNextPoint,AddExtdrSCHConnection);
+end;
 
 initialization
   programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
-  CreateCommandFastObjectPlugin(@Regen_com,'Regen',CADWG,0);
+  CreateCommandFastObjectPlugin(@SCHConnection_com,'SCHConnection',CADWG,0);
 finalization
   ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
 end.

@@ -67,7 +67,7 @@ uses
   {$INCLUDE allgeneratedfiles.inc}//correct defs in system.pas
   uzcregother,//setup SysVar
 
-  uMetaDarkStyle,uDarkStyleSchemes,uDarkStyleSchemesLoader,
+  {$IFDEF WINDOWS}uMetaDarkStyle,uDarkStyleSchemes,uDarkStyleSchemesLoader,{$ENDIF}
 
   UUnitManager,
   uzefontmanager,
@@ -146,7 +146,7 @@ uses
   uzccommand_DWGNew,
   uzccommand_DWGNext,uzccommand_DWGPrev,
   uzccommand_DWGClose,
-  uzccommand_load,
+  uzccommand_load,uzcCommand_LoadLibrary,
   uzccommand_mergeblocks,
   uzccommand_merge,
   uzccommand_saveas,
@@ -242,7 +242,7 @@ uses
 
 
   uzcenitiesvariablesextender,uzcExtdrLayerControl,uzcExtdrSmartTextEnt,
-  uzcExtdrIncludingVolume,uzcExtdrNet,uzcExtdrNetConnector,
+  uzcExtdrIncludingVolume,uzcExtdrSCHConnection,uzcExtdrSCHConnector,
 
   {$IFNDEF DARWIN}
   {$IFDEF ELECTROTECH}
@@ -258,6 +258,7 @@ uses
   uzvmanemcom, //управления и обработка полученой электрической модели
   uzvmanemschemalevelone, //создание одноуровневой схемы
   uzvmanemdialogcom,//запуск генератора схемы через диалоговое окно
+  uzvmodeltoxlsx,   //запуск экспорта информации из veb модели в xlsx
   //**//
   {$ENDIF}
   {$ENDIF}
@@ -272,6 +273,7 @@ uses
   uzccomelectrical,
   uzccomops,
   //uzccommaps,
+  uzceCommand_SCHConnection,
   {$ENDIF}
   uzcmainwindow,
   uzcuidialogs,

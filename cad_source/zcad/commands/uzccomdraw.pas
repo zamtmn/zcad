@@ -40,7 +40,7 @@ uses
   uzglviewareadata,
   uzcinterface,
   uzegeometry,
-
+  Forms,
   uzeconsts,
   uzccommand_move,uzccommand_copy,uzccommand_regen,uzccommand_copyclip,
   uzegeometrytypes,uzeentity,uzeentcircle,uzeentline,uzeentgenericsubentry,uzeentmtext,
@@ -48,10 +48,14 @@ uses
   math,uzeenttable,uzctnrvectorstrings,
   uzeentlwpolyline,UBaseTypeDescriptor,uzeblockdef,Varman,URecordDescriptor,TypeDescriptors,UGDBVisibleTreeArray
   ,uzelongprocesssupport,uzccommand_circle2,uzccommand_erase,uzccmdfloatinsert,
-  uzccommand_rebuildtree, uzeffmanager;
+  uzccommand_rebuildtree, uzeffmanager,
+  masks;
 const
      modelspacename:String='**Модель**';
 type
+TDummyClass=class
+  procedure RunBEdit(Data:PtrInt);
+end;
 {EXPORT+}
          BRMode=(
                  BRM_Block(*'Block'*),
@@ -85,6 +89,7 @@ type
   {REGISTERRECORDTYPE TBEditParam}
   TBEditParam=record
                     CurrentEditBlock:String;(*'Current block'*)(*oi_readonly*)
+                    Filter:string;(*'Filter block name'*)
                     Blocks:TEnumData;(*'Select block'*)
               end;
   ptpcoavector=^tpcoavector;
@@ -159,7 +164,7 @@ MapPointOnCurve3DPropArray=specialize TMap<PGDBObjLine,PointOnCurve3DPropArray, 
 devcoordsort=specialize TOrderingArrayUtils<devcoordarray, tdevcoord, TGDBVertexLess>;
 devnamesort=specialize TOrderingArrayUtils<devnamearray, tdevname, TGDBNameLess>;
 
-function GetBlockDefNames(var BDefNames:TZctnrVectorStrings;selname:String):Integer;
+function GetBlockDefNames(var BDefNames:TZctnrVectorStrings;selname:String;filter:String=''):Integer;
 function GetSelectedBlockNames(var BDefNames:TZctnrVectorStrings;selname:String;mode:BRMode):Integer;
 
 var
@@ -184,30 +189,33 @@ var
    BlockRotate:BlockRotate_com;
 
    ExportDevWithAxisParams:TExportDevWithAxisParams;
+   dummyclass:tdummyclass;
 
 //procedure startup;
 //procedure Finalize;
 implementation
 
-function GetBlockDefNames(var BDefNames:TZctnrVectorStrings;selname:String):Integer;
-var pb:PGDBObjBlockdef;
-    ir:itrec;
-    i:Integer;
-    s:String;
+function GetBlockDefNames(var BDefNames:TZctnrVectorStrings;selname:String;filter:String=''):Integer;
+var
+  pb:PGDBObjBlockdef;
+  ir:itrec;
+  i:Integer;
+  s:String;
 begin
-     result:=-1;
-     i:=0;
-     selname:=uppercase(selname);
-     pb:=drawings.GetCurrentDWG^.BlockDefArray.beginiterate(ir);
-     if pb<>nil then
-     repeat
-           if uppercase(pb^.name)=selname then
-                                              result:=i;
-           s:=Tria_AnsiToUtf8(pb^.name);
-           BDefNames.PushBackData(s);
-           pb:=drawings.GetCurrentDWG^.BlockDefArray.iterate(ir);
-           inc(i);
-     until pb=nil;
+  result:=-1;
+  i:=0;
+  selname:=uppercase(selname);
+  pb:=drawings.GetCurrentDWG^.BlockDefArray.beginiterate(ir);
+  if pb<>nil then repeat
+    s:=Tria_AnsiToUtf8(pb^.name);
+    if (filter='') or MatchesMask(s,filter) then begin
+      if uppercase(pb^.name)=selname then
+        result:=i;
+      BDefNames.PushBackData(s);
+      inc(i);
+    end;
+    pb:=drawings.GetCurrentDWG^.BlockDefArray.iterate(ir);
+  until pb=nil;
 end;
 function GetSelectedBlockNames(var BDefNames:TZctnrVectorStrings;selname:String;mode:BRMode):Integer;
 var pb:PGDBObjBlockInsert;
@@ -708,7 +716,7 @@ var
 begin
   self.savemousemode:=drawings.GetCurrentDWG^.wa.param.md.mode;
   test:=false;
-  if zcGetRealSelEntsCount=1 then
+  //if zcGetRealSelEntsCount=1 then
   if drawings.GetCurrentDWG^.wa.param.seldesc.LastSelectedObject<>nil then
   if PGDBObjEntity(drawings.GetCurrentDWG^.wa.param.seldesc.LastSelectedObject)^.GetObjType=GDBDeviceID then
   test:=true;
@@ -819,91 +827,107 @@ begin
   //drawings.GetCurrentROOT^.getoutbound;
   //redrawoglwnd;
 end;
+
+procedure TDummyClass.RunBEdit(Data:PtrInt);
+var
+  nname:String;
+begin
+  nname:=(BEditParam.Blocks.Enums.getData(BEditParam.Blocks.Selected));
+  if nname<>BEditParam.CurrentEditBlock then begin
+    ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIFreEditorProc);
+    ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIReturnToDefaultObject);
+    BEditParam.CurrentEditBlock:=nname;
+    if nname<>modelspacename then
+      drawings.GetCurrentDWG^.pObjRoot:=drawings.GetCurrentDWG^.BlockDefArray.getblockdef(Tria_Utf8ToAnsi(nname))
+    else
+      drawings.GetCurrentDWG^.pObjRoot:=@drawings.GetCurrentDWG^.mainObjRoot;
+    Regen_com(EmptyCommandOperands);
+    RebuildTree_com(EmptyCommandOperands);
+    ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIActionRedraw);
+    zcRedrawCurrentDrawing;
+  end;
+end;
+
 procedure bedit_format(_self:pointer);
 var
-   nname:String;
+  i:integer;
+  sd:TSelEntsDesk;
+  //tn:String;
 begin
-     nname:=(BEditParam.Blocks.Enums.getData(BEditParam.Blocks.Selected));
-     if nname<>BEditParam.CurrentEditBlock then
-     begin
-          BEditParam.CurrentEditBlock:=nname;
-          if nname<>modelspacename then
-                                      drawings.GetCurrentDWG^.pObjRoot:=drawings.GetCurrentDWG^.BlockDefArray.getblockdef(Tria_Utf8ToAnsi(nname))
-                                  else
-                                      drawings.GetCurrentDWG^.pObjRoot:=@drawings.GetCurrentDWG^.mainObjRoot;
-          Regen_com(EmptyCommandOperands);
-          RebuildTree_com(EmptyCommandOperands);
-          ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIActionRedraw);
-          //if assigned(UpdateVisibleProc) then UpdateVisibleProc(ZMsgID_GUIActionRedraw);
-          zcRedrawCurrentDrawing;
-     end;
+  if _self=@BEditParam.Blocks then
+    Application.QueueAsyncCall(@DummyClass.RunBEdit,0)
+  else begin
+    BEditParam.Blocks.Enums.free;
+    i:=GetBlockDefNames(BEditParam.Blocks.Enums,BEditParam.CurrentEditBlock,BEditParam.Filter);
+    BEditParam.Blocks.Enums.PushBackData(modelspacename);
+
+    if BEditParam.CurrentEditBlock=modelspacename then begin
+      BEditParam.Blocks.Selected:=BEditParam.Blocks.Enums.Count-1;
+    end;
+
+    if BEditParam.Blocks.Enums.Count>1 then
+      if i>0 then
+        BEditParam.Blocks.Selected:=i
+  end;
 end;
 function bedit_com(operands:TCommandOperands):TCommandResult;
 var
-   i:integer;
-   sd:TSelEntsDesk;
-   tn:String;
+  i:integer;
+  sd:TSelEntsDesk;
+  tn:String;
 begin
-     tn:=operands;
-     sd:=zcGetSelEntsDeskInCurrentRoot;
-     if (sd.PFirstSelectedEnt<>nil)and(sd.SelectedEntsCount=1) then
-     begin
-    if (sd.PFirstSelectedEnt^.GetObjType=GDBBlockInsertID) then
-    begin
-         tn:=PGDBObjBlockInsert(sd.PFirstSelectedEnt)^.name;
-    end
-else if (sd.PFirstSelectedEnt^.GetObjType=GDBDeviceID) then
-    begin
-         tn:=DevicePrefix+PGDBObjBlockInsert(sd.PFirstSelectedEnt)^.name;
+  tn:=operands;
+  sd:=zcGetSelEntsDeskInCurrentRoot;
+  if (sd.PFirstSelectedEnt<>nil)and(sd.SelectedEntsCount=1) then begin
+    if (sd.PFirstSelectedEnt^.GetObjType=GDBBlockInsertID) then begin
+      tn:=PGDBObjBlockInsert(sd.PFirstSelectedEnt)^.name;
+    end else if (sd.PFirstSelectedEnt^.GetObjType=GDBDeviceID) then begin
+      tn:=DevicePrefix+PGDBObjBlockInsert(sd.PFirstSelectedEnt)^.name;
     end;
-     end;
+  end;
 
-     BEditParam.Blocks.Enums.free;
-     i:=GetBlockDefNames(BEditParam.Blocks.Enums,tn);
-     BEditParam.Blocks.Enums.PushBackData(modelspacename);
-     if BEditParam.CurrentEditBlock=modelspacename then
-       begin
-            BEditParam.Blocks.Selected:=BEditParam.Blocks.Enums.Count-1;
-       end;
-     if (tn='')and(drawings.GetCurrentDWG^.pObjRoot<>@drawings.GetCurrentDWG^.mainObjRoot) then
-                                                                                   begin
-                                                                                        tn:=modelspacename;
-                                                                                        BEditParam.Blocks.Selected:=BEditParam.Blocks.Enums.Count-1;
-                                                                                   end;
-     if BEditParam.Blocks.Enums.Count>0 then
-     begin
-          //BEditParam.Blocks.Enums.add(@modelspacename);
-          if i>0 then
-                     BEditParam.Blocks.Selected:=i
-                 else
-                     if length(operands)<>0 then
-                                         begin
-                                               ZCMsgCallBackInterface.TextMessage('BEdit:'+format(rscmNoBlockDefInDWG,[operands]),TMWOHistoryOut);
-                                               commandmanager.executecommandend;
-                                               exit;
-                                         end;
-          ZCMsgCallBackInterface.Do_PrepareObject(nil,drawings.GetUnitsFormat,SysUnit^.TypeName2PTD('CommandRTEdObject'),pbeditcom,drawings.GetCurrentDWG);
-          drawings.GetCurrentDWG^.SelObjArray.Free;
-          drawings.GetCurrentROOT^.ObjArray.DeSelect(drawings.GetCurrentDWG^.wa.param.SelDesc.Selectedobjcount,@drawings.GetCurrentDWG^.deselector);
-          result:=cmd_ok;
-          zcRedrawCurrentDrawing;
-          if tn<>'' then
-                        bedit_format(nil);
-     end
-        else
-            begin
-                 ZCMsgCallBackInterface.TextMessage('BEdit:'+rscmInDwgBlockDefNotDeffined,TMWOHistoryOut);
-                 commandmanager.executecommandend;
-            end;
+  BEditParam.Blocks.Enums.free;
+  i:=GetBlockDefNames(BEditParam.Blocks.Enums,tn,BEditParam.Filter);
+  BEditParam.Blocks.Enums.PushBackData(modelspacename);
 
+  if BEditParam.CurrentEditBlock=modelspacename then begin
+    BEditParam.Blocks.Selected:=BEditParam.Blocks.Enums.Count-1;
+  end;
 
+  if (tn='')and(drawings.GetCurrentDWG^.pObjRoot<>@drawings.GetCurrentDWG^.mainObjRoot) then begin
+    tn:=modelspacename;
+    BEditParam.Blocks.Selected:=BEditParam.Blocks.Enums.Count-1;
+  end;
 
-  exit;
+  if BEditParam.Blocks.Enums.Count>1 then begin
+    if i>0 then
+      BEditParam.Blocks.Selected:=i
+    else
+      if length(operands)<>0 then begin
+        ZCMsgCallBackInterface.TextMessage('BEdit:'+format(rscmNoBlockDefInDWG,[operands]),TMWOHistoryOut);
+        commandmanager.executecommandend;
+        exit;
+      end;
+    if tn='' then
+      ZCMsgCallBackInterface.Do_PrepareObject(nil,drawings.GetUnitsFormat,SysUnit^.TypeName2PTD('CommandRTEdObject'),pbeditcom,drawings.GetCurrentDWG);
+    drawings.GetCurrentDWG^.SelObjArray.Free;
+    drawings.GetCurrentROOT^.ObjArray.DeSelect(drawings.GetCurrentDWG^.wa.param.SelDesc.Selectedobjcount,@drawings.GetCurrentDWG^.deselector);
+    //result:=cmd_ok;
+    //zcRedrawCurrentDrawing;
+    if tn<>'' then
+       DummyClass.RunBEdit(0);//bedit_format(nil);
+  end else begin
+    ZCMsgCallBackInterface.TextMessage('BEdit:'+rscmInDwgBlockDefNotDeffined,TMWOHistoryOut);
+    commandmanager.executecommandend;
+  end;
+  result:=cmd_ok;
+
+  {exit;
   ZCMsgCallBackInterface.Do_PrepareObject(nil,drawings.GetUnitsFormat,SysUnit^.TypeName2PTD('CommandRTEdObject'),pbeditcom,drawings.GetCurrentDWG);
   drawings.GetCurrentDWG^.SelObjArray.Free;
   drawings.GetCurrentROOT^.ObjArray.DeSelect(drawings.GetCurrentDWG^.wa.param.SelDesc.Selectedobjcount,@drawings.GetCurrentDWG^.deselector);
   result:=cmd_ok;
-  zcRedrawCurrentDrawing;
+  zcRedrawCurrentDrawing;}
 end;
 
 procedure PlacePoint(const point:GDBVertex);inline;
@@ -1145,7 +1169,8 @@ begin
   pbeditcom:=CreateCommandRTEdObjectPlugin(@bedit_com,nil,nil,@bedit_format,nil,nil,nil,nil,'BEdit',0,0);
   BEditParam.Blocks.Enums.init(100);
   BEditParam.CurrentEditBlock:=modelspacename;
-  pbeditcom^.SetCommandParam(@BEditParam,'PTBEditParam');
+  BEditParam.Filter:='DEVICE*';
+  pbeditcom^.SetCommandParam(@BEditParam,'PTBEditParam',False);
 
   ATO.init('AddToOwner',CADWG,0);
   CFO.init('CopyFromOwner',CADWG,0);
@@ -1179,7 +1204,9 @@ begin
 end;
 initialization
   startup;
+  dummyclass:=tdummyclass.Create;
 finalization
   ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
   finalize;
+  dummyclass.Free;
 end.

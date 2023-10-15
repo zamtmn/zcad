@@ -43,8 +43,8 @@ var
   StringsTreeSelector: TStringsTreeSelector;
 
 implementation
-
-{$R *.lfm}
+{todo: убрать когда выкинут TVirtualStringTree}
+{$IF DECLARED(TVirtualStringTree)}{$R uzcefstringstreeselector.lfm}{$ELSE}{$R uzcefstringstreeselector-laz.lfm}{$ENDIF}
 
 procedure TStringsTreeSelector.filltree(StringTreeNode:PVirtualNode;BlobTreeNode:TBlobTree.TTreeNodeType);
 var

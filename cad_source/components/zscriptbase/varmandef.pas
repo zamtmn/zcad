@@ -261,6 +261,7 @@ TOSMode=record
     username: TInternalScriptString;
     data: TTypedData;
     attrib:TVariableAttributes;
+    {-}function GetValueAsString:TInternalScriptString;overload;{/ /}
     {-}procedure SetInstance(DS:PZAbsVector;Offs:PtrUInt);overload;{/ /}
     {-}procedure SetInstance(Ptr:Pointer);overload;{/ /}
     {-}procedure FreeeInstance;{/ /}
@@ -301,6 +302,10 @@ procedure ProcessVariableAttributes(var attr:TVariableAttributes; const setattri
 implementation
 //uses log;
 {for hide exttype}
+function vardesk.GetValueAsString:TInternalScriptString;
+begin
+  result:=data.PTD^.GetValueAsString(data.Addr.Instance);
+end;
 procedure vardesk.SetInstance(DS:PZAbsVector;Offs:PtrUInt);
 begin
   data.Addr.SetInstance(DS,Offs);

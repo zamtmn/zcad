@@ -103,7 +103,7 @@ begin
       pb:=pointer(tb);
     end;
 
-    cdwg^.GetCurrentROOT^.GoodAddObjectToObjArray(pb^);
+    cdwg^.GetCurrentROOT^.GoodAddObjectToObjArray(pb);
 
     pb^.FromDXFPostProcessAfterAdd;
     pb^.CalcObjMatrix;
@@ -153,7 +153,7 @@ begin
       StretchBlt(PNG.Canvas.Handle, 0, 0, PNG.Width, PNG.Height,
                  bmp.Canvas.Handle, 0, 0, bmp.Width, bmp.Height, SRCCOPY);
 
-      cdwg^.GetCurrentROOT^.GoodRemoveMiFromArray(pb^,cdwg^);
+      cdwg^.GetCurrentROOT^.GoodRemoveMiFromArray(pb,cdwg^);
       ForceDirectories(ExtractFileDir(ExpandPath(operands)));
       PNG.SaveToFile(ExpandPath(operands));
 

@@ -286,7 +286,7 @@ begin
   SysUnit^.SetTypeDesk(TypeInfo(TSelGeneralParams),['Same layer','Same line weight','Same line type','Same line type scale','Same entity type','Same color']);
   SysUnit^.SetTypeDesk(TypeInfo(TSelSimParams),['General','Blocks','Texts']);
   SelSim.init('SelSim',CADWG or CASelEnts,0);
-  SelSim.CEndActionAttr:=0;
+  SelSim.CEndActionAttr:=[];
   SelSimParams.General.SameEntType:=true;
   SelSimParams.General.SameLayer:=true;
   SelSimParams.General.SameLineWeight:=false;

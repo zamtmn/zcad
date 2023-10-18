@@ -106,7 +106,7 @@ begin
 end;
 procedure startup;
 begin
-  CreateCommandFastObjectPlugin(@DWGNew_com,'DWGNew',0,0).CEndActionAttr:=CEDWGNChanged;
+  CreateCommandFastObjectPlugin(@DWGNew_com,'DWGNew',0,0).CEndActionAttr:=[CEDWGNChanged];
 end;
 procedure finalize;
 begin

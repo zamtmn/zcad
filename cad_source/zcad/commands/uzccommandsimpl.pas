@@ -237,7 +237,7 @@ begin
     //inherited;
     if drawings.currentdwg<>nil then
     begin
-    if (self.CEndActionAttr and CEDeSelect)<>0 then
+    if CEDeSelect in self.CEndActionAttr then
     //if (@self<>pfindcom)and(@self<>@OnDrawingEd)and(@self<>selframecommand)and(@self<>ms2objinsp)and(@self<>csel)and(@self<>selall) then
     begin
     drawings.GetCurrentROOT.ObjArray.DeSelect(drawings.GetCurrentDWG.wa.param.SelDesc.Selectedobjcount,drawings.GetCurrentDWG^.deselector);
@@ -270,7 +270,7 @@ end;
 procedure CommandRTEdObject.CommandEnd;
 begin
     //inherited;
-    if (self.CEndActionAttr and CEDeSelect)<>0 then
+    if CEDeSelect in self.CEndActionAttr then
     //if (@self<>pfindcom)and(@self<>@OnDrawingEd)and(@self<>selframecommand) then
     begin
     drawings.GetCurrentROOT.ObjArray.DeSelect(drawings.GetCurrentDWG.wa.param.SelDesc.Selectedobjcount,drawings.GetCurrentDWG^.deselector);

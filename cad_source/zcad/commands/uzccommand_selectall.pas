@@ -73,7 +73,7 @@ initialization
   programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
   selall:=CreateCommandFastObjectPlugin(@SelectAll_com,'SelectAll',CADWG,0);
   selall^.overlay:=true;
-  selall.CEndActionAttr:=0;
+  selall.CEndActionAttr:=[];
 finalization
   ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
 end.

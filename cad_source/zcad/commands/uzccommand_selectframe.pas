@@ -229,7 +229,7 @@ procedure startup;
 begin
   selframecommand:=CreateCommandRTEdObjectPlugin(@FrameEdit_com_CommandStart,@FrameEdit_com_Command_End,nil,nil,@FrameEdit_com_BeforeClick,@FrameEdit_com_AfterClick,nil,nil,'SelectFrame',0,0);
   selframecommand^.overlay:=true;
-  selframecommand.CEndActionAttr:=0;
+  selframecommand.CEndActionAttr:=[];
 end;
 initialization
   programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);

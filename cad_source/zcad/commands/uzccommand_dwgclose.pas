@@ -40,7 +40,7 @@ end;
 
 procedure startup;
 begin
-  CreateCommandFastObjectPlugin(@DWGClose_com,'DWGClose',CADWG,0).CEndActionAttr:=CEDWGNChanged;
+  CreateCommandFastObjectPlugin(@DWGClose_com,'DWGClose',CADWG,0).CEndActionAttr:=[CEDWGNChanged];
 end;
 procedure finalize;
 begin

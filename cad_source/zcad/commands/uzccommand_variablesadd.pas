@@ -226,7 +226,7 @@ begin
   SysUnit^.SetTypeDesk(TypeInfo(TMFunction),['MainFunction','Delegate', 'All']);
   SysUnit^.SetTypeDesk(TypeInfo(TVariablesAddParams),['Process only','Variables']);
   VariablesAdd.init('VariablesAdd',CADWG or CASelEnts,0);
-  VariablesAdd.CEndActionAttr:=0;
+  VariablesAdd.CEndActionAttr:=[];
   VariablesAddParams.MFunction:=TMF_MainFunction;
   VariablesAddParams.NevVars:='NMO_SpecPos|String|??|Позиция по спецификации';
   VariablesAdd.SetCommandParam(@VariablesAddParams,'PTVariablesAddParams');
@@ -235,7 +235,7 @@ begin
   SysUnit^.RegisterType(TypeInfo(PTVarTextSelectParams));
   SysUnit^.SetTypeDesk(TypeInfo(TVarTextSelectParams),['TemplateToFind']);
   VarTextSelect.init('VarTextSelect',CADWG or CASelEnts,0);
-  VarTextSelect.CEndActionAttr:=0;
+  VarTextSelect.CEndActionAttr:=[];
   VarTextSelectParams.TemplateToFind:='*NMO_Name*';
   VarTextSelect.SetCommandParam(@VarTextSelectParams,'PTVarTextSelectParams');
 end;

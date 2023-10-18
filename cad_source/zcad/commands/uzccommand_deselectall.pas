@@ -42,7 +42,7 @@ end;
 initialization
   programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
   deselall:=CreateCommandFastObjectPlugin(@DeSelectAll_com,'DeSelectAll',CADWG  or CASelEnts,0);
-  deselall.CEndActionAttr:=CEDeSelect;
+  deselall.CEndActionAttr:=[CEDeSelect];
   deselall^.overlay:=true;
 finalization
   ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);

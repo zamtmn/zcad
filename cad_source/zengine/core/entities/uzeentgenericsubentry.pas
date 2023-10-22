@@ -101,10 +101,16 @@ GDBObjGenericSubEntry= object(GDBObjWithMatrix)
                               procedure IterateCounter(PCounted:Pointer;var Counter:Integer;proc:TProcCounter);virtual;
 
                               procedure postload(var context:TIODXFLoadContext);virtual;
+                              function GetMainOwner:PGDBObjSubordinated;virtual;
 
                       end;
 {Export-}
 implementation
+function GDBObjGenericSubEntry.GetMainOwner:PGDBObjSubordinated;
+begin
+     result:=@self;
+end;
+
 //uses log;
 {function GDBObjGenericSubEntry.SubMi;
 begin
@@ -381,9 +387,10 @@ begin
 end;
 procedure GDBObjGenericSubEntry.AddMi;
 begin
-     //pobj^.bp.PSelfInOwnerArray:=ObjArray.getDataMutable(ObjArray.add(pobj));
-     ObjArray.AddPEntity(pGDBObjEntity(ppointer(pobj)^)^);
-     pGDBObjEntity(ppointer(pobj)^).bp.ListPos.Owner:=@self;
+  ObjArray.AddPEntity(pGDBObjEntity(ppointer(pobj)^)^);
+  pGDBObjEntity(ppointer(pobj)^).bp.ListPos.Owner:=@self;
+  if assigned(pGDBObjEntity(ppointer(pobj)^).EntExtensions)then
+    pGDBObjEntity(ppointer(pobj)^).EntExtensions.RunSetRoot(pobj,@self);
 end;
 procedure GDBObjGenericSubEntry.correctobjects;
 var pobj:PGDBObjEntity;

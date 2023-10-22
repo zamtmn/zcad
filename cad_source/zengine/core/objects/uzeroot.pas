@@ -193,11 +193,13 @@ begin
       p:=ents2Connected.iterate(ir);
   until p=nil;
 
-  p:=ents.beginiterate(ir);
-  if p<>nil then repeat
-    ConnectedArea.EntExtensions.RunConnectFormattedEntsToRoot(@ConnectedArea,p,drawing,DC);
-    p:=ents.iterate(ir);
-  until p=nil;
+  if ConnectedArea.EntExtensions<>nil then begin
+    p:=ents.beginiterate(ir);
+    if p<>nil then repeat
+      ConnectedArea.EntExtensions.RunConnectFormattedEntsToRoot(@ConnectedArea,p,drawing,DC);
+      p:=ents.iterate(ir);
+    until p=nil;
+  end;
 
   p:=ents2Connected.beginiterate(ir);
   if p<>nil then repeat

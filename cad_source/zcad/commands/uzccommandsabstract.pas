@@ -41,8 +41,6 @@ const
 
      EmptyCommandOperands='';
 type
-TCommandEndAction=(CEDeSelect,CEDWGNChanged);
-TCommandEndActions={-}set of TCommandEndAction{/Byte/};
 TInteractiveProcObjBuild=procedure(const PInteractiveData:Pointer;Point:GDBVertex;Click:Boolean);
     TGetInputPossible=(IPEmpty,//возможность пустого ввода
                        IPShortCuts//разрешение перехвата шорткатов
@@ -54,6 +52,8 @@ TInteractiveProcObjBuild=procedure(const PInteractiveData:Pointer;Point:GDBVerte
                  );
     TGetPossibleResult=set of TGetPossible;
 {Export+}
+    TCommandEndAction=(CEDeSelect,CEDWGNChanged);
+    TCommandEndActions={-}set of TCommandEndAction{/Byte/};
     TGetPointMode=(
                    TGPMWait{point},//ожидание указания точки
                    TGPMPoint,      //точка указана

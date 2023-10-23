@@ -195,17 +195,16 @@ begin
       MatchInChildren:=false;
     if MatchInChildren then
       Tree.Expanded[Node]:=true;
-      //node.States:=node.States+[vsExpanded];
     if pattern='' then
-      node.States:=node.States-[vsFiltered]
+      tree.IsFiltered[node]:=false
     else begin
       pTND:=tree.GetNodeData(node);
       if assigned(pTND) then begin
-          if MatchInChildren or Match(pTND,pattern) then begin
-            node.States:=node.States-[vsFiltered];
-            result:=true;
-          end else
-            node.States:=node.States+[vsFiltered]
+        if MatchInChildren or Match(pTND,pattern) then begin
+          tree.IsFiltered[node]:=false;
+          result:=true;
+        end else
+          tree.IsFiltered[node]:=true;
       end;
     end;
     node:=node.NextSibling;

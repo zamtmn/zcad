@@ -825,14 +825,14 @@ begin
     if MatchInChildren then
       Tree.Expanded[Node]:=true;
     if pattern='' then
-      node.States:=node.States-[vsFiltered]
+      tree.IsFiltered[node]:=false
     else begin
       if MatchInChildren or Match(node,pattern) then begin
-        node.States:=node.States-[vsFiltered];
+        tree.IsFiltered[node]:=false;
         result:=true;
         treeh:=treeh+node.NodeHeight;
       end else
-        node.States:=node.States+[vsFiltered]
+        tree.IsFiltered[node]:=true;
     end;
     node:=node.NextSibling;
   until (node=nil)or(node=node.NextSibling);

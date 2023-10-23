@@ -24,8 +24,7 @@ uses
   uzctnrVectorBytes,{$IFNDEF DELPHI}LResources,{$ENDIF}LCLProc,uzbpaths,
   uzelclintfex,uzestrconsts,uzbstrproc,uzefont,
   sysutils,uzbtypes,uzegeometry,gzctnrSTL,
-  UGDBNamedObjectsArray,classes,uzefontttfpreloader,uzelongprocesssupport,
-  uzcstrconsts;
+  UGDBNamedObjectsArray,classes,uzefontttfpreloader,uzelongprocesssupport;
 type
   TGeneralFontParam=record
     procedure Init;

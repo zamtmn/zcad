@@ -200,7 +200,6 @@ resourcestring
 
   rsSaveEmptyDWG='Drawing is empty. Sure?';
   rsZCADStarted='%s v%s started';
-  rsLoadingFontFile='Loading font file "%S"';
   rsTypeNotDefinedInModule='Type "%S" not defined in unit "%S"';
   rsUnableSelectFreeLayerName='Unable select free layer name';
   rsUnableSelectFreeTextStylerName='Unable select free text style name';

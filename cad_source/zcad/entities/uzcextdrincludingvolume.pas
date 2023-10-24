@@ -26,7 +26,8 @@ uses sysutils,UGDBObjBlockdefArray,uzedrawingdef,uzeentityextender,
      uzeentitiestree,usimplegenerics,uzeffdxfsupport,uzbpaths,uzcTranslations,
      gzctnrVectorTypes,uzeBaseExtender,uzeconsts,uzgldrawcontext,
      UGDBOpenArrayOfPV,uzeentgenericsubentry,uzegeometry,
-     uzcEnitiesVariablesExtender,gzctnrVectorc;
+     uzcEnitiesVariablesExtender,gzctnrVectorc,uzegeometrytypes,
+     uzeentwithmatrix,uzeentlwpolyline;
 const
   IncludingVolumeExtenderName='extdrIncludingVolume';
 type
@@ -47,6 +48,7 @@ type
 
 TIncludingVolumeExtender=class(TBaseEntityExtender)
     pThisEntity:PGDBObjEntity;
+    toBoundMatrix:DMatrix4D;
     InsideEnts:GDBObjOpenArrayOfPV;
     class function getExtenderName:string;override;
     constructor Create(pEntity:Pointer);override;
@@ -66,6 +68,8 @@ TIncludingVolumeExtender=class(TBaseEntityExtender)
     procedure TryConnectToEnts(var Objects:GDBObjOpenArrayOfPV;const drawing:TDrawingDef;var DC:TDrawContext);
     procedure ConnectToEnt(p:PGDBObjEntity;var VolumeVExtdr:TVariablesExtender;const drawing:TDrawingDef;var DC:TDrawContext);
     procedure CheckEnt(p:PGDBObjEntity;var VolumeVExtdr:TVariablesExtender;const drawing:TDrawingDef;var DC:TDrawContext);
+
+    procedure onEntityBeforeConnect(pEntity:Pointer;const drawing:TDrawingDef;var DC:TDrawContext);override;
 
     procedure onEntitySupportOldVersions(pEntity:pointer;const drawing:TDrawingDef);override;
 
@@ -230,6 +234,20 @@ begin
     end;
   InsideEnts.Clear;
 end;
+
+procedure TIncludingVolumeExtender.onEntityBeforeConnect(pEntity:Pointer;const drawing:TDrawingDef;var DC:TDrawContext);
+begin
+  if pThisEntity<>nil then begin
+    if IsIt(TypeOf(pThisEntity^),typeof(GDBObjWithMatrix)) then begin
+      toBoundMatrix:=PGDBObjWithMatrix(pThisEntity)^.GetMatrix^;
+      MatrixInvert(toBoundMatrix);
+    end else
+      toBoundMatrix:=OneMatrix;
+  end else
+    toBoundMatrix:=OneMatrix;
+
+end;
+
 procedure TIncludingVolumeExtender.onEntityConnect(pEntity:Pointer;const drawing:TDrawingDef;var DC:TDrawContext);
 var
   Objects:GDBObjOpenArrayOfPV;
@@ -260,16 +278,33 @@ begin
   until p=nil;
 end;
 procedure TIncludingVolumeExtender.CheckEnt(p:PGDBObjEntity;var VolumeVExtdr:TVariablesExtender;const drawing:TDrawingDef;var DC:TDrawContext);
+var
+  testp:GDBvertex;
+  testp2d:GDBVertex2D;
 begin
-  if p<>pThisEntity then
+  if p<>pThisEntity then begin
     case p^.GetObjType of
       GDBDeviceID:begin
-        if IsPointInBB(PGDBObjDevice(p)^.P_insert_in_WCS,PGDBObjEntity(pThisEntity)^.vp.BoundingBox)then
-          ConnectToEnt(p,VolumeVExtdr,drawing,DC);
+        testp:=PGDBObjDevice(p)^.P_insert_in_WCS;
       end;
       else begin
+        testp:=NulVertex;
       end;
     end;
+
+    if IsIt(TypeOf(pThisEntity^),typeof(GDBObjLWPolyline)) then begin
+      if IsPointInBB(PGDBObjDevice(p)^.P_insert_in_WCS,PGDBObjEntity(pThisEntity)^.vp.BoundingBox)then begin
+        testp:=VectorTransform3D(testp,toBoundMatrix);
+        testp2d.x:=testp.x;
+        testp2d.y:=testp.y;
+        if PGDBObjLWPolyline(pThisEntity)^.Vertex2D_in_OCS_Array.ispointinside(testp2d)then
+          ConnectToEnt(p,VolumeVExtdr,drawing,DC);
+      end;
+    end else
+      if IsPointInBB(PGDBObjDevice(p)^.P_insert_in_WCS,PGDBObjEntity(pThisEntity)^.vp.BoundingBox)then
+        ConnectToEnt(p,VolumeVExtdr,drawing,DC);
+
+  end;
 end;
 
 procedure TIncludingVolumeExtender.ConnectToEnt(p:PGDBObjEntity;var VolumeVExtdr:TVariablesExtender;const drawing:TDrawingDef;var DC:TDrawContext);

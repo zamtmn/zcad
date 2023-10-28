@@ -125,7 +125,7 @@ begin
  TNavigatorRisers(result).BP.TreeBuildMap:=GetAnsiStringFromSavedUnit(FormName,TreeBuildMapSaveVarSuffix,'+@@[RiserName]');
  TNavigatorRisers(result).BP.IncludeEntities:=GetAnsiStringFromSavedUnit(FormName,IncludeEntitiesSaveVarSuffix,'IncludeEntityName(''Device'')');
  TNavigatorRisers(result).BP.IncludeProperties:=GetAnsiStringFromSavedUnit(FormName,IncludePropertiesSaveVarSuffix,'IncludeIfMask(%%(''Name''),''EL_CABLE_*'')');
- TNavigatorRisers(result).BP.TreeProperties:=GetAnsiStringFromSavedUnit(FormName,TreePropertiesSaveVarSuffix,'SetColumnsCount(3,0);'#10'SetColumnParams(0,''Tree'',''@@[RiserName]'',''tmpGUIParamSave_NavRis_C0'',1);'#10'SetColumnParams(1,''Elevation'',''@@[Elevation]'',''tmpGUIParamSave_NavRis_C1'',1);'#10'SetColumnParams(2,''Text'',''@@[Text]'',''tmpGUIParamSave_NavRis_C2'',1)');
+ TNavigatorRisers(result).BP.TreeProperties:=GetAnsiStringFromSavedUnit(FormName,TreePropertiesSaveVarSuffix,'SetColumnsCount(3,0);'#10'SetColumnParams(0,''Tree'',''@@[NMO_Name]'',''tmpGUIParamSave_NavRis_C0'',1);'#10'SetColumnParams(1,''Elevation'',''@@[Elevation]'',''tmpGUIParamSave_NavRis_C1'',1);'#10'SetColumnParams(2,''Text'',''@@[Text]'',''tmpGUIParamSave_NavRis_C2'',1)');
  TNavigatorRisers(result).BP.CreateRootNode:=GetBooleanFromSavedUnit(FormName,TreeCreateRootNode,False);
  TNavigatorRisers(result).BP.UseMainFunctions:=False;
 end;

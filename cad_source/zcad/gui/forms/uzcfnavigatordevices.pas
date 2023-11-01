@@ -491,7 +491,7 @@ begin
     if pnd^.Ident.pent<>nil then
       begin
        CurrentSel:=pnd^;
-       if LastAutoselectedEnt<>pnd^.Ident.pent then begin
+       if (LastAutoselectedEnt<>pnd^.Ident.pent)and( not pnd^.Ident.pent^.Selected) then begin
          s:='SelectObjectByAddres('+inttostr(PtrUInt(pnd^.Ident.pent))+')';
          //commandmanager.executecommandsilent(@s[1],drawings.GetCurrentDWG,drawings.GetCurrentOGLWParam);
          Application.QueueAsyncCall(AsyncRunCommand,PtrInt(@s[1]));

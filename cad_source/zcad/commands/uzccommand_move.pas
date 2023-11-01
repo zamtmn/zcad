@@ -121,7 +121,8 @@ begin
                 if tv<>nil then
                 begin
                     tv^.State:=tv^.State+[ESConstructProxy];
-                    drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.AddPEntity(tv^);
+                    drawings.GetCurrentDWG^.ConstructObjRoot.AddMi(@tv);
+                    //ObjArray.AddPEntity(tv^);
                     tcd.sourceEnt:=pobj;
                     tcd.tmpProxy:=tv;
                     tcd.copyEnt:=nil;

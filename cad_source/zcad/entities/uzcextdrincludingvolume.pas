@@ -282,28 +282,30 @@ var
   testp:GDBvertex;
   testp2d:GDBVertex2D;
 begin
-  if p<>pThisEntity then begin
-    case p^.GetObjType of
-      GDBDeviceID:begin
-        testp:=PGDBObjDevice(p)^.P_insert_in_WCS;
+  if pThisEntity<>nil then begin
+    if p<>pThisEntity then begin
+      case p^.GetObjType of
+        GDBDeviceID:begin
+          testp:=PGDBObjDevice(p)^.P_insert_in_WCS;
+        end;
+        else begin
+          testp:=NulVertex;
+        end;
       end;
-      else begin
-        testp:=NulVertex;
-      end;
-    end;
 
-    if IsIt(TypeOf(pThisEntity^),typeof(GDBObjLWPolyline)) then begin
-      if IsPointInBB(PGDBObjDevice(p)^.P_insert_in_WCS,PGDBObjEntity(pThisEntity)^.vp.BoundingBox)then begin
-        testp:=VectorTransform3D(testp,toBoundMatrix);
-        testp2d.x:=testp.x;
-        testp2d.y:=testp.y;
-        if PGDBObjLWPolyline(pThisEntity)^.Vertex2D_in_OCS_Array.ispointinside(testp2d)then
+      if IsIt(TypeOf(pThisEntity^),typeof(GDBObjLWPolyline)) then begin
+        if IsPointInBB(PGDBObjDevice(p)^.P_insert_in_WCS,PGDBObjEntity(pThisEntity)^.vp.BoundingBox)then begin
+          testp:=VectorTransform3D(testp,toBoundMatrix);
+          testp2d.x:=testp.x;
+          testp2d.y:=testp.y;
+          if PGDBObjLWPolyline(pThisEntity)^.Vertex2D_in_OCS_Array.ispointinside(testp2d)then
+            ConnectToEnt(p,VolumeVExtdr,drawing,DC);
+        end;
+      end else
+        if IsPointInBB(PGDBObjDevice(p)^.P_insert_in_WCS,PGDBObjEntity(pThisEntity)^.vp.BoundingBox)then
           ConnectToEnt(p,VolumeVExtdr,drawing,DC);
-      end;
-    end else
-      if IsPointInBB(PGDBObjDevice(p)^.P_insert_in_WCS,PGDBObjEntity(pThisEntity)^.vp.BoundingBox)then
-        ConnectToEnt(p,VolumeVExtdr,drawing,DC);
 
+    end;
   end;
 end;
 

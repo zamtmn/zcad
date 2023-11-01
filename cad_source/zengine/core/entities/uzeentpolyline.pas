@@ -150,7 +150,7 @@ var
   tpo: PGDBObjPolyLine;
 begin
   Getmem(Pointer(tpo), sizeof(GDBObjPolyline));
-  tpo^.init(bp.ListPos.owner,vp.Layer, vp.LineWeight,closed);
+  tpo^.init({bp.ListPos.owner}own,vp.Layer, vp.LineWeight,closed);
   CopyVPto(tpo^);
   CopyExtensionsTo(tpo^);
   //tpo^.vertexarray.init(1000);

@@ -37,7 +37,7 @@ TBaseEntityExtender=class(TBaseExtender)
 
                   procedure CopyExt2Ent(pSourceEntity,pDestEntity:pointer);virtual;abstract;
                   procedure ReorganizeEnts(OldEnts2NewEntsMap:TMapPointerToPointer);virtual;abstract;
-                  procedure PostLoad(var context:TIODXFLoadContext);virtual;abstract;
+                  procedure PostLoad(var context:TIODXFLoadContext);virtual;
                   procedure SaveToDxfObjXData(var outhandle:TZctnrVectorBytes;PEnt:Pointer;var IODXFContext:TIODXFContext);virtual;abstract;
                   procedure SaveToDXFfollow(PEnt:Pointer;var outhandle:TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext)virtual;
                   procedure onEntityConnect(pEntity:Pointer;const drawing:TDrawingDef;var DC:TDrawContext);virtual;
@@ -93,6 +93,10 @@ begin
   result:=true;
 end;
 procedure TBaseEntityExtender.SetRoot(pEntity:Pointer;pNewRoot:Pointer);
+begin
+end;
+
+procedure TBaseEntityExtender.PostLoad(var context:TIODXFLoadContext);
 begin
 end;
 

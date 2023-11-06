@@ -24,18 +24,23 @@ uses sysutils,UGDBObjBlockdefArray,uzedrawingdef,uzeentityextender,
      uzbtypes,uzeentsubordinated,uzeentity,uzeblockdef,
      varmandef,Varman,UUnitManager,URecordDescriptor,UBaseTypeDescriptor,
      uzeentitiestree,usimplegenerics,uzeffdxfsupport,uzbpaths,uzcTranslations,
-     gzctnrVectorTypes,uzeBaseExtender,uzeconsts,uzgldrawcontext;
+     gzctnrVectorTypes,uzeBaseExtender,uzeconsts,uzgldrawcontext,
+     gzctnrVectorP;
 const
   VariablesExtenderName='extdrVariables';
 type
 TBaseVariablesExtender=class(TBaseEntityExtender)
   end;
+TVariablesExtender=class;
+TVariablesExtendersVector=GZVectorP<TVariablesExtender>;
 TVariablesExtender=class(TBaseVariablesExtender)
     EntityUnit:TEntityUnit;
     pMainFuncEntity:PGDBObjEntity;
 
     DelegatesArray:TEntityArray;
     pThisEntity:PGDBObjEntity;
+
+    ConnectedVariablesExtenders:TVariablesExtendersVector;
     class function getExtenderName:string;override;
     //class function CreateEntExtender(pEntity:Pointer):TVariablesExtender;static;
     constructor Create(pEntity:Pointer);override;
@@ -64,6 +69,9 @@ TVariablesExtender=class(TBaseVariablesExtender)
 
     procedure addDelegate(pDelegateEntity:PGDBObjEntity;pDelegateEntityVarext:TVariablesExtender);
     procedure removeDelegate(pDelegateEntity:PGDBObjEntity;pDelegateEntityVarext:TVariablesExtender);
+
+    procedure addConnected(ConnectedEntityVarext:TVariablesExtender);
+    procedure ClearConnected;
 
 
     class function EntIOLoadDollar(_Name,_Value:String;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
@@ -213,22 +221,22 @@ begin
 end;
 constructor TVariablesExtender.Create;
 begin
-     //inherited;
      pThisEntity:=pEntity;
      entityunit.init('entity');
      entityunit.InterfaceUses.PushBackData(SysUnit);
      if PFCTTD=nil then
                        PFCTTD:=sysunit.TypeName2PTD('PTObjectUnit');
      pMainFuncEntity:=nil;
-     DelegatesArray.init(10) ;
-     //PGDBObjEntity(pEntity).OU.Instance:=@entityunit;
-     //PGDBObjEntity(pEntity).OU.PTD:=PFCTTD;
+     DelegatesArray.init(10);
+     ConnectedVariablesExtenders.init(10);
 end;
 destructor TVariablesExtender.Destroy;
 begin
      entityunit.done;
      DelegatesArray.Clear;
      DelegatesArray.done;
+     ConnectedVariablesExtenders.Clear;
+     ConnectedVariablesExtenders.done;
 end;
 procedure TVariablesExtender.Assign(Source:TBaseExtender);
 begin
@@ -262,13 +270,22 @@ begin
        pbdunit.entityunit.CopyTo(@self.entityunit);
      //PTEntityUnit(pblockdef^.ou.Instance)^.copyto(PTEntityUnit(ou.Instance));
 end;
-procedure TVariablesExtender.onBeforeEntityFormat(pEntity:Pointer;const drawing:TDrawingDef;var DC:TDrawContext);
+procedure TVariablesExtender.addConnected(ConnectedEntityVarext:TVariablesExtender);
+begin
+  EntityUnit.ConnectedUses.PushBackIfNotPresent(@ConnectedEntityVarext.EntityUnit);
+  ConnectedVariablesExtenders.PushBackIfNotPresent(ConnectedEntityVarext);
+end;
+procedure TVariablesExtender.ClearConnected;
 begin
   entityunit.ConnectedUses.Clear;
+  ConnectedVariablesExtenders.Clear;
+end;
+procedure TVariablesExtender.onBeforeEntityFormat(pEntity:Pointer;const drawing:TDrawingDef;var DC:TDrawContext);
+begin
+  ClearConnected;
 end;
 procedure TVariablesExtender.onEntityBeforeConnect(pEntity:Pointer;const drawing:TDrawingDef;var DC:TDrawContext);
 begin
-  //entityunit.ConnectedUses.Clear;
 end;
 procedure TVariablesExtender.onAfterEntityFormat(pEntity:Pointer;const drawing:TDrawingDef;var DC:TDrawContext);
 begin

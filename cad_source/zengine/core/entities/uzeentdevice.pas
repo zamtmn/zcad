@@ -193,6 +193,8 @@ begin
      //pobj^.bp.PSelfInOwnerArray:=ObjArray.getDataMutable(ObjArray.add(pobj));
      VarObjArray.AddPEntity(pGDBObjEntity(ppointer(pobj)^)^);
      pGDBObjEntity(ppointer(pobj)^).bp.ListPos.Owner:=@self;
+     if assigned(pGDBObjEntity(ppointer(pobj)^).EntExtensions)then
+       pGDBObjEntity(ppointer(pobj)^).EntExtensions.RunSetRoot(pobj,GetMainOwner{ @self});
 end;
 destructor GDBObjDevice.done;
 begin

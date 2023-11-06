@@ -318,11 +318,12 @@ begin
     if VolumeVExtdr=nil then
       VolumeVExtdr:=PGDBObjEntity(pThisEntity)^.GetExtension<TVariablesExtender>;
     if VolumeVExtdr<>nil then begin
-      pEntVExtdr.EntityUnit.ConnectedUses.PushBackIfNotPresent(@VolumeVExtdr.EntityUnit);
+      pEntVExtdr.addConnected(VolumeVExtdr);
+      //pEntVExtdr.EntityUnit.ConnectedUses.PushBackIfNotPresent(@VolumeVExtdr.EntityUnit);
       PGDBObjGenericSubEntry(drawing.GetCurrentRootSimple)^.ObjCasheArray.PushBackIfNotPresent(p);
-      InsideEnts.PushBackData(p);
     end;
   end;
+  InsideEnts.PushBackData(p);
 end;
 
 procedure TIncludingVolumeExtender.onAfterEntityFormat(pEntity:Pointer;const drawing:TDrawingDef;var DC:TDrawContext);

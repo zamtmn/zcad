@@ -260,7 +260,7 @@ uses
   uzvmanemdialogcom,//запуск генератора схемы через диалоговое окно
   {$IFDEF WINDOWS}uzvmodeltoxlsx,{$ENDIF}  //запуск экспорта информации из veb модели в xlsx на OLE
 
-  uzvelectricalexcelcom,
+  //uzvelectricalexcelcom,
   //**//
   {$ENDIF}
   {$ENDIF}

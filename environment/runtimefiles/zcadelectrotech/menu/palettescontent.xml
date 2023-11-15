@@ -104,7 +104,8 @@
 	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_SOCKET4_1P)" Img='DEVICE_EL_VL_SOCKET4_1P_300' Caption='Розетка СП31 1P КВ'/>
 	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_SOCKET4_2P)" Img='DEVICE_EL_VL_SOCKET4_2P_300' Caption='Розетка СП31 2P КВ'/>
 	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_SOCKET4_3P)" Img='DEVICE_EL_VL_SOCKET4_3P_300' Caption='Розетка ОП54 1P КВ'/>
-	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_SOCKET4_4P)" Img='DEVICE_EL_VL_SOCKET4_4P_300' Caption='Плита СП31 1P КВ'/>
+	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_SOCKET4_4P)" Img='DEVICE_EL_VL_SOCKET4_4P_300' Caption='Розетка ОП54 2P КВ'/>
+	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_SOCKET4_5P)" Img='DEVICE_EL_VL_SOCKET4_5P_300' Caption='Плита СП31 1P КВ'/>
 	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_SOCKET_M)" Img='DEVICE_EL_VL_SOCKET_M_300' Caption='Электродвигатель'/>
 	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_SOCKET_HEATER)" Img='DEVICE_EL_VL_SOCKET_HEATER_300' Caption='Электрообогреватель'/>
 	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_SOCKET_YTR)" Img='DEVICE_EL_VL_SOCKET_YTR_300' Caption='Ящик с трансформатором'/>

@@ -239,7 +239,8 @@ begin
       if ppin<>nil then
       repeat
         PVExtdr:=ppin.pThisEntity^.GetExtension<TVariablesExtender>;
-        PVExtdr.EntityUnit.ConnectedUses.PushBackIfNotPresent(@SVExtdr.EntityUnit);
+        PVExtdr.addConnected(SVExtdr);
+        //PVExtdr.EntityUnit.ConnectedUses.PushBackIfNotPresent(@SVExtdr.EntityUnit);
         ppin:=Net.Pins.iterate(eir);
       until ppin=nil;
 

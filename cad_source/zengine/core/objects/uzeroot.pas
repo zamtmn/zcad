@@ -36,7 +36,6 @@ GDBObjRoot= object(GDBObjGenericSubEntry)
                  procedure FormatAfterEdit(var drawing:TDrawingDef;var DC:TDrawContext;Stage:TEFStages=EFAllStages);virtual;
                  procedure AfterDeSerialize(SaveFlag:Word; membuf:Pointer);virtual;
                  function getowner:PGDBObjSubordinated;virtual;
-                 function GetMainOwner:PGDBObjSubordinated;virtual;
                  procedure getoutbound(var DC:TDrawContext);virtual;
                  //function FindVariable(varname:String):pvardesk;virtual;
                  function GetHandle:PtrInt;virtual;
@@ -56,10 +55,6 @@ procedure DoFormat(var ConnectedArea:GDBObjGenericSubEntry;var ents,ents2Connect
 implementation
 //uses
 //    log;
-function GDBObjRoot.GetMainOwner:PGDBObjSubordinated;
-begin
-     result:=@self;
-end;
 {function GDBObjRoot.FindShellByClass(_type:TDeviceClass):PGDBObjSubordinated;
 begin
      result:=nil;
@@ -197,6 +192,14 @@ begin
       p^.EntExtensions.RunOnConnect(p,drawing,DC);
       p:=ents2Connected.iterate(ir);
   until p=nil;
+
+  if ConnectedArea.EntExtensions<>nil then begin
+    p:=ents.beginiterate(ir);
+    if p<>nil then repeat
+      ConnectedArea.EntExtensions.RunConnectFormattedEntsToRoot(@ConnectedArea,p,drawing,DC);
+      p:=ents.iterate(ir);
+    until p=nil;
+  end;
 
   p:=ents2Connected.beginiterate(ir);
   if p<>nil then repeat

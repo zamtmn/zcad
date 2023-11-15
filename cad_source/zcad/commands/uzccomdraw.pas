@@ -1181,13 +1181,13 @@ begin
   ExportDevWithAxisCom.SetCommandParam(@ExportDevWithAxisParams,'PTExportDevWithAxisParams');
 
   BlockScale.init('BlockScale',0,0);
-  BlockScale.CEndActionAttr:=0;
+  BlockScale.CEndActionAttr:=[];
   BlockScaleParams.Scale:=uzegeometry.CreateVertex(1,1,1);
   BlockScaleParams.Absolytly:=true;
   BlockScale.SetCommandParam(@BlockScaleParams,'PTBlockScaleParams');
 
   BlockRotate.init('BlockRotate',0,0);
-  BlockRotate.CEndActionAttr:=0;
+  BlockRotate.CEndActionAttr:=[];
   BlockRotateParams.Rotate:=0;
   BlockRotateParams.Absolytly:=true;
   BlockRotate.SetCommandParam(@BlockRotateParams,'PTBlockRotateParams');

@@ -308,14 +308,14 @@
     </PublishOptions>
     <RunParams>
       <local>
-        <CommandLineParams Value="nosplash updatepo qnll qsi"/>
+        <CommandLineParams Value="nosplash updatepo qleam qlcl qlm_trace"/>
         <LaunchingApplication PathPlusParams="/usr/X11R6/bin/xterm -T &apos;Lazarus Run Output&apos; -e $(LazarusDir)/tools/runwait.sh $(TargetCmdLine)"/>
       </local>
       <FormatVersion Value="2"/>
       <Modes Count="1">
         <Mode0 Name="default">
           <local>
-            <CommandLineParams Value="nosplash updatepo qnll qsi"/>
+            <CommandLineParams Value="nosplash updatepo qleam qlcl qlm_trace"/>
             <LaunchingApplication PathPlusParams="/usr/X11R6/bin/xterm -T &apos;Lazarus Run Output&apos; -e $(LazarusDir)/tools/runwait.sh $(TargetCmdLine)"/>
           </local>
         </Mode0>
@@ -323,7 +323,7 @@
     </RunParams>
     <RequiredPackages Count="26">
       <Item1>
-        <PackageName Value="laz_fpspreadsheet"/>
+        <PackageName Value="lape"/>
       </Item1>
       <Item2>
         <PackageName Value="MetaDarkStyle"/>

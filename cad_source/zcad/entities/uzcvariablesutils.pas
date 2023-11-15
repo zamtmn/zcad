@@ -20,7 +20,8 @@ unit uzcvariablesutils;
 
 interface
 uses uzcenitiesvariablesextender,sysutils,UGDBOpenArrayOfPV,
-     gzctnrVectorTypes,uzeentity,varmandef,uzeentsubordinated;
+     gzctnrVectorTypes,uzeentity,varmandef,uzeentsubordinated,
+     Varman;
 //**поиск значения свойства по имени varname:String которое было в ведено в инспекторе для данного устройства PEnt:PGDBObjEntity
 //**возвращает
 function FindVariableInEnt(PEnt:PGDBObjEntity;varname:String):pvardesk;
@@ -28,15 +29,28 @@ function FindEntityByVar(arr:GDBObjOpenArrayOfPV;objID:Word;vname,vvalue:String)
 implementation
 function FindVariableInEnt(PEnt:PGDBObjEntity;varname:String):pvardesk;
 var
-   pentvarext:TVariablesExtender;
+  pentvarext,connectedentvarext:TVariablesExtender;
+  p:PTEntityUnit;
+  ir:itrec;
 begin
-     pentvarext:=PEnt^.GetExtension<TVariablesExtender>;
-     result:=nil;
-     if pentvarext<>nil then
-     result:=pentvarext.entityunit.FindVariable(varname);
-     if result=nil then
-     if PEnt^.bp.ListPos.Owner<>nil then
-       result:=FindVariableInEnt(pointer(PEnt^.bp.ListPos.Owner),varname);
+  result:=nil;
+  pentvarext:=PEnt^.GetExtension<TVariablesExtender>;
+  if pentvarext<>nil then
+    result:=pentvarext.entityunit.FindVariable(varname);
+  if result=nil then
+    if PEnt^.bp.ListPos.Owner<>nil then
+      result:=FindVariableInEnt(pointer(PEnt^.bp.ListPos.Owner),varname);
+  if result=nil then
+    if pentvarext<>nil then begin
+      connectedentvarext:=pentvarext.ConnectedVariablesExtenders.beginiterate(ir);
+      if connectedentvarext<>nil then
+        repeat
+          result:=FindVariableInEnt(connectedentvarext.pThisEntity,varname);
+          if result<>nil then
+            exit;
+          connectedentvarext:=pentvarext.ConnectedVariablesExtenders.iterate(ir);
+        until connectedentvarext=nil;
+    end;
 end;
 function FindEntityByVar(arr:GDBObjOpenArrayOfPV;objID:Word;vname,vvalue:String):PGDBObjSubordinated;
 var

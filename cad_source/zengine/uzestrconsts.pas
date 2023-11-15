@@ -42,6 +42,7 @@ resourcestring
   rsUnknownFileFormat='Unknown file format';
   rsUnableRenameFileToBak='Could not rename file "%s" into "*.bak"';
   rsUnableToWriteFile='Unable to write file "%s"';
+  rsLoadingFontFile='Loading font file "%S"';
 
 implementation
 end.

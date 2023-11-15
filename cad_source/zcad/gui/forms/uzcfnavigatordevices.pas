@@ -491,7 +491,7 @@ begin
     if pnd^.Ident.pent<>nil then
       begin
        CurrentSel:=pnd^;
-       if LastAutoselectedEnt<>pnd^.Ident.pent then begin
+       if (LastAutoselectedEnt<>pnd^.Ident.pent)and( not pnd^.Ident.pent^.Selected) then begin
          s:='SelectObjectByAddres('+inttostr(PtrUInt(pnd^.Ident.pent))+')';
          //commandmanager.executecommandsilent(@s[1],drawings.GetCurrentDWG,drawings.GetCurrentOGLWParam);
          Application.QueueAsyncCall(AsyncRunCommand,PtrInt(@s[1]));
@@ -825,14 +825,14 @@ begin
     if MatchInChildren then
       Tree.Expanded[Node]:=true;
     if pattern='' then
-      node.States:=node.States-[vsFiltered]
+      tree.IsFiltered[node]:=false
     else begin
       if MatchInChildren or Match(node,pattern) then begin
-        node.States:=node.States-[vsFiltered];
+        tree.IsFiltered[node]:=false;
         result:=true;
         treeh:=treeh+node.NodeHeight;
       end else
-        node.States:=node.States+[vsFiltered]
+        tree.IsFiltered[node]:=true;
     end;
     node:=node.NextSibling;
   until (node=nil)or(node=node.NextSibling);

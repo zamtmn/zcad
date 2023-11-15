@@ -793,7 +793,7 @@ var
 begin
    pd:={gdb.GetCurrentDWG}PTSimpleDrawing(pdrawing);
    if pd<>nil then
-   if ((pc^.CEndActionAttr)and CEDWGNChanged)=0 then
+   if not(CEDWGNChanged in pc^.CEndActionAttr) then
                                                    pd.ChangeStampt(true);
           if pcommandrunning<>nil then
                                       begin

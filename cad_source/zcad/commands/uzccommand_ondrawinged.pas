@@ -238,7 +238,7 @@ end;
 procedure startup;
 begin
   OnDrawingEd.init('OnDrawingEd',0,0);
-  OnDrawingEd.CEndActionAttr:=0;
+  OnDrawingEd.CEndActionAttr:=[];
 end;
 procedure Finalize;
 begin

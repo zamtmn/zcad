@@ -19,7 +19,9 @@
 unit uzccommandsabstract;
 {$INCLUDE zengineconfig.inc}
 interface
-uses uzegeometrytypes,uzbtypes,uzglviewareadata,uzclog,gzctnrVectorTypes;
+uses
+  uzegeometrytypes,uzbtypes,uzglviewareadata,uzclog,gzctnrVectorTypes,
+  sysutils;
 const
      //нужна динамическая регистация
      CADWG=1;                    //есть открытый чертеж
@@ -37,8 +39,6 @@ const
      ZCMD_OK_NOEND=-10;
 
 
-     CEDeSelect=1;
-     CEDWGNChanged=2;
      EmptyCommandOperands='';
 type
 TInteractiveProcObjBuild=procedure(const PInteractiveData:Pointer;Point:GDBVertex;Click:Boolean);
@@ -52,6 +52,8 @@ TInteractiveProcObjBuild=procedure(const PInteractiveData:Pointer;Point:GDBVerte
                  );
     TGetPossibleResult=set of TGetPossible;
 {Export+}
+    TCommandEndAction=(CEDeSelect,CEDWGNChanged);
+    TCommandEndActions={-}set of TCommandEndAction{/Byte/};
     TGetPointMode=(
                    TGPMWait{point},//ожидание указания точки
                    TGPMPoint,      //точка указана
@@ -78,7 +80,6 @@ TInteractiveProcObjBuild=procedure(const PInteractiveData:Pointer;Point:GDBVerte
     TCommandOperands={-}String{/Pointer/};
     TCommandResult=Integer;
   TCStartAttr=Integer;{атрибут разрешения\запрещения запуска команды}
-    TCEndAttr=Integer;{атрибут действия по завершению команды}
   PCommandObjectDef = ^CommandObjectDef;
   {REGISTEROBJECTTYPE CommandObjectDef}
   CommandObjectDef=object (GDBaseObject)
@@ -90,7 +91,7 @@ TInteractiveProcObjBuild=procedure(const PInteractiveData:Pointer;Point:GDBVerte
     overlay:Boolean;(*hidden_in_objinsp*)
     CStartAttrEnableAttr:TCStartAttr;(*hidden_in_objinsp*)
     CStartAttrDisableAttr:TCStartAttr;(*hidden_in_objinsp*)
-    CEndActionAttr:TCEndAttr;(*hidden_in_objinsp*)
+    CEndActionAttr:TCommandEndActions;(*hidden_in_objinsp*)
     pdwg:Pointer;(*hidden_in_objinsp*)
     NotUseCommandLine:Boolean;(*hidden_in_objinsp*)
     IData:TInteractiveData;(*hidden_in_objinsp*)
@@ -148,7 +149,7 @@ begin
   CStartAttrEnableAttr:=SA or CADWG;
   CStartAttrDisableAttr:=DA;
   overlay:=false;
-  CEndActionAttr:=CEDeSelect;
+  CEndActionAttr:=[CEDeSelect];
   NotUseCommandLine:=true;
   IData.GetPointMode:=TGPMCancel;
 end;
@@ -203,4 +204,5 @@ begin
                                          end;
 end;
 begin
+  assert(sizeof(Byte)=sizeof(TCommandEndActions),'SizeOf(Byte)<>SizeOf(TCommandEndActions)')
 end.

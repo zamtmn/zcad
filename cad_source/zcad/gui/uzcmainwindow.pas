@@ -1633,7 +1633,7 @@ begin
     commandmanager.sendmousecoordwop(sender,zc)
   else
     if onmouseobject<>nil then
-      if (MZW_LBUTTON and zc)<>0 then
+      if ((MZW_LBUTTON and zc)<>0)and((MZW_SHIFT and zc)=0) then
         MouseTimer.&Set(mp,sysvarDSGNEntityMoveStartOffset,[RMDown,RMUp,RReSet,RLeave],StartEntityDrag,sysvarDSGNEntityMoveStartTimerInterval);
 
   ZCMsgCallBackInterface.Do_GUIaction(self,ZMsgID_GUIActionRedraw);

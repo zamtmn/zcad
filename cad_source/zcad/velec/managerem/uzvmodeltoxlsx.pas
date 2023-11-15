@@ -44,9 +44,15 @@ uses
   uzcenitiesvariablesextender,
   //uzvmanemshieldsgroupparams,
   uzegeometry,
-  uzvzcadxlsx,  //работа с xlsx
-  //garrayutils,
+  uzvzcadxlsxole,  //работа с xlsx
+  StrUtils,
   Varman;
+
+  type
+  TVXLSXCELL=record
+        vRow:Cardinal;
+        vCol:Cardinal;
+  end;
 
 resourcestring
   //RSCLPuzvmanemNameShield                       ='Name shield';
@@ -72,6 +78,26 @@ resourcestring
   //RSCLPDataExportExportScriptNewValue    ='${"&[<]<<",Keys[<],StrId[CLPIdBack]} Enter new export script:';
   RSCLParam='Нажми ${"э&[т]у",Keys[n],StrId[CLPIdUser1]} кнопку, ${"эт&[у]",Keys[e],100} или запусти ${"&[ф]айловый",Keys[a],StrId[CLPIdFileDialog]} диалог';
 
+  const
+    //zcadImportIndoDevST= '<zcadImportInfoDevST>';
+    zcadImportIndoDevST= '<zcadImportInfoDevST>';
+    zcadImportIndoDevFT= '<zcadImportInfoDevFT>';
+    zcadHDGroupST='<zcadHDGroupST>';
+    zcadHDGroupFT='<zcadHDGroupFT>';
+    zcadGroupColDevST='<zcadGroupColDevST>';
+    zcadGroupColDevFT='<zcadGroupColDevFT>';
+    uzvXLSXSheetIMPORT='IMPORT';
+    uzvXLSXSheetEXPORT='EXPORT';
+    uzvXLSXSheetCALC='CALC';
+    uzvXLSXSheetCABLE='CABLE';
+    uzvXLSXCellFormula='ZVFORMULA';
+    zInsertColDevRow='zInsertColDevRow';
+    zInsertColDevCol='zInsertColDevCol';
+    zEndColDevRow='zEndColDevRow';
+    zEndColDevCol='zEndColDevCol';
+    zInsertHDGroupRow='zInsertHDGroupRow';
+    zEndHDGroupRow='zEndHDGroupRow';
+
 implementation
 type
 
@@ -89,10 +115,7 @@ type
   //
   //
   //PTSelSimParams=^TSelBlockParams;
-  //TSelBlockParams=record
-  //                      SameName:Boolean;(*'Same name'*)
-  //                      DiffBlockDevice:TDiff;(*'Block and Device'*)
-  //                end;
+
   //
 
   TListDev=TVector<pGDBObjDevice>;
@@ -109,6 +132,21 @@ var
   //SelSimParams:TSelBlockParams;
   listFullGraphEM:TListGraphDev;     //Граф со всем чем можно
   listMainFuncHeadDev:TListDev;
+
+
+  function ExCell(x,y:cardinal):String;
+  var s:string;
+  begin
+    s:='';
+    x:=x-1;
+    While x>=26 do
+    begin
+      s:=chr(65+(x mod 26))+s;
+      x:=(x div 26)-1;
+    end;
+    Result:=chr(65+x)+s+IntToStr(y);
+  end;
+
 
   //Получить головное устройство
   function getDeviceHeadGroup(listFullGraphEM:TListGraphDev;listDev:TListDev):pGDBObjDevice;
@@ -228,20 +266,130 @@ var
   end;
   procedure exportGraphModelToXLSX(listAllHeadDev:TListDev);
   var
-    pvd,pvd2:pvardesk;
+    pvd:pvardesk;
     graphDev:TGraphDev;
-    listDev:TListDev;
-    devMaincFunc,ourDev:PGDBObjDevice;
-    listGroupHeadDev:TListGroupHeadDev;
-    nameGroup:string;
-    namePanel,textCell:string;
-    cellValueVar:string;
-    stRowImport,stColImport:Cardinal;
-    nowRowImport,nowColImport:Cardinal;
-    coldev:integer;
+    //listDev:TListDev;
+    devMaincFunc:PGDBObjDevice;
+    //listGroupHeadDev:TListGroupHeadDev;
+    namePanel:string;
+    //cellValueVar:string;
+
+
+
+    procedure copySheetsLightPanel(codeName,namePanel:string);
+    begin
+       uzvzcadxlsxole.copyWorksheetName(codeName,namePanel);
+       uzvzcadxlsxole.copyWorksheetName(codeName+uzvXLSXSheetIMPORT,namePanel+uzvXLSXSheetIMPORT);
+       uzvzcadxlsxole.copyWorksheetName(codeName+uzvXLSXSheetEXPORT,namePanel+uzvXLSXSheetEXPORT);
+       uzvzcadxlsxole.copyWorksheetName(codeName+uzvXLSXSheetCALC,namePanel+uzvXLSXSheetCALC);
+       uzvzcadxlsxole.copyWorksheetName(codeName+uzvXLSXSheetCABLE,namePanel+uzvXLSXSheetCABLE);
+    end;
+    procedure sheetsVisibleOff();
+    begin
+       uzvzcadxlsxole.sheetVisibleOff('<lightpanel><namepanel>');
+       //uzvzcadxlsxole.sheetVisibleOff(uzvXLSXSheetIMPORT);
+       uzvzcadxlsxole.sheetVisibleOff(uzvXLSXSheetEXPORT);
+       uzvzcadxlsxole.sheetVisibleOff(uzvXLSXSheetCALC);
+       uzvzcadxlsxole.sheetVisibleOff(uzvXLSXSheetCABLE);
+    end;
+    procedure generatorLightPanel(codePanel,namePanel:string);
+    var
+      listGroupHeadDev:TListGroupHeadDev;
+      coldev:integer;
+      stInfoDevCell:TVXLSXCELL;
+      //stInfoDevCell:TVCELL;
+      //stRowImport,stColImport:Cardinal;
+      //stRowImport,stColImport:Cardinal;
+      nowCell:TVXLSXCELL;
+      stRow:Cardinal;
+      textCell:string;
+      cellValueVar:string;
+      nameGroup:string;
+      listDev:TListDev;
+      ourDev:PGDBObjDevice;
+      pvd2:pvardesk;
+        function parserZVFormula(textCell:string):String;
+        //var S,S2:string;
+        begin
+          result := StringReplace(textCell, uzvXLSXCellFormula, '', [rfReplaceAll, rfIgnoreCase]);
+          if ContainsText(result, zInsertColDevRow) then
+           result := StringReplace(result, zInsertColDevRow, inttostr(stInfoDevCell.vRow+coldev), [rfReplaceAll, rfIgnoreCase]);
+          if ContainsText(result, zEndColDevRow) then
+          begin
+           result := StringReplace(result, zEndColDevRow, inttostr(stInfoDevCell.vRow+coldev), [rfReplaceAll, rfIgnoreCase]);
+          end;
+        end;
+    begin
+       // Получаем список групп для данного щита
+       listGroupHeadDev:=uzvmanemgetgem.getListNameGroupHD(graphDev);
+       coldev:=1;
+       for nameGroup in listGroupHeadDev do
+         begin
+          //Получаем список устройств для данной группы
+          listDev:=uzvmanemgetgem.getListDevInGroupHD(nameGroup,graphDev);
+          //Ищем стартовую ячейку для начала переноса данных
+          uzvzcadxlsxole.searchCellRowCol(namePanel+uzvXLSXSheetIMPORT,zcadImportIndoDevST,stInfoDevCell.vRow,stInfoDevCell.vCol);
+          stRow:=stInfoDevCell.vRow+1;
+
+          //начинаем заполнять ячейки в XLSX
+          for ourDev in listDev do
+            begin
+            pvd2:=FindVariableInEnt(ourDev,velec_nameDevice);
+              if pvd2<>nil then
+                 ZCMsgCallBackInterface.TextMessage('   Имя устройства = '+pstring(pvd2^.data.Addr.Instance)^,TMWOHistoryOut);
+            nowCell:=stInfoDevCell; //метонахождение изменяемая место ячейка
+            inc(nowCell.vCol);      // отходим от кодового имени
+
+            // Заполняем всю информацию по устройству
+            //ZCMsgCallBackInterface.TextMessage('1',TMWOHistoryOut);
+            cellValueVar:=uzvzcadxlsxole.getCellValue(namePanel+uzvXLSXSheetIMPORT,nowCell.vRow,nowCell.vCol);
+            //ZCMsgCallBackInterface.TextMessage('значение ячейки = ' + inttostr(nowCell.vRow) + ' - ' + inttostr(nowCell.vCol)+ ' = ' + cellValueVar,TMWOHistoryOut);
+            while cellValueVar <> zcadImportIndoDevFT do begin
+               pvd2:=FindVariableInEnt(ourDev,cellValueVar);
+               if pvd2<>nil then begin
+                 textCell:=pvd2^.data.ptd^.GetValueAsString(pvd2^.data.Addr.Instance);
+                 //ZCMsgCallBackInterface.TextMessage('записываю в ячейку = ' + textCell,TMWOHistoryOut);
+                 uzvzcadxlsxole.setCellValue(namePanel+uzvXLSXSheetIMPORT,stInfoDevCell.vRow+coldev,nowCell.vCol,textCell);
+               end;
+               inc(nowCell.vCol);
+               cellValueVar:=uzvzcadxlsxole.getCellValue(namePanel+uzvXLSXSheetIMPORT,nowCell.vRow,nowCell.vCol);
+               //ZCMsgCallBackInterface.TextMessage('значение ячейки внутри while = ' + inttostr(nowCell.vRow) + ' - ' + inttostr(nowCell.vCol)+ ' = ' + cellValueVar,TMWOHistoryOut);
+
+               //ZCMsgCallBackInterface.TextMessage('222',TMWOHistoryOut);
+            end;
+            //**Информация по устройству закочена
+//
+//          //Далее заполняем всю информацию по коллекциям устройств
+            // нужно для группирования например по имени (б/п или имя светильника, технологические имена), и в последующем для формирования коэфициента спроса
+            while cellValueVar <> zcadGroupColDevFT do
+            begin
+              //**начинаем получать есть ли формула в ячейки тогда сложное копирование, если нет формулы просто копирование
+              //ZCMsgCallBackInterface.TextMessage('getCellValue at [stRow' + IntToStr(stRow) + ':nowCell.vCol' + IntToStr(nowCell.vCol) + ']',TMWOHistoryOut);
+
+              cellValueVar:=uzvzcadxlsxole.getCellValue(codePanel+uzvXLSXSheetIMPORT,stRow,nowCell.vCol);
+              //ZCMsgCallBackInterface.TextMessage('Получили ячейку = ' + cellValueVar,TMWOHistoryOut);
+              //ZCMsgCallBackInterface.TextMessage('адрес ввиди строки = ' + ExCell(111,222),TMWOHistoryOut);
+              if ContainsText(cellValueVar, uzvXLSXCellFormula) then begin
+                 ZCMsgCallBackInterface.TextMessage('формула такая = ' + cellValueVar,TMWOHistoryOut);
+                 ZCMsgCallBackInterface.TextMessage('формула стала такой = ' + parserZVFormula(cellValueVar),TMWOHistoryOut);
+                 uzvzcadxlsxole.setCellValue(namePanel+uzvXLSXSheetIMPORT,stInfoDevCell.vRow+coldev,nowCell.vCol,parserZVFormula(cellValueVar));
+              end
+              else
+                 uzvzcadxlsxole.copyCell(codePanel+uzvXLSXSheetIMPORT,stRow,nowCell.vCol,namePanel+uzvXLSXSheetIMPORT,stInfoDevCell.vRow+coldev,nowCell.vCol);
+
+              inc(nowCell.vCol);
+            end;
+
+            //заполнение следующего устройтсва
+            inc(coldev);
+          end;
+
+         end;
+    end;
+
   begin
        //открываем эталонную книгу
-       uzvzcadxlsx.openXLSXFile('D:\etalon.xlsx');
+       uzvzcadxlsxole.openXLSXFile('D:\testZCAD\etalon.xlsx');
 
 
        for devMaincFunc in listAllHeadDev do
@@ -251,58 +399,26 @@ var
             pvd:=FindVariableInEnt(graphDev.Root.getDevice,velec_nameDevice);
             if pvd<>nil then
               begin
-                //ZCMsgCallBackInterface.TextMessage('Начинаем копирование листа = '+pstring(pvd^.data.Addr.Instance)^,TMWOHistoryOut);
                 namePanel:=pstring(pvd^.data.Addr.Instance)^;
-                uzvzcadxlsx.copyWorksheetName('<lightpanel><namepanel>',namePanel);
-
-                //ZCMsgCallBackInterface.TextMessage('Завершино копирование листа = '+pstring(pvd^.data.Addr.Instance)^,TMWOHistoryOut);
+                ZCMsgCallBackInterface.TextMessage('Начинаем копирование листа = '+namePanel,TMWOHistoryOut);
+                copySheetsLightPanel('<lightpanel><namepanel>',namePanel);
+                ZCMsgCallBackInterface.TextMessage('Завершино копирование листа = '+pstring(pvd^.data.Addr.Instance)^,TMWOHistoryOut);
 
                 ZCMsgCallBackInterface.TextMessage('===================================================================',TMWOHistoryOut);
                 ZCMsgCallBackInterface.TextMessage('Анализ щита = ' + pstring(pvd^.data.Addr.Instance)^,TMWOHistoryOut);
-                // Получаем список групп для данного щита
-                listGroupHeadDev:=uzvmanemgetgem.getListNameGroupHD(graphDev);
-                coldev:=1;
-                for nameGroup in listGroupHeadDev do
-                  begin
-                   // Получаем список устройств для данной группы
-                   listDev:=uzvmanemgetgem.getListDevInGroupHD(nameGroup,graphDev);
-                   uzvzcadxlsx.searchCellRowCol(namePanel+'IMPORT','<zcadImportstart>',stRowImport,stColImport);
-                   ZCMsgCallBackInterface.TextMessage('ячейка = ' + inttostr(stRowImport) + ' - ' + inttostr(stColImport),TMWOHistoryOut);
 
-                   //начинаем заполнять ячейки в XLSX
-                   for ourDev in listDev do
-                     begin
-                     //pvd2:=FindVariableInEnt(ourDev,velec_nameDevice);
-                     //  if pvd2<>nil then
-                     //     ZCMsgCallBackInterface.TextMessage('   Имя устройства = '+pstring(pvd2^.data.Addr.Instance)^,TMWOHistoryOut);
-                     nowRowImport:=stRowImport;
-                     nowColImport:=stColImport;
-                     inc(nowColImport);
-                     cellValueVar:=uzvzcadxlsx.getCellValue(namePanel+'IMPORT',nowRowImport,nowColImport);
-                     //ZCMsgCallBackInterface.TextMessage('значение ячейки = ' + inttostr(nowRowImport) + ' - ' + inttostr(nowColImport)+ ' = ' + cellValueVar,TMWOHistoryOut);
-                     while cellValueVar <> '<zcadImportfinish>' do begin
-                        pvd2:=FindVariableInEnt(ourDev,cellValueVar);
-                        if pvd2<>nil then begin
-                          textCell:=pvd2^.data.ptd^.GetValueAsString(pvd2^.data.Addr.Instance);
-                          //ZCMsgCallBackInterface.TextMessage('записываю в ячейку = ' + textCell,TMWOHistoryOut);
-                          uzvzcadxlsx.setCellValue(namePanel+'IMPORT',stRowImport+coldev,nowColImport,textCell);
+                //Генерируем щит рабочего/аварийного освещения
+                generatorLightPanel('<lightpanel><namepanel>',namePanel);
 
-                        end;
-                        inc(nowColImport);
-                        cellValueVar:=uzvzcadxlsx.getCellValue(namePanel+'IMPORT',nowRowImport,nowColImport);
-                     end;
-                     inc(coldev);
-                   end;
-
-                  end;
            end;
          end;
+       //Прячем системные листы
+       sheetsVisibleOff();
        //Сохранить или перезаписать книгу с моделью
-       uzvzcadxlsx.saveXLSXFile('D:\etalon121212.xlsx');
-
+       uzvzcadxlsxole.saveXLSXFile('D:\testZCAD\etalon121212.xlsx');
        ZCMsgCallBackInterface.TextMessage('Книга сохранена ',TMWOHistoryOut);
 
-       uzvzcadxlsx.destroyWorkbook;
+       uzvzcadxlsxole.destroyWorkbook;
        ZCMsgCallBackInterface.TextMessage('Память очищена',TMWOHistoryOut);
 
 

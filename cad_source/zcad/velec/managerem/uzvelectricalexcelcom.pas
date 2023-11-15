@@ -46,7 +46,7 @@ uses
   uzegeometry,
   //garrayutils,
   Varman,
-  fpsTypes, fpSpreadsheet, fpsUtils, fpsSearch, fpsAllFormats,  uzbstrproc,
+  fpsTypes, fpSpreadsheet, fpsUtils, fpsSearch, fpsAllFormats,fpsClasses,fpsExprParser,  uzbstrproc,
   comobj, variants, LConvEncoding, strutils;
 
 
@@ -139,7 +139,7 @@ begin
   //end;
 
   end;
-  function textexcel2_com(operands:TCommandOperands):TCommandResult;
+  function textexcel333_com(operands:TCommandOperands):TCommandResult;
   var
     MyWorkbook,MyWorkbook2: TsWorkbook;
     old_worksheet: TsWorksheet;
@@ -164,11 +164,29 @@ begin
       ZCMsgCallBackInterface.TextMessage('4',TMWOHistoryOut);
       //if MyWorkbook2.ValidWorksheetName('something_else') then
         new_worksheet.Name := 'something_else' ;
-        MyWorkbook2.WriteToFile('d:\444.xlsx', sfOOXML);
+        MyWorkbook.WriteToFile('d:\444.xlsx', sfOOXML,true);
       //else
       //  ZCMsgCallBackInterface.TextMessage('Invalid worksheet name.',TMWOHistoryOut);
         //ShowMessage('Invalid worksheet name.');
   end;
+  function textexcel2_com(operands:TCommandOperands):TCommandResult;
+  var
+  b: TsWorkbook;
+  sh: TsWorksheet;
+  f: PsFormula;
+begin
+  b := TsWorkbook.Create;
+  try
+    b.Options := [boReadFormulas];
+    b.ReadFromFile('d:\4.xlsx', sfOOXML);
+    sh := b.GetFirstWorksheet;
+    for f in sh.Formulas do
+      ZCMsgCallBackInterface.TextMessage(f^.Text,TMWOHistoryOut);
+    b.WriteToFile('d:\444.xlsx', sfOOXML, true);
+  finally
+    b.Free;
+  end;
+end;
 
 
 
@@ -269,7 +287,7 @@ end;
 //end;
 function textexcel222_com(operands:TCommandOperands):TCommandResult;
 var
-  Excel, Books,Books2, Sheet : OleVariant;
+  Excel, Books,Books2, Sheet, Sheet2: OleVariant;
   Range,Range2: Variant;
   Matrix : Variant;
   i, j: Integer;
@@ -280,20 +298,28 @@ begin
   ZCMsgCallBackInterface.TextMessage('Начал читать',TMWOHistoryOut);
   Excel := CreateOleObject('Excel.Application');
   ZCMsgCallBackInterface.TextMessage('Создать новую книгу',TMWOHistoryOut);
-  Books := Excel.WorkBooks.Add;
-  Books2 := Excel.Workbooks.Open(WideString('d:\1.xlsx'));
+  //Books := Excel.WorkBooks.Add;
+  Books2 := Excel.Workbooks.Open(WideString('d:\4.xlsx'));
   ZCMsgCallBackInterface.TextMessage('Копирование начато',TMWOHistoryOut);
 
-  Range:=Books2.WorkSheets.Range('table111').Value;
+  //Range:=Books2.WorkSheets.Range('table111').Value;
          //Range.SpecialCells(xlCellTypeLastCell, EmptyParam).Activate;
   //For Range2 In Range do
-      ZCMsgCallBackInterface.TextMessage(Range[1,1],TMWOHistoryOut);
+      //ZCMsgCallBackInterface.TextMessage(Range[1,1],TMWOHistoryOut);
       //If rng2.Column > myCol Then myCol = rng2.Column
       //If rng2.Row > myRow Then myRow = rng2.Row
   //Next
 
   //Books2.WorkSheets[1].Copy(Books.WorkSheets[1]);
-  Books2.WorkSheets.Item[1].Copy(After:=Books.WorkSheets.Item[1]) ;
+
+    Books2.WorkSheets[1].Cells[2,2].Copy;
+    Books2.WorkSheets[2].Cells[5,5].PasteSpecial();
+
+  //копирование книги
+  //Books2.WorkSheets('111').Copy(EmptyParam,Books2.WorkSheets[Books2.WorkSheets.Count]) ;
+  //Books2.WorkSheets[Books2.WorkSheets.Count].Name:='sdfsdf';
+
+  Books2.SaveAs(WideString('d:\444.xlsx'));
 
 
 
@@ -319,7 +345,7 @@ initialization
   //SelSim.SetCommandParam(@SelSimParams,'PTSelSimParams');
   //CreateCommandFastObjectPlugin(@generatorOnelineDiagramOneLevel_com,'vGeneratorOneLine',CADWG,0);
   CreateCommandFastObjectPlugin(@textexcel_com,'vtestExcel',CADWG,0);
-  CreateCommandFastObjectPlugin(@textexcel2_com,'vtestExcel2',CADWG,0);
+  CreateCommandFastObjectPlugin(@textexcel222_com,'vtestExcel2',CADWG,0);
 finalization
   ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
   //CmdProp.props.free;

@@ -37,13 +37,15 @@ TBaseEntityExtender=class(TBaseExtender)
 
                   procedure CopyExt2Ent(pSourceEntity,pDestEntity:pointer);virtual;abstract;
                   procedure ReorganizeEnts(OldEnts2NewEntsMap:TMapPointerToPointer);virtual;abstract;
-                  procedure PostLoad(var context:TIODXFLoadContext);virtual;abstract;
+                  procedure PostLoad(var context:TIODXFLoadContext);virtual;
                   procedure SaveToDxfObjXData(var outhandle:TZctnrVectorBytes;PEnt:Pointer;var IODXFContext:TIODXFContext);virtual;abstract;
                   procedure SaveToDXFfollow(PEnt:Pointer;var outhandle:TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext)virtual;
                   procedure onEntityConnect(pEntity:Pointer;const drawing:TDrawingDef;var DC:TDrawContext);virtual;
+                  procedure onConnectFormattedEntsToRoot(pRootEntity,pFormattedEntity:Pointer;const drawing:TDrawingDef;var DC:TDrawContext);virtual;
                   procedure onEntityAfterConnect(pEntity:Pointer;const drawing:TDrawingDef;var DC:TDrawContext);virtual;
                   procedure onEntityBeforeConnect(pEntity:Pointer;const drawing:TDrawingDef;var DC:TDrawContext);virtual;
                   function NeedStandardDraw(pEntity:Pointer;const drawing:TDrawingDef;var DC:TDrawContext):Boolean;virtual;
+                  procedure SetRoot(pEntity:Pointer;pNewRoot:Pointer);virtual;
 end;
 TMetaEntityExtender=class of TBaseEntityExtender;
 TEntityExtenderVector= TMyVector<TBaseEntityExtender>;
@@ -77,8 +79,10 @@ TEntityExtensions=class
                        procedure RunSaveToDxf(var outhandle:TZctnrVectorBytes;PEnt:Pointer;var IODXFContext:TIODXFContext);
                        procedure RunSaveToDXFfollow(PEnt:Pointer;var outhandle:TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);
                        procedure RunOnConnect(pEntity:Pointer;const drawing:TDrawingDef;var DC:TDrawContext);
+                       procedure RunConnectFormattedEntsToRoot(pRootEntity,pFormattedEntity:Pointer;const drawing:TDrawingDef;var DC:TDrawContext);
                        procedure RunOnAfterConnect(pEntity:Pointer;const drawing:TDrawingDef;var DC:TDrawContext);
                        procedure RunOnBeforeConnect(pEntity:Pointer;const drawing:TDrawingDef;var DC:TDrawContext);
+                       procedure RunSetRoot(pEntity:Pointer;pNewRoot:Pointer);
                   end;
   TEntityExtendersMap=GKey2DataMap<string,TMetaEntityExtender>;
 var
@@ -88,12 +92,23 @@ function TBaseEntityExtender.NeedStandardDraw(pEntity:Pointer;const drawing:TDra
 begin
   result:=true;
 end;
+procedure TBaseEntityExtender.SetRoot(pEntity:Pointer;pNewRoot:Pointer);
+begin
+end;
+
+procedure TBaseEntityExtender.PostLoad(var context:TIODXFLoadContext);
+begin
+end;
 
 procedure TBaseEntityExtender.SaveToDXFfollow(PEnt:Pointer;var outhandle:TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);
 begin
 end;
 
 procedure TBaseEntityExtender.onEntityConnect(pEntity:Pointer;const drawing:TDrawingDef;var DC:TDrawContext);
+begin
+end;
+
+procedure TBaseEntityExtender.onConnectFormattedEntsToRoot(pRootEntity,pFormattedEntity:Pointer;const drawing:TDrawingDef;var DC:TDrawContext);
 begin
 end;
 
@@ -328,6 +343,16 @@ begin
          fEntityExtensions[i].onEntityConnect(pEntity,drawing,DC);
 end;
 
+procedure TEntityExtensions.RunConnectFormattedEntsToRoot(pRootEntity,pFormattedEntity:Pointer;const drawing:TDrawingDef;var DC:TDrawContext);
+var
+  i:integer;
+begin
+     if assigned(fEntityExtensions)then
+     for i:=0 to fEntityExtensions.Size-1 do
+       if fEntityExtensions[i]<>nil then
+         fEntityExtensions[i].onConnectFormattedEntsToRoot(pRootEntity,pFormattedEntity,drawing,DC);
+end;
+
 procedure TEntityExtensions.RunOnAfterConnect(pEntity:Pointer;const drawing:TDrawingDef;var DC:TDrawContext);
 var
   i:integer;
@@ -346,6 +371,15 @@ begin
      for i:=0 to fEntityExtensions.Size-1 do
        if fEntityExtensions[i]<>nil then
          fEntityExtensions[i].onEntityBeforeConnect(pEntity,drawing,DC);
+end;
+procedure TEntityExtensions.RunSetRoot(pEntity:Pointer;pNewRoot:Pointer);
+var
+  i:integer;
+begin
+     if assigned(fEntityExtensions)then
+     for i:=0 to fEntityExtensions.Size-1 do
+       if fEntityExtensions[i]<>nil then
+         fEntityExtensions[i].SetRoot(pEntity,pNewRoot);
 end;
 
 initialization

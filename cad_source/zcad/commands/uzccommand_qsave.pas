@@ -62,7 +62,7 @@ end;
 
 procedure startup;
 begin
-  CreateCommandFastObjectPlugin(@QSave_com,'QSave',CADWG or CADWGChanged,0).CEndActionAttr:=CEDWGNChanged;
+  CreateCommandFastObjectPlugin(@QSave_com,'QSave',CADWG or CADWGChanged,0).CEndActionAttr:=[CEDWGNChanged];
 end;
 procedure finalize;
 begin

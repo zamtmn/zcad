@@ -23,7 +23,8 @@ uses
      uzcstrconsts,uzcsysparams,uzcsysvars,
      uzcinfoform,Varman,uzcinterface,laz.VirtualTrees,LCLVersion,
      uzbstrproc,
-     EditBtn,Masks,StdCtrls,Controls,Classes,Forms,uzccommandsmanager,Laz2_DOM,
+     EditBtn,Masks,StdCtrls,ExtCtrls,Controls,Classes,Forms,Buttons,
+     uzccommandsmanager,Laz2_DOM,
      ComCtrls,uztoolbarsmanager,uzxmlnodesutils,uzcimagesmanager,
      uzctranslations,uzcdrawings;
 type
@@ -57,6 +58,8 @@ type
   TZPaletteTreeViewFilter=class(TEditButton)
     tree:TZPaletteTreeView;
     procedure PurgeFilter(Sender: TObject);
+    procedure CollapseAll(Sender: TObject);
+    procedure ExpandAll(Sender: TObject);
   end;
 
 TPaletteHelper=class
@@ -195,17 +198,16 @@ begin
       MatchInChildren:=false;
     if MatchInChildren then
       Tree.Expanded[Node]:=true;
-      //node.States:=node.States+[vsExpanded];
     if pattern='' then
-      node.States:=node.States-[vsFiltered]
+      tree.IsFiltered[node]:=false
     else begin
       pTND:=tree.GetNodeData(node);
       if assigned(pTND) then begin
-          if MatchInChildren or Match(pTND,pattern) then begin
-            node.States:=node.States-[vsFiltered];
-            result:=true;
-          end else
-            node.States:=node.States+[vsFiltered]
+        if MatchInChildren or Match(pTND,pattern) then begin
+          tree.IsFiltered[node]:=false;
+          result:=true;
+        end else
+          tree.IsFiltered[node]:=true;
       end;
     end;
     node:=node.NextSibling;
@@ -216,7 +218,14 @@ procedure TZPaletteTreeViewFilter.PurgeFilter(Sender: TObject);
 begin
   Text:='';
 end;
-
+procedure TZPaletteTreeViewFilter.CollapseAll(Sender: TObject);
+begin
+  tree.FullCollapse();
+end;
+procedure TZPaletteTreeViewFilter.ExpandAll(Sender: TObject);
+begin
+  tree.FullExpand();
+end;
 class procedure TPaletteHelper.ZPaletteTreeFilter(Sender: TObject);
 var
    ZPaletteTreeViewFilter:TZPaletteTreeViewFilter;
@@ -238,6 +247,8 @@ var
    col1,col2:TVirtualTreeColumn;
    PaletteTreeViewFilter:TZPaletteTreeViewFilter;
    UlclzdCaption:String;
+   pnl:TPanel;
+   eab,cab:TSpeedButton;
 begin
   result:=TCustomForm(Tform.NewInstance);
   {if result is TWinControl then
@@ -248,14 +259,44 @@ begin
   TCustomForm(result).Name:=aControlName;
   UlclzdCaption:=getAttrValue(TBNode,'Caption',aInternalCaption);
   TCustomForm(result).Caption:=InterfaceTranslate('Palette~'+UlclzdCaption,UlclzdCaption);
+  pnl:=TPanel.Create(result);
+  with pnl do
+  begin
+    Align:=alTop;
+    Parent:=result;
+    AutoSize:=True;
+    BorderStyle:=bsNone;
+  end;
+  cab:=TSpeedButton.Create(result);
+  with cab do
+  begin
+    Align:=alRight;
+    AutoSize:=True;
+    Images:=ImagesManager.IconList;
+    ImageIndex:=ImagesManager.GetImageIndex('Plus');
+    ShowCaption:=false;
+    Flat:=true;
+    Parent:=pnl;
+  end;
+  eab:=TSpeedButton.Create(result);
+  with eab do
+  begin
+    Align:=alRight;
+    AutoSize:=True;
+    Images:=ImagesManager.IconList;
+    ImageIndex:=ImagesManager.GetImageIndex('Minus');
+    ShowCaption:=false;
+    Flat:=true;
+    Parent:=pnl;
+  end;
   PaletteTreeViewFilter:=TZPaletteTreeViewFilter.Create(result);
   with PaletteTreeViewFilter do
   begin
     TextHint:=rsFilterHint;
     Edit.BorderStyle:=bsNone;
     Flat:=true;
-    align:=alTop;
-    Parent:=result;
+    align:=alClient;
+    Parent:=pnl;
     OnChange:=ZPaletteTreeFilter;
     Button.Images:=ImagesManager.IconList;
     Button.ImageIndex:=ImagesManager.GetImageIndex('purge');
@@ -295,6 +336,8 @@ begin
   end;
   PaletteTreeViewFilter.tree:=TZPaletteTreeView(PaletteControl);
   PaletteTreeViewFilter.Button.OnClick:=PaletteTreeViewFilter.PurgeFilter;
+  eab.OnClick:=PaletteTreeViewFilter.ExpandAll;
+  cab.OnClick:=PaletteTreeViewFilter.CollapseAll;
 end;
 class procedure TPaletteHelper.ZPaletteTreeItemCreator(aNode: TDomNode;rootnode:TPersistent; palette:TPaletteControlBaseType;treeprefix:string);
 var

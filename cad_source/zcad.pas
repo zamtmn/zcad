@@ -243,6 +243,7 @@ uses
 
   uzcenitiesvariablesextender,uzcExtdrLayerControl,uzcExtdrSmartTextEnt,
   uzcExtdrIncludingVolume,uzcExtdrSCHConnection,uzcExtdrSCHConnector,
+  uzcExtdrReport,
 
   {$IFNDEF DARWIN}
   {$IFDEF ELECTROTECH}

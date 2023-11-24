@@ -4,7 +4,7 @@ interface
 
 uses system,devices;
 usescopy blocktype;
-usescopy objname_eo;
+usescopy objname;
 usescopy objgroup;
 usescopy addtocable;
 

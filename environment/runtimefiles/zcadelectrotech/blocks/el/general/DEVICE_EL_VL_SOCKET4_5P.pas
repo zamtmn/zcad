@@ -1,4 +1,4 @@
-unit DEVICE_EL_VL_SOCKET4_2P;
+unit DEVICE_EL_VL_SOCKET4_5P;
 
 interface
 
@@ -32,7 +32,7 @@ GC_HeadDevice:='ЩО??';
 GC_HDShortName:='??';
 GC_HDGroup:=0;
 
-VL_Type:='Р СП/2 ip20';
+VL_Type:='П СП/1 ip20';
 VL_Room:='.';
 VL_Floor:='0';
 

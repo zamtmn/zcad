@@ -4,7 +4,7 @@ interface
 
 uses system,devices;
 usescopy blocktype;
-usescopy objname_eo;
+usescopy objname;
 usescopy objgroup;
 usescopy addtocable;
 
@@ -32,7 +32,7 @@ GC_HeadDevice:='ЩО??';
 GC_HDShortName:='??';
 GC_HDGroup:=0;
 
-VL_Type:='П СП/1 ip20';
+VL_Type:='Р ОП/2 ip54';
 VL_Room:='.';
 VL_Floor:='0';
 

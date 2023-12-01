@@ -565,6 +565,7 @@ var
       getListNameHeadDevinGraph(graphDev,graphDev.Root.Index,listNameHeadDev);
       for tempStr in listNameHeadDev do
         begin
+          ZCMsgCallBackInterface.TextMessage(' все ГУ ГУ гУ ===' + tempStr,TMWOHistoryOut);
           //ZCMsgCallBackInterface.TextMessage('Имя ГУ без отсева ='+tempStr,TMWOHistoryOut);
           getListMainFuncHeadDevinGraph(graphDev,graphDev.Root.Index,result,tempStr);
         end;

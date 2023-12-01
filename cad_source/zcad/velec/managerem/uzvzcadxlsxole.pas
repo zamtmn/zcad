@@ -52,13 +52,17 @@ procedure saveXLSXFile(pathFile:string);
 procedure destroyWorkbook();
   //** копуруем лист с кодовым именем и присваиваем ему правильное имя
 procedure copyWorksheetName(codeSheet:string;nameSheet:string);
+  //** удалить строчку
+  procedure deleteRow(nameSheet:string;iRow:Cardinal);
   //** найти строку и столбец ячейки старта, для импорта
 procedure searchCellRowCol(nameSheet:string;nameValueCell:string;var vRow,vCol:Cardinal);
   //** получить значение ячейки
 function getCellValue(nameSheet:string;iRow,iCol:Cardinal):string;
   //** присвоить значение ячейки
 procedure setCellValue(nameSheet:string;iRow,iCol:Cardinal;iText:string);
-//** присвоить значение ячейки ФОРМУЛА
+  //** получить значение ячейки
+function getCellFormula(nameSheet:string;iRow,iCol:Cardinal):string;
+  //** присвоить значение ячейки ФОРМУЛА
 procedure setCellFormula(nameSheet:string;iRow,iCol:Cardinal;iText:string);
   //**Копирование ячейки с какого листа и какая ячейка
 procedure copyCell(nameStSheet:string;stRow,stCol:Cardinal;nameEdSheet:string;edRow,edCol:Cardinal);
@@ -97,6 +101,11 @@ begin
       //ZCMsgCallBackInterface.TextMessage('Лист = ' + BasicWorkbook.WorkSheets[i].Name + ' спрятан!',TMWOHistoryOut);
       BasicWorkbook.WorkSheets[i].Visible:=false;
     end;
+end;
+procedure deleteRow(nameSheet:string;iRow:Cardinal);
+//var
+begin
+  BasicWorkbook.WorkSheets(nameSheet).Rows[iRow].Delete;
 end;
 procedure copyWorksheetName(codeSheet:string;nameSheet:string);
 var
@@ -139,6 +148,10 @@ procedure setCellValue(nameSheet:string;iRow,iCol:Cardinal;iText:string);
 begin
   BasicWorkbook.WorkSheets(nameSheet).Cells(iRow,iCol).Value:=iText;
 end;
+function getCellFormula(nameSheet:string;iRow,iCol:Cardinal):string;
+begin
+  result:=BasicWorkbook.WorkSheets(nameSheet).Cells(iRow,iCol).Formula;
+end;
 procedure setCellFormula(nameSheet:string;iRow,iCol:Cardinal;iText:string);
 begin
   BasicWorkbook.WorkSheets(nameSheet).Cells(iRow,iCol).Formula:=iText;
@@ -163,11 +176,23 @@ procedure searchCellRowCol(nameSheet:string;nameValueCell:string;var vRow,vCol:C
 var
     iRangeFind: OleVariant;
 
+    function VarIsNothing(V: OleVariant): Boolean;
+    begin
+      Result :=
+        (TVarData(V).VType = varDispatch)
+        and
+        (TVarData(V).VDispatch = nil);
+    end;
 begin
 
   iRangeFind := BasicWorkbook.WorkSheets(nameSheet).UsedRange.Find(nameValueCell, MatchCase:=False);
-  if VarIsEmpty(iRangeFind) then
-     ZCMsgCallBackInterface.TextMessage('Not found',TMWOHistoryOut)
+  //ZCMsgCallBackInterface.TextMessage('поиск',TMWOHistoryOut);
+  if VarIsNothing(iRangeFind) then
+  begin
+     //ZCMsgCallBackInterface.TextMessage('Not found',TMWOHistoryOut);
+     vRow:=0;
+     vCol:=0;
+  end
   else
   begin
     vRow:=iRangeFind.Row;

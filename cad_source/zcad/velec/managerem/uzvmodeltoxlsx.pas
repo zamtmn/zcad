@@ -310,23 +310,29 @@ var
                 uzvzcadxlsxole.setCellValue(nameSheet,stRowNew,stColNew,'1');
 
               inc(stColNew);      // отходим от кодового имени
-              cellValueVar:=uzvzcadxlsxole.getCellValue(nameEtalon,stRow,stColNew);
+              cellValueVar:=uzvzcadxlsxole.getCellFormula(nameEtalon,stRow,stColNew);
 
               ZCMsgCallBackInterface.TextMessage('значение ячейки = ' + inttostr(stRow) + ' - ' + inttostr(stColNew)+ ' = ' + cellValueVar,TMWOHistoryOut);
               while cellValueVar <> zimportdevFT do begin
-                 pvd2:=FindVariableInEnt(ourDev,cellValueVar);
-                 if pvd2<>nil then begin
-                   textCell:=pvd2^.data.ptd^.GetValueAsString(pvd2^.data.Addr.Instance);
-                   //ZCMsgCallBackInterface.TextMessage('записываю в ячейку = ' + textCell,TMWOHistoryOut);
-                   uzvzcadxlsxole.setCellValue(nameSheet,stRowNew,stColNew,textCell);
-                 end
-                 else
-                 begin
-                   uzvzcadxlsxole.copyCell(nameEtalon,stRow,stColNew,nameSheet,stRowNew,stColNew);
-                 end;
+               if cellValueVar = '' then
+                 continue;
+               if cellValueVar[1]<>'=' then
+               begin
+                   pvd2:=FindVariableInEnt(ourDev,cellValueVar);
+                   if pvd2<>nil then begin
+                     textCell:=pvd2^.data.ptd^.GetValueAsString(pvd2^.data.Addr.Instance);
+                     //ZCMsgCallBackInterface.TextMessage('записываю в ячейку = ' + textCell,TMWOHistoryOut);
+                     uzvzcadxlsxole.setCellValue(nameSheet,stRowNew,stColNew,textCell);
+                   end else uzvzcadxlsxole.copyCell(nameEtalon,stRow,stColNew,nameSheet,stRowNew,stColNew);
+
+               end
+               else
+               begin
+                 uzvzcadxlsxole.copyCell(nameEtalon,stRow,stColNew,nameSheet,stRowNew,stColNew);
+               end;
 
                  inc(stColNew);
-                 cellValueVar:=uzvzcadxlsxole.getCellValue(nameEtalon,stRow,stColNew);
+                 cellValueVar:=uzvzcadxlsxole.getCellFormula(nameEtalon,stRow,stColNew);
                  ZCMsgCallBackInterface.TextMessage('значение ячейки = ' + inttostr(stRow) + ' - ' + inttostr(stColNew)+ ' = ' + cellValueVar,TMWOHistoryOut);
 
 
@@ -335,6 +341,7 @@ var
               stColNew:=stCol;
             end;
          end;
+       //uzvzcadxlsxole.setCellValue(nameSheet,1,1,'1'); //переводим фокус
     end;
     //Если кодовое имя zcopyrow
     procedure zcopyrowcommand(nameEtalon,nameSheet:string;stRowEtalon,stColEtalon:Cardinal);
@@ -413,7 +420,7 @@ var
        stColEtalonNew:=stColEtalon;
 
        //цикл до конца заполнених строчек
-       cellValueVar:=uzvzcadxlsxole.getCellValue(textTargetSheet,stRowNew,stCol);  //Получаем значение ключа, для первой строки
+       cellValueVar:=uzvzcadxlsxole.getCellFormula(textTargetSheet,stRowNew,stCol);  //Получаем значение ключа, для первой строки
        while cellValueVar <> '' do
          begin
               ////cellValueVar:=uzvzcadxlsxole.getCellValue(textTargetSheet,stRowNew,stCol);  //Получаем значение ключа, для первой строки
@@ -425,7 +432,7 @@ var
               //   continue;
               //
               inc(stColEtalonNew);
-              cellValueVar:=uzvzcadxlsxole.getCellValue(nameEtalon,stRowEtalon,stColEtalonNew);  //Получаем значение ключа, для первой строки
+              cellValueVar:=uzvzcadxlsxole.getCellFormula(nameEtalon,stRowEtalon,stColEtalonNew);  //Получаем значение ключа, для первой строки
               ////начинаем копировать строки
               while cellValueVar <> zcopyrowFT do begin
                   uzvzcadxlsxole.copyCell(nameEtalon,stRowEtalon,stColEtalonNew,nameSheet,stRowEtalonNew,stColEtalonNew);
@@ -435,21 +442,29 @@ var
                   //ZCMsgCallBackInterface.TextMessage('temptextcellnew = ' + temptextcellnew,TMWOHistoryOut);
                   uzvzcadxlsxole.setCellFormula(nameSheet,stRowEtalonNew,stColEtalonNew,temptextcellnew);
                   inc(stColEtalonNew);
-                  cellValueVar:=uzvzcadxlsxole.getCellValue(nameEtalon,stRowEtalon,stColEtalonNew);
+                  cellValueVar:=uzvzcadxlsxole.getCellFormula(nameEtalon,stRowEtalon,stColEtalonNew);
                end;
 
               inc(stRowEtalonNew);
               stColEtalonNew:=stColEtalon;
+              if (stRowEtalonNew <> stRowEtalon) then
+                uzvzcadxlsxole.setCellValue(nameSheet,stRowEtalonNew,stColEtalon,'1');
               inc(stRowNew);
-              cellValueVar:=uzvzcadxlsxole.getCellValue(textTargetSheet,stRowNew,stCol);  //Получаем значение ключа, для первой строки
+              cellValueVar:=uzvzcadxlsxole.getCellFormula(textTargetSheet,stRowNew,stCol);  //Получаем значение ключа, для первой строки
          end;
 
        //цикл который удаляет строчки в которые неподходят по ключам
+       stRowNew:=stRowNew-1;
+
+       uzvzcadxlsxole.deleteRow(nameSheet,stRowEtalonNew);// удаляем последнию строчку в которую вписали 1
+       stRowEtalonNew:=stRowEtalonNew-1;
        cellValueVar:=uzvzcadxlsxole.getCellValue(textTargetSheet,stRowNew,stCol);  //Получаем значение ключа, для первой строки
+       ZCMsgCallBackInterface.TextMessage('удаляем удаляем удаляем= ' + inttostr(stRowNew) + ' - ' + inttostr(stCol)+ ' = '+cellValueVar,TMWOHistoryOut);
+
        while cellValueVar = '1' do
          begin
               cellValueVar:=uzvzcadxlsxole.getCellValue(textTargetSheet,stRowNew,speckeynumcol);  //Получаем значение ключа, для первой строки
-              ZCMsgCallBackInterface.TextMessage('значение ячейки которое равно 111111111111111111 = ' + inttostr(stRowNew) + ' - ' + inttostr(stCol)+ ' = '+cellValueVar,TMWOHistoryOut);
+              //ZCMsgCallBackInterface.TextMessage('значение ячейки которое удаляем 111111111111111111 = ' + inttostr(stRowNew) + ' - ' + inttostr(stCol)+ ' = '+cellValueVar,TMWOHistoryOut);
               if cellValueVar <> '1' then
                  uzvzcadxlsxole.deleteRow(nameSheet,stRowEtalonNew);
 
@@ -457,78 +472,7 @@ var
               stRowNew:=stRowNew-1;
               cellValueVar:=uzvzcadxlsxole.getCellValue(textTargetSheet,stRowNew,stCol);  //Получаем значение ключа, для первой строки
          end;
-
-
-
-       //for ourDev in listDev do
-       //   begin
-       //
-       //     pvd2:=FindVariableInEnt(ourDev,velec_nameDevice);
-       //       if pvd2<>nil then
-       //          ZCMsgCallBackInterface.TextMessage('Имя устройства = '+pstring(pvd2^.data.Addr.Instance)^,TMWOHistoryOut);
-       //
-       //     // Заполняем всю информацию по устройству
-       //     //ZCMsgCallBackInterface.TextMessage('1',TMWOHistoryOut);
-       //
-       //     if (stRowNew <> stRow) then
-       //       uzvzcadxlsxole.setCellValue(nameSheet,stRowNew,stColNew,'1');
-       //
-       //     inc(stColNew);      // отходим от кодового имени
-       //     cellValueVar:=uzvzcadxlsxole.getCellValue(nameEtalon,stRow,stColNew);
-       //
-       //     //ZCMsgCallBackInterface.TextMessage('значение ячейки = ' + inttostr(nowCell.vRow) + ' - ' + inttostr(nowCell.vCol)+ ' = ' + cellValueVar,TMWOHistoryOut);
-       //
-       //   end;
-
-       ////Получаем список групп для данного щита
-       //listGroupHeadDev:=uzvmanemgetgem.getListNameGroupHD(graphDev);
-       //stRowNew:=stRow;
-       //stColNew:=stCol;
-       //
-       //for nameGroup in listGroupHeadDev do
-       //  begin
-       //   //Получаем список устройств для данной группы
-       //   listDev:=uzvmanemgetgem.getListDevInGroupHD(nameGroup,graphDev);
-       //   //Ищем стартовую ячейку для начала переноса данных
-       //
-       //
-       //   //начинаем заполнять ячейки в XLSX
-       //   for ourDev in listDev do
-       //     begin
-       //
-       //       pvd2:=FindVariableInEnt(ourDev,velec_nameDevice);
-       //         if pvd2<>nil then
-       //            ZCMsgCallBackInterface.TextMessage('Имя устройства = '+pstring(pvd2^.data.Addr.Instance)^,TMWOHistoryOut);
-       //
-       //       // Заполняем всю информацию по устройству
-       //       //ZCMsgCallBackInterface.TextMessage('1',TMWOHistoryOut);
-       //
-       //       if (stRowNew <> stRow) uzvzcadxlsxole.searchCellRowCol(nameEtalon,arrayCodeName[i],stInfoDevCell.vRow,stInfoDevCell.vCol);then
-       //         uzvzcadxlsxole.setCellValue(nameSheet,stRowNew,stColNew,'1');
-       //
-       //       inc(stColNew);      // отходим от кодового имени
-       //       cellValueVar:=uzvzcadxlsxole.getCellValue(nameEtalon,stRow,stColNew);
-       //
-       //       //ZCMsgCallBackInterface.TextMessage('значение ячейки = ' + inttostr(nowCell.vRow) + ' - ' + inttostr(nowCell.vCol)+ ' = ' + cellValueVar,TMWOHistoryOut);
-       //       while cellValueVar <> zimportdevFT do begin
-       //          pvd2:=FindVariableInEnt(ourDev,cellValueVar);
-       //          if pvd2<>nil then begin
-       //            textCell:=pvd2^.data.ptd^.GetValueAsString(pvd2^.data.Addr.Instance);
-       //            //ZCMsgCallBackInterface.TextMessage('записываю в ячейку = ' + textCell,TMWOHistoryOut);
-       //            uzvzcadxlsxole.setCellValue(nameSheet,stRowNew,stColNew,textCell);
-       //          end
-       //          else
-       //          begin
-       //            uzvzcadxlsxole.copyCell(nameEtalon,stRow,stColNew,nameSheet,stRowNew,stColNew);
-       //          end;
-       //          inc(stColNew);
-       //          cellValueVar:=uzvzcadxlsxole.getCellValue(nameEtalon,stRow,stColNew);
-       //
-       //       end;
-       //       inc(stRowNew);
-       //       stColNew:=stCol;
-       //     end;
-       //  end;
+       //uzvzcadxlsxole.setCellValue(nameSheet,1,1,'1'); //переводим фокус
     end;
     procedure generatorSheet(graphDev:TGraphDev;nameEtalon,nameSheet:string);
   var

@@ -1237,13 +1237,13 @@ var
       //рисуем прямоугольник с цветом  зная номера вершин, координат возьмем из графа по номерам
       procedure drawConnectLineDev(pSt,p1,p2,pEd:GDBVertex;VT1,VT2:TVertex; var root:GDBObjRoot);
       var
-          cabl:TEdgeTree;
+          cabl,cabl2:TEdgeTree;
           pDev1,pDev2:pGDBObjDevice;
           cableLine:PGDBObjPolyLine;
           //pnevdev:PGDBObjCable;
-          entvarext,delvarext:TVariablesExtender;
+          entvarext,delvarext,entvarextParent:TVariablesExtender;
           psu:ptunit;
-          pvd:pvardesk;
+          pvd,pvd2:pvardesk;
           //pv1,pv2,pvlength1,pvlength2:pvardesk;
           //sum:double;
           //DC:TDrawContext;
@@ -1292,9 +1292,34 @@ var
             //pvarext:=cableLine^.specialize GetExtension<TVariablesExtender>; //подклчаемся к инспектору
             if entvarext<>nil then
             begin
+              cabl2:=TEdgeTree(G.GetEdge(listVertex[tparent].vertex,listVertex[tparent].vertex.Parent).AsPointer[vpTEdgeTree]^);
+              entvarextParent:=cabl2.segm^.specialize GetExtension<TVariablesExtender>;
+
               psu:=units.findunit(GetSupportPath,@InterfaceTranslate,'cableelscheme'); //
               if psu<>nil then
                 entvarext.entityunit.copyfrom(psu);
+
+              pvd:=entvarext.entityunit.FindVariable(velec_GC_HeadDevice);
+              if pvd<>nil then
+              begin
+                 pvd2:=entvarextParent.entityunit.FindVariable(velec_GC_HeadDevice);
+                 pstring(pvd^.data.Addr.Instance)^:=pstring(pvd2^.data.Addr.Instance)^;
+              end;
+
+              pvd:=entvarext.entityunit.FindVariable(velec_nameDevice);
+              if pvd<>nil then
+              begin
+                 pvd2:=entvarextParent.entityunit.FindVariable(velec_nameDevice);
+                 pstring(pvd^.data.Addr.Instance)^:=pstring(pvd2^.data.Addr.Instance)^;
+              end;
+
+              pvd:=entvarext.entityunit.FindVariable(velec_GC_HDGroup);
+              if pvd<>nil then
+              begin
+                 pvd2:=entvarextParent.entityunit.FindVariable(velec_GC_HDGroup);
+                 pstring(pvd^.data.Addr.Instance)^:=pstring(pvd2^.data.Addr.Instance)^;
+              end;
+
               pvd:=entvarext.entityunit.FindVariable(velec_cableMounting);
               if pvd<>nil then
                  pstring(pvd^.data.Addr.Instance)^:=cabl.mountingMethod;
@@ -2244,7 +2269,9 @@ var
                   edgeGraph^.segm:=nil;
                   edgeGraph^.isSegm:=false;
                   edgeGraph^.isRiser:=true;
-                  edgeGraph^.mountingMethod:='УРА';
+                  //edgeGraph^.mountingMethod:=uzbstrproc.Tria_AnsiToUtf8('СтоякРазрыв');
+                  edgeGraph^.mountingMethod:='СтоякРазрыв';
+
                   sum:= abs(pdouble(pvendelevation^.data.Addr.Instance)^ - pdouble(pvstartelevation^.data.Addr.Instance)^);
                   edgeGraph^.length:=sum;
                   //ZCMsgCallBackInterface.TextMessage('создали ребро в граф',TMWOHistoryOut);

@@ -15,6 +15,7 @@
       <ZAction Name="ACN_managerEM" Command="manem" Img="#MEM" Caption="Manager electrical model"/>
       <ZAction Name="ACN_generatorOneDiagram" Command="vGeneratorOneLine" Img="#GD1" Caption="Generator one-level diagram"/>
       <ZAction Name="ACN_exportModeltoExcell" Command="vExportToXLSX" Img="#GGG" Caption="Export model to excell"/>
+      <ZAction Name="ACN_XLSXtoCADinsertblock" Command="vXLSXtoCAD" Img="#FFF" Caption="Import block from xlsx"/>
       <ZAction Name="ACN_CreateLL" Command="extdrAdd(extdrSmartTextEnt)" Img="#CLL" Caption="Creating Leader Lines"/>
     </Group>
   </ActionsContent>

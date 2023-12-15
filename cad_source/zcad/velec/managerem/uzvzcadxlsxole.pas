@@ -46,6 +46,12 @@ uses
   //RegExpr;
   //** открываем нужный нам xlsx файл
 procedure openXLSXFile(pathFile:string);
+  //** Получаем активную книгу
+procedure activeXLSXWorkbook();
+  //** Получаем активный лист в активной книге
+procedure activeWorkSheetXLSX;
+//** Получаем имя активного листа в активной книге
+function getActiveWorkSheetName:string;
   //** сохраняем xlsx файл
 procedure saveXLSXFile(pathFile:string);
   //** очищаем память
@@ -54,8 +60,10 @@ procedure destroyWorkbook();
 procedure copyWorksheetName(codeSheet:string;nameSheet:string);
   //** удалить строчку
   procedure deleteRow(nameSheet:string;iRow:Cardinal);
-  //** найти строку и столбец ячейки старта, для импорта
+  //** найти строку и столбец ячейки старта, для импорта. Первое вхождение
 procedure searchCellRowCol(nameSheet:string;nameValueCell:string;var vRow,vCol:Cardinal);
+  //** найти строку и столбец ячейки старта, для импорта. Следующее вхождение
+procedure searchNextCellRowCol(nameSheet:string;nameValueCell:string;var vRow,vCol:Cardinal);
   //** получить значение ячейки
 function getCellValue(nameSheet:string;iRow,iCol:Cardinal):string;
   //** присвоить значение ячейки
@@ -73,13 +81,37 @@ implementation
 var
   Excel:OleVariant;
   BasicWorkbook: OleVariant;
-  //nowWorksheet: OleVariant;
+  ActiveWorkSheet: OleVariant;
+  iRangeFind: OleVariant;
 
 procedure openXLSXFile(pathFile:string);
 //var
 begin
   Excel := CreateOleObject('Excel.Application');
   BasicWorkbook:=Excel.Workbooks.Open(WideString(pathFile));
+end;
+procedure activeXLSXWorkbook;
+//var
+begin
+  //Ищем запущеный экземпляр Excel, если он не найден, вызывается исключение
+  Excel := GetActiveOleObject('Excel.Application');
+  BasicWorkbook:=Excel.ActiveWorkbook;
+  ZCMsgCallBackInterface.TextMessage('Доступ получен к книге = ' + BasicWorkbook.Name,TMWOHistoryOut);
+end;
+procedure activeWorkSheetXLSX;
+//var
+begin
+  ActiveWorkSheet:=Excel.ActiveSheet;
+  //ActiveWorkSheet:=BasicWorkbook.ActiveWorksheet;
+  ZCMsgCallBackInterface.TextMessage('Открыт лист = ' + ActiveWorkSheet.Name,TMWOHistoryOut);
+end;
+function getActiveWorkSheetName:string;
+//var
+begin
+  ActiveWorkSheet:=Excel.ActiveSheet;
+  result:=ActiveWorkSheet.Name;
+  //ActiveWorkSheet:=BasicWorkbook.ActiveWorksheet;
+  ZCMsgCallBackInterface.TextMessage('Открыт лист = ' + result,TMWOHistoryOut);
 end;
 procedure saveXLSXFile(pathFile:string);
 //var
@@ -174,7 +206,7 @@ end;
 
 procedure searchCellRowCol(nameSheet:string;nameValueCell:string;var vRow,vCol:Cardinal);
 var
-    iRangeFind: OleVariant;
+  i: integer;
 
     function VarIsNothing(V: OleVariant): Boolean;
     begin
@@ -187,6 +219,35 @@ begin
 
   iRangeFind := BasicWorkbook.WorkSheets(nameSheet).UsedRange.Find(nameValueCell, MatchCase:=False);
   //ZCMsgCallBackInterface.TextMessage('поиск',TMWOHistoryOut);
+  if VarIsNothing(iRangeFind) then
+  begin
+     //ZCMsgCallBackInterface.TextMessage('Not found',TMWOHistoryOut);
+     vRow:=0;
+     vCol:=0;
+  end
+  else
+  begin
+    vRow:=iRangeFind.Row;
+    vCol:=iRangeFind.Column;
+  end;
+
+end;
+
+procedure searchNextCellRowCol(nameSheet:string;nameValueCell:string;var vRow,vCol:Cardinal);
+var
+  i:integer;
+    function VarIsNothing(V: OleVariant): Boolean;
+    begin
+      Result :=
+        (TVarData(V).VType = varDispatch)
+        and
+        (TVarData(V).VDispatch = nil);
+    end;
+begin
+
+  iRangeFind := BasicWorkbook.WorkSheets(nameSheet).UsedRange.FindNext(iRangeFind);
+  //ZCMsgCallBackInterface.TextMessage('поиск next',TMWOHistoryOut);
+  //ZCMsgCallBackInterface.TextMessage('значение адресс = ' + inttostr(iRangeFind.Row) + ' - ' + inttostr(iRangeFind.Column)+ ' = ',TMWOHistoryOut);
   if VarIsNothing(iRangeFind) then
   begin
      //ZCMsgCallBackInterface.TextMessage('Not found',TMWOHistoryOut);

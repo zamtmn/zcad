@@ -52,6 +52,9 @@ uses
   Classes,
   uzgldrawcontext,
   uzcstrconsts,
+  UUnitManager,
+  uzbPaths,
+  uzcTranslations,
   Varman;
 
   type
@@ -123,6 +126,8 @@ var
   function drawInsertBlock(pt:GDBVertex;nameBlock:string):PGDBObjDevice;
   var
       rc:TDrawContext;
+      entvarext:TVariablesExtender;
+      psu:ptunit;
   begin
       //if commandmanager.get3dpoint('Specify insert point:',p1)=GRNormal then
       //begin
@@ -140,31 +145,75 @@ var
         result^.BuildGeometry(drawings.GetCurrentDWG^);
         //"форматируем"
         rc:=drawings.GetCurrentDWG^.CreateDrawingRC;
-        ZCMsgCallBackInterface.TextMessage('1',TMWOHistoryOut);
+        //ZCMsgCallBackInterface.TextMessage('1',TMWOHistoryOut);
         result^.FormatEntity(drawings.GetCurrentDWG^,rc);
-        ZCMsgCallBackInterface.TextMessage('2',TMWOHistoryOut);
+        //ZCMsgCallBackInterface.TextMessage('2',TMWOHistoryOut);
+
+        //добавляем свойства
+        if AnsiPos('DEVICE_', nameBlock) > 0 then begin
+          entvarext:=result^.GetExtension<TVariablesExtender>;
+          if entvarext<>nil then
+            begin
+              psu:=units.findunit(GetSupportPath,@InterfaceTranslate,nameBlock); //
+              if psu<>nil then
+                entvarext.entityunit.copyfrom(psu);
+            end;
+        end;
         //дальше как обычно
         zcAddEntToCurrentDrawingConstructRoot(result);
-        ZCMsgCallBackInterface.TextMessage('3',TMWOHistoryOut);
+        //ZCMsgCallBackInterface.TextMessage('3',TMWOHistoryOut);
       //end;
+
+            //      cableLine^.AddExtension(TVariablesExtender.Create(cableLine));
+      //      entvarext:=cableLine^.specialize GetExtension<TVariablesExtender>;
+      //      //**добавление кабельных свойств
+      //      if entvarext<>nil then
+      //      begin
+      //        psu:=units.findunit(SupportPath,@InterfaceTranslate,'cable'); //
+      //        if psu<>nil then
+      //          entvarext.entityunit.copyfrom(psu);
+      //      end;
+
       //result:=cmd_ok;
   end;
 
   //Если кодовое имя zimportdev
     procedure creatorBlockXLSX(nameSheet:string;stRow,stCol:Cardinal);
     var
-      pvd2:pvardesk;
+      pvd,pvd2:pvardesk;
       nameGroup:string;
       listGroupHeadDev:TListGroupHeadDev;
       listDev:TListDev;
       ourDev:PGDBObjDevice;
       stRowNew,stColNew:Cardinal;
-      cellValueVar:string;
+      cellValueVar,cellValueVar2:string;
       insertBlockName:string;
       movex,movey:double;
       textCell:string;
-    begin
+      isInt:boolean;
+      CellValueInt:integer;
+//      function IsNumber(N : String) : Boolean;
+//var
+//I : Integer;
+//begin
+//Result := True;
+//if Trim(N) = '' then
+// Exit(False);
+//
+//if (Length(Trim(N)) > 1) and (Trim(N)[1] = '0') then
+//Exit(False);
+//
+//for I := 1 to Length(N) do
+//begin
+// if not (N[I] in ['0'..'9']) then
+//  begin
+//   Result := False;
+//   Break;
+// end;
+//end;
 
+    begin
+      //isInt:false;
 
       stColNew:=stCol;
       // получаем стартовые условия
@@ -181,28 +230,37 @@ var
 
       inc(stColNew);
       cellValueVar:=uzvzcadxlsxole.getCellValue(nameSheet,stRow,stColNew);
-      //while cellValueVar <> xlsxInsertBlockFT do begin
-      // if cellValueVar = '' then
-      //   continue;
-      // if cellValueVar[1]<>'=' then
-      // begin
-      //     pvd2:=FindVariableInEnt(ourDev,cellValueVar);
-      //     if pvd2<>nil then begin
-      //       textCell:=pvd2^.data.ptd^.GetValueAsString(pvd2^.data.Addr.Instance);
-      //       //ZCMsgCallBackInterface.TextMessage('записываю в ячейку = ' + textCell,TMWOHistoryOut);
-      //       uzvzcadxlsxole.setCellValue(nameSheet,stRowNew,stColNew,textCell);
-      //     end else uzvzcadxlsxole.copyCell(nameEtalon,stRow,stColNew,nameSheet,stRowNew,stColNew);
-      //
-      // end
-      // else
-      // begin
-      //   uzvzcadxlsxole.copyCell(nameEtalon,stRow,stColNew,nameSheet,stRowNew,stColNew);
-      // end;
-      //
-      //   inc(stColNew);
-      //   cellValueVar:=uzvzcadxlsxole.getCellValue(nameSheet,stRow,stColNew);
-      //   //ZCMsgCallBackInterface.TextMessage('значение ячейки = ' + inttostr(stRow) + ' - ' + inttostr(stColNew)+ ' = ' + cellValueVar,TMWOHistoryOut);
-      //end;
+      ZCMsgCallBackInterface.TextMessage('cellValueVar значение ячейки = ' + inttostr(stRow) + ' - ' + inttostr(stColNew)+ ' = ' + cellValueVar,TMWOHistoryOut);
+      while cellValueVar <> xlsxInsertBlockFT do begin
+
+         if cellValueVar <> '' then begin
+           pvd:=FindVariableInEnt(ourDev,cellValueVar);
+           if pvd<>nil then begin
+               inc(stColNew);
+               cellValueVar2:=uzvzcadxlsxole.getCellValue(nameSheet,stRow,stColNew);
+               ZCMsgCallBackInterface.TextMessage('cellValueVar2 значение ячейки = ' + inttostr(stRow) + ' - ' + inttostr(stColNew)+ ' = ' + cellValueVar2,TMWOHistoryOut);
+               //pvd2:=FindVariableInEnt(ourDev,cellValueVar);
+                 //if pvd2<>nil then begin
+               if (cellValueVar2 = 'TRUE') or (cellValueVar2 = 'FALSE') or (cellValueVar2 = 'ЛОЖЬ') or (cellValueVar2 = 'ИСТИНА') or (cellValueVar2 = 'False') or (cellValueVar2 = 'True') then begin
+                 if (cellValueVar2 = 'TRUE') or (cellValueVar2 = 'ИСТИНА') or (cellValueVar2 = 'True') then
+                    pboolean(pvd^.data.Addr.Instance)^:= true
+                    else
+                    pboolean(pvd^.data.Addr.Instance)^:= false;
+                 end else begin
+                    //isInt:=Trystrtoint(cellValueVar2,CellValueInt);
+                    //if isInt then
+                    //   pinetger(pvd^.data.Addr.Instance)^:= CellValueInt
+                    //     else
+                       pstring(pvd^.data.Addr.Instance)^:= cellValueVar2;
+                    ZCMsgCallBackInterface.TextMessage('pstring(pvd^.data.Addr.Instance)^:= cellValueVar2; = ' + cellValueVar2,TMWOHistoryOut);
+                 end;
+                 //end;
+             end;
+         end;
+         inc(stColNew);
+         cellValueVar:=uzvzcadxlsxole.getCellValue(nameSheet,stRow,stColNew);
+         ZCMsgCallBackInterface.TextMessage('cellValueVar while значение ячейки = ' + inttostr(stRow) + ' - ' + inttostr(stColNew)+ ' = ' + cellValueVar,TMWOHistoryOut);
+      end;
       //
 
 

@@ -48,7 +48,7 @@ const
   vTempLayerName='systemTempVisualLayer';
   vpTVertexTree='TVertexTree';
   vpTEdgeTree='TEdgeTree';
-  //velec_NameDevice='NMO_Name';
+  //velec_NameDevice='NMO_Name';          GC_HeadDevice
 
   vGPGDBObjEdge='vGPGDBObjEdge';
   vGPGDBObjVertex='vGPGDBObjVertex';

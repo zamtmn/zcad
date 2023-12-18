@@ -14,6 +14,7 @@
       <Action Name="ACN_managerEM"/>
       <Action Name="ACN_generatorOneDiagram"/>
       <Action Name="ACN_exportModeltoExcell"/>
+      <Action Name="ACN_XLSXtoCADinsertblock"/>
       <Action Name="ACN_CreateLL"/>
     </ElectrotechVelec>
   </ToolBarsContent>

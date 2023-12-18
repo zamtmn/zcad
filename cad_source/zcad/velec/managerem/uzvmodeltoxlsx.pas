@@ -42,9 +42,12 @@ uses
   uzcvariablesutils,
   uzvconsts,
   uzcenitiesvariablesextender,
+  uzcentcable,
   //uzvmanemshieldsgroupparams,
   uzegeometry,
+  uzeentpolyline,
   uzvzcadxlsxole,  //работа с xlsx
+  uzbstrproc,
   StrUtils,
   Classes,
   Varman;
@@ -101,6 +104,7 @@ resourcestring
 
 
     zimportdevFT= '</zimportdev>';
+    zimportcabFT= '</zimportcab>';
     zcopyrowFT= '</zcopyrow>';
     arrayCodeName: TArray<String> = ['<zimportdev','<zimportcab','<zcopyrow', '<zcopycol'];
 
@@ -312,7 +316,7 @@ var
               inc(stColNew);      // отходим от кодового имени
               cellValueVar:=uzvzcadxlsxole.getCellFormula(nameEtalon,stRow,stColNew);
 
-              ZCMsgCallBackInterface.TextMessage('значение ячейки = ' + inttostr(stRow) + ' - ' + inttostr(stColNew)+ ' = ' + cellValueVar,TMWOHistoryOut);
+              //ZCMsgCallBackInterface.TextMessage('значение ячейки = ' + inttostr(stRow) + ' - ' + inttostr(stColNew)+ ' = ' + cellValueVar,TMWOHistoryOut);
               while cellValueVar <> zimportdevFT do begin
                if cellValueVar = '' then
                  continue;
@@ -333,7 +337,7 @@ var
 
                  inc(stColNew);
                  cellValueVar:=uzvzcadxlsxole.getCellFormula(nameEtalon,stRow,stColNew);
-                 ZCMsgCallBackInterface.TextMessage('значение ячейки = ' + inttostr(stRow) + ' - ' + inttostr(stColNew)+ ' = ' + cellValueVar,TMWOHistoryOut);
+                 //ZCMsgCallBackInterface.TextMessage('значение ячейки = ' + inttostr(stRow) + ' - ' + inttostr(stColNew)+ ' = ' + cellValueVar,TMWOHistoryOut);
 
 
               end;
@@ -343,6 +347,193 @@ var
          end;
        //uzvzcadxlsxole.setCellValue(nameSheet,1,1,'1'); //переводим фокус
     end;
+    //Если кодовое имя zimportcab
+    procedure zimportcabcommand(graphDev:TGraphDev;nameEtalon,nameSheet:string;stRow,stCol:Cardinal);
+    var
+      pvd,pvd2:pvardesk;
+      nameGroup:string;
+      listGroupHeadDev:TListGroupHeadDev;
+      listCab:TListPolyline;
+      ourCab:PGDBObjPolyline;
+      stRowNew,stColNew:Cardinal;
+      cellValueVar:string;
+      textCell:string;
+      j:integer;
+      cabNowvarext,polyext:TVariablesExtender;
+      cableNowMF:PGDBObjCable;
+      iHaveParam:boolean;
+
+      function getMainFuncCable(devNowvarext:TVariablesExtender):PGDBObjCable;
+      begin
+        result:=nil;
+        if devNowvarext.getMainFuncEntity^.GetObjType=GDBCableID then
+           result:=PGDBObjCable(devNowvarext.getMainFuncEntity);
+      end;
+      //function getMainFuncCable(devNowvarext:TVariablesExtender):PGDBObjCable;
+      //begin
+      //  result:=nil;
+      //  if devNowvarext.getMainFuncEntity^.GetObjType=GDBCableID then
+      //     result:=PGDBObjCable(devNowvarext.getMainFuncEntity);
+      //end;
+    begin
+
+       //Получаем список групп для данного щита
+       listGroupHeadDev:=uzvmanemgetgem.getListNameGroupHD(graphDev);
+       stRowNew:=stRow;
+       stColNew:=stCol;
+
+       for nameGroup in listGroupHeadDev do
+         begin
+          //Получаем список кабелей для данной группы
+          listCab:=uzvmanemgetgem.getListCabInGroupHD(nameGroup,graphDev);
+          //Ищем стартовую ячейку для начала переноса данных
+
+          for ourCab in listCab do
+            begin
+
+                 // Заполняем всю информацию по устройству
+                 ZCMsgCallBackInterface.TextMessage('ЗАПОЛНЯЕМ КАБЕЛИ',TMWOHistoryOut);
+
+                 polyext:=ourCab^.GetExtension<TVariablesExtender>;
+                 //Получаем ссылку на кабель или полилинию которая заменяет стояк
+                 cableNowMF:=getMainFuncCable(polyext);
+                 if (stRowNew <> stRow) then
+                   uzvzcadxlsxole.setCellValue(nameSheet,stRowNew,stColNew,'1');
+
+                  inc(stColNew);      // отходим от кодового имени
+                  cellValueVar:=uzvzcadxlsxole.getCellFormula(nameEtalon,stRow,stColNew);
+
+                  ZCMsgCallBackInterface.TextMessage('значение ячейки = ' + inttostr(stRow) + ' - ' + inttostr(stColNew)+ ' = ' + cellValueVar,TMWOHistoryOut);
+                  while cellValueVar <> zimportcabFT do begin
+                   if cellValueVar = '' then
+                     continue;
+                   if cellValueVar[1]<>'=' then
+                   begin
+                     iHaveParam:=false;
+                     polyext:=ourCab^.GetExtension<TVariablesExtender>;
+                     //Получаем ссылку на кабель или полилинию которая заменяет стояк
+                     cableNowMF:=getMainFuncCable(polyext);
+                     if cableNowMF <> nil then
+                     begin    //кабель
+                       // Проверяем совпадает имя группы подключения внутри устройства с группой которую мы сейчас заполняем
+                       pvd:=FindVariableInEnt(cableNowMF,cellValueVar);
+                       if pvd<>nil then begin
+                          iHaveParam:=true;
+                          textCell:=pvd^.data.ptd^.GetValueAsString(pvd^.data.Addr.Instance);
+                       end;
+                     end
+                     else
+                     begin   //полилиния
+                       // Проверяем совпадает имя группы подключения внутри устройства с группой которую мы сейчас заполняем
+                      //ZCMsgCallBackInterface.TextMessage('   я полилиния = ',TMWOHistoryOut);
+                       pvd:=FindVariableInEnt(ourCab,cellValueVar);
+                       if pvd<>nil then begin
+                           iHaveParam:=true;
+                           textCell:=pvd^.data.ptd^.GetValueAsString(pvd^.data.Addr.Instance);
+                       end;
+                     end;
+
+                       //pvd2:=FindVariableInEnt(ourCab,cellValueVar);
+                       if iHaveParam then
+                       begin
+                         //textCell:=uzbstrproc.Tria_AnsiToUtf8(textCell);
+                         uzvzcadxlsxole.setCellValue(nameSheet,stRowNew,stColNew,textCell);
+                       end else uzvzcadxlsxole.copyCell(nameEtalon,stRow,stColNew,nameSheet,stRowNew,stColNew);
+
+                   end
+                   else
+                   begin
+                     uzvzcadxlsxole.copyCell(nameEtalon,stRow,stColNew,nameSheet,stRowNew,stColNew);
+                   end;
+
+                     inc(stColNew);
+                     cellValueVar:=uzvzcadxlsxole.getCellFormula(nameEtalon,stRow,stColNew);
+                     ZCMsgCallBackInterface.TextMessage('значение ячейки = ' + inttostr(stRow) + ' - ' + inttostr(stColNew)+ ' = ' + cellValueVar,TMWOHistoryOut);
+
+
+                  end;
+                  inc(stRowNew);
+                  stColNew:=stCol;
+
+
+
+            end;
+
+
+          //for j:=0 to listCab.Size-1 do
+          // begin
+          //   polyext:=listCab[j]^.GetExtension<TVariablesExtender>;
+          //   //Получаем ссылку на кабель или полилинию которая заменяет стояк
+          //   cableNowMF:=getMainFuncCable(polyext);
+          //   if cableNowMF <> nil then
+          //   begin    //кабель
+          //     // Проверяем совпадает имя группы подключения внутри устройства с группой которую мы сейчас заполняем
+          //     pvd:=FindVariableInEnt(cableNowMF,'CABLE_MountingMethod');
+          //     if pvd<>nil then
+          //       ZCMsgCallBackInterface.TextMessage('   Имя КАБЕЛЯ КАБЕЛЯ кАБЕЛЯ = '+pstring(pvd^.data.Addr.Instance)^,TMWOHistoryOut);
+          //   end
+          //   else
+          //   begin   //полилиния
+          //     // Проверяем совпадает имя группы подключения внутри устройства с группой которую мы сейчас заполняем
+          //    //ZCMsgCallBackInterface.TextMessage('   я полилиния = ',TMWOHistoryOut);
+          //     pvd:=FindVariableInEnt(listCab[j],'CABLE_MountingMethod');
+          //     if pvd<>nil then
+          //       ZCMsgCallBackInterface.TextMessage('   Имя КАБЕЛЯ полилинии = '+pstring(pvd^.data.Addr.Instance)^,TMWOHistoryOut);
+          //   end;
+          //   //pvd:=FindVariableInEnt(listCab[j],velec_nameDevice);
+          //   //  if pvd<>nil then
+          //   //     ZCMsgCallBackInterface.TextMessage('   Имя КАБЕЛЯ = '+pstring(pvd^.data.Addr.Instance)^,TMWOHistoryOut);
+          // end;
+
+          ////начинаем заполнять ячейки в XLSX
+          //for ourDev in listDev do
+          //  begin
+          //
+          //    pvd2:=FindVariableInEnt(ourDev,velec_nameDevice);
+          //      if pvd2<>nil then
+          //         ZCMsgCallBackInterface.TextMessage('Имя устройства = '+pstring(pvd2^.data.Addr.Instance)^,TMWOHistoryOut);
+          //
+          //    // Заполняем всю информацию по устройству
+          //    //ZCMsgCallBackInterface.TextMessage('1',TMWOHistoryOut);
+          //
+          //    if (stRowNew <> stRow) then
+          //      uzvzcadxlsxole.setCellValue(nameSheet,stRowNew,stColNew,'1');
+          //
+          //    inc(stColNew);      // отходим от кодового имени
+          //    cellValueVar:=uzvzcadxlsxole.getCellFormula(nameEtalon,stRow,stColNew);
+          //
+          //    ZCMsgCallBackInterface.TextMessage('значение ячейки = ' + inttostr(stRow) + ' - ' + inttostr(stColNew)+ ' = ' + cellValueVar,TMWOHistoryOut);
+          //    while cellValueVar <> zimportdevFT do begin
+          //     if cellValueVar = '' then
+          //       continue;
+          //     if cellValueVar[1]<>'=' then
+          //     begin
+          //         pvd2:=FindVariableInEnt(ourDev,cellValueVar);
+          //         if pvd2<>nil then begin
+          //           textCell:=pvd2^.data.ptd^.GetValueAsString(pvd2^.data.Addr.Instance);
+          //           //ZCMsgCallBackInterface.TextMessage('записываю в ячейку = ' + textCell,TMWOHistoryOut);
+          //           uzvzcadxlsxole.setCellValue(nameSheet,stRowNew,stColNew,textCell);
+          //         end else uzvzcadxlsxole.copyCell(nameEtalon,stRow,stColNew,nameSheet,stRowNew,stColNew);
+          //
+          //     end
+          //     else
+          //     begin
+          //       uzvzcadxlsxole.copyCell(nameEtalon,stRow,stColNew,nameSheet,stRowNew,stColNew);
+          //     end;
+          //
+          //       inc(stColNew);
+          //       cellValueVar:=uzvzcadxlsxole.getCellFormula(nameEtalon,stRow,stColNew);
+          //       ZCMsgCallBackInterface.TextMessage('значение ячейки = ' + inttostr(stRow) + ' - ' + inttostr(stColNew)+ ' = ' + cellValueVar,TMWOHistoryOut);
+          //
+          //
+          //    end;
+          //    inc(stRowNew);
+          //    stColNew:=stCol;
+          //  end;
+         end;
+       //uzvzcadxlsxole.setCellValue(nameSheet,1,1,'1'); //переводим фокус
+    end;
+
     //Если кодовое имя zcopyrow
     procedure zcopyrowcommand(nameEtalon,nameSheet:string;stRowEtalon,stColEtalon:Cardinal);
     const
@@ -515,7 +706,7 @@ var
            begin
              Case i of
              0: zimportdevcommand(graphDev,nameEtalon,nameSheet,stInfoDevCell.vRow,stInfoDevCell.vCol);//ZCMsgCallBackInterface.TextMessage('<zimportdev запускаем! ',TMWOHistoryOut);//<zimportdev
-             1: ZCMsgCallBackInterface.TextMessage('<zimportcab запускаем! ',TMWOHistoryOut);//<zimportcab
+             1: zimportcabcommand(graphDev,nameEtalon,nameSheet,stInfoDevCell.vRow,stInfoDevCell.vCol);//ZCMsgCallBackInterface.TextMessage('<zimportcab запускаем! ',TMWOHistoryOut);//<zimportcab
              2: zcopyrowcommand(nameEtalon,nameSheet,stInfoDevCell.vRow,stInfoDevCell.vCol);   //<zcopyrow
              3: ZCMsgCallBackInterface.TextMessage('<zcopycol запускаем! ',TMWOHistoryOut);//'<zcopycol'
              else

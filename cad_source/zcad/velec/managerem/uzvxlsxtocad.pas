@@ -181,40 +181,18 @@ var
     procedure creatorBlockXLSX(nameSheet:string;stRow,stCol:Cardinal);
     var
       pvd,pvd2:pvardesk;
-      nameGroup:string;
-      listGroupHeadDev:TListGroupHeadDev;
-      listDev:TListDev;
+      //nameGroup:string;
+      //listGroupHeadDev:TListGroupHeadDev;
+      //listDev:TListDev;
       ourDev:PGDBObjDevice;
-      stRowNew,stColNew:Cardinal;
+      stColNew:Cardinal;
       cellValueVar,cellValueVar2:string;
       insertBlockName:string;
       movex,movey:double;
-      textCell:string;
-      isInt:boolean;
-      CellValueInt:integer;
-//      function IsNumber(N : String) : Boolean;
-//var
-//I : Integer;
-//begin
-//Result := True;
-//if Trim(N) = '' then
-// Exit(False);
-//
-//if (Length(Trim(N)) > 1) and (Trim(N)[1] = '0') then
-//Exit(False);
-//
-//for I := 1 to Length(N) do
-//begin
-// if not (N[I] in ['0'..'9']) then
-//  begin
-//   Result := False;
-//   Break;
-// end;
-//end;
+      //textCell:string;
+      isSpecName:boolean;
 
     begin
-      //isInt:false;
-
       stColNew:=stCol;
       // получаем стартовые условия
       inc(stColNew);
@@ -230,36 +208,41 @@ var
 
       inc(stColNew);
       cellValueVar:=uzvzcadxlsxole.getCellValue(nameSheet,stRow,stColNew);
-      ZCMsgCallBackInterface.TextMessage('cellValueVar значение ячейки = ' + inttostr(stRow) + ' - ' + inttostr(stColNew)+ ' = ' + cellValueVar,TMWOHistoryOut);
+      //ZCMsgCallBackInterface.TextMessage('cellValueVar значение ячейки = ' + inttostr(stRow) + ' - ' + inttostr(stColNew)+ ' = ' + cellValueVar,TMWOHistoryOut);
       while cellValueVar <> xlsxInsertBlockFT do begin
-
          if cellValueVar <> '' then begin
            pvd:=FindVariableInEnt(ourDev,cellValueVar);
-           if pvd<>nil then begin
+           if pvd<>nil then
+             begin
                inc(stColNew);
                cellValueVar2:=uzvzcadxlsxole.getCellValue(nameSheet,stRow,stColNew);
-               ZCMsgCallBackInterface.TextMessage('cellValueVar2 значение ячейки = ' + inttostr(stRow) + ' - ' + inttostr(stColNew)+ ' = ' + cellValueVar2,TMWOHistoryOut);
+               //ZCMsgCallBackInterface.TextMessage('cellValueVar2 значение ячейки = ' + inttostr(stRow) + ' - ' + inttostr(stColNew)+ ' = ' + cellValueVar2,TMWOHistoryOut);
                //pvd2:=FindVariableInEnt(ourDev,cellValueVar);
                  //if pvd2<>nil then begin
-               if (cellValueVar2 = 'TRUE') or (cellValueVar2 = 'FALSE') or (cellValueVar2 = 'ЛОЖЬ') or (cellValueVar2 = 'ИСТИНА') or (cellValueVar2 = 'False') or (cellValueVar2 = 'True') then begin
-                 if (cellValueVar2 = 'TRUE') or (cellValueVar2 = 'ИСТИНА') or (cellValueVar2 = 'True') then
-                    pboolean(pvd^.data.Addr.Instance)^:= true
-                    else
+               //ZCMsgCallBackInterface.TextMessage('pstring(pvd^.data.Addr.Instance)^:= cellValueVar2; = ' + cellValueVar2,TMWOHistoryOut);
+               isSpecName:=true;
+               if AnsiPos('BOOLEAN_', cellValueVar2) > 0 then begin
+                   cellValueVar2:=StringReplace(cellValueVar2, 'BOOLEAN_', '', [rfReplaceAll, rfIgnoreCase]);
+                   cellValueVar2:=Trim(cellValueVar2);
+                   isSpecName:=false;
+                   if cellValueVar2 = '1' then
+                     pboolean(pvd^.data.Addr.Instance)^:= true
+                   else
                     pboolean(pvd^.data.Addr.Instance)^:= false;
-                 end else begin
-                    //isInt:=Trystrtoint(cellValueVar2,CellValueInt);
-                    //if isInt then
-                    //   pinetger(pvd^.data.Addr.Instance)^:= CellValueInt
-                    //     else
-                       pstring(pvd^.data.Addr.Instance)^:= cellValueVar2;
-                    ZCMsgCallBackInterface.TextMessage('pstring(pvd^.data.Addr.Instance)^:= cellValueVar2; = ' + cellValueVar2,TMWOHistoryOut);
-                 end;
-                 //end;
+               end;
+               if AnsiPos('INTEGER_', cellValueVar2) > 0 then begin
+                   cellValueVar2:=StringReplace(cellValueVar2, 'INTEGER_', '', [rfReplaceAll, rfIgnoreCase]);
+                   cellValueVar2:=Trim(cellValueVar2);
+                   pinteger(pvd^.data.Addr.Instance)^:=strtoint(cellValueVar2);
+                   isSpecName:=false;
+               end;
+               if isSpecName then
+                  pstring(pvd^.data.Addr.Instance)^:= cellValueVar2;
              end;
          end;
          inc(stColNew);
          cellValueVar:=uzvzcadxlsxole.getCellValue(nameSheet,stRow,stColNew);
-         ZCMsgCallBackInterface.TextMessage('cellValueVar while значение ячейки = ' + inttostr(stRow) + ' - ' + inttostr(stColNew)+ ' = ' + cellValueVar,TMWOHistoryOut);
+         //ZCMsgCallBackInterface.TextMessage('cellValueVar while значение ячейки = ' + inttostr(stRow) + ' - ' + inttostr(stColNew)+ ' = ' + cellValueVar,TMWOHistoryOut);
       end;
       //
 

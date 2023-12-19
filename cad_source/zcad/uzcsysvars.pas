@@ -197,6 +197,7 @@ type
                end;
   {REGISTERRECORDTYPE tinterface}
   tinterface=record
+              INTF_LanguageOverride:PString;(*'Language override'*)
               INTF_CommandLineEnabled:PBoolean;(*'Command line enabled'*)
               INTF_ShowScrollBars:PBoolean;(*'Show scroll bars'*)
               INTF_ShowDwgTabs:PBoolean;(*'Show drawing tabs'*)

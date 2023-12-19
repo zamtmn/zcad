@@ -275,6 +275,10 @@ initialization
   DisableTranslateCount:=0;
   PODirectory := ProgramPath+'languages/';
   GetLanguageIDs(Lang, FallbackLang); // определено в модуле gettext
+  if sysparam.saved.LangOverride<>'' then begin
+    Lang:=sysparam.saved.LangOverride;
+    FallbackLang:='';
+  end;
   createpo;
   LRSTranslator:=TPoTranslator.Create;
   if not sysparam.saved.updatepo then begin

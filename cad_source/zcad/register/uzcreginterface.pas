@@ -44,6 +44,7 @@ initialization
   SysVar.sys.SYS_NoSplash:=@SysParam.saved.NoSplash;
   SysVar.sys.SYS_NoLoadLayout:=@SysParam.saved.NoLoadLayout;
   SysVar.sys.SYS_UpdatePO:=@SysParam.saved.UpdatePO;
+  SysVar.INTF.INTF_LanguageOverride:=@SysParam.saved.LangOverride;
 
   SysVarUnit.AssignToSymbol(SysVar.INTF.INTF_ThemedUpToolbars,'INTF_ThemedUpToolbars');
   SysVarUnit.AssignToSymbol(SysVar.INTF.INTF_ThemedRightToolbars,'INTF_ThemedRightToolbars');

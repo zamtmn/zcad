@@ -1115,7 +1115,7 @@ var
     end;
 
 begin
-     ZCMsgCallBackInterface.TextMessage(' Получение списков древовидных графов электрической модели (getListGrapghEM) - НАЧАТО  ',TMWOHistoryOut);
+     ZCMsgCallBackInterface.TextMessage('Получение списков древовидных графов электрической модели (getListGrapghEM) - НАЧАТО  ',TMWOHistoryOut);
      result:=TListGraphDev.Create;
      listDevice:=TListDevice.Create;
      listCable:=TListCable.Create;
@@ -1166,8 +1166,7 @@ begin
      else
         exit;
 
-
-     ZCMsgCallBackInterface.TextMessage(' getListGrapghEM - ФИНИШ  ',TMWOHistoryOut);
+     ZCMsgCallBackInterface.TextMessage('Cписков древовидных графов модели соединений (getListGrapghEM) - ПОЛУЧЕН!  ',TMWOHistoryOut);
 end;
 
 

@@ -53,9 +53,10 @@ procedure activeWorkSheetXLSX;
 //** Получаем имя активного листа в активной книге
 function getActiveWorkSheetName:string;
   //** сохраняем xlsx файл
-procedure saveXLSXFile(pathFile:string);
+function saveXLSXFile(pathFile:string):boolean;
   //** очищаем память
 procedure destroyWorkbook();
+procedure activeDestroyWorkbook();
   //** копуруем лист с кодовым именем и присваиваем ему правильное имя
 procedure copyWorksheetName(codeSheet:string;nameSheet:string);
   //** удалить строчку
@@ -113,15 +114,33 @@ begin
   //ActiveWorkSheet:=BasicWorkbook.ActiveWorksheet;
   ZCMsgCallBackInterface.TextMessage('Открыт лист = ' + result,TMWOHistoryOut);
 end;
-procedure saveXLSXFile(pathFile:string);
+function saveXLSXFile(pathFile:string):boolean;
 //var
 begin
   BasicWorkbook.WorkSheets[1].Activate;
-  BasicWorkbook.SaveAs(WideString(pathFile));
+  result:=false;
+  try
+    //Excel.DisplayAlerts := False;
+    BasicWorkbook.SaveAs(FileName:=WideString(pathFile));
+    result:=true;
+    //Excel.DisplayAlerts := True;
+  except
+    ZCMsgCallBackInterface.TextMessage('ОШИБКА! СОХРАНЕНИЕ ОТМЕНЕНО ИЛИ ФАЙЛ НЕ ДОСТУПЕН!',TMWOHistoryOut);
+  end;
 end;
 procedure destroyWorkbook();
 begin
+  BasicWorkbook.Close(Savechanges:=false);
+  BasicWorkbook:=Unassigned;
   Excel.Quit;
+  Excel := Unassigned;
+end;
+procedure activeDestroyWorkbook();
+begin
+  iRangeFind:=Unassigned;
+  ActiveWorkSheet:=Unassigned;
+  BasicWorkbook:=Unassigned;
+  Excel := Unassigned;
 end;
 procedure sheetVisibleOff(partNameSheet:string);
 var

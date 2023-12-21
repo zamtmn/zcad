@@ -229,10 +229,16 @@ var
   i:integer;
   cellValueVar:string;
   isFinishSearch:boolean;
+  isActiveExcel:boolean;
 begin
 
    //получаем доступ к открытой книге
-   uzvzcadxlsxole.activeXLSXWorkbook;
+   isActiveExcel:=uzvzcadxlsxole.activeXLSXWorkbook;
+   if not isActiveExcel then begin
+      result:=cmd_cancel;
+      exit;
+    end;
+
 
    //Получаем имя активного листа
    nameActiveSheet:=uzvzcadxlsxole.getActiveWorkSheetName;

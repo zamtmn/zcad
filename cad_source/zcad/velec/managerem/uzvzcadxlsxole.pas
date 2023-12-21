@@ -45,11 +45,11 @@ uses
   //DOM,XMLRead,XMLWrite,XMLCfg,
   //RegExpr;
   //** открываем нужный нам xlsx файл
-procedure openXLSXFile(pathFile:string);
+function openXLSXFile(pathFile:string):boolean;
   //** Получаем активную книгу
-procedure activeXLSXWorkbook();
+function activeXLSXWorkbook:boolean;
   //** Получаем активный лист в активной книге
-procedure activeWorkSheetXLSX;
+function activeWorkSheetXLSX:boolean;
 //** Получаем имя активного листа в активной книге
 function getActiveWorkSheetName:string;
   //** сохраняем xlsx файл
@@ -85,26 +85,44 @@ var
   ActiveWorkSheet: OleVariant;
   iRangeFind: OleVariant;
 
-procedure openXLSXFile(pathFile:string);
+function openXLSXFile(pathFile:string):boolean;
 //var
 begin
-  Excel := CreateOleObject('Excel.Application');
-  BasicWorkbook:=Excel.Workbooks.Open(WideString(pathFile));
+  result:=false;
+  try
+    Excel := CreateOleObject('Excel.Application');
+    BasicWorkbook:=Excel.Workbooks.Open(WideString(pathFile));
+    result:=true;
+  except
+    ZCMsgCallBackInterface.TextMessage('ОШИБКА. ПРОГРАММА EXCEL НЕ УСТАНОВЛЕНА',TMWOHistoryOut);
+  end;
 end;
-procedure activeXLSXWorkbook;
+function activeXLSXWorkbook:boolean;
 //var
 begin
   //Ищем запущеный экземпляр Excel, если он не найден, вызывается исключение
-  Excel := GetActiveOleObject('Excel.Application');
-  BasicWorkbook:=Excel.ActiveWorkbook;
-  ZCMsgCallBackInterface.TextMessage('Доступ получен к книге = ' + BasicWorkbook.Name,TMWOHistoryOut);
+  result:=false;
+  try
+    Excel := GetActiveOleObject('Excel.Application');
+    BasicWorkbook:=Excel.ActiveWorkbook;
+    ZCMsgCallBackInterface.TextMessage('Доступ получен к книге = ' + BasicWorkbook.Name,TMWOHistoryOut);
+    result:=true;
+  except
+    ZCMsgCallBackInterface.TextMessage('ОШИБКА. НЕТ АКТИВНОЙ ОТКРЫТОЙ КНИГИ В EXCEL!!!',TMWOHistoryOut);
+  end;
 end;
-procedure activeWorkSheetXLSX;
+function activeWorkSheetXLSX:boolean;
 //var
 begin
-  ActiveWorkSheet:=Excel.ActiveSheet;
-  //ActiveWorkSheet:=BasicWorkbook.ActiveWorksheet;
-  ZCMsgCallBackInterface.TextMessage('Открыт лист = ' + ActiveWorkSheet.Name,TMWOHistoryOut);
+  result:=false;
+  try
+    ActiveWorkSheet:=Excel.ActiveSheet;
+    //ActiveWorkSheet:=BasicWorkbook.ActiveWorksheet;
+    ZCMsgCallBackInterface.TextMessage('Открыт лист = ' + ActiveWorkSheet.Name,TMWOHistoryOut);
+    result:=true;
+  except
+    ZCMsgCallBackInterface.TextMessage('ОШИБКА. НЕТ АКТИВНОЙ ОТКРЫТОЙ КНИГИ В EXCEL!!!',TMWOHistoryOut);
+  end;
 end;
 function getActiveWorkSheetName:string;
 //var

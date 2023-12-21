@@ -322,35 +322,36 @@ var
                    listPolyInGroup.PushBack(polyCab);
              end;
          end;
-         ZCMsgCallBackInterface.TextMessage('кол-во = ' + inttostr(listPolyInGroup.Size),TMWOHistoryOut);
+         //ZCMsgCallBackInterface.TextMessage('кол-во = ' + inttostr(listPolyInGroup.Size),TMWOHistoryOut);
          for i:=0 to graphDev.Vertices[intVertex].ChildCount-1 do
              getListCabPoly(graphDev.Vertices[intVertex].Childs[i].Index,listPolyInGroup);
     end;
   begin
-     ZCMsgCallBackInterface.TextMessage('Имя группы = ' + nameGroup + '. Список КАБЕЛЕЙ:',TMWOHistoryOut);
+     ZCMsgCallBackInterface.TextMessage('Имя группы = ' + nameGroup + '. Список сегментов:',TMWOHistoryOut);
      result:=TListPolyline.Create;
      getListCabPoly(graphDev.Root.Index,result);
 
-     for j:=0 to result.Size-1 do
-       begin
-         polyext:=result[j]^.specialize GetExtension<TVariablesExtender>;
-         //Получаем ссылку на кабель или полилинию которая заменяет стояк
-         cableNowMF:=getMainFuncCable(polyext);
-         if cableNowMF <> nil then
-           begin    //кабель
-             // Проверяем совпадает имя группы подключения внутри устройства с группой которую мы сейчас заполняем
-             pvd:=FindVariableInEnt(cableNowMF,velec_GC_HDGroup);
-             if pvd<>nil then
-               ZCMsgCallBackInterface.TextMessage('   Имя кабеля = '+pstring(pvd^.data.Addr.Instance)^,TMWOHistoryOut);
-           end
-           else
-           begin   //полилиния
-             // Проверяем совпадает имя группы подключения внутри устройства с группой которую мы сейчас заполняем
-             pvd:=FindVariableInEnt(result[j],velec_GC_HDGroup);
-             if pvd<>nil then
-              ZCMsgCallBackInterface.TextMessage('   Имя кабеля = '+pstring(pvd^.data.Addr.Instance)^,TMWOHistoryOut);
-           end;
-       end;
+     /////****ПРОВЕРКА того что получили в результате анализа
+     //for j:=0 to result.Size-1 do
+     //  begin
+     //    polyext:=result[j]^.specialize GetExtension<TVariablesExtender>;
+     //    //Получаем ссылку на кабель или полилинию которая заменяет стояк
+     //    cableNowMF:=getMainFuncCable(polyext);
+     //    if cableNowMF <> nil then
+     //      begin    //кабель
+     //        // Проверяем совпадает имя группы подключения внутри устройства с группой которую мы сейчас заполняем
+     //        pvd:=FindVariableInEnt(cableNowMF,velec_GC_HDGroup);
+     //        if pvd<>nil then
+     //          ZCMsgCallBackInterface.TextMessage('   Имя кабеля = '+pstring(pvd^.data.Addr.Instance)^,TMWOHistoryOut);
+     //      end
+     //      else
+     //      begin   //полилиния
+     //        // Проверяем совпадает имя группы подключения внутри устройства с группой которую мы сейчас заполняем
+     //        pvd:=FindVariableInEnt(result[j],velec_GC_HDGroup);
+     //        if pvd<>nil then
+     //         ZCMsgCallBackInterface.TextMessage('   Имя кабеля = '+pstring(pvd^.data.Addr.Instance)^,TMWOHistoryOut);
+     //      end;
+     //  end;
   end;
 
   //**Получить список устройств внутри группы для данного щита (графа)

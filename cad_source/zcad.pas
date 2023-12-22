@@ -259,7 +259,7 @@ uses
   uzvmanemcom, //управления и обработка полученой электрической модели
   uzvmanemschemalevelone, //создание одноуровневой схемы
   uzvmanemdialogcom,//запуск генератора схемы через диалоговое окно
-  {$IFDEF WINDOWS}uzvmodeltoxlsx, uzvxlsxtocad,{$ENDIF}  //запуск экспорта информации из veb модели в xlsx на OLE
+  {$IFDEF WINDOWS}uzvmodeltoxlsx,uzvdevtoxlsx, uzvxlsxtocad,{$ENDIF}  //запуск экспорта информации из veb модели в xlsx на OLE
 
   //uzvelectricalexcelcom,
   //**//

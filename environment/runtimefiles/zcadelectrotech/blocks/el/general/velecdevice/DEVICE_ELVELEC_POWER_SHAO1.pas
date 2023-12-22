@@ -24,6 +24,7 @@ BTY_TreeCoord:='PLAN_ELVELEC_Щит аварийного освещения';
 Device_Type:=TDT_SilaPotr;
 Device_Class:=TDC_Shell;
 
+
 NMO_Name:='';
 NMO_BaseName:='ЩАО';
 NMO_Suffix:='';
@@ -38,5 +39,7 @@ GC_HDGroup:=0;
 VL_Type:='Р СП/1 ip20';
 VL_Room:='.';
 VL_Floor:='.';
+
+nametemplatesxlsx:='<zlight>';
 
 end.

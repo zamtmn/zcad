@@ -17,6 +17,7 @@ jobs:
           sudo gem install asciidoctor
           sudo gem install asciidoctor-pdf
           sudo gem install asciidoctor-diagram
+          sudo apt install graphviz
           make documentation
       - name: GitHub Pages
         if: success() && github.ref == 'refs/heads/master'
@@ -24,4 +25,4 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          build_dir: cad_source/docs/
+          build_dir: cad_source/docs/userguide

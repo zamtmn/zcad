@@ -14,9 +14,9 @@ jobs:
           lfs: true
       - name: build
         run: |
-          gem install asciidoctor
-          gem install asciidoctor-pdf
-          gem install asciidoctor-diagram
+          sudo gem install asciidoctor
+          sudo gem install asciidoctor-pdf
+          sudo gem install asciidoctor-diagram
           make documentation
       - name: GitHub Pages
         if: success() && github.ref == 'refs/heads/master'

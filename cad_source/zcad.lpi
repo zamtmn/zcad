@@ -72,7 +72,6 @@
             <WriteFPCLogo Value="False"/>
             <ConfigFile>
               <StopAfterErrCount Value="5"/>
-              <WriteConfigFilePath Value="$(ProjOutDir)/fpclaz.cfg"/>
             </ConfigFile>
             <CompilerMessages>
               <IgnoredMessages idx6058="True" idx5062="True" idx5024="True" idx4055="True"/>
@@ -114,7 +113,6 @@
             <WriteFPCLogo Value="False"/>
             <ConfigFile>
               <StopAfterErrCount Value="5"/>
-              <WriteConfigFilePath Value="$(ProjOutDir)/fpclaz.cfg"/>
             </ConfigFile>
             <CompilerMessages>
               <IgnoredMessages idx6058="True" idx5062="True" idx5024="True" idx4055="True"/>
@@ -156,7 +154,6 @@
             <WriteFPCLogo Value="False"/>
             <ConfigFile>
               <StopAfterErrCount Value="5"/>
-              <WriteConfigFilePath Value="$(ProjOutDir)/fpclaz.cfg"/>
             </ConfigFile>
             <CompilerMessages>
               <IgnoredMessages idx6058="True" idx5062="True" idx5024="True" idx4055="True"/>
@@ -198,7 +195,6 @@
             <WriteFPCLogo Value="False"/>
             <ConfigFile>
               <StopAfterErrCount Value="5"/>
-              <WriteConfigFilePath Value="$(ProjOutDir)/fpclaz.cfg"/>
             </ConfigFile>
             <CompilerMessages>
               <IgnoredMessages idx6058="True" idx5062="True" idx5024="True" idx4055="True"/>
@@ -240,7 +236,6 @@
             <WriteFPCLogo Value="False"/>
             <ConfigFile>
               <StopAfterErrCount Value="5"/>
-              <WriteConfigFilePath Value="$(ProjOutDir)/fpclaz.cfg"/>
             </ConfigFile>
             <CompilerMessages>
               <IgnoredMessages idx6058="True" idx5062="True" idx5024="True" idx4055="True"/>
@@ -282,7 +277,6 @@
             <WriteFPCLogo Value="False"/>
             <ConfigFile>
               <StopAfterErrCount Value="5"/>
-              <WriteConfigFilePath Value="$(ProjOutDir)/fpclaz.cfg"/>
             </ConfigFile>
             <CompilerMessages>
               <IgnoredMessages idx6058="True" idx5062="True" idx5024="True" idx4055="True"/>
@@ -1305,7 +1299,6 @@
       <WriteFPCLogo Value="False"/>
       <ConfigFile>
         <StopAfterErrCount Value="5"/>
-        <WriteConfigFilePath Value="$(ProjOutDir)/fpclaz.cfg"/>
       </ConfigFile>
       <CompilerMessages>
         <IgnoredMessages idx6058="True" idx5062="True" idx5024="True" idx4055="True"/>

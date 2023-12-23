@@ -127,10 +127,15 @@ end;
 function getActiveWorkSheetName:string;
 //var
 begin
-  ActiveWorkSheet:=Excel.ActiveSheet;
-  result:=ActiveWorkSheet.Name;
-  //ActiveWorkSheet:=BasicWorkbook.ActiveWorksheet;
-  ZCMsgCallBackInterface.TextMessage('Открыт лист = ' + result,TMWOHistoryOut);
+  result:='nil';
+  try
+    ActiveWorkSheet:=Excel.ActiveSheet;
+    result:=ActiveWorkSheet.Name;
+    //ActiveWorkSheet:=BasicWorkbook.ActiveWorksheet;
+    ZCMsgCallBackInterface.TextMessage('Открыт лист = ' + result,TMWOHistoryOut);
+  except
+    ZCMsgCallBackInterface.TextMessage('ОШИБКА. НЕТ АКТИВНОЙ ОТКРЫТОЙ КНИГИ В EXCEL!!!',TMWOHistoryOut);
+  end;
 end;
 function saveXLSXFile(pathFile:string):boolean;
 //var
@@ -181,9 +186,12 @@ var
   i,numsheet:integer;
 begin
   //ZCMsgCallBackInterface.TextMessage('имя лист = ' + nameSheet,TMWOHistoryOut);
-  BasicWorkbook.WorkSheets(codeSheet).Copy(EmptyParam,BasicWorkbook.WorkSheets[BasicWorkbook.WorkSheets.Count]);
-  BasicWorkbook.WorkSheets[BasicWorkbook.WorkSheets.Count].Name:=nameSheet;
-
+  try
+    BasicWorkbook.WorkSheets(codeSheet).Copy(EmptyParam,BasicWorkbook.WorkSheets[BasicWorkbook.WorkSheets.Count]);
+    BasicWorkbook.WorkSheets[BasicWorkbook.WorkSheets.Count].Name:=nameSheet;
+  except
+   ZCMsgCallBackInterface.TextMessage('ОШИБКА! procedure copyWorksheetName(codeSheet:string;nameSheet:string);',TMWOHistoryOut);
+  end;
   //numsheet:=-1;
   //for i:= 1 to BasicWorkbook.WorkSheets.count do
   //begin

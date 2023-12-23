@@ -21,7 +21,9 @@
       <Separator/>
       <Action Name="ACN_vBuildMC"/>
       <Action Name="ACN_exportModeltoExcell"/>
+      <Action Name="ACN_exportDevtoExcell"/>
       <Action Name="ACN_XLSXtoCADinsertblock"/>
+      <Action Name="ACN_exportDevtoExcelTOCAD"/>
     </ElectrotechVelec>
   </ToolBarsContent>
 </CONFIG>

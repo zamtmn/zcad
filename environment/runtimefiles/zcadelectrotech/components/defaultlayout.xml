@@ -77,7 +77,7 @@
     <Item3 Name="CoolBarD" Type="CoolBar" ItemCount="4">
       <Item0 Name="ElectrotechEnts" Type="ToolBar" Width="133"/>
       <Item1 Name="ElectrotechPlacing" Type="ToolBar" Break="False"/>
-      <Item2 Name="ElectrotechVelec" Type="ToolBar" Break="False" Width="436"/>
+      <Item2 Name="ElectrotechVelec" Type="ToolBar" Break="False" Width="502"/>
       <Item3 Name="ElectrotechActions" Type="ToolBar" Break="False" Width="396"/>
     </Item3>
   </ToolBarsConfig>

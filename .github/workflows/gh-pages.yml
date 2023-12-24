@@ -19,7 +19,7 @@ jobs:
           sudo gem install asciidoctor-diagram
           sudo apt install graphviz
           make documentation
-          ls cad_source/docs/userguide
+          cp cad_source/docs/userguide/userguide.ru.html cad_source/docs/userguide/index.html
       - name: GitHub Pages
         if: success() && github.ref == 'refs/heads/master'
         uses: crazy-max/ghaction-github-pages@v2.3.0

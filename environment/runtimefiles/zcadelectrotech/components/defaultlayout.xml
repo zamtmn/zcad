@@ -63,7 +63,7 @@
       </Item1>
     </Nodes>
   </MainConfig>
-  <Settings HeaderStyle="Lines" FloatingWindowsOnTop="True" DockSitesCanBeMinimized="True"/>
+  <Settings HeaderStyle="Lines" FlatHeadersButtons="True" FloatingWindowsOnTop="True" DockSitesCanBeMinimized="True"/>
   <ToolBarsConfig ItemCount="4">
     <Item0 Name="CoolBarU" Type="CoolBar" ItemCount="1">
       <Item0 Name="Standard" Type="ToolBar" Width="1318"/>

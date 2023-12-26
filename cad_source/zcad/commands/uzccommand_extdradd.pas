@@ -75,7 +75,7 @@ begin
       if psd<>nil then
       repeat
         pEntity:=psd^.objaddr;
-        if (pEntity^.Selected){and(pEntity<>pLastSelectedEntity)} then
+        if (pEntity^.Selected)and extdr.CanBeAddedTo(pEntity){and(pEntity<>pLastSelectedEntity)} then
           if pEntity^.GetExtension(extdr)=nil then begin
             PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack.PushStartMarker(cmdName);
             domethod.Code:=pointer(pEntity^.AddExtension);

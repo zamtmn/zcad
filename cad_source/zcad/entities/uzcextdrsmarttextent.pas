@@ -118,6 +118,8 @@ type
 
       class function EntIOLoadSmartTextEntExtenderDefault(_Name,_Value:String;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
 
+      class function CanBeAddedTo(pEntity:Pointer):Boolean;override;
+
       //property ExtensionLine:Boolean read FExtensionLine write FExtensionLine default true;
       //property BaseLine:Boolean read FBaseLine write FBaseLine default true;
   end;
@@ -157,6 +159,13 @@ begin
   dxfStringout(outhandle,1002,'}');
 end;
 
+class function TSmartTextEntExtender.CanBeAddedTo(pEntity:Pointer):Boolean;
+var
+  pt:pointer;
+begin
+  pt:=typeof(PGDBObjEntity(pEntity)^);
+  result:=(pt=TypeOf(GDBObjText))or(pt=TypeOf(GDBObjMText));
+end;
 
 function TSmartTextEntExtender.isDefault:boolean;
 begin

@@ -483,8 +483,11 @@ end;
 
 function AddSmartTextEntExtenderToEntity(PEnt:PGDBObjEntity):TSmartTextEntExtender;
 begin
-  result:=TSmartTextEntExtender.Create(PEnt);
-  PEnt^.AddExtension(result);
+  if TSmartTextEntExtender.CanBeAddedTo(PEnt) then begin
+    result:=TSmartTextEntExtender.Create(PEnt);
+    PEnt^.AddExtension(result);
+  end else
+    result:=nil;
 end;
 
 
@@ -495,7 +498,8 @@ begin
   STEExtdr:=PGDBObjEntity(PEnt)^.GetExtension<TSmartTextEntExtender>;
   if STEExtdr=nil then
     STEExtdr:=AddSmartTextEntExtenderToEntity(PEnt);
-  STEExtdr.FExtensionLine:=false;
+  if STEExtdr<>nil then
+    STEExtdr.FExtensionLine:=false;
   result:=true;
 end;
 
@@ -506,7 +510,8 @@ begin
   STEExtdr:=PGDBObjEntity(PEnt)^.GetExtension<TSmartTextEntExtender>;
   if STEExtdr=nil then
     STEExtdr:=AddSmartTextEntExtenderToEntity(PEnt);
-  STEExtdr.FBaseLine:=false;
+  if STEExtdr<>nil then
+    STEExtdr.FBaseLine:=false;
   result:=true;
 end;
 
@@ -517,7 +522,8 @@ begin
   STEExtdr:=PGDBObjEntity(PEnt)^.GetExtension<TSmartTextEntExtender>;
   if STEExtdr=nil then
     STEExtdr:=AddSmartTextEntExtenderToEntity(PEnt);
-  STEExtdr.FExtensionLineStartShift:=StrToFloat(_Value);
+  if STEExtdr<>nil then
+    STEExtdr.FExtensionLineStartShift:=StrToFloat(_Value);
   result:=true;
 end;
 
@@ -528,7 +534,8 @@ begin
   STEExtdr:=PGDBObjEntity(PEnt)^.GetExtension<TSmartTextEntExtender>;
   if STEExtdr=nil then
     STEExtdr:=AddSmartTextEntExtenderToEntity(PEnt);
-  STEExtdr.FLeaderStartDrawDist:=StrToFloat(_Value);
+  if STEExtdr<>nil then
+    STEExtdr.FLeaderStartDrawDist:=StrToFloat(_Value);
   result:=true;
 end;
 
@@ -539,7 +546,8 @@ begin
   STEExtdr:=PGDBObjEntity(PEnt)^.GetExtension<TSmartTextEntExtender>;
   if STEExtdr=nil then
     STEExtdr:=AddSmartTextEntExtenderToEntity(PEnt);
-  STEExtdr.FTextHeightOverride:=StrToFloat(_Value);
+  if STEExtdr<>nil then
+    STEExtdr.FTextHeightOverride:=StrToFloat(_Value);
   result:=true;
 end;
 
@@ -550,7 +558,8 @@ begin
   STEExtdr:=PGDBObjEntity(PEnt)^.GetExtension<TSmartTextEntExtender>;
   if STEExtdr=nil then
     STEExtdr:=AddSmartTextEntExtenderToEntity(PEnt);
-  STEExtdr.FBaseLineOffset.x:=StrToFloat(_Value);
+  if STEExtdr<>nil then
+    STEExtdr.FBaseLineOffset.x:=StrToFloat(_Value);
   result:=true;
 end;
 
@@ -561,7 +570,8 @@ begin
   STEExtdr:=PGDBObjEntity(PEnt)^.GetExtension<TSmartTextEntExtender>;
   if STEExtdr=nil then
     STEExtdr:=AddSmartTextEntExtenderToEntity(PEnt);
-  STEExtdr.FBaseLineOffset.y:=StrToFloat(_Value);
+  if STEExtdr<>nil then
+    STEExtdr.FBaseLineOffset.y:=StrToFloat(_Value);
   result:=true;
 end;
 
@@ -572,7 +582,8 @@ begin
   STEExtdr:=PGDBObjEntity(PEnt)^.GetExtension<TSmartTextEntExtender>;
   if STEExtdr=nil then
     STEExtdr:=AddSmartTextEntExtenderToEntity(PEnt);
-  STEExtdr.FHJOverride:=false;
+  if STEExtdr<>nil then
+    STEExtdr.FHJOverride:=false;
   result:=true;
 end;
 
@@ -583,7 +594,8 @@ begin
   STEExtdr:=PGDBObjEntity(PEnt)^.GetExtension<TSmartTextEntExtender>;
   if STEExtdr=nil then
     STEExtdr:=AddSmartTextEntExtenderToEntity(PEnt);
-  STEExtdr.FVJOverride:=false;
+  if STEExtdr<>nil then
+    STEExtdr.FVJOverride:=false;
   result:=true;
 end;
 
@@ -594,7 +606,8 @@ begin
   STEExtdr:=PGDBObjEntity(PEnt)^.GetExtension<TSmartTextEntExtender>;
   if STEExtdr=nil then
     STEExtdr:=AddSmartTextEntExtenderToEntity(PEnt);
-  STEExtdr.FRotateOverride:=false;
+  if STEExtdr<>nil then
+    STEExtdr.FRotateOverride:=false;
   result:=true;
 end;
 
@@ -605,7 +618,8 @@ begin
   STEExtdr:=PGDBObjEntity(PEnt)^.GetExtension<TSmartTextEntExtender>;
   if STEExtdr=nil then
     STEExtdr:=AddSmartTextEntExtenderToEntity(PEnt);
-  STEExtdr.FRotateOverrideValue:=StrToFloat(_Value);
+  if STEExtdr<>nil then
+    STEExtdr.FRotateOverrideValue:=StrToFloat(_Value);
   result:=true;
 end;
 
@@ -616,7 +630,8 @@ begin
   STEExtdr:=PGDBObjEntity(PEnt)^.GetExtension<TSmartTextEntExtender>;
   if STEExtdr=nil then
     STEExtdr:=AddSmartTextEntExtenderToEntity(PEnt);
-  result:=true;
+  if STEExtdr<>nil then
+    result:=true;
 end;
 
 procedure TSmartTextEntExtender.PostLoad(var context:TIODXFLoadContext);

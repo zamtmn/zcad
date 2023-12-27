@@ -21,6 +21,7 @@ jobs:
           sudo gem install asciidoctor-diagram
           sudo apt install graphviz
           make documentation
+          sed -i 's/locale//ru//_images///https:////zamtmn.github.io//zcad//locale//ru//_images///g' cad_source/docs/userguide/userguide.ru.html 
           cp cad_source/docs/userguide/userguide.ru.html cad_source/docs/userguide/index.html
       - name: GitHub Pages
         if: success() && github.ref == 'refs/heads/master'

@@ -22,7 +22,7 @@ jobs:
           sudo apt install graphviz
           make documentation
           sed -i "s/locale\/ru\/_images\//https:\/\/raw.githubusercontent.com\/zamtmn\/zcad\/gh-pages\/locale\/ru\/_images\//g" cad_source/docs/userguide/userguide.ru.html
-          sed -i "s/..\/images\/actions\//https:\/\/raw.githubusercontent.com\/zamtmn\/zcad\/gh-pages\/images_actions\//g" cad_source/docs/userguide/userguide.ru.html
+          sed -i "s/..\/images\/actions\//https:\/\/raw.githubusercontent.com\/zamtmn\/zcad\/gh-pages\/images_actions\/actions\//g" cad_source/docs/userguide/userguide.ru.html
           cp -r cad_source/docs/images cad_source/docs/userguide/images_actions
 
           cp cad_source/docs/userguide/userguide.ru.html cad_source/docs/userguide/index.html

@@ -66,6 +66,8 @@ type
 var
   ReportScriptsManager:TScriptsManager;
 
+  temp:TScriptData;
+
 function AddReportExtenderToEntity(PEnt:PGDBObjEntity):TReportExtender;
 
 implementation
@@ -169,7 +171,9 @@ initialization
   //extdrAdd(extdrReport)
   ReportScriptsManager:=STManager.CreateType('lpr','Script test',[testadder]);
   ReportScriptsManager.ScanDirs(sysvar.PATH.Preload_Path^);
-  ReportScriptsManager.RunScript('test');
+  temp:=ReportScriptsManager.CreateExternalScriptData('test');
+  ReportScriptsManager.RunScript(temp);
+  //ReportScriptsManager.RunScript('test');
   EntityExtenders.RegisterKey(uppercase(ReportExtenderName),TReportExtender);
   GDBObjEntity.GetDXFIOFeatures.RegisterNamedLoadFeature('REPORTEXTENDER',TReportExtender.EntIOLoadReportExtender);
 finalization

@@ -26,10 +26,11 @@ uses
   lptypes,lpvartypes,lpparser,lpcompiler,lputils,lpeval,lpinterpreter,lpmessages,
   gzctnrSTL,
   LazUTF8,
-  uzbLogTypes,uzcLog;
+  uzbLogTypes,uzcLog,
+  uzcLapeScriptsImplBase;
 
 type
-  TCompilerDefAdder=procedure(cplr:TLapeCompiler);
+  TCompilerDefAdder=procedure(mode:TLapeScriptContextModes;ctx:TBaseScriptContext;cplr:TLapeCompiler);
   TCompilerDefAdders=array of TCompilerDefAdder;
   TScriptsType=string;
 
@@ -47,6 +48,7 @@ type
   TScriptData=record
     FileData:TFileData;
     LAPEData:TLAPEData;
+    Ctx:TBaseScriptContext;
     constructor CreateRec(AFileName:string);
   end;
 
@@ -61,10 +63,11 @@ type
     FScriptFileMask:String;
     SN2SD:TScriptName2ScriptDataMap;
     FCDA:TCompilerDefAdders;
+    CtxClass:TMetaScriptContext;
 
     procedure FoundScriptFile(FileName:String;PData:Pointer);
 
-    constructor Create(AScriptsType:String;ACDA:TCompilerDefAdders);
+    constructor Create(AScriptsType:String;ACtxClass:TMetaScriptContext;ACDA:TCompilerDefAdders);
     destructor Destroy;override;
 
     procedure ScanDir(DirPath:string);
@@ -82,8 +85,9 @@ type
         TScriptTypeDesc=record
           ScriptsType:TScriptsType;
           Description:string;
+          CtxClass:TMetaScriptContext;
           FCDA:TCompilerDefAdders;
-          constructor CreateRec(AScriptsType:TScriptsType;ADescription:string;AFCDA:TCompilerDefAdders);
+          constructor CreateRec(AScriptsType:TScriptsType;ADescription:string;ACtxClass:TMetaScriptContext;AFCDA:TCompilerDefAdders);
         end;
         PTScriptTypeData=^TScriptTypeData;
         TScriptTypeData=record
@@ -98,7 +102,9 @@ type
       function CreateSTN2SNDIfNeeded:boolean;//true if it has just been created
     public
       constructor Create;
-      function CreateType(AScriptsType:TScriptsType;ADescription:string;AFCDA:TCompilerDefAdders):TScriptsManager;
+      function CreateType(AScriptsType:TScriptsType;ADescription:string;
+                          ACtxClass:TMetaScriptContext;AFCDA:TCompilerDefAdders)
+:TScriptsManager;
   end;
 
 var
@@ -107,10 +113,11 @@ var
 
 implementation
 
-constructor TScriptsTypeManager.TScriptTypeDesc.CreateRec(AScriptsType:TScriptsType;ADescription:string;AFCDA:TCompilerDefAdders);
+constructor TScriptsTypeManager.TScriptTypeDesc.CreateRec(AScriptsType:TScriptsType;ADescription:string;ACtxClass:TMetaScriptContext;AFCDA:TCompilerDefAdders);
 begin
   ScriptsType:=AScriptsType;
   Description:=ADescription;
+  CtxClass:=ACtxClass;
   FCDA:=AFCDA;
 end;
 constructor TScriptsTypeManager.TScriptTypeData.CreateRec(ADesc:TScriptTypeDesc;AManager:TScriptsManager=nil);
@@ -132,11 +139,11 @@ begin
   STN2SND:=nil;
 end;
 
-function TScriptsTypeManager.CreateType(AScriptsType:TScriptsType;ADescription:string;AFCDA:TCompilerDefAdders):TScriptsManager;
+function TScriptsTypeManager.CreateType(AScriptsType:TScriptsType;ADescription:string;ACtxClass:TMetaScriptContext;AFCDA:TCompilerDefAdders):TScriptsManager;
   function addScriptsType:TScriptsManager;
   begin
-    result:=TScriptsManager.Create(AScriptsType,AFCDA);
-    STN2SND.Add(AScriptsType,TScriptTypeData.CreateRec(TScriptTypeDesc.CreateRec(AScriptsType,ADescription,AFCDA),result));
+    result:=TScriptsManager.Create(AScriptsType,ACtxClass,AFCDA);
+    STN2SND.Add(AScriptsType,TScriptTypeData.CreateRec(TScriptTypeDesc.CreateRec(AScriptsType,ADescription,ACtxClass,AFCDA),result));
   end;
 var
   PSTD:PTScriptTypeData;
@@ -157,13 +164,15 @@ begin
   FileData.Age:=-1;
   //LAPEData.FParser:=nil;
   LAPEData.FCompiler:=nil;
+  Ctx:=nil;
 end;
 
-constructor TScriptsmanager.Create(AScriptsType:String;ACDA:TCompilerDefAdders);
+constructor TScriptsmanager.Create(AScriptsType:String;ACtxClass:TMetaScriptContext;ACDA:TCompilerDefAdders);
 begin
   FScriptType:=AScriptsType;
   FScriptFileMask:=format('*.%s',[AScriptsType]);
   SN2SD:=TScriptName2ScriptDataMap.Create;
+  CtxClass:=ACtxClass;
   FCDA:=ACDA;
 end;
 
@@ -188,15 +197,20 @@ procedure TScriptsmanager.CheckScriptActuality(var SD:TScriptData);
 var
   cda:TCompilerDefAdder;
   fa:Int64;
+  ctxmode:TLapeScriptContextModes;
 begin
   try
     fa:=FileAge(SD.FileData.Name);
     if (SD.LAPEData.FCompiler=nil)or(SD.FileData.Age=-1)or(SD.FileData.Age<>fa)then begin
+      if SD.LAPEData.FCompiler<>nil then
+        SD.LAPEData.FCompiler.Destroy;
       SD.LAPEData.FCompiler:=TLapeCompiler.Create(TLapeTokenizerFile.Create(SD.FileData.Name));
-      for cda in FCDA do
-        cda(SD.LAPEData.FCompiler);
       SD.FileData.Age:=fa;
-    end;
+      ctxmode:=DoAll;
+    end else
+      ctxmode:=DoCtx;
+    for cda in FCDA do
+      cda(ctxmode,SD.Ctx,SD.LAPEData.FCompiler);
   except
     on E: Exception do
       begin
@@ -261,6 +275,7 @@ begin
 
     result.FileData.Age:=-1;
     result.FileData.Name:=PSD^.FileData.Name;
+    result.Ctx:=CtxClass.Create;
   end;
 end;
 procedure TScriptsmanager.ScanDir(DirPath:string);

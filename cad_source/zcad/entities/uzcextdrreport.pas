@@ -32,7 +32,7 @@ uses
   gzctnrSTL,uzcsysvars,
   LazUTF8,
   uzbLogTypes,uzcLog,
-  uzcLapeScriptsManager;
+  uzcLapeScriptsManager,uzcLapeScriptsImplBase;
 
 const
   ReportExtenderName='extdrReport';
@@ -147,29 +147,9 @@ procedure TReportExtender.onRemoveFromArray(pEntity:Pointer;const drawing:TDrawi
 begin
 end;
 
-procedure line(const Params: PParamArray{x1,y1,z1,x2,y2,z2: double}); cdecl;
-var
-  x1,y1,z1,x2,y2,z2: double;
-begin
-  x1:=PDouble(Params^[0])^;
-  y1:=PDouble(Params^[1])^;
-  z1:=PDouble(Params^[2])^;
-  x2:=PDouble(Params^[3])^;
-  y2:=PDouble(Params^[4])^;
-  z2:=PDouble(Params^[5])^;
-end;
-
-procedure testadder(cplr:TLapeCompiler);
-begin
-  cplr.StartImporting;
-  cplr.addBaseDefine('LAPE');
-  cplr.addGlobalFunc('procedure line(x1,y1,z1,x2,y2,z2: double);', @line);
-  cplr.EndImporting;
-end;
-
 initialization
   //extdrAdd(extdrReport)
-  ReportScriptsManager:=STManager.CreateType('lpr','Script test',[testadder]);
+  ReportScriptsManager:=STManager.CreateType('lpr','Script test',TBaseScriptContext,[testadder]);
   ReportScriptsManager.ScanDirs(sysvar.PATH.Preload_Path^);
   temp:=ReportScriptsManager.CreateExternalScriptData('test');
   ReportScriptsManager.RunScript(temp);

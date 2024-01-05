@@ -30,8 +30,6 @@ uses
   uzcLapeScriptsImplBase;
 
 type
-  TCompilerDefAdder=procedure(mode:TLapeScriptContextModes;ctx:TBaseScriptContext;cplr:TLapeCompiler);
-  TCompilerDefAdders=array of TCompilerDefAdder;
   TScriptsType=string;
 
   TFileData=record
@@ -42,6 +40,7 @@ type
   TLAPEData=record
     //FParser:TLapeTokenizerBase;
     FCompiler:TLapeCompiler;
+    FCompiled:Boolean;
   end;
 
   PTScriptData=^TScriptData;
@@ -49,6 +48,7 @@ type
     FileData:TFileData;
     LAPEData:TLAPEData;
     Ctx:TBaseScriptContext;
+    FIndividualCDA:TCompilerDefAdders;
     constructor CreateRec(AFileName:string);
   end;
 
@@ -74,7 +74,7 @@ type
     procedure ScanDirs(DirPaths:string);
 
     procedure RunScript(AScriptName:string);overload;
-    function CreateExternalScriptData(AScriptName:string):TScriptData;
+    function CreateExternalScriptData(AScriptName:string;AICDA:TCompilerDefAdders):TScriptData;
     procedure RunScript(var SD:TScriptData);overload;
     procedure CheckScriptActuality(var SD:TScriptData);
   end;
@@ -164,6 +164,7 @@ begin
   FileData.Age:=-1;
   //LAPEData.FParser:=nil;
   LAPEData.FCompiler:=nil;
+  LAPEData.FCompiled:=False;
   Ctx:=nil;
 end;
 
@@ -198,6 +199,7 @@ var
   cda:TCompilerDefAdder;
   fa:Int64;
   ctxmode:TLapeScriptContextModes;
+  CDAS:TCompilerDefAdders;
 begin
   try
     fa:=FileAge(SD.FileData.Name);
@@ -205,11 +207,16 @@ begin
       if SD.LAPEData.FCompiler<>nil then
         SD.LAPEData.FCompiler.Destroy;
       SD.LAPEData.FCompiler:=TLapeCompiler.Create(TLapeTokenizerFile.Create(SD.FileData.Name));
+      SD.LAPEData.FCompiled:=False;
       SD.FileData.Age:=fa;
       ctxmode:=DoAll;
     end else
       ctxmode:=DoCtx;
-    for cda in FCDA do
+    if length(SD.FIndividualCDA)=0 then
+      CDAS:=FCDA
+    else
+      CDAS:=SD.FIndividualCDA;
+    for cda in CDAS do
       cda(ctxmode,SD.Ctx,SD.LAPEData.FCompiler);
   except
     on E: Exception do
@@ -226,33 +233,21 @@ var
   PSD:PTScriptData;
 begin
   scrname:=UpperCase(AScriptName);
-  if SN2SD.MyGetMutableValue(scrname,PSD) then begin
-    RunScript(PSD^);
-    {CheckScriptActuality(PSD^);
-    try
-      if PSD^.LAPEData.FCompiler.Compile then
-        RunCode(PSD^.LAPEData.FCompiler.Emitter)
-      else
-        LapeExceptionFmt('Error compiling file "%s"',[PSD^.FileData.Name]);
-      RunCode(PSD^.LAPEData.FCompiler.Emitter)
-    except
-      on E: Exception do
-      begin
-        ProgramLog.LogOutFormatStr('TScriptsmanager.RunScript "%s"',[E.Message],LM_Error,LapeLMId);
-        FreeAndNil(PSD^.LAPEData.FCompiler);
-      end;
-    end;}
-  end;
+  if SN2SD.MyGetMutableValue(scrname,PSD) then
+    RunScript(PSD^)
+  else
+    raise Exception.CreateFmt('Script "%s" (type "%s", file mask "%s") not found',[AScriptName,FScriptType,FScriptFileMask]);
 end;
 procedure TScriptsmanager.RunScript(var SD:TScriptData);
 begin
   CheckScriptActuality(SD);
   try
-    if SD.LAPEData.FCompiler.Compile then
+    if (SD.LAPEData.FCompiled)or(SD.LAPEData.FCompiler.Compile) then begin
+      SD.LAPEData.FCompiled:=True;
       RunCode(SD.LAPEData.FCompiler.Emitter)
+    end
     else
       LapeExceptionFmt('Error compiling file "%s"',[SD.FileData.Name]);
-    RunCode(SD.LAPEData.FCompiler.Emitter)
   except
     on E: Exception do
     begin
@@ -262,7 +257,7 @@ begin
   end;
 end;
 
-function TScriptsmanager.CreateExternalScriptData(AScriptName:string):TScriptData;
+function TScriptsmanager.CreateExternalScriptData(AScriptName:string;AICDA:TCompilerDefAdders):TScriptData;
 var
   scrname:string;
   PSD:PTScriptData;
@@ -276,6 +271,7 @@ begin
     result.FileData.Age:=-1;
     result.FileData.Name:=PSD^.FileData.Name;
     result.Ctx:=CtxClass.Create;
+    result.FIndividualCDA:=AICDA;
   end;
 end;
 procedure TScriptsmanager.ScanDir(DirPath:string);

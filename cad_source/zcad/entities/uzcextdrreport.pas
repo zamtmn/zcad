@@ -61,6 +61,8 @@ type
 
     procedure SaveToDxfObjXData(var outhandle:TZctnrVectorBytes;PEnt:Pointer;var IODXFContext:TIODXFContext);override;
     procedure onRemoveFromArray(pEntity:Pointer;const drawing:TDrawingDef);override;
+
+    procedure ScrContextSet(mode:TLapeScriptContextModes;ctx:TBaseScriptContext;cplr:TLapeCompiler);
   end;
 
 var
@@ -147,12 +149,20 @@ procedure TReportExtender.onRemoveFromArray(pEntity:Pointer;const drawing:TDrawi
 begin
 end;
 
+procedure TReportExtender.ScrContextSet(mode:TLapeScriptContextModes;ctx:TBaseScriptContext;cplr:TLapeCompiler);
+begin
+  if LSCMContextSetup in mode then begin
+    TEntityExtentionContext(ctx).FThisEntity:=pThisEntity;
+    TEntityExtentionContext(ctx).FThisEntityExtender:=self;
+  end;
+end;
+
 initialization
   //extdrAdd(extdrReport)
-  ReportScriptsManager:=STManager.CreateType('lpr','Script test',TBaseScriptContext,[testadder]);
+  ReportScriptsManager:=STManager.CreateType('lpr','Script test',TEntityExtentionContext,[ttest.testadder]);
   ReportScriptsManager.ScanDirs(sysvar.PATH.Preload_Path^);
-  temp:=ReportScriptsManager.CreateExternalScriptData('test');
-  ReportScriptsManager.RunScript(temp);
+  temp:=ReportScriptsManager.CreateExternalScriptData('test',[ttest.testadder]);
+  //ReportScriptsManager.RunScript(temp);
   //ReportScriptsManager.RunScript('test');
   EntityExtenders.RegisterKey(uppercase(ReportExtenderName),TReportExtender);
   GDBObjEntity.GetDXFIOFeatures.RegisterNamedLoadFeature('REPORTEXTENDER',TReportExtender.EntIOLoadReportExtender);

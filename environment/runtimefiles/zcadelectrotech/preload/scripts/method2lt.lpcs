@@ -1,0 +1,3 @@
+begin
+  Output:=Input+'_hello_from_script';
+end.

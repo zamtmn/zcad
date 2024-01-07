@@ -68,10 +68,19 @@ uses
   Varman,UBaseTypeDescriptor,uzbstrproc,
 
   gzctnrVectorTypes,
-  uzcstrconsts;       //resouce strings
+  uzcstrconsts,       //resouce strings
+
+  uzcLapeScriptsManager,uzcLapeScriptsImplBase,uzcCommand_LPCSRun,lpcompiler;
 
 
 type
+TMethod2ltContext=class(TBaseScriptContext)
+  FInput:string;
+  FOutput:string;
+end;
+TMethod2ltContextSetter=class
+  class procedure SetCtx(mode:TLapeScriptContextModes;ctx:TBaseScriptContext;cplr:TLapeCompiler);
+end;
 PTDrawSuperlineParams=^TDrawSuperlineParams;
 TDrawSuperlineParams=record
                          pu:PTUnit;                //рантайм юнит с параметрами суперлинии
@@ -87,10 +96,40 @@ TDrawSuperlineParams=record
                      end;
 var
    DrawSuperlineParams:TDrawSuperlineParams;
+   method2lt:TScriptData;
 
    function createSuperLine(p1,p2:GDBVertex;nameSL:string;changeLayer:boolean;LayerNamePrefix:string):TCommandResult;
 
 implementation
+
+
+class procedure TMethod2ltContextSetter.SetCtx(mode:TLapeScriptContextModes;ctx:TBaseScriptContext;cplr:TLapeCompiler);
+var
+  pvd:pvardesk;
+  psu:ptunit;
+begin
+  if LSCMCompilerSetup in mode then begin
+    cplr.StartImporting;
+    cplr.addBaseDefine('LAPE');
+    cplr.addGlobalVar('String',@TMethod2ltContext(ctx).FInput,'Input');
+    cplr.addGlobalVar('String',@TMethod2ltContext(ctx).FOutput,'Output');
+    cplr.EndImporting;
+  end;
+  if LSCMContextSetup in mode then begin
+    if ctx is TMethod2ltContext then begin
+      psu:=units.findunit(GetSupportPath,InterfaceTranslate,'superline');
+      if psu<>nil then
+        pvd:=psu.FindVariable('CABLE_MountingMethod')
+      else
+        pvd:=nil;
+
+      if pvd<>nil then
+        (ctx as TMethod2ltContext).FInput:=pvd^.GetValueAsString
+      else
+        (ctx as TMethod2ltContext).FInput:='error'
+    end;
+  end;
+end;
 
 function GetInteractiveLine(prompt1,prompt2:String;out p1,p2:GDBVertex):Boolean;
 var
@@ -183,6 +222,7 @@ procedure createline;
 var
     pvd:pvardesk;        //для нахождения имени суперлинии
     layername:String; //имя слоя куда будет помещена супелиния
+    ltname:string;
     player:PGDBLayerProp;//указатель на слой куда будет помещена супелиния
 begin
     psuperline := AllocEnt(GDBSuperLineID);
@@ -197,6 +237,10 @@ begin
     zcSetEntPropFromCurrentDrawingProp(psuperline);           //присваиваем умолчательные значения
 
     ////open~inTrust          open~inСableСhannel
+
+    CommandScriptsManager.RunScript(method2lt);
+    ltname:=(method2lt.Ctx as TMethod2ltContext).FOutput;
+
     pvd:=psu.FindVariable('CABLE_MountingMethod');
     if (DrawSuperlineParams.ProcessTypeLine)and(pvd<>nil) then begin
        if pvd.data.PTD^.GetValueAsString(pvd.data.Addr.Instance) = 'open~inMetalTray' then
@@ -302,4 +346,7 @@ initialization
      DrawSuperlineParams.SLSetting3:='???';
      DrawSuperlineParams.SLSettingTypeLine3:='-';
      CreateCommandFastObjectPlugin(@DrawSuperLine_com,   'DrawSuperLine',   CADWG,0);
+     method2lt:=CommandScriptsManager.CreateExternalScriptData('method2lt',TMethod2ltContext,[TMethod2ltContextSetter.SetCtx]);
+finalization
+     TScriptsmanager.FreeExternalScriptData(method2lt);
 end.

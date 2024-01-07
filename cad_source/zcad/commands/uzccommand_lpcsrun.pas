@@ -26,10 +26,9 @@ uses
  uzbpaths,uzccommandsabstract,uzccommandsimpl,uzmenusmanager,
  uzcLapeScriptsManager,uzcLapeScriptsImplBase,
  uzcsysvars;
-
-implementation
 var
   CommandScriptsManager:TScriptsManager;
+implementation
 function LPCSRun_com(operands:TCommandOperands):TCommandResult;
 begin
   try

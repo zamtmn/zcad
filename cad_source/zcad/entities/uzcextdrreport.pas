@@ -161,7 +161,7 @@ initialization
   //extdrAdd(extdrReport)
   ReportScriptsManager:=STManager.CreateType('lpr','Script test',TEntityExtentionContext,[ttest.testadder]);
   ReportScriptsManager.ScanDirs(sysvar.PATH.Preload_Path^);
-  temp:=ReportScriptsManager.CreateExternalScriptData('test',[ttest.testadder]);
+  temp:=ReportScriptsManager.CreateExternalScriptData('test',TEntityExtentionContext,[ttest.testadder]);
   //ReportScriptsManager.RunScript(temp);
   //ReportScriptsManager.RunScript('test');
   EntityExtenders.RegisterKey(uppercase(ReportExtenderName),TReportExtender);

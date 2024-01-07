@@ -27,6 +27,7 @@ uses
   gzctnrSTL,
   LazUTF8,
   uzbLogTypes,uzcLog,
+  uzelongprocesssupport,
   uzcLapeScriptsImplBase;
 
 type
@@ -77,7 +78,7 @@ type
     procedure ScanDirs(DirPaths:string);
 
     procedure RunScript(AScriptName:string);overload;
-    function CreateExternalScriptData(AScriptName:string;AICDA:TCompilerDefAdders):TScriptData;
+    function CreateExternalScriptData(AScriptName:string;AICtxClass:TMetaScriptContext;AICDA:TCompilerDefAdders):TScriptData;
     class procedure FreeExternalScriptData(var ESD:TScriptData);
     procedure RunScript(var SD:TScriptData);overload;
     procedure CheckScriptActuality(var SD:TScriptData);
@@ -274,15 +275,21 @@ begin
     raise Exception.CreateFmt('Script "%s" (type "%s", file mask "%s") not found',[AScriptName,FScriptType,FScriptFileMask]);
 end;
 procedure TScriptsmanager.RunScript(var SD:TScriptData);
+var
+  lpsh:TLPSHandle;
 begin
   CheckScriptActuality(SD);
   try
-    if (SD.LAPEData.FCompiled)or(SD.LAPEData.FCompiler.Compile) then begin
-      SD.LAPEData.FCompiled:=True;
-      RunCode(SD.LAPEData.FCompiler.Emitter)
-    end
-    else
+    if not SD.LAPEData.FCompiled then begin
+      lpsh:=LPS.StartLongProcess('Compile script',self);
+      SD.LAPEData.FCompiled:=SD.LAPEData.FCompiler.Compile;
+      LPS.EndLongProcess(lpsh);
+    end;
+    if not SD.LAPEData.FCompiled then
       LapeExceptionFmt('Error compiling file "%s"',[SD.FileData.Name]);
+    lpsh:=LPS.StartLongProcess('Run script',self);
+    RunCode(SD.LAPEData.FCompiler.Emitter);
+    LPS.EndLongProcess(lpsh);
   except
     on E: Exception do
     begin
@@ -292,21 +299,28 @@ begin
   end;
 end;
 
-function TScriptsmanager.CreateExternalScriptData(AScriptName:string;AICDA:TCompilerDefAdders):TScriptData;
+function TScriptsmanager.CreateExternalScriptData(AScriptName:string;AICtxClass:TMetaScriptContext;AICDA:TCompilerDefAdders):TScriptData;
 var
   scrname:string;
   PSD:PTScriptData;
 begin
   scrname:=UpperCase(AScriptName);
+  result.LAPEData.FCompiler:=nil;
+  result.FileData.Age:=-1;
+  result.FIndividualCDA:=AICDA;
   if SN2SD.MyGetMutableValue(scrname,PSD) then begin
-
-    result.LAPEData.FCompiler:=nil;
-    //result.LAPEData.FParser:=nil;
-
-    result.FileData.Age:=-1;
     result.FileData.Name:=PSD^.FileData.Name;
-    result.Ctx:=CtxClass.Create;
-    result.FIndividualCDA:=AICDA;
+    if AICtxClass<>nil then
+      result.Ctx:=AICtxClass.Create
+    else if CtxClass<>nil then
+      result.Ctx:=CtxClass.Create
+    else
+      result.Ctx:=nil;
+  end else begin
+    if AICtxClass<>nil then
+      result.Ctx:=AICtxClass.Create
+    else
+      result.Ctx:=nil;
   end;
 end;
 class procedure TScriptsmanager.FreeExternalScriptData(var ESD:TScriptData);

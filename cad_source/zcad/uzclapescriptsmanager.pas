@@ -57,7 +57,10 @@ type
     ScriptType:TScriptsType;
   end;}
 
-  TScriptName2ScriptDataMap=GKey2DataMap<String,TScriptData>;
+  TScriptName2ScriptDataMap=class(GKey2DataMap<String,TScriptData>)
+    destructor Destroy;override;
+  end;
+
   TScriptsManager=class
     FScriptType:String;
     FScriptFileMask:String;
@@ -75,6 +78,7 @@ type
 
     procedure RunScript(AScriptName:string);overload;
     function CreateExternalScriptData(AScriptName:string;AICDA:TCompilerDefAdders):TScriptData;
+    class procedure FreeExternalScriptData(var ESD:TScriptData);
     procedure RunScript(var SD:TScriptData);overload;
     procedure CheckScriptActuality(var SD:TScriptData);
   end;
@@ -95,13 +99,16 @@ type
           Manager:TScriptsManager;
           constructor CreateRec(ADesc:TScriptTypeDesc;AManager:TScriptsManager=nil);
         end;
-        TScriptsType2ScriptDataMap=GKey2DataMap<TScriptsType,TScriptTypeData>;
+        TScriptsType2ScriptDataMap=class (GKey2DataMap<TScriptsType,TScriptTypeData>)
+          destructor Destroy;override;
+        end;
       var
         STN2SND:TScriptsType2ScriptDataMap;
     private
       function CreateSTN2SNDIfNeeded:boolean;//true if it has just been created
     public
       constructor Create;
+      destructor Destroy;override;
       function CreateType(AScriptsType:TScriptsType;ADescription:string;
                           ACtxClass:TMetaScriptContext;AFCDA:TCompilerDefAdders)
 :TScriptsManager;
@@ -137,6 +144,34 @@ end;
 constructor TScriptsTypeManager.Create;
 begin
   STN2SND:=nil;
+end;
+
+destructor TScriptsTypeManager.Destroy;
+begin
+  if STN2SND<>nil then
+    FreeAndNil(STN2SND);
+end;
+
+destructor TScriptName2ScriptDataMap.Destroy;
+var
+  sd:TScriptName2ScriptDataMap.TDictionaryPair;
+begin
+  for sd in self do begin
+    sd.Value.Ctx.free;
+    sd.Value.LAPEData.FCompiler.free;
+  end;
+  inherited;
+end;
+
+destructor TScriptsTypeManager.TScriptsType2ScriptDataMap.Destroy;
+var
+  std:TScriptsTypeManager.TScriptsType2ScriptDataMap.TDictionaryPair;
+begin
+  for std in self do begin
+    //setlength(std.Desc.FCDA,0);
+    std.Value.Manager.Free;
+  end;
+  inherited;
 end;
 
 function TScriptsTypeManager.CreateType(AScriptsType:TScriptsType;ADescription:string;ACtxClass:TMetaScriptContext;AFCDA:TCompilerDefAdders):TScriptsManager;
@@ -274,6 +309,12 @@ begin
     result.FIndividualCDA:=AICDA;
   end;
 end;
+class procedure TScriptsmanager.FreeExternalScriptData(var ESD:TScriptData);
+begin
+  FreeAndNil(ESD.LAPEData.FCompiler);
+  FreeAndNil(ESD.Ctx);
+end;
+
 procedure TScriptsmanager.ScanDir(DirPath:string);
 begin
   FromDirIterator(utf8tosys(DirPath),FScriptFileMask,'',nil,FoundScriptFile);

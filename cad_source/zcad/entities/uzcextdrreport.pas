@@ -167,5 +167,5 @@ initialization
   EntityExtenders.RegisterKey(uppercase(ReportExtenderName),TReportExtender);
   GDBObjEntity.GetDXFIOFeatures.RegisterNamedLoadFeature('REPORTEXTENDER',TReportExtender.EntIOLoadReportExtender);
 finalization
-  ReportScriptsManager.Destroy;
+  TScriptsmanager.FreeExternalScriptData(temp);
 end.

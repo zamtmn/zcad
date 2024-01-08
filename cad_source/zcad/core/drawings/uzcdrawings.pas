@@ -587,7 +587,7 @@ begin
         exit;
     end;
     if td=nil then begin
-      DebugLn(sysutils.format('{EW}Block "%s" not found! If this dimension arrow block - manually creating block not implemented yet((',[name]));
+      DebugLn(sysutils.format('{EM}Block "%s" not found! If this dimension arrow block - manually creating block not implemented yet((',[name]));
       exit;
     end;
     CopyBlock(BlockBaseDWG,PTSimpleDrawing(_to),td);

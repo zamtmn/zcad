@@ -247,15 +247,18 @@ begin
       CommandScriptsManager.RunScript(method2lt);
       //выводим из контекста скрипта выходное значение из переменной Output
       ltname:=(method2lt.Ctx as TMethod2ltContext).FOutput;
-      //копируем при необходимости и возможности тип линй из базы загруженых dxf
+      ZCMsgCallBackInterface.TextMessage('ltname:'+ltname,TMWOHistoryOut);
+      //копируем при необходимости и возможности тип линий из базы загруженых dxf
       drawings.AddLTStyleFromDBIfNeed(drawings.GetCurrentDWG,ltname);
 
-       if pvd.data.PTD^.GetValueAsString(pvd.data.Addr.Instance) = 'open~inMetalTray' then
-          psuperline.vp.LineType:=drawings.GetCurrentDWG^.LTypeStyleTable.getAddres('cablotok');
-       if pvd.data.PTD^.GetValueAsString(pvd.data.Addr.Instance) = 'open~inСableСhannel' then
-          psuperline.vp.LineType:=drawings.GetCurrentDWG^.LTypeStyleTable.getAddres('cabkorob');
-       if pvd.data.PTD^.GetValueAsString(pvd.data.Addr.Instance) = 'Hidden~inPipe' then
-          psuperline.vp.LineType:=drawings.GetCurrentDWG^.LTypeStyleTable.getAddres('cabtruba');
+      psuperline.vp.LineType:=drawings.GetCurrentDWG^.LTypeStyleTable.getAddres(ltname);
+
+       //if pvd.data.PTD^.GetValueAsString(pvd.data.Addr.Instance) = 'open~inMetalTray' then
+       //   psuperline.vp.LineType:=drawings.GetCurrentDWG^.LTypeStyleTable.getAddres('cablotok');
+       //if pvd.data.PTD^.GetValueAsString(pvd.data.Addr.Instance) = 'open~inСableСhannel' then
+       //   psuperline.vp.LineType:=drawings.GetCurrentDWG^.LTypeStyleTable.getAddres('cabkorob');
+       //if pvd.data.PTD^.GetValueAsString(pvd.data.Addr.Instance) = 'Hidden~inPipe' then
+       //   psuperline.vp.LineType:=drawings.GetCurrentDWG^.LTypeStyleTable.getAddres('cabtruba');
        end;
 
     //если манипуляции со слоем включены и ранее был найден "юнит" с параметрами

@@ -426,6 +426,16 @@ begin
                        result.init(_source.Name);
                        //result.LengthFact:=_source.LengthFact;
                        result.LengthDXF:=_source.LengthDXF;
+                       result.h:=_source.h;
+
+
+                       result.Mode:=_source.Mode;
+                       result.FirstStroke:=_source.FirstStroke;
+                       result.LastStroke:=_source.LastStroke;
+                       result.WithoutLines:=_source.WithoutLines;
+                       result.desk:=_source.desk;
+
+
                        _source.dasharray.copyto(result.dasharray);
                        _source.strokesarray.copyto(result.strokesarray);
                        //_source.shapearray.copyto(@result.shapearray);

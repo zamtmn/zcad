@@ -812,7 +812,7 @@ begin
       halfStroke:=(scale*abs(PStroke^/2))/length;//первый штрих
       supressfirstdash:=false;
       dend:=normalizedD-halfStroke;
-      if dend>eps then
+      if {dend>eps}lt^.LastStroke<>TODILine then
         case LT.FirstStroke of
                    TODILine:Segmentator.draw(rc,dend,true,result);
                   TODIPoint:begin

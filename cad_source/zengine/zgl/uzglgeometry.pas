@@ -198,7 +198,7 @@ begin
   Bound.RT.x:=NegInfinity;
   Bound.RT.y:=NegInfinity;//-infinity;
 
-  matr:=matrixmultiply(DrawMatrix,objmatrix);
+  //matr:=matrixmultiply(DrawMatrix,objmatrix);
   matr:=DrawMatrix;
 
   i := 1;

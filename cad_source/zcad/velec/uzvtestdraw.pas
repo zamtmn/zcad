@@ -360,7 +360,7 @@ function TestModul_com(operands:TCommandOperands):TCommandResult;
  end;
 
 initialization
- CreateCommandFastObjectPlugin(@TestModul_com,'test555',CADWG,0);
+ CreateZCADCommand(@TestModul_com,'test555',CADWG,0);
 end.
 
 

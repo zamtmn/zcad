@@ -141,6 +141,6 @@ begin
 end;
 
 initialization
-  CreateCommandFastObjectPlugin(@stripMtext_com,'stripmtext',CADWG,0);
+  CreateZCADCommand(@stripMtext_com,'stripmtext',CADWG,0);
 end.
 

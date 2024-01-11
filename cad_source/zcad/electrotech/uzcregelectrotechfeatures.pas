@@ -94,8 +94,8 @@ initialization;
   FunctionsTree.LoadTree(expandpath('*rtl/functions.xml'),InterfaceTranslate);
   RepresentationsTree.LoadTree(expandpath('*rtl/representations.xml'),InterfaceTranslate);
 
-  CreateCommandFastObjectPlugin(@FunctionsTest_com,'ft',CADWG,0);
-  CreateCommandFastObjectPlugin(@RepresentationsTest_com,'rt',CADWG,0);
+  CreateZCADCommand(@FunctionsTest_com,'ft',CADWG,0);
+  CreateZCADCommand(@RepresentationsTest_com,'rt',CADWG,0);
 
   //AddEditorToType(SysUnit.TypeName2PTD('TEentityRepresentation'),TBaseTypesEditors.BaseCreateEditor);
   //AddEditorToType(SysUnit.TypeName2PTD('TEentityFunction'),TBaseTypesEditors.BaseCreateEditor);

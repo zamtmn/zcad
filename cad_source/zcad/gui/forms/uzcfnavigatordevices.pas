@@ -1368,7 +1368,7 @@ begin
 end;
 
 initialization
-  CreateCommandFastObjectPlugin(@NavSelectSubNodes_com,'NavSelectSubNodes',CADWG,0);
+  CreateZCADCommand(@NavSelectSubNodes_com,'NavSelectSubNodes',CADWG,0);
   NavGroupIconIndex:=-1;
   NavAutoGroupIconIndex:=-1;
 finalization

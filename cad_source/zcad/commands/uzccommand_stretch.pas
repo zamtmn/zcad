@@ -43,9 +43,6 @@ type
   TStretchComMode=(SM_GetEnts,SM_FirstPoint,SM_SecondPoint);
 var
   StretchComMode:TStretchComMode;
-procedure finalize;
-begin
-end;
 procedure Stretch_com_CommandStart(Operands:pansichar);
 begin
   StretchComMode:=SM_GetEnts;
@@ -114,18 +111,13 @@ begin
 
 end;
 
-procedure startup;
-begin
+initialization
+  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
   CreateCommandRTEdObjectPlugin(@Stretch_com_CommandStart,
                                 @FrameEdit_com_Command_End,
                                 nil,nil,
                                 @Stretch_com_BeforeClick,
                                 @Stretch_com_AfterClick,nil,nil,'Stretch',0,0);
-end;
-initialization
-  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
-  startup;
 finalization
   ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
-  finalize;
 end.

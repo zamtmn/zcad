@@ -191,9 +191,9 @@ begin
 end;
 procedure startup;
 begin
-  CreateCommandFastObjectPlugin(@DBaseAdd_com,'DBaseAdd',CADWG,0);
-  CreateCommandFastObjectPlugin(@DBaseLink_com,'DBaseLink',CADWG,0);
-  CreateCommandFastObjectPlugin(@DBaseRename_com,'DBaseRename',CADWG,0);
+  CreateZCADCommand(@DBaseAdd_com,'DBaseAdd',CADWG,0);
+  CreateZCADCommand(@DBaseLink_com,'DBaseLink',CADWG,0);
+  CreateZCADCommand(@DBaseRename_com,'DBaseRename',CADWG,0);
 end;
 begin
      startup;

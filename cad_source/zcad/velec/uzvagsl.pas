@@ -1877,7 +1877,7 @@ initialization
   autogenSuperLine.indent:=5;
   autogenSuperLine.LayerNamePrefix:='SYS_SL_';
   autogenSuperLine.ProcessLayer:=true;
-  CreateCommandFastObjectPlugin(@Test111sl,'t111',CADWG,0);
+  CreateZCADCommand(@Test111sl,'t111',CADWG,0);
 end.
 
 

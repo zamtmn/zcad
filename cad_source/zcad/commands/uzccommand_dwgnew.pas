@@ -104,17 +104,9 @@ begin
   ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIActionRedrawContent);
   result:=cmd_ok;
 end;
-procedure startup;
-begin
-  CreateCommandFastObjectPlugin(@DWGNew_com,'DWGNew',0,0).CEndActionAttr:=[CEDWGNChanged];
-end;
-procedure finalize;
-begin
-end;
 initialization
   programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
-  startup;
+  CreateZCADCommand(@DWGNew_com,'DWGNew',0,0).CEndActionAttr:=[CEDWGNChanged];
 finalization
   ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
-  finalize;
 end.

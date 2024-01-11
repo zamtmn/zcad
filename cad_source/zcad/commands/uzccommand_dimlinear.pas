@@ -97,7 +97,7 @@ end;
 
 initialization
   programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
-  CreateCommandFastObjectPlugin(@DrawRotatedDim_com,'DimLinear',  CADWG,0)
+  CreateZCADCommand(@DrawRotatedDim_com,'DimLinear',  CADWG,0)
 finalization
   ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
 end.

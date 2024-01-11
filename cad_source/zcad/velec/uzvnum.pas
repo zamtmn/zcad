@@ -3388,9 +3388,9 @@ end;
 
 
 initialization
-  CreateCommandFastObjectPlugin(@NumPsIzvAndDlina_com,'test111',CADWG,0);
-  CreateCommandFastObjectPlugin(@TestTREEUses_com,'test222',CADWG,0);
-  CreateCommandFastObjectPlugin(@TestTREEUses_com2,'test333',CADWG,0);
+  CreateZCADCommand(@NumPsIzvAndDlina_com,'test111',CADWG,0);
+  CreateZCADCommand(@TestTREEUses_com,'test222',CADWG,0);
+  CreateZCADCommand(@TestTREEUses_com2,'test333',CADWG,0);
   DummyComparer:=TDummyComparer.Create;
   SortTreeLengthComparer:=TSortTreeLengthComparer.Create;
 finalization

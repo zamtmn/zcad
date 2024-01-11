@@ -162,7 +162,7 @@ initialization
   SysUnit.SetTypeDesk(TypeInfo(TPolygonParam),['Entity type','Number of vertices','Polyline width'],[FNUser]);//Даем человечьи имена параметрам
   SysUnit.SetTypeDesk(TypeInfo(TRectangEntType),['3DPoly','LWPoly'],[FNUser]);//Даем человечьи имена параметрам
 
-  CreateCommandFastObjectPlugin(@DrawPolygon_com,'Polygon',CADWG,0);
+  CreateZCADCommand(@DrawPolygon_com,'Polygon',CADWG,0);
 
   PolygonParam.ET:=RET_3DPoly;
   PolygonParam.PolyWidth:=0;

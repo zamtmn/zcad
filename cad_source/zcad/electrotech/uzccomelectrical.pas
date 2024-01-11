@@ -3465,7 +3465,7 @@ procedure startup;
 begin
   MainSpecContentFormat.init(100);
   MainSpecContentFormat.loadfromfile(FindInSupportPath(GetSupportPath,'main.sf'));
-  CreateCommandFastObjectPlugin(@RegenZEnts_com,'RegenZEnts',CADWG,0);
+  CreateZCADCommand(@RegenZEnts_com,'RegenZEnts',CADWG,0);
   Wire.init('El_Wire',0,0);
   commandmanager.CommandRegister(@Wire);
   pcabcom:=CreateCommandRTEdObjectPlugin(@_Cable_com_CommandStart, _Cable_com_CommandEnd,nil,@cabcomformat,@_Cable_com_BeforeClick,@_Cable_com_AfterClick,@_Cable_com_Hd,nil,'EL_Cable',0,0);
@@ -3474,21 +3474,21 @@ begin
   cabcomparam.Traces.Enums.init(10);
   cabcomparam.PTrace:=nil;
 
-  CreateCommandFastObjectPlugin(@_Cable_com_Invert,'El_Cable_Invert',CADWG,0);
-  CreateCommandFastObjectPlugin(@_Cable_com_Manager,'El_CableMan',CADWG,0);
-  CreateCommandFastObjectPlugin(@_Cable_com_Legend,'El_Cable_Legend',CADWG,0);
-  CreateCommandFastObjectPlugin(@_Cable_com_Join,'El_Cable_Join',CADWG,0);
-  csel:=CreateCommandFastObjectPlugin(@_Cable_com_Select,'El_Cable_Select',CADWG,0);
+  CreateZCADCommand(@_Cable_com_Invert,'El_Cable_Invert',CADWG,0);
+  CreateZCADCommand(@_Cable_com_Manager,'El_CableMan',CADWG,0);
+  CreateZCADCommand(@_Cable_com_Legend,'El_Cable_Legend',CADWG,0);
+  CreateZCADCommand(@_Cable_com_Join,'El_Cable_Join',CADWG,0);
+  csel:=CreateZCADCommand(@_Cable_com_Select,'El_Cable_Select',CADWG,0);
   csel.CEndActionAttr:=[];
-  CreateCommandFastObjectPlugin(@_Material_com_Legend,'El_Material_Legend',CADWG,0);
-  CreateCommandFastObjectPlugin(@_Cable_mark_com,'KIP_Cable_Mark',CADWG,0);
+  CreateZCADCommand(@_Material_com_Legend,'El_Material_Legend',CADWG,0);
+  CreateZCADCommand(@_Cable_mark_com,'KIP_Cable_Mark',CADWG,0);
 
-  CreateCommandFastObjectPlugin(@_Ren_n_to_0n_com,'El_Cable_RenN_0N',CADWG,0);
-  CreateCommandFastObjectPlugin(@_SelectMaterial_com,'SelMat',CADWG,0);
-  CreateCommandFastObjectPlugin(@_test_com,'test',CADWG,0);
-  CreateCommandFastObjectPlugin(@_El_ExternalKZ_com,'El_ExternalKZ',CADWG,0);
-  CreateCommandFastObjectPlugin(@_AutoGenCableRemove_com,'EL_AutoGen_Cable_Remove',CADWG,0);
-  CreateCommandFastObjectPlugin(@Connection2Dot_com,'Connection2Dot',CADWG,0);
+  CreateZCADCommand(@_Ren_n_to_0n_com,'El_Cable_RenN_0N',CADWG,0);
+  CreateZCADCommand(@_SelectMaterial_com,'SelMat',CADWG,0);
+  CreateZCADCommand(@_test_com,'test',CADWG,0);
+  CreateZCADCommand(@_El_ExternalKZ_com,'El_ExternalKZ',CADWG,0);
+  CreateZCADCommand(@_AutoGenCableRemove_com,'EL_AutoGen_Cable_Remove',CADWG,0);
+  CreateZCADCommand(@Connection2Dot_com,'Connection2Dot',CADWG,0);
 
   //EM_SRBUILD.init('EM_SRBUILD',CADWG,0);
   //EM_SEPBUILD.init('EM_SEPBUILD',CADWG,0);
@@ -3507,7 +3507,7 @@ begin
   ELLeaderComParam.Scale:=1;
   ELLeaderComParam.Size:=1;
 
-  CreateCommandFastObjectPlugin(@VarReport_com,'VarReport',CADWG,0);
+  CreateZCADCommand(@VarReport_com,'VarReport',CADWG,0);
 end;
 
 procedure finalize;

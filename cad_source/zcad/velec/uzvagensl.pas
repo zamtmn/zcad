@@ -665,7 +665,7 @@ var
 
 
 initialization
-  CreateCommandFastObjectPlugin(@TestModul_com,'test45',CADWG,0);
+  CreateZCADCommand(@TestModul_com,'test45',CADWG,0);
 end.
 
 

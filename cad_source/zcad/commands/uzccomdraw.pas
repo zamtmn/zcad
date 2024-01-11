@@ -191,8 +191,6 @@ var
    ExportDevWithAxisParams:TExportDevWithAxisParams;
    dummyclass:tdummyclass;
 
-//procedure startup;
-//procedure Finalize;
 implementation
 
 function GetBlockDefNames(var BDefNames:TZctnrVectorStrings;selname:String;filter:String=''):Integer;
@@ -1164,7 +1162,7 @@ end;
 
 procedure startup;
 begin
-  CreateCommandFastObjectPlugin(@Insert2_com,'Insert2',CADWG,0);
+  CreateZCADCommand(@Insert2_com,'Insert2',CADWG,0);
   //CreateCommandFastObjectPlugin(@bedit_com,'BEdit');
   pbeditcom:=CreateCommandRTEdObjectPlugin(@bedit_com,nil,nil,@bedit_format,nil,nil,nil,nil,'BEdit',0,0);
   BEditParam.Blocks.Enums.init(100);
@@ -1196,7 +1194,7 @@ begin
   InsertTestTable.init('InsertTestTable',0,0);
   //CreateCommandFastObjectPlugin(@InsertTestTable_com,'InsertTestTable',0,0);
 
-  CreateCommandFastObjectPlugin(@FindAllIntersections_com,'FindAllIntersections',CADWG,0);
+  CreateZCADCommand(@FindAllIntersections_com,'FindAllIntersections',CADWG,0);
 end;
 procedure Finalize;
 begin

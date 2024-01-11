@@ -5223,7 +5223,7 @@ end;
 
 initialization
   //CreateCommandFastObjectPlugin(@NumPsIzvAndDlina_com,'test111',CADWG,0);
-  CreateCommandFastObjectPlugin(@TestgraphUses_com,'test454',CADWG,0);
+  CreateZCADCommand(@TestgraphUses_com,'test454',CADWG,0);
   //CreateCommandFastObjectPlugin(@TestTREEUses_com2,'test333',CADWG,0);
   DummyComparer:=TDummyComparer.Create;
   SortTreeLengthComparer:=TSortTreeLengthComparer.Create;

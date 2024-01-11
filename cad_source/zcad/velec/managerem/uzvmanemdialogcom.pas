@@ -342,7 +342,7 @@ initialization
   //CmdProp.props.init('test');
 
   //SelSim.SetCommandParam(@SelSimParams,'PTSelSimParams');
-  CreateCommandFastObjectPlugin(@generatorOnelineDiagramOneLevel_com,'vGeneratorOneLine',CADWG,0);
+  CreateZCADCommand(@generatorOnelineDiagramOneLevel_com,'vGeneratorOneLine',CADWG,0);
 finalization
   ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
   //CmdProp.props.free;

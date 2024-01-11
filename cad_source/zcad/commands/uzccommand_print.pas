@@ -212,8 +212,8 @@ begin
   //PreviewForm.Free;
 end;
 
-procedure startup;
-begin
+initialization
+  ProgramLog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
   SysUnit^.RegisterType(TypeInfo(PTRasterizeParams));
   SysUnit^.SetTypeDesk(TypeInfo(TRasterizeParams),['FitToPage','Center','Scale','Palette']);
 
@@ -225,17 +225,8 @@ begin
 
   PSD:=TPrinterSetupDialog.Create(nil);
   PAGED:=TPageSetupDialog.Create(nil);
-end;
-
-procedure Finalize;
-begin
-  freeandnil(psd);
-  freeandnil(paged);
-end;
-initialization
-  ProgramLog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
-  startup;
 finalization
   ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
-  finalize;
+  freeandnil(psd);
+  freeandnil(paged);
 end.

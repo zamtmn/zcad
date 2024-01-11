@@ -626,7 +626,7 @@ function createSchemaLevelOne_com(operands:TCommandOperands):TCommandResult;
   end;
 
 initialization
- CreateCommandFastObjectPlugin(@createSchemaLevelOne_com,'vCreateSchemaLevelOne',CADWG,0);
+  CreateZCADCommand(@createSchemaLevelOne_com,'vCreateSchemaLevelOne',CADWG,0);
 end.
 
 

@@ -273,8 +273,9 @@ begin
      created:=false;
      Commandmanager.executecommandend;
 end;
-procedure startup;
-begin
+
+initialization
+  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
   SysUnit^.RegisterType(TypeInfo(TDiff));
   SysUnit^.RegisterType(TypeInfo(TSelBlockParams));
   SysUnit^.RegisterType(TypeInfo(TSelTextParams));
@@ -299,14 +300,6 @@ begin
   SelSimParams.Blocks.SameName:=true;
   SelSimParams.Blocks.DiffBlockDevice:=TD_Diff;
   SelSim.SetCommandParam(@SelSimParams,'PTSelSimParams');
-end;
-procedure Finalize;
-begin
-end;
-initialization
-  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
-  startup;
 finalization
   ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
-  finalize;
 end.

@@ -115,7 +115,7 @@ initialization
   SysUnit^.RegisterType(TypeInfo(TCmdProp));
   SysUnit^.SetTypeDesk(TypeInfo(TCmdProp),['параметры']);
   CmdProp.props.init('test');
-  CreateCommandFastObjectPlugin(@ExampleConstructToModalSpace_com,'ExampleConstructToModalSpace',CADWG,0);
+  CreateZCADCommand(@ExampleConstructToModalSpace_com,'ExampleConstructToModalSpace',CADWG,0);
 finalization
   ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
   CmdProp.props.free;

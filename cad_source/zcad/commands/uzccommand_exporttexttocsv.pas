@@ -174,7 +174,7 @@ initialization
   SysUnit^.RegisterType(TypeInfo(TExportTextToCSVParam));//регистрируем тип данных в зкадном RTTI
   SysUnit^.SetTypeDesk(TypeInfo(TExportTextToCSVParam),['Widths','W','H','FileName'],[FNProgram]);//Даем програмные имена параметрам, по идее это должно быть в ртти, но ненашел
 
-  CreateCommandFastObjectPlugin(@ExportTextToCSV_com,'ExportTextToCSV',  CADWG,0);
+  CreateZCADCommand(@ExportTextToCSV_com,'ExportTextToCSV',  CADWG,0);
 finalization
   ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
 end.

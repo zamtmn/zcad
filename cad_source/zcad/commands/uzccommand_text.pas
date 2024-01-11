@@ -216,8 +216,9 @@ begin
      dc:=drawings.GetCurrentDWG^.CreateDrawingRC;
      pt^.FormatEntity(drawings.GetCurrentDWG^,dc);
 end;
-procedure startup;
-begin
+
+initialization
+  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
   SysUnit^.RegisterType(TypeInfo(PTTextInsertParams));//регистрируем тип данных в зкадном RTTI
   //SysUnit^.RegisterType(TypeInfo(TTextInsertParams));
   SysUnit^.SetTypeDesk(TypeInfo(TTextInsertParams),['mode','Style','justify','h','WidthFactor','Oblique','Width','LineSpace','text','runtexteditor']);//Даем програмные имена параметрам, по идее это должно быть в ртти, но ненашел
@@ -235,15 +236,7 @@ begin
   TextInsertParams.Width:=100;
   TextInsertParams.LineSpace:=1;
   TextInsert.SetCommandParam(@TextInsertParams,'PTTextInsertParams');
-end;
-procedure Finalize;
-begin
-  TextInsertParams.Style.Enums.done;
-end;
-initialization
-  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
-  startup;
 finalization
   ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
-  finalize;
+  TextInsertParams.Style.Enums.done;
 end.

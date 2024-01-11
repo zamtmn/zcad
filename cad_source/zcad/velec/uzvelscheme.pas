@@ -2542,8 +2542,8 @@ end;
 
 
 initialization
- CreateCommandFastObjectPlugin(@createELSchema_com,'vBuildELSchema',CADWG,0);
- CreateCommandFastObjectPlugin(@testArrayDelegate_com,'testArrayDelegate',CADWG,0);
+ CreateZCADCommand(@createELSchema_com,'vBuildELSchema',CADWG,0);
+ CreateZCADCommand(@testArrayDelegate_com,'testArrayDelegate',CADWG,0);
  //CreateCommandFastObjectPlugin(@TestModul_com,'test888',CADWG,0);
 end.
 

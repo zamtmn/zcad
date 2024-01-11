@@ -153,17 +153,8 @@ begin
                           inherited MouseMoveCallback(wc,mc,button,osp);
      result:=cmd_ok;
 end;
-
-procedure startup;
-begin
-end;
-procedure finalize;
-begin
-end;
 initialization
   programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
-  startup;
 finalization
   ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
-  finalize;
 end.

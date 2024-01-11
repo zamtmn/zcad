@@ -127,18 +127,9 @@ begin
   result:=cmd_ok;
 end;
 
-
-procedure startup;
-begin
-  copybase.init('CopyBase',CADWG or CASelEnts,0);
-end;
-procedure Finalize;
-begin
-end;
 initialization
   programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
-  startup;
+  copybase.init('CopyBase',CADWG or CASelEnts,0);
 finalization
   ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
-  finalize;
 end.

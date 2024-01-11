@@ -47,7 +47,7 @@ initialization
   programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
   CommandScriptsManager:=STManager.CreateType('lpcs','Command script',TCurrentDrawingContext,[ttest.testadder,ttest.setCurrentDrawing]);
   CommandScriptsManager.ScanDirs(sysvar.PATH.Preload_Path^);
-  CreateCommandFastObjectPlugin(@LPCSRun_com,'LPCSRun',0,0);
+  CreateZCADCommand(@LPCSRun_com,'LPCSRun',0,0);
 finalization
   ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
 end.

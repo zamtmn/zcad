@@ -72,7 +72,7 @@ end;
 
 initialization
   programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
-  CreateCommandFastObjectPlugin(@CmdLinePrompt_com,'tstCmdLinePrompt',CADWG,0);
+  CreateZCADCommand(@CmdLinePrompt_com,'tstCmdLinePrompt',CADWG,0);
 finalization
   ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
   if clFileParam<>nil then

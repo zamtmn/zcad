@@ -350,7 +350,7 @@ ZCMsgCallBackInterface.RegisterHandler_GUIAction(dummyclass.FreEditor);
 ZCMsgCallBackInterface.RegisterHandler_GUIAction(dummyclass.StoreAndFreeEditor);
 ZCMsgCallBackInterface.RegisterHandler_GetFocusedControl(dummyclass.GetPeditorFocusPriority);
 //StoreAndFreeEditorProc:=StoreAndFreeEditor;
-CreateCommandFastObjectPlugin(@ObjInspCopyToClip_com,'ObjInspCopyToClip',0,0).overlay:=true;
+CreateZCADCommand(@ObjInspCopyToClip_com,'ObjInspCopyToClip',0,0).overlay:=true;
 
 finalization
   dummyclass.free;

@@ -145,8 +145,6 @@ var CommandManager:GDBcommandmanager;
 function getcommandmanager:Pointer;export;
 function GetCommandContext(pdrawing:PTDrawingDef;POGLWnd:POGLWndtype):TCStartAttr;
 procedure ParseCommand(comm:string; out command,operands:String);
-{procedure startup;
-procedure finalize;}
 implementation
 
 function GDBcommandmanager.MacroFuncsCurrentMacrosPath (const {%H-}Param: string; const Data: PtrInt;
@@ -1070,14 +1068,7 @@ begin
   if Assigned(CommandLinePrompts)then
     CommandLinePrompts.Free;
 end;
-{procedure startup;
-begin
-  commandmanager.init(1000);
-end;
-procedure finalize;
-begin
-  commandmanager.FreeAndDone;
-end;}
+
 initialization
   commandmanager.init(1000);
   DefaultMacros.AddMacro(TTransferMacro.Create('CurrentMacrosPath','',

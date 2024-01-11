@@ -31,12 +31,9 @@ type
   comdrawfunc=function(mclick:Integer):TCommandResult;
   comfunc=function:Integer;
   comfuncwithoper=function(operands:TCommandOperands):TCommandResult;
+
+  TZCADBaseCommand=function(operands:TCommandOperands):TCommandResult;
 {Export+}
-{REGISTEROBJECTTYPE CommandFastObject}
-  CommandFastObject =  object(CommandFastObjectDef)
-    procedure CommandInit; virtual;
-    procedure CommandEnd; virtual;
-  end;
   PCommandFastObjectPlugin=^CommandFastObjectPlugin;
   {REGISTEROBJECTTYPE CommandFastObjectPlugin}
   CommandFastObjectPlugin =  object(CommandFastObjectDef)
@@ -93,7 +90,7 @@ type
 var
      OSModeEditor:TOSModeEditor;
 function CreateCommandRTEdObjectPlugin(ocs:comfuncwithoper;oce,occ,ocf:comproc;obc,oac:commousefunc;ohgd:comdrawfunc;occont:comproc;name:pansichar;SA,DA:TCStartAttr):pCommandRTEdObjectPlugin;export;
-function CreateCommandFastObjectPlugin(ocs:comfuncwithoper;name:pansichar;SA,DA:TCStartAttr):pCommandFastObjectPlugin;export;
+function CreateZCADCommand(ACommandFunc:TZCADBaseCommand;ACommandName:string;SA,DA:TCStartAttr):pCommandFastObjectPlugin;export;
 implementation
 procedure  TOSModeEditor.Format;
 var
@@ -298,12 +295,12 @@ begin
   OSModeEditor.GetState;
   zcRedrawCurrentDrawing;
 end;
-function CreateCommandFastObjectPlugin;
+function CreateZCADCommand;
 var p:pCommandFastObjectPlugin;
 begin
      p:=nil;
      Getmem(Pointer(p),sizeof(CommandFastObjectPlugin));
-     p^.init(name,ocs);
+     p^.init(pchar(ACommandName),ACommandFunc);
      p^.dyn:=true;
      p^.CStartAttrEnableAttr:=SA;
      p^.CStartAttrDisableAttr:=DA;
@@ -412,9 +409,6 @@ begin
      if assigned(onCommandContinue) then
                                      onCommandContinue(@self);
 end;
-procedure CommandFastObject.CommandEnd;
-begin
-end;
 
 procedure CommandRTEdObject.CommandStart;
 begin
@@ -436,10 +430,6 @@ begin
   drawings.GetCurrentDWG.ConstructObjRoot.ObjMatrix:=onematrix;
   drawings.GetCurrentDWG.wa.SetMouseMode(savemousemode);
   zcRedrawCurrentDrawing;
-end;
-
-procedure CommandFastObject.CommandInit;
-begin
 end;
 
 procedure CommandRTEdObject.CommandInit;

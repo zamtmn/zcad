@@ -62,7 +62,7 @@ end;
 
 initialization
   programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
-  CreateCommandFastObjectPlugin(@VarsEd_com,'VarsEd',CADWG or CASelEnt,0);
+  CreateZCADCommand(@VarsEd_com,'VarsEd',CADWG or CASelEnt,0);
 finalization
   ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
 end.

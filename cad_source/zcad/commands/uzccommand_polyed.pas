@@ -429,8 +429,8 @@ begin
   end;
 end;}
 
-procedure startup;
-begin
+initialization
+  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
   PEProp.Action:=TSPE_Insert;
   SysUnit^.RegisterType(TypeInfo(TPolyEdit));//регистрируем тип данных в зкадном RTTI
   SysUnit^.SetTypeDesk(TypeInfo(TPolyEdit),['Action','Mode','vdist','ldist','nearestvertex','nearestline','dir','setpoint','vvertex','lvertex1','lvertex2']);//Даем програмные имена параметрам, по идее это должно быть в ртти, но ненашел
@@ -438,14 +438,6 @@ begin
   SysUnit^.SetTypeDesk(TypeInfo(TPolyEditMode),['TPEM_Nearest','TPEM_Select']);//Даем человечьи имена параметрам
 
   CreateCommandRTEdObjectPlugin(@_3DPolyEd_com_CommandStart,nil,nil,nil,@_3DPolyEd_com_BeforeClick,@_3DPolyEd_com_BeforeClick,nil,nil,'PolyEd',0,0);
-end;
-procedure Finalize;
-begin
-end;
-initialization
-  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
-  startup;
 finalization
   ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
-  finalize;
 end.

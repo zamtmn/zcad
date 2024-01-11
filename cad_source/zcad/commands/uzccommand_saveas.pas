@@ -110,17 +110,9 @@ begin
   ZCMsgCallBackInterface.Do_AfterShowModal(nil);
 end;
 
-procedure startup;
-begin
-  CreateCommandFastObjectPlugin(@SaveAs_com,'SaveAs',CADWG,0);
-end;
-procedure finalize;
-begin
-end;
 initialization
   programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
-  startup;
+  CreateZCADCommand(@SaveAs_com,'SaveAs',CADWG,0);
 finalization
   ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
-  finalize;
 end.

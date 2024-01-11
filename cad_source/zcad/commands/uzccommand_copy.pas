@@ -103,17 +103,9 @@ begin
   end;
   result:=cmd_ok;
 end;
-procedure startup;
-begin
-  copy.init('Copy',0,0);
-end;
-procedure Finalize;
-begin
-end;
 initialization
   programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
-  startup;
+  copy.init('Copy',0,0);
 finalization
   ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
-  finalize;
 end.

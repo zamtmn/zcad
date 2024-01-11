@@ -48,17 +48,9 @@ begin
   drawings.CurrentDWG:=pdwg;
 end;
 
-procedure startup;
-begin
-  CreateCommandFastObjectPlugin(@MergeBlocks_com,'MergeBlocks',0,0);
-end;
-procedure finalize;
-begin
-end;
 initialization
   programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
-  startup;
+  CreateZCADCommand(@MergeBlocks_com,'MergeBlocks',0,0);
 finalization
   ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
-  finalize;
 end.

@@ -64,7 +64,7 @@ begin
   result:=cmd_ok;
 end;
 initialization
-  CreateCommandFastObjectPlugin(@ReadBlockLibrary_com,'ReadBlockLibrary',0,0);
+  CreateZCADCommand(@ReadBlockLibrary_com,'ReadBlockLibrary',0,0);
 finalization
   ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
 end.

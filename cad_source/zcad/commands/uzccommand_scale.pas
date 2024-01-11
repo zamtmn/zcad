@@ -156,18 +156,10 @@ begin
       result:=cmd_ok;
 end;
 
-procedure startup;
-begin
-  scale.init('Scale',0,0);
-  scale.NotUseCommandLine:=false;
-end;
-procedure Finalize;
-begin
-end;
 initialization
   programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
-  startup;
+  scale.init('Scale',0,0);
+  scale.NotUseCommandLine:=false;
 finalization
   ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
-  finalize;
 end.

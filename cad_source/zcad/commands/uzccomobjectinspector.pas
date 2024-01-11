@@ -186,9 +186,9 @@ begin
 end;
 
 initialization
-     CreateCommandFastObjectPlugin(@GetPoint_com,   'GetPoint',   CADWG,0);
-     CreateCommandFastObjectPlugin(@GetVertexX_com, 'GetVertexX', CADWG,0);
-     CreateCommandFastObjectPlugin(@GetVertexY_com, 'GetVertexY', CADWG,0);
-     CreateCommandFastObjectPlugin(@GetVertexZ_com, 'GetVertexZ', CADWG,0);
-     CreateCommandFastObjectPlugin(@GetLength_com,  'GetLength',  CADWG,0);
+  CreateZCADCommand(@GetPoint_com,   'GetPoint',   CADWG,0);
+  CreateZCADCommand(@GetVertexX_com, 'GetVertexX', CADWG,0);
+  CreateZCADCommand(@GetVertexY_com, 'GetVertexY', CADWG,0);
+  CreateZCADCommand(@GetVertexZ_com, 'GetVertexZ', CADWG,0);
+  CreateZCADCommand(@GetLength_com,  'GetLength',  CADWG,0);
 end.

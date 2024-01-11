@@ -235,18 +235,11 @@ begin
   end;
   result:=cmd_ok;
 end;
-procedure startup;
-begin
-  OnDrawingEd.init('OnDrawingEd',0,0);
-  OnDrawingEd.CEndActionAttr:=[];
-end;
-procedure Finalize;
-begin
-end;
+
 initialization
   programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
-  startup;
+  OnDrawingEd.init('OnDrawingEd',0,0);
+  OnDrawingEd.CEndActionAttr:=[];
 finalization
   ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
-  finalize;
 end.

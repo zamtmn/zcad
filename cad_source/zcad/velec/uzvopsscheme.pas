@@ -1443,7 +1443,7 @@ end;
 
 
 initialization
- CreateCommandFastObjectPlugin(@createStructureSchema_com,'vBuildSSSchema',CADWG,0);
- CreateCommandFastObjectPlugin(@TestModul_com,'test888',CADWG,0);
+ CreateZCADCommand(@createStructureSchema_com,'vBuildSSSchema',CADWG,0);
+ CreateZCADCommand(@TestModul_com,'test888',CADWG,0);
 end.
 

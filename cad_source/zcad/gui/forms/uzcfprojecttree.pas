@@ -363,7 +363,7 @@ begin
   EqCategory.init(100);
   BlockCategory.loadfromfile(expandpath('*rtl/BlockCategory.cat'));
   EqCategory.loadfromfile(expandpath('*rtl/EqCategory.cat'));
-  CreateCommandFastObjectPlugin(@ProjectTree_com,'ProjectTree',CADWG,0);
+  CreateZCADCommand(@ProjectTree_com,'ProjectTree',CADWG,0);
 end;
 finalization
 begin

@@ -219,8 +219,9 @@ begin
   counter.Report;
   Commandmanager.executecommandend;
 end;
-procedure startup;
-begin
+
+initialization
+  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
   SysUnit^.RegisterType(TypeInfo(TMFunction));
   SysUnit^.RegisterType(TypeInfo(PTVariablesAddParams));
   SysUnit^.SetTypeDesk(TypeInfo(TMFunction),['MainFunction','Delegate', 'All']);
@@ -238,14 +239,6 @@ begin
   VarTextSelect.CEndActionAttr:=[];
   VarTextSelectParams.TemplateToFind:='*NMO_Name*';
   VarTextSelect.SetCommandParam(@VarTextSelectParams,'PTVarTextSelectParams');
-end;
-procedure Finalize;
-begin
-end;
-initialization
-  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
-  startup;
 finalization
   ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
-  finalize;
 end.

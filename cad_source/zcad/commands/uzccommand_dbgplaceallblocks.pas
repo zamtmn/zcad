@@ -84,18 +84,9 @@ begin
 
 end;
 
-
-procedure startup;
-begin
-  CreateCommandFastObjectPlugin(@dbgPlaceAllBlocks_com,'dbgPlaceAllBlocks',CADWG,0);
-end;
-procedure Finalize;
-begin
-end;
 initialization
   programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
-  startup;
+  CreateZCADCommand(@dbgPlaceAllBlocks_com,'dbgPlaceAllBlocks',CADWG,0);
 finalization
   ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
-  finalize;
 end.

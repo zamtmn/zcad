@@ -355,7 +355,7 @@ initialization
      DrawSuperlineParams.SLSettingTypeLine2:='-';
      DrawSuperlineParams.SLSetting3:='???';
      DrawSuperlineParams.SLSettingTypeLine3:='-';
-     CreateCommandFastObjectPlugin(@DrawSuperLine_com,   'DrawSuperLine',   CADWG,0);
+     CreateZCADCommand(@DrawSuperLine_com,   'DrawSuperLine',   CADWG,0);
      method2lt:=CommandScriptsManager.CreateExternalScriptData('method2lt',TMethod2ltContext,[TMethod2ltContextSetter.SetCtx]);
 finalization
      TScriptsmanager.FreeExternalScriptData(method2lt);

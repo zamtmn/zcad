@@ -119,7 +119,7 @@ end;
 
 initialization
   programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
-  CreateCommandFastObjectPlugin(@uzvremoveconnection_com,'uzvremoveconnection',CADWG,0);
+  CreateZCADCommand(@uzvremoveconnection_com,'uzvremoveconnection',CADWG,0);
 finalization
   ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
 end.

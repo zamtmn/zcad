@@ -59,7 +59,6 @@ begin
       pv^.y:=tv.y;
     end;
   end;
-  paths.Clear;
 end;
 function TBoundaryPath.getDataMutableByPlainIndex(index:TArrayIndex):PGDBVertex2D;
 var

@@ -663,12 +663,8 @@ function GDBObjHatch.CalcTrueInFrustum;
 var
   pv1,pv2:pgdbvertex;
 begin
-  result:=Vertex3D_in_WCS_Array.CalcTrueInFrustum(frustum);
-  if (result=IREmpty)and(Vertex3D_in_WCS_Array.count>3) then begin
-    pv1:=Vertex3D_in_WCS_Array.getDataMutable(0);
-    pv2:=Vertex3D_in_WCS_Array.getDataMutable(Vertex3D_in_WCS_Array.Count-1);
-    result:=uzegeometry.CalcTrueInFrustum(pv1^,pv2^,frustum);
-  end;
+  pv1:=Vertex3D_in_WCS_Array.getDataMutable(0);
+  result:=Path.DummyCalcTrueInFrustum(pv1,frustum);
 end;
 procedure GDBObjHatch.remaponecontrolpoint(pdesc:pcontrolpointdesc);
 var vertexnumber:Integer;

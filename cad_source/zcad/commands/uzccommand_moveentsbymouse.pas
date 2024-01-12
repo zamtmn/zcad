@@ -79,7 +79,7 @@ begin
 end;
 
 
-function MoveEntsByMouse_com(operands:TCommandOperands):TCommandResult;
+function MoveEntsByMouse_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 var
   p1:GDBvertex;
   t_matrix:DMatrix4D;

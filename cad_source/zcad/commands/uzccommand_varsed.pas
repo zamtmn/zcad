@@ -40,7 +40,7 @@ uses
 
 implementation
 
-function VarsEd_com(operands:TCommandOperands):TCommandResult;
+function VarsEd_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 var
   pobj:PGDBObjEntity;
   pentvarext:TVariablesExtender;

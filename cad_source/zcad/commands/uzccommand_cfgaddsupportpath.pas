@@ -25,7 +25,7 @@ uses
  uzbpaths,uzccommandsabstract,uzccommandsimpl,uzmenusmanager;
 
 implementation
-function cfgAddSupportPath_com(operands:TCommandOperands):TCommandResult;
+function cfgAddSupportPath_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 begin
   AddSupportPath(ExpandPath(operands));
   result:=cmd_ok;

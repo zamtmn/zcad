@@ -35,7 +35,7 @@ uses
   uzcinterface,
   uzeffdxf,uzedrawingsimple,Varman,uzctnrVectorBytes,uzcdrawing,uzcTranslations,uzeconsts;
 
-function SaveAs_com(operands:TCommandOperands):TCommandResult;
+function SaveAs_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 function SaveDXFDPAS(s:ansistring):Integer;
 function dwgQSave_com(dwg:PTSimpleDrawing):Integer;
 
@@ -86,7 +86,7 @@ begin
                                              ProcessFilehistoryProc(s);
 end;
 
-function SaveAs_com(operands:TCommandOperands):TCommandResult;
+function SaveAs_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 var
    s:AnsiString;
    fileext:AnsiString;

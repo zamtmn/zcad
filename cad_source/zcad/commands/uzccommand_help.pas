@@ -74,7 +74,7 @@ begin
     OpenDocument(AFile);
 end;
 
-function Help_com(operands:TCommandOperands):TCommandResult;
+function Help_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 var
   htmlDoc:string;
 begin

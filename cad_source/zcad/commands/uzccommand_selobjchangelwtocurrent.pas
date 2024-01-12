@@ -32,7 +32,7 @@ uses
 
 implementation
 
-function SelObjChangeLWToCurrent_com(operands:TCommandOperands):TCommandResult;
+function SelObjChangeLWToCurrent_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 var pv:pGDBObjEntity;
     ir:itrec;
 begin

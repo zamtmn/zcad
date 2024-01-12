@@ -33,7 +33,7 @@ uses
 
 implementation
 
-function DrawDiametricDim_com(operands:TCommandOperands):TCommandResult;
+function DrawDiametricDim_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 var
     pd:PGDBObjDiametricDimension;
     pcircle:PGDBObjCircle;

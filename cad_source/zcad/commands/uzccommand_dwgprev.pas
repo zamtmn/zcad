@@ -27,7 +27,7 @@ uses
 
 implementation
 
-function DWGPrev_com(operands:TCommandOperands):TCommandResult;
+function DWGPrev_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 var
    i:integer;
 begin

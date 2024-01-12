@@ -252,7 +252,7 @@ begin
      //redrawoglwnd;
 end;
 
-procedure polydiv_com(Operands:pansichar);
+procedure polydiv_com(const Context:TZCADCommandContext;Operands:pansichar);
 var pva,pvr:GDBPolyline2DArray;
 begin
   if drawings.GetCurrentDWG.GetLastSelected<>nil then

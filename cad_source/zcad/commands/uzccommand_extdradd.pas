@@ -28,14 +28,14 @@ uses
   gzundoCmdChgMethods2,zUndoCmdSaveEntityState,uzcdrawing,
   uzcinterface,UGDBSelectedObjArray;
 
-function extdrAdd_com(operands:TCommandOperands):TCommandResult;
+function extdrAdd_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 
 implementation
 
 const
   cmdName='extdrAdd';
 
-function extdrAdd_com(operands:TCommandOperands):TCommandResult;
+function extdrAdd_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 var
   extdr:TMetaEntityExtender;
   pEntity,pLastSelectedEntity:PGDBObjEntity;

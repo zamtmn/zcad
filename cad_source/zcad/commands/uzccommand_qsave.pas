@@ -37,7 +37,7 @@ uses
 
 implementation
 
-function QSave_com(operands:TCommandOperands):TCommandResult;
+function QSave_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 var s,s1:AnsiString;
     itautoseve:boolean;
 begin
@@ -49,7 +49,7 @@ begin
     itautoseve:=true;
   end else begin
     if extractfilepath(drawings.GetCurrentDWG.GetFileName)='' then begin
-      SaveAs_com(EmptyCommandOperands);
+      SaveAs_com(Context,EmptyCommandOperands);
       exit;
     end;
       s1:=drawings.GetCurrentDWG.GetFileName;

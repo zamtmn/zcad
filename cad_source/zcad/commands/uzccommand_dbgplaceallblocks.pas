@@ -36,7 +36,7 @@ uses
 
 implementation
 
-function dbgPlaceAllBlocks_com(operands:TCommandOperands):TCommandResult;
+function dbgPlaceAllBlocks_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 var pb:PGDBObjBlockdef;
     ir:itrec;
     xcoord:Double;

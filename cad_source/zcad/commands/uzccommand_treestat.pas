@@ -137,7 +137,7 @@ begin
   ZCMsgCallBackInterface.TextMessage('}',TMWOHistoryOut);
 end;
 
-function TreeStat_com(operands:TCommandOperands):TCommandResult;
+function TreeStat_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 var i: Integer;
     percent,apercent:string;
     cp,ap:single;

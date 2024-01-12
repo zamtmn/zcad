@@ -28,7 +28,7 @@ uses
 
 implementation
 
-function DWGClose_com(operands:TCommandOperands):TCommandResult;
+function DWGClose_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 var
    CurrentDWG:PTZCADDrawing;
 begin

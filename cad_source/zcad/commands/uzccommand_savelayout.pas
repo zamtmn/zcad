@@ -57,7 +57,7 @@ begin
     XMLConfig.Free;
   end;
 end;
-function SaveLayout_com(operands:TCommandOperands):TCommandResult;
+function SaveLayout_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 var
   XMLConfig: TXMLConfigStorage;
   filename:string;

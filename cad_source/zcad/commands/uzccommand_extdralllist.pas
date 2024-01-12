@@ -25,7 +25,7 @@ uses
 
 implementation
 
-function extdrAllList_com(operands:TCommandOperands):TCommandResult;
+function extdrAllList_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 var
   pair:TEntityExtendersMap.TDictionaryPair;
 begin

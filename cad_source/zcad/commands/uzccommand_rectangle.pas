@@ -49,7 +49,7 @@ implementation
 var
   RectangParam:TRectangParam;     //**< Переменная содержащая опции команды Rectangle
 
-  function DrawRectangle_com(operands:TCommandOperands):TCommandResult;    //< Чертим прямоугольник
+  function DrawRectangle_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;    //< Чертим прямоугольник
   var
       vertexLWObj:GDBvertex2D;               //переменная для добавления вершин в полилинию
       vertexObj:GDBvertex;

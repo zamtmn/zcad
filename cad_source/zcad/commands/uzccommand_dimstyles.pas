@@ -33,7 +33,7 @@ uses
 
 implementation
 
-function DimStyles_cmd(operands:TCommandOperands):TCommandResult;
+function DimStyles_cmd(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 begin
   DimStylesForm:=TDimStylesForm.Create(nil);
   SetHeightControl(DimStylesForm,sysvar.INTF.INTF_DefaultControlHeight^);

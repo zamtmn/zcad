@@ -28,9 +28,9 @@ uses
 
 implementation
 
-function dbgGetStackOverflow_com(Operands:pansichar):Integer;
+function dbgGetStackOverflow_com(const Context:TZCADCommandContext;Operands:pansichar):Integer;
 begin
-  dbgGetStackOverflow_com(nil);
+  dbgGetStackOverflow_com(Context,nil);
   result:=cmd_ok;
 end;
 

@@ -29,7 +29,7 @@ uses
 var
   CommandScriptsManager:TScriptsManager;
 implementation
-function LPCSRun_com(operands:TCommandOperands):TCommandResult;
+function LPCSRun_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 begin
   try
     CommandScriptsManager.RunScript(operands);

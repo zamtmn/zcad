@@ -37,7 +37,7 @@ uses
 
 implementation
 
-function units_cmd(operands:TCommandOperands):TCommandResult;
+function units_cmd(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 var
     _UnitsFormat:TzeUnitsFormat;
 begin

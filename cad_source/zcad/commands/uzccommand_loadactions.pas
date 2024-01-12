@@ -33,7 +33,7 @@ begin
          (_control as TToolButton).Caption:=(((_control as TToolButton).action)as TmyAction).imgstr;
 end;
 
-function LoadActions_com(operands:TCommandOperands):TCommandResult;
+function LoadActions_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 begin
   ToolBarsManager.LoadActions(ExpandPath(operands));
   ToolBarsManager.IterateToolBarsContent(FixButtonCaption);

@@ -30,7 +30,7 @@ uses
 
 implementation
 
-function ChangeProjType_com(operands:TCommandOperands):TCommandResult;
+function ChangeProjType_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 begin
   if drawings.GetCurrentDWG.wa.param.projtype = projparalel then
   begin

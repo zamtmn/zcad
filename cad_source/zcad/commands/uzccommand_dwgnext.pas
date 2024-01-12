@@ -27,7 +27,7 @@ uses
 
 implementation
 
-function DWGNext_com(operands:TCommandOperands):TCommandResult;
+function DWGNext_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 var
    i:integer;
 begin

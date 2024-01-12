@@ -25,7 +25,7 @@ uses
  uzbpaths,uzccommandsabstract,uzccommandsimpl,uztoolbarsmanager;
 
 implementation
-function LoadPalettes_com(operands:TCommandOperands):TCommandResult;
+function LoadPalettes_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 begin
   ToolBarsManager.LoadPalettes(ExpandPath(operands));
   result:=cmd_ok;

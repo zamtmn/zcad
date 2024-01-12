@@ -227,7 +227,7 @@ var
   end;
 
 
-function generatorOnelineDiagramOneLevel_com(operands:TCommandOperands):TCommandResult;
+function generatorOnelineDiagramOneLevel_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 var
   //inpt:String;
   gr:TGetResult;

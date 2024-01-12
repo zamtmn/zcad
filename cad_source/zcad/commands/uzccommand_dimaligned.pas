@@ -37,7 +37,7 @@ implementation
   the basis of them aligned dimension}
 { данная примерная функция просит пользователя указать 3 точки и строит на
   основе них выровненный размер }
-function DrawAlignedDim_com(operands:TCommandOperands):TCommandResult;
+function DrawAlignedDim_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 
 var
     pd:PGDBObjAlignedDimension;// указатель на создаваемый размерный примитив

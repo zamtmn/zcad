@@ -34,7 +34,7 @@ uses
 
 implementation
 
-function RotateEnts_com(operands:TCommandOperands):TCommandResult;
+function RotateEnts_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 var
   pv:pGDBObjEntity;
   ir:itrec;

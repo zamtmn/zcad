@@ -42,7 +42,7 @@ implementation
 const
     CommandName='explDbCheck';
 
-function explDbCheck_com(operands:TCommandOperands):TCommandResult;
+function explDbCheck_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 var
   pEntity:PGDBObjEntity;
   EntVarExt:TVariablesExtender;

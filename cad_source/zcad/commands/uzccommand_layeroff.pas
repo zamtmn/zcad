@@ -30,7 +30,7 @@ uses
 implementation
 const
   LayerOnCommandName='LayerOff';
-function LayerOff_com(operands:TCommandOperands):TCommandResult;
+function LayerOff_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 var
   UndoStartMarkerPlaced:boolean;
   plp:PGDBLayerProp;

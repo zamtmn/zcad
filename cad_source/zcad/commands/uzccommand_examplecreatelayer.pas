@@ -29,7 +29,7 @@ uses
 
 implementation
 
-function ExampleCreateLayer_com(operands:TCommandOperands):TCommandResult;
+function ExampleCreateLayer_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 var
     pproglayer:PGDBLayerProp;
     pnevlayer:PGDBLayerProp;

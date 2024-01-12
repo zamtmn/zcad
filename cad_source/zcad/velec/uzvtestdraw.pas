@@ -340,7 +340,7 @@ implementation
   //  e.Graphics.DrawLines(Pens.Black, points);
 
 
-function TestModul_com(operands:TCommandOperands):TCommandResult;
+function TestModul_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 
 
      var

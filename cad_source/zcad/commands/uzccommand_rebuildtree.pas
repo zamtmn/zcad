@@ -29,11 +29,11 @@ uses
   uzcinterface,
   uzcutils;
 
-function RebuildTree_com(operands:TCommandOperands):TCommandResult;
+function RebuildTree_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 
 implementation
 
-function RebuildTree_com(operands:TCommandOperands):TCommandResult;
+function RebuildTree_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 var
   lpsh:TLPSHandle;
 begin

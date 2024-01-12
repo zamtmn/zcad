@@ -32,7 +32,7 @@ var
   StringsTreeSelector:TStringsTreeSelector=nil;
 implementation
 
-function FunctionsTest_com(operands:TCommandOperands):TCommandResult;
+function FunctionsTest_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 begin
   StringsTreeSelector:=TStringsTreeSelector.Create(nil);
   StringsTreeSelector.fill(FunctionsTree.BlobTree);
@@ -41,7 +41,7 @@ begin
   result:=cmd_ok;
 end;
 
-function RepresentationsTest_com(operands:TCommandOperands):TCommandResult;
+function RepresentationsTest_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 begin
   StringsTreeSelector:=TStringsTreeSelector.Create(nil);
   StringsTreeSelector.fill(RepresentationsTree.BlobTree);

@@ -29,11 +29,11 @@ uses
   uzccommand_merge,uzccommandsimpl,uzccommandsabstract,
   uzcdrawings,uzedrawingsimple;
 
-function MergeBlocks_com(operands:TCommandOperands):TCommandResult;
+function MergeBlocks_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 
 implementation
 
-function MergeBlocks_com(operands:TCommandOperands):TCommandResult;
+function MergeBlocks_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 var
    pdwg:PTSimpleDrawing;
    s:AnsiString;
@@ -43,7 +43,7 @@ begin
 
   if length(operands)>0 then
   s:=FindInSupportPath(GetSupportPath,operands);
-  result:=Merge_com(s);
+  result:=Merge_com(Context,s);
 
   drawings.CurrentDWG:=pdwg;
 end;

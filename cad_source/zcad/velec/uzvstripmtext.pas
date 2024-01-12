@@ -43,7 +43,7 @@ uses
 implementation
 
 //**Очистка текста на чертеже
-function stripMtext_com(operands:TCommandOperands):TCommandResult;
+function stripMtext_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 var
 
   pobj: PGDBObjMText;
@@ -136,7 +136,7 @@ begin
     until pobj=nil;
 
     end;
-    Regen_com(EmptyCommandOperands);   //выполнитть регенирацию всего листа
+    Regen_com(Context,EmptyCommandOperands);   //выполнитть регенирацию всего листа
     result:=cmd_ok;
 end;
 

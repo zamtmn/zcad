@@ -228,7 +228,7 @@ begin
                 psdesc:=drawings.GetCurrentDWG^.SelObjArray.iterate(ir);
           until psdesc=nil;
           Prompt(sysutils.format(rscmNEntitiesProcessed,[result]));
-          Regen_com(EmptyCommandOperands);
+          Regen_com(TZCADCommandContext.CreateRec,EmptyCommandOperands);
           commandmanager.executecommandend;
      end;
 end;

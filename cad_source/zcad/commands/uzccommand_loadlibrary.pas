@@ -26,10 +26,10 @@ uses
  uzcEnitiesVariablesExtender;
 
 implementation
-function LoadLibrary_com(operands:TCommandOperands):TCommandResult;
+function LoadLibrary_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 begin
   TVariablesExtender.DisableVariableContentReplace;
-  result:=Load_com(operands);
+  result:=Load_com(Context,operands);
 end;
 
 

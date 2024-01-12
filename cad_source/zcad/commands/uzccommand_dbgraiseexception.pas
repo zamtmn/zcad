@@ -28,7 +28,7 @@ uses
 
 implementation
 
-function RaiseException_com(Operands:pansichar):Integer;
+function RaiseException_com(const Context:TZCADCommandContext;Operands:pansichar):Integer;
 begin
   raise EExternal.Create('Exception test');
   result:=cmd_ok;

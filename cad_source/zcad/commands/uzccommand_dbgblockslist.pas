@@ -31,7 +31,7 @@ uses
 
 implementation
 
-function dbgBlocksList_com(operands:TCommandOperands):TCommandResult;
+function dbgBlocksList_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 var pb:PGDBObjBlockdef;
     ir:itrec;
 begin

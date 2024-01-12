@@ -33,7 +33,7 @@ implementation
 const
   cmdName='extdrRemove';
 
-function extdrRemove_com(operands:TCommandOperands):TCommandResult;
+function extdrRemove_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 var
   extdr:TMetaEntityExtender;
   pEntity,pLastSelectedEntity:PGDBObjEntity;

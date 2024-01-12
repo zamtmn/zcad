@@ -35,7 +35,7 @@ uses
 
 implementation
 
-function DrawArc_com(operands:TCommandOperands):TCommandResult;
+function DrawArc_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 var
     pa:PGDBObjArc;
     pline:PGDBObjLine;

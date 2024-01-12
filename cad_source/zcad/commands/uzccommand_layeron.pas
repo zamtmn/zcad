@@ -30,7 +30,7 @@ uses
 implementation
 const
   LayerOnCommandName='LayerOn';
-function LayerOn_com(operands:TCommandOperands):TCommandResult;
+function LayerOn_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 var
   UndoStartMarkerPlaced:boolean;
   plp:PGDBLayerProp;

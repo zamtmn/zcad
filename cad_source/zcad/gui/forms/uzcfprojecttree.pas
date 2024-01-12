@@ -349,7 +349,7 @@ begin
   BuildTreeByEQ(ProjectEquipmentN,PTZCADDrawing(drawings.GetCurrentDWG).DWGUnits.findunit(GetSupportPath,InterfaceTranslate,DrawingDeviceBaseUnitName),MenusManager.GetPopupMenu('PROJECTDBCXMENU',nil));
 
 end;
-function ProjectTree_com(Operands:pansichar):Integer;
+function ProjectTree_com(const Context:TZCADCommandContext;Operands:pansichar):Integer;
 begin
   if not assigned(ProjectTreeForm) then
                                   ProjectTreeForm:=TProjectTreeForm.mycreate(Application,@ProjectTreeForm);

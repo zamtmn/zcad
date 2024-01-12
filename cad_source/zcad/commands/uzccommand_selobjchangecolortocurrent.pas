@@ -32,7 +32,7 @@ uses
 
 implementation
 
-function SelObjChangeColorToCurrent_com(operands:TCommandOperands):TCommandResult;
+function SelObjChangeColorToCurrent_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 var pv:pGDBObjEntity;
     ir:itrec;
 begin

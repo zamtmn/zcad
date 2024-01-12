@@ -28,7 +28,7 @@ uses
   zcmultiobjectcreateundocommand,uzcinterface,uzcutils,
   UGDBSelectedObjArray,gzctnrSTL,uzeentsubordinated;
 
-function Erase_com(operands:TCommandOperands):TCommandResult;
+function Erase_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 
 implementation
 
@@ -95,7 +95,7 @@ begin
 end;
 
 
-function Erase_com(operands:TCommandOperands):TCommandResult;
+function Erase_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 var
   pv:pGDBObjEntity;
   Pair:TMyMapCounter<PGDBObjGenericWithSubordinated>.TDictionaryPair;

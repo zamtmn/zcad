@@ -34,7 +34,7 @@ uses
 
 implementation
 
-function DrawCircle_com(operands:TCommandOperands):TCommandResult;
+function DrawCircle_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 var
     pcircle:PGDBObjCircle;
     pe:T3PointCircleModePentity;

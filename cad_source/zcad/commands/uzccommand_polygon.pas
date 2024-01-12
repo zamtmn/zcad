@@ -55,7 +55,7 @@ var
    PolygonParam:TPolygonParam;     //**< Переменная содержащая опции команды Polygon
 
 //** Чертим многоугольник центер вершина
-function DrawPolygon_com(operands:TCommandOperands):TCommandResult;
+function DrawPolygon_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 var
     vertexLWObj:GDBvertex2D;               //переменная для добавления вершин в полилинию
     vertexObj:GDBvertex;

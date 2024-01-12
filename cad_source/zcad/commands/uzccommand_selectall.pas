@@ -34,7 +34,7 @@ var
 
 implementation
 
-function SelectAll_com(operands:TCommandOperands):TCommandResult;
+function SelectAll_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 var
     pv:pGDBObjEntity;
     ir:itrec;

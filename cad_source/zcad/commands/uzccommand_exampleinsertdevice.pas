@@ -29,7 +29,7 @@ uses
 
 implementation
 
-function ExampleInsertDevice_com(operands:TCommandOperands):TCommandResult;
+function ExampleInsertDevice_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 var
     pdev:PGDBObjDevice;
     p1:gdbvertex;

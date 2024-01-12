@@ -30,7 +30,7 @@ uses
 
 implementation
 
-function ExecuteFile_com(operands:TCommandOperands):TCommandResult;
+function ExecuteFile_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 begin
   commandmanager.executefile(ExpandPath(operands),drawings.GetCurrentDWG,nil);
   result:=cmd_ok;

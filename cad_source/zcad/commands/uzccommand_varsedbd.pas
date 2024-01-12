@@ -40,7 +40,7 @@ uses
 
 implementation
 
-function VarsEdBD_com(operands:TCommandOperands):TCommandResult;
+function VarsEdBD_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 var
   pobj:PGDBObjEntity;
   op:ansistring;

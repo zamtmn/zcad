@@ -207,7 +207,7 @@ begin
     result:=cmd_ok;
 end;
 
-function DrawSuperLine_com(operands:TCommandOperands):TCommandResult;
+function DrawSuperLine_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 var
     psuperline:PGDBObjSuperLine;
     p1,p2:gdbvertex;

@@ -396,7 +396,7 @@ begin
 end;
 
 
-function DataExport_com(operands:TCommandOperands):TCommandResult;
+function DataExport_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 type
   TCmdMode=(CMEmpty,CMWaitFile,CMOptions,CMOptions1,CMOptions2,CMOptions3,CMExport);
 var

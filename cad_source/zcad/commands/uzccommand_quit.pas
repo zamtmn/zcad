@@ -153,7 +153,7 @@ begin
 end;
 
 
-function quit_com(operands:TCommandOperands):TCommandResult;
+function quit_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 begin
   CloseApp;
   result:=cmd_ok;

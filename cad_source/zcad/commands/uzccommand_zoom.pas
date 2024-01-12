@@ -29,7 +29,7 @@ uses
 
 implementation
 
-function Zoom_com(operands:TCommandOperands):TCommandResult;
+function Zoom_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 begin
   if uppercase(operands)='ALL' then
     drawings.GetCurrentDWG.wa.ZoomAll

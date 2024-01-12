@@ -28,10 +28,10 @@ uses
 
 implementation
 
-function CutClip_com(operands:TCommandOperands):TCommandResult;
+function CutClip_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 begin
-   copyclip_com(EmptyCommandOperands);
-   Erase_com(EmptyCommandOperands);
+   copyclip_com(Context,EmptyCommandOperands);
+   Erase_com(Context,EmptyCommandOperands);
    result:=cmd_ok;
 end;
 

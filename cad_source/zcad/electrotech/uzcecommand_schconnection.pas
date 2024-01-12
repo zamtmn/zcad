@@ -37,9 +37,9 @@ begin
   AddSCHConnectionExtenderToEntity(PEnt);
 end;
 
-function SCHConnection_com(operands:TCommandOperands):TCommandResult;
+function SCHConnection_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 begin
- Result:=InteractiveDrawLines(rscmSpecifyFirstPoint,rscmSpecifyNextPoint,AddExtdrSCHConnection);
+ Result:=InteractiveDrawLines(Context,rscmSpecifyFirstPoint,rscmSpecifyNextPoint,AddExtdrSCHConnection);
 end;
 
 initialization

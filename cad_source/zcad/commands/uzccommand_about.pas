@@ -29,7 +29,7 @@ uses
 
 implementation
 
-function About_com(operands:TCommandOperands):TCommandResult;
+function About_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 begin
   if not assigned(AboutForm) then
     AboutForm:=TAboutForm.mycreate(nil,@AboutForm);

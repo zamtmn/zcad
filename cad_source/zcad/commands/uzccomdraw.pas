@@ -352,7 +352,7 @@ begin
                 pb:=poa^.iterate(ir);
           until pb=nil;
           Prompt(sysutils.format(rscmNEntitiesProcessed,[result]));
-          Regen_com(EmptyCommandOperands);
+          Regen_com(TZCADCommandContext.CreateRec,EmptyCommandOperands);
           commandmanager.executecommandend;
      end;
 end;
@@ -425,7 +425,7 @@ begin
                 pb:=poa^.iterate(ir);
           until pb=nil;
           Prompt(sysutils.format(rscmNEntitiesProcessed,[result]));
-          Regen_com(EmptyCommandOperands);
+          Regen_com(TZCADCommandContext.CreateRec,EmptyCommandOperands);
           commandmanager.executecommandend;
      end;
 end;
@@ -768,7 +768,7 @@ begin
      Commandmanager.executecommandend;
 end;
 
-function Insert2_com(operands:TCommandOperands):TCommandResult;
+function Insert2_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 var
     s:String;
 begin
@@ -839,8 +839,8 @@ begin
       drawings.GetCurrentDWG^.pObjRoot:=drawings.GetCurrentDWG^.BlockDefArray.getblockdef(Tria_Utf8ToAnsi(nname))
     else
       drawings.GetCurrentDWG^.pObjRoot:=@drawings.GetCurrentDWG^.mainObjRoot;
-    Regen_com(EmptyCommandOperands);
-    RebuildTree_com(EmptyCommandOperands);
+    Regen_com(TZCADCommandContext.CreateRec,EmptyCommandOperands);
+    RebuildTree_com(TZCADCommandContext.CreateRec,EmptyCommandOperands);
     ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIActionRedraw);
     zcRedrawCurrentDrawing;
   end;
@@ -1079,7 +1079,7 @@ begin
     PCreatedGDBPoint^.P_insertInOCS:=point;
     PCreatedGDBPoint^.FormatEntity(drawings.GetCurrentDWG^);}
 end;
-function FindAllIntersections_com(operands:TCommandOperands):TCommandResult;
+function FindAllIntersections_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 var
     lineAABBtests,linelinetests,intersectcount,lm,lc:integer;
     parray:GDBPoint3dArray;

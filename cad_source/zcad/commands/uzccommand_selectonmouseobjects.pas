@@ -79,7 +79,7 @@ begin
                          until pp=nil;
                     end;
 end;
-function SelectOnMouseObjects_com(operands:TCommandOperands):TCommandResult;
+function SelectOnMouseObjects_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 begin
      cxmenumgr.closecurrentmenu;
      MSelectCXMenu:=TPopupMenu.create(nil);

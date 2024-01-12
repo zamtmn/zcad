@@ -67,7 +67,7 @@ begin
   exit(Widths.Size);
 end;
 
-function ExportTextToCSV_com(operands:TCommandOperands):TCommandResult;
+function ExportTextToCSV_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 var
   count,x,y:integer;
   pv,pstart:PGDBObjText;

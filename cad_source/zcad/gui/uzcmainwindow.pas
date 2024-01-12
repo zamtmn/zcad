@@ -776,7 +776,7 @@ begin
   HardcodedButtonSize:=21;
   {Грузим раскладку окон}
   if not sysparam.saved.noloadlayout then
-    LoadLayout_com(EmptyCommandOperands);
+    LoadLayout_com(TZCADCommandContext.CreateRec,EmptyCommandOperands);
 
   if sysparam.saved.noloadlayout then
   begin

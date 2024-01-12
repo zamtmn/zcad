@@ -103,7 +103,7 @@ begin
   //result:=cmd_ok;
 end;
 
-function uzvdeverrorsClear_com(operands:TCommandOperands):TCommandResult;
+function uzvdeverrorsClear_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 var
   pvd:pvardesk;
   ir:itrec;

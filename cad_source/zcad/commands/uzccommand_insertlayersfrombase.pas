@@ -31,7 +31,7 @@ uses
 implementation
 
 
-function InsertLayersFromBase_com(operands:TCommandOperands):TCommandResult;
+function InsertLayersFromBase_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 var
   pl:PGDBLayerProp;
   cdwg:PTSimpleDrawing;

@@ -47,7 +47,7 @@ type
 var
   CmdProp:TCmdProp;
 
-function ExampleConstructToModalSpace_com(operands:TCommandOperands):TCommandResult;
+function ExampleConstructToModalSpace_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 //Визуализация многострочный текст
 function drawMText(pt:GDBVertex;color:integer;rotate:double):PGDBObjMText;
 begin

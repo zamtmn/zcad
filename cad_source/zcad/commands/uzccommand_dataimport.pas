@@ -153,7 +153,7 @@ begin
   filtredentarray.done;
 end;
 
-function DataImport_com(operands:TCommandOperands):TCommandResult;
+function DataImport_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 var
   //pv:pGDBObjEntity;
   //ir:itrec;

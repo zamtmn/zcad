@@ -33,7 +33,7 @@ uses
 
 implementation
 
-function Undo_com(operands:TCommandOperands):TCommandResult;
+function Undo_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 var
    prevundo:integer;
    overlay:Boolean;

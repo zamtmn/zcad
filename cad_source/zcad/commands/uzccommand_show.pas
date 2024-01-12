@@ -31,7 +31,7 @@ uses
 
 implementation
 
-function Show_com(operands:TCommandOperands):TCommandResult;
+function Show_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 var
    ctrl:TControl;
 begin

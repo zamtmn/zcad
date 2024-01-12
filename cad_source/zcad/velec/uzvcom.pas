@@ -399,7 +399,7 @@ begin
     end;
 end;
 
-function TemplateForVeb_com(operands:TCommandOperands):TCommandResult;
+function TemplateForVeb_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 var
     pc,pc2:PGDBObjCable;                //указатель на кабель
     LastPoint:GDBVertex;            //точка в конце кабеля
@@ -2047,7 +2047,7 @@ end;
   end;
         *}
 
-function Testcablemanager_com(operands:TCommandOperands):TCommandResult;
+function Testcablemanager_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
   var
   //a:double;
   //CableManager:TCableManager;

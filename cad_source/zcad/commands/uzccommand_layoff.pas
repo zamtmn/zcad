@@ -29,7 +29,7 @@ uses
 implementation
 const
   LayOffCommandName='LayOff';
-function LayOff_com(operands:TCommandOperands):TCommandResult;
+function LayOff_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 var
   _PEntity:PGDBObjEntity;
   UndoStartMarkerPlaced:boolean;

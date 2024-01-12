@@ -29,7 +29,7 @@ uses
 
 implementation
 
-function ShowPage_com(operands:TCommandOperands):TCommandResult;
+function ShowPage_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 begin
   if assigned(ZCADMainWindow)then
   if assigned(ZCADMainWindow.PageControl)then

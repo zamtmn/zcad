@@ -197,7 +197,7 @@ begin
   result:=tform(TForm.NewInstance);
 end;
 
-function ObjInspCopyToClip_com(operands:TCommandOperands):TCommandResult;
+function ObjInspCopyToClip_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 begin
    if GetCurrentObj=nil then
                              ZCMsgCallBackInterface.TextMessage(rscmCommandOnlyCTXMenu,TMWOHistoryOut)

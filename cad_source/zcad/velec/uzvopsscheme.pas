@@ -220,7 +220,7 @@ implementation
 //end;
 
 
-function TestModul_com(operands:TCommandOperands):TCommandResult;
+function TestModul_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
  var
     x, y: Integer;
     i   : Integer;
@@ -527,7 +527,7 @@ end;
 //end;
 
 
-function createStructureSchema_com(operands:TCommandOperands):TCommandResult;
+function createStructureSchema_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 var
    listGraph:TListGraph;
    insertPoint:gdbvertex;

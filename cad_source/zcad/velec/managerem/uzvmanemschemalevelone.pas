@@ -366,7 +366,7 @@ end;
 
 
 //**Создаем схему первого уровня
-function createSchemaLevelOne_com(operands:TCommandOperands):TCommandResult;
+function createSchemaLevelOne_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
   var
      listFullGraphEM:TListGraphDev;                             //Граф со всем чем можно
      listStructurGraphEM:TListGraphDev;                         //Граф без разрывов, переходов методов прокладки. Только устройства подключения и разветвительные коробки

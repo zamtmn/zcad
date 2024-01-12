@@ -31,7 +31,7 @@ uses
 
 implementation
 
-function SaveOptions_com(operands:TCommandOperands):TCommandResult;
+function SaveOptions_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 var
    mem:TZctnrVectorBytes;
 begin

@@ -650,7 +650,7 @@ var
         result:=cmd_ok;
  end;
 
-function TestModul_com(operands:TCommandOperands):TCommandResult;
+function TestModul_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 var
  test:string;
  r:integer;

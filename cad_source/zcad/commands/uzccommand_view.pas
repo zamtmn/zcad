@@ -30,7 +30,7 @@ uses
 
 implementation
 
-function view_com(operands:TCommandOperands):TCommandResult;
+function view_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 var
    s:string;
    ox,oy,oz:gdbvertex;

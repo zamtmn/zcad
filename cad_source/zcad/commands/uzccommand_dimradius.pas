@@ -33,7 +33,7 @@ uses
 
 implementation
 
-function DrawRadialDim_com(operands:TCommandOperands):TCommandResult;
+function DrawRadialDim_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 var
     pd:PGDBObjRadialDimension;
     pcircle:PGDBObjCircle;

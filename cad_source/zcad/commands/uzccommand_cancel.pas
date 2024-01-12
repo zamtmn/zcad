@@ -27,7 +27,7 @@ uses
 
 implementation
 
-function Cancel_com(operands:TCommandOperands):TCommandResult;
+function Cancel_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 begin
   result:=cmd_ok;
 end;

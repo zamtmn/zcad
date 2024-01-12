@@ -29,7 +29,7 @@ uses
 
 implementation
 
-function Pan_com(operands:TCommandOperands):TCommandResult;
+function Pan_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 const
   pix=50;
 var

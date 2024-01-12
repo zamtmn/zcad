@@ -32,13 +32,16 @@ type
   comfunc=function:Integer;
   comfuncwithoper=function(operands:TCommandOperands):TCommandResult;
 
-  TZCADBaseCommand=function(operands:TCommandOperands):TCommandResult;
+  TZCADCommandContext=record
+    class function CreateRec:TZCADCommandContext;static;
+  end;
+  TZCADBaseCommand=function(const Context:TZCADCommandContext; Operands:TCommandOperands):TCommandResult;
 {Export+}
   PCommandFastObjectPlugin=^CommandFastObjectPlugin;
   {REGISTEROBJECTTYPE CommandFastObjectPlugin}
   CommandFastObjectPlugin =  object(CommandFastObjectDef)
-    onCommandStart:comfuncwithoper;
-    constructor Init(name:pansichar;func:comfuncwithoper);
+    onCommandStart:TZCADBaseCommand;
+    constructor Init(name:pansichar;func:TZCADBaseCommand);
     procedure CommandStart(Operands:TCommandOperands); virtual;
     procedure CommandCancel; virtual;
     procedure CommandEnd; virtual;
@@ -92,6 +95,11 @@ var
 function CreateCommandRTEdObjectPlugin(ocs:comfuncwithoper;oce,occ,ocf:comproc;obc,oac:commousefunc;ohgd:comdrawfunc;occont:comproc;name:pansichar;SA,DA:TCStartAttr):pCommandRTEdObjectPlugin;export;
 function CreateZCADCommand(ACommandFunc:TZCADBaseCommand;ACommandName:string;SA,DA:TCStartAttr):pCommandFastObjectPlugin;export;
 implementation
+
+class function TZCADCommandContext.CreateRec;
+begin
+end;
+
 procedure  TOSModeEditor.Format;
 var
    i,c:integer;
@@ -223,7 +231,7 @@ var
 begin
   if assigned(drawings.GetCurrentDWG)then
     UndoTop:=drawings.GetCurrentDWG.GetUndoTop{UndoStack.CurrentCommand};
-  if assigned(onCommandStart) then rez:=onCommandStart(Operands);
+  if assigned(onCommandStart) then rez:=onCommandStart(TZCADCommandContext.CreateRec,Operands);
   if rez<>ZCMD_OK_NOEND then commandmanager.executecommandend;
 end;
 procedure CommandFastObjectPlugin.CommandCancel;

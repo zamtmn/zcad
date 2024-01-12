@@ -31,7 +31,7 @@ uses
 
 implementation
 
-function SelectObjectByAddres_com(operands:TCommandOperands):TCommandResult;
+function SelectObjectByAddres_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 var
   pp:PGDBObjEntity;
   code:integer;

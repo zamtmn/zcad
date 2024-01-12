@@ -34,7 +34,7 @@ uses
 
 implementation
 
-function UnitsMan_com(operands:TCommandOperands):TCommandResult;
+function UnitsMan_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 var
   PUnit:ptunit;
 begin

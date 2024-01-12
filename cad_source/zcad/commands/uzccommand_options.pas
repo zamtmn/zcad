@@ -32,7 +32,7 @@ uses
 
 implementation
 
-function Options_com(operands:TCommandOperands):TCommandResult;
+function Options_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 begin
   ZCMsgCallBackInterface.Do_PrepareObject(nil,drawings.GetUnitsFormat,SysUnit.TypeName2PTD('gdbsysvariable'),@sysvar,drawings.GetCurrentDWG);
   ZCMsgCallBackInterface.TextMessage(rscmOptions2OI,TMWOMessageBox);

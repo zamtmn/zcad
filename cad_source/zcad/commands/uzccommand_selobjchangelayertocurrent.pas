@@ -33,7 +33,7 @@ uses
 
 implementation
 
-function SelObjChangeLayerToCurrent_com(operands:TCommandOperands):TCommandResult;
+function SelObjChangeLayerToCurrent_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 var pv:pGDBObjEntity;
     psv:PSelectedObjDesc;
     ir:itrec;

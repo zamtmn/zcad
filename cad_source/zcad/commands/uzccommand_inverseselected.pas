@@ -34,7 +34,7 @@ var
 
 implementation
 
-function InverseSelected_com(operands:TCommandOperands):TCommandResult;
+function InverseSelected_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 var pv:pGDBObjEntity;
     ir:itrec;
     count:integer;

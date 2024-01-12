@@ -36,7 +36,7 @@ uses
 
 implementation
 
-function SelObjChangeDimStyleToCurrent_com(operands:TCommandOperands):TCommandResult;
+function SelObjChangeDimStyleToCurrent_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 var pv:PGDBObjDimension;
     psv:PSelectedObjDesc;
     prs:PGDBDimStyle;

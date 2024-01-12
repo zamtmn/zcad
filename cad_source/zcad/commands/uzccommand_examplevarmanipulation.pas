@@ -33,7 +33,7 @@ uses
 
 implementation
 
-function ExampleVarManipulation_com(operands:TCommandOperands):TCommandResult;
+function ExampleVarManipulation_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 var
   Varext:TVariablesExtender;
   pe:PGDBObjEntity;

@@ -33,7 +33,7 @@ uses
 
 implementation
 
-function TextStyles_cmd(operands:TCommandOperands):TCommandResult;
+function TextStyles_cmd(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 begin
   TextStylesForm:=TTextStylesForm.Create(nil);
   SetHeightControl(TextStylesForm,sysvar.INTF.INTF_DefaultControlHeight^);

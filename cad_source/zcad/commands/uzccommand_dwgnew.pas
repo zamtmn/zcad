@@ -33,11 +33,11 @@ uses
   uzcdrawing,uzcdrawings,
   uzcinterface,uzcmainwindow;
 
-function DWGNew_com(operands:TCommandOperands):TCommandResult;
+function DWGNew_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 
 implementation
 
-function DWGNew_com(operands:TCommandOperands):TCommandResult;
+function DWGNew_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 var
    PDrawing:PTZCADDrawing;
    TabSheet:TTabSheet;

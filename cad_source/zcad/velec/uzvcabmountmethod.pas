@@ -60,7 +60,7 @@ var
 
 implementation
 
-function MountingMethodsTest_com(operands:TCommandOperands):TCommandResult;
+function MountingMethodsTest_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 begin
   MountingMethodsTreeSelector:=TStringsTreeSelector.Create(nil);//создаем форму
   MountingMethodsTreeSelector.fill(MountingMethodsTree.BlobTree);//заполняем дерево

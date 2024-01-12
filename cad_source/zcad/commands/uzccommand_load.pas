@@ -35,14 +35,14 @@ uses
   uzcinterface,
   uzccmdload;
 
-function Load_com(operands:TCommandOperands):TCommandResult;
+function Load_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 
 implementation
 
 var
   LastFileHandle:Integer=-1;
 
-function Load_com(operands:TCommandOperands):TCommandResult;
+function Load_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 var
    s: AnsiString;
    isload:boolean;
@@ -68,7 +68,7 @@ begin
   end;
   isload:=FileExists(utf8tosys(s));
   if isload then begin
-    DWGNew_com(s);
+    DWGNew_com(Context,s);
     drawings.GetCurrentDWG.SetFileName(s);
     if @loadproc=nil then
       load_merge(s,tloload)

@@ -30,7 +30,7 @@ uses
 
 implementation
 
-function ClearFileHistory_com(operands:TCommandOperands):TCommandResult;
+function ClearFileHistory_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 var i:integer;
     pstr:PAnsiString;
 begin

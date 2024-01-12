@@ -1137,7 +1137,7 @@ begin
      result:=cmd_ok;
 end;
 
-function NumPsIzvAndDlina_com(operands:TCommandOperands):TCommandResult;
+function NumPsIzvAndDlina_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
   begin
           result:=cmd_ok;
   end;
@@ -2835,7 +2835,7 @@ procedure addErrorinList(nowDev:PGDBObjDevice;var listError:TListError;textError
     end;
     result:=cmd_ok;
   end;
-  function TestTREEUses_com(operands:TCommandOperands):TCommandResult;
+  function TestTREEUses_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
   var
     G: TGraph;
     EdgePath, VertexPath: TClassList;
@@ -3133,7 +3133,7 @@ begin
 
 end;
 
-  function TestTREEUses_com2(operands:TCommandOperands):TCommandResult;
+  function TestTREEUses_com2(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
   var
     G: TGraph;
     EdgePath, VertexPath: TClassList;

@@ -55,7 +55,7 @@ begin
   end;
 end;
 
-function DockingOptions_com(Operands:pansichar):Integer;
+function DockingOptions_com(const Context:TZCADCommandContext;Operands:pansichar):Integer;
 begin
      ShowAnchorDockOptions(DockMaster);
      result:=cmd_ok;

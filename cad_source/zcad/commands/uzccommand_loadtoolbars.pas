@@ -25,7 +25,7 @@ uses
  uzbpaths,uzccommandsabstract,uzccommandsimpl,uztoolbarsmanager;
 
 implementation
-function LoadToolbars_com(operands:TCommandOperands):TCommandResult;
+function LoadToolbars_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 begin
   ToolBarsManager.LoadToolBarsContent(ExpandPath(operands));
   result:=cmd_ok;

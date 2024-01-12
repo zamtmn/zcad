@@ -34,7 +34,7 @@ uses
 
 implementation
 
-function SetObjInsp_com(operands:TCommandOperands):TCommandResult;
+function SetObjInsp_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 var
    obj:AnsiString;
    objt:PUserTypeDescriptor;

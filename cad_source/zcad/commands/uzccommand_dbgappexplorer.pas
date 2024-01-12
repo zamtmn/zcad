@@ -24,7 +24,7 @@ uses
  uzcLog,
  uzccommandsimpl,uzccommandsabstract,AppExploreFrm;
 implementation
-function dbgAppExplorer_com(operands:TCommandOperands):TCommandResult;
+function dbgAppExplorer_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 begin
   ShowAppExplorer;
   result:=cmd_ok;

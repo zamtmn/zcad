@@ -32,7 +32,7 @@ var
 
 implementation
 
-function DeSelectAll_com(operands:TCommandOperands):TCommandResult;
+function DeSelectAll_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 begin
   ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIActionRedraw);
   //if assigned(updatevisibleproc) then updatevisibleproc(ZMsgID_GUIActionRedraw);

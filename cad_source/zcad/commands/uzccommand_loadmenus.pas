@@ -25,7 +25,7 @@ uses
  uzbpaths,uzccommandsabstract,uzccommandsimpl,uzmenusmanager;
 
 implementation
-function LoadMenus_com(operands:TCommandOperands):TCommandResult;
+function LoadMenus_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 begin
   MenusManager.LoadMenus(ExpandPath(operands));
   result:=cmd_ok;

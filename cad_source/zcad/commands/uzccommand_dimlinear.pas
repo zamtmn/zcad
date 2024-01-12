@@ -53,7 +53,7 @@ begin
     drawings.GetCurrentDWG^.FreeConstructionObjects;
 end;
 
-function DrawRotatedDim_com(operands:TCommandOperands):TCommandResult;
+function DrawRotatedDim_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 var
     pd:PGDBObjRotatedDimension;
     p1,p2,p3,vd,vn:gdbvertex;

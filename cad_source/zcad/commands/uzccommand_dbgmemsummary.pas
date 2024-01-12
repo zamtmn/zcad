@@ -91,7 +91,7 @@ begin
 end;
 {$ENDIF}
 
-function dbgMemSummary_com(operands:TCommandOperands):TCommandResult;
+function dbgMemSummary_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 {$IFDEF REPORTMMEMORYLEAKS}
 const
   DefaultArrSize=1000000;

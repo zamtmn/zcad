@@ -641,7 +641,7 @@ begin
   redrawoglwnd;
   result:=cmd_ok;
 end;}
-function OPS_Sensor_Mark_com(operands:TCommandOperands):TCommandResult;
+function OPS_Sensor_Mark_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 var //i: Integer;
     pcabledesk:PTCableDesctiptor;
     ir,ir2,ir_inNodeArray:itrec;

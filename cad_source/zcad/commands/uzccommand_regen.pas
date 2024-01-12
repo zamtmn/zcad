@@ -32,11 +32,11 @@ uses
   uzelongprocesssupport,
   uzeroot;
 
-function Regen_com(operands:TCommandOperands):TCommandResult;
+function Regen_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 
 implementation
 
-function Regen_com(operands:TCommandOperands):TCommandResult;
+function Regen_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 var
   drawing:PTSimpleDrawing;
   DC:TDrawContext;

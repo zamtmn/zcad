@@ -31,7 +31,7 @@ uses
 
 implementation
 
-function Cam_reset_com(operands:TCommandOperands):TCommandResult;
+function Cam_reset_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 var
   cdwg:PTSimpleDrawing;
   pcamera:PGDBObjCamera;

@@ -37,7 +37,7 @@ resourcestring
 
 implementation
 
-function UpdatePO_com(operands:TCommandOperands):TCommandResult;
+function UpdatePO_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 var
    cleaned:integer;
    s:string;

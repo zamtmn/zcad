@@ -39,7 +39,7 @@ implementation
 var
   clFileParam:CMDLinePromptParser.TGeneralParsedText=nil;
 
-function CmdLinePrompt_com(operands:TCommandOperands):TCommandResult;
+function CmdLinePrompt_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 var
   //inpt:String;
   gr:TGetResult;

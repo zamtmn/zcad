@@ -1774,7 +1774,7 @@ begin
    end;
 end;
 
-function Test111sl(operands:TCommandOperands):TCommandResult;
+function Test111sl(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 //const
   //accuracy=0.001;
   //indent=5;

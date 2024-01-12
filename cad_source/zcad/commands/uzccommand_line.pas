@@ -33,11 +33,11 @@ uses
 type
   TEntitySetupProc=procedure(const PEnt:PGDBObjEntity);
 
-function InteractiveDrawLines(APrompt1,APromptNext:String;ESP:TEntitySetupProc):TCommandResult;
+function InteractiveDrawLines(const Context:TZCADCommandContext;APrompt1,APromptNext:String;ESP:TEntitySetupProc):TCommandResult;
 
 implementation
 
-function InteractiveDrawLines(APrompt1,APromptNext:String;ESP:TEntitySetupProc):TCommandResult;
+function InteractiveDrawLines(const Context:TZCADCommandContext;APrompt1,APromptNext:String;ESP:TEntitySetupProc):TCommandResult;
 var
   pline:PGDBObjLine;
   p1,p2:gdbvertex;
@@ -73,9 +73,9 @@ begin
 end;
 
 
-function DrawLine_com(operands:TCommandOperands):TCommandResult;
+function DrawLine_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 begin
- Result:=InteractiveDrawLines(rscmSpecifyFirstPoint,rscmSpecifyNextPoint,nil);
+ Result:=InteractiveDrawLines(Context,rscmSpecifyFirstPoint,rscmSpecifyNextPoint,nil);
 end;
 
 initialization

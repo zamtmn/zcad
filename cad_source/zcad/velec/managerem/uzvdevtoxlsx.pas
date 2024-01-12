@@ -786,7 +786,7 @@ begin
 end;
 
 //Экспорт данных в XLSX
-function vExportDevToXLSX_com(operands:TCommandOperands):TCommandResult;
+function vExportDevToXLSX_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 var
   fileTemplate:ansiString;
   gr:TGetResult;
@@ -859,7 +859,7 @@ begin
   result:=cmd_ok;
 end;
 //Экспорт данных в XLSX
-function vExportDevToXLSXToCAD_com(operands:TCommandOperands):TCommandResult;
+function vExportDevToXLSXToCAD_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 var
   fileTemplate:ansiString;
   gr:TGetResult;

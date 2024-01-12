@@ -40,7 +40,7 @@ uses
 
 implementation
 
-function VarsEdSel_com(operands:TCommandOperands):TCommandResult;
+function VarsEdSel_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 var
   mem:TZctnrVectorBytes;
   pobj:PGDBObjEntity;

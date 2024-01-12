@@ -36,7 +36,7 @@ uses
 
 implementation
 
-function SelObjChangeTStyleToCurrent_com(operands:TCommandOperands):TCommandResult;
+function SelObjChangeTStyleToCurrent_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 var pv:PGDBObjText;
     psv:PSelectedObjDesc;
     prs:PGDBTextStyle;

@@ -29,11 +29,11 @@ uses
   uzccmdload,
   uzccommandsimpl,uzccommandsabstract;
 
-function Merge_com(operands:TCommandOperands):TCommandResult;
+function Merge_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 
 implementation
 
-function Merge_com(operands:TCommandOperands):TCommandResult;
+function Merge_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 begin
   result:=Load_merge(operands,TLOMerge);
 end;

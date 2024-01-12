@@ -4972,7 +4972,7 @@ var
 //  end;
 
 
-  function TestgraphUses_com(operands:TCommandOperands):TCommandResult;
+  function TestgraphUses_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
   var
     G: TGraphDev;
     EdgePath, VertexPath: TClassList;

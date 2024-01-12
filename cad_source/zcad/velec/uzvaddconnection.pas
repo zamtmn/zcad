@@ -40,7 +40,7 @@ uses
 
 implementation
 
-function uzvaddconnection_com(operands:TCommandOperands):TCommandResult;
+function uzvaddconnection_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 var
   Varext:TVariablesExtender;
   //pe:PGDBObjEntity;

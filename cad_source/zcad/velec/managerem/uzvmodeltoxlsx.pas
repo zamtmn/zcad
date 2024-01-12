@@ -888,7 +888,7 @@ procedure generatorSheet(graphDev:TGraphDev;nameEtalon,nameSheet:string);
   end;
 
 
-function vExportModelToXLSX_com(operands:TCommandOperands):TCommandResult;
+function vExportModelToXLSX_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 var
   fileTemplate:ansiString;
   gr:TGetResult;

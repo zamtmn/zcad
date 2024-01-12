@@ -28,7 +28,7 @@ uses
 
 implementation
 
-function dbgGetOutOfMem_com(Operands:pansichar):Integer;
+function dbgGetOutOfMem_com(const Context:TZCADCommandContext;Operands:pansichar):Integer;
 begin
   while true do getmem(4*1024);
   result:=cmd_ok;

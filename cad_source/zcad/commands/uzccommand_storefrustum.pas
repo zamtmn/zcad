@@ -28,7 +28,7 @@ uses
 
 implementation
 
-function StoreFrustum_com(operands:TCommandOperands):TCommandResult;
+function StoreFrustum_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 begin
    drawings.GetCurrentDWG.wa.param.debugfrustum:=drawings.GetCurrentDWG.pcamera.frustum;
    drawings.GetCurrentDWG.wa.param.ShowDebugFrustum:=true;

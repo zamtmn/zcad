@@ -33,7 +33,7 @@ uses
 
 implementation
 
-function Redo_com(operands:TCommandOperands):TCommandResult;
+function Redo_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 var
    msg:string;
 begin

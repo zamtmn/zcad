@@ -34,7 +34,7 @@ uses
 
 implementation
 
-function Colors_cmd(operands:TCommandOperands):TCommandResult;
+function Colors_cmd(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 var
    mr:integer;
 begin

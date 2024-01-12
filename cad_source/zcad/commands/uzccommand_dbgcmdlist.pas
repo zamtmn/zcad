@@ -30,7 +30,7 @@ uses
 
 implementation
 
-function dbgCmdList_com(operands:TCommandOperands):TCommandResult;
+function dbgCmdList_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 var
    p:PCommandObjectDef;
    ir:itrec;

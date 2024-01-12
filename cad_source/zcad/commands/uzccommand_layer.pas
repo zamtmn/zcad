@@ -31,11 +31,11 @@ uses
   Varman,
   uzccommandsabstract,uzccommandsimpl;
 
-function layer_cmd(operands:TCommandOperands):TCommandResult;
+function layer_cmd(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 
 implementation
 
-function layer_cmd(operands:TCommandOperands):TCommandResult;
+function layer_cmd(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 begin
   LayersForm:=TLayersForm.Create(nil);
   SetHeightControl(LayersForm,sysvar.INTF.INTF_DefaultControlHeight^);

@@ -35,7 +35,7 @@ uses
 
 implementation
 
-function SelObjChangeLTypeToCurrent_com(operands:TCommandOperands):TCommandResult;
+function SelObjChangeLTypeToCurrent_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 var pv:pGDBObjEntity;
     psv:PSelectedObjDesc;
     plt:PGDBLtypeProp;

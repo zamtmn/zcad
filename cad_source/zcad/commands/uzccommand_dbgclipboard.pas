@@ -30,7 +30,7 @@ uses
 
 implementation
 
-function dbgClipboard_com(operands:TCommandOperands):TCommandResult;
+function dbgClipboard_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 var
    pbuf:pansichar;
    i:integer;

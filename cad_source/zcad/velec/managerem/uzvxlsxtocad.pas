@@ -216,7 +216,7 @@ var
     end else ZCMsgCallBackInterface.TextMessage('ОШИБКА. Неправильно задано имя блока или неправильн заданы смещения',TMWOHistoryOut);
   end;
 
-function vImportXLSXToCAD_com(operands:TCommandOperands):TCommandResult;
+function vImportXLSXToCAD_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 var
   //inpt:String;
   gr:TGetResult;

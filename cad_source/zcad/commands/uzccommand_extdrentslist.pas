@@ -27,11 +27,11 @@ uses
   uzeentity,gzctnrVectorTypes,uzcdrawings,uzcstrconsts,uzeentityextender,
   uzcinterface,gzctnrSTL;
 
-function extdrEntsList_com(operands:TCommandOperands):TCommandResult;
+function extdrEntsList_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 
 implementation
 
-function extdrEntsList_com(operands:TCommandOperands):TCommandResult;
+function extdrEntsList_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 type
   TExtCounter=TMyMapCounter<TMetaEntityExtender>;
 var

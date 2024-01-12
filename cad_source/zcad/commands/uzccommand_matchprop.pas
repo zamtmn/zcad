@@ -60,7 +60,7 @@ type
 var
    MatchPropParam:TMatchPropParam; //**< Переменная содержащая опции команды MatchProp
 
-function matchprop_com(operands:TCommandOperands):TCommandResult;
+function matchprop_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 var
     ps,pd:PGDBObjEntity;
     SourceObjType:TObjID;

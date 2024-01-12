@@ -38,9 +38,9 @@ uses
   uzeentdevice,uzeentblockinsert,uzeblockdef,uzeentsubordinated,
   //uzestyleslayers,
   uzeconsts;
-function BlockPreViewExport_com(operands:TCommandOperands):TCommandResult;
+function BlockPreViewExport_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 implementation
-function BlockPreViewExport_com(operands:TCommandOperands):TCommandResult;
+function BlockPreViewExport_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 const
   scl=3;
 var

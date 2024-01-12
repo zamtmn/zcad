@@ -31,7 +31,7 @@ uses
 
 implementation
 
-function EntsList_com(operands:TCommandOperands):TCommandResult;
+function EntsList_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 var
    //p:PCommandObjectDef;
    //ir:itrec;

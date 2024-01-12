@@ -33,7 +33,7 @@ uses
 
 implementation
 
-function LineTypes_cmd(operands:TCommandOperands):TCommandResult;
+function LineTypes_cmd(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 begin
   LineTypesForm:=TLineTypesForm.Create(nil);
   SetHeightControl(LineTypesForm,sysvar.INTF.INTF_DefaultControlHeight^);

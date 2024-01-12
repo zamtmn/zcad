@@ -38,7 +38,7 @@ uses
 
 implementation
 
-function VarsEdUnit_com(operands:TCommandOperands):TCommandResult;
+function VarsEdUnit_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 var
   u:PTSimpleUnit;
   op:ansistring;

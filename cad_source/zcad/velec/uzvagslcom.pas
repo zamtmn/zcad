@@ -40,7 +40,7 @@ uses uzccommandsimpl,    //тут реализация объекта CommandRTE
 
 type
 Tuzvagsl_com=object(CommandRTEdObject)//определяем тип - объект наследник базового объекта "динамической" команды
-             procedure CommandStart(Operands:TCommandOperands);virtual;//переопределяем метод вызываемый при старте команды
+             procedure CommandStart(const Context:TZCADCommandContext;Operands:TCommandOperands);virtual;//переопределяем метод вызываемый при старте команды
              //procedure CommandEnd; virtual;//переопределяем метод вызываемый при окончании команды
              //procedure CommandCancel; virtual;//переопределяем метод вызываемый при отмене команды
 
@@ -86,7 +86,7 @@ var
 implementation
 uses
       uzvagsl;
-procedure Tuzvagsl_com.CommandStart(Operands:TCommandOperands);
+procedure Tuzvagsl_com.CommandStart(const Context:TZCADCommandContext;Operands:TCommandOperands);
 begin
   //создаем командное меню из 3х пунктов
   commandmanager.DMAddMethod('Пронумеровать','Временная пронумеровка извещателей',generatorSLinRooms);
@@ -97,7 +97,7 @@ begin
   //показываем командное меню
   commandmanager.DMShow;
   //не забываем вызвать метод родителя, там еще много что должно выполниться
-  inherited CommandStart('');
+  inherited CommandStart(context,'');
 end;
 
 procedure Tuzvagsl_com.generatorSLinRooms(pdata:PtrInt);

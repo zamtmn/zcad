@@ -87,10 +87,10 @@ TBasicFinter=record
     New_line: PGDBObjLine;
     FirstOwner,SecondOwner,OldFirstOwner:PGDBObjNet;
     constructor init(cn:String;SA,DA:TCStartAttr);
-    procedure CommandStart(Operands:TCommandOperands); virtual;
-    procedure CommandCancel; virtual;
-    function BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record): Integer; virtual;
-    function AfterClick(wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record): Integer; virtual;
+    procedure CommandStart(const Context:TZCADCommandContext;Operands:TCommandOperands); virtual;
+    procedure CommandCancel(const Context:TZCADCommandContext); virtual;
+    function BeforeClick(const Context:TZCADCommandContext;wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record): Integer; virtual;
+    function AfterClick(const Context:TZCADCommandContext;wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record): Integer; virtual;
   end;
 
   {EM_SRBUILD_com = object(FloatInsert_com)
@@ -1318,7 +1318,7 @@ end;
 
 procedure El_Wire_com.CommandStart;
 begin
-  inherited CommandStart('');;
+  inherited CommandStart(context,'');;
   FirstOwner:=nil;
   SecondOwner:=nil;
   OldFirstOwner:=nil;
@@ -1330,7 +1330,7 @@ procedure El_Wire_com.CommandCancel;
 begin
 end;
 
-function El_Wire_com.BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record): Integer;
+function El_Wire_com.BeforeClick(const Context:TZCADCommandContext;wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record): Integer;
 var //po:PGDBObjSubordinated;
     Objects:GDBObjOpenArrayOfPV;
     DC:TDrawContext;
@@ -1368,7 +1368,7 @@ begin
   end
 end;
 
-function El_Wire_com.AfterClick(wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record): Integer;
+function El_Wire_com.AfterClick(const Context:TZCADCommandContext;wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record): Integer;
 var //po:PGDBObjSubordinated;
     mode:Integer;
     TempNet:PGDBObjNet;
@@ -1495,7 +1495,7 @@ begin
 
     zcRedrawCurrentDrawing;
     if mode= 2 then commandmanager.executecommandend
-               else beforeclick(wc,mc,button,osp);
+               else beforeclick(context,wc,mc,button,osp);
   end;
   result:=cmd_ok;
 end;
@@ -1587,7 +1587,7 @@ begin
   ZCMsgCallBackInterface.TextMessage('Первая точка:',TMWOHistoryOut);
   result:=cmd_ok;
 end;
-Procedure _Cable_com_CommandEnd(_self:pointer);
+Procedure _Cable_com_CommandEnd(const Context:TZCADCommandContext;_self:pointer);
 begin
   if p3dpl<>nil then
   begin

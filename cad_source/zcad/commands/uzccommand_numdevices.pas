@@ -66,7 +66,7 @@ type
                      NumberVar:AnsiString;(*'Number variable'*)
                end;
   Number_com= object(CommandRTEdObject)
-                         procedure CommandStart(Operands:TCommandOperands); virtual;
+                         procedure CommandStart(const Context:TZCADCommandContext;Operands:TCommandOperands); virtual;
                          procedure ShowMenu;virtual;
                          procedure Run(pdata:PtrInt); virtual;
              end;
@@ -74,13 +74,13 @@ var
    NumberCom:Number_com;
    NumberingParams:TNumberingParams;
 implementation
-procedure Number_com.CommandStart(Operands:TCommandOperands);
+procedure Number_com.CommandStart(const Context:TZCADCommandContext;Operands:TCommandOperands);
 begin
   self.savemousemode:=drawings.GetCurrentDWG^.wa.param.md.mode;
   if drawings.GetCurrentDWG^.SelObjArray.Count>0 then
   begin
        showmenu;
-       inherited CommandStart('');
+       inherited CommandStart(context,'');
   end
   else
   begin

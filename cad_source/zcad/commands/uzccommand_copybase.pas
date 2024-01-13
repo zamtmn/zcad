@@ -38,15 +38,15 @@ uses
 
 type
   copybase_com =  object(CommandRTEdObject)
-    procedure CommandStart(Operands:TCommandOperands); virtual;
-    function BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record): Integer; virtual;
+    procedure CommandStart(const Context:TZCADCommandContext;Operands:TCommandOperands); virtual;
+    function BeforeClick(const Context:TZCADCommandContext;wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record): Integer; virtual;
   end;
 var
   copybase:copybase_com;
 
 implementation
 
-procedure copybase_com.CommandStart(Operands:TCommandOperands);
+procedure copybase_com.CommandStart(const Context:TZCADCommandContext;Operands:TCommandOperands);
 var
   pobj: pGDBObjEntity;
   ir:itrec;
@@ -76,7 +76,7 @@ begin
     Commandmanager.executecommandend;
   end;
 end;
-function copybase_com.BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record): Integer;
+function copybase_com.BeforeClick(const Context:TZCADCommandContext;wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record): Integer;
 var
   dist:gdbvertex;
   dispmatr:DMatrix4D;
@@ -121,7 +121,7 @@ begin
    CopyToClipboard;
 
    drawings.GetCurrentDWG^.ConstructObjRoot.ObjMatrix:=onematrix;
-   commandend;
+   //commandend;
    commandmanager.executecommandend;
   end;
   result:=cmd_ok;

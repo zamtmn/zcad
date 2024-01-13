@@ -41,8 +41,8 @@ var
 
 procedure FrameEdit_com_CommandStart(Operands:pansichar);
 procedure FrameEdit_com_Command_End;
-function FrameEdit_com_BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record;mclick:Integer): Integer;
-function FrameEdit_com_AfterClick(wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record;mclick:Integer): Integer;
+function FrameEdit_com_BeforeClick(const Context:TZCADCommandContext;wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record;mclick:Integer): Integer;
+function FrameEdit_com_AfterClick(const Context:TZCADCommandContext;wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record;mclick:Integer): Integer;
 
 implementation
 procedure FrameEdit_com_CommandStart(Operands:pansichar);
@@ -55,7 +55,7 @@ begin
   drawings.GetCurrentDWG.wa.param.seldesc.MouseFrameON := false;
 end;
 
-function FrameEdit_com_BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record;mclick:Integer): Integer;
+function FrameEdit_com_BeforeClick(const Context:TZCADCommandContext;wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record;mclick:Integer): Integer;
 begin
   result:=0;
   if (button and MZW_LBUTTON)<>0 then
@@ -68,7 +68,7 @@ begin
     drawings.GetCurrentDWG.wa.param.seldesc.Frame23d := wc;
   end
 end;
-function FrameEdit_com_AfterClick(wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record;mclick:Integer): Integer;
+function FrameEdit_com_AfterClick(const Context:TZCADCommandContext;wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record;mclick:Integer): Integer;
 var
   ti: Integer;
   x,y,w,h:Double;

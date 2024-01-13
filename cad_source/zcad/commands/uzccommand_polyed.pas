@@ -75,7 +75,7 @@ var
 
 implementation
 
-function _3DPolyEd_com_CommandStart(operands:TCommandOperands):TCommandResult;
+function _3DPolyEd_com_CommandStart(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 var
    pobj:pgdbobjentity;
    ir:itrec;
@@ -117,7 +117,7 @@ begin
 end;
 
 
-function _3DPolyEd_com_BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record;mclick:Integer): Integer;
+function _3DPolyEd_com_BeforeClick(const Context:TZCADCommandContext;wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record;mclick:Integer): Integer;
 var
     ptv,ptvprev:pgdbvertex;
     ir:itrec;

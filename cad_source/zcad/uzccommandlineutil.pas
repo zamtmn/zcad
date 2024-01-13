@@ -130,7 +130,7 @@ begin
              if commandmanager.pcommandrunning<>nil then
              begin
                   commandmanager.PushValue('','Double',@len);
-                  commandmanager.pcommandrunning.CommandContinue;
+                  commandmanager.pcommandrunning.CommandContinue(CommandManager.Context);
              end;
         end;
       end

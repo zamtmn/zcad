@@ -39,7 +39,7 @@ type
   end;
   mirror_com =  object(copy_com)
     function CalcTransformMatrix(p1,p2: GDBvertex):DMatrix4D; virtual;
-    function AfterClick(wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record): Integer; virtual;
+    function AfterClick(const Context:TZCADCommandContext;wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record): Integer; virtual;
   end;
 var
   MirrorParam:TMirrorParam;
@@ -62,7 +62,7 @@ begin
         result:=CreateReflectionMatrix(plane);
 end;
 
-function Mirror_com.AfterClick(wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record): Integer;
+function Mirror_com.AfterClick(const Context:TZCADCommandContext;wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record): Integer;
 var
     dispmatr:DMatrix4D;
 begin

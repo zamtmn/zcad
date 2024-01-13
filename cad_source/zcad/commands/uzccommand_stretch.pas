@@ -49,21 +49,21 @@ begin
   FrameEdit_com_CommandStart(Operands);
 end;
 
-function Stretch_com_BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record;mclick:Integer): Integer;
+function Stretch_com_BeforeClick(const Context:TZCADCommandContext;wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record;mclick:Integer): Integer;
 begin
   case StretchComMode of
     SM_GetEnts:
-               result:=FrameEdit_com_BeforeClick(wc,mc,button,osp,mclick);
+               result:=FrameEdit_com_BeforeClick(context,wc,mc,button,osp,mclick);
  SM_FirstPoint:
                if (button and MZW_LBUTTON)<>0 then begin
-                  OnDrawingEd.BeforeClick(wc,mc,button,osp);
+                  OnDrawingEd.BeforeClick(context,wc,mc,button,osp);
                   StretchComMode:=SM_SecondPoint;
                   result:=0;
                end;
  SM_SecondPoint:
                begin
                OnDrawingEd.mouseclic:=1;
-               OnDrawingEd.AfterClick(wc,mc,button,osp);
+               OnDrawingEd.AfterClick(context,wc,mc,button,osp);
                if (button and MZW_LBUTTON)<>0 then begin
                   commandmanager.ExecuteCommandEnd;
                   result:=0;
@@ -80,12 +80,12 @@ begin
   drawings.GetCurrentDWG.GetSelObjArray.selectcontrolpointinframe(drawings.GetCurrentDWG.wa.param.seldesc.Frame1,drawings.GetCurrentDWG.wa.param.seldesc.Frame2);
 end;
 
-function Stretch_com_AfterClick(wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record;mclick:Integer): Integer;
+function Stretch_com_AfterClick(const Context:TZCADCommandContext;wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record;mclick:Integer): Integer;
 begin
   result:=0;
   if StretchComMode=SM_GetEnts then begin
     commandmanager.DisableExecuteCommandEnd;
-    result:=FrameEdit_com_AfterClick(wc,mc,button,osp,mclick);
+    result:=FrameEdit_com_AfterClick(context,wc,mc,button,osp,mclick);
     commandmanager.EnableExecuteCommandEnd;
     //button:=0;
     drawings.GetCurrentDWG.wa.Clear0Ontrackpoint;//убираем нулевую точку трассировки

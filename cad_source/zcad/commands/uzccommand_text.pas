@@ -38,8 +38,8 @@ type
   TextInsert_com= object(FloatInsert_com)
                        pt:PGDBObjText;
                        //procedure Build(Operands:pansichar); virtual;
-                       procedure CommandStart(Operands:TCommandOperands); virtual;
-                       procedure CommandEnd; virtual;
+                       procedure CommandStart(const Context:TZCADCommandContext;Operands:TCommandOperands); virtual;
+                       procedure CommandEnd(const Context:TZCADCommandContext); virtual;
                        procedure Command(Operands:TCommandOperands); virtual;
                        procedure BuildPrimitives; virtual;
                        procedure Format;virtual;
@@ -104,7 +104,7 @@ begin
      drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.AddPEntity(pt^);
      end;
 end;
-procedure TextInsert_com.CommandStart(Operands:TCommandOperands);
+procedure TextInsert_com.CommandStart(const Context:TZCADCommandContext;Operands:TCommandOperands);
 begin
      inherited;
      if drawings.GetCurrentDWG^.TextStyleTable.GetRealCount<1 then
@@ -113,7 +113,7 @@ begin
           commandmanager.executecommandend;
      end;
 end;
-procedure TextInsert_com.CommandEnd;
+procedure TextInsert_com.CommandEnd(const Context:TZCADCommandContext);
 begin
 
 end;

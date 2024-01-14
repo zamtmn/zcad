@@ -44,7 +44,7 @@ type
     public
       class var ShowCursorHandlersVector:TShowCursorHandlersVector;
 
-                           WorkArea:TCADControl;
+                       var WorkArea:TCADControl;
                            InsidePaintMessage:integer;
 
                            function getviewcontrol:TCADControl;override;

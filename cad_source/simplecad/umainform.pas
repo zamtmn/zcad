@@ -64,7 +64,7 @@ type
     Memo1: TMemo;
     OpenDialog1: TOpenDialog;
     Panel1: TPanel;
-    Panel2: TPanel;
+    PanelDown: TPanel;
     PanelUp: TPanel;
     SaveDialog1: TSaveDialog;
     SpinEdit1: TSpinEdit;
@@ -207,13 +207,13 @@ begin
      end;
 
 
-     ViewArea:=TGDIViewArea.Create(Panel2);//Create view area (GDI)
+     ViewArea:=TGDIViewArea.Create(PanelDown);//Create view area (GDI)
      WADrawControl:=ViewArea.getviewcontrol;//Get window which will be drawing
      pdrawing2^.wa:=ViewArea;//associate drwing with window
      ViewArea.PDWG:=pdrawing2;//associate window with drawing
 
      WADrawControl.align:=alClient;
-     WADrawControl.Parent:=Panel2;
+     WADrawControl.Parent:=PanelDown;
      WADrawControl.show;
 
      ViewArea.getareacaps;//setup internal view area params

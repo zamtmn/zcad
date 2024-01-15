@@ -38,7 +38,7 @@ EnumDescriptor=object(TUserTypeDescriptor)
                      Value:PTByteVector;
                      constructor init(size:Integer;tname:string;pu:pointer);
                      function CreateProperties(const f:TzeUnitsFormat;mode:PDMode;PPDA:PTPropertyDeskriptorArray;Name:TInternalScriptString;PCollapsed:Pointer;ownerattrib:Word;var bmode:Integer;const addr:Pointer;ValKey,ValType:TInternalScriptString):PTPropertyDeskriptorArray;virtual;
-                     function CreateEditor(TheOwner:TPropEditorOwner;rect:trect;pinstance:pointer;psa:PTZctnrVectorStrings;FreeOnLostFocus:boolean;InitialValue:TInternalScriptString;preferedHeight:integer):TEditorDesc;virtual;
+                     function CreateEditor(TheOwner:TPropEditorOwner;rect:trect;pinstance:pointer;psa:PTZctnrVectorStrings;FreeOnLostFocus:boolean;InitialValue:TInternalScriptString;preferedHeight:integer;f:TzeUnitsFormat):TEditorDesc;virtual;
                      function GetNumberInArrays(addr:Pointer;out number:LongWord):Boolean;virtual;
                      //function Serialize(PInstance:Pointer;SaveFlag:Word;var membuf:PTZctnrVectorBytes;var  linkbuf:PGDBOpenArrayOfTObjLinkRecord;var sub:integer):integer;virtual;
                      //function DeSerialize(PInstance:Pointer;SaveFlag:Word;var membuf:TZctnrVectorBytes;linkbuf:PGDBOpenArrayOfTObjLinkRecord):integer;virtual;
@@ -181,7 +181,7 @@ begin
      result:=inherited;
      if (result.editor=nil)and(result.mode=TEM_Nothing)then
      if assigned(EnumGlobalEditor) then
-                                         result:=EnumGlobalEditor(TheOwner,rect,pinstance,psa,FreeOnLostFocus,initialvalue,@self,preferedHeight)
+                                         result:=EnumGlobalEditor(TheOwner,rect,pinstance,psa,FreeOnLostFocus,initialvalue,@self,preferedHeight,f)
                                    else
                                        begin
                                            result.editor:=nil;

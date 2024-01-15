@@ -19,8 +19,8 @@
 unit uzcregzscript;
 {$INCLUDE zengineconfig.inc}
 interface
-uses uzcsysvars,uzbpaths,uzctranslations,UUnitManager,TypeDescriptors,varman,
-     UBaseTypeDescriptor,uzedimensionaltypes,uzemathutils,uzcLog;
+uses SysUtils,uzcsysvars,uzbpaths,uzctranslations,UUnitManager,TypeDescriptors,varman,
+     UBaseTypeDescriptor,uzedimensionaltypes,uzemathutils,uzcLog,uzcreglog;
 type
   GDBNonDimensionDoubleDescriptor=object(DoubleDescriptor)
                             function GetFormattedValueAsString(PInstance:Pointer; const f:TzeUnitsFormat):String;virtual;
@@ -30,6 +30,7 @@ type
                                    end;
   GDBAngleDoubleDescriptor=object(DoubleDescriptor)
                                  function GetFormattedValueAsString(PInstance:Pointer; const f:TzeUnitsFormat):String;virtual;
+                                 procedure SetFormattedValueFromString(PInstance:Pointer;const f:TzeUnitsFormat;Value:String);virtual;
                            end;
 var
   GDBNonDimensionDoubleDescriptorObj:GDBNonDimensionDoubleDescriptor;
@@ -47,6 +48,14 @@ end;
 function GDBAngleDoubleDescriptor.GetFormattedValueAsString(PInstance:Pointer; const f:TzeUnitsFormat):String;
 begin
     result:=zeAngleToString(PGDBNonDimensionDouble(PInstance)^,f);
+end;
+procedure GDBAngleDoubleDescriptor.SetFormattedValueFromString(PInstance:Pointer;const f:TzeUnitsFormat;Value:String);
+begin
+  try
+    PGDBNonDimensionDouble(PInstance)^:=zeStringToAngle(Value,f);
+  except
+    ProgramLog.LogOutFormatStr('Input with error "%s"',[Value],LM_Error,0,MO_SM);
+  end;
 end;
 procedure _OnCreateSystemUnit(ptsu:PTUnit);
 begin

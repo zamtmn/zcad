@@ -43,10 +43,10 @@ type
   TStretchComMode=(SM_GetEnts,SM_FirstPoint,SM_SecondPoint);
 var
   StretchComMode:TStretchComMode;
-procedure Stretch_com_CommandStart(Operands:pansichar);
+procedure Stretch_com_CommandStart(const Context:TZCADCommandContext;Operands:pansichar);
 begin
   StretchComMode:=SM_GetEnts;
-  FrameEdit_com_CommandStart(Operands);
+  FrameEdit_com_CommandStart(Context,Operands);
 end;
 
 function Stretch_com_BeforeClick(const Context:TZCADCommandContext;wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record;mclick:Integer): Integer;

@@ -33,7 +33,7 @@ uses uzccommandsimpl,    //тут реализация объекта CommandRTE
 
 type
 TExample_com=object(CommandRTEdObject)//определяем тип - объект наследник базового объекта "динамической" команды
-             procedure CommandStart(Operands:TCommandOperands);virtual;//переопределяем метод вызываемый при старте команды
+             procedure CommandStart(const Context:TZCADCommandContext;Operands:TCommandOperands);virtual;//переопределяем метод вызываемый при старте команды
              //procedure CommandEnd; virtual;//переопределяем метод вызываемый при окончании команды
              //procedure CommandCancel; virtual;//переопределяем метод вызываемый при отмене команды
 
@@ -66,7 +66,7 @@ var
 
 implementation
 
-procedure TExample_com.CommandStart(Operands:TCommandOperands);
+procedure TExample_com.CommandStart(const Context:TZCADCommandContext;Operands:TCommandOperands);
 begin
   //создаем командное меню из 3х пунктов
   commandmanager.DMAddMethod('Создать граф и визуал. его','Создает предварительный вид графа для его визуального анализа',visualInspectionGraph);

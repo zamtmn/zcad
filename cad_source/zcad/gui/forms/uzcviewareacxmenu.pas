@@ -58,7 +58,7 @@ end;
 
 function CommandRunningCCF(const vac:TViewAreaContext):boolean;
 begin
-  result:=commandmanager.pcommandrunning<>nil;
+  result:=commandmanager.CurrCmd.pcommandrunning<>nil;
 end;
 
 procedure InitializeViewAreaCXMenu(mainform:TForm;actlist:TActionList);

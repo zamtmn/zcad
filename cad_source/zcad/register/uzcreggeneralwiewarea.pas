@@ -32,10 +32,10 @@ implementation
 
 class procedure TShowCursorHelper.ShowCursorHandlerDrawLine(var DC:TDrawContext);
 begin
-  if commandmanager.pcommandrunning<>nil then begin
-    if commandmanager.pcommandrunning.IData.DrawFromBasePoint then begin
+  if commandmanager.CurrCmd.pcommandrunning<>nil then begin
+    if commandmanager.CurrCmd.pcommandrunning.IData.DrawFromBasePoint then begin
       dc.drawer.SetColor(palette[{7}DC.SystmGeometryColor].rgb);
-      dc.drawer.DrawLine3DInModelSpace(commandmanager.pcommandrunning.IData.BasePoint,commandmanager.pcommandrunning.IData.currentPointValue,dc.DrawingContext.matrixs);
+      dc.drawer.DrawLine3DInModelSpace(commandmanager.CurrCmd.pcommandrunning.IData.BasePoint,commandmanager.CurrCmd.pcommandrunning.IData.currentPointValue,dc.DrawingContext.matrixs);
     end;
   end;
 end;

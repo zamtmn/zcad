@@ -30,12 +30,12 @@ uses
   uzeentlwpolyline,
   uzcdrawings,
   uzeconsts,
-  uzccommandsmanager,
+  uzccommandsmanager,uzccommandsabstract,
   uzcinterface;
 
 implementation
 
-procedure polytest_com_CommandStart(Operands:pansichar);
+procedure polytest_com_CommandStart(const Context:TZCADCommandContext;Operands:pansichar);
 begin
   if drawings.GetCurrentDWG.GetLastSelected<>nil then
   if drawings.GetCurrentDWG.GetLastSelected.GetObjType=GDBlwPolylineID then
@@ -51,7 +51,7 @@ begin
        commandmanager.executecommandend;
   end;
 end;
-function polytest_com_BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record;mclick:Integer): Integer;
+function polytest_com_BeforeClick(const Context:TZCADCommandContext;wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record;mclick:Integer): Integer;
 //var tb:PGDBObjSubordinated;
 begin
   result:=mclick+1;

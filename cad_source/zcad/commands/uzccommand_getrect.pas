@@ -32,7 +32,7 @@ implementation
 var
    c1,c2:integer;
 
-function Rect_com_CommandStart(operands:TCommandOperands):TCommandResult;
+function Rect_com_CommandStart(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 begin
      c1:=commandmanager.GetValueHeap;
      c2:=-1;
@@ -40,7 +40,7 @@ begin
      result:=cmd_ok;
 end;
 
-procedure Rect_com_CommandCont;
+procedure Rect_com_CommandCont(const Context:TZCADCommandContext);
 begin
      if c2=-1 then
                   c2:=commandmanager.GetValueHeap

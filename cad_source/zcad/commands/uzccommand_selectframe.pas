@@ -39,13 +39,13 @@ uses
 var
   selframecommand:PCommandObjectDef;
 
-procedure FrameEdit_com_CommandStart(Operands:pansichar);
+procedure FrameEdit_com_CommandStart(const Context:TZCADCommandContext;Operands:pansichar);
 procedure FrameEdit_com_Command_End;
 function FrameEdit_com_BeforeClick(const Context:TZCADCommandContext;wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record;mclick:Integer): Integer;
 function FrameEdit_com_AfterClick(const Context:TZCADCommandContext;wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record;mclick:Integer): Integer;
 
 implementation
-procedure FrameEdit_com_CommandStart(Operands:pansichar);
+procedure FrameEdit_com_CommandStart(const Context:TZCADCommandContext;Operands:pansichar);
 begin
   drawings.GetCurrentDWG.wa.SetMouseMode((MGet3DPointWOOP) or (MMoveCamera));
   ZCMsgCallBackInterface.TextMessage(rscmFirstPoint,TMWOHistoryOut);

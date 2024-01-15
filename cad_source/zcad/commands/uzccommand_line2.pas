@@ -32,10 +32,10 @@ uses
   uzeentitiesmanager,uzcutils,uzeentsubordinated,uzeentgenericsubentry,
   zcmultiobjectcreateundocommand,uzcdrawing;
 
-function Line_com_CommandStart(operands:TCommandOperands):TCommandResult;
-procedure Line_com_CommandEnd(_self:pointer);
-function Line_com_BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record;mclick:Integer): Integer;
-function Line_com_AfterClick(wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record;mclick:Integer): Integer;
+function Line_com_CommandStart(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
+procedure Line_com_CommandEnd(const Context:TZCADCommandContext;_self:pointer);
+function Line_com_BeforeClick(const Context:TZCADCommandContext;wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record;mclick:Integer): Integer;
+function Line_com_AfterClick(const Context:TZCADCommandContext;wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record;mclick:Integer): Integer;
 
 var
   PCreatedGDBLine:pgdbobjline;
@@ -45,7 +45,7 @@ implementation
 var
   pold:PGDBObjEntity;
 
-function Line_com_CommandStart(operands:TCommandOperands):TCommandResult;
+function Line_com_CommandStart(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 begin
   pold:=nil;
   drawings.GetCurrentDWG^.wa.SetMouseMode((MGet3DPoint) or (MMoveCamera) or (MRotateCamera));
@@ -53,11 +53,11 @@ begin
   result:=cmd_ok;
 end;
 
-procedure Line_com_CommandEnd(_self:pointer);
+procedure Line_com_CommandEnd(const Context:TZCADCommandContext;_self:pointer);
 begin
 end;
 
-function Line_com_BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record;mclick:Integer): Integer;
+function Line_com_BeforeClick(const Context:TZCADCommandContext;wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record;mclick:Integer): Integer;
 var
     dc:TDrawContext;
 begin
@@ -73,7 +73,7 @@ begin
   end
 end;
 
-function Line_com_AfterClick(wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record;mclick:Integer): Integer;
+function Line_com_AfterClick(const Context:TZCADCommandContext;wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record;mclick:Integer): Integer;
 var po:PGDBObjSubordinated;
     domethod,undomethod:tmethod;
     dc:TDrawContext;

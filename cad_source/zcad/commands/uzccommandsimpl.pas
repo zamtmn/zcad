@@ -353,7 +353,7 @@ begin
                                         dc:=drawings.GetCurrentDWG^.CreateDrawingRC;
                                         drawings.GetCurrentROOT.getoutbound(dc);
                                         result:=a;
-                                        if (mouseclic=1)and(commandmanager.pcommandrunning<>nil) then BeforeClick(context,wc,mc,button,osp);
+                                        if (mouseclic=1)and(commandmanager.CurrCmd.pcommandrunning<>nil) then BeforeClick(context,wc,mc,button,osp);
                                         //if mouseclic=0 then
                                         //                   mouseclic:=0;
                                    end;

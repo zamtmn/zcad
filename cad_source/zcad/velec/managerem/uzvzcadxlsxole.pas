@@ -52,6 +52,8 @@ function activeXLSXWorkbook:boolean;
 function activeWorkSheetXLSX:boolean;
 //** Получаем имя активного листа в активной книге
 function getActiveWorkSheetName:string;
+//** Получаем номер листа по его имени
+function getNumWorkSheetName(nameSheet:string):integer; //-1 отсутствует
   //** сохраняем xlsx файл
 function saveXLSXFile(pathFile:string):boolean;
   //** очищаем память
@@ -137,6 +139,21 @@ begin
     ZCMsgCallBackInterface.TextMessage('ОШИБКА. НЕТ АКТИВНОЙ ОТКРЫТОЙ КНИГИ В EXCEL!!!',TMWOHistoryOut);
   end;
 end;
+
+function getNumWorkSheetName(nameSheet:string):integer; //-1 отсутствует
+var
+  i:integer;
+begin
+  result:=-1;
+  for i:= 1 to BasicWorkbook.WorkSheets.count do
+    if ContainsText(BasicWorkbook.WorkSheets[i].Name, nameSheet) then
+    begin
+      result:=i;
+      //ZCMsgCallBackInterface.TextMessage('Лист = ' + BasicWorkbook.WorkSheets[i].Name + ' спрятан!',TMWOHistoryOut);
+      //BasicWorkbook.WorkSheets[i].Visible:=false;
+    end;
+end;
+
 function saveXLSXFile(pathFile:string):boolean;
 //var
 begin

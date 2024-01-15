@@ -82,18 +82,18 @@ TSelSimParams=record
                          weights:TZctnrVectorGDBLineWeight;
                          objtypes:TZctnrVectorObjID;
                          linetypescales:TZctnrVectorDouble;
-                         procedure CommandStart(Operands:TCommandOperands); virtual;
+                         procedure CommandStart(const Context:TZCADCommandContext;Operands:TCommandOperands); virtual;
                          procedure createbufs;
                          //procedure BuildDM(Operands:pansichar); virtual;
                          //procedure Format;virtual;
                          procedure Run(pdata:PtrInt); virtual;
-                         procedure Sel(pdata:{pointer}PtrInt); virtual;
+                         procedure Sel(pdata:PtrInt); virtual;
                    end;
 var
    SelSim:SelSim_com;
    SelSimParams:TSelSimParams;
 implementation
-procedure SelSim_com.CommandStart(Operands:TCommandOperands);
+procedure SelSim_com.CommandStart(const Context:TZCADCommandContext;Operands:TCommandOperands);
 begin
   created:=false;
   self.savemousemode:=drawings.GetCurrentDWG^.wa.param.md.mode;
@@ -103,7 +103,7 @@ begin
        commandmanager.DMAddMethod(rscmStore,'Store ents and select ents to select similar',@sel);
        commandmanager.DMAddMethod(rscmSelect,'Select similar ents (if "template" ents were not stored, the entire drawing will be searched)',@run);
        commandmanager.DMShow;
-       inherited CommandStart('');
+       inherited CommandStart(context,'');
   end
   else
   begin
@@ -273,8 +273,9 @@ begin
      created:=false;
      Commandmanager.executecommandend;
 end;
-procedure startup;
-begin
+
+initialization
+  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
   SysUnit^.RegisterType(TypeInfo(TDiff));
   SysUnit^.RegisterType(TypeInfo(TSelBlockParams));
   SysUnit^.RegisterType(TypeInfo(TSelTextParams));
@@ -299,14 +300,6 @@ begin
   SelSimParams.Blocks.SameName:=true;
   SelSimParams.Blocks.DiffBlockDevice:=TD_Diff;
   SelSim.SetCommandParam(@SelSimParams,'PTSelSimParams');
-end;
-procedure Finalize;
-begin
-end;
-initialization
-  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
-  startup;
 finalization
   ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
-  finalize;
 end.

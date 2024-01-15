@@ -216,7 +216,7 @@ var
     end else ZCMsgCallBackInterface.TextMessage('ОШИБКА. Неправильно задано имя блока или неправильн заданы смещения',TMWOHistoryOut);
   end;
 
-function vImportXLSXToCAD_com(operands:TCommandOperands):TCommandResult;
+function vImportXLSXToCAD_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 var
   //inpt:String;
   gr:TGetResult;
@@ -347,7 +347,7 @@ end;
 initialization
   programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
 
-  CreateCommandFastObjectPlugin(@vImportXLSXToCAD_com,'vXLSXtoCAD',CADWG,0);
+  CreateZCADCommand(@vImportXLSXToCAD_com,'vXLSXtoCAD',CADWG,0);
 finalization
   ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
 

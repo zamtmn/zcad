@@ -34,7 +34,7 @@ implementation
 var
   ms2objinsp:PCommandObjectDef;
 
-function MultiSelect2ObjIbsp_com(operands:TCommandOperands):TCommandResult;
+function MultiSelect2ObjIbsp_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 begin
   MSEditor.CreateUnit(drawings.GetUnitsFormat);
   ZCMsgCallBackInterface.Do_PrepareObject(drawings.GetUndoStack,drawings.GetUnitsFormat,SysUnit.TypeName2PTD('TMSEditor'),@MSEditor,drawings.GetCurrentDWG);
@@ -43,7 +43,7 @@ end;
 
 initialization
   programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
-  ms2objinsp:=CreateCommandFastObjectPlugin(@MultiSelect2ObjIbsp_com,'MultiSelect2ObjIbsp',CADWG,0);
+  ms2objinsp:=CreateZCADCommand(@MultiSelect2ObjIbsp_com,'MultiSelect2ObjIbsp',CADWG,0);
   ms2objinsp.overlay:=true;
   ms2objinsp.CEndActionAttr:=[];
 finalization

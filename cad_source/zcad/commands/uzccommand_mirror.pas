@@ -39,7 +39,7 @@ type
   end;
   mirror_com =  object(copy_com)
     function CalcTransformMatrix(p1,p2: GDBvertex):DMatrix4D; virtual;
-    function AfterClick(wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record): Integer; virtual;
+    function AfterClick(const Context:TZCADCommandContext;wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record): Integer; virtual;
   end;
 var
   MirrorParam:TMirrorParam;
@@ -62,7 +62,7 @@ begin
         result:=CreateReflectionMatrix(plane);
 end;
 
-function Mirror_com.AfterClick(wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record): Integer;
+function Mirror_com.AfterClick(const Context:TZCADCommandContext;wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record): Integer;
 var
     dispmatr:DMatrix4D;
 begin
@@ -82,8 +82,8 @@ begin
    result:=cmd_ok;
 end;
 
-procedure startup;
-begin
+initialization
+  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
   SysUnit^.RegisterType(TypeInfo(TMirrorParam));
   SysUnit^.RegisterType(TypeInfo(PTMirrorParam));
   SysUnit^.SetTypeDesk(TypeInfo(TMirrorParam),[rscmSourceEntities],[FNUser]);
@@ -92,14 +92,7 @@ begin
   MirrorParam.SourceEnts:=TEP_Erase;
   mirror.init('Mirror',0,0);
   mirror.SetCommandParam(@MirrorParam,'PTMirrorParam');
-end;
-procedure Finalize;
-begin
-end;
-initialization
-  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
-  startup;
 finalization
   ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
-  finalize;
+
 end.

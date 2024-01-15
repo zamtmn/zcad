@@ -69,11 +69,11 @@ TVarTextSelectParams=record
               end;
   {REGISTEROBJECTTYPE SelSim_com}
   VariablesAdd_com= object(CommandRTEdObject)
-                         procedure CommandStart(Operands:TCommandOperands); virtual;
+                         procedure CommandStart(const Context:TZCADCommandContext;Operands:TCommandOperands); virtual;
                          procedure Run(pdata:PtrInt); virtual;
                    end;
   VarTextSelect_com= object(CommandRTEdObject)
-                         procedure CommandStart(Operands:TCommandOperands); virtual;
+                         procedure CommandStart(const Context:TZCADCommandContext;Operands:TCommandOperands); virtual;
                          procedure Run(pdata:PtrInt); virtual;
                    end;
 var
@@ -111,7 +111,7 @@ begin
   ZCMsgCallBackInterface.TextMessage(sysutils.format(rscmEntitiesCounter,[Processed,Total,Selected,Filtred]),TMWOHistoryOut);
 end;
 
-procedure VariablesAdd_com.CommandStart(Operands:TCommandOperands);
+procedure VariablesAdd_com.CommandStart(const Context:TZCADCommandContext;Operands:TCommandOperands);
 begin
   self.savemousemode:=drawings.GetCurrentDWG^.wa.param.md.mode;
 
@@ -119,7 +119,7 @@ begin
   begin
        commandmanager.DMAddMethod(rscmAdd,'Add variables to selected ents',run);
        commandmanager.DMShow;
-       inherited CommandStart('');
+       inherited CommandStart(context,'');
   end
   else
   begin
@@ -171,7 +171,7 @@ begin
   counter.Report;
   Commandmanager.executecommandend;
 end;
-procedure VarTextSelect_com.CommandStart(Operands:TCommandOperands);
+procedure VarTextSelect_com.CommandStart(const Context:TZCADCommandContext;Operands:TCommandOperands);
 begin
   self.savemousemode:=drawings.GetCurrentDWG^.wa.param.md.mode;
 
@@ -179,7 +179,7 @@ begin
   begin
        commandmanager.DMAddMethod(rscmSelect,'Select',run);
        commandmanager.DMShow;
-       inherited CommandStart('');
+       inherited CommandStart(context,'');
   end
   else
   begin
@@ -219,8 +219,9 @@ begin
   counter.Report;
   Commandmanager.executecommandend;
 end;
-procedure startup;
-begin
+
+initialization
+  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
   SysUnit^.RegisterType(TypeInfo(TMFunction));
   SysUnit^.RegisterType(TypeInfo(PTVariablesAddParams));
   SysUnit^.SetTypeDesk(TypeInfo(TMFunction),['MainFunction','Delegate', 'All']);
@@ -238,14 +239,6 @@ begin
   VarTextSelect.CEndActionAttr:=[];
   VarTextSelectParams.TemplateToFind:='*NMO_Name*';
   VarTextSelect.SetCommandParam(@VarTextSelectParams,'PTVarTextSelectParams');
-end;
-procedure Finalize;
-begin
-end;
-initialization
-  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
-  startup;
 finalization
   ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
-  finalize;
 end.

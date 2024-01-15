@@ -40,7 +40,7 @@ uses
 
 implementation
 
-function uzvaddconnection_com(operands:TCommandOperands):TCommandResult;
+function uzvaddconnection_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 var
   Varext:TVariablesExtender;
   //pe:PGDBObjEntity;
@@ -130,7 +130,7 @@ end;
 
 initialization
   programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
-  CreateCommandFastObjectPlugin(@uzvaddconnection_com,'uzvaddconnection',CADWG,0);
+  CreateZCADCommand(@uzvaddconnection_com,'uzvaddconnection',CADWG,0);
 finalization
   ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
 end.

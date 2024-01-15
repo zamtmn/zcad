@@ -220,7 +220,7 @@ implementation
 //end;
 
 
-function TestModul_com(operands:TCommandOperands):TCommandResult;
+function TestModul_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
  var
     x, y: Integer;
     i   : Integer;
@@ -527,7 +527,7 @@ end;
 //end;
 
 
-function createStructureSchema_com(operands:TCommandOperands):TCommandResult;
+function createStructureSchema_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 var
    listGraph:TListGraph;
    insertPoint:gdbvertex;
@@ -1443,7 +1443,7 @@ end;
 
 
 initialization
- CreateCommandFastObjectPlugin(@createStructureSchema_com,'vBuildSSSchema',CADWG,0);
- CreateCommandFastObjectPlugin(@TestModul_com,'test888',CADWG,0);
+ CreateZCADCommand(@createStructureSchema_com,'vBuildSSSchema',CADWG,0);
+ CreateZCADCommand(@TestModul_com,'test888',CADWG,0);
 end.
 

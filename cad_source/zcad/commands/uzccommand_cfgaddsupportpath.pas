@@ -25,7 +25,7 @@ uses
  uzbpaths,uzccommandsabstract,uzccommandsimpl,uzmenusmanager;
 
 implementation
-function cfgAddSupportPath_com(operands:TCommandOperands):TCommandResult;
+function cfgAddSupportPath_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 begin
   AddSupportPath(ExpandPath(operands));
   result:=cmd_ok;
@@ -34,7 +34,7 @@ end;
 
 initialization
   programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
-  CreateCommandFastObjectPlugin(@cfgAddSupportPath_com,'cfgAddSupportPath',0,0);
+  CreateZCADCommand(@cfgAddSupportPath_com,'cfgAddSupportPath',0,0);
 finalization
   ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
 end.

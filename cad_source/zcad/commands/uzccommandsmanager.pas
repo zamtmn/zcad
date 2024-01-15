@@ -43,6 +43,7 @@ type
   tvarstack=object({varmanagerdef}varmanager)
             end;
   TOnCommandRun=procedure(command:string) of object;
+  TButtonMethod2=procedure(const Data:TZCADCommandContext)of object;
 
   TZctnrPCommandObjectDef=object(GZVectorP{-}<PCommandObjectDef>{//}) //TODO:почемуто не работают синонимы с объектами, приходится наследовать
                                                          //TODO:надо тут поменять GZVectorP на GZVectorSimple
@@ -51,13 +52,15 @@ type
   GDBcommandmanager=object({TZctnrVectorPGDBaseObjects}GZVectorPObects{-}<PCommandObjectDef,CommandObjectDef>{//})
 
                           lastcommand:String;
+
                           pcommandrunning:PCommandRTEdObjectDef;
+                          Context:TZCADCommandContext;
 
                           LatestRunPC:PCommandObjectDef;
                           LatestRunOperands:String;
                           LatestRunPDrawing:PTDrawingDef;
 
-                          CommandsStack:{TZctnrVectorPointer}TZctnrPCommandObjectDef;
+                          CommandsStack:TZctnrPCommandObjectDef;
                           ContextCommandParams:Pointer;
                           busy:Integer;
                           varstack:tvarstack;
@@ -94,8 +97,8 @@ type
                           procedure DMHide;
                           procedure DMClear;
                           //-----------------------------------------------------------------procedure DMAddProcedure(Text,HText:String;proc:TonClickProc);
-                          procedure DMAddMethod(Text,HText:String;FMethod:TButtonMethod);
-                          procedure DMAddProcedure(Text,HText:String;FProc:TButtonProc);
+                          procedure DMAddMethod(Text,HText:String;FMethod:TButtonMethod;pcr:PCommandRTEdObjectDef=nil);overload;
+                          procedure DMAddMethod(Text,HText:String;FMethod:TButtonMethod2;pcr:PCommandRTEdObjectDef=nil);overload;
                           function FindCommand(command:String):PCommandObjectDef;
                           procedure PushValue(varname,vartype:String;instance:Pointer);virtual;
                           function PopValue:vardesk;virtual;
@@ -145,8 +148,6 @@ var CommandManager:GDBcommandmanager;
 function getcommandmanager:Pointer;export;
 function GetCommandContext(pdrawing:PTDrawingDef;POGLWnd:POGLWndtype):TCStartAttr;
 procedure ParseCommand(comm:string; out command,operands:String);
-{procedure startup;
-procedure finalize;}
 implementation
 
 function GDBcommandmanager.MacroFuncsCurrentMacrosPath (const {%H-}Param: string; const Data: PtrInt;
@@ -617,21 +618,26 @@ begin
      if assigned(cline) then
      if assigned(CLine.DMenu) then
      CLine.DMenu.AddProcedure(Text,HText,Proc);
-end;}
+end;
 procedure GDBcommandmanager.DMAddProcedure;
 begin
-     //if assigned(cline) then
-     if assigned({CLine.}DMenu) then
-     {CLine.}DMenu.AddProcedure(Text,HText,FProc);
-end;
+     if assigned(DMenu) then
+     DMenu.AddProcedure(Text,HText,FProc);
+end;}
 
-procedure GDBcommandmanager.DMAddMethod;
+procedure GDBcommandmanager.DMAddMethod(Text,HText:String;FMethod:TButtonMethod;pcr:PCommandRTEdObjectDef=nil);
 begin
-     //if assigned(cline) then
-     if assigned({CLine.}DMenu) then
-     {CLine.}DMenu.AddMethod(Text,HText,FMethod);
+  if pcr=nil then
+    pcr:=@Context;
+  if assigned(DMenu) then
+    DMenu.AddMethod(Text,HText,FMethod,pcr);
 end;
-
+procedure GDBcommandmanager.DMAddMethod(Text,HText:String;FMethod:TButtonMethod2;pcr:PCommandRTEdObjectDef=nil);
+type
+ TMethodWithPointer=procedure(pdata:ptrint)of object;
+begin
+ DMAddMethod(Text,HText,TMethodWithPointer(FMethod),pcr);
+end;
 
 procedure GDBcommandmanager.executefile;
 var
@@ -684,7 +690,7 @@ begin
      if pcommandrunning^.pdwg={gdb.GetCurrentDWG}@drawing then
      if pcommandrunning.IsRTECommand then
      begin
-          pcommandrunning^.MouseMoveCallback(p3d,p2d,mode,osp);
+          pcommandrunning^.MouseMoveCallback(context,p3d,p2d,mode,osp);
      end
      else if pcommandrunning^.IData.GetPointMode=TGPMWait then
                                       begin
@@ -709,7 +715,7 @@ begin
               if p^.pdwg={gdb.GetCurrentDWG}@drawing then
               if p^.IsRTECommand then
                                                        begin
-                                                            (p)^.MouseMoveCallback(p3d,p2d,mode,osp);
+                                                            (p)^.MouseMoveCallback(context,p3d,p2d,mode,osp);
                                                        end;
 
               p:=CommandsStack.iterate(ir);
@@ -822,8 +828,10 @@ begin
                                                               end;
                                       end;
           pcommandrunning := pointer(pc);
+          context:=TZCADCommandContext.CreateRec;
           pcommandrunning^.pdwg:=pd;
-          pcommandrunning^.CommandStart(pansichar(operands));
+          pcommandrunning^.pcontext:=@context;
+          pcommandrunning^.CommandStart(context,operands);
 end;
 procedure GDBcommandmanager.execute(const comm:string;silent:Boolean;pdrawing:PTDrawingDef;POGLWndParam:POGLWndtype);
 var //i,p1,p2: Integer;
@@ -953,7 +961,7 @@ begin
   temp:=pcommandrunning;
   pcommandrunning := nil;
   if temp<>nil then
-                   temp^.CommandEnd;
+                   temp^.CommandEnd(Context);
   if pcommandrunning=nil then
   //if assigned(cline) then
   //                 CLine.SetMode(CLCOMMANDREDY);
@@ -964,7 +972,7 @@ begin
                                     begin
                                          pcommandrunning:=ppointer(CommandsStack.getDataMutable(CommandsStack.Count-1))^;
                                          dec(CommandsStack.Count);
-                                         pcommandrunning.CommandContinue;
+                                         pcommandrunning.CommandContinue(Context);
                                     end
                                 else
                                     begin
@@ -994,7 +1002,7 @@ begin
   temp:=pcommandrunning;
   pcommandrunning := nil;
   if temp<>nil then
-                   temp^.CommandEnd;
+                   temp^.CommandEnd(Context);
   if pcommandrunning=nil then
                              ZCMsgCallBackInterface.Do_GUIMode(ZMsgID_GUICMDLineReadyMode);
                              {if assigned(SetCommandLineMode) then
@@ -1070,14 +1078,7 @@ begin
   if Assigned(CommandLinePrompts)then
     CommandLinePrompts.Free;
 end;
-{procedure startup;
-begin
-  commandmanager.init(1000);
-end;
-procedure finalize;
-begin
-  commandmanager.FreeAndDone;
-end;}
+
 initialization
   commandmanager.init(1000);
   DefaultMacros.AddMacro(TTransferMacro.Create('CurrentMacrosPath','',

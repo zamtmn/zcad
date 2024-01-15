@@ -53,7 +53,7 @@ begin
     drawings.GetCurrentDWG^.FreeConstructionObjects;
 end;
 
-function DrawRotatedDim_com(operands:TCommandOperands):TCommandResult;
+function DrawRotatedDim_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 var
     pd:PGDBObjRotatedDimension;
     p1,p2,p3,vd,vn:gdbvertex;
@@ -97,7 +97,7 @@ end;
 
 initialization
   programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
-  CreateCommandFastObjectPlugin(@DrawRotatedDim_com,'DimLinear',  CADWG,0)
+  CreateZCADCommand(@DrawRotatedDim_com,'DimLinear',  CADWG,0)
 finalization
   ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
 end.

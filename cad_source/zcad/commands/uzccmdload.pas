@@ -122,17 +122,4 @@ begin
   end else
     ZCMsgCallBackInterface.TextMessage('MERGE:'+format(rsUnableToOpenFile,[s]),TMWOShowError);
 end;
-
-
-procedure startup;
-begin
-end;
-procedure finalize;
-begin
-end;
-initialization
-  startup;
-finalization
-  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
-  finalize;
 end.

@@ -20,25 +20,36 @@ unit uzcctrldynamiccommandmenu;
 {$INCLUDE zengineconfig.inc}
 interface
 uses
- uzcinfoform,ComCtrls,Controls,Forms,uzclog,uzcstrconsts;
+ uzcinfoform,ComCtrls,Controls,Forms,uzclog,uzcstrconsts,
+ uzcinterface;
 type
   DMMethod=procedure(sender:Pointer) of object;
-  //PTDMenuWnd=^TDMenuWnd;
 
-  { TDMenuWnd }
+  TmyProcToolButton=class({Tmy}TToolButton)
+    public
+      FMethod:TButtonMethod;
+      PData:Pointer;
+      procedure Click; override;
+  end;
 
   TDMenuWnd = class(tform)
     ToolBar1: TToolBar;
     procedure AfterConstruction; override;
-    //procedure AddProcedure(Text,HText:String;proc:TonClickProc);
-    procedure AddMethod(Text,HText:String;FMethod:TButtonMethod);
-    procedure AddProcedure(Text,HText:String;FProc:TButtonProc);
+    procedure AddMethod(Text,HText:String;AMethod:TButtonMethod;APData:Pointer);
     function AddButton(Text,HText:String):TmyProcToolButton;
     public
       procedure CreateToolBar;
       procedure clear;
   end;
 implementation
+
+procedure TmyProcToolButton.Click;
+begin
+  ZCMsgCallBackInterface.Do_GUIaction(self,ZMsgID_GUIStoreAndFreeEditorProc);
+  if assigned(FMethod) then
+    Application.QueueAsyncCall(FMethod,PtrInt(PData));
+end;
+
 procedure TDMenuWnd.AfterConstruction;
 begin
      FormStyle:=fsStayOnTop;
@@ -48,21 +59,6 @@ begin
      CreateToolBar;
      inherited;
 end;
-
-{procedure TDMenuWnd.AddMethod(Text, HText: String; FMethod: TButtonMethod);
-begin
-
-end;
-
-procedure TDMenuWnd.AddProcedure(Text, HText: String; FProc: TButtonProc);
-begin
-
-end;
-
-function TDMenuWnd.AddButton(Text, HText: String): TmyProcToolButton;
-begin
-
-end;}
 procedure TDMenuWnd.clear;
 begin
   ToolBar1.Free;
@@ -85,46 +81,14 @@ begin
      result.showhint:=true;
      result.hint:=HText;
      result.parent:=ToolBar1;
-     //result.align:=alTop;
-     //self.DoAutoSize;
-     //result.height:=18
-     //result.height:=10;
-(*  nw:=0;
-  nh:=0;
-  _dc:=GetDC(handle);
-	hfntOld:=SelectObject(_dc, hFontNormal);
-	GetTextExtentPoint32A(_dc,@Text[1],length(Text),sz);
-  ww:=sz.cx+8;
-  nw:=width;
-  if ww<clientwidth then
-                        ww:=clientwidth
-                    else
-                        nw:=width+(ww-clientwidth);
-  yy:=kids.Count*statusbarclientheight;
-  nh:=yy+statusbarclientheight;
-
-
-
-  Getmem(Pointer(result),sizeof(ZButtonGeneric));
-  result^.initxywh(Text,hText,@self,0,yy,ww,statusbarclientheight,true);
-  result^.align:=al_clientw;
-	SelectObject(_dc, hfntOld);
-	ReleaseDC(handle,_dc);
-  self.setxywh(wndx,wndy,nw,nh+(height-clientheight));
-*)
-end;
-(*procedure TDMenuWnd.AddProcedure(Text,HText:String;proc:TonClickProc);
-begin
-     AddButton(Text,HText).onclickproc:=proc;
-end;*)
-procedure TDMenuWnd.AddProcedure;
-begin
-
 end;
 
 procedure TDMenuWnd.AddMethod;
 begin
-     AddButton(Text,HText).FMethod:=FMethod;//.onClickMethod:=TonClickMethod(proc);
+  with AddButton(Text,HText) do begin
+    FMethod:=AMethod;
+    PData:=APData;
+  end;
 end;
 begin
 end.

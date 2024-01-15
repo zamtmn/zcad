@@ -786,7 +786,7 @@ begin
 end;
 
 //Экспорт данных в XLSX
-function vExportDevToXLSX_com(operands:TCommandOperands):TCommandResult;
+function vExportDevToXLSX_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 var
   fileTemplate:ansiString;
   gr:TGetResult;
@@ -859,7 +859,7 @@ begin
   result:=cmd_ok;
 end;
 //Экспорт данных в XLSX
-function vExportDevToXLSXToCAD_com(operands:TCommandOperands):TCommandResult;
+function vExportDevToXLSXToCAD_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 var
   fileTemplate:ansiString;
   gr:TGetResult;
@@ -972,8 +972,8 @@ initialization
   //CmdProp.props.init('test');
 
   //SelSim.SetCommandParam(@SelSimParams,'PTSelSimParams');
-  CreateCommandFastObjectPlugin(@vExportDevToXLSX_com,'vExportDevToXLSX',CADWG,0);
-  CreateCommandFastObjectPlugin(@vExportDevToXLSXToCAD_com,'vExportDevToXLSXToCAD',CADWG,0);
+  CreateZCADCommand(@vExportDevToXLSX_com,'vExportDevToXLSX',CADWG,0);
+  CreateZCADCommand(@vExportDevToXLSXToCAD_com,'vExportDevToXLSXToCAD',CADWG,0);
 finalization
   ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
   //CmdProp.props.free;

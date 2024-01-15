@@ -28,7 +28,7 @@ uses
 
 implementation
 
-function dbgGetOutOfMem_com(Operands:pansichar):Integer;
+function dbgGetOutOfMem_com(const Context:TZCADCommandContext;Operands:pansichar):Integer;
 begin
   while true do getmem(4*1024);
   result:=cmd_ok;
@@ -36,7 +36,7 @@ end;
 
 initialization
   programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
-  CreateCommandFastObjectPlugin(@dbgGetOutOfMem_com,'dbgGetOutOfMem',0,0);
+  CreateZCADCommand(@dbgGetOutOfMem_com,'dbgGetOutOfMem',0,0);
 finalization
   ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
 end.

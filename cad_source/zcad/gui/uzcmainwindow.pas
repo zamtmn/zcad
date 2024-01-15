@@ -776,7 +776,7 @@ begin
   HardcodedButtonSize:=21;
   {Грузим раскладку окон}
   if not sysparam.saved.noloadlayout then
-    LoadLayout_com(EmptyCommandOperands);
+    LoadLayout_com(TZCADCommandContext.CreateRec,EmptyCommandOperands);
 
   if sysparam.saved.noloadlayout then
   begin
@@ -1505,7 +1505,7 @@ begin
         begin
           if (zc and MZW_LBUTTON) <> 0{zc=MZW_LBUTTON} then
                                  Sender.param.lastpoint:=Sender.param.nearesttcontrolpoint.pcontrolpoint^.worldcoord;
-          commandmanager.pcommandrunning^.MouseMoveCallback(Sender.param.nearesttcontrolpoint.pcontrolpoint^.worldcoord,
+          commandmanager.pcommandrunning^.MouseMoveCallback(CommandManager.Context,Sender.param.nearesttcontrolpoint.pcontrolpoint^.worldcoord,
                                                             Sender.param.md.mouseglue, zc,nil)
         end;
       end;
@@ -1713,7 +1713,7 @@ begin
          end
        else
          begin
-              commandmanager.pcommandrunning.CommandCancel;
+              commandmanager.pcommandrunning.CommandCancel(CommandManager.Context);
               commandmanager.executecommandend;
          end;
        //end;

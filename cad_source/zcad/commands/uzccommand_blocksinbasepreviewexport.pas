@@ -31,7 +31,7 @@ uses
 implementation
 
 
-function BlocksInBasePreViewExport_com(operands:TCommandOperands):TCommandResult;
+function BlocksInBasePreViewExport_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 var
   pb:PGDBObjBlockdef;
   param,BlockNameIncludeMask,BlockNameExcludeMask,BlockPattern:AnsiString;
@@ -48,7 +48,7 @@ begin
     if MatchesMaskList(pb^.name,BlockNameIncludeMask,';',false) then
       if (BlockNameExcludeMask='')or(not MatchesMaskList(pb^.name,BlockNameExcludeMask,';',false)) then begin
         param:=StringReplace(BlockPattern,'<>',pb^.name,[rfReplaceAll, rfIgnoreCase]);
-        BlockPreViewExport_com(param);
+        BlockPreViewExport_com(context,param);
       end;
     pb:=BlockBaseDWG^.BlockDefArray.iterate(ir);
   until pb=nil;
@@ -57,7 +57,7 @@ end;
 
 initialization
   programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
-  CreateCommandFastObjectPlugin(@BlocksInBasePreViewExport_com,'BlocksInBasePreViewExport',0,0);
+  CreateZCADCommand(@BlocksInBasePreViewExport_com,'BlocksInBasePreViewExport',0,0);
 finalization
   ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
 end.

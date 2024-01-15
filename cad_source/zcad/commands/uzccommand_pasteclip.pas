@@ -80,18 +80,9 @@ begin
     ZCMsgCallBackInterface.TextMessage(rsClipboardIsEmpty,TMWOHistoryOut);
 end;
 
-
-procedure startup;
-begin
-  PasteClip.init('PasteClip',0,0);
-end;
-procedure Finalize;
-begin
-end;
 initialization
   programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
-  startup;
+  PasteClip.init('PasteClip',0,0);
 finalization
   ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
-  finalize;
 end.

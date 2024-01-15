@@ -28,7 +28,7 @@ uses
 
 implementation
 
-function DWGClose_com(operands:TCommandOperands):TCommandResult;
+function DWGClose_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 var
    CurrentDWG:PTZCADDrawing;
 begin
@@ -38,17 +38,9 @@ begin
   result:=cmd_ok;
 end;
 
-procedure startup;
-begin
-  CreateCommandFastObjectPlugin(@DWGClose_com,'DWGClose',CADWG,0).CEndActionAttr:=[CEDWGNChanged];
-end;
-procedure finalize;
-begin
-end;
 initialization
   programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
-  startup;
+  CreateZCADCommand(@DWGClose_com,'DWGClose',CADWG,0).CEndActionAttr:=[CEDWGNChanged];
 finalization
   ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
-  finalize;
 end.

@@ -35,7 +35,7 @@ uses
 
 implementation
 
-function DrawArc_com(operands:TCommandOperands):TCommandResult;
+function DrawArc_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 var
     pa:PGDBObjArc;
     pline:PGDBObjLine;
@@ -71,7 +71,7 @@ end;
 
 initialization
   programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
-  CreateCommandFastObjectPlugin(@DrawArc_com,'Arc',CADWG,0);
+  CreateZCADCommand(@DrawArc_com,'Arc',CADWG,0);
 finalization
   ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
 end.

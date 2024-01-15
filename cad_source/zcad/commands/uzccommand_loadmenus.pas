@@ -25,7 +25,7 @@ uses
  uzbpaths,uzccommandsabstract,uzccommandsimpl,uzmenusmanager;
 
 implementation
-function LoadMenus_com(operands:TCommandOperands):TCommandResult;
+function LoadMenus_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 begin
   MenusManager.LoadMenus(ExpandPath(operands));
   result:=cmd_ok;
@@ -34,7 +34,7 @@ end;
 
 initialization
   programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
-  CreateCommandFastObjectPlugin(@LoadMenus_com,'LoadMenus',0,0);
+  CreateZCADCommand(@LoadMenus_com,'LoadMenus',0,0);
 finalization
   ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
 end.

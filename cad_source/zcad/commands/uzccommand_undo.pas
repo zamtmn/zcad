@@ -33,7 +33,7 @@ uses
 
 implementation
 
-function Undo_com(operands:TCommandOperands):TCommandResult;
+function Undo_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 var
    prevundo:integer;
    overlay:Boolean;
@@ -60,7 +60,7 @@ end;
 
 initialization
   programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
-  CreateCommandFastObjectPlugin(@undo_com,'Undo',CADWG or CACanUndo,0).overlay:=true;
+  CreateZCADCommand(@undo_com,'Undo',CADWG or CACanUndo,0).overlay:=true;
 finalization
   ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
 end.

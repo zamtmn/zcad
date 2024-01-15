@@ -49,7 +49,7 @@ uses
 
 type
 Tuzvslagcab_com=object(CommandRTEdObject)//определяем тип - объект наследник базового объекта "динамической" команды
-             procedure CommandStart(Operands:TCommandOperands);virtual;//переопределяем метод вызываемый при старте команды
+             procedure CommandStart(const Context:TZCADCommandContext;Operands:TCommandOperands);virtual;//переопределяем метод вызываемый при старте команды
              //procedure CommandEnd; virtual;//переопределяем метод вызываемый при окончании команды
              //procedure CommandCancel; virtual;//переопределяем метод вызываемый при отмене команды
 
@@ -77,7 +77,7 @@ var
 
 implementation
 
-procedure Tuzvslagcab_com.CommandStart(Operands:TCommandOperands);
+procedure Tuzvslagcab_com.CommandStart(const Context:TZCADCommandContext;Operands:TCommandOperands);
 var
  listSLname:TGDBlistSLname;
  nameSL:string;
@@ -105,7 +105,7 @@ begin
 
 
   //не забываем вызвать метод родителя, там еще много что должно выполниться
-  inherited CommandStart('');
+  inherited CommandStart(context,'');
 end;
 
 procedure Tuzvslagcab_com.visualGlobalGraph(pdata:PtrInt);

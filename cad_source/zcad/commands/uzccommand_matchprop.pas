@@ -60,7 +60,7 @@ type
 var
    MatchPropParam:TMatchPropParam; //**< Переменная содержащая опции команды MatchProp
 
-function matchprop_com(operands:TCommandOperands):TCommandResult;
+function matchprop_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 var
     ps,pd:PGDBObjEntity;
     SourceObjType:TObjID;
@@ -234,7 +234,7 @@ initialization
   SysUnit.SetTypeDesk(TypeInfo(TMatchPropParam),['Process layer','Process line weight','Process line type','Process line type scale','Process color','Text params'],[FNProgram]);//Даем програмные имена параметрам, по идее это должно быть в ртти, но ненашел
   SysUnit.SetTypeDesk(TypeInfo(TMatchPropTextParam),['Process style','Process size','Process oblique','Process wfactor','Process justify'],[FNUser]);//Даем человечьи имена параметрам
 
-  CreateCommandFastObjectPlugin(@matchprop_com,'MatchProp',  CADWG,0);
+  CreateZCADCommand(@matchprop_com,'MatchProp',  CADWG,0);
 finalization
   ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
 end.

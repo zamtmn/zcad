@@ -32,7 +32,7 @@ var
   StringsTreeSelector:TStringsTreeSelector=nil;
 implementation
 
-function FunctionsTest_com(operands:TCommandOperands):TCommandResult;
+function FunctionsTest_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 begin
   StringsTreeSelector:=TStringsTreeSelector.Create(nil);
   StringsTreeSelector.fill(FunctionsTree.BlobTree);
@@ -41,7 +41,7 @@ begin
   result:=cmd_ok;
 end;
 
-function RepresentationsTest_com(operands:TCommandOperands):TCommandResult;
+function RepresentationsTest_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 begin
   StringsTreeSelector:=TStringsTreeSelector.Create(nil);
   StringsTreeSelector.fill(RepresentationsTree.BlobTree);
@@ -94,8 +94,8 @@ initialization;
   FunctionsTree.LoadTree(expandpath('*rtl/functions.xml'),InterfaceTranslate);
   RepresentationsTree.LoadTree(expandpath('*rtl/representations.xml'),InterfaceTranslate);
 
-  CreateCommandFastObjectPlugin(@FunctionsTest_com,'ft',CADWG,0);
-  CreateCommandFastObjectPlugin(@RepresentationsTest_com,'rt',CADWG,0);
+  CreateZCADCommand(@FunctionsTest_com,'ft',CADWG,0);
+  CreateZCADCommand(@RepresentationsTest_com,'rt',CADWG,0);
 
   //AddEditorToType(SysUnit.TypeName2PTD('TEentityRepresentation'),TBaseTypesEditors.BaseCreateEditor);
   //AddEditorToType(SysUnit.TypeName2PTD('TEentityFunction'),TBaseTypesEditors.BaseCreateEditor);

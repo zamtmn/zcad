@@ -153,7 +153,7 @@ begin
 end;
 
 
-function quit_com(operands:TCommandOperands):TCommandResult;
+function quit_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 begin
   CloseApp;
   result:=cmd_ok;
@@ -161,7 +161,7 @@ end;
 
 initialization
   programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
-  CreateCommandFastObjectPlugin(@quit_com,'Quit',0,0);
+  CreateZCADCommand(@quit_com,'Quit',0,0);
 finalization
   ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
 end.

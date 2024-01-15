@@ -396,7 +396,7 @@ begin
 end;
 
 
-function DataExport_com(operands:TCommandOperands):TCommandResult;
+function DataExport_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 type
   TCmdMode=(CMEmpty,CMWaitFile,CMOptions,CMOptions1,CMOptions2,CMOptions3,CMExport);
 var
@@ -588,7 +588,7 @@ initialization
   SysUnit^.RegisterType(TypeInfo(TDataExportParam));//регистрируем тип данных в зкадном RTTI
   SysUnit^.SetTypeDesk(TypeInfo(TDataExportParam),['EntFilter','PropFilter','Exporter','FileName'],[FNProgram]);//Даем програмные имена параметрам, по идее это должно быть в ртти, но ненашел
 
-  CreateCommandFastObjectPlugin(@DataExport_com,'DataExport',  CADWG,0);
+  CreateZCADCommand(@DataExport_com,'DataExport',  CADWG,0);
 
 
   ExporterParser:=TExporterParser.create;

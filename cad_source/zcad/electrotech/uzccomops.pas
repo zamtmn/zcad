@@ -641,7 +641,7 @@ begin
   redrawoglwnd;
   result:=cmd_ok;
 end;}
-function OPS_Sensor_Mark_com(operands:TCommandOperands):TCommandResult;
+function OPS_Sensor_Mark_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 var //i: Integer;
     pcabledesk:PTCableDesctiptor;
     ir,ir2,ir_inNodeArray:itrec;
@@ -1361,7 +1361,7 @@ begin
   OPS_SPBuild_com.init('OPS_SPBuild',0,0);
   //CreateCommandFastObjectPlugin(@OPS_SPBuild_com,'OPS_SPBuild',CADWG,0);
 
-  CreateCommandFastObjectPlugin(@OPS_Sensor_Mark_com,'OPS_Sensor_Mark',CADWG,0);
+  CreateZCADCommand(@OPS_Sensor_Mark_com,'OPS_Sensor_Mark',CADWG,0);
   pco:=CreateCommandRTEdObjectPlugin(@CommandStart,nil,nil,@commformat,@BeforeClick,@AfterClick,nil,nil,'PlaceSmokeDetectorOrto',0,0);
   pco^.SetCommandParam(@OPSPlaceSmokeDetectorOrtoParam,'PTOPSPlaceSmokeDetectorOrtoParam');
   OPSPlaceSmokeDetectorOrtoParam.InsertType:=TIT_Device;

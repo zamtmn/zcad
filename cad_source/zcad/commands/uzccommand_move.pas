@@ -56,10 +56,10 @@ type
     t3dp: gdbvertex;
     pcoa:ptpcoavector;
     //constructor init;
-    procedure CommandStart(Operands:TCommandOperands); virtual;
-    procedure CommandCancel; virtual;
-    function BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record): Integer; virtual;
-    function AfterClick(wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record): Integer; virtual;
+    procedure CommandStart(const Context:TZCADCommandContext;Operands:TCommandOperands); virtual;
+    procedure CommandCancel(const Context:TZCADCommandContext); virtual;
+    function BeforeClick(const Context:TZCADCommandContext;wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record): Integer; virtual;
+    function AfterClick(const Context:TZCADCommandContext;wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record): Integer; virtual;
     function CalcTransformMatrix(p1,p2: GDBvertex):DMatrix4D; virtual;
     function Move(dispmatr:DMatrix4D;UndoMaker:String): Integer;
     procedure showprompt(mklick:integer);virtual;
@@ -82,7 +82,7 @@ begin
      end;
 end;
 
-procedure Move_com.CommandStart(Operands:TCommandOperands);
+procedure Move_com.CommandStart(const Context:TZCADCommandContext;Operands:TCommandOperands);
 var //i: Integer;
   tv,pobj: pGDBObjEntity;
       ir:itrec;
@@ -105,7 +105,7 @@ begin
 
   if counter>0 then
   begin
-  inherited CommandStart('');
+  inherited CommandStart(context,'');
   drawings.GetCurrentDWG^.wa.SetMouseMode((MGet3DPoint) or (MMoveCamera) or (MRotateCamera));
   showprompt(0);
    dc:=drawings.GetCurrentDWG^.CreateDrawingRC;
@@ -141,7 +141,7 @@ begin
   end;
 end;
 
-procedure Move_com.CommandCancel;
+procedure Move_com.CommandCancel(const Context:TZCADCommandContext);
 begin
      if pcoa<>nil then
      begin
@@ -152,7 +152,7 @@ begin
      inherited;
 end;
 
-function Move_com.BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record): Integer;
+function Move_com.BeforeClick(const Context:TZCADCommandContext;wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record): Integer;
 //var i: Integer;
 //  tv,pobj: pGDBObjEntity;
  //     ir:itrec;
@@ -202,7 +202,7 @@ begin
    PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack.PushEndMarker;
    result:=cmd_ok;
 end;
-function Move_com.AfterClick(wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record): Integer;
+function Move_com.AfterClick(const Context:TZCADCommandContext;wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record): Integer;
 var
   dispmatr:DMatrix4D;
   dc:TDrawContext;
@@ -226,17 +226,10 @@ begin
   end;
   result:=cmd_ok;
 end;
-procedure startup;
-begin
-  move.init('Move',0,0);
-end;
-procedure Finalize;
-begin
-end;
+
 initialization
   programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
-  startup;
+  move.init('Move',0,0);
 finalization
   ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
-  finalize;
 end.

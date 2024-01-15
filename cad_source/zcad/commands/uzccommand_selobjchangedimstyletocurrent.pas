@@ -36,7 +36,7 @@ uses
 
 implementation
 
-function SelObjChangeDimStyleToCurrent_com(operands:TCommandOperands):TCommandResult;
+function SelObjChangeDimStyleToCurrent_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 var pv:PGDBObjDimension;
     psv:PSelectedObjDesc;
     prs:PGDBDimStyle;
@@ -79,7 +79,7 @@ end;
 
 initialization
   programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
-  CreateCommandFastObjectPlugin(@SelObjChangeDimStyleToCurrent_com,'SelObjChangeDimStyleToCurrent',CADWG,0);
+  CreateZCADCommand(@SelObjChangeDimStyleToCurrent_com,'SelObjChangeDimStyleToCurrent',CADWG,0);
 finalization
   ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
 end.

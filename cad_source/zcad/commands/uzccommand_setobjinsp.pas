@@ -34,7 +34,7 @@ uses
 
 implementation
 
-function SetObjInsp_com(operands:TCommandOperands):TCommandResult;
+function SetObjInsp_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 var
    obj:AnsiString;
    objt:PUserTypeDescriptor;
@@ -137,7 +137,7 @@ end;
 
 initialization
   programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
-  CreateCommandFastObjectPlugin(@SetObjInsp_com,'SetObjInsp',CADWG,0);
+  CreateZCADCommand(@SetObjInsp_com,'SetObjInsp',CADWG,0);
 finalization
   ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
 end.

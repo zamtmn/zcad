@@ -32,7 +32,7 @@ uses
 
 implementation
 
-function Options_com(operands:TCommandOperands):TCommandResult;
+function Options_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 begin
   ZCMsgCallBackInterface.Do_PrepareObject(nil,drawings.GetUnitsFormat,SysUnit.TypeName2PTD('gdbsysvariable'),@sysvar,drawings.GetCurrentDWG);
   ZCMsgCallBackInterface.TextMessage(rscmOptions2OI,TMWOMessageBox);
@@ -41,7 +41,7 @@ end;
 
 initialization
   programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
-  CreateCommandFastObjectPlugin(@Options_com,'Options',0,0);
+  CreateZCADCommand(@Options_com,'Options',0,0);
 finalization
   ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
 end.

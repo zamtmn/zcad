@@ -42,7 +42,7 @@ implementation
 const
     CommandName='explDbCheck';
 
-function explDbCheck_com(operands:TCommandOperands):TCommandResult;
+function explDbCheck_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 var
   pEntity:PGDBObjEntity;
   EntVarExt:TVariablesExtender;
@@ -86,7 +86,7 @@ end;
 
 initialization
   programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
-  CreateCommandFastObjectPlugin(@explDbCheck_com,CommandName,  CADWG,0);
+  CreateZCADCommand(@explDbCheck_com,CommandName,  CADWG,0);
 finalization
   ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
 end.

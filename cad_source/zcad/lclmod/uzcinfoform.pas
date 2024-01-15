@@ -24,7 +24,7 @@ uses
   uzcsysparams,uzcinterface,uzclog,
   Forms,ButtonPanel,StdCtrls,ComCtrls,Controls;
 type
-  TButtonMethod=procedure({Sender:pointer;}pdata:{Pointer}PtrInt)of object;
+  TButtonMethod=procedure(PData:PtrInt)of object;
   TButtonProc=procedure(pdata:Pointer);
   TDialogForm=class(tform)
       DialogPanel: TButtonPanel;
@@ -35,13 +35,6 @@ type
       Memo: TMemo;
     public
       procedure AfterConstruction; override;
-  end;
-  TmyProcToolButton=class({Tmy}TToolButton)
-    public
-      FProc:TButtonProc;
-      FMethod:TButtonMethod;
-      PPata:Pointer;
-      procedure Click; override;
   end;
 implementation
 procedure TDialogForm.AfterConstruction;
@@ -65,14 +58,6 @@ begin
   Memo.ScrollBars:=ssAutoBoth;
   Memo.Align:=alClient;
   Memo.Parent:=self;
-end;
-procedure TmyProcToolButton.Click;
-begin
-  ZCMsgCallBackInterface.Do_GUIaction(self,ZMsgID_GUIStoreAndFreeEditorProc);
-  if assigned(FProc) then
-    FProc(PPata);
-  if assigned(FMethod) then
-    Application.QueueAsyncCall(FMethod,PtrInt(PPata));
 end;
 initialization
 finalization

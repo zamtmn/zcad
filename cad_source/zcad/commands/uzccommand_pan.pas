@@ -29,7 +29,7 @@ uses
 
 implementation
 
-function Pan_com(operands:TCommandOperands):TCommandResult;
+function Pan_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 const
   pix=50;
 var
@@ -51,7 +51,7 @@ end;
 
 initialization
   programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
-  CreateCommandFastObjectPlugin(@Pan_com,'Pan',CADWG,0).overlay:=true;
+  CreateZCADCommand(@Pan_com,'Pan',CADWG,0).overlay:=true;
 finalization
   ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
 end.

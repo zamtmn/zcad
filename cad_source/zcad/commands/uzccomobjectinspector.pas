@@ -96,7 +96,7 @@ uses
 
 implementation
 
-function GetPoint_com(operands:TCommandOperands):TCommandResult;
+function GetPoint_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 var
    p:GDBVertex;
    vdpobj,vdpvertex:vardesk;
@@ -113,7 +113,7 @@ begin
     end;
     result:=cmd_ok;
 end;
-function GetVertexX_com(operands:TCommandOperands):TCommandResult;
+function GetVertexX_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 var
    p:GDBVertex;
    vdpobj,vdpvertex:vardesk;
@@ -130,7 +130,7 @@ begin
     end;
     result:=cmd_ok;
 end;
-function GetVertexY_com(operands:TCommandOperands):TCommandResult;
+function GetVertexY_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 var
    p:GDBVertex;
    vdpobj,vdpvertex:vardesk;
@@ -147,7 +147,7 @@ begin
     end;
     result:=cmd_ok;
 end;
-function GetVertexZ_com(operands:TCommandOperands):TCommandResult;
+function GetVertexZ_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 var
    p:GDBVertex;
    vdpobj,vdpvertex:vardesk;
@@ -164,7 +164,7 @@ begin
     end;
     result:=cmd_ok;
 end;
-function GetLength_com(operands:TCommandOperands):TCommandResult;
+function GetLength_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 var
    p1,p2:GDBVertex;
    vdpobj,vdpvertex:vardesk;
@@ -186,9 +186,9 @@ begin
 end;
 
 initialization
-     CreateCommandFastObjectPlugin(@GetPoint_com,   'GetPoint',   CADWG,0);
-     CreateCommandFastObjectPlugin(@GetVertexX_com, 'GetVertexX', CADWG,0);
-     CreateCommandFastObjectPlugin(@GetVertexY_com, 'GetVertexY', CADWG,0);
-     CreateCommandFastObjectPlugin(@GetVertexZ_com, 'GetVertexZ', CADWG,0);
-     CreateCommandFastObjectPlugin(@GetLength_com,  'GetLength',  CADWG,0);
+  CreateZCADCommand(@GetPoint_com,   'GetPoint',   CADWG,0);
+  CreateZCADCommand(@GetVertexX_com, 'GetVertexX', CADWG,0);
+  CreateZCADCommand(@GetVertexY_com, 'GetVertexY', CADWG,0);
+  CreateZCADCommand(@GetVertexZ_com, 'GetVertexZ', CADWG,0);
+  CreateZCADCommand(@GetLength_com,  'GetLength',  CADWG,0);
 end.

@@ -31,7 +31,7 @@ uses
   StdCtrls,uzcdrawings,uzcstrconsts,Controls,Classes,uzbstrproc,uzcsysvars,uzccommandsmanager,
   uzcsysparams,gzctnrVectorTypes,uzegeometrytypes,uzcinterface,uzcoimultiobjects,
   uzcgui2color,uzcgui2linewidth,uzcgui2linetypes,
-  uzccommand_layer,uzcuitypes,uzeNamedObject;
+  uzccommand_layer,uzcuitypes,uzeNamedObject,uzccommandsimpl;
 type
     AsyncCommHelper=class
                          class procedure GetVertex(Pinstance:PtrInt);
@@ -216,7 +216,7 @@ end;
 
 procedure runlayerswnd(PInstance:Pointer);
 begin
-     layer_cmd(EmptyCommandOperands);
+     layer_cmd(TZCADCommandContext.CreateRec,EmptyCommandOperands);
 end;
 procedure runcolorswnd(PInstance:Pointer);
 var

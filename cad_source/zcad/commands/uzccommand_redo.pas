@@ -33,7 +33,7 @@ uses
 
 implementation
 
-function Redo_com(operands:TCommandOperands):TCommandResult;
+function Redo_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 var
    msg:string;
 begin
@@ -47,7 +47,7 @@ end;
 
 initialization
   programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
-  CreateCommandFastObjectPlugin(@redo_com,'Redo',CADWG or CACanRedo,0).overlay:=true;
+  CreateZCADCommand(@redo_com,'Redo',CADWG or CACanRedo,0).overlay:=true;
 finalization
   ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
 end.

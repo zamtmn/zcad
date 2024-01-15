@@ -29,7 +29,7 @@ uses
 
 implementation
 
-function Zoom_com(operands:TCommandOperands):TCommandResult;
+function Zoom_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 begin
   if uppercase(operands)='ALL' then
     drawings.GetCurrentDWG.wa.ZoomAll
@@ -44,7 +44,7 @@ end;
 
 initialization
   programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
-  CreateCommandFastObjectPlugin(@Zoom_com,'Zoom',CADWG,0).overlay:=true;
+  CreateZCADCommand(@Zoom_com,'Zoom',CADWG,0).overlay:=true;
 finalization
   ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
 end.

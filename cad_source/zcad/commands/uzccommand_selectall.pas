@@ -34,7 +34,7 @@ var
 
 implementation
 
-function SelectAll_com(operands:TCommandOperands):TCommandResult;
+function SelectAll_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 var
     pv:pGDBObjEntity;
     ir:itrec;
@@ -71,7 +71,7 @@ end;
 
 initialization
   programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
-  selall:=CreateCommandFastObjectPlugin(@SelectAll_com,'SelectAll',CADWG,0);
+  selall:=CreateZCADCommand(@SelectAll_com,'SelectAll',CADWG,0);
   selall^.overlay:=true;
   selall.CEndActionAttr:=[];
 finalization

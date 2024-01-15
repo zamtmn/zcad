@@ -38,7 +38,7 @@ const
 
 procedure ReCreateClipboardDWG;
 procedure CopyToClipboard;
-function CopyClip_com(operands:TCommandOperands):TCommandResult;
+function CopyClip_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 
 implementation
 
@@ -87,7 +87,7 @@ begin
   //ClipboardDWG.DimStyleTable.AddItem('Standart',pds);
 end;
 
-function CopyClip_com(operands:TCommandOperands):TCommandResult;
+function CopyClip_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 var
    pobj: pGDBObjEntity;
    ir:itrec;
@@ -122,7 +122,7 @@ end;
 initialization
   programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
   CopyClipFile:='Empty';
-  CreateCommandFastObjectPlugin(@Copyclip_com,'CopyClip',CADWG or CASelEnts,0);
+  CreateZCADCommand(@Copyclip_com,'CopyClip',CADWG or CASelEnts,0);
 finalization
   ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
 end.

@@ -366,7 +366,7 @@ end;
 
 
 //**Создаем схему первого уровня
-function createSchemaLevelOne_com(operands:TCommandOperands):TCommandResult;
+function createSchemaLevelOne_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
   var
      listFullGraphEM:TListGraphDev;                             //Граф со всем чем можно
      listStructurGraphEM:TListGraphDev;                         //Граф без разрывов, переходов методов прокладки. Только устройства подключения и разветвительные коробки
@@ -626,7 +626,7 @@ function createSchemaLevelOne_com(operands:TCommandOperands):TCommandResult;
   end;
 
 initialization
- CreateCommandFastObjectPlugin(@createSchemaLevelOne_com,'vCreateSchemaLevelOne',CADWG,0);
+  CreateZCADCommand(@createSchemaLevelOne_com,'vCreateSchemaLevelOne',CADWG,0);
 end.
 
 

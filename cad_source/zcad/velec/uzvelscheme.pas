@@ -534,7 +534,7 @@ end;
 //
 //end;
 
-function testArrayDelegate_com(operands:TCommandOperands):TCommandResult;
+function testArrayDelegate_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
    var
    pobj,pdelegateobj: pGDBObjEntity;   //выделеные объекты в пространстве листа
    ir:itrec;  // применяется для обработки списка выделений, но что это понятия не имею :)
@@ -569,7 +569,7 @@ function testArrayDelegate_com(operands:TCommandOperands):TCommandResult;
 //    until pobj=nil;
    end;
 
-function createELSchema_com(operands:TCommandOperands):TCommandResult;
+function createELSchema_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 var
    listGraph:TListGraph;
    listFullGraph:TListGraph;
@@ -2542,8 +2542,8 @@ end;
 
 
 initialization
- CreateCommandFastObjectPlugin(@createELSchema_com,'vBuildELSchema',CADWG,0);
- CreateCommandFastObjectPlugin(@testArrayDelegate_com,'testArrayDelegate',CADWG,0);
+ CreateZCADCommand(@createELSchema_com,'vBuildELSchema',CADWG,0);
+ CreateZCADCommand(@testArrayDelegate_com,'testArrayDelegate',CADWG,0);
  //CreateCommandFastObjectPlugin(@TestModul_com,'test888',CADWG,0);
 end.
 

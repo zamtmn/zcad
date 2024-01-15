@@ -28,14 +28,14 @@ uses
   gzundoCmdChgMethods2,zUndoCmdSaveEntityState,uzcdrawing,
   uzcinterface,UGDBSelectedObjArray;
 
-function extdrAdd_com(operands:TCommandOperands):TCommandResult;
+function extdrAdd_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 
 implementation
 
 const
   cmdName='extdrAdd';
 
-function extdrAdd_com(operands:TCommandOperands):TCommandResult;
+function extdrAdd_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 var
   extdr:TMetaEntityExtender;
   pEntity,pLastSelectedEntity:PGDBObjEntity;
@@ -106,7 +106,7 @@ end;
 
 initialization
   programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
-  CreateCommandFastObjectPlugin(@extdrAdd_com,cmdName,CADWG or CASelEnts,0);
+  CreateZCADCommand(@extdrAdd_com,cmdName,CADWG or CASelEnts,0);
 finalization
   ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
 end.

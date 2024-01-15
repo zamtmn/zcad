@@ -137,7 +137,7 @@ begin
   ZCMsgCallBackInterface.TextMessage('}',TMWOHistoryOut);
 end;
 
-function TreeStat_com(operands:TCommandOperands):TCommandResult;
+function TreeStat_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 var i: Integer;
     percent,apercent:string;
     cp,ap:single;
@@ -195,7 +195,7 @@ end;
 
 initialization
   programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
-  CreateCommandFastObjectPlugin(@TreeStat_com,'TreeStat',CADWG,0);
+  CreateZCADCommand(@TreeStat_com,'TreeStat',CADWG,0);
 finalization
   ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
 end.

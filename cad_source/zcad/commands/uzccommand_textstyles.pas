@@ -33,7 +33,7 @@ uses
 
 implementation
 
-function TextStyles_cmd(operands:TCommandOperands):TCommandResult;
+function TextStyles_cmd(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 begin
   TextStylesForm:=TTextStylesForm.Create(nil);
   SetHeightControl(TextStylesForm,sysvar.INTF.INTF_DefaultControlHeight^);
@@ -44,7 +44,7 @@ end;
 
 initialization
   programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
-  CreateCommandFastObjectPlugin(@TextStyles_cmd,'TextStyles',CADWG,0);
+  CreateZCADCommand(@TextStyles_cmd,'TextStyles',CADWG,0);
 finalization
   ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
 end.

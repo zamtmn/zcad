@@ -29,7 +29,7 @@ uses
 
 implementation
 
-function About_com(operands:TCommandOperands):TCommandResult;
+function About_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 begin
   if not assigned(AboutForm) then
     AboutForm:=TAboutForm.mycreate(nil,@AboutForm);
@@ -39,7 +39,7 @@ end;
 
 initialization
   programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
-  CreateCommandFastObjectPlugin(@About_com,'About',0,0);
+  CreateZCADCommand(@About_com,'About',0,0);
 finalization
   ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
 end.

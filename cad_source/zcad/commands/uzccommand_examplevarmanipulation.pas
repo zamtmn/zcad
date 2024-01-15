@@ -33,7 +33,7 @@ uses
 
 implementation
 
-function ExampleVarManipulation_com(operands:TCommandOperands):TCommandResult;
+function ExampleVarManipulation_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 var
   Varext:TVariablesExtender;
   pe:PGDBObjEntity;
@@ -104,7 +104,7 @@ end;
 
 initialization
   programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
-  CreateCommandFastObjectPlugin(@ExampleVarManipulation_com,'ExampleVarManipulation',CADWG,0);
+  CreateZCADCommand(@ExampleVarManipulation_com,'ExampleVarManipulation',CADWG,0);
 finalization
   ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
 end.

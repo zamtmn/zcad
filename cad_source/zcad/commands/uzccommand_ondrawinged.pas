@@ -40,10 +40,10 @@ type
   OnDrawingEd_com =object(CommandRTEdObject)
     t3dp: gdbvertex;
     constructor init(cn:String;SA,DA:TCStartAttr);
-    procedure CommandStart(Operands:TCommandOperands); virtual;
-    procedure CommandCancel; virtual;
-    function BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record): Integer; virtual;
-    function AfterClick(wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record): Integer; virtual;
+    procedure CommandStart(const Context:TZCADCommandContext;Operands:TCommandOperands); virtual;
+    procedure CommandCancel(const Context:TZCADCommandContext); virtual;
+    function BeforeClick(const Context:TZCADCommandContext;wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record): Integer; virtual;
+    function AfterClick(const Context:TZCADCommandContext;wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record): Integer; virtual;
   end;
 var
    OnDrawingEd:OnDrawingEd_com;
@@ -54,23 +54,23 @@ begin
   inherited init(cn,sa,da);
   dyn:=false;
 end;
-procedure OnDrawingEd_com.CommandStart(Operands:TCommandOperands);
+procedure OnDrawingEd_com.CommandStart(const Context:TZCADCommandContext;Operands:TCommandOperands);
 //var i: Integer;
 //  lastremove: Integer;
 //  findselected:Boolean;
 //  tv: pGDBObjEntity;
 begin
-  inherited commandstart('');
+  inherited commandstart(context,'');
   drawings.GetCurrentDWG^.wa.SetMouseMode((MGet3DPoint) or (MMoveCamera) or (MRotateCamera));
-  if drawings.GetCurrentDWG^.SelObjArray.SelectedCount=0 then CommandEnd;
+  if drawings.GetCurrentDWG^.SelObjArray.SelectedCount=0 then CommandEnd(context);
   fixentities:=false;
 end;
-procedure OnDrawingEd_com.CommandCancel;
+procedure OnDrawingEd_com.CommandCancel(const Context:TZCADCommandContext);
 begin
     drawings.GetCurrentDWG^.wa.param.startgluepoint:=nil;
     fixentities:=false;
 end;
-function OnDrawingEd_com.BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record): Integer;
+function OnDrawingEd_com.BeforeClick(const Context:TZCADCommandContext;wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record): Integer;
 begin
   if (button and MZW_LBUTTON)<>0 then
                     t3dp := wc;
@@ -106,7 +106,7 @@ begin
 
 end;
 
-function OnDrawingEd_com.AfterClick(wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record): Integer;
+function OnDrawingEd_com.AfterClick(const Context:TZCADCommandContext;wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record): Integer;
 var //oldi, newi, i: Integer;
   dist: gdbvertex;
   pobj: Pointer;
@@ -235,18 +235,11 @@ begin
   end;
   result:=cmd_ok;
 end;
-procedure startup;
-begin
-  OnDrawingEd.init('OnDrawingEd',0,0);
-  OnDrawingEd.CEndActionAttr:=[];
-end;
-procedure Finalize;
-begin
-end;
+
 initialization
   programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
-  startup;
+  OnDrawingEd.init('OnDrawingEd',0,0);
+  OnDrawingEd.CEndActionAttr:=[];
 finalization
   ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
-  finalize;
 end.

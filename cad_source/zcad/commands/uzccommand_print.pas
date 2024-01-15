@@ -48,8 +48,8 @@ type
   Print_com= object(CommandRTEdObject)
     VS:Integer;
     p1,p2:GDBVertex;
-    procedure CommandContinue; virtual;
-    procedure CommandStart(Operands:TCommandOperands); virtual;
+    procedure CommandContinue(const Context:TZCADCommandContext); virtual;
+    procedure CommandStart(const Context:TZCADCommandContext;Operands:TCommandOperands); virtual;
     procedure ShowMenu;virtual;
     procedure Print(pdata:PtrInt);
     procedure Preview(pdata:PtrInt);
@@ -71,7 +71,7 @@ begin
   ZCMsgCallBackInterface.TextMessage(Format('Printer "%s", paper "%s"(%dx%d)',[Printer.PrinterName,Printer.PaperSize.PaperName,Printer.PageWidth,Printer.PageHeight]),TMWOHistoryOut);
 end;
 
-procedure Print_com.CommandContinue;
+procedure Print_com.CommandContinue(const Context:TZCADCommandContext);
 var v1,v2:vardesk;
    tp1,tp2:gdbvertex;
 begin
@@ -93,7 +93,7 @@ begin
      end;
 
 end;
-procedure Print_com.CommandStart(Operands:TCommandOperands);
+procedure Print_com.CommandStart(const Context:TZCADCommandContext;Operands:TCommandOperands);
 begin
   {Error}Prompt(rsNotYetImplemented);
   self.savemousemode:=drawings.GetCurrentDWG^.wa.param.md.mode;
@@ -101,7 +101,7 @@ begin
        ShowMenu;
        commandmanager.DMShow;
        vs:=commandmanager.GetValueHeap;
-       inherited CommandStart('');
+       inherited CommandStart(context,'');
   end;
   dbg;
 end;
@@ -212,8 +212,8 @@ begin
   //PreviewForm.Free;
 end;
 
-procedure startup;
-begin
+initialization
+  ProgramLog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
   SysUnit^.RegisterType(TypeInfo(PTRasterizeParams));
   SysUnit^.SetTypeDesk(TypeInfo(TRasterizeParams),['FitToPage','Center','Scale','Palette']);
 
@@ -225,17 +225,8 @@ begin
 
   PSD:=TPrinterSetupDialog.Create(nil);
   PAGED:=TPageSetupDialog.Create(nil);
-end;
-
-procedure Finalize;
-begin
-  freeandnil(psd);
-  freeandnil(paged);
-end;
-initialization
-  ProgramLog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
-  startup;
 finalization
   ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
-  finalize;
+  freeandnil(psd);
+  freeandnil(paged);
 end.

@@ -252,7 +252,7 @@ begin
      //redrawoglwnd;
 end;
 
-procedure polydiv_com(Operands:pansichar);
+procedure polydiv_com(const Context:TZCADCommandContext;Operands:pansichar);
 var pva,pvr:GDBPolyline2DArray;
 begin
   if drawings.GetCurrentDWG.GetLastSelected<>nil then
@@ -278,7 +278,7 @@ end;
 
 initialization
   programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
-  CreateCommandFastObjectPlugin(@PolyDiv_com,'PolyDiv',CADWG,0).CEndActionAttr:=[CEDeSelect];
+  CreateZCADCommand(@PolyDiv_com,'PolyDiv',CADWG,0).CEndActionAttr:=[CEDeSelect];
 finalization
   ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
 end.

@@ -1774,7 +1774,7 @@ begin
    end;
 end;
 
-function Test111sl(operands:TCommandOperands):TCommandResult;
+function Test111sl(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 //const
   //accuracy=0.001;
   //indent=5;
@@ -1877,7 +1877,7 @@ initialization
   autogenSuperLine.indent:=5;
   autogenSuperLine.LayerNamePrefix:='SYS_SL_';
   autogenSuperLine.ProcessLayer:=true;
-  CreateCommandFastObjectPlugin(@Test111sl,'t111',CADWG,0);
+  CreateZCADCommand(@Test111sl,'t111',CADWG,0);
 end.
 
 

@@ -976,7 +976,7 @@ procedure generatorSheet(graphDev:TGraphDev;nameEtalon,nameSheet:string);
   end;
 
 
-function vExportModelToXLSX_com(operands:TCommandOperands):TCommandResult;
+function vExportModelToXLSX_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 var
   fileTemplate:ansiString;
   gr:TGetResult;
@@ -1092,7 +1092,7 @@ initialization
   //CmdProp.props.init('test');
 
   //SelSim.SetCommandParam(@SelSimParams,'PTSelSimParams');
-  CreateCommandFastObjectPlugin(@vExportModelToXLSX_com,'vExportToXLSX',CADWG,0);
+  CreateZCADCommand(@vExportModelToXLSX_com,'vExportToXLSX',CADWG,0);
 finalization
   ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
   //CmdProp.props.free;

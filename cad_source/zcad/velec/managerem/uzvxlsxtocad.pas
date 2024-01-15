@@ -95,7 +95,7 @@ var
 
 
 
-  function drawInsertBlock(pt:GDBVertex;nameBlock:string):PGDBObjDevice;
+  function drawInsertBlock(pt:GDBVertex;scalex,scaley:double;nameBlock:string):PGDBObjDevice;
   var
       rc:TDrawContext;
       entvarext:TVariablesExtender;
@@ -111,6 +111,7 @@ var
         //настраивает
         result^.Name:=nameBlock;
         result^.Local.P_insert:=pt;
+        result^.scale:=uzegeometry.CreateVertex(scalex,scaley,1);
         //строим переменную часть примитива (та что может редактироваться)
         result^.BuildVarGeometry(drawings.GetCurrentDWG^);
         //строим постоянную часть примитива
@@ -150,6 +151,7 @@ var
       cellValueVar,cellValueVar2:string;
       insertBlockName:string;
       movex,movey:double;
+      scalex,scaley:double;
       //textCell:string;
       isSpecName:boolean;
 
@@ -165,8 +167,13 @@ var
         // координата смещения относительно нуля по У
         inc(stColNew);
         movey:=strtofloat(uzvzcadxlsxole.getCellValue(nameSheet,stRow,stColNew));
+        //маштабирование
+        inc(stColNew);
+        scalex:=strtofloat(uzvzcadxlsxole.getCellValue(nameSheet,stRow,stColNew));
+        inc(stColNew);
+        scaley:=strtofloat(uzvzcadxlsxole.getCellValue(nameSheet,stRow,stColNew));
 
-        ourDev:=drawInsertBlock(uzegeometry.CreateVertex(movex,movey,0),insertBlockName);
+        ourDev:=drawInsertBlock(uzegeometry.CreateVertex(movex,movey,0),scalex,scaley,insertBlockName);
       except
         ourDev:=nil;
       end;

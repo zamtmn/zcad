@@ -37,7 +37,7 @@ implementation
 var
   zoomwindowcommand:PCommandObjectDef;
 
-function ShowWindow_com_AfterClick(wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record;mclick:Integer): Integer;
+function ShowWindow_com_AfterClick(const Context:TZCADCommandContext;wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record;mclick:Integer): Integer;
 begin
   result:=mclick;
   drawings.GetCurrentDWG.wa.param.seldesc.Frame2 := mc;

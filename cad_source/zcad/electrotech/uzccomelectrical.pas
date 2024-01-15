@@ -1542,7 +1542,7 @@ begin
   s:='**Напрямую**';
   cabcomparam.Traces.Enums.PushBackData(s);
 end;
-function _Cable_com_CommandStart(operands:TCommandOperands):TCommandResult;
+function _Cable_com_CommandStart(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 var
    s:String;
    ir_inGDB:itrec;
@@ -1603,7 +1603,7 @@ begin
   cabcomparam.PTrace:=nil;
   //Freemem(pointer(p3dpl));
 end;
-function _Cable_com_BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record;mclick:Integer): Integer;
+function _Cable_com_BeforeClick(const Context:TZCADCommandContext;wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record;mclick:Integer): Integer;
 var
    pvd:pvardesk;
    domethod,undomethod:tmethod;
@@ -1820,7 +1820,7 @@ begin
 end;
 
 
-function _Cable_com_AfterClick(wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record;mclick:Integer): Integer;
+function _Cable_com_AfterClick(const Context:TZCADCommandContext;wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record;mclick:Integer): Integer;
 var //po:PGDBObjSubordinated;
     plastw:pgdbvertex;
     //tw1,tw2:gdbvertex;
@@ -2761,7 +2761,7 @@ begin
   cman.done;
   result:=cmd_ok;
 end;
-function El_Leader_com_AfterClick(wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record;mclick:Integer): Integer;
+function El_Leader_com_AfterClick(const Context:TZCADCommandContext;wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record;mclick:Integer): Integer;
 var //po:PGDBObjSubordinated;
     pleader:PGDBObjElLeader;
     domethod,undomethod:tmethod;
@@ -2828,7 +2828,7 @@ begin
     zcRedrawCurrentDrawing;
   end;
 end;
-function ElLeaser_com_CommandStart(operands:TCommandOperands):TCommandResult;
+function ElLeaser_com_CommandStart(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 begin
   pold:=nil;
   drawings.GetCurrentDWG.wa.SetMouseMode((MGet3DPoint) or (MMoveCamera) or (MRotateCamera));

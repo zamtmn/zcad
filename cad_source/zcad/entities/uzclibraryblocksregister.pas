@@ -39,7 +39,6 @@ begin
     until tdp='';
     BlockDefArray:=BlockBaseDWG^.GetBlockDefArraySimple;
     if BlockDefArray.getblockdef(BlockName)=nil then
-                                                    MergeBlocks_com(TZCADCommandContext.CreateRec,BlockDeffinedIn);
     result:=nil;
 end;
 function ReadBlockLibrary_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;

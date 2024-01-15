@@ -30,7 +30,7 @@ uses
 
 implementation
 
-function Line_com_CommandStart(operands:TCommandOperands):TCommandResult;
+function Line_com_CommandStart(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 begin
   drawings.GetCurrentDWG.wa.SetMouseMode((MGet3DPoint) or (MMoveCamera) or (MRotateCamera));
   if operands='' then
@@ -39,7 +39,7 @@ begin
                      ZCMsgCallBackInterface.TextMessage(operands,TMWOHistoryOut);
   result:=cmd_ok;
 end;
-function Line_com_BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record;mclick:Integer): Integer;
+function Line_com_BeforeClick(const Context:TZCADCommandContext;wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record;mclick:Integer): Integer;
 begin
   if (button and MZW_LBUTTON)<>0 then
   begin

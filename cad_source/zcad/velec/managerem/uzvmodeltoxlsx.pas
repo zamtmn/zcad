@@ -982,11 +982,12 @@ var
   gr:TGetResult;
   filename,newfilexlsx:string;
   pvd:pvardesk;
+  i,j:integer;
   //p:GDBVertex;
   //listHeadDev:TListDev;
   //listNameGroupDev:TListGroupHeadDev;
   //headDev:pGDBObjDevice;
-  graphView:TGraphDev;
+  graphView,ggg:TGraphDev;
   depthVisual:double;
   insertCoordination:GDBVertex;
   listAllHeadDev:TListDev;
@@ -1024,8 +1025,17 @@ begin
 
   //Получить список всех древовидно ориентированных графов из которых состоит модель
   listFullGraphEM:=TListGraphDev.Create;
-  listFullGraphEM:=uzvmanemgetgem.getListGrapghEM;
-  //ZCMsgCallBackInterface.TextMessage('listFullGraphEM сайз =  ' + inttostr(listFullGraphEM.Size),TMWOHistoryOut);
+  listFullGraphEM:=uzvmanemgetgem.getListGrapghEM;       //ВСЕ ХОРоШо
+  ////ZCMsgCallBackInterface.TextMessage('listFullGraphEM сайз =  ' + inttostr(listFullGraphEM.Size),TMWOHistoryOut);
+  //for i:=0 to listFullGraphEM.Size-1 do begin
+  //  ZCMsgCallBackInterface.TextMessage('   ===граф№ - ' + inttostr(i),TMWOHistoryOut);
+  //  for j:=0 to listFullGraphEM[i].VertexCount-1 do
+  //    begin
+  //      pvd:=FindVariableInEnt(listFullGraphEM[i].Vertices[j].getDevice,'NMO_Name');
+  //      if pvd<>nil then
+  //         ZCMsgCallBackInterface.TextMessage('   ===Устройства в графе - ' + pstring(pvd^.data.Addr.Instance)^,TMWOHistoryOut);
+  //    end;
+  //end;
   //**получить список всех головных устройств (устройств централей)
   listAllHeadDev:=TListDev.Create;
   listAllHeadDev:=uzvmanemgetgem.getListMainFuncHeadDev(listFullGraphEM);

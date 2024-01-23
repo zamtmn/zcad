@@ -81,6 +81,7 @@ const
   velec_beforeNameGlobalSchemaBlock='DEVICE_';
   velec_SchemaBlockJunctionBox='EL_EMSPLITTERBOX';
   velec_SchemaBlockChangingLayingMethod='EL_EMCHANGLAYINGMETHOD';
+  velec_nameBlockDevice='Name';
 
   velec_SchemaELDevInfo='VELEC_EL_SCHEME_INFO';
   velec_SchemaCableInfo='VELEC_CABLE_SCHEME_INFO';

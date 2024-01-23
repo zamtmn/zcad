@@ -1147,7 +1147,7 @@ var
           entvarext.entityunit.copyfrom(psu);
       end;
        //** Имя мастера устройства
-       pvd:=FindVariableInEnt(pnevdev,'vEMGCHDGroup');
+       pvd:=FindVariableInEnt(pnevdev,velec_EM_vEMGCHDGroup);
        if pvd<>nil then begin
              pcable:=PTEdgeTree(G.GetEdge(vertexGraph,vertexGraph.Parent).AsPointer[vpTEdgeTree])^.segm;
              pcablepvd:=FindVariableInEnt(pcable,'GC_HDGroup');

@@ -5,6 +5,8 @@ usescopy ellocation;
 var
    ANALYSISEM_icanbeheadunit:boolean;(*'Я могу быть ГУ?'*)
    nametemplatesxlsx:String;(*'Имя листа в шаблоне в Excel, для заполнения'*)
+   realnamedev:String;(*'Реальное имя устройства подключения'*)
+
    labelondev:string;(*'Метка на устройстве'*)
    Position:String;(*'Позиция по заданию ТХ'*)
 
@@ -21,6 +23,7 @@ implementation
 begin
    ANALYSISEM_icanbeheadunit:=true;
    labelondev:='';
+   realnamedev:='';
    Position:='-';
    nametemplatesxlsx:='-';
 

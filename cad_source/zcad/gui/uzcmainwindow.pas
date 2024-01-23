@@ -441,20 +441,20 @@ begin
                                begin
                                     ivars.CLType:=ltype;
                                end;
-           if tstyle<>PEmpty then
-           if tstyle=PDifferent then
-                                  ivars.CTStyle:=nil
-                           else
-                               begin
-                                    ivars.CTStyle:=tstyle;
-                               end;
-           if dimstyle<>PEmpty then
-           if dimstyle=PDifferent then
-                                  ivars.CDimStyle:=nil
-                           else
-                               begin
-                                    ivars.CDimStyle:=dimstyle;
-                               end;
+           if tstyle<>PEmpty then begin
+             if tstyle=PDifferent then
+               ivars.CTStyle:=nil
+             else
+               ivars.CTStyle:=tstyle;
+           end else
+             ivars.CTStyle:=sysvar.dwg.DWG_CTStyle^;
+           if dimstyle<>PEmpty then begin
+             if dimstyle=PDifferent then
+               ivars.CDimStyle:=nil
+             else
+               ivars.CDimStyle:=dimstyle;
+           end else
+             ivars.CTStyle:=sysvar.dwg.DWG_CDimStyle^;
       end;
       UpdateControls;
 end;

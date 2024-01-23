@@ -359,13 +359,13 @@ begin
      ProcessVariableAttributes(pvardesk(pdata)^.attrib,0,vda_approximately or vda_different);
      mp.MPType^.CopyInstanceTo(pvardesk(pdata)^.data.Addr.Instance,@a);
 
-     PGDBObjText(ChangedData.PEntity)^.setrot(a);
+     //PGDBObjText(ChangedData.PEntity)^.setrot(a);
 
      if (abs (PGDBObjText(ChangedData.PEntity)^.Local.basis.oz.x) < 1/64) and (abs (PGDBObjText(ChangedData.PEntity)^.Local.basis.oz.y) < 1/64) then
                                                                     PGDBObjText(ChangedData.PEntity)^.Local.basis.ox:=CrossVertex(YWCS,PGDBObjText(ChangedData.PEntity)^.Local.basis.oz)
                                                                 else
                                                                     PGDBObjText(ChangedData.PEntity)^.Local.basis.ox:=CrossVertex(ZWCS,PGDBObjText(ChangedData.PEntity)^.Local.basis.oz);
-     PGDBObjText(ChangedData.PEntity)^.local.basis.OX:=VectorTransform3D(PGDBObjText(ChangedData.PEntity)^.local.basis.OX,uzegeometry.CreateAffineRotationMatrix(PGDBObjText(ChangedData.PEntity)^.Local.basis.oz,-a*pi/180));
+     PGDBObjText(ChangedData.PEntity)^.local.basis.OX:=VectorTransform3D(PGDBObjText(ChangedData.PEntity)^.local.basis.OX,uzegeometry.CreateAffineRotationMatrix(PGDBObjText(ChangedData.PEntity)^.Local.basis.oz,-a));
 end;
 
 procedure GDBPolyLineLengthEntIterateProc(pdata:Pointer;ChangedData:TChangedData;mp:TMultiProperty;fistrun:boolean;ecp:TEntChangeProc; const f:TzeUnitsFormat);
@@ -584,7 +584,7 @@ begin
   MultiPropertiesManager.RegisterPhysMultiproperty('TxtStyle','Style',sysunit^.TypeName2PTD('PGDBTextStyleObjInsp'),MPCMisc,GDBTextID,nil,PtrInt(@ptext^.TXTStyleIndex),PtrInt(@ptext^.TXTStyleIndex),OneVarDataMIPD,OneVarDataEIPD);
   MultiPropertiesManager.RegisterPhysMultiproperty('TxtJustify','Justify',sysunit^.TypeName2PTD('TTextJustify'),MPCMisc,GDBTextID,nil,PtrInt(@ptext^.textprop.justify),PtrInt(@ptext^.textprop.justify),OneVarDataMIPD,OneVarDataEIPD);
   MultiPropertiesManager.RegisterPhysMultiproperty('Rotation','Rotation',sysunit^.TypeName2PTD('GDBAngleDouble'),MPCMisc,GDBTextID,nil,0,0,OneVarDataMIPD,TEntIterateProcsData.Create(nil,@DoubleAngleTextIterateProc,@GeneralTextRotateEntChangeProc));
-  MultiPropertiesManager.RegisterPhysMultiproperty('RotationWCS','RotationWCS',sysunit^.TypeName2PTD('GDBAngleDouble'),MPCMisc,GDBTextID,nil,0,0,OneVarDataMIPD,TEntIterateProcsData.Create(nil,@DoubleWCSAngleTextIterateProc,@GeneralTextRotateEntChangeProc));
+  MultiPropertiesManager.RegisterPhysMultiproperty('RotationWCS','RotationWCS',sysunit^.TypeName2PTD('GDBAngleDouble'),MPCMisc,GDBTextID,nil,0,0,OneVarDataMIPD,TEntIterateProcsData.Create(nil,@DoubleWCSAngleTextIterateProc,nil{@GeneralTextRotateEntChangeProc}));
   MultiPropertiesManager.RegisterPhysMultiproperty('Height','Height',sysunit^.TypeName2PTD('Double'),MPCMisc,GDBTextID,nil,PtrInt(@ptext^.textprop.size),PtrInt(@ptext^.textprop.size),OneVarDataMIPD,TEntIterateProcsData.Create(nil,@GeneralEntIterateProc,@GeneralFromVarEntChangeProc,@DoubleCheckGreater0));
   MultiPropertiesManager.RegisterPhysMultiproperty('Oblique','Oblique',sysunit^.TypeName2PTD('GDBAngleDouble'),MPCMisc,GDBTextID,nil,PtrInt(@ptext^.textprop.oblique),PtrInt(@ptext^.textprop.oblique),OneVarDataMIPD,TEntIterateProcsData.Create(nil,@GeneralEntIterateProc,@GeneralFromVarEntChangeProc,@DoubleCheckMinus85to85));
   MultiPropertiesManager.RegisterPhysMultiproperty('WidthFactor','Width factor',sysunit^.TypeName2PTD('Double'),MPCMisc,GDBTextID,nil,PtrInt(@ptext^.textprop.wfactor),PtrInt(@ptext^.textprop.wfactor),OneVarDataMIPD,OneVarDataEIPD);
@@ -607,7 +607,7 @@ begin
   MultiPropertiesManager.RegisterPhysMultiproperty('TxtStyle','Style',sysunit^.TypeName2PTD('PGDBTextStyleObjInsp'),MPCMisc,GDBMTextID,nil,PtrInt(@pmtext^.TXTStyleIndex),PtrInt(@pmtext^.TXTStyleIndex),OneVarDataMIPD,OneVarDataEIPD);
   MultiPropertiesManager.RegisterPhysMultiproperty('TxtJustify','Justify',sysunit^.TypeName2PTD('TTextJustify'),MPCMisc,GDBMTextID,nil,PtrInt(@pmtext^.textprop.justify),PtrInt(@pmtext^.textprop.justify),OneVarDataMIPD,OneVarDataEIPD);
   MultiPropertiesManager.RegisterPhysMultiproperty('Rotation','Rotation',sysunit^.TypeName2PTD('GDBAngleDouble'),MPCMisc,GDBMTextID,nil,0,0,OneVarDataMIPD,TEntIterateProcsData.Create(nil,@DoubleAngleTextIterateProc,@GeneralTextRotateEntChangeProc));
-  MultiPropertiesManager.RegisterPhysMultiproperty('RotationWCS','RotationWCS',sysunit^.TypeName2PTD('GDBAngleDouble'),MPCMisc,GDBMTextID,nil,0,0,OneVarDataMIPD,TEntIterateProcsData.Create(nil,@DoubleWCSAngleTextIterateProc,@GeneralTextRotateEntChangeProc));
+  MultiPropertiesManager.RegisterPhysMultiproperty('RotationWCS','RotationWCS',sysunit^.TypeName2PTD('GDBAngleDouble'),MPCMisc,GDBMTextID,nil,0,0,OneVarDataMIPD,TEntIterateProcsData.Create(nil,@DoubleWCSAngleTextIterateProc,nil{@GeneralTextRotateEntChangeProc}));
   MultiPropertiesManager.RegisterPhysMultiproperty('Height','Height',sysunit^.TypeName2PTD('Double'),MPCMisc,GDBMTextID,nil,PtrInt(@pmtext^.textprop.size),PtrInt(@pmtext^.textprop.size),OneVarDataMIPD,TEntIterateProcsData.Create(nil,@GeneralEntIterateProc,@GeneralFromVarEntChangeProc,@DoubleCheckGreater0));
   MultiPropertiesManager.RegisterPhysMultiproperty('Width','Width',sysunit^.TypeName2PTD('Double'),MPCMisc,GDBMTextID,nil,PtrInt(@pmtext^.width),PtrInt(@pmtext^.width),OneVarDataMIPD,OneVarDataEIPD);
   MultiPropertiesManager.RegisterPhysMultiproperty('LinespaceFactor','Linespace factor',sysunit^.TypeName2PTD('Double'),MPCMisc,GDBMTextID,nil,PtrInt(@pmtext^.linespacef),PtrInt(@pmtext^.linespacef),OneVarDataMIPD,OneVarDataEIPD);

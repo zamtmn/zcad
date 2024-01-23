@@ -139,7 +139,7 @@ TOIProps=record
 pvardesk = ^vardesk;
 TMyNotifyCommand=(TMNC_EditingDoneEnterKey,TMNC_EditingDoneLostFocus,TMNC_EditingDoneESC,TMNC_EditingProcess,TMNC_RunFastEditor,TMNC_EditingDoneDoNothing);
 TMyNotifyProc=procedure (Sender: TObject;Command:TMyNotifyCommand) of object;
-TCreateEditorFunc=function (TheOwner:TPropEditorOwner;rect:trect;pinstance:pointer;psa:PTZctnrVectorStrings;FreeOnLostFocus:boolean;InitialValue:String;ptdesc:PUserTypeDescriptor;preferedHeight:integer):TEditorDesc of object;
+TCreateEditorFunc=function (TheOwner:TPropEditorOwner;rect:trect;pinstance:pointer;psa:PTZctnrVectorStrings;FreeOnLostFocus:boolean;InitialValue:String;ptdesc:PUserTypeDescriptor;preferedHeight:integer;f:TzeUnitsFormat):TEditorDesc of object;
 UserTypeDescriptor=object
                          SizeInBytes:Integer;
                          TypeName:String;
@@ -153,7 +153,7 @@ UserTypeDescriptor=object
                          constructor init(size:Integer;tname:string;pu:pointer);
                          constructor baseinit(size:Integer;tname:string;pu:pointer);
                          procedure _init(size:Integer;tname:string;pu:pointer);
-                         function CreateEditor(TheOwner:TPropEditorOwner;rect:trect;pinstance:pointer;psa:PTZctnrVectorStrings;FreeOnLostFocus:boolean;InitialValue:TInternalScriptString;preferedHeight:integer):TEditorDesc;virtual;
+                         function CreateEditor(TheOwner:TPropEditorOwner;rect:trect;pinstance:pointer;psa:PTZctnrVectorStrings;FreeOnLostFocus:boolean;InitialValue:TInternalScriptString;preferedHeight:integer;f:TzeUnitsFormat):TEditorDesc;virtual;
                          procedure ApplyOperator(oper,path:TInternalScriptString;var offset:Integer;out tc:PUserTypeDescriptor);virtual;abstract;
                          //function Serialize(PInstance:Pointer;SaveFlag:Word;var membuf:PTZctnrVectorBytes;var  linkbuf:PGDBOpenArrayOfTObjLinkRecord;var sub:integer):integer;virtual;abstract;
                          function SerializePreProcess(Value:TInternalScriptString;sub:integer):TInternalScriptString;virtual;
@@ -161,6 +161,7 @@ UserTypeDescriptor=object
                          function GetTypeAttributes:TTypeAttr;virtual;
                          function GetValueAsString(pinstance:Pointer):TInternalScriptString;virtual;
                          function GetFormattedValueAsString(PInstance:Pointer; const f:TzeUnitsFormat):TInternalScriptString;virtual;
+                         procedure SetFormattedValueFromString(PInstance:Pointer;const f:TzeUnitsFormat;Value:TInternalScriptString);virtual;
                          function GetUserValueAsString(pinstance:Pointer):TInternalScriptString;virtual;
                          function GetDecoratedValueAsString(pinstance:Pointer; const f:TzeUnitsFormat):TInternalScriptString;virtual;
                          procedure CopyInstanceTo(source,dest:pointer);virtual;
@@ -188,7 +189,8 @@ TPropEditor=class(TComponent)
                  CanRunFastEditor:boolean;
                  RunFastEditorValue:tobject;
                  changed:boolean;
-                 constructor Create(AOwner:TComponent;_PInstance:Pointer;var _PTD:UserTypeDescriptor;FreeOnLostFocus:boolean);
+                 f:TzeUnitsFormat;
+                 constructor Create(AOwner:TComponent;_PInstance:Pointer;var _PTD:UserTypeDescriptor;FreeOnLostFocus:boolean;_f:TzeUnitsFormat);
                  destructor Destroy;override;
                  procedure EditingDone(Sender: TObject);//Better name ..LostFocus..
                  procedure EditingDone2(Sender: TObject);
@@ -383,7 +385,7 @@ begin
      attr:=(attr or setattrib)and(not resetattrib);
 end;
 
-constructor TPropEditor.Create(AOwner:TComponent;_PInstance:Pointer;var _PTD:UserTypeDescriptor;FreeOnLostFocus:boolean);
+constructor TPropEditor.Create(AOwner:TComponent;_PInstance:Pointer;var _PTD:UserTypeDescriptor;FreeOnLostFocus:boolean;_f:TzeUnitsFormat);
 begin
      inherited create(AOwner);
      PInstance:=_PInstance;
@@ -393,6 +395,7 @@ begin
      CanRunFastEditor:=false;
      RunFastEditorValue:=nil;
      changed:=false;
+     f:=_f;
 end;
 function TPropEditor.geteditor:TWinControl;
 begin
@@ -426,7 +429,7 @@ begin
      if key=#13 then
                     if assigned(OwnerNotify) then
                                                  begin
-                                                      ptd^.SetValueFromString(PInstance,tedit(sender).text);
+                                                      ptd^.SetFormattedValueFromString(PInstance,f,tedit(sender).text);
                                                       OwnerNotify(self,TMNC_EditingDoneEnterKey);
                                                  end;
 end;
@@ -444,7 +447,7 @@ begin
                            ptd^.CopyInstanceTo(@p,PInstance)
                       end
                   else
-                      ptd^.SetValueFromString(PInstance,tedit(sender).text);
+                      ptd^.SetFormattedValueFromString(PInstance,f,tedit(sender).text);
      end;
 end;
 procedure TPropEditor.EditingDone(Sender: TObject);
@@ -600,10 +603,10 @@ begin
      if FastEditors<>nil then
                              FastEditors.Destroy;
 end;
-function UserTypeDescriptor.CreateEditor(TheOwner:TPropEditorOwner;rect:trect;pinstance:pointer;psa:PTZctnrVectorStrings;FreeOnLostFocus:boolean;InitialValue:TInternalScriptString;preferedHeight:integer):TEditorDesc;
+function UserTypeDescriptor.CreateEditor(TheOwner:TPropEditorOwner;rect:trect;pinstance:pointer;psa:PTZctnrVectorStrings;FreeOnLostFocus:boolean;InitialValue:TInternalScriptString;preferedHeight:integer;f:TzeUnitsFormat):TEditorDesc;
 begin
      if assigned(onCreateEditorFunc) then
-                                         result:=onCreateEditorFunc(TheOwner,rect,pinstance,psa,FreeOnLostFocus,initialvalue,@self,preferedHeight)
+                                         result:=onCreateEditorFunc(TheOwner,rect,pinstance,psa,FreeOnLostFocus,initialvalue,@self,preferedHeight,f)
                                      else
                                          begin
                                            result.editor:=nil;
@@ -622,7 +625,10 @@ function UserTypeDescriptor.GetFormattedValueAsString(pinstance:Pointer; const f
 begin
      result:=GetValueAsString(PInstance);
 end;
-
+procedure UserTypeDescriptor.SetFormattedValueFromString(PInstance:Pointer;const f:TzeUnitsFormat;Value:TInternalScriptString);
+begin
+     SetValueFromString(PInstance,Value);
+end;
 function UserTypeDescriptor.GetUserValueAsString(pinstance:Pointer):TInternalScriptString;
 begin
      result:=GetValueAsString(pinstance);

@@ -661,7 +661,10 @@ var
   pv1:pgdbvertex;
 begin
   pv1:=Vertex3D_in_WCS_Array.getDataMutable(0);
-  result:=Path.DummyCalcTrueInFrustum(pv1,frustum);
+  if pv1<>nil then
+    result:=Path.DummyCalcTrueInFrustum(pv1,frustum)
+  else
+    result:=IRFully;
 end;
 procedure GDBObjHatch.remaponecontrolpoint(pdesc:pcontrolpointdesc);
 var vertexnumber:Integer;

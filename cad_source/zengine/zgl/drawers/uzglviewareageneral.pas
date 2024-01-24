@@ -1833,7 +1833,7 @@ begin
     if assigned(OnWaMouseDown) then
       OnWaMouseDown(self,MouseBS2ZKey(Button,Shift),X, Y,param.SelDesc.OnMouseObject,needredraw);
   end else begin
-    if assigned(OnWaMouseDown) then
+    if assigned(OnWaMouseUp) then
       OnWaMouseUp(self,MouseBS2ZKey(Button,shift),X, Y,param.SelDesc.OnMouseObject,needredraw);
   end;
 end;

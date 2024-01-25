@@ -875,19 +875,23 @@ var
   i:integer;
   sd:TSelEntsDesk;
   tn:String;
+  filter:string;
 begin
   tn:=operands;
   sd:=zcGetSelEntsDeskInCurrentRoot;
+  filter:='';
   if (sd.PFirstSelectedEnt<>nil)and(sd.SelectedEntsCount=1) then begin
     if (sd.PFirstSelectedEnt^.GetObjType=GDBBlockInsertID) then begin
       tn:=PGDBObjBlockInsert(sd.PFirstSelectedEnt)^.name;
     end else if (sd.PFirstSelectedEnt^.GetObjType=GDBDeviceID) then begin
       tn:=DevicePrefix+PGDBObjBlockInsert(sd.PFirstSelectedEnt)^.name;
-    end;
-  end;
+    end else
+      filter:=BEditParam.Filter;
+  end else
+    filter:=BEditParam.Filter;
 
   BEditParam.Blocks.Enums.free;
-  i:=GetBlockDefNames(BEditParam.Blocks.Enums,tn,BEditParam.Filter);
+  i:=GetBlockDefNames(BEditParam.Blocks.Enums,tn,filter);
   BEditParam.Blocks.Enums.PushBackData(modelspacename);
 
   if BEditParam.CurrentEditBlock=modelspacename then begin

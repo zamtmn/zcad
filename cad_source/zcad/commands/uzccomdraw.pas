@@ -98,13 +98,13 @@ end;
   {REGISTEROBJECTTYPE BlockScale_com}
   BlockScale_com= object(CommandRTEdObject)
                          procedure CommandStart(const Context:TZCADCommandContext;Operands:TCommandOperands); virtual;
-                         procedure BuildDM(Operands:TCommandOperands); virtual;
+                         procedure BuildDM(const Context:TZCADCommandContext;Operands:TCommandOperands); virtual;
                          procedure Run(const Context:TZCADCommandContext); virtual;
                    end;
   {REGISTEROBJECTTYPE BlockRotate_com}
   BlockRotate_com= object(CommandRTEdObject)
                          procedure CommandStart(const Context:TZCADCommandContext;Operands:TCommandOperands); virtual;
-                         procedure BuildDM(Operands:TCommandOperands); virtual;
+                         procedure BuildDM(const Context:TZCADCommandContext;Operands:TCommandOperands); virtual;
                          procedure Run(const Context:TZCADCommandContext); virtual;
                    end;
   {REGISTEROBJECTTYPE ATO_com}
@@ -314,10 +314,10 @@ begin
                             commandmanager.executecommandend;
                             exit;
                       end;
-   BuildDM(Operands);
+   BuildDM(context,Operands);
           inherited;
 end;
-procedure BlockRotate_com.BuildDM(Operands:TCommandOperands);
+procedure BlockRotate_com.BuildDM(const Context:TZCADCommandContext;Operands:TCommandOperands);
 begin
   commandmanager.DMAddMethod(rscmChange,'Change rotate selected blocks',@run);
   commandmanager.DMShow;
@@ -382,10 +382,10 @@ begin
                             commandmanager.executecommandend;
                             exit;
                       end;
-   BuildDM(Operands);
+   BuildDM(Context,Operands);
           inherited;
 end;
-procedure BlockScale_com.BuildDM(Operands:TCommandOperands);
+procedure BlockScale_com.BuildDM(const Context:TZCADCommandContext;Operands:TCommandOperands);
 begin
   commandmanager.DMAddMethod(rscmChange,'Change scale selected blocks',@run);
   commandmanager.DMShow;

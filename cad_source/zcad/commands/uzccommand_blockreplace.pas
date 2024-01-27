@@ -52,7 +52,7 @@ type
 
   BlockReplace_com= object(CommandRTEdObject)
     procedure CommandStart(const Context:TZCADCommandContext;Operands:TCommandOperands); virtual;
-    procedure BuildDM(Operands:TCommandOperands); virtual;
+    procedure BuildDM(const Context:TZCADCommandContext;Operands:TCommandOperands); virtual;
     procedure Format;virtual;
     procedure Run(const Context:TZCADCommandContext); virtual;
   end;
@@ -83,7 +83,7 @@ begin
                                          end;
           format;
 
-          BuildDM(Operands);
+          BuildDM(Context,Operands);
           inherited;
      end
         else
@@ -92,7 +92,7 @@ begin
                  commandmanager.executecommandend;
             end;
 end;
-procedure BlockReplace_com.BuildDM(Operands:TCommandOperands);
+procedure BlockReplace_com.BuildDM(const Context:TZCADCommandContext;Operands:TCommandOperands);
 begin
   commandmanager.DMAddMethod(rscmReplace,'Replace blocks',run);
   commandmanager.DMShow;

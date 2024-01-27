@@ -2572,7 +2572,7 @@ else
   //redrawoglwnd;
   result:=cmd_ok;
 end;
-function Find_com(operands:TCommandOperands):TCommandResult;
+function Find_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 //var i: Integer;
    // pv:pGDBObjEntity;
    // ir:itrec;

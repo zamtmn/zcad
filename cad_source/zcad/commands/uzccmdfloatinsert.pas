@@ -42,7 +42,7 @@ type
   FloatInsertWithParams_com =  object(FloatInsert_com)
     CMode:TFIWPMode;
     procedure CommandStart(const Context:TZCADCommandContext;Operands:TCommandOperands); virtual;
-    procedure BuildDM(Operands:TCommandOperands); virtual;
+    procedure BuildDM(const Context:TZCADCommandContext;Operands:TCommandOperands); virtual;
     procedure Run(pdata:PtrInt); virtual;
     function MouseMoveCallback(const Context:TZCADCommandContext;wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record): Integer; virtual;
     //procedure Command(Operands:pansichar); virtual;abstract;
@@ -132,7 +132,7 @@ begin
   result:=cmd_ok;
 end;
 
-procedure FloatInsertWithParams_com.BuildDM(Operands:TCommandOperands);
+procedure FloatInsertWithParams_com.BuildDM(const Context:TZCADCommandContext;Operands:TCommandOperands);
 begin
 
 end;
@@ -140,7 +140,7 @@ procedure FloatInsertWithParams_com.CommandStart(const Context:TZCADCommandConte
 begin
      CommandRTEdObject.CommandStart(context,Operands);
      CMode:=FIWPCustomize;
-     BuildDM(Operands);
+     BuildDM(Context,Operands);
 end;
 procedure FloatInsertWithParams_com.Run(pdata:PtrInt);
 begin

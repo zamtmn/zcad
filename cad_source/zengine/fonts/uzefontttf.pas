@@ -40,7 +40,8 @@ TTFFont= object({SHXFont}BASEFont)
               MapChar:TMapChar;
               //MapCharIterator:TMapChar.TIterator;
               //-ttf-//TriangleData:ZGLFontTriangle2DArray;
-              function GetOrReplaceSymbolInfo(symbol:Integer{//-ttf-//; var TrianglesDataInfo:TTrianglesDataInfo}):PGDBsymdolinfo;virtual;
+              function GetOrReplaceSymbolInfo(symbol:Integer):PGDBsymdolinfo;virtual;
+              function GetSymbolInfo(symbol:Integer):PGDBsymdolinfo;virtual;
               //-ttf-//function GetTriangleDataAddr(offset:integer):PGDBFontVertex2D;virtual;
               procedure ProcessTriangleData(si:PGDBsymdolinfo);
               constructor init;
@@ -502,11 +503,54 @@ begin
        si.SymMinY:=symoutbound.LBN.y;
   end;
 end;
+function TTFFont.GetSymbolInfo(symbol:Integer):PGDBsymdolinfo;
+var
+   CharIterator:TMapChar.TIterator;
+   si:TTTFSymInfo;
+begin
+  CharIterator:=MapChar.Find(symbol);
+  if CharIterator<>nil then begin
+    si:=CharIterator.value;
+    if si.PSymbolInfo<>nil then
+      result:=si.PSymbolInfo
+    else  begin
+      cfeatettfsymbol(symbol,si,@self);
+      ProcessTriangleData(si.PSymbolInfo);
+      CharIterator.Value:=si;
+      result:=si.PSymbolInfo;
+    end;
+    CharIterator.Destroy;
+  end else
+    result:=nil;
+end;
+
 function TTFFont.GetOrReplaceSymbolInfo(symbol:Integer{//-ttf-//; var TrianglesDataInfo:TTrianglesDataInfo}):PGDBsymdolinfo;
 var
    CharIterator:TMapChar.TIterator;
    si:TTTFSymInfo;
 begin
+  result:=GetSymbolInfo(symbol);
+  if result=nil then begin
+    if symbol=8709 then
+      exit(GetOrReplaceSymbolInfo(216));
+    result:=GetSymbolInfo(ord('?'));
+    if result=nil then begin
+      CharIterator:=MapChar.Min;
+      if CharIterator<>nil then begin
+        si:=CharIterator.value;
+        if si.PSymbolInfo<>nil then
+          result:=si.PSymbolInfo
+        else begin
+          cfeatettfsymbol(symbol,si,@self);
+          ProcessTriangleData(si.PSymbolInfo);
+          CharIterator.Value:=si;
+          result:=si.PSymbolInfo;
+        end;
+        CharIterator.Destroy;
+      end;
+  end;
+  exit;
+
      CharIterator:=MapChar.Find(symbol);
      if CharIterator<>nil then
                               begin
@@ -564,6 +608,7 @@ begin
                                              result:=@symbolinfo[ord('?')];
 
                        end;
+  end;
 end;
 
 initialization

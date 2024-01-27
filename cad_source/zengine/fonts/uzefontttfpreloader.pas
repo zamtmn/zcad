@@ -69,13 +69,17 @@ const
 type
 
   //from TTTypes.pas
-  UShort   = Word;        (* unsigned short integer, must be on 16 bits *)
-  Short    = Smallint;    (* signed short integer,   must be on 16 bits *)
-  Long        = Longint;
-  ULong       = LongWord; (* unsigned long integer, must be on 32 bits *)
-  TT_Fixed    = LongInt;  (* Signed Fixed 16.16 Single *)
-  TStorage    = array[0..16000] of Long;
-  PStorage    = ^TStorage;
+  UShort   = Word;     (* unsigned short integer, must be on 16 bits *)
+  Short    = Smallint; (* signed short integer,   must be on 16 bits *)
+  Long     = Longint;
+  ULong    = LongWord; (* unsigned long integer, must be on 32 bits *)
+  TT_Fixed = LongInt;  (* Signed Fixed 16.16 Single *)
+  TStorage = array[0..16000] of Long;
+  PStorage = ^TStorage;
+
+  //not from TTTypes.pas
+  uint8_t  = byte;     (* unsigned byte *)
+  int8     = shortint;  (* signed byte *)
 
 
   //from TTTables.pas
@@ -128,6 +132,35 @@ type
     //storage        : PByte;
   end;
 
+  TPANOSE = array [0..9] of uint8_t;
+  TulUnicodeRange = array [0..4] of uint32;
+  TachVendID = array [0..4]  of int8;
+
+  POS2Table = ^TOS2Table;
+  TOS2Table = record
+    version:UShort;//table version number (set to 0)
+    xAvgCharWidth:Short;//average weighted advance width of lower case letters and space
+    usWeightClass:UShort;//visual weight (degree of blackness or thickness) of stroke in glyphs
+    usWidthClass:UShort;//relative change from the normal aspect ratio (width to height ratio) as specified by a font designer for the glyphs in the font
+    fsType:Short;//characteristics and properties of this font (set undefined bits to zero)
+    ySubscriptXSize:Short;//recommended horizontal size in pixels for subscripts
+    ySubscriptYSize:Short;//recommended vertical size in pixels for subscripts
+    ySubscriptXOffset:Short;//recommended horizontal offset for subscripts
+    ySubscriptYOffset:Short;//recommended vertical offset form the baseline for subscripts
+    ySuperscriptXSize:Short;//recommended horizontal size in pixels for superscripts
+    ySuperscriptYSize:Short;//recommended vertical size in pixels for superscripts
+    ySuperscriptXOffset:Short;//recommended horizontal offset for superscripts
+    ySuperscriptYOffset:Short;//recommended vertical offset from the baseline for superscripts
+    yStrikeoutSize:Short;//width of the strikeout stroke
+    yStrikeoutPosition:Short;//position of the strikeout stroke relative to the baseline
+    sFamilyClass:Short;//classification of font-family design.
+    panose:TPANOSE;//10 byte series of number used to describe the visual characteristics of a given typeface
+    ulUnicodeRange:TulUnicodeRange;//Field is split into two bit fields of 96 and 36 bits each. The low 96 bits are used to specify the Unicode blocks encompassed by the font file. The high 32 bits are used to specify the character or script sets covered by the font file. Bit assignments are pending. Set to 0
+    achVendID:TachVendID;//four character identifier for the font vendor
+    fsSelection:UShort;//2-byte bit field containing information concerning the nature of the font patterns
+    fsFirstCharIndex:UShort;//The minimum Unicode index in this font.
+    fsLastCharIndex:UShort;//The maximum Unicode index in this font.
+  end;
 
   TTTFFileStream=class({TFileStream}{TMemoryStream}TBufferedFileStream)
     public
@@ -135,6 +168,9 @@ type
       function GET_ULong:ULong;
       function GET_Long:Long;
       function GET_UShort:UShort;
+      function GET_Short:Short;
+      function GET_u8:uint8_t;
+      function GET_i8:int8;
   end;
 
 function readTTCheader(AStream:TTTFFileStream):TTTCHeader;
@@ -213,11 +249,12 @@ var
   AStream:TTTFFileStream;
   TTCHeader:TTTCHeader;
   TableDir:TTableDir;
-  i,nametableindex:integer;
+  i,nametableindex,os2tableindex:integer;
   TableDirEntries:TTableDirEntries;
   NameTable:TNameTable;
   NameRecord:TNameRecord;
   NameRecords:TNameRecords;
+  OS2Table:TOS2Table;
   t:integer;
   StorageOffsetInFile:Long;
 begin
@@ -231,7 +268,7 @@ begin
     AStream.Seek(0,soBeginning);
     TTCHeader:=readTTCheader(AStream);
     if TTCHeader.Tag=TTC_Tag then begin
-      debugln('{W}getTTFFileParaC:\Windows\Fonts\Amiri-Bold.ttfms: TTFFile "%s" is collection',[filename]);
+      debugln('{W}getTTFFileParams: TTFFile "%s" is collection',[filename]);
       exit;
     end;
 
@@ -313,6 +350,52 @@ begin
     result.SampleText:=                    readNameRecordValue(AStream,NameRecords[19],StorageOffsetInFile);
     result.VariationsPostScriptNamePrefix:=readNameRecordValue(AStream,NameRecords[25],StorageOffsetInFile);
 
+    {os2tableindex:=getTrueTypeTableIndex(TableDirEntries,'OS/2');
+    AStream.Seek(TableDirEntries[os2tableindex].Offset,soBeginning);
+    OS2Table.version:=BEtoN(AStream.GET_UShort);
+    OS2Table.xAvgCharWidth:=BEtoN(AStream.GET_Short);
+    OS2Table.usWeightClass:=BEtoN(AStream.GET_UShort);
+    OS2Table.usWidthClass:=BEtoN(AStream.GET_UShort);
+    OS2Table.fsType:=BEtoN(AStream.GET_Short);
+    OS2Table.ySubscriptXSize:=BEtoN(AStream.GET_Short);
+    OS2Table.ySubscriptYSize:=BEtoN(AStream.GET_Short);
+    OS2Table.ySubscriptXOffset:=BEtoN(AStream.GET_Short);
+    OS2Table.ySubscriptYOffset:=BEtoN(AStream.GET_Short);
+    OS2Table.ySuperscriptXSize:=BEtoN(AStream.GET_Short);
+    OS2Table.ySuperscriptYSize:=BEtoN(AStream.GET_Short);
+    OS2Table.ySuperscriptXOffset:=BEtoN(AStream.GET_Short);
+    OS2Table.ySuperscriptYOffset:=BEtoN(AStream.GET_Short);
+    OS2Table.yStrikeoutSize:=BEtoN(AStream.GET_Short);
+    OS2Table.yStrikeoutPosition:=BEtoN(AStream.GET_Short);
+    OS2Table.sFamilyClass:=BEtoN(AStream.GET_Short);
+    for i:=low(OS2Table.panose) to High(OS2Table.panose) do
+      OS2Table.panose[i]:=AStream.GET_u8;
+    for i:=low(OS2Table.ulUnicodeRange) to High(OS2Table.ulUnicodeRange) do
+      OS2Table.ulUnicodeRange[i]:=AStream.GET_u8;
+    for i:=low(OS2Table.achVendID) to High(OS2Table.achVendID) do
+      OS2Table.achVendID[i]:=AStream.GET_i8;
+    OS2Table.fsSelection:=BEtoN(AStream.GET_UShort);
+    OS2Table.fsFirstCharIndex:=BEtoN(AStream.GET_UShort);
+    OS2Table.fsLastCharIndex:=BEtoN(AStream.GET_UShort);
+
+    i:=BEtoN(AStream.GET_Short);
+    i:=BEtoN(AStream.GET_Short);
+    i:=BEtoN(AStream.GET_Short);
+    i:=BEtoN(AStream.GET_UShort);
+    i:=BEtoN(AStream.GET_UShort);
+    i:=BEtoN(AStream.GET_Long);
+    i:=BEtoN(AStream.GET_Long);
+    i:=BEtoN(AStream.GET_Short);
+    i:=BEtoN(AStream.GET_Short);
+    i:=BEtoN(AStream.GET_UShort);
+
+    if pos(filename,'Y:\ZC')<>0 then
+      filename:=filename;}
+
+
+    NameTable.numNameRecords:=BEtoN(AStream.GET_UShort);
+    t:=AStream.Seek(0,soCurrent);
+
     result.ValidTTFFile:=result.FontFamily<>'';
 
     debugln('TTFName "%s"',[filename]);
@@ -364,6 +447,21 @@ begin
   read(result,SizeOf(Result));
 end;
 function TTTFFileStream.GET_UShort:UShort;
+begin
+  result:=0;
+  read(result,SizeOf(Result));
+end;
+function TTTFFileStream.GET_Short:Short;
+begin
+  result:=0;
+  read(result,SizeOf(Result));
+end;
+function TTTFFileStream.GET_u8:uint8_t;
+begin
+  result:=0;
+  read(result,SizeOf(Result));
+end;
+function TTTFFileStream.GET_i8:int8;
 begin
   result:=0;
   read(result,SizeOf(Result));

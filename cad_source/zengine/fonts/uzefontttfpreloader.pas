@@ -28,8 +28,11 @@ const
   maxNameID=26;
 
 type
+  TTTFFileType=(TTFTApple,TTFTMS,TTFTOther);
+
   TNameTableValueType=String;
   TTTFFileParams=record
+    FileType:TTTFFileType;
     ValidTTFFile:boolean;
     //this from https://developer.apple.com/fonts/TrueType-Reference-Manual/RM06/Chap6name.html
     CopyrightNotice,               //{0    }Copyright notice.
@@ -55,6 +58,9 @@ type
                                    //{20–24}Defined by OpenType.
     VariationsPostScriptNamePrefix //{25   }Variations PostScript Name Prefix. If present in a variable font, it may be used as the family prefix in the algorithm to generate PostScript names for variation fonts. See Adobe Technical Note #5902: “PostScript Name Generation for Variation Fonts” for details.
     :TNameTableValueType;
+    FirstCharIndex:integer;//OS2Table
+    LastCharIndex:integer;//OS2Table
+    DefaultChar:integer;//OS2Table
   end;
 function getTTFFileParams(filename:String):TTTFFileParams;
 
@@ -133,8 +139,8 @@ type
   end;
 
   TPANOSE = array [0..9] of uint8_t;
-  TulUnicodeRange = array [0..4] of uint32;
-  TachVendID = array [0..4]  of int8;
+  TulUnicodeRange = array [0..3] of uint32;
+  TachVendID = array [0..3]  of int8;
 
   POS2Table = ^TOS2Table;
   TOS2Table = record
@@ -160,6 +166,24 @@ type
     fsSelection:UShort;//2-byte bit field containing information concerning the nature of the font patterns
     fsFirstCharIndex:UShort;//The minimum Unicode index in this font.
     fsLastCharIndex:UShort;//The maximum Unicode index in this font.
+    //end apple 'OS/2' table, start OpenType version 0
+    {apple AdditionalFieldsOS2Table}sTypoAscender:int16;//The typographic ascender for this font. This is not necessarily the same as the ascender value in the 'hhea' table.
+    {apple AdditionalFieldsOS2Table}sTypoDescender:int16;//The typographic descender for this font. This is not necessarily the same as the descender value in the 'hhea' table.
+    {apple AdditionalFieldsOS2Table}sTypoLineGap:int16;//The typographic line gap for this font. This is not necessarily the same as the line gap value in the 'hhea' table.
+    {apple AdditionalFieldsOS2Table}usWinAscent:uint16;//The ascender metric for Windows. usWinAscent is computed as the yMax for all characters in the Windows ANSI character set.
+    {apple AdditionalFieldsOS2Table}usWinDescent:uint16;//The descender metric for Windows. usWinDescent is computed as the -yMin for all characters in the Windows ANSI character set.
+    //end OpenType version 0, start OpenType version 1..3
+    {apple AdditionalFieldsOS2Table}ulCodePageRange1:uint32;//Bits 0-31
+    {apple AdditionalFieldsOS2Table}ulCodePageRange2:uint32;//Bits 32-63
+    //end OpenType version 0..3, start OpenType version 4
+    {apple AdditionalFieldsOS2Table}sxHeight:int16;//The distance between the baseline and the approximate height of non-ascending lowercase letters measured in FUnits.
+    {apple AdditionalFieldsOS2Table}sCapHeight:int16;//The distance between the baseline and the approximate height of uppercase letters measured in FUnits.
+    {apple AdditionalFieldsOS2Table}usDefaultChar:uint16;//The default character displayed by Windows to represent an unsupported character. (Typically this should be 0.)
+    {apple AdditionalFieldsOS2Table}usBreakChar:uint16;//The break character used by Windows.
+    {apple AdditionalFieldsOS2Table}usMaxContext:uint16;//The maximum length of a target glyph OpenType context for any feature in this font.
+    //end OpenType version 4, start OpenType version 5
+    {apple AdditionalFieldsOS2Table}usLowerPointSize:uint16;//Proposed for version 5 The lowest size (in twentieths of a typographic point), at which the font starts to be used. This is an inclusive value.
+    {apple AdditionalFieldsOS2Table}usUpperPointSize:uint16;//Proposed for version 5 The highest size (in twentieths of a typographic point), at which the font starts to be used. This is an exclusive value. Use 0xFFFFU to indicate no upper limit.
   end;
 
   TTTFFileStream=class({TFileStream}{TMemoryStream}TBufferedFileStream)
@@ -255,7 +279,7 @@ var
   NameRecord:TNameRecord;
   NameRecords:TNameRecords;
   OS2Table:TOS2Table;
-  t:integer;
+  StartOffs,TableLength:integer;
   StorageOffsetInFile:Long;
 begin
   //result.FullName:=extractfilename(filename);
@@ -277,9 +301,12 @@ begin
     TableDir:=readTablreDir(AStream);
     ulong(TableDir.version):=TTCHeader.Tag;
 
-
-    if (TableDir.version <> $10000   )(* MS fonts  *) and
-       (TableDir.version <> $74727565)(* Mac fonts *) then begin
+    if (TableDir.version=$10000)then
+      result.FileType:=TTFTMS
+    else if (TableDir.version=$74727565)then
+      result.FileType:=TTFTApple
+    else begin
+      result.FileType:=TTFTOther;
       debugln('{W}getTTFFileParams: TTFFile "%s" TableDir.version=%x (not MS or MAC)',[filename,TableDir.version]);
       exit;
     end;
@@ -297,7 +324,7 @@ begin
     AStream.Seek(TableDirEntries[nametableindex].Offset,soBeginning);
     NameTable.format:=BEtoN(AStream.GET_UShort);
     NameTable.numNameRecords:=BEtoN(AStream.GET_UShort);
-    t:=AStream.Seek(0,soCurrent);
+    StartOffs:=AStream.Seek(0,soCurrent);
     NameTable.storageOffset:=BEtoN(AStream.GET_UShort){+TableDirEntries[nametableindex].Offset};
 
     //debugln('{E}NameTable.numNameRecords=%d',[NameTable.numNameRecords]);
@@ -350,8 +377,10 @@ begin
     result.SampleText:=                    readNameRecordValue(AStream,NameRecords[19],StorageOffsetInFile);
     result.VariationsPostScriptNamePrefix:=readNameRecordValue(AStream,NameRecords[25],StorageOffsetInFile);
 
-    {os2tableindex:=getTrueTypeTableIndex(TableDirEntries,'OS/2');
+    os2tableindex:=getTrueTypeTableIndex(TableDirEntries,'OS/2');
     AStream.Seek(TableDirEntries[os2tableindex].Offset,soBeginning);
+    StartOffs:=TableDirEntries[os2tableindex].Offset;
+    OS2Table:=default(TOS2Table);
     OS2Table.version:=BEtoN(AStream.GET_UShort);
     OS2Table.xAvgCharWidth:=BEtoN(AStream.GET_Short);
     OS2Table.usWeightClass:=BEtoN(AStream.GET_UShort);
@@ -371,30 +400,59 @@ begin
     for i:=low(OS2Table.panose) to High(OS2Table.panose) do
       OS2Table.panose[i]:=AStream.GET_u8;
     for i:=low(OS2Table.ulUnicodeRange) to High(OS2Table.ulUnicodeRange) do
-      OS2Table.ulUnicodeRange[i]:=AStream.GET_u8;
+      OS2Table.ulUnicodeRange[i]:=BEtoN(AStream.GET_ULong);
     for i:=low(OS2Table.achVendID) to High(OS2Table.achVendID) do
       OS2Table.achVendID[i]:=AStream.GET_i8;
     OS2Table.fsSelection:=BEtoN(AStream.GET_UShort);
     OS2Table.fsFirstCharIndex:=BEtoN(AStream.GET_UShort);
     OS2Table.fsLastCharIndex:=BEtoN(AStream.GET_UShort);
 
-    i:=BEtoN(AStream.GET_Short);
-    i:=BEtoN(AStream.GET_Short);
-    i:=BEtoN(AStream.GET_Short);
-    i:=BEtoN(AStream.GET_UShort);
-    i:=BEtoN(AStream.GET_UShort);
-    i:=BEtoN(AStream.GET_Long);
-    i:=BEtoN(AStream.GET_Long);
-    i:=BEtoN(AStream.GET_Short);
-    i:=BEtoN(AStream.GET_Short);
-    i:=BEtoN(AStream.GET_UShort);
+    if result.FileType=TTFTMS then begin
+      //end apple 'OS/2' table, start OpenType version 0
+      OS2Table.sTypoAscender:=BEtoN(AStream.GET_Short);
+      OS2Table.sTypoDescender:=BEtoN(AStream.GET_Short);
+      OS2Table.sTypoLineGap:=BEtoN(AStream.GET_Short);
+      OS2Table.usWinAscent:=BEtoN(AStream.GET_UShort);
+      OS2Table.usWinDescent:=BEtoN(AStream.GET_UShort);
+    end;
 
-    if pos(filename,'Y:\ZC')<>0 then
-      filename:=filename;}
 
+    if OS2Table.version>=1 then begin
+      if result.FileType=TTFTApple then begin
+        OS2Table.sTypoAscender:=BEtoN(AStream.GET_Short);
+        OS2Table.sTypoDescender:=BEtoN(AStream.GET_Short);
+        OS2Table.sTypoLineGap:=BEtoN(AStream.GET_Short);
+        OS2Table.usWinAscent:=BEtoN(AStream.GET_UShort);
+        OS2Table.usWinDescent:=BEtoN(AStream.GET_UShort);
+      end;
+      OS2Table.ulCodePageRange1:=BEtoN(AStream.GET_ULong);
+      OS2Table.ulCodePageRange2:=BEtoN(AStream.GET_ULong);
+      if OS2Table.version>=2 then begin
+        OS2Table.sxHeight:=BEtoN(AStream.GET_Short);
+        OS2Table.sCapHeight:=BEtoN(AStream.GET_Short);
+        OS2Table.usDefaultChar:=BEtoN(AStream.GET_UShort);
+        OS2Table.usBreakChar:=BEtoN(AStream.GET_UShort);
+        OS2Table.usMaxContext:=BEtoN(AStream.GET_UShort);
+        if OS2Table.version>=5 then begin
+          OS2Table.usLowerPointSize:=BEtoN(AStream.GET_UShort);
+          OS2Table.usUpperPointSize:=BEtoN(AStream.GET_UShort);
+        end;
+      end;
+    end;
+
+    result.FirstCharIndex:=OS2Table.fsFirstCharIndex;
+    result.LastCharIndex:=OS2Table.fsLastCharIndex;
+    result.DefaultChar:=OS2Table.usDefaultChar;
+
+    TableLength:=AStream.Seek(0,soCurrent)-StartOffs;
+
+    if TableLength<>TableDirEntries[os2tableindex].Length then begin
+      debugln('{W}getTTFFileParams: TTFFile "%s" OS/2 table length in file header <> fact length %d<>%d',[filename,TableDirEntries[os2tableindex].Length,TableLength]);
+      exit;
+    end;
 
     NameTable.numNameRecords:=BEtoN(AStream.GET_UShort);
-    t:=AStream.Seek(0,soCurrent);
+    StartOffs:=AStream.Seek(0,soCurrent);
 
     result.ValidTTFFile:=result.FontFamily<>'';
 

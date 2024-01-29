@@ -21,7 +21,7 @@ unit uzeffttf;
 interface
 uses uzefontmanager,EasyLazFreeType,uzefontttf,uzegeometry,
     uzefont,uzbstrproc,{$IFNDEF DELPHI}FileUtil,LCLProc,{$ENDIF}sysutils,
-    uzctnrVectorBytes;
+    uzctnrVectorBytes,uzefontttfpreloader;
 type ptsyminfo=^tsyminfo;
      tsyminfo=record
                            number,size:word;
@@ -41,8 +41,9 @@ var
    chcode:integer;
    pttf:PTTFFont;
    si:TTTFSymInfo;
-   //Iterator:TMapChar.TIterator;
+   TTFFileParams:TTTFFileParams;
 begin
+  TTFFileParams:=uzefontttfpreloader.getTTFFileParams(name);
     initfont(pf,extractfilename(name));
     pf^.fontfile:=name;
     pf^.font:=CreateTTFFontInstance;
@@ -72,7 +73,7 @@ begin
     pttf^.ftFont.TextWidth('');//It's just a guarantee font loading. I do not need to calculate the any width
     pttf^.ftFont.SizeInPoints:={pttf^.ftFont.SizeInPoints*10}10000;
     pf.font.unicode:=true;
-    for i:=0 to 65535 do
+    for i:=TTFFileParams.FirstCharIndex to TTFFileParams.LastCharIndex do
       begin
            chcode:=pttf^.ftFont.CharIndex[i];
            if chcode>0 then

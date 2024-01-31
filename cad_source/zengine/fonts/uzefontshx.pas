@@ -19,29 +19,24 @@
 unit uzefontshx;
 {$INCLUDE zengineconfig.inc}
 interface
-uses uzefontbase,uzctnrVectorBytes,sysutils,
-     uzegeometry;
+uses
+  uzefontbase,uzctnrVectorBytes,sysutils,uzegeometry;
 type
-PSHXFont=^SHXFont;
-SHXFont= object(BASEFont)
-              //compiledsize:Integer;
-              h,u:Byte;
-              //SHXdata:TZctnrVectorBytes;
-              constructor init;
-              destructor done;virtual;
-        end;
+  PSHXFont=^SHXFont;
+  SHXFont= object(BASEFont)
+    h,u:Byte;
+    constructor init;
+    destructor done;virtual;
+  end;
 implementation
-//uses log;
 constructor SHXFont.init;
 begin
-     inherited;
-     u:=1;
-     h:=1;
-     //SHXdata.init(1024);
+  inherited;
+  u:=1;
+  h:=1;
 end;
 destructor SHXFont.done;
 begin
-     inherited;
-     //SHXdata.done;
+  inherited;
 end;
 end.

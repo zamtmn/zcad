@@ -22,9 +22,7 @@ interface
 uses uzefontbase,uzctnrVectorBytes,sysutils,
      uzegeometry;
 type
-{EXPORT+}
 PSHXFont=^SHXFont;
-{REGISTEROBJECTTYPE SHXFont}
 SHXFont= object(BASEFont)
               //compiledsize:Integer;
               h,u:Byte;
@@ -32,7 +30,6 @@ SHXFont= object(BASEFont)
               constructor init;
               destructor done;virtual;
         end;
-{EXPORT-}
 implementation
 //uses log;
 constructor SHXFont.init;

@@ -19,8 +19,9 @@
 unit uzefontttf;
 {$INCLUDE zengineconfig.inc}
 interface
-uses LCLProc,uzgprimitivescreator,uzgprimitives,uzglvectorobject,uzefontbase,
-     uzebeziersolver,math,uzgloglstatemanager,uzegluinterface,TTTypes,TTObjs,
+uses
+  LCLProc,uzgprimitivescreator,uzgprimitives,uzglvectorobject,uzefontbase,
+  uzebeziersolver,math,uzgloglstatemanager,uzegluinterface,TTTypes,TTObjs,
   usimplegenerics,EasyLazFreeType,uzbstrproc,sysutils,
   uzegeometrytypes,uzbtypes,uzegeometry,gzctnrSTL,gzctnrVectorTypes,uzbLogIntf;
 type
@@ -31,9 +32,7 @@ type
   end;
 
   TMapChar=TMyMapGenOld<integer,TTTFSymInfo{$IFNDEF DELPHI},LessInteger{$ENDIF}>;
-{EXPORT+}
   PTTFFont=^TTFFont;
-{REGISTEROBJECTTYPE TTFFont}
   TTFFont= object(BASEFont)
     ftFont: TFreeTypeFont;
     MapChar:TMapChar;
@@ -45,7 +44,6 @@ type
     function IsCanSystemDraw:Boolean;virtual;
     procedure SetupSymbolLineParams(const matr:DMatrix4D; var SymsParam:TSymbolSParam);virtual;
   end;
-{EXPORT-}
 
 procedure cfeatettfsymbol(const chcode:integer;var si:TTTFSymInfo; pttf:PTTFFont);
 implementation

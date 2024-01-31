@@ -22,12 +22,10 @@ interface
 uses uzgprimitives,uzglvectorobject,uzbstrproc,uzctnrVectorBytes,
      gzctnrVectorTypes,gzctnrVector,sysutils,uzbtypes,uzegeometrytypes,uzegeometry;
 type
-{EXPORT+}
 TSymbolInfoArray=packed array [0..255] of GDBsymdolinfo;
 TGDBUNISymbolInfoVector=GZVector{-}<GDBUNISymbolInfo>{//};
 PBASEFont=^BASEFont;
-{REGISTEROBJECTTYPE BASEFont}
-BASEFont= object(GDBaseObject)
+BASEFont=object
               unicode:Boolean;
               symbolinfo:TSymbolInfoArray;
               unisymbolinfo:{GDBOpenArrayOfData}TGDBUNISymbolInfoVector;
@@ -45,7 +43,6 @@ BASEFont= object(GDBaseObject)
               function IsCanSystemDraw:Boolean;virtual;
               procedure SetupSymbolLineParams(const matr:DMatrix4D; var SymsParam:TSymbolSParam);virtual;
         end;
-{EXPORT-}
 implementation
 //uses log;
 procedure BASEFont.SetupSymbolLineParams(const matr:DMatrix4D; var SymsParam:TSymbolSParam);

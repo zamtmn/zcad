@@ -22,20 +22,19 @@ interface
 uses
   uzefontbase,uzctnrVectorBytes,sysutils,uzegeometry;
 type
-  PSHXFont=^SHXFont;
-  SHXFont= object(BASEFont)
+  SHXFont= class(BASEFont)
     h,u:Byte;
-    constructor init;
-    destructor done;virtual;
+    constructor Create;
+    destructor Destroy;override;
   end;
 implementation
-constructor SHXFont.init;
+constructor SHXFont.Create;
 begin
   inherited;
   u:=1;
   h:=1;
 end;
-destructor SHXFont.done;
+destructor SHXFont.Destroy;
 begin
   inherited;
 end;

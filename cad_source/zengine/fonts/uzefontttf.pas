@@ -32,20 +32,19 @@ type
   end;
 
   TMapChar=TMyMapGenOld<integer,TTTFSymInfo{$IFNDEF DELPHI},LessInteger{$ENDIF}>;
-  PTTFFont=^TTFFont;
-  TTFFont= object(BASEFont)
+  TTFFont=class(BASEFont)
     ftFont: TFreeTypeFont;
     MapChar:TMapChar;
-    function GetOrReplaceSymbolInfo(symbol:Integer):PGDBsymdolinfo;virtual;
+    function GetOrReplaceSymbolInfo(symbol:Integer):PGDBsymdolinfo;override;
     function GetSymbolInfo(symbol:Integer):PGDBsymdolinfo;virtual;
     procedure ProcessTriangleData(si:PGDBsymdolinfo);
-    constructor init;
-    destructor done;virtual;
-    function IsCanSystemDraw:Boolean;virtual;
-    procedure SetupSymbolLineParams(const matr:DMatrix4D; var SymsParam:TSymbolSParam);virtual;
+    constructor Create;
+    destructor Destroy;override;
+    function IsCanSystemDraw:Boolean;override;
+    procedure SetupSymbolLineParams(const matr:DMatrix4D; var SymsParam:TSymbolSParam);override;
   end;
 
-procedure cfeatettfsymbol(const chcode:integer;var si:TTTFSymInfo; pttf:PTTFFont);
+procedure cfeatettfsymbol(const chcode:integer;var si:TTTFSymInfo; pttf:TTFFont);
 implementation
 type
   TTriangulationMode=(TM_Triangles,TM_TriangleStrip,TM_TriangleFan);
@@ -133,7 +132,7 @@ begin
     end;
   end;
 end;
-procedure cfeatettfsymbol(const chcode:integer;var si:TTTFSymInfo; pttf:PTTFFont{;var pf:PGDBfont});
+procedure cfeatettfsymbol(const chcode:integer;var si:TTTFSymInfo; pttf:TTFFont{;var pf:PGDBfont});
 var
    i,j:integer;
    glyph:TFreeTypeGlyph;
@@ -160,14 +159,14 @@ begin
   bs.EndCountur;
 end;
 begin
-  k:=1/pttf^.ftFont.CapHeight;
-  BS.VectorData:=@pttf^.FontData;
+  k:=1/pttf.ftFont.CapHeight;
+  BS.VectorData:=@pttf.FontData;
 
   BS.fmode:=TSM_WaitStartCountur;
-  glyph:=pttf^.ftFont.Glyph[{i}si.GlyphIndex];
+  glyph:=pttf.ftFont.Glyph[{i}si.GlyphIndex];
   _glyph:=glyph.Data.z;
-  si.PSymbolInfo:=pttf^.GetOrCreateSymbolInfo(chcode);
-  si.PSymbolInfo.LLPrimitiveStartIndex:=pttf^.FontData.LLprimitives.Count;
+  si.PSymbolInfo:=pttf.GetOrCreateSymbolInfo(chcode);
+  si.PSymbolInfo.LLPrimitiveStartIndex:=pttf.FontData.LLprimitives.Count;
   BS.shxsize:=@si.PSymbolInfo.LLPrimitiveCount;
   si.PSymbolInfo.w:=glyph.Bounds.Right*k;
   si.PSymbolInfo.NextSymX:=glyph.Bounds.Right*k;
@@ -176,7 +175,7 @@ begin
   si.PSymbolInfo.SymMinX:=0;
   si.PSymbolInfo.h:=glyph.Bounds.Top*k;
   si.PSymbolInfo.LLPrimitiveCount:=0;
-  ptrdata:=@pttf^.FontData;
+  ptrdata:=@pttf.FontData;
   ptrsize:=@si.PSymbolInfo.LLPrimitiveCount;
   tparrayindex:=0;
   if _glyph^.outline.n_contours>0 then begin
@@ -250,13 +249,13 @@ function TTFFont.IsCanSystemDraw:Boolean;
 begin
   result:=true;
 end;
-constructor TTFFont.init;
+constructor TTFFont.Create;
 begin
   inherited;
   ftFont:=TFreeTypeFont.create;
   MapChar:=TMapChar.Create;
 end;
-destructor TTFFont.done;
+destructor TTFFont.Destroy;
 begin
   inherited;
   ftFont.Destroy;
@@ -285,7 +284,7 @@ begin
     if si.PSymbolInfo<>nil then
       result:=si.PSymbolInfo
     else  begin
-      cfeatettfsymbol(symbol,si,@self);
+      cfeatettfsymbol(symbol,si,self);
       ProcessTriangleData(si.PSymbolInfo);
       CharIterator.Value:=si;
       result:=si.PSymbolInfo;

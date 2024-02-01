@@ -30,16 +30,17 @@ function createnewfontfromttf(name:String;var pf:PGDBfont):Boolean;
 
 implementation
 
-function CreateTTFFontInstance:PTTFFont;
+function CreateTTFFontInstance:TTFFont;
 begin
-     Getmem(result,sizeof(TTFFont));
-     result^.init;
+     //Getmem(result,sizeof(TTFFont));
+     //result^.Create;
+  result:=TTFFont.Create;
 end;
 function createnewfontfromttf(name:String;var pf:PGDBfont):Boolean;
 var
   i:integer;
   chcode:integer;
-  pttf:PTTFFont;
+  pttf:TTFFont;
   si:TTTFSymInfo;
   TTFFileParams:TTTFFileParams;
 begin
@@ -49,20 +50,20 @@ begin
   pf^.font:=CreateTTFFontInstance;
   pttf:=pointer(pf^.font);
   result:=true;
-  pttf^.ftFont.Hinted:=false;
-  pttf^.ftFont.Name := name;
-  pf^.family:=pttf^.ftFont.Information[ftiFamily];
-  pf^.fullname:=pttf^.ftFont.Information[ftiFullName];
+  pttf.ftFont.Hinted:=false;
+  pttf.ftFont.Name := name;
+  pf^.family:=pttf.ftFont.Information[ftiFamily];
+  pf^.fullname:=pttf.ftFont.Information[ftiFullName];
 
-  pttf^.ftFont.TextWidth('');//It's just a guarantee font loading. I do not need to calculate the any width
-  pttf^.ftFont.SizeInPoints:={pttf^.ftFont.SizeInPoints*10}10000;
+  pttf.ftFont.TextWidth('');//It's just a guarantee font loading. I do not need to calculate the any width
+  pttf.ftFont.SizeInPoints:={pttf^.ftFont.SizeInPoints*10}10000;
   pf.font.unicode:=true;
   for i:=TTFFileParams.FirstCharIndex to TTFFileParams.LastCharIndex do begin
-    chcode:=pttf^.ftFont.CharIndex[i];
+    chcode:=pttf.ftFont.CharIndex[i];
     if chcode>0 then begin
       si.GlyphIndex:=chcode;
       si.PSymbolInfo:=nil;
-      pttf^.MapChar.Insert(i,si);
+      pttf.MapChar.Insert(i,si);
     end;
   end;
 end;

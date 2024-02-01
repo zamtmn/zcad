@@ -154,12 +154,12 @@ begin
             if symbol=1055{П}then
                                  symbol:=symbol;
             psyminfo:=pf^.GetOrCreateSymbolInfo(symbol);
-            PSHXFont(pf^.font).FontData.LLprimitives.AlignDataSize;
-            psyminfo.{addr}LLPrimitiveStartIndex:=PSHXFont(pf^.font).FontData.LLprimitives{SHXdata}.Count;//----//
+            SHXFont(pf^.font).FontData.LLprimitives.AlignDataSize;
+            psyminfo.LLPrimitiveStartIndex:=SHXFont(pf^.font).FontData.LLprimitives{SHXdata}.Count;//----//
             onlyver:=0;
             sizeshx:=0;
             draw:=true;
-            baselen:=1/PSHXFont(pf^.font).h;
+            baselen:=1/SHXFont(pf^.font).h;
             stackheap:=-1;
             x:=0;
             y:=0;
@@ -250,7 +250,7 @@ begin
                         offset.GeomIndexOffset:=VDCopyResultParam.EID.GeomIndexMin-VDCopyParam.EID.GeomIndexMin;
                         offset.IndexsIndexOffset:=VDCopyResultParam.EID.IndexsIndexMin-VDCopyParam.EID.IndexsIndexMin;
                         pf^.font.FontData.CorrectIndexes(VDCopyResultParam.LLPrimitivesStartIndex,psyminfo.LLPrimitiveCount,VDCopyResultParam.EID.IndexsIndexMin,VDCopyResultParam.EID.IndexsIndexMax-VDCopyResultParam.EID.IndexsIndexMin+1,offset);
-                        pf^.font.FontData.MulOnMatrix(VDCopyResultParam.EID.GeomIndexMin,VDCopyResultParam.EID.GeomIndexMax,MatrixMultiply(CreateScaleMatrix(CreateVertex(baselen*PSHXFont(pf^.font).h,baselen*PSHXFont(pf^.font).h,1)),CreateTranslationMatrix(CreateVertex(x,y,0))));
+                        pf^.font.FontData.MulOnMatrix(VDCopyResultParam.EID.GeomIndexMin,VDCopyResultParam.EID.GeomIndexMax,MatrixMultiply(CreateScaleMatrix(CreateVertex(baselen*SHXFont(pf^.font).h,baselen*SHXFont(pf^.font).h,1)),CreateTranslationMatrix(CreateVertex(x,y,0))));
                         symoutbound:=pf^.font.FontData.GetBoundingBbox(VDCopyResultParam.EID.GeomIndexMin,VDCopyResultParam.EID.GeomIndexMax);
                         ProcessMinMax(symoutbound.LBN.x,symoutbound.LBN.y);
                         ProcessMinMax(symoutbound.RTF.x,symoutbound.RTF.y);
@@ -681,10 +681,11 @@ begin
 
             result:=inccounter;
           end;
-function CreateSHXFontInstance:PSHXFont;
+function CreateSHXFontInstance:SHXFont;
 begin
-     Getmem(result,sizeof(SHXFont));
-     result^.init;
+     //Getmem(result,sizeof(SHXFont));
+     //result^.Create;
+     result:=SHXFont.Create;
 end;
 function createnewfontfromshx(name:String;var pf:PGDBfont):Boolean;
 var
@@ -740,8 +741,8 @@ begin
          if symnum=0 then
                          begin
                               pf^.Internalname:=line;
-                              PSHXFont(pf^.font).h:=memorybuf.readbyte;
-                              PSHXFont(pf^.font).u:=memorybuf.readbyte;
+                              SHXFont(pf^.font).h:=memorybuf.readbyte;
+                              SHXFont(pf^.font).u:=memorybuf.readbyte;
                               memorybuf.readbyte;
                               line:='';
                          end
@@ -772,7 +773,7 @@ begin
                                memorybuf.done;
                                membufcreated:=false;
                              end;
-        PSHXFont(pf^.font).FontData.Shrink;
+        SHXFont(pf^.font).FontData.Shrink;
         //pf.compiledsize:=pf.SHXdata.Count;
   end
 else if line='AUTOCAD-86 UNIFONT 1.0' then
@@ -793,8 +794,8 @@ else if line='AUTOCAD-86 UNIFONT 1.0' then
        {symmin:=}memorybuf.readword;
 
        pf^.internalname:=memorybuf.readstring3(#0,'');
-       PSHXFont(pf^.font).h:=memorybuf.readbyte;
-       PSHXFont(pf^.font).u:=memorybuf.readbyte;
+       SHXFont(pf^.font).h:=memorybuf.readbyte;
+       SHXFont(pf^.font).u:=memorybuf.readbyte;
        memorybuf.readbyte;
        {test:=}memorybuf.readbyte;
        memorybuf.readbyte;
@@ -854,7 +855,7 @@ else if line='AUTOCAD-86 UNIFONT 1.0' then
 
 
   {psinfo:=}memorybuf.GetCurrentReadAddres;
-  PSHXFont(pf^.font).FontData.Shrink;
+  SHXFont(pf^.font).FontData.Shrink;
   end
 else
     result:=false;

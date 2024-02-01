@@ -25,14 +25,13 @@ uses
 type
   TSymbolInfoArray=packed array [0..255] of GDBsymdolinfo;
   TGDBUNISymbolInfoVector=GZVector<GDBUNISymbolInfo>;
-  PBASEFont=^BASEFont;
-  BASEFont=object
+  BASEFont=class
     unicode:Boolean;
     symbolinfo:TSymbolInfoArray;
     unisymbolinfo:TGDBUNISymbolInfoVector;
     FontData:ZGLVectorObject;
-    constructor init;
-    destructor done;virtual;
+    constructor Create;
+    destructor Destroy;virtual;
     function GetOrCreateSymbolInfo(symbol:Integer):PGDBsymdolinfo;virtual;
     function GetOrReplaceSymbolInfo(symbol:Integer):PGDBsymdolinfo;virtual;
     function findunisymbolinfo(symbol:Integer):PGDBsymdolinfo;
@@ -48,7 +47,7 @@ function BASEFont.IsCanSystemDraw:Boolean;
 begin
   result:=false;
 end;
-constructor BASEFont.init;
+constructor BASEFont.Create;
 var
   i:integer;
 begin
@@ -62,7 +61,7 @@ begin
   unisymbolinfo.init(1000);
   FontData.init();
 end;
-destructor BASEFont.done;
+destructor BASEFont.Destroy;
 var
   i:integer;
   pobj:PGDBUNISymbolInfo;

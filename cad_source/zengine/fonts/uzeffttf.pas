@@ -30,24 +30,18 @@ function createnewfontfromttf(name:String;var pf:PGDBfont):Boolean;
 
 implementation
 
-function CreateTTFFontInstance:TTFFont;
-begin
-     //Getmem(result,sizeof(TTFFont));
-     //result^.Create;
-  result:=TTFFont.Create;
-end;
 function createnewfontfromttf(name:String;var pf:PGDBfont):Boolean;
 var
   i:integer;
   chcode:integer;
-  pttf:TTFFont;
+  pttf:TZETFFFontImpl;
   si:TTTFSymInfo;
   TTFFileParams:TTTFFileParams;
 begin
   TTFFileParams:=uzefontttfpreloader.getTTFFileParams(name);
   initfont(pf,extractfilename(name));
   pf^.fontfile:=name;
-  pf^.font:=CreateTTFFontInstance;
+  pf^.font:=TZETFFFontImpl.Create;
   pttf:=pointer(pf^.font);
   result:=true;
   pttf.ftFont.Hinted:=false;
@@ -57,7 +51,7 @@ begin
 
   pttf.ftFont.TextWidth('');//It's just a guarantee font loading. I do not need to calculate the any width
   pttf.ftFont.SizeInPoints:={pttf^.ftFont.SizeInPoints*10}10000;
-  pf.font.unicode:=true;
+  //pf.font.unicode:=true;
   for i:=TTFFileParams.FirstCharIndex to TTFFileParams.LastCharIndex do begin
     chcode:=pttf.ftFont.CharIndex[i];
     if chcode>0 then begin

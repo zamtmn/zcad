@@ -204,7 +204,7 @@ begin
   i := 1;
   while i <= length(content) do
   begin
-    sym:=getsymbol_fromGDBText(content,i,symlen,pgdbfont(pfont)^.font.unicode);
+    sym:=getsymbol_fromGDBText(content,i,symlen,pgdbfont(pfont)^.font.IsUnicode);
     if sym=1 then
     begin
          ispl:=not(ispl);
@@ -551,7 +551,7 @@ sli:=-1;
 for j:=1 to (system.length(PTP^.Text)) do
 begin
      sym:=byte(PTP^.Text[j]);
-          if ptp.param.PStyle.pfont.font.unicode then
+          if ptp.param.PStyle.pfont.font.IsUnicode then
                                                      sym:=ach2uch(sym);
 PTP^.param.PStyle.pfont.CreateSymbol(drawer,self,sym,objmatrix,matr,Bound,sli);
 matr[3].v[0]:=matr[3].v[0]+PTP^.param.PStyle.pfont^.GetOrReplaceSymbolInfo(byte(PTP^.Text[j]){//-ttf-//,tdinfo}).NextSymX;

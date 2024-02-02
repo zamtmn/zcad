@@ -22,53 +22,58 @@ interface
 uses
   uzgprimitives,uzglvectorobject,uzbstrproc,uzctnrVectorBytes,gzctnrVectorTypes,
   gzctnrVector,sysutils,uzbtypes,uzegeometrytypes,uzegeometry;
+
+const
+  SymCasheSize=128;
 type
-  TSymbolInfoArray=packed array [0..255] of GDBsymdolinfo;
+  TSymbolInfoArray=packed array [0..SymCasheSize-1] of GDBsymdolinfo;
   TGDBUNISymbolInfoVector=GZVector<GDBUNISymbolInfo>;
-  BASEFont=class
-    unicode:Boolean;
+  TZEFontImpl=class of TZEBaseFontImpl;
+  TZEBaseFontImpl=class
     symbolinfo:TSymbolInfoArray;
     unisymbolinfo:TGDBUNISymbolInfoVector;
     FontData:ZGLVectorObject;
     constructor Create;
-    destructor Destroy;virtual;
+    destructor Destroy;override;
     function GetOrCreateSymbolInfo(symbol:Integer):PGDBsymdolinfo;virtual;
-    function GetOrReplaceSymbolInfo(symbol:Integer):PGDBsymdolinfo;virtual;
+    function GetOrReplaceSymbolInfo(symbol:Integer):PGDBsymdolinfo;virtual;abstract;
     function findunisymbolinfo(symbol:Integer):PGDBsymdolinfo;
     function findunisymbolinfos(symbolname:String):PGDBsymdolinfo;
     function IsCanSystemDraw:Boolean;virtual;
     procedure SetupSymbolLineParams(const matr:DMatrix4D; var SymsParam:TSymbolSParam);virtual;
+    public
+      function IsUnicode:Boolean;virtual;abstract;
   end;
 implementation
-procedure BASEFont.SetupSymbolLineParams(const matr:DMatrix4D; var SymsParam:TSymbolSParam);
+procedure TZEBaseFontImpl.SetupSymbolLineParams(const matr:DMatrix4D; var SymsParam:TSymbolSParam);
 begin
 end;
-function BASEFont.IsCanSystemDraw:Boolean;
+function TZEBaseFontImpl.IsCanSystemDraw:Boolean;
 begin
   result:=false;
 end;
-constructor BASEFont.Create;
+constructor TZEBaseFontImpl.Create;
 var
   i:integer;
 begin
   inherited;
-  for i:=0 to 255 do begin
+  for i:=low(symbolinfo) to high(symbolinfo) do begin
     symbolinfo[i].LLPrimitiveStartIndex:=-1;
     symbolinfo[i].LLPrimitiveCount:=0;
     symbolinfo[i].LatestCreate:=false;
   end;
-  unicode:=false;
+
   unisymbolinfo.init(1000);
   FontData.init();
 end;
-destructor BASEFont.Destroy;
+destructor TZEBaseFontImpl.Destroy;
 var
   i:integer;
   pobj:PGDBUNISymbolInfo;
   ir:itrec;
 begin
   inherited;
-  for i:=0 to 255 do
+  for i:=low(symbolinfo) to high(symbolinfo) do
     symbolinfo[i].Name:='';
 
   pobj:=unisymbolinfo.beginiterate(ir);
@@ -79,34 +84,11 @@ begin
   unisymbolinfo.Done;
   FontData.done;
 end;
-function BASEFont.GetOrReplaceSymbolInfo(symbol:Integer):PGDBsymdolinfo;
-begin
-     if symbol=49 then
-                        symbol:=symbol;
-     if symbol<256 then
-                       begin
-                       result:=@symbolinfo[symbol];
-                       if result^.LLPrimitiveStartIndex=-1 then
-                                        result:=@symbolinfo[ord('?')];
-                       end
-                   else
-                       begin
-                            result:=findunisymbolinfo(symbol);
-                            if result=nil then
-                            begin
-                                 result:=@symbolinfo[ord('?')];
-                                 exit;
-                            end;
-                            if result^.LLPrimitiveStartIndex=-1 then
-                                             result:=@symbolinfo[ord('?')];
-
-                       end;
-end;
-function BASEFont.GetOrCreateSymbolInfo(symbol:Integer):PGDBsymdolinfo;
+function TZEBaseFontImpl.GetOrCreateSymbolInfo(symbol:Integer):PGDBsymdolinfo;
 var
   usi:GDBUNISymbolInfo;
 begin
-  if symbol<256 then
+  if symbol<SymCasheSize then
     result:=@symbolinfo[symbol]
   else begin
     result:=findunisymbolinfo(symbol);
@@ -127,7 +109,7 @@ begin
     end;
   end;
 end;
-function BASEFont.findunisymbolinfo(symbol:Integer):PGDBsymdolinfo;
+function TZEBaseFontImpl.findunisymbolinfo(symbol:Integer):PGDBsymdolinfo;
 var
   pobj:PGDBUNISymbolInfo;
   ir:itrec;
@@ -143,14 +125,14 @@ begin
     until pobj=nil;
   result:=nil;
 end;
-function BASEFont.findunisymbolinfos(symbolname:String):PGDBsymdolinfo;
+function TZEBaseFontImpl.findunisymbolinfos(symbolname:String):PGDBsymdolinfo;
 var
   pobj:PGDBUNISymbolInfo;
   ir:itrec;
   i:integer;
 begin
   symbolname:=uppercase(symbolname);
-  for i:=0 to 255 do begin
+  for i:=low(symbolinfo) to high(symbolinfo) do begin
     if uppercase(symbolinfo[i].Name)=symbolname then begin
       result:=@symbolinfo[i];
       exit;

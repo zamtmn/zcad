@@ -282,7 +282,7 @@ begin
                                                  if PTP^.param.PStyle<>nil then
                                                  begin
                                                       sym:=byte(PTP^.Text[i]);
-                                                      if ptp.param.PStyle.pfont.font.unicode then
+                                                      if ptp.param.PStyle.pfont.font.IsUnicode then
                                                                                                  sym:=ach2uch(sym);
                                                  Psymbol:=PTP^.param.PStyle.pfont^.GetOrReplaceSymbolInfo(byte(sym){//-ttf-//,TDInfo});
                                                  processH(Psymbol,PTP^.param);

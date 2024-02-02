@@ -32,7 +32,7 @@ type
   end;
 
   TMapChar=TMyMapGenOld<integer,TTTFSymInfo{$IFNDEF DELPHI},LessInteger{$ENDIF}>;
-  TTFFont=class(BASEFont)
+  TZETFFFontImpl=class(TZEBaseFontImpl)
     ftFont: TFreeTypeFont;
     MapChar:TMapChar;
     function GetOrReplaceSymbolInfo(symbol:Integer):PGDBsymdolinfo;override;
@@ -42,9 +42,11 @@ type
     destructor Destroy;override;
     function IsCanSystemDraw:Boolean;override;
     procedure SetupSymbolLineParams(const matr:DMatrix4D; var SymsParam:TSymbolSParam);override;
+    public
+      function IsUnicode:Boolean;override;
   end;
 
-procedure cfeatettfsymbol(const chcode:integer;var si:TTTFSymInfo; pttf:TTFFont);
+procedure cfeatettfsymbol(const chcode:integer;var si:TTTFSymInfo; pttf:TZETFFFontImpl);
 implementation
 type
   TTriangulationMode=(TM_Triangles,TM_TriangleStrip,TM_TriangleFan);
@@ -132,7 +134,7 @@ begin
     end;
   end;
 end;
-procedure cfeatettfsymbol(const chcode:integer;var si:TTTFSymInfo; pttf:TTFFont{;var pf:PGDBfont});
+procedure cfeatettfsymbol(const chcode:integer;var si:TTTFSymInfo; pttf:TZETFFFontImpl{;var pf:PGDBfont});
 var
    i,j:integer;
    glyph:TFreeTypeGlyph;
@@ -237,7 +239,11 @@ begin
   end;
   bs.ClearConturs;
 end;
-procedure TTFFont.SetupSymbolLineParams(const matr:DMatrix4D; var SymsParam:TSymbolSParam);
+function TZETFFFontImpl.IsUnicode:Boolean;
+begin
+  result:=true;
+end;
+procedure TZETFFFontImpl.SetupSymbolLineParams(const matr:DMatrix4D; var SymsParam:TSymbolSParam);
 begin
   if SymsParam.IsCanSystemDraw then
                                       begin
@@ -245,23 +251,23 @@ begin
                                            //SymsParam.pfont:=@self;
                                       end
 end;
-function TTFFont.IsCanSystemDraw:Boolean;
+function TZETFFFontImpl.IsCanSystemDraw:Boolean;
 begin
   result:=true;
 end;
-constructor TTFFont.Create;
+constructor TZETFFFontImpl.Create;
 begin
   inherited;
   ftFont:=TFreeTypeFont.create;
   MapChar:=TMapChar.Create;
 end;
-destructor TTFFont.Destroy;
+destructor TZETFFFontImpl.Destroy;
 begin
   inherited;
   ftFont.Destroy;
   MapChar.Destroy;
 end;
-procedure TTFFont.ProcessTriangleData(si:PGDBsymdolinfo);
+procedure TZETFFFontImpl.ProcessTriangleData(si:PGDBsymdolinfo);
 var
   symoutbound:TBoundingBox;
   VDCopyParam:TZGLVectorDataCopyParam;
@@ -273,7 +279,7 @@ begin
     si.SymMinY:=symoutbound.LBN.y;
   end;
 end;
-function TTFFont.GetSymbolInfo(symbol:Integer):PGDBsymdolinfo;
+function TZETFFFontImpl.GetSymbolInfo(symbol:Integer):PGDBsymdolinfo;
 var
   CharIterator:TMapChar.TIterator;
   si:TTTFSymInfo;
@@ -294,7 +300,7 @@ begin
     result:=nil;
 end;
 
-function TTFFont.GetOrReplaceSymbolInfo(symbol:Integer{//-ttf-//; var TrianglesDataInfo:TTrianglesDataInfo}):PGDBsymdolinfo;
+function TZETFFFontImpl.GetOrReplaceSymbolInfo(symbol:Integer{//-ttf-//; var TrianglesDataInfo:TTrianglesDataInfo}):PGDBsymdolinfo;
 var
   CharIterator:TMapChar.TIterator;
   si:TTTFSymInfo;
@@ -318,66 +324,7 @@ begin
         end;
         CharIterator.Destroy;
       end;
-  end;
-  exit;
-
-     CharIterator:=MapChar.Find(symbol);
-     if CharIterator<>nil then
-                              begin
-                                   si:=CharIterator.value;
-                                   if si.PSymbolInfo<>nil then
-                                                              result:=si.PSymbolInfo
-                                                          else
-                                                              begin
-                                                                   cfeatettfsymbol(symbol,si,@self);
-                                                                   ProcessTriangleData(si.PSymbolInfo);
-                                                                   CharIterator.Value:=si;
-                                                                   result:=si.PSymbolInfo;
-                                                              end;
-                              end
-                          else
-                              begin
-                                   if symbol=8709 then
-                                                      begin
-                                                           result:=GetOrReplaceSymbolInfo(216{//-ttf-//,TrianglesDataInfo});
-                                                           exit;
-                                                      end
-                                                  else
-                                                      begin
-                                                           {CharIterator:=MapChar.Min;
-                                                           si:=CharIterator.value;
-                                                           result:=si.PSymbolInfo;}
-                                                           result:=GetOrReplaceSymbolInfo(ord('?'));
-                                                      end;
-                              end;
-     //-ttf-//TrianglesDataInfo:=si.TrianglesDataInfo;
-     if CharIterator<>nil then
-                              CharIterator.Destroy;
-     exit;
-
-     if symbol=49 then
-                        symbol:=symbol;
-     if symbol<256 then
-                       begin
-                       result:=@symbolinfo[symbol];
-                       if result^.LLPrimitiveStartIndex=-1 then
-                                        result:=@symbolinfo[ord('?')];
-                       end
-                   else
-                       //result:=@self.symbolinfo[ord('?')]
-                       begin
-                            result:=findunisymbolinfo(symbol);
-                            //result:=@symbolinfo[ord('?')];
-                            //usi.symbolinfo:=result^;;
-                            if result=nil then
-                            begin
-                                 result:=@symbolinfo[ord('?')];
-                                 exit;
-                            end;
-                            if result^.LLPrimitiveStartIndex=-1 then
-                                             result:=@symbolinfo[ord('?')];
-
-                       end;
+    end;
   end;
 end;
 

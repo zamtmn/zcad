@@ -32,7 +32,7 @@ GDBfont= object(GDBNamedObject)
     Internalname:String; // Международное полное имя с описанием авора
     family:String;
     fullname:String;
-    font:BASEFont;
+    font:TZEBaseFontImpl;
     DummyDrawerHandle:{THandle}ptruint;
     constructor initnul;
     constructor init(n:String);

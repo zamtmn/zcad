@@ -71,7 +71,7 @@ uses
 
   UUnitManager,
   uzefontmanager,
-  uzeffshx,uzeffttf,uzeffLibreDWG,uzeffLibreDWG2Ents,
+  uzeFontFileFormatSHX,uzeffttf,uzeffLibreDWG,uzeffLibreDWG2Ents,
 
 
   uzcdrawings,

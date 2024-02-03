@@ -28,29 +28,29 @@ const
 type
   TSymbolInfoArray=packed array [0..SymCasheSize-1] of GDBsymdolinfo;
   TGDBUNISymbolInfoVector=GZVector<GDBUNISymbolInfo>;
-  TZEFontImpl=class of TZEBaseFontImpl;
+
   TZEBaseFontImpl=class
-    symbolinfo:TSymbolInfoArray;
-    unisymbolinfo:TGDBUNISymbolInfoVector;
-    FontData:ZGLVectorObject;
-    constructor Create;
-    destructor Destroy;override;
-    function GetOrCreateSymbolInfo(symbol:Integer):PGDBsymdolinfo;virtual;
-    function GetOrReplaceSymbolInfo(symbol:Integer):PGDBsymdolinfo;virtual;abstract;
-    function findunisymbolinfo(symbol:Integer):PGDBsymdolinfo;
-    function findunisymbolinfos(symbolname:String):PGDBsymdolinfo;
-    function IsCanSystemDraw:Boolean;virtual;
-    procedure SetupSymbolLineParams(const matr:DMatrix4D; var SymsParam:TSymbolSParam);virtual;
+    protected
+      symbolinfo:TSymbolInfoArray;
+      unisymbolinfo:TGDBUNISymbolInfoVector;
+      function findunisymbolinfo(symbol:Integer):PGDBsymdolinfo;
+
     public
+      FontData:ZGLVectorObject;
+      procedure SetupSymbolLineParams(const matr:DMatrix4D; var SymsParam:TSymbolSParam);virtual;
+      function GetOrReplaceSymbolInfo(symbol:Integer):PGDBsymdolinfo;virtual;abstract;
+      function GetOrCreateSymbolInfo(symbol:Integer):PGDBsymdolinfo;virtual;
+      function findunisymbolinfos(symbolname:String):PGDBsymdolinfo;
+
+      constructor Create;
+      destructor Destroy;override;
+
       function IsUnicode:Boolean;virtual;abstract;
+      function IsCanSystemDraw:Boolean;virtual;abstract;
   end;
 implementation
 procedure TZEBaseFontImpl.SetupSymbolLineParams(const matr:DMatrix4D; var SymsParam:TSymbolSParam);
 begin
-end;
-function TZEBaseFontImpl.IsCanSystemDraw:Boolean;
-begin
-  result:=false;
 end;
 constructor TZEBaseFontImpl.Create;
 var

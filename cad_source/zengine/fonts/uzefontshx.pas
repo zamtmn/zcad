@@ -29,10 +29,15 @@ type
     destructor Destroy;override;
     public
       function IsUnicode:Boolean;override;
+      function IsCanSystemDraw:Boolean;override;
       property Unicode:Boolean read FUnicode write FUnicode;
       function GetOrReplaceSymbolInfo(symbol:Integer):PGDBsymdolinfo;override;
   end;
 implementation
+function TZESHXFontImpl.IsCanSystemDraw:Boolean;
+begin
+  result:=false;
+end;
 function TZESHXFontImpl.GetOrReplaceSymbolInfo(symbol:Integer):PGDBsymdolinfo;
 begin
      if symbol=49 then

@@ -34,7 +34,7 @@ function createnewfontfromttf(name:String;var pf:PGDBfont):Boolean;
 var
   i:integer;
   chcode:integer;
-  pttf:TZETFFFontImpl;
+  ttf:TZETFFFontImpl;
   si:TTTFSymInfo;
   TTFFileParams:TTTFFileParams;
 begin
@@ -42,22 +42,20 @@ begin
   initfont(pf,extractfilename(name));
   pf^.fontfile:=name;
   pf^.font:=TZETFFFontImpl.Create;
-  pttf:=pointer(pf^.font);
+  ttf:=pointer(pf^.font);
   result:=true;
-  pttf.ftFont.Hinted:=false;
-  pttf.ftFont.Name := name;
-  pf^.family:=pttf.ftFont.Information[ftiFamily];
-  pf^.fullname:=pttf.ftFont.Information[ftiFullName];
+  ttf.TTFImpl.Hinted:=false;
+  ttf.TTFImpl.LoadFile(name);
+  pf^.family:=ttf.TTFImpl.Family;
+  pf^.fullname:=ttf.TTFImpl.FullName;
 
-  pttf.ftFont.TextWidth('');//It's just a guarantee font loading. I do not need to calculate the any width
-  pttf.ftFont.SizeInPoints:={pttf^.ftFont.SizeInPoints*10}10000;
-  //pf.font.unicode:=true;
+  ttf.TTFImpl.SizeInPoints:=10000;
   for i:=TTFFileParams.FirstCharIndex to TTFFileParams.LastCharIndex do begin
-    chcode:=pttf.ftFont.CharIndex[i];
+    chcode:=ttf.TTFImpl.CharIndex[i];
     if chcode>0 then begin
       si.GlyphIndex:=chcode;
       si.PSymbolInfo:=nil;
-      pttf.MapChar.Insert(i,si);
+      ttf.MapChar.Insert(i,si);
     end;
   end;
 end;

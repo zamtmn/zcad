@@ -23,68 +23,15 @@ uses
   LCLProc,uzgprimitivescreator,uzgprimitives,uzglvectorobject,uzefontbase,
   uzebeziersolver,math,uzgloglstatemanager,uzegluinterface,TTTypes,TTObjs,
   usimplegenerics,EasyLazFreeType,uzbstrproc,sysutils,
-  uzegeometrytypes,uzbtypes,uzegeometry,gzctnrSTL,gzctnrVectorTypes,uzbLogIntf;
+  uzegeometrytypes,uzbtypes,uzegeometry,gzctnrSTL,gzctnrVectorTypes,uzbLogIntf,
+  uzeFontFileFormatTTFBackend,
+  uzeFontFileFormatTTFBackendLFT,uzeFontFileFormatTTFBackendFT;
 type
   TTTFSymInfo=record
     GlyphIndex:Integer;
     PSymbolInfo:PGDBSymdolInfo;
   end;
   TMapChar=TMyMapGenOld<integer,TTTFSymInfo{$IFNDEF DELPHI},LessInteger{$ENDIF}>;
-
-  TTTFBackend=class
-    private
-      function GetHinted:Boolean;virtual;abstract;
-      procedure SetHinted(const AValue:Boolean);virtual;abstract;
-      function GetFullName:String;virtual;abstract;
-      function GetFamily:String;virtual;abstract;
-      procedure SetSizeInPoints(const AValue:single);virtual;abstract;
-      function GetSizeInPoints:single;virtual;abstract;
-      function GetCharIndex(AUnicodeChar:integer):integer;virtual;abstract;
-
-      function GetAscent: single; virtual; abstract;
-      function GetDescent: single; virtual; abstract;
-      function GetCapHeight: single; virtual; abstract;
-      function GetGlyph(Index: integer): TFreeTypeGlyph; virtual; abstract;
-
-    public
-      constructor Create;virtual;abstract;
-      procedure LoadFile(const AFile:String);virtual;abstract;
-      property Hinted:Boolean read GetHinted write SetHinted;
-      property FullName:String read GetFullName;
-      property Family:String read GetFamily;
-      property SizeInPoints:single read GetSizeInPoints write SetSizeInPoints;
-      property CharIndex[AUnicodeChar:integer]:integer read GetCharIndex;
-
-      property Ascent: single read GetAscent;
-      property Descent: single read GetDescent;
-      property CapHeight: single read GetCapHeight;
-      property Glyph[Index: integer]: TFreeTypeGlyph read GetGlyph;
-  end;
-
-  TLazFreeTypeTTFBackend=Class(TTTFBackend)
-    private
-      LazFreeTypeTTFImpl:TFreeTypeFont;
-
-      function GetHinted:Boolean;override;
-      procedure SetHinted(const AValue:Boolean);override;
-      function GetFullName:String;override;
-      function GetFamily:String;override;
-      procedure SetSizeInPoints(const AValue:single);override;
-      function GetSizeInPoints:single;override;
-      function GetCharIndex(AUnicodeChar:integer):integer;override;
-
-      function GetAscent: single;override;
-      function GetDescent: single;override;
-      function GetCapHeight: single;override;
-      function GetGlyph(Index: integer): TFreeTypeGlyph;override;
-
-    public
-      constructor Create;override;
-      destructor Destroy;override;
-      procedure LoadFile(const AFile:String);override;
-  end;
-
-  TTTFBackends=class of TTTFBackend;
 
   TZETFFFontImpl=class(TZEBaseFontImpl)
     private
@@ -120,62 +67,6 @@ var
   triangle:array[0..2] of integer;
 
   TTFBackend:TTTFBackends;
-function TLazFreeTypeTTFBackend.GetGlyph(Index: integer):TFreeTypeGlyph;
-begin
-  Result:=LazFreeTypeTTFImpl.Glyph[Index];
-end;
-function TLazFreeTypeTTFBackend.GetCapHeight: single;
-begin
-  Result:=LazFreeTypeTTFImpl.CapHeight;
-end;
-function TLazFreeTypeTTFBackend.GetAscent:single;
-begin
-  Result:=LazFreeTypeTTFImpl.Ascent;
-end;
-function TLazFreeTypeTTFBackend.GetDescent:single;
-begin
-  Result:=LazFreeTypeTTFImpl.Descent;
-end;
-function TLazFreeTypeTTFBackend.GetCharIndex(AUnicodeChar:integer):integer;
-begin
-  Result:=LazFreeTypeTTFImpl.CharIndex[AUnicodeChar];
-end;
-procedure TLazFreeTypeTTFBackend.SetSizeInPoints(const AValue:single);
-begin
-  LazFreeTypeTTFImpl.SizeInPoints:=AValue;
-end;
-function TLazFreeTypeTTFBackend.GetSizeInPoints:single;
-begin
-  Result:=LazFreeTypeTTFImpl.SizeInPoints;
-end;
-function TLazFreeTypeTTFBackend.GetFullName:String;
-begin
-  Result:=LazFreeTypeTTFImpl.Information[ftiFullName];
-end;
-function TLazFreeTypeTTFBackend.GetFamily:String;
-begin
-  Result:=LazFreeTypeTTFImpl.Information[ftiFamily];
-end;
-procedure TLazFreeTypeTTFBackend.LoadFile(const AFile:String);
-begin
-   LazFreeTypeTTFImpl.Name:=AFile;
-end;
-function TLazFreeTypeTTFBackend.GetHinted:Boolean;
-begin
-  Result:=LazFreeTypeTTFImpl.Hinted;
-end;
-procedure TLazFreeTypeTTFBackend.SetHinted(const AValue:Boolean);
-begin
-  LazFreeTypeTTFImpl.Hinted:=AValue;
-end;
-constructor TLazFreeTypeTTFBackend.Create;
-begin
-  LazFreeTypeTTFImpl:=TFreeTypeFont.Create;
-end;
-destructor TLazFreeTypeTTFBackend.Destroy;
-begin
-  FreeAndNil(LazFreeTypeTTFImpl);
-end;
 procedure TessErrorCallBack(error: Cardinal;v2: Pdouble);{$IFDEF Windows}stdcall{$ELSE}cdecl{$ENDIF};
 begin
      error:=error;
@@ -445,5 +336,5 @@ begin
 end;
 
 initialization
- TTFBackend:=TLazFreeTypeTTFBackend;
+ TTFBackend:=TTTFBackendLazFreeType;//TTTFBackendFreeType;
 end.

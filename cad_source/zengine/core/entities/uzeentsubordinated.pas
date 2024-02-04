@@ -217,27 +217,35 @@ begin
 end;
 
 procedure extractvarfromdxfstring(_Value:String;out vn,vt,vv,vun:String);
-var i:integer;
+var
+  i_beg:integer;
+  i_end:integer=0;
 begin
-    i:=pos('|',_value);
-    vn:=copy(_value,1,i-1);
-    _Value:=copy(_value,i+1,length(_value)-i);
-    i:=pos('|',_value);
-    vt:=copy(_value,1,i-1);
-    _Value:=copy(_value,i+1,length(_value)-i);
-    i:=pos('|',_value);
-    vv:=copy(_value,1,i-1);
-    vun:=copy(_value,i+1,length(_value)-i);
+    i_beg:=i_end+1;
+    i_end:=pos('|',_value,i_beg);
+    vn:=copy(_value,i_beg,i_end-i_beg);
+    i_beg:=i_end+1;
+    i_end:=pos('|',_value,i_beg);
+    vt:=copy(_value,i_beg,i_end-i_beg);
+    i_beg:=i_end+1;
+    i_end:=pos('|',_value,i_beg);
+    vv:=copy(_value,i_beg,i_end-i_beg);
+    i_beg:=i_end+1;
+    vun:=copy(_value,i_beg,length(_value)-i_end);
 end;
 procedure extractvarfromdxfstring2(_Value:String;out vn,vt,vun:String);
-var i:integer;
+var
+  i_beg:integer;
+  i_end:integer=0;
 begin
-    i:=pos('|',_value);
-    vn:=copy(_value,1,i-1);
-    _Value:=copy(_value,i+1,length(_value)-i);
-    i:=pos('|',_value);
-    vt:=copy(_value,1,i-1);
-    vun:=copy(_value,i+1,length(_value)-i);
+    i_beg:=i_end+1;
+    i_end:=pos('|',_value,i_beg);
+    vn:=copy(_value,i_beg,i_end-i_beg);
+    i_beg:=i_end+1;
+    i_end:=pos('|',_value,i_beg);
+    vt:=copy(_value,i_beg,i_end-i_beg);
+    i_beg:=i_end+1;
+    vun:=copy(_value,i_beg,length(_value)-i_end);
 end;
 function ansitoutf8ifneed(var s:String):boolean;
 begin

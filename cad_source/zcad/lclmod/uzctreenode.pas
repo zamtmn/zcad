@@ -354,8 +354,8 @@ var
    i:integer;
    tBufer:DWord;
 begin
-     if varname='DWG_DrawMode' then
-                                     varname:=varname;
+//     if varname='DWG_DrawMode' then
+//                                     varname:=varname;
      FVariable:=varname;
      Fmask:=mask;
      pvd:=nil;
@@ -586,8 +586,8 @@ var
    i:integer;
    tBufer:DWord;
 begin
-     if varname='DWG_DrawMode' then
-                                     varname:=varname;
+//     if varname='DWG_DrawMode' then
+//                                     varname:=varname;
      FVariable:=varname;
      Fmask:=mask;
      pvd:=nil;

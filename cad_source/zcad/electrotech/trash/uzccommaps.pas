@@ -468,8 +468,8 @@ begin
       if not ptextent^.selected then
        if length(ptextent^.Content)>1 then
         if ptextent^.Content[1]<>'*' then begin
-          if ptextent^.Content[1]='^' then
-                                          dt:=dt;
+//          if ptextent^.Content[1]='^' then
+//                                          dt:=dt;
           dt:=distance2ray(ptextent^.P_insert_in_WCS,p1.coord,p2.coord);
           if confirmed(dt) then begin
            if TryStrToFloat(string(ptextent^.Content),temp) then begin

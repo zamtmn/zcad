@@ -303,8 +303,8 @@ procedure setstartx;
 begin
      if length(pswp.str)>0 then
                                begin
-                                 if pswp.str[1]=' ' then
-                                                         l:=l;
+//                                 if pswp.str[1]=' ' then
+//                                                         l:=l;
                                sym:=getsymbol_fromGDBText(pswp.str,1,l,pgdbfont(pfont)^.font.unicode);
                                psyminfo:=pgdbfont(pfont)^.GetOrReplaceSymbolInfo(sym{//-ttf-//,tdinfo});
                                pswp^.x:= 0-psyminfo.SymMinX{*textprop.size};

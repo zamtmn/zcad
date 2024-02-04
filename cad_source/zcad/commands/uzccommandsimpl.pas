@@ -345,8 +345,8 @@ var a:integer;
 begin
      if assigned(onAfterClick) then
                                    begin
-                                        if mouseclic=1 then
-                                                           mouseclic:=mouseclic;
+//                                        if mouseclic=1 then
+//                                                           mouseclic:=mouseclic;
 
                                         a:=onAfterClick(context,wc,mc,button,osp,mouseclic);
                                         mouseclic:=a;

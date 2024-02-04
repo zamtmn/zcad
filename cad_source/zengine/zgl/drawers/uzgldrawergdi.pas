@@ -137,11 +137,11 @@ procedure isWindowsErrors;
 begin
 
      {$IFDEF WINDOWS}
-     code:=code;
+//     code:=code;
      code:=0;
      code:=GetLastError;
-     if code<>0 then
-                    code:=code;
+//     if code<>0 then
+//                    code:=code;
      SetLastError(0);
      code:=0;
      {$ENDIF}

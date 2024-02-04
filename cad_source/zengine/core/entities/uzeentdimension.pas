@@ -529,7 +529,7 @@ begin
                                    else
                                        begin
                                             result:=TDXFEntsInternalStringType(PDimStyle.Units.DIMPOST);
-                                                 i:=pos('<>',uppercase(result));
+                                                 i:=pos('<>',result);
                                                  if i>0 then
                                                             begin
                                                                  result:=copy(result,1,i-1)+str+copy(result,i+2,length(result)-i-1)

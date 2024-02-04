@@ -235,8 +235,8 @@ begin
          pvc:=pv^.Clone(@self{.bp.Owner});
          pvc2:=pv^.Clone(@self{.bp.Owner});
          //historyoutstr(pv^.ObjToString('','')+'  cloned obj='+pvc^.ObjToString('',''));
-         if pvc^.GetObjType=GDBTextID then
-            pvc:=pvc;
+//         if pvc^.GetObjType=GDBTextID then
+//            pvc:=pvc;
 
          pvc^.bp.ListPos.Owner:=@self;
 

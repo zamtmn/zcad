@@ -306,7 +306,7 @@ end;
 
 procedure TTextStylesForm.onrsz(Sender: TObject);
 begin
-     Sender:=Sender;
+//     Sender:=Sender;
      SupportTypedEditors.freeeditor;
 end;
 

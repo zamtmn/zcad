@@ -813,7 +813,7 @@ begin
     result:=ToolBarsManager.CreateToolPalette(aName,DoDisableAutoSizing);
   end
   else if ZCADGUIManager.GetZCADFormInfo(aname,PFID) then begin
-    aname:=aname;
+//    aname:=aname;
     if assigned(PFID^.CreateProc)then
       result:=PFID^.CreateProc(aname)
     else begin

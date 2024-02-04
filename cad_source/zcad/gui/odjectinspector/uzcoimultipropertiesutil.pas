@@ -335,8 +335,8 @@ var
    tv:PGDBVertex;
    cc:TArrayIndex;
 begin
-     if fistrun then
-                    fistrun:=fistrun;
+//     if fistrun then
+//                    fistrun:=fistrun;
      if @ecp=nil then
                      begin
                           ProcessVariableAttributes(pvardesk(PTVertex3DControlVarData(pdata).XVarDescAddr.Instance).attrib,vda_RO,0);

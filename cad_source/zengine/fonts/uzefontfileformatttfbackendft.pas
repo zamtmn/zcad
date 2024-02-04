@@ -32,13 +32,13 @@ type
       procedure SetHinted(const AValue:Boolean);override;
       function GetFullName:String;override;
       function GetFamily:String;override;
-      {procedure SetSizeInPoints(const AValue:single);override;
-      function GetSizeInPoints:single;override;
+      procedure SetSizeInPoints(const AValue:single);override;
+      {function GetSizeInPoints:single;override;}
       function GetCharIndex(AUnicodeChar:integer):integer;override;
 
-      function GetAscent: single;override;
-      function GetDescent: single;override;
-      function GetCapHeight: single;override;}
+      {function GetAscent: single;override;
+      function GetDescent: single;override;}
+      function GetCapHeight: single;override;
       //function GetGlyph(Index: integer): TFreeTypeGlyph;override;
 
     public
@@ -79,6 +79,31 @@ begin
       result:=ts;
     end;
   end;
+end;
+
+function TTTFBackendFreeType.GetCapHeight:single;
+var
+  p:pointer;
+begin
+  p:=FT_Get_Sfnt_Table(FontMgr.GetFreeTypeFont(FreeTypeTTFImpl.FontIndex),FT_SFNT_OS2);
+  if p<>nil then
+    result:=PTT_OS(p)^.sCapHeight
+  else
+    exit(0);
+  p:=FT_Get_Sfnt_Table(FontMgr.GetFreeTypeFont(FreeTypeTTFImpl.FontIndex),FT_SFNT_HEAD);
+  if p<>nil then
+    result:=result/PTT_Header(p)^.Units_Per_EM
+  else
+    exit(0);
+end;
+function TTTFBackendFreeType.GetCharIndex(AUnicodeChar:integer):integer;
+begin
+  result:=FT_Get_Char_Index(FontMgr.GetFreeTypeFont(FreeTypeTTFImpl.FontIndex),AUnicodeChar);
+end;
+
+procedure TTTFBackendFreeType.SetSizeInPoints(const AValue:single);
+begin
+  FT_Set_Char_Size(FontMgr.GetFreeTypeFont(FreeTypeTTFImpl.FontIndex),round(64*AValue),round(3*64*AValue),round(AValue),round(3*AValue));
 end;
 
 function TTTFBackendFreeType.GetFullName:String;

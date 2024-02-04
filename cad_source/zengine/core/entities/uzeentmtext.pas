@@ -971,21 +971,16 @@ begin
   //format;
 end;
 function z2dxfmtext(s:String;var ul:boolean):String;
-var i:Integer;
+var count:Integer;
 begin
-     result:=s;
-     repeat
-          i:=pos(#1,result);
-          if i>0 then
-                     begin
-                          if not(ul) then
-                                         result:=copy(result,1,i-1)+'\L'+copy(result,i+1,length(result)-i)
-                                     else
-                                         result:=copy(result,1,i-1)+'\l'+copy(result,i+1,length(result)-i);
-
-                          ul:=not(ul);
-                     end;
-     until i<=0;
+    result:=s;
+    repeat
+        if not(ul) then
+                       result:=StringReplace(result,#1,'\L',[],count)
+                   else
+                       result:=StringReplace(result,#1,'\l',[],count);
+        ul:=not(ul);
+    until count=0;
 end;
 procedure GDBObjMText.SaveToDXF(var outhandle:{Integer}TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);
 var

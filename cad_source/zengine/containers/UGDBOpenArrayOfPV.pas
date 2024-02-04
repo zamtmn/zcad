@@ -282,13 +282,13 @@ var
   p:pGDBObjEntity;
       ir:itrec;
 begin
-  if count>500 then
-                   count:=count;
+//  if count>500 then
+//                   count:=count;
   p:=beginiterate(ir);
   if p<>nil then
   repeat
-  if ir.itc=12 then
-                         count:=count;
+//  if ir.itc=12 then
+//                         count:=count;
 
   {if p^.GetObjType=0 then
                          p^.vp.ID:=p^.vp.ID;}
@@ -304,8 +304,8 @@ var
   p:pGDBObjEntity;
   ir:itrec;
 begin
-  if Count>1 then
-                    Count:=Count;
+//  if Count>1 then
+//                    Count:=Count;
   p:=beginiterate(ir);
   if p<>nil then
   repeat
@@ -319,8 +319,8 @@ var
   p:pGDBObjEntity;
       ir:itrec;
 begin
-  if Count>1 then
-                    Count:=Count;
+//  if Count>1 then
+//                    Count:=Count;
   p:=beginiterate(ir);
   if p<>nil then
   repeat
@@ -336,8 +336,8 @@ var
   p:pGDBObjEntity;
       ir:itrec;
 begin
-  if Count>1 then
-                    Count:=Count;
+//  if Count>1 then
+//                    Count:=Count;
   p:=beginiterate(ir);
   if p<>nil then
   repeat

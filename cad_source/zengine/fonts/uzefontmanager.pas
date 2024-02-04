@@ -215,8 +215,8 @@ begin
                             end;
      FontExt:=uppercase(ExtractFileExt(FontPathName));
      FontName:=ExtractFileName(FontPathName);
-          if FontName='_mipgost.shx' then
-                                    fontname:=FontName;
+//          if FontName='_mipgost.shx' then
+//                                    fontname:=FontName;
      case AddItem(FontName,pointer(p)) of
              IsFounded:
                        begin

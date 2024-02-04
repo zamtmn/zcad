@@ -135,10 +135,10 @@ function uch2ach(uch:word):byte;
 var s:String;
 begin
      {$IFNDEF DELPHI}
-     if uch=$412 then
-                     uch:=uch;
-     if uch=44064 then
-                     uch:=uch;
+//     if uch=$412 then
+//                     uch:=uch;
+//     if uch=44064 then
+//                     uch:=uch;
      s:=UnicodeToUtf8(uch);
      s:={UTF8toANSI}Tria_Utf8ToAnsi(s);
      //if length(s)=1 then
@@ -146,8 +146,8 @@ begin
      //               else
      //                   result:=0;
      //WideCharToMultiByte(CP_ACP,0,@uch, 1, @result, 1, nil, nil);
-     if result=194 then
-                     uch:=uch;
+//     if result=194 then
+//                     uch:=uch;
      {$ENDIF}
 end;
 function ach2uch(ach:byte):word;
@@ -385,8 +385,8 @@ begin
       system.break;
     i := i + 1;
   end;
-  if i>1 then
-              i:=i;
+//  if i>1 then
+//              i:=i;
   //programlog.LogOut(@expr[1],0);
 
   //expr:=expr;

@@ -489,7 +489,7 @@ begin
                                                                     pf^.base.Attributes:=pf.base.Attributes or FA_READONLY;
                  end;
   end;
-     sdname:=sdname;
+//     sdname:=sdname;
      if OPSPlaceSmokeDetectorOrtoParam.DatType<>OPSPlaceSmokeDetectorOrtoParam.olddt then
      begin
           OPSPlaceSmokeDetectorOrtoParam.olddt:=OPSPlaceSmokeDetectorOrtoParam.DatType;

@@ -317,7 +317,7 @@ end;
 
 procedure TDimStylesForm.onrsz(Sender: TObject);
 begin
-     Sender:=Sender;
+//     Sender:=Sender;
      SupportTypedEditors.freeeditor;
 end;
 

@@ -301,8 +301,8 @@ end;
 
 procedure TGDBobjinsp.SetBounds(ALeft, ATop, AWidth, AHeight: integer);
 begin
-     if aheight=41 then
-                       aheight:=aheight;
+//     if aheight=41 then
+//                       aheight:=aheight;
   inherited SetBounds(ALeft, ATop, AWidth, AHeight);
 end;
 {function ReStoreGDBObjInsp:boolean;

@@ -389,7 +389,7 @@ begin
     MainFunction:=GetMainFunction(pent);
     if mainfunction<>nil then
     begin
-       mainfunction:=mainfunction;
+//       mainfunction:=mainfunction;
        if Ent2NodeMap.TryGetValue(MainFunction,mainfuncnode) then
          basenode:=mainfuncnode.Parent
        else begin
@@ -575,7 +575,7 @@ begin
     else
       parts:=parts+'|'+partsarray[i]
   end;
-  parts:=parts;
+//  parts:=parts;
 end;
 
 function RunEditor(const cpt,BoundsSaveName:string;var AText:string):boolean;

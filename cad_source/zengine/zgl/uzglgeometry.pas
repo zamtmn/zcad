@@ -414,9 +414,9 @@ begin
      dir:=pcurrsegment^.dir;
      angle:=Vertexangle(CreateVertex2D(0,0),CreateVertex2D(dir.x,dir.y));
      cp:=pcurrsegment^.startpoint;
-     end
-     else
-         pcurrsegment:=pcurrsegment;
+     end;
+//     else
+//         pcurrsegment:=pcurrsegment;
 end;
 procedure ZSegmentator.startdraw;
 begin

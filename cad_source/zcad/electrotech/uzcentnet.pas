@@ -515,8 +515,8 @@ begin
      if graf.divide then
      begin
           Getmem(Pointer(TempNet),sizeof(GDBObjNet));
-          if PtrUInt(tempnet)=$229FEF0 then
-                                  tempnet:=tempnet;
+//          if PtrUInt(tempnet)=$229FEF0 then
+//                                  tempnet:=tempnet;
           TempNet^.initnul(nil);
           pentvarexttempnet:=tempnet.GetExtension<TVariablesExtender>;
 

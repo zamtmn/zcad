@@ -320,8 +320,8 @@ begin
                                        oldline:=line;
                    end;
     line:=readspace(line);
-   if line='GDBObjLWPolyline=object(GDBObjWithLocalCS) Closed:Boolean;' then
-                  line:=line;
+//   if line='GDBObjLWPolyline=object(GDBObjWithLocalCS) Closed:Boolean;' then
+//                  line:=line;
    zTraceLn('{T}[ZSCRIPT]%s',[line]);
 
     //programlog.LogOutFormatStr('%s',[line],lp_OldPos,LM_Trace);
@@ -329,8 +329,8 @@ begin
     parseresult:=getpattern(@parsemodetemplate,maxparsemodetemplate,line,typ);
     if typ>0 then
     begin
-         if typ=beginmode then
-                              typ:=typ;
+//         if typ=beginmode then
+//                              typ:=typ;
          case changeparsemode(PPaths,TranslateFunc,typ,mode) of
                                           modeEnd:
                                                   system.break;
@@ -443,16 +443,16 @@ begin
                                             end;
                                   identtype:begin
                                                   typename:=parseresult^.getData(0);
-                                                  if typename='GDBXCoordinate' then
-                                                                                  typename:=typename;
+//                                                  if typename='GDBXCoordinate' then
+//                                                                                  typename:=typename;
                                                   Getmem(Pointer(etd),sizeof(GDBSinonimDescriptor));
                                                   PGDBSinonimDescriptor(etd)^.init(parseresult^.getData(1),typename,currentunit);
                                                   fieldoffset:=PGDBSinonimDescriptor(etd)^.SizeInBytes;
                                              end;
                                       ptype:begin
                                                   typename:=parseresult^.getData(0);
-                                                  if typename='PTUnitManager' then
-                                                                                  typename:=typename;
+//                                                  if typename='PTUnitManager' then
+//                                                                                  typename:=typename;
                                                   Getmem(Pointer(etd),sizeof(GDBPointerDescriptor));
                                                   PGDBPointerDescriptor(etd)^.init(pString(parseresult^.getDataMutable(1))^,typename,currentunit);
                                                   //Stringtypearray := chr(TGDBPointer)+pString(parseresult^.getelement(1))^;
@@ -467,9 +467,9 @@ begin
                                                                                zTraceLn('{W}Record "'+typename+'" not packed');
 
                                                                                end;
-                                                  if (typename) = 'tmemdeb'
-                                                  then
-                                                       typename:=typename;
+//                                                  if (typename) = 'tmemdeb'
+//                                                  then
+//                                                       typename:=typename;
                                                   //Stringtypearray := chr(Trecord);
                                                   fieldoffset:=0;
                                                   Getmem(Pointer(etd),sizeof(RecordDescriptor));
@@ -485,9 +485,9 @@ begin
                                                                                zTraceLn('{W}Object "'+typename+'" not packed');
 
                                                                                end;
-                                                  if (typename) = 'GDBObj3DFace'
-                                                  then
-                                                       typename:=typename;
+//                                                  if (typename) = 'GDBObj3DFace'
+//                                                  then
+//                                                       typename:=typename;
                                                   Getmem(Pointer(etd),sizeof(ObjectDescriptor));
                                                   PObjectDescriptor(etd)^.init(typename,currentunit);
                                                   //Stringtypearray := chr(TGDBobject);
@@ -525,8 +525,8 @@ begin
                                                                PObjectDescriptor(fieldgdbtype)^.CopyTo(PObjectDescriptor(etd));
                                                                PObjectDescriptor(etd)^.Parent:=PObjectDescriptor(fieldgdbtype);
                                                                fieldoffset:=PUserTypeDescriptor(fieldgdbtype)^.SizeInBytes;
-                                                               if fieldoffset=dynamicoffset then
-                                                               fieldoffset:=fieldoffset;
+//                                                               if fieldoffset=dynamicoffset then
+//                                                               fieldoffset:=fieldoffset;
 
                                                           end;
 
@@ -551,8 +551,8 @@ begin
                                                                                zTraceLn('{W}Array "'+typename+'" not packed');
 
                                                                               end;
-                                                  if typename='GDBPalette' then
-                                                                              typename:=typename;
+//                                                  if typename='GDBPalette' then
+//                                                                              typename:=typename;
                                                   if parseresult<>nil then begin parseresult^.Done;Freemem(Pointer(parseresult));parseresult:=nil;end;
                                                   parseresult:=runparser('_softspace'#0'=[_intdiapazons_cs'#0'_softspace'#0'=]',line,parseerror);
                                                   subparseresult:=runparser('_softspace'#0'=o=f_softspace'#0'_identifier'#0'_softend'#0,line,parseerror);
@@ -634,8 +634,8 @@ begin
                                                   currvalue:=0;
                                                   maxvalue:=0;
                                                   typename:=pString(parseresult^.getDataMutable(0))^;
-                                                  if typename='TInsUnits' then
-                                                                                typename:=typename;
+//                                                  if typename='TInsUnits' then
+//                                                                                typename:=typename;
                                                   repeat
                                                   if parseresult<>nil then begin parseresult^.Done;Freemem(Pointer(parseresult));end;
                                                   parseresult:=runparser('_identifier'#0,line,parseerror);
@@ -721,8 +721,8 @@ if addtype then
         zTraceLn('{T}[ZSCRIPT]Type "%s" added',[typename]);
 
         //programlog.LogOutFormatStr('Type "%s" added',[typename],lp_OldPos,LM_Trace);
-        if typename='tdisp' then
-                                typename:=typename;
+//        if typename='tdisp' then
+//                                typename:=typename;
         //Pointer(etd.name):=nil;
         //Pointer(etd.tdesk):=nil;
         end;
@@ -734,8 +734,8 @@ if addtype then
                                 //programlog.LogOutFormatStr('Varmode string: "%s"',[line],lp_OldPos,LM_Trace);
                                 //parsepos:=1;
                                 parseresult:=runparser('_identifiers_cs'#0'=:_identifier'#0'_softend'#0,line,parseerror);
-                                if line<>'' then
-                                                line:=line;
+//                                if line<>'' then
+//                                                line:=line;
                                 {(template:'_softspace'#0'=(=*_String'#0'=*=)';id:username)}
 
     if line='' then
@@ -770,8 +770,8 @@ if addtype then
                                      for i:=0 to parseresult.Count-2 do
                                      begin
                                      varname:=pString(parseresult^.getDataMutable(i))^;
-                                     if varname='INTF_ObjInsp_WhiteBackground' then
-                                                            varname:=varname;
+//                                     if varname='INTF_ObjInsp_WhiteBackground' then
+//                                                            varname:=varname;
                                      if currentunit^.FindVariable(varname,true)=nil then
                                      begin
                                      currentunit^.setvardesc(vd, varname,vuname, vartype);
@@ -793,13 +793,13 @@ if addtype then
                                                         zTraceLn('{D}[ZSCRIPT]'+line);
 
                                                         //programlog.logoutstr(line,0,LM_Debug);
-                                                        if copy(line,1,10)='VIEW_ObjIn'
-                                                        then
-                                                            line:=line;
+                                                        //if copy(line,1,10)='VIEW_ObjIn'
+                                                        //then
+                                                        //    line:=line;
                                                         line:=copy(line,1,PosWithBracket(';','''','''',line,1,0)-1);
-                                                        if line='camera.prop.point.x:=111.0'
-                                                                 then
-                                                                     line:=line;
+//                                                        if line='camera.prop.point.x:=111.0'
+//                                                                 then
+//                                                                     line:=line;
                                                         vd:=evaluate(line,currentunit);
                                                         ClearTempVariable(vd);
                                                    end;

@@ -427,8 +427,8 @@ begin
      begin
           if point.selected then
           begin
-               if save then
-                           save:=save;
+//               if save then
+//                           save:=save;
                {учет СК владельца}
                m:=PSelectedObjDesc(md).objaddr^.getownermatrix^;
                MatrixInvert(m);

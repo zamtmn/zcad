@@ -129,8 +129,8 @@ var
     i:integer;
     dc:TDrawContext;
 begin
-  if (button and MZW_LBUTTON)<>0 then
-                    button:=button;
+//  if (button and MZW_LBUTTON)<>0 then
+//                    button:=button;
   if PEProp.Action=TSPE_Remove then
                                    PEProp.setpoint:=false;
 

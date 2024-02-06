@@ -99,8 +99,8 @@ begin
                                 sname:=pString(pvn^.data.Addr.Instance)^
                             else
                                 sname:=rsNameAbsent;
-                if sname='RS' then
-                               sname:=sname;
+//                if sname='RS' then
+//                               sname:=sname;
                 pcd:=FindOrCreate(sname);                                         //поиск или создание нового элемента в списки. Если такое имя в списке есть, то возвращает указатель на него, если нет то создает новый.
                 pcd^.Segments.PushBackData(pobj);                                 //добавляем к сегменту новый кабель
                 //pvn:=PTEntityUnit(pobj^.ou.Instance)^.FindVariable('AmountD');

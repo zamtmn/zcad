@@ -124,7 +124,7 @@ begin
     i := i + 1;
   end;
   result := copy(expr, i, length(expr) - i + 1);
-  expr:=expr;
+//  expr:=expr;
 end;
 function filestream.ReadString2: TMyString;
 begin
@@ -332,9 +332,9 @@ begin
                                inc(currentpos);
                                if buferpos = buferread then
                                                            readtobufer;
-                               if scobcacount=0 then exit
-                                                else
-                                                     s:=s;
+                               if scobcacount=0 then exit;
+//                                                else
+//                                                     s:=s;
                           end
                       else inc(buferpos);
       end;

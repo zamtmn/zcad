@@ -1164,8 +1164,8 @@ begin
         inc(IODXFContext.handle);
       end;
     end;
-  if $3d=tmpHandle then
-    tmpHandle:=tmpHandle;
+//  if $3d=tmpHandle then
+//    tmpHandle:=tmpHandle;
 
   dxfStringout(outhandle,5,inttohex(tmpHandle{IODXFContext.handle}, 0));
   dxfStringout(outhandle,100,dxfName_AcDbEntity);

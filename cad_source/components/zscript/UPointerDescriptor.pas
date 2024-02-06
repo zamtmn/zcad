@@ -96,8 +96,8 @@ begin
     bm2:=property_build;
     //if PTUserTypeDescriptor(PUserTypeDescriptor((TypeOf)))^.GetTypeAttributes=TA_COMPOUND then
     //                                                                                          ppd:=ppd;
-    if (assigned(ta))and(name='lstonmouse') then
-                                                       name:=name;
+//    if (assigned(ta))and(name='lstonmouse') then
+//                                                       name:=name;
 
     if assigned(ta) then
                         begin

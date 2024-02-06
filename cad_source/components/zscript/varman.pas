@@ -1104,7 +1104,7 @@ begin
 
            oaod:begin
                      PObjectDescriptor(ptd)^.LincedData:=parseresult^.getData(0);
-                     state:=state;
+//                     state:=state;
                 end;
            functionmember,
            proceduremember,
@@ -1140,8 +1140,8 @@ begin
                                                        Raise Exception.Create('Something wrong');
                                                     {ENDIF}
                                                   end;
-                               if uppercase(functionname)='FORMAT' then
-                                                                   functionname:=functionname;
+//                               if uppercase(functionname)='FORMAT' then
+//                                                                   functionname:=functionname;
 
                                if parseresult<>nil then begin parseresult^.Done;Freemem(Pointer(parseresult));end;
                                repeat
@@ -1151,9 +1151,9 @@ begin
                                 mod_virtual:begin
                                                  mattr:=mattr or m_virtual;
                                             end;
-                               mod_abstract:begin
-                                                 mattr:=mattr;
-                                            end;
+//                               mod_abstract:begin
+//                                                 mattr:=mattr;
+//                                            end;
                                end;
                                if parseresult<>nil then begin parseresult^.Done;Freemem(Pointer(parseresult));end;
                                until typ=0;
@@ -1180,8 +1180,8 @@ begin
                     begin
                       fieldtype:=parseresult^.getData(0);
                       //pf:=PFieldDescriptor(PRecordDescriptor(ptd)^.Fields.getDataMutable(PRecordDescriptor(ptd)^.Fields.Count-1));
-                      if fieldtype='Paths' then
-                                          fieldtype:=fieldtype;
+//                      if fieldtype='Paths' then
+//                                          fieldtype:=fieldtype;
                       {$IFNDEF DELPHI}
                       if assigned(TranslateFunc)then
                         fieldtype:=TranslateFunc(ptd.TypeName+'~'+getlastfirld.ProgramName,fieldtype);
@@ -1251,8 +1251,8 @@ begin
                                                         for i:=0 to parseresult.Count-2 do
                                                         begin
                                                              fieldname:=parseresult^.getData(i);
-                                                             if fieldname='PInOCS' then
-                                                                                           fieldname:=fieldname;
+//                                                             if fieldname='PInOCS' then
+//                                                                                           fieldname:=fieldname;
                                                              Stringtypearray := Stringtypearray + fieldname + #0;
                                                              if fieldsmode=primary then Stringtypearray := Stringtypearray+'P'
                                                                                    else Stringtypearray := Stringtypearray+'C';
@@ -1526,15 +1526,15 @@ begin
   //pblock := firstblockdesc;
   //while true do
   //begin
-    if varname='camera.point.x' then
-       varname:=varname;
+//    if varname='camera.point.x' then
+//       varname:=varname;
     pdesc:=self.vardescarray.beginiterate(ir);
     if pdesc<>nil then
     repeat
     offset := 0;
       bc := nil;
-          if pdesc^.name='RD_BackGroundColor' then
-                                       varname:=varname;
+//          if pdesc^.name='RD_BackGroundColor' then
+//                                       varname:=varname;
 
           if findfieldcustom(PByte(pdesc), offset, bc, varname) then
       begin
@@ -1839,8 +1839,8 @@ begin
 end;
 destructor tunit.done;
 begin
-     if name='devicebase' then
-                               name:=name;
+//     if name='devicebase' then
+//                               name:=name;
      ImplementationVariables.done;
      InterfaceVariables.done;
      InterfaceUses.done;

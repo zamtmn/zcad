@@ -116,8 +116,8 @@ begin
      MetodName:=mn;
      NameHash:=makehash(uppercase(MetodName));
      OperandsName:=dt;
-     if dt='(var obj):Integer;' then
-                                        dt:=dt;
+//     if dt='(var obj):Integer;' then
+//                                        dt:=dt;
 
      MetodAddr:=ma;
      Attributes:=attr;
@@ -170,10 +170,10 @@ begin
 end;
 procedure ObjectDescriptor.RegisterTypeinfo(ti:PTypeInfo);
 begin
-     if TypeName='TMSEditor' then begin
-          if TypeName='TMSEditor' then
-                    ti:=ti;
-     end;
+//     if TypeName='TMSEditor' then begin
+//          if TypeName='TMSEditor' then
+//                    ti:=ti;
+//     end;
      CorrectFieldsOffset(ti);
 end;
 procedure ObjectDescriptor.CorrectCurrentFieldsOffset(td:PTypeData;var i:integer);
@@ -415,8 +415,8 @@ begin
                                                        pcmd.init(objname,mn,dt,ma,attr,punit)
                                                    else
                                                        begin
-                                                            if uppercase(mn)='FORMAT' then
-                                                                                           mn:=mn;
+//                                                            if uppercase(mn)='FORMAT' then
+//                                                                                           mn:=mn;
                                                             pcmd.init(objname,mn,dt,pointer(vmtcurrentoffset),attr,punit);
                                                             inc(vmtcurrentoffset,{4 cpu64}sizeof(pointer));
                                                        end;
@@ -425,8 +425,8 @@ begin
                     begin
                          if (attr and m_virtual)=0 then
                                                         begin
-                                                             if uppercase(mn)='FORMAT' then
-                                                                                           mn:=mn;
+//                                                             if uppercase(mn)='FORMAT' then
+//                                                                                           mn:=mn;
                                                              pmd^.MetodAddr:=ma;
                                                         end;
                     end;
@@ -663,10 +663,10 @@ var pcmd:PMetodDescriptor;
 begin
      zTraceLn('{T+}[ZSCRIPT]ObjectDescriptor.CopyTo(@%s)',[RD.TypeName]);
      //programlog.LogOutFormatStr('ObjectDescriptor.CopyTo(@%s)',[RD.TypeName],lp_IncPos,LM_Debug);
-     if self.TypeName='DeviceDbBaseObject' then
-                                               TypeName:=TypeName;
-     if rd^.TypeName='DbBaseObject' then
-                                               TypeName:=TypeName;
+//     if self.TypeName='DeviceDbBaseObject' then
+//                                               TypeName:=TypeName;
+//     if rd^.TypeName='DbBaseObject' then
+//                                               TypeName:=TypeName;
      inherited CopyTo(RD);
      pmd:=SimpleMenods.beginiterate(ir);
      if pmd<>nil then

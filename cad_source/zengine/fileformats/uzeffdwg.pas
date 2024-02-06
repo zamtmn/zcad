@@ -817,7 +817,7 @@ begin
                           exit(0);
     if two_bit_code=3 then
                           ShowError('BitRead_bd: unexpected 2-bit code: "11"');
-    result:=result;
+//    result:=result;
 
 end;
 
@@ -945,8 +945,8 @@ begin
                    end
                  else
                    lit_length := read_literal_length(bc, opcode1);
-                 if lit_length=0 then
-                                     lit_length:=lit_length;
+//                 if lit_length=0 then
+//                                     lit_length:=lit_length;
                  //HistoryOutStr('  '+format('comp_bytes=%d comp_offset=%d lit_length=%d',[comp_bytes,comp_offset,lit_length]));
                end
        else if (opcode1 >= $21) and (opcode1 <= $3F) then
@@ -997,7 +997,7 @@ begin
            break     // Terminates the input stream, everything is ok!
        else
            begin
-             opcode1:=opcode1;
+//             opcode1:=opcode1;
            exit{(1)};  // error in input stream
            end;
 
@@ -1202,8 +1202,8 @@ begin
                siarray[i].pages[a].DataSize:=pi^.DataSize;
                siarray[i].pages[a].StartOffset:=pi^.StartOffset;
                siarray[i].pages[a].section:=FindSectionByID(sarray,pi^.PageNumber);
-               if siarray[i].pages[a].section=nil then
-                                                      pi:=pi;
+//               if siarray[i].pages[a].section=nil then
+//                                                      pi:=pi;
                HistoryOutStr(format(' Page: %d, DataSize: %d, StartOffset: %d,',
                                            [pi^.PageNumber, pi^.DataSize,pi^.StartOffset]));
                PtrUInt(pi):=PtrUInt(pi)+{sizeof(dwg2004pageinfo)}16;
@@ -1257,7 +1257,7 @@ begin
          if extdatasize<>0 then
                                begin
                                objbitreader.BitRead_h;
-                               extdatasize:=extdatasize;
+//                               extdatasize:=extdatasize;
                                for jj:=1 to extdatasize do
                                objbitreader.BitRead_rc;
                                end;
@@ -1330,8 +1330,8 @@ begin
                   objbitreader.BitRead_TV;
                 end;
 
-              if (flags and $4000)>0then
-                flags:=flags;   // has AcDbColor reference (handle)
+//              if (flags and $4000)>0then
+//                flags:=flags;   // has AcDbColor reference (handle)
 
               if (flags and $2000)>0 then
                 begin

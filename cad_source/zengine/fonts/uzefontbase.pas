@@ -99,8 +99,8 @@ function BASEFont.GetOrReplaceSymbolInfo(symbol:Integer{//-ttf-//; var Triangles
 begin
      //-ttf-//TrianglesDataInfo.TrianglesAddr:=0;
      //-ttf-//TrianglesDataInfo.TrianglesSize:=0;
-     if symbol=49 then
-                        symbol:=symbol;
+//     if symbol=49 then
+//                        symbol:=symbol;
      if symbol<256 then
                        begin
                        result:=@symbolinfo[symbol];

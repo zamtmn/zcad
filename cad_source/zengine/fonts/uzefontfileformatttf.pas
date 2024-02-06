@@ -172,13 +172,15 @@ end;
 begin
   k:=1/pttf.TTFImpl.CapHeight;
   BS.VectorData:=@pttf.FontData;
-
   BS.fmode:=TSM_WaitStartCountur;
-  glyph:=pttf.TTFImplementation.Glyph[{i}si.GlyphIndex];
-  _glyph:=glyph.Data.z;
+
   si.PSymbolInfo:=pttf.GetOrCreateSymbolInfo(chcode);
   si.PSymbolInfo.LLPrimitiveStartIndex:=pttf.FontData.LLprimitives.Count;
   BS.shxsize:=@si.PSymbolInfo.LLPrimitiveCount;
+
+  glyph:=pttf.TTFImplementation.Glyph[{i}si.GlyphIndex];
+  _glyph:=glyph.Data.z;
+
   si.PSymbolInfo.w:=glyph.Bounds.Right*k;
   si.PSymbolInfo.NextSymX:=glyph.Bounds.Right*k;
   si.PSymbolInfo.NextSymX:=glyph.Advance*k;
@@ -198,14 +200,13 @@ begin
         bs.StartCountur;
       x1:=_glyph^.outline.points^[j].x*k/64;
       y1:=_glyph^.outline.points^[j].y*k/64;
-      if (_glyph^.outline.flags[j] and TT_Flag_On_Curve)<>0 then begin
-        bs.AddPoint(x1,y1,TPA_OnCurve);
-      end else begin
-       bs.AddPoint(x1,y1,TPA_NotOnCurve);
-      end;
-      if  startcountur then begin
-        startcountur:=false;
-      end else begin
+      if (_glyph^.outline.flags[j] and TT_Flag_On_Curve)<>0 then
+        bs.AddPoint(x1,y1,TPA_OnCurve)
+      else
+        bs.AddPoint(x1,y1,TPA_NotOnCurve);
+      if startcountur then
+        startcountur:=false
+      else begin
         if (_glyph^.outline.flags[j] and TT_Flag_On_Curve)<>0 then begin
           if j-lastoncurve>3 then
             lastoncurve:=lastoncurve;
@@ -238,7 +239,7 @@ begin
         tv.x:=bs.Conturs.VArray[i][j].v.x;
         tv.y:=bs.Conturs.VArray[i][j].v.y;
         tv.z:=0;
-        GLUIntrf.TessVertex(tesselator,@tv,pointer(bs.Conturs.VArray[i][j].index));
+        GLUIntrf.TessVertex(tesselator,@tv,bs.Conturs.VArray[i][j].index);
       end;
       GLUIntrf.TessEndContour(tesselator);
       zTraceLn('{T-}[TTF_CONTENTS]End contur');

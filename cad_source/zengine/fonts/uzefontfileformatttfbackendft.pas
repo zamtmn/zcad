@@ -28,13 +28,19 @@ type
     protected
       FreeTypeTTFImpl:TFreeTypeFont;
 
+      FPointSize:single;
+      FDPI:integer;
+
       function GetHinted:Boolean;override;
       procedure SetHinted(const AValue:Boolean);override;
       function GetFullName:String;override;
       function GetFamily:String;override;
       procedure SetSizeInPoints(const AValue:single);override;
-      {function GetSizeInPoints:single;override;}
+      function GetSizeInPoints:single;override;
       function GetCharIndex(AUnicodeChar:integer):integer;override;
+
+      //procedure SetDPI(const AValue:integer);
+      //function GetDPI:integer;
 
       {function GetAscent: single;override;
       function GetDescent: single;override;}
@@ -45,6 +51,7 @@ type
       constructor Create;override;
       destructor Destroy;override;
       procedure LoadFile(const AFile:String);override;
+      //property DPI: integer read GetDPI write SetDPI;
   end;
 
 implementation
@@ -95,14 +102,22 @@ begin
     result:=result/PTT_Header(p)^.Units_Per_EM
   else
     exit(0);
+
+  result:=result * FPointSize * FDPI / 72;
 end;
+
 function TTTFBackendFreeType.GetCharIndex(AUnicodeChar:integer):integer;
 begin
   result:=FT_Get_Char_Index(FontMgr.GetFreeTypeFont(FreeTypeTTFImpl.FontIndex),AUnicodeChar);
 end;
+function TTTFBackendFreeType.GetSizeInPoints:single;
+begin
+  result:=FPointSize;
+end;
 
 procedure TTTFBackendFreeType.SetSizeInPoints(const AValue:single);
 begin
+  FPointSize:=AValue;
   FT_Set_Char_Size(FontMgr.GetFreeTypeFont(FreeTypeTTFImpl.FontIndex),round(64*AValue),round(3*64*AValue),round(AValue),round(3*AValue));
 end;
 
@@ -135,6 +150,8 @@ end;
 constructor TTTFBackendFreeType.Create;
 begin
   FreeTypeTTFImpl:=TFreeTypeFont.Create;
+  FDPI:=96;
+  FPointSize:=1;
 end;
 destructor TTTFBackendFreeType.Destroy;
 begin

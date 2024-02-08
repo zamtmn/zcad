@@ -150,7 +150,7 @@ GL_TRIANGLE_STRIP:begin
      else
          begin
            debugln('{F}Wrong triangulation mode!!');
-           halt(0);
+           raise Exception.Create('Wrong triangulation mode!!');
          end;
      end;
 end;

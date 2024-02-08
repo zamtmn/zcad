@@ -164,8 +164,7 @@ GL_TRIANGLE_STRIP:begin
      else
          begin
            debugln('{F}Wrong triangulation mode!!');
-           //programlog.LogOutStr('Wrong triangulation mode!!',lp_OldPos,LM_Fatal);
-           halt(0);
+           raise Exception.Create('Wrong triangulation mode!!');
          end;
      end;
 end;

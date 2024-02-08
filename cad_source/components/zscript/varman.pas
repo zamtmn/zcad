@@ -1193,9 +1193,8 @@ begin
                           begin
                                if state<>metods then
                                                     begin
-                                                         DebugLn('{F}Syntax error in file '+f.name);
-                                                         //programlog.LogOutStr('Syntax error in file '+f.name,lp_OldPos,LM_Fatal);
-                                                         halt(0);
+                                                      debugln('{E}Syntax error in file "%s"',[f.name]);
+                                                      raise Exception.CreateFmt('Syntax error in file "%s"',[f.name]);
                                                     end;
 
                           end;
@@ -1203,9 +1202,8 @@ begin
           begin
                if state<>metods then
                                     begin
-                                      DebugLn('{F}Syntax error in file '+f.name);
-                                      //programlog.LogOutStr('Syntax error in file '+f.name,lp_OldPos,LM_Fatal);
-                                      halt(0);
+                                      debugln('{E}Syntax error in file "%s"',[f.name]);
+                                      raise Exception.CreateFmt('Syntax error in file "%s"',[f.name]);
                                     end;
                oldline:=line;
                parseresult:=runparser('_softspace'#0'_identifier'#0'_softspace'#0'=:'#0'_softspace'#0'_identifier'#0'_softspace'#0'=r=e=a=d'#0'_softspace'#0'_identifier'#0'_softspace'#0'=w=r=i=t=e'#0'_softspace'#0'_identifier'#0'_softspace'#0'=;',line,parseerror);
@@ -1232,9 +1230,8 @@ begin
                           begin
                                if state=metods then
                                                   begin
-                                                    DebugLn('{F}Syntax error in file '+f.name);
-                                                    //programlog.LogOutStr('Syntax error in file '+f.name,lp_OldPos,LM_Fatal);
-                                                    halt(0);
+                                                    debugln('{E}Syntax error in file "%s"',[f.name]);
+                                                    raise Exception.CreateFmt('Syntax error in file "%s"',[f.name]);
                                                   end
                                                else
                                                    begin

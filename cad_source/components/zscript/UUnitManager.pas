@@ -310,11 +310,9 @@ begin
                         //inc(kolvo);
                         if {kolvo=20}line=oldline then
                                    begin
-                                        //FatalError('Unable to parse line "'+line+'"');
-                                        debugln('Unable to parse line "'+line+'"');
-                                        halt(0);
+                                        debugln('{E}Unable to parse line "%s"',[line]);
+                                        raise Exception.CreateFmt('Unable to parse line "%s"',[line]);
                                         line := f.readtoparser(';');
-                                        //kolvo:=0;
                                    end
                                    else
                                        oldline:=line;
@@ -643,8 +641,8 @@ begin
                                                                 else
                                                                     begin
                                                                       //FatalError('Syntax error in file '+f.name);
-                                                                      debugln('{E}Syntax error in file '+f.name);
-                                                                      halt(0);
+                                                                      debugln('{E}Syntax error in file "%s"',[f.name]);
+                                                                      raise Exception.CreateFmt('Syntax error in file "%s"',[f.name]);
                                                                     end;
                                                   if parseresult<>nil then begin parseresult^.Done;Freemem(Pointer(parseresult));parseresult:=nil;end;
                                                   parseresult:=runparser('_softspace'#0'=(=*_String'#0'=*=)',line,parseerror);
@@ -672,8 +670,8 @@ begin
                                              else if maxvalue<65536 then maxvalue:=2
                                              else if maxvalue<4294967296 then maxvalue:=4
                                              else begin
-                                                   debugln('{E}Syntax error in file '+f.name);
-                                                   halt(0);
+                                                    debugln('{E}Syntax error in file "%s"',[f.name]);
+                                                    raise Exception.CreateFmt('Syntax error in file "%s"',[f.name]);
                                                   end;
                                              Getmem(Pointer(etd),sizeof(EnumDescriptor));
                                              PEnumDescriptor(etd)^.init(maxvalue,typename,currentunit);
@@ -696,9 +694,8 @@ begin
 
                                              end;
                                            0:begin
-                                                  debugln('{E}Syntax error in file '+f.name);
-                                                  halt(0);
-                                                  //FatalError('Syntax error in file '+f.name)
+                                              debugln('{E}Syntax error in file "%s"',[f.name]);
+                                              raise Exception.CreateFmt('Syntax error in file "%s"',[f.name]);
                                              end;
                                 end;
 
@@ -749,11 +746,8 @@ if addtype then
                         //inc(kolvo);
                         if {kolvo=20}line=oldline then
                                    begin
-                                        //FatalError('Unable to parse line "'+line+'"');
-                                        debugln('{E}Unable to parse line "'+line+'"');
-                                        halt(0);
-                                        line := f.readtoparser(';');
-                                        //kolvo:=0;
+                                     debugln('{E}Unable to parse line "%s"',[line]);
+                                     raise Exception.CreateFmt('Unable to parse line "%s"',[line]);
                                    end
                                    else
                                        oldline:=line;

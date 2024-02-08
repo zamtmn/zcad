@@ -399,7 +399,6 @@ begin
                 functionname := itbasicfunction(s);
                 if functionname > 0 then
                 begin
-                                                                                                                 //halt(0);
                   s := readsubexpr(expr);
                   i := pos(',', s);
                   while i > 0 do

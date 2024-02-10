@@ -20,7 +20,7 @@ unit uzeFontFileFormatTTFBackendLFT;
 {$INCLUDE zengineconfig.inc}
 interface
 uses
-  sysutils,
+  sysutils,Types,
   uzeFontFileFormatTTFBackend,
   EasyLazFreeType;
 type
@@ -39,17 +39,29 @@ type
       function GetAscent: single;override;
       function GetDescent: single;override;
       function GetCapHeight: single;override;
-      function GetGlyph(Index: integer): TFreeTypeGlyph;override;
+      function GetGlyph(Index: integer): TGlyphData;override;
 
     public
       constructor Create;override;
       destructor Destroy;override;
       procedure LoadFile(const AFile:String);override;
+
+      function GetGlyphBounds(GD:TGlyphData):TRect;override;
+      function GetGlyphAdvance(GD:TGlyphData):Single;override;
   end;
 implementation
-function TTTFBackendLazFreeType.GetGlyph(Index: integer):TFreeTypeGlyph;
+function TTTFBackendLazFreeType.GetGlyphBounds(GD:TGlyphData):TRect;
 begin
-  Result:=LazFreeTypeTTFImpl.Glyph[Index];
+  result:=TFreeTypeGlyph(GD.PG).Bounds;
+end;
+function TTTFBackendLazFreeType.GetGlyphAdvance(GD:TGlyphData):Single;
+begin
+  result:=TFreeTypeGlyph(GD.PG).Advance;
+end;
+
+function TTTFBackendLazFreeType.GetGlyph(Index: integer):TGlyphData;
+begin
+  Result.PG:=LazFreeTypeTTFImpl.Glyph[Index];
 end;
 function TTTFBackendLazFreeType.GetCapHeight: single;
 begin

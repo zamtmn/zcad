@@ -25,7 +25,7 @@ uses
   usimplegenerics,EasyLazFreeType,uzbstrproc,sysutils,
   uzegeometrytypes,uzbtypes,uzegeometry,gzctnrSTL,gzctnrVectorTypes,uzbLogIntf,
   uzeFontFileFormatTTFBackend,
-  uzeFontFileFormatTTFBackendLFT,uzeFontFileFormatTTFBackendFT;
+  uzeFontFileFormatTTFBackendLFT,uzeFontFileFormatTTFBackendFT,Types;
 type
   TTTFSymInfo=record
     GlyphIndex:Integer;
@@ -146,9 +146,10 @@ end;
 procedure cfeatettfsymbol(const chcode:integer;var si:TTTFSymInfo; pttf:TZETFFFontImpl{;var pf:PGDBfont});
 var
    i,j:integer;
-   glyph:TFreeTypeGlyph;
+   GenGlyph:TGlyphData;
+   //glyph:TFreeTypeGlyph;
    _glyph:PGlyph;
-   x1,y1:fontfloat;
+   //x,y:fontfloat;
    cends,lastoncurve:integer;
    startcountur:boolean;
    k:Double;
@@ -156,6 +157,8 @@ var
    lastv:GDBFontVertex2D;
    tparrayindex:integer;
    tv:gdbvertex;
+   p:GDBvertex2D;
+   glyphBounds:TRect;
 procedure CompareAndTess(v:GDBFontVertex2D);
 begin
   if (abs(lastv.x-v.x)>eps)or(abs(lastv.y-v.y)>eps) then begin
@@ -178,15 +181,16 @@ begin
   si.PSymbolInfo.LLPrimitiveStartIndex:=pttf.FontData.LLprimitives.Count;
   BS.shxsize:=@si.PSymbolInfo.LLPrimitiveCount;
 
-  glyph:=pttf.TTFImplementation.Glyph[{i}si.GlyphIndex];
-  _glyph:=glyph.Data.z;
+  GenGlyph:=pttf.TTFImplementation.Glyph[si.GlyphIndex];
+  _glyph:=TFreeTypeGlyph(GenGlyph.PG).Data.z;
 
-  si.PSymbolInfo.w:=glyph.Bounds.Right*k;
-  si.PSymbolInfo.NextSymX:=glyph.Bounds.Right*k;
-  si.PSymbolInfo.NextSymX:=glyph.Advance*k;
+  glyphBounds:=pttf.TTFImplementation.GetGlyphBounds(GenGlyph);
+
+  si.PSymbolInfo.w:=glyphBounds.Right*k;
+  si.PSymbolInfo.NextSymX:=pttf.TTFImplementation.GetGlyphAdvance(GenGlyph)*k;
   si.PSymbolInfo.SymMaxX:=si.PSymbolInfo.NextSymX;
   si.PSymbolInfo.SymMinX:=0;
-  si.PSymbolInfo.h:=glyph.Bounds.Top*k;
+  si.PSymbolInfo.h:=glyphBounds.Top*k;
   si.PSymbolInfo.LLPrimitiveCount:=0;
   ptrdata:=@pttf.FontData;
   ptrsize:=@si.PSymbolInfo.LLPrimitiveCount;
@@ -198,12 +202,12 @@ begin
     for j:=0 to _glyph^.outline.n_points-3 do begin
       if  startcountur then
         bs.StartCountur;
-      x1:=_glyph^.outline.points^[j].x*k/64;
-      y1:=_glyph^.outline.points^[j].y*k/64;
+      p.x:=_glyph^.outline.points^[j].x*k/64;
+      p.y:=_glyph^.outline.points^[j].y*k/64;
       if (_glyph^.outline.flags[j] and TT_Flag_On_Curve)<>0 then
-        bs.AddPoint(x1,y1,TPA_OnCurve)
+        bs.AddPoint(p,TPA_OnCurve)
       else
-        bs.AddPoint(x1,y1,TPA_NotOnCurve);
+        bs.AddPoint(p,TPA_NotOnCurve);
       if startcountur then
         startcountur:=false
       else begin

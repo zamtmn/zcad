@@ -20,9 +20,13 @@ unit uzeFontFileFormatTTFBackend;
 {$INCLUDE zengineconfig.inc}
 interface
 uses
-  sysutils,
+  sysutils,Types,
   EasyLazFreeType;
 type
+  TGlyphData=record
+    PG:Pointer;
+  end;
+
   TTTFBackends=class of TTTFBackend;
   TTTFBackend=class
     protected
@@ -37,7 +41,7 @@ type
       function GetAscent: single; virtual; abstract;
       function GetDescent: single; virtual; abstract;
       function GetCapHeight: single; virtual; abstract;
-      function GetGlyph(Index: integer): TFreeTypeGlyph; virtual; abstract;
+      function GetGlyph(Index: integer): TGlyphData; virtual; abstract;
 
     public
       constructor Create;virtual;abstract;
@@ -48,10 +52,13 @@ type
       property SizeInPoints:single read GetSizeInPoints write SetSizeInPoints;
       property CharIndex[AUnicodeChar:integer]:integer read GetCharIndex;
 
+      function GetGlyphBounds(GD:TGlyphData):TRect;virtual;abstract;
+      function GetGlyphAdvance(GD:TGlyphData):Single;virtual;abstract;
+
       property Ascent: single read GetAscent;
       property Descent: single read GetDescent;
       property CapHeight: single read GetCapHeight;
-      property Glyph[Index: integer]: TFreeTypeGlyph read GetGlyph;
+      property Glyph[Index: integer]: TGlyphData read GetGlyph;
   end;
 implementation
 end.

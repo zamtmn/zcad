@@ -148,7 +148,7 @@ var
    i,j:integer;
    GenGlyph:TGlyphData;
    //glyph:TFreeTypeGlyph;
-   _glyph:PGlyph;
+   //_glyph:PGlyph;
    //x,y:fontfloat;
    cends,lastoncurve:integer;
    startcountur:boolean;
@@ -182,7 +182,6 @@ begin
   BS.shxsize:=@si.PSymbolInfo.LLPrimitiveCount;
 
   GenGlyph:=pttf.TTFImplementation.Glyph[si.GlyphIndex];
-  _glyph:=TFreeTypeGlyph(GenGlyph.PG).Data.z;
 
   glyphBounds:=pttf.TTFImplementation.GetGlyphBounds(GenGlyph);
 
@@ -195,36 +194,36 @@ begin
   ptrdata:=@pttf.FontData;
   ptrsize:=@si.PSymbolInfo.LLPrimitiveCount;
   tparrayindex:=0;
-  if _glyph^.outline.n_contours>0 then begin
+  if pttf.TTFImplementation.GetGlyphContoursCount(GenGlyph)>0 then begin
     cends:=0;
     lastoncurve:=0;
     startcountur:=true;
-    for j:=0 to _glyph^.outline.n_points-3 do begin
+    for j:=0 to pttf.TTFImplementation.GetGlyphPointsCount(GenGlyph)-3 do begin
       if  startcountur then
         bs.StartCountur;
-      p.x:=_glyph^.outline.points^[j].x*k/64;
-      p.y:=_glyph^.outline.points^[j].y*k/64;
-      if (_glyph^.outline.flags[j] and TT_Flag_On_Curve)<>0 then
+      p:=pttf.TTFImplementation.GetGlyphPoint(GenGlyph,j);
+      p:=p*k/64;
+      if (TTFPFOnCurve in pttf.TTFImplementation.GetGlyphPointFlag(GenGlyph,j)) then
         bs.AddPoint(p,TPA_OnCurve)
       else
         bs.AddPoint(p,TPA_NotOnCurve);
       if startcountur then
         startcountur:=false
       else begin
-        if (_glyph^.outline.flags[j] and TT_Flag_On_Curve)<>0 then begin
+        if (TTFPFOnCurve in pttf.TTFImplementation.GetGlyphPointFlag(GenGlyph,j)) then begin
           if j-lastoncurve>3 then
             lastoncurve:=lastoncurve;
           lastoncurve:=j;
         end;
       end;
-      if j=_glyph^.outline.conEnds[cends] then begin
+      if j=pttf.TTFImplementation.GetGlyphConEnd(GenGlyph,cends) then begin
         EndSymContour;
         inc(cends);
         startcountur:=true;
         lastoncurve:=j+1;
-        if cends=_glyph^.outline.n_contours then
+        if cends=pttf.TTFImplementation.GetGlyphContoursCount(GenGlyph) then
           break;
-        if (_glyph^.outline.n_points-j)<5 then
+        if (pttf.TTFImplementation.GetGlyphPointsCount(GenGlyph)-j)<5 then
           break;
       end;
     end;

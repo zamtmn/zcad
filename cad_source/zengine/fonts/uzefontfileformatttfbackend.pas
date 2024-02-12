@@ -21,11 +21,15 @@ unit uzeFontFileFormatTTFBackend;
 interface
 uses
   sysutils,Types,
-  EasyLazFreeType;
+  EasyLazFreeType,
+  uzegeometrytypes;
 type
   TGlyphData=record
     PG:Pointer;
   end;
+
+  TTTFPointFlag=(TTFPFOnCurve);
+  TTTFPointFlags=set of TTTFPointFlag;
 
   TTTFBackends=class of TTTFBackend;
   TTTFBackend=class
@@ -54,6 +58,11 @@ type
 
       function GetGlyphBounds(GD:TGlyphData):TRect;virtual;abstract;
       function GetGlyphAdvance(GD:TGlyphData):Single;virtual;abstract;
+      function GetGlyphContoursCount(GD:TGlyphData):Integer;virtual;abstract;
+      function GetGlyphPointsCount(GD:TGlyphData):Integer;virtual;abstract;
+      function GetGlyphPoint(GD:TGlyphData;np:integer):GDBvertex2D;virtual;abstract;
+      function GetGlyphPointFlag(GD:TGlyphData;np:integer):TTTFPointFlags;virtual;abstract;
+      function GetGlyphConEnd(GD:TGlyphData;np:integer):Integer;virtual;abstract;
 
       property Ascent: single read GetAscent;
       property Descent: single read GetDescent;

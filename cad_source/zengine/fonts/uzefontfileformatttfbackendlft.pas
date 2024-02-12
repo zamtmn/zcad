@@ -22,7 +22,8 @@ interface
 uses
   sysutils,Types,
   uzeFontFileFormatTTFBackend,
-  EasyLazFreeType;
+  EasyLazFreeType,TTObjs,
+  uzegeometrytypes;
 type
   TTTFBackendLazFreeType=Class(TTTFBackend)
     protected
@@ -48,6 +49,11 @@ type
 
       function GetGlyphBounds(GD:TGlyphData):TRect;override;
       function GetGlyphAdvance(GD:TGlyphData):Single;override;
+      function GetGlyphContoursCount(GD:TGlyphData):Integer;override;
+      function GetGlyphPointsCount(GD:TGlyphData):Integer;override;
+      function GetGlyphPoint(GD:TGlyphData;np:integer):GDBvertex2D;override;
+      function GetGlyphPointFlag(GD:TGlyphData;np:integer):TTTFPointFlags;override;
+      function GetGlyphConEnd(GD:TGlyphData;np:integer):Integer;override;
   end;
 implementation
 function TTTFBackendLazFreeType.GetGlyphBounds(GD:TGlyphData):TRect;
@@ -58,7 +64,31 @@ function TTTFBackendLazFreeType.GetGlyphAdvance(GD:TGlyphData):Single;
 begin
   result:=TFreeTypeGlyph(GD.PG).Advance;
 end;
-
+function TTTFBackendLazFreeType.GetGlyphContoursCount(GD:TGlyphData):Integer;
+begin
+  result:=PGlyph(TFreeTypeGlyph(GD.PG).Data.z)^.outline.n_contours;
+end;
+function TTTFBackendLazFreeType.GetGlyphPointsCount(GD:TGlyphData):Integer;
+begin
+  result:=PGlyph(TFreeTypeGlyph(GD.PG).Data.z)^.outline.n_points;
+end;
+function TTTFBackendLazFreeType.GetGlyphPoint(GD:TGlyphData;np:integer):GDBvertex2D;
+begin
+  with PGlyph(TFreeTypeGlyph(GD.PG).Data.z)^.outline.points^[np] do begin
+    result.x:=x;
+    result.y:=y;
+  end;
+end;
+function TTTFBackendLazFreeType.GetGlyphPointFlag(GD:TGlyphData;np:integer):TTTFPointFlags;
+begin
+  result:=[];
+  if PGlyph(TFreeTypeGlyph(GD.PG).Data.z)^.outline.flags^[np]<>0 then
+    Include(result,TTFPFOnCurve);
+end;
+function TTTFBackendLazFreeType.GetGlyphConEnd(GD:TGlyphData;np:integer):Integer;
+begin
+  result:=PGlyph(TFreeTypeGlyph(GD.PG).Data.z)^.outline.conEnds^[np];
+end;
 function TTTFBackendLazFreeType.GetGlyph(Index: integer):TGlyphData;
 begin
   Result.PG:=LazFreeTypeTTFImpl.Glyph[Index];

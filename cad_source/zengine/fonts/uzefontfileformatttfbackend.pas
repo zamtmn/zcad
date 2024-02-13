@@ -63,6 +63,7 @@ type
       function GetGlyphPoint(GD:TGlyphData;np:integer):GDBvertex2D;virtual;abstract;
       function GetGlyphPointFlag(GD:TGlyphData;np:integer):TTTFPointFlags;virtual;abstract;
       function GetGlyphConEnd(GD:TGlyphData;np:integer):Integer;virtual;abstract;
+      procedure DoneGlyph(var GD:TGlyphData); virtual; abstract;
 
       property Ascent: single read GetAscent;
       property Descent: single read GetDescent;

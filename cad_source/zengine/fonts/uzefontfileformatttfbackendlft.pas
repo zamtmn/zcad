@@ -47,6 +47,8 @@ type
       destructor Destroy;override;
       procedure LoadFile(const AFile:String);override;
 
+      procedure DoneGlyph(var GD:TGlyphData);override;
+
       function GetGlyphBounds(GD:TGlyphData):TRect;override;
       function GetGlyphAdvance(GD:TGlyphData):Single;override;
       function GetGlyphContoursCount(GD:TGlyphData):Integer;override;
@@ -92,6 +94,10 @@ end;
 function TTTFBackendLazFreeType.GetGlyph(Index: integer):TGlyphData;
 begin
   Result.PG:=LazFreeTypeTTFImpl.Glyph[Index];
+end;
+procedure TTTFBackendLazFreeType.DoneGlyph(var GD:TGlyphData);
+begin
+  GD.PG:=nil;
 end;
 function TTTFBackendLazFreeType.GetCapHeight: single;
 begin

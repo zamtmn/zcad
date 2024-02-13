@@ -20,7 +20,7 @@ unit uzeFontFileFormatTTFBackendFT;
 {$INCLUDE zengineconfig.inc}
 interface
 uses
-  sysutils,
+  sysutils,Types,
   uzeFontFileFormatTTFBackend,
   freetypehdyn,ftfont;
 type
@@ -45,13 +45,16 @@ type
       {function GetAscent: single;override;
       function GetDescent: single;override;}
       function GetCapHeight: single;override;
-      //function GetGlyph(Index: integer): TFreeTypeGlyph;override;
+      function GetGlyph(Index: integer):TGlyphData;override;
 
     public
       constructor Create;override;
       destructor Destroy;override;
       procedure LoadFile(const AFile:String);override;
       //property DPI: integer read GetDPI write SetDPI;
+      procedure DoneGlyph(var GD:TGlyphData);override;
+
+      function GetGlyphBounds(GD:TGlyphData):TRect;override;
   end;
 
 implementation
@@ -86,6 +89,25 @@ begin
       result:=ts;
     end;
   end;
+end;
+
+function TTTFBackendFreeType.GetGlyph(Index: integer):TGlyphData;
+begin
+  Result.PG:=nil;
+  FT_Load_Glyph(FontMgr.GetFreeTypeFont(FreeTypeTTFImpl.FontIndex),Index,FT_LOAD_DEFAULT);
+  FT_Get_Glyph(FontMgr.GetFreeTypeFont(FreeTypeTTFImpl.FontIndex).glyph,Result.PG);
+end;
+procedure TTTFBackendFreeType.DoneGlyph(var GD:TGlyphData);
+begin
+  FT_Done_Glyph(GD.PG);
+end;
+
+function TTTFBackendFreeType.GetGlyphBounds(GD:TGlyphData):TRect;
+var
+  BB:FT_BBox;
+begin
+  FT_Glyph_Get_CBox(GD.PG,FT_GLYPH_BBOX_UNSCALED,BB);
+  bb:=bb;
 end;
 
 function TTTFBackendFreeType.GetCapHeight:single;

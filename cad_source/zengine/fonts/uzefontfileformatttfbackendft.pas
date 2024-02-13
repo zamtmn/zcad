@@ -22,11 +22,15 @@ interface
 uses
   sysutils,Types,
   uzeFontFileFormatTTFBackend,
+  uzegeometrytypes,
   freetypehdyn,ftfont;
+const
+  EmptyIndex=-1;
 type
   TTTFBackendFreeType=Class(TTTFBackend)
     protected
       FreeTypeTTFImpl:TFreeTypeFont;
+      GlyphInSlotIndex:Integer;
 
       FPointSize:single;
       FDPI:integer;
@@ -42,8 +46,8 @@ type
       //procedure SetDPI(const AValue:integer);
       //function GetDPI:integer;
 
-      {function GetAscent: single;override;
-      function GetDescent: single;override;}
+      function GetAscent: single;override;
+      function GetDescent: single;override;
       function GetCapHeight: single;override;
       function GetGlyph(Index: integer):TGlyphData;override;
 
@@ -55,6 +59,12 @@ type
       procedure DoneGlyph(var GD:TGlyphData);override;
 
       function GetGlyphBounds(GD:TGlyphData):TRect;override;
+      function GetGlyphAdvance(GD:TGlyphData):Single;override;
+      function GetGlyphContoursCount(GD:TGlyphData):Integer;override;
+      function GetGlyphPointsCount(GD:TGlyphData):Integer;override;
+      function GetGlyphPoint(GD:TGlyphData;np:integer):GDBvertex2D;override;
+      function GetGlyphPointFlag(GD:TGlyphData;np:integer):TTTFPointFlags;override;
+      function GetGlyphConEnd(GD:TGlyphData;np:integer):Integer;override;
   end;
 
 implementation
@@ -93,21 +103,102 @@ end;
 
 function TTTFBackendFreeType.GetGlyph(Index: integer):TGlyphData;
 begin
-  Result.PG:=nil;
-  FT_Load_Glyph(FontMgr.GetFreeTypeFont(FreeTypeTTFImpl.FontIndex),Index,FT_LOAD_DEFAULT);
-  FT_Get_Glyph(FontMgr.GetFreeTypeFont(FreeTypeTTFImpl.FontIndex).glyph,Result.PG);
+  if GlyphInSlotIndex<>Index then begin
+    if FT_Load_Glyph(FontMgr.GetFreeTypeFont(FreeTypeTTFImpl.FontIndex),Index,FT_LOAD_DEFAULT)=0 then begin
+      PtrInt(Result.PG):=Index;
+      GlyphInSlotIndex:=Index;
+      //FT_Get_Glyph(FontMgr.GetFreeTypeFont(FreeTypeTTFImpl.FontIndex).glyph,Result.PG);
+    end else
+      raise Exception.CreateFmt('TTTFBackendFreeType.GetGlyph FT_Load_Glyph(%d)<>0', [Index]);
+  end;
 end;
 procedure TTTFBackendFreeType.DoneGlyph(var GD:TGlyphData);
 begin
-  FT_Done_Glyph(GD.PG);
+  //FT_Done_Glyph(GD.PG);
 end;
 
 function TTTFBackendFreeType.GetGlyphBounds(GD:TGlyphData):TRect;
 var
   BB:FT_BBox;
 begin
-  FT_Glyph_Get_CBox(GD.PG,FT_GLYPH_BBOX_UNSCALED,BB);
-  bb:=bb;
+  GetGlyph(PtrInt(GD.PG));
+  with FontMgr.GetFreeTypeFont(FreeTypeTTFImpl.FontIndex).glyph^.metrics do begin
+    result.left:=horiBearingX;
+    result.right:=horiAdvance;
+    result.top:=vertAdvance;
+    result.Bottom:=vertBearingY;
+  end;
+end;
+function TTTFBackendFreeType.GetGlyphAdvance(GD:TGlyphData):Single;
+begin
+  GetGlyph(PtrInt(GD.PG));
+  result:=FontMgr.GetFreeTypeFont(FreeTypeTTFImpl.FontIndex).glyph^.linearHoriAdvance
+end;
+function TTTFBackendFreeType.GetGlyphContoursCount(GD:TGlyphData):Integer;
+begin
+  GetGlyph(PtrInt(GD.PG));
+  result:=FontMgr.GetFreeTypeFont(FreeTypeTTFImpl.FontIndex).glyph^.outline.n_contours;
+end;
+function TTTFBackendFreeType.GetGlyphPointsCount(GD:TGlyphData):Integer;
+begin
+  GetGlyph(PtrInt(GD.PG));
+  result:=FontMgr.GetFreeTypeFont(FreeTypeTTFImpl.FontIndex).glyph^.outline.n_points;
+end;
+function TTTFBackendFreeType.GetGlyphPoint(GD:TGlyphData;np:integer):GDBvertex2D;
+begin
+  GetGlyph(PtrInt(GD.PG));
+  with FontMgr.GetFreeTypeFont(FreeTypeTTFImpl.FontIndex).glyph^.outline.points[np] do begin
+    result.x:=x;
+    result.y:=y;
+  end;
+end;
+function TTTFBackendFreeType.GetGlyphPointFlag(GD:TGlyphData;np:integer):TTTFPointFlags;
+begin
+  GetGlyph(PtrInt(GD.PG));
+  if (byte(FontMgr.GetFreeTypeFont(FreeTypeTTFImpl.FontIndex).glyph^.outline.tags[np]) and 1)<>0 then
+    result:=[TTFPFOnCurve]
+  else
+    result:=[];
+end;
+function  TTTFBackendFreeType.GetGlyphConEnd(GD:TGlyphData;np:integer):Integer;
+begin
+  GetGlyph(PtrInt(GD.PG));
+  result:=FontMgr.GetFreeTypeFont(FreeTypeTTFImpl.FontIndex).glyph^.outline.contours[np];
+end;
+function TTTFBackendFreeType.GetAscent: single;
+var
+  p:pointer;
+begin
+  p:=FT_Get_Sfnt_Table(FontMgr.GetFreeTypeFont(FreeTypeTTFImpl.FontIndex),FT_SFNT_OS2);
+  if p<>nil then
+    result:=PTT_OS(p)^.sTypoAscender
+  else
+    exit(0);
+  p:=FT_Get_Sfnt_Table(FontMgr.GetFreeTypeFont(FreeTypeTTFImpl.FontIndex),FT_SFNT_HEAD);
+  if p<>nil then
+    result:=result/PTT_Header(p)^.Units_Per_EM
+  else
+    exit(0);
+
+  result:=result * FPointSize * FDPI / 72;
+end;
+
+function TTTFBackendFreeType.GetDescent: single;
+var
+  p:pointer;
+begin
+  p:=FT_Get_Sfnt_Table(FontMgr.GetFreeTypeFont(FreeTypeTTFImpl.FontIndex),FT_SFNT_OS2);
+  if p<>nil then
+    result:=PTT_OS(p)^.sTypoDescender
+  else
+    exit(0);
+  p:=FT_Get_Sfnt_Table(FontMgr.GetFreeTypeFont(FreeTypeTTFImpl.FontIndex),FT_SFNT_HEAD);
+  if p<>nil then
+    result:=result/PTT_Header(p)^.Units_Per_EM
+  else
+    exit(0);
+
+  result:=result * FPointSize * FDPI / 72;
 end;
 
 function TTTFBackendFreeType.GetCapHeight:single;
@@ -174,6 +265,7 @@ begin
   FreeTypeTTFImpl:=TFreeTypeFont.Create;
   FDPI:=96;
   FPointSize:=1;
+  GlyphInSlotIndex:=EmptyIndex;
 end;
 destructor TTTFBackendFreeType.Destroy;
 begin

@@ -166,6 +166,9 @@ type
  //**Получить список кабелей внутри группы для данного щита (графа)
  function getListCabInGroupHD(nameGroup:string;graphDev:TGraphDev):TListPolyline;
 
+  //**Получить список всех кабелей внутри графа
+ function getListAllCabInGraph(graphDev:TGraphDev):TListPolyline;
+
  //**Получить список устройств внутри группы для данного щита (графа)
  function getListDevInGroupHD(nameGroup:string;graphDev:TGraphDev):TListDev;
 
@@ -328,6 +331,91 @@ var
     end;
   begin
      ZCMsgCallBackInterface.TextMessage('Имя группы = ' + nameGroup + '. Список сегментов:',TMWOHistoryOut);
+     result:=TListPolyline.Create;
+     getListCabPoly(graphDev.Root.Index,result);
+
+     /////****ПРОВЕРКА того что получили в результате анализа
+     //for j:=0 to result.Size-1 do
+     //  begin
+     //    polyext:=result[j]^.specialize GetExtension<TVariablesExtender>;
+     //    //Получаем ссылку на кабель или полилинию которая заменяет стояк
+     //    cableNowMF:=getMainFuncCable(polyext);
+     //    if cableNowMF <> nil then
+     //      begin    //кабель
+     //        // Проверяем совпадает имя группы подключения внутри устройства с группой которую мы сейчас заполняем
+     //        pvd:=FindVariableInEnt(cableNowMF,velec_GC_HDGroup);
+     //        if pvd<>nil then
+     //          ZCMsgCallBackInterface.TextMessage('   Имя кабеля = '+pstring(pvd^.data.Addr.Instance)^,TMWOHistoryOut);
+     //      end
+     //      else
+     //      begin   //полилиния
+     //        // Проверяем совпадает имя группы подключения внутри устройства с группой которую мы сейчас заполняем
+     //        pvd:=FindVariableInEnt(result[j],velec_GC_HDGroup);
+     //        if pvd<>nil then
+     //         ZCMsgCallBackInterface.TextMessage('   Имя кабеля = '+pstring(pvd^.data.Addr.Instance)^,TMWOHistoryOut);
+     //      end;
+     //  end;
+  end;
+
+  //**Получить список всех кабелей внутри графа
+  function getListAllCabInGraph(graphDev:TGraphDev):TListPolyline;
+  var
+    i,j:integer;
+    cabNowMF:PGDBObjEntity;
+    cabNowvarext,polyext:TVariablesExtender;
+    cableNowMF:PGDBObjCable;
+    isHaveList:boolean;
+    pvd:pvardesk;
+    polyCab:PGDBObjPolyline;
+
+    function getMainFuncCable(devNowvarext:TVariablesExtender):PGDBObjCable;
+    begin
+      result:=nil;
+      if devNowvarext.getMainFuncEntity^.GetObjType=GDBCableID then
+         result:=PGDBObjCable(devNowvarext.getMainFuncEntity);
+    end;
+
+    //** Рекурсия получаем номер нужного нам головного устройства внутри нужного нам графа
+    procedure getListCabPoly(intVertex:integer;var listPolyInGroup:TListPolyline);
+    var
+      i,j:integer;
+      cableNowMF:PGDBObjCable;
+      polyCab:PGDBObjPolyline;
+      devNowvarext:TVariablesExtender;
+      //devNameGroup:string;
+
+    begin
+       if intVertex <> graphDev.Root.Index then
+         begin
+           //inc(j);
+
+           polyCab:=graphDev.GetEdge(graphDev.Vertices[intVertex].Parent,graphDev.Vertices[intVertex]).getCableSet^.cab;//получить ребро полилинию
+           devNowvarext:=polyCab^.specialize GetExtension<TVariablesExtender>;
+           //Получаем ссылку на кабель или полилинию которая заменяет стояк
+           cableNowMF:=getMainFuncCable(devNowvarext);
+           if cableNowMF <> nil then
+             begin    //кабель
+               // Проверяем совпадает имя группы подключения внутри устройства с группой которую мы сейчас заполняем
+               //pvd:=FindVariableInEnt(cableNowMF,velec_GC_HDGroup);
+               //if pvd<>nil then
+               //  if pstring(pvd^.data.Addr.Instance)^ = nameGroup then
+                     listPolyInGroup.PushBack(polyCab);
+             //end
+             //else
+             //begin   //полилиния
+             //  // Проверяем совпадает имя группы подключения внутри устройства с группой которую мы сейчас заполняем
+             //  pvd:=FindVariableInEnt(polyCab,velec_GC_HDGroup);
+             //  if pvd<>nil then
+             //    if pstring(pvd^.data.Addr.Instance)^ = nameGroup then
+             //      listPolyInGroup.PushBack(polyCab);
+             end;
+         end;
+         //ZCMsgCallBackInterface.TextMessage('кол-во = ' + inttostr(listPolyInGroup.Size),TMWOHistoryOut);
+         for i:=0 to graphDev.Vertices[intVertex].ChildCount-1 do
+             getListCabPoly(graphDev.Vertices[intVertex].Childs[i].Index,listPolyInGroup);
+    end;
+  begin
+     ZCMsgCallBackInterface.TextMessage('Получаем все кабели!!!. Список сегментов:',TMWOHistoryOut);
      result:=TListPolyline.Create;
      getListCabPoly(graphDev.Root.Index,result);
 

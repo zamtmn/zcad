@@ -287,6 +287,7 @@
 			<ZTreeCommand Command="Insert(DEVICE_ELVELEC_POWER_SHR1)" Img='DEVICE_ELVELEC_POWER_SHR1_150' Caption='Щит распределительный'/>
 			<ZTreeCommand Command="Insert(DEVICE_ELVELEC_POWER_SHO1)" Img='DEVICE_ELVELEC_POWER_SHO1_150' Caption='Щит освещения'/>
 			<ZTreeCommand Command="Insert(DEVICE_ELVELEC_POWER_SHAO1)" Img='DEVICE_ELVELEC_POWER_SHAO1_150' Caption='Щит аварийного освещения'/>
+			<ZTreeCommand Command="Insert(DEVICE_ELVELEC_POWER_SHAO1NEW)" Img='DEVICE_ELVELEC_POWER_SHAO1NEW_150' Caption='НОВЫЙ Щит аварийного освещения'/>
 		</ZTreeNode>
 		<ZTreeNode Caption='Sockets'>
 			<ZTreeCommand Command="Insert(DEVICE_ELVELEC_SOCKET1_1P)" Img='DEVICE_ELVELEC_SOCKET1_1P_150' Caption='Розетка 1Р. Скрытая'/>

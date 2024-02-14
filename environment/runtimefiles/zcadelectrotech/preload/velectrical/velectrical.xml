@@ -8,7 +8,8 @@
           <ZTreeCommand Command="Insert(DEVICE_VSCHEMA_PANEL_IN)"/>
           <ZTreeCommand Command="Insert(DEVICE_VSCHEMA_PANEL_OUT)"/> 
         </ZTreeNode>
-	<ZTreeCommand Command="extdrAdd(extdrLayerControl)"/>
+		<ZTreeCommand Command="extdrAdd(extdrLayerControl)" Caption='Доб. расшир. упр. слоем'/>
+		<ZTreeCommand Command="DevDefSync" Caption='Синхрон. упр. слоем'/>	
       </ZTreeNode>
     </BlockLib>
   </PalettesContent>

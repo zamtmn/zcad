@@ -28,7 +28,7 @@ resourcestring
 implementation
 procedure ZCADFormSetupProc(Form:TControl);
 begin
-  Form:=Form;
+//  Form:=Form;
 end;
 initialization
   ZCADGUIManager.RegisterZCADFormInfo('NavigatorEntities',rsEntities,TNavigatorEntities,rect(0,100,200,600),ZCADFormSetupProc,nil,@NavigatorEntities,true);

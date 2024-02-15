@@ -389,7 +389,7 @@ begin
     MainFunction:=GetMainFunction(pent);
     if mainfunction<>nil then
     begin
-       mainfunction:=mainfunction;
+//       mainfunction:=mainfunction;
        if Ent2NodeMap.TryGetValue(MainFunction,mainfuncnode) then
          basenode:=mainfuncnode.Parent
        else begin
@@ -575,7 +575,7 @@ begin
     else
       parts:=parts+'|'+partsarray[i]
   end;
-  parts:=parts;
+//  parts:=parts;
 end;
 
 function RunEditor(const cpt,BoundsSaveName:string;var AText:string):boolean;
@@ -1352,7 +1352,7 @@ begin
   end;
 end;
 
-function NavSelectSubNodes_com(operands:TCommandOperands):TCommandResult;
+function NavSelectSubNodes_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 var
   pnode:PVirtualNode;
   nav:{$IF DECLARED(TVirtualStringTree)}TVirtualStringTree{$ELSE}TLazVirtualStringTree{$ENDIF};
@@ -1368,7 +1368,7 @@ begin
 end;
 
 initialization
-  CreateCommandFastObjectPlugin(@NavSelectSubNodes_com,'NavSelectSubNodes',CADWG,0);
+  CreateZCADCommand(@NavSelectSubNodes_com,'NavSelectSubNodes',CADWG,0);
   NavGroupIconIndex:=-1;
   NavAutoGroupIconIndex:=-1;
 finalization

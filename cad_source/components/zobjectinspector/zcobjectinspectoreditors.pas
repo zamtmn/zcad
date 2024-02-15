@@ -26,13 +26,13 @@ uses
   UEnumDescriptor,zcobjectinspector,Forms,sysutils,
   Graphics,LCLType,Themes,uzctnrvectorstrings,
   varmandef,Varman,uzbtypes,usupportgui,
-  gzctnrVectorTypes,StdCtrls,Controls,Classes,uzbstrproc;
+  gzctnrVectorTypes,StdCtrls,Controls,Classes,uzbstrproc,uzedimensionaltypes;
 type
     TBaseTypesEditors=class
-                             class function BaseCreateEditor           (TheOwner:TPropEditorOwner;rect:trect;pinstance:pointer;psa:PTZctnrVectorStrings;FreeOnLostFocus:boolean;InitialValue:String;ptdesc:PUserTypeDescriptor;preferedHeight:integer):TEditorDesc;
-                             class function BooleanCreateEditor     (TheOwner:TPropEditorOwner;rect:trect;pinstance:pointer;psa:PTZctnrVectorStrings;FreeOnLostFocus:boolean;InitialValue:String;ptdesc:PUserTypeDescriptor;preferedHeight:integer):TEditorDesc;
-                             class function TEnumDataCreateEditor      (TheOwner:TPropEditorOwner;rect:trect;pinstance:pointer;psa:PTZctnrVectorStrings;FreeOnLostFocus:boolean;InitialValue:String;ptdesc:PUserTypeDescriptor;preferedHeight:integer):TEditorDesc;
-                             class function EnumDescriptorCreateEditor (TheOwner:TPropEditorOwner;rect:trect;pinstance:pointer;psa:PTZctnrVectorStrings;FreeOnLostFocus:boolean;InitialValue:String;ptdesc:PUserTypeDescriptor;preferedHeight:integer):TEditorDesc;
+                             class function BaseCreateEditor           (TheOwner:TPropEditorOwner;rect:trect;pinstance:pointer;psa:PTZctnrVectorStrings;FreeOnLostFocus:boolean;InitialValue:String;ptdesc:PUserTypeDescriptor;preferedHeight:integer;f:TzeUnitsFormat):TEditorDesc;
+                             class function BooleanCreateEditor        (TheOwner:TPropEditorOwner;rect:trect;pinstance:pointer;psa:PTZctnrVectorStrings;FreeOnLostFocus:boolean;InitialValue:String;ptdesc:PUserTypeDescriptor;preferedHeight:integer;f:TzeUnitsFormat):TEditorDesc;
+                             class function TEnumDataCreateEditor      (TheOwner:TPropEditorOwner;rect:trect;pinstance:pointer;psa:PTZctnrVectorStrings;FreeOnLostFocus:boolean;InitialValue:String;ptdesc:PUserTypeDescriptor;preferedHeight:integer;f:TzeUnitsFormat):TEditorDesc;
+                             class function EnumDescriptorCreateEditor (TheOwner:TPropEditorOwner;rect:trect;pinstance:pointer;psa:PTZctnrVectorStrings;FreeOnLostFocus:boolean;InitialValue:String;ptdesc:PUserTypeDescriptor;preferedHeight:integer;f:TzeUnitsFormat):TEditorDesc;
     end;
 implementation
 class function TBaseTypesEditors.BaseCreateEditor;
@@ -47,12 +47,12 @@ class function TBaseTypesEditors.BaseCreateEditor;
         result.mode:=TEM_Nothing;
         if (psa=nil)or(psa^.count=0) then
                             begin
-                                  propeditor:=TPropEditor.Create(theowner,PInstance,ptdesc^,FreeOnLostFocus);
+                                  propeditor:=TPropEditor.Create(theowner,PInstance,ptdesc^,FreeOnLostFocus,f);
 
                                   edit:=TEdit.Create(propeditor);
                                   edit.AutoSize:=false;
                                   if initialvalue='' then
-                                                         edit.Text:=ptdesc^.GetValueAsString(pinstance)
+                                                         edit.Text:=ptdesc^.GetFormattedValueAsString(pinstance,f)
                                                      else
                                                          edit.Text:=initialvalue;
                                   edit.OnKeyPress:=propeditor.keyPress;
@@ -64,13 +64,13 @@ class function TBaseTypesEditors.BaseCreateEditor;
                             end
                         else
                             begin
-                                 propeditor:=TPropEditor.Create(theowner,PInstance,ptdesc^,FreeOnLostFocus);
+                                 propeditor:=TPropEditor.Create(theowner,PInstance,ptdesc^,FreeOnLostFocus,f);
                                  cbedit:=TComboBox.Create(propeditor);
                                  {$IFNDEF DELPHI}
                                  cbedit.AutoSize:=false;
                                  {$ENDIF}
                                  if initialvalue='' then
-                                                        cbedit.Text:=ptdesc^.GetValueAsString(pinstance)
+                                                        cbedit.Text:=ptdesc^.GetFormattedValueAsString(pinstance,f)
                                                     else
                                                         cbedit.Text:=initialvalue;
                                  cbedit.OnKeyPress:=propeditor.keyPress;
@@ -101,7 +101,7 @@ var
     cbedit:TComboBox;
     propeditor:TPropEditor;
 begin
-     propeditor:=TPropEditor.Create(theowner,PInstance,ptdesc^,FreeOnLostFocus);
+     propeditor:=TPropEditor.Create(theowner,PInstance,ptdesc^,FreeOnLostFocus,f);
      cbedit:=TComboBox.Create(propeditor);
      cbedit.Text:=ptdesc^.GetValueAsString(pinstance);
      cbedit.OnChange:=propeditor.EditingProcess;
@@ -127,7 +127,7 @@ var
     ir:itrec;
     p:pString;
 begin
-     propeditor:=TPropEditor.Create(theowner,PInstance,ptdesc^,FreeOnLostFocus);
+     propeditor:=TPropEditor.Create(theowner,PInstance,ptdesc^,FreeOnLostFocus,f);
      cbedit:=TComboBox.Create(propeditor);
      cbedit.Text:=ptdesc^.GetValueAsString(pinstance);
      cbedit.OnChange:=propeditor.EditingProcess;
@@ -157,7 +157,7 @@ var
     number:LongWord;
     p:pString;
 begin
-     propeditor:=TPropEditor.Create(theowner,PInstance,ptdesc^,FreeOnLostFocus);
+     propeditor:=TPropEditor.Create(theowner,PInstance,ptdesc^,FreeOnLostFocus,f);
      cbedit:=TComboBox.Create(propeditor);
      cbedit.Text:=ptdesc^.GetValueAsString(pinstance);
      cbedit.OnChange:=propeditor.EditingProcess;

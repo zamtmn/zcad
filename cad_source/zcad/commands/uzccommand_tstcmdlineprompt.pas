@@ -39,7 +39,7 @@ implementation
 var
   clFileParam:CMDLinePromptParser.TGeneralParsedText=nil;
 
-function CmdLinePrompt_com(operands:TCommandOperands):TCommandResult;
+function CmdLinePrompt_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 var
   //inpt:String;
   gr:TGetResult;
@@ -72,7 +72,7 @@ end;
 
 initialization
   programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
-  CreateCommandFastObjectPlugin(@CmdLinePrompt_com,'tstCmdLinePrompt',CADWG,0);
+  CreateZCADCommand(@CmdLinePrompt_com,'tstCmdLinePrompt',CADWG,0);
 finalization
   ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
   if clFileParam<>nil then

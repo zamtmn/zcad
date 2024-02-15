@@ -38,7 +38,7 @@ uses
 
 implementation
 
-function VarsEdUnit_com(operands:TCommandOperands):TCommandResult;
+function VarsEdUnit_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 var
   u:PTSimpleUnit;
   op:ansistring;
@@ -57,7 +57,7 @@ end;
 
 initialization
   programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
-  CreateCommandFastObjectPlugin(@VarsEdUnit_com,'VarsEdUnit',0,0);
+  CreateZCADCommand(@VarsEdUnit_com,'VarsEdUnit',0,0);
 finalization
   ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
 end.

@@ -100,9 +100,9 @@ begin
      else
          enttree.NodeData.FulDraw:=TDTSimpleDraw;
      case OwnerInFrustum of
-     IREmpty:begin
-                   OwnerInFrustum:=OwnerInFrustum;
-             end;
+//     IREmpty:begin
+//                   OwnerInFrustum:=OwnerInFrustum;
+//             end;
      IRFully:begin
                    enttree.NodeData.infrustum:=infrustumactualy;
                    pobj:=enttree.nulbeginiterate(ir);
@@ -120,9 +120,9 @@ begin
  IRPartially:begin
                   ImInFrustum:=CalcAABBInFrustum(enttree.BoundingBox,frustum);
                   case ImInFrustum of
-                       IREmpty:begin
-                                     OwnerInFrustum:=OwnerInFrustum;
-                               end;
+//                       IREmpty:begin
+//                                     OwnerInFrustum:=OwnerInFrustum;
+//                               end;
                        IRFully{,IRPartially}:begin
                                      enttree.NodeData.infrustum:=infrustumactualy;
                                      pobj:=enttree.nulbeginiterate(ir);

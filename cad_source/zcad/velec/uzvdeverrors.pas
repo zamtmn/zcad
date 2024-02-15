@@ -103,7 +103,7 @@ begin
   //result:=cmd_ok;
 end;
 
-function uzvdeverrorsClear_com(operands:TCommandOperands):TCommandResult;
+function uzvdeverrorsClear_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 var
   pvd:pvardesk;
   ir:itrec;
@@ -149,7 +149,7 @@ end;
 
 initialization
   programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
-  CreateCommandFastObjectPlugin(@uzvdeverrorsClear_com,'uzvdeverrorsclear',CADWG,0);
+  CreateZCADCommand(@uzvdeverrorsClear_com,'uzvdeverrorsclear',CADWG,0);
 finalization
   ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
 end.

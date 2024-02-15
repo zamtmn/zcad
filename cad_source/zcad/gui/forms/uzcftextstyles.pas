@@ -189,7 +189,7 @@ begin
 end;
 function TTextStylesForm.CreateNameEditor(Item: TListItem;r: TRect):boolean;
 begin
-  result:=SupportTypedEditors.createeditor(ListView1,Item,r,PGDBTextStyle(Item.Data)^.Name,'AnsiString',@CreateUndoStartMarkerNeeded,r.Bottom-r.Top)
+  result:=SupportTypedEditors.createeditor(ListView1,Item,r,PGDBTextStyle(Item.Data)^.Name,'AnsiString',@CreateUndoStartMarkerNeeded,r.Bottom-r.Top,drawings.GetUnitsFormat)
 end;
 {Font name handle procedures}
 function TTextStylesForm.GetFontName(Item: TListItem):string;
@@ -205,7 +205,7 @@ begin
     FillFontsSelector(PGDBTextStyle(Item.Data)^.pfont^.fontfile,PGDBTextStyle(Item.Data)^.pfont);
     FontChange:=true;
     FontTypeFilterComboBox.enabled:=false;
-    result:=SupportTypedEditors.createeditor(ListView1,Item,r,FontsSelector,'TEnumData',nil,r.Bottom-r.Top,false)
+    result:=SupportTypedEditors.createeditor(ListView1,Item,r,FontsSelector,'TEnumData',nil,r.Bottom-r.Top,drawings.GetUnitsFormat,false)
   end;
 end;
 {Font path handle procedures}
@@ -223,7 +223,7 @@ begin
 end;
 function TTextStylesForm.CreateHeightEditor(Item: TListItem;r: TRect):boolean;
 begin
-  result:=SupportTypedEditors.createeditor(ListView1,Item,r,PGDBTextStyle(Item.Data)^.prop.size,'Double',@CreateUndoStartMarkerNeeded,r.Bottom-r.Top)
+  result:=SupportTypedEditors.createeditor(ListView1,Item,r,PGDBTextStyle(Item.Data)^.prop.size,'Double',@CreateUndoStartMarkerNeeded,r.Bottom-r.Top,drawings.GetUnitsFormat)
 end;
 {Wfactor handle procedures}
 function TTextStylesForm.GetWidthFactor(Item: TListItem):string;
@@ -232,7 +232,7 @@ begin
 end;
 function TTextStylesForm.CreateWidthFactorEditor(Item: TListItem;r: TRect):boolean;
 begin
-  result:=SupportTypedEditors.createeditor(ListView1,Item,r,PGDBTextStyle(Item.Data)^.prop.wfactor,'Double',@CreateUndoStartMarkerNeeded,r.Bottom-r.Top)
+  result:=SupportTypedEditors.createeditor(ListView1,Item,r,PGDBTextStyle(Item.Data)^.prop.wfactor,'Double',@CreateUndoStartMarkerNeeded,r.Bottom-r.Top,drawings.GetUnitsFormat)
 end;
 {Oblique handle procedures}
 function TTextStylesForm.GetOblique(Item: TListItem):string;
@@ -241,7 +241,7 @@ begin
 end;
 function TTextStylesForm.CreateObliqueEditor(Item: TListItem;r: TRect):boolean;
 begin
-  result:=SupportTypedEditors.createeditor(ListView1,Item,r,PGDBTextStyle(Item.Data)^.prop.oblique,'Double',@CreateUndoStartMarkerNeeded,r.Bottom-r.Top)
+  result:=SupportTypedEditors.createeditor(ListView1,Item,r,PGDBTextStyle(Item.Data)^.prop.oblique,'Double',@CreateUndoStartMarkerNeeded,r.Bottom-r.Top,drawings.GetUnitsFormat)
 end;
 procedure TTextStylesForm.FillFontsSelector(currentitem:string;currentitempfont:PGDBfont);
 var i:integer;
@@ -306,7 +306,7 @@ end;
 
 procedure TTextStylesForm.onrsz(Sender: TObject);
 begin
-     Sender:=Sender;
+//     Sender:=Sender;
      SupportTypedEditors.freeeditor;
 end;
 

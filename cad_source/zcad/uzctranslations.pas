@@ -174,7 +174,7 @@ begin
       //actualypo:=TmyPOFile.Create;
     end else begin
       programlog.LogOutFormatStr(ZCADPOFileNotFound,[AFilename],0,LM_Fatal);
-      halt(0);
+      raise Exception.CreateFmt(ZCADPOFileNotFound,[AFilename]);
     end;
   end;
 end;
@@ -275,6 +275,10 @@ initialization
   DisableTranslateCount:=0;
   PODirectory := ProgramPath+'languages/';
   GetLanguageIDs(Lang, FallbackLang); // определено в модуле gettext
+  if sysparam.saved.LangOverride<>'' then begin
+    Lang:=sysparam.saved.LangOverride;
+    FallbackLang:='';
+  end;
   createpo;
   LRSTranslator:=TPoTranslator.Create;
   if not sysparam.saved.updatepo then begin

@@ -3,3 +3,4 @@
 
 include::for_developers/building_from_sources.adoc[]
 include::for_developers/localization.adoc[]
+include::for_developers/documentation.adoc[]

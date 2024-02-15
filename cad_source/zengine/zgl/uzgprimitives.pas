@@ -415,29 +415,38 @@ begin
 end;
 function TLLPolyLine.CalcTrueInFrustum(frustum:ClipArray;var GeomData:ZGLGeomData;out InRect:TInBoundingVolume):Integer;
 var
-   i,index:integer;
-   SubRect:TInBoundingVolume;
+  i,index:integer;
+  SubRect:TInBoundingVolume;
+
+  procedure ProcessSubrect;
+  begin
+    case SubRect of
+      IREmpty:if InRect=IRFully then
+                                     InRect:=IRPartially;
+      IRFully:if InRect<>IRFully then
+                                     InRect:=IRPartially;
+      IRPartially:
+                  InRect:=IRPartially;
+      IRNotAplicable:;//заглушка на варнинг
+    end;
+  end;
 begin
-     InRect:=uzegeometry.CalcTrueInFrustum(PGDBvertex3S(geomdata.Vertex3S.getDataMutable(P1Index))^,PGDBvertex3S(geomdata.Vertex3S.getDataMutable(P1Index+1))^,frustum);
+     InRect:=uzegeometry.CalcTrueInFrustum(geomdata.Vertex3S.getDataMutable(P1Index)^,geomdata.Vertex3S.getDataMutable(P1Index+1)^,frustum);
      result:=getPrimitiveSize;
      if InRect=IRPartially then
                                exit;
      index:=P1Index+1;
-     for i:=2 to Count-1 do
+     for i:=3 to Count do
      begin
         SubRect:=uzegeometry.CalcTrueInFrustum(geomdata.Vertex3S.getDataMutable(index)^,geomdata.Vertex3S.getDataMutable(index+1)^,frustum);
-        case SubRect of
-          IREmpty:if InRect=IRFully then
-                                         InRect:=IRPartially;
-          IRFully:if InRect<>IRFully then
-                                         InRect:=IRPartially;
-          IRPartially:
-                      InRect:=IRPartially;
-          IRNotAplicable:;//заглушка на варнинг
-        end;
+        ProcessSubrect;
         if InRect=IRPartially then
                                   exit;
         inc(index);
+     end;
+     if closed then begin
+       SubRect:=uzegeometry.CalcTrueInFrustum(geomdata.Vertex3S.getDataMutable(index)^,geomdata.Vertex3S.getDataMutable(P1Index)^,frustum);
+       ProcessSubrect;
      end;
 end;
 function TLLSymbolEnd.draw(drawer:TZGLAbstractDrawer;var rc:TDrawContext;var GeomData:ZGLGeomData;var LLPArray:TLLPrimitivesArray;var OptData:ZGLOptimizerData):Integer;
@@ -494,37 +503,35 @@ begin
 end;
 function TLLSymbol.CalcTrueInFrustum(frustum:ClipArray;var GeomData:ZGLGeomData;out InRect:TInBoundingVolume):Integer;
 var
-   //ir1,ir2,ir3,ir4:TInBoundingVolume;
-   myfrustum:ClipArray;
-   OutBound:OutBound4V;
-   p:ZGLVertex3Sarray.PT;
+  myfrustum:ClipArray;
+  OutBound:OutBound4V;
+  p:ZGLVertex3Sarray.PT;
 begin
-     p:=geomdata.Vertex3S.getDataMutable(OutBoundIndex);
-     OutBound[0].x:=p^.x;
-     OutBound[0].y:=p^.y;
-     OutBound[0].z:=p^.z;
-     p:=geomdata.Vertex3S.getDataMutable(OutBoundIndex+1);
-     OutBound[1].x:=p^.x;
-     OutBound[1].y:=p^.y;
-     OutBound[1].z:=p^.z;
-     p:=geomdata.Vertex3S.getDataMutable(OutBoundIndex+2);
-     OutBound[2].x:=p^.x;
-     OutBound[2].y:=p^.y;
-     OutBound[2].z:=p^.z;
-     p:=geomdata.Vertex3S.getDataMutable(OutBoundIndex+3);
-     OutBound[3].x:=p^.x;
-     OutBound[3].y:=p^.y;
-     OutBound[3].z:=p^.z;
+  p:=geomdata.Vertex3S.getDataMutable(OutBoundIndex);
+  OutBound[0].x:=p^.x;
+  OutBound[0].y:=p^.y;
+  OutBound[0].z:=p^.z;
+  p:=geomdata.Vertex3S.getDataMutable(OutBoundIndex+1);
+  OutBound[1].x:=p^.x;
+  OutBound[1].y:=p^.y;
+  OutBound[1].z:=p^.z;
+  p:=geomdata.Vertex3S.getDataMutable(OutBoundIndex+2);
+  OutBound[2].x:=p^.x;
+  OutBound[2].y:=p^.y;
+  OutBound[2].z:=p^.z;
+  p:=geomdata.Vertex3S.getDataMutable(OutBoundIndex+3);
+  OutBound[3].x:=p^.x;
+  OutBound[3].y:=p^.y;
+  OutBound[3].z:=p^.z;
 
-     InRect:=CalcOutBound4VInFrustum(OutBound,frustum);
+  InRect:=CalcOutBound4VInFrustum(OutBound,frustum);
 
-     result:=getPrimitiveSize;
+  result:=getPrimitiveSize;
 
-     if InRect<>IRPartially then
-                                exit;
-
-     myfrustum:=FrustumTransform(frustum,SymMatr);
-     InRect:=PZGLVectorObject(PExternalVectorObject).CalcCountedTrueInFrustum(myfrustum,true,ExternalLLPOffset,ExternalLLPCount);
+  if InRect<>IRPartially then
+    exit;
+  myfrustum:=FrustumTransform(frustum,SymMatr);
+  InRect:=PZGLVectorObject(PExternalVectorObject).CalcCountedTrueInFrustum(myfrustum,true,ExternalLLPOffset,ExternalLLPCount);
 end;
 
 function TLLSymbol.draw(drawer:TZGLAbstractDrawer;var rc:TDrawContext;var GeomData:ZGLGeomData;var LLPArray:TLLPrimitivesArray;var OptData:ZGLOptimizerData):Integer;

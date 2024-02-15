@@ -29,11 +29,11 @@ uses
   uzccommand_merge,uzccommandsimpl,uzccommandsabstract,
   uzcdrawings,uzedrawingsimple;
 
-function MergeBlocks_com(operands:TCommandOperands):TCommandResult;
+function MergeBlocks_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 
 implementation
 
-function MergeBlocks_com(operands:TCommandOperands):TCommandResult;
+function MergeBlocks_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 var
    pdwg:PTSimpleDrawing;
    s:AnsiString;
@@ -43,22 +43,14 @@ begin
 
   if length(operands)>0 then
   s:=FindInSupportPath(GetSupportPath,operands);
-  result:=Merge_com(s);
+  result:=Merge_com(Context,s);
 
   drawings.CurrentDWG:=pdwg;
 end;
 
-procedure startup;
-begin
-  CreateCommandFastObjectPlugin(@MergeBlocks_com,'MergeBlocks',0,0);
-end;
-procedure finalize;
-begin
-end;
 initialization
   programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
-  startup;
+  CreateZCADCommand(@MergeBlocks_com,'MergeBlocks',0,0);
 finalization
   ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
-  finalize;
 end.

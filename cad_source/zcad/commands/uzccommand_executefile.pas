@@ -30,7 +30,7 @@ uses
 
 implementation
 
-function ExecuteFile_com(operands:TCommandOperands):TCommandResult;
+function ExecuteFile_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 begin
   commandmanager.executefile(ExpandPath(operands),drawings.GetCurrentDWG,nil);
   result:=cmd_ok;
@@ -38,7 +38,7 @@ end;
 
 initialization
   programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
-  CreateCommandFastObjectPlugin(@ExecuteFile_com,'ExecuteFile',0,0);
+  CreateZCADCommand(@ExecuteFile_com,'ExecuteFile',0,0);
 finalization
   ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
 end.

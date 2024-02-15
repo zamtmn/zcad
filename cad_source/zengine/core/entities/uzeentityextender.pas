@@ -46,6 +46,7 @@ TBaseEntityExtender=class(TBaseExtender)
                   procedure onEntityBeforeConnect(pEntity:Pointer;const drawing:TDrawingDef;var DC:TDrawContext);virtual;
                   function NeedStandardDraw(pEntity:Pointer;const drawing:TDrawingDef;var DC:TDrawContext):Boolean;virtual;
                   procedure SetRoot(pEntity:Pointer;pNewRoot:Pointer);virtual;
+                  class function CanBeAddedTo(pEntity:Pointer):Boolean;virtual;
 end;
 TMetaEntityExtender=class of TBaseEntityExtender;
 TEntityExtenderVector= TMyVector<TBaseEntityExtender>;
@@ -88,6 +89,10 @@ TEntityExtensions=class
 var
   EntityExtenders:TEntityExtendersMap;
 implementation
+class function TBaseEntityExtender.CanBeAddedTo(pEntity:Pointer):Boolean;
+begin
+  result:=true;
+end;
 function TBaseEntityExtender.NeedStandardDraw(pEntity:Pointer;const drawing:TDrawingDef;var DC:TDrawContext):Boolean;
 begin
   result:=true;

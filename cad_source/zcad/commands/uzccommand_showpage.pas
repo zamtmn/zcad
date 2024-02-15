@@ -29,7 +29,7 @@ uses
 
 implementation
 
-function ShowPage_com(operands:TCommandOperands):TCommandResult;
+function ShowPage_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 begin
   if assigned(ZCADMainWindow)then
   if assigned(ZCADMainWindow.PageControl)then
@@ -39,7 +39,7 @@ end;
 
 initialization
   programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
-  CreateCommandFastObjectPlugin(@ShowPage_com,'ShowPage',0,0);
+  CreateZCADCommand(@ShowPage_com,'ShowPage',0,0);
 finalization
   ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
 end.

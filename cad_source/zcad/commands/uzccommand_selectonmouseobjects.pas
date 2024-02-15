@@ -79,7 +79,7 @@ begin
                          until pp=nil;
                     end;
 end;
-function SelectOnMouseObjects_com(operands:TCommandOperands):TCommandResult;
+function SelectOnMouseObjects_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 begin
      cxmenumgr.closecurrentmenu;
      MSelectCXMenu:=TPopupMenu.create(nil);
@@ -92,7 +92,7 @@ end;
 
 initialization
   programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
-  CreateCommandFastObjectPlugin(@SelectOnMouseObjects_com,'SelectOnMouseObjects',CADWG,0);
+  CreateZCADCommand(@SelectOnMouseObjects_com,'SelectOnMouseObjects',CADWG,0);
 finalization
   ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
 end.

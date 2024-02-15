@@ -66,7 +66,7 @@ type
                      NumberVar:AnsiString;(*'Number variable'*)
                end;
   Number_com= object(CommandRTEdObject)
-                         procedure CommandStart(Operands:TCommandOperands); virtual;
+                         procedure CommandStart(const Context:TZCADCommandContext;Operands:TCommandOperands); virtual;
                          procedure ShowMenu;virtual;
                          procedure Run(pdata:PtrInt); virtual;
              end;
@@ -74,13 +74,13 @@ var
    NumberCom:Number_com;
    NumberingParams:TNumberingParams;
 implementation
-procedure Number_com.CommandStart(Operands:TCommandOperands);
+procedure Number_com.CommandStart(const Context:TZCADCommandContext;Operands:TCommandOperands);
 begin
   self.savemousemode:=drawings.GetCurrentDWG^.wa.param.md.mode;
   if drawings.GetCurrentDWG^.SelObjArray.Count>0 then
   begin
        showmenu;
-       inherited CommandStart('');
+       inherited CommandStart(context,'');
   end
   else
   begin
@@ -204,8 +204,9 @@ begin
      mpd.Destroy;
      Commandmanager.executecommandend;
 end;
-procedure startup;
-begin
+
+initialization
+  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
   SysUnit^.RegisterType(TypeInfo(TST));
   SysUnit^.SetTypeDesk(TypeInfo(TST),['Y-X','X-Y','Unsorted']);
   SysUnit^.RegisterType(TypeInfo(TNumberingParams));
@@ -224,14 +225,6 @@ begin
   NumberingParams.SortMode:=TST_YX;
   NumberCom.init('NumDevices',CADWG,0);
   NumberCom.SetCommandParam(@NumberingParams,'PTNumberingParams');
-end;
-procedure Finalize;
-begin
-end;
-initialization
-  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
-  startup;
 finalization
   ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
-  finalize;
 end.

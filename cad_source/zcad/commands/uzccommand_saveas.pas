@@ -35,7 +35,7 @@ uses
   uzcinterface,
   uzeffdxf,uzedrawingsimple,Varman,uzctnrVectorBytes,uzcdrawing,uzcTranslations,uzeconsts;
 
-function SaveAs_com(operands:TCommandOperands):TCommandResult;
+function SaveAs_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 function SaveDXFDPAS(s:ansistring):Integer;
 function dwgQSave_com(dwg:PTSimpleDrawing):Integer;
 
@@ -86,7 +86,7 @@ begin
                                              ProcessFilehistoryProc(s);
 end;
 
-function SaveAs_com(operands:TCommandOperands):TCommandResult;
+function SaveAs_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 var
    s:AnsiString;
    fileext:AnsiString;
@@ -110,17 +110,9 @@ begin
   ZCMsgCallBackInterface.Do_AfterShowModal(nil);
 end;
 
-procedure startup;
-begin
-  CreateCommandFastObjectPlugin(@SaveAs_com,'SaveAs',CADWG,0);
-end;
-procedure finalize;
-begin
-end;
 initialization
   programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
-  startup;
+  CreateZCADCommand(@SaveAs_com,'SaveAs',CADWG,0);
 finalization
   ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
-  finalize;
 end.

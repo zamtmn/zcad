@@ -34,7 +34,7 @@ uses
 
 implementation
 
-function RotateEnts_com(operands:TCommandOperands):TCommandResult;
+function RotateEnts_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 var
   pv:pGDBObjEntity;
   ir:itrec;
@@ -98,7 +98,7 @@ begin
 end;
 initialization
   programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
-  CreateCommandFastObjectPlugin(@RotateEnts_com,'RotateEnts',CADWG or CASelEnts,0);
+  CreateZCADCommand(@RotateEnts_com,'RotateEnts',CADWG or CASelEnts,0);
 finalization
   ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
 end.

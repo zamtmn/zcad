@@ -31,7 +31,7 @@ uses
 
 implementation
 
-function Cam_reset_com(operands:TCommandOperands):TCommandResult;
+function Cam_reset_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 var
   cdwg:PTSimpleDrawing;
   pcamera:PGDBObjCamera;
@@ -71,7 +71,7 @@ end;
 
 initialization
   programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
-  CreateCommandFastObjectPlugin(@Cam_reset_com,'Cam_Reset',CADWG,0);
+  CreateZCADCommand(@Cam_reset_com,'Cam_Reset',CADWG,0);
 finalization
   ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
 end.

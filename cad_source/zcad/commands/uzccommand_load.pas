@@ -35,14 +35,14 @@ uses
   uzcinterface,
   uzccmdload;
 
-function Load_com(operands:TCommandOperands):TCommandResult;
+function Load_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 
 implementation
 
 var
   LastFileHandle:Integer=-1;
 
-function Load_com(operands:TCommandOperands):TCommandResult;
+function Load_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 var
    s: AnsiString;
    isload:boolean;
@@ -68,7 +68,7 @@ begin
   end;
   isload:=FileExists(utf8tosys(s));
   if isload then begin
-    DWGNew_com(s);
+    DWGNew_com(Context,s);
     drawings.GetCurrentDWG.SetFileName(s);
     if @loadproc=nil then
       load_merge(s,tloload)
@@ -86,17 +86,9 @@ begin
   end;
 end;
 
-procedure startup;
-begin
-  CreateCommandFastObjectPlugin(@Load_com,'Load',0,0).CEndActionAttr:=[CEDWGNChanged];
-end;
-procedure finalize;
-begin
-end;
 initialization
   programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
-  startup;
+  CreateZCADCommand(@Load_com,'Load',0,0).CEndActionAttr:=[CEDWGNChanged];
 finalization
   ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
-  finalize;
 end.

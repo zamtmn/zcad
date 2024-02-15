@@ -32,7 +32,7 @@ uses
 
 implementation
 
-function ShowToolBar_com(operands:TCommandOperands):TCommandResult;
+function ShowToolBar_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 begin
   if Operands<>'' then begin
     ToolBarsManager.ShowFloatToolbar(operands,rect(0,0,300,50));
@@ -44,7 +44,7 @@ end;
 
 initialization
   programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
-  CreateCommandFastObjectPlugin(@ShowToolBar_com,'ShowToolBar',0,0);
+  CreateZCADCommand(@ShowToolBar_com,'ShowToolBar',0,0);
 finalization
   ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
 end.

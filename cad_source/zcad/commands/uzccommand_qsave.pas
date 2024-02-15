@@ -37,7 +37,7 @@ uses
 
 implementation
 
-function QSave_com(operands:TCommandOperands):TCommandResult;
+function QSave_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 var s,s1:AnsiString;
     itautoseve:boolean;
 begin
@@ -49,7 +49,7 @@ begin
     itautoseve:=true;
   end else begin
     if extractfilepath(drawings.GetCurrentDWG.GetFileName)='' then begin
-      SaveAs_com(EmptyCommandOperands);
+      SaveAs_com(Context,EmptyCommandOperands);
       exit;
     end;
       s1:=drawings.GetCurrentDWG.GetFileName;
@@ -60,17 +60,9 @@ begin
     SysVar.SAVE.SAVE_Auto_Current_Interval^:=SysVar.SAVE.SAVE_Auto_Interval^;
 end;
 
-procedure startup;
-begin
-  CreateCommandFastObjectPlugin(@QSave_com,'QSave',CADWG or CADWGChanged,0).CEndActionAttr:=[CEDWGNChanged];
-end;
-procedure finalize;
-begin
-end;
 initialization
   programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
-  startup;
+  CreateZCADCommand(@QSave_com,'QSave',CADWG or CADWGChanged,0).CEndActionAttr:=[CEDWGNChanged];
 finalization
   ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
-  finalize;
 end.

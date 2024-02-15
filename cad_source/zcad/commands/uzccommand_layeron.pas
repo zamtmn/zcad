@@ -30,7 +30,7 @@ uses
 implementation
 const
   LayerOnCommandName='LayerOn';
-function LayerOn_com(operands:TCommandOperands):TCommandResult;
+function LayerOn_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 var
   UndoStartMarkerPlaced:boolean;
   plp:PGDBLayerProp;
@@ -57,7 +57,7 @@ begin
 end;
 initialization
   programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
-  CreateCommandFastObjectPlugin(@LayerOn_com,LayerOnCommandName,CADWG,0);
+  CreateZCADCommand(@LayerOn_com,LayerOnCommandName,CADWG,0);
 finalization
   ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
 end.

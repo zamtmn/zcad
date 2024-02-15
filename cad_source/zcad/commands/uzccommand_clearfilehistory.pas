@@ -30,7 +30,7 @@ uses
 
 implementation
 
-function ClearFileHistory_com(operands:TCommandOperands):TCommandResult;
+function ClearFileHistory_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 var i:integer;
     pstr:PAnsiString;
 begin
@@ -52,7 +52,7 @@ end;
 
 initialization
   programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
-  CreateCommandFastObjectPlugin(@ClearFileHistory_com,'ClearFileHistory',0,0);
+  CreateZCADCommand(@ClearFileHistory_com,'ClearFileHistory',0,0);
 finalization
   ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
 end.

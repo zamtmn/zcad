@@ -30,7 +30,7 @@ uses
 
 implementation
 
-function dbgCmdList_com(operands:TCommandOperands):TCommandResult;
+function dbgCmdList_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 var
    p:PCommandObjectDef;
    ir:itrec;
@@ -51,7 +51,7 @@ end;
 
 initialization
   programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
-  CreateCommandFastObjectPlugin(@dbgCmdList_com,'dbgCmdList',0,0);
+  CreateZCADCommand(@dbgCmdList_com,'dbgCmdList',0,0);
 finalization
   ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
   ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);

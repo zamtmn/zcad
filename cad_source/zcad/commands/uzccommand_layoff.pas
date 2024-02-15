@@ -29,7 +29,7 @@ uses
 implementation
 const
   LayOffCommandName='LayOff';
-function LayOff_com(operands:TCommandOperands):TCommandResult;
+function LayOff_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 var
   _PEntity:PGDBObjEntity;
   UndoStartMarkerPlaced:boolean;
@@ -52,7 +52,7 @@ begin
 end;
 initialization
   programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
-  CreateCommandFastObjectPlugin(@LayOff_com,LayOffCommandName,CADWG,0);
+  CreateZCADCommand(@LayOff_com,LayOffCommandName,CADWG,0);
 finalization
   ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
 end.

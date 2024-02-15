@@ -38,9 +38,9 @@ uses
   uzeentdevice,uzeentblockinsert,uzeblockdef,uzeentsubordinated,
   //uzestyleslayers,
   uzeconsts;
-function BlockPreViewExport_com(operands:TCommandOperands):TCommandResult;
+function BlockPreViewExport_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 implementation
-function BlockPreViewExport_com(operands:TCommandOperands):TCommandResult;
+function BlockPreViewExport_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 const
   scl=3;
 var
@@ -174,7 +174,7 @@ begin
 end;
 initialization
   programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
-  CreateCommandFastObjectPlugin(@BlockPreViewExport_com,'BlockPreViewExport',0,0);
+  CreateZCADCommand(@BlockPreViewExport_com,'BlockPreViewExport',0,0);
 finalization
   ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
 end.

@@ -30,7 +30,7 @@ uses
 
 implementation
 
-function view_com(operands:TCommandOperands):TCommandResult;
+function view_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 var
    s:string;
    ox,oy,oz:gdbvertex;
@@ -124,7 +124,7 @@ end;
 
 initialization
   programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
-  CreateCommandFastObjectPlugin(@view_com,'View',CADWG,0).overlay:=true;
+  CreateZCADCommand(@view_com,'View',CADWG,0).overlay:=true;
 finalization
   ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
 end.

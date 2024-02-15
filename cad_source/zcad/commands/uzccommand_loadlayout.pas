@@ -35,7 +35,7 @@ uses
   uzccommandsabstract,uzccommandsimpl;
 
 procedure LoadLayoutFromFile(Filename: string);
-function LoadLayout_com(operands:TCommandOperands):TCommandResult;
+function LoadLayout_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 
 implementation
 
@@ -71,7 +71,7 @@ begin
   end;
 end;
 
-function LoadLayout_com(operands:TCommandOperands):TCommandResult;
+function LoadLayout_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 var
   XMLConfig: TXMLConfigStorage;
   filename:string;
@@ -111,7 +111,7 @@ end;
 
 initialization
   programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
-  CreateCommandFastObjectPlugin(@LoadLayout_com,'LoadLayout',0,0);
+  CreateZCADCommand(@LoadLayout_com,'LoadLayout',0,0);
 finalization
   ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
 end.

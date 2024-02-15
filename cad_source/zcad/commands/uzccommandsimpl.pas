@@ -26,25 +26,21 @@ uses uzcutils,uzgldrawcontext,uzglviewareageneral,uzeconsts,uzcsysvars,uzegeomet
      uzegeometrytypes,uzglviewareadata,uzcdrawings,
      uzcinterface,varman,uzclog,uzeSnap;
 type
-  comproc=procedure(_self:pointer);
-  commousefunc=function(wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record;mclick:Integer):Integer;
+  comproc=procedure(const Context:TZCADCommandContext;_self:pointer);
+  commousefunc=function(const Context:TZCADCommandContext;wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record;mclick:Integer):Integer;
   comdrawfunc=function(mclick:Integer):TCommandResult;
-  comfunc=function:Integer;
-  comfuncwithoper=function(operands:TCommandOperands):TCommandResult;
+  comfuncwithoper=function(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
+
+  TZCADBaseCommand=function(const Context:TZCADCommandContext; Operands:TCommandOperands):TCommandResult;
 {Export+}
-{REGISTEROBJECTTYPE CommandFastObject}
-  CommandFastObject =  object(CommandFastObjectDef)
-    procedure CommandInit; virtual;
-    procedure CommandEnd; virtual;
-  end;
   PCommandFastObjectPlugin=^CommandFastObjectPlugin;
   {REGISTEROBJECTTYPE CommandFastObjectPlugin}
   CommandFastObjectPlugin =  object(CommandFastObjectDef)
-    onCommandStart:comfuncwithoper;
-    constructor Init(name:pansichar;func:comfuncwithoper);
-    procedure CommandStart(Operands:TCommandOperands); virtual;
-    procedure CommandCancel; virtual;
-    procedure CommandEnd; virtual;
+    onCommandStart:TZCADBaseCommand;
+    constructor Init(name:pansichar;func:TZCADBaseCommand);
+    procedure CommandStart(const Context:TZCADCommandContext;Operands:TCommandOperands); virtual;
+    procedure CommandCancel(const Context:TZCADCommandContext); virtual;
+    procedure CommandEnd(const Context:TZCADCommandContext); virtual;
   end;
   pCommandRTEdObject=^CommandRTEdObject;
   {REGISTEROBJECTTYPE CommandRTEdObject}
@@ -52,9 +48,9 @@ type
     saveosmode:Integer;(*hidden_in_objinsp*)
     commanddata:THardTypedData;(*'Command options'*)
     ShowParams:Boolean;(*hidden_in_objinsp*)
-    procedure CommandStart(Operands:TCommandOperands); virtual;
-    procedure CommandEnd; virtual;
-    procedure CommandCancel; virtual;
+    procedure CommandStart(const Context:TZCADCommandContext;Operands:TCommandOperands); virtual;
+    procedure CommandEnd(const Context:TZCADCommandContext); virtual;
+    procedure CommandCancel(const Context:TZCADCommandContext); virtual;
     procedure CommandInit; virtual;
     procedure Prompt(msg:String);
     procedure Error(msg:String);
@@ -72,14 +68,14 @@ type
     onHelpGeometryDraw:comdrawfunc;
     onCommandContinue:comproc;
     constructor init(ocs:comfuncwithoper;oce,occ,ocf:comproc;obc,oac:commousefunc;onCCont:comproc;name:pansichar);
-    procedure CommandStart(Operands:TCommandOperands); virtual;
-    procedure CommandEnd; virtual;
-    procedure CommandCancel; virtual;
+    procedure CommandStart(const Context:TZCADCommandContext;Operands:TCommandOperands); virtual;
+    procedure CommandEnd(const Context:TZCADCommandContext); virtual;
+    procedure CommandCancel(const Context:TZCADCommandContext); virtual;
     procedure Format;virtual;
     procedure FormatAfterFielfmod(PField,PTypeDescriptor:Pointer);virtual;
-    procedure CommandContinue; virtual;
-    function BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record): Integer; virtual;
-    function AfterClick(wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record): Integer; virtual;
+    procedure CommandContinue(const Context:TZCADCommandContext); virtual;
+    function BeforeClick(const Context:TZCADCommandContext;wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record): Integer; virtual;
+    function AfterClick(const Context:TZCADCommandContext;wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record): Integer; virtual;
     procedure DrawHeplGeometry;virtual;
   end;
   {REGISTEROBJECTTYPE TOSModeEditor}
@@ -93,7 +89,7 @@ type
 var
      OSModeEditor:TOSModeEditor;
 function CreateCommandRTEdObjectPlugin(ocs:comfuncwithoper;oce,occ,ocf:comproc;obc,oac:commousefunc;ohgd:comdrawfunc;occont:comproc;name:pansichar;SA,DA:TCStartAttr):pCommandRTEdObjectPlugin;export;
-function CreateCommandFastObjectPlugin(ocs:comfuncwithoper;name:pansichar;SA,DA:TCStartAttr):pCommandFastObjectPlugin;export;
+function CreateZCADCommand(ACommandFunc:TZCADBaseCommand;ACommandName:string;SA,DA:TCStartAttr):pCommandFastObjectPlugin;export;
 implementation
 procedure  TOSModeEditor.Format;
 var
@@ -226,7 +222,7 @@ var
 begin
   if assigned(drawings.GetCurrentDWG)then
     UndoTop:=drawings.GetCurrentDWG.GetUndoTop{UndoStack.CurrentCommand};
-  if assigned(onCommandStart) then rez:=onCommandStart(Operands);
+  if assigned(onCommandStart) then rez:=onCommandStart(Context,Operands);
   if rez<>ZCMD_OK_NOEND then commandmanager.executecommandend;
 end;
 procedure CommandFastObjectPlugin.CommandCancel;
@@ -298,12 +294,12 @@ begin
   OSModeEditor.GetState;
   zcRedrawCurrentDrawing;
 end;
-function CreateCommandFastObjectPlugin;
+function CreateZCADCommand;
 var p:pCommandFastObjectPlugin;
 begin
      p:=nil;
      Getmem(Pointer(p),sizeof(CommandFastObjectPlugin));
-     p^.init(name,ocs);
+     p^.init(pchar(ACommandName),ACommandFunc);
      p^.dyn:=true;
      p^.CStartAttrEnableAttr:=SA;
      p^.CStartAttrDisableAttr:=DA;
@@ -349,15 +345,15 @@ var a:integer;
 begin
      if assigned(onAfterClick) then
                                    begin
-                                        if mouseclic=1 then
-                                                           mouseclic:=mouseclic;
+//                                        if mouseclic=1 then
+//                                                           mouseclic:=mouseclic;
 
-                                        a:=onAfterClick(wc,mc,button,osp,mouseclic);
+                                        a:=onAfterClick(context,wc,mc,button,osp,mouseclic);
                                         mouseclic:=a;
                                         dc:=drawings.GetCurrentDWG^.CreateDrawingRC;
                                         drawings.GetCurrentROOT.getoutbound(dc);
                                         result:=a;
-                                        if (mouseclic=1)and(commandmanager.pcommandrunning<>nil) then BeforeClick(wc,mc,button,osp);
+                                        if (mouseclic=1)and(commandmanager.CurrCmd.pcommandrunning<>nil) then BeforeClick(context,wc,mc,button,osp);
                                         //if mouseclic=0 then
                                         //                   mouseclic:=0;
                                    end;
@@ -372,48 +368,45 @@ end;
 procedure CommandRTEdObjectPlugin.FormatAfterFielfmod(PField,PTypeDescriptor:Pointer);
 begin
   if assigned(self.onFormat) then
-    onFormat(PField);
+    onFormat(PTZCADCommandContext(pcontext)^,PField);
 end;
 procedure CommandRTEdObjectPlugin.Format;
 begin
   if assigned(self.onFormat) then
-    onFormat(nil);
+    onFormat(PTZCADCommandContext(pcontext)^,nil);
 end;
 function CommandRTEdObjectPlugin.BeforeClick;
 begin
      if assigned(onBeforeClick) then
-                                     result:=onBeforeClick(wc,mc,button,osp,mouseclic);
+                                     result:=onBeforeClick(context,wc,mc,button,osp,mouseclic);
 end;
 procedure CommandRTEdObjectPlugin.CommandStart;
 begin
-     inherited CommandStart('');
+     inherited CommandStart(context,'');
      if assigned(onCommandStart) then
                                      begin
-                                          onCommandStart(operands);
+                                          onCommandStart(Context,operands);
                                      end;
 end;
 procedure CommandRTEdObjectPlugin.CommandEnd;
 begin
      if assigned(onCommandEnd) then
                                    begin
-                                        onCommandEnd(@self);
+                                        onCommandEnd(Context,@self);
                                    end;
-     inherited CommandEnd;
+     inherited CommandEnd(context);
 end;
 procedure CommandRTEdObjectPlugin.CommandCancel;
 begin
      //inherited CommandCancel;
      if assigned(onCommandCancel) then
-                                     onCommandCancel(@self);
-     inherited CommandCancel;
+                                     onCommandCancel(Context,@self);
+     inherited CommandCancel(context);
 end;
 procedure CommandRTEdObjectPlugin.CommandContinue;
 begin
      if assigned(onCommandContinue) then
-                                     onCommandContinue(@self);
-end;
-procedure CommandFastObject.CommandEnd;
-begin
+                                     onCommandContinue(context,@self);
 end;
 
 procedure CommandRTEdObject.CommandStart;
@@ -436,10 +429,6 @@ begin
   drawings.GetCurrentDWG.ConstructObjRoot.ObjMatrix:=onematrix;
   drawings.GetCurrentDWG.wa.SetMouseMode(savemousemode);
   zcRedrawCurrentDrawing;
-end;
-
-procedure CommandFastObject.CommandInit;
-begin
 end;
 
 procedure CommandRTEdObject.CommandInit;

@@ -25,7 +25,7 @@ uses
  uzbpaths,uzccommandsabstract,uzccommandsimpl,uztoolbarsmanager;
 
 implementation
-function LoadToolbars_com(operands:TCommandOperands):TCommandResult;
+function LoadToolbars_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 begin
   ToolBarsManager.LoadToolBarsContent(ExpandPath(operands));
   result:=cmd_ok;
@@ -33,7 +33,7 @@ end;
 
 initialization
   programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
-  CreateCommandFastObjectPlugin(@LoadToolbars_com,'LoadToolbars',0,0);
+  CreateZCADCommand(@LoadToolbars_com,'LoadToolbars',0,0);
 finalization
   ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
 end.

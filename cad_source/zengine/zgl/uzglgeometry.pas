@@ -198,7 +198,7 @@ begin
   Bound.RT.x:=NegInfinity;
   Bound.RT.y:=NegInfinity;//-infinity;
 
-  matr:=matrixmultiply(DrawMatrix,objmatrix);
+  //matr:=matrixmultiply(DrawMatrix,objmatrix);
   matr:=DrawMatrix;
 
   i := 1;
@@ -414,9 +414,9 @@ begin
      dir:=pcurrsegment^.dir;
      angle:=Vertexangle(CreateVertex2D(0,0),CreateVertex2D(dir.x,dir.y));
      cp:=pcurrsegment^.startpoint;
-     end
-     else
-         pcurrsegment:=pcurrsegment;
+     end;
+//     else
+//         pcurrsegment:=pcurrsegment;
 end;
 procedure ZSegmentator.startdraw;
 begin
@@ -781,75 +781,70 @@ begin
 end;
 function ZGLGraphix.DrawLineWithLT(var rc:TDrawContext;const startpoint,endpoint:GDBVertex; const vp:GDBObjVisualProp):TLLDrawResult;
 var
-    scale,length:Double;
-    num,normalizedD,D,halfStroke,dend:Double;
-    ir3:itrec;
-    PStroke:PDouble;
-    lt:PGDBLtypeProp;
-    Segmentator:ZSegmentator;
-    supressfirstdash:boolean;
+  scale,length:Double;
+  num,normalizedD,D,halfStroke,dend:Double;
+  ir3:itrec;
+  PStroke:PDouble;
+  lt:PGDBLtypeProp;
+  Segmentator:ZSegmentator;
+  supressfirstdash:boolean;
 begin
-     result:=CreateLLDrawResult(LLprimitives);
-     LT:=getLTfromVP(vp);
-     if (LT=nil) or (LT.dasharray.Count=0) then
-     begin
-          DrawLineWithoutLT(rc,startpoint,endpoint,result);
-          result.Appearance:=TAMatching;
-     end
-     else
-     begin
-          //LT:=getLTfromVP(vp);
-          length := Vertexlength(startpoint,endpoint);//длина линии
-          scale:={SysVar.dwg.DWG_LTScale^}rc.DrawingContext.GlobalLTScale*vp.LineTypeScale;//фактический масштаб линии
-          num:=Length/(scale*LT.strokesarray.LengthFact);//количество повторений шаблона
-          if ((num<1)and(not LT^.WithoutLines))or(num>SysVarRDMaxLTPatternsInEntity) then
-          begin
-               DrawLineWithoutLT(rc,startpoint,endpoint,result); //не рисуем шаблон при большом количестве повторений
-               result.Appearance:=TAMatching;
-          end
-          else
-          begin
-               Segmentator.InitFromLine(startpoint,endpoint,length,@self);//длина линии
-               Segmentator.startdraw;
-               D:=(Length-(scale*LT.strokesarray.LengthFact)*trunc(num))/2; //длинна добавки для выравнивания
-               normalizedD:=D/Length;
+  result:=CreateLLDrawResult(LLprimitives);
+  LT:=getLTfromVP(vp);
+  if (LT=nil) or (LT.dasharray.Count=0) then begin
+    DrawLineWithoutLT(rc,startpoint,endpoint,result);
+    result.Appearance:=TAMatching;
+  end else begin
+    //LT:=getLTfromVP(vp);
+    length := Vertexlength(startpoint,endpoint);//длина линии
+    scale:={SysVar.dwg.DWG_LTScale^}rc.DrawingContext.GlobalLTScale*vp.LineTypeScale;//фактический масштаб линии
+    num:=Length/(scale*LT.strokesarray.LengthFact);//количество повторений шаблона
+    if ((num<1)and(not LT^.WithoutLines))or(num>SysVarRDMaxLTPatternsInEntity) then begin
+      DrawLineWithoutLT(rc,startpoint,endpoint,result); //не рисуем шаблон при большом количестве повторений
+      result.Appearance:=TAMatching;
+    end else begin
+      Segmentator.InitFromLine(startpoint,endpoint,length,@self);//длина линии
+      Segmentator.startdraw;
+      D:=(Length-(scale*LT.strokesarray.LengthFact)*trunc(num))/2; //длинна добавки для выравнивания
+      normalizedD:=D/Length;
 
-               PStroke:=LT^.strokesarray.beginiterate(ir3);//первый штрих
-               halfStroke:=(scale*abs(PStroke^/2))/length;//первый штрих
-               supressfirstdash:=false;
-               dend:=normalizedD-halfStroke;
-               if dend>eps then
-               case LT.FirstStroke of
-                            TODILine:Segmentator.draw(rc,dend,true,result);
-                           TODIPoint:
-                                     begin
-                                          DrawPointWithoutLT(rc,Segmentator.cp,result);
-                                          Segmentator.draw(rc,dend,false,result);
-                                          supressfirstdash:=true;
-                                     end;
-     TODIUnknown,TODIShape,TODIBlank:;//заглушка на варнинг
-               end;
-               PlaceNPatterns(rc,Segmentator,trunc(num),LT,scale,scale,length,result,supressfirstdash);//рисуем num паттернов
-               dend:=1-Segmentator.cdp;
-               if dend>eps then
-                               begin
-                                    //Segmentator.draw(rc,dend,true);
-                                    //дорисовываем окончание если надо
-                                    case LT.FirstStroke of
-                                                 TODILine:Segmentator.draw(rc,dend,true,result);
-                                                TODIPoint:
-                                                          begin
-                                                               //Segmentator.draw(rc,dend,false);
-                                                               DrawPointWithoutLT(rc,{Segmentator.cp}endpoint,result);
-                                                          end;
-                          TODIUnknown,TODIShape,TODIBlank:;//заглушка на варнинг
-                                    end;
-                               end;
-               Segmentator.done;
-         end;
-     end;
-     FinishLLDrawResult(LLprimitives,result);
-     Shrink;
+      PStroke:=LT^.strokesarray.beginiterate(ir3);//первый штрих
+      halfStroke:=(scale*abs(PStroke^/2))/length;//первый штрих
+      supressfirstdash:=false;
+      dend:=normalizedD-halfStroke;
+      if {dend>eps}lt^.LastStroke<>TODILine then
+        case LT.FirstStroke of
+                   TODILine:Segmentator.draw(rc,dend,true,result);
+                  TODIPoint:begin
+                              DrawPointWithoutLT(rc,Segmentator.cp,result);
+                              Segmentator.draw(rc,dend,false,result);
+                              supressfirstdash:=true;
+                            end;
+                TODIUnknown,
+                  TODIShape,
+                  TODIBlank:;//заглушка на варнинг
+      end;
+      PlaceNPatterns(rc,Segmentator,trunc(num),LT,scale,scale,length,result,supressfirstdash);//рисуем num паттернов
+      dend:=1-Segmentator.cdp;
+      if dend>eps then begin
+        //Segmentator.draw(rc,dend,true);
+        //дорисовываем окончание если надо
+        case LT.FirstStroke of
+                   TODILine:Segmentator.draw(rc,dend,true,result);
+                  TODIPoint:begin
+                              //Segmentator.draw(rc,dend,false);
+                              DrawPointWithoutLT(rc,{Segmentator.cp}endpoint,result);
+                            end;
+                TODIUnknown,
+                  TODIShape,
+                  TODIBlank:;//заглушка на варнинг
+        end;
+      end;
+      Segmentator.done;
+    end;
+  end;
+  FinishLLDrawResult(LLprimitives,result);
+  Shrink;
 end;
 
 procedure ZGLGraphix.drawgeometry;

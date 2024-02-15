@@ -37,7 +37,7 @@ uses
 
 implementation
 
-function units_cmd(operands:TCommandOperands):TCommandResult;
+function units_cmd(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 var
     _UnitsFormat:TzeUnitsFormat;
 begin
@@ -65,7 +65,7 @@ end;
 
 initialization
   programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
-  CreateCommandFastObjectPlugin(@units_cmd,'Units',CADWG,0);
+  CreateZCADCommand(@units_cmd,'Units',CADWG,0);
 finalization
   ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
 end.

@@ -29,26 +29,18 @@ uses
   uzccmdload,
   uzccommandsimpl,uzccommandsabstract;
 
-function Merge_com(operands:TCommandOperands):TCommandResult;
+function Merge_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 
 implementation
 
-function Merge_com(operands:TCommandOperands):TCommandResult;
+function Merge_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 begin
   result:=Load_merge(operands,TLOMerge);
 end;
 
-procedure startup;
-begin
-  CreateCommandFastObjectPlugin(@Merge_com,'Merge',CADWG,0);
-end;
-procedure finalize;
-begin
-end;
 initialization
   programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
-  startup;
+  CreateZCADCommand(@Merge_com,'Merge',CADWG,0);
 finalization
   ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
-  finalize;
 end.

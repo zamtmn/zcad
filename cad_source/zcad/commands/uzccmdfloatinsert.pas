@@ -31,20 +31,20 @@ type
 {EXPORT+}
   {REGISTEROBJECTTYPE FloatInsert_com}
   FloatInsert_com =  object(CommandRTEdObject)
-    procedure CommandStart(Operands:TCommandOperands); virtual;
+    procedure CommandStart(const Context:TZCADCommandContext;Operands:TCommandOperands); virtual;
     procedure Build(Operands:TCommandOperands); virtual;
     procedure Command(Operands:TCommandOperands); virtual;abstract;
     function DoEnd(pdata:Pointer):Boolean;virtual;
-    function BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record): Integer; virtual;
+    function BeforeClick(const Context:TZCADCommandContext;wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record): Integer; virtual;
   end;
   TFIWPMode=(FIWPCustomize,FIWPRun);
   {REGISTEROBJECTTYPE FloatInsertWithParams_com}
   FloatInsertWithParams_com =  object(FloatInsert_com)
     CMode:TFIWPMode;
-    procedure CommandStart(Operands:TCommandOperands); virtual;
-    procedure BuildDM(Operands:TCommandOperands); virtual;
+    procedure CommandStart(const Context:TZCADCommandContext;Operands:TCommandOperands); virtual;
+    procedure BuildDM(const Context:TZCADCommandContext;Operands:TCommandOperands); virtual;
     procedure Run(pdata:PtrInt); virtual;
-    function MouseMoveCallback(wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record): Integer; virtual;
+    function MouseMoveCallback(const Context:TZCADCommandContext;wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record): Integer; virtual;
     //procedure Command(Operands:pansichar); virtual;abstract;
     //function BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; button: Byte;osp:pos_record): Integer; virtual;
   end;
@@ -62,9 +62,9 @@ begin
          end
 end;
 
-procedure FloatInsert_com.CommandStart(Operands:TCommandOperands);
+procedure FloatInsert_com.CommandStart(const Context:TZCADCommandContext;Operands:TCommandOperands);
 begin
-     inherited CommandStart(Operands);
+     inherited CommandStart(context,Operands);
      build(operands);
 end;
 function FloatInsert_com.DoEnd(pdata:Pointer):Boolean;
@@ -72,7 +72,7 @@ begin
      result:=true;
 end;
 
-function FloatInsert_com.BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record): Integer;
+function FloatInsert_com.BeforeClick(const Context:TZCADCommandContext;wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record): Integer;
 var
     dist:gdbvertex;
     dispmatr:DMatrix4D;
@@ -132,38 +132,29 @@ begin
   result:=cmd_ok;
 end;
 
-procedure FloatInsertWithParams_com.BuildDM(Operands:TCommandOperands);
+procedure FloatInsertWithParams_com.BuildDM(const Context:TZCADCommandContext;Operands:TCommandOperands);
 begin
 
 end;
-procedure FloatInsertWithParams_com.CommandStart(Operands:TCommandOperands);
+procedure FloatInsertWithParams_com.CommandStart(const Context:TZCADCommandContext;Operands:TCommandOperands);
 begin
-     CommandRTEdObject.CommandStart(Operands);
+     CommandRTEdObject.CommandStart(context,Operands);
      CMode:=FIWPCustomize;
-     BuildDM(Operands);
+     BuildDM(Context,Operands);
 end;
 procedure FloatInsertWithParams_com.Run(pdata:PtrInt);
 begin
      cmode:=FIWPRun;
      self.Build('');
 end;
-function FloatInsertWithParams_com.MouseMoveCallback(wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record): Integer;
+function FloatInsertWithParams_com.MouseMoveCallback(const Context:TZCADCommandContext;wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record): Integer;
 begin
      if CMode=FIWPRun then
-                          inherited MouseMoveCallback(wc,mc,button,osp);
+                          inherited MouseMoveCallback(context,wc,mc,button,osp);
      result:=cmd_ok;
-end;
-
-procedure startup;
-begin
-end;
-procedure finalize;
-begin
 end;
 initialization
   programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
-  startup;
 finalization
   ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
-  finalize;
 end.

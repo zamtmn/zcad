@@ -51,7 +51,7 @@ implementation
 var
   p3dpl:pgdbobjpolyline;
 
-function _3DPoly_com_CommandStart(operands:TCommandOperands):TCommandResult; //< Команда построитель полилинии начало
+function _3DPoly_com_CommandStart(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult; //< Команда построитель полилинии начало
 begin
   p3dpl:=nil;
   drawings.GetCurrentDWG^.wa.SetMouseMode((MGet3DPoint) or (MMoveCamera) or (MRotateCamera));
@@ -60,7 +60,7 @@ begin
   result:=cmd_ok;
 end;
 
-Procedure _3DPoly_com_CommandEnd(_self:pointer);
+Procedure _3DPoly_com_CommandEnd(const Context:TZCADCommandContext;_self:pointer);
 var
     domethod,undomethod:tmethod;
     cc:integer;
@@ -93,7 +93,7 @@ begin
 end;
 
 
-function _3DPoly_com_BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record;mclick:Integer): Integer;
+function _3DPoly_com_BeforeClick(const Context:TZCADCommandContext;wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record;mclick:Integer): Integer;
 var
     dc:TDrawContext;
 begin
@@ -118,7 +118,7 @@ begin
   end
 end;
 
-function _3DPoly_com_AfterClick(wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record;mclick:Integer): Integer;
+function _3DPoly_com_AfterClick(const Context:TZCADCommandContext;wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record;mclick:Integer): Integer;
 var
   domethod,undomethod:tmethod;
   polydata:tpolydata;

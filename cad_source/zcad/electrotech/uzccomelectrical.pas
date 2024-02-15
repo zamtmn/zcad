@@ -87,10 +87,10 @@ TBasicFinter=record
     New_line: PGDBObjLine;
     FirstOwner,SecondOwner,OldFirstOwner:PGDBObjNet;
     constructor init(cn:String;SA,DA:TCStartAttr);
-    procedure CommandStart(Operands:TCommandOperands); virtual;
-    procedure CommandCancel; virtual;
-    function BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record): Integer; virtual;
-    function AfterClick(wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record): Integer; virtual;
+    procedure CommandStart(const Context:TZCADCommandContext;Operands:TCommandOperands); virtual;
+    procedure CommandCancel(const Context:TZCADCommandContext); virtual;
+    function BeforeClick(const Context:TZCADCommandContext;wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record): Integer; virtual;
+    function AfterClick(const Context:TZCADCommandContext;wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record): Integer; virtual;
   end;
 
   {EM_SRBUILD_com = object(FloatInsert_com)
@@ -144,7 +144,7 @@ var
 {procedure startup;
 procedure finalize;}
 procedure Cable2CableMark(pcd:PTCableDesctiptor;pv:pGDBObjDevice);
-function RegenZEnts_com(operands:TCommandOperands):TCommandResult;
+function RegenZEnts_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 implementation
 function GetCableMaterial(pcd:PTCableDesctiptor):String;
 var
@@ -1318,7 +1318,7 @@ end;
 
 procedure El_Wire_com.CommandStart;
 begin
-  inherited CommandStart('');;
+  inherited CommandStart(context,'');;
   FirstOwner:=nil;
   SecondOwner:=nil;
   OldFirstOwner:=nil;
@@ -1330,7 +1330,7 @@ procedure El_Wire_com.CommandCancel;
 begin
 end;
 
-function El_Wire_com.BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record): Integer;
+function El_Wire_com.BeforeClick(const Context:TZCADCommandContext;wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record): Integer;
 var //po:PGDBObjSubordinated;
     Objects:GDBObjOpenArrayOfPV;
     DC:TDrawContext;
@@ -1368,7 +1368,7 @@ begin
   end
 end;
 
-function El_Wire_com.AfterClick(wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record): Integer;
+function El_Wire_com.AfterClick(const Context:TZCADCommandContext;wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record): Integer;
 var //po:PGDBObjSubordinated;
     mode:Integer;
     TempNet:PGDBObjNet;
@@ -1386,8 +1386,8 @@ begin
   New_line.CoordInOCS.lEnd:= wc;
   New_line^.Formatentity(drawings.GetCurrentDWG^,dc);
   //po:=nil;
-  if (button and MZW_LBUTTON)<>0 then
-                                     button:=button;
+//  if (button and MZW_LBUTTON)<>0 then
+//                                     button:=button;
   Objects.init(10);
   if drawings.GetCurrentROOT.FindObjectsInPoint(wc,Objects) then
   begin
@@ -1495,7 +1495,7 @@ begin
 
     zcRedrawCurrentDrawing;
     if mode= 2 then commandmanager.executecommandend
-               else beforeclick(wc,mc,button,osp);
+               else beforeclick(context,wc,mc,button,osp);
   end;
   result:=cmd_ok;
 end;
@@ -1542,7 +1542,7 @@ begin
   s:='**Напрямую**';
   cabcomparam.Traces.Enums.PushBackData(s);
 end;
-function _Cable_com_CommandStart(operands:TCommandOperands):TCommandResult;
+function _Cable_com_CommandStart(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 var
    s:String;
    ir_inGDB:itrec;
@@ -1587,7 +1587,7 @@ begin
   ZCMsgCallBackInterface.TextMessage('Первая точка:',TMWOHistoryOut);
   result:=cmd_ok;
 end;
-Procedure _Cable_com_CommandEnd(_self:pointer);
+Procedure _Cable_com_CommandEnd(const Context:TZCADCommandContext;_self:pointer);
 begin
   if p3dpl<>nil then
   begin
@@ -1603,7 +1603,7 @@ begin
   cabcomparam.PTrace:=nil;
   //Freemem(pointer(p3dpl));
 end;
-function _Cable_com_BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record;mclick:Integer): Integer;
+function _Cable_com_BeforeClick(const Context:TZCADCommandContext;wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record;mclick:Integer): Integer;
 var
    pvd:pvardesk;
    domethod,undomethod:tmethod;
@@ -1820,7 +1820,7 @@ begin
 end;
 
 
-function _Cable_com_AfterClick(wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record;mclick:Integer): Integer;
+function _Cable_com_AfterClick(const Context:TZCADCommandContext;wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record;mclick:Integer): Integer;
 var //po:PGDBObjSubordinated;
     plastw:pgdbvertex;
     //tw1,tw2:gdbvertex;
@@ -1991,7 +1991,7 @@ end;
 //  end;
 //  result:=cmd_ok;
 //end;
-function _Cable_com_Legend(operands:TCommandOperands):TCommandResult;
+function _Cable_com_Legend(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 var //i: Integer;
     pv:PTCableDesctiptor;
     ir,{irincable,}ir_inNodeArray:itrec;
@@ -2031,8 +2031,8 @@ begin
     begin
          cablename:=pv^.Name;
 
-         if cablename='RS' then
-                               cablename:=cablename;
+//         if cablename='RS' then
+//                               cablename:=cablename;
 
          pstartsegmentvarext:=pv^.StartSegment^.GetExtension<TVariablesExtender>;
          pvd:=pstartsegmentvarext.entityunit.FindVariable('DB_link');
@@ -2139,7 +2139,7 @@ begin
   end;
   result:=cmd_ok;
 end;
-function _Material_com_Legend(operands:TCommandOperands):TCommandResult;
+function _Material_com_Legend(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 var //i: Integer;
     pv:pGDBObjEntity;
     ir,{irincable,ir_inNodeArray,}ir_inscf:itrec;
@@ -2355,7 +2355,7 @@ begin
   end;
   result:=cmd_ok;
 end;
-function _Cable_com_Select(operands:TCommandOperands):TCommandResult;
+function _Cable_com_Select(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 var //i: Integer;
     pv:pGDBObjEntity;
     ir,irnpa:itrec;
@@ -2418,7 +2418,7 @@ begin
   until pv=nil;
 end;
 }
-function VarReport_com(operands:TCommandOperands):TCommandResult;
+function VarReport_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 var pv:pGDBObjEntity;
     ir:itrec;
     pvd:pvardesk;
@@ -2467,7 +2467,7 @@ begin
   result:=cmd_ok;
 end;
 
-function _Cable_com_Invert(operands:TCommandOperands):TCommandResult;
+function _Cable_com_Invert(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 var //i: Integer;
     pv:pGDBObjEntity;
     ir:itrec;
@@ -2489,7 +2489,7 @@ begin
   zcRedrawCurrentDrawing;
   result:=cmd_ok;
 end;
-function _Cable_com_Join(operands:TCommandOperands):TCommandResult;
+function _Cable_com_Join(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 var //i: Integer;
     pv:pGDBObjEntity;
     pc1,pc2:PGDBObjCable;
@@ -2572,7 +2572,7 @@ else
   //redrawoglwnd;
   result:=cmd_ok;
 end;
-function Find_com(operands:TCommandOperands):TCommandResult;
+function Find_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 //var i: Integer;
    // pv:pGDBObjEntity;
    // ir:itrec;
@@ -2698,7 +2698,7 @@ begin
   //ZCMsgCallBackInterface.TextMessage('Найдено '+inttostr(count)+' объектов',TMWOHistoryOut);
   ZCMsgCallBackInterface.TextMessage(format('Founded %d entities',[count]),TMWOHistoryOut);
 end;
-function _Cable_mark_com(operands:TCommandOperands):TCommandResult;
+function _Cable_mark_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 var //i: Integer;
     pv:pGDBObjDevice;
     ir{,irincable,ir_inNodeArray}:itrec;
@@ -2761,7 +2761,7 @@ begin
   cman.done;
   result:=cmd_ok;
 end;
-function El_Leader_com_AfterClick(wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record;mclick:Integer): Integer;
+function El_Leader_com_AfterClick(const Context:TZCADCommandContext;wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record;mclick:Integer): Integer;
 var //po:PGDBObjSubordinated;
     pleader:PGDBObjElLeader;
     domethod,undomethod:tmethod;
@@ -2828,7 +2828,7 @@ begin
     zcRedrawCurrentDrawing;
   end;
 end;
-function ElLeaser_com_CommandStart(operands:TCommandOperands):TCommandResult;
+function ElLeaser_com_CommandStart(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 begin
   pold:=nil;
   drawings.GetCurrentDWG.wa.SetMouseMode((MGet3DPoint) or (MMoveCamera) or (MRotateCamera));
@@ -2837,7 +2837,7 @@ begin
   ZCMsgCallBackInterface.TextMessage('Первая точка:',TMWOHistoryOut);
   result:=cmd_ok;
 end;
-function _Cable_com_Manager(operands:TCommandOperands):TCommandResult;
+function _Cable_com_Manager(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 //var i: Integer;
     //pv:pGDBObjEntity;
     //ir:itrec;
@@ -2847,7 +2847,7 @@ begin
         zcShowCommandParams(SysUnit.TypeName2PTD('TCableManager'),@CableManager);
         result:=cmd_ok;
 end;
-function _Ren_n_to_0n_com(operands:TCommandOperands):TCommandResult;
+function _Ren_n_to_0n_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 var {i,}len: Integer;
     pv:pGDBObjEntity;
     ir:itrec;
@@ -2883,7 +2883,7 @@ begin
   until pv=nil;
   result:=cmd_ok;
 end;
-function _SelectMaterial_com(operands:TCommandOperands):TCommandResult;
+function _SelectMaterial_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 var //i,len: Integer;
     pv:pGDBObjEntity;
     ir:itrec;
@@ -2966,7 +2966,7 @@ begin
   drawings.standardization(result,GDBCableID);
 end;
 
-function _El_ExternalKZ_com(operands:TCommandOperands):TCommandResult;
+function _El_ExternalKZ_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 var
     FDoc: TCSVDocument;
     isload:boolean;
@@ -3177,7 +3177,7 @@ begin
                                                                 New_line^.Formatentity(drawings.GetCurrentDWG^,dc);
                                                                 supernet^.ObjArray.AddPEntity(New_line^);
                                                                 linesarray.PushBackData(New_line);
-                                                            pvd:=pvd;
+//                                                            pvd:=pvd;
                                                        end;
                                                   end;
                                                   end;
@@ -3199,9 +3199,9 @@ begin
                           riserarray.Done;
                           if supernet<>nil then
                                           supernetsarray.PushBackData(supernet);
-                          end
-                             else
-                                 supernet:=supernet;
+                          end;
+//                             else
+//                                 supernet:=supernet;
 
                           if supernet<>nil then
                           begin
@@ -3279,7 +3279,7 @@ begin
      //ZCMsgCallBackInterface.TextMessage('GDBCommandsElectrical.El_ExternalKZ: Не могу открыть файл: '+s+'('+Operands+')',TMWOShowError);
      ZCMsgCallBackInterface.TextMessage(format('GDBCommandsElectrical.El_ExternalKZ: can''t open file: "%s"("%s")',[s,Operands]),TMWOShowError);
 end;
-function _AutoGenCableRemove_com(operands:TCommandOperands):TCommandResult;
+function _AutoGenCableRemove_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 var //i,len: Integer;
     pv:pGDBObjEntity;
     ir:itrec;
@@ -3313,7 +3313,7 @@ begin
   result:=cmd_ok;
 end;
 
-function _test_com(operands:TCommandOperands):TCommandResult;
+function _test_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 var
     p:GDBVertex;
     pet:CMDLinePromptParser.TGeneralParsedText;
@@ -3345,7 +3345,7 @@ begin
      result:=cmd_ok;
 end;
 
-function RegenZEnts_com(operands:TCommandOperands):TCommandResult;
+function RegenZEnts_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 var
     pv:pGDBObjEntity;
         ir:itrec;
@@ -3377,7 +3377,7 @@ begin
   result:=cmd_ok;
 end;
 
-function Connection2Dot_com(operands:TCommandOperands):TCommandResult;
+function Connection2Dot_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 var
   cman:TCableManager;
   pv:PTCableDesctiptor;
@@ -3465,7 +3465,7 @@ procedure startup;
 begin
   MainSpecContentFormat.init(100);
   MainSpecContentFormat.loadfromfile(FindInSupportPath(GetSupportPath,'main.sf'));
-  CreateCommandFastObjectPlugin(@RegenZEnts_com,'RegenZEnts',CADWG,0);
+  CreateZCADCommand(@RegenZEnts_com,'RegenZEnts',CADWG,0);
   Wire.init('El_Wire',0,0);
   commandmanager.CommandRegister(@Wire);
   pcabcom:=CreateCommandRTEdObjectPlugin(@_Cable_com_CommandStart, _Cable_com_CommandEnd,nil,@cabcomformat,@_Cable_com_BeforeClick,@_Cable_com_AfterClick,@_Cable_com_Hd,nil,'EL_Cable',0,0);
@@ -3474,21 +3474,21 @@ begin
   cabcomparam.Traces.Enums.init(10);
   cabcomparam.PTrace:=nil;
 
-  CreateCommandFastObjectPlugin(@_Cable_com_Invert,'El_Cable_Invert',CADWG,0);
-  CreateCommandFastObjectPlugin(@_Cable_com_Manager,'El_CableMan',CADWG,0);
-  CreateCommandFastObjectPlugin(@_Cable_com_Legend,'El_Cable_Legend',CADWG,0);
-  CreateCommandFastObjectPlugin(@_Cable_com_Join,'El_Cable_Join',CADWG,0);
-  csel:=CreateCommandFastObjectPlugin(@_Cable_com_Select,'El_Cable_Select',CADWG,0);
+  CreateZCADCommand(@_Cable_com_Invert,'El_Cable_Invert',CADWG,0);
+  CreateZCADCommand(@_Cable_com_Manager,'El_CableMan',CADWG,0);
+  CreateZCADCommand(@_Cable_com_Legend,'El_Cable_Legend',CADWG,0);
+  CreateZCADCommand(@_Cable_com_Join,'El_Cable_Join',CADWG,0);
+  csel:=CreateZCADCommand(@_Cable_com_Select,'El_Cable_Select',CADWG,0);
   csel.CEndActionAttr:=[];
-  CreateCommandFastObjectPlugin(@_Material_com_Legend,'El_Material_Legend',CADWG,0);
-  CreateCommandFastObjectPlugin(@_Cable_mark_com,'KIP_Cable_Mark',CADWG,0);
+  CreateZCADCommand(@_Material_com_Legend,'El_Material_Legend',CADWG,0);
+  CreateZCADCommand(@_Cable_mark_com,'KIP_Cable_Mark',CADWG,0);
 
-  CreateCommandFastObjectPlugin(@_Ren_n_to_0n_com,'El_Cable_RenN_0N',CADWG,0);
-  CreateCommandFastObjectPlugin(@_SelectMaterial_com,'SelMat',CADWG,0);
-  CreateCommandFastObjectPlugin(@_test_com,'test',CADWG,0);
-  CreateCommandFastObjectPlugin(@_El_ExternalKZ_com,'El_ExternalKZ',CADWG,0);
-  CreateCommandFastObjectPlugin(@_AutoGenCableRemove_com,'EL_AutoGen_Cable_Remove',CADWG,0);
-  CreateCommandFastObjectPlugin(@Connection2Dot_com,'Connection2Dot',CADWG,0);
+  CreateZCADCommand(@_Ren_n_to_0n_com,'El_Cable_RenN_0N',CADWG,0);
+  CreateZCADCommand(@_SelectMaterial_com,'SelMat',CADWG,0);
+  CreateZCADCommand(@_test_com,'test',CADWG,0);
+  CreateZCADCommand(@_El_ExternalKZ_com,'El_ExternalKZ',CADWG,0);
+  CreateZCADCommand(@_AutoGenCableRemove_com,'EL_AutoGen_Cable_Remove',CADWG,0);
+  CreateZCADCommand(@Connection2Dot_com,'Connection2Dot',CADWG,0);
 
   //EM_SRBUILD.init('EM_SRBUILD',CADWG,0);
   //EM_SEPBUILD.init('EM_SEPBUILD',CADWG,0);
@@ -3507,7 +3507,7 @@ begin
   ELLeaderComParam.Scale:=1;
   ELLeaderComParam.Size:=1;
 
-  CreateCommandFastObjectPlugin(@VarReport_com,'VarReport',CADWG,0);
+  CreateZCADCommand(@VarReport_com,'VarReport',CADWG,0);
 end;
 
 procedure finalize;

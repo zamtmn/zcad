@@ -39,4 +39,5 @@ VL_Type:='Р СП/1 ip20';
 VL_Room:='.';
 VL_Floor:='.';
 
+nametemplatesxlsx:='<zlight>';
 end.

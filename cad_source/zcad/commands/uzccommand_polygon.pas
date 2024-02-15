@@ -55,7 +55,7 @@ var
    PolygonParam:TPolygonParam;     //**< Переменная содержащая опции команды Polygon
 
 //** Чертим многоугольник центер вершина
-function DrawPolygon_com(operands:TCommandOperands):TCommandResult;
+function DrawPolygon_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 var
     vertexLWObj:GDBvertex2D;               //переменная для добавления вершин в полилинию
     vertexObj:GDBvertex;
@@ -162,7 +162,7 @@ initialization
   SysUnit.SetTypeDesk(TypeInfo(TPolygonParam),['Entity type','Number of vertices','Polyline width'],[FNUser]);//Даем человечьи имена параметрам
   SysUnit.SetTypeDesk(TypeInfo(TRectangEntType),['3DPoly','LWPoly'],[FNUser]);//Даем человечьи имена параметрам
 
-  CreateCommandFastObjectPlugin(@DrawPolygon_com,'Polygon',CADWG,0);
+  CreateZCADCommand(@DrawPolygon_com,'Polygon',CADWG,0);
 
   PolygonParam.ET:=RET_3DPoly;
   PolygonParam.PolyWidth:=0;

@@ -55,7 +55,7 @@ begin
   end;
 end;
 
-function DockingOptions_com(Operands:pansichar):Integer;
+function DockingOptions_com(const Context:TZCADCommandContext;Operands:pansichar):Integer;
 begin
      ShowAnchorDockOptions(DockMaster);
      result:=cmd_ok;
@@ -63,7 +63,7 @@ end;
 
 initialization
   programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
-  CreateCommandFastObjectPlugin(@DockingOptions_com,'DockingOptions',0,0);
+  CreateZCADCommand(@DockingOptions_com,'DockingOptions',0,0);
   DockMaster.OnShowOptions:=ShowAnchorDockOptions;
 finalization
   ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);

@@ -27,14 +27,14 @@ uses
 
 implementation
 
-function Cancel_com(operands:TCommandOperands):TCommandResult;
+function Cancel_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 begin
   result:=cmd_ok;
 end;
 
 initialization
   programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
-  CreateCommandFastObjectPlugin(@Cancel_com,'Cancel',0,0);
+  CreateZCADCommand(@Cancel_com,'Cancel',0,0);
 finalization
   ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
 end.

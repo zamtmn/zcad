@@ -668,9 +668,6 @@ begin
           if (d1<0)and(d2<0)and(d3<0)and(d4<0)and(d5<0)and(d6<0)and(d7<0)and(d8<0)
           then
               begin
-
-                   d1:=d2;
-                   if d1>d2 then halt(0);
                    result:=irempty;
                    system.exit;
               end;

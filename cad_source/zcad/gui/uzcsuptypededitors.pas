@@ -24,7 +24,7 @@ interface
 uses
   zeundostack,zebaseundocommands,usupportgui,Varman,UBaseTypeDescriptor,varmandef,
   StdCtrls,sysutils,Forms,Controls,Classes,uzbstrproc,uzcsysvars,
-  uzccommandsmanager,uzcinterface;
+  uzccommandsmanager,uzcinterface,uzedimensionaltypes;
 
 type
   TUndoContext=record
@@ -41,7 +41,7 @@ type
     UndoContext:TUndoContext;
 
     procedure freeeditor;
-    function createeditor(const TheOwner:TPropEditorOwner; const AEditedControl:TObject; const r: TRect; const variable; const vartype:String;UndoPrefixProcedure:TUndoPrefixProcedure;preferedHeight:integer; useinternalundo:boolean=true):boolean;
+    function createeditor(const TheOwner:TPropEditorOwner; const AEditedControl:TObject; const r: TRect; const variable; const vartype:String;UndoPrefixProcedure:TUndoPrefixProcedure;preferedHeight:integer;f:TzeUnitsFormat; useinternalundo:boolean=true):boolean;
     procedure Notify(Sender: TObject;Command:TMyNotifyCommand); virtual;
     procedure asyncfreeeditor(Data: PtrInt);
     procedure ClearEDContext;
@@ -90,7 +90,7 @@ begin
      undocontext.UndoCommand:=nil;
      undocontext.UndoStack:=nil;
 end;
-function TSupportTypedEditors.createeditor(const TheOwner:TPropEditorOwner; const AEditedControl:TObject; const r: TRect; const variable; const vartype:String;UndoPrefixProcedure:TUndoPrefixProcedure;preferedHeight:integer; useinternalundo:boolean=true):boolean;
+function TSupportTypedEditors.createeditor(const TheOwner:TPropEditorOwner; const AEditedControl:TObject; const r: TRect; const variable; const vartype:String;UndoPrefixProcedure:TUndoPrefixProcedure;preferedHeight:integer;f:TzeUnitsFormat;useinternalundo:boolean=true):boolean;
 var
   needdropdown:boolean;
   typemanager:PUserTypeDescriptor;
@@ -100,13 +100,13 @@ begin
      if uppercase(vartype)='TENUMDATA' then
      begin
           typemanager:=@GDBEnumDataDescriptorObj;
-      PEditor:=GDBEnumDataDescriptorObj.CreateEditor(TheOwner,r,@variable,nil,true,'',preferedHeight).Editor;
+      PEditor:=GDBEnumDataDescriptorObj.CreateEditor(TheOwner,r,@variable,nil,true,'',preferedHeight,f).Editor;
       needdropdown:=true;
      end
      else
      begin
           typemanager:=SysUnit^.TypeName2PTD(vartype);
-          PEditor:=typemanager^.CreateEditor(TheOwner,r,@variable,nil,true,'',preferedHeight).Editor;
+          PEditor:=typemanager^.CreateEditor(TheOwner,r,@variable,nil,true,'',preferedHeight,f).Editor;
      end;
      if assigned(peditor) then
      if assigned(PEditor.geteditor) then

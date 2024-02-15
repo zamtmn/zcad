@@ -27,7 +27,7 @@ uses
 
 implementation
 
-function DWGPrev_com(operands:TCommandOperands):TCommandResult;
+function DWGPrev_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 var
    i:integer;
 begin
@@ -42,17 +42,9 @@ begin
   result:=cmd_ok;
 end;
 
-procedure startup;
-begin
-  CreateCommandFastObjectPlugin(@DWGPrev_com,'DWGPrev',0,0);
-end;
-procedure finalize;
-begin
-end;
 initialization
   programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
-  startup;
+  CreateZCADCommand(@DWGPrev_com,'DWGPrev',0,0);
 finalization
   ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
-  finalize;
 end.

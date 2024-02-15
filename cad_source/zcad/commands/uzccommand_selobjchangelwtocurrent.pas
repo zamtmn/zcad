@@ -32,7 +32,7 @@ uses
 
 implementation
 
-function SelObjChangeLWToCurrent_com(operands:TCommandOperands):TCommandResult;
+function SelObjChangeLWToCurrent_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 var pv:pGDBObjEntity;
     ir:itrec;
 begin
@@ -49,7 +49,7 @@ end;
 
 initialization
   programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
-  CreateCommandFastObjectPlugin(@SelObjChangeLWToCurrent_com,'SelObjChangeLWToCurrent',CADWG,0);
+  CreateZCADCommand(@SelObjChangeLWToCurrent_com,'SelObjChangeLWToCurrent',CADWG,0);
 finalization
   ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
 end.

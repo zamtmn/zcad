@@ -133,7 +133,7 @@ begin
 end;}
 procedure TessErrorCallBack(error: Cardinal;v2: Pdouble);{$IFDEF Windows}stdcall{$ELSE}cdecl{$ENDIF};
 begin
-     error:=error;
+//     error:=error;
 end;
 procedure CombineCallback(const coords:GDBvertex;const vertex_data:TV4P;const weight:TArray4F;var dataout:Pointer);{$IFDEF Windows}stdcall{$ELSE}cdecl{$ENDIF};
 begin
@@ -142,8 +142,8 @@ end;
 procedure TessBeginCallBack(gmode: Cardinal;v2: Pdouble);{$IFDEF Windows}stdcall{$ELSE}cdecl{$ENDIF};
 begin
      CurrentLLentity:=-1;
-     if gmode=GL_TRIANGLES then
-                               gmode:=gmode;
+//     if gmode=GL_TRIANGLES then
+//                               gmode:=gmode;
      pointcount:=0;
      case gmode of
      GL_TRIANGLES:
@@ -164,8 +164,7 @@ GL_TRIANGLE_STRIP:begin
      else
          begin
            debugln('{F}Wrong triangulation mode!!');
-           //programlog.LogOutStr('Wrong triangulation mode!!',lp_OldPos,LM_Fatal);
-           halt(0);
+           raise Exception.Create('Wrong triangulation mode!!');
          end;
      end;
 end;
@@ -249,9 +248,9 @@ begin
           //OGLSM.TessVertex(tesselator,@tparray[tparrayindex],nil);
           inc(tparrayindex);
           lastv:=v;
-     end
-        else
-            v:=v;
+     end;
+//        else
+//            v:=v;
 end;
 
 procedure EndSymContour;
@@ -381,8 +380,8 @@ begin
     if (_glyph^.outline.flags[j] and TT_Flag_On_Curve)<>0 then
     begin
          //HistoryOutStr(inttostr(j-lastoncurve));
-         if j-lastoncurve>3 then
-                                lastoncurve:=lastoncurve;
+//         if j-lastoncurve>3 then
+//                                lastoncurve:=lastoncurve;
          lastoncurve:=j;
     end;
     //programlog.LogOutStr('TTF: flag='+inttostr(_glyph^.outline.flags[j]),0);
@@ -541,8 +540,8 @@ begin
                               CharIterator.Destroy;
      exit;
 
-     if symbol=49 then
-                        symbol:=symbol;
+//     if symbol=49 then
+//                        symbol:=symbol;
      if symbol<256 then
                        begin
                        result:=@symbolinfo[symbol];

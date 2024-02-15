@@ -460,8 +460,8 @@ begin
                          name:='_error_here';
           //index:=gdb.GetCurrentDWG.BlockDefArray.getindex(pansichar(name));
           index:=PGDBObjBlockdefArray(drawing.GetBlockDefArraySimple).getindex({pansichar(}name{)});
-          if index<0 then
-                         index:=index;
+//          if index<0 then
+//                         index:=index;
           assert((index>=0) and (index<PGDBObjBlockdefArray(drawing.GetBlockDefArraySimple).count), rsWrongBlockDefIndex);
 
           if not PBlockDefArray(PGDBObjBlockdefArray(drawing.GetBlockDefArraySimple).parray)^[index].Formated then
@@ -658,8 +658,8 @@ else if not dxfStringload(f,2,byt,name)then {s := }f.readString;
         until s = 'SEQEND'
       end;}
   zTraceLn('{D}[DXF_CONTENTS]Name='+name);
-  if name='EL_LIGHT_SWIITH' then
-    name:=name;
+//  if name='EL_LIGHT_SWIITH' then
+//    name:=name;
       //programlog.LogOutFormatStr('BlockInsert name="%s" loaded',[name],lp_OldPos,LM_Debug);
       //index:=gdb.GetCurrentDWG.BlockDefArray.getindex(pansichar(name));
       index:=PGDBObjBlockdefArray(drawing.GetBlockDefArraySimple).getindex(pansichar(name));

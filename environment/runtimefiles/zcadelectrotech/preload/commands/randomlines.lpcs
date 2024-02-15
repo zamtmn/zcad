@@ -1,0 +1,13 @@
+//LPCSRun(randomlines)
+var i:int32;
+begin
+  randomize;
+  for i:=1 to 100 do begin
+    line(1000*random,
+         1000*random,
+         0,
+         1000*random,
+         1000*random,
+         0);
+  end;
+end.

@@ -340,7 +340,7 @@ implementation
   //  e.Graphics.DrawLines(Pens.Black, points);
 
 
-function TestModul_com(operands:TCommandOperands):TCommandResult;
+function TestModul_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 
 
      var
@@ -360,7 +360,7 @@ function TestModul_com(operands:TCommandOperands):TCommandResult;
  end;
 
 initialization
- CreateCommandFastObjectPlugin(@TestModul_com,'test555',CADWG,0);
+ CreateZCADCommand(@TestModul_com,'test555',CADWG,0);
 end.
 
 

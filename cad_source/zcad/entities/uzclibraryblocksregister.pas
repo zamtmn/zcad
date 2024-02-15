@@ -39,10 +39,9 @@ begin
     until tdp='';
     BlockDefArray:=BlockBaseDWG^.GetBlockDefArraySimple;
     if BlockDefArray.getblockdef(BlockName)=nil then
-                                                    MergeBlocks_com(BlockDeffinedIn);
     result:=nil;
 end;
-function ReadBlockLibrary_com(operands:TCommandOperands):TCommandResult;
+function ReadBlockLibrary_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 var
   line,block,depends,s:String;
   f:TZctnrVectorBytes;
@@ -64,7 +63,7 @@ begin
   result:=cmd_ok;
 end;
 initialization
-  CreateCommandFastObjectPlugin(@ReadBlockLibrary_com,'ReadBlockLibrary',0,0);
+  CreateZCADCommand(@ReadBlockLibrary_com,'ReadBlockLibrary',0,0);
 finalization
   ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
 end.

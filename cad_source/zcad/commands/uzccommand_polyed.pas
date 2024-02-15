@@ -75,7 +75,7 @@ var
 
 implementation
 
-function _3DPolyEd_com_CommandStart(operands:TCommandOperands):TCommandResult;
+function _3DPolyEd_com_CommandStart(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 var
    pobj:pgdbobjentity;
    ir:itrec;
@@ -117,7 +117,7 @@ begin
 end;
 
 
-function _3DPolyEd_com_BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record;mclick:Integer): Integer;
+function _3DPolyEd_com_BeforeClick(const Context:TZCADCommandContext;wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record;mclick:Integer): Integer;
 var
     ptv,ptvprev:pgdbvertex;
     ir:itrec;
@@ -129,8 +129,8 @@ var
     i:integer;
     dc:TDrawContext;
 begin
-  if (button and MZW_LBUTTON)<>0 then
-                    button:=button;
+//  if (button and MZW_LBUTTON)<>0 then
+//                    button:=button;
   if PEProp.Action=TSPE_Remove then
                                    PEProp.setpoint:=false;
 
@@ -429,8 +429,8 @@ begin
   end;
 end;}
 
-procedure startup;
-begin
+initialization
+  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
   PEProp.Action:=TSPE_Insert;
   SysUnit^.RegisterType(TypeInfo(TPolyEdit));//регистрируем тип данных в зкадном RTTI
   SysUnit^.SetTypeDesk(TypeInfo(TPolyEdit),['Action','Mode','vdist','ldist','nearestvertex','nearestline','dir','setpoint','vvertex','lvertex1','lvertex2']);//Даем програмные имена параметрам, по идее это должно быть в ртти, но ненашел
@@ -438,14 +438,6 @@ begin
   SysUnit^.SetTypeDesk(TypeInfo(TPolyEditMode),['TPEM_Nearest','TPEM_Select']);//Даем человечьи имена параметрам
 
   CreateCommandRTEdObjectPlugin(@_3DPolyEd_com_CommandStart,nil,nil,nil,@_3DPolyEd_com_BeforeClick,@_3DPolyEd_com_BeforeClick,nil,nil,'PolyEd',0,0);
-end;
-procedure Finalize;
-begin
-end;
-initialization
-  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
-  startup;
 finalization
   ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
-  finalize;
 end.

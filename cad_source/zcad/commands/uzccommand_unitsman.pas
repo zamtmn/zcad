@@ -34,7 +34,7 @@ uses
 
 implementation
 
-function UnitsMan_com(operands:TCommandOperands):TCommandResult;
+function UnitsMan_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 var
   PUnit:ptunit;
 begin
@@ -52,7 +52,7 @@ end;
 
 initialization
   programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
-  CreateCommandFastObjectPlugin(@UnitsMan_com,'UnitsMan',0,0);
+  CreateZCADCommand(@UnitsMan_com,'UnitsMan',0,0);
 finalization
   ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
 end.

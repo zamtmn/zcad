@@ -168,9 +168,9 @@ begin
                                //inc(currentpos);
                                {if readpos = buferread then
                                                            readtobufer;}
-                               if scobcacount=0 then exit
-                                                else
-                                                     s:=s;
+                               if scobcacount=0 then exit;
+//                                                else
+//                                                     s:=s;
                           end
                       else inc(readpos);
       end;
@@ -192,8 +192,8 @@ begin
       system.break;
     i := i + 1;
   end;
-  if i>1 then
-    i:=i;
+//  if i>1 then
+//    i:=i;
   result := copy(expr, i, length(expr) - i + 1);
 end;
 

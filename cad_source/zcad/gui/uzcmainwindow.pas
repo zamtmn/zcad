@@ -286,7 +286,7 @@ end;
 
 procedure TZCADMainWindow.StartEntityDrag(StartX,StartY,X,Y:Integer);
 begin
-  if commandmanager.pcommandrunning=nil then begin
+  if commandmanager.CurrCmd.pcommandrunning=nil then begin
     //drawings.GetCurrentDWG^.wa.WaMouseMove(nil,[ssRight],StartX,StartY);
     Application.QueueAsyncCall(drawings.GetCurrentDWG^.wa.asyncsendmouse,(StartX and $ffff)or((StartY and $ffff) shl 16));
     commandmanager.executecommandsilent('MoveEntsByMouse',drawings.GetCurrentDWG,drawings.GetCurrentOGLWParam);
@@ -441,20 +441,20 @@ begin
                                begin
                                     ivars.CLType:=ltype;
                                end;
-           if tstyle<>PEmpty then
-           if tstyle=PDifferent then
-                                  ivars.CTStyle:=nil
-                           else
-                               begin
-                                    ivars.CTStyle:=tstyle;
-                               end;
-           if dimstyle<>PEmpty then
-           if dimstyle=PDifferent then
-                                  ivars.CDimStyle:=nil
-                           else
-                               begin
-                                    ivars.CDimStyle:=dimstyle;
-                               end;
+           if tstyle<>PEmpty then begin
+             if tstyle=PDifferent then
+               ivars.CTStyle:=nil
+             else
+               ivars.CTStyle:=tstyle;
+           end else
+             ivars.CTStyle:=sysvar.dwg.DWG_CTStyle^;
+           if dimstyle<>PEmpty then begin
+             if dimstyle=PDifferent then
+               ivars.CDimStyle:=nil
+             else
+               ivars.CDimStyle:=dimstyle;
+           end else
+             ivars.CTStyle:=sysvar.dwg.DWG_CDimStyle^;
       end;
       UpdateControls;
 end;
@@ -776,7 +776,7 @@ begin
   HardcodedButtonSize:=21;
   {Грузим раскладку окон}
   if not sysparam.saved.noloadlayout then
-    LoadLayout_com(EmptyCommandOperands);
+    LoadLayout_com(TZCADCommandContext.CreateRec,EmptyCommandOperands);
 
   if sysparam.saved.noloadlayout then
   begin
@@ -813,7 +813,7 @@ begin
     result:=ToolBarsManager.CreateToolPalette(aName,DoDisableAutoSizing);
   end
   else if ZCADGUIManager.GetZCADFormInfo(aname,PFID) then begin
-    aname:=aname;
+//    aname:=aname;
     if assigned(PFID^.CreateProc)then
       result:=PFID^.CreateProc(aname)
     else begin
@@ -1171,8 +1171,8 @@ begin
 
     comtext:='';
     needinput:=false;
-    if commandmanager.pcommandrunning<>nil then
-      if (commandmanager.pcommandrunning.IData.GetPointMode=TGPMWaitInput)and(key<>VK_ESCAPE) then
+    if commandmanager.CurrCmd.pcommandrunning<>nil then
+      if (commandmanager.CurrCmd.pcommandrunning.IData.GetPointMode=TGPMWaitInput)and(key<>VK_ESCAPE) then
         needinput:=true;
     if assigned(cmdedit) then
       comtext:=cmdedit.text;
@@ -1265,7 +1265,7 @@ begin
     if pdwg<>nil then
       if not pdwg^.GetChangeStampt then
         SysVar.SAVE.SAVE_Auto_Current_Interval^:=SysVar.SAVE.SAVE_Auto_Interval^;
-    if (SysVar.SAVE.SAVE_Auto_Current_Interval^<1)and(commandmanager.pcommandrunning=nil) then
+    if (SysVar.SAVE.SAVE_Auto_Current_Interval^<1)and(commandmanager.CurrCmd.pcommandrunning=nil) then
       if (pdwg)<>nil then
         if (pdwg.wa.param.SelDesc.Selectedobjcount=0) then begin
           commandmanager.executecommandsilent('QSave(QS)',drawings.GetCurrentDWG,drawings.GetCurrentOGLWParam);
@@ -1501,11 +1501,11 @@ begin
       if (zc and MZW_SHIFT) = 0 then begin
         Sender.param.startgluepoint:=Sender.param.nearesttcontrolpoint.pcontrolpoint;
         commandmanager.ExecuteCommandSilent('OnDrawingEd',Sender.pdwg,@Sender.param);
-        if commandmanager.pcommandrunning <> nil then
+        if commandmanager.CurrCmd.pcommandrunning <> nil then
         begin
           if (zc and MZW_LBUTTON) <> 0{zc=MZW_LBUTTON} then
                                  Sender.param.lastpoint:=Sender.param.nearesttcontrolpoint.pcontrolpoint^.worldcoord;
-          commandmanager.pcommandrunning^.MouseMoveCallback(Sender.param.nearesttcontrolpoint.pcontrolpoint^.worldcoord,
+          commandmanager.CurrCmd.pcommandrunning^.MouseMoveCallback(CommandManager.CurrCmd.Context,Sender.param.nearesttcontrolpoint.pcontrolpoint^.worldcoord,
                                                             Sender.param.md.mouseglue, zc,nil)
         end;
       end;
@@ -1573,11 +1573,11 @@ begin
                   //if assigned(updatevisibleproc) then updatevisibleproc(ZMsgID_GUIActionRedraw);
              end;
              //wa.param.SelDesc.LastSelectedObject := wa.param.SelDesc.OnMouseObject;
-             if commandmanager.pcommandrunning<>nil then
-             if commandmanager.pcommandrunning.IData.GetPointMode=TGPMWaitEnt then
+             if commandmanager.CurrCmd.pcommandrunning<>nil then
+             if commandmanager.CurrCmd.pcommandrunning.IData.GetPointMode=TGPMWaitEnt then
              if sender.param.SelDesc.LastSelectedObject<>nil then
              begin
-               commandmanager.pcommandrunning^.IData.GetPointMode:=TGPMEnt;
+               commandmanager.CurrCmd.pcommandrunning^.IData.GetPointMode:=TGPMEnt;
              end;
          NeedRedraw:=true;
     end
@@ -1683,11 +1683,11 @@ procedure TZCADMainWindow.wakp(Sender:TAbstractViewArea;var Key: Word; Shift: TS
 var
   waitinput:boolean;
 begin
-  waitinput:=commandmanager.pcommandrunning<>nil;
+  waitinput:=commandmanager.CurrCmd.pcommandrunning<>nil;
   if waitinput then
-    waitinput:=commandmanager.pcommandrunning.IData.GetPointMode in SomethingWait;
+    waitinput:=commandmanager.CurrCmd.pcommandrunning.IData.GetPointMode in SomethingWait;
   if waitinput then
-    waitinput:=IPEmpty in commandmanager.pcommandrunning.IData.InputMode;
+    waitinput:=IPEmpty in commandmanager.CurrCmd.pcommandrunning.IData.InputMode;
 
      if Key=VK_ESCAPE then
      begin
@@ -1696,7 +1696,7 @@ begin
        //if not ReStoreGDBObjInspProc then
        //begin
        Sender.ClearOntrackpoint;
-       if commandmanager.pcommandrunning=nil then
+       if commandmanager.CurrCmd.pcommandrunning=nil then
          begin
          Sender.PDWG.GetCurrentROOT.ObjArray.DeSelect(Sender.param.SelDesc.Selectedobjcount,drawings.GetCurrentDWG^.deselector);
          Sender.param.SelDesc.LastSelectedObject := nil;
@@ -1713,7 +1713,7 @@ begin
          end
        else
          begin
-              commandmanager.pcommandrunning.CommandCancel;
+              commandmanager.CurrCmd.pcommandrunning.CommandCancel(CommandManager.CurrCmd.Context);
               commandmanager.executecommandend;
          end;
        //end;
@@ -1738,7 +1738,7 @@ begin
   RelSelectedObjects:=SelectRelatedObjects(Sender.PDWG,@Sender.param,Sender.param.SelDesc.LastSelectedObject);
   if RelSelectedObjects>0 then
                               ZCMsgCallBackInterface.TextMessage(format(rsAdditionalSelected,[RelSelectedObjects]),TMWOHistoryOut);
-  if (commandmanager.pcommandrunning=nil)or(commandmanager.pcommandrunning^.IData.GetPointMode<>TGPMWaitEnt) then
+  if (commandmanager.CurrCmd.pcommandrunning=nil)or(commandmanager.CurrCmd.pcommandrunning^.IData.GetPointMode<>TGPMWaitEnt) then
   begin
   if PGDBObjEntity(Sender.param.SelDesc.OnMouseObject)^.select(Sender.param.SelDesc.Selectedobjcount,drawings.CurrentDWG^.selector) then
     begin
@@ -1897,7 +1897,7 @@ end;
 
 procedure TZCADMainWindow.AsyncFree(Data:PtrInt);
 begin
-  if (commandmanager.pcommandrunning=nil)and(not LPS.isProcessed) then
+  if (commandmanager.CurrCmd.pcommandrunning=nil)and(not LPS.isProcessed) then
     Tobject(Data).Free
   else
     Application.QueueAsyncCall(AsyncFree,Data);

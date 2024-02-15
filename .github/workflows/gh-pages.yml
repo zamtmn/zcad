@@ -1,0 +1,35 @@
+name: build
+on: 
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2.3.4
+        with:
+          lfs: true
+          fetch-depth: 0
+          fetch-tags: true
+      - name: build
+        run: |
+          sudo gem install asciidoctor
+          sudo gem install asciidoctor-pdf
+          sudo gem install asciidoctor-diagram
+          sudo apt install graphviz
+          make documentation
+          sed -i "s/locale\/ru\/_images\//https:\/\/raw.githubusercontent.com\/zamtmn\/zcad\/gh-pages\/locale\/ru\/_images\//g" cad_source/docs/userguide/userguide.ru.html
+          sed -i "s/..\/images\/actions\//https:\/\/raw.githubusercontent.com\/zamtmn\/zcad\/gh-pages\/images_actions\/actions\//g" cad_source/docs/userguide/userguide.ru.html
+          cp -r cad_source/docs/images cad_source/docs/userguide/images_actions
+
+          cp cad_source/docs/userguide/userguide.ru.html cad_source/docs/userguide/index.html
+      - name: GitHub Pages
+        if: success() && github.ref == 'refs/heads/master'
+        uses: crazy-max/ghaction-github-pages@v2.3.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          build_dir: cad_source/docs/userguide

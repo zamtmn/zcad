@@ -1227,8 +1227,8 @@ begin
         exit;
       end
       else begin
-        if PTokenizerSymbolData^.NextSymbol=nil then
-         includedChars:=includedChars;
+//        if PTokenizerSymbolData^.NextSymbol=nil then
+//         includedChars:=includedChars;
         GManipulator.AddToPosition(TaddResult,text,CurrentPos,1);
         exit(PTokenizerSymbolData^.NextSymbol.Sub2GetToken(Text,SubStr,TaddResult,TokenTextInfo,level+1,TokenDataVector,FirstSymbol));
       end;

@@ -30,7 +30,7 @@ uses
 
 implementation
 
-function ChangeProjType_com(operands:TCommandOperands):TCommandResult;
+function ChangeProjType_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 begin
   if drawings.GetCurrentDWG.wa.param.projtype = projparalel then
   begin
@@ -47,7 +47,7 @@ end;
 
 initialization
   programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
-  CreateCommandFastObjectPlugin(@ChangeProjType_com,'ChangeProjType',CADWG,0);
+  CreateZCADCommand(@ChangeProjType_com,'ChangeProjType',CADWG,0);
 finalization
   ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
 end.

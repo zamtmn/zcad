@@ -24,6 +24,7 @@ function zeDimensionToUnicodeString(const value:Double; const f:TzeUnitsFormat):
 function zeNonDimensionToString(const value:Double; const f:TzeUnitsFormat):String;
 function zeAngleDegToString(const value:Double; const f:TzeUnitsFormat):String;
 function zeAngleToString(const value:Double; const f:TzeUnitsFormat):String;
+function zeStringToAngle(const value:String; const f:TzeUnitsFormat):Double;
 function CreateDefaultUnitsFormat:TzeUnitsFormat;
 implementation
 const
@@ -261,6 +262,11 @@ begin
                                 end;
                                 end;
 end;
+function zeStringToAngle(const value:String; const f:TzeUnitsFormat):Double;
+begin
+  result:=degtorad(StrToFloat(value));
+end;
+
 function zeAngleDegToString(const value:Double; const f:TzeUnitsFormat):String;
 var
    ff:TzeUnitsFormat;

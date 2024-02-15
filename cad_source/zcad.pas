@@ -239,6 +239,7 @@ uses
   uzccommand_cfgAddSupportPath,
   uzccommand_DockingOptions,
   uzcCommand_MoveEntsByMouse,
+  uzcCommand_LPCSRun,
 
 
   uzcenitiesvariablesextender,uzcExtdrLayerControl,uzcExtdrSmartTextEnt,
@@ -259,7 +260,7 @@ uses
   uzvmanemcom, //управления и обработка полученой электрической модели
   uzvmanemschemalevelone, //создание одноуровневой схемы
   uzvmanemdialogcom,//запуск генератора схемы через диалоговое окно
-  {$IFDEF WINDOWS}uzvmodeltoxlsx,{$ENDIF}  //запуск экспорта информации из veb модели в xlsx на OLE
+  {$IFDEF WINDOWS}uzvmodeltoxlsx,uzvdevtoxlsx, uzvxlsxtocad,{$ENDIF}  //запуск экспорта информации из veb модели в xlsx на OLE
 
   //uzvelectricalexcelcom,
   //**//

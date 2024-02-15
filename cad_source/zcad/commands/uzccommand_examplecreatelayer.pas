@@ -29,7 +29,7 @@ uses
 
 implementation
 
-function ExampleCreateLayer_com(operands:TCommandOperands):TCommandResult;
+function ExampleCreateLayer_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 var
     pproglayer:PGDBLayerProp;
     pnevlayer:PGDBLayerProp;
@@ -55,7 +55,7 @@ end;
 
 initialization
   programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
-  CreateCommandFastObjectPlugin(@ExampleCreateLayer_com,'ExampleCreateLayer',CADWG,0);
+  CreateZCADCommand(@ExampleCreateLayer_com,'ExampleCreateLayer',CADWG,0);
 finalization
   ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
 end.

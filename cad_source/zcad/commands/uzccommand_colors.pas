@@ -34,7 +34,7 @@ uses
 
 implementation
 
-function Colors_cmd(operands:TCommandOperands):TCommandResult;
+function Colors_cmd(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 var
    mr:integer;
 begin
@@ -52,7 +52,7 @@ end;
 
 initialization
   programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
-  CreateCommandFastObjectPlugin(@Colors_cmd,'Colors',CADWG,0);
+  CreateZCADCommand(@Colors_cmd,'Colors',CADWG,0);
 finalization
   ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
 end.

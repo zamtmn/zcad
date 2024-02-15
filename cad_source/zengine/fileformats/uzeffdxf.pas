@@ -417,8 +417,8 @@ begin
                                      context.h2p.Add(PGDBObjEntity(pobj)^.PExtAttrib^.dwgHandle,postobj);
                                                                                       //pushhandle(phandlearray,PGDBObjEntity(pobj)^.PExtAttrib^.Handle,PtrInt(postobj));
                                 end;
-                                if newowner=pointer($ffffffff) then
-                                                           newowner:=newowner;
+//                                if newowner=pointer($ffffffff) then
+//                                                           newowner:=newowner;
                                 if newowner<>owner then
                                 begin
                                      m4:=PGDBObjEntity(newowner)^.getmatrix^;
@@ -445,7 +445,7 @@ begin
                                 end
                                    else
                                        begin
-                                       newowner:=newowner;
+//                                       newowner:=newowner;
                                        {//добавляем потеряный примитив
                                        owner^.AddMi(@postobj);
                                            if foc=0 then
@@ -1289,14 +1289,14 @@ begin
                                     //programlog.logoutstr('Ignored double definition block '+s+';',lp_OldPos);
                                     //HistoryOutStr(format(rsDoubleBlockIgnored,[Tria_AnsiToUtf8(s)]));
                                     DebugLn('{IH}'+rsDoubleBlockIgnored,[Tria_AnsiToUtf8(s)]);
-                                    if s='DEVICE_PS_UK-VK'then
-                                               s:=s;
+//                                    if s='DEVICE_PS_UK-VK'then
+//                                               s:=s;
                                     while (s <> 'ENDBLK') do
                                     s := f.readString;
                                end
               else begin
-                   if s='polyline' then
-                                  s:=s;
+//                   if s='polyline' then
+//                                  s:=s;
 
                 tp := drawing.BlockDefArray.create(s);
                 debugln('{D+}[DXF_CONTENTS]Found blockdef ',s);
@@ -1347,7 +1347,7 @@ begin
           drawing.DimStyleTable.ResolveLineTypes(drawing.LTypeStyleTable);
         end;
 
-    s := s;
+//    s := s;
 //       if (byt=fcode) and (s=fname) then exit;
     lps.ProgressLongProcess(lph,f.ReadPos);
     //if assigned(ProcessLongProcessProc)then

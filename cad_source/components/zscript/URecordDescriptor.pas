@@ -90,10 +90,10 @@ begin
 end;
 procedure RecordDescriptor.RegisterTypeinfo(ti:PTypeInfo);
 begin
-  if TypeName='trenderdeb' then begin
-       if TypeName='trenderdeb' then
-                 ti:=ti;
-  end;
+//  if TypeName='trenderdeb' then begin
+//       if TypeName='trenderdeb' then
+//                 ti:=ti;
+//  end;
   CorrectFieldsOffset(ti);
 end;
 
@@ -141,9 +141,9 @@ begin
               begin
                    PtrUInt(p):=PtrUInt(PInstance)+pd^.Offset;
                    if assigned(pd^.base.PFT) then
-                                                 pd^.base.PFT^.MagicFreeInstance(p)
-                                             else
-                                                 pd:=pd;
+                                                 pd^.base.PFT^.MagicFreeInstance(p);
+//                                             else
+//                                                 pd:=pd;
               end;
               pd:=Fields.iterate(ir);
         until pd=nil;
@@ -285,19 +285,19 @@ var PFD:PFieldDescriptor;
     SaveFastEditors:TFastEditorsVector;
     startaddr:pointer;
 begin
-        if TypeName='trenderdeb' then begin
-             if TypeName='trenderdeb' then
-                       TypeName:=TypeName;
-        end;
+//        if TypeName='trenderdeb' then begin
+//             if TypeName='trenderdeb' then
+//                       TypeName:=TypeName;
+//        end;
      zTraceLn('{T+}[ZSCRIPT]RecordDescriptor.CreateProperties "%s"',[name]);
      //programlog.LogOutFormatStr('RecordDescriptor.CreateProperties "%s"',[name],lp_IncPos,LM_Trace);
 
      pobj:=addr;
      startaddr:=addr;
-     if bmode<>property_build then
-                                  begin
-                                       bmode:=bmode;
-                                  end;
+//     if bmode<>property_build then
+//                                  begin
+//                                       bmode:=bmode;
+//                                  end;
      bmodesave:=property_build;
      if PCollapsed<>field_no_attrib then
      begin
@@ -442,8 +442,8 @@ begin
            tname:=pfd^.base.UserName;
            if tname='' then
                            tname:=pfd^.base.ProgramName;
-           if tname='Geometry' then
-                                   tname:=tname;
+//           if tname='Geometry' then
+//                                   tname:=tname;
            if (pfd^.base.PFT^.GetFactTypedef^.TypeName='TEnumData') or
               (pfd^.base.PFT^.GetFactTypedef^.TypeName='TEnumDataWithOtherData') then
                        begin

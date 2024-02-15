@@ -37,14 +37,14 @@ begin
   AddSCHConnectionExtenderToEntity(PEnt);
 end;
 
-function SCHConnection_com(operands:TCommandOperands):TCommandResult;
+function SCHConnection_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 begin
- Result:=InteractiveDrawLines(rscmSpecifyFirstPoint,rscmSpecifyNextPoint,AddExtdrSCHConnection);
+ Result:=InteractiveDrawLines(Context,rscmSpecifyFirstPoint,rscmSpecifyNextPoint,AddExtdrSCHConnection);
 end;
 
 initialization
   programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
-  CreateCommandFastObjectPlugin(@SCHConnection_com,'SCHConnection',CADWG,0);
+  CreateZCADCommand(@SCHConnection_com,'SCHConnection',CADWG,0);
 finalization
   ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
 end.

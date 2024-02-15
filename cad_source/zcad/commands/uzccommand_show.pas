@@ -31,7 +31,7 @@ uses
 
 implementation
 
-function Show_com(operands:TCommandOperands):TCommandResult;
+function Show_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 var
    ctrl:TControl;
 begin
@@ -53,7 +53,7 @@ end;
 
 initialization
   programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
-  CreateCommandFastObjectPlugin(@Show_com,'Show',0,0);
+  CreateZCADCommand(@Show_com,'Show',0,0);
 finalization
   ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
 end.

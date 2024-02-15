@@ -150,8 +150,8 @@ procedure TColorSelectForm.PalettePainter(canvas:Tcanvas; StartIndex,IncIndex,st
 var
   x,y,xcoord,ycoord,cindex:integer;
 begin
-     if dy<0 then
-                 dy:=dy;
+//     if dy<0 then
+//                 dy:=dy;
      canvas.Pen.Width:=2;
      cindex:=StartIndex;
      for x:=0 to cx-1 do

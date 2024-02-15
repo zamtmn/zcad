@@ -301,8 +301,8 @@ end;
 
 procedure TGDBobjinsp.SetBounds(ALeft, ATop, AWidth, AHeight: integer);
 begin
-     if aheight=41 then
-                       aheight:=aheight;
+//     if aheight=41 then
+//                       aheight:=aheight;
   inherited SetBounds(ALeft, ATop, AWidth, AHeight);
 end;
 {function ReStoreGDBObjInsp:boolean;
@@ -1532,7 +1532,7 @@ begin
       //Freemem(pointer(peditor));
       EDContext.ppropcurrentedit:=pp;
     end;
-    PEditor:=pp^.PTypeManager^.CreateEditor(@self,pp.rect,pp^.valueAddres,nil,false,'этого не должно тут быть',rowh).Editor;
+    PEditor:=pp^.PTypeManager^.CreateEditor(@self,pp.rect,pp^.valueAddres,nil,false,'этого не должно тут быть',rowh,CurrUnitsFormat).Editor;
     if PEditor<>nil then
     begin
       //PEditor^.show;
@@ -1719,7 +1719,7 @@ begin
        if assigned(pp^.Decorators.OnCreateEditor) then
                                                       TED:=pp^.Decorators.OnCreateEditor(self,tr,pp^.valueAddres,@vsa,false,pp^.PTypeManager)
                                                   else
-                                                      TED:=pp^.PTypeManager^.CreateEditor(self,tr,pp^.valueAddres,@vsa,{false}true,initialvalue,rowh);
+                                                      TED:=pp^.PTypeManager^.CreateEditor(self,tr,pp^.valueAddres,@vsa,{false}true,initialvalue,rowh,CurrUnitsFormat);
      case ted.Mode of
                      TEM_Integrate:begin
                                        TED.Editor.SetEditorBounds(pp,INTFObjInspShowOnlyHotFastEditors);

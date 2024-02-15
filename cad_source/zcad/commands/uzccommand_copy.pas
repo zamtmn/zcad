@@ -36,7 +36,7 @@ type
 {EXPORT+}
   {REGISTEROBJECTTYPE copy_com}
   copy_com =  object(move_com)
-    function AfterClick(wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record): Integer; virtual;
+    function AfterClick(const Context:TZCADCommandContext;wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record): Integer; virtual;
     function Copy(dispmatr:DMatrix4D;UndoMaker:String): Integer;
   end;
 {EXPORT-}
@@ -91,7 +91,7 @@ begin
   PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack.PushEndMarker;
   result:=cmd_ok;
 end;
-function Copy_com.AfterClick(wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record): Integer;
+function Copy_com.AfterClick(const Context:TZCADCommandContext;wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record): Integer;
 var
   dispmatr:DMatrix4D;
 begin
@@ -103,17 +103,9 @@ begin
   end;
   result:=cmd_ok;
 end;
-procedure startup;
-begin
-  copy.init('Copy',0,0);
-end;
-procedure Finalize;
-begin
-end;
 initialization
   programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
-  startup;
+  copy.init('Copy',0,0);
 finalization
   ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
-  finalize;
 end.

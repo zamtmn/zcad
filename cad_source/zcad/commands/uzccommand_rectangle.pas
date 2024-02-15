@@ -49,7 +49,7 @@ implementation
 var
   RectangParam:TRectangParam;     //**< Переменная содержащая опции команды Rectangle
 
-  function DrawRectangle_com(operands:TCommandOperands):TCommandResult;    //< Чертим прямоугольник
+  function DrawRectangle_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;    //< Чертим прямоугольник
   var
       vertexLWObj:GDBvertex2D;               //переменная для добавления вершин в полилинию
       vertexObj:GDBvertex;
@@ -143,7 +143,7 @@ initialization
   SysUnit.SetTypeDesk(TypeInfo(TRectangParam),['ET','PolyWidth'],[FNProgram]);//Даем програмные имена параметрам, по идее это должно быть в ртти, но ненашел
   SysUnit.SetTypeDesk(TypeInfo(TRectangParam),['Entity type','Polyline width'],[FNUser]);//Даем человечьи имена параметрам
 
-  CreateCommandFastObjectPlugin(@DrawRectangle_com,'Rectangle',CADWG,0);
+  CreateZCADCommand(@DrawRectangle_com,'Rectangle',CADWG,0);
   RectangParam.ET:=RET_3DPoly;
   RectangParam.PolyWidth:=0;
 finalization

@@ -51,6 +51,10 @@ TInteractiveProcObjBuild=procedure(const PInteractiveData:Pointer;Point:GDBVerte
                   GPID//идентификатор из подсказки как результат запроса
                  );
     TGetPossibleResult=set of TGetPossible;
+    PTZCADCommandContext=^TZCADCommandContext;
+    TZCADCommandContext=record
+      class function CreateRec:TZCADCommandContext;static;
+    end;
 {Export+}
     TCommandEndAction=(CEDeSelect,CEDWGNChanged);
     TCommandEndActions={-}set of TCommandEndAction{/Byte/};
@@ -93,36 +97,37 @@ TInteractiveProcObjBuild=procedure(const PInteractiveData:Pointer;Point:GDBVerte
     CStartAttrDisableAttr:TCStartAttr;(*hidden_in_objinsp*)
     CEndActionAttr:TCommandEndActions;(*hidden_in_objinsp*)
     pdwg:Pointer;(*hidden_in_objinsp*)
+    pcontext:pointer;(*hidden_in_objinsp*)
     NotUseCommandLine:Boolean;(*hidden_in_objinsp*)
     IData:TInteractiveData;(*hidden_in_objinsp*)
-    procedure CommandStart(Operands:TCommandOperands); virtual; abstract;
-    procedure CommandEnd; virtual; abstract;
-    procedure CommandCancel; virtual; abstract;
+    procedure CommandStart(const Context:TZCADCommandContext;Operands:TCommandOperands); virtual; abstract;
+    procedure CommandEnd(const Context:TZCADCommandContext); virtual; abstract;
+    procedure CommandCancel(const Context:TZCADCommandContext); virtual; abstract;
     procedure CommandInit; virtual; abstract;
     procedure DrawHeplGeometry;virtual;
     destructor done;virtual;
     constructor init(cn:String;SA,DA:TCStartAttr);
     function GetObjTypeName:String;virtual;
     function IsRTECommand:Boolean;virtual;
-    procedure CommandContinue; virtual;
+    procedure CommandContinue(const Context:TZCADCommandContext); virtual;
   end;
   {REGISTEROBJECTTYPE CommandFastObjectDef}
   CommandFastObjectDef = object(CommandObjectDef)
     UndoTop:TArrayIndex;(*hidden_in_objinsp*)
     procedure CommandInit; virtual;abstract;
-    procedure CommandEnd; virtual;abstract;
+    procedure CommandEnd(const Context:TZCADCommandContext); virtual;abstract;
   end;
   PCommandRTEdObjectDef=^CommandRTEdObjectDef;
   {REGISTEROBJECTTYPE CommandRTEdObjectDef}
   CommandRTEdObjectDef =  object(CommandFastObjectDef)
-    procedure CommandStart(Operands:TCommandOperands); virtual;abstract;
-    procedure CommandEnd; virtual;abstract;
-    procedure CommandCancel; virtual;abstract;
+    procedure CommandStart(const Context:TZCADCommandContext;Operands:TCommandOperands); virtual;abstract;
+    procedure CommandEnd(const Context:TZCADCommandContext); virtual;abstract;
+    procedure CommandCancel(const Context:TZCADCommandContext); virtual;abstract;
     procedure CommandInit; virtual;abstract;
-    procedure CommandContinue; virtual;
-    function MouseMoveCallback(wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record): Integer; virtual;
-    function BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record): Integer; virtual;
-    function AfterClick(wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record): Integer; virtual;
+    procedure CommandContinue(const Context:TZCADCommandContext); virtual;
+    function MouseMoveCallback(const Context:TZCADCommandContext;wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record): Integer; virtual;
+    function BeforeClick(const Context:TZCADCommandContext;wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record): Integer; virtual;
+    function AfterClick(const Context:TZCADCommandContext;wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record): Integer; virtual;
     function IsRTECommand:Boolean;virtual;
   end;
 {Export-}
@@ -131,6 +136,9 @@ const
                  TGPMWaitEnt,
                  TGPMWaitInput];
 implementation
+class function TZCADCommandContext.CreateRec;
+begin
+end;
 function CommandObjectDef.IsRTECommand:Boolean;
 begin
      result:=false;
@@ -163,11 +171,11 @@ end;
 procedure CommandObjectDef.DrawHeplGeometry;
 begin
 end;
-function CommandRTEdObjectDef.BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record):Integer;
+function CommandRTEdObjectDef.BeforeClick(const Context:TZCADCommandContext;wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record):Integer;
 begin
      result:=0;
 end;
-function CommandRTEdObjectDef.AfterClick(wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record): Integer;
+function CommandRTEdObjectDef.AfterClick(const Context:TZCADCommandContext;wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record): Integer;
 begin
      if self.mouseclic=1 then
                              result:=0
@@ -181,7 +189,7 @@ end;
 procedure CommandRTEdObjectDef.CommandContinue;
 begin
 end;
-function CommandRTEdObjectDef.MouseMoveCallback(wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record): Integer;
+function CommandRTEdObjectDef.MouseMoveCallback(const Context:TZCADCommandContext;wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record): Integer;
 begin
   //result:=0;
   programlog.logoutstr('CommandRTEdObjectDef.MouseMoveCallback',0);
@@ -190,14 +198,14 @@ begin
                             button:=-button;
                             button:=-button;
                         end;}
-                        if (button and MZW_LBUTTON)<>0 then
-                                          begin
-                                                button:=button;
-                                          end;
+//                        if (button and MZW_LBUTTON)<>0 then
+//                                          begin
+//                                                button:=button;
+//                                          end;
     if mouseclic = 0 then
-                         result := BeforeClick(wc, mc, button,osp)
+                         result := BeforeClick(context, wc, mc, button,osp)
                      else
-                         result := AfterClick(wc, mc, button,osp);
+                         result := AfterClick(context, wc, mc, button,osp);
     if ((button and MZW_LBUTTON)<>0)and(result<=0) then
                                          begin
                                                inc(self.mouseclic);

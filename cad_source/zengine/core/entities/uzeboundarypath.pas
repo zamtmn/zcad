@@ -37,9 +37,43 @@ TBoundaryPath=object
 
   procedure transform(const t_matrix:DMatrix4D);virtual;
   function getDataMutableByPlainIndex(index:TArrayIndex):PGDBVertex2D;
+
+  function DummyCalcTrueInFrustum(pv1:pgdbvertex;frustum:ClipArray):TInBoundingVolume;virtual;
 end;
 
 implementation
+
+function TBoundaryPath.DummyCalcTrueInFrustum(pv1:pgdbvertex;frustum:ClipArray):TInBoundingVolume;
+var i,j:integer;
+   ppla:PGDBPolyline2DArray;
+   firstp,pv2:pgdbvertex;
+   isAllFull,isAllEmpty:boolean;
+begin
+  pv2:=pv1;
+  inc(pv2);
+  isAllFull:=true;
+  isAllEmpty:=true;
+  for i:=0 to paths.count-1 do begin
+    firstp:=pv1;
+    ppla:=paths.getDataMutable(i);
+    for j:=0 to ppla^.count-2 do begin
+      result:=uzegeometry.CalcTrueInFrustum(pv1^,pv2^,frustum);
+      isAllFull:=isAllFull and (result=IRFully);
+      isAllEmpty:=isAllEmpty and (result=IREmpty);
+      if (not isAllFull)and(not isAllEmpty) then
+        exit(IRPartially);
+      inc(pv1);
+      inc(pv2);
+    end;
+    result:=uzegeometry.CalcTrueInFrustum(pv1^,firstp^,frustum);
+    isAllFull:=isAllFull and (result=IRFully);
+    isAllEmpty:=isAllEmpty and (result=IREmpty);
+    if (not isAllFull)and(not isAllEmpty) then
+      exit(IRPartially);
+    inc(pv1);
+    inc(pv2);
+  end;
+end;
 
 procedure TBoundaryPath.transform(const t_matrix:DMatrix4D);
 var i,j:integer;
@@ -59,7 +93,6 @@ begin
       pv^.y:=tv.y;
     end;
   end;
-  paths.Clear;
 end;
 function TBoundaryPath.getDataMutableByPlainIndex(index:TArrayIndex):PGDBVertex2D;
 var

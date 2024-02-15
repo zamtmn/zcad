@@ -196,7 +196,7 @@ begin
 end;
 function TDimStylesForm.CreateNameEditor(Item: TListItem;r: TRect):boolean;
 begin
-  result:=SupportTypedEditors.createeditor(ListView1,Item,r,PGDBDimStyle(Item.Data)^.Name,'AnsiString',@CreateUndoStartMarkerNeeded,r.Bottom-r.Top)
+  result:=SupportTypedEditors.createeditor(ListView1,Item,r,PGDBDimStyle(Item.Data)^.Name,'AnsiString',@CreateUndoStartMarkerNeeded,r.Bottom-r.Top,drawings.GetUnitsFormat)
 end;
 {Font name handle procedures}
 function TDimStylesForm.GetTextStyleName(Item: TListItem):string;
@@ -209,7 +209,7 @@ begin
   //FillFontsSelector(PGDBTextStyle(Item.Data)^.pfont^.fontfile,PGDBTextStyle(Item.Data)^.pfont);
   FillTextStyleSelector(PGDBDimStyle(Item.Data)^.Text.DIMTXSTY^.Name,PGDBDimStyle(Item.Data)^.Text.DIMTXSTY);
   FontChange:=true;
-  result:=SupportTypedEditors.createeditor(ListView1,Item,r,FontsSelector,'TEnumData',nil,r.Bottom-r.Top,false)
+  result:=SupportTypedEditors.createeditor(ListView1,Item,r,FontsSelector,'TEnumData',nil,r.Bottom-r.Top,drawings.GetUnitsFormat,false)
 end;
 //{Font path handle procedures}
 //function TDimStylesForm.GetFontPath(Item: TListItem):string;
@@ -223,7 +223,7 @@ begin
 end;
 function TDimStylesForm.CreateLinearScaleEditor(Item: TListItem;r: TRect):boolean;
 begin
-  result:=SupportTypedEditors.createeditor(ListView1,Item,r,PGDBDimStyle(Item.Data)^.Units.DIMLFAC,'Double',@CreateUndoStartMarkerNeeded,r.Bottom-r.Top)
+  result:=SupportTypedEditors.createeditor(ListView1,Item,r,PGDBDimStyle(Item.Data)^.Units.DIMLFAC,'Double',@CreateUndoStartMarkerNeeded,r.Bottom-r.Top,drawings.GetUnitsFormat)
 end;
 {Text Height handle procedures}
 function TDimStylesForm.GetTextHeight(Item: TListItem):string;
@@ -232,7 +232,7 @@ begin
 end;
 function TDimStylesForm.CreateTextHeightEditor(Item: TListItem;r: TRect):boolean;
 begin
-  result:=SupportTypedEditors.createeditor(ListView1,Item,r,PGDBDimStyle(Item.Data)^.Text.DIMTXT,'Double',@CreateUndoStartMarkerNeeded,r.Bottom-r.Top)
+  result:=SupportTypedEditors.createeditor(ListView1,Item,r,PGDBDimStyle(Item.Data)^.Text.DIMTXT,'Double',@CreateUndoStartMarkerNeeded,r.Bottom-r.Top,drawings.GetUnitsFormat)
 end;
 
 function TDimStylesForm.GetDIMBLK1(Item: TListItem):string;
@@ -247,7 +247,7 @@ begin
 end;
 function TDimStylesForm.CreateDIMBLK1Editor(Item: TListItem;r: TRect):boolean;
 begin
-  result:=SupportTypedEditors.createeditor(ListView1,Item,r,PGDBDimStyle(Item.Data)^.Arrows.DIMBLK1,'TArrowStyle',@CreateUndoStartMarkerNeeded,r.Bottom-r.Top)
+  result:=SupportTypedEditors.createeditor(ListView1,Item,r,PGDBDimStyle(Item.Data)^.Arrows.DIMBLK1,'TArrowStyle',@CreateUndoStartMarkerNeeded,r.Bottom-r.Top,drawings.GetUnitsFormat)
 end;
 
 function TDimStylesForm.GetDIMBLK2(Item: TListItem):string;
@@ -262,7 +262,7 @@ begin
 end;
 function TDimStylesForm.CreateDIMBLK2Editor(Item: TListItem;r: TRect):boolean;
 begin
-  result:=SupportTypedEditors.createeditor(ListView1,Item,r,PGDBDimStyle(Item.Data)^.Arrows.DIMBLK2,'TArrowStyle',@CreateUndoStartMarkerNeeded,r.Bottom-r.Top)
+  result:=SupportTypedEditors.createeditor(ListView1,Item,r,PGDBDimStyle(Item.Data)^.Arrows.DIMBLK2,'TArrowStyle',@CreateUndoStartMarkerNeeded,r.Bottom-r.Top,drawings.GetUnitsFormat)
 end;
 
 function TDimStylesForm.GetDIMLDRBLK (Item: TListItem):string;
@@ -277,7 +277,7 @@ begin
 end;
 function TDimStylesForm.CreateDIMLDRBLKEditor(Item: TListItem;r: TRect):boolean;
 begin
-  result:=SupportTypedEditors.createeditor(ListView1,Item,r,PGDBDimStyle(Item.Data)^.Arrows.DIMLDRBLK,'TArrowStyle',@CreateUndoStartMarkerNeeded,r.Bottom-r.Top)
+  result:=SupportTypedEditors.createeditor(ListView1,Item,r,PGDBDimStyle(Item.Data)^.Arrows.DIMLDRBLK,'TArrowStyle',@CreateUndoStartMarkerNeeded,r.Bottom-r.Top,drawings.GetUnitsFormat)
 end;
 
 function TDimStylesForm.GetDIMASZ(Item: TListItem):string;
@@ -286,7 +286,7 @@ begin
 end;
 function TDimStylesForm.CreateDIMASZEditor(Item: TListItem;r: TRect):boolean;
 begin
-  result:=SupportTypedEditors.createeditor(ListView1,Item,r,PGDBDimStyle(Item.Data)^.Arrows.DIMASZ,'Double',@CreateUndoStartMarkerNeeded,r.Bottom-r.Top)
+  result:=SupportTypedEditors.createeditor(ListView1,Item,r,PGDBDimStyle(Item.Data)^.Arrows.DIMASZ,'Double',@CreateUndoStartMarkerNeeded,r.Bottom-r.Top,drawings.GetUnitsFormat)
 end;
 
 procedure TDimStylesForm.FillTextStyleSelector(currentitem:string;currentitempstyle:PGDBTextStyle);
@@ -317,7 +317,7 @@ end;
 
 procedure TDimStylesForm.onrsz(Sender: TObject);
 begin
-     Sender:=Sender;
+//     Sender:=Sender;
      SupportTypedEditors.freeeditor;
 end;
 

@@ -29,7 +29,7 @@ uses
 
 implementation
 
-function ExampleInsertDevice_com(operands:TCommandOperands):TCommandResult;
+function ExampleInsertDevice_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 var
     pdev:PGDBObjDevice;
     p1:gdbvertex;
@@ -63,7 +63,7 @@ end;
 
 initialization
   programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
-  CreateCommandFastObjectPlugin(@ExampleInsertDevice_com,'ExampleInsertDevice',   CADWG,0);
+  CreateZCADCommand(@ExampleInsertDevice_com,'ExampleInsertDevice',   CADWG,0);
 finalization
   ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
 end.

@@ -78,8 +78,8 @@ begin
     vd:=DWGUnit.InterfaceVariables.findvardesc('DWG_LTScale');
   if vd<>nil then
                  dc.DrawingContext.GlobalLTScale:=dc.DrawingContext.GlobalLTScale*PDouble(vd^.data.Addr.Instance)^;
-  if commandmanager.pcommandrunning<>nil then
-                                               dc.DrawingContext.DrawHeplGeometryProc:=commandmanager.pcommandrunning^.DrawHeplGeometry;
+  if commandmanager.CurrCmd.pcommandrunning<>nil then
+                                               dc.DrawingContext.DrawHeplGeometryProc:=commandmanager.CurrCmd.pcommandrunning^.DrawHeplGeometry;
 end;
 
 function TZCADDrawing.GetUnitsFormat:TzeUnitsFormat;

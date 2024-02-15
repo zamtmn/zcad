@@ -363,7 +363,7 @@ begin
   begin
        CurrentSize:=LLprimitives.Align(PPrimitive.CalcTrueInFrustum(frustum,GeomData,result));
        if not FullCheck then
-         if result<>IREmpty then
+         if (result<>IREmpty)and(result<>IRNotAplicable) then
                                 begin
                                      result:=IRPartially;
                                      exit;

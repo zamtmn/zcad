@@ -37,7 +37,7 @@ resourcestring
 
 implementation
 
-function UpdatePO_com(operands:TCommandOperands):TCommandResult;
+function UpdatePO_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 var
    cleaned:integer;
    s:string;
@@ -63,7 +63,7 @@ end;
 
 initialization
   programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
-  CreateCommandFastObjectPlugin(@UpdatePO_com,'UpdatePO',0,0);
+  CreateZCADCommand(@UpdatePO_com,'UpdatePO',0,0);
 finalization
   ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
 end.

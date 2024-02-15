@@ -91,14 +91,14 @@ var
   l,a:double;
 begin
   try
-    if commandmanager.pcommandrunning<>nil then begin
-      if commandmanager.pcommandrunning.IData.GetPointMode=TGPMWaitInput then begin
-        commandmanager.pcommandrunning.IData.GetPointMode:=TGPMInput;
-        commandmanager.pcommandrunning.IData.Input:=input;
+    if commandmanager.CurrCmd.pcommandrunning<>nil then begin
+      if commandmanager.CurrCmd.pcommandrunning.IData.GetPointMode=TGPMWaitInput then begin
+        commandmanager.CurrCmd.pcommandrunning.IData.GetPointMode:=TGPMInput;
+        commandmanager.CurrCmd.pcommandrunning.IData.Input:=input;
         exit;
-      end else if (commandmanager.pcommandrunning.IData.GetPointMode in SomethingWait)and(GPInput in commandmanager.pcommandrunning.IData.PossibleResult) then begin
-        commandmanager.pcommandrunning.IData.GetPointMode:=TGPMInput;
-        commandmanager.pcommandrunning.IData.Input:=input;
+      end else if (commandmanager.CurrCmd.pcommandrunning.IData.GetPointMode in SomethingWait)and(GPInput in commandmanager.CurrCmd.pcommandrunning.IData.PossibleResult) then begin
+        commandmanager.CurrCmd.pcommandrunning.IData.GetPointMode:=TGPMInput;
+        commandmanager.CurrCmd.pcommandrunning.IData.Input:=input;
         exit;
       end;
 
@@ -127,10 +127,10 @@ begin
         end
         else
         begin
-             if commandmanager.pcommandrunning<>nil then
+             if commandmanager.CurrCmd.pcommandrunning<>nil then
              begin
                   commandmanager.PushValue('','Double',@len);
-                  commandmanager.pcommandrunning.CommandContinue;
+                  commandmanager.CurrCmd.pcommandrunning.CommandContinue(CommandManager.CurrCmd.Context);
              end;
         end;
       end

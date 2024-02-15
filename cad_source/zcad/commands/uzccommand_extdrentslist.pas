@@ -27,11 +27,11 @@ uses
   uzeentity,gzctnrVectorTypes,uzcdrawings,uzcstrconsts,uzeentityextender,
   uzcinterface,gzctnrSTL;
 
-function extdrEntsList_com(operands:TCommandOperands):TCommandResult;
+function extdrEntsList_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 
 implementation
 
-function extdrEntsList_com(operands:TCommandOperands):TCommandResult;
+function extdrEntsList_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 type
   TExtCounter=TMyMapCounter<TMetaEntityExtender>;
 var
@@ -85,7 +85,7 @@ end;
 
 initialization
   programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
-  CreateCommandFastObjectPlugin(@extdrEntsList_com,'extdrEntsList',CADWG or CASelEnts,0);
+  CreateZCADCommand(@extdrEntsList_com,'extdrEntsList',CADWG or CASelEnts,0);
 finalization
   ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
 end.

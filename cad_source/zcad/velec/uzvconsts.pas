@@ -48,7 +48,7 @@ const
   vTempLayerName='systemTempVisualLayer';
   vpTVertexTree='TVertexTree';
   vpTEdgeTree='TEdgeTree';
-  //velec_NameDevice='NMO_Name';
+  //velec_NameDevice='NMO_Name';          GC_HeadDevice
 
   vGPGDBObjEdge='vGPGDBObjEdge';
   vGPGDBObjVertex='vGPGDBObjVertex';
@@ -81,6 +81,7 @@ const
   velec_beforeNameGlobalSchemaBlock='DEVICE_';
   velec_SchemaBlockJunctionBox='EL_EMSPLITTERBOX';
   velec_SchemaBlockChangingLayingMethod='EL_EMCHANGLAYINGMETHOD';
+  velec_nameBlockDevice='Name';
 
   velec_SchemaELDevInfo='VELEC_EL_SCHEME_INFO';
   velec_SchemaCableInfo='VELEC_CABLE_SCHEME_INFO';
@@ -113,6 +114,7 @@ const
   velec_GC_HeadDevice='GC_HeadDevice';
   velec_GC_HDGroup='GC_HDGroup';
   velec_ANALYSISEM_icanbeheadunit='ANALYSISEM_icanbeheadunit';
+  velec_nametemplatesxlsx='nametemplatesxlsx';
 
 
 implementation

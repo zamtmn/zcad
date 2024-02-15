@@ -31,36 +31,13 @@ uses
   lpeval,lpinterpreter,lpmessages,
   gzctnrSTL,uzcsysvars,
   LazUTF8,
-  uzbLogTypes,uzcLog;
+  uzbLogTypes,uzcLog,
+  uzcLapeScriptsManager,uzcLapeScriptsImplBase;
 
 const
   ReportExtenderName='extdrReport';
-var
-  LapeLMId:TModuleDesk;
+
 type
-  PTScriptData=^TScriptData;
-  TScriptData=record
-    FileName:string;
-    FParser:TLapeTokenizerBase;
-    FCompiler:TLapeCompiler;
-    constructor CreateRec(AFileName:string);
-  end;
-  TScriptName2ScriptDataMap=GKey2DataMap<String,TScriptData>;
-  TScriptsManager=class
-    FScriptFileMask:String;
-    SN2SD:TScriptName2ScriptDataMap;
-    procedure FoundScriptFile(FileName:String;PData:Pointer);
-
-    constructor Create(ScriptFileMask:String);
-    destructor Destroy;override;
-
-    procedure ScanDir(DirPath:string);
-    procedure ScanDirs(DirPaths:string);
-
-    procedure RunScript(AScriptName:string);
-    procedure CheckScriptActuality(PSD:PTScriptData);
-  end;
-
   TReportExtender=class(TBaseEntityExtender)
     pThisEntity:PGDBObjEntity;
     class function getExtenderName:string;override;
@@ -84,89 +61,23 @@ type
 
     procedure SaveToDxfObjXData(var outhandle:TZctnrVectorBytes;PEnt:Pointer;var IODXFContext:TIODXFContext);override;
     procedure onRemoveFromArray(pEntity:Pointer;const drawing:TDrawingDef);override;
+
+    procedure ScrContextSet(mode:TLapeScriptContextModes;ctx:TBaseScriptContext;cplr:TLapeCompiler);
   end;
 
+var
+  ReportScriptsManager:TScriptsManager;
+
+  temp:TScriptData;
 
 function AddReportExtenderToEntity(PEnt:PGDBObjEntity):TReportExtender;
 
 implementation
 
-var
-  ScriptsManager:TScriptsManager;
-
-constructor TScriptData.CreateRec(AFileName:string);
-begin
-  FileName:=AFileName;
-  FParser:=nil;
-  FCompiler:=nil;
-end;
-
-constructor TScriptsmanager.Create(ScriptFileMask:String);
-begin
-  FScriptFileMask:=ScriptFileMask;
-  SN2SD:=TScriptName2ScriptDataMap.Create;
-end;
-
-destructor TScriptsmanager.Destroy;
-begin
-  SN2SD.Destroy;
-end;
-
-
-procedure TScriptsmanager.FoundScriptFile(FileName:String;PData:Pointer);
-var
-  scrname:string;
-  PSD:PTScriptData;
-begin
-  scrname:=UpperCase(ChangeFileExt(ExtractFileName(FileName),''));
-  if not SN2SD.MyGetMutableValue(scrname,PSD) then begin
-    SN2SD.Add(scrname,TScriptData.CreateRec(FileName));
-  end;
-end;
-
-procedure TScriptsmanager.CheckScriptActuality(PSD:PTScriptData);
-begin
-  if not assigned(PSD^.FCompiler)then begin
-    PSD^.FCompiler:=TLapeCompiler.Create(TLapeTokenizerFile.Create(PSD^.FileName))
-  end;
-end;
-
-procedure TScriptsmanager.RunScript(AScriptName:string);
-var
-  scrname:string;
-  PSD:PTScriptData;
-begin
-  scrname:=UpperCase(AScriptName);
-  if SN2SD.MyGetMutableValue(scrname,PSD) then begin
-    CheckScriptActuality(PSD);
-    try
-    if PSD^.FCompiler.Compile then
-      RunCode(PSD^.FCompiler.Emitter)
-    else
-      LapeExceptionFmt('Error compiling file "%s"',[PSD^.FileName]);
-    except
-      on E: Exception do
-      begin
-        ProgramLog.LogOutFormatStr('TScriptsmanager.RunScript "%s"',[E.Message],LM_Error,LapeLMId);
-        FreeAndNil(PSD^.FCompiler);
-      end;
-    end;
-  end;
-end;
-
-procedure TScriptsmanager.ScanDir(DirPath:string);
-begin
-  FromDirIterator(utf8tosys(DirPath),FScriptFileMask,'',nil,FoundScriptFile);
-end;
-procedure TScriptsmanager.ScanDirs(DirPaths:string);
-begin
-  FromDirsIterator(utf8tosys(DirPaths),FScriptFileMask,'',nil,FoundScriptFile);
-end;
-
 function AddReportExtenderToEntity(PEnt:PGDBObjEntity):TReportExtender;
 begin
-     result:=TReportExtender.Create(PEnt);
-     PEnt^.AddExtension(result);
+  result:=TReportExtender.Create(PEnt);
+  PEnt^.AddExtension(result);
 end;
 procedure TReportExtender.onEntitySupportOldVersions(pEntity:pointer;const drawing:TDrawingDef);
 begin
@@ -238,15 +149,23 @@ procedure TReportExtender.onRemoveFromArray(pEntity:Pointer;const drawing:TDrawi
 begin
 end;
 
+procedure TReportExtender.ScrContextSet(mode:TLapeScriptContextModes;ctx:TBaseScriptContext;cplr:TLapeCompiler);
+begin
+  if LSCMContextSetup in mode then begin
+    TEntityExtentionContext(ctx).FThisEntity:=pThisEntity;
+    TEntityExtentionContext(ctx).FThisEntityExtender:=self;
+  end;
+end;
 
 initialization
   //extdrAdd(extdrReport)
-  LapeLMId:=ProgramLog.RegisterModule('LAPEScripts');
-  ScriptsManager:=TScriptsManager.Create('*.lpr');;
-  ScriptsManager.ScanDirs(sysvar.PATH.Preload_Path^);
-  Scriptsmanager.RunScript('test');
+  ReportScriptsManager:=STManager.CreateType('lpr','Script test',TEntityExtentionContext,[ttest.testadder]);
+  ReportScriptsManager.ScanDirs(sysvar.PATH.Preload_Path^);
+  temp:=ReportScriptsManager.CreateExternalScriptData('test',TEntityExtentionContext,[ttest.testadder]);
+  //ReportScriptsManager.RunScript(temp);
+  //ReportScriptsManager.RunScript('test');
   EntityExtenders.RegisterKey(uppercase(ReportExtenderName),TReportExtender);
   GDBObjEntity.GetDXFIOFeatures.RegisterNamedLoadFeature('REPORTEXTENDER',TReportExtender.EntIOLoadReportExtender);
 finalization
-  ScriptsManager.Destroy;
+  TScriptsmanager.FreeExternalScriptData(temp);
 end.

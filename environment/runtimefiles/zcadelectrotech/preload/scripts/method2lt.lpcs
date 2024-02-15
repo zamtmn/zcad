@@ -1,0 +1,8 @@
+begin
+       if Input = 'open~inMetalTray' then
+          Output:='cablotok';
+       if Input = 'open~inСableСhannel' then
+          Output:='cabkorob';
+       if Input = 'Hidden~inPipe' then
+          Output:='cabtruba'; 
+end.

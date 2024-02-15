@@ -34,8 +34,8 @@ uses
 type
   {REGISTEROBJECTTYPE rotate_com}
   rotate_com =  object(move_com)
-    function AfterClick(wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record): Integer; virtual;
-    procedure CommandContinue; virtual;
+    function AfterClick(const Context:TZCADCommandContext;wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record): Integer; virtual;
+    procedure CommandContinue(const Context:TZCADCommandContext); virtual;
     procedure rot(a:Double; button: Byte);
     procedure showprompt(mklick:integer);virtual;
   end;
@@ -43,7 +43,7 @@ var
   rotate:rotate_com;
 implementation
 
-procedure rotate_com.CommandContinue;
+procedure rotate_com.CommandContinue(const Context:TZCADCommandContext);
 var v1:vardesk;
     td:Double;
 begin
@@ -117,13 +117,13 @@ if (button and MZW_LBUTTON)<>0 then
 begin
 drawings.GetCurrentROOT^.FormatAfterEdit(drawings.GetCurrentDWG^,dc);
 drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.free;
-commandend;
+//commandend;
 commandmanager.executecommandend;
 end;
 
 end;
 
-function rotate_com.AfterClick(wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record): Integer;
+function rotate_com.AfterClick(const Context:TZCADCommandContext;wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record): Integer;
 var
     //dispmatr,im,rotmatr:DMatrix4D;
     //ir:itrec;
@@ -144,18 +144,10 @@ begin
       result:=cmd_ok;
 end;
 
-procedure startup;
-begin
-rotate.init('Rotate',0,0);
-rotate.NotUseCommandLine:=false;
-end;
-procedure Finalize;
-begin
-end;
 initialization
   programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
-  startup;
+  rotate.init('Rotate',0,0);
+  rotate.NotUseCommandLine:=false;
 finalization
   ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
-  finalize;
 end.

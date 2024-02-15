@@ -33,7 +33,7 @@ uses
 
 implementation
 
-function LineTypes_cmd(operands:TCommandOperands):TCommandResult;
+function LineTypes_cmd(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 begin
   LineTypesForm:=TLineTypesForm.Create(nil);
   SetHeightControl(LineTypesForm,sysvar.INTF.INTF_DefaultControlHeight^);
@@ -44,7 +44,7 @@ end;
 
 initialization
   programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
-  CreateCommandFastObjectPlugin(@LineTypes_cmd,'LineTypes',CADWG,0);
+  CreateZCADCommand(@LineTypes_cmd,'LineTypes',CADWG,0);
 finalization
   ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
 end.

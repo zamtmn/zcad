@@ -45,7 +45,7 @@ var
 
 implementation
 
-function Insert_com_CommandStart(operands:TCommandOperands):Integer;
+function Insert_com_CommandStart(const Context:TZCADCommandContext;operands:TCommandOperands):Integer;
 var pb:PGDBObjBlockdef;
     //ir:itrec;
     i:integer;
@@ -91,7 +91,7 @@ begin
             end;
   result:=cmd_ok;
 end;
-function Insert_com_BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record;mclick:Integer): Integer;
+function Insert_com_BeforeClick(const Context:TZCADCommandContext;wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record;mclick:Integer): Integer;
 var tb:PGDBObjSubordinated;
     domethod,undomethod:tmethod;
     DC:TDrawContext;
@@ -202,7 +202,7 @@ begin
     //pb^.RenderFeedback;
   end;
 end;
-procedure Insert_com_CommandEnd(_self:pointer);
+procedure Insert_com_CommandEnd(const Context:TZCADCommandContext;_self:pointer);
 begin
      if pb<>nil then
                     begin

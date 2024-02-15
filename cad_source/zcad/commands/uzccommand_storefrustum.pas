@@ -28,7 +28,7 @@ uses
 
 implementation
 
-function StoreFrustum_com(operands:TCommandOperands):TCommandResult;
+function StoreFrustum_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 begin
    drawings.GetCurrentDWG.wa.param.debugfrustum:=drawings.GetCurrentDWG.pcamera.frustum;
    drawings.GetCurrentDWG.wa.param.ShowDebugFrustum:=true;
@@ -37,7 +37,7 @@ end;
 
 initialization
   programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
-  CreateCommandFastObjectPlugin(@StoreFrustum_com,'StoreFrustum',CADWG,0).overlay:=true;
+  CreateZCADCommand(@StoreFrustum_com,'StoreFrustum',CADWG,0).overlay:=true;
 finalization
   ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
 end.

@@ -40,7 +40,7 @@ uses
 
 implementation
 
-function VarsEdBD_com(operands:TCommandOperands):TCommandResult;
+function VarsEdBD_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 var
   pobj:PGDBObjEntity;
   op:ansistring;
@@ -69,7 +69,7 @@ end;
 
 initialization
   programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
-  CreateCommandFastObjectPlugin(@VarsEdBD_com,'VarsEdBD',CADWG,0);
+  CreateZCADCommand(@VarsEdBD_com,'VarsEdBD',CADWG,0);
 finalization
   ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
 end.

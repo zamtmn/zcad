@@ -30,7 +30,7 @@ uses
 
 implementation
 
-function dbgClipboard_com(operands:TCommandOperands):TCommandResult;
+function dbgClipboard_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 var
    pbuf:pansichar;
    i:integer;
@@ -71,7 +71,7 @@ end;
 
 initialization
   programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
-  CreateCommandFastObjectPlugin(@dbgClipboard_com,'dbgClipboard',0,0);
+  CreateZCADCommand(@dbgClipboard_com,'dbgClipboard',0,0);
 finalization
   ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
 end.

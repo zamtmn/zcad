@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<CONFIG>
+  <PalettesContent>
+    <BlockLib Type="Tree" Caption='Blocks' ImagesWidth='24'>
+      <ZTreeNode Caption='Velectrical'>
+        <ZTreeNode Caption='Schemes'>
+          <ZTreeCommand Command="Insert(VSCHEMA_PANEL_SIDE)"/>
+          <ZTreeCommand Command="Insert(DEVICE_VSCHEMA_PANEL_IN)"/>
+          <ZTreeCommand Command="Insert(DEVICE_VSCHEMA_PANEL_OUT)"/> 
+        </ZTreeNode>
+		<ZTreeCommand Command="extdrAdd(extdrLayerControl)" Caption='Доб. расшир. упр. слоем'/>
+		<ZTreeCommand Command="DevDefSync" Caption='Синхрон. упр. слоем'/>	
+      </ZTreeNode>
+    </BlockLib>
+  </PalettesContent>
+</CONFIG>

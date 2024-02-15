@@ -31,7 +31,7 @@ resourcestring
   rsDeviceSynhronized='Device "%s" synhronized';
   rsAlreadySynhronized='Device "%s" already synhronized';
 
-function DevDefSync_com(operands:TCommandOperands):TCommandResult;
+function DevDefSync_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 
 implementation
 
@@ -75,7 +75,7 @@ begin
 end;
 
 
-function DevDefSync_com(operands:TCommandOperands):TCommandResult;
+function DevDefSync_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 var
   pv,pls:PGDBObjDevice;
   ir:itrec;
@@ -103,7 +103,7 @@ end;
 
 initialization
   programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
-  CreateCommandFastObjectPlugin(@DevDefSync_com,'DevDefSync',CADWG or CASelEnts,0);
+  CreateZCADCommand(@DevDefSync_com,'DevDefSync',CADWG or CASelEnts,0);
 finalization
   ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
 end.

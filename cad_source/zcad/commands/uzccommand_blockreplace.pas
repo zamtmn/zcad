@@ -51,10 +51,10 @@ type
   end;
 
   BlockReplace_com= object(CommandRTEdObject)
-    procedure CommandStart(Operands:TCommandOperands); virtual;
-    procedure BuildDM(Operands:TCommandOperands); virtual;
+    procedure CommandStart(const Context:TZCADCommandContext;Operands:TCommandOperands); virtual;
+    procedure BuildDM(const Context:TZCADCommandContext;Operands:TCommandOperands); virtual;
     procedure Format;virtual;
-    procedure Run(pdata:PtrInt); virtual;
+    procedure Run(const Context:TZCADCommandContext); virtual;
   end;
 
 var
@@ -63,7 +63,7 @@ var
 
 implementation
 
-procedure BlockReplace_com.CommandStart(Operands:TCommandOperands);
+procedure BlockReplace_com.CommandStart(const Context:TZCADCommandContext;Operands:TCommandOperands);
 var //pb:PGDBObjBlockdef;
     //ir:itrec;
     i:integer;
@@ -83,7 +83,7 @@ begin
                                          end;
           format;
 
-          BuildDM(Operands);
+          BuildDM(Context,Operands);
           inherited;
      end
         else
@@ -92,12 +92,12 @@ begin
                  commandmanager.executecommandend;
             end;
 end;
-procedure BlockReplace_com.BuildDM(Operands:TCommandOperands);
+procedure BlockReplace_com.BuildDM(const Context:TZCADCommandContext;Operands:TCommandOperands);
 begin
   commandmanager.DMAddMethod(rscmReplace,'Replace blocks',run);
   commandmanager.DMShow;
 end;
-procedure BlockReplace_com.Run(pdata:PtrInt);
+procedure BlockReplace_com.Run(const Context:TZCADCommandContext);
 var pb:PGDBObjBlockInsert;
     ir:itrec;
     {i,}result:Integer;
@@ -228,7 +228,7 @@ begin
                 psdesc:=drawings.GetCurrentDWG^.SelObjArray.iterate(ir);
           until psdesc=nil;
           Prompt(sysutils.format(rscmNEntitiesProcessed,[result]));
-          Regen_com(EmptyCommandOperands);
+          Regen_com(context,EmptyCommandOperands);
           commandmanager.executecommandend;
      end;
 end;

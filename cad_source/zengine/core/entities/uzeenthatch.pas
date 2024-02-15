@@ -237,7 +237,6 @@ var
   i,j:integer;
   ppath:PGDBPolyline2DArray;
   FirstP,PrevP,CurrP:PGDBvertex2D;
-  iprop:intercept2dprop;
 begin
   for i:=0 to Path.paths.Count-1 do begin
     ppath:=Path.paths.getDataMutable(i);
@@ -426,7 +425,7 @@ end;
 
 procedure GDBObjHatch.FillPattern(var Strokes:TPatStrokesArray;var DC:TDrawContext);
 var
-  Angl,LenOffs,LF,sinA,cosA:Double;
+  Angl,{LenOffs,}LF,sinA,cosA:Double;
   offs,offs2,dirx,diry,p2,ls:GDBVertex2D;
   pp:PGDBvertex2D;
   i,j:integer;
@@ -437,7 +436,7 @@ var
 begin
   IV:=TIntercept2dpropWithLICVector.Create;
   Angl:=DegToRad(Angle+Strokes.Angle);
-  LenOffs:=oneVertexlength2D(Strokes.Offset);
+  //LenOffs:=oneVertexlength2D(Strokes.Offset);
   if Strokes.LengthFact>0 then
     LF:=Strokes.LengthFact
   else
@@ -536,7 +535,6 @@ var
   i,j: Integer;
   v:GDBvertex4D;
   v3d:GDBVertex;
-  pv:PGDBVertex2D;
   ppolyarr:pGDBPolyline2DArray;
 begin
   Vertex3D_in_WCS_Array.clear;
@@ -630,7 +628,6 @@ end;
 function GDBObjHatch.Clone;
 var
   tvo: PGDBObjHatch;
-  p:PGDBVertex2D;
   i:integer;
 begin
   Getmem(Pointer(tvo),sizeof(GDBObjHatch));
@@ -661,14 +658,13 @@ end;
 
 function GDBObjHatch.CalcTrueInFrustum;
 var
-  pv1,pv2:pgdbvertex;
+  pv1:pgdbvertex;
 begin
-  result:=Vertex3D_in_WCS_Array.CalcTrueInFrustum(frustum);
-  if (result=IREmpty)and(Vertex3D_in_WCS_Array.count>3) then begin
-    pv1:=Vertex3D_in_WCS_Array.getDataMutable(0);
-    pv2:=Vertex3D_in_WCS_Array.getDataMutable(Vertex3D_in_WCS_Array.Count-1);
-    result:=uzegeometry.CalcTrueInFrustum(pv1^,pv2^,frustum);
-  end;
+  pv1:=Vertex3D_in_WCS_Array.getDataMutable(0);
+  if pv1<>nil then
+    result:=Path.DummyCalcTrueInFrustum(pv1,frustum)
+  else
+    result:=IRFully;
 end;
 procedure GDBObjHatch.remaponecontrolpoint(pdesc:pcontrolpointdesc);
 var vertexnumber:Integer;

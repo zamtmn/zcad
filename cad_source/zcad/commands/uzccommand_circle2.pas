@@ -37,7 +37,7 @@ var
 
 implementation
 
-function Circle_com_CommandStart(operands:TCommandOperands):TCommandResult;
+function Circle_com_CommandStart(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 begin
   drawings.GetCurrentDWG^.wa.SetMouseMode((MGet3DPoint) or (MMoveCamera) or (MRotateCamera));
   ZCMsgCallBackInterface.TextMessage(rscmCenterPointCircle,TMWOHistoryOut);
@@ -48,7 +48,7 @@ procedure Circle_com_CommandEnd(_self:pointer);
 begin
 end;
 
-function Circle_com_BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record;mclick:Integer): Integer;
+function Circle_com_BeforeClick(const Context:TZCADCommandContext;wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record;mclick:Integer): Integer;
 var
   dc:TDrawContext;
 begin
@@ -71,7 +71,7 @@ begin
   result:=0;
 end;
 
-function Circle_com_AfterClick(wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record;mclick:Integer): Integer;
+function Circle_com_AfterClick(const Context:TZCADCommandContext;wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record;mclick:Integer): Integer;
 var
     domethod,undomethod:tmethod;
     dc:TDrawContext;

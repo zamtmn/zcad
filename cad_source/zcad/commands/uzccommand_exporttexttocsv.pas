@@ -67,7 +67,7 @@ begin
   exit(Widths.Size);
 end;
 
-function ExportTextToCSV_com(operands:TCommandOperands):TCommandResult;
+function ExportTextToCSV_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 var
   count,x,y:integer;
   pv,pstart:PGDBObjText;
@@ -174,7 +174,7 @@ initialization
   SysUnit^.RegisterType(TypeInfo(TExportTextToCSVParam));//регистрируем тип данных в зкадном RTTI
   SysUnit^.SetTypeDesk(TypeInfo(TExportTextToCSVParam),['Widths','W','H','FileName'],[FNProgram]);//Даем програмные имена параметрам, по идее это должно быть в ртти, но ненашел
 
-  CreateCommandFastObjectPlugin(@ExportTextToCSV_com,'ExportTextToCSV',  CADWG,0);
+  CreateZCADCommand(@ExportTextToCSV_com,'ExportTextToCSV',  CADWG,0);
 finalization
   ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
 end.

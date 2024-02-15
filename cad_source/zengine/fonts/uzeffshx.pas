@@ -151,8 +151,8 @@ begin
 end;
 begin
             inccounter:=0;
-            if symbol=1055{П}then
-                                 symbol:=symbol;
+//            if symbol=1055{П}then
+//                                 symbol:=symbol;
             psyminfo:=pf^.GetOrCreateSymbolInfo(symbol);
             PSHXFont(pf^.font).FontData.LLprimitives.AlignDataSize;
             psyminfo.{addr}LLPrimitiveStartIndex:=PSHXFont(pf^.font).FontData.LLprimitives{SHXdata}.Count;//----//
@@ -394,7 +394,7 @@ begin
                           x:=x1;
                           y:=y1;
                         end;
-                      x:=x;
+//                      x:=x;
                     end;
                   009:
                     begin
@@ -404,8 +404,8 @@ begin
                                 dy:=pShortint(pshxdata)^;
                     if (dx<>0)or(dy<>0) then
                     begin
-                      if symbol=107 then
-                      symbol:=symbol;
+//                      if symbol=107 then
+//                      symbol:=symbol;
                       if onlyver=0 then
                       begin
                       x1:=x+dx*baselen;
@@ -521,8 +521,8 @@ begin
                       startoffset:=pshxdata^;
                       incpshxdata;
                       endoffset:=pshxdata^;
-                      if (startoffset<>0)or(startoffset<>0)then
-                                                               startoffset:=startoffset;
+//                      if (startoffset<>0)or(startoffset<>0)then
+//                                                               startoffset:=startoffset;
                       incpshxdata;
                       r:=256*pshxdata^*baselen;
 
@@ -664,8 +664,8 @@ begin
             psyminfo.NextSymX:=x;
             psyminfo.SymMaxY:=ymax;//-ymin;
             psyminfo.SymMinY:=ymin;
-                                     if symbol=32 then
-                                                      symbol:=symbol;
+//                                     if symbol=32 then
+//                                                      symbol:=symbol;
                                     if xmax<>NegInfinity then
                                                            psyminfo.SymMaxX:=Xmax
                                                        else
@@ -674,8 +674,8 @@ begin
                                                           psyminfo.SymMinX:=Xmin
                                                       else
                                                           psyminfo.SymMinX:=0;
-            if symbol=166 then
-                             symbol:=symbol;
+//            if symbol=166 then
+//                             symbol:=symbol;
             psyminfo^.Name:=symname;
             psyminfo^.Number:=symbol;
 
@@ -731,8 +731,8 @@ begin
          symlen:=psinfo^.size;
          symnum:=psinfo^.number;
 
-         if symnum=150 then
-                        symnum:=symnum;
+//         if symnum=150 then
+//                        symnum:=symnum;
 
          line:=memorybuf.readstring3(#0,'');
          datalen:=symlen-length(line)-2;
@@ -748,8 +748,8 @@ begin
                      else
                          begin
                               zTraceLn('{T+}[SHX]symbol %d',[integer(symnum)]);
-                              if symnum=135 then
-                                                symnum:=symnum;
+//                              if symnum=135 then
+//                                                symnum:=symnum;
                               //programlog.LogOutFormatStr('symbol %d',[integer(symnum)],lp_IncPos,LM_Trace);
                               dataread:=createsymbol(pf,symnum,memorybuf.GetCurrentReadAddres,false,line);
                               memorybuf.jump({datalen}dataread);
@@ -803,8 +803,8 @@ else if line='AUTOCAD-86 UNIFONT 1.0' then
   for i:=0 to symcount-2 do
     begin
          symnum:=memorybuf.readword;
-         if symnum=49 then
-                          symnum:=symnum;
+//         if symnum=49 then
+//                          symnum:=symnum;
          symlen:=memorybuf.readword;
          datalen:=memorybuf.readbyte;
          if datalen<>0 then
@@ -827,12 +827,12 @@ else if line='AUTOCAD-86 UNIFONT 1.0' then
          end;
          {else
              test:=symnum;}
-         if test=49 then
-                         test:=test;
+//         if test=49 then
+//                         test:=test;
          //if (*pf^.GetOrCreateSymbolInfo(test)^.{ .symbo linfo[test].}addr=0*)symnum<2560000 then
          zTraceLn('{T+}[SHX]symbol %d',[integer(symnum)]);
-         if symnum=135 then
-                           symnum:=symnum;
+//         if symnum=135 then
+//                           symnum:=symnum;
          //programlog.LogOutFormatStr('symbol %d',[integer(symnum)],lp_IncPos,LM_Trace);
          {if symnum<256 then }dataread:=createsymbol(pf,test{symnum},memorybuf.GetCurrentReadAddres,true,line);
          zTraceLn('{T-}[SHX]end');

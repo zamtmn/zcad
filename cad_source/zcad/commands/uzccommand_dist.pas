@@ -35,7 +35,7 @@ var
    c1,c2:integer;
    distlen:Double;
    oldpoint,point:gdbvertex;
-function Dist_com_CommandStart(operands:TCommandOperands):TCommandResult;
+function Dist_com_CommandStart(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 begin
      c1:=commandmanager.GetValueHeap;
      c2:=-1;
@@ -43,7 +43,7 @@ begin
      distlen:=0;
      result:=cmd_ok;
 end;
-procedure Dist_com_CommandCont;
+procedure Dist_com_CommandCont(const Context:TZCADCommandContext);
 var
    cs:integer;
    vd:vardesk;

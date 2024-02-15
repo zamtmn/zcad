@@ -386,7 +386,7 @@ begin
        end
   end;}
 end;
-function CommandStart(operands:pansichar):Integer;
+function CommandStart(const Context:TZCADCommandContext;operands:pansichar):Integer;
 begin
   drawings.AddBlockFromDBIfNeed(drawings.GetCurrentDWG,'DEVICE_PS_DAT_SMOKE');
   drawings.AddBlockFromDBIfNeed(drawings.GetCurrentDWG,'DEVICE_PS_DAT_TERMO');
@@ -395,7 +395,7 @@ begin
   zcShowCommandParams(SysUnit.TypeName2PTD('CommandRTEdObject'),pco);
   result:=cmd_ok;
 end;
-function BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record;mclick:Integer): integer;
+function BeforeClick(const Context:TZCADCommandContext;wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record;mclick:Integer): integer;
 begin
   result:=mclick;
   if (button and MZW_LBUTTON)<>0 then
@@ -405,7 +405,7 @@ begin
       t3dp:=wc;
     end;
 end;
-function AfterClick(wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record;mclick:Integer):Integer;
+function AfterClick(const Context:TZCADCommandContext;wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record;mclick:Integer):Integer;
 var
 pl:pgdbobjline;
 //debug:string;
@@ -489,7 +489,7 @@ begin
                                                                     pf^.base.Attributes:=pf.base.Attributes or FA_READONLY;
                  end;
   end;
-     sdname:=sdname;
+//     sdname:=sdname;
      if OPSPlaceSmokeDetectorOrtoParam.DatType<>OPSPlaceSmokeDetectorOrtoParam.olddt then
      begin
           OPSPlaceSmokeDetectorOrtoParam.olddt:=OPSPlaceSmokeDetectorOrtoParam.DatType;
@@ -641,7 +641,7 @@ begin
   redrawoglwnd;
   result:=cmd_ok;
 end;}
-function OPS_Sensor_Mark_com(operands:TCommandOperands):TCommandResult;
+function OPS_Sensor_Mark_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 var //i: Integer;
     pcabledesk:PTCableDesctiptor;
     ir,ir2,ir_inNodeArray:itrec;
@@ -1101,7 +1101,7 @@ begin
                        end;
      end;
 end;
-function PlCommandStart(operands:pansichar):Integer;
+function PlCommandStart(const Context:TZCADCommandContext;operands:pansichar):Integer;
 var //i: Integer;
     sd:TSelEntsDesk;
 begin
@@ -1131,7 +1131,7 @@ else if (sd.PFirstSelectedEnt^.GetObjType=GDBDeviceID) then
   zcShowCommandParams(SysUnit.TypeName2PTD('CommandRTEdObject'),pco2);
   OPSPlaceSmokeDetectorOrtoParam.DMC:=TOPSMDC_1_2;
 end;
-function PlBeforeClick(wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record;mclick:Integer): integer;
+function PlBeforeClick(const Context:TZCADCommandContext;wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record;mclick:Integer): integer;
 begin
   result:=mclick;
   if (button and MZW_LBUTTON)<>0 then
@@ -1219,7 +1219,7 @@ begin
        end
   end;
 end;
-function PlAfterClick(wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record;mclick:Integer): integer;
+function PlAfterClick(const Context:TZCADCommandContext;wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record;mclick:Integer): integer;
 var
 pl:pgdbobjline;
 //debug:string;
@@ -1361,7 +1361,7 @@ begin
   OPS_SPBuild_com.init('OPS_SPBuild',0,0);
   //CreateCommandFastObjectPlugin(@OPS_SPBuild_com,'OPS_SPBuild',CADWG,0);
 
-  CreateCommandFastObjectPlugin(@OPS_Sensor_Mark_com,'OPS_Sensor_Mark',CADWG,0);
+  CreateZCADCommand(@OPS_Sensor_Mark_com,'OPS_Sensor_Mark',CADWG,0);
   pco:=CreateCommandRTEdObjectPlugin(@CommandStart,nil,nil,@commformat,@BeforeClick,@AfterClick,nil,nil,'PlaceSmokeDetectorOrto',0,0);
   pco^.SetCommandParam(@OPSPlaceSmokeDetectorOrtoParam,'PTOPSPlaceSmokeDetectorOrtoParam');
   OPSPlaceSmokeDetectorOrtoParam.InsertType:=TIT_Device;

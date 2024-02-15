@@ -3,17 +3,27 @@
   <ToolBarsContent>
       <ElectrotechVelec Type="ToolBar">
       <Action Name="ACN_SUPELINE"/>
-      <Action Name="ACN_slagcabCom"/>
-      <Action Name="ACN_vBuildSSSchema"/>
-      <Action Name="ACN_vBuildELSchema"/>
-      <Action Name="ACN_uzvaddconnection"/>
-      <Action Name="ACN_uzvremoveconnection"/>
       <Action Name="ACN_SupeLineHT1"/>
       <Action Name="ACN_SupeLineHT2"/>
       <Action Name="ACN_SupeLineHT3"/>
-      <Action Name="ACN_managerEM"/>
-      <Action Name="ACN_generatorOneDiagram"/>
+      <Separator/>
+      <Action Name="ACN_slagcabCom"/>
+      <Action Name="ACN_SENSORMARK"/>
+      <Action Name="ACN_DEVNUMBERING"/>
+      <Action Name="ACN_REMAUTOCABLES"/>
+      <Separator/>
+      <Action Name="ACN_uzvaddconnection"/>
+      <Action Name="ACN_uzvremoveconnection"/>
+      <Separator/>
       <Action Name="ACN_CreateLL"/>
+      <Separator/>
+      <Action Name="ACN_vVarsLink"/>
+      <Separator/>
+      <Action Name="ACN_vBuildMC"/>
+      <Action Name="ACN_exportModeltoExcell"/>
+      <Action Name="ACN_exportDevtoExcell"/>
+      <Action Name="ACN_XLSXtoCADinsertblock"/>
+      <Action Name="ACN_exportDevtoExcelTOCAD"/>
     </ElectrotechVelec>
   </ToolBarsContent>
 </CONFIG>

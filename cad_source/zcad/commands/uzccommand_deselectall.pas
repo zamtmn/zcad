@@ -32,7 +32,7 @@ var
 
 implementation
 
-function DeSelectAll_com(operands:TCommandOperands):TCommandResult;
+function DeSelectAll_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 begin
   ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIActionRedraw);
   //if assigned(updatevisibleproc) then updatevisibleproc(ZMsgID_GUIActionRedraw);
@@ -41,7 +41,7 @@ end;
 
 initialization
   programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
-  deselall:=CreateCommandFastObjectPlugin(@DeSelectAll_com,'DeSelectAll',CADWG  or CASelEnts,0);
+  deselall:=CreateZCADCommand(@DeSelectAll_com,'DeSelectAll',CADWG  or CASelEnts,0);
   deselall.CEndActionAttr:=[CEDeSelect];
   deselall^.overlay:=true;
 finalization

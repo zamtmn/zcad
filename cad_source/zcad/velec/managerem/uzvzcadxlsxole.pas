@@ -45,20 +45,35 @@ uses
   //DOM,XMLRead,XMLWrite,XMLCfg,
   //RegExpr;
   //** открываем нужный нам xlsx файл
-procedure openXLSXFile(pathFile:string);
+function openXLSXFile(pathFile:string):boolean;
+  //** Получаем активную книгу
+function activeXLSXWorkbook:boolean;
+  //** Получаем активный лист в активной книге
+function activeWorkSheetXLSX:boolean;
+//** Получаем имя активного листа в активной книге
+function getActiveWorkSheetName:string;
+//** Получаем номер листа по его имени
+function getNumWorkSheetName(nameSheet:string):integer; //-1 отсутствует
   //** сохраняем xlsx файл
-procedure saveXLSXFile(pathFile:string);
+function saveXLSXFile(pathFile:string):boolean;
   //** очищаем память
 procedure destroyWorkbook();
+procedure activeDestroyWorkbook();
   //** копуруем лист с кодовым именем и присваиваем ему правильное имя
 procedure copyWorksheetName(codeSheet:string;nameSheet:string);
-  //** найти строку и столбец ячейки старта, для импорта
+  //** удалить строчку
+  procedure deleteRow(nameSheet:string;iRow:Cardinal);
+  //** найти строку и столбец ячейки старта, для импорта. Первое вхождение
 procedure searchCellRowCol(nameSheet:string;nameValueCell:string;var vRow,vCol:Cardinal);
+  //** найти строку и столбец ячейки старта, для импорта. Следующее вхождение
+procedure searchNextCellRowCol(nameSheet:string;nameValueCell:string;var vRow,vCol:Cardinal);
   //** получить значение ячейки
 function getCellValue(nameSheet:string;iRow,iCol:Cardinal):string;
   //** присвоить значение ячейки
 procedure setCellValue(nameSheet:string;iRow,iCol:Cardinal;iText:string);
-//** присвоить значение ячейки ФОРМУЛА
+  //** получить значение ячейки
+function getCellFormula(nameSheet:string;iRow,iCol:Cardinal):string;
+  //** присвоить значение ячейки ФОРМУЛА
 procedure setCellFormula(nameSheet:string;iRow,iCol:Cardinal;iText:string);
   //**Копирование ячейки с какого листа и какая ячейка
 procedure copyCell(nameStSheet:string;stRow,stCol:Cardinal;nameEdSheet:string;edRow,edCol:Cardinal);
@@ -69,23 +84,103 @@ implementation
 var
   Excel:OleVariant;
   BasicWorkbook: OleVariant;
-  //nowWorksheet: OleVariant;
+  ActiveWorkSheet: OleVariant;
+  iRangeFind: OleVariant;
 
-procedure openXLSXFile(pathFile:string);
+function openXLSXFile(pathFile:string):boolean;
 //var
 begin
-  Excel := CreateOleObject('Excel.Application');
-  BasicWorkbook:=Excel.Workbooks.Open(WideString(pathFile));
+  result:=false;
+  try
+    Excel := CreateOleObject('Excel.Application');
+    BasicWorkbook:=Excel.Workbooks.Open(WideString(pathFile));
+    result:=true;
+  except
+    ZCMsgCallBackInterface.TextMessage('ОШИБКА. ПРОГРАММА EXCEL НЕ УСТАНОВЛЕНА',TMWOHistoryOut);
+  end;
 end;
-procedure saveXLSXFile(pathFile:string);
+function activeXLSXWorkbook:boolean;
+//var
+begin
+  //Ищем запущеный экземпляр Excel, если он не найден, вызывается исключение
+  result:=false;
+  try
+    Excel := GetActiveOleObject('Excel.Application');
+    BasicWorkbook:=Excel.ActiveWorkbook;
+    ZCMsgCallBackInterface.TextMessage('Доступ получен к книге = ' + BasicWorkbook.Name,TMWOHistoryOut);
+    result:=true;
+  except
+    ZCMsgCallBackInterface.TextMessage('ОШИБКА. НЕТ АКТИВНОЙ ОТКРЫТОЙ КНИГИ В EXCEL!!!',TMWOHistoryOut);
+  end;
+end;
+function activeWorkSheetXLSX:boolean;
+//var
+begin
+  result:=false;
+  try
+    ActiveWorkSheet:=Excel.ActiveSheet;
+    //ActiveWorkSheet:=BasicWorkbook.ActiveWorksheet;
+    ZCMsgCallBackInterface.TextMessage('Открыт лист = ' + ActiveWorkSheet.Name,TMWOHistoryOut);
+    result:=true;
+  except
+    ZCMsgCallBackInterface.TextMessage('ОШИБКА. НЕТ АКТИВНОЙ ОТКРЫТОЙ КНИГИ В EXCEL!!!',TMWOHistoryOut);
+  end;
+end;
+function getActiveWorkSheetName:string;
+//var
+begin
+  result:='nil';
+  try
+    ActiveWorkSheet:=Excel.ActiveSheet;
+    result:=ActiveWorkSheet.Name;
+    //ActiveWorkSheet:=BasicWorkbook.ActiveWorksheet;
+    ZCMsgCallBackInterface.TextMessage('Открыт лист = ' + result,TMWOHistoryOut);
+  except
+    ZCMsgCallBackInterface.TextMessage('ОШИБКА. НЕТ АКТИВНОЙ ОТКРЫТОЙ КНИГИ В EXCEL!!!',TMWOHistoryOut);
+  end;
+end;
+
+function getNumWorkSheetName(nameSheet:string):integer; //-1 отсутствует
+var
+  i:integer;
+begin
+  result:=-1;
+  for i:= 1 to BasicWorkbook.WorkSheets.count do
+    if ContainsText(BasicWorkbook.WorkSheets[i].Name, nameSheet) then
+    begin
+      result:=i;
+      //ZCMsgCallBackInterface.TextMessage('Лист = ' + BasicWorkbook.WorkSheets[i].Name + ' спрятан!',TMWOHistoryOut);
+      //BasicWorkbook.WorkSheets[i].Visible:=false;
+    end;
+end;
+
+function saveXLSXFile(pathFile:string):boolean;
 //var
 begin
   BasicWorkbook.WorkSheets[1].Activate;
-  BasicWorkbook.SaveAs(WideString(pathFile));
+  result:=false;
+  try
+    //Excel.DisplayAlerts := False;
+    BasicWorkbook.SaveAs(FileName:=WideString(pathFile));
+    result:=true;
+    //Excel.DisplayAlerts := True;
+  except
+    ZCMsgCallBackInterface.TextMessage('ОШИБКА! СОХРАНЕНИЕ ОТМЕНЕНО ИЛИ ФАЙЛ НЕ ДОСТУПЕН!',TMWOHistoryOut);
+  end;
 end;
 procedure destroyWorkbook();
 begin
+  BasicWorkbook.Close(Savechanges:=false);
+  BasicWorkbook:=Unassigned;
   Excel.Quit;
+  Excel := Unassigned;
+end;
+procedure activeDestroyWorkbook();
+begin
+  iRangeFind:=Unassigned;
+  ActiveWorkSheet:=Unassigned;
+  BasicWorkbook:=Unassigned;
+  Excel := Unassigned;
 end;
 procedure sheetVisibleOff(partNameSheet:string);
 var
@@ -98,14 +193,22 @@ begin
       BasicWorkbook.WorkSheets[i].Visible:=false;
     end;
 end;
+procedure deleteRow(nameSheet:string;iRow:Cardinal);
+//var
+begin
+  BasicWorkbook.WorkSheets(nameSheet).Rows[iRow].Delete;
+end;
 procedure copyWorksheetName(codeSheet:string;nameSheet:string);
 var
   i,numsheet:integer;
 begin
   //ZCMsgCallBackInterface.TextMessage('имя лист = ' + nameSheet,TMWOHistoryOut);
-  BasicWorkbook.WorkSheets(codeSheet).Copy(EmptyParam,BasicWorkbook.WorkSheets[BasicWorkbook.WorkSheets.Count]);
-  BasicWorkbook.WorkSheets[BasicWorkbook.WorkSheets.Count].Name:=nameSheet;
-
+  try
+    BasicWorkbook.WorkSheets(codeSheet).Copy(EmptyParam,BasicWorkbook.WorkSheets[BasicWorkbook.WorkSheets.Count]);
+    BasicWorkbook.WorkSheets[BasicWorkbook.WorkSheets.Count].Name:=nameSheet;
+  except
+   ZCMsgCallBackInterface.TextMessage('ОШИБКА! procedure copyWorksheetName(codeSheet:string;nameSheet:string);',TMWOHistoryOut);
+  end;
   //numsheet:=-1;
   //for i:= 1 to BasicWorkbook.WorkSheets.count do
   //begin
@@ -139,6 +242,10 @@ procedure setCellValue(nameSheet:string;iRow,iCol:Cardinal;iText:string);
 begin
   BasicWorkbook.WorkSheets(nameSheet).Cells(iRow,iCol).Value:=iText;
 end;
+function getCellFormula(nameSheet:string;iRow,iCol:Cardinal):string;
+begin
+  result:=BasicWorkbook.WorkSheets(nameSheet).Cells(iRow,iCol).Formula;
+end;
 procedure setCellFormula(nameSheet:string;iRow,iCol:Cardinal;iText:string);
 begin
   BasicWorkbook.WorkSheets(nameSheet).Cells(iRow,iCol).Formula:=iText;
@@ -161,13 +268,54 @@ end;
 
 procedure searchCellRowCol(nameSheet:string;nameValueCell:string;var vRow,vCol:Cardinal);
 var
-    iRangeFind: OleVariant;
+  i: integer;
 
+    function VarIsNothing(V: OleVariant): Boolean;
+    begin
+      Result :=
+        (TVarData(V).VType = varDispatch)
+        and
+        (TVarData(V).VDispatch = nil);
+    end;
 begin
 
   iRangeFind := BasicWorkbook.WorkSheets(nameSheet).UsedRange.Find(nameValueCell, MatchCase:=False);
-  if VarIsEmpty(iRangeFind) then
-     ZCMsgCallBackInterface.TextMessage('Not found',TMWOHistoryOut)
+  //ZCMsgCallBackInterface.TextMessage('поиск',TMWOHistoryOut);
+  if VarIsNothing(iRangeFind) then
+  begin
+     //ZCMsgCallBackInterface.TextMessage('Not found',TMWOHistoryOut);
+     vRow:=0;
+     vCol:=0;
+  end
+  else
+  begin
+    vRow:=iRangeFind.Row;
+    vCol:=iRangeFind.Column;
+  end;
+
+end;
+
+procedure searchNextCellRowCol(nameSheet:string;nameValueCell:string;var vRow,vCol:Cardinal);
+var
+  i:integer;
+    function VarIsNothing(V: OleVariant): Boolean;
+    begin
+      Result :=
+        (TVarData(V).VType = varDispatch)
+        and
+        (TVarData(V).VDispatch = nil);
+    end;
+begin
+
+  iRangeFind := BasicWorkbook.WorkSheets(nameSheet).UsedRange.FindNext(iRangeFind);
+  //ZCMsgCallBackInterface.TextMessage('поиск next',TMWOHistoryOut);
+  //ZCMsgCallBackInterface.TextMessage('значение адресс = ' + inttostr(iRangeFind.Row) + ' - ' + inttostr(iRangeFind.Column)+ ' = ',TMWOHistoryOut);
+  if VarIsNothing(iRangeFind) then
+  begin
+     //ZCMsgCallBackInterface.TextMessage('Not found',TMWOHistoryOut);
+     vRow:=0;
+     vCol:=0;
+  end
   else
   begin
     vRow:=iRangeFind.Row;

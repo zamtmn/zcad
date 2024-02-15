@@ -60,7 +60,7 @@ var
 
 implementation
 
-function MountingMethodsTest_com(operands:TCommandOperands):TCommandResult;
+function MountingMethodsTest_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 begin
   MountingMethodsTreeSelector:=TStringsTreeSelector.Create(nil);//создаем форму
   MountingMethodsTreeSelector.fill(MountingMethodsTree.BlobTree);//заполняем дерево
@@ -95,7 +95,7 @@ end;
 initialization
   MountingMethodsTree:=TTreePropManager.Create('~','MountingMethodsRoot');//создаем экземпляр, указываем разделитель и имя корневого узла
   MountingMethodsTree.LoadTree(expandpath('*rtl/velec/mountingmethodss.xml'),InterfaceTranslate);//грузим файл передаем путь  и переводчика
-  CreateCommandFastObjectPlugin(@MountingMethodsTest_com,'mt',CADWG,0);//тестовая команда, вызывает окно с твоим деревом
+  CreateZCADCommand(@MountingMethodsTest_com,'mt',CADWG,0);//тестовая команда, вызывает окно с твоим деревом
 
 
   AddFastEditorToType(units.findunit(GetSupportPath,InterfaceTranslate,'cables').TypeName2PTD('TDCableMountingMethod'),//привязка быстрого редактора, я вяжу к String, ты поставишь свой тип

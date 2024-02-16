@@ -4,11 +4,18 @@
     <BlockLib Type="Tree" Caption='Blocks' ImagesWidth='24'>
       <ZTreeNode Caption='Velectrical'>
         <ZTreeNode Caption='Schemes'>
-          <ZTreeCommand Command="Insert(VSCHEMA_PANEL_SIDE)"/>
-          <ZTreeCommand Command="Insert(DEVICE_VSCHEMA_PANEL_IN)"/>
-          <ZTreeCommand Command="Insert(DEVICE_VSCHEMA_PANEL_OUT)"/> 
+		    <ZTreeNode Caption='Shield diagram'>
+			  <ZTreeCommand Command="Insert(VSCHEMA_PANEL_SIDE)"/>
+			  <ZTreeCommand Command="Insert(DEVICE_VSCHEMA_PANEL_IN)"/>
+			  <ZTreeCommand Command="Insert(DEVICE_VSCHEMA_PANEL_OUT)"/> 
+			</ZTreeNode>
+		    <ZTreeNode Caption='Shield devices'>
+			  <ZTreeCommand Command="Insert(DEVICE_VSCHEMES_QS)"/>
+			  <ZTreeCommand Command="Insert(DEVICE_VSCHEMES_QS_N)"/> 
+			</ZTreeNode>			
         </ZTreeNode>
-	<ZTreeCommand Command="extdrAdd(extdrLayerControl)"/>
+		<ZTreeCommand Command="extdrAdd(extdrLayerControl)" Caption='Доб. расшир. упр. слоем'/>
+		<ZTreeCommand Command="DevDefSync" Caption='Синхрон. упр. слоем'/>	
       </ZTreeNode>
     </BlockLib>
   </PalettesContent>

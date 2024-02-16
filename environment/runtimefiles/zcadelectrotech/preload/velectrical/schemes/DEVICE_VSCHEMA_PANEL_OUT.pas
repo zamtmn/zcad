@@ -9,11 +9,10 @@ usescopy objname;
 var
 
 VSCHEMATransfer:boolean;(*'Перекидка секции'*)
+VSCHEMAPhase3:boolean;(*'3-и фазы'*)
 VSCHEMABusn:boolean;(*'Шина N'*)
 VSCHEMABuspe:boolean;(*'Шина PE'*)
-VSCHEMALevel0start:Integer;(*'Ур.0 авт. стартовый'*)
-VSCHEMALevel0continue:Integer;(*'Ур.0 авт. продолжаемый'*)
-VSCHEMALevel0finish:Integer;(*'Ур.0 авт. финишный'*)
+VSCHEMALevel0start:Integer;(*'Ур.0 автомат'*)
 VSCHEMALevel1start:Integer;(*'Ур.1 стартовый'*)
 VSCHEMALevel1continue:Integer;(*'Ур.1 продолжаемый'*)
 VSCHEMALevel1finish:Integer;(*'Ур.1 финишный'*)
@@ -39,12 +38,10 @@ implementation
 
 begin
 VSCHEMATransfer:=false;
-VSCHEMAMain:=true;
+VSCHEMAPhase3:=true;
 VSCHEMABusn:=true;
 VSCHEMABuspe:=true;
 VSCHEMALevel0start:=0;
-VSCHEMALevel0continue:=0;
-VSCHEMALevel0finish:=0;
 VSCHEMALevel1start:=0;
 VSCHEMALevel1continue:=0;
 VSCHEMALevel1finish:=0;

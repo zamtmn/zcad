@@ -19,6 +19,7 @@ jobs:
           sudo gem install asciidoctor
           sudo gem install asciidoctor-pdf
           sudo gem install asciidoctor-diagram
+          sudo gem install asciidoctor-multipage
           sudo apt install graphviz
           make documentation
           sed -i "s/locale\/ru\/_images\//https:\/\/raw.githubusercontent.com\/zamtmn\/zcad\/gh-pages\/locale\/ru\/_images\//g" cad_source/docs/userguide/userguide.ru.html

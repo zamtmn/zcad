@@ -41,6 +41,7 @@ install:
   - cmd: gem install asciidoctor
   - cmd: gem install asciidoctor-pdf
   - cmd: gem install asciidoctor-diagram
+  - cmd: gem install asciidoctor-multipage
 
 # Build scripts
 build_script:

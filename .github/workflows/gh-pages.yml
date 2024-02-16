@@ -24,18 +24,18 @@ jobs:
           make documentation
           sed -i "s/locale\/ru\/_images\//https:\/\/raw.githubusercontent.com\/zamtmn\/zcad\/gh-pages\/locale\/ru\/_images\//g" cad_source/docs/userguide/userguide.ru.html
           sed -i "s/..\/images\/actions\//https:\/\/raw.githubusercontent.com\/zamtmn\/zcad\/gh-pages\/images_actions\/actions\//g" cad_source/docs/userguide/userguide.ru.html
-          sed -i "s/_быстрый_старт/https:\/\/raw.githubusercontent.com\/zamtmn\/zcad\/gh-pages\/_getting_started/g" cad_source/docs/userguide/userguide.ru.html
-          sed -i "s/_для_разработчика/https:\/\/raw.githubusercontent.com\/zamtmn\/zcad\/gh-pages\/_for_developers/g" cad_source/docs/userguide/userguide.ru.html
-          sed -i "s/_настройка_программы/https:\/\/raw.githubusercontent.com\/zamtmn\/zcad\/gh-pages\/_customization/g" cad_source/docs/userguide/userguide.ru.html
-          sed -i "s/_общая_информация/https:\/\/raw.githubusercontent.com\/zamtmn\/zcad\/gh-pages\/_general_information/g" cad_source/docs/userguide/userguide.ru.html
-          sed -i "s/_работа_с_программой/https:\/\/raw.githubusercontent.com\/zamtmn\/zcad\/gh-pages\/_working_with_program/g" cad_source/docs/userguide/userguide.ru.html
+          sed -i "s/_Р±С‹СЃС‚СЂС‹Р№_СЃС‚Р°СЂС‚/https:\/\/raw.githubusercontent.com\/zamtmn\/zcad\/gh-pages\/_getting_started/g" cad_source/docs/userguide/userguide.ru.html
+          sed -i "s/_РґР»СЏ_СЂР°Р·СЂР°Р±РѕС‚С‡РёРєР°/https:\/\/raw.githubusercontent.com\/zamtmn\/zcad\/gh-pages\/_for_developers/g" cad_source/docs/userguide/userguide.ru.html
+          sed -i "s/_РЅР°СЃС‚СЂРѕР№РєР°_РїСЂРѕРіСЂР°РјРјС‹/https:\/\/raw.githubusercontent.com\/zamtmn\/zcad\/gh-pages\/_customization/g" cad_source/docs/userguide/userguide.ru.html
+          sed -i "s/_РѕР±С‰Р°СЏ_РёРЅС„РѕСЂРјР°С†РёСЏ/https:\/\/raw.githubusercontent.com\/zamtmn\/zcad\/gh-pages\/_general_information/g" cad_source/docs/userguide/userguide.ru.html
+          sed -i "s/_СЂР°Р±РѕС‚Р°_СЃ_РїСЂРѕРіСЂР°РјРјРѕР№/https:\/\/raw.githubusercontent.com\/zamtmn\/zcad\/gh-pages\/_working_with_program/g" cad_source/docs/userguide/userguide.ru.html
           cp -r cad_source/docs/images cad_source/docs/userguide/images_actions
           cp cad_source/docs/userguide/userguide.ru.html cad_source/docs/userguide/index.html
-          cp cad_source/docs/userguide/_быстрый_старт.html cad_source/docs/userguide/_getting_started.html
-          cp cad_source/docs/userguide/_для_разработчика.html cad_source/docs/userguide/_for_developers.html
-          cp cad_source/docs/userguide/_настройка_программы.html cad_source/docs/userguide/_customization.html
-          cp cad_source/docs/userguide/_общая_информация.html cad_source/docs/userguide/_general_information.html
-          cp cad_source/docs/userguide/_работа_с_программой.html cad_source/docs/userguide/_working_with_program.html
+          cp cad_source/docs/userguide/_Р±С‹СЃС‚СЂС‹Р№_СЃС‚Р°СЂС‚.html cad_source/docs/userguide/_getting_started.html
+          cp cad_source/docs/userguide/_РґР»СЏ_СЂР°Р·СЂР°Р±РѕС‚С‡РёРєР°.html cad_source/docs/userguide/_for_developers.html
+          cp cad_source/docs/userguide/_РЅР°СЃС‚СЂРѕР№РєР°_РїСЂРѕРіСЂР°РјРјС‹.html cad_source/docs/userguide/_customization.html
+          cp cad_source/docs/userguide/_РѕР±С‰Р°СЏ_РёРЅС„РѕСЂРјР°С†РёСЏ.html cad_source/docs/userguide/_general_information.html
+          cp cad_source/docs/userguide/_СЂР°Р±РѕС‚Р°_СЃ_РїСЂРѕРіСЂР°РјРјРѕР№.html cad_source/docs/userguide/_working_with_program.html
       - name: GitHub Pages
         if: success() && github.ref == 'refs/heads/master'
         uses: crazy-max/ghaction-github-pages@v2.3.0

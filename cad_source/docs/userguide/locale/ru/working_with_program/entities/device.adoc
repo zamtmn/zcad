@@ -42,5 +42,5 @@ image:https://img.youtube.com/vi/zUKcJVM55fQ/maxresdefault.jpg[link=https://yout
 endif::[]
 
 ifndef::env-github[]
-video::zUKcJVM55fQ[youtube]
+video::zUKcJVM55fQ[youtube, width=640]
 endif::[]

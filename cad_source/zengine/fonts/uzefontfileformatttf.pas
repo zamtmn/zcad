@@ -198,7 +198,7 @@ begin
     cends:=0;
     lastoncurve:=0;
     startcountur:=true;
-    for j:=0 to pttf.TTFImplementation.GetGlyphPointsCount(GenGlyph)-3 do begin
+    for j:=0 to pttf.TTFImplementation.GetGlyphPointsCount(GenGlyph)-1{-3} do begin
       if  startcountur then
         bs.StartCountur;
       p:=pttf.TTFImplementation.GetGlyphPoint(GenGlyph,j);
@@ -223,7 +223,7 @@ begin
         lastoncurve:=j+1;
         if cends=pttf.TTFImplementation.GetGlyphContoursCount(GenGlyph) then
           break;
-        if (pttf.TTFImplementation.GetGlyphPointsCount(GenGlyph)-j)<5 then
+        if (pttf.TTFImplementation.GetGlyphPointsCount(GenGlyph)-j)<{5}3 then
           break;
       end;
     end;
@@ -340,5 +340,5 @@ begin
 end;
 
 initialization
- TTFBackend:=TTTFBackendLazFreeType;//TTTFBackendFreeType;
+ TTFBackend:=TTTFBackendLAZFreeType;//TTTFBackendFreeType;
 end.

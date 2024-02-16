@@ -72,7 +72,7 @@ begin
 end;
 function TTTFBackendLazFreeType.GetGlyphPointsCount(GD:TGlyphData):Integer;
 begin
-  result:=PGlyph(TFreeTypeGlyph(GD.PG).Data.z)^.outline.n_points;
+  result:=PGlyph(TFreeTypeGlyph(GD.PG).Data.z)^.outline.n_points-2;
 end;
 function TTTFBackendLazFreeType.GetGlyphPoint(GD:TGlyphData;np:integer):GDBvertex2D;
 begin

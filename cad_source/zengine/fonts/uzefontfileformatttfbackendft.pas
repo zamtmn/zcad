@@ -120,8 +120,11 @@ end;
 function TTTFBackendFreeType.GetGlyphBounds(GD:TGlyphData):TRect;
 var
   BB:FT_BBox;
+  gm:FT_Glyph_Metrics;
 begin
   GetGlyph(PtrInt(GD.PG));
+  BB:=FontMgr.GetFreeTypeFont(FreeTypeTTFImpl.FontIndex).bbox;
+  gm:=FontMgr.GetFreeTypeFont(FreeTypeTTFImpl.FontIndex).glyph^.metrics;
   with FontMgr.GetFreeTypeFont(FreeTypeTTFImpl.FontIndex).glyph^.metrics do begin
     result.left:=horiBearingX;
     result.right:=horiAdvance;

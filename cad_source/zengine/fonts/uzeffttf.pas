@@ -26,11 +26,11 @@ type ptsyminfo=^tsyminfo;
      tsyminfo=record
                            number,size:word;
                      end;
-function createnewfontfromttf(name:String;var pf:PGDBfont):Boolean;
+function CreateNewfontFromTTF(name:String;var pf:PGDBfont):Boolean;
 
 implementation
 
-function createnewfontfromttf(name:String;var pf:PGDBfont):Boolean;
+function CreateNewfontFromTTF(name:String;var pf:PGDBfont):Boolean;
 var
   i:integer;
   chcode:integer;
@@ -51,7 +51,10 @@ begin
 
   ttf.TTFImpl.SizeInPoints:=10000;
   for i:=TTFFileParams.FirstCharIndex to TTFFileParams.LastCharIndex do begin
-    chcode:=ttf.TTFImpl.CharIndex[i];
+    if i=45 then
+      chcode:=ttf.TTFImpl.CharIndex[i]
+    else
+      chcode:=ttf.TTFImpl.CharIndex[i];
     if chcode>0 then begin
       si.GlyphIndex:=chcode;
       si.PSymbolInfo:=nil;

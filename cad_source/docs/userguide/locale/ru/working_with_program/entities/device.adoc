@@ -35,5 +35,12 @@ image::ents_device_var_part.png[width=50%,pdfwidth=50%]
 
 * коннектор для присоединения кабелей (коннекторов может быть несколько, это самостоятельное устройство).
 
-Как создать новое устройство показанно на данном видео:
+Как создать новое устройство показанно на данном видео (попытка 2):
+
+ifdef::env-github[]
+image:https://img.youtube.com/vi/zUKcJVM55fQ/maxresdefault.jpg[link=https://youtu.be/zUKcJVM55fQ]
+endif::[]
+
+ifndef::env-github[]
 video::zUKcJVM55fQ[youtube]
+endif::[]

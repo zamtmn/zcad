@@ -24,7 +24,11 @@ jobs:
           make documentation
           sed -i "s/locale\/ru\/_images\//https:\/\/raw.githubusercontent.com\/zamtmn\/zcad\/gh-pages\/locale\/ru\/_images\//g" cad_source/docs/userguide/userguide.ru.html
           sed -i "s/..\/images\/actions\//https:\/\/raw.githubusercontent.com\/zamtmn\/zcad\/gh-pages\/images_actions\/actions\//g" cad_source/docs/userguide/userguide.ru.html
-          sed -i "s/_быстрый_старт//https:\/\/raw.githubusercontent.com\/zamtmn\/zcad\/gh-pages\/_быстрый_старт/g" cad_source/docs/userguide/userguide.ru.html
+          sed -i "s/_быстрый_старт/https:\/\/raw.githubusercontent.com\/zamtmn\/zcad\/gh-pages\/_быстрый_старт/g" cad_source/docs/userguide/userguide.ru.html
+          sed -i "s/__для_разработчика/https:\/\/raw.githubusercontent.com\/zamtmn\/zcad\/gh-pages\/_для_разработчика/g" cad_source/docs/userguide/userguide.ru.html
+          sed -i "s/_настройка_программы/https:\/\/raw.githubusercontent.com\/zamtmn\/zcad\/gh-pages\/_настройка_программы/g" cad_source/docs/userguide/userguide.ru.html
+          sed -i "s/_общая_информация/https:\/\/raw.githubusercontent.com\/zamtmn\/zcad\/gh-pages\/_общая_информация/g" cad_source/docs/userguide/userguide.ru.html
+          sed -i "s/_работа_с_программой/https:\/\/raw.githubusercontent.com\/zamtmn\/zcad\/gh-pages\/_работа_с_программой/g" cad_source/docs/userguide/userguide.ru.html
           cp -r cad_source/docs/images cad_source/docs/userguide/images_actions
 
           cp cad_source/docs/userguide/userguide.ru.html cad_source/docs/userguide/index.html

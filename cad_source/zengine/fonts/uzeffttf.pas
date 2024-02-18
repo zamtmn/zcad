@@ -51,10 +51,7 @@ begin
 
   ttf.TTFImpl.SizeInPoints:=10000;
   for i:=TTFFileParams.FirstCharIndex to TTFFileParams.LastCharIndex do begin
-    if i=45 then
-      chcode:=ttf.TTFImpl.CharIndex[i]
-    else
-      chcode:=ttf.TTFImpl.CharIndex[i];
+    chcode:=ttf.TTFImpl.CharIndex[i];
     if chcode>0 then begin
       si.GlyphIndex:=chcode;
       si.PSymbolInfo:=nil;

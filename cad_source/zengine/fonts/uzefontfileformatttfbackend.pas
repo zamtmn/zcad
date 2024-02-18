@@ -65,10 +65,17 @@ type
       function GetGlyphConEnd(GD:TGlyphData;np:integer):Integer;virtual;abstract;
       procedure DoneGlyph(var GD:TGlyphData); virtual; abstract;
 
+      function TTFImplDummyGlobalScale:Double;virtual;
+
       property Ascent: single read GetAscent;
       property Descent: single read GetDescent;
       property CapHeight: single read GetCapHeight;
       property Glyph[Index: integer]: TGlyphData read GetGlyph;
   end;
 implementation
+function TTTFBackend.TTFImplDummyGlobalScale:Double;
+begin
+  result:=1;
+end;
+
 end.

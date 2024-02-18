@@ -173,7 +173,7 @@ begin
   bs.EndCountur;
 end;
 begin
-  k:=1/pttf.TTFImpl.CapHeight;
+  k:=pttf.TTFImpl.TTFImplDummyGlobalScale/pttf.TTFImpl.CapHeight;
   BS.VectorData:=@pttf.FontData;
   BS.fmode:=TSM_WaitStartCountur;
 
@@ -340,5 +340,5 @@ begin
 end;
 
 initialization
- TTFBackend:=TTTFBackendLAZFreeType;//TTTFBackendFreeType;
+ TTFBackend:=TTTFBackendFreeType;//TTTFBackendFreeType;
 end.

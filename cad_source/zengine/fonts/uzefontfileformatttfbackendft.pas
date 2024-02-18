@@ -213,16 +213,35 @@ end;
 
 function TTTFBackendFreeType.GetCapHeight:single;
 var
-  p:pointer;
+  pos2,phead,phori:pointer;
 begin
-  p:=FT_Get_Sfnt_Table(FontMgr.GetFreeTypeFont(FreeTypeTTFImpl.FontID),FT_SFNT_OS2);
-  if p<>nil then
-    result:=PTT_OS(p)^.sCapHeight
-  else
+  pos2:=FT_Get_Sfnt_Table(FontMgr.GetFreeTypeFont(FreeTypeTTFImpl.FontID),FT_SFNT_OS2);
+  phead:=FT_Get_Sfnt_Table(FontMgr.GetFreeTypeFont(FreeTypeTTFImpl.FontID),FT_SFNT_HEAD);
+  if pos2<>nil then begin
+    if PTT_OS(pos2)^.version>=2 then
+      result:=PTT_OS(pos2)^.sCapHeight
+    else begin
+      phori:=FT_Get_Sfnt_Table(FontMgr.GetFreeTypeFont(FreeTypeTTFImpl.FontID),FT_SFNT_HHEA);
+      if phori<>nil then
+        result:= PTT_HoriHeader(phori)^.Ascender
+      else
+        result:=0;
+      if result = 0 then
+      begin
+        if PTT_OS(pos2)^.version<>$ffff then
+        begin
+          if PTT_OS(pos2)^.usWinAscent <> 0 then
+            result := PTT_OS(pos2)^.usWinAscent
+          else
+            result := PTT_OS(pos2)^.sTypoAscender;
+        end;
+      end;
+      result:=result*2/3 {todo: добавить это в LazFreeType (если sCapHeight в заголовке нет, то она 3/2 Ascender)}
+    end;
+  end else
     exit(0);
-  p:=FT_Get_Sfnt_Table(FontMgr.GetFreeTypeFont(FreeTypeTTFImpl.FontID),FT_SFNT_HEAD);
-  if p<>nil then
-    result:=result/PTT_Header(p)^.Units_Per_EM
+  if phead<>nil then
+    result:=result/PTT_Header(phead)^.Units_Per_EM
   else
     exit(0);
 

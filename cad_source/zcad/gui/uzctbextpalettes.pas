@@ -136,8 +136,8 @@ end;
 
 procedure TZPaletteListView.ProcessClick(ListItem:TListItem;DblClck:Boolean);
 begin
-  if DblClck then
-     ListItem:=ListItem;
+//  if DblClck then
+//     ListItem:=ListItem;
 end;
 
 

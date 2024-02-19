@@ -3117,7 +3117,7 @@ begin
                            if (pt.trace)and(pt2.trace) then
                            if SqrOneVertexlength(vectordot(pt.dir,pt2.dir))>sqreps then
                            begin
-                           ip:=ip;
+//                           ip:=ip;
                            ip.isintercept:=false;
                            ip:=intercept3dmy2(param.ontrackarray.otrackarray[i].worldcoord,pt.worldraycoord,param.ontrackarray.otrackarray[j].worldcoord,pt2.worldraycoord);
                            //ip:=intercept3dmy(createvertex(0,0,0),createvertex(0,2,0),createvertex(-1,1,0),createvertex(1,1,0));

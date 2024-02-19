@@ -8,9 +8,9 @@ usescopy objname;
 
 var
 
-T1:String;(*'Обозначение'*)
-T2:String;(*'Наименование'*)
-T3:String;(*'Примечание'*)
+T3:String;(*'Обозначение'*)
+T5:String;(*'Наименование'*)
+T6:String;(*'Примечание'*)
 
 implementation
 
@@ -20,12 +20,12 @@ BTY_TreeCoord:='PLAN_EM_Ведомость';
 Device_Type:=TDT_SilaPotr;
 Device_Class:=TDC_Shell;
 
-NMO_Name:='ВД0';
-NMO_BaseName:='ВД';
+NMO_Name:='СД0';
+NMO_BaseName:='СД';
 NMO_Suffix:='??';
 
-T1:='??';
-T2:='??';
-T3:='';
+T3:='??';
+T5:='??';
+T6:='';
 
 end.

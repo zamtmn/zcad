@@ -1386,8 +1386,8 @@ begin
   New_line.CoordInOCS.lEnd:= wc;
   New_line^.Formatentity(drawings.GetCurrentDWG^,dc);
   //po:=nil;
-  if (button and MZW_LBUTTON)<>0 then
-                                     button:=button;
+//  if (button and MZW_LBUTTON)<>0 then
+//                                     button:=button;
   Objects.init(10);
   if drawings.GetCurrentROOT.FindObjectsInPoint(wc,Objects) then
   begin
@@ -2031,8 +2031,8 @@ begin
     begin
          cablename:=pv^.Name;
 
-         if cablename='RS' then
-                               cablename:=cablename;
+//         if cablename='RS' then
+//                               cablename:=cablename;
 
          pstartsegmentvarext:=pv^.StartSegment^.GetExtension<TVariablesExtender>;
          pvd:=pstartsegmentvarext.entityunit.FindVariable('DB_link');
@@ -3177,7 +3177,7 @@ begin
                                                                 New_line^.Formatentity(drawings.GetCurrentDWG^,dc);
                                                                 supernet^.ObjArray.AddPEntity(New_line^);
                                                                 linesarray.PushBackData(New_line);
-                                                            pvd:=pvd;
+//                                                            pvd:=pvd;
                                                        end;
                                                   end;
                                                   end;
@@ -3199,9 +3199,9 @@ begin
                           riserarray.Done;
                           if supernet<>nil then
                                           supernetsarray.PushBackData(supernet);
-                          end
-                             else
-                                 supernet:=supernet;
+                          end;
+//                             else
+//                                 supernet:=supernet;
 
                           if supernet<>nil then
                           begin

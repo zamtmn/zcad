@@ -289,8 +289,8 @@ begin
         begin
           rez.name := '';
           expr := copy(expr, 2, length(expr) - 2);
-          if expr='34 2511' then
-                                expr:=expr;
+//          if expr='34 2511' then
+//                                expr:=expr;
           rez.SetInstance(FundamentalStringDescriptorObj.AllocAndInitInstance);
           pString(rez.data.Addr.Instance)^ := expr;
           expr:='';
@@ -299,8 +299,8 @@ begin
     else
       begin
         s := readGDBWord(expr);
-        if s='rp_21.Tu' then
-        s:=s;
+//        if s='rp_21.Tu' then
+//        s:=s;
 
         pvar := _unit{.InterfaceVariables}.FindVariable(s);
         if pvar <> nil then
@@ -317,7 +317,7 @@ begin
           if ithex(s) or itint(s) then
           begin
             createIntegervar(rez, s);
-            s:=s;
+//            s:=s;
           end
           else
             if itreal(s) then
@@ -327,7 +327,7 @@ begin
               createBooleanvar(rez, s)
                     else if pos('.',s)>0 then
         begin
-             s:=s;
+//             s:=s;
              s1:=copy(s,1,pos('.',s)-1);
              s2:=copy(s,pos('.',s)+1,length(s)-pos('.',s));
              pvar:=_unit{.InterfaceVariables}.FindVariable(s1);
@@ -335,7 +335,7 @@ begin
              begin
                   {PObjectDescriptor(PUserTypeDescriptor(Types.exttype.getDataMutable(pvar^.vartypecustom)^))}
                   PObjectDescriptor(pvar^.data.ptd)^.RunMetod(s2,pvar^.data.Addr.Instance);
-                  s:=s;
+//                  s:=s;
              end
         end
             else
@@ -399,7 +399,6 @@ begin
                 functionname := itbasicfunction(s);
                 if functionname > 0 then
                 begin
-                                                                                                                 //halt(0);
                   s := readsubexpr(expr);
                   i := pos(',', s);
                   while i > 0 do
@@ -415,7 +414,7 @@ begin
                 else
                 begin
                      rez.name:=s;
-                     s:=s;
+//                     s:=s;
                 end;
               end;
             end;

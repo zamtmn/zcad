@@ -389,10 +389,10 @@ begin
                                                    begin
                                                         if (tmpFlag and 1) = 1 then closed := true;
                                                    end
-  else if dxfIntegerload(f,71,GroupCode,Degree) then
-                                                   begin
-                                                        Degree:=Degree;
-                                                   end
+//  else if dxfIntegerload(f,71,GroupCode,Degree) then
+//                                                   begin
+//                                                        Degree:=Degree;
+//                                                   end
 
                                       else {s:= }f.readString;
     GroupCode:=readmystrtoint(f);

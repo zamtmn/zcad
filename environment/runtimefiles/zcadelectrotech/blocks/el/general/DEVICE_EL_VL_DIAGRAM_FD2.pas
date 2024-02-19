@@ -8,10 +8,10 @@ usescopy objname;
 
 var
 
-T1:String;(*'Обозначение'*)
-T2:String;(*'P активная'*)
-T3:String;(*'I расчетный'*)
-T4:String;(*'Наименование'*)
+VL_Mark:String;(*'Обозначение'*)
+VL_PyPp:String;(*'P активная'*)
+VL_Ip:String;(*'I расчетный'*)
+VL_Load:String;(*'Наименование'*)
 
 implementation
 
@@ -25,9 +25,9 @@ NMO_Name:='ФД0';
 NMO_BaseName:='ФД';
 NMO_Suffix:='??';
 
-T1:='??';
-T2:='??';
-T3:='??';
-T4:='??';
+VL_Mark:='??';
+VL_PyPp:='??';
+VL_Ip:='??';
+VL_Load:='??';
 
 end.

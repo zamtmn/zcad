@@ -50,7 +50,7 @@ pdf: getpdftheme version copyimages
 	asciidoctor-pdf -a pdf-themesdir=styles -a pdf-theme=zcadd -r asciidoctor-diagram userguide.ru.adoc
 
 html: version copyimages                      
-	asciidoctor -a stylesheet=styles/stylesheet.css -r asciidoctor-diagram userguide.ru.adoc
+	asciidoctor -a stylesheet=styles/stylesheet.css -r asciidoctor-multipage -b multipage_html5 -r asciidoctor-diagram userguide.ru.adoc
 
 example: version styles/default-theme.yml
 	asciidoctor-pdf -a pdf-themesdir=styles -a pdf-theme=zcadd -r asciidoctor-diagram formats_examples.adoc

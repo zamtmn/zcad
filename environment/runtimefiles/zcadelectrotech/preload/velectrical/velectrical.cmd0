@@ -1,0 +1,3 @@
+cfgAddSupportPath($(CurrentMacrosPath))
+cfgAddSupportPath($(CurrentMacrosPath)schemes)
+LoadPalettes($(CurrentMacrosPath)velectrical.xml)

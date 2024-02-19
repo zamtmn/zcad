@@ -281,7 +281,7 @@ begin
                              if (result)and(strarr.count<>0) then
                              begin
                                   strarr.copyto(Stringarray^);
-                                  l:=l;
+//                                  l:=l;
                              end;
                              strarr.Done;
                         end;

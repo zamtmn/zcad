@@ -71,12 +71,12 @@ var
   symoutbound:TBoundingBox;
   //offset:TEntIndexesOffsetData;
 begin
-  if _symbol=100 then
-                      _symbol:=_symbol;
+//  if _symbol=100 then
+//                      _symbol:=_symbol;
   {if _symbol<256 then
                     _symbol:=ach2uch(_symbol);}
-  if _symbol=32 then
-                      _symbol:=_symbol;
+//  if _symbol=32 then
+//                      _symbol:=_symbol;
   LLSymbolIndex:=-1;
   //trcount:=0;
   LLSymbolLineCreated:=false;

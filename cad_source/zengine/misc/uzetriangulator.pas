@@ -130,8 +130,8 @@ end;
 procedure TTriangulator.BeginCallBack(gmode: Cardinal;Data: Pointer);
 begin
      CurrentLLentity:=-1;
-     if gmode=GL_TRIANGLES then
-                               gmode:=gmode;
+//     if gmode=GL_TRIANGLES then
+//                               gmode:=gmode;
      pcount:=0;
      case gmode of
      GL_TRIANGLES:
@@ -150,7 +150,7 @@ GL_TRIANGLE_STRIP:begin
      else
          begin
            debugln('{F}Wrong triangulation mode!!');
-           halt(0);
+           raise Exception.Create('Wrong triangulation mode!!');
          end;
      end;
 end;

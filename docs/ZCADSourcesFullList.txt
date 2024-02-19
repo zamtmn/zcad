@@ -13,4 +13,3 @@
 ..\cad_source\zcad\lclmod\*.pas
 ..\cad_source\zcad\misc\*.pas
 ..\cad_source\zcad\register\*.pas
-

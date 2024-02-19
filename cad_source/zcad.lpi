@@ -797,8 +797,9 @@
         <IsPartOfProject Value="True"/>
       </Unit87>
       <Unit88>
-        <Filename Value="zengine/fonts/uzefontttf.pas"/>
+        <Filename Value="zengine/fonts/uzefontfileformatttf.pas"/>
         <IsPartOfProject Value="True"/>
+        <UnitName Value="uzeFontFileFormatTTF"/>
       </Unit88>
       <Unit89>
         <Filename Value="zengine/fonts/uzefontmanager.pas"/>
@@ -813,8 +814,9 @@
         <IsPartOfProject Value="True"/>
       </Unit91>
       <Unit92>
-        <Filename Value="zengine/fonts/uzeffshx.pas"/>
+        <Filename Value="zengine/fonts/uzefontfileformatshx.pas"/>
         <IsPartOfProject Value="True"/>
+        <UnitName Value="uzeFontFileFormatSHX"/>
       </Unit92>
       <Unit93>
         <Filename Value="zengine/fonts/uzeffttf.pas"/>
@@ -1282,11 +1284,6 @@
         <CPPInline Value="False"/>
       </SyntaxOptions>
     </Parsing>
-    <CodeGeneration>
-      <Optimizations>
-        <OptimizationLevel Value="0"/>
-      </Optimizations>
-    </CodeGeneration>
     <Linking>
       <Debugging>
         <DebugInfoType Value="dsDwarf2Set"/>

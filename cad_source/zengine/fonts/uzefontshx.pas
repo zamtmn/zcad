@@ -19,32 +19,62 @@
 unit uzefontshx;
 {$INCLUDE zengineconfig.inc}
 interface
-uses uzefontbase,uzctnrVectorBytes,sysutils,
-     uzegeometry;
+uses
+  uzefontbase,uzctnrVectorBytes,sysutils,uzegeometry,uzbtypes;
 type
-{EXPORT+}
-PSHXFont=^SHXFont;
-{REGISTEROBJECTTYPE SHXFont}
-SHXFont= object(BASEFont)
-              //compiledsize:Integer;
-              h,u:Byte;
-              //SHXdata:TZctnrVectorBytes;
-              constructor init;
-              destructor done;virtual;
-        end;
-{EXPORT-}
+  TZESHXFontImpl= class(TZEBaseFontImpl)
+    h,u:Byte;
+    FUnicode:Boolean;
+    constructor Create;
+    destructor Destroy;override;
+    public
+      function IsUnicode:Boolean;override;
+      function IsCanSystemDraw:Boolean;override;
+      property Unicode:Boolean read FUnicode write FUnicode;
+      function GetOrReplaceSymbolInfo(symbol:Integer):PGDBsymdolinfo;override;
+  end;
 implementation
-//uses log;
-constructor SHXFont.init;
+function TZESHXFontImpl.IsCanSystemDraw:Boolean;
 begin
-     inherited;
-     u:=1;
-     h:=1;
-     //SHXdata.init(1024);
+  result:=false;
 end;
-destructor SHXFont.done;
+function TZESHXFontImpl.GetOrReplaceSymbolInfo(symbol:Integer):PGDBsymdolinfo;
 begin
-     inherited;
-     //SHXdata.done;
+     if symbol=49 then
+                        symbol:=symbol;
+     if symbol<SymCasheSize then
+                       begin
+                       result:=@symbolinfo[symbol];
+                       if result^.LLPrimitiveStartIndex=-1 then
+                                        result:=@symbolinfo[ord('?')];
+                       end
+                   else
+                       begin
+                            result:=findunisymbolinfo(symbol);
+                            if result=nil then
+                            begin
+                                 result:=@symbolinfo[ord('?')];
+                                 exit;
+                            end;
+                            if result^.LLPrimitiveStartIndex=-1 then
+                                             result:=@symbolinfo[ord('?')];
+
+                       end;
+end;
+
+function TZESHXFontImpl.IsUnicode:Boolean;
+begin
+  result:=unicode;
+end;
+constructor TZESHXFontImpl.Create;
+begin
+  inherited;
+  FUnicode:=false;
+  u:=1;
+  h:=1;
+end;
+destructor TZESHXFontImpl.Destroy;
+begin
+  inherited;
 end;
 end.

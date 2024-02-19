@@ -19,193 +19,134 @@
 unit uzefontbase;
 {$INCLUDE zengineconfig.inc}
 interface
-uses uzgprimitives,uzglvectorobject,uzbstrproc,uzctnrVectorBytes,
-     gzctnrVectorTypes,gzctnrVector,sysutils,uzbtypes,uzegeometrytypes,uzegeometry;
+uses
+  uzgprimitives,uzglvectorobject,uzbstrproc,uzctnrVectorBytes,gzctnrVectorTypes,
+  gzctnrVector,sysutils,uzbtypes,uzegeometrytypes,uzegeometry;
+
+const
+  SymCasheSize=128;
 type
-{EXPORT+}
-TSymbolInfoArray=packed array [0..255] of GDBsymdolinfo;
-TGDBUNISymbolInfoVector=GZVector{-}<GDBUNISymbolInfo>{//};
-PBASEFont=^BASEFont;
-{REGISTEROBJECTTYPE BASEFont}
-BASEFont= object(GDBaseObject)
-              unicode:Boolean;
-              symbolinfo:TSymbolInfoArray;
-              unisymbolinfo:{GDBOpenArrayOfData}TGDBUNISymbolInfoVector;
-              //----//SHXdata:TZctnrVectorBytes;
-              FontData:ZGLVectorObject;
-              constructor init;
-              destructor done;virtual;
-              //----//function GetSymbolDataAddr(offset:integer):pointer;virtual;
-              //function GetTriangleDataAddr(offset:integer):PGDBFontVertex2D;virtual;
+  TSymbolInfoArray=packed array [0..SymCasheSize-1] of GDBsymdolinfo;
+  TGDBUNISymbolInfoVector=GZVector<GDBUNISymbolInfo>;
 
-              function GetOrCreateSymbolInfo(symbol:Integer):PGDBsymdolinfo;virtual;
-              function GetOrReplaceSymbolInfo(symbol:Integer{//-ttf-//; var TrianglesDataInfo:TTrianglesDataInfo}):PGDBsymdolinfo;virtual;
-              function findunisymbolinfo(symbol:Integer):PGDBsymdolinfo;
-              function findunisymbolinfos(symbolname:String):PGDBsymdolinfo;
-              function IsCanSystemDraw:Boolean;virtual;
-              procedure SetupSymbolLineParams(const matr:DMatrix4D; var SymsParam:TSymbolSParam);virtual;
-        end;
-{EXPORT-}
+  TZEBaseFontImpl=class
+    protected
+      symbolinfo:TSymbolInfoArray;
+      unisymbolinfo:TGDBUNISymbolInfoVector;
+      function findunisymbolinfo(symbol:Integer):PGDBsymdolinfo;
+
+    public
+      FontData:ZGLVectorObject;
+      procedure SetupSymbolLineParams(const matr:DMatrix4D; var SymsParam:TSymbolSParam);virtual;
+      function GetOrReplaceSymbolInfo(symbol:Integer):PGDBsymdolinfo;virtual;abstract;
+      function GetOrCreateSymbolInfo(symbol:Integer):PGDBsymdolinfo;virtual;
+      function findunisymbolinfos(symbolname:String):PGDBsymdolinfo;
+
+      constructor Create;
+      destructor Destroy;override;
+
+      function IsUnicode:Boolean;virtual;abstract;
+      function IsCanSystemDraw:Boolean;virtual;abstract;
+  end;
 implementation
-//uses log;
-procedure BASEFont.SetupSymbolLineParams(const matr:DMatrix4D; var SymsParam:TSymbolSParam);
+procedure TZEBaseFontImpl.SetupSymbolLineParams(const matr:DMatrix4D; var SymsParam:TSymbolSParam);
 begin
 end;
-function BASEFont.IsCanSystemDraw:Boolean;
-begin
-     result:=false;
-end;
-
-constructor BASEFont.init;
+constructor TZEBaseFontImpl.Create;
 var
-   i:integer;
+  i:integer;
 begin
-     inherited;
-     for i:=0 to 255 do
-     begin
-      symbolinfo[i].LLPrimitiveStartIndex:=-1;
-      symbolinfo[i].LLPrimitiveCount:=0;
-      symbolinfo[i].LatestCreate:=false;
-     end;
-     unicode:=false;
-     unisymbolinfo.init(1000);
-     //----//SHXdata.init(1024);
-     FontData.init();
-end;
-destructor BASEFont.done;
-var i:integer;
-    pobj:PGDBUNISymbolInfo;
-    ir:itrec;
-begin
-     inherited;
-     for i:=0 to 255 do
-     begin
-      symbolinfo[i].Name:='';
-     end;
+  inherited;
+  for i:=low(symbolinfo) to high(symbolinfo) do begin
+    symbolinfo[i].LLPrimitiveStartIndex:=-1;
+    symbolinfo[i].LLPrimitiveCount:=0;
+    symbolinfo[i].LatestCreate:=false;
+  end;
 
-     pobj:=unisymbolinfo.beginiterate(ir);
-     if pobj<>nil then
-     repeat
-           pobj^.symbolinfo.Name:='';
-           pobj:=unisymbolinfo.iterate(ir);
-     until pobj=nil;
-     unisymbolinfo.{FreeAnd}Done;
-     //----//SHXdata.done;
-     FontData.done;
+  unisymbolinfo.init(1000);
+  FontData.init();
 end;
-function BASEFont.GetOrReplaceSymbolInfo(symbol:Integer{//-ttf-//; var TrianglesDataInfo:TTrianglesDataInfo}):PGDBsymdolinfo;
-//var
-   //usi:GDBUNISymbolInfo;
-begin
-     //-ttf-//TrianglesDataInfo.TrianglesAddr:=0;
-     //-ttf-//TrianglesDataInfo.TrianglesSize:=0;
-//     if symbol=49 then
-//                        symbol:=symbol;
-     if symbol<256 then
-                       begin
-                       result:=@symbolinfo[symbol];
-                       if result^.LLPrimitiveStartIndex=-1 then
-                                        result:=@symbolinfo[ord('?')];
-                       end
-                   else
-                       //result:=@self.symbolinfo[ord('?')]
-                       begin
-                            result:=findunisymbolinfo(symbol);
-                            //result:=@symbolinfo[ord('?')];
-                            //usi.symbolinfo:=result^;;
-                            if result=nil then
-                            begin
-                                 result:=@symbolinfo[ord('?')];
-                                 exit;
-                            end;
-                            if result^.LLPrimitiveStartIndex=-1 then
-                                             result:=@symbolinfo[ord('?')];
-
-                       end;
-end;
-{function BASEFont.GetTriangleDataAddr(offset:integer):PGDBFontVertex2D;
-begin
-     result:=nil;
-end;}
-//----//function BASEFont.GetSymbolDataAddr(offset:integer):pointer;
-//----//begin
-//----//     result:=SHXdata.getelement(offset);
-//----//end;
-function BASEFont.GetOrCreateSymbolInfo(symbol:Integer):PGDBsymdolinfo;
+destructor TZEBaseFontImpl.Destroy;
 var
-   usi:GDBUNISymbolInfo;
+  i:integer;
+  pobj:PGDBUNISymbolInfo;
+  ir:itrec;
 begin
-     if symbol<256 then
-                       result:=@symbolinfo[symbol]
-                   else
-                       //result:=@self.symbolinfo[0]
-                       begin
-                            result:=findunisymbolinfo(symbol);
-                            if result=nil then
-                            begin
-                                 usi.symbol:=symbol;
-                                 usi.symbolinfo.LLPrimitiveStartIndex:=-1;
-                                 usi.symbolinfo.NextSymX:=0;
-                                 usi.symbolinfo.SymMaxY:=0;
-                                 usi.symbolinfo.h:=0;
-                                 usi.symbolinfo.LLPrimitiveCount:=0;
-                                 usi.symbolinfo.w:=0;
-                                 usi.symbolinfo.SymMinY:=0;
-                                 usi.symbolinfo.LatestCreate:=false;
-                                 killstring(usi.symbolinfo.Name);
-                                 unisymbolinfo.PushBackData(usi);
+  inherited;
+  for i:=low(symbolinfo) to high(symbolinfo) do
+    symbolinfo[i].Name:='';
 
-                                 result:=@(PGDBUNISymbolInfo(unisymbolinfo.getDataMutable(unisymbolinfo.Count-1))^.symbolinfo);
-                            end;
-                       end;
+  pobj:=unisymbolinfo.beginiterate(ir);
+  if pobj<>nil then repeat
+    pobj^.symbolinfo.Name:='';
+    pobj:=unisymbolinfo.iterate(ir);
+  until pobj=nil;
+  unisymbolinfo.Done;
+  FontData.done;
 end;
-function BASEFont.findunisymbolinfo(symbol:Integer):PGDBsymdolinfo;
+function TZEBaseFontImpl.GetOrCreateSymbolInfo(symbol:Integer):PGDBsymdolinfo;
 var
-   pobj:PGDBUNISymbolInfo;
-   ir:itrec;
-   //debug:Integer;
+  usi:GDBUNISymbolInfo;
 begin
-     pobj:=unisymbolinfo.beginiterate(ir);
-     if pobj<>nil then
-     repeat
-           //debug:=pobj^.symbol;
-           //debug:=pobj^.symbolinfo.addr;
-           if pobj^.symbol=symbol then
-                                      begin
-                                           result:=@pobj^.symbolinfo;
-                                           exit;
-                                      end;
-           pobj:=unisymbolinfo.iterate(ir);
-     until pobj=nil;
-     result:=nil;
+  if symbol<SymCasheSize then
+    result:=@symbolinfo[symbol]
+  else begin
+    result:=findunisymbolinfo(symbol);
+    if result=nil then
+    begin
+      usi.symbol:=symbol;
+      usi.symbolinfo.LLPrimitiveStartIndex:=-1;
+      usi.symbolinfo.NextSymX:=0;
+      usi.symbolinfo.SymMaxY:=0;
+      usi.symbolinfo.h:=0;
+      usi.symbolinfo.LLPrimitiveCount:=0;
+      usi.symbolinfo.w:=0;
+      usi.symbolinfo.SymMinY:=0;
+      usi.symbolinfo.LatestCreate:=false;
+      killstring(usi.symbolinfo.Name);
+      unisymbolinfo.PushBackData(usi);
+      result:=@(PGDBUNISymbolInfo(unisymbolinfo.getDataMutable(unisymbolinfo.Count-1))^.symbolinfo);
+    end;
+  end;
 end;
-function BASEFont.findunisymbolinfos(symbolname:String):PGDBsymdolinfo;
+function TZEBaseFontImpl.findunisymbolinfo(symbol:Integer):PGDBsymdolinfo;
 var
-   pobj:PGDBUNISymbolInfo;
-   ir:itrec;
-   i:integer;
-   //debug:Integer;
+  pobj:PGDBUNISymbolInfo;
+  ir:itrec;
 begin
-     symbolname:=uppercase(symbolname);
-
-     for i:=0 to 255 do
-     begin
-          if uppercase(symbolinfo[i].Name)=symbolname then
-          begin
-               result:=@symbolinfo[i];
-               exit;
-          end;
-     end;
-     pobj:=unisymbolinfo.beginiterate(ir);
-     if pobj<>nil then
-     repeat
-           if uppercase(pobj^.symbolinfo.Name)=symbolname then
-                                      begin
-                                           result:=@pobj^.symbolinfo;
-                                           exit;
-                                      end;
-           pobj:=unisymbolinfo.iterate(ir);
-     until pobj=nil;
-     result:=nil;
+  pobj:=unisymbolinfo.beginiterate(ir);
+  if pobj<>nil then
+    repeat
+      if pobj^.symbol=symbol then begin
+        result:=@pobj^.symbolinfo;
+        exit;
+      end;
+    pobj:=unisymbolinfo.iterate(ir);
+    until pobj=nil;
+  result:=nil;
+end;
+function TZEBaseFontImpl.findunisymbolinfos(symbolname:String):PGDBsymdolinfo;
+var
+  pobj:PGDBUNISymbolInfo;
+  ir:itrec;
+  i:integer;
+begin
+  symbolname:=uppercase(symbolname);
+  for i:=low(symbolinfo) to high(symbolinfo) do begin
+    if uppercase(symbolinfo[i].Name)=symbolname then begin
+      result:=@symbolinfo[i];
+      exit;
+    end;
+  end;
+  pobj:=unisymbolinfo.beginiterate(ir);
+  if pobj<>nil then
+    repeat
+      if uppercase(pobj^.symbolinfo.Name)=symbolname then begin
+        result:=@pobj^.symbolinfo;
+        exit;
+      end;
+    pobj:=unisymbolinfo.iterate(ir);
+    until pobj=nil;
+    result:=nil;
 end;
 end.

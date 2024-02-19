@@ -16,7 +16,7 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
 
-unit uzeffshx;
+unit uzeFontFileFormatSHX;
 {$INCLUDE zengineconfig.inc}
 interface
 uses uzgprimitivescreator,uzglvectorobject,uzefontmanager,uzefontshx,uzegeometry,
@@ -154,12 +154,12 @@ begin
 //            if symbol=1055{П}then
 //                                 symbol:=symbol;
             psyminfo:=pf^.GetOrCreateSymbolInfo(symbol);
-            PSHXFont(pf^.font).FontData.LLprimitives.AlignDataSize;
-            psyminfo.{addr}LLPrimitiveStartIndex:=PSHXFont(pf^.font).FontData.LLprimitives{SHXdata}.Count;//----//
+            TZESHXFontImpl(pf^.font).FontData.LLprimitives.AlignDataSize;
+            psyminfo.LLPrimitiveStartIndex:=TZESHXFontImpl(pf^.font).FontData.LLprimitives{SHXdata}.Count;//----//
             onlyver:=0;
             sizeshx:=0;
             draw:=true;
-            baselen:=1/PSHXFont(pf^.font).h;
+            baselen:=1/TZESHXFontImpl(pf^.font).h;
             stackheap:=-1;
             x:=0;
             y:=0;
@@ -250,7 +250,7 @@ begin
                         offset.GeomIndexOffset:=VDCopyResultParam.EID.GeomIndexMin-VDCopyParam.EID.GeomIndexMin;
                         offset.IndexsIndexOffset:=VDCopyResultParam.EID.IndexsIndexMin-VDCopyParam.EID.IndexsIndexMin;
                         pf^.font.FontData.CorrectIndexes(VDCopyResultParam.LLPrimitivesStartIndex,psyminfo.LLPrimitiveCount,VDCopyResultParam.EID.IndexsIndexMin,VDCopyResultParam.EID.IndexsIndexMax-VDCopyResultParam.EID.IndexsIndexMin+1,offset);
-                        pf^.font.FontData.MulOnMatrix(VDCopyResultParam.EID.GeomIndexMin,VDCopyResultParam.EID.GeomIndexMax,MatrixMultiply(CreateScaleMatrix(CreateVertex(baselen*PSHXFont(pf^.font).h,baselen*PSHXFont(pf^.font).h,1)),CreateTranslationMatrix(CreateVertex(x,y,0))));
+                        pf^.font.FontData.MulOnMatrix(VDCopyResultParam.EID.GeomIndexMin,VDCopyResultParam.EID.GeomIndexMax,MatrixMultiply(CreateScaleMatrix(CreateVertex(baselen*TZESHXFontImpl(pf^.font).h,baselen*TZESHXFontImpl(pf^.font).h,1)),CreateTranslationMatrix(CreateVertex(x,y,0))));
                         symoutbound:=pf^.font.FontData.GetBoundingBbox(VDCopyResultParam.EID.GeomIndexMin,VDCopyResultParam.EID.GeomIndexMax);
                         ProcessMinMax(symoutbound.LBN.x,symoutbound.LBN.y);
                         ProcessMinMax(symoutbound.RTF.x,symoutbound.RTF.y);
@@ -681,11 +681,7 @@ begin
 
             result:=inccounter;
           end;
-function CreateSHXFontInstance:PSHXFont;
-begin
-     Getmem(result,sizeof(SHXFont));
-     result^.init;
-end;
+
 function createnewfontfromshx(name:String;var pf:PGDBfont):Boolean;
 var
    //f:filestream;
@@ -707,10 +703,10 @@ begin
     debugln('{D}[SHX]AUTOCAD-86 SHAPES 1.0');
     //programlog.LogOutStr('AUTOCAD-86 SHAPES 1.0',lp_OldPos,LM_Debug);
   initfont(pf,extractfilename(name));
-  pf^.font:=CreateSHXFontInstance;
+  pf^.font:=TZESHXFontImpl.Create;
   //pf.ItSHX;
   pf^.fontfile:=name;
-  pf^.font.unicode:=false;
+  //pf^.font.Unicode:=false;
   pdata:=pointer(pf);
   inc(pdata,sizeof(GDBfont));
   {test:=}memorybuf.readbyte;
@@ -740,8 +736,8 @@ begin
          if symnum=0 then
                          begin
                               pf^.Internalname:=line;
-                              PSHXFont(pf^.font).h:=memorybuf.readbyte;
-                              PSHXFont(pf^.font).u:=memorybuf.readbyte;
+                              TZESHXFontImpl(pf^.font).h:=memorybuf.readbyte;
+                              TZESHXFontImpl(pf^.font).u:=memorybuf.readbyte;
                               memorybuf.readbyte;
                               line:='';
                          end
@@ -772,7 +768,7 @@ begin
                                memorybuf.done;
                                membufcreated:=false;
                              end;
-        PSHXFont(pf^.font).FontData.Shrink;
+        TZESHXFontImpl(pf^.font).FontData.Shrink;
         //pf.compiledsize:=pf.SHXdata.Count;
   end
 else if line='AUTOCAD-86 UNIFONT 1.0' then
@@ -780,10 +776,10 @@ else if line='AUTOCAD-86 UNIFONT 1.0' then
        debugln('{D}[SHX]AUTOCAD-86 UNIFONT 1.0');
        //programlog.LogOutStr('AUTOCAD-86 UNIFONT 1.0',lp_OldPos,LM_Debug);
        initfont(pf,extractfilename(name));
-       pf^.font:=CreateSHXFontInstance;
+       pf^.font:=TZESHXFontImpl.Create;
        //pf.ItSHX;
        pf^.fontfile:=name;
-       pf^.font.unicode:=true;
+       TZESHXFontImpl(pf^.font).unicode:=true;
        pdata:=pointer(pf);
        inc(pdata,sizeof(GDBfont));
        {test:=}memorybuf.readbyte;
@@ -793,8 +789,8 @@ else if line='AUTOCAD-86 UNIFONT 1.0' then
        {symmin:=}memorybuf.readword;
 
        pf^.internalname:=memorybuf.readstring3(#0,'');
-       PSHXFont(pf^.font).h:=memorybuf.readbyte;
-       PSHXFont(pf^.font).u:=memorybuf.readbyte;
+       TZESHXFontImpl(pf^.font).h:=memorybuf.readbyte;
+       TZESHXFontImpl(pf^.font).u:=memorybuf.readbyte;
        memorybuf.readbyte;
        {test:=}memorybuf.readbyte;
        memorybuf.readbyte;
@@ -854,7 +850,7 @@ else if line='AUTOCAD-86 UNIFONT 1.0' then
 
 
   {psinfo:=}memorybuf.GetCurrentReadAddres;
-  PSHXFont(pf^.font).FontData.Shrink;
+  TZESHXFontImpl(pf^.font).FontData.Shrink;
   end
 else
     result:=false;

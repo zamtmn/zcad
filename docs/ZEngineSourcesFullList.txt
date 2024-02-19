@@ -5,12 +5,12 @@
 ..\cad_source\zengine\core\entities\*.pas
 ..\cad_source\zengine\core\objects\*.pas
 ..\cad_source\zengine\core\utils\*.pas
-..\cad_source\zengine\fileformats\*.pas	
-..\cad_source\zengine\fileformats\uzeffdxf.pas	
+..\cad_source\zengine\fileformats\*.pas
+..\cad_source\zengine\fileformats\uzeffdxf.pas
 ..\cad_source\zengine\fileformats\uzeffdxfsupport.pas
 ..\cad_source\zengine\fileformats\uzeffmanager.pas
-..\cad_source\zengine\fonts\*.pas		
-..\cad_source\zengine\misc\*.pas	
+..\cad_source\zengine\fonts\*.pas
+..\cad_source\zengine\misc\*.pas
 ..\cad_source\zengine\styles\*.pas
 ..\cad_source\zengine\zgl\*.pas
 ..\cad_source\zengine\zgl\drawers\*.pas

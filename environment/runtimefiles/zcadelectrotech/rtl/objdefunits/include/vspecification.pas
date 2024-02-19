@@ -9,7 +9,7 @@ var
    VSPECIFICATION_Article:String;(*'Код изделия'*)
    VSPECIFICATION_Factoryname:String;(*'Завод-изготовитель'*)
    VSPECIFICATION_Unit:String;(*'Единица измерения'*)
-   VSPECIFICATION_Сount:Double;(*'Количество'*)
+   VSPECIFICATION_Count:Double;(*'Количество'*)
    VSPECIFICATION_Weight:String;(*'Масса_Текст'*)
    VSPECIFICATION_Note:String;(*'Примечание'*)
    VSPECIFICATION_Grouping:String;(*'Группирование'*)

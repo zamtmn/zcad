@@ -20,13 +20,19 @@ unit uzcregfontmanager;
 {$INCLUDE zengineconfig.inc}
 interface
 uses
-  uzcsysvars,uzefontmanager,uzbpaths,uzctranslations,UUnitManager,Varman,
+  uzcsysvars,uzefontmanager,uzeFontFileFormatTTFBackend,
+  uzbpaths,uzctranslations,UUnitManager,Varman,
   TypeDescriptors,uzcLog;
 implementation
 
 initialization
 units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'PATH_Fonts','String',@sysvarPATHFontsPath);
 units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'PATH_AlternateFont','String',@sysvarAlternateFont);
+{$IF DEFINED(USELAZFREETYPETTFIMPLEMENTATION) and DEFINED(USEFREETYPETTFIMPLEMENTATION)}
+units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'RD_UseLazFreeTypeImplementation','Boolean',@sysvarTTFUseLazFreeTypeImplementation);
+sysvar.RD.RD_UseLazFreeTypeImplementation:=@sysvarTTFUseLazFreeTypeImplementation;
+{$ELSE}
+{$ENDIF}
 sysvar.PATH.Fonts_Path:=@sysvarPATHFontsPath;
 sysvar.PATH.Alternate_Font:=@sysvarAlternateFont;
 finalization

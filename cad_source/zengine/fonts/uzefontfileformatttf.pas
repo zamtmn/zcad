@@ -21,11 +21,13 @@ unit uzeFontFileFormatTTF;
 interface
 uses
   LCLProc,uzgprimitivescreator,uzgprimitives,uzglvectorobject,uzefontbase,
-  uzebeziersolver,math,uzgloglstatemanager,uzegluinterface,TTTypes,TTObjs,
+  uzebeziersolver,math,uzgloglstatemanager,uzegluinterface,
   usimplegenerics,EasyLazFreeType,uzbstrproc,sysutils,
   uzegeometrytypes,uzbtypes,uzegeometry,gzctnrSTL,gzctnrVectorTypes,uzbLogIntf,
   uzeFontFileFormatTTFBackend,
-  uzeFontFileFormatTTFBackendLFT,uzeFontFileFormatTTFBackendFT,Types;
+  {$IFDEF USELAZFREETYPETTFIMPLEMENTATION}uzeFontFileFormatTTFBackendLFT,{$ENDIF}
+  {$IFDEF USEFREETYPETTFIMPLEMENTATION}uzeFontFileFormatTTFBackendFT,{$ENDIF}
+  Types;
 type
   TTTFSymInfo=record
     GlyphIndex:Integer;
@@ -37,7 +39,6 @@ type
     private
       TTFImplementation:TTTFBackend;
     public
-      //TTFImplementation:TFreeTypeFont;
       MapChar:TMapChar;
       function GetOrReplaceSymbolInfo(symbol:Integer):PGDBsymdolinfo;override;
       function GetSymbolInfo(symbol:Integer):PGDBsymdolinfo;virtual;
@@ -65,8 +66,6 @@ var
   trmode:TTriangulationMode;
   CurrentLLentity:TArrayIndex;
   triangle:array[0..2] of integer;
-
-  TTFBackend:TTTFBackends;
 procedure TessErrorCallBack(error: Cardinal;v2: Pdouble);{$IFDEF Windows}stdcall{$ELSE}cdecl{$ENDIF};
 begin
      error:=error;
@@ -147,9 +146,6 @@ procedure cfeatettfsymbol(const chcode:integer;var si:TTTFSymInfo; pttf:TZETFFFo
 var
    i,j:integer;
    GenGlyph:TGlyphData;
-   //glyph:TFreeTypeGlyph;
-   //_glyph:PGlyph;
-   //x,y:fontfloat;
    cends,lastoncurve:integer;
    startcountur:boolean;
    k:Double;
@@ -311,7 +307,7 @@ begin
     result:=nil;
 end;
 
-function TZETFFFontImpl.GetOrReplaceSymbolInfo(symbol:Integer{//-ttf-//; var TrianglesDataInfo:TTrianglesDataInfo}):PGDBsymdolinfo;
+function TZETFFFontImpl.GetOrReplaceSymbolInfo(symbol:Integer):PGDBsymdolinfo;
 var
   CharIterator:TMapChar.TIterator;
   si:TTTFSymInfo;
@@ -340,5 +336,14 @@ begin
 end;
 
 initialization
- TTFBackend:=TTTFBackendFreeType;//TTTFBackendFreeType;
+{$IF DEFINED(USELAZFREETYPETTFIMPLEMENTATION) and DEFINED(USEFREETYPETTFIMPLEMENTATION)}
+  if sysvarTTFUseLazFreeTypeImplementation then
+    TTFBackend:=TTTFBackendLazFreeType
+  else
+    TTFBackend:=TTTFBackendFreeType;
+{$ELSEIF DEFINED(USELAZFREETYPETTFIMPLEMENTATION)}
+  TTFBackend:=TTTFBackendLazFreeType;
+{$ELSEIF DEFINED(USEFREETYPETTFIMPLEMENTATION)}
+  TTFBackend:=TTTFBackendFreeType;
+{$ENDIF}
 end.

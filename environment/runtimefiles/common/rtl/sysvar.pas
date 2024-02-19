@@ -40,6 +40,7 @@ var
   RD_ID_Enabled:Boolean;
   RD_ID_PrefferedRenderTime:Integer;
   RD_ID_MaxDegradationFactor:Double;
+  RD_UseLazFreeTypeImplementation:Boolean;
   DISP_RemoveSystemCursorFromWorkArea:Boolean;
   DSGN_SelNew:Boolean;
   DWG_EditInSubEntry:Boolean;
@@ -141,6 +142,7 @@ begin
   RD_ID_Enabled:=False;
   RD_ID_PrefferedRenderTime:=20;
   RD_ID_MaxDegradationFactor:=0;
+  RD_UseLazFreeTypeImplementation:=False;
   DISP_RemoveSystemCursorFromWorkArea:=True;
   DSGN_SelNew:=False;
   DWG_EditInSubEntry:=False;

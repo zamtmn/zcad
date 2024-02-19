@@ -72,6 +72,11 @@ type
       property CapHeight: single read GetCapHeight;
       property Glyph[Index: integer]: TGlyphData read GetGlyph;
   end;
+var
+  TTFBackend:TTTFBackends;
+  {$IF DEFINED(USELAZFREETYPETTFIMPLEMENTATION) and DEFINED(USEFREETYPETTFIMPLEMENTATION)}
+  sysvarTTFUseLazFreeTypeImplementation:boolean=false;
+  {$ENDIF}
 implementation
 function TTTFBackend.TTFImplDummyGlobalScale:Double;
 begin

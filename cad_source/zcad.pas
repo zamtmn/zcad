@@ -39,10 +39,10 @@ uses
 
   Interfaces,forms, classes,LCLVersion,
   uzclog,uzcreglog,
-  uzcfsplash,
+  uzcSysInfo,uzcfsplash,
   uzcsysvars,
 
-  uzcsysparams,uzcSysInfo,uzcPathMacros,
+  uzcsysparams,uzcPathMacros,
   uzbpaths,uzbCommandLineParser,uzcCommandLineParser,
 
   varman,

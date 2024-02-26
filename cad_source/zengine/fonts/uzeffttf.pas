@@ -49,6 +49,14 @@ begin
   pf^.family:=ttf.TTFImpl.Family;
   pf^.fullname:=ttf.TTFImpl.FullName;
 
+  //символ для замены отсутствующих символов
+  ttf.DefaultChar:=TTFFileParams.DefaultChar;
+
+  //символ 0 с глифом 0 на случай если DefaultChar врет
+  si.GlyphIndex:=0;
+  si.PSymbolInfo:=nil;
+  ttf.MapChar.Insert(0,si);
+
   ttf.TTFImpl.SizeInPoints:=10000;
   for i:=TTFFileParams.FirstCharIndex to TTFFileParams.LastCharIndex do begin
     chcode:=ttf.TTFImpl.CharIndex[i];

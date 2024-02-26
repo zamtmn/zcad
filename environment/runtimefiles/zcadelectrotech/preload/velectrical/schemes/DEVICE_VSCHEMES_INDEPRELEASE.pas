@@ -1,4 +1,4 @@
-unit DEVICE_VSCHEMES_QS_N;
+unit DEVICE_VSCHEMES_INDEPRELEASE;
 
 interface
 
@@ -16,8 +16,8 @@ implementation
 begin
 
 VSCHEMAUGOtext:='??\P??\P??';
-VSPECIFICATION_Position:='QS+N';
-VSPECIFICATION_Name:='Выключатель нагрузки, 4P';
+VSPECIFICATION_Position:='';
+VSPECIFICATION_Name:='Расцепитель независимый';
 VSPECIFICATION_Brand:='';
 VSPECIFICATION_Article:='';
 VSPECIFICATION_Factoryname:='';
@@ -27,5 +27,4 @@ VSPECIFICATION_Weight:='';
 VSPECIFICATION_Note:='';
 VSPECIFICATION_Grouping:='??';
 VSPECIFICATION_Belong:='';
-
 end.

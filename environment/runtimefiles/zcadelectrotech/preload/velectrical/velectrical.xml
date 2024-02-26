@@ -10,8 +10,18 @@
 			  <ZTreeCommand Command="Insert(DEVICE_VSCHEMA_PANEL_OUT)"/> 
 			</ZTreeNode>
 		    <ZTreeNode Caption='Shield devices'>
-			  <ZTreeCommand Command="Insert(DEVICE_VSCHEMES_QS)"/>
-			  <ZTreeCommand Command="Insert(DEVICE_VSCHEMES_QS_N)"/> 
+			  <ZTreeCommand Command="Insert(DEVICE_VSCHEMES_QF)" Caption='Автоматический выключатель' />
+			  <ZTreeCommand Command="Insert(DEVICE_VSCHEMES_QF_N)" Caption='Автоматический выключатель, 4P' />
+			  <ZTreeCommand Command="Insert(DEVICE_VSCHEMES_QS)" Caption='Выключатель нагрузки' />
+			  <ZTreeCommand Command="Insert(DEVICE_VSCHEMES_QS_N)" Caption='Выключатель нагрузки, 4P'/> 
+			  <ZTreeCommand Command="Insert(DEVICE_VSCHEMES_QFD)" Caption='АВДТ' />
+			  <ZTreeCommand Command="Insert(DEVICE_VSCHEMES_AFDD)" Caption='УЗДП' />
+			  <ZTreeCommand Command="Insert(DEVICE_VSCHEMES_QD)" Caption='УЗО' />
+			  <ZTreeCommand Command="Insert(DEVICE_VSCHEMES_INDEPRELEASE)" Caption='Расцепитель независимый' />
+			  <ZTreeCommand Command="Insert(DEVICE_VSCHEMES_FU)" Caption='Предохранители (плавкие вставки)' />			  
+			  <ZTreeCommand Command="Insert(DEVICE_VSCHEMES_TT)" Caption='Трансформатор тока' />
+			  <ZTreeCommand Command="Insert(DEVICE_VSCHEMES_WH)" Caption='Счетчик электроэнергии' />
+			  <ZTreeCommand Command="Insert(DEVICE_VSCHEMES_BU)" Caption='Ящик управления' />
 			</ZTreeNode>			
         </ZTreeNode>
 		<ZTreeCommand Command="extdrAdd(extdrLayerControl)" Caption='Доб. расшир. упр. слоем'/>

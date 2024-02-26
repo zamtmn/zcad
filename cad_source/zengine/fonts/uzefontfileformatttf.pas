@@ -40,6 +40,7 @@ type
       TTFImplementation:TTTFBackend;
     public
       MapChar:TMapChar;
+      DefaultChar:Integer;
       function GetOrReplaceSymbolInfo(symbol:Integer):PGDBsymdolinfo;override;
       function GetSymbolInfo(symbol:Integer):PGDBsymdolinfo;virtual;
       procedure ProcessTriangleData(si:PGDBsymdolinfo);
@@ -316,7 +317,12 @@ begin
   if result=nil then begin
     if symbol=8709 then
       exit(GetOrReplaceSymbolInfo(216));
-    result:=GetSymbolInfo(ord('?'));
+    if DefaultChar<>-1 then begin
+      result:=GetSymbolInfo(DefaultChar);//символ для подстановки оссутствующих глифов
+      if result=nil then //не нашли? тогда всетаки нулевой глиф
+        result:=GetSymbolInfo(0);//символ 0 с глифом 0 для подстановки оссутствующих глифов подготовлен при загрузке шрифта
+    end else
+      result:=GetSymbolInfo(0);//символ 0 с глифом 0 для подстановки оссутствующих глифов подготовлен при загрузке шрифта
     if result=nil then begin
       CharIterator:=MapChar.Min;
       if CharIterator<>nil then begin

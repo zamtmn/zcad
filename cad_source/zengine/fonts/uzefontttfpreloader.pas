@@ -381,6 +381,7 @@ begin
     AStream.Seek(TableDirEntries[os2tableindex].Offset,soBeginning);
     StartOffs:=TableDirEntries[os2tableindex].Offset;
     OS2Table:=default(TOS2Table);
+    OS2Table.usDefaultChar:=-1;
     OS2Table.version:=BEtoN(AStream.GET_UShort);
     OS2Table.xAvgCharWidth:=BEtoN(AStream.GET_Short);
     OS2Table.usWeightClass:=BEtoN(AStream.GET_UShort);

@@ -23,7 +23,7 @@ begin
    VSPECIFICATION_Article:='';
    VSPECIFICATION_Factoryname:='';
    VSPECIFICATION_Unit:='';
-   VSPECIFICATION_Сount:=1;
+   VSPECIFICATION_Count:=1;
    VSPECIFICATION_Weight:='';
    VSPECIFICATION_Note:='';
    VSPECIFICATION_Grouping:='??';

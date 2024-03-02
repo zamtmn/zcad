@@ -47,18 +47,27 @@ uses
   uzccomdraw,UGDBSelectedObjArray,uzeentdevice,uzgldrawcontext,
   uzcenitiesvariablesextender,uzbstrproc;
 type
+
   TST=(
-          TST_YX(*'Y-X'*),
-          TST_XY(*'X-Y'*),
-          TST_UNSORTED(*'Unsorted'*)
-         );
+       TST_YX(*'Y-X'*),
+       TST_XY(*'X-Y'*),
+       TST_UNSORTED(*'Unsorted'*)
+      );
+
+  TSpatiallyNumberingParam=record
+    SortMode:TST;(*'Sorting'*)
+    InverseX:Boolean;(*'Inverse X axis dir'*)
+    InverseY:Boolean;(*'Inverse Y axis dir'*)
+    DeadDand:Double;(*'Deadband'*)
+  end;
 
   PTNumberingParams=^TNumberingParams;
   TNumberingParams=record
-                     SortMode:TST;(*'Sorting'*)
-                     InverseX:Boolean;(*'Inverse X axis dir'*)
-                     InverseY:Boolean;(*'Inverse Y axis dir'*)
-                     DeadDand:Double;(*'Deadband'*)
+                     //SortMode:TST;(*'Sorting'*)
+                     Spatially:TSpatiallyNumberingParam;
+                     //InverseX:Boolean;(*'Inverse X axis dir'*)
+                     //InverseY:Boolean;(*'Inverse Y axis dir'*)
+                     //DeadDand:Double;(*'Deadband'*)
                      StartNumber:Integer;(*'Start'*)
                      Increment:Integer;(*'Increment'*)
                      SaveStart:Boolean;(*'Save start number'*)
@@ -116,13 +125,13 @@ begin
      repeat
            if psd^.objaddr^.GetObjType=GDBDeviceID then
            begin
-                case NumberingParams.SortMode of
+                case NumberingParams.Spatially.SortMode of
                                                 TST_YX,TST_UNSORTED:
                                                        begin
                                                        dcoord.coord:=PGDBObjDevice(psd^.objaddr)^.P_insert_in_WCS;
-                                                       if NumberingParams.InverseX then
+                                                       if NumberingParams.Spatially.InverseX then
                                                                                        dcoord.coord.x:=-dcoord.coord.x;
-                                                       if NumberingParams.InverseY then
+                                                       if NumberingParams.Spatially.InverseY then
                                                                                        dcoord.coord.y:=-dcoord.coord.y;
                                                        end;
                                                 TST_XY:
@@ -130,9 +139,9 @@ begin
                                                             dcoord.coord.x:=PGDBObjDevice(psd^.objaddr)^.P_insert_in_WCS.y;
                                                             dcoord.coord.y:=PGDBObjDevice(psd^.objaddr)^.P_insert_in_WCS.x;
                                                             dcoord.coord.z:=PGDBObjDevice(psd^.objaddr)^.P_insert_in_WCS.z;
-                                                            if NumberingParams.InverseX then
+                                                            if NumberingParams.Spatially.InverseX then
                                                                                             dcoord.coord.y:=-dcoord.coord.y;
-                                                            if NumberingParams.InverseY then
+                                                            if NumberingParams.Spatially.InverseY then
                                                                                             dcoord.coord.x:=-dcoord.coord.x;
                                                        end;
                                                end;{case}
@@ -150,8 +159,8 @@ begin
                          exit;
                     end;
      index:=NumberingParams.StartNumber;
-     if NumberingParams.SortMode<>TST_UNSORTED then begin
-       TGDBVertexLess.deadband:=NumberingParams.DeadDand;
+     if NumberingParams.Spatially.SortMode<>TST_UNSORTED then begin
+       TGDBVertexLess.deadband:=NumberingParams.Spatially.DeadDand;
        devcoordsort.Sort(mpd,mpd.Size);
      end;
      count:=0;
@@ -209,8 +218,12 @@ initialization
   programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
   SysUnit^.RegisterType(TypeInfo(TST));
   SysUnit^.SetTypeDesk(TypeInfo(TST),['Y-X','X-Y','Unsorted']);
+
+  SysUnit^.RegisterType(TypeInfo(TSpatiallyNumberingParam));
+  SysUnit^.SetTypeDesk(TypeInfo(TSpatiallyNumberingParam),['Sorting','Inverse X axis dir','Inverse Y axis dir','Deadband']);
+
   SysUnit^.RegisterType(TypeInfo(TNumberingParams));
-  SysUnit^.SetTypeDesk(TypeInfo(TNumberingParams),['Sorting','Inverse X axis dir','Inverse Y axis dir','Deadband','Start',
+  SysUnit^.SetTypeDesk(TypeInfo(TNumberingParams),['Spatially Numbering Param','Start',
                                                    'Increment','Save start number','Base name sorting devices','Number variable']);
   SysUnit^.RegisterType(TypeInfo(PTNumberingParams));
 
@@ -218,11 +231,11 @@ initialization
   NumberingParams.Increment:=1;
   NumberingParams.StartNumber:=1;
   NumberingParams.SaveStart:=false;
-  NumberingParams.DeadDand:=10;
+  NumberingParams.Spatially.DeadDand:=10;
   NumberingParams.NumberVar:='NMO_Suffix';
-  NumberingParams.InverseX:=false;
-  NumberingParams.InverseY:=true;
-  NumberingParams.SortMode:=TST_YX;
+  NumberingParams.Spatially.InverseX:=false;
+  NumberingParams.Spatially.InverseY:=true;
+  NumberingParams.Spatially.SortMode:=TST_YX;
   NumberCom.init('NumDevices',CADWG,0);
   NumberCom.SetCommandParam(@NumberingParams,'PTNumberingParams');
 finalization

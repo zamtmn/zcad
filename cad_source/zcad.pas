@@ -225,7 +225,7 @@ uses
   uzccommand_dataexport,uzccommand_dataimport,
   uzccommand_extdrentslist,uzccommand_extdralllist,uzccommand_extdrAdd,uzccommand_extdrRemove,
   uzccommand_DevDefSync,
-  uzccommand_VariablesAdd,
+  uzccommand_VariablesAdd,uzccommand_VarValueCopy,
 
   uzccommand_dbgRaiseException,uzccommand_dbgGetAV,uzccommand_dbgGetOutOfMem,uzccommand_dbgGetStackOverflow,
   uzccommand_dbgPlaceAllBlocks,

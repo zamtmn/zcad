@@ -713,6 +713,8 @@ var
       cableNowMF:PGDBObjCable;
       iHaveParam:boolean;
 
+      node:PTNodeProp;
+
       function getMainFuncCable(devNowvarext:TVariablesExtender):PGDBObjCable;
       begin
         result:=nil;
@@ -776,11 +778,41 @@ var
                        if cableNowMF <> nil then
                        begin    //кабель
                          // Проверяем совпадает имя группы подключения внутри устройства с группой которую мы сейчас заполняем
+
+                         if cellValueVar = 'zdevstart' then
+                            begin
+                             //node:= cableNowMF^.NodePropArray[0];
+
+                             if cableNowMF^.NodePropArray[0].DevLink <> nil then begin
+                                 pvd2:=FindVariableInEnt(PGDBObjDevice(cableNowMF^.NodePropArray[0].DevLink^.bp.ListPos.Owner),velec_nameDevice);
+                                 if pvd2<>nil then begin
+                                   iHaveParam:=true;
+                                   textCell:=pvd2^.data.ptd^.GetValueAsString(pvd2^.data.Addr.Instance);
+                                 //textCell:= PGDBObjDevice(node^.DevLink^.bp.ListPos.Owner);      //получаем устройство ота коннектора
+                                 end;
+                             end;
+                            end;
+                         //ZCMsgCallBackInterface.TextMessage('значение ячейки zdevstart = ' + textCell,TMWOHistoryOut);
+                           if cellValueVar = 'zdevfinish' then
+                              begin
+                               //node:= cableNowMF^.NodePropArray[cableNowMF^.NodePropArray.count-1];
+                               if cableNowMF^.NodePropArray[cableNowMF^.NodePropArray.count-1].DevLink <> nil then begin
+                                   pvd2:=FindVariableInEnt(PGDBObjDevice(cableNowMF^.NodePropArray[cableNowMF^.NodePropArray.count-1].DevLink^.bp.ListPos.Owner),velec_nameDevice);
+                                   if pvd2<>nil then begin
+                                     iHaveParam:=true;
+                                     textCell:=pvd2^.data.ptd^.GetValueAsString(pvd2^.data.Addr.Instance);
+                                   //textCell:= PGDBObjDevice(node^.DevLink^.bp.ListPos.Owner);      //получаем устройство ота коннектора
+                                   end;
+                               end;
+                              end;
+                         //ZCMsgCallBackInterface.TextMessage('значение ячейки zdevfinish = ' + textCell,TMWOHistoryOut);
+
                          pvd:=FindVariableInEnt(cableNowMF,cellValueVar);
                          if pvd<>nil then begin
                             iHaveParam:=true;
                             textCell:=pvd^.data.ptd^.GetValueAsString(pvd^.data.Addr.Instance);
                          end;
+                         //ZCMsgCallBackInterface.TextMessage('значение ячейки zdevfinish2 = ' + textCell,TMWOHistoryOut);
                        end
                        else
                        begin   //полилиния
@@ -797,6 +829,7 @@ var
                          if iHaveParam then
                          begin
                            //textCell:=uzbstrproc.Tria_AnsiToUtf8(textCell);
+
                            uzvzcadxlsxole.setCellValue(nameSheet,stRowNew,stColNew,textCell);
                          end else uzvzcadxlsxole.copyCell(nameEtalon,stRow,stColNew,nameSheet,stRowNew,stColNew);
 
@@ -1048,6 +1081,8 @@ procedure generatorSheet(graphDev:TGraphDev;nameEtalon,nameSheet:string);
             pvd:=FindVariableInEnt(graphDev.Root.getDevice,uzvconsts.velec_nametemplatesxlsx);
             if pvd<>nil then
               nameSET:=pstring(pvd^.data.Addr.Instance)^; // Имя устройства
+
+            //nameSET:='<zlight>';
 
             ZCMsgCallBackInterface.TextMessage('Имя заполняемого листа = '+nameSET,TMWOHistoryOut);
 

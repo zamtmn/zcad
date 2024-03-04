@@ -855,7 +855,9 @@ class procedure TGZParser<GManipulator,GParserString,GParserSymbol,GManipulatorC
                 TGeneralParsedText.GetResultWithPart(const  Src:GParserString;var APart:TParserTokenizer.TTextPart;data:GDataType;var Res:GParserString;var ResultParam:GManipulatorCharRange);
 begin
   if APart.TokenInfo.ProcessorClass=nil then
-    Raise Exception.CreateFmt(rsProcessorClassNilError,[GManipulator.GetHumanReadableAdress(APart.TextInfo.TokenPos.P)]);
+    //пустая строка - обход https://gitlab.com/freepascal.org/fpc/source/-/issues/39387
+    //todo: убрать после закрытия бага
+    Raise Exception.CreateFmt('%s '+rsProcessorClassNilError,['',GManipulator.GetHumanReadableAdress(APart.TextInfo.TokenPos.P)]);
   if APart.TokenInfo.ProcessorClass.GetProcessorType=PTStatic then begin
     APart.TokenInfo.ProcessorClass.staticGetResult(Src,APart.TextInfo.TokenPos,APart.TextInfo.OperandsPos,APart.Operands,APart.TokenInfo.InsideBracketParser,Res,ResultParam,data);
   end else begin
@@ -939,7 +941,9 @@ begin
       end
     end else begin
       if not TTokenOptions.IsAllPresent(parts[i].TokenInfo.Options,TGOSeparator) then
-        Raise Exception.CreateFmt(rsRunTimeError,[GManipulator.GetHumanReadableAdress(parts[i].TextInfo.TokenPos.P)]);
+        //пустая строка - обход https://gitlab.com/freepascal.org/fpc/source/-/issues/39387
+        //todo: убрать после закрытия бага
+        Raise Exception.CreateFmt('%s '+rsRunTimeError,['',GManipulator.GetHumanReadableAdress(parts[i].TextInfo.TokenPos.P)]);
     end;
   end;
 end;

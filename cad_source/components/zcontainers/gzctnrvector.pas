@@ -116,6 +116,10 @@ GZVector{-}<T>{//}=object(TZAbsVector)
         procedure setData(index:TArrayIndex;const Value:T);
         {**Возвращает последнее значение}
         function getLast:T;
+        function getPLast:PT;
+        {**Возвращает ппервое значение}
+        function getFirst:T;
+        function getPFirst:PT;
         {**Добавить в конец массива значение, возвращает индекс добавленного значения}
         function PushBackData(const data:T):TArrayIndex;
         {**Добавить в конец массива значение если его еще нет в массиве, возвращает индекс найденного или добавленного значения}
@@ -225,7 +229,24 @@ function GZVector<T>.getLast;
 begin
   Result:=getData(count-1);
 end;
-
+function GZVector<T>.getPLast:T;
+begin
+  if count>0 then
+    Result:=@parray^[count-1]
+  else
+    Result:=nil;
+end;
+function GZVector<T>.getFirst;
+begin
+  Result:=getData(0);
+end;
+function GZVector<T>.getPFirst;
+begin
+  if count>0 then
+    Result:=PT(parray)
+  else
+    Result:=nil;
+end;
 function GZVector<T>.PushBackData(const data:T):TArrayIndex;
 begin
   if parray=nil then

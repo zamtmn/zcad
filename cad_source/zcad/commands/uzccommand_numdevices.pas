@@ -45,44 +45,106 @@ uses
   Varman, varmandef,
   uzcLog,uzctnrvectorgdbpalettecolor,
   uzccomdraw,UGDBSelectedObjArray,uzeentdevice,uzgldrawcontext,
-  uzcenitiesvariablesextender,uzbstrproc;
+  uzegeometrytypes,uzegeometry,uzeentwithlocalcs,garrayutils,
+  uzcenitiesvariablesextender,uzbstrproc,gzctnrSTL,Generics.Collections;
 type
+  TAlgoType=(AT_Area,AT_Perimetr);
+  PTPerimetrNumberingParam=^TPerimetrNumberingParam;
+  TPerimetrNumberingParam=record
+    StartAngle:Double;
+    Clockwise:Boolean;
+  end;
+
 
   TST=(
        TST_YX(*'Y-X'*),
        TST_XY(*'X-Y'*),
        TST_UNSORTED(*'Unsorted'*)
       );
-
-  TSpatiallyNumberingParam=record
+  PTAreaNumberingParam=^TAreaNumberingParam;
+  TAreaNumberingParam=record
     SortMode:TST;(*'Sorting'*)
     InverseX:Boolean;(*'Inverse X axis dir'*)
     InverseY:Boolean;(*'Inverse Y axis dir'*)
     DeadDand:Double;(*'Deadband'*)
   end;
 
+
   PTNumberingParams=^TNumberingParams;
   TNumberingParams=record
                      //SortMode:TST;(*'Sorting'*)
-                     Spatially:TSpatiallyNumberingParam;
+                     AlgoType:TAlgoType;
+                     AlgoParams:TFaceTypedData;
+                     //Spatially:TAreaNumberingParam;
                      //InverseX:Boolean;(*'Inverse X axis dir'*)
                      //InverseY:Boolean;(*'Inverse Y axis dir'*)
                      //DeadDand:Double;(*'Deadband'*)
+                     OnlyDevices:Boolean;
                      StartNumber:Integer;(*'Start'*)
                      Increment:Integer;(*'Increment'*)
                      SaveStart:Boolean;(*'Save start number'*)
                      BaseName:AnsiString;(*'Base name sorting devices'*)
+                     MetricVariable:AnsiString;(*'Metric variable'*)
                      NumberVar:AnsiString;(*'Number variable'*)
                end;
   Number_com= object(CommandRTEdObject)
                          procedure CommandStart(const Context:TZCADCommandContext;Operands:TCommandOperands); virtual;
                          procedure ShowMenu;virtual;
                          procedure Run(pdata:PtrInt); virtual;
+                         procedure FormatAfterFielfmod(PField,PTypeDescriptor:Pointer);virtual;
              end;
+  TMetrixDictionary=specialize TMyMapGen<string,devcoordarray>;
+  TMetrixwithData=record
+    Metrix:string;
+    Devs:devcoordarray;
+  end;
+  TMetrixVector=specialize TMyVector<TMetrixwithData>;
+  TMetrixLess=class
+    class function c(a,b:TMetrixwithData):boolean;
+  end;
+  TMetrixVectorSort=specialize TOrderingArrayUtils<TMetrixVector,TMetrixwithData,TMetrixLess>;
+
+  PTDevCoordwithAngle=^TDevCoordwithAngle;
+  TDevCoordwithAngle=record
+    DevCoord:tdevcoord;
+    Angle:double;
+  end;
+  TDevCoordwithAngleVector=specialize TMyVector<TDevCoordwithAngle>;
+  TDevCoordwithAngleLess=class
+    class function c(a,b:TDevCoordwithAngle):boolean;
+  end;
+  TDevCoordwithAngleSort=specialize TOrderingArrayUtils<TDevCoordwithAngleVector,TDevCoordwithAngle,TDevCoordwithAngleLess>;
+
 var
    NumberCom:Number_com;
    NumberingParams:TNumberingParams;
+   AreaParam:TAreaNumberingParam;
+   PerimetrParam:TPerimetrNumberingParam;
 implementation
+class function TDevCoordwithAngleLess.c(a,b:TDevCoordwithAngle):boolean;
+begin
+  result:=a.Angle<b.Angle;
+end;
+
+class function TMetrixLess.c(a,b:TMetrixwithData):boolean;
+begin
+  result:=AnsiNaturalCompare(a.Metrix,b.Metrix)<0;
+end;
+
+procedure Number_com.FormatAfterFielfmod(PField,PTypeDescriptor:Pointer);
+begin
+  case NumberingParams.AlgoType of
+    AT_Area:begin
+      NumberingParams.AlgoParams.Instance:=@AreaParam;
+      NumberingParams.AlgoParams.PTD:=SysUnit^.TypeName2PTD('PTAreaNumberingParam');
+    end;
+    AT_Perimetr:begin
+      NumberingParams.AlgoParams.Instance:=@PerimetrParam;
+      NumberingParams.AlgoParams.PTD:=SysUnit^.TypeName2PTD('PTPerimetrNumberingParam');
+    end;
+  end;
+end;
+
 procedure Number_com.CommandStart(const Context:TZCADCommandContext;Operands:TCommandOperands);
 begin
   self.savemousemode:=drawings.GetCurrentDWG^.wa.param.md.mode;
@@ -102,140 +164,265 @@ begin
   commandmanager.DMAddMethod(rscmNumber,'Number selected devices',@run);
   commandmanager.DMShow;
 end;
+
+function IsHavePoint(pent:PGDBObjEntity;out pt:gdbvertex):boolean;
+begin
+  if IsIt(TypeOf(pent^),typeof(GDBObjWithLocalCS)) then
+    pt:=PGDBObjWithLocalCS(pent)^.P_insert_in_WCS
+  else
+    pt:=(pent^.vp.BoundingBox.LBN+pent^.vp.BoundingBox.RTF)/2;
+  result:=true;
+end;
+
+procedure FillMetrixDictionary(var md:TMetrixDictionary);
+var
+  psd:PSelectedObjDesc;
+  pt:GDBvertex;
+  pent:PGDBObjEntity;
+  ir:itrec;
+  pvd:pvardesk;
+  pdevvarext:TVariablesExtender;
+  metric:string;
+  pmpd:^devcoordarray;
+  mpd:devcoordarray;
+  process:boolean;
+begin
+  psd:=drawings.GetCurrentDWG^.SelObjArray.beginiterate(ir);
+  if psd<>nil then
+  repeat
+    if (not NumberingParams.OnlyDevices)or(psd^.objaddr^.GetObjType=GDBDeviceID) then
+      if IsHavePoint(psd^.objaddr,pt) then begin
+        pent:=pointer(psd^.objaddr);
+        pdevvarext:=pent^.specialize GetExtension<TVariablesExtender>;
+        if pdevvarext<>nil then begin
+          if NumberingParams.BaseName<>'' then begin
+            pvd:=pdevvarext.entityunit.FindVariable('NMO_BaseName');
+            if pvd<>nil then begin
+              if uppercase(pvd^.data.PTD^.GetUserValueAsString(pvd^.data.Addr.Instance))=
+                 uppercase(Tria_AnsiToUtf8(NumberingParams.BaseName)) then
+                process:=true
+              else begin
+                process:=false;
+                ZCMsgCallBackInterface.TextMessage('Device with basename "'+pvd^.data.PTD^.GetUserValueAsString(pvd^.data.Addr.Instance)+'" filtred out',TMWOHistoryOut);
+              end;
+            end
+              else begin
+                process:=true;
+                ZCMsgCallBackInterface.TextMessage('In device not found BaseName variable. Processed',TMWOHistoryOut);
+              end;
+          end else
+            process:=true;
+
+          if process then begin
+            pvd:=pdevvarext.entityunit.FindVariable(NumberingParams.NumberVar);
+            if pvd<>nil then begin
+              pvd:=pdevvarext.entityunit.FindVariable(NumberingParams.MetricVariable);
+              if pvd=nil then
+                metric:=''
+              else
+                metric:=pvd^.GetValueAsString;
+
+              if md.MyGetMutableValue(metric,pmpd) then begin
+                pmpd^.PushBack(tdevcoord.CreateRec(pt,pointer(pent)));
+              end else begin
+                mpd:=devcoordarray.Create;
+                mpd.PushBack(tdevcoord.CreateRec(pt,pointer(pent)));
+                md.Add(metric,mpd);
+              end;
+            end else
+              ZCMsgCallBackInterface.TextMessage('In device not found numbering variable, filtred out',TMWOHistoryOut);
+          end;
+        end else
+          ZCMsgCallBackInterface.TextMessage('In device not found VariablesExtender, filtred out',TMWOHistoryOut);
+      end;
+    psd:=drawings.GetCurrentDWG^.SelObjArray.iterate(ir);
+  until psd=nil;
+end;
+
+procedure AreaSort(mpd:devcoordarray);
+  function ProcessCoord(const coord:GDBVertex):GDBVertex;
+  begin
+    case AreaParam.SortMode of
+      TST_YX,TST_UNSORTED:begin
+        result:=coord;
+      end;
+      TST_XY:begin
+        result.x:=coord.y;
+        result.y:=coord.x;
+        result.z:=coord.z;
+      end;
+    end;{case}
+    if AreaParam.InverseX then
+      result.x:=-result.x;
+    if AreaParam.InverseY then
+      result.y:=-result.y;
+  end;
+var
+  i:integer;
+  pdc:^tdevcoord;
+begin
+  if AreaParam.SortMode<>TST_UNSORTED then begin
+    for i:=0 to mpd.Size-1 do begin
+      pdc:=mpd.Mutable[i];
+      pdc^.coord:=ProcessCoord(pdc^.coord);
+    end;
+    TGDBVertexLess.deadband:=AreaParam.DeadDand;
+    devcoordsort.Sort(mpd,mpd.Size);
+  end;
+end;
+
+procedure PerimetrSort(mpd:devcoordarray);
+var
+  i:integer;
+  CenterPoint:GDBvertex;
+  dcwa:TDevCoordwithAngleVector;
+  sav:GDBvertex;
+  a,aa:double;
+begin
+  CenterPoint:=NulVertex;
+  for i:=0 to mpd.Size-1 do
+    CenterPoint:=CenterPoint+mpd.Mutable[i]^.coord;
+  CenterPoint:=CenterPoint/mpd.Size;
+  aa:=PerimetrParam.StartAngle*pi/180;
+  dcwa:=TDevCoordwithAngleVector.Create;
+  dcwa.Resize(mpd.Size);
+  for i:=0 to mpd.Size-1 do
+    with dcwa.Mutable[i]^ do begin
+      DevCoord:=mpd[i];
+      sav:=(DevCoord.coord-CenterPoint).NormalizeVertex;
+      a:=uzegeometry.TwoVectorAngle(_X_yzVertex,sav);
+      if sav.y<-eps then
+        a:=2*pi-a;
+      a:=a-aa;
+      if a<-eps then
+        a:=2*pi+a;
+      if PerimetrParam.Clockwise then
+        a:=-a;
+      angle:=a;
+      a:=angle*180/pi;
+    end;
+  TDevCoordwithAngleSort.Sort(dcwa,dcwa.Size);
+  for i:=0 to mpd.Size-1 do
+    mpd.Mutable[i]^:=dcwa.Mutable[i]^.DevCoord;
+end;
+
 procedure Number_com.Run(pdata:PtrInt);
 var
-    psd:PSelectedObjDesc;
-    ir:itrec;
-    mpd:devcoordarray;
-    pdev:PGDBObjDevice;
-    //key:GDBVertex;
-    index:integer;
-    pvd:pvardesk;
-    dcoord:tdevcoord;
-    i,count:integer;
-    process:boolean;
-    DC:TDrawContext;
-    pdevvarext:TVariablesExtender;
+  index,i:integer;
+  count:integer;
+  md:TMetrixDictionary;
+  mv:TMetrixVector;
+  MWD:TMetrixWithData;
+  pair:TMetrixDictionary.TDictionaryPair;
+  DC:TDrawContext;
+  dcoord:tdevcoord;
+  pdev:PGDBObjDevice;
+  pdevvarext:TVariablesExtender;
+  pvd:pvardesk;
 begin
-     mpd:=devcoordarray.Create;
-     psd:=drawings.GetCurrentDWG^.SelObjArray.beginiterate(ir);
-     count:=0;
-     dc:=drawings.GetCurrentDWG^.CreateDrawingRC;
-     if psd<>nil then
-     repeat
-           if psd^.objaddr^.GetObjType=GDBDeviceID then
-           begin
-                case NumberingParams.Spatially.SortMode of
-                                                TST_YX,TST_UNSORTED:
-                                                       begin
-                                                       dcoord.coord:=PGDBObjDevice(psd^.objaddr)^.P_insert_in_WCS;
-                                                       if NumberingParams.Spatially.InverseX then
-                                                                                       dcoord.coord.x:=-dcoord.coord.x;
-                                                       if NumberingParams.Spatially.InverseY then
-                                                                                       dcoord.coord.y:=-dcoord.coord.y;
-                                                       end;
-                                                TST_XY:
-                                                       begin
-                                                            dcoord.coord.x:=PGDBObjDevice(psd^.objaddr)^.P_insert_in_WCS.y;
-                                                            dcoord.coord.y:=PGDBObjDevice(psd^.objaddr)^.P_insert_in_WCS.x;
-                                                            dcoord.coord.z:=PGDBObjDevice(psd^.objaddr)^.P_insert_in_WCS.z;
-                                                            if NumberingParams.Spatially.InverseX then
-                                                                                            dcoord.coord.y:=-dcoord.coord.y;
-                                                            if NumberingParams.Spatially.InverseY then
-                                                                                            dcoord.coord.x:=-dcoord.coord.x;
-                                                       end;
-                                               end;{case}
-                dcoord.pdev:=pointer(psd^.objaddr);
-                inc(count);
-                mpd.PushBack(dcoord);
-           end;
-     psd:=drawings.GetCurrentDWG^.SelObjArray.iterate(ir);
-     until psd=nil;
-     if count=0 then
-                    begin
-                         ZCMsgCallBackInterface.TextMessage('In selection not found devices',TMWOHistoryOut);
-                         mpd.Destroy;
-                         Commandmanager.executecommandend;
-                         exit;
-                    end;
-     index:=NumberingParams.StartNumber;
-     if NumberingParams.Spatially.SortMode<>TST_UNSORTED then begin
-       TGDBVertexLess.deadband:=NumberingParams.Spatially.DeadDand;
-       devcoordsort.Sort(mpd,mpd.Size);
-     end;
-     count:=0;
-     for i:=0 to mpd.Size-1 do
-       begin
-            dcoord:=mpd[i];
-            pdev:=dcoord.pdev;
-            pointer(pdevvarext):=pdev^.specialize GetExtension<TVariablesExtender>;
+  md:=TMetrixDictionary.Create;
+  FillMetrixDictionary(md);
+  count:=0;
 
-            if NumberingParams.BaseName<>'' then
-            begin
-            //pvd:=PTEntityUnit(pdev^.ou.Instance)^.FindVariable('NMO_BaseName');
-            pvd:=pdevvarext.entityunit.FindVariable('NMO_BaseName');
-            if pvd<>nil then
-            begin
-            if uppercase(pvd^.data.PTD^.GetUserValueAsString(pvd^.data.Addr.Instance))=
-               uppercase(Tria_AnsiToUtf8(NumberingParams.BaseName)) then
-                                                       process:=true
-                                                   else
-                                                       process:=false;
-            end
-               else
-                   begin
-                        process:=true;
-                        ZCMsgCallBackInterface.TextMessage('In device not found BaseName variable. Processed',TMWOHistoryOut);
-                   end;
-            end
-               else
-                   process:=true;
-            if process then
-            begin
-            //pvd:=PTEntityUnit(pdev^.ou.Instance)^.FindVariable(NumberingParams.NumberVar);
-            pvd:=pdevvarext.entityunit.FindVariable(NumberingParams.NumberVar);
-            if pvd<>nil then
-            begin
-                 pvd^.data.PTD^.SetValueFromString(pvd^.data.Addr.Instance,inttostr(index));
-                 inc(index,NumberingParams.Increment);
-                 inc(count);
-                 pdev^.FormatEntity(drawings.GetCurrentDWG^,dc);
-            end
-               else
-               ZCMsgCallBackInterface.TextMessage('In device not found numbering variable',TMWOHistoryOut);
-            end
-            else
-                ZCMsgCallBackInterface.TextMessage('Device with basename "'+pvd^.data.PTD^.GetUserValueAsString(pvd^.data.Addr.Instance)+'" filtred out',TMWOHistoryOut);
-       end;
-     ZCMsgCallBackInterface.TextMessage(sysutils.format(rscmNEntitiesProcessed,[count]),TMWOHistoryOut);
-     if NumberingParams.SaveStart then
-                                      NumberingParams.StartNumber:=index;
-     mpd.Destroy;
-     Commandmanager.executecommandend;
+  if md.Count=0 then begin
+    ZCMsgCallBackInterface.TextMessage('In selection not found devices',TMWOHistoryOut);
+    md.Destroy;
+    Commandmanager.executecommandend;
+    exit;
+  end;
+
+  dc:=drawings.GetCurrentDWG^.CreateDrawingRC;
+  count:=0;
+
+
+  mv:=TMetrixVector.Create;
+  mv.Resize(md.Count);
+  i:=0;
+  for pair in md do begin
+    with mv.Mutable[i]^ do begin
+      Metrix:=pair.Key;
+      Devs:=pair.Value;
+    end;
+    inc(i);
+  end;
+
+  TMetrixVectorSort.Sort(mv,mv.Size);
+
+  for MWD in mv do begin
+    index:=NumberingParams.StartNumber;
+
+    if NumberingParams.AlgoType=AT_Area then
+      AreaSort(MWD.Devs)
+    else
+      PerimetrSort(MWD.Devs);
+
+    for i:=0 to MWD.Devs.Size-1 do begin
+      dcoord:=MWD.Devs[i];
+      pdev:=dcoord.pdev;
+      pointer(pdevvarext):=pdev^.specialize GetExtension<TVariablesExtender>;
+
+      pvd:=pdevvarext.entityunit.FindVariable(NumberingParams.NumberVar);
+      if pvd<>nil then begin
+        pvd^.data.PTD^.SetValueFromString(pvd^.data.Addr.Instance,inttostr(index));
+        inc(index,NumberingParams.Increment);
+        inc(count);
+        pdev^.FormatEntity(drawings.GetCurrentDWG^,dc);
+      end
+    end;
+
+    if NumberingParams.SaveStart then
+      NumberingParams.StartNumber:=index;
+  end;
+
+  ZCMsgCallBackInterface.TextMessage(sysutils.format(rscmNEntitiesProcessed,[count]),TMWOHistoryOut);
+  md.Destroy;
+  Commandmanager.executecommandend;
 end;
 
 initialization
   programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
+
+  SysUnit^.RegisterType(TypeInfo(TAlgoType));
+  SysUnit^.RegisterType(TypeInfo(TPerimetrNumberingParam));
+  SysUnit^.SetTypeDesk(TypeInfo(TPerimetrNumberingParam),['StartAngle','Clockwise']);
+  SysUnit^.RegisterType(TypeInfo(PTPerimetrNumberingParam));
+
   SysUnit^.RegisterType(TypeInfo(TST));
   SysUnit^.SetTypeDesk(TypeInfo(TST),['Y-X','X-Y','Unsorted']);
 
-  SysUnit^.RegisterType(TypeInfo(TSpatiallyNumberingParam));
-  SysUnit^.SetTypeDesk(TypeInfo(TSpatiallyNumberingParam),['Sorting','Inverse X axis dir','Inverse Y axis dir','Deadband']);
+  SysUnit^.RegisterType(TypeInfo(TAreaNumberingParam));
+  SysUnit^.SetTypeDesk(TypeInfo(TAreaNumberingParam),['Sorting','Inverse X axis dir','Inverse Y axis dir','Deadband']);
+  SysUnit^.RegisterType(TypeInfo(PTAreaNumberingParam));
+
+  SysUnit^.RegisterType(TypeInfo(TAlgoType));
+  SysUnit^.SetTypeDesk(TypeInfo(TAlgoType),['Area','Perimetral']);
+
 
   SysUnit^.RegisterType(TypeInfo(TNumberingParams));
-  SysUnit^.SetTypeDesk(TypeInfo(TNumberingParams),['Spatially Numbering Param','Start',
-                                                   'Increment','Save start number','Base name sorting devices','Number variable']);
+  SysUnit^.SetTypeDesk(TypeInfo(TNumberingParams),['AlgoType','AlgoParams','Only devices','Start',
+                                                   'Increment','Save start number','Base name sorting devices','Metric variable','Number variable']);
   SysUnit^.RegisterType(TypeInfo(PTNumberingParams));
 
+  NumberingParams.AlgoParams.Instance:=@AreaParam;
+  NumberingParams.AlgoParams.PTD:=SysUnit^.TypeName2PTD('PTAreaNumberingParam');
+
+  NumberingParams.AlgoType:=AT_Area;
+
+  NumberingParams.OnlyDevices:=True;
   NumberingParams.BaseName:='??';
   NumberingParams.Increment:=1;
   NumberingParams.StartNumber:=1;
   NumberingParams.SaveStart:=false;
-  NumberingParams.Spatially.DeadDand:=10;
+  AreaParam.DeadDand:=10;
+  AreaParam.InverseX:=false;
+  AreaParam.InverseY:=true;
+  AreaParam.SortMode:=TST_YX;
+
+  PerimetrParam.Clockwise:=false;
+  PerimetrParam.StartAngle:=90;
+
+  NumberingParams.MetricVariable:='GC_HeadDevice';
   NumberingParams.NumberVar:='NMO_Suffix';
-  NumberingParams.Spatially.InverseX:=false;
-  NumberingParams.Spatially.InverseY:=true;
-  NumberingParams.Spatially.SortMode:=TST_YX;
   NumberCom.init('NumDevices',CADWG,0);
   NumberCom.SetCommandParam(@NumberingParams,'PTNumberingParams');
 finalization

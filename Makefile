@@ -180,7 +180,8 @@ else
 	echo \'$(ZCVERSION)\' > cad_source/zcadversion.inc
 endif
 	echo $(ZCVERSION) > cad_source/zcadversion.txt
-	
+	type cad_source/zcadversion.inc
+	type cad_source/zcadversion.txt
 zcad: checkvars version       
 	$(LP)$(PATHDELIM)lazbuild --pcp=$(PCP) cad_source/utils/typeexporter.lpi
 	environment/typeexporter/typeexporter pathprefix=cad_source/ outputfile=cad/rtl/system.pas processfiles=environment/typeexporter/zcad.files

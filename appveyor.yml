@@ -24,19 +24,19 @@ init:
 
 # add several platforms to build matrix:
 platform:
-  - Win32
+  - x64
 
 # Scripts that run after cloning repository
 install:
   - cmd: git submodule update --init --recursive
-  - cmd: echo Download lazarus-2.2.0-fpc-3.2.2-win32
-  - cmd: curl -fsSL -o lazarus-2.2.0-fpc-3.2.2-win32.exe "https://softslot.ru/d28bc0c/programming/file-editors/lazarus-2.2.0-fpc-3.2.2-win32.exe"
-  - cmd: echo Installing lazarus-2.2.0-fpc-3.2.2-win32
-  - cmd: lazarus-2.2.0-fpc-3.2.2-win32.exe /verysilent /supressmsgboxes
+  - cmd: echo Download lazarus-3.0-fpc-3.2.2-win64.exe
+  - cmd: curl -fsSL -o lazarus-3.0-fpc-3.2.2-win64.exe "https://sourceforge.net/projects/lazarus/files/Lazarus%20Windows%2064%20bits/Lazarus%203.0/lazarus-3.0-fpc-3.2.2-win64.exe/download"
+  - cmd: echo Installing lazarus-3.0-fpc-3.2.2-win64.exe
+  - cmd: lazarus-3.0-fpc-3.2.2-win64.exe /verysilent /supressmsgboxes
   - cmd: rmdir /S /Q c:\lazarus\docs
   - cmd: rmdir /S /Q c:\lazarus\examples
   - cmd: echo Fix https://gitlab.com/freepascal.org/lazarus/lazarus/-/issues/39630
-  - ps: (Get-Content -Path 'C:\lazarus\environmentoptions.xml') -replace '\$Lazarusdir\\','$(Lazarusdir)' | Set-Content -Path 'C:\lazarus\environmentoptions.xml'
+#  - ps: (Get-Content -Path 'C:\lazarus\environmentoptions.xml') -replace '\$Lazarusdir\\','$(Lazarusdir)' | Set-Content -Path 'C:\lazarus\environmentoptions.xml'
   - cmd: echo Installing Asciidoctor
   - cmd: gem install asciidoctor
   - cmd: gem install asciidoctor-pdf
@@ -45,14 +45,14 @@ install:
 
 # Build scripts
 build_script:
-  - cmd: C:\lazarus\fpc\3.2.2\bin\i386-win32\make.exe installpkgstolaz
-  - cmd: C:\lazarus\fpc\3.2.2\bin\i386-win32\make.exe cleanzcad
-  - cmd: C:\lazarus\fpc\3.2.2\bin\i386-win32\make.exe documentation
+  - cmd: C:\lazarus\fpc\3.2.2\bin\x86_64-win64\make.exe installpkgstolaz
+  - cmd: C:\lazarus\fpc\3.2.2\bin\x86_64-win64\make.exe cleanzcad
+  - cmd: C:\lazarus\fpc\3.2.2\bin\x86_64-win64\make.exe documentation
   - cmd: 7z a ZCAD-%APPVEYOR_REPO_COMMIT%.zip "cad"
-  - cmd: C:\lazarus\fpc\3.2.2\bin\i386-win32\make.exe cleanzcadelectrotech
-  - cmd: C:\lazarus\fpc\3.2.2\bin\i386-win32\make.exe afterzcadelectrotechbuild
-  - cmd: C:\lazarus\fpc\3.2.2\bin\i386-win32\make.exe documentation
-  - cmd: C:\lazarus\fpc\3.2.2\bin\i386-win32\make.exe tests
+  - cmd: C:\lazarus\fpc\3.2.2\bin\x86_64-win64\make.exe cleanzcadelectrotech
+  - cmd: C:\lazarus\fpc\3.2.2\bin\x86_64-win64\make.exe afterzcadelectrotechbuild
+  - cmd: C:\lazarus\fpc\3.2.2\bin\x86_64-win64\make.exe documentation
+  - cmd: C:\lazarus\fpc\3.2.2\bin\x86_64-win64\make.exe tests
 
 # scripts to run after build
 after_build:

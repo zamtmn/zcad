@@ -173,13 +173,13 @@ else
 endif
 
 version:                      
-	@echo ZCAD Version: $(ZCVERSION)
+	echo ZCAD Version: $(ZCVERSION)
 ifeq ($(OSDETECT),WIN32)
-	@echo '$(ZCVERSION)' > cad_source/zcadversion.inc
+	echo '$(ZCVERSION)' > cad_source/zcadversion.inc
 else
-	@echo \'$(ZCVERSION)\' > cad_source/zcadversion.inc
+	echo \'$(ZCVERSION)\' > cad_source/zcadversion.inc
 endif
-	@echo $(ZCVERSION) > cad_source/zcadversion.txt
+	echo $(ZCVERSION) > cad_source/zcadversion.txt
 	
 zcad: checkvars version       
 	$(LP)$(PATHDELIM)lazbuild --pcp=$(PCP) cad_source/utils/typeexporter.lpi

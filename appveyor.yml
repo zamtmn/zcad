@@ -30,7 +30,7 @@ platform:
 install:
   - cmd: git submodule update --init --recursive
   - cmd: echo Download lazarus-3.0-fpc-3.2.2-win64.exe
-  - cmd: curl -fsSL -o lazarus-3.0-fpc-3.2.2-win64.exe "https://sourceforge.net/projects/lazarus/files/Lazarus%20Windows%2064%20bits/Lazarus%203.0/lazarus-3.0-fpc-3.2.2-win64.exe/download"
+  - cmd: curl -fsSL -o lazarus-3.0-fpc-3.2.2-win64.exe "https://www.filehorse.com/download/file/Rzct89SDev-JKFzSy8JHvfSWY2G0Ph92ZQ8eIY_F8we8dz0VULQTaUdiVNwiCAJBJ0tCO-4QUnPAaUf-SsXad9HjKct4eYZcBXW07SMbKjM/"
   - cmd: echo Installing lazarus-3.0-fpc-3.2.2-win64.exe
   - cmd: lazarus-3.0-fpc-3.2.2-win64.exe /verysilent /supressmsgboxes
   - cmd: rmdir /S /Q c:\lazarus\docs

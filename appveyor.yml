@@ -30,11 +30,11 @@ platform:
 install:
   - cmd: git submodule update --init --recursive
   - cmd: echo %PATH%
-  - cmd: make --v
   - cmd: echo Download lazarus-3.0-fpc-3.2.2-win64.exe
   - cmd: curl -fsSL -o lazarus-3.0-fpc-3.2.2-win64.exe "https://fossies.org/windows/misc/lazarus-3.2-fpc-3.2.2-win64.exe"
   - cmd: echo Installing lazarus-3.0-fpc-3.2.2-win64.exe
   - cmd: lazarus-3.0-fpc-3.2.2-win64.exe /verysilent /supressmsgboxes
+  - cmd: C:\lazarus\fpc\3.2.2\bin\x86_64-win64\make.exe --v
   - cmd: rmdir /S /Q c:\lazarus\docs
   - cmd: rmdir /S /Q c:\lazarus\examples
   - cmd: echo Fix https://gitlab.com/freepascal.org/lazarus/lazarus/-/issues/39630

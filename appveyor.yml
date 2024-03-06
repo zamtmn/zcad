@@ -29,6 +29,7 @@ platform:
 # Scripts that run after cloning repository
 install:
   - cmd: git submodule update --init --recursive
+  - cmd: echo %PATH%
   - cmd: echo Download lazarus-3.0-fpc-3.2.2-win64.exe
   - cmd: curl -fsSL -o lazarus-3.0-fpc-3.2.2-win64.exe "https://fossies.org/windows/misc/lazarus-3.2-fpc-3.2.2-win64.exe"
   - cmd: echo Installing lazarus-3.0-fpc-3.2.2-win64.exe

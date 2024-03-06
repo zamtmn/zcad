@@ -175,7 +175,7 @@ endif
 version:                      
 	echo ZCAD Version: $(ZCVERSION)
 ifeq ($(OSDETECT),WIN32)
-	echo ^'$(ZCVERSION)^' > cad_source/zcadversion.inc
+	echo \'$(ZCVERSION)\' > cad_source/zcadversion.inc
 else
 	echo \'$(ZCVERSION)\' > cad_source/zcadversion.inc
 endif

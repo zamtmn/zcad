@@ -177,7 +177,7 @@ version:
 	echo quoted ZCAD Version: $(QZCVERSION)
 #	@echo $(QZCVERSION) > cad_source/zcadversion.inc
 ifeq ($(OSDETECT),WIN32)
-	cmd.exe /C echo '$(ZCVERSION)' > cad_source/zcadversion.inc
+	cmd.exe "/C echo '$(ZCVERSION)' > cad_source/zcadversion.inc"
 else
 	echo \'$(ZCVERSION)\' > cad_source/zcadversion.inc
 endif

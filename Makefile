@@ -83,7 +83,7 @@ ifeq ($(OSDETECT),WIN32)
 	ifeq ($(CPUDETECT),AMD64)
 		ZP=\cad\bin\x86_64-win64
 	else
-		ZP=\cad\bin\i386-win32
+		ZP=\cad\bin\x86_64-win64
 	endif
 else
 	ifeq ($(OSDETECT),LINUX)

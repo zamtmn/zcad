@@ -2,6 +2,7 @@
 default: cleanzcad
 
 ZCVERSION:=$(shell git describe --tags)
+QZCVERSION:='$(ZCVERSION)'
 
 OSDETECT:=
 ifeq ($(OS),Windows_NT)
@@ -174,14 +175,9 @@ endif
 
 version:                      
 	echo ZCAD Version: $(ZCVERSION)
-ifeq ($(OSDETECT),WIN32)
-	echo \'$(ZCVERSION)\' > cad_source/zcadversion.inc
-else
-	echo \'$(ZCVERSION)\' > cad_source/zcadversion.inc
-endif
-	echo $(ZCVERSION) > cad_source/zcadversion.txt
-	cat cad_source/zcadversion.inc
-	cat cad_source/zcadversion.txt
+	echo quoted ZCAD Version: $(QZCVERSION)
+	@echo $(QZCVERSION) > cad_source/zcadversion.inc
+	@echo $(ZCVERSION) > cad_source/zcadversion.txt
 zcad: checkvars version       
 	$(LP)$(PATHDELIM)lazbuild --pcp=$(PCP) cad_source/utils/typeexporter.lpi
 	environment/typeexporter/typeexporter pathprefix=cad_source/ outputfile=cad/rtl/system.pas processfiles=environment/typeexporter/zcad.files

@@ -80,9 +80,9 @@ endif
 ZP:=
 ifeq ($(OSDETECT),WIN32)
 	ifeq ($(CPUDETECT),AMD64)
-		ZP=\cad\bin\x86_64-win64
+		ZP=/cad/bin/x86_64-win64
 	else
-		ZP=\cad\bin\x86_64-win64
+		ZP=/cad/bin/x86_64-win64
 	endif
 else
 	ifeq ($(OSDETECT),LINUX)

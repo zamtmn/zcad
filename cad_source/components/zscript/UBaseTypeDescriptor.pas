@@ -65,6 +65,13 @@ TAnsiStringTypeManipulator<T>=class(TBaseTypeManipulator<T>)
   class procedure setFormattedValueAsString(var data:T; const f:TzeUnitsFormat;Value:TInternalScriptString);
   class procedure SetValueFromString(var data:T;Value:TInternalScriptString);
 end;
+TTempAnsiStringStoredIn1251TypeManipulator<T>=class(TBaseTypeManipulator<T>)
+  class function GetValueAsString(const data:T):TInternalScriptString;
+  class function GetFormattedValueAsString(const data:T; const f:TzeUnitsFormat):TInternalScriptString;
+  class procedure setFormattedValueAsString(var data:T; const f:TzeUnitsFormat;Value:TInternalScriptString);
+  class procedure SetValueFromString(var data:T;Value:TInternalScriptString);
+end;
+
 TPointerTypeManipulator<T>=class(TBaseTypeManipulator<T>)
   class function GetValueAsString(const data:T):TInternalScriptString;
   class function GetFormattedValueAsString(const data:T; const f:TzeUnitsFormat):TInternalScriptString;
@@ -137,6 +144,10 @@ TASTM_String=TAnsiStringTypeManipulator<String>;
 AnsiStringDescriptor=object(StringGeneralDescriptor<string,{TAnsiStringTypeManipulator<string>}TASTM_String>)
                           procedure SavePasToMem(var membuf:TZctnrVectorBytes;PInstance:Pointer;prefix:TInternalScriptString);virtual;
                     end;
+TAS1251TM_String=TTempAnsiStringStoredIn1251TypeManipulator<String>;
+TempAnsiString1251Descriptor=object(StringGeneralDescriptor<string,TAS1251TM_String>)
+                       //procedure SavePasToMem(var membuf:TZctnrVectorBytes;PInstance:Pointer;prefix:TInternalScriptString);virtual;
+                     end;
 TPTM_Pointer=TPointerTypeManipulator<Pointer>;
 PointerDescriptor=object(BaseTypeDescriptor<pointer,{TPointerTypeManipulator<Pointer>}TPTM_Pointer>)
                     end;
@@ -154,6 +165,7 @@ FundamentalDoubleDescriptorObj:DoubleDescriptor;
 FundamentalUnicodeStringDescriptorObj:GDBUnicodeStringDescriptor;
 FundamentalStringDescriptorObj:StringDescriptor;
 FundamentalAnsiStringDescriptorObj:AnsiStringDescriptor;
+FundamentalTempAnsiString1251DescriptorObj:TempAnsiString1251Descriptor;
 FundamentalWordDescriptorObj:TFundamentalWordDescriptor;
 FundamentalLongIntDescriptorObj:TFundamentalLongIntDescriptor;
 FundamentalByteDescriptorObj:TFundamentalByteDescriptor;
@@ -384,6 +396,24 @@ begin
 end;
 
 
+class function TTempAnsiStringStoredIn1251TypeManipulator<T>.GetValueAsString(const data:T):TInternalScriptString;
+begin
+    result:={ansi2cp}Tria_AnsiToUtf8(data);
+end;
+class function TTempAnsiStringStoredIn1251TypeManipulator<T>.GetFormattedValueAsString(const data:T; const f:TzeUnitsFormat):TInternalScriptString;
+begin
+   result:=GetValueAsString(data);
+end;
+class procedure TTempAnsiStringStoredIn1251TypeManipulator<T>.SetValueFromString(var data:T;Value:TInternalScriptString);
+begin
+     data:={cp2ansi}Tria_Utf8ToAnsi(Value);
+end;
+class procedure TTempAnsiStringStoredIn1251TypeManipulator<T>.setFormattedValueAsString(var data:T; const f:TzeUnitsFormat;Value:TInternalScriptString);
+begin
+     data:=Tria_Utf8ToAnsi(Value);
+end;
+
+
 class function TBoolTypeManipulator<T>.GetValueAsString(const data:T):TInternalScriptString;
 begin
   result:=BoolToStr(data,'True','False');
@@ -598,6 +628,7 @@ begin
      FundamentalStringDescriptorObj.init('String',nil);
      FundamentalUnicodeStringDescriptorObj.init('UnicodeString',nil);
      FundamentalAnsiStringDescriptorObj.init('AnsiString',nil);
+     FundamentalTempAnsiString1251DescriptorObj.init('AnsiString1251',nil);
 
      FundamentalDoubleDescriptorObj.init('Double',nil);
      FundamentalSingleDescriptorObj.init('Single',nil);

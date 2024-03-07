@@ -913,6 +913,7 @@ begin
      AddTypeByRef(FundamentalStringDescriptorObj);
      AddTypeByRef(FundamentalUnicodeStringDescriptorObj);
      AddTypeByRef(FundamentalAnsiStringDescriptorObj);
+     AddTypeByRef(FundamentalTempAnsiString1251DescriptorObj);
      AddTypeByRef(FundamentalSingleDescriptorObj);
      AddTypeByRef(GDBEnumDataDescriptorObj);
      AddTypeByRef(AliasIntegerDescriptorOdj);

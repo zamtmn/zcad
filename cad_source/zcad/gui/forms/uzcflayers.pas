@@ -66,7 +66,7 @@ type
     procedure ListView1SelectItem(Sender: TObject; Item: TListItem;
       Selected: Boolean);
     procedure MkCurrent(Sender: TObject);
-    procedure MaceItemCurrent(ListItem:TListItem);
+    procedure MakeItemCurrent(ListItem:TListItem);
     procedure countlayer(player:PGDBLayerProp;out e,b:Integer);
 
     procedure CreateUndoStartMarkerNeeded;
@@ -140,7 +140,7 @@ end;
 function TLayersForm.createnameeditor(Item: TListItem;r: TRect):boolean;
 begin
   //createeditor(Item,r,@PGDBLayerProp(Item.Data)^.Name);
-  result:=SupportTypedEditors.createeditor(ListView1,Item,r,PGDBLayerProp(Item.Data)^.Name,'AnsiString',@CreateUndoStartMarkerNeeded,r.Bottom-r.Top,drawings.GetUnitsFormat);
+  result:=SupportTypedEditors.createeditor(ListView1,Item,r,PGDBLayerProp(Item.Data)^.Name,'AnsiString1251',@CreateUndoStartMarkerNeeded,r.Bottom-r.Top,drawings.GetUnitsFormat);
 end;
 function TLayersForm.GetLayerName(Item: TListItem):string;
 begin
@@ -455,7 +455,7 @@ begin
 end;
   Panel1.Constraints.MinWidth:=ToolBar1.Left+ToolButton6.Left+ToolButton6.Width+CoolBar1.GrabWidth;
 end;
-procedure TLayersForm.MaceItemCurrent(ListItem:TListItem);
+procedure TLayersForm.MakeItemCurrent(ListItem:TListItem);
 begin
      if ListView1.CurrentItem<>ListItem then
      begin
@@ -479,7 +479,7 @@ begin
                                      begin
                                      if ListView1.Selected<>ListView1.CurrentItem then
                                      begin
-                                       MaceItemCurrent(ListView1.Selected);
+                                       MakeItemCurrent(ListView1.Selected);
                                        ListView1.MakeItemCorrent(ListView1.Selected);
                                        ListView1.UpdateItem2(ListView1.Selected);
                                      end;

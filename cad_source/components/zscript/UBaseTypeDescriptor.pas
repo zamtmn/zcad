@@ -398,7 +398,7 @@ end;
 
 class function TTempAnsiStringStoredIn1251TypeManipulator<T>.GetValueAsString(const data:T):TInternalScriptString;
 begin
-    result:={ansi2cp}Tria_AnsiToUtf8(data);
+    result:=Tria_AnsiToUtf8(data);
 end;
 class function TTempAnsiStringStoredIn1251TypeManipulator<T>.GetFormattedValueAsString(const data:T; const f:TzeUnitsFormat):TInternalScriptString;
 begin
@@ -406,7 +406,7 @@ begin
 end;
 class procedure TTempAnsiStringStoredIn1251TypeManipulator<T>.SetValueFromString(var data:T;Value:TInternalScriptString);
 begin
-     data:={cp2ansi}Tria_Utf8ToAnsi(Value);
+     data:=Tria_Utf8ToAnsi(Value);
 end;
 class procedure TTempAnsiStringStoredIn1251TypeManipulator<T>.setFormattedValueAsString(var data:T; const f:TzeUnitsFormat;Value:TInternalScriptString);
 begin

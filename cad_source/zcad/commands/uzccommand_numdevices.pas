@@ -375,7 +375,11 @@ begin
   end;
 
   ZCMsgCallBackInterface.TextMessage(sysutils.format(rscmNEntitiesProcessed,[count]),TMWOHistoryOut);
+  for pair in md do begin
+    pair.Value.Destroy;
+  end;
   md.Destroy;
+  mv.Destroy;
   Commandmanager.executecommandend;
 end;
 

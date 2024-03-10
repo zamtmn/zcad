@@ -16,11 +16,11 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>)
 }
 {$MODE OBJFPC}{$H+}
-unit zundoCmdChgVertex;
+unit zUndoCmdChgVertex;
 {$INCLUDE zengineconfig.inc}
 interface
 uses zeundostack,zebaseundocommands,
-     uzegeometrytypes,uzeentity,gzundoCmdChgData;
+     uzegeometrytypes,uzeentity,gzUndoCmdChgData;
 type
   TGDBVertexChangeCommand=specialize GUCmdChgData<GDBVertex,PGDBObjEntity>;
 implementation

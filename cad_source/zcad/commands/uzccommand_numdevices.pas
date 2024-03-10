@@ -22,10 +22,6 @@ unit uzccommand_NumDevices;
 interface
 uses
   gzctnrVectorTypes,
-  uzctnrvectorobjid,
-  uzctnrVectorDouble,
-  uzctnrvectorgdblineweight,
-  uzctnrVectorPointers,
   uzcstrconsts,
   uzeenttext,
   uzccommandsabstract,
@@ -34,16 +30,14 @@ uses
   uzccommandsimpl,
   uzbtypes,
   uzcdrawings,
-  uzcutils,
   sysutils,
   uzcinterface,
   uzeconsts,
   uzeentity,
   uzeentmtext,
   uzeentblockinsert,
-  uzctnrvectorstrings,
   Varman, varmandef,
-  uzcLog,uzctnrvectorgdbpalettecolor,
+  uzcLog,
   uzccomdraw,UGDBSelectedObjArray,uzeentdevice,uzgldrawcontext,
   uzegeometrytypes,uzegeometry,uzeentwithlocalcs,garrayutils,
   uzcenitiesvariablesextender,uzbstrproc,gzctnrSTL,Generics.Collections;

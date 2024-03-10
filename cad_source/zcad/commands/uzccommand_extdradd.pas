@@ -25,7 +25,7 @@ uses
   uzcLog,SysUtils,
   uzccommandsabstract,uzccommandsimpl,
   uzeentity,gzctnrVectorTypes,uzcdrawings,uzcstrconsts,uzeentityextender,
-  gzundoCmdChgMethods2,zUndoCmdSaveEntityState,uzcdrawing,
+  gzUndoCmdChgMethods2,zUndoCmdSaveEntityState,uzcdrawing,
   uzcinterface,UGDBSelectedObjArray;
 
 function extdrAdd_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;

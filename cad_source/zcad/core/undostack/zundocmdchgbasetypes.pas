@@ -16,11 +16,11 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>)
 }
 {$MODE OBJFPC}{$H+}
-unit zundoCmdChgBaseTypes;
+unit zUndoCmdChgBaseTypes;
 {$INCLUDE zengineconfig.inc}
 interface
 uses zeundostack,zebaseundocommands,
-     uzegeometrytypes,uzeentity,gzundoCmdChgData;
+     uzegeometrytypes,uzeentity,gzUndoCmdChgData;
 type
   TStringChangeCommand=specialize GUCmdChgData<String,PGDBObjEntity>;
   TGDBPoinerChangeCommand=specialize GUCmdChgData<Pointer,PGDBObjEntity>;

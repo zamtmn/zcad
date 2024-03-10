@@ -87,7 +87,7 @@ uses
                       //разные функции упрощающие создание примитивов, пока их там очень мало
   varmandef,
   Varman,
-  zundoCmdChgBaseTypes,zundoCmdChgVertex,
+  zUndoCmdChgBaseTypes,zUndoCmdChgVertex,
 
   uzcstrconsts,       //resouce strings
 

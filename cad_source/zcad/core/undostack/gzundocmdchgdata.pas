@@ -16,7 +16,7 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>)
 }
 {$MODE OBJFPC}{$H+}
-unit gzundoCmdChgData;
+unit gzUndoCmdChgData;
 {$INCLUDE zengineconfig.inc}
 interface
 uses zeundostack,zebaseundocommands;

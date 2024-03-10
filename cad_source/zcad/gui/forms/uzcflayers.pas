@@ -5,7 +5,10 @@ unit uzcflayers;
 interface
 
 uses
-  UGDBNamedObjectsArray,uzcutils,gzundoCmdChgData,gzundoCmdChgMethods,uzcdrawing,uzepalette,uzcsuptypededitors,LMessages,uzcfselector,uzestyleslinetypes,uzeutils,uzclog,uzcflineweights,uzcfcolors,uzedrawingsimple,uzcsysvars,Classes, SysUtils,
+  UGDBNamedObjectsArray,uzcutils,zundoCmdChgBaseTypes,gzundoCmdChgMethods,
+  uzcdrawing,uzepalette,uzcsuptypededitors,LMessages,uzcfselector,
+  uzestyleslinetypes,uzeutils,uzclog,uzcflineweights,uzcfcolors,
+  uzedrawingsimple,uzcsysvars,Classes, SysUtils,
   FileUtil, LResources, Forms, Controls, Graphics, GraphType,
   Buttons, ExtCtrls, StdCtrls, ComCtrls,LCLIntf,lcltype, ActnList,
 

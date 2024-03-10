@@ -25,7 +25,7 @@ uses
   sysutils,
   uzcLog,
   uzccommandsabstract,uzccommandsimpl,
-  gzundoCmdChgData,
+  zundoCmdChgCameraBaseProp,
   uzcutils,uzecamera,
   uzedrawingsimple,uzcdrawings,uzcdrawing;
 

@@ -57,35 +57,30 @@ type
 
 
   TST=(
-       TST_YX(*'Y-X'*),
-       TST_XY(*'X-Y'*),
-       TST_UNSORTED(*'Unsorted'*)
+       TST_YX,//Y-X
+       TST_XY,//X-Y
+       TST_UNSORTED//Unsorted
       );
   PTAreaNumberingParam=^TAreaNumberingParam;
   TAreaNumberingParam=record
-    SortMode:TST;(*'Sorting'*)
-    InverseX:Boolean;(*'Inverse X axis dir'*)
-    InverseY:Boolean;(*'Inverse Y axis dir'*)
-    DeadDand:Double;(*'Deadband'*)
+    SortMode:TST;//Sorting
+    InverseX:Boolean;//Inverse X axis dir
+    InverseY:Boolean;//verse Y axis dir
+    DeadDand:Double;//adband
   end;
 
 
   PTNumberingParams=^TNumberingParams;
   TNumberingParams=record
-                     //SortMode:TST;(*'Sorting'*)
                      AlgoType:TAlgoType;
                      AlgoParams:TFaceTypedData;
-                     //Spatially:TAreaNumberingParam;
-                     //InverseX:Boolean;(*'Inverse X axis dir'*)
-                     //InverseY:Boolean;(*'Inverse Y axis dir'*)
-                     //DeadDand:Double;(*'Deadband'*)
                      OnlyDevices:Boolean;
-                     StartNumber:Integer;(*'Start'*)
-                     Increment:Integer;(*'Increment'*)
-                     SaveStart:Boolean;(*'Save start number'*)
-                     BaseName:AnsiString;(*'Base name sorting devices'*)
-                     MetricVariable:AnsiString;(*'Metric variable'*)
-                     NumberVar:AnsiString;(*'Number variable'*)
+                     StartNumber:Integer;//Start
+                     Increment:Integer;//Increment
+                     SaveStart:Boolean;//Save start number
+                     BaseName:AnsiString;//Base name sorting devices
+                     MetricVariable:AnsiString;//Metric variable
+                     NumberVar:AnsiString;//Number variable
                end;
   Number_com= object(CommandRTEdObject)
                          procedure CommandStart(const Context:TZCADCommandContext;Operands:TCommandOperands); virtual;

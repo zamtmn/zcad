@@ -22,7 +22,7 @@ unit uzcftextstyles;
 interface
 
 uses
-  uzcutils,gzundoCmdChgData,gzundoCmdChgMethods,uzcdrawing,LMessages,uzefont,
+  uzcutils,zundoCmdChgBaseTypes,gzundoCmdChgMethods,uzcdrawing,LMessages,uzefont,
   uzclog,uzedrawingsimple,uzcsysvars,Classes,SysUtils,
   FileUtil,LResources,Forms,Controls,Graphics,GraphType,
   Buttons,ExtCtrls,StdCtrls,ComCtrls,LCLIntf,lcltype, ActnList,

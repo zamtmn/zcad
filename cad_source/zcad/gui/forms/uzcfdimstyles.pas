@@ -22,7 +22,7 @@ unit uzcfdimstyles;
 interface
 
 uses
-  uzcutils,gzundoCmdChgData,gzundoCmdChgMethods,uzcdrawing,LMessages,
+  uzcutils,zundoCmdChgBaseTypes,gzundoCmdChgMethods,uzcdrawing,LMessages,
   uzclog,uzedrawingsimple,uzcsysvars,Classes, SysUtils,
   FileUtil, LResources, Forms, Controls, Graphics, GraphType,
   Buttons, ExtCtrls, StdCtrls, ComCtrls,LCLIntf,lcltype, ActnList,

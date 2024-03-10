@@ -32,13 +32,18 @@ uses
   uzcutils,
   uzbtypes,
   uzegeometry,
-  uzeentity,uzeenttext,uzgldrawcontext,uzcdrawing,uzeconsts,gzundoCmdChgData,
-  URecordDescriptor,typedescriptors,Varman;
+  uzeentity,uzeenttext,uzgldrawcontext,uzcdrawing,uzeconsts,
+  gzundoCmdChgData,zundoCmdChgBaseTypes,
+  URecordDescriptor,typedescriptors,Varman,
+  uzeentabstracttext,uzepalette;
 
 //type
 implementation
 
 type
+  TGDBTTextJustifyChangeCommand=GUCmdChgData<TTextJustify,PGDBObjEntity>;
+  TGDBTGDBPaletteColorChangeCommand=GUCmdChgData<TGDBPaletteColor,PGDBObjEntity>;
+  TGDBTGDBLineWeightChangeCommand=GUCmdChgData<TGDBLineWeight,PGDBObjEntity>;
   //** Тип данных для отображения в инспекторе опций команды MatchProp о текстовых примитивах, составная часть TMatchPropParam
   TMatchPropTextParam=record
     ProcessTextStyle:Boolean;(*'Process style'*)

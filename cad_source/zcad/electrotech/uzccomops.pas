@@ -19,7 +19,8 @@ uses
   uzegeometrytypes,varman,uzccablemanager,uzeentdevice,uzeentmtext,math,
   uzcenitiesvariablesextender,uzeroot,uzglviewareadata,uzcentcable,UUnitManager,
   gzctnrVectorTypes,uzccomelectrical,URecordDescriptor,TypeDescriptors,uzcLog,
-  uzcstrconsts,uzccmdfloatinsert,uzctnrvectorpgdbaseobjects;
+  uzcstrconsts,uzccmdfloatinsert,uzctnrvectorpgdbaseobjects,zUndoCmdChgVariable,
+  uzcdrawing;
 
 type
   TPlaceParam=record
@@ -645,7 +646,7 @@ function OPS_Sensor_Mark_com(const Context:TZCADCommandContext;operands:TCommand
 var //i: Integer;
     pcabledesk:PTCableDesctiptor;
     ir,ir2,ir_inNodeArray:itrec;
-    pvd:pvardesk;
+    pvd,pvd1,pvd2,pvd3,pvd4:pvardesk;
     defaultunit:TUnit;
     currentunit:PTUnit;
     UManager:TUnitManager;
@@ -659,6 +660,8 @@ var //i: Integer;
     name:String;
     DC:TDrawContext;
     pcablestartsegmentvarext,pptnownervarext:TVariablesExtender;
+    cpGC_NumberInGroup,cpGC_HeadDevice,cpGC_HDGroup,cpGC_HDShortName:UCmdChgVariable;
+    UndoStartMarkerPlaced:boolean;
 const
       DefNumMetric='default_num_in_group';
 function GetNumUnit(uname:String):PTUnit;
@@ -674,6 +677,7 @@ begin
 end;
 
 begin
+  UndoStartMarkerPlaced:=false;
   dc:=drawings.GetCurrentDWG^.CreateDrawingRC;
   if drawings.GetCurrentROOT.ObjArray.Count = 0 then exit;
   ProcessedDevices.init(100);
@@ -759,7 +763,58 @@ begin
                          p:=@pptnownervarext.entityunit;
                          currentunit.InterfaceUses.PushBackIfNotPresent(p);
 
+                         pvd1:=pptnownervarext.entityunit.FindVariable('GC_NumberInGroup');
+                         if pvd1<>nil then begin
+                           zcPlaceUndoStartMarkerIfNeed(UndoStartMarkerPlaced,'OPS_Sensor_Mark');
+                           cpGC_NumberInGroup:=UCmdChgVariable.CreateAndPush(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,
+                                                                             TChangedDataDesc.CreateRec(pvd1^.data.PTD,'GC_NumberInGroup'),
+                                                                             TSharedData.CreateRec(PGDBObjEntity(ptn^.bp.ListPos.Owner)),
+                                                                             TAfterChangeDataDesc.CreateRec(drawings.GetCurrentDWG));
+                           cpGC_NumberInGroup.ChangedData.StoreUndoData(pvd1^.data.Addr.GetInstance);
+                         end;
+                         pvd2:=pptnownervarext.entityunit.FindVariable('GC_HeadDevice');
+                         if pvd2<>nil then begin
+                           zcPlaceUndoStartMarkerIfNeed(UndoStartMarkerPlaced,'OPS_Sensor_Mark');
+                           cpGC_HeadDevice:=UCmdChgVariable.CreateAndPush(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,
+                                                                          TChangedDataDesc.CreateRec(pvd2^.data.PTD,'GC_HeadDevice'),
+                                                                          TSharedData.CreateRec(PGDBObjEntity(ptn^.bp.ListPos.Owner)),
+                                                                          TAfterChangeDataDesc.CreateRec(drawings.GetCurrentDWG));
+                           cpGC_HeadDevice.ChangedData.StoreUndoData(pvd2^.data.Addr.GetInstance);
+                         end;
+                         pvd3:=pptnownervarext.entityunit.FindVariable('GC_HDGroup');
+                         if pvd3<>nil then begin
+                           zcPlaceUndoStartMarkerIfNeed(UndoStartMarkerPlaced,'OPS_Sensor_Mark');
+                           cpGC_HDGroup:=UCmdChgVariable.CreateAndPush(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,
+                                                                       TChangedDataDesc.CreateRec(pvd3^.data.PTD,'GC_HDGroup'),
+                                                                       TSharedData.CreateRec(PGDBObjEntity(ptn^.bp.ListPos.Owner)),
+                                                                       TAfterChangeDataDesc.CreateRec(drawings.GetCurrentDWG));
+                           cpGC_HDGroup.ChangedData.StoreUndoData(pvd3^.data.Addr.GetInstance);
+                         end;
+                         pvd4:=pptnownervarext.entityunit.FindVariable('GC_HDShortName');
+                         if pvd4<>nil then begin
+                           zcPlaceUndoStartMarkerIfNeed(UndoStartMarkerPlaced,'OPS_Sensor_Mark');
+                           cpGC_HDShortName:=UCmdChgVariable.CreateAndPush(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,
+                                                                           TChangedDataDesc.CreateRec(pvd3^.data.PTD,'GC_HDShortName'),
+                                                                           TSharedData.CreateRec(PGDBObjEntity(ptn^.bp.ListPos.Owner)),
+                                                                           TAfterChangeDataDesc.CreateRec(drawings.GetCurrentDWG));
+                           cpGC_HDShortName.ChangedData.StoreUndoData(pvd4^.data.Addr.GetInstance);
+                         end;
+
                          units.loadunit(GetSupportPath,InterfaceTranslate,expandpath('*rtl/objcalc/opsmark.pas'),(currentunit));
+
+                         if pvd1<>nil then begin
+                           cpGC_NumberInGroup.ChangedData.StoreDoData(pvd1^.data.Addr.GetInstance);;
+                         end;
+                         if pvd2<>nil then begin
+                           cpGC_HeadDevice.ChangedData.StoreDoData(pvd2^.data.Addr.GetInstance);;
+                         end;
+                         if pvd3<>nil then begin
+                           cpGC_HDGroup.ChangedData.StoreDoData(pvd3^.data.Addr.GetInstance);;
+                         end;
+                         if pvd4<>nil then begin
+                           cpGC_HDShortName.ChangedData.StoreDoData(pvd4^.data.Addr.GetInstance);
+                         end;
+
 
                          ProcessedDevices.PushBackData(ptn^.bp.ListPos.Owner);
 
@@ -799,6 +854,7 @@ begin
   pcabledesk:=cman.iterate(ir);
   until pcabledesk=nil;
 
+  zcPlaceUndoEndMarkerIfNeed(UndoStartMarkerPlaced);
   defaultunit.done;
   UManager.done;
   cman.done;

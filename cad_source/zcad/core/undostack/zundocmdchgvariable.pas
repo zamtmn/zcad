@@ -17,6 +17,7 @@
 }
 {$MODE OBJFPC}{$H+}
 {$ModeSwitch advancedrecords}
+{$INCLUDE zengineconfig.inc}
 unit zUndoCmdChgVariable;
 interface
 uses
@@ -27,6 +28,7 @@ type
   TSharedData=record
     PEntity:PGDBObjEntity;
     constructor CreateRec(APEntity:PGDBObjEntity);
+    procedure DestroyRec;
   end;
   TChangedDataDesc=record
     PDoData,PUnDoData:Pointer;
@@ -36,6 +38,7 @@ type
     procedure Comit(sd:TSharedData);
     procedure ChangeProc(sd:TSharedData);
     constructor CreateRec(APTD:PUserTypeDescriptor;AVarName:String);
+    procedure DestroyRec;
     procedure StoreUndoData(APUnDoData:Pointer);
     procedure StoreDoData(APDoData:Pointer);
   end;
@@ -43,6 +46,7 @@ type
     PDWG:PTDrawingDef;
     procedure AfterDo(sd:TSharedData);
     constructor CreateRec(APDWG:PTDrawingDef);
+    procedure DestroyRec;
   end;
 
   UCmdChgVariable=specialize GUCmdChgData2<TChangedDataDesc,TSharedData,TAfterChangeDataDesc>;
@@ -52,6 +56,9 @@ implementation
 constructor TSharedData.CreateRec(APEntity:PGDBObjEntity);
 begin
   PEntity:=APEntity;
+end;
+procedure TSharedData.DestroyRec;
+begin
 end;
 
 procedure TChangedDataDesc.UnDo(sd:TSharedData);
@@ -91,6 +98,14 @@ begin
   PDoData:=PTD^.AllocAndInitInstance;
   PUnDoData:=PTD^.AllocAndInitInstance;
 end;
+procedure TChangedDataDesc.DestroyRec;
+begin
+  VarName:='';
+  PTD^.MagicFreeInstance(PDoData);
+  Freemem(PDoData);
+  PTD^.MagicFreeInstance(PUnDoData);
+  Freemem(PUnDoData);
+end;
 
 procedure TAfterChangeDataDesc.AfterDo(sd:TSharedData);
 begin
@@ -99,6 +114,9 @@ end;
 constructor TAfterChangeDataDesc.CreateRec(APDWG:PTDrawingDef);
 begin
   PDWG:=APDWG;
+end;
+procedure TAfterChangeDataDesc.DestroyRec;
+begin
 end;
 
 procedure TChangedDataDesc.StoreUndoData(APUnDoData:Pointer);

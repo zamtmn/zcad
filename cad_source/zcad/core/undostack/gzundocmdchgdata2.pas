@@ -36,6 +36,7 @@ type
         constructor Create(AChangedData:GChangedDataDesc;
                            ASharedData:GSharedData;
                            AAfterChangeData:GAfterChangeDataDesc);
+        destructor Destroy;override;
         class function CreateAndPush(var us:TZctnrVectorUndoCommands;
                                      AChangedData:GChangedDataDesc;
                                      ASharedData:GSharedData;
@@ -46,6 +47,13 @@ type
   end;
 
 implementation
+destructor GUCmdChgData2.Destroy;
+begin
+  inherited;
+  SharedData.DestroyRec;
+  AfterChangeData.DestroyRec;
+  ChangedData.DestroyRec;
+end;
 
 class function GUCmdChgData2.CreateAndPush(var us:TZctnrVectorUndoCommands;
                                            AChangedData:GChangedDataDesc;

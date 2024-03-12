@@ -82,7 +82,7 @@ begin
       pgdbvertex(@tempmatr[0])^:=prop.xdir;
       pgdbvertex(@tempmatr[1])^:=prop.ydir;
       pgdbvertex(@tempmatr[2])^:=prop.look;
-      rotmatr:=MatrixMultiply(CreateRotationMatrixY(sin(uy),cos(uy)),CreateRotationMatrixX(sin(ux),cos(uy)));
+      rotmatr:=MatrixMultiply(CreateRotationMatrixY(uy),CreateRotationMatrixX(ux));
       tempmatr:=MatrixMultiply(rotmatr,tempmatr);
 
       prop.xdir:=pgdbvertex(@tempmatr[0])^;

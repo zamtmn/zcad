@@ -914,6 +914,7 @@ implementation
         angle:double;
          //infoVertexDevice:TVertexDevice;
          tempforinfo:string;
+         sine,cosine:double;
     begin
          //ZCMsgCallBackInterface.TextMessage('Заработалоssssss');
 
@@ -937,8 +938,9 @@ implementation
                begin
                    dcoord.coordOld:=listDeviceinRoom[i].coord;
 
-                   tempvert.x:=perpendListVertex.front.X + (listDeviceinRoom[i].coord.X-perpendListVertex.front.X) * Cos(angle) + (listDeviceinRoom[i].coord.Y-perpendListVertex.front.Y) * Sin(angle) ;
-                   tempvert.y:=perpendListVertex.front.Y - (listDeviceinRoom[i].coord.X -perpendListVertex.front.X)* Sin(angle) + (listDeviceinRoom[i].coord.Y -perpendListVertex.front.Y)* Cos(angle);
+                   SinCos(angle,sine,cosine);
+                   tempvert.x:=perpendListVertex.front.X + (listDeviceinRoom[i].coord.X-perpendListVertex.front.X) * cosine + (listDeviceinRoom[i].coord.Y-perpendListVertex.front.Y) * sine ;
+                   tempvert.y:=perpendListVertex.front.Y - (listDeviceinRoom[i].coord.X -perpendListVertex.front.X)* sine + (listDeviceinRoom[i].coord.Y -perpendListVertex.front.Y)* cosine;
                    tempvert.z:=0;
                    dcoord.coord:=uzegeometry.CreateVertex(tempvert.x,tempvert.y,tempvert.z);
 
@@ -964,8 +966,9 @@ implementation
                begin
                    dcoord.coordOld:=listDeviceinRoom[i].coord;
 
-                   tempvert.x:=perpendListVertex.front.X + (listDeviceinRoom[i].coord.X-perpendListVertex.front.X) * Cos(angle) + (listDeviceinRoom[i].coord.Y-perpendListVertex.front.Y) * Sin(angle) ;
-                   tempvert.y:=perpendListVertex.front.Y - (listDeviceinRoom[i].coord.X -perpendListVertex.front.X)* Sin(angle) + (listDeviceinRoom[i].coord.Y -perpendListVertex.front.Y)* Cos(angle);
+                   SinCos(angle,sine,cosine);
+                   tempvert.x:=perpendListVertex.front.X + (listDeviceinRoom[i].coord.X-perpendListVertex.front.X) * cosine + (listDeviceinRoom[i].coord.Y-perpendListVertex.front.Y) * sine ;
+                   tempvert.y:=perpendListVertex.front.Y - (listDeviceinRoom[i].coord.X -perpendListVertex.front.X)* sine + (listDeviceinRoom[i].coord.Y -perpendListVertex.front.Y)* cosine;
                    tempvert.z:=0;
                    dcoord.coord:=uzegeometry.CreateVertex(tempvert.x,tempvert.y,tempvert.z);
 

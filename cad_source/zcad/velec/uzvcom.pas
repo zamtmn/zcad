@@ -767,6 +767,7 @@ var
    tempvert,tempVertex,newEdPtLine:GDBVertex;
    xline,yline,xyline,angle,anglePerpendCos:double;
    vertexRectangleLine:TRectangleLine;
+   sine,cosine:double;
 begin
 //
 //     tempvert.x:=cableLine.edPoint.X ;
@@ -793,12 +794,13 @@ begin
          if (cableLine.stPoint.x <= cableLine.edPoint.x) and (cableLine.stPoint.y <= cableLine.edPoint.y) then
             angle:=arccos(anglePerpendCos)+3*1.5707963267949;
 
-         newEdPtLine.x:=cableLine.stPoint.X+ (cableLine.edPoint.X-cableLine.stPoint.X) * Cos(angle) + (cableLine.edPoint.Y-cableLine.stPoint.Y) * Sin(angle) ;
-         newEdPtLine.y:=cableLine.stPoint.Y-(cableLine.edPoint.X -cableLine.stPoint.X)* Sin(angle) + (cableLine.edPoint.Y -cableLine.stPoint.Y)* Cos(angle);
+         SinCos(angle,sine,cosine);
+         newEdPtLine.x:=cableLine.stPoint.X+ (cableLine.edPoint.X-cableLine.stPoint.X) * cosine + (cableLine.edPoint.Y-cableLine.stPoint.Y) * sine ;
+         newEdPtLine.y:=cableLine.stPoint.Y-(cableLine.edPoint.X -cableLine.stPoint.X)* sine + (cableLine.edPoint.Y -cableLine.stPoint.Y)* cosine;
          newEdPtLine.z:=0;
 
-         tempvert.x:=cableLine.stPoint.X+ (vertexPt.X-cableLine.stPoint.X) * Cos(angle) + (vertexPt.Y-cableLine.stPoint.Y) * Sin(angle) ;
-         tempvert.y:=cableLine.stPoint.Y-(vertexPt.X -cableLine.stPoint.X)* Sin(angle) + (vertexPt.Y -cableLine.stPoint.Y)* Cos(angle);
+         tempvert.x:=cableLine.stPoint.X+ (vertexPt.X-cableLine.stPoint.X) * cosine + (vertexPt.Y-cableLine.stPoint.Y) * sine ;
+         tempvert.y:=cableLine.stPoint.Y-(vertexPt.X -cableLine.stPoint.X)* sine + (vertexPt.Y -cableLine.stPoint.Y)* cosine;
          tempvert.z:=0;
 
 

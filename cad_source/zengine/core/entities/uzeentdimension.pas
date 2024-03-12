@@ -24,7 +24,7 @@ uses uzemathutils,uzgldrawcontext,uzeentabstracttext,uzestylestexts,
      uzbstrproc,uzctnrVectorBytes,uzeenttext,uzegeometry,uzeentline,uzeentcomplex,
      uzegeometrytypes,sysutils,uzeentity,uzbtypes,uzeconsts,
      uzedimensionaltypes,uzeentitiesmanager,UGDBOpenArrayOfPV,uzeentblockinsert,
-     uzglviewareadata,uzeSnap;
+     uzglviewareadata,uzeSnap,math;
 type
 {EXPORT+}
 PTDXFDimData2D=^TDXFDimData2D;
@@ -262,8 +262,7 @@ begin
                          if PDimStyle.Text.DIMTOH then
                                                       TextAngle:=0;
                     end;
-  vectorT.x:=cos(TextAngle);
-  vectorT.y:=sin(TextAngle);
+  SinCos(TextAngle,vectorT.y,vectorT.x);
   vectorT.z:=0;
 end;
 procedure GDBObjDimension.CalcTextAngle;
@@ -404,8 +403,7 @@ begin
   ptext.linespacef:=1;
   ptext.textprop.justify:=jsmc;
   { TODO : removeing angle from text ents }//ptext.textprop.angle:=TextAngle;
-  ptext.Local.basis.ox.x:=cos(TextAngle);
-  ptext.Local.basis.ox.y:=sin(TextAngle);
+  SinCos(TextAngle,ptext.Local.basis.ox.y,ptext.Local.basis.ox.x);
   ptext.TXTStyleIndex:=dimtxtstyle;
   ptext.textprop.size:=textsize;
   ptext.vp.Color:=PDimStyle.Text.DIMCLRT;

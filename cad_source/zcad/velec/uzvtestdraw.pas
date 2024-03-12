@@ -105,7 +105,8 @@ uses
    uzcenitiesvariablesextender,
    UUnitManager,
    uzbpaths,
-   uzctranslations;
+   uzctranslations,
+   math;
 
 
 
@@ -278,6 +279,7 @@ implementation
     x, y: Integer;
     i   : Integer;
     tempPt:GDBVertex;
+    sine,cosine:double;
  begin
    //SetColor(color);
    {Вычисление производится по формуле:
@@ -309,8 +311,9 @@ implementation
      //tempPt.x := pt.x + round(radius*cos(2*pi*i/sides));
      //tempPt.y := pt.y + round(radius*sin(2*pi*i/sides));
 
-     tempPt.x := pt.x + radius*cos(alpha + (2*pi*i/sides));
-     tempPt.y := pt.y + radius*sin(alpha + (2*pi*i/sides));
+     SinCos(alpha + (2*pi*i/sides),sine,cosine);
+     tempPt.x := pt.x + radius*cosine;
+     tempPt.y := pt.y + radius*sine;
      {Коордианты очередной вершины вычислены
       рисуем линию из текущего положения графического курсора
       в вычисленную. Делается это с помощью поцедуры LineTo}

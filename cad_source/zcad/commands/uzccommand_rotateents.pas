@@ -71,7 +71,7 @@ begin
         else
           pc:=Vertexmorph(pv^.vp.BoundingBox.LBN,pv^.vp.BoundingBox.RTF,0.5);
         dispmatr:=uzegeometry.CreateTranslationMatrix(createvertex(-pc.x,-pc.y,-pc.z));
-        rotmatr:=uzegeometry.CreateRotationMatrixZ(sin(a),cos(a));
+        rotmatr:=uzegeometry.CreateRotationMatrixZ(a);
         rotmatr:=uzegeometry.MatrixMultiply(dispmatr,rotmatr);
         dispmatr:=uzegeometry.CreateTranslationMatrix(createvertex(pc.x,pc.y,pc.z));
         dispmatr:=uzegeometry.MatrixMultiply(rotmatr,dispmatr);

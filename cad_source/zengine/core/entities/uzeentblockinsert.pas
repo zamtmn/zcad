@@ -286,12 +286,14 @@ begin
 end;
 procedure GDBObjBlockInsert.setrot(r:Double);
 var m1:DMatrix4D;
+    sine,cosine:double;
 begin
 m1:=onematrix;
-m1[0].v[0]:=cos(r);
-m1[1].v[1]:=cos(r);
-m1[1].v[0]:=-sin(r);
-m1[0].v[1]:=sin(r);
+SinCos(r,sine,cosine);
+m1[0].v[0]:=cosine;
+m1[1].v[1]:=cosine;
+m1[1].v[0]:=-sine;
+m1[0].v[1]:=sine;
 objMatrix:=MatrixMultiply(m1,objMatrix);
 end;
 function GDBObjBlockInsert.getrot:Double;

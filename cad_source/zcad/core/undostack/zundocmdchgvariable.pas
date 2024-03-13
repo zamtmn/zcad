@@ -22,62 +22,44 @@ unit zUndoCmdChgVariable;
 interface
 uses
   zeundostack,zebaseundocommands,uzeentity,varmandef,
-  uzcEnitiesVariablesExtender,gzUndoCmdChgData2,uzedrawingdef;
+  uzcEnitiesVariablesExtender,gzUndoCmdChgData2,
+  zUndoCmdChgTypes;
 
 type
-  TSharedData=record
-    PEntity:PGDBObjEntity;
-    constructor CreateRec(APEntity:PGDBObjEntity);
-    procedure DestroyRec;
-  end;
   TChangedDataDesc=record
     PDoData,PUnDoData:Pointer;
     PTD:PUserTypeDescriptor;
     VarName:String;
-    procedure UnDo(sd:TSharedData);
-    procedure Comit(sd:TSharedData);
-    procedure ChangeProc(sd:TSharedData);
+    procedure UnDo(sd:TSharedPEntityData);
+    procedure Comit(sd:TSharedPEntityData);
+    procedure ChangeProc(sd:TSharedPEntityData);
     constructor CreateRec(APTD:PUserTypeDescriptor;AVarName:String);
     procedure DestroyRec;
     procedure StoreUndoData(APUnDoData:Pointer);
     procedure StoreDoData(APDoData:Pointer);
   end;
-  TAfterChangeDataDesc=record
-    PDWG:PTDrawingDef;
-    procedure AfterDo(sd:TSharedData);
-    constructor CreateRec(APDWG:PTDrawingDef);
-    procedure DestroyRec;
-  end;
 
-  UCmdChgVariable=specialize GUCmdChgData2<TChangedDataDesc,TSharedData,TAfterChangeDataDesc>;
+  UCmdChgVariable=specialize GUCmdChgData2<TChangedDataDesc,TSharedPEntityData,TAfterChangePDrawing>;
 
 implementation
 
-constructor TSharedData.CreateRec(APEntity:PGDBObjEntity);
-begin
-  PEntity:=APEntity;
-end;
-procedure TSharedData.DestroyRec;
-begin
-end;
-
-procedure TChangedDataDesc.UnDo(sd:TSharedData);
+procedure TChangedDataDesc.UnDo(sd:TSharedPEntityData);
 begin
   ChangeProc(sd);
 end;
 
-procedure TChangedDataDesc.Comit(sd:TSharedData);
+procedure TChangedDataDesc.Comit(sd:TSharedPEntityData);
 begin
   ChangeProc(sd);
 end;
 
-procedure TChangedDataDesc.ChangeProc(sd:TSharedData);
+procedure TChangedDataDesc.ChangeProc(sd:TSharedPEntityData);
 var
   varext:TVariablesExtender;
   vd:pvardesk;
   p:pointer;
 begin
-  varext:=sd.PEntity^.specialize GetExtension<TVariablesExtender>;
+  varext:=sd.Data^.specialize GetExtension<TVariablesExtender>;
   if varext<>nil then begin
     vd:=varext.entityunit.FindVariable(VarName);
     if vd<>nil then begin
@@ -105,18 +87,6 @@ begin
   Freemem(PDoData);
   PTD^.MagicFreeInstance(PUnDoData);
   Freemem(PUnDoData);
-end;
-
-procedure TAfterChangeDataDesc.AfterDo(sd:TSharedData);
-begin
-  sd.PEntity^.YouChanged(PDWG^);
-end;
-constructor TAfterChangeDataDesc.CreateRec(APDWG:PTDrawingDef);
-begin
-  PDWG:=APDWG;
-end;
-procedure TAfterChangeDataDesc.DestroyRec;
-begin
 end;
 
 procedure TChangedDataDesc.StoreUndoData(APUnDoData:Pointer);

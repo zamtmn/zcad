@@ -41,7 +41,7 @@ uses
   uzccomdraw,UGDBSelectedObjArray,uzeentdevice,uzgldrawcontext,
   uzegeometrytypes,uzegeometry,uzeentwithlocalcs,garrayutils,
   uzcenitiesvariablesextender,uzbstrproc,gzctnrSTL,Generics.Collections,
-  zUndoCmdChgVariable,uzcutils,uzcdrawing;
+  zUndoCmdChgTypes,zUndoCmdChgVariable,uzcutils,uzcdrawing;
 type
   TAlgoType=(AT_Area,AT_Perimetr);
   PTPerimetrNumberingParam=^TPerimetrNumberingParam;
@@ -359,8 +359,8 @@ begin
         zcPlaceUndoStartMarkerIfNeed(UndoStartMarkerPlaced,'NumDevices');
         cp:=UCmdChgVariable.CreateAndPush(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,
                                           TChangedDataDesc.CreateRec(pvd^.data.PTD,NumberingParams.NumberVar),
-                                          TSharedData.CreateRec(pdev),
-                                          TAfterChangeDataDesc.CreateRec(drawings.GetCurrentDWG));
+                                          TSharedPEntityData.CreateRec(pdev),
+                                          TAfterChangePDrawing.CreateRec(drawings.GetCurrentDWG));
         cp.ChangedData.StoreUndoData(pvd^.data.Addr.GetInstance);
         pvd^.data.PTD^.SetValueFromString(pvd^.data.Addr.Instance,inttostr(index));
         cp.ChangedData.StoreDoData(pvd^.data.Addr.GetInstance);

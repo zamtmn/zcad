@@ -19,7 +19,8 @@ uses
   uzegeometrytypes,varman,uzccablemanager,uzeentdevice,uzeentmtext,math,
   uzcenitiesvariablesextender,uzeroot,uzglviewareadata,uzcentcable,UUnitManager,
   gzctnrVectorTypes,uzccomelectrical,URecordDescriptor,TypeDescriptors,uzcLog,
-  uzcstrconsts,uzccmdfloatinsert,uzctnrvectorpgdbaseobjects,zUndoCmdChgVariable,
+  uzcstrconsts,uzccmdfloatinsert,uzctnrvectorpgdbaseobjects,
+  zUndoCmdChgTypes,zUndoCmdChgVariable,
   uzcdrawing;
 
 type
@@ -768,8 +769,8 @@ begin
                            zcPlaceUndoStartMarkerIfNeed(UndoStartMarkerPlaced,'OPS_Sensor_Mark');
                            cpGC_NumberInGroup:=UCmdChgVariable.CreateAndPush(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,
                                                                              TChangedDataDesc.CreateRec(pvd1^.data.PTD,'GC_NumberInGroup'),
-                                                                             TSharedData.CreateRec(PGDBObjEntity(ptn^.bp.ListPos.Owner)),
-                                                                             TAfterChangeDataDesc.CreateRec(drawings.GetCurrentDWG));
+                                                                             TSharedPEntityData.CreateRec(PGDBObjEntity(ptn^.bp.ListPos.Owner)),
+                                                                             TAfterChangePDrawing.CreateRec(drawings.GetCurrentDWG));
                            cpGC_NumberInGroup.ChangedData.StoreUndoData(pvd1^.data.Addr.GetInstance);
                          end;
                          pvd2:=pptnownervarext.entityunit.FindVariable('GC_HeadDevice');
@@ -777,8 +778,8 @@ begin
                            zcPlaceUndoStartMarkerIfNeed(UndoStartMarkerPlaced,'OPS_Sensor_Mark');
                            cpGC_HeadDevice:=UCmdChgVariable.CreateAndPush(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,
                                                                           TChangedDataDesc.CreateRec(pvd2^.data.PTD,'GC_HeadDevice'),
-                                                                          TSharedData.CreateRec(PGDBObjEntity(ptn^.bp.ListPos.Owner)),
-                                                                          TAfterChangeDataDesc.CreateRec(drawings.GetCurrentDWG));
+                                                                          TSharedPEntityData.CreateRec(PGDBObjEntity(ptn^.bp.ListPos.Owner)),
+                                                                          TAfterChangePDrawing.CreateRec(drawings.GetCurrentDWG));
                            cpGC_HeadDevice.ChangedData.StoreUndoData(pvd2^.data.Addr.GetInstance);
                          end;
                          pvd3:=pptnownervarext.entityunit.FindVariable('GC_HDGroup');
@@ -786,8 +787,8 @@ begin
                            zcPlaceUndoStartMarkerIfNeed(UndoStartMarkerPlaced,'OPS_Sensor_Mark');
                            cpGC_HDGroup:=UCmdChgVariable.CreateAndPush(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,
                                                                        TChangedDataDesc.CreateRec(pvd3^.data.PTD,'GC_HDGroup'),
-                                                                       TSharedData.CreateRec(PGDBObjEntity(ptn^.bp.ListPos.Owner)),
-                                                                       TAfterChangeDataDesc.CreateRec(drawings.GetCurrentDWG));
+                                                                       TSharedPEntityData.CreateRec(PGDBObjEntity(ptn^.bp.ListPos.Owner)),
+                                                                       TAfterChangePDrawing.CreateRec(drawings.GetCurrentDWG));
                            cpGC_HDGroup.ChangedData.StoreUndoData(pvd3^.data.Addr.GetInstance);
                          end;
                          pvd4:=pptnownervarext.entityunit.FindVariable('GC_HDShortName');
@@ -795,8 +796,8 @@ begin
                            zcPlaceUndoStartMarkerIfNeed(UndoStartMarkerPlaced,'OPS_Sensor_Mark');
                            cpGC_HDShortName:=UCmdChgVariable.CreateAndPush(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,
                                                                            TChangedDataDesc.CreateRec(pvd3^.data.PTD,'GC_HDShortName'),
-                                                                           TSharedData.CreateRec(PGDBObjEntity(ptn^.bp.ListPos.Owner)),
-                                                                           TAfterChangeDataDesc.CreateRec(drawings.GetCurrentDWG));
+                                                                           TSharedPEntityData.CreateRec(PGDBObjEntity(ptn^.bp.ListPos.Owner)),
+                                                                           TAfterChangePDrawing.CreateRec(drawings.GetCurrentDWG));
                            cpGC_HDShortName.ChangedData.StoreUndoData(pvd4^.data.Addr.GetInstance);
                          end;
 

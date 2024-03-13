@@ -16,7 +16,7 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>)
 }
 {$mode delphi}
-unit uzccommand_matchprop;
+unit uzccommand_MatchProp;
 
 {$INCLUDE zengineconfig.inc}
 
@@ -35,15 +35,21 @@ uses
   uzeentity,uzeenttext,uzgldrawcontext,uzcdrawing,uzeconsts,
   gzUndoCmdChgData,zUndoCmdChgBaseTypes,
   URecordDescriptor,typedescriptors,Varman,
-  uzeentabstracttext,uzepalette;
+  uzeentabstracttext,uzepalette,
+  zUndoCmdChgTypes,gzUndoCmdChgData2,zUndoCmdChgExtTypes;
 
-//type
 implementation
 
 type
-  TGDBTTextJustifyChangeCommand=GUCmdChgData<TTextJustify,PGDBObjEntity>;
-  TGDBTGDBPaletteColorChangeCommand=GUCmdChgData<TGDBPaletteColor,PGDBObjEntity>;
-  TGDBTGDBLineWeightChangeCommand=GUCmdChgData<TGDBLineWeight,PGDBObjEntity>;
+  TChangedTextJustify=GChangedData<TTextJustify,TSharedPEntityData,TAfterChangePDrawing>;
+  TUndoTextJustifyChangeCommand=GUCmdChgData2<TChangedTextJustify,TSharedPEntityData,TAfterChangePDrawing>;
+
+  TChangedPaletteColor=GChangedData<TGDBPaletteColor,TSharedPEntityData,TAfterChangePDrawing>;
+  TUndoPaletteColorChangeCommand=GUCmdChgData2<TChangedPaletteColor,TSharedPEntityData,TAfterChangePDrawing>;
+
+  TChangedLineWeight=GChangedData<TGDBLineWeight,TSharedPEntityData,TAfterChangePDrawing>;
+  TUndoLineWeightChangeCommand=GUCmdChgData2<TChangedLineWeight,TSharedPEntityData,TAfterChangePDrawing>;
+
   //** Тип данных для отображения в инспекторе опций команды MatchProp о текстовых примитивах, составная часть TMatchPropParam
   TMatchPropTextParam=record
     ProcessTextStyle:Boolean;(*'Process style'*)
@@ -67,13 +73,15 @@ var
 
 function matchprop_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 var
-    ps,pd:PGDBObjEntity;
-    SourceObjType:TObjID;
-    isSourceObjText:boolean;
-    dc:TDrawContext;
-    UndoStartMarkerPlaced:boolean;
-    drawing:PTZCADDrawing;
-    EntChange:boolean;
+  ps,pd:PGDBObjEntity;
+  SourceObjType:TObjID;
+  isSourceObjText:boolean;
+  dc:TDrawContext;
+  UndoStartMarkerPlaced:boolean;
+  drawing:PTZCADDrawing;
+  EntChange:boolean;
+  USharedEntity:TSharedPEntityData;
+  USharedDrawing:TAfterChangePDrawing;
 const
     CommandName='MatchProp';
 function isTextEnt(ObjType:TObjID):boolean;
@@ -86,6 +94,7 @@ begin
 end;
 
 begin
+  USharedDrawing.CreateRec(drawings.GetCurrentDWG);
     UndoStartMarkerPlaced:=false;
     if commandmanager.getentity(rscmSelectSourceEntity,ps) then
     begin
@@ -96,15 +105,18 @@ begin
          isSourceObjText:=isTextEnt(SourceObjType);
          while commandmanager.getentity(rscmSelectDestinationEntity,pd) do
          begin
+           USharedEntity.CreateRec(pd);
               EntChange:=false;
               if MatchPropParam.ProcessLayer then
                 if pd^.vp.Layer<>ps^.vp.Layer then
                   begin
                     zcPlaceUndoStartMarkerIfNeed(UndoStartMarkerPlaced,CommandName);
-                    with TGDBPoinerChangeCommand.CreateAndPushIfNeed(drawing.UndoStack,pd^.vp.Layer,nil,nil) do
+                    with TPoinerInEntChangeCommand.CreateAndPushIfNeed(drawing.UndoStack,
+                                                                       TChangedPointerInEnt.CreateRec(pd^.vp.Layer),
+                                                                       USharedEntity,USharedDrawing) do
                     begin
                          pd^.vp.Layer:=ps^.vp.Layer;
-                         ComitFromObj;
+                         //ComitFromObj;
                     end;
                     EntChange:=true;
                   end;
@@ -112,10 +124,12 @@ begin
                 if pd^.vp.LineType<>ps^.vp.LineType then
                   begin
                     zcPlaceUndoStartMarkerIfNeed(UndoStartMarkerPlaced,CommandName);
-                    with TGDBPoinerChangeCommand.CreateAndPushIfNeed(drawing.UndoStack,pd^.vp.LineType,nil,nil) do
+                    with TPoinerInEntChangeCommand.CreateAndPushIfNeed(drawing.UndoStack,
+                                                                       TChangedPointerInEnt.CreateRec(pd^.vp.LineType),
+                                                                       USharedEntity,USharedDrawing) do
                     begin
                          pd^.vp.LineType:=ps^.vp.LineType;
-                         ComitFromObj;
+                         //ComitFromObj;
                     end;
                     EntChange:=true;
                   end;
@@ -123,10 +137,12 @@ begin
                 if pd^.vp.LineWeight<>ps^.vp.LineWeight then
                   begin
                     zcPlaceUndoStartMarkerIfNeed(UndoStartMarkerPlaced,CommandName);
-                    with TGDBTGDBLineWeightChangeCommand.CreateAndPushIfNeed(drawing.UndoStack,pd^.vp.LineWeight,nil,nil) do
+                    with TUndoLineWeightChangeCommand.CreateAndPushIfNeed(drawing.UndoStack,
+                                                                             TChangedLineWeight.CreateRec(pd^.vp.LineWeight),
+                                                                             USharedEntity,USharedDrawing) do
                     begin
                          pd^.vp.LineWeight:=ps^.vp.LineWeight;
-                         ComitFromObj;
+                         //ComitFromObj;
                     end;
                     EntChange:=true;
                   end;
@@ -134,10 +150,12 @@ begin
                 if pd^.vp.color<>ps^.vp.Color then
                   begin
                     zcPlaceUndoStartMarkerIfNeed(UndoStartMarkerPlaced,CommandName);
-                    with TGDBTGDBPaletteColorChangeCommand.CreateAndPushIfNeed(drawing.UndoStack,pd^.vp.color,nil,nil) do
+                    with TUndoPaletteColorChangeCommand.CreateAndPushIfNeed(drawing.UndoStack,
+                                                                            TChangedPaletteColor.CreateRec(pd^.vp.color),
+                                                                            USharedEntity,USharedDrawing) do
                     begin
                          pd^.vp.color:=ps^.vp.Color;
-                         ComitFromObj;
+                         //ComitFromObj;
                     end;
                     EntChange:=true;
                   end;
@@ -145,10 +163,12 @@ begin
                 if pd^.vp.LineTypeScale<>ps^.vp.LineTypeScale then
                   begin
                     zcPlaceUndoStartMarkerIfNeed(UndoStartMarkerPlaced,CommandName);
-                    with TDoubleChangeCommand.CreateAndPushIfNeed(drawing.UndoStack,pd^.vp.LineTypeScale,nil,nil) do
+                    with TDoubleInEntChangeCommand.CreateAndPushIfNeed(drawing.UndoStack,
+                                                                       TChangedDoubleInEnt.CreateRec(pd^.vp.LineTypeScale),
+                                                                       USharedEntity,USharedDrawing) do
                     begin
                          pd^.vp.LineTypeScale:=ps^.vp.LineTypeScale;
-                         ComitFromObj;
+                         //ComitFromObj;
                     end;
                     EntChange:=true;
                   end;
@@ -158,10 +178,12 @@ begin
                   if PGDBObjText(pd)^.TXTStyleIndex<>PGDBObjText(ps)^.TXTStyleIndex then
                     begin
                       zcPlaceUndoStartMarkerIfNeed(UndoStartMarkerPlaced,CommandName);
-                      with TGDBPoinerChangeCommand.CreateAndPushIfNeed(drawing.UndoStack,PGDBObjText(pd)^.TXTStyleIndex,nil,nil) do
+                      with TPoinerInEntChangeCommand.CreateAndPushIfNeed(drawing.UndoStack,
+                                                                       TChangedPointerInEnt.CreateRec(PGDBObjText(pd)^.TXTStyleIndex),
+                                                                       USharedEntity,USharedDrawing) do
                       begin
                            PGDBObjText(pd)^.TXTStyleIndex:=PGDBObjText(ps)^.TXTStyleIndex;
-                           ComitFromObj;
+                           //ComitFromObj;
                       end;
                       EntChange:=true;
                     end;
@@ -169,10 +191,12 @@ begin
                   if PGDBObjText(pd)^.textprop.size<>PGDBObjText(ps)^.textprop.size then
                     begin
                       zcPlaceUndoStartMarkerIfNeed(UndoStartMarkerPlaced,CommandName);
-                      with TDoubleChangeCommand.CreateAndPushIfNeed(drawing.UndoStack,PGDBObjText(pd)^.textprop.size,nil,nil) do
+                      with TDoubleInEntChangeCommand.CreateAndPushIfNeed(drawing.UndoStack,
+                                                                         TChangedDoubleInEnt.CreateRec(PGDBObjText(pd)^.textprop.size),
+                                                                         USharedEntity,USharedDrawing) do
                       begin
                            PGDBObjText(pd)^.textprop.size:=PGDBObjText(ps)^.textprop.size;
-                           ComitFromObj;
+                           //ComitFromObj;
                       end;
                       EntChange:=true;
                     end;
@@ -180,10 +204,12 @@ begin
                   if PGDBObjText(pd)^.textprop.Oblique<>PGDBObjText(ps)^.textprop.Oblique then
                     begin
                       zcPlaceUndoStartMarkerIfNeed(UndoStartMarkerPlaced,CommandName);
-                      with TDoubleChangeCommand.CreateAndPushIfNeed(drawing.UndoStack,PGDBObjText(pd)^.textprop.Oblique,nil,nil) do
+                      with TDoubleInEntChangeCommand.CreateAndPushIfNeed(drawing.UndoStack,
+                                                                         TChangedDoubleInEnt.CreateRec(PGDBObjText(pd)^.textprop.Oblique),
+                                                                         USharedEntity,USharedDrawing) do
                       begin
                            PGDBObjText(pd)^.textprop.Oblique:=PGDBObjText(ps)^.textprop.Oblique;
-                           ComitFromObj;
+                           //ComitFromObj;
                       end;
                       EntChange:=true;
                     end;
@@ -191,10 +217,12 @@ begin
                   if PGDBObjText(pd)^.textprop.wfactor<>PGDBObjText(ps)^.textprop.wfactor then
                     begin
                       zcPlaceUndoStartMarkerIfNeed(UndoStartMarkerPlaced,CommandName);
-                      with TDoubleChangeCommand.CreateAndPushIfNeed(drawing.UndoStack,PGDBObjText(pd)^.textprop.wfactor,nil,nil) do
+                      with TDoubleInEntChangeCommand.CreateAndPushIfNeed(drawing.UndoStack,
+                                                                         TChangedDoubleInEnt.CreateRec(PGDBObjText(pd)^.textprop.wfactor),
+                                                                         USharedEntity,USharedDrawing) do
                       begin
                            PGDBObjText(pd)^.textprop.wfactor:=PGDBObjText(ps)^.textprop.wfactor;
-                           ComitFromObj;
+                           //ComitFromObj;
                       end;
                       EntChange:=true;
                     end;
@@ -202,10 +230,12 @@ begin
                   if PGDBObjText(pd)^.textprop.justify<>PGDBObjText(ps)^.textprop.justify then
                     begin
                       zcPlaceUndoStartMarkerIfNeed(UndoStartMarkerPlaced,CommandName);
-                      with TGDBTTextJustifyChangeCommand.CreateAndPushIfNeed(drawing.UndoStack,PGDBObjText(pd)^.textprop.justify,nil,nil) do
-                      begin
+                      with TUndoTextJustifyChangeCommand.CreateAndPushIfNeed(drawing.UndoStack,
+                                                                             TChangedTextJustify.CreateRec(PGDBObjText(pd)^.textprop.justify),
+                                                                             USharedEntity,USharedDrawing)
+                      do begin
                            PGDBObjText(pd)^.textprop.justify:=PGDBObjText(ps)^.textprop.justify;
-                           ComitFromObj;
+                           //ComitFromObj;
                       end;
                       EntChange:=true;
                     end;

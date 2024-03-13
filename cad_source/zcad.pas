@@ -269,7 +269,7 @@ uses
 
   //uzccomexample2,
   uzventsuperline,
-  uzccomobjectinspector,
+  //uzccomobjectinspector,
   //uzccomexperimental,
 
   {$IFDEF ELECTROTECH}

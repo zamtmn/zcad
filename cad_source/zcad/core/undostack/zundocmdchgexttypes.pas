@@ -28,5 +28,5 @@ type
   TChangedDoubleInEnt=specialize GChangedData<Double,TSharedPEntityData,TAfterChangePDrawing>;
   TDoubleInEntChangeCommand=specialize GUCmdChgData2<TChangedDoubleInEnt,TSharedPEntityData,TAfterChangePDrawing>;
 implementation
-end.y
+end.
 

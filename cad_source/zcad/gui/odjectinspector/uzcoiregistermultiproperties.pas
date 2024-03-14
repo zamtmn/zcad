@@ -325,8 +325,7 @@ begin
   V2:=PGDBVertex(ChangedData.PSetDataInEtity)^;
   d:=vertexlength(v2,v1);
   l1:=PDouble(pvardesk(pdata)^.data.Addr.Instance)^*pi/180;
-  V2.x:=cos(l1);
-  V2.y:=sin(l1);
+  SinCos(l1,V2.y,V2.x);
   V2.z:=0;
   V2:=VertexMulOnSc(V2,d);
   ProcessVariableAttributes(pvardesk(pdata)^.attrib,0,vda_approximately or vda_different);

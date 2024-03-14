@@ -18,6 +18,7 @@
 {$MODE OBJFPC}{$H+}
 unit uzccomdraw;
 {$INCLUDE zengineconfig.inc}
+{$ModeSwitch advancedrecords}
 
 interface
 uses
@@ -135,10 +136,11 @@ taxisdesc=record
               d0:double;
               Name:String;
         end;
-tdevcoord=record
-              coord:GDBVertex;
-              pdev:PGDBObjDevice;
-        end;
+  tdevcoord=record
+    coord:GDBVertex;
+    pdev:PGDBObjDevice;
+    constructor CreateRec(const ACoord:GDBVertex;const APDev:PGDBObjDevice);
+  end;
 tdevname=record
               name:String;
               pdev:PGDBObjDevice;
@@ -192,6 +194,13 @@ var
    dummyclass:tdummyclass;
 
 implementation
+
+
+constructor tdevcoord.CreateRec(const ACoord:GDBVertex;const APDev:PGDBObjDevice);
+begin
+  coord:=ACoord;
+  pdev:=APDev;
+end;
 
 function GetBlockDefNames(var BDefNames:TZctnrVectorStrings;selname:String;filter:String=''):Integer;
 var

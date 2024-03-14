@@ -27,7 +27,8 @@ uses sysutils,uzedrawingdef,uzeentityextender,
      gzctnrVectorSimple,gzctnrVectorTypes,uzeBaseExtender,uzgldrawcontext,
      uzegeometrytypes,uzcsysvars,
      uzctnrVectorDouble,gzctnrVector,garrayutils,
-     uzcExtdrSCHConnector,uzcEnitiesVariablesExtender;
+     uzcExtdrSCHConnector,uzcEnitiesVariablesExtender,
+     math;
 const
   ConnectionExtenderName='extdrSCHConnection';
   IntersectRadius=0.5;
@@ -348,20 +349,31 @@ end;
 procedure drawFilledCircle(p0:GDBVertex;r:Double;pThisEntity:PGDBObjEntity;var DC:TDrawContext);
 var
   p1,p2,p3,p4,p5,p6,p7,p8,p9,p10,p11,p12:GDBVertex;
+  sine,cosine:Double;
 begin
   if r>bigeps then begin
     p1:=CreateVertex(-1,0,0)*r+p0;
-    p2:=CreateVertex(cos(5*pi/6),sin(5*pi/6),0)*r+p0;
-    p3:=CreateVertex(cos(4*pi/6),sin(4*pi/6),0)*r+p0;
-    p4:=CreateVertex(cos(3*pi/6),sin(3*pi/6),0)*r+p0;
-    p5:=CreateVertex(cos(2*pi/6),sin(2*pi/6),0)*r+p0;
-    p6:=CreateVertex(cos(1*pi/6),sin(1*pi/6),0)*r+p0;
+    SinCos(5*pi/6, sine, cosine);
+    p2:=CreateVertex(cosine,sine,0)*r+p0;
+    SinCos(4*pi/6, sine, cosine);
+    p3:=CreateVertex(cosine,sine,0)*r+p0;
+    SinCos(3*pi/6, sine, cosine);
+    p4:=CreateVertex(cosine,sine,0)*r+p0;
+    SinCos(2*pi/6, sine, cosine);
+    p5:=CreateVertex(cosine,sine,0)*r+p0;
+    SinCos(1*pi/6, sine, cosine);
+    p6:=CreateVertex(cosine,sine,0)*r+p0;
     p7:=CreateVertex(1,0,0)*r+p0;
-    p8:=CreateVertex(cos(-1*pi/6),sin(-1*pi/6),0)*r+p0;
-    p9:=CreateVertex(cos(-2*pi/6),sin(-2*pi/6),0)*r+p0;
-    p10:=CreateVertex(cos(-3*pi/6),sin(-3*pi/6),0)*r+p0;
-    p11:=CreateVertex(cos(-4*pi/6),sin(-4*pi/6),0)*r+p0;
-    p12:=CreateVertex(cos(-5*pi/6),sin(-5*pi/6),0)*r+p0;
+    SinCos(-1*pi/6, sine, cosine);
+    p8:=CreateVertex(cosine,sine,0)*r+p0;
+    SinCos(-2*pi/6, sine, cosine);
+    p9:=CreateVertex(cosine,sine,0)*r+p0;
+    SinCos(-3*pi/6, sine, cosine);
+    p10:=CreateVertex(cosine,sine,0)*r+p0;
+    SinCos(-4*pi/6, sine, cosine);
+    p11:=CreateVertex(cosine,sine,0)*r+p0;
+    SinCos(-5*pi/6, sine, cosine);
+    p12:=CreateVertex(cosine,sine,0)*r+p0;
     pThisEntity^.Representation.DrawLineWithoutLT(DC,p1,p2);
     pThisEntity^.Representation.DrawLineWithoutLT(DC,p2,p3);
     pThisEntity^.Representation.DrawLineWithoutLT(DC,p3,p4);
@@ -396,6 +408,7 @@ var
   tp2,tp3:GDBVertex;
   m,rotmatr:DMatrix4D;
   l,x,y,z:double;
+  sine,cosine:Double;
   chg:boolean;
 begin
   v:=l2-l1;
@@ -429,16 +442,21 @@ begin
     m:=MatrixMultiply(rotmatr,m);
 
     p1:=VectorTransform3D(uzegeometry.CreateVertex(-1,0,0),m);
-    p2:=VectorTransform3D(uzegeometry.CreateVertex(cos(5*pi/6),sin(5*pi/6),0),m);
+    SinCos(5*pi/6, sine, cosine);
+    p2:=VectorTransform3D(uzegeometry.CreateVertex(cosine,sine,0),m);
     pThisEntity^.Representation.DrawLineWithoutLT(DC,p1,p2);
-    p1:=VectorTransform3D(uzegeometry.CreateVertex(cos(4*pi/6),sin(4*pi/6),0),m);
+    SinCos(4*pi/6, sine, cosine);
+    p1:=VectorTransform3D(uzegeometry.CreateVertex(cosine,sine,0),m);
     pThisEntity^.Representation.DrawLineWithoutLT(DC,p2,p1);
-    p2:=VectorTransform3D(uzegeometry.CreateVertex(cos(3*pi/6),sin(3*pi/6),0),m);
+    SinCos(3*pi/6, sine, cosine);
+    p2:=VectorTransform3D(uzegeometry.CreateVertex(cosine,sine,0),m);
     pThisEntity^.Representation.DrawLineWithoutLT(DC,p1,p2);
 
-    p1:=VectorTransform3D(uzegeometry.CreateVertex(cos(2*pi/6),sin(2*pi/6),0),m);
+    SinCos(2*pi/6, sine, cosine);
+    p1:=VectorTransform3D(uzegeometry.CreateVertex(cosine,sine,0),m);
     pThisEntity^.Representation.DrawLineWithoutLT(DC,p2,p1);
-    p2:=VectorTransform3D(uzegeometry.CreateVertex(cos(1*pi/6),sin(1*pi/6),0),m);
+    SinCos(1*pi/6, sine, cosine);
+    p2:=VectorTransform3D(uzegeometry.CreateVertex(cosine,sine,0),m);
     pThisEntity^.Representation.DrawLineWithoutLT(DC,p1,p2);
 
     pThisEntity^.Representation.DrawLineWithoutLT(DC,p2,l2);

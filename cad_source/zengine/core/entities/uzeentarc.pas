@@ -23,7 +23,7 @@ uses
     uzecamera,uzestyleslayers,UGDBSelectedObjArray,
     uzeentity,UGDBOutbound2DIArray,UGDBPoint3DArray,uzctnrVectorBytes,uzbtypes,
     uzegeometrytypes,uzeconsts,uzglviewareadata,uzegeometry,uzeffdxfsupport,uzeentplain,
-    uzctnrvectorpgdbaseobjects,uzeSnap;
+    uzctnrvectorpgdbaseobjects,uzeSnap,math;
 type
 {Export+}
 {REGISTEROBJECTTYPE GDBObjArc}
@@ -279,20 +279,17 @@ var
 begin
   angle := endangle - startangle;
   if angle < 0 then angle := 2 * pi + angle;
-  v.x:=cos(startangle{*pi/180});
-  v.y:=sin(startangle{*pi/180});
+  SinCos(startangle{*pi/180},v.y,v.x);
   v.z:=0;
   v.w:=1;
   v:=VectorTransform(v,objMatrix);
   q0:=pgdbvertex(@v)^;
-  v.x:=cos(startangle+angle{*pi/180}/2);
-  v.y:=sin(startangle+angle{*pi/180}/2);
+  SinCos(startangle+angle{*pi/180}/2,v.y,v.x);
   v.z:=0;
   v.w:=1;
   v:=VectorTransform(v,objMatrix);
   q1:=pgdbvertex(@v)^;
-  v.x:=cos(endangle{*pi/180});
-  v.y:=sin(endangle{*pi/180});
+  SinCos(endangle{*pi/180},v.y,v.x);
   v.z:=0;
   v.w:=1;
   v:=VectorTransform(v,objMatrix);
@@ -363,10 +360,8 @@ begin
          q:=AxisIntersect(sq,eq);
          if (self.StartAngle>self.EndAngle)and(q=0) then
                                               q:=q xor 15;
-         sx:=cos(self.StartAngle);
-         sy:=sin(self.StartAngle);
-         ex:=cos(self.EndAngle);
-         ey:=sin(self.EndAngle);
+         SinCos(self.StartAngle,sy,sx);
+         SinCos(self.EndAngle,ey,ex);
          if sx>ex then
                       begin
                            minx:=ex;
@@ -436,9 +431,7 @@ begin
   if angle < 0 then angle := 2 * pi + angle;
 
   Vertex3D_in_WCS_Array.clear;
-
-  v.x:=cos(startangle);
-  v.y:=sin(startangle);
+  SinCos(startangle,v.y,v.x);
   v.z:=0;
   pv:=VectorTransform3D(v,objmatrix);
   Vertex3D_in_WCS_Array.PushBackData(pv);
@@ -458,8 +451,7 @@ begin
 
   for i:=1 to lod do
   begin
-              v.x:=cos(startangle+i / lod * angle);
-              v.y:=sin(startangle+i / lod * angle);
+              SinCos(startangle+i / lod * angle,v.y,v.x);
               v.z:=0;
               pv:=VectorTransform3D(v,objmatrix);
               Vertex3D_in_WCS_Array.PushBackData(pv);

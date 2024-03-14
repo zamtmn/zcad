@@ -32,7 +32,7 @@ GDBfont= object(GDBNamedObject)
     Internalname:String; // Международное полное имя с описанием авора
     family:String;
     fullname:String;
-    font:PBASEFont;
+    font:TZEBaseFontImpl;
     DummyDrawerHandle:{THandle}ptruint;
     constructor initnul;
     constructor init(n:String);
@@ -330,8 +330,8 @@ begin
     PLLSymbolLine:=pointer(geom.LLprimitives.getDataMutable(LLSymbolLineIndex));
     if LLSymbolLineCreated then
                                begin
-                                    PLLSymbolLine^.SymbolsParam.IsCanSystemDraw:=font^.IsCanSystemDraw;
-                                    font^.SetupSymbolLineParams(matr,PLLSymbolLine^.SymbolsParam);
+                                    PLLSymbolLine^.SymbolsParam.IsCanSystemDraw:=font.IsCanSystemDraw;
+                                    font.SetupSymbolLineParams(matr,PLLSymbolLine^.SymbolsParam);
                                     PLLSymbolLine^.SymbolsParam.pfont:=@self;
                                     (*if PLLSymbolLine^.SymbolsParam.IsCanSystemDraw then
                                     begin
@@ -384,10 +384,7 @@ begin
      family:='';
      fullname:='';
      if font<>nil then
-                      begin
-                           font.done;
-                           Freemem(pointer(font));
-                      end;
+       freeandnil(font);
      inherited;
 end;
 (*procedure GDBfont.ItSHX;

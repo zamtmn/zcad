@@ -92,6 +92,7 @@ type
             RD_SpatialNodesDepth:PInteger;(*'Spatial index nodes depth'*)(*hidden_in_objinsp*)
             RD_SpatialNodeCount:PInteger;(*'Spatial index ents in node'*)(*hidden_in_objinsp*)
             RD_MaxLTPatternsInEntity:PInteger;(*'Max LT patterns in entity'*)
+            RD_UseLazFreeTypeImplementation:PBoolean;(*'Use LazFreeType engine instead FreeType'*)
       end;
   {REGISTERRECORDTYPE tsave}
   tsave=record

@@ -32,7 +32,8 @@ uses
   uzcstrconsts,uzccommand_loadlayout,uzcgui2linetypes,uzestyleslinetypes,uzcinterfacedata,
   uzcgui2linewidth,uzcflineweights,uzcgui2textstyles,uzcgui2dimstyles,
   uzedrawingsimple,uzcdrawing,uzcuidialogs,uzbstrproc,
-  uzestyleslayers,gzundoCmdChgData,uzcutils,gzctnrVectorTypes;
+  uzestyleslayers,zUndoCmdChgBaseTypes,uzcutils,gzctnrVectorTypes,
+  zUndoCmdChgTypes;
 type
   TMyToolbar=class(TToolBar)
     public
@@ -113,10 +114,13 @@ begin
      result:=false;
      case numprop of
                     0:begin
-                        with TBooleanChangeCommand.CreateAndPushIfNeed(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,PGDBLayerProp(PLayer)^._on,nil,nil) do
+                        with TBooleanChangeCommand.CreateAndPushIfNeed(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,
+                                                                       TChangedBoolean.CreateRec(PGDBLayerProp(PLayer)^._on),
+                                                                       TSharedEmpty(Default(TEmpty)),
+                                                                       TAfterChangeEmpty(Default(TEmpty)))do
                         begin
                           PGDBLayerProp(PLayer)^._on:=not(PGDBLayerProp(PLayer)^._on);
-                          ComitFromObj;
+                          //ComitFromObj;
                         end;
                         if PLayer=cdwg^.GetCurrentLayer then
                           if not PGDBLayerProp(PLayer)^._on then
@@ -125,10 +129,13 @@ begin
                       end;
                     {1:;}
                     2:begin
-                        with TBooleanChangeCommand.CreateAndPushIfNeed(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,PGDBLayerProp(PLayer)^._lock,nil,nil) do
+                        with TBooleanChangeCommand.CreateAndPushIfNeed(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,
+                                                                       TChangedBoolean.CreateRec(PGDBLayerProp(PLayer)^._lock),
+                                                                       TSharedEmpty(Default(TEmpty)),
+                                                                       TAfterChangeEmpty(Default(TEmpty)))do
                         begin
                           PGDBLayerProp(PLayer)^._lock:=not(PGDBLayerProp(PLayer)^._lock);
-                          ComitFromObj;
+                          //ComitFromObj;
                         end;
                       end;
                     3:begin
@@ -140,10 +147,13 @@ begin
                                           if assigned(sysvar.dwg.DWG_CLayer) then
                                           if sysvar.dwg.DWG_CLayer^<>Player then
                                           begin
-                                               with TGDBPoinerChangeCommand.CreateAndPushIfNeed(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,sysvar.dwg.DWG_CLayer^,nil,nil) do
+                                               with TPoinerChangeCommand.CreateAndPushIfNeed(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,
+                                                                                             TChangedPointer.CreateRec(sysvar.dwg.DWG_CLayer^),
+                                                                                             TSharedEmpty.CreateRec(Default(TEmpty)),
+                                                                                             TAfterChangeEmpty.CreateRec(Default(TEmpty))) do
                                                begin
                                                     sysvar.dwg.DWG_CLayer^:=Player;
-                                                    ComitFromObj;
+                                                    //ComitFromObj;
                                                end;
                                           end;
                                           if not PGDBLayerProp(PLayer)^._on then

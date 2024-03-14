@@ -24,7 +24,7 @@ uses
     UGDBSelectedObjArray,uzeentity,UGDBOutbound2DIArray,UGDBPoint3DArray,
     uzegeometrytypes,uzctnrVectorBytes,varman,varmandef,uzbtypes,uzeconsts,
     uzglviewareadata,uzegeometry,uzeffdxfsupport,uzeentplain,
-    uzctnrvectorpgdbaseobjects,uzeSnap;
+    uzctnrvectorpgdbaseobjects,uzeSnap,math;
 type
 {Export+}
   ptEllipsertmodify=^tEllipsertmodify;
@@ -263,20 +263,17 @@ begin
   angle := endangle - startangle;
   if angle < 0 then angle := 2 * pi + angle;
   length := abs(angle){*pi/180} * rr;//---------------------------------------------------------------
-  v.x:=cos(startangle{*pi/180});
-  v.y:=sin(startangle{*pi/180});
+  SinCos(startangle{*pi/180},v.y,v.x);
   v.z:=0;
   v.w:=1;
   v:=VectorTransform(v,objMatrix);
   q0:=pgdbvertex(@v)^;
-  v.x:=cos(startangle+angle{*pi/180}/2);
-  v.y:=sin(startangle+angle{*pi/180}/2);
+  SinCos(startangle+angle{*pi/180}/2,v.y,v.x);
   v.z:=0;
   v.w:=1;
   v:=VectorTransform(v,objMatrix);
   q1:=pgdbvertex(@v)^;
-  v.x:=cos(endangle{*pi/180});
-  v.y:=sin(endangle{*pi/180});
+  SinCos(endangle{*pi/180},v.y,v.x);
   v.z:=0;
   v.w:=1;
   v:=VectorTransform(v,objMatrix);
@@ -371,8 +368,7 @@ begin
   Getmem(PPoint,sizeof(GDBPoint2DArray));
   PPoint^.init(lod+1);}
   //matr:=objMatrix;
-  v.x:=cos(startangle);
-  v.y:=sin(startangle);
+  SinCos(startangle,v.y,v.x);
   v.z:=0;
   pv:=VectorTransform3D(v,objmatrix);
   Vertex3D_in_WCS_Array.PushBackData(pv);
@@ -381,8 +377,7 @@ begin
 
   for i:=1 to lod do
   begin
-              v.x:=cos(startangle+i / lod * angle);
-              v.y:=sin(startangle+i / lod * angle);
+              SinCos(startangle+i / lod * angle,v.y,v.x);
               v.z:=0;
               pv:=VectorTransform3D(v,objmatrix);
               Vertex3D_in_WCS_Array.PushBackData(pv);

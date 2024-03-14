@@ -21,7 +21,7 @@ unit uzccommand_polyed;
 
 interface
 uses
-  gzundoCmdChgMethods,
+  gzUndoCmdChgMethods,
   gzctnrVectorTypes,uzeentitiesmanager,
   uzcdrawing,
   uzgldrawcontext,

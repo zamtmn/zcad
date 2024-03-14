@@ -1690,8 +1690,7 @@ begin
 
      for i := 0 to 4 - 1 do
      begin
-       v.x:=cos(pi * i / 4);
-       v.y:=sin(pi * i / 4);
+       SinCos(pi * i / 4,v.y,v.x);
        v.z:=0;
        PolarAxis.PushBackData(v);
      end;

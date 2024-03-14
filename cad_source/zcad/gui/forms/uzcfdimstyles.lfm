@@ -1,19 +1,20 @@
 object DimStylesForm: TDimStylesForm
   Left = 362
-  Height = 751
+  Height = 876
   Top = 42
-  Width = 1200
+  Width = 1400
   ActiveControl = ButtonApplyClose
   Caption = 'Dimantion styles'
-  ClientHeight = 751
-  ClientWidth = 1200
-  Constraints.MinHeight = 751
-  Constraints.MinWidth = 1200
-  DesignTimePPI = 144
+  ClientHeight = 876
+  ClientWidth = 1400
+  Constraints.MinHeight = 876
+  Constraints.MinWidth = 1400
+  DesignTimePPI = 168
+  Position = poMainFormCenter
+  LCLVersion = '3.99.0.0'
   OnClose = FormClose
   OnCreate = FormCreate
   OnShow = FormShow
-  Position = poMainFormCenter
   object Bevel1: TBevel
     AnchorSideLeft.Control = Panel1
     AnchorSideLeft.Side = asrBottom
@@ -22,14 +23,14 @@ object DimStylesForm: TDimStylesForm
     AnchorSideRight.Side = asrBottom
     AnchorSideBottom.Control = Panel1
     AnchorSideBottom.Side = asrBottom
-    Left = 125
+    Left = 146
     Height = 37
     Top = 2
     Width = 1071
     Anchors = [akTop, akLeft, akRight, akBottom]
-    BorderSpacing.Left = 8
+    BorderSpacing.Left = 9
     BorderSpacing.Top = 2
-    BorderSpacing.Right = 4
+    BorderSpacing.Right = 5
     BorderSpacing.Bottom = 2
   end
   object DescLabel: TLabel
@@ -39,9 +40,9 @@ object DimStylesForm: TDimStylesForm
     AnchorSideTop.Side = asrCenter
     AnchorSideRight.Side = asrCenter
     AnchorSideBottom.Side = asrCenter
-    Left = 660
+    Left = 770
     Height = 1
-    Top = 20
+    Top = 23
     Width = 1
     BorderSpacing.Around = 1
     Layout = tlCenter
@@ -58,14 +59,14 @@ object DimStylesForm: TDimStylesForm
     Width = 153
     Anchors = [akRight, akBottom]
     AutoSize = True
-    BorderSpacing.Left = 3
-    BorderSpacing.Top = 3
-    BorderSpacing.Right = 3
-    BorderSpacing.Bottom = 3
+    BorderSpacing.Left = 4
+    BorderSpacing.Top = 4
+    BorderSpacing.Right = 4
+    BorderSpacing.Bottom = 4
     Caption = 'Apply and close'
-    OnClick = AplyClose
     ParentFont = False
     TabOrder = 0
+    OnClick = AplyClose
   end
   object ListView1: TZListView
     AnchorSideLeft.Control = Owner
@@ -76,7 +77,7 @@ object DimStylesForm: TDimStylesForm
     AnchorSideBottom.Control = ButtonApplyClose
     Left = 1
     Height = 667
-    Top = 43
+    Top = 50
     Width = 1198
     Anchors = [akTop, akLeft, akRight, akBottom]
     BorderSpacing.Left = 1
@@ -86,39 +87,39 @@ object DimStylesForm: TDimStylesForm
     Columns = <    
       item
         Caption = 'Status'
-        Width = 75
+        Width = 88
       end    
       item
         Caption = 'Name'
-        Width = 267
+        Width = 312
       end    
       item
         Caption = 'LinearScale'
-        Width = 226
+        Width = 264
       end    
       item
         Caption = 'TextStyleName'
-        Width = 226
+        Width = 264
       end    
       item
         Caption = 'TextHeight'
-        Width = 104
+        Width = 121
       end    
       item
         Caption = 'DIMBLK1'
-        Width = 75
+        Width = 88
       end    
       item
         Caption = 'DIMBLK2'
-        Width = 75
+        Width = 88
       end    
       item
         Caption = 'DIMLDRBLK'
-        Width = 75
+        Width = 88
       end    
       item
         Caption = 'DIMASZ'
-        Width = 75
+        Width = 88
       end>
     HideSelection = False
     ParentFont = False
@@ -164,13 +165,13 @@ object DimStylesForm: TDimStylesForm
         AnchorSideLeft.Control = CoolBar1
         AnchorSideTop.Control = CoolBar1
         Left = 17
-        Height = 33
+        Height = 39
         Top = 3
-        Width = 216
+        Width = 126
         Align = alNone
         AutoSize = True
-        BorderSpacing.Left = 17
-        BorderSpacing.Top = 3
+        BorderSpacing.Left = 20
+        BorderSpacing.Top = 4
         Caption = 'ToolBar1'
         EdgeBorders = []
         ParentFont = False
@@ -187,34 +188,34 @@ object DimStylesForm: TDimStylesForm
           ShowHint = True
         end
         object ToolButton_Delete: TToolButton
-          Left = 36
+          Left = 42
           Top = 0
           Action = DelStyle
         end
         object ToolButton_MkCurrent: TToolButton
-          Left = 71
+          Left = 83
           Top = 0
           Action = MkCurrentStyle
         end
         object ToolButton_Inspect: TToolButton
-          Left = 106
+          Left = 124
           Top = 0
           Action = InspectListItem
         end
         object Separator1: TToolButton
-          Left = 141
-          Height = 33
+          Left = 164
+          Height = 6
           Top = 0
           Caption = 'Separator1'
           Style = tbsDivider
         end
         object ToolButton_Purge: TToolButton
-          Left = 146
+          Left = 170
           Top = 0
           Action = PurgeStyles
         end
         object ToolButton_Refresh: TToolButton
-          Left = 181
+          Left = 211
           Top = 0
           Action = RefreshStyles
         end
@@ -222,43 +223,43 @@ object DimStylesForm: TDimStylesForm
     end
   end
   object ActionList1: TActionList
-    Left = 948
-    Top = 468
+    Left = 1106
+    Top = 546
     object AddStyle: TAction
       Caption = 'AddStyle'
       DisableIfNoHandler = False
       Hint = 'Add text style'
       ImageIndex = 1
-      OnExecute = DimStyleAdd
       ShortCut = 45
+      OnExecute = DimStyleAdd
     end
     object DelStyle: TAction
       Caption = 'DelStyle'
       DisableIfNoHandler = False
       Hint = 'Delete text style'
-      OnExecute = DeleteItem
       ShortCut = 46
+      OnExecute = DeleteItem
     end
     object MkCurrentStyle: TAction
       Caption = 'MkCurrentStyle'
       DisableIfNoHandler = False
       Hint = 'Make selected style curretn'
-      OnExecute = MkCurrent
       ShortCut = 32
+      OnExecute = MkCurrent
     end
     object PurgeStyles: TAction
       Caption = 'PurgeStyles'
       DisableIfNoHandler = False
       Hint = 'Purge not used styles'
-      OnExecute = PurgeTStyles
       ShortCut = 8238
+      OnExecute = PurgeTStyles
     end
     object RefreshStyles: TAction
       Caption = 'RefreshStyles'
       DisableIfNoHandler = False
       Hint = 'Refresh styles list'
-      OnExecute = RefreshListitems
       ShortCut = 115
+      OnExecute = RefreshListitems
     end
     object InspectListItem: TAction
       Caption = 'InspectListItem'

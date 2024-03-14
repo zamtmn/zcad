@@ -186,7 +186,7 @@ begin
   if content<>'' then
   begin
   repeat
-    sym:=getsymbol_fromGDBText(content,currsymbol,l,pgdbfont(pfont)^.font.unicode);
+    sym:=getsymbol_fromGDBText(content,currsymbol,l,pgdbfont(pfont)^.font.IsUnicode);
     psyminfo:=pgdbfont(pfont)^.GetOrReplaceSymbolInfo({ach2uch(integer(content[currsymbol]))}sym{//-ttf-//,tdinfo});
     if newline then
                    begin
@@ -303,9 +303,9 @@ procedure setstartx;
 begin
      if length(pswp.str)>0 then
                                begin
-//                                 if pswp.str[1]=' ' then
-//                                                         l:=l;
-                               sym:=getsymbol_fromGDBText(pswp.str,1,l,pgdbfont(pfont)^.font.unicode);
+                                 //if pswp.str[1]=' ' then
+                                 //                        l:=l;
+                               sym:=getsymbol_fromGDBText(pswp.str,1,l,pgdbfont(pfont)^.font.IsUnicode);
                                psyminfo:=pgdbfont(pfont)^.GetOrReplaceSymbolInfo(sym{//-ttf-//,tdinfo});
                                pswp^.x:= 0-psyminfo.SymMinX{*textprop.size};
                                end
@@ -722,7 +722,7 @@ begin
   while i<=length(pswp^.str) do
   begin
     m1:=matr;
-    sym:=getsymbol_fromGDBText(pswp^.str{[i]},i,l,pgdbfont(pfont)^.font.unicode);
+    sym:=getsymbol_fromGDBText(pswp^.str{[i]},i,l,pgdbfont(pfont)^.font.IsUnicode);
     if {pswp^.str[i]}sym={#}1 then
     begin
          ispl:=not(ispl);

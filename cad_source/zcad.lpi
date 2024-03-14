@@ -315,85 +315,91 @@
         </Mode0>
       </Modes>
     </RunParams>
-    <RequiredPackages Count="26">
+    <RequiredPackages Count="28">
       <Item1>
-        <PackageName Value="lape"/>
+        <PackageName Value="laz_fpspreadsheet"/>
       </Item1>
       <Item2>
-        <PackageName Value="MetaDarkStyle"/>
+        <PackageName Value="laz_fpspreadsheet_visual"/>
       </Item2>
       <Item3>
-        <PackageName Value="SynEdit"/>
+        <PackageName Value="lape"/>
       </Item3>
       <Item4>
-        <PackageName Value="fpdwg"/>
+        <PackageName Value="MetaDarkStyle"/>
       </Item4>
       <Item5>
-        <PackageName Value="lazopenglcontext"/>
+        <PackageName Value="SynEdit"/>
       </Item5>
       <Item6>
-        <PackageName Value="zbaseutils"/>
+        <PackageName Value="fpdwg"/>
       </Item6>
       <Item7>
-        <PackageName Value="zbaseutilsgui"/>
+        <PackageName Value="lazopenglcontext"/>
       </Item7>
       <Item8>
-        <PackageName Value="ag_vectors"/>
+        <PackageName Value="zbaseutils"/>
       </Item8>
       <Item9>
-        <PackageName Value="ag_graph"/>
+        <PackageName Value="zbaseutilsgui"/>
       </Item9>
       <Item10>
-        <PackageName Value="runtimetypeinfocontrols"/>
+        <PackageName Value="ag_vectors"/>
       </Item10>
       <Item11>
-        <PackageName Value="uniqueinstance_package"/>
+        <PackageName Value="ag_graph"/>
       </Item11>
       <Item12>
-        <PackageName Value="zmacros"/>
+        <PackageName Value="runtimetypeinfocontrols"/>
       </Item12>
       <Item13>
-        <PackageName Value="laz.virtualtreeview_package"/>
+        <PackageName Value="uniqueinstance_package"/>
       </Item13>
       <Item14>
-        <PackageName Value="ztoolbars"/>
+        <PackageName Value="zmacros"/>
       </Item14>
       <Item15>
-        <PackageName Value="zmath"/>
+        <PackageName Value="laz.virtualtreeview_package"/>
       </Item15>
       <Item16>
-        <PackageName Value="zobjectinspector"/>
+        <PackageName Value="ztoolbars"/>
       </Item16>
       <Item17>
-        <PackageName Value="zundostack"/>
+        <PackageName Value="zmath"/>
       </Item17>
       <Item18>
-        <PackageName Value="zscript"/>
+        <PackageName Value="zobjectinspector"/>
       </Item18>
       <Item19>
-        <PackageName Value="zscriptbase"/>
+        <PackageName Value="zundostack"/>
       </Item19>
       <Item20>
-        <PackageName Value="zcontainers"/>
+        <PackageName Value="zscript"/>
       </Item20>
       <Item21>
-        <PackageName Value="zebase"/>
+        <PackageName Value="zscriptbase"/>
       </Item21>
       <Item22>
-        <PackageName Value="zcontrols"/>
+        <PackageName Value="zcontainers"/>
       </Item22>
       <Item23>
-        <PackageName Value="FCL"/>
+        <PackageName Value="zebase"/>
       </Item23>
       <Item24>
-        <PackageName Value="Printer4Lazarus"/>
+        <PackageName Value="zcontrols"/>
       </Item24>
       <Item25>
-        <PackageName Value="AnchorDocking"/>
+        <PackageName Value="FCL"/>
       </Item25>
       <Item26>
-        <PackageName Value="LCL"/>
+        <PackageName Value="Printer4Lazarus"/>
       </Item26>
+      <Item27>
+        <PackageName Value="AnchorDocking"/>
+      </Item27>
+      <Item28>
+        <PackageName Value="LCL"/>
+      </Item28>
     </RequiredPackages>
     <Units Count="201">
       <Unit0>
@@ -797,8 +803,9 @@
         <IsPartOfProject Value="True"/>
       </Unit87>
       <Unit88>
-        <Filename Value="zengine/fonts/uzefontttf.pas"/>
+        <Filename Value="zengine/fonts/uzefontfileformatttf.pas"/>
         <IsPartOfProject Value="True"/>
+        <UnitName Value="uzeFontFileFormatTTF"/>
       </Unit88>
       <Unit89>
         <Filename Value="zengine/fonts/uzefontmanager.pas"/>
@@ -813,8 +820,9 @@
         <IsPartOfProject Value="True"/>
       </Unit91>
       <Unit92>
-        <Filename Value="zengine/fonts/uzeffshx.pas"/>
+        <Filename Value="zengine/fonts/uzefontfileformatshx.pas"/>
         <IsPartOfProject Value="True"/>
+        <UnitName Value="uzeFontFileFormatSHX"/>
       </Unit92>
       <Unit93>
         <Filename Value="zengine/fonts/uzeffttf.pas"/>
@@ -1282,11 +1290,6 @@
         <CPPInline Value="False"/>
       </SyntaxOptions>
     </Parsing>
-    <CodeGeneration>
-      <Optimizations>
-        <OptimizationLevel Value="0"/>
-      </Optimizations>
-    </CodeGeneration>
     <Linking>
       <Debugging>
         <DebugInfoType Value="dsDwarf2Set"/>

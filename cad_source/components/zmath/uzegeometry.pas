@@ -155,9 +155,9 @@ function FrustumTransform(const frustum:ClipArray;const M:DMatrix4F; MatrixAlrea
 procedure MatrixTranspose(var M: DMatrix4D);overload;inline;
 procedure MatrixTranspose(var M: DMatrix4F);overload;inline;
 procedure MatrixNormalize(var M: DMatrix4D);inline;
-function CreateRotationMatrixX(const Sine, Cosine: Double): DMatrix4D;inline;
-function CreateRotationMatrixY(const Sine, Cosine: Double): DMatrix4D;inline;
-function CreateRotationMatrixZ(const Sine, Cosine: Double): DMatrix4D;inline;
+function CreateRotationMatrixX(const angle: Double): DMatrix4D;inline;
+function CreateRotationMatrixY(const angle: Double): DMatrix4D;inline;
+function CreateRotationMatrixZ(const angle: Double): DMatrix4D;inline;
 function CreateRotatedXVector(const angle: Double):GDBVertex;
 function CreateRotatedYVector(const angle: Double):GDBVertex;
 function CreateAffineRotationMatrix(const anAxis: GDBvertex; angle: double):DMatrix4D;inline;
@@ -875,20 +875,20 @@ end;}
 
 
 function Perspective;
-var sine, cotangent, deltaZ, radians:Double;
+var sine, cosine, cotangent, deltaZ, radians:Double;
     m:DMatrix4D;
 begin
 
     radians:= fovy/2*Pi/180;
     deltaZ:=zmax - zmin;
-    sine:=sin(radians);
+    SinCos(radians, sine, cosine);
 
 
     {if ((deltaZ == 0) || (sine == 0) || (aspect == 0))
 	return;
     }
 
-    cotangent:= COS(radians) / sine;
+    cotangent:= cosine / sine;
 
     m:=OneMatrix;
 
@@ -1366,8 +1366,11 @@ begin
   Result[3].v[3] := 1;
 end;
 
-function CreateRotationMatrixX(const Sine, Cosine: Double): DMatrix4D;
+function CreateRotationMatrixX(const angle: Double): DMatrix4D;
+var
+  Sine, Cosine: Double;
 begin
+  SinCos(angle, Sine, Cosine);
   Result := EmptyMatrix;
   Result[0].v[0] := 1;
   Result[1].v[1] := Cosine;
@@ -1376,8 +1379,11 @@ begin
   Result[2].v[2] := Cosine;
   Result[3].v[3] := 1;
 end;
-function CreateRotationMatrixY(const Sine, Cosine: Double): DMatrix4D;
+function CreateRotationMatrixY(const angle: Double): DMatrix4D;
+var
+  Sine, Cosine: Double;
 begin
+  SinCos(angle, Sine, Cosine);
   Result := EmptyMatrix;
   Result[0].v[0] := Cosine;
   Result[0].v[2] := -Sine;
@@ -1388,30 +1394,30 @@ begin
 end;
 function CreateRotatedXVector(const angle: Double):GDBVertex;
 begin
-  Result.x:=cos(angle);
-  Result.y:=sin(angle);
+  SinCos(angle, Result.y, Result.x);
   Result.z:=0;
 end;
 function CreateRotatedYVector(const angle: Double):GDBVertex;
 begin
   Result:=CreateRotatedXVector(angle+pi/2);
 end;
-function CreateRotationMatrixZ(const Sine, Cosine: Double): DMatrix4D;
+function CreateRotationMatrixZ(const angle: Double): DMatrix4D;
+var
+  Sine, Cosine: Double;
 begin
+  SinCos(angle, Sine, Cosine);
   Result := Onematrix;
   Result[0].v[0] := Cosine;
   Result[1].v[1] := Cosine;
   Result[1].v[0] := -Sine;
   Result[0].v[1] := Sine;
-
 end;
 function CreateAffineRotationMatrix(const anAxis: GDBvertex; angle: double):DMatrix4D;
 var
    axis : GDBvertex;
    cosine, sine, one_minus_cosine :double;
 begin
-   SINE:=sin(angle);
-   cosine:=cos(angle);
+   SinCos(angle, SINE, cosine);
    one_minus_cosine:=1 - cosine;
    axis:=NormalizeVertex(anAxis);
    result:=onematrix;

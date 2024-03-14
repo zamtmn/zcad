@@ -171,7 +171,8 @@ begin
                  repeat
                       if pv^.Selected then
                                           begin
-                                               pentvarext:=pv^.GetExtension<TVariablesExtender>;
+                                            pentvarext:=pv^.GetExtension<TVariablesExtender>;
+                                            if pentvarext<>nil then begin
                                                pvd:=pentvarext.entityunit.FindVariable('DB_link');
                                                if pvd<>nil then
                                                begin
@@ -179,6 +180,7 @@ begin
                                                     DBLinkProcess(pv,drawings.GetCurrentDWG^);
                                                     inc(c);
                                                end;
+                                            end;
                                           end;
                  pv:=drawings.GetCurrentROOT.ObjArray.iterate(ir);
                  until pv=nil;

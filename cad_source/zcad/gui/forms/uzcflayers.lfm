@@ -1,19 +1,20 @@
 object LayersForm: TLayersForm
   Left = 643
-  Height = 885
+  Height = 1032
   Top = 222
-  Width = 1576
+  Width = 1839
   ActiveControl = ButtonApplyClose
   Caption = 'Layers'
-  ClientHeight = 885
-  ClientWidth = 1576
-  Constraints.MinHeight = 750
-  Constraints.MinWidth = 1200
-  DesignTimePPI = 144
+  ClientHeight = 1032
+  ClientWidth = 1839
+  Constraints.MinHeight = 875
+  Constraints.MinWidth = 1400
+  DesignTimePPI = 168
+  Position = poMainFormCenter
+  LCLVersion = '3.99.0.0'
   OnClose = FormClose
   OnCreate = FormCreate
   OnShow = RefreshListItems
-  Position = poMainFormCenter
   object Bevel1: TBevel
     AnchorSideLeft.Control = Panel1
     AnchorSideLeft.Side = asrBottom
@@ -22,14 +23,14 @@ object LayersForm: TLayersForm
     AnchorSideRight.Side = asrBottom
     AnchorSideBottom.Control = Panel1
     AnchorSideBottom.Side = asrBottom
-    Left = 508
-    Height = 35
+    Left = 592
+    Height = 41
     Top = 2
-    Width = 1060
+    Width = 1238
     Anchors = [akTop, akLeft, akRight, akBottom]
-    BorderSpacing.Left = 8
+    BorderSpacing.Left = 9
     BorderSpacing.Top = 2
-    BorderSpacing.Right = 8
+    BorderSpacing.Right = 9
     BorderSpacing.Bottom = 2
   end
   object LayerDescLabel: TLabel
@@ -39,16 +40,15 @@ object LayersForm: TLayersForm
     AnchorSideRight.Side = asrBottom
     AnchorSideBottom.Control = Bevel1
     AnchorSideBottom.Side = asrBottom
-    Left = 520
-    Height = 31
+    Left = 606
+    Height = 37
     Top = 4
-    Width = 1036
+    Width = 1210
     Anchors = [akTop, akLeft, akRight, akBottom]
     AutoSize = False
-    BorderSpacing.Left = 10
-    BorderSpacing.Right = 10
+    BorderSpacing.Left = 12
+    BorderSpacing.Right = 12
     BorderSpacing.Around = 2
-    Color = clDefault
     Layout = tlCenter
     ParentColor = False
   end
@@ -57,32 +57,32 @@ object LayersForm: TLayersForm
     AnchorSideRight.Side = asrBottom
     AnchorSideBottom.Control = Owner
     AnchorSideBottom.Side = asrBottom
-    Left = 1343
-    Height = 45
-    Top = 838
-    Width = 231
+    Left = 1567
+    Height = 52
+    Top = 978
+    Width = 270
     Anchors = [akRight, akBottom]
     BorderSpacing.Right = 2
     BorderSpacing.Bottom = 2
     Caption = 'Apply and close'
-    OnClick = AplyClose
     TabOrder = 0
+    OnClick = AplyClose
   end
   object Button_Apply: TBitBtn
     AnchorSideRight.Control = ButtonApplyClose
     AnchorSideBottom.Control = Owner
     AnchorSideBottom.Side = asrBottom
-    Left = 1116
-    Height = 45
-    Top = 838
-    Width = 225
+    Left = 1303
+    Height = 52
+    Top = 978
+    Width = 262
     Anchors = [akRight, akBottom]
     BorderSpacing.Right = 2
     BorderSpacing.Bottom = 2
     Caption = 'Apply'
-    OnClick = Aply
     ParentShowHint = False
     TabOrder = 1
+    OnClick = Aply
   end
   object ListView1: TZListView
     AnchorSideLeft.Control = Owner
@@ -92,60 +92,61 @@ object LayersForm: TLayersForm
     AnchorSideRight.Side = asrBottom
     AnchorSideBottom.Control = ButtonApplyClose
     Left = 2
-    Height = 793
-    Top = 42
-    Width = 1572
+    Height = 925
+    Top = 49
+    Width = 1835
     Anchors = [akTop, akLeft, akRight, akBottom]
     BorderSpacing.Left = 2
-    BorderSpacing.Top = 3
+    BorderSpacing.Top = 4
     BorderSpacing.Right = 2
-    BorderSpacing.Bottom = 3
+    BorderSpacing.Bottom = 4
+    BorderStyle = bsNone
     Columns = <    
       item
         Alignment = taCenter
         Caption = 'Status'
-        Width = 80
+        Width = 93
       end    
       item
         Caption = 'Name'
-        Width = 602
+        Width = 701
       end    
       item
         Alignment = taCenter
         Caption = 'On'
-        Width = 100
+        Width = 117
       end    
       item
         Alignment = taCenter
         Caption = 'Freze'
-        Width = 100
+        Width = 117
       end    
       item
         Alignment = taCenter
         Caption = 'Lock'
-        Width = 100
+        Width = 117
       end    
       item
         Caption = 'Color'
-        Width = 100
+        Width = 117
       end    
       item
         Caption = 'Line type'
-        Width = 150
+        Width = 175
       end    
       item
         Caption = 'Line weight'
-        Width = 150
+        Width = 175
       end    
       item
         Alignment = taCenter
         Caption = 'Plot'
-        Width = 75
+        Width = 88
       end    
       item
         AutoSize = True
         Caption = 'Description'
-        Width = 115
+        Width = 135
       end>
     MultiSelect = True
     ReadOnly = True
@@ -155,26 +156,26 @@ object LayersForm: TLayersForm
     TabOrder = 2
     ViewStyle = vsReport
     OnSelectItem = ListView1SelectItem
-    onMakeCurrent = MaceItemCurrent
+    onMakeCurrent = MakeItemCurrent
   end
   object Panel1: TPanel
     AnchorSideLeft.Control = Owner
     AnchorSideTop.Control = Owner
     Left = 0
-    Height = 39
+    Height = 45
     Top = 0
-    Width = 500
+    Width = 583
     AutoSize = True
     BevelOuter = bvNone
-    ClientHeight = 39
-    ClientWidth = 500
-    Constraints.MinWidth = 500
+    ClientHeight = 45
+    ClientWidth = 583
+    Constraints.MinWidth = 583
     TabOrder = 3
     object CoolBar1: TCoolBar
       Left = 0
-      Height = 39
+      Height = 45
       Top = 0
-      Width = 500
+      Width = 583
       AutoSize = True
       Bands = <      
         item
@@ -187,9 +188,9 @@ object LayersForm: TLayersForm
         AnchorSideLeft.Control = CoolBar1
         AnchorSideTop.Control = CoolBar1
         Left = 22
-        Height = 33
+        Height = 39
         Top = 3
-        Width = 181
+        Width = 207
         Align = alNone
         AutoSize = True
         BorderSpacing.Left = 22
@@ -209,35 +210,35 @@ object LayersForm: TLayersForm
           ShowHint = True
         end
         object ToolButton2: TToolButton
-          Left = 36
+          Left = 41
           Top = 0
           Action = DelLayer
           ParentShowHint = False
           ShowHint = True
         end
         object ToolButton3: TToolButton
-          Left = 71
+          Left = 81
           Top = 0
           Action = MkCurrentLayer
           ParentShowHint = False
           ShowHint = True
         end
         object ToolButton4: TToolButton
-          Left = 106
-          Height = 33
+          Left = 121
+          Height = 5
           Top = 0
           Caption = 'ToolButton4'
           Style = tbsDivider
         end
         object ToolButton5: TToolButton
-          Left = 111
+          Left = 127
           Top = 0
           Action = PurgeLayers
           ParentShowHint = False
           ShowHint = True
         end
         object ToolButton6: TToolButton
-          Left = 146
+          Left = 167
           Top = 0
           Action = RefreshLayers
           ParentShowHint = False
@@ -247,42 +248,42 @@ object LayersForm: TLayersForm
     end
   end
   object ActionList1: TActionList
-    Left = 1131
-    Top = 390
+    Left = 1320
+    Top = 455
     object AddLayer: TAction
       Caption = 'AddLayer'
       DisableIfNoHandler = False
       Hint = 'Add layer'
-      OnExecute = LayerAdd
       ShortCut = 45
+      OnExecute = LayerAdd
     end
     object DelLayer: TAction
       Caption = 'DelLayer'
       DisableIfNoHandler = False
       Hint = 'Delete layer'
-      OnExecute = LayerDelete
       ShortCut = 46
+      OnExecute = LayerDelete
     end
     object MkCurrentLayer: TAction
       Caption = 'MkCurrentLayer'
       DisableIfNoHandler = False
       Hint = 'Make selected layer current'
-      OnExecute = MkCurrent
       ShortCut = 32
+      OnExecute = MkCurrent
     end
     object PurgeLayers: TAction
       Caption = 'PurgeLayers'
       DisableIfNoHandler = False
       Hint = 'Purge layers'
-      OnExecute = _PurgeLayers
       ShortCut = 8238
+      OnExecute = _PurgeLayers
     end
     object RefreshLayers: TAction
       Caption = 'RefreshLayers'
       DisableIfNoHandler = False
       Hint = 'Refresh layers'
-      OnExecute = RefreshListItems
       ShortCut = 115
+      OnExecute = RefreshListItems
     end
   end
 end

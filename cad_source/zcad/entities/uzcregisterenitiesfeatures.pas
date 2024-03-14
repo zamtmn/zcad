@@ -213,6 +213,11 @@ begin
     if (pvnt<>nil)and(pvnt<>nil) then
       DeviceNameSubProcess(pvn,pstring(pvnt^.data.Addr.Instance)^,pEntity);
 
+    pvn:=pentvarext.entityunit.FindVariable('GC_NameGroup',true);
+    pvnt:=pentvarext.entityunit.FindVariable('GC_NameGroupTemplate',true);
+    if (pvnt<>nil)and(pvnt<>nil) then
+      DeviceNameSubProcess(pvn,pstring(pvnt^.data.Addr.Instance)^,pEntity);
+
 
     pvnt:=pentvarext.entityunit.FindVariable('RiserName',true);
     if (pvnt<>nil)and(pvn<>nil)then

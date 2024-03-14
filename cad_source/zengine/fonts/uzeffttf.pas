@@ -19,86 +19,53 @@
 unit uzeffttf;
 {$INCLUDE zengineconfig.inc}
 interface
-uses uzefontmanager,EasyLazFreeType,uzefontttf,uzegeometry,
+uses uzefontmanager,EasyLazFreeType,uzeFontFileFormatTTF,uzegeometry,
     uzefont,uzbstrproc,{$IFNDEF DELPHI}FileUtil,LCLProc,{$ENDIF}sysutils,
-    uzctnrVectorBytes;
+    uzctnrVectorBytes,uzefontttfpreloader;
 type ptsyminfo=^tsyminfo;
      tsyminfo=record
                            number,size:word;
                      end;
-function createnewfontfromttf(name:String;var pf:PGDBfont):Boolean;
+function CreateNewfontFromTTF(name:String;var pf:PGDBfont):Boolean;
 
 implementation
 
-function CreateTTFFontInstance:PTTFFont;
-begin
-     Getmem(result,sizeof(TTFFont));
-     result^.init;
-end;
-function createnewfontfromttf(name:String;var pf:PGDBfont):Boolean;
+function CreateNewfontFromTTF(name:String;var pf:PGDBfont):Boolean;
 var
-   i:integer;
-   chcode:integer;
-   pttf:PTTFFont;
-   si:TTTFSymInfo;
-   //Iterator:TMapChar.TIterator;
+  i:integer;
+  chcode:integer;
+  ttf:TZETFFFontImpl;
+  si:TTTFSymInfo;
+  TTFFileParams:TTTFFileParams;
 begin
-    initfont(pf,extractfilename(name));
-    pf^.fontfile:=name;
-    pf^.font:=CreateTTFFontInstance;
-    //pf.ItFFT;
-    pttf:=pointer(pf^.font);
-    result:=true;
-    pttf^.ftFont.Hinted:=false;
-    pttf^.ftFont.Name := name;
-    //pttf^.ftFont.SmallLinePadding:=false;
-    //pf^.Internalname:=pttf^.ftFont.Information[ftiCopyrightNotice];
-    pf^.family:=pttf^.ftFont.Information[ftiFamily];
-    //pf^.Internalname:=pttf^.ftFont.Information[ftiStyle];
-    //pf^.Internalname:=pttf^.ftFont.Information[ftiIdentifier];
-    pf^.fullname:=pttf^.ftFont.Information[ftiFullName];
-    //pf^.Internalname:=pttf^.ftFont.Information[ftiVersionString];
-    //pf^.Internalname:=pttf^.ftFont.Information[ftiPostscriptName];
-    //pf^.Internalname:=pttf^.ftFont.Information[ftiTrademark];
-    //pf^.Internalname:=pttf^.ftFont.Information[ftiManufacturer];
-    //pf^.Internalname:=pttf^.ftFont.Information[ftiDesigner];
-    //pf^.Internalname:=pttf^.ftFont.Information[ftiVendorURL];
-    //pf^.Internalname:=pttf^.ftFont.Information[ftiDesignerURL];
-    //pf^.Internalname:=pttf^.ftFont.Information[ftiLicenseInfoURL];
+  TTFFileParams:=uzefontttfpreloader.getTTFFileParams(name);
+  initfont(pf,extractfilename(name));
+  pf^.fontfile:=name;
+  pf^.font:=TZETFFFontImpl.Create;
+  ttf:=pointer(pf^.font);
+  result:=true;
+  ttf.TTFImpl.Hinted:=false;
+  ttf.TTFImpl.LoadFile(name);
+  pf^.family:=ttf.TTFImpl.Family;
+  pf^.fullname:=ttf.TTFImpl.FullName;
 
-    //pf^.Internalname:=pttf^.ftFont.Information[ftiFamily];
+  //символ для замены отсутствующих символов
+  ttf.DefaultChar:=TTFFileParams.DefaultChar;
 
+  //символ 0 с глифом 0 на случай если DefaultChar врет
+  si.GlyphIndex:=0;
+  si.PSymbolInfo:=nil;
+  ttf.MapChar.Insert(0,si);
 
-    pttf^.ftFont.TextWidth('');//It's just a guarantee font loading. I do not need to calculate the any width
-    pttf^.ftFont.SizeInPoints:={pttf^.ftFont.SizeInPoints*10}10000;
-    pf.font.unicode:=true;
-    for i:=0 to 65535 do
-      begin
-           chcode:=pttf^.ftFont.CharIndex[i];
-           if chcode>0 then
-                      begin
-                           si.GlyphIndex:=chcode;
-                           si.PSymbolInfo:=nil;
-                           pttf^.MapChar.Insert(i,si);
-                           //programlog.LogOutStr('TTF: Symbol index='+inttostr(si.GlyphIndex)+'; code='+inttostr(i),0);
-                      end;
-      end;
-    {exit;}
-    (*if name='C:\WINDOWS\Fonts\GOST2304A.ttf' then
-      name:=name;
-    iterator:=pttf^.MapChar.Min;
-    if assigned(iterator) then
-    begin
-    repeat
-          si:=iterator.Value;
-          chcode:=iterator.Key;
-
-          cfeatettfsymbol(chcode,si,pttf);
-          iterator.Value:=si;
-
-    until {not iterator.next}true;
-    iterator.Destroy;
-    end;*)
+  ttf.TTFImpl.SizeInPoints:=10000;
+  for i:=TTFFileParams.FirstCharIndex to TTFFileParams.LastCharIndex do begin
+    chcode:=ttf.TTFImpl.CharIndex[i];
+    if chcode>0 then begin
+      si.GlyphIndex:=chcode;
+      si.PSymbolInfo:=nil;
+      ttf.MapChar.Insert(i,si);
+    end;
+  end;
 end;
 initialization
   RegisterFontLoadProcedure('ttf','TTF font',@createnewfontfromttf);

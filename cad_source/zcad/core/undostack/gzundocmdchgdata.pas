@@ -16,11 +16,10 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>)
 }
 {$MODE OBJFPC}{$H+}
-unit gzundoCmdChgData;
+unit gzUndoCmdChgData;
 {$INCLUDE zengineconfig.inc}
 interface
-uses uzepalette,zeundostack,zebaseundocommands,uzbtypes,
-     uzegeometrytypes,uzeentity,uzeentabstracttext{,uzestyleslayers};
+uses zeundostack,zebaseundocommands;
 
 type
   generic GUCmdChgData<T,HT> =class(TUCmdBase)
@@ -46,16 +45,6 @@ type
         procedure ComitFromObj;virtual;
         function GetDataTypeSize:PtrInt;virtual;
   end;
-  TGDBVertexChangeCommand=specialize GUCmdChgData<GDBVertex,PGDBObjEntity>;
-  TDoubleChangeCommand=specialize GUCmdChgData<Double,PGDBObjEntity>;
-  TGDBCameraBasePropChangeCommand=specialize GUCmdChgData<GDBCameraBaseProp,PGDBObjEntity>;
-  TStringChangeCommand=specialize GUCmdChgData<String,PGDBObjEntity>;
-  TGDBPoinerChangeCommand=specialize GUCmdChgData<Pointer,PGDBObjEntity>;
-  TBooleanChangeCommand=specialize GUCmdChgData<Boolean,PGDBObjEntity>;
-  TGDBByteChangeCommand=specialize GUCmdChgData<Byte,PGDBObjEntity>;
-  TGDBTGDBLineWeightChangeCommand=specialize GUCmdChgData<TGDBLineWeight,PGDBObjEntity>;
-  TGDBTGDBPaletteColorChangeCommand=specialize GUCmdChgData<TGDBPaletteColor,PGDBObjEntity>;
-  TGDBTTextJustifyChangeCommand=specialize GUCmdChgData<TTextJustify,PGDBObjEntity>;
 
 implementation
 //uses uzcdrawings,uzcinterface;

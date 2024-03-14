@@ -121,7 +121,7 @@ var
   i:TArrayIndex;
 begin
   i:=PZR^.Graphix.GeomData.Vertex3S.AddGDBVertex(V);
-  GLUIntrf.TessVertex(TS,@V,pointer(i));
+  GLUIntrf.TessVertex(TS,@V,i);
 end;
 procedure TTriangulator.ErrorCallBack(error: Cardinal;Data: Pointer);
 begin

@@ -390,6 +390,7 @@ var
   v1,v2:GDBVertex;
   l0:Double;
   a:double;
+  sine,cosine:double;
 begin
   if ESCalcWithoutOwner in PGDBObjEntity(pEntity)^.State then
     exit;
@@ -400,7 +401,8 @@ begin
         if PGDBObjEntity(pEntity)^.bp.ListPos.owner<>nil then begin
           V1:=PGDBvertex(@PGDBObjEntity(pEntity)^.bp.ListPos.owner^.GetMatrix^[0])^;
           a:=FRotateOverrideValue*pi/180;
-          l0:=scalardot(NormalizeVertex(V1),createvertex(cos(a),sin(a),0));
+          SinCos(a,sine,cosine);
+          l0:=scalardot(NormalizeVertex(V1),createvertex(cosine,sine,0));
           l0:=arccos(l0);
           if v1.y<-eps then l0:=2*pi-l0;
         end else

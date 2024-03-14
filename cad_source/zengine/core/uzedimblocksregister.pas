@@ -23,7 +23,8 @@ unit uzedimblocksregister;
 interface
 uses uzeutils,uzestyleslayers,uzestyleslinetypes,uzeconsts,uzeentitiesmanager,
      UGDBObjBlockdefArray,uzeblockdefsfactory,uzeblockdef,uzedrawingdef,
-     uzcsysvars,uzeentgenericsubentry,uzeentity,LazLogger,uzegeometrytypes,uzegeometry;
+     uzcsysvars,uzeentgenericsubentry,uzeentity,LazLogger,uzegeometrytypes,uzegeometry,
+     math;
 implementation
 function CreateClosedFilledBlock(var dwg:PTDrawingDef;const BlockName,BlockDependsOn,BlockDeffinedIn:String):PGDBObjBlockdef;
 var
@@ -124,11 +125,13 @@ function CreateArchTickBlock(var dwg:PTDrawingDef;const BlockName,BlockDependsOn
 var
   BlockDefArray:PGDBObjBlockdefArray;
   c,s:double;
+  sine,cosine:double;
 begin
   BlockDefArray:=dwg^.GetBlockDefArraySimple;
   result:=BlockDefArray.create(BlockName);
-  c:=0.075*cos(pi/4);
-  s:=0.075*sin(pi/4);
+  SinCos(pi/4,sine,cosine);
+  c:=0.075*cosine;
+  s:=0.075*sine;
   ENTF_CreateSolid(result,@result.ObjArray,
                    dwg^.GetLayerTable^.GetSystemLayer,dwg^.GetLTypeTable^.GetSystemLT(TLTByBlock),LnWtByBlock,ClByBlock,
                    CreateVertex(-0.5-c,-0.5+s,0),

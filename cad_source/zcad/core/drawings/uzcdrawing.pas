@@ -20,12 +20,13 @@ unit uzcdrawing;
 {$INCLUDE zengineconfig.inc}
 interface
 uses
-    uzcTranslations,uzcinterface,uzgldrawcontext,zeundostack,gzundoCmdChgData,
-    gzundoCmdChgMethod,zebaseundocommands,uzbpaths,uzestylesdim,
+    uzcTranslations,uzcinterface,uzgldrawcontext,zeundostack,gzUndoCmdChgData,
+    gzUndoCmdChgMethod,zUndoCmdChgCameraBaseProp,zebaseundocommands,uzbpaths,uzestylesdim,
     uzcdialogsfiles,LResources,uzcsysvars,uzcstrconsts,uzbstrproc,uzeblockdef,UUnitManager,
     uzbtypes,varmandef,varman,sysutils,uzegeometry, uzeconsts,
     uzedrawingsimple,uzestyleslayers,uzeentity,uzefontmanager,
-    uzedimensionaltypes,uzegeometrytypes,uzctnrVectorBytes,gzctnrVectorTypes,uzglviewareadata;
+    uzedimensionaltypes,uzegeometrytypes,uzctnrVectorBytes,gzctnrVectorTypes,uzglviewareadata,
+    zUndoCmdChgExtTypes;
 type
 {EXPORT+}
 PTZCADDrawing=^TZCADDrawing;

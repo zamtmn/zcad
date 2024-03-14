@@ -25,7 +25,7 @@ uses
   uzcLog,SysUtils,
   uzccommandsabstract,uzccommandsimpl,
   uzeentity,gzctnrVectorTypes,uzcdrawings,uzcstrconsts,uzeentityextender,
-  gzundoCmdChgMethods2,uzcdrawing,
+  gzUndoCmdChgMethods2,uzcdrawing,
   uzcinterface;
 
 implementation

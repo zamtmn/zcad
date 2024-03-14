@@ -71,7 +71,7 @@ var
     dc:TDrawContext;
 begin
   dispmatr:=uzegeometry.CreateTranslationMatrix(createvertex(-t3dp.x,-t3dp.y,-t3dp.z));
-  rotmatr:=uzegeometry.CreateRotationMatrixZ(sin(a),cos(a));
+  rotmatr:=uzegeometry.CreateRotationMatrixZ(a);
   rotmatr:=uzegeometry.MatrixMultiply(dispmatr,rotmatr);
   dispmatr:=uzegeometry.CreateTranslationMatrix(createvertex(t3dp.x,t3dp.y,t3dp.z));
   dispmatr:=uzegeometry.MatrixMultiply(rotmatr,dispmatr);

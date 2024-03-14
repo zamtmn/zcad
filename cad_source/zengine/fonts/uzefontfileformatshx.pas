@@ -16,7 +16,7 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
 
-unit uzeffshx;
+unit uzeFontFileFormatSHX;
 {$INCLUDE zengineconfig.inc}
 interface
 uses uzgprimitivescreator,uzglvectorobject,uzefontmanager,uzefontshx,uzegeometry,
@@ -55,6 +55,7 @@ var
   VDCopyParam,VDCopyResultParam:TZGLVectorDataCopyParam;
   symoutbound:TBoundingBox;
   offset:TEntIndexesOffsetData;
+  sine,cosine:double;
 procedure ProcessMinMax(_x,_y:fontfloat);
 begin
       if _y>ymax then
@@ -75,6 +76,7 @@ procedure createarc;
 var
   ad:TArcData;
   j:integer;
+  sine,cosine:double;
 begin
      tr.p1.x:=x;
      tr.p1.y:=y;
@@ -113,8 +115,9 @@ begin
              sizeshp:=0;
              for j:=0 to arccount do
                begin
-                 x1:=ad.p.x+(ad.r)*cos(startangle+j/arccount*angle);
-                 y1:=ad.p.y+(ad.r)*sin(startangle+j/arccount*angle);
+                 SinCos(startangle+j/arccount*angle,sine,cosine);
+                 x1:=ad.p.x+(ad.r)*cosine;
+                 y1:=ad.p.y+(ad.r)*sine;
                  if draw then
                    begin
                      ProcessMinMax(x1,y1);
@@ -154,12 +157,12 @@ begin
 //            if symbol=1055{П}then
 //                                 symbol:=symbol;
             psyminfo:=pf^.GetOrCreateSymbolInfo(symbol);
-            PSHXFont(pf^.font).FontData.LLprimitives.AlignDataSize;
-            psyminfo.{addr}LLPrimitiveStartIndex:=PSHXFont(pf^.font).FontData.LLprimitives{SHXdata}.Count;//----//
+            TZESHXFontImpl(pf^.font).FontData.LLprimitives.AlignDataSize;
+            psyminfo.LLPrimitiveStartIndex:=TZESHXFontImpl(pf^.font).FontData.LLprimitives{SHXdata}.Count;//----//
             onlyver:=0;
             sizeshx:=0;
             draw:=true;
-            baselen:=1/PSHXFont(pf^.font).h;
+            baselen:=1/TZESHXFontImpl(pf^.font).h;
             stackheap:=-1;
             x:=0;
             y:=0;
@@ -250,7 +253,7 @@ begin
                         offset.GeomIndexOffset:=VDCopyResultParam.EID.GeomIndexMin-VDCopyParam.EID.GeomIndexMin;
                         offset.IndexsIndexOffset:=VDCopyResultParam.EID.IndexsIndexMin-VDCopyParam.EID.IndexsIndexMin;
                         pf^.font.FontData.CorrectIndexes(VDCopyResultParam.LLPrimitivesStartIndex,psyminfo.LLPrimitiveCount,VDCopyResultParam.EID.IndexsIndexMin,VDCopyResultParam.EID.IndexsIndexMax-VDCopyResultParam.EID.IndexsIndexMin+1,offset);
-                        pf^.font.FontData.MulOnMatrix(VDCopyResultParam.EID.GeomIndexMin,VDCopyResultParam.EID.GeomIndexMax,MatrixMultiply(CreateScaleMatrix(CreateVertex(baselen*PSHXFont(pf^.font).h,baselen*PSHXFont(pf^.font).h,1)),CreateTranslationMatrix(CreateVertex(x,y,0))));
+                        pf^.font.FontData.MulOnMatrix(VDCopyResultParam.EID.GeomIndexMin,VDCopyResultParam.EID.GeomIndexMax,MatrixMultiply(CreateScaleMatrix(CreateVertex(baselen*TZESHXFontImpl(pf^.font).h,baselen*TZESHXFontImpl(pf^.font).h,1)),CreateTranslationMatrix(CreateVertex(x,y,0))));
                         symoutbound:=pf^.font.FontData.GetBoundingBbox(VDCopyResultParam.EID.GeomIndexMin,VDCopyResultParam.EID.GeomIndexMax);
                         ProcessMinMax(symoutbound.LBN.x,symoutbound.LBN.y);
                         ProcessMinMax(symoutbound.RTF.x,symoutbound.RTF.y);
@@ -485,8 +488,10 @@ begin
                       else
                         angle:=sign(Shortint(byt))*lo*pi/4;
                       startangle:=hi*pi/4;
-                      xb:=x-r*cos(startangle);
-                      yb:=y-r*sin(startangle);
+
+                      SinCos(startangle,sine,cosine);
+                      xb:=x-r*cosine;
+                      yb:=y-r*sine;
 
                       inc(sizeshx);
                       sizeshp:=1;
@@ -498,8 +503,9 @@ begin
                       y1:=0;
                       for i:=1 to arccount do
                         begin
-                          x1:=xb+r*cos(startangle+i/arccount*angle);
-                          y1:=yb+r*sin(startangle+i/arccount*angle);
+                          SinCos(startangle+i/arccount*angle,sine,cosine);
+                          x1:=xb+r*cosine;
+                          y1:=yb+r*sine;
                           if draw then
                             begin
                               ProcessMinMax(x1,y1);
@@ -538,8 +544,9 @@ begin
                                angle:=sign(Shortint(byt))*lo*pi/4;
                    angle:=angle-sign(Shortint(byt))*pi/180*{round}((endoffset+startoffset)/256*45); { TODO : symbol & wrong in isocp.shx, see errors\5.dxf }
                    startangle:=hi*pi/4+sign(Shortint(byt))*pi/180*{round}(startoffset/256*45);
-                   xb:=x-r*cos(startangle);
-                   yb:=y-r*sin(startangle);
+                   SinCos(startangle,sine,cosine);
+                   xb:=x-r*cosine;
+                   yb:=y-r*sine;
                    inc(sizeshx);
                    sizeshp:=1;
 
@@ -550,8 +557,9 @@ begin
                    y1:=0;
                    for i:=1 to arccount do
                      begin
-                       x1:=xb+r*cos(startangle+i/arccount*angle);
-                       y1:=yb+r*sin(startangle+i/arccount*angle);
+                       SinCos(startangle+i/arccount*angle,sine,cosine);
+                       x1:=xb+r*cosine;
+                       y1:=yb+r*sine;
                        if draw then
                          begin
                               ProcessMinMax(x1,y1);
@@ -681,11 +689,7 @@ begin
 
             result:=inccounter;
           end;
-function CreateSHXFontInstance:PSHXFont;
-begin
-     Getmem(result,sizeof(SHXFont));
-     result^.init;
-end;
+
 function createnewfontfromshx(name:String;var pf:PGDBfont):Boolean;
 var
    //f:filestream;
@@ -707,10 +711,10 @@ begin
     debugln('{D}[SHX]AUTOCAD-86 SHAPES 1.0');
     //programlog.LogOutStr('AUTOCAD-86 SHAPES 1.0',lp_OldPos,LM_Debug);
   initfont(pf,extractfilename(name));
-  pf^.font:=CreateSHXFontInstance;
+  pf^.font:=TZESHXFontImpl.Create;
   //pf.ItSHX;
   pf^.fontfile:=name;
-  pf^.font.unicode:=false;
+  //pf^.font.Unicode:=false;
   pdata:=pointer(pf);
   inc(pdata,sizeof(GDBfont));
   {test:=}memorybuf.readbyte;
@@ -740,8 +744,8 @@ begin
          if symnum=0 then
                          begin
                               pf^.Internalname:=line;
-                              PSHXFont(pf^.font).h:=memorybuf.readbyte;
-                              PSHXFont(pf^.font).u:=memorybuf.readbyte;
+                              TZESHXFontImpl(pf^.font).h:=memorybuf.readbyte;
+                              TZESHXFontImpl(pf^.font).u:=memorybuf.readbyte;
                               memorybuf.readbyte;
                               line:='';
                          end
@@ -772,7 +776,7 @@ begin
                                memorybuf.done;
                                membufcreated:=false;
                              end;
-        PSHXFont(pf^.font).FontData.Shrink;
+        TZESHXFontImpl(pf^.font).FontData.Shrink;
         //pf.compiledsize:=pf.SHXdata.Count;
   end
 else if line='AUTOCAD-86 UNIFONT 1.0' then
@@ -780,10 +784,10 @@ else if line='AUTOCAD-86 UNIFONT 1.0' then
        debugln('{D}[SHX]AUTOCAD-86 UNIFONT 1.0');
        //programlog.LogOutStr('AUTOCAD-86 UNIFONT 1.0',lp_OldPos,LM_Debug);
        initfont(pf,extractfilename(name));
-       pf^.font:=CreateSHXFontInstance;
+       pf^.font:=TZESHXFontImpl.Create;
        //pf.ItSHX;
        pf^.fontfile:=name;
-       pf^.font.unicode:=true;
+       TZESHXFontImpl(pf^.font).unicode:=true;
        pdata:=pointer(pf);
        inc(pdata,sizeof(GDBfont));
        {test:=}memorybuf.readbyte;
@@ -793,8 +797,8 @@ else if line='AUTOCAD-86 UNIFONT 1.0' then
        {symmin:=}memorybuf.readword;
 
        pf^.internalname:=memorybuf.readstring3(#0,'');
-       PSHXFont(pf^.font).h:=memorybuf.readbyte;
-       PSHXFont(pf^.font).u:=memorybuf.readbyte;
+       TZESHXFontImpl(pf^.font).h:=memorybuf.readbyte;
+       TZESHXFontImpl(pf^.font).u:=memorybuf.readbyte;
        memorybuf.readbyte;
        {test:=}memorybuf.readbyte;
        memorybuf.readbyte;
@@ -854,7 +858,7 @@ else if line='AUTOCAD-86 UNIFONT 1.0' then
 
 
   {psinfo:=}memorybuf.GetCurrentReadAddres;
-  PSHXFont(pf^.font).FontData.Shrink;
+  TZESHXFontImpl(pf^.font).FontData.Shrink;
   end
 else
     result:=false;

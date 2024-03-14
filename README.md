@@ -4,7 +4,9 @@
 ZCAD is simple CAD program, written in Lazarus / FPC.
 
 Contacts:
+
 zamtmn@yandex.ru
+
 https://t.me/zcad_dev
 
 License: GPL3.0/MPL2.0

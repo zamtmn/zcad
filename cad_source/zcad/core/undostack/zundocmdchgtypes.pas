@@ -27,6 +27,9 @@ uses
 
 type
   TEmpty=record
+    {todo: убрать после выхода нового fpc}
+    {3.2.2 компилятор виснет с пустой записью}
+    {$IF FPC_FULlVERSION<=30202}Dummy:Integer;{$ENDIF}
   end;
   TSharedEmpty=specialize GSharedData<TEmpty>;
   TAfterChangeDoNothing=class;

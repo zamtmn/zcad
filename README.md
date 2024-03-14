@@ -1,10 +1,11 @@
 # ZCAD
-[![GitHub Release](https://img.shields.io/github/release/zamtmn/zcad.svg)](https://github.com/zamtmn/zcad/releases)[![Build status](https://ci.appveyor.com/api/projects/status/7bsg5me8q1r5jjt4/branch/master?svg=true)](https://ci.appveyor.com/project/zamtmn/zcad/branch/master)
-![screenshot](https://github.com/zamtmn/zcad/raw/master/docs/img/sch.png)
-![screenshot](https://github.com/zamtmn/zcad/raw/master/docs/img/ops.png)
-![screenshot](https://github.com/zamtmn/zcad/raw/master/docs/img/zcadet_win32.png)
+
 ## Overview
 ZCAD is simple CAD program, written in Lazarus / FPC.
+
+Contacts:
+zamtmn@yandex.ru
+https://t.me/zcad_dev
 
 License: GPL3.0/MPL2.0
 
@@ -52,3 +53,10 @@ Build ZCADELECTROTECH:
 * `make zcadelectrotech LP=/path/to/your/lazarus PCP=/path/to/your/lazarus/primary/config`
 
 `make installpkgstolaz` you need to do it only one time, this will install packages from '**cad_sources/components**' and '**cad_sources/other**' to your lazarus and will rebuild it
+
+## Screenshots
+
+[![GitHub Release](https://img.shields.io/github/release/zamtmn/zcad.svg)](https://github.com/zamtmn/zcad/releases)[![Build status](https://ci.appveyor.com/api/projects/status/7bsg5me8q1r5jjt4/branch/master?svg=true)](https://ci.appveyor.com/project/zamtmn/zcad/branch/master)
+![screenshot](https://github.com/zamtmn/zcad/raw/master/docs/img/sch.png)
+![screenshot](https://github.com/zamtmn/zcad/raw/master/docs/img/ops.png)
+![screenshot](https://github.com/zamtmn/zcad/raw/master/docs/img/zcadet_win32.png)

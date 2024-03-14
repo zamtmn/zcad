@@ -358,12 +358,12 @@ begin
       if pvd<>nil then begin
         zcPlaceUndoStartMarkerIfNeed(UndoStartMarkerPlaced,'NumDevices');
         cp:=UCmdChgVariable.CreateAndPush(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,
-                                          TChangedDataDesc.CreateRec(pvd^.data.PTD,NumberingParams.NumberVar),
+                                          TChangedDataDesc.CreateRec(pvd^.data.PTD,pvd^.data.Addr.GetInstance,NumberingParams.NumberVar),
                                           TSharedPEntityData.CreateRec(pdev),
                                           TAfterChangePDrawing.CreateRec(drawings.GetCurrentDWG));
-        cp.ChangedData.StoreUndoData(pvd^.data.Addr.GetInstance);
+        //cp.ChangedData.StoreUndoData(pvd^.data.Addr.GetInstance);
         pvd^.data.PTD^.SetValueFromString(pvd^.data.Addr.Instance,inttostr(index));
-        cp.ChangedData.StoreDoData(pvd^.data.Addr.GetInstance);
+        //cp.ChangedData.StoreDoData(pvd^.data.Addr.GetInstance);
         inc(index,NumberingParams.Increment);
         inc(count);
         pdev^.FormatEntity(drawings.GetCurrentDWG^,dc);

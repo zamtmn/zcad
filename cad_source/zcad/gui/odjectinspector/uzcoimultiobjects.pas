@@ -146,12 +146,12 @@ begin
           zcPlaceUndoStartMarkerIfNeed(UMPlaced,'Variable changed');
 
           cp:=UCmdChgVariable.CreateAndPush(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,
-                                            TChangedDataDesc.CreateRec(PDestVD^.data.PTD,PDestVD^.name),
+                                            TChangedDataDesc.CreateRec(PDestVD^.data.PTD,PDestVD^.data.Addr.GetInstance,PDestVD^.name),
                                             TSharedPEntityData.CreateRec(pentity),
                                             TAfterChangePDrawing.CreateRec(drawings.GetCurrentDWG));
-          cp.ChangedData.StoreUndoData(PDestVD^.data.Addr.GetInstance);
+          //cp.ChangedData.StoreUndoData(PDestVD^.data.Addr.GetInstance);
           PDestVD.data.PTD.CopyInstanceTo(PSourceVD.data.Addr.Instance,PDestVD.data.Addr.Instance);
-          cp.ChangedData.StoreDoData(PDestVD^.data.Addr.GetInstance);
+          //cp.ChangedData.StoreDoData(PDestVD^.data.Addr.GetInstance);
           pentity^.YouChanged(drawings.GetCurrentDWG^);
           result:=true;
           if PSourceVD^.data.PTD.GetValueAsString(PSourceVD^.data.Addr.Instance)<>PDestVD^.data.PTD.GetValueAsString(PDestVD^.data.Addr.Instance) then

@@ -27,16 +27,15 @@ uses
 
 type
   TChangedDataDesc=record
-    PDoData,PUnDoData:Pointer;
+    PUnDoData:Pointer;
     PTD:PUserTypeDescriptor;
     VarName:String;
     procedure UnDo(sd:TSharedPEntityData);
     procedure Comit(sd:TSharedPEntityData);
     procedure ChangeProc(sd:TSharedPEntityData);
-    constructor CreateRec(APTD:PUserTypeDescriptor;AVarName:String);
+    constructor CreateRec(APTD:PUserTypeDescriptor;APValue:Pointer;AVarName:String);
     procedure DestroyRec;
     procedure StoreUndoData(APUnDoData:Pointer);
-    procedure StoreDoData(APDoData:Pointer);
   end;
 
   UCmdChgVariable=specialize GUCmdChgData2<TChangedDataDesc,TSharedPEntityData,TAfterChangePDrawing>;
@@ -53,6 +52,42 @@ begin
   ChangeProc(sd);
 end;
 
+procedure MyXchange(const source;var dest;count:SizeInt);
+var
+  tbuf:QWord;
+  i:integer;
+begin
+  case count of
+    sizeof(Byte):begin
+      pByte(@tbuf)^:=pByte(@source)^;
+      pByte(@source)^:=pByte(@dest)^;
+      pByte(@dest)^:=pByte(@tbuf)^;
+    end;
+    sizeof(Word):begin
+      pWord(@tbuf)^:=pWord(@source)^;
+      pWord(@source)^:=pWord(@dest)^;
+      pWord(@dest)^:=pWord(@tbuf)^;
+    end;
+    sizeof(LongWord):begin
+      pLongWord(@tbuf)^:=pLongWord(@source)^;
+      pLongWord(@source)^:=pLongWord(@dest)^;
+      pLongWord(@dest)^:=pLongWord(@tbuf)^;
+    end;
+    sizeof(QWord):begin
+      pQWord(@tbuf)^:=pQWord(@source)^;
+      pQWord(@source)^:=pQWord(@dest)^;
+      pQWord(@dest)^:=pQWord(@tbuf)^;
+    end;
+    else begin
+      for i:=0 to count-1 do begin
+        pByte(@tbuf)^:=pByte(@source)[i];
+        pByte(@source)[i]:=pByte(@dest)[i];
+        pByte(@dest)[i]:=pByte(@tbuf)^;
+      end;
+    end;
+  end;
+end;
+
 procedure TChangedDataDesc.ChangeProc(sd:TSharedPEntityData);
 var
   varext:TVariablesExtender;
@@ -64,27 +99,24 @@ begin
     vd:=varext.entityunit.FindVariable(VarName);
     if vd<>nil then begin
       if vd^.data.ptd=PTD then begin
-        PTD^.CopyInstanceTo(PUnDoData,vd^.data.Addr.GetInstance);
+        MyXchange(vd^.data.Addr.GetInstance^,PUnDoData^,vd^.data.ptd^.SizeInBytes);
       end;
     end;
   end;
-  p:=PDoData;
-  PDoData:=PUnDoData;
-  PUnDoData:=p;
 end;
 
-constructor TChangedDataDesc.CreateRec(APTD:PUserTypeDescriptor;AVarName:String);
+constructor TChangedDataDesc.CreateRec(APTD:PUserTypeDescriptor;APValue:Pointer;AVarName:String);
 begin
   PTD:=APTD;
   VarName:=AVarName;
-  PDoData:=PTD^.AllocAndInitInstance;
   PUnDoData:=PTD^.AllocAndInitInstance;
+  if APValue<>nil then
+    PTD^.CopyInstanceTo(APValue,PUnDoData);
 end;
+
 procedure TChangedDataDesc.DestroyRec;
 begin
   VarName:='';
-  PTD^.MagicFreeInstance(PDoData);
-  Freemem(PDoData);
   PTD^.MagicFreeInstance(PUnDoData);
   Freemem(PUnDoData);
 end;
@@ -92,10 +124,6 @@ end;
 procedure TChangedDataDesc.StoreUndoData(APUnDoData:Pointer);
 begin
   PTD^.CopyInstanceTo(APUnDoData,PUnDoData);
-end;
-procedure TChangedDataDesc.StoreDoData(APDoData:Pointer);
-begin
-  PTD^.CopyInstanceTo(APDoData,PDoData);
 end;
 
 end.

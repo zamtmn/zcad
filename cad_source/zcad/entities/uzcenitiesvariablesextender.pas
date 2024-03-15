@@ -67,6 +67,9 @@ TVariablesExtender=class(TBaseVariablesExtender)
     //**Если примитив - устройство, тогда возвращает ссылку на устройство. Если примитив - не устройство, тогда возвращает ноль
     function getMainFuncDevice:PGDBObjDevice;
 
+    ////**Если примитив - кабель, тогда возвращает ссылку на кабель. Если примитив - не кабель, тогда возвращает ноль
+    //function getMainFuncCable:PGDBObjCable;
+
     procedure addDelegate(pDelegateEntity:PGDBObjEntity;pDelegateEntityVarext:TVariablesExtender);
     procedure removeDelegate(pDelegateEntity:PGDBObjEntity;pDelegateEntityVarext:TVariablesExtender);
 
@@ -124,6 +127,13 @@ begin
   if getMainFuncEntity^.GetObjType=GDBDeviceID then
      result:=PGDBObjDevice(getMainFuncEntity);
 end;
+////**Если примитив - кабель, тогда возвращает ссылку на кабель. Если примитив - не кабель, тогда возвращает ноль
+//function TVariablesExtender.getMainFuncCable:PGDBObjCable;
+//begin
+//  result:=nil;
+//  if getMainFuncEntity^.GetObjType=GDBCableID then
+//     result:=PGDBObjCable(getMainFuncEntity);
+//end;
 
 procedure TVariablesExtender.addDelegate(pDelegateEntity:PGDBObjEntity;pDelegateEntityVarext:TVariablesExtender);
 begin

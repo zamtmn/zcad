@@ -24,7 +24,7 @@ interface
 uses uzcutils,uzgldrawcontext,uzglviewareageneral,uzeconsts,uzcsysvars,uzegeometry,
      varmandef,uzbtypes,uzccommandsabstract,uzccommandsmanager,
      uzegeometrytypes,uzglviewareadata,uzcdrawings,
-     uzcinterface,varman,uzclog,uzeSnap;
+     uzcinterface,varman,uzclog,uzeSnap,math;
 type
   comproc=procedure(const Context:TZCADCommandContext;_self:pointer);
   commousefunc=function(const Context:TZCADCommandContext;wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record;mclick:Integer):Integer;
@@ -95,7 +95,6 @@ procedure  TOSModeEditor.Format;
 var
    i,c:integer;
    v:gdbvertex;
-
 begin
     sysvarDWGOSMode:=0;
     if osm.kosm_inspoint then inc(sysvarDWGOSMode,osm_inspoint);
@@ -122,8 +121,7 @@ begin
   drawings.GetCurrentDWG.wa.PolarAxis.clear;
   for i := 0 to c - 1 do
   begin
-    v.x:=cos(pi * i / c);
-    v.y:=sin(pi * i / c);
+    SinCos(pi * i / c, v.y, v.x);
     v.z:=0;
     drawings.GetCurrentDWG.wa.PolarAxis.PushBackData(v);
   end;

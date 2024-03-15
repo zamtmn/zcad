@@ -9,7 +9,8 @@ uses
   fpcunit,
   uzeBoundaryPath in '../core/entities/uzeboundarypath',
   gzctnrVectorSimple,gvector,strutils,UGDBPolyLine2DArray,uzegeometrytypes,
-  testregistry;
+  testregistry,
+  math;
 
 const
   MaxVectorLength=10000000;
@@ -31,14 +32,16 @@ var
   i,j:integer;
   ppl:PGDBPolyline2DArray;
   v:GDBVertex2D;
+  sine,cosine:double;
 begin
   Path.paths.AllocData(1);
   for i:=0 to 0 do begin
     ppl:=path.paths.getDataMutable(i);
     ppl^.init(10,true);
     for j:=0 to 0 do begin
-      v.x:=100*cos(10*2*pi/(j+1))/(i+1);
-      v.y:=100*sin(10*2*pi/(j+1))/(i+1);
+      SinCos(10*2*pi/(j+1),sine,cosine);
+      v.x:=100*cosine/(i+1);
+      v.y:=100*sine/(i+1);
       ppl^.PushBackData(v);
     end;
   end;

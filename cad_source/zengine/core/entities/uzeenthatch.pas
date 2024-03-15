@@ -433,6 +433,7 @@ var
   tmin,tmax:double;
   first:boolean;
   IV:TIntercept2dpropWithLICVector;
+  sine,cosine:double;
 begin
   IV:=TIntercept2dpropWithLICVector.Create;
   Angl:=DegToRad(Angle+Strokes.Angle);
@@ -441,12 +442,12 @@ begin
     LF:=Strokes.LengthFact
   else
     LF:=1;
-  diry.x:=cos(Angl)*LF*Scale;
-  diry.y:=sin(Angl)*LF*Scale;
+  SinCos(Angl,sine,cosine);
+  diry.x:=cosine*LF*Scale;
+  diry.y:=sine*LF*Scale;
 
   Angl:=DegToRad(Angle);
-  sinA:=sin(Angl);
-  cosA:=cos(Angl);
+  SinCos(Angl,sinA,cosA);
   dirx.x:=(Strokes.Offset.x*cosA-Strokes.Offset.y*sinA)*Scale;
   dirx.y:=(Strokes.Offset.y*cosA+Strokes.Offset.x*sinA)*Scale;
   //dirx.x:=Strokes.Offset.x*Scale;

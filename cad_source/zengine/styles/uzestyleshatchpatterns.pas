@@ -95,8 +95,7 @@ begin
     dxfDoubleout(outhandle,44,psa^.Base.y*MainScale);
 
     angle:=DegToRad(MainAngle);
-    sinA:=sin(angle);
-    cosA:=cos(angle);
+    SinCos(angle,sinA,cosA);
 
     dxfDoubleout(outhandle,45,(psa^.offset.x*cosA-psa^.offset.y*sinA)*MainScale);
     dxfDoubleout(outhandle,46,(psa^.offset.y*cosA+psa^.offset.x*sinA)*MainScale);
@@ -137,8 +136,7 @@ begin
       psa^.Angle:=angle-MainAngle;
 
       angle:=DegToRad(MainAngle);
-      sinA:=sin(-angle);
-      cosA:=cos(-angle);
+      SinCos(-angle,sinA,cosA);
       psa^.Base.x:=base.x/MainScale;
       psa^.Base.y:=base.y/MainScale;
 

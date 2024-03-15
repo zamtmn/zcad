@@ -474,6 +474,7 @@ var
   dc:TDrawContext;
   i,countVert:integer;
   radius,alpha,stalpha,xyline,xline:double;
+  sine, cosine: double;
 begin
 
    countVert:=obj.npoint;
@@ -503,10 +504,11 @@ begin
 
   if obj.typeLWPoly then  begin
       zcSetEntPropFromCurrentDrawingProp(obj.plwentity);
-      for i := 0 to countVert - 1 do
+      for i := countVert - 1 downto 0 do
       begin
-      GDBvertex2D(obj.plwentity^.Vertex2D_in_OCS_Array.getDataMutable(i)^).x := stPoint.x + radius*cos(alpha + (2*pi*i/countVert));
-      GDBvertex2D(obj.plwentity^.Vertex2D_in_OCS_Array.getDataMutable(i)^).y := stPoint.y + radius*sin(alpha + (2*pi*i/countVert));
+      SinCos(alpha + (2*pi*i/countVert), sine, cosine);
+      GDBvertex2D(obj.plwentity^.Vertex2D_in_OCS_Array.getDataMutable(i)^).x := stPoint.x + radius*cosine;
+      GDBvertex2D(obj.plwentity^.Vertex2D_in_OCS_Array.getDataMutable(i)^).y := stPoint.y + radius*sine;
       end;
       dc:=drawings.GetCurrentDWG^.CreateDrawingRC;
       obj.plwentity^.FormatEntity(drawings.GetCurrentDWG^,dc);
@@ -514,10 +516,11 @@ begin
   else
   begin
      zcSetEntPropFromCurrentDrawingProp(obj.pentity);
-     for i := 0 to countVert - 1 do
+     for i := countVert - 1 downto 0 do
       begin
-       PGDBvertex2D(obj.pentity^.VertexArrayInOCS.getDataMutable(i))^.x := stPoint.x + radius*cos(alpha + (2*pi*i/countVert));
-       PGDBvertex2D(obj.pentity^.VertexArrayInOCS.getDataMutable(i))^.y := stPoint.y + radius*sin(alpha + (2*pi*i/countVert));
+       SinCos(alpha + (2*pi*i/countVert), sine, cosine);
+       PGDBvertex2D(obj.pentity^.VertexArrayInOCS.getDataMutable(i))^.x := stPoint.x + radius*cosine;
+       PGDBvertex2D(obj.pentity^.VertexArrayInOCS.getDataMutable(i))^.y := stPoint.y + radius*sine;
       end;
      dc:=drawings.GetCurrentDWG^.CreateDrawingRC;
      obj.pentity^.FormatEntity(drawings.GetCurrentDWG^,dc);

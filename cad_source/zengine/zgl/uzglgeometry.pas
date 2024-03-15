@@ -465,9 +465,9 @@ begin
                     TACRel:a:=PSP^.param.Angle*pi/180-angle;
                     TACUpRight:a:=0;
                   end;}
-    mrot:=CreateRotationMatrixZ(Sin(param.Angle*pi/180), Cos(param.Angle*pi/180));
+    mrot:=CreateRotationMatrixZ(param.Angle*pi/180);
     if param.AD=TACRel then
-                           mentrot:=CreateRotationMatrixZ(Sin(LineAngle), Cos(LineAngle))
+                           mentrot:=CreateRotationMatrixZ(LineAngle)
                        else
                            mentrot:=onematrix;
     madd:=CreateTranslationMatrix(createvertex(param.x*Scale,param.y*Scale,0));
@@ -489,9 +489,9 @@ function CreateReadableMatrix(PInsert:GDBVertex; //Точка вставки
 var
     mrot,mrot2,mentrot,madd,madd2,madd3,mtrans,mscale:dmatrix4d;
 begin
-    mrot:=CreateRotationMatrixZ(Sin(param.Angle*pi/180), Cos(param.Angle*pi/180));
+    mrot:=CreateRotationMatrixZ(param.Angle*pi/180);
     if (param.AD<>TACAbs) then
-                           mentrot:=CreateRotationMatrixZ(Sin(LineAngle), Cos(LineAngle))
+                           mentrot:=CreateRotationMatrixZ(LineAngle)
                        else
                            mentrot:=onematrix;
     madd:=CreateTranslationMatrix(createvertex(param.x*Scale,param.y*Scale,0));
@@ -506,7 +506,7 @@ begin
     begin
     madd2:=CreateTranslationMatrix(createvertex(dx*Scale,dy*Scale,0));
     madd3:=CreateTranslationMatrix(createvertex(-dx*Scale,-dy*Scale,0));
-    mrot2:=CreateRotationMatrixZ(Sin(pi), Cos(pi));
+    mrot2:=CreateRotationMatrixZ(pi);
     result:=MatrixMultiply(result,madd3);
     result:=MatrixMultiply(result,mrot2);
     result:=MatrixMultiply(result,madd2);

@@ -141,7 +141,8 @@ uses
   uzvcom,
   uzvconsts,
   uzvtmasterdev,
-  uzvtestdraw;
+  uzvtestdraw,
+  math;
 
 
 type
@@ -3035,9 +3036,7 @@ var
           pmtext^.vp.LineWeight:=LnWt100;
           pmtext^.linespacef:=1;
           //pmtext^.textprop.aaaangle:=rotate;
-          rotate:=(rotate*pi)/180;
-          pmtext^.Local.basis.ox.x:=cos(rotate);
-          pmtext^.Local.basis.ox.y:=sin(rotate);
+          SinCos(rotate*pi/180, pmtext^.Local.basis.ox.y, pmtext^.Local.basis.ox.x);
 
           //pmtext^.vp.LineTypeScale:=1;
           pmtext^.vp.Color:=color;

@@ -13,7 +13,7 @@ unit uzccomelectrical;
 
 interface
 uses
-  gzctnrVectorTypes,uzglviewareageneral,uzcTranslations,gzundoCmdChgMethods,
+  gzctnrVectorTypes,uzglviewareageneral,uzcTranslations,gzUndoCmdChgMethods,
   zcmultiobjectcreateundocommand,uzeentitiesmanager,uzedrawingdef,
   uzcenitiesvariablesextender,uzgldrawcontext,uzcdrawing,uzcvariablesutils,
   uzcstrconsts,UGDBSelectedObjArray,uzeentityfactory,uzcsysvars,

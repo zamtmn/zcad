@@ -24,7 +24,7 @@ interface
 uses
   uzcLog,SysUtils,
   uzccommandsabstract,uzeentity,uzcdrawing,uzcdrawings,uzccommandsmanager,
-  uzcstrconsts,uzcutils,zundoCmdChgBaseTypes,uzccommandsimpl,
+  uzcstrconsts,uzcutils,zUndoCmdChgBaseTypes,zUndoCmdChgTypes,uzccommandsimpl,
   uzestyleslayers,uzcinterface;
 
 implementation
@@ -43,9 +43,14 @@ begin
       result:=cmd_error;
     end else begin
       zcPlaceUndoStartMarkerIfNeed(UndoStartMarkerPlaced,LayerOnCommandName,true);
-      with TBooleanChangeCommand.CreateAndPushIfNeed(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,plp^._on,nil,nil) do begin
+      with TBooleanChangeCommand.CreateAndPushIfNeed(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,
+                                                    TChangedBoolean.CreateRec(plp^._on),
+                                                    TSharedEmpty(Default(TEmpty)),
+                                                    TAfterChangeEmpty(Default(TEmpty)))do
+
+      begin
         plp^._on:=not plp^._on;
-        ComitFromObj;
+        //ComitFromObj;
       end;
       zcPlaceUndoEndMarkerIfNeed(UndoStartMarkerPlaced);
       result:=cmd_ok;

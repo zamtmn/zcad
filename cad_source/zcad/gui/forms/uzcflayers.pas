@@ -5,7 +5,7 @@ unit uzcflayers;
 interface
 
 uses
-  UGDBNamedObjectsArray,uzcutils,zundoCmdChgBaseTypes,gzundoCmdChgMethods,
+  UGDBNamedObjectsArray,uzcutils,zUndoCmdChgBaseTypes,gzUndoCmdChgMethods,
   uzcdrawing,uzepalette,uzcsuptypededitors,LMessages,uzcfselector,
   uzestyleslinetypes,uzeutils,uzclog,uzcflineweights,uzcfcolors,
   uzedrawingsimple,uzcsysvars,Classes, SysUtils,
@@ -15,7 +15,8 @@ uses
   uzcgui2linetypes,uzeconsts,uzestyleslayers,uzcdrawings,uzbtypes,varmandef,
 
   uzcinterface, uzcstrconsts, uzbstrproc,UBaseTypeDescriptor,
-  gzctnrVectorTypes,uzcimagesmanager, usupportgui, ZListView, uzcuitypes;
+  gzctnrVectorTypes,uzcimagesmanager, usupportgui, ZListView, uzcuitypes,
+  zUndoCmdChgTypes;
 
 const
      NameColumn=0;
@@ -158,10 +159,13 @@ function TLayersForm.LayerLockClick(Item: TListItem;r: TRect):boolean;
 begin
      result:=true;
      CreateUndoStartMarkerNeeded;
-     with TBooleanChangeCommand.CreateAndPushIfNeed(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,PGDBLayerProp(Item.Data)^._lock,nil,nil) do
+     with TBooleanChangeCommand.CreateAndPushIfNeed(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,
+                                                    TChangedBoolean.CreateRec(PGDBLayerProp(Item.Data)^._lock),
+                                                    TSharedEmpty(Default(TEmpty)),
+                                                    TAfterChangeEmpty(Default(TEmpty))) do
      begin
        PGDBLayerProp(Item.Data)^._lock:=not PGDBLayerProp(Item.Data)^._lock;
-       ComitFromObj;
+       //ComitFromObj;
      end;
 end;
 {layer on handle procedures}
@@ -173,10 +177,13 @@ function TLayersForm.LayerOnClick(Item: TListItem;r: TRect):boolean;
 begin
      result:=true;
      CreateUndoStartMarkerNeeded;
-     with TBooleanChangeCommand.CreateAndPushIfNeed(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,PGDBLayerProp(Item.Data)^._on,nil,nil) do
+     with TBooleanChangeCommand.CreateAndPushIfNeed(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,
+                                                    TChangedBoolean.CreateRec(PGDBLayerProp(Item.Data)^._on),
+                                                    TSharedEmpty(Default(TEmpty)),
+                                                    TAfterChangeEmpty(Default(TEmpty))) do
      begin
        PGDBLayerProp(Item.Data)^._on:=not PGDBLayerProp(Item.Data)^._on;
-       ComitFromObj;
+       //ComitFromObj;
      end;
 end;
 {layer freze handle procedures}
@@ -193,10 +200,13 @@ function TLayersForm.LayerPlotClick(Item: TListItem;r: TRect):boolean;
 begin
      result:=true;
      CreateUndoStartMarkerNeeded;
-     with TBooleanChangeCommand.CreateAndPushIfNeed(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,PGDBLayerProp(Item.Data)^._print,nil,nil) do
+     with TBooleanChangeCommand.CreateAndPushIfNeed(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,
+                                                    TChangedBoolean.CreateRec(PGDBLayerProp(Item.Data)^._print),
+                                                    TSharedEmpty(Default(TEmpty)),
+                                                    TAfterChangeEmpty(Default(TEmpty))) do
      begin
        PGDBLayerProp(Item.Data)^._print:=not PGDBLayerProp(Item.Data)^._print;
-       ComitFromObj;
+       //ComitFromObj;
      end;
 end;
 {layer color handle procedures}
@@ -260,10 +270,13 @@ begin
       if PGDBLayerProp(Item.Data)^.color<>ColorSelectForm.ColorInfex then
         begin
            CreateUndoStartMarkerNeeded;
-           with TGDBByteChangeCommand.CreateAndPushIfNeed(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,PGDBLayerProp(Item.Data)^.color,nil,nil) do
+           with TByteChangeCommand.CreateAndPushIfNeed(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,
+                                                             TChangedByte.CreateRec(PGDBLayerProp(Item.Data)^.color),
+                                                             TSharedEmpty.CreateRec(Default(TEmpty)),
+                                                             TAfterChangeEmpty.CreateRec(Default(TEmpty))) do
            begin
              PGDBLayerProp(Item.Data)^.color:=ColorSelectForm.ColorInfex;
-             ComitFromObj;
+             //ComitFromObj;
            end;
           //Item.SubItems[4]:=GetColorNameFromIndex(ColorSelectForm.ColorInfex);
           result:=true;
@@ -463,10 +476,13 @@ begin
      if ListView1.CurrentItem<>ListItem then
      begin
        CreateUndoStartMarkerNeeded;
-     with TGDBPoinerChangeCommand.CreateAndPushIfNeed(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,sysvar.dwg.DWG_CLayer^,nil,nil) do
+     with TPoinerChangeCommand.CreateAndPushIfNeed(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,
+                                                   TChangedPointer.CreateRec(sysvar.dwg.DWG_CLayer^),
+                                                   TSharedEmpty.CreateRec(Default(TEmpty)),
+                                                   TAfterChangeEmpty.CreateRec(Default(TEmpty))) do
      begin
           SysVar.dwg.DWG_CLayer^:={drawings.GetCurrentDWG^.LayerTable.GetIndexByPointer}(ListItem.Data);
-          ComitFromObj;
+          //ComitFromObj;
      end;
      //ListItem.ImageIndex:=II_Ok;
      //ListView1.CurrentItem.ImageIndex:=-1;

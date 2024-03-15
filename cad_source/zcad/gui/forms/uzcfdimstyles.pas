@@ -22,7 +22,7 @@ unit uzcfdimstyles;
 interface
 
 uses
-  uzcutils,zundoCmdChgBaseTypes,gzundoCmdChgMethods,uzcdrawing,LMessages,
+  uzcutils,zUndoCmdChgBaseTypes,gzUndoCmdChgMethods,uzcdrawing,LMessages,
   uzclog,uzedrawingsimple,uzcsysvars,Classes, SysUtils,
   FileUtil, LResources, Forms, Controls, Graphics, GraphType,
   Buttons, ExtCtrls, StdCtrls, ComCtrls,LCLIntf,lcltype, ActnList,
@@ -34,7 +34,7 @@ uses
 
   uzbpaths,uzcinterface, uzcstrconsts,uzbstrproc,UBaseTypeDescriptor,
   uzcimagesmanager, usupportgui, ZListView,uzefontmanager,varman,uzctnrvectorstrings,
-  gzctnrVectorTypes,uzeentity;
+  gzctnrVectorTypes,uzeentity,zUndoCmdChgTypes;
 
 const
      NameColumn=0;
@@ -178,10 +178,13 @@ begin
                  ZCMsgCallBackInterface.TextMessage(pstring(FontsSelector.Enums.getDataMutable(FontsSelector.Selected))^,TMWOHistoryOut);
 
                CreateUndoStartMarkerNeeded;
-               with TGDBPoinerChangeCommand.CreateAndPushIfNeed(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,pointer(PGDBDimStyle(TListItem(Item).Data)^.Text.DIMTXSTY),nil,nil) do
+               with TPoinerChangeCommand.CreateAndPushIfNeed(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,
+                                                             TChangedPointer.CreateRec(PGDBDimStyle(TListItem(Item).Data)^.Text.DIMTXSTY),
+                                                             TSharedEmpty.CreateRec(Default(TEmpty)),
+                                                             TAfterChangeEmpty.CreateRec(Default(TEmpty))) do
                begin
                PGDBDimStyle(TListItem(Item).Data)^.Text.DIMTXSTY:=currentextstyle;
-               ComitFromObj;
+               //ComitFromObj;
                end;
           end;
      end;
@@ -395,10 +398,13 @@ begin
      if ListView1.CurrentItem<>ListItem then
      begin
      CreateUndoStartMarkerNeeded;
-     with TGDBPoinerChangeCommand.CreateAndPushIfNeed(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,sysvar.dwg.DWG_CTStyle^,nil,nil) do
+     with TPoinerChangeCommand.CreateAndPushIfNeed(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,
+                                                   TChangedPointer.CreateRec(sysvar.dwg.DWG_CTStyle^),
+                                                   TSharedEmpty.CreateRec(Default(TEmpty)),
+                                                   TAfterChangeEmpty.CreateRec(Default(TEmpty))) do
      begin
           SysVar.dwg.DWG_CTStyle^:=ListItem.Data;
-          ComitFromObj;
+          //ComitFromObj;
      end;
      end;
 end;

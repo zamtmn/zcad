@@ -16,7 +16,7 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>)
 }
 {$MODE OBJFPC}{$H+}
-unit gzundoCmdChgMethods;
+unit gzUndoCmdChgMethods;
 interface
 uses
   zeundostack,zebaseundocommands;

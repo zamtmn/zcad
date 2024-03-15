@@ -22,10 +22,6 @@ unit uzccommand_NumDevices;
 interface
 uses
   gzctnrVectorTypes,
-  uzctnrvectorobjid,
-  uzctnrVectorDouble,
-  uzctnrvectorgdblineweight,
-  uzctnrVectorPointers,
   uzcstrconsts,
   uzeenttext,
   uzccommandsabstract,
@@ -34,19 +30,18 @@ uses
   uzccommandsimpl,
   uzbtypes,
   uzcdrawings,
-  uzcutils,
   sysutils,
   uzcinterface,
   uzeconsts,
   uzeentity,
   uzeentmtext,
   uzeentblockinsert,
-  uzctnrvectorstrings,
   Varman, varmandef,
-  uzcLog,uzctnrvectorgdbpalettecolor,
+  uzcLog,
   uzccomdraw,UGDBSelectedObjArray,uzeentdevice,uzgldrawcontext,
   uzegeometrytypes,uzegeometry,uzeentwithlocalcs,garrayutils,
-  uzcenitiesvariablesextender,uzbstrproc,gzctnrSTL,Generics.Collections;
+  uzcenitiesvariablesextender,uzbstrproc,gzctnrSTL,Generics.Collections,
+  zUndoCmdChgTypes,zUndoCmdChgVariable,uzcutils,uzcdrawing;
 type
   TAlgoType=(AT_Area,AT_Perimetr);
   PTPerimetrNumberingParam=^TPerimetrNumberingParam;
@@ -314,10 +309,13 @@ var
   pdev:PGDBObjDevice;
   pdevvarext:TVariablesExtender;
   pvd:pvardesk;
+  UndoStartMarkerPlaced:boolean;
+  cp:UCmdChgVariable;
 begin
   md:=TMetrixDictionary.Create;
   FillMetrixDictionary(md);
   count:=0;
+  UndoStartMarkerPlaced:=false;
 
   if md.Count=0 then begin
     ZCMsgCallBackInterface.TextMessage('In selection not found devices',TMWOHistoryOut);
@@ -358,7 +356,14 @@ begin
 
       pvd:=pdevvarext.entityunit.FindVariable(NumberingParams.NumberVar);
       if pvd<>nil then begin
+        zcPlaceUndoStartMarkerIfNeed(UndoStartMarkerPlaced,'NumDevices');
+        cp:=UCmdChgVariable.CreateAndPush(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,
+                                          TChangedVariableDesc.CreateRec(pvd^.data.PTD,pvd^.data.Addr.GetInstance,NumberingParams.NumberVar),
+                                          TSharedPEntityData.CreateRec(pdev),
+                                          TAfterChangePDrawing.CreateRec(drawings.GetCurrentDWG));
+        //cp.ChangedData.StoreUndoData(pvd^.data.Addr.GetInstance);
         pvd^.data.PTD^.SetValueFromString(pvd^.data.Addr.Instance,inttostr(index));
+        //cp.ChangedData.StoreDoData(pvd^.data.Addr.GetInstance);
         inc(index,NumberingParams.Increment);
         inc(count);
         pdev^.FormatEntity(drawings.GetCurrentDWG^,dc);
@@ -368,6 +373,7 @@ begin
     if NumberingParams.SaveStart then
       NumberingParams.StartNumber:=index;
   end;
+  zcPlaceUndoEndMarkerIfNeed(UndoStartMarkerPlaced);
 
   ZCMsgCallBackInterface.TextMessage(sysutils.format(rscmNEntitiesProcessed,[count]),TMWOHistoryOut);
   for pair in md do begin

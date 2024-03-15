@@ -11,6 +11,7 @@ object LayersForm: TLayersForm
   Constraints.MinWidth = 1400
   DesignTimePPI = 168
   Position = poMainFormCenter
+  LCLVersion = '3.99.0.0'
   OnClose = FormClose
   OnCreate = FormCreate
   OnShow = RefreshListItems
@@ -224,7 +225,7 @@ object LayersForm: TLayersForm
         end
         object ToolButton4: TToolButton
           Left = 121
-          Height = 39
+          Height = 5
           Top = 0
           Caption = 'ToolButton4'
           Style = tbsDivider

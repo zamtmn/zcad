@@ -104,6 +104,7 @@ var
   command,operands:String;
   relativemarker:boolean;
   l,a:double;
+  sine,cosine:double;
 begin
   try
     if (length(input) > 0) then
@@ -202,7 +203,8 @@ begin
                       len:=drawings.GetCurrentDWG.wa.param.ontrackarray.total;
                       l:=strtodouble(parseresult^.getData(0));
                       a:=strtodouble(parseresult^.getData(1));
-                      temp:=CreateVertex(l*cos(a*pi/180),l*sin(a*pi/180),0);
+                      SinCos(a*pi/180,sine,cosine);
+                      temp:=CreateVertex(l*cosine,l*sine,0);
                  if relativemarker then
                  if drawings.GetCurrentDWG.wa.tocommandmcliccount>0 then
                    temp:=VertexAdd(temp,drawings.GetCurrentDWG.wa.param.ontrackarray.otrackarray[0].worldcoord);

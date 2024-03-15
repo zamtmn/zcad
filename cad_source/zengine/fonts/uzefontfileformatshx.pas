@@ -55,6 +55,7 @@ var
   VDCopyParam,VDCopyResultParam:TZGLVectorDataCopyParam;
   symoutbound:TBoundingBox;
   offset:TEntIndexesOffsetData;
+  sine,cosine:double;
 procedure ProcessMinMax(_x,_y:fontfloat);
 begin
       if _y>ymax then
@@ -75,6 +76,7 @@ procedure createarc;
 var
   ad:TArcData;
   j:integer;
+  sine,cosine:double;
 begin
      tr.p1.x:=x;
      tr.p1.y:=y;
@@ -113,8 +115,9 @@ begin
              sizeshp:=0;
              for j:=0 to arccount do
                begin
-                 x1:=ad.p.x+(ad.r)*cos(startangle+j/arccount*angle);
-                 y1:=ad.p.y+(ad.r)*sin(startangle+j/arccount*angle);
+                 SinCos(startangle+j/arccount*angle,sine,cosine);
+                 x1:=ad.p.x+(ad.r)*cosine;
+                 y1:=ad.p.y+(ad.r)*sine;
                  if draw then
                    begin
                      ProcessMinMax(x1,y1);
@@ -485,8 +488,10 @@ begin
                       else
                         angle:=sign(Shortint(byt))*lo*pi/4;
                       startangle:=hi*pi/4;
-                      xb:=x-r*cos(startangle);
-                      yb:=y-r*sin(startangle);
+
+                      SinCos(startangle,sine,cosine);
+                      xb:=x-r*cosine;
+                      yb:=y-r*sine;
 
                       inc(sizeshx);
                       sizeshp:=1;
@@ -498,8 +503,9 @@ begin
                       y1:=0;
                       for i:=1 to arccount do
                         begin
-                          x1:=xb+r*cos(startangle+i/arccount*angle);
-                          y1:=yb+r*sin(startangle+i/arccount*angle);
+                          SinCos(startangle+i/arccount*angle,sine,cosine);
+                          x1:=xb+r*cosine;
+                          y1:=yb+r*sine;
                           if draw then
                             begin
                               ProcessMinMax(x1,y1);
@@ -538,8 +544,9 @@ begin
                                angle:=sign(Shortint(byt))*lo*pi/4;
                    angle:=angle-sign(Shortint(byt))*pi/180*{round}((endoffset+startoffset)/256*45); { TODO : symbol & wrong in isocp.shx, see errors\5.dxf }
                    startangle:=hi*pi/4+sign(Shortint(byt))*pi/180*{round}(startoffset/256*45);
-                   xb:=x-r*cos(startangle);
-                   yb:=y-r*sin(startangle);
+                   SinCos(startangle,sine,cosine);
+                   xb:=x-r*cosine;
+                   yb:=y-r*sine;
                    inc(sizeshx);
                    sizeshp:=1;
 
@@ -550,8 +557,9 @@ begin
                    y1:=0;
                    for i:=1 to arccount do
                      begin
-                       x1:=xb+r*cos(startangle+i/arccount*angle);
-                       y1:=yb+r*sin(startangle+i/arccount*angle);
+                       SinCos(startangle+i/arccount*angle,sine,cosine);
+                       x1:=xb+r*cosine;
+                       y1:=yb+r*sine;
                        if draw then
                          begin
                               ProcessMinMax(x1,y1);

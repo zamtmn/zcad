@@ -16,11 +16,11 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>)
 }
 {$MODE OBJFPC}{$H+}
-unit zundoCmdChgCameraBaseProp;
+unit zUndoCmdChgCameraBaseProp;
 {$INCLUDE zengineconfig.inc}
 interface
 uses zeundostack,zebaseundocommands,
-     uzegeometrytypes,uzeentity,gzundoCmdChgData;
+     uzegeometrytypes,uzeentity,gzUndoCmdChgData;
 type
   TGDBCameraBasePropChangeCommand=specialize GUCmdChgData<GDBCameraBaseProp,PGDBObjEntity>;
 implementation

@@ -16,17 +16,28 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>)
 }
 {$MODE OBJFPC}{$H+}
-unit zundoCmdChgBaseTypes;
+unit zUndoCmdChgBaseTypes;
 {$INCLUDE zengineconfig.inc}
 interface
 uses zeundostack,zebaseundocommands,
-     uzegeometrytypes,uzeentity,gzundoCmdChgData;
+     uzeentity,gzUndoCmdChgData,
+     gzUndoCmdChgData2,zUndoCmdChgTypes;
 type
-  TStringChangeCommand=specialize GUCmdChgData<String,PGDBObjEntity>;
-  TGDBPoinerChangeCommand=specialize GUCmdChgData<Pointer,PGDBObjEntity>;
-  TBooleanChangeCommand=specialize GUCmdChgData<Boolean,PGDBObjEntity>;
-  TGDBByteChangeCommand=specialize GUCmdChgData<Byte,PGDBObjEntity>;
-  TDoubleChangeCommand=specialize GUCmdChgData<Double,PGDBObjEntity>;
+  //команда изменения строки, только меняет строку, ничего больше
+  TChangedString=specialize GChangedData<String,TSharedEmpty,TAfterChangeEmpty>;
+  TStringChangeCommand=specialize GUCmdChgData2<TChangedString,TSharedEmpty,TAfterChangeEmpty>;
+
+  //команда изменения указателя, ничего больше
+  TChangedPointer=specialize GChangedData<Pointer,TSharedEmpty,TAfterChangeEmpty>;
+  TPoinerChangeCommand=specialize GUCmdChgData2<TChangedPointer,TSharedEmpty,TAfterChangeEmpty>;
+
+  //команда изменения булен, ничего больше
+  TChangedBoolean=specialize GChangedData<Boolean,TSharedEmpty,TAfterChangeEmpty>;
+  TBooleanChangeCommand=specialize GUCmdChgData2<TChangedBoolean,TSharedEmpty,TAfterChangeEmpty>;
+
+  //команда изменения цвета слоя, ничего больше
+  TChangedByte=specialize GChangedData<Byte,TSharedEmpty,TAfterChangeEmpty>;
+  TByteChangeCommand=specialize GUCmdChgData2<TChangedByte,TSharedEmpty,TAfterChangeEmpty>;
 implementation
-end.
+end.y
 

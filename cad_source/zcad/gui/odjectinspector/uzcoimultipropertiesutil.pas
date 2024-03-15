@@ -31,7 +31,8 @@ uses
   uzeentcircle,uzeentarc,uzeentline,uzeentblockinsert,
   uzeenttext,uzeentmtext,uzeentpolyline,uzegeometry,uzcoimultiproperties,uzcLog,
   uzcstrconsts,
-  gzctnrSTL,gzctnrVectorTypes,uzeNamedObject;
+  gzctnrSTL,gzctnrVectorTypes,uzeNamedObject,zUndoCmdChgVariable,
+  uzcutils,uzcdrawing,uzcdrawings,zUndoCmdChgTypes;
 type
   PTOneVarData=^TOneVarData;
   TOneVarData=record
@@ -85,14 +86,14 @@ procedure GeneralEntIterateProc(pdata:Pointer;ChangedData:TChangedData;mp:TMulti
 procedure EntityNameEntIterateProc(pdata:Pointer;ChangedData:TChangedData;mp:TMultiProperty;fistrun:boolean;ecp:TEntChangeProc; const f:TzeUnitsFormat);
 procedure EntityAddressEntIterateProc(pdata:Pointer;ChangedData:TChangedData;mp:TMultiProperty;fistrun:boolean;ecp:TEntChangeProc; const f:TzeUnitsFormat);
 procedure PolylineVertex3DControlEntIterateProc(pdata:Pointer;ChangedData:TChangedData;mp:TMultiProperty;fistrun:boolean;ecp:TEntChangeProc; const f:TzeUnitsFormat);
-procedure PolylineVertex3DControlFromVarEntChangeProc(pu:PTEntityUnit;pdata:PVarDesk;ChangedData:TChangedData;mp:TMultiProperty);
+procedure PolylineVertex3DControlFromVarEntChangeProc(var UMPlaced:boolean;pu:PTEntityUnit;pdata:PVarDesk;ChangedData:TChangedData;mp:TMultiProperty);
 procedure Double2SumEntIterateProc(pdata:Pointer;ChangedData:TChangedData;mp:TMultiProperty;fistrun:boolean;ecp:TEntChangeProc; const f:TzeUnitsFormat);
 procedure TArrayIndex2SumEntIterateProc(pdata:Pointer;ChangedData:TChangedData;mp:TMultiProperty;fistrun:boolean;ecp:TEntChangeProc; const f:TzeUnitsFormat);
 procedure Blockname2BlockNameCounterIterateProc(pdata:Pointer;ChangedData:TChangedData;mp:TMultiProperty;fistrun:boolean;ecp:TEntChangeProc; const f:TzeUnitsFormat);
 procedure PStyle2PStyleCounterIterateProc(pdata:Pointer;ChangedData:TChangedData;mp:TMultiProperty;fistrun:boolean;ecp:TEntChangeProc; const f:TzeUnitsFormat);
 procedure PolylineVertex3DControlBeforeEntIterateProc(pdata:Pointer;ChangedData:TChangedData);
 function CreateChangedData(pentity:pointer;GSData:TGetSetData):TChangedData;
-procedure GeneralFromVarEntChangeProc(pu:PTEntityUnit;pdata:PVarDesk;ChangedData:TChangedData;mp:TMultiProperty);
+procedure GeneralFromVarEntChangeProc(var UMPlaced:boolean;pu:PTEntityUnit;pdata:PVarDesk;ChangedData:TChangedData;mp:TMultiProperty);
 const
   OneVarDataMIPD:TMainIterateProcsData=(BeforeIterateProc:GetOneVarData;
                                         AfterIterateProc:FreeOneVarData);
@@ -109,8 +110,17 @@ implementation
 var
    Vertex3DControl:TArrayIndex=0;
 
-procedure GeneralFromVarEntChangeProc(pu:PTEntityUnit;pdata:PVarDesk;ChangedData:TChangedData;mp:TMultiProperty);
+procedure GeneralFromVarEntChangeProc(var UMPlaced:boolean;pu:PTEntityUnit;pdata:PVarDesk;ChangedData:TChangedData;mp:TMultiProperty);
+var
+  cp:UCmdChgField;
 begin
+  zcPlaceUndoStartMarkerIfNeed(UMPlaced,'Property changed');
+
+  cp:=UCmdChgField.CreateAndPush(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,
+                                 TChangedFieldDesc.CreateRec(pvardesk(pdata)^.data.PTD,ChangedData.PSetDataInEtity,ChangedData.PSetDataInEtity),
+                                 TSharedPEntityData.CreateRec(ChangedData.PEntity),
+                                 TAfterChangePDrawing.CreateRec(drawings.GetCurrentDWG));
+
      mp.MPType^.CopyInstanceTo(pvardesk(pdata)^.data.Addr.Instance,ChangedData.PSetDataInEtity);
      ProcessVariableAttributes(pvardesk(pdata)^.attrib,0,vda_approximately or vda_different);
 end;
@@ -378,7 +388,7 @@ begin
                             ProcessVariableAttributes(pvardesk(PTVertex3DControlVarData(pdata).ZVarDescAddr.Instance)^.attrib,vda_different,vda_approximately);
                     end;
 end;
-procedure PolylineVertex3DControlFromVarEntChangeProc(pu:PTEntityUnit;pdata:PVarDesk;ChangedData:TChangedData;mp:TMultiProperty);
+procedure PolylineVertex3DControlFromVarEntChangeProc(var UMPlaced:boolean;pu:PTEntityUnit;pdata:PVarDesk;ChangedData:TChangedData;mp:TMultiProperty);
 var
    tv:PGDBVertex;
    v:GDBVertex;

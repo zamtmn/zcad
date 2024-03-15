@@ -358,7 +358,7 @@ begin
       if pvd<>nil then begin
         zcPlaceUndoStartMarkerIfNeed(UndoStartMarkerPlaced,'NumDevices');
         cp:=UCmdChgVariable.CreateAndPush(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,
-                                          TChangedDataDesc.CreateRec(pvd^.data.PTD,pvd^.data.Addr.GetInstance,NumberingParams.NumberVar),
+                                          TChangedVariableDesc.CreateRec(pvd^.data.PTD,pvd^.data.Addr.GetInstance,NumberingParams.NumberVar),
                                           TSharedPEntityData.CreateRec(pdev),
                                           TAfterChangePDrawing.CreateRec(drawings.GetCurrentDWG));
         //cp.ChangedData.StoreUndoData(pvd^.data.Addr.GetInstance);

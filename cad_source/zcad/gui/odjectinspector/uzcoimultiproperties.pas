@@ -44,7 +44,7 @@ type
 
   TBeforeIterateProc=function(mp:TMultiProperty;pu:PTEntityUnit):Pointer;
   TAfterIterateProc=procedure(piteratedata:Pointer;mp:TMultiProperty);
-  TEntChangeProc=procedure(pu:PTEntityUnit;PSourceVD:PVarDesk;ChangedData:TChangedData;mp:TMultiProperty);
+  TEntChangeProc=procedure(var UMPlaced:boolean;pu:PTEntityUnit;PSourceVD:PVarDesk;ChangedData:TChangedData;mp:TMultiProperty);
   TCheckValueFunc=function(PSourceVD:PVarDesk;var ErrorRange:Boolean;out message:String):Boolean;
   TEntIterateProc=procedure(pvd:Pointer;ChangedData:TChangedData;mp:TMultiProperty;fistrun:boolean;ecp:TEntChangeProc; const f:TzeUnitsFormat);
   TEntBeforeIterateProc=procedure(pvd:Pointer;ChangedData:TChangedData);

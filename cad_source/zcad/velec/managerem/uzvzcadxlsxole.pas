@@ -100,10 +100,11 @@ type
     function get_cache(s: String; out o: OleVariant): Boolean;
     procedure set_cache(s: String; o: OleVariant);
   end;
+
   TSheetCache = object(TSimpleCache)
     Book: OleVariant;
-    cnt: integer;
     function get(nameSheet: String): OleVariant;
+    procedure setBook(aBook: OleVariant);
   end;
 
 function TSimpleCache.get_cache(s: String; out o: OleVariant): Boolean;
@@ -135,6 +136,15 @@ begin
   end;
 end;
 
+procedure TSheetCache.setBook(aBook: OleVariant);
+var
+  i: Integer;
+begin
+  // какя-то синхронизация тут нужна наверное, в случае многопоточного доступа
+  for i:=High(data) downto Low(Data) do data[i].s := '';
+  Book:=aBook;
+end;
+
 var
   sheets_cache:TSheetCache;
 
@@ -145,6 +155,7 @@ begin
   try
     Excel := CreateOleObject('Excel.Application');
     BasicWorkbook:=Excel.Workbooks.Open(WideString(pathFile));
+    sheets_cache.setBook(BasicWorkbook);
     result:=true;
   except
     ZCMsgCallBackInterface.TextMessage('ОШИБКА. ПРОГРАММА EXCEL НЕ УСТАНОВЛЕНА',TMWOHistoryOut);
@@ -158,6 +169,7 @@ begin
   try
     Excel := GetActiveOleObject('Excel.Application');
     BasicWorkbook:=Excel.ActiveWorkbook;
+    sheets_cache.setBook(BasicWorkbook);
     ZCMsgCallBackInterface.TextMessage('Доступ получен к книге = ' + BasicWorkbook.Name,TMWOHistoryOut);
     result:=true;
   except

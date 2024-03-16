@@ -647,19 +647,24 @@ var
               inc(j);
               //
               inc(stColEtalonNew);
-              cellValueVar:=uzvzcadxlsxole.getCellFormula(nameEtalon,stRowEtalon,stColEtalonNew);  //Получаем значение ключа, для первой строки
-              ////начинаем копировать строки
-              while cellValueVar <> zcopyrowFT do begin
-                  uzvzcadxlsxole.copyCell(nameEtalon,stRowEtalon,stColEtalonNew,nameSheet,stRowEtalonNew,stColEtalonNew);
-                  temptextcell:=uzvzcadxlsxole.getCellFormula(nameSheet,stRowEtalonNew,stColEtalonNew);
-                  //ZCMsgCallBackInterface.TextMessage('temptextcell = ' + temptextcell,TMWOHistoryOut);
-                  temptextcellnew:=StringReplace(temptextcell, codeNameEtalonSheet, codeNameNewSheet, [rfReplaceAll, rfIgnoreCase]);
-                  temptextcellnew:=StringReplace(temptextcellnew, zallcabcodeNameEtalon, zallcabcodeNameNew, [rfReplaceAll, rfIgnoreCase]);
-                  //ZCMsgCallBackInterface.TextMessage('temptextcellnew = ' + temptextcellnew,TMWOHistoryOut);
-                  uzvzcadxlsxole.setCellFormula(nameSheet,stRowEtalonNew,stColEtalonNew,temptextcellnew);
-                  inc(stColEtalonNew);
-                  cellValueVar:=uzvzcadxlsxole.getCellFormula(nameEtalon,stRowEtalon,stColEtalonNew);
-               end;
+
+              uzvzcadxlsxole.copyRow(nameEtalon, stRowEtalon, nameSheet, stRowEtalonNew);
+              uzvzcadxlsxole.ReplaceTextInRow(nameSheet,stRowEtalonNew,codeNameEtalonSheet,codeNameNewSheet);
+              uzvzcadxlsxole.ReplaceTextInRow(nameSheet,stRowEtalonNew,zallcabcodeNameEtalon,zallcabcodeNameNew);
+
+              //cellValueVar:=uzvzcadxlsxole.getCellFormula(nameEtalon,stRowEtalon,stColEtalonNew);  //Получаем значение ключа, для первой строки
+              //////начинаем копировать строки
+              //while cellValueVar <> zcopyrowFT do begin
+              //    uzvzcadxlsxole.copyCell(nameEtalon,stRowEtalon,stColEtalonNew,nameSheet,stRowEtalonNew,stColEtalonNew);
+              //    temptextcell:=uzvzcadxlsxole.getCellFormula(nameSheet,stRowEtalonNew,stColEtalonNew);
+              //    //ZCMsgCallBackInterface.TextMessage('temptextcell = ' + temptextcell,TMWOHistoryOut);
+              //    temptextcellnew:=StringReplace(temptextcell, codeNameEtalonSheet, codeNameNewSheet, [rfReplaceAll, rfIgnoreCase]);
+              //    temptextcellnew:=StringReplace(temptextcellnew, zallcabcodeNameEtalon, zallcabcodeNameNew, [rfReplaceAll, rfIgnoreCase]);
+              //    //ZCMsgCallBackInterface.TextMessage('temptextcellnew = ' + temptextcellnew,TMWOHistoryOut);
+              //    uzvzcadxlsxole.setCellFormula(nameSheet,stRowEtalonNew,stColEtalonNew,temptextcellnew);
+              //    inc(stColEtalonNew);
+              //    cellValueVar:=uzvzcadxlsxole.getCellFormula(nameEtalon,stRowEtalon,stColEtalonNew);
+              // end;
 
               inc(stRowEtalonNew);
               stColEtalonNew:=stColEtalon;

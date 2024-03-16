@@ -80,6 +80,9 @@ procedure copyCell(nameStSheet:string;stRow,stCol:Cardinal;nameEdSheet:string;ed
 //** спрятать лист который содержит partNameSheet
 procedure sheetVisibleOff(partNameSheet:string);
 
+procedure copyRow(fromSheet:string;stRow:Cardinal;ToSheet:string;edRow:Cardinal);
+procedure ReplaceTextInRow(nameSheet:string;stRow:Cardinal;FromText,ToText:string);
+
 implementation
 var
   Excel:OleVariant;
@@ -145,8 +148,8 @@ begin
   Book:=aBook;
 end;
 
-var
-  sheets_cache:TSheetCache;
+//var
+//  sheets_cache:TSheetCache;
 
 function openXLSXFile(pathFile:string):boolean;
 //var
@@ -155,7 +158,7 @@ begin
   try
     Excel := CreateOleObject('Excel.Application');
     BasicWorkbook:=Excel.Workbooks.Open(WideString(pathFile));
-    sheets_cache.setBook(BasicWorkbook);
+    //sheets_cache.setBook(BasicWorkbook);
     result:=true;
   except
     ZCMsgCallBackInterface.TextMessage('ОШИБКА. ПРОГРАММА EXCEL НЕ УСТАНОВЛЕНА',TMWOHistoryOut);
@@ -169,7 +172,7 @@ begin
   try
     Excel := GetActiveOleObject('Excel.Application');
     BasicWorkbook:=Excel.ActiveWorkbook;
-    sheets_cache.setBook(BasicWorkbook);
+    //sheets_cache.setBook(BasicWorkbook);
     ZCMsgCallBackInterface.TextMessage('Доступ получен к книге = ' + BasicWorkbook.Name,TMWOHistoryOut);
     result:=true;
   except
@@ -258,7 +261,8 @@ begin
 end;
 procedure deleteRow(nameSheet:string;iRow:Cardinal);
 begin
-  sheets_cache.get(nameSheet).Rows[iRow].Delete;
+  BasicWorkbook.WorkSheets(nameSheet).Rows[iRow].Delete;
+  //sheets_cache.get(nameSheet).Rows[iRow].Delete;
 end;
 procedure copyWorksheetName(codeSheet:string;nameSheet:string);
 var
@@ -266,7 +270,8 @@ var
 begin
   //ZCMsgCallBackInterface.TextMessage('имя лист = ' + nameSheet,TMWOHistoryOut);
   try
-    sheets_cache.get(codeSheet).Copy(EmptyParam,BasicWorkbook.WorkSheets[BasicWorkbook.WorkSheets.Count]);
+    BasicWorkbook.WorkSheets(codeSheet).Copy(EmptyParam,BasicWorkbook.WorkSheets[BasicWorkbook.WorkSheets.Count]);
+    //sheets_cache.get(codeSheet).Copy(EmptyParam,BasicWorkbook.WorkSheets[BasicWorkbook.WorkSheets.Count]);
     BasicWorkbook.WorkSheets[BasicWorkbook.WorkSheets.Count].Name:=nameSheet;
   except
    ZCMsgCallBackInterface.TextMessage('ОШИБКА! procedure copyWorksheetName(codeSheet:string;nameSheet:string);',TMWOHistoryOut);
@@ -298,15 +303,18 @@ end;
 
 function getCellValue(nameSheet:string;iRow,iCol:Cardinal):string;
 begin
-  result:=sheets_cache.get(nameSheet).Cells(iRow,iCol).Value;
+  result:=BasicWorkbook.WorkSheets(nameSheet).Cells(iRow,iCol).Value;
+  //result:=sheets_cache.get(nameSheet).Cells(iRow,iCol).Value;
 end;
 procedure setCellValue(nameSheet:string;iRow,iCol:Cardinal;iText:string);
 begin
-  sheets_cache.get(nameSheet).Cells(iRow,iCol).Value:=iText;
+  BasicWorkbook.WorkSheets(nameSheet).Cells(iRow,iCol).Value:=iText;
+  //sheets_cache.get(nameSheet).Cells(iRow,iCol).Value:=iText;
 end;
 function getCellFormula(nameSheet:string;iRow,iCol:Cardinal):string;
 begin
-  result:=sheets_cache.get(nameSheet).Cells(iRow,iCol).Formula;
+  result:=BasicWorkbook.WorkSheets(nameSheet).Cells(iRow,iCol).Formula;
+  //result:=sheets_cache.get(nameSheet).Cells(iRow,iCol).Formula;
 end;
 procedure setCellFormula(nameSheet:string;iRow,iCol:Cardinal;iText:string);
 begin
@@ -321,8 +329,10 @@ begin
     //  Books2.WorkSheets[1].Cells[2,2].Copy;
     //Books2.WorkSheets[2].Cells[5,5].PasteSpecial();
 
-  sheets_cache.get(nameStSheet).Cells[stRow,stCol].Copy;
-  sheets_cache.get(nameEdSheet).Cells[edRow,edCol].PasteSpecial();
+  BasicWorkbook.WorkSheets(nameStSheet).Cells[stRow,stCol].Copy;
+  BasicWorkbook.WorkSheets(nameEdSheet).Cells[edRow,edCol].PasteSpecial();
+  //sheets_cache.get(nameStSheet).Cells[stRow,stCol].Copy;
+  //sheets_cache.get(nameEdSheet).Cells[edRow,edCol].PasteSpecial();
   //BasicWorkbook.WorkSheets(nameStSheet).Cells(stRow,stCol).Copy(BasicWorkbook.WorkSheets(nameEdSheet).Cells(edRow,edCol));
     //BasicWorkbook.WorkSheets(nameStSheet).Range[BasicWorkbook.WorkSheets(nameStSheet).Cells[stRow,stCol],BasicWorkbook.WorkSheets(nameStSheet).Cells[stRow,stCol]].Copy(BasicWorkbook.WorkSheets(nameEdSheet).Cells[edRow,edCol]);
   //result:=BasicWorkbook.WorkSheets(nameSheet).Cells(iRow,iCol).Value;
@@ -384,6 +394,15 @@ begin
     vCol:=iRangeFind.Column;
   end;
 
+end;
+
+procedure copyRow(fromSheet:string;stRow:Cardinal;ToSheet:string;edRow:Cardinal);
+begin
+  BasicWorkbook.WorkSheets(fromSheet).Rows(stRow).Copy(BasicWorkbook.WorkSheets(ToSheet).Rows[edRow]);
+end;
+procedure ReplaceTextInRow(nameSheet:string;stRow:Cardinal;FromText,ToText:string);
+begin
+  BasicWorkbook.Worksheets(nameSheet).Rows(stRow).Replace(What:=FromText, Replacement:=ToText, LookAt:=2{xlPart}, MatchCase:=False);
 end;
 
 //

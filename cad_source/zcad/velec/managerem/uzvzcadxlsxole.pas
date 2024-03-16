@@ -87,6 +87,57 @@ var
   ActiveWorkSheet: OleVariant;
   iRangeFind: OleVariant;
 
+
+type
+  TSimpleCache = object
+    const size=3;
+    var
+      data_index: Integer;
+      data: array [0..size] of record
+        s: String;
+        o: OleVariant;
+      end;
+    function get_cache(s: String; out o: OleVariant): Boolean;
+    procedure set_cache(s: String; o: OleVariant);
+  end;
+  TSheetCache = object(TSimpleCache)
+    Book: OleVariant;
+    cnt: integer;
+    function get(nameSheet: String): OleVariant;
+  end;
+
+function TSimpleCache.get_cache(s: String; out o: OleVariant): Boolean;
+var
+  i: Integer;
+begin
+  for i:=High(data) downto Low(Data) do
+    if data[i].s = s then
+    begin
+      o:=data[i].o;
+      Exit(True);
+    end;
+  Result:=False;
+end;
+
+procedure TSimpleCache.set_cache(s: String; o: OleVariant);
+begin
+  if (data_index<Low(data)) or (data_index=High(data)) then data_index:=Low(data) else inc(data_index);
+  data[data_index].s:=s;
+  data[data_index].o:=o;
+end;
+
+function TSheetCache.get(nameSheet: String): OleVariant;
+begin
+  if not get_cache(nameSheet, Result) then
+  begin
+    Result:=Book.WorkSheets(nameSheet);
+    set_cache(nameSheet, Result);
+  end;
+end;
+
+var
+  sheets_cache:TSheetCache;
+
 function openXLSXFile(pathFile:string):boolean;
 //var
 begin
@@ -194,9 +245,8 @@ begin
     end;
 end;
 procedure deleteRow(nameSheet:string;iRow:Cardinal);
-//var
 begin
-  BasicWorkbook.WorkSheets(nameSheet).Rows[iRow].Delete;
+  sheets_cache.get(nameSheet).Rows[iRow].Delete;
 end;
 procedure copyWorksheetName(codeSheet:string;nameSheet:string);
 var
@@ -204,7 +254,7 @@ var
 begin
   //ZCMsgCallBackInterface.TextMessage('имя лист = ' + nameSheet,TMWOHistoryOut);
   try
-    BasicWorkbook.WorkSheets(codeSheet).Copy(EmptyParam,BasicWorkbook.WorkSheets[BasicWorkbook.WorkSheets.Count]);
+    sheets_cache.get(codeSheet).Copy(EmptyParam,BasicWorkbook.WorkSheets[BasicWorkbook.WorkSheets.Count]);
     BasicWorkbook.WorkSheets[BasicWorkbook.WorkSheets.Count].Name:=nameSheet;
   except
    ZCMsgCallBackInterface.TextMessage('ОШИБКА! procedure copyWorksheetName(codeSheet:string;nameSheet:string);',TMWOHistoryOut);
@@ -236,15 +286,15 @@ end;
 
 function getCellValue(nameSheet:string;iRow,iCol:Cardinal):string;
 begin
-  result:=BasicWorkbook.WorkSheets(nameSheet).Cells(iRow,iCol).Value;
+  result:=sheets_cache.get(nameSheet).Cells(iRow,iCol).Value;
 end;
 procedure setCellValue(nameSheet:string;iRow,iCol:Cardinal;iText:string);
 begin
-  BasicWorkbook.WorkSheets(nameSheet).Cells(iRow,iCol).Value:=iText;
+  sheets_cache.get(nameSheet).Cells(iRow,iCol).Value:=iText;
 end;
 function getCellFormula(nameSheet:string;iRow,iCol:Cardinal):string;
 begin
-  result:=BasicWorkbook.WorkSheets(nameSheet).Cells(iRow,iCol).Formula;
+  result:=sheets_cache.get(nameSheet).Cells(iRow,iCol).Formula;
 end;
 procedure setCellFormula(nameSheet:string;iRow,iCol:Cardinal;iText:string);
 begin
@@ -259,8 +309,8 @@ begin
     //  Books2.WorkSheets[1].Cells[2,2].Copy;
     //Books2.WorkSheets[2].Cells[5,5].PasteSpecial();
 
-  BasicWorkbook.WorkSheets(nameStSheet).Cells[stRow,stCol].Copy;
-  BasicWorkbook.WorkSheets(nameEdSheet).Cells[edRow,edCol].PasteSpecial();
+  sheets_cache.get(nameStSheet).Cells[stRow,stCol].Copy;
+  sheets_cache.get(nameEdSheet).Cells[edRow,edCol].PasteSpecial();
   //BasicWorkbook.WorkSheets(nameStSheet).Cells(stRow,stCol).Copy(BasicWorkbook.WorkSheets(nameEdSheet).Cells(edRow,edCol));
     //BasicWorkbook.WorkSheets(nameStSheet).Range[BasicWorkbook.WorkSheets(nameStSheet).Cells[stRow,stCol],BasicWorkbook.WorkSheets(nameStSheet).Cells[stRow,stCol]].Copy(BasicWorkbook.WorkSheets(nameEdSheet).Cells[edRow,edCol]);
   //result:=BasicWorkbook.WorkSheets(nameSheet).Cells(iRow,iCol).Value;

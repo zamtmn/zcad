@@ -37,7 +37,7 @@ type
     public
       FExpression:String;
       FParser:TFPExpressionParser;
-      pEnt:Pointer;
+      pThisEntity:Pointer;
     public
       GoodLayer,BadLayer:String;
       procedure SetExpression(const AExpression:String);
@@ -52,12 +52,12 @@ type
       procedure GetVariableValue(Var Result : TFPExpressionResult; ConstRef AName : ShortString);
       procedure onBeforeEntityFormat(pEntity:Pointer;const drawing:TDrawingDef;var DC:TDrawContext);override;
       procedure onAfterEntityFormat(pEntity:Pointer;const drawing:TDrawingDef;var DC:TDrawContext);override;
-      procedure SaveToDxfObjXData(var outhandle:TZctnrVectorBytes;PEnt:Pointer;var IODXFContext:TIODXFContext);override;
+      procedure SaveToDxfObjXData(var outhandle:TZctnrVectorBytes;pEntity:Pointer;var IODXFContext:TIODXFContext);override;
       procedure ReorganizeEnts(OldEnts2NewEntsMap:TMapPointerToPointer);override;
       procedure PostLoad(var context:TIODXFLoadContext);override;
-      class function EntIOLoadGoodLayer(_Name,_Value:String;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
-      class function EntIOLoadBadLayer(_Name,_Value:String;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
-      class function EntIOLoadExpression(_Name,_Value:String;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
+      class function EntIOLoadGoodLayer(_Name,_Value:String;ptu:PExtensionData;const drawing:TDrawingDef;pEntity:pointer):boolean;
+      class function EntIOLoadBadLayer(_Name,_Value:String;ptu:PExtensionData;const drawing:TDrawingDef;pEntity:pointer):boolean;
+      class function EntIOLoadExpression(_Name,_Value:String;ptu:PExtensionData;const drawing:TDrawingDef;pEntity:pointer):boolean;
 
       procedure onEntitySupportOldVersions(pEntity:pointer;const drawing:TDrawingDef);override;
 
@@ -72,10 +72,10 @@ procedure TLayerControlExtender.ReorganizeEnts(OldEnts2NewEntsMap:TMapPointerToP
 begin
 end;
 
-function AddLayerControlExtenderToEntity(PEnt:PGDBObjEntity):TLayerControlExtender;
+function AddLayerControlExtenderToEntity(pEntity:PGDBObjEntity):TLayerControlExtender;
 begin
-  result:=TLayerControlExtender.Create(PEnt);
-  PEnt^.AddExtension(result);
+  result:=TLayerControlExtender.Create(pEntity);
+  pEntity^.AddExtension(result);
 end;
 
 procedure TLayerControlExtender.onEntityClone(pSourceEntity,pDestEntity:pointer);
@@ -151,9 +151,9 @@ var
   rt:TResultType;
   ptd:PUserTypeDescriptor;
 begin
-  if pEnt=nil then
+  if pThisEntity=nil then
     Err('call TLayerControlExtender.GetVariableValue with pEnt=nil');
-  pvd:=FindVariableInEnt(PGDBObjEntity(pEnt),AName);
+  pvd:=FindVariableInEnt(PGDBObjEntity(pThisEntity),AName);
 
   if pvd=nil then
     Err('TLayerControlExtender.GetVariableValue variable "'+AName+'" not found');
@@ -201,8 +201,8 @@ var
   rt:TResultType;
 begin
   result:=false;
-  if pEnt<>nil then begin
-    pvd:=FindVariableInEnt(PGDBObjEntity(pEnt),ID.Name);
+  if pThisEntity<>nil then begin
+    pvd:=FindVariableInEnt(PGDBObjEntity(pThisEntity),ID.Name);
     if pvd<>nil then begin
       ptd:=pvd^.data.PTD.GetFactTypedef;
       if tryCalcFPExpressionParserResultType(ptd,rt)then begin
@@ -245,7 +245,7 @@ var
   pl:pointer;
   ExpressionResult:TFPExpressionResult;
 begin
-  pEnt:=pEntity;
+  //pThisEntity:=pEntity;
   if FParser<>nil then
     FreeAndNil(FParser);
   try
@@ -275,7 +275,7 @@ begin
   finally
     FreeAndNil(FParser);
   end;
-  pEnt:=Nil;
+  //pThisEntity:=Nil;
 end;
 
 class function TLayerControlExtender.getExtenderName:string;
@@ -283,7 +283,7 @@ begin
   result:=LayerControlExtenderName;
 end;
 
-procedure TLayerControlExtender.SaveToDxfObjXData(var outhandle:TZctnrVectorBytes;PEnt:Pointer;var IODXFContext:TIODXFContext);
+procedure TLayerControlExtender.SaveToDxfObjXData(var outhandle:TZctnrVectorBytes;pEntity:Pointer;var IODXFContext:TIODXFContext);
 begin
   dxfStringout(outhandle,1000,'LCGoodLayer='+GoodLayer);
   dxfStringout(outhandle,1000,'LCBadLayer='+BadLayer);
@@ -294,35 +294,35 @@ procedure TLayerControlExtender.PostLoad(var context:TIODXFLoadContext);
 begin
 end;
 
-class function TLayerControlExtender.EntIOLoadGoodLayer(_Name,_Value:String;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
+class function TLayerControlExtender.EntIOLoadGoodLayer(_Name,_Value:String;ptu:PExtensionData;const drawing:TDrawingDef;pEntity:pointer):boolean;
 var
   LCExtdr:TLayerControlExtender;
 begin
-  LCExtdr:=PGDBObjEntity(PEnt)^.GetExtension<TLayerControlExtender>;
+  LCExtdr:=PGDBObjEntity(pEntity)^.GetExtension<TLayerControlExtender>;
   if LCExtdr=nil then
-    LCExtdr:=AddLayerControlExtenderToEntity(PEnt);
+    LCExtdr:=AddLayerControlExtenderToEntity(pEntity);
   LCExtdr.GoodLayer:=_Value;
   result:=true;
 end;
 
-class function TLayerControlExtender.EntIOLoadBadLayer(_Name,_Value:String;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
+class function TLayerControlExtender.EntIOLoadBadLayer(_Name,_Value:String;ptu:PExtensionData;const drawing:TDrawingDef;pEntity:pointer):boolean;
 var
   LCExtdr:TLayerControlExtender;
 begin
-  LCExtdr:=PGDBObjEntity(PEnt)^.GetExtension<TLayerControlExtender>;
+  LCExtdr:=PGDBObjEntity(pEntity)^.GetExtension<TLayerControlExtender>;
   if LCExtdr=nil then
-    LCExtdr:=AddLayerControlExtenderToEntity(PEnt);
+    LCExtdr:=AddLayerControlExtenderToEntity(pEntity);
   LCExtdr.BadLayer:=_Value;
   result:=true;
 end;
 
-class function TLayerControlExtender.EntIOLoadExpression(_Name,_Value:String;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
+class function TLayerControlExtender.EntIOLoadExpression(_Name,_Value:String;ptu:PExtensionData;const drawing:TDrawingDef;pEntity:pointer):boolean;
 var
   LCExtdr:TLayerControlExtender;
 begin
-  LCExtdr:=PGDBObjEntity(PEnt)^.GetExtension<TLayerControlExtender>;
+  LCExtdr:=PGDBObjEntity(pEntity)^.GetExtension<TLayerControlExtender>;
   if LCExtdr=nil then
-    LCExtdr:=AddLayerControlExtenderToEntity(PEnt);
+    LCExtdr:=AddLayerControlExtenderToEntity(pEntity);
   LCExtdr.FExpression:=_Value;
   result:=true;
 end;

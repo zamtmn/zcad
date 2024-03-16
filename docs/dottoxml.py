@@ -163,7 +163,7 @@ def main():
                       action='store_true', dest='EdgeLabelsAutoComplete', default=False,
                       help='auto-complete edge labels')
     parser.add_option('--ah', '--arrowhead',
-                      action='store', dest='DefaultArrowHead', default='none', metavar='TYPE',
+                      action='store', dest='DefaultArrowHead', default='standard', metavar='TYPE',
                       help='sets the default appearance of arrow heads for edges (normal|diamond|dot|...) [default : %default]')
     parser.add_option('--at', '--arrowtail',
                       action='store', dest='DefaultArrowTail', default='none', metavar='TYPE',

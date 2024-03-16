@@ -146,7 +146,8 @@ tdevname=record
               pdev:PGDBObjDevice;
         end;
 TGDBVertexLess=class
-                    class var DeadBand:Double;
+                    class var DeadBandX:Double;
+                    class var DeadBandY:Double;
                     class function c(a,b:tdevcoord):boolean;{inline;}
                end;
 TGDBNameLess=class
@@ -1158,15 +1159,15 @@ begin
 end;
 class function TGDBVertexLess.c(a,b:tdevcoord):boolean;
 begin
-     if a.coord.y<b.coord.y-DeadBand then
+     if a.coord.y<b.coord.y-DeadBandY then
                     result:=true
                 else
-                    if abs(a.coord.y-b.coord.y)>DeadBand then
+                    if abs(a.coord.y-b.coord.y)>DeadBandY then
                                    begin
                                    result:=false;
                                    end
                 else
-                    if a.coord.x<b.coord.x-DeadBand then
+                    if a.coord.x<b.coord.x-DeadBandX then
                                    result:=true
                 else
                     begin

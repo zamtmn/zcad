@@ -23,7 +23,7 @@ interface
 uses
   zeundostack,zebaseundocommands,uzeentity,varmandef,
   uzcEnitiesVariablesExtender,gzUndoCmdChgData2,uzedrawingdef,
-  uzestyleslayers,uzbtypes,uzeExtdrAbstractEntityExtender;
+  uzestyleslayers,uzbtypes,uzeExtdrAbstractEntityExtender,uzeExtdrBaseEntityExtender;
 
 type
   TEmpty=record
@@ -54,8 +54,8 @@ class procedure TAfterEntChangeDo.AfterDo(SD:TSharedPEntityData;ADD:TAfterChange
 begin
   if IsIt(typeof(SD.Data^),typeof(GDBObjEntity)) then
     SD.Data^.YouChanged(ADD.Data^)
-  //else if TBaseVariablesExtender(ADD.Data^) is TBaseVariablesExtender then
-  //  TBaseVariablesExtender(ADD.Data^). SD.Data^.YouChanged(ADD.Data^)   sdf
+  else if TBaseEntityExtender(SD.Data) is TBaseEntityExtender then
+    TBaseEntityExtender(SD.Data).pThisEntity^.YouChanged(ADD.Data^);
 end;
 
 class procedure TAfterChangeDoNothing.AfterDo(SD:TSharedEmpty;ADD:TAfterChangeEmpty);

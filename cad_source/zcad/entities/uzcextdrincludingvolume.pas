@@ -19,15 +19,17 @@ unit uzcExtdrIncludingVolume;
 {$INCLUDE zengineconfig.inc}
 
 interface
-uses sysutils,UGDBObjBlockdefArray,uzedrawingdef,uzeentityextender,
-     uzeentdevice,TypeDescriptors,uzctnrVectorBytes,
-     uzbtypes,uzeentsubordinated,uzeentity,uzeblockdef,
-     varmandef,Varman,UUnitManager,URecordDescriptor,UBaseTypeDescriptor,
-     uzeentitiestree,usimplegenerics,uzeffdxfsupport,uzbpaths,uzcTranslations,
-     gzctnrVectorTypes,uzeBaseExtender,uzeconsts,uzgldrawcontext,
-     UGDBOpenArrayOfPV,uzeentgenericsubentry,uzegeometry,
-     uzcEnitiesVariablesExtender,gzctnrVectorc,uzegeometrytypes,
-     uzeentwithmatrix,uzeentlwpolyline;
+uses
+  sysutils,UGDBObjBlockdefArray,uzedrawingdef,uzeExtdrAbstractEntityExtender,
+  uzeExtdrBaseEntityExtender,
+  uzeentdevice,TypeDescriptors,uzctnrVectorBytes,
+  uzbtypes,uzeentsubordinated,uzeentity,uzeblockdef,
+  varmandef,Varman,UUnitManager,URecordDescriptor,UBaseTypeDescriptor,
+  uzeentitiestree,usimplegenerics,uzeffdxfsupport,uzbpaths,uzcTranslations,
+  gzctnrVectorTypes,uzeBaseExtender,uzeconsts,uzgldrawcontext,
+  UGDBOpenArrayOfPV,uzeentgenericsubentry,uzegeometry,
+  uzcEnitiesVariablesExtender,gzctnrVectorc,uzegeometrytypes,
+  uzeentwithmatrix,uzeentlwpolyline;
 const
   IncludingVolumeExtenderName='extdrIncludingVolume';
 type
@@ -47,7 +49,6 @@ type
 
 
 TIncludingVolumeExtender=class(TBaseEntityExtender)
-    pThisEntity:PGDBObjEntity;
     toBoundMatrix:DMatrix4D;
     InsideEnts:GDBObjOpenArrayOfPV;
     class function getExtenderName:string;override;
@@ -87,6 +88,7 @@ implementation
 
 constructor TVolumesExtender.Create(pEntity:Pointer);
 begin
+  inherited;
   Volumes:=TVolumes.Create(10);
 end;
 destructor TVolumesExtender.Destroy;
@@ -171,7 +173,8 @@ var
   root:PGDBObjSubordinated;
   rve:TVolumesExtender;
 begin
-  pThisEntity:=pEntity;
+  inherited;
+  //pThisEntity:=pEntity;
   InsideEnts.init(100);
   if(pEntity<>nil)then
     if not PGDBObjEntity(pEntity)^.CheckState([ESConstructProxy,ESTemp]) then

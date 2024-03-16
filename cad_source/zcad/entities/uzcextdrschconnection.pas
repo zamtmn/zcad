@@ -19,7 +19,7 @@ unit uzcExtdrSCHConnection;
 {$INCLUDE zengineconfig.inc}
 
 interface
-uses sysutils,uzedrawingdef,uzeentityextender,
+uses sysutils,uzedrawingdef,uzeExtdrAbstractEntityExtender,
      UGDBOpenArrayOfPV,uzeentgenericsubentry,uzeentline,uzegeometry,
      uzeentdevice,TypeDescriptors,uzctnrVectorBytes,
      uzbtypes,uzeentsubordinated,uzeentity,uzeblockdef,
@@ -46,19 +46,19 @@ type
   end;
   TKnotsUtils=TOrderingArrayUtils<TKnots,TKnot,TKnotLess>;
 
-PTConnectPoint=^TConnectPoint;
-TConnectPoint=record
-  t:Double;
-  count:Integer;
-  constructor Create(AT:Double);
-end;
-TConnectPoints=GZVector<TConnectPoint>;
-TIntersectPointsLess=class
-  class function c(a,b:Double):boolean;
-end;
-TIntersectPointsUtil=TOrderingArrayUtils<TZctnrVectorDouble,Double,TIntersectPointsLess>;
+  PTConnectPoint=^TConnectPoint;
+  TConnectPoint=record
+    t:Double;
+    count:Integer;
+    constructor Create(AT:Double);
+  end;
+  TConnectPoints=GZVector<TConnectPoint>;
+  TIntersectPointsLess=class
+    class function c(a,b:Double):boolean;
+  end;
+  TIntersectPointsUtil=TOrderingArrayUtils<TZctnrVectorDouble,Double,TIntersectPointsLess>;
 
-TSCHConnectionExtender=class(TBaseSCHConnectExtender)
+  TSCHConnectionExtender=class(TBaseSCHConnectExtender)
     ConnectedWith,IntersectedWith:GDBObjOpenArrayOfPV;
     Connections:TConnectPoints;
     Knots:TKnots;

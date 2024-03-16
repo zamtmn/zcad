@@ -13,30 +13,30 @@
 *****************************************************************************
 }
 {
-@author(Andrey Zubarev <zamtmn@yandex.ru>)
+@author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
-unit uzccommand_extdralllist;
+{MODE OBJFPC}{H+}
+unit uzeExtdrBaseEntityExtender;
+{$INCLUDE zengineconfig.inc}
 
 interface
 uses
-  uzcLog,SysUtils,
-  uzccommandsabstract,uzccommandsimpl,
-  uzcinterface,uzeExtdrAbstractEntityExtender;
+  uzeExtdrAbstractEntityExtender,uzeentity;
 
+type
+  TBaseEntityExtender=class(TAbstractEntityExtender)
+    protected
+      fpThisEntity:PGDBObjEntity;
+    public
+      constructor Create(pEntity:Pointer);override;
+      property pThisEntity:PGDBObjEntity read fpThisEntity{ write fpThisEntity};
+  end;
 implementation
-
-function extdrAllList_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
-var
-  pair:TEntityExtendersMap.TDictionaryPair;
+constructor TBaseEntityExtender.Create(pEntity:Pointer);
 begin
-  for pair in EntityExtenders do
-    ZCMsgCallBackInterface.TextMessage(pair.value.getExtenderName,TMWOHistoryOut);
-  result:=cmd_ok;
+  fpThisEntity:=pEntity;
 end;
-
 initialization
-  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
-  CreateZCADCommand(@extdrAllList_com,'extdrAllList',0,0);
 finalization
-  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
 end.
+

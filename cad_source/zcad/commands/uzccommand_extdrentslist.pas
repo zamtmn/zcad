@@ -24,7 +24,7 @@ interface
 uses
   uzcLog,SysUtils,
   uzccommandsabstract,uzccommandsimpl,
-  uzeentity,gzctnrVectorTypes,uzcdrawings,uzcstrconsts,uzeentityextender,
+  uzeentity,gzctnrVectorTypes,uzcdrawings,uzcstrconsts,uzeExtdrAbstractEntityExtender,
   uzcinterface,gzctnrSTL;
 
 function extdrEntsList_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;

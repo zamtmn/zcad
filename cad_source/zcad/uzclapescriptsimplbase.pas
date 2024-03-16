@@ -25,7 +25,7 @@ uses
   lptypes,lpvartypes,lpparser,lpcompiler,lpeval,
   LazUTF8,
   uzbLogTypes,uzcLog,
-  uzeentity,uzeentityextender,
+  uzeentity,uzeExtdrAbstractEntityExtender,
   uzedrawingsimple,uzcdrawings,
   uzeentline,uzeentityfactory,uzeconsts,uzcutils,
   uzegeometry;
@@ -50,7 +50,7 @@ type
 
   TEntityExtentionContext=class(TBaseScriptContext)
     FThisEntity:PGDBObjEntity;
-    FThisEntityExtender:TBaseEntityExtender;
+    FThisEntityExtender:TAbstractEntityExtender;
   end;
 
   TCompilerDefAdder=procedure(mode:TLapeScriptContextModes;ctx:TBaseScriptContext;cplr:TLapeCompiler) of object;

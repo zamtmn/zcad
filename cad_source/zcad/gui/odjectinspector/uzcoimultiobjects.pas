@@ -27,7 +27,7 @@ uses
   uzcenitiesvariablesextender,uzgldrawcontext,usimplegenerics,gzctnrSTL,
   gzctnrVectorTypes,uzbtypes,uzcdrawings,varmandef,uzeentity,
   Varman,uzctnrvectorstrings,UGDBSelectedObjArray,uzcoimultipropertiesutil,
-  uzeentityextender,uzelongprocesssupport,uzbLogIntf,uzcutils,
+  uzeExtdrAbstractEntityExtender,uzelongprocesssupport,uzbLogIntf,uzcutils,
   zUndoCmdChgVariable,uzcdrawing,zUndoCmdChgTypes;
 type
   TObjIDWithExtender2Counter=TMyMapCounter<TObjIDWithExtender>;
@@ -295,7 +295,7 @@ var
   i,j:integer;
   PMultiPropertyDataForObjects:PTMultiPropertyDataForObjects;
   ObjIDWithExtender:TObjIDWithExtender;
-  Extender:TBaseEntityExtender;
+  Extender:TAbstractEntityExtender;
   lpsh:TLPSHandle;
 begin
   ClearErrorRange;
@@ -419,7 +419,7 @@ var
     entinfo:TEntInfoData;
     ObjIDWithExtender:TObjIDWithExtender;
     counter:integer;
-    EE:TBaseEntityExtender;
+    EE:TAbstractEntityExtender;
 begin
   //очистка-пересоздание структур данных
   ObjID2Counter.Free;
@@ -493,7 +493,7 @@ var
     fistrun:boolean;
     ChangedData:TChangedData;
     ObjIDWithExtender:TObjIDWithExtender;
-    Extender:TBaseEntityExtender;
+    Extender:TAbstractEntityExtender;
 begin
   SavezeUnitsFormat:=f;
   NeedObjID:=GetObjType;

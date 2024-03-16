@@ -921,8 +921,9 @@
         <IsPartOfProject Value="True"/>
       </Unit116>
       <Unit117>
-        <Filename Value="zengine/core/entities/uzeentityextender.pas"/>
+        <Filename Value="zengine/core/entities/uzeextdrabstractentityextender.pas"/>
         <IsPartOfProject Value="True"/>
+        <UnitName Value="uzeExtdrAbstractEntityExtender"/>
       </Unit117>
       <Unit118>
         <Filename Value="zengine/core/entities/uzeentline.pas"/>

@@ -20,12 +20,14 @@ unit uzcExtdrLayerControl;
 
 interface
 
-uses SysUtils,uzedrawingdef,uzeentityextender,
-     uzeentdevice,TypeDescriptors,uzetextpreprocessor,uzctnrVectorBytes,
-     uzbtypes,uzeentsubordinated,uzeentity,uzeenttext,uzeblockdef,
-     varmandef,Varman,UUnitManager,URecordDescriptor,UBaseTypeDescriptor,
-     uzeffdxfsupport,uzcvariablesutils,usimplegenerics,
-     uzeBaseExtender,uzgldrawcontext,fpexprpars,LCLProc;
+uses
+  SysUtils,uzedrawingdef,uzeExtdrAbstractEntityExtender,
+  uzeExtdrBaseEntityExtender,
+  uzeentdevice,TypeDescriptors,uzetextpreprocessor,uzctnrVectorBytes,
+  uzbtypes,uzeentsubordinated,uzeentity,uzeenttext,uzeblockdef,
+  varmandef,Varman,UUnitManager,URecordDescriptor,UBaseTypeDescriptor,
+  uzeffdxfsupport,uzcvariablesutils,usimplegenerics,
+  uzeBaseExtender,uzgldrawcontext,fpexprpars,LCLProc;
 const
   LayerControlExtenderName='extdrLayerControl';
   //добавить это расширение к примитиву можно командой
@@ -113,6 +115,7 @@ end;
 
 constructor TLayerControlExtender.Create(pEntity:Pointer);
 begin
+  inherited;
   GoodLayer:='EL_DEVICE_NAME';
   BadLayer:='SYS_METRIC';
   FExpression:='Test';

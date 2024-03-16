@@ -19,13 +19,15 @@ unit uzcEnitiesVariablesExtender;
 {$INCLUDE zengineconfig.inc}
 
 interface
-uses sysutils,UGDBObjBlockdefArray,uzedrawingdef,uzeentityextender,
-     uzeentdevice,TypeDescriptors,uzctnrVectorBytes,
-     uzbtypes,uzeentsubordinated,uzeentity,uzeblockdef,
-     varmandef,Varman,UUnitManager,URecordDescriptor,UBaseTypeDescriptor,
-     uzeentitiestree,usimplegenerics,uzeffdxfsupport,uzbpaths,uzcTranslations,
-     gzctnrVectorTypes,uzeBaseExtender,uzeconsts,uzgldrawcontext,
-     gzctnrVectorP;
+uses
+  sysutils,UGDBObjBlockdefArray,uzedrawingdef,uzeExtdrAbstractEntityExtender,
+  uzeExtdrBaseEntityExtender,
+  uzeentdevice,TypeDescriptors,uzctnrVectorBytes,
+  uzbtypes,uzeentsubordinated,uzeentity,uzeblockdef,
+  varmandef,Varman,UUnitManager,URecordDescriptor,UBaseTypeDescriptor,
+  uzeentitiestree,usimplegenerics,uzeffdxfsupport,uzbpaths,uzcTranslations,
+  gzctnrVectorTypes,uzeBaseExtender,uzeconsts,uzgldrawcontext,
+  gzctnrVectorP;
 const
   VariablesExtenderName='extdrVariables';
 type
@@ -38,7 +40,6 @@ TVariablesExtender=class(TBaseVariablesExtender)
     pMainFuncEntity:PGDBObjEntity;
 
     DelegatesArray:TEntityArray;
-    pThisEntity:PGDBObjEntity;
 
     ConnectedVariablesExtenders:TVariablesExtendersVector;
     class function getExtenderName:string;override;
@@ -231,14 +232,15 @@ begin
 end;
 constructor TVariablesExtender.Create;
 begin
-     pThisEntity:=pEntity;
-     entityunit.init('entity');
-     entityunit.InterfaceUses.PushBackData(SysUnit);
-     if PFCTTD=nil then
-                       PFCTTD:=sysunit.TypeName2PTD('PTObjectUnit');
-     pMainFuncEntity:=nil;
-     DelegatesArray.init(10);
-     ConnectedVariablesExtenders.init(10);
+  inherited;
+  //pThisEntity:=pEntity;
+  entityunit.init('entity');
+  entityunit.InterfaceUses.PushBackData(SysUnit);
+  if PFCTTD=nil then
+    PFCTTD:=sysunit.TypeName2PTD('PTObjectUnit');
+  pMainFuncEntity:=nil;
+  DelegatesArray.init(10);
+  ConnectedVariablesExtenders.init(10);
 end;
 destructor TVariablesExtender.Destroy;
 begin

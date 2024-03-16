@@ -111,7 +111,7 @@ uses
    uzeroot,
    uzctranslations,
    uzgldrawcontext,
-   uzeentityextender,
+   uzeExtdrAbstractEntityExtender,
    uzeblockdef,
 
   uzvagraphsdev,

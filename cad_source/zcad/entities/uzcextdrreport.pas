@@ -21,7 +21,8 @@ unit uzcExtdrReport;
 interface
 
 uses
-  SysUtils,UGDBObjBlockdefArray,uzedrawingdef,uzeentityextender,
+  SysUtils,UGDBObjBlockdefArray,uzedrawingdef,uzeExtdrAbstractEntityExtender,
+  uzeExtdrBaseEntityExtender,
   uzeentdevice,TypeDescriptors,uzctnrVectorBytes,
   uzbtypes,uzeentsubordinated,uzeentity,uzeblockdef,
   varmandef,Varman,UUnitManager,URecordDescriptor,UBaseTypeDescriptor,
@@ -39,7 +40,6 @@ const
 
 type
   TReportExtender=class(TBaseEntityExtender)
-    pThisEntity:PGDBObjEntity;
     class function getExtenderName:string;override;
     constructor Create(pEntity:Pointer);override;
     destructor Destroy;override;
@@ -84,7 +84,8 @@ begin
 end;
 constructor TReportExtender.Create;
 begin
-  pThisEntity:=pEntity;
+  inherited;
+  //pThisEntity:=pEntity;
 end;
 destructor TReportExtender.Destroy;
 begin

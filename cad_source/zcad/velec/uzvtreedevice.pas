@@ -105,7 +105,7 @@ uses
   AttrSet,
   //*
    RegExpr,
-   uzeentityextender,
+   uzeExtdrAbstractEntityExtender,
    uzcenitiesvariablesextender,
    uzeentitiestree,
    UUnitManager,

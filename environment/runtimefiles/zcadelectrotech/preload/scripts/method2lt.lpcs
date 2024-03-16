@@ -5,4 +5,10 @@ begin
           Output:='cabkorob';
        if Input = 'Hidden~inPipe' then
           Output:='cabtruba'; 
+       if Input = 'EPSN~CL04' then
+          Output:='Cable_N'; 
+       if Input = 'EPSN~CL10' then
+          Output:='Cable_W'; 
+       if Input = 'EPSN~OutLightLines' then
+          Output:='Cable_V'; 
 end.

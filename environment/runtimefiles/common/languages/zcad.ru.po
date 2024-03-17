@@ -5,140 +5,11 @@ msgstr ""
 "PO-Revision-Date: \n"
 "Last-Translator: zamtmn <zamtmn@yandex.ru>\n"
 "Language-Team: \n"
+"Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: ru\n"
-"X-Generator: Poedit 1.5.7\n"
-
-#: tblockinsertform.anglelabel.caption
-msgid "Angle: "
-msgstr ""
-
-#: tblockinsertform.angleonscreen.caption
-msgctxt "tblockinsertform.angleonscreen.caption"
-msgid "Specify on-screen"
-msgstr ""
-
-#: tblockinsertform.blockinit.text
-msgid "BlockInit"
-msgstr ""
-
-#: tblockinsertform.blocknamecombobox.text
-msgid "BlockNameComboBox"
-msgstr ""
-
-#: tblockinsertform.blocknamelabel.caption
-msgid "Name: "
-msgstr ""
-
-#: tblockinsertform.caption
-msgid "Вставка блока"
-msgstr ""
-
-#: tblockinsertform.explodecheckbox.caption
-msgid "Explode"
-msgstr ""
-
-#: tblockinsertform.factorlabel.caption
-msgid "Factor: "
-msgstr ""
-
-#: tblockinsertform.insertgroupbox.caption
-msgid "Insertion point"
-msgstr ""
-
-#: tblockinsertform.insertonscreen.caption
-msgctxt "tblockinsertform.insertonscreen.caption"
-msgid "Specify on-screen"
-msgstr ""
-
-#: tblockinsertform.insxlabel.caption
-msgctxt "tblockinsertform.insxlabel.caption"
-msgid "X: "
-msgstr ""
-
-#: tblockinsertform.insylabel.caption
-msgctxt "tblockinsertform.insylabel.caption"
-msgid "Y: "
-msgstr ""
-
-#: tblockinsertform.inszlabel.caption
-msgctxt "tblockinsertform.inszlabel.caption"
-msgid "Z: "
-msgstr ""
-
-#: tblockinsertform.mainpanel.caption
-msgid "Prewiev"
-msgstr ""
-
-#: tblockinsertform.pathlabel.caption
-msgid "Path: "
-msgstr ""
-
-#: tblockinsertform.rotationgroupbox.caption
-msgid "Rotation"
-msgstr ""
-
-#: tblockinsertform.scalegroupbox.caption
-msgid "Scale"
-msgstr ""
-
-#: tblockinsertform.scaleonscreen.caption
-msgctxt "tblockinsertform.scaleonscreen.caption"
-msgid "Specify on-screen"
-msgstr ""
-
-#: tblockinsertform.scalexlabel.caption
-msgctxt "tblockinsertform.scalexlabel.caption"
-msgid "X: "
-msgstr ""
-
-#: tblockinsertform.scaleylabel.caption
-msgctxt "tblockinsertform.scaleylabel.caption"
-msgid "Z: "
-msgstr ""
-
-#: tblockinsertform.scalezlabel.caption
-msgctxt "tblockinsertform.scalezlabel.caption"
-msgid "Y: "
-msgstr ""
-
-#: tblockinsertform.uniformscale.caption
-msgid "Uniform scale"
-msgstr ""
-
-#: tblockinsertform.unitlabel.caption
-msgid "Unit: "
-msgstr ""
-
-#: tblockinsertform.unitsgroupbox.caption
-msgid "Block unit"
-msgstr ""
-
-#: tcolorselectform.byblock.caption
-msgid "??ByBlock"
-msgstr ""
-
-#: tcolorselectform.bylayer.caption
-msgid "??ByLayer"
-msgstr ""
-
-#: tcolorselectform.caption
-msgid "Color selection"
-msgstr ""
-
-#: tcolorselectform.label2.caption
-msgid "Color number:"
-msgstr ""
-
-#: tcolorselectform.label3.caption
-msgid "??Color description"
-msgstr ""
-
-#: tcolorselectform.tabsheet1.caption
-msgid "Color index"
-msgstr ""
+"X-Generator: Poedit 3.4.2\n"
 
 #: tdimstylesform.addstyle.caption
 msgctxt "tdimstylesform.addstyle.caption"
@@ -362,209 +233,6 @@ msgstr ""
 msgid "ToolButton4"
 msgstr ""
 
-#: tlinetypesform.bitbtn1.caption
-msgid "Update"
-msgstr ""
-
-#: tlinetypesform.bitbtn2.caption
-msgid "Create"
-msgstr ""
-
-#: tlinetypesform.bitbtn3.caption
-msgid "Load"
-msgstr ""
-
-#: tlinetypesform.caption
-msgid "Line types"
-msgstr ""
-
-#: tlinetypesform.checkbox1.caption
-msgid "Auto rotate text"
-msgstr ""
-
-#: tlinetypesform.dellt.caption
-msgctxt "tlinetypesform.dellt.caption"
-msgid "Delete line type"
-msgstr ""
-
-#: tlinetypesform.dellt.hint
-msgctxt "tlinetypesform.dellt.hint"
-msgid "Delete line type"
-msgstr ""
-
-#: tlinetypesform.groupbox1.caption
-msgid "Line type description"
-msgstr ""
-
-#: tlinetypesform.groupbox2.caption
-msgid "Drawing settings"
-msgstr ""
-
-#: tlinetypesform.groupbox3.caption
-msgid "Global settings"
-msgstr ""
-
-#: tlinetypesform.label3.caption
-msgid "Global scale factor"
-msgstr ""
-
-#: tlinetypesform.label4.caption
-msgid "Current object scale factor"
-msgstr ""
-
-#: tlinetypesform.listview1.columns[0].caption
-msgctxt "tlinetypesform.listview1.columns[0].caption"
-msgid "Status"
-msgstr "Статус"
-
-#: tlinetypesform.listview1.columns[1].caption
-msgctxt "tlinetypesform.listview1.columns[1].caption"
-msgid "Line type"
-msgstr "Тип линии"
-
-#: tlinetypesform.listview1.columns[2].caption
-msgid "Apperance"
-msgstr ""
-
-#: tlinetypesform.listview1.columns[3].caption
-msgctxt "tlinetypesform.listview1.columns[3].caption"
-msgid "Description"
-msgstr "Описание"
-
-#: tlinetypesform.mkcurr.caption
-msgid "Make current"
-msgstr ""
-
-#: tlinetypesform.mkcurr.hint
-msgid "Make selected line type current"
-msgstr ""
-
-#: tlinetypesform.toolbar1.caption
-msgctxt "tlinetypesform.toolbar1.caption"
-msgid "ToolBar1"
-msgstr ""
-
-#: tlinetypesloadform.caption
-msgctxt "tlinetypesloadform.caption"
-msgid "Form1"
-msgstr ""
-
-#: tlinetypesloadform.listview1.columns[0].caption
-msgctxt "tlinetypesloadform.listview1.columns[0].caption"
-msgid "Name"
-msgstr "Имя"
-
-#: tlinetypesloadform.listview1.columns[1].caption
-msgctxt "tlinetypesloadform.listview1.columns[1].caption"
-msgid "Description"
-msgstr "Описание"
-
-#: tnavigatordevices.caption
-msgctxt "tnavigatordevices.caption"
-msgid "Devices"
-msgstr "Устройства"
-
-#: tnavigatordevices.collapseall.caption
-msgctxt "tnavigatordevices.collapseall.caption"
-msgid "Collapse all"
-msgstr "Свернуть всё"
-
-#: tnavigatordevices.collapseallbtn.hint
-msgctxt "tnavigatordevices.collapseallbtn.hint"
-msgid "Collapse all"
-msgstr "Свернуть всё"
-
-#: tnavigatordevices.expandall.caption
-msgctxt "tnavigatordevices.expandall.caption"
-msgid "Expand all"
-msgstr "Развернуть всё"
-
-#: tnavigatordevices.expandallbtn.hint
-msgctxt "tnavigatordevices.expandallbtn.hint"
-msgid "Expand all"
-msgstr "Развернуть всё"
-
-#: tnavigatordevices.filterbtn.buttonhint
-msgid "Clear filter"
-msgstr "Очистить фильтр"
-
-#: tnavigatordevices.includeents.caption
-msgid "Edit include entities"
-msgstr ""
-
-#: tnavigatordevices.includeprops.caption
-msgid "Edit include properties"
-msgstr ""
-
-#: tnavigatordevices.loadfromfile.caption
-msgid "Load from file"
-msgstr ""
-
-#: tnavigatordevices.refresh.caption
-msgid "Refresh tree"
-msgstr ""
-
-#: tnavigatordevices.savetofile.caption
-msgid "Save to file"
-msgstr ""
-
-#: tnavigatordevices.treeprops.caption
-msgid "Edit tree properties"
-msgstr ""
-
-#: tnavigatorentities.caption
-msgctxt "tnavigatorentities.caption"
-msgid "Entities"
-msgstr "Примитивы"
-
-#: tnavigatorentities.maintoolbar.caption
-msgid "MainToolBar"
-msgstr ""
-
-#: tnavigatorentities.refresh.caption
-msgid "Refresh"
-msgstr ""
-
-#: tnavigatorentities.toolbutton1.caption
-msgid "ToolButton1"
-msgstr ""
-
-#: tnavigatorentities.toolbutton3.caption
-msgid "ToolButton3"
-msgstr ""
-
-#: tselectorform.caption
-msgctxt "tselectorform.caption"
-msgid "Form1"
-msgstr ""
-
-#: tselectorform.listview1.columns[0].caption
-msgctxt "tselectorform.listview1.columns[0].caption"
-msgid "Name"
-msgstr "Имя"
-
-#: tselectorform.listview1.columns[1].caption
-msgctxt "tselectorform.listview1.columns[1].caption"
-msgid "Description"
-msgstr "Описание"
-
-#: tsinglelinetexteditorform.cancelbutton.caption
-msgid "Cancel"
-msgstr ""
-
-#: tsinglelinetexteditorform.caption
-msgctxt "tsinglelinetexteditorform.caption"
-msgid "Text editor"
-msgstr "Редактор текста"
-
-#: tsinglelinetexteditorform.helptext.caption
-msgid "Text"
-msgstr ""
-
-#: tsinglelinetexteditorform.okbutton.caption
-msgid "Ok"
-msgstr ""
-
 #: ttextstylesform.addstyle.caption
 msgctxt "ttextstylesform.addstyle.caption"
 msgid "AddStyle"
@@ -673,68 +341,6 @@ msgctxt "ttextstylesform.toolbar1.caption"
 msgid "ToolBar1"
 msgstr ""
 
-#: tunitsform.angdircheckbox.caption
-msgid "Clockwise"
-msgstr ""
-
-#: tunitsform.angledirectionbitbtn.caption
-msgid "Direction"
-msgstr ""
-
-#: tunitsform.caption
-msgid "Drawing units"
-msgstr ""
-
-#: tunitsform.groupbox1.caption
-msgid "Length"
-msgstr ""
-
-#: tunitsform.groupbox2.caption
-msgid "Angle"
-msgstr ""
-
-#: tunitsform.groupbox3.caption
-msgid "Insertion scale"
-msgstr ""
-
-#: tunitsform.groupbox4.caption
-msgctxt "tunitsform.groupbox4.caption"
-msgid "Sample output"
-msgstr ""
-
-#: tunitsform.label1.caption
-msgctxt "tunitsform.label1.caption"
-msgid "Sample output"
-msgstr ""
-
-#: tunitsform.label3.caption
-msgctxt "tunitsform.label3.caption"
-msgid "Type:"
-msgstr ""
-
-#: tunitsform.label4.caption
-msgctxt "tunitsform.label4.caption"
-msgid "Precision:"
-msgstr ""
-
-#: tunitsform.label5.caption
-msgctxt "tunitsform.label5.caption"
-msgid "Type:"
-msgstr ""
-
-#: tunitsform.label6.caption
-msgctxt "tunitsform.label6.caption"
-msgid "Precision:"
-msgstr ""
-
-#: tunitsform.label7.caption
-msgid "Units to scale inserted content:"
-msgstr ""
-
-#: tunitsform.unitmodecheckbox.caption
-msgid "Unit mode"
-msgstr ""
-
 #: tzcadmainwindow.toolbard.caption
 msgid "ToolBarD"
 msgstr ""
@@ -760,10 +366,7 @@ msgid "${\"&[<]<<\",Keys[<],StrId[CLPIdBack]} Enter new export script:"
 msgstr ""
 
 #: uzccommand_dataexport.rsclpdataexportoptions
-msgid ""
-"${\"&[<]<<\",Keys[<],StrId[CLPIdBack]} Set ${\"&[e]ntities\",Keys[o],StrId"
-"[CLPIdUser1]}/${\"&[p]roperties\",Keys[o],StrId[CLPIdUser2]} filter or "
-"export ${\"&[s]cript\",Keys[o],StrId[CLPIdUser3]}"
+msgid "${\"&[<]<<\",Keys[<],StrId[CLPIdBack]} Set ${\"&[e]ntities\",Keys[o],StrId[CLPIdUser1]}/${\"&[p]roperties\",Keys[o],StrId[CLPIdUser2]} filter or export ${\"&[s]cript\",Keys[o],StrId[CLPIdUser3]}"
 msgstr ""
 
 #: uzccommand_dataexport.rsclpdataexportpropsfiltercurrentvalue
@@ -775,10 +378,7 @@ msgid "${\"&[<]<<\",Keys[<],StrId[CLPIdBack]} Enter new properties filter:"
 msgstr ""
 
 #: uzccommand_dataexport.rsclpdataexportwaitfile
-msgid ""
-"Configure export ${\"&[p]arams\",Keys[p],StrId[CLPIdOptions]}, run ${\"&[f]"
-"ile dialog\",Keys[f],StrId[CLPIdFileDialog]} or enter file name (empty for "
-"default):"
+msgid "Configure export ${\"&[p]arams\",Keys[p],StrId[CLPIdOptions]}, run ${\"&[f]ile dialog\",Keys[f],StrId[CLPIdFileDialog]} or enter file name (empty for default):"
 msgstr ""
 
 #: uzcdialogsfiles.rsopensomething
@@ -795,9 +395,7 @@ msgstr "Неможет быть соединено"
 
 #: uzcfnavigatordevices.rsnavigatorparamsfilefilter
 #, object-pascal-format
-msgid ""
-"This navigator params files (*.%0:s)|*.%0:s|Xml files (*.xml)|*.xml|All "
-"files (*.*)|*.*"
+msgid "This navigator params files (*.%0:s)|*.%0:s|Xml files (*.xml)|*.xml|All files (*.*)|*.*"
 msgstr ""
 
 #: uzcfnavigatordevices.rsstandalonedevices
@@ -856,12 +454,8 @@ msgid "ByLayer"
 msgstr "По Слою"
 
 #: uzcstrconsts.rscautionnosyntaxcheckyet
-msgid ""
-"CAUTION! There is no syntax check yet. Clicking \"OK\" the object will be "
-"updated. Error - CRASHES!!!"
-msgstr ""
-"ВНИМАНИЕ! проверки синтаксиса нет. При нажатии \"OK\" объекты будут "
-"обновлены. Ошибка=Вылет!"
+msgid "CAUTION! There is no syntax check yet. Clicking \"OK\" the object will be updated. Error - CRASHES!!!"
+msgstr "ВНИМАНИЕ! проверки синтаксиса нет. При нажатии \"OK\" объекты будут обновлены. Ошибка=Вылет!"
 
 #: uzcstrconsts.rsclipboardisempty
 msgid "Clipboard is empty, there is nothing to paste"
@@ -1161,12 +755,8 @@ msgstr "Команда \"%s\" не может быть запущена"
 
 #: uzcstrconsts.rscommenteeport
 #, object-pascal-format
-msgid ""
-"Registered commands - %d; registered entities - %d; registered DXF entities "
-"- %d"
-msgstr ""
-"Зарегистрированных команд - %d; зарегистрированных примитивов - %d; "
-"зарегистрированных DXF примитивов - %d"
+msgid "Registered commands - %d; registered entities - %d; registered DXF entities - %d"
+msgstr "Зарегистрированных команд - %d; зарегистрированных примитивов - %d; зарегистрированных DXF примитивов - %d"
 
 #: uzcstrconsts.rscompiledtimemsg
 #, object-pascal-format
@@ -1230,12 +820,8 @@ msgstr "Разный"
 
 #: uzcstrconsts.rsdimstyleusedin
 #, object-pascal-format
-msgid ""
-"Dimension style \"%s\" used in: %d-model, %d-blockdef table, %d-dimstyle "
-"table"
-msgstr ""
-"Стиль размеров \"%s\" используется в: %d-модели, %d-таблице определений "
-"блоков, %d-ьаблице стилей размеров"
+msgid "Dimension style \"%s\" used in: %d-model, %d-blockdef table, %d-dimstyle table"
+msgstr "Стиль размеров \"%s\" используется в: %d-модели, %d-таблице определений блоков, %d-ьаблице стилей размеров"
 
 #: uzcstrconsts.rsdivbyzero
 msgid "Divide by zero"
@@ -1290,8 +876,7 @@ msgstr "Выражение  %s возвращает %s"
 
 #: uzcstrconsts.rsfardeffilenotfounf
 #, object-pascal-format
-msgid ""
-"File definition of the variables can not be found for the device \"%s\";"
+msgid "File definition of the variables can not be found for the device \"%s\";"
 msgstr "Файл определения переменных не найден для устройства \"%s\";"
 
 #: uzcstrconsts.rsfilterhint
@@ -1379,11 +964,6 @@ msgstr ""
 #, object-pascal-format
 msgid "Line type \"%s\" used in: %d-model, %d-blockdef table"
 msgstr "Тип линии  \"%s\" используется: %d-в модели, %d-в таблице блоков"
-
-#: uzcstrconsts.rsloadingfontfile
-#, object-pascal-format
-msgid "Loading font file \"%S\""
-msgstr "Загрузка файла шрифтов \"%S\""
 
 #: uzcstrconsts.rsmessagecaption
 msgid "Message:"
@@ -1489,22 +1069,13 @@ msgstr "Повторное создание %s!"
 
 #: uzcstrconsts.rsreleasenotes
 msgid ""
-"-UNDO\\REDO - yet it is better not to use;\n"
+"-If you have problems with rendering or selecting entities, run \"Regen\" and \"RebuildTree\" in command line;\n"
 "\n"
-"-If you have problems with rendering or selecting entities, run \"Regen\" "
-"and \"RebuildTree\" in command line;\n"
-"\n"
-"-To disable the display of this window comment out line \"About\" in the "
-"file \"components\\autorun.cmd\". Encoding of all configuration files - "
-"UTF8;\n"
+"-To disable the display of this window comment out line \"About\" in the file \"components\\autorun.cmd\". Encoding of all configuration files - UTF8;\n"
 msgstr ""
-"-UNDO\\REDO - пока лучше не пользоваться;\n"
+"-При проблемах с отображением или выделением примитивов, запустите \"Regen\" и \"RebuildTree\" в командной строке;\n"
 "\n"
-"-При проблемах с отображением или выделением примитивов, запустите \"Regen\" "
-"и \"RebuildTree\" в командной строке;\n"
-"\n"
-"-Для отключения показа этого окна закоментируйте строку \"About\" в файле "
-"\"components\\autorun.cmd\". Кодировка всех конфигурационных файлов - UTF8;\n"
+"-Для отключения показа этого окна закоментируйте строку \"About\" в файле \"components\\autorun.cmd\". Кодировка всех конфигурационных файлов - UTF8;\n"
 
 #: uzcstrconsts.rsrenamedto
 #, object-pascal-format
@@ -1564,11 +1135,8 @@ msgstr "Редактор текста"
 
 #: uzcstrconsts.rstextstyleusedin
 #, object-pascal-format
-msgid ""
-"Text style \"%s\" used in: %d-model, %d-blockdef table, %d-dimstyle table"
-msgstr ""
-"Стиль текста \"%s\" используется: %d-в модели, %d-в таблице определений "
-"блоков, %d-в таблице стилей размеров"
+msgid "Text style \"%s\" used in: %d-model, %d-blockdef table, %d-dimstyle table"
+msgstr "Стиль текста \"%s\" используется: %d-в модели, %d-в таблице определений блоков, %d-в таблице стилей размеров"
 
 #: uzcstrconsts.rstoolbarnotfound
 #, object-pascal-format
@@ -1604,6 +1172,11 @@ msgstr "Не могу выбрать свободное имя стиля"
 #, object-pascal-format
 msgid "Unable to find file \"%s\""
 msgstr "Не могу найти файл \"%s\""
+
+#: uzcstrconsts.rsunabletofindunit
+#, object-pascal-format
+msgid "Unable to find unit \"%s\""
+msgstr ""
 
 #: uzcstrconsts.rsunabletoopenfile
 #, object-pascal-format
@@ -1696,12 +1269,8 @@ msgstr "Для стиля текста \"%s\" не найден шрифт \"%s\
 
 #: uzestrconsts.fontnotfoundandreplace
 #, object-pascal-format
-msgid ""
-"For text style \"%s\" not found font \"%s\" (\"%s\" fontfamily), is replaced "
-"by an alternative"
-msgstr ""
-"Для стиля текста \"%s\" не найден фонт \"%s\" (\"%s\" семейство), заменен на "
-"альтернативный"
+msgid "For text style \"%s\" not found font \"%s\" (\"%s\" fontfamily), is replaced by an alternative"
+msgstr "Для стиля текста \"%s\" не найден фонт \"%s\" (\"%s\" семейство), заменен на альтернативный"
 
 #: uzestrconsts.rsalternatefontnotfoundin
 #, object-pascal-format
@@ -1732,6 +1301,12 @@ msgstr "Сетка слишком мелкая"
 msgid "Loading file \"%s\""
 msgstr "Загрузка файла  \"%s\""
 
+#: uzestrconsts.rsloadingfontfile
+#, object-pascal-format
+msgctxt "uzestrconsts.rsloadingfontfile"
+msgid "Loading font file \"%S\""
+msgstr "Загрузка файла шрифтов \"%S\""
+
 #: uzestrconsts.rsreservefontnotfound
 msgid "Reserve font is not found in the resources"
 msgstr "Резервный фонт не найден в расурсах программы"
@@ -1761,11 +1336,11 @@ msgstr "Неверный индекс блока"
 
 #: uzglviewareageneral.rswonlyparalel
 msgid "Works only for parallel projection!"
-msgstr "Работает только при паралельной проекции"
+msgstr "Работает только при паралельной проекции!"
 
 #: uzglviewareageneral.rswonlytop
 msgid "Works only for top view!"
-msgstr "Работает только при виде сверху"
+msgstr "Работает только при виде сверху!"
 
 #: zcad.rsstartautorun
 msgid "Execute *components\\autorun.cmd"

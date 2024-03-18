@@ -39,7 +39,7 @@ type
     public
       FExpression:String;
       FParser:TFPExpressionParser;
-      pThisEntity:Pointer;
+      //pThisEntity:Pointer;
     public
       GoodLayer,BadLayer:String;
       procedure SetExpression(const AExpression:String);

@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <CONFIG>
   <STRINGTREE>
     <Hidden Desc="Скрытая">
@@ -7,7 +7,7 @@
     </Hidden>
     <open Desc="Открытая">
       <inMetalTray Desc="В металлическом лотке"/>
-      <inСableСhannel Desc="В кабельном канале"/>
+      <inCableChannel Desc="В кабельном канале"/>
       <inPipePVC Desc="В ПВХ трубе"/>
       <inPip Desc="В металической трубе"/>
     </open>

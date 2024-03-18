@@ -35,7 +35,7 @@ VSPECIFICATION_Unit:='шт.';
 VSPECIFICATION_Count:=1;
 VSPECIFICATION_Weight:='';
 VSPECIFICATION_Note:='';
-VSPECIFICATION_Grouping:='Щиты';
+VSPECIFICATION_Grouping:='Щитки, шкафы, ящики, пульты';
 VSPECIFICATION_Belong:='';
 
 

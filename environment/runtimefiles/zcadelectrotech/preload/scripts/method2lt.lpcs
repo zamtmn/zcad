@@ -5,7 +5,7 @@ begin
           Output:='ByLayer';   
        if Input = 'open~inMetalTray' then
           Output:='cablotok';
-       if Input = 'open~inСableСhannel' then
+       if Input = 'open~inCableChannel' then
           Output:='cabkorob';
 	   if Input = 'open~inPipePVC' then
           Output:='cabtruba';

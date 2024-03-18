@@ -8,7 +8,7 @@ usescopy objname;
 
 var
 
-T11:Integer;(*'123'*)
+VL_Phase:Integer;(*'123'*)
 
 implementation
 
@@ -23,6 +23,6 @@ NMO_BaseName:='Н';
 NMO_Suffix:='??';
 NMO_Affix:='';
 
-T11:=3;
+VL_Phase:=3;
 
 end.

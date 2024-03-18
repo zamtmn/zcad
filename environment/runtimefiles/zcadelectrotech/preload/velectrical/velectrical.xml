@@ -4,10 +4,19 @@
     <BlockLib Type="Tree" Caption='Blocks' ImagesWidth='24'>
       <ZTreeNode Caption='Velectrical'>
 	    <ZTreeNode Caption='Plan'>
+		    <ZTreeNode Caption='ElReceiver'>
+			  <ZTreeCommand Command="Insert(DEVICE_VEL_POWER_MOTOR)" Caption='Двигатель' />
+			  <ZTreeCommand Command="Insert(DEVICE_VEL_POWER_HEATER)" Caption='Электрообогреватель' />
+			  <ZTreeCommand Command="Insert(DEVICE_VEL_POWER_BU)" Caption='Блок управления' />
+			</ZTreeNode>			
 		    <ZTreeNode Caption='Sockets'>
 			  <ZTreeCommand Command="Insert(DEVICE_VEL_SOCKET1_1P)" Caption='Розетка СП31 1Р' />
 			  <ZTreeCommand Command="Insert(DEVICE_VEL_SOCKET1_2P)" Caption='Розетка СП31 2Р' />
-			</ZTreeNode>		
+			</ZTreeNode>	
+		    <ZTreeNode Caption='Shields'>
+			  <ZTreeCommand Command="Insert(DEVICE_VEL_SOCKET1_1P)" Caption='Розетка СП31 1Р' />
+			  <ZTreeCommand Command="Insert(DEVICE_VEL_SOCKET1_2P)" Caption='Розетка СП31 2Р' />
+			</ZTreeNode>					
         </ZTreeNode>
         <ZTreeNode Caption='Schemes'>
 		    <ZTreeNode Caption='Shield diagram'>

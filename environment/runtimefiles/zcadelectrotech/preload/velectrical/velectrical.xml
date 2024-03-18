@@ -3,11 +3,17 @@
   <PalettesContent>
     <BlockLib Type="Tree" Caption='Blocks' ImagesWidth='24'>
       <ZTreeNode Caption='Velectrical'>
+	    <ZTreeNode Caption='Plan'>
+		    <ZTreeNode Caption='Sockets'>
+			  <ZTreeCommand Command="Insert(DEVICE_VEL_SOCKET1_1P)" Caption='Розетка СП31 1Р' />
+			  <ZTreeCommand Command="Insert(DEVICE_VEL_SOCKET1_2P)" Caption='Розетка СП31 2Р' />
+			</ZTreeNode>		
+        </ZTreeNode>
         <ZTreeNode Caption='Schemes'>
 		    <ZTreeNode Caption='Shield diagram'>
-			  <ZTreeCommand Command="Insert(VSCHEMA_PANEL_SIDE)"/>
-			  <ZTreeCommand Command="Insert(DEVICE_VSCHEMA_PANEL_IN)"/>
-			  <ZTreeCommand Command="Insert(DEVICE_VSCHEMA_PANEL_OUT)"/> 
+				<ZTreeCommand Command="Insert(VSCHEMA_PANEL_SIDE)"/>
+			    <ZTreeCommand Command="Insert(DEVICE_VSCHEMA_PANEL_IN)"/>
+			    <ZTreeCommand Command="Insert(DEVICE_VSCHEMA_PANEL_OUT)"/> 
 			</ZTreeNode>
 		    <ZTreeNode Caption='Shield devices'>
 			  <ZTreeCommand Command="Insert(DEVICE_VSCHEMES_QF)" Caption='Автоматический выключатель' />

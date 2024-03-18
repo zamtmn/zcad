@@ -1,6 +1,9 @@
 unit vspecification;
 interface
 uses system;
+type
+
+(*varcategoryforoi VSPECIFICATION='Спецификация'*)
 
 var
    VSPECIFICATION_Position:String;(*'Позиция'*)

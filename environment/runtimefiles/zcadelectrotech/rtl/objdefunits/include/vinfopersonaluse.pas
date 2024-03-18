@@ -6,10 +6,10 @@ type
 (*varcategoryforoi INFOPERSONALUSE='Инфо личного пользования'*)
 
 var
-   INFOPERSONALUSE_text:string;(*'Текст личного пользования'*)
-   INFOPERSONALUSE_template:string;(*'Шаблон для текста лич. польз.'*)  
+   INFOPERSONALUSE_Text:string;(*'Текст личного пользования'*)
+   INFOPERSONALUSE_TextTemplate:string;(*'Шаблон для текста лич. польз.'*)  
 implementation
 begin
-   INFOPERSONALUSE_text:='';
-   INFOPERSONALUSE_template:='-';
+   INFOPERSONALUSE_Text:='';
+   INFOPERSONALUSE_TextTemplate:='-';
 end.

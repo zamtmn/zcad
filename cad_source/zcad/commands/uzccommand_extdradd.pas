@@ -24,7 +24,7 @@ interface
 uses
   uzcLog,SysUtils,
   uzccommandsabstract,uzccommandsimpl,
-  uzeentity,gzctnrVectorTypes,uzcdrawings,uzcstrconsts,uzeentityextender,
+  uzeentity,gzctnrVectorTypes,uzcdrawings,uzcstrconsts,uzeExtdrAbstractEntityExtender,
   gzUndoCmdChgMethods2,zUndoCmdSaveEntityState,uzcdrawing,
   uzcinterface,UGDBSelectedObjArray;
 
@@ -42,7 +42,7 @@ var
   ir:itrec;
   count:Integer;
   DoMethod,UndoMethod:TMethod;
-  ext:TBaseEntityExtender;
+  ext:TAbstractEntityExtender;
   psd:PSelectedObjDesc;
 begin
   try
@@ -86,7 +86,7 @@ begin
 
             TUndoCmdSaveEntityState.CreateAndPush(pEntity,PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack);
 
-            with GUCmdChgMethods2<TBaseEntityExtender,Pointer>.CreateAndPush(ext,typeof(ext),domethod,undomethod,PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,drawings.AfterNotAutoProcessGDB) do
+            with GUCmdChgMethods2<TAbstractEntityExtender,Pointer>.CreateAndPush(ext,typeof(ext),domethod,undomethod,PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,drawings.AfterNotAutoProcessGDB) do
             begin
               comit;
             end;

@@ -20,7 +20,7 @@ unit uzeobjectextender;
 {$INCLUDE zengineconfig.inc}
 
 interface
-uses uzeentityextender,uzeentsubordinated,uzedrawingdef,uzbtypes,
+uses uzeExtdrAbstractEntityExtender,uzeentsubordinated,uzedrawingdef,uzbtypes,
      uzctnrVectorBytes,gzctnrSTL,uzeffdxfsupport;
 
 type
@@ -193,7 +193,7 @@ end;
 procedure TDXFEntIODataManager.AddExtendersToEntity(pEntity:Pointer);
 var
   i:integer;
-  extension:TBaseEntityExtender;
+  extension:TAbstractEntityExtender;
 begin
      for i:=0 to fTEntityExtenderVector.Size-1 do
      begin

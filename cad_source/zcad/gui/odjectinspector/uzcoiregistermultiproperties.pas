@@ -32,7 +32,8 @@ uses
   uzcoimultipropertiesutil,
   uzeentcircle,uzeentarc,uzeentline,uzeentblockinsert,uzeenttext,uzeentmtext,uzeentpolyline,uzcentelleader,uzeentdimension,uzeentellipse,
   uzegeometry,uzcoimultiproperties,uzcLog,
-  uzcExtdrLayerControl,uzcExtdrSmartTextEnt,uzcExtdrSCHConnector;
+  uzcExtdrLayerControl,uzcExtdrSmartTextEnt,uzcExtdrSCHConnector,
+  uzcutils,uzcdrawing,uzcdrawings,zUndoCmdChgTypes,zUndoCmdChgVariable;
 implementation
 procedure DoubleDeltaEntIterateProc(pdata:Pointer;ChangedData:TChangedData;mp:TMultiProperty;fistrun:boolean;ecp:TEntChangeProc; const f:TzeUnitsFormat);
 var
@@ -252,45 +253,53 @@ begin
                                                          end;
 end;
 
-procedure GeneralFromPtrEntChangeProc(pu:PTEntityUnit;pdata:PVarDesk;ChangedData:TChangedData;mp:TMultiProperty);
+procedure GeneralFromPtrEntChangeProc(var UMPlaced:boolean;pu:PTEntityUnit;pdata:PVarDesk;ChangedData:TChangedData;mp:TMultiProperty);
+var
+  cp:UCmdChgField;
 begin
-     mp.MPType^.CopyInstanceTo(pdata,ChangedData.PSetDataInEtity);
+  zcPlaceUndoStartMarkerIfNeed(UMPlaced,'Property changed');
+
+  cp:=UCmdChgField.CreateAndPush(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,
+                                 TChangedFieldDesc.CreateRec(pvardesk(pdata)^.data.PTD,ChangedData.PSetDataInEtity,ChangedData.PSetDataInEtity),
+                                 TSharedPEntityData.CreateRec(ChangedData.PEntity),
+                                 TAfterChangePDrawing.CreateRec(drawings.GetCurrentDWG));
+  mp.MPType^.CopyInstanceTo(pdata,ChangedData.PSetDataInEtity);
 end;
-procedure DoubleDiv2EntChangeProc(pu:PTEntityUnit;pdata:PVarDesk;ChangedData:TChangedData;mp:TMultiProperty);
+procedure DoubleDiv2EntChangeProc(var UMPlaced:boolean;pu:PTEntityUnit;pdata:PVarDesk;ChangedData:TChangedData;mp:TMultiProperty);
 var
     l1:Double;
 begin
      l1:=PDouble(pvardesk(pdata)^.data.Addr.Instance)^/2;
      ProcessVariableAttributes(pvardesk(pdata)^.attrib,0,vda_approximately or vda_different);
-     GeneralFromPtrEntChangeProc(pu,@l1,ChangedData,mp);
+     GeneralFromPtrEntChangeProc(UMPlaced,pu,@l1,ChangedData,mp);
 end;
-procedure DoubleCircumference2REntChangeProc(pu:PTEntityUnit;pdata:PVarDesk;ChangedData:TChangedData;mp:TMultiProperty);
+procedure DoubleCircumference2REntChangeProc(var UMPlaced:boolean;pu:PTEntityUnit;pdata:PVarDesk;ChangedData:TChangedData;mp:TMultiProperty);
 var
     l1:Double;
 begin
      l1:=PDouble(pvardesk(pdata)^.data.Addr.Instance)^/(2*PI);
      ProcessVariableAttributes(pvardesk(pdata)^.attrib,0,vda_approximately or vda_different);
-     GeneralFromPtrEntChangeProc(pu,@l1,ChangedData,mp);
+     GeneralFromPtrEntChangeProc(UMPlaced,pu,@l1,ChangedData,mp);
 end;
-procedure DoubleArcCircumferenceEntChangeProc(pu:PTEntityUnit;pdata:PVarDesk;ChangedData:TChangedData;mp:TMultiProperty);
+procedure DoubleArcCircumferenceEntChangeProc(var UMPlaced:boolean;pu:PTEntityUnit;pdata:PVarDesk;ChangedData:TChangedData;mp:TMultiProperty);
 var
     l1:Double;
 begin
      l1:=PDouble(pvardesk(pdata)^.data.Addr.Instance)^/PGDBObjArc(ChangedData.pentity)^.angle;
      ChangedData.PSetDataInEtity:=@PGDBObjArc(ChangedData.pentity)^.R;
      ProcessVariableAttributes(pvardesk(pdata)^.attrib,0,vda_approximately or vda_different);
-     GeneralFromPtrEntChangeProc(pu,@l1,ChangedData,mp);
+     GeneralFromPtrEntChangeProc(UMPlaced,pu,@l1,ChangedData,mp);
 end;
 
-procedure DoubleArea2REntChangeProc(pu:PTEntityUnit;pdata:PVarDesk;ChangedData:TChangedData;mp:TMultiProperty);
+procedure DoubleArea2REntChangeProc(var UMPlaced:boolean;pu:PTEntityUnit;pdata:PVarDesk;ChangedData:TChangedData;mp:TMultiProperty);
 var
     l1:Double;
 begin
      l1:=sqrt(PDouble(pvardesk(pdata)^.data.Addr.Instance)^/PI);
      ProcessVariableAttributes(pvardesk(pdata)^.attrib,0,vda_approximately or vda_different);
-     GeneralFromPtrEntChangeProc(pu,@l1,ChangedData,mp);
+     GeneralFromPtrEntChangeProc(UMPlaced,pu,@l1,ChangedData,mp);
 end;
-procedure DoubleDeltaEntChangeProc(pu:PTEntityUnit;pdata:PVarDesk;ChangedData:TChangedData;mp:TMultiProperty);
+procedure DoubleDeltaEntChangeProc(var UMPlaced:boolean;pu:PTEntityUnit;pdata:PVarDesk;ChangedData:TChangedData;mp:TMultiProperty);
 var
     l1:Double;
 begin
@@ -298,12 +307,13 @@ begin
      inc(ChangedData.PSetDataInEtity,sizeof(GDBVertex));
      l1:=l1+PDouble(pvardesk(pdata)^.data.Addr.Instance)^;
      ProcessVariableAttributes(pvardesk(pdata)^.attrib,0,vda_approximately or vda_different);
-     GeneralFromPtrEntChangeProc(pu,@l1,ChangedData,mp);
+     GeneralFromPtrEntChangeProc(UMPlaced,pu,@l1,ChangedData,mp);
 end;
-procedure DoubleLengthEntChangeProc(pu:PTEntityUnit;pdata:PVarDesk;ChangedData:TChangedData;mp:TMultiProperty);
+procedure DoubleLengthEntChangeProc(var UMPlaced:boolean;pu:PTEntityUnit;pdata:PVarDesk;ChangedData:TChangedData;mp:TMultiProperty);
 var
-    v1,v2:GDBVertex;
-    l1:Double;
+  v1,v2:GDBVertex;
+  l1:Double;
+  cp:UCmdChgField;
 begin
      V1:=PGDBVertex(ChangedData.PSetDataInEtity)^;
      inc(ChangedData.PSetDataInEtity,sizeof(GDBVertex));
@@ -313,9 +323,17 @@ begin
      V2:=normalizevertex(V2);
      V2:=VertexMulOnSc(V2,l1);
      ProcessVariableAttributes(pvardesk(pdata)^.attrib,0,vda_approximately or vda_different);
+
+  zcPlaceUndoStartMarkerIfNeed(UMPlaced,'Property changed');
+  cp:=UCmdChgField.CreateAndPush(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,
+                                 TChangedFieldDesc.CreateRec(SysUnit^.TypeName2PTD('GDBvertex'),ChangedData.PSetDataInEtity,ChangedData.PSetDataInEtity),
+                                 TSharedPEntityData.CreateRec(ChangedData.PEntity),
+                                 TAfterChangePDrawing.CreateRec(drawings.GetCurrentDWG));
+
+
      PGDBVertex(ChangedData.PSetDataInEtity)^:=VertexAdd(v1,v2);
 end;
-procedure DoubleAngleEntChangeProc(pu:PTEntityUnit;pdata:PVarDesk;ChangedData:TChangedData;mp:TMultiProperty);
+procedure DoubleAngleEntChangeProc(var UMPlaced:boolean;pu:PTEntityUnit;pdata:PVarDesk;ChangedData:TChangedData;mp:TMultiProperty);
 var
     v1,v2:GDBVertex;
     l1,d:Double;
@@ -331,15 +349,15 @@ begin
   ProcessVariableAttributes(pvardesk(pdata)^.attrib,0,vda_approximately or vda_different);
   PGDBVertex(ChangedData.PSetDataInEtity)^:=VertexAdd(v1,v2);
 end;
-procedure DoubleDeg2RadEntChangeProc(pu:PTEntityUnit;pdata:PVarDesk;ChangedData:TChangedData;mp:TMultiProperty);
+procedure DoubleDeg2RadEntChangeProc(var UMPlaced:boolean;pu:PTEntityUnit;pdata:PVarDesk;ChangedData:TChangedData;mp:TMultiProperty);
 var
     l1:Double;
 begin
      l1:=PDouble(pvardesk(pdata)^.data.Addr.Instance)^*pi/180;
      ProcessVariableAttributes(pvardesk(pdata)^.attrib,0,vda_approximately or vda_different);
-     GeneralFromPtrEntChangeProc(pu,@l1,ChangedData,mp);
+     GeneralFromPtrEntChangeProc(UMPlaced,pu,@l1,ChangedData,mp);
 end;
-procedure DoubleArcArea2REntChangeProc(pu:PTEntityUnit;pdata:PVarDesk;ChangedData:TChangedData;mp:TMultiProperty);
+procedure DoubleArcArea2REntChangeProc(var UMPlaced:boolean;pu:PTEntityUnit;pdata:PVarDesk;ChangedData:TChangedData;mp:TMultiProperty);
 var
     l1:Double;
 begin
@@ -349,9 +367,9 @@ begin
         l1:=sqrt(PDouble(pvardesk(pdata)^.data.Addr.Instance)^/(PGDBObjArc(ChangedData.pentity)^.angle/2+0.5*sin(PGDBObjArc(ChangedData.pentity)^.angle)));
      ChangedData.PSetDataInEtity:=@PGDBObjArc(ChangedData.pentity)^.R;
      ProcessVariableAttributes(pvardesk(pdata)^.attrib,0,vda_approximately or vda_different);
-     GeneralFromPtrEntChangeProc(pu,@l1,ChangedData,mp);
+     GeneralFromPtrEntChangeProc(UMPlaced,pu,@l1,ChangedData,mp);
 end;
-procedure GeneralTextRotateEntChangeProc(pu:PTEntityUnit;pdata:PVarDesk;ChangedData:TChangedData;mp:TMultiProperty);
+procedure GeneralTextRotateEntChangeProc(var UMPlaced:boolean;pu:PTEntityUnit;pdata:PVarDesk;ChangedData:TChangedData;mp:TMultiProperty);
 var
     a:Double;
 begin

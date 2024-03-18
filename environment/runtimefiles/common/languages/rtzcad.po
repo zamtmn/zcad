@@ -302,6 +302,30 @@ msgctxt "zcadexternal.acn_erase~caption"
 msgid "Erase"
 msgstr ""
 
+#: zcadexternal.acn_exportdevtoexcell~caption
+msgid "Export devices to excel"
+msgstr ""
+
+#: zcadexternal.acn_exportdevtoexcell~textimage
+msgid "D>X"
+msgstr ""
+
+#: zcadexternal.acn_exportdevtoexceltocad~caption
+msgid "Export devices to excel to CAD"
+msgstr ""
+
+#: zcadexternal.acn_exportdevtoexceltocad~textimage
+msgid "D>Z"
+msgstr ""
+
+#: zcadexternal.acn_exportmodeltoexcell~caption
+msgid "Export model to excel"
+msgstr ""
+
+#: zcadexternal.acn_exportmodeltoexcell~textimage
+msgid "M>X"
+msgstr ""
+
 #: zcadexternal.acn_generatoronediagram~caption
 msgid "Generator one-level diagram"
 msgstr ""
@@ -869,7 +893,7 @@ msgid "Start command panels for autocabeling SL"
 msgstr ""
 
 #: zcadexternal.acn_slagcabcom~textimage
-msgid "D()"
+msgid "ACL"
 msgstr ""
 
 #: zcadexternal.acn_smtextall~caption
@@ -1001,12 +1025,12 @@ msgstr ""
 msgid "Object variables editor"
 msgstr ""
 
-#: zcadexternal.acn_vbuildelschema~caption
-msgid "Start building vEL Schema"
+#: zcadexternal.acn_vbuildmc~caption
+msgid "Start building connection model"
 msgstr ""
 
-#: zcadexternal.acn_vbuildelschema~textimage
-msgid "vEL"
+#: zcadexternal.acn_vbuildmc~textimage
+msgid "MC"
 msgstr ""
 
 #: zcadexternal.acn_vbuildssschema~caption
@@ -1081,6 +1105,14 @@ msgstr ""
 msgid "View top"
 msgstr ""
 
+#: zcadexternal.acn_vvarslink~caption
+msgid "Creating master/slave device"
+msgstr ""
+
+#: zcadexternal.acn_vvarslink~textimage
+msgid "VL"
+msgstr ""
+
 #: zcadexternal.acn_whitebackgrounfdinobjinsp~caption
 msgid "White background in object inspector"
 msgstr ""
@@ -1108,6 +1140,14 @@ msgstr ""
 #: zcadexternal.acn_wprev~textimage
 msgctxt "zcadexternal.acn_wprev~textimage"
 msgid "P"
+msgstr ""
+
+#: zcadexternal.acn_xlsxtocadinsertblock~caption
+msgid "Import block from xlsx"
+msgstr ""
+
+#: zcadexternal.acn_xlsxtocadinsertblock~textimage
+msgid "X>Z"
 msgstr ""
 
 #: zcadexternal.acn_zoomall~caption
@@ -1201,7 +1241,25 @@ msgstr ""
 msgid "Command options"
 msgstr ""
 
+#: zcadexternal.functionsroot~connections
+msgid "Connections"
+msgstr ""
+
+#: zcadexternal.functionsroot~connections~electrotechnics
+msgctxt "zcadexternal.functionsroot~connections~electrotechnics"
+msgid "Electrotechnics"
+msgstr ""
+
+#: zcadexternal.functionsroot~connections~electrotechnics~control
+msgid "Control"
+msgstr ""
+
+#: zcadexternal.functionsroot~connections~electrotechnics~power
+msgid "Power"
+msgstr ""
+
 #: zcadexternal.functionsroot~electrotechnics
+msgctxt "zcadexternal.functionsroot~electrotechnics"
 msgid "Electrotechnics"
 msgstr ""
 
@@ -1769,7 +1827,7 @@ msgstr ""
 msgid "Create material report"
 msgstr ""
 
-#: zcadexternal.menucommand~executefile(*components\blockpreviewexport.cmd)
+#: zcadexternal.menucommand~executefile(*components/blockpreviewexport.cmd)
 msgid "BlockPreviewExport"
 msgstr ""
 
@@ -2139,6 +2197,14 @@ msgstr ""
 
 #: zcadexternal.oimultiproperty~extdrlayercontrol_goodlayer
 msgid "True layer"
+msgstr ""
+
+#: zcadexternal.oimultiproperty~extdrnetconnector_connectorradius
+msgid "Connector radius"
+msgstr ""
+
+#: zcadexternal.oimultiproperty~extdrnetconnector_connectortype
+msgid "Connector type"
 msgstr ""
 
 #: zcadexternal.oimultiproperty~extdrssmarttextent_baseline
@@ -2528,6 +2594,10 @@ msgstr ""
 
 #: zcadexternal.tbeditparam~currenteditblock
 msgid "Current block"
+msgstr ""
+
+#: zcadexternal.tbeditparam~filter
+msgid "Filter block name"
 msgstr ""
 
 #: zcadexternal.tblockdesc~bborder
@@ -3127,6 +3197,11 @@ msgstr ""
 msgid "Drawing tabs position"
 msgstr ""
 
+#: zcadexternal.tinterface~intf_languageoverride
+msgctxt "zcadexternal.tinterface~intf_languageoverride"
+msgid "Language override"
+msgstr ""
+
 #: zcadexternal.tinterface~intf_messages_properties
 msgid "Messages properties"
 msgstr ""
@@ -3347,9 +3422,18 @@ msgctxt "zcadexternal.toolpalette_blocklib_itemcaption~power_supply"
 msgid "Power supply"
 msgstr ""
 
+#: zcadexternal.toolpalette_blocklib_itemcaption~schemes
+msgctxt "zcadexternal.toolpalette_blocklib_itemcaption~schemes"
+msgid "Schemes"
+msgstr ""
+
 #: zcadexternal.toolpalette_blocklib_itemcaption~unsorted
 msgctxt "zcadexternal.toolpalette_blocklib_itemcaption~unsorted"
 msgid "Unsorted"
+msgstr ""
+
+#: zcadexternal.toolpalette_blocklib_itemcaption~velectrical
+msgid "Velectrical"
 msgstr ""
 
 #: zcadexternal.toolpalette_blocklib_low-current_alarm_fire_alarm_itemcaption~detectors
@@ -3406,6 +3490,7 @@ msgid "Risers"
 msgstr ""
 
 #: zcadexternal.toolpalette_blocklib_power_supply_itemcaption~schemes
+msgctxt "zcadexternal.toolpalette_blocklib_power_supply_itemcaption~schemes"
 msgid "Schemes"
 msgstr ""
 
@@ -3419,6 +3504,24 @@ msgstr ""
 
 #: zcadexternal.toolpalette_blocklib_power_supply_itemcaption~switches
 msgid "Switches"
+msgstr ""
+
+#: zcadexternal.toolpalette_blocklib_schemes_itemcaption~unsorted
+msgctxt "zcadexternal.toolpalette_blocklib_schemes_itemcaption~unsorted"
+msgid "Unsorted"
+msgstr ""
+
+#: zcadexternal.toolpalette_blocklib_velectrical_itemcaption~schemes
+msgctxt "zcadexternal.toolpalette_blocklib_velectrical_itemcaption~schemes"
+msgid "Schemes"
+msgstr ""
+
+#: zcadexternal.toolpalette_blocklib_velectrical_schemes_itemcaption~shield_devices
+msgid "Shield devices"
+msgstr ""
+
+#: zcadexternal.toolpalette_blocklib_velectrical_schemes_itemcaption~shield_diagram
+msgid "Shield diagram"
 msgstr ""
 
 #: zcadexternal.toolpalette_blocklib~caption
@@ -3811,6 +3914,10 @@ msgstr ""
 msgid "Spatial index nodes depth"
 msgstr ""
 
+#: zcadexternal.trd~rd_uselazfreetypeimplementation
+msgid "Use LazFreeType engine instead FreeType"
+msgstr ""
+
 #: zcadexternal.trestoremode~wnd_accumbuffer
 msgid "ACCUM buffer"
 msgstr ""
@@ -3848,6 +3955,11 @@ msgstr ""
 #: zcadexternal.trgb~r
 msgctxt "zcadexternal.trgb~r"
 msgid "Red"
+msgstr ""
+
+#: zcadexternal.tsavedparams~langoverride
+msgctxt "zcadexternal.tsavedparams~langoverride"
+msgid "Language override"
 msgstr ""
 
 #: zcadexternal.tsavedparams~noloadlayout
@@ -4132,6 +4244,10 @@ msgstr ""
 
 #: zcadexternal.varcategory~extdrlayercontrol
 msgid "Layer control"
+msgstr ""
+
+#: zcadexternal.varcategory~extdrnetconnector
+msgid "Connector control"
 msgstr ""
 
 #: zcadexternal.varcategory~extdrssmarttextent

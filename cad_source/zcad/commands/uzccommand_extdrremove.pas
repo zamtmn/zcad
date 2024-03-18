@@ -24,7 +24,7 @@ interface
 uses
   uzcLog,SysUtils,
   uzccommandsabstract,uzccommandsimpl,
-  uzeentity,gzctnrVectorTypes,uzcdrawings,uzcstrconsts,uzeentityextender,
+  uzeentity,gzctnrVectorTypes,uzcdrawings,uzcstrconsts,uzeExtdrAbstractEntityExtender,
   gzUndoCmdChgMethods2,uzcdrawing,
   uzcinterface;
 
@@ -39,7 +39,7 @@ var
   pEntity,pLastSelectedEntity:PGDBObjEntity;
   ir:itrec;
   DoMethod,UndoMethod:TMethod;
-  ext:TBaseEntityExtender;
+  ext:TAbstractEntityExtender;
   count:Integer;
 begin
   try
@@ -58,7 +58,7 @@ begin
           undomethod.Data:=pLastSelectedEntity;
           ext:=extdr.Create(pLastSelectedEntity);
 
-          with GUCmdChgMethods2<TBaseEntityExtender,Pointer>.CreateAndPush(ext,typeof(ext),domethod,undomethod,PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,drawings.AfterNotAutoProcessGDB,true) do
+          with GUCmdChgMethods2<TAbstractEntityExtender,Pointer>.CreateAndPush(ext,typeof(ext),domethod,undomethod,PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,drawings.AfterNotAutoProcessGDB,true) do
           begin
             comit;
           end;
@@ -78,7 +78,7 @@ begin
             undomethod.Code:=pointer(pEntity^.RemoveExtension);
             undomethod.Data:=pEntity;
             ext:=extdr.Create(pEntity);
-            with GUCmdChgMethods2<TBaseEntityExtender,Pointer>.CreateAndPush(ext,typeof(ext),domethod,undomethod,PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,drawings.AfterNotAutoProcessGDB,true) do
+            with GUCmdChgMethods2<TAbstractEntityExtender,Pointer>.CreateAndPush(ext,typeof(ext),domethod,undomethod,PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,drawings.AfterNotAutoProcessGDB,true) do
             begin
               comit;
             end;

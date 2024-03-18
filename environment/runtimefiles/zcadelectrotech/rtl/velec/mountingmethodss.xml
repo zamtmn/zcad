@@ -11,5 +11,10 @@
       <inPipePVC Desc="В ПВХ трубе"/>
       <inPip Desc="В металической трубе"/>
     </open>
+    <EPSN Desc="Наружные сети электроснабжения">
+      <CL04 Desc="КЛ-0,4 (-N-)"/>
+      <CL10 Desc="КЛ-6/10 кВ (-W-)"/>
+      <OutLightLines Desc="Линии наружного освещения (-V-)"/>
+    </EPSN>
   </STRINGTREE>
 </CONFIG>

@@ -19,14 +19,16 @@ unit uzcExtdrSCHConnector;
 {$INCLUDE zengineconfig.inc}
 
 interface
-uses sysutils,uzedrawingdef,uzeentityextender,
-     uzeentgenericsubentry,uzeentline,uzegeometry,
-     uzeentdevice,TypeDescriptors,uzctnrVectorBytes,
-     uzbtypes,uzeentsubordinated,uzeentity,uzeblockdef,
-     usimplegenerics,uzeffdxfsupport,
-     gzctnrVectorTypes,uzeBaseExtender,uzgldrawcontext,
-     uzcsysvars,gzctnrVectorSimple,gzctnrVectorP,UGDBOpenArrayOfPV,
-     gzctnrVector;
+uses
+  sysutils,uzedrawingdef,uzeExtdrAbstractEntityExtender,
+  uzeExtdrBaseEntityExtender,
+  uzeentgenericsubentry,uzeentline,uzegeometry,
+  uzeentdevice,TypeDescriptors,uzctnrVectorBytes,
+  uzbtypes,uzeentsubordinated,uzeentity,uzeblockdef,
+  usimplegenerics,uzeffdxfsupport,
+  gzctnrVectorTypes,uzeBaseExtender,uzgldrawcontext,
+  uzcsysvars,gzctnrVectorSimple,gzctnrVectorP,UGDBOpenArrayOfPV,
+  gzctnrVector;
 const
   ConnectionExtenderName='extdrSCHConnector';
 type
@@ -34,7 +36,6 @@ type
   TNet=class;
   TBaseSCHConnectExtender=class(TBaseEntityExtender)
     Net:TNet;
-    pThisEntity:PGDBObjEntity;
     constructor Create(pEntity:Pointer);override;
     destructor Destroy;override;
   end;
@@ -120,8 +121,9 @@ const
 
 constructor TBaseSCHConnectExtender.Create(pEntity:Pointer);
 begin
+  inherited;
   Net:=nil;
-  pThisEntity:=pEntity;
+  //pThisEntity:=pEntity;
 end;
 destructor TBaseSCHConnectExtender.Destroy;
 begin

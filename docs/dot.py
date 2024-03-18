@@ -399,7 +399,7 @@ class Node:
             shape.appendChild(mlabel)
         else:
             shape = doc.createElement(u'y:Shape')
-            shape.setAttribute(u'type',u'rectangle')
+            shape.setAttribute(u'type',u'ellipse')
         snode.appendChild(shape)
         data0.appendChild(snode)
         node.appendChild(data0)
@@ -513,12 +513,15 @@ class Edge:
         data2 = doc.createElement(u'data')
         data2.setAttribute(u'key', u'd2')
 
-        pedge = doc.createElement(u'y:PolyLineEdge')
+        pedge = doc.createElement(u'y:BezierEdge')
         line = doc.createElement(u'y:LineStyle')
         color = getColorAttribute(self.attribs, 'color', conf.DefaultEdgeColor, conf)
         line.setAttribute(u'color',u'%s' % color)
         line.setAttribute(u'type', u'line')
-        line.setAttribute(u'width', u'1.0')
+        if self.attribs.has_key('penwidth'):
+            line.setAttribute(u'width', u'%s' % self.attribs['penwidth'])
+        else:
+            line.setAttribute(u'width', u'1.0')
         pedge.appendChild(line)
         arrow = doc.createElement(u'y:Arrows')
         arrow_tail = conf.DefaultArrowTail
@@ -534,6 +537,8 @@ class Edge:
         if conf.EdgeLabels:
             tlabel = self.getLabel(nodes, conf)
             if tlabel != "":
+                if (tlabel.endswith(u' (Domain>Range)')):
+                    tlabel = tlabel[:-15]
                 label = doc.createElement(u'y:EdgeLabel')
                 color = getColorAttribute(self.attribs, 'fontcolor', conf.DefaultEdgeTextColor, conf)
                 label.setAttribute(u'alignment',u'center')
@@ -552,7 +557,7 @@ class Edge:
                 label.appendChild(doc.createTextNode(u'%s' % escapeNewlines(tlabel)))        
                 pedge.appendChild(label)
         bend = doc.createElement(u'y:BendStyle')      
-        bend.setAttribute(u'smoothed', u'false')
+        bend.setAttribute(u'smoothed', u'true')
         pedge.appendChild(bend)
         data2.appendChild(pedge)
         edge.appendChild(data2)

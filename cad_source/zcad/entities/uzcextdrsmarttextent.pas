@@ -29,7 +29,8 @@ uses
   uzeffdxfsupport,
   uzeentdevice,uzeentsubordinated,uzeentity,uzeentabstracttext,uzeenttext,
   uzeblockdef,uzeentmtext,uzeentwithlocalcs,uzeentblockinsert,
-  uzeentityextender,uzeBaseExtender,uzbtypes,uzegeometrytypes,uzeconsts;
+  uzeExtdrAbstractEntityExtender,uzeExtdrBaseEntityExtender,
+  uzeBaseExtender,uzbtypes,uzegeometrytypes,uzeconsts;
 
 type
   TDummyDtawer=procedure(var IODXFContext:TIODXFContext;var outhandle:TZctnrVectorBytes;pEntity:PGDBObjEntity;const p1,p2:GDBvertex;const drawing:TDrawingDef;var DC:TDrawContext);
@@ -193,6 +194,7 @@ end;
 
 constructor TSmartTextEntExtender.Create(pEntity:Pointer);
 begin
+  inherited;
   FExtensionLine:=true;
   FBaseLine:=true;
   FExtensionLineStartShift:=ExtensionLineStartShiftDef;

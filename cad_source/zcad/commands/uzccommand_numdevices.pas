@@ -61,7 +61,8 @@ type
     SortMode:TST;//Sorting
     InverseX:Boolean;//Inverse X axis dir
     InverseY:Boolean;//verse Y axis dir
-    DeadDand:Double;//adband
+    DeadDandX:Double;//DeadbandX
+    DeadDandY:Double;//DeadbandY
   end;
 
 
@@ -256,7 +257,8 @@ begin
       pdc:=mpd.Mutable[i];
       pdc^.coord:=ProcessCoord(pdc^.coord);
     end;
-    TGDBVertexLess.deadband:=AreaParam.DeadDand;
+    TGDBVertexLess.deadbandX:=AreaParam.DeadDandX;
+    TGDBVertexLess.deadbandY:=AreaParam.DeadDandY;
     devcoordsort.Sort(mpd,mpd.Size);
   end;
 end;
@@ -358,12 +360,12 @@ begin
       if pvd<>nil then begin
         zcPlaceUndoStartMarkerIfNeed(UndoStartMarkerPlaced,'NumDevices');
         cp:=UCmdChgVariable.CreateAndPush(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,
-                                          TChangedDataDesc.CreateRec(pvd^.data.PTD,NumberingParams.NumberVar),
+                                          TChangedVariableDesc.CreateRec(pvd^.data.PTD,pvd^.data.Addr.GetInstance,NumberingParams.NumberVar),
                                           TSharedPEntityData.CreateRec(pdev),
                                           TAfterChangePDrawing.CreateRec(drawings.GetCurrentDWG));
-        cp.ChangedData.StoreUndoData(pvd^.data.Addr.GetInstance);
+        //cp.ChangedData.StoreUndoData(pvd^.data.Addr.GetInstance);
         pvd^.data.PTD^.SetValueFromString(pvd^.data.Addr.Instance,inttostr(index));
-        cp.ChangedData.StoreDoData(pvd^.data.Addr.GetInstance);
+        //cp.ChangedData.StoreDoData(pvd^.data.Addr.GetInstance);
         inc(index,NumberingParams.Increment);
         inc(count);
         pdev^.FormatEntity(drawings.GetCurrentDWG^,dc);
@@ -396,7 +398,7 @@ initialization
   SysUnit^.SetTypeDesk(TypeInfo(TST),['Y-X','X-Y','Unsorted']);
 
   SysUnit^.RegisterType(TypeInfo(TAreaNumberingParam));
-  SysUnit^.SetTypeDesk(TypeInfo(TAreaNumberingParam),['Sorting','Inverse X axis dir','Inverse Y axis dir','Deadband']);
+  SysUnit^.SetTypeDesk(TypeInfo(TAreaNumberingParam),['Sorting','Inverse X axis dir','Inverse Y axis dir','Deadband X','Deadband Y']);
   SysUnit^.RegisterType(TypeInfo(PTAreaNumberingParam));
 
   SysUnit^.RegisterType(TypeInfo(TAlgoType));
@@ -418,7 +420,8 @@ initialization
   NumberingParams.Increment:=1;
   NumberingParams.StartNumber:=1;
   NumberingParams.SaveStart:=false;
-  AreaParam.DeadDand:=10;
+  AreaParam.DeadDandX:=3;
+  AreaParam.DeadDandY:=3;
   AreaParam.InverseX:=false;
   AreaParam.InverseY:=true;
   AreaParam.SortMode:=TST_YX;

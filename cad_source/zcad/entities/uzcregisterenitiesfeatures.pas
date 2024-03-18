@@ -218,6 +218,11 @@ begin
     if (pvnt<>nil)and(pvnt<>nil) then
       DeviceNameSubProcess(pvn,pstring(pvnt^.data.Addr.Instance)^,pEntity);
 
+    pvn:=pentvarext.entityunit.FindVariable('INFOPERSONALUSE_Text',true);
+    pvnt:=pentvarext.entityunit.FindVariable('INFOPERSONALUSE_TextTemplate',true);
+    if (pvnt<>nil)and(pvnt<>nil) then
+      DeviceNameSubProcess(pvn,pstring(pvnt^.data.Addr.Instance)^,pEntity);
+
 
     pvnt:=pentvarext.entityunit.FindVariable('RiserName',true);
     if (pvnt<>nil)and(pvn<>nil)then

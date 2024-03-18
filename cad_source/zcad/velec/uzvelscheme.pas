@@ -122,7 +122,7 @@ uses
    uzeentmtext,
    uzbstrproc,
    //uzccombase,
-   uzeentityextender,
+   uzeExtdrAbstractEntityExtender,
    uzeblockdef,
    uzctranslations;//,
    //generics.Collections;

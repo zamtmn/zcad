@@ -2085,6 +2085,7 @@ begin
             nodeend:=pv^.Devices.iterate(ir_inNodeArray);
           until nodeend=nil;
           line:='`'+cablename+';'+CableMaterial+';'+CableLength+';'+puredevstart+';'+devend+#13#10;
+          line:=Tria_Utf8ToAnsi(line);
           FileWrite(handle,line[1],length(line));
           s:='';
           psl.PushBackData(Tria_Utf8ToAnsi(devend));

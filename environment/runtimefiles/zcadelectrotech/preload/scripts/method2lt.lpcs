@@ -1,8 +1,20 @@
 begin
+       if Input = 'Hidden~inPipe' then
+          Output:='cabtruba'; 
+	   if Input = 'Hidden~underPlaster' then
+          Output:='ByLayer';   
        if Input = 'open~inMetalTray' then
           Output:='cablotok';
        if Input = 'open~inСableСhannel' then
           Output:='cabkorob';
-       if Input = 'Hidden~inPipe' then
-          Output:='cabtruba'; 
+	   if Input = 'open~inPipePVC' then
+          Output:='cabtruba';
+	   if Input = 'open~inPip' then
+          Output:='cabtruba'; 		  
+       if Input = 'EPSN~CL04' then
+          Output:='Cable_N'; 
+       if Input = 'EPSN~CL10' then
+          Output:='Cable_W'; 
+       if Input = 'EPSN~OutLightLines' then
+          Output:='Cable_V'; 
 end.

@@ -1,3 +1,5 @@
 cfgAddSupportPath($(CurrentMacrosPath))
 cfgAddSupportPath($(CurrentMacrosPath)schemes)
+cfgAddSupportPath($(CurrentMacrosPath)plan$(DirectorySeparator)sockets)
+cfgAddSupportPath($(CurrentMacrosPath)plan$(DirectorySeparator)shields)
 LoadPalettes($(CurrentMacrosPath)velectrical.xml)

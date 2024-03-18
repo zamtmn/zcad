@@ -20,7 +20,7 @@ unit uzeentsubordinated;
 {$INCLUDE zengineconfig.inc}
 
 interface
-uses strutils,uzgldrawcontext,uzeentityextender,uzedrawingdef,
+uses strutils,uzgldrawcontext,uzeExtdrAbstractEntityExtender,uzedrawingdef,
      uzbstrproc{$IFNDEF DELPHI},LazUTF8{$ENDIF},uzctnrVectorBytes,uzegeometrytypes,uzbtypes,
      sysutils,uzestyleslayers,uzeffdxfsupport,gzctnrVectorTypes,uzecamera;
 type
@@ -29,11 +29,11 @@ PGDBObjExtendable=^GDBObjExtendable;
 {REGISTEROBJECTTYPE GDBObjExtendable}
 GDBObjExtendable=object(GDBaseObject)
                                  EntExtensions:{-}TEntityExtensions{/Pointer/};
-                                 procedure AddExtension(ExtObj:TBaseEntityExtender);
+                                 procedure AddExtension(ExtObj:TAbstractEntityExtender);
                                  procedure RemoveExtension(ExtType:TMetaEntityExtender);
                                  function GetExtension<GEntityExtenderType>:GEntityExtenderType;overload;
-                                 function GetExtension(ExtType:TMetaEntityExtender):TBaseEntityExtender;overload;
-                                 function GetExtension(n:Integer):TBaseEntityExtender;overload;
+                                 function GetExtension(ExtType:TMetaEntityExtender):TAbstractEntityExtender;overload;
+                                 function GetExtension(n:Integer):TAbstractEntityExtender;overload;
                                  function GetExtensionsCount:Integer;
                                  procedure CopyExtensionsTo(var Dest:GDBObjExtendable);
                                  destructor done;virtual;
@@ -110,7 +110,7 @@ procedure OldVersTextReplace(var vv:TDXFEntsInternalStringType);overload;
 
 implementation
 
-procedure GDBObjExtendable.AddExtension(ExtObj:TBaseEntityExtender);
+procedure GDBObjExtendable.AddExtension(ExtObj:TAbstractEntityExtender);
 begin
      if not assigned(EntExtensions) then
                                         EntExtensions:=TEntityExtensions.create;
@@ -128,7 +128,7 @@ begin
                                 else
                                     result:=nil;
 end;
-function GDBObjExtendable.GetExtension(ExtType:TMetaEntityExtender):TBaseEntityExtender;
+function GDBObjExtendable.GetExtension(ExtType:TMetaEntityExtender):TAbstractEntityExtender;
 begin
      if assigned(EntExtensions) then
                                     result:=EntExtensions.GetExtension(ExtType)
@@ -142,7 +142,7 @@ begin
   else
     result:=0;
 end;
-function GDBObjExtendable.GetExtension(n:Integer):TBaseEntityExtender;
+function GDBObjExtendable.GetExtension(n:Integer):TAbstractEntityExtender;
 begin
   if assigned(EntExtensions) then
     result:=EntExtensions.GetExtension(n)
@@ -157,7 +157,7 @@ end;
 procedure GDBObjExtendable.CopyExtensionsTo(var Dest:GDBObjExtendable);
 var
   i:integer;
-  SourceExt,DestExt:TBaseEntityExtender;
+  SourceExt,DestExt:TAbstractEntityExtender;
 begin
   for i:=0 to GetExtensionsCount-1 do begin
     SourceExt:=GetExtension(i);

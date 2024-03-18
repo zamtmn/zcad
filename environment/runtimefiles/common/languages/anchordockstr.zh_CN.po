@@ -1,49 +1,49 @@
 msgid ""
 msgstr ""
-"Content-Type: text/plain; charset=UTF-8\n"
 "Project-Id-Version: X-1.9\n"
 "POT-Creation-Date: \n"
 "PO-Revision-Date: \n"
-"Last-Translator: 郑建平@夏宗萍 aka  robsean <robsean@126.com>\n"
+"Last-Translator: ACTom <i@actom.me>\n"
 "Language-Team: \n"
-"MIME-Version: 1.0\n"
-"Content-Transfer-Encoding: 8bit\n"
 "Language: zh_CN\n"
-"X-Generator: Poedit 1.8.7.1\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 3.3.2\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 
 #: anchordockstr.adrsafreesideofasplittermustnotbeanchorednodetypeancho
 #, object-pascal-format
 msgid "A free side of a splitter must not be anchored: Node=\"%s\" Type=%s Anchors[%s]=\"%s\""
-msgstr ""
+msgstr "分隔器的自由边不得锚定：节点=\"%s\" 类型=%s 锚点[%s]=\"%s\""
 
 #: anchordockstr.adrsallowdocksitestobeminimized
 msgid "Allow dock sites to be minimized"
-msgstr ""
+msgstr "允许停靠的站点最小化"
 
 #: anchordockstr.adrsamountofpixelthemousehastodragbeforedragstarts
 msgid "Amount of pixel the mouse has to drag before drag starts"
-msgstr ""
+msgstr "开始拖动前鼠标必须拖动的像素数"
 
 #: anchordockstr.adrsanchorisnotsplitternodeanchors
 #, object-pascal-format
 msgid "Anchor is not splitter: Node=\"%s\" Anchors[%s]=\"%s\""
-msgstr ""
+msgstr "锚点不是分隔器：Node=\"%s\" Anchors[%s]=\"%s\""
 
 #: anchordockstr.adrsanchornotfoundnodeanchors
 #, object-pascal-format
 msgid "Anchor not found: Node=\"%s\" Anchors[%s]=\"%s\""
-msgstr "锚/固定(Anchor)未找到:节点=\"%s\"锚/固定(Anchors)[%s]=\"%s\""
+msgstr "锚点未找到：Node=\"%s\" Anchors[%s]=\"%s\""
 
 #: anchordockstr.adrsanchortowrongsideofsplitternodeanchors
 #, object-pascal-format
 msgid "Anchor to wrong side of splitter: Node=\"%s\" Anchors[%s]=\"%s\""
-msgstr ""
+msgstr "锚定到分割器的错误一侧：Node=\"%s\" Anchors[%s]=\"%s\""
 
 #: anchordockstr.adrsapagemustnotbeanchorednodeparentparenttypeanchors
 #, object-pascal-format
 msgid "A page must not be anchored: Node=\"%s\" Parent=%s ParentType=%s Anchors[%s]=\"%s\""
-msgstr ""
+msgstr "页面不得被锚定：Node=\"%s\" Parent=%s ParentType=%s Anchors[%s]=\"%s\""
 
 #: anchordockstr.adrsautomatically
 msgid "Automatically"
@@ -59,102 +59,102 @@ msgstr "关闭"
 
 #: anchordockstr.adrscontrolisalreadyadocksite
 msgid "control is already a docksite"
-msgstr ""
+msgstr "控件已经是停靠站"
 
 #: anchordockstr.adrscustomdocksitecanhaveonlyonesite
 #, object-pascal-format
 msgid "Custom dock site \"%s\" can have only one site."
-msgstr ""
+msgstr "自定义停靠点 \"%s\" 只能有一个站点。"
 
 #: anchordockstr.adrsdockinganchordocking
 msgid "Docking / Anchordocking"
-msgstr ""
+msgstr "停靠站 / 锚泊"
 
 #: anchordockstr.adrsdockingoptions
 msgid "Docking options"
-msgstr "停靠(Docking)选项"
+msgstr "停靠站选项"
 
 #: anchordockstr.adrsdraganddockc
 #, object-pascal-format
 msgid "Use the mouse to drag and dock window \"%s\""
-msgstr "使用鼠标拖拽和停靠窗体\"%s\""
+msgstr "使用鼠标拖拽和停靠窗体 \"%s\""
 
 #: anchordockstr.adrsdragthreshold
 msgid "Drag threshold"
-msgstr ""
+msgstr "拖动阈值"
 
 #: anchordockstr.adrsduplicatename
 msgid "Duplicate name: "
-msgstr ""
+msgstr "重复名称："
 
 #: anchordockstr.adrseachdockedwindowhasaheaderthatallowsdragginghasaco
 msgid "Each docked window has a header that allows dragging, has a context menu with extra layout functions and shows the caption of the docked window"
-msgstr ""
+msgstr "每个停靠窗口都有一个可以拖动的标题栏，有一个包含额外布局功能的上下文菜单，并显示停靠窗口的标题"
 
 #: anchordockstr.adrsemptyname
 msgid "Empty name: "
-msgstr "空名称:"
+msgstr "空名称： "
 
 #: anchordockstr.adrsenlargeside
 #, object-pascal-format
 msgid "Enlarge %s side"
-msgstr ""
+msgstr "放大 %s 边"
 
 #: anchordockstr.adrsfilledheaders
 msgid "Fill headers"
-msgstr ""
+msgstr "填充标题栏"
 
 #: anchordockstr.adrsfilledheadershint
 msgid "Fill headers of docked controls"
-msgstr ""
+msgstr "填充停靠控件的标题栏"
 
 #: anchordockstr.adrsflatheadersbuttons
 msgid "Flat header buttons"
-msgstr ""
+msgstr "扁平化标题栏按钮"
 
 #: anchordockstr.adrsflatheadersbuttonshint
 msgid "Flat buttons in headers of docked controls"
-msgstr ""
+msgstr "停靠控件标题栏中的扁平按钮"
 
 #: anchordockstr.adrsflattenheaders
 msgid "Flatten headers"
-msgstr ""
+msgstr "扁平化标题栏"
 
 #: anchordockstr.adrsflattenheadershint
 msgid "Flatten headers of docked controls"
-msgstr ""
+msgstr "扁平化停靠控件的标题栏"
 
 #: anchordockstr.adrsfloatingwindowsontop
 msgid "Floating windows on top"
-msgstr ""
+msgstr "在顶端显示浮动窗口"
 
 #: anchordockstr.adrsfloatingwindowsontophint
 msgid "Show floating windows on top of main form"
-msgstr ""
+msgstr "在主窗体顶部显示浮动窗口"
 
 #: anchordockstr.adrsgeneraldockingoptions
 msgid "General docking options"
-msgstr "一般停靠(docking)选项"
+msgstr "常规停靠站选项"
 
 #: anchordockstr.adrsheaderalignleft
 msgid "Header align left"
-msgstr "Header左对齐"
+msgstr "标题栏左对齐"
 
 #: anchordockstr.adrsheaderaligntop
 msgid "Header align top"
-msgstr "Header顶端对齐"
+msgstr "标题栏顶端对齐"
 
 #: anchordockstr.adrsheaderposition
 msgid "Header position"
-msgstr "Header位置"
+msgstr "标题栏位置"
 
 #: anchordockstr.adrsheaderstyle
 msgid "Header Style:"
-msgstr "Header样式:"
+msgstr "标题栏样式："
 
 #: anchordockstr.adrshideheadercaptionsforsiteswithonlyonedockedcontrol
 msgid "Hide header captions for sites with only one docked control, as that is already shown in the normal window title"
-msgstr ""
+msgstr "在只有一个停靠控件的站点上隐藏标题栏，因为正常窗口标题中已经显示了该控件的标题"
 
 #: anchordockstr.adrshighlightfocused
 msgid "Highlight focused"
@@ -162,7 +162,7 @@ msgstr "高亮聚焦"
 
 #: anchordockstr.adrshighlightfocusedhint
 msgid "Highlight header of focused docked control"
-msgstr ""
+msgstr "高亮显示聚焦停靠控件的标题栏"
 
 #: anchordockstr.adrsleft
 msgid "left"
@@ -178,7 +178,7 @@ msgstr "合并"
 
 #: anchordockstr.adrsminimize
 msgid "Minimize"
-msgstr ""
+msgstr "最小化"
 
 #: anchordockstr.adrsmissingcontrolname
 msgid "missing control name"
@@ -186,15 +186,15 @@ msgstr "缺少控制名称"
 
 #: anchordockstr.adrsmodalformscannotbemadedockable
 msgid "modal forms can not be made dockable"
-msgstr ""
+msgstr "模态窗体不能停靠"
 
 #: anchordockstr.adrsmoveheadertoleftwhenwidthheight100headeralignleft
 msgid "Move header to left when (Width/Height)*100>=HeaderAlignLeft"
-msgstr "移动header到左侧 当(宽度/高度)*100>=Header左对齐"
+msgstr "当 (Width/Height)*100>=HeaderAlignLeft 时移动标题栏到左侧"
 
 #: anchordockstr.adrsmoveheadertotopwhenwidthheight100headeraligntop
 msgid "Move header to top when (Width/Height)*100<=HeaderAlignTop"
-msgstr "移动header到顶侧 当(宽度/高度)*100<=Header顶部对齐"
+msgstr "当 (Width/Height)*100<=HeaderAlignTop 时移动标题栏到顶侧"
 
 #: anchordockstr.adrsmovepageleft
 msgid "Move page left"
@@ -214,35 +214,35 @@ msgstr "移动到页面最右边"
 
 #: anchordockstr.adrsmultilinepages
 msgid "Multiline Tabs"
-msgstr ""
+msgstr "多行标签页"
 
 #: anchordockstr.adrsmultilinepageshint
 msgid "Tabs of pages can be shown in multiple lines"
-msgstr ""
+msgstr "页面标签可以显示为多行"
 
 #: anchordockstr.adrsnocaptionsforfloatingsites
 msgid "No captions for floating sites"
-msgstr ""
+msgstr "浮动站点时无标题"
 
 #: anchordockstr.adrsnochildrenallowedfornodetype
 #, object-pascal-format
 msgid "No children allowed for Node=\"%s\" Type=%s"
-msgstr ""
+msgstr "Node=\"%s\" Type=%s 不允许有子节点"
 
 #: anchordockstr.adrsnotsupportedhasparent
 #, object-pascal-format
 msgid "Not supported: %s has parent %s"
-msgstr "不被支持:%s有父类%s"
+msgstr "不支持：%s 有父 %s"
 
 #: anchordockstr.adrsquit
 #, object-pascal-format
 msgid "Quit %s"
-msgstr "退出%s"
+msgstr "退出 %s"
 
 #: anchordockstr.adrsrequestedbutcreated
 #, object-pascal-format
 msgid "%s requested, but %s created"
-msgstr "%s被要求(requested),但是%s被创建"
+msgstr "请求 %s，但创建了 %s"
 
 #: anchordockstr.adrsright
 msgid "right"
@@ -250,40 +250,40 @@ msgstr "右"
 
 #: anchordockstr.adrsscaleonresize
 msgid "Scale on resize"
-msgstr "规模调整大小(Scale on resize)"
+msgstr "调整大小时缩放"
 
 #: anchordockstr.adrsscalesubsiteswhenasiteisresized
 msgid "Scale sub sites when a site is resized"
-msgstr ""
+msgstr "调整站点大小时缩放子站点"
 
 #: anchordockstr.adrsshowcaptionsofdockedcontrolsintheheader
 msgid "Show captions of docked controls in the header"
-msgstr ""
+msgstr "在标题栏中显示停靠控件的标题"
 
 #: anchordockstr.adrsshowheadercaptions
 msgid "Show header captions"
-msgstr "显示header标题"
+msgstr "显示标题栏标题"
 
 #: anchordockstr.adrsshowheaders
 msgid "Show headers"
-msgstr "显示headers"
+msgstr "显示标题栏"
 
 #: anchordockstr.adrssplitterthickness
 msgid "Splitter thickness"
-msgstr "分配器厚度(Splitter)"
+msgstr "分隔器厚度"
 
 #: anchordockstr.adrssplitterwidth
 msgid "Splitter width"
-msgstr "分配器宽度(Splitter)"
+msgstr "分隔器宽度"
 
 #: anchordockstr.adrstabposition
 msgid "Tab position"
-msgstr "Tab位置"
+msgstr "标签页位置"
 
 #: anchordockstr.adrsthereisanotherdockmasterinstalledonlyonedockingpac
 #, object-pascal-format
 msgid "There is another dock master installed. Only one docking package can be installed at a time. Please uninstall the other dock master %s and restart the IDE"
-msgstr ""
+msgstr "安装了另一个停靠主控程序。一次只能安装一个停靠站软件包。请卸载另一个停靠主控程序 %s 并重启 IDE"
 
 #: anchordockstr.adrstop
 msgid "top"
@@ -292,9 +292,9 @@ msgstr "顶部"
 #: anchordockstr.adrstouseanchordockingyoumustfirstuninstall
 #, object-pascal-format
 msgid "To use anchordocking you must first uninstall %s"
-msgstr ""
+msgstr "要使用 anchordocking，您必须先卸载 %s"
 
 #: anchordockstr.adrsundock
 msgid "Undock"
-msgstr "(取消停靠)(Undock"
+msgstr "取消停靠"
 

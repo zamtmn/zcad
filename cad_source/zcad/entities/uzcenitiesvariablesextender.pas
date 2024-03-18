@@ -484,6 +484,9 @@ begin
          repeat
            if (pvd^.data.PTD.GetTypeAttributes and TA_COMPOUND)=0 then begin
              sv:=PBaseTypeDescriptor(pvd^.data.ptd)^.GetValueAsString(pvd^.data.Addr.Instance);
+             sv:=StringReplace(sv,#0,'',[rfReplaceAll]);
+             sv:=StringReplace(sv,#10,'',[rfReplaceAll]);
+             sv:=StringReplace(sv,#13,'',[rfReplaceAll]);
              str:='#'+inttostr(i)+'='+pvd^.name+'|'+pvd^.data.ptd.TypeName;
              str:=str+'|'+sv+'|'+pvd^.username;
              dxfStringout(outhandle,1000,str);

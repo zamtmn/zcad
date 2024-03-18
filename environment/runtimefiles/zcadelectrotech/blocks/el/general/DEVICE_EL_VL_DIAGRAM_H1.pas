@@ -8,8 +8,8 @@ usescopy objname;
 
 var
 
-T1:String;(*'Маркировка'*)
-T2:String;(*'Тип'*)
+VL_Mark:String;(*'Маркировка'*)
+VL_Type:String;(*'Тип'*)
 
 implementation
 
@@ -24,7 +24,7 @@ NMO_BaseName:='Н';
 NMO_Suffix:='??';
 NMO_Affix:='.1';
 
-T1:='??';
-T2:='??';
+VL_Mark:='??';
+VL_Type:='??';
 
 end.

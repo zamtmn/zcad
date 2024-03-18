@@ -263,15 +263,17 @@ begin
                                  TChangedFieldDesc.CreateRec(pvardesk(pdata)^.data.PTD,ChangedData.PSetDataInEtity,ChangedData.PSetDataInEtity),
                                  TSharedPEntityData.CreateRec(ChangedData.PEntity),
                                  TAfterChangePDrawing.CreateRec(drawings.GetCurrentDWG));
-  mp.MPType^.CopyInstanceTo(pdata,ChangedData.PSetDataInEtity);
+  mp.MPType^.CopyInstanceTo(pvardesk(pdata)^.data.Addr.GetInstance,ChangedData.PSetDataInEtity);
 end;
 procedure DoubleDiv2EntChangeProc(var UMPlaced:boolean;pu:PTEntityUnit;pdata:PVarDesk;ChangedData:TChangedData;mp:TMultiProperty);
 var
     l1:Double;
 begin
-     l1:=PDouble(pvardesk(pdata)^.data.Addr.Instance)^/2;
+     l1:=PDouble(pvardesk(pdata)^.data.Addr.Instance)^;
+     PDouble(pvardesk(pdata)^.data.Addr.Instance)^:=PDouble(pvardesk(pdata)^.data.Addr.Instance)^/2;
      ProcessVariableAttributes(pvardesk(pdata)^.attrib,0,vda_approximately or vda_different);
-     GeneralFromPtrEntChangeProc(UMPlaced,pu,@l1,ChangedData,mp);
+     GeneralFromPtrEntChangeProc(UMPlaced,pu,pdata,ChangedData,mp);
+     PDouble(pvardesk(pdata)^.data.Addr.Instance)^:=l1;
 end;
 procedure DoubleCircumference2REntChangeProc(var UMPlaced:boolean;pu:PTEntityUnit;pdata:PVarDesk;ChangedData:TChangedData;mp:TMultiProperty);
 var

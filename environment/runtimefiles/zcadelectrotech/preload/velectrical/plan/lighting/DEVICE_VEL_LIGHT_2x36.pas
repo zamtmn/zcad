@@ -14,6 +14,7 @@ usescopy vinfopersonaluse;
 var
 
 VELLightType:String;(*'Тип светильника (авар/рем/деж)'*)
+VELLightNumControl:String;(*'Номер управления светильником'*)
 implementation
 
 begin
@@ -27,6 +28,7 @@ NMO_Suffix:='(??)';
 NMO_Template:='@@[NMO_BaseName]@@[NMO_Suffix]';
 
 VELLightType:='';
+VELLightNumControl:='';
 
 GC_NameGroupTemplate:='@@[GC_HeadDevice].@@[GC_HDGroup]';
 

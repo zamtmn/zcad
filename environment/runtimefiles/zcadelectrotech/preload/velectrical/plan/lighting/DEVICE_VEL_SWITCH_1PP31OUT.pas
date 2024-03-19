@@ -1,4 +1,4 @@
-unit DEVICE_VEL_LIGHT_600x600;
+unit DEVICE_VEL_SWITCH_1PP31OUT;
 
 interface
 
@@ -12,38 +12,34 @@ usescopy vlocation;
 usescopy vspecification;
 usescopy vinfopersonaluse;
 var
-
-VELLightType:String;(*'Тип светильника (авар/рем/деж)'*)
 VELLightNumControl:String;(*'Номер управления светильником'*)
-
 implementation
 
 begin
 
-BTY_TreeCoord:='PLAN_VEL_Освещение_Светильник 600х600';
+BTY_TreeCoord:='PLAN_VEL_Освещение_Выключатель накладной проходной ОП31 1Р';
 Device_Type:=TDT_SilaPotr;
 Device_Class:=TDC_Shell;
 
-NMO_BaseName:='EL1';
+NMO_BaseName:='Вкл';
 NMO_Suffix:='(??)';
 NMO_Template:='@@[NMO_BaseName]@@[NMO_Suffix]';
 
-VELLightType:='';
 VELLightNumControl:='';
 
 GC_NameGroupTemplate:='@@[GC_HeadDevice].@@[GC_HDGroup]';
 
-realnamedev:='Светильник';
-Power:=0.03;
+realnamedev:='Выключатель';
+Power:=0.0;
 CosPHI:=0.92;
 Voltage:=_AC_220V_50Hz;
 Phase:=_A;
 
-INFOPERSONALUSE_TextTemplate:='';
+INFOPERSONALUSE_TextTemplate:='@@[GC_HeadDevice].@@[GC_HDGroup]';
 
 
 VSPECIFICATION_Position:='';
-VSPECIFICATION_Name:='Светильник 600х600';
+VSPECIFICATION_Name:='Выключатель накладной проходной ОП31 1Р';
 VSPECIFICATION_Brand:='';
 VSPECIFICATION_Article:='';
 VSPECIFICATION_Factoryname:='';

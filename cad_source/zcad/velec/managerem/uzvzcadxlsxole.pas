@@ -25,15 +25,15 @@ uses
   sysutils,
 
   uzeentmtext,
-  uzbtypes,
-  uzeconsts, //base constants
+  //uzbtypes,
+  //uzeconsts, //base constants
              //описания базовых констант
   uzccommandsabstract,
   uzccommandsimpl, //Commands manager and related objects
                    //менеджер команд и объекты связанные с ним
-  uzcdrawings,     //Drawings manager, all open drawings are processed him
+  //uzcdrawings,     //Drawings manager, all open drawings are processed him
   //uzccombase,
-  gzctnrVectorTypes,
+  //gzctnrVectorTypes,
   uzcinterface,
   //fpsTypes, fpSpreadsheet, fpsUtils, fpsSearch, fpsAllFormats,
   comobj, variants, LConvEncoding, strutils,
@@ -84,6 +84,10 @@ procedure copyRow(fromSheet:string;stRow:Cardinal;ToSheet:string;edRow:Cardinal)
 procedure ReplaceTextInRow(nameSheet:string;stRow:Cardinal;FromText,ToText:string);
 
 implementation
+const
+  xlCalculationAutomatic = -4105; // Excel controls recalculation.
+  xlCalculationManual    = -4135; // Calculation is done when the user requests it.
+
 var
   Excel:OleVariant;
   BasicWorkbook: OleVariant;
@@ -168,7 +172,17 @@ begin
   result:=false;
   try
     Excel := CreateOleObject('Excel.Application');
+    Excel.ScreenUpdating:=False;
+    Excel.DisplayStatusBar:=False;
+    Excel.EnableEvents:=False;
+
     BasicWorkbook:=Excel.Workbooks.Open(WideString(pathFile));
+
+    try
+       Excel.Calculation:=xlCalculationManual;
+    finally
+    end;
+
     sheets_cache.setBook(BasicWorkbook);
     result:=true;
   except
@@ -183,6 +197,15 @@ begin
   try
     Excel := GetActiveOleObject('Excel.Application');
     BasicWorkbook:=Excel.ActiveWorkbook;
+
+    Excel.ScreenUpdating:=False;
+    Excel.DisplayStatusBar:=False;
+    Excel.EnableEvents:=False;
+    try
+      Excel.Calculation:=xlCalculationAutomatic;
+    finally
+    end;
+
     sheets_cache.setBook(BasicWorkbook);
     ZCMsgCallBackInterface.TextMessage('Доступ получен к книге = ' + BasicWorkbook.Name,TMWOHistoryOut);
     result:=true;
@@ -247,6 +270,14 @@ begin
 end;
 procedure destroyWorkbook();
 begin
+  try
+    Excel.Calculation:=xlCalculationAutomatic;
+  finally
+  end;
+  Excel.ScreenUpdating:=True;
+  Excel.DisplayStatusBar:=True;
+  Excel.EnableEvents:=True;
+
   sheets_cache.DestroyCache;
   sheets_cache.Book:=Unassigned;
   BasicWorkbook.Close(Savechanges:=false);
@@ -280,8 +311,8 @@ begin
   sheets_cache.get(nameSheet).Rows[iRow].Delete;
 end;
 procedure copyWorksheetName(codeSheet:string;nameSheet:string);
-var
-  i,numsheet:integer;
+//var
+//  i,numsheet:integer;
 begin
   //ZCMsgCallBackInterface.TextMessage('имя лист = ' + nameSheet,TMWOHistoryOut);
   try
@@ -319,7 +350,7 @@ end;
 function getCellValue(nameSheet:string;iRow,iCol:Cardinal):string;
 begin
   //result:=BasicWorkbook.WorkSheets(nameSheet).Cells(iRow,iCol).Value;
-  result:=sheets_cache.get(nameSheet).Cells(iRow,iCol).Value;
+  result:=sheets_cache.get(nameSheet).Cells(iRow,iCol).Value2;
 end;
 procedure setCellValue(nameSheet:string;iRow,iCol:Cardinal;iText:string);
 begin
@@ -354,8 +385,8 @@ begin
 end;
 
 procedure searchCellRowCol(nameSheet:string;nameValueCell:string;var vRow,vCol:Cardinal);
-var
-  i: integer;
+//var
+  //i: integer;
 
     function VarIsNothing(V: OleVariant): Boolean;
     begin
@@ -384,8 +415,8 @@ begin
 end;
 
 procedure searchNextCellRowCol(nameSheet:string;nameValueCell:string;var vRow,vCol:Cardinal);
-var
-  i:integer;
+//var
+  //i:integer;
     function VarIsNothing(V: OleVariant): Boolean;
     begin
       Result :=

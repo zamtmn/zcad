@@ -4480,7 +4480,8 @@ var
      //** Головное устройства -> группа -> ОДНО дерево (устройства могут находится на разных планах), для каждого плана свое дерево
 
      ZCMsgCallBackInterface.TextMessage('*** Получаем дерево устройств! ***',TMWOHistoryOut);
-     if listMasterDevice.Size-1 <> -1 then     //пропуск когда лист пустой
+     //if listMasterDevice.Size-1 <> -1 then     //пропуск когда лист пустой // Range check error
+     if listMasterDevice.Size <> 0 then     //пропуск когда лист пустой
         getFinishTreeDevOnGroup(listVertexEdge,globalGraph,listMasterDevice);
      ZCMsgCallBackInterface.TextMessage('*** Дерево устройств получено! ***',TMWOHistoryOut);
      //getOneTreeDevOnGroup(listVertexEdge,globalGraph,listMasterDevice);
@@ -4498,7 +4499,8 @@ var
            ZCMsgCallBackInterface.TextMessage('***Визуализация отладочного графа! ВКЛЮЧЕНА***',TMWOHistoryOut);
 
            gg:=uzegeometry.CreateVertex(0,0,0);
-           if listMasterDevice.Size-1 <> -1 then    //пропуск когда лист пустой
+           //if listMasterDevice.Size-1 <> -1 then    //пропуск когда лист пустой // Range check error
+           if listMasterDevice.Size <> 0 then    //пропуск когда лист пустой
            for i:=0 to listMasterDevice.Size-1 do
                 for j:=0 to listMasterDevice[i].LGroup.Size-1 do
                      begin
@@ -4528,7 +4530,8 @@ var
 //
     //**Добавляем к вершинам длины кабелей с конца, для правильной сортировки дерева по длине
     //ZCMsgCallBackInterface.TextMessage('*** Добавляем длины внутри дерева! ***',TMWOHistoryOut);
-    if listMasterDevice.Size-1 <> -1 then   //пропуск когда лист пустой
+    //if listMasterDevice.Size-1 <> -1 then   //пропуск когда лист пустой // Range check error
+    if listMasterDevice.Size <> 0 then   //пропуск когда лист пустой
        addItemLengthFromEndNew(listMasterDevice);
 //
     ZCMsgCallBackInterface.TextMessage('***Суперлиния - ' + listVertexEdge.nameSuperLine + ' - обработка выполнена! ***',TMWOHistoryOut);
@@ -4537,7 +4540,8 @@ var
 //    //gg:=uzegeometry.CreateVertex(0,0,0);
 //
 //    //visualAllTreesLMD(listMasterDevice,gg,1);
-  if listMasterDevice.Size-1 <> -1 then       //пропуск когда лист пустой
+  //if listMasterDevice.Size-1 <> -1 then       //пропуск когда лист пустой // Range check error
+  if listMasterDevice.Size <> 0 then       //пропуск когда лист пустой
     for i:=0 to listMasterDevice.Size-1 do
       begin
          for j:=0 to listMasterDevice[i].LGroup.Size -1 do

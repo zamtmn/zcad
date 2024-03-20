@@ -297,8 +297,8 @@ uses
   uzccommand_dbgappexplorer,
   uzelongprocesssupport;
 
-resourcestring
- rsStartAutorun='Execute *components\autorun.cmd';
+//resourcestring
+// rsStartAutorun='Execute *components\autorun.cmd';
 
 var
   lpsh:TLPSHandle;

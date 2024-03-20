@@ -418,7 +418,8 @@ begin
        ZCMsgCallBackInterface.TextMessage('ПРОКЛАДЫВАЕМ КАБЕЛИ!',TMWOHistoryOut);
 
        //Когда много суперлиний, это пропуск когда идет прокладка не той суперлинии, удобнее пропуск организвать не получилось(
-       if listMasterDevice.Size-1 <> -1 then
+       //if listMasterDevice.Size-1 <> -1 then // Range check error
+       if listMasterDevice.Size <> 0 then
           uzvtreedevice.cabelingMasterGroupLineNew(graphBuilderInfo.graph,listMasterDevice,uzvslagcabComParams.metricDev);
 
        ZCMsgCallBackInterface.TextMessage('КАБЕЛИ УСПЕШНО ПРОЛОЖЕНЫ!',TMWOHistoryOut);

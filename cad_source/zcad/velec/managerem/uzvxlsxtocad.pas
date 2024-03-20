@@ -156,10 +156,12 @@ type
       isSpecName:boolean;
 
     begin
+          ZCMsgCallBackInterface.TextMessage('creatorBlockXLSX = ' + inttostr(stRow) + ' , ' + inttostr(stCol),TMWOHistoryOut);
       stColNew:=stCol;
       // получаем стартовые условия
       inc(stColNew);
       insertBlockName:=uzvzcadxlsxole.getCellValue(nameSheet,stRow,stColNew);
+      ZCMsgCallBackInterface.TextMessage('insertBlockName = ' + insertBlockName,TMWOHistoryOut);
       // координата смещения относительно нуля по X
       inc(stColNew);
       try
@@ -219,6 +221,7 @@ type
          inc(stColNew);
          cellValueVar:=uzvzcadxlsxole.getCellValue(nameSheet,stRow,stColNew);
          //ZCMsgCallBackInterface.TextMessage('cellValueVar while значение ячейки = ' + inttostr(stRow) + ' - ' + inttostr(stColNew)+ ' = ' + cellValueVar,TMWOHistoryOut);
+
       end;
     end else ZCMsgCallBackInterface.TextMessage('ОШИБКА. Неправильно задано имя блока или неправильн заданы смещения',TMWOHistoryOut);
   end;
@@ -242,7 +245,7 @@ var
 
   nameActiveSheet:string;
   ourCell:TVXLSXCELL;
-  stRow:integer;
+  stRow,stCol:Cardinal;
   i:integer;
   //cellValueVar:string;
   isFinishSearch:boolean;
@@ -275,10 +278,15 @@ begin
         creatorBlockXLSX(nameActiveSheet,ourCell.vRow,ourCell.vCol);
         //ищем вхождение спец символов
         uzvzcadxlsxole.searchNextCellRowCol(nameActiveSheet,xlsxInsertBlockST,ourCell.vRow,ourCell.vCol);
-        if stRow>ourCell.vRow then
+        if (stRow=ourCell.vRow) and (stCol=ourCell.vCol) then
+          isFinishSearch:=false;
+        if (stRow>ourCell.vRow) then
+          isFinishSearch:=false;
+        if (stRow=ourCell.vRow) and (stCol>ourCell.vCol) then
           isFinishSearch:=false;
 
         stRow:=ourCell.vRow;
+        stCol:=ourCell.vCol;
      end;
 
      ZCMsgCallBackInterface.TextMessage('Количество добавленных блоков = ' + xlsxInsertBlockST + ' = ' + inttostr(i),TMWOHistoryOut);
@@ -311,7 +319,7 @@ var
 
   //nameActiveSheet:string;
   ourCell:TVXLSXCELL;
-  stRow:integer;
+  stRow,stCol:Cardinal;
   i:integer;
   //cellValueVar:string;
   isFinishSearch:boolean;
@@ -324,19 +332,25 @@ begin
 
       isFinishSearch:= true;      //когда поиск пошел с начала
       stRow:=ourCell.vRow;
+      stCol:=ourCell.vCol;
 
-      while (ourCell.vRow > 0) and isFinishSearch do
+      while isFinishSearch do
       begin
         inc(i);
-
         //Создание блоков
         creatorBlockXLSX(nameSheet,ourCell.vRow,ourCell.vCol);
+
         //ищем вхождение спец символов
         uzvzcadxlsxole.searchNextCellRowCol(nameSheet,xlsxInsertBlockST,ourCell.vRow,ourCell.vCol);
-        if stRow>ourCell.vRow then
+        if (stRow=ourCell.vRow) and (stCol=ourCell.vCol) then
+          isFinishSearch:=false;
+        if (stRow>ourCell.vRow) then
+          isFinishSearch:=false;
+        if (stRow=ourCell.vRow) and (stCol>ourCell.vCol) then
           isFinishSearch:=false;
 
         stRow:=ourCell.vRow;
+        stCol:=ourCell.vCol;
      end;
 
      ZCMsgCallBackInterface.TextMessage('Количество добавленных блоков = ' + xlsxInsertBlockST + ' = ' + inttostr(i),TMWOHistoryOut);

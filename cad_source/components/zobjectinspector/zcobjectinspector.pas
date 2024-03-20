@@ -1677,7 +1677,7 @@ end;
 
 procedure TGDBobjinsp.createeditor(pp:PPropertyDeskriptor);
 var
-  tp:pointer;
+  //tp:pointer;
   vsa:TZctnrVectorStrings;
   TED:TEditorDesc;
   editorcontrol:TWinControl;
@@ -1700,8 +1700,8 @@ begin
      begin
        if peditor<>nil then
        begin
-         tp:=CurrPObj;
-         {GDBobjinsp.}buildproplist(EDContext.UndoStack,CurrUnitsFormat,CurrObjGDBType,property_correct,tp);
+         //tp:=CurrPObj;
+         {GDBobjinsp.}buildproplist(EDContext.UndoStack,CurrUnitsFormat,CurrObjGDBType,property_correct,CurrPObj);
          StoreAndFreeEditor;
        end;
        vsa.init(50);

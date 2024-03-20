@@ -1,4 +1,4 @@
-unit DEVICE_VEL_POWER_SHR1;
+unit DEVICE_VEL_POWER_SHAO1;
 
 interface
 
@@ -16,7 +16,7 @@ implementation
 
 begin
 
-BTY_TreeCoord:='PLAN_VEL_Щиты_Щит распределительный';
+BTY_TreeCoord:='PLAN_VEL_Щиты_Щит аварийного освещения';
 Device_Type:=TDT_SilaPotr;
 Device_Class:=TDC_Shell;
 
@@ -27,7 +27,7 @@ NMO_Template:='@@[NMO_BaseName]';
 nametemplatesxlsx:='<zlight>';
 ANALYSISEM_icanbeheadunit:=true;
 
-realnamedev:='Щит распред';
+realnamedev:='Щит авар. осв.';
 Power:=0.0;
 CosPHI:=0.8;
 Voltage:=_AC_380V_50Hz;
@@ -36,7 +36,7 @@ Phase:=_ABC;
 GC_NameGroupTemplate:='@@[GC_HeadDevice].@@[GC_HDGroup]';
 
 VSPECIFICATION_Position:='';
-VSPECIFICATION_Name:='Щит распределительный';
+VSPECIFICATION_Name:='Щит аварийного освещения';
 VSPECIFICATION_Brand:='';
 VSPECIFICATION_Article:='';
 VSPECIFICATION_Factoryname:='';

@@ -21,7 +21,7 @@ var
 
 implementation
 begin
-   ANALYSISEM_icanbeheadunit:=true;
+   ANALYSISEM_icanbeheadunit:=false;
    labelondev:='';
    realnamedev:='';
    Position:='-';

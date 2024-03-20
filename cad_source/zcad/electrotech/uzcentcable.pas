@@ -192,8 +192,8 @@ procedure GDBObjCable.FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext;S
 var ir_inGDB,ir_inVertexArray,ir_inNodeArray,ir_inDevice,ir_inDevice2:itrec;
     currentobj,CurrentSubObj,CurrentSubObj2,ptd:PGDBObjDevice;
     devpoint,{cabpoint,}tp,tp2,tp3,{_XWCS,}_YWCS,_ZWCS:GDBVertex;
-    ptv,ptvpred,ptvnext:pgdbvertex;
-    ptn,{ptnfirst,ptnfirst2,}ptnlast,ptnlast2:PTNodeProp;
+    ptv,ptvpred,ptvnext,ptlast,ptpred:pgdbvertex;
+    ptn,{ptnfirst,ptnfirst2,}ptnlastCutted,ptnlast2Cutted:PTNodeProp;
     tn:TNodeProp;
     psldb:pointer;
     I3DPPrev,I3DPNext,I3DP:Intercept3DProp;
@@ -240,7 +240,7 @@ begin
        until ptv=nil;
   end;
   //ptnfirst:=NodePropArray.getelement(0);
-  //ptnlast:=NodePropArray.getelement(vertexarrayInWCS.Count-1);
+  //ptnlastCutted:=NodePropArray.getelement(vertexarrayInWCS.Count-1);
   CurrentObj:=PGDBObjGenericSubEntry(drawing.GetCurrentRootSimple)^.{gdb.GetCurrentROOT.}ObjArray.beginiterate(ir_inGDB);
   if (CurrentObj<>nil) then
      repeat
@@ -403,10 +403,13 @@ begin
                                              end;
 
 
-  ptnlast:=NodePropArray.getDataMutable(vertexarrayInWCS.Count-1);
-  ptnlast2:=NodePropArray.getDataMutable(vertexarrayInWCS.Count-2);
+  ptnlastCutted:=NodePropArray.getDataMutable(vertexarrayInWCS.Count-1);
+  ptnlast2Cutted:=NodePropArray.getDataMutable(vertexarrayInWCS.Count-2);
 
-  tp:=vertexsub(ptnlast^.PrevP,ptnlast2^.NextP);
+  ptlast:=VertexArrayInWCS.getDataMutable(vertexarrayInWCS.Count-1);
+  ptpred:=VertexArrayInWCS.getDataMutable(vertexarrayInWCS.Count-2);
+
+  tp:=vertexsub(ptlast^,ptpred^);
   if uzegeometry.SqrOneVertexlength(tp)>sqreps then
   begin
   _YWCS:=YWCS;//gdb.GetCurrentDWG.pcamera.ydir;
@@ -428,18 +431,18 @@ begin
    PGDBVertex(@rotmatr[2])^:=tp3;
 
    m:=onematrix;
-   PGDBVertex(@m[3])^:=ptnlast.PrevP;
+   PGDBVertex(@m[3])^:=ptnlastCutted.PrevP;
 
    m:=MatrixMultiply(rotmatr,m);
 
-  str22:=ptnlast.PrevP;
+  str22:=ptnlastCutted.PrevP;
   str21:=VectorTransform3D(uzegeometry.CreateVertex(-3*SysVar.DSGN.DSGN_HelpScale^,0.5*SysVar.DSGN.DSGN_HelpScale^,0),m);
   str23:=VectorTransform3D(uzegeometry.CreateVertex(-3*SysVar.DSGN.DSGN_HelpScale^,-0.5*SysVar.DSGN.DSGN_HelpScale^,0),m);
   end
   else begin
-            str22:=ptnlast.PrevP;
-            str21:=ptnlast.PrevP;
-            str23:=ptnlast.PrevP;
+            str22:=ptnlastCutted.PrevP;
+            str21:=ptnlastCutted.PrevP;
+            str23:=ptnlastCutted.PrevP;
        end;
   end;
   NodePropArray.Shrink;

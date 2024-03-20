@@ -31,6 +31,7 @@ uses
     gzctnrVectorTypes,uzedimensionaltypes,uzetrash,uzctnrVectorBytes,uzglviewareadata,
     uzccommandsabstract,
     uzeentitiestypefilter,uzctnrvectorpgdbaseobjects,
+    uzcinterfacedata,
     LCLProc;
 type
 {EXPORT+}
@@ -451,6 +452,9 @@ begin
    SysVar.dwg.DWG_CLTscale:=nil;
    SysVar.dwg.DWG_CColor:=nil;
    SysVar.dwg.DWG_CDimStyle:=nil;
+   // Костыль для решения, нужно сделать как-то покрасивше
+   // https://github.com/zamtmn/zcad/issues/102
+   IVars.CDimStyle:=nil;
 
    SysVar.dwg.DWG_LUnits:=nil;
    SysVar.dwg.DWG_LUPrec:=nil;

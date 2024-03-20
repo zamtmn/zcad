@@ -454,7 +454,7 @@ begin
              else
                ivars.CDimStyle:=dimstyle;
            end else
-             ivars.CTStyle:=sysvar.dwg.DWG_CDimStyle^;
+             ivars.CDimStyle:=sysvar.dwg.DWG_CDimStyle^;
       end;
       UpdateControls;
 end;

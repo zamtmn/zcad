@@ -20,7 +20,7 @@ BTY_TreeCoord:='PLAN_VEL_Щиты_Щит освещения';
 Device_Type:=TDT_SilaPotr;
 Device_Class:=TDC_Shell;
 
-NMO_BaseName:='ЩР';
+NMO_BaseName:='ЩО';
 NMO_Suffix:='';
 NMO_Template:='@@[NMO_BaseName]';
 

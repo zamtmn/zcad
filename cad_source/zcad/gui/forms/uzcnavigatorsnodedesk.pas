@@ -318,28 +318,29 @@ end;
 
 function findin(Path:TNodePath;var StartInNodestates:integer;OpNod:TNodesStatesVector;Dist:Integer):boolean;
 var
-  i:integer;
+  i:SizeUInt;
   deb:TNodeIdent;
   IsEqual:Boolean;
 begin
   //dbg('Start compare ',Path);
-  for i:=0 to OpNod.VArray.Size-1 do
-  begin
-   //dbg('  compare with',OpNod.VArray[i]);
-   if Dist=0 then
-      IsEqual:=LeveMetric.Equaly(OpNod.VArray[i],Path)
-   else begin
-      if abs(integer(OpNod.VArray[i].Size-Path.Size))<2 then
-        IsEqual:=LeveMetric.LeveDist(OpNod.VArray[i],Path)<=Dist
-      else
-        IsEqual:=False;
-   end;
-   if IsEqual then begin
-     //ZCMsgCallBackInterface.TextMessage('yes!',TMWOHistoryOut);
-     exit(true);
-   end;
-  end;
-    result:=false;
+  if OpNod.VArray.Size>0 then
+    for i:=OpNod.VArray.Size-1 downto 0 do
+    begin
+     //dbg('  compare with',OpNod.VArray[i]);
+     if Dist=0 then
+        IsEqual:=LeveMetric.Equaly(OpNod.VArray[i],Path)
+     else begin
+        if abs(integer(OpNod.VArray[i].Size-Path.Size))<2 then
+          IsEqual:=LeveMetric.LeveDist(OpNod.VArray[i],Path)<=Dist
+        else
+          IsEqual:=False;
+     end;
+     if IsEqual then begin
+       //ZCMsgCallBackInterface.TextMessage('yes!',TMWOHistoryOut);
+       exit(true);
+     end;
+    end;
+      result:=false;
     //ZCMsgCallBackInterface.TextMessage('end((',TMWOHistoryOut);
 end;
 

@@ -177,12 +177,6 @@ begin
     Excel.EnableEvents:=False;
 
     BasicWorkbook:=Excel.Workbooks.Open(WideString(pathFile));
-
-    try
-       Excel.Calculation:=xlCalculationAutomatic;
-    finally
-    end;
-
     sheets_cache.setBook(BasicWorkbook);
     result:=true;
   except
@@ -197,15 +191,6 @@ begin
   try
     Excel := GetActiveOleObject('Excel.Application');
     BasicWorkbook:=Excel.ActiveWorkbook;
-
-    Excel.ScreenUpdating:=False;
-    Excel.DisplayStatusBar:=False;
-    Excel.EnableEvents:=False;
-    try
-      Excel.Calculation:=xlCalculationAutomatic;
-    finally
-    end;
-
     sheets_cache.setBook(BasicWorkbook);
     ZCMsgCallBackInterface.TextMessage('Доступ получен к книге = ' + BasicWorkbook.Name,TMWOHistoryOut);
     result:=true;
@@ -270,10 +255,6 @@ begin
 end;
 procedure destroyWorkbook();
 begin
-  try
-    Excel.Calculation:=xlCalculationAutomatic;
-  finally
-  end;
   Excel.ScreenUpdating:=True;
   Excel.DisplayStatusBar:=True;
   Excel.EnableEvents:=True;

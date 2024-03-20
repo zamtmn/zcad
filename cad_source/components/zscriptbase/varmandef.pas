@@ -43,7 +43,7 @@ const
   TString=15;
   TGDBobject=16;}
   Ignore=#13;
-  Break='=:,'#10;
+  BreakChars='=:,'#10; // Старое название Break ломало ключевое слово Break
   dynamicoffset=-1;
   invar='_INVAR_';
   TA_COMPOUND=1;

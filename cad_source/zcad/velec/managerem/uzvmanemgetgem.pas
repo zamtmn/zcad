@@ -183,7 +183,8 @@ var
   //**Получить список имен групп которые есть у головного устройства (рут) у вершины дерева
   function getListNameGroupHD(graphDev:TGraphDev):TListGroupHeadDev;
   var
-    i,j:integer;
+    i:integer;
+    j:SizeUInt;
     cabNowMF:PGDBObjEntity;
     cabNowvarext:TVariablesExtender;
     isHaveList:boolean;
@@ -233,13 +234,16 @@ var
            begin
                     //ZCMsgCallBackInterface.TextMessage('3',TMWOHistoryOut);
              pvd:=FindVariableInEnt(cabNowMF,velec_GC_HDGroup);
-             if pvd<>nil then
+             if (pvd<>nil) and (result.Size>0) then
                begin
                  isHaveList:=true;
-                 for j:=0 to result.Size-1 do
+                 for j:=result.Size-1 downto 0 do
                    begin
                       if result[j] = pstring(pvd^.data.Addr.Instance)^ then
+                      begin
                          isHaveList:=false;
+                         Break;
+                      end;
                    end;
                  if isHaveList then
                    result.PushBack(pstring(pvd^.data.Addr.Instance)^);

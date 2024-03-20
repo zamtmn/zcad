@@ -358,8 +358,10 @@ var
               inc(stRowNew);
               stColNew:=stCol;
             end;
+            listDev.Free;
          end;
        //uzvzcadxlsxole.setCellValue(nameSheet,1,1,'1'); //переводим фокус
+       listGroupHeadDev.Free;
     end;
     //Если кодовое имя zimportdev
     procedure zimportrootdevcommand(graphDev:TGraphDev;nameEtalon,nameSheet:string;stRow,stCol:Cardinal);
@@ -550,7 +552,9 @@ var
 
 
             end;
+            listCab.Free;
          end;
+         listGroupHeadDev.Free;
     end;
 
     //Если кодовое имя zcopyrow
@@ -856,6 +860,7 @@ var
 
 
               end;
+              listCab.Free;
            end;
        end;
 
@@ -1038,8 +1043,9 @@ procedure generatorSheet(graphDev:TGraphDev;nameEtalon,nameSheet:string);
             //заполнение следующего устройтсва
             inc(coldev);
           end;
-
+          listDev.Free;
          end;
+         listGroupHeadDev.Free;
     end;
 
   var lph:TLPSHandle;
@@ -1124,6 +1130,7 @@ procedure generatorSheet(graphDev:TGraphDev;nameEtalon,nameSheet:string);
             end;
                 //until AnsiPos(nameSET, valueCell) > 0;
             valueCell:=uzvzcadxlsxole.getCellValue(nameSET+'SET',numRow,1);
+            graphDev.Free;
          end;
 
        //Прячем системные листы
@@ -1218,7 +1225,7 @@ begin
   ZCMsgCallBackInterface.TextMessage('Выбранный шаблон =' + fileTemplate,TMWOHistoryOut);
 
   //Получить список всех древовидно ориентированных графов из которых состоит модель
-  listFullGraphEM:=TListGraphDev.Create;
+  //listFullGraphEM:=TListGraphDev.Create;
   listFullGraphEM:=uzvmanemgetgem.getListGrapghEM;       //ВСЕ ХОРоШо
   ////ZCMsgCallBackInterface.TextMessage('listFullGraphEM сайз =  ' + inttostr(listFullGraphEM.Size),TMWOHistoryOut);
   //for i:=0 to listFullGraphEM.Size-1 do begin
@@ -1243,7 +1250,7 @@ begin
    end;
 
   //**получить список всех головных устройств (устройств централей)
-  listAllHeadDev:=TListDev.Create;
+  //listAllHeadDev:=TListDev.Create;
   listAllHeadDev:=uzvmanemgetgem.getListMainFuncHeadDev(listFullGraphEM);
   //ZCMsgCallBackInterface.TextMessage('listAllHeadDev сайз =  ' + inttostr(listAllHeadDev.Size),TMWOHistoryOut);
   if remotemode then
@@ -1257,6 +1264,7 @@ begin
         //ZCMsgCallBackInterface.TextMessage('рисуем граф exportGraphModelToXLSX = СТАРТ ',TMWOHistoryOut);
         graphView:=uzvmanemgetgem.getGraphHeadDev(listFullGraphEM,devMaincFunc,listAllHeadDev);
         visualGraphTree(graphView,insertCoordination,3,depthVisual);
+        graphView.Free;
         //ZCMsgCallBackInterface.TextMessage('рисуем граф exportGraphModelToXLSX = ФИНИШ ',TMWOHistoryOut);
       end;
 
@@ -1265,6 +1273,8 @@ begin
      exportGraphModelToXLSX(listAllHeadDev,fileTemplate,newfilexlsx);
   //ZCMsgCallBackInterface.TextMessage('exportGraphModelToXLSX = ФИНИШ ',TMWOHistoryOut);
   result:=cmd_ok;
+  listFullGraphEM.Free;
+  listAllHeadDev.Free;
 end;
 
 

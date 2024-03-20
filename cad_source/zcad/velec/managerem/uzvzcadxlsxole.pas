@@ -108,6 +108,7 @@ type
     Book: OleVariant;
     function get(nameSheet: String): OleVariant;
     procedure setBook(aBook: OleVariant);
+    procedure DestroyCache;
   end;
 
 function TSimpleCache.get_cache(s: String; out o: OleVariant): Boolean;
@@ -146,6 +147,17 @@ begin
   // какя-то синхронизация тут нужна наверное, в случае многопоточного доступа
   for i:=High(data) downto Low(Data) do data[i].s := '';
   Book:=aBook;
+end;
+
+procedure TSheetCache.DestroyCache;
+var
+  i: Integer;
+begin
+  for i:=High(data) downto Low(Data) do
+  begin
+    data[i].s := '';
+    data[i].o := Unassigned;
+  end;
 end;
 
 var sheets_cache:TSheetCache;
@@ -235,6 +247,8 @@ begin
 end;
 procedure destroyWorkbook();
 begin
+  sheets_cache.DestroyCache;
+  sheets_cache.Book:=Unassigned;
   BasicWorkbook.Close(Savechanges:=false);
   BasicWorkbook:=Unassigned;
   Excel.Quit;
@@ -244,6 +258,8 @@ procedure activeDestroyWorkbook();
 begin
   iRangeFind:=Unassigned;
   ActiveWorkSheet:=Unassigned;
+  sheets_cache.DestroyCache;
+  sheets_cache.Book:=Unassigned;
   BasicWorkbook:=Unassigned;
   Excel := Unassigned;
 end;

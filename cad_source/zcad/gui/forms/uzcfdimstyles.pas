@@ -204,13 +204,16 @@ end;
 {Font name handle procedures}
 function TDimStylesForm.GetTextStyleName(Item: TListItem):string;
 begin
-  //result:=ExtractFileName(PGDBDimStyle(Item.Data)^.pfont^.fontfile);
-  result:=ExtractFileName(PGDBDimStyle(Item.Data)^.Text.DIMTXSTY^.Name);
+  //DIMTXSTY может быть NIL, тогда это стиль Standard
+  result:=ExtractFileName(PTZCADDrawing(drawings.GetCurrentDWG)^.TextStyleTable.CorrectNilledTextStyle(PGDBDimStyle(Item.Data)^.Text.DIMTXSTY)^.Name)
 end;
 function TDimStylesForm.CreateTextStyleNameEditor(Item: TListItem;r: TRect):boolean;
+var
+  pts:PGDBTextStyle;
 begin
-  //FillFontsSelector(PGDBTextStyle(Item.Data)^.pfont^.fontfile,PGDBTextStyle(Item.Data)^.pfont);
-  FillTextStyleSelector(PGDBDimStyle(Item.Data)^.Text.DIMTXSTY^.Name,PGDBDimStyle(Item.Data)^.Text.DIMTXSTY);
+  //DIMTXSTY может быть NIL, тогда это стиль Standard
+  pts:=PTZCADDrawing(drawings.GetCurrentDWG)^.TextStyleTable.CorrectNilledTextStyle(PGDBDimStyle(Item.Data)^.Text.DIMTXSTY);
+  FillTextStyleSelector(pts^.Name,pts);
   FontChange:=true;
   result:=SupportTypedEditors.createeditor(ListView1,Item,r,FontsSelector,'TEnumData',nil,r.Bottom-r.Top,drawings.GetUnitsFormat,false)
 end;

@@ -33,7 +33,7 @@ uses
   uzvmanemgetgem,
   uzvagraphsdev,
   gvector,
-  uzeentdevice,
+  uzeentdevice,uzeentblockinsert,
   uzeentity,
   gzctnrVectorTypes,
   uzcdrawings,
@@ -95,21 +95,31 @@ var
 
 
 
-  function drawInsertBlock(pt:GDBVertex;scalex,scaley:double;nameBlock:string):PGDBObjDevice;
+  function drawInsertBlock(pt:GDBVertex;scalex,scaley:double;InsertionName:string):PGDBObjBlockInsert;
   var
       rc:TDrawContext;
       entvarext:TVariablesExtender;
       psu:ptunit;
+      itDevice:boolean;
+      blockName:string;
   begin
-      //if commandmanager.get3dpoint('Specify insert point:',p1)=GRNormal then
-      //begin
-        //проверяем наличие блока PS_DAT_SMOKE и устройства DEVICE_PS_DAT_SMOKE в чертеже и копируем при необходимости
-        //этот момент кривой - AddBlockFromDBIfNeed должна быть функцией чтоб было понятно - есть блок или нет, хотя это можно проверить отдельно
-        drawings.AddBlockFromDBIfNeed(drawings.GetCurrentDWG,nameBlock);
-        //создаем примитив
-        result:=GDBObjDevice.CreateInstance;
+        //проверяем на входе устройство или блок
+        itDevice:=AnsiPos(velec_beforeNameGlobalSchemaBlock,InsertionName)=1;
+        //добавляем в чертеж то что на входе
+        drawings.AddBlockFromDBIfNeed(drawings.GetCurrentDWG,InsertionName);
+        if itDevice then begin
+          //если устройство добавляем т блок
+          blockName:=Copy(InsertionName,length(velec_beforeNameGlobalSchemaBlock)+1,length(InsertionName)-length(velec_beforeNameGlobalSchemaBlock));
+          drawings.AddBlockFromDBIfNeed(drawings.GetCurrentDWG,blockName);
+          //создаем примитив
+          result:=GDBObjDevice.CreateInstance;
+        end else begin
+          blockName:=InsertionName;
+          result:=GDBObjBlockInsert.CreateInstance;
+        end;
+
         //настраивает
-        result^.Name:=nameBlock;
+        result^.Name:=blockName;
         result^.Local.P_insert:=pt;
         result^.scale:=uzegeometry.CreateVertex(scalex,scaley,1);
         //строим переменную часть примитива (та что может редактироваться)
@@ -123,11 +133,11 @@ var
         //ZCMsgCallBackInterface.TextMessage('2',TMWOHistoryOut);
 
         //добавляем свойства
-        if AnsiPos('DEVICE_', nameBlock) > 0 then begin
+        if itDevice then begin
           entvarext:=result^.GetExtension<TVariablesExtender>;
           if entvarext<>nil then
             begin
-              psu:=units.findunit(GetSupportPath,@InterfaceTranslate,nameBlock); //
+              psu:=units.findunit(GetSupportPath,@InterfaceTranslate,InsertionName); //
               if psu<>nil then
                 entvarext.entityunit.copyfrom(psu);
             end;
@@ -146,7 +156,7 @@ var
       //nameGroup:string;
       //listGroupHeadDev:TListGroupHeadDev;
       //listDev:TListDev;
-      ourDev:PGDBObjDevice;
+      ourDevOrInsert:PGDBObjBlockInsert;
       stColNew:Cardinal;
       cellValueVar,cellValueVar2:string;
       insertBlockName:string;
@@ -175,19 +185,19 @@ var
         inc(stColNew);
         scaley:=strtofloat(uzvzcadxlsxole.getCellValue(nameSheet,stRow,stColNew));
 
-        ourDev:=drawInsertBlock(uzegeometry.CreateVertex(movex,movey,0),scalex,scaley,insertBlockName);
+        ourDevOrInsert:=drawInsertBlock(uzegeometry.CreateVertex(movex,movey,0),scalex,scaley,insertBlockName);
       except
-        ourDev:=nil;
+        ourDevOrInsert:=nil;
       end;
 
-      if ourDev <> nil then begin
+      if ourDevOrInsert <> nil then begin
       inc(stColNew);
       cellValueVar:=uzvzcadxlsxole.getCellValue(nameSheet,stRow,stColNew);
       //ZCMsgCallBackInterface.TextMessage('cellValueVar значение ячейки = ' + inttostr(stRow) + ' - ' + inttostr(stColNew)+ ' = ' + cellValueVar,TMWOHistoryOut);
       while cellValueVar <> xlsxInsertBlockFT do begin
         try
            if cellValueVar <> '' then begin
-             pvd:=FindVariableInEnt(ourDev,cellValueVar);
+             pvd:=FindVariableInEnt(ourDevOrInsert,cellValueVar);
              if pvd<>nil then
                begin
                  inc(stColNew);

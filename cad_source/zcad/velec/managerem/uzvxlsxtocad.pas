@@ -55,6 +55,7 @@ uses
   UUnitManager,
   uzbPaths,
   uzcTranslations,
+  uzvconsts,
   Varman;
 
   type

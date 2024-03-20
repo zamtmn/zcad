@@ -179,7 +179,7 @@ begin
     BasicWorkbook:=Excel.Workbooks.Open(WideString(pathFile));
 
     try
-       Excel.Calculation:=xlCalculationManual;
+       Excel.Calculation:=xlCalculationAutomatic;
     finally
     end;
 
@@ -350,7 +350,7 @@ end;
 function getCellValue(nameSheet:string;iRow,iCol:Cardinal):string;
 begin
   //result:=BasicWorkbook.WorkSheets(nameSheet).Cells(iRow,iCol).Value;
-  result:=sheets_cache.get(nameSheet).Cells(iRow,iCol).Value2;
+  result:=sheets_cache.get(nameSheet).Cells(iRow,iCol).Value;
 end;
 procedure setCellValue(nameSheet:string;iRow,iCol:Cardinal;iText:string);
 begin
@@ -398,7 +398,7 @@ procedure searchCellRowCol(nameSheet:string;nameValueCell:string;var vRow,vCol:C
 begin
 
   //iRangeFind := BasicWorkbook.WorkSheets(nameSheet).UsedRange.Find(nameValueCell, MatchCase:=False);
-  iRangeFind := sheets_cache.get(nameSheet).UsedRange.Find(nameValueCell, MatchCase:=False);
+  iRangeFind := sheets_cache.get(nameSheet).UsedRange.Find(nameValueCell, MatchCase:=False, LookIn:='-4163' {xlValues});
   //ZCMsgCallBackInterface.TextMessage('поиск',TMWOHistoryOut);
   if VarIsNothing(iRangeFind) then
   begin

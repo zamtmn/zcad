@@ -687,7 +687,7 @@ var
        while cellValueVar = '1' do
          begin
               cellValueVar:=uzvzcadxlsxole.getCellValue(textTargetSheet,stRowNew,speckeynumcol);  //Получаем значение ключа, для первой строки
-              //ZCMsgCallBackInterface.TextMessage('значение ячейки которое удаляем 111111111111111111 = ' + inttostr(stRowNew) + ' - ' + inttostr(stCol)+ ' = '+cellValueVar,TMWOHistoryOut);
+              ZCMsgCallBackInterface.TextMessage('значение ячейки которое удаляем 111111111111111111 = ' + inttostr(stRowNew) + ' - ' + inttostr(speckeynumcol)+ ' = '+cellValueVar,TMWOHistoryOut);
               if cellValueVar <> '1' then
                  uzvzcadxlsxole.deleteRow(nameSheet,stRowEtalonNew);
 

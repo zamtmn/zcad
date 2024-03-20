@@ -37,10 +37,10 @@ uses
   uzeentity,
   gzctnrVectorTypes,
   uzcdrawings,
-  uzeconsts,
+  //uzeconsts,
   varmandef,
   uzcvariablesutils,
-  uzvconsts,
+  //uzvconsts,
   uzcenitiesvariablesextender,
   uzcentcable,
   //uzvmanemshieldsgroupparams,
@@ -85,12 +85,12 @@ type
 
   TListGroupHeadDev=TVector<string>;
 
-var
-  clFileParam:CMDLinePromptParser.TGeneralParsedText=nil;
+//var
+  //clFileParam:CMDLinePromptParser.TGeneralParsedText=nil;
   //CmdProp:TuzvmanemSGparams;
   //SelSimParams:TSelBlockParams;
-  listFullGraphEM:TListGraphDev;     //Граф со всем чем можно
-  listMainFuncHeadDev:TListDev;
+  //listFullGraphEM:TListGraphDev;     //Граф со всем чем можно
+  //listMainFuncHeadDev:TListDev;
 
 
 
@@ -142,7 +142,7 @@ var
   //Если кодовое имя zimportdev
     procedure creatorBlockXLSX(nameSheet:string;stRow,stCol:Cardinal);
     var
-      pvd,pvd2:pvardesk;
+      pvd{,pvd2}:pvardesk;
       //nameGroup:string;
       //listGroupHeadDev:TListGroupHeadDev;
       //listDev:TListDev;
@@ -226,25 +226,25 @@ var
 function vImportXLSXToCAD_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 var
   //inpt:String;
-  gr:TGetResult;
-  filename:string;
-  pvd:pvardesk;
-  p:GDBVertex;
-  listHeadDev:TListDev;
-  listNameGroupDev:TListGroupHeadDev;
-  headDev:pGDBObjDevice;
-  graphView:TGraphDev;
-  depthVisual:double;
-  insertCoordination:GDBVertex;
-  listAllHeadDev:TListDev;
-  devMaincFunc:PGDBObjDevice;
+  //gr:TGetResult;
+  //filename:string;
+  //pvd:pvardesk;
+  //p:GDBVertex;
+  //listHeadDev:TListDev;
+  //listNameGroupDev:TListGroupHeadDev;
+  //headDev:pGDBObjDevice;
+  //graphView:TGraphDev;
+  //depthVisual:double;
+  //insertCoordination:GDBVertex;
+  //listAllHeadDev:TListDev;
+  //devMaincFunc:PGDBObjDevice;
 
 
   nameActiveSheet:string;
   ourCell:TVXLSXCELL;
   stRow:integer;
   i:integer;
-  cellValueVar:string;
+  //cellValueVar:string;
   isFinishSearch:boolean;
   isActiveExcel:boolean;
 begin
@@ -294,28 +294,28 @@ end;
 
 function importXLSXToCAD(nameSheet:string):boolean;
 var
-  //inpt:String;
-  gr:TGetResult;
-  filename:string;
-  pvd:pvardesk;
-  p:GDBVertex;
-  listHeadDev:TListDev;
-  listNameGroupDev:TListGroupHeadDev;
-  headDev:pGDBObjDevice;
-  graphView:TGraphDev;
-  depthVisual:double;
-  insertCoordination:GDBVertex;
-  listAllHeadDev:TListDev;
-  devMaincFunc:PGDBObjDevice;
+//  //inpt:String;
+//  gr:TGetResult;
+//  filename:string;
+//  pvd:pvardesk;
+//  p:GDBVertex;
+//  listHeadDev:TListDev;
+//  listNameGroupDev:TListGroupHeadDev;
+//  headDev:pGDBObjDevice;
+//  graphView:TGraphDev;
+//  depthVisual:double;
+//  insertCoordination:GDBVertex;
+//  listAllHeadDev:TListDev;
+//  devMaincFunc:PGDBObjDevice;
 
 
-  nameActiveSheet:string;
+  //nameActiveSheet:string;
   ourCell:TVXLSXCELL;
   stRow:integer;
   i:integer;
-  cellValueVar:string;
+  //cellValueVar:string;
   isFinishSearch:boolean;
-  isActiveExcel:boolean;
+  //isActiveExcel:boolean;
 begin
 
    //Ищем команду всавки блоков из Excel

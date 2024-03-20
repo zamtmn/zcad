@@ -29,7 +29,7 @@ uses
   uzcLog,
   uzccommandsabstract,uzccommandsimpl,uzccommandsmanager,
   uzeparsercmdprompt,uzegeometrytypes,
-  uzcinterface,uzcdialogsfiles,uzcutils,
+  uzcinterface,uzcdialogsfiles,{uzcutils,}
   uzvmanemgetgem,
   uzvagraphsdev,
   gvector,
@@ -52,7 +52,8 @@ uses
   uzcsysvars,
   Classes,
   uzcdrawing,
-  Varman;
+  Varman,
+  uzelongprocesssupport;
 
   type
   TVXLSXCELL=record
@@ -149,11 +150,11 @@ type
   //devgroupnamesort=TOrderingArrayUtils<TListGroupHeadDev, string, TSortComparer>;
 
 var
-  clFileParam:CMDLinePromptParser.TGeneralParsedText=nil;
+  //clFileParam:CMDLinePromptParser.TGeneralParsedText=nil;
   //CmdProp:TuzvmanemSGparams;
   //SelSimParams:TSelBlockParams;
   listFullGraphEM:TListGraphDev;     //Граф со всем чем можно
-  listMainFuncHeadDev:TListDev;
+  //listMainFuncHeadDev:TListDev;
   remotemode:boolean;
 
 
@@ -173,15 +174,15 @@ var
 
   //Получить головное устройство
   function getDeviceHeadGroup(listFullGraphEM:TListGraphDev;listDev:TListDev):pGDBObjDevice;
-  type
-    TListEntity=TVector<pGDBObjEntity>;
+  //type
+  //  TListEntity=TVector<pGDBObjEntity>;
   var
      selEnt:pGDBObjEntity;
-     pvd:pvardesk;
+     //pvd:pvardesk;
      //listDev:TListDev;
-     devName:string;
-     devlistMF,selDev,selDevMF:PGDBObjDevice;
-     isListDev:boolean;
+     //devName:string;
+     devlistMF{,selDev,selDevMF}:PGDBObjDevice;
+     //isListDev:boolean;
      selDevVarExt:TVariablesExtender;
      selEntMF:PGDBObjEntity;
 
@@ -364,9 +365,9 @@ var
     procedure zimportrootdevcommand(graphDev:TGraphDev;nameEtalon,nameSheet:string;stRow,stCol:Cardinal);
     var
       pvd2:pvardesk;
-      nameGroup:string;
-      listGroupHeadDev:TListGroupHeadDev;
-      listDev:TListDev;
+      //nameGroup:string;
+      //listGroupHeadDev:TListGroupHeadDev;
+      //listDev:TListDev;
       ourDev:PGDBObjDevice;
       stRowNew,stColNew:Cardinal;
       cellValueVar:string;
@@ -438,7 +439,7 @@ var
     //Если кодовое имя zimportcab
     procedure zimportcabcommand(graphDev:TGraphDev;nameEtalon,nameSheet:string;stRow,stCol:Cardinal);
     var
-      pvd,pvd2:pvardesk;
+      pvd{,pvd2}:pvardesk;
       nameGroup:string;
       listGroupHeadDev:TListGroupHeadDev;
       listCab:TListPolyline;
@@ -447,7 +448,7 @@ var
       cellValueVar:string;
       textCell:string;
       j:integer;
-      cabNowvarext,polyext:TVariablesExtender;
+      {cabNowvarext,}polyext:TVariablesExtender;
       cableNowMF:PGDBObjCable;
       iHaveParam:boolean;
 
@@ -559,23 +560,23 @@ var
        targetcodename='targetcodename';
        keynumcol='keynumcol';
     var
-      pvd2:pvardesk;
+      //pvd2:pvardesk;
       //nameGroup:string;
       //listGroupHeadDev:TListGroupHeadDev;
       //listDev:TListDev;
       //ourDev:PGDBObjDevice;
       j:integer;
       stRow,stCol:Cardinal;
-      stRowNew,stColNew:Cardinal;
+      stRowNew{,stColNew}:Cardinal;
       stRowEtalonNew,stColEtalonNew:Cardinal;
       cellValueVar:string;
       textTargetSheet:string;
-      temptextcell,temptextcellnew:string;
+      //temptextcell,temptextcellnew:string;
       codeNameEtalonSheet,codeNameEtalonSheetRect,codeNameNewSheet:string;
       speckeynumcol:integer;
       spectargetSheet:string;
       spectargetcodename:string;
-      stInfoDevCell:TVXLSXCELL;
+      //stInfoDevCell:TVXLSXCELL;
 
       //парсим ключи спецключи
       function getkeysCell(textCell,namekey:string):String;
@@ -633,7 +634,7 @@ var
 
 
        stRowNew:=stRow;
-       stColNew:=stCol;
+       //stColNew:=stCol;
        stRowEtalonNew:=stRowEtalon;
        stColEtalonNew:=stColEtalon;
 
@@ -706,19 +707,19 @@ var
       stInfoDevCell:TVXLSXCELL;    //
       ourgraphDev:TGraphDev;       //
       pvd,pvd2:pvardesk;
-      nameGroup:string;
-      listGroupHeadDev:TListGroupHeadDev;
+      //nameGroup:string;
+      //listGroupHeadDev:TListGroupHeadDev;
       listCab:TListPolyline;       //
       ourCab:PGDBObjPolyline;
       stRowNew,stColNew,stRow,stCol:Cardinal;
       cellValueVar:string;
       textCell:string;
       j:integer;
-      cabNowvarext,polyext:TVariablesExtender;
+      {cabNowvarext,}polyext:TVariablesExtender;
       cableNowMF:PGDBObjCable;
       iHaveParam:boolean;
 
-      node:PTNodeProp;
+      //node:PTNodeProp;
 
       function getMainFuncCable(devNowvarext:TVariablesExtender):PGDBObjCable;
       begin
@@ -1041,6 +1042,7 @@ procedure generatorSheet(graphDev:TGraphDev;nameEtalon,nameSheet:string);
          end;
     end;
 
+  var lph:TLPSHandle;
   begin
        ////открываем эталонную книгу     generatorSheet
        // ZCMsgCallBackInterface.Do_BeforeShowModal(nil);
@@ -1050,7 +1052,7 @@ procedure generatorSheet(graphDev:TGraphDev;nameEtalon,nameSheet:string);
        //   result:=cmd_cancel;
        //   exit;
        // end;
-
+       lph:=lps.StartLongProcess('Выполнение экспорта модели соединений в EXCEL',nil);
        ZCMsgCallBackInterface.TextMessage('Алгоритм экспорта модели соединений в EXCEL - НАЧАТ',TMWOHistoryOut);
 
        //uzvzcadxlsxole.openXLSXFile('d:\YandexDisk\zcad-test\ETALON\etalon.xlsx');
@@ -1144,6 +1146,7 @@ procedure generatorSheet(graphDev:TGraphDev;nameEtalon,nameSheet:string);
             //ZCMsgCallBackInterface.TextMessage('Значение ячейки = '+valueCell + ', номер позиции = ' +inttostr(AnsiPos(nameSET, valueCell)),TMWOHistoryOut);
         end;
 
+       lps.EndLongProcess(lph);
 
        //Сохранить или перезаписать книгу с моделью
 
@@ -1170,15 +1173,15 @@ procedure generatorSheet(graphDev:TGraphDev;nameEtalon,nameSheet:string);
 function vExportModelToXLSX_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 var
   fileTemplate:ansiString;
-  gr:TGetResult;
-  filename,newfilexlsx:string;
+  //gr:TGetResult;
+  {filename,}newfilexlsx:string;
   pvd:pvardesk;
-  i,j:integer;
+  //i,j:integer;
   //p:GDBVertex;
   //listHeadDev:TListDev;
   //listNameGroupDev:TListGroupHeadDev;
   //headDev:pGDBObjDevice;
-  graphView,ggg:TGraphDev;
+  graphView{,ggg}:TGraphDev;
   depthVisual:double;
   insertCoordination:GDBVertex;
   listAllHeadDev:TListDev;

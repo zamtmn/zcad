@@ -234,17 +234,18 @@ var
            begin
                     //ZCMsgCallBackInterface.TextMessage('3',TMWOHistoryOut);
              pvd:=FindVariableInEnt(cabNowMF,velec_GC_HDGroup);
-             if (pvd<>nil) and (result.Size>0) then
+             if (pvd<>nil) then
                begin
                  isHaveList:=true;
-                 for j:=result.Size-1 downto 0 do
-                   begin
-                      if result[j] = pstring(pvd^.data.Addr.Instance)^ then
-                      begin
-                         isHaveList:=false;
-                         Break;
-                      end;
-                   end;
+                 if (result.Size>0) then
+                   for j:=result.Size-1 downto 0 do
+                     begin
+                        if result[j] = pstring(pvd^.data.Addr.Instance)^ then
+                        begin
+                           isHaveList:=false;
+                           Break;
+                        end;
+                     end;
                  if isHaveList then
                    result.PushBack(pstring(pvd^.data.Addr.Instance)^);
                end;

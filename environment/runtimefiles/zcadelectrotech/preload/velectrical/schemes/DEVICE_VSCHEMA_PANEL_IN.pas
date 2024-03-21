@@ -17,6 +17,8 @@ VSCHEMAPp:String;(*'Pp'*)
 VSCHEMACosf:String;(*'cosf'*)
 VSCHEMAIp:String;(*'Ip'*)
 VSCHEMAAdd:String;(*'Доп текст'*)
+VSCHEMACable11:String;(*'Кабель 1.1'*)
+VSCHEMACable12:String;(*'Кабель 1.2'*)
 implementation
 
 begin
@@ -30,4 +32,6 @@ VSCHEMAPp:='Pp';
 VSCHEMACosf:='Cosf';
 VSCHEMAIp:='Ip';
 VSCHEMAAdd:='';
+VSCHEMACable11:='??';
+VSCHEMACable12:='??';
 end.

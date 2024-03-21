@@ -417,7 +417,7 @@ begin
   *)
   //glColor3ub(255, 255, 255);
   dc.drawer.startrender(TRM_WindowSpace,dc.DrawingContext.matrixs);
-  dc.drawer.SetColor(palette[ForeGroundColorIndex].RGB);
+  //dc.drawer.SetColor(palette[ForeGroundColorIndex].RGB);
   //oglsm.glColor3ubv(foreground);
 
   if param.seldesc.MouseFrameON then
@@ -440,17 +440,13 @@ begin
                               param.seldesc.Frame2.x,param.seldesc.Frame1.y);
 
     if param.seldesc.MouseFrameInverse then
-      dc.drawer.SetPenStyle(TPS_Solid);
-    if param.seldesc.MouseFrameInverse then
     begin
-      dc.drawer.SetDrawMode(TDM_XOR);
       dc.drawer.SetPenStyle(TPS_Dash);
-    end;
-    if param.seldesc.MouseFrameInverse then
       dc.drawer.SetColor(0,40,0,10)
+    end
     else
       dc.drawer.SetColor(0,0,40,10);
-    dc.drawer.SetDrawMode(TDM_XOR);
+    dc.drawer.SetDrawMode(TDM_OR);
     dc.drawer.DrawQuad2DInDCS(param.seldesc.Frame1.x,param.seldesc.Frame1.y,param.seldesc.Frame2.x,param.seldesc.Frame2.y);
     if param.seldesc.MouseFrameInverse then
       dc.drawer.SetPenStyle(TPS_Solid);
@@ -671,17 +667,14 @@ function TGeneralViewArea.treerender;
 var
   currtime:TDateTime;
   Hour,Minute,Second,MilliSecond:word;
-  q1,q2:Boolean;
 begin
   if (sysvarRDMaxRenderTime<>0) then begin
     currtime:=now;
     decodetime(currtime-StartTime,Hour,Minute,Second,MilliSecond);
-    if (sysvarRDMaxRenderTime<>0) then
-      if (sysvarRDMaxRenderTime-MilliSecond)<0 then
-        exit(true);
+    if (sysvarRDMaxRenderTime-MilliSecond)<0 then
+      exit(true);
   end;
-  q1:=false;
-  q2:=false;
+  Result:=false;
 
   if Node.NodeData.infrustum=PDWG.Getpcamera.POSCOUNT then begin
     if (Node.NodeData.FulDraw=TDTFulDraw)or(Node.nul.count=0) then begin
@@ -690,14 +683,14 @@ begin
           if not treerender(PTEntTreeNode(node.pminusnode)^,StartTime,dc) then
             node.NodeData.minusdrawpos:=PDWG.Getpcamera.DRAWCOUNT
           else
-            q1:=true;
+            Result:=true;
         end;
       if assigned(node.pplusnode)then
         if node.NodeData.plusdrawpos<>PDWG.Getpcamera.DRAWCOUNT then begin
           if not treerender(PTEntTreeNode(node.pplusnode)^,StartTime,dc) then
             node.NodeData.plusdrawpos:=PDWG.Getpcamera.DRAWCOUNT
           else
-            q2:=true;
+            Result:=true;
         end;
     end;
     if node.NodeData.nuldrawpos<>PDWG.Getpcamera.DRAWCOUNT then begin
@@ -706,7 +699,6 @@ begin
       node.NodeData.nuldrawpos:=PDWG.Getpcamera.DRAWCOUNT;
     end;
   end;
-  result:=q1 or q2;
 end;
 procedure TGeneralViewArea.render;
 begin

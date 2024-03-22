@@ -1717,7 +1717,7 @@ begin
                                                initialvalue:='';
          tr:=pp^.rect;
        if assigned(pp^.Decorators.OnCreateEditor) then
-                                                      TED:=pp^.Decorators.OnCreateEditor(self,tr,pp^.valueAddres,@vsa,false,pp^.PTypeManager)
+                                                      TED:=pp^.Decorators.OnCreateEditor(self,tr,pp^.valueAddres,@vsa,false,pp^.PTypeManager,CurrUnitsFormat)
                                                   else
                                                       TED:=pp^.PTypeManager^.CreateEditor(self,tr,pp^.valueAddres,@vsa,{false}true,initialvalue,rowh,CurrUnitsFormat);
      case ted.Mode of

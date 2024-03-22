@@ -257,7 +257,7 @@ begin
      index:=PTGDBPaletteColor(PInstance)^;
      DrawColor(Canvas,Index,ARect);
 end;
-function CreateEmptyEditor(TheOwner:TPropEditorOwner;rect:trect;pinstance:pointer;psa:PTZctnrVectorStrings;FreeOnLostFocus:boolean;PTD:PUserTypeDescriptor):TEditorDesc;
+function CreateEmptyEditor(TheOwner:TPropEditorOwner;rect:trect;pinstance:pointer;psa:PTZctnrVectorStrings;FreeOnLostFocus:boolean;PTD:PUserTypeDescriptor;f:TzeUnitsFormat):TEditorDesc;
 begin
      result.mode:=TEM_Nothing;
      result.Editor:=nil;
@@ -543,12 +543,12 @@ begin
      EnumGlobalEditor:=TBaseTypesEditors.EnumDescriptorCreateEditor;
 
 
-     DecorateType(SysUnit.TypeName2PTD('TGDBLineWeight'),@LWDecorator,@LineWeightDecoratorCreateEditor,@drawLWProp);
-     DecorateType(SysUnit.TypeName2PTD('PGDBLayerPropObjInsp'),@NamedObjectsDecorator,@LayersDecoratorCreateEditor,nil);
-     DecorateType(SysUnit.TypeName2PTD('PGDBLtypePropObjInsp'),@NamedObjectsDecorator,@LTypeDecoratorCreateEditor,@drawLTProp);
-     DecorateType(SysUnit.TypeName2PTD('PGDBTextStyleObjInsp'),@NamedObjectsDecorator,@TextStyleDecoratorCreateEditor,nil);
-     DecorateType(SysUnit.TypeName2PTD('PGDBDimStyleObjInsp'),@NamedObjectsDecorator,@DimStyleDecoratorCreateEditor,nil);
-     DecorateType(SysUnit.TypeName2PTD('TGDBPaletteColor'),@PaletteColorDecorator,@ColorDecoratorCreateEditor,@drawIndexColorProp);
+     DecorateType(SysUnit.TypeName2PTD('TGDBLineWeight'),LWDecorator,LineWeightDecoratorCreateEditor,drawLWProp);
+     DecorateType(SysUnit.TypeName2PTD('PGDBLayerPropObjInsp'),NamedObjectsDecorator,LayersDecoratorCreateEditor,nil);
+     DecorateType(SysUnit.TypeName2PTD('PGDBLtypePropObjInsp'),NamedObjectsDecorator,LTypeDecoratorCreateEditor,drawLTProp);
+     DecorateType(SysUnit.TypeName2PTD('PGDBTextStyleObjInsp'),NamedObjectsDecorator,TextStyleDecoratorCreateEditor,nil);
+     DecorateType(SysUnit.TypeName2PTD('PGDBDimStyleObjInsp'),NamedObjectsDecorator,DimStyleDecoratorCreateEditor,nil);
+     DecorateType(SysUnit.TypeName2PTD('TGDBPaletteColor'),PaletteColorDecorator,ColorDecoratorCreateEditor,drawIndexColorProp);
      DecorateType(SysUnit.TypeName2PTD('TGDBOSMode'),nil,CreateEmptyEditor,nil);
 
      AddFastEditorToType(SysUnit.TypeName2PTD('Integer'),@OIUI_FE_HalfButtonGetPrefferedSize,@OIUI_FE_ButtonGreatThatDraw,@OIUI_FE_IntegerInc);

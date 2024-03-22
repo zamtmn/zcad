@@ -66,7 +66,7 @@ TEditorDesc=record
                   Editor:TPropEditor;
                   Mode:TEditorMode;
             end;
-TOnCreateEditor=function (TheOwner:TPropEditorOwner;rect:trect;pinstance:pointer;psa:PTZctnrVectorStrings;FreeOnLostFocus:boolean;PTD:PUserTypeDescriptor):TEditorDesc;
+TOnCreateEditor=function (TheOwner:TPropEditorOwner;rect:trect;pinstance:pointer;psa:PTZctnrVectorStrings;FreeOnLostFocus:boolean;PTD:PUserTypeDescriptor;f:TzeUnitsFormat):TEditorDesc;
 TOnGetValueAsString=function(PInstance:Pointer):String;
 TOnDrawProperty=procedure(canvas:TCanvas;ARect:TRect;PInstance:Pointer);
 

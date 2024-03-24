@@ -2418,7 +2418,10 @@ begin
     if pv^.Selected then
     begin
     pentvarext:=pv^.GetExtension<TVariablesExtender>;
-    pvd:=pentvarext.entityunit.FindVariable(name);
+    if pentvarext<>nil then
+      pvd:=pentvarext.entityunit.FindVariable(name)
+    else
+      pvd:=nil;
     if pvd<>nil then
     begin
          content:=pvd.data.PTD.GetValueAsString(pvd.data.Addr.Instance);

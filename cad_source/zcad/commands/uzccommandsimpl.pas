@@ -228,51 +228,58 @@ begin
 end;
 procedure CommandFastObjectPlugin.CommandEnd;
 begin
-    //inherited;
-    if drawings.currentdwg<>nil then
-    begin
-    if CEDeSelect in self.CEndActionAttr then
-    //if (@self<>pfindcom)and(@self<>@OnDrawingEd)and(@self<>selframecommand)and(@self<>ms2objinsp)and(@self<>csel)and(@self<>selall) then
-    begin
-    drawings.GetCurrentROOT.ObjArray.DeSelect(drawings.GetCurrentDWG.wa.param.SelDesc.Selectedobjcount,drawings.GetCurrentDWG^.deselector);
-    drawings.GetCurrentDWG.wa.param.SelDesc.LastSelectedObject := nil;
-    drawings.GetCurrentDWG.wa.param.SelDesc.OnMouseObject := nil;
-    drawings.GetCurrentDWG.wa.param.seldesc.Selectedobjcount:=0;
-    drawings.GetCurrentDWG.SelObjArray.Free;
+  if drawings.currentdwg<>nil then begin
+    if CEDeSelect in self.CEndActionAttr then begin
+      drawings.GetCurrentROOT.ObjArray.DeSelect(drawings.GetCurrentDWG.wa.param.SelDesc.Selectedobjcount,drawings.GetCurrentDWG^.deselector);
+      drawings.GetCurrentDWG.wa.param.SelDesc.LastSelectedObject := nil;
+      drawings.GetCurrentDWG.wa.param.SelDesc.OnMouseObject := nil;
+      drawings.GetCurrentDWG.wa.param.seldesc.Selectedobjcount:=0;
+      drawings.GetCurrentDWG.SelObjArray.Free;
     end;
+    if CEGUIRePrepare in self.CEndActionAttr then begin
+      if drawings.GetCurrentDWG.wa.param.seldesc.Selectedobjcount=0 then
+        ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIReturnToDefaultObject)
+      else
+        ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIRePrepareObject)
+    end;
+    if CEGUIReturnToDefaultObject in self.CEndActionAttr then
+      ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIReturnToDefaultObject);
     if drawings.GetCurrentDWG.wa<>nil then
     if not overlay then
-  drawings.GetCurrentDWG.wa.Clear0Ontrackpoint;
-  if not overlay then
-                     begin
-                          drawings.GetCurrentDWG.FreeConstructionObjects;
-                          {drawings.GetCurrentDWG.ConstructObjRoot.ObjArray.cleareraseobj;
-                          drawings.GetCurrentDWG.ConstructObjRoot.ObjCasheArray.Clear;
-                          //drawings.GetCurrentDWG.ConstructObjRoot.ObjToConnectedArray.Clear;
-                          drawings.GetCurrentDWG.ConstructObjRoot.ObjMatrix:=onematrix;}
-                     end;
-  if drawings.GetCurrentDWG.wa.getviewcontrol<>nil then
-  drawings.GetCurrentDWG.wa.param.lastonmouseobject:=nil;
-  drawings.GetCurrentDWG.OnMouseObj.Clear;
-  //poglwnd^.md.mode := savemousemode;
-  OSModeEditor.GetState;
-  zcRedrawCurrentDrawing;
-  ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIActionRedraw);
-  //if assigned(UpdateVisibleProc) then UpdateVisibleProc(ZMsgID_GUIActionRedraw);
+    drawings.GetCurrentDWG.wa.Clear0Ontrackpoint;
+    if not overlay then begin
+      drawings.GetCurrentDWG.FreeConstructionObjects;
+      {drawings.GetCurrentDWG.ConstructObjRoot.ObjArray.cleareraseobj;
+      drawings.GetCurrentDWG.ConstructObjRoot.ObjCasheArray.Clear;
+      //drawings.GetCurrentDWG.ConstructObjRoot.ObjToConnectedArray.Clear;
+      drawings.GetCurrentDWG.ConstructObjRoot.ObjMatrix:=onematrix;}
     end;
+    if drawings.GetCurrentDWG.wa.getviewcontrol<>nil then
+      drawings.GetCurrentDWG.wa.param.lastonmouseobject:=nil;
+    drawings.GetCurrentDWG.OnMouseObj.Clear;
+    OSModeEditor.GetState;
+    zcRedrawCurrentDrawing;
+    ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIActionRedraw);
+  end;
 end;
 procedure CommandRTEdObject.CommandEnd;
 begin
     //inherited;
-    if CEDeSelect in self.CEndActionAttr then
-    //if (@self<>pfindcom)and(@self<>@OnDrawingEd)and(@self<>selframecommand) then
-    begin
+  if CEDeSelect in self.CEndActionAttr then begin
     drawings.GetCurrentROOT.ObjArray.DeSelect(drawings.GetCurrentDWG.wa.param.SelDesc.Selectedobjcount,drawings.GetCurrentDWG^.deselector);
     drawings.GetCurrentDWG.wa.param.SelDesc.LastSelectedObject := nil;
     drawings.GetCurrentDWG.wa.param.SelDesc.OnMouseObject := nil;
     drawings.GetCurrentDWG.wa.param.seldesc.Selectedobjcount:=0;
     drawings.GetCurrentDWG.SelObjArray.Free;
-    end;
+  end;
+  if CEGUIRePrepare in self.CEndActionAttr then begin
+    if drawings.GetCurrentDWG.wa.param.seldesc.Selectedobjcount=0 then
+      ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIReturnToDefaultObject)
+    else
+      ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIRePrepareObject)
+  end;
+  if CEGUIReturnToDefaultObject in self.CEndActionAttr then
+    ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIReturnToDefaultObject);
   drawings.GetCurrentDWG.wa.param.lastonmouseobject:=nil;
   drawings.GetCurrentDWG.OnMouseObj.Clear;
   if uzccommandsmanager.commandmanager.CommandsStack.Count=0 then

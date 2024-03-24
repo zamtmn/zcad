@@ -27,10 +27,10 @@ uses
   uzeentity,
   uzcinterface;
 
+implementation
+
 var
   deselall:pCommandFastObjectPlugin;
-
-implementation
 
 function DeSelectAll_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 begin
@@ -42,7 +42,7 @@ end;
 initialization
   programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
   deselall:=CreateZCADCommand(@DeSelectAll_com,'DeSelectAll',CADWG  or CASelEnts,0);
-  deselall.CEndActionAttr:=[CEDeSelect];
+  deselall^.CEndActionAttr:=[CEGUIReturnToDefaultObject,CEDeSelect];
   deselall^.overlay:=true;
 finalization
   ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);

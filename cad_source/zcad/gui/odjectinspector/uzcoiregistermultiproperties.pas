@@ -267,49 +267,58 @@ begin
 end;
 procedure DoubleDiv2EntChangeProc(var UMPlaced:boolean;pu:PTEntityUnit;pdata:PVarDesk;ChangedData:TChangedData;mp:TMultiProperty);
 var
-    l1:Double;
+  l1:Double;
 begin
-     l1:=PDouble(pvardesk(pdata)^.data.Addr.Instance)^;
-     PDouble(pvardesk(pdata)^.data.Addr.Instance)^:=PDouble(pvardesk(pdata)^.data.Addr.Instance)^/2;
-     ProcessVariableAttributes(pvardesk(pdata)^.attrib,0,vda_approximately or vda_different);
-     GeneralFromPtrEntChangeProc(UMPlaced,pu,pdata,ChangedData,mp);
-     PDouble(pvardesk(pdata)^.data.Addr.Instance)^:=l1;
+  l1:=PDouble(pvardesk(pdata)^.data.Addr.Instance)^;
+  PDouble(pvardesk(pdata)^.data.Addr.Instance)^:=PDouble(pvardesk(pdata)^.data.Addr.Instance)^/2;
+  ProcessVariableAttributes(pvardesk(pdata)^.attrib,0,vda_approximately or vda_different);
+  GeneralFromPtrEntChangeProc(UMPlaced,pu,pdata,ChangedData,mp);
+  PDouble(pvardesk(pdata)^.data.Addr.Instance)^:=l1;
 end;
+
 procedure DoubleCircumference2REntChangeProc(var UMPlaced:boolean;pu:PTEntityUnit;pdata:PVarDesk;ChangedData:TChangedData;mp:TMultiProperty);
 var
-    l1:Double;
+  R:Double;
 begin
-     l1:=PDouble(pvardesk(pdata)^.data.Addr.Instance)^/(2*PI);
-     ProcessVariableAttributes(pvardesk(pdata)^.attrib,0,vda_approximately or vda_different);
-     GeneralFromPtrEntChangeProc(UMPlaced,pu,@l1,ChangedData,mp);
+  R:=PDouble(pvardesk(pdata)^.data.Addr.Instance)^;
+  PDouble(pvardesk(pdata)^.data.Addr.Instance)^:=PDouble(pvardesk(pdata)^.data.Addr.Instance)^/(2*PI);
+  ProcessVariableAttributes(pvardesk(pdata)^.attrib,0,vda_approximately or vda_different);
+  GeneralFromPtrEntChangeProc(UMPlaced,pu,pdata,ChangedData,mp);
+  PDouble(pvardesk(pdata)^.data.Addr.Instance)^:=R;
 end;
+
 procedure DoubleArcCircumferenceEntChangeProc(var UMPlaced:boolean;pu:PTEntityUnit;pdata:PVarDesk;ChangedData:TChangedData;mp:TMultiProperty);
 var
-    l1:Double;
+  R:Double;
 begin
-     l1:=PDouble(pvardesk(pdata)^.data.Addr.Instance)^/PGDBObjArc(ChangedData.pentity)^.angle;
-     ChangedData.PSetDataInEtity:=@PGDBObjArc(ChangedData.pentity)^.R;
-     ProcessVariableAttributes(pvardesk(pdata)^.attrib,0,vda_approximately or vda_different);
-     GeneralFromPtrEntChangeProc(UMPlaced,pu,@l1,ChangedData,mp);
+  R:=PDouble(pvardesk(pdata)^.data.Addr.Instance)^;
+  PDouble(pvardesk(pdata)^.data.Addr.Instance)^:=PDouble(pvardesk(pdata)^.data.Addr.Instance)^/PGDBObjArc(ChangedData.pentity)^.angle;
+  ProcessVariableAttributes(pvardesk(pdata)^.attrib,0,vda_approximately or vda_different);
+  GeneralFromPtrEntChangeProc(UMPlaced,pu,pdata,ChangedData,mp);
+  PDouble(pvardesk(pdata)^.data.Addr.Instance)^:=R;
 end;
 
 procedure DoubleArea2REntChangeProc(var UMPlaced:boolean;pu:PTEntityUnit;pdata:PVarDesk;ChangedData:TChangedData;mp:TMultiProperty);
 var
-    l1:Double;
+  R:Double;
 begin
-     l1:=sqrt(PDouble(pvardesk(pdata)^.data.Addr.Instance)^/PI);
-     ProcessVariableAttributes(pvardesk(pdata)^.attrib,0,vda_approximately or vda_different);
-     GeneralFromPtrEntChangeProc(UMPlaced,pu,@l1,ChangedData,mp);
+  R:=PDouble(pvardesk(pdata)^.data.Addr.Instance)^;
+  PDouble(pvardesk(pdata)^.data.Addr.Instance)^:=sqrt(PDouble(pvardesk(pdata)^.data.Addr.Instance)^/PI);
+  ProcessVariableAttributes(pvardesk(pdata)^.attrib,0,vda_approximately or vda_different);
+  GeneralFromPtrEntChangeProc(UMPlaced,pu,pdata,ChangedData,mp);
+  PDouble(pvardesk(pdata)^.data.Addr.Instance)^:=R;
 end;
 procedure DoubleDeltaEntChangeProc(var UMPlaced:boolean;pu:PTEntityUnit;pdata:PVarDesk;ChangedData:TChangedData;mp:TMultiProperty);
 var
-    l1:Double;
+  oldValue,delta:Double;
 begin
-     l1:=PDouble(ChangedData.PSetDataInEtity)^;
-     inc(ChangedData.PSetDataInEtity,sizeof(GDBVertex));
-     l1:=l1+PDouble(pvardesk(pdata)^.data.Addr.Instance)^;
-     ProcessVariableAttributes(pvardesk(pdata)^.attrib,0,vda_approximately or vda_different);
-     GeneralFromPtrEntChangeProc(UMPlaced,pu,@l1,ChangedData,mp);
+  oldValue:=PDouble(pvardesk(pdata)^.data.Addr.Instance)^;
+  delta:=PDouble(ChangedData.PSetDataInEtity)^;
+  inc(ChangedData.PSetDataInEtity,sizeof(GDBVertex));
+  PDouble(pvardesk(pdata)^.data.Addr.Instance)^:=delta+PDouble(pvardesk(pdata)^.data.Addr.Instance)^;
+  ProcessVariableAttributes(pvardesk(pdata)^.attrib,0,vda_approximately or vda_different);
+  GeneralFromPtrEntChangeProc(UMPlaced,pu,pdata,ChangedData,mp);
+  PDouble(pvardesk(pdata)^.data.Addr.Instance)^:=oldValue;
 end;
 procedure DoubleLengthEntChangeProc(var UMPlaced:boolean;pu:PTEntityUnit;pdata:PVarDesk;ChangedData:TChangedData;mp:TMultiProperty);
 var
@@ -317,14 +326,14 @@ var
   l1:Double;
   cp:UCmdChgField;
 begin
-     V1:=PGDBVertex(ChangedData.PSetDataInEtity)^;
-     inc(ChangedData.PSetDataInEtity,sizeof(GDBVertex));
-     V2:=PGDBVertex(ChangedData.PSetDataInEtity)^;
-     l1:=PDouble(pvardesk(pdata)^.data.Addr.Instance)^;
-     V2:=VertexSub(V2,V1);
-     V2:=normalizevertex(V2);
-     V2:=VertexMulOnSc(V2,l1);
-     ProcessVariableAttributes(pvardesk(pdata)^.attrib,0,vda_approximately or vda_different);
+  V1:=PGDBVertex(ChangedData.PSetDataInEtity)^;
+  inc(ChangedData.PSetDataInEtity,sizeof(GDBVertex));
+  V2:=PGDBVertex(ChangedData.PSetDataInEtity)^;
+  l1:=PDouble(pvardesk(pdata)^.data.Addr.Instance)^;
+  V2:=VertexSub(V2,V1);
+  V2:=normalizevertex(V2);
+  V2:=VertexMulOnSc(V2,l1);
+  ProcessVariableAttributes(pvardesk(pdata)^.attrib,0,vda_approximately or vda_different);
 
   zcPlaceUndoStartMarkerIfNeed(UMPlaced,'Property changed');
   cp:=UCmdChgField.CreateAndPush(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,
@@ -332,59 +341,79 @@ begin
                                  TSharedPEntityData.CreateRec(ChangedData.PEntity),
                                  TAfterChangePDrawing.CreateRec(drawings.GetCurrentDWG));
 
-
-     PGDBVertex(ChangedData.PSetDataInEtity)^:=VertexAdd(v1,v2);
+  PGDBVertex(ChangedData.PSetDataInEtity)^:=VertexAdd(v1,v2);
 end;
 procedure DoubleAngleEntChangeProc(var UMPlaced:boolean;pu:PTEntityUnit;pdata:PVarDesk;ChangedData:TChangedData;mp:TMultiProperty);
 var
-    v1,v2:GDBVertex;
-    l1,d:Double;
+  v1,v2:GDBVertex;
+  l1,d:Double;
+  cp:UCmdChgField;
 begin
+  {TODO: Надо пересчитать из текущих едениц чертежа в градусы}
   V1:=PGDBVertex(ChangedData.PSetDataInEtity)^;
   inc(ChangedData.PSetDataInEtity,sizeof(GDBVertex));
   V2:=PGDBVertex(ChangedData.PSetDataInEtity)^;
   d:=vertexlength(v2,v1);
-  l1:=PDouble(pvardesk(pdata)^.data.Addr.Instance)^*pi/180;
+  l1:=PDouble(pvardesk(pdata)^.data.Addr.Instance)^{*pi/180};
   SinCos(l1,V2.y,V2.x);
   V2.z:=0;
   V2:=VertexMulOnSc(V2,d);
   ProcessVariableAttributes(pvardesk(pdata)^.attrib,0,vda_approximately or vda_different);
+
+  zcPlaceUndoStartMarkerIfNeed(UMPlaced,'Property changed');
+  cp:=UCmdChgField.CreateAndPush(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,
+                                 TChangedFieldDesc.CreateRec(SysUnit^.TypeName2PTD('GDBvertex'),ChangedData.PSetDataInEtity,ChangedData.PSetDataInEtity),
+                                 TSharedPEntityData.CreateRec(ChangedData.PEntity),
+                                 TAfterChangePDrawing.CreateRec(drawings.GetCurrentDWG));
+
   PGDBVertex(ChangedData.PSetDataInEtity)^:=VertexAdd(v1,v2);
 end;
-procedure DoubleDeg2RadEntChangeProc(var UMPlaced:boolean;pu:PTEntityUnit;pdata:PVarDesk;ChangedData:TChangedData;mp:TMultiProperty);
+procedure CurrentAngleFormat2DegEntChangeProc(var UMPlaced:boolean;pu:PTEntityUnit;pdata:PVarDesk;ChangedData:TChangedData;mp:TMultiProperty);
 var
-    l1:Double;
+  angle:Double;
 begin
-     l1:=PDouble(pvardesk(pdata)^.data.Addr.Instance)^*pi/180;
-     ProcessVariableAttributes(pvardesk(pdata)^.attrib,0,vda_approximately or vda_different);
-     GeneralFromPtrEntChangeProc(UMPlaced,pu,@l1,ChangedData,mp);
+  angle:=PDouble(pvardesk(pdata)^.data.Addr.Instance)^;
+  {TODO: Надо пересчитать из текущих едениц чертежа в градусы}
+  //PDouble(pvardesk(pdata)^.data.Addr.Instance)^:=
+  ProcessVariableAttributes(pvardesk(pdata)^.attrib,0,vda_approximately or vda_different);
+  GeneralFromPtrEntChangeProc(UMPlaced,pu,pdata,ChangedData,mp);
+  PDouble(pvardesk(pdata)^.data.Addr.Instance)^:=angle;
 end;
+
 procedure DoubleArcArea2REntChangeProc(var UMPlaced:boolean;pu:PTEntityUnit;pdata:PVarDesk;ChangedData:TChangedData;mp:TMultiProperty);
 var
-    l1:Double;
+  R:Double;
 begin
-     if PGDBObjArc(ChangedData.pentity)^.angle<pi then
-        l1:=sqrt(PDouble(pvardesk(pdata)^.data.Addr.Instance)^/(PGDBObjArc(ChangedData.pentity)^.angle/2-0.5*sin(PGDBObjArc(ChangedData.pentity)^.angle)))
-     else
-        l1:=sqrt(PDouble(pvardesk(pdata)^.data.Addr.Instance)^/(PGDBObjArc(ChangedData.pentity)^.angle/2+0.5*sin(PGDBObjArc(ChangedData.pentity)^.angle)));
-     ChangedData.PSetDataInEtity:=@PGDBObjArc(ChangedData.pentity)^.R;
-     ProcessVariableAttributes(pvardesk(pdata)^.attrib,0,vda_approximately or vda_different);
-     GeneralFromPtrEntChangeProc(UMPlaced,pu,@l1,ChangedData,mp);
+  R:=PDouble(pvardesk(pdata)^.data.Addr.Instance)^;
+  if PGDBObjArc(ChangedData.pentity)^.angle<pi then
+    PDouble(pvardesk(pdata)^.data.Addr.Instance)^:=sqrt(PDouble(pvardesk(pdata)^.data.Addr.Instance)^/(PGDBObjArc(ChangedData.pentity)^.angle/2-0.5*sin(PGDBObjArc(ChangedData.pentity)^.angle)))
+  else
+    PDouble(pvardesk(pdata)^.data.Addr.Instance)^:=sqrt(PDouble(pvardesk(pdata)^.data.Addr.Instance)^/(PGDBObjArc(ChangedData.pentity)^.angle/2+0.5*sin(PGDBObjArc(ChangedData.pentity)^.angle)));
+  ChangedData.PSetDataInEtity:=@PGDBObjArc(ChangedData.pentity)^.R;
+  ProcessVariableAttributes(pvardesk(pdata)^.attrib,0,vda_approximately or vda_different);
+  GeneralFromPtrEntChangeProc(UMPlaced,pu,pdata,ChangedData,mp);
+  PDouble(pvardesk(pdata)^.data.Addr.Instance)^:=R;
 end;
 procedure GeneralTextRotateEntChangeProc(var UMPlaced:boolean;pu:PTEntityUnit;pdata:PVarDesk;ChangedData:TChangedData;mp:TMultiProperty);
 var
-    a:Double;
+  a:Double;
+  cp:UCmdChgField;
 begin
-     ProcessVariableAttributes(pvardesk(pdata)^.attrib,0,vda_approximately or vda_different);
-     mp.MPType^.CopyInstanceTo(pvardesk(pdata)^.data.Addr.Instance,@a);
+  ProcessVariableAttributes(pvardesk(pdata)^.attrib,0,vda_approximately or vda_different);
+  mp.MPType^.CopyInstanceTo(pvardesk(pdata)^.data.Addr.Instance,@a);
 
-     //PGDBObjText(ChangedData.PEntity)^.setrot(a);
+  zcPlaceUndoStartMarkerIfNeed(UMPlaced,'Property changed');
+  cp:=UCmdChgField.CreateAndPush(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,
+                                 TChangedFieldDesc.CreateRec(SysUnit^.TypeName2PTD('GDBvertex'),@PGDBObjText(ChangedData.PEntity)^.local.basis.OX,@PGDBObjText(ChangedData.PEntity)^.local.basis.OX),
+                                 TSharedPEntityData.CreateRec(ChangedData.PEntity),
+                                 TAfterChangePDrawing.CreateRec(drawings.GetCurrentDWG));
 
-     if (abs (PGDBObjText(ChangedData.PEntity)^.Local.basis.oz.x) < 1/64) and (abs (PGDBObjText(ChangedData.PEntity)^.Local.basis.oz.y) < 1/64) then
-                                                                    PGDBObjText(ChangedData.PEntity)^.Local.basis.ox:=CrossVertex(YWCS,PGDBObjText(ChangedData.PEntity)^.Local.basis.oz)
-                                                                else
-                                                                    PGDBObjText(ChangedData.PEntity)^.Local.basis.ox:=CrossVertex(ZWCS,PGDBObjText(ChangedData.PEntity)^.Local.basis.oz);
-     PGDBObjText(ChangedData.PEntity)^.local.basis.OX:=VectorTransform3D(PGDBObjText(ChangedData.PEntity)^.local.basis.OX,uzegeometry.CreateAffineRotationMatrix(PGDBObjText(ChangedData.PEntity)^.Local.basis.oz,-a));
+
+  if (abs (PGDBObjText(ChangedData.PEntity)^.Local.basis.oz.x) < 1/64) and (abs (PGDBObjText(ChangedData.PEntity)^.Local.basis.oz.y) < 1/64) then
+    PGDBObjText(ChangedData.PEntity)^.Local.basis.ox:=CrossVertex(YWCS,PGDBObjText(ChangedData.PEntity)^.Local.basis.oz)
+  else
+    PGDBObjText(ChangedData.PEntity)^.Local.basis.ox:=CrossVertex(ZWCS,PGDBObjText(ChangedData.PEntity)^.Local.basis.oz);
+  PGDBObjText(ChangedData.PEntity)^.local.basis.OX:=VectorTransform3D(PGDBObjText(ChangedData.PEntity)^.local.basis.OX,uzegeometry.CreateAffineRotationMatrix(PGDBObjText(ChangedData.PEntity)^.Local.basis.oz,-a));
 end;
 
 procedure GDBPolyLineLengthEntIterateProc(pdata:Pointer;ChangedData:TChangedData;mp:TMultiProperty;fistrun:boolean;ecp:TEntChangeProc; const f:TzeUnitsFormat);
@@ -490,9 +519,9 @@ begin
   MultiPropertiesManager.RegisterPhysMultiproperty('CENTER_Z','Center Z',sysunit^.TypeName2PTD('GDBZCoordinate'),MPCGeometry,GDBArcID,nil,PtrInt(@parc^.P_insert_in_WCS.z),PtrInt(@parc^.Local.P_insert.z),OneVarDataMIPD,OneVarDataEIPD);
   MultiPropertiesManager.RegisterPhysMultiproperty('Radius','Radius',sysunit^.TypeName2PTD('Double'),MPCGeometry,GDBArcID,nil,PtrInt(@parc^.R),PtrInt(@parc^.R),OneVarDataMIPD,TEntIterateProcsData.Create(nil,@GeneralEntIterateProc,@GeneralFromVarEntChangeProc,@DoubleCheckGreater0));
   MultiPropertiesManager.RegisterPhysMultiproperty('Diameter','Diameter',sysunit^.TypeName2PTD('Double'),MPCGeometry,GDBArcID,nil,PtrInt(@parc^.R),PtrInt(@parc^.R),OneVarDataMIPD,TEntIterateProcsData.Create(nil,@DoubleMul2EntIterateProc,@DoubleDiv2EntChangeProc,@DoubleCheckGreater0));
-  MultiPropertiesManager.RegisterPhysMultiproperty('StartAngle','Start angle',sysunit^.TypeName2PTD('GDBAngleDouble'),MPCGeometry,GDBArcID,nil,PtrInt(@parc^.StartAngle),PtrInt(@parc^.StartAngle),OneVarDataMIPD,TEntIterateProcsData.Create(nil,{@DoubleRad2DegEntIterateProc}@GeneralEntIterateProc,@DoubleDeg2RadEntChangeProc));
-  MultiPropertiesManager.RegisterPhysMultiproperty('EndAngle','End angle',sysunit^.TypeName2PTD('GDBAngleDouble'),MPCGeometry,GDBArcID,nil,PtrInt(@parc^.EndAngle),PtrInt(@parc^.EndAngle),OneVarDataMIPD,TEntIterateProcsData.Create(nil,{@DoubleRad2DegEntIterateProc}@GeneralEntIterateProc,@DoubleDeg2RadEntChangeProc));
-  MultiPropertiesManager.RegisterPhysMultiproperty('Circumference','Circumference',sysunit^.TypeName2PTD('Double'),MPCGeometry,GDBArcID,nil,0,0,OneVarDataMIPD,TEntIterateProcsData.Create(nil,@DoubleArcCircumferenceEntIterateProc,@DoubleArcCircumferenceEntChangeProc));
+  MultiPropertiesManager.RegisterPhysMultiproperty('StartAngle','Start angle',sysunit^.TypeName2PTD('GDBAngleDouble'),MPCGeometry,GDBArcID,nil,PtrInt(@parc^.StartAngle),PtrInt(@parc^.StartAngle),OneVarDataMIPD,TEntIterateProcsData.Create(nil,{@DoubleRad2DegEntIterateProc}@GeneralEntIterateProc,@CurrentAngleFormat2DegEntChangeProc));
+  MultiPropertiesManager.RegisterPhysMultiproperty('EndAngle','End angle',sysunit^.TypeName2PTD('GDBAngleDouble'),MPCGeometry,GDBArcID,nil,PtrInt(@parc^.EndAngle),PtrInt(@parc^.EndAngle),OneVarDataMIPD,TEntIterateProcsData.Create(nil,{@DoubleRad2DegEntIterateProc}@GeneralEntIterateProc,@CurrentAngleFormat2DegEntChangeProc));
+  MultiPropertiesManager.RegisterPhysMultiproperty('Circumference','Circumference',sysunit^.TypeName2PTD('Double'),MPCGeometry,GDBArcID,nil,0,PtrInt(@parc^.R),OneVarDataMIPD,TEntIterateProcsData.Create(nil,@DoubleArcCircumferenceEntIterateProc,@DoubleArcCircumferenceEntChangeProc));
   MultiPropertiesManager.RegisterPhysMultiproperty('Area','Area',sysunit^.TypeName2PTD('Double'),MPCGeometry,GDBArcID,nil,0,0,OneVarDataMIPD,TEntIterateProcsData.Create(nil,@DoubleArcAreaEntIterateProc,@DoubleArcArea2REntChangeProc));
   MultiPropertiesManager.RegisterPhysMultiproperty('NORMAL_X','Normal X',sysunit^.TypeName2PTD('Double'),MPCGeometry,GDBArcID,nil,PtrInt(@parc^.Local.Basis.oz.x),0,OneVarDataMIPD,OneVarRODataEIPD);
   MultiPropertiesManager.RegisterPhysMultiproperty('NORMAL_Y','Normal Y',sysunit^.TypeName2PTD('Double'),MPCGeometry,GDBArcID,nil,PtrInt(@parc^.Local.Basis.oz.y),0,OneVarDataMIPD,OneVarRODataEIPD);
@@ -510,8 +539,8 @@ begin
   MultiPropertiesManager.RegisterPhysMultiproperty('MajorRadius','Major radius',sysunit^.TypeName2PTD('Double'),MPCGeometry,GDBEllipseID,nil,PtrInt(@pellipse^.RR),PtrInt(@pellipse^.RR),OneVarDataMIPD,TEntIterateProcsData.Create(nil,@GeneralEntIterateProc,@GeneralFromVarEntChangeProc,@DoubleCheckGreater0));
   MultiPropertiesManager.RegisterPhysMultiproperty('RadiusRatio','Radius ratio',sysunit^.TypeName2PTD('Double'),MPCGeometry,GDBEllipseID,nil,PtrInt(@pellipse^.Ratio),PtrInt(@pellipse^.Ratio),OneVarDataMIPD,TEntIterateProcsData.Create(nil,@GeneralEntIterateProc,@GeneralFromVarEntChangeProc,@DoubleCheck0Exclude1Include));
   //MultiPropertiesManager.RegisterPhysMultiproperty('Diameter','Diameter',sysunit^.TypeName2PTD('Double'),MPCGeometry,GDBEllipseID,PtrInt(@pellipse^.RR),PtrInt(@pellipse^.RR),@GetOneVarData,@FreeOneVarData,@DoubleMul2EntIterateProc,@DoubleDiv2EntChangeProc);
-  MultiPropertiesManager.RegisterPhysMultiproperty('StartAngle','Start angle',sysunit^.TypeName2PTD('Double'),MPCGeometry,GDBEllipseID,nil,PtrInt(@pellipse^.StartAngle),PtrInt(@pellipse^.StartAngle),OneVarDataMIPD,TEntIterateProcsData.Create(nil,{@DoubleRad2DegEntIterateProc}@GeneralEntIterateProc,@DoubleDeg2RadEntChangeProc));
-  MultiPropertiesManager.RegisterPhysMultiproperty('EndAngle','End angle',sysunit^.TypeName2PTD('Double'),MPCGeometry,GDBEllipseID,nil,PtrInt(@pellipse^.EndAngle),PtrInt(@pellipse^.EndAngle),OneVarDataMIPD,TEntIterateProcsData.Create(nil,{@DoubleRad2DegEntIterateProc}@GeneralEntIterateProc,@DoubleDeg2RadEntChangeProc));
+  MultiPropertiesManager.RegisterPhysMultiproperty('StartAngle','Start angle',sysunit^.TypeName2PTD('Double'),MPCGeometry,GDBEllipseID,nil,PtrInt(@pellipse^.StartAngle),PtrInt(@pellipse^.StartAngle),OneVarDataMIPD,TEntIterateProcsData.Create(nil,{@DoubleRad2DegEntIterateProc}@GeneralEntIterateProc,@CurrentAngleFormat2DegEntChangeProc));
+  MultiPropertiesManager.RegisterPhysMultiproperty('EndAngle','End angle',sysunit^.TypeName2PTD('Double'),MPCGeometry,GDBEllipseID,nil,PtrInt(@pellipse^.EndAngle),PtrInt(@pellipse^.EndAngle),OneVarDataMIPD,TEntIterateProcsData.Create(nil,{@DoubleRad2DegEntIterateProc}@GeneralEntIterateProc,@CurrentAngleFormat2DegEntChangeProc));
   //MultiPropertiesManager.RegisterPhysMultiproperty('Circumference','Circumference',sysunit^.TypeName2PTD('Double'),MPCGeometry,GDBEllipseID,0,0,@GetOneVarData,@FreeOneVarData,@DoubleArcCircumferenceEntIterateProc,@DoubleArcCircumferenceEntChangeProc);
   //MultiPropertiesManager.RegisterPhysMultiproperty('Area','Area',sysunit^.TypeName2PTD('Double'),MPCGeometry,GDBEllipseID,0,0,@GetOneVarData,@FreeOneVarData,@DoubleArcAreaEntIterateProc,@DoubleArcArea2REntChangeProc);
   MultiPropertiesManager.RegisterPhysMultiproperty('NORMAL_X','Normal X',sysunit^.TypeName2PTD('Double'),MPCGeometry,GDBEllipseID,nil,PtrInt(@pellipse^.Local.Basis.oz.x),0,OneVarDataMIPD,OneVarRODataEIPD);

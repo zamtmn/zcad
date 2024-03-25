@@ -76,8 +76,6 @@ uses
 
 type
 
-TDCableMountingMethod=String;//{TODO: незабыть потом сделать обшее определение для него}
-
 TMethod2ltContext=class(TBaseScriptContext)
   FInput:string;
   FOutput:string;

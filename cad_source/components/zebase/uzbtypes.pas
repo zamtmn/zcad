@@ -179,6 +179,7 @@ TImageDegradation=record
                         RD_ID_PrefferedRenderTime:PInteger;(*'Prefered rendertime'*)
                     end;
 PExtensionData=Pointer;
+TDCableMountingMethod={-}type {//}string;
 {EXPORT-}
 function IsIt(PType,PChecedType:Pointer):Boolean;
 

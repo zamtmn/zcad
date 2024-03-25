@@ -325,7 +325,10 @@ var
               ZCMsgCallBackInterface.TextMessage('1',TMWOHistoryOut);
 
               if (stRowNew <> stRow) then
+              begin
+                uzvzcadxlsxole.copyRow(nameEtalon,stRow,nameSheet,stRowNew);
                 uzvzcadxlsxole.setCellValue(nameSheet,stRowNew,stColNew,'1');
+              end;
 
               inc(stColNew);      // отходим от кодового имени
               cellValueVar:=uzvzcadxlsxole.getCellFormula(nameEtalon,stRow,stColNew);
@@ -341,13 +344,13 @@ var
                      textCell:=pvd2^.data.ptd^.GetValueAsString(pvd2^.data.Addr.Instance);
                      //ZCMsgCallBackInterface.TextMessage('записываю в ячейку = ' + textCell,TMWOHistoryOut);
                      uzvzcadxlsxole.setCellValue(nameSheet,stRowNew,stColNew,textCell);
-                   end else uzvzcadxlsxole.copyCell(nameEtalon,stRow,stColNew,nameSheet,stRowNew,stColNew);
+                   end;// else uzvzcadxlsxole.copyCell(nameEtalon,stRow,stColNew,nameSheet,stRowNew,stColNew);
 
-               end
-               else
-               begin
-                 uzvzcadxlsxole.copyCell(nameEtalon,stRow,stColNew,nameSheet,stRowNew,stColNew);
                end;
+               //else
+               //begin
+               //  uzvzcadxlsxole.copyCell(nameEtalon,stRow,stColNew,nameSheet,stRowNew,stColNew);
+               //end;
 
                  inc(stColNew);
                  cellValueVar:=uzvzcadxlsxole.getCellFormula(nameEtalon,stRow,stColNew);
@@ -402,7 +405,10 @@ var
               //ZCMsgCallBackInterface.TextMessage('1',TMWOHistoryOut);
 
               if (stRowNew <> stRow) then
+              begin
+                uzvzcadxlsxole.copyRow(nameEtalon,stRow,nameSheet,stRowNew);
                 uzvzcadxlsxole.setCellValue(nameSheet,stRowNew,stColNew,'1');
+              end;
 
               inc(stColNew);      // отходим от кодового имени
               cellValueVar:=uzvzcadxlsxole.getCellFormula(nameEtalon,stRow,stColNew);
@@ -418,13 +424,13 @@ var
                      textCell:=pvd2^.data.ptd^.GetValueAsString(pvd2^.data.Addr.Instance);
                      //ZCMsgCallBackInterface.TextMessage('записываю в ячейку = ' + textCell,TMWOHistoryOut);
                      uzvzcadxlsxole.setCellValue(nameSheet,stRowNew,stColNew,textCell);
-                   end else uzvzcadxlsxole.copyCell(nameEtalon,stRow,stColNew,nameSheet,stRowNew,stColNew);
+                   end;// else uzvzcadxlsxole.copyCell(nameEtalon,stRow,stColNew,nameSheet,stRowNew,stColNew);
 
-               end
-               else
-               begin
-                 uzvzcadxlsxole.copyCell(nameEtalon,stRow,stColNew,nameSheet,stRowNew,stColNew);
                end;
+               //else
+               //begin
+               //  uzvzcadxlsxole.copyCell(nameEtalon,stRow,stColNew,nameSheet,stRowNew,stColNew);
+               //end;
 
                  inc(stColNew);
                  cellValueVar:=uzvzcadxlsxole.getCellFormula(nameEtalon,stRow,stColNew);
@@ -491,7 +497,10 @@ var
                  //Получаем ссылку на кабель или полилинию которая заменяет стояк
                  cableNowMF:=getMainFuncCable(polyext);
                  if (stRowNew <> stRow) then
+                 begin
+                   uzvzcadxlsxole.copyRow(nameEtalon,stRow,nameSheet,stRowNew);
                    uzvzcadxlsxole.setCellValue(nameSheet,stRowNew,stColNew,'1');
+                 end;
 
                   inc(stColNew);      // отходим от кодового имени
                   cellValueVar:=uzvzcadxlsxole.getCellFormula(nameEtalon,stRow,stColNew);
@@ -533,13 +542,13 @@ var
                        begin
                          //textCell:=uzbstrproc.Tria_AnsiToUtf8(textCell);
                          uzvzcadxlsxole.setCellValue(nameSheet,stRowNew,stColNew,textCell);
-                       end else uzvzcadxlsxole.copyCell(nameEtalon,stRow,stColNew,nameSheet,stRowNew,stColNew);
+                       end;// else uzvzcadxlsxole.copyCell(nameEtalon,stRow,stColNew,nameSheet,stRowNew,stColNew);
 
-                   end
-                   else
-                   begin
-                     uzvzcadxlsxole.copyCell(nameEtalon,stRow,stColNew,nameSheet,stRowNew,stColNew);
                    end;
+                   //else
+                   //begin
+                   //  uzvzcadxlsxole.copyCell(nameEtalon,stRow,stColNew,nameSheet,stRowNew,stColNew);
+                   //end;
 
                      inc(stColNew);
                      cellValueVar:=uzvzcadxlsxole.getCellFormula(nameEtalon,stRow,stColNew);
@@ -1111,8 +1120,8 @@ procedure generatorSheet(graphDev:TGraphDev;nameEtalon,nameSheet:string);
 
             While AnsiPos(nameSET, valueCell) > 0 do
             begin
-                if AnsiPos(nameSET, valueCell) > 0 then
-                begin
+                //if AnsiPos(nameSET, valueCell) > 0 then
+                //begin
                   //Создаем копию листа эталона
                   newNameSheet:=StringReplace(valueCell, nameSET, namePanel,[rfReplaceAll, rfIgnoreCase]);
                   uzvzcadxlsxole.copyWorksheetName(valueCell,newNameSheet);
@@ -1121,7 +1130,7 @@ procedure generatorSheet(graphDev:TGraphDev;nameEtalon,nameSheet:string);
                   if remotemode then
                     ZCMsgCallBackInterface.TextMessage('generatorSheet(graphDev,valueCell,newNameSheet)',TMWOHistoryOut);
                   generatorSheet(graphDev,valueCell,newNameSheet);     //здесь запускается самое главное, ищутся спец коды и заполняются
-                end;
+                //end;
                 inc(numRow);
                 valueCell:=uzvzcadxlsxole.getCellValue(nameSET+'SET',numRow,1);
 

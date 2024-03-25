@@ -325,7 +325,10 @@ var
               ZCMsgCallBackInterface.TextMessage('1',TMWOHistoryOut);
 
               if (stRowNew <> stRow) then
+              begin
+                uzvzcadxlsxole.copyRow(nameEtalon,stRow,nameSheet,stRowNew);
                 uzvzcadxlsxole.setCellValue(nameSheet,stRowNew,stColNew,'1');
+              end;
 
               inc(stColNew);      // отходим от кодового имени
               cellValueVar:=uzvzcadxlsxole.getCellFormula(nameEtalon,stRow,stColNew);
@@ -341,13 +344,13 @@ var
                      textCell:=pvd2^.data.ptd^.GetValueAsString(pvd2^.data.Addr.Instance);
                      //ZCMsgCallBackInterface.TextMessage('записываю в ячейку = ' + textCell,TMWOHistoryOut);
                      uzvzcadxlsxole.setCellValue(nameSheet,stRowNew,stColNew,textCell);
-                   end else uzvzcadxlsxole.copyCell(nameEtalon,stRow,stColNew,nameSheet,stRowNew,stColNew);
+                   end;// else uzvzcadxlsxole.copyCell(nameEtalon,stRow,stColNew,nameSheet,stRowNew,stColNew);
 
-               end
-               else
-               begin
-                 uzvzcadxlsxole.copyCell(nameEtalon,stRow,stColNew,nameSheet,stRowNew,stColNew);
                end;
+               //else
+               //begin
+               //  uzvzcadxlsxole.copyCell(nameEtalon,stRow,stColNew,nameSheet,stRowNew,stColNew);
+               //end;
 
                  inc(stColNew);
                  cellValueVar:=uzvzcadxlsxole.getCellFormula(nameEtalon,stRow,stColNew);
@@ -491,7 +494,10 @@ var
                  //Получаем ссылку на кабель или полилинию которая заменяет стояк
                  cableNowMF:=getMainFuncCable(polyext);
                  if (stRowNew <> stRow) then
+                 begin
+                   uzvzcadxlsxole.copyRow(nameEtalon,stRow,nameSheet,stRowNew);
                    uzvzcadxlsxole.setCellValue(nameSheet,stRowNew,stColNew,'1');
+                 end;
 
                   inc(stColNew);      // отходим от кодового имени
                   cellValueVar:=uzvzcadxlsxole.getCellFormula(nameEtalon,stRow,stColNew);
@@ -533,13 +539,13 @@ var
                        begin
                          //textCell:=uzbstrproc.Tria_AnsiToUtf8(textCell);
                          uzvzcadxlsxole.setCellValue(nameSheet,stRowNew,stColNew,textCell);
-                       end else uzvzcadxlsxole.copyCell(nameEtalon,stRow,stColNew,nameSheet,stRowNew,stColNew);
+                       end;// else uzvzcadxlsxole.copyCell(nameEtalon,stRow,stColNew,nameSheet,stRowNew,stColNew);
 
-                   end
-                   else
-                   begin
-                     uzvzcadxlsxole.copyCell(nameEtalon,stRow,stColNew,nameSheet,stRowNew,stColNew);
                    end;
+                   //else
+                   //begin
+                   //  uzvzcadxlsxole.copyCell(nameEtalon,stRow,stColNew,nameSheet,stRowNew,stColNew);
+                   //end;
 
                      inc(stColNew);
                      cellValueVar:=uzvzcadxlsxole.getCellFormula(nameEtalon,stRow,stColNew);

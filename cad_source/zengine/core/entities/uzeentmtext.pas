@@ -998,9 +998,10 @@ begin
   dxfIntegerout(outhandle,71,j2b[textprop.justify]{ord(textprop.justify)+1});
   quotedcontent:=StringReplace(content,TDXFEntsInternalStringType(#10),TDXFEntsInternalStringType('\P'),[rfReplaceAll]);
   if  convertfromunicode(template)=quotedcontent then
-                                               s := Tria_Utf8ToAnsi(UTF8Encode(template))
-                                           else
-                                               s := Tria_Utf8ToAnsi(UTF8Encode(quotedcontent));
+    s := Tria_Utf8ToAnsi(UTF8Encode(template))
+  else
+    s := Tria_Utf8ToAnsi(UTF8Encode(quotedcontent));
+  s:=StringReplace(s,#10,'\P',[rfReplaceAll]);
   //s := content;
   if length(s) < maxdxfmtextlen then
   begin

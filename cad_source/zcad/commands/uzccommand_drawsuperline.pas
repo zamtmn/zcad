@@ -69,11 +69,15 @@ uses
 
   gzctnrVectorTypes,
   uzcstrconsts,       //resouce strings
+  uzvcabmountmethod,
 
   uzcLapeScriptsManager,uzcLapeScriptsImplBase,uzcCommand_LPCSRun,lpcompiler;
 
 
 type
+
+TDCableMountingMethod=String;//{TODO: незабыть потом сделать обшее определение для него}
+
 TMethod2ltContext=class(TBaseScriptContext)
   FInput:string;
   FOutput:string;
@@ -88,11 +92,11 @@ TDrawSuperlineParams=record
                          ProcessLayer:Boolean;  //выключатель слоя
                          ProcessTypeLine:Boolean;  //выключатель типа линyи
                          SLSetting1:String;     //сохраненная настройка суперлинии для кнопки суперлиния №1
-                         SLSettingTypeLine1:String;     //сохраненная настройка суперлинии для кнопки суперлиния №1 типа линии
+                         SLSettingTypeLine1:TDCableMountingMethod;     //сохраненная настройка суперлинии для кнопки суперлиния №1 типа линии
                          SLSetting2:String;     //сохраненная настройка суперлинии для кнопки суперлиния №2
-                         SLSettingTypeLine2:String;     //сохраненная настройка суперлинии для кнопки суперлиния №2 типа линии
+                         SLSettingTypeLine2:TDCableMountingMethod;     //сохраненная настройка суперлинии для кнопки суперлиния №2 типа линии
                          SLSetting3:String;     //сохраненная настройка суперлинии для кнопки суперлиния №3
-                         SLSettingTypeLine3:String;     //сохраненная настройка суперлинии для кнопки суперлиния №2 типа линии
+                         SLSettingTypeLine3:TDCableMountingMethod;     //сохраненная настройка суперлинии для кнопки суперлиния №2 типа линии
                      end;
 var
    DrawSuperlineParams:TDrawSuperlineParams;

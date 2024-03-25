@@ -471,7 +471,7 @@ var
          if devNowMF <> nil then
            begin
              pvd:=FindVariableInEnt(devNowMF,velec_nameDevice);
-             ZCMsgCallBackInterface.TextMessage('NMO_name = ' + pstring(pvd^.data.Addr.Instance)^,TMWOHistoryOut);
+             //ZCMsgCallBackInterface.TextMessage('NMO_name = ' + pstring(pvd^.data.Addr.Instance)^,TMWOHistoryOut);
            end;
 
          if intVertex <> graphDev.Root.Index then

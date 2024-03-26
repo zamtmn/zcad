@@ -299,18 +299,18 @@ begin
 
     if operands = '1' then
     begin
-       hotkeyname:=Tria_AnsiToUtf8(DrawSuperlineParams.SLSetting1);
-       hotkeytypeline:=Tria_AnsiToUtf8(DrawSuperlineParams.SLSettingTypeLine1);
+       hotkeyname:={Tria_AnsiToUtf8}(DrawSuperlineParams.SLSetting1);
+       hotkeytypeline:={Tria_AnsiToUtf8}(DrawSuperlineParams.SLSettingTypeLine1);
     end;
     if operands = '2' then
     begin
-       hotkeyname:=Tria_AnsiToUtf8(DrawSuperlineParams.SLSetting2);
-       hotkeytypeline:=Tria_AnsiToUtf8(DrawSuperlineParams.SLSettingTypeLine2);
+       hotkeyname:={Tria_AnsiToUtf8}(DrawSuperlineParams.SLSetting2);
+       hotkeytypeline:={Tria_AnsiToUtf8}(DrawSuperlineParams.SLSettingTypeLine2);
     end;
     if operands = '3' then
     begin
-       hotkeyname:=Tria_AnsiToUtf8(DrawSuperlineParams.SLSetting3);
-       hotkeytypeline:=Tria_AnsiToUtf8(DrawSuperlineParams.SLSettingTypeLine3);
+       hotkeyname:={Tria_AnsiToUtf8}(DrawSuperlineParams.SLSetting3);
+       hotkeytypeline:={Tria_AnsiToUtf8}(DrawSuperlineParams.SLSettingTypeLine3);
     end;
 
      //ZCMsgCallBackInterface.TextMessage('hotkeyname:'+hotkeyname,TMWOHistoryOut);

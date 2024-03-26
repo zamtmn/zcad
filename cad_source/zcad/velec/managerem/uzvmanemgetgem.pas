@@ -171,6 +171,9 @@ type
 
  //**Получить список устройств внутри группы для данного щита (графа)
  function getListDevInGroupHD(nameGroup:string;graphDev:TGraphDev):TListDev;
+ //**Получить список устройств внутри группы для данного щита (графа)
+
+ function getListDevInGroupHDALL(graphDev:TGraphDev):TListDev;
 
  procedure visualGraphTree(G: TGraph; var startPt:GDBVertex;height:double; var depth:double);
 
@@ -447,7 +450,188 @@ var
      //  end;
   end;
 
-  //**Получить список устройств внутри группы для данного щита (графа)
+//  //**Получить список устройств внутри группы для данного щита (графа)
+//  function getListDevInGroupHD(nameGroup:string;graphDev:TGraphDev):TListDev;
+//  var
+//    i,j:integer;
+//    cabNowMF:PGDBObjEntity;
+//    cabNowvarext:TVariablesExtender;
+//    isHaveList:boolean;
+//    pvd:pvardesk;
+//    //** Рекурсия получаем номер нужного нам головного устройства внутри нужного нам графа
+//    procedure getListDev(deepdontlook:boolean;intVertex:integer;var listDevInGroup:TListDev);
+//    var
+//      i:integer;
+//      devNowMF:PGDBObjDevice;
+//      devNowvarext:TVariablesExtender;
+//      devNameGroup:string;
+//      pvd2:pvardesk;
+//
+//    begin
+//       //if deepdontlook then
+//         devNowvarext:=graphDev.Vertices[intVertex].getDevice^.specialize GetExtension<TVariablesExtender>;
+//         devNowMF:=devNowvarext.getMainFuncDevice;
+//         if devNowMF <> nil then
+//           begin
+//             pvd:=FindVariableInEnt(devNowMF,velec_nameDevice);
+//             //ZCMsgCallBackInterface.TextMessage('NMO_name = ' + pstring(pvd^.data.Addr.Instance)^,TMWOHistoryOut);
+//           end;
+//
+//         if intVertex <> graphDev.Root.Index then
+//           begin
+//             if graphDev.Vertices[intVertex].Parent = graphDev.Root then
+//               begin
+//                 ZCMsgCallBackInterface.TextMessage('nameGroup = ' + nameGroup + '',TMWOHistoryOut);
+//                 devNowvarext:=graphDev.Vertices[intVertex].getDevice^.specialize GetExtension<TVariablesExtender>;
+//                 devNowMF:=devNowvarext.getMainFuncDevice;
+//                 if devNowMF <> nil then
+//                    begin
+//                      ZCMsgCallBackInterface.TextMessage('devNowMF = ' + devNowMF^.Name,TMWOHistoryOut);
+//                      //if (devNowMF^.Name=velec_SchemaBlockJunctionBox) or (devNowMF^.Name=velec_SchemaBlockChangingLayingMethod) then
+//                      //  begin
+//                      //    pvd:=FindVariableInEnt(devNowMF,velec_EM_vEMGCHDGroup);
+//                      //    ZCMsgCallBackInterface.TextMessage('if (devNowMF^.Name<>velec_SchemaBlockJunctionBox) and (devNowMF^.Name<>velec_SchemaBlockChangingLayingMethod) then',TMWOHistoryOut);
+//                      //      if pvd<>nil then
+//                      //        if pstring(pvd^.data.Addr.Instance)^ = nameGroup then
+//                      //            begin
+//                      //                 ZCMsgCallBackInterface.TextMessage('if pstring(pvd^.data.Addr.Instance)^ = nameGroup then = ' + nameGroup + '',TMWOHistoryOut);
+//                      //                 deepdontlook:=true;
+//                      //            end
+//                      //        else
+//                      //         deepdontlook:=false;
+//                      //  end
+//                      //  else
+//                      //  begin
+//                            pvd:=FindVariableInEnt(devNowMF,velec_GC_HDGroup);
+//                            if pvd<>nil then
+//                              if pstring(pvd^.data.Addr.Instance)^ = nameGroup then
+//                                  begin
+//                                       ZCMsgCallBackInterface.TextMessage('if pstring(pvd^.data.Addr.Instance)^ = nameGroup then ' + nameGroup + '',TMWOHistoryOut);
+//                                       deepdontlook:=true;
+//                                  end
+//                              else
+//                               deepdontlook:=false;
+//                        //end;
+//
+//
+//
+//
+//
+//                      //if pvd2<>nil then
+//                      //   if (devNowMF^.Name<>velec_SchemaBlockJunctionBox) and (devNowMF^.Name<>velec_SchemaBlockChangingLayingMethod) then
+//                      //     begin
+//                      //      // Проверяем совпадает имя группы подключения внутри устройства с группой которую мы сейчас заполняем
+//                      //      pvd:=FindVariableInEnt(devNowMF,velec_GC_HDGroup);
+//                      //      if pvd<>nil then
+//                      //        if pstring(pvd^.data.Addr.Instance)^ = nameGroup then
+//                      //          begin
+//                      //          listDevInGroup.PushBack(graphDev.Vertices[intVertex].getDevice);
+//                      //          ZCMsgCallBackInterface.TextMessage('nameGroup = ' + nameGroup + '',TMWOHistoryOut);
+//                      //          deepdontlook:=true;
+//                      //          end
+//                      //      else
+//                      //       deepdontlook:=false;
+//                      //    end;
+//
+//                 end;
+//               end;
+//
+//
+//            end;
+//
+//         if deepdontlook then
+//           //if (graphDev.Vertices[intVertex].getDevice^.Name<>velec_SchemaBlockJunctionBox) and (graphDev.Vertices[intVertex].getDevice^.Name<>velec_SchemaBlockChangingLayingMethod) then
+//             listDevInGroup.PushBack(graphDev.Vertices[intVertex].getDevice);
+//
+//       //if intVertex <> graphDev.Root.Index then
+//       //    begin
+//       //      devNowvarext:=graphDev.Vertices[intVertex].getDevice^.specialize GetExtension<TVariablesExtender>;
+//       //      devNowMF:=devNowvarext.getMainFuncDevice;
+//       //      if devNowMF <> nil then
+//       //        begin
+//       //          //ZCMsgCallBackInterface.TextMessage('pvd2:=FindVariableInEnt(devNowMF,velec_nameBlockDevice);' + devNowMF^.Name ,TMWOHistoryOut);
+//       //          //pvd2:=FindVariableInEnt(devNowMF,velec_nameBlockDevice);
+//       //          //if pvd2<>nil then
+//       //          //  ZCMsgCallBackInterface.TextMessage('velec_nameBlockDevice = ' + pstring(pvd2^.data.Addr.Instance)^ + '',TMWOHistoryOut);
+//       //
+//       //          if pvd2<>nil then
+//       //             if (devNowMF^.Name<>velec_SchemaBlockJunctionBox) and (devNowMF^.Name<>velec_SchemaBlockChangingLayingMethod) then
+//       //               begin
+//       //                // Проверяем совпадает имя группы подключения внутри устройства с группой которую мы сейчас заполняем
+//       //                pvd:=FindVariableInEnt(devNowMF,velec_GC_HDGroup);
+//       //                if pvd<>nil then
+//       //                  if pstring(pvd^.data.Addr.Instance)^ = nameGroup then
+//       //                    begin
+//       //                    listDevInGroup.PushBack(graphDev.Vertices[intVertex].getDevice);
+//       //                    ZCMsgCallBackInterface.TextMessage('nameGroup = ' + nameGroup + '',TMWOHistoryOut);
+//       //                    deepdontlook:=true;
+//       //                    end
+//       //                else
+//       //                 deepdontlook:=false;
+//       //              end;
+//       //
+//       //           end;
+//       //     end;
+//
+//
+//         for i:=0 to graphDev.Vertices[intVertex].ChildCount-1 do
+//             getListDev(deepdontlook,graphDev.Vertices[intVertex].Childs[i].Index,listDevInGroup);
+//    end;
+//  begin
+//     ZCMsgCallBackInterface.TextMessage('Имя группы = ' + nameGroup + '. Список имен устройств:',TMWOHistoryOut);
+//     result:=TListDev.Create;
+//     getListDev(false,graphDev.Root.Index,result);
+//
+//     //for j:=0 to result.Size-1 do
+//     //  begin
+//     //    pvd:=FindVariableInEnt(result[j],velec_nameDevice);
+//     //      if pvd<>nil then
+//     //         ZCMsgCallBackInterface.TextMessage('   Имя устройства = '+pstring(pvd^.data.Addr.Instance)^,TMWOHistoryOut);
+//     //  end;
+//
+////     for i:=0 to graphDev.Root.ChildCount-1 do
+////       begin
+////         cabNowvarext:=graphDev.GetEdge(graphDev.Root,graphDev.Root.Childs[i]).getCableSet^.cab^.specialize GetExtension<TVariablesExtender>;
+////         //ZCMsgCallBackInterface.TextMessage('1',TMWOHistoryOut);
+////         cabNowMF:=cabNowvarext.getMainFuncEntity;
+////                  //ZCMsgCallBackInterface.TextMessage('2',TMWOHistoryOut);
+////         if cabNowMF^.GetObjType=GDBCableID then
+////           begin
+////                    //ZCMsgCallBackInterface.TextMessage('3',TMWOHistoryOut);
+////             pvd:=FindVariableInEnt(cabNowMF,velec_GC_HDGroup);
+////             if pvd<>nil then
+////               begin
+////                 isHaveList:=true;
+////                 for j:=0 to result.Size-1 do
+////                   begin
+////                      if result[j] = pstring(pvd^.data.Addr.Instance)^ then
+////                         isHaveList:=false;
+////                   end;
+////                 if isHaveList then
+////                   result.PushBack(pstring(pvd^.data.Addr.Instance)^);
+////               end;
+////               //if pboolean(pvd2^.data.Addr.Instance)^ then
+////               //  listDev.PushBack(devNowMF);
+////           end;
+//////
+//////         graphDev.Root.Childs[i]
+//////         graphDev.GetEdge(graphDev.Root,graphDev.Root.Childs[i]).getCable;
+//////           getListName(graphDev,graphDev.Root.Childs[i].Index,listGroup);
+////       end;
+////
+////      //Выполнем сортировку по имени группы
+////      devgroupnamesort.Sort(result,result.Size);
+////
+////      for j:=0 to result.Size-1 do
+////       begin
+////         ZCMsgCallBackInterface.TextMessage('   GroupName = '+result[j],TMWOHistoryOut);
+////       end;
+//
+//     //ZCMsgCallBackInterface.TextMessage('******************************************',TMWOHistoryOut);
+//  end;
+
+
+    //**Получить список устройств внутри группы для данного щита (графа)
   function getListDevInGroupHD(nameGroup:string;graphDev:TGraphDev):TListDev;
   var
     i,j:integer;
@@ -466,166 +650,169 @@ var
 
     begin
        //if deepdontlook then
-         devNowvarext:=graphDev.Vertices[intVertex].getDevice^.specialize GetExtension<TVariablesExtender>;
-         devNowMF:=devNowvarext.getMainFuncDevice;
-         if devNowMF <> nil then
-           begin
-             pvd:=FindVariableInEnt(devNowMF,velec_nameDevice);
-             //ZCMsgCallBackInterface.TextMessage('NMO_name = ' + pstring(pvd^.data.Addr.Instance)^,TMWOHistoryOut);
-           end;
-
+         //devNowvarext:=graphDev.Vertices[intVertex].getDevice^.specialize GetExtension<TVariablesExtender>;
+         //devNowMF:=devNowvarext.getMainFuncDevice;
+         //if devNowMF <> nil then
+         //  begin
+         //    pvd:=FindVariableInEnt(devNowMF,velec_nameDevice);
+         //    ZCMsgCallBackInterface.TextMessage('getListDev NMO_NAME = ' + pstring(pvd^.data.Addr.Instance)^,TMWOHistoryOut);
+         //  end;
+         //
          if intVertex <> graphDev.Root.Index then
            begin
              if graphDev.Vertices[intVertex].Parent = graphDev.Root then
                begin
-                 ZCMsgCallBackInterface.TextMessage('nameGroup = ' + nameGroup + '',TMWOHistoryOut);
-                 devNowvarext:=graphDev.Vertices[intVertex].getDevice^.specialize GetExtension<TVariablesExtender>;
-                 devNowMF:=devNowvarext.getMainFuncDevice;
-                 if devNowMF <> nil then
-                    begin
-                      ZCMsgCallBackInterface.TextMessage('devNowMF = ' + devNowMF^.Name,TMWOHistoryOut);
-                      if (devNowMF^.Name=velec_SchemaBlockJunctionBox) or (devNowMF^.Name=velec_SchemaBlockChangingLayingMethod) then
-                        begin
-                          pvd:=FindVariableInEnt(devNowMF,velec_EM_vEMGCHDGroup);
-                          ZCMsgCallBackInterface.TextMessage('if (devNowMF^.Name<>velec_SchemaBlockJunctionBox) and (devNowMF^.Name<>velec_SchemaBlockChangingLayingMethod) then',TMWOHistoryOut);
-                            if pvd<>nil then
-                              if pstring(pvd^.data.Addr.Instance)^ = nameGroup then
-                                  begin
-                                       ZCMsgCallBackInterface.TextMessage('if pstring(pvd^.data.Addr.Instance)^ = nameGroup then = ' + nameGroup + '',TMWOHistoryOut);
-                                       deepdontlook:=true;
-                                  end
-                              else
-                               deepdontlook:=false;
-                        end
-                        else
-                        begin
-                            pvd:=FindVariableInEnt(devNowMF,velec_GC_HDGroup);
-                            if pvd<>nil then
-                              if pstring(pvd^.data.Addr.Instance)^ = nameGroup then
-                                  begin
-                                       ZCMsgCallBackInterface.TextMessage('if pstring(pvd^.data.Addr.Instance)^ = nameGroup then ' + nameGroup + '',TMWOHistoryOut);
-                                       deepdontlook:=true;
-                                  end
-                              else
-                               deepdontlook:=false;
-                        end;
-
-
-
-
-
-                      //if pvd2<>nil then
-                      //   if (devNowMF^.Name<>velec_SchemaBlockJunctionBox) and (devNowMF^.Name<>velec_SchemaBlockChangingLayingMethod) then
-                      //     begin
-                      //      // Проверяем совпадает имя группы подключения внутри устройства с группой которую мы сейчас заполняем
-                      //      pvd:=FindVariableInEnt(devNowMF,velec_GC_HDGroup);
-                      //      if pvd<>nil then
-                      //        if pstring(pvd^.data.Addr.Instance)^ = nameGroup then
-                      //          begin
-                      //          listDevInGroup.PushBack(graphDev.Vertices[intVertex].getDevice);
-                      //          ZCMsgCallBackInterface.TextMessage('nameGroup = ' + nameGroup + '',TMWOHistoryOut);
-                      //          deepdontlook:=true;
-                      //          end
-                      //      else
-                      //       deepdontlook:=false;
-                      //    end;
-
-                 end;
+                 ZCMsgCallBackInterface.TextMessage('getListDev nameGroup = ' + nameGroup + '',TMWOHistoryOut);
                end;
 
+             devNowvarext:=graphDev.Vertices[intVertex].getDevice^.specialize GetExtension<TVariablesExtender>;
+             devNowMF:=devNowvarext.getMainFuncDevice;
+             if devNowMF <> nil then
+                begin
+                  ZCMsgCallBackInterface.TextMessage('devNowMF = ' + devNowMF^.Name,TMWOHistoryOut);
+     //             if (devNowMF^.Name=velec_SchemaBlockJunctionBox) or (devNowMF^.Name=velec_SchemaBlockChangingLayingMethod) then
+     //               begin
+     //                 pvd:=FindVariableInEnt(devNowMF,velec_EM_vEMGCHDGroup);
+     //                 ZCMsgCallBackInterface.TextMessage('if (devNowMF^.Name<>velec_SchemaBlockJunctionBox) and (devNowMF^.Name<>velec_SchemaBlockChangingLayingMethod) then',TMWOHistoryOut);
+     //                   if pvd<>nil then
+     //                     if pstring(pvd^.data.Addr.Instance)^ = nameGroup then
+     //                         begin
+     //                              ZCMsgCallBackInterface.TextMessage('if pstring(pvd^.data.Addr.Instance)^ = nameGroup then = ' + nameGroup + '',TMWOHistoryOut);
+     //                              deepdontlook:=true;
+     //                         end
+     //                     else
+     //                      deepdontlook:=false;
+     //               end
+     //               else
+     //               begin
+                        pvd:=FindVariableInEnt(devNowMF,velec_GC_HDGroup);
+                        if pvd<>nil then begin
+                          ZCMsgCallBackInterface.TextMessage('pstring(pvd^.data.Addr.Instance)^=' + pstring(pvd^.data.Addr.Instance)^ + '   -    nameGroup=' + nameGroup,TMWOHistoryOut);
+                          if pstring(pvd^.data.Addr.Instance)^ = nameGroup then
+                              begin
+                                   ZCMsgCallBackInterface.TextMessage('if pstring(pvd^.data.Addr.Instance)^ = nameGroup then ' + nameGroup + '',TMWOHistoryOut);
+                                   deepdontlook:=true;
+                              end else
+                           deepdontlook:=false;
+                           end
+                          else
+                           deepdontlook:=false;
+     //               end;
+     //
+             end;
 
+         //
+         //
             end;
-
+         //
          if deepdontlook then
-           if (graphDev.Vertices[intVertex].getDevice^.Name<>velec_SchemaBlockJunctionBox) and (graphDev.Vertices[intVertex].getDevice^.Name<>velec_SchemaBlockChangingLayingMethod) then
              listDevInGroup.PushBack(graphDev.Vertices[intVertex].getDevice);
-
-       //if intVertex <> graphDev.Root.Index then
-       //    begin
-       //      devNowvarext:=graphDev.Vertices[intVertex].getDevice^.specialize GetExtension<TVariablesExtender>;
-       //      devNowMF:=devNowvarext.getMainFuncDevice;
-       //      if devNowMF <> nil then
-       //        begin
-       //          //ZCMsgCallBackInterface.TextMessage('pvd2:=FindVariableInEnt(devNowMF,velec_nameBlockDevice);' + devNowMF^.Name ,TMWOHistoryOut);
-       //          //pvd2:=FindVariableInEnt(devNowMF,velec_nameBlockDevice);
-       //          //if pvd2<>nil then
-       //          //  ZCMsgCallBackInterface.TextMessage('velec_nameBlockDevice = ' + pstring(pvd2^.data.Addr.Instance)^ + '',TMWOHistoryOut);
-       //
-       //          if pvd2<>nil then
-       //             if (devNowMF^.Name<>velec_SchemaBlockJunctionBox) and (devNowMF^.Name<>velec_SchemaBlockChangingLayingMethod) then
-       //               begin
-       //                // Проверяем совпадает имя группы подключения внутри устройства с группой которую мы сейчас заполняем
-       //                pvd:=FindVariableInEnt(devNowMF,velec_GC_HDGroup);
-       //                if pvd<>nil then
-       //                  if pstring(pvd^.data.Addr.Instance)^ = nameGroup then
-       //                    begin
-       //                    listDevInGroup.PushBack(graphDev.Vertices[intVertex].getDevice);
-       //                    ZCMsgCallBackInterface.TextMessage('nameGroup = ' + nameGroup + '',TMWOHistoryOut);
-       //                    deepdontlook:=true;
-       //                    end
-       //                else
-       //                 deepdontlook:=false;
-       //              end;
-       //
-       //           end;
-       //     end;
-
-
-         for i:=0 to graphDev.Vertices[intVertex].ChildCount-1 do
+         //
+         for i:=0 to graphDev.Vertices[intVertex].ChildCount-1 do begin
+             //listDevInGroup.PushBack(graphDev.Vertices[intVertex].getDevice);
              getListDev(deepdontlook,graphDev.Vertices[intVertex].Childs[i].Index,listDevInGroup);
+         end;
     end;
   begin
      ZCMsgCallBackInterface.TextMessage('Имя группы = ' + nameGroup + '. Список имен устройств:',TMWOHistoryOut);
      result:=TListDev.Create;
      getListDev(false,graphDev.Root.Index,result);
 
-     //for j:=0 to result.Size-1 do
-     //  begin
-     //    pvd:=FindVariableInEnt(result[j],velec_nameDevice);
-     //      if pvd<>nil then
-     //         ZCMsgCallBackInterface.TextMessage('   Имя устройства = '+pstring(pvd^.data.Addr.Instance)^,TMWOHistoryOut);
-     //  end;
-
-//     for i:=0 to graphDev.Root.ChildCount-1 do
-//       begin
-//         cabNowvarext:=graphDev.GetEdge(graphDev.Root,graphDev.Root.Childs[i]).getCableSet^.cab^.specialize GetExtension<TVariablesExtender>;
-//         //ZCMsgCallBackInterface.TextMessage('1',TMWOHistoryOut);
-//         cabNowMF:=cabNowvarext.getMainFuncEntity;
-//                  //ZCMsgCallBackInterface.TextMessage('2',TMWOHistoryOut);
-//         if cabNowMF^.GetObjType=GDBCableID then
-//           begin
-//                    //ZCMsgCallBackInterface.TextMessage('3',TMWOHistoryOut);
-//             pvd:=FindVariableInEnt(cabNowMF,velec_GC_HDGroup);
-//             if pvd<>nil then
-//               begin
-//                 isHaveList:=true;
-//                 for j:=0 to result.Size-1 do
-//                   begin
-//                      if result[j] = pstring(pvd^.data.Addr.Instance)^ then
-//                         isHaveList:=false;
-//                   end;
-//                 if isHaveList then
-//                   result.PushBack(pstring(pvd^.data.Addr.Instance)^);
-//               end;
-//               //if pboolean(pvd2^.data.Addr.Instance)^ then
-//               //  listDev.PushBack(devNowMF);
-//           end;
-////
-////         graphDev.Root.Childs[i]
-////         graphDev.GetEdge(graphDev.Root,graphDev.Root.Childs[i]).getCable;
-////           getListName(graphDev,graphDev.Root.Childs[i].Index,listGroup);
-//       end;
-//
-//      //Выполнем сортировку по имени группы
-//      devgroupnamesort.Sort(result,result.Size);
-//
-//      for j:=0 to result.Size-1 do
-//       begin
-//         ZCMsgCallBackInterface.TextMessage('   GroupName = '+result[j],TMWOHistoryOut);
-//       end;
-
-     //ZCMsgCallBackInterface.TextMessage('******************************************',TMWOHistoryOut);
   end;
+
+  //**Получить список устройств внутри группы для данного щита (графа)
+  function getListDevInGroupHDALL(graphDev:TGraphDev):TListDev;
+  var
+    i,j:integer;
+    cabNowMF:PGDBObjEntity;
+    cabNowvarext:TVariablesExtender;
+    isHaveList:boolean;
+    pvd:pvardesk;
+    //** Рекурсия получаем номер нужного нам головного устройства внутри нужного нам графа
+    procedure getListDev(deepdontlook:boolean;intVertex:integer;var listDevInGroup:TListDev);
+    var
+      i:integer;
+      devNowMF:PGDBObjDevice;
+      devNowvarext:TVariablesExtender;
+      devNameGroup:string;
+      pvd2:pvardesk;
+
+    begin
+       //if deepdontlook then
+     //    //devNowvarext:=graphDev.Vertices[intVertex].getDevice^.specialize GetExtension<TVariablesExtender>;
+     //    //devNowMF:=devNowvarext.getMainFuncDevice;
+     //    //if devNowMF <> nil then
+     //    //  begin
+     //    //    pvd:=FindVariableInEnt(devNowMF,velec_nameDevice);
+     //    //    ZCMsgCallBackInterface.TextMessage('getListDev NMO_NAME = ' + pstring(pvd^.data.Addr.Instance)^,TMWOHistoryOut);
+     //    //  end;
+     //    //
+         if intVertex <> graphDev.Root.Index then
+           begin
+             //if graphDev.Vertices[intVertex].Parent = graphDev.Root then
+             //  begin
+             //    ZCMsgCallBackInterface.TextMessage('getListDev nameGroup = ' + nameGroup + '',TMWOHistoryOut);
+             //  end;
+
+             devNowvarext:=graphDev.Vertices[intVertex].getDevice^.specialize GetExtension<TVariablesExtender>;
+             devNowMF:=devNowvarext.getMainFuncDevice;
+             if devNowMF <> nil then
+                begin
+                  ZCMsgCallBackInterface.TextMessage('devNowMF = ' + devNowMF^.Name,TMWOHistoryOut);
+     //             if (devNowMF^.Name=velec_SchemaBlockJunctionBox) or (devNowMF^.Name=velec_SchemaBlockChangingLayingMethod) then
+     //               begin
+     //                 pvd:=FindVariableInEnt(devNowMF,velec_EM_vEMGCHDGroup);
+     //                 ZCMsgCallBackInterface.TextMessage('if (devNowMF^.Name<>velec_SchemaBlockJunctionBox) and (devNowMF^.Name<>velec_SchemaBlockChangingLayingMethod) then',TMWOHistoryOut);
+     //                   if pvd<>nil then
+     //                     if pstring(pvd^.data.Addr.Instance)^ = nameGroup then
+     //                         begin
+     //                              ZCMsgCallBackInterface.TextMessage('if pstring(pvd^.data.Addr.Instance)^ = nameGroup then = ' + nameGroup + '',TMWOHistoryOut);
+     //                              deepdontlook:=true;
+     //                         end
+     //                     else
+     //                      deepdontlook:=false;
+     //               end
+     //               else
+     //               begin
+                      if (devNowMF^.Name<>velec_SchemaBlockJunctionBox) and (devNowMF^.Name<>velec_SchemaBlockChangingLayingMethod) then begin
+                        pvd:=FindVariableInEnt(devNowMF,velec_GC_HDGroup);
+                        if pvd<>nil then begin
+                          ZCMsgCallBackInterface.TextMessage('pstring(pvd^.data.Addr.Instance)^=' + pstring(pvd^.data.Addr.Instance)^,TMWOHistoryOut);
+                          //if pstring(pvd^.data.Addr.Instance)^ = nameGroup then
+                              //begin
+                                   //ZCMsgCallBackInterface.TextMessage('if pstring(pvd^.data.Addr.Instance)^ = nameGroup then ' + nameGroup + '',TMWOHistoryOut);
+                          deepdontlook:=true;
+                              //end else
+                           //deepdontlook:=false;
+                           end
+                          else
+                           deepdontlook:=false;
+                      end;
+     //               end;
+     //
+             end;
+     //
+     //    //
+     //    //
+            end;
+         //
+       if deepdontlook then
+         //if intVertex <> graphDev.Root.Index then
+           listDevInGroup.PushBack(graphDev.Vertices[intVertex].getDevice);
+         //
+         for i:=0 to graphDev.Vertices[intVertex].ChildCount-1 do begin
+             //listDevInGroup.PushBack(graphDev.Vertices[intVertex].getDevice);
+             getListDev(false,graphDev.Vertices[intVertex].Childs[i].Index,listDevInGroup);
+         end;
+    end;
+  begin
+     //ZCMsgCallBackInterface.TextMessage('Имя группы = ' + nameGroup + '. Список имен устройств:',TMWOHistoryOut);
+     result:=TListDev.Create;
+     getListDev(false,graphDev.Root.Index,result);
+
+  end;
+
+
 
  //**получить граф головного устройства с учетом подключенных ТОЛЬКО к нему устройств (с учетом особеностей отказа от ГУ)
  function getGraphHeadDev(listFullGraphEM:TListGraphDev;rootDev:PGDBObjDevice;listAllHeadDev:TListDev):TGraphDev;

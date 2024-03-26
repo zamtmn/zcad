@@ -302,14 +302,15 @@ var
     begin
 
        //Получаем список групп для данного щита
-       listGroupHeadDev:=uzvmanemgetgem.getListNameGroupHD(graphDev);
+       //listGroupHeadDev:=uzvmanemgetgem.getListNameGroupHD(graphDev);
        stRowNew:=stRow;
        stColNew:=stCol;
 
-       for nameGroup in listGroupHeadDev do
-         begin
+       //for nameGroup in listGroupHeadDev do
+       //  begin
           //Получаем список устройств для данной группы
-          listDev:=uzvmanemgetgem.getListDevInGroupHD(nameGroup,graphDev);
+          //listDev:=uzvmanemgetgem.getListDevInGroupHD(nameGroup,graphDev);
+          listDev:=uzvmanemgetgem.getListDevInGroupHDALL(graphDev);
           //Ищем стартовую ячейку для начала переноса данных
 
 
@@ -322,7 +323,7 @@ var
                    ZCMsgCallBackInterface.TextMessage('   - устройство с именем = '+pstring(pvd2^.data.Addr.Instance)^,TMWOHistoryOut);
 
               // Заполняем всю информацию по устройству
-              ZCMsgCallBackInterface.TextMessage('1',TMWOHistoryOut);
+              //ZCMsgCallBackInterface.TextMessage('1',TMWOHistoryOut);
 
               if (stRowNew <> stRow) then
                 uzvzcadxlsxole.setCellValue(nameSheet,stRowNew,stColNew,'1');
@@ -359,9 +360,9 @@ var
               stColNew:=stCol;
             end;
             listDev.Free;
-         end;
+         //end;
        //uzvzcadxlsxole.setCellValue(nameSheet,1,1,'1'); //переводим фокус
-       listGroupHeadDev.Free;
+       //listGroupHeadDev.Free;
     end;
     //Если кодовое имя zimportdev
     procedure zimportrootdevcommand(graphDev:TGraphDev;nameEtalon,nameSheet:string;stRow,stCol:Cardinal);

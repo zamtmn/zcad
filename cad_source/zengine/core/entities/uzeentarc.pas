@@ -437,11 +437,11 @@ begin
   Vertex3D_in_WCS_Array.PushBackData(pv);
 
   if dc.MaxDetail then
-                      maxlod:=50
+                      maxlod:=100
                   else
-                      maxlod:=20;
+                      maxlod:=60;
 
-  l:=r*angle/(dc.DrawingContext.zoom*dc.DrawingContext.zoom*3);
+  l:=r*angle/(dc.DrawingContext.zoom{*dc.DrawingContext.zoom}*10);
   if (l>maxlod)or dc.MaxDetail then lod:=maxlod
            else
                begin

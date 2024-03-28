@@ -7,8 +7,8 @@ object TextStylesForm: TTextStylesForm
   Caption = 'Text styles'
   ClientHeight = 1032
   ClientWidth = 1710
-  Constraints.MinHeight = 875
-  Constraints.MinWidth = 1400
+  Constraints.MinHeight = 600
+  Constraints.MinWidth = 800
   DesignTimePPI = 168
   Position = poMainFormCenter
   LCLVersion = '3.99.0.0'

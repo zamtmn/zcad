@@ -24,6 +24,15 @@ NMO_BaseName:='ЩР';
 NMO_Suffix:='';
 NMO_Template:='@@[NMO_BaseName]';
 
+nametemplatesxlsx:='<zlight>';
+ANALYSISEM_icanbeheadunit:=true;
+
+realnamedev:='Щит распред';
+Power:=0.0;
+CosPHI:=0.8;
+Voltage:=_AC_380V_50Hz;
+Phase:=_ABC;
+
 GC_NameGroupTemplate:='@@[GC_HeadDevice].@@[GC_HDGroup]';
 
 VSPECIFICATION_Position:='';
@@ -35,7 +44,7 @@ VSPECIFICATION_Unit:='шт.';
 VSPECIFICATION_Count:=1;
 VSPECIFICATION_Weight:='';
 VSPECIFICATION_Note:='';
-VSPECIFICATION_Grouping:='Щиты';
+VSPECIFICATION_Grouping:='Щитки, шкафы, ящики, пульты';
 VSPECIFICATION_Belong:='';
 
 

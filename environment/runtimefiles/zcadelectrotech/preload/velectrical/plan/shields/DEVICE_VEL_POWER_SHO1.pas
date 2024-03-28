@@ -1,0 +1,53 @@
+unit DEVICE_VEL_POWER_SHO1;
+
+interface
+
+uses system,devices;
+usescopy blocktype;
+usescopy objname_eo;
+usescopy objgroup;
+usescopy addtocable;
+usescopy elreceivers;
+usescopy vlocation;
+usescopy vspecification;
+usescopy vinfopersonaluse;
+
+implementation
+
+begin
+
+BTY_TreeCoord:='PLAN_VEL_Щиты_Щит освещения';
+Device_Type:=TDT_SilaPotr;
+Device_Class:=TDC_Shell;
+
+NMO_BaseName:='ЩО';
+NMO_Suffix:='';
+NMO_Template:='@@[NMO_BaseName]';
+
+nametemplatesxlsx:='<zlight>';
+ANALYSISEM_icanbeheadunit:=true;
+
+realnamedev:='Щит освещения';
+Power:=0.0;
+CosPHI:=0.8;
+Voltage:=_AC_380V_50Hz;
+Phase:=_ABC;
+
+GC_NameGroupTemplate:='@@[GC_HeadDevice].@@[GC_HDGroup]';
+
+VSPECIFICATION_Position:='';
+VSPECIFICATION_Name:='Щит освещения';
+VSPECIFICATION_Brand:='';
+VSPECIFICATION_Article:='';
+VSPECIFICATION_Factoryname:='';
+VSPECIFICATION_Unit:='шт.';
+VSPECIFICATION_Count:=1;
+VSPECIFICATION_Weight:='';
+VSPECIFICATION_Note:='';
+VSPECIFICATION_Grouping:='Щитки, шкафы, ящики, пульты';
+VSPECIFICATION_Belong:='';
+
+
+SerialConnection:=1;
+
+end.

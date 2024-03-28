@@ -4,9 +4,48 @@
     <BlockLib Type="Tree" Caption='Blocks' ImagesWidth='24'>
       <ZTreeNode Caption='Velectrical'>
 	    <ZTreeNode Caption='Plan'>
+		    <ZTreeNode Caption='Shields'>
+			  <ZTreeCommand Command="Insert(DEVICE_VEL_POWER_SHR1)" Caption='Щит распределительный' />
+			  <ZTreeCommand Command="Insert(DEVICE_VEL_POWER_SHO1)" Caption='Щит освещения' />
+			  <ZTreeCommand Command="Insert(DEVICE_VEL_POWER_SHAO1)" Caption='Щит аварийного освещения' />
+			</ZTreeNode>	
+		    <ZTreeNode Caption='ElReceiver'>
+			  <ZTreeCommand Command="Insert(DEVICE_VEL_POWER_MOTOR)" Caption='Двигатель' />
+			  <ZTreeCommand Command="Insert(DEVICE_VEL_POWER_HEATER)" Caption='Электрообогреватель' />
+			  <ZTreeCommand Command="Insert(DEVICE_VEL_POWER_BU)" Caption='Блок управления' />
+			</ZTreeNode>			
 		    <ZTreeNode Caption='Sockets'>
-			  <ZTreeCommand Command="Insert(DEVICE_VEL_SOCKET1_1P)" Caption='Розетка СП31 1Р' />
-			  <ZTreeCommand Command="Insert(DEVICE_VEL_SOCKET1_2P)" Caption='Розетка СП31 2Р' />
+			  <ZTreeCommand Command="Insert(DEVICE_VEL_SOCKET_1P31IN)" Caption='Розетка СП31 1Р' />
+			  <ZTreeCommand Command="Insert(DEVICE_VEL_SOCKET_2P31IN)" Caption='Розетка СП31 2Р' />
+			  <ZTreeCommand Command="Insert(DEVICE_VEL_SOCKET_3P31IN)" Caption='Розетка СП31 3Р' />
+			  <ZTreeCommand Command="Insert(DEVICE_VEL_SOCKET_3F31IN)" Caption='Розетка СП31 1P 380V' />
+			  <ZTreeCommand Command="Insert(DEVICE_VEL_SOCKET_1P31OUT)" Caption='Розетка ОП31 1Р' />
+			  <ZTreeCommand Command="Insert(DEVICE_VEL_SOCKET_2P31OUT)" Caption='Розетка ОП31 2Р' />
+			  <ZTreeCommand Command="Insert(DEVICE_VEL_SOCKET_3P31OUT)" Caption='Розетка ОП31 3Р' />
+			  <ZTreeCommand Command="Insert(DEVICE_VEL_SOCKET_3F31OUT)" Caption='Розетка ОП31 1P 380V' />
+			  <ZTreeCommand Command="Insert(DEVICE_VEL_SOCKET_1P54OUT)" Caption='Розетка ОП54 1Р' />
+			  <ZTreeCommand Command="Insert(DEVICE_VEL_SOCKET_2P54OUT)" Caption='Розетка ОП54 2Р' />
+			  <ZTreeCommand Command="Insert(DEVICE_VEL_SOCKET_3P54OUT)" Caption='Розетка ОП54 3Р' />
+			  <ZTreeCommand Command="Insert(DEVICE_VEL_SOCKET_3F54OUT)" Caption='Розетка ОП54 1P 380V' />
+			  <ZTreeCommand Command="Insert(DEVICE_VEL_SOCKET_1P44OUT)" Caption='Розетка ОП44 1Р' />
+			  <ZTreeCommand Command="Insert(DEVICE_VEL_SOCKET_2P44OUT)" Caption='Розетка ОП44 2Р' />			  
+			</ZTreeNode>	
+		    <ZTreeNode Caption='Lighting'>
+			  <ZTreeCommand Command="Insert(DEVICE_VEL_LIGHT_YTR)" Caption='Ящик ЯТПР' />
+			  <ZTreeCommand Command="Insert(DEVICE_VEL_LIGHT_600x600)" Caption='Светильник 600х600' />
+			  <ZTreeCommand Command="Insert(DEVICE_VEL_LIGHT_2x36)" Caption='Светильник 2х36' />
+			  <ZTreeCommand Command="Insert(DEVICE_VEL_LIGHT_2x18)" Caption='Светильник 2х18' />
+			  <ZTreeCommand Command="Insert(DEVICE_VEL_LIGHT_R4)" Caption='Светильник R4' />
+			  <ZTreeCommand Command="Insert(DEVICE_VEL_LIGHT_R3)" Caption='Светильник R3' />
+			  <ZTreeCommand Command="Insert(DEVICE_VEL_SWITCH_1P31IN)" Caption='Выключатель СП31 1Р' />
+			  <ZTreeCommand Command="Insert(DEVICE_VEL_SWITCH_2P31IN)" Caption='Выключатель СП31 2Р' />
+			  <ZTreeCommand Command="Insert(DEVICE_VEL_SWITCH_1PP31IN)" Caption='Выключатель проходной СП31 1PP' />
+			  <ZTreeCommand Command="Insert(DEVICE_VEL_SWITCH_1P31OUT)" Caption='Выключатель ОП31 1Р' />
+			  <ZTreeCommand Command="Insert(DEVICE_VEL_SWITCH_2P31OUT)" Caption='Выключатель ОП31 2Р' />
+			  <ZTreeCommand Command="Insert(DEVICE_VEL_SWITCH_1PP31OUT)" Caption='Выключатель проходной ОП31 1PP' />
+			  <ZTreeCommand Command="Insert(DEVICE_VEL_SWITCH_1P54OUT)" Caption='Выключатель ОП54 1Р' />
+			  <ZTreeCommand Command="Insert(DEVICE_VEL_SWITCH_2P54OUT)" Caption='Выключатель ОП54 2Р' />
+			  <ZTreeCommand Command="Insert(DEVICE_VEL_SWITCH_1PP54OUT)" Caption='Выключатель проходной ОП54 1PP' />
 			</ZTreeNode>		
         </ZTreeNode>
         <ZTreeNode Caption='Schemes'>

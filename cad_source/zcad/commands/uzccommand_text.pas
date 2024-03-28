@@ -115,7 +115,7 @@ begin
 end;
 procedure TextInsert_com.CommandEnd(const Context:TZCADCommandContext);
 begin
-
+  inherited;
 end;
 
 function GetStyleNames(var BDefNames:TZctnrVectorStrings;selname:String):Integer;

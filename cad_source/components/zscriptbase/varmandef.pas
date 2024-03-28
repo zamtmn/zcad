@@ -43,7 +43,7 @@ const
   TString=15;
   TGDBobject=16;}
   Ignore=#13;
-  Break='=:,'#10;
+  BreakChars='=:,'#10; // Старое название Break ломало ключевое слово Break
   dynamicoffset=-1;
   invar='_INVAR_';
   TA_COMPOUND=1;
@@ -66,7 +66,7 @@ TEditorDesc=record
                   Editor:TPropEditor;
                   Mode:TEditorMode;
             end;
-TOnCreateEditor=function (TheOwner:TPropEditorOwner;rect:trect;pinstance:pointer;psa:PTZctnrVectorStrings;FreeOnLostFocus:boolean;PTD:PUserTypeDescriptor):TEditorDesc;
+TOnCreateEditor=function (TheOwner:TPropEditorOwner;rect:trect;pinstance:pointer;psa:PTZctnrVectorStrings;FreeOnLostFocus:boolean;PTD:PUserTypeDescriptor;f:TzeUnitsFormat):TEditorDesc;
 TOnGetValueAsString=function(PInstance:Pointer):String;
 TOnDrawProperty=procedure(canvas:TCanvas;ARect:TRect;PInstance:Pointer);
 

@@ -29,7 +29,7 @@ uses
   uzcLog,
   uzccommandsabstract,uzccommandsimpl,uzccommandsmanager,
   uzeparsercmdprompt,uzegeometrytypes,
-  uzcinterface,uzcdialogsfiles,uzcutils,
+  uzcinterface,uzcdialogsfiles,{uzcutils,}
   uzvmanemgetgem,
   uzvagraphsdev,
   gvector,
@@ -140,11 +140,11 @@ type
   //devgroupnamesort=TOrderingArrayUtils<TListGroupHeadDev, string, TSortComparer>;
 
 var
-  clFileParam:CMDLinePromptParser.TGeneralParsedText=nil;
+  //clFileParam:CMDLinePromptParser.TGeneralParsedText=nil;
   //CmdProp:TuzvmanemSGparams;
   //SelSimParams:TSelBlockParams;
-  listFullGraphEM:TListGraphDev;     //Граф со всем чем можно
-  listMainFuncHeadDev:TListDev;
+  //listFullGraphEM:TListGraphDev;     //Граф со всем чем можно
+  //listMainFuncHeadDev:TListDev;
   remotemode:boolean;
 
 
@@ -164,15 +164,15 @@ var
 
   //Получить головное устройство
   function getDeviceHeadGroup(listFullGraphEM:TListGraphDev;listDev:TListDev):pGDBObjDevice;
-  type
-    TListEntity=TVector<pGDBObjEntity>;
+  //type
+  //  TListEntity=TVector<pGDBObjEntity>;
   var
      selEnt:pGDBObjEntity;
-     pvd:pvardesk;
+     //pvd:pvardesk;
      //listDev:TListDev;
-     devName:string;
-     devlistMF,selDev,selDevMF:PGDBObjDevice;
-     isListDev:boolean;
+     //devName:string;
+     devlistMF{,selDev,selDevMF}:PGDBObjDevice;
+     //isListDev:boolean;
      selDevVarExt:TVariablesExtender;
      selEntMF:PGDBObjEntity;
 
@@ -282,8 +282,8 @@ var
     procedure zimportdevcommand(listDev:TListDev;nameEtalon,nameSheet:string;stRow,stCol:Cardinal);
     var
       pvd2:pvardesk;
-      nameGroup:string;
-      listGroupHeadDev:TListGroupHeadDev;
+      //nameGroup:string;
+      //listGroupHeadDev:TListGroupHeadDev;
       //listDev:TListDev;
       ourDev:PGDBObjDevice;
       stRowNew,stColNew:Cardinal;
@@ -475,14 +475,14 @@ var
        targetcodename='targetcodename';
        keynumcol='keynumcol';
     var
-      pvd2:pvardesk;
+      //pvd2:pvardesk;
       //nameGroup:string;
       //listGroupHeadDev:TListGroupHeadDev;
       //listDev:TListDev;
       //ourDev:PGDBObjDevice;
       j:integer;
       stRow,stCol:Cardinal;
-      stRowNew,stColNew:Cardinal;
+      stRowNew{,stColNew}:Cardinal;
       stRowEtalonNew,stColEtalonNew:Cardinal;
       cellValueVar:string;
       textTargetSheet:string;
@@ -491,7 +491,7 @@ var
       speckeynumcol:integer;
       spectargetSheet:string;
       spectargetcodename:string;
-      stInfoDevCell:TVXLSXCELL;
+      //stInfoDevCell:TVXLSXCELL;
 
       //парсим ключи спецключи
       function getkeysCell(textCell,namekey:string):String;
@@ -548,7 +548,7 @@ var
 
 
        stRowNew:=stRow;
-       stColNew:=stCol;
+       //stColNew:=stCol;
        stRowEtalonNew:=stRowEtalon;
        stColEtalonNew:=stColEtalon;
 
@@ -651,10 +651,10 @@ procedure generatorDevSheet(listDev:TListDev;nameEtalon,nameSheet:string);
 
 procedure exportGraphDevToXLSX(listAllDev:TListDev;fileTemplate:ansistring;newFile:string;TOCAD:boolean);
 var
-  pvd:pvardesk;
-  graphDev:TGraphDev;
+  //pvd:pvardesk;
+  //graphDev:TGraphDev;
   //listDev:TListDev;
-  devMaincFunc:PGDBObjDevice;
+  //devMaincFunc:PGDBObjDevice;
   //listGroupHeadDev:TListGroupHeadDev;
   namePanel:string;
   newNameSheet:string;
@@ -789,24 +789,24 @@ end;
 function vExportDevToXLSX_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 var
   fileTemplate:ansiString;
-  gr:TGetResult;
-  filename,newfilexlsx:string;
-  pvd:pvardesk;
+  //gr:TGetResult;
+  {filename,}newfilexlsx:string;
+  //pvd:pvardesk;
   //p:GDBVertex;
   //listHeadDev:TListDev;
   //listNameGroupDev:TListGroupHeadDev;
   //headDev:pGDBObjDevice;
-  graphView:TGraphDev;
-  depthVisual:double;
-  insertCoordination:GDBVertex;
+  //graphView:TGraphDev;
+  //depthVisual:double;
+  //insertCoordination:GDBVertex;
   listAllHeadDev:TListDev;
-  devMaincFunc,pobj:PGDBObjDevice;
+  {devMaincFunc,}pobj:PGDBObjDevice;
   isload:boolean;
   LastFileHandle:Integer=-1;
   ir:itrec;
 begin
-  depthVisual:=15;
-  insertCoordination:=uzegeometry.CreateVertex(0,0,0);
+  //depthVisual:=15;
+  //insertCoordination:=uzegeometry.CreateVertex(0,0,0);
 
   //Запуск ремонтного режима
   remotemode:=false;
@@ -862,24 +862,24 @@ end;
 function vExportDevToXLSXToCAD_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 var
   fileTemplate:ansiString;
-  gr:TGetResult;
-  filename,newfilexlsx:string;
-  pvd:pvardesk;
+  //gr:TGetResult;
+  {filename,}newfilexlsx:string;
+  //pvd:pvardesk;
   //p:GDBVertex;
   //listHeadDev:TListDev;
   //listNameGroupDev:TListGroupHeadDev;
   //headDev:pGDBObjDevice;
-  graphView:TGraphDev;
-  depthVisual:double;
-  insertCoordination:GDBVertex;
+  //graphView:TGraphDev;
+  //depthVisual:double;
+  //insertCoordination:GDBVertex;
   listAllHeadDev:TListDev;
-  devMaincFunc,pobj:PGDBObjDevice;
+  {devMaincFunc,}pobj:PGDBObjDevice;
   isload:boolean;
   LastFileHandle:Integer=-1;
   ir:itrec;
 begin
-  depthVisual:=15;
-  insertCoordination:=uzegeometry.CreateVertex(0,0,0);
+  //depthVisual:=15;
+  //insertCoordination:=uzegeometry.CreateVertex(0,0,0);
 
   //Запуск ремонтного режима
   remotemode:=false;

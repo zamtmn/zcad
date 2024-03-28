@@ -631,10 +631,14 @@ var p: gdbvertex2d;
   hlGDBWord: LongWord;
   tDouble: Double;
   numv: Integer;
+  widthload:boolean;
+  globalwidth:double;
 begin
   //inherited init(nil,0, -1);
   hlGDBWord:=0;
   numv:=0;
+  widthload:=false;
+  globalwidth:=0;
   //vp.id:=GDBLWPolylineID;
   //bp.ListPos.owner:=@drawing;
   if bp.ListPos.owner<>nil then
@@ -671,6 +675,7 @@ begin
           //normalarray.init(hlGDBWord, sizeof(gdbvertex));
           //widtharray.init(hlGDBWord, sizeof(GLLWWidth));
           numv := hlGDBWord;
+          Width2D_in_OCS_Array.SetSize(numv);
           hlGDBWord := 0;
         end;
       10:
@@ -697,6 +702,7 @@ begin
           //val(s, PGLLWWidth(Width2D_in_OCS_Array.getelement(hlGDBWord-1)).startw, code);
           Width2D_in_OCS_Array.SetCount(numv);
           val(s, PGLLWWidth(Width2D_in_OCS_Array.getDataMutable(hlGDBWord-1)).startw, code);
+          widthload:=true;
         end;
       41:
         begin
@@ -704,20 +710,13 @@ begin
           Width2D_in_OCS_Array.SetCount(numv);
           val(s, PGLLWWidth(Width2D_in_OCS_Array.getDataMutable(hlGDBWord- 1)).endw, code);
           //Width2D_in_OCS_Array.SetCount(hlGDBWord);
+          widthload:=true;
         end;
       43:
         begin
           s := f.readString;
           val(s, tDouble, code);
-          if Width2D_in_OCS_Array.Max<numv then
-                                               Width2D_in_OCS_Array.setsize(numv);
-          Width2D_in_OCS_Array.Count := numv;
-          for i := 0 to numv - 1 do
-          begin
-            PGLLWWidth(Width2D_in_OCS_Array.getDataMutable(i)).endw := tDouble;
-            PGLLWWidth(Width2D_in_OCS_Array.getDataMutable(i)).startw := tDouble;
-          end;
-          Width2D_in_OCS_Array.Count := numv;
+          globalwidth:=tDouble;
         end;
       70:
         begin
@@ -749,6 +748,13 @@ begin
     end;
     s := f.readString;
     val(s, byt, code);
+  end;
+  if not widthload then begin
+    Width2D_in_OCS_Array.SetCount(numv);
+    for i := 0 to numv - 1 do begin
+      PGLLWWidth(Width2D_in_OCS_Array.getDataMutable(i)).endw := globalwidth;
+      PGLLWWidth(Width2D_in_OCS_Array.getDataMutable(i)).startw := globalwidth;
+    end;
   end;
   Vertex2D_in_OCS_Array.SetSize(lwtv.Count);
   lwtv.copyto(Vertex2D_in_OCS_Array);

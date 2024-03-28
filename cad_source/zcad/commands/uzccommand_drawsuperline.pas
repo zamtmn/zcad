@@ -69,11 +69,13 @@ uses
 
   gzctnrVectorTypes,
   uzcstrconsts,       //resouce strings
+  uzvcabmountmethod,
 
   uzcLapeScriptsManager,uzcLapeScriptsImplBase,uzcCommand_LPCSRun,lpcompiler;
 
 
 type
+
 TMethod2ltContext=class(TBaseScriptContext)
   FInput:string;
   FOutput:string;
@@ -88,11 +90,11 @@ TDrawSuperlineParams=record
                          ProcessLayer:Boolean;  //выключатель слоя
                          ProcessTypeLine:Boolean;  //выключатель типа линyи
                          SLSetting1:String;     //сохраненная настройка суперлинии для кнопки суперлиния №1
-                         SLSettingTypeLine1:String;     //сохраненная настройка суперлинии для кнопки суперлиния №1 типа линии
+                         SLSettingTypeLine1:TDCableMountingMethod;     //сохраненная настройка суперлинии для кнопки суперлиния №1 типа линии
                          SLSetting2:String;     //сохраненная настройка суперлинии для кнопки суперлиния №2
-                         SLSettingTypeLine2:String;     //сохраненная настройка суперлинии для кнопки суперлиния №2 типа линии
+                         SLSettingTypeLine2:TDCableMountingMethod;     //сохраненная настройка суперлинии для кнопки суперлиния №2 типа линии
                          SLSetting3:String;     //сохраненная настройка суперлинии для кнопки суперлиния №3
-                         SLSettingTypeLine3:String;     //сохраненная настройка суперлинии для кнопки суперлиния №2 типа линии
+                         SLSettingTypeLine3:TDCableMountingMethod;     //сохраненная настройка суперлинии для кнопки суперлиния №2 типа линии
                      end;
 var
    DrawSuperlineParams:TDrawSuperlineParams;
@@ -297,18 +299,18 @@ begin
 
     if operands = '1' then
     begin
-       hotkeyname:=Tria_AnsiToUtf8(DrawSuperlineParams.SLSetting1);
-       hotkeytypeline:=Tria_AnsiToUtf8(DrawSuperlineParams.SLSettingTypeLine1);
+       hotkeyname:={Tria_AnsiToUtf8}(DrawSuperlineParams.SLSetting1);
+       hotkeytypeline:={Tria_AnsiToUtf8}(DrawSuperlineParams.SLSettingTypeLine1);
     end;
     if operands = '2' then
     begin
-       hotkeyname:=Tria_AnsiToUtf8(DrawSuperlineParams.SLSetting2);
-       hotkeytypeline:=Tria_AnsiToUtf8(DrawSuperlineParams.SLSettingTypeLine2);
+       hotkeyname:={Tria_AnsiToUtf8}(DrawSuperlineParams.SLSetting2);
+       hotkeytypeline:={Tria_AnsiToUtf8}(DrawSuperlineParams.SLSettingTypeLine2);
     end;
     if operands = '3' then
     begin
-       hotkeyname:=Tria_AnsiToUtf8(DrawSuperlineParams.SLSetting3);
-       hotkeytypeline:=Tria_AnsiToUtf8(DrawSuperlineParams.SLSettingTypeLine3);
+       hotkeyname:={Tria_AnsiToUtf8}(DrawSuperlineParams.SLSetting3);
+       hotkeytypeline:={Tria_AnsiToUtf8}(DrawSuperlineParams.SLSettingTypeLine3);
     end;
 
      //ZCMsgCallBackInterface.TextMessage('hotkeyname:'+hotkeyname,TMWOHistoryOut);

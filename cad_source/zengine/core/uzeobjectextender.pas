@@ -152,38 +152,43 @@ begin
 end;
 procedure TDXFEntIODataManager.RunSaveFeatures(var outhandle:TZctnrVectorBytes;PEnt:Pointer;var IODXFContext:TIODXFContext);
 var
-  i:integer;
+  i:SizeUInt;
 begin
-     for i:=0 to fDXFEntSaveDataVector.Size-1 do
-      fDXFEntSaveDataVector[i].DXFEntSaveFeature(outhandle,PEnt,IODXFContext);
+     if fDXFEntSaveDataVector.Size>0 then
+       for i:=fDXFEntSaveDataVector.Size-1 downto 0  do
+        fDXFEntSaveDataVector[i].DXFEntSaveFeature(outhandle,PEnt,IODXFContext);
 end;
 procedure TDXFEntIODataManager.RunFormatProcs(const drawing:TDrawingDef;pEntity:Pointer);
 var
-  i:integer;
+  i:SizeUInt;
 begin
-     for i:=0 to fDXFEntFormatprocsVector.Size-1 do
-      fDXFEntFormatprocsVector[i](pEntity,drawing);
+     if fDXFEntFormatprocsVector.Size>0 then
+       for i:=fDXFEntFormatprocsVector.Size-1 downto 0 do
+        fDXFEntFormatprocsVector[i](pEntity,drawing);
 end;
 procedure TDXFEntIODataManager.RunConstructorFeature(pEntity:Pointer);
 var
-  i:integer;
+  i:SizeUInt;
 begin
-     for i:=0 to fCreateEntFeatureVector.Size-1 do
-      fCreateEntFeatureVector[i].constr(pEntity);
+     if fCreateEntFeatureVector.Size>0 then
+       for i:=fCreateEntFeatureVector.Size-1 downto 0 do
+        fCreateEntFeatureVector[i].constr(pEntity);
 end;
 procedure TDXFEntIODataManager.RunAfterLoadFeature(pEntity:Pointer);
 var
-  i:integer;
+  i:SizeUInt;
 begin
-     for i:=0 to fDXFEntAfterLoadFeatureVector.Size-1 do
-      fDXFEntAfterLoadFeatureVector[i](pEntity);
+     if fDXFEntAfterLoadFeatureVector.Size>0 then
+       for i:=fDXFEntAfterLoadFeatureVector.Size-1 downto 0 do
+        fDXFEntAfterLoadFeatureVector[i](pEntity);
 end;
 procedure TDXFEntIODataManager.RunDestructorFeature(pEntity:Pointer);
 var
-  i:integer;
+  i:SizeUInt;
 begin
-     for i:=0 to fCreateEntFeatureVector.Size-1 do
-      fCreateEntFeatureVector[i].destr(pEntity);
+     if fCreateEntFeatureVector.Size>0 then
+       for i:=fCreateEntFeatureVector.Size-1 downto 0 do
+        fCreateEntFeatureVector[i].destr(pEntity);
 end;
 
 procedure TDXFEntIODataManager.RegisterEntityExtenderObject(ExtenderClass:TMetaEntityExtender);
@@ -192,14 +197,15 @@ begin
 end;
 procedure TDXFEntIODataManager.AddExtendersToEntity(pEntity:Pointer);
 var
-  i:integer;
+  i:SizeUInt;
   extension:TAbstractEntityExtender;
 begin
-     for i:=0 to fTEntityExtenderVector.Size-1 do
-     begin
-      extension:=fTEntityExtenderVector[i].create(pEntity);
-      PGDBObjSubordinated(pEntity)^.AddExtension(extension);
-     end;
+     if fTEntityExtenderVector.Size>0 then
+         for i:=fTEntityExtenderVector.Size-1 downto 0 do
+         begin
+          extension:=fTEntityExtenderVector[i].create(pEntity);
+          PGDBObjSubordinated(pEntity)^.AddExtension(extension);
+         end;
 end;
 
 end.

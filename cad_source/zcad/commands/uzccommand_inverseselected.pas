@@ -29,34 +29,30 @@ uses
   uzcinterface,uzcutils,
   gzctnrVectorTypes;
 
-var
-  selall:pCommandFastObjectPlugin;
-
 implementation
 
+var
+  InvSel:pCommandFastObjectPlugin;
+
 function InverseSelected_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
-var pv:pGDBObjEntity;
-    ir:itrec;
-    count:integer;
-    //domethod,undomethod:tmethod;
+var
+  pv:pGDBObjEntity;
+  ir:itrec;
+  count:integer;
 begin
-  //if (drawings.GetCurrentROOT^.ObjArray.count = 0)or(drawings.GetCurrentDWG^.OGLwindow1.param.seldesc.Selectedobjcount=0) then exit;
+
   count:=0;
   pv:=drawings.GetCurrentROOT^.ObjArray.beginiterate(ir);
   if pv<>nil then
   repeat
     if pv^.Selected then
-                        begin
-                             pv^.deselect(drawings.GetCurrentDWG^.wa.param.SelDesc.Selectedobjcount,drawings.CurrentDWG^.DeSelector);
-                             inc(count);
-                        end
-                    else
-                        begin
-                          pv^.select(drawings.GetCurrentDWG^.wa.param.SelDesc.Selectedobjcount,drawings.CurrentDWG^.selector);
-                          inc(count);
-                        end;
+      pv^.deselect(drawings.GetCurrentDWG^.wa.param.SelDesc.Selectedobjcount,drawings.CurrentDWG^.DeSelector)
+    else begin
+      pv^.select(drawings.GetCurrentDWG^.wa.param.SelDesc.Selectedobjcount,drawings.CurrentDWG^.selector);
+      inc(count);
+    end;
 
-  pv:=drawings.GetCurrentROOT^.ObjArray.iterate(ir);
+    pv:=drawings.GetCurrentROOT^.ObjArray.iterate(ir);
   until pv=nil;
   drawings.GetCurrentDWG^.wa.param.seldesc.Selectedobjcount:=count;
   drawings.GetCurrentDWG^.wa.param.seldesc.OnMouseObject:=nil;
@@ -71,7 +67,9 @@ end;
 
 initialization
   programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
-  CreateZCADCommand(@InverseSelected_com,'InverseSelected',CADWG or CASelEnts,0);
+  InvSel:=CreateZCADCommand(@InverseSelected_com,'InverseSelected',CADWG or CASelEnts,0);
+  InvSel^.CEndActionAttr:=[CEGUIRePrepare];
+  InvSel^.overlay:=true;
 finalization
   ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
 end.

@@ -33,14 +33,14 @@ uses
   uzvmanemgetgem,
   uzvagraphsdev,
   gvector,
-  uzeentdevice,
+  uzeentdevice,uzeentblockinsert,
   uzeentity,
   gzctnrVectorTypes,
   uzcdrawings,
-  uzeconsts,
+  //uzeconsts,
   varmandef,
   uzcvariablesutils,
-  uzvconsts,
+  //uzvconsts,
   uzcenitiesvariablesextender,
   uzcentcable,
   //uzvmanemshieldsgroupparams,
@@ -55,6 +55,7 @@ uses
   UUnitManager,
   uzbPaths,
   uzcTranslations,
+  uzvconsts,
   Varman;
 
   type
@@ -85,31 +86,41 @@ type
 
   TListGroupHeadDev=TVector<string>;
 
-var
-  clFileParam:CMDLinePromptParser.TGeneralParsedText=nil;
+//var
+  //clFileParam:CMDLinePromptParser.TGeneralParsedText=nil;
   //CmdProp:TuzvmanemSGparams;
   //SelSimParams:TSelBlockParams;
-  listFullGraphEM:TListGraphDev;     //Граф со всем чем можно
-  listMainFuncHeadDev:TListDev;
+  //listFullGraphEM:TListGraphDev;     //Граф со всем чем можно
+  //listMainFuncHeadDev:TListDev;
 
 
 
 
-  function drawInsertBlock(pt:GDBVertex;scalex,scaley:double;nameBlock:string):PGDBObjDevice;
+  function drawInsertBlock(pt:GDBVertex;scalex,scaley:double;InsertionName:string):PGDBObjBlockInsert;
   var
       rc:TDrawContext;
       entvarext:TVariablesExtender;
       psu:ptunit;
+      itDevice:boolean;
+      blockName:string;
   begin
-      //if commandmanager.get3dpoint('Specify insert point:',p1)=GRNormal then
-      //begin
-        //проверяем наличие блока PS_DAT_SMOKE и устройства DEVICE_PS_DAT_SMOKE в чертеже и копируем при необходимости
-        //этот момент кривой - AddBlockFromDBIfNeed должна быть функцией чтоб было понятно - есть блок или нет, хотя это можно проверить отдельно
-        drawings.AddBlockFromDBIfNeed(drawings.GetCurrentDWG,nameBlock);
-        //создаем примитив
-        result:=GDBObjDevice.CreateInstance;
+        //проверяем на входе устройство или блок
+        itDevice:=AnsiPos(velec_beforeNameGlobalSchemaBlock,InsertionName)=1;
+        //добавляем в чертеж то что на входе
+        drawings.AddBlockFromDBIfNeed(drawings.GetCurrentDWG,InsertionName);
+        if itDevice then begin
+          //если устройство добавляем т блок
+          blockName:=Copy(InsertionName,length(velec_beforeNameGlobalSchemaBlock)+1,length(InsertionName)-length(velec_beforeNameGlobalSchemaBlock));
+          drawings.AddBlockFromDBIfNeed(drawings.GetCurrentDWG,blockName);
+          //создаем примитив
+          result:=GDBObjDevice.CreateInstance;
+        end else begin
+          blockName:=InsertionName;
+          result:=GDBObjBlockInsert.CreateInstance;
+        end;
+
         //настраивает
-        result^.Name:=nameBlock;
+        result^.Name:=blockName;
         result^.Local.P_insert:=pt;
         result^.scale:=uzegeometry.CreateVertex(scalex,scaley,1);
         //строим переменную часть примитива (та что может редактироваться)
@@ -123,11 +134,11 @@ var
         //ZCMsgCallBackInterface.TextMessage('2',TMWOHistoryOut);
 
         //добавляем свойства
-        if AnsiPos('DEVICE_', nameBlock) > 0 then begin
+        if itDevice then begin
           entvarext:=result^.GetExtension<TVariablesExtender>;
           if entvarext<>nil then
             begin
-              psu:=units.findunit(GetSupportPath,@InterfaceTranslate,nameBlock); //
+              psu:=units.findunit(GetSupportPath,@InterfaceTranslate,InsertionName); //
               if psu<>nil then
                 entvarext.entityunit.copyfrom(psu);
             end;
@@ -142,11 +153,11 @@ var
   //Если кодовое имя zimportdev
     procedure creatorBlockXLSX(nameSheet:string;stRow,stCol:Cardinal);
     var
-      pvd,pvd2:pvardesk;
+      pvd{,pvd2}:pvardesk;
       //nameGroup:string;
       //listGroupHeadDev:TListGroupHeadDev;
       //listDev:TListDev;
-      ourDev:PGDBObjDevice;
+      ourDevOrInsert:PGDBObjBlockInsert;
       stColNew:Cardinal;
       cellValueVar,cellValueVar2:string;
       insertBlockName:string;
@@ -156,10 +167,12 @@ var
       isSpecName:boolean;
 
     begin
+          ZCMsgCallBackInterface.TextMessage('creatorBlockXLSX = ' + inttostr(stRow) + ' , ' + inttostr(stCol),TMWOHistoryOut);
       stColNew:=stCol;
       // получаем стартовые условия
       inc(stColNew);
       insertBlockName:=uzvzcadxlsxole.getCellValue(nameSheet,stRow,stColNew);
+      ZCMsgCallBackInterface.TextMessage('insertBlockName = ' + insertBlockName,TMWOHistoryOut);
       // координата смещения относительно нуля по X
       inc(stColNew);
       try
@@ -173,19 +186,19 @@ var
         inc(stColNew);
         scaley:=strtofloat(uzvzcadxlsxole.getCellValue(nameSheet,stRow,stColNew));
 
-        ourDev:=drawInsertBlock(uzegeometry.CreateVertex(movex,movey,0),scalex,scaley,insertBlockName);
+        ourDevOrInsert:=drawInsertBlock(uzegeometry.CreateVertex(movex,movey,0),scalex,scaley,insertBlockName);
       except
-        ourDev:=nil;
+        ourDevOrInsert:=nil;
       end;
 
-      if ourDev <> nil then begin
+      if ourDevOrInsert <> nil then begin
       inc(stColNew);
       cellValueVar:=uzvzcadxlsxole.getCellValue(nameSheet,stRow,stColNew);
       //ZCMsgCallBackInterface.TextMessage('cellValueVar значение ячейки = ' + inttostr(stRow) + ' - ' + inttostr(stColNew)+ ' = ' + cellValueVar,TMWOHistoryOut);
       while cellValueVar <> xlsxInsertBlockFT do begin
         try
            if cellValueVar <> '' then begin
-             pvd:=FindVariableInEnt(ourDev,cellValueVar);
+             pvd:=FindVariableInEnt(ourDevOrInsert,cellValueVar);
              if pvd<>nil then
                begin
                  inc(stColNew);
@@ -219,6 +232,7 @@ var
          inc(stColNew);
          cellValueVar:=uzvzcadxlsxole.getCellValue(nameSheet,stRow,stColNew);
          //ZCMsgCallBackInterface.TextMessage('cellValueVar while значение ячейки = ' + inttostr(stRow) + ' - ' + inttostr(stColNew)+ ' = ' + cellValueVar,TMWOHistoryOut);
+
       end;
     end else ZCMsgCallBackInterface.TextMessage('ОШИБКА. Неправильно задано имя блока или неправильн заданы смещения',TMWOHistoryOut);
   end;
@@ -226,25 +240,25 @@ var
 function vImportXLSXToCAD_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 var
   //inpt:String;
-  gr:TGetResult;
-  filename:string;
-  pvd:pvardesk;
-  p:GDBVertex;
-  listHeadDev:TListDev;
-  listNameGroupDev:TListGroupHeadDev;
-  headDev:pGDBObjDevice;
-  graphView:TGraphDev;
-  depthVisual:double;
-  insertCoordination:GDBVertex;
-  listAllHeadDev:TListDev;
-  devMaincFunc:PGDBObjDevice;
+  //gr:TGetResult;
+  //filename:string;
+  //pvd:pvardesk;
+  //p:GDBVertex;
+  //listHeadDev:TListDev;
+  //listNameGroupDev:TListGroupHeadDev;
+  //headDev:pGDBObjDevice;
+  //graphView:TGraphDev;
+  //depthVisual:double;
+  //insertCoordination:GDBVertex;
+  //listAllHeadDev:TListDev;
+  //devMaincFunc:PGDBObjDevice;
 
 
   nameActiveSheet:string;
   ourCell:TVXLSXCELL;
-  stRow:integer;
+  stRow,stCol:Cardinal;
   i:integer;
-  cellValueVar:string;
+  //cellValueVar:string;
   isFinishSearch:boolean;
   isActiveExcel:boolean;
 begin
@@ -275,10 +289,15 @@ begin
         creatorBlockXLSX(nameActiveSheet,ourCell.vRow,ourCell.vCol);
         //ищем вхождение спец символов
         uzvzcadxlsxole.searchNextCellRowCol(nameActiveSheet,xlsxInsertBlockST,ourCell.vRow,ourCell.vCol);
-        if stRow>ourCell.vRow then
+        if (stRow=ourCell.vRow) and (stCol=ourCell.vCol) then
+          isFinishSearch:=false;
+        if (stRow>ourCell.vRow) then
+          isFinishSearch:=false;
+        if (stRow=ourCell.vRow) and (stCol>ourCell.vCol) then
           isFinishSearch:=false;
 
         stRow:=ourCell.vRow;
+        stCol:=ourCell.vCol;
      end;
 
      ZCMsgCallBackInterface.TextMessage('Количество добавленных блоков = ' + xlsxInsertBlockST + ' = ' + inttostr(i),TMWOHistoryOut);
@@ -294,28 +313,28 @@ end;
 
 function importXLSXToCAD(nameSheet:string):boolean;
 var
-  //inpt:String;
-  gr:TGetResult;
-  filename:string;
-  pvd:pvardesk;
-  p:GDBVertex;
-  listHeadDev:TListDev;
-  listNameGroupDev:TListGroupHeadDev;
-  headDev:pGDBObjDevice;
-  graphView:TGraphDev;
-  depthVisual:double;
-  insertCoordination:GDBVertex;
-  listAllHeadDev:TListDev;
-  devMaincFunc:PGDBObjDevice;
+//  //inpt:String;
+//  gr:TGetResult;
+//  filename:string;
+//  pvd:pvardesk;
+//  p:GDBVertex;
+//  listHeadDev:TListDev;
+//  listNameGroupDev:TListGroupHeadDev;
+//  headDev:pGDBObjDevice;
+//  graphView:TGraphDev;
+//  depthVisual:double;
+//  insertCoordination:GDBVertex;
+//  listAllHeadDev:TListDev;
+//  devMaincFunc:PGDBObjDevice;
 
 
-  nameActiveSheet:string;
+  //nameActiveSheet:string;
   ourCell:TVXLSXCELL;
-  stRow:integer;
+  stRow,stCol:Cardinal;
   i:integer;
-  cellValueVar:string;
+  //cellValueVar:string;
   isFinishSearch:boolean;
-  isActiveExcel:boolean;
+  //isActiveExcel:boolean;
 begin
 
    //Ищем команду всавки блоков из Excel
@@ -324,19 +343,25 @@ begin
 
       isFinishSearch:= true;      //когда поиск пошел с начала
       stRow:=ourCell.vRow;
+      stCol:=ourCell.vCol;
 
-      while (ourCell.vRow > 0) and isFinishSearch do
+      while isFinishSearch do
       begin
         inc(i);
-
         //Создание блоков
         creatorBlockXLSX(nameSheet,ourCell.vRow,ourCell.vCol);
+
         //ищем вхождение спец символов
         uzvzcadxlsxole.searchNextCellRowCol(nameSheet,xlsxInsertBlockST,ourCell.vRow,ourCell.vCol);
-        if stRow>ourCell.vRow then
+        if (stRow=ourCell.vRow) and (stCol=ourCell.vCol) then
+          isFinishSearch:=false;
+        if (stRow>ourCell.vRow) then
+          isFinishSearch:=false;
+        if (stRow=ourCell.vRow) and (stCol>ourCell.vCol) then
           isFinishSearch:=false;
 
         stRow:=ourCell.vRow;
+        stCol:=ourCell.vCol;
      end;
 
      ZCMsgCallBackInterface.TextMessage('Количество добавленных блоков = ' + xlsxInsertBlockST + ' = ' + inttostr(i),TMWOHistoryOut);

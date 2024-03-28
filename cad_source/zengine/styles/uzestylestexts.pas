@@ -54,6 +54,7 @@ GDBTextStyleArray= object(GDBNamedObjectsArray{-}<PGDBTextStyle,GDBTextStyle>{//
                     procedure internalsetstyle(var style:GDBTextStyle;AFontFile,AFontFamily:String;tp:GDBTextStyleProp;USedInLT:Boolean);
                     function FindStyle(StyleName:String;ult:Boolean):PGDBTextStyle;
                     procedure freeelement(PItem:PT);virtual;
+                    function CorrectNilledTextStyle(pts:PGDBTextStyle):PGDBTextStyle;
               end;
 {EXPORT-}
   TTextStyle = class(TNamedObject)
@@ -90,33 +91,15 @@ begin
   //addlayer('0',cgdbwhile,lwgdbdefault);
 end;
 
-{procedure GDBLayerArray.clear;
-var i:Integer;
-    tlp:PGDBLayerProp;
+function GDBTextStyleArray.CorrectNilledTextStyle(pts:PGDBTextStyle):PGDBTextStyle;
 begin
-     if count>0 then
-     begin
-          tlp:=parray;
-          for i:=0 to count-1 do
-          begin
-               tlp^.name:='';
-               inc(tlp);
-          end;
-     end;
-  count:=0;
-end;}
-{function GDBLayerArray.getLayerIndex(name: String): Integer;
-var
-  i: Integer;
-begin
-  result := 0;
-  for i := 0 to count - 1 do
-    if PGDBLayerPropArray(Parray)^[i].name = name then
-    begin
-      result := i;
-      exit;
-    end;
-end;}
+  if pts<>nil then
+    result:=pts
+  else
+    result:=getAddres('Standard');
+    {todo: централизовать все строки с dxf терминами наподобии 'Standard'}
+end;
+
 procedure GDBTextStyleArray.internalsetstyle(var style:GDBTextStyle;AFontFile,AFontFamily:String;tp:GDBTextStyleProp;USedInLT:Boolean);
 begin
   style.FontFile:=AFontFile;

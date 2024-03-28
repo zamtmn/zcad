@@ -888,32 +888,27 @@ var
   HaveErrors:boolean;
   NScrollInfo:TScrollInfo;
 begin
-   if not isvisible then exit;
-   HaveErrors:=false;
-
-   //TreeEnabler.Height:=MainToolBar.Height;
-
-   NavTree.BeginUpdate;
-
-   lpsh:=LPS.StartLongProcess('NavigatorEntities.RefreshTree',@self);
-   EraseRoots;
-   CreateRoots;
-
-   try
-     if drawings.GetCurrentDWG<>nil then
-     begin
-       pv:=drawings.GetCurrentROOT.ObjArray.beginiterate(ir);
-       if pv<>nil then
-       repeat
-         {if assigned(CombinedNode)then
-           CombinedNode.ProcessEntity(pv,EntsFilter,TraceEntity);}
-         if assigned(StandaloneNode)then
-           StandaloneNode.ProcessEntity(self.CreateEntityNode,pv,EntsFilter,TraceEntity);
-         pv:=drawings.GetCurrentROOT.ObjArray.iterate(ir);
-       until pv=nil;
-     end;
-   except
-     on
+  NavTree.BeginUpdate;
+  lpsh:=LPS.StartLongProcess('NavigatorEntities.RefreshTree',@self);
+  EraseRoots;
+  CreateRoots;
+  try
+    if not isvisible then exit;
+    HaveErrors:=false;
+    try
+      if drawings.GetCurrentDWG<>nil then begin
+        pv:=drawings.GetCurrentROOT.ObjArray.beginiterate(ir);
+        if pv<>nil then
+        repeat
+          {if assigned(CombinedNode)then
+          CombinedNode.ProcessEntity(pv,EntsFilter,TraceEntity);}
+          if assigned(StandaloneNode)then
+             StandaloneNode.ProcessEntity(self.CreateEntityNode,pv,EntsFilter,TraceEntity);
+          pv:=drawings.GetCurrentROOT.ObjArray.iterate(ir);
+        until pv=nil;
+      end;
+    except
+      on
         E:Exception do begin
           programlog.LogOutStr('Error in TNavigatorDevices.RefreshTree '+E.Message,LM_Error);
           if NDMsgCtx=nil then
@@ -921,21 +916,22 @@ begin
           {dr:=}zcMsgDlg('Error in TNavigatorDevices.RefreshTree '+E.Message,zcdiError,[],true,NDMsgCtx);
           HaveErrors:=true;
         end;
-   end;
-   if not HaveErrors then
-     if assigned(NDMsgCtx) then
-       NDMsgCtx.clear;
+    end;
+    if not HaveErrors then
+      if assigned(NDMsgCtx) then
+        NDMsgCtx.clear;
 
-   if assigned(StandaloneNodeStates) then
-   begin
-     StandaloneNode.RestoreState(StandaloneNodeStates,Dist);
-     NavTree.OffsetXY:=StandaloneNodeStates.SaveOffset;
-     FreeAndNil(StandaloneNodeStates);
-   end;
-   PostProcessTree;
-   Filter(FilterBtn);
-   LPS.EndLongProcess(lpsh);
-   NavTree.EndUpdate;
+    if assigned(StandaloneNodeStates) then begin
+      StandaloneNode.RestoreState(StandaloneNodeStates,Dist);
+      NavTree.OffsetXY:=StandaloneNodeStates.SaveOffset;
+      FreeAndNil(StandaloneNodeStates);
+    end;
+    PostProcessTree;
+    Filter(FilterBtn);
+  finally
+    LPS.EndLongProcess(lpsh);
+    NavTree.EndUpdate;
+  end;
 end;
 procedure TNavigatorDevices.RefreshTree(Sender: TObject);
 begin

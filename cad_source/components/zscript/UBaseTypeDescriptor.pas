@@ -18,7 +18,7 @@
 
 unit UBaseTypeDescriptor;
 
-{$MODE DELPHI}
+{$MODE DELPHI}{$Codepage UTF8}
 interface
 uses
       typinfo,LCLProc,Graphics,classes,Themes,
@@ -363,7 +363,7 @@ begin
 end;
 class function TStringTypeManipulator<T>.GetValueAsString(const data:T):TInternalScriptString;
 begin
-    result:=uni2cp(data);
+    result:={uni2cp}(data);
 end;
 class function TStringTypeManipulator<T>.GetFormattedValueAsString(const data:T; const f:TzeUnitsFormat):TInternalScriptString;
 begin
@@ -371,16 +371,16 @@ begin
 end;
 class procedure TStringTypeManipulator<T>.SetValueFromString(var data:T;Value:TInternalScriptString);
 begin
-     data:=cp2uni(Value);
+     data:={cp2uni}(Value);
 end;
 class procedure TStringTypeManipulator<T>.setFormattedValueAsString(var data:T; const f:TzeUnitsFormat;Value:TInternalScriptString);
 begin
-     data:=cp2uni(Value);
+     data:={cp2uni}(Value);
 end;
 
 class function TAnsiStringTypeManipulator<T>.GetValueAsString(const data:T):TInternalScriptString;
 begin
-    result:=ansi2cp(data);
+    result:={ansi2cp}(data);;
 end;
 class function TAnsiStringTypeManipulator<T>.GetFormattedValueAsString(const data:T; const f:TzeUnitsFormat):TInternalScriptString;
 begin
@@ -388,11 +388,11 @@ begin
 end;
 class procedure TAnsiStringTypeManipulator<T>.SetValueFromString(var data:T;Value:TInternalScriptString);
 begin
-     data:=cp2ansi(Value);
+     data:={cp2ansi}(Value);
 end;
 class procedure TAnsiStringTypeManipulator<T>.setFormattedValueAsString(var data:T; const f:TzeUnitsFormat;Value:TInternalScriptString);
 begin
-     data:=cp2uni(Value);
+     data:={cp2uni}(Value);
 end;
 
 

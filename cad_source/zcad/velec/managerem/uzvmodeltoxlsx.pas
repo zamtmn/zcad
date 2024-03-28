@@ -29,7 +29,7 @@ uses
   uzcLog,
   uzccommandsabstract,uzccommandsimpl,uzccommandsmanager,
   uzeparsercmdprompt,uzegeometrytypes,
-  uzcinterface,uzcdialogsfiles,uzcutils,
+  uzcinterface,uzcdialogsfiles,{uzcutils,}
   uzvmanemgetgem,
   uzvagraphsdev,
   gvector,
@@ -52,7 +52,8 @@ uses
   uzcsysvars,
   Classes,
   uzcdrawing,
-  Varman;
+  Varman,
+  uzelongprocesssupport;
 
   type
   TVXLSXCELL=record
@@ -149,11 +150,11 @@ type
   //devgroupnamesort=TOrderingArrayUtils<TListGroupHeadDev, string, TSortComparer>;
 
 var
-  clFileParam:CMDLinePromptParser.TGeneralParsedText=nil;
+  //clFileParam:CMDLinePromptParser.TGeneralParsedText=nil;
   //CmdProp:TuzvmanemSGparams;
   //SelSimParams:TSelBlockParams;
   listFullGraphEM:TListGraphDev;     //Граф со всем чем можно
-  listMainFuncHeadDev:TListDev;
+  //listMainFuncHeadDev:TListDev;
   remotemode:boolean;
 
 
@@ -173,15 +174,15 @@ var
 
   //Получить головное устройство
   function getDeviceHeadGroup(listFullGraphEM:TListGraphDev;listDev:TListDev):pGDBObjDevice;
-  type
-    TListEntity=TVector<pGDBObjEntity>;
+  //type
+  //  TListEntity=TVector<pGDBObjEntity>;
   var
      selEnt:pGDBObjEntity;
-     pvd:pvardesk;
+     //pvd:pvardesk;
      //listDev:TListDev;
-     devName:string;
-     devlistMF,selDev,selDevMF:PGDBObjDevice;
-     isListDev:boolean;
+     //devName:string;
+     devlistMF{,selDev,selDevMF}:PGDBObjDevice;
+     //isListDev:boolean;
      selDevVarExt:TVariablesExtender;
      selEntMF:PGDBObjEntity;
 
@@ -324,29 +325,30 @@ var
               ZCMsgCallBackInterface.TextMessage('1',TMWOHistoryOut);
 
               if (stRowNew <> stRow) then
+              begin
+                uzvzcadxlsxole.copyRow(nameEtalon,stRow,nameSheet,stRowNew);
                 uzvzcadxlsxole.setCellValue(nameSheet,stRowNew,stColNew,'1');
+              end;
 
               inc(stColNew);      // отходим от кодового имени
               cellValueVar:=uzvzcadxlsxole.getCellFormula(nameEtalon,stRow,stColNew);
 
               //ZCMsgCallBackInterface.TextMessage('значение ячейки = ' + inttostr(stRow) + ' - ' + inttostr(stColNew)+ ' = ' + cellValueVar,TMWOHistoryOut);
               while cellValueVar <> zimportdevFT do begin
-               if cellValueVar = '' then
-                 continue;
-               if cellValueVar[1]<>'=' then
+               if (cellValueVar <> '') and (cellValueVar[1]<>'=') then
                begin
                    pvd2:=FindVariableInEnt(ourDev,cellValueVar);
                    if pvd2<>nil then begin
                      textCell:=pvd2^.data.ptd^.GetValueAsString(pvd2^.data.Addr.Instance);
-                     ZCMsgCallBackInterface.TextMessage('записываю в ячейку = ' + textCell,TMWOHistoryOut);
+                     //ZCMsgCallBackInterface.TextMessage('записываю в ячейку = ' + textCell,TMWOHistoryOut);
                      uzvzcadxlsxole.setCellValue(nameSheet,stRowNew,stColNew,textCell);
-                   end else uzvzcadxlsxole.copyCell(nameEtalon,stRow,stColNew,nameSheet,stRowNew,stColNew);
+                   end;// else uzvzcadxlsxole.copyCell(nameEtalon,stRow,stColNew,nameSheet,stRowNew,stColNew);
 
-               end
-               else
-               begin
-                 uzvzcadxlsxole.copyCell(nameEtalon,stRow,stColNew,nameSheet,stRowNew,stColNew);
                end;
+               //else
+               //begin
+               //  uzvzcadxlsxole.copyCell(nameEtalon,stRow,stColNew,nameSheet,stRowNew,stColNew);
+               //end;
 
                  inc(stColNew);
                  cellValueVar:=uzvzcadxlsxole.getCellFormula(nameEtalon,stRow,stColNew);
@@ -357,16 +359,18 @@ var
               inc(stRowNew);
               stColNew:=stCol;
             end;
+            listDev.Free;
          end;
        //uzvzcadxlsxole.setCellValue(nameSheet,1,1,'1'); //переводим фокус
+       listGroupHeadDev.Free;
     end;
     //Если кодовое имя zimportdev
     procedure zimportrootdevcommand(graphDev:TGraphDev;nameEtalon,nameSheet:string;stRow,stCol:Cardinal);
     var
       pvd2:pvardesk;
-      nameGroup:string;
-      listGroupHeadDev:TListGroupHeadDev;
-      listDev:TListDev;
+      //nameGroup:string;
+      //listGroupHeadDev:TListGroupHeadDev;
+      //listDev:TListDev;
       ourDev:PGDBObjDevice;
       stRowNew,stColNew:Cardinal;
       cellValueVar:string;
@@ -399,29 +403,30 @@ var
               //ZCMsgCallBackInterface.TextMessage('1',TMWOHistoryOut);
 
               if (stRowNew <> stRow) then
+              begin
+                uzvzcadxlsxole.copyRow(nameEtalon,stRow,nameSheet,stRowNew);
                 uzvzcadxlsxole.setCellValue(nameSheet,stRowNew,stColNew,'1');
+              end;
 
               inc(stColNew);      // отходим от кодового имени
               cellValueVar:=uzvzcadxlsxole.getCellFormula(nameEtalon,stRow,stColNew);
 
               //ZCMsgCallBackInterface.TextMessage('значение ячейки = ' + inttostr(stRow) + ' - ' + inttostr(stColNew)+ ' = ' + cellValueVar,TMWOHistoryOut);
               while cellValueVar <> zimportrootdevFT do begin
-               if cellValueVar = '' then
-                 continue;
-               if cellValueVar[1]<>'=' then
+               if (cellValueVar <> '') and (cellValueVar[1]<>'=') then
                begin
                    pvd2:=FindVariableInEnt(ourDev,cellValueVar);
                    if pvd2<>nil then begin
                      textCell:=pvd2^.data.ptd^.GetValueAsString(pvd2^.data.Addr.Instance);
                      //ZCMsgCallBackInterface.TextMessage('записываю в ячейку = ' + textCell,TMWOHistoryOut);
                      uzvzcadxlsxole.setCellValue(nameSheet,stRowNew,stColNew,textCell);
-                   end else uzvzcadxlsxole.copyCell(nameEtalon,stRow,stColNew,nameSheet,stRowNew,stColNew);
+                   end;// else uzvzcadxlsxole.copyCell(nameEtalon,stRow,stColNew,nameSheet,stRowNew,stColNew);
 
-               end
-               else
-               begin
-                 uzvzcadxlsxole.copyCell(nameEtalon,stRow,stColNew,nameSheet,stRowNew,stColNew);
                end;
+               //else
+               //begin
+               //  uzvzcadxlsxole.copyCell(nameEtalon,stRow,stColNew,nameSheet,stRowNew,stColNew);
+               //end;
 
                  inc(stColNew);
                  cellValueVar:=uzvzcadxlsxole.getCellFormula(nameEtalon,stRow,stColNew);
@@ -438,7 +443,7 @@ var
     //Если кодовое имя zimportcab
     procedure zimportcabcommand(graphDev:TGraphDev;nameEtalon,nameSheet:string;stRow,stCol:Cardinal);
     var
-      pvd,pvd2:pvardesk;
+      pvd{,pvd2}:pvardesk;
       nameGroup:string;
       listGroupHeadDev:TListGroupHeadDev;
       listCab:TListPolyline;
@@ -447,7 +452,7 @@ var
       cellValueVar:string;
       textCell:string;
       j:integer;
-      cabNowvarext,polyext:TVariablesExtender;
+      {cabNowvarext,}polyext:TVariablesExtender;
       cableNowMF:PGDBObjCable;
       iHaveParam:boolean;
 
@@ -488,7 +493,10 @@ var
                  //Получаем ссылку на кабель или полилинию которая заменяет стояк
                  cableNowMF:=getMainFuncCable(polyext);
                  if (stRowNew <> stRow) then
+                 begin
+                   uzvzcadxlsxole.copyRow(nameEtalon,stRow,nameSheet,stRowNew);
                    uzvzcadxlsxole.setCellValue(nameSheet,stRowNew,stColNew,'1');
+                 end;
 
                   inc(stColNew);      // отходим от кодового имени
                   cellValueVar:=uzvzcadxlsxole.getCellFormula(nameEtalon,stRow,stColNew);
@@ -497,9 +505,7 @@ var
                      ZCMsgCallBackInterface.TextMessage('значение ячейки = ' + inttostr(stRow) + ' - ' + inttostr(stColNew)+ ' = ' + cellValueVar,TMWOHistoryOut);
 
                   while cellValueVar <> zimportcabFT do begin
-                   if cellValueVar = '' then
-                     continue;
-                   if cellValueVar[1]<>'=' then
+                   if (cellValueVar <> '') and (cellValueVar[1]<>'=') then
                    begin
                      iHaveParam:=false;
                      polyext:=ourCab^.GetExtension<TVariablesExtender>;
@@ -530,13 +536,13 @@ var
                        begin
                          //textCell:=uzbstrproc.Tria_AnsiToUtf8(textCell);
                          uzvzcadxlsxole.setCellValue(nameSheet,stRowNew,stColNew,textCell);
-                       end else uzvzcadxlsxole.copyCell(nameEtalon,stRow,stColNew,nameSheet,stRowNew,stColNew);
+                       end;// else uzvzcadxlsxole.copyCell(nameEtalon,stRow,stColNew,nameSheet,stRowNew,stColNew);
 
-                   end
-                   else
-                   begin
-                     uzvzcadxlsxole.copyCell(nameEtalon,stRow,stColNew,nameSheet,stRowNew,stColNew);
                    end;
+                   //else
+                   //begin
+                   //  uzvzcadxlsxole.copyCell(nameEtalon,stRow,stColNew,nameSheet,stRowNew,stColNew);
+                   //end;
 
                      inc(stColNew);
                      cellValueVar:=uzvzcadxlsxole.getCellFormula(nameEtalon,stRow,stColNew);
@@ -549,7 +555,9 @@ var
 
 
             end;
+            listCab.Free;
          end;
+         listGroupHeadDev.Free;
     end;
 
     //Если кодовое имя zcopyrow
@@ -559,23 +567,23 @@ var
        targetcodename='targetcodename';
        keynumcol='keynumcol';
     var
-      pvd2:pvardesk;
+      //pvd2:pvardesk;
       //nameGroup:string;
       //listGroupHeadDev:TListGroupHeadDev;
       //listDev:TListDev;
       //ourDev:PGDBObjDevice;
       j:integer;
       stRow,stCol:Cardinal;
-      stRowNew,stColNew:Cardinal;
+      stRowNew{,stColNew}:Cardinal;
       stRowEtalonNew,stColEtalonNew:Cardinal;
       cellValueVar:string;
       textTargetSheet:string;
-      temptextcell,temptextcellnew:string;
+      //temptextcell,temptextcellnew:string;
       codeNameEtalonSheet,codeNameEtalonSheetRect,codeNameNewSheet:string;
       speckeynumcol:integer;
       spectargetSheet:string;
       spectargetcodename:string;
-      stInfoDevCell:TVXLSXCELL;
+      //stInfoDevCell:TVXLSXCELL;
 
       //парсим ключи спецключи
       function getkeysCell(textCell,namekey:string):String;
@@ -633,7 +641,7 @@ var
 
 
        stRowNew:=stRow;
-       stColNew:=stCol;
+       //stColNew:=stCol;
        stRowEtalonNew:=stRowEtalon;
        stColEtalonNew:=stColEtalon;
 
@@ -686,7 +694,7 @@ var
        while cellValueVar = '1' do
          begin
               cellValueVar:=uzvzcadxlsxole.getCellValue(textTargetSheet,stRowNew,speckeynumcol);  //Получаем значение ключа, для первой строки
-              //ZCMsgCallBackInterface.TextMessage('значение ячейки которое удаляем 111111111111111111 = ' + inttostr(stRowNew) + ' - ' + inttostr(stCol)+ ' = '+cellValueVar,TMWOHistoryOut);
+              ZCMsgCallBackInterface.TextMessage('значение ячейки которое удаляем 111111111111111111 = ' + inttostr(stRowNew) + ' - ' + inttostr(speckeynumcol)+ ' = '+cellValueVar,TMWOHistoryOut);
               if cellValueVar <> '1' then
                  uzvzcadxlsxole.deleteRow(nameSheet,stRowEtalonNew);
 
@@ -706,19 +714,19 @@ var
       stInfoDevCell:TVXLSXCELL;    //
       ourgraphDev:TGraphDev;       //
       pvd,pvd2:pvardesk;
-      nameGroup:string;
-      listGroupHeadDev:TListGroupHeadDev;
+      //nameGroup:string;
+      //listGroupHeadDev:TListGroupHeadDev;
       listCab:TListPolyline;       //
       ourCab:PGDBObjPolyline;
       stRowNew,stColNew,stRow,stCol:Cardinal;
       cellValueVar:string;
       textCell:string;
       j:integer;
-      cabNowvarext,polyext:TVariablesExtender;
+      {cabNowvarext,}polyext:TVariablesExtender;
       cableNowMF:PGDBObjCable;
       iHaveParam:boolean;
 
-      node:PTNodeProp;
+      //node:PTNodeProp;
 
       function getMainFuncCable(devNowvarext:TVariablesExtender):PGDBObjCable;
       begin
@@ -763,7 +771,10 @@ var
                    //Получаем ссылку на кабель или полилинию которая заменяет стояк
                    cableNowMF:=getMainFuncCable(polyext);
                    if (stRowNew <> stRow) then
+                   begin
+                     uzvzcadxlsxole.copyRow(nameEtalon,stRow,nameSheet,stRowNew);
                      uzvzcadxlsxole.setCellValue(nameSheet,stRowNew,stColNew,'1');
+                   end;
 
                     inc(stColNew);      // отходим от кодового имени
                     cellValueVar:=uzvzcadxlsxole.getCellFormula(nameEtalon,stRow,stColNew);
@@ -772,9 +783,7 @@ var
                        ZCMsgCallBackInterface.TextMessage('значение ячейки = ' + inttostr(stRow) + ' - ' + inttostr(stColNew)+ ' = ' + cellValueVar,TMWOHistoryOut);
 
                     while cellValueVar <> zallcabCodeFT do begin
-                     if cellValueVar = '' then
-                       continue;
-                     if cellValueVar[1]<>'=' then
+                     if (cellValueVar <> '') and (cellValueVar[1]<>'=') then
                      begin
                        iHaveParam:=false;
                        polyext:=ourCab^.GetExtension<TVariablesExtender>;
@@ -836,13 +845,13 @@ var
                            //textCell:=uzbstrproc.Tria_AnsiToUtf8(textCell);
 
                            uzvzcadxlsxole.setCellValue(nameSheet,stRowNew,stColNew,textCell);
-                         end else uzvzcadxlsxole.copyCell(nameEtalon,stRow,stColNew,nameSheet,stRowNew,stColNew);
+                         end;// else uzvzcadxlsxole.copyCell(nameEtalon,stRow,stColNew,nameSheet,stRowNew,stColNew);
 
-                     end
-                     else
-                     begin
-                       uzvzcadxlsxole.copyCell(nameEtalon,stRow,stColNew,nameSheet,stRowNew,stColNew);
                      end;
+                     //else
+                     //begin
+                     //  uzvzcadxlsxole.copyCell(nameEtalon,stRow,stColNew,nameSheet,stRowNew,stColNew);
+                     //end;
 
                        inc(stColNew);
                        cellValueVar:=uzvzcadxlsxole.getCellFormula(nameEtalon,stRow,stColNew);
@@ -855,6 +864,7 @@ var
 
 
               end;
+              listCab.Free;
            end;
        end;
 
@@ -1037,10 +1047,12 @@ procedure generatorSheet(graphDev:TGraphDev;nameEtalon,nameSheet:string);
             //заполнение следующего устройтсва
             inc(coldev);
           end;
-
+          listDev.Free;
          end;
+         listGroupHeadDev.Free;
     end;
 
+  var lph:TLPSHandle;
   begin
        ////открываем эталонную книгу     generatorSheet
        // ZCMsgCallBackInterface.Do_BeforeShowModal(nil);
@@ -1050,7 +1062,7 @@ procedure generatorSheet(graphDev:TGraphDev;nameEtalon,nameSheet:string);
        //   result:=cmd_cancel;
        //   exit;
        // end;
-
+       lph:=lps.StartLongProcess('Выполнение экспорта модели соединений в EXCEL',nil);
        ZCMsgCallBackInterface.TextMessage('Алгоритм экспорта модели соединений в EXCEL - НАЧАТ',TMWOHistoryOut);
 
        //uzvzcadxlsxole.openXLSXFile('d:\YandexDisk\zcad-test\ETALON\etalon.xlsx');
@@ -1103,8 +1115,8 @@ procedure generatorSheet(graphDev:TGraphDev;nameEtalon,nameSheet:string);
 
             While AnsiPos(nameSET, valueCell) > 0 do
             begin
-                if AnsiPos(nameSET, valueCell) > 0 then
-                begin
+                //if AnsiPos(nameSET, valueCell) > 0 then
+                //begin
                   //Создаем копию листа эталона
                   newNameSheet:=StringReplace(valueCell, nameSET, namePanel,[rfReplaceAll, rfIgnoreCase]);
                   uzvzcadxlsxole.copyWorksheetName(valueCell,newNameSheet);
@@ -1113,7 +1125,7 @@ procedure generatorSheet(graphDev:TGraphDev;nameEtalon,nameSheet:string);
                   if remotemode then
                     ZCMsgCallBackInterface.TextMessage('generatorSheet(graphDev,valueCell,newNameSheet)',TMWOHistoryOut);
                   generatorSheet(graphDev,valueCell,newNameSheet);     //здесь запускается самое главное, ищутся спец коды и заполняются
-                end;
+                //end;
                 inc(numRow);
                 valueCell:=uzvzcadxlsxole.getCellValue(nameSET+'SET',numRow,1);
 
@@ -1122,6 +1134,7 @@ procedure generatorSheet(graphDev:TGraphDev;nameEtalon,nameSheet:string);
             end;
                 //until AnsiPos(nameSET, valueCell) > 0;
             valueCell:=uzvzcadxlsxole.getCellValue(nameSET+'SET',numRow,1);
+            graphDev.Free;
          end;
 
        //Прячем системные листы
@@ -1144,6 +1157,7 @@ procedure generatorSheet(graphDev:TGraphDev;nameEtalon,nameSheet:string);
             //ZCMsgCallBackInterface.TextMessage('Значение ячейки = '+valueCell + ', номер позиции = ' +inttostr(AnsiPos(nameSET, valueCell)),TMWOHistoryOut);
         end;
 
+       lps.EndLongProcess(lph);
 
        //Сохранить или перезаписать книгу с моделью
 
@@ -1170,15 +1184,15 @@ procedure generatorSheet(graphDev:TGraphDev;nameEtalon,nameSheet:string);
 function vExportModelToXLSX_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 var
   fileTemplate:ansiString;
-  gr:TGetResult;
-  filename,newfilexlsx:string;
+  //gr:TGetResult;
+  {filename,}newfilexlsx:string;
   pvd:pvardesk;
-  i,j:integer;
+  //i,j:integer;
   //p:GDBVertex;
   //listHeadDev:TListDev;
   //listNameGroupDev:TListGroupHeadDev;
   //headDev:pGDBObjDevice;
-  graphView,ggg:TGraphDev;
+  graphView{,ggg}:TGraphDev;
   depthVisual:double;
   insertCoordination:GDBVertex;
   listAllHeadDev:TListDev;
@@ -1215,7 +1229,7 @@ begin
   ZCMsgCallBackInterface.TextMessage('Выбранный шаблон =' + fileTemplate,TMWOHistoryOut);
 
   //Получить список всех древовидно ориентированных графов из которых состоит модель
-  listFullGraphEM:=TListGraphDev.Create;
+  //listFullGraphEM:=TListGraphDev.Create;
   listFullGraphEM:=uzvmanemgetgem.getListGrapghEM;       //ВСЕ ХОРоШо
   ////ZCMsgCallBackInterface.TextMessage('listFullGraphEM сайз =  ' + inttostr(listFullGraphEM.Size),TMWOHistoryOut);
   //for i:=0 to listFullGraphEM.Size-1 do begin
@@ -1240,7 +1254,7 @@ begin
    end;
 
   //**получить список всех головных устройств (устройств централей)
-  listAllHeadDev:=TListDev.Create;
+  //listAllHeadDev:=TListDev.Create;
   listAllHeadDev:=uzvmanemgetgem.getListMainFuncHeadDev(listFullGraphEM);
   //ZCMsgCallBackInterface.TextMessage('listAllHeadDev сайз =  ' + inttostr(listAllHeadDev.Size),TMWOHistoryOut);
   if remotemode then
@@ -1254,6 +1268,7 @@ begin
         //ZCMsgCallBackInterface.TextMessage('рисуем граф exportGraphModelToXLSX = СТАРТ ',TMWOHistoryOut);
         graphView:=uzvmanemgetgem.getGraphHeadDev(listFullGraphEM,devMaincFunc,listAllHeadDev);
         visualGraphTree(graphView,insertCoordination,3,depthVisual);
+        graphView.Free;
         //ZCMsgCallBackInterface.TextMessage('рисуем граф exportGraphModelToXLSX = ФИНИШ ',TMWOHistoryOut);
       end;
 
@@ -1262,6 +1277,8 @@ begin
      exportGraphModelToXLSX(listAllHeadDev,fileTemplate,newfilexlsx);
   //ZCMsgCallBackInterface.TextMessage('exportGraphModelToXLSX = ФИНИШ ',TMWOHistoryOut);
   result:=cmd_ok;
+  listFullGraphEM.Free;
+  listAllHeadDev.Free;
 end;
 
 

@@ -56,7 +56,7 @@ TInteractiveProcObjBuild=procedure(const PInteractiveData:Pointer;Point:GDBVerte
       class function CreateRec:TZCADCommandContext;static;
     end;
 {Export+}
-    TCommandEndAction=(CEDeSelect,CEDWGNChanged);
+    TCommandEndAction=(CEGUIRePrepare,CEGUIReturnToDefaultObject,CEDeSelect,CEDWGNChanged);
     TCommandEndActions={-}set of TCommandEndAction{/Byte/};
     TGetPointMode=(
                    TGPMWait{point},//ожидание указания точки

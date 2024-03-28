@@ -17,6 +17,7 @@
 }
 
 unit uzcregnavigatordevices;
+{$Codepage UTF8}
 {$INCLUDE zengineconfig.inc}
 interface
 uses uzcfnavigatordevices,uzcfcommandline,uzbpaths,TypeDescriptors,uzctranslations,Forms,

@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<CONFIG>
+  <PalettesContent>
+    <BlockLib Type="Tree" Caption='Blocks' ImagesWidth='24'>
+      <ZTreeNode Caption='Vlowcurrentnetworks'>
+	    <ZTreeNode Caption='Plan'>
+		    <ZTreeNode Caption='Домофон'>
+			  <ZTreeCommand Command="Insert(DEVICE_SS_CALLPANELMULTIBUTTON)" Caption='Вызывная панель на 8 абонентов' />
+		    </ZTreeNode>	
+		    <ZTreeNode Caption='Сетевое оборудование'>
+			  <ZTreeCommand Command="Insert(DEVICE_SS_19)" Caption='Коммутационная стойка' />
+			  <ZTreeCommand Command="Insert(DEVICE_SS_NETWORKSWITCH)" Caption='Сетевой коммутатор' />
+			  <ZTreeCommand Command="Insert(DEVICE_SS_NETWIFI)" Caption='Точка доступа WiFi настенный' />
+			  <ZTreeCommand Command="Insert(DEVICE_SS_NETWIFICEILING)" Caption='Точка доступа WiFi потолочный' />
+			  <ZTreeCommand Command="Insert(DEVICE_SS_RJSOCKET)" Caption='Розетка RJ-45 Ethernet' />
+			  <ZTreeCommand Command="Insert(DEVICE_SS_RT)" Caption='Розетка RJ-12 телефонная' />
+		    </ZTreeNode>				
+        </ZTreeNode>
+      </ZTreeNode>
+    </BlockLib>
+  </PalettesContent>
+</CONFIG>

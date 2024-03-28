@@ -18,7 +18,7 @@
 
 unit langsystem;
 
-{$MODE DELPHI}
+{$MODE DELPHI}{$Codepage UTF8}
 interface
 uses uzbstrproc,varmandef,UBaseTypeDescriptor,
      base64;
@@ -359,8 +359,8 @@ begin
     rez.SetInstance(FundamentalStringDescriptorObj.AllocAndInitInstance);
   end else
     AnsiString(rez.data.Addr.Instance^):='';
-  AnsiString(result.data.Addr.Instance^) := Tria_Utf8ToAnsi(String(hrez.data.Addr.Instance^));
-  AnsiString(rez.data.Addr.Instance^) := Tria_Utf8ToAnsi(String(hrez.data.Addr.Instance^));
+  AnsiString(result.data.Addr.Instance^) := {Tria_Utf8ToAnsi}(String(hrez.data.Addr.Instance^));
+  AnsiString(rez.data.Addr.Instance^) := {Tria_Utf8ToAnsi}(String(hrez.data.Addr.Instance^));
 end;
 function TAnsiString_let_TAnsiString(var rez, hrez: vardesk): vardesk;
 begin

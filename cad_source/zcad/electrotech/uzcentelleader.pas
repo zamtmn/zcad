@@ -288,7 +288,7 @@ begin
        EntExtensions.RunOnBeforeEntityFormat(@self,drawing,DC);
      tbl.ptablestyle:=drawing.GetTableStyleTable^.getAddres('Temp');
      TCP:=CodePage;
-     CodePage:=CP_win;
+     CodePage:=CP_utf8;
      pdev:=nil;
      //pobj:=nil;
      sta.init(10);
@@ -432,7 +432,7 @@ begin
        end;
      until ps=nil;
 
-     textcontent:=Tria_AnsiToUtf8(textcontent);
+     //textcontent:=Tria_AnsiToUtf8(textcontent);
 
      if sta.Count=0 then begin
        s:='??';
@@ -458,7 +458,7 @@ begin
                                        psl.init(10);
                                   end;
           s:=ps^;
-          psl.PushBackData(s);
+          psl.PushBackData(Tria_Utf8ToAnsi(s));
           S:='';
           ps:=sta.iterate(ir);
      until ps=nil;
@@ -553,7 +553,7 @@ begin
           begin
           ptext:=pointer(self.ConstObjArray.CreateInitObj(GDBMTextID,@self));
           ptext.vp.Layer:=vp.Layer;
-          ptext.Template:=UTF8ToString(Tria_AnsiToUtf8(s));
+          ptext.Template:=UTF8ToString({Tria_AnsiToUtf8}(s));
           ptext.Local.P_insert:=tbl.Local.P_insert;
           ptext.Local.P_insert.y:=ptext.Local.P_insert.y+1.5*scale;
           ptext.textprop.justify:=jsbl;

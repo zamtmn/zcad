@@ -74,6 +74,7 @@
 	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_LIGHT7_1)" Img='DEVICE_EL_VL_LIGHT7_1_300' Caption='Настенный патрон КВ'/>
 	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_LIGHT8_1)" Img='DEVICE_EL_VL_LIGHT8_1_300' Caption='Звонок КВ'/>
 	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_LIGHT9_1)" Img='DEVICE_EL_VL_LIGHT9_1_300' Caption='Кнопка КВ'/>
+	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_LIGHT10_1)" Img='DEVICE_EL_VL_LIGHT10_1_300' Caption='Светильник жилье'/>
       	</ZTreeNode>
       	<ZTreeNode Caption='Switches'>
 	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_SWITH1_1P)" Img='DEVICE_EL_VL_SWITH1_1P_300' Caption='Выключатель СП31 1P'/>

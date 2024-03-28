@@ -1,0 +1,15 @@
+
+[[extdrRemove_com]]
+#### extdrRemove
+
+:cmdcommand: extdrRemove
+:cmdoperands: Обязательный. Имя расширения
+:predselect: Требуется
+:cmdexample: extdrRemove(extdrVariables)
+
+include::../../_elements/commandsummary.adoc[]
+
+Отвязка указанного расширения (см. <<ent_extenders>>) от выбраных примитивов. В случае к выбраному примитиву не привязано данное расширение,
+он будет проигнорирован
+
+include::commandsummaryfree.adoc[]

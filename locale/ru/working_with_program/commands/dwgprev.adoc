@@ -1,0 +1,12 @@
+
+#### DWGPrev
+
+:cmdcommand: DWGPrev
+:cmdshortcuts: kbd:[Ctrl+Shift+Tab]
+:cmdmenu: Окно > Предидущее окно
+
+include::../../_elements/commandsummary.adoc[]
+
+Если в программе открыто несколько чертежей текущим становится предидущий открытый чертеж
+
+include::commandsummaryfree.adoc[]

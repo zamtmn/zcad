@@ -21,7 +21,7 @@ unit uzctextpreprocessorimpl;
 
 interface
 uses uzeentity,uzcvariablesutils,uzetextpreprocessor,uzbstrproc,sysutils,
-     varmandef,uzbtypes,uzcenitiesvariablesextender,
+     varmandef,uzbtypes,uzcenitiesvariablesextender,languade,
      uzcpropertiesutils,uzeparser,LazUTF8;
 type
   TStr2VarProcessor=class(TMyParser.TParserTokenizer.TDynamicProcessor)
@@ -135,30 +135,24 @@ begin
   else
     result:='!!ERR('+operands+')!!';
 end;
-{function evaluatesubstr(var str:String;var startpos:integer;pobj:PGDBObjGenericWithSubordinated):String;
+function evaluatesubstr(const str:TDXFEntsInternalStringType;const operands:TDXFEntsInternalStringType;var NextSymbolPos:integer;pobj:Pointer):String;
 var
-  endpos:integer;
-  varname:String;
-  //pv:pvardesk;
   vd:vardesk;
   pentvarext:TVariablesExtender;
-  NextSymbolPos:integer;
 begin
-  NextSymbolPos:=startpos+1;
-  if startpos>0 then
+  result:='';
+  if operands<>'' then
   begin
-    endpos:=pos(']',str);
-    if endpos<NextSymbolPos-1 then exit;
-    varname:=copy(str,NextSymbolPos-1+3,endpos-NextSymbolPos-1-3);
-    pentvarext:=pobj^.GetExtension(TVariablesExtender);
-    vd:=evaluate(varname,@pentvarext.entityunit);
-    if (assigned(vd.data.ptd))and(assigned(vd.Instance)) then
-                                                                  str:=copy(str,1,NextSymbolPos-1-1)+vd.data.ptd^.GetValueAsString(vd.Instance)+copy(str,endpos+1,length(str)-endpos)
-                                                              else
-                                                                  str:=copy(str,1,NextSymbolPos-1-1)+'!!ERR('+varname+')!!'+copy(str,endpos+1,length(str)-endpos)
+    pentvarext:=PGDBObjEntity(pobj)^.specialize GetExtension<TVariablesExtender>;
+    if pentvarext<>nil then begin
+    vd:=evaluate(operands,@pentvarext.entityunit);
+    if (assigned(vd.data.ptd))and(assigned(vd.data.Addr.GetInstance)) then
+      result:=vd.GetValueAsString
+    else
+      result:='!!ERR('+operands+')!!';
+    end;
   end;
-  startpos:=NextSymbolPos-1;
-end;}
+end;
 
 function EscapeSeq(const str:TDXFEntsInternalStringType;const operands:TDXFEntsInternalStringType;var NextSymbolPos:integer;pobj:Pointer):String;
 var
@@ -195,7 +189,7 @@ end;
 initialization
   Prefix2ProcessFunc.RegisterProcessor('@@','[',']',@var2value,true);
   Prefix2ProcessFunc.RegisterProcessor('%%','[',']',@prop2value,true);
-  //Prefix2ProcessFunc.RegisterProcessor('##','[',']',@evaluatesubstr);
+  Prefix2ProcessFunc.RegisterProcessor('#calc','[',']',@evaluatesubstr);
   Prefix2ProcessFunc.RegisterProcessor('\',#0,#0,@EscapeSeq);
   Prefix2ProcessFunc.RegisterProcessor('%%DATE',#0,#0,@date2value,true);
 

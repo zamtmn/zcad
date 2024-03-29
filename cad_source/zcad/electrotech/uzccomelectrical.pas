@@ -30,7 +30,7 @@ uses
   uzglviewareadata,
   uzcinterface,
   uzegeometry,
-
+                                          gzctnrSTL,
   uzeconsts,
   uzeentity,uzeentline,
   uzcentnet,
@@ -1992,131 +1992,162 @@ end;
 //  result:=cmd_ok;
 //end;
 function _Cable_com_Legend(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
+type
+   TSummator=TMyGenMapCounter<string,double>;
 var //i: Integer;
     pv:PTCableDesctiptor;
-    ir,{irincable,}ir_inNodeArray:itrec;
+    ir,ir_inDevs,ir_inSegms:itrec;
     filename,cablename,CableMaterial,CableLength,devstart,devend,puredevstart: String;
     handle:cardinal;
-    pvd{,pvds,pvdal}:pvardesk;
+    pvd,pmm,eq:pvardesk;
     nodeend,nodestart:PGDBObjDevice;
+    Segm:PGDBObjCable;
 
-    line,s:String;
+    line,s,summMM:String;
     firstline:boolean;
     cman:TCableManager;
     pt:PGDBObjTable;
-    psl{,psfirstline}:PTZctnrVectorStrings;
-
-    eq:pvardesk;
+    psl:PTZctnrVectorStrings;
     DC:TDrawContext;
     pstartsegmentvarext:TVariablesExtender;
+    Summator:TSummator;
+    SummatorItr:TPair<string,double>;//TSummator.TPairEnumerator;
 begin
   filename:='';
-  if SaveFileDialog(filename,'CSV',CSVFileFilter,'','Сохранить данные...') then
-  begin
-  DefaultFormatSettings.DecimalSeparator := ',';
-  cman.init;
-  cman.build;
-  handle:=FileCreate(UTF8ToSys(filename),fmOpenWrite);
-  line:=Tria_Utf8ToAnsi('Обозначение'+';'+'Материал'+';'+'Длина'+';'+'Начало'+';'+'Конец'+#13#10);
-  FileWrite(handle,line[1],length(line));
-  pv:=cman.beginiterate(ir);
-  if pv<>nil then
-  begin
-                     Getmem(pointer(pt),sizeof(GDBObjTable));
-                     pt^.initnul;
-                     zcSetEntPropFromCurrentDrawingProp(pt);
-                     pt^.ptablestyle:=drawings.GetCurrentDWG.TableStyleTable.getAddres('KZ');
-                     pt^.tbl.free;
-    repeat
-      begin
-         cablename:=pv^.Name;
+  if SaveFileDialog(filename,'CSV',CSVFileFilter,'','Сохранить данные...') then begin
+    DefaultFormatSettings.DecimalSeparator := ',';
+    Summator:=TSummator.Create;
+    cman.init;
+    cman.build;
+    handle:=FileCreate(UTF8ToSys(filename),fmOpenWrite);
+    line:=Tria_Utf8ToAnsi('Обозначение'+';'+'Материал'+';'+'Длина'+';'+'Начало'+';'+'Конец'+#13#10);
+    FileWrite(handle,line[1],length(line));
+    pv:=cman.beginiterate(ir);
+    if pv<>nil then
+    begin
+                       Getmem(pointer(pt),sizeof(GDBObjTable));
+                       pt^.initnul;
+                       zcSetEntPropFromCurrentDrawingProp(pt);
+                       pt^.ptablestyle:=drawings.GetCurrentDWG.TableStyleTable.getAddres('KZ');
+                       pt^.tbl.free;
+      repeat
+        begin
+           cablename:=pv^.Name;
 
-//         if cablename='RS' then
-//                               cablename:=cablename;
+  //         if cablename='RS' then
+  //                               cablename:=cablename;
 
-         pstartsegmentvarext:=pv^.StartSegment^.GetExtension<TVariablesExtender>;
-         pvd:=pstartsegmentvarext.entityunit.FindVariable('DB_link');
-         CableMaterial:=pstring(pvd^.data.Addr.Instance)^;
+           pstartsegmentvarext:=pv^.StartSegment^.GetExtension<TVariablesExtender>;
+           pvd:=pstartsegmentvarext.entityunit.FindVariable('DB_link');
+           CableMaterial:=pstring(pvd^.data.Addr.Instance)^;
 
-                                        eq:=DWGDBUnit.FindVariable(CableMaterial);
-                                        if eq<>nil then
-                                                      begin
-                                                           CableMaterial:=PDbBaseObject(eq^.data.Addr.Instance)^.NameShort;
-                                                      end;
-         CableLength:=floattostr(pv^.length);
+                                          eq:=DWGDBUnit.FindVariable(CableMaterial);
+                                          if eq<>nil then
+                                                        begin
+                                                             CableMaterial:=PDbBaseObject(eq^.data.Addr.Instance)^.NameShort;
+                                                        end;
+           CableLength:=floattostr(pv^.length);
 
-          firstline:=true;
-          devstart:='Не присоединено';
-          nodestart:=pv^.Devices.beginiterate(ir_inNodeArray);
-          if pv^.StartDevice<>nil then
-                                         begin
-                                              pvd:=FindVariableInEnt(pv^.StartDevice,'NMO_Name');
-                                              if pvd<>nil then
-                                                              devstart:=pstring(pvd^.data.Addr.Instance)^;
-                                              nodeend:=pv^.Devices.iterate(ir_inNodeArray);
-                                         end
-                                  else
-                                      nodeend:=nodestart;
-          puredevstart:=devstart;
-                psl:=pt^.tbl.CreateObject;
-                psl.init(12);
-          repeat
-            devend:='Не присоединено';
+            firstline:=true;
+            devstart:='Не присоединено';
+            nodestart:=pv^.Devices.beginiterate(ir_inDevs);
+            if pv^.StartDevice<>nil then
+                                           begin
+                                                pvd:=FindVariableInEnt(pv^.StartDevice,'NMO_Name');
+                                                if pvd<>nil then
+                                                                devstart:=pstring(pvd^.data.Addr.Instance)^;
+                                                nodeend:=pv^.Devices.iterate(ir_inDevs);
+                                           end
+                                    else
+                                        nodeend:=nodestart;
+            puredevstart:=devstart;
+                  psl:=pt^.tbl.CreateObject;
+                  psl.init(12);
             repeat
-              if nodeend=nil then system.break;
-              pvd:=FindVariableInEnt(nodeend,'NMO_Name');
-              if pvd=nil then
-                nodeend:=pv^.Devices.iterate(ir_inNodeArray);
-            until pvd<>nil;
-            if nodeend<>nil then
-              devend:=pstring(pvd^.data.Addr.Instance)^;
-            if firstline then begin
-              line:='`'+cablename+';'+CableMaterial+';'+CableLength+';'+devstart+';'+devend+#13#10;
-              s:='';
-              psl.PushBackData(Tria_Utf8ToAnsi(cablename));
-              psl.PushBackData(Tria_Utf8ToAnsi(devstart));
-            end else begin
-              line:={cablename+}';'+{CableMaterial+}';'+{CableLength+}';'+devstart+';'+devend+#13#10;
+              devend:='Не присоединено';
+              repeat
+                if nodeend=nil then system.break;
+                pvd:=FindVariableInEnt(nodeend,'NMO_Name');
+                if pvd=nil then
+                  nodeend:=pv^.Devices.iterate(ir_inDevs);
+              until pvd<>nil;
+              if nodeend<>nil then
+                devend:=pstring(pvd^.data.Addr.Instance)^;
+              if firstline then begin
+                line:='`'+cablename+';'+CableMaterial+';'+CableLength+';'+devstart+';'+devend+#13#10;
+                s:='';
+                psl.PushBackData(Tria_Utf8ToAnsi(cablename));
+                psl.PushBackData(Tria_Utf8ToAnsi(devstart));
+              end else begin
+                line:={cablename+}';'+{CableMaterial+}';'+{CableLength+}';'+devstart+';'+devend+#13#10;
+              end;
+              line:=Tria_Utf8ToAnsi(line);
+              //FileWrite(handle,line[1],length(line));
+              firstline:=false;
+              devstart:=devend;
+              nodeend:=pv^.Devices.iterate(ir_inDevs);
+            until nodeend=nil;
+
+            Summator.Clear;
+            summMM:='';
+            Segm:=pv^.Segments.beginiterate(ir_inSegms);
+            if Segm<>nil then repeat
+              pmm:=FindVariableInEnt(Segm,'CABLE_MountingMethod');
+              if pmm<>nil then begin
+                pvd:=FindVariableInEnt(Segm,'AmountD');
+                if pvd<>nil then begin
+                  Summator.CountKey(pmm.GetValueAsString,pdouble(pvd^.data.Addr.GetInstance)^);
+                end;
+              end;
+              Segm:=pv^.Segments.iterate(ir_inSegms);
+            until Segm=nil;
+
+            if Summator.Count>0 then begin
+              for SummatorItr in Summator do
+                if summMM='' then
+                  summMM:=SummatorItr.Key+';'+floattostr(SummatorItr.Value)
+                else
+                  summMM:=summMM+';'+SummatorItr.Key+';'+floattostr(SummatorItr.Value);
             end;
+
+            if summMM<>'' then
+              line:='`'+cablename+';'+CableMaterial+';'+CableLength+';'+puredevstart+';'+devend+';'+summMM+#13#10
+            else
+              line:='`'+cablename+';'+CableMaterial+';'+CableLength+';'+puredevstart+';'+devend+#13#10;
+
             line:=Tria_Utf8ToAnsi(line);
-            //FileWrite(handle,line[1],length(line));
-            firstline:=false;
-            devstart:=devend;
-            nodeend:=pv^.Devices.iterate(ir_inNodeArray);
-          until nodeend=nil;
-          line:='`'+cablename+';'+CableMaterial+';'+CableLength+';'+puredevstart+';'+devend+#13#10;
-          line:=Tria_Utf8ToAnsi(line);
-          FileWrite(handle,line[1],length(line));
-          s:='';
-          psl.PushBackData(Tria_Utf8ToAnsi(devend));
-          psl.PushBackData(Tria_Utf8ToAnsi(s));
-          psl.PushBackData(Tria_Utf8ToAnsi(s));
-          psl.PushBackData(Tria_Utf8ToAnsi(s));
-          psl.PushBackData(Tria_Utf8ToAnsi(s));
-          psl.PushBackData(Tria_Utf8ToAnsi(CableMaterial));
-          psl.PushBackData(Tria_Utf8ToAnsi(CableLength));
-          psl.PushBackData(Tria_Utf8ToAnsi(s));
-          psl.PushBackData(Tria_Utf8ToAnsi(s));
-          s:='';
-          psl.PushBackData(Tria_Utf8ToAnsi(s));
+            FileWrite(handle,line[1],length(line));
+            s:='';
+            psl.PushBackData(Tria_Utf8ToAnsi(devend));
+            psl.PushBackData(Tria_Utf8ToAnsi(s));
+            psl.PushBackData(Tria_Utf8ToAnsi(s));
+            psl.PushBackData(Tria_Utf8ToAnsi(s));
+            psl.PushBackData(Tria_Utf8ToAnsi(s));
+            psl.PushBackData(Tria_Utf8ToAnsi(CableMaterial));
+            psl.PushBackData(Tria_Utf8ToAnsi(CableLength));
+            psl.PushBackData(Tria_Utf8ToAnsi(s));
+            psl.PushBackData(Tria_Utf8ToAnsi(s));
+            s:='';
+            psl.PushBackData(Tria_Utf8ToAnsi(s));
 
-         //ZCMsgCallBackInterface.TextMessage('Cable "'+pv^.Name+'", segments '+inttostr(pv^.Segments.Count)+', материал "'+CableMaterial+'", начало: '+puredevstart+' конец: '+devend,TMWOHistoryOut);
-          ZCMsgCallBackInterface.TextMessage(format('Cable %s, %d segments, %s, from: %s to: %s',[pv^.Name,pv^.Segments.Count,CableMaterial,puredevstart,devend]),TMWOHistoryOut);
+           //ZCMsgCallBackInterface.TextMessage('Cable "'+pv^.Name+'", segments '+inttostr(pv^.Segments.Count)+', материал "'+CableMaterial+'", начало: '+puredevstart+' конец: '+devend,TMWOHistoryOut);
+            ZCMsgCallBackInterface.TextMessage(format('Cable %s, %d segments, %s, from: %s to: %s',[pv^.Name,pv^.Segments.Count,CableMaterial,puredevstart,devend]),TMWOHistoryOut);
 
 
-      end;
-      pv:=cman.iterate(ir);
-    until pv=nil;
+        end;
+        pv:=cman.iterate(ir);
+      until pv=nil;
 
-  drawings.GetCurrentROOT.AddObjectToObjArray{ObjArray.add}(@pt);
-  pt^.Build(drawings.GetCurrentDWG^);
-  dc:=drawings.GetCurrentDWG^.CreateDrawingRC;
-  pt^.FormatEntity(drawings.GetCurrentDWG^,dc);
-  end;
-  zcRedrawCurrentDrawing;
-  FileClose(handle);
-  cman.done;
-  DefaultFormatSettings.DecimalSeparator := '.';
+    drawings.GetCurrentROOT.AddObjectToObjArray{ObjArray.add}(@pt);
+    pt^.Build(drawings.GetCurrentDWG^);
+    dc:=drawings.GetCurrentDWG^.CreateDrawingRC;
+    pt^.FormatEntity(drawings.GetCurrentDWG^,dc);
+    end;
+    zcRedrawCurrentDrawing;
+    FileClose(handle);
+    cman.done;
+    Summator.Destroy;
+    DefaultFormatSettings.DecimalSeparator := '.';
   end;
   result:=cmd_ok;
 end;

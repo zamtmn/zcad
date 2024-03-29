@@ -36,11 +36,13 @@ end;
  {$IFDEF DELPHI}TMyMap <TKey,TValue> = class( TMyMapGen<TKey,TValue>){$ENDIF}
   procedure MyGetOrCreateValue(const key:TKey; var Value:TValue; out OutValue:TValue);inline;
 end;
-{$IFNDEF DELPHI}TMyMapCounter <TKey> = class( TMyMap<TKey, SizeUInt>){$ENDIF}
- {$IFDEF DELPHI}TMyMapCounter <TKey, TCompare> = class( TMyMap<TKey, SizeUInt>){$ENDIF}
-  function CountKey(const key:TKey; const InitialCounter:SizeUInt=1):SizeUInt;inline;
+TMyGenMapCounter<TKey,TValue> = class( TMyMap<TKey,TValue>)
+  function CountKey(const key:TKey; const InitialCounter:TValue=1):TValue;inline;
 end;
-{$IFNDEF DELPHI}GKey2DataMap <TKey, TValue> = class(TMyMapGen<TKey, TValue>){$ENDIF}
+
+TMyMapCounter<TKey>=class(TMyGenMapCounter<TKey,SizeUInt>);
+
+ {$IFNDEF DELPHI}GKey2DataMap <TKey, TValue> = class(TMyMapGen<TKey, TValue>){$ENDIF}
  {$IFDEF DELPHI}GKey2DataMap <TKey, TValue> = class(TDictionary<TKey, TValue>){$ENDIF}
         {$IFDEF DELPHI}type PTValue=^TValue;{$ENDIF}
         procedure RegisterKey(const key:TKey; const Value:TValue);
@@ -217,18 +219,19 @@ begin
   end;
 end;
 
-function TMyMapCounter<TKey>.CountKey(const key:TKey; const InitialCounter:SizeUInt):SizeUInt;
+function TMyGenMapCounter<TKey,TValue>.CountKey(const key:TKey; const InitialCounter:TValue=1):TValue;inline;
 var
   PAValue:PValue;
 begin
   if MyGetMutableValue(key,PAValue) then begin
-    inc(PAValue^);
+    PAValue^:=PAValue^+InitialCounter;
     result:=PAValue^;
   end else begin
     add(key,InitialCounter);
     result:=InitialCounter;
   end;
 end;
+
 procedure TMyMap<TKey, TValue>.MyGetOrCreateValue(const key:TKey; var Value:TValue; out OutValue:TValue);
 {$IFNDEF DELPHI}
 begin

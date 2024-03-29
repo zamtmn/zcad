@@ -1994,10 +1994,14 @@ end;
 function _Cable_com_Legend(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 type
    TSummator=TMyGenMapCounter<string,double>;
+   TNumStore=TMyMap<string,integer>;
+   TStore=TmyVector<string>;
 var //i: Integer;
     pv:PTCableDesctiptor;
     ir,ir_inDevs,ir_inSegms:itrec;
     filename,cablename,CableMaterial,CableLength,devstart,devend,puredevstart: String;
+    DCableLength:double;
+    totalMMC,i,index:integer;
     handle:cardinal;
     pvd,pmm,eq:pvardesk;
     nodeend,nodestart:PGDBObjDevice;
@@ -2012,16 +2016,80 @@ var //i: Integer;
     pstartsegmentvarext:TVariablesExtender;
     Summator:TSummator;
     SummatorItr:TPair<string,double>;//TSummator.TPairEnumerator;
+    NumStore:TNumStore;
+    Store:TStore;
 begin
   filename:='';
   if SaveFileDialog(filename,'CSV',CSVFileFilter,'','Сохранить данные...') then begin
     DefaultFormatSettings.DecimalSeparator := ',';
     Summator:=TSummator.Create;
+    NumStore:=TNumStore.Create;
+    Store:=TStore.Create;
     cman.init;
     cman.build;
+
+    pv:=cman.beginiterate(ir);
+    DCableLength:=0;
+    if pv<>nil then repeat
+      DCableLength:=DCableLength+pv^.length;
+
+      Segm:=pv^.Segments.beginiterate(ir_inSegms);
+      if Segm<>nil then repeat
+        pmm:=FindVariableInEnt(Segm,'CABLE_MountingMethod');
+        if pmm<>nil then begin
+          pvd:=FindVariableInEnt(Segm,'AmountD');
+          if pvd<>nil then begin
+            Summator.CountKey(pmm.GetValueAsString,pdouble(pvd^.data.Addr.GetInstance)^);
+          end;
+        end;
+        Segm:=pv^.Segments.iterate(ir_inSegms);
+      until Segm=nil;
+
+      pv:=cman.iterate(ir);
+    until pv=nil;
+
+    totalMMC:=0;
+    summMM:='';
+    if Summator.Count>0 then begin
+      for SummatorItr in Summator do begin
+
+        if summMM='' then
+          summMM:=SummatorItr.Key
+        else
+          summMM:=summMM+';'+SummatorItr.Key;
+
+        Store.PushBack(SummatorItr.Key);
+        NumStore.Add(SummatorItr.Key,totalMMC);
+        inc(totalMMC);
+      end;
+    end;
+    dec(totalMMC);
+
     handle:=FileCreate(UTF8ToSys(filename),fmOpenWrite);
-    line:=Tria_Utf8ToAnsi('Обозначение'+';'+'Материал'+';'+'Длина'+';'+'Начало'+';'+'Конец'+#13#10);
+    if summMM='' then
+      line:=Tria_Utf8ToAnsi('Обозначение'+';'+'Материал'+';'+'Длина'+';'+'Начало'+';'+'Конец'+#13#10)
+    else begin
+      line:='Обозначение'+';'+'Материал'+';'+'Длина'+';'+'Начало'+';'+'Конец';
+      for i:=0 to totalMMC do
+        line:=line+';'+Store[i];
+      line:=line+#13#10;
+      line:=Tria_Utf8ToAnsi(line);
+    end;
     FileWrite(handle,line[1],length(line));
+
+    if summMM='' then
+      line:=''+';'+';'+floattostr(DCableLength)+#13#10
+    else begin
+      line:=''+';'+';'+floattostr(DCableLength)+';'+''+';'+'';
+      for SummatorItr in Summator do
+        line:=line+';'+floattostr(SummatorItr.Value);
+      line:=line+#13#10;
+      line:=Tria_Utf8ToAnsi(line);
+    end;
+    FileWrite(handle,line[1],length(line));
+
+
+
     pv:=cman.beginiterate(ir);
     if pv<>nil then
     begin
@@ -2103,11 +2171,17 @@ begin
             until Segm=nil;
 
             if Summator.Count>0 then begin
-              for SummatorItr in Summator do
-                if summMM='' then
-                  summMM:=SummatorItr.Key+';'+floattostr(SummatorItr.Value)
+              for i:=0 to totalMMC do
+                store.Mutable[i]^:='';
+              for SummatorItr in Summator do begin
+                index:=NumStore[SummatorItr.Key];
+                store.Mutable[index]^:=FloatToStr(SummatorItr.Value);
+              end;
+              for i:=0 to totalMMC do
+                if i=0 then
+                  summMM:=store[i]
                 else
-                  summMM:=summMM+';'+SummatorItr.Key+';'+floattostr(SummatorItr.Value);
+                  summMM:=summMM+';'+store[i];
             end;
 
             if summMM<>'' then
@@ -2147,6 +2221,8 @@ begin
     FileClose(handle);
     cman.done;
     Summator.Destroy;
+    NumStore.Destroy;
+    Store.Destroy;
     DefaultFormatSettings.DecimalSeparator := '.';
   end;
   result:=cmd_ok;

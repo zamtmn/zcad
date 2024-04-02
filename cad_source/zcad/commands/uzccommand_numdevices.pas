@@ -190,7 +190,7 @@ begin
             pvd:=pdevvarext.entityunit.FindVariable('NMO_BaseName');
             if pvd<>nil then begin
               if uppercase(pvd^.data.PTD^.GetUserValueAsString(pvd^.data.Addr.Instance))=
-                 uppercase(Tria_AnsiToUtf8(NumberingParams.BaseName)) then
+                 uppercase({Tria_AnsiToUtf8}(NumberingParams.BaseName)) then
                 process:=true
               else begin
                 process:=false;

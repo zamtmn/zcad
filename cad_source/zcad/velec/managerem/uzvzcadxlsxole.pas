@@ -96,46 +96,72 @@ var
 
 
 type
-  TSimpleCache = object
-    const size=3;
-    var
-      data_index: Integer;
-      data: array [0..size] of record
-        s: String;
-        o: OleVariant;
+  TCacheSize = 0..3;
+  generic TSimpleCache<_TKey,_TValue,_TSize> = object
+    type
+      TKey = _TKey;
+      TValue = _TValue;
+      TSize = _TSize;
+      cache_record = record
+        key: TKey;
+        value: TValue;
       end;
-    function get_cache(s: String; out o: OleVariant): Boolean;
-    procedure set_cache(s: String; o: OleVariant);
+    var
+      cache_index: TSize;
+      cache: array [TSize] of cache_record;
+    function get_cache(key: TKey; out value: TValue): Boolean;
+    procedure set_cache(key: TKey; value: TValue);
+    procedure DestroyCache;
   end;
-
-  TSheetCache = object(TSimpleCache)
+  PSheetsCache = ^TSheetsCache;
+  TSheetsCache = object(specialize TSimpleCache<String,OleVariant,TCacheSize>)
     Book: OleVariant;
     function get(nameSheet: String): OleVariant;
     procedure setBook(aBook: OleVariant);
-    procedure DestroyCache;
+  end;
+  TRowsCache = object(specialize TSimpleCache<String,OleVariant,TCacheSize>)
+    sheets_cache: PSheetsCache;
+    function get(nameSheet: String; Row, Col: Integer; StartCol:Integer=1; EndCol:Integer=200): OleVariant;
+    procedure setSheetsCache(aSheetsCache: PSheetsCache);
   end;
 
-function TSimpleCache.get_cache(s: String; out o: OleVariant): Boolean;
+
+function TSimpleCache.get_cache(key: TKey; out value: TValue): Boolean;
 var
-  i: Integer;
+  i: TSize;
 begin
-  for i:=High(data) downto Low(Data) do
-    if data[i].s = s then
+  for i:=High(cache) downto Low(cache) do
+    if cache[i].key = key then
     begin
-      o:=data[i].o;
+      value:=cache[i].value;
       Exit(True);
     end;
   Result:=False;
 end;
 
-procedure TSimpleCache.set_cache(s: String; o: OleVariant);
+procedure TSimpleCache.set_cache(key: TKey; value: TValue);
 begin
-  if (data_index<Low(data)) or (data_index=High(data)) then data_index:=Low(data) else inc(data_index);
-  data[data_index].s:=s;
-  data[data_index].o:=o;
+  if (cache_index<Low(cache)) or (cache_index=High(cache)) then cache_index:=Low(cache) else inc(cache_index);
+  cache[cache_index].key:=key;
+  cache[cache_index].value:=value;
 end;
 
-function TSheetCache.get(nameSheet: String): OleVariant;
+procedure TSimpleCache.DestroyCache;
+var
+  i: TSize;
+begin
+  // какая-то синхронизация тут нужна наверное, в случае многопоточного доступа
+  for i:=High(cache) downto Low(cache) do
+  begin
+    cache[i].key := Default(TKey);
+    if GetTypeKind(TValue)=tkVariant then
+      cache[i].value := Unassigned
+    else
+      cache[i].value := Default(TValue);
+  end;
+end;
+
+function TSheetsCache.get(nameSheet: String): OleVariant;
 begin
   if not get_cache(nameSheet, Result) then
   begin
@@ -144,27 +170,37 @@ begin
   end;
 end;
 
-procedure TSheetCache.setBook(aBook: OleVariant);
-var
-  i: Integer;
+procedure TSheetsCache.setBook(aBook: OleVariant);
 begin
-  // какя-то синхронизация тут нужна наверное, в случае многопоточного доступа
-  for i:=High(data) downto Low(Data) do data[i].s := '';
+  DestroyCache;
   Book:=aBook;
 end;
 
-procedure TSheetCache.DestroyCache;
+function TRowsCache.get(nameSheet: String; Row, Col: Integer; StartCol:Integer=1; EndCol:Integer=200): OleVariant;
 var
-  i: Integer;
+  cache_id: String;
+  row_variant: OleVariant;
 begin
-  for i:=High(data) downto Low(Data) do
+  cache_id:=nameSheet+IntToStr(Row)+IntToStr(StartCol)+IntToStr(EndCol);
+  if not get_cache(cache_id, row_variant) then
   begin
-    data[i].s := '';
-    data[i].o := Unassigned;
+    // TODO: not full row!
+    row_variant:=sheets_cache^.get(nameSheet).Rows(Row).Value;
+    set_cache(cache_id, row_variant);
   end;
+  Result:=VarArrayGet(row_variant,[1,Col]);
+  if VarIsError(Result) then Result:=Unassigned;
 end;
 
-var sheets_cache:TSheetCache;
+procedure TRowsCache.setSheetsCache(aSheetsCache: PSheetsCache);
+begin
+  DestroyCache;
+  sheets_cache:=aSheetsCache;
+end;
+
+var
+  sheets_cache:TSheetsCache;
+  rows_cache:TRowsCache;
 
 function openXLSXFile(pathFile:string):boolean;
 //var
@@ -178,6 +214,7 @@ begin
 
     BasicWorkbook:=Excel.Workbooks.Open(WideString(pathFile));
     sheets_cache.setBook(BasicWorkbook);
+    rows_cache.setSheetsCache(@sheets_cache);
     result:=true;
   except
     ZCMsgCallBackInterface.TextMessage('ОШИБКА. ПРОГРАММА EXCEL НЕ УСТАНОВЛЕНА',TMWOHistoryOut);
@@ -192,6 +229,7 @@ begin
     Excel := GetActiveOleObject('Excel.Application');
     BasicWorkbook:=Excel.ActiveWorkbook;
     sheets_cache.setBook(BasicWorkbook);
+    rows_cache.setSheetsCache(@sheets_cache);
     ZCMsgCallBackInterface.TextMessage('Доступ получен к книге = ' + BasicWorkbook.Name,TMWOHistoryOut);
     result:=true;
   except
@@ -259,6 +297,7 @@ begin
   Excel.DisplayStatusBar:=True;
   Excel.EnableEvents:=True;
 
+  rows_cache.DestroyCache;
   sheets_cache.DestroyCache;
   sheets_cache.Book:=Unassigned;
   BasicWorkbook.Close(Savechanges:=false);
@@ -341,7 +380,8 @@ end;
 function getCellFormula(nameSheet:string;iRow,iCol:Cardinal):string;
 begin
   //result:=BasicWorkbook.WorkSheets(nameSheet).Cells(iRow,iCol).Formula;
-  result:=sheets_cache.get(nameSheet).Cells(iRow,iCol).Formula;
+  //result:=sheets_cache.get(nameSheet).Cells(iRow,iCol).Formula;
+  result:=rows_cache.get(nameSheet,iRow,iCol);
 end;
 procedure setCellFormula(nameSheet:string;iRow,iCol:Cardinal;iText:string);
 begin

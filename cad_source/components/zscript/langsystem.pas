@@ -21,15 +21,15 @@ unit langsystem;
 {$MODE DELPHI}{$Codepage UTF8}
 interface
 uses uzbstrproc,varmandef,UBaseTypeDescriptor,
-     base64;
+     base64,StrUtils;
 type
     TTypesArray=array of pointer;
 var
-   foneString,foneInteger,foneDouble:TTypesArray;
+   foneString,foneInteger,foneDouble,f3StringStringInteger:TTypesArray;
 const
 
   basicoperatorcount = 5;
-  basicfunctioncount = 2;
+  basicfunctioncount = 3;
   basicoperatorparamcount = 28;
   basicfunctionparamcount = 1;
   {foneBoolean = #7;
@@ -131,6 +131,7 @@ const
   (
     (name: 'cos')
    ,(name: 'DecodeStringBase64')
+   ,(name: 'ExpandString')
     );
 
   basicoperatorparam: array[1..basicoperatorparamcount] of operatortype =
@@ -189,7 +190,7 @@ var
 begin
   result := true;
   for i := 1 to opstack.count do
-    if str[i-1]<>opstack.stack[i].data.PTD then
+    if str[i-1]<>opstack.stack[i].data.PTD^.GetFactTypedef then
                                              begin
                                                   result := false;
                                                   exit;
@@ -200,7 +201,7 @@ function findbasicfunction(name: String; opstack: operandstack): Integer;
 var
   i{, j}: Integer;
 begin
-  result := 0;
+  result := -1;
   for i :=low(basicfunctionparam) to high(basicfunctionparam) do
   begin
     if name = basicfunctionparam[i].name then
@@ -267,6 +268,27 @@ begin
   PString(r.data.Addr.Instance)^ := DecodeStringBase64(PString(stack.stack[1].data.Addr.Instance)^);
   result := r;
 end;
+function ExpandString_TGBDString(var stack: operandstack): vardesk;
+var
+  r: vardesk;
+  s1,s2:string;
+  i3:integer;
+begin
+  r.data.ptd:=@FundamentalStringDescriptorObj;
+  r.name := '';
+  r.SetInstance(FundamentalStringDescriptorObj.AllocAndInitInstance);
+  ppointer(r.data.Addr.Instance)^:=nil;
+  s1:=stack.stack[1].GetValueAsString;
+  s2:=stack.stack[2].GetValueAsString;
+  i3:=pinteger(stack.stack[3].data.Addr.Instance)^;
+
+  if length(s1)<i3 then begin
+    PString(r.data.Addr.Instance)^:=dupestring(s2,(i3-length(s1))div length(s2))+s1;
+  end else
+    PString(r.data.Addr.Instance)^:=s1;
+  result := r;
+end;
+
 function Cos_TDouble(var stack: operandstack): vardesk;
 var
   r: vardesk;
@@ -634,16 +656,23 @@ begin
   end
 end;
 var
-  tv,tv1,tv2:functiontype;
+  tv,tv1,tv2,tv3:functiontype;
 begin
      setlength(foneInteger,1);foneInteger[0]:=@FundamentalLongIntDescriptorObj;
      setlength(foneDouble,1);foneDouble[0]:=@FundamentalDoubleDescriptorObj;
      setlength(foneString,1);foneString[0]:=@FundamentalStringDescriptorObj;
+     setlength(f3StringStringInteger,3);
+       f3StringStringInteger[0]:=@FundamentalLongIntDescriptorObj;
+       f3StringStringInteger[1]:=@FundamentalStringDescriptorObj;
+       f3StringStringInteger[2]:=@FundamentalLongIntDescriptorObj;
+
      tv.name:='cos';tv.param:=foneInteger;tv.addr:=Cos_TInteger;
      tv1.name:='cos';tv1.param:=foneDouble;tv1.addr:=Cos_TDouble;
      tv2.name:='DecodeStringBase64';tv2.param:=foneString;tv2.addr:=DecodeStringBase64_TGBDString;
-     setlength(basicfunctionparam,3);
+     tv3.name:='ExpandString';tv3.param:=f3StringStringInteger;tv3.addr:=ExpandString_TGBDString;
+     setlength(basicfunctionparam,4);
      basicfunctionparam[0]:=tv;
      basicfunctionparam[1]:=tv1;
      basicfunctionparam[2]:=tv2;
+     basicfunctionparam[3]:=tv3;
 end.

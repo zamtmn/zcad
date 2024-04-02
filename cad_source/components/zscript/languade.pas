@@ -403,9 +403,16 @@ begin
                   i := pos(',', s);
                   while i > 0 do
                   begin
+                    s1:=copy(s,1,i-1);
+                    s:=copy(s,i+1,length(s)-i);
+
+                    inc(opstac.count);
+                    opstac.stack[opstac.count] := evaluate(s1,_unit);
+
+                    i:=pos(',', s);
                   end;
-                  inc(opstac.count);
-                  opstac.stack[opstac.count] := evaluate(s,_unit);
+                    inc(opstac.count);
+                    opstac.stack[opstac.count] := evaluate(s,_unit);
                   functiontype := findbasicfunction(basicfunctionname[functionname].name, opstac);
                   rez := basicfunctionparam[functiontype].addr(opstac);
                   for i:=1 to opstac.count do

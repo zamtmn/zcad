@@ -111,15 +111,15 @@ resourcestring
     zimportcabFT= '</zimportcab>';
     zalldevexportetalon='<zall>DEVEXPORT';
     zalldevexport='zallDEVEXPORT';
-    zallcabexportetalon='<zall>CABEXPORT';
-    zallcabexport='zallCABEXPORT';
+    zallcabexportetalon='<zall>CAB';
+    zallcabexport='zallCAB';
     zallcabcodeNameEtalon='<zall>';
     zallcabcodeNameNew='zall';
     zallcabCodeST= '<zallcabimport>';
     zallcabCodeFT= '</zallcabimport>';
     zcopyrowFT= '</zcopyrow>';
     woorkBookSET= '<workbook>SET';
-    arrayCodeName: TArray<String> = ['<zimportrootdev','<zimportdev','<zimportcab','<zcopyrow', '<zcopycol'];
+    arrayCodeName: TArray<String> = ['<zimportrootdev','<zimportdev','<zimportcab','<zcopyrow', '<zcopycol','<zallcabimport'];
 
 implementation
 type
@@ -889,7 +889,7 @@ var
 
     end;
 
-procedure generatorSheet(graphDev:TGraphDev;nameEtalon,nameSheet:string);
+procedure generatorSheet(graphDev:TGraphDev;nameEtalon,nameSheet:string;listGraphEM:TListGraphDev);
   var
       stInfoDevCell:TVXLSXCELL;
       i:integer;
@@ -919,13 +919,70 @@ procedure generatorSheet(graphDev:TGraphDev;nameEtalon,nameSheet:string);
              2: zimportcabcommand(graphDev,nameEtalon,nameSheet,stInfoDevCell.vRow,stInfoDevCell.vCol);//ZCMsgCallBackInterface.TextMessage('<zimportcab запускаем! ',TMWOHistoryOut);//<zimportcab
              3: zcopyrowcommand(nameEtalon,nameSheet,stInfoDevCell.vRow,stInfoDevCell.vCol);   //<zcopyrow
              4: ZCMsgCallBackInterface.TextMessage('<zcopycol запускаем! ',TMWOHistoryOut);//'<zcopycol'
+             5: zallimportcabcommand(listGraphEM,nameEtalon,nameSheet);
              else
                ZCMsgCallBackInterface.TextMessage('ОШИБКА в КАСЕ!!! ',TMWOHistoryOut);
              end;
            end;
         end;
     end;
+procedure zallimportcabsetcommand(listGraphEM:TListGraphDev;nameEtalon,nameNewSheet:string);
+    var
+       numRow:Cardinal;
+       valueCell,newNameSheet:string;
+    begin
+       //Получаем исключительно граф в котором головное устройство данное устройство
+       //graphDev:=uzvmanemgetgem.getGraphHeadDev(listFullGraphEM,devMaincFunc,listAllHeadDev);
 
+       //Получаем досутп к переменной с именим устройства
+        //pvd:=FindVariableInEnt(graphDev.Root.getDevice,velec_nameDevice);
+        //if pvd<>nil then
+        //  namePanel:=pstring(pvd^.data.Addr.Instance)^; // Имя устройства
+
+        //ZCMsgCallBackInterface.TextMessage('Имя ГУ = '+pstring(pvd^.data.Addr.Instance)^,TMWOHistoryOut);
+
+        //Получаем досутп к переменной с именим заполняемого листа
+        //pvd:=FindVariableInEnt(graphDev.Root.getDevice,uzvconsts.velec_nametemplatesxlsx);
+        //if pvd<>nil then
+        //  nameSET:=pstring(pvd^.data.Addr.Instance)^; // Имя устройства
+
+        //nameSET:='<zlight>';
+
+        //ZCMsgCallBackInterface.TextMessage('Имя заполняемого листа = '+nameSET,TMWOHistoryOut);
+
+        //Здесь будет место где я буду получать какие настройки будут подключаться
+        //nameSET:='<zlight>'; //Данное имя всегда будет менятся на имя щита
+
+        numRow:=1;
+        //Получаем значение ячейки 1,1 в настройках для данного кода листа
+        valueCell:=uzvzcadxlsxole.getCellValue(nameEtalon+'SET',numRow,1);
+
+        if remotemode then
+           ZCMsgCallBackInterface.TextMessage('Значение ячейки = '+valueCell,TMWOHistoryOut);
+
+        While AnsiPos(nameEtalon, valueCell) > 0 do
+        begin
+            //if AnsiPos(nameSET, valueCell) > 0 then
+            //begin
+              //Создаем копию листа эталона
+              newNameSheet:=StringReplace(valueCell, nameEtalon, nameNewSheet,[rfReplaceAll, rfIgnoreCase]);
+              uzvzcadxlsxole.copyWorksheetName(valueCell,newNameSheet);
+              ZCMsgCallBackInterface.TextMessage('Создаем новый лист ='+newNameSheet,TMWOHistoryOut);
+              //Передаем имя эталона и имя нового листа в генерацию листа
+              if remotemode then
+                ZCMsgCallBackInterface.TextMessage('generatorSheet(graphDev,valueCell,newNameSheet)',TMWOHistoryOut);
+              generatorSheet(nil,valueCell,newNameSheet,listGraphEM);     //здесь запускается самое главное, ищутся спец коды и заполняются
+            //end;
+            inc(numRow);
+            valueCell:=uzvzcadxlsxole.getCellValue(nameEtalon+'SET',numRow,1);
+
+            if remotemode then
+              ZCMsgCallBackInterface.TextMessage('Значение ячейки = '+valueCell + ', номер позиции = ' +inttostr(AnsiPos(nameEtalon, valueCell)),TMWOHistoryOut);
+        end;
+            //until AnsiPos(nameSET, valueCell) > 0;
+        valueCell:=uzvzcadxlsxole.getCellValue(nameEtalon+'SET',numRow,1);
+
+    end;
 
   procedure exportGraphModelToXLSX(listAllHeadDev:TListDev;fileTemplate:ansistring;newFile:string);
   var
@@ -1130,7 +1187,7 @@ procedure generatorSheet(graphDev:TGraphDev;nameEtalon,nameSheet:string);
                   //Передаем имя эталона и имя нового листа в генерацию листа
                   if remotemode then
                     ZCMsgCallBackInterface.TextMessage('generatorSheet(graphDev,valueCell,newNameSheet)',TMWOHistoryOut);
-                  generatorSheet(graphDev,valueCell,newNameSheet);     //здесь запускается самое главное, ищутся спец коды и заполняются
+                  generatorSheet(graphDev,valueCell,newNameSheet,nil);     //здесь запускается самое главное, ищутся спец коды и заполняются
                 //end;
                 inc(numRow);
                 valueCell:=uzvzcadxlsxole.getCellValue(nameSET+'SET',numRow,1);
@@ -1146,40 +1203,9 @@ procedure generatorSheet(graphDev:TGraphDev;nameEtalon,nameSheet:string);
        //Прячем системные листы
        //sheetsVisibleOff();
 
-       //Обрабатываем специфические настройки для того, что бы потушить все листы которые нам не нужны в проекте и дать главному файлу имя
-       //Получаем значение ячейки 1,1 в настройках для данного кода листа
-       numRow:=1;
-       valueCell:=uzvzcadxlsxole.getCellValue(woorkBookSET,numRow,1);
-       valueCell:= trim(valueCell);
-       While valueCell <> '' do
-        begin
-            if AnsiPos('suffix', valueCell) > 0 then
-               suffixFilename:=uzvzcadxlsxole.getCellValue(woorkBookSET,numRow,2);
-            if AnsiPos('hide', valueCell) > 0 then
-               uzvzcadxlsxole.sheetVisibleOff(uzvzcadxlsxole.getCellValue(woorkBookSET,numRow,2));
-            inc(numRow);
-            valueCell:=uzvzcadxlsxole.getCellValue(woorkBookSET,numRow,1);
-            valueCell:= trim(valueCell);
-            //ZCMsgCallBackInterface.TextMessage('Значение ячейки = '+valueCell + ', номер позиции = ' +inttostr(AnsiPos(nameSET, valueCell)),TMWOHistoryOut);
-        end;
-
        lps.EndLongProcess(lph);
 
-       //Сохранить или перезаписать книгу с моделью
 
-       isfileSave:=false;
-       isfileSave:=uzvzcadxlsxole.saveXLSXFile(newFile + suffixFilename + '.xlsx');
-       //isfileSave:=uzvzcadxlsxole.saveXLSXFile('d:\YandexDisk\zcad-test\ETALON\etalon121212.xlsx');
-       //ZCMsgCallBackInterface.TextMessage('Книга сохранена с именем ='+newFile + suffixFilename + '.xlsx',TMWOHistoryOut);
-
-       uzvzcadxlsxole.destroyWorkbook;
-       //ZCMsgCallBackInterface.TextMessage('Память очищена',TMWOHistoryOut);
-       if isfileSave then begin
-         ZCMsgCallBackInterface.TextMessage('Алгоритм экспорта модели соединений в EXCEL - ЗАВЕРШЕН УСПЕШНО!',TMWOHistoryOut);
-         ZCMsgCallBackInterface.TextMessage('Книга сохранена с именем ='+newFile + suffixFilename + '.xlsx',TMWOHistoryOut);
-       end
-       else
-         ZCMsgCallBackInterface.TextMessage('Алгоритм экспорта модели соединений в EXCEL - ОТМЕНЕН. ФАЙЛ НЕ ДОСТУПЕН ИЛИ СОХРАНЕНИЕ ОТМЕНЕНО!',TMWOHistoryOut);
      except
        ZCMsgCallBackInterface.TextMessage('ОШИБКА. НЕ правильно выбран шаблон, не те имена заполнены в ГУ и они не соответствуют листам в книге, проверяйте!!!',TMWOHistoryOut);
        uzvzcadxlsxole.destroyWorkbook;
@@ -1205,6 +1231,9 @@ var
   devMaincFunc:PGDBObjDevice;
   isload:boolean;
   LastFileHandle:Integer=-1;
+  numRow:Cardinal;
+  valueCell,suffixFilename:string;
+  isfileSave:boolean;
 begin
   depthVisual:=15;
   insertCoordination:=uzegeometry.CreateVertex(0,0,0);
@@ -1253,38 +1282,72 @@ begin
    //**Обрабатываем листы которые производят вынос всех кабелей в один общий список
    if uzvzcadxlsxole.getNumWorkSheetName(zallcabexportetalon)>0 then begin
      //создаем копию листа для заполнения
-     uzvzcadxlsxole.copyWorksheetName(zallcabexportetalon,zallcabexport);
-     ZCMsgCallBackInterface.TextMessage('копия листа создана',TMWOHistoryOut);
+     //uzvzcadxlsxole.copyWorksheetName(zallcabexportetalon,zallcabexport);
+     //ZCMsgCallBackInterface.TextMessage('копия листа создана',TMWOHistoryOut);
      //начинаем заполнять
-     zallimportcabcommand(listFullGraphEM,zallcabexportetalon,zallcabexport);
+     zallimportcabsetcommand(listFullGraphEM,zallcabexportetalon,zallcabexport);
    end;
 
   //**получить список всех головных устройств (устройств централей)
-  //listAllHeadDev:=TListDev.Create;
-  listAllHeadDev:=uzvmanemgetgem.getListMainFuncHeadDev(listFullGraphEM);
-  //ZCMsgCallBackInterface.TextMessage('listAllHeadDev сайз =  ' + inttostr(listAllHeadDev.Size),TMWOHistoryOut);
-  if remotemode then
-    for devMaincFunc in listAllHeadDev do
-      begin
-        pvd:=FindVariableInEnt(devMaincFunc,velec_nameDevice);
-        if pvd<>nil then
-          begin
-            ZCMsgCallBackInterface.TextMessage('Имя ГУ с учетом особенностей = '+pstring(pvd^.data.Addr.Instance)^,TMWOHistoryOut);
-          end;
-        //ZCMsgCallBackInterface.TextMessage('рисуем граф exportGraphModelToXLSX = СТАРТ ',TMWOHistoryOut);
-        graphView:=uzvmanemgetgem.getGraphHeadDev(listFullGraphEM,devMaincFunc,listAllHeadDev);
-        visualGraphTree(graphView,insertCoordination,3,depthVisual);
-        graphView.Free;
-        //ZCMsgCallBackInterface.TextMessage('рисуем граф exportGraphModelToXLSX = ФИНИШ ',TMWOHistoryOut);
-      end;
+  ////listAllHeadDev:=TListDev.Create;
+  //listAllHeadDev:=uzvmanemgetgem.getListMainFuncHeadDev(listFullGraphEM);
+  ////ZCMsgCallBackInterface.TextMessage('listAllHeadDev сайз =  ' + inttostr(listAllHeadDev.Size),TMWOHistoryOut);
+  //if remotemode then
+  //  for devMaincFunc in listAllHeadDev do
+  //    begin
+  //      pvd:=FindVariableInEnt(devMaincFunc,velec_nameDevice);
+  //      if pvd<>nil then
+  //        begin
+  //          ZCMsgCallBackInterface.TextMessage('Имя ГУ с учетом особенностей = '+pstring(pvd^.data.Addr.Instance)^,TMWOHistoryOut);
+  //        end;
+  //      //ZCMsgCallBackInterface.TextMessage('рисуем граф exportGraphModelToXLSX = СТАРТ ',TMWOHistoryOut);
+  //      graphView:=uzvmanemgetgem.getGraphHeadDev(listFullGraphEM,devMaincFunc,listAllHeadDev);
+  //      visualGraphTree(graphView,insertCoordination,3,depthVisual);
+  //      graphView.Free;
+  //      //ZCMsgCallBackInterface.TextMessage('рисуем граф exportGraphModelToXLSX = ФИНИШ ',TMWOHistoryOut);
+  //    end;
+  //
+  ////ZCMsgCallBackInterface.TextMessage('exportGraphModelToXLSX = СТАРТ ',TMWOHistoryOut);
+  //if not listAllHeadDev.IsEmpty then
+  //   exportGraphModelToXLSX(listAllHeadDev,fileTemplate,newfilexlsx);
+  ////ZCMsgCallBackInterface.TextMessage('exportGraphModelToXLSX = ФИНИШ ',TMWOHistoryOut);
 
-  //ZCMsgCallBackInterface.TextMessage('exportGraphModelToXLSX = СТАРТ ',TMWOHistoryOut);
-  if not listAllHeadDev.IsEmpty then
-     exportGraphModelToXLSX(listAllHeadDev,fileTemplate,newfilexlsx);
-  //ZCMsgCallBackInterface.TextMessage('exportGraphModelToXLSX = ФИНИШ ',TMWOHistoryOut);
+     //Обрабатываем специфические настройки для того, что бы потушить все листы которые нам не нужны в проекте и дать главному файлу имя
+   //Получаем значение ячейки 1,1 в настройках для данного кода листа
+   numRow:=1;
+   valueCell:=uzvzcadxlsxole.getCellValue(woorkBookSET,numRow,1);
+   valueCell:= trim(valueCell);
+   While valueCell <> '' do
+    begin
+        if AnsiPos('suffix', valueCell) > 0 then
+           suffixFilename:=uzvzcadxlsxole.getCellValue(woorkBookSET,numRow,2);
+        if AnsiPos('hide', valueCell) > 0 then
+           uzvzcadxlsxole.sheetVisibleOff(uzvzcadxlsxole.getCellValue(woorkBookSET,numRow,2));
+        inc(numRow);
+        valueCell:=uzvzcadxlsxole.getCellValue(woorkBookSET,numRow,1);
+        valueCell:= trim(valueCell);
+        //ZCMsgCallBackInterface.TextMessage('Значение ячейки = '+valueCell + ', номер позиции = ' +inttostr(AnsiPos(nameSET, valueCell)),TMWOHistoryOut);
+    end;
+          //Сохранить или перезаписать книгу с моделью
+
+
+   isfileSave:=false;
+   isfileSave:=uzvzcadxlsxole.saveXLSXFile(newfilexlsx + suffixFilename + '.xlsx');
+   //isfileSave:=uzvzcadxlsxole.saveXLSXFile('d:\YandexDisk\zcad-test\ETALON\etalon121212.xlsx');
+   //ZCMsgCallBackInterface.TextMessage('Книга сохранена с именем ='+newFile + suffixFilename + '.xlsx',TMWOHistoryOut);
+
+   uzvzcadxlsxole.destroyWorkbook;
+   //ZCMsgCallBackInterface.TextMessage('Память очищена',TMWOHistoryOut);
+   if isfileSave then begin
+     ZCMsgCallBackInterface.TextMessage('Алгоритм экспорта модели соединений в EXCEL - ЗАВЕРШЕН УСПЕШНО!',TMWOHistoryOut);
+     ZCMsgCallBackInterface.TextMessage('Книга сохранена с именем ='+newfilexlsx + suffixFilename + '.xlsx',TMWOHistoryOut);
+   end
+   else
+     ZCMsgCallBackInterface.TextMessage('Алгоритм экспорта модели соединений в EXCEL - ОТМЕНЕН. ФАЙЛ НЕ ДОСТУПЕН ИЛИ СОХРАНЕНИЕ ОТМЕНЕНО!',TMWOHistoryOut);
+
   result:=cmd_ok;
   listFullGraphEM.Free;
-  listAllHeadDev.Free;
+  //listAllHeadDev.Free;
 end;
 
 

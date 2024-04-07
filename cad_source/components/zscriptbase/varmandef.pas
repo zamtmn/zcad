@@ -66,9 +66,9 @@ TEditorDesc=record
                   Editor:TPropEditor;
                   Mode:TEditorMode;
             end;
-TOnCreateEditor=function (TheOwner:TPropEditorOwner;rect:trect;pinstance:pointer;psa:PTZctnrVectorStrings;FreeOnLostFocus:boolean;PTD:PUserTypeDescriptor;f:TzeUnitsFormat):TEditorDesc;
-TOnGetValueAsString=function(PInstance:Pointer):String;
-TOnDrawProperty=procedure(canvas:TCanvas;ARect:TRect;PInstance:Pointer);
+TDecoratorCreateEditor=function (TheOwner:TPropEditorOwner;rect:trect;pinstance:pointer;psa:PTZctnrVectorStrings;FreeOnLostFocus:boolean;PTD:PUserTypeDescriptor;f:TzeUnitsFormat):TEditorDesc;
+TDecoratorGetValueAsString=function(PInstance:Pointer):String;
+TDecoratorDrawProperty=procedure(canvas:TCanvas;ARect:TRect;PInstance:Pointer);
 
 TFastEditorState=(TFES_Default,TFES_Hot,TFES_Pressed);
 
@@ -77,9 +77,9 @@ TDrawFastEditor=procedure (canvas:TCanvas;r:trect;PInstance:Pointer;state:TFastE
 TRunFastEditor=procedure (PInstance:Pointer);
 
 TDecoratedProcs=record
-                OnGetValueAsString:TOnGetValueAsString;
-                OnCreateEditor:TOnCreateEditor;
-                OnDrawProperty:TOnDrawProperty;
+                OnGetValueAsString:TDecoratorGetValueAsString;
+                OnCreateEditor:TDecoratorCreateEditor;
+                OnDrawProperty:TDecoratorDrawProperty;
                 end;
 TFastEditorProcs=record
                 OnGetPrefferedFastEditorSize:TGetPrefferedFastEditorSize;
@@ -140,6 +140,7 @@ pvardesk = ^vardesk;
 TMyNotifyCommand=(TMNC_EditingDoneEnterKey,TMNC_EditingDoneLostFocus,TMNC_EditingDoneESC,TMNC_EditingProcess,TMNC_RunFastEditor,TMNC_EditingDoneDoNothing);
 TMyNotifyProc=procedure (Sender: TObject;Command:TMyNotifyCommand) of object;
 TCreateEditorFunc=function (TheOwner:TPropEditorOwner;rect:trect;pinstance:pointer;psa:PTZctnrVectorStrings;FreeOnLostFocus:boolean;InitialValue:String;ptdesc:PUserTypeDescriptor;preferedHeight:integer;f:TzeUnitsFormat):TEditorDesc of object;
+TonGetValueAsString=function (pinstance:Pointer):TInternalScriptString of object;
 UserTypeDescriptor=object
                          SizeInBytes:Integer;
                          TypeName:String;
@@ -150,6 +151,7 @@ UserTypeDescriptor=object
                          //FastEditor:TFastEditorProcs;
                          FastEditors:TFastEditorsVector;
                          onCreateEditorFunc:TCreateEditorFunc;
+                         onGetValueAsString:TonGetValueAsString;
                          constructor init(size:Integer;tname:string;pu:pointer);
                          constructor baseinit(size:Integer;tname:string;pu:pointer);
                          procedure _init(size:Integer;tname:string;pu:pointer);
@@ -592,6 +594,7 @@ begin
      _init(size,tname,pu);
      Decorators.OnGetValueAsString:=nil;
      FastEditors:=nil;
+     onGetValueAsString:=nil;
 end;
 
 destructor UserTypeDescriptor.done;

@@ -566,6 +566,8 @@ var pd:PFieldDescriptor;
     ir:itrec;
     notfirst:Boolean;
 begin
+  if @onGetValueAsString<>nil then
+    exit(onGetValueAsString(pinstance));
      result:='(';
      notfirst:=false;
         pd:=Fields.beginiterate(ir);

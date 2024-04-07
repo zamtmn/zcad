@@ -52,6 +52,32 @@ type
     procedure StoreDoData(const AData:T);
   end;
 
+  generic GDataByAddr<T>=record
+    type
+      TData=T;
+      PData=^T;
+    var
+      PChangedData:PData;
+    function GetAddr:PData;
+    constructor CreateRec(var AData:T);
+    procedure DestroyRec;
+  end;
+
+  generic GChangedDataByDesk<T,TDesk,GSData,GASData>=record
+    type
+      TData=T;
+      PData=^T;
+    var
+      DataDesk:TDesk;
+      Data:T;
+    procedure UnDo(GSD:GSData);
+    procedure Comit(GSD:GSData);
+    procedure ChangeProc(GSD:GSData);
+    constructor CreateRec(var AData:T);
+    procedure DestroyRec;
+    procedure StoreDoData(const AData:T);
+  end;
+
   generic GUCmdChgData2<GChangedDataDesc,GSharedData,GAfterChangeDataDesc>=class(TUCmdBase)
     private
       var
@@ -183,6 +209,53 @@ procedure GUCmdChgData2.AfterDo;
 begin
   AfterChangeData.AfterDo(SharedData);
 end;
+
+
+
+function GDataByAddr.GetAddr:PData;
+begin
+  result:=PChangedData;
+end;
+constructor GDataByAddr.CreateRec(var AData:T);
+begin
+  PChangedData:=@AData;
+end;
+procedure GDataByAddr.DestroyRec;
+begin
+end;
+
+procedure GChangedDataByDesk.UnDo(GSD:GSData);
+begin
+  ChangeProc(GSD);
+end;
+procedure GChangedDataByDesk.Comit(GSD:GSData);
+begin
+  ChangeProc(GSD);
+end;
+procedure GChangedDataByDesk.ChangeProc(GSD:GSData);
+var
+  TD:T;
+  PD:PData;
+begin
+  PD:=DataDesk.getAddr;
+  TD:=PD^;
+  PD^:=Data;
+  Data:=TD;
+end;
+constructor GChangedDataByDesk.CreateRec(var AData:T);
+begin
+  //PChangedData:=@AData;
+  Data:=AData;
+end;
+procedure GChangedDataByDesk.DestroyRec;
+begin
+  Data:=default(T);
+end;
+procedure GChangedDataByDesk.StoreDoData(const AData:T);
+begin
+  Data:=AData;
+end;
+
 
 
 end.

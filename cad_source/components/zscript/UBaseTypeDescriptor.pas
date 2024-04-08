@@ -210,87 +210,27 @@ begin
 end;
 class procedure TBaseTypeManipulator<T>.Initialize(var Instance:T);
 begin
-   system.initialize(Instance);
+  system.initialize(Instance);
 end;
 
-(*function MyDataToStr(data:LongInt):string;overload;
-begin
-     result:=inttostr(data);
-end;
-function MyDataToStr(data:boolean):string;overload;
-begin
-     if data then
-     result := 'True'
-     else
-     result := 'False';
-end;
-function MyDataToStr(data:double):string;overload;
-begin
-    if isnan(data) then
-                             result := 'NAN'
-                         else
-                             begin
-                                  result := floattostr(data);
-                                      if pos('.',result)<1 then
-                                                               result:=result+'.0';
-                             end;
-
-end;
-function MyDataToStr(data:float):string;overload;
-begin
-    if isnan(data) then
-                             result := 'NAN'
-                         else
-                             begin
-                                  result := floattostr(data);
-                                      if pos('.',result)<1 then
-                                                               result:=result+'.0';
-                             end;
-
-end;
-function MyDataToStr(data:string):string;overload;
-begin
-     result := data;
-end;
-function MyDataToStr(data:pointer):string;overload;
-begin
-     if data<>nil then
-                      begin
-                           result := '$' + inttohex(int64(data), 8);
-                      end
-                  else result := 'nil';
-end;
-function MyDataToStr(data:TEnumData):string;overload;
-begin
-     if data.Selected>=data.Enums.Count then
-                                            result:='ENUMERROR'
-                                        else
-                                            result:=data.Enums.getData(data.Selected);
-end;*)
 function TEnumDataDescriptor.CreateProperties;
 var ppd:PPropertyDeskriptor;
 begin
-     zTraceLn('{T}[ZSCRIPT]TEnumDataDescriptor.CreateProperties(%s,ppda=%p)',[name,ppda]);
-     //programlog.LogOutFormatStr('TEnumDataDescriptor.CreateProperties(%s,ppda=%p)',[name,ppda],lp_OldPos,LM_Trace);
-     ppd:=GetPPD(ppda,bmode);
-     if ppd^._bmode=property_build then
-                                       ppd^._bmode:=bmode;
-     if bmode=property_build then
-                                 begin
-                                      ppd^._ppda:=ppda;
-                                      ppd^._bmode:=bmode;
-                                 end
-                             else
-                                 begin
-                                      if (ppd^._ppda<>ppda)
-                                      //or (ppd^._bmode<>bmode)
-                                                             then
-                                                             {IFDEF LOUDERRORS}
-                                                               //Raise Exception.Create('Something wrong');
-                                                             {ENDIF}
-
-
-                                 end;
+  zTraceLn('{T}[ZSCRIPT]TEnumDataDescriptor.CreateProperties(%s,ppda=%p)',[name,ppda]);
+  ppd:=GetPPD(ppda,bmode);
+  if ppd^._bmode=property_build then
+    ppd^._bmode:=bmode;
+  if bmode=property_build then begin
+    ppd^._ppda:=ppda;
+    ppd^._bmode:=bmode;
+  end else begin
+     if (ppd^._ppda<>ppda)
+   //or (ppd^._bmode<>bmode)
+                           then
+                               {IFDEF LOUDERRORS}
+                                 //Raise Exception.Create('Something wrong');
+                               {ENDIF}
+  end;
      ppd^.Name:=name;
      ppd^.ValType:=valtype;
      ppd^.ValKey:=valkey;
@@ -300,16 +240,11 @@ begin
      ppd^.Attr:=ownerattrib;
      ppd^.Collapsed:=PCollapsed;
      ppd^.valueAddres:=addr;
-     ppd^.value:=GetValueAsString(addr);
-     if ppd^.value='rp_21' then
-                               ppd^.value:=ppd^.value;
-           if ppd<>nil then
-                           begin
-                                //IncAddr(addr);
-                                //inc(PByte(addr),SizeInBytes);
-                                //if bmode=property_build then PPDA^.add(@ppd);
-                           end;
-     //IncAddr(addr);
+     if (ppd^.Attr and FA_DIFFERENT)=0 then
+       ppd^.value:=GetDecoratedValueAsString(addr,f)
+     else
+       ppd^.value:=rsDifferent;
+     //ppd^.value:=GetValueAsString(addr);
 end;
 class function TOrdinalTypeManipulator<T>.GetValueAsString(const data:T):TInternalScriptString;
 begin
@@ -629,7 +564,30 @@ procedure TCalculatedStringDescriptor.SetValueFromString(PInstance:Pointer;_Valu
 begin
 end;
 function TCalculatedStringDescriptor.CreateProperties(const f:TzeUnitsFormat;mode:PDMode;PPDA:PTPropertyDeskriptorArray;Name:TInternalScriptString;PCollapsed:Pointer;ownerattrib:Word;var bmode:Integer;const addr:Pointer;ValKey,ValType:TInternalScriptString):PTPropertyDeskriptorArray;
+var ppd:PPropertyDeskriptor;
 begin
+  zTraceLn('{T}[ZSCRIPT]TEnumDataDescriptor.CreateProperties(%s,ppda=%p)',[name,ppda]);
+  ppd:=GetPPD(ppda,bmode);
+  if ppd^._bmode=property_build then
+    ppd^._bmode:=bmode;
+  if bmode=property_build then begin
+    ppd^._ppda:=ppda;
+    ppd^._bmode:=bmode;
+  end;
+  ppd^.Name:=name;
+  ppd^.ValType:=valtype;
+  ppd^.ValKey:=valkey;
+  ppd^.PTypeManager:=@self;
+  ppd^.Decorators:=Decorators;
+  convertToRunTime(FastEditors,ppd^.FastEditors);
+  ppd^.Attr:=ownerattrib;
+  ppd^.Collapsed:=PCollapsed;
+  ppd^.valueAddres:=addr;
+  if (ppd^.Attr and FA_DIFFERENT)=0 then
+    ppd^.value:=GetDecoratedValueAsString(addr,f)
+  else
+    ppd^.value:=rsDifferent;
+  //ppd^.value:=GetValueAsString(addr);
 end;
 
 begin

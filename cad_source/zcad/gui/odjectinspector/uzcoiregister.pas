@@ -24,7 +24,8 @@ uses Laz2_DOM,Toolwin,Clipbrd,sysutils,uzccommandsabstract,uzcfcommandline,uzcut
      uzeentity,uzcenitiesvariablesextender,zcobjectinspector,uzcguimanager,uzcstrconsts,
      gzctnrVectorTypes,Types,Controls,uzcdrawings,Varman,UUnitManager,uzcsysvars,
      uzcsysparams,zcobjectinspectorui,uzcoimultiobjects,uzccommandsimpl,
-     uzmenusmanager,uzcLog,menus,ComCtrls,uztoolbarsmanager,uzcimagesmanager;
+     uzmenusmanager,uzcLog,menus,ComCtrls,uztoolbarsmanager,uzcimagesmanager,
+     uzedimensionaltypes;
 const
     PEditorFocusPriority=550;
 type
@@ -152,7 +153,7 @@ begin
   //    PMSEditor(pcurrobj)^.CreateUnit(PMSEditor(pcurrobj)^.SavezeUnitsFormat);
 end;
 
-procedure _onGetOtherValues(var vsa:TZctnrVectorStrings;const valkey:string;const pcurcontext:pointer;const pcurrobj:pointer;const GDBobj:boolean);
+procedure _onGetOtherValues(var vsa:TZctnrVectorStrings;const valkey:string;const pcurcontext:pointer;const pcurrobj:pointer;const GDBobj:boolean;const f:TzeUnitsFormat);
 var
   pentvarext:TVariablesExtender;
   pobj:pGDBObjEntity;
@@ -173,7 +174,7 @@ begin
                   pv:={PTEntityUnit(pobj.ou.Instance)}pentvarext.entityunit.FindVariable(valkey);
                   if pv<>nil then
                   begin
-                       vv:=pv.data.PTD.GetValueAsString(pv.data.Addr.Instance);
+                       vv:=pv.data.PTD.GetEditableAsString(pv.data.Addr.Instance,f);
                        if vv<>'' then
 
                        vsa.PushBackIfNotPresent(vv);

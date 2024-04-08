@@ -916,6 +916,7 @@ begin
      AddTypeByRef(FundamentalTempAnsiString1251DescriptorObj);
      AddTypeByRef(FundamentalSingleDescriptorObj);
      AddTypeByRef(GDBEnumDataDescriptorObj);
+     AddTypeByRef(CalculatedStringDescriptor);
      AddTypeByRef(AliasIntegerDescriptorOdj);
      AddTypeByRef(AliasCardinalDescriptorOdj);
      AddTypeByRef(AliasDWordDescriptorOdj);

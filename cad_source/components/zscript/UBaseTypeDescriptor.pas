@@ -161,8 +161,10 @@ TEnumDataDescriptor=object(BaseTypeDescriptor<TEnumData,{TOrdinalTypeManipulator
                end;
 TCalculatedStringDescriptor=object(BaseTypeDescriptor<TCalculatedString,TASTM_String>)
   constructor init;
+  function GetEditableAsString(PInstance:Pointer; const f:TzeUnitsFormat):TInternalScriptString;virtual;
   function GetValueAsString(pinstance:Pointer):TInternalScriptString;virtual;
-  procedure SetValueFromString(PInstance:Pointer;_Value:TInternalScriptString);virtual;
+  //procedure SetValueFromString(PInstance:Pointer;_Value:TInternalScriptString);virtual;
+  procedure SetEditableFromString(PInstance:Pointer;const f:TzeUnitsFormat;Value:TInternalScriptString);virtual;
   function CreateProperties(const f:TzeUnitsFormat;mode:PDMode;PPDA:PTPropertyDeskriptorArray;Name:TInternalScriptString;PCollapsed:Pointer;ownerattrib:Word;var bmode:Integer;const addr:Pointer;ValKey,ValType:TInternalScriptString):PTPropertyDeskriptorArray;virtual;
   //destructor Done;virtual;
 end;
@@ -560,9 +562,17 @@ function TCalculatedStringDescriptor.GetValueAsString(pinstance:Pointer):TIntern
 begin
   result:=PTCalculatedString(pinstance)^.value;
 end;
-procedure TCalculatedStringDescriptor.SetValueFromString(PInstance:Pointer;_Value:TInternalScriptString);
+function TCalculatedStringDescriptor.GetEditableAsString(PInstance:Pointer; const f:TzeUnitsFormat):TInternalScriptString;
 begin
+  result:=PTCalculatedString(pinstance)^.format;
 end;
+procedure TCalculatedStringDescriptor.SetEditableFromString(PInstance:Pointer;const f:TzeUnitsFormat;Value:TInternalScriptString);
+begin
+  PTCalculatedString(pinstance)^.format:=Value;
+end;
+//procedure TCalculatedStringDescriptor.SetValueFromString(PInstance:Pointer;_Value:TInternalScriptString);
+//begin
+//end;
 function TCalculatedStringDescriptor.CreateProperties(const f:TzeUnitsFormat;mode:PDMode;PPDA:PTPropertyDeskriptorArray;Name:TInternalScriptString;PCollapsed:Pointer;ownerattrib:Word;var bmode:Integer;const addr:Pointer;ValKey,ValType:TInternalScriptString):PTPropertyDeskriptorArray;
 var ppd:PPropertyDeskriptor;
 begin

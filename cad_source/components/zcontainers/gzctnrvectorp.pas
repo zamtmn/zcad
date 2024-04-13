@@ -105,8 +105,12 @@ begin
   result:=nil;
   if count=0 then exit;
 
-  inc(pByte(ir.itp),SizeOfData);
   inc(ir.itc);
+  pointer(ir.itp):=PArray;
+  inc(pByte(ir.itp),SizeOfData*ir.itc);
+
+  //inc(pByte(ir.itp),SizeOfData);
+  //inc(ir.itc);
 
   if ir.itc>=count then exit;
   p:=ir.itp^;

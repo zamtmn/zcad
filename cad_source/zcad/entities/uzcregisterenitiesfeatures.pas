@@ -24,7 +24,7 @@ uses uzcinterface,uzeffdxf,uzbpaths,uzcsysvars,uzcTranslations,sysutils,
      uzetextpreprocessor,uzctnrVectorBytes,uzbtypes,uzeobjectextender,
      uzeentsubordinated,uzeentity,uzeenttext,uzeblockdef,varmandef,Varman,UUnitManager,
      URecordDescriptor,UBaseTypeDescriptor,uzedrawingdef,
-     uzbstrproc,uzeentitiesprop,uzcentelleader,math;
+     uzbstrproc,uzeentitiesprop,uzcentelleader,math,gzctnrVectorTypes;
 var
    PFCTTD:Pointer=nil;
    extvarunit:TUnit;
@@ -195,6 +195,9 @@ procedure DeviceNameProcess(pEntity:PGDBObjEntity;const drawing:TDrawingDef);
 var
    pvn,pvnt:pvardesk;
    pentvarext:TVariablesExtender;
+   ir:itrec;
+   p:PUserTypeDescriptor;
+   ptcs:PTCalculatedString;
 begin
   pentvarext:=pEntity^.GetExtension<TVariablesExtender>;
   if pentvarext<>nil then begin
@@ -227,6 +230,18 @@ begin
     pvnt:=pentvarext.entityunit.FindVariable('RiserName',true);
     if (pvnt<>nil)and(pvn<>nil)then
       pstring(pvnt^.data.Addr.Instance)^:=pstring(pvn^.data.Addr.Instance)^;
+  end;
+
+  p:=SysUnit.TypeName2PTD('TCalculatedString');
+  if p<>nil then begin
+    pvn:=pentvarext.entityunit.InterfaceVariables.vardescarray.beginiterate(ir);
+    if pvn<>nil then repeat
+      if pvn.data.PTD=p then begin
+        ptcs:=pvn.data.Addr.Instance;
+        ptcs.value:=textformat(ptcs.format,pEntity)
+      end;
+      pvn:=pentvarext.entityunit.InterfaceVariables.vardescarray.iterate(ir);
+    until pvn=nil;
   end;
 
   DBLinkProcess(pentity,drawing);

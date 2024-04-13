@@ -180,6 +180,12 @@ TImageDegradation=record
                     end;
 PExtensionData=Pointer;
 TDCableMountingMethod={-}type {//}string;
+PTCalculatedString=^TCalculatedString;
+{REGISTERRECORDTYPE TCalculatedString}
+TCalculatedString=record
+  value:string;
+  format:string;
+end;
 {EXPORT-}
 function IsIt(PType,PChecedType:Pointer):Boolean;
 

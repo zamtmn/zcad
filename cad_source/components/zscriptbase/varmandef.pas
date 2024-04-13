@@ -455,7 +455,7 @@ begin
                            ptd^.CopyInstanceTo(@p,PInstance)
                       end
                   else
-                      ptd^.SetFormattedValueFromString(PInstance,f,tedit(sender).text);
+                      ptd^.SetEditableFromString(PInstance,f,tedit(sender).text);
      end;
 end;
 procedure TPropEditor.EditingDone(Sender: TObject);

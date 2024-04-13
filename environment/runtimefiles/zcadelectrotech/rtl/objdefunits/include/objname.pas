@@ -9,7 +9,6 @@ var
    NMO_Suffix:String;(*'Суффикс'*)
    NMO_Affix:String;(*'Аффикс'*)
    NMO_Template:String;(*'Шаблон Обозначения'*) 
-   NMO_Test:TCalculatedString;(*'test'*) 
 implementation
 begin
    NMO_Name:='??';

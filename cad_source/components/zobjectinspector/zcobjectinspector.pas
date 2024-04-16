@@ -60,7 +60,7 @@ type
                        UndoCommand:TTypedChangeCommand;
                  end;
 
-  TOnGetOtherValues=procedure(var vsa:TZctnrVectorStrings;const valkey:string;const pcurcontext:pointer;const pcurrobj:pointer;const GDBobj:boolean);
+  TOnGetOtherValues=procedure(var vsa:TZctnrVectorStrings;const valkey:string;const pcurcontext:pointer;const pcurrobj:pointer;const GDBobj:boolean;const f:TzeUnitsFormat);
   TOnUpdateObjectInInsp=procedure(const EDContext:TEditorContext;const currobjgdbtype:PUserTypeDescriptor;const pcurcontext:pointer;const pcurrobj:pointer;const GDBobj:boolean);
   TOnNotify=procedure(const pcurcontext:pointer);
   TMyNotifyEvent=procedure(sender:tobject);
@@ -1707,7 +1707,7 @@ begin
        vsa.init(50);
 
        if assigned(onGetOtherValues) then
-          onGetOtherValues(vsa,pp^.valkey,CurrContext,CurrPObj,GDBobj);
+          onGetOtherValues(vsa,pp^.valkey,CurrContext,CurrPObj,GDBobj,CurrUnitsFormat);
 
        if assigned(pp^.valueAddres) then
        begin

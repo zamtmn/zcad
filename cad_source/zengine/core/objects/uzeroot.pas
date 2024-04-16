@@ -189,7 +189,8 @@ begin
   if p<>nil then repeat
       if IsIt(TypeOf(p^),typeof(GDBObjConnected)) then
         PGDBObjConnected(p)^.connectedtogdb(@ConnectedArea,drawing);
-      p^.EntExtensions.RunOnConnect(p,drawing,DC);
+      if assigned(p^.EntExtensions)then
+        p^.EntExtensions.RunOnConnect(p,drawing,DC);
       p:=ents2Connected.iterate(ir);
   until p=nil;
 
@@ -203,7 +204,8 @@ begin
 
   p:=ents2Connected.beginiterate(ir);
   if p<>nil then repeat
-    p^.EntExtensions.RunOnAfterConnect(p,drawing,DC);
+    if assigned(p^.EntExtensions)then
+      p^.EntExtensions.RunOnAfterConnect(p,drawing,DC);
     p:=ents2Connected.iterate(ir);
   until p=nil;
 

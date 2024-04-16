@@ -27,7 +27,7 @@ uses
   varmandef,Varman,UUnitManager,URecordDescriptor,UBaseTypeDescriptor,
   uzeentitiestree,usimplegenerics,uzeffdxfsupport,uzbpaths,uzcTranslations,
   gzctnrVectorTypes,uzeBaseExtender,uzeconsts,uzgldrawcontext,
-  gzctnrVectorP;
+  gzctnrVectorP,uzetextpreprocessor;
 const
   VariablesExtenderName='extdrVariables';
 type
@@ -83,6 +83,7 @@ TVariablesExtender=class(TBaseVariablesExtender)
     class function EntIOLoadHash(_Name,_Value:String;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
     class function EntIOLoadUSES(_Name,_Value:String;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
     class function EntIOLoadMainFunction(_Name,_Value:String;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
+    class function EntIOLoadEmptyVariablesExtender(_Name,_Value:String;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
 
     procedure SaveToDxfObjXData(var outhandle:TZctnrVectorBytes;PEnt:Pointer;var IODXFContext:TIODXFContext);override;
     class procedure DisableVariableContentReplace;
@@ -300,7 +301,23 @@ procedure TVariablesExtender.onEntityBeforeConnect(pEntity:Pointer;const drawing
 begin
 end;
 procedure TVariablesExtender.onAfterEntityFormat(pEntity:Pointer;const drawing:TDrawingDef;var DC:TDrawContext);
+var
+   pvn,pvnt:pvardesk;
+   ir:itrec;
+   p:PUserTypeDescriptor;
+   ptcs:PTCalculatedString;
 begin
+  p:=SysUnit.TypeName2PTD('TCalculatedString');
+  if p<>nil then begin
+    pvn:=entityunit.InterfaceVariables.vardescarray.beginiterate(ir);
+    if pvn<>nil then repeat
+      if pvn.data.PTD=p then begin
+        ptcs:=pvn.data.Addr.Instance;
+        ptcs.value:=textformat(ptcs.format,pEntity)
+      end;
+      pvn:=entityunit.InterfaceVariables.vardescarray.iterate(ir);
+    until pvn=nil;
+  end;
 end;
 procedure TVariablesExtender.CopyExt2Ent(pSourceEntity,pDestEntity:pointer);
 begin
@@ -439,6 +456,16 @@ begin
   result:=true;
 end;
 
+class function TVariablesExtender.EntIOLoadEmptyVariablesExtender(_Name,_Value:String;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
+var
+  vardata:TVariablesExtender;
+begin
+  vardata:=PGDBObjEntity(PEnt)^.GetExtension<TVariablesExtender>;
+  if vardata=nil then
+    vardata:=addvariablestoentity(PEnt);
+  result:=true;
+end;
+
 procedure TVariablesExtender.SaveToDxfObjXData(var outhandle:TZctnrVectorBytes;PEnt:Pointer;var IODXFContext:TIODXFContext);
 var
    ishavevars:boolean;
@@ -451,7 +478,9 @@ var
    tp:pointer;
    vardata:TVariablesExtender;
    th: TDWGHandle;
+   IsNothingWrite:boolean;
 begin
+  IsNothingWrite:=true;
   //сохранять переменные определений блоков ненадо, берем их из внешних файлов
   if not IsIt(typeof(PGDBObjEntity(PEnt)^),typeof(GDBObjBlockdef))then begin
      ishavevars:=false;
@@ -466,6 +495,7 @@ begin
          if typeof(pvu^)<>typeof(TEntityUnit) then begin
            str:='USES='+pvu^.Name;
            dxfStringout(outhandle,1000,str);
+           IsNothingWrite:=false;
          end;
         pvu:=vardata.entityunit.InterfaceUses.iterate(ir);
         until pvu=nil;
@@ -475,6 +505,7 @@ begin
        IODXFContext.p2h.MyGetOrCreateValue(vardata.pMainFuncEntity,IODXFContext.handle,th);
        str:='MAINFUNCTION='+inttohex(th,0);
        dxfStringout(outhandle,1000,str);
+       IsNothingWrite:=false;
      end;
 
      if ishavevars then begin
@@ -490,9 +521,11 @@ begin
              str:='#'+inttostr(i)+'='+pvd^.name+'|'+pvd^.data.ptd.TypeName;
              str:=str+'|'+sv+'|'+pvd^.username;
              dxfStringout(outhandle,1000,str);
+             IsNothingWrite:=false;
            end else begin
              str:='&'+inttostr(i)+'='+pvd^.name+'|'+pvd^.data.ptd.TypeName+'|'+pvd^.username;
              dxfStringout(outhandle,1000,str);
+             IsNothingWrite:=false;
              inc(i);
              tp:=pvd^.data.Addr.Instance;
              pfd:=PRecordDescriptor(pvd^.data.ptd).Fields.beginiterate(ir2);
@@ -511,6 +544,8 @@ begin
          pvd:=vardata.entityunit.InterfaceVariables.vardescarray.iterate(ir);
          until pvd=nil;
      end;
+    if IsNothingWrite then
+      dxfStringout(outhandle,1000,'EMPTYVARIABLESEXTENDER=');
   end;
 end;
 
@@ -527,6 +562,7 @@ initialization
   GDBObjEntity.GetDXFIOFeatures.RegisterPrefixLoadFeature('#',TVariablesExtender.EntIOLoadHash);
   GDBObjEntity.GetDXFIOFeatures.RegisterNamedLoadFeature('USES',TVariablesExtender.EntIOLoadUSES);
   GDBObjEntity.GetDXFIOFeatures.RegisterNamedLoadFeature('MAINFUNCTION',TVariablesExtender.EntIOLoadMainFunction);
+  GDBObjEntity.GetDXFIOFeatures.RegisterNamedLoadFeature('EMPTYVARIABLESEXTENDER',TVariablesExtender.EntIOLoadEmptyVariablesExtender);
 
 
 finalization

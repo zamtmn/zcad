@@ -22,14 +22,14 @@ unit uzctypesdecorations;
 
 interface
 uses varmandef;
-procedure DecorateType(PT:PUserTypeDescriptor;getvalueasstring:TOnGetValueAsString;CreateEditor:TOnCreateEditor;DrawProperty:TOnDrawProperty);
+procedure DecorateType(PT:PUserTypeDescriptor;getvalueasstring:TDecoratorGetValueAsString;CreateEditor:TDecoratorCreateEditor;DrawProperty:TDecoratorDrawProperty);
 procedure AddEditorToType(PT:PUserTypeDescriptor;CreateEditor:TCreateEditorFunc);
 procedure AddFastEditorToType(PT:PUserTypeDescriptor;GetPrefferedFastEditorSize:TGetPrefferedFastEditorSize;
                               DrawFastEditor:TDrawFastEditor;
                               RunFastEditor:TRunFastEditor;
                               _UndoInsideFastEditor:Boolean=false);
 implementation
-procedure DecorateType(PT:PUserTypeDescriptor;getvalueasstring:TOnGetValueAsString;CreateEditor:TOnCreateEditor;DrawProperty:TOnDrawProperty);
+procedure DecorateType(PT:PUserTypeDescriptor;getvalueasstring:TDecoratorGetValueAsString;CreateEditor:TDecoratorCreateEditor;DrawProperty:TDecoratorDrawProperty);
 begin
      if PT<>nil then
                     begin

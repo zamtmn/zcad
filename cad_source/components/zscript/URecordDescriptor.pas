@@ -268,172 +268,153 @@ begin
      result:=TA_COMPOUND;
 end;
 function RecordDescriptor.CreateProperties;
-var PFD:PFieldDescriptor;
-    ppd:PPropertyDeskriptor;
-    bmodesave,bmodesave2,bmodetemp:Integer;
-    tname:TInternalScriptString;
-    ta,tb,taa:Pointer;
-    pobj:PGDBaseObject;
-    ir,ir2:itrec;
-    pvd:pvardesk;
-    tw:word;
-    i:integer;
-    category:TInternalScriptString;
-    oldppda:PTPropertyDeskriptorArray;
-    recreateunitvars:boolean;
-    SaveDecorators:TDecoratedProcs;
-    SaveFastEditors:TFastEditorsVector;
-    startaddr:pointer;
+var
+  PFD:PFieldDescriptor;
+  ppd:PPropertyDeskriptor;
+  bmodesave,bmodesave2,bmodetemp:Integer;
+  tname:TInternalScriptString;
+  ta,tb,taa:Pointer;
+  pobj:PGDBaseObject;
+  ir,ir2:itrec;
+  pvd:pvardesk;
+  tw:word;
+  i:integer;
+  category:TInternalScriptString;
+  oldppda:PTPropertyDeskriptorArray;
+  recreateunitvars:boolean;
+  SaveDecorators:TDecoratedProcs;
+  SaveFastEditors:TFastEditorsVector;
+  startaddr:pointer;
 begin
-//        if TypeName='trenderdeb' then begin
-//             if TypeName='trenderdeb' then
-//                       TypeName:=TypeName;
-//        end;
-     zTraceLn('{T+}[ZSCRIPT]RecordDescriptor.CreateProperties "%s"',[name]);
-     //programlog.LogOutFormatStr('RecordDescriptor.CreateProperties "%s"',[name],lp_IncPos,LM_Trace);
+  zTraceLn('{T+}[ZSCRIPT]RecordDescriptor.CreateProperties "%s"',[name]);
+  pobj:=addr;
+  startaddr:=addr;
+  bmodesave:=property_build;
+  if PCollapsed<>field_no_attrib then begin
+    ppd:=GetPPD(ppda,bmode);
+    ppd^.Name:=name;
+    ppd^.Attr:=ownerattrib;
+    ppd^.Collapsed:=PCollapsed;
+    ppd^.Decorators:=Decorators;
+    convertToRunTime(FastEditors,ppd^.FastEditors);
+    ppd^.valueAddres:=addr;
+    ppd^.PTypeManager:=@self;
+    if bmode=property_build then begin
+      Getmem(Pointer(ppd^.SubNode),sizeof(TPropertyDeskriptorArray));
+      PTPropertyDeskriptorArray(ppd^.SubNode)^.init(100);
+      ppda:=PTPropertyDeskriptorArray(ppd^.SubNode);
+    end else begin
+      bmodesave:=bmode;
+      bmode:=property_correct;
+      ppda:=PTPropertyDeskriptorArray(ppd^.SubNode);
+    end;
+  end;
+  result:=ppda;
 
-     pobj:=addr;
-     startaddr:=addr;
-//     if bmode<>property_build then
-//                                  begin
-//                                       bmode:=bmode;
-//                                  end;
-     bmodesave:=property_build;
-     if PCollapsed<>field_no_attrib then
-     begin
-           ppd:=GetPPD(ppda,bmode);
-           ppd^.Name:=name;
-           ppd^.Attr:=ownerattrib;
-           ppd^.Collapsed:=PCollapsed;
-           ppd^.Decorators:=Decorators;
-           convertToRunTime(FastEditors,ppd^.FastEditors);
-           ppd^.valueAddres:=addr;
-           ppd^.PTypeManager:=@self;
-           if bmode=property_build then
-           begin
-                Getmem(Pointer(ppd^.SubNode),sizeof(TPropertyDeskriptorArray));
-                PTPropertyDeskriptorArray(ppd^.SubNode)^.init(100);
-                ppda:=PTPropertyDeskriptorArray(ppd^.SubNode);
-           end else
-           begin
-                bmodesave:=bmode;
-                bmode:=property_correct;
-                ppda:=PTPropertyDeskriptorArray(ppd^.SubNode);
-           end;
-     end;
-     result:=ppda;
+  if (self.TypeName='TEntityUnit')or(self.TypeName='TUnit') then begin
+    if (bmode=property_correct)then begin
+      if PTPropertyDeskriptorArray(ppd^.SubNode)^.GetRealPropertyDeskriptorsCount<>PTEntityUnit(addr)^.InterfaceVariables.vardescarray.Count then begin
+        PTPropertyDeskriptorArray(ppd^.SubNode)^.cleareraseobj;
+        recreateunitvars:=true;
+        bmode:=property_build;
+      end;
+    end else
+      recreateunitvars:=false;
 
-     {if PCollapsed<>field_no_attrib then
-     if pboolean(pcollapsed)^ then exit;}
-     if (self.TypeName='TEntityUnit')or(self.TypeName='TUnit') then
-                                        begin
-                                        //if (bmode=property_build)then
-                                              if (bmode=property_correct)then
-                                              begin
-                                               if PTPropertyDeskriptorArray(ppd^.SubNode)^.GetRealPropertyDeskriptorsCount<>PTEntityUnit(addr)^.InterfaceVariables.vardescarray.Count then
-                                                  begin
-                                                  PTPropertyDeskriptorArray(ppd^.SubNode)^.cleareraseobj;
-                                                  recreateunitvars:=true;
-                                                  bmode:=property_build;
-                                                  end;
-                                              end
-                                               else
-                                                  recreateunitvars:=false;
-                                             //recreateunitvars:=false;
-                                        begin
-                                             pvd:=PTEntityUnit(addr)^.InterfaceVariables.vardescarray.beginiterate(ir2);
-                                             if pvd<>nil then
-                                             repeat
-                                                  if pvd^.name='BTY_TreeCoord' then
-                                                                                   pvd^.name:=pvd^.name;
-                                                  zTraceLn('{T}[ZSCRIPT]process prop: "%s"',[pvd^.name]);
-                                                  //programlog.LogOutFormatStr('process prop: "%s"',[pvd^.name],lp_OldPos,LM_Trace);
-                                                  i:=pos('_',pvd^.name);
-                                                  tname:=pvd^.username;
-                                                  if tname='' then
-                                                                  tname:=pvd^.name;
-                                                  taa:=pvd^.data.Addr.Instance;
-                                                  if (pvd^.attrib and vda_different)>0 then
-                                                                                           tw:=FA_DIFFERENT
-                                                                                       else
-                                                                                           tw:=0;
-                                                  if (pvd^.attrib and vda_approximately)>0 then
-                                                                                           tw:=tw or FA_APPROXIMATELY;
-                                                  if (pvd^.attrib and vda_RO)>0 then
-                                                                                           tw:=tw or FA_READONLY;
-                                                  if (pvd^.attrib and vda_colored1)>0 then
-                                                    tw:=tw or FA_COLORED1;
-                                                  oldppda:=ppda;
-                                                  if i>0 then
-                                                  begin
-                                                       category:=uppercase(copy(pvd^.name,1,i-1));
-                                                       ppd:=PPDA.findcategory(category);
-                                                       if ppd=nil then
-                                                                      begin
-                                                                           bmodetemp:=property_build;
-                                                                           ppd:=GetPPD(ppda,{bmode}bmodetemp);
-                                                                           //ppd^.Name:=category;
-                                                                           ppd^.Collapsed:=FindCategory(category,ppd^.Name);
-                                                                           ppd^.category:=category;
-                                                                           ppd^.Attr:=ownerattrib;
-                                                                           Getmem(Pointer(ppd^.SubNode),sizeof(TPropertyDeskriptorArray));
-                                                                           PTPropertyDeskriptorArray(ppd^.SubNode)^.init(100);
-                                                                      end;
-                                                      ppda:=PTPropertyDeskriptorArray(ppd^.SubNode);
-                                                  end;
-                                                  bmodesave2:=ppda^.findvalkey(pvd^.name);
-                                                  if bmodesave2<>0 then
-                                                  begin
-                                                       if (PTUserTypeDescriptor(pvd^.data.PTD)^.GetFactTypedef^.TypeName='TEnumData')
-                                                       or (PTUserTypeDescriptor(pvd^.data.PTD)^.GetFactTypedef^.TypeName='TEnumDataWithOtherStrings')
-                                                       or (PTUserTypeDescriptor(pvd^.data.PTD)^.GetFactTypedef^.TypeName='TEnumDataWithOtherPointers')then
-                                                                   begin
-                                                                        SaveDecorators:=GDBEnumDataDescriptorObj.Decorators;
-                                                                        SaveFastEditors:=GDBEnumDataDescriptorObj.FastEditors;
-                                                                        GDBEnumDataDescriptorObj.Decorators:=PTUserTypeDescriptor(pvd^.data.PTD)^.Decorators;
-                                                                        GDBEnumDataDescriptorObj.FastEditors:=PTUserTypeDescriptor(pvd^.data.PTD)^.FastEditors;
-                                                                        GDBEnumDataDescriptorObj.CreateProperties(f,PDM_Field,PPDA,tname,@pvd^.data.PTD^.collapsed,(ownerattrib or tw),bmodesave2,taa,pvd^.name,pvd^.data.ptd.TypeName);
-                                                                        GDBEnumDataDescriptorObj.Decorators:=SaveDecorators;
-                                                                        GDBEnumDataDescriptorObj.FastEditors:=SaveFastEditors;
-                                                                   end
-                                                               else
-                                                  PTUserTypeDescriptor(pvd^.data.PTD)^.CreateProperties
-                                                  (f,PDM_Field,PPDA,tname,@pvd^.data.PTD^.collapsed,(ownerattrib or tw),bmodesave2,taa,pvd^.name,pvd^.data.ptd.TypeName)
-                                                  end
-                                                                   else
-                                                                   begin
-                                                  bmodetemp:=property_build;
-                                                                        if (PTUserTypeDescriptor(pvd^.data.PTD)^.GetFactTypedef^.TypeName='TEnumData')
-                                                                        or (PTUserTypeDescriptor(pvd^.data.PTD)^.GetFactTypedef^.TypeName='TEnumDataWithOtherStrings')
-                                                                        or (PTUserTypeDescriptor(pvd^.data.PTD)^.GetFactTypedef^.TypeName='TEnumDataWithOtherPointers')then                                                                   begin
-                                                                        SaveDecorators:=GDBEnumDataDescriptorObj.Decorators;
-                                                                        SaveFastEditors:=GDBEnumDataDescriptorObj.FastEditors;
-                                                                        GDBEnumDataDescriptorObj.Decorators:=PTUserTypeDescriptor(pvd^.data.PTD)^.Decorators;
-                                                                        GDBEnumDataDescriptorObj.FastEditors:=PTUserTypeDescriptor(pvd^.data.PTD)^.FastEditors;
-                                                                        GDBEnumDataDescriptorObj.CreateProperties(f,PDM_Field,PPDA,tname,@pvd^.data.PTD^.collapsed,(ownerattrib or tw),bmodetemp,taa,pvd^.name,pvd^.data.ptd.TypeName);
-                                                                        GDBEnumDataDescriptorObj.Decorators:=SaveDecorators;
-                                                                        GDBEnumDataDescriptorObj.FastEditors:=SaveFastEditors;
-                                                                   end
-                                                               else
-                                                  PTUserTypeDescriptor(pvd^.data.PTD)^.CreateProperties
-                                                  (f,PDM_Field,PPDA,tname,@pvd^.data.PTD^.collapsed,(ownerattrib or tw),{bmode}bmodetemp,taa,pvd^.name,pvd^.data.ptd.TypeName);
+    pvd:=PTEntityUnit(addr)^.InterfaceVariables.vardescarray.beginiterate(ir2);
+    if pvd<>nil then
+    repeat
+      if pvd^.name='BTY_TreeCoord' then
+        pvd^.name:=pvd^.name;
+      zTraceLn('{T}[ZSCRIPT]process prop: "%s"',[pvd^.name]);
+      i:=pos('_',pvd^.name);
+      tname:=pvd^.username;
+      if tname='' then
+        tname:=pvd^.name;
+      taa:=pvd^.data.Addr.Instance;
+      if (pvd^.attrib and vda_different)>0 then
+        tw:=FA_DIFFERENT
+      else
+        tw:=0;
+      if (pvd^.attrib and vda_approximately)>0 then
+        tw:=tw or FA_APPROXIMATELY;
+      if (pvd^.attrib and vda_RO)>0 then
+        tw:=tw or FA_READONLY;
+      if (pvd^.attrib and vda_colored1)>0 then
+        tw:=tw or FA_COLORED1;
+      oldppda:=ppda;
+      if i>0 then begin
+        category:=uppercase(copy(pvd^.name,1,i-1));
+        ppd:=PPDA.findcategory(category);
+        if ppd=nil then begin
+          bmodetemp:=property_build;
+          ppd:=GetPPD(ppda,{bmode}bmodetemp);
+          ppd^.Collapsed:=FindCategory(category,ppd^.Name);
+          ppd^.category:=category;
+          ppd^.Attr:=ownerattrib;
+          Getmem(Pointer(ppd^.SubNode),sizeof(TPropertyDeskriptorArray));
+          PTPropertyDeskriptorArray(ppd^.SubNode)^.init(100);
+        end;
+        ppda:=PTPropertyDeskriptorArray(ppd^.SubNode);
+      end;
+      bmodesave2:=ppda^.findvalkey(pvd^.name);
+      if bmodesave2<>0 then begin
+        if (PTUserTypeDescriptor(pvd^.data.PTD)^.GetFactTypedef^.TypeName='TEnumData')or
+           (PTUserTypeDescriptor(pvd^.data.PTD)^.GetFactTypedef^.TypeName='TEnumDataWithOtherStrings')or
+           (PTUserTypeDescriptor(pvd^.data.PTD)^.GetFactTypedef^.TypeName='TEnumDataWithOtherPointers')then begin
+          SaveDecorators:=GDBEnumDataDescriptorObj.Decorators;
+          SaveFastEditors:=GDBEnumDataDescriptorObj.FastEditors;
+          GDBEnumDataDescriptorObj.Decorators:=PTUserTypeDescriptor(pvd^.data.PTD)^.Decorators;
+          GDBEnumDataDescriptorObj.FastEditors:=PTUserTypeDescriptor(pvd^.data.PTD)^.FastEditors;
+          GDBEnumDataDescriptorObj.CreateProperties(f,PDM_Field,PPDA,tname,@pvd^.data.PTD^.collapsed,(ownerattrib or tw),bmodesave2,taa,pvd^.name,pvd^.data.ptd.TypeName);
+          GDBEnumDataDescriptorObj.Decorators:=SaveDecorators;
+          GDBEnumDataDescriptorObj.FastEditors:=SaveFastEditors;
 
-                                                  if (bmode<>property_build)then
-                                                                                inc(bmode);
-                                                                   end;
+        end else if (PTUserTypeDescriptor(pvd^.data.PTD)^.GetFactTypedef^.TypeName='TCalculatedString')then begin
+          SaveDecorators:=CalculatedStringDescriptor.Decorators;
+          SaveFastEditors:=CalculatedStringDescriptor.FastEditors;
+          CalculatedStringDescriptor.Decorators:=PTUserTypeDescriptor(pvd^.data.PTD)^.Decorators;
+          CalculatedStringDescriptor.FastEditors:=PTUserTypeDescriptor(pvd^.data.PTD)^.FastEditors;
+          CalculatedStringDescriptor.CreateProperties(f,PDM_Field,PPDA,tname,@pvd^.data.PTD^.collapsed,(ownerattrib or tw),bmodesave2,taa,pvd^.name,pvd^.data.ptd.TypeName);
+          CalculatedStringDescriptor.Decorators:=SaveDecorators;
+          CalculatedStringDescriptor.FastEditors:=SaveFastEditors;
+        end else
+          PTUserTypeDescriptor(pvd^.data.PTD)^.CreateProperties(f,PDM_Field,PPDA,tname,@pvd^.data.PTD^.collapsed,(ownerattrib or tw),bmodesave2,taa,pvd^.name,pvd^.data.ptd.TypeName)
+      end else begin
+        bmodetemp:=property_build;
+        if (PTUserTypeDescriptor(pvd^.data.PTD)^.GetFactTypedef^.TypeName='TEnumData')or
+           (PTUserTypeDescriptor(pvd^.data.PTD)^.GetFactTypedef^.TypeName='TEnumDataWithOtherStrings')or
+           (PTUserTypeDescriptor(pvd^.data.PTD)^.GetFactTypedef^.TypeName='TEnumDataWithOtherPointers')then begin
+          SaveDecorators:=GDBEnumDataDescriptorObj.Decorators;
+          SaveFastEditors:=GDBEnumDataDescriptorObj.FastEditors;
+          GDBEnumDataDescriptorObj.Decorators:=PTUserTypeDescriptor(pvd^.data.PTD)^.Decorators;
+          GDBEnumDataDescriptorObj.FastEditors:=PTUserTypeDescriptor(pvd^.data.PTD)^.FastEditors;
+          GDBEnumDataDescriptorObj.CreateProperties(f,PDM_Field,PPDA,tname,@pvd^.data.PTD^.collapsed,(ownerattrib or tw),bmodetemp,taa,pvd^.name,pvd^.data.ptd.TypeName);
+          GDBEnumDataDescriptorObj.Decorators:=SaveDecorators;
+          GDBEnumDataDescriptorObj.FastEditors:=SaveFastEditors;
+        end else if (PTUserTypeDescriptor(pvd^.data.PTD)^.GetFactTypedef^.TypeName='TCalculatedString')then begin
+          SaveDecorators:=CalculatedStringDescriptor.Decorators;
+          SaveFastEditors:=CalculatedStringDescriptor.FastEditors;
+          CalculatedStringDescriptor.Decorators:=PTUserTypeDescriptor(pvd^.data.PTD)^.Decorators;
+          CalculatedStringDescriptor.FastEditors:=PTUserTypeDescriptor(pvd^.data.PTD)^.FastEditors;
+          CalculatedStringDescriptor.CreateProperties(f,PDM_Field,PPDA,tname,@pvd^.data.PTD^.collapsed,(ownerattrib or tw),bmodetemp,taa,pvd^.name,pvd^.data.ptd.TypeName);
+          CalculatedStringDescriptor.Decorators:=SaveDecorators;
+          CalculatedStringDescriptor.FastEditors:=SaveFastEditors;
+        end else
+          PTUserTypeDescriptor(pvd^.data.PTD)^.CreateProperties(f,PDM_Field,PPDA,tname,@pvd^.data.PTD^.collapsed,(ownerattrib or tw),{bmode}bmodetemp,taa,pvd^.name,pvd^.data.ptd.TypeName);
+        if (bmode<>property_build)then
+          inc(bmode);
+      end;
 
-                                                  ppda:=oldppda;
+      ppda:=oldppda;
 
-                                                   pvd:=PTEntityUnit(addr)^.InterfaceVariables.vardescarray.iterate(ir2);
-                                             until pvd=nil;
-                                        end;
-                                        if recreateunitvars then
-                                                                bmode:=property_correct;
-                                        //inc(PtrInt(addr),sizeof(TEntityUnit));
-                                        end
-                                        else
+      pvd:=PTEntityUnit(addr)^.InterfaceVariables.vardescarray.iterate(ir2);
+    until pvd=nil;
 
-     begin
+    if recreateunitvars then
+      bmode:=property_correct;
+
+  end else begin
      pfd:=Fields.beginiterate(ir);
      if pfd<>nil then
      repeat
@@ -553,11 +534,10 @@ begin
            if (bmode<>property_build)then
                                          inc(bmode);
      until pfd=nil;
-     end;
-               if bmodesave<>property_build then
-                                      bmode:=bmodesave;
-     zTraceLn('{T-}[ZSCRIPT]end;{RecordDescriptor.CreateProperties "%s"}',[name]);
-     //programlog.LogOutFormatStr('end;{RecordDescriptor.CreateProperties "%s"}',[name],lp_DecPos,LM_Trace);
+  end;
+  if bmodesave<>property_build then
+    bmode:=bmodesave;
+  zTraceLn('{T-}[ZSCRIPT]end;{RecordDescriptor.CreateProperties "%s"}',[name]);
 end;
 
 //procedure MagicAfterCopyInstance(PInstance:Pointer);virtual;
@@ -566,6 +546,8 @@ var pd:PFieldDescriptor;
     ir:itrec;
     notfirst:Boolean;
 begin
+  if @onGetValueAsString<>nil then
+    exit(onGetValueAsString(pinstance));
      result:='(';
      notfirst:=false;
         pd:=Fields.beginiterate(ir);

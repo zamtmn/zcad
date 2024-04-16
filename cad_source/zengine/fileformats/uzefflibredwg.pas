@@ -27,7 +27,8 @@ uses
   dwg,dwgproc,
   uzeffmanager,
   uzelongprocesssupport,uzgldrawcontext,forms,
-  uzcstrconsts;
+  uzcstrconsts,
+  LazUTF8;
 
 type
 
@@ -82,7 +83,11 @@ begin
     dwg.opts:=0;
     DebugLn(['{WH}try load file: ',ansistring(filename)]);
     lph:=lps.StartLongProcess('LibreDWG.dwg_read_file',nil);
+    {$IFDEF WINDOWS}
+    Success:=dwg_read_file(pchar(UTF8ToWinCP(filename)),@dwg);
+    {$ELSE WINDOWS}
     Success:=dwg_read_file(pchar(ansistring(filename)),@dwg);
+    {$ENDIF}
     lps.EndLongProcess(lph);
     DebugLn(['{WH}Success: ',Success]);
     DebugDWG(@dwg);

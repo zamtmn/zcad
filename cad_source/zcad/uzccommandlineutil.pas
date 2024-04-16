@@ -136,7 +136,7 @@ begin
             end;
           end
       end else
-        if input[1] = '$' then begin
+        if {(length(input) > 0) and}(input[1] = '$') then begin
           expr:=copy(input, 2, length(input) - 1);
           v:=evaluate(expr,SysUnit);
           if v.data.ptd<>nil  then begin
@@ -232,7 +232,8 @@ begin
               end;
             end;
           end;
-    end;
+    end else
+      MakeInput(input);
   finally
     input:='';
     if assigned(drawings.GetCurrentDWG) then

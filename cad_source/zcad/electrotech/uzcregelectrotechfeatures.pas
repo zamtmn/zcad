@@ -103,6 +103,12 @@ initialization;
   AddFastEditorToType(SysUnit.TypeName2PTD('TEentityRepresentation'),@OIUI_FE_ButtonGetPrefferedSize,@ButtonTxtDrawFastEditor,@RunEentityRepresentationEditor);
   AddFastEditorToType(SysUnit.TypeName2PTD('TEentityFunction'),@OIUI_FE_ButtonGetPrefferedSize,@ButtonTxtDrawFastEditor,@RunEentityFunctionEditor);
 
+  with SysUnit.TypeName2PTD('TCalculatedString')^ do begin
+    onGetValueAsString:=CalculatedStringDescriptor.GetValueAsString;
+    onGetEditableAsString:=CalculatedStringDescriptor.GetEditableAsString;
+    onSetEditableFromString:=CalculatedStringDescriptor.SetEditableFromString;
+  end;
+
 finalization;
   ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
 end.

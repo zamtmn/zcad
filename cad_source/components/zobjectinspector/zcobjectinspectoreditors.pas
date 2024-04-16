@@ -52,7 +52,7 @@ class function TBaseTypesEditors.BaseCreateEditor;
                                   edit:=TEdit.Create(propeditor);
                                   edit.AutoSize:=false;
                                   if initialvalue='' then
-                                                         edit.Text:=ptdesc^.GetFormattedValueAsString(pinstance,f)
+                                                         edit.Text:=ptdesc^.GetEditableAsString(pinstance,f)
                                                      else
                                                          edit.Text:=initialvalue;
                                   edit.OnKeyPress:=propeditor.keyPress;
@@ -70,7 +70,7 @@ class function TBaseTypesEditors.BaseCreateEditor;
                                  cbedit.AutoSize:=false;
                                  {$ENDIF}
                                  if initialvalue='' then
-                                                        cbedit.Text:=ptdesc^.GetFormattedValueAsString(pinstance,f)
+                                                        cbedit.Text:=ptdesc^.GetEditableAsString(pinstance,f)
                                                     else
                                                         cbedit.Text:=initialvalue;
                                  cbedit.OnKeyPress:=propeditor.keyPress;

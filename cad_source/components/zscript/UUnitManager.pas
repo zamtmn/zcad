@@ -350,8 +350,8 @@ begin
                                                            if pfu<>nil then
                                                                            begin
                                                                                 CurrentUnit.InterfaceUses.PushBackIfNotPresent(pfu);
-                                                                           end;
-                                                           if (pfu=nil)and(uppercase(pstring(p)^)='SYSTEM')then
+                                                                           end
+                                                           else if (pfu=nil)and(uppercase(pstring(p)^)='SYSTEM')then
                                                            begin
                                                                 pfu:=pointer(CreateObject);
                                                                 PTUnit(pfu)^.init('system');

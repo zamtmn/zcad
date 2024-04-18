@@ -66,13 +66,13 @@ function findlexem(s:String):String;
 var
    i:Integer;
 begin
-     result:='';
-     for i:=0 to maxlexem do
+     for i:=maxlexem downto 0 do
      if lexemarray[i,0]=s then
                               begin
                                    result:=lexemarray[i,1];
                                    exit;
                               end;
+     result:='';
 end;
 
 function replacenull(s:String): String;
@@ -156,7 +156,7 @@ function countchar(s: String; ch: ansichar): Integer;
 var i, c: Integer;
 begin
   c := 0;
-  if length(s) > 0 then
+  //if length(s) > 0 then
     for i := 1 to length(s) do if s[i] = ch then inc(c);
   result := c;
 end;
@@ -186,8 +186,8 @@ begin
     begin
       if count=0 then s:=subend;
       inc(count);
-    end;
-    if expr[subend] = r2 then
+    end
+    else if expr[subend] = r2 then
     begin
       dec(count);
       if count=0 then f:=subend;
@@ -322,12 +322,12 @@ begin
                         subi:=i;
                         foundsym(#0,template,subi);
                         subexpr:=copy(template,i,subi-i);
-                        if pos(str[position],subexpr)<>0 then
-                                                             begin
-                                                                  result:=true
-                                                             end
-                                                         else
-                                                             result:=false;
+                        result:=pos(str[position],subexpr)<>0;// then
+                                                         //    begin
+                                                         //         result:=true
+                                                         //    end
+                                                         //else
+                                                         //    result:=false;
                         i:=subi;
                    end;
                '=':begin

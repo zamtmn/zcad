@@ -48,9 +48,9 @@ TZctnrVectorBytes=object(GZVector{-}<byte>{//})
                       function GetCurrentReadAddres:Pointer;virtual;
                       function Jump(offset:Integer):Pointer;virtual;
                       function SaveToFile(FileName:Ansistring):Integer;
-                      function ReadByte: Byte;
+                      function ReadByte: Byte; inline;
                       function ReadWord: Word;
-                      function GetChar(rp:integer): Ansichar;
+                      function GetChar(rp:integer): Ansichar; inline;
                       function Seek(pos:Integer):integer;
                       function notEOF:Boolean;
                       function readtoparser(break:AnsiString):AnsiString;
@@ -82,12 +82,13 @@ begin
      self.AddData(@s[1],length(s));
 end;
 function TZctnrVectorBytes.GetChar;
-var
-  p:PT;
+//var
+//  p:PT;
 begin
-     p:=@parray[0];
-     inc(p,rp);
-     result:=pansichar(p)^;
+     {$PUSH}
+     {$POINTERMATH ON}
+     result:=pansichar(@parray[rp])^;
+     {$POP}
      //result:=pansichar(PtrUInt(parray)+rp)^;
 end;
 function TZctnrVectorBytes.readtoparser;
@@ -97,91 +98,92 @@ var
   mode:(parse,commenttoendline,commenttouncomment);
   lastbreak:Boolean;
   stringread:Boolean;
+  currchar: AnsiChar;
 begin
   lastbreak:=false;
   scobcacount:=0;
-  s:='';
+  result:='';
   //i:=1;
   mode:=parse;
   stringread:=false;
   begin
     while noteof do begin
-      if (GetChar(readpos)='''')and(mode=parse) then begin
+      currchar:=GetChar(readpos);
+      if (currchar='''')and(mode=parse) then begin
         stringread:=not stringread;
       end;
-      if (GetChar(readpos)='{')and(mode=parse)and(not stringread) then begin
+      if (currchar='{')and(mode=parse)and(not stringread) then begin
         mode:=commenttouncomment;
         inc(readpos);
+        currchar:=GetChar(readpos);
       end
-      else if (GetChar(readpos)='}')and(mode=commenttouncomment) then begin
+      else if (currchar='}')and(mode=commenttouncomment) then begin
         mode:=parse;
-        s:= s+' ';
+        result:=result+' ';
         lastbreak:=true;
         inc(readpos);
+        currchar:=GetChar(readpos);
       end
-      else if (GetChar(readpos)='/')and(mode=parse)and(GetChar(readpos+1)='/')and(not stringread) then begin
-        if GetChar(readpos+1)='/'then begin
+      else if (currchar='/')and(mode=parse)and(GetChar(readpos+1)='/')and(not stringread) then begin
           mode:=commenttoendline;
           inc(readpos,2);
-        end;
+          currchar:=GetChar(readpos);
       end
-      else if (GetChar(readpos)=#10)and(mode=commenttoendline) then begin
+      else if (currchar=#10)and(mode=commenttoendline) then begin
         mode:=parse;
-        s:= s+' ';
+        result:=result+' ';
         inc(readpos);
+        currchar:=GetChar(readpos);
       end
-
-      else if (mode=parse)and(pos(GetChar(readpos),break)=0) then
+      else if (mode=parse)and(pos(currchar,break)=0) then
       begin
           //inc(i);
-          if mode=parse then
-          begin
-               if GetChar(readpos)='(' then inc(scobcacount);
-               if GetChar(readpos)=')' then dec(scobcacount);
-                            if ((GetChar(readpos) in syn_breacer))and(not stringread) then
-                                                 begin
-                                                      if not lastbreak then
-                                                                           s:=s+{bufer^[readpos]}' ';
-                                                      lastbreak:=true;
-                                                 end
-                                             else
-                                                 begin
-                                                      s:=s+GetChar(readpos);
-                                                      lastbreak:=false;
-                                                 end;
-          end;
+          if currchar='(' then inc(scobcacount)
+          else if currchar=')' then dec(scobcacount);
+          if ((currchar in syn_breacer))and(not stringread) then
+                               begin
+                                    if not lastbreak then
+                                    begin
+                                      result:=result+{bufer^[readpos]}' ';
+                                      lastbreak:=true;
+                                    end;
+                               end
+                           else
+                               begin
+                                    result:=result+currchar;
+                                    lastbreak:=false;
+                               end;
           inc(readpos);
+          currchar:=GetChar(readpos);
           //inc(currentpos);
       end
-      else if stringread then begin
-        s:=s+GetChar(readpos);
+      else if stringread then
+      begin
+        result:=result+currchar;
         inc(readpos);
+        currchar:=GetChar(readpos);
       end
       else
       begin
+        inc(readpos);
         if mode=parse then
                           begin
-                               if GetChar(readpos)='(' then inc(scobcacount);
-                               if GetChar(readpos)=')' then dec(scobcacount);
-                               s:=s+break;
-                               result:=s;
-                               inc(readpos);
+                               if currchar='(' then inc(scobcacount)
+                               else if currchar=')' then dec(scobcacount);
                                //inc(currentpos);
                                {if readpos = buferread then
                                                            readtobufer;}
-                               if scobcacount=0 then exit;
+                               if scobcacount=0 then exit(result+break);
 //                                                else
 //                                                     s:=s;
-                          end
-                      else inc(readpos);
+                          end;
       end;
     end;
     //readtobufer;
   end;
-  //setlength(s,i-1);
-  result := s;
 end;
-function readspace(expr:String):String;
+
+function readspace(expr:String):String; inline;
 var
   i:Integer;
 begin
@@ -200,7 +202,7 @@ end;
 
 function TZctnrVectorBytes.ReadString2;
 begin
-     result:=readspace(readString)
+     result:=readspace(readString);
 end;
 function TZctnrVectorBytes.ReadString;
 begin
@@ -211,32 +213,34 @@ begin
      result:=(readpos<(count-1))and(parray<>nil)
 end;
 function TZctnrVectorBytes.Jump;
-var
-  p:PT;
+//var
+//  p:PT;
 begin
+     {$PUSH}
+     {$POINTERMATH ON}
      readpos:=readpos+offset;
-     p:=@parray[0];
-     inc(p,readpos);
-     result:=p;
+     result:=@parray[readpos];
+     {$POP}
      //result:=pointer(PtrUInt(parray)+readpos);
 end;
 function TZctnrVectorBytes.GetCurrentReadAddres;
-var
-  p:PT;
+//var
+  //p:PT;
 begin
-     p:=@parray[0];
-     inc(p,readpos);
-     result:=p;
+     {$PUSH}
+     {$POINTERMATH ON}
+     result:=@parray[readpos];
+     {$POP}
      //result:=pointer(PtrUInt(parray)+readpos);
 end;
 function TZctnrVectorBytes.readbyte;
-var
-  p:PT;
+//var
+//  p:PT;
 begin
-     p:=@parray[0];
-     inc(p,readpos);
-     result:=pbyte(p)^;
-     //result:=pbyte(PtrUInt(parray)+readpos)^;
+     {$PUSH}
+     {$POINTERMATH ON}
+     result:=pbyte(@parray[readpos])^;
+     {$POP}
      inc(readpos);
 end;
 function TZctnrVectorBytes.readword;
@@ -251,7 +255,7 @@ var
   lastbreak:Boolean;
   addr:pansichar;
   strlen:integer;
-  p:PT;
+  //p:PT;
 procedure inci; inline;
 begin
  inc(i);
@@ -268,9 +272,10 @@ begin
   setlength(result,strlen);
   lastbreak:=false;
   i:=0;
-  p:=@parray[0];
-  inc(p,readpos);
-  addr:=pointer(p);
+  {$PUSH}
+  {$POINTERMATH ON}
+  addr:=pointer(@parray[readpos]);
+  {$POP}
   //addr:=pointer(PtrUInt(parray)+readpos);
     while ReadPos <> count do
     begin

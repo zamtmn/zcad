@@ -24,6 +24,7 @@ const
     syn_breacer=[#13,#10,' '];
     lineend:string=#13#10;
 type
+TSetOfChar = set of char;
 {Export+}
 PTZctnrVectorBytes=^TZctnrVectorBytes;
 {REGISTEROBJECTTYPE TZctnrVectorBytes}
@@ -41,7 +42,7 @@ TZctnrVectorBytes=object(GZVector{-}<byte>{//})
                       procedure TXTAddString(s:AnsiString);virtual;
                       function ReadData(PData:Pointer;SData:Word):Integer;virtual;
                       //function PopData(PData:Pointer;SData:Word):Integer;virtual;
-                      function ReadString3(break, ignore: AnsiString): AnsiString;inline;
+                      function ReadString3(break, ignore: TSetOfChar): AnsiString;inline;
                       function ReadString: AnsiString;inline;
                       function ReadString2:AnsiString;inline;
                       function GetCurrentReadAddres:Pointer;virtual;
@@ -203,7 +204,7 @@ begin
 end;
 function TZctnrVectorBytes.ReadString;
 begin
-     result:=ReadString3(#10,#13);
+     result:=ReadString3([#10],[#13]);
 end;
 function TZctnrVectorBytes.notEOF:Boolean;
 begin
@@ -249,23 +250,22 @@ var
   i:Integer;
   lastbreak:Boolean;
   addr:pansichar;
-  myresult:ansistring;
   strlen:integer;
   p:PT;
-procedure inci;
+procedure inci; inline;
 begin
  inc(i);
  if i>strlen then
                  begin
                    strlen:=strlen+255;
-                   setlength(myresult,strlen);
+                   setlength(result,strlen);
                  end;
 end;
 
 begin
   //s := '';
-  strlen:=255;
-  setlength(myresult,strlen);
+  strlen:=16;
+  setlength(result,strlen);
   lastbreak:=false;
   i:=0;
   p:=@parray[0];
@@ -274,30 +274,30 @@ begin
   //addr:=pointer(PtrUInt(parray)+readpos);
     while ReadPos <> count do
     begin
-      if (pos(addr[0], break) = 0)or(({s=''}i=0)and(addr[0]=' ')) then
+      if not (addr^ in break)(*or(({s=''}i=0)and(addr[0]=' '))*) then
       begin
-        if pos(addr[0], ignore) = 0 then
+        if not (addr^ in ignore) then
           begin
           //setlength(s,i);
           //s[i]:=bufer^[buferpos];
           //inc(i);
-          if ({s<>''}i<>0)or(addr[0]<>' ') then
+          if (({s<>''}i<>0)or(addr[0]<>' ')) then
 
-          if addr[0] in syn_breacer then
+          if (addr[0] in syn_breacer) then
                                                  begin
                                                       if not lastbreak then
                                                                            begin
                                                                                 //s:=s+addr[0];
                                                                                 inci;
-                                                                                myresult[i]:=addr[0];
+                                                                                PChar(@result[i])^:=addr[0];
+                                                                                lastbreak:=true;
                                                                            end;
-                                                      lastbreak:=true;
                                                  end
                                              else
                                                  begin
                                                       //s:=s+addr[0];
                                                       inci;
-                                                      myresult[i]:=addr[0];
+                                                      PChar(@result[i])^:=addr[0];
                                                       lastbreak:=false;
                                                  end;
 
@@ -308,17 +308,15 @@ begin
       else
       begin
         //myresult := s;
-        setlength(myresult,i);
-        result := myresult;
+        setlength(result,i);
         //inc(addr);
         inc(readpos);
         //myresult := s;
         exit;
       end;
     end;
-    setlength(myresult,i);
+    setlength(result,i);
   //myresult := s;
-  result := myresult;
 end;
 function TZctnrVectorBytes.Seek(pos:Integer):integer;
 begin

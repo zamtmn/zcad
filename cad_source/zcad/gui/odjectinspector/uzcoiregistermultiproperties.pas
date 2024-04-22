@@ -496,6 +496,8 @@ begin
   MultiPropertiesManager.RegisterPhysMultiproperty('FILTER_EntsByLinesTypes','Ents by linetypes',sysunit^.TypeName2PTD('TMSEntsLinetypesDetector'),MPCSummary,0,nil,PtrInt(@pent^.vp.LineType),PtrInt(@pent^.vp.LineType),TMainIterateProcsData.Create(@GetPointerCounterData,@FreePNamedObjectCounterData),TEntIterateProcsData.Create(nil,@PStyle2PStyleCounterIterateProc,nil),MPUM_AtLeastOneEntMatched);
   MultiPropertiesManager.RegisterPhysMultiproperty('OSnapModeControl','OSnap mode control',sysunit^.TypeName2PTD('TOSnapModeControl'),MPCGeneral,0,nil,PtrInt(@pent^.OSnapModeControl),PtrInt(@pent^.OSnapModeControl),OneVarDataMIPD,OneVarDataEIPD);
 
+  MultiPropertiesManager.RegisterPhysMultiproperty('FILTER_EntsByExtenders','Ents by extenders',sysunit^.TypeName2PTD('TMSEntsExtendersDetector'),MPCSummary,0,nil,PtrInt(@pent^.EntExtensions),PtrInt(@pent^.EntExtensions),TMainIterateProcsData.Create(@GetExtenderCounterData,@FreeExtendersCounterData),TEntIterateProcsData.Create(nil,@Extendrs2ExtendersCounterIterateProc,nil),MPUM_AtLeastOneEntMatched);
+
   {Circle uzegeometry}
   MultiPropertiesManager.RestartMultipropertySortID;
   MultiPropertiesManager.RegisterPhysMultiproperty('CENTER_X','Center X',sysunit^.TypeName2PTD('GDBXCoordinate'),MPCGeometry,GDBCircleID,nil,PtrInt(@pcircle^.P_insert_in_WCS.x),PtrInt(@pcircle^.Local.P_insert.x),OneVarDataMIPD,OneVarDataEIPD);

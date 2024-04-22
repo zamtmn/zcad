@@ -249,7 +249,7 @@ uses
   {$IFNDEF DARWIN}
   {$IFDEF ELECTROTECH}
   //**for velec func**//
-  uzccommand_drawsuperline,
+  uzccommand_drawsuperline,uzccommand_l2sl,
   uzvslagcab, //автопрокладка кабелей по именным суперлиниям
   uzvagslcom, //создания именных суперлиний в комнате между извещателями
   uzvstripmtext, //очистка мтекста, сделано плохо, в будущем надо переделывать мтекст и механизм.

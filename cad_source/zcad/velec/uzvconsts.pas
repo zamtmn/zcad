@@ -114,6 +114,7 @@ const
   velec_GC_HeadDevice='GC_HeadDevice';
   velec_GC_HDGroup='GC_HDGroup';
   velec_ANALYSISEM_icanbeheadunit='ANALYSISEM_icanbeheadunit';
+  velec_ANALYSISEM_exporttoxlsx='ANALYSISEM_exporttoxlsx';
   velec_nametemplatesxlsx='nametemplatesxlsx';
 
 

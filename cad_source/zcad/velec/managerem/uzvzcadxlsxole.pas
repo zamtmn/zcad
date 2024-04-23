@@ -268,13 +268,18 @@ var
   i:integer;
 begin
   result:=-1;
-  for i:= 1 to BasicWorkbook.WorkSheets.count do
-    if ContainsText(BasicWorkbook.WorkSheets[i].Name, nameSheet) then
-    begin
-      result:=i;
-      //ZCMsgCallBackInterface.TextMessage('Лист = ' + BasicWorkbook.WorkSheets[i].Name + ' спрятан!',TMWOHistoryOut);
-      //BasicWorkbook.WorkSheets[i].Visible:=false;
-    end;
+  try
+    for i:= 1 to BasicWorkbook.WorkSheets.count do
+      //if ContainsText(BasicWorkbook.WorkSheets[i].Name, nameSheet) then
+      if BasicWorkbook.WorkSheets[i].Name = nameSheet then
+      begin
+        result:=i;
+        //ZCMsgCallBackInterface.TextMessage('Лист = ' + BasicWorkbook.WorkSheets[i].Name + ' спрятан!',TMWOHistoryOut);
+        //BasicWorkbook.WorkSheets[i].Visible:=false;
+      end;
+  except
+    ZCMsgCallBackInterface.TextMessage('ОШИБКА! Лист с именем ='+nameSheet + ' - ОТСУТСТВУЕТ',TMWOHistoryOut);
+  end;
 end;
 
 function saveXLSXFile(pathFile:string):boolean;

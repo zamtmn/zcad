@@ -37,6 +37,7 @@ Phase:=_A;
 
 INFOPERSONALUSE_TextTemplate:='@@[GC_HeadDevice].@@[GC_HDGroup]';
 
+ANALYSISEM_exporttoxlsx:=false;
 
 VSPECIFICATION_Position:='';
 VSPECIFICATION_Name:='Выключатель встраиваемый СП31 1Р';

@@ -28,7 +28,7 @@ type
 GZVectorStr{-}<T>{//}=object
                             (GZVectorSimple{-}<T>{//})
                         procedure loadfromfile(fname:RawByteString);
-                        function findstring(s:T;ucase:Boolean):Boolean;
+                        function findstring(s:T;ucase:Boolean):integer;
                         procedure sort;virtual;
                         procedure SortAndSaveIndex(var index:TArrayIndex);virtual;
                         function addwithscroll(p:T):Integer;virtual;
@@ -52,27 +52,26 @@ begin
     end;
   f.done;
 end;
-function GZVectorStr<T>.findstring(s:T;ucase:Boolean):Boolean;
+function GZVectorStr<T>.findstring(s:T;ucase:Boolean):integer;
 var
-   ps:PT;
-   ir:itrec;
-   ss:T;
+  ps:PT;
+  ir:itrec;
+  ss:T;
 begin
-     ps:=beginiterate(ir);
-     if (ps<>nil) then
-     repeat
-          if ucase then
-                           ss:=uppercase(ps^)
-                       else
-                           ss:=ps^;
-          if {ps^}ss=s then
-                       begin
-                            result:=true;
-                            exit;
-                       end;
-          ps:=iterate(ir);
-     until ps=nil;
-     result:=false;
+  ps:=beginiterate(ir);
+  if (ps<>nil) then
+  repeat
+    if ucase then
+      ss:=uppercase(ps^)
+    else
+      ss:=ps^;
+    if {ps^}ss=s then begin
+      result:=ir.itc;
+      exit;
+    end;
+    ps:=iterate(ir);
+  until ps=nil;
+  result:=-1;
 end;
 procedure GZVectorStr<T>.sort;
 

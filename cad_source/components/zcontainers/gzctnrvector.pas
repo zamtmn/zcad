@@ -174,7 +174,6 @@ function enlargememblock(pblock:Pointer;oldsize,nevsize:Integer):Pointer;
 var
   newblock:Pointer;
 begin
-  newblock:=nil;
   if nevsize>0 then
     GetMem(newblock,nevsize)
   else

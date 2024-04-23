@@ -52,8 +52,8 @@ GDBObjCircle= object(GDBObjWithLocalCS)
                  procedure LoadFromDXF(var f:TZctnrVectorBytes;ptu:PExtensionData;var drawing:TDrawingDef);virtual;
 
                  procedure CalcObjMatrix(pdrawing:PTDrawingDef=nil);virtual;
-                 function calcinfrustum(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:Integer; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double):Boolean;virtual;
-                 function CalcTrueInFrustum(frustum:ClipArray;visibleactualy:TActulity):TInBoundingVolume;virtual;
+                 function calcinfrustum(const frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:Integer; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double):Boolean;virtual;
+                 function CalcTrueInFrustum(const frustum:ClipArray;visibleactualy:TActulity):TInBoundingVolume;virtual;
                  procedure RenderFeedback(pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc;var DC:TDrawContext);virtual;
                  procedure getoutbound(var DC:TDrawContext);virtual;
                  procedure SaveToDXF(var outhandle:{Integer}TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
@@ -82,7 +82,7 @@ GDBObjCircle= object(GDBObjWithLocalCS)
                  function IsIntersect_Line(lbegin,lend:gdbvertex):Intercept3DProp;virtual; //<**Пересечение с линией описанной 2-я точками
                  procedure ReCalcFromObjMatrix;virtual;
 
-                 function GetTangentInPoint(point:GDBVertex):GDBVertex;virtual;
+                 function GetTangentInPoint(const point:GDBVertex):GDBVertex;virtual;
                  procedure AddOnTrackAxis(var posr:os_record;const processaxis:taddotrac);virtual;
                  function onpoint(var objects:TZctnrVectorPGDBaseObjects;const point:GDBVertex):Boolean;virtual;
 
@@ -120,10 +120,12 @@ begin
      processaxis(posr,tv);
 end;
 
-function GDBObjCircle.GetTangentInPoint(point:GDBVertex):GDBVertex;
+function GDBObjCircle.GetTangentInPoint(const point:GDBVertex):GDBVertex;
 begin
-     point:=uzegeometry.VertexSub(self.P_insert_in_WCS,point);
-     result:=normalizevertex(uzegeometry.vectordot(point,self.Local.basis.oz));
+     result:=normalizevertex(uzegeometry.vectordot(
+                     uzegeometry.VertexSub(self.P_insert_in_WCS,point),
+                     self.Local.basis.oz)
+     );
 end;
 procedure GDBObjCircle.ReCalcFromObjMatrix;
 var

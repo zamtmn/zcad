@@ -170,7 +170,7 @@ function distance2piece_2Dmy(var q:GDBvertex2D; p1,p2:GDBvertex2D): double;inlin
 
 function distance2piece_2_xy(var q:GDBvertex2DI;const p1,p2:GDBvertex2D):GDBvertex2DI;inline;
 
-function distance2point_2(var p1,p2:GDBvertex2DI):Integer;inline;
+function distance2point_2(const p1,p2:GDBvertex2DI):Integer;inline;
 function distance2ray(q:GDBvertex;const p1,p2:GDBvertex):DistAndt;
 function CreateTranslationMatrix(const V:GDBvertex): DMatrix4D;inline;
 function CreateScaleMatrix(const V:GDBvertex): DMatrix4D;inline;
@@ -226,7 +226,7 @@ function CalcAABBInFrustum (const AABB:TBoundingBox; const frustum:ClipArray):TI
 
 function GetXfFromZ(oz:GDBVertex):GDBVertex;
 
-function MatrixDeterminant(M: DMatrix4D): Double;
+function MatrixDeterminant(const M: DMatrix4D): Double;
 function CreateMatrixFromBasis(const ox,oy,oz:GDBVertex):DMatrix4D;
 procedure CreateBasisFromMatrix(const m:DMatrix4D;out ox,oy,oz:GDBVertex);
 
@@ -470,25 +470,28 @@ begin
       cacount:=0;
       for i:=0 to 5 do
       begin
-      d1:=frustum[i].v[0] * lbegin.x + frustum[i].v[1] * lbegin.y + frustum[i].v[2] * lbegin.z + frustum[i].v[3];
-      d2:=frustum[i].v[0] * lend.x +   frustum[i].v[1] * lend.y +   frustum[i].v[2] * lend.z +   frustum[i].v[3];
-      if d1<0 then
-                  bytebegin:=bytebegin or bit;
-      if d2<0 then
-                  byteend:=byteend or bit;
-      if ((bytebegin and bit)and(byteend and bit))>0 then
-                                                         begin
-                                                              result:=IREmpty;
-                                                              exit;
-                                                         end;
-           if((bytebegin and bit)xor(byteend and bit))>0then
-            begin
-                 d1:=abs(d1);
-                 d2:=abs(d2);
-                 ca[cacount]:=d1/(d1+d2);
-                 inc(cacount);
-            end;
-      bit:=bit*2;
+        with frustum[i] do
+        begin
+          d1:=v[0] * lbegin.x + v[1] * lbegin.y + v[2] * lbegin.z + v[3];
+          d2:=v[0] * lend.x +   v[1] * lend.y +   v[2] * lend.z +   v[3];
+        end;
+        if d1<0 then
+                    bytebegin:=bytebegin or bit;
+        if d2<0 then
+                    byteend:=byteend or bit;
+        if ((bytebegin and bit)and(byteend and bit))>0 then
+                                                           begin
+                                                                result:=IREmpty;
+                                                                exit;
+                                                           end;
+             if((bytebegin and bit)xor(byteend and bit))>0then
+              begin
+                   d1:=abs(d1);
+                   d2:=abs(d2);
+                   ca[cacount]:=d1/(d1+d2);
+                   inc(cacount);
+              end;
+        bit:=bit*2;
       end;
       if ((bytebegin)=0)and((byteend)=0) then
                                            begin
@@ -523,7 +526,8 @@ begin
       p:=VertexDmorph(lbegin,d,d1);
       for i:=0 to 5 do
       begin
-            if (frustum[i].v[0] * p.x + frustum[i].v[1] * p.y + frustum[i].v[2] * p.z + frustum[i].v[3])>=0
+        with frustum[i] do
+            if (v[0] * p.x + v[1] * p.y + v[2] * p.z + v[3])>=0
             then
                 inc(bit);
       end;
@@ -1029,14 +1033,14 @@ begin
      if x*x+y*y+z*z<bigeps then result:=true
                         else result:=false;
 end;
-function distance2point_2(var p1,p2:GDBvertex2DI):Integer;
+function distance2point_2(const p1,p2:GDBvertex2DI):Integer;
 var x,y:Integer;
 begin
      x:=p2.x-p1.x;
      y:=p2.y-p1.y;
      result:=x*x+y*y;
 end;
-function MatrixDetInternal(var a1, a2, a3, b1, b2, b3, c1, c2, c3:Double):Double;
+function MatrixDetInternal(const a1, a2, a3, b1, b2, b3, c1, c2, c3:Double):Double;
 begin
   Result := a1 * (b2 * c3 - b3 * c2) -
             b1 * (a2 * c3 - a3 * c2) +
@@ -1048,14 +1052,26 @@ var a1, a2, a3, a4,
     c1, c2, c3, c4,
     d1, d2, d3, d4: Double;
 begin
-    a1 :=  M[0].v[0]; b1 :=  M[0].v[1];
-    c1 :=  M[0].v[2]; d1 :=  M[0].v[3];
-    a2 :=  M[1].v[0]; b2 :=  M[1].v[1];
-    c2 :=  M[1].v[2]; d2 :=  M[1].v[3];
-    a3 :=  M[2].v[0]; b3 :=  M[2].v[1];
-    c3 :=  M[2].v[2]; d3 :=  M[2].v[3];
-    a4 :=  M[3].v[0]; b4 :=  M[3].v[1];
-    c4 :=  M[3].v[2]; d4 :=  M[3].v[3];
+  with DVector4D((@M[0])^) do begin
+    a1 := v[0];  b1 := v[1];  c1 := v[2];  d1 := v[3];
+  end;
+  with DVector4D((@M[1])^) do begin
+    a2 := v[0];  b2 := v[1];  c2 := v[2];  d2 := v[3];
+  end;
+  with DVector4D((@M[2])^) do begin
+    a3 := v[0];  b3 := v[1];  c3 := v[2];  d3 := v[3];
+  end;
+  with DVector4D((@M[3])^) do begin
+    a4 := v[0];  b4 := v[1];  c4 := v[2];  d4 := v[3];
+  end;
+    //a1 :=  M[0].v[0]; b1 :=  M[0].v[1];
+    //c1 :=  M[0].v[2]; d1 :=  M[0].v[3];
+    //a2 :=  M[1].v[0]; b2 :=  M[1].v[1];
+    //c2 :=  M[1].v[2]; d2 :=  M[1].v[3];
+    //a3 :=  M[2].v[0]; b3 :=  M[2].v[1];
+    //c3 :=  M[2].v[2]; d3 :=  M[2].v[3];
+    //a4 :=  M[3].v[0]; b4 :=  M[3].v[1];
+    //c4 :=  M[3].v[2]; d4 :=  M[3].v[3];
 
     // row column labeling reversed since we transpose rows & columns
     M[XAxisIndex].v[XAxisIndex] :=  MatrixDetInternal(b2, b3, b4, c2, c3, c4, d2, d3, d4);
@@ -1078,28 +1094,63 @@ begin
     M[ZAxisIndex].v[WAxisIndex] := -MatrixDetInternal(a1, a2, a3, b1, b2, b3, d1, d2, d3);
     M[WAxisIndex].v[WAxisIndex] :=  MatrixDetInternal(a1, a2, a3, b1, b2, b3, c1, c2, c3);
 end;
-function MatrixDeterminant(M: DMatrix4D): Double;
+function MatrixDeterminant(const M: DMatrix4D): Double;
 var a1, a2, a3, a4,
     b1, b2, b3, b4,
     c1, c2, c3, c4,
     d1, d2, d3, d4  : Double;
-
 begin
-  a1 := M[0].v[0];  b1 := M[0].v[1];  c1 := M[0].v[2];  d1 := M[0].v[3];
-  a2 := M[1].v[0];  b2 := M[1].v[1];  c2 := M[1].v[2];  d2 := M[1].v[3];
-  a3 := M[2].v[0];  b3 := M[2].v[1];  c3 := M[2].v[2];  d3 := M[2].v[3];
-  a4 := M[3].v[0];  b4 := M[3].v[1];  c4 := M[3].v[3];  d4 := M[3].v[3];
+  with DVector4D((@M[0])^) do begin
+    a1 := v[0];  b1 := v[1];  c1 := v[2];  d1 := v[3];
+  end;
+  with DVector4D((@M[1])^) do begin
+    a2 := v[0];  b2 := v[1];  c2 := v[2];  d2 := v[3];
+  end;
+  with DVector4D((@M[2])^) do begin
+    a3 := v[0];  b3 := v[1];  c3 := v[2];  d3 := v[3];
+  end;
+  with DVector4D((@M[3])^) do begin
+    a4 := v[0];  b4 := v[1];  c4 := v[2];  d4 := v[3];
+  end;
+  //a1 := M[0].v[0];  b1 := M[0].v[1];  c1 := M[0].v[2];  d1 := M[0].v[3];
+  //a2 := M[1].v[0];  b2 := M[1].v[1];  c2 := M[1].v[2];  d2 := M[1].v[3];
+  //a3 := M[2].v[0];  b3 := M[2].v[1];  c3 := M[2].v[2];  d3 := M[2].v[3];
+  //a4 := M[3].v[0];  b4 := M[3].v[1];  c4 := M[3].v[3];  d4 := M[3].v[3];
 
   Result := a1 * MatrixDetInternal(b2, b3, b4, c2, c3, c4, d2, d3, d4) -
             b1 * MatrixDetInternal(a2, a3, a4, c2, c3, c4, d2, d3, d4) +
             c1 * MatrixDetInternal(a2, a3, a4, b2, b3, b4, d2, d3, d4) -
             d1 * MatrixDetInternal(a2, a3, a4, b2, b3, b4, c2, c3, c4);
 end;
-procedure MatrixScale(var M: DMatrix4D; Factor: Double);
-var I, J: Integer;
+procedure MatrixScale(var M: DMatrix4D; const Factor: Double);
+//var I, J: Integer;
 begin
-  for I := 0 to 3 do
-    for J := 0 to 3 do M[I].v[J] := M[I].v[J] * Factor;
+  with DVector4D((@M[0])^) do begin
+    v[0] := v[0] * Factor;
+    v[1] := v[1] * Factor;
+    v[2] := v[2] * Factor;
+    v[3] := v[3] * Factor;
+  end;
+  with DVector4D((@M[1])^) do begin
+    v[0] := v[0] * Factor;
+    v[1] := v[1] * Factor;
+    v[2] := v[2] * Factor;
+    v[3] := v[3] * Factor;
+  end;
+  with DVector4D((@M[2])^) do begin
+    v[0] := v[0] * Factor;
+    v[1] := v[1] * Factor;
+    v[2] := v[2] * Factor;
+    v[3] := v[3] * Factor;
+  end;
+  with DVector4D((@M[3])^) do begin
+    v[0] := v[0] * Factor;
+    v[1] := v[1] * Factor;
+    v[2] := v[2] * Factor;
+    v[3] := v[3] * Factor;
+  end;
+  //for I := 0 to 3 do
+  //  for J := 0 to 3 do M[I].v[J] := M[I].v[J] * Factor;
 end;
 
 procedure MatrixInvert(var M: DMatrix4D);
@@ -1718,11 +1769,8 @@ begin
           result := 2 * pi - temp
 end;
 function TwoVectorAngle(const Vector1, Vector2: GDBVertex): Double;inline;
-var
-  dx, dy, temp: Double;
 begin
-  temp:=scalardot(Vector1, Vector2);
-  Result:=ArcCos(temp);
+  Result:=ArcCos(scalardot(Vector1, Vector2));
 end;
 function Vertexmorph(const Vector1, Vector2: GDBVertex; a: Double): GDBVertex;
 var

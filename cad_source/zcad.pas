@@ -236,7 +236,7 @@ uses
   uzccommand_tstCmdLinePrompt,
   uzccommand_explDbCheck,
 
-  uzccommand_cfgAddSupportPath,
+  uzccommand_cfgAddSupportPath,uzccommand_cfgSetRendererBackEnd,
   uzccommand_DockingOptions,
   uzcCommand_MoveEntsByMouse,
   uzcCommand_LPCSRun,

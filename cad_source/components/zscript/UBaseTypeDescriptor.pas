@@ -155,6 +155,7 @@ TOTM_PtrUint=TOrdinalTypeManipulator<PtrUint>;
 TEnumDataDescriptor=object(BaseTypeDescriptor<TEnumData,{TOrdinalTypeManipulator<PtrUint>}TOTM_PtrUint>)
                      constructor init;
                      function GetValueAsString(pinstance:Pointer):TInternalScriptString;virtual;
+                     function GetDecoratedValueAsString(pinstance:Pointer; const f:TzeUnitsFormat):TInternalScriptString;virtual;
                      procedure SetValueFromString(PInstance:Pointer;_Value:TInternalScriptString);virtual;
                      function CreateProperties(const f:TzeUnitsFormat;mode:PDMode;PPDA:PTPropertyDeskriptorArray;Name:TInternalScriptString;PCollapsed:Pointer;ownerattrib:Word;var bmode:Integer;const addr:Pointer;ValKey,ValType:TInternalScriptString):PTPropertyDeskriptorArray;virtual;
                      destructor Done;virtual;
@@ -552,7 +553,10 @@ begin
   else
     result:=PTEnumData(Pinstance)^.Enums.getData(PTEnumData(Pinstance)^.Selected);
 end;
-
+function TEnumDataDescriptor.GetDecoratedValueAsString(pinstance:Pointer; const f:TzeUnitsFormat):TInternalScriptString;
+begin
+  result:=GetValueAsString(pinstance);
+end;
 
 constructor TCalculatedStringDescriptor.init;
 begin

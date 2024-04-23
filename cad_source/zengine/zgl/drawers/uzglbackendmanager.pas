@@ -20,7 +20,9 @@ unit uzglbackendmanager;
 {$INCLUDE zengineconfig.inc}
 
 interface
-uses uzctnrvectorstrings,uzglviewareaabstract,uzctnrVectorPointers,LazLogger;
+uses
+  SysUtils,
+  uzctnrvectorstrings,uzglviewareaabstract,uzctnrVectorPointers,LazLogger;
 const test:String='asdasd';
 type
     TVA=class of TAbstractViewArea;
@@ -29,7 +31,18 @@ var
     BackendsNames:TEnumData;
 procedure RegisterBackend(BackEndClass:TVA;Name:string);
 function GetCurrentBackEnd:TVA;
+function SetCurrentBackEnd(BackEndName:string):boolean;
 implementation
+function SetCurrentBackEnd(BackEndName:string):boolean;
+var
+  i:integer;
+begin
+  i:=BackendsNames.Enums.findstring(uppercase(BackEndName),true);
+  if i>=0 then
+    BackendsNames.Selected:=i
+  else
+    debugln('{E}RendererBackEnd "',BackEndName,'" not found');
+end;
 procedure RegisterBackend(BackEndClass:TVA;Name:string);
 begin
      //sysvar.RD.RD_RendererBackEnd.Enums.add(@name);

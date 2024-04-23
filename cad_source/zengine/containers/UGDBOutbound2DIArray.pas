@@ -17,6 +17,7 @@
 }
 
 unit UGDBOutbound2DIArray;
+{$Mode delphi}{$H+}
 {$INCLUDE zengineconfig.inc}
 interface
 uses uzegeometrytypes,uzgldrawcontext,gzctnrVector,sysutils,uzegeometry;

@@ -17,6 +17,7 @@
 }
 
 unit uzeentsubordinated;
+{$Mode delphi}{$H+)
 {$INCLUDE zengineconfig.inc}
 
 interface

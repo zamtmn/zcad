@@ -1023,40 +1023,38 @@ begin
               end;
            40:
              begin
-                  if LoadMode=TLOLoad then
-                  if active then
-                  if @drawing<>nil then
-                  if drawing.pcamera<>nil then
-                  if drawing.wa.getviewcontrol<>nil then
-                  begin
-                       drawing.pcamera^.prop.zoom:=(strtofloat(s)/drawing.wa.getviewcontrol.ClientHeight);
-                  end;
+               if LoadMode=TLOLoad then
+                 if active then
+                   if @drawing<>nil then
+                     if drawing.pcamera<>nil then
+                       if drawing.wa<>nil then
+                         if drawing.wa.getviewcontrol<>nil then
+                           drawing.pcamera^.prop.zoom:=(strtofloat(s)/drawing.wa.getviewcontrol.ClientHeight);
               end;
            41:
              begin
-                  if LoadMode=TLOLoad then
-                  if active then
-                  if @drawing<>nil then
-                  if drawing.pcamera<>nil then
-                  if drawing.wa.getviewcontrol<>nil then
-                  begin
-                       if drawing.wa.getviewcontrol.ClientHeight*strtofloat(s)>drawing.wa.getviewcontrol.ClientWidth then
-                       drawing.pcamera^.prop.zoom:=drawing.pcamera^.prop.zoom*strtofloat(s)*drawing.wa.getviewcontrol.ClientHeight/drawing.wa.getviewcontrol.ClientWidth;
-                  end;
+               if LoadMode=TLOLoad then
+                 if active then
+                   if @drawing<>nil then
+                     if drawing.pcamera<>nil then
+                       if drawing.wa<>nil then
+                         if drawing.wa.getviewcontrol<>nil then
+                           if drawing.wa.getviewcontrol.ClientHeight*strtofloat(s)>drawing.wa.getviewcontrol.ClientWidth then
+                             drawing.pcamera^.prop.zoom:=drawing.pcamera^.prop.zoom*strtofloat(s)*drawing.wa.getviewcontrol.ClientHeight/drawing.wa.getviewcontrol.ClientWidth;
               end;
            71:
              begin
-                  if LoadMode=TLOLoad then
-                  if active then
-                  if @drawing<>nil then
-                  if drawing.wa.getviewcontrol<>nil then
-                  begin
-                       flags:=strtoint(s);
-                       if (flags and 1)<>0 then
-                                     drawing.wa.param.projtype:=PROJPerspective
-                                 else
-                                     drawing.wa.param.projtype:=PROJParalel;
-                  end;
+               if LoadMode=TLOLoad then
+                 if active then
+                   if @drawing<>nil then
+                     if drawing.wa<>nil then
+                       if drawing.wa.getviewcontrol<>nil then begin
+                         flags:=strtoint(s);
+                         if (flags and 1)<>0 then
+                           drawing.wa.param.projtype:=PROJPerspective
+                         else
+                           drawing.wa.param.projtype:=PROJParalel;
+                       end;
              end;
            75:
              begin

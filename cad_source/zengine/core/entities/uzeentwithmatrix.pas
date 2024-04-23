@@ -17,6 +17,7 @@
 }
 
 unit uzeentwithmatrix;
+{$Mode delphi}{$H+}
 {$INCLUDE zengineconfig.inc}
 
 interface

@@ -17,6 +17,7 @@
 }
 
 unit uzgvertex3sarray;
+{$Mode delphi}{$H+)
 {$INCLUDE zengineconfig.inc}
 interface
 uses gzctnrVector,sysutils,

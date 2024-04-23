@@ -17,6 +17,7 @@
 }
 
 unit uzeentwithlocalcs;
+{$Mode delphi}{$H+}
 {$INCLUDE zengineconfig.inc}
 
 interface

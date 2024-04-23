@@ -17,6 +17,7 @@
 }
 
 unit uzeentityfactory;
+{$Mode delphi}{$H+}
 {$INCLUDE zengineconfig.inc}
 
 

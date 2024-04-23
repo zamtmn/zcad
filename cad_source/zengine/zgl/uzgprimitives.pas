@@ -17,6 +17,7 @@
 }
 
 unit uzgprimitives;
+{$Mode delphi}{$H+)
 {$INCLUDE zengineconfig.inc}
 interface
 uses uzgprimitivessarray,math,uzglgeomdata,uzgldrawcontext,uzgvertex3sarray,uzgldrawerabstract,

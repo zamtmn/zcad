@@ -16,6 +16,7 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>)
 }
 unit uzeentdimdiametric;
+{$Mode delphi}{$H+}
 {$INCLUDE zengineconfig.inc}
 
 interface

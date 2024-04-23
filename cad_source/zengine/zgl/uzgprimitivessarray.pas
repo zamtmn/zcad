@@ -17,6 +17,7 @@
 }
 
 unit uzgprimitivessarray;
+{$Mode delphi}{$H+)
 {$INCLUDE zengineconfig.inc}
 interface
 uses gzctnrAlignedVectorObjects,uzbtypes;

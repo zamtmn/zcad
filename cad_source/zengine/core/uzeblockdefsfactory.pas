@@ -17,6 +17,7 @@
 }
 
 unit uzeblockdefsfactory;
+{$Mode delphi}{$H+}
 {$INCLUDE zengineconfig.inc}
 
 

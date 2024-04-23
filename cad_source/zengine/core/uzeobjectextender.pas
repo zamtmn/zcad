@@ -15,8 +15,8 @@
 {
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
-{MODE OBJFPC}{$H+}
 unit uzeobjectextender;
+{$Mode delphi}{$H+}
 {$INCLUDE zengineconfig.inc}
 
 interface

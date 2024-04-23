@@ -457,11 +457,11 @@ begin
   dxfDoubleout(outhandle,42,endangle{ * 180 / pi});
 end;
 procedure GDBObjEllipse.LoadFromDXF;
-var //s: String;
+var
   byt{, code}: Integer;
 begin
   //initnul;
-  byt:=readmystrtoint(f);
+  byt:=f.ParseInteger;
   while byt <> 0 do
   begin
     if not LoadFromDXFObjShared(f,byt,ptu,drawing) then
@@ -469,8 +469,8 @@ begin
     if not dxfvertexload(f,11,byt,MajorAxis) then
     if not dxfDoubleload(f,40,byt,ratio) then
     if not dxfDoubleload(f,41,byt,startangle) then
-    if not dxfDoubleload(f,42,byt,endangle) then {s := }f.readString;
-    byt:=readmystrtoint(f);
+    if not dxfDoubleload(f,42,byt,endangle) then f.ReadPAnsiChar;
+    byt:=f.ParseInteger;
   end;
   startangle := startangle{ * pi / 180};
   endangle := endangle{ * pi / 180};

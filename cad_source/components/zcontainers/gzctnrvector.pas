@@ -273,12 +273,11 @@ end;
 function GZVector<T>.IsDataExistWithCompareProc;
 var i:integer;
 begin
-     for i:=0 to count-1 do
-     if EqualFunc(parray[i],pobj) then
-                           begin
-                                result:=i;
-                                exit;
-                           end;
+     i:=count;
+     while i>0 do begin
+       dec(i);
+       if EqualFunc(parray[i],pobj) then exit(i);
+     end;
      result:=-1;
 end;
 function GZVector<T>.PushBackIfNotLastWithCompareProc(data:T;EqualFunc:TEqualFunc):Integer;

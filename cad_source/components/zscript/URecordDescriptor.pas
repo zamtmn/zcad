@@ -30,12 +30,12 @@ PRecordDescriptor=^RecordDescriptor;
 RecordDescriptor=object(TUserTypeDescriptor)
                        Fields:{GDBOpenArrayOfData}TFieldDescriptor;
                        Parent:PRecordDescriptor;
-                       constructor init(tname:string;pu:pointer);
-                       function CreateProperties(const f:TzeUnitsFormat;mode:PDMode;PPDA:PTPropertyDeskriptorArray;Name:TInternalScriptString;PCollapsed:Pointer;ownerattrib:Word;var bmode:Integer;const addr:Pointer;ValKey,ValType:TInternalScriptString):PTPropertyDeskriptorArray;virtual;
+                       constructor init(const tname:string;pu:pointer);
+                       function CreateProperties(const f:TzeUnitsFormat;mode:PDMode;PPDA:PTPropertyDeskriptorArray;const Name:TInternalScriptString;PCollapsed:Pointer;ownerattrib:Word;var bmode:Integer;const addr:Pointer;const ValKey,ValType:TInternalScriptString):PTPropertyDeskriptorArray;virtual;
                        procedure AddField(var fd:FieldDescriptor);
                        function FindField(fn:TInternalScriptString):PFieldDescriptor;virtual; //**< Найти требуемое поля. Пример : sampleRTTITypeDesk^.FindField('PolyWidth')
-                       function SetAttrib(fn:TInternalScriptString;SetA,UnSetA:Word):PFieldDescriptor;
-                       procedure ApplyOperator(oper,path:TInternalScriptString;var offset:Integer;out tc:PUserTypeDescriptor);virtual;
+                       function SetAttrib(const fn:TInternalScriptString;SetA,UnSetA:Word):PFieldDescriptor;
+                       procedure ApplyOperator(const oper,path:TInternalScriptString;var offset:Integer;out tc:PUserTypeDescriptor);virtual;
                        procedure AddConstField(const fd:FieldDescriptor);
                        procedure CopyTo(RD:PTUserTypeDescriptor);
                        //function Serialize(PInstance:Pointer;SaveFlag:Word;var membuf:PTZctnrVectorBytes;var  linkbuf:PGDBOpenArrayOfTObjLinkRecord;var sub:integer):integer;virtual;
@@ -43,26 +43,26 @@ RecordDescriptor=object(TUserTypeDescriptor)
                        function GetTypeAttributes:TTypeAttr;virtual;
                        procedure MagicFreeInstance(PInstance:Pointer);virtual;
                        destructor Done;virtual;
-                       procedure SavePasToMem(var membuf:TZctnrVectorBytes;PInstance:Pointer;prefix:TInternalScriptString);virtual;
+                       procedure SavePasToMem(var membuf:TZctnrVectorBytes;PInstance:Pointer;const prefix:TInternalScriptString);virtual;
                        procedure MagicAfterCopyInstance(PInstance:Pointer);virtual;
                        function GetValueAsString(pinstance:Pointer):TInternalScriptString;virtual;
                        procedure RegisterTypeinfo(ti:PTypeInfo);virtual;
                        procedure CorrectFieldsOffset(ti:PTypeInfo);
                    end;
-function typeformat(s:TInternalScriptString;PInstance,PTypeDescriptor:Pointer):TInternalScriptString;
+function typeformat(ps:TInternalScriptString;PInstance,PTypeDescriptor:Pointer):TInternalScriptString;
 var
     EmptyTypedData:TInternalScriptString;
 implementation
 uses varman;
-function typeformat(s:TInternalScriptString;PInstance,PTypeDescriptor:Pointer):TInternalScriptString;
+function typeformat(ps:TInternalScriptString;PInstance,PTypeDescriptor:Pointer):TInternalScriptString;
 var i,i2:Integer;
-    ps,fieldname:TInternalScriptString;
+    {ps,}fieldname:TInternalScriptString;
 //    pv:pvardesk;
     offset:Integer;
     tc:PUserTypeDescriptor;
     pf:Pointer;
 begin
-     ps:=s;
+     //ps:=s;
      repeat
           i:=pos('%%[',ps);
           if i>0 then
@@ -148,7 +148,7 @@ begin
               pd:=Fields.iterate(ir);
         until pd=nil;
 end;
-procedure RecordDescriptor.ApplyOperator;
+procedure RecordDescriptor.ApplyOperator(const oper,path:TInternalScriptString;var offset:Integer;out tc:PUserTypeDescriptor);
 var pd:PFieldDescriptor;
 //   d:FieldDescriptor;
 //     p:pointer;
@@ -218,7 +218,7 @@ begin
         until pd=nil;
         result:=nil;
 end;
-function RecordDescriptor.SetAttrib(fn:TInternalScriptString;SetA,UnSetA:Word):PFieldDescriptor;
+function RecordDescriptor.SetAttrib(const fn:TInternalScriptString;SetA,UnSetA:Word):PFieldDescriptor;
 begin
      result:=FindField(fn);
      if result<>nil then
@@ -250,7 +250,7 @@ begin
               pd:=Fields.iterate(ir);
         until pd=nil;
 end;
-procedure RecordDescriptor.SavePasToMem(var membuf:TZctnrVectorBytes;PInstance:Pointer;prefix:TInternalScriptString);
+procedure RecordDescriptor.SavePasToMem(var membuf:TZctnrVectorBytes;PInstance:Pointer;const prefix:TInternalScriptString);
 var pd:PFieldDescriptor;
 //    d:FieldDescriptor;
     ir:itrec;
@@ -267,7 +267,7 @@ function RecordDescriptor.GetTypeAttributes;
 begin
      result:=TA_COMPOUND;
 end;
-function RecordDescriptor.CreateProperties;
+function RecordDescriptor.CreateProperties(const f:TzeUnitsFormat;mode:PDMode;PPDA:PTPropertyDeskriptorArray;const Name:TInternalScriptString;PCollapsed:Pointer;ownerattrib:Word;var bmode:Integer;const addr:Pointer;const ValKey,ValType:TInternalScriptString):PTPropertyDeskriptorArray;
 var
   PFD:PFieldDescriptor;
   ppd:PPropertyDeskriptor;

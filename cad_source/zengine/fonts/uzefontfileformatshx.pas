@@ -691,6 +691,8 @@ begin
           end;
 
 function createnewfontfromshx(name:String;var pf:PGDBfont):Boolean;
+const
+  emptyCS:TSetOfChar = [];
 var
    //f:filestream;
    line{,sub}:AnsiString;
@@ -738,7 +740,7 @@ begin
 //         if symnum=150 then
 //                        symnum:=symnum;
 
-         line:=memorybuf.readstring3([#0],[]);
+         line:=memorybuf.readstring3([#0],emptyCS);
          datalen:=symlen-length(line)-2;
 
          if symnum=0 then
@@ -770,7 +772,7 @@ begin
                                               programlog.logoutstr(line,0);}
          inc(psinfo);
     end;
-        line:=memorybuf.readstring3([],[]);
+        line:=memorybuf.readstring3(emptyCS,emptyCS);
         if membufcreated then
                              begin
                                memorybuf.done;
@@ -796,7 +798,7 @@ else if line='AUTOCAD-86 UNIFONT 1.0' then
        {symmin:=}memorybuf.readword;
        {symmin:=}memorybuf.readword;
 
-       pf^.internalname:=memorybuf.readstring3([#0],[]);
+       pf^.internalname:=memorybuf.readstring3([#0],emptyCS);
        TZESHXFontImpl(pf^.font).h:=memorybuf.readbyte;
        TZESHXFontImpl(pf^.font).u:=memorybuf.readbyte;
        memorybuf.readbyte;
@@ -813,7 +815,7 @@ else if line='AUTOCAD-86 UNIFONT 1.0' then
          datalen:=memorybuf.readbyte;
          if datalen<>0 then
                            begin
-                           line:=memorybuf.readstring3([#0],[]);
+                           line:=memorybuf.readstring3([#0],emptyCS);
                            datalen:=symlen-length(line)-2;
                            end
                        else

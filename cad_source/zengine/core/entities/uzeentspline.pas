@@ -394,7 +394,7 @@ begin
                                                         Degree:=Degree;
                                                    end
 
-                                      else {s:= }f.readString;
+                                      else f.ReadPAnsiChar;
     GroupCode:=readmystrtoint(f);
   end;
 vertexarrayinocs.Shrink;

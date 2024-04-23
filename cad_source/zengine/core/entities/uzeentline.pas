@@ -63,7 +63,7 @@ GDBObjLine= object(GDBObj3d)
                  procedure transform(const t_matrix:DMatrix4D);virtual;
                   function jointoline(pl:pgdbobjline;var drawing:TDrawingDef):Boolean;virtual;
 
-                  function ObjToString(prefix,sufix:String):String;virtual;
+                  function ObjToString(const prefix,sufix:String):String;virtual;
                   function GetObjTypeName:String;virtual;
                   function GetCenterPoint:GDBVertex;virtual;
                   procedure getoutbound(var DC:TDrawContext);virtual;
@@ -164,7 +164,7 @@ begin
      pl^.YouDeleted(drawing);
      result:=true;
 end;
-function GDBObjLine.ObjToString(prefix,sufix:String):String;
+function GDBObjLine.ObjToString(const prefix,sufix:String):String;
 begin
      result:=prefix+inherited ObjToString('GDBObjLine (addr:',')')+sufix;
 end;
@@ -191,16 +191,16 @@ begin
      result:=GDBlineID;
 end;
 procedure GDBObjLine.LoadFromDXF;
-var //s: String;
+var
   byt: Integer;
 begin
-  byt:=readmystrtoint(f);
+  byt:=f.ParseInteger;
   while byt <> 0 do
   begin
     if not LoadFromDXFObjShared(f,byt,ptu,drawing) then
        if not dxfvertexload(f,10,byt,CoordInOCS.lBegin) then
-          if not dxfvertexload(f,11,byt,CoordInOCS.lEnd) then {s := }f.readString;
-    byt:=readmystrtoint(f);
+          if not dxfvertexload(f,11,byt,CoordInOCS.lEnd) then f.ReadPAnsiChar;
+    byt:=f.ParseInteger;
   end;
 end;
 destructor GDBObjLine.done;

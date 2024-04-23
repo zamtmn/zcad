@@ -23,7 +23,7 @@ uses uzepalette,uzeobjectextender,uzgldrawerabstract,uzgldrawcontext,uzedrawingd
      uzecamera,uzeentitiesprop,uzestyleslinetypes,
      uzegeometrytypes,UGDBControlPointArray,uzeentsubordinated,uzbtypes,uzeconsts,
      uzglviewareadata,uzegeometry,uzeffdxfsupport,sysutils,uzctnrVectorBytes,
-     uzestyleslayers,uzeenrepresentation,LazLogger,uzctnrvectorpgdbaseobjects;
+     uzestyleslayers,uzeenrepresentation,LazLogger,uzctnrvectorpgdbaseobjects,uzcinterface;
 type
 taddotrac=procedure (var posr:os_record;const axis:GDBVertex) of object;
 {Export+}
@@ -61,7 +61,7 @@ GDBObjEntity= object(GDBObjSubordinated)
                     constructor initnul(owner:PGDBObjGenericWithSubordinated);
                     procedure SaveToDXFObjPrefix(var  outhandle:{Integer}TZctnrVectorBytes;entname,dbname:String;var IODXFContext:TIODXFContext;notprocessHandle:boolean=false);
                     function LoadFromDXFObjShared(var f:TZctnrVectorBytes;dxfcod:Integer;ptu:PExtensionData;var drawing:TDrawingDef):Boolean;
-                    function ProcessFromDXFObjXData(_Name,_Value:String;ptu:PExtensionData;const drawing:TDrawingDef):Boolean;virtual;
+                    function ProcessFromDXFObjXData(const _Name,_Value:String;ptu:PExtensionData;const drawing:TDrawingDef):Boolean;virtual;
                     function FromDXFPostProcessBeforeAdd(ptu:PExtensionData;const drawing:TDrawingDef):PGDBObjSubordinated;virtual;
                     procedure FromDXFPostProcessAfterAdd;virtual;
                     procedure postload(var context:TIODXFLoadContext);virtual;
@@ -140,7 +140,7 @@ GDBObjEntity= object(GDBObjSubordinated)
                     function GetMainOwner:PGDBObjSubordinated;virtual;
                     function getmatrix:PDMatrix4D;virtual;
                     function getownermatrix:PDMatrix4D;virtual;
-                    function ObjToString(prefix,sufix:String):String;virtual;
+                    function ObjToString(const prefix,sufix:String):String;virtual;
                     function ReturnLastOnMouse(InSubEntry:Boolean):PGDBObjEntity;virtual;
                     procedure YouDeleted(var drawing:TDrawingDef);virtual;
                     procedure YouChanged(var drawing:TDrawingDef);virtual;
@@ -461,7 +461,7 @@ function GDBObjEntity.ReturnLastOnMouse;
 begin
      result:=@self;
 end;
-function GDBObjEntity.ObjToString(prefix,sufix:String):String;
+function GDBObjEntity.ObjToString(const prefix,sufix:String):String;
 begin
      result:=prefix+'#'+inttohex(PtrInt(@self),10)+sufix;
 end;
@@ -1188,37 +1188,39 @@ var APP_NAME:String;
     XValue:String;
     Name,Value{,vn,vt,vv,vun}:String;
     i:integer;
+    kk:integer=0;
 //    vd: vardesk;
+addr:pointer;
 begin
-     result:=false;
      case dxfcod of
                 5:begin
                           if AddExtAttrib^.dwgHandle=0 then begin
-                            if not TryStrToQWord('$'+readmystr(f),PExtAttrib^.dwgHandle)then
+                            if not TryStrToQWord('$'+f.ReadStringTemp,PExtAttrib^.dwgHandle)then
                               begin
                                 //нужно залупиться
                               end
                           end else begin
-                            readmystr(f);
+                            f.ReadPAnsiChar;
+                            //readmystr(f);
                             //нужно залупиться
                           end;
                           result:=true;
                   end;
                 6:begin
                        //vp.LineType:=readmystr(f);
-                       vp.LineType:=drawing.GetLTypeTable.getAddres(readmystr(f));
+                       vp.LineType:=drawing.GetLTypeTable.getAddres(f.ReadStringTemp);// readmystr(f));
                        result:=true
                   end;
                      8:begin
                           if {vp.layer.name=LNSysLayerName}vp.layer=@DefaultErrorLayer then
                                                    begin
-                                                        name:=readmystr(f);
-                                                   vp.Layer :=drawing.getlayertable.getAddres(name);
+                                                        //name:=readmystr(f);
+                                                   vp.Layer :=drawing.getlayertable.getAddres(f.ReadStringTemp);
                                                    if vp.Layer=nil then
                                                                         vp.Layer:=vp.Layer;
                                                    end
                                                else
-                                                   APP_NAME:=readmystr(f);
+                                                   {APP_NAME:=}f.ReadPAnsiChar;
                           result:=true
                      end;
                     48:begin
@@ -1234,20 +1236,29 @@ begin
                           result:=true
                      end;
                 1001:begin
-                          APP_NAME:=readmystr(f);
+                     //TZctnrVectorBytes(f)
+                         //{$PUSH}
+                         //{$POINTERMATH ON}
+                         //addr:=pointer(@TZctnrVectorBytes(f).parray[TZctnrVectorBytes(f).readpos]);
+                         //{$POP}
                           result:=true;
-                          if APP_NAME=ZCADAppNameInDXF then
+                          //APP_NAME:=f.ReadStringTemp;
+                          if f.ReadStringTemp=ZCADAppNameInDXF then
                           begin
                                repeat
                                  XGroup:=readmystrtoint(f);
-                                 XValue:=readmystr(f);
+                                 XValue:=f.ReadStringTemp;
                                  if XGroup=1000 then
                                                     begin
+                                                         inc(kk);
                                                          i:=pos('=',Xvalue);
-                                                         Name:=copy(Xvalue,1,i-1);
-                                                         if name='' then
-                                                                        name:='empty';
+                                                         //if name='' then
+                                                         //               name:='empty';
                                                          Value:=copy(Xvalue,i+1,length(xvalue)-i);
+                                                         if i=0 then name:='empty' else
+                                                         begin
+                                                           Name:=copy(Xvalue,1,i-1);
+                                                         end;
                                                          (*if Name='_OWNERHANDLE' then
                                                                                  begin
                                                                                       {$IFNDEF DELPHI}
@@ -1281,18 +1292,22 @@ begin
                                                     //else*)
                                                            ProcessFromDXFObjXData(Name,Value,ptu,drawing);
                                                     end;
-                               until (XGroup=1002)and(XValue='}')
+                               until (XGroup=1002)and(XValue='}');
+                               //if kk=kk then
+                               //begin
+                               //  ZCMsgCallBackInterface.TextMessage('======== ' + inttostr(kk),TMWOHistoryOut);
+                               //end;
                           end;
 
                      end;
+                else result:=false;
      end;
-
 end;
 class function GDBObjEntity.GetDXFIOFeatures:TDXFEntIODataManager;
 begin
   result:=GDBObjEntityDXFFeatures;
 end;
-function GDBObjEntity.ProcessFromDXFObjXData(_Name,_Value:String;ptu:PExtensionData;const drawing:TDrawingDef):Boolean;
+function GDBObjEntity.ProcessFromDXFObjXData(const _Name,_Value:String;ptu:PExtensionData;const drawing:TDrawingDef):Boolean;
 var
    features:TDXFEntIODataManager;
    FeatureLoadProc:TDXFEntLoadFeature;

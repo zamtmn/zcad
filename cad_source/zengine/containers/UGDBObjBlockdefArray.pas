@@ -31,10 +31,10 @@ GDBObjBlockdefArray= object(GZVectorObjects{-}<GDBObjBlockdef>{//})(*OpenArrayOf
                       constructor init(m:Integer);
                       constructor initnul;
 
-                      function getindex(name:String):Integer;virtual;
-                      function getblockdef(name:String):PGDBObjBlockdef;virtual;
+                      function getindex(const name:String):Integer;virtual;
+                      function getblockdef(const name:String):PGDBObjBlockdef;virtual;
                       //function loadblock(filename,bname:pansichar;pdrawing:Pointer):Integer;virtual;
-                      function create(name:String):PGDBObjBlockdef;virtual;
+                      function create(const name:String):PGDBObjBlockdef;virtual;
                       procedure freeelement(PItem:PT);virtual;
                       procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);virtual;
                       procedure Grow(newmax:Integer=0);virtual;
@@ -96,10 +96,11 @@ end;
 function GDBObjBlockdefArray.getindex;
 var
    i:Integer;
+   Name_Upper: String;
 begin
-  Name:=UpperCase(Name);
+  Name_Upper:=UpperCase(Name);
   for i:=0 to count-1 do
-    if uppercase(PBlockdefArray(parray)[i].Name)=Name then
+    if uppercase(PBlockdefArray(parray)[i].Name)=Name_Upper then
       exit(i);
   result:=-1;
 end;
@@ -131,13 +132,14 @@ function GDBObjBlockdefArray.getblockdef;
 var
   p:PGDBObjBlockdef;
       ir:itrec;
+  name_upper: String;
 begin
-  name:=uppercase(name);
+  name_upper:=uppercase(name);
   result:=nil;
   p:=beginiterate(ir);
   if p<>nil then
   repeat
-       if uppercase(p^.Name)=name then
+       if uppercase(p^.Name)=name_upper then
                                            begin
                                                 result := p;
                                                 exit;

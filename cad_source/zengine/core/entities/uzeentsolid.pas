@@ -145,16 +145,15 @@ procedure GDBObjSolid.LoadFromDXF;
 var //s: String;
   byt: Integer;
 begin
-  byt:=readmystrtoint(f);
+  byt:=f.ParseInteger;
   while byt <> 0 do
   begin
     if not LoadFromDXFObjShared(f,byt,ptu,drawing) then
        if not dxfvertexload(f,10,byt,PInOCS[0]) then
           if not dxfvertexload(f,11,byt,PInOCS[1]) then
           if not dxfvertexload(f,12,byt,PInOCS[2]) then
-          if not dxfvertexload(f,13,byt,PInOCS[3]) then
-          {s := }f.readString;
-    byt:=readmystrtoint(f);
+          if not dxfvertexload(f,13,byt,PInOCS[3]) then f.ReadPAnsiChar;
+    byt:=f.ParseInteger;
   end;
 end;
 procedure GDBObjSolid.SaveToDXF;

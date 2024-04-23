@@ -570,15 +570,15 @@ var //s: String;
   dc:TDrawContext;
 begin
   //initnul;
-  byt:=readmystrtoint(f);
+  byt:=f.ParseInteger;
   while byt <> 0 do
   begin
     if not LoadFromDXFObjShared(f,byt,ptu,drawing) then
     if not dxfvertexload(f,10,byt,Local.P_insert) then
     if not dxfDoubleload(f,40,byt,r) then
     if not dxfDoubleload(f,50,byt,startangle) then
-    if not dxfDoubleload(f,51,byt,endangle) then {s := }f.readString;
-    byt:=readmystrtoint(f);
+    if not dxfDoubleload(f,51,byt,endangle) then f.ReadPAnsiChar;
+    byt:=f.ParseInteger;
   end;
   startangle := startangle * pi / 180;
   endangle := endangle * pi / 180;

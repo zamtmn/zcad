@@ -257,9 +257,12 @@ begin
                            if CurrentSubObj^.BlockDesc.BType=BT_Connector then
                            begin
                            devpoint:=CurrentSubObj^.P_insert_in_WCS;
-                           ptv:=vertexarrayInWCS.beginiterate(ir_inVertexArray);
                            ptvpred:=nil;
-                           ptvnext:=vertexarrayInWCS.iterate(ir_inVertexArray);
+                           with vertexarrayInWCS do
+                           begin
+                             ptv:=beginiterate(ir_inVertexArray);
+                             ptvnext:=iterate(ir_inVertexArray);
+                           end;
                            ptn:=NodePropArray.beginiterate(ir_inNodeArray);
                            if ptv<>nil then
                            begin

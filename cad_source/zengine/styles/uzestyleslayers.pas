@@ -36,9 +36,9 @@ GDBLayerProp= object(GDBNamedObject)
                _lock:Boolean;(*saved_to_shd*)(*'Lock'*)
                _print:Boolean;(*saved_to_shd*)(*'Print'*)
                desk:AnsiString;(*saved_to_shd*)(*'Description'*)
-               constructor InitWithParam(N:String; C: Integer; LW: Integer;oo,ll,pp:Boolean;d:String);
+               constructor InitWithParam(const N:String; C: Integer; LW: Integer;oo,ll,pp:Boolean;const d:String);
                function GetFullName:String;virtual;
-               procedure SetValueFromDxf(group:Integer;value:String);virtual;
+               procedure SetValueFromDxf(group:Integer;const value:String);virtual;
                procedure SetDefaultValues;virtual;
                destructor done;virtual;
          end;
@@ -50,10 +50,10 @@ GDBLayerArray= object(GDBNamedObjectsArray{-}<PGDBLayerProp,GDBLayerProp>{//})(*
                     constructor init(m:Integer;psyslt:Pointer);
                     constructor initnul;
 
-                    function addlayer(name:String;color:Integer;lw:Integer;oo,ll,pp:Boolean;d:String;lm:TLoadOpt):PGDBLayerProp;virtual;
+                    function addlayer(const name:String;color:Integer;lw:Integer;oo,ll,pp:Boolean;const d:String;lm:TLoadOpt):PGDBLayerProp;virtual;
                     function GetSystemLayer:PGDBLayerProp;
                     function createlayerifneed(_source:PGDBLayerProp):PGDBLayerProp;
-                    function createlayerifneedbyname(lname:String;_source:PGDBLayerProp):PGDBLayerProp;
+                    function createlayerifneedbyname(const lname:String;_source:PGDBLayerProp):PGDBLayerProp;
               end;
 {EXPORT-}
 TLayerProp=class(TNamedObject)
@@ -76,7 +76,7 @@ begin
                          result:='Continuous';
 end;
 
-function  GDBLayerArray.createlayerifneedbyname(lname:String;_source:PGDBLayerProp):PGDBLayerProp;
+function  GDBLayerArray.createlayerifneedbyname(const lname:String;_source:PGDBLayerProp):PGDBLayerProp;
 begin
            result:=getAddres(lname);
            if result=nil then
@@ -140,7 +140,7 @@ begin
                                            _print:=true;
      desk:='';
 end;
-procedure GDBLayerProp.SetValueFromDxf(group:Integer;value:String);
+procedure GDBLayerProp.SetValueFromDxf(group:Integer;const value:String);
 var
    _color:integer;
 begin
@@ -174,7 +174,7 @@ begin
         end;
 end;
 
-constructor GDBLayerProp.InitWithParam(N:String; C: Integer; LW: Integer;oo,ll,pp:Boolean;d:String);
+constructor GDBLayerProp.InitWithParam(const N:String; C: Integer; LW: Integer;oo,ll,pp:Boolean;const d:String);
 begin
     initnul;
     LT:=nil;

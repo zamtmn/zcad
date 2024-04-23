@@ -72,7 +72,7 @@ GDBObjCircle= object(GDBObjWithLocalCS)
                  procedure rtmodifyonepoint(const rtmod:TRTModifyData);virtual;
                  function IsRTNeedModify(const Point:PControlPointDesc; p:Pointer):Boolean;virtual;
 
-                 function ObjToString(prefix,sufix:String):String;virtual;
+                 function ObjToString(const prefix,sufix:String):String;virtual;
                  destructor done;virtual;
 
                  function GetObjTypeName:String;virtual;
@@ -256,7 +256,7 @@ begin
      Vertex3D_in_WCS_Array.Done;
      inherited done;
 end;
-function GDBObjCircle.ObjToString(prefix,sufix:String):String;
+function GDBObjCircle.ObjToString(const prefix,sufix:String):String;
 begin
      result:=prefix+inherited ObjToString('GDBObjCircle (addr:',')')+sufix;
 end;
@@ -496,13 +496,13 @@ var //s: String;
   byt{, code}: Integer;
 begin
   //initnul;
-  byt:=readmystrtoint(f);
+  byt:=f.ParseInteger;
   while byt <> 0 do
   begin
     if not LoadFromDXFObjShared(f,byt,ptu,drawing) then
     if not dxfvertexload(f,10,byt,Local.P_insert) then
-    if not dxfDoubleload(f,40,byt,Radius) then {s := }f.readString;
-    byt:=readmystrtoint(f);
+    if not dxfDoubleload(f,40,byt,Radius) then f.ReadPAnsiChar;
+    byt:=f.ParseInteger;
   end;
   //PProjoutbound:=nil;
   //pprojpoint:=nil;

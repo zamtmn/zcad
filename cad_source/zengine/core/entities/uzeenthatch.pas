@@ -68,7 +68,7 @@ GDBObjHatch= object(GDBObjWithLocalCS)
                  procedure DrawStrokes(var Strokes:TPatStrokesArray;var st:Double;const p1,p2:GDBvertex2D;var DC:TDrawContext);
                  procedure FillPattern(var Strokes:TPatStrokesArray;var DC:TDrawContext);
                  procedure DrawGeometry(lw:Integer;var DC:TDrawContext);virtual;
-                 function ObjToString(prefix,sufix:String):String;virtual;
+                 function ObjToString(const prefix,sufix:String):String;virtual;
                  destructor done;virtual;
 
                  function GetObjTypeName:String;virtual;
@@ -152,7 +152,7 @@ begin
   end;
   PatternName:='';
 end;
-function GDBObjHatch.ObjToString(prefix,sufix:String):String;
+function GDBObjHatch.ObjToString(const prefix,sufix:String):String;
 begin
      result:=prefix+inherited ObjToString('GDBObjHatch (addr:',')')+sufix;
 end;
@@ -606,7 +606,7 @@ var
 begin
   hstyle:=100;
   Angle:=0;
-  byt:=readmystrtoint(f);
+  byt:=f.ParseInteger;
   while byt <> 0 do
   begin
     if not LoadFromDXFObjShared(f,byt,ptu,drawing) then
@@ -615,9 +615,8 @@ begin
     if not dxfintegerload(f,75,byt,hstyle) then
     if not dxfDoubleload(f,52,byt,Angle) then
     if not dxfDoubleload(f,41,byt,Scale) then
-    if not dxfStringload(f,2,byt,PatternName) then
-      f.readString;
-    byt:=readmystrtoint(f);
+    if not dxfStringload(f,2,byt,PatternName) then f.ReadPAnsiChar;
+    byt:=f.ParseInteger;
   end;
   case hstyle of
     1:IslandDetection:=HID_Outer;

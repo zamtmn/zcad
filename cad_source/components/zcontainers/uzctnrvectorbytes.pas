@@ -24,64 +24,116 @@ const
     syn_breacer=[#13,#10,' '];
     lineend:string=#13#10;
 type
+//// TAnsiRec SOURCE: fpcsrc\rtl\inc\astrings.inc
+PAnsiRec = ^TAnsiRec;
+TAnsiRec = Record
+  CodePage    : TSystemCodePage;
+  ElementSize : Word;
+{$if not defined(VER3_0) and not defined(VER3_2)}
+{$ifdef CPU64}
+  Ref         : Longint;
+{$else}
+  Ref         : SizeInt;
+{$endif}
+{$else}
+{$ifdef CPU64}
+  { align fields  }
+      Dummy       : DWord;
+{$endif CPU64}
+  Ref         : SizeInt;
+{$endif}
+  Len         : SizeInt;
+end;
+//// end TAnsiRec
+
 TSetOfChar = set of char;
 {Export+}
 PTZctnrVectorBytes=^TZctnrVectorBytes;
 {REGISTEROBJECTTYPE TZctnrVectorBytes}
+
+{ TZctnrVectorBytes }
+
 TZctnrVectorBytes=object(GZVector{-}<byte>{//})
                       ReadPos:Integer;
                       name:AnsiString;
+                      shortstr:ShortString;
                       constructor init(m:Integer);
                       constructor initnul;
-                      constructor InitFromFile(FileName:Ansistring);
+                      constructor InitFromFile(const FileName:Ansistring);
                       function AddByte(PData:Pointer):Integer;virtual;
                       function AddByteByVal(Data:Byte):Integer;virtual;
                       function AddWord(PData:Pointer):Integer;virtual;
                       //function AddFontFloat(PData:Pointer):Integer;virtual;
-                      procedure TXTAddStringEOL(s:AnsiString);virtual;
-                      procedure TXTAddString(s:AnsiString);virtual;
+                      procedure TXTAddStringEOL(const s:AnsiString);virtual;
+                      procedure TXTAddString(const s:AnsiString);virtual;
                       function ReadData(PData:Pointer;SData:Word):Integer;virtual;
                       //function PopData(PData:Pointer;SData:Word):Integer;virtual;
-                      function ReadString3(break, ignore: TSetOfChar): AnsiString;inline;
+                      function ReadString3(const break: TSetOfChar; ignore: TSetOfChar): AnsiString;inline;
+
+                      function ReadString3New(const skipLeft: TSetOfChar; lineendings: TSetOfChar): AnsiString;inline;
+                      function ReadString4Temp(const skipLeft: TSetOfChar; lineendings: TSetOfChar): AnsiString;inline;
+
+                      function ReadPAnsiChar3(const skipLeft: TSetOfChar; lineendings: TSetOfChar): PAnsiChar;inline;
+                      function ReadPShortString3(const skipLeft: TSetOfChar; lineendings: TSetOfChar): PShortString;inline;
+
                       function ReadString: AnsiString;inline;
+                      function ReadStringTemp: AnsiString;inline;
+
+                      function ParseInteger(out Value: Integer): Integer; inline; overload;
+                      function ParseDouble(out Value: Double): Integer; inline; overload;
+                      function ParseInteger: Integer; inline; overload;
+                      function ParseDouble: Double; inline; overload;
+
+                      function ReadPAnsiChar: PAnsiChar;inline;
+                      function ReadPShortString: PShortString;inline;
+
                       function ReadString2:AnsiString;inline;
                       function GetCurrentReadAddres:Pointer;virtual;
                       function Jump(offset:Integer):Pointer;virtual;
-                      function SaveToFile(FileName:Ansistring):Integer;
+                      function SaveToFile(const FileName:Ansistring):Integer;
                       function ReadByte: Byte; inline;
                       function ReadWord: Word;
                       function GetChar(rp:integer): Ansichar; inline;
                       function Seek(pos:Integer):integer;
                       function notEOF:Boolean;
-                      function readtoparser(break:AnsiString):AnsiString;
+                      function readtoparser(const break:AnsiString):AnsiString;
                       destructor done;virtual;
                    end;
 {Export-}
-procedure WriteString_EOL(h: Integer; s: AnsiString);
+procedure WriteString_EOL(h: Integer; const s: AnsiString);
+
+var
+  cnt1:Integer=0;
+  cnt2:Integer=0;
+  cnt3:Integer=0;
+
 implementation
 //uses uzbstrproc;
-procedure WriteString_EOL(h: Integer; s: AnsiString);
+procedure WriteString_EOL(h: Integer; const s: AnsiString);
 begin
-  s := s + lineend;
+  //s := s + lineend;
      //writeln(s);
   FileWrite(h, s[1], length(s));
+  FileWrite(h, lineend[1], length(lineend));
 end;
 destructor TZctnrVectorBytes.done;
 begin
-     name:='';
+     SetLength(name,0);
      inherited;
 end;
 
-procedure TZctnrVectorBytes.TXTAddStringEOL;
+procedure TZctnrVectorBytes.TXTAddStringEOL(const s: AnsiString);
 begin
-     s:=s+lineend;
-     self.TXTAddString(s);
+     //s:=s+lineend;
+     //self.TXTAddString(s);
+     self.AddData(@s[1],length(s));
+     self.AddData(@lineend[1],length(lineend));
 end;
-procedure TZctnrVectorBytes.TXTAddString;
+procedure TZctnrVectorBytes.TXTAddString(const s: AnsiString);
 begin
      self.AddData(@s[1],length(s));
 end;
-function TZctnrVectorBytes.GetChar;
+function TZctnrVectorBytes.GetChar(rp: integer): Ansichar;
 //var
 //  p:PT;
 begin
@@ -91,7 +143,7 @@ begin
      {$POP}
      //result:=pansichar(PtrUInt(parray)+rp)^;
 end;
-function TZctnrVectorBytes.readtoparser;
+function TZctnrVectorBytes.readtoparser(const break: AnsiString): AnsiString;
 var
   s: String;
   scobcacount:Integer;
@@ -183,7 +235,7 @@ begin
   end;
 end;
 
-function readspace(expr:String):String; inline;
+function readspace(const expr:String):String; inline;
 var
   i:Integer;
 begin
@@ -200,19 +252,53 @@ begin
   result := copy(expr, i, length(expr) - i + 1);
 end;
 
-function TZctnrVectorBytes.ReadString2;
+function TZctnrVectorBytes.ReadString2: AnsiString;
 begin
      result:=readspace(readString);
 end;
-function TZctnrVectorBytes.ReadString;
+function TZctnrVectorBytes.ReadString: AnsiString;
 begin
-     result:=ReadString3([#10],[#13]);
+     result:=ReadString3New([' '],[#13,#10]);
+     //result:=ReadString3([#10],[#13]);
 end;
+function TZctnrVectorBytes.ReadStringTemp: AnsiString;
+begin
+     result:=ReadString4Temp([' '],[#13,#10]);
+end;
+function TZctnrVectorBytes.ReadPAnsiChar: PAnsiChar;
+begin
+     result:=ReadPAnsiChar3([' '],[#13,#10]);
+end;
+function TZctnrVectorBytes.ReadPShortString: PShortString;
+begin
+     result:=ReadPShortString3([' '],[#13,#10]);
+end;
+
+function TZctnrVectorBytes.ParseInteger(out Value: Integer): Integer;
+begin
+  Val(ReadPShortString()^,Value,Result);
+end;
+
+function TZctnrVectorBytes.ParseDouble(out Value: Double): Integer;
+begin
+  Val(ReadPShortString()^,Value,Result);
+end;
+
+function TZctnrVectorBytes.ParseInteger: Integer;
+begin
+  ParseInteger(Result);
+end;
+
+function TZctnrVectorBytes.ParseDouble: Double;
+begin
+  ParseDouble(Result);
+end;
+
 function TZctnrVectorBytes.notEOF:Boolean;
 begin
      result:=(readpos<(count-1))and(parray<>nil)
 end;
-function TZctnrVectorBytes.Jump;
+function TZctnrVectorBytes.Jump(offset: Integer): Pointer;
 //var
 //  p:PT;
 begin
@@ -223,7 +309,7 @@ begin
      {$POP}
      //result:=pointer(PtrUInt(parray)+readpos);
 end;
-function TZctnrVectorBytes.GetCurrentReadAddres;
+function TZctnrVectorBytes.GetCurrentReadAddres: Pointer;
 //var
   //p:PT;
 begin
@@ -233,7 +319,7 @@ begin
      {$POP}
      //result:=pointer(PtrUInt(parray)+readpos);
 end;
-function TZctnrVectorBytes.readbyte;
+function TZctnrVectorBytes.ReadByte: Byte;
 //var
 //  p:PT;
 begin
@@ -243,19 +329,17 @@ begin
      {$POP}
      inc(readpos);
 end;
-function TZctnrVectorBytes.readword;
+function TZctnrVectorBytes.ReadWord: Word;
 begin
      result:=readbyte;
      result:=result+256*readbyte;
 end;
-function TZctnrVectorBytes.readstring3{(break, ignore: String): shortString};
+function TZctnrVectorBytes.ReadString3(const break: TSetOfChar; ignore: TSetOfChar): AnsiString;
 var
-  //{s,}myresult: shortString;
-  i:Integer;
-  lastbreak:Boolean;
+  i:SizeInt=0;
+  strlen:SizeInt = 16;
   addr:pansichar;
-  strlen:integer;
-  //p:PT;
+  lastbreak:Boolean = false;
 procedure inci; inline;
 begin
  inc(i);
@@ -267,68 +351,246 @@ begin
 end;
 
 begin
-  //s := '';
-  strlen:=16;
+inc(cnt3);
   setlength(result,strlen);
-  lastbreak:=false;
-  i:=0;
   {$PUSH}
   {$POINTERMATH ON}
   addr:=pointer(@parray[readpos]);
   {$POP}
-  //addr:=pointer(PtrUInt(parray)+readpos);
-    while ReadPos <> count do
+
+  while (i=0) and not (addr^ in break) and (ReadPos <> count) do
+  begin
+    if not (addr^ in ignore) and (addr^<>' ') then
     begin
-      if not (addr^ in break)(*or(({s=''}i=0)and(addr[0]=' '))*) then
+      if (addr^ in syn_breacer) then
       begin
-        if not (addr^ in ignore) then
-          begin
-          //setlength(s,i);
-          //s[i]:=bufer^[buferpos];
-          //inc(i);
-          if (({s<>''}i<>0)or(addr[0]<>' ')) then
-
-          if (addr[0] in syn_breacer) then
-                                                 begin
-                                                      if not lastbreak then
-                                                                           begin
-                                                                                //s:=s+addr[0];
-                                                                                inci;
-                                                                                PChar(@result[i])^:=addr[0];
-                                                                                lastbreak:=true;
-                                                                           end;
-                                                 end
-                                             else
-                                                 begin
-                                                      //s:=s+addr[0];
-                                                      inci;
-                                                      PChar(@result[i])^:=addr[0];
-                                                      lastbreak:=false;
-                                                 end;
-
-          end;
-        inc(addr);
-        inc(readpos);
+           if not lastbreak then
+                                begin
+                                     inci;
+                                     PChar(@result[i])^:=addr^;
+                                     lastbreak:=true;
+                                end;
       end
       else
       begin
-        //myresult := s;
-        setlength(result,i);
-        //inc(addr);
-        inc(readpos);
-        //myresult := s;
-        exit;
+           inci;
+           PChar(@result[i])^:=addr^;
+           lastbreak:=false;
       end;
     end;
-    setlength(result,i);
-  //myresult := s;
+    inc(addr);
+    inc(readpos);
+  end;
+
+  while not (addr^ in break) and (ReadPos <> count) do
+  begin
+    if not (addr^ in ignore) then
+    begin
+      if (addr^ in syn_breacer) then
+      begin
+           if not lastbreak then
+                                begin
+                                     inci;
+                                     PChar(@result[i])^:=addr^;
+                                     lastbreak:=true;
+                                end;
+      end
+      else
+      begin
+           inci;
+           PChar(@result[i])^:=addr^;
+           lastbreak:=false;
+      end;
+    end;
+    inc(addr);
+    inc(readpos);
+  end;
+
+  inc(readpos);
+  setlength(result,i);
 end;
+
+function TZctnrVectorBytes.ReadString3New(const skipLeft: TSetOfChar; lineendings: TSetOfChar): AnsiString;
+var
+  i: SizeInt=0;
+  strlen: SizeInt = 16;
+  addr, start_addr, last_ptr: PAnsiChar;
+begin
+ inc(cnt2);
+  {$PUSH}
+  {$POINTERMATH ON}
+  addr:=@parray[readpos];
+  last_ptr:=@parray[count];
+  {$POP}
+  start_addr:=addr;
+
+  SetLength(result, strlen);
+
+  while (addr < last_ptr) and (addr^ in skipLeft) do inc(addr);
+  while (addr < last_ptr) and not (addr^ in lineendings) do
+  begin
+    inc(i);
+    if i>strlen then
+    begin
+      strlen:=strlen+255;
+      SetLength(result,strlen);
+    end;
+    PChar(@result[i])^:=addr^;
+    inc(addr);
+  end;
+  while (addr < last_ptr) and (addr^ in lineendings) do
+  begin
+    Exclude(lineendings, addr^);
+    inc(addr);
+  end;
+  SetLength(Result, i);
+  inc(readpos, addr-start_addr);
+end;
+
+var
+  need_copy_cnt: integer=0;
+
+function TZctnrVectorBytes.ReadString4Temp(const skipLeft: TSetOfChar; lineendings: TSetOfChar): AnsiString;
+var
+  i: SizeInt=0;
+  strlen: SizeInt = 16;
+  addr, start_addr, last_ptr: PAnsiChar;
+  data_addr: PAnsiChar;
+  need_copy: Boolean;
+begin
+(*
+Использовать нужно осторожно - т.к. заголовок AnsiString весит 24 байта и уже не помещается в
+символы перевода строки - поэтому может быть такая ситуация, когда происходит чтение строки
+эта строка хранится в указателе, потом происходит вложенный вызов другой ф-ии, которая тоже читает
+строку, возвращает управление в вызвавшую ф-ю, а в ней по ранее хранившемуся указателю на строку уже
+поломанные данные т.к. эти две считанные строки были рядом
+-> что теперь эта строка становится невалидной и если будет её использование - будет крах
+в общем это нужно учитывать в ф-ях, которые вызывают другие ф-ии тоже читающие строки
+и при этом если в вызывающей ф-ии планируется затем использовать объявленную строку
+*)
+ inc(cnt1);
+  {$PUSH}
+  {$POINTERMATH ON}
+  addr:=@parray[readpos];
+  last_ptr:=@parray[count];
+  {$POP}
+  start_addr:=addr;
+
+  while (addr < last_ptr) and (addr^ in skipLeft) do inc(addr);
+  data_addr:=addr;
+
+  need_copy:=((data_addr-sizeof(TAnsiRec))<PAnsiChar(PArray));
+  if need_copy then
+  begin
+    inc(need_copy_cnt);
+    SetLength(result, strlen);
+    while (addr < last_ptr) and not (addr^ in lineendings) do
+    begin
+      inc(i);
+      if i>strlen then
+      begin
+        strlen:=strlen+255;
+        SetLength(result,strlen);
+      end;
+      PChar(@result[i])^:=addr^;
+      inc(addr);
+    end;
+  end else
+  begin
+    while (addr < last_ptr) and not (addr^ in lineendings) do inc(addr);
+    strlen:=addr-PAnsiChar(data_addr);
+  end;
+
+  while (addr < last_ptr) and (addr^ in lineendings) do
+  begin
+    Exclude(lineendings, addr^);
+    inc(addr);
+  end;
+
+  if need_copy then
+  begin
+    SetLength(Result, i);
+  end else
+  begin
+    if strlen=0 then
+    begin
+      Result:='';
+    end else
+    begin
+      PSizeInt(Result):=PSizeInt(data_addr); // prevent FPC_ANSISTR_ASSIGN call
+      with PAnsiRec(@PByte(Result)[-sizeof(TAnsiRec)])^ do
+      begin
+        CodePage:=CP_ACP;
+        ElementSize:=1;
+        Ref:=-1; // const ansistring
+        Len:=strlen;
+      end;
+      PByte(Result)[strlen]:=0; // prevent FPC_ANSISTR_UNIQUE call
+    end;
+  end;
+  inc(readpos, addr-start_addr);
+end;
+
+function TZctnrVectorBytes.ReadPShortString3(const skipLeft: TSetOfChar; lineendings: TSetOfChar): PShortString;
+var
+  addr, start_addr, last_ptr: PAnsiChar;
+  len: byte;
+  tmp_readpos:Integer;
+begin
+  {$PUSH}
+  {$POINTERMATH ON}
+  addr:=@parray[readpos];
+  last_ptr:=@parray[count];
+  {$POP}
+  start_addr:=addr;
+
+  while (addr < last_ptr) and (addr^ in skipLeft) do inc(addr);
+  Result:=PShortString(@PByte(addr)[-1]);
+  while (addr < last_ptr) and not (addr^ in lineendings) do inc(addr);
+  len:=addr-PAnsiChar(Result)-1;
+  while (addr < last_ptr) and (addr^ in lineendings) do
+  begin
+    Exclude(lineendings, addr^);
+    inc(addr);
+  end;
+  inc(readpos, addr-start_addr);
+  if Result<PShortString(PArray) then begin
+    Move(Result^[1], shortstr[1], len);
+    Result:=@shortstr;
+  end;
+  PByte(Result)^:=len;
+end;
+
+function TZctnrVectorBytes.ReadPAnsiChar3(const skipLeft: TSetOfChar; lineendings: TSetOfChar): PAnsiChar;
+var
+  addr, start_addr, last_ptr, null_addr: PAnsiChar;
+begin
+  {$PUSH}
+  {$POINTERMATH ON}
+  addr:=@parray[readpos];
+  last_ptr:=@parray[count];
+  {$POP}
+  start_addr:=addr;
+
+  while (addr^ in skipLeft) and (addr < last_ptr) do inc(addr);
+  Result:=addr;
+  while not (addr^ in lineendings) and (addr < last_ptr) do inc(addr);
+  null_addr:=addr;
+  while (addr^ in lineendings) and (addr < last_ptr) do
+  begin
+    Exclude(lineendings, addr^);
+    inc(addr);
+  end;
+  null_addr^:=#0;
+  inc(readpos, addr-start_addr);
+end;
+
 function TZctnrVectorBytes.Seek(pos:Integer):integer;
 begin
      result:=self.ReadPos;
      readpos:=pos;
 end;
-constructor TZctnrVectorBytes.InitFromFile;
+constructor TZctnrVectorBytes.InitFromFile(const FileName: Ansistring);
 var infile,filelength:Integer;
 begin
      //StringToWideChar(filename)
@@ -347,23 +609,23 @@ begin
                        CreateArray;
      FileRead(InFile,parray^,filelength);
      count:=filelength;
-     fileclose(infile)
+     fileclose(infile);
      end;
 end;
-function TZctnrVectorBytes.SaveToFile;
+function TZctnrVectorBytes.SaveToFile(const FileName: Ansistring): Integer;
 var infile:Integer;
 begin
      infile:=filecreate({$IFNDEF DELPHI}UTF8ToSys{$ENDIF}({ExpandPath}(FileName)));
      if infile>0 then
                      begin
-                           FileWrite(InFile,parray^,count);
+                           FileWrite(InFile,PArray^,count);
                            fileclose(infile);
                            result:=count;
                      end
                  else
                      result:=infile;
 end;
-constructor TZctnrVectorBytes.init;
+constructor TZctnrVectorBytes.init(m: Integer);
 begin
   ReadPos:=0;
   inherited init(m);
@@ -393,7 +655,7 @@ function TZctnrVectorBytes.AddWord(PData:Pointer):Integer;
 begin
      result:=adddata(pdata,sizeof(Word));
 end;
-function TZctnrVectorBytes.ReadData;
+function TZctnrVectorBytes.ReadData(PData: Pointer; SData: Word): Integer;
 {var addr:PtrInt;
     p:pt;}
 begin

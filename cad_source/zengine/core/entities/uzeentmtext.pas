@@ -924,7 +924,7 @@ begin
   style:='';
   ttemplate:='';
   j:=0;
-  byt:=readmystrtoint(f);
+  byt:=f.ParseInteger;
   while byt <> 0 do
   begin
     if not LoadFromDXFObjShared(f,byt,ptu,drawing) then
@@ -945,8 +945,8 @@ begin
                                                  if TXTStyleIndex=nil then
                                                                      TXTStyleIndex:=pointer(drawing.GetTextStyleTable^.getDataMutable(0));
                                                  end
-    else {s := }f.readString;
-    byt:=readmystrtoint(f);
+    else f.ReadPAnsiChar;
+    byt:=f.ParseInteger;
   end;
   if TXTStyleIndex=nil then
                            begin

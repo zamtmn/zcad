@@ -36,9 +36,9 @@ type
   GDBNamedObject=object(GDBaseObject)
                        Name:AnsiString;(*saved_to_shd*)(*'Name'*)
                        constructor initnul;
-                       constructor init(n:String);
+                       constructor init(const n:String);
                        destructor Done;virtual;
-                       procedure SetName(n:String);
+                       procedure SetName(const n:String);
                        function GetName:String;
                        function GetFullName:String;virtual;
                        procedure SetDefaultValues;virtual;
@@ -62,7 +62,7 @@ begin
      pointer(name):=nil;
      SetDefaultValues;
 end;
-constructor GDBNamedObject.Init(n:String);
+constructor GDBNamedObject.Init(const n:String);
 begin
     initnul;
     SetName(n);
@@ -71,7 +71,7 @@ destructor GDBNamedObject.done;
 begin
      SetName('');
 end;
-procedure GDBNamedObject.SetName(n:String);
+procedure GDBNamedObject.SetName(const n:String);
 begin
      name:=n;
 end;

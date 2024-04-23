@@ -107,7 +107,7 @@ var
   byt,dtype:Integer;
   style:String;
 begin
-  byt:=readmystrtoint(f);
+  byt:=f.ParseInteger;
   dtype:=-1;
   style:='';
   while byt <> 0 do
@@ -130,8 +130,8 @@ begin
                                                                                             PDimStyle:=pointer(drawing.GetDimStyleTable^.getDataMutable(0));
                                                                   end
                             else
-                                f.readString;
-    byt:=readmystrtoint(f);
+                                f.ReadPAnsiChar;
+    byt:=f.ParseInteger;
   end;
   if dtype<>-1 then
   begin

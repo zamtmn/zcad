@@ -55,7 +55,7 @@ TObjID=Word;
 PGDBaseObject=^GDBaseObject;
 {----REGISTEROBJECTTYPE GDBaseObject----}
 GDBaseObject=object
-    function ObjToString(prefix,sufix:String):String; virtual;
+    function ObjToString(const prefix,sufix:String):String; virtual;
     function GetObjType:TObjID;virtual;
     //procedure Format;virtual;
     procedure FormatAfterFielfmod(PField,PTypeDescriptor:Pointer);virtual;
@@ -198,7 +198,7 @@ function GDBaseObject.GetObjType:Word;
 begin
      result:=GDBBaseObjectID;
 end;
-function GDBaseObject.ObjToString(prefix,sufix:String):String;
+function GDBaseObject.ObjToString(const prefix,sufix:String):String;
 begin
      result:=prefix+GetObjTypeName+sufix;
 end;

@@ -29,8 +29,8 @@ end;
 {$IFNDEF DELPHI}TMyMapGenOld <TKey, TValue, TCompare> = class( TMap<TKey, TValue, TCompare>);{$ENDIF}
 {$IFNDEF DELPHI}TMyMapGen <TKey,TValue> = class( TDictionary<TKey,TValue>){TMyMapGen <TKey, TValue, TCompare> = class( TMap<TKey, TValue, TCompare>)}{$ENDIF}
  {$IFDEF DELPHI}TMyMapGen <TKey,TValue> = class( TDictionary<TKey,TValue>){$ENDIF}
-  function MyGetValue(key:TKey):TValue;inline;
-  function MyGetMutableValue(key:TKey; out PAValue:{$IFNDEF DELPHI}PValue{$ENDIF}{$IFDEF DELPHI}pointer{$ENDIF}):boolean;
+  function MyGetValue(const key:TKey):TValue;inline;
+  function MyGetMutableValue(const key:TKey; out PAValue:{$IFNDEF DELPHI}PValue{$ENDIF}{$IFDEF DELPHI}pointer{$ENDIF}):boolean;
 end;
 {$IFNDEF DELPHI}TMyMap <TKey, TValue> = class( TMyMapGen<TKey, TValue>){$ENDIF}
  {$IFDEF DELPHI}TMyMap <TKey,TValue> = class( TMyMapGen<TKey,TValue>){$ENDIF}
@@ -46,15 +46,15 @@ TMyMapCounter<TKey>=class(TMyGenMapCounter<TKey,SizeUInt>);
  {$IFDEF DELPHI}GKey2DataMap <TKey, TValue> = class(TDictionary<TKey, TValue>){$ENDIF}
         {$IFDEF DELPHI}type PTValue=^TValue;{$ENDIF}
         procedure RegisterKey(const key:TKey; const Value:TValue);
-        function MyGetValue(key:TKey; out Value:TValue):boolean;
+        function MyGetValue(const key:TKey; out Value:TValue):boolean;
         //function MyGetMutableValue(key:TKey; out PValue:{$IFNDEF DELPHI}PTValue{$ENDIF}{$IFDEF DELPHI}pointer{$ENDIF}):boolean;
-        function MyContans(key:TKey):boolean;
+        function MyContans(const key:TKey):boolean;
 end;
   GKey2DataMapOld <TKey, TValue, TCompare> = class(TMap<TKey, TValue, TCompare>)
     procedure RegisterKey(const key:TKey; const Value:TValue);
-    function MyGetValue(key:TKey; out Value:TValue):boolean;
-    function MyGetMutableValue(key:TKey; out PValue:{$IFNDEF DELPHI}PTValue{$ENDIF}{$IFDEF DELPHI}pointer{$ENDIF}):boolean;
-    function MyContans(key:TKey):boolean;
+    function MyGetValue(const key:TKey; out Value:TValue):boolean;
+    function MyGetMutableValue(const key:TKey; out PValue:{$IFNDEF DELPHI}PTValue{$ENDIF}{$IFDEF DELPHI}pointer{$ENDIF}):boolean;
+    function MyContans(const key:TKey):boolean;
 end;
 {$IFNDEF DELPHI}TMyVector <T> = class(TVector<T>){$ENDIF}
  {$IFDEF DELPHI}TMyVector <T> = class(Generics.Collections.TList<T>)
@@ -78,17 +78,17 @@ TMyVectorArray<T,TVec> = class
         function AddArray:SizeInt;
         function AddArrayAndSetCurrent:SizeInt;
         procedure SetCurrentArray(ai:SizeInt);
-        procedure AddDataToCurrentArray(data:T);
+        procedure AddDataToCurrentArray(const data:T);
         function GetCurrentArray:TVec;
 end;
 
 {$IFNDEF DELPHI}TMyHashMap <TKey, TValue, Thash> = class(THashMap<TKey, TValue, Thash>){$ENDIF}
  {$IFDEF DELPHI}TMyHashMap <TKey, TValue> = class(TDictionary<TKey, TValue>){$ENDIF}
-  function MyGetValue(key:TKey; out Value:TValue):boolean;
+  function MyGetValue(const key:TKey; out Value:TValue):boolean;
 end;
 {$IFNDEF DELPHI}
 StringHash=class
-  class function hash(s:AnsiString; n:longint):SizeUInt;
+  class function hash(const s:AnsiString; n:longint):SizeUInt;
 end;
 {$ENDIF}
 TMyAnsiStringDictionary <TValue> = class(TMyHashMap<AnsiString, TValue{$IFNDEF DELPHI},StringHash{$ENDIF}>)
@@ -143,7 +143,7 @@ procedure TMyVectorArray<T,TVec>.SetCurrentArray(ai:SizeInt);
 begin
      CurrentArray:=ai;
 end;
-procedure TMyVectorArray<T,TVec>.AddDataToCurrentArray(data:T);
+procedure TMyVectorArray<T,TVec>.AddDataToCurrentArray(const data:T);
 begin
      (VArray[CurrentArray]){brackets for 2.6.x compiler version}.{$IFNDEF DELPHI}PushBack{$ENDIF}{$IFDEF DELPHI}Add{$ENDIF}(data);
 end;
@@ -152,7 +152,7 @@ begin
   result:=VArray[CurrentArray];
 end;
 
-function TMyHashMap<TKey, TValue{$IFNDEF DELPHI},Thash{$ENDIF}>.MyGetValue(key:TKey; out Value:TValue):boolean;
+function TMyHashMap<TKey, TValue{$IFNDEF DELPHI},Thash{$ENDIF}>.MyGetValue(const key:TKey; out Value:TValue):boolean;
 {$IFNDEF DELPHI}var i,h,bs:longint;{$ENDIF}
 begin
   {$IFNDEF DELPHI}
@@ -177,10 +177,14 @@ var
   I: Integer;
 begin
   Result := 0;
-  for I := 1 to Length(s) do
+  I:=Length(s);
+  while I<>0 do
+  begin
     Result := ((Result shl 7) or (Result shr 25)) + Ord(s[I]);
+    dec(I);
+  end;
 end;
-class function StringHash.hash(s:AnsiString; n:longint):SizeUInt;
+class function StringHash.hash(const s:AnsiString; n:longint):SizeUInt;
 begin
      result:=makehash(s) mod SizeUInt(n);
 end;
@@ -189,21 +193,21 @@ procedure GKey2DataMap<TKey, TValue>.RegisterKey(const key:TKey; const Value:TVa
 begin
   AddOrSetValue(Key,Value);
 end;
-function GKey2DataMap<TKey, TValue>.MyGetValue(key:TKey; out Value:TValue):boolean;
+function GKey2DataMap<TKey, TValue>.MyGetValue(const key:TKey; out Value:TValue):boolean;
 begin
   result:=TryGetValue(Key,Value);
 end;
-function GKey2DataMap<TKey, TValue>.MyContans(key:TKey):boolean;
+function GKey2DataMap<TKey, TValue>.MyContans(const key:TKey):boolean;
 begin
   result:=ContainsKey(Key);
 end;
 
-function TMyMapGen<TKey, TValue>.MyGetValue(key:TKey):TValue;
+function TMyMapGen<TKey, TValue>.MyGetValue(const key:TKey):TValue;
 begin
   if not TryGetValue(Key,result) then
     result:=default(TValue);
 end;
-function TMyMapGen<TKey, TValue>.MyGetMutableValue(key:TKey; out PAValue:PValue):Boolean;
+function TMyMapGen<TKey, TValue>.MyGetMutableValue(const key:TKey; out PAValue:PValue):Boolean;
 var
   LIndex: SizeInt;
   LHash: UInt32;
@@ -302,7 +306,7 @@ begin
   AddOrSetValue(Key,Value);
 {$ENDIF}
 end;
-function GKey2DataMapOld<TKey, TValue{$IFNDEF DELPHI},TCompare{$ENDIF}>.MyGetValue(key:TKey; out Value:TValue):boolean;
+function GKey2DataMapOld<TKey, TValue{$IFNDEF DELPHI},TCompare{$ENDIF}>.MyGetValue(const key:TKey; out Value:TValue):boolean;
 {$IFNDEF DELPHI}
 var
    //Iterator:TIterator;
@@ -333,7 +337,7 @@ begin
   result:=TryGetValue(Key,Value);
 {$ENDIF}
 end;
-function GKey2DataMapOld<TKey, TValue{$IFNDEF DELPHI},TCompare{$ENDIF}>.MyGetMutableValue(key:TKey; out PValue:{$IFNDEF DELPHI}PTValue{$ENDIF}{$IFDEF DELPHI}pointer{$ENDIF}):boolean;
+function GKey2DataMapOld<TKey, TValue{$IFNDEF DELPHI},TCompare{$ENDIF}>.MyGetMutableValue(const key:TKey; out PValue:{$IFNDEF DELPHI}PTValue{$ENDIF}{$IFDEF DELPHI}pointer{$ENDIF}):boolean;
 {$IFNDEF DELPHI}
 var
    (*
@@ -386,7 +390,7 @@ begin
     end;
 {$ENDIF}
 end;
-function GKey2DataMapOld<TKey, TValue{$IFNDEF DELPHI},TCompare{$ENDIF}>.MyContans(key:TKey):boolean;
+function GKey2DataMapOld<TKey, TValue{$IFNDEF DELPHI},TCompare{$ENDIF}>.MyContans(const key:TKey):boolean;
 {$IFNDEF DELPHI}
 var
    Pair:TPair;

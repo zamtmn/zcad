@@ -207,7 +207,7 @@ begin
                                                   if s='VERTEX' then vertexgo := true;
                                                   if s='SEQEND' then system.Break;
                                              end
-                                      else s:= f.readString;
+                                      else s:= f.ReadStringTemp;
     byt:=readmystrtoint(f);
   end;
 

@@ -99,7 +99,7 @@ GDBLtypeProp= object(GDBNamedObject)
                shapearray:GDBShapePropArray;(*'Shape array'*)
                Textarray:GDBTextPropArray;(*'Text array'*)
                desk:AnsiString;(*'Description'*)
-               constructor init(n:String);
+               constructor init(const n:String);
                destructor done;virtual;
                procedure Format;virtual;
                function GetAsText:String;
@@ -113,7 +113,7 @@ PGDBLtypeArray=^GDBLtypeArray;
 GDBLtypeArray= object(GDBNamedObjectsArray{-}<PGDBLtypeProp,GDBLtypeProp>{//})(*OpenArrayOfData=GDBLtypeProp*)
                     constructor init(m:Integer);
                     constructor initnul;
-                    procedure LoadFromFile(fname:String;lm:TLoadOpt);
+                    procedure LoadFromFile(const fname:String;lm:TLoadOpt);
                     procedure ParseStrings(const ltd:tstrings; var CurrentLine:integer;out LTName,LTDesk,LTImpl:String);
                     function createltypeifneed(_source:PGDBLtypeProp;var _DestTextStyleTable:GDBTextStyleArray):PGDBLtypeProp;
                     function GetSystemLT(neededtype:TLTMode):PGDBLtypeProp;
@@ -300,20 +300,22 @@ begin
                                       until PTP=nil;
 
 end;
-function N2TLTMode(n:String):TLTMode;
+function N2TLTMode(const n:String):TLTMode;
+var
+   n_lower: string;
 begin
-     n:=lowercase(n);
-     if n='continuous' then
+     n_lower:=lowercase(n);
+     if n_lower='continuous' then
                            result:=TLTMode.TLTContinous
-else if n='bylayer' then
+else if n_lower='bylayer' then
                            result:=TLTMode.TLTByLayer
-else if n='byblock' then
+else if n_lower='byblock' then
                            result:=TLTMode.TLTByBlock
 else
     result:=TLTMode.TLTLineType;
 end;
 
-constructor GDBLtypeProp.init(n:String);
+constructor GDBLtypeProp.init(const n:String);
 begin
      inherited;
      FirstStroke:=TODIUnknown;
@@ -648,7 +650,7 @@ begin
           element:=GetStr(LT,dinfo);
      end;
 end;
-procedure GDBLtypeArray.LoadFromFile(fname:String;lm:TLoadOpt);
+procedure GDBLtypeArray.LoadFromFile(const fname:String;lm:TLoadOpt);
 var
    strings:TStringList{=nil};
    line:String;

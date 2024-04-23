@@ -17,6 +17,7 @@
 }
 
 unit UGDBVisibleTreeArray;
+{$Mode delphi}{$H+}
 {$INCLUDE zengineconfig.inc}
 interface
 uses uzeentitiestree,UGDBVisibleOpenArray,sysutils,uzegeometry,

@@ -17,6 +17,7 @@
 }
 
 unit uzefontmanager;
+{$Mode delphi}{$H+)
 {$INCLUDE zengineconfig.inc}
 {$ModeSwitch advancedrecords}
 interface

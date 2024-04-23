@@ -17,6 +17,7 @@
 }
 
 unit uzeStylesLineTypes;
+{$Mode delphi}{$H+)
 {$INCLUDE zengineconfig.inc}
 interface
 uses LCLProc,LazUTF8,Classes,gzctnrVector,sysutils,uzbtypes,
@@ -277,21 +278,25 @@ begin
                                       repeat
                                             PTP.txtL:=0;
                                             PTP.txtH:=0;
+                                            Psymbol:=nil;
                                             for i:=1 to length(PTP^.Text) do
                                             begin
                                                  if PTP^.param.PStyle<>nil then
                                                  begin
                                                       sym:=byte(PTP^.Text[i]);
-                                                      if ptp.param.PStyle.pfont.font.IsUnicode then
-                                                                                                 sym:=ach2uch(sym);
-                                                 Psymbol:=PTP^.param.PStyle.pfont^.GetOrReplaceSymbolInfo(byte(sym){//-ttf-//,TDInfo});
-                                                 processH(Psymbol,PTP^.param);
-                                                 if PTP.txtH<Psymbol.SymMaxY*PTP.param.Height then
-                                                                                                  PTP.txtH:=Psymbol.SymMaxY*PTP.param.Height;
-                                                 PTP.txtL:=PTP.txtL+Psymbol.NextSymX*PTP^.param.Height;
+                                                      if ptp.param.PStyle.pfont<>nil then begin
+                                                        if ptp.param.PStyle.pfont.font.IsUnicode then
+                                                           sym:=ach2uch(sym);
+                                                        Psymbol:=PTP^.param.PStyle.pfont^.GetOrReplaceSymbolInfo(byte(sym){//-ttf-//,TDInfo});
+                                                        processH(Psymbol,PTP^.param);
+                                                        if PTP.txtH<Psymbol.SymMaxY*PTP.param.Height then
+                                                          PTP.txtH:=Psymbol.SymMaxY*PTP.param.Height;
+                                                        PTP.txtL:=PTP.txtL+Psymbol.NextSymX*PTP^.param.Height;
+                                                      end;
                                                  end;
                                             end;
-                                            PTP.txtL:=PTP.txtL-(Psymbol.NextSymX-Psymbol.SymMaxX)*PTP^.param.Height;
+                                            if Psymbol<>nil then
+                                              PTP.txtL:=PTP.txtL-(Psymbol.NextSymX-Psymbol.SymMaxX)*PTP^.param.Height;
                                             if h<PTP.txtL then
                                                           h:=PTP.txtL;
                                             PTP.txtH:=PTP.txtH/2;

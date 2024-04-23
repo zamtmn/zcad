@@ -17,6 +17,7 @@
 }
 
 unit UGDBControlPointArray;
+{$Mode delphi}{$H+}
 {$INCLUDE zengineconfig.inc}
 interface
 uses uzepalette,uzgldrawcontext,gzctnrVector,sysutils,uzbtypes,uzegeometry,

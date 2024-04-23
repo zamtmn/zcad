@@ -17,6 +17,7 @@
 }
 
 unit uzegeomentitiestree;
+{$Mode delphi}{$H+}
 {$INCLUDE zengineconfig.inc}
 interface
 uses

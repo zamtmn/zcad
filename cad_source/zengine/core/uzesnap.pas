@@ -17,6 +17,8 @@
 }
 
 unit uzeSnap;
+{$Mode delphi}{$H+}
+{$ModeSwitch advancedrecords}
 {$INCLUDE zengineconfig.inc}
 
 interface

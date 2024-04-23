@@ -17,6 +17,7 @@
 }
 
 unit uzeroot;
+{$Mode delphi}{$H+}
 {$INCLUDE zengineconfig.inc}
 
 interface

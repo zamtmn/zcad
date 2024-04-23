@@ -17,6 +17,7 @@
 }
 
 unit UGDBVisibleOpenArray;
+{$Mode delphi}{$H+}
 {$INCLUDE zengineconfig.inc}
 interface
 uses gzctnrVectorTypes,uzegeometrytypes,uzeentity,uzecamera,UGDBOpenArrayOfPV,sysutils,uzbtypes,uzegeometry;

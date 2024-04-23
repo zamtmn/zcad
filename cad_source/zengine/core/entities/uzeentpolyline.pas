@@ -17,6 +17,7 @@
 }
 
 unit uzeentpolyline;
+{$Mode delphi}{$H+}
 {$INCLUDE zengineconfig.inc}
 
 interface

@@ -17,6 +17,7 @@
 }
 
 unit uzctnrvectorpgdbaseobjects;
+{$Mode delphi}{$H+}
 
 interface
 uses uzbtypes,gzctnrVectorPData;

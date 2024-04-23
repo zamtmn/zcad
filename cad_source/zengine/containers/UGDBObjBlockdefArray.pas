@@ -17,6 +17,7 @@
 }
 
 unit UGDBObjBlockdefArray;
+{$Mode delphi}{$H+}
 {$INCLUDE zengineconfig.inc}
 interface
 uses LCLProc,uzgldrawcontext,uzedrawingdef,uzbstrproc,uzeblockdef,gzctnrVectorObjects,

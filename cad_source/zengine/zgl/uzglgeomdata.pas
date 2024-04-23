@@ -17,6 +17,7 @@
 }
 
 unit uzglgeomdata;
+{$Mode delphi}{$H+)
 {$INCLUDE zengineconfig.inc}
 interface
 uses uzgindexsarray,uzgvertex3sarray,sysutils,uzbtypes,

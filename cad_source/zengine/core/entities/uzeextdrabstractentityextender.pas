@@ -15,8 +15,8 @@
 {
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
-{MODE OBJFPC}{H+}
 unit uzeExtdrAbstractEntityExtender;
+{$Mode delphi}{$H+)
 {$INCLUDE zengineconfig.inc}
 
 interface

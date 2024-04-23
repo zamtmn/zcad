@@ -17,6 +17,7 @@
 }
 
 unit uzelongprocesssupport;
+{$Mode delphi}{$H+)
 {$INCLUDE zengineconfig.inc}
 
 

@@ -17,6 +17,7 @@
 }
 
 unit uzehelpobj;
+{$Mode delphi}{$H+}
 {$INCLUDE zengineconfig.inc}
 interface
 uses uzegeometrytypes,LazLogger,gzctnrVector,math;

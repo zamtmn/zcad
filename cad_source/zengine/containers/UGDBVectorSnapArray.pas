@@ -17,6 +17,7 @@
 }
 
 unit UGDBVectorSnapArray;
+{$Mode delphi}{$H+}
 {$INCLUDE zengineconfig.inc}
 interface
 uses uzegeometrytypes,gzctnrVector,sysutils;

@@ -317,6 +317,8 @@ begin
   textprop.wfactor:=PGDBTextStyle((TXTStyleIndex))^.prop.wfactor;
   textprop.oblique:=PGDBTextStyle((TXTStyleIndex))^.prop.oblique;
   pfont:=TXTStyleIndex^.pfont;
+  if pfont=nil then
+    exit;
   TCP:=CodePage;
   CodePage:=CP_win;
   if template='' then

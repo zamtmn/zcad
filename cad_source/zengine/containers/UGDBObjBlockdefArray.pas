@@ -19,6 +19,7 @@
 unit UGDBObjBlockdefArray;
 {$Mode delphi}{$H+}
 {$INCLUDE zengineconfig.inc}
+{$PointerMath ON}
 interface
 uses LCLProc,uzgldrawcontext,uzedrawingdef,uzbstrproc,uzeblockdef,gzctnrVectorObjects,
      gzctnrVectorTypes,sysutils,uzbtypes,uzegeometry,uzbLogIntf;
@@ -90,7 +91,7 @@ begin
   if count = max then
                      //exit;
                      grow;
-  result := @PBlockdefArray(parray)[count];
+  result := @PGDBObjBlockdef(parray)[count];
   result.init(name);
   inc(count);
 end;
@@ -101,7 +102,7 @@ var
 begin
   Name_Upper:=UpperCase(Name);
   for i:=0 to count-1 do
-    if uppercase(PBlockdefArray(parray)[i].Name)=Name_Upper then
+    if uppercase(PGDBObjBlockdef(parray)[i].Name)=Name_Upper then
       exit(i);
   result:=-1;
 end;

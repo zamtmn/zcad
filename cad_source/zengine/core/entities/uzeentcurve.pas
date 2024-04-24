@@ -58,13 +58,13 @@ GDBObjCurve= object(GDBObj3d)
                  function GetObjTypeName:String;virtual;
                  procedure getoutbound(var DC:TDrawContext);virtual;
 
-                 procedure AddVertex(Vertex:GDBVertex);virtual;
+                 procedure AddVertex(const Vertex:GDBVertex);virtual;
 
                  procedure SaveToDXFfollow(var outhandle:{Integer}TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
                  procedure TransformAt(p:PGDBObjEntity;t_matrix:PDMatrix4D);virtual;
                  procedure transform(const t_matrix:DMatrix4D);virtual;
 
-                 function CalcTrueInFrustum(frustum:ClipArray;visibleactualy:TActulity):TInBoundingVolume;virtual;
+                 function CalcTrueInFrustum(const frustum:ClipArray;visibleactualy:TActulity):TInBoundingVolume;virtual;
                  procedure AddOnTrackAxis(var posr:os_record;const processaxis:taddotrac);virtual;
                  procedure InsertVertex(const PolyData:TPolyData);
                  procedure DeleteVertex(const PolyData:TPolyData);
@@ -219,7 +219,7 @@ begin
   until ptv=nil;
   SaveToDXFObjPrefix(outhandle,'SEQEND','',IODXFContext,true);
 end;
-procedure GDBObjCurve.AddVertex(Vertex:GDBVertex);
+procedure GDBObjCurve.AddVertex(const Vertex:GDBVertex);
 begin
      vertexarrayinocs.PushBackData(vertex);
 end;

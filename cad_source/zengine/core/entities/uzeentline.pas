@@ -68,12 +68,12 @@ GDBObjLine= object(GDBObj3d)
                   function GetObjTypeName:String;virtual;
                   function GetCenterPoint:GDBVertex;virtual;
                   procedure getoutbound(var DC:TDrawContext);virtual;
-                  function CalcInFrustum(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:Integer; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double):Boolean;virtual;
-                  function CalcTrueInFrustum(frustum:ClipArray;visibleactualy:TActulity):TInBoundingVolume;virtual;
+                  function CalcInFrustum(const frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:Integer; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double):Boolean;virtual;
+                  function CalcTrueInFrustum(const frustum:ClipArray;visibleactualy:TActulity):TInBoundingVolume;virtual;
 
                   function IsIntersect_Line(lbegin,lend:gdbvertex):Intercept3DProp;virtual;
                   procedure AddOnTrackAxis(var posr:os_record;const processaxis:taddotrac);virtual;
-                  function GetTangentInPoint(point:GDBVertex):GDBVertex;virtual;
+                  function GetTangentInPoint(const point:GDBVertex):GDBVertex;virtual;
 
                   class function CreateInstance:PGDBObjLine;static;
                   function GetObjType:TObjID;virtual;
@@ -86,7 +86,7 @@ tlinertmodify=record
 function AllocAndInitLine(owner:PGDBObjGenericWithSubordinated):PGDBObjLine;
 implementation
 //uses log;
-function GDBObjLine.GetTangentInPoint(point:GDBVertex):GDBVertex;
+function GDBObjLine.GetTangentInPoint(const point:GDBVertex):GDBVertex;
 begin
      result:=normalizevertex(VertexSub(CoordInWCS.lEnd,CoordInWCS.lBegin));
 end;

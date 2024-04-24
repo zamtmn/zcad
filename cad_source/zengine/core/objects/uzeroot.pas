@@ -44,8 +44,8 @@ GDBObjRoot= object(GDBObjGenericSubEntry)
 
                  function GetMatrix:PDMatrix4D;virtual;
                  procedure DrawWithAttrib(var DC:TDrawContext{visibleactualy:TActulity;subrender:Integer});virtual;
-                 function CalcInFrustum(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:Integer; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double):Boolean;virtual;
-                 procedure CalcInFrustumByTree(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var enttree:TEntTreeNode;var totalobj,infrustumobj:Integer; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double);virtual;
+                 function CalcInFrustum(const frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:Integer; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double):Boolean;virtual;
+                 procedure CalcInFrustumByTree(const frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var enttree:TEntTreeNode;var totalobj,infrustumobj:Integer; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double);virtual;
                  procedure calcbb(var DC:TDrawContext);virtual;
                  //function FindShellByClass(_type:TDeviceClass):PGDBObjSubordinated;virtual;
                  function GetObjType:TObjID;virtual;
@@ -66,7 +66,7 @@ begin
      vp.BoundingBox.LBN:=VectorTransform3D(vp.BoundingBox.LBN,ObjMatrix);
      vp.BoundingBox.RTF:=VectorTransform3D(vp.BoundingBox.RTF,ObjMatrix);
 end;
-procedure GDBObjRoot.CalcInFrustumByTree(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var enttree:TEntTreeNode;var totalobj,infrustumobj:Integer; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double);
+procedure GDBObjRoot.CalcInFrustumByTree(const frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var enttree:TEntTreeNode;var totalobj,infrustumobj:Integer; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double);
 var
    myfrustum:ClipArray;
 begin

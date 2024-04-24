@@ -18,6 +18,7 @@
 unit uzeentblockinsert;
 {$Mode delphi}{$H+}
 {$INCLUDE zengineconfig.inc}
+{$PointerMath ON}
 
 interface
 uses uzeentity,uzgldrawcontext,uzeentityfactory,uzedrawingdef,uzestyleslayers,math,
@@ -467,10 +468,10 @@ begin
 //                         index:=index;
           assert((index>=0) and (index<PGDBObjBlockdefArray(drawing.GetBlockDefArraySimple).count), rsWrongBlockDefIndex);
 
-          if not PBlockDefArray(PGDBObjBlockdefArray(drawing.GetBlockDefArraySimple).parray)^[index].Formated then
+          if not PGDBObjBlockdef(PGDBObjBlockdefArray(drawing.GetBlockDefArraySimple).parray)[index].Formated then
                                                                                begin
                                                                                 dc:=drawing.CreateDrawingRC;
-                                                                                PBlockDefArray(PGDBObjBlockdefArray(drawing.GetBlockDefArraySimple).parray)^[index].FormatEntity(drawing,dc);
+                                                                                PGDBObjBlockdef(PGDBObjBlockdefArray(drawing.GetBlockDefArraySimple).parray)[index].FormatEntity(drawing,dc);
                                                                                end;
           mainowner:=getmainowner;
           if mainowner<>nil then

@@ -26,7 +26,7 @@ uses LCLProc,uzbpaths,uzbstrproc,uzgldrawcontext,usimplegenerics,uzestylesdim,uz
     uzegeometry,uzeentsubordinated,uzeentgenericsubentry,uzbtypes,
     uzedimensionaltypes,uzegeometrytypes,sysutils,uzeconsts,UGDBObjBlockdefArray,
     uzctnrVectorBytes,UGDBVisibleOpenArray,uzeentity,uzeblockdef,uzestyleslayers,
-    uzeffmanager,uzbLogIntf;
+    uzeffmanager,uzbLogIntf,uzeFileStream;
 resourcestring
   rsLoadDXFFile='Load DXF file';
 type
@@ -71,7 +71,7 @@ begin
   result:=-1;
 end;
 
-procedure gotodxf(var f: TZctnrVectorBytes; fcode: Integer; const fname: String);
+procedure gotodxf(var f: TZFileStream; fcode: Integer; const fname: String);
 var
   byt: Integer;
 begin
@@ -101,7 +101,7 @@ begin
     end;
   end;
 end;
-procedure readvariables(var drawing:TSimpleDrawing;var f: TZctnrVectorBytes;var ctstyle:String; var clayer:String;var cltype:String;var cdimstyle:String;LoadMode:TLoadOpt;DWGVarsDict:TString2StringDictionary);
+procedure readvariables(var drawing:TSimpleDrawing;var f: TZFileStream;var ctstyle:String; var clayer:String;var cltype:String;var cdimstyle:String;LoadMode:TLoadOpt;DWGVarsDict:TString2StringDictionary);
 var
   {byt: Byte;}
   s: String;
@@ -160,7 +160,7 @@ begin
          drawing.TextSize:=strtofloat(s);//sysvar.DWG.DWG_TextSize^ := strtofloat(s);
      end;
 end;
-procedure ReadDXFHeader(var f: TZctnrVectorBytes; DWGVarsDict:TString2StringDictionary);
+procedure ReadDXFHeader(var f: TZFileStream; DWGVarsDict:TString2StringDictionary);
 type
    TDXFHeaderMode=(TDXFHMWaitSection,TDXFHMSection,TDXFHMHeader);
 const
@@ -282,7 +282,7 @@ begin
   end;
 end;
 
-function GoToDXForENDTAB(var f: TZctnrVectorBytes; fcode: Integer; const fname: String):boolean;
+function GoToDXForENDTAB(var f: TZFileStream; fcode: Integer; const fname: String):boolean;
 var
   byt: Integer;
   s: String;
@@ -306,7 +306,7 @@ begin
                                          end;
   end;
 end;
-procedure addentitiesfromdxf(var f: TZctnrVectorBytes; const exitString: String;owner:PGDBObjSubordinated;var drawing:TSimpleDrawing;DC:TDrawContext;var context:TIODXFLoadContext);
+procedure addentitiesfromdxf(var f: TZFileStream; const exitString: String;owner:PGDBObjSubordinated;var drawing:TSimpleDrawing;DC:TDrawContext;var context:TIODXFLoadContext);
 //const
 //   stat: array [1..10] of QWord = (0,0,0,0,0,0,0,0,0,0);
 
@@ -494,7 +494,7 @@ begin
 end;
 
 
-procedure addfromdxf12(var f:TZctnrVectorBytes; const exitString: String;owner:PGDBObjSubordinated;LoadMode:TLoadOpt;var drawing:TSimpleDrawing;var DC:TDrawContext);
+procedure addfromdxf12(var f:TZFileStream; const exitString: String;owner:PGDBObjSubordinated;LoadMode:TLoadOpt;var drawing:TSimpleDrawing;var DC:TDrawContext);
 var
   {byt,}LayerColor: Integer;
   s, sname{, sx1, sy1, sz1},scode,LayerName: String;
@@ -589,7 +589,7 @@ begin
   debugln('{D-}end; {AddFromDXF12}');
   //programlog.LogOutStr('end; {AddFromDXF12}',lp_DecPos,LM_Debug);
 end;
-procedure ReadLTStyles(var s:ansiString; const cltype:string;var f:TZctnrVectorBytes; const exitString: String;owner:PGDBObjGenericSubEntry;LoadMode:TLoadOpt;var drawing:TSimpleDrawing;var context:TIODXFLoadContext);
+procedure ReadLTStyles(var s:ansiString; const cltype:string;var f:TZFileStream; const exitString: String;owner:PGDBObjGenericSubEntry;LoadMode:TLoadOpt;var drawing:TSimpleDrawing;var context:TIODXFLoadContext);
 const
    cntr:integer=0;
 var
@@ -756,7 +756,7 @@ begin
   end;
   BShapeProp.Done;
 end;
-procedure ReadLayers(var s:ansistring; const clayer:string;var f:TZctnrVectorBytes; const exitString: String;owner:PGDBObjGenericSubEntry;LoadMode:TLoadOpt;var drawing:TSimpleDrawing);
+procedure ReadLayers(var s:ansistring; const clayer:string;var f:TZFileStream; const exitString: String;owner:PGDBObjGenericSubEntry;LoadMode:TLoadOpt;var drawing:TSimpleDrawing);
 var
 byt: Integer;
 lname,desk: String;
@@ -820,7 +820,7 @@ begin
       drawing.CurrentLayer:=player;
   end;
 end;
-procedure ReadTextstyles(var s:ansistring; const ctstyle:string;var f:TZctnrVectorBytes; const exitString: String;owner:PGDBObjGenericSubEntry;LoadMode:TLoadOpt;var drawing:TSimpleDrawing;var context:TIODXFLoadContext);
+procedure ReadTextstyles(var s:ansistring; const ctstyle:string;var f:TZFileStream; const exitString: String;owner:PGDBObjGenericSubEntry;LoadMode:TLoadOpt;var drawing:TSimpleDrawing;var context:TIODXFLoadContext);
 var
    tstyle:GDBTextStyle;
    ptstyle:PGDBTextStyle;
@@ -921,7 +921,7 @@ begin
   end;
   drawing.LTypeStyleTable.format;
 end;
-procedure ReadVport(var s:ansistring;var f:TZctnrVectorBytes; const exitString: String;owner:PGDBObjGenericSubEntry;LoadMode:TLoadOpt;var drawing:TSimpleDrawing);
+procedure ReadVport(var s:ansistring;var f:TZFileStream; const exitString: String;owner:PGDBObjGenericSubEntry;LoadMode:TLoadOpt;var drawing:TSimpleDrawing);
 var
    byt: Integer;
    active:boolean;
@@ -1090,7 +1090,7 @@ begin
      end;
      debugln('{D-}[DXF_CONTENTS]end;{ReadVport}');
 end;
-procedure ReadDimStyles(var s:ansistring; const cdimstyle:string;var f:TZctnrVectorBytes; const exitString: String;owner:PGDBObjGenericSubEntry;LoadMode:TLoadOpt;var drawing:TSimpleDrawing;var context:TIODXFLoadContext);
+procedure ReadDimStyles(var s:ansistring; const cdimstyle:string;var f:TZFileStream; const exitString: String;owner:PGDBObjGenericSubEntry;LoadMode:TLoadOpt;var drawing:TSimpleDrawing;var context:TIODXFLoadContext);
 var
    psimstyleprop:PGDBDimStyle;
    byt:integer;
@@ -1124,7 +1124,7 @@ begin
   end;
 end;
 end;
-procedure ReadBlockRecird(const Handle2BlockName:TMapBlockHandle_BlockNames;var s:ansistring;var f:TZctnrVectorBytes; const exitString: String;owner:PGDBObjGenericSubEntry;LoadMode:TLoadOpt;var drawing:TSimpleDrawing);
+procedure ReadBlockRecird(const Handle2BlockName:TMapBlockHandle_BlockNames;var s:ansistring;var f:TZFileStream; const exitString: String;owner:PGDBObjGenericSubEntry;LoadMode:TLoadOpt;var drawing:TSimpleDrawing);
 var
    byt:integer;
    bname:string;
@@ -1151,7 +1151,7 @@ begin
 end;
 end;
 
-procedure addfromdxf2000(var f:TZctnrVectorBytes; const exitString: String;owner:PGDBObjGenericSubEntry;LoadMode:TLoadOpt;var drawing:TSimpleDrawing;var context:TIODXFLoadContext;var DC:TDrawContext;DWGVarsDict:TString2StringDictionary);
+procedure addfromdxf2000(var f:TZFileStream; const exitString: String;owner:PGDBObjGenericSubEntry;LoadMode:TLoadOpt;var drawing:TSimpleDrawing;var context:TIODXFLoadContext;var DC:TDrawContext;DWGVarsDict:TString2StringDictionary);
 //type
 //   tproftype = (classes,appid,blockrecord,dimstyle,layer,ltype,style,ucs,view,vport,entities,blocks);
 //const
@@ -1445,7 +1445,7 @@ end;
 
 procedure addfromdxf(const name: String;var ZCDCtx:TZDrawingContext{owner:PGDBObjGenericSubEntry;LoadMode:TLoadOpt;var drawing:TSimpleDrawing});
 var
-  f: TZctnrVectorBytes;
+  f:TZFileStream;
   s,s1,s2: String;
   dxfversion,code:integer;
   Context:TIODXFLoadContext;

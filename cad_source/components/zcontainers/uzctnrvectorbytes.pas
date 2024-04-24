@@ -24,9 +24,7 @@ const
     syn_breacer=[#13,#10,' '];
     lineend:string=#13#10;
 type
-{Export+}
 PTZctnrVectorBytes=^TZctnrVectorBytes;
-{REGISTEROBJECTTYPE TZctnrVectorBytes}
 TZctnrVectorBytes=object(GZVector{-}<byte>{//})
                       ReadPos:Integer;
                       name:AnsiString;
@@ -55,7 +53,6 @@ TZctnrVectorBytes=object(GZVector{-}<byte>{//})
                       function readtoparser(break:AnsiString):AnsiString;
                       destructor done;virtual;
                    end;
-{Export-}
 procedure WriteString_EOL(h: Integer; s: AnsiString);
 implementation
 //uses uzbstrproc;

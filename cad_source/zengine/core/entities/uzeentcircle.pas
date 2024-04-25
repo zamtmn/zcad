@@ -82,7 +82,7 @@ GDBObjCircle= object(GDBObjWithLocalCS)
                  function IsIntersect_Line(lbegin,lend:gdbvertex):Intercept3DProp;virtual; //<**Пересечение с линией описанной 2-я точками
                  procedure ReCalcFromObjMatrix;virtual;
 
-                 function GetTangentInPoint(const point:GDBVertex):GDBVertex;virtual;
+                 function GetTangentInPoint(point:GDBVertex):GDBVertex;virtual;
                  procedure AddOnTrackAxis(var posr:os_record;const processaxis:taddotrac);virtual;
                  function onpoint(var objects:TZctnrVectorPGDBaseObjects;const point:GDBVertex):Boolean;virtual;
 
@@ -120,12 +120,10 @@ begin
      processaxis(posr,tv);
 end;
 
-function GDBObjCircle.GetTangentInPoint(const point:GDBVertex):GDBVertex;
+function GDBObjCircle.GetTangentInPoint(point:GDBVertex):GDBVertex;
 begin
-     result:=normalizevertex(uzegeometry.vectordot(
-                     uzegeometry.VertexSub(self.P_insert_in_WCS,point),
-                     self.Local.basis.oz)
-     );
+     point:=uzegeometry.VertexSub(self.P_insert_in_WCS,point);
+     result:=normalizevertex(uzegeometry.vectordot(point,self.Local.basis.oz));
 end;
 procedure GDBObjCircle.ReCalcFromObjMatrix;
 var
@@ -499,13 +497,13 @@ var //s: String;
   byt{, code}: Integer;
 begin
   //initnul;
-  byt:=f.ParseInteger;
+  byt:=readmystrtoint(f);
   while byt <> 0 do
   begin
     if not LoadFromDXFObjShared(f,byt,ptu,drawing) then
     if not dxfvertexload(f,10,byt,Local.P_insert) then
-    if not dxfDoubleload(f,40,byt,Radius) then f.ReadPAnsiChar;
-    byt:=f.ParseInteger;
+    if not dxfDoubleload(f,40,byt,Radius) then {s := }f.readString;
+    byt:=readmystrtoint(f);
   end;
   //PProjoutbound:=nil;
   //pprojpoint:=nil;

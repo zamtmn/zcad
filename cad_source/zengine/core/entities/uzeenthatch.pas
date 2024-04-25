@@ -606,7 +606,7 @@ var
 begin
   hstyle:=100;
   Angle:=0;
-  byt:=f.ParseInteger;
+  byt:=readmystrtoint(f);
   while byt <> 0 do
   begin
     if not LoadFromDXFObjShared(f,byt,ptu,drawing) then
@@ -615,8 +615,9 @@ begin
     if not dxfintegerload(f,75,byt,hstyle) then
     if not dxfDoubleload(f,52,byt,Angle) then
     if not dxfDoubleload(f,41,byt,Scale) then
-    if not dxfStringload(f,2,byt,PatternName) then f.ReadPAnsiChar;
-    byt:=f.ParseInteger;
+    if not dxfStringload(f,2,byt,PatternName) then
+      f.readString;
+    byt:=readmystrtoint(f);
   end;
   case hstyle of
     1:IslandDetection:=HID_Outer;

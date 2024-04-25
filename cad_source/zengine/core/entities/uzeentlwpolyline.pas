@@ -86,7 +86,7 @@ GDBObjLWPolyline= object(GDBObjWithLocalCS)
                  procedure AddOnTrackAxis(var posr:os_record;const processaxis:taddotrac);virtual;
                  procedure transform(const t_matrix:DMatrix4D);virtual;
                  procedure TransformAt(p:PGDBObjEntity;t_matrix:PDMatrix4D);virtual;
-                 function GetTangentInPoint(const point:GDBVertex):GDBVertex;virtual;
+                 function GetTangentInPoint(point:GDBVertex):GDBVertex;virtual;
 
                  procedure higlight(var DC:TDrawContext);virtual;
 
@@ -101,7 +101,7 @@ var
 procedure GDBObjLWpolyline.higlight(var DC:TDrawContext);
 begin
 end;
-function GDBObjLWpolyline.GetTangentInPoint(const point:GDBVertex):GDBVertex;
+function GDBObjLWpolyline.GetTangentInPoint(point:GDBVertex):GDBVertex;
 var //tv:gdbvertex;
     ptv,ppredtv:pgdbvertex;
     ir:itrec;
@@ -653,17 +653,24 @@ begin
   Vertex3D_in_WCS_Array.init(1000);
   Width3D_in_WCS_Array.init(1000, sizeof(GDBQuad3d));
   *)
-  //s := f.readString;
-  byt:=f.ParseInteger;
+  s := f.readString;
+  val(s, byt, code);
   while byt <> 0 do
   begin
     if not LoadFromDXFObjShared(f,byt,ptu,drawing) then
     case byt of
-      8: vp.Layer :=drawing.getlayertable.getAddres(f.readStringTemp);
-      62: vp.color:=readmystrtoint(f);
+      8:
+        begin
+          s := f.readString;
+          vp.Layer :=drawing.getlayertable.getAddres(s);
+        end;
+      62:begin
+              vp.color:=readmystrtoint(f);
+         end;
       90:
         begin
-          hlGDBWord := f.ParseInteger;
+          s := f.readString;
+          hlGDBWord := strtoint(s);
           //vertexarray.init(hlGDBWord,closed);
           //vertexarray.init(hlGDBWord, sizeof(gdbvertex2d));
           //normalarray.init(hlGDBWord, sizeof(gdbvertex));
@@ -672,42 +679,76 @@ begin
           Width2D_in_OCS_Array.SetSize(numv);
           hlGDBWord := 0;
         end;
-      10: p.x:=f.ParseDouble;
+      10:
+        begin
+          s := f.readString;
+          val(s, p.x, code);
+        end;
       20:
         begin
-          p.y:=f.ParseDouble;
+          s := f.readString;
+          val(s, p.y, code);
           lwtv.PushBackData(p);
           inc(hlGDBWord);
         end;
       38:
         begin
-          local.p_insert.z:=f.ParseDouble;
+          s := f.readString;
+          val(s, local.p_insert.z, code);
           //local.p_insert.z:=-local.p_insert.z;
         end;
       40:
         begin
+          s := f.readString;
           //val(s, PGLLWWidth(Width2D_in_OCS_Array.getelement(hlGDBWord-1)).startw, code);
           Width2D_in_OCS_Array.SetCount(numv);
-          PGLLWWidth(Width2D_in_OCS_Array.getDataMutable(hlGDBWord-1)).startw:=f.ParseDouble;
+          val(s, PGLLWWidth(Width2D_in_OCS_Array.getDataMutable(hlGDBWord-1)).startw, code);
           widthload:=true;
         end;
       41:
         begin
+          s := f.readString;
           Width2D_in_OCS_Array.SetCount(numv);
-          PGLLWWidth(Width2D_in_OCS_Array.getDataMutable(hlGDBWord- 1)).endw:=f.ParseDouble;
+          val(s, PGLLWWidth(Width2D_in_OCS_Array.getDataMutable(hlGDBWord- 1)).endw, code);
           //Width2D_in_OCS_Array.SetCount(hlGDBWord);
           widthload:=true;
         end;
-      43: globalwidth:=f.ParseDouble;
-      70: if (f.ParseInteger and 1) = 1 then closed := true;
-      210: Local.basis.oz.x:=f.ParseDouble;
-      220: Local.basis.oz.y:=f.ParseDouble;
-      230: Local.basis.oz.z:=f.ParseDouble;
-      370: vp.lineweight := f.ParseInteger;
+      43:
+        begin
+          s := f.readString;
+          val(s, tDouble, code);
+          globalwidth:=tDouble;
+        end;
+      70:
+        begin
+          s := f.readString;
+          if (strtoint(s) and 1) = 1 then closed := true;
+        end;
+      210:
+        begin
+          s := f.readString;
+          val(s, Local.basis.oz.x, code);
+        end;
+      220:
+        begin
+          s := f.readString;
+          val(s, Local.basis.oz.y, code);
+        end;
+      230:
+        begin
+          s := f.readString;
+          val(s, Local.basis.oz.z, code);
+        end;
+      370:
+        begin
+          s := f.readString;
+          vp.lineweight := strtoint(s);
+        end;
     else
-      f.ReadPAnsiChar;
+      s := f.readString;
     end;
-    byt:=f.ParseInteger;
+    s := f.readString;
+    val(s, byt, code);
   end;
   if not widthload then begin
     Width2D_in_OCS_Array.SetCount(numv);

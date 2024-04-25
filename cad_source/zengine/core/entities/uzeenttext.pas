@@ -57,7 +57,7 @@ GDBObjText= object(GDBObjAbstractText)
                  procedure rtsave(refp:Pointer);virtual;
                  function IsHaveObjXData:Boolean;virtual;
                  procedure SaveToDXFObjXData(var outhandle:{Integer}TZctnrVectorBytes;var IODXFContext:TIODXFContext);virtual;
-                 function ProcessFromDXFObjXData(const _Name,_Value:String;ptu:PExtensionData;const drawing:TDrawingDef):Boolean;virtual;
+                 function ProcessFromDXFObjXData(_Name,_Value:String;ptu:PExtensionData;const drawing:TDrawingDef):Boolean;virtual;
                  class function GetDXFIOFeatures:TDXFEntIODataManager;static;
 
                  function CreateInstance:PGDBObjText;static;
@@ -660,7 +660,7 @@ begin
   //initnul;
   vv := 0;
   gv := 0;
-  byt:=f.ParseInteger;
+  byt:=readmystrtoint(f);
   angleload:=false;
   doublepoint:=false;
   style:='';
@@ -691,9 +691,9 @@ else if     dxfStringload(f,7,byt,style)then
 else if not dxfIntegerload(f,72,byt,gv)then
      if not dxfIntegerload(f,73,byt,vv)then
      if not dxfIntegerload(f,71,byt,textbackward)then
-     if not dxfStringload(f,1,byt,tcontent)then f.ReadPAnsiChar;
-
-    byt:=f.ParseInteger;
+     if not dxfStringload(f,1,byt,tcontent)then
+                                               {s := }f.readString;
+    byt:=readmystrtoint(f);
   end;
   if (textbackward and 4)<>0 then
                                  textprop.upsidedown:=true

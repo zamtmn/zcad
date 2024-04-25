@@ -73,7 +73,7 @@ GDBObjLine= object(GDBObj3d)
 
                   function IsIntersect_Line(lbegin,lend:gdbvertex):Intercept3DProp;virtual;
                   procedure AddOnTrackAxis(var posr:os_record;const processaxis:taddotrac);virtual;
-                  function GetTangentInPoint(const point:GDBVertex):GDBVertex;virtual;
+                  function GetTangentInPoint(point:GDBVertex):GDBVertex;virtual;
 
                   class function CreateInstance:PGDBObjLine;static;
                   function GetObjType:TObjID;virtual;
@@ -86,7 +86,7 @@ tlinertmodify=record
 function AllocAndInitLine(owner:PGDBObjGenericWithSubordinated):PGDBObjLine;
 implementation
 //uses log;
-function GDBObjLine.GetTangentInPoint(const point:GDBVertex):GDBVertex;
+function GDBObjLine.GetTangentInPoint(point:GDBVertex):GDBVertex;
 begin
      result:=normalizevertex(VertexSub(CoordInWCS.lEnd,CoordInWCS.lBegin));
 end;
@@ -192,16 +192,16 @@ begin
      result:=GDBlineID;
 end;
 procedure GDBObjLine.LoadFromDXF;
-var
+var //s: String;
   byt: Integer;
 begin
-  byt:=f.ParseInteger;
+  byt:=readmystrtoint(f);
   while byt <> 0 do
   begin
     if not LoadFromDXFObjShared(f,byt,ptu,drawing) then
        if not dxfvertexload(f,10,byt,CoordInOCS.lBegin) then
-          if not dxfvertexload(f,11,byt,CoordInOCS.lEnd) then f.ReadPAnsiChar;
-    byt:=f.ParseInteger;
+          if not dxfvertexload(f,11,byt,CoordInOCS.lEnd) then {s := }f.readString;
+    byt:=readmystrtoint(f);
   end;
 end;
 destructor GDBObjLine.done;

@@ -56,7 +56,7 @@ begin
   f.InitFromFile(ProgramPath+filename);
   while f.notEOF do
     begin
-      line:=f.readString; // Нет смысла использовать readStringTemp
+      line:=f.readString;
       if line<>'' then
       if line[1]<>';' then
         begin

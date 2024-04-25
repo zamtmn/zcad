@@ -146,7 +146,7 @@ begin
   f.InitFromFile(path);
   while f.notEOF do
     begin
-      line:=f.readString; // нет смылса использовать readStringTemp
+      line:=f.readString;
       if line<>'' then
       if line[1]<>';' then
         begin

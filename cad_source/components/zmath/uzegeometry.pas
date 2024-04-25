@@ -2022,7 +2022,7 @@ end;
 
 function pointinquad2d(const x1, y1, x2, y2, xp, yp: Single): Boolean;
 begin
-  if result := (x1 <= xp) and (x2 >= xp) and (y1 <= yp) and (y2 >= yp);
+  result := (x1 <= xp) and (x2 >= xp) and (y1 <= yp) and (y2 >= yp);
 end;
 function intercept2dmy(const l1begin,l1end,l2begin,l2end:gdbvertex2d):intercept2dprop;
 var

@@ -30,6 +30,8 @@ type
   TSetOfBytes=set of AnsiChar;
 const
   CSpaces:TSetOfBytes=[' '];
+  CSpacesAndCR:TSetOfBytes=[' ',#13];
+  CCR:TSetOfBytes=[#10];
   CDecDigits:TSetOfBytes=['0','1','2','3','4','5','6','7','8','9'];
 
 type
@@ -37,7 +39,7 @@ type
     function notEOF:Boolean;
     procedure ResetLastChar;
     function InternalParseInteger(const ASkipLeft:TSetOfBytes;out Value:Integer;const ASkipRight,AEnd:TSetOfBytes):boolean;inline;
-    function ParseInteger(out Value:Integer):Integer;inline;overload;
+    function ParseInteger(out Value:Integer):Integer;inline;
   end;
   TZFileStream=TZctnrVectorBytes;
 
@@ -70,6 +72,7 @@ begin
   while AnsiChar(CurrentByte) in CDecDigits do begin
     inc(DigitCounter);
     value:=value*10+CurrentByte-Ord('0');
+    CurrentByte:=ReadByte;
   end;
 
   if DigitCounter=0 then begin
@@ -91,10 +94,9 @@ begin
   Result:=true;
 end;
 
-function TZFileStream2.ParseInteger(out Value:Integer):Integer;inline;overload;
+function TZFileStream2.ParseInteger(out Value:Integer):Integer;
 begin
-  Value:=0;
-
+  InternalParseInteger(CSpaces,Value,CSpacesAndCR,CCR);
 end;
 
 {function TZFileStream2.GetChar(rp:Int64): Ansichar;

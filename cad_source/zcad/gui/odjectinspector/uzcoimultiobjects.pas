@@ -28,7 +28,7 @@ uses
   gzctnrVectorTypes,uzbtypes,uzcdrawings,varmandef,uzeentity,
   Varman,uzctnrvectorstrings,UGDBSelectedObjArray,uzcoimultipropertiesutil,
   uzeExtdrAbstractEntityExtender,uzelongprocesssupport,uzbLogIntf,uzcutils,
-  zUndoCmdChgVariable,uzcdrawing,zUndoCmdChgTypes;
+  zUndoCmdChgVariable,uzcdrawing,zUndoCmdChgTypes,uzeBaseExtender;
 type
   TObjIDWithExtender2Counter=TMyMapCounter<TObjIDWithExtender>;
 {Export+}
@@ -53,6 +53,8 @@ type
   TMSEntsLayersDetector=TEnumDataWithOtherPointers;
   {REGISTERRECORDTYPE TMSEntsLinetypesDetector}
   TMSEntsLinetypesDetector=TEnumDataWithOtherPointers;
+  {REGISTERRECORDTYPE TMSEntsExtendersDetector}
+  TMSEntsExtendersDetector=TEnumDataWithOtherPointers;
   {REGISTEROBJECTTYPE TMSEditor}
   TMSEditor= object(TWrapper2ObjInsp)
                 TxtEntType:TMSPrimitiveDetector;(*'Process primitives'*)
@@ -93,10 +95,12 @@ procedure DeselectBlocsByName(PInstance:Pointer);
 procedure DeselectTextsByStyle(PInstance:Pointer);
 procedure DeselectEntsByLayer(PInstance:Pointer);
 procedure DeselectEntsByLinetype(PInstance:Pointer);
+procedure DeselectEntsByExtender(PInstance:Pointer);
 procedure SelectOnlyThisBlocsByName(PInstance:Pointer);
 procedure SelectOnlyThisTextsByStyle(PInstance:Pointer);
 procedure SelectOnlyThisEntsByLayer(PInstance:Pointer);
 procedure SelectOnlyThisEntsByLinetype(PInstance:Pointer);
+procedure SelectOnlyThisEntsByExtender(PInstance:Pointer);
 var
    MSEditor:TMSEditor;
    i:integer;
@@ -955,6 +959,49 @@ begin
       ZCMsgCallBackInterface.Do_GUIaction(drawings.GetCurrentDWG.wa,ZMsgID_GUIActionSelectionChanged);
 end;
 
+procedure DeselectEntsByExtender(PInstance:Pointer);
+var
+  pv:pGDBObjEntity;
+  ir:itrec;
+  count,selected:integer;
+  extdrClass:TMetaEntityExtender;
+begin
+  selected:=PTEnumDataWithOtherPointers(PInstance)^.Selected;
+  extdrClass:=PTEnumDataWithOtherPointers(PInstance)^.Pointers.getData(selected);
+  count:=0;
+  pv:=drawings.GetCurrentROOT.ObjArray.beginiterate(ir);
+  if pv<>nil then
+  repeat
+    if pv^.Selected then
+    if (selected=0)or(pv^.GetExtension(extdrClass)<>nil)then
+    begin
+      inc(count);
+      pv^.DeSelect(drawings.GetCurrentDWG.wa.param.SelDesc.Selectedobjcount,drawings.CurrentDWG^.DeSelector);
+    end;
+    pv:=drawings.GetCurrentROOT.ObjArray.iterate(ir);
+  until pv=nil;
+  ZCMsgCallBackInterface.TextMessage(sysutils.Format(rscmNEntitiesDeselected,[count]),TMWOHistoryOut);
+  if count>0 then
+    ZCMsgCallBackInterface.Do_GUIaction(drawings.GetCurrentDWG.wa,ZMsgID_GUIActionSelectionChanged);
+end;
+
+procedure Extendrs2ExtendersCounterIterateProc(pdata:Pointer;ChangedData:TChangedData;mp:TMultiProperty;fistrun:boolean;ecp:TEntChangeProc; const f:TzeUnitsFormat);
+var
+  p:TEntityExtensions;
+  i:integer;
+begin
+  p:=pointer(ppointer(ChangedData.PGetDataInEtity)^);
+  if p<>nil then begin
+    if assigned(p.fEntityExtensions)then
+      for i:=0 to p.fEntityExtensions.Size-1 do
+        if p.fEntityExtensions[i]<>nil then begin
+          PTPointerCounterData(pdata)^.counter.CountKey(p.fEntityExtensions[i].ClassType,1);
+          inc(PTPointerCounterData(pdata)^.totalcount);
+        end;
+  end;
+end;
+
+
 
 
 procedure SelectOnlyThisBlocsByName(PInstance:Pointer);
@@ -1097,8 +1144,40 @@ begin
     end;
 end;
 
-
-
+procedure SelectOnlyThisEntsByExtender(PInstance:Pointer);
+var
+    pv:pGDBObjEntity;
+    ir:itrec;
+    count,selected:integer;
+    extdrClass:TMetaEntityExtender;
+begin
+    selected:=PTEnumDataWithOtherPointers(PInstance)^.Selected;
+    extdrClass:=PTEnumDataWithOtherPointers(PInstance)^.Pointers.getData(selected);
+    //if NeededObjType<>0 then
+    begin
+      count:=0;
+      pv:=drawings.GetCurrentROOT.ObjArray.beginiterate(ir);
+      if pv<>nil then
+      repeat
+        if pv^.Selected then
+        //if (pv^.GetObjType=GDBtextID)or(pv^.GetObjType=GDBMTextID) then
+        begin
+          if (selected<>0)and(pv^.GetExtension(extdrClass)=nil) then begin
+          inc(count);
+          pv^.DeSelect(drawings.GetCurrentDWG.wa.param.SelDesc.Selectedobjcount,drawings.CurrentDWG^.DeSelector);
+          end;
+        end else
+        begin
+          inc(count);
+          pv^.DeSelect(drawings.GetCurrentDWG.wa.param.SelDesc.Selectedobjcount,drawings.CurrentDWG^.DeSelector);
+        end;
+        pv:=drawings.GetCurrentROOT.ObjArray.iterate(ir);
+      until pv=nil;
+      ZCMsgCallBackInterface.TextMessage(sysutils.Format(rscmNEntitiesDeselected,[count]),TMWOHistoryOut);
+      if count>0 then
+        ZCMsgCallBackInterface.Do_GUIaction(drawings.GetCurrentDWG.wa,ZMsgID_GUIActionSelectionChanged);
+    end;
+end;
 
 procedure SelectOnlyThisEnts(PInstance:Pointer);
 var

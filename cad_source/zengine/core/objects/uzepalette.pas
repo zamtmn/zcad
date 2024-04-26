@@ -18,6 +18,7 @@
 
 unit uzepalette;
 {$INCLUDE zengineconfig.inc}
+{$ModeSwitch advancedrecords}
 interface
 
 type

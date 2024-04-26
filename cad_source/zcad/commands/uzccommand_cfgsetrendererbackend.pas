@@ -16,17 +16,25 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
 
-unit uzctnrvectorpgdbaseobjects;
-{$Mode delphi}{$H+}
+unit uzccommand_cfgSetRendererBackEnd;
+{$INCLUDE zengineconfig.inc}
 
 interface
-uses uzbtypes,gzctnrVectorPData;
-type
-{Export+}
-TZctnrVectorPGDBaseObjects=object(GZVectorPData{-}<PGDBaseObject>{//})
-                              end;
-PGDBOpenArrayOfPObjects=^TZctnrVectorPGDBaseObjects;
-{Export-}
+uses
+ uzcLog,
+ uzbpaths,uzccommandsabstract,uzccommandsimpl,uzglbackendmanager;
+
 implementation
+function cfgSetRendererBackEnd_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 begin
+  SetCurrentBackEnd(operands);
+  result:=cmd_ok;
+end;
+
+
+initialization
+  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
+  CreateZCADCommand(@cfgSetRendererBackEnd_com,'cfgSetRendererBackEnd',0,0);
+finalization
+  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
 end.

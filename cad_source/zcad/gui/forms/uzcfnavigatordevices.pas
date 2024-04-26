@@ -486,24 +486,26 @@ var
   pnd:PTNodeData;
   s:string;
 begin
-  pnd := Sender.GetNodeData(Node);
-  if assigned(pnd) then begin
-    if pnd^.Ident.pent<>nil then
-      begin
-       CurrentSel:=pnd^;
-       if (LastAutoselectedEnt<>pnd^.Ident.pent)and( not pnd^.Ident.pent^.Selected) then begin
-         s:='SelectObjectByAddres('+inttostr(PtrUInt(pnd^.Ident.pent))+')';
-         //commandmanager.executecommandsilent(@s[1],drawings.GetCurrentDWG,drawings.GetCurrentOGLWParam);
-         Application.QueueAsyncCall(AsyncRunCommand,PtrInt(@s[1]));
-         pointer(s):=nil;
-         LastAutoselectedEnt:=pnd^.Ident.pent;
-       end else begin
-         //if not LastAutoselectedEnt^.Selected then
-         //  LastAutoselectedEnt:=nil;
-       end;
-      end else
-        CurrentSel.Ident.pent:=nil;
-  end
+  if Sender.Focused then begin
+    pnd := Sender.GetNodeData(Node);
+    if assigned(pnd) then begin
+      if pnd^.Ident.pent<>nil then
+        begin
+         CurrentSel:=pnd^;
+         if (LastAutoselectedEnt<>pnd^.Ident.pent)and( not pnd^.Ident.pent^.Selected) then begin
+           s:='SelectObjectByAddres('+inttostr(PtrUInt(pnd^.Ident.pent))+')';
+           //commandmanager.executecommandsilent(@s[1],drawings.GetCurrentDWG,drawings.GetCurrentOGLWParam);
+           Application.QueueAsyncCall(AsyncRunCommand,PtrInt(@s[1]));
+           pointer(s):=nil;
+           LastAutoselectedEnt:=pnd^.Ident.pent;
+         end else begin
+           //if not LastAutoselectedEnt^.Selected then
+           //  LastAutoselectedEnt:=nil;
+         end;
+        end else
+          CurrentSel.Ident.pent:=nil;
+    end
+  end;
 end;
 function TNavigatorDevices.GetPartsCount(const parts:string):integer;
 begin

@@ -17,6 +17,7 @@
 }
 
 unit UGDBOpenArrayOfPV;
+{$Mode delphi}{$H+}
 {$INCLUDE zengineconfig.inc}
 interface
 uses uzegeometrytypes,uzgldrawcontext,uzedrawingdef,uzeentity,uzecamera,

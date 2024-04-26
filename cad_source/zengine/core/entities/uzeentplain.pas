@@ -17,6 +17,7 @@
 }
 
 unit uzeentplain;
+{$Mode delphi}{$H+}
 {$INCLUDE zengineconfig.inc}
 
 interface

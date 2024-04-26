@@ -17,6 +17,7 @@
 }
 
 unit uzedrawingsimple;
+{$Mode delphi}{$H+}
 {$INCLUDE zengineconfig.inc}
 interface
 uses uzedrawingdef,uzeblockdefsfactory,uzestylesdim,

@@ -212,14 +212,14 @@ begin
            if isobjtype then
            begin
                 if ((oid=GDBBlockInsertID)or(oid=GDBDeviceID))and(SelSimParams.Blocks.SameName) then
-                if not bnames.findstring(uppercase(PGDBObjBlockInsert(pobj)^.Name),true) then
+                if not bnames.findstring(uppercase(PGDBObjBlockInsert(pobj)^.Name),true)>=0 then
                    isobjtype:=false;
 
                 if ((oid=GDBTextID)or(oid=GDBMTextID))and(SelSimParams.Texts.SameContent) then
-                if not textcontents.findstring(uppercase(PGDBObjText(pobj)^.Content),true) then
+                if not textcontents.findstring(uppercase(PGDBObjText(pobj)^.Content),true)>=0 then
                    isobjtype:=false;
                 if ((oid=GDBTextID)or(oid=GDBMTextID))and(SelSimParams.Texts.SameContent) then
-                if not textremplates.findstring(uppercase(PGDBObjText(pobj)^.Template),true) then
+                if not textremplates.findstring(uppercase(PGDBObjText(pobj)^.Template),true)>=0 then
                    isobjtype:=false;
 
            end;

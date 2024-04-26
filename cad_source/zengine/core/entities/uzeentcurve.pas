@@ -17,6 +17,7 @@
 }
 
 unit uzeentcurve;
+{$Mode delphi}{$H+}
 {$INCLUDE zengineconfig.inc}
 
 interface

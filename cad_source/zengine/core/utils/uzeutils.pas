@@ -18,6 +18,7 @@
 
 {**Модуль утилит движка}
 unit uzeutils;
+{$Mode delphi}{$H+}
 {$INCLUDE zengineconfig.inc}
 interface
 uses

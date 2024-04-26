@@ -29,8 +29,8 @@ GC_NameGroupTemplate:='@@[GC_HeadDevice].@@[GC_HDGroup]';
 realnamedev:='Розетка ОП54 1Р 3F';
 Power:=0.06;
 CosPHI:=0.8;
-Voltage:=_AC_220V_50Hz;
-Phase:=_A;
+Voltage:=_AC_380V_50Hz;
+Phase:=_ABC;
 
 INFOPERSONALUSE_TextTemplate:='';
 

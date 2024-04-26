@@ -17,6 +17,7 @@
 }
 
 unit uzelongprocesssupport;
+{$Mode delphi}{$H+)
 {$INCLUDE zengineconfig.inc}
 
 
@@ -98,22 +99,25 @@ procedure TZELongProcessSupport.DoStartLongProcess(plpi:PTLPInfo;LPHandle:TLPSHa
 var
   i:integer;
 begin
-  for i:=0 to OnLPStartProcVector.size-1 do
-   OnLPStartProcVector[i](LPHandle,plpi^.LPTotal,plpi^.LPName);
+  if OnLPStartProcVector.size>0 then
+    for i:=0 to OnLPStartProcVector.size-1 do
+      OnLPStartProcVector[i](LPHandle,plpi^.LPTotal,plpi^.LPName);
 end;
 procedure TZELongProcessSupport.DoProgressLongProcess(plpi:PTLPInfo;LPHandle:TLPSHandle;Current:TLPSCounter);
 var
   i:integer;
 begin
-  for i:=0 to OnLPProgressProcVector.size-1 do
-   OnLPProgressProcVector[i](LPHandle,Current);
+  if OnLPProgressProcVector.size>0 then
+    for i:=0 to OnLPProgressProcVector.size-1 do
+      OnLPProgressProcVector[i](LPHandle,Current);
 end;
 procedure TZELongProcessSupport.DoEndLongProcess(plpi:PTLPInfo;LPHandle:TLPSHandle);
 var
   i:integer;
 begin
-  for i:=0 to OnLPEndProcVector.size-1 do
-   OnLPEndProcVector[i](LPHandle,plpi^.LPTime);
+  if OnLPProgressProcVector.size>0 then
+    for i:=0 to OnLPEndProcVector.size-1 do
+      OnLPEndProcVector[i](LPHandle,plpi^.LPTime);
 end;
 function TZELongProcessSupport.StartLongProcess(LPName:TLPName;Context:pointer;Total:TLPSCounter):TLPSHandle;
 var

@@ -17,6 +17,7 @@
 }
 
 unit uzeentmtext;
+{$Mode delphi}{$H+}
 {$INCLUDE zengineconfig.inc}
 
 interface

@@ -37,6 +37,7 @@ Phase:=_A;
 
 INFOPERSONALUSE_TextTemplate:='@@[GC_HeadDevice].@@[GC_HDGroup]';
 
+ANALYSISEM_exporttoxlsx:=false;
 
 VSPECIFICATION_Position:='';
 VSPECIFICATION_Name:='Выключатель накладной ОП54 1Р';

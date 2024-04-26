@@ -967,7 +967,7 @@ var
 
       //выставляем клону точку вставки, ориентируем по осям, вращаем
       pnevdev^.Local.P_insert:=currentcoord;
-      //pnevdev.Local.Basis.oz:=xy_Z_Vertex;
+      pnevdev^.scale:=createvertex(1,1,1);
       //pnevdev.Local.Basis.ox:=_X_yzVertex;
       //pnevdev.Local.Basis.oy:=x_Y_zVertex;
       //pnevdev.rotate:=0;

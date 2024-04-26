@@ -17,6 +17,7 @@
 }
 
 unit uzeentcircle;
+{$Mode delphi}{$H+}
 {$INCLUDE zengineconfig.inc}
 interface
 uses

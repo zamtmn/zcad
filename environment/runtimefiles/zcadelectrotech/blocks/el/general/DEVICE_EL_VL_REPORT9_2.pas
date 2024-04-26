@@ -8,10 +8,10 @@ usescopy objname;
 
 var
 
-T1:String;(*'Помещение'*)
-T2:String;(*'Наименование'*)
-T3:String;(*'Площадь'*)
-T4:String;(*'Категория'*)
+VL_Room:String;(*'Помещение'*)
+VL_Name:String;(*'Наименование'*)
+VL_Square:String;(*'Площадь'*)
+VL_Category:String;(*'Категория'*)
 
 implementation
 
@@ -25,10 +25,10 @@ NMO_Name:='ЭК0';
 NMO_BaseName:='ЭК';
 NMO_Suffix:='??';
 
-T1:='??';
-T2:='??';
-T3:='??';
-T4:='??';
+VL_Room:='??';
+VL_Name:='??';
+VL_Square:='??';
+VL_Category:='??';
 
 
 end.

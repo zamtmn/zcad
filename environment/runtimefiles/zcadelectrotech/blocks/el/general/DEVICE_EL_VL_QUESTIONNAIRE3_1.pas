@@ -8,11 +8,11 @@ usescopy objname;
 
 var
 
-T1:String;(*'Ном.напряжение'*)
-T2:String;(*'Ток сборных шин'*)
-T3:String;(*'Сечение сборных шин'*)
-T4:String;(*'Сечение нулевых шин'*)
-T5:String;(*'Наличие АВР'*)
+VL_Un:String;(*'Ном.напряжение'*)
+VL_In:String;(*'Ток сборных шин'*)
+VL_BusbarL:String;(*'Сечение сборных шин'*)
+VL_BusbarN:String;(*'Сечение нулевых шин'*)
+VL_AVR:String;(*'Наличие АВР'*)
 
 implementation
 
@@ -26,10 +26,10 @@ NMO_Name:='ОН.0';
 NMO_BaseName:='ОН.';
 NMO_Suffix:='??';
 
-T1:='400';
-T2:='?';
-T3:='?';
-T4:='?';
-T5:='?';
+VL_Un:='400';
+VL_In:='?';
+VL_BusbarL:='?';
+VL_BusbarN:='?';
+VL_AVR:='?';
 
 end.

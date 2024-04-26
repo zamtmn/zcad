@@ -8,9 +8,9 @@ usescopy objname;
 
 var
 
-T1:String;(*'Наименование точки'*)
-T2:String;(*'Координата X'*)
-T3:String;(*'Координата Y'*)
+VL_Point:String;(*'Наименование точки'*)
+VL_PositionX:String;(*'Координата X'*)
+VL_PositionY:String;(*'Координата Y'*)
 
 implementation
 
@@ -24,8 +24,8 @@ NMO_Name:='ВГ0';
 NMO_BaseName:='ВГ';
 NMO_Suffix:='??';
 
-T1:='??';
-T2:='??';
-T3:='??';
+VL_Point:='??';
+VL_PositionX:='??';
+VL_PositionY:='??';
 
 end.

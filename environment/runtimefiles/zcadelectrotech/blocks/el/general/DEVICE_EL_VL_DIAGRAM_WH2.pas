@@ -8,9 +8,9 @@ usescopy objname;
 
 var
 
-T1:String;(*'Обозначение'*)
-T2:String;(*'Марка'*)
-T3:String;(*'Параметры'*)
+VL_Mark:String;(*'Обозначение'*)
+VL_Type:String;(*'Марка'*)
+VL_Data:String;(*'Параметры'*)
 
 implementation
 
@@ -25,8 +25,8 @@ NMO_BaseName:='А';
 NMO_Suffix:='??';
 NMO_Affix:='.6';
 
-T1:='??';
-T2:='??';
-T3:='??';
+VL_Mark:='??';
+VL_Type:='??';
+VL_Data:='??';
 
 end.

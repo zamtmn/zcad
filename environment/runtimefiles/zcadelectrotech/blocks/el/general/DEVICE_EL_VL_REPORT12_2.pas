@@ -8,17 +8,17 @@ usescopy objname;
 
 var
 
-T1:String;(*'Обозначение'*)
-T2:String;(*'Начало'*)
-T3:String;(*'Конец'*)
-T4:String;(*'Тип прокладки'*)
-T5:String;(*'Марка'*)
-T6:String;(*'Кол. и сечение жил'*)
-T7:String;(*'Длина'*)
-T8:String;(*'Мощность'*)
-T9:String;(*'Ток'*)
-T10:String;(*'Аппарат'*)
-T11:String;(*'Трансформатор'*)
+VL_Name:String;(*'Обозначение'*)
+VL_Start:String;(*'Начало'*)
+VL_Finish:String;(*'Конец'*)
+VL_Track:String;(*'Тип прокладки'*)
+VL_Mark:String;(*'Марка'*)
+VL_Number:String;(*'Кол. и сечение жил'*)
+VL_Length:String;(*'Длина'*)
+VL_Power:String;(*'Мощность'*)
+VL_Current:String;(*'Ток'*)
+VL_Switch:String;(*'Аппарат'*)
+VL_Meter:String;(*'Трансформатор'*)
 
 implementation
 
@@ -32,16 +32,16 @@ NMO_Name:='КЖ0';
 NMO_BaseName:='КЖ';
 NMO_Suffix:='??';
 
-T1:='??';
-T2:='??';
-T3:='??';
-T4:='??';
-T5:='??';
-T6:='??';
-T7:='??';
-T8:='??';
-T9:='??';
-T10:='??';
-T11:='??';
+VL_Name:='??';
+VL_Start:='??';
+VL_Finish:='??';
+VL_Track:='??';
+VL_Mark:='??';
+VL_Number:='??';
+VL_Length:='??';
+VL_Power:='??';
+VL_Current:='??';
+VL_Switch:='??';
+VL_Meter:='??';
 
 end.

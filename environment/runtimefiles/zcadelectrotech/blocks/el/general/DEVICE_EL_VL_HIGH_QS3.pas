@@ -8,11 +8,10 @@ usescopy objname;
 
 var
 
-T1:String;(*'Обозначение'*)
-T2:String;(*'Марка'*)
-T3:String;(*'Параметры'*)
-
-T11:Integer;(*'Схема'*)
+VL_Mark:String;(*'Обозначение'*)
+VL_Type:String;(*'Марка'*)
+VL_Data:String;(*'Параметры'*)
+VL_Busbar:Integer;(*'Схема'*)
 
 implementation
 
@@ -27,10 +26,9 @@ NMO_BaseName:='В';
 NMO_Suffix:='??';
 NMO_Affix:='.4';
 
-T1:='??';
-T2:='??';
-T3:='??';
-
-T11:=1;
+VL_Mark:='??';
+VL_Type:='??';
+VL_Data:='??';
+VL_Busbar:=1;
 
 end.

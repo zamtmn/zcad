@@ -8,9 +8,9 @@ usescopy objname;
 
 var
 
-T1:String;(*'Лист'*)
-T2:String;(*'Наименование'*)
-T3:String;(*'Примечание'*)
+VL_Sheet:String;(*'Лист'*)
+VL_Name:String;(*'Наименование'*)
+VL_Note:String;(*'Примечание'*)
 
 implementation
 
@@ -24,8 +24,8 @@ NMO_Name:='ВЧ0';
 NMO_BaseName:='ВЧ';
 NMO_Suffix:='??';
 
-T1:='??';
-T2:='??';
-T3:='??';
+VL_Sheet:='??';
+VL_Name:='??';
+VL_Note:='??';
 
 end.

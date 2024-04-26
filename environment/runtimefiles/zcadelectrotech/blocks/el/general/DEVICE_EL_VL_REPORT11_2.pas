@@ -8,27 +8,22 @@ usescopy objname;
 
 var
 
-T1:String;(*'Фидер'*)
-
-T2:String;(*'Маркировка'*)
-T3:String;(*'Тип кабеля'*)
-T4:String;(*'Кол. жил, сечение'*)
-T5:String;(*'Длина'*)
-
-T6:String;(*'Спаренные кабеля'*)
-T7:String;(*'Групповая прокладка'*)
-T8:String;(*'Коэф. прокладка'*)
-T9:String;(*'Коэф. температура'*)
-
-T10:String;(*'Допустимый ток'*)
-T11:String;(*'Ток прокладки'*)
-T12:String;(*'Ток наибольшей фазы'*)
-
-T13:String;(*'Кратность аппарата'*)
-T14:String;(*'Ток по кратности'*)
-T15:String;(*'Падение напряжения'*)
-
-T16:String;(*'Электрощит'*)
+VL_Feeder:String;(*'Фидер'*)
+VL_Mark:String;(*'Маркировка'*)
+VL_Cable:String;(*'Тип кабеля'*)
+VL_Section:String;(*'Кол. жил, сечение'*)
+VL_Length:String;(*'Длина'*)
+VL_Paired:String;(*'Спаренные кабеля'*)
+VL_Track:String;(*'Групповая прокладка'*)
+VL_K1:String;(*'Коэф. прокладка'*)
+VL_K2:String;(*'Коэф. температура'*)
+VL_Inom:String;(*'Допустимый ток'*)
+VL_Imin:String;(*'Ток прокладки'*)
+VL_Imax:String;(*'Ток наибольшей фазы'*)
+VL_K3:String;(*'Кратность аппарата'*)
+VL_Current:String;(*'Ток по кратности'*)
+VL_Voltage:String;(*'Падение напряжения'*)
+VL_Panel:String;(*'Электрощит'*)
 
 implementation
 
@@ -42,26 +37,21 @@ NMO_Name:='ВК0';
 NMO_BaseName:='ВК';
 NMO_Suffix:='??';
 
-T1:='??';
-
-T2:='??';
-T3:='??';
-T4:='??';
-T5:='??';
-
-T6:='??';
-T7:='??';
-T8:='??';
-T9:='??';
-
-T10:='??';
-T11:='??';
-T12:='??';
-
-T13:='??';
-T14:='??';
-T15:='??';
-
-T16:='??';
+VL_Feeder:='??';
+VL_Mark:='??';
+VL_Cable:='??';
+VL_Section:='??';
+VL_Length:='??';
+VL_Paired:='??';
+VL_Track:='??';
+VL_K1:='??';
+VL_K2:='??';
+VL_Inom:='??';
+VL_Imin:='??';
+VL_Imax:='??';
+VL_K3:='??';
+VL_Current:='??';
+VL_Voltage:='??';
+VL_Panel:='??';
 
 end.

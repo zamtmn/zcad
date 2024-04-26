@@ -8,24 +8,24 @@ usescopy objname;
 
 var
 
-T3:String;(*'Позиция 1'*)
-T4:String;(*'Позиция 2'*)
-T5:String;(*'Позиция 3'*)
-T6:String;(*'Позиция 4'*)
-T7:String;(*'Позиция 5'*)
-T8:String;(*'Позиция 6'*)
-T9:String;(*'Позиция 7'*)
-T10:String;(*'Позиция 8'*)
-T11:String;(*'Позиция 9'*)
-T12:String;(*'Позиция 10'*)
-T13:String;(*'Позиция 11'*)
-T14:String;(*'Позиция 12'*)
-T15:String;(*'Позиция 13'*)
-T16:String;(*'Позиция 14'*)
-T17:String;(*'Позиция 15'*)
-T18:String;(*'Позиция 16'*)
-T19:String;(*'Позиция 17'*)
-T20:String;(*'Позиция 18'*)
+VL_Detail_1:String;(*'Позиция 1'*)
+VL_Detail_2:String;(*'Позиция 2'*)
+VL_Detail_3:String;(*'Позиция 3'*)
+VL_Detail_4:String;(*'Позиция 4'*)
+VL_Detail_5:String;(*'Позиция 5'*)
+VL_Detail_6:String;(*'Позиция 6'*)
+VL_Detail_7:String;(*'Позиция 7'*)
+VL_Detail_8:String;(*'Позиция 8'*)
+VL_Detail_9:String;(*'Позиция 9'*)
+VL_Detail_10:String;(*'Позиция 10'*)
+VL_Detail_11:String;(*'Позиция 11'*)
+VL_Detail_12:String;(*'Позиция 12'*)
+VL_Detail_13:String;(*'Позиция 13'*)
+VL_Detail_14:String;(*'Позиция 14'*)
+VL_Detail_15:String;(*'Позиция 15'*)
+VL_Detail_16:String;(*'Позиция 16'*)
+VL_Detail_17:String;(*'Позиция 17'*)
+VL_Detail_18:String;(*'Позиция 18'*)
 
 implementation
 
@@ -39,23 +39,23 @@ NMO_Name:='ВА0';
 NMO_BaseName:='ВА';
 NMO_Suffix:='??';
 
-T3:='??';
-T4:='??';
-T5:='??';
-T6:='??';
-T7:='??';
-T8:='??';
-T9:='??';
-T10:='??';
-T11:='??';
-T12:='??';
-T13:='??';
-T14:='??';
-T15:='??';
-T16:='??';
-T17:='??';
-T18:='??';
-T19:='??';
-T20:='??';
+VL_Detail_1:='??';
+VL_Detail_2:='??';
+VL_Detail_3:='??';
+VL_Detail_4:='??';
+VL_Detail_5:='??';
+VL_Detail_6:='??';
+VL_Detail_7:='??';
+VL_Detail_8:='??';
+VL_Detail_9:='??';
+VL_Detail_10:='??';
+VL_Detail_11:='??';
+VL_Detail_12:='??';
+VL_Detail_13:='??';
+VL_Detail_14:='??';
+VL_Detail_15:='??';
+VL_Detail_16:='??';
+VL_Detail_17:='??';
+VL_Detail_18:='??';
 
 end.

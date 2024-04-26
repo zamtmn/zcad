@@ -8,7 +8,7 @@ usescopy objname;
 
 var
 
-T1:String;(*'Тип'*)
+VL_Mark:String;(*'Тип'*)
 
 implementation
 
@@ -22,6 +22,6 @@ NMO_Name:='ТМ0';
 NMO_BaseName:='ТМ';
 NMO_Suffix:='??';
 
-T1:='??';
+VL_Mark:='??';
 
 end.

@@ -8,8 +8,8 @@ usescopy objname;
 
 var
 
-T1:String;(*'Клемник'*)
-T2:String;(*'Расшифровка'*)
+VL_Klemnik:String;(*'Клемник'*)
+VL_Mark:String;(*'Расшифровка'*)
 
 implementation
 
@@ -24,6 +24,7 @@ NMO_BaseName:='X';
 NMO_Suffix:='??';
 NMO_Affix:='';
 
-T1:='';
+VL_Klemnik:='';
+VL_Mark:='';
 
 end.

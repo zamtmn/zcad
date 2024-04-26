@@ -8,16 +8,16 @@ usescopy objname;
 
 var
 
-T1:String;(*'Организация'*)
-T7:String;(*'Страница'*)
-T8:String;(*'Страниц'*)
-T9:String;(*'Дата'*)
+VL_Company:String;(*'Организация'*)
+VL_Sheet:String;(*'Страница'*)
+VL_Sheets:String;(*'Страниц'*)
+VL_Date:String;(*'Дата'*)
 
-T12:String;(*'Фамилия 1'*)
-T14:String;(*'Фамилия 2'*)
-T16:String;(*'Фамилия 3'*)
-T18:String;(*'Фамилия 4'*)
-T20:String;(*'Фамилия 5'*)
+VL_Name1:String;(*'Фамилия 1'*)
+VL_Name2:String;(*'Фамилия 2'*)
+VL_Name3:String;(*'Фамилия 3'*)
+VL_Name4:String;(*'Фамилия 4'*)
+VL_Name5:String;(*'Фамилия 5'*)
 
 implementation
 
@@ -31,13 +31,15 @@ NMO_Name:='ШТ0';
 NMO_BaseName:='ШТ';
 NMO_Suffix:='??';
 
-T1:='??';
-T7:='??';
-T9:='??';
+VL_Company:='??';
+VL_Sheet:='??';
+VL_Sheets:='??';
+VL_Date:='??';
 
-T12:='';
-T14:='';
-T18:='';
-T20:='';
+VL_Name1:='??';
+VL_Name2:='??';
+VL_Name3:='??';
+VL_Name4:='??';
+VL_Name5:='??';
 
 end.

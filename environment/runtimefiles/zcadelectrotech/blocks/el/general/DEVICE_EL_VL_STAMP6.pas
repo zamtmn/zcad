@@ -8,7 +8,7 @@ usescopy objname;
 
 var
 
-T16:String;(*'Гип'*)
+VL_Name3:String;(*'Гип'*)
 
 implementation
 
@@ -22,6 +22,6 @@ NMO_Name:='ШТ0';
 NMO_BaseName:='ШТ';
 NMO_Suffix:='??';
 
-T16:='??';
+VL_Name3:='??';
 
 end.

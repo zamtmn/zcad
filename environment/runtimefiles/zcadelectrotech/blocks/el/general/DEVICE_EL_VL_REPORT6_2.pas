@@ -8,7 +8,7 @@ usescopy objname;
 
 var
 
-Reference:String;(*'Наименование'*)
+VL_Name:String;(*'Наименование'*)
 
 implementation
 
@@ -22,6 +22,6 @@ NMO_Name:='УО0';
 NMO_BaseName:='УО';
 NMO_Suffix:='??';
 
-Reference:='??';
+VL_Name:='??';
 
 end.

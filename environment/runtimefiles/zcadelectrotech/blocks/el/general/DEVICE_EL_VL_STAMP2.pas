@@ -8,8 +8,8 @@ usescopy objname;
 
 var
 
-T2:String;(*'Шифр'*)
-T7:String;(*'Страница'*)
+VL_Code:String;(*'Шифр'*)
+VL_Sheet:String;(*'Страница'*)
 
 implementation
 
@@ -23,7 +23,7 @@ NMO_Name:='ШТ0';
 NMO_BaseName:='ШТ';
 NMO_Suffix:='??';
 
-T2:='??';
-T7:='??';
+VL_Code:='??';
+VL_Sheet:='??';
 
 end.

@@ -8,13 +8,13 @@ usescopy objname;
 
 var
 
-T1:String;(*'Позция'*)
-T2:String;(*'ЛСР'*)
-T3:String;(*'Наименование работ'*)
-T4:String;(*'Ед.изм.'*)
-T5:String;(*'Кол-во'*)
-T6:String;(*'Чертежи'*)
-T7:String;(*'Группировка'*)
+VL_Position:String;(*'Позция'*)
+VL_Number:String;(*'ЛСР'*)
+VL_Name:String;(*'Наименование работ'*)
+VL_Units:String;(*'Ед.изм.'*)
+VL_Quantity:String;(*'Кол-во'*)
+VL_Link:String;(*'Чертежи'*)
+VL_Grouping:String;(*'Группировка'*)
 
 implementation
 
@@ -28,12 +28,12 @@ NMO_Name:='ВР0';
 NMO_BaseName:='ВР';
 NMO_Suffix:='??';
 
-T1:='??';
-T2:='??';
-T3:='??';
-T4:='??';
-T5:='??';
-T6:='??';
-T7:='??';
+VL_Position:='??';
+VL_Number:='??';
+VL_Name:='??';
+VL_Units:='??';
+VL_Quantity:='??';
+VL_Link:='??';
+VL_Grouping:='??';
 
 end.

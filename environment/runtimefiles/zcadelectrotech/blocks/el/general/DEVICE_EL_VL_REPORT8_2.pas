@@ -8,12 +8,12 @@ usescopy objname;
 
 var
 
-T1:String;(*'Помещение'*)
-T2:String;(*'Освещенность'*)
-T3:String;(*'Светильник'*)
-T4:String;(*'Мощность'*)
-T5:String;(*'Количество'*)
-T6:String;(*'Высота'*)
+VL_Room:String;(*'Помещение'*)
+VL_Light:String;(*'Освещенность'*)
+VL_Lamp:String;(*'Светильник'*)
+VL_Power:String;(*'Мощность'*)
+VL_Quantity:String;(*'Количество'*)
+VL_Height:String;(*'Высота'*)
 
 implementation
 
@@ -27,11 +27,11 @@ NMO_Name:='ВС0';
 NMO_BaseName:='ВС';
 NMO_Suffix:='??';
 
-T1:='??';
-T2:='??';
-T3:='??';
-T4:='??';
-T5:='??';
-T6:='??';
+VL_Room:='??';
+VL_Light:='??';
+VL_Lamp:='??';
+VL_Power:='??';
+VL_Quantity:='??';
+VL_Height:='??';
 
 end.

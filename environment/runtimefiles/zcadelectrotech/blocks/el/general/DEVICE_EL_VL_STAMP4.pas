@@ -8,26 +8,26 @@ usescopy objname;
 
 var
 
-T1:String;(*'Организация'*)
-T2:String;(*'Шифр'*)
-T3:String;(*'Проект'*)
-T4:String;(*'Раздел'*)
-T5:String;(*'Чертеж'*)
-T6:String;(*'Стадия'*)
-T7:String;(*'Страница'*)
-T8:String;(*'Страниц'*)
-T9:String;(*'Дата'*)
+VL_Company:String;(*'Организация'*)
+VL_Code:String;(*'Шифр'*)
+VL_Project:String;(*'Проект'*)
+VL_Chapter:String;(*'Раздел'*)
+VL_Plan:String;(*'Чертеж'*)
+VL_Stage:String;(*'Стадия'*)
+VL_Sheet:String;(*'Страница'*)
+VL_Sheets:String;(*'Страниц'*)
+VL_Date:String;(*'Дата'*)
 
-T11:String;(*'Специалист 1'*)
-T12:String;(*'Фамилия 1'*)
-T13:String;(*'Специалист 2'*)
-T14:String;(*'Фамилия 2'*)
-T15:String;(*'Специалист 3'*)
-T16:String;(*'Фамилия 3'*)
-T17:String;(*'Специалист 4'*)
-T18:String;(*'Фамилия 4'*)
-T19:String;(*'Специалист 5'*)
-T20:String;(*'Фамилия 5'*)
+VL_Worker1:String;(*'Специалист 1'*)
+VL_Name1:String;(*'Фамилия 1'*)
+VL_Worker2:String;(*'Специалист 2'*)
+VL_Name2:String;(*'Фамилия 2'*)
+VL_Worker3:String;(*'Специалист 3'*)
+VL_Name3:String;(*'Фамилия 3'*)
+VL_Worker4:String;(*'Специалист 4'*)
+VL_Name4:String;(*'Фамилия 4'*)
+VL_Worker5:String;(*'Специалист 5'*)
+VL_Name5:String;(*'Фамилия 5'*)
 
 implementation
 
@@ -41,22 +41,25 @@ NMO_Name:='ШТ0';
 NMO_BaseName:='ШТ';
 NMO_Suffix:='??';
 
-T1:='??';
-T2:='??';
-T3:='??';
-T4:='??';
-T6:='??';
-T7:='??';
-T9:='??';
+VL_Company:='??';
+VL_Code:='??';
+VL_Project:='??';
+VL_Chapter:='??';
+VL_Plan:='??';
+VL_Stage:='??';
+VL_Sheet:='??';
+VL_Sheets:='??';
+VL_Date:='??';
 
-T11:='';
-T12:='';
-T13:='';
-T14:='';
-T15:='';
-T17:='';
-T18:='';
-T19:='';
-T20:='';
+VL_Worker1:='??';
+VL_Name1:='??';
+VL_Worker2:='??';
+VL_Name2:='??';
+VL_Worker3:='??';
+VL_Name3:='??';
+VL_Worker4:='??';
+VL_Name4:='??';
+VL_Worker5:='??';
+VL_Name5:='??';
 
 end.

@@ -8,10 +8,6 @@ usescopy objname;
 usescopy objgroup;
 usescopy addtocable;
 
-var
-
-T1:String;(*'Питающая фаза'*)
-
 implementation
 
 begin

@@ -8,8 +8,8 @@ usescopy objname;
 
 var
 
-T1:String;(*'Ном. напряжение'*)
-T2:String;(*'Ток сборных шин'*)
+VL_Un:String;(*'Ном. напряжение'*)
+VL_In:String;(*'Ток сборных шин'*)
 
 implementation
 
@@ -23,7 +23,7 @@ NMO_Name:='ОВ.0';
 NMO_BaseName:='ОВ.';
 NMO_Suffix:='??';
 
-T1:='6/10';
-T2:='630/1000';
+VL_Un:='?';
+VL_In:='?';
 
 end.

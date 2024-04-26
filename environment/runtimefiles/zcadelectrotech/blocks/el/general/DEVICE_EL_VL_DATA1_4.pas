@@ -8,7 +8,7 @@ usescopy objname;
 
 var
 
-T4:String;(*'Ед.измерения'*)
+VL_Units:String;(*'Ед.измерения'*)
 
 implementation
 
@@ -22,6 +22,6 @@ NMO_Name:='ДН0';
 NMO_BaseName:='ДН';
 NMO_Suffix:='??';
 
-T4:='??';
+VL_Units:='??';
 
 end.

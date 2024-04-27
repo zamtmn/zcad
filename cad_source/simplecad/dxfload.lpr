@@ -11,7 +11,7 @@ var
   drawing:TSimpleDrawing;
   dc:TDrawContext;
   zdc:TZDrawingContext;
-  filename:string='../../../cad/examples/test_dxf/sample_base.dxf';
+  filename:string='../../cad/examples/test_dxf/sample_base.dxf';
 begin
   drawing.init(nil);
   dc:=drawing.CreateDrawingRC;

@@ -56,7 +56,7 @@
     </Target>
     <SearchPaths>
       <IncludeFiles Value="$(ProjOutDir);..\zengine"/>
-      <OtherUnitFiles Value="..\zengine\containers;..\zengine;..\zengine\core;..\zengine\core\utils;..\zengine\core\objects;..\zengine\core\entities;..\zengine\zgl;..\zengine\geomlib;..\zengine\styles;..\zengine\zgl\drawers;..\zengine\misc;..\zengine\fileformats;..\zengine\fonts;..\zengine\core\drawings"/>
+      <OtherUnitFiles Value="..\zengine\containers;..\zengine;..\zengine\core;..\zengine\core\utils;..\zengine\core\objects;..\zengine\core\entities;..\zengine\zgl;..\zengine\geomlib;..\zengine\styles;..\zengine\zgl\drawers;..\zengine\misc;..\zengine\fileformats;..\zengine\fonts;..\zengine\core\drawings;..\other"/>
       <UnitOutputDirectory Value="lib\$(TargetCPU)-$(TargetOS)"/>
     </SearchPaths>
     <Linking>

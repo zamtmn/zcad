@@ -126,13 +126,13 @@ type TBeRoFileMappedStream=class(TStream)
        fMapHandle:{$ifdef unix}pointer{$else}THandle{$endif};
 {$endif}
        fAllocationGranularity:int64;
+       protected
        fMemory:pointer;
        fReadOnly:boolean;
        fCurrentViewOffset:int64;
        fCurrentViewSize:int64;
        fViewSize:int64;
        fViewMask:int64;
-       protected
        fPosition:int64;
        fSize:int64;
        private

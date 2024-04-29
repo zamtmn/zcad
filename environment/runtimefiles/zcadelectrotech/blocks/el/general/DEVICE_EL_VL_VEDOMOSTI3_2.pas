@@ -8,11 +8,11 @@ usescopy objname;
 
 var
 
-T1:String;(*'Изменение'*)
-T2:String;(*'Лист'*)
-T4:String;(*'Содержание'*)
-T5:String;(*'Код'*)
-T6:String;(*'Примечание'*)
+VL_Change:String;(*'Изменение'*)
+VL_Sheet:String;(*'Лист'*)
+VL_Name:String;(*'Содержание'*)
+VL_Number:String;(*'Код'*)
+VL_Note:String;(*'Примечание'*)
 
 implementation
 
@@ -26,10 +26,10 @@ NMO_Name:='СД0';
 NMO_BaseName:='СД';
 NMO_Suffix:='??';
 
-T1:='??';
-T2:='??';
-T4:='??';
-T5:='??';
-T6:='??';
+VL_Change:='??';
+VL_Sheet:='??';
+VL_Name:='??';
+VL_Number:='??';
+VL_Note:='??';
 
 end.

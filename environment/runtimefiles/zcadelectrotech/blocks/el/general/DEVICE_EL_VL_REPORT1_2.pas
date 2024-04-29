@@ -8,13 +8,13 @@ usescopy objname;
 
 var
 
-T1:String;(*'Обозначение'*)
-T2:String;(*'Начало'*)
-T3:String;(*'Конец'*)
-T4:String;(*'Тип прокладки'*)
-T5:String;(*'Марка'*)
-T6:String;(*'Кол. и сечение жил'*)
-T7:String;(*'Длина'*)
+VL_Name:String;(*'Обозначение'*)
+VL_Start:String;(*'Начало'*)
+VL_Finish:String;(*'Конец'*)
+VL_Track:String;(*'Тип прокладки'*)
+VL_Mark:String;(*'Марка'*)
+VL_Number:String;(*'Кол. и сечение жил'*)
+VL_Length:String;(*'Длина'*)
 
 implementation
 
@@ -28,12 +28,12 @@ NMO_Name:='КЖ0';
 NMO_BaseName:='КЖ';
 NMO_Suffix:='??';
 
-T1:='??';
-T2:='??';
-T3:='??';
-T4:='??';
-T5:='??';
-T6:='??';
-T7:='??';
+VL_Name:='??';
+VL_Start:='??';
+VL_Finish:='??';
+VL_Track:='??';
+VL_Mark:='??';
+VL_Number:='??';
+VL_Length:='??';
 
 end.

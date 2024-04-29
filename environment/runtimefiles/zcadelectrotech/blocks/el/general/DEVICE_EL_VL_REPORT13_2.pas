@@ -8,25 +8,22 @@ usescopy objname;
 
 var
 
-T1:String;(*'Фидер'*)
-
-T2:String;(*'Маркировка'*)
-T3:String;(*'Тип аппарата'*)
-T4:String;(*'Номинальный ток'*)
-T5:String;(*'Теп. расцепитель'*)
-T6:String;(*'Эл.маг. расцепитель'*)
-
-T7:String;(*'Наибольший ток'*)
-T8:String;(*'Коэф. запаса'*)
-T9:String;(*'Ток с учетом запаса'*)
-
-T10:String;(*'3-ф ток КЗ'*)
-T11:String;(*'Ударный ток КЗ'*)
-T12:String;(*'1-ф ток КЗ в начале'*)
-T13:String;(*'1-ф ток КЗ в конце'*)
-T14:String;(*'Порог теп.расцепителя'*)
-T15:String;(*'Порог эл.маг.расцепителя'*)
-T16:String;(*'Электрощит'*)
+VL_Feeder:String;(*'Фидер'*)
+VL_Mark:String;(*'Маркировка'*)
+VL_Device:String;(*'Тип аппарата'*)
+VL_Inom:String;(*'Номинальный ток'*)
+VL_Temp:String;(*'Теп. расцепитель'*)
+VL_ElMag:String;(*'Эл.маг. расцепитель'*)
+VL_Imax:String;(*'Наибольший ток'*)
+VL_ReserveK:String;(*'Коэф. запаса'*)
+VL_ReserveI:String;(*'Ток с учетом запаса'*)
+VL_Ikz3:String;(*'3-ф ток КЗ'*)
+VL_Iyd:String;(*'Ударный ток КЗ'*)
+VL_Ikz1:String;(*'1-ф ток КЗ в начале'*)
+VL_Ikz2:String;(*'1-ф ток КЗ в конце'*)
+VL_TempI:String;(*'Порог теп.расцепителя'*)
+VL_ElMagI:String;(*'Порог эл.маг.расцепителя'*)
+VL_Panel:String;(*'Электрощит'*)
 
 implementation
 
@@ -40,25 +37,21 @@ NMO_Name:='ВВ0';
 NMO_BaseName:='ВВ';
 NMO_Suffix:='??';
 
-T1:='??';
-
-T2:='??';
-T3:='??';
-T4:='??';
-T5:='??';
-T6:='??';
-
-T7:='??';
-T8:='??';
-T9:='??';
-
-T10:='??';
-T11:='??';
-T12:='??';
-T13:='??';
-T14:='??';
-T15:='??';
-
-T16:='??';
+VL_Feeder:='??';
+VL_Mark:='??';
+VL_Device:='??';
+VL_Inom:='??';
+VL_Temp:='??';
+VL_ElMag:='??';
+VL_Imax:='??';
+VL_ReserveK:='??';
+VL_ReserveI:='??';
+VL_Ikz3:='??';
+VL_Iyd:='??';
+VL_Ikz1:='??';
+VL_Ikz2:='??';
+VL_TempI:='??';
+VL_ElMagI:='??';
+VL_Panel:='??';
 
 end.

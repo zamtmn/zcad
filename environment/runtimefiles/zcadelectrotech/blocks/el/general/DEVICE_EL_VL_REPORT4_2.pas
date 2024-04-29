@@ -8,9 +8,9 @@ usescopy objname;
 
 var
 
-T1:String;(*'Позиция'*)
-T2:String;(*'Наименование'*)
-T3:String;(*'Количество'*)
+VL_Number:String;(*'Позиция'*)
+VL_Name:String;(*'Наименование'*)
+VL_Quantity:String;(*'Количество'*)
 
 implementation
 
@@ -24,8 +24,8 @@ NMO_Name:='ВУ0';
 NMO_BaseName:='ВУ';
 NMO_Suffix:='??';
 
-T1:='??';
-T2:='??';
-T3:='??';
+VL_Number:='??';
+VL_Name:='??';
+VL_Quantity:='??';
 
 end.

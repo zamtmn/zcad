@@ -8,7 +8,7 @@ usescopy objname;
 
 var
 
-T11:Integer;(*'Схема'*)
+VL_Busbar:Integer;(*'Схема'*)
 
 implementation
 
@@ -23,6 +23,6 @@ NMO_BaseName:='CN';
 NMO_Suffix:='??';
 NMO_Affix:='';
 
-T11:=1;
+VL_Busbar:=1;
 
 end.

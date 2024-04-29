@@ -8,10 +8,10 @@ usescopy objname;
 
 var
 
-T1:String;(*'Щит'*)
-T2:String;(*'Нагрузка'*)
-T3:String;(*'Расшифровка'*)
-T4:String;(*'Фаза'*)
+VL_PanelF:String;(*'Щит'*)
+VL_PanelK:String;(*'Нагрузка'*)
+VL_Name:String;(*'Расшифровка'*)
+VL_Phase:String;(*'Фаза'*)
 
 implementation
 
@@ -25,9 +25,9 @@ NMO_Name:='ВЭ0';
 NMO_BaseName:='ВЭ';
 NMO_Suffix:='??';
 
-T1:='??';
-T2:='??';
-T3:='??';
-T4:='??';
+VL_PanelF:='??';
+VL_PanelK:='??';
+VL_Name:='??';
+VL_Phase:='??';
 
 end.

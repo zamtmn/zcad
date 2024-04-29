@@ -8,20 +8,20 @@ usescopy objname;
 
 var
 
-T1:String;(*'Номер п/п'*)
-T2:String;(*'Обозначение'*)
-T3:String;(*'Наименование'*)
-T4:String;(*'Версия'*)
-T5:String;(*'Изменение'*)
-T6:String;(*'Примечание'*)
-T7:String;(*'Дата 1'*)
-T8:String;(*'Разработал'*)
-T9:String;(*'Проверил'*)
-T10:String;(*'ГИП'*)
-T11:String;(*'Утвердил'*)
-T12:String;(*'Дата 2'*)
-T13:String;(*'Лист'*)
-T14:String;(*'Листов'*)
+VL_Number:String;(*'Номер п/п'*)
+VL_Mark:String;(*'Обозначение'*)
+VL_Name:String;(*'Наименование'*)
+VL_Version:String;(*'Версия'*)
+VL_Change:String;(*'Изменение'*)
+VL_Note:String;(*'Примечание'*)
+VL_Date1:String;(*'Дата 1'*)
+VL_Name1:String;(*'Разработал'*)
+VL_Name2:String;(*'Проверил'*)
+VL_Name3:String;(*'ГИП'*)
+VL_Name4:String;(*'Утвердил'*)
+VL_Date2:String;(*'Дата 2'*)
+VL_Sheet:String;(*'Лист'*)
+VL_Sheets:String;(*'Листов'*)
 
 implementation
 
@@ -35,19 +35,19 @@ NMO_Name:='ИУЛ0';
 NMO_BaseName:='ИУЛ';
 NMO_Suffix:='??';
 
-T1:='1';
-T2:='??';
-T3:='??';
-T4:='1';
-T5:='??';
-T6:='??';
-T7:='??';
-T8:='??';
-T9:='??';
-T10:='??';
-T11:='??';
-T12:='??';
-T13:='1';
-T14:='1';
+VL_Number:='??';
+VL_Mark:='??';
+VL_Name:='??';
+VL_Version:='??';
+VL_Change:='??';
+VL_Note:='??';
+VL_Date1:='??';
+VL_Name1:='??';
+VL_Name2:='??';
+VL_Name3:='??';
+VL_Name4:='??';
+VL_Date2:='??';
+VL_Sheet:='??';
+VL_Sheets:='??';
 
 end.

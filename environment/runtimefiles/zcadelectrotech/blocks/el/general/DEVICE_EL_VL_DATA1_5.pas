@@ -8,7 +8,7 @@ usescopy objname;
 
 var
 
-T2:String;(*'Расшифровка'*)
+VL_Decod:String;(*'Расшифровка'*)
 
 implementation
 
@@ -22,6 +22,6 @@ NMO_Name:='ДН0';
 NMO_BaseName:='ДН';
 NMO_Suffix:='??';
 
-T2:='??';
+VL_Decod:='??';
 
 end.

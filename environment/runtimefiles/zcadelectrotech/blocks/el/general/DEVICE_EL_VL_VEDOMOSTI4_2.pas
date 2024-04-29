@@ -8,9 +8,9 @@ usescopy objname;
 
 var
 
-T3:String;(*'Шифр'*)
-T5:String;(*'Наименование'*)
-T6:String;(*'Примечание'*)
+VL_Mark:String;(*'Шифр'*)
+VL_Name:String;(*'Наименование'*)
+VL_Note:String;(*'Примечание'*)
 
 implementation
 
@@ -24,8 +24,8 @@ NMO_Name:='СД0';
 NMO_BaseName:='СД';
 NMO_Suffix:='??';
 
-T3:='??';
-T5:='??';
-T6:='??';
+VL_Mark:='??';
+VL_Name:='??';
+VL_Note:='??';
 
 end.

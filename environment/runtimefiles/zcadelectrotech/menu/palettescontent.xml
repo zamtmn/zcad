@@ -129,10 +129,8 @@
 	   <ZTreeCommand Command="Insert(EL_VL_LINE4_2)" Img='EL_VL_LINE4_2' Caption='Ограничитель перенапряжения'/>
       	</ZTreeNode>
       	<ZTreeNode Caption='Statements'>
-	   <ZTreeCommand Command="Insert(EL_VL_REPORT7_1)" Img='EL_VL_REPORT7_1_300' Caption='Ведомость нагрузок 1, заголовок'/>
-	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_REPORT7_2)" Img='DEVICE_EL_VL_REPORT7_2_300' Caption='Ведомость нагрузок 1, строка'/>
-	   <ZTreeCommand Command="Insert(EL_VL_REPORT16_1)" Img='EL_VL_REPORT16_1_300' Caption='Ведомость нагрузок 2, заголовок'/>
-	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_REPORT16_2)" Img='DEVICE_EL_VL_REPORT16_2_300' Caption='Ведомость нагрузок 2, строка'/>
+	   <ZTreeCommand Command="Insert(EL_VL_REPORT16_1)" Img='EL_VL_REPORT16_1_300' Caption='Ведомость нагрузок, заголовок'/>
+	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_REPORT16_2)" Img='DEVICE_EL_VL_REPORT16_2_300' Caption='Ведомость нагрузок, строка'/>
 	   <ZTreeCommand Command="Insert(EL_VL_REPORT1_1)" Img='EL_VL_REPORT1_1_300' Caption='Кабельный журнал, заголовок'/>
 	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_REPORT1_2)" Img='DEVICE_EL_VL_REPORT1_2_300' Caption='Кабельный журнал, строка'/>
 	   <ZTreeCommand Command="Insert(EL_VL_REPORT12_1)" Img='EL_VL_REPORT12_1_300' Caption='Кабельный журнал ТП, заголовок'/>
@@ -275,6 +273,7 @@
 	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_QUESTIONNAIRE3_2)" Img='DEVICE_EL_VL_QUESTIONNAIRE3_2_300' Caption='Опросник РУНН Фидер 1'/>
 	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_QUESTIONNAIRE3_3)" Img='DEVICE_EL_VL_QUESTIONNAIRE3_3_300' Caption='Опросник РУНН Фидер 2'/>
 	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_QUESTIONNAIRE3_4)" Img='DEVICE_EL_VL_QUESTIONNAIRE3_4_300' Caption='Опросник РУНН Фидер 3'/>
+
       	</ZTreeNode>
       	<ZTreeNode Caption='Calculations'>
 	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_DATA1_1)" Img='DEVICE_EL_VL_DATA1_1_300' Caption='Обозначение'/>

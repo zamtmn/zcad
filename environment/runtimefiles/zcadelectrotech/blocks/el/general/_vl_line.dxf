@@ -4301,7 +4301,7 @@ DSTP_XDATA
 1002
 {
 1000
-_TMPL1=@@[T16]
+_TMPL1=@@[VL_Current1]
 1000
 _OWNERHANDLE=0000000064
 1002
@@ -4363,7 +4363,7 @@ DSTP_XDATA
 1002
 {
 1000
-_TMPL1=@@[T17]
+_TMPL1=@@[VL_Feeder]
 1000
 _OWNERHANDLE=0000000064
 1002
@@ -4425,7 +4425,7 @@ DSTP_XDATA
 1002
 {
 1000
-_TMPL1=@@[T14]
+_TMPL1=@@[VL_Group]
 1000
 _OWNERHANDLE=0000000064
 1002
@@ -4483,7 +4483,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T27 
+LCExpression=VL_Cable1 
 1002
 }
   0
@@ -4521,7 +4521,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T27 
+LCExpression=VL_Cable1 
 1002
 }
   0
@@ -4559,7 +4559,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T23 or T24 or T27
+LCExpression=VL_Device1 or VL_Device2 or VL_Cable1
 1002
 }
   0
@@ -4597,7 +4597,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T23 or T24 or T27
+LCExpression=VL_Device1 or VL_Device2 or VL_Cable1
 1002
 }
   0
@@ -4635,7 +4635,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T23 or T24 or T27
+LCExpression=VL_Device1 or VL_Device2 or VL_Cable1
 1002
 }
   0
@@ -4673,7 +4673,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T23 or T24 or T27
+LCExpression=VL_Device1 or VL_Device2 or VL_Cable1
 1002
 }
   0
@@ -4707,7 +4707,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T23 or T24 or T27
+LCExpression=VL_Device1 or VL_Device2 or VL_Cable1
 1002
 }
   0
@@ -4741,7 +4741,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T27 
+LCExpression=VL_Cable1 
 1002
 }
   0
@@ -4775,7 +4775,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T27 
+LCExpression=VL_Cable1 
 1002
 }
   0
@@ -4813,7 +4813,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T31>0 and T31<6
+LCExpression=VL_View1>0 and VL_View1<6
 1002
 }
   0
@@ -4851,7 +4851,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T31>0 and T31<6
+LCExpression=VL_View1>0 and VL_View1<6
 1002
 }
   0
@@ -4891,7 +4891,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T27
+LCExpression=VL_Cable1
 1002
 }
   0
@@ -4931,7 +4931,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=Defpoints
 1000
-LCExpression=T23 or T24 or T27
+LCExpression=VL_Device1 or VL_Device2 or VL_Cable1
 1002
 }
   0
@@ -4971,7 +4971,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=Defpoints
 1000
-LCExpression=T23 or T24 or T27
+LCExpression=VL_Device1 or VL_Device2 or VL_Cable1
 1002
 }
   0
@@ -5011,7 +5011,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=Defpoints
 1000
-LCExpression=T23 or T24 or T27
+LCExpression=VL_Device1 or VL_Device2 or VL_Cable1
 1002
 }
   0
@@ -5051,7 +5051,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=Defpoints
 1000
-LCExpression=T23 or T24 or T27
+LCExpression=VL_Device1 or VL_Device2 or VL_Cable1
 1002
 }
   0
@@ -5091,7 +5091,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=Defpoints
 1000
-LCExpression=T23 or T24 or T27
+LCExpression=VL_Device1 or VL_Device2 or VL_Cable1
 1002
 }
   0
@@ -5131,7 +5131,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=Defpoints
 1000
-LCExpression=T23 or T24 or T27
+LCExpression=VL_Device1 or VL_Device2 or VL_Cable1
 1002
 }
   0
@@ -5171,7 +5171,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=Defpoints
 1000
-LCExpression=T23 or T24 or T27
+LCExpression=VL_Device1 or VL_Device2 or VL_Cable1
 1002
 }
   0
@@ -5209,7 +5209,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T23 or T24 or T27
+LCExpression=VL_Device1 or VL_Device2 or VL_Cable1
 1002
 }
   0
@@ -5247,7 +5247,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T31>2 and T31<6
+LCExpression=VL_View1>2 and VL_View1<6
 1002
 }
   0
@@ -5285,7 +5285,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T31>2 and T31<6
+LCExpression=VL_View1>2 and VL_View1<6
 1002
 }
   0
@@ -5323,7 +5323,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T31>2 and T31<6
+LCExpression=VL_View1>2 and VL_View1<6
 1002
 }
   0
@@ -5361,7 +5361,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T31>0 and T31<6
+LCExpression=VL_View1>0 and VL_View1<6
 1002
 }
   0
@@ -5399,7 +5399,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T31=2 or T31=3
+LCExpression=VL_View1=2 or VL_View1=3
 1002
 }
   0
@@ -5437,7 +5437,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T31=2 or T31=3
+LCExpression=VL_View1=2 or VL_View1=3
 1002
 }
   0
@@ -5475,7 +5475,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T31=2 or T31=3
+LCExpression=VL_View1=2 or VL_View1=3
 1002
 }
   0
@@ -5525,7 +5525,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T31=3 or T31=4
+LCExpression=VL_View1=3 or VL_View1=4
 1002
 }
   0
@@ -5563,7 +5563,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T32>0 and T32<6
+LCExpression=VL_View2>0 and VL_View2<6
 1002
 }
   0
@@ -5601,7 +5601,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T32>0 and T32<6
+LCExpression=VL_View2>0 and VL_View2<6
 1002
 }
   0
@@ -5639,7 +5639,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T32>2 and T32<6
+LCExpression=VL_View2>2 and VL_View2<6
 1002
 }
   0
@@ -5677,7 +5677,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T32>2 and T32<6
+LCExpression=VL_View2>2 and VL_View2<6
 1002
 }
   0
@@ -5715,7 +5715,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T32>2 and T32<6
+LCExpression=VL_View2>2 and VL_View2<6
 1002
 }
   0
@@ -5753,7 +5753,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T32>0 and T32<6
+LCExpression=VL_View2>0 and VL_View2<6
 1002
 }
   0
@@ -5803,7 +5803,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T32=3 or T32=4
+LCExpression=VL_View2=3 or VL_View2=4
 1002
 }
   0
@@ -5841,7 +5841,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=(T23 or T27) and (not T23)
+LCExpression=(VL_Device1 or VL_Cable1) and (not VL_Device1)
 1002
 }
   0
@@ -5879,7 +5879,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=(T23 or T27) and (not T24) or T32=6
+LCExpression=(VL_Device1 or VL_Cable1) and (not VL_Device2) or VL_View2=6
 1002
 }
   0
@@ -5927,7 +5927,7 @@ DSTP_XDATA
 1002
 {
 1000
-_TMPL1=@@[T1]
+_TMPL1=@@[VL_Name1]
 1000
 _OWNERHANDLE=0000000064
 1002
@@ -5995,7 +5995,7 @@ DSTP_XDATA
 1002
 {
 1000
-_TMPL1=@@[T2]
+_TMPL1=@@[VL_Mark1]
 1000
 _OWNERHANDLE=0000000064
 1002
@@ -6063,7 +6063,7 @@ DSTP_XDATA
 1002
 {
 1000
-_TMPL1=@@[T3]
+_TMPL1=@@[VL_Setting1]
 1000
 _OWNERHANDLE=0000000064
 1002
@@ -6131,7 +6131,7 @@ DSTP_XDATA
 1002
 {
 1000
-_TMPL1=@@[T4]
+_TMPL1=@@[VL_Name2]
 1000
 _OWNERHANDLE=0000000064
 1002
@@ -6199,7 +6199,7 @@ DSTP_XDATA
 1002
 {
 1000
-_TMPL1=@@[T5]
+_TMPL1=@@[VL_Mark2]
 1000
 _OWNERHANDLE=0000000064
 1002
@@ -6267,7 +6267,7 @@ DSTP_XDATA
 1002
 {
 1000
-_TMPL1=@@[T6]
+_TMPL1=@@[VL_Setting2]
 1000
 _OWNERHANDLE=0000000064
 1002
@@ -6329,7 +6329,7 @@ DSTP_XDATA
 1002
 {
 1000
-_TMPL1=@@[T7]
+_TMPL1=@@[VL_Name3]
 1000
 _OWNERHANDLE=0000000064
 1002
@@ -6391,7 +6391,7 @@ DSTP_XDATA
 1002
 {
 1000
-_TMPL1=@@[T8]
+_TMPL1=@@[VL_Mark3]
 1000
 _OWNERHANDLE=0000000064
 1002
@@ -6453,7 +6453,7 @@ DSTP_XDATA
 1002
 {
 1000
-_TMPL1=@@[T9]
+_TMPL1=@@[VL_Setting3]
 1000
 _OWNERHANDLE=0000000064
 1002
@@ -6515,7 +6515,7 @@ DSTP_XDATA
 1002
 {
 1000
-_TMPL1=@@[T15]
+_TMPL1=@@[VL_Power1]
 1000
 _OWNERHANDLE=0000000064
 1002
@@ -6577,7 +6577,7 @@ DSTP_XDATA
 1002
 {
 1000
-_TMPL1=@@[T10]
+_TMPL1=@@[VL_Cable11]
 1000
 _OWNERHANDLE=0000000064
 1002
@@ -6639,7 +6639,7 @@ DSTP_XDATA
 1002
 {
 1000
-_TMPL1=@@[T11]
+_TMPL1=@@[VL_Cable12]
 1000
 _OWNERHANDLE=0000000064
 1002
@@ -6697,7 +6697,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T31=4 or T31=5
+LCExpression=VL_View1=4 or VL_View1=5
 1002
 }
   0
@@ -6735,7 +6735,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T23 or T24 or T27
+LCExpression=VL_Device1 or VL_Device2 or VL_Cable1
 1002
 }
   0
@@ -6773,7 +6773,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T27 
+LCExpression=VL_Cable1 
 1002
 }
   0
@@ -6811,7 +6811,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T27 
+LCExpression=VL_Cable1 
 1002
 }
   0
@@ -6849,7 +6849,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T27
+LCExpression=VL_Cable1
 1002
 }
   0
@@ -6887,7 +6887,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T27
+LCExpression=VL_Cable1
 1002
 }
   0
@@ -6925,7 +6925,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T27
+LCExpression=VL_Cable1
 1002
 }
   0
@@ -6965,7 +6965,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T27
+LCExpression=VL_Cable1
 1002
 }
   0
@@ -7007,7 +7007,7 @@ DSTP_XDATA
 1002
 {
 1000
-_TMPL1=@@[T19]
+_TMPL1=@@[VL_Current2]
 1000
 _OWNERHANDLE=0000000064
 1002
@@ -7069,7 +7069,7 @@ DSTP_XDATA
 1002
 {
 1000
-_TMPL1=@@[T18]
+_TMPL1=@@[VL_Power2]
 1000
 _OWNERHANDLE=0000000064
 1002
@@ -7127,7 +7127,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T27 and (not T32=7)
+LCExpression=VL_Cable1 and (not VL_View2=7)
 1002
 }
   0
@@ -7165,7 +7165,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T27 
+LCExpression=VL_Cable1 
 1002
 }
   0
@@ -7205,7 +7205,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T32=6
+LCExpression=VL_View2=6
 1002
 }
   0
@@ -7245,7 +7245,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T32=6
+LCExpression=VL_View2=6
 1002
 }
   0
@@ -7283,7 +7283,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T32=6
+LCExpression=VL_View2=6
 1002
 }
   0
@@ -7321,7 +7321,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T32=6
+LCExpression=VL_View2=6
 1002
 }
   0
@@ -7359,7 +7359,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T32=7
+LCExpression=VL_View2=7
 1002
 }
   0
@@ -7397,7 +7397,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T32=7
+LCExpression=VL_View2=7
 1002
 }
   0
@@ -7435,7 +7435,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T32=7
+LCExpression=VL_View2=7
 1002
 }
   0
@@ -7473,7 +7473,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T32=7
+LCExpression=VL_View2=7
 1002
 }
   0
@@ -7511,7 +7511,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T32=7
+LCExpression=VL_View2=7
 1002
 }
   0
@@ -7559,7 +7559,7 @@ LCGoodLayer=FORMAT
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T32=7
+LCExpression=VL_View2=7
 1002
 }
   0
@@ -7597,7 +7597,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=(T23 or T27) and (not T32=7)
+LCExpression=(VL_Device1 or VL_Cable1) and (not VL_View2=7)
 1002
 }
   0
@@ -7639,7 +7639,7 @@ DSTP_XDATA
 1002
 {
 1000
-_TMPL1=@@[T20]
+_TMPL1=@@[VL_Cos]
 1000
 _OWNERHANDLE=0000000064
 1002
@@ -7697,7 +7697,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T32=2 or T32=3
+LCExpression=VL_View2=2 or VL_View2=3
 1002
 }
   0
@@ -7735,7 +7735,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T32=2 or T32=3
+LCExpression=VL_View2=2 or VL_View2=3
 1002
 }
   0
@@ -7773,7 +7773,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T32=2 or T32=3
+LCExpression=VL_View2=2 or VL_View2=3
 1002
 }
   0
@@ -7811,7 +7811,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T32=4 or T32=5
+LCExpression=VL_View2=4 or VL_View2=5
 1002
 }
   0
@@ -7849,7 +7849,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T31=5
+LCExpression=VL_View1=5
 1002
 }
   0
@@ -7887,7 +7887,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T31=5
+LCExpression=VL_View1=5
 1002
 }
   0
@@ -7925,7 +7925,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T31=5
+LCExpression=VL_View1=5
 1002
 }
   0
@@ -7963,7 +7963,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T31=5
+LCExpression=VL_View1=5
 1002
 }
   0
@@ -8001,7 +8001,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T32=5
+LCExpression=VL_View2=5
 1002
 }
   0
@@ -8039,7 +8039,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T32=5
+LCExpression=VL_View2=5
 1002
 }
   0
@@ -8077,7 +8077,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T32=5
+LCExpression=VL_View2=5
 1002
 }
   0
@@ -8115,7 +8115,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T32=5
+LCExpression=VL_View2=5
 1002
 }
   0
@@ -9375,7 +9375,7 @@ DSTP_XDATA
 1002
 {
 1000
-_TMPL1=@@[T16]
+_TMPL1=@@[VL_Current1]
 1000
 _OWNERHANDLE=0000000064
 1002
@@ -9437,7 +9437,7 @@ DSTP_XDATA
 1002
 {
 1000
-_TMPL1=@@[T17]
+_TMPL1=@@[VL_Feeder]
 1000
 _OWNERHANDLE=0000000064
 1002
@@ -9499,7 +9499,7 @@ DSTP_XDATA
 1002
 {
 1000
-_TMPL1=@@[T14]
+_TMPL1=@@[VL_Group]
 1000
 _OWNERHANDLE=0000000064
 1002
@@ -9557,7 +9557,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T27 and (not (T25 or T26)) and (not(T24 and (not T23)))
+LCExpression=VL_Cable1 and (not (VL_Crossing1 or VL_Crossing2)) and (not(VL_Device2 and (not VL_Device1)))
 1002
 }
   0
@@ -9595,7 +9595,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T27 and (not (T25 or T26)) and (not(T24 and (not T23)))
+LCExpression=VL_Cable1 and (not (VL_Crossing1 or VL_Crossing2)) and (not(VL_Device2 and (not VL_Device1)))
 1002
 }
   0
@@ -9633,7 +9633,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=((not (T25 or T26 )) or T22) and (not(T24 and (not T23))) and (T21 or T22)
+LCExpression=((not (VL_Crossing1 or VL_Crossing2 )) or VL_Busbar2) and (not(VL_Device2 and (not VL_Device1))) and (VL_Busbar1 or VL_Busbar2)
 1002
 }
   0
@@ -9671,7 +9671,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T21 or T22
+LCExpression=VL_Busbar1 or VL_Busbar2
 1002
 }
   0
@@ -9709,7 +9709,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T21 or T22
+LCExpression=VL_Busbar1 or VL_Busbar2
 1002
 }
   0
@@ -9747,7 +9747,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T21 or T22
+LCExpression=VL_Busbar1 or VL_Busbar2
 1002
 }
   0
@@ -9781,7 +9781,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=(not(T24 and (not T23))) and (not (T25 or T26)) and (T21 or T22)
+LCExpression=(not(VL_Device2 and (not VL_Device1))) and (not (VL_Crossing1 or VL_Crossing2)) and (VL_Busbar1 or VL_Busbar2)
 1002
 }
   0
@@ -9815,7 +9815,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=((not(T24 and (not T23))) and T27) and (not (T25 or T26)) 
+LCExpression=((not(VL_Device2 and (not VL_Device1))) and VL_Cable1) and (not (VL_Crossing1 or VL_Crossing2)) 
 1002
 }
   0
@@ -9849,7 +9849,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=((not(T24 and (not T23))) and T27) and (not (T25 or T26)) 
+LCExpression=((not(VL_Device2 and (not VL_Device1))) and VL_Cable1) and (not (VL_Crossing1 or VL_Crossing2)) 
 1002
 }
   0
@@ -9887,7 +9887,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T31>0 and T31<6
+LCExpression=VL_View1>0 and VL_View1<6
 1002
 }
   0
@@ -9925,7 +9925,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T31>0 and T31<6
+LCExpression=VL_View1>0 and VL_View1<6
 1002
 }
   0
@@ -9963,7 +9963,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=not (T25 or T26 ) and (T21 or T22)
+LCExpression=not (VL_Crossing1 or VL_Crossing2 ) and (VL_Busbar1 or VL_Busbar2)
 1002
 }
   0
@@ -10001,7 +10001,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T27 and (not (T25 or T26)) 
+LCExpression=VL_Cable1 and (not (VL_Crossing1 or VL_Crossing2)) 
 1002
 }
   0
@@ -10039,7 +10039,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T27 and (not (T25 or T26)) 
+LCExpression=VL_Cable1 and (not (VL_Crossing1 or VL_Crossing2)) 
 1002
 }
   0
@@ -10077,7 +10077,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T27 and (not (T25 or T26)) 
+LCExpression=VL_Cable1 and (not (VL_Crossing1 or VL_Crossing2)) 
 1002
 }
   0
@@ -10115,7 +10115,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T27 and (not (T25 or T26)) 
+LCExpression=VL_Cable1 and (not (VL_Crossing1 or VL_Crossing2)) 
 1002
 }
   0
@@ -10153,7 +10153,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T27 and (not (T25 or T26)) 
+LCExpression=VL_Cable1 and (not (VL_Crossing1 or VL_Crossing2)) 
 1002
 }
   0
@@ -10193,7 +10193,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T27
+LCExpression=VL_Cable1
 1002
 }
   0
@@ -10233,7 +10233,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=Defpoints
 1000
-LCExpression=(T23 or T24 or T27) or T22
+LCExpression=(VL_Device1 or VL_Device2 or VL_Cable1) or VL_Busbar2
 1002
 }
   0
@@ -10273,7 +10273,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=Defpoints
 1000
-LCExpression=(T23 or T24 or T27) or T22
+LCExpression=(VL_Device1 or VL_Device2 or VL_Cable1) or VL_Busbar2
 1002
 }
   0
@@ -10313,7 +10313,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=Defpoints
 1000
-LCExpression=(T23 or T24 or T27) or T22
+LCExpression=(VL_Device1 or VL_Device2 or VL_Cable1) or VL_Busbar2
 1002
 }
   0
@@ -10353,7 +10353,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=Defpoints
 1000
-LCExpression=(T23 or T24 or T27) or T22
+LCExpression=(VL_Device1 or VL_Device2 or VL_Cable1) or VL_Busbar2
 1002
 }
   0
@@ -10393,7 +10393,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=Defpoints
 1000
-LCExpression=(T23 or T24 or T27) or T22
+LCExpression=(VL_Device1 or VL_Device2 or VL_Cable1) or VL_Busbar2
 1002
 }
   0
@@ -10433,7 +10433,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=Defpoints
 1000
-LCExpression=(T23 or T24 or T27) or T22
+LCExpression=(VL_Device1 or VL_Device2 or VL_Cable1) or VL_Busbar2
 1002
 }
   0
@@ -10473,7 +10473,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=Defpoints
 1000
-LCExpression=(T23 or T24 or T27) or T22
+LCExpression=(VL_Device1 or VL_Device2 or VL_Cable1) or VL_Busbar2
 1002
 }
   0
@@ -10511,7 +10511,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=((not (T25 or T26 )) or T22) and (not(T24 and (not T23))) and (T21 or T22)
+LCExpression=((not (VL_Crossing1 or VL_Crossing2 )) or VL_Busbar2) and (not(VL_Device2 and (not VL_Device1))) and (VL_Busbar1 or VL_Busbar2)
 1002
 }
   0
@@ -10549,7 +10549,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T31>2 and T31<6
+LCExpression=VL_View1>2 and VL_View1<6
 1002
 }
   0
@@ -10587,7 +10587,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T31>2 and T31<6
+LCExpression=VL_View1>2 and VL_View1<6
 1002
 }
   0
@@ -10625,7 +10625,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T31>2 and T31<6
+LCExpression=VL_View1>2 and VL_View1<6
 1002
 }
   0
@@ -10663,7 +10663,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T31>0 and T31<6
+LCExpression=VL_View1>0 and VL_View1<6
 1002
 }
   0
@@ -10701,7 +10701,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=(T31=2 or T31=3)
+LCExpression=(VL_View1=2 or VL_View1=3)
 1002
 }
   0
@@ -10739,7 +10739,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=(T31=2 or T31=3)
+LCExpression=(VL_View1=2 or VL_View1=3)
 1002
 }
   0
@@ -10777,7 +10777,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=(T31=2 or T31=3)
+LCExpression=(VL_View1=2 or VL_View1=3)
 1002
 }
   0
@@ -10827,7 +10827,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=(T31=3 or T31=4) 
+LCExpression=(VL_View1=3 or VL_View1=4) 
 1002
 }
   0
@@ -10865,7 +10865,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T32>0 and T32<6
+LCExpression=VL_View2>0 and VL_View2<6
 1002
 }
   0
@@ -10903,7 +10903,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T32>0 and T32<6
+LCExpression=VL_View2>0 and VL_View2<6
 1002
 }
   0
@@ -10941,7 +10941,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T32>0 and T32<6
+LCExpression=VL_View2>0 and VL_View2<6
 1002
 }
   0
@@ -10979,7 +10979,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=((not (T24 and (not T23)) and (not T23)) or ((not T23) and T22)) and (not (T25 or T26 )) and (T21 or T22)
+LCExpression=((not (VL_Device2 and (not VL_Device1)) and (not VL_Device1)) or ((not VL_Device1) and VL_Busbar2)) and (not (VL_Crossing1 or VL_Crossing2 )) and (VL_Busbar1 or VL_Busbar2)
 1002
 }
   0
@@ -11019,7 +11019,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T33=8
+LCExpression=VL_View3=8
 1002
 }
   0
@@ -11059,7 +11059,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T33=8
+LCExpression=VL_View3=8
 1002
 }
   0
@@ -11099,7 +11099,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T33=8
+LCExpression=VL_View3=8
 1002
 }
   0
@@ -11139,7 +11139,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T33=8
+LCExpression=VL_View3=8
 1002
 }
   0
@@ -11179,7 +11179,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T33=8
+LCExpression=VL_View3=8
 1002
 }
   0
@@ -11219,7 +11219,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T33=8
+LCExpression=VL_View3=8
 1002
 }
   0
@@ -11267,7 +11267,7 @@ DSTP_XDATA
 1002
 {
 1000
-_TMPL1=@@[T1]
+_TMPL1=@@[VL_Name1]
 1000
 _OWNERHANDLE=0000000064
 1002
@@ -11335,7 +11335,7 @@ DSTP_XDATA
 1002
 {
 1000
-_TMPL1=@@[T2]
+_TMPL1=@@[VL_Mark1]
 1000
 _OWNERHANDLE=0000000064
 1002
@@ -11403,7 +11403,7 @@ DSTP_XDATA
 1002
 {
 1000
-_TMPL1=@@[T3]
+_TMPL1=@@[VL_Setting1]
 1000
 _OWNERHANDLE=0000000064
 1002
@@ -11471,7 +11471,7 @@ DSTP_XDATA
 1002
 {
 1000
-_TMPL1=@@[T4]
+_TMPL1=@@[VL_Name2]
 1000
 _OWNERHANDLE=0000000064
 1002
@@ -11539,7 +11539,7 @@ DSTP_XDATA
 1002
 {
 1000
-_TMPL1=@@[T5]
+_TMPL1=@@[VL_Mark2]
 1000
 _OWNERHANDLE=0000000064
 1002
@@ -11607,7 +11607,7 @@ DSTP_XDATA
 1002
 {
 1000
-_TMPL1=@@[T6]
+_TMPL1=@@[VL_Setting2]
 1000
 _OWNERHANDLE=0000000064
 1002
@@ -11675,7 +11675,7 @@ DSTP_XDATA
 1002
 {
 1000
-_TMPL1=@@[T7]
+_TMPL1=@@[VL_Name3]
 1000
 _OWNERHANDLE=0000000064
 1002
@@ -11743,7 +11743,7 @@ DSTP_XDATA
 1002
 {
 1000
-_TMPL1=@@[T8]
+_TMPL1=@@[VL_Mark3]
 1000
 _OWNERHANDLE=0000000064
 1002
@@ -11811,7 +11811,7 @@ DSTP_XDATA
 1002
 {
 1000
-_TMPL1=@@[T9]
+_TMPL1=@@[VL_Setting3]
 1000
 _OWNERHANDLE=0000000064
 1002
@@ -11873,7 +11873,7 @@ DSTP_XDATA
 1002
 {
 1000
-_TMPL1=@@[T15]
+_TMPL1=@@[VL_Power1]
 1000
 _OWNERHANDLE=0000000064
 1002
@@ -11941,7 +11941,7 @@ DSTP_XDATA
 1002
 {
 1000
-_TMPL1=@@[T10]
+_TMPL1=@@[VL_Cable11]
 1000
 _OWNERHANDLE=0000000064
 1002
@@ -12009,7 +12009,7 @@ DSTP_XDATA
 1002
 {
 1000
-_TMPL1=@@[T11]
+_TMPL1=@@[VL_Cable12]
 1000
 _OWNERHANDLE=0000000064
 1002
@@ -12067,7 +12067,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T26
+LCExpression=VL_Crossing2
 1002
 }
   0
@@ -12105,7 +12105,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T26
+LCExpression=VL_Crossing2
 1002
 }
   0
@@ -12143,7 +12143,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T26
+LCExpression=VL_Crossing2
 1002
 }
   0
@@ -12181,7 +12181,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T25 or T26
+LCExpression=VL_Crossing1 or VL_Crossing2
 1002
 }
   0
@@ -12219,7 +12219,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T25 or T26
+LCExpression=VL_Crossing1 or VL_Crossing2
 1002
 }
   0
@@ -12257,7 +12257,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T22
+LCExpression=VL_Busbar2
 1002
 }
   0
@@ -12295,7 +12295,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression= (T32=4 or T32=5) 
+LCExpression= (VL_View2=4 or VL_View2=5) 
 1002
 }
   0
@@ -12333,7 +12333,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T25 
+LCExpression=VL_Crossing1 
 1002
 }
   0
@@ -12371,7 +12371,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T21
+LCExpression=VL_Busbar1
 1002
 }
   0
@@ -12409,7 +12409,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=(T31=4 or T31=5)
+LCExpression=(VL_View1=4 or VL_View1=5)
 1002
 }
   0
@@ -12447,7 +12447,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=(T32=2 or T32=3)
+LCExpression=(VL_View2=2 or VL_View2=3)
 1002
 }
   0
@@ -12485,7 +12485,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=(T32=2 or T32=3)
+LCExpression=(VL_View2=2 or VL_View2=3)
 1002
 }
   0
@@ -12523,7 +12523,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=(T32=2 or T32=3)
+LCExpression=(VL_View2=2 or VL_View2=3)
 1002
 }
   0
@@ -12561,7 +12561,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=((not T24) or T32=6) and (T21 or T22) and (not(T27 and (T25 or T26)))
+LCExpression=((not VL_Device2) or VL_View2=6) and (VL_Busbar1 or VL_Busbar2) and (not(VL_Cable1 and (VL_Crossing1 or VL_Crossing2)))
 1002
 }
   0
@@ -12599,7 +12599,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T27 and (not (T25 or T26)) and (not T32=7)
+LCExpression=VL_Cable1 and (not (VL_Crossing1 or VL_Crossing2)) and (not VL_View2=7)
 1002
 }
   0
@@ -12639,7 +12639,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T32=6
+LCExpression=VL_View2=6
 1002
 }
   0
@@ -12679,7 +12679,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T32=6
+LCExpression=VL_View2=6
 1002
 }
   0
@@ -12717,7 +12717,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T32=6
+LCExpression=VL_View2=6
 1002
 }
   0
@@ -12755,7 +12755,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T32=6
+LCExpression=VL_View2=6
 1002
 }
   0
@@ -12793,7 +12793,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T32=7
+LCExpression=VL_View2=7
 1002
 }
   0
@@ -12831,7 +12831,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T32=7
+LCExpression=VL_View2=7
 1002
 }
   0
@@ -12869,7 +12869,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T32=7
+LCExpression=VL_View2=7
 1002
 }
   0
@@ -12907,7 +12907,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T32=7
+LCExpression=VL_View2=7
 1002
 }
   0
@@ -12945,7 +12945,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T32=7
+LCExpression=VL_View2=7
 1002
 }
   0
@@ -12993,7 +12993,7 @@ LCGoodLayer=FORMAT
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T32=7
+LCExpression=VL_View2=7
 1002
 }
   0
@@ -13031,7 +13031,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=(not (T25 or T26 )) and (not T32=7) and (T21 or T22)
+LCExpression=(not (VL_Crossing1 or VL_Crossing2 )) and (not VL_View2=7) and (VL_Busbar1 or VL_Busbar2)
 1002
 }
   0
@@ -13069,7 +13069,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T27 and (not (T25 or T26)) 
+LCExpression=VL_Cable1 and (not (VL_Crossing1 or VL_Crossing2)) 
 1002
 }
   0
@@ -13107,7 +13107,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T32>2 and T32<6
+LCExpression=VL_View2>2 and VL_View2<6
 1002
 }
   0
@@ -13145,7 +13145,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T32>2 and T32<6
+LCExpression=VL_View2>2 and VL_View2<6
 1002
 }
   0
@@ -13183,7 +13183,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T32>2 and T32<6
+LCExpression=VL_View2>2 and VL_View2<6
 1002
 }
   0
@@ -13233,7 +13233,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=(T32=3 or T32=4)
+LCExpression=(VL_View2=3 or VL_View2=4)
 1002
 }
   0
@@ -13273,7 +13273,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T32=8
+LCExpression=VL_View2=8
 1002
 }
   0
@@ -13313,7 +13313,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T32=8
+LCExpression=VL_View2=8
 1002
 }
   0
@@ -13353,7 +13353,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T32=8
+LCExpression=VL_View2=8
 1002
 }
   0
@@ -13393,7 +13393,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T32=8
+LCExpression=VL_View2=8
 1002
 }
   0
@@ -13433,7 +13433,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T32=8
+LCExpression=VL_View2=8
 1002
 }
   0
@@ -13473,7 +13473,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T32=8
+LCExpression=VL_View2=8
 1002
 }
   0
@@ -13511,7 +13511,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=(T27 and (not (T25 or T26))) and (not T32=7) and (not T32=8)
+LCExpression=(VL_Cable1 and (not (VL_Crossing1 or VL_Crossing2))) and (not VL_View2=7) and (not VL_View2=8)
 1002
 }
   0
@@ -13549,7 +13549,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T31=5
+LCExpression=VL_View1=5
 1002
 }
   0
@@ -13587,7 +13587,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T31=5
+LCExpression=VL_View1=5
 1002
 }
   0
@@ -13625,7 +13625,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T31=5
+LCExpression=VL_View1=5
 1002
 }
   0
@@ -13663,7 +13663,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T31=5
+LCExpression=VL_View1=5
 1002
 }
   0
@@ -13701,7 +13701,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T32=5 
+LCExpression=VL_View2=5 
 1002
 }
   0
@@ -13739,7 +13739,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T32=5 
+LCExpression=VL_View2=5 
 1002
 }
   0
@@ -13777,7 +13777,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T32=5 
+LCExpression=VL_View2=5 
 1002
 }
   0
@@ -13815,7 +13815,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T32=5 
+LCExpression=VL_View2=5 
 1002
 }
   0
@@ -13855,7 +13855,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T28
+LCExpression=VL_Cable2
 1002
 }
   0
@@ -13903,7 +13903,7 @@ DSTP_XDATA
 1002
 {
 1000
-_TMPL1=@@[T12]
+_TMPL1=@@[VL_Cable21]
 1000
 _OWNERHANDLE=0000000064
 1002
@@ -13971,7 +13971,7 @@ DSTP_XDATA
 1002
 {
 1000
-_TMPL1=@@[T13]
+_TMPL1=@@[VL_Cable22]
 1000
 _OWNERHANDLE=0000000064
 1002
@@ -14031,7 +14031,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T27 and T33=0 
+LCExpression=VL_Cable1 and VL_View3=0 
 1002
 }
   0
@@ -14069,7 +14069,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T24 and (not T23) and (not T22)
+LCExpression=VL_Device2 and (not VL_Device1) and (not VL_Busbar2)
 1002
 }
   0
@@ -14107,7 +14107,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T24 and (not T23) and (not T22) and T27 
+LCExpression=VL_Device2 and (not VL_Device1) and (not VL_Busbar2) and VL_Cable1 
 1002
 }
   0
@@ -14145,7 +14145,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T24 and (not T23) and (not T22) and T27
+LCExpression=VL_Device2 and (not VL_Device1) and (not VL_Busbar2) and VL_Cable1
 1002
 }
   0
@@ -14183,7 +14183,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T27 and (not (T25 or T26)) 
+LCExpression=VL_Cable1 and (not (VL_Crossing1 or VL_Crossing2)) 
 1002
 }
   0
@@ -14221,7 +14221,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T27 and (not (T25 or T26)) 
+LCExpression=VL_Cable1 and (not (VL_Crossing1 or VL_Crossing2)) 
 1002
 }
   0
@@ -14259,7 +14259,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=not (T25 or T26 ) and (T21 or T22)
+LCExpression=not (VL_Crossing1 or VL_Crossing2 ) and (VL_Busbar1 or VL_Busbar2)
 1002
 }
   0
@@ -14293,7 +14293,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T24 and (not T23) and (not T22)
+LCExpression=VL_Device2 and (not VL_Device1) and (not VL_Busbar2)
 1002
 }
   0
@@ -14327,7 +14327,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T24 and (not T23) and (not T22) and T27 
+LCExpression=VL_Device2 and (not VL_Device1) and (not VL_Busbar2) and VL_Cable1 
 1002
 }
   0
@@ -14361,7 +14361,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T24 and (not T23) and (not T22) and T27
+LCExpression=VL_Device2 and (not VL_Device1) and (not VL_Busbar2) and VL_Cable1
 1002
 }
   0
@@ -14511,7 +14511,7 @@ DSTP_XDATA
 1002
 {
 1000
-_TMPL1=@@[T16]
+_TMPL1=@@[VL_Current1]
 1000
 _OWNERHANDLE=0000000064
 1002
@@ -14573,7 +14573,7 @@ DSTP_XDATA
 1002
 {
 1000
-_TMPL1=@@[T17]
+_TMPL1=@@[VL_Feeder]
 1000
 _OWNERHANDLE=0000000064
 1002
@@ -14635,7 +14635,7 @@ DSTP_XDATA
 1002
 {
 1000
-_TMPL1=@@[T14]
+_TMPL1=@@[VL_Group]
 1000
 _OWNERHANDLE=0000000064
 1002
@@ -14693,7 +14693,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T27 
+LCExpression=VL_Cable1 
 1002
 }
   0
@@ -14731,7 +14731,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T27 
+LCExpression=VL_Cable1 
 1002
 }
   0
@@ -14769,7 +14769,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T23 or T24 or T27
+LCExpression=VL_Device1 or VL_Device2 or VL_Cable1
 1002
 }
   0
@@ -14807,7 +14807,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T23 or T24 or T27
+LCExpression=VL_Device1 or VL_Device2 or VL_Cable1
 1002
 }
   0
@@ -14845,7 +14845,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T23 or T24 or T27
+LCExpression=VL_Device1 or VL_Device2 or VL_Cable1
 1002
 }
   0
@@ -14883,7 +14883,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T23 or T24 or T27
+LCExpression=VL_Device1 or VL_Device2 or VL_Cable1
 1002
 }
   0
@@ -14917,7 +14917,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T23 or T24 or T27
+LCExpression=VL_Device1 or VL_Device2 or VL_Cable1
 1002
 }
   0
@@ -14951,7 +14951,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T27 
+LCExpression=VL_Cable1 
 1002
 }
   0
@@ -14985,7 +14985,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T27 
+LCExpression=VL_Cable1 
 1002
 }
   0
@@ -15023,7 +15023,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T31>0 and T31<6
+LCExpression=VL_View1>0 and VL_View1<6
 1002
 }
   0
@@ -15061,7 +15061,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T31>0 and T31<6
+LCExpression=VL_View1>0 and VL_View1<6
 1002
 }
   0
@@ -15101,7 +15101,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T27
+LCExpression=VL_Cable1
 1002
 }
   0
@@ -15141,7 +15141,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=Defpoints
 1000
-LCExpression=T23 or T24 or T27
+LCExpression=VL_Device1 or VL_Device2 or VL_Cable1
 1002
 }
   0
@@ -15181,7 +15181,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=Defpoints
 1000
-LCExpression=T23 or T24 or T27
+LCExpression=VL_Device1 or VL_Device2 or VL_Cable1
 1002
 }
   0
@@ -15221,7 +15221,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=Defpoints
 1000
-LCExpression=T23 or T24 or T27
+LCExpression=VL_Device1 or VL_Device2 or VL_Cable1
 1002
 }
   0
@@ -15261,7 +15261,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=Defpoints
 1000
-LCExpression=T23 or T24 or T27
+LCExpression=VL_Device1 or VL_Device2 or VL_Cable1
 1002
 }
   0
@@ -15301,7 +15301,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=Defpoints
 1000
-LCExpression=T23 or T24 or T27
+LCExpression=VL_Device1 or VL_Device2 or VL_Cable1
 1002
 }
   0
@@ -15341,7 +15341,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=Defpoints
 1000
-LCExpression=T23 or T24 or T27
+LCExpression=VL_Device1 or VL_Device2 or VL_Cable1
 1002
 }
   0
@@ -15381,7 +15381,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=Defpoints
 1000
-LCExpression=T23 or T24 or T27
+LCExpression=VL_Device1 or VL_Device2 or VL_Cable1
 1002
 }
   0
@@ -15419,7 +15419,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T23 or T24 or T27
+LCExpression=VL_Device1 or VL_Device2 or VL_Cable1
 1002
 }
   0
@@ -15457,7 +15457,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T31>2 and T31<6
+LCExpression=VL_View1>2 and VL_View1<6
 1002
 }
   0
@@ -15495,7 +15495,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T31>2 and T31<6
+LCExpression=VL_View1>2 and VL_View1<6
 1002
 }
   0
@@ -15533,7 +15533,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T31>2 and T31<6
+LCExpression=VL_View1>2 and VL_View1<6
 1002
 }
   0
@@ -15571,7 +15571,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T31>0 and T31<6
+LCExpression=VL_View1>0 and VL_View1<6
 1002
 }
   0
@@ -15609,7 +15609,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T31=2 or T31=3
+LCExpression=VL_View1=2 or VL_View1=3
 1002
 }
   0
@@ -15647,7 +15647,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T31=2 or T31=3
+LCExpression=VL_View1=2 or VL_View1=3
 1002
 }
   0
@@ -15685,7 +15685,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T31=2 or T31=3
+LCExpression=VL_View1=2 or VL_View1=3
 1002
 }
   0
@@ -15735,7 +15735,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T31=3 or T31=4
+LCExpression=VL_View1=3 or VL_View1=4
 1002
 }
   0
@@ -15773,7 +15773,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T32>0 and T32<6
+LCExpression=VL_View2>0 and VL_View2<6
 1002
 }
   0
@@ -15811,7 +15811,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T32>0 and T32<6
+LCExpression=VL_View2>0 and VL_View2<6
 1002
 }
   0
@@ -15849,7 +15849,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T32>2 and T32<6
+LCExpression=VL_View2>2 and VL_View2<6
 1002
 }
   0
@@ -15887,7 +15887,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T32>2 and T32<6
+LCExpression=VL_View2>2 and VL_View2<6
 1002
 }
   0
@@ -15925,7 +15925,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T32>2 and T32<6
+LCExpression=VL_View2>2 and VL_View2<6
 1002
 }
   0
@@ -15963,7 +15963,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T32>0 and T32<6
+LCExpression=VL_View2>0 and VL_View2<6
 1002
 }
   0
@@ -16013,7 +16013,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T32=3 or T32=4
+LCExpression=VL_View2=3 or VL_View2=4
 1002
 }
   0
@@ -16051,7 +16051,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=(T23 or T27) and (not T23)
+LCExpression=(VL_Device1 or VL_Cable1) and (not VL_Device1)
 1002
 }
   0
@@ -16089,7 +16089,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=(T23 or T27) and (not T24) or T32=6
+LCExpression=(VL_Device1 or VL_Cable1) and (not VL_Device2) or VL_View2=6
 1002
 }
   0
@@ -16137,7 +16137,7 @@ DSTP_XDATA
 1002
 {
 1000
-_TMPL1=@@[T1]
+_TMPL1=@@[VL_Name1]
 1000
 _OWNERHANDLE=0000000064
 1002
@@ -16205,7 +16205,7 @@ DSTP_XDATA
 1002
 {
 1000
-_TMPL1=@@[T2]
+_TMPL1=@@[VL_Mark1]
 1000
 _OWNERHANDLE=0000000064
 1002
@@ -16273,7 +16273,7 @@ DSTP_XDATA
 1002
 {
 1000
-_TMPL1=@@[T3]
+_TMPL1=@@[VL_Setting1]
 1000
 _OWNERHANDLE=0000000064
 1002
@@ -16341,7 +16341,7 @@ DSTP_XDATA
 1002
 {
 1000
-_TMPL1=@@[T4]
+_TMPL1=@@[VL_Name2]
 1000
 _OWNERHANDLE=0000000064
 1002
@@ -16409,7 +16409,7 @@ DSTP_XDATA
 1002
 {
 1000
-_TMPL1=@@[T5]
+_TMPL1=@@[VL_Mark2]
 1000
 _OWNERHANDLE=0000000064
 1002
@@ -16477,7 +16477,7 @@ DSTP_XDATA
 1002
 {
 1000
-_TMPL1=@@[T6]
+_TMPL1=@@[VL_Setting2]
 1000
 _OWNERHANDLE=0000000064
 1002
@@ -16539,7 +16539,7 @@ DSTP_XDATA
 1002
 {
 1000
-_TMPL1=@@[T7]
+_TMPL1=@@[VL_Name3]
 1000
 _OWNERHANDLE=0000000064
 1002
@@ -16601,7 +16601,7 @@ DSTP_XDATA
 1002
 {
 1000
-_TMPL1=@@[T8]
+_TMPL1=@@[VL_Mark3]
 1000
 _OWNERHANDLE=0000000064
 1002
@@ -16663,7 +16663,7 @@ DSTP_XDATA
 1002
 {
 1000
-_TMPL1=@@[T9]
+_TMPL1=@@[VL_Setting3]
 1000
 _OWNERHANDLE=0000000064
 1002
@@ -16725,7 +16725,7 @@ DSTP_XDATA
 1002
 {
 1000
-_TMPL1=@@[T15]
+_TMPL1=@@[VL_Power1]
 1000
 _OWNERHANDLE=0000000064
 1002
@@ -16787,7 +16787,7 @@ DSTP_XDATA
 1002
 {
 1000
-_TMPL1=@@[T10]
+_TMPL1=@@[VL_Cable11]
 1000
 _OWNERHANDLE=0000000064
 1002
@@ -16849,7 +16849,7 @@ DSTP_XDATA
 1002
 {
 1000
-_TMPL1=@@[T11]
+_TMPL1=@@[VL_Cable12]
 1000
 _OWNERHANDLE=0000000064
 1002
@@ -16907,7 +16907,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T31=4 or T31=5
+LCExpression=VL_View1=4 or VL_View1=5
 1002
 }
   0
@@ -16945,7 +16945,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T23 or T24 or T27
+LCExpression=VL_Device1 or VL_Device2 or VL_Cable1
 1002
 }
   0
@@ -16983,7 +16983,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T27 
+LCExpression=VL_Cable1 
 1002
 }
   0
@@ -17021,7 +17021,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T27 
+LCExpression=VL_Cable1 
 1002
 }
   0
@@ -17059,7 +17059,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T27
+LCExpression=VL_Cable1
 1002
 }
   0
@@ -17097,7 +17097,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T27
+LCExpression=VL_Cable1
 1002
 }
   0
@@ -17135,7 +17135,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T27
+LCExpression=VL_Cable1
 1002
 }
   0
@@ -17175,7 +17175,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T27
+LCExpression=VL_Cable1
 1002
 }
   0
@@ -17217,7 +17217,7 @@ DSTP_XDATA
 1002
 {
 1000
-_TMPL1=@@[T19]
+_TMPL1=@@[VL_Current2]
 1000
 _OWNERHANDLE=0000000064
 1002
@@ -17279,7 +17279,7 @@ DSTP_XDATA
 1002
 {
 1000
-_TMPL1=@@[T18]
+_TMPL1=@@[VL_Power2]
 1000
 _OWNERHANDLE=0000000064
 1002
@@ -17337,7 +17337,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T27 and (not T32=7)
+LCExpression=VL_Cable1 and (not VL_View2=7)
 1002
 }
   0
@@ -17375,7 +17375,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T27 
+LCExpression=VL_Cable1 
 1002
 }
   0
@@ -17415,7 +17415,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T32=6
+LCExpression=VL_View2=6
 1002
 }
   0
@@ -17455,7 +17455,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T32=6
+LCExpression=VL_View2=6
 1002
 }
   0
@@ -17493,7 +17493,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T32=6
+LCExpression=VL_View2=6
 1002
 }
   0
@@ -17531,7 +17531,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T32=6
+LCExpression=VL_View2=6
 1002
 }
   0
@@ -17569,7 +17569,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T32=7
+LCExpression=VL_View2=7
 1002
 }
   0
@@ -17607,7 +17607,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T32=7
+LCExpression=VL_View2=7
 1002
 }
   0
@@ -17645,7 +17645,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T32=7
+LCExpression=VL_View2=7
 1002
 }
   0
@@ -17683,7 +17683,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T32=7
+LCExpression=VL_View2=7
 1002
 }
   0
@@ -17721,7 +17721,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T32=7
+LCExpression=VL_View2=7
 1002
 }
   0
@@ -17769,7 +17769,7 @@ LCGoodLayer=FORMAT
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T32=7
+LCExpression=VL_View2=7
 1002
 }
   0
@@ -17807,7 +17807,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=(T23 or T27) and (not T32=7)
+LCExpression=(VL_Device1 or VL_Cable1) and (not VL_View2=7)
 1002
 }
   0
@@ -17849,7 +17849,7 @@ DSTP_XDATA
 1002
 {
 1000
-_TMPL1=@@[T20]
+_TMPL1=@@[VL_Cos]
 1000
 _OWNERHANDLE=0000000064
 1002
@@ -17907,7 +17907,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T32=2 or T32=3
+LCExpression=VL_View2=2 or VL_View2=3
 1002
 }
   0
@@ -17945,7 +17945,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T32=2 or T32=3
+LCExpression=VL_View2=2 or VL_View2=3
 1002
 }
   0
@@ -17983,7 +17983,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T32=2 or T32=3
+LCExpression=VL_View2=2 or VL_View2=3
 1002
 }
   0
@@ -18021,7 +18021,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T32=4 or T32=5
+LCExpression=VL_View2=4 or VL_View2=5
 1002
 }
   0
@@ -18059,7 +18059,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T28
+LCExpression=VL_Cable2
 1002
 }
   0
@@ -18097,7 +18097,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T28
+LCExpression=VL_Cable2
 1002
 }
   0
@@ -18135,7 +18135,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T28
+LCExpression=VL_Cable2
 1002
 }
   0
@@ -18175,7 +18175,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T28
+LCExpression=VL_Cable2
 1002
 }
   0
@@ -18217,7 +18217,7 @@ DSTP_XDATA
 1002
 {
 1000
-_TMPL1=@@[T12]
+_TMPL1=@@[VL_Cable21]
 1000
 _OWNERHANDLE=0000000064
 1002
@@ -18279,7 +18279,7 @@ DSTP_XDATA
 1002
 {
 1000
-_TMPL1=@@[T13]
+_TMPL1=@@[VL_Cable22]
 1000
 _OWNERHANDLE=0000000064
 1002
@@ -18337,7 +18337,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T278
+LCExpression=VL_Cable18
 1002
 }
   0
@@ -18375,7 +18375,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T278
+LCExpression=VL_Cable18
 1002
 }
   0
@@ -18413,7 +18413,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T278
+LCExpression=VL_Cable18
 1002
 }
   0
@@ -18451,7 +18451,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T278
+LCExpression=VL_Cable18
 1002
 }
   0
@@ -18489,7 +18489,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T278
+LCExpression=VL_Cable18
 1002
 }
   0
@@ -18523,7 +18523,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T278
+LCExpression=VL_Cable18
 1002
 }
   0
@@ -18557,7 +18557,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T278
+LCExpression=VL_Cable18
 1002
 }
   0
@@ -18591,7 +18591,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T278
+LCExpression=VL_Cable18
 1002
 }
   0
@@ -18629,7 +18629,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T31=5
+LCExpression=VL_View1=5
 1002
 }
   0
@@ -18667,7 +18667,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T31=5
+LCExpression=VL_View1=5
 1002
 }
   0
@@ -18705,7 +18705,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T31=5
+LCExpression=VL_View1=5
 1002
 }
   0
@@ -18743,7 +18743,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T31=5
+LCExpression=VL_View1=5
 1002
 }
   0
@@ -18781,7 +18781,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T32=5
+LCExpression=VL_View2=5
 1002
 }
   0
@@ -18819,7 +18819,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T32=5
+LCExpression=VL_View2=5
 1002
 }
   0
@@ -18857,7 +18857,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T32=5
+LCExpression=VL_View2=5
 1002
 }
   0
@@ -18895,7 +18895,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T32=5
+LCExpression=VL_View2=5
 1002
 }
   0
@@ -19045,7 +19045,7 @@ DSTP_XDATA
 1002
 {
 1000
-_TMPL1=@@[T16]
+_TMPL1=@@[VL_Current1]
 1000
 _OWNERHANDLE=0000000064
 1002
@@ -19107,7 +19107,7 @@ DSTP_XDATA
 1002
 {
 1000
-_TMPL1=@@[T17]
+_TMPL1=@@[VL_Feeder]
 1000
 _OWNERHANDLE=0000000064
 1002
@@ -19169,7 +19169,7 @@ DSTP_XDATA
 1002
 {
 1000
-_TMPL1=@@[T14]
+_TMPL1=@@[VL_Group]
 1000
 _OWNERHANDLE=0000000064
 1002
@@ -19227,7 +19227,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T27 and (not (T25 or T26)) and (not(T24 and (not T23)))
+LCExpression=VL_Cable1 and (not (VL_Crossing1 or VL_Crossing2)) and (not(VL_Device2 and (not VL_Device1)))
 1002
 }
   0
@@ -19265,7 +19265,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T27 and (not (T25 or T26)) and (not(T24 and (not T23)))
+LCExpression=VL_Cable1 and (not (VL_Crossing1 or VL_Crossing2)) and (not(VL_Device2 and (not VL_Device1)))
 1002
 }
   0
@@ -19303,7 +19303,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=((not (T25 or T26 )) or T22) and (not(T24 and (not T23))) and (T21 or T22)
+LCExpression=((not (VL_Crossing1 or VL_Crossing2 )) or VL_Busbar2) and (not(VL_Device2 and (not VL_Device1))) and (VL_Busbar1 or VL_Busbar2)
 1002
 }
   0
@@ -19341,7 +19341,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T21 or T22
+LCExpression=VL_Busbar1 or VL_Busbar2
 1002
 }
   0
@@ -19379,7 +19379,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T21 or T22
+LCExpression=VL_Busbar1 or VL_Busbar2
 1002
 }
   0
@@ -19417,7 +19417,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T21 or T22
+LCExpression=VL_Busbar1 or VL_Busbar2
 1002
 }
   0
@@ -19451,7 +19451,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=(not(T24 and (not T23))) and (not (T25 or T26)) and (T21 or T22)
+LCExpression=(not(VL_Device2 and (not VL_Device1))) and (not (VL_Crossing1 or VL_Crossing2)) and (VL_Busbar1 or VL_Busbar2)
 1002
 }
   0
@@ -19485,7 +19485,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=((not(T24 and (not T23))) and T27) and (not (T25 or T26)) 
+LCExpression=((not(VL_Device2 and (not VL_Device1))) and VL_Cable1) and (not (VL_Crossing1 or VL_Crossing2)) 
 1002
 }
   0
@@ -19519,7 +19519,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=((not(T24 and (not T23))) and T27) and (not (T25 or T26)) 
+LCExpression=((not(VL_Device2 and (not VL_Device1))) and VL_Cable1) and (not (VL_Crossing1 or VL_Crossing2)) 
 1002
 }
   0
@@ -19557,7 +19557,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T31>0 and T31<6
+LCExpression=VL_View1>0 and VL_View1<6
 1002
 }
   0
@@ -19595,7 +19595,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T31>0 and T31<6
+LCExpression=VL_View1>0 and VL_View1<6
 1002
 }
   0
@@ -19633,7 +19633,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=not (T25 or T26 ) and (T21 or T22)
+LCExpression=not (VL_Crossing1 or VL_Crossing2 ) and (VL_Busbar1 or VL_Busbar2)
 1002
 }
   0
@@ -19671,7 +19671,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T27 and (not (T25 or T26)) 
+LCExpression=VL_Cable1 and (not (VL_Crossing1 or VL_Crossing2)) 
 1002
 }
   0
@@ -19709,7 +19709,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T27 and (not (T25 or T26)) 
+LCExpression=VL_Cable1 and (not (VL_Crossing1 or VL_Crossing2)) 
 1002
 }
   0
@@ -19747,7 +19747,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T27 and (not (T25 or T26)) 
+LCExpression=VL_Cable1 and (not (VL_Crossing1 or VL_Crossing2)) 
 1002
 }
   0
@@ -19785,7 +19785,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T27 and (not (T25 or T26)) 
+LCExpression=VL_Cable1 and (not (VL_Crossing1 or VL_Crossing2)) 
 1002
 }
   0
@@ -19823,7 +19823,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T27 and (not (T25 or T26)) 
+LCExpression=VL_Cable1 and (not (VL_Crossing1 or VL_Crossing2)) 
 1002
 }
   0
@@ -19863,7 +19863,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T27
+LCExpression=VL_Cable1
 1002
 }
   0
@@ -19903,7 +19903,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=Defpoints
 1000
-LCExpression=(T23 or T24 or T27) or T22
+LCExpression=(VL_Device1 or VL_Device2 or VL_Cable1) or VL_Busbar2
 1002
 }
   0
@@ -19943,7 +19943,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=Defpoints
 1000
-LCExpression=(T23 or T24 or T27) or T22
+LCExpression=(VL_Device1 or VL_Device2 or VL_Cable1) or VL_Busbar2
 1002
 }
   0
@@ -19983,7 +19983,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=Defpoints
 1000
-LCExpression=(T23 or T24 or T27) or T22
+LCExpression=(VL_Device1 or VL_Device2 or VL_Cable1) or VL_Busbar2
 1002
 }
   0
@@ -20023,7 +20023,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=Defpoints
 1000
-LCExpression=(T23 or T24 or T27) or T22
+LCExpression=(VL_Device1 or VL_Device2 or VL_Cable1) or VL_Busbar2
 1002
 }
   0
@@ -20063,7 +20063,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=Defpoints
 1000
-LCExpression=(T23 or T24 or T27) or T22
+LCExpression=(VL_Device1 or VL_Device2 or VL_Cable1) or VL_Busbar2
 1002
 }
   0
@@ -20103,7 +20103,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=Defpoints
 1000
-LCExpression=(T23 or T24 or T27) or T22
+LCExpression=(VL_Device1 or VL_Device2 or VL_Cable1) or VL_Busbar2
 1002
 }
   0
@@ -20143,7 +20143,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=Defpoints
 1000
-LCExpression=(T23 or T24 or T27) or T22
+LCExpression=(VL_Device1 or VL_Device2 or VL_Cable1) or VL_Busbar2
 1002
 }
   0
@@ -20181,7 +20181,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=((not (T25 or T26 )) or T22) and (not(T24 and (not T23))) and (T21 or T22)
+LCExpression=((not (VL_Crossing1 or VL_Crossing2 )) or VL_Busbar2) and (not(VL_Device2 and (not VL_Device1))) and (VL_Busbar1 or VL_Busbar2)
 1002
 }
   0
@@ -20219,7 +20219,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T31>2 and T31<6
+LCExpression=VL_View1>2 and VL_View1<6
 1002
 }
   0
@@ -20257,7 +20257,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T31>2 and T31<6
+LCExpression=VL_View1>2 and VL_View1<6
 1002
 }
   0
@@ -20295,7 +20295,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T31>2 and T31<6
+LCExpression=VL_View1>2 and VL_View1<6
 1002
 }
   0
@@ -20333,7 +20333,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T31>0 and T31<6
+LCExpression=VL_View1>0 and VL_View1<6
 1002
 }
   0
@@ -20371,7 +20371,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=(T31=2 or T31=3)
+LCExpression=(VL_View1=2 or VL_View1=3)
 1002
 }
   0
@@ -20409,7 +20409,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=(T31=2 or T31=3)
+LCExpression=(VL_View1=2 or VL_View1=3)
 1002
 }
   0
@@ -20447,7 +20447,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=(T31=2 or T31=3)
+LCExpression=(VL_View1=2 or VL_View1=3)
 1002
 }
   0
@@ -20497,7 +20497,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=(T31=3 or T31=4) 
+LCExpression=(VL_View1=3 or VL_View1=4) 
 1002
 }
   0
@@ -20535,7 +20535,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T32>0 and T32<6
+LCExpression=VL_View2>0 and VL_View2<6
 1002
 }
   0
@@ -20573,7 +20573,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T32>0 and T32<6
+LCExpression=VL_View2>0 and VL_View2<6
 1002
 }
   0
@@ -20611,7 +20611,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T32>0 and T32<6
+LCExpression=VL_View2>0 and VL_View2<6
 1002
 }
   0
@@ -20649,7 +20649,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=((not (T24 and (not T23)) and (not T23)) or ((not T23) and T22)) and (not (T25 or T26 )) and (T21 or T22)
+LCExpression=((not (VL_Device2 and (not VL_Device1)) and (not VL_Device1)) or ((not VL_Device1) and VL_Busbar2)) and (not (VL_Crossing1 or VL_Crossing2 )) and (VL_Busbar1 or VL_Busbar2)
 1002
 }
   0
@@ -20689,7 +20689,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T33=8
+LCExpression=VL_View3=8
 1002
 }
   0
@@ -20729,7 +20729,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T33=8
+LCExpression=VL_View3=8
 1002
 }
   0
@@ -20769,7 +20769,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T33=8
+LCExpression=VL_View3=8
 1002
 }
   0
@@ -20809,7 +20809,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T33=8
+LCExpression=VL_View3=8
 1002
 }
   0
@@ -20849,7 +20849,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T33=8
+LCExpression=VL_View3=8
 1002
 }
   0
@@ -20889,7 +20889,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T33=8
+LCExpression=VL_View3=8
 1002
 }
   0
@@ -20937,7 +20937,7 @@ DSTP_XDATA
 1002
 {
 1000
-_TMPL1=@@[T1]
+_TMPL1=@@[VL_Name1]
 1000
 _OWNERHANDLE=0000000064
 1002
@@ -21005,7 +21005,7 @@ DSTP_XDATA
 1002
 {
 1000
-_TMPL1=@@[T2]
+_TMPL1=@@[VL_Mark1]
 1000
 _OWNERHANDLE=0000000064
 1002
@@ -21073,7 +21073,7 @@ DSTP_XDATA
 1002
 {
 1000
-_TMPL1=@@[T3]
+_TMPL1=@@[VL_Setting1]
 1000
 _OWNERHANDLE=0000000064
 1002
@@ -21141,7 +21141,7 @@ DSTP_XDATA
 1002
 {
 1000
-_TMPL1=@@[T4]
+_TMPL1=@@[VL_Name2]
 1000
 _OWNERHANDLE=0000000064
 1002
@@ -21209,7 +21209,7 @@ DSTP_XDATA
 1002
 {
 1000
-_TMPL1=@@[T5]
+_TMPL1=@@[VL_Mark2]
 1000
 _OWNERHANDLE=0000000064
 1002
@@ -21277,7 +21277,7 @@ DSTP_XDATA
 1002
 {
 1000
-_TMPL1=@@[T6]
+_TMPL1=@@[VL_Setting2]
 1000
 _OWNERHANDLE=0000000064
 1002
@@ -21345,7 +21345,7 @@ DSTP_XDATA
 1002
 {
 1000
-_TMPL1=@@[T7]
+_TMPL1=@@[VL_Name3]
 1000
 _OWNERHANDLE=0000000064
 1002
@@ -21413,7 +21413,7 @@ DSTP_XDATA
 1002
 {
 1000
-_TMPL1=@@[T8]
+_TMPL1=@@[VL_Mark3]
 1000
 _OWNERHANDLE=0000000064
 1002
@@ -21481,7 +21481,7 @@ DSTP_XDATA
 1002
 {
 1000
-_TMPL1=@@[T9]
+_TMPL1=@@[VL_Setting3]
 1000
 _OWNERHANDLE=0000000064
 1002
@@ -21543,7 +21543,7 @@ DSTP_XDATA
 1002
 {
 1000
-_TMPL1=@@[T15]
+_TMPL1=@@[VL_Power1]
 1000
 _OWNERHANDLE=0000000064
 1002
@@ -21611,7 +21611,7 @@ DSTP_XDATA
 1002
 {
 1000
-_TMPL1=@@[T10]
+_TMPL1=@@[VL_Cable11]
 1000
 _OWNERHANDLE=0000000064
 1002
@@ -21679,7 +21679,7 @@ DSTP_XDATA
 1002
 {
 1000
-_TMPL1=@@[T11]
+_TMPL1=@@[VL_Cable12]
 1000
 _OWNERHANDLE=0000000064
 1002
@@ -21737,7 +21737,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T26
+LCExpression=VL_Crossing2
 1002
 }
   0
@@ -21775,7 +21775,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T26
+LCExpression=VL_Crossing2
 1002
 }
   0
@@ -21813,7 +21813,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T26
+LCExpression=VL_Crossing2
 1002
 }
   0
@@ -21851,7 +21851,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T25 or T26
+LCExpression=VL_Crossing1 or VL_Crossing2
 1002
 }
   0
@@ -21889,7 +21889,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T25 or T26
+LCExpression=VL_Crossing1 or VL_Crossing2
 1002
 }
   0
@@ -21927,7 +21927,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T22
+LCExpression=VL_Busbar2
 1002
 }
   0
@@ -21965,7 +21965,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression= (T32=4 or T32=5) 
+LCExpression= (VL_View2=4 or VL_View2=5) 
 1002
 }
   0
@@ -22003,7 +22003,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T25 
+LCExpression=VL_Crossing1 
 1002
 }
   0
@@ -22041,7 +22041,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T21
+LCExpression=VL_Busbar1
 1002
 }
   0
@@ -22079,7 +22079,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=(T31=4 or T31=5)
+LCExpression=(VL_View1=4 or VL_View1=5)
 1002
 }
   0
@@ -22117,7 +22117,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=(T32=2 or T32=3)
+LCExpression=(VL_View2=2 or VL_View2=3)
 1002
 }
   0
@@ -22155,7 +22155,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=(T32=2 or T32=3)
+LCExpression=(VL_View2=2 or VL_View2=3)
 1002
 }
   0
@@ -22193,7 +22193,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=(T32=2 or T32=3)
+LCExpression=(VL_View2=2 or VL_View2=3)
 1002
 }
   0
@@ -22231,7 +22231,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=((not T24) or T32=6) and (T21 or T22) and (not(T27 and (T25 or T26)))
+LCExpression=((not VL_Device2) or VL_View2=6) and (VL_Busbar1 or VL_Busbar2) and (not(VL_Cable1 and (VL_Crossing1 or VL_Crossing2)))
 1002
 }
   0
@@ -22269,7 +22269,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T27 and (not (T25 or T26)) and (not T32=7)
+LCExpression=VL_Cable1 and (not (VL_Crossing1 or VL_Crossing2)) and (not VL_View2=7)
 1002
 }
   0
@@ -22309,7 +22309,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T32=6
+LCExpression=VL_View2=6
 1002
 }
   0
@@ -22349,7 +22349,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T32=6
+LCExpression=VL_View2=6
 1002
 }
   0
@@ -22387,7 +22387,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T32=6
+LCExpression=VL_View2=6
 1002
 }
   0
@@ -22425,7 +22425,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T32=6
+LCExpression=VL_View2=6
 1002
 }
   0
@@ -22463,7 +22463,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T32=7
+LCExpression=VL_View2=7
 1002
 }
   0
@@ -22501,7 +22501,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T32=7
+LCExpression=VL_View2=7
 1002
 }
   0
@@ -22539,7 +22539,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T32=7
+LCExpression=VL_View2=7
 1002
 }
   0
@@ -22577,7 +22577,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T32=7
+LCExpression=VL_View2=7
 1002
 }
   0
@@ -22615,7 +22615,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T32=7
+LCExpression=VL_View2=7
 1002
 }
   0
@@ -22663,7 +22663,7 @@ LCGoodLayer=FORMAT
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T32=7
+LCExpression=VL_View2=7
 1002
 }
   0
@@ -22701,7 +22701,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=(not (T25 or T26 )) and (not T32=7) and (T21 or T22)
+LCExpression=(not (VL_Crossing1 or VL_Crossing2 )) and (not VL_View2=7) and (VL_Busbar1 or VL_Busbar2)
 1002
 }
   0
@@ -22739,7 +22739,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T27 and (not (T25 or T26)) 
+LCExpression=VL_Cable1 and (not (VL_Crossing1 or VL_Crossing2)) 
 1002
 }
   0
@@ -22777,7 +22777,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T32>2 and T32<6
+LCExpression=VL_View2>2 and VL_View2<6
 1002
 }
   0
@@ -22815,7 +22815,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T32>2 and T32<6
+LCExpression=VL_View2>2 and VL_View2<6
 1002
 }
   0
@@ -22853,7 +22853,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T32>2 and T32<6
+LCExpression=VL_View2>2 and VL_View2<6
 1002
 }
   0
@@ -22903,7 +22903,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=(T32=3 or T32=4)
+LCExpression=(VL_View2=3 or VL_View2=4)
 1002
 }
   0
@@ -22943,7 +22943,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T32=8
+LCExpression=VL_View2=8
 1002
 }
   0
@@ -22983,7 +22983,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T32=8
+LCExpression=VL_View2=8
 1002
 }
   0
@@ -23023,7 +23023,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T32=8
+LCExpression=VL_View2=8
 1002
 }
   0
@@ -23063,7 +23063,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T32=8
+LCExpression=VL_View2=8
 1002
 }
   0
@@ -23103,7 +23103,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T32=8
+LCExpression=VL_View2=8
 1002
 }
   0
@@ -23143,7 +23143,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T32=8
+LCExpression=VL_View2=8
 1002
 }
   0
@@ -23181,7 +23181,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=(T27 and (not (T25 or T26))) and (not T32=7) and (not T32=8)
+LCExpression=(VL_Cable1 and (not (VL_Crossing1 or VL_Crossing2))) and (not VL_View2=7) and (not VL_View2=8)
 1002
 }
   0
@@ -23219,7 +23219,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T31=5
+LCExpression=VL_View1=5
 1002
 }
   0
@@ -23257,7 +23257,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T31=5
+LCExpression=VL_View1=5
 1002
 }
   0
@@ -23295,7 +23295,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T31=5
+LCExpression=VL_View1=5
 1002
 }
   0
@@ -23333,7 +23333,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T31=5
+LCExpression=VL_View1=5
 1002
 }
   0
@@ -23371,7 +23371,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T32=5 
+LCExpression=VL_View2=5 
 1002
 }
   0
@@ -23409,7 +23409,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T32=5 
+LCExpression=VL_View2=5 
 1002
 }
   0
@@ -23447,7 +23447,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T32=5 
+LCExpression=VL_View2=5 
 1002
 }
   0
@@ -23485,7 +23485,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T32=5 
+LCExpression=VL_View2=5 
 1002
 }
   0
@@ -23523,7 +23523,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T24 and (not T23) and (not T22)
+LCExpression=VL_Device2 and (not VL_Device1) and (not VL_Busbar2)
 1002
 }
   0
@@ -23561,7 +23561,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T24 and (not T23) and (not T22) and T27 
+LCExpression=VL_Device2 and (not VL_Device1) and (not VL_Busbar2) and VL_Cable1 
 1002
 }
   0
@@ -23599,7 +23599,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T24 and (not T23) and (not T22) and T27
+LCExpression=VL_Device2 and (not VL_Device1) and (not VL_Busbar2) and VL_Cable1
 1002
 }
   0
@@ -23637,7 +23637,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T27 and (not (T25 or T26)) 
+LCExpression=VL_Cable1 and (not (VL_Crossing1 or VL_Crossing2)) 
 1002
 }
   0
@@ -23675,7 +23675,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T27 and (not (T25 or T26)) 
+LCExpression=VL_Cable1 and (not (VL_Crossing1 or VL_Crossing2)) 
 1002
 }
   0
@@ -23713,7 +23713,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=not (T25 or T26 ) and (T21 or T22)
+LCExpression=not (VL_Crossing1 or VL_Crossing2 ) and (VL_Busbar1 or VL_Busbar2)
 1002
 }
   0
@@ -23747,7 +23747,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T24 and (not T23) and (not T22)
+LCExpression=VL_Device2 and (not VL_Device1) and (not VL_Busbar2)
 1002
 }
   0
@@ -23781,7 +23781,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T24 and (not T23) and (not T22) and T27 
+LCExpression=VL_Device2 and (not VL_Device1) and (not VL_Busbar2) and VL_Cable1 
 1002
 }
   0
@@ -23815,7 +23815,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T24 and (not T23) and (not T22) and T27
+LCExpression=VL_Device2 and (not VL_Device1) and (not VL_Busbar2) and VL_Cable1
 1002
 }
   0
@@ -23855,7 +23855,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T27 and T33=0 
+LCExpression=VL_Cable1 and VL_View3=0 
 1002
 }
   0
@@ -25177,7 +25177,7 @@ DSTP_XDATA
 1002
 {
 1000
-_TMPL1=@@[T16]
+_TMPL1=@@[VL_Current1]
 1000
 _OWNERHANDLE=0000000064
 1002
@@ -25239,7 +25239,7 @@ DSTP_XDATA
 1002
 {
 1000
-_TMPL1=@@[T17]
+_TMPL1=@@[VL_Feeder]
 1000
 _OWNERHANDLE=0000000064
 1002
@@ -25301,7 +25301,7 @@ DSTP_XDATA
 1002
 {
 1000
-_TMPL1=@@[T14]
+_TMPL1=@@[VL_Group]
 1000
 _OWNERHANDLE=0000000064
 1002
@@ -25359,7 +25359,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T27 and (not (T25 or T26)) 
+LCExpression=VL_Cable1 and (not (VL_Crossing1 or VL_Crossing2)) 
 1002
 }
   0
@@ -25397,7 +25397,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T27 and (not (T25 or T26)) 
+LCExpression=VL_Cable1 and (not (VL_Crossing1 or VL_Crossing2)) 
 1002
 }
   0
@@ -25435,7 +25435,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=((T23 or T27) and (not (T25 or T26))) or T22
+LCExpression=((VL_Device1 or VL_Cable1) and (not (VL_Crossing1 or VL_Crossing2))) or VL_Busbar2
 1002
 }
   0
@@ -25473,7 +25473,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=(T23 or T27) or T22
+LCExpression=(VL_Device1 or VL_Cable1) or VL_Busbar2
 1002
 }
   0
@@ -25511,7 +25511,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=(T23 or T27) or T22
+LCExpression=(VL_Device1 or VL_Cable1) or VL_Busbar2
 1002
 }
   0
@@ -25549,7 +25549,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=(T23 or T27) or T22
+LCExpression=(VL_Device1 or VL_Cable1) or VL_Busbar2
 1002
 }
   0
@@ -25583,7 +25583,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=((T23 or T27) and (not (T25 or T26))) or T22
+LCExpression=((VL_Device1 or VL_Cable1) and (not (VL_Crossing1 or VL_Crossing2))) or VL_Busbar2
 1002
 }
   0
@@ -25617,7 +25617,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T27 and (not (T25 or T26)) 
+LCExpression=VL_Cable1 and (not (VL_Crossing1 or VL_Crossing2)) 
 1002
 }
   0
@@ -25651,7 +25651,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T27 and (not (T25 or T26)) 
+LCExpression=VL_Cable1 and (not (VL_Crossing1 or VL_Crossing2)) 
 1002
 }
   0
@@ -25689,7 +25689,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T31>0 and T31<4
+LCExpression=VL_View1>0 and VL_View1<4
 1002
 }
   0
@@ -25727,7 +25727,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T31>0 and T31<4
+LCExpression=VL_View1>0 and VL_View1<4
 1002
 }
   0
@@ -25765,7 +25765,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T27 and (not (T25 or T26)) 
+LCExpression=VL_Cable1 and (not (VL_Crossing1 or VL_Crossing2)) 
 1002
 }
   0
@@ -25803,7 +25803,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T27 and (not (T25 or T26)) 
+LCExpression=VL_Cable1 and (not (VL_Crossing1 or VL_Crossing2)) 
 1002
 }
   0
@@ -25841,7 +25841,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T27 and (not (T25 or T26)) 
+LCExpression=VL_Cable1 and (not (VL_Crossing1 or VL_Crossing2)) 
 1002
 }
   0
@@ -25879,7 +25879,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T27 and (not (T25 or T26)) 
+LCExpression=VL_Cable1 and (not (VL_Crossing1 or VL_Crossing2)) 
 1002
 }
   0
@@ -25917,7 +25917,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T27 and (not (T25 or T26)) 
+LCExpression=VL_Cable1 and (not (VL_Crossing1 or VL_Crossing2)) 
 1002
 }
   0
@@ -25957,7 +25957,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T27
+LCExpression=VL_Cable1
 1002
 }
   0
@@ -25997,7 +25997,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=Defpoints
 1000
-LCExpression=(T23 or T27) or T22
+LCExpression=(VL_Device1 or VL_Cable1) or VL_Busbar2
 1002
 }
   0
@@ -26037,7 +26037,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=Defpoints
 1000
-LCExpression=(T23 or T27) or T22
+LCExpression=(VL_Device1 or VL_Cable1) or VL_Busbar2
 1002
 }
   0
@@ -26077,7 +26077,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=Defpoints
 1000
-LCExpression=(T23 or T27) or T22
+LCExpression=(VL_Device1 or VL_Cable1) or VL_Busbar2
 1002
 }
   0
@@ -26117,7 +26117,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=Defpoints
 1000
-LCExpression=(T23 or T27) or T22
+LCExpression=(VL_Device1 or VL_Cable1) or VL_Busbar2
 1002
 }
   0
@@ -26157,7 +26157,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=Defpoints
 1000
-LCExpression=(T23 or T27) or T22
+LCExpression=(VL_Device1 or VL_Cable1) or VL_Busbar2
 1002
 }
   0
@@ -26197,7 +26197,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=Defpoints
 1000
-LCExpression=(T23 or T27) or T22
+LCExpression=(VL_Device1 or VL_Cable1) or VL_Busbar2
 1002
 }
   0
@@ -26237,7 +26237,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=Defpoints
 1000
-LCExpression=(T23 or T27) or T22
+LCExpression=(VL_Device1 or VL_Cable1) or VL_Busbar2
 1002
 }
   0
@@ -26275,7 +26275,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=((T23 or T27) and (not (T25 or T26))) or T22
+LCExpression=((VL_Device1 or VL_Cable1) and (not (VL_Crossing1 or VL_Crossing2))) or VL_Busbar2
 1002
 }
   0
@@ -26313,7 +26313,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T31=3
+LCExpression=VL_View1=3
 1002
 }
   0
@@ -26351,7 +26351,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T31=3
+LCExpression=VL_View1=3
 1002
 }
   0
@@ -26389,7 +26389,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T31=3
+LCExpression=VL_View1=3
 1002
 }
   0
@@ -26427,7 +26427,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T31>0 and T31<4
+LCExpression=VL_View1>0 and VL_View1<4
 1002
 }
   0
@@ -26465,7 +26465,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T31>1 and T31<4
+LCExpression=VL_View1>1 and VL_View1<4
 1002
 }
   0
@@ -26503,7 +26503,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T31>1 and T31<4
+LCExpression=VL_View1>1 and VL_View1<4
 1002
 }
   0
@@ -26541,7 +26541,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T31>1 and T31<4
+LCExpression=VL_View1>1 and VL_View1<4
 1002
 }
   0
@@ -26591,7 +26591,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T31=3
+LCExpression=VL_View1=3
 1002
 }
   0
@@ -26629,7 +26629,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=(((T23 or T27) and (not T23)) and (not (T25 or T26))) or T22 
+LCExpression=(((VL_Device1 or VL_Cable1) and (not VL_Device1)) and (not (VL_Crossing1 or VL_Crossing2))) or VL_Busbar2 
 1002
 }
   0
@@ -26669,7 +26669,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T33=8
+LCExpression=VL_View3=8
 1002
 }
   0
@@ -26709,7 +26709,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T33=8
+LCExpression=VL_View3=8
 1002
 }
   0
@@ -26749,7 +26749,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T33=8
+LCExpression=VL_View3=8
 1002
 }
   0
@@ -26789,7 +26789,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T33=8
+LCExpression=VL_View3=8
 1002
 }
   0
@@ -26829,7 +26829,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T33=8
+LCExpression=VL_View3=8
 1002
 }
   0
@@ -26869,7 +26869,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T33=8
+LCExpression=VL_View3=8
 1002
 }
   0
@@ -26917,7 +26917,7 @@ DSTP_XDATA
 1002
 {
 1000
-_TMPL1=@@[T3]
+_TMPL1=@@[VL_Setting1]
 1000
 _OWNERHANDLE=0000000064
 1002
@@ -26985,7 +26985,7 @@ DSTP_XDATA
 1002
 {
 1000
-_TMPL1=@@[T2]
+_TMPL1=@@[VL_Mark1]
 1000
 _OWNERHANDLE=0000000064
 1002
@@ -27053,7 +27053,7 @@ DSTP_XDATA
 1002
 {
 1000
-_TMPL1=@@[T1]
+_TMPL1=@@[VL_Name1]
 1000
 _OWNERHANDLE=0000000064
 1002
@@ -27121,7 +27121,7 @@ DSTP_XDATA
 1002
 {
 1000
-_TMPL1=@@[T9]
+_TMPL1=@@[VL_Setting3]
 1000
 _OWNERHANDLE=0000000064
 1002
@@ -27189,7 +27189,7 @@ DSTP_XDATA
 1002
 {
 1000
-_TMPL1=@@[T8]
+_TMPL1=@@[VL_Mark3]
 1000
 _OWNERHANDLE=0000000064
 1002
@@ -27257,7 +27257,7 @@ DSTP_XDATA
 1002
 {
 1000
-_TMPL1=@@[T7]
+_TMPL1=@@[VL_Name3]
 1000
 _OWNERHANDLE=0000000064
 1002
@@ -27319,7 +27319,7 @@ DSTP_XDATA
 1002
 {
 1000
-_TMPL1=@@[T15]
+_TMPL1=@@[VL_Power1]
 1000
 _OWNERHANDLE=0000000064
 1002
@@ -27387,7 +27387,7 @@ DSTP_XDATA
 1002
 {
 1000
-_TMPL1=@@[T10]
+_TMPL1=@@[VL_Cable11]
 1000
 _OWNERHANDLE=0000000064
 1002
@@ -27455,7 +27455,7 @@ DSTP_XDATA
 1002
 {
 1000
-_TMPL1=@@[T11]
+_TMPL1=@@[VL_Cable12]
 1000
 _OWNERHANDLE=0000000064
 1002
@@ -27513,7 +27513,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T26
+LCExpression=VL_Crossing2
 1002
 }
   0
@@ -27551,7 +27551,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T26
+LCExpression=VL_Crossing2
 1002
 }
   0
@@ -27589,7 +27589,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T26
+LCExpression=VL_Crossing2
 1002
 }
   0
@@ -27627,7 +27627,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T26
+LCExpression=VL_Crossing2
 1002
 }
   0
@@ -27665,7 +27665,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T25 or T26
+LCExpression=VL_Crossing1 or VL_Crossing2
 1002
 }
   0
@@ -27703,7 +27703,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T22
+LCExpression=VL_Busbar2
 1002
 }
   0
@@ -27741,7 +27741,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T25
+LCExpression=VL_Crossing1
 1002
 }
   0
@@ -27779,7 +27779,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T33=0 and T27
+LCExpression=VL_View3=0 and VL_Cable1
 1002
 }
   0
@@ -27817,7 +27817,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T21
+LCExpression=VL_Busbar1
 1002
 }
   0
@@ -27857,7 +27857,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T28
+LCExpression=VL_Cable2
 1002
 }
   0
@@ -27905,7 +27905,7 @@ DSTP_XDATA
 1002
 {
 1000
-_TMPL1=@@[T12]
+_TMPL1=@@[VL_Cable21]
 1000
 _OWNERHANDLE=0000000064
 1002
@@ -27973,7 +27973,7 @@ DSTP_XDATA
 1002
 {
 1000
-_TMPL1=@@[T13]
+_TMPL1=@@[VL_Cable22]
 1000
 _OWNERHANDLE=0000000064
 1002
@@ -145061,7 +145061,7 @@ DSTP_XDATA
 1002
 {
 1000
-_TMPL1=@@[T16]
+_TMPL1=@@[VL_Current1]
 1000
 _OWNERHANDLE=0000000064
 1002
@@ -145123,7 +145123,7 @@ DSTP_XDATA
 1002
 {
 1000
-_TMPL1=@@[T17]
+_TMPL1=@@[VL_Feeder]
 1000
 _OWNERHANDLE=0000000064
 1002
@@ -145185,7 +145185,7 @@ DSTP_XDATA
 1002
 {
 1000
-_TMPL1=@@[T14]
+_TMPL1=@@[VL_Group]
 1000
 _OWNERHANDLE=0000000064
 1002
@@ -145243,7 +145243,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T27 and (not (T25 or T26)) 
+LCExpression=VL_Cable1 and (not (VL_Crossing1 or VL_Crossing2)) 
 1002
 }
   0
@@ -145281,7 +145281,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T27 and (not (T25 or T26)) 
+LCExpression=VL_Cable1 and (not (VL_Crossing1 or VL_Crossing2)) 
 1002
 }
   0
@@ -145319,7 +145319,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=((T23 or T27) and (not (T25 or T26))) or T22
+LCExpression=((VL_Device1 or VL_Cable1) and (not (VL_Crossing1 or VL_Crossing2))) or VL_Busbar2
 1002
 }
   0
@@ -145357,7 +145357,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=(T23 or T27) or T22
+LCExpression=(VL_Device1 or VL_Cable1) or VL_Busbar2
 1002
 }
   0
@@ -145395,7 +145395,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=(T23 or T27) or T22
+LCExpression=(VL_Device1 or VL_Cable1) or VL_Busbar2
 1002
 }
   0
@@ -145433,7 +145433,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=(T23 or T27) or T22
+LCExpression=(VL_Device1 or VL_Cable1) or VL_Busbar2
 1002
 }
   0
@@ -145467,7 +145467,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=((T23 or T27) and (not (T25 or T26))) or T22
+LCExpression=((VL_Device1 or VL_Cable1) and (not (VL_Crossing1 or VL_Crossing2))) or VL_Busbar2
 1002
 }
   0
@@ -145501,7 +145501,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T27 and (not (T25 or T26)) 
+LCExpression=VL_Cable1 and (not (VL_Crossing1 or VL_Crossing2)) 
 1002
 }
   0
@@ -145535,7 +145535,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T27 and (not (T25 or T26)) 
+LCExpression=VL_Cable1 and (not (VL_Crossing1 or VL_Crossing2)) 
 1002
 }
   0
@@ -145573,7 +145573,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T31>0 and T31<4
+LCExpression=VL_View1>0 and VL_View1<4
 1002
 }
   0
@@ -145611,7 +145611,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T31>0 and T31<4
+LCExpression=VL_View1>0 and VL_View1<4
 1002
 }
   0
@@ -145649,7 +145649,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T27 and (not (T25 or T26)) 
+LCExpression=VL_Cable1 and (not (VL_Crossing1 or VL_Crossing2)) 
 1002
 }
   0
@@ -145687,7 +145687,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T27 and (not (T25 or T26)) 
+LCExpression=VL_Cable1 and (not (VL_Crossing1 or VL_Crossing2)) 
 1002
 }
   0
@@ -145725,7 +145725,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T27 and (not (T25 or T26)) 
+LCExpression=VL_Cable1 and (not (VL_Crossing1 or VL_Crossing2)) 
 1002
 }
   0
@@ -145763,7 +145763,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T27 and (not (T25 or T26)) 
+LCExpression=VL_Cable1 and (not (VL_Crossing1 or VL_Crossing2)) 
 1002
 }
   0
@@ -145801,7 +145801,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T27 and (not (T25 or T26)) 
+LCExpression=VL_Cable1 and (not (VL_Crossing1 or VL_Crossing2)) 
 1002
 }
   0
@@ -145841,7 +145841,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T27
+LCExpression=VL_Cable1
 1002
 }
   0
@@ -145881,7 +145881,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=Defpoints
 1000
-LCExpression=(T23 or T27) or T22
+LCExpression=(VL_Device1 or VL_Cable1) or VL_Busbar2
 1002
 }
   0
@@ -145921,7 +145921,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=Defpoints
 1000
-LCExpression=(T23 or T27) or T22
+LCExpression=(VL_Device1 or VL_Cable1) or VL_Busbar2
 1002
 }
   0
@@ -145961,7 +145961,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=Defpoints
 1000
-LCExpression=(T23 or T27) or T22
+LCExpression=(VL_Device1 or VL_Cable1) or VL_Busbar2
 1002
 }
   0
@@ -146001,7 +146001,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=Defpoints
 1000
-LCExpression=(T23 or T27) or T22
+LCExpression=(VL_Device1 or VL_Cable1) or VL_Busbar2
 1002
 }
   0
@@ -146041,7 +146041,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=Defpoints
 1000
-LCExpression=(T23 or T27) or T22
+LCExpression=(VL_Device1 or VL_Cable1) or VL_Busbar2
 1002
 }
   0
@@ -146081,7 +146081,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=Defpoints
 1000
-LCExpression=(T23 or T27) or T22
+LCExpression=(VL_Device1 or VL_Cable1) or VL_Busbar2
 1002
 }
   0
@@ -146121,7 +146121,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=Defpoints
 1000
-LCExpression=(T23 or T27) or T22
+LCExpression=(VL_Device1 or VL_Cable1) or VL_Busbar2
 1002
 }
   0
@@ -146159,7 +146159,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=((T23 or T27) and (not (T25 or T26))) or T22
+LCExpression=((VL_Device1 or VL_Cable1) and (not (VL_Crossing1 or VL_Crossing2))) or VL_Busbar2
 1002
 }
   0
@@ -146197,7 +146197,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T31=3
+LCExpression=VL_View1=3
 1002
 }
   0
@@ -146235,7 +146235,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T31=3
+LCExpression=VL_View1=3
 1002
 }
   0
@@ -146273,7 +146273,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T31=3
+LCExpression=VL_View1=3
 1002
 }
   0
@@ -146311,7 +146311,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T31>0 and T31<4
+LCExpression=VL_View1>0 and VL_View1<4
 1002
 }
   0
@@ -146349,7 +146349,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T31>1 and T31<4
+LCExpression=VL_View1>1 and VL_View1<4
 1002
 }
   0
@@ -146387,7 +146387,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T31>1 and T31<4
+LCExpression=VL_View1>1 and VL_View1<4
 1002
 }
   0
@@ -146425,7 +146425,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T31>1 and T31<4
+LCExpression=VL_View1>1 and VL_View1<4
 1002
 }
   0
@@ -146475,7 +146475,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T31=3
+LCExpression=VL_View1=3
 1002
 }
   0
@@ -146513,7 +146513,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=(((T23 or T27) and (not T23)) and (not (T25 or T26))) or T22 
+LCExpression=(((VL_Device1 or VL_Cable1) and (not VL_Device1)) and (not (VL_Crossing1 or VL_Crossing2))) or VL_Busbar2 
 1002
 }
   0
@@ -146553,7 +146553,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T33=8
+LCExpression=VL_View3=8
 1002
 }
   0
@@ -146593,7 +146593,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T33=8
+LCExpression=VL_View3=8
 1002
 }
   0
@@ -146633,7 +146633,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T33=8
+LCExpression=VL_View3=8
 1002
 }
   0
@@ -146673,7 +146673,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T33=8
+LCExpression=VL_View3=8
 1002
 }
   0
@@ -146713,7 +146713,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T33=8
+LCExpression=VL_View3=8
 1002
 }
   0
@@ -146753,7 +146753,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T33=8
+LCExpression=VL_View3=8
 1002
 }
   0
@@ -146801,7 +146801,7 @@ DSTP_XDATA
 1002
 {
 1000
-_TMPL1=@@[T3]
+_TMPL1=@@[VL_Setting1]
 1000
 _OWNERHANDLE=0000000064
 1002
@@ -146869,7 +146869,7 @@ DSTP_XDATA
 1002
 {
 1000
-_TMPL1=@@[T2]
+_TMPL1=@@[VL_Mark1]
 1000
 _OWNERHANDLE=0000000064
 1002
@@ -146937,7 +146937,7 @@ DSTP_XDATA
 1002
 {
 1000
-_TMPL1=@@[T1]
+_TMPL1=@@[VL_Name1]
 1000
 _OWNERHANDLE=0000000064
 1002
@@ -147005,7 +147005,7 @@ DSTP_XDATA
 1002
 {
 1000
-_TMPL1=@@[T9]
+_TMPL1=@@[VL_Setting3]
 1000
 _OWNERHANDLE=0000000064
 1002
@@ -147073,7 +147073,7 @@ DSTP_XDATA
 1002
 {
 1000
-_TMPL1=@@[T8]
+_TMPL1=@@[VL_Mark3]
 1000
 _OWNERHANDLE=0000000064
 1002
@@ -147141,7 +147141,7 @@ DSTP_XDATA
 1002
 {
 1000
-_TMPL1=@@[T7]
+_TMPL1=@@[VL_Name3]
 1000
 _OWNERHANDLE=0000000064
 1002
@@ -147203,7 +147203,7 @@ DSTP_XDATA
 1002
 {
 1000
-_TMPL1=@@[T15]
+_TMPL1=@@[VL_Power1]
 1000
 _OWNERHANDLE=0000000064
 1002
@@ -147271,7 +147271,7 @@ DSTP_XDATA
 1002
 {
 1000
-_TMPL1=@@[T10]
+_TMPL1=@@[VL_Cable11]
 1000
 _OWNERHANDLE=0000000064
 1002
@@ -147339,7 +147339,7 @@ DSTP_XDATA
 1002
 {
 1000
-_TMPL1=@@[T11]
+_TMPL1=@@[VL_Cable12]
 1000
 _OWNERHANDLE=0000000064
 1002
@@ -147397,7 +147397,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T26
+LCExpression=VL_Crossing2
 1002
 }
   0
@@ -147435,7 +147435,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T26
+LCExpression=VL_Crossing2
 1002
 }
   0
@@ -147473,7 +147473,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T26
+LCExpression=VL_Crossing2
 1002
 }
   0
@@ -147511,7 +147511,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T26
+LCExpression=VL_Crossing2
 1002
 }
   0
@@ -147549,7 +147549,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T25 or T26
+LCExpression=VL_Crossing1 or VL_Crossing2
 1002
 }
   0
@@ -147587,7 +147587,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T22
+LCExpression=VL_Busbar2
 1002
 }
   0
@@ -147625,7 +147625,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T25
+LCExpression=VL_Crossing1
 1002
 }
   0
@@ -147663,7 +147663,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T33=0 and T27
+LCExpression=VL_View3=0 and VL_Cable1
 1002
 }
   0
@@ -147701,7 +147701,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T21
+LCExpression=VL_Busbar1
 1002
 }
   0
@@ -147741,7 +147741,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T28
+LCExpression=VL_Cable2
 1002
 }
   0
@@ -147789,7 +147789,7 @@ DSTP_XDATA
 1002
 {
 1000
-_TMPL1=@@[T12]
+_TMPL1=@@[VL_Cable21]
 1000
 _OWNERHANDLE=0000000064
 1002
@@ -147857,7 +147857,7 @@ DSTP_XDATA
 1002
 {
 1000
-_TMPL1=@@[T13]
+_TMPL1=@@[VL_Cable22]
 1000
 _OWNERHANDLE=0000000064
 1002
@@ -214865,7 +214865,7 @@ DSTP_XDATA
 1002
 {
 1000
-_TMPL1=@@[T16]
+_TMPL1=@@[VL_Current1]
 1000
 _OWNERHANDLE=0000000064
 1002
@@ -214927,7 +214927,7 @@ DSTP_XDATA
 1002
 {
 1000
-_TMPL1=@@[T17]
+_TMPL1=@@[VL_Feeder]
 1000
 _OWNERHANDLE=0000000064
 1002
@@ -214989,7 +214989,7 @@ DSTP_XDATA
 1002
 {
 1000
-_TMPL1=@@[T14]
+_TMPL1=@@[VL_Group]
 1000
 _OWNERHANDLE=0000000064
 1002
@@ -215047,7 +215047,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T27 and (not (T25 or T26)) 
+LCExpression=VL_Cable1 and (not (VL_Crossing1 or VL_Crossing2)) 
 1002
 }
   0
@@ -215085,7 +215085,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T27 and (not (T25 or T26)) 
+LCExpression=VL_Cable1 and (not (VL_Crossing1 or VL_Crossing2)) 
 1002
 }
   0
@@ -215123,7 +215123,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=((T23 or T27) and (not (T25 or T26))) or T22
+LCExpression=((VL_Device1 or VL_Cable1) and (not (VL_Crossing1 or VL_Crossing2))) or VL_Busbar2
 1002
 }
   0
@@ -215161,7 +215161,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=(T23 or T27) or T22
+LCExpression=(VL_Device1 or VL_Cable1) or VL_Busbar2
 1002
 }
   0
@@ -215199,7 +215199,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=(T23 or T27) or T22
+LCExpression=(VL_Device1 or VL_Cable1) or VL_Busbar2
 1002
 }
   0
@@ -215237,7 +215237,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=(T23 or T27) or T22
+LCExpression=(VL_Device1 or VL_Cable1) or VL_Busbar2
 1002
 }
   0
@@ -215271,7 +215271,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=((T23 or T27) and (not (T25 or T26))) or T22
+LCExpression=((VL_Device1 or VL_Cable1) and (not (VL_Crossing1 or VL_Crossing2))) or VL_Busbar2
 1002
 }
   0
@@ -215305,7 +215305,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T27 and (not (T25 or T26)) 
+LCExpression=VL_Cable1 and (not (VL_Crossing1 or VL_Crossing2)) 
 1002
 }
   0
@@ -215339,7 +215339,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T27 and (not (T25 or T26)) 
+LCExpression=VL_Cable1 and (not (VL_Crossing1 or VL_Crossing2)) 
 1002
 }
   0
@@ -215377,7 +215377,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T31>0 and T31<4
+LCExpression=VL_View1>0 and VL_View1<4
 1002
 }
   0
@@ -215415,7 +215415,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T31>0 and T31<4
+LCExpression=VL_View1>0 and VL_View1<4
 1002
 }
   0
@@ -215453,7 +215453,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T27 and (not (T25 or T26)) 
+LCExpression=VL_Cable1 and (not (VL_Crossing1 or VL_Crossing2)) 
 1002
 }
   0
@@ -215491,7 +215491,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T27 and (not (T25 or T26)) 
+LCExpression=VL_Cable1 and (not (VL_Crossing1 or VL_Crossing2)) 
 1002
 }
   0
@@ -215529,7 +215529,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T27 and (not (T25 or T26)) 
+LCExpression=VL_Cable1 and (not (VL_Crossing1 or VL_Crossing2)) 
 1002
 }
   0
@@ -215567,7 +215567,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T27 and (not (T25 or T26)) 
+LCExpression=VL_Cable1 and (not (VL_Crossing1 or VL_Crossing2)) 
 1002
 }
   0
@@ -215605,7 +215605,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T27 and (not (T25 or T26)) 
+LCExpression=VL_Cable1 and (not (VL_Crossing1 or VL_Crossing2)) 
 1002
 }
   0
@@ -215645,7 +215645,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T27
+LCExpression=VL_Cable1
 1002
 }
   0
@@ -215685,7 +215685,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=Defpoints
 1000
-LCExpression=(T23 or T27) or T22
+LCExpression=(VL_Device1 or VL_Cable1) or VL_Busbar2
 1002
 }
   0
@@ -215725,7 +215725,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=Defpoints
 1000
-LCExpression=(T23 or T27) or T22
+LCExpression=(VL_Device1 or VL_Cable1) or VL_Busbar2
 1002
 }
   0
@@ -215765,7 +215765,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=Defpoints
 1000
-LCExpression=(T23 or T27) or T22
+LCExpression=(VL_Device1 or VL_Cable1) or VL_Busbar2
 1002
 }
   0
@@ -215805,7 +215805,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=Defpoints
 1000
-LCExpression=(T23 or T27) or T22
+LCExpression=(VL_Device1 or VL_Cable1) or VL_Busbar2
 1002
 }
   0
@@ -215845,7 +215845,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=Defpoints
 1000
-LCExpression=(T23 or T27) or T22
+LCExpression=(VL_Device1 or VL_Cable1) or VL_Busbar2
 1002
 }
   0
@@ -215885,7 +215885,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=Defpoints
 1000
-LCExpression=(T23 or T27) or T22
+LCExpression=(VL_Device1 or VL_Cable1) or VL_Busbar2
 1002
 }
   0
@@ -215925,7 +215925,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=Defpoints
 1000
-LCExpression=(T23 or T27) or T22
+LCExpression=(VL_Device1 or VL_Cable1) or VL_Busbar2
 1002
 }
   0
@@ -215963,7 +215963,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=((T23 or T27) and (not (T25 or T26))) or T22
+LCExpression=((VL_Device1 or VL_Cable1) and (not (VL_Crossing1 or VL_Crossing2))) or VL_Busbar2
 1002
 }
   0
@@ -216001,7 +216001,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T31=3
+LCExpression=VL_View1=3
 1002
 }
   0
@@ -216039,7 +216039,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T31=3
+LCExpression=VL_View1=3
 1002
 }
   0
@@ -216077,7 +216077,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T31=3
+LCExpression=VL_View1=3
 1002
 }
   0
@@ -216115,7 +216115,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T31>0 and T31<4
+LCExpression=VL_View1>0 and VL_View1<4
 1002
 }
   0
@@ -216153,7 +216153,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T31>1 and T31<4
+LCExpression=VL_View1>1 and VL_View1<4
 1002
 }
   0
@@ -216191,7 +216191,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T31>1 and T31<4
+LCExpression=VL_View1>1 and VL_View1<4
 1002
 }
   0
@@ -216229,7 +216229,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T31>1 and T31<4
+LCExpression=VL_View1>1 and VL_View1<4
 1002
 }
   0
@@ -216279,7 +216279,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T31=3
+LCExpression=VL_View1=3
 1002
 }
   0
@@ -216317,7 +216317,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=(((T23 or T27) and (not T23)) and (not (T25 or T26))) or T22 
+LCExpression=(((VL_Device1 or VL_Cable1) and (not VL_Device1)) and (not (VL_Crossing1 or VL_Crossing2))) or VL_Busbar2 
 1002
 }
   0
@@ -216357,7 +216357,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T33=8
+LCExpression=VL_View3=8
 1002
 }
   0
@@ -216397,7 +216397,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T33=8
+LCExpression=VL_View3=8
 1002
 }
   0
@@ -216437,7 +216437,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T33=8
+LCExpression=VL_View3=8
 1002
 }
   0
@@ -216477,7 +216477,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T33=8
+LCExpression=VL_View3=8
 1002
 }
   0
@@ -216517,7 +216517,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T33=8
+LCExpression=VL_View3=8
 1002
 }
   0
@@ -216557,7 +216557,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T33=8
+LCExpression=VL_View3=8
 1002
 }
   0
@@ -216605,7 +216605,7 @@ DSTP_XDATA
 1002
 {
 1000
-_TMPL1=@@[T3]
+_TMPL1=@@[VL_Setting1]
 1000
 _OWNERHANDLE=0000000064
 1002
@@ -216673,7 +216673,7 @@ DSTP_XDATA
 1002
 {
 1000
-_TMPL1=@@[T2]
+_TMPL1=@@[VL_Mark1]
 1000
 _OWNERHANDLE=0000000064
 1002
@@ -216741,7 +216741,7 @@ DSTP_XDATA
 1002
 {
 1000
-_TMPL1=@@[T1]
+_TMPL1=@@[VL_Name1]
 1000
 _OWNERHANDLE=0000000064
 1002
@@ -216809,7 +216809,7 @@ DSTP_XDATA
 1002
 {
 1000
-_TMPL1=@@[T9]
+_TMPL1=@@[VL_Setting3]
 1000
 _OWNERHANDLE=0000000064
 1002
@@ -216877,7 +216877,7 @@ DSTP_XDATA
 1002
 {
 1000
-_TMPL1=@@[T8]
+_TMPL1=@@[VL_Mark3]
 1000
 _OWNERHANDLE=0000000064
 1002
@@ -216945,7 +216945,7 @@ DSTP_XDATA
 1002
 {
 1000
-_TMPL1=@@[T7]
+_TMPL1=@@[VL_Name3]
 1000
 _OWNERHANDLE=0000000064
 1002
@@ -217007,7 +217007,7 @@ DSTP_XDATA
 1002
 {
 1000
-_TMPL1=@@[T15]
+_TMPL1=@@[VL_Power1]
 1000
 _OWNERHANDLE=0000000064
 1002
@@ -217075,7 +217075,7 @@ DSTP_XDATA
 1002
 {
 1000
-_TMPL1=@@[T10]
+_TMPL1=@@[VL_Cable11]
 1000
 _OWNERHANDLE=0000000064
 1002
@@ -217143,7 +217143,7 @@ DSTP_XDATA
 1002
 {
 1000
-_TMPL1=@@[T11]
+_TMPL1=@@[VL_Cable12]
 1000
 _OWNERHANDLE=0000000064
 1002
@@ -217201,7 +217201,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T26
+LCExpression=VL_Crossing2
 1002
 }
   0
@@ -217239,7 +217239,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T26
+LCExpression=VL_Crossing2
 1002
 }
   0
@@ -217277,7 +217277,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T26
+LCExpression=VL_Crossing2
 1002
 }
   0
@@ -217315,7 +217315,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T26
+LCExpression=VL_Crossing2
 1002
 }
   0
@@ -217353,7 +217353,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T25 or T26
+LCExpression=VL_Crossing1 or VL_Crossing2
 1002
 }
   0
@@ -217391,7 +217391,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T22
+LCExpression=VL_Busbar2
 1002
 }
   0
@@ -217429,7 +217429,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T25
+LCExpression=VL_Crossing1
 1002
 }
   0
@@ -217467,7 +217467,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T33=0 and T27
+LCExpression=VL_View3=0 and VL_Cable1
 1002
 }
   0
@@ -217505,7 +217505,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T21
+LCExpression=VL_Busbar1
 1002
 }
   0
@@ -217545,7 +217545,7 @@ LCGoodLayer=TABLE
 1000
 LCBadLayer=SYS_METRIC
 1000
-LCExpression=T28
+LCExpression=VL_Cable2
 1002
 }
   0
@@ -217593,7 +217593,7 @@ DSTP_XDATA
 1002
 {
 1000
-_TMPL1=@@[T12]
+_TMPL1=@@[VL_Cable21]
 1000
 _OWNERHANDLE=0000000064
 1002
@@ -217661,7 +217661,7 @@ DSTP_XDATA
 1002
 {
 1000
-_TMPL1=@@[T13]
+_TMPL1=@@[VL_Cable22]
 1000
 _OWNERHANDLE=0000000064
 1002

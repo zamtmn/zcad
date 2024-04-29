@@ -8,16 +8,16 @@ usescopy objname;
 
 var
 
-T1:String;(*'Позиция'*)
-T2:String;(*'Наименование'*)
-T3:String;(*'Марка'*)
-T4:String;(*'Код'*)
-T5:String;(*'Изготовитель'*)
-T6:String;(*'Ед. измерения'*)
-T7:String;(*'Количество'*)
-T8:String;(*'Масса'*)
-T9:String;(*'Примечание'*)
-T10:String;(*'Группировка'*)
+VL_Position:String;(*'Позиция'*)
+VL_Name:String;(*'Наименование'*)
+VL_Type:String;(*'Марка'*)
+VL_Code:String;(*'Код'*)
+VL_Factory:String;(*'Изготовитель'*)
+VL_Units:String;(*'Ед. измерения'*)
+VL_Quantity:String;(*'Количество'*)
+VL_Weight:String;(*'Масса'*)
+VL_Note:String;(*'Примечание'*)
+VL_Grouping:String;(*'Группировка'*)
 
 implementation
 
@@ -31,15 +31,15 @@ NMO_Name:='СП0';
 NMO_BaseName:='СП';
 NMO_Suffix:='??';
 
-T1:='??';
-T2:='??';
-T3:='??';
-T4:='??';
-T5:='??';
-T6:='??';
-T7:='??';
-T8:='??';
-T9:='??';
-T10:='';
+VL_Position:='??';
+VL_Name:='??';
+VL_Type:='??';
+VL_Code:='??';
+VL_Factory:='??';
+VL_Units:='??';
+VL_Quantity:='??';
+VL_Weight:='??';
+VL_Note:='??';
+VL_Grouping:='??';
 
 end.

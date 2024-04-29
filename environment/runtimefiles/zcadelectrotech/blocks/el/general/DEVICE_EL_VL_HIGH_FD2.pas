@@ -8,12 +8,12 @@ usescopy objname;
 
 var
 
-T1:String;(*'Обозначение'*)
-T2:String;(*'Камера'*)
-T3:String;(*'Номер'*)
-T4:String;(*'P активная'*)
-T5:String;(*'I расчетный'*)
-T6:String;(*'Cos Ф'*)
+VL_Mark:String;(*'Обозначение'*)
+VL_Type:String;(*'Камера'*)
+VL_Number:String;(*'Номер'*)
+VL_Pp:String;(*'P активная'*)
+VL_Ip:String;(*'I расчетный'*)
+VL_Cos:String;(*'Cos Ф'*)
 
 implementation
 
@@ -27,11 +27,11 @@ NMO_Name:='ФВ0';
 NMO_BaseName:='ФВ';
 NMO_Suffix:='??';
 
-T1:='??';
-T2:='??';
-T3:='??';
-T4:='??';
-T5:='??';
-T6:='??';
+VL_Mark:='??';
+VL_Type:='??';
+VL_Number:='??';
+VL_Pp:='??';
+VL_Ip:='??';
+VL_Cos:='??';
 
 end.

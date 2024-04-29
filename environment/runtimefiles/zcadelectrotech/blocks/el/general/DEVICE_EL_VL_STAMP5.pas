@@ -8,7 +8,7 @@ usescopy objname;
 
 var
 
-T21:String;(*'Сквозная нумерация'*)
+VL_Number:String;(*'Сквозная нумерация'*)
 
 implementation
 
@@ -22,6 +22,6 @@ NMO_Name:='ШТ0';
 NMO_BaseName:='ШТ';
 NMO_Suffix:='??';
 
-T21:='??';
+VL_Number:='??';
 
 end.

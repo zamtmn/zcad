@@ -27,10 +27,12 @@ interface
 uses
   SysUtils,
   uzctnrVectorBytes,
-  Classes,BeRoFileMappedStream,FileUtil;
+  Classes,BeRoFileMappedStream,FileUtil,bufstream;
 
 type
   TSetOfBytes=set of AnsiChar;
+  TInMemString=int64;
+
 const
   CSpaces:TSetOfBytes=[' '];
   CSpacesAndCR:TSetOfBytes=[' ',#13];
@@ -39,7 +41,7 @@ const
   CDecDigits:TSetOfBytes=['0','1','2','3','4','5','6','7','8','9'];
   ChLF=#10;
   ChCR=#13;
-  CNotInThisPage=low(Int64);//возвращаем когда конец строки не найден на текущей странице
+  CNotInThisPage=low({Int64}TInMemString);//возвращаем когда конец строки не найден на текущей странице
 type
   TZFileStream=TZctnrVectorBytes;
 
@@ -63,6 +65,13 @@ type
     function MoveMemViewProc(ANewPosition:int64):TMemViewInfo;
     function GetMemViewInfo:TMemViewInfo;
   end;
+
+  TZReadBufStream=class(TReadBufStream,IMemViewSource)
+
+    function MoveMemViewProc(ANewPosition:int64):TMemViewInfo;
+    function GetMemViewInfo:TMemViewInfo;
+  end;
+
   TZInMemoryReader=class
     protected
       type
@@ -70,10 +79,10 @@ type
                         ,CVPLast);//последняя/единственная страница;
       var
         fMemory:pbyte;
-        fCurrentViewOffset:int64;
-        fCurrentViewSize:int64;
-        fInMemPosition:int64;
-        fSize:int64;
+        fCurrentViewOffset:{Int64}TInMemString;
+        fCurrentViewSize:{Int64}TInMemString;
+        fInMemPosition:{Int64}TInMemString;
+        fSize:{Int64}TInMemString;
         fIS:IMemViewSource;
         FCurrentViewPos:TCurrentViewPos;
         FNeedScipEOL:boolean;
@@ -88,14 +97,23 @@ type
       function InternalParseInteger(const ASkipLeft:TSetOfBytes;out Value:Integer;const ASkipRight,AEnd:TSetOfBytes):boolean;inline;
       function InternalGetStr(const AEnd:TSetOfBytes):ShortString;inline;
       function ParseInteger(out Value:Integer):Integer;inline;
-      function ParseString:String;
+      function ParseString:String;overload;inline;
+      function ParseString(out s:String):boolean;overload;
 
-      function FindEOL:int64;
-      procedure ScipEOL;
-      procedure ScipEOLifNeed;
+      function FindEOL:int64;inline;
+      procedure ScipEOL;inline;
+      procedure ScipEOLifNeed;inline;
 
 
   end;
+
+var
+  FindEOLcount:Int64=0;
+  ScipEOLcount:Int64=0;
+  ParseStringcount:Int64=0;
+  EOFcount:Int64=0;
+  fastReadBytecount:Int64=0;
+  fastReadByteAndMoweWindowcount:Int64=0;
 
 implementation
 
@@ -113,6 +131,20 @@ begin
   result:=GetMemViewInfo;
 end;
 
+function TZReadBufStream.GetMemViewInfo:TMemViewInfo;
+begin
+  result.Memory:=buffer;
+  result.Position:=GetPosition;
+  result.Size:=GetSize;
+  result.CurrentViewSize:=Capacity;//BufferSize;
+  result.CurrentViewOffset:=(result.Position-1) div result.CurrentViewSize{BufferPos};
+end;
+function TZReadBufStream.MoveMemViewProc(ANewPosition:int64):TMemViewInfo;
+begin
+  Seek(ANewPosition,soBeginning);
+  result:=GetMemViewInfo;
+  FillBuffer;
+end;
 
 procedure TZInMemoryReader.ResetLastChar;
 begin
@@ -175,11 +207,14 @@ end;
 
 function TZInMemoryReader.fastReadByte:byte;
 begin
+  inc(fastReadBytecount);
   result:=fMemory[fInMemPosition];
-  if (fInMemPosition<fCurrentViewSize-1)or(fInMemPosition+fCurrentViewOffset=fSize-1) then
+  if (fInMemPosition<(fCurrentViewSize-1))or((fInMemPosition+fCurrentViewOffset)=(fSize-1)) then
     inc(fInMemPosition)
-  else
-    {Seek(1,soCurrent)};
+  else begin
+    setFromTMemViewInfo(fIS.MoveMemViewProc(fCurrentViewOffset+fCurrentViewSize));
+    inc(fastReadByteAndMoweWindowcount);
+  end;
 end;
 
 
@@ -191,6 +226,7 @@ end;
 
 function TZInMemoryReader.EOF:Boolean;
 begin
+  inc(EOFcount);
   ScipEOLifNeed;
   if FCurrentViewPos<>CVPLast then
     result:=false
@@ -249,34 +285,53 @@ procedure TZInMemoryReader.ScipEOL;
 var
   CurrentByte:Byte;
 begin
-  CurrentByte:=fastReadByte;
-  if CurrentByte=byte(ChCR)then begin
+  inc(ScipEOLcount);
+
+  //if fCurrentViewSize-fInMemPosition<3 then begin
     CurrentByte:=fastReadByte;
-    if CurrentByte=byte(ChLF)then
-      //CurrentByte:=fastReadByte
-    else
-      ResetLastChar;
-  end;
+    if CurrentByte=byte(ChCR)then begin
+      CurrentByte:=fastReadByte;
+      if CurrentByte<>byte(ChLF)then
+        ResetLastChar;
+    end;
+  {end else begin
+
+    CurrentByte:=fMemory[fInMemPosition];
+    inc(fInMemPosition);
+    if CurrentByte=byte(ChCR)then begin
+      CurrentByte:=fMemory[fInMemPosition];
+      inc(fInMemPosition);
+      if CurrentByte<>byte(ChLF)then
+        dec(fInMemPosition);
+    end;
+
+  end;}
 end;
+
 
 function TZInMemoryReader.FindEOL:int64;
 var
   InMemPos:int64;
+  pch:pchar;
 begin
+  inc(FindEOLcount);
+
   ScipEOLifNeed;
 
   InMemPos:=fInMemPosition;
+  pch:=@fMemory[InMemPos];
 
   while InMemPos<fCurrentViewSize do begin
-    if AnsiChar(fMemory[InMemPos]) in CLFCR then begin
+    if (pch^=ChLF)or(pch^=ChCR) then begin  //pch^ in CLFCR медленней в 2 раза
       FNeedScipEOL:=True;
       exit(InMemPos)
     end;
     inc(InMemPos);
+    inc(pch);
   end;
   if InMemPos=fSize then
-    exit(InMemPos);
-  //if fCurrentViewSize+fCurrentViewOffset=InMemPos then
+    result:=InMemPos
+  else
     result:=CNotInThisPage;
 end;
 
@@ -287,23 +342,57 @@ var
   l:int64;
   ts:string;
 begin
+  inc(ParseStringcount);
   PEOL:=FindEOL;
   if PEOL=fInMemPosition then
     exit('')
   else if PEOL=CNotInThisPage then begin
     l:=fCurrentViewSize-fInMemPosition;
-    SetLength(Result,l);
-    Move(fMemory[fInMemPosition],Result[1],l);
+    //SetLength(Result,l);
+    //Move(fMemory[fInMemPosition],Result[1],l);
     setFromTMemViewInfo(fIS.MoveMemViewProc(fCurrentViewOffset+fCurrentViewSize));
-    ts:=ParseString();
-    result:=result+ts;
+    {ts:=}ParseString();
+    //result:=result+ts;
   end else begin
     l:=PEOL-fInMemPosition;
-    SetLength(Result,l);
-    Move(fMemory[fInMemPosition],Result[1],l);
+    //SetLength(Result,l);
+    //Move(fMemory[fInMemPosition],Result[1],l);
     fInMemPosition:=PEOL;
   end;
 end;
-
+function TZInMemoryReader.ParseString(out s:String):boolean;
+var
+  PEOL:int64;
+  l:int64;
+  ts:string;
+begin
+  if fCurrentViewOffset+fInMemPosition=fSize then
+    exit(false);
+  PEOL:=FindEOL;
+  if PEOL=fInMemPosition then begin
+    s:='';
+    if fCurrentViewOffset+fInMemPosition=fSize then
+      exit(false)
+    else
+      exit(true);
+  end
+  else if PEOL=CNotInThisPage then begin
+    l:=fCurrentViewSize-fInMemPosition;
+    result:=l<>0;
+    SetLength(s,l);
+    Move(fMemory[fInMemPosition],s[1],l);
+    if fCurrentViewOffset+fInMemPosition=fSize then
+      exit(true);
+    setFromTMemViewInfo(fIS.MoveMemViewProc(fCurrentViewOffset+fCurrentViewSize));
+    result:=result or ParseString(ts);
+    s:=s+ts;
+  end else begin
+    l:=PEOL-fInMemPosition;
+    SetLength(s,l);
+    Move(fMemory[fInMemPosition],s[1],l);
+    fInMemPosition:=PEOL;
+    result:=true;
+  end;
+end;
 begin
 end.

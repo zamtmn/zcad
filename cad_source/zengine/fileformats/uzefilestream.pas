@@ -22,7 +22,7 @@ unit uzeFileStream;
 {$ModeSwitch advancedrecords}
 {$PointerMath ON}
 {$Interfaces CORBA}
-{Inline off}
+{$Inline off}
 interface
 uses
   SysUtils,
@@ -284,28 +284,41 @@ end;
 procedure TZInMemoryReader.ScipEOL;
 var
   CurrentByte:Byte;
+  CurrentWord:Word;
 begin
   inc(ScipEOLcount);
 
-  //if fCurrentViewSize-fInMemPosition<3 then begin
+  if fCurrentViewSize-fInMemPosition<2 then begin
     CurrentByte:=fastReadByte;
     if CurrentByte=byte(ChCR)then begin
       CurrentByte:=fastReadByte;
       if CurrentByte<>byte(ChLF)then
         ResetLastChar;
     end;
-  {end else begin
+  end else begin
+    CurrentWord:=PWord(@fMemory[fInMemPosition])^;
+  {$ifdef FPC_LITTLE_ENDIAN}
+    if CurrentWord=$0A0D then
+      inc(fInMemPosition,2)
+    else
+      inc(fInMemPosition);
+  {$else}
+    if CurrentWord=$0D0A then
+      inc(fInMemPosition,2)
+    else
+      inc(fInMemPosition);
+  {$endif}
 
-    CurrentByte:=fMemory[fInMemPosition];
+    {CurrentByte:=fMemory[fInMemPosition];
     inc(fInMemPosition);
     if CurrentByte=byte(ChCR)then begin
       CurrentByte:=fMemory[fInMemPosition];
       inc(fInMemPosition);
       if CurrentByte<>byte(ChLF)then
         dec(fInMemPosition);
-    end;
+    end;}
 
-  end;}
+  end;
 end;
 
 
@@ -322,10 +335,11 @@ begin
   pch:=@fMemory[InMemPos];
 
   while InMemPos<fCurrentViewSize do begin
-    if (pch^=ChLF)or(pch^=ChCR) then begin  //pch^ in CLFCR медленней в 2 раза
-      FNeedScipEOL:=True;
-      exit(InMemPos)
-    end;
+    if byte(pch^)<14 then
+      if (pch^=ChLF)or(pch^=ChCR) then begin  //pch^ in CLFCR медленней в 2 раза
+        FNeedScipEOL:=True;
+        exit(InMemPos)
+      end;
     inc(InMemPos);
     inc(pch);
   end;

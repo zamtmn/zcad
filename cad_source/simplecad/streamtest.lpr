@@ -113,7 +113,7 @@ begin
   //testTZctnrVectorBytes;
   testMMF;
   //testBufferedFileStream;
-  readln;
+  //readln;
 end.
 
 

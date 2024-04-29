@@ -191,24 +191,33 @@ begin
   byt:=readmystrtoint(f);
   while true do
   begin
-    s:='';
     if not LoadFromDXFObjShared(f,byt,ptu,drawing) then
+    begin
        if dxfvertexload(f,10,byt,tv) then
-                                         begin
-                                              if byt=30 then
-                                                            if vertexgo then
-                                                                            FastAddVertex(tv);
-                                         end
-  else if dxfIntegerload(f,70,byt,hlGDBWord) then
-                                                   begin
-                                                        if (hlGDBWord and 1) = 1 then closed := true;
-                                                   end
-   else if dxfStringload(f,0,byt,s)then
-                                             begin
-                                                  if s='VERTEX' then vertexgo := true;
-                                                  if s='SEQEND' then system.Break;
-                                             end
-                                      else s:= f.ReadStringTemp;
+       begin
+         if (byt=30) and vertexgo then FastAddVertex(tv);
+       end
+       else if dxfIntegerload(f,70,byt,hlGDBWord) then
+       begin
+        if (hlGDBWord and 1) = 1 then closed := true;
+       end
+       else
+       begin
+         s:='';
+         if dxfStringload(f,0,byt,s)then
+         begin
+              if s='VERTEX' then vertexgo := true
+              else if s='SEQEND' then
+              begin
+                f.ReleaseStringTemp(s);
+                system.Break;
+              end;
+         end
+         else f.ReadPAnsiChar;
+         f.ReleaseStringTemp(s);
+       end;
+    end;
+
     byt:=readmystrtoint(f);
   end;
 

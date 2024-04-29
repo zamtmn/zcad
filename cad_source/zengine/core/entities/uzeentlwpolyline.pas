@@ -659,7 +659,11 @@ begin
   begin
     if not LoadFromDXFObjShared(f,byt,ptu,drawing) then
     case byt of
-      8: vp.Layer :=drawing.getlayertable.getAddres(f.readStringTemp);
+      8: begin
+        s:=f.readStringTemp;
+        vp.Layer :=drawing.getlayertable.getAddres(s);
+        f.ReleaseStringTemp(s);
+      end;
       62: vp.color:=readmystrtoint(f);
       90:
         begin

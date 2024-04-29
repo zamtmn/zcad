@@ -130,7 +130,9 @@ begin
     case byt of
       8:
         begin
-          vp.Layer := {gdb.GetCurrentDWG.LayerTable}drawing.GetLayerTable.getaddres(f.readStringTemp);
+          s:=f.readStringTemp;
+          vp.Layer := {gdb.GetCurrentDWG.LayerTable}drawing.GetLayerTable.getaddres(s);
+          f.ReleaseStringTemp(s);
               //layername:=Pointer(s);
         end;
       10: P_insertInOCS.x:=f.ParseDouble;

@@ -615,7 +615,7 @@ begin
     if not dxfintegerload(f,75,byt,hstyle) then
     if not dxfDoubleload(f,52,byt,Angle) then
     if not dxfDoubleload(f,41,byt,Scale) then
-    if not dxfStringload(f,2,byt,PatternName) then f.ReadPAnsiChar;
+    if not dxfStringload(f,2,byt,PatternName,true) then f.ReadPAnsiChar;
     byt:=f.ParseInteger;
   end;
   case hstyle of

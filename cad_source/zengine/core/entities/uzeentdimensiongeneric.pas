@@ -124,14 +124,15 @@ begin
                             if not dxfIntegerload(f,70,byt,dtype) then
                                if not dxfDoubleload(f,50,byt,a50) then
                                   if not dxfDoubleload(f,52,byt,a52) then
-                            if dxfStringload(f,3,byt,style)then
-                                                                  begin
-                                                                       PDimStyle:=drawing.GetDimStyleTable^.getAddres(Style);
-                                                                       if PDimStyle=nil then
-                                                                                            PDimStyle:=pointer(drawing.GetDimStyleTable^.getDataMutable(0));
-                                                                  end
-                            else
-                                f.ReadPAnsiChar;
+                                  begin
+                                    if dxfStringload(f,3,byt,style)then
+                                    begin
+                                      PDimStyle:=drawing.GetDimStyleTable^.getAddres(Style);
+                                      if PDimStyle=nil then PDimStyle:=pointer(drawing.GetDimStyleTable^.getDataMutable(0));
+                                    end
+                                    else f.ReadPAnsiChar;
+                                    f.ReleaseStringTemp(style);
+                                  end;
     byt:=f.ParseInteger;
   end;
   if dtype<>-1 then

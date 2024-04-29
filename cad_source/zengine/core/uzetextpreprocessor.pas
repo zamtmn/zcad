@@ -52,9 +52,9 @@ var
     Parser:TMyParser;
 
     ZCADToken:TTokenDescription.TEnumItemType;
-function textformat(s:TDXFEntsInternalStringType;pobj:Pointer):TDXFEntsInternalStringType;overload;
-function textformat(s:string;pobj:Pointer):string;overload;
-function convertfromunicode(s:TDXFEntsInternalStringType):TDXFEntsInternalStringType;
+function textformat(const s:TDXFEntsInternalStringType;pobj:Pointer):TDXFEntsInternalStringType;overload;
+function textformat(const s:string;pobj:Pointer):string;overload;
+function convertfromunicode(const s:TDXFEntsInternalStringType):TDXFEntsInternalStringType;
 implementation
 
 
@@ -77,7 +77,7 @@ begin
   RegisterKey(key,data);
 end;
 
-function convertfromunicode(s:TDXFEntsInternalStringType):TDXFEntsInternalStringType;
+function convertfromunicode(const s:TDXFEntsInternalStringType):TDXFEntsInternalStringType;
 var //i,i2:Integer;
     ps{,varname}:TDXFEntsInternalStringType;
     //pv:pvardesk;
@@ -125,12 +125,12 @@ begin
    end;
 end;
 {$endif}
-function textformat(s:string;pobj:Pointer):string;overload;
+function textformat(const s:string;pobj:Pointer):string;overload;
 begin
   result:=string(textformat(TDXFEntsInternalStringType(s),pobj));
 end;
 
-function textformat(s:TDXFEntsInternalStringType;pobj:Pointer):TDXFEntsInternalStringType;
+function textformat(const s:TDXFEntsInternalStringType;pobj:Pointer):TDXFEntsInternalStringType;
 var FindedIdPos,ContinuePos,EndBracketPos,{i2,}counter:Integer;
     ps{,s2},res,operands:TDXFEntsInternalStringType;
     pair:Prefix2ProcessFunc.TDictionaryPair;
@@ -142,7 +142,7 @@ var FindedIdPos,ContinuePos,EndBracketPos,{i2,}counter:Integer;
 const
     maxitertations=10000;
 begin
-     ps:=convertfromunicode(s);
+     ps:=s;//convertfromunicode(s);
      {repeat
           FindedIdPos:=pos('%%DATE',uppercase(ps));
           if FindedIdPos>0 then

@@ -1189,39 +1189,42 @@ var APP_NAME:String;
     XValue:String;
     Name,Value{,vn,vt,vv,vun}:String;
     i:integer;
-    kk:integer=0;
+    s: String;
 //    vd: vardesk;
-addr:pointer;
 begin
      case dxfcod of
                 5:begin
                           if AddExtAttrib^.dwgHandle=0 then begin
-                            if not TryStrToQWord('$'+f.ReadStringTemp,PExtAttrib^.dwgHandle)then
-                              begin
-                                //нужно залупиться
-                              end
+                            s:=f.ReadStringTemp;
+                            if not TryStrToQWord('$'+s,PExtAttrib^.dwgHandle)then
+                            begin
+                              //нужно залупиться
+                            end;
+                            f.ReleaseStringTemp(s);
                           end else begin
                             f.ReadPAnsiChar;
-                            //readmystr(f);
                             //нужно залупиться
                           end;
                           result:=true;
                   end;
                 6:begin
                        //vp.LineType:=readmystr(f);
-                       vp.LineType:=drawing.GetLTypeTable.getAddres(f.ReadStringTemp);// readmystr(f));
+                       s:=f.ReadStringTemp;
+                       vp.LineType:=drawing.GetLTypeTable.getAddres(s);
+                       f.ReleaseStringTemp(s);
                        result:=true
                   end;
                      8:begin
                           if {vp.layer.name=LNSysLayerName}vp.layer=@DefaultErrorLayer then
                                                    begin
-                                                        //name:=readmystr(f);
-                                                   vp.Layer :=drawing.getlayertable.getAddres(f.ReadStringTemp);
-                                                   if vp.Layer=nil then
-                                                                        vp.Layer:=vp.Layer;
+                                                     s:=f.ReadStringTemp;
+                                                     vp.Layer :=drawing.getlayertable.getAddres(s);
+                                                     f.ReleaseStringTemp(s);
+                                                     if vp.Layer=nil then
+                                                                          vp.Layer:=vp.Layer;
                                                    end
                                                else
-                                                   {APP_NAME:=}f.ReadPAnsiChar;
+                                                   f.ReadPAnsiChar;
                           result:=true
                      end;
                     48:begin
@@ -1243,15 +1246,15 @@ begin
                          //addr:=pointer(@TZctnrVectorBytes(f).parray[TZctnrVectorBytes(f).readpos]);
                          //{$POP}
                           result:=true;
-                          //APP_NAME:=f.ReadStringTemp;
-                          if f.ReadStringTemp=ZCADAppNameInDXF then
+                          APP_NAME:=f.ReadStringTemp;
+                          f.ReleaseStringTemp(APP_NAME);
+                          if APP_NAME=ZCADAppNameInDXF then
                           begin
                                repeat
                                  XGroup:=readmystrtoint(f);
                                  XValue:=f.ReadStringTemp;
                                  if XGroup=1000 then
                                                     begin
-                                                         inc(kk);
                                                          i:=pos('=',Xvalue);
                                                          //if name='' then
                                                          //               name:='empty';
@@ -1293,13 +1296,9 @@ begin
                                                     //else*)
                                                            ProcessFromDXFObjXData(Name,Value,ptu,drawing);
                                                     end;
+                                 f.ReleaseStringTemp(XValue);
                                until (XGroup=1002)and(XValue='}');
-                               //if kk=kk then
-                               //begin
-                               //  ZCMsgCallBackInterface.TextMessage('======== ' + inttostr(kk),TMWOHistoryOut);
-                               //end;
                           end;
-
                      end;
                 else result:=false;
      end;

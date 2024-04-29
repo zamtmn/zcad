@@ -62,7 +62,7 @@ GDBObjMText= object(GDBObjText)
                  function GetObjType:TObjID;virtual;
             end;
 {Export-}
-procedure FormatMtext(pfont:pgdbfont;width,size,wfactor:Double;content:TDXFEntsInternalStringType;var text:XYZWStringArray);
+procedure FormatMtext(pfont:pgdbfont;width,size,wfactor:Double;const content:TDXFEntsInternalStringType;var text:XYZWStringArray);
 function GetLinesH(linespace,size:Double;var lines:XYZWStringArray):Double;
 function GetLinesW(var lines:XYZWStringArray):Double;
 function GetLineSpaceFromLineSpaceF(linespacef,size:Double):Double;
@@ -155,7 +155,7 @@ begin
                else
                    result:=0;
 end;
-procedure FormatMtext(pfont:pgdbfont;width,size,wfactor:Double;content:TDXFEntsInternalStringType;var text:XYZWStringArray);
+procedure FormatMtext(pfont:pgdbfont;width,size,wfactor:Double;const content:TDXFEntsInternalStringType;var text:XYZWStringArray);
 var
   canbreak: Boolean;
   currsymbol, lastbreak, lastcanbreak: Integer;
@@ -941,14 +941,18 @@ begin
     if not dxfStringload(f,1,byt,ttemplate)then
     if not dxfStringload(f,3,byt,ttemplate)then
     if dxfDoubleload(f,50,byt,angle) then angleload := true
+    else
+    begin
+      if dxfStringload(f,7,byt,style)then
+      begin
+        TXTStyleIndex :={drawing.GetTextStyleTable^.getDataMutable}(drawing.GetTextStyleTable^.FindStyle(Style,false));
+        if TXTStyleIndex=nil then
+                            TXTStyleIndex:=pointer(drawing.GetTextStyleTable^.getDataMutable(0));
+      end
+      else f.ReadPAnsiChar;
+      f.ReleaseStringTemp(style);
+    end;
 
-    else if     dxfStringload(f,7,byt,style)then
-                                                 begin
-                                                 TXTStyleIndex :={drawing.GetTextStyleTable^.getDataMutable}(drawing.GetTextStyleTable^.FindStyle(Style,false));
-                                                 if TXTStyleIndex=nil then
-                                                                     TXTStyleIndex:=pointer(drawing.GetTextStyleTable^.getDataMutable(0));
-                                                 end
-    else f.ReadPAnsiChar;
     byt:=f.ParseInteger;
   end;
   if TXTStyleIndex=nil then
@@ -961,6 +965,7 @@ begin
   OldVersTextReplace(Content);
   Content:=utf8tostring(Tria_AnsiToUtf8(ttemplate));
   //template:=utf8tostring({Tria_AnsiToUtf8}(template));
+  f.ReleaseStringTemp(ttemplate);
   textprop.justify:=b2j[j];
   P_drawInOCS := Local.p_insert;
   linespace := textprop.size * linespacef * 5 / 3;
@@ -1000,7 +1005,7 @@ begin
   dxfDoubleout(outhandle,41,width);
   dxfIntegerout(outhandle,71,j2b[textprop.justify]{ord(textprop.justify)+1});
   quotedcontent:=StringReplace(content,TDXFEntsInternalStringType(#10),TDXFEntsInternalStringType('\P'),[rfReplaceAll]);
-  if  convertfromunicode(template)=quotedcontent then
+  if  {convertfromunicode(template)}template=quotedcontent then
     s := Tria_Utf8ToAnsi(UTF8Encode(template))
   else
     s := Tria_Utf8ToAnsi(UTF8Encode(quotedcontent));

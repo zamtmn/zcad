@@ -56,6 +56,8 @@ PTZctnrVectorBytes=^TZctnrVectorBytes;
 TZctnrVectorBytes=object(GZVector{-}<byte>{//})
                       ReadPos:Integer;
                       name:AnsiString;
+                      prev_PAnsiRec: PAnsiRec;
+                      prev_data_end_addr: PAnsiChar;
                       shortstr:ShortString;
                       constructor init(m:Integer);
                       constructor initnul;
@@ -68,16 +70,17 @@ TZctnrVectorBytes=object(GZVector{-}<byte>{//})
                       procedure TXTAddString(const s:AnsiString);virtual;
                       function ReadData(PData:Pointer;SData:Word):Integer;virtual;
                       //function PopData(PData:Pointer;SData:Word):Integer;virtual;
-                      function ReadString3(const break: TSetOfChar; ignore: TSetOfChar): AnsiString;inline;
+                      function ReadString3(const break: TSetOfChar; ignore: TSetOfChar): AnsiString; inline;
 
-                      function ReadString3New(const skipLeft: TSetOfChar; lineendings: TSetOfChar): AnsiString;inline;
-                      function ReadString4Temp(const skipLeft: TSetOfChar; lineendings: TSetOfChar): AnsiString;inline;
+                      function ReadString3New(const skipLeft: TSetOfChar; lineendings: TSetOfChar): AnsiString; inline;
+                      function ReadString4Temp(const skipLeft: TSetOfChar; lineendings: TSetOfChar; do_copy: Boolean = False): AnsiString; inline;
 
-                      function ReadPAnsiChar3(const skipLeft: TSetOfChar; lineendings: TSetOfChar): PAnsiChar;inline;
-                      function ReadPShortString3(const skipLeft: TSetOfChar; lineendings: TSetOfChar): PShortString;inline;
+                      function ReadPAnsiChar3(const skipLeft: TSetOfChar; lineendings: TSetOfChar): PAnsiChar; inline;
+                      function ReadPShortString3(const skipLeft: TSetOfChar; lineendings: TSetOfChar): PShortString; inline;
 
                       function ReadString: AnsiString;inline;
-                      function ReadStringTemp: AnsiString;inline;
+                      function ReadStringTemp(do_copy: Boolean = False): AnsiString; inline;
+                      procedure ReleaseStringTemp(const s: AnsiString); inline;
 
                       function ParseInteger(out Value: Integer): Integer; inline; overload;
                       function ParseDouble(out Value: Double): Integer; inline; overload;
@@ -261,9 +264,9 @@ begin
      result:=ReadString3New([' '],[#13,#10]);
      //result:=ReadString3([#10],[#13]);
 end;
-function TZctnrVectorBytes.ReadStringTemp: AnsiString;
+function TZctnrVectorBytes.ReadStringTemp(do_copy: Boolean = False): AnsiString;
 begin
-     result:=ReadString4Temp([' '],[#13,#10]);
+     result:=ReadString4Temp([' '],[#13,#10],do_copy);
 end;
 function TZctnrVectorBytes.ReadPAnsiChar: PAnsiChar;
 begin
@@ -424,6 +427,7 @@ begin
   {$POP}
   start_addr:=addr;
 
+  result:='';
   SetLength(result, strlen);
 
   while (addr < last_ptr) and (addr^ in skipLeft) do inc(addr);
@@ -450,7 +454,83 @@ end;
 var
   need_copy_cnt: integer=0;
 
-function TZctnrVectorBytes.ReadString4Temp(const skipLeft: TSetOfChar; lineendings: TSetOfChar): AnsiString;
+
+type
+  TCodePointerNames = array of record
+    cp: CodePointer;
+    name: string;
+  end;
+
+  TCodePointer = record
+    cp: CodePointer;
+    name: string;
+    next: array of TCodePointer;
+    cnt: SizeUInt;
+  end;
+  TCodePointerArray = array of TCodePointer;
+
+var
+  stack_tree: TCodePointerArray;
+  CodePointerNames: TCodePointerNames;
+
+function MyBackTraceStrFunc (Addr: CodePointer): string;
+var
+  i:Integer;
+begin
+  for i:=High(CodePointerNames) downto Low(CodePointerNames) do
+  begin
+    if CodePointerNames[i].cp = Addr then
+    begin
+      Result := CodePointerNames[i].name;
+      Exit;
+    end;
+  end;
+  SetLength(CodePointerNames, Length(CodePointerNames)+1);
+  Result := BackTraceStrFunc(Addr);
+  CodePointerNames[High(CodePointerNames)].cp:=Addr;
+  CodePointerNames[High(CodePointerNames)].name:=Result;
+end;
+
+procedure dump_stack2(skip_bottom_frames: integer=0);
+var
+  i, i2, count: longint;
+  frames: array [0..255] of codepointer;
+  list: ^TCodePointerArray;
+  pcp: ^TCodePointer;
+  found: boolean;
+begin
+  count:=CaptureBacktrace(2,255,@frames[0]);
+
+  list:=@stack_tree;
+  for i:=count-1-skip_bottom_frames downto 0 do
+  begin
+    found:=false;
+    for i2:=low(list^) to high(list^) do
+    begin
+      pcp:=@list^[i2];
+      if pcp^.cp=frames[i] then
+      begin
+        inc(pcp^.cnt);
+        list:=@pcp^.next;
+        found:=true;
+        Break;
+      end;
+    end;
+    if not found then
+    begin
+      SetLength(list^, length(list^)+1);
+      pcp:=@list^[high(list^)];
+      pcp^.cp:=frames[i];
+      pcp^.cnt:=1;
+      pcp^.name:=MyBackTraceStrFunc(frames[i]);
+      list:=@pcp^.next;
+    end
+    else Continue;
+  end;
+end;
+
+
+function TZctnrVectorBytes.ReadString4Temp(const skipLeft: TSetOfChar; lineendings: TSetOfChar; do_copy: Boolean = False): AnsiString;
 var
   i: SizeInt=0;
   strlen: SizeInt = 16;
@@ -469,6 +549,7 @@ begin
 и при этом если в вызывающей ф-ии планируется затем использовать объявленную строку
 *)
  inc(cnt1);
+
   {$PUSH}
   {$POINTERMATH ON}
   addr:=@parray[readpos];
@@ -479,9 +560,38 @@ begin
   while (addr < last_ptr) and (addr^ in skipLeft) do inc(addr);
   data_addr:=addr;
 
-  need_copy:=((data_addr-sizeof(TAnsiRec))<PAnsiChar(PArray));
+  // если есть приказ копировать - копируем не глядя
+  // (вызывающий лучше знает, что ему нужно)
+  // это лучше чем вначале ReadStringTemp, а затем Copy для коротких строк
+  if do_copy then
+  begin
+    need_copy := true;
+  end else
+  begin
+    // контроль смещение от конца предыдущей unsafe-строки, если довольно мал < ~25 байт,
+    // то производится копирование, если же места достаточно - копирования не происходит
+    //
+    // также тут можно из вызывающего кода принудительно сообщить, что предыдущая строка уже
+    // освобождена - путём изменения значение TAnsiRec.Ref на -2 вызовом процедуры ReleaseStringTemp
+    // с указанием unsafe-строки, которую необходимо "освободить"
+    // В этом случае копирования тоже не будет происходить даже не смотря на то,
+    // что не хватает место под заголовок -> предыдущая строка повредится
+    // (!) Предпочтительно всегда вызывать парами ReadStringTemp и ReleaseStringTemp
+    // это существенно уменьшит кол-во копирований, т.к. строки в основном короткие часто
+
+    need_copy := ((data_addr - prev_data_end_addr) < sizeof(TAnsiRec))        // если не хватает места для вставки заголовка
+                 and (                                                        // И
+                        ((prev_PAnsiRec<>nil) and (prev_PAnsiRec^.Ref=-1) or  // строку НЕ "освободили"
+                         (prev_PAnsiRec=nil))                                 // или это начало массива памяти
+                     )
+                     ;
+  end;
+
+  result:='';
   if need_copy then
   begin
+    //dump_stack2(27); // default 6 - ok, but sometimes over 20 need
+
     inc(need_copy_cnt);
     SetLength(result, strlen);
     while (addr < last_ptr) and not (addr^ in lineendings) do
@@ -498,6 +608,7 @@ begin
   end else
   begin
     while (addr < last_ptr) and not (addr^ in lineendings) do inc(addr);
+    prev_data_end_addr:=PAnsiChar(@addr[1]); // [1] = +1 - end null symbol
     strlen:=addr-PAnsiChar(data_addr);
   end;
 
@@ -509,33 +620,48 @@ begin
 
   if need_copy then
   begin
-    SetLength(Result, i);
+    SetLength(result, i);
   end else
   begin
     if strlen=0 then
     begin
-      Result:='';
+      result:='';
     end else
     begin
-      PSizeInt(Result):=PSizeInt(data_addr); // prevent FPC_ANSISTR_ASSIGN call
-      with PAnsiRec(@PByte(Result)[-sizeof(TAnsiRec)])^ do
+      PSizeInt(result):=PSizeInt(data_addr); // prevent FPC_ANSISTR_ASSIGN call
+      prev_PAnsiRec:=PAnsiRec(@PByte(result)[-sizeof(TAnsiRec)]);
+      with prev_PAnsiRec^ do
       begin
         CodePage:=CP_ACP;
         ElementSize:=1;
-        Ref:=-1; // const ansistring
+        Ref:=-1; // ref<0 - const ansistring
         Len:=strlen;
       end;
-      PByte(Result)[strlen]:=0; // prevent FPC_ANSISTR_UNIQUE call
+      PByte(result)[strlen]:=0; // prevent FPC_ANSISTR_UNIQUE call
     end;
   end;
   inc(readpos, addr-start_addr);
+end;
+
+procedure TZctnrVectorBytes.ReleaseStringTemp(const s: AnsiString);
+var
+  pAR:PAnsiRec;
+begin
+  {$PUSH}
+  {$POINTERMATH ON}
+  // проверка, что пытаемся изменить не какую-то левую строку
+  if (PSizeUInt(s)>=PSizeUInt(@PT(parray)[SizeOf(TAnsiRec)])) and (PSizeUInt(s)<PSizeUInt(@PT(parray)[count])) then
+  begin
+    pAR:=PAnsiRec(@PByte(s)[-sizeof(TAnsiRec)]);
+    paR^.Ref:=-2; // ref<0 - const string; -2 - temp string released (not used anymore)
+  end;
+  {$POP}
 end;
 
 function TZctnrVectorBytes.ReadPShortString3(const skipLeft: TSetOfChar; lineendings: TSetOfChar): PShortString;
 var
   addr, start_addr, last_ptr: PAnsiChar;
   len: byte;
-  tmp_readpos:Integer;
 begin
   {$PUSH}
   {$POINTERMATH ON}
@@ -600,16 +726,18 @@ begin
                       //ShowError(sysutils.format(rsUnableToOpenFile,[FileName]))
      else
      begin
-     pointer(name):=nil;
-     name:=filename;
-     filelength:=FileSeek(infile,0,2);
-     init(filelength);
-     FileSeek(infile,0,0);
-     if parray=nil then
-                       CreateArray;
-     FileRead(InFile,parray^,filelength);
-     count:=filelength;
-     fileclose(infile);
+       pointer(name):=nil;
+       name:=filename;
+       filelength:=FileSeek(infile,0,2);
+       init(filelength);
+       FileSeek(infile,0,0);
+       if parray=nil then
+                         CreateArray;
+       FileRead(InFile,parray^,filelength);
+       prev_PAnsiRec:=nil;
+       prev_data_end_addr:=PAnsiChar(PArray);
+       count:=filelength;
+       fileclose(infile);
      end;
 end;
 function TZctnrVectorBytes.SaveToFile(const FileName: Ansistring): Integer;

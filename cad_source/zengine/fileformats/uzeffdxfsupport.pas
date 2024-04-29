@@ -72,8 +72,9 @@ function dxfvertexload1(var f:TZctnrVectorBytes;dxfcod,currentdxfcod:Integer; va
 function dxfDoubleload(var f:TZctnrVectorBytes;dxfcod,currentdxfcod:Integer; var v:Double):Boolean; inline;
 function dxfFloatload(var f:TZctnrVectorBytes;dxfcod,currentdxfcod:Integer; var v:Single):Boolean; inline;
 function dxfIntegerload(var f:TZctnrVectorBytes;dxfcod,currentdxfcod:Integer; var v:Integer):Boolean; inline;
-function dxfStringload(var f:TZctnrVectorBytes;dxfcod,currentdxfcod:Integer; var v:String):Boolean;overload; inline;
-function dxfStringload(var f:TZctnrVectorBytes;dxfcod,currentdxfcod:Integer; var v:TDXFEntsInternalStringType):Boolean;overload; inline;
+function dxfStringload(var f:TZctnrVectorBytes;dxfcod,currentdxfcod:Integer; var v:String; do_copy: Boolean = False):Boolean;overload; inline;
+function dxfStringload(var f:TZctnrVectorBytes;dxfcod,currentdxfcod:Integer; var v:TDXFEntsInternalStringType; do_copy: Boolean = False):Boolean;overload; inline;
+
 function dxfGroupCode(const dxfcod:Integer):String; inline;
 function DXFHandle(const sh:string):TDWGHandle; inline;
 
@@ -207,17 +208,15 @@ end;
 
 function dxfvertexload(var f:TZctnrVectorBytes;dxfcod,currentdxfcod:Integer; var v:gdbvertex):Boolean;
 begin
-     dxfcod:=((currentdxfcod-dxfcod));
-     if dxfcod=0 then begin v.x:=readmystrtodouble(f); result:=true end
-else if dxfcod=10 then begin v.y:=readmystrtodouble(f); result:=true end
-else if dxfcod=20 then begin v.z:=readmystrtodouble(f); result:=true end else result:=false;
+     if currentdxfcod=dxfcod then begin v.x:=readmystrtodouble(f); result:=true end
+else if currentdxfcod=dxfcod+10 then begin v.y:=readmystrtodouble(f); result:=true end
+else if currentdxfcod=dxfcod+20 then begin v.z:=readmystrtodouble(f); result:=true end else result:=false;
 end;
 function dxfvertexload1(var f:TZctnrVectorBytes;dxfcod,currentdxfcod:Integer; var v:gdbvertex):Boolean;
 begin
-     dxfcod:=((currentdxfcod-dxfcod));
-     if dxfcod=0 then begin v.x:=readmystrtodouble(f); result:=true end
-else if dxfcod=1 then begin v.y:=readmystrtodouble(f); result:=true end
-else if dxfcod=2 then begin v.z:=readmystrtodouble(f); result:=true end else result:=false;
+     if currentdxfcod=dxfcod then begin v.x:=readmystrtodouble(f); result:=true end
+else if currentdxfcod=dxfcod+1 then begin v.y:=readmystrtodouble(f); result:=true end
+else if currentdxfcod=dxfcod+2 then begin v.z:=readmystrtodouble(f); result:=true end else result:=false;
 end;
 function dxfDoubleload(var f:TZctnrVectorBytes;dxfcod,currentdxfcod:Integer; var v:Double):Boolean;
 begin
@@ -231,26 +230,21 @@ function dxfIntegerload(var f:TZctnrVectorBytes;dxfcod,currentdxfcod:Integer; va
 begin
      if currentdxfcod=dxfcod then begin v:=readmystrtoint(f); result:=true end else result:=false;
 end;
-function dxfStringload(var f:TZctnrVectorBytes;dxfcod,currentdxfcod:Integer;var v:String):Boolean;
-var
-  s:ansistring;
+
+function dxfStringload(var f:TZctnrVectorBytes;dxfcod,currentdxfcod:Integer;var v:String; do_copy: Boolean = False):Boolean;
 begin
-     if currentdxfcod=dxfcod then
-     begin
-       s:=f.readStringTemp;
-       if v='' then v:=v+Copy(s,1,Length(s)) else v:=v+s;
-       result:=true;
-     end else result:=false;
+   if currentdxfcod=dxfcod then
+   begin
+     v:=v+f.readStringTemp(do_copy);
+     result:=true;
+   end else result:=false;
 end;
-function dxfStringload(var f:TZctnrVectorBytes;dxfcod,currentdxfcod:Integer; var v:TDXFEntsInternalStringType):Boolean;
-var
-  s:ansistring;
+function dxfStringload(var f:TZctnrVectorBytes;dxfcod,currentdxfcod:Integer; var v:TDXFEntsInternalStringType; do_copy: Boolean = False):Boolean;
 begin
    { #todo : Нужно убрать уникодный вариант. читать утф8 потом за 1 раз присваивать }
    if currentdxfcod=dxfcod then
    begin
-     s:=f.readStringTemp;
-     if v='' then v:=v+TDXFEntsInternalStringType(Copy(s,1,Length(s))) else v:=v+TDXFEntsInternalStringType(s);
+     v:=v+TDXFEntsInternalStringType(f.readStringTemp(do_copy));
      result:=true;
    end else result:=false;
 end;

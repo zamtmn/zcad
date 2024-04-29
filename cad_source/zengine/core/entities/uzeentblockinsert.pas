@@ -529,12 +529,13 @@ begin
      if not LoadFromDXFObjShared(f,byt,ptu,drawing) then
      if not dxfvertexload(f,10,byt,Local.P_insert) then
      if not dxfvertexload1(f,41,byt,scale) then
-     if dxfDoubleload(f,50,byt,rotate) then begin
-                                                    rotate:=rotate*pi/180;
-                                               end
-else if dxfIntegerload(f,71,byt,hlGDBWord)then begin if hlGDBWord = 1 then attrcont := true; end
-else if not dxfStringload(f,2,byt,name)then f.ReadPAnsiChar;
-    byt:=f.ParseInteger;
+     if dxfDoubleload(f,50,byt,rotate) then
+     begin
+       rotate:=rotate*pi/180;
+     end
+     else if dxfIntegerload(f,71,byt,hlGDBWord)then begin if hlGDBWord = 1 then attrcont := true; end
+     else if not dxfStringload(f,2,byt,name,true)then f.ReadPAnsiChar;
+     byt:=f.ParseInteger;
   end;
   if attrcont then ;
       {begin
@@ -665,7 +666,7 @@ else if not dxfStringload(f,2,byt,name)then f.ReadPAnsiChar;
 //    name:=name;
       //programlog.LogOutFormatStr('BlockInsert name="%s" loaded',[name],lp_OldPos,LM_Debug);
       //index:=gdb.GetCurrentDWG.BlockDefArray.getindex(pansichar(name));
-      index:=PGDBObjBlockdefArray(drawing.GetBlockDefArraySimple).getindex(pansichar(name));
+      index:=PGDBObjBlockdefArray(drawing.GetBlockDefArraySimple).getindex(name);
       //format;
 end;
 procedure GDBObjBlockInsert.SaveToDXF(var outhandle:{Integer}TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);

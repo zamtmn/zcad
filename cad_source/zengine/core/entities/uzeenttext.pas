@@ -83,10 +83,7 @@ begin
 end;
 function GDBObjText.IsHaveObjXData:Boolean;
 begin
-     if  convertfromunicode(template)<>content then
-                              result:=true
-                          else
-                              result:=false;
+  result:={convertfromunicode(template)}template<>content;
 end;
 function GDBObjText.GetObjTypeName;
 begin
@@ -639,7 +636,7 @@ begin
   SaveToDXFObjPostfix(outhandle);
 
 
-    if  convertfromunicode(template)=content then
+    if {convertfromunicode(template)}template=content then
                                                s := Tria_Utf8ToAnsi(UTF8Encode(template))
                                            else
                                                s := Tria_Utf8ToAnsi(UTF8Encode(content));
@@ -671,27 +668,29 @@ begin
   begin
     if not LoadFromDXFObjShared(f,byt,ptu,drawing) then
        if not dxfvertexload(f,10,byt,Local.P_insert) then
-          if dxfvertexload(f,11,byt,P_drawInOCS) then
-                                                     doublepoint := true
-else if not dxfDoubleload(f,40,byt,textprop.size) then
-     if not dxfDoubleload(f,41,byt,textprop.wfactor) then
-     if dxfDoubleload(f,50,byt,angle) then
-                                             begin
-                                               angleload := true;
-                                               angle:=angle*pi/180;
-                                             end
-else if dxfDoubleload(f,51,byt,textprop.oblique) then
-                                                        textprop.oblique:=textprop.oblique*pi/180
-else if     dxfStringload(f,7,byt,style)then
-                                             begin
-                                                  TXTStyleIndex :={drawing.GetTextStyleTable^.getDataMutable}(drawing.GetTextStyleTable^.FindStyle(Style,false));
-                                                  if TXTStyleIndex=nil then
-                                                                      TXTStyleIndex:=pointer(drawing.GetTextStyleTable^.getDataMutable(0));
-                                             end
-else if not dxfIntegerload(f,72,byt,gv)then
-     if not dxfIntegerload(f,73,byt,vv)then
-     if not dxfIntegerload(f,71,byt,textbackward)then
-     if not dxfStringload(f,1,byt,tcontent)then f.ReadPAnsiChar;
+          if dxfvertexload(f,11,byt,P_drawInOCS) then doublepoint := true
+          else if not dxfDoubleload(f,40,byt,textprop.size) then
+            if not dxfDoubleload(f,41,byt,textprop.wfactor) then
+              if dxfDoubleload(f,50,byt,angle) then
+              begin
+                angleload := true;
+                angle:=angle*pi/180;
+              end
+              else if dxfDoubleload(f,51,byt,textprop.oblique) then textprop.oblique:=textprop.oblique*pi/180
+              else if dxfStringload(f,7,byt,style)then
+              begin
+                TXTStyleIndex :={drawing.GetTextStyleTable^.getDataMutable}(drawing.GetTextStyleTable^.FindStyle(Style,false));
+                if TXTStyleIndex=nil then TXTStyleIndex:=pointer(drawing.GetTextStyleTable^.getDataMutable(0));
+                f.ReleaseStringTemp(style);
+              end
+              else
+              begin
+                f.ReleaseStringTemp(style);
+                if not dxfIntegerload(f,72,byt,gv)then
+                  if not dxfIntegerload(f,73,byt,vv)then
+                    if not dxfIntegerload(f,71,byt,textbackward)then
+                      if not dxfStringload(f,1,byt,tcontent)then f.ReadPAnsiChar;
+              end;
 
     byt:=f.ParseInteger;
   end;
@@ -712,6 +711,7 @@ else if not dxfIntegerload(f,72,byt,gv)then
   OldVersTextReplace(Template);
   OldVersTextReplace(tcontent);
   content:=utf8tostring(Tria_AnsiToUtf8(tcontent));
+  f.ReleaseStringTemp(tcontent);
   textprop.justify := jt[vv, gv];
   if doublepoint then Local.p_Insert := P_drawInOCS;
   //assert(angleload, 'GDBText отсутствует dxf код 50 (угол поворота)');

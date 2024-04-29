@@ -224,8 +224,11 @@ begin
          if dxfintegerload(f,97,byt,bt) then
            if bt<>0 then
              byt:=readmystrtoint(f);
-         for j:=1 to bt do begin
+         for j:=1 to bt do
+         begin
+           s:='';
            if (dxfstringload(f,330,byt,s))and(j<>bt) then byt:=readmystrtoint(f);
+           f.ReleaseStringTemp(s);
          end;
          currpath.Shrink;
          paths.PushBackData(currpath);

@@ -73,6 +73,7 @@ end;
 
 procedure gotodxf(var f: TZFileStream; fcode: Integer; const fname: String);
 var
+  s: AnsiString;
   byt: Integer;
 begin
   if fname<>'' then
@@ -83,7 +84,9 @@ begin
         byt := byt{чето тут не так};
       if (byt = fcode) then
       begin
-        if (f.ReadStringTemp = fname) then exit;
+        s:=f.ReadStringTemp;
+        f.ReleaseStringTemp(s);
+        if (s = fname) then exit;
       end else
       begin
         f.ReadPAnsiChar;
@@ -204,80 +207,83 @@ begin
   currentindex:=-1;
   maxindex:=currentindex;
   try
-  while f.notEOF do
-  begin
-                //tmprp:=f.ReadPos;
-                //
-                //val(f.ReadString, v1, e1);
-                //rp1:=f.ReadPos;
-                //
-                //f.ReadPos:=tmprp;
-                //
-                //e2:=f.ParseInteger(v2);
-                //rp2:=f.ReadPos;
-                //
-                //if rp1<>rp2 then
-                //begin
-                //  rp1:=rp2;
-                //end;
-                //if v1<>v2 then
-                //begin
-                //  v1:=v2;
-                //end;
-                //if e1<>e2 then
-                //begin
-                //  e1:=e2;
-                //end;
-                //
-                //f.ReadPos:=tmprp;
-
-    val(f.ReadPShortString^, group, error);
-    if error <> 0 then
-                      DebugLn('{EM}ReadDXFHeader wrong group code');
-    s := f.ReadStringTemp;
-    if group<>999 then
+    while f.notEOF do
     begin
-    case ParseMode of
-    TDXFHMWaitSection:begin
-                           if uppercase(s)=dxfName_SECTION then
-                                                             begin
-                                                                  ParseMode:=TDXFHMSection;
-                                                             end
-                                                            else
+                  //tmprp:=f.ReadPos;
+                  //
+                  //val(f.ReadString, v1, e1);
+                  //rp1:=f.ReadPos;
+                  //
+                  //f.ReadPos:=tmprp;
+                  //
+                  //e2:=f.ParseInteger(v2);
+                  //rp2:=f.ReadPos;
+                  //
+                  //if rp1<>rp2 then
+                  //begin
+                  //  rp1:=rp2;
+                  //end;
+                  //if v1<>v2 then
+                  //begin
+                  //  v1:=v2;
+                  //end;
+                  //if e1<>e2 then
+                  //begin
+                  //  e1:=e2;
+                  //end;
+                  //
+                  //f.ReadPos:=tmprp;
+
+      val(f.ReadPShortString^, group, error);
+      if error <> 0 then
+                        DebugLn('{EM}ReadDXFHeader wrong group code');
+      s := f.ReadStringTemp;
+      if group<>999 then
+      begin
+        case ParseMode of
+        TDXFHMWaitSection:begin
+                               if uppercase(s)=dxfName_SECTION then
+                                                                 begin
+                                                                      ParseMode:=TDXFHMSection;
+                                                                 end
+                                                                else
+                                                                    DebugLn('{EM}ReadDXFHeader error');
+                          end;
+            TDXFHMSection:begin
+                               if uppercase(s)=dxfName_HEADER then
+                                                                begin
+                                                                  ParseMode:=TDXFHMHeader;
+                                                                end
+                                                              else
                                                                 DebugLn('{EM}ReadDXFHeader error');
-                      end;
-        TDXFHMSection:begin
-                           if uppercase(s)=dxfName_HEADER then
-                                                            begin
-                                                              ParseMode:=TDXFHMHeader;
-                                                            end
-                                                          else
-                                                            DebugLn('{EM}ReadDXFHeader error');
-                      end;
-         TDXFHMHeader:begin
-                           if group=0 then
-                           if uppercase(s)=dxfName_ENDSEC then
-                                                              exit;
-                           if group=9 then
-                                          begin
-                                               if varcount>0 then
-                                                                 storevariable;
-                                               varname:=Copy(s,1,Length(s));
-                                               inc(varcount);
-                                          end
-                                      else
-                                          begin
-                                               processvalue(group,Copy(s,1,Length(s)));
-                                          end
-                              end;
-    end;{case}
-    end
-       else
-           begin
-                DebugLn('{IH}Found dxf comment "%s",[s]');
-           end;
+                          end;
+             TDXFHMHeader:begin
+                               if (group=0) and (uppercase(s)=dxfName_ENDSEC) then
+                               begin
+                                 f.ReleaseStringTemp(s);
+                                 exit;
+                               end
+                               else if group=9 then
+                                              begin
+                                                   if varcount>0 then
+                                                                     storevariable;
+                                                   varname:=Copy(s,1,Length(s));
+                                                   inc(varcount);
+                                              end
+                                          else
+                                              begin
+                                                   processvalue(group,Copy(s,1,Length(s)));
+                                              end
+                          end;
+        end;{case}
+      end
+      else
+      begin
+          DebugLn('{IH}Found dxf comment "%s",[s]');
+      end;
+      f.ReleaseStringTemp(s);
     end;
-    finally
+  finally
     freearrays;
   end;
 end;
@@ -291,19 +297,22 @@ begin
   result:=false;
   while f.notEOF do
   begin
-    val(f.readStringTemp, byt, error);
+    val(f.ReadPShortString^, byt, error);
     if error <> 0 then
       s := s{чето тут не так};
     s := f.readStringTemp;
     if (byt = fcode) and (s = fname) then
                                          begin
+                                              f.ReleaseStringTemp(s);
                                               result:=true;
                                               exit;
                                          end;
     if (byt = 0) and (uppercase(s) = dxfName_ENDTAB) then
                                          begin
+                                              f.ReleaseStringTemp(s);
                                               exit;
                                          end;
+    f.ReleaseStringTemp(s);
   end;
 end;
 procedure addentitiesfromdxf(var f: TZFileStream; const exitString: String;owner:PGDBObjSubordinated;var drawing:TSimpleDrawing;DC:TDrawContext;var context:TIODXFLoadContext);
@@ -339,10 +348,13 @@ begin
                                      PExtLoadData:=nil;
   group:=-1;
   bylayerlt:=drawing.LTypeStyleTable.getAddres('ByLayer');
-  while (f.notEOF) and (s <> exitString) do
+  while (f.notEOF) do
   begin
     lps.ProgressLongProcess(lph,f.ReadPos);
     s := f.readStringTemp;
+    f.ReleaseStringTemp(s);
+    if (s = exitString) then Break;
+
     msg_end_primitive:='{D-}[DXF_CONTENTS]End primitive '+s;
     if (group=0)and(DXFName2EntInfoData.MyGetValue(s,EntInfoData)) then
     begin
@@ -497,7 +509,7 @@ end;
 procedure addfromdxf12(var f:TZFileStream; const exitString: String;owner:PGDBObjSubordinated;LoadMode:TLoadOpt;var drawing:TSimpleDrawing;var DC:TDrawContext);
 var
   {byt,}LayerColor: Integer;
-  s, sname{, sx1, sy1, sz1},scode,LayerName: String;
+  s, s2, sname{, sx1, sy1, sz1},scode,LayerName: String;
   ErrorCode,GroupCode: Integer;
 
 //objid: Integer;
@@ -524,8 +536,8 @@ begin
     begin
       debugln('{D+}[DXF_CONTENTS]Found layer table');
       repeat
-            //scode := f.readStringTemp;
-            val(f.readStringTemp,GroupCode,ErrorCode); //
+            val(f.ReadPShortString^,GroupCode,ErrorCode);
+            f.ReleaseStringTemp(sname);
             sname := f.readStringTemp;
       until GroupCode=0;
       repeat
@@ -533,8 +545,8 @@ begin
         if sname<>dxfName_Layer then DebugLn('{FM}''LAYER'' expected but '''+sname+''' found');
         //FatalError('''LAYER'' expected but '''+sname+''' found');
         repeat
-              //scode := f.readStringTemp;
-              val(f.readStringTemp,GroupCode,ErrorCode);
+              val(f.ReadPShortString^,GroupCode,ErrorCode);
+              f.ReleaseStringTemp(sname);
               sname := f.readStringTemp;
               case GroupCode of
                                2:LayerName:=Copy(sname,1,Length(sname));
@@ -544,6 +556,7 @@ begin
         debugln('{D}[DXF_CONTENTS]Found layer ',LayerName);
         drawing.LayerTable.addlayer(LayerName,LayerColor,-3,true,false,true,'',TLOLoad);
       until sname=dxfName_ENDTAB;
+      f.ReleaseStringTemp(sname);
       debugln('{D-}[DXF_CONTENTS]end; {layer table}');
       //programlog.LogOutStr('end; {layer table}',lp_DecPos,LM_Debug);
     end
@@ -553,15 +566,18 @@ begin
       //programlog.LogOutStr('Found block table',lp_IncPos,LM_Debug);
       sname := '';
       repeat
-        if sname = '  2' then
+        f.ReleaseStringTemp(sname);
+        if sname = '2' then
           if (s = '$MODEL_SPACE') or (s = '$PAPER_SPACE') then
           begin
-            while (f.readStringTemp <> 'ENDBLK') do
-              //s := ;
+            repeat
+              s:=f.readStringTemp;
+              f.ReleaseStringTemp(s);
+            until s = 'ENDBLK';
           end
           else
           begin
-            tp := drawing.BlockDefArray.create(s);
+            tp := drawing.BlockDefArray.create(Copy(s,1,length(s)));
             debugln('{D+}[DXF_CONTENTS]Found block ',s);
             //programlog.LogOutFormatStr('Found block "%s"',[s],lp_IncPos,LM_Debug);
             {addfromdxf12}addentitiesfromdxf(f, 'ENDBLK',tp,drawing,dc,context);
@@ -569,8 +585,11 @@ begin
             //programlog.LogOutFormatStr('end; {block "%s"}',[s],lp_DecPos,LM_Debug);
           end;
         sname := f.readStringTemp;
+        f.ReleaseStringTemp(s);
         s := f.readStringTemp;
       until (s = dxfName_ENDSEC);
+      f.ReleaseStringTemp(sname);
+      f.ReleaseStringTemp(s);
       debugln('{D-}end; {block table}');
       //programlog.LogOutStr('end; {block table}',lp_DecPos,LM_Debug);
     end
@@ -582,6 +601,7 @@ begin
          debugln('{D-}[DXF_CONTENTS]end {entities section}');
          //programlog.LogOutStr('end {entities section}',lp_DecPos,LM_Debug);
     end;
+    f.ReleaseStringTemp(s);
   end;
   //Freemem(Pointer(phandlearray));
   context.h2p.Destroy;
@@ -594,7 +614,7 @@ const
    cntr:integer=0;
 var
    pltypeprop:PGDBLtypeProp;
-   byt: Integer;
+   byt,code: Integer;
    dashinfo:TDashInfo;
    shapenumber,stylehandle:TDWGHandle;
    PSP:PShapeProp;
@@ -615,150 +635,153 @@ begin
   shapenumber:=0;
 
   if GoToDXForENDTAB(f, 0, dxfName_LType) then
-  while s = dxfName_LType do
   begin
-       pltypeprop:=nil;
-       byt := 2;
-       while byt <> 0 do
-       begin
-       byt := strtoint(f.ReadStringTemp);
-       s := f.ReadStringTemp;
-       case byt of
-       2:
+    while s = dxfName_LType do
+    begin
+         pltypeprop:=nil;
+         byt := 2;
+         while byt <> 0 do
          begin
-           len:=0;
-           case drawing.LTypeStyleTable.AddItem(s,pointer(pltypeprop)) of
-                        IsFounded:
-                                  begin
-                                       context.h2p.Add(DWGHandle,pltypeprop);
-                                       if LoadMode=TLOLoad then
+         val(f.ReadPShortString^,byt,code);
+         s := f.ReadStringTemp;
+         case byt of
+         2:
+           begin
+             len:=0;
+             case drawing.LTypeStyleTable.AddItem(s,pointer(pltypeprop)) of
+                          IsFounded:
+                                    begin
+                                         context.h2p.Add(DWGHandle,pltypeprop);
+                                         if LoadMode=TLOLoad then
+                                         begin
+                                         end
+                                         else
+                                             pltypeprop:=nil;
+                                    end;
+                          IsCreated:
+                                    begin
+                                         pltypeprop^.init(Copy(s,1,Length(s)));
+                                         dashinfo:=TDIDash;
+                                         context.h2p.Add(DWGHandle,pltypeprop);
+                                    end;
+                          IsError:
+                                    begin
+                                    end;
+                  end;
+             if drawing.CurrentLType=nil then
+               drawing.CurrentLType:=pltypeprop
+             else if uppercase(s)=uppercase(cltype)then
+               drawing.CurrentLType:=pltypeprop;
+
+           end;
+         3:
+           begin
+                if pltypeprop<>nil then
+                                  pltypeprop^.desk:=Copy(s,1,Length(s));
+           end;
+         5:begin
+                DWGHandle:=strtoint64('$'+s)
+           end;
+         40:
+           begin
+                if pltypeprop<>nil then
+                pltypeprop^.LengthDXF:=strtofloat(s);
+           end;
+         49:
+            begin
+                 if pltypeprop<>nil then
+                 begin
+                 case dashinfo of
+                 TDIShape:begin
+                               if stylehandle<>0 then
+                               begin
+                                   pointer(psp):=pltypeprop^.shapearray.CreateObject;
+                                   psp^.initnul;
+                                   psp^.param:=BShapeProp.param;
+                                   psp^.Psymbol:=nil;
+                                   psp^.ShapeNum:=shapenumber;
+                                   psp^.param.PStyle:=pointer(stylehandle);
+                                   psp^.param.PstyleIsHandle:=true;
+                                   pltypeprop^.dasharray.PushBackData(dashinfo);
+                               end;
+                          end;
+                 TDIText:begin
+                               pointer(ptp):=pltypeprop^.Textarray.CreateObject;
+                               ptp^.initnul;
+                               ptp^.param:=BShapeProp.param;
+                               ptp^.Text:=txtstr;
+                               //ptp^.Style:=;
+                               ptp^.param.PStyle:=pointer(stylehandle);
+                               ptp^.param.PstyleIsHandle:=true;
+                               pltypeprop^.dasharray.PushBackData(dashinfo);
+                          end;
+                 { #todo : сменить case на if }
+                 TDIDash:;//заглушка на варнинг
+                 end;
+                      dashinfo:=TDIDash;
+                      TempDouble:=strtofloat(s);
+                      pltypeprop^.dasharray.PushBackData(dashinfo);
+                      pltypeprop^.strokesarray.PushBackData(TempDouble);
+                      len:=len+abs(TempDouble);
+                 if TempDouble>eps then
                                        begin
+                                            pltypeprop^.LastStroke:=TODILine;
+                                            pltypeprop^.WithoutLines:=false;
                                        end
-                                       else
-                                           pltypeprop:=nil;
-                                  end;
-                        IsCreated:
-                                  begin
-                                       pltypeprop^.init(Copy(s,1,Length(s)));
-                                       dashinfo:=TDIDash;
-                                       context.h2p.Add(DWGHandle,pltypeprop);
-                                  end;
-                        IsError:
-                                  begin
-                                  end;
-                end;
-           if drawing.CurrentLType=nil then
-             drawing.CurrentLType:=pltypeprop
-           else if uppercase(s)=uppercase(cltype)then
-             drawing.CurrentLType:=pltypeprop;
+                 else if TempDouble<-eps then
+                                   pltypeprop^.LastStroke:=TODIBlank
+                 else pltypeprop^.LastStroke:=TODIPoint;
+                 if pltypeprop^.FirstStroke=TODIUnknown then
+                                                pltypeprop^.FirstStroke:=pltypeprop^.LastStroke;
+                 end;
+            end;
+         74:if pltypeprop<>nil then
+            begin
+                 flags:=strtoint(s);
+                 if (flags and 1)>0 then
+                                        BShapeProp.param.AD:={BShapeProp.param.AD.}TACAbs
+                                    else
+                                        BShapeProp.param.AD:={BShapeProp.param.AD.}TACRel;
+                 if (flags and 2)>0 then
+                                        dashinfo:=TDIText;
+                 if (flags and 4)>0 then
+                                        dashinfo:=TDIShape;
 
+            end;
+         75:begin
+                 shapenumber:=strtoint(s);//
+            end;
+        340:begin
+                 if pltypeprop<>nil then
+                                        stylehandle:=strtoint64('$'+s);
+            end;
+        46:begin
+                BShapeProp.param.Height:=strtofloat(s);
+           end;
+        50:begin
+                BShapeProp.param.Angle:=strtofloat(s);
+           end;
+        44:begin
+                BShapeProp.param.X:=strtofloat(s);
+           end;
+        45:begin
+                BShapeProp.param.Y:=strtofloat(s);
+           end;
+        9:begin if pltypeprop<>nil then
+                txtstr:=Copy(s,1,Length(s));
+           end;
          end;
-       3:
-         begin
-              if pltypeprop<>nil then
-                                pltypeprop^.desk:=Copy(s,1,Length(s));
+         f.ReleaseStringTemp(s);
          end;
-       5:begin
-              DWGHandle:=strtoint64('$'+s)
-         end;
-       40:
-         begin
-              if pltypeprop<>nil then
-              pltypeprop^.LengthDXF:=strtofloat(s);
-         end;
-       49:
-          begin
-               if pltypeprop<>nil then
-               begin
-               case dashinfo of
-               TDIShape:begin
-                             if stylehandle<>0 then
-                             begin
-                                 pointer(psp):=pltypeprop^.shapearray.CreateObject;
-                                 psp^.initnul;
-                                 psp^.param:=BShapeProp.param;
-                                 psp^.Psymbol:=nil;
-                                 psp^.ShapeNum:=shapenumber;
-                                 psp^.param.PStyle:=pointer(stylehandle);
-                                 psp^.param.PstyleIsHandle:=true;
-                                 pltypeprop^.dasharray.PushBackData(dashinfo);
-                             end;
-                        end;
-               TDIText:begin
-                             pointer(ptp):=pltypeprop^.Textarray.CreateObject;
-                             ptp^.initnul;
-                             ptp^.param:=BShapeProp.param;
-                             ptp^.Text:=txtstr;
-                             //ptp^.Style:=;
-                             ptp^.param.PStyle:=pointer(stylehandle);
-                             ptp^.param.PstyleIsHandle:=true;
-                             pltypeprop^.dasharray.PushBackData(dashinfo);
-                        end;
-               { #todo : сменить case на if }
-               TDIDash:;//заглушка на варнинг
-               end;
-                    dashinfo:=TDIDash;
-                    TempDouble:=strtofloat(s);
-                    pltypeprop^.dasharray.PushBackData(dashinfo);
-                    pltypeprop^.strokesarray.PushBackData(TempDouble);
-                    len:=len+abs(TempDouble);
-               if TempDouble>eps then
-                                     begin
-                                          pltypeprop^.LastStroke:=TODILine;
-                                          pltypeprop^.WithoutLines:=false;
-                                     end
-               else if TempDouble<-eps then
-                                 pltypeprop^.LastStroke:=TODIBlank
-               else pltypeprop^.LastStroke:=TODIPoint;
-               if pltypeprop^.FirstStroke=TODIUnknown then
-                                              pltypeprop^.FirstStroke:=pltypeprop^.LastStroke;
-               end;
-          end;
-       74:if pltypeprop<>nil then
-          begin
-               flags:=strtoint(s);
-               if (flags and 1)>0 then
-                                      BShapeProp.param.AD:={BShapeProp.param.AD.}TACAbs
-                                  else
-                                      BShapeProp.param.AD:={BShapeProp.param.AD.}TACRel;
-               if (flags and 2)>0 then
-                                      dashinfo:=TDIText;
-               if (flags and 4)>0 then
-                                      dashinfo:=TDIShape;
-
-          end;
-       75:begin
-               shapenumber:=strtoint(s);//
-          end;
-      340:begin
-               if pltypeprop<>nil then
-                                      stylehandle:=strtoint64('$'+s);
-          end;
-      46:begin
-              BShapeProp.param.Height:=strtofloat(s);
-         end;
-      50:begin
-              BShapeProp.param.Angle:=strtofloat(s);
-         end;
-      44:begin
-              BShapeProp.param.X:=strtofloat(s);
-         end;
-      45:begin
-              BShapeProp.param.Y:=strtofloat(s);
-         end;
-      9:begin if pltypeprop<>nil then
-              txtstr:=Copy(s,1,Length(s));
-         end;
-       end;
-       end;
-      if assigned(pltypeprop) then
-        pltypeprop^.strokesarray.LengthFact:=len;
+        if assigned(pltypeprop) then
+          pltypeprop^.strokesarray.LengthFact:=len;
+    end;
   end;
   BShapeProp.Done;
 end;
 procedure ReadLayers(var s:ansistring; const clayer:string;var f:TZFileStream; const exitString: String;owner:PGDBObjGenericSubEntry;LoadMode:TLoadOpt;var drawing:TSimpleDrawing);
 var
-byt: Integer;
+byt,code: Integer;
 lname,desk: String;
 nulisread:boolean;
 player:PGDBLayerProp;
@@ -773,11 +796,12 @@ begin
     begin
       if not nulisread then
       begin
-      byt := strtoint(f.readStringTemp);
-      s := f.ReadStringTemp;
+        val(f.ReadPShortString^,byt,code);
+        s := f.ReadStringTemp;
       end
       else
           nulisread:=false;
+
       case byt of
         2:begin
             debugln('{D}[DXF_CONTENTS]Found layer  ',s);
@@ -790,21 +814,23 @@ begin
             player^.LT:=drawing.LTypeStyleTable.getAddres(s);
         1001:begin
             if s='AcAecLayerStandard' then begin
-              byt:=strtoint(f.readStringTemp);
+              val(f.ReadPShortString^,byt,code);
               if byt<>0 then begin
                 f.ReadPAnsiChar;
-                byt:=strtoint(f.ReadStringTemp);
+                val(f.ReadPShortString^,byt,code);
                 if byt<>0 then begin
-                  desk := f.readString;
+                  desk := f.ReadStringTemp(true);
                   if player<>nil then
                     player^.desk:=desk;
                 end else begin
                   nulisread:=true;
+                  f.ReleaseStringTemp(s);
                   s:=f.readStringTemp;
                 end;
               end else begin
                   nulisread:=true;
-                  s := f.readStringTemp;
+                  f.ReleaseStringTemp(s);
+                  s:=f.readStringTemp;
               end;
             end;
         end;
@@ -813,6 +839,8 @@ begin
             player^.SetValueFromDxf(byt,s);
         end;
       end;
+
+      f.ReleaseStringTemp(s);
     end;
     if drawing.CurrentLayer=nil then
       drawing.CurrentLayer:=player
@@ -825,7 +853,7 @@ var
    tstyle:GDBTextStyle;
    ptstyle:PGDBTextStyle;
    DWGHandle:TDWGHandle;
-   byt: Integer;
+   byt,code: Integer;
    flags: Integer;
    FontFile,FontFamily: String;
    ti:PGDBTextStyle;
@@ -835,95 +863,98 @@ var
    PTP:PTextProp;
 begin
   if GoToDXForENDTAB(f, 0, dxfName_Style) then
-  while s = dxfName_Style do
   begin
-    FontFile:='';
-    FontFamily:='';
-    tstyle.name:='';
-    tstyle.pfont:=nil;
-    tstyle.prop.oblique:=0;
-    tstyle.prop.size:=1;
-    DWGHandle:=0;
-
-    byt := 2;
-
-    while byt <> 0 do
+    while s = dxfName_Style do
     begin
-      byt := strtoint(f.ReadStringTemp);
-      s := f.readStringTemp;
-      case byt of
-            2:tstyle.name := Copy(s,1,Length(s));
-            5:DWGHandle:=strtoint64('$'+s);
-           40:tstyle.prop.size:=strtofloat(s);
-           41:tstyle.prop.wfactor:=strtofloat(s);
-           50:tstyle.prop.oblique:=strtofloat(s)*pi/180;
-           70:flags:=strtoint(s);
-            3:FontFile:=Copy(s,1,Length(s));
-         1000:FontFamily:=Copy(s,1,Length(s));
-      end;
-    end;
-    ti:=nil;
-    if (flags and 1)=0 then begin
-      ti:=drawing.TextStyleTable.FindStyle(tstyle.Name,false);
-      if ti<>nil then begin
-        if LoadMode=TLOLoad then
-          ti:=drawing.TextStyleTable.setstyle(tstyle.Name,FontFile,FontFamily,tstyle.prop,false);
-      end else
-        ti:=drawing.TextStyleTable.addstyle(tstyle.Name,FontFile,FontFamily,tstyle.prop,false);
-    end else begin
-      if drawing.TextStyleTable.FindStyle(FontFile,true)<>nil then begin
-        if LoadMode=TLOLoad then
-          ti:=drawing.TextStyleTable.setstyle(FontFile,FontFile,FontFamily,tstyle.prop,true);
-      end else
-        ti:=drawing.TextStyleTable.addstyle(FontFile,FontFile,FontFamily,tstyle.prop,true);
-    end;
-    if ti<>nil then begin
-      context.h2p.Add(DWGHandle,ti);
-      ptstyle:={drawing.TextStyleTable.getelement}(ti);
-      pltypeprop:=drawing.LTypeStyleTable.beginiterate(ir);
-      if pltypeprop<>nil then
-      repeat
-        PSP:=pltypeprop^.shapearray.beginiterate(ir2);
-        if PSP<>nil then
-        repeat
-          if psp^.param.PstyleIsHandle then
-            if psp^.param.PStyle=pointer(DWGHandle) then begin
-              psp^.param.PStyle:=ptstyle;
-              psp^.FontName:=ptstyle^.FontFile;
-              if assigned(ptstyle^.pfont) then begin
-                psp^.Psymbol:=ptstyle^.pfont^.GetOrReplaceSymbolInfo(integer(psp^.ShapeNum){//-ttf-//,tdinfo});
-                psp^.SymbolName:=psp^.Psymbol^.Name;
-              end;
-            end;
-          PSP:=pltypeprop^.shapearray.iterate(ir2);
-        until PSP=nil;
+      FontFile:='';
+      FontFamily:='';
+      tstyle.name:='';
+      tstyle.pfont:=nil;
+      tstyle.prop.oblique:=0;
+      tstyle.prop.size:=1;
+      DWGHandle:=0;
 
-        PTP:=pltypeprop^.Textarray.beginiterate(ir2);
-        if PTP<>nil then
+      byt := 2;
+
+      while byt <> 0 do
+      begin
+        val(f.ReadPShortString^, byt, code);
+        s := f.readStringTemp;
+        case byt of
+              2:tstyle.name := Copy(s,1,Length(s));
+              5:DWGHandle:=strtoint64('$'+s);
+             40:tstyle.prop.size:=strtofloat(s);
+             41:tstyle.prop.wfactor:=strtofloat(s);
+             50:tstyle.prop.oblique:=strtofloat(s)*pi/180;
+             70:flags:=strtoint(s);
+              3:FontFile:=Copy(s,1,Length(s));
+           1000:FontFamily:=Copy(s,1,Length(s));
+        end;
+        f.ReleaseStringTemp(s);
+      end;
+      ti:=nil;
+      if (flags and 1)=0 then begin
+        ti:=drawing.TextStyleTable.FindStyle(tstyle.Name,false);
+        if ti<>nil then begin
+          if LoadMode=TLOLoad then
+            ti:=drawing.TextStyleTable.setstyle(tstyle.Name,FontFile,FontFamily,tstyle.prop,false);
+        end else
+          ti:=drawing.TextStyleTable.addstyle(tstyle.Name,FontFile,FontFamily,tstyle.prop,false);
+      end else begin
+        if drawing.TextStyleTable.FindStyle(FontFile,true)<>nil then begin
+          if LoadMode=TLOLoad then
+            ti:=drawing.TextStyleTable.setstyle(FontFile,FontFile,FontFamily,tstyle.prop,true);
+        end else
+          ti:=drawing.TextStyleTable.addstyle(FontFile,FontFile,FontFamily,tstyle.prop,true);
+      end;
+      if ti<>nil then begin
+        context.h2p.Add(DWGHandle,ti);
+        ptstyle:={drawing.TextStyleTable.getelement}(ti);
+        pltypeprop:=drawing.LTypeStyleTable.beginiterate(ir);
+        if pltypeprop<>nil then
         repeat
-          if pTp^.param.PStyle=pointer(DWGHandle) then begin
-            pTp^.param.PStyle:=ptstyle;
-            {pTp^.FontName:=ptstyle^.FontFile;
-            pTp^.Psymbol:=ptstyle^.pfont^.GetOrReplaceSymbolInfo(integer(pTp^.Psymbol));
-            pTp^.SymbolName:=pTp^.Psymbol^.Name;}
-          end;
-          PTP:=pltypeprop^.Textarray.iterate(ir2);
-        until PTP=nil;
-       pltypeprop:=drawing.LTypeStyleTable.iterate(ir);
-      until pltypeprop=nil;
+          PSP:=pltypeprop^.shapearray.beginiterate(ir2);
+          if PSP<>nil then
+          repeat
+            if psp^.param.PstyleIsHandle then
+              if psp^.param.PStyle=pointer(DWGHandle) then begin
+                psp^.param.PStyle:=ptstyle;
+                psp^.FontName:=ptstyle^.FontFile;
+                if assigned(ptstyle^.pfont) then begin
+                  psp^.Psymbol:=ptstyle^.pfont^.GetOrReplaceSymbolInfo(integer(psp^.ShapeNum){//-ttf-//,tdinfo});
+                  psp^.SymbolName:=psp^.Psymbol^.Name;
+                end;
+              end;
+            PSP:=pltypeprop^.shapearray.iterate(ir2);
+          until PSP=nil;
+
+          PTP:=pltypeprop^.Textarray.beginiterate(ir2);
+          if PTP<>nil then
+          repeat
+            if pTp^.param.PStyle=pointer(DWGHandle) then begin
+              pTp^.param.PStyle:=ptstyle;
+              {pTp^.FontName:=ptstyle^.FontFile;
+              pTp^.Psymbol:=ptstyle^.pfont^.GetOrReplaceSymbolInfo(integer(pTp^.Psymbol));
+              pTp^.SymbolName:=pTp^.Psymbol^.Name;}
+            end;
+            PTP:=pltypeprop^.Textarray.iterate(ir2);
+          until PTP=nil;
+         pltypeprop:=drawing.LTypeStyleTable.iterate(ir);
+        until pltypeprop=nil;
+      end;
+      debugln('{D}[DXF_CONTENTS]Found style  ',tstyle.Name);
+      if drawing.CurrentTextStyle=nil then
+        drawing.CurrentTextStyle:=drawing.TextStyleTable.FindStyle(tstyle.Name,false)
+      else if uppercase(tstyle.Name)=uppercase(ctstyle)then
+        drawing.CurrentTextStyle:=drawing.TextStyleTable.FindStyle(tstyle.Name,false);
+      tstyle.Name:='';
     end;
-    debugln('{D}[DXF_CONTENTS]Found style  ',tstyle.Name);
-    if drawing.CurrentTextStyle=nil then
-      drawing.CurrentTextStyle:=drawing.TextStyleTable.FindStyle(tstyle.Name,false)
-    else if uppercase(tstyle.Name)=uppercase(ctstyle)then
-      drawing.CurrentTextStyle:=drawing.TextStyleTable.FindStyle(tstyle.Name,false);
-    tstyle.Name:='';
+    drawing.LTypeStyleTable.format;
   end;
-  drawing.LTypeStyleTable.format;
 end;
 procedure ReadVport(var s:ansistring;var f:TZFileStream; const exitString: String;owner:PGDBObjGenericSubEntry;LoadMode:TLoadOpt;var drawing:TSimpleDrawing);
 var
-   byt: Integer;
+   byt,code: Integer;
    active:boolean;
    flags: Integer;
 begin
@@ -935,8 +966,7 @@ begin
 
        while byt <> 0 do
        begin
-         //s := f.readString;
-         byt := strtoint(f.ReadStringTemp);
+         val(f.ReadPShortString^,byt,code);
          s := f.readStringTemp;
          if (byt=0)and(s='VPORT')then
          begin
@@ -1085,7 +1115,7 @@ begin
                 end;
             end;
        end;
-
+       f.ReleaseStringTemp(s);
      end;
      end;
      debugln('{D-}[DXF_CONTENTS]end;{ReadVport}');
@@ -1093,62 +1123,66 @@ end;
 procedure ReadDimStyles(var s:ansistring; const cdimstyle:string;var f:TZFileStream; const exitString: String;owner:PGDBObjGenericSubEntry;LoadMode:TLoadOpt;var drawing:TSimpleDrawing;var context:TIODXFLoadContext);
 var
    psimstyleprop:PGDBDimStyle;
-   byt:integer;
+   byt,code:integer;
    ReadDimStylesMode:TDimStyleReadMode;
 begin
 if GoToDXForENDTAB(f, 0, dxfName_DIMSTYLE) then
-while s = dxfName_DIMSTYLE do
 begin
-  psimstyleprop:=nil;
-  ReadDimStylesMode:=TDSRM_ACAD;
-  byt := 2;
-  while byt <> 0 do
+  while s = dxfName_DIMSTYLE do
   begin
-  byt := strtoint(f.ReadStringTemp);
-  s := f.readStringTemp;
-  if psimstyleprop=nil then begin
-    if byt=2 then begin
-      psimstyleprop:=drawing.DimStyleTable.MergeItem(s,LoadMode);
-      if psimstyleprop<>nil then begin
-        psimstyleprop^.init(s);
-        psimstyleprop^.Name:=Copy(s,1,Length(s));
-      end;
-      if drawing.CurrentDimStyle=nil then
-        drawing.CurrentDimStyle:=psimstyleprop
-      else if uppercase(s)=uppercase(cdimstyle)then
-      if (LoadMode=TLOLoad) then
-        drawing.CurrentDimStyle:=psimstyleprop;
+    psimstyleprop:=nil;
+    ReadDimStylesMode:=TDSRM_ACAD;
+    byt := 2;
+    while byt <> 0 do
+    begin
+      val(f.ReadPShortString^,byt,code);
+      s := f.readStringTemp;
+      if psimstyleprop=nil then begin
+        if byt=2 then begin
+          psimstyleprop:=drawing.DimStyleTable.MergeItem(s,LoadMode);
+          if psimstyleprop<>nil then begin
+            psimstyleprop^.init(Copy(s,1,Length(s)));
+            //psimstyleprop^.Name:=Copy(s,1,Length(s));
+          end;
+          if drawing.CurrentDimStyle=nil then
+            drawing.CurrentDimStyle:=psimstyleprop
+          else if uppercase(s)=uppercase(cdimstyle)then
+          if (LoadMode=TLOLoad) then
+            drawing.CurrentDimStyle:=psimstyleprop;
+        end;
+      end else
+         psimstyleprop^.SetValueFromDxf(ReadDimStylesMode,byt,Copy(s,1,Length(s)),context);
+      f.ReleaseStringTemp(s);
     end;
-  end else
-     psimstyleprop^.SetValueFromDxf(ReadDimStylesMode,byt,Copy(s,1,Length(s)),context);
   end;
 end;
 end;
 procedure ReadBlockRecird(const Handle2BlockName:TMapBlockHandle_BlockNames;var s:ansistring;var f:TZFileStream; const exitString: String;owner:PGDBObjGenericSubEntry;LoadMode:TLoadOpt;var drawing:TSimpleDrawing);
 var
-   byt:integer;
+   byt,code:integer;
    bname:string;
    bhandle:TDWGHandle;
 begin
   bhandle:=0;
-while s = dxfName_BLOCKRECORD do
-begin
-     byt := 2;
-     while byt <> 0 do
-     begin
-       byt := strtoint(f.readStringTemp);
-       s := f.readStringTemp;
-       if byt=2 then
-                    begin
-                         //bname:=s;
-                         Handle2BlockName.{$IFDEF DELPHI}Add{$ENDIF}{$IFNDEF DELPHI}insert{$ENDIF}(bhandle,Copy(s,1,Length(s)));
-                    end
-       else if byt=5 then
-                    begin
-                         bhandle:=DXFHandle(s);
-                    end;
-     end;
-end;
+  while s = dxfName_BLOCKRECORD do
+  begin
+       byt := 2;
+       while byt <> 0 do
+       begin
+         val(f.ReadPShortString^,byt,code);
+         s := f.readStringTemp;
+         if byt=2 then
+                      begin
+                           //bname:=s;
+                           Handle2BlockName.{$IFDEF DELPHI}Add{$ENDIF}{$IFNDEF DELPHI}insert{$ENDIF}(bhandle,Copy(s,1,Length(s)));
+                      end
+         else if byt=5 then
+                      begin
+                           bhandle:=DXFHandle(s);
+                      end;
+         f.ReleaseStringTemp(s);
+       end;
+  end;
 end;
 
 procedure addfromdxf2000(var f:TZFileStream; const exitString: String;owner:PGDBObjGenericSubEntry;LoadMode:TLoadOpt;var drawing:TSimpleDrawing;var context:TIODXFLoadContext;var DC:TDrawContext;DWGVarsDict:TString2StringDictionary);
@@ -1158,7 +1192,7 @@ procedure addfromdxf2000(var f:TZFileStream; const exitString: String;owner:PGDB
 //   stat: array [tproftype] of QWord = (0,0,0,0,0,0,0,0,0,0,0,0);
 //   stat2: array [tproftype] of QWord = (0,0,0,0,0,0,0,0,0,0,0,0);
 var
-  byt: Integer;
+  byt,code: Integer;
   error: Integer;
   US, sname: String;
   s:ansistring;
@@ -1188,17 +1222,21 @@ begin
     //s :=
     f.ReadPAnsiChar;
     s := f.ReadStringTemp;
+    f.ReleaseStringTemp(s);
     if s = dxfName_TABLES then
     begin
       if not f.notEOF then
         system.break;
       f.ReadPAnsiChar;
-      while f.readStringTemp = dxfName_TABLE do
+
+      s:=f.readStringTemp;
+      while s = dxfName_TABLE do
       begin
         if not f.notEOF then
           system.break;
         f.ReadPAnsiChar;
-        s := f.ReadString;
+        f.ReleaseStringTemp(s);
+        s := f.ReadStringTemp;
 
         //case (s) of
                     if s = dxfName_CLASSES{:}then
@@ -1294,6 +1332,9 @@ begin
                                     end;
         //end;{case}
         f.ReadPAnsiChar;
+
+        f.ReleaseStringTemp(s);
+        s:=f.readStringTemp;
       end;
 
     end
@@ -1322,13 +1363,16 @@ begin
           sname := '';
           repeat
             US:=uppercase(s);
-            if (sname = '  2') or (sname = '2') then
+            if {(sname = '  2') or }(sname = '2') then
               if (pos('MODEL_SPACE',US)<>0)or(pos('PAPER_SPACE',US)<>0)or(pos('*A',US)=1)or(pos('*D',US)=1){or(pos('*U',US)=1)}then   //блоки *U игнорировать нестоит, что то связанное с параметризацией
               begin
                 //programlog.logoutstr('Ignored block '+s+';',lp_OldPos);
                 DebugLn('{IH}'+rsBlockIgnored,[s]);
                 //HistoryOutStr(format(rsBlockIgnored,[s]));
-                while (f.readStringTemp <> 'ENDBLK') do;
+                repeat
+                  s:=f.readStringTemp;
+                  f.ReleaseStringTemp(s);
+                until s = 'ENDBLK';
               end
               else if drawing.BlockDefArray.getindex(s)>=0 then
                                begin
@@ -1337,13 +1381,16 @@ begin
                                     DebugLn('{IH}'+rsDoubleBlockIgnored,[Tria_AnsiToUtf8(s)]);
 //                                    if s='DEVICE_PS_UK-VK'then
 //                                               s:=s;
-                                    while (f.readStringTemp <> 'ENDBLK') do;
+                                    repeat
+                                      s:=f.readStringTemp;
+                                      f.ReleaseStringTemp(s);
+                                    until s = 'ENDBLK';
                                end
               else begin
 //                   if s='polyline' then
 //                                  s:=s;
 
-                tp := drawing.BlockDefArray.create(s);
+                tp := drawing.BlockDefArray.create(Copy(s,1,Length(s)));
                 debugln('{D+}[DXF_CONTENTS]Found blockdef ',s);
                    //addfromdxf12(f, Pointer(GDB.pgdbblock^.blockarray[GDB.pgdbblock^.count].ppa),@tp^.Entities, 'ENDBLK');
                 if (s <> '30') then // Сравнивать с ' 30' нет смысла, т.к. функция чтения строки отбрасывает пробелы сама
@@ -1367,7 +1414,7 @@ begin
                   end;
                 end;
                 //s := f.readString;
-                tp^.Base.z := strtofloat(f.readStringTemp);
+                val(f.ReadPShortString^,tp^.Base.z,code);
                 //programlog.LogOutFormatStr('Base x:%g y:%g z:%g',[tp^.Base.x,tp^.Base.y,tp^.Base.z],lp_OldPos,LM_Info);
                 inc(foc);
                 SaveOptions:=dc.Options;
@@ -1385,7 +1432,9 @@ begin
             if not blockload then
                                  sname := f.readStringTemp;
             blockload:=false;
-            s := f.readString;
+
+            s := f.ReadStringTemp;
+            f.ReleaseStringTemp(s);
           until (s = dxfName_ENDSEC);
           debugln('{D-}[DXF_CONTENTS]end; {block table}');
           //programlog.LogOutStr('end; {block table}',lp_DecPos,LM_Debug);

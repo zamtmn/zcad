@@ -34,6 +34,9 @@ uses
 
 implementation
 
+const
+  IdentEnd='<<<';
+
 procedure FilterArray(source,dest:PGDBOpenArrayOfPObjects;prop,value:string);
 var
    pvisible:PGDBObjEntity;
@@ -97,8 +100,9 @@ procedure ProcessCSVLine(FDoc:TCSVDocument;Row:Integer;var drawing:TSimpleDrawin
 var
   Filter:TEntsTypeFilter;
   entarray,filtredentarray:TZctnrVectorPGDBaseObjects;
-  fltcounter,fltcount,FactColCount:integer;
+  fltcounter,fltcount,FactColCount,setvarfrom:integer;
   a1,a2,atemp:PGDBOpenArrayOfPObjects;
+  VarName,VarValue:string;
 begin
   FactColCount:=GetFactColCount(FDoc,row);
   if (FactColCount mod 2)=0 then
@@ -132,19 +136,33 @@ begin
 
   fltcounter:=1;
   fltcount:=(FactColCount-1) div 2;
+  setvarfrom:=1;
   while fltcount>fltcounter do begin
-    FilterArray(a1,a2,FDoc.Cells[fltcounter*2-1,Row],FDoc.Cells[fltcounter*2,Row]);
+    VarName:=FDoc.Cells[fltcounter*2-1,Row];
+    if VarName=IdentEnd then begin
+      inc(setvarfrom);
+      Break;
+    end;
+    VarValue:=FDoc.Cells[fltcounter*2,Row];
+    FilterArray(a1,a2,VarName,VarValue);
     a1.Clear;
     atemp:=a2;
     a2:=a1;
     a1:=atemp;
     inc(fltcounter);
+    setvarfrom:=fltcounter*2-1;
   end;
 
   if a1^.Count<>1 then
     ZCMsgCallBackInterface.TextMessage(format('In row %d found %d candidats (%s)',[row+1,a1^.Count,RowValue(FDoc,row)]),TMWOHistoryOut);
-  if a1^.Count<>0 then
-    SetArray(a1,FDoc.Cells[fltcounter*2-1,Row],FDoc.Cells[fltcounter*2,Row],drawing,DC);
+  if a1^.Count<>0 then begin
+    while setvarfrom<FactColCount do begin
+      VarName:=FDoc.Cells[setvarfrom,Row];
+      VarValue:=FDoc.Cells[setvarfrom+1,Row];
+      SetArray(a1,VarName,VarValue,drawing,DC);
+      inc(setvarfrom,2);
+    end;
+  end;
 
   Filter.Destroy;
   entarray.Clear;

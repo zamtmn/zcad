@@ -58,7 +58,7 @@ type
       TSetStateProc=procedure(var value:T;const n:integer;state:boolean) of object;
       TPartsEditFunc=function(var value:T):boolean of object;
       TReorganizePartsFunc=procedure (var parts:string;const AFrom,ATo:integer;ABefore:boolean) of object;
-   private
+   protected
     var
       fpvalue:PT;
       actns:array of taction;

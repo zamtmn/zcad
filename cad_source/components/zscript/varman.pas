@@ -864,7 +864,7 @@ var
   S:TInternalScriptString;}
   rr:tarrayindex;
 begin
-  if n2i.MyGetValue(uppercase(name),rr) then
+  if n2i.GetValue(uppercase(name),rr) then
   begin
        result:=_TypeIndex2PTD(rr);
   end

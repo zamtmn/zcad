@@ -8,8 +8,8 @@
       <Version Value="11"/>
       <PathDelim Value="\"/>
       <SearchPaths>
-        <IncludeFiles Value="$PkgDir(zebase)"/>
-        <OtherUnitFiles Value="."/>
+        <IncludeFiles Value="$PkgDir(zebase);fpcmod\inc"/>
+        <OtherUnitFiles Value=".;fpcmod"/>
         <UnitOutputDirectory Value="lib\$(TargetCPU)-$(TargetOS)"/>
       </SearchPaths>
       <Parsing>
@@ -18,7 +18,7 @@
         </SyntaxOptions>
       </Parsing>
     </CompilerOptions>
-    <Files Count="17">
+    <Files Count="24">
       <Item1>
         <Filename Value="gzctnrvector.pas"/>
         <UnitName Value="gzctnrVector"/>
@@ -53,7 +53,7 @@
       </Item8>
       <Item9>
         <Filename Value="uzctnralignedvectorbytes.pas"/>
-        <UnitName Value="uzctnralignedvectorbytes"/>
+        <UnitName Value="uzctnrAlignedVectorBytes"/>
       </Item9>
       <Item10>
         <Filename Value="gzctnrvectorstr.pas"/>
@@ -87,6 +87,34 @@
         <Filename Value="gzctnrvectorclass.pas"/>
         <UnitName Value="gzctnrVectorClass"/>
       </Item17>
+      <Item18>
+        <Filename Value="fpcmod\generics.collections.pas"/>
+        <UnitName Value="Generics.Collections"/>
+      </Item18>
+      <Item19>
+        <Filename Value="fpcmod\generics.defaults.pas"/>
+        <UnitName Value="Generics.Defaults"/>
+      </Item19>
+      <Item20>
+        <Filename Value="fpcmod\generics.hashes.pas"/>
+        <UnitName Value="Generics.Hashes"/>
+      </Item20>
+      <Item21>
+        <Filename Value="fpcmod\generics.helpers.pas"/>
+        <UnitName Value="Generics.Helpers"/>
+      </Item21>
+      <Item22>
+        <Filename Value="fpcmod\generics.memoryexpanders.pas"/>
+        <UnitName Value="Generics.MemoryExpanders"/>
+      </Item22>
+      <Item23>
+        <Filename Value="fpcmod\generics.strings.pas"/>
+        <UnitName Value="Generics.Strings"/>
+      </Item23>
+      <Item24>
+        <Filename Value="fpcmod\gzmap.pp"/>
+        <UnitName Value="gzmap"/>
+      </Item24>
     </Files>
     <CompatibilityMode Value="True"/>
     <RequiredPkgs Count="2">

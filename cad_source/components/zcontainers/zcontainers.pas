@@ -13,7 +13,8 @@ uses
   gzctnrSTL, uzctnrAlignedVectorBytes, gzctnrVectorStr, uzctnrTree, 
   uzctnrVectorStrings, uzctnrVectorPointers, uzctnrVectorBytes, 
   gzctnrAlignedVectorObjects, gzctnrVectorc, gzctnrVectorClass, 
-  LazarusPackageIntf;
+  Generics.Collections, Generics.Defaults, Generics.Hashes, Generics.Helpers, 
+  Generics.MemoryExpanders, Generics.Strings, gzmap, LazarusPackageIntf;
 
 implementation
 

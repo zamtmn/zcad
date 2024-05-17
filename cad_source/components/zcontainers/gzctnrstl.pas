@@ -20,13 +20,13 @@ unit gzctnrSTL;
 interface
 uses
   gvector,
-  gutil,gmap,ghashmap,generics.collections,
+  gutil,gzmap,ghashmap,generics.collections,
   sysutils;
 type
 TMyMapGenOld <TKey, TValue, TCompare> = class( TMap<TKey, TValue, TCompare>);
 TMyMapGen <TKey,TValue> = class( TDictionary<TKey,TValue>)
   function MyGetValue(key:TKey):TValue;inline;
-  function MyGetMutableValue(key:TKey; out PAValue:PValue):boolean;
+  //function MyGetMutableValue(key:TKey; out PAValue:PValue):boolean;
 end;
 TMyMap <TKey, TValue> = class( TMyMapGen<TKey, TValue>)
   procedure MyGetOrCreateValue(const key:TKey; var Value:TValue; out OutValue:TValue);inline;
@@ -44,8 +44,8 @@ GKey2DataMap <TKey, TValue> = class(TMyMapGen<TKey, TValue>)
 end;
   GKey2DataMapOld <TKey, TValue, TCompare> = class(TMap<TKey, TValue, TCompare>)
     procedure RegisterKey(const key:TKey; const Value:TValue);
-    function MyGetValue(key:TKey; out Value:TValue):boolean;
-    function MyGetMutableValue(key:TKey; out PValue:{$IFNDEF DELPHI}PTValue{$ENDIF}{$IFDEF DELPHI}pointer{$ENDIF}):boolean;
+    //function MyGetValue(key:TKey; out Value:TValue):boolean;
+    //function MyGetMutableValue(key:TKey; out PValue:{$IFNDEF DELPHI}PTValue{$ENDIF}{$IFDEF DELPHI}pointer{$ENDIF}):boolean;
     function MyContans(key:TKey):boolean;
 end;
 TMyVector <T> = class(TVector<T>)
@@ -69,8 +69,8 @@ TMyVectorArray<T,TVec> = class
         function GetCurrentArray:TVec;
 end;
 
-TMyHashMap <TKey, TValue, Thash> = class(THashMap<TKey, TValue, Thash>)
-  function MyGetValue(key:TKey; out Value:TValue):boolean;
+TMyHashMap <TKey, TValue, Thash> = class(ghashmap.THashMap<TKey, TValue, Thash>)
+  //function MyGetValue(key:TKey; out Value:TValue):boolean;
 end;
 StringHash=class
   class function hash(s:AnsiString; n:longint):SizeUInt;
@@ -122,7 +122,7 @@ begin
   result:=VArray[CurrentArray];
 end;
 
-function TMyHashMap<TKey, TValue,Thash>.MyGetValue(key:TKey; out Value:TValue):boolean;
+{function TMyHashMap<TKey, TValue,Thash>.MyGetValue(key:TKey; out Value:TValue):boolean;
 var i,h,bs:longint;
 begin
   h:=Thash.hash(key,FData.size);
@@ -135,7 +135,7 @@ begin
                                      end;
   end;
   exit(false);
-end;
+end;}
 function MakeHash(const s:AnsiString):SizeUInt;//TODO это копия процедуры из uzbstrproc
 var
   I: Integer;
@@ -162,11 +162,17 @@ begin
 end;
 
 function TMyMapGen<TKey, TValue>.MyGetValue(key:TKey):TValue;
+var
+  pv:^TValue;
 begin
-  if not TryGetValue(Key,result) then
+  if tryGetMutableValue(key,pv) then
+    result:=pv^
+  else
     result:=default(TValue);
+  {if not GetValue(Key,result) then
+    result:=default(TValue);}
 end;
-function TMyMapGen<TKey, TValue>.MyGetMutableValue(key:TKey; out PAValue:PValue):Boolean;
+{function TMyMapGen<TKey, TValue>.MyGetMutableValue(key:TKey; out PAValue:PValue):Boolean;
 var
   LIndex: SizeInt;
   LHash: UInt32;
@@ -180,13 +186,13 @@ begin
     result:=true;
     PAValue:=@FItems[LIndex].Pair.Value;
   end;
-end;
+end;}
 
 function TMyGenMapCounter<TKey,TValue>.CountKey(const key:TKey; const InitialCounter:TValue=1):TValue;inline;
 var
   PAValue:PValue;
 begin
-  if MyGetMutableValue(key,PAValue) then begin
+  if tryGetMutableValue(key,PAValue) then begin
     PAValue^:=PAValue^+InitialCounter;
     result:=PAValue^;
   end else begin
@@ -218,7 +224,7 @@ begin
                             Iterator.Destroy;
                        end;
 end;
-function GKey2DataMapOld<TKey, TValue,TCompare>.MyGetValue(key:TKey; out Value:TValue):boolean;
+{function GKey2DataMapOld<TKey, TValue,TCompare>.MyGetValue(key:TKey; out Value:TValue):boolean;
 var
    Pair:TPair;
    Node:TMSet.PNode;
@@ -231,8 +237,8 @@ begin
     result:=true;
     Value:=Node^.Data.Value;
   end;
-end;
-function GKey2DataMapOld<TKey, TValue,TCompare>.MyGetMutableValue(key:TKey; out PValue:PTValue):boolean;
+end;}
+{function GKey2DataMapOld<TKey, TValue,TCompare>.MyGetMutableValue(key:TKey; out PValue:PTValue):boolean;
 var
   Pair:TPair;
   Node:TMSet.PNode;
@@ -245,15 +251,19 @@ begin
     result:=true;
     PValue:=@Node^.Data.Value;
   end;
-end;
+end;}
 function GKey2DataMapOld<TKey, TValue,TCompare>.MyContans(key:TKey):boolean;
 var
    Pair:TPair;
    Node: TMSet.PNode;
+   p:pointer;
 begin
+  result:=tryGetMutableValue(key,p);
+  {
   Pair.Key:=key;
   Node := FSet.NFind(Pair);
   Result := Node <> nil;
+  }
 end;
 begin
 end.

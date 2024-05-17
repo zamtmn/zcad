@@ -185,7 +185,7 @@ var
 begin
   pt:=TCommandLinePromptOption.Create;
   ts:=APrompt.GetResult(pt);
-  prompt.SetHighLightedText(ts,pt.Parts.arr,pt.Parts.Size-1);
+  //prompt.SetHighLightedText(ts,pt.Parts.arr,pt.Parts.Size-1);
   pt.Free;
   HandleCmdLine(ZMsgID_GUICMDLineCheck);
 end;

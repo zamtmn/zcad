@@ -1932,6 +1932,7 @@ begin
 end;
 
 begin
+  {$if declared(SSE42Support)}
   {$ifdef CPUINTEL}
   if SSE42Support then
   begin
@@ -1940,6 +1941,7 @@ begin
   end
   else
   {$endif CPUINTEL}
+  {$endif}
   {$ifdef CPULOONGARCH64}
   if True then
   begin

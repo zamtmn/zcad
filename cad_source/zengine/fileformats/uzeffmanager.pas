@@ -125,7 +125,7 @@ var
   PData:PTFileFormatData;
 begin
   StandartizedName:=vec.StandartizeName(_Wxt);
-  if map.MyGetMutableValue(StandartizedName,PValue) then begin
+  if map.tryGetMutableValue(StandartizedName,PValue) then begin
     ExtHandle:=vec.CreateHandle;
     PData:=vec.GetPLincedData(ExtHandle);
     PData^.FormatDesk:=_FormatDesk;

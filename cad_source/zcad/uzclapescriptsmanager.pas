@@ -187,7 +187,7 @@ begin
   if CreateSTN2SNDIfNeeded then
     result:=addScriptsType
   else begin
-    if STN2SND.MyGetMutableValue(AScriptsType,PSTD) then
+    if STN2SND.tryGetMutableValue(AScriptsType,PSTD) then
       result:=PSTD.Manager
     else
       result:=addScriptsType;
@@ -225,7 +225,7 @@ var
   PSD:PTScriptData;
 begin
   scrname:=UpperCase(ChangeFileExt(ExtractFileName(FileName),''));
-  if not SN2SD.MyGetMutableValue(scrname,PSD) then begin
+  if not SN2SD.tryGetMutableValue(scrname,PSD) then begin
     SN2SD.Add(scrname,TScriptData.CreateRec(FileName));
   end;
 end;
@@ -269,7 +269,7 @@ var
   PSD:PTScriptData;
 begin
   scrname:=UpperCase(AScriptName);
-  if SN2SD.MyGetMutableValue(scrname,PSD) then
+  if SN2SD.tryGetMutableValue(scrname,PSD) then
     RunScript(PSD^)
   else
     raise Exception.CreateFmt('Script "%s" (type "%s", file mask "%s") not found',[AScriptName,FScriptType,FScriptFileMask]);
@@ -308,7 +308,7 @@ begin
   result.LAPEData.FCompiler:=nil;
   result.FileData.Age:=-1;
   result.FIndividualCDA:=AICDA;
-  if SN2SD.MyGetMutableValue(scrname,PSD) then begin
+  if SN2SD.tryGetMutableValue(scrname,PSD) then begin
     result.FileData.Name:=PSD^.FileData.Name;
     if AICtxClass<>nil then
       result.Ctx:=AICtxClass.Create

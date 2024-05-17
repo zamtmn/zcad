@@ -102,7 +102,7 @@ begin
   id.Path:=filename;
   //exit;
   internalname:=uppercase(ChangeFileExt(extractfilename(filename),''));
-  if ImagesManager.ImageDataMap.MyGetMutableValue(internalname,PID) then
+  if ImagesManager.ImageDataMap.tryGetMutableValue(internalname,PID) then
     begin
       //уже зарегистрирован
     end
@@ -124,7 +124,7 @@ var
    internalname:string;
 begin
    internalname:=uppercase(ChangeFileExt(extractfilename(ImageName),''));
-   if ImagesManager.ImageDataMap.MyGetMutableValue(internalname,PID) then
+   if ImagesManager.ImageDataMap.tryGetMutableValue(internalname,PID) then
      begin
        if PID^.Index<>-1 then
                              exit(PID^.Index);
@@ -152,7 +152,7 @@ begin
         begin
           sub:=GetPredStr(line,'=');
           internalname:=uppercase(sub);
-          if ImagesManager.ImageDataMap.MyGetMutableValue(internalname,PID) then
+          if ImagesManager.ImageDataMap.tryGetMutableValue(internalname,PID) then
             begin
               //уже зарегистрирован
             end

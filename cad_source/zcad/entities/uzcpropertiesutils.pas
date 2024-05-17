@@ -63,9 +63,9 @@ begin
   propertyvalue:='??';
   exit;}
   if MultiPropertiesManager.MultiPropertyDictionary.MyGetValue(propertyname,mp) then begin
-    if mp.MPObjectsData.MyGetValue(TObjIDWithExtender.Create(0,nil),mpd) then begin
+    if mp.MPObjectsData.tryGetValue(TObjIDWithExtender.Create(0,nil),mpd) then begin
       GetPropertyValue;
-    end else if mp.MPObjectsData.MyGetValue(TObjIDWithExtender.Create(PEnt^.GetObjType,nil),mpd) then begin
+    end else if mp.MPObjectsData.tryGetValue(TObjIDWithExtender.Create(PEnt^.GetObjType,nil),mpd) then begin
       GetPropertyValue;
     end else
       result:=false;

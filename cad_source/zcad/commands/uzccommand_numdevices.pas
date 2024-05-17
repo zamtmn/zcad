@@ -213,7 +213,7 @@ begin
               else
                 metric:=pvd^.GetValueAsString;
 
-              if md.MyGetMutableValue(metric,pmpd) then begin
+              if md.tryGetMutableValue(metric,pmpd) then begin
                 pmpd^.PushBack(tdevcoord.CreateRec(pt,pointer(pent)));
               end else begin
                 mpd:=devcoordarray.Create;

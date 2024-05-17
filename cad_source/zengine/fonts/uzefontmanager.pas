@@ -122,7 +122,7 @@ begin
   if AddFontResourceFile(filename)>0 then begin
     ttfparams:=getTTFFileParams(filename);
     if ttfparams.ValidTTFFile then begin
-      if not FontFiles.MyGetMutableValue(uppercase(ttfparams.FontFamily),ffg)then
+      if not FontFiles.tryGetMutableValue(uppercase(ttfparams.FontFamily),ffg)then
         FontFiles.registerkey(uppercase(ttfparams.FontFamily),TGeneralFontFileDesc.Create(ttfparams.FontFamily,filename,TGeneralFontParam.Create(0)))
       else
         if ((ttfparams.FontSubfamily='')or(LowerCase(ttfparams.FontSubfamily)='regular')) then

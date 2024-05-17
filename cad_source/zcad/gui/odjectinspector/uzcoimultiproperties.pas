@@ -247,7 +247,7 @@ var
 begin
   addvalue:=sortedid-oldsortedid;
   for i:=0 to MultiPropertiesManager.MultiPropertyVector.Size-1 do
-  if not MultiPropertiesManager.MultiPropertyVector[i].MPObjectsData.MyGetValue(IdWithExtdr,mp)  then
+  if not MultiPropertiesManager.MultiPropertyVector[i].MPObjectsData.tryGetValue(IdWithExtdr,mp)  then
   if MultiPropertiesManager.MultiPropertyVector[i].sortedid>=oldsortedid then
     inc(MultiPropertiesManager.MultiPropertyVector[i].sortedid,addvalue);
 end;

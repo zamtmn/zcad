@@ -91,6 +91,8 @@
       <ZAction Name="ACN_smtextall" Command="stripmtext(ALL)" Img="stripmtextall" Caption="Start command clear mtext all"/>
       <ZAction Name="ACN_smtextarea" Command="stripmtext" Img="stripmtextsel" Caption="Start command clear mtext area"/>
       <ZAction Name="ACN_LAYOFF" Command="LayOff" Img="#LO" Caption="Layer off" Hint="Turns off the layer of selected object"/>
+      <ZAction Name="ACN_EXTDRALLLIST" Command="extdrAllList" Img="#exAL" Caption="List of available extenders"/>
+      <ZAction Name="ACN_EXTDRENTLIST" Command="extdrEntsList" Img="#exEL" Caption="List of extenders of selected entities"/>
     </Group>
     <Group Category="Draw">
       <ZAction Name="ACN_LINE" Command="Line" Img="line" Caption="Line" Hint="Draw line" ShortCut="CTRL+ALT+L" SecondaryShortCuts="L"/>

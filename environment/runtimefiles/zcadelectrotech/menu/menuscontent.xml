@@ -162,6 +162,18 @@
         <Action Name="ACN_smtextarea"/>
       </SubMenu>
     <Separator/>
+      <SubMenu Name="Extenders">
+        <Action Name="ACN_EXTDRALLLIST"/>
+        <Action Name="ACN_EXTDRENTLIST"/>
+      <Separator/>
+        <Command Caption="Add extdrVariables" Command="extdrAdd(extdrVariables)"/>
+        <Command Caption="Add extdrIncludingVolume" Command="extdrAdd(extdrIncludingVolume)"/>
+        <Command Caption="Add extdrLayerControl" Command="extdrAdd(extdrLayerControl)"/>
+        <Command Caption="Add extdrReport" Command="extdrAdd(extdrReport)"/>
+        <Command Caption="Add extdrSCHConnection" Command="extdrAdd(extdrSCHConnection)"/>
+        <Command Caption="Add extdrSCHConnector" Command="extdrAdd(extdrSCHConnector)"/>
+        <Command Caption="Add extdrSmartTextEnt" Command="extdrAdd(extdrSmartTextEnt)"/>
+      </SubMenu>
       <Action Name="ACN_VARSED"/>
       <Action Name="ACN_VARSEDSEL"/>
     </Menu>

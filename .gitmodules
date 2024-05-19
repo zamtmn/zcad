@@ -19,3 +19,6 @@
 [submodule "cad_source/components/lape"]
 	path = cad_source/components/lape
 	url = https://github.com/nielsAD/lape.git
+[submodule "cad_source/components/zreaders"]
+	path = cad_source/components/zreaders
+	url = https://github.com/zamtmn/zreaders.git

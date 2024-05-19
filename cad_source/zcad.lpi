@@ -315,91 +315,94 @@
         </Mode0>
       </Modes>
     </RunParams>
-    <RequiredPackages Count="28">
+    <RequiredPackages Count="29">
       <Item1>
-        <PackageName Value="laz_fpspreadsheet"/>
+        <PackageName Value="zreaders"/>
       </Item1>
       <Item2>
-        <PackageName Value="laz_fpspreadsheet_visual"/>
+        <PackageName Value="laz_fpspreadsheet"/>
       </Item2>
       <Item3>
-        <PackageName Value="lape"/>
+        <PackageName Value="laz_fpspreadsheet_visual"/>
       </Item3>
       <Item4>
-        <PackageName Value="MetaDarkStyle"/>
+        <PackageName Value="lape"/>
       </Item4>
       <Item5>
-        <PackageName Value="SynEdit"/>
+        <PackageName Value="MetaDarkStyle"/>
       </Item5>
       <Item6>
-        <PackageName Value="fpdwg"/>
+        <PackageName Value="SynEdit"/>
       </Item6>
       <Item7>
-        <PackageName Value="lazopenglcontext"/>
+        <PackageName Value="fpdwg"/>
       </Item7>
       <Item8>
-        <PackageName Value="zbaseutils"/>
+        <PackageName Value="lazopenglcontext"/>
       </Item8>
       <Item9>
-        <PackageName Value="zbaseutilsgui"/>
+        <PackageName Value="zbaseutils"/>
       </Item9>
       <Item10>
-        <PackageName Value="ag_vectors"/>
+        <PackageName Value="zbaseutilsgui"/>
       </Item10>
       <Item11>
-        <PackageName Value="ag_graph"/>
+        <PackageName Value="ag_vectors"/>
       </Item11>
       <Item12>
-        <PackageName Value="runtimetypeinfocontrols"/>
+        <PackageName Value="ag_graph"/>
       </Item12>
       <Item13>
-        <PackageName Value="uniqueinstance_package"/>
+        <PackageName Value="runtimetypeinfocontrols"/>
       </Item13>
       <Item14>
-        <PackageName Value="zmacros"/>
+        <PackageName Value="uniqueinstance_package"/>
       </Item14>
       <Item15>
-        <PackageName Value="laz.virtualtreeview_package"/>
+        <PackageName Value="zmacros"/>
       </Item15>
       <Item16>
-        <PackageName Value="ztoolbars"/>
+        <PackageName Value="laz.virtualtreeview_package"/>
       </Item16>
       <Item17>
-        <PackageName Value="zmath"/>
+        <PackageName Value="ztoolbars"/>
       </Item17>
       <Item18>
-        <PackageName Value="zobjectinspector"/>
+        <PackageName Value="zmath"/>
       </Item18>
       <Item19>
-        <PackageName Value="zundostack"/>
+        <PackageName Value="zobjectinspector"/>
       </Item19>
       <Item20>
-        <PackageName Value="zscript"/>
+        <PackageName Value="zundostack"/>
       </Item20>
       <Item21>
-        <PackageName Value="zscriptbase"/>
+        <PackageName Value="zscript"/>
       </Item21>
       <Item22>
-        <PackageName Value="zcontainers"/>
+        <PackageName Value="zscriptbase"/>
       </Item22>
       <Item23>
-        <PackageName Value="zebase"/>
+        <PackageName Value="zcontainers"/>
       </Item23>
       <Item24>
-        <PackageName Value="zcontrols"/>
+        <PackageName Value="zebase"/>
       </Item24>
       <Item25>
-        <PackageName Value="FCL"/>
+        <PackageName Value="zcontrols"/>
       </Item25>
       <Item26>
-        <PackageName Value="Printer4Lazarus"/>
+        <PackageName Value="FCL"/>
       </Item26>
       <Item27>
-        <PackageName Value="AnchorDocking"/>
+        <PackageName Value="Printer4Lazarus"/>
       </Item27>
       <Item28>
-        <PackageName Value="LCL"/>
+        <PackageName Value="AnchorDocking"/>
       </Item28>
+      <Item29>
+        <PackageName Value="LCL"/>
+      </Item29>
     </RequiredPackages>
     <Units Count="201">
       <Unit0>

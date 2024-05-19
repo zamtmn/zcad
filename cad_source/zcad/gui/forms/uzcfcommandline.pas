@@ -174,7 +174,7 @@ end;
 
 procedure TCLine.SetPrompt(APrompt:String{;ATPromptResults:TCommandLinePrompt.TPromptResults});
 begin
-  prompt.SetHighLightedText(APrompt,[],-1);
+  prompt.SetHighLightedText(APrompt,[]{,-1});
   HandleCmdLine(ZMsgID_GUICMDLineCheck);
 end;
 
@@ -182,10 +182,12 @@ procedure TCLine.SetPrompt(APrompt:TParserCommandLinePrompt.TGeneralParsedText);
 var
   pt:TCommandLinePromptOption;
   ts:TParserCommandLinePrompt.TParserString;
+  pa:PTSubStringsArr;
 begin
   pt:=TCommandLinePromptOption.Create;
   ts:=APrompt.GetResult(pt);
-  //prompt.SetHighLightedText(ts,pt.Parts.arr,pt.Parts.Size-1);
+  pa:=pointer(pt.Parts.Mutable);
+  prompt.SetHighLightedText(ts,pa^[0..pt.Parts.Size-1]);
   pt.Free;
   HandleCmdLine(ZMsgID_GUICMDLineCheck);
 end;

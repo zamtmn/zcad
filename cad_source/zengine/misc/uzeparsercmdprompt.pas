@@ -22,18 +22,14 @@ const
 
 type
   TOptStrMan=TUTF8StringManipulator;
-  TSubStringsVector=TVector<TSubString>;
-  //TArrayOfTSubString=array of TSubString;
-
-  {TSubStringsVectorHelper = class helper for TSubStringsVector
-    function Arr:TArrayOfTSubString; //TSubStringsVector.TArr;
-  end;}
 
   TmyVector<T> = class (TVector<T>)
   public
   type
     TT = TArr;
   end;
+
+  TSubStringsVector=TMyVector<TSubString>;
 
   TCLPMode=(CreateHL,CheckShortCut);
   TCommandLinePromptOption=class
@@ -134,12 +130,6 @@ procedure TStrIdsDictionary.Add(constref AKey: TOptStrMan.TStringType; constref 
 begin
   inherited add(uppercase(AKey),Avalue);
 end;
-
-{function TSubStringsVectorHelper.Arr:TArrayOfTSubString;
-begin
-  result:=FData;
-end;}
-
 
 constructor TCommandLinePromptOption.Create;
 begin

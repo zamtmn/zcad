@@ -64,6 +64,8 @@ type
     &Type:TCommandLineTextType;            //тип
     Tag:TTag;                              //тэг
   end;
+  PTSubStringsArr=^TSubStringsArr;
+  TSubStringsArr=array [0..0] of TSubString;
   TSubStrings=array of TSubString;         //массив подстрок
   TRectWithTag=record                      //рект для контроля положения мышки
     R:TRect;
@@ -91,7 +93,7 @@ type
       property Layout;
       constructor Create(TheOwner: TComponent); override;
       destructor Destroy; override;
-      procedure SetHighLightedText(const Value: TCaption;Parts:TSubStrings;PartsCount:SizeInt);
+      procedure SetHighLightedText(const Value: TCaption; const Parts: array of TSubString{; Parts:TSubStrings;PartsCount:SizeInt});
   end;
 
 function SubString(p,l:integer;t:TCommandLineTextType;tag:integer):TSubString;
@@ -131,15 +133,15 @@ begin
              end;
   end;
 end;
-procedure  TCommandLinePrompt.SetHighLightedText(const Value: TCaption;Parts:TSubStrings;PartsCount:SizeInt);
+procedure  TCommandLinePrompt.SetHighLightedText(const Value: TCaption; const Parts: array of TSubString{; Parts:TSubStrings;PartsCount:SizeInt});
 var
   i:Integer;
   HLItem: TCLHighlight.THighlightItem;
 begin
   Highlight.Clear;
-  if PartsCount<0 then
-    PartsCount:=High(Parts);
-  for i:=Low(Parts) to PartsCount do begin
+  {if PartsCount<0 then
+    PartsCount:=High(Parts);}
+  for i:=Low(Parts) to High(Parts){PartsCount} do begin
     HLItem := Highlight.AddHighlight;
     HLItem.Tag.&Type:=Parts[i].&Type;
     HLItem.Tag.Tag:=Parts[i].Tag;

@@ -64,8 +64,6 @@ type
     &Type:TCommandLineTextType;            //тип
     Tag:TTag;                              //тэг
   end;
-  PTSubStringsArr=^TSubStringsArr;
-  TSubStringsArr=array [0..0] of TSubString;
   TSubStrings=array of TSubString;         //массив подстрок
   TRectWithTag=record                      //рект для контроля положения мышки
     R:TRect;

@@ -21,7 +21,8 @@ unit uzeblockdef;
 interface
 uses gzctnrVectorTypes,uzeentity,uzeentityfactory,uzgldrawcontext,uzeobjectextender,uzedrawingdef,
      uzeentsubordinated,uzeffdxfsupport,uzctnrVectorBytes,sysutils,uzbtypes,
-     uzegeometrytypes,uzegeometry,uzestyleslayers,uzeconsts,uzeentgenericsubentry,LazLogger;
+     uzegeometrytypes,uzegeometry,uzestyleslayers,uzeconsts,uzeentgenericsubentry,LazLogger,
+     uzMVReader;
 type
 {Export+}
 PGDBObjBlockdef=^GDBObjBlockdef;
@@ -36,7 +37,7 @@ GDBObjBlockdef= object(GDBObjGenericSubEntry)
                      constructor init(_name:String);
                      procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext;Stage:TEFStages=EFAllStages);virtual;
                      //function FindVariable(varname:String):pvardesk;virtual;
-                     procedure LoadFromDXF(var f: TZctnrVectorBytes;ptu:PExtensionData;var drawing:TDrawingDef);virtual;
+                     procedure LoadFromDXF(var f:TZMemReader;ptu:PExtensionData;var drawing:TDrawingDef);virtual;
                      function ProcessFromDXFObjXData(_Name,_Value:String;ptu:PExtensionData;const drawing:TDrawingDef):Boolean;virtual;
                      destructor done;virtual;
                      function GetMatrix:PDMatrix4D;virtual;
@@ -82,7 +83,7 @@ begin
   while byt <> 0 do
   begin
     if not LoadFromDXFObjShared(f,byt,ptu,drawing) then
-                                           f.ReadString;
+                                           f.parsestring;
     byt:=readmystrtoint(f);
   end;
   GetDXFIOFeatures.RunAfterLoadFeature(@self);

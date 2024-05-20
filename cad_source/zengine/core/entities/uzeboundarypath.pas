@@ -23,14 +23,14 @@ unit uzeBoundaryPath;
 interface
 
 uses uzegeometrytypes,UGDBPolyline2DArray,gzctnrVector,
-  uzctnrVectorBytes,gzctnrVectorTypes,uzegeometry,uzeffdxfsupport;
+  uzctnrVectorBytes,gzctnrVectorTypes,uzegeometry,uzeffdxfsupport,uzMVReader;
 type
 PBoundaryPath=^TBoundaryPath;
 TBoundaryPath=object
   paths:GZVector<GDBPolyline2DArray>;
   constructor init(m:TArrayIndex);
   destructor done;virtual;
-  function LoadFromDXF(var f:TZctnrVectorBytes;dxfcod:Integer):Boolean; {todo: вынести это нафиг из простых типов}
+  function LoadFromDXF(var f:TZMemReader;dxfcod:Integer):Boolean; {todo: вынести это нафиг из простых типов}
   procedure SaveToDXF(var outhandle:TZctnrVectorBytes);
   procedure CloneTo(var Dest:TBoundaryPath);
   procedure Clear;virtual;
@@ -132,7 +132,7 @@ begin
   paths.Clear;
 end;
 
-function TBoundaryPath.LoadFromDXF(var f:TZctnrVectorBytes;dxfcod:Integer):Boolean;
+function TBoundaryPath.LoadFromDXF(var f:TZMemReader;dxfcod:Integer):Boolean;
 type
   TNotPolyLine=(NPL_Line,NPL_CircularArc,NPL_EllipticArc,NPL_Spline);
 var

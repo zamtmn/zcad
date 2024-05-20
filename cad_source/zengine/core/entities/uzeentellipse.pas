@@ -24,7 +24,7 @@ uses
     UGDBSelectedObjArray,uzeentity,UGDBOutbound2DIArray,UGDBPoint3DArray,
     uzegeometrytypes,uzctnrVectorBytes,varman,varmandef,uzbtypes,uzeconsts,
     uzglviewareadata,uzegeometry,uzeffdxfsupport,uzeentplain,
-    uzctnrvectorpgdbaseobjects,uzeSnap,math;
+    uzctnrvectorpgdbaseobjects,uzeSnap,math,uzMVReader;
 type
 {Export+}
   ptEllipsertmodify=^tEllipsertmodify;
@@ -47,7 +47,7 @@ GDBObjEllipse= object(GDBObjPlain)
                  pq0,pq1,pq2:GDBvertex;
                  constructor init(own:Pointer;layeraddres:PGDBLayerProp;LW:SmallInt;p:GDBvertex;{RR,}S,E:Double;majaxis:GDBVertex);
                  constructor initnul;
-                 procedure LoadFromDXF(var f:TZctnrVectorBytes;ptu:PExtensionData;var drawing:TDrawingDef);virtual;
+                 procedure LoadFromDXF(var f:TZMemReader;ptu:PExtensionData;var drawing:TDrawingDef);virtual;
 
                  procedure SaveToDXF(var outhandle:{Integer}TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
                  procedure DrawGeometry(lw:Integer;var DC:TDrawContext{infrustumactualy:TActulity;subrender:Integer});virtual;
@@ -469,7 +469,7 @@ begin
     if not dxfvertexload(f,11,byt,MajorAxis) then
     if not dxfDoubleload(f,40,byt,ratio) then
     if not dxfDoubleload(f,41,byt,startangle) then
-    if not dxfDoubleload(f,42,byt,endangle) then {s := }f.readString;
+    if not dxfDoubleload(f,42,byt,endangle) then {s := }f.ParseString;
     byt:=readmystrtoint(f);
   end;
   startangle := startangle{ * pi / 180};

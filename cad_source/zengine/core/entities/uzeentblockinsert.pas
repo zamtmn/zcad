@@ -25,7 +25,7 @@ uses uzeentity,uzgldrawcontext,uzeentityfactory,uzedrawingdef,uzestyleslayers,ma
      uzeentcomplex,sysutils,UGDBObjBlockdefArray,uzeblockdef,uzbtypes,
      uzeconsts,uzglviewareadata,uzegeometry,uzeffdxfsupport,uzeentsubordinated,
      gzctnrVectorTypes,uzegeometrytypes,uzctnrVectorBytes,uzestrconsts,LCLProc,
-     uzbLogIntf;
+     uzbLogIntf,uzMVReader;
 const zcadmetric='!!ZMODIFIER:';
 type
 {Export+}
@@ -40,7 +40,7 @@ GDBObjBlockInsert= object(GDBObjComplex)
                      BlockDesc:TBlockDesc;(*'Block params'*)(*saved_to_shd*)(*oi_readonly*)
                      constructor initnul;
                      constructor init(own:Pointer;layeraddres:PGDBLayerProp;LW:SmallInt);
-                     procedure LoadFromDXF(var f: TZctnrVectorBytes;ptu:PExtensionData;var drawing:TDrawingDef);virtual;
+                     procedure LoadFromDXF(var f:TZMemReader;ptu:PExtensionData;var drawing:TDrawingDef);virtual;
 
                      procedure SaveToDXF(var outhandle:{Integer}TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
                      procedure CalcObjMatrix(pdrawing:PTDrawingDef=nil);virtual;
@@ -534,7 +534,7 @@ begin
                                                     rotate:=rotate*pi/180;
                                                end
 else if dxfIntegerload(f,71,byt,hlGDBWord)then begin if hlGDBWord = 1 then attrcont := true; end
-else if not dxfStringload(f,2,byt,name)then {s := }f.readString;
+else if not dxfStringload(f,2,byt,name)then {s := }f.ParseString;
     byt:=readmystrtoint(f);
   end;
   if attrcont then ;

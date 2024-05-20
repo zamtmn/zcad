@@ -25,7 +25,7 @@ uses LCLProc,uzeentityfactory,uzgldrawcontext,uzedrawingdef,uzecamera,
      uzestyleslayers,uzeentsubordinated,
      UGDBSelectedObjArray,uzeent3d,uzeentity,uzctnrVectorBytes,uzbtypes,uzeconsts,
      uzegeometrytypes,uzglviewareadata,uzegeometry,uzeffdxfsupport,
-     uzctnrvectorpgdbaseobjects,uzeSnap;
+     uzctnrvectorpgdbaseobjects,uzeSnap,uzMVReader;
 type
 {Export+}
 PGDBObjLine=^GDBObjLine;
@@ -37,7 +37,7 @@ GDBObjLine= object(GDBObj3d)
 
                  constructor init(own:Pointer;layeraddres:PGDBLayerProp;LW:SmallInt;p1,p2:GDBvertex);
                  constructor initnul(owner:PGDBObjGenericWithSubordinated);
-                 procedure LoadFromDXF(var f: TZctnrVectorBytes;ptu:PExtensionData;var drawing:TDrawingDef);virtual;
+                 procedure LoadFromDXF(var f:TZMemReader;ptu:PExtensionData;var drawing:TDrawingDef);virtual;
 
                  procedure SaveToDXF(var outhandle:{Integer}TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
                  function IsStagedFormatEntity:boolean;virtual;
@@ -200,7 +200,7 @@ begin
   begin
     if not LoadFromDXFObjShared(f,byt,ptu,drawing) then
        if not dxfvertexload(f,10,byt,CoordInOCS.lBegin) then
-          if not dxfvertexload(f,11,byt,CoordInOCS.lEnd) then {s := }f.readString;
+          if not dxfvertexload(f,11,byt,CoordInOCS.lEnd) then {s := }f.ParseString;
     byt:=readmystrtoint(f);
   end;
 end;

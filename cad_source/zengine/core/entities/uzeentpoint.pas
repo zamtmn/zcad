@@ -25,7 +25,7 @@ uses uzeentityfactory,uzgldrawcontext,uzeffdxfsupport,uzedrawingdef,uzecamera,
      uzestyleslayers,UGDBSelectedObjArray,
      uzeentsubordinated,uzeent3d,uzeentity,sysutils,uzctnrVectorBytes,
      uzegeometrytypes,uzbtypes,uzeconsts,uzglviewareadata,uzegeometry,
-     uzctnrvectorpgdbaseobjects,uzeSnap;
+     uzctnrvectorpgdbaseobjects,uzeSnap,uzMVReader;
 type
 {Export+}
 PGDBObjPoint=^GDBObjPoint;
@@ -36,7 +36,7 @@ GDBObjPoint= object(GDBObj3d)
                  ProjPoint:GDBvertex;
                  constructor init(own:Pointer;layeraddres:PGDBLayerProp;LW:SmallInt;p:GDBvertex);
                  constructor initnul(owner:PGDBObjGenericWithSubordinated);
-                 procedure LoadFromDXF(var f:TZctnrVectorBytes;ptu:PExtensionData;var drawing:TDrawingDef);virtual;
+                 procedure LoadFromDXF(var f:TZMemReader;ptu:PExtensionData;var drawing:TDrawingDef);virtual;
                  procedure SaveToDXF(var outhandle:{Integer}TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
                  procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext;Stage:TEFStages=EFAllStages);virtual;
 
@@ -124,41 +124,41 @@ begin
   //inherited init(nil,0, 10);
   //vp.ID := GDBPointID;
   P_insertInOCS:=NulVertex;
-  s := f.readString;
+  s := f.ParseString;
   val(s, byt, code);
   while byt <> 0 do
   begin
     case byt of
       8:
         begin
-          layername := f.readString;
+          layername := f.ParseString;
           vp.Layer := {gdb.GetCurrentDWG.LayerTable}drawing.GetLayerTable.getaddres(layername);
               //layername:=Pointer(s);
         end;
       10:
         begin
-          s := f.readString;
+          s := f.ParseString;
           val(s, P_insertInOCS.x, code);
         end;
       20:
         begin
-          s := f.readString;
+          s := f.ParseString;
           val(s, P_insertInOCS.y, code);
         end;
       30:
         begin
-          s := f.readString;
+          s := f.ParseString;
           val(s, P_insertInOCS.z, code);
         end;
       370:
         begin
-          s := f.readString;
+          s := f.ParseString;
           vp.lineweight := strtoint(s);
         end;
     else
-      s := f.readString;
+      s := f.ParseString;
     end;
-    s := f.readString;
+    s := f.ParseString;
     val(s, byt, code);
   end;
 

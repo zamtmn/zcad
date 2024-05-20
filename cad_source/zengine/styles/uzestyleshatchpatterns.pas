@@ -23,7 +23,7 @@ uses LCLProc,LazUTF8,Classes,gzctnrVector,sysutils,uzbtypes,
      uzegeometry,gzctnrVectorObjects,
      gzctnrVectorTypes,uzbstrproc,uzeStylesLineTypes,uzegeometrytypes,
      uzctnrVectorBytes,
-     uzeffdxfsupport,
+     uzeffdxfsupport,uzMVReader,
      Math;
 type
 {EXPORT+}
@@ -47,7 +47,7 @@ type
   end;
 {EXPORT-}
 
-function LoadPatternFromDXF(var PPattern:PTHatchPattern;var f:TZctnrVectorBytes;dxfcod:Integer;const MainAngle,MainScale:Double):Boolean;
+function LoadPatternFromDXF(var PPattern:PTHatchPattern;var f:TZMemReader;dxfcod:Integer;const MainAngle,MainScale:Double):Boolean;
 
 implementation
 
@@ -107,7 +107,7 @@ begin
 end;
 
 
-function LoadPatternFromDXF(var PPattern:PTHatchPattern;var f:TZctnrVectorBytes;dxfcod:Integer;const MainAngle,MainScale:Double):Boolean;
+function LoadPatternFromDXF(var PPattern:PTHatchPattern;var f:TZMemReader;dxfcod:Integer;const MainAngle,MainScale:Double):Boolean;
 var
   i,j,patternscount,dashcount:Integer;
   angle,dash:Double;

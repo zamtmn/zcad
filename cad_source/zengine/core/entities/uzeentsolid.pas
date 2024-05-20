@@ -24,7 +24,8 @@ uses
     uzeentityfactory,uzgldrawcontext,uzedrawingdef,uzecamera,uzeentwithlocalcs,
     uzegeometry,uzeffdxfsupport,uzestyleslayers,
     UGDBSelectedObjArray,uzeentsubordinated,uzeentity,sysutils,uzctnrVectorBytes,
-    uzegeometrytypes,uzbtypes,uzeconsts,uzctnrvectorpgdbaseobjects,uzglviewareadata;
+    uzegeometrytypes,uzbtypes,uzeconsts,uzctnrvectorpgdbaseobjects,uzglviewareadata,
+    uzMVReader;
 type
 {Export+}
 PGDBObjSolid=^GDBObjSolid;
@@ -39,7 +40,7 @@ GDBObjSolid= object(GDBObjWithLocalCS)
                  //ProjPoint:GDBvertex;
                  constructor init(own:Pointer;layeraddres:PGDBLayerProp;LW:SmallInt;p:GDBvertex);
                  constructor initnul(owner:PGDBObjGenericWithSubordinated);
-                 procedure LoadFromDXF(var f:TZctnrVectorBytes;ptu:PExtensionData;var drawing:TDrawingDef);virtual;
+                 procedure LoadFromDXF(var f:TZMemReader;ptu:PExtensionData;var drawing:TDrawingDef);virtual;
                  procedure SaveToDXF(var outhandle:{Integer}TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
                  procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext;Stage:TEFStages=EFAllStages);virtual;
                  procedure createpoint;virtual;
@@ -154,7 +155,7 @@ begin
           if not dxfvertexload(f,11,byt,PInOCS[1]) then
           if not dxfvertexload(f,12,byt,PInOCS[2]) then
           if not dxfvertexload(f,13,byt,PInOCS[3]) then
-          {s := }f.readString;
+          {s := }f.ParseString;
     byt:=readmystrtoint(f);
   end;
 end;

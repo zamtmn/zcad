@@ -26,7 +26,7 @@ uses
     uzegeometrytypes,uzeentity,UGDBPoint3DArray,uzctnrVectorBytes,
     uzbtypes,uzeentwithlocalcs,uzeconsts,uzegeometry,uzeffdxfsupport,uzecamera,
     UGDBPolyLine2DArray,uzglviewareadata,uzeTriangulator,
-    uzeBoundaryPath,uzeStylesHatchPatterns,gvector,garrayutils;
+    uzeBoundaryPath,uzeStylesHatchPatterns,gvector,garrayutils,uzMVReader;
 type
 TLineInContour=record
   C{,L}:integer;
@@ -58,7 +58,7 @@ GDBObjHatch= object(GDBObjWithLocalCS)
                  Origin:GDBvertex2D;
                  constructor init(own:Pointer;layeraddres:PGDBLayerProp;LW:SmallInt;p:GDBvertex);
                  constructor initnul;
-                 procedure LoadFromDXF(var f:TZctnrVectorBytes;ptu:PExtensionData;var drawing:TDrawingDef);virtual;
+                 procedure LoadFromDXF(var f:TZMemReader;ptu:PExtensionData;var drawing:TDrawingDef);virtual;
 
                  procedure SaveToDXF(var outhandle:TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
                  procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext;Stage:TEFStages=EFAllStages);virtual;
@@ -616,7 +616,7 @@ begin
     if not dxfDoubleload(f,52,byt,Angle) then
     if not dxfDoubleload(f,41,byt,Scale) then
     if not dxfStringload(f,2,byt,PatternName) then
-      f.readString;
+      f.ParseString;
     byt:=readmystrtoint(f);
   end;
   case hstyle of

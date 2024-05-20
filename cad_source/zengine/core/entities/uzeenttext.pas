@@ -26,7 +26,7 @@ uses
     uzedrawingdef,uzecamera,uzbstrproc,sysutils,uzefont,uzestyleslayers,
     uzeentabstracttext,uzeentity,UGDBOutbound2DIArray,uzctnrVectorBytes,uzbtypes,
     uzeconsts,uzglviewareadata,uzegeometry,uzeffdxfsupport,uzeentsubordinated,LazLogger,
-    uzegeometrytypes,uzestylestexts,uzeSnap;
+    uzegeometrytypes,uzestylestexts,uzeSnap,uzMVReader;
 type
 {Export+}
 PGDBObjText=^GDBObjText;
@@ -40,7 +40,7 @@ GDBObjText= object(GDBObjAbstractText)
                  obj_y:Double;(*oi_readonly*)(*hidden_in_objinsp*)
                  constructor init(own:Pointer;layeraddres:PGDBLayerProp;LW:SmallInt;c:TDXFEntsInternalStringType;p:GDBvertex;s,o,w,a:Double;j:TTextJustify);
                  constructor initnul(owner:PGDBObjGenericWithSubordinated);
-                 procedure LoadFromDXF(var f: TZctnrVectorBytes;ptu:PExtensionData;var drawing:TDrawingDef);virtual;
+                 procedure LoadFromDXF(var f:TZMemReader;ptu:PExtensionData;var drawing:TDrawingDef);virtual;
                  procedure SaveToDXF(var outhandle:{Integer}TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
                  procedure CalcGabarit(const drawing:TDrawingDef);virtual;
                  procedure getoutbound(var DC:TDrawContext);virtual;
@@ -692,7 +692,7 @@ else if not dxfIntegerload(f,72,byt,gv)then
      if not dxfIntegerload(f,73,byt,vv)then
      if not dxfIntegerload(f,71,byt,textbackward)then
      if not dxfStringload(f,1,byt,tcontent)then
-                                               {s := }f.readString;
+                                               {s := }f.ParseString;
     byt:=readmystrtoint(f);
   end;
   if (textbackward and 4)<>0 then

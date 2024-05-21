@@ -38,19 +38,22 @@
         </Mode0>
       </Modes>
     </RunParams>
-    <RequiredPackages Count="4">
+    <RequiredPackages Count="5">
       <Item1>
-        <PackageName Value="zebase"/>
+        <PackageName Value="zreaders"/>
       </Item1>
       <Item2>
-        <PackageName Value="zmath"/>
+        <PackageName Value="zebase"/>
       </Item2>
       <Item3>
-        <PackageName Value="zcontainers"/>
+        <PackageName Value="zmath"/>
       </Item3>
       <Item4>
-        <PackageName Value="FCL"/>
+        <PackageName Value="zcontainers"/>
       </Item4>
+      <Item5>
+        <PackageName Value="FCL"/>
+      </Item5>
     </RequiredPackages>
     <Units Count="1">
       <Unit0>
@@ -87,6 +90,7 @@
     </CodeGeneration>
     <Linking>
       <Debugging>
+        <DebugInfoType Value="dsDwarf3"/>
         <UseHeaptrc Value="True"/>
       </Debugging>
     </Linking>

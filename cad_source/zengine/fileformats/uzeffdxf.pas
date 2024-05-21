@@ -1380,7 +1380,7 @@ begin
   dc:=ZCDCtx.PDrawing^.CreateDrawingRC;
   //f.InitFromFile(AFileName);
 
-  DxfStream:=TZMVSMemoryMappedFile.Create(AFileName,fmOpenRead);
+  DxfStream:=TZMVSMemoryMappedFile.Create({$IFDEF WINDOWS}UTF8ToWinCP{$ENDIF}(AFileName),fmOpenRead);
   MemReader:=TZMemReader.Create;
   MemReader.setSource(DxfStream);
 

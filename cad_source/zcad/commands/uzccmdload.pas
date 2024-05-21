@@ -34,7 +34,8 @@ uses
   uzcinterface,
   uzcstrconsts,
   uzcutils,
-  sysutils;
+  sysutils,
+  uzelongprocesssupport;
 
 function Load_Merge(Operands:TCommandOperands;LoadMode:TLoadOpt):TCommandResult;
 function Internal_Load_Merge(s: AnsiString;loadproc:TFileLoadProcedure;LoadMode:TLoadOpt):TCommandResult;
@@ -78,6 +79,7 @@ var
    pu:ptunit;
    DC:TDrawContext;
    ZCDCtx:TZDrawingContext;
+   lph:TLPSHandle;
 begin
   ZCDCtx.CreateRec(drawings.GetCurrentDWG^,drawings.GetCurrentDWG^.pObjRoot^,loadmode,drawings.GetCurrentDWG.CreateDrawingRC);
   loadproc(s,ZCDCtx);
@@ -91,14 +93,20 @@ begin
     end;
   end;
   dc:=drawings.GetCurrentDWG^.CreateDrawingRC;
-  drawings.GetCurrentROOT.calcbb(dc);
-  drawings.GetCurrentDWG^.pObjRoot.ObjArray.ObjTree.maketreefrom(drawings.GetCurrentDWG^.pObjRoot.ObjArray,drawings.GetCurrentDWG^.pObjRoot.vp.BoundingBox,nil);
-  drawings.GetCurrentROOT.FormatEntity(drawings.GetCurrentDWG^,dc);
-  ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIActionRedraw);
-  if drawings.currentdwg<>PTSimpleDrawing(BlockBaseDWG) then begin
+  lph:=lps.StartLongProcess('First maketreefrom afrer dxf load',nil,0);
+    drawings.GetCurrentROOT.calcbb(dc);
     drawings.GetCurrentDWG^.pObjRoot.ObjArray.ObjTree.maketreefrom(drawings.GetCurrentDWG^.pObjRoot.ObjArray,drawings.GetCurrentDWG^.pObjRoot.vp.BoundingBox,nil);
-    zcRedrawCurrentDrawing;
-  end;
+  lps.EndLongProcess(lph);
+  lph:=lps.StartLongProcess('drawings.GetCurrentROOT.FormatEntity afrer dxf load',nil,0);
+    drawings.GetCurrentROOT.FormatEntity(drawings.GetCurrentDWG^,dc);
+  lps.EndLongProcess(lph);
+  lph:=lps.StartLongProcess('Second maketreefrom and redraw afrer dxf load',nil,0);
+    if drawings.currentdwg<>PTSimpleDrawing(BlockBaseDWG) then begin
+      drawings.GetCurrentDWG^.pObjRoot.ObjArray.ObjTree.maketreefrom(drawings.GetCurrentDWG^.pObjRoot.ObjArray,drawings.GetCurrentDWG^.pObjRoot.vp.BoundingBox,nil);
+      zcRedrawCurrentDrawing;
+    end;
+  lps.EndLongProcess(lph);
+  ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIActionRedraw);
 
   result:=cmd_ok;
 end;

@@ -145,26 +145,38 @@ begin
     old_worksheet: TsWorksheet;
     new_worksheet: TsWorksheet;
     new_Name: String;
-  const
-    xlCellTypeLastCell = 11;
+  //const
+  //  xlCellTypeLastCell = 11;
   begin
       ZCMsgCallBackInterface.TextMessage('1',TMWOHistoryOut);
-      MyWorkbook := TsWorkbook.Create;
-      //MyWorkbook.Options := MyWorkbook.Options + [boReadFormulas];
-      MyWorkbook.ReadFromFile('d:\4.xlsx', sfOOXML);
-      //MyWorksheet := MyWorkbook.GetFirstWorksheet;
-      ZCMsgCallBackInterface.TextMessage('2',TMWOHistoryOut);
-      MyWorkbook2 := TsWorkbook.Create;
-      //MyWorkbook2.Options := MyWorkbook2.Options + [boReadFormulas];
-      //ZCMsgCallBackInterface.TextMessage('3',TMWOHistoryOut);
-      //MyWorkbook2.ReadFromFile('d:\1.xlsx', sfOOXML);
-      //ZCMsgCallBackInterface.TextMessage('4',TMWOHistoryOut);
-      ZCMsgCallBackInterface.TextMessage('3',TMWOHistoryOut);
-      new_worksheet := MyWorkbook2.CopyWorksheetFrom(MyWorkbook.GetFirstWorksheet, true);
-      ZCMsgCallBackInterface.TextMessage('4',TMWOHistoryOut);
-      //if MyWorkbook2.ValidWorksheetName('something_else') then
-        new_worksheet.Name := 'something_else' ;
-        MyWorkbook.WriteToFile('d:\444.xlsx', sfOOXML,true);
+      //MyWorkbook := TsWorkbook.Create;
+      try
+        //MyWorkbook.Options := MyWorkbook.Options + [boReadFormulas];
+        //MyWorkbook.Options := MyWorkbook.Options + [boReadFormulas];
+        //MyWorkbook.ReadFromFile('d:\4.xlsx', sfOOXML);
+        //MyWorksheet := MyWorkbook.GetFirstWorksheet;
+        ZCMsgCallBackInterface.TextMessage('2',TMWOHistoryOut);
+        //new_worksheet := MyWorkbook.CopyWorksheetFrom(MyWorkbook.GetFirstWorksheet, true);
+        //MyWorkbook2 := TsWorkbook.Create;
+
+        //ZCMsgCallBackInterface.TextMessage('3',TMWOHistoryOut);
+        //MyWorkbook2.ReadFromFile('d:\1.xlsx', sfOOXML);
+        //ZCMsgCallBackInterface.TextMessage('4',TMWOHistoryOut);
+        ZCMsgCallBackInterface.TextMessage('3',TMWOHistoryOut);
+
+        //new_worksheet := MyWorkbook2.CopyWorksheetFrom(MyWorkbook.GetFirstWorksheet, true);
+        //new_worksheet.Name:="ГРЩновый";
+        ZCMsgCallBackInterface.TextMessage('4',TMWOHistoryOut);
+
+        //if MyWorkbook2.ValidWorksheetName('something_else') then
+        //new_worksheet.Name := 'something_else' ;
+        //MyWorkbook.WriteToFile('d:\555.xlsx', sfOOXML,true);
+
+
+      finally
+         //MyWorkbook.Free;
+      end;
+      result:=cmd_ok;
       //else
       //  ZCMsgCallBackInterface.TextMessage('Invalid worksheet name.',TMWOHistoryOut);
         //ShowMessage('Invalid worksheet name.');
@@ -173,15 +185,29 @@ begin
   var
   b: TsWorkbook;
   sh: TsWorksheet;
+  cl:PCell;
   f: PsFormula;
 begin
   b := TsWorkbook.Create;
   try
     b.Options := [boReadFormulas];
-    b.ReadFromFile('d:\4.xlsx', sfOOXML);
+    b.ReadFromFile('d:\4545.xlsx', sfOOXML);
     sh := b.GetFirstWorksheet;
-    for f in sh.Formulas do
-      ZCMsgCallBackInterface.TextMessage(f^.Text,TMWOHistoryOut);
+
+    cl:=sh.GetCell(0,3);
+    ZCMsgCallBackInterface.TextMessage('Значение:' + sh.ReadAsText(0,3) + ';    Формула:'+ sh.ReadFormulaAsString(cl,false),TMWOHistoryOut);
+
+    //cl:=sh.GetCell(1,2);
+    cl:=sh.CopyCell(0,3,1,3,sh);
+    sh.CalcFormulas;
+    ZCMsgCallBackInterface.TextMessage('Значение:' + sh.ReadAsText(1,3) + ';    Формула:'+ sh.ReadFormulaAsString(sh.GetCell(1,3),false),TMWOHistoryOut);
+    //sh.ce
+    cl:=sh.CopyCell(0,2,1,2,sh);
+
+    sh.CalcFormulas;
+    ZCMsgCallBackInterface.TextMessage('Значение:' + sh.ReadAsText(0,2) + ';    Формула:'+ sh.ReadFormulaAsString(sh.GetCell(1,2),false),TMWOHistoryOut);
+    //for f in sh.Formulas do
+    //  ZCMsgCallBackInterface.TextMessage(f^.Text,TMWOHistoryOut);
     b.WriteToFile('d:\444.xlsx', sfOOXML, true);
   finally
     b.Free;
@@ -340,19 +366,12 @@ end;
 
 initialization
   programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
-  //SysUnit^.RegisterType(TypeInfo(TCmdProp));
-
-  //SelSim.SetCommandParam(@SelSimParams,'PTSelSimParams');
-  //CreateCommandFastObjectPlugin(@generatorOnelineDiagramOneLevel_com,'vGeneratorOneLine',CADWG,0);
-  CreateCommandFastObjectPlugin(@textexcel_com,'vtestExcel',CADWG,0);
-  CreateCommandFastObjectPlugin(@textexcel222_com,'vtestExcel2',CADWG,0);
+  CreateZCADCommand(@textexcel333_com,'vtestExcel333',CADWG,0);
+  CreateZCADCommand(@textexcel2_com,'vtestExcel111',CADWG,0);
 finalization
   ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
-  //CmdProp.props.free;
-  //CmdProp.props.done;
-  //if clFileParam<>nil then
-  //  clFileParam.Free;
 end.
+
 
 
 

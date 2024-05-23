@@ -948,7 +948,7 @@ begin
                                                  if TXTStyleIndex=nil then
                                                                      TXTStyleIndex:=pointer(drawing.GetTextStyleTable^.getDataMutable(0));
                                                  end
-    else {s := }f.ParseString;
+    else {s := }f.SkipString;
     byt:=readmystrtoint(f);
   end;
   if TXTStyleIndex=nil then

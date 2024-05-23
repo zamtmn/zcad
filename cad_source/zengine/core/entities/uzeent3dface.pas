@@ -179,7 +179,7 @@ begin
           if not dxfvertexload(f,11,byt,PInOCS[1]) then
           if not dxfvertexload(f,12,byt,PInOCS[2]) then
           if not dxfvertexload(f,13,byt,PInOCS[3]) then
-          {s := }f.ParseString;
+          {s := }f.SkipString;
     byt:=readmystrtoint(f);
   end;
 end;

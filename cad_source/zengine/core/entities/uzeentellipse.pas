@@ -469,7 +469,7 @@ begin
     if not dxfvertexload(f,11,byt,MajorAxis) then
     if not dxfDoubleload(f,40,byt,ratio) then
     if not dxfDoubleload(f,41,byt,startangle) then
-    if not dxfDoubleload(f,42,byt,endangle) then {s := }f.ParseString;
+    if not dxfDoubleload(f,42,byt,endangle) then {s := }f.SkipString;
     byt:=readmystrtoint(f);
   end;
   startangle := startangle{ * pi / 180};

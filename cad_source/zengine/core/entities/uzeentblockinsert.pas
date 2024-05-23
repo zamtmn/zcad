@@ -534,7 +534,7 @@ begin
                                                     rotate:=rotate*pi/180;
                                                end
 else if dxfIntegerload(f,71,byt,hlGDBWord)then begin if hlGDBWord = 1 then attrcont := true; end
-else if not dxfStringload(f,2,byt,name)then {s := }f.ParseString;
+else if not dxfStringload(f,2,byt,name)then {s := }f.SkipString;
     byt:=readmystrtoint(f);
   end;
   if attrcont then ;

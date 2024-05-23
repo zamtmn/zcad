@@ -692,7 +692,7 @@ else if not dxfIntegerload(f,72,byt,gv)then
      if not dxfIntegerload(f,73,byt,vv)then
      if not dxfIntegerload(f,71,byt,textbackward)then
      if not dxfStringload(f,1,byt,tcontent)then
-                                               {s := }f.ParseString;
+                                               {s := }f.SkipString;
     byt:=readmystrtoint(f);
   end;
   if (textbackward and 4)<>0 then

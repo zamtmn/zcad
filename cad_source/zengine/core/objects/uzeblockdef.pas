@@ -83,7 +83,7 @@ begin
   while byt <> 0 do
   begin
     if not LoadFromDXFObjShared(f,byt,ptu,drawing) then
-                                           f.parsestring;
+                                           f.SkipString;
     byt:=readmystrtoint(f);
   end;
   GetDXFIOFeatures.RunAfterLoadFeature(@self);

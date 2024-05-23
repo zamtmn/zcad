@@ -616,7 +616,7 @@ begin
     if not dxfDoubleload(f,52,byt,Angle) then
     if not dxfDoubleload(f,41,byt,Scale) then
     if not dxfStringload(f,2,byt,PatternName) then
-      f.ParseString;
+      f.SkipString;
     byt:=readmystrtoint(f);
   end;
   case hstyle of

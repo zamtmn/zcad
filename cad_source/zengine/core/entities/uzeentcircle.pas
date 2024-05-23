@@ -504,7 +504,7 @@ begin
   begin
     if not LoadFromDXFObjShared(f,byt,ptu,drawing) then
     if not dxfvertexload(f,10,byt,Local.P_insert) then
-    if not dxfDoubleload(f,40,byt,Radius) then {s := }f.ParseString;
+    if not dxfDoubleload(f,40,byt,Radius) then {s := }f.SkipString;
     byt:=readmystrtoint(f);
   end;
   //PProjoutbound:=nil;

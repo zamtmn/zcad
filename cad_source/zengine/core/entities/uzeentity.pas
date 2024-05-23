@@ -1201,7 +1201,7 @@ begin
                                 //нужно залупиться
                               end
                           end else begin
-                            readmystr(f);
+                            f.SkipString;
                             //нужно залупиться
                           end;
                           result:=true;

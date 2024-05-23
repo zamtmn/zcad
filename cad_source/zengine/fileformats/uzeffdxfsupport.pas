@@ -67,7 +67,7 @@ procedure dxfStringout(var f:TZctnrVectorBytes;dxfcode:Integer;const v1,v2:Strin
 function mystrtoint(const s:String):Integer;
 function readmystrtoint(var f:TZMemReader):Integer;
 function readmystrtodouble(var f:TZMemReader):Double;
-function readmystr(var f:TZMemReader):String;
+function readmystr(var f:TZMemReader):String;inline;
 function dxfvertexload(var f:TZMemReader;dxfcod,currentdxfcod:Integer; var v:gdbvertex):Boolean;
 function dxfvertexload1(var f:TZMemReader;dxfcod,currentdxfcod:Integer; var v:gdbvertex):Boolean;
 function dxfDoubleload(var f:TZMemReader;dxfcod,currentdxfcod:Integer; var v:Double):Boolean;

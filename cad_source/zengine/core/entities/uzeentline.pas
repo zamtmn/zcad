@@ -200,7 +200,7 @@ begin
   begin
     if not LoadFromDXFObjShared(f,byt,ptu,drawing) then
        if not dxfvertexload(f,10,byt,CoordInOCS.lBegin) then
-          if not dxfvertexload(f,11,byt,CoordInOCS.lEnd) then {s := }f.ParseString;
+          if not dxfvertexload(f,11,byt,CoordInOCS.lEnd) then {s := }f.SkipString;
     byt:=readmystrtoint(f);
   end;
 end;

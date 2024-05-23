@@ -132,7 +132,7 @@ begin
                                                                                             PDimStyle:=pointer(drawing.GetDimStyleTable^.getDataMutable(0));
                                                                   end
                             else
-                                f.ParseString;
+                                f.SkipString;
     byt:=readmystrtoint(f);
   end;
   if dtype<>-1 then

@@ -195,12 +195,13 @@ begin
                     result:=0;
 end;
 function readmystrtoint(var f:TZMemReader):Integer;
-var
-  code:Integer;
+//var
+//  code:Integer;
 begin
-  val(f.ParseString,result,code);
-  if code<>0 then
-                    result:=0;
+  result:=f.ParseInteger;
+  //val(f.ParseString,result,code);
+  //if code<>0 then
+  //  result:=0;
 end;
 function readmystrtodouble(var f:TZMemReader):Double;
 var code:Integer;

@@ -64,7 +64,6 @@ procedure dxfDoubleout(var f:TZctnrVectorBytes;dxfcode:Integer;const v:Double);
 procedure dxfIntegerout(var f:TZctnrVectorBytes;dxfcode:Integer;const v:Integer);
 procedure dxfStringout(var f:TZctnrVectorBytes;dxfcode:Integer;const v:String);overload;
 procedure dxfStringout(var f:TZctnrVectorBytes;dxfcode:Integer;const v1,v2:String);overload;
-function mystrtoint(const s:String):Integer;
 function readmystrtoint(var f:TZMemReader):Integer;
 function readmystrtodouble(var f:TZMemReader):Double;
 function readmystr(var f:TZMemReader):String;inline;
@@ -187,13 +186,6 @@ begin
      f.TXTAddString(v1);
      f.TXTAddStringEOL(v2);
 end;
-function mystrtoint(const s:String):Integer;
-var code:Integer;
-begin
-     val(s,result,code);
-     if code<>0 then
-                    result:=0;
-end;
 function readmystrtoint(var f:TZMemReader):Integer;
 //var
 //  code:Integer;
@@ -204,13 +196,14 @@ begin
   //  result:=0;
 end;
 function readmystrtodouble(var f:TZMemReader):Double;
-var code:Integer;
+//var code:Integer;
     //s:String;
 begin
+  result:=f.ParseDouble;
      //s := f.readString;
-     val({s}f.ParseString,result,code);
-     if code<>0 then
-                    result:=0;
+//     val({s}f.ParseString,result,code);
+//     if code<>0 then
+//                    result:=0;
 end;
 function readmystr(var f:TZMemReader):String;
 //var s:String;

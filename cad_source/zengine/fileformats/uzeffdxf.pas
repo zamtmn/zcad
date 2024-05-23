@@ -613,8 +613,9 @@ begin
        byt := 2;
        while byt <> 0 do
        begin
-       s := f.ParseString;
-       byt := strtoint(s);
+       byt:=f.ParseInteger;
+       {s := f.ParseString;
+       byt := strtoint(s);}
        s := f.ParseString;
        case byt of
        2:
@@ -764,45 +765,42 @@ begin
     byt := 2;
     while byt <> 0 do
     begin
-      if not nulisread then
-      begin
-      s := f.ParseString;
-      byt := strtoint(s);
-      s := f.ParseString;
-      end
-      else
-          nulisread:=false;
+      if not nulisread then begin
+        byt:=f.ParseInteger;
+        s := f.ParseString;
+      end else
+        nulisread:=false;
       case byt of
         2:begin
-            debugln('{D}[DXF_CONTENTS]Found layer  ',s);
-            lname:=s;
-            player:=drawing.LayerTable.MergeItem(s,LoadMode);
-            if player<>nil then
-              player^.init(s);
-          end;
+          debugln('{D}[DXF_CONTENTS]Found layer  ',s);
+          lname:=s;
+          player:=drawing.LayerTable.MergeItem(s,LoadMode);
+          if player<>nil then
+            player^.init(s);
+        end;
         6:if player<>nil then
-            player^.LT:=drawing.LTypeStyleTable.getAddres(s);
+          player^.LT:=drawing.LTypeStyleTable.getAddres(s);
         1001:begin
-            if s='AcAecLayerStandard' then begin
+          if s='AcAecLayerStandard' then begin
+            s := f.ParseString;
+            byt:=strtoint(s);
+            if byt<>0 then begin
+              s := f.ParseString;
               s := f.ParseString;
               byt:=strtoint(s);
               if byt<>0 then begin
-                s := f.ParseString;
-                s := f.ParseString;
-                byt:=strtoint(s);
-                if byt<>0 then begin
-                  desk := f.ParseString;
-                  if player<>nil then
-                    player^.desk:=desk;
-                end else begin
-                  nulisread:=true;
-                  s:=f.ParseString;
-                end;
+                desk := f.ParseString;
+                if player<>nil then
+                  player^.desk:=desk;
               end else begin
-                  nulisread:=true;
-                  s := f.ParseString;
+                nulisread:=true;
+                s:=f.ParseString;
               end;
+            end else begin
+                nulisread:=true;
+                s := f.ParseString;
             end;
+          end;
         end;
         else begin
           if player<>nil then
@@ -845,18 +843,21 @@ begin
 
     while byt <> 0 do
     begin
-      s := f.ParseString;
-      byt := strtoint(s);
-      s := f.ParseString;
+      {s := f.ParseString;
+      byt := strtoint(s);}
+      byt:=f.ParseInteger;
+      //s := f.ParseString;
       case byt of
-            2:tstyle.name := s;
-            5:DWGHandle:=strtoint64('$'+s);
-           40:tstyle.prop.size:=strtofloat(s);
-           41:tstyle.prop.wfactor:=strtofloat(s);
-           50:tstyle.prop.oblique:=strtofloat(s)*pi/180;
-           70:flags:=strtoint(s);
-            3:FontFile:=s;
-         1000:FontFamily:=s;
+            2:tstyle.name:=f.ParseString;
+            5:DWGHandle:=strtoint64('$'+f.ParseString);
+           40:tstyle.prop.size:=f.ParseDouble;
+           41:tstyle.prop.wfactor:=f.ParseDouble;
+           50:tstyle.prop.oblique:=f.ParseDouble*pi/180;
+           70:flags:=f.ParseInteger;
+            3:FontFile:=f.ParseString;
+         1000:FontFamily:=f.ParseString;
+         else
+           s := f.ParseString;
       end;
     end;
     ti:=nil;
@@ -932,8 +933,9 @@ begin
 
        while byt <> 0 do
        begin
-         s := f.ParseString;
-         byt := strtoint(s);
+         {s := f.ParseString;
+         byt := strtoint(s);}
+         byt:=f.ParseInteger;
          s := f.ParseString;
          if (byt=0)and(s='VPORT')then
          begin
@@ -1101,8 +1103,9 @@ begin
   byt := 2;
   while byt <> 0 do
   begin
-  s := f.ParseString;
-  byt := strtoint(s);
+  {s := f.ParseString;
+  byt := strtoint(s);}
+  byt:=f.ParseInteger;
   s := f.ParseString;
   if psimstyleprop=nil then begin
     if byt=2 then begin
@@ -1134,8 +1137,9 @@ begin
      byt := 2;
      while byt <> 0 do
      begin
-     s := f.ParseString;
-     byt := strtoint(s);
+     {s := f.ParseString;
+     byt := strtoint(s);}
+     byt:=f.ParseInteger;
      s := f.ParseString;
      if byt=2 then
                   begin

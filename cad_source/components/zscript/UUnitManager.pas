@@ -33,20 +33,20 @@ type
                        currentunit:PTUnit;
                        NextUnitManager:PTUnitManager;
                        constructor init;
-                       function CreateUnit(PPaths:String;TranslateFunc:TTranslateFunction;UName:String):PTUnit;
-                       function loadunit(PPaths:String;TranslateFunc:TTranslateFunction;fname:String; pcreatedunit:PTSimpleUnit):ptunit;virtual;
-                       function parseunit(PPaths:String;TranslateFunc:TTranslateFunction;var f: TZctnrVectorBytes; pcreatedunit:PTSimpleUnit):ptunit;virtual;
-                       function changeparsemode(PPaths:String;TranslateFunc:TTranslateFunction;newmode:Integer;var mode:Integer):pasparsemode;
-                       function findunit(PPaths:String;TranslateFunc:TTranslateFunction;uname:String):ptunit;virtual;
-                       function FindOrCreateEmptyUnit(uname:String):ptunit;virtual;
-                       function internalfindunit(uname:String):ptunit;virtual;
+                       function CreateUnit(const PPaths:String;TranslateFunc:TTranslateFunction;const UName:String):PTUnit;
+                       function loadunit(const PPaths:String;TranslateFunc:TTranslateFunction;const fname:String; pcreatedunit:PTSimpleUnit):ptunit;virtual;
+                       function parseunit(const PPaths:String;TranslateFunc:TTranslateFunction;var f: TZctnrVectorBytes; pcreatedunit:PTSimpleUnit):ptunit;virtual;
+                       function changeparsemode(const PPaths:String;TranslateFunc:TTranslateFunction;newmode:Integer;var mode:Integer):pasparsemode;
+                       function findunit(const PPaths:String;TranslateFunc:TTranslateFunction;const uname:String):ptunit;virtual;
+                       function FindOrCreateEmptyUnit(const uname:String):ptunit;virtual;
+                       function internalfindunit(const uname:String):ptunit;virtual;
                        procedure SetNextManager(PNM:PTUnitManager);
-                       procedure LoadFolder(PPaths:String;TranslateFunc:TTranslateFunction;path: String);
+                       procedure LoadFolder(const PPaths:String;TranslateFunc:TTranslateFunction;const path: String);
 
                        //procedure AfterObjectDone(p:PGDBaseObject);virtual;
                        procedure free;virtual;
 
-                       procedure CreateExtenalSystemVariable(var VarUnit:PTUnit;VarUnitName:string;PPaths:String;sysunitname:String;TranslateFunc:TTranslateFunction;varname,vartype:String;pinstance:Pointer);
+                       procedure CreateExtenalSystemVariable(var VarUnit:PTUnit;const VarUnitName:string;const PPaths:String;const sysunitname:String;TranslateFunc:TTranslateFunction;const varname,vartype:String;pinstance:Pointer);
                  end;
 {EXPORT-}
 var
@@ -83,7 +83,7 @@ const
                             Size:sizeof(Pointer);
                             //Attributes:{FA_HIDDEN_IN_OBJ_INSP or }FA_READONLY
                             );
-procedure TUnitManager.CreateExtenalSystemVariable(var VarUnit:PTUnit;VarUnitName:string;PPaths:String;sysunitname:String;TranslateFunc:TTranslateFunction;varname,vartype:String;pinstance:Pointer);
+procedure TUnitManager.CreateExtenalSystemVariable(var VarUnit:PTUnit;const VarUnitName:string;const PPaths:String;const sysunitname:String;TranslateFunc:TTranslateFunction;const varname,vartype:String;pinstance:Pointer);
 begin
   //TODO: убрать такуюже шнягу из urtl, сделать создание SysUnit в одном месте
   if SysUnit=nil then
@@ -136,23 +136,27 @@ var
   ir:itrec;
   //nfn:String;
   //tcurrentunit:PTUnit;
+  upper_uname: String;
 begin
   p:=beginiterate(ir);
   //uname:=uppercase(uname);
   result:=nil;
   if p<>nil then
-  repeat
-       if uppercase(p^.Name)=uppercase(uname) then
-                            begin
-                                 result:=p;
-                                 exit;
-                            end;
-       p:=iterate(ir);
-  until p=nil;
+  begin
+    upper_uname:=uppercase(uname);
+    repeat
+         if uppercase(p^.Name)=upper_uname then
+                              begin
+                                   result:=p;
+                                   exit;
+                              end;
+         p:=iterate(ir);
+    until p=nil;
+  end;
   if NextUnitManager<>NIL then
                               result:=NextUnitManager^.internalfindunit(uname);
 end;
-function TUnitManager.FindOrCreateEmptyUnit(uname:String):ptunit;
+function TUnitManager.FindOrCreateEmptyUnit(const uname:String):ptunit;
 begin
    result:=internalfindunit(uname);
    if result=nil then
@@ -196,7 +200,7 @@ begin
                     end;                           
   
 end;
-function TUnitManager.changeparsemode(PPaths:String;TranslateFunc:TTranslateFunction;newmode:Integer;var mode:Integer):pasparsemode;
+function TUnitManager.changeparsemode(const PPaths:String;TranslateFunc:TTranslateFunction;newmode:Integer;var mode:Integer):pasparsemode;
 var i:Integer;
     //line:String;
     //fieldgdbtype: gdbtypedesk;
@@ -238,7 +242,7 @@ begin
   f.done;
   //result:=pointer(pcreatedunit);
 end;
-function TUnitManager.CreateUnit(PPaths:String;TranslateFunc:TTranslateFunction;UName:String):PTUnit;
+function TUnitManager.CreateUnit(const PPaths:String;TranslateFunc:TTranslateFunction;const UName:String):PTUnit;
 var
   pfu:PTUnit;
 begin
@@ -350,8 +354,8 @@ begin
                                                            if pfu<>nil then
                                                                            begin
                                                                                 CurrentUnit.InterfaceUses.PushBackIfNotPresent(pfu);
-                                                                           end;
-                                                           if (pfu=nil)and(uppercase(pstring(p)^)='SYSTEM')then
+                                                                           end
+                                                           else if (pfu=nil)and(uppercase(pstring(p)^)='SYSTEM')then
                                                            begin
                                                                 pfu:=pointer(CreateObject);
                                                                 PTUnit(pfu)^.init('system');
@@ -820,7 +824,7 @@ begin
      inherited init(500);
      NextUnitManager:=nil;
 end;
-procedure TUnitManager.LoadFolder(PPaths:String;TranslateFunc:TTranslateFunction;path: String);
+procedure TUnitManager.LoadFolder(const PPaths:String;TranslateFunc:TTranslateFunction;const path: String);
 var
   sr: TSearchRec;
 begin

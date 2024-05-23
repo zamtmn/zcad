@@ -30,7 +30,7 @@ type
                                    end;
   GDBAngleDoubleDescriptor=object(DoubleDescriptor)
                                  function GetFormattedValueAsString(PInstance:Pointer; const f:TzeUnitsFormat):String;virtual;
-                                 procedure SetFormattedValueFromString(PInstance:Pointer;const f:TzeUnitsFormat;Value:String);virtual;
+                                 procedure SetFormattedValueFromString(PInstance:Pointer;const f:TzeUnitsFormat;const Value:String);virtual;
                            end;
 var
   GDBNonDimensionDoubleDescriptorObj:GDBNonDimensionDoubleDescriptor;
@@ -49,7 +49,7 @@ function GDBAngleDoubleDescriptor.GetFormattedValueAsString(PInstance:Pointer; c
 begin
     result:=zeAngleToString(PGDBNonDimensionDouble(PInstance)^,f);
 end;
-procedure GDBAngleDoubleDescriptor.SetFormattedValueFromString(PInstance:Pointer;const f:TzeUnitsFormat;Value:String);
+procedure GDBAngleDoubleDescriptor.SetFormattedValueFromString(PInstance:Pointer;const f:TzeUnitsFormat; const Value:String);
 begin
   try
     PGDBNonDimensionDouble(PInstance)^:=zeStringToAngle(Value,f);

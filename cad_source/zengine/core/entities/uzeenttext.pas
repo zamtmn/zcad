@@ -57,7 +57,7 @@ GDBObjText= object(GDBObjAbstractText)
                  procedure rtsave(refp:Pointer);virtual;
                  function IsHaveObjXData:Boolean;virtual;
                  procedure SaveToDXFObjXData(var outhandle:{Integer}TZctnrVectorBytes;var IODXFContext:TIODXFContext);virtual;
-                 function ProcessFromDXFObjXData(_Name,_Value:String;ptu:PExtensionData;const drawing:TDrawingDef):Boolean;virtual;
+                 function ProcessFromDXFObjXData(const _Name,_Value:String;ptu:PExtensionData;const drawing:TDrawingDef):Boolean;virtual;
                  class function GetDXFIOFeatures:TDXFEntIODataManager;static;
 
                  function CreateInstance:PGDBObjText;static;

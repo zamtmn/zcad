@@ -29,10 +29,10 @@ uses
   gzctnrVectorTypes,StdCtrls,Controls,Classes,uzbstrproc,uzedimensionaltypes;
 type
     TBaseTypesEditors=class
-                             class function BaseCreateEditor           (TheOwner:TPropEditorOwner;rect:trect;pinstance:pointer;psa:PTZctnrVectorStrings;FreeOnLostFocus:boolean;InitialValue:String;ptdesc:PUserTypeDescriptor;preferedHeight:integer;f:TzeUnitsFormat):TEditorDesc;
-                             class function BooleanCreateEditor        (TheOwner:TPropEditorOwner;rect:trect;pinstance:pointer;psa:PTZctnrVectorStrings;FreeOnLostFocus:boolean;InitialValue:String;ptdesc:PUserTypeDescriptor;preferedHeight:integer;f:TzeUnitsFormat):TEditorDesc;
-                             class function TEnumDataCreateEditor      (TheOwner:TPropEditorOwner;rect:trect;pinstance:pointer;psa:PTZctnrVectorStrings;FreeOnLostFocus:boolean;InitialValue:String;ptdesc:PUserTypeDescriptor;preferedHeight:integer;f:TzeUnitsFormat):TEditorDesc;
-                             class function EnumDescriptorCreateEditor (TheOwner:TPropEditorOwner;rect:trect;pinstance:pointer;psa:PTZctnrVectorStrings;FreeOnLostFocus:boolean;InitialValue:String;ptdesc:PUserTypeDescriptor;preferedHeight:integer;f:TzeUnitsFormat):TEditorDesc;
+                             class function BaseCreateEditor           (TheOwner:TPropEditorOwner;rect:trect;pinstance:pointer;psa:PTZctnrVectorStrings;FreeOnLostFocus:boolean;const InitialValue:String;ptdesc:PUserTypeDescriptor;preferedHeight:integer;f:TzeUnitsFormat):TEditorDesc;
+                             class function BooleanCreateEditor        (TheOwner:TPropEditorOwner;rect:trect;pinstance:pointer;psa:PTZctnrVectorStrings;FreeOnLostFocus:boolean;const InitialValue:String;ptdesc:PUserTypeDescriptor;preferedHeight:integer;f:TzeUnitsFormat):TEditorDesc;
+                             class function TEnumDataCreateEditor      (TheOwner:TPropEditorOwner;rect:trect;pinstance:pointer;psa:PTZctnrVectorStrings;FreeOnLostFocus:boolean;const InitialValue:String;ptdesc:PUserTypeDescriptor;preferedHeight:integer;f:TzeUnitsFormat):TEditorDesc;
+                             class function EnumDescriptorCreateEditor (TheOwner:TPropEditorOwner;rect:trect;pinstance:pointer;psa:PTZctnrVectorStrings;FreeOnLostFocus:boolean;const InitialValue:String;ptdesc:PUserTypeDescriptor;preferedHeight:integer;f:TzeUnitsFormat):TEditorDesc;
     end;
 implementation
 class function TBaseTypesEditors.BaseCreateEditor;

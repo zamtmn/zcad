@@ -62,7 +62,7 @@ type
     LastCharIndex:integer;//OS2Table
     DefaultChar:integer;//OS2Table
   end;
-function getTTFFileParams(filename:String):TTTFFileParams;
+function getTTFFileParams(const filename:String):TTTFFileParams;
 
 implementation
 
@@ -268,7 +268,7 @@ begin
   end;
 end;
 
-function getTTFFileParams(filename:String):TTTFFileParams;
+function getTTFFileParams(const filename:String):TTTFFileParams;
 var
   AStream:TTTFFileStream;
   TTCHeader:TTTCHeader;

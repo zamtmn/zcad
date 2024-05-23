@@ -36,7 +36,7 @@ GDBfont= object(GDBNamedObject)
     font:TZEBaseFontImpl;
     DummyDrawerHandle:{THandle}ptruint;
     constructor initnul;
-    constructor init(n:String);
+    constructor init(const n:String);
     //procedure ItSHX;
     //procedure ItFFT;
     destructor done;virtual;

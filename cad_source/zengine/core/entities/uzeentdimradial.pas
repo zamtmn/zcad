@@ -46,9 +46,9 @@ GDBObjRadialDimension= object(GDBObjDiametricDimension)
                         function GetCenterPoint:GDBVertex;virtual;
                         function Clone(own:Pointer):PGDBObjEntity;virtual;
 
-                        function P10ChangeTo(tv:GDBVertex):GDBVertex;virtual;
-                        function P15ChangeTo(tv:GDBVertex):GDBVertex;virtual;
-                        function P11ChangeTo(tv:GDBVertex):GDBVertex;virtual;
+                        function P10ChangeTo(const tv:GDBVertex):GDBVertex;virtual;
+                        function P15ChangeTo(const tv:GDBVertex):GDBVertex;virtual;
+                        function P11ChangeTo(const tv:GDBVertex):GDBVertex;virtual;
                         function GetRadius:Double;virtual;
 
                         procedure SaveToDXF(var outhandle:TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
@@ -75,7 +75,7 @@ function GDBObjRadialDimension.GetRadius:Double;
 begin
      result:=Vertexlength(DimData.P15InWCS,DimData.P10InWCS);
 end;
-function GDBObjRadialDimension.P10ChangeTo(tv:GDBVertex):GDBVertex;
+function GDBObjRadialDimension.P10ChangeTo(const tv:GDBVertex):GDBVertex;
 var
   dirv:GDBVertex;
   d:double;
@@ -88,7 +88,7 @@ begin
      result:=tv;
      DimData.P11InOCS:=VertexDmorph(DimData.P15InWCS,dirv,d);
 end;
-function GDBObjRadialDimension.P15ChangeTo(tv:GDBVertex):GDBVertex;
+function GDBObjRadialDimension.P15ChangeTo(const tv:GDBVertex):GDBVertex;
 var
   dirv:GDBVertex;
   r:double;
@@ -101,7 +101,7 @@ begin
      r:=Vertexlength(DimData.P10InWCS,DimData.P11InOCS);
      DimData.P11InOCS:=VertexDmorph(DimData.P10InWCS,dirv,r);
 end;
-function GDBObjRadialDimension.P11ChangeTo(tv:GDBVertex):GDBVertex;
+function GDBObjRadialDimension.P11ChangeTo(const tv:GDBVertex):GDBVertex;
 var
   dirv:GDBVertex;
   r:double;

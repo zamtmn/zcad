@@ -61,7 +61,7 @@ type
     DC:TDrawContext;
     procedure CreateRec(var ADrawing:TSimpleDrawing;var AOwner:GDBObjGenericSubEntry;ALoadMode:TLoadOpt;constref ADC:TDrawContext);
   end;
-  TFileLoadProcedure=procedure(name: String;var ZCDCtx:TZDrawingContext{owner:PGDBObjGenericSubEntry;LoadMode:TLoadOpt;var drawing:TSimpleDrawing});
+  TFileLoadProcedure=procedure(const name: String;var ZCDCtx:TZDrawingContext{owner:PGDBObjGenericSubEntry;LoadMode:TLoadOpt;var drawing:TSimpleDrawing});
   TLoadFomats=TExt2LoadProcMap<TFileLoadProcedure>;
 var
     Ext2LoadProcMap:TLoadFomats;

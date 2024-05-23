@@ -63,7 +63,7 @@ GDBObjEntity= object(GDBObjSubordinated)
                     constructor initnul(owner:PGDBObjGenericWithSubordinated);
                     procedure SaveToDXFObjPrefix(var  outhandle:{Integer}TZctnrVectorBytes;entname,dbname:String;var IODXFContext:TIODXFContext;notprocessHandle:boolean=false);
                     function LoadFromDXFObjShared(var f:TZMemReader;dxfcod:Integer;ptu:PExtensionData;var drawing:TDrawingDef):Boolean;
-                    function ProcessFromDXFObjXData(_Name,_Value:String;ptu:PExtensionData;const drawing:TDrawingDef):Boolean;virtual;
+                    function ProcessFromDXFObjXData(const _Name,_Value:String;ptu:PExtensionData;const drawing:TDrawingDef):Boolean;virtual;
                     function FromDXFPostProcessBeforeAdd(ptu:PExtensionData;const drawing:TDrawingDef):PGDBObjSubordinated;virtual;
                     procedure FromDXFPostProcessAfterAdd;virtual;
                     procedure postload(var context:TIODXFLoadContext);virtual;
@@ -112,12 +112,12 @@ GDBObjEntity= object(GDBObjSubordinated)
                     function GetLTCorrectL(GlobalLTScale:Double):Double;virtual;
                     procedure calcbb(var DC:TDrawContext);virtual;
                     procedure DrawBB(var DC:TDrawContext);
-                    function calcvisible(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:Integer; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double):Boolean;virtual;
+                    function calcvisible(const frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:Integer; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double):Boolean;virtual;
 
                     function onmouse(var popa:TZctnrVectorPGDBaseObjects;const MF:ClipArray;InSubEntry:Boolean):Boolean;virtual;
                     function onpoint(var objects:TZctnrVectorPGDBaseObjects;const point:GDBVertex):Boolean;virtual;
 
-                    function isonmouse(var popa:TZctnrVectorPGDBaseObjects;mousefrustum:ClipArray;InSubEntry:Boolean):Boolean;virtual;
+                    function isonmouse(var popa:TZctnrVectorPGDBaseObjects;const mousefrustum:ClipArray;InSubEntry:Boolean):Boolean;virtual;
                     procedure startsnap(out osp:os_record; out pdata:Pointer);virtual;
                     function getsnap(var osp:os_record; var pdata:Pointer; const param:OGLWndtype; ProjectProc:GDBProjectProc;SnapMode:TGDBOSMode):Boolean;virtual;
                     procedure endsnap(out osp:os_record; var pdata:Pointer);virtual;
@@ -142,7 +142,7 @@ GDBObjEntity= object(GDBObjSubordinated)
                     function GetMainOwner:PGDBObjSubordinated;virtual;
                     function getmatrix:PDMatrix4D;virtual;
                     function getownermatrix:PDMatrix4D;virtual;
-                    function ObjToString(prefix,sufix:String):String;virtual;
+                    function ObjToString(const prefix,sufix:String):String;virtual;
                     function ReturnLastOnMouse(InSubEntry:Boolean):PGDBObjEntity;virtual;
                     procedure YouDeleted(var drawing:TDrawingDef);virtual;
                     procedure YouChanged(var drawing:TDrawingDef);virtual;
@@ -160,8 +160,8 @@ GDBObjEntity= object(GDBObjSubordinated)
                     procedure SetInFrustum(infrustumactualy:TActulity;var totalobj,infrustumobj:Integer);virtual;
                     procedure SetInFrustumFromTree(const frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:Integer; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double);virtual;
                     procedure SetNotInFrustum(infrustumactualy:TActulity;var totalobj,infrustumobj:Integer);virtual;
-                    function CalcInFrustum(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:Integer; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double):Boolean;virtual;
-                    function CalcTrueInFrustum(frustum:ClipArray;visibleactualy:TActulity):TInBoundingVolume;virtual;
+                    function CalcInFrustum(const frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:Integer; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double):Boolean;virtual;
+                    function CalcTrueInFrustum(const frustum:ClipArray;visibleactualy:TActulity):TInBoundingVolume;virtual;
                     function IsIntersect_Line(lbegin,lend:gdbvertex):Intercept3DProp;virtual;
                     procedure BuildGeometry(var drawing:TDrawingDef);virtual;
                     procedure AddOnTrackAxis(var posr:os_record; const processaxis:taddotrac);virtual;
@@ -169,7 +169,7 @@ GDBObjEntity= object(GDBObjSubordinated)
                     function CalcObjMatrixWithoutOwner:DMatrix4D;virtual;
 
                     procedure EraseMi(pobj:pGDBObjEntity;pobjinarray:Integer;var drawing:TDrawingDef);virtual;
-                    function GetTangentInPoint(point:GDBVertex):GDBVertex;virtual;
+                    function GetTangentInPoint(const point:GDBVertex):GDBVertex;virtual;
                     procedure CalcObjMatrix(pdrawing:PTDrawingDef=nil);virtual;
                     procedure ReCalcFromObjMatrix;virtual;
                     procedure correctsublayers(var la:GDBLayerArray);virtual;
@@ -280,7 +280,7 @@ begin
 
 end;
 
-function GDBObjEntity.GetTangentInPoint(point:GDBVertex):GDBVertex;
+function GDBObjEntity.GetTangentInPoint(const point:GDBVertex):GDBVertex;
 begin
      result:=nulvertex;
 end;
@@ -463,7 +463,7 @@ function GDBObjEntity.ReturnLastOnMouse;
 begin
      result:=@self;
 end;
-function GDBObjEntity.ObjToString(prefix,sufix:String):String;
+function GDBObjEntity.ObjToString(const prefix,sufix:String):String;
 begin
      result:=prefix+'#'+inttohex(PtrInt(@self),10)+sufix;
 end;
@@ -1294,7 +1294,7 @@ class function GDBObjEntity.GetDXFIOFeatures:TDXFEntIODataManager;
 begin
   result:=GDBObjEntityDXFFeatures;
 end;
-function GDBObjEntity.ProcessFromDXFObjXData(_Name,_Value:String;ptu:PExtensionData;const drawing:TDrawingDef):Boolean;
+function GDBObjEntity.ProcessFromDXFObjXData(const _Name,_Value:String;ptu:PExtensionData;const drawing:TDrawingDef):Boolean;
 var
    features:TDXFEntIODataManager;
    FeatureLoadProc:TDXFEntLoadFeature;

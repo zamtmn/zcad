@@ -38,12 +38,12 @@ TBoundaryPath=object
   procedure transform(const t_matrix:DMatrix4D);virtual;
   function getDataMutableByPlainIndex(index:TArrayIndex):PGDBVertex2D;
 
-  function DummyCalcTrueInFrustum(pv1:pgdbvertex;frustum:ClipArray):TInBoundingVolume;virtual;
+  function DummyCalcTrueInFrustum(pv1:pgdbvertex;const frustum:ClipArray):TInBoundingVolume;virtual;
 end;
 
 implementation
 
-function TBoundaryPath.DummyCalcTrueInFrustum(pv1:pgdbvertex;frustum:ClipArray):TInBoundingVolume;
+function TBoundaryPath.DummyCalcTrueInFrustum(pv1:pgdbvertex;const frustum:ClipArray):TInBoundingVolume;
 var i,j:integer;
    ppla:PGDBPolyline2DArray;
    firstp,pv2:pgdbvertex;

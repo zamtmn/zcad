@@ -619,7 +619,7 @@ begin
 end;
 
 
-procedure addfiletoLayoutbox(filename:String;pdata:pointer);
+procedure addfiletoLayoutbox(const filename:String;pdata:pointer);
 var
     s:string;
 begin

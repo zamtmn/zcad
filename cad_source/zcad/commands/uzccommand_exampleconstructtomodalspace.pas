@@ -49,7 +49,7 @@ var
 
 function ExampleConstructToModalSpace_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 //Визуализация многострочный текст
-function drawMText(pt:GDBVertex;color:integer;rotate:double):PGDBObjMText;
+function drawMText(const pt:GDBVertex;color:integer;rotate:double):PGDBObjMText;
 begin
   Result:=GDBObjMText.CreateInstance;
   zcSetEntPropFromCurrentDrawingProp(Result);                        //добавляем дефаултные свойства

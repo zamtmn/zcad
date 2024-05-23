@@ -22,11 +22,11 @@ interface
 uses uzbtypes,Masks,LCLProc,{$IFNDEF DELPHI}LazUTF8,{$ENDIF}sysutils,
      uzmacros,uzbLogIntf;
 type
-  TFromDirIterator=procedure (filename:String;pdata:pointer);
-  TFromDirIteratorObj=procedure (filename:String;pdata:pointer) of object;
+  TFromDirIterator=procedure (const filename:String;pdata:pointer);
+  TFromDirIteratorObj=procedure (const filename:String;pdata:pointer) of object;
 function ExpandPath(path:String):String;
-function FindInSupportPath(PPaths:String;FileName:String):String;
-function FindInPaths(Paths,FileName:String):String;
+function FindInSupportPath(const PPaths:String; FileName:String):String;
+function FindInPaths(const Paths:String; FileName:String):String;
 
 //**Получает части текста разделеные разделителем.
 //**path - текст в котором идет поиск.
@@ -36,7 +36,7 @@ function GetPartOfPath(out part:String;var path:String;const separator:String):S
 function GetSupportPath:String;
 {TODO: костыли))}
 function GeAddrSupportPath:PString;
-procedure AddSupportPath(APath:String);
+procedure AddSupportPath(const APath:String);
 
 procedure FromDirIterator(const path,mask,firstloadfilename:String;proc:TFromDirIterator;method:TFromDirIteratorObj;pdata:pointer=nil);
 procedure FromDirsIterator(const path,mask,firstloadfilename:String;proc:TFromDirIterator;method:TFromDirIteratorObj;pdata:pointer=nil);
@@ -44,7 +44,7 @@ var ProgramPath,AdditionalSupportPath,TempPath:String;
 implementation
 var SupportPath:String;
 //uses log;
-procedure AddSupportPath(APath:String);
+procedure AddSupportPath(const APath:String);
 begin
   if APath=''then exit;
   if AdditionalSupportPath='' then
@@ -73,7 +73,7 @@ function GeAddrSupportPath:PString;
 begin
   result:=@SupportPath;
 end;
-function FindInPaths(Paths,FileName:String):String;
+function FindInPaths(const Paths:String; FileName:String):String;
 var
    s,ts,ts2:String;
 begin
@@ -140,7 +140,7 @@ begin
                        end;
      result:=part;
 end;
-function FindInSupportPath(PPaths:String;FileName:String):String;
+function FindInSupportPath(const PPaths:String; FileName:String):String;
 const
      cFindInSupportPath='[FILEOPS]FindInSupportPath: found file:"%s"';
 var
@@ -205,7 +205,7 @@ end;
 procedure FromDirIterator(const path,mask,firstloadfilename:String;proc:TFromDirIterator;method:TFromDirIteratorObj;pdata:pointer);
 var sr: TSearchRec;
     s:String;
-procedure processfile(s:String);
+procedure processfile(const s:String);
 var
    fn:String;
 function IsASCII(const s: string): boolean; inline;

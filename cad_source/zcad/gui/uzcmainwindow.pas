@@ -187,7 +187,7 @@ var
   ZCADMainWindow: TZCADMainWindow;
 
 function IsRealyQuit:Boolean;
-procedure RunCmdFile(filename:String;pdata:pointer);
+procedure RunCmdFile(const filename:String;pdata:pointer);
 
 implementation
 {$R *.lfm}
@@ -946,7 +946,7 @@ begin
   SetupFIPCServer;
 end;
 
-procedure RunCmdFile(filename:String;pdata:pointer);
+procedure RunCmdFile(const filename:String;pdata:pointer);
 begin
   commandmanager.executefile(filename,drawings.GetCurrentDWG,nil);
 end;

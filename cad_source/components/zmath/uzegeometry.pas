@@ -137,7 +137,7 @@ function Vertexdmorphabs(const Vector1, Vector2: GDBVertex;a: Double): GDBVertex
 function Vertexmorphabs(const Vector1, Vector2: GDBVertex;a: Double): GDBVertex;inline;
 function Vertexmorphabs2(const Vector1, Vector2: GDBVertex;a: Double): GDBVertex;inline;
 function MatrixMultiply(const M1, M2: DMatrix4D):DMatrix4D;overload;inline;
-function MatrixMultiply(const M1: DMatrix4D; M2: DMatrix4F):DMatrix4D;overload;inline;
+function MatrixMultiply(const M1: DMatrix4D; const M2: DMatrix4F):DMatrix4D;overload;inline;
 function MatrixMultiplyF(const M1, M2: DMatrix4D):DMatrix4F;inline;
 function VectorTransform(const V:GDBVertex4D;const M:DMatrix4D):GDBVertex4D;overload;inline;
 function VectorTransform(const V:GDBVertex4D;const M:DMatrix4F):GDBVertex4D;overload;inline;
@@ -162,19 +162,19 @@ function CreateRotatedXVector(const angle: Double):GDBVertex;
 function CreateRotatedYVector(const angle: Double):GDBVertex;
 function CreateAffineRotationMatrix(const anAxis: GDBvertex; angle: double):DMatrix4D;inline;
 function distance2piece(var q:GDBvertex2DI;var p1,p2:GDBvertex2D): double;overload;inline;
-function distance2piece(q:GDBvertex;var p1,p2:GDBvertex): {DistAndPoint}double;overload;//inline;
+function distance2piece(const q:GDBvertex;var p1,p2:GDBvertex): {DistAndPoint}double;overload;//inline;
 
-function distance2piece_2(var q:GDBvertex2DI; p1,p2:GDBvertex2D): double;overload;inline;
-function distance2piece_2(var q:GDBvertex2DI; p1,p2:GDBvertex2DI): double;overload;inline;
-function distance2piece_2Dmy(var q:GDBvertex2D; p1,p2:GDBvertex2D): double;inline;
+function distance2piece_2(var q:GDBvertex2DI; const p1,p2:GDBvertex2D): double;overload;inline;
+function distance2piece_2(var q:GDBvertex2DI; const p1,p2:GDBvertex2DI): double;overload;inline;
+function distance2piece_2Dmy(var q:GDBvertex2D; const p1,p2:GDBvertex2D): double;inline;
 
 function distance2piece_2_xy(var q:GDBvertex2DI;const p1,p2:GDBvertex2D):GDBvertex2DI;inline;
 
 function distance2point_2(var p1,p2:GDBvertex2DI):Integer;inline;
-function distance2ray(q:GDBvertex;const p1,p2:GDBvertex):DistAndt;
+function distance2ray(const q:GDBvertex;const p1,p2:GDBvertex):DistAndt;
 function CreateTranslationMatrix(const V:GDBvertex): DMatrix4D;inline;
 function CreateScaleMatrix(const V:GDBvertex): DMatrix4D;inline;
-function CreateReflectionMatrix(plane:DVector4D): DMatrix4D;
+function CreateReflectionMatrix(const plane:DVector4D): DMatrix4D;
 //**Создать 3D вершину
 function CreateVertex(const x,y,z:Double):GDBVertex;inline;
 function CreateVertexFromArray(var counter:integer;const args:array of const):GDBVertex;
@@ -224,9 +224,9 @@ function CalcPointTrueInFrustum (const lbegin:GDBvertex; const frustum:ClipArray
 function CalcOutBound4VInFrustum (const OutBound:OutBound4V; const frustum:ClipArray):TInBoundingVolume;inline;
 function CalcAABBInFrustum (const AABB:TBoundingBox; const frustum:ClipArray):TInBoundingVolume;{inline;}
 
-function GetXfFromZ(oz:GDBVertex):GDBVertex;
+function GetXfFromZ(const oz:GDBVertex):GDBVertex;
 
-function MatrixDeterminant(M: DMatrix4D): Double;
+function MatrixDeterminant(const M: DMatrix4D): Double;
 function CreateMatrixFromBasis(const ox,oy,oz:GDBVertex):DMatrix4D;
 procedure CreateBasisFromMatrix(const m:DMatrix4D;out ox,oy,oz:GDBVertex);
 
@@ -344,7 +344,7 @@ begin
                                       result:=angle;
 end;
 
-function GetXfFromZ(oz:GDBVertex):GDBVertex;
+function GetXfFromZ(const oz:GDBVertex):GDBVertex;
 begin
      if (abs (oz.x) < 1/64) and (abs (oz.y) < 1/64) then
                                                                     result:=CrossVertex(YWCS,oz)
@@ -1078,7 +1078,7 @@ begin
     M[ZAxisIndex].v[WAxisIndex] := -MatrixDetInternal(a1, a2, a3, b1, b2, b3, d1, d2, d3);
     M[WAxisIndex].v[WAxisIndex] :=  MatrixDetInternal(a1, a2, a3, b1, b2, b3, c1, c2, c3);
 end;
-function MatrixDeterminant(M: DMatrix4D): Double;
+function MatrixDeterminant(const M: DMatrix4D): Double;
 var a1, a2, a3, a4,
     b1, b2, b3, b4,
     c1, c2, c3, c4,
@@ -1166,7 +1166,7 @@ begin
     Pb:=vertexadd(s0,VertexMulOnSc(v,b));
     result:=pb;
 end;
-function distance2piece(q:GDBvertex;var p1,p2:GDBvertex):{DistAndPoint}double;
+function distance2piece(const q:GDBvertex;var p1,p2:GDBvertex):{DistAndPoint}double;
 var t,w,p2x_p1x,p2y_p1y,qx_p1x,qy_p1y,qy_p2y,qx_p2x: double;
 begin
   p2x_p1x:=p2.x-p1.x;
@@ -1195,7 +1195,7 @@ begin
   result{.d}:= sqrt(t);
   //result.point:=
 end;
-function distance2ray(q:GDBvertex;const p1,p2:GDBvertex):DistAndt;
+function distance2ray(const q:GDBvertex;const p1,p2:GDBvertex):DistAndt;
 var w,v:gdbvertex;
     c1,c2:double;
 begin
@@ -1232,7 +1232,7 @@ begin
     t:= sqr((qx_p1x)*(p2y_p1y)-(qy_p1y)*(p2x_p1x))/(sqr(p2x_p1x)+sqr(p2y_p1y));
   result:= sqrt(t);
 end;
-function distance2piece_2(var q:GDBvertex2DI; p1,p2:GDBvertex2D): double;
+function distance2piece_2(var q:GDBvertex2DI; const p1,p2:GDBvertex2D): double;
 var t,w,p2x_p1x,p2y_p1y,qx_p1x,qy_p1y,qy_p2y,qx_p2x: double;
 begin
   p2x_p1x:=p2.x-p1.x;
@@ -1250,7 +1250,7 @@ begin
     t:= sqr((qx_p1x)*(p2y_p1y)-(qy_p1y)*(p2x_p1x))/(sqr(p2x_p1x)+sqr(p2y_p1y));
   result:= t;
 end;
-function distance2piece_2(var q:GDBvertex2DI; p1,p2:GDBvertex2DI): double;
+function distance2piece_2(var q:GDBvertex2DI; const p1,p2:GDBvertex2DI): double;
 var t,w,p2x_p1x,p2y_p1y,qx_p1x,qy_p1y,qy_p2y,qx_p2x: double;
 begin
   p2x_p1x:=p2.x-p1.x;
@@ -1268,7 +1268,7 @@ begin
     t:= sqr((qx_p1x)*(p2y_p1y)-(qy_p1y)*(p2x_p1x))/(sqr(p2x_p1x)+sqr(p2y_p1y));
   result:= t;
 end;
-function distance2piece_2dmy(var q:GDBvertex2D; p1,p2:GDBvertex2D): double;
+function distance2piece_2dmy(var q:GDBvertex2D; const p1,p2:GDBvertex2D): double;
 var t,w,p2x_p1x,p2y_p1y,qx_p1x,qy_p1y,qy_p2y,qx_p2x: double;
 begin
   p2x_p1x:=p2.x-p1.x;
@@ -1334,7 +1334,7 @@ begin
   Result[3].v[2] := V.z;
   Result[3].v[3] := 1;
 end;
-function CreateReflectionMatrix(plane:DVector4D): DMatrix4D;
+function CreateReflectionMatrix(const plane:DVector4D): DMatrix4D;
 begin
   result[0].v[0] :=-2 * plane.v[0] * plane.v[0] + 1;
   result[1].v[0] :=-2 * plane.v[0] * plane.v[1];
@@ -1448,7 +1448,7 @@ begin
                   M1[I].v[3] * M2[3].v[J];
   Result := TM;
 end;
-function MatrixMultiply(const M1: DMatrix4D; M2: DMatrix4F):DMatrix4D;
+function MatrixMultiply(const M1: DMatrix4D; const M2: DMatrix4F):DMatrix4D;
 
 var I, J: Integer;
     TM: DMatrix4D;

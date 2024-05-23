@@ -30,13 +30,13 @@ TZctnrVectorBytes=object(GZVector{-}<byte>{//})
                       name:AnsiString;
                       constructor init(m:Integer);
                       constructor initnul;
-                      constructor InitFromFile(FileName:Ansistring);
+                      constructor InitFromFile(const FileName:Ansistring);
                       function AddByte(PData:Pointer):Integer;virtual;
                       function AddByteByVal(Data:Byte):Integer;virtual;
                       function AddWord(PData:Pointer):Integer;virtual;
                       //function AddFontFloat(PData:Pointer):Integer;virtual;
-                      procedure TXTAddStringEOL(s:AnsiString);virtual;
-                      procedure TXTAddString(s:AnsiString);virtual;
+                      procedure TXTAddStringEOL(const s:AnsiString);virtual;
+                      procedure TXTAddString(const s:AnsiString);virtual;
                       function ReadData(PData:Pointer;SData:Word):Integer;virtual;
                       //function PopData(PData:Pointer;SData:Word):Integer;virtual;
                       function ReadString3(break, ignore: AnsiString): AnsiString;inline;
@@ -44,13 +44,13 @@ TZctnrVectorBytes=object(GZVector{-}<byte>{//})
                       function ReadString2:AnsiString;inline;
                       function GetCurrentReadAddres:Pointer;virtual;
                       function Jump(offset:Integer):Pointer;virtual;
-                      function SaveToFile(FileName:Ansistring):Integer;
-                      function ReadByte: Byte;
+                      function SaveToFile(const FileName:Ansistring):Integer;
+                      function ReadByte: Byte; inline;
                       function ReadWord: Word;
-                      function GetChar(rp:integer): Ansichar;
+                      function GetChar(rp:integer): Ansichar; inline;
                       function Seek(pos:Integer):integer;
                       function notEOF:Boolean;
-                      function readtoparser(break:AnsiString):AnsiString;
+                      function readtoparser(const break:AnsiString):AnsiString;
                       destructor done;virtual;
                    end;
 procedure WriteString_EOL(h: Integer; s: AnsiString);
@@ -70,8 +70,8 @@ end;
 
 procedure TZctnrVectorBytes.TXTAddStringEOL;
 begin
-     s:=s+lineend;
      self.TXTAddString(s);
+     self.TXTAddString(lineend);
 end;
 procedure TZctnrVectorBytes.TXTAddString;
 begin
@@ -177,7 +177,7 @@ begin
   //setlength(s,i-1);
   result := s;
 end;
-function readspace(expr:String):String;
+function readspace(const expr:String):String;
 var
   i:Integer;
 begin

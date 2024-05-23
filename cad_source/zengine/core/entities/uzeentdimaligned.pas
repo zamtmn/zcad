@@ -62,11 +62,11 @@ GDBObjAlignedDimension= object(GDBObjDimension)
 
                       procedure CalcDNVectors;virtual;
                       procedure CalcDefaultPlaceText(dlStart,dlEnd:Gdbvertex;var drawing:TDrawingDef);virtual;
-                      function P10ChangeTo(tv:GDBVertex):GDBVertex;virtual;
-                      function P11ChangeTo(tv:GDBVertex):GDBVertex;virtual;
+                      function P10ChangeTo(const tv:GDBVertex):GDBVertex;virtual;
+                      function P11ChangeTo(const tv:GDBVertex):GDBVertex;virtual;
                       //function P12ChangeTo(tv:GDBVertex):GDBVertex;virtual;
-                      function P13ChangeTo(tv:GDBVertex):GDBVertex;virtual;
-                      function P14ChangeTo(tv:GDBVertex):GDBVertex;virtual;
+                      function P13ChangeTo(const tv:GDBVertex):GDBVertex;virtual;
+                      function P14ChangeTo(const tv:GDBVertex):GDBVertex;virtual;
                       //function P15ChangeTo(tv:GDBVertex):GDBVertex;virtual;
                       //function P16ChangeTo(tv:GDBVertex):GDBVertex;virtual;
                        procedure SaveToDXF(var outhandle:{Integer}TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
@@ -74,15 +74,15 @@ GDBObjAlignedDimension= object(GDBObjDimension)
                        function GetObjType:TObjID;virtual;
                    end;
 {EXPORT-}
-function CorrectPointLine(q:GDBvertex;p1,p2:GDBvertex;out d:Double):GDBVertex;
-function GetTFromDirNormalizedPoint(q:GDBvertex;var p1,dirNormalized:GDBvertex):double;
+function CorrectPointLine(const q:GDBvertex;p1:GDBvertex; const p2:GDBvertex;out d:Double):GDBVertex;
+function GetTFromDirNormalizedPoint(const q:GDBvertex; const p1,dirNormalized:GDBvertex):double;
 implementation
 function GDBObjAlignedDimension.GetDimStr(var drawing:TDrawingDef):TDXFEntsInternalStringType;
 begin
      result:=GetLinearDimStr(abs(scalardot(vertexsub(DimData.P14InWCS,DimData.P13InWCS),vectorD)),drawing);
 end;
 
-function CorrectPointLine(q:GDBvertex;p1,p2:GDBvertex;out d:Double):GDBVertex;
+function CorrectPointLine(const q:GDBvertex; p1:GDBvertex; const p2:GDBvertex;out d:Double):GDBVertex;
 var w,l:GDBVertex;
     dist,llength:Double;
 begin
@@ -101,31 +101,33 @@ begin
      d:=Vertexlength(q,p1);
      if d>eps then
                   begin
-                       q:=uzegeometry.Vertexmorphabs2(p1,q,d);
-                       result:=VertexAdd(p2,VertexSub(q,p1));
+                       result:=VertexAdd(p2,VertexSub(
+                                                      uzegeometry.Vertexmorphabs2(p1,q,d)
+                                                      ,p1));
                   end
               else
                   result:=p2;
 end;
-function SetPointLine(d:Double;q:GDBvertex;p1,p2:GDBvertex):GDBVertex;
+function SetPointLine(d:Double;const q:GDBvertex;const p1,p2:GDBvertex):GDBVertex;
 var w,l:GDBVertex;
     dist:Double;
 begin
      w:=VertexSub(q,p1);
      l:=VertexSub(p2,p1);
      dist:=scalardot(w,l)/scalardot(l,l);
-     p1:=Vertexmorph(p1,p2,dist);
-     result:=uzegeometry.Vertexmorphabs2(p1,q,d);
+     result:=uzegeometry.Vertexmorphabs2(
+                                         Vertexmorph(p1,p2,dist)
+                                         ,q,d);
      //result:=VertexAdd(p2,VertexSub(q,p1));
 end;
-function GetTFromLinePoint(q:GDBvertex;var p1,p2:GDBvertex):double;
+function GetTFromLinePoint(const q:GDBvertex;const p1,p2:GDBvertex):double;
 var w,l:GDBVertex;
 begin
      w:=VertexSub(q,p1);
      l:=VertexSub(p2,p1);
      result:=scalardot(w,l)/scalardot(l,l);
 end;
-function GetTFromDirNormalizedPoint(q:GDBvertex;var p1,dirNormalized:GDBvertex):double;
+function GetTFromDirNormalizedPoint(const q:GDBvertex;const p1,dirNormalized:GDBvertex):double;
 var w:GDBVertex;
 begin
      w:=VertexSub(q,p1);
@@ -153,7 +155,7 @@ begin
   //DimData.P11InOCS:=VertexAdd(DimData.P11InOCS,vertexsub(DimData.P10InWCS,DimData.P14InWCS));
   DimData.P11InOCS:=VertexAdd(DimData.P11InOCS,getTextOffset(drawing));
 end;
-function GDBObjAlignedDimension.P10ChangeTo(tv:GDBVertex):GDBVertex;
+function GDBObjAlignedDimension.P10ChangeTo(const tv:GDBVertex):GDBVertex;
 var
     t,tl:Double;
     temp:GDBVertex;
@@ -162,19 +164,18 @@ begin
      begin
            tl:=scalardot(vertexsub(DimData.P14InWCS,DimData.P13InWCS),vectorD);
            temp:=VertexDmorph(DimData.P13InWCS,self.vectorD,tl);
-           tv:=CorrectPointLine(tv,DimData.P13InWCS,temp,t);
+           result:=CorrectPointLine(tv,DimData.P13InWCS,temp,t);
      end
      else
-           tv:=DimData.P14InWCS;
-     result:=tv;
-     DimData.P10InWCS:=tv;
+           result:=DimData.P14InWCS;
+     DimData.P10InWCS:=result;
      self.CalcDNVectors;
      if (self.DimData.TextMoved)and(PDimStyle.Placing.DIMTMOVE=DTMMoveDimLine) then
                                    DimData.P11InOCS:=SetPointLine(t,DimData.P11InOCS,DimData.P13InWCS,temp)
                                {else
                                    CalcDefaultPlaceText(DimData.P13InWCS,DimData.P14InWCS);}
 end;
-function GDBObjAlignedDimension.P11ChangeTo(tv:GDBVertex):GDBVertex;
+function GDBObjAlignedDimension.P11ChangeTo(const tv:GDBVertex):GDBVertex;
 var
     t,tl:Double;
     tvertex,temp:GDBVERTEX;
@@ -203,7 +204,7 @@ Alligned dimension structure in DXF
 X (13,23,33)     X (14,24,34)
 
 *)
-function GDBObjAlignedDimension.P13ChangeTo(tv:GDBVertex):GDBVertex;
+function GDBObjAlignedDimension.P13ChangeTo(const tv:GDBVertex):GDBVertex;
 var
     t,dir:Double;
     tvertex:GDBVERTEX;
@@ -240,7 +241,7 @@ begin
                                        //CalcDefaultPlaceText(DimData.P13InWCS,DimData.P14InWCS);
                                    end
 end;
-function GDBObjAlignedDimension.P14ChangeTo(tv:GDBVertex):GDBVertex;
+function GDBObjAlignedDimension.P14ChangeTo(const tv:GDBVertex):GDBVertex;
 var
     t,dir:Double;
     tvertex:GDBVERTEX;

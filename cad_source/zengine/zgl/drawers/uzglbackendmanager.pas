@@ -31,9 +31,9 @@ var
     BackendsNames:TEnumData;
 procedure RegisterBackend(BackEndClass:TVA;Name:string);
 function GetCurrentBackEnd:TVA;
-function SetCurrentBackEnd(BackEndName:string):boolean;
+function SetCurrentBackEnd(const BackEndName:string):boolean;
 implementation
-function SetCurrentBackEnd(BackEndName:string):boolean;
+function SetCurrentBackEnd(const BackEndName:string):boolean;
 var
   i:integer;
 begin

@@ -38,7 +38,7 @@ GDBObjBlockdef= object(GDBObjGenericSubEntry)
                      procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext;Stage:TEFStages=EFAllStages);virtual;
                      //function FindVariable(varname:String):pvardesk;virtual;
                      procedure LoadFromDXF(var f:TZMemReader;ptu:PExtensionData;var drawing:TDrawingDef);virtual;
-                     function ProcessFromDXFObjXData(_Name,_Value:String;ptu:PExtensionData;const drawing:TDrawingDef):Boolean;virtual;
+                     function ProcessFromDXFObjXData(const _Name,_Value:String;ptu:PExtensionData;const drawing:TDrawingDef):Boolean;virtual;
                      destructor done;virtual;
                      function GetMatrix:PDMatrix4D;virtual;
                      function GetHandle:PtrInt;virtual;

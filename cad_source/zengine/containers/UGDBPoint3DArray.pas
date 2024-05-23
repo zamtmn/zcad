@@ -27,9 +27,9 @@ type
 {REGISTEROBJECTTYPE GDBPoint3dArray}
 PGDBPoint3dArray=^GDBPoint3dArray;
 GDBPoint3dArray= object(GZVector{-}<GDBVertex>{//})(*OpenArrayOfData=GDBVertex*)
-                function onpoint(p:gdbvertex;closed:Boolean):Boolean;
+                function onpoint(const p:gdbvertex;closed:Boolean):Boolean;
                 function onmouse(const mf:ClipArray;const closed:Boolean):Boolean;virtual;
-                function CalcTrueInFrustum(frustum:ClipArray):TInBoundingVolume;virtual;
+                function CalcTrueInFrustum(const frustum:ClipArray):TInBoundingVolume;virtual;
                 {procedure DrawGeometry;virtual;
                 procedure DrawGeometry2;virtual;
                 procedure DrawGeometryWClosed(closed:Boolean);virtual;}
@@ -221,7 +221,7 @@ begin
    end;
 end;
 
-function GDBPoint3DArray.onpoint(p:gdbvertex;closed:Boolean):Boolean;
+function GDBPoint3DArray.onpoint(const p:gdbvertex;closed:Boolean):Boolean;
 var i{,counter}:Integer;
     d:Double;
     ptpv0,ptpv1:PGDBVertex;

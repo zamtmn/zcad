@@ -55,7 +55,7 @@ TSimpleDrawing= object(TAbstractDrawing)
                        constructor init(pcam:PGDBObjCamera);
                        destructor done;virtual;
                        procedure myGluProject2(objcoord:GDBVertex; out wincoord:GDBVertex);virtual;
-                       procedure myGluUnProject(win:GDBVertex;out obj:GDBvertex);virtual;
+                       procedure myGluUnProject(const win:GDBVertex;out obj:GDBvertex);virtual;
                        function GetPcamera:PGDBObjCamera;virtual;
                        function GetCurrentROOT:PGDBObjGenericSubEntry;virtual;
                        function GetCurrentRootSimple:Pointer;virtual;
@@ -644,7 +644,7 @@ begin
       objcoord:=vertexadd(objcoord,pcamera^.CamCSOffset);
      _myGluProject(objcoord.x,objcoord.y,objcoord.z,@pcamera^.modelMatrixLCS,@pcamera^.projMatrixLCS,@pcamera^.viewport,wincoord.x,wincoord.y,wincoord.z);
 end;
-procedure TSimpleDrawing.myGluUnProject(win:GDBVertex;out obj:GDBvertex);
+procedure TSimpleDrawing.myGluUnProject(const win:GDBVertex;out obj:GDBvertex);
 begin
      _myGluUnProject(win.x,win.y,win.z,@pcamera^.modelMatrixLCS,@pcamera^.projMatrixLCS,@pcamera^.viewport, obj.x,obj.y,obj.z);
      OBJ:=vertexsub(OBJ,pcamera^.CamCSOffset);

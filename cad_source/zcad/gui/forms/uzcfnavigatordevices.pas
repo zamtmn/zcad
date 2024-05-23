@@ -1042,7 +1042,7 @@ begin
   c:=a.FileName<b.FileName;
 end;
 
-procedure EnumerateCfgs(filename:String;pdata:pointer);
+procedure EnumerateCfgs(const filename:String;pdata:pointer);
 var
   fd:TCfgFileDesk;
 begin

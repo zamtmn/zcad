@@ -62,24 +62,24 @@ ObjectDescriptor=object(RecordDescriptor)
                        Properties:TPropertiesVector;
 
 
-                       constructor init(tname:string;pu:pointer);
-                       function CreateProperties(const f:TzeUnitsFormat;mode:PDMode;PPDA:PTPropertyDeskriptorArray;Name:TInternalScriptString;PCollapsed:Pointer;ownerattrib:Word;var bmode:Integer;const addr:Pointer;ValKey,ValType:TInternalScriptString):PTPropertyDeskriptorArray;virtual;
+                       constructor init(const tname:string;pu:pointer);
+                       function CreateProperties(const f:TzeUnitsFormat;mode:PDMode;PPDA:PTPropertyDeskriptorArray;const Name:TInternalScriptString;PCollapsed:Pointer;ownerattrib:Word;var bmode:Integer;const addr:Pointer;const ValKey,ValType:TInternalScriptString):PTPropertyDeskriptorArray;virtual;
                        procedure CopyTo(RD:PTUserTypeDescriptor);
                        procedure RegisterVMT(pv:Pointer);
                        procedure RegisterDefaultConstructor(pv:Pointer);
                        procedure RegisterObject(pv,pc:Pointer);
-                       procedure AddMetod(objname,mn,dt:TInternalScriptString;ma:Pointer;attr:GDBMetodModifier);
+                       procedure AddMetod(const objname,mn,dt:TInternalScriptString;ma:Pointer;attr:GDBMetodModifier);
                        procedure AddProperty(var pd:PropertyDescriptor);
-                       function FindMetod(mn:TInternalScriptString;obj:Pointer):PMetodDescriptor;virtual;
-                       function FindMetodAddr(mn:TInternalScriptString;obj:Pointer;out pmd:pMetodDescriptor):TMethod;virtual;
-                       procedure RunMetod(mn:TInternalScriptString;obj:Pointer);
-                       procedure SimpleRunMetodWithArg(mn:TInternalScriptString;obj,arg:Pointer);
+                       function FindMetod(const mn:TInternalScriptString;obj:Pointer):PMetodDescriptor;virtual;
+                       function FindMetodAddr(const mn:TInternalScriptString;obj:Pointer;out pmd:pMetodDescriptor):TMethod;virtual;
+                       procedure RunMetod(const mn:TInternalScriptString;obj:Pointer);
+                       procedure SimpleRunMetodWithArg(const mn:TInternalScriptString;obj,arg:Pointer);
                        procedure RunDefaultConstructor(PInstance:Pointer);
                        //function Serialize(PInstance:Pointer;SaveFlag:Word;var membuf:PTZctnrVectorBytes;var  linkbuf:PGDBOpenArrayOfTObjLinkRecord;var sub:integer):integer;virtual;
                        //function DeSerialize(PInstance:Pointer;SaveFlag:Word;var membuf:TZctnrVectorBytes;linkbuf:PGDBOpenArrayOfTObjLinkRecord):integer;virtual;
                        destructor Done;virtual;
                        function GetTypeAttributes:TTypeAttr;virtual;
-                       procedure SavePasToMem(var membuf:TZctnrVectorBytes;PInstance:Pointer;prefix:TInternalScriptString);virtual;
+                       procedure SavePasToMem(var membuf:TZctnrVectorBytes;PInstance:Pointer;const prefix:TInternalScriptString);virtual;
                        procedure MagicFreeInstance(PInstance:Pointer);virtual;
                        procedure RegisterTypeinfo(ti:PTypeInfo);virtual;
                        procedure CorrectFieldsOffset(ti: PTypeInfo);
@@ -231,7 +231,7 @@ begin
      //Pointer(pd.w):=nil;
 end;
 
-procedure ObjectDescriptor.SavePasToMem(var membuf:TZctnrVectorBytes;PInstance:Pointer;prefix:TInternalScriptString);
+procedure ObjectDescriptor.SavePasToMem(var membuf:TZctnrVectorBytes;PInstance:Pointer;const prefix:TInternalScriptString);
 //var pd:PFieldDescriptor;
 //    d:FieldDescriptor;
 //    ir:itrec;
@@ -506,7 +506,7 @@ begin
            pmd:=SimpleMenods.iterate(ir);
      until pmd=nil;
 end;
-function ObjectDescriptor.FindMetodAddr(mn:TInternalScriptString;obj:Pointer;out pmd:pMetodDescriptor):TMethod;
+function ObjectDescriptor.FindMetodAddr(const mn:TInternalScriptString;obj:Pointer;out pmd:pMetodDescriptor):TMethod;
 begin
      pmd:=findmetod(mn,obj);
      if pmd<>nil then
@@ -529,7 +529,7 @@ begin
           result.Code:=nil;
      end;
 end;
-procedure ObjectDescriptor.SimpleRunMetodWithArg(mn:TInternalScriptString;obj,arg:Pointer);
+procedure ObjectDescriptor.SimpleRunMetodWithArg(const mn:TInternalScriptString;obj,arg:Pointer);
 var pmd:pMetodDescriptor;
     tm:tmethod;
 begin

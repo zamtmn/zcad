@@ -76,12 +76,12 @@ TZGLGeneralDrawer=class(TZGLAbstractDrawer)
                         procedure SetOGLMatrix(const cam:GDBObjCamera;const w,h:integer);override;
                         procedure PostRenderDraw;override;
 
-                        procedure pushMatrixAndSetTransform(Transform:DMatrix4D;FromOneMatrix:Boolean=False);overload;override;
-                        procedure pushMatrixAndSetTransform(Transform:DMatrix4F;FromOneMatrix:Boolean=False);overload;override;
+                        procedure pushMatrixAndSetTransform(const Transform:DMatrix4D;FromOneMatrix:Boolean=False);overload;override;
+                        procedure pushMatrixAndSetTransform(const Transform:DMatrix4F;FromOneMatrix:Boolean=False);overload;override;
                         procedure popMatrix;override;
-                        procedure AddToLCS(v:GDBvertex);override;
+                        procedure AddToLCS(const v:GDBvertex);override;
                         function SetLCSState(State:boolean):boolean;override;
-                        function SetLCS(newLCS:GDBvertex):GDBvertex;override;
+                        function SetLCS(const newLCS:GDBvertex):GDBvertex;override;
                         function GetLCS:GDBvertex;override;
                    end;
    TLCSProp=record
@@ -102,7 +102,7 @@ begin
   Result:=LCS.notuseLCS;
   LCS.notuseLCS:=State;
 end;
-function TZGLGeneralDrawer.SetLCS(newLCS:GDBvertex):GDBvertex;
+function TZGLGeneralDrawer.SetLCS(const newLCS:GDBvertex):GDBvertex;
 begin
   Result:=LCS.CurrentCamCSOffset;
   LCS.CurrentCamCSOffset:=newLCS;
@@ -115,7 +115,7 @@ begin
   Result:=LCS.CurrentCamCSOffset;
 end;
 
-procedure TZGLGeneralDrawer.AddToLCS(v:GDBvertex);
+procedure TZGLGeneralDrawer.AddToLCS(const v:GDBvertex);
 begin
   LCS.CurrentCamCSOffset:=LCS.CurrentCamCSOffset+v;
   LCS.CurrentCamCSOffsetS.x:=LCS.CurrentCamCSOffsetS.x+v.x;
@@ -125,10 +125,10 @@ end;
 procedure TZGLGeneralDrawer.popMatrix;
 begin
 end;
-procedure TZGLGeneralDrawer.pushMatrixAndSetTransform(Transform:DMatrix4D;FromOneMatrix:Boolean=False);
+procedure TZGLGeneralDrawer.pushMatrixAndSetTransform(const Transform:DMatrix4D;FromOneMatrix:Boolean=False);
 begin
 end;
-procedure TZGLGeneralDrawer.pushMatrixAndSetTransform(Transform:DMatrix4F;FromOneMatrix:Boolean=False);
+procedure TZGLGeneralDrawer.pushMatrixAndSetTransform(const Transform:DMatrix4F;FromOneMatrix:Boolean=False);
 begin
 end;
 function TZGLGeneralDrawer.GetLLPrimitivesCreator:TLLPrimitivesCreatorAbstract;

@@ -95,7 +95,7 @@ type
                            procedure asyncupdatemouse(Data: PtrInt);override;
                            procedure asyncsendmouse(Data: PtrInt);override;
                            procedure set3dmouse;override;
-                           procedure SetCameraPosZoom(_pos:gdbvertex;_zoom:Double;finalcalk:Boolean);override;
+                           procedure SetCameraPosZoom(const _pos:gdbvertex;_zoom:Double;finalcalk:Boolean);override;
                            procedure DISP_ZoomFactor(x: double{; MousePos: TPoint});
                            procedure showmousecursor;override;
                            procedure hidemousecursor;override;
@@ -1260,7 +1260,7 @@ begin
   doCameraChanged;
 end;
 
-procedure TGeneralViewArea.SetCameraPosZoom(_pos:gdbvertex;_zoom:Double;finalcalk:Boolean);
+procedure TGeneralViewArea.SetCameraPosZoom(const _pos:gdbvertex;_zoom:Double;finalcalk:Boolean);
 var
   fv1: GDBVertex;
 begin

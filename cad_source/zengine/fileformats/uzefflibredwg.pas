@@ -62,7 +62,7 @@ begin
  lps.ProgressLongProcess(TLPSHandle(Data),Counter);
 end;
 
-procedure addfromdwg(filename:String;var ZCDCtx:TZDrawingContext{owner:PGDBObjGenericSubEntry;LoadMode:TLoadOpt;var drawing:TSimpleDrawing});
+procedure addfromdwg(const filename:String;var ZCDCtx:TZDrawingContext{owner:PGDBObjGenericSubEntry;LoadMode:TLoadOpt;var drawing:TSimpleDrawing});
 var
   dwg:Dwg_Data;
   Success:integer;
@@ -98,7 +98,7 @@ begin
   finally
   end;
 end;
-procedure addfromdxf(filename:String;var ZCDCtx:TZDrawingContext{owner:PGDBObjGenericSubEntry;LoadMode:TLoadOpt;var drawing:TSimpleDrawing});
+procedure addfromdxf(const filename:String;var ZCDCtx:TZDrawingContext{owner:PGDBObjGenericSubEntry;LoadMode:TLoadOpt;var drawing:TSimpleDrawing});
 var
   dwg:Dwg_Data;
   Success:integer;

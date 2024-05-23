@@ -24,7 +24,7 @@ uses LCLIntf,gdbentityfactory,zcadinterface,GDBLine,gdbobjectsconstdef,typinfo,
      zcadstrconsts,iodxf,fileutil,varman,uzegeometry,gdbasetypes,
      GDBGenericSubEntry,SysInfo,gdbase, GDBManager, sysutils, memman,UGDBDescriptor,
      uzctnrVectorBytes,GDBEntity,TypeDescriptors,ugdbsimpledrawing;
-procedure addfromdwg(name: String;owner:PGDBObjGenericSubEntry;LoadMode:TLoadOpt;var drawing:TSimpleDrawing);
+procedure addfromdwg(const name: String;owner:PGDBObjGenericSubEntry;LoadMode:TLoadOpt;var drawing:TSimpleDrawing);
 implementation
 uses {GDBBlockDef,}UGDBLayerArray,fileformatsmanager;
 
@@ -1395,7 +1395,7 @@ begin
          end;
 end;
 
-procedure addfromdwg(name: String;owner:PGDBObjGenericSubEntry;LoadMode:TLoadOpt;var drawing:TSimpleDrawing);
+procedure addfromdwg(const name: String;owner:PGDBObjGenericSubEntry;LoadMode:TLoadOpt;var drawing:TSimpleDrawing);
 var
   f: TZctnrVectorBytes;
   s: String;

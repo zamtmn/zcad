@@ -35,7 +35,7 @@ GDBPolyline2DArray= object(GZVector{-}<GDBVertex2D>{//})(*OpenArrayOfData=GDBVer
                       function _optimize:Boolean;virtual;
                       function inrect(Frame1, Frame2: GDBvertex2DI;inv:Boolean):Boolean;virtual;
                       function inrectd(Frame1, Frame2: GDBvertex2D;inv:Boolean):Boolean;virtual;
-                      function ispointinside(point:GDBVertex2D):Boolean;virtual;
+                      function ispointinside(const point:GDBVertex2D):Boolean;virtual;
                       procedure transform(const t_matrix:DMatrix4D);virtual;
                       function getoutbound:TBoundingBox;virtual;
                 end;
@@ -160,7 +160,7 @@ begin
     end;
 end;
 
-function GDBPolyline2DArray.ispointinside(point:GDBVertex2D):Boolean;
+function GDBPolyline2DArray.ispointinside(const point:GDBVertex2D):Boolean;
 var
     pv,pvnext:PGDBVertex2D;
     i,c:integer;

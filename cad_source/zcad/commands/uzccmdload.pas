@@ -37,8 +37,8 @@ uses
   sysutils,
   uzelongprocesssupport;
 
-function Load_Merge(Operands:TCommandOperands;LoadMode:TLoadOpt):TCommandResult;
-function Internal_Load_Merge(s: AnsiString;loadproc:TFileLoadProcedure;LoadMode:TLoadOpt):TCommandResult;
+function Load_Merge(const Operands:TCommandOperands;LoadMode:TLoadOpt):TCommandResult;
+function Internal_Load_Merge(const s: AnsiString;loadproc:TFileLoadProcedure;LoadMode:TLoadOpt):TCommandResult;
 
 implementation
 
@@ -73,7 +73,7 @@ begin
         until pv=nil;
 end;
 
-function Internal_Load_Merge(s: AnsiString;loadproc:TFileLoadProcedure;LoadMode:TLoadOpt):TCommandResult;
+function Internal_Load_Merge(const s: AnsiString;loadproc:TFileLoadProcedure;LoadMode:TLoadOpt):TCommandResult;
 var
    mem:TZctnrVectorBytes;
    pu:ptunit;
@@ -111,7 +111,7 @@ begin
   result:=cmd_ok;
 end;
 
-function Load_Merge(Operands:TCommandOperands;LoadMode:TLoadOpt):TCommandResult;
+function Load_Merge(const Operands:TCommandOperands;LoadMode:TLoadOpt):TCommandResult;
 var
    s: AnsiString;
    isload:boolean;

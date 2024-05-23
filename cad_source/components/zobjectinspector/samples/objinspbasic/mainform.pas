@@ -70,7 +70,7 @@ implementation
 { TForm1 }
 
 procedure TForm1.CreateForm(Sender: TObject);
-  procedure AddEditorToType(tn:string; CreateEditor:TCreateEditorFunc);//set editor to type
+  procedure AddEditorToType(const tn:string; CreateEditor:TCreateEditorFunc);//set editor to type
   var
      PT:PUserTypeDescriptor;
   begin

@@ -22,7 +22,7 @@ interface
 uses {$IFNDEF DELPHI}{fileutil,}{$ENDIF}uzbtypes,sysutils,strutils{$IFNDEF DELPHI},{LCLProc}LazUTF8,lazutf16{$ENDIF};
 function GetPredStr(var s: String; substr: String): String;overload;
 function GetPredStr(var s: String; substrs: array of const; out nearestsubstr:string): String;overload;
-function readspace(expr: String): String;
+function readspace(const expr: String): String;
 
 //function sys2interf(s:String):String;
 function Tria_Utf8ToAnsi(const s:string):string;
@@ -40,7 +40,7 @@ function CompareNUMSTR(str1,str2:String):Boolean;
 function AnsiNaturalCompare(const str1, str2: string; vCaseSensitive: boolean = False): integer;
 
 function ConvertFromDxfString(str:TDXFEntsInternalStringType):String;
-function ConvertToDxfString(str:String):TDXFEntsInternalStringType;
+function ConvertToDxfString(const str:String):TDXFEntsInternalStringType;
 function MakeHash(const s: String):SizeUInt;//TODO в gzctnrSTL есть копия этой процедуры. надо убирать
 
 procedure KillString(var str:String);inline;
@@ -126,7 +126,7 @@ begin
      {$IFNDEF DELPHI}result:=UTF8Encode(StringsReplace(str, ['\P'],[LineEnding],[rfReplaceAll,rfIgnoreCase]));{$ENDIF}
 end;
 
-function ConvertToDxfString(str:String):TDXFEntsInternalStringType;
+function ConvertToDxfString(const str:String):TDXFEntsInternalStringType;
 begin
      //{$IFNDEF DELPHI}result:=StringsReplace(str, [LineEnding],['\P'],[rfReplaceAll,rfIgnoreCase]);{$ENDIF}
      result:={Tria_Utf8ToAnsi}UTF8ToString(StringsReplace(str, [LineEnding],['\P'],[rfReplaceAll,rfIgnoreCase]));
@@ -175,7 +175,7 @@ begin
      //                uch:=uch;
      {$ENDIF}
 end;
-function GetDigitCount(str1:String):Integer;
+function GetDigitCount(const str1:String):Integer;
 begin
 
      if str1='' then
@@ -370,7 +370,7 @@ else
           end;
      end;
 end;
-function readspace(expr: String): String;
+function readspace(const expr: String): String;
 var
   i: Integer;
 //  s:string;

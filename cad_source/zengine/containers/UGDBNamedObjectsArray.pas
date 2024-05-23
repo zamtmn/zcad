@@ -31,12 +31,12 @@ TForCResult=(IsFounded(*'IsFounded'*)=1,
 GDBNamedObjectsArray{-}<PTObj,TObj>{//}
                      = object(GZVectorPObects{-}<PTObj,TObj>{//})
                     constructor init(m:Integer);
-                    function getIndex(name: String):Integer;
-                    function getAddres(name: String):Pointer;
+                    function getIndex(const name: String):Integer;
+                    function getAddres(const name: String):Pointer;
                     function GetIndexByPointer(p:PGDBNamedObject):Integer;
-                    function AddItem(name:String; out PItem:Pointer):TForCResult;
-                    function MergeItem(name:String;LoadMode:TLoadOpt):Pointer;
-                    function GetFreeName(NameFormat:String;firstindex:integer):String;
+                    function AddItem(const name:String; out PItem:Pointer):TForCResult;
+                    function MergeItem(const name:String;LoadMode:TLoadOpt):Pointer;
+                    function GetFreeName(const NameFormat:String;firstindex:integer):String;
                     procedure IterateCounter(PCounted:Pointer;var Counter:Integer;proc:TProcCounter);virtual;
               end;
 {EXPORT-}
@@ -58,7 +58,7 @@ begin
     p:=iterate(ir);
     until p=nil;
 end;
-function GDBNamedObjectsArray<PTObj,TObj>.GetFreeName(NameFormat:String;firstindex:integer):String;
+function GDBNamedObjectsArray<PTObj,TObj>.GetFreeName(const NameFormat:String;firstindex:integer):String;
 var
    counter,LoopCounter:integer;
    OldName:String;
@@ -87,7 +87,7 @@ begin
   OldName:=result;
   until getIndex(result)=-1;
 end;
-function GDBNamedObjectsArray<PTObj,TObj>.MergeItem(name:String;LoadMode:TLoadOpt):Pointer;
+function GDBNamedObjectsArray<PTObj,TObj>.MergeItem(const name:String;LoadMode:TLoadOpt):Pointer;
 begin
      if AddItem(name,result)=IsFounded then
                        begin
@@ -101,15 +101,17 @@ function GDBNamedObjectsArray<PTObj,TObj>.AddItem;
 var
   p:PGDBNamedObject;
   ir:itrec;
+  name_upper:string;
 begin
   PItem:=nil;
   begin
        p:=beginiterate(ir);
+       name_upper:=uppercase(name);
        if p<>nil then
        begin
        result:=IsFounded;
        repeat
-            if uppercase(p^.name) = uppercase(name) then
+            if uppercase(p^.name) = name_upper then
                                                         begin
                                                              PItem:=p;
                                                              system.exit;
@@ -130,37 +132,45 @@ end;
 function GDBNamedObjectsArray<PTObj,TObj>.getIndex;
 var
   p:PGDBNamedObject;
-    ir:itrec;
+  ir:itrec;
+  name_upper: String;
 begin
   result := -1;
 
   p:=beginiterate(ir);
   if p<>nil then
-  repeat
-    if uppercase(p^.name) = uppercase(name) then
-    begin
-      result := ir.itc;
-      exit;
-    end;
-    p:=iterate(ir);
-  until p=nil;
+  begin
+    name_upper:=uppercase(name);// Может вызывать отложенно? по флагу
+    repeat
+      if uppercase(p^.name) = name_upper then
+      begin
+        result := ir.itc;
+        exit;
+      end;
+      p:=iterate(ir);
+    until p=nil;
+  end;
 end;
 function GDBNamedObjectsArray<PTObj,TObj>.getAddres;
 var
   p:PGDBNamedObject;
       ir:itrec;
+  name_upper:string;
 begin
   result:=nil;
   p:=beginiterate(ir);
   if p<>nil then
-  repeat
-    if uppercase(p^.name) = uppercase(name) then
-    begin
-      result := p;
-      exit;
-    end;
-    p:=iterate(ir);
-  until p=nil;
+  begin
+    name_upper:=uppercase(name);
+    repeat
+      if uppercase(p^.name) = name_upper then
+      begin
+        result := p;
+        exit;
+      end;
+      p:=iterate(ir);
+    until p=nil;
+  end;
 end;
 function GDBNamedObjectsArray<PTObj,TObj>.GetIndexByPointer(p:PGDBNamedObject):Integer;
 var

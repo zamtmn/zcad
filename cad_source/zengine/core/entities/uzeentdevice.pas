@@ -39,8 +39,8 @@ GDBObjDevice= object(GDBObjBlockInsert)
                    constructor initnul;
                    constructor init(own:Pointer;layeraddres:PGDBLayerProp;LW:SmallInt);
                    destructor done;virtual;
-                   function CalcInFrustum(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:Integer; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double):Boolean;virtual;
-                   function CalcTrueInFrustum(frustum:ClipArray;visibleactualy:TActulity):TInBoundingVolume;virtual;
+                   function CalcInFrustum(const frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:Integer; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double):Boolean;virtual;
+                   function CalcTrueInFrustum(const frustum:ClipArray;visibleactualy:TActulity):TInBoundingVolume;virtual;
                    procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext;Stage:TEFStages=EFAllStages);virtual;
                    function IsStagedFormatEntity:boolean;virtual;
                    procedure FormatFeatures(var drawing:TDrawingDef);virtual;
@@ -558,7 +558,7 @@ begin
           if not PBlockDefArray(PGDBObjBlockdefArray(drawing.GetBlockDefArraySimple).parray)^[index].Formated then
                                                                                PBlockDefArray(PGDBObjBlockdefArray(drawing.GetBlockDefArraySimple).parray)^[index].formatEntity(drawing,dc);
           //index:=gdb.GetCurrentDWG.BlockDefArray.getindex(pansichar(name));
-          index:=PGDBObjBlockdefArray(drawing.GetBlockDefArraySimple).getindex(pansichar(name));
+          index:=PGDBObjBlockdefArray(drawing.GetBlockDefArraySimple).getindex(name);
           assert((index>=0) and (index<PGDBObjBlockdefArray(drawing.GetBlockDefArraySimple).count), rsWrongBlockDefIndex);
           ConstObjArray.free;
           //pblockdef:=gdb.GetCurrentDWG.BlockDefArray.getDataMutable(index);
@@ -680,7 +680,7 @@ begin
     if assigned(EntExtensions)then
       EntExtensions.RunOnBeforeEntityFormat(@self,drawing,DC);
   end;
-  index:=PGDBObjBlockdefArray(drawing.GetBlockDefArraySimple).getindex(pansichar(name));
+  index:=PGDBObjBlockdefArray(drawing.GetBlockDefArraySimple).getindex(name);
   FormatFeatures(drawing);
   CalcObjMatrix(@drawing);
   ConstObjArray.FormatEntity(drawing,dc,stage);
@@ -714,7 +714,7 @@ begin
 end;
 function UpgradeBlockInsert2Device(ptu:PTAbstractUnit;pent:PGDBObjBlockInsert;const drawing:TDrawingDef):PGDBObjDevice;
 begin
-     pent^.index:=PGDBObjBlockdefArray(drawing.GetBlockDefArraySimple).getindex(pansichar(pent^.name));
+     pent^.index:=PGDBObjBlockdefArray(drawing.GetBlockDefArraySimple).getindex(pent^.name);
      result:=nil;
      begin
           result:=AllocAndInitDevice(pent^.bp.ListPos.Owner);
@@ -731,7 +731,7 @@ begin
                                                               //PExtAttrib:=nil;
                                                               end;
           result^.name:=copy(result^.name,8,length(result^.name)-7);
-          result^.index:=PGDBObjBlockdefArray(drawing.GetBlockDefArraySimple).getindex(pansichar(result^.name));
+          result^.index:=PGDBObjBlockdefArray(drawing.GetBlockDefArraySimple).getindex(result^.name);
      end;
 end;
 class function GDBObjDevice.GetDXFIOFeatures:TDXFEntIODataManager;

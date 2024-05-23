@@ -62,7 +62,7 @@ GDBObjMText= object(GDBObjText)
                  function GetObjType:TObjID;virtual;
             end;
 {Export-}
-procedure FormatMtext(pfont:pgdbfont;width,size,wfactor:Double;content:TDXFEntsInternalStringType;var text:XYZWStringArray);
+procedure FormatMtext(pfont:pgdbfont;width,size,wfactor:Double;const content:TDXFEntsInternalStringType;var text:XYZWStringArray);
 function GetLinesH(linespace,size:Double;var lines:XYZWStringArray):Double;
 function GetLinesW(var lines:XYZWStringArray):Double;
 function GetLineSpaceFromLineSpaceF(linespacef,size:Double):Double;
@@ -155,7 +155,7 @@ begin
                else
                    result:=0;
 end;
-procedure FormatMtext(pfont:pgdbfont;width,size,wfactor:Double;content:TDXFEntsInternalStringType;var text:XYZWStringArray);
+procedure FormatMtext(pfont:pgdbfont;width,size,wfactor:Double;const content:TDXFEntsInternalStringType;var text:XYZWStringArray);
 var
   canbreak: Boolean;
   currsymbol, lastbreak, lastcanbreak: Integer;

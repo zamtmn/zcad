@@ -61,7 +61,7 @@ type
     function BeforeClick(const Context:TZCADCommandContext;wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record): Integer; virtual;
     function AfterClick(const Context:TZCADCommandContext;wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record): Integer; virtual;
     function CalcTransformMatrix(p1,p2: GDBvertex):DMatrix4D; virtual;
-    function Move(dispmatr:DMatrix4D;UndoMaker:String): Integer;
+    function Move(const dispmatr:DMatrix4D;UndoMaker:String): Integer;
     procedure showprompt(mklick:integer);virtual;
   end;
 {EXPORT-}
@@ -169,7 +169,7 @@ begin
         dist:=uzegeometry.VertexSub(p2,p1);
         result:=uzegeometry.CreateTranslationMatrix(dist);
 end;
-function Move_com.Move(dispmatr:DMatrix4D;UndoMaker:String): Integer;
+function Move_com.Move(const dispmatr:DMatrix4D;UndoMaker:String): Integer;
 var
     //dist:gdbvertex;
     im:DMatrix4D;

@@ -64,7 +64,7 @@ GDBObjLWPolyline= object(GDBObjWithLocalCS)
                  procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext;Stage:TEFStages=EFAllStages);virtual;
                  function CalcSquare:Double;virtual;
                  //**попадаетли данная координата внутрь контура
-                 function isPointInside(point:GDBVertex):Boolean;virtual;
+                 function isPointInside(const point:GDBVertex):Boolean;virtual;
                  procedure createpoint;virtual;
                  procedure CalcWidthSegment;virtual;
                  destructor done;virtual;
@@ -76,7 +76,7 @@ GDBObjLWPolyline= object(GDBObjWithLocalCS)
                  procedure rtmodifyonepoint(const rtmod:TRTModifyData);virtual;
                  procedure rtsave(refp:Pointer);virtual;
                  procedure getoutbound(var DC:TDrawContext);virtual;
-                 function CalcTrueInFrustum(frustum:ClipArray;visibleactualy:TActulity):TInBoundingVolume;virtual;
+                 function CalcTrueInFrustum(const frustum:ClipArray;visibleactualy:TActulity):TInBoundingVolume;virtual;
                  //function InRect:TInRect;virtual;
                  function onmouse(var popa:TZctnrVectorPGDBaseObjects;const MF:ClipArray;InSubEntry:Boolean):Boolean;virtual;
                  function onpoint(var objects:TZctnrVectorPGDBaseObjects;const point:GDBVertex):Boolean;virtual;
@@ -86,7 +86,7 @@ GDBObjLWPolyline= object(GDBObjWithLocalCS)
                  procedure AddOnTrackAxis(var posr:os_record;const processaxis:taddotrac);virtual;
                  procedure transform(const t_matrix:DMatrix4D);virtual;
                  procedure TransformAt(p:PGDBObjEntity;t_matrix:PDMatrix4D);virtual;
-                 function GetTangentInPoint(point:GDBVertex):GDBVertex;virtual;
+                 function GetTangentInPoint(const point:GDBVertex):GDBVertex;virtual;
 
                  procedure higlight(var DC:TDrawContext);virtual;
 
@@ -101,7 +101,7 @@ var
 procedure GDBObjLWpolyline.higlight(var DC:TDrawContext);
 begin
 end;
-function GDBObjLWpolyline.GetTangentInPoint(point:GDBVertex):GDBVertex;
+function GDBObjLWpolyline.GetTangentInPoint(const point:GDBVertex):GDBVertex;
 var //tv:gdbvertex;
     ptv,ppredtv:pgdbvertex;
     ir:itrec;
@@ -805,15 +805,17 @@ begin
   end;
   SaveToDXFObjPostfix(outhandle);
 end;
-function GDBObjLWpolyline.isPointInside(point:GDBVertex):Boolean;
+function GDBObjLWpolyline.isPointInside(const point:GDBVertex):Boolean;
 var m: DMatrix4D;
     p:GDBVertex2D;
 begin
      m:=self.getmatrix^;
      uzegeometry.MatrixInvert(m);
-     point:=VectorTransform3D(point,m);
-     p.x:=point.x;
-     p.y:=point.y;
+     with VectorTransform3D(point,m) do
+     begin
+       p.x:=x;
+       p.y:=y;
+     end;
      result:=Vertex2D_in_OCS_Array.ispointinside(p);
 end;
 

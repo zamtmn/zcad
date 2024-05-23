@@ -84,12 +84,12 @@ TZGLAbstractDrawer=class
 
                         function ProjectPoint3DInModelSpace(const p:gdbvertex;var matrixs:tmatrixs):GDBvertex2D;virtual;abstract;
 
-                        procedure pushMatrixAndSetTransform(Transform:DMatrix4D;ResetLCS:Boolean=False);overload;virtual;abstract;
-                        procedure pushMatrixAndSetTransform(Transform:DMatrix4F;ResetLCS:Boolean=False);overload;virtual;abstract;
+                        procedure pushMatrixAndSetTransform(const Transform:DMatrix4D;ResetLCS:Boolean=False);overload;virtual;abstract;
+                        procedure pushMatrixAndSetTransform(const Transform:DMatrix4F;ResetLCS:Boolean=False);overload;virtual;abstract;
                         procedure DisableLCS(var matrixs:tmatrixs);overload;virtual;abstract;
-                        procedure AddToLCS(v:GDBvertex);virtual;abstract;
+                        procedure AddToLCS(const v:GDBvertex);virtual;abstract;
                         function SetLCSState(State:boolean):boolean;virtual;abstract;
-                        function SetLCS(newLCS:GDBvertex):GDBvertex;virtual;abstract;
+                        function SetLCS(const newLCS:GDBvertex):GDBvertex;virtual;abstract;
                         function GetLCS:GDBvertex;virtual;abstract;
                         procedure EnableLCS(var matrixs:tmatrixs);overload;virtual;abstract;
                         procedure popMatrix;virtual;abstract;

@@ -68,7 +68,7 @@ GDBObjHatch= object(GDBObjWithLocalCS)
                  procedure DrawStrokes(var Strokes:TPatStrokesArray;var st:Double;const p1,p2:GDBvertex2D;var DC:TDrawContext);
                  procedure FillPattern(var Strokes:TPatStrokesArray;var DC:TDrawContext);
                  procedure DrawGeometry(lw:Integer;var DC:TDrawContext);virtual;
-                 function ObjToString(prefix,sufix:String):String;virtual;
+                 function ObjToString(const prefix,sufix:String):String;virtual;
                  destructor done;virtual;
 
                  function GetObjTypeName:String;virtual;
@@ -80,7 +80,7 @@ GDBObjHatch= object(GDBObjWithLocalCS)
 
                  procedure createpoint;virtual;
                  procedure getoutbound(var DC:TDrawContext);virtual;
-                 function CalcTrueInFrustum(frustum:ClipArray;visibleactualy:TActulity):TInBoundingVolume;virtual;
+                 function CalcTrueInFrustum(const frustum:ClipArray;visibleactualy:TActulity):TInBoundingVolume;virtual;
                  procedure remaponecontrolpoint(pdesc:pcontrolpointdesc);virtual;
                  procedure RenderFeedback(pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc;var DC:TDrawContext);virtual;
                  procedure addcontrolpoints(tdesc:Pointer);virtual;
@@ -152,7 +152,7 @@ begin
   end;
   PatternName:='';
 end;
-function GDBObjHatch.ObjToString(prefix,sufix:String):String;
+function GDBObjHatch.ObjToString(const prefix,sufix:String):String;
 begin
      result:=prefix+inherited ObjToString('GDBObjHatch (addr:',')')+sufix;
 end;

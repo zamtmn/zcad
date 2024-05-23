@@ -73,7 +73,7 @@ ZGLGraphix= object(ZGLVectorObject)
 var
     sysvarDWGRotateTextInLT:boolean=true;
     SysVarRDMaxLTPatternsInEntity:integer=1000;
-function getsymbol_fromGDBText(s:TDXFEntsInternalStringType; i:integer;out l:integer;const fontunicode:Boolean):word;
+function getsymbol_fromGDBText(const s:TDXFEntsInternalStringType; i:integer;out l:integer;const fontunicode:Boolean):word;
 implementation
 {function ZGLGraphix.CanSimplyDrawInOCS(const DC:TDrawContext;const SqrParamSize,TargetSize:Double):Boolean;
 //false - не упрощать, true - упрощать. в GDBObjWithLocalCS.CanSimplyDrawInOCS наоборот
@@ -86,14 +86,14 @@ begin
                                result:=true;
 end;}
 
-function getsymbol_fromGDBText(s:TDXFEntsInternalStringType; i:integer;out l:integer;const fontunicode:Boolean):word;
+function getsymbol_fromGDBText(const s:TDXFEntsInternalStringType; i:integer;out l:integer;const fontunicode:Boolean):word;
 var
    ts:TDXFEntsInternalStringType;
    code:integer;
 begin
      if length(s)>=i+6 then
      if s[i]='\' then
-     if uppercase(s[i+1])='U' then
+     if s[i+1] in ['U','u'] then
      if s[i+2]='+' then
      begin
           ts:='$'+copy(s,i+3,4);
@@ -453,7 +453,7 @@ begin
      AddPoint(rc,p);
      //points.Add(@p);
 end;
-function creatematrix(PInsert:GDBVertex; //Точка вставки
+function creatematrix(const PInsert:GDBVertex; //Точка вставки
                       param:shxprop;     //Параметры текста
                       LineAngle,         //Угол линии
                       Scale:Double)   //Масштаб линии
@@ -481,7 +481,7 @@ begin
     result:=MatrixMultiply(result,mentrot);
     result:=MatrixMultiply(result,mtrans);
 end;
-function CreateReadableMatrix(PInsert:GDBVertex; //Точка вставки
+function CreateReadableMatrix(const PInsert:GDBVertex; //Точка вставки
                       param:shxprop;     //Параметры текста
                       LineAngle,         //Угол линии
                       Scale:Double;

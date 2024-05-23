@@ -50,10 +50,10 @@ GDBTextStyleArray= object(GDBNamedObjectsArray{-}<PGDBTextStyle,GDBTextStyle>{//
                     constructor init(m:Integer);
                     constructor initnul;
 
-                    function addstyle(StyleName,AFontFile,AFontFamily:String;tp:GDBTextStyleProp;USedInLT:Boolean):PGDBTextStyle;
-                    function setstyle(StyleName,AFontFile,AFontFamily:String;tp:GDBTextStyleProp;USedInLT:Boolean):PGDBTextStyle;
-                    procedure internalsetstyle(var style:GDBTextStyle;AFontFile,AFontFamily:String;tp:GDBTextStyleProp;USedInLT:Boolean);
-                    function FindStyle(StyleName:String;ult:Boolean):PGDBTextStyle;
+                    function addstyle(const StyleName,AFontFile,AFontFamily:String;tp:GDBTextStyleProp;USedInLT:Boolean):PGDBTextStyle;
+                    function setstyle(const StyleName,AFontFile,AFontFamily:String;tp:GDBTextStyleProp;USedInLT:Boolean):PGDBTextStyle;
+                    procedure internalsetstyle(var style:GDBTextStyle;const AFontFile,AFontFamily:String;tp:GDBTextStyleProp;USedInLT:Boolean);
+                    function FindStyle(const StyleName:String;ult:Boolean):PGDBTextStyle;
                     procedure freeelement(PItem:PT);virtual;
                     function CorrectNilledTextStyle(pts:PGDBTextStyle):PGDBTextStyle;
               end;
@@ -101,7 +101,7 @@ begin
     {todo: централизовать все строки с dxf терминами наподобии 'Standard'}
 end;
 
-procedure GDBTextStyleArray.internalsetstyle(var style:GDBTextStyle;AFontFile,AFontFamily:String;tp:GDBTextStyleProp;USedInLT:Boolean);
+procedure GDBTextStyleArray.internalsetstyle(var style:GDBTextStyle;const AFontFile,AFontFamily:String;tp:GDBTextStyleProp;USedInLT:Boolean);
 begin
   style.FontFile:=AFontFile;
   style.FontFamily:=AFontFamily;
@@ -121,7 +121,7 @@ begin
   style.prop:=tp;
 end;
 
-function GDBTextStyleArray.setstyle(StyleName,AFontFile,AFontFamily:String;tp:GDBTextStyleProp;USedInLT:Boolean):PGDBTextStyle;
+function GDBTextStyleArray.setstyle(const StyleName,AFontFile,AFontFamily:String;tp:GDBTextStyleProp;USedInLT:Boolean):PGDBTextStyle;
 var
    ps:PGDBTextStyle;
 begin
@@ -130,7 +130,7 @@ begin
   if ps<>nil then
     internalsetstyle(ps^,AFontFile,AFontFamily,tp,USedInLT);
 end;
-function GDBTextStyleArray.addstyle(StyleName,AFontFile,AFontFamily:String;tp:GDBTextStyleProp;USedInLT:Boolean):{Integer}PGDBTextStyle;
+function GDBTextStyleArray.addstyle(const StyleName,AFontFile,AFontFamily:String;tp:GDBTextStyleProp;USedInLT:Boolean):{Integer}PGDBTextStyle;
 var ts:PGDBTextStyle;
 begin
   Getmem(pointer(ts),sizeof(GDBTextStyle));

@@ -200,11 +200,11 @@ begin
      until s='';
      EnableTranslate;
 end;
-procedure loaddev(fn:string;pdata:pointer);
+procedure loaddev(const fn:string;pdata:pointer);
 begin
      units.loadunit(GetSupportPath,InterfaceTranslate,{utf8tosys}(fn),nil);
 end;
-procedure loadvariants(fn:string;pdata:pointer);
+procedure loadvariants(const fn:string;pdata:pointer);
 var
    pvd:pvardesk;
    pfd:PFieldDescriptor;

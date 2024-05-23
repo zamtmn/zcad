@@ -126,7 +126,7 @@ begin
 end;
 procedure TextIOSave_TMPL1(var outhandle:TZctnrVectorBytes;PEnt:PGDBObjText);
 begin
-     if UnicodeStringReplace(pent^.content,#10,'\P',[rfReplaceAll])<>convertfromunicode(pent^.template) then
+     if UnicodeStringReplace(pent^.content,#10,'\P',[rfReplaceAll])<>pent^.template{convertfromunicode(pent^.template)} then
        dxfStringout(outhandle,1000,'_TMPL1='+string(pent^.template));
 end;
 

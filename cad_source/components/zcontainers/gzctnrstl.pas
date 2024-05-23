@@ -25,7 +25,7 @@ uses
 type
 TMyMapGenOld <TKey, TValue, TCompare> = class( TMap<TKey, TValue, TCompare>);
 TMyMapGen <TKey,TValue> = class( TDictionary<TKey,TValue>)
-  function MyGetValue(key:TKey):TValue;inline;
+  function MyGetValue(const key:TKey):TValue;inline;
   //function MyGetMutableValue(key:TKey; out PAValue:PValue):boolean;
 end;
 TMyMap <TKey, TValue> = class( TMyMapGen<TKey, TValue>)
@@ -39,14 +39,14 @@ TMyMapCounter<TKey>=class(TMyGenMapCounter<TKey,SizeUInt>);
 
 GKey2DataMap <TKey, TValue> = class(TMyMapGen<TKey, TValue>)
         procedure RegisterKey(const key:TKey; const Value:TValue);
-        function MyGetValue(key:TKey; out Value:TValue):boolean;
-        function MyContans(key:TKey):boolean;
+        function MyGetValue(const key:TKey; out Value:TValue):boolean;
+        function MyContans(const key:TKey):boolean;
 end;
   GKey2DataMapOld <TKey, TValue, TCompare> = class(TMap<TKey, TValue, TCompare>)
     procedure RegisterKey(const key:TKey; const Value:TValue);
     //function MyGetValue(key:TKey; out Value:TValue):boolean;
     //function MyGetMutableValue(key:TKey; out PValue:{$IFNDEF DELPHI}PTValue{$ENDIF}{$IFDEF DELPHI}pointer{$ENDIF}):boolean;
-    function MyContans(key:TKey):boolean;
+    function MyContans(const key:TKey):boolean;
 end;
 TMyVector <T> = class(TVector<T>)
    procedure CopyTo(Dst:TMyVector<T>);
@@ -152,16 +152,16 @@ procedure GKey2DataMap<TKey, TValue>.RegisterKey(const key:TKey; const Value:TVa
 begin
   AddOrSetValue(Key,Value);
 end;
-function GKey2DataMap<TKey, TValue>.MyGetValue(key:TKey; out Value:TValue):boolean;
+function GKey2DataMap<TKey, TValue>.MyGetValue(const key:TKey; out Value:TValue):boolean;
 begin
   result:=TryGetValue(Key,Value);
 end;
-function GKey2DataMap<TKey, TValue>.MyContans(key:TKey):boolean;
+function GKey2DataMap<TKey, TValue>.MyContans(const key:TKey):boolean;
 begin
   result:=ContainsKey(Key);
 end;
 
-function TMyMapGen<TKey, TValue>.MyGetValue(key:TKey):TValue;
+function TMyMapGen<TKey, TValue>.MyGetValue(const key:TKey):TValue;
 var
   pv:^TValue;
 begin
@@ -252,7 +252,7 @@ begin
     PValue:=@Node^.Data.Value;
   end;
 end;}
-function GKey2DataMapOld<TKey, TValue,TCompare>.MyContans(key:TKey):boolean;
+function GKey2DataMapOld<TKey, TValue,TCompare>.MyContans(const key:TKey):boolean;
 var
    Pair:TPair;
    Node: TMSet.PNode;

@@ -44,11 +44,11 @@ type
       constructor Create;overload;
       constructor Create(TheOwner: TComponent); override;overload;
       destructor destroy; override;
-      function loadicon(f:string):integer;
-      procedure ScanDir(path:string);
-      procedure LoadAliasesDir(path:string);
-      function GetImageIndex(ImageName:string):integer;overload;
-      function GetImageIndex(ImageName:string;DefaultInd:integer):integer;overload;
+      function loadicon(const f:string):integer;
+      procedure ScanDir(const path:string);
+      procedure LoadAliasesDir(const path:string);
+      function GetImageIndex(const ImageName:string):integer;overload;
+      function GetImageIndex(const ImageName:string;DefaultInd:integer):integer;overload;
     published
       property IconList: TImageList read FIconList write FIconList;
       property DefaultImageIndex:integer read FDefaultImageIndex write FDefaultImageIndex;
@@ -92,7 +92,7 @@ begin
   FreeAndNil(FIconList);
   FreeAndNil(ImageDataMap);
 end;
-procedure {TImagesManager.}FoundImage(filename:String;pdata:pointer);
+procedure {TImagesManager.}FoundImage(const filename:String;pdata:pointer);
 var
    ID:TImageData;
    PID:TImageName2TImageDataMap.PValue;
@@ -114,11 +114,11 @@ begin
       ImagesManager.ImageDataMap.RegisterKey(internalname,id)
     end;
 end;
-function TImagesManager.GetImageIndex(ImageName:string):integer;
+function TImagesManager.GetImageIndex(const ImageName:string):integer;
 begin
   result:=GetImageIndex(ImageName,defaultimageindex)
 end;
-function TImagesManager.GetImageIndex(ImageName:string;DefaultInd:integer):integer;
+function TImagesManager.GetImageIndex(const ImageName:string;DefaultInd:integer):integer;
 var
    PID:TImageName2TImageDataMap.PValue;
    internalname:string;
@@ -136,7 +136,7 @@ begin
        result:=DefaultInd;
      end;
 end;
-procedure TImagesManager.LoadAliasesDir(path:string);
+procedure TImagesManager.LoadAliasesDir(const path:string);
 var
   line,sub,internalname:String;
   f:TZctnrVectorBytes;
@@ -167,11 +167,11 @@ begin
     end;
   f.done;
 end;
-procedure TImagesManager.ScanDir(path:string);
+procedure TImagesManager.ScanDir(const path:string);
 begin
   FromDirIterator(utf8tosys(path),'*.png','',foundimage,{TImagesManager.foundimage}nil);
 end;
-function TImagesManager.loadicon(f:string):integer;
+function TImagesManager.loadicon(const f:string):integer;
 var
   PNG:TPortableNetworkGraphic;
 begin

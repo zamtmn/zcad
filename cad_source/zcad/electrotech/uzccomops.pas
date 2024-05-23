@@ -154,7 +154,7 @@ var
 procedure finalize;}
 
 implementation
-function docorrecttogrid(point:GDBVertex;need:Boolean):GDBVertex;
+function docorrecttogrid(const point:GDBVertex;need:Boolean):GDBVertex;
 var
    gr:Boolean;
 begin

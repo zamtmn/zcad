@@ -35,12 +35,12 @@ type
     Name:string;
     FontFile:string;
     Param:TGeneralFontParam;
-    procedure Init(AName:string;AFontFile:string;AParam:TGeneralFontParam);
-    constructor Create(AName:string;AFontFile:string;AParam:TGeneralFontParam);
+    procedure Init(const AName:string; const AFontFile:string;AParam:TGeneralFontParam);
+    constructor Create(const AName:string; const AFontFile:string;AParam:TGeneralFontParam);
   end;
   TFontName2FontFileMap=GKey2DataMap<String,TGeneralFontFileDesc(*{$IFNDEF DELPHI},LessString{$ENDIF}*)>;
 
-  TFontLoadProcedure=function(name:String;var pf:PGDBfont):Boolean;
+  TFontLoadProcedure=function(const name:String;var pf:PGDBfont):Boolean;
   TFontLoadProcedureData=record
     FontDesk:String;
     FontLoadProcedure:TFontLoadProcedure;
@@ -63,11 +63,11 @@ type
     destructor done;virtual;
     procedure CreateBaseFont;
 
-    function addFonfByFile(FontPathName:String):PGDBfont;
-    function addFont(FontFile,FontFamily:String):PGDBfont;
+    function addFonfByFile(const FontPathName:String):PGDBfont;
+    function addFont(FontFile:String; FontFamily:String):PGDBfont;
     procedure EnumerateFontFiles;
-    procedure EnumerateTTFFontFile(filename:String;pdata:pointer);
-    procedure EnumerateSHXFontFile(filename:String;pdata:pointer);
+    procedure EnumerateTTFFontFile(const filename:String;pdata:pointer);
+    procedure EnumerateSHXFontFile(const filename:String;pdata:pointer);
     //function FindFonf(FontName:String):Pointer;
     {procedure freeelement(p:Pointer);virtual;}
   end;
@@ -89,14 +89,14 @@ constructor TGeneralFontParam.Create;
 begin
 end;
 
-procedure TGeneralFontFileDesc.init(AName:string;AFontFile:string;AParam:TGeneralFontParam);
+procedure TGeneralFontFileDesc.init(const AName:string; const AFontFile:string;AParam:TGeneralFontParam);
 begin
   Name:=AName;
   FontFile:=AFontFile;
   Param:=AParam;
 end;
 
-constructor TGeneralFontFileDesc.Create(AName:string;AFontFile:string;AParam:TGeneralFontParam);
+constructor TGeneralFontFileDesc.Create(const AName:string; const AFontFile:string;AParam:TGeneralFontParam);
 begin
   //init(AName,AFontFile,AParam);
   Name:=AName;
@@ -113,7 +113,7 @@ begin
      EntInfoData.FontLoadProcedure:=_FontLoadProcedure;
      FontExt2LoadProc.RegisterKey(_FontExt,EntInfoData);
 end;
-procedure GDBFontManager.EnumerateTTFFontFile(filename:String;pdata:pointer);
+procedure GDBFontManager.EnumerateTTFFontFile(const filename:String;pdata:pointer);
 var
   ttfparams:TTTFFileParams;
   ffg:^TGeneralFontFileDesc;
@@ -131,7 +131,7 @@ begin
   end;
 end;
 
-procedure GDBFontManager.EnumerateSHXFontFile(filename:String;pdata:pointer);
+procedure GDBFontManager.EnumerateSHXFontFile(const filename:String;pdata:pointer);
 begin
      shxfontfiles.Add(filename);
 end;
@@ -196,7 +196,7 @@ begin
   {$ENDIF}
 end;
 
-function GDBFontManager.addFonfByFile(FontPathName:String):PGDBfont;
+function GDBFontManager.addFonfByFile(const FontPathName:String):PGDBfont;
 var
   p:PGDBfont;
   FontName,FontExt:String;
@@ -267,7 +267,7 @@ begin
      debugln('{D-}end;{GDBFontManager.addFonf}');
      //programlog.logoutstr('end;{GDBFontManager.addFonf}',lp_DecPos,LM_Debug);
 end;
-function GDBFontManager.addFont(FontFile,FontFamily:String):PGDBfont;
+function GDBFontManager.addFont(FontFile:String; FontFamily:String):PGDBfont;
 var
   ffd:TGeneralFontFileDesc;
   FF:String;

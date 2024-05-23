@@ -46,7 +46,7 @@ TBezierSolver2D=class
                      constructor create;
                      destructor Destroy;override;
                      procedure AddPoint(x,y:double;pa:TPointAttr);overload;
-                     procedure AddPoint(p:GDBvertex2D;pa:TPointAttr);overload;
+                     procedure AddPoint(const p:GDBvertex2D;pa:TPointAttr);overload;
                      procedure ChangeMode(Mode:TSolverMode);
                      procedure EndCountur;
                      procedure StartCountur;
@@ -93,7 +93,7 @@ begin
      p.y:=y;
      AddPoint(p,pa);
 end;
-procedure TBezierSolver2D.AddPoint(p:GDBvertex2D;pa:TPointAttr);
+procedure TBezierSolver2D.AddPoint(const p:GDBvertex2D;pa:TPointAttr);
 begin
      case FMode of
      TSM_WaitStartCountur:begin

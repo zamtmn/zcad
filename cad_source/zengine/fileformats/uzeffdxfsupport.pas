@@ -64,7 +64,7 @@ procedure dxfDoubleout(var f:TZctnrVectorBytes;dxfcode:Integer;const v:Double);
 procedure dxfIntegerout(var f:TZctnrVectorBytes;dxfcode:Integer;const v:Integer);
 procedure dxfStringout(var f:TZctnrVectorBytes;dxfcode:Integer;const v:String);overload;
 procedure dxfStringout(var f:TZctnrVectorBytes;dxfcode:Integer;const v1,v2:String);overload;
-function mystrtoint(s:String):Integer;
+function mystrtoint(const s:String):Integer;
 function readmystrtoint(var f:TZMemReader):Integer;
 function readmystrtodouble(var f:TZMemReader):Double;
 function readmystr(var f:TZMemReader):String;
@@ -76,12 +76,12 @@ function dxfIntegerload(var f:TZMemReader;dxfcod,currentdxfcod:Integer; var v:In
 function dxfStringload(var f:TZMemReader;dxfcod,currentdxfcod:Integer; var v:String):Boolean;overload;
 function dxfStringload(var f:TZMemReader;dxfcod,currentdxfcod:Integer; var v:TDXFEntsInternalStringType):Boolean;overload;
 function dxfGroupCode(const dxfcod:Integer):String;
-function DXFHandle(sh:string):TDWGHandle;
+function DXFHandle(const sh:string):TDWGHandle;
 
 implementation
 //uses
 //    log;
-function DXFHandle(sh:string):TDWGHandle;
+function DXFHandle(const sh:string):TDWGHandle;
 begin
      result:=StrToQWord('$'+sh);
 end;
@@ -187,7 +187,7 @@ begin
      f.TXTAddString(v1);
      f.TXTAddStringEOL(v2);
 end;
-function mystrtoint(s:String):Integer;
+function mystrtoint(const s:String):Integer;
 var code:Integer;
 begin
      val(s,result,code);

@@ -62,8 +62,8 @@ TZGLGeneral2DDrawer=class(TZGLGeneralDrawer)
                           procedure TranslateCoord2D(const tx,ty:single);override;
                           procedure ScaleCoord2D(const sx,sy:single);override;
 
-                          procedure pushMatrixAndSetTransform(Transform:DMatrix4D;FromOneMatrix:Boolean=False);overload;override;
-                          procedure pushMatrixAndSetTransform(Transform:DMatrix4F;FromOneMatrix:Boolean=False);overload;override;
+                          procedure pushMatrixAndSetTransform(const Transform:DMatrix4D;FromOneMatrix:Boolean=False);overload;override;
+                          procedure pushMatrixAndSetTransform(const Transform:DMatrix4F;FromOneMatrix:Boolean=False);overload;override;
                           procedure DisableLCS(var matrixs:tmatrixs);overload;override;
                           procedure EnableLCS(var matrixs:tmatrixs);overload;override;
 
@@ -591,7 +591,7 @@ begin
      mstackindex:=-1;
 end;
 
-procedure TZGLGeneral2DDrawer.pushMatrixAndSetTransform(Transform:DMatrix4D;FromOneMatrix:Boolean=False);
+procedure TZGLGeneral2DDrawer.pushMatrixAndSetTransform(const Transform:DMatrix4D;FromOneMatrix:Boolean=False);
 begin
   inc(mstackindex);
   mstack[mstackindex]:=matr;
@@ -599,7 +599,7 @@ begin
     matr:=OneMatrix;
   matr:=MatrixMultiply(matr,Transform);
 end;
-procedure TZGLGeneral2DDrawer.pushMatrixAndSetTransform(Transform:DMatrix4F;FromOneMatrix:Boolean=False);
+procedure TZGLGeneral2DDrawer.pushMatrixAndSetTransform(const Transform:DMatrix4F;FromOneMatrix:Boolean=False);
 begin
   inc(mstackindex);
   mstack[mstackindex]:=matr;

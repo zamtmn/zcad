@@ -65,7 +65,7 @@ TMyVectorArray<T,TVec> = class
         function AddArray:SizeInt;
         function AddArrayAndSetCurrent:SizeInt;
         procedure SetCurrentArray(ai:SizeInt);
-        procedure AddDataToCurrentArray(data:T);
+        procedure AddDataToCurrentArray(const data:T);
         function GetCurrentArray:TVec;
 end;
 
@@ -73,7 +73,7 @@ TMyHashMap <TKey, TValue, Thash> = class(ghashmap.THashMap<TKey, TValue, Thash>)
   //function MyGetValue(key:TKey; out Value:TValue):boolean;
 end;
 StringHash=class
-  class function hash(s:AnsiString; n:longint):SizeUInt;
+  class function hash(const s:AnsiString; n:longint):SizeUInt;
 end;
 TMyAnsiStringDictionary <TValue> = class(TMyHashMap<AnsiString, TValue{$IFNDEF DELPHI},StringHash{$ENDIF}>)
 end;
@@ -113,7 +113,7 @@ procedure TMyVectorArray<T,TVec>.SetCurrentArray(ai:SizeInt);
 begin
      CurrentArray:=ai;
 end;
-procedure TMyVectorArray<T,TVec>.AddDataToCurrentArray(data:T);
+procedure TMyVectorArray<T,TVec>.AddDataToCurrentArray(const data:T);
 begin
      (VArray[CurrentArray]){brackets for 2.6.x compiler version}.PushBack(data);
 end;
@@ -144,7 +144,7 @@ begin
   for I := 1 to Length(s) do
     Result := ((Result shl 7) or (Result shr 25)) + Ord(s[I]);
 end;
-class function StringHash.hash(s:AnsiString; n:longint):SizeUInt;
+class function StringHash.hash(const s:AnsiString; n:longint):SizeUInt;
 begin
      result:=makehash(s) mod SizeUInt(n);
 end;

@@ -104,6 +104,8 @@ begin
     //значения некоторых параметров из комстроки, если есть
     if CommandLineParser.HasOption(NOSPLASHHDL) then
       SysParam.saved.NoSplash:=true;
+    if CommandLineParser.HasOption(MemProfiling) then
+      SysParam.saved.MemProfiling:=true;
     if CommandLineParser.HasOption(UPDATEPOHDL) then
       SysParam.saved.UpdatePO:=true;
     if CommandLineParser.HasOption(NOLOADLAYOUTHDL) then

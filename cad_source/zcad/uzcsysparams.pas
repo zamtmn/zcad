@@ -35,6 +35,7 @@ type
     NoSplash:Boolean;(*'No splash screen'*)
     NoLoadLayout:Boolean;(*'No load layout'*)
     UpdatePO:Boolean;(*'Update PO file'*)
+    MemProfiling:Boolean;(*'Internal memory profiler'*)
     LangOverride:string;(*'Language override'*)
   end;
   {REGISTERRECORDTYPE tnotsavedparams}
@@ -58,6 +59,7 @@ const
                                    NoSplash:false;
                                    NoLoadLayout:false;
                                    UpdatePO:false;
+                                   MemProfiling:false;
                                    LangOverride:'');
   zcaduniqueinstanceid='zcad unique instance';
 var
@@ -73,6 +75,7 @@ begin
   Config.SetDeleteValue('NoSplash',Params.NoSplash,DefaultSavedParams.NoSplash);
   Config.SetDeleteValue('NoLoadLayout',Params.NoLoadLayout,DefaultSavedParams.NoLoadLayout);
   Config.SetDeleteValue('UpdatePO',Params.UpdatePO,DefaultSavedParams.UpdatePO);
+  Config.SetDeleteValue('MemProfiling',Params.MemProfiling,DefaultSavedParams.MemProfiling);
   Config.SetDeleteValue('LangOverride',Params.LangOverride,DefaultSavedParams.LangOverride);
   Config.UndoAppendBasePath;
 end;
@@ -111,6 +114,7 @@ begin
   Params.NoSplash:=XMLConfig.GetValue('NoSplash',DefaultSavedParams.NoSplash);
   Params.NoLoadLayout:=XMLConfig.GetValue('NoLoadLayout',DefaultSavedParams.NoLoadLayout);
   Params.UpdatePO:=XMLConfig.GetValue('UpdatePO',DefaultSavedParams.UpdatePO);
+  Params.MemProfiling:=XMLConfig.GetValue('MemProfiling',DefaultSavedParams.MemProfiling);
   Params.LangOverride:=XMLConfig.GetValue('LangOverride',DefaultSavedParams.LangOverride);
   XMLConfig.CloseKey;
   FreeAndNil(XMLConfig);

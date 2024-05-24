@@ -12,6 +12,7 @@ uses
   ;
 
 function dumptofile(const Context:TZCADCommandContext; Operands:TCommandOperands):TCommandResult;
+procedure ReplaceMemoryManager;
 procedure RestoreMemoryManager; inline;
 
 implementation
@@ -191,6 +192,8 @@ begin
   NewMM.ReAllocMem:=@NewReAllocMem;
 
   SetMemoryManager(NewMM);
+  //todo: нужен флажок что менеджер заменен? както надо понимать что надо
+  //восстановить его на выходе
 end;
 procedure RestoreMemoryManager; inline;
 begin
@@ -388,6 +391,7 @@ begin
 end;
 
 initialization
-  ReplaceMemoryManager;
+  //для возможности управления фичей в рантайме будем включать в другом месте
+  //ReplaceMemoryManager;
 end.
 

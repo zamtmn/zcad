@@ -122,7 +122,7 @@ type
              SYS_NoSplash:PBoolean;(*'No splash screen'*)
              SYS_NoLoadLayout:PBoolean;(*'No load layout'*)(*oi_readonly*)
              SYS_UpdatePO:PBoolean;(*'Update PO file'*)(*oi_readonly*)
-
+             SYS_MemProfiling:PBoolean;(*'Memory profiling'*)(*oi_readonly*)
        end;
   {REGISTERRECORDTYPE tdwg}
   tdwg=record

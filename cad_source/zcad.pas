@@ -39,11 +39,14 @@ uses
 
   Interfaces,forms, classes,LCLVersion,
   uzclog,uzcreglog,
+
   uzcSysInfo,uzcfsplash,
   uzcsysvars,
 
   uzcsysparams,uzcPathMacros,
   uzbpaths,uzbCommandLineParser,uzcCommandLineParser,
+
+  uzcregMemProfiler,
 
   varman,
   //
@@ -188,7 +191,7 @@ uses
   uzccommand_show,uzccommand_showtoolbar,
 
   uzccommand_setobjinsp,
-  uzccommand_dbgmemsummary,
+  uzccommand_dbgmemsummary,uzccommand_dbgMemProfiler,
   uzccommand_executefile,
   uzccommand_dbgClipboard,
   uzccommand_dbgCmdList,uzccommand_dbgBlocksList,

@@ -151,6 +151,7 @@ begin
         end;
       end;
       psa^.format;
+      result:=false;
     end;
   end;
 end;

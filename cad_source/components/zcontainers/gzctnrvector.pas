@@ -428,32 +428,28 @@ end;
 
 function GZVector<T>.SetCount;
 begin
-     count:=index;
-     if parray=nil then
-                        createarray;
-     if count>=max then
-                       begin
-                            if count>2*max then
-                                               SetSize(2*count)
-                                           else
-                                               SetSize(2*max);
-                       end;
-     result:=parray;
+  count:=index;
+  if count>max then
+    SetSize(count);
+  if parray=nil then
+    createarray;
+  result:=parray;
 end;
+
 procedure GZVector<T>.SetSize;
 begin
-     if nsize>max then
-                      begin
-                           parray := enlargememblock(parray, SizeOfData*max, SizeOfData*nsize);
-                      end
-else if nsize<max then
-                      begin
-                           parray := enlargememblock(parray, SizeOfData*max, SizeOfData*nsize);
-                           if count>nsize then count:=nsize;
-                      end;
-     if nsize<>0 then
-       max:=nsize;
+  if parray<>nil then begin
+    if nsize>max then
+      parray := enlargememblock(parray, SizeOfData*max, SizeOfData*nsize)
+    else if nsize<max then begin
+      parray := enlargememblock(parray, SizeOfData*max, SizeOfData*nsize);
+      if count>nsize then count:=nsize;
+    end;
+  end;
+  if nsize<>0 then
+    max:=nsize;
 end;
+
 function GZVector<T>.beginiterate;
 begin
   if parray=nil then

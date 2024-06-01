@@ -224,7 +224,7 @@ begin
   startangle := 0;
   endangle := pi/2;
   PProjoutbound:=nil;
-  Vertex3D_in_WCS_Array.init(100);
+  Vertex3D_in_WCS_Array.init(3);
 end;
 constructor GDBObjARC.init;
 begin
@@ -235,7 +235,7 @@ begin
   startangle := s;
   endangle := e;
   PProjoutbound:=nil;
-  Vertex3D_in_WCS_Array.init(100);
+  Vertex3D_in_WCS_Array.init(3);
   //format;
 end;
 function GDBObjArc.GetObjType;
@@ -431,12 +431,6 @@ begin
   angle := endangle - startangle;
   if angle < 0 then angle := 2 * pi + angle;
 
-  Vertex3D_in_WCS_Array.clear;
-  SinCos(startangle,v.y,v.x);
-  v.z:=0;
-  pv:=VectorTransform3D(v,objmatrix);
-  Vertex3D_in_WCS_Array.PushBackData(pv);
-
   if dc.MaxDetail then
                       maxlod:=100
                   else
@@ -449,6 +443,13 @@ begin
                     lod:=round(l);
                     if lod<5 then lod:=5;
                end;
+  Vertex3D_in_WCS_Array.SetSize(lod+1);
+
+  Vertex3D_in_WCS_Array.clear;
+  SinCos(startangle,v.y,v.x);
+  v.z:=0;
+  pv:=VectorTransform3D(v,objmatrix);
+  Vertex3D_in_WCS_Array.PushBackData(pv);
 
   for i:=1 to lod do
   begin

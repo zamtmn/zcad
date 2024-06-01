@@ -248,8 +248,8 @@ constructor GDBObjCurve.init;
 begin
   inherited init(own,layeraddres, lw);
   //vp.ID := GDBPolylineID;
-  VertexArrayInWCS.init(1000);
-  vertexarrayinocs.init(1000);
+  VertexArrayInWCS.init(10);
+  vertexarrayinocs.init(10);
   //------------snaparray.init(100);
   PProjPoint:=nil;
   //Format;
@@ -259,8 +259,8 @@ begin
   inherited initnul(nil);
   bp.ListPos.Owner:=owner;
   //vp.ID := GDBPolylineID;
-  VertexArrayInWCS.init(1000);
-  vertexarrayinocs.init(1000);
+  VertexArrayInWCS.init(10);
+  vertexarrayinocs.init(10);
   //------------snaparray.init(100);
   PProjPoint:=nil;
 end;

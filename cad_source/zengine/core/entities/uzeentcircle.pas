@@ -269,7 +269,7 @@ begin
   //vp.ID := GDBCircleID;
   Radius := 1;
   PProjoutbound:=nil;
-  Vertex3D_in_WCS_Array.init(100);
+  Vertex3D_in_WCS_Array.init(4);
 end;
 constructor GDBObjCircle.init;
 begin
@@ -282,7 +282,7 @@ begin
   Radius := rr;
   //ObjToString('','');
   PProjoutbound:=nil;
-  Vertex3D_in_WCS_Array.init(100);
+  Vertex3D_in_WCS_Array.init(4);
   //format;
 end;
 function GDBObjCircle.GetObjType;
@@ -376,7 +376,7 @@ begin
                  end
             else
                 l:=32;
-
+  Vertex3D_in_WCS_Array.SetSize(circlepointoflod[l].Count);
   pvertex:=circlepointoflod[l].beginiterate(ir);
   if pvertex<>nil then
   repeat

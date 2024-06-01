@@ -210,7 +210,7 @@ begin
   inherited initnul(nil);
   //vp.ID:=GDBEllipseID;
   //r := 1;
-  Vertex3D_in_WCS_Array.init(100);
+  Vertex3D_in_WCS_Array.init(4);
 end;
 constructor GDBObjEllipse.init;
 begin
@@ -222,7 +222,7 @@ begin
   endangle := e;
   majoraxis:=majaxis;
   PProjoutbound:=nil;
-  Vertex3D_in_WCS_Array.init(100);
+  Vertex3D_in_WCS_Array.init(4);
   //format;
 end;
 function GDBObjEllipse.GetObjType;
@@ -336,44 +336,22 @@ begin
 end;
 procedure GDBObjEllipse.createpoint;
 var
-  //psymbol: PByte;
-  i{, j, k}: Integer;
-  //len: Word;
-  //matr{,m1}: DMatrix4D;
+  i:Integer;
   v:GDBvertex;
   pv:GDBVertex;
 begin
-  {oglsm.myglpushmatrix;
-  glscaledf(r, r, 1);
-  gltranslatef(p_insert.x / r, p_insert.y / r, p_insert.z);
-  angle := endangle - startangle;
-  if angle < 0 then angle := 2 * pi + angle;
-  myglbegin(GL_line_strip);
-  glVertex3d(cos(startangle), sin(startangle), 0);
-  for i := 1 to arccount do
-  begin
-    glVertex3d(cos(startangle + i / arccount * angle), sin(startangle + i / arccount * angle), 0);
-  end;
-  myglend;
-  oglsm.myglpopmatrix;}
   angle := endangle - startangle;
   if angle < 0 then angle := 2 * pi + angle;
 
+  lod:=100;  { TODO : А кто лод считать будет? }
+  Vertex3D_in_WCS_Array.SetSize(lod+1);
+
   Vertex3D_in_WCS_Array.clear;
-  {if ppoint<>nil then
-                     begin
-                          ppoint^.done;
-                          Freemem(ppoint);
-                     end;
-  Getmem(PPoint,sizeof(GDBPoint2DArray));
-  PPoint^.init(lod+1);}
-  //matr:=objMatrix;
+
   SinCos(startangle,v.y,v.x);
   v.z:=0;
   pv:=VectorTransform3D(v,objmatrix);
   Vertex3D_in_WCS_Array.PushBackData(pv);
-
-  lod:=100;  { TODO : А кто лод считать будет? }
 
   for i:=1 to lod do
   begin

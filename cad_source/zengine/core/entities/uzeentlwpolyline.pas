@@ -469,10 +469,10 @@ begin
   inherited init(own,layeraddres, lw);
   //vp.id:=GDBLWPolylineID;
   closed := c;
-  Vertex2D_in_OCS_Array.init(1000,c);
-  Width2D_in_OCS_Array.init(1000);
-  Vertex3D_in_WCS_Array.init(1000);
-  Width3D_in_WCS_Array.init(1000);
+  Vertex2D_in_OCS_Array.init(4,c);
+  Width2D_in_OCS_Array.init(4);
+  Vertex3D_in_WCS_Array.init(4);
+  Width3D_in_WCS_Array.init(4);
   //----------------snaparray.init(1000);
   PProjPoint:=nil;
 end;
@@ -481,10 +481,10 @@ begin
   inherited initnul(nil);
   //vp.id:=GDBLWPolylineID;
   {убрать в афтердесериализе}
-  Vertex2D_in_OCS_Array.init(1000,false);
-  Width2D_in_OCS_Array.init(1000);
-  Vertex3D_in_WCS_Array.init(1000);
-  Width3D_in_WCS_Array.init(1000{, sizeof(GDBQuad3d)});
+  Vertex2D_in_OCS_Array.init(4,false);
+  Width2D_in_OCS_Array.init(4);
+  Vertex3D_in_WCS_Array.init(4);
+  Width3D_in_WCS_Array.init(4{, sizeof(GDBQuad3d)});
   //----------------snaparray.init(1000);
   PProjPoint:=nil;
 end;
@@ -647,7 +647,7 @@ begin
                            else
                                local.P_insert:=nulvertex;;
   closed := false;
-  Width2D_in_OCS_Array.createarray;
+  //Width2D_in_OCS_Array.createarray;
   (*Vertex2D_in_OCS_Array.init(1000,closed);
   Width2D_in_OCS_Array.init(1000);
   Vertex3D_in_WCS_Array.init(1000);

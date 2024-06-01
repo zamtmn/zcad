@@ -161,7 +161,7 @@ begin
   inherited initnul(nil);
   PProjoutbound:=nil;
   PProjPoint:=nil;
-  Vertex3D_in_WCS_Array.init(10);
+  Vertex3D_in_WCS_Array.init(4);
   //Vertex2D_in_OCS_Array.init(10,true);
   Path.init(10);
   PPattern:=nil;
@@ -179,7 +179,7 @@ begin
   Local.basis.oz:=ZWCS;
   PProjoutbound:=nil;
   PProjPoint:=nil;
-  Vertex3D_in_WCS_Array.init(10);
+  Vertex3D_in_WCS_Array.init(4);
   //Vertex2D_in_OCS_Array.init(10,true);
   Path.init(10);
   PPattern:=nil;
@@ -533,16 +533,21 @@ begin
 end;
 procedure GDBObjHatch.createpoint;
 var
-  i,j: Integer;
+  i,j,vc:Integer;
   v:GDBvertex4D;
   v3d:GDBVertex;
   ppolyarr:pGDBPolyline2DArray;
 begin
   Vertex3D_in_WCS_Array.clear;
+  vc:=0;
+  for i:=0 to Path.paths.Count-1  do begin
+    vc:=vc+Path.paths.getDataMutable(i)^.Count;
+  end;
+  Vertex3D_in_WCS_Array.SetSize(vc);
 
   for i:=0 to Path.paths.Count-1  do begin
     ppolyarr:=Path.paths.getDataMutable(i);
-    for j:=0 to Path.paths.getData(i).Count-1 do begin
+    for j:=0 to Path.paths.getDataMutable(i).Count-1 do begin
        v.x:=ppolyarr^.getData(j).x;
        v.y:=ppolyarr^.getData(j).y;
        v.z:=0;

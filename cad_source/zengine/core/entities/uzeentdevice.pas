@@ -645,7 +645,7 @@ constructor GDBObjDevice.init(own:Pointer;layeraddres:PGDBLayerProp;LW:SmallInt)
 begin
   inherited init(own,layeraddres,LW);
   //vp.ID:=GDBDeviceID;
-  VarObjArray.init(100);
+  VarObjArray.init(10);
   GetDXFIOFeatures.AddExtendersToEntity(@self);
 end;
 function GDBObjDevice.GetObjType;
@@ -656,7 +656,7 @@ constructor GDBObjDevice.initnul;
 begin
   inherited initnul;
   //vp.ID:=GDBDeviceID;
-  VarObjArray.init(100);
+  VarObjArray.init(10);
   //DType:=DT_Unknown;
   //DBorder:=DB_Empty;
   //DGroup:=DG_Unknown;

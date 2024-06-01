@@ -178,12 +178,12 @@ end;
 constructor GDBObjComplex.initnul;
 begin
   inherited initnul(nil);
-  ConstObjArray.init(100);
+  ConstObjArray.init(3);
 end;
 constructor GDBObjComplex.init;
 begin
   inherited init(own,layeraddres,LW);
-  ConstObjArray.init(100);
+  ConstObjArray.init(3);
 end;
 destructor GDBObjComplex.done;
 begin

@@ -31,12 +31,12 @@ type
   TLogExtHandle=SizeInt;
   PTLogerBaseBackend=^TLogerBaseBackend;
   TLogerBaseBackend=object
-    procedure DoLog(msg:TLogMsg;MsgOptions:TMsgOpt;LogMode:TLogLevel;LMDI:TModuleDesk);virtual;abstract;
+    procedure DoLog(const msg:TLogMsg;MsgOptions:TMsgOpt;LogMode:TLogLevel;LMDI:TModuleDesk);virtual;abstract;
     destructor Done;virtual;
   end;
   PTLogerBaseDecorator=^TLogerBaseDecorator;
   TLogerBaseDecorator=object
-    function GetDecor(msg:TLogMsg;MsgOptions:TMsgOpt;LogMode:TLogLevel;LMDI:TModuleDesk):TLogMsg;virtual;abstract;
+    function GetDecor(const msg:TLogMsg;MsgOptions:TMsgOpt;LogMode:TLogLevel;LMDI:TModuleDesk):TLogMsg;virtual;abstract;
     destructor Done;virtual;
   end;
 

@@ -36,7 +36,7 @@ type
   end;
 
   TLogerMBoxBackend=object(TLogerBaseBackend)
-    procedure doLog(msg:TLogMsg;MsgOptions:TMsgOpt;LogMode:TLogLevel;LMDI:TModuleDesk);virtual;
+    procedure doLog(const msg:TLogMsg;MsgOptions:TMsgOpt;LogMode:TLogLevel;LMDI:TModuleDesk);virtual;
     constructor init;
   end;
 
@@ -79,7 +79,7 @@ begin
   dr:=zcMsgDlg(ErrStr,zcdiError,[],true);
 end;
 
-procedure TLogerMBoxBackend.doLog(msg:TLogMsg;MsgOptions:TMsgOpt;LogMode:TLogLevel;LMDI:TModuleDesk);
+procedure TLogerMBoxBackend.doLog(const msg:TLogMsg;MsgOptions:TMsgOpt;LogMode:TLogLevel;LMDI:TModuleDesk);
 begin
   if ((MO_SM and MsgOptions)<>0)and((ZCMsgCallBackInterface.GetState and ZState_Busy)=0) then begin
        case ProgramLog.GetMutableLogLevelData(LogMode)^.LogLevelType of

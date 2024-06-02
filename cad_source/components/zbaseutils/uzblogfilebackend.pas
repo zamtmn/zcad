@@ -34,7 +34,7 @@ type
   TLogFileBackend=object(TLogerBaseBackend)
     LogFileName:AnsiString;
     FileHandle:cardinal;
-    procedure doLog(msg:TLogMsg;MsgOptions:TMsgOpt;LogMode:TLogLevel;LMDI:TModuleDesk);virtual;
+    procedure doLog(const msg:TLogMsg;MsgOptions:TMsgOpt;LogMode:TLogLevel;LMDI:TModuleDesk);virtual;
     procedure endLog;virtual;
     constructor init(fn:AnsiString);
     destructor done;virtual;
@@ -62,7 +62,7 @@ begin
   CloseLog;
 end;
 
-procedure TLogFileBackend.doLog(msg:TLogMsg;MsgOptions:TMsgOpt;LogMode:TLogLevel;LMDI:TModuleDesk);
+procedure TLogFileBackend.doLog(const msg:TLogMsg;MsgOptions:TMsgOpt;LogMode:TLogLevel;LMDI:TModuleDesk);
 begin
   OpenLog;
   FileWrite(FileHandle,msg[1],Length(msg)*SizeOf(msg[1]));

@@ -32,7 +32,8 @@ GDBNamedObjectsArray{-}<PTObj,TObj>{//}
                      = object(GZVectorPObects{-}<PTObj,TObj>{//})
                     constructor init(m:Integer);
                     function getIndex(const name: String):Integer;
-                    function getAddres(const name: String):Pointer;
+                    function getAddres(const name: String):Pointer;overload;
+                    function getAddres(const name: ShortString):Pointer;overload;
                     function GetIndexByPointer(p:PGDBNamedObject):Integer;
                     function AddItem(const name:String; out PItem:Pointer):TForCResult;
                     function MergeItem(const name:String;LoadMode:TLoadOpt):Pointer;
@@ -151,7 +152,8 @@ begin
     until p=nil;
   end;
 end;
-function GDBNamedObjectsArray<PTObj,TObj>.getAddres;
+
+function GDBNamedObjectsArray<PTObj,TObj>.getAddres(const name: String):Pointer;
 var
   p:PGDBNamedObject;
       ir:itrec;
@@ -172,6 +174,30 @@ begin
     until p=nil;
   end;
 end;
+
+function GDBNamedObjectsArray<PTObj,TObj>.getAddres(const name: ShortString):Pointer;
+var
+  p:PGDBNamedObject;
+  ir:itrec;
+  name_upper:ShortString;
+begin
+  result:=nil;
+  p:=beginiterate(ir);
+  if p<>nil then
+  begin
+    name_upper:=uppercase(name);
+    repeat
+      if uppercase(p^.name) = name_upper then
+      begin
+        result := p;
+        exit;
+      end;
+      p:=iterate(ir);
+    until p=nil;
+  end;
+end;
+
+
 function GDBNamedObjectsArray<PTObj,TObj>.GetIndexByPointer(p:PGDBNamedObject):Integer;
 var
   _pobj:PGDBNamedObject;

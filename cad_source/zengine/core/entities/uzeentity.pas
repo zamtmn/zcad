@@ -1185,110 +1185,71 @@ begin
      result:=false;
 end;
 function GDBObjEntity.LoadFromDXFObjShared;
-var APP_NAME:String;
-    XGroup:Integer;
-    XValue:String;
-    Name,Value{,vn,vt,vv,vun}:String;
-    i:integer;
-//    vd: vardesk;
+var
+  APP_NAME:ShortString;
+  XGroup:Integer;
+  XValue:String;
+  Name,Value:String;
+  i:integer;
 begin
-     result:=false;
-     case dxfcod of
-                5:begin
-                          if AddExtAttrib^.dwgHandle=0 then begin
-                            if not TryStrToQWord('$'+readmystr(f),PExtAttrib^.dwgHandle)then
-                              begin
-                                //нужно залупиться
-                              end
-                          end else begin
-                            f.SkipString;
-                            //нужно залупиться
-                          end;
-                          result:=true;
-                  end;
-                6:begin
-                       //vp.LineType:=readmystr(f);
-                       vp.LineType:=drawing.GetLTypeTable.getAddres(readmystr(f));
-                       result:=true
-                  end;
-                     8:begin
-                          if {vp.layer.name=LNSysLayerName}vp.layer=@DefaultErrorLayer then
-                                                   begin
-                                                        name:=readmystr(f);
-                                                   vp.Layer :=drawing.getlayertable.getAddres(name);
-                                                   if vp.Layer=nil then
-                                                                        vp.Layer:=vp.Layer;
-                                                   end
-                                               else
-                                                   APP_NAME:=readmystr(f);
-                          result:=true
-                     end;
-                    48:begin
-                            vp.LineTypeScale :=readmystrtodouble(f);
-                            result:=true
-                       end;
-                    62:begin
-                            vp.color:=readmystrtoint(f);
-                            result:=true
-                       end;
-                 370:begin
-                          vp.lineweight :=readmystrtoint(f);
-                          result:=true
-                     end;
-                1001:begin
-                          APP_NAME:=readmystr(f);
-                          result:=true;
-                          if APP_NAME=ZCADAppNameInDXF then
-                          begin
-                               repeat
-                                 XGroup:=readmystrtoint(f);
-                                 XValue:=readmystr(f);
-                                 if XGroup=1000 then
-                                                    begin
-                                                         i:=pos('=',Xvalue);
-                                                         Name:=copy(Xvalue,1,i-1);
-                                                         if name='' then
-                                                                        name:='empty';
-                                                         Value:=copy(Xvalue,i+1,length(xvalue)-i);
-                                                         (*if Name='_OWNERHANDLE' then
-                                                                                 begin
-                                                                                      {$IFNDEF DELPHI}
-                                                                                      if not TryStrToQWord('$'+value,self.AddExtAttrib^.OwnerHandle)then
-                                                                                      {$ENDIF}
-                                                                                      begin
-                                                                                           //нужно залупиться
-                                                                                      end;
-
-                                                                                      //self.AddExtAttrib^.OwnerHandle:=StrToInt('$'+value);
-                                                                                 end;
-                                                         if Name='_HANDLE' then
-                                                                               begin
-                                                                                    {$IFNDEF DELPHI}
-                                                                                    if not TryStrToQWord('$'+value,self.AddExtAttrib^.Handle)then
-                                                                                    {$ENDIF}
-                                                                                    begin
-                                                                                         //нужно залупиться
-                                                                                    end;
-                                                                                    //self.AddExtAttrib^.Handle:=strtoint('$'+value);
-                                                                               end;
-                                                         if Name='_UPGRADE' then
-                                                                               begin
-                                                                                    self.AddExtAttrib^.Upgrade:=strtoint(value);
-                                                                               end;
-                                                         if Name='_LAYER' then
-                                                                               begin
-                                                                                    vp.Layer:=drawing.getlayertable.getAddres(value);
-                                                                               end;
-
-                                                    //else*)
-                                                           ProcessFromDXFObjXData(Name,Value,ptu,drawing);
-                                                    end;
-                               until (XGroup=1002)and(XValue='}')
-                          end;
-
-                     end;
-     end;
-
+  result:=false;
+  case dxfcod of
+    5:begin
+      if AddExtAttrib^.dwgHandle=0 then begin
+        if not TryStrToQWord('$'+readmystr(f),PExtAttrib^.dwgHandle)then
+          begin
+            //нужно залупиться
+          end
+      end else begin
+        f.SkipString;
+        //нужно залупиться
+      end;
+      result:=true;
+    end;
+    6:begin
+      vp.LineType:=drawing.GetLTypeTable.getAddres(f.ParseShortString);
+      result:=true
+    end;
+    8:begin
+      if vp.layer=@DefaultErrorLayer then begin
+        vp.Layer :=drawing.getlayertable.getAddres(f.ParseShortString);
+        if vp.Layer=nil then
+          vp.Layer:=vp.Layer;
+      end else
+        APP_NAME:=readmystr(f);
+        result:=true
+    end;
+    48:begin
+      vp.LineTypeScale :=readmystrtodouble(f);
+      result:=true
+    end;
+    62:begin
+      vp.color:=readmystrtoint(f);
+      result:=true
+    end;
+    370:begin
+      vp.lineweight :=readmystrtoint(f);
+      result:=true
+    end;
+    1001:begin
+      APP_NAME:=f.ParseShortString;
+      result:=true;
+      if APP_NAME=ZCADAppNameInDXF then begin
+        repeat
+          XGroup:=readmystrtoint(f);
+          XValue:=readmystr(f);
+          if XGroup=1000 then begin
+            i:=pos('=',Xvalue);
+            Name:=copy(Xvalue,1,i-1);
+            if name='' then
+              name:='empty';
+            Value:=copy(Xvalue,i+1,length(xvalue)-i);
+            ProcessFromDXFObjXData(Name,Value,ptu,drawing);
+          end;
+        until (XGroup=1002)and(XValue='}')
+      end;
+    end;
+  end;
 end;
 class function GDBObjEntity.GetDXFIOFeatures:TDXFEntIODataManager;
 begin

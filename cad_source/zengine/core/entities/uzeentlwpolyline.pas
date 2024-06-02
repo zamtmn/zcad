@@ -649,7 +649,7 @@ begin
   begin
     if not LoadFromDXFObjShared(f,byt,ptu,drawing) then
       case byt of
-        8  :vp.Layer:=drawing.getlayertable.getAddres(f.ParseString);
+        8  :vp.Layer:=drawing.getlayertable.getAddres(f.ParseShortString);
         62 :vp.color:=f.ParseInteger;
         90 :begin
           numv:=f.ParseInteger;

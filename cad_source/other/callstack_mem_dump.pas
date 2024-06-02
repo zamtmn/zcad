@@ -7,11 +7,10 @@ uses
   SysUtils, Generics.Collections
   ,Forms, Controls
   ,laz.VirtualTrees
-  ,uzccommandsabstract
   ,lnfodwrf
   ;
 
-function dumptofile(const Context:TZCADCommandContext; Operands:TCommandOperands):TCommandResult;
+procedure dumptofile;
 procedure ReplaceMemoryManager;
 procedure RestoreMemoryManager; inline;
 
@@ -302,7 +301,7 @@ end;
 
 
 
-function dumptofile(const Context:TZCADCommandContext; Operands:TCommandOperands):TCommandResult;
+procedure dumptofile;
 var
   vt: TLazVirtualStringTree;
   i,ii: Integer;
@@ -383,7 +382,6 @@ begin
   end;
   vt.EndUpdate;
 
-  result:=cmd_ok;
   EventsHandler.Free;
 end;
 

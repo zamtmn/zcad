@@ -30,9 +30,20 @@ uses
 
 implementation
 
+function dbgMemProfiler_com(const Context:TZCADCommandContext; Operands:TCommandOperands):TCommandResult;
+begin
+  Operands:=UpperCase(Operands);
+  if operands='ON' then
+    ReplaceMemoryManager
+  else if operands='OFF' then
+    RestoreMemoryManager
+  else
+    dumptofile;
+end;
+
 initialization
   programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
-  CreateZCADCommand(@dumptofile,'dbgMemProfiler',0,0);
+  CreateZCADCommand(@dbgMemProfiler_com,'dbgMemProfiler',0,0);
 finalization
   ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
 end.

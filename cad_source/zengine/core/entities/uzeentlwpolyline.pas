@@ -1026,7 +1026,7 @@ begin
   result:=AllocAndInitLWpolyline(nil);
 end;
 
-procedure SetLWpolylineGeomProps(ALWpolyLine:PGDBObjLWpolyline;args:array of const);
+procedure SetLWpolylineGeomProps(ALWpolyLine:PGDBObjLWpolyline; const args:array of const);
 var
    counter:integer;
    i,c:integer;
@@ -1056,7 +1056,7 @@ begin
   end;
 end;
 
-function AllocAndCreateLWpolyline(owner:PGDBObjGenericWithSubordinated;args:array of const):PGDBObjLWPolyline;
+function AllocAndCreateLWpolyline(owner:PGDBObjGenericWithSubordinated; const args:array of const):PGDBObjLWPolyline;
 begin
   result:=AllocAndInitLWpolyline(owner);
   SetLWpolylineGeomProps(result,args);

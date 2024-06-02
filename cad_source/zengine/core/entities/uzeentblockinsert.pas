@@ -70,7 +70,7 @@ GDBObjBlockInsert= object(GDBObjComplex)
                      function GetObjType:TObjID;virtual;
                   end;
 {Export-}
-procedure SetBlockInsertGeomProps(PBlockInsert:PGDBObjBlockInsert;args:array of const);
+procedure SetBlockInsertGeomProps(PBlockInsert:PGDBObjBlockInsert; const args:array of const);
 implementation
 //uses log;
 (*Procedure QDUDecomposition (const m:DMatrix4D; out kQ:DMatrix3D;out kD,kU:DVector3D);
@@ -697,7 +697,7 @@ begin
   result.initnul{(owner)};
   result.bp.ListPos.Owner:=owner;
 end;
-procedure SetBlockInsertGeomProps(PBlockInsert:PGDBObjBlockInsert;args:array of const);
+procedure SetBlockInsertGeomProps(PBlockInsert:PGDBObjBlockInsert; const args:array of const);
 var
    counter:integer;
    r:Double;
@@ -715,7 +715,7 @@ begin
   PBlockInsert^.setrot(r);
   PBlockInsert^.rotate:=r;
 end;
-function AllocAndCreateBlockInsert(owner:PGDBObjGenericWithSubordinated;args:array of const):PGDBObjBlockInsert;
+function AllocAndCreateBlockInsert(owner:PGDBObjGenericWithSubordinated; const args:array of const):PGDBObjBlockInsert;
 begin
   result:=AllocAndInitBlockInsert(owner);
   //owner^.AddMi(@result);

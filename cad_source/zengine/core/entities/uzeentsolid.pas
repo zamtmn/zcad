@@ -416,7 +416,7 @@ begin
   result.initnul(owner);
   result.bp.ListPos.Owner:=owner;
 end;
-procedure SetSolidGeomProps(PSolid:PGDBObjSolid;args:array of const);
+procedure SetSolidGeomProps(PSolid:PGDBObjSolid; const args:array of const);
 var
    counter:integer;
 begin
@@ -429,7 +429,7 @@ begin
                          else
                              PSolid^.PInOCS[3]:=CreateVertexFromArray(counter,args)
 end;
-function AllocAndCreateSolid(owner:PGDBObjGenericWithSubordinated;args:array of const):PGDBObjSolid;
+function AllocAndCreateSolid(owner:PGDBObjGenericWithSubordinated; const args:array of const):PGDBObjSolid;
 begin
   result:=AllocAndInitSolid(owner);
   SetSolidGeomProps(result,args);

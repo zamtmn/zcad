@@ -798,7 +798,7 @@ begin
   result.initnul{(owner)};
   result.bp.ListPos.Owner:=owner;
 end;
-procedure SetArcGeomProps(AArc:PGDBObjArc;args:array of const);
+procedure SetArcGeomProps(AArc:PGDBObjArc; const args:array of const);
 var
    counter:integer;
 begin
@@ -808,7 +808,7 @@ begin
   AArc^.StartAngle:=CreateDoubleFromArray(counter,args);
   AArc^.EndAngle:=CreateDoubleFromArray(counter,args);
 end;
-function AllocAndCreateArc(owner:PGDBObjGenericWithSubordinated;args:array of const):PGDBObjArc;
+function AllocAndCreateArc(owner:PGDBObjGenericWithSubordinated; const args:array of const):PGDBObjArc;
 begin
   result:=AllocAndInitArc(owner);
   SetArcGeomProps(result,args);

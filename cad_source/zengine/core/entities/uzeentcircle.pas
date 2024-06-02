@@ -790,7 +790,7 @@ begin
   result.initnul{(owner)};
   result.bp.ListPos.Owner:=owner;
 end;
-procedure SetCircleGeomProps(Pcircle:PGDBObjCircle;args:array of const);
+procedure SetCircleGeomProps(Pcircle:PGDBObjCircle; const args:array of const);
 var
    counter:integer;
 begin
@@ -798,7 +798,7 @@ begin
   Pcircle.Local.p_insert:=CreateVertexFromArray(counter,args);
   Pcircle.Radius:=CreateDoubleFromArray(counter,args);
 end;
-function AllocAndCreateCircle(owner:PGDBObjGenericWithSubordinated;args:array of const):PGDBObjCircle;
+function AllocAndCreateCircle(owner:PGDBObjGenericWithSubordinated; const args:array of const):PGDBObjCircle;
 begin
   result:=AllocAndInitCircle(owner);
   //owner^.AddMi(@result);

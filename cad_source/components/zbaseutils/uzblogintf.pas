@@ -26,13 +26,13 @@ uses
 
 type
   TDebugLnProc=procedure(const S:String) of object;
-  TDebugLnFormatedProc=procedure(const S:String;Args: array of const) of object;
+  TDebugLnFormatedProc=procedure(const S:String; const Args: array of const) of object;
   TIsTraceEnabled=function:boolean of object;
 
 procedure zDebugLn(const S:String);
-procedure zDebugLn(const S:String;Args: array of const);
+procedure zDebugLn(const S:String; const Args: array of const);
 procedure zTraceLn(const S:String);
-procedure zTraceLn(const S:String;Args: array of const);
+procedure zTraceLn(const S:String; const Args: array of const);
 
 procedure InstallLoger(ADebugLnProc:TDebugLnProc;ADebugLnFormatProc:TDebugLnFormatedProc;AIsTraceEnabled:TIsTraceEnabled);
 //procedure RemoveLoger(DebugLnProc:TDebugLnStr;DebugLnFormatProc:TDebugLnFormatProc;IsTraceEnabled:TIsTraceEnabled);
@@ -79,7 +79,7 @@ begin
         Logger.DebugLnProc(S);
 end;
 
-procedure zDebugLn(const S:String; Args: array of const);
+procedure zDebugLn(const S:String; const Args: array of const);
 var
   Logger:TLoggerRec;
 begin
@@ -107,7 +107,7 @@ begin
     end;
 end;
 
-procedure zTraceLn(const S:String; Args: array of const);
+procedure zTraceLn(const S:String; const Args: array of const);
 var
   Logger:TLoggerRec;
   TraceEnabled:Boolean;

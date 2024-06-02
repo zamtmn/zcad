@@ -33,7 +33,7 @@ type
   end;
   PStackTreeArray = ^TStackTreeArray;
   TStackTreeArray = array of TStackTree;
-  Tupdate_data_proc = procedure (var data: pointer; args: array of const);
+  Tupdate_data_proc = procedure (var data: pointer; const args: array of const);
 
   PNodeData = ^TNodeData;
   TNodeData = record
@@ -61,7 +61,7 @@ var
   mem_monitor: TMemUsageMonitor = nil;
   NewMM, OldMM: TMemoryManager;
 
-procedure collect_callstack(const name: String; args: array of const; update_proc: Tupdate_data_proc = nil; skip_frames: integer = 2; skip_bottom_frames: integer=0);
+procedure collect_callstack(const name: String; const args: array of const; update_proc: Tupdate_data_proc = nil; skip_frames: integer = 2; skip_bottom_frames: integer=0);
 var
   i: longint = 0;
   i2: longint = 0;
@@ -117,7 +117,7 @@ begin
   end;
 end;
 
-procedure update_ptr_memusage(var data: pointer; args: array of const); inline;
+procedure update_ptr_memusage(var data: pointer; const args: array of const); inline;
 begin
   PtrUInt(data)+=args[0].VInt64^;
 end;

@@ -327,7 +327,7 @@ begin
     begin
     if owner <> nil then
       begin
-        zTraceLn('{D+}[DXF_CONTENTS]AddEntitiesFromDXF.Found primitive '+s);
+        zTraceLn('{D+}[DXF_CONTENTS]AddEntitiesFromDXF.Found primitive %s',[s]);
         pobj := EntInfoData.AllocAndInitEntity(nil);
         //pobj := {po^.CreateInitObj(objid,owner)}CreateInitObjFree(objid,nil);
         PGDBObjEntity(pobj)^.LoadFromDXF(f,{@additionalunit}PExtLoadData,drawing);
@@ -462,7 +462,7 @@ begin
                                    pobj^.done;
                                    Freemem(pointer(pobj));
                             end;
-        zTraceLn('{D-}[DXF_CONTENTS]End primitive '+s);
+        zTraceLn('{D-}[DXF_CONTENTS]End primitive %s',[s]);
       end;
       //additionalunit.free;
         if Assigned(ClearExtLoadData) then

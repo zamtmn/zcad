@@ -54,7 +54,6 @@ type
 const
   skip_memusage_frames = 3;
 
-
 var
   root_stack: TStackTreeArray = nil;
   root_mem: TStackTreeArray = nil;
@@ -122,9 +121,9 @@ begin
   PtrUInt(data)+=args[0].VInt64^;
 end;
 
-procedure collect_memusage(const name: String; mem_size:PtrInt; skip_frames: integer=2; skip_bottom_frames: integer=0); inline;
+procedure collect_memusage(mem_size:PtrInt; skip_frames: integer=2; skip_bottom_frames: integer=0); inline;
 begin
-  collect_callstack({name}'MemUsage', [mem_size], @update_ptr_memusage, skip_frames, skip_bottom_frames);
+  collect_callstack('MemUsage', [mem_size], @update_ptr_memusage, skip_frames, skip_bottom_frames);
 end;
 
 function NewGetMem(Size:ptruint):Pointer;
@@ -132,7 +131,7 @@ begin
   Result := OldMM.GetMem(Size);
 
   SetMemoryManager(OldMM);
-  collect_memusage('NewGetMem', mem_monitor.ChangePtrMemSize(nil, Size, Result), skip_memusage_frames);
+  collect_memusage(mem_monitor.ChangePtrMemSize(nil, Size, Result), skip_memusage_frames);
   //collect_callstack('NewGetMem',[]);
   SetMemoryManager(NewMM);
 end;
@@ -141,7 +140,7 @@ begin
   Result := OldMM.FreeMem(p);
 
   SetMemoryManager(OldMM);
-  collect_memusage('NewFreeMem', mem_monitor.ChangePtrMemSize(p, 0, nil), skip_memusage_frames);
+  collect_memusage(mem_monitor.ChangePtrMemSize(p, 0, nil), skip_memusage_frames);
   //collect_callstack('NewFreeMem',[]);
   SetMemoryManager(NewMM);
 end;
@@ -150,7 +149,7 @@ begin
   Result := OldMM.FreeMemSize(p,Size);
 
   SetMemoryManager(OldMM);
-  collect_memusage('NewFreeMemSize', mem_monitor.ChangePtrMemSize(p, 0, nil), skip_memusage_frames);
+  collect_memusage(mem_monitor.ChangePtrMemSize(p, 0, nil), skip_memusage_frames);
   //collect_callstack('NewFreeMemSize',[]);
   SetMemoryManager(NewMM);
 end;
@@ -159,7 +158,7 @@ begin
   Result := OldMM.AllocMem(size);
 
   SetMemoryManager(OldMM);
-  collect_memusage('NewAllocMem', mem_monitor.ChangePtrMemSize(nil, Size, Result), skip_memusage_frames);
+  collect_memusage(mem_monitor.ChangePtrMemSize(nil, Size, Result), skip_memusage_frames);
   //collect_callstack('NewAllocMem',[]);
   SetMemoryManager(NewMM);
 end;
@@ -171,9 +170,7 @@ begin
   Result := OldMM.ReAllocMem(p,size);
 
   SetMemoryManager(OldMM);
-
-  collect_memusage('NewReallocMem', mem_monitor.ChangePtrMemSize(old_p, Size, Result), skip_memusage_frames);
-
+  collect_memusage(mem_monitor.ChangePtrMemSize(old_p, Size, Result), skip_memusage_frames);
   //collect_callstack('NewReallocMem',[]);
   SetMemoryManager(NewMM);
 end;

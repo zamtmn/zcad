@@ -607,7 +607,7 @@ end;
 
 destructor UserTypeDescriptor.done;
 begin
-     zTraceLn('{T}[FINALIZATION_TYPES]'+self.TypeName);
+     zTraceLn('{T}[FINALIZATION_TYPES]%s',[self.TypeName]);
      //programlog.LogOutStr(self.TypeName,lp_OldPos,LM_Trace);
      SizeInBytes:=0;
      typename:='';

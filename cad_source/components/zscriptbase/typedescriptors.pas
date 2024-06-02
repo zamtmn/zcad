@@ -200,7 +200,7 @@ begin
   repeat
         if curr^.SubNode<>nil then
                                       PTPropertyDeskriptorArray(curr^.SubNode)^.cleareraseobj;
-        zTraceLn('{T}[ZSCRIPT]'+curr^.Name+'='+curr^.Value);
+        zTraceLn('{T}[ZSCRIPT]%s=%s',[curr^.Name,curr^.Value]);
         //programlog.LogOutStr(curr^.Name,0,LM_Trace);
         //programlog.LogOutStr('='+curr^.Value,0,LM_Trace);
         curr^.Name:='';

@@ -146,14 +146,14 @@ const
 var
    s,ts:String;
 begin
-     zTraceLn(sysutils.Format('[FILEOPS]FindInSupportPath: searh file:"%s"',[{$IFNDEF DELPHI}utf8tosys{$ENDIF}(FileName)]));
+     zTraceLn('[FILEOPS]FindInSupportPath: searh file:"%s"',[{$IFNDEF DELPHI}utf8tosys{$ENDIF}(FileName)]);
      FileName:=ExpandPath(FileName);
-     zTraceLn(sysutils.Format('[FILEOPS]FindInSupportPath: file name expand to:"%s"',[{$IFNDEF DELPHI}utf8tosys{$ENDIF}(FileName)]));
+     zTraceLn('[FILEOPS]FindInSupportPath: file name expand to:"%s"',[{$IFNDEF DELPHI}utf8tosys{$ENDIF}(FileName)]);
      if FileExists({$IFNDEF DELPHI}utf8tosys{$ENDIF}(FileName)) then
                                  begin
                                       result:=FileName;
                                       //programlog.LogOutStr(format(FindInSupportPath,[{$IFNDEF DELPHI}utf8tosys{$ENDIF}(ts)]),0,LM_Info);
-                                      zTraceLn(sysutils.Format(cFindInSupportPath,[{$IFNDEF DELPHI}utf8tosys{$ENDIF}(FileName)]));
+                                      zTraceLn(cFindInSupportPath,[{$IFNDEF DELPHI}utf8tosys{$ENDIF}(FileName)]);
                                       exit;
                                  end;
      //if PPaths<>nil then
@@ -162,12 +162,12 @@ begin
      repeat
            GetPartOfPath(ts,s,';');
            ts:=ExpandPath(ts);
-           zTraceLn(sysutils.Format('[FILEOPS]FindInSupportPath: searh in "%s"',[{$IFNDEF DELPHI}utf8tosys{$ENDIF}(ts)]));
+           zTraceLn('[FILEOPS]FindInSupportPath: searh in "%s"',[{$IFNDEF DELPHI}utf8tosys{$ENDIF}(ts)]);
            ts:=ts+FileName;
            if FileExists({$IFNDEF DELPHI}utf8tosys{$ENDIF}(ts)) then
                                  begin
                                       result:=ts;
-                                      zTraceLn(sysutils.Format(cFindInSupportPath,[{$IFNDEF DELPHI}utf8tosys{$ENDIF}(result)]));
+                                      zTraceLn(cFindInSupportPath,[{$IFNDEF DELPHI}utf8tosys{$ENDIF}(result)]);
                                       exit;
                                  end;
      until s='';

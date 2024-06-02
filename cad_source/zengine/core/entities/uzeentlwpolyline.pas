@@ -626,129 +626,63 @@ begin
 end;
 
 procedure GDBObjLWpolyline.LoadFromDXF;
-var p: gdbvertex2d;
-  s: String;
-  byt, code, i: Integer;
-  hlGDBWord: LongWord;
-  tDouble: Double;
-  numv: Integer;
+var
+  p:gdbvertex2d;
+  byt,i:Integer;
+  hlGDBWord:LongWord;
+  numv:Integer;
   widthload:boolean;
   globalwidth:double;
 begin
-  //inherited init(nil,0, -1);
   hlGDBWord:=0;
   numv:=0;
-  widthload:=false;
   globalwidth:=0;
-  //vp.id:=GDBLWPolylineID;
-  //bp.ListPos.owner:=@drawing;
+  widthload:=false;
+  closed:=false;
   if bp.ListPos.owner<>nil then
-                               local.p_insert:={w0^}PGDBVertex(@bp.ListPos.owner^.GetMatrix^[3])^
-                           else
-                               local.P_insert:=nulvertex;;
-  closed := false;
-  //Width2D_in_OCS_Array.createarray;
-  (*Vertex2D_in_OCS_Array.init(1000,closed);
-  Width2D_in_OCS_Array.init(1000);
-  Vertex3D_in_WCS_Array.init(1000);
-  Width3D_in_WCS_Array.init(1000, sizeof(GDBQuad3d));
-  *)
-  s := f.ParseString;
-  val(s, byt, code);
+    local.p_insert:=PGDBVertex(@bp.ListPos.owner^.GetMatrix^[3])^
+  else
+    local.P_insert:=nulvertex;
+
+  byt:=f.ParseInteger;
   while byt <> 0 do
   begin
     if not LoadFromDXFObjShared(f,byt,ptu,drawing) then
-    case byt of
-      8:
-        begin
-          s := f.ParseString;
-          vp.Layer :=drawing.getlayertable.getAddres(s);
-        end;
-      62:begin
-              vp.color:=readmystrtoint(f);
-         end;
-      90:
-        begin
-          s := f.ParseString;
-          hlGDBWord := strtoint(s);
-          //vertexarray.init(hlGDBWord,closed);
-          //vertexarray.init(hlGDBWord, sizeof(gdbvertex2d));
-          //normalarray.init(hlGDBWord, sizeof(gdbvertex));
-          //widtharray.init(hlGDBWord, sizeof(GLLWWidth));
-          numv := hlGDBWord;
+      case byt of
+        8  :vp.Layer:=drawing.getlayertable.getAddres(f.ParseString);
+        62 :vp.color:=f.ParseInteger;
+        90 :begin
+          numv:=f.ParseInteger;
           Width2D_in_OCS_Array.SetSize(numv);
-          hlGDBWord := 0;
+          hlGDBWord:=0;
         end;
-      10:
-        begin
-          s := f.ParseString;
-          val(s, p.x, code);
-        end;
-      20:
-        begin
-          s := f.ParseString;
-          val(s, p.y, code);
+        10 :p.x:=f.ParseDouble;
+        20 :begin
+          p.y:=f.ParseDouble;
           lwtv.PushBackData(p);
           inc(hlGDBWord);
         end;
-      38:
-        begin
-          s := f.ParseString;
-          val(s, local.p_insert.z, code);
-          //local.p_insert.z:=-local.p_insert.z;
-        end;
-      40:
-        begin
-          s := f.ParseString;
-          //val(s, PGLLWWidth(Width2D_in_OCS_Array.getelement(hlGDBWord-1)).startw, code);
+        38 :local.p_insert.z:=f.ParseDouble;
+        40 :begin
           Width2D_in_OCS_Array.SetCount(numv);
-          val(s, PGLLWWidth(Width2D_in_OCS_Array.getDataMutable(hlGDBWord-1)).startw, code);
+          PGLLWWidth(Width2D_in_OCS_Array.getDataMutable(hlGDBWord-1)).startw:=f.ParseDouble;
           widthload:=true;
         end;
-      41:
-        begin
-          s := f.ParseString;
+        41 :begin
           Width2D_in_OCS_Array.SetCount(numv);
-          val(s, PGLLWWidth(Width2D_in_OCS_Array.getDataMutable(hlGDBWord- 1)).endw, code);
-          //Width2D_in_OCS_Array.SetCount(hlGDBWord);
+          PGLLWWidth(Width2D_in_OCS_Array.getDataMutable(hlGDBWord- 1)).endw:=f.ParseDouble;
           widthload:=true;
         end;
-      43:
-        begin
-          s := f.ParseString;
-          val(s, tDouble, code);
-          globalwidth:=tDouble;
-        end;
-      70:
-        begin
-          s := f.ParseString;
-          if (strtoint(s) and 1) = 1 then closed := true;
-        end;
-      210:
-        begin
-          s := f.ParseString;
-          val(s, Local.basis.oz.x, code);
-        end;
-      220:
-        begin
-          s := f.ParseString;
-          val(s, Local.basis.oz.y, code);
-        end;
-      230:
-        begin
-          s := f.ParseString;
-          val(s, Local.basis.oz.z, code);
-        end;
-      370:
-        begin
-          s := f.ParseString;
-          vp.lineweight := strtoint(s);
-        end;
-    else
-      s := f.ParseString;
+        43 :globalwidth:=f.ParseDouble;
+        70 :closed:=(f.ParseInteger and 1)=1;
+        210:Local.basis.oz.x:=f.ParseDouble;
+        220:Local.basis.oz.y:=f.ParseDouble;
+        230:Local.basis.oz.z:=f.ParseDouble;
+        370:vp.lineweight:=f.ParseInteger;
+      else
+        f.SkipString;
     end;
-    s := f.ParseString;
-    val(s, byt, code);
+    byt:=f.ParseInteger;
   end;
   if not widthload then begin
     Width2D_in_OCS_Array.SetCount(numv);
@@ -760,11 +694,7 @@ begin
   Vertex2D_in_OCS_Array.SetSize(lwtv.Count);
   lwtv.copyto(Vertex2D_in_OCS_Array);
   lwtv.Clear;
-  //Vertex2D_in_OCS_Array.Shrink;
   Width2D_in_OCS_Array.Shrink;
-  //Vertex3D_in_WCS_Array.Shrink;
-  //Width3D_in_WCS_Array.Shrink;
-  //format;
 end;
 
 procedure GDBObjLWpolyline.SaveToDXF;

@@ -78,31 +78,29 @@ var
   s: String;
   error: Integer;
 begin
-  if fname<>'' then
-  begin
-  while not f.EOF do
-  begin
-    s := f.ParseString;
-    val(s, byt, error);
-    if error <> 0 then
-      s := s{чето тут не так};
-    s := f.ParseString;
-    if (byt = fcode) and (s = fname) then
-      exit;
-  end;
-  end
-  else
-  begin
-  while not f.EOF do
-  begin
-    s := f.ParseString;
-    val(s, byt, error);
-    if error <> 0 then
-      s := s{чето тут не так};
-    if (byt = fcode) then
-          exit;
-    s := f.ParseString;
-  end;
+  if fname<>'' then begin
+    while not f.EOF do begin
+      byt:=f.ParseInteger;
+      //s := f.ParseString;
+      //val(s, byt, error);
+      //if error <> 0 then
+      //  s := s{чето тут не так};
+      s := f.ParseString;
+      if (byt = fcode) and (s = fname) then
+        exit;
+    end;
+  end else begin
+    while not f.EOF do begin
+      byt:=f.ParseInteger;
+      //s := f.ParseString;
+      //val(s, byt, error);
+      //if error <> 0 then
+      //  s := s{чето тут не так};
+      if (byt = fcode) then
+        exit;
+      //s:=f.ParseString;
+      f.SkipString;
+    end;
   end;
 end;
 procedure readvariables(var drawing:TSimpleDrawing;var f:TZMemReader;var ctstyle:String; var clayer:String;var cltype:String;var cdimstyle:String;LoadMode:TLoadOpt;DWGVarsDict:TString2StringDictionary);
@@ -209,10 +207,11 @@ begin
   try
   while not f.EOF do
   begin
-    s := f.ParseString;
+    group:=f.ParseInteger;
+    (*s := f.ParseString;
     val(s, group, error);
     if error <> 0 then
-                      DebugLn('{EM}ReadDXFHeader wrong group code');
+      DebugLn('{EM}ReadDXFHeader wrong group code');*)
     s := f.ParseString;
     if group<>999 then
     begin
@@ -270,10 +269,11 @@ begin
   result:=false;
   while not f.EOF do
   begin
-    s := f.ParseString;
-    val(s, byt, error);
-    if error <> 0 then
-      s := s{чето тут не так};
+    byt:=f.ParseInteger;
+    //s := f.ParseString;
+    //val(s, byt, error);
+    //if error <> 0 then
+    //  s := s{чето тут не так};
     s := f.ParseString;
     if (byt = fcode) and (s = fname) then
                                          begin

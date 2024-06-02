@@ -118,50 +118,24 @@ begin
   dxfvertexout(outhandle,10,P_insertInOCS);
 end;
 procedure GDBObjPoint.LoadFromDXF;
-var s, layername: String;
-  byt, code: Integer;
+var
+  byt:Integer;
 begin
-  //inherited init(nil,0, 10);
-  //vp.ID := GDBPointID;
   P_insertInOCS:=NulVertex;
-  s := f.ParseString;
-  val(s, byt, code);
+  byt:=f.ParseInteger;
   while byt <> 0 do
   begin
     case byt of
-      8:
-        begin
-          layername := f.ParseString;
-          vp.Layer := {gdb.GetCurrentDWG.LayerTable}drawing.GetLayerTable.getaddres(layername);
-              //layername:=Pointer(s);
-        end;
-      10:
-        begin
-          s := f.ParseString;
-          val(s, P_insertInOCS.x, code);
-        end;
-      20:
-        begin
-          s := f.ParseString;
-          val(s, P_insertInOCS.y, code);
-        end;
-      30:
-        begin
-          s := f.ParseString;
-          val(s, P_insertInOCS.z, code);
-        end;
-      370:
-        begin
-          s := f.ParseString;
-          vp.lineweight := strtoint(s);
-        end;
+      8  :vp.Layer :=drawing.GetLayerTable.getaddres(f.ParseString);
+      10 :P_insertInOCS.x:=f.ParseDouble;
+      20 :P_insertInOCS.y:=f.ParseDouble;
+      30 :P_insertInOCS.z:=f.ParseDouble;
+      370:vp.lineweight:=f.ParseInteger;
     else
-      s := f.ParseString;
+      f.SkipString;
     end;
-    s := f.ParseString;
-    val(s, byt, code);
+    byt:=f.ParseInteger;
   end;
-
 end;
 
 procedure GDBObjPoint.DrawGeometry;

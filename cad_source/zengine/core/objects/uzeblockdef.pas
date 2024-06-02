@@ -165,7 +165,7 @@ begin
   result:=AllocBlockDef;
   result.initnul(owner);
 end;
-procedure SetLineGeomProps(PBlockdef:PGDBObjBlockDef;args:array of const);
+procedure SetLineGeomProps(PBlockdef:PGDBObjBlockDef; const args:array of const);
 var
    counter:integer;
 begin
@@ -173,7 +173,7 @@ begin
   PBlockdef.Name:=CreateStringFromArray(counter,args);
   PBlockdef.Base:=CreateVertexFromArray(counter,args);
 end;
-function AllocAndCreateBlockDef(owner:PGDBObjGenericWithSubordinated;args:array of const):PGDBObjBlockDef;
+function AllocAndCreateBlockDef(owner:PGDBObjGenericWithSubordinated; const args:array of const):PGDBObjBlockDef;
 begin
   result:= AllocAndInitBlockDef(owner);
   SetLineGeomProps(result,args);

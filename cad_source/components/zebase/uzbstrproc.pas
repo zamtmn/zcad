@@ -21,7 +21,7 @@ unit uzbstrproc;
 interface
 uses {$IFNDEF DELPHI}{fileutil,}{$ENDIF}uzbtypes,sysutils,strutils{$IFNDEF DELPHI},{LCLProc}LazUTF8,lazutf16{$ENDIF};
 function GetPredStr(var s: String; substr: String): String;overload;
-function GetPredStr(var s: String; substrs: array of const; out nearestsubstr:string): String;overload;
+function GetPredStr(var s: String; const substrs: array of const; out nearestsubstr:string): String;overload;
 function readspace(const expr: String): String;
 
 //function sys2interf(s:String):String;
@@ -410,7 +410,7 @@ begin
                   s:='';
              end;
 end;
-function GetPredStr(var s: String; substrs: array of const; out nearestsubstr:string): String;
+function GetPredStr(var s: String; const substrs: array of const; out nearestsubstr:string): String;
 var i,current: Integer;
     substr:String;
     itstring:boolean;

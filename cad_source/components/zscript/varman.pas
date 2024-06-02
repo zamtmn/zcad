@@ -243,7 +243,7 @@ TUnit=object(TSimpleUnit)
             destructor done;virtual;
             procedure free;virtual;
             function RegisterType(ti:PTypeInfo):PUserTypeDescriptor;
-            function SetTypeDesk(ti:PTypeInfo;fieldnames:array of const;SetNames:TFieldNames=[FNUser,FNProgram]):PUserTypeDescriptor;
+            function SetTypeDesk(ti:PTypeInfo; const fieldnames:array of const;SetNames:TFieldNames=[FNUser,FNProgram]):PUserTypeDescriptor;
             function RegisterRecordType(ti:PTypeInfo):PUserTypeDescriptor;
             function RegisterPointerType(ti:PTypeInfo):PUserTypeDescriptor;
             function RegisterEnumType(ti:PTypeInfo):PUserTypeDescriptor;
@@ -610,7 +610,7 @@ begin
        tkEnumeration:result:=RegisterEnumType(ti);
      end;
 end;
-function TUnit.SetTypeDesk(ti:PTypeInfo;fieldnames:array of const;SetNames:TFieldNames=[FNUser,FNProgram]):PUserTypeDescriptor;
+function TUnit.SetTypeDesk(ti:PTypeInfo; const fieldnames:array of const;SetNames:TFieldNames=[FNUser,FNProgram]):PUserTypeDescriptor;
 function GetFieldName(index:integer;const oldname:string):string;
 begin
   if index>high(fieldnames) then

@@ -44,7 +44,7 @@ function ENTF_CreateBlockInsert(AOwner:PGDBObjGenericSubEntry;AArrayInOwner: PGD
                                 AName:String;const APInsert:GDBvertex;const AScale,AAngle:Double):PGDBObjEntity;
 function ENTF_CreateLWPolyLine(AOwner:PGDBObjGenericSubEntry;AArrayInOwner: PGDBObjEntityOpenArray;
                                ALayer:PGDBLayerProp;ALT:PGDBLtypeProp;ALW:TGDBLineWeight;AColor:TGDBPaletteColor;
-                               args:array of const):PGDBObjEntity;
+                               const args:array of const):PGDBObjEntity;
 implementation
 function ENTF_CreateBlockInsert(AOwner:PGDBObjGenericSubEntry;AArrayInOwner: PGDBObjEntityOpenArray;
                                 ALayer:PGDBLayerProp;ALT:PGDBLtypeProp;ALW:TGDBLineWeight;AColor:TGDBPaletteColor;
@@ -169,7 +169,7 @@ begin
 end;
 function ENTF_CreateLWPolyLine(AOwner:PGDBObjGenericSubEntry;AArrayInOwner: PGDBObjEntityOpenArray;
                                ALayer:PGDBLayerProp;ALT:PGDBLtypeProp;ALW:TGDBLineWeight;AColor:TGDBPaletteColor;
-                               args:array of const):PGDBObjEntity;
+                               const args:array of const):PGDBObjEntity;
 begin
   if assigned(_StandartLWPolyLineCreateProcedure)then begin
     result:=_StandartLWPolyLineCreateProcedure(AOwner,args);

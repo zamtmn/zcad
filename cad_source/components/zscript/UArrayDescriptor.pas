@@ -87,7 +87,7 @@ end;
 function ArrayDescriptor.CreateProperties;
 var ppd:PPropertyDeskriptor;
 begin
-     zTraceLn(sysutils.Format('{T}[ZSCRIPT]ArrayDescriptor.CreateProperties(%s)',[name]));
+     zTraceLn('{T}[ZSCRIPT]ArrayDescriptor.CreateProperties(%s)',[name]);
      //programlog.LogOutFormatStr('ArrayDescriptor.CreateProperties(%s)',[name],lp_OldPos,LM_Trace);
      ppd:=GetPPD(ppda,bmode);
      ppd^.Name:=name;

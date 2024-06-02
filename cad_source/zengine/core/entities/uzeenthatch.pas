@@ -762,14 +762,14 @@ begin
   result.initnul;
   result.bp.ListPos.Owner:=owner;
 end;
-procedure SetHatchGeomProps(Pcircle:PGDBObjHatch;args:array of const);
+procedure SetHatchGeomProps(Pcircle:PGDBObjHatch; const args:array of const);
 var
    counter:integer;
 begin
   counter:=low(args);
   Pcircle.Local.p_insert:=CreateVertexFromArray(counter,args);
 end;
-function AllocAndCreateHatch(owner:PGDBObjGenericWithSubordinated;args:array of const):PGDBObjHatch;
+function AllocAndCreateHatch(owner:PGDBObjGenericWithSubordinated; const args:array of const):PGDBObjHatch;
 begin
   result:=AllocAndInitHatch(owner);
   //owner^.AddMi(@result);

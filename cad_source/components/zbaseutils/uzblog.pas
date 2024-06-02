@@ -136,9 +136,9 @@ type
         MsgOptAliasDic:TTMsgOptAliasDic;
 
       function IsNeedToLog(LogMode:TLogLevel;LMDI:TModuleDesk):boolean;
-      procedure processMsg(msg:TLogMsg;LogMode:TLogLevel;LMDI:TModuleDesk;MsgOptions:TMsgOpt);
-      procedure processFmtResultData(var FRD:TFmtResultData;Stampt:TLogStampt;msg:TLogMsg;LogMode:TLogLevel;LMDI:TModuleDesk;MsgOptions:TMsgOpt);
-      procedure processDecoratorData(var DD:TDecoratorData;Stampt:TLogStampt;msg:TLogMsg;LogMode:TLogLevel;LMDI:TModuleDesk;MsgOptions:TMsgOpt);
+      procedure processMsg(const msg:TLogMsg;LogMode:TLogLevel;LMDI:TModuleDesk;MsgOptions:TMsgOpt);
+      procedure processFmtResultData(var FRD:TFmtResultData;Stampt:TLogStampt;const msg:TLogMsg;LogMode:TLogLevel;LMDI:TModuleDesk;MsgOptions:TMsgOpt);
+      procedure processDecoratorData(var DD:TDecoratorData;Stampt:TLogStampt;const msg:TLogMsg;LogMode:TLogLevel;LMDI:TModuleDesk;MsgOptions:TMsgOpt);
 
     public
       EnterMsgOpt,ExitMsgOpt:TMsgOpt;
@@ -150,7 +150,7 @@ type
 
       procedure addMsgOptAlias(const ch:AnsiChar;const opt:TMsgOpt);
 
-      function addBackend(var BackEnd:TLogerBaseBackend;fmt:TLogMsg;const args:array of PTLogerBaseDecorator):TLogExtHandle;
+      function addBackend(var BackEnd:TLogerBaseBackend;const fmt:TLogMsg;const args:array of PTLogerBaseDecorator):TLogExtHandle;
       procedure removeBackend(BackEndH:TLogExtHandle);
 
       function addDecorator(var Decorator:TLogerBaseDecorator):TLogExtHandle;
@@ -159,11 +159,11 @@ type
       procedure LogStart;
       procedure LogEnd;
 
-      function Enter(EnterTo:TLogMsg;LogMode:TLogLevel=1;LMDI:TModuleDesk=1;MsgOptions:TMsgOpt=MsgDefaultOptions):TEntered;
+      function Enter(const EnterTo:TLogMsg;LogMode:TLogLevel=1;LMDI:TModuleDesk=1;MsgOptions:TMsgOpt=MsgDefaultOptions):TEntered;
       procedure Leave(AEntered:TEntered);
 
-      procedure LogOutFormatStr(Const Fmt:TLogMsg;const Args :Array of const;LogMode:TLogLevel;LMDI:TModuleDesk=1;MsgOptions:TMsgOpt=MsgDefaultOptions);virtual;
-      procedure LogOutStr(str:TLogMsg;LogMode:TLogLevel=1;LMDI:TModuleDesk=1;MsgOptions:TMsgOpt=MsgDefaultOptions);virtual;
+      procedure LogOutFormatStr(const Fmt:TLogMsg;const Args :Array of const;LogMode:TLogLevel;LMDI:TModuleDesk=1;MsgOptions:TMsgOpt=MsgDefaultOptions);virtual;
+      procedure LogOutStr(const str:TLogMsg;LogMode:TLogLevel=1;LMDI:TModuleDesk=1;MsgOptions:TMsgOpt=MsgDefaultOptions);virtual;
       function RegisterLogLevel(LogLevelName:TLogLevelHandleNameType;LLAlias:AnsiChar;_LLD:TLogLevelType):TLogLevel;
 
       function RegisterModule(ModuleName:TModuleDeskNameType;Enbl:TEnable=EDefault):TModuleDesk;
@@ -171,7 +171,7 @@ type
       function GetCurrentLogLevel:TLogLevel;
       procedure SetDefaultLogLevel(LogLevel:TLogLevel;silent:boolean=false);
 
-      procedure ZOnDebugLN(Sender: TObject; S: TLogMsg; var Handled: Boolean);
+      procedure ZOnDebugLN(Sender: TObject; const S: TLogMsg; var Handled: Boolean);
       procedure ZDebugLN(const S: TLogMsg);
       function isTraceEnabled:boolean;
 
@@ -281,12 +281,12 @@ begin
     result:=LogLevels.GetPLincedData(LogMode)^.LogLevelType>=DisabledModuleAllow;
   end;
 end;
-procedure TLog.LogOutFormatStr(Const Fmt:TLogMsg;const Args :Array of const;LogMode:TLogLevel;LMDI:TModuleDesk;MsgOptions:TMsgOpt=MsgDefaultOptions);
+procedure TLog.LogOutFormatStr(const Fmt:TLogMsg;const Args :Array of const;LogMode:TLogLevel;LMDI:TModuleDesk;MsgOptions:TMsgOpt=MsgDefaultOptions);
 begin
   if IsNeedToLog(LogMode,lmdi) then
     processMsg(format(fmt,args),LogMode,LMDI,MsgOptions);
 end;
-function TLog.Enter(EnterTo:TLogMsg;LogMode:TLogLevel=1;LMDI:TModuleDesk=1;MsgOptions:TMsgOpt=MsgDefaultOptions):TEntered;
+function TLog.Enter(const EnterTo:TLogMsg;LogMode:TLogLevel=1;LMDI:TModuleDesk=1;MsgOptions:TMsgOpt=MsgDefaultOptions):TEntered;
 begin
   if IsNeedToLog(LogMode,lmdi) then begin
     result.Entered:=true;
@@ -307,7 +307,7 @@ begin
     processMsg(format('end; {%s}',[AEntered.EnteredTo]),AEntered.LogLevel,AEntered.LMDI,AEntered.MsgOptions or ExitMsgOpt);
 end;
 
-procedure TLog.logoutstr(str:TLogMsg;LogMode:TLogLevel;LMDI:TModuleDesk;MsgOptions:TMsgOpt=MsgDefaultOptions);
+procedure TLog.logoutstr(const str:TLogMsg;LogMode:TLogLevel;LMDI:TModuleDesk;MsgOptions:TMsgOpt=MsgDefaultOptions);
 begin
   if IsNeedToLog(LogMode,lmdi) then
     processMsg(str,LogMode,LMDI,MsgOptions);
@@ -459,7 +459,7 @@ begin
   end
 end;
 
-function TLog.addBackend(var BackEnd:TLogerBaseBackend;fmt:TLogMsg;const args:array of PTLogerBaseDecorator):TLogExtHandle;
+function TLog.addBackend(var BackEnd:TLogerBaseBackend;const fmt:TLogMsg;const args:array of PTLogerBaseDecorator):TLogExtHandle;
 var
   BD:TLogerBackendData;
   i,j,k:Integer;
@@ -521,7 +521,7 @@ begin
     dec(TotalBackendsCount);
 end;
 
-procedure TLog.processDecoratorData(var DD:TDecoratorData;Stampt:TLogStampt;msg:TLogMsg;LogMode:TLogLevel;LMDI:TModuleDesk;MsgOptions:TMsgOpt);
+procedure TLog.processDecoratorData(var DD:TDecoratorData;Stampt:TLogStampt; const msg:TLogMsg;LogMode:TLogLevel;LMDI:TModuleDesk;MsgOptions:TMsgOpt);
 begin
   if DD.Stampt=Stampt then
     exit;
@@ -529,7 +529,7 @@ begin
   DD.Stampt:=Stampt
 end;
 
-procedure TLog.processFmtResultData(var FRD:TFmtResultData;Stampt:TLogStampt;msg:TLogMsg;LogMode:TLogLevel;LMDI:TModuleDesk;MsgOptions:TMsgOpt);
+procedure TLog.processFmtResultData(var FRD:TFmtResultData;Stampt:TLogStampt; const msg:TLogMsg;LogMode:TLogLevel;LMDI:TModuleDesk;MsgOptions:TMsgOpt);
 var
   arrVT:array of TVarRec;
   i:integer;
@@ -548,7 +548,7 @@ begin
   FRD.Res:=format(FRD.Fmt.msgFmt,arrVT);
 end;
 
-procedure TLog.processMsg(msg:TLogMsg;LogMode:TLogLevel;LMDI:TModuleDesk;MsgOptions:TMsgOpt);
+procedure TLog.processMsg(const msg:TLogMsg;LogMode:TLogLevel;LMDI:TModuleDesk;MsgOptions:TMsgOpt);
 var
   i:Integer;
   Stampt:TLogStampt;
@@ -661,7 +661,7 @@ begin
   MsgOptAliasDic.add(ch,opt);
 end;
 
-procedure TLog.ZOnDebugLN(Sender: TObject; S: string; var Handled: Boolean);
+procedure TLog.ZOnDebugLN(Sender: TObject; const S: string; var Handled: Boolean);
 begin
      ZDebugLN(S);
 end;

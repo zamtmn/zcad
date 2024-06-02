@@ -28,12 +28,12 @@ uses
 type
 
   TTimeDecorator=object(TLogerBaseDecorator)
-    function GetDecor(msg:TLogMsg;MsgOptions:TMsgOpt;LogMode:TLogLevel;LMDI:TModuleDesk):TLogMsg;virtual;
+    function GetDecor(const msg:TLogMsg;MsgOptions:TMsgOpt;LogMode:TLogLevel;LMDI:TModuleDesk):TLogMsg;virtual;
     constructor init;
   end;
   TPositionDecorator=object(TLogerBaseDecorator)
     offset:integer;
-    function GetDecor(msg:TLogMsg;MsgOptions:TMsgOpt;LogMode:TLogLevel;LMDI:TModuleDesk):TLogMsg;virtual;
+    function GetDecor(const msg:TLogMsg;MsgOptions:TMsgOpt;LogMode:TLogLevel;LMDI:TModuleDesk):TLogMsg;virtual;
     constructor init;
   end;
 
@@ -42,7 +42,7 @@ var
 
 implementation
 
-function TPositionDecorator.GetDecor(msg:TLogMsg;MsgOptions:TMsgOpt;LogMode:TLogLevel;LMDI:TModuleDesk):TLogMsg;
+function TPositionDecorator.GetDecor(const msg:TLogMsg;MsgOptions:TMsgOpt;LogMode:TLogLevel;LMDI:TModuleDesk):TLogMsg;
 begin
  if (MsgOptions and lp_DecPos)>0 then
    dec(offset,2);
@@ -60,7 +60,7 @@ constructor TTimeDecorator.init;
 begin
 end;
 
-function TTimeDecorator.GetDecor(msg:TLogMsg;MsgOptions:TMsgOpt;LogMode:TLogLevel;LMDI:TModuleDesk):TLogMsg;
+function TTimeDecorator.GetDecor(const msg:TLogMsg;MsgOptions:TMsgOpt;LogMode:TLogLevel;LMDI:TModuleDesk):TLogMsg;
 begin
   result:=TimeToStr(Time);
 end;

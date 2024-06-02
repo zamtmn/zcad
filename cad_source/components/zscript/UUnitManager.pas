@@ -466,7 +466,7 @@ begin
                                                   if typ<>packedrecordtype then
                                                                                begin
                                                                                //ShowError('Record "'+typename+'" not packed');
-                                                                               zTraceLn('{W}Record "'+typename+'" not packed');
+                                                                               zTraceLn('{W}Record "%s" not packed',[typename]);
 
                                                                                end;
 //                                                  if (typename) = 'tmemdeb'
@@ -484,7 +484,7 @@ begin
                                                   if typ<>packedobjecttype then
                                                                                begin
                                                                                //ShowError('Object "'+typename+'" not packed');
-                                                                               zTraceLn('{W}Object "'+typename+'" not packed');
+                                                                               zTraceLn('{W}Object "%s" not packed',[typename]);
 
                                                                                end;
 //                                                  if (typename) = 'GDBObj3DFace'
@@ -550,7 +550,7 @@ begin
                                                   if typ<>packedarraytype then
                                                                               begin
                                                                                //ShowError('Array "'+typename+'" not packed');
-                                                                               zTraceLn('{W}Array "'+typename+'" not packed');
+                                                                               zTraceLn('{W}Array "%s" not packed',[typename]);
 
                                                                               end;
 //                                                  if typename='GDBPalette' then
@@ -788,7 +788,7 @@ if addtype then
                                                    system.break
                                                else
                                                    begin
-                                                        zTraceLn('{D}[ZSCRIPT]'+line);
+                                                        zTraceLn('{D}[ZSCRIPT]%s',[line]);
 
                                                         //programlog.logoutstr(line,0,LM_Debug);
                                                         //if copy(line,1,10)='VIEW_ObjIn'
@@ -834,7 +834,7 @@ begin
   if FindFirst(path + '*.pas', faAnyFile, sr) = 0 then
   begin
     repeat
-      zTraceLn('{T}[ZSCRIPT]Found file "%s"',[path+sr.Name]);
+      zTraceLn('{T}[ZSCRIPT]Found file "%s%s"',[path,sr.Name]);
       //programlog.LogOutFormatStr('Found file "%s"',[path+sr.Name],lp_OldPos,LM_Info);
       loadunit(PPaths,TranslateFunc,path+sr.Name,nil);
     until FindNext(sr) <> 0;

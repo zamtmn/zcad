@@ -771,7 +771,7 @@ begin
   result.initnul(owner);
   result.bp.ListPos.Owner:=owner;
 end;
-procedure SetLineGeomProps(Pline:PGDBObjLine;args:array of const);
+procedure SetLineGeomProps(Pline:PGDBObjLine; const args:array of const);
 var
    counter:integer;
 begin
@@ -779,7 +779,7 @@ begin
   Pline.CoordInOCS.lBegin:=CreateVertexFromArray(counter,args);
   Pline.CoordInOCS.lEnd:=CreateVertexFromArray(counter,args);
 end;
-function AllocAndCreateLine(owner:PGDBObjGenericWithSubordinated;args:array of const):PGDBObjLine;
+function AllocAndCreateLine(owner:PGDBObjGenericWithSubordinated; const args:array of const):PGDBObjLine;
 begin
   result:=AllocAndInitLine(owner);
   //owner^.AddMi(@result);

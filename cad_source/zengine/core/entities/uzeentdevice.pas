@@ -702,7 +702,7 @@ begin
   result.initnul{(owner)};
   result.bp.ListPos.Owner:=owner;
 end;
-function AllocAndCreateDevice(owner:PGDBObjGenericWithSubordinated;args:array of const):PGDBObjBlockInsert;
+function AllocAndCreateDevice(owner:PGDBObjGenericWithSubordinated; const args:array of const):PGDBObjBlockInsert;
 begin
   result:=AllocAndInitDevice(owner);
   //owner^.AddMi(@result);

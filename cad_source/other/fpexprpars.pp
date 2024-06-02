@@ -914,7 +914,7 @@ begin
   Raise EExprParser.Create(Msg);
 end;
 
-Procedure RaiseParserError(Fmt : String; Args : Array of const);
+Procedure RaiseParserError(Fmt : String; const Args : Array of const);
 begin
   Raise EExprParser.CreateFmt(Fmt,Args);
 end;

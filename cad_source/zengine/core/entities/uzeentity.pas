@@ -1191,12 +1191,23 @@ var
   XValue:String;
   Name,Value:String;
   i:integer;
+
+  function MyTryStrToQWord(const s:string; Out value:QWord): boolean;
+  var
+    code:integer;
+    ss:shortstring;
+  begin
+    ss:='$';
+    ss:=ss+ShortString(s);
+    Val(ss, value, code);
+    Result:=code=0
+  end;
 begin
   result:=false;
   case dxfcod of
     5:begin
       if AddExtAttrib^.dwgHandle=0 then begin
-        if not TryStrToQWord('$'+readmystr(f),PExtAttrib^.dwgHandle)then
+        if not MyTryStrToQWord(readmystr(f), PExtAttrib^.dwgHandle)then
           begin
             //нужно залупиться
           end
@@ -1234,15 +1245,14 @@ begin
     1001:begin
       APP_NAME:=f.ParseShortString;
       result:=true;
-      if APP_NAME=ZCADAppNameInDXF then begin
+      if (Length(APP_NAME) = Length(ZCADAppNameInDXF)) and
+         (StrLComp(@APP_NAME[1], @ZCADAppNameInDXF[1], Length(APP_NAME))=0) then begin
         repeat
           XGroup:=readmystrtoint(f);
           XValue:=readmystr(f);
           if XGroup=1000 then begin
             i:=pos('=',Xvalue);
-            Name:=copy(Xvalue,1,i-1);
-            if name='' then
-              name:='empty';
+            if i>1 then Name:=copy(Xvalue,1,i-1) else name:='empty';
             Value:=copy(Xvalue,i+1,length(xvalue)-i);
             ProcessFromDXFObjXData(Name,Value,ptu,drawing);
           end;

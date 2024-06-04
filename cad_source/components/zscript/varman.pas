@@ -28,7 +28,8 @@ uses
   TypeDescriptors,URecordDescriptor,UObjectDescriptor,uzbstrproc,classes,typinfo,
   UPointerDescriptor,
   gzctnrVectorPData,gzctnrVector,
-  uzbLogIntf,uzctnrAlignedVectorBytes,uzbtypes;
+  uzbLogIntf,uzctnrAlignedVectorBytes,uzbtypes,
+  StrUtils;
 type
     td=record
              template:String;
@@ -1320,7 +1321,7 @@ begin
   end;
   //deb1:=pvardesk(pdesc)^.name;
   //deb2:=copy(nam, 1, length(pvardesk(pdesc)^.name));
-  if pvardesk(pdesc)^.name <> copy(nam, 1, length(pvardesk(pdesc)^.name)) then
+  if not StartsStr(pvardesk(pdesc)^.name, nam) then
   begin
     exit;
   end;

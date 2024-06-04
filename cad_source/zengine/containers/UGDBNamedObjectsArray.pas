@@ -21,7 +21,8 @@ unit UGDBNamedObjectsArray;
 {$INCLUDE zengineconfig.inc}
 interface
 uses gzctnrVectorTypes,gzctnrVectorPObjects,sysutils,uzbtypes,uzegeometry,
-     uzeNamedObject,gzctnrVectorClass;
+     uzeNamedObject,gzctnrVectorClass,
+     Strings;
 type
 {EXPORT+}
 TForCResult=(IsFounded(*'IsFounded'*)=1,
@@ -102,17 +103,15 @@ function GDBNamedObjectsArray<PTObj,TObj>.AddItem;
 var
   p:PGDBNamedObject;
   ir:itrec;
-  name_upper:string;
 begin
   PItem:=nil;
   begin
        p:=beginiterate(ir);
-       name_upper:=uppercase(name);
        if p<>nil then
        begin
        result:=IsFounded;
        repeat
-            if uppercase(p^.name) = name_upper then
+         if (Length(p^.name)=Length(name)) and (StrLIComp(@p^.name[1], @name[1], Length(name))=0) then
                                                         begin
                                                              PItem:=p;
                                                              system.exit;
@@ -134,16 +133,14 @@ function GDBNamedObjectsArray<PTObj,TObj>.getIndex;
 var
   p:PGDBNamedObject;
   ir:itrec;
-  name_upper: String;
 begin
   result := -1;
 
   p:=beginiterate(ir);
   if p<>nil then
   begin
-    name_upper:=uppercase(name);// Может вызывать отложенно? по флагу
     repeat
-      if uppercase(p^.name) = name_upper then
+      if (Length(p^.name)=Length(name)) and (StrLIComp(@p^.name[1], @name[1], Length(name))=0) then
       begin
         result := ir.itc;
         exit;
@@ -157,15 +154,13 @@ function GDBNamedObjectsArray<PTObj,TObj>.getAddres(const name: String):Pointer;
 var
   p:PGDBNamedObject;
       ir:itrec;
-  name_upper:string;
 begin
   result:=nil;
   p:=beginiterate(ir);
   if p<>nil then
   begin
-    name_upper:=uppercase(name);
     repeat
-      if uppercase(p^.name) = name_upper then
+      if (Length(p^.name)=Length(name)) and (StrLIComp(@p^.name[1], @name[1], Length(name))=0) then
       begin
         result := p;
         exit;
@@ -179,15 +174,13 @@ function GDBNamedObjectsArray<PTObj,TObj>.getAddres(const name: ShortString):Poi
 var
   p:PGDBNamedObject;
   ir:itrec;
-  name_upper:ShortString;
 begin
   result:=nil;
   p:=beginiterate(ir);
   if p<>nil then
   begin
-    name_upper:=uppercase(name);
     repeat
-      if uppercase(p^.name) = name_upper then
+      if (Length(p^.name)=Length(name)) and (StrLIComp(@p^.name[1], @name[1], Length(name))=0) then
       begin
         result := p;
         exit;

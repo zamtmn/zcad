@@ -62,17 +62,21 @@ const
 
 implementation
 uses varmandef{,log,URecordDescriptor};
-function findlexem(const s:String):String;
+function findlexem(const s:String; start, len: Integer):String; overload;
 var
    i:Integer;
+   s2:string;
 begin
      result:='';
      for i:=0 to maxlexem do
-     if lexemarray[i,0]=s then
-                              begin
-                                   result:=lexemarray[i,1];
-                                   exit;
-                              end;
+     begin
+       s2:=lexemarray[i,0];
+       if (Length(s2)=len) and (CompareChar(s2[1], s[start], len)=0) then
+                                begin
+                                     result:=lexemarray[i,1];
+                                     exit;
+                                end;
+     end;
 end;
 
 function replacenull(const s:String): String;
@@ -270,8 +274,7 @@ begin
                '_':begin
                         subi:=i;
                         foundsym(#0,template,subi);
-                        subexpr:=copy(template,i,subi-i);
-                        subexpr:=findlexem(subexpr);
+                        subexpr:=findlexem(template,i,subi-i);
                         if subexpr<>'' then
                         begin
                              l:='';
@@ -290,8 +293,7 @@ begin
                '?':begin
                         subi:=i;
                         foundsym(#0,template,subi);
-                        subexpr:=copy(template,i,subi-i);
-                        if pos(str[position],subexpr)<>0 then
+                        if IndexByte(template[i], subi-i, Byte(str[position]))>=0 then
                                                              begin
                                                                   if (lexema<>nil) and mode then lexema^:=lexema^+str[position];
                                                                   inc(position);
@@ -321,8 +323,7 @@ begin
                '^':begin
                         subi:=i;
                         foundsym(#0,template,subi);
-                        subexpr:=copy(template,i,subi-i);
-                        if pos(str[position],subexpr)<>0 then
+                        if IndexByte(template[i], subi-i, Byte(str[position]))>=0 then
                                                              begin
                                                                   result:=true
                                                              end
@@ -385,8 +386,7 @@ begin
                '{':begin
                         iend:=i;
                         readsubexpr('{','}',template,i,iend);
-                        subexpr:=copy(template,i+1,iend-i-1);
-                        subexpr:=findlexem(subexpr);
+                        subexpr:=findlexem(template,i+1,iend-i-1);
                         if subexpr<>'' then
                         begin
                              {error:=}parse(template,str,Stringarray,mode,nil,position);

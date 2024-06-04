@@ -1196,10 +1196,11 @@ begin
   case dxfcod of
     5:begin
       if AddExtAttrib^.dwgHandle=0 then begin
-        if not TryStrToQWord('$'+readmystr(f),PExtAttrib^.dwgHandle)then
-          begin
-            //нужно залупиться
-          end
+        PExtAttrib^.dwgHandle:=f.ParseHexInteger;
+        //if not TryStrToQWord('$'+readmystr(f),PExtAttrib^.dwgHandle)then
+        //  begin
+        //    //нужно залупиться
+        //  end
       end else begin
         f.SkipString;
         //нужно залупиться

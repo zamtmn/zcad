@@ -5,14 +5,15 @@ unit umainformGDI;
 interface
 
 uses
-  LCLType,Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs,
+  LCLType,Classes, SysUtils, FileUtil, Math,
+  Forms, Controls, Graphics, Dialogs,
   ExtCtrls, StdCtrls, Spin,
   {From ZCAD}
   uzeffmanager,
                                                                          //zcad memorymanager
   uzbtypes, uzegeometrytypes,                                              //zcad basetypes
   uzegeometry,                                                                     //some mathematical and geometrical support
-  uzefontmanager,uzefontshx,// uzeffshx,                                                        //fonts manager and SHX fileformat support
+  uzefontmanager,uzeFontFileFormatSHX,                                                        //fonts manager and SHX fileformat support
   uzglviewareaabstract,uzglviewareageneral,uzgldrawcontext,                          //generic view areas support
   uzglviewareaogl,uzglviewareagdi,                                           //gdi and opengl wiewareas
   uzeentity,                                                                    //generic entitys objects parent
@@ -562,7 +563,7 @@ begin
     pobj^.textprop.size:=1+random(10);
     pobj^.textprop.justify:=b2j[1+random(11)];
     pobj^.textprop.wfactor:=0.3+random*0.7;
-    pobj^.textprop.oblique:=(random(30)-15)*pi/180;
+    pobj^.textprop.oblique:=DegToRad(random(30)-15);
     angl:=pi*random;
     //pobj^.textprop.angle:=angl;
     pobj^.local.basis.OX:=VectorTransform3D(PGDBObjText(pobj)^.local.basis.OX,uzegeometry.CreateAffineRotationMatrix(PGDBObjText(pobj)^.Local.basis.oz,-angl));

@@ -1191,27 +1191,12 @@ var
   XValue:String;
   Name,Value:String;
   i:integer;
-
-  function MyTryStrToQWord(const s:string; Out value:QWord): boolean;
-  var
-    code:integer;
-    ss:shortstring;
-  begin
-    ss:='$';
-    ss:=ss+ShortString(s);
-    Val(ss, value, code);
-    Result:=code=0
-  end;
 begin
   result:=false;
   case dxfcod of
     5:begin
       if AddExtAttrib^.dwgHandle=0 then begin
         PExtAttrib^.dwgHandle:=f.ParseHexInteger;
-        //if not TryStrToQWord('$'+readmystr(f),PExtAttrib^.dwgHandle)then
-        //  begin
-        //    //нужно залупиться
-        //  end
       end else begin
         f.SkipString;
         //нужно залупиться

@@ -262,18 +262,18 @@ begin
   calcObjMatrix;
   angle := endangle - startangle;
   if angle < 0 then angle := 2 * pi + angle;
-  length := abs(angle){*pi/180} * rr;//---------------------------------------------------------------
-  SinCos(startangle{*pi/180},v.y,v.x);
+  length := abs(angle)*rr;//---------------------------------------------------------------
+  SinCos(startangle,v.y,v.x);
   v.z:=0;
   v.w:=1;
   v:=VectorTransform(v,objMatrix);
   q0:=pgdbvertex(@v)^;
-  SinCos(startangle+angle{*pi/180}/2,v.y,v.x);
+  SinCos(startangle+angle/2,v.y,v.x);
   v.z:=0;
   v.w:=1;
   v:=VectorTransform(v,objMatrix);
   q1:=pgdbvertex(@v)^;
-  SinCos(endangle{*pi/180},v.y,v.x);
+  SinCos(endangle,v.y,v.x);
   v.z:=0;
   v.w:=1;
   v:=VectorTransform(v,objMatrix);

@@ -21,6 +21,7 @@ unit uzccommand_rotate;
 
 interface
 uses
+  math,
   gzctnrVectorTypes,
   uzcdrawing,
   uzgldrawcontext,
@@ -50,7 +51,7 @@ begin
    if (commandmanager.GetValueHeap{-vs})>0 then
    begin
    v1:=commandmanager.PopValue;
-   td:=PDouble(v1.data.Addr.Instance)^*pi/180;
+   td:=DegToRad(PDouble(v1.data.Addr.Instance)^);
    rot(td,MZW_LBUTTON);
    end;
 end;

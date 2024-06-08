@@ -660,7 +660,7 @@ begin
   //initnul;
   vv := 0;
   gv := 0;
-  byt:=readmystrtoint(f);
+  byt:=f.ParseInteger;
   angleload:=false;
   doublepoint:=false;
   style:='';
@@ -693,7 +693,7 @@ else if not dxfIntegerload(f,72,byt,gv)then
      if not dxfIntegerload(f,71,byt,textbackward)then
      if not dxfStringload(f,1,byt,tcontent)then
                                                {s := }f.SkipString;
-    byt:=readmystrtoint(f);
+    byt:=f.ParseInteger;
   end;
   if (textbackward and 4)<>0 then
                                  textprop.upsidedown:=true

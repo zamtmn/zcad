@@ -439,7 +439,7 @@ var //s: String;
   byt{, code}: Integer;
 begin
   //initnul;
-  byt:=readmystrtoint(f);
+  byt:=f.ParseInteger;
   while byt <> 0 do
   begin
     if not LoadFromDXFObjShared(f,byt,ptu,drawing) then
@@ -448,7 +448,7 @@ begin
     if not dxfDoubleload(f,40,byt,ratio) then
     if not dxfDoubleload(f,41,byt,startangle) then
     if not dxfDoubleload(f,42,byt,endangle) then {s := }f.SkipString;
-    byt:=readmystrtoint(f);
+    byt:=f.ParseInteger;
   end;
   startangle := startangle{ * pi / 180};
   endangle := endangle{ * pi / 180};

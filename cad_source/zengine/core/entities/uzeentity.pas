@@ -1198,8 +1198,8 @@ begin
       if AddExtAttrib^.dwgHandle=0 then begin
         PExtAttrib^.dwgHandle:=f.ParseHexInteger;
       end else begin
+        //при загрузке полилинии у вертексов есть хэндл
         f.SkipString;
-        //нужно залупиться
       end;
       result:=true;
     end;
@@ -1213,19 +1213,19 @@ begin
         if vp.Layer=nil then
           vp.Layer:=vp.Layer;
       end else
-        APP_NAME:=readmystr(f);
+        APP_NAME:=f.ParseString;
         result:=true
     end;
     48:begin
-      vp.LineTypeScale :=readmystrtodouble(f);
+      vp.LineTypeScale:=f.ParseDouble;
       result:=true
     end;
     62:begin
-      vp.color:=readmystrtoint(f);
+      vp.color:=f.ParseInteger;
       result:=true
     end;
     370:begin
-      vp.lineweight :=readmystrtoint(f);
+      vp.lineweight:=f.ParseInteger;
       result:=true
     end;
     1001:begin
@@ -1234,8 +1234,8 @@ begin
       if (Length(APP_NAME) = Length(ZCADAppNameInDXF)) and
          (StrLComp(@APP_NAME[1], @ZCADAppNameInDXF[1], Length(APP_NAME))=0) then begin
         repeat
-          XGroup:=readmystrtoint(f);
-          XValue:=readmystr(f);
+          XGroup:=f.ParseInteger;
+          XValue:=f.ParseString;
           if XGroup=1000 then begin
             i:=pos('=',Xvalue);
             if i>1 then Name:=copy(Xvalue,1,i-1) else name:='empty';

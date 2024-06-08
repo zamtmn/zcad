@@ -79,12 +79,12 @@ var
   byt: Integer;
 begin
   //initnul(@gdb.ObjRoot);
-  byt:=readmystrtoint(f);
+  byt:=f.ParseInteger;
   while byt <> 0 do
   begin
     if not LoadFromDXFObjShared(f,byt,ptu,drawing) then
                                            f.SkipString;
-    byt:=readmystrtoint(f);
+    byt:=f.ParseInteger;
   end;
   GetDXFIOFeatures.RunAfterLoadFeature(@self);
 end;

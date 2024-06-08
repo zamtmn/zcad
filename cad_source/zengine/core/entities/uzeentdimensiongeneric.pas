@@ -109,7 +109,7 @@ var
   byt,dtype:Integer;
   style:String;
 begin
-  byt:=readmystrtoint(f);
+  byt:=f.ParseInteger;
   dtype:=-1;
   style:='';
   while byt <> 0 do
@@ -133,7 +133,7 @@ begin
                                                                   end
                             else
                                 f.SkipString;
-    byt:=readmystrtoint(f);
+    byt:=f.ParseInteger;
   end;
   if dtype<>-1 then
   begin

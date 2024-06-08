@@ -171,7 +171,7 @@ procedure GDBObj3DFace.LoadFromDXF;
 var //s: String;
   byt: Integer;
 begin
-  byt:=readmystrtoint(f);
+  byt:=f.ParseInteger;
   while byt <> 0 do
   begin
     if not LoadFromDXFObjShared(f,byt,ptu,drawing) then
@@ -180,7 +180,7 @@ begin
           if not dxfvertexload(f,12,byt,PInOCS[2]) then
           if not dxfvertexload(f,13,byt,PInOCS[3]) then
           {s := }f.SkipString;
-    byt:=readmystrtoint(f);
+    byt:=f.ParseInteger;
   end;
 end;
 procedure GDBObj3DFace.SaveToDXF;

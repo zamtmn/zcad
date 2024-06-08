@@ -376,7 +376,7 @@ begin
   tmpKnot:=0;
   tmpFlag:=0;
 
-  GroupCode:=readmystrtoint(f);
+  GroupCode:=f.ParseInteger;
   while GroupCode <> 0 do begin
     if not LoadFromDXFObjShared(f,GroupCode,ptu,drawing) then
        if dxfvertexload(f,10,GroupCode,tmpVertex) then begin
@@ -395,7 +395,7 @@ begin
                                                    end
 
                                       else {s:= }f.SkipString;
-    GroupCode:=readmystrtoint(f);
+    GroupCode:=f.ParseInteger;
   end;
 vertexarrayinocs.Shrink;
 Knots.Shrink;

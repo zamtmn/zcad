@@ -189,7 +189,7 @@ begin
   tv:=NulVertex;
 
   //initnul(@gdb.ObjRoot);
-  byt:=readmystrtoint(f);
+  byt:=f.ParseInteger;
   while true do
   begin
     s:='';
@@ -210,7 +210,7 @@ begin
                                                   if s='SEQEND' then system.Break;
                                              end
                                       else s:= f.ParseString;
-    byt:=readmystrtoint(f);
+    byt:=f.ParseInteger;
   end;
 
   vertexarrayinocs.SetSize(curveVertexArrayInWCS.Count);

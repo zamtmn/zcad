@@ -523,7 +523,7 @@ var
 begin
   hlGDBWord:=0;
   attrcont := false;
-  byt:=readmystrtoint(f);
+  byt:=f.ParseInteger;
   while byt <> 0 do
   begin
      if not LoadFromDXFObjShared(f,byt,ptu,drawing) then
@@ -533,7 +533,7 @@ begin
        rotate:=DegToRad(rotate)
 else if dxfIntegerload(f,71,byt,hlGDBWord)then begin if hlGDBWord = 1 then attrcont := true; end
 else if not dxfStringload(f,2,byt,name)then {s := }f.SkipString;
-    byt:=readmystrtoint(f);
+    byt:=f.ParseInteger;
   end;
   if attrcont then ;
       {begin

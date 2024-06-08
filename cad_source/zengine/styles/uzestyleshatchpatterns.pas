@@ -117,20 +117,20 @@ var
 begin
   result:=dxfIntegerload(f,78,dxfcod,patternscount);
   if result then begin
-    dxfcod:=readmystrtoint(f);
+    dxfcod:=f.ParseInteger;
     for i:=1 to patternscount do begin
-      if dxfdoubleload(f,53,dxfcod,angle) then dxfcod:=readmystrtoint(f);
-      if dxfdoubleload(f,43,dxfcod,base.x) then dxfcod:=readmystrtoint(f);
-      if dxfdoubleload(f,44,dxfcod,base.y) then dxfcod:=readmystrtoint(f);
-      if dxfdoubleload(f,45,dxfcod,offset.x) then dxfcod:=readmystrtoint(f);
-      if dxfdoubleload(f,46,dxfcod,offset.y) then dxfcod:=readmystrtoint(f);
+      if dxfdoubleload(f,53,dxfcod,angle) then dxfcod:=f.ParseInteger;
+      if dxfdoubleload(f,43,dxfcod,base.x) then dxfcod:=f.ParseInteger;
+      if dxfdoubleload(f,44,dxfcod,base.y) then dxfcod:=f.ParseInteger;
+      if dxfdoubleload(f,45,dxfcod,offset.x) then dxfcod:=f.ParseInteger;
+      if dxfdoubleload(f,46,dxfcod,offset.y) then dxfcod:=f.ParseInteger;
 
       if PPattern=nil then begin
         PPattern:=GetMem(sizeof(THatchPattern));
         PPattern^.init(patternscount);
       end;
 
-      if dxfintegerload(f,79,dxfcod,dashcount) then dxfcod:=readmystrtoint(f);
+      if dxfintegerload(f,79,dxfcod,dashcount) then dxfcod:=f.ParseInteger;
       psa:=PPattern^.CreateObject;
       psa^.init(dashcount);
       psa^.Angle:=angle-MainAngle;
@@ -147,7 +147,7 @@ begin
       for j:=1 to dashcount do begin
         if dxfdoubleload(f,49,dxfcod,dash) then begin
           psa^.PushBackData(dash/MainScale);
-          dxfcod:=readmystrtoint(f);
+          dxfcod:=f.ParseInteger;
         end;
       end;
       psa^.format;

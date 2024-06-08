@@ -499,13 +499,13 @@ var //s: String;
   byt{, code}: Integer;
 begin
   //initnul;
-  byt:=readmystrtoint(f);
+  byt:=f.ParseInteger;
   while byt <> 0 do
   begin
     if not LoadFromDXFObjShared(f,byt,ptu,drawing) then
     if not dxfvertexload(f,10,byt,Local.P_insert) then
     if not dxfDoubleload(f,40,byt,Radius) then {s := }f.SkipString;
-    byt:=readmystrtoint(f);
+    byt:=f.ParseInteger;
   end;
   //PProjoutbound:=nil;
   //pprojpoint:=nil;

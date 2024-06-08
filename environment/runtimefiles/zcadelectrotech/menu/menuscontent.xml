@@ -224,6 +224,11 @@
         <Command Caption="BlockPreviewExport" Command="ExecuteFile(*components/blockpreviewexport.cmd)"/>
         <Action Name="ACN_TREESTAT"/>
         <Command Caption="AppExplorer" Command="DbgAppExplorer"/>
+        <SubMenu Name="**dbgMemProfiler">
+          <Command Caption="dbgMemProfiler(on)" Command="dbgMemProfiler(on)"/>
+          <Command Caption="dbgMemProfiler" Command="dbgMemProfiler"/>
+          <Command Caption="dbgMemProfiler(off)" Command="dbgMemProfiler(off)"/>
+        </SubMenu>
       </SubMenu>
       <SubMenu Name="Inspector">
         <Command Caption="**Fix the current" Command="SetObjInsp(CURRENT)"/>

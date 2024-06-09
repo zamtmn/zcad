@@ -30,7 +30,7 @@ TBoundaryPath=object
   paths:GZVector<GDBPolyline2DArray>;
   constructor init(m:TArrayIndex);
   destructor done;virtual;
-  function LoadFromDXF(var f:TZMemReader;dxfcod:Integer):Boolean; {todo: вынести это нафиг из простых типов}
+  function LoadFromDXF(var f:TZMemReader;DXFCode:Integer):Boolean; {todo: вынести это нафиг из простых типов}
   procedure SaveToDXF(var outhandle:TZctnrVectorBytes);
   procedure CloneTo(var Dest:TBoundaryPath);
   procedure Clear;virtual;
@@ -132,7 +132,7 @@ begin
   paths.Clear;
 end;
 
-function TBoundaryPath.LoadFromDXF(var f:TZMemReader;dxfcod:Integer):Boolean;
+function TBoundaryPath.LoadFromDXF(var f:TZMemReader;DXFCode:Integer):Boolean;
 type
   TNotPolyLine=(NPL_Line,NPL_CircularArc,NPL_EllipticArc,NPL_Spline);
 var
@@ -145,7 +145,7 @@ var
   NotPolyLine:TNotPolyLine;
   isFirst:boolean;
 begin
-     result:=dxfIntegerload(f,91,dxfcod,pathscount);
+     result:=dxfIntegerload(f,91,DXFCode,pathscount);
      if result then begin
        isPolyLine:=false;
        byt:=f.ParseInteger;

@@ -64,14 +64,14 @@ procedure dxfDoubleout(var f:TZctnrVectorBytes;dxfcode:Integer;const v:Double);
 procedure dxfIntegerout(var f:TZctnrVectorBytes;dxfcode:Integer;const v:Integer);
 procedure dxfStringout(var f:TZctnrVectorBytes;dxfcode:Integer;const v:String);overload;
 procedure dxfStringout(var f:TZctnrVectorBytes;dxfcode:Integer;const v1,v2:String);overload;
-function dxfvertexload(var f:TZMemReader;dxfcod,currentdxfcod:Integer; var v:gdbvertex):Boolean;
-function dxfvertexload1(var f:TZMemReader;dxfcod,currentdxfcod:Integer; var v:gdbvertex):Boolean;
-function dxfDoubleload(var f:TZMemReader;dxfcod,currentdxfcod:Integer; var v:Double):Boolean;
-function dxfFloatload(var f:TZMemReader;dxfcod,currentdxfcod:Integer; var v:Single):Boolean;
-function dxfIntegerload(var f:TZMemReader;dxfcod,currentdxfcod:Integer; var v:Integer):Boolean;
-function dxfStringload(var f:TZMemReader;dxfcod,currentdxfcod:Integer; var v:String):Boolean;overload;
-function dxfStringload(var f:TZMemReader;dxfcod,currentdxfcod:Integer; var v:TDXFEntsInternalStringType):Boolean;overload;
-function dxfGroupCode(const dxfcod:Integer):String;
+function dxfvertexload(var f:TZMemReader;DXFCode,CurrentDXFCode:Integer; var v:gdbvertex):Boolean;
+function dxfvertexload1(var f:TZMemReader;DXFCode,CurrentDXFCode:Integer; var v:gdbvertex):Boolean;
+function dxfDoubleload(var f:TZMemReader;DXFCode,CurrentDXFCode:Integer; var v:Double):Boolean;
+function dxfFloatload(var f:TZMemReader;DXFCode,CurrentDXFCode:Integer; var v:Single):Boolean;
+function dxfIntegerload(var f:TZMemReader;DXFCode,CurrentDXFCode:Integer; var v:Integer):Boolean;
+function dxfStringload(var f:TZMemReader;DXFCode,CurrentDXFCode:Integer; var v:String):Boolean;overload;
+function dxfStringload(var f:TZMemReader;DXFCode,CurrentDXFCode:Integer; var v:TDXFEntsInternalStringType):Boolean;overload;
+function dxfGroupCode(const DXFCode:Integer):String;
 function DXFHandle(const sh:string):TDWGHandle;
 
 implementation
@@ -80,9 +80,9 @@ function DXFHandle(const sh:string):TDWGHandle;
 begin
      result:=StrToQWord('$'+sh);
 end;
-function dxfGroupCode(const dxfcod:Integer):String;
+function dxfGroupCode(const DXFCode:Integer):String;
 begin
-     result:=inttostr(dxfcod);
+     result:=inttostr(DXFCode);
 end;
 
 procedure dxfvertexout(var f:TZctnrVectorBytes;dxfcode:Integer;const v:gdbvertex);
@@ -183,53 +183,53 @@ begin
      f.TXTAddStringEOL(v2);
 end;
 
-function dxfvertexload(var f:TZMemReader;dxfcod,currentdxfcod:Integer; var v:gdbvertex):Boolean;
+function dxfvertexload(var f:TZMemReader;DXFCode,CurrentDXFCode:Integer; var v:gdbvertex):Boolean;
 //var s:String;
 begin
      result:=false;
-     if currentdxfcod=dxfcod then begin v.x:=f.ParseDouble; result:=true end
-else if currentdxfcod=dxfcod+10 then begin v.y:=f.ParseDouble; result:=true end
-else if currentdxfcod=dxfcod+20 then begin v.z:=f.ParseDouble; result:=true end;
+     if CurrentDXFCode=DXFCode then begin v.x:=f.ParseDouble; result:=true end
+else if CurrentDXFCode=DXFCode+10 then begin v.y:=f.ParseDouble; result:=true end
+else if CurrentDXFCode=DXFCode+20 then begin v.z:=f.ParseDouble; result:=true end;
 end;
-function dxfvertexload1(var f:TZMemReader;dxfcod,currentdxfcod:Integer; var v:gdbvertex):Boolean;
+function dxfvertexload1(var f:TZMemReader;DXFCode,CurrentDXFCode:Integer; var v:gdbvertex):Boolean;
 //var s:String;
 begin
      result:=false;
-     if currentdxfcod=dxfcod then begin v.x:=f.ParseDouble; result:=true end
-else if currentdxfcod=dxfcod+1 then begin v.y:=f.ParseDouble; result:=true end
-else if currentdxfcod=dxfcod+2 then begin v.z:=f.ParseDouble; result:=true end;
+     if CurrentDXFCode=DXFCode then begin v.x:=f.ParseDouble; result:=true end
+else if CurrentDXFCode=DXFCode+1 then begin v.y:=f.ParseDouble; result:=true end
+else if CurrentDXFCode=DXFCode+2 then begin v.z:=f.ParseDouble; result:=true end;
 end;
-function dxfDoubleload(var f:TZMemReader;dxfcod,currentdxfcod:Integer; var v:Double):Boolean;
+function dxfDoubleload(var f:TZMemReader;DXFCode,CurrentDXFCode:Integer; var v:Double):Boolean;
 //var s:String;
 begin
      result:=false;
-     if currentdxfcod=dxfcod then begin v:=f.ParseDouble; result:=true end
+     if CurrentDXFCode=DXFCode then begin v:=f.ParseDouble; result:=true end
 end;
-function dxfFloatload(var f:TZMemReader;dxfcod,currentdxfcod:Integer; var v:Single):Boolean;
+function dxfFloatload(var f:TZMemReader;DXFCode,CurrentDXFCode:Integer; var v:Single):Boolean;
 begin
      result:=false;
-     if currentdxfcod=dxfcod then begin v:=f.ParseDouble; result:=true end
+     if CurrentDXFCode=DXFCode then begin v:=f.ParseDouble; result:=true end
 end;
-function dxfIntegerload(var f:TZMemReader;dxfcod,currentdxfcod:Integer; var v:Integer):Boolean;
+function dxfIntegerload(var f:TZMemReader;DXFCode,CurrentDXFCode:Integer; var v:Integer):Boolean;
 //var s:String;
 begin
      result:=false;
-     if currentdxfcod=dxfcod then begin v:=f.ParseInteger; result:=true end
+     if CurrentDXFCode=DXFCode then begin v:=f.ParseInteger; result:=true end
 end;
-function dxfStringload(var f:TZMemReader;dxfcod,currentdxfcod:Integer;var v:String):Boolean;
+function dxfStringload(var f:TZMemReader;DXFCode,CurrentDXFCode:Integer;var v:String):Boolean;
 //var s:String;
 begin
      result:=false;
-     if currentdxfcod=dxfcod then begin
+     if CurrentDXFCode=DXFCode then begin
        v:=v+f.ParseString;
        result:=true;
      end;
 end;
-function dxfStringload(var f:TZMemReader;dxfcod,currentdxfcod:Integer; var v:TDXFEntsInternalStringType):Boolean;
+function dxfStringload(var f:TZMemReader;DXFCode,CurrentDXFCode:Integer; var v:TDXFEntsInternalStringType):Boolean;
 begin
      { #todo : Нужно убрать уникодный вариант. читать утф8 потом за 1 раз присваивать }
      result:=false;
-     if currentdxfcod=dxfcod then begin
+     if CurrentDXFCode=DXFCode then begin
        v:=v+TDXFEntsInternalStringType(f.ParseString);
        result:=true;
      end;

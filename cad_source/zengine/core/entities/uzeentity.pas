@@ -62,7 +62,7 @@ GDBObjEntity= object(GDBObjSubordinated)
                     constructor init(own:Pointer;layeraddres:PGDBLayerProp;LW:SmallInt);
                     constructor initnul(owner:PGDBObjGenericWithSubordinated);
                     procedure SaveToDXFObjPrefix(var  outhandle:{Integer}TZctnrVectorBytes;entname,dbname:String;var IODXFContext:TIODXFContext;notprocessHandle:boolean=false);
-                    function LoadFromDXFObjShared(var f:TZMemReader;dxfcod:Integer;ptu:PExtensionData;var drawing:TDrawingDef):Boolean;
+                    function LoadFromDXFObjShared(var f:TZMemReader;DXFCode:Integer;ptu:PExtensionData;var drawing:TDrawingDef):Boolean;
                     function ProcessFromDXFObjXData(const _Name,_Value:String;ptu:PExtensionData;const drawing:TDrawingDef):Boolean;virtual;
                     function FromDXFPostProcessBeforeAdd(ptu:PExtensionData;const drawing:TDrawingDef):PGDBObjSubordinated;virtual;
                     procedure FromDXFPostProcessAfterAdd;virtual;
@@ -1193,7 +1193,7 @@ var
   i:integer;
 begin
   result:=false;
-  case dxfcod of
+  case DXFCode of
     5:begin
       if AddExtAttrib^.dwgHandle=0 then begin
         PExtAttrib^.dwgHandle:=f.ParseHexInteger;

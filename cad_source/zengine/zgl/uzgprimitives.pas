@@ -109,6 +109,7 @@ PTLLPoint=^TLLPoint;
 TLLPoint= object(TLLPrimitive)
               PIndex:TLLVertexIndex;
               function draw(drawer:TZGLAbstractDrawer;var rc:TDrawContext;var GeomData:ZGLGeomData;var LLPArray:TLLPrimitivesArray;var OptData:ZGLOptimizerData):Integer;virtual;
+              function CalcTrueInFrustum(const frustum:ClipArray;var GeomData:ZGLGeomData;out InRect:TInBoundingVolume):Integer;virtual;
               procedure getEntIndexs(var GeomData:ZGLGeomData;out eid:TEntIndexesData);virtual;
               procedure CorrectIndexes(const offset:TEntIndexesOffsetData);virtual;
         end;
@@ -225,6 +226,12 @@ begin
      Drawer.DrawPoint(@geomdata.Vertex3S,PIndex);
      result:=inherited;
 end;
+function TLLPoint.CalcTrueInFrustum(const frustum:ClipArray;var GeomData:ZGLGeomData;out InRect:TInBoundingVolume):Integer;
+begin
+     InRect:=uzegeometry.CalcPointTrueInFrustum(geomdata.Vertex3S.getDataMutable(self.PIndex)^,frustum);
+     result:=getPrimitiveSize;
+end;
+
 procedure TLLPoint.getEntIndexs(var GeomData:ZGLGeomData;out eid:TEntIndexesData);
 begin
      eid.GeomIndexMin:=PIndex;

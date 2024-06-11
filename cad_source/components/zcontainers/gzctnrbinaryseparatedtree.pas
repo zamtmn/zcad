@@ -201,70 +201,172 @@ begin
 end;
 procedure GZBInarySeparatedGeometry<TBoundingBox,TSeparator,TNodeData,TEntsManipulator,TEntity,TEntityArrayIterateResult,TEntityArray>.Separate;
 var
-   TestNodesCount,OptimalTestNode:integer;
-   TNArray:array of TTestNode;
-   i:integer;
-   PFirstStageData:pointer;
-   pobj:PTEntity;
-   ir:itrec;
-   ep:TElemPosition;
+  i:integer;
+  PFirstStageData:pointer;
+  pobj:PTEntity;
+  ir:itrec;
+  ep:TElemPosition;
+
+  entcount : integer = MaxInt;
+  dentcount: integer = MaxInt;
+  plus_size, minus_size, nul_size: integer;
+  plus_count, minus_count, nul_count: integer;
+  plus_size_optimal,  minus_size_optimal,  nul_size_optimal: integer;
+  TestNode: TTestNode;
+  nul_optimal: TEntityArray;
+  plane_optimal: TSeparator;
+
+  function IsOptimalTestNode: Boolean;
+  begin
+    if nul_count < entcount then
+    begin
+      entcount:=nul_count;
+      dentcount:=abs(plus_count - minus_count);
+      Result:=True;
+    end
+    else if nul_count = entcount then
+    begin
+      if abs(plus_count - minus_count) < dentcount then
+      begin
+        entcount:=nul_count;
+        dentcount:=abs(plus_count-minus_count);
+        Result:=True;
+      end;
+    end else Result:=False;
+  end;
+
 begin
-  //writeln(GetNodeDepth);
   if TEntsManipulator.isUnneedSeparate(nul.count,GetNodeDepth)then
                                                                   begin
                                                                     updateenttreeadress;
                                                                     exit;
                                                                   end;
   MoveSub(self);
-  TestNodesCount:=TEntsManipulator.GetTestNodesCount;
-  TNArray:=[];
-  setlength(TNArray,TestNodesCount{-1});
 
-     PFirstStageData:=nil;
-     TEntsManipulator.FirstStageCalcSeparatirs(BoundingBox,TEntity(nil^),PFirstStageData,TSMStart);
-     if PFirstStageData<>nil then
-     begin
-       pobj:=nul.beginiterate(ir);
-       if pobj<>nil then
-       repeat
-             pobj:=TEntsManipulator.IterateResult2PEntity(pobj);
-             TEntsManipulator.FirstStageCalcSeparatirs(BoundingBox,pobj^,PFirstStageData,TSMAccumulation);
-
-             pobj:=nul.iterate(ir);
-       until pobj=nil;
-     end;
-     TEntsManipulator.FirstStageCalcSeparatirs(BoundingBox,TEntity(nil^),PFirstStageData,TSMCalc);
-
-  for i:=0 to high(TNArray) do
-    TNArray[i].initnul(nul.count);
-
-  for i:=0 to high(TNArray) do
-    TEntsManipulator.CreateSeparator(BoundingBox,TNArray[i],PFirstStageData,i);
-
-  for i:=0 to high(TNArray) do
+  PFirstStageData:=nil;
+  TEntsManipulator.FirstStageCalcSeparatirs(BoundingBox,TEntity(nil^),PFirstStageData,TSMStart);
+  if PFirstStageData<>nil then
   begin
+   pobj:=nul.beginiterate(ir);
+   if pobj<>nil then
+   repeat
+         pobj:=TEntsManipulator.IterateResult2PEntity(pobj);
+         TEntsManipulator.FirstStageCalcSeparatirs(BoundingBox,pobj^,PFirstStageData,TSMAccumulation);
+
+         pobj:=nul.iterate(ir);
+   until pobj=nil;
+  end;
+  TEntsManipulator.FirstStageCalcSeparatirs(BoundingBox,TEntity(nil^),PFirstStageData,TSMCalc);
+
+  // подсчёт +/-/nul
+  plus_size_optimal:=0;
+  minus_size_optimal:=0;
+  nul_size_optimal:=0;
+
+  // TODO: Если кол-во элементов в массиве = 1 (а это довольно часто!), то смысла в переборе нету
+  for i:=0 to TEntsManipulator.GetTestNodesCount-1 do
+  begin
+    TEntsManipulator.CreateSeparator(BoundingBox,TestNode,PFirstStageData,i);
+
+    pobj:=nul.beginiterate(ir);
+    if pobj<>nil then
+    begin
+      plus_count:=0;
+      minus_count:=0;
+      nul_count:=0;
+
+      plus_size:=0;
+      minus_size:=0;
+      nul_size:=0;
+      repeat
+         pobj:=TEntsManipulator.IterateResult2PEntity(pobj);
+         ep:=TEntsManipulator.GetBBPosition(TestNode.plane,TEntsManipulator.GetEntityBoundingBox(pobj^));
+         case ep of
+           TEP_Plus:
+           begin
+             inc(plus_count);
+             inc(plus_size, sizeof(pobj^));
+           end;
+           TEP_Minus:
+           begin
+             inc(minus_count);
+             inc(minus_size, sizeof(pobj^));
+           end;
+           TEP_nul:
+           begin
+             inc(nul_count);
+             inc(nul_size, sizeof(pobj^));
+           end;
+         end;
+         pobj:=nul.iterate(ir);
+      until pobj=nil;
+
+      if IsOptimalTestNode then
+      begin
+        plus_size_optimal:=plus_size;
+        minus_size_optimal:=minus_size;
+        nul_size_optimal:=nul_size;
+
+        plane_optimal:=TestNode.plane;
+      end;
+    end;
+  end;
+
+  // сохранение оптимального
+  nul_optimal.init(nul_size_optimal);
+
+  if plus_size_optimal>0 then
+  begin
+    if pplusnode=nil then
+      begin
+        Getmem(pointer(pplusnode),sizeof(GZBInarySeparatedGeometry<TBoundingBox,TSeparator,TNodeData,TEntsManipulator,TEntity,TEntityArrayIterateResult,TEntityArray>));
+        pplusnode.initnul;
+      end;
+      pplusnode.lock;
+      pplusnode.root:=@self;
+      pplusnode.setsize(plus_size_optimal);
+  end;
+
+  if minus_size_optimal>0 then
+  begin
+    if pminusnode=nil then
+      begin
+        Getmem(pointer(pminusnode),sizeof(GZBInarySeparatedGeometry<TBoundingBox,TSeparator,TNodeData,TEntsManipulator,TEntity,TEntityArrayIterateResult,TEntityArray>));
+        pminusnode.initnul;
+      end;
+      pminusnode.lock;
+      pminusnode.root:=@self;
+      pminusnode.setsize(minus_size_optimal);
+  end;
+
   pobj:=nul.beginiterate(ir);
   if pobj<>nil then
-  repeat
-     pobj:=TEntsManipulator.IterateResult2PEntity(pobj);
-     ep:=TEntsManipulator.GetBBPosition(TNArray[i].plane,TEntsManipulator.GetEntityBoundingBox(pobj^));
-     case ep of
-       TEP_Plus://TNArray[i].plus.PushBackData(pobj);
-                TEntsManipulator.StoreEntityToArray(pobj^,TNArray[i].plus);
-      TEP_Minus://TNArray[i].minus.PushBackData(pobj);
-                TEntsManipulator.StoreEntityToArray(pobj^,TNArray[i].minus);
-        TEP_nul://TNArray[i].nul.PushBackData(pobj);
-                TEntsManipulator.StoreEntityToArray(pobj^,TNArray[i].nul);
-     end;
-        pobj:=nul.iterate(ir);
-  until pobj=nil;
+  begin
+    repeat
+       pobj:=TEntsManipulator.IterateResult2PEntity(pobj);
+       ep:=TEntsManipulator.GetBBPosition(plane_optimal,TEntsManipulator.GetEntityBoundingBox(pobj^));
+       case ep of
+         TEP_Plus:  if plus_size_optimal>0 then pplusnode.AddObjectToNodeTree(pobj^);
+         TEP_Minus: if minus_size_optimal>0 then pminusnode.AddObjectToNodeTree(pobj^);
+         TEP_nul:   TEntsManipulator.StoreEntityToArray(pobj^,nul_optimal);
+       end;
+       pobj:=nul.iterate(ir);
+    until pobj=nil;
   end;
-  OptimalTestNode:=GetOptimalTestNode(TNArray);
-  StoreOptimalTestNode(TNArray[OptimalTestNode]);
-  updateenttreeadress;
 
-  for i:=0 to high(TNArray) do
-    TNArray[i].done;
+  // Тут надо придумать как сделать без копирования, как-то присвоить может просто объекты друг другу и освободить лишний
+  nul.clear;
+  nul.setsize(nul_size_optimal);
+  nul_optimal.copyto(nul);
+  nul_optimal.clear;
+  nul_optimal.done;
+
+  Separator:=plane_optimal;
+
+  if plus_size_optimal>0 then pplusnode.unlock;
+  if minus_size_optimal>0 then pminusnode.unlock;
+
+  updateenttreeadress;
 end;
 procedure GZBInarySeparatedGeometry<TBoundingBox,TSeparator,TNodeData,TEntsManipulator,TEntity,TEntityArrayIterateResult,TEntityArray>.AddObjectToNodeTree(var Entity:TEntity);
 begin

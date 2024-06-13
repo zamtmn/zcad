@@ -286,9 +286,9 @@ begin
 
       if IsOptimalTestNode then
       begin
-        plus_count_optimal:=plus_count+100;
-        minus_count_optimal:=minus_count+100;
-        nul_count_optimal:=nul_count+100;
+        plus_count_optimal:=plus_count;
+        minus_count_optimal:=minus_count;
+        nul_count_optimal:=nul_count;
 
         plane_optimal:=TestNode.plane;
       end;

@@ -209,9 +209,8 @@ var
 
   entcount : integer = MaxInt;
   dentcount: integer = MaxInt;
-  plus_size, minus_size, nul_size: integer;
   plus_count, minus_count, nul_count: integer;
-  plus_size_optimal,  minus_size_optimal,  nul_size_optimal: integer;
+  plus_count_optimal, minus_count_optimal, nul_count_optimal: integer;
   TestNode: TTestNode;
   nul_optimal: TEntityArray;
   plane_optimal: TSeparator;
@@ -259,9 +258,9 @@ begin
   TEntsManipulator.FirstStageCalcSeparatirs(BoundingBox,TEntity(nil^),PFirstStageData,TSMCalc);
 
   // подсчёт +/-/nul
-  plus_size_optimal:=0;
-  minus_size_optimal:=0;
-  nul_size_optimal:=0;
+  plus_count_optimal:=0;
+  minus_count_optimal:=0;
+  nul_count_optimal:=0;
 
   // TODO: Если кол-во элементов в массиве = 1 (а это довольно часто!), то смысла в переборе нету
   for i:=0 to TEntsManipulator.GetTestNodesCount-1 do
@@ -274,38 +273,22 @@ begin
       plus_count:=0;
       minus_count:=0;
       nul_count:=0;
-
-      plus_size:=0;
-      minus_size:=0;
-      nul_size:=0;
       repeat
          pobj:=TEntsManipulator.IterateResult2PEntity(pobj);
          ep:=TEntsManipulator.GetBBPosition(TestNode.plane,TEntsManipulator.GetEntityBoundingBox(pobj^));
          case ep of
-           TEP_Plus:
-           begin
-             inc(plus_count);
-             inc(plus_size, sizeof(pobj^));
-           end;
-           TEP_Minus:
-           begin
-             inc(minus_count);
-             inc(minus_size, sizeof(pobj^));
-           end;
-           TEP_nul:
-           begin
-             inc(nul_count);
-             inc(nul_size, sizeof(pobj^));
-           end;
+           TEP_Plus:  inc(plus_count);
+           TEP_Minus: inc(minus_count);
+           TEP_nul:   inc(nul_count);
          end;
          pobj:=nul.iterate(ir);
       until pobj=nil;
 
       if IsOptimalTestNode then
       begin
-        plus_size_optimal:=plus_size;
-        minus_size_optimal:=minus_size;
-        nul_size_optimal:=nul_size;
+        plus_count_optimal:=plus_count+100;
+        minus_count_optimal:=minus_count+100;
+        nul_count_optimal:=nul_count+100;
 
         plane_optimal:=TestNode.plane;
       end;
@@ -313,9 +296,9 @@ begin
   end;
 
   // сохранение оптимального
-  nul_optimal.init(nul_size_optimal);
+  nul_optimal.init(nul_count_optimal);
 
-  if plus_size_optimal>0 then
+  if plus_count_optimal>0 then
   begin
     if pplusnode=nil then
       begin
@@ -324,10 +307,10 @@ begin
       end;
       pplusnode.lock;
       pplusnode.root:=@self;
-      pplusnode.setsize(plus_size_optimal);
+      pplusnode.setsize(plus_count_optimal);
   end;
 
-  if minus_size_optimal>0 then
+  if minus_count_optimal>0 then
   begin
     if pminusnode=nil then
       begin
@@ -336,7 +319,7 @@ begin
       end;
       pminusnode.lock;
       pminusnode.root:=@self;
-      pminusnode.setsize(minus_size_optimal);
+      pminusnode.setsize(minus_count_optimal);
   end;
 
   pobj:=nul.beginiterate(ir);
@@ -346,8 +329,8 @@ begin
        pobj:=TEntsManipulator.IterateResult2PEntity(pobj);
        ep:=TEntsManipulator.GetBBPosition(plane_optimal,TEntsManipulator.GetEntityBoundingBox(pobj^));
        case ep of
-         TEP_Plus:  if plus_size_optimal>0 then pplusnode.AddObjectToNodeTree(pobj^);
-         TEP_Minus: if minus_size_optimal>0 then pminusnode.AddObjectToNodeTree(pobj^);
+         TEP_Plus:  if plus_count_optimal>0 then pplusnode.AddObjectToNodeTree(pobj^);
+         TEP_Minus: if minus_count_optimal>0 then pminusnode.AddObjectToNodeTree(pobj^);
          TEP_nul:   TEntsManipulator.StoreEntityToArray(pobj^,nul_optimal);
        end;
        pobj:=nul.iterate(ir);
@@ -356,15 +339,15 @@ begin
 
   // Тут надо придумать как сделать без копирования, как-то присвоить может просто объекты друг другу и освободить лишний
   nul.clear;
-  nul.setsize(nul_size_optimal);
+  nul.setsize(nul_count_optimal);
   nul_optimal.copyto(nul);
   nul_optimal.clear;
   nul_optimal.done;
 
   Separator:=plane_optimal;
 
-  if plus_size_optimal>0 then pplusnode.unlock;
-  if minus_size_optimal>0 then pminusnode.unlock;
+  if plus_count_optimal>0 then pplusnode.unlock;
+  if minus_count_optimal>0 then pminusnode.unlock;
 
   updateenttreeadress;
 end;

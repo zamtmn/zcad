@@ -212,7 +212,8 @@ var
   plus_count, minus_count, nul_count: integer;
   plus_count_optimal, minus_count_optimal, nul_count_optimal: integer;
   TestNode: TTestNode;
-  nul_optimal: TEntityArray;
+  nul_optimal,
+  temp_entarr: TEntityArray;
   plane_optimal: TSeparator;
 
   function IsOptimalTestNode: Boolean;
@@ -337,12 +338,11 @@ begin
     until pobj=nil;
   end;
 
-  // Тут надо придумать как сделать без копирования, как-то присвоить может просто объекты друг другу и освободить лишний
-  nul.clear;
-  nul.setsize(nul_count_optimal);
-  nul_optimal.copyto(nul);
-  nul_optimal.clear;
-  nul_optimal.done;
+  temp_entarr:=nul;
+  nul:=nul_optimal;
+
+  temp_entarr.clear;
+  temp_entarr.done;
 
   Separator:=plane_optimal;
 

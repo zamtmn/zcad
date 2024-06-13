@@ -76,6 +76,8 @@ type
             function nulDeleteElement(index:Integer):Pointer;
           end;
 {EXPORT-}
+var
+   ttt:integer;
 implementation
 constructor GZBInarySeparatedGeometry<TBoundingBox,TSeparator,TNodeData,TEntsManipulator,TEntity,TEntityArrayIterateResult,TEntityArray>.TTestNode.initnul;
 begin
@@ -216,6 +218,8 @@ var
   temp_entarr: TEntityArray;
   plane_optimal: TSeparator;
 
+  testSeparatorCount:integer;
+
   function IsOptimalTestNode: Boolean;
   begin
     if nul_count < entcount then
@@ -264,6 +268,10 @@ begin
   nul_count_optimal:=0;
 
   // TODO: Если кол-во элементов в массиве = 1 (а это довольно часто!), то смысла в переборе нету
+  // не так. сейчас перебора как такового нет, выбирается максимальный размер BB и по этой оси
+  // далается сечение. но по идее в некоторых вариантах придется выбирать
+
+  testSeparatorCount:=TEntsManipulator.GetTestNodesCount-1;
   for i:=0 to TEntsManipulator.GetTestNodesCount-1 do
   begin
     TEntsManipulator.CreateSeparator(BoundingBox,TestNode,PFirstStageData,i);
@@ -278,20 +286,22 @@ begin
          pobj:=TEntsManipulator.IterateResult2PEntity(pobj);
          ep:=TEntsManipulator.GetBBPosition(TestNode.plane,TEntsManipulator.GetEntityBoundingBox(pobj^));
          case ep of
-           TEP_Plus:  inc(plus_count);
-           TEP_Minus: inc(minus_count);
-           TEP_nul:   inc(nul_count);
+           TEP_Plus:  inc(plus_count,TEntsManipulator.EntitySizeOrOne(pobj^));
+           TEP_Minus: inc(minus_count,TEntsManipulator.EntitySizeOrOne(pobj^));
+           TEP_nul:   inc(nul_count,TEntsManipulator.EntitySizeOrOne(pobj^));
          end;
          pobj:=nul.iterate(ir);
       until pobj=nil;
 
-      if IsOptimalTestNode then
+      //вариант единственный, его и выбираем
+      if (IsOptimalTestNode)or(testSeparatorCount=i) then
       begin
         plus_count_optimal:=plus_count;
         minus_count_optimal:=minus_count;
         nul_count_optimal:=nul_count;
 
         plane_optimal:=TestNode.plane;
+        break;
       end;
     end;
   end;

@@ -20,7 +20,7 @@ unit uzctnrAlignedVectorBytes;
 interface
 uses gzctnrVector,sysutils,gzctnrVectorTypes;
 const
-  ObjAlign=4;
+  ObjAlign=SizeOf(Pointer);
 type
 {Export+}
 {----REGISTEROBJECTTYPE TZctnrAlignedVectorBytes}

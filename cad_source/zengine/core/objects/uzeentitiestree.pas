@@ -259,6 +259,7 @@ var
     ir:itrec;
 begin
      ClearSub;
+     nul.SetSize(entitys.Count);
      Lock;
      root:=rn;
      pobj:=entitys.beginiterate(ir);

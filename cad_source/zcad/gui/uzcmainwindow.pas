@@ -1361,10 +1361,12 @@ begin
   str(TotalLPTime*10e4:3:2,TimeStr);
   LPName:=lps.getLPName(LPHandle);
 
-  if LPName='' then
-    ZCMsgCallBackInterface.TextMessage(format(rscompiledtimemsg,[TimeStr]),TMWOHistoryOut)
-  else
-    ZCMsgCallBackInterface.TextMessage(format(rsprocesstimemsg,[LPName,TimeStr]),TMWOHistoryOut);
+  if not lps.hasOptions(LPHandle,LPSOSilent) then begin
+    if (LPName='')or(lps.hasOptions(LPHandle,LPSOSilent)) then
+      ZCMsgCallBackInterface.TextMessage(format(rscompiledtimemsg,[TimeStr]),[TMWOToConsole])
+    else
+      ZCMsgCallBackInterface.TextMessage(format(rsprocesstimemsg,[LPName,TimeStr]),[TMWOToConsole]);
+  end;
 end;
 procedure TZCADMainWindow.MainMouseMove;
 begin

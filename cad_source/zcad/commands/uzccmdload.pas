@@ -79,8 +79,9 @@ var
    pu:ptunit;
    DC:TDrawContext;
    ZCDCtx:TZDrawingContext;
-   lph:TLPSHandle;
+   lph,lph2:TLPSHandle;
 begin
+  lph:=lps.StartLongProcess(rsLoadFile,nil,0);
   ZCDCtx.CreateRec(drawings.GetCurrentDWG^,drawings.GetCurrentDWG^.pObjRoot^,loadmode,drawings.GetCurrentDWG.CreateDrawingRC);
   loadproc(s,ZCDCtx);
   if FileExists(utf8tosys(s+'.dbpas')) then begin
@@ -93,21 +94,21 @@ begin
     end;
   end;
   dc:=drawings.GetCurrentDWG^.CreateDrawingRC;
-  lph:=lps.StartLongProcess('First maketreefrom afrer dxf load',nil,0);
+  lph2:=lps.StartLongProcess('First maketreefrom afrer dxf load',nil,0,LPSOSilent);
     drawings.GetCurrentROOT.calcbb(dc);
     drawings.GetCurrentDWG^.pObjRoot.ObjArray.ObjTree.maketreefrom(drawings.GetCurrentDWG^.pObjRoot.ObjArray,drawings.GetCurrentDWG^.pObjRoot.vp.BoundingBox,nil);
-  lps.EndLongProcess(lph);
-  lph:=lps.StartLongProcess('drawings.GetCurrentROOT.FormatEntity afrer dxf load',nil,0);
+  lps.EndLongProcess(lph2);
+  lph2:=lps.StartLongProcess('drawings.GetCurrentROOT.FormatEntity afrer dxf load',nil,0,LPSOSilent);
     drawings.GetCurrentROOT.FormatEntity(drawings.GetCurrentDWG^,dc);
-  lps.EndLongProcess(lph);
-  lph:=lps.StartLongProcess('Second maketreefrom and redraw afrer dxf load',nil,0);
+  lps.EndLongProcess(lph2);
+  lph2:=lps.StartLongProcess('Second maketreefrom and redraw afrer dxf load',nil,0,LPSOSilent);
     if drawings.currentdwg<>PTSimpleDrawing(BlockBaseDWG) then begin
       drawings.GetCurrentDWG^.pObjRoot.ObjArray.ObjTree.maketreefrom(drawings.GetCurrentDWG^.pObjRoot.ObjArray,drawings.GetCurrentDWG^.pObjRoot.vp.BoundingBox,nil);
       zcRedrawCurrentDrawing;
     end;
+  lps.EndLongProcess(lph2);
   lps.EndLongProcess(lph);
   ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIActionRedraw);
-
   result:=cmd_ok;
 end;
 

@@ -1282,7 +1282,7 @@ begin
               if (pos('MODEL_SPACE',US)<>0)or(pos('PAPER_SPACE',US)<>0)or(pos('*A',US)=1)or(pos('*D',US)=1){or(pos('*U',US)=1)}then   //блоки *U игнорировать нестоит, что то связанное с параметризацией
               begin
                 //programlog.logoutstr('Ignored block '+s+';',lp_OldPos);
-                DebugLn('{IH}'+rsBlockIgnored,[s]);
+                DebugLn('{I}'+rsBlockIgnored,[s]);
                 //HistoryOutStr(format(rsBlockIgnored,[s]));
                 while (s <> 'ENDBLK') do
                   s := f.ParseString;
@@ -1291,7 +1291,7 @@ begin
                                begin
                                     //programlog.logoutstr('Ignored double definition block '+s+';',lp_OldPos);
                                     //HistoryOutStr(format(rsDoubleBlockIgnored,[Tria_AnsiToUtf8(s)]));
-                                    DebugLn('{IH}'+rsDoubleBlockIgnored,[Tria_AnsiToUtf8(s)]);
+                                    DebugLn('{I}'+rsDoubleBlockIgnored,[Tria_AnsiToUtf8(s)]);
 //                                    if s='DEVICE_PS_UK-VK'then
 //                                               s:=s;
                                     while (s <> 'ENDBLK') do
@@ -1393,7 +1393,7 @@ begin
     DWGVarsDict:=TString2StringDictionary.create;
     ReadDXFHeader(MemReader,DWGVarsDict);
     Context.h2p:=TMapHandleToPointer.create;
-    lph:=lps.StartLongProcess(rsLoadDXFFile,@MemReader,MemReader.Size);
+    lph:=lps.StartLongProcess(rsLoadDXFFile,@MemReader,MemReader.Size,LPSOSilent);
     if DWGVarsDict.mygetvalue('$ACADVER',s) then begin
       s1:=copy(s,3,length(s)-2);
       s2:=copy(s,1,2);

@@ -888,10 +888,9 @@ var
   ir:itrec;
   lpsh:TLPSHandle;
   HaveErrors:boolean;
-  NScrollInfo:TScrollInfo;
 begin
   NavTree.BeginUpdate;
-  lpsh:=LPS.StartLongProcess('NavigatorEntities.RefreshTree',@self);
+  lpsh:=LPS.StartLongProcess('NavigatorEntities.RefreshTree',@self,0,LPSOSilent);
   EraseRoots;
   CreateRoots;
   try

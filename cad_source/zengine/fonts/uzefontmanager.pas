@@ -227,7 +227,7 @@ begin
              IsCreated:
                        begin
                             //HistoryOutStr(sysutils.format(rsLoadingFontFile,[FontPathName]));
-                            debugln('{IH+}'+rsLoadingFontFile,[FontPathName]);
+                            debugln('{I+}'+rsLoadingFontFile,[FontPathName]);
                             //programlog.LogOutFormatStr('Loading font "%s"',[FontPathName],lp_IncPos,LM_Info);
                             _key:=lowercase(FontExt);
                             if _key<>'' then

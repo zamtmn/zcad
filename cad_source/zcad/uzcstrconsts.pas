@@ -163,6 +163,7 @@ resourcestring
   rsCloseDrawings='Close drawings';
 
   {messages}
+  rsLoadFile='Load file';
   rsMsgRepeatCountStr=' [%d]';
   rsDWGAlreadyContainsData='Drawing already contains data. Load anyway?';
   rsCAUTIONnoSyntaxCheckYet='CAUTION! There is no syntax check yet. Clicking "OK" the object will be updated. Error - CRASHES!!!';

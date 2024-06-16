@@ -51,7 +51,7 @@ class procedure TLogHelper.EndLongProcessHandler(LPHandle:TLPSHandle;TotalLPTime
 var
    ts:string;
 begin
-  str((TotalLPTime*10e4):3:2,ts);
+  str((TotalLPTime*10e4):3:3,ts);
   programlog.LogOutFormatStr('LongProcess "%s" finished: %s second',[lps.getLPName(LPHandle),ts],LM_Necessarily,LPSTIMINGModuleDeskIndex)
 end;
 

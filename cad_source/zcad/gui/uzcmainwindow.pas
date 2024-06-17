@@ -1361,7 +1361,7 @@ begin
   str(TotalLPTime*10e4:3:2,TimeStr);
   LPName:=lps.getLPName(LPHandle);
 
-  if not lps.hasOptions(LPHandle,LPSOSilent) then begin
+  if (not lps.hasOptions(LPHandle,LPSOSilent))and(not CommandManager.isBusy) then begin
     if (LPName='')or(lps.hasOptions(LPHandle,LPSOSilent)) then
       ZCMsgCallBackInterface.TextMessage(format(rscompiledtimemsg,[TimeStr]),[TMWOToConsole])
     else

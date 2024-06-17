@@ -860,16 +860,18 @@ begin
           //lastcommand := command;
 
           if silent then begin
-                        programlog.LogOutFormatStr('GDBCommandManager.ExecuteCommandSilent(%s)',[pfoundcommand^.CommandName],LM_Info);
-                        inc(SilentCounter);
-                    end else
-                        begin
-                        ZCMsgCallBackInterface.TextMessage(rsRunCommand+':'+pfoundcommand^.CommandName,TMWOHistoryOut);
-                        lastcommand := command;
-                        if not (isBusy) then
-                        if assigned(OnCommandRun) then
-                                                      OnCommandRun(command);
-                        end;
+            programlog.LogOutFormatStr('GDBCommandManager.ExecuteCommandSilent(%s)',[pfoundcommand^.CommandName],LM_Info);
+            inc(SilentCounter);
+          end else begin
+             if isBusy then
+               ZCMsgCallBackInterface.TextMessage(rsRunCommand+':'+pfoundcommand^.CommandName,[TMWOToLog])
+             else
+               ZCMsgCallBackInterface.TextMessage(rsRunCommand+':'+pfoundcommand^.CommandName,TMWOHistoryOut);
+             lastcommand := command;
+             if not (isBusy) then
+               if assigned(OnCommandRun) then
+                 OnCommandRun(command);
+          end;
 
           run(pfoundcommand,operands,pdrawing);
           if CurrCmd.pcommandrunning<>nil then

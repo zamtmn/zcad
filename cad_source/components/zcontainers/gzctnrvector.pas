@@ -518,6 +518,8 @@ begin
 end;
 function GZVector<T>.CreateArray;
 begin
+  if max=0 then
+    max:=4;
   Getmem(PArray,SizeOfData*max);
   result:=parray;
 end;

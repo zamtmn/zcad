@@ -324,19 +324,21 @@ procedure TZCADMainWindow.IPCMessage(Sender: TObject);
 var
    msgstring,ts:string;
 begin
-     msgstring:=TSimpleIPCServer(Sender).StringMessage;
-     {$ifndef windows}application.BringToFront;{$endif}
-     {$ifdef windows}settop;{$endif}
-     application.processmessages;
-     //{ifdef windows}msgstring:=Tria_AnsiToUtf8(msgstring);{endif}
-     repeat
-           GetPartOfPath(ts,msgstring,'|');
-           if FileExists({$IFNDEF DELPHI}utf8tosys{$ENDIF}(ts)) then
-           begin
-                commandmanager.executecommandtotalend;
-                commandmanager.executecommand('Load('+ts+')',drawings.GetCurrentDWG,drawings.GetCurrentOGLWParam);
-           end;
-     until msgstring='';
+  msgstring:=TSimpleIPCServer(Sender).StringMessage;
+ {$ifndef windows}
+  application.BringToFront;
+ {$else}
+  settop;
+ {$endif}
+  application.processmessages;
+  msgstring:=StringReplace(msgstring,#13,'',[rfReplaceAll]);
+  repeat
+    GetPartOfPath(ts,msgstring,'|');
+    if FileExists({$IFNDEF DELPHI}utf8tosys{$ENDIF}(ts)) then begin
+      commandmanager.executecommandtotalend;
+      commandmanager.executecommand('Load('+ts+')',drawings.GetCurrentDWG,drawings.GetCurrentOGLWParam);
+    end;
+  until msgstring='';
 end;
 
 procedure TZCADMainWindow.setvisualprop(sender:TObject;GUIAction:TZMessageID);
@@ -1009,6 +1011,7 @@ begin
   CreateAnchorDockingInterface;
   ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIActionRedraw);
   MouseTimer:=TMouseTimer.Create;
+  SetupFIPCServer;
   finally programlog.leave(IfEntered);end;end;
 end;
 

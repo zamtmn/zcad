@@ -27,7 +27,7 @@ uses
   dwg,dwgproc,
   uzeffmanager,
   uzelongprocesssupport,uzgldrawcontext,forms,
-  uzcstrconsts,
+  uzcstrconsts,uzeLogIntf,
   LazUTF8;
 
 type
@@ -62,7 +62,7 @@ begin
  lps.ProgressLongProcess(TLPSHandle(Data),Counter);
 end;
 
-procedure addfromdwg(const filename:String;var ZCDCtx:TZDrawingContext{owner:PGDBObjGenericSubEntry;LoadMode:TLoadOpt;var drawing:TSimpleDrawing});
+procedure addfromdwg(const filename:String;var ZCDCtx:TZDrawingContext;const LogProc:TZELogProc=nil);
 var
   dwg:Dwg_Data;
   Success:integer;
@@ -98,7 +98,7 @@ begin
   finally
   end;
 end;
-procedure addfromdxf(const filename:String;var ZCDCtx:TZDrawingContext{owner:PGDBObjGenericSubEntry;LoadMode:TLoadOpt;var drawing:TSimpleDrawing});
+procedure addfromdxf(const filename:String;var ZCDCtx:TZDrawingContext;const LogProc:TZELogProc=nil);
 var
   dwg:Dwg_Data;
   Success:integer;

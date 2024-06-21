@@ -22,7 +22,7 @@ unit uzeffmanager;
 interface
 uses
   uzbnamedhandles,uzbnamedhandleswithdata,uzbtypes,uzeentgenericsubentry,
-  uzedrawingsimple,sysutils,gzctnrSTL,LazLogger,uzgldrawcontext;
+  uzedrawingsimple,sysutils,gzctnrSTL,LazLogger,uzgldrawcontext,uzeLogIntf;
 
 type
   TExt2LoadProcMap<GFileProcessProc>=class
@@ -61,7 +61,7 @@ type
     DC:TDrawContext;
     procedure CreateRec(var ADrawing:TSimpleDrawing;var AOwner:GDBObjGenericSubEntry;ALoadMode:TLoadOpt;constref ADC:TDrawContext);
   end;
-  TFileLoadProcedure=procedure(const name: String;var ZCDCtx:TZDrawingContext{owner:PGDBObjGenericSubEntry;LoadMode:TLoadOpt;var drawing:TSimpleDrawing});
+  TFileLoadProcedure=procedure(const name: String;var ZCDCtx:TZDrawingContext;const LogProc:TZELogProc=nil);
   TLoadFomats=TExt2LoadProcMap<TFileLoadProcedure>;
 var
     Ext2LoadProcMap:TLoadFomats;

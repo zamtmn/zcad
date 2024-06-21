@@ -21,7 +21,7 @@ unit uzccmdload;
 
 interface
 uses
-  uzcLog,LCLType,LazUTF8,
+  uzcLog,LCLType,LazUTF8,LCLProc,
   uzbpaths,uzbtypes,uzcuitypes,
 
   uzeffmanager,uzctranslations,
@@ -35,7 +35,8 @@ uses
   uzcstrconsts,
   uzcutils,
   sysutils,
-  uzelongprocesssupport;
+  uzelongprocesssupport,uzccommandsmanager,
+  uzcreglog,uzeLogIntf;
 
 function Load_Merge(const Operands:TCommandOperands;LoadMode:TLoadOpt):TCommandResult;
 function Internal_Load_Merge(const s: AnsiString;loadproc:TFileLoadProcedure;LoadMode:TLoadOpt):TCommandResult;
@@ -73,6 +74,26 @@ begin
         until pv=nil;
 end;
 
+procedure DXFLoadCallBack(stage:TZEStage;&Type:TZEMsgType;msg:string);
+begin
+  if commandmanager.isBusy then begin
+    case &Type of
+      ZEMsgInfo:ProgramLog.LogOutStr(msg,LM_Info);
+      ZEMsgCriticalInfo:ProgramLog.LogOutStr(msg,LM_Info,1,MO_SH);
+      ZEMsgWarning:ProgramLog.LogOutStr(msg,LM_Info);
+      ZEMsgError:ProgramLog.LogOutStr(msg,LM_Info,1,MO_SH);
+    end;
+  end else begin
+    case &Type of
+      ZEMsgInfo:ProgramLog.LogOutStr(msg,LM_Info,1,MO_SH);
+      ZEMsgCriticalInfo:ProgramLog.LogOutStr(msg,LM_Info,1,MO_SH);
+      ZEMsgWarning:ProgramLog.LogOutStr(msg,LM_Info,1,MO_SH);
+      ZEMsgError:ProgramLog.LogOutStr(msg,LM_Info,1,MO_SM);
+    end;
+    DebugLn(msg);
+  end;
+end;
+
 function Internal_Load_Merge(const s: AnsiString;loadproc:TFileLoadProcedure;LoadMode:TLoadOpt):TCommandResult;
 var
    mem:TZctnrVectorBytes;
@@ -83,7 +104,7 @@ var
 begin
   lph:=lps.StartLongProcess(rsLoadFile,nil,0);
   ZCDCtx.CreateRec(drawings.GetCurrentDWG^,drawings.GetCurrentDWG^.pObjRoot^,loadmode,drawings.GetCurrentDWG.CreateDrawingRC);
-  loadproc(s,ZCDCtx);
+  loadproc(s,ZCDCtx,@DXFLoadCallBack);
   if FileExists(utf8tosys(s+'.dbpas')) then begin
     pu:=PTZCADDrawing(drawings.GetCurrentDWG).DWGUnits.findunit(GetSupportPath,InterfaceTranslate,DrawingDeviceBaseUnitName);
     if assigned(pu) then begin

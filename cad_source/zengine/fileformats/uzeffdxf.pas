@@ -26,7 +26,7 @@ uses LCLProc,uzbpaths,uzbstrproc,uzgldrawcontext,usimplegenerics,uzestylesdim,uz
     uzegeometry,uzeentsubordinated,uzeentgenericsubentry,uzbtypes,
     uzedimensionaltypes,uzegeometrytypes,sysutils,uzeconsts,UGDBObjBlockdefArray,
     uzctnrVectorBytes,UGDBVisibleOpenArray,uzeentity,uzeblockdef,uzestyleslayers,
-    uzeffmanager,uzbLogIntf,
+    uzeffmanager,uzbLogIntf,uzeLogIntf,
     uzMVSMemoryMappedFile,uzMVReader;
 resourcestring
   rsLoadDXFFile='Load DXF file';
@@ -54,7 +54,7 @@ var FOC:Integer;
     CreateExtLoadData:TCreateExtLoadData=nil;
     ClearExtLoadData:TProcessExtLoadData=nil;
     FreeExtLoadData:TProcessExtLoadData=nil;
-procedure addfromdxf(const AFileName: String;var ZCDCtx:TZDrawingContext{owner:PGDBObjGenericSubEntry;LoadMode:TLoadOpt;var drawing:TSimpleDrawing});
+procedure addfromdxf(const AFileName: String;var ZCDCtx:TZDrawingContext;const LogIntf:TZELogProc=nil);
 function savedxf2000(const SavedFileName:String; const TemplateFileName:String;var drawing:TSimpleDrawing):boolean;
 procedure saveZCP(const name: String;var drawing:TSimpleDrawing);
 procedure LoadZCP(const name: String;var drawing:TSimpleDrawing);
@@ -488,7 +488,7 @@ begin
   //additionalunit.done;
   lps.EndLongProcess(lph);
 end;
-procedure addfromdxf12(var f:TZMemReader; const exitString: String;owner:PGDBObjSubordinated;LoadMode:TLoadOpt;var drawing:TSimpleDrawing;var DC:TDrawContext);
+procedure addfromdxf12(var f:TZMemReader; const exitString: String;owner:PGDBObjSubordinated;LoadMode:TLoadOpt;var drawing:TSimpleDrawing;var DC:TDrawContext;const LogProc:TZELogProc=nil);
 var
   {byt,}LayerColor: Integer;
   s, sname{, sx1, sy1, sz1},scode,LayerName: String;
@@ -814,7 +814,7 @@ begin
       drawing.CurrentLayer:=player;
   end;
 end;
-procedure ReadTextstyles(var s:ansistring; const ctstyle:string;var f:TZMemReader; const exitString: String;owner:PGDBObjGenericSubEntry;LoadMode:TLoadOpt;var drawing:TSimpleDrawing;var context:TIODXFLoadContext);
+procedure ReadTextstyles(var s:ansistring; const ctstyle:string;var f:TZMemReader; const exitString: String;owner:PGDBObjGenericSubEntry;LoadMode:TLoadOpt;var drawing:TSimpleDrawing;var context:TIODXFLoadContext;const LogProc:TZELogProc=nil);
 var
    tstyle:GDBTextStyle;
    ptstyle:PGDBTextStyle;
@@ -867,7 +867,7 @@ begin
         if LoadMode=TLOLoad then
           ti:=drawing.TextStyleTable.setstyle(tstyle.Name,FontFile,FontFamily,tstyle.prop,false);
       end else
-        ti:=drawing.TextStyleTable.addstyle(tstyle.Name,FontFile,FontFamily,tstyle.prop,false);
+        ti:=drawing.TextStyleTable.addstyle(tstyle.Name,FontFile,FontFamily,tstyle.prop,false,LogProc);
     end else begin
       if drawing.TextStyleTable.FindStyle(FontFile,true)<>nil then begin
         if LoadMode=TLOLoad then
@@ -1154,7 +1154,7 @@ begin
 end;
 end;
 
-procedure addfromdxf2000(var f:TZMemReader; const exitString: String;owner:PGDBObjGenericSubEntry;LoadMode:TLoadOpt;var drawing:TSimpleDrawing;var context:TIODXFLoadContext;var DC:TDrawContext;DWGVarsDict:TString2StringDictionary);
+procedure addfromdxf2000(var f:TZMemReader; const exitString: String;owner:PGDBObjGenericSubEntry;LoadMode:TLoadOpt;var drawing:TSimpleDrawing;var context:TIODXFLoadContext;var DC:TDrawContext;DWGVarsDict:TString2StringDictionary;const LogProc:TZELogProc=nil);
 var
   byt: Integer;
   error: Integer;
@@ -1236,7 +1236,7 @@ begin
                       else if s = dxfName_Style{:}then
                                     begin
                                       debugln('{D+}[DXF_CONTENTS]Found style table');
-                                      ReadTextstyles(s,ctstyle,f,exitString,owner,LoadMode,drawing,context);
+                                      ReadTextstyles(s,ctstyle,f,exitString,owner,LoadMode,drawing,context,LogProc);
                                       debugln('{D-}[DXF_CONTENTS]end; {style table}');
                                     end
                               else if s = 'UCS'{:}then
@@ -1364,7 +1364,7 @@ begin
   lps.EndLongProcess(lph);
 end;
 
-procedure addfromdxf(const AFileName: String;var ZCDCtx:TZDrawingContext);
+procedure addfromdxf(const AFileName: String;var ZCDCtx:TZDrawingContext;const LogIntf:TZELogProc=nil);
 var
   //f: TZctnrVectorBytes;
   s,s1,s2: String;
@@ -1376,11 +1376,12 @@ var
 
   DxfStream:TZMVSMemoryMappedFile;
   MemReader:TZMemReader;
-
+const
+   ffs='%s (%s)';
 begin
   DefaultFormatSettings.DecimalSeparator:='.';
   debugln('{D+}AddFromDXF("%s")',[AFileName]);
-  DebugLn('{IH}'+rsLoadingFile,[AFileName]);
+  Log(LogIntf,ZESGeneral,ZEMsgCriticalInfo,format(rsLoadingFile,[AFileName]));
   dc:=ZCDCtx.PDrawing^.CreateDrawingRC;
   //f.InitFromFile(AFileName);
 
@@ -1401,25 +1402,25 @@ begin
       if (uppercase(s2)='AC')and(code=0)then begin
         case dxfversion of
           1009:begin
-            DebugLn('{IH}'+rsFileFormat,['DXF12 ('+s+')']);
+            Log(LogIntf,ZESGeneral,ZEMsgInfo,format(rsFileFormat,[format(ffs,['DXF12',s])]));
             gotodxf(MemReader, 0, dxfName_ENDSEC);
-            addfromdxf12(MemReader,'EOF',ZCDCtx.POwner,ZCDCtx.LoadMode,ZCDCtx.PDrawing^,dc);
+            addfromdxf12(MemReader,'EOF',ZCDCtx.POwner,ZCDCtx.LoadMode,ZCDCtx.PDrawing^,dc,LogIntf);
           end;
           1015:begin
-            DebugLn('{IH}'+rsFileFormat,['DXF2000 ('+s+')']);
-            addfromdxf2000(MemReader,'EOF',ZCDCtx.POwner,ZCDCtx.LoadMode,ZCDCtx.PDrawing^,context,dc,DWGVarsDict)
+            Log(LogIntf,ZESGeneral,ZEMsgInfo,format(rsFileFormat,[format(ffs,['DXF2000',s])]));
+            addfromdxf2000(MemReader,'EOF',ZCDCtx.POwner,ZCDCtx.LoadMode,ZCDCtx.PDrawing^,context,dc,DWGVarsDict,LogIntf)
           end;
           1018:begin
-            DebugLn('{IH}'+rsFileFormat,['DXF2004 ('+s+')']);
-            addfromdxf2000(MemReader,'EOF',ZCDCtx.POwner,ZCDCtx.LoadMode,ZCDCtx.PDrawing^,context,dc,DWGVarsDict)
+            Log(LogIntf,ZESGeneral,ZEMsgInfo,format(rsFileFormat,[format(ffs,['DXF2004',s])]));
+            addfromdxf2000(MemReader,'EOF',ZCDCtx.POwner,ZCDCtx.LoadMode,ZCDCtx.PDrawing^,context,dc,DWGVarsDict,LogIntf)
           end;
           1021:begin
-            DebugLn('{IH}'+rsFileFormat,['DXF2007 ('+s+')']);
-            addfromdxf2000(MemReader,'EOF',ZCDCtx.POwner,ZCDCtx.LoadMode,ZCDCtx.PDrawing^,context,dc,DWGVarsDict)
+            Log(LogIntf,ZESGeneral,ZEMsgInfo,format(rsFileFormat,[format(ffs,['DXF2007',s])]));
+            addfromdxf2000(MemReader,'EOF',ZCDCtx.POwner,ZCDCtx.LoadMode,ZCDCtx.PDrawing^,context,dc,DWGVarsDict,LogIntf)
           end;
           1024:begin
-            DebugLn('{IH}'+rsFileFormat,['DXF2010 ('+s+')']);
-            addfromdxf2000(MemReader,'EOF',ZCDCtx.POwner,ZCDCtx.LoadMode,ZCDCtx.PDrawing^,context,dc,DWGVarsDict)
+            Log(LogIntf,ZESGeneral,ZEMsgInfo,format(rsFileFormat,[format(ffs,['DXF2010',s])]));
+            addfromdxf2000(MemReader,'EOF',ZCDCtx.POwner,ZCDCtx.LoadMode,ZCDCtx.PDrawing^,context,dc,DWGVarsDict,LogIntf)
           end;
           else
             DebugLn('{EM}'+rsUnknownFileFormat+' $ACADVER='+s);

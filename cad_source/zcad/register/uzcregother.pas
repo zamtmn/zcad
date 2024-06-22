@@ -248,7 +248,7 @@ finalization;
 
   mem.init(1024);
   SavedUnit^.SavePasToMem(mem);
-  mem.SaveToFile(expandpath(ProgramPath+'rtl'+PathDelim+'savedvar.pas'));
+  mem.SaveToFile(expandpath(ProgramPath+'/rtl'+PathDelim+'savedvar.pas'));
   mem.done;
   //units.FreeAndDone;
 end.

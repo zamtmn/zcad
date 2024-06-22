@@ -37,9 +37,9 @@ var
 begin
   mem.init(1024);
   SysVarUnit^.SavePasToMem(mem);
-  mem.SaveToFile(expandpath(ProgramPath+'rtl/sysvar.pas'));
+  mem.SaveToFile(expandpath(ProgramPath+'/rtl/sysvar.pas'));
   mem.done;
-  SaveParams(expandpath(ProgramPath+'rtl/config.xml'),SysParam.saved);
+  SaveParams(expandpath(ProgramPath+'/rtl/config.xml'),SysParam.saved);
   result:=cmd_ok;
 end;
 

@@ -64,7 +64,7 @@ var
 begin
   try
     // create a new xml config file
-    filename:=utf8tosys(ProgramPath+'components/defaultlayout.xml');
+    filename:=utf8tosys(ProgramPath+'/components/defaultlayout.xml');
     SaveLayoutToFile(filename);
     exit;
     XMLConfig:=TXMLConfigStorage.Create(filename,false);

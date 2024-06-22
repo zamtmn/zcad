@@ -78,7 +78,7 @@ function Help_com(const Context:TZCADCommandContext;operands:TCommandOperands):T
 var
   htmlDoc:string;
 begin
-  htmlDoc:=ProgramPath+'help/userguide.ru.html';//todo: расхардкодить
+  htmlDoc:=ProgramPath+'/help/userguide.ru.html';//todo: расхардкодить
   if CommandManager.CommandsStack.isEmpty then
     OpenDocument(htmlDoc)
   else

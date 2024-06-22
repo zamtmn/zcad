@@ -32,9 +32,9 @@ implementation
 var
   mem:TZctnrVectorBytes;
 initialization;
-  units.loadunit(GetSupportPath,InterfaceTranslate,expandpath('*rtl/sysvar.pas'),nil);
-  units.loadunit(GetSupportPath,InterfaceTranslate,expandpath('*rtl/savedvar.pas'),nil);
-  units.loadunit(GetSupportPath,InterfaceTranslate,expandpath('*rtl/devicebase.pas'),nil);
+  units.loadunit(GetSupportPath,InterfaceTranslate,expandpath('$(ZCADPath)/rtl/sysvar.pas'),nil);
+  units.loadunit(GetSupportPath,InterfaceTranslate,expandpath('$(ZCADPath)/rtl/savedvar.pas'),nil);
+  units.loadunit(GetSupportPath,InterfaceTranslate,expandpath('$(ZCADPath)/rtl/devicebase.pas'),nil);
 
   SysVarUnit:=units.findunit(GetSupportPath,InterfaceTranslate,'sysvar');
   SavedUnit:=units.findunit(GetSupportPath,InterfaceTranslate,'savedvar');
@@ -200,10 +200,10 @@ initialization;
   end;
 
 
-  units.loadunit(GetSupportPath,InterfaceTranslate,expandpath('*rtl/cables.pas'),nil);
-  units.loadunit(GetSupportPath,InterfaceTranslate,expandpath('*rtl/devices.pas'),nil);
-  units.loadunit(GetSupportPath,InterfaceTranslate,expandpath('*rtl/connectors.pas'),nil);
-  units.loadunit(GetSupportPath,InterfaceTranslate,expandpath('*rtl/styles/styles.pas'),nil);
+  units.loadunit(GetSupportPath,InterfaceTranslate,expandpath('$(ZCADPath)/rtl/cables.pas'),nil);
+  units.loadunit(GetSupportPath,InterfaceTranslate,expandpath('$(ZCADPath)/rtl/devices.pas'),nil);
+  units.loadunit(GetSupportPath,InterfaceTranslate,expandpath('$(ZCADPath)/rtl/connectors.pas'),nil);
+  units.loadunit(GetSupportPath,InterfaceTranslate,expandpath('$(ZCADPath)/rtl/styles/styles.pas'),nil);
 
   //units.loadunit(expandpath('*rtl\objdefunits\objname.pas'),nil);
   //units.loadunit(expandpath('*rtl\objdefunits\blocktype.pas'),nil);

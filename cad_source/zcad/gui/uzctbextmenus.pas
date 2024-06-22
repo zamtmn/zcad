@@ -110,8 +110,8 @@ class procedure ZMenuExt.ZMenuExtSampleFiles(MT:TMenuType;fmf:TForm;aName: strin
 begin
   localpm.localpm:=RootMenuItem;
   localpm.ImageIndex:=ImagesManager.GetImageIndex('Dxf');
-  FromDirIterator(expandpath('*/examples'),'*.dxf','',@bugfileiterator,nil);
-  FromDirIterator(expandpath('*/examples'),'*.dwg','',@bugfileiterator,nil);
+  FromDirIterator(expandpath('$(ZCADPath)//examples'),'*.dxf','',@bugfileiterator,nil);
+  FromDirIterator(expandpath('$(ZCADPath)//examples'),'*.dwg','',@bugfileiterator,nil);
   localpm.localpm:=nil;
   localpm.ImageIndex:=-1;
 end;
@@ -120,7 +120,7 @@ class procedure ZMenuExt.ZMenuExtDebugFiles(MT:TMenuType;fmf:TForm;aName: string
 begin
   localpm.localpm:=RootMenuItem;
   localpm.ImageIndex:=ImagesManager.GetImageIndex('Dxf');
-  FromDirIterator(expandpath('*../errors/'),'*.dxf','',@bugfileiterator,nil);
+  FromDirIterator(expandpath('$(ZCADPath)/../errors/'),'*.dxf','',@bugfileiterator,nil);
   localpm.localpm:=nil;
   localpm.ImageIndex:=-1;
 end;

@@ -304,7 +304,7 @@ begin
     //---------------BevelOuter:=bvnone;
 
     aliases.init(100);
-    aliases.loadfromfile(expandpath('*menu/default.cla'));
+    aliases.loadfromfile(expandpath('$(ZCADPath)/menu/default.cla'));
 
     //DMenu:=TDMenuWnd.Create(self);
 

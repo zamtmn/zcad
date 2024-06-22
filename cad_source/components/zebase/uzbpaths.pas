@@ -178,17 +178,18 @@ end;
 function ExpandPath(path:String):String;
 begin
   DefaultMacros.SubstituteMacros(path);
-     if path='' then
-                    result:=programpath
-else if path[1]='*' then
-                    result:=programpath+'/'+copy(path,2,length(path)-1)
-else result:=path;
-result:=StringReplace(result,'/', PathDelim,[rfReplaceAll, rfIgnoreCase]);
-if DirectoryExists({$IFNDEF DELPHI}utf8tosys{$ENDIF}(result)) then
-  if (result[length(result)]<>{'/'}PathDelim)
-  //or (result[length(result)]<>'\')
-  then
-                                     result:=result+PathDelim;
+  if path='' then
+    result:=programpath
+  {else if path[1]='*' then
+         result:=programpath+'/'+copy(path,2,length(path)-1)}
+  else
+    result:=path;
+  result:=StringReplace(result,'/', PathDelim,[rfReplaceAll, rfIgnoreCase]);
+  if DirectoryExists({$IFNDEF DELPHI}utf8tosys{$ENDIF}(result)) then
+    if (result[length(result)]<>{'/'}PathDelim)
+      //or (result[length(result)]<>'\')
+    then
+      result:=result+PathDelim;
 end;
 procedure FromDirsIterator(const path,mask,firstloadfilename:String;proc:TFromDirIterator;method:TFromDirIteratorObj;pdata:pointer);
 var

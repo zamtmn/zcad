@@ -961,7 +961,7 @@ begin
   TZGuiExceptionsHandler.InstallHandler(ZcadException);
 
   SuppressedShortcuts:=TXMLConfig.Create(nil);
-  SuppressedShortcuts.Filename:=ProgramPath+'components/suppressedshortcuts.xml';
+  SuppressedShortcuts.Filename:=ProgramPath+'/components/suppressedshortcuts.xml';
 
   if SysParam.saved.UniqueInstance then
     CreateOrRunFIPCServer;
@@ -980,15 +980,15 @@ begin
 
   InitSystemCalls;
 
-  ImagesManager.ScanDir(ProgramPath+'images/');
-  ImagesManager.LoadAliasesDir(ProgramPath+'images/navigator.ima');
+  ImagesManager.ScanDir(ProgramPath+'/images/');
+  ImagesManager.LoadAliasesDir(ProgramPath+'/images/navigator.ima');
 
   //StandartActions:=TActionList.Create(self);
   InsertComponent(StandartActions);
 
   if not assigned(StandartActions.Images) then
                              StandartActions.Images:={TImageList.Create(StandartActions)}ImagesManager.IconList;
-  brocenicon:=StandartActions.LoadImage(ProgramPath+'menu/BMP/noimage.bmp');
+  brocenicon:=StandartActions.LoadImage(ProgramPath+'/menu/BMP/noimage.bmp');
 
 
   ToolBarsManager.setup(self,StandartActions,sysvar.INTF.INTF_DefaultControlHeight^);

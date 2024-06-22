@@ -181,7 +181,7 @@ begin
      if path='' then
                     result:=programpath
 else if path[1]='*' then
-                    result:=programpath+copy(path,2,length(path)-1)
+                    result:=programpath+'/'+copy(path,2,length(path)-1)
 else result:=path;
 result:=StringReplace(result,'/', PathDelim,[rfReplaceAll, rfIgnoreCase]);
 if DirectoryExists({$IFNDEF DELPHI}utf8tosys{$ENDIF}(result)) then
@@ -263,7 +263,7 @@ begin
   //programlog.LogOutStr('FromDirIterator....{end}',lp_DecPos,LM_Debug);
 end;
 initialization
-  programpath:={$IFNDEF DELPHI}SysToUTF8{$ENDIF}(SysUtils.ExpandFileName(ExtractFilePath(paramstr(0))+'../../'));
+  programpath:={$IFNDEF DELPHI}SysToUTF8{$ENDIF}(SysUtils.ExpandFileName(ExtractFilePath(paramstr(0))+'../..'));
   {$IfNDef DELPHI}
     TempPath:=GetTempDir;
   {$Else}

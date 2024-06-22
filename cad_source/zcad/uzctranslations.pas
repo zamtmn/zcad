@@ -273,7 +273,7 @@ initialization
   programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
   TranslateLogModuleId:=programlog.RegisterModule('TRANSLATOR');
   DisableTranslateCount:=0;
-  PODirectory := ProgramPath+'languages/';
+  PODirectory := ProgramPath+'/languages/';
   GetLanguageIDs(Lang, FallbackLang); // определено в модуле gettext
   if sysparam.saved.LangOverride<>'' then begin
     Lang:=sysparam.saved.LangOverride;

@@ -1,2 +1,2 @@
-ExecuteFile(*components/blockpreviewexport.cmd)
+ExecuteFile($(ZCADPath)/components/blockpreviewexport.cmd)
 Quit

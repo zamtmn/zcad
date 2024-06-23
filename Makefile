@@ -187,7 +187,7 @@ zcadelectrotech: checkvars version
 	$(LP)$(PATHDELIM)lazbuild --pcp=$(PCP) cad_source/zcad.lpi
 
 afterzcadelectrotechbuild: checkallvars version
-	.$(ZP)/zcad nosplash runscript *components/afterbuild.cmd
+	.$(ZP)/zcad nosplash runscript $(ZCADPath)/components/afterbuild.cmd
 cad:
 	mkdir cad
 cad/help:

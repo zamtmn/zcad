@@ -40,6 +40,7 @@ uses
 
 function Load_Merge(const Operands:TCommandOperands;LoadMode:TLoadOpt):TCommandResult;
 function Internal_Load_Merge(const s: AnsiString;loadproc:TFileLoadProcedure;LoadMode:TLoadOpt):TCommandResult;
+procedure DXFLoadCallBack(stage:TZEStage;&Type:TZEMsgType;msg:string);
 
 implementation
 

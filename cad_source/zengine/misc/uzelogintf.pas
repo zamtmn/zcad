@@ -35,7 +35,7 @@ procedure Log(LogProc:TZELogProc;Stage:TZEStage;MsgType:TZEMsgType;Msg:TZEMsg);/
 implementation
 procedure Log(LogProc:TZELogProc;Stage:TZEStage;MsgType:TZEMsgType;Msg:TZEMsg);//inline;
 begin
-  if @LogProc<>nil then
+  if LogProc<>nil then
 
     LogProc(Stage,MsgType,Msg);
 end;

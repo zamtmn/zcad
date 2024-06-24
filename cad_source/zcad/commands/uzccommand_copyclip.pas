@@ -57,7 +57,7 @@ begin
   s:=temppath+'Z$C'+inttohex(random(15),1)+inttohex(random(15),1)+inttohex(random(15),1)+inttohex(random(15),1)
      +inttohex(random(15),1)+inttohex(random(15),1)+inttohex(random(15),1)+inttohex(random(15),1)+'.dxf';
   CopyClipFile:=s;
-  savedxf2000(s,ProgramPath + 'components/empty.dxf',ClipboardDWG^);
+  savedxf2000(s,ProgramPath + '/components/empty.dxf',ClipboardDWG^);
   s:=s+#0;
   suni:=s;
   //setlength(suni,length(s)*2+2);

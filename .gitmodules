@@ -22,3 +22,6 @@
 [submodule "cad_source/components/zreaders"]
 	path = cad_source/components/zreaders
 	url = https://github.com/zamtmn/zreaders.git
+[submodule "cad_source/components/callstack_memprofiler"]
+	path = cad_source/components/callstack_memprofiler
+	url = https://github.com/Alligator-1/callstack_memprofiler.git

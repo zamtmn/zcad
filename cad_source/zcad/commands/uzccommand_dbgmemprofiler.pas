@@ -26,7 +26,7 @@ uses
   uzcLog,
   uzccommandsabstract,uzccommandsimpl,
   uzcinfoform,
-  uzcinterface,callstack_mem_dump;
+  uzcinterface,callstack_memprofiler;
 
 implementation
 

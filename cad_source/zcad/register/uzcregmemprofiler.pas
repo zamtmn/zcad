@@ -20,7 +20,7 @@ unit uzcregMemProfiler;
 {$INCLUDE zengineconfig.inc}
 interface
 uses
-  callstack_mem_dump,uzcsysparams;
+  callstack_memprofiler,uzcsysparams;
 implementation
 
 initialization

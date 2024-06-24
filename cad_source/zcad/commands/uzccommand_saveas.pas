@@ -47,7 +47,7 @@ var
    pu:ptunit;
    allok:boolean;
 begin
-     allok:=savedxf2000(s,ProgramPath + 'components/empty.dxf',dwg^);
+     allok:=savedxf2000(s,ProgramPath + '/components/empty.dxf',dwg^);
      pu:=PTZCADDrawing(dwg).DWGUnits.findunit(GetSupportPath,InterfaceTranslate,DrawingDeviceBaseUnitName);
      mem.init(1024);
      pu^.SavePasToMem(mem);

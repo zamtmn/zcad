@@ -25,7 +25,6 @@ uses
 implementation
 
 initialization
-  //units.CreateExtenalSystemVariable(SupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'PATH_Program_Run','String',@ProgramPath);
   units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPath,expandpath('$(ZCADPath)/rtl/system.pas'),InterfaceTranslate,'PATH_Support_Path','String',GeAddrSupportPath);
   sysvar.PATH.Program_Run:=@ProgramPath;
   sysvar.PATH.Support_Path:=GeAddrSupportPath;

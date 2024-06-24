@@ -1005,7 +1005,6 @@ begin
   toolbars.Sorted:=true;
   CreateInterfaceLists;
 
-  //commandmanager.executefile('*components/stage0.cmd0',drawings.GetCurrentDWG,nil);
   FromDirsIterator(sysvar.PATH.Preload_Path^,'*.cmd0','stage0.cmd0',RunCmdFile,nil);
 
   CreateAnchorDockingInterface;

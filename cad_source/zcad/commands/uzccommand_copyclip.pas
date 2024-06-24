@@ -83,7 +83,7 @@ begin
     ClipboardDWG.done;
     Freemem(ClipboardDWG);
   end;
-  ClipboardDWG:=drawings.CreateDWG('*rtl/dwg/DrawingVars.pas','');
+  ClipboardDWG:=drawings.CreateDWG('$(ZCADPath)/rtl/dwg/DrawingVars.pas','');
   //ClipboardDWG.DimStyleTable.AddItem('Standart',pds);
 end;
 

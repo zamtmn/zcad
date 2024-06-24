@@ -343,9 +343,7 @@ begin
   ZCMsgCallBackInterface.TextMessage(format(rsZCADStarted,[programname,sysvar.SYS.SYS_Version^]),TMWOHistoryOut);
   application.ProcessMessages;
 
-  //SplashForm.TXTOut(rsStartAutorun,false);commandmanager.executefile('*components/autorun.cmd',drawings.GetCurrentDWG,nil);
   FromDirsIterator(sysvar.PATH.Preload_Path^,'*.cmd','autorun.cmd',RunCmdFile,nil);
-  //*components/blockpreviewexport.cmd
   if CommandLineParser.HasOption(RunScript)then
     for i:=0 to CommandLineParser.OptionOperandsCount(RunScript)-1 do begin
       scrfile:=CommandLineParser.OptionOperand(RunScript,i);

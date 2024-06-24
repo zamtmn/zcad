@@ -205,27 +205,6 @@ initialization;
   units.loadunit(GetSupportPath,InterfaceTranslate,expandpath('$(ZCADPath)/rtl/connectors.pas'),nil);
   units.loadunit(GetSupportPath,InterfaceTranslate,expandpath('$(ZCADPath)/rtl/styles/styles.pas'),nil);
 
-  //units.loadunit(expandpath('*rtl\objdefunits\objname.pas'),nil);
-  //units.loadunit(expandpath('*rtl\objdefunits\blocktype.pas'),nil);
-  //units.loadunit(expandpath('*rtl\objdefunits\ark.pas'),nil);
-  //units.loadunit(expandpath('*rtl\objdefunits\connector.pas'),nil);
-  //units.loadunit(expandpath('*rtl\objdefunits\elcableconnector.pas'),nil);
-  //units.loadunit(expandpath('*rtl\objdefunits\cable.pas'),nil);
-  //units.loadunit(expandpath('*rtl\objdefunits\trace.pas'),nil);
-  //units.loadunit(expandpath('*rtl\objdefunits\elwire.pas'),nil);
-  //units.loadunit(expandpath('*rtl\objdefunits\objroot.pas'),nil);
-  //units.loadunit(expandpath('*rtl\objdefunits\firesensor.pas'),nil);
-  //units.loadunit(expandpath('*rtl\objdefunits\smokesensor.pas'),nil);
-  //units.loadunit(expandpath('*rtl\objdefunits\termosensor.pas'),nil);
-  //units.loadunit(expandpath('*rtl\objdefunits\handsensor.pas'),nil);
-  //units.loadunit(expandpath('*rtl\objdefunits\elmotor.pas'),nil);
-  //units.loadunit(expandpath('*rtl\objdefunits\elsr.pas'),nil);
-
-  //units.loadunit(expandpath('*rtl\objdefunits\bgbsensor.pas'),nil);
-  //units.loadunit(expandpath('*rtl\objdefunits\bgtsensor.pas'),nil);
-  //units.loadunit(expandpath('*rtl\objdefunits\bglsensor.pas'),nil);
-  //units.loadunit(expandpath('*rtl\objdefunits\bias.pas'),nil);
-
   SysVar.debug.memdeb.GetMemCount:=nil;
   SysVar.debug.memdeb.FreeMemCount:=nil;
   SysVar.debug.memdeb.TotalAllocMb:=nil;

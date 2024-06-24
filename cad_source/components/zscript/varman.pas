@@ -1955,11 +1955,8 @@ end;
 initialization;
 begin
   zTraceLn('{D+}[ZSCRIPT]Varman.startup');
-  //programlog.logoutstr('Varman.startup',lp_IncPos,LM_Debug);
-  //DecimalSeparator := '.';
   ShortDateFormat:='MM.yy';
   VarCategory.init(100);
-  //VarCategory.loadfromfile(expandpath('*rtl/VarCategory.cat'));
   CategoryCollapsed.init(VarCategory.Max);
   CategoryCollapsed.CreateArray;
   fillchar(CategoryCollapsed.parray^,CategoryCollapsed.max,byte(true));

@@ -258,9 +258,9 @@ begin
   pdwgwarsunit^.CreateFixedVariable('DWG_TextSize','Double',@TextSize);
 
   if preloadedfile1<>'' then
-  DWGUnits.loadunit(GetSupportPath,InterfaceTranslate,expandpath({'*rtl/dwg/DrawingDeviceBase.pas')}preloadedfile1),nil);
+    DWGUnits.loadunit(GetSupportPath,InterfaceTranslate,expandpath(preloadedfile1),nil);
   if preloadedfile2<>'' then
-  DWGUnits.loadunit(GetSupportPath,InterfaceTranslate,expandpath({'*rtl/dwg/DrawingVars.pas'}preloadedfile2),nil);
+    DWGUnits.loadunit(GetSupportPath,InterfaceTranslate,expandpath(preloadedfile2),nil);
   DWGDBUnit:=DWGUnits.findunit(GetSupportPath,InterfaceTranslate,DrawingDeviceBaseUnitName);
 
   pcam:=nil;

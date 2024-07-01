@@ -1,0 +1,6 @@
+
+## Настройка программы
+
+include::customization/options.adoc[]
+include::customization/directory_structure.adoc[]
+include::customization/command_line_swith.adoc[]

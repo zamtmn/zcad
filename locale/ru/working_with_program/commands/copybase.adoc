@@ -1,0 +1,14 @@
+
+#### CopyBase
+
+:cmdcommand: CopyBase
+:cmdicon: ../../../../images/actions/copyclipbase.png
+:cmdshortcuts: kbd:[Ctrl+Shift+C]
+:cmdmenu: Правка > Копировать в буфер обмена с базовой точкой
+:predselect: Требуется
+
+include::../../_elements/commandsummary.adoc[]
+
+Копирует выбраные примитивы в буфер обмена, перед копированием нужно указать базовую точку
+
+include::commandsummaryfree.adoc[]

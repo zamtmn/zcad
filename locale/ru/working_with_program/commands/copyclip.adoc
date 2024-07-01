@@ -1,0 +1,14 @@
+
+#### CopyClip
+
+:cmdcommand: CopyClip
+:cmdicon: ../../../../images/actions/copyclip.png
+:cmdshortcuts: kbd:[Ctrl+C]; kbd:[Ctrl+INS]
+:cmdmenu: Правка > Копировать в буфер обмена
+:predselect: Требуется
+
+include::../../_elements/commandsummary.adoc[]
+
+Копирует выбраные примитивы в буфер обмена
+
+include::commandsummaryfree.adoc[]

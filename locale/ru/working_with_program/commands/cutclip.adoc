@@ -1,0 +1,14 @@
+
+#### CutClip
+
+:cmdcommand: CutClip
+:cmdicon: ../../../../images/actions/cutclip.png
+:cmdshortcuts: kbd:[Ctrl+X]
+:cmdmenu: Правка > Вырезать в буфер обмена
+:predselect: Требуется
+
+include::../../_elements/commandsummary.adoc[]
+
+Копирует выбраные примитивы в буфер обмена и стирает их из чертежа
+
+include::commandsummaryfree.adoc[]

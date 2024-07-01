@@ -1,0 +1,15 @@
+
+#### Copy
+
+:cmdcommand: Copy
+:cmdicon: ../../../../images/actions/copy.png
+:cmdshortcuts: kbd:[Ctrl+ALT+C]; kbd:[C]
+:predselect: Требуется
+
+include::../../_elements/commandsummary.adoc[]
+
+Копирование выбраных примитивов. Исходные примитивы нужно выбрать до запуска команды.
+После запуска требуется базовую точку для копирования и базовые точки для вставки.
+Завершение копирования - ESC или запуск другой команды
+
+include::commandsummaryfree.adoc[]

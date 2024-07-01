@@ -590,14 +590,13 @@ end;
 function z2dxftext(s:String):String;
 var i:Integer;
 begin
-     result:=s;
-     repeat
-          i:=pos(#1,result);
-          if i>0 then
-                     begin
-                          result:=copy(result,1,i-1)+'%%U'+copy(result,i+1,length(result)-i);
-                     end;
-     until i<=0;
+  result:=StringReplace(s,#10,'\P',[rfReplaceAll]);
+  repeat
+    i:=pos(#1,result);
+    if i>0 then begin
+      result:=copy(result,1,i-1)+'%%U'+copy(result,i+1,length(result)-i);
+    end;
+  until i<=0;
 end;
 procedure GDBObjText.SaveToDXF(var outhandle:{Integer}TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);
 var

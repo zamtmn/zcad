@@ -35,6 +35,8 @@
       <Separator/>
       <Action Name="ACN_MATCHPROP"/>
       <Separator/>
+      <FindEditBox Width="200" Hint="Find"/>
+      <Separator/>
       <Action Name="ACN_REGEN"/>
       <Separator/>
       <Action Name="ACN_REBUILDTREE"/>

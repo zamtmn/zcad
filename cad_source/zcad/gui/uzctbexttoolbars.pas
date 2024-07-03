@@ -32,7 +32,7 @@ uses
   uzcstrconsts,uzccommand_loadlayout,uzcgui2linetypes,uzestyleslinetypes,uzcinterfacedata,
   uzcgui2linewidth,uzcflineweights,uzcgui2textstyles,uzcgui2dimstyles,
   uzedrawingsimple,uzcdrawing,uzcuidialogs,uzbstrproc,
-  uzestyleslayers,zUndoCmdChgBaseTypes,uzcutils,gzctnrVectorTypes,
+  uzestyleslayers,zUndoCmdChgBaseTypes,uzcutils,gzctnrVectorTypes,uzcCtrlFindEditBox,
   zUndoCmdChgTypes;
 type
   TMyToolbar=class(TToolBar)
@@ -46,6 +46,7 @@ type
     class procedure TBGroupActionCreateFunc(fmf:TForm;actlist:TActionList;aNode: TDomNode; TB:TToolBar);
     class procedure TBButtonCreateFunc(fmf:TForm;actlist:TActionList;aNode: TDomNode; TB:TToolBar);
     class procedure TBLayerComboBoxCreateFunc(fmf:TForm;actlist:TActionList;aNode: TDomNode; TB:TToolBar);
+    class procedure TBFindEditBoxCreateFunc(fmf:TForm;actlist:TActionList;aNode: TDomNode; TB:TToolBar);
     class procedure TBLayoutComboBoxCreateFunc(fmf:TForm;actlist:TActionList;aNode: TDomNode; TB:TToolBar);
     class procedure TBColorComboBoxCreateFunc(fmf:TForm;actlist:TActionList;aNode: TDomNode; TB:TToolBar);
     class procedure TBLTypeComboBoxCreateFunc(fmf:TForm;actlist:TActionList;aNode: TDomNode; TB:TToolBar);
@@ -441,6 +442,20 @@ begin
   va.Enabled:=true;
   va.ActionList:=actlist;
 end;
+class procedure TZTBZCADExtensions.TBFindEditBoxCreateFunc(fmf:TForm;actlist:TActionList;aNode: TDomNode; TB:TToolBar);
+var
+  _Width:integer;
+  FindEditBox:TFindEditBox;
+begin
+  _Width:=getAttrValue(aNode,'Width',100);
+  FindEditBox:=TFindEditBox.Create(tb);
+  FindEditBox.style:=csDropDown;
+  FindEditBox.Parent:=tb;
+  FindEditBox.Width:=_Width;
+  updatescontrols.Add(FindEditBox);
+  enabledcontrols.Add(FindEditBox);
+end;
+
 class procedure TZTBZCADExtensions.TBLayerComboBoxCreateFunc(fmf:TForm;actlist:TActionList;aNode: TDomNode; TB:TToolBar);
 var
   _hint:string;
@@ -879,6 +894,7 @@ initialization
   ToolBarsManager.RegisterTBItemCreateFunc('Action',TZTBZCADExtensions.TBActionCreateFunc);
   ToolBarsManager.RegisterTBItemCreateFunc('GroupAction',TZTBZCADExtensions.TBGroupActionCreateFunc);
   ToolBarsManager.RegisterTBItemCreateFunc('Button',TZTBZCADExtensions.TBButtonCreateFunc);
+  ToolBarsManager.RegisterTBItemCreateFunc('FindEditBox',TZTBZCADExtensions.TBFindEditBoxCreateFunc);
   ToolBarsManager.RegisterTBItemCreateFunc('LayerComboBox',TZTBZCADExtensions.TBLayerComboBoxCreateFunc);
   ToolBarsManager.RegisterTBItemCreateFunc('LayoutComboBox',TZTBZCADExtensions.TBLayoutComboBoxCreateFunc);
   ToolBarsManager.RegisterTBItemCreateFunc('ColorComboBox',TZTBZCADExtensions.TBColorComboBoxCreateFunc);

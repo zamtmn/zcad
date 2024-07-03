@@ -64,10 +64,10 @@ end;
 
 function isEditable(const ActiveControl:TWinControl):boolean;
 begin
-  if (ActiveControl is TEdit)
-  or (ActiveControl is TEbEdit)
-  or ((ActiveControl is TMemo)and((ActiveControl as TMemo).ReadOnly=false))
-  or ((ActiveControl is TComboBox)and((ActiveControl as TComboBox).Style in [csSimple,csDropDown,csOwnerDrawEditableFixed,csOwnerDrawEditableVariable])) then
+  if (ActiveControl is TCustomEdit)
+  //or (ActiveControl is TEbEdit)  //ненужно, т.к. наследник TCustomEdit
+  or ((ActiveControl is TCustomMemo)and((ActiveControl as TCustomMemo).ReadOnly=false))
+  or ((ActiveControl is TCustomComboBox)and((ActiveControl as TCustomComboBox).Style.HasEditBox)) then
     result:=true
   else
     result:=false

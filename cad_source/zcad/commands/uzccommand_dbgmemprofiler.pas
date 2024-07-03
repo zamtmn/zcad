@@ -38,7 +38,7 @@ begin
   else if operands='OFF' then
     RestoreMemoryManager
   else
-    dumptofile;
+    SaveProfileToFile;
 end;
 
 initialization

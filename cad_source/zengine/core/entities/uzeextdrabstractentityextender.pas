@@ -25,66 +25,66 @@ uses uzedrawingdef,usimplegenerics,
      uzgldrawcontext;
 
 type
-TAbstractEntityExtender=class(TBaseExtender)
-                  //class function CreateThisExtender(pEntity:Pointer; out ObjSize:Integer):PTBaseEntityExtender;
-                  constructor Create(pEntity:Pointer);virtual;abstract;
-                  procedure onRemoveFromArray(pEntity:Pointer;const drawing:TDrawingDef);virtual;abstract;
-                  procedure onBeforeEntityFormat(pEntity:Pointer;const drawing:TDrawingDef;var DC:TDrawContext);virtual;abstract;
-                  procedure onAfterEntityFormat(pEntity:Pointer;const drawing:TDrawingDef;var DC:TDrawContext);virtual;abstract;
-                  procedure onEntityClone(pSourceEntity,pDestEntity:Pointer);virtual;abstract;
-                  procedure onEntityBuildVarGeometry(pEntity:pointer;const drawing:TDrawingDef);virtual;abstract;
-                  procedure onEntitySupportOldVersions(pEntity:pointer;const drawing:TDrawingDef);virtual;abstract;
+  TAbstractEntityExtender=class(TBaseExtender)
+    //class function CreateThisExtender(pEntity:Pointer; out ObjSize:Integer):PTBaseEntityExtender;
+    constructor Create(pEntity:Pointer);virtual;abstract;
+    procedure onRemoveFromArray(pEntity:Pointer;const drawing:TDrawingDef);virtual;abstract;
+    procedure onBeforeEntityFormat(pEntity:Pointer;const drawing:TDrawingDef;var DC:TDrawContext);virtual;abstract;
+    procedure onAfterEntityFormat(pEntity:Pointer;const drawing:TDrawingDef;var DC:TDrawContext);virtual;abstract;
+    procedure onEntityClone(pSourceEntity,pDestEntity:Pointer);virtual;abstract;
+    procedure onEntityBuildVarGeometry(pEntity:pointer;const drawing:TDrawingDef);virtual;abstract;
+    procedure onEntitySupportOldVersions(pEntity:pointer;const drawing:TDrawingDef);virtual;abstract;
 
-                  procedure CopyExt2Ent(pSourceEntity,pDestEntity:pointer);virtual;abstract;
-                  procedure ReorganizeEnts(OldEnts2NewEntsMap:TMapPointerToPointer);virtual;abstract;
-                  procedure PostLoad(var context:TIODXFLoadContext);virtual;
-                  procedure SaveToDxfObjXData(var outhandle:TZctnrVectorBytes;PEnt:Pointer;var IODXFContext:TIODXFContext);virtual;abstract;
-                  procedure SaveToDXFfollow(PEnt:Pointer;var outhandle:TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext)virtual;
-                  procedure onEntityConnect(pEntity:Pointer;const drawing:TDrawingDef;var DC:TDrawContext);virtual;
-                  procedure onConnectFormattedEntsToRoot(pRootEntity,pFormattedEntity:Pointer;const drawing:TDrawingDef;var DC:TDrawContext);virtual;
-                  procedure onEntityAfterConnect(pEntity:Pointer;const drawing:TDrawingDef;var DC:TDrawContext);virtual;
-                  procedure onEntityBeforeConnect(pEntity:Pointer;const drawing:TDrawingDef;var DC:TDrawContext);virtual;
-                  function NeedStandardDraw(pEntity:Pointer;const drawing:TDrawingDef;var DC:TDrawContext):Boolean;virtual;
-                  procedure SetRoot(pEntity:Pointer;pNewRoot:Pointer);virtual;
-                  class function CanBeAddedTo(pEntity:Pointer):Boolean;virtual;
-end;
-TMetaEntityExtender=class of TAbstractEntityExtender;
-TEntityExtenderVector= TMyVector<TAbstractEntityExtender>;
-TEntityExtenderMap= GKey2DataMap<TMetaEntityExtender,SizeUInt(*{$IFNDEF DELPHI},LessPointer{$ENDIF}*)>;
-TEntityExtensions=class
-                       fFreeEntityExtensions:Integer;
-                       fEntityExtensions:TEntityExtenderVector;
-                       fEntityExtenderToIndex:TEntityExtenderMap;
+    procedure CopyExt2Ent(pSourceEntity,pDestEntity:pointer);virtual;abstract;
+    procedure ReorganizeEnts(OldEnts2NewEntsMap:TMapPointerToPointer);virtual;abstract;
+    procedure PostLoad(var context:TIODXFLoadContext);virtual;
+    procedure SaveToDxfObjXData(var outhandle:TZctnrVectorBytes;PEnt:Pointer;var IODXFContext:TIODXFContext);virtual;abstract;
+    procedure SaveToDXFfollow(PEnt:Pointer;var outhandle:TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext)virtual;
+    procedure onEntityConnect(pEntity:Pointer;const drawing:TDrawingDef;var DC:TDrawContext);virtual;
+    procedure onConnectFormattedEntsToRoot(pRootEntity,pFormattedEntity:Pointer;const drawing:TDrawingDef;var DC:TDrawContext);virtual;
+    procedure onEntityAfterConnect(pEntity:Pointer;const drawing:TDrawingDef;var DC:TDrawContext);virtual;
+    procedure onEntityBeforeConnect(pEntity:Pointer;const drawing:TDrawingDef;var DC:TDrawContext);virtual;
+    function NeedStandardDraw(pEntity:Pointer;const drawing:TDrawingDef;var DC:TDrawContext):Boolean;virtual;
+    procedure SetRoot(pEntity:Pointer;pNewRoot:Pointer);virtual;
+    class function CanBeAddedTo(pEntity:Pointer):Boolean;virtual;
+  end;
 
-                       constructor create;
-                       destructor destroy;override;
-                       function AddExtension(ExtObj:TAbstractEntityExtender):TAbstractEntityExtender;
-                       procedure RemoveExtension(ExtType:TMetaEntityExtender);
-                       function GetExtension(ExtType:TMetaEntityExtender):TAbstractEntityExtender;overload;
-                       function GetExtension<GEntityExtenderType>:GEntityExtenderType;overload;
-                       function GetExtension(n:Integer):TAbstractEntityExtender;overload;
-                       //function GetExtension(ExtType:TMetaEntityExtender):TAbstractEntityExtender;overload;
-                       function GetExtensionsCount:Integer;
-                       procedure CopyAllExtToEnt(pSourceEntity,pDestEntity:pointer);
+  TMetaEntityExtender=class of TAbstractEntityExtender;
+
+  TEntityExtensions=class(TExtensions<TAbstractEntityExtender,TMetaEntityExtender>)
+    fFreeEntityExtensions:Integer;
+    fEntityExtensions:TEntityExtenderVector;
+    fEntityExtenderToIndex:TEntityExtenderMap;
+
+    constructor create;
+    destructor destroy;override;
+    function AddExtension(ExtObj:TAbstractEntityExtender):TAbstractEntityExtender;
+    procedure RemoveExtension(ExtType:TMetaEntityExtender);
+    function GetExtension(ExtType:TMetaEntityExtender):TAbstractEntityExtender;overload;
+    function GetExtension<GEntityExtenderType>:GEntityExtenderType;overload;
+    function GetExtension(n:Integer):TAbstractEntityExtender;overload;
+    //function GetExtension(ExtType:TMetaEntityExtender):TAbstractEntityExtender;overload;
+    function GetExtensionsCount:Integer;
+    procedure CopyAllExtToEnt(pSourceEntity,pDestEntity:pointer);
 
 
-                       procedure RunOnCloneProcedures(source,dest:pointer);
-                       procedure RunRemoveFromArray(pEntity:Pointer;const drawing:TDrawingDef);
-                       procedure RunOnBeforeEntityFormat(pEntity:Pointer;const drawing:TDrawingDef;var DC:TDrawContext);
-                       function NeedStandardDraw(pEntity:Pointer;const drawing:TDrawingDef;var DC:TDrawContext):Boolean;
-                       procedure RunOnAfterEntityFormat(pEntity:Pointer;const drawing:TDrawingDef;var DC:TDrawContext);
-                       procedure RunOnBuildVarGeometryProcedures(pEntity:pointer;const drawing:TDrawingDef);
-                       procedure RunSupportOldVersions(pEntity:pointer;const drawing:TDrawingDef);
-                       procedure RunReorganizeEnts(OldEnts2NewEntsMap:TMapPointerToPointer);
-                       procedure RunPostload(var context:TIODXFLoadContext);
-                       procedure RunSaveToDxf(var outhandle:TZctnrVectorBytes;PEnt:Pointer;var IODXFContext:TIODXFContext);
-                       procedure RunSaveToDXFfollow(PEnt:Pointer;var outhandle:TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);
-                       procedure RunOnConnect(pEntity:Pointer;const drawing:TDrawingDef;var DC:TDrawContext);
-                       procedure RunConnectFormattedEntsToRoot(pRootEntity,pFormattedEntity:Pointer;const drawing:TDrawingDef;var DC:TDrawContext);
-                       procedure RunOnAfterConnect(pEntity:Pointer;const drawing:TDrawingDef;var DC:TDrawContext);
-                       procedure RunOnBeforeConnect(pEntity:Pointer;const drawing:TDrawingDef;var DC:TDrawContext);
-                       procedure RunSetRoot(pEntity:Pointer;pNewRoot:Pointer);
-                  end;
+    procedure RunOnCloneProcedures(source,dest:pointer);
+    procedure RunRemoveFromArray(pEntity:Pointer;const drawing:TDrawingDef);
+    procedure RunOnBeforeEntityFormat(pEntity:Pointer;const drawing:TDrawingDef;var DC:TDrawContext);
+    function NeedStandardDraw(pEntity:Pointer;const drawing:TDrawingDef;var DC:TDrawContext):Boolean;
+    procedure RunOnAfterEntityFormat(pEntity:Pointer;const drawing:TDrawingDef;var DC:TDrawContext);
+    procedure RunOnBuildVarGeometryProcedures(pEntity:pointer;const drawing:TDrawingDef);
+    procedure RunSupportOldVersions(pEntity:pointer;const drawing:TDrawingDef);
+    procedure RunReorganizeEnts(OldEnts2NewEntsMap:TMapPointerToPointer);
+    procedure RunPostload(var context:TIODXFLoadContext);
+    procedure RunSaveToDxf(var outhandle:TZctnrVectorBytes;PEnt:Pointer;var IODXFContext:TIODXFContext);
+    procedure RunSaveToDXFfollow(PEnt:Pointer;var outhandle:TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);
+    procedure RunOnConnect(pEntity:Pointer;const drawing:TDrawingDef;var DC:TDrawContext);
+    procedure RunConnectFormattedEntsToRoot(pRootEntity,pFormattedEntity:Pointer;const drawing:TDrawingDef;var DC:TDrawContext);
+    procedure RunOnAfterConnect(pEntity:Pointer;const drawing:TDrawingDef;var DC:TDrawContext);
+    procedure RunOnBeforeConnect(pEntity:Pointer;const drawing:TDrawingDef;var DC:TDrawContext);
+    procedure RunSetRoot(pEntity:Pointer;pNewRoot:Pointer);
+  end;
   TEntityExtendersMap=GKey2DataMap<string,TMetaEntityExtender>;
 var
   EntityExtenders:TEntityExtendersMap;

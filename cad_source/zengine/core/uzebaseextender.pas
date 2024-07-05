@@ -16,15 +16,26 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
 unit uzeBaseExtender;
+{$Mode delphi}{$H+)
+{$INCLUDE zengineconfig.inc}
 
 interface
+  uses gzctnrSTL;
 
 type
   TBaseExtender=class
     class function getExtenderName:string;virtual;abstract;
     procedure Assign(Source:TBaseExtender);virtual;abstract;
   end;
- TMetaExtender=class of TBaseExtender;
+
+  TMetaExtender=class of TBaseExtender;
+
+  TExtensions<GExtender,GMetaExtender>=class
+  type
+    TEntityExtenderVector=TMyVector<GExtender>;
+    TEntityExtenderMap=GKey2DataMap<GMetaExtender,SizeUInt>;
+  end;
+
 
 implementation
 end.

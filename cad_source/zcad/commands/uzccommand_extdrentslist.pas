@@ -41,7 +41,7 @@ var
   count:integer;
   extcounter:TExtCounter;
   pair:TExtCounter.TDictionaryPair;
-  ee:TEntityExtensions;
+  ee:TAbstractEntityExtender;
 begin
   extcounter:=TExtCounter.create;
   try

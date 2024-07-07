@@ -243,7 +243,7 @@ uses
   uzccommand_DockingOptions,
   uzcCommand_MoveEntsByMouse,
   uzcCommand_LPCSRun,
-
+  uzcCommand_Find,
 
   uzcenitiesvariablesextender,uzcExtdrLayerControl,uzcExtdrSmartTextEnt,
   uzcExtdrIncludingVolume,uzcExtdrSCHConnection,uzcExtdrSCHConnector,

@@ -26,7 +26,7 @@ uses uzedrawingdef,uzeblockdefsfactory,uzestylesdim,
      uzestyleslayers,uzestyleslinetypes,uzeentity,UGDBSelectedObjArray,uzestylestexts,
      uzedimensionaltypes,uzegeometrytypes,uzecamera,UGDBOpenArrayOfPV,uzeroot,uzefont,
      uzglviewareaabstract,uzglviewareageneral,uzgldrawcontext,UGDBControlPointArray,
-     uzglviewareadata;
+     uzglviewareadata,uzeExtdrAbstractDrawingExtender;
 type
 TMainBlockCreateProc=procedure (_to:PTDrawingDef;name:String) of object;
 {EXPORT+}
@@ -51,6 +51,7 @@ TSimpleDrawing= object(TAbstractDrawing)
                        TableStyleTable:GDBTableStyleArray;(*saved_to_shd*)
                        LTypeStyleTable:GDBLtypeArray;
                        DimStyleTable:GDBDimStyleArray;
+                       DrawingExtensions:TDrawingExtensions;
                        function GetLastSelected:PGDBObjEntity;virtual;
                        constructor init(pcam:PGDBObjCamera);
                        destructor done;virtual;

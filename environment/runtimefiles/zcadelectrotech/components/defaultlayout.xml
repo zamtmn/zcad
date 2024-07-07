@@ -65,8 +65,9 @@
   </MainConfig>
   <Settings HeaderStyle="Lines" FlatHeadersButtons="True" FloatingWindowsOnTop="True" DockSitesCanBeMinimized="True"/>
   <ToolBarsConfig ItemCount="4">
-    <Item0 Name="CoolBarU" Type="CoolBar" ItemCount="1">
+    <Item0 Name="CoolBarU" Type="CoolBar" ItemCount="2">
       <Item0 Name="Standard" Type="ToolBar" Width="1709"/>
+      <Item1 Name="Find" Type="ToolBar" Break="False" Width="345"/>
     </Item0>
     <Item1 Name="CoolBarL" Type="CoolBar" ItemCount="0"/>
     <Item2 Name="CoolBarR" Type="CoolBar" ItemCount="3">

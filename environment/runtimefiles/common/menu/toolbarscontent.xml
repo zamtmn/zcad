@@ -35,12 +35,16 @@
       <Separator/>
       <Action Name="ACN_MATCHPROP"/>
       <Separator/>
-      <FindEditBox Width="200" Hint="Find"/>
-      <Separator/>
       <Action Name="ACN_REGEN"/>
       <Separator/>
       <Action Name="ACN_REBUILDTREE"/>
     </Standard>
+    <Find Type="ToolBar">
+      <FindEditBox Width="200" Hint="Find"/>
+      <Action Name="ACN_FINDNEXT"/>
+      <Action Name="ACN_FINDPREV"/>
+      <Action Name="ACN_FINDPARAMS"/>
+    </Find>
     <ObjInspUpToolbar Type="ToolBar2">
       <Action Name="ACN_SNAPRUNTIME"/>
       <Separator/>

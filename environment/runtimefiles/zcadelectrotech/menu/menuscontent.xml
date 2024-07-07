@@ -36,6 +36,11 @@
       <Action Name="ACN_INVERSESELECTED"/>
       <Action Name="ACN_SELSIM"/>
       <Separator/>
+      <Action Name="ACN_FIND"/>
+      <Action Name="ACN_FINDNEXT"/>
+      <Action Name="ACN_FINDPREV"/>
+      <Action Name="ACN_FINDPARAMS"/>
+      <Separator/>
       <Action Name="ACN_El_FIND"/>
     </Menu>
     <Menu Name="View">

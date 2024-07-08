@@ -47,6 +47,7 @@ uses
   uzegeometry,
   uzeentpolyline,
   uzvzcadxlsxole,  //работа с xlsx
+  uzvzcadxlsxfps,  //работа с xlsx
   uzbstrproc,
   StrUtils,
   uzcsysvars,

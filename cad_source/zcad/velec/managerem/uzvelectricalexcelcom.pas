@@ -139,23 +139,24 @@ begin
   //end;
 
   end;
-  function textexcel333_com(operands:TCommandOperands):TCommandResult;
+  function textexcel333_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
   var
     MyWorkbook,MyWorkbook2: TsWorkbook;
-    old_worksheet: TsWorksheet;
+    old_worksheet,MyWorksheet: TsWorksheet;
     new_worksheet: TsWorksheet;
     new_Name: String;
   //const
   //  xlCellTypeLastCell = 11;
   begin
       ZCMsgCallBackInterface.TextMessage('1',TMWOHistoryOut);
-      //MyWorkbook := TsWorkbook.Create;
+      MyWorkbook := TsWorkbook.Create;
       try
         //MyWorkbook.Options := MyWorkbook.Options + [boReadFormulas];
-        //MyWorkbook.Options := MyWorkbook.Options + [boReadFormulas];
-        //MyWorkbook.ReadFromFile('d:\4.xlsx', sfOOXML);
-        //MyWorksheet := MyWorkbook.GetFirstWorksheet;
+        MyWorkbook.Options := MyWorkbook.Options + [boReadFormulas];
+        MyWorkbook.ReadFromFile('d:\4.xlsx', sfOOXML);
+        MyWorksheet := MyWorkbook.GetFirstWorksheet;
         ZCMsgCallBackInterface.TextMessage('2',TMWOHistoryOut);
+        MyWorksheet.CopyRow(1,5);
         //new_worksheet := MyWorkbook.CopyWorksheetFrom(MyWorkbook.GetFirstWorksheet, true);
         //MyWorkbook2 := TsWorkbook.Create;
 
@@ -170,18 +171,18 @@ begin
 
         //if MyWorkbook2.ValidWorksheetName('something_else') then
         //new_worksheet.Name := 'something_else' ;
-        //MyWorkbook.WriteToFile('d:\555.xlsx', sfOOXML,true);
+        MyWorkbook.WriteToFile('d:\555.xlsx', sfOOXML,true);
 
 
       finally
-         //MyWorkbook.Free;
+         MyWorkbook.Free;
       end;
       result:=cmd_ok;
       //else
       //  ZCMsgCallBackInterface.TextMessage('Invalid worksheet name.',TMWOHistoryOut);
         //ShowMessage('Invalid worksheet name.');
   end;
-  function textexcel2_com(operands:TCommandOperands):TCommandResult;
+  function textexcel2_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
   var
   b: TsWorkbook;
   sh: TsWorksheet;
@@ -191,29 +192,268 @@ begin
   b := TsWorkbook.Create;
   try
     b.Options := [boReadFormulas];
-    b.ReadFromFile('d:\4545.xlsx', sfOOXML);
+    b.ReadFromFile('d:\test1\4.xlsx', sfOOXML);
     sh := b.GetFirstWorksheet;
 
-    cl:=sh.GetCell(0,3);
-    ZCMsgCallBackInterface.TextMessage('Значение:' + sh.ReadAsText(0,3) + ';    Формула:'+ sh.ReadFormulaAsString(cl,false),TMWOHistoryOut);
+    //cl:=sh.GetCell(0,2);
+    //ZCMsgCallBackInterface.TextMessage('Значение:' + sh.ReadAsText(0,1) + ';    Формула:'+ sh.ReadFormulaAsString(sh.GetCell(0,1),false),TMWOHistoryOut);
+    //ZCMsgCallBackInterface.TextMessage('Значение:' + sh.ReadAsText(1,1) + ';    Формула:'+ sh.ReadFormulaAsString(sh.GetCell(1,1),false),TMWOHistoryOut);
+    //ZCMsgCallBackInterface.TextMessage('Значение:' + sh.ReadAsText(2,1) + ';    Формула:'+ sh.ReadFormulaAsString(sh.GetCell(2,1),false),TMWOHistoryOut);
+    //ZCMsgCallBackInterface.TextMessage('Значение:' + sh.ReadAsText(3,1) + ';    Формула:'+ sh.ReadFormulaAsString(sh.GetCell(3,1),false),TMWOHistoryOut);
 
-    //cl:=sh.GetCell(1,2);
-    cl:=sh.CopyCell(0,3,1,3,sh);
+    //sh.WriteCellValueAsString(0,0,'2');
+    sh.CopyCell(0,1,1,1,b.GetFirstWorksheet);
+    sh.CopyCell(0,2,1,2,b.GetFirstWorksheet);
+    sh.CopyCell(0,3,1,3,b.GetFirstWorksheet);
+
+    //sh.copyCell(nameEtalon,stRow,stColNew,nameSheet,stRowNew,stColNew);
+    b.CalcFormulas;
     sh.CalcFormulas;
+    ZCMsgCallBackInterface.TextMessage('Значение:' + sh.ReadAsText(0,1) + ';    Формула:'+ sh.ReadFormulaAsString(sh.GetCell(0,1),false),TMWOHistoryOut);
+    ZCMsgCallBackInterface.TextMessage('Значение:' + sh.ReadAsText(1,1) + ';    Формула:'+ sh.ReadFormulaAsString(sh.GetCell(1,1),false),TMWOHistoryOut);
+    ZCMsgCallBackInterface.TextMessage('Значение:' + sh.ReadAsText(0,2) + ';    Формула:'+ sh.ReadFormulaAsString(sh.GetCell(0,2),false),TMWOHistoryOut);
+    ZCMsgCallBackInterface.TextMessage('Значение:' + sh.ReadAsText(1,2) + ';    Формула:'+ sh.ReadFormulaAsString(sh.GetCell(1,2),false),TMWOHistoryOut);
+    ZCMsgCallBackInterface.TextMessage('Значение:' + sh.ReadAsText(0,3) + ';    Формула:'+ sh.ReadFormulaAsString(sh.GetCell(0,3),false),TMWOHistoryOut);
     ZCMsgCallBackInterface.TextMessage('Значение:' + sh.ReadAsText(1,3) + ';    Формула:'+ sh.ReadFormulaAsString(sh.GetCell(1,3),false),TMWOHistoryOut);
-    //sh.ce
-    cl:=sh.CopyCell(0,2,1,2,sh);
 
-    sh.CalcFormulas;
-    ZCMsgCallBackInterface.TextMessage('Значение:' + sh.ReadAsText(0,2) + ';    Формула:'+ sh.ReadFormulaAsString(sh.GetCell(1,2),false),TMWOHistoryOut);
+    //ZCMsgCallBackInterface.TextMessage('Значение:' + sh.ReadAsText(0,3) + ';    Формула:'+ sh.ReadFormulaAsString(sh.GetCell(0,3),false),TMWOHistoryOut);
+    //
+    //sh.WriteCellValueAsString(0,0,'3');
+    //sh.CalcFormulas;
+    //ZCMsgCallBackInterface.TextMessage('Значение:' + sh.ReadAsText(0,0) + ';    Формула:'+ sh.ReadFormulaAsString(sh.GetCell(0,0),false),TMWOHistoryOut);
+    //ZCMsgCallBackInterface.TextMessage('Значение:' + sh.ReadAsText(0,3) + ';    Формула:'+ sh.ReadFormulaAsString(sh.GetCell(0,3),false),TMWOHistoryOut);
+    //
+    //sh.WriteCellValueAsString(0,0,'4');
+    //sh.CalcFormulas;
+    //ZCMsgCallBackInterface.TextMessage('Значение:' + sh.ReadAsText(0,0) + ';    Формула:'+ sh.ReadFormulaAsString(sh.GetCell(0,0),false),TMWOHistoryOut);
+    //ZCMsgCallBackInterface.TextMessage('Значение:' + sh.ReadAsText(0,3) + ';    Формула:'+ sh.ReadFormulaAsString(sh.GetCell(0,3),false),TMWOHistoryOut);
+    //
+    //sh.WriteFormula(2,7,'INDIRECT(A1&A2)');
+    //sh.CalcFormulas;
+    //ZCMsgCallBackInterface.TextMessage('Значение:' + sh.ReadAsText(2,7) + ';    Формула:'+ sh.ReadFormulaAsString(sh.GetCell(2,7),false),TMWOHistoryOut);
+    //
+    //sh.WriteFormula(3,7,'INDIRECT(A1&"3")');
+    //sh.CalcFormulas;
+    //ZCMsgCallBackInterface.TextMessage('Значение:' + sh.ReadAsText(3,7) + ';    Формула:'+ sh.ReadFormulaAsString(sh.GetCell(3,7),false),TMWOHistoryOut);
+    //
+    //sh.WriteFormula(4,7,'INDIRECT(Лист2!A1&A2)');
+    //sh.CalcFormulas;
+    //ZCMsgCallBackInterface.TextMessage('Значение:' + sh.ReadAsText(4,7) + ';    Формула:'+ sh.ReadFormulaAsString(sh.GetCell(4,7),false),TMWOHistoryOut);
+    //
+    //sh.WriteFormula(5,7,'INDIRECT("Лист2!D1")');
+    //sh.CalcFormulas;
+    //ZCMsgCallBackInterface.TextMessage('Значение:' + sh.ReadAsText(5,7) + ';    Формула:'+ sh.ReadFormulaAsString(sh.GetCell(5,7),false),TMWOHistoryOut);
+    //
+    //sh.WriteFormula(6,7,'INDIRECT("A7")');
+    //sh.CalcFormulas;
+    //ZCMsgCallBackInterface.TextMessage('Значение:' + sh.ReadAsText(6,7) + ';    Формула:'+ sh.ReadFormulaAsString(sh.GetCell(6,7),false),TMWOHistoryOut);
+
+//
+//    sh.WriteFormula(3,3,'SUMIFS(A9:A11,B9:B11,"<>2",B9:B11,"<>2")');
+//    ZCMsgCallBackInterface.TextMessage('Значение:' + sh.ReadAsText(3,3) + ';    Формула:'+ sh.ReadFormulaAsString(sh.GetCell(3,3),false),TMWOHistoryOut);
+//    sh.CalcFormulas;
+//    ZCMsgCallBackInterface.TextMessage('Значение:' + sh.ReadAsText(3,3) + ';    Формула:'+ sh.ReadFormulaAsString(sh.GetCell(3,3),false),TMWOHistoryOut);
+//
+    //sh.WriteFormula(1,2,'INDIRECT("Лист3!D1")');
+    //sh.CalcFormulas;
+    //ZCMsgCallBackInterface.TextMessage('Значение:' + sh.ReadAsText(1,2) + ';    Формула:'+ sh.ReadFormulaAsString(sh.GetCell(1,2),false),TMWOHistoryOut);
+
+    //sh.WriteFormula(5,5,'INDIRECT(Лист3!A3&"1")');
+    //sh.CalcFormulas;
+    //ZCMsgCallBackInterface.TextMessage('Значение:' + sh.ReadAsText(5,5) + ';    Формула:'+ sh.ReadFormulaAsString(sh.GetCell(5,5),false),TMWOHistoryOut);
+    //
+    //sh.WriteFormula(2,2,'INDIRECT(Лист3!A4&Лист3!C4)');
+    //sh.CalcFormulas;
+    //ZCMsgCallBackInterface.TextMessage('Значение:' + sh.ReadAsText(2,2) + ';    Формула:'+ sh.ReadFormulaAsString(sh.GetCell(2,2),false),TMWOHistoryOut);
+    //
+    //ZCMsgCallBackInterface.TextMessage('Значение:' + sh.ReadAsText(8,1) + ';    Формула:'+ sh.ReadFormulaAsString(sh.GetCell(8,1),false),TMWOHistoryOut);
+    //ZCMsgCallBackInterface.TextMessage('Значение:' + sh.ReadAsText(9,1) + ';    Формула:'+ sh.ReadFormulaAsString(sh.GetCell(9,1),false),TMWOHistoryOut);
+    //ZCMsgCallBackInterface.TextMessage('Значение:' + sh.ReadAsText(10,1) + ';    Формула:'+ sh.ReadFormulaAsString(sh.GetCell(10,1),false),TMWOHistoryOut);
+    //ZCMsgCallBackInterface.TextMessage('Значение:' + sh.ReadAsText(11,1) + ';    Формула:'+ sh.ReadFormulaAsString(sh.GetCell(11,1),false),TMWOHistoryOut);
+    //ZCMsgCallBackInterface.TextMessage('Значение:' + sh.ReadAsText(12,1) + ';    Формула:'+ sh.ReadFormulaAsString(sh.GetCell(12,1),false),TMWOHistoryOut);
+    //cl:=sh.GetCell(1,2);
+    //cl:=sh.CopyCell(0,3,1,3,sh);
+    //sh.CalcFormulas;
+    //ZCMsgCallBackInterface.TextMessage('Значение:' + sh.ReadAsText(1,3) + ';    Формула:'+ sh.ReadFormulaAsString(sh.GetCell(1,3),false),TMWOHistoryOut);
+    ////sh.ce
+    //cl:=sh.CopyCell(0,2,1,2,sh);
+
+    //sh.CalcFormulas;
+    //ZCMsgCallBackInterface.TextMessage('Значение:' + sh.ReadAsText(1,2) + ';    Формула:'+ sh.ReadFormulaAsString(sh.GetCell(1,2),false),TMWOHistoryOut);
+    //
+    //sh.WriteFormula(2,2,'INDIRECT("F2")');
+    //sh.CalcFormulas;
+    ////sh.ChangedCell(2,2);
+    //ZCMsgCallBackInterface.TextMessage('Значение:' + sh.ReadAsText(2,2) + ';    Формула:'+ sh.ReadFormulaAsString(sh.GetCell(2,2),false),TMWOHistoryOut);
+    //
+    ////sh.WriteFormula(3,3,'INDIRECT(F2)');
+    //sh.CalcFormulas;
+    ////sh.ChangedCell(2,2);
+    //ZCMsgCallBackInterface.TextMessage('Значение:' + sh.ReadAsText(2,8) + ';    Формула:'+ sh.ReadFormulaAsString(sh.GetCell(2,8),false),TMWOHistoryOut);
+    //
+    //sh.WriteFormula(10,10,'MATCH(B9;INDIRECT(C1);0)');
+    //sh.CalcFormulas;
+    ////sh.ChangedCell(2,2);
+    //ZCMsgCallBackInterface.TextMessage('Значение:' + sh.ReadAsText(10,10) + ';    Формула:'+ sh.ReadFormulaAsString(sh.GetCell(10,10),false),TMWOHistoryOut);
+
+
     //for f in sh.Formulas do
     //  ZCMsgCallBackInterface.TextMessage(f^.Text,TMWOHistoryOut);
-    b.WriteToFile('d:\444.xlsx', sfOOXML, true);
+    b.WriteToFile('d:\test1\444111111.xlsx', sfOOXML, true);
   finally
     b.Free;
   end;
 end;
 
+
+   function testRoundExcel_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
+  var
+  b: TsWorkbook;
+  sh: TsWorksheet;
+  cl:PCell;
+  f: PsFormula;
+begin
+  b := TsWorkbook.Create;
+  try
+    b.Options := [boReadFormulas];
+    b.ReadFromFile('d:\test1\round.xlsx', sfOOXML);
+    sh := b.GetFirstWorksheet;
+
+    //ZCMsgCallBackInterface.TextMessage('Значение:' + sh.ReadAsText(0,1) + ';    Формула:'+ sh.ReadFormulaAsString(sh.GetCell(0,1),false),TMWOHistoryOut);
+
+
+    //sh.WriteFormula(0,2,'INDIRECT(A1)');
+    //sh.CalcFormulas;
+    //ZCMsgCallBackInterface.TextMessage('Значение:' + sh.ReadAsText(0,2) + ';    Формула:'+ sh.ReadFormulaAsString(sh.GetCell(0,2),false),TMWOHistoryOut);
+
+
+    sh.WriteFormula(0,10,'ROUNDDOWN(Лист2!A1,0)');
+    sh.CalcFormulas;
+    ZCMsgCallBackInterface.TextMessage('Значение:' + sh.ReadAsText(0,10) + ';    Формула:'+ sh.ReadFormulaAsString(sh.GetCell(0,10),false),TMWOHistoryOut);
+
+    sh.WriteFormula(0,11,'ROUNDDOWN(Лист2!A1,1)');
+    sh.CalcFormulas;
+    ZCMsgCallBackInterface.TextMessage('Значение:' + sh.ReadAsText(0,11) + ';    Формула:'+ sh.ReadFormulaAsString(sh.GetCell(0,11),false),TMWOHistoryOut);
+
+    sh.WriteFormula(0,12,'ROUNDDOWN(Лист2!A1,2)');
+    sh.CalcFormulas;
+    ZCMsgCallBackInterface.TextMessage('Значение:' + sh.ReadAsText(0,12) + ';    Формула:'+ sh.ReadFormulaAsString(sh.GetCell(0,12),false),TMWOHistoryOut);
+
+
+    sh.WriteFormula(0,13,'ROUNDUP(Лист2!A1,0)');
+    sh.CalcFormulas;
+    ZCMsgCallBackInterface.TextMessage('Значение:' + sh.ReadAsText(0,13) + ';    Формула:'+ sh.ReadFormulaAsString(sh.GetCell(0,13),false),TMWOHistoryOut);
+
+    sh.WriteFormula(0,14,'ROUNDUP(Лист2!A1,1)');
+    sh.CalcFormulas;
+    ZCMsgCallBackInterface.TextMessage('Значение:' + sh.ReadAsText(0,14) + ';    Формула:'+ sh.ReadFormulaAsString(sh.GetCell(0,14),false),TMWOHistoryOut);
+
+    sh.WriteFormula(0,15,'ROUNDUP(Лист2!A1,2)');
+    sh.CalcFormulas;
+    ZCMsgCallBackInterface.TextMessage('Значение:' + sh.ReadAsText(0,15) + ';    Формула:'+ sh.ReadFormulaAsString(sh.GetCell(0,15),false),TMWOHistoryOut);
+
+
+
+
+    sh.WriteFormula(1,10,'ROUNDDOWN(Лист2!A2,0)');
+    sh.CalcFormulas;
+    ZCMsgCallBackInterface.TextMessage('Значение:' + sh.ReadAsText(1,10) + ';    Формула:'+ sh.ReadFormulaAsString(sh.GetCell(1,10),false),TMWOHistoryOut);
+
+    sh.WriteFormula(1,11,'ROUNDDOWN(Лист2!A2,1)');
+    sh.CalcFormulas;
+    ZCMsgCallBackInterface.TextMessage('Значение:' + sh.ReadAsText(1,11) + ';    Формула:'+ sh.ReadFormulaAsString(sh.GetCell(1,11),false),TMWOHistoryOut);
+
+    sh.WriteFormula(1,12,'ROUNDDOWN(Лист2!A2,2)');
+    sh.CalcFormulas;
+    ZCMsgCallBackInterface.TextMessage('Значение:' + sh.ReadAsText(1,12) + ';    Формула:'+ sh.ReadFormulaAsString(sh.GetCell(1,12),false),TMWOHistoryOut);
+
+    sh.WriteFormula(1,13,'ROUNDUP(Лист2!A2,0)');
+    sh.CalcFormulas;
+    ZCMsgCallBackInterface.TextMessage('Значение:' + sh.ReadAsText(1,13) + ';    Формула:'+ sh.ReadFormulaAsString(sh.GetCell(1,13),false),TMWOHistoryOut);
+
+    sh.WriteFormula(1,14,'ROUNDUP(Лист2!A2,1)');
+    sh.CalcFormulas;
+    ZCMsgCallBackInterface.TextMessage('Значение:' + sh.ReadAsText(1,14) + ';    Формула:'+ sh.ReadFormulaAsString(sh.GetCell(1,14),false),TMWOHistoryOut);
+
+    sh.WriteFormula(1,15,'ROUNDUP(Лист2!A2,2)');
+    sh.CalcFormulas;
+    ZCMsgCallBackInterface.TextMessage('Значение:' + sh.ReadAsText(1,15) + ';    Формула:'+ sh.ReadFormulaAsString(sh.GetCell(1,15),false),TMWOHistoryOut);
+
+
+    sh.WriteFormula(2,10,'ROUNDDOWN(Лист2!A3,0)');
+    sh.CalcFormulas;
+    ZCMsgCallBackInterface.TextMessage('Значение:' + sh.ReadAsText(2,10) + ';    Формула:'+ sh.ReadFormulaAsString(sh.GetCell(2,10),false),TMWOHistoryOut);
+
+    sh.WriteFormula(2,11,'ROUNDDOWN(Лист2!A3,1)');
+    sh.CalcFormulas;
+    ZCMsgCallBackInterface.TextMessage('Значение:' + sh.ReadAsText(2,11) + ';    Формула:'+ sh.ReadFormulaAsString(sh.GetCell(2,11),false),TMWOHistoryOut);
+
+    sh.WriteFormula(2,12,'ROUNDDOWN(Лист2!A3,2)');
+    sh.CalcFormulas;
+    ZCMsgCallBackInterface.TextMessage('Значение:' + sh.ReadAsText(2,12) + ';    Формула:'+ sh.ReadFormulaAsString(sh.GetCell(2,12),false),TMWOHistoryOut);
+
+    sh.WriteFormula(2,13,'ROUNDUP(Лист2!A3,0)');
+    sh.CalcFormulas;
+    ZCMsgCallBackInterface.TextMessage('Значение:' + sh.ReadAsText(2,13) + ';    Формула:'+ sh.ReadFormulaAsString(sh.GetCell(2,13),false),TMWOHistoryOut);
+
+    sh.WriteFormula(2,14,'ROUNDUP(Лист2!A3,1)');
+    sh.CalcFormulas;
+    ZCMsgCallBackInterface.TextMessage('Значение:' + sh.ReadAsText(2,14) + ';    Формула:'+ sh.ReadFormulaAsString(sh.GetCell(2,14),false),TMWOHistoryOut);
+
+    sh.WriteFormula(2,15,'ROUNDUP(Лист2!A3,2)');
+    sh.CalcFormulas;
+    ZCMsgCallBackInterface.TextMessage('Значение:' + sh.ReadAsText(2,15) + ';    Формула:'+ sh.ReadFormulaAsString(sh.GetCell(2,15),false),TMWOHistoryOut);
+
+        sh.WriteFormula(3,10,'ROUNDDOWN(Лист2!A4,0)');
+        sh.CalcFormulas;
+        ZCMsgCallBackInterface.TextMessage('Значение:' + sh.ReadAsText(3,10) + ';    Формула:'+ sh.ReadFormulaAsString(sh.GetCell(3,10),false),TMWOHistoryOut);
+
+        sh.WriteFormula(3,11,'ROUNDDOWN(Лист2!A4,1)');
+        sh.CalcFormulas;
+        ZCMsgCallBackInterface.TextMessage('Значение:' + sh.ReadAsText(3,11) + ';    Формула:'+ sh.ReadFormulaAsString(sh.GetCell(3,11),false),TMWOHistoryOut);
+
+        sh.WriteFormula(3,12,'ROUNDDOWN(Лист2!A4,2)');
+        sh.CalcFormulas;
+        ZCMsgCallBackInterface.TextMessage('Значение:' + sh.ReadAsText(3,12) + ';    Формула:'+ sh.ReadFormulaAsString(sh.GetCell(3,12),false),TMWOHistoryOut);
+
+        sh.WriteFormula(3,13,'ROUNDUP(Лист2!A4,0)');
+        sh.CalcFormulas;
+        ZCMsgCallBackInterface.TextMessage('Значение:' + sh.ReadAsText(3,13) + ';    Формула:'+ sh.ReadFormulaAsString(sh.GetCell(3,13),false),TMWOHistoryOut);
+
+        sh.WriteFormula(3,14,'ROUNDUP(Лист2!A4,1)');
+        sh.CalcFormulas;
+        ZCMsgCallBackInterface.TextMessage('Значение:' + sh.ReadAsText(3,14) + ';    Формула:'+ sh.ReadFormulaAsString(sh.GetCell(3,14),false),TMWOHistoryOut);
+
+        sh.WriteFormula(3,15,'ROUNDUP(Лист2!A4,2)');
+        sh.CalcFormulas;
+        ZCMsgCallBackInterface.TextMessage('Значение:' + sh.ReadAsText(3,15) + ';    Формула:'+ sh.ReadFormulaAsString(sh.GetCell(3,15),false),TMWOHistoryOut);
+
+    //sh.WriteFormula(1,2,'INDIRECT("Лист3!D1")');
+    //sh.CalcFormulas;
+    //ZCMsgCallBackInterface.TextMessage('Значение:' + sh.ReadAsText(1,2) + ';    Формула:'+ sh.ReadFormulaAsString(sh.GetCell(1,2),false),TMWOHistoryOut);
+
+    //sh.WriteFormula(5,5,'INDIRECT(Лист3!A3&"1")');
+    //sh.CalcFormulas;
+    //ZCMsgCallBackInterface.TextMessage('Значение:' + sh.ReadAsText(5,5) + ';    Формула:'+ sh.ReadFormulaAsString(sh.GetCell(5,5),false),TMWOHistoryOut);
+    //
+    //sh.WriteFormula(2,2,'INDIRECT(Лист3!A4&Лист3!C4)');
+    //sh.CalcFormulas;
+    //ZCMsgCallBackInterface.TextMessage('Значение:' + sh.ReadAsText(2,2) + ';    Формула:'+ sh.ReadFormulaAsString(sh.GetCell(2,2),false),TMWOHistoryOut);
+    //
+    //ZCMsgCallBackInterface.TextMessage('Значение:' + sh.ReadAsText(8,1) + ';    Формула:'+ sh.ReadFormulaAsString(sh.GetCell(8,1),false),TMWOHistoryOut);
+    //ZCMsgCallBackInterface.TextMessage('Значение:' + sh.ReadAsText(9,1) + ';    Формула:'+ sh.ReadFormulaAsString(sh.GetCell(9,1),false),TMWOHistoryOut);
+    //ZCMsgCallBackInterface.TextMessage('Значение:' + sh.ReadAsText(10,1) + ';    Формула:'+ sh.ReadFormulaAsString(sh.GetCell(10,1),false),TMWOHistoryOut);
+    //ZCMsgCallBackInterface.TextMessage('Значение:' + sh.ReadAsText(11,1) + ';    Формула:'+ sh.ReadFormulaAsString(sh.GetCell(11,1),false),TMWOHistoryOut);
+    //ZCMsgCallBackInterface.TextMessage('Значение:' + sh.ReadAsText(12,1) + ';    Формула:'+ sh.ReadFormulaAsString(sh.GetCell(12,1),false),TMWOHistoryOut);
+
+
+    //for f in sh.Formulas do
+    //  ZCMsgCallBackInterface.TextMessage(f^.Text,TMWOHistoryOut);
+    b.WriteToFile('d:\test1\round_fin.xlsx', sfOOXML, true);
+  finally
+    b.Free;
+  end;
+end;
 
 
 //procedure ReadExcelFile(FileName: String; Sheets, ColCount, RowCount: Integer; var Region: TRegion);
@@ -366,6 +606,8 @@ end;
 
 initialization
   programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
+
+  //CreateZCADCommand(@testRoundExcel_com,'vtestExcel000',CADWG,0);
   CreateZCADCommand(@textexcel333_com,'vtestExcel333',CADWG,0);
   CreateZCADCommand(@textexcel2_com,'vtestExcel111',CADWG,0);
 finalization

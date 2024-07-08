@@ -849,7 +849,7 @@ var
      //               end
      //               else
      //               begin
-                      if (devNowMF^.Name<>velec_SchemaBlockJunctionBox) and (devNowMF^.Name<>velec_SchemaBlockChangingLayingMethod) then begin
+                      //if (devNowMF^.Name<>velec_SchemaBlockJunctionBox) and (devNowMF^.Name<>velec_SchemaBlockChangingLayingMethod) then begin
                         pvd:=FindVariableInEnt(devNowMF,velec_GC_HDGroup);
                         if pvd<>nil then begin
                           ZCMsgCallBackInterface.TextMessage('pstring(pvd^.data.Addr.Instance)^=' + pstring(pvd^.data.Addr.Instance)^,TMWOHistoryOut);
@@ -862,7 +862,7 @@ var
                            end
                           else
                            deepdontlook:=false;
-                      end;
+                      //end;
      //               end;
      //
              end;
@@ -873,7 +873,8 @@ var
          //
        if deepdontlook then
          //if intVertex <> graphDev.Root.Index then
-           listDevInGroup.PushBack(graphDev.Vertices[intVertex].getDevice);
+           listDevInGroup.PushBack(devNowMF);
+           //listDevInGroup.PushBack(graphDev.Vertices[intVertex].getDevice);
          //
          for i:=0 to graphDev.Vertices[intVertex].ChildCount-1 do begin
              //listDevInGroup.PushBack(graphDev.Vertices[intVertex].getDevice);

@@ -134,7 +134,9 @@ var
   //** Выполнить пересчет книги
 procedure nowCalcFormulas();
 begin
+    ZCMsgCallBackInterface.TextMessage('КАЛЬКУЛЯТОР КАЛЬКУЛЯТОР КАЛЬКУЛЯТОР КАЛЬКУЛЯТОР КАЛЬКУЛЯТОР КАЛЬКУЛЯТОР СТАРТ',TMWOHistoryOut);
   BasicWorkbook.CalcFormulas;
+    ZCMsgCallBackInterface.TextMessage('КАЛЬКУЛЯТОР КАЛЬКУЛЯТОР КАЛЬКУЛЯТОР КАЛЬКУЛЯТОР КАЛЬКУЛЯТОР КАЛЬКУЛЯТОР ФИНИШ',TMWOHistoryOut);
 end;
 
 function openXLSXFile(pathFile:string):boolean;
@@ -409,7 +411,7 @@ procedure calcFormulas(nameSheet:string);
 var
   now_worksheet: TsWorksheet;
 begin
-  //ZCMsgCallBackInterface.TextMessage('calcFormulas nameSheet='+ nameSheet ,TMWOHistoryOut);
+  //ZCMsgCallBackInterface.TextMessage('КАЛЬКУЛЯТОР КАЛЬКУЛЯТОР КАЛЬКУЛЯТОР КАЛЬКУЛЯТОР КАЛЬКУЛЯТОР КАЛЬКУЛЯТОР СТАРТ'+ nameSheet ,TMWOHistoryOut);
   now_worksheet:=BasicWorkbook.GetWorksheetByName(nameSheet);
   now_worksheet.CalcFormulas;
     //ZCMsgCallBackInterface.TextMessage('calcFormulas nameSheet='+ nameSheet ,TMWOHistoryOut);

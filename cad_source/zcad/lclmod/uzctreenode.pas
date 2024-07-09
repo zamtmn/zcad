@@ -710,7 +710,7 @@ begin
      _action:=Action;
      ACtion:=nil;
      if fsilent then
-                    commandmanager.executecommandsilent(@Fcommand[1],drawings.GetCurrentDWG,drawings.GetCurrentOGLWParam)
+                    commandmanager.executecommandsilent(Fcommand,drawings.GetCurrentDWG,drawings.GetCurrentOGLWParam)
                 else
                     commandmanager.executecommand(Fcommand,drawings.GetCurrentDWG,drawings.GetCurrentOGLWParam);
      inherited;

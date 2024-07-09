@@ -24,14 +24,42 @@ unit uzcCtrlFindEditBox;
 interface
 
 uses
+  SysUtils,
   Classes,StdCtrls,Graphics,Controls,
-  LCLIntf,LCLType;
+  LCLIntf,LCLType,
+  uzccommandsmanager,uzcdrawings,
+  uzcCommand_Find;
 
 type
 
   TFindEditBox=class(TCustomComboBox)
+    protected
+      procedure KeyPress(var Key: char);override;
+    public
+      procedure Click;override;
   end;
 
 implementation
+
+procedure TFindEditBox.KeyPress(var Key: char);
+var
+  idx:integer;
+begin
+  if ord(Key)=VK_RETURN then begin
+    CommandManager.executecommandsilent(format('%s(%s)',[CMDNFind,Text]),drawings.GetCurrentDWG,drawings.GetCurrentOGLWParam);
+    idx:=Items.IndexOf(Text);
+    if idx>=0 then
+      Items.Delete(idx);
+    Items.Insert(0,Text);
+    //Text:='';
+  end;
+  inherited;
+end;
+
+procedure TFindEditBox.Click;
+begin
+  inherited;
+  ShowFindCommandParams;
+end;
 
 end.

@@ -1156,7 +1156,7 @@ begin
     end;
 
     if ((ActiveControl<>cmdedit)and(ActiveControl<>HistoryLine){and(ActiveControl<>LayerBox)and(ActiveControl<>LineWBox)})then begin
-      if (ActiveControl is tedit)or (ActiveControl is tmemo)or (ActiveControl is TComboBox)then begin
+      if (ActiveControl is TCustomEdit)or (ActiveControl is TCustomMemo)or (ActiveControl is TCustomComboBox)then begin
         //programlog.leave(IfEntered);
         exit;
       end;

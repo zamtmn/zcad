@@ -351,8 +351,8 @@ initialization
 
   CreateZCADCommand(@FindCommandParam_com,'FindParams',0,0);
   CreateZCADCommand(@Find_com,CMDNFind,CADWG,0);
-  CreateZCADCommand(@FindNext_com,'FindNext',CADWG,0);
-  CreateZCADCommand(@FindPrev_com,'FindPrev',CADWG,0);
+  CreateZCADCommand(@FindNext_com,'FindNext',CADWG,0).overlay:=true;
+  CreateZCADCommand(@FindPrev_com,'FindPrev',CADWG,0).overlay:=true;
 finalization
   ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
 end.

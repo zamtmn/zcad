@@ -214,7 +214,6 @@ begin
   ZCMsgCallBackInterface.TextMessage(format(rscmNEntityFrom,[fe.Current+1,fe.Finded.Count]),TMWOHistoryOut);
   pv:=pGDBObjEntity(fe.Finded.getData(fe.Current));
   DC:=drawings.GetCurrentDWG.CreateDrawingRC;
-  pv.FormatEntity(drawings.GetCurrentDWG^,DC);
   drawings.GetCurrentDWG.wa.ZoomToVolume(ScaleBB(pv^.vp.BoundingBox,10));
 end;
 
@@ -304,7 +303,7 @@ initialization
   FindCommandParam.Area.InTextTemplate:=false;
   FindCommandParam.Area.InVariables:=false;
   FindCommandParam.Area.Variables:='NMO_Name';
-  FindCommandParam.Action.SelectResult:=SR_Select;
+  FindCommandParam.Action.SelectResult:=SR_Nohhing;
 
   CreateZCADCommand(@FindCommandParam_com,'FindParams',0,0);
   CreateZCADCommand(@Find_com,CMDNFind,CADWG,0);

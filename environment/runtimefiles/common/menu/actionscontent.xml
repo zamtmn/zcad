@@ -26,9 +26,9 @@
       <ZAction Name="ACN_SELSIM" Command="SelSim" Img="#SSim" Caption="Select similar"/>
       <ZAction Name="ACN_El_FIND" Command="EL_Find" Img="find" Caption="Find device"/>
       <ZAction Name="ACN_FIND" Command="Find" Img="find" Caption="Find ..." ShortCut="CTRL+F"/>
-      <ZAction Name="ACN_FINDNEXT" Command="FindNext" Img="#▲" Caption="Find next" ShortCut="F3"/>
-      <ZAction Name="ACN_FINDPREV" Command="FindPrev" Img="#▼" Caption="Find prev" ShortCut="SHIFT+F3"/>
-      <ZAction Name="ACN_FINDPARAMS" Command="FindParams" Img="#⁕" Caption="Find prev" ShortCut="CTRL+SHIFT+F3"/>
+      <ZAction Name="ACN_FINDNEXT" Command="FindNext" Img="#▼" Caption="Find next" ShortCut="F3"/>
+      <ZAction Name="ACN_FINDPREV" Command="FindPrev" Img="#▲" Caption="Find prev" ShortCut="SHIFT+F3"/>
+      <ZAction Name="ACN_FINDPARAMS" Command="FindParams" Img="#⁕" Caption="Find params" ShortCut="CTRL+SHIFT+F3"/>
     </Group>
     <Group Category="View">
       <ZAction Name="ACN_PROJECTTREE" Command="ProjectTree" Img="projecttree" Caption="Project tree" ShortCut="CTRL+T"/>

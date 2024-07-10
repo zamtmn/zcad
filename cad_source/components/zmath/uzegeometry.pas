@@ -193,6 +193,7 @@ procedure concatBBandPoint(var fistbb:TBoundingBox;const point:GDBvertex);inline
 function IsBBNul(const v1, v2: GDBvertex): Boolean; overload; inline;
 function IsBBNul(const bb:TBoundingBox):boolean; overload; inline;
 function boundingintersect(const bb1,bb2:TBoundingBox):Boolean;inline;
+function ScaleBB(const bb:TBoundingBox;const k:Double):TBoundingBox;
 procedure MatrixInvert(var M: DMatrix4D);inline;
 function vectordot(const v1,v2:GDBVertex):GDBVertex;inline;
 function scalardot(const v1,v2:GDBVertex):Double;inline;
@@ -2540,6 +2541,16 @@ else if IsPointInBB(CreateVertex(bb2.rtf.x,bb2.rtf.y,bb2.rtf.z),bb1) then begin 
 else if IsPointInBB(CreateVertex(bb2.rtf.x,bb2.lbn.y,bb2.rtf.z),bb1) then begin result:=true; exit end
 
 end;}
+function ScaleBB(const bb:TBoundingBox;const k:Double):TBoundingBox;
+var
+  p,v:gdbvertex;
+begin
+  p:=(bb.RTF+bb.LBN)/2;
+  v:=(bb.RTF-p)*k;
+  result.LBN:=p-v;
+  result.RTF:=p+v;
+end;
+
 function boundingintersect(const bb1,bb2:TBoundingBox):Boolean;
 var
   b1,b2,b1c,b2c,dist:gdbvertex;

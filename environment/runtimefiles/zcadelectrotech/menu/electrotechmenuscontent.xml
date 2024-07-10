@@ -109,7 +109,6 @@
         <Command Caption="Создание расчетной схемы распределительной сети" Command="EM_SRBuild"/> 
         <Command Caption="Создание схемы электрической принципиальной распределительной сети" Command="EM_SEPBuild"/> 
       </SubMenu>
-      <Command Caption="Find device/cable" Command="EL_Find"/>
       <Command Caption="Verifying rules" Command="EL_Сheck"/>
       <Command Caption="Create cable report" Command="El_Cable_Legend"/>
       <Command Caption="Create material report" Command="El_Material_Legend"/>

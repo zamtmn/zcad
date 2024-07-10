@@ -42,7 +42,7 @@ uses
   uzeparsercmdprompt,uzcinterface,uzcdialogsfiles,uzegeometrytypes,
   uzgldrawcontext,uzcEnitiesVariablesExtender,UGDBOpenArrayOfPV,UGDBSelectedObjArray,
   uzeconsts,uzcstrconsts,LazUTF8,
-  uzeExtdrAbstractDrawingExtender,uzedrawingsimple,uzedrawingabstract;
+  uzeExtdrAbstractDrawingExtender,uzedrawingsimple,uzedrawingabstract,uzbPaths;
 
 const
   CMDNFind='Find';
@@ -56,6 +56,7 @@ resourcestring
   RSFCPOptions='Options';
     RSFCPOptionsCaseSensitive='Case sensitive';
     RSFCPOptionsWholeWords='Whole words';
+    RSFCPOptionsUseWildcards='Use wildcards';
   RSFCPArea='Area';
     RSFCPAreaInSelection='In selection';
     RSFCPAreaInTextContent='In text content';
@@ -79,6 +80,7 @@ type
   TCompareOptions=record
     CaseSensitive:boolean;
     WholeWords:boolean;
+    UseWildcards:boolean;
   end;
   TSearhArea=record
     InSelection:boolean;
@@ -119,7 +121,7 @@ begin
     result:=SysUnit^.RegisterType(TypeInfo(FindCommandParam));
     SysUnit^.SetTypeDesk(TypeInfo(TSelectResult),[RSTSelectResultSelect,RSTSelectResultAddToSelection,RSTSelectResultNohhing],[FNUser]);
     SysUnit^.SetTypeDesk(TypeInfo(FindCommandParam),[RSFCPOptions,RSFCPArea,RSFCPAction],[FNUser]);
-    SysUnit^.SetTypeDesk(TypeInfo(TCompareOptions),[RSFCPOptionsCaseSensitive,RSFCPOptionsWholeWords],[FNUser]);
+    SysUnit^.SetTypeDesk(TypeInfo(TCompareOptions),[RSFCPOptionsCaseSensitive,RSFCPOptionsWholeWords,RSFCPOptionsUseWildcards],[FNUser]);
     SysUnit^.SetTypeDesk(TypeInfo(TSearhArea),[RSFCPAreaInSelection,RSFCPAreaInTextContent,RSFCPAreaInTextTemplate,RSFCPAreaInVariables,RSFCPAreaVariables],[FNProgram]);
     SysUnit^.SetTypeDesk(TypeInfo(TFindAction),[RSFCPActionSelectResult],[FNProgram]);
   end;
@@ -136,20 +138,44 @@ begin
   result:=cmd_ok;
 end;
 
-function CheckStr(FindIn,Text:TDXFEntsInternalStringType):boolean;
+function CheckStr(FindIn,Text:TDXFEntsInternalStringType):boolean;overload;
 var
   i:integer;
 begin
   if not FindCommandParam.Options.CaseSensitive then
     FindIn:=UnicodeUpperCase(FindIn);
-  i:=pos(Text,FindIn);
-  result:=i>0;
-  if result and FindCommandParam.Options.WholeWords then begin
-    if i>1 then
-      result:=(ord(FindIn[i-1])<256)and(FindIn[i-1] in WordBreakChars);
-    if result then
-      if i+length(text)<=length(FindIn) then
-        result:=(ord(FindIn[i+length(text)])<256)and(FindIn[i+length(text)] in WordBreakChars);
+  if FindCommandParam.Options.UseWildcards then begin
+    result:=MatchesMask(FindIn,Text)
+  end else begin
+    i:=pos(Text,FindIn);
+    result:=i>0;
+    if result and FindCommandParam.Options.WholeWords then begin
+      if i>1 then
+        result:=(ord(FindIn[i-1])<256)and(FindIn[i-1] in WordBreakChars);
+      if result then
+        if i+length(text)<=length(FindIn) then
+          result:=(ord(FindIn[i+length(text)])<256)and(FindIn[i+length(text)] in WordBreakChars);
+    end;
+  end;
+end;
+function CheckStr(FindIn,Text:string):boolean;overload;
+var
+  i:integer;
+begin
+  if not FindCommandParam.Options.CaseSensitive then
+    FindIn:=UTF8UpperCase(FindIn);
+  if FindCommandParam.Options.UseWildcards then begin
+    result:=MatchesMask(FindIn,Text)
+  end else begin
+    i:=pos(Text,FindIn);
+    result:=i>0;
+    if result and FindCommandParam.Options.WholeWords then begin
+      if i>1 then
+        result:=FindIn[i-1] in WordBreakChars;
+      if result then
+        if i+length(text)<=length(FindIn) then
+          result:=FindIn[i+length(text)] in WordBreakChars;
+    end;
   end;
 end;
 
@@ -159,6 +185,9 @@ var pv:pGDBObjEntity;
     pvt:TObjID;
     utext:TDXFEntsInternalStringType;
     isNeedToAdd:Boolean;
+    pentvarext:TVariablesExtender;
+    vars,&var:string;
+    v:pvardesk;
 begin
   utext:=Text;
   pv:=arr.beginiterate(ir);
@@ -173,6 +202,21 @@ begin
         if FindCommandParam.Area.InTextTemplate then
           isNeedToAdd:=CheckStr(PGDBObjText(pv)^.Template,utext);
     end;
+    if not isNeedToAdd then
+      if (FindCommandParam.Area.InVariables)and(FindCommandParam.Area.Variables<>'') then begin
+        pentvarext:=pv^.GetExtension<TVariablesExtender>;
+        if pentvarext<>nil then begin
+          vars:=FindCommandParam.Area.Variables;
+          repeat
+            GetPartOfPath(&var,vars,';');
+            v:=pentvarext.entityunit.FindVariable(&var);
+            if v<>nil then begin
+              &var:=v^.data.PTD.GetValueAsString(v^.data.Addr.Instance);
+              isNeedToAdd:=CheckStr(&var,text);
+            end;
+          until (vars='')or isNeedToAdd;
+        end;
+      end;
     if isNeedToAdd then
       Finded.PushBackData(pv);
     pv:=arr.iterate(ir);
@@ -209,11 +253,9 @@ end;
 procedure ShowEntity(fe:TFindInDrawingExtender);
 var
   pv:pGDBObjEntity;
-  DC:TDrawContext;
 begin
   ZCMsgCallBackInterface.TextMessage(format(rscmNEntityFrom,[fe.Current+1,fe.Finded.Count]),TMWOHistoryOut);
   pv:=pGDBObjEntity(fe.Finded.getData(fe.Current));
-  DC:=drawings.GetCurrentDWG.CreateDrawingRC;
   drawings.GetCurrentDWG.wa.ZoomToVolume(ScaleBB(pv^.vp.BoundingBox,10));
 end;
 
@@ -300,6 +342,7 @@ initialization
 
   FindCommandParam.Options.CaseSensitive:=False;
   FindCommandParam.Options.WholeWords:=False;
+  FindCommandParam.Options.UseWildcards:=False;
   FindCommandParam.Area.InSelection:=True;
   FindCommandParam.Area.InTextContent:=True;
   FindCommandParam.Area.InTextTemplate:=false;

@@ -24,7 +24,7 @@ uses
   usimplegenerics,uzctnrVectorBytes,gzctnrSTL,uzeBaseExtender,uzedrawingabstract;
 
 type
-  TAbstractDrawingExtender=class(TExtender<pointer>)
+  TAbstractDrawingExtender=class(TExtender<TAbstractDrawing>)
   end;
 
   TMetaDrawingExtender=class of TAbstractDrawingExtender;

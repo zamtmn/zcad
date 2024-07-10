@@ -41,7 +41,8 @@ uses
   uzcoimultipropertiesutil,varmandef,uzcvariablesutils,Masks,uzcregother,
   uzeparsercmdprompt,uzcinterface,uzcdialogsfiles,uzegeometrytypes,
   uzgldrawcontext,uzcEnitiesVariablesExtender,UGDBOpenArrayOfPV,UGDBSelectedObjArray,
-  uzeconsts,uzcstrconsts,LazUTF8,LazUTF16;
+  uzeconsts,uzcstrconsts,LazUTF8,
+  uzeExtdrAbstractDrawingExtender,uzedrawingsimple,uzedrawingabstract;
 
 const
   CMDNFind='Find';
@@ -64,10 +65,14 @@ resourcestring
   RSFCPAction='Action';
     RSFCPActionSelectResult='Select result';
 
+  RSTSelectResultSelect='Create selection';
+  RSTSelectResultAddToSelection='Add to selection';
+  RSTSelectResultNohhing='Nothing';
 
 const
   WordBreakChars = [#0..#31,'.', ',', ';', ':', '"', '''', '!', '?', '[', ']',
-               '(', ')', '{', '}', '^', '-', '=', '+', '*', '/', '\', '|', ' '];
+                  '(', ')', '{', '}', '^', '-', '=', '+',  '*', '/', '\', '|',
+                  ' '];
 
 type
   //** Тип данных для отображения в инспекторе опций
@@ -92,16 +97,29 @@ type
     Action:TFindAction;
   end;
 
+  TFindInDrawingExtender=class(TAbstractDrawingExtender)
+    Finded:GDBObjOpenArrayOfPV;
+    Current:Integer;
+    constructor Create(pEntity:TAbstractDrawing);override;
+  end;
+
 var
   FindCommandParam:TFindCommandParam; //**<  Переменная содержащая опции команды
+
+constructor TFindInDrawingExtender.Create(pEntity:TAbstractDrawing);
+begin
+  Finded.init(10);
+  Current:=-1;
+end;
 
 function GetFindCommandParam:PUserTypeDescriptor;
 begin
   result:=SysUnit^.TypeName2PTD('TFindCommandParam');
   if result=nil then begin
     result:=SysUnit^.RegisterType(TypeInfo(FindCommandParam));
-    SysUnit^.SetTypeDesk(TypeInfo(FindCommandParam),[RSFCPOptions,RSFCPArea,RSFCPAction],[FNProgram]);
-    SysUnit^.SetTypeDesk(TypeInfo(TCompareOptions),[RSFCPOptionsCaseSensitive,RSFCPOptionsWholeWords],[FNProgram]);
+    SysUnit^.SetTypeDesk(TypeInfo(TSelectResult),[RSTSelectResultSelect,RSTSelectResultAddToSelection,RSTSelectResultNohhing],[FNUser]);
+    SysUnit^.SetTypeDesk(TypeInfo(FindCommandParam),[RSFCPOptions,RSFCPArea,RSFCPAction],[FNUser]);
+    SysUnit^.SetTypeDesk(TypeInfo(TCompareOptions),[RSFCPOptionsCaseSensitive,RSFCPOptionsWholeWords],[FNUser]);
     SysUnit^.SetTypeDesk(TypeInfo(TSearhArea),[RSFCPAreaInSelection,RSFCPAreaInTextContent,RSFCPAreaInTextTemplate,RSFCPAreaInVariables,RSFCPAreaVariables],[FNProgram]);
     SysUnit^.SetTypeDesk(TypeInfo(TFindAction),[RSFCPActionSelectResult],[FNProgram]);
   end;
@@ -179,6 +197,53 @@ begin
   Selection.Done;
 end;
 
+function FindFindInDrawingExtender(dwg:TSimpleDrawing;CreateIfnotFound:boolean=true):TFindInDrawingExtender;
+begin
+  result:=dwg.DrawingExtensions.GetExtension<TFindInDrawingExtender>;
+  if (CreateIfnotFound)and(result=nil) then begin
+    result:=TFindInDrawingExtender.Create(dwg);
+    dwg.DrawingExtensions.AddExtension(result);
+  end;
+end;
+
+procedure ShowEntity(fe:TFindInDrawingExtender);
+var
+  pv:pGDBObjEntity;
+  DC:TDrawContext;
+begin
+  ZCMsgCallBackInterface.TextMessage(format(rscmNEntityFrom,[fe.Current+1,fe.Finded.Count]),TMWOHistoryOut);
+  pv:=pGDBObjEntity(fe.Finded.getData(fe.Current));
+  DC:=drawings.GetCurrentDWG.CreateDrawingRC;
+  pv.FormatEntity(drawings.GetCurrentDWG^,DC);
+  drawings.GetCurrentDWG.wa.ZoomToVolume(ScaleBB(pv^.vp.BoundingBox,10));
+end;
+
+function FindNext_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
+var
+  fe:TFindInDrawingExtender;
+begin
+  fe:=FindFindInDrawingExtender(drawings.CurrentDWG^,False);
+  if fe<>nil then begin
+    inc(fe.Current);
+    if (fe.Current<0)or(fe.Current>=fe.Finded.Count) then
+      fe.Current:=0;
+    showentity(fe);
+  end;
+end;
+
+function FindPrev_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
+var
+  fe:TFindInDrawingExtender;
+begin
+  fe:=FindFindInDrawingExtender(drawings.CurrentDWG^,False);
+  if fe<>nil then begin
+    dec(fe.Current);
+    if (fe.Current<0)or(fe.Current>=fe.Finded.Count) then
+      fe.Current:=0;
+    showentity(fe);
+  end;
+end;
+
 function Find_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 var
   Finded:GDBObjOpenArrayOfPV;
@@ -186,6 +251,7 @@ var
   ir:itrec;
   pv:pGDBObjEntity;
   text:string;
+  fe:TFindInDrawingExtender;
 begin
   if operands<>''then begin
     if not FindCommandParam.Options.CaseSensitive then
@@ -213,6 +279,14 @@ begin
       until pv=nil;
     end;
 
+    fe:=FindFindInDrawingExtender(drawings.CurrentDWG^);
+    if fe<>nil then begin
+      fe.Current:=-1;
+      fe.Finded.Clear;
+      Finded.copyto(fe.Finded);
+      result:=FindNext_com(Context,'');
+    end;
+
     Finded.Clear;
     Finded.Done;
   end else
@@ -234,8 +308,8 @@ initialization
 
   CreateZCADCommand(@FindCommandParam_com,'FindParams',0,0);
   CreateZCADCommand(@Find_com,CMDNFind,CADWG,0);
-  CreateZCADCommand(@Find_com,'FindNext',CADWG,0);
-  CreateZCADCommand(@Find_com,'FindPrev',CADWG,0);
+  CreateZCADCommand(@FindNext_com,'FindNext',CADWG,0);
+  CreateZCADCommand(@FindPrev_com,'FindPrev',CADWG,0);
 finalization
   ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
 end.

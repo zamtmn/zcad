@@ -58,7 +58,7 @@ resourcestring
     RSFCPOptionsWholeWords='Whole words';
   RSFCPArea='Area';
     RSFCPAreaInSelection='In selection';
-    RSFCPAreaInTextContent='In text content=';
+    RSFCPAreaInTextContent='In text content';
     RSFCPAreaInTextTemplate='In text template';
     RSFCPAreaInVariables='In variables';
     RSFCPAreaVariables='Variables';

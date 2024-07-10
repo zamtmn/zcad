@@ -222,12 +222,13 @@ var
   fe:TFindInDrawingExtender;
 begin
   fe:=FindFindInDrawingExtender(drawings.CurrentDWG^,False);
-  if fe<>nil then begin
-    inc(fe.Current);
-    if (fe.Current<0)or(fe.Current>=fe.Finded.Count) then
-      fe.Current:=0;
-    showentity(fe);
-  end;
+  if fe<>nil then
+    if fe.Finded.Count>0 then begin
+      inc(fe.Current);
+      if (fe.Current<0)or(fe.Current>=fe.Finded.Count) then
+        fe.Current:=0;
+      showentity(fe);
+    end;
 end;
 
 function FindPrev_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
@@ -235,12 +236,13 @@ var
   fe:TFindInDrawingExtender;
 begin
   fe:=FindFindInDrawingExtender(drawings.CurrentDWG^,False);
-  if fe<>nil then begin
-    dec(fe.Current);
-    if (fe.Current<0)or(fe.Current>=fe.Finded.Count) then
-      fe.Current:=0;
-    showentity(fe);
-  end;
+  if fe<>nil then
+    if fe.Finded.Count>0 then begin
+      dec(fe.Current);
+      if (fe.Current<0)or(fe.Current>=fe.Finded.Count) then
+        fe.Current:=0;
+      showentity(fe);
+    end;
 end;
 
 function Find_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;

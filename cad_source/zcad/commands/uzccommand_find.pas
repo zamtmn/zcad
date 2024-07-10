@@ -24,7 +24,6 @@ unit uzcCommand_Find;
 
 interface
 uses
-  CsvDocument,
   uzcLog,
   SysUtils,
   uzccommandsabstract,uzccommandsimpl,
@@ -36,11 +35,11 @@ uses
   uzegeometry,
   uzeentity,uzeenttext,
   URecordDescriptor,typedescriptors,Varman,gzctnrVectorTypes,
-  uzeparserenttypefilter,uzeparserentpropfilter,uzeentitiestypefilter,
-  uzelongprocesssupport,uzeparser,uzcoimultiproperties,uzedimensionaltypes,
-  uzcoimultipropertiesutil,varmandef,uzcvariablesutils,Masks,uzcregother,
-  uzeparsercmdprompt,uzcinterface,uzcdialogsfiles,uzegeometrytypes,
-  uzgldrawcontext,uzcEnitiesVariablesExtender,UGDBOpenArrayOfPV,UGDBSelectedObjArray,
+  uzeparserenttypefilter,uzeparserentpropfilter,
+  uzelongprocesssupport,uzeparser,uzcoimultiproperties,
+  uzcoimultipropertiesutil,varmandef,Masks,uzcregother,
+  uzeparsercmdprompt,uzcinterface,uzcdialogsfiles,
+  uzcEnitiesVariablesExtender,UGDBOpenArrayOfPV,UGDBSelectedObjArray,
   uzeconsts,uzcstrconsts,LazUTF8,
   uzeExtdrAbstractDrawingExtender,uzedrawingsimple,uzedrawingabstract,uzbPaths;
 

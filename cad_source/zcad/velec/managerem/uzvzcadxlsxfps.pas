@@ -36,7 +36,7 @@ uses
   gzctnrVectorTypes,
   uzcinterface,
   comobj, variants, LConvEncoding, strutils,
-  fpsTypes, fpSpreadsheet, fpsUtils, fpsSearch, fpsAllFormats,  uzbstrproc;
+  fpsTypes, fpSpreadsheet, fpsUtils, fpsSearch,gvector, fpsAllFormats,  uzbstrproc;
 
   //uzvsettingform,
   //LCLIntf, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
@@ -55,6 +55,16 @@ uses
 //function getCellValue(nameSheet:string;iRow,iCol:Cardinal):string;
 //  //** присвоить значение ячейки
 //procedure setCellValue(nameSheet:string;iRow,iCol:Cardinal;iText:string);
+
+type
+cellContainText=record
+      //iText:string;
+      iRow:Cardinal;
+      iCol:Cardinal;
+end;
+
+TListCellContainText=specialize TVector<cellContainText>;
+
 
 //** открываем нужный нам xlsx файл
 function openXLSXFile(pathFile:string):boolean;                          //++++++++
@@ -108,6 +118,8 @@ function iHaveFormula(nameSheet:string;iRow,iCol:Cardinal):boolean;
 function getAddress(nameSheet:string;iRow,iCol:Cardinal):string;
 //** Выполнить пересчет книги
 procedure nowCalcFormulas();
+//** выполнить расчет формулы
+procedure calcCellFormula(nameSheet:string;iRow,iCol:Cardinal);
 //**Копирование ячейки с какого листа и какая ячейка
 procedure copyCell(nameStSheet:string;stRow,stCol:Cardinal;nameEdSheet:string;edRow,edCol:Cardinal);
 //**Копирование формата ячейки с какого листа и какая ячейка
@@ -118,6 +130,7 @@ procedure sheetVisibleOff(partNameSheet:string);
 procedure copyRow(fromSheet:string;stRow:Cardinal;ToSheet:string;edRow:Cardinal);
 procedure ReplaceTextInRow(nameSheet:string;stRow:Cardinal;FromText,ToText:string);
 procedure allFindAndReplaceSheet(nameSheet:string;FromText,ToText:string);
+function getListCellContainText(nameSheet:string;iText:string):TListCellContainText;
 
 
 
@@ -396,6 +409,13 @@ begin
   //sheets_cache.get(nameSheet).Cells(iRow,iCol).Formula:=iText;
 end;
 
+procedure calcCellFormula(nameSheet:string;iRow,iCol:Cardinal);
+var
+  now_worksheet: TsWorksheet;
+begin
+  now_worksheet:=BasicWorkbook.GetWorksheetByName(nameSheet);
+  now_worksheet.CalcFormula(now_worksheet.GetFormula(now_worksheet.GetCell(iRow,iCol)));
+end;
 procedure setCellAddressFormula(nameSheet:string;AddressStr:string;iText:string);
 begin
   BasicWorkbook.GetWorksheetByName(nameSheet).WriteFormula(BasicWorkbook.GetWorksheetByName(nameSheet).GetCell(AddressStr),iText)
@@ -445,7 +465,7 @@ begin
 
   //GetCellString
   //if now_worksheet.getFormula(now_worksheet.GetCell(iRow,iCol)) <> nil then begin
-     ZCMsgCallBackInterface.TextMessage('Ячейка с именем = '+result,TMWOHistoryOut);
+     //ZCMsgCallBackInterface.TextMessage('Ячейка с именем = '+result,TMWOHistoryOut);
   //   result:=true;
   //end;
 end;
@@ -609,7 +629,7 @@ begin
       if FindFirst(searchParams, now_worksheet, MyRow, MyCol) then begin
         setCellValOrFomula(nameSheet, MyRow, MyCol,StringReplace(getCellValOrFomula(nameSheet, MyRow, MyCol), fromText, toText, [rfReplaceAll, rfIgnoreCase]));
         //temptextcellnew:=StringReplace(temptextcell, codeNameEtalonSheet, codeNameNewSheet, [rfReplaceAll, rfIgnoreCase]);
-        ZCMsgCallBackInterface.TextMessage('Первый [искомый текст] "' + searchParams.SearchText + '" найден в ячейке ' + GetCellString(MyRow, MyCol),TMWOHistoryOut);
+        //ZCMsgCallBackInterface.TextMessage('Первый [искомый текст] "' + searchParams.SearchText + '" найден в ячейке ' + GetCellString(MyRow, MyCol),TMWOHistoryOut);
         //WriteLn('Первый [искомый текст] "', searchParams.SearchText, '" найден в ячейке ', GetCellString(MyRow, MyCol));
         while FindNext(searchParams, now_worksheet, myRow, MyCol) do
                   setCellValOrFomula(nameSheet, MyRow, MyCol,StringReplace(getCellValOrFomula(nameSheet, MyRow, MyCol), fromText, toText, [rfReplaceAll, rfIgnoreCase]));
@@ -647,6 +667,46 @@ begin
     //  ZCMsgCallBackInterface.TextMessage('searchCellRowCol iRow = '+inttostr(iRow),TMWOHistoryOut);
     ////if remotemode then
     //  ZCMsgCallBackInterface.TextMessage('searchCellRowCol iCol = '+ inttostr(iCol),TMWOHistoryOut);
+end;
+
+function getListCellContainText(nameSheet:string;iText:string):TListCellContainText;
+var
+  now_worksheet: TsWorksheet;
+  MyRow, MyCol: Cardinal;
+  searchParams: TsSearchParams;
+  isFind:boolean;
+  iCellContaint:cellContainText;
+
+begin
+    now_worksheet:=BasicWorkbook.GetWorksheetByName(nameSheet);
+    //BasicWorkbook.SelectWorksheet(now_worksheet);
+    BasicWorkbook.ActiveWorksheet:=now_worksheet;
+    //BasicWorkbook.GetWorksheetByName(nameSheet).select
+    searchParams.SearchText := iText;
+    searchParams.Options := [soEntireDocument];
+    searchParams.Within := swWorksheet;
+    isFind:=false;
+    result:=TListCellContainText.Create;
+    // Создать поисковую систему и выполняем особую замену
+    with TsSearchEngine.Create(BasicWorkbook) do begin
+      if FindFirst(searchParams, now_worksheet, MyRow, MyCol) then begin
+        iCellContaint.iRow:=MyRow;
+        iCellContaint.iCol:=MyCol;
+        //iCellContaint.iText:=iText;
+        result.PushBack(iCellContaint);
+        //setCellValOrFomula(nameSheet, MyRow, MyCol,StringReplace(getCellValOrFomula(nameSheet, MyRow, MyCol), fromText, toText, [rfReplaceAll, rfIgnoreCase]));
+        //temptextcellnew:=StringReplace(temptextcell, codeNameEtalonSheet, codeNameNewSheet, [rfReplaceAll, rfIgnoreCase]);
+        //ZCMsgCallBackInterface.TextMessage('Первый [искомый текст] "' + searchParams.SearchText + '" найден в ячейке ' + GetCellString(MyRow, MyCol),TMWOHistoryOut);
+        //WriteLn('Первый [искомый текст] "', searchParams.SearchText, '" найден в ячейке ', GetCellString(MyRow, MyCol));
+        while FindNext(searchParams, now_worksheet, myRow, MyCol) do begin
+          iCellContaint.iRow:=MyRow;
+          iCellContaint.iCol:=MyCol;
+          //iCellContaint.iText:=iText;
+          result.PushBack(iCellContaint);
+        end;
+      end;
+      Free;
+    end;
 end;
 
 end.

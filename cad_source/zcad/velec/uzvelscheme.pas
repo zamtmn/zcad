@@ -1042,6 +1042,37 @@ var
              //ZCMsgCallBackInterface.TextMessage('vEMGCHDGroup4 -' + dev^.Name,TMWOHistoryOut);
              if pcablepvd<>nil then
                 pstring(pvd^.data.Addr.Instance)^:= pstring(pcablepvd^.data.Addr.Instance)^;
+
+             //ZCMsgCallBackInterface.TextMessage('vEMGCHDGroup5 -' + dev^.Name,TMWOHistoryOut);
+           end;
+       end;
+
+       pvd:=FindVariableInEnt(pnevdev,'vEMGCHeadDevice');
+       if (pvd<>nil) and (vertexGraph.Parent<>nil) then begin
+          //ZCMsgCallBackInterface.TextMessage('vEMGCHDGroup2 -' + dev^.Name,TMWOHistoryOut);
+          pcable:=PTEdgeTree(G.GetEdge(vertexGraph,vertexGraph.Parent).AsPointer[vpTEdgeTree])^.segm;
+          //ZCMsgCallBackInterface.TextMessage('vEMGCHDGroup3 -' + dev^.Name,TMWOHistoryOut);
+          if pcable<> nil then begin
+             pcablepvd:=FindVariableInEnt(pcable,'GC_HeadDevice');
+             //ZCMsgCallBackInterface.TextMessage('vEMGCHDGroup4 -' + dev^.Name,TMWOHistoryOut);
+             if pcablepvd<>nil then
+                pstring(pvd^.data.Addr.Instance)^:= pstring(pcablepvd^.data.Addr.Instance)^;
+
+             //ZCMsgCallBackInterface.TextMessage('vEMGCHDGroup5 -' + dev^.Name,TMWOHistoryOut);
+           end;
+       end;
+
+       pvd:=FindVariableInEnt(pnevdev,'vEMGCvelecNumConnectDevice');
+       if (pvd<>nil) and (vertexGraph.Parent<>nil) then begin
+          //ZCMsgCallBackInterface.TextMessage('vEMGCHDGroup2 -' + dev^.Name,TMWOHistoryOut);
+          pcable:=PTEdgeTree(G.GetEdge(vertexGraph,vertexGraph.Parent).AsPointer[vpTEdgeTree])^.segm;
+          //ZCMsgCallBackInterface.TextMessage('vEMGCHDGroup3 -' + dev^.Name,TMWOHistoryOut);
+          if pcable<> nil then begin
+             pcablepvd:=FindVariableInEnt(pcable,'GC_velecNumConnectDevice');
+             //ZCMsgCallBackInterface.TextMessage('vEMGCHDGroup4 -' + dev^.Name,TMWOHistoryOut);
+             if pcablepvd<>nil then
+                pinteger(pvd^.data.Addr.Instance)^:= pinteger(pcablepvd^.data.Addr.Instance)^;
+
              //ZCMsgCallBackInterface.TextMessage('vEMGCHDGroup5 -' + dev^.Name,TMWOHistoryOut);
            end;
        end;

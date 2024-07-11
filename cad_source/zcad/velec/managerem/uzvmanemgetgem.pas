@@ -484,19 +484,49 @@ var
        //  begin
            myDev:=graphDev.Vertices[intVertex].getDevice;
            //graphDev.GetEdge(graphDev.Vertices[intVertex].Parent,graphDev.Vertices[intVertex]).getCableSet^.cab;//получить ребро полилинию
-           devNowvarext:=myDev^.specialize GetExtension<TVariablesExtender>;
-           //Получаем ссылку на кабель или полилинию которая заменяет стояк
-           myDevMF:=getMainFuncDev(devNowvarext);
-           if myDevMF <> nil then
-             begin
-               listDevInGroup.PushBack(myDevMF);
-             end;
+           //devNowvarext:=myDev^.specialize GetExtension<TVariablesExtender>;
+           ////Получаем ссылку на кабель или полилинию которая заменяет стояк
+           //myDevMF:=getMainFuncDev(devNowvarext);
+           //if myDevMF <> nil then
+           //  begin
+               listDevInGroup.PushBack(myDev);
+             //end;
          //end;
 
          //ZCMsgCallBackInterface.TextMessage('кол-во = ' + inttostr(listPolyInGroup.Size),TMWOHistoryOut);
          for i:=0 to graphDev.Vertices[intVertex].ChildCount-1 do
              getListDev(graphDev.Vertices[intVertex].Childs[i].Index,listDevInGroup);
     end;
+
+    //** старое возвращало только централи
+    //** Рекурсия получаем номер нужного нам головного устройства внутри нужного нам графа
+    //procedure getListDev(intVertex:integer;var listDevInGroup:TListDev);
+    //var
+    //  i,j:integer;
+    //  //cableNowMF:PGDBObjCable;
+    //  myDev, myDevMF:PGDBObjDevice;
+    //  devNowvarext:TVariablesExtender;
+    //  //devNameGroup:string;
+    //
+    //begin
+    //   //if intVertex <> graphDev.Root.Index then
+    //   //  begin
+    //       myDev:=graphDev.Vertices[intVertex].getDevice;
+    //       //graphDev.GetEdge(graphDev.Vertices[intVertex].Parent,graphDev.Vertices[intVertex]).getCableSet^.cab;//получить ребро полилинию
+    //       devNowvarext:=myDev^.specialize GetExtension<TVariablesExtender>;
+    //       //Получаем ссылку на кабель или полилинию которая заменяет стояк
+    //       myDevMF:=getMainFuncDev(devNowvarext);
+    //       if myDevMF <> nil then
+    //         begin
+    //           listDevInGroup.PushBack(myDevMF);
+    //         end;
+    //     //end;
+    //
+    //     //ZCMsgCallBackInterface.TextMessage('кол-во = ' + inttostr(listPolyInGroup.Size),TMWOHistoryOut);
+    //     for i:=0 to graphDev.Vertices[intVertex].ChildCount-1 do
+    //         getListDev(graphDev.Vertices[intVertex].Childs[i].Index,listDevInGroup);
+    //end;
+
   begin
      ZCMsgCallBackInterface.TextMessage('Получаем все устройства!!!. Список сегментов:',TMWOHistoryOut);
      result:=TListDev.Create;
@@ -942,9 +972,9 @@ var
        newVertex:=newGraph.addVertexDevFunc(graphDev.Vertices[intVertex].getDevice);
        newGraph.Root:=newVertex;
        newInt:=newVertex.Index;
-       pvd:=FindVariableInEnt(graphDev.Vertices[intVertex].getDevice,velec_nameDevice);       // смотрим может ли данное устройство быть централью
-         if pvd<>nil then
-            ZCMsgCallBackInterface.TextMessage(' nnewGraph.Root:=newVertex; ' + pstring(pvd^.data.Addr.Instance)^,TMWOHistoryOut);
+       //pvd:=FindVariableInEnt(graphDev.Vertices[intVertex].getDevice,velec_nameDevice);       // смотрим может ли данное устройство быть централью
+       //  if pvd<>nil then
+       //     ZCMsgCallBackInterface.TextMessage(' nnewGraph.Root:=newVertex; ' + pstring(pvd^.data.Addr.Instance)^,TMWOHistoryOut);
       end
       else
       begin
@@ -952,9 +982,9 @@ var
         newInt:=newVertex.Index;
         newVertex.attachDevice(graphDev.Vertices[intVertex].getDevice);
 
-         pvd:=FindVariableInEnt(graphDev.Vertices[intVertex].getDevice,velec_nameDevice);       // смотрим может ли данное устройство быть централью
-         if pvd<>nil then
-            ZCMsgCallBackInterface.TextMessage(' nnewGraph.NOT = ' + pstring(pvd^.data.Addr.Instance)^,TMWOHistoryOut);
+         //pvd:=FindVariableInEnt(graphDev.Vertices[intVertex].getDevice,velec_nameDevice);       // смотрим может ли данное устройство быть централью
+         //if pvd<>nil then
+         //   ZCMsgCallBackInterface.TextMessage(' nnewGraph.NOT = ' + pstring(pvd^.data.Addr.Instance)^,TMWOHistoryOut);
 
         //ZCMsgCallBackInterface.TextMessage('41',TMWOHistoryOut);
         newGraph.GetEdge(newVertex.Parent,newVertex).attachCable(cab);
@@ -967,18 +997,18 @@ var
         //pvd:=FindVariableInEnt(graphDev.Vertices[intVertex].,velec_ANALYSISEM_icanbeheadunit);
         lastChild:=false;
         childDevVarExt:=graphDev.Vertices[intVertex].Childs[i].getDevice^.specialize GetExtension<TVariablesExtender>;
-        pvd:=FindVariableInEnt(graphDev.Vertices[intVertex].Childs[i].getDevice,velec_nameDevice);
-          if pvd<>nil then
-            ZCMsgCallBackInterface.TextMessage(' дети=' + pstring(pvd^.data.Addr.Instance)^,TMWOHistoryOut);
+        //pvd:=FindVariableInEnt(graphDev.Vertices[intVertex].Childs[i].getDevice,velec_nameDevice);
+        //  if pvd<>nil then
+        //    ZCMsgCallBackInterface.TextMessage(' дети=' + pstring(pvd^.data.Addr.Instance)^,TMWOHistoryOut);
 
 
         childDev:=getEntToDev(childDevVarExt.getMainFuncEntity);    // получиль центра устройства
         pvd:=FindVariableInEnt(childDev,velec_ANALYSISEM_icanbeheadunit);       // смотрим может ли данное устройство быть централью
           if pvd<>nil then
             begin
-             pvd2:=FindVariableInEnt(childDev,velec_nameDevice);       // смотрим может ли данное устройство быть централью
-             if pvd2<>nil then
-                ZCMsgCallBackInterface.TextMessage(' Внутри условия и цикла чайлд. имя устройства = ' + pstring(pvd2^.data.Addr.Instance)^,TMWOHistoryOut);
+             //pvd2:=FindVariableInEnt(childDev,velec_nameDevice);       // смотрим может ли данное устройство быть централью
+             //if pvd2<>nil then
+             //   ZCMsgCallBackInterface.TextMessage(' Внутри условия и цикла чайлд. имя устройства = ' + pstring(pvd2^.data.Addr.Instance)^,TMWOHistoryOut);
 
              if (pboolean(pvd^.data.Addr.Instance)^) then
               for devlistMF in listAllHeadDev do
@@ -986,7 +1016,7 @@ var
                     lastChild:=true;
             end;
 
-        ZCMsgCallBackInterface.TextMessage(' lastChild=' + booltostr(lastChild,'TRUE', 'FALSE'),TMWOHistoryOut);
+        //ZCMsgCallBackInterface.TextMessage(' lastChild=' + booltostr(lastChild,'TRUE', 'FALSE'),TMWOHistoryOut);
         newcab:=PTEdgeEMTree(graphDev.GetEdge(graphDev.Vertices[intVertex],graphDev.Vertices[intVertex].Childs[i]).AsPointer[vPTEdgeEMTree])^.cab;
         //ZCMsgCallBackInterface.TextMessage(' newcab.length= ' + floattostr(PTEdgeEMTree(graphDev.GetEdge(graphDev.Vertices[intVertex],graphDev.Vertices[intVertex].Childs[i]).AsPointer[vPTEdgeEMTree])^.length),TMWOHistoryOut);
         createNewGraph(graphDev,graphDev.Vertices[intVertex].Childs[i].Index,newGraph,newInt,newcab,lastChild);
@@ -1122,11 +1152,11 @@ var
 
     for graphDev in listFullGraphEM do
     begin
-      ZCMsgCallBackInterface.TextMessage(' getListMainFuncHeadDevinGraph - старт ',TMWOHistoryOut);
+      //ZCMsgCallBackInterface.TextMessage(' getListMainFuncHeadDevinGraph - старт ',TMWOHistoryOut);
       getListNameHeadDevinGraph(graphDev,graphDev.Root.Index,listNameHeadDev);
       for tempStr in listNameHeadDev do
         begin
-          ZCMsgCallBackInterface.TextMessage(' все ГУ ГУ гУ ===' + tempStr,TMWOHistoryOut);
+          //ZCMsgCallBackInterface.TextMessage(' все ГУ ГУ гУ ===' + tempStr,TMWOHistoryOut);
           //ZCMsgCallBackInterface.TextMessage('Имя ГУ без отсева ='+tempStr,TMWOHistoryOut);
           getListMainFuncHeadDevinGraph(graphDev,graphDev.Root.Index,result,tempStr);
         end;
@@ -1138,7 +1168,7 @@ var
       //        ZCMsgCallBackInterface.TextMessage('Имя ГУ с учетом особенностей что они по ГУ или не ГУ = '+pstring(pvd^.data.Addr.Instance)^,TMWOHistoryOut);
       //      end;
       //  end;
-      ZCMsgCallBackInterface.TextMessage(' getListMainFuncHeadDevinGraph - финиш',TMWOHistoryOut);
+      //ZCMsgCallBackInterface.TextMessage(' getListMainFuncHeadDevinGraph - финиш',TMWOHistoryOut);
     end;
   end;
   //***//

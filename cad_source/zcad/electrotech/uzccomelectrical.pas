@@ -58,13 +58,6 @@ TBasicFinter=record
                    ExcludeCable:Boolean;(*'Exclude filter'*)
                    ExcludeCableMask:String;(*'Exclude mask'*)
              end;
-  PTFindDeviceParam=^TFindDeviceParam;
-  {REGISTERRECORDTYPE TFindDeviceParam}
-  TFindDeviceParam=record
-                        FindType:TFindType;(*'Find in'*)
-                        FindMethod:Boolean;(*'Use symbols *, ?'*)
-                        FindString:String;(*'Text'*)
-                    end;
   {REGISTERRECORDTYPE GDBLine}
      GDBLine=record
                   lBegin,lEnd:GDBvertex;
@@ -122,7 +115,6 @@ var
    p3dpl:PGDBObjCable;
 
    //pco:pCommandRTEdObjectPlugin;
-   FindDeviceParam:TFindDeviceParam;
 
    CableManager:TCableManager;
 
@@ -2694,132 +2686,6 @@ else
   //redrawoglwnd;
   result:=cmd_ok;
 end;
-function Find_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
-//var i: Integer;
-   // pv:pGDBObjEntity;
-   // ir:itrec;
-begin
-  zcShowCommandParams(SysUnit.TypeName2PTD('CommandRTEdObject'),pfindcom);
-  drawings.GetCurrentDWG.SelObjArray.Free;
-  drawings.GetCurrentROOT.ObjArray.DeSelect(drawings.GetCurrentDWG.wa.param.SelDesc.Selectedobjcount,drawings.GetCurrentDWG^.deselector);
-  result:=cmd_ok;
-  zcRedrawCurrentDrawing;
-end;
-procedure commformat;
-var pv,pvlast:pGDBObjEntity;
-    v:pvardesk;
-    varvalue,sourcestr,varname:String;
-    ir:itrec;
-    count:integer;
-    //a:HandledMsg;
-    tpz{, glx1, gly1}: Double;
-  {fv1,}{tp,}wcsLBN,wcsRTF,dcsLBN,dcsRTF: GDBVertex;
-    findvarvalue:Boolean;
-    DC:TDrawContext;
-    pentvarext:TVariablesExtender;
-begin
-  drawings.GetCurrentDWG.SelObjArray.Free;
-  drawings.GetCurrentROOT.ObjArray.DeSelect(drawings.GetCurrentDWG.wa.param.SelDesc.Selectedobjcount,drawings.GetCurrentDWG^.deselector);
-   case FindDeviceParam.FindType of
-      TFT_Obozn:begin
-                     varname:=('NMO_Name');
-                end;
-      TFT_DBLink:begin
-                     varname:=('DB_link');
-                end;
-      TFT_DESC_MountingDrawing:begin
-                     varname:=('DESC_MountingDrawing');
-                end;
-      TFT_variable:;//заглушка для warning
-   end;
-
-  sourcestr:=uppercase(FindDeviceParam.FindString);
-
-  pv:=drawings.GetCurrentROOT.ObjArray.beginiterate(ir);
-  count:=0;
-  if pv<>nil then
-  repeat
-        pentvarext:=pv^.GetExtension<TVariablesExtender>;
-        if pentvarext<>nil then
-        begin
-        findvarvalue:=false;
-        v:=pentvarext.entityunit.FindVariable(varname);
-        if v<>nil then
-        begin
-             varvalue:=uppercase(v^.data.PTD.GetValueAsString(v^.data.Addr.Instance));
-             findvarvalue:=true;
-        end;
-
-        if findvarvalue then
-        begin
-
-              case FindDeviceParam.FindMethod of
-                   true:begin
-                              if MatchesMask(varvalue,sourcestr) then
-                                                                     findvarvalue:=true
-                                                                 else
-                                                                     findvarvalue:=false;
-                        end;
-                   false:
-                         begin
-                              if sourcestr=varvalue then
-                                                        findvarvalue:=true
-                                                    else
-                                                        findvarvalue:=false;
-                         end;
-               end;
-
-               if findvarvalue then
-               begin
-                  pv^.select(drawings.GetCurrentDWG.wa.param.SelDesc.Selectedobjcount,drawings.CurrentDWG^.selector);
-                  pvlast:=pv;
-                  inc(count);
-               end;
-        end;
-        end;
-
-  pv:=drawings.GetCurrentROOT.ObjArray.iterate(ir);
-  until pv=nil;
-
-
-
-  if count=1 then
-  begin
-        dcsLBN:=InfinityVertex;
-        dcsRTF:=MinusInfinityVertex;
-        wcsLBN:=InfinityVertex;
-        wcsRTF:=MinusInfinityVertex;
-        {tp:=}drawings.getcurrentdwg.wa.ProjectPoint(pvlast^.vp.BoundingBox.LBN.x,pvlast^.vp.BoundingBox.LBN.y,pvlast^.vp.BoundingBox.LBN.Z,wcsLBN,wcsRTF,dcsLBN,dcsRTF);
-        {tp:=}drawings.getcurrentdwg.wa.ProjectPoint(pvlast^.vp.BoundingBox.RTF.x,pvlast^.vp.BoundingBox.LBN.y,pvlast^.vp.BoundingBox.LBN.Z,wcsLBN,wcsRTF,dcsLBN,dcsRTF);
-        {tp:=}drawings.getcurrentdwg.wa.ProjectPoint(pvlast^.vp.BoundingBox.RTF.x,pvlast^.vp.BoundingBox.RTF.y,pvlast^.vp.BoundingBox.LBN.Z,wcsLBN,wcsRTF,dcsLBN,dcsRTF);
-        {tp:=}drawings.getcurrentdwg.wa.ProjectPoint(pvlast^.vp.BoundingBox.LBN.x,pvlast^.vp.BoundingBox.RTF.y,pvlast^.vp.BoundingBox.LBN.Z,wcsLBN,wcsRTF,dcsLBN,dcsRTF);
-        {tp:=}drawings.getcurrentdwg.wa.ProjectPoint(pvlast^.vp.BoundingBox.LBN.x,pvlast^.vp.BoundingBox.LBN.y,pvlast^.vp.BoundingBox.RTF.Z,wcsLBN,wcsRTF,dcsLBN,dcsRTF);
-        {tp:=}drawings.getcurrentdwg.wa.ProjectPoint(pvlast^.vp.BoundingBox.RTF.x,pvlast^.vp.BoundingBox.LBN.y,pvlast^.vp.BoundingBox.RTF.Z,wcsLBN,wcsRTF,dcsLBN,dcsRTF);
-        {tp:=}drawings.getcurrentdwg.wa.ProjectPoint(pvlast^.vp.BoundingBox.RTF.x,pvlast^.vp.BoundingBox.RTF.y,pvlast^.vp.BoundingBox.RTF.Z,wcsLBN,wcsRTF,dcsLBN,dcsRTF);
-        {tp:=}drawings.getcurrentdwg.wa.ProjectPoint(pvlast^.vp.BoundingBox.LBN.x,pvlast^.vp.BoundingBox.RTF.y,pvlast^.vp.BoundingBox.RTF.Z,wcsLBN,wcsRTF,dcsLBN,dcsRTF);
-  drawings.GetCurrentDWG.pcamera^.prop.point.x:=-(wcsLBN.x+(wcsRTF.x-wcsLBN.x)/2);
-  drawings.GetCurrentDWG.pcamera^.prop.point.y:=-(wcsLBN.y+(wcsRTF.y-wcsLBN.y)/2);
-
-
-  drawings.GetCurrentDWG.pcamera^.prop.zoom:=(wcsRTF.x-wcsLBN.x)/drawings.GetCurrentDWG.wa.getviewcontrol.clientwidth;
-  tpz:=(wcsRTF.y-wcsLBN.y)/drawings.GetCurrentDWG.wa.getviewcontrol.clientheight;
-
-  if tpz>drawings.GetCurrentDWG.pcamera^.prop.zoom then drawings.GetCurrentDWG.pcamera^.prop.zoom:=tpz;
-
-  drawings.GetCurrentDWG.wa.CalcOptimalMatrix;
-  drawings.GetCurrentDWG.wa.mouseunproject(drawings.GetCurrentDWG.wa.param.md.mouse.x, drawings.GetCurrentDWG.wa.param.md.mouse.y);
-  drawings.GetCurrentDWG.wa.reprojectaxis;
-  //OGLwindow1.param.firstdraw := true;
-  //drawings.GetCurrentDWG.pcamera^.getfrustum(@drawings.GetCurrentDWG.pcamera^.modelMatrix,@drawings.GetCurrentDWG.pcamera^.projMatrix,drawings.GetCurrentDWG.pcamera^.clipLCS,drawings.GetCurrentDWG.pcamera^.frustum);
-  dc:=drawings.GetCurrentDWG^.CreateDrawingRC;
-  drawings.GetCurrentROOT.FormatEntity(drawings.GetCurrentDWG^,dc);
-  //drawings.GetCurrentDWG.ObjRoot.calcvisible;
-  //drawings.GetCurrentDWG.ConstructObjRoot.calcvisible;
-  end;
-  zcRedrawCurrentDrawing;
-  //ZCMsgCallBackInterface.TextMessage('Найдено '+inttostr(count)+' объектов',TMWOHistoryOut);
-  ZCMsgCallBackInterface.TextMessage(format('Founded %d entities',[count]),TMWOHistoryOut);
-end;
 function _Cable_mark_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 var //i: Integer;
     pv:pGDBObjDevice;
@@ -3620,12 +3486,7 @@ begin
   //EM_SEPBUILD.SetCommandParam(@em_sepbuild_params,'PTBasicFinter');
 
   CreateCommandRTEdObjectPlugin(@ElLeaser_com_CommandStart,@Line_com_CommandEnd,nil,nil,@Line_com_BeforeClick,@El_Leader_com_AfterClick,nil,nil,'El_Leader',0,0);
-  pfindcom:=CreateCommandRTEdObjectPlugin(@Find_com,nil,nil,@commformat,nil,nil,nil,nil,'El_Find',0,0);
-  pfindcom.CEndActionAttr:=[];
-  pfindcom^.SetCommandParam(@FindDeviceParam,'PTFindDeviceParam');
 
-  FindDeviceParam.FindType:=tft_obozn;
-  FindDeviceParam.FindString:='';
   ELLeaderComParam.Scale:=1;
   ELLeaderComParam.Size:=1;
 

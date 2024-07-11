@@ -401,7 +401,7 @@ begin
     cmd:=pTND^.Command;
   end;
   if cmd<>'' then
-    commandmanager.executecommandsilent(@cmd[1],drawings.GetCurrentDWG,drawings.GetCurrentOGLWParam);
+    commandmanager.executecommandsilent(cmd,drawings.GetCurrentDWG,drawings.GetCurrentOGLWParam);
 end;
 
 class procedure TPaletteHelper.ZPalettevsIconItemCreator(aNode: TDomNode;rootnode:TPersistent; palette:TPaletteControlBaseType;treeprefix:string);

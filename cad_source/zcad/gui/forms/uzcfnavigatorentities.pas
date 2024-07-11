@@ -77,7 +77,7 @@ begin
     if (pnd^.Ident.pent<>nil)and(pnd^.Ident.pent<>LastAutoselectedEnt) then begin
        LastAutoselectedEnt:=pnd^.Ident.pent;
        s:='SelectObjectByAddres('+inttostr(PtrUInt(pnd^.Ident.pent))+')';
-       commandmanager.executecommandsilent(@s[1],drawings.GetCurrentDWG,drawings.GetCurrentOGLWParam);
+       commandmanager.executecommandsilent(s,drawings.GetCurrentDWG,drawings.GetCurrentOGLWParam);
     end;
   end;
 end;

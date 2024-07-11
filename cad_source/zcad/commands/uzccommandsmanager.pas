@@ -79,7 +79,7 @@ type
                           constructor init(m:Integer);
                           procedure execute(const comm:string;silent:Boolean;pdrawing:PTDrawingDef;POGLWndParam:POGLWndtype);virtual;
                           procedure executecommand(const comm:string;pdrawing:PTDrawingDef;POGLWndParam:POGLWndtype);virtual;
-                          procedure executecommandsilent(const comm:pansichar;pdrawing:PTDrawingDef;POGLWndParam:POGLWndtype);virtual;
+                          procedure executecommandsilent(const comm:string;pdrawing:PTDrawingDef;POGLWndParam:POGLWndtype);virtual;
                           procedure DisableExecuteCommandEnd;virtual;
                           procedure EnableExecuteCommandEnd;virtual;
                           function hasDisabledExecuteCommandEnd:boolean;virtual;
@@ -902,7 +902,7 @@ end;
 procedure GDBcommandmanager.executecommandsilent{(const comm:pansichar): Integer};
 begin
      if not isBusy then
-     execute(comm,true,pdrawing,POGLWndParam);
+       execute(comm,true,pdrawing,POGLWndParam);
 end;
 procedure GDBcommandmanager.PrepairVarStack;
 var

@@ -478,7 +478,7 @@ var
   s:string;
 begin
     PtrInt(s):=Data;
-    commandmanager.executecommandsilent(@s[1],drawings.GetCurrentDWG,drawings.GetCurrentOGLWParam);
+    commandmanager.executecommandsilent(s,drawings.GetCurrentDWG,drawings.GetCurrentOGLWParam);
 end;
 
 procedure TNavigatorDevices.VTFocuschanged(Sender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex);

@@ -1189,7 +1189,12 @@ procedure TGeneralViewArea.ZoomToVolume(Volume:TBoundingBox);
                                                                            DebugLn('{WH}'+'ZoomToVolume: Пустой чертеж?');
                                                                            exit;
                                                                       end;
-    target:=createvertex(-(wcsLBN.x+(wcsRTF.x-wcsLBN.x)/2),-(wcsLBN.y+(wcsRTF.y-wcsLBN.y)/2),-(wcsLBN.z+(wcsRTF.z-wcsLBN.z)/2));
+    //без этого разделения камера уползает по Z
+    if IsPointEqual(pdwg.Getpcamera^.prop.look,xy_MinusZ_Vertex) then
+      //добавоено чтоб не уполжала камера
+      target:=createvertex(-(wcsLBN.x+(wcsRTF.x-wcsLBN.x)/2),-(wcsLBN.y+(wcsRTF.y-wcsLBN.y)/2),pdwg.Getpcamera^.prop.point.z)
+    else
+      target:=createvertex(-(wcsLBN.x+(wcsRTF.x-wcsLBN.x)/2),-(wcsLBN.y+(wcsRTF.y-wcsLBN.y)/2),-(wcsLBN.z+(wcsRTF.z-wcsLBN.z)/2));
     camerapos:=pdwg.Getpcamera^.prop.point;
     target:=vertexsub(target,camerapos);
 

@@ -978,6 +978,8 @@ begin
      cs.cf:=jcc;
      ts.tblformat.PushBackData(cs);
 
+     DrawingExtensions:=TDrawingExtensions.create;
+
 end;
 
 end.

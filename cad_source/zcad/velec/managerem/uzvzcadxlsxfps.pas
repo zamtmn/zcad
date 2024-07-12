@@ -157,10 +157,10 @@ begin
     //pathFile:=GetEnvironmentVariableUTF8('USERPROFILE') + '\zcadcalctemp.xlsx';
     pathFile:=sysutils.gettempdir() + 'zcadcalctemp.xlsx';
 
-    ZCMsgCallBackInterface.TextMessage('pathFile='+pathFile,TMWOHistoryOut);
+    //ZCMsgCallBackInterface.TextMessage('pathFile='+pathFile,TMWOHistoryOut);
     BasicWorkbook.WriteToFile(pathFile, sfOOXML,true);
     BasicWorkbook.Free;
-    ZCMsgCallBackInterface.TextMessage('pathFile='+pathFile,TMWOHistoryOut);
+    //ZCMsgCallBackInterface.TextMessage('pathFile='+pathFile,TMWOHistoryOut);
     Excel := CreateOleObject('Excel.Application');
     Excel.ScreenUpdating:=False;
     Excel.DisplayStatusBar:=False;

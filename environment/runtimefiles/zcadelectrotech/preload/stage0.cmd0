@@ -1,5 +1,5 @@
 ;Комментарий
-;*-путь к программе
+;$(ZCADPath)-путь к программе
 LoadActions($(ZCADPath)/menu/actionscontent.xml)
 LoadActions($(ZCADPath)/menu/electrotechactionscontent.xml)
 LoadActions($(ZCADPath)/menu/velecactionscontent.xml)

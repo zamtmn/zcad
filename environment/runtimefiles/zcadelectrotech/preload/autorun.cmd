@@ -1,5 +1,5 @@
 ;Комментарий
-;*-путь к программе
+;$(ZCADPath)-путь к программе
 ;-------------------
 ;Загрузка УГО блоков
 ;-------------------
@@ -34,10 +34,10 @@ MergeBlocks(_velec_diagram.dxf)
 ;------------------------
 ;Загрузка ткстовых файлов
 ;------------------------
-;Load(*sample/test_dxf/teapot.dxf)
-;Load(*sample/test_dxf/em.dxf)
-;Load(*autosave/autosave.dxf)
-;Load(*sample/zigzag.dxf)
+;Load($(ZCADPath)/sample/test_dxf/teapot.dxf)
+;Load($(ZCADPath)/sample/test_dxf/em.dxf)
+;Load($(ZCADPath)/autosave/autosave.dxf)
+;Load($(ZCADPath)/sample/zigzag.dxf)
 
 ;-----------------------------------
 ;Показ окна "О программе" при старте

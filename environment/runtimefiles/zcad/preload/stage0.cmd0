@@ -1,6 +1,6 @@
 ;Комментарий
 ;*-путь к программе
-LoadActions(*menu/actionscontent.xml)
-LoadToolBars(*menu/toolbarscontent.xml)
-LoadPalettes(*menu/palettescontent.xml)
-LoadMenus(*menu/menuscontent.xml)
+LoadActions($(ZCADPath)/menu/actionscontent.xml)
+LoadToolBars($(ZCADPath)/menu/toolbarscontent.xml)
+LoadPalettes($(ZCADPath)/menu/palettescontent.xml)
+LoadMenus($(ZCADPath)/menu/menuscontent.xml)

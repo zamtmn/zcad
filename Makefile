@@ -9,7 +9,7 @@ ifeq ($(OS),Windows_NT)
 else
 	UNAME_S:=$(shell uname -s)
 	ifeq ($(UNAME_S),Linux)
-		OSDETECT=LINUX
+		OSDETECT:=LINUX
 	endif
 	ifeq ($(UNAME_S),Darwin)
 		OSDETECT:=OSX
@@ -19,65 +19,63 @@ endif
 CPUDETECT:=
 ifeq ($(OS),Windows_NT)
 	ifeq ($(PROCESSOR_ARCHITECTURE),AMD64)
-		CPUDETECT=AMD64
+		CPUDETECT:=AMD64
 	endif
 	ifeq ($(PROCESSOR_ARCHITECTURE),x86)
-		CPUDETECT=IA32
+		CPUDETECT:=IA32
 	endif
 else
 	UNAME_P := $(shell uname -p)
 	ifeq ($(UNAME_P),x86_64)
-		CPUDETECT=AMD64
+		CPUDETECT:=AMD64
 	endif
-		ifneq ($(filter %86,$(UNAME_P)),)
-	CPUDETECT=IA32
-		endif
+	ifneq ($(filter %86,$(UNAME_P)),)
+		CPUDETECT:=IA32
+	endif
 	ifneq ($(filter arm%,$(UNAME_P)),)
-		CPUDETECT=ARM
+		CPUDETECT:=ARM
 	endif
 endif
 
-PATHDELIM:=
+PATHDELIM:=/
 ifeq ($(OSDETECT),WIN32)
-	PATHDELIM =\\
-else
-	PATHDELIM =/
+	PATHDELIM:=\\
 endif
-
+PATHDELIM:=$(strip $(PATHDELIM))
 
 PCP:=
 ifeq ($(OSDETECT),WIN32)
-	PCP=$(LOCALAPPDATA)\lazarus
+	PCP:=$(LOCALAPPDATA)\lazarus
 else
 	ifeq ($(OSDETECT),LINUX)
-		PCP='~/.lazarus'
+		PCP:='~/.lazarus'
 	else
 		ifeq ($(OSDETECT),OSX)
-			PCP=~/.lazarus
+			PCP:=~/.lazarus
 		else
-			PCP=~/.lazarus
+			PCP:=~/.lazarus
 		endif
-
 	endif
 endif
 
 LP:=
 ifeq ($(OSDETECT),WIN32)
-	LP =C:/lazarus
+	LP:=C:\lazarus
 else
 	ifeq ($(OSDETECT),LINUX)
-		LP=~/lazarus
+		LP:=~/lazarus
 	else
 		ifeq ($(OSDETECT),OSX)
-			PCP=~/lazarus
+			LP:=~/lazarus
 		else
-			PCP=~/lazarus
+			LP:=~/lazarus
 		endif
-
 	endif
 endif
 
-ZP:=$(shell $(LP)/lazbuild --pcp=$(PCP) cad_source$(PATHDELIM)zcad.lpi  --get-expand-text=$$\(ProjPath\)..$(PATHDELIM)cad$(PATHDELIM)bin$(PATHDELIM)$$\(TargetCPU\)-$$\(TargetOS\))
+LAZBUILD:=$(LP)$(PATHDELIM)lazbuild
+
+ZP:=$(shell $(LAZBUILD) --pcp=$(PCP) cad_source$(PATHDELIM)zcad.lpi --get-expand-text=$$\(ProjPath\)..$(PATHDELIM)cad$(PATHDELIM)bin$(PATHDELIM)$$\(TargetCPU\)-$$\(TargetOS\))
 
 checkallvars: checkvars 
 	@echo OSDETECT=$(OSDETECT)
@@ -156,14 +154,14 @@ else
 endif
 	@echo $(ZCVERSION) > cad_source/zcadversion.txt
 zcad: checkvars version       
-	$(LP)$(PATHDELIM)lazbuild --pcp=$(PCP) cad_source/utils/typeexporter.lpi
+	$(LAZBUILD) --pcp=$(PCP) cad_source/utils/typeexporter.lpi
 	environment/typeexporter/typeexporter pathprefix=cad_source/ outputfile=cad/rtl/system.pas processfiles=environment/typeexporter/zcad.files
-	$(LP)$(PATHDELIM)lazbuild --pcp=$(PCP) cad_source/zcad.lpi
+	$(LAZBUILD) --pcp=$(PCP) cad_source/zcad.lpi
 
 zcadelectrotech: checkvars version
-	$(LP)$(PATHDELIM)lazbuild --pcp=$(PCP) cad_source/utils/typeexporter.lpi
+	$(LAZBUILD) --pcp=$(PCP) cad_source/utils/typeexporter.lpi
 	environment/typeexporter/typeexporter pathprefix=cad_source/ outputfile=cad/rtl/system.pas processfiles=environment/typeexporter/zcad.files+environment/typeexporter/zcadelectrotech.files define=ELECTROTECH
-	$(LP)$(PATHDELIM)lazbuild --pcp=$(PCP) cad_source/zcad.lpi
+	$(LAZBUILD) --pcp=$(PCP) cad_source/zcad.lpi
 
 afterzcadelectrotechbuild: checkallvars version
 	$(ZP)/zcad nosplash runscript cad/components/afterbuild.cmd
@@ -225,27 +223,27 @@ rmpkgslibs:
 
 installpkgstolaz: checkvars rmpkgslibs
 ifneq ($(OSDETECT),OSX)
-	$(LP)$(PATHDELIM)lazbuild --pcp=$(PCP) --add-package cad_source$(PATHDELIM)other$(PATHDELIM)agraphlaz$(PATHDELIM)lazarus$(PATHDELIM)ag_graph.lpk
-	$(LP)$(PATHDELIM)lazbuild --pcp=$(PCP) --add-package cad_source$(PATHDELIM)other$(PATHDELIM)agraphlaz$(PATHDELIM)lazarus$(PATHDELIM)ag_math.lpk
-	$(LP)$(PATHDELIM)lazbuild --pcp=$(PCP) --add-package cad_source$(PATHDELIM)other$(PATHDELIM)agraphlaz$(PATHDELIM)lazarus$(PATHDELIM)ag_vectors.lpk
+	$(LAZBUILD) --pcp=$(PCP) --add-package cad_source$(PATHDELIM)other$(PATHDELIM)agraphlaz$(PATHDELIM)lazarus$(PATHDELIM)ag_graph.lpk
+	$(LAZBUILD) --pcp=$(PCP) --add-package cad_source$(PATHDELIM)other$(PATHDELIM)agraphlaz$(PATHDELIM)lazarus$(PATHDELIM)ag_math.lpk
+	$(LAZBUILD) --pcp=$(PCP) --add-package cad_source$(PATHDELIM)other$(PATHDELIM)agraphlaz$(PATHDELIM)lazarus$(PATHDELIM)ag_vectors.lpk
 endif
-	$(LP)$(PATHDELIM)lazbuild --pcp=$(PCP) --add-package cad_source$(PATHDELIM)other$(PATHDELIM)uniqueinstance$(PATHDELIM)uniqueinstance_package.lpk
-	$(LP)$(PATHDELIM)lazbuild --pcp=$(PCP) --add-package cad_source$(PATHDELIM)components$(PATHDELIM)metadarkstyle$(PATHDELIM)metadarkstyle.lpk
-	$(LP)$(PATHDELIM)lazbuild --pcp=$(PCP) --add-package cad_source$(PATHDELIM)components$(PATHDELIM)zcontainers$(PATHDELIM)zcontainers.lpk
-	$(LP)$(PATHDELIM)lazbuild --pcp=$(PCP) --add-package cad_source$(PATHDELIM)components$(PATHDELIM)zbaseutils$(PATHDELIM)zbaseutils.lpk
-	$(LP)$(PATHDELIM)lazbuild --pcp=$(PCP) --add-package cad_source$(PATHDELIM)components$(PATHDELIM)zbaseutilsgui$(PATHDELIM)zbaseutilsgui.lpk
-	$(LP)$(PATHDELIM)lazbuild --pcp=$(PCP) --add-package cad_source$(PATHDELIM)components$(PATHDELIM)zebase$(PATHDELIM)zebase.lpk
-	$(LP)$(PATHDELIM)lazbuild --pcp=$(PCP) --add-package cad_source$(PATHDELIM)components$(PATHDELIM)zcontrols$(PATHDELIM)zcontrols.lpk
-	$(LP)$(PATHDELIM)lazbuild --pcp=$(PCP) --add-package cad_source$(PATHDELIM)components$(PATHDELIM)zmacros$(PATHDELIM)zmacros.lpk
-	$(LP)$(PATHDELIM)lazbuild --pcp=$(PCP) --add-package cad_source$(PATHDELIM)components$(PATHDELIM)zmath$(PATHDELIM)zmath.lpk
-	$(LP)$(PATHDELIM)lazbuild --pcp=$(PCP) --add-package cad_source$(PATHDELIM)components$(PATHDELIM)zobjectinspector$(PATHDELIM)zobjectinspector.lpk
-	$(LP)$(PATHDELIM)lazbuild --pcp=$(PCP) --add-package cad_source$(PATHDELIM)components$(PATHDELIM)zscriptbase$(PATHDELIM)zscriptbase.lpk
-	$(LP)$(PATHDELIM)lazbuild --pcp=$(PCP) --add-package cad_source$(PATHDELIM)components$(PATHDELIM)zscript$(PATHDELIM)zscript.lpk
-	$(LP)$(PATHDELIM)lazbuild --pcp=$(PCP) --add-package cad_source$(PATHDELIM)components$(PATHDELIM)ztoolbars$(PATHDELIM)ztoolbars.lpk
-	$(LP)$(PATHDELIM)lazbuild --pcp=$(PCP) --add-package cad_source$(PATHDELIM)components$(PATHDELIM)zundostack$(PATHDELIM)zundostack.lpk
-	$(LP)$(PATHDELIM)lazbuild --pcp=$(PCP) --add-package cad_source$(PATHDELIM)components$(PATHDELIM)fpdwg$(PATHDELIM)fpdwg.lpk
-	$(LP)$(PATHDELIM)lazbuild --pcp=$(PCP) --add-package cad_source$(PATHDELIM)components$(PATHDELIM)fpspreadsheet$(PATHDELIM)laz_fpspreadsheet_visual_dsgn.lpk
-	$(LP)$(PATHDELIM)lazbuild --pcp=$(PCP) cad_source$(PATHDELIM)components$(PATHDELIM)lape$(PATHDELIM)package$(PATHDELIM)lape.lpk
-	$(LP)$(PATHDELIM)lazbuild --pcp=$(PCP) --add-package cad_source$(PATHDELIM)components$(PATHDELIM)zreaders$(PATHDELIM)zreaders.lpk
-	$(LP)$(PATHDELIM)lazbuild --pcp=$(PCP) --add-package cad_source$(PATHDELIM)components$(PATHDELIM)fphunspell$(PATHDELIM)fphunspell.lpk
-#	$(LP)$(PATHDELIM)lazbuild --pcp=$(PCP) --build-ide=""
+	$(LAZBUILD) --pcp=$(PCP) --add-package cad_source$(PATHDELIM)other$(PATHDELIM)uniqueinstance$(PATHDELIM)uniqueinstance_package.lpk
+	$(LAZBUILD) --pcp=$(PCP) --add-package cad_source$(PATHDELIM)components$(PATHDELIM)metadarkstyle$(PATHDELIM)metadarkstyle.lpk
+	$(LAZBUILD) --pcp=$(PCP) --add-package cad_source$(PATHDELIM)components$(PATHDELIM)zcontainers$(PATHDELIM)zcontainers.lpk
+	$(LAZBUILD) --pcp=$(PCP) --add-package cad_source$(PATHDELIM)components$(PATHDELIM)zbaseutils$(PATHDELIM)zbaseutils.lpk
+	$(LAZBUILD) --pcp=$(PCP) --add-package cad_source$(PATHDELIM)components$(PATHDELIM)zbaseutilsgui$(PATHDELIM)zbaseutilsgui.lpk
+	$(LAZBUILD) --pcp=$(PCP) --add-package cad_source$(PATHDELIM)components$(PATHDELIM)zebase$(PATHDELIM)zebase.lpk
+	$(LAZBUILD) --pcp=$(PCP) --add-package cad_source$(PATHDELIM)components$(PATHDELIM)zcontrols$(PATHDELIM)zcontrols.lpk
+	$(LAZBUILD) --pcp=$(PCP) --add-package cad_source$(PATHDELIM)components$(PATHDELIM)zmacros$(PATHDELIM)zmacros.lpk
+	$(LAZBUILD) --pcp=$(PCP) --add-package cad_source$(PATHDELIM)components$(PATHDELIM)zmath$(PATHDELIM)zmath.lpk
+	$(LAZBUILD) --pcp=$(PCP) --add-package cad_source$(PATHDELIM)components$(PATHDELIM)zobjectinspector$(PATHDELIM)zobjectinspector.lpk
+	$(LAZBUILD) --pcp=$(PCP) --add-package cad_source$(PATHDELIM)components$(PATHDELIM)zscriptbase$(PATHDELIM)zscriptbase.lpk
+	$(LAZBUILD) --pcp=$(PCP) --add-package cad_source$(PATHDELIM)components$(PATHDELIM)zscript$(PATHDELIM)zscript.lpk
+	$(LAZBUILD) --pcp=$(PCP) --add-package cad_source$(PATHDELIM)components$(PATHDELIM)ztoolbars$(PATHDELIM)ztoolbars.lpk
+	$(LAZBUILD) --pcp=$(PCP) --add-package cad_source$(PATHDELIM)components$(PATHDELIM)zundostack$(PATHDELIM)zundostack.lpk
+	$(LAZBUILD) --pcp=$(PCP) --add-package cad_source$(PATHDELIM)components$(PATHDELIM)fpdwg$(PATHDELIM)fpdwg.lpk
+	$(LAZBUILD) --pcp=$(PCP) --add-package cad_source$(PATHDELIM)components$(PATHDELIM)fpspreadsheet$(PATHDELIM)laz_fpspreadsheet_visual_dsgn.lpk
+	$(LAZBUILD) --pcp=$(PCP) cad_source$(PATHDELIM)components$(PATHDELIM)lape$(PATHDELIM)package$(PATHDELIM)lape.lpk
+	$(LAZBUILD) --pcp=$(PCP) --add-package cad_source$(PATHDELIM)components$(PATHDELIM)zreaders$(PATHDELIM)zreaders.lpk
+	$(LAZBUILD) --pcp=$(PCP) --add-package cad_source$(PATHDELIM)components$(PATHDELIM)fphunspell$(PATHDELIM)fphunspell.lpk
+#	$(LAZBUILD) --pcp=$(PCP) --build-ide=""

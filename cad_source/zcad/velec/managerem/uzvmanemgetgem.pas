@@ -425,7 +425,7 @@ var
              getListCabPoly(graphDev.Vertices[intVertex].Childs[i].Index,listPolyInGroup);
     end;
   begin
-     ZCMsgCallBackInterface.TextMessage('Получаем все кабели!!!. Список сегментов:',TMWOHistoryOut);
+     //ZCMsgCallBackInterface.TextMessage('Получаем все кабели!!!. Список сегментов:',TMWOHistoryOut);
      result:=TListPolyline.Create;
      getListCabPoly(graphDev.Root.Index,result);
 
@@ -528,7 +528,7 @@ var
     //end;
 
   begin
-     ZCMsgCallBackInterface.TextMessage('Получаем все устройства!!!. Список сегментов:',TMWOHistoryOut);
+     //ZCMsgCallBackInterface.TextMessage('Получаем все устройства!!!. Список сегментов:',TMWOHistoryOut);
      result:=TListDev.Create;
      getListDev(graphDev.Root.Index,result);
 

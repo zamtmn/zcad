@@ -33,7 +33,7 @@ uses
                    //менеджер команд и объекты связанные с ним
   uzcdrawings,     //Drawings manager, all open drawings are processed him
   //uzccombase,
-  gzctnrVectorTypes,
+  gzctnrVectorTypes,LazUTF8,
   uzcinterface,
   comobj, variants, LConvEncoding, strutils,
   fpsTypes, fpSpreadsheet, fpsUtils, fpsSearch,gvector, fpsAllFormats,  uzbstrproc;
@@ -146,10 +146,52 @@ var
 
   //** Выполнить пересчет книги
 procedure nowCalcFormulas();
+var
+    Excel:OleVariant;
+    ExcelWorkbook: OleVariant;
+    pathFile:string;
 begin
-    ZCMsgCallBackInterface.TextMessage('КАЛЬКУЛЯТОР КАЛЬКУЛЯТОР КАЛЬКУЛЯТОР КАЛЬКУЛЯТОР КАЛЬКУЛЯТОР КАЛЬКУЛЯТОР СТАРТ',TMWOHistoryOut);
-  BasicWorkbook.CalcFormulas;
-    ZCMsgCallBackInterface.TextMessage('КАЛЬКУЛЯТОР КАЛЬКУЛЯТОР КАЛЬКУЛЯТОР КАЛЬКУЛЯТОР КАЛЬКУЛЯТОР КАЛЬКУЛЯТОР ФИНИШ',TMWOHistoryOut);
+    ZCMsgCallBackInterface.TextMessage('         калькуляция книги - начато',TMWOHistoryOut);
+     //GetEnvironmentVariableUTF8();
+     //sysutils.gettempdir();
+    //pathFile:=GetEnvironmentVariableUTF8('USERPROFILE') + '\zcadcalctemp.xlsx';
+    pathFile:=sysutils.gettempdir() + 'zcadcalctemp.xlsx';
+
+    ZCMsgCallBackInterface.TextMessage('pathFile='+pathFile,TMWOHistoryOut);
+    BasicWorkbook.WriteToFile(pathFile, sfOOXML,true);
+    BasicWorkbook.Free;
+    ZCMsgCallBackInterface.TextMessage('pathFile='+pathFile,TMWOHistoryOut);
+    Excel := CreateOleObject('Excel.Application');
+    Excel.ScreenUpdating:=False;
+    Excel.DisplayStatusBar:=False;
+    Excel.DisplayAlerts := False;
+    Excel.EnableEvents:=False;
+    //ZCMsgCallBackInterface.TextMessage('2',TMWOHistoryOut);
+    ExcelWorkbook:=Excel.Workbooks.Open(WideString(pathFile));
+    //ZCMsgCallBackInterface.TextMessage('3',TMWOHistoryOut);
+    //fullFilePath, AccessMode:=xlExclusive,ConflictResolution:=Excel.XlSaveConflictResolution.xlLocalSessionChanges
+    ExcelWorkbook.SaveAs(FileName:=WideString(pathFile), AccessMode:=3 ,ConflictResolution:=2);
+    //ZCMsgCallBackInterface.TextMessage('4',TMWOHistoryOut);
+    Excel.ScreenUpdating:=True;
+    Excel.DisplayStatusBar:=True;
+    Excel.EnableEvents:=True;
+    //ZCMsgCallBackInterface.TextMessage('5',TMWOHistoryOut);
+    ExcelWorkbook.Close(Savechanges:=false);
+    ExcelWorkbook:=Unassigned;
+    Excel.Quit;
+    Excel := Unassigned;
+    //ZCMsgCallBackInterface.TextMessage('6',TMWOHistoryOut);
+//
+    //openXLSXFile(pathFile);
+    BasicWorkbook := TsWorkbook.Create;
+    BasicWorkbook.Options := BasicWorkbook.Options + [boReadFormulas];
+    //ZCMsgCallBackInterface.TextMessage('openXLSXFile='+pathFile,TMWOHistoryOut);
+    BasicWorkbook.ReadFromFile(pathFile, sfOOXML);
+
+
+    //result:=true;
+  //BasicWorkbook.CalcFormulas;
+    ZCMsgCallBackInterface.TextMessage('         калькуляция книги - закончена',TMWOHistoryOut);
 end;
 
 function openXLSXFile(pathFile:string):boolean;
@@ -582,8 +624,8 @@ var
   //cl:PCell;
 begin
   edWorksheet:=BasicWorkbook.GetWorksheetByName(ToSheet);
-  ZCMsgCallBackInterface.TextMessage('copyRow fromSheet = '+fromSheet + '---- ToSheet = '+ToSheet,TMWOHistoryOut);
-  ZCMsgCallBackInterface.TextMessage('copyRow stRow = '+ inttostr(stRow) + '---- edRow = '+ inttostr(edRow),TMWOHistoryOut);
+  //ZCMsgCallBackInterface.TextMessage('copyRow fromSheet = '+fromSheet + '---- ToSheet = '+ToSheet,TMWOHistoryOut);
+  //ZCMsgCallBackInterface.TextMessage('copyRow stRow = '+ inttostr(stRow) + '---- edRow = '+ inttostr(edRow),TMWOHistoryOut);
   BasicWorkbook.GetWorksheetByName(ToSheet).CopyRow(stRow,edRow);
   //edWorksheet.CopyCell(stRow,stCol,edRow,edCol,BasicWorkbook.GetWorksheetByName(nameStSheet));
   // BasicWorkbook.GetWorksheetByName(fromSheet)

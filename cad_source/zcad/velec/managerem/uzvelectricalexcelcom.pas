@@ -202,17 +202,34 @@ begin
     //ZCMsgCallBackInterface.TextMessage('Значение:' + sh.ReadAsText(3,1) + ';    Формула:'+ sh.ReadFormulaAsString(sh.GetCell(3,1),false),TMWOHistoryOut);
 
     //sh.WriteCellValueAsString(0,0,'2');
-    //sh.CopyCell(0,1,1,1,b.GetFirstWorksheet);
-    //sh.CopyCell(0,2,1,2,b.GetFirstWorksheet);
-    //sh.CopyCell(0,3,1,3,b.GetFirstWorksheet);
+    sh.CopyCell(1,5,2,5,b.GetFirstWorksheet);
+    sh.CopyCell(2,5,3,5,b.GetFirstWorksheet);
+    sh.CopyCell(3,5,4,5,b.GetFirstWorksheet);
 
     //sh.copyCell(nameEtalon,stRow,stColNew,nameSheet,stRowNew,stColNew);
     b.CalcFormulas;
     //sh.CalcFormulas;
-    //ZCMsgCallBackInterface.TextMessage('Значение:' + sh.ReadAsText(0,1) + ';    Формула:'+ sh.ReadFormulaAsString(sh.GetCell(0,1),false),TMWOHistoryOut);
-    //ZCMsgCallBackInterface.TextMessage('Значение:' + sh.ReadAsText(1,1) + ';    Формула:'+ sh.ReadFormulaAsString(sh.GetCell(1,1),false),TMWOHistoryOut);
-    //ZCMsgCallBackInterface.TextMessage('Значение:' + sh.ReadAsText(0,2) + ';    Формула:'+ sh.ReadFormulaAsString(sh.GetCell(0,2),false),TMWOHistoryOut);
-    //ZCMsgCallBackInterface.TextMessage('Значение:' + sh.ReadAsText(1,2) + ';    Формула:'+ sh.ReadFormulaAsString(sh.GetCell(1,2),false),TMWOHistoryOut);
+    ZCMsgCallBackInterface.TextMessage('Значение:' + sh.ReadAsText(1,5) + ';    Формула:'+ sh.ReadFormulaAsString(sh.GetCell(1,5),false),TMWOHistoryOut);
+    ZCMsgCallBackInterface.TextMessage('Значение:' + sh.ReadAsText(2,5) + ';    Формула:'+ sh.ReadFormulaAsString(sh.GetCell(2,5),false),TMWOHistoryOut);
+    ZCMsgCallBackInterface.TextMessage('Значение:' + sh.ReadAsText(3,5) + ';    Формула:'+ sh.ReadFormulaAsString(sh.GetCell(3,5),false),TMWOHistoryOut);
+    ZCMsgCallBackInterface.TextMessage('Значение:' + sh.ReadAsText(4,5) + ';    Формула:'+ sh.ReadFormulaAsString(sh.GetCell(4,5),false),TMWOHistoryOut);
+
+    sh.CopyCell(1,8,2,8,b.GetFirstWorksheet);
+    sh.CopyCell(2,8,3,8,b.GetFirstWorksheet);
+    sh.CopyCell(3,8,4,8,b.GetFirstWorksheet);
+    //sh.copyCell(nameEtalon,stRow,stColNew,nameSheet,stRowNew,stColNew);
+    b.CalcFormulas;
+    //sh.CalcFormulas;
+    ZCMsgCallBackInterface.TextMessage('Значение:' + sh.ReadAsText(0,2) + ';    Формула:'+ sh.ReadFormulaAsString(sh.GetCell(0,2),false),TMWOHistoryOut);
+    ZCMsgCallBackInterface.TextMessage('Значение:' + sh.ReadAsText(0,3) + ';    Формула:'+ sh.ReadFormulaAsString(sh.GetCell(0,3),false),TMWOHistoryOut);
+    ZCMsgCallBackInterface.TextMessage('Значение:' + sh.ReadAsText(0,4) + ';    Формула:'+ sh.ReadFormulaAsString(sh.GetCell(0,4),false),TMWOHistoryOut);
+    ZCMsgCallBackInterface.TextMessage('Значение:' + sh.ReadAsText(0,5) + ';    Формула:'+ sh.ReadFormulaAsString(sh.GetCell(0,5),false),TMWOHistoryOut);
+
+    ZCMsgCallBackInterface.TextMessage('Значение:' + sh.ReadAsText(1,8) + ';    Формула:'+ sh.ReadFormulaAsString(sh.GetCell(1,8),false),TMWOHistoryOut);
+    ZCMsgCallBackInterface.TextMessage('Значение:' + sh.ReadAsText(2,8) + ';    Формула:'+ sh.ReadFormulaAsString(sh.GetCell(2,8),false),TMWOHistoryOut);
+    ZCMsgCallBackInterface.TextMessage('Значение:' + sh.ReadAsText(3,8) + ';    Формула:'+ sh.ReadFormulaAsString(sh.GetCell(3,8),false),TMWOHistoryOut);
+    ZCMsgCallBackInterface.TextMessage('Значение:' + sh.ReadAsText(4,8) + ';    Формула:'+ sh.ReadFormulaAsString(sh.GetCell(4,8),false),TMWOHistoryOut);
+
     //ZCMsgCallBackInterface.TextMessage('Значение:' + sh.ReadAsText(0,3) + ';    Формула:'+ sh.ReadFormulaAsString(sh.GetCell(0,3),false),TMWOHistoryOut);
     //ZCMsgCallBackInterface.TextMessage('Значение:' + sh.ReadAsText(1,3) + ';    Формула:'+ sh.ReadFormulaAsString(sh.GetCell(1,3),false),TMWOHistoryOut);
 

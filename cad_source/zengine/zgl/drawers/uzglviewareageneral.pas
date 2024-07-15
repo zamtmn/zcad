@@ -2526,8 +2526,7 @@ begin
 
   tm:=pcamera^.modelMatrix;
   //MatrixInvert(tm);
-  pcamera^.CamCSOffset:=uzegeometry.VectorTransform3D(pcamera^.CamCSOffset,tm);
-  pcamera^.CamCSOffset:=pcamera^.prop.point;
+  pcamera^.CamCSOffset:=pcamera^.prop.point-pcamera^.prop.look*(pcamera^.zmax+pcamera^.zmin)/2;
 
   {получение центра виевфрустума}
   tm:=uzegeometry.CreateTranslationMatrix({minusvertex(pdwg.pcamera^.CamCSOffset)}nulvertex);

@@ -77,7 +77,7 @@ else
 	endif
 endif
 
-ZP:=$(shell $(LP)$(PATHDELIM)lazbuild --pcp=$(PCP) cad_source$(PATHDELIM)zcad.lpi  "--get-expand-text=$$(ProjPath)..$(PATHDELIM)cad$(PATHDELIM)bin$(PATHDELIM)$$(TargetCPU)-$$(TargetOS)")
+ZP:=$(shell $(LP)$(PATHDELIM)lazbuild --pcp=$(PCP) cad_source$(PATHDELIM)zcad.lpi  --get-expand-text=\$$(ProjPath)..$(PATHDELIM)cad$(PATHDELIM)bin$(PATHDELIM)\$$(TargetCPU)-\$$(TargetOS))
 
 checkallvars: checkvars 
 	@echo OSDETECT=$(OSDETECT)

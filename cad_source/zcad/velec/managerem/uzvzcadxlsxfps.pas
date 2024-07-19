@@ -146,6 +146,9 @@ var
 
   //** Выполнить пересчет книги
 procedure nowCalcFormulas();
+const
+  xlManual = -4135;
+  xlAutomatic = -4105;
 var
     Excel:OleVariant;
     ExcelWorkbook: OleVariant;
@@ -168,6 +171,10 @@ begin
     Excel.EnableEvents:=False;
     //ZCMsgCallBackInterface.TextMessage('2',TMWOHistoryOut);
     ExcelWorkbook:=Excel.Workbooks.Open(WideString(pathFile));
+
+    Excel.Calculate;
+    //Excel.Calculation := xlAutomatic; //Вновь включаем автоматический пересчёт.
+
     //ZCMsgCallBackInterface.TextMessage('3',TMWOHistoryOut);
     //fullFilePath, AccessMode:=xlExclusive,ConflictResolution:=Excel.XlSaveConflictResolution.xlLocalSessionChanges
     ExcelWorkbook.SaveAs(FileName:=WideString(pathFile), AccessMode:=3 ,ConflictResolution:=2);
@@ -457,6 +464,9 @@ var
 begin
   now_worksheet:=BasicWorkbook.GetWorksheetByName(nameSheet);
   now_worksheet.CalcFormula(now_worksheet.GetFormula(now_worksheet.GetCell(iRow,iCol)));
+
+  ZCMsgCallBackInterface.TextMessage('******специальный расчет формулы внутри ячейки. Лист = '  + nameSheet + ' ключ=(' + inttostr(iRow) + ',' + inttostr(iCol)+ ') значение = '+uzvzcadxlsxfps.getCellValue(nameSheet,iRow,iCol) + ' формула = ' + uzvzcadxlsxfps.getCellFormula(nameSheet,iRow,iCol),TMWOHistoryOut);
+
 end;
 procedure setCellAddressFormula(nameSheet:string;AddressStr:string;iText:string);
 begin
@@ -475,8 +485,8 @@ var
 begin
   //ZCMsgCallBackInterface.TextMessage('КАЛЬКУЛЯТОР КАЛЬКУЛЯТОР КАЛЬКУЛЯТОР КАЛЬКУЛЯТОР КАЛЬКУЛЯТОР КАЛЬКУЛЯТОР СТАРТ'+ nameSheet ,TMWOHistoryOut);
   now_worksheet:=BasicWorkbook.GetWorksheetByName(nameSheet);
-  now_worksheet.CalcFormulas;
-    //ZCMsgCallBackInterface.TextMessage('calcFormulas nameSheet='+ nameSheet ,TMWOHistoryOut);
+  //now_worksheet.CalcFormulas;
+    ZCMsgCallBackInterface.TextMessage('ОТМЕНА ОТМЕНА calcFormulas nameSheet='+ nameSheet ,TMWOHistoryOut);
 end;
 function iHaveFormula(nameSheet:string;iRow,iCol:Cardinal):boolean;
 var

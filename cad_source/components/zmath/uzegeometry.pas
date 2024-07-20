@@ -2259,9 +2259,17 @@ begin
    pp.y:= l2begin.y + t2 * p43.y;
    pp.z:= l2begin.z + t2 * p43.z;
 
-   if (ABS(pp.x-result.interceptcoord.x)>bigEPS) or
-      (ABS(pp.y-result.interceptcoord.y)>bigEPS) or
-      (ABS(pp.z-result.interceptcoord.z)>bigEPS)
+   //todo: непомню зачем добавил эту проверку, по сути она не нужна - пересечение
+   //всеравно "насчитали". Координаты на линиях могут не совпасть изза
+   //погрешности, что собсвенно происходит при пересечении вот этих линий
+   //(5865965.88288733,-2925099.80152868)-(5865959.78288733,-2925099.80152868)
+   //(5865964.13288733,-2925101.55152868)-(5865964.13288733,-2925098.05152868)
+   //пока отодвинуд точность с bigEPS на floateps, но по идее надо убрать
+   //если не вспомню зачем добавлял
+
+   if (ABS(pp.x-result.interceptcoord.x)>floateps) or
+      (ABS(pp.y-result.interceptcoord.y)>floateps) or
+      (ABS(pp.z-result.interceptcoord.z)>floateps)
    then exit;
 
    result.isintercept:=true;

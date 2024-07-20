@@ -63,7 +63,7 @@ endif
 
 LP:=
 ifeq ($(OSDETECT),WIN32)
-	LP =C:\lazarus
+	LP =C:/lazarus
 else
 	ifeq ($(OSDETECT),LINUX)
 		LP=~/lazarus
@@ -77,28 +77,7 @@ else
 	endif
 endif
 
-ZP:=
-ifeq ($(OSDETECT),WIN32)
-	ifeq ($(CPUDETECT),AMD64)
-		ZP=/cad/bin/x86_64-win64
-	else
-		ZP=/cad/bin/x86_64-win64
-	endif
-else
-	ifeq ($(OSDETECT),LINUX)
-		ifeq ($(CPUDETECT),AMD64)
-			ZP=\cad\bin\x86_64-linux
-		else
-			ZP=\cad\bin\i386-linux
-		endif
-	else
-		ifeq ($(CPUDETECT),AMD64)
-			ZP=\cad\bin\x86_64-darwin
-		else
-			ZP=\cad\bin\i386-darwin
-		endif
-	endif
-endif
+ZP:=$(shell $(LP)/lazbuild --pcp=$(PCP) cad_source$(PATHDELIM)zcad.lpi  --get-expand-text=$$\(ProjPath\)..$(PATHDELIM)cad$(PATHDELIM)bin$(PATHDELIM)$$\(TargetCPU\)-$$\(TargetOS\))
 
 checkallvars: checkvars 
 	@echo OSDETECT=$(OSDETECT)
@@ -187,7 +166,7 @@ zcadelectrotech: checkvars version
 	$(LP)$(PATHDELIM)lazbuild --pcp=$(PCP) cad_source/zcad.lpi
 
 afterzcadelectrotechbuild: checkallvars version
-	.$(ZP)/zcad nosplash runscript cad/components/afterbuild.cmd
+	$(ZP)/zcad nosplash runscript cad/components/afterbuild.cmd
 cad:
 	mkdir cad
 cad/help:

@@ -36,10 +36,10 @@
 |Диаметральный размер |DiametricDimension|DIMENSION |ZCAD                  |Экспериментально   
 |Радиальный размер    |RadialDimension   |DIMENSION |ZCAD                  |Экспериментально   
 
-|Кабель               |Cable             |          |ZCADElectrotech       |                   
-|Электрическая ывноска|Leader            |          |ZCADElectrotech       |                   
-|Трасса               |Net               |          |ZCADElectrotech       |                   
-|Суперлиния           |SuperLine         |          |ZCADElectrotech       |Экспериментально    
+|Кабель               |Cable             |          |ZCADElectroTech       |                   
+|Электрическая ывноска|Leader            |          |ZCADElectroTech       |                   
+|Трасса               |Net               |          |ZCADElectroTech       |                   
+|Суперлиния           |SuperLine         |          |ZCADElectroTech       |Экспериментально    
 |====
 Данный список будет расширен, но не до полного охвата примитивов DXF.
 

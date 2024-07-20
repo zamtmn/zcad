@@ -12,7 +12,7 @@ ZCAD - программа (далее по тексту - программа) с
 
 Есть два варианта сборки программы:
 
-ZCAD - базовый набор CAD инструментов; ZCADElectrotech - набор расширеннвй инструментами для электротехнического проектирования
+ZCAD - базовый набор CAD инструментов; ZCADElectroTech - расширенный набор инструментов для электротехнического проектирования
 
 include::general_information/license.adoc[]
 include::general_information/disclaimer.adoc[]

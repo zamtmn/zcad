@@ -162,7 +162,7 @@ var
 begin
   result:='';
   if NextSymbolPos>0 then
-  if NextSymbolPos<length(str) then
+  if NextSymbolPos<=length(str) then
   begin
     sym:=str[NextSymbolPos];
     case sym of

@@ -9,7 +9,7 @@ var
    realnamedev:String;(*'Реальное имя устройства подключения'*)
 
    labelondev:string;(*'Метка на устройстве'*)
-   Position:String;(*'Позиция по заданию ТХ'*)
+   Position:TCalculatedString;(*'Позиция по заданию ТХ'*)
 
    CalcIP:TCalcIP;(*'Способ расчета'*)
    Power:Double;(*'Мощность, кВт'*)
@@ -26,7 +26,10 @@ begin
    ANALYSISEM_exporttoxlsx:=true;
    labelondev:='';
    realnamedev:='';
-   Position:='-';
+
+   Position.value:='-';
+   Position.format:='@@[NMO_BaseName]';
+   
    nametemplatesxlsx:='-';
 
    Power:=1.0;

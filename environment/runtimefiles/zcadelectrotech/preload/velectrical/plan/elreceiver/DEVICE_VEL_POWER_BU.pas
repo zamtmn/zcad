@@ -9,6 +9,7 @@ usescopy objgroup;
 usescopy addtocable;
 usescopy elreceivers;
 usescopy vlocation;
+usescopy vtextpointer;
 usescopy vinfopersonaluse;
 
 implementation
@@ -21,7 +22,7 @@ Device_Class:=TDC_Shell;
 
 NMO_BaseName:='Дв';
 NMO_Suffix:='(??)';
-NMO_Template:='@@[NMO_BaseName]@@[NMO_Suffix]\P@@[Power]';
+NMO_Template:='@@[NMO_BaseName]@@[NMO_Suffix]';
 
 GC_NameGroupTemplate:='@@[GC_HeadDevice].@@[GC_HDGroup]';
 
@@ -32,6 +33,11 @@ Voltage:=_AC_380V_50Hz;
 Phase:=_ABC;
 
 INFOPERSONALUSE_TextTemplate:='';
+
+INFOTEXTPOINTER_Tp1Up.format:='@@[NMO_BaseName]@@[NMO_Suffix]';
+INFOTEXTPOINTER_Tp1Bottom.format:='@@[Power]';
+INFOTEXTPOINTER_Tp2Up.format:='@@[GC_HeadDevice].@@[GC_HDGroup]';
+INFOTEXTPOINTER_Tp2Bottom.format:=' ';
 
 SerialConnection:=1;
 

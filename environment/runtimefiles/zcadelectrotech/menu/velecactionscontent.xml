@@ -14,7 +14,7 @@
       <ZAction Name="ACN_uzvremoveconnection" Command="uzvremoveconnection" Img="#С-" Caption="Remove connection"/>
       <ZAction Name="ACN_managerEM" Command="manem" Img="#MEM" Caption="Manager electrical model"/>
       <ZAction Name="ACN_generatorOneDiagram" Command="vGeneratorOneLine" Img="#GD1" Caption="Generator one-level diagram"/>
-      <ZAction Name="ACN_exportModeltoExcell" Command="vExportToXLSX" Img="#M>X" Caption="Export model to excel"/>
+      <ZAction Name="ACN_exportModeltoExcell" Command="vExportToXLSXFPS" Img="#M>X" Caption="Export model to excel"/>
       <ZAction Name="ACN_exportDevtoExcell" Command="vExportDevToXLSX" Img="#D>X" Caption="Export devices to excel"/>
       <ZAction Name="ACN_exportDevtoExcelTOCAD" Command="vExportDevToXLSXToCAD" Img="#D>Z" Caption="Export devices to excel to CAD"/>
       <ZAction Name="ACN_XLSXtoCADinsertblock" Command="vXLSXtoCAD" Img="#X>Z" Caption="Import block from xlsx"/>

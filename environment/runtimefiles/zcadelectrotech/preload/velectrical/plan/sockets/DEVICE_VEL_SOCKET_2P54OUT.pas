@@ -9,6 +9,7 @@ usescopy objgroup;
 usescopy addtocable;
 usescopy elreceivers;
 usescopy vlocation;
+usescopy vtextpointer;
 usescopy vspecification;
 usescopy vinfopersonaluse;
 
@@ -22,7 +23,7 @@ Device_Class:=TDC_Shell;
 
 NMO_BaseName:='б/п';
 NMO_Suffix:='(??)';
-NMO_Template:='@@[NMO_BaseName]@@[NMO_Suffix]\P@@[Power] @@[LOCATION_height]';
+NMO_Template:='@@[NMO_BaseName]@@[NMO_Suffix]';
 
 GC_NameGroupTemplate:='@@[GC_HeadDevice].@@[GC_HDGroup]';
 
@@ -33,6 +34,11 @@ Voltage:=_AC_220V_50Hz;
 Phase:=_A;
 
 INFOPERSONALUSE_TextTemplate:='';
+
+INFOTEXTPOINTER_Tp1Up.format:='@@[NMO_BaseName]@@[NMO_Suffix]';
+INFOTEXTPOINTER_Tp1Bottom.format:='@@[Power] @@[LOCATION_height]';
+INFOTEXTPOINTER_Tp2Up.format:='@@[GC_HeadDevice].@@[GC_HDGroup]';
+INFOTEXTPOINTER_Tp2Bottom.format:=' ';
 
 VSPECIFICATION_Position:='??';
 VSPECIFICATION_Name:='Розетка ОП54 2Р';

@@ -9,6 +9,7 @@ usescopy objgroup;
 usescopy addtocable;
 usescopy elreceivers;
 usescopy vlocation;
+usescopy vtextpointer;
 usescopy vspecification;
 usescopy vinfopersonaluse;
 var
@@ -38,6 +39,11 @@ Phase:=_A;
 INFOPERSONALUSE_TextTemplate:='@@[GC_HeadDevice].@@[GC_HDGroup]';
 
 ANALYSISEM_exporttoxlsx:=false;
+
+INFOTEXTPOINTER_Tp1Up.format:=' ';
+INFOTEXTPOINTER_Tp1Bottom.format:=' ';
+INFOTEXTPOINTER_Tp2Up.format:=' ';
+INFOTEXTPOINTER_Tp2Bottom.format:=' ';
 
 VSPECIFICATION_Position:='';
 VSPECIFICATION_Name:='Выключатель накладной ОП31 1Р';

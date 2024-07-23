@@ -1387,7 +1387,7 @@ begin
                             ny:=OrtoDevPlaceParam.NY;
                        end;
      end;
-  if button=0 then
+  if button<>MZW_LBUTTON then
   begin
        placedev(@drawings.GetCurrentDWG.ConstructObjRoot.ObjArray,gdbobjline(pl^).CoordInWCS.lbegin, gdbobjline(pl^).CoordInWCS.lend, NX, NY,@OrtoDevPlaceParam.Name[1],OrtoDevPlaceParam.Angle,OrtoDevPlaceParam.AutoAngle,OrtoDevPlaceParam.NormalizePoint);
   end

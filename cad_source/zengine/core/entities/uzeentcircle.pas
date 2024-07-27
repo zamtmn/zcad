@@ -576,7 +576,7 @@ begin
   for i:=0 to 5 do
     if(frustum[i].v[0] * P_insert_in_WCS.x + frustum[i].v[1] * P_insert_in_WCS.y + frustum[i].v[2] * P_insert_in_WCS.z + frustum[i].v[3]+r{+GetLTCorrectH} < 0 ) then
       exit(IREmpty);
-  result:=Vertex3D_in_WCS_Array.CalcTrueInFrustum(frustum);
+  result:=Vertex3D_in_WCS_Array.CalcTrueInFrustum(frustum,false);
 end;
 function GDBObjCircle.getsnap;
 var

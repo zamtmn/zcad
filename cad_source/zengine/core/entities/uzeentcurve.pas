@@ -201,7 +201,7 @@ begin
 end;
 function GDBObjCurve.CalcTrueInFrustum;
 begin
-      result:=VertexArrayInWCS.CalcTrueInFrustum(frustum);
+      result:=VertexArrayInWCS.CalcTrueInFrustum(frustum,false);
 end;
 procedure GDBObjCurve.SaveToDXFFollow;
 var

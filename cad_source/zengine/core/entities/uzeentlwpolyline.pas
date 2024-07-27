@@ -302,16 +302,8 @@ begin
    result:=VertexArrayInWCS.onmouse(mf);}
 end;
 function GDBObjLWpolyline.CalcTrueInFrustum;
-var
-pv1,pv2:pgdbvertex;
 begin
-  result:=Vertex3D_in_WCS_Array.CalcTrueInFrustum(frustum);
-  if Closed then
-    if (result=IREmpty)and(Vertex3D_in_WCS_Array.count>3) then begin
-      pv1:=Vertex3D_in_WCS_Array.getDataMutable(0);
-      pv2:=Vertex3D_in_WCS_Array.getDataMutable(Vertex3D_in_WCS_Array.Count-1);
-      result:=uzegeometry.CalcTrueInFrustum(pv1^,pv2^,frustum);
-    end;
+  result:=Vertex3D_in_WCS_Array.CalcTrueInFrustum(frustum,closed);
 end;
 procedure GDBObjLWpolyline.getoutbound;
 var //tv,tv2:GDBVertex4D;

@@ -51,10 +51,14 @@ GDBObjPolyline= object(GDBObjCurve)
 
                  class function CreateInstance:PGDBObjPolyline;static;
                  function GetObjType:TObjID;virtual;
+                 function CalcTrueInFrustum(const frustum:ClipArray;visibleactualy:TActulity):TInBoundingVolume;virtual;
            end;
 {Export-}
 implementation
-//uses log;
+function GDBObjPolyline.CalcTrueInFrustum;
+begin
+  result:=VertexArrayInWCS.CalcTrueInFrustum(frustum,closed);
+end;
 function GDBObjPolyline.GetLength:Double;
 var
    ptpv0,ptpv1:PGDBVertex;

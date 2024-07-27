@@ -172,7 +172,7 @@ begin
            //system.break;
       end;
       end;
-      result:=Vertex3D_in_WCS_Array.CalcTrueInFrustum(frustum);
+      result:=Vertex3D_in_WCS_Array.CalcTrueInFrustum(frustum,false);
 end;
 function GDBObjEllipse.calcinfrustum;
 var i:Integer;

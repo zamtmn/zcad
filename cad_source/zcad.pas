@@ -81,6 +81,7 @@ uses
 
 
   uzcdrawings,
+  uzcSpeller,
 
   (*            //все нужные файлы перечислены в allgeneratedfiles.inc
   {DXF entities}

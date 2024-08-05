@@ -25,3 +25,6 @@
 [submodule "cad_source/components/callstack_memprofiler"]
 	path = cad_source/components/callstack_memprofiler
 	url = https://github.com/Alligator-1/callstack_memprofiler.git
+[submodule "cad_source/components/fphunspell"]
+	path = cad_source/components/fphunspell
+	url = https://github.com/zamtmn/fphunspell.git

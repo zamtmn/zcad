@@ -217,6 +217,7 @@ rmpkgslibs:
 	rm -rf  cad_source$(PATHDELIM)components$(PATHDELIM)fpspreadsheet$(PATHDELIM)lib$(PATHDELIM)*
 	rm -rf  cad_source$(PATHDELIM)components$(PATHDELIM)lape$(PATHDELIM)package$(PATHDELIM)lib$(PATHDELIM)*
 	rm -rf  cad_source$(PATHDELIM)components$(PATHDELIM)zreaders$(PATHDELIM)lib$(PATHDELIM)*
+	rm -rf  cad_source$(PATHDELIM)components$(PATHDELIM)fphunspell$(PATHDELIM)lib$(PATHDELIM)*
 	rm -rf  cad_source$(PATHDELIM)simplecad$(PATHDELIM)lib$(PATHDELIM)*
 	rm -rf  lib$(PATHDELIM)*
 
@@ -244,4 +245,5 @@ endif
 	$(LP)$(PATHDELIM)lazbuild --pcp=$(PCP) --add-package cad_source$(PATHDELIM)components$(PATHDELIM)fpspreadsheet$(PATHDELIM)laz_fpspreadsheet_visual_dsgn.lpk
 	$(LP)$(PATHDELIM)lazbuild --pcp=$(PCP) cad_source$(PATHDELIM)components$(PATHDELIM)lape$(PATHDELIM)package$(PATHDELIM)lape.lpk
 	$(LP)$(PATHDELIM)lazbuild --pcp=$(PCP) --add-package cad_source$(PATHDELIM)components$(PATHDELIM)zreaders$(PATHDELIM)zreaders.lpk
+	$(LP)$(PATHDELIM)lazbuild --pcp=$(PCP) --add-package cad_source$(PATHDELIM)components$(PATHDELIM)fphunspell$(PATHDELIM)fphunspell.lpk
 #	$(LP)$(PATHDELIM)lazbuild --pcp=$(PCP) --build-ide=""

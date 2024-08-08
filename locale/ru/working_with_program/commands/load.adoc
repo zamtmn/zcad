@@ -1,0 +1,19 @@
+
+#### Load
+
+:cmdcommand: Load
+:cmdicon: ../../../../images/actions/open.png
+:cmdshortcuts: kbd:[Ctrl+O]
+:cmdmenu: Файл > Открыть
+:cmdoperands: Не обязательный. Путь и имя файла dxf
+:cmdexample: Load
+:cmdexample2: Load(E:\myfile.dxf)
+
+include::../../_elements/commandsummary.adoc[]
+
+Загрузка файла DXF. При вызове без параметров будет открыто окно выбора файла, после выбора будет открыт данный файл.
+Имя файла можно передать параметром, тогда файл будет открыт сразу, без окна выбора. В составе строки параметра
+могут использоваться <<path_macros>>, например команда [.cmdline]#Load($(ZCADAutoSaveFilePath))# приведет к загрузке
+файла автосохранения
+
+include::commandsummaryfree.adoc[]

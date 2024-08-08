@@ -194,7 +194,7 @@ const
   //true - команда выполнена
   function execSpecCodeinCell(ourDev:PGDBObjDevice;ourCab:PGDBObjPolyline;codeCellStr,nameGenerSheet:string;row:cardinal;var col:cardinal):boolean;
   const
-      arraySpecCodeinCell: TArray<String> = ['zdevsettings','zsetformulatocell','zsetvaluetocell','zcabsettings', 'zcabdevstart', 'zcabdevfinish', 'zcalculate'];
+      arraySpecCodeinCell: TArray<String> = ['zdevsettings','zsetformulatocell','zsetvaluetocell','zcabsettings', 'zcabdevstart', 'zcabdevfinish', 'zcalculate', 'zcadnameblock'];
   var
     i:integer;
     //doneCorrect:boolean;
@@ -224,6 +224,14 @@ const
       result:=nil;
       if devNowvarext.getMainFuncEntity^.GetObjType=GDBCableID then
          result:=PGDBObjCable(devNowvarext.getMainFuncEntity);
+    end;
+
+    function zcadnameblock:boolean;
+    begin
+      result:=false;
+      uzvzcadxlsxfps.setCellValue(nameGenerSheet,row,col,ourDev.Name);
+      inc(col);
+      result:=true;
     end;
 
     function zdevsettings:boolean;
@@ -562,6 +570,8 @@ const
          4: if ourCab<>nil then result:=zcabdevstart;
          5: if ourCab<>nil then result:=zcabdevfinish;
          6: result:=zcalculate;
+         7: result:=zcadnameblock;
+
 
          //zsetformulatocell
          //1: zimportdevcommand(graphDev,nameEtalon,nameSheet,stInfoDevCell.vRow,stInfoDevCell.vCol);

@@ -11,9 +11,9 @@ begin
           Output:='cabtruba';
 	   if Input = 'open~inPipеMetal' then
           Output:='cabtruba'; 		  
-       if Input = 'land~lowСable' then
+       if Input = 'land~lowCable' then
           Output:='Cable_N'; 
-       if Input = 'land~highСable' then
+       if Input = 'land~highCable' then
           Output:='Cable_W'; 
        if Input = 'land~OutLight' then
           Output:='Cable_V'; 

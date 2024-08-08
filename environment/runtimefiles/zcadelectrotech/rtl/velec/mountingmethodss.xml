@@ -12,8 +12,8 @@
       <inPipеMetal Desc="В металической трубе"/>
     </open>
     <land Desc="Наружные сети электроснабжения">
-      <lowСable Desc="КЛ-0,4 (-N-)"/>
-      <highСable  Desc="КЛ-6/10 кВ (-W-)"/>
+      <lowCable Desc="КЛ-0,4 (-N-)"/>
+      <highCable  Desc="КЛ-6/10 кВ (-W-)"/>
       <OutLight Desc="Наружное освещение (-V-)"/>
       <inPipeSDR Desc="Кабель в защитной трубе"/>
     </land>

@@ -56,6 +56,7 @@ var
   PATH_Fonts:String;
   PATH_AlternateFont:String;
   PATH_Support_Path:String;
+  PATH_Dictionaries:String;
   INTF_CommandLineEnabled:Boolean;
   DSGN_NavigatorsUseMainFunction:Boolean;
   INTF_ObjInspButtonSizeReducing:Integer;
@@ -158,6 +159,7 @@ begin
   PATH_Fonts:='$(SystemFontsPath)/;$(UserFontsPath)/;$(ZCADPath)/fonts/;C:/APPS/MY/acad/support/;C:/Program Files/Autodesk/AutoCAD 2020/Fonts/';
   PATH_AlternateFont:='_mipGost.shx';
   PATH_Support_Path:='$(ZCADPath)/rtl;$(ZCADPath)/rtl/objdefunits;$(ZCADPath)/rtl/objdefunits/include;$(ZCADPath)/components;$(ZCADPath)/blocks/el/general;$(ZCADPath)/blocks/el/general/velecdevice;$(ZCADPath)/rtl/styles';
+  PATH_Dictionaries:='ru=$(ZCADPath)\dictionaries\ru_RU.dic|$(ZCADPath)\dictionaries\en_US.dic';
   INTF_CommandLineEnabled:=True;
   DSGN_NavigatorsUseMainFunction:=True;
   INTF_ObjInspButtonSizeReducing:=4;

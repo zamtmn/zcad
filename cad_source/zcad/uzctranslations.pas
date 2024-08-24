@@ -20,9 +20,13 @@ unit uzcTranslations;
 {$INCLUDE zengineconfig.inc}
 
 interface
-uses uzbpaths,uzbstrproc,LazUTF8,gettext,translations,
-     fileutil,LResources,sysutils,uzbLogTypes,uzcLog,uzbLog,forms,
-     Classes, typinfo,uzcsysparams{,uzcLog};
+uses
+  uzbpaths,uzbstrproc,uzbLogTypes,uzcLog,uzbLog,
+  uzcsysparams,
+  uzcSpeller,
+  LazUTF8,gettext,translations,
+  fileutil,LResources,sysutils,forms,
+  Classes,typinfo;
 
 const
   ZCADTranslatedPOFileName='zcad.%s.po';
@@ -67,7 +71,7 @@ procedure EnableTranslate;
 implementation
 
 var
-  TranslateLogModuleId:TModuleDesk;
+  TranslateLogModuleId,TranslateSpellerLogModuleId:TModuleDesk;
 
 procedure DisableTranslate;
 begin
@@ -124,9 +128,13 @@ function TmyPOFile.Translate(const Identifier, OriginalValue: String): String;
 var
   Item: TPOFileItem;
 begin
+  case SpellChecker.SpellText(OriginalValue) of
+    SpellChecker.WrongLang:programlog.LogOutFormatStr('InterfaceTranslate-SpellChecker: identifier:"%s" originalValue:"%s" spell check error',[Identifier,OriginalValue],LM_Error,TranslateSpellerLogModuleId);
+    SpellChecker.MixedLang:programlog.LogOutFormatStr('InterfaceTranslate-SpellChecker: identifier:"%s" originalValue:"%s" spell check mixed langs',[Identifier,OriginalValue],LM_Warning,TranslateSpellerLogModuleId);
+    SpellChecker.NoText:;
+    else;
+  end;
   Item:=FindPoItem(Identifier);
-  //uncoment for lazarus < r57491
-  //Item:=TPOFileItem({FIdentifierToItem}FIdentLowVarToItem.Data[Identifier]);
   if Item=nil then
     Item:=TPOFileItem(FOriginalToItem.Data[OriginalValue]);
   if Item<>nil then begin
@@ -134,6 +142,15 @@ begin
     if Result='' then Result:=OriginalValue;
   end else
     Result:=OriginalValue;
+  if result<>OriginalValue then begin
+    case SpellChecker.SpellText(result) of
+      SpellChecker.WrongLang:programlog.LogOutFormatStr('InterfaceTranslate-SpellChecker: identifier:"%s" originalValue:"%s" translate to "%s" translation spell check error',[Identifier,OriginalValue,result],LM_Error,TranslateSpellerLogModuleId);
+      SpellChecker.MixedLang:programlog.LogOutFormatStr('InterfaceTranslate-SpellChecker: identifier:"%s" originalValue:"%s" translate to "%s" translation spell check mixed langs',[Identifier,OriginalValue,result],LM_Warning,TranslateSpellerLogModuleId);
+      SpellChecker.NoText:;
+      else;
+    end;
+
+  end;
 end;
 procedure TmyPOFile.Add(const Identifier, OriginalValue, TranslatedValue,
   Comments, Context, Flags, PreviousID: string; SetFuzzy: boolean = false; LineNr: Integer = -1);
@@ -272,6 +289,7 @@ end;
 initialization
   programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
   TranslateLogModuleId:=programlog.RegisterModule('TRANSLATOR');
+  TranslateSpellerLogModuleId:=ProgramLog.RegisterModule('TRANSLATOR/SPELLER');
   DisableTranslateCount:=0;
   PODirectory := ProgramPath+'/languages/';
   GetLanguageIDs(Lang, FallbackLang); // определено в модуле gettext

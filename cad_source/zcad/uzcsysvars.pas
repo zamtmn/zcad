@@ -67,7 +67,7 @@ type
              Template_Path:PString;(*'Templates'*)
              Template_File:PString;(*'Default template'*)
              LayoutFile:PString;(*'Current layout'*)
-             Dictionaries:String;(*'Dictionaries'*)
+             Dictionaries:PString;(*'Dictionaries'*)
              Program_Run:PString;(*'Program'*)(*oi_readonly*)
              Temp_files:PString;(*'Temporary files'*)(*oi_readonly*)
              Device_Library:PString;(*'Device base'*)

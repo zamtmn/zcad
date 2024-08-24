@@ -20,6 +20,7 @@ unit uzcSpeller;
 {$INCLUDE zengineconfig.inc}
 {$mode objfpc}{$H+}
 {$ModeSwitch advancedrecords}
+{$Codepage UTF8}
 
 interface
 
@@ -29,7 +30,7 @@ uses
   hunspell,
   uzbPaths,
   uzcLog,uzbLogTypes,
-  uzcsysvars;
+  uzcSysParams;
 
 type
   TSpellerData=record
@@ -49,16 +50,17 @@ type
       const
         WrongLang=-1;
         MixedLang=-2;
+        NoText=-3;
     procedure CreateRec;
     procedure DestroyRec;
     function LoadDictionary(const DictName:string;const Lang:string=''):TLangHandle;
     procedure LoadDictionaries(Dicts:string);
-    function SpellWord(Word:string):TLangHandle;//>WrongLang if ok
+    function SpellWord(Word:String):TLangHandle;//>WrongLang if ok
+    function SpellText(Text:String):TLangHandle;//>WrongLang or MixedLang or NoText if ok
   end;
 
 var
   SpellChecker:TZCSpeller;
-  t:integer;
 
 implementation
 
@@ -131,7 +133,7 @@ begin
   until Dicts='';
 end;
 
-function TZCSpeller.SpellWord(Word:string):TLangHandle;
+function TZCSpeller.SpellWord(Word:String):TLangHandle;
 var
   i:integer;
   PSD:TSpellers.PT;
@@ -144,14 +146,77 @@ begin
   Result:=WrongLang;
 end;
 
+function TZCSpeller.SpellText(Text:String):TLangHandle;
+var
+  startw,endw,chlen:integer;
+  word:string;
+  t:TLangHandle;
+
+  function ItBreackSumbol(i:integer):boolean;
+  begin
+    if ord(text[i])in[ord('a')..ord('z'),ord('A')..ord('Z')] then begin
+      chlen:=1;
+      exit(false);
+    end;
+    chlen:=Utf8CodePointLen(@Text[i],4,true);
+    if chlen=1 then
+      result:=true
+    else
+      result:=false;
+  end;
+
+  procedure GoToStartW;
+  begin
+    while startw<=length(text) do begin
+     if not ItBreackSumbol(startw) then
+       break;
+     inc(startw,chlen);
+    end;
+    endw:=startw+chlen;
+    while endw<=length(text) do begin
+     if ItBreackSumbol(endw) then
+       break;
+     inc(endw,chlen);
+    end;
+
+  end;
+
+begin
+  result:=NoText;
+  startw:=1;
+  GoToStartW;
+  word:=Copy(text,startw,endw-startw);
+  if word<>''then begin
+    result:=SpellChecker.SpellWord(word);
+    startw:=endw;
+    while startw<=length(text) do begin
+      GoToStartW;
+      word:=Copy(text,startw,endw-startw);
+      if word<>''then begin
+        t:=SpellChecker.SpellWord(word);
+        case t of
+          WrongLang:exit(WrongLang);
+          else
+            if t<>result then
+              result:=MixedLang;
+        end;
+      end;
+      startw:=endw;
+    end;
+  end;
+end;
+
 initialization
   LMDSpeller:=ProgramLog.RegisterModule('Speller/Hunspell');
   SpellChecker.CreateRec;
-  SpellChecker.LoadDictionaries(ExpandPath(SysVar.PATH.Dictionaries));
-  t:=SpellChecker.SpellWord('претворяя');
+  SpellChecker.LoadDictionaries(ExpandPath(SysParam.saved.DictionariesPath));
+  {t:=SpellChecker.SpellText('претворяя в');
+  t:=SpellChecker.SpellText('претворяя the');
+  t:=SpellChecker.SpellText('претворяя ##');
+  t:=SpellChecker.SpellText('##');
   t:=SpellChecker.SpellWord('притворяя');
   t:=SpellChecker.SpellWord('the');
-  t:=SpellChecker.SpellWord('притваряя');
+  t:=SpellChecker.SpellWord('притваряя');}
 finalization
   SpellChecker.DestroyRec;
 end.

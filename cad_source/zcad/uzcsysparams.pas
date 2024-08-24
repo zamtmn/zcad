@@ -16,7 +16,7 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
 
-unit uzcsysparams;
+unit uzcSysParams;
 {$INCLUDE zengineconfig.inc}
 interface
 uses XMLConf,XMLPropStorage,LazConfigStorage,fileutil,
@@ -37,6 +37,7 @@ type
     UpdatePO:Boolean;(*'Update PO file'*)
     MemProfiling:Boolean;(*'Internal memory profiler'*)
     LangOverride:string;(*'Language override'*)
+    DictionariesPath:string;(*'Dictionaries path'*)
   end;
   {REGISTERRECORDTYPE tnotsavedparams}
   tnotsavedparams=record
@@ -60,7 +61,8 @@ const
                                    NoLoadLayout:false;
                                    UpdatePO:false;
                                    MemProfiling:false;
-                                   LangOverride:'');
+                                   LangOverride:'';
+                                   DictionariesPath:'ru=$(ZCADPath)\dictionaries\ru_RU.dic|$(ZCADPath)\dictionaries\en_US.dic');
   zcaduniqueinstanceid='zcad unique instance';
 var
   SysParam: tsysparam;
@@ -77,6 +79,7 @@ begin
   Config.SetDeleteValue('UpdatePO',Params.UpdatePO,DefaultSavedParams.UpdatePO);
   Config.SetDeleteValue('MemProfiling',Params.MemProfiling,DefaultSavedParams.MemProfiling);
   Config.SetDeleteValue('LangOverride',Params.LangOverride,DefaultSavedParams.LangOverride);
+  Config.SetDeleteValue('DictionariesPath',Params.DictionariesPath,DefaultSavedParams.DictionariesPath);
   Config.UndoAppendBasePath;
 end;
 
@@ -116,6 +119,7 @@ begin
   Params.UpdatePO:=XMLConfig.GetValue('UpdatePO',DefaultSavedParams.UpdatePO);
   Params.MemProfiling:=XMLConfig.GetValue('MemProfiling',DefaultSavedParams.MemProfiling);
   Params.LangOverride:=XMLConfig.GetValue('LangOverride',DefaultSavedParams.LangOverride);
+  Params.DictionariesPath:=XMLConfig.GetValue('DictionariesPath',DefaultSavedParams.DictionariesPath);
   XMLConfig.CloseKey;
   FreeAndNil(XMLConfig);
 end;

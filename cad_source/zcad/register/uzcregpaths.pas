@@ -21,12 +21,12 @@ unit uzcregpaths;
 interface
 uses
   uzcsysvars,uzbpaths,uzctranslations,UUnitManager,Varman,
-  TypeDescriptors,uzcLog;
+  TypeDescriptors,uzcLog,uzcsysparams;
 implementation
 
 initialization
   units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPath,expandpath('$(ZCADPath)/rtl/system.pas'),InterfaceTranslate,'PATH_Support_Path','String',GeAddrSupportPath);
-  units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPath,expandpath('$(ZCADPath)/rtl/system.pas'),InterfaceTranslate,'PATH_Dictionaries','String',@SysVar.PATH.Dictionaries);
+  sysvar.PATH.Dictionaries:=@SysParam.saved.DictionariesPath;
   sysvar.PATH.Program_Run:=@ProgramPath;
   sysvar.PATH.Support_Path:=GeAddrSupportPath;
   sysvar.PATH.AdditionalSupport_Path:=@AdditionalSupportPath;

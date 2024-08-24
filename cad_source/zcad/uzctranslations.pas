@@ -34,7 +34,7 @@ const
   ZCADRTTranslatedPOFileName='rtzcad.%s.po';
   ZCADRTPOFileName='rtzcad.po';
   ZCADRTBackupPOFileName='rtzcad.po.backup';
-  ZCADPOFileNotFound='Founf command line swith "UpdatePO". File "%s" not found. STOP!';
+  ZCADPOFileNotFound='Found command line swith "UpdatePO". File "%s" not found. STOP!';
   identpref='zcadexternal.';
 
 type

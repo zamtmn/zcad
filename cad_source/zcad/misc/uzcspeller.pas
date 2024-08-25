@@ -26,7 +26,7 @@ interface
 
 uses
   SysUtils,FileUtil,
-  hunspell,speller,
+  uHunspell,uSpeller,
   uzbPaths,
   uzcLog,uzbLog,uzbLogTypes,
   uzcSysParams;
@@ -57,10 +57,10 @@ initialization
   LMDSpeller:=ProgramLog.RegisterModule('Speller/Hunspell');
   SpellChecker.CreateRec(@SpellLogCallBack);
   SpellChecker.LoadDictionaries(ExpandPath(SysParam.saved.DictionariesPath));
-  {t:=SpellChecker.SpellText('претворяя в');
-  t:=SpellChecker.SpellText('претворяя the');
-  t:=SpellChecker.SpellText('претворяя ##');
-  t:=SpellChecker.SpellText('##');
+  {t:=SpellChecker.SpellTextSimple('претворяя в');
+  t:=SpellChecker.SpellTextSimple('претворяя the');
+  t:=SpellChecker.SpellTextSimple('претворяя ##');
+  t:=SpellChecker.SpellTextSimple('##');
   t:=SpellChecker.SpellWord('притворяя');
   t:=SpellChecker.SpellWord('the');
   t:=SpellChecker.SpellWord('притваряя');}

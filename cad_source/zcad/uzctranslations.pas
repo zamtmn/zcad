@@ -84,7 +84,7 @@ end;
 procedure TPoTranslator.TranslateStringProperty(Sender: TObject;const Instance: TPersistent;
                                                 PropInfo: PPropInfo; var Content: string);
 var
-  s: String;
+  s,errW: String;
 begin
   if not Assigned(CompileTimePO) then exit;
   if not Assigned(PropInfo) then exit;
@@ -93,8 +93,22 @@ begin
    if csDesigning in (Instance as TComponent).ComponentState then exit;
 {:)}
   if (AnsiUpperCase(PropInfo^.PropType^.Name)<>'TTRANSLATESTRING') then exit;
+  case SpellChecker.SpellTextSimple(Content,errW) of
+    SpellChecker.WrongLang:programlog.LogOutFormatStr('TPoTranslator.TranslateStringProperty: Content:"%s" spell check error [%s]',[Content,errW],LM_Error,TranslateSpellerLogModuleId);
+    SpellChecker.MixedLang:programlog.LogOutFormatStr('TPoTranslator.TranslateStringProperty: Content:"%s" spell check mixed langs',[Content],LM_Warning,TranslateSpellerLogModuleId);
+    SpellChecker.NoText:;
+    else;
+  end;
   s:=CompileTimePO.Translate(Content,Content);
-  if s<>'' then Content:=s;
+  if s<>'' then begin
+    case SpellChecker.SpellTextSimple(Content,errW) of
+      SpellChecker.WrongLang:programlog.LogOutFormatStr('TPoTranslator.TranslateStringProperty: Content:"%s", Translated content:"%s" spell check error [%s]',[Content,s,errW],LM_Error,TranslateSpellerLogModuleId);
+      SpellChecker.MixedLang:programlog.LogOutFormatStr('TPoTranslator.TranslateStringProperty: Content:"%s", Translated content:"%s" spell check mixed langs',[Content,s],LM_Warning,TranslateSpellerLogModuleId);
+      SpellChecker.NoText:;
+      else;
+    end;
+    Content:=s;
+  end;
 end;
 
 function TmyPOFile.FindByIdentifier(const Identifier: String):TPOFileItem;
@@ -127,9 +141,10 @@ end;
 function TmyPOFile.Translate(const Identifier, OriginalValue: String): String;
 var
   Item: TPOFileItem;
+  errW:string;
 begin
-  case SpellChecker.SpellText(OriginalValue) of
-    SpellChecker.WrongLang:programlog.LogOutFormatStr('InterfaceTranslate-SpellChecker: identifier:"%s" originalValue:"%s" spell check error',[Identifier,OriginalValue],LM_Error,TranslateSpellerLogModuleId);
+  case SpellChecker.SpellTextSimple(OriginalValue,errW) of
+    SpellChecker.WrongLang:programlog.LogOutFormatStr('InterfaceTranslate-SpellChecker: identifier:"%s" originalValue:"%s" spell check error [%s]',[Identifier,OriginalValue,errW],LM_Error,TranslateSpellerLogModuleId);
     SpellChecker.MixedLang:programlog.LogOutFormatStr('InterfaceTranslate-SpellChecker: identifier:"%s" originalValue:"%s" spell check mixed langs',[Identifier,OriginalValue],LM_Warning,TranslateSpellerLogModuleId);
     SpellChecker.NoText:;
     else;
@@ -143,8 +158,8 @@ begin
   end else
     Result:=OriginalValue;
   if result<>OriginalValue then begin
-    case SpellChecker.SpellText(result) of
-      SpellChecker.WrongLang:programlog.LogOutFormatStr('InterfaceTranslate-SpellChecker: identifier:"%s" originalValue:"%s" translate to "%s" translation spell check error',[Identifier,OriginalValue,result],LM_Error,TranslateSpellerLogModuleId);
+    case SpellChecker.SpellTextSimple(result,errW) of
+      SpellChecker.WrongLang:programlog.LogOutFormatStr('InterfaceTranslate-SpellChecker: identifier:"%s" originalValue:"%s" translate to "%s" translation spell check error [%s]',[Identifier,OriginalValue,result,errW],LM_Error,TranslateSpellerLogModuleId);
       SpellChecker.MixedLang:programlog.LogOutFormatStr('InterfaceTranslate-SpellChecker: identifier:"%s" originalValue:"%s" translate to "%s" translation spell check mixed langs',[Identifier,OriginalValue,result],LM_Warning,TranslateSpellerLogModuleId);
       SpellChecker.NoText:;
       else;

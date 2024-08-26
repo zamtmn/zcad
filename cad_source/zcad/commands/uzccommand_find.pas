@@ -41,11 +41,29 @@ uses
   uzeparsercmdprompt,uzcinterface,uzcdialogsfiles,
   uzcEnitiesVariablesExtender,UGDBOpenArrayOfPV,UGDBSelectedObjArray,
   uzeconsts,uzcstrconsts,LazUTF8,
-  uzeExtdrAbstractDrawingExtender,uzedrawingsimple,uzedrawingabstract,uzbPaths;
+  uzeExtdrAbstractDrawingExtender,uzedrawingsimple,uzedrawingabstract,uzbPaths,
+  gzctnrSTL;
 
 const
   CMDNFind='Find';
   CMDNFindFindParams='FindParams';
+
+type
+  TCheckFuncType=(CFCheckEntity,CFCheckText);
+  TCheckUStr=function(FindIn,Text:TDXFEntsInternalStringType):boolean;
+  TCheckStr=function(FindIn,Text:string):boolean;
+  TCheckEnt=function(PEntity:pGDBObjEntity):boolean;
+  TFindProcData=record
+    CheckUStr:TCheckUStr;
+    case CheckFuncType:TCheckFuncType of
+      CFCheckText:(CheckStr:TCheckStr);
+      CFCheckEntity:(CheckEnt:TCheckEnt);
+  end;
+
+  TFindProcKeyType=string;
+
+procedure RegisterCheckStrProc(AKey:TFindProcKeyType;ACheckStr:TCheckStr;ACheckUStr:TCheckUStr=nil);
+procedure RegisterCheckEntProc(AKey:TFindProcKeyType;ACheckEnt:TCheckEnt);
 
 procedure ShowFindCommandParams;
 
@@ -75,6 +93,7 @@ const
                   ' '];
 
 type
+  TFindProcsRegister=GKey2DataMap<TFindProcKeyType,TFindProcData>;
   //** Тип данных для отображения в инспекторе опций
   TCompareOptions=record
     CaseSensitive:boolean;
@@ -106,6 +125,34 @@ type
 
 var
   FindCommandParam:TFindCommandParam; //**<  Переменная содержащая опции команды
+  FindProcsRegister:TFindProcsRegister;
+
+procedure CreateFindProcsRegisterIfNeed;
+begin
+  if FindProcsRegister=nil then
+    FindProcsRegister:=TFindProcsRegister.Create;
+end;
+
+procedure RegisterCheckStrProc(AKey:TFindProcKeyType;ACheckStr:TCheckStr;ACheckUStr:TCheckUStr=nil);
+var
+  fd:TFindProcData;
+begin
+  CreateFindProcsRegisterIfNeed;
+  fd.CheckUStr:=ACheckUStr;
+  fd.CheckFuncType:=CFCheckText;
+  fd.CheckStr:=ACheckStr;
+  FindProcsRegister.RegisterKey(AKey,fd);
+end;
+procedure RegisterCheckEntProc(AKey:TFindProcKeyType;ACheckEnt:TCheckEnt);
+var
+  fd:TFindProcData;
+begin
+  CreateFindProcsRegisterIfNeed;
+  fd.CheckUStr:=nil;
+  fd.CheckFuncType:=CFCheckEntity;
+  fd.CheckEnt:=ACheckEnt;
+  FindProcsRegister.RegisterKey(AKey,fd);
+end;
 
 constructor TFindInDrawingExtender.Create(pEntity:TAbstractDrawing);
 begin
@@ -137,7 +184,7 @@ begin
   result:=cmd_ok;
 end;
 
-function CheckStr(FindIn,Text:TDXFEntsInternalStringType):boolean;overload;
+function CheckUStr(FindIn,Text:TDXFEntsInternalStringType):boolean;overload;
 var
   i:integer;
 begin
@@ -178,7 +225,7 @@ begin
   end;
 end;
 
-procedure FindInArray(const text:string; constref arr:GDBObjOpenArrayOfPV;var Finded:GDBObjOpenArrayOfPV);
+procedure FindInArray(const fd:TFindProcData;const text:string; constref arr:GDBObjOpenArrayOfPV;var Finded:GDBObjOpenArrayOfPV);
 var pv:pGDBObjEntity;
     ir:itrec;
     pvt:TObjID;
@@ -194,28 +241,42 @@ begin
   repeat
     pvt:=pv.GetObjType;
     isNeedToAdd:=False;
-    if (pvt=GDBMTextID)or(pvt=GDBTextID) then begin
-      if FindCommandParam.Area.InTextContent then
-        isNeedToAdd:=CheckStr(PGDBObjText(pv)^.Content,utext);
-      if not isNeedToAdd then
-        if FindCommandParam.Area.InTextTemplate then
-          isNeedToAdd:=CheckStr(PGDBObjText(pv)^.Template,utext);
-    end;
-    if not isNeedToAdd then
-      if (FindCommandParam.Area.InVariables)and(FindCommandParam.Area.Variables<>'') then begin
-        pentvarext:=pv^.GetExtension<TVariablesExtender>;
-        if pentvarext<>nil then begin
-          vars:=FindCommandParam.Area.Variables;
-          repeat
-            GetPartOfPath(&var,vars,';');
-            v:=pentvarext.entityunit.FindVariable(&var);
-            if v<>nil then begin
-              &var:=v^.data.PTD.GetValueAsString(v^.data.Addr.Instance);
-              isNeedToAdd:=CheckStr(&var,text);
+    case fd.CheckFuncType of
+      CFCheckText:begin
+        if (pvt=GDBMTextID)or(pvt=GDBTextID) then begin
+          if FindCommandParam.Area.InTextContent then begin
+            if @fd.CheckUStr<>nil then
+              isNeedToAdd:=fd.CheckUStr(PGDBObjText(pv)^.Content,utext)
+            else
+              isNeedToAdd:=fd.CheckStr(PGDBObjText(pv)^.Content,utext)
+          end;
+          if not isNeedToAdd then
+            if FindCommandParam.Area.InTextTemplate then begin
+              if @fd.CheckUStr<>nil then
+                isNeedToAdd:=fd.CheckUStr(PGDBObjText(pv)^.Template,utext)
+              else
+                isNeedToAdd:=fd.CheckStr(PGDBObjText(pv)^.Template,utext)
             end;
-          until (vars='')or isNeedToAdd;
         end;
+        if not isNeedToAdd then
+          if (FindCommandParam.Area.InVariables)and(FindCommandParam.Area.Variables<>'') then begin
+            pentvarext:=pv^.GetExtension<TVariablesExtender>;
+            if pentvarext<>nil then begin
+              vars:=FindCommandParam.Area.Variables;
+              repeat
+                GetPartOfPath(&var,vars,';');
+                v:=pentvarext.entityunit.FindVariable(&var);
+                if v<>nil then begin
+                  &var:=v^.data.PTD.GetValueAsString(v^.data.Addr.Instance);
+                  isNeedToAdd:=fd.CheckStr(&var,text);
+                end;
+              until (vars='')or isNeedToAdd;
+            end;
+          end;
       end;
+      CFCheckEntity:
+        isNeedToAdd:=fd.CheckEnt(pv);
+    end;
     if isNeedToAdd then
       Finded.PushBackData(pv);
     pv:=arr.iterate(ir);
@@ -223,7 +284,7 @@ begin
 end;
 
 
-procedure FindInSelection(const text:string; PSelArr:PGDBSelectedObjArray; var Finded:GDBObjOpenArrayOfPV);
+procedure FindInSelection(const fd:TFindProcData;const text:string; PSelArr:PGDBSelectedObjArray; var Finded:GDBObjOpenArrayOfPV);
 var
   Selection:GDBObjOpenArrayOfPV;
   ir:itrec;
@@ -235,7 +296,7 @@ begin
     Selection.PushBackData(psd.objaddr);
     psd:=PSelArr^.iterate(ir);
   until psd=nil;
-  FindInArray(text,Selection,Finded);
+  FindInArray(fd,text,Selection,Finded);
   Selection.Clear;
   Selection.Done;
 end;
@@ -287,6 +348,12 @@ begin
 end;
 
 function Find_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
+const
+  DefaultFindProcData:TFindProcData=(
+    CheckUStr:@CheckUStr;
+    CheckFuncType:CFCheckText;
+    CheckStr:@CheckStr
+  );
 var
   Finded:GDBObjOpenArrayOfPV;
   PSelArr:PGDBSelectedObjArray;
@@ -294,8 +361,15 @@ var
   pv:pGDBObjEntity;
   text:string;
   fe:TFindInDrawingExtender;
+  fd:TFindProcData;
 begin
   if operands<>''then begin
+    if FindProcsRegister<>nil then begin
+      if not FindProcsRegister.TryGetValue(operands,fd) then
+        fd:=DefaultFindProcData;
+    end else
+      fd:=DefaultFindProcData;
+
     if not FindCommandParam.Options.CaseSensitive then
       text:=UTF8UpperString(operands)
     else
@@ -303,9 +377,9 @@ begin
     Finded.init(100);
     PSelArr:=@drawings.GetCurrentDWG.SelObjArray;
     if (FindCommandParam.Area.InSelection)and(PSelArr^.Count>0) then
-      FindInSelection(text,PSelArr,Finded)
+      FindInSelection(fd,text,PSelArr,Finded)
     else
-      FindInArray(text,drawings.GetCurrentDWG.GetCurrentROOT.ObjArray,Finded);
+      FindInArray(fd,text,drawings.GetCurrentDWG.GetCurrentROOT.ObjArray,Finded);
     ZCMsgCallBackInterface.TextMessage(format(rscmNEntitiesFounded,[Finded.Count]),TMWOHistoryOut);
 
     if FindCommandParam.Action.SelectResult<>SR_Nohhing then begin
@@ -355,4 +429,5 @@ initialization
   CreateZCADCommand(@FindPrev_com,'FindPrev',CADWG,0).overlay:=true;
 finalization
   ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
+  FindProcsRegister.Free;
 end.

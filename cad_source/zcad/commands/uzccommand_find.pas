@@ -50,9 +50,9 @@ const
 
 type
   TCheckFuncType=(CFCheckEntity,CFCheckText);
-  TCheckUStr=function(FindIn,Text:TDXFEntsInternalStringType):boolean;
-  TCheckStr=function(FindIn,Text:string):boolean;
-  TCheckEnt=function(PEntity:pGDBObjEntity):boolean;
+  TCheckUStr=function(FindIn,Text:TDXFEntsInternalStringType;var Details:String;const NeedDetails:Boolean=false):boolean;
+  TCheckStr=function(FindIn,Text:string;var Details:String;const NeedDetails:Boolean=false):boolean;
+  TCheckEnt=function(PEntity:pGDBObjEntity;var Details:String;const NeedDetails:Boolean=false):boolean;
   TFindProcData=record
     CheckUStr:TCheckUStr;
     case CheckFuncType:TCheckFuncType of
@@ -121,6 +121,7 @@ type
   TFindInDrawingExtender=class(TAbstractDrawingExtender)
     Finded:GDBObjOpenArrayOfPV;
     Current:Integer;
+    fd:TFindProcData;
     constructor Create(pEntity:TAbstractDrawing);override;
   end;
 
@@ -185,7 +186,7 @@ begin
   result:=cmd_ok;
 end;
 
-function CheckUStr(FindIn,Text:TDXFEntsInternalStringType):boolean;overload;
+function CheckUStr(FindIn,Text:TDXFEntsInternalStringType;var Details:String;const NeedDetails:Boolean=false):boolean;overload;
 var
   i:integer;
 begin
@@ -205,7 +206,7 @@ begin
     end;
   end;
 end;
-function CheckStr(FindIn,Text:string):boolean;overload;
+function CheckStr(FindIn,Text:string;var Details:String;const NeedDetails:Boolean=false):boolean;overload;
 var
   i:integer;
 begin
@@ -226,59 +227,65 @@ begin
   end;
 end;
 
+function CheckEntity(const pv:pGDBObjEntity;const fd:TFindProcData;const text:string;const utext:TDXFEntsInternalStringType;var details:string;const NeedDetails:Boolean):boolean;
+var
+  pvt:TObjID;
+  pentvarext:TVariablesExtender;
+  vars,&var:string;
+  v:pvardesk;
+begin
+  pvt:=pv.GetObjType;
+  result:=False;
+  case fd.CheckFuncType of
+    CFCheckText:begin
+      if (pvt=GDBMTextID)or(pvt=GDBTextID) then begin
+        if FindCommandParam.Area.InTextContent then begin
+          if @fd.CheckUStr<>nil then
+            result:=fd.CheckUStr(PGDBObjText(pv)^.Content,utext,details)
+          else
+            result:=fd.CheckStr(PGDBObjText(pv)^.Content,utext,details)
+        end;
+        if not result then
+          if FindCommandParam.Area.InTextTemplate then begin
+            if @fd.CheckUStr<>nil then
+              result:=fd.CheckUStr(PGDBObjText(pv)^.Template,utext,details)
+            else
+              result:=fd.CheckStr(PGDBObjText(pv)^.Template,utext,details)
+          end;
+      end;
+      if not result then
+        if (FindCommandParam.Area.InVariables)and(FindCommandParam.Area.Variables<>'') then begin
+          pentvarext:=pv^.GetExtension<TVariablesExtender>;
+          if pentvarext<>nil then begin
+            vars:=FindCommandParam.Area.Variables;
+            repeat
+              GetPartOfPath(&var,vars,';');
+              v:=pentvarext.entityunit.FindVariable(&var);
+              if v<>nil then begin
+                &var:=v^.data.PTD.GetValueAsString(v^.data.Addr.Instance);
+                result:=fd.CheckStr(&var,text,details);
+              end;
+            until (vars='')or result;
+          end;
+        end;
+    end;
+    CFCheckEntity:
+      result:=fd.CheckEnt(pv,details);
+  end;
+end;
+
 procedure FindInArray(const fd:TFindProcData;const text:string; constref arr:GDBObjOpenArrayOfPV;var Finded:GDBObjOpenArrayOfPV);
-var pv:pGDBObjEntity;
-    ir:itrec;
-    pvt:TObjID;
-    utext:TDXFEntsInternalStringType;
-    isNeedToAdd:Boolean;
-    pentvarext:TVariablesExtender;
-    vars,&var:string;
-    v:pvardesk;
+var
+  pv:pGDBObjEntity;
+  ir:itrec;
+  utext:TDXFEntsInternalStringType;
+  details:string;
 begin
   utext:=Text;
   pv:=arr.beginiterate(ir);
   if pv<>nil then
   repeat
-    pvt:=pv.GetObjType;
-    isNeedToAdd:=False;
-    case fd.CheckFuncType of
-      CFCheckText:begin
-        if (pvt=GDBMTextID)or(pvt=GDBTextID) then begin
-          if FindCommandParam.Area.InTextContent then begin
-            if @fd.CheckUStr<>nil then
-              isNeedToAdd:=fd.CheckUStr(PGDBObjText(pv)^.Content,utext)
-            else
-              isNeedToAdd:=fd.CheckStr(PGDBObjText(pv)^.Content,utext)
-          end;
-          if not isNeedToAdd then
-            if FindCommandParam.Area.InTextTemplate then begin
-              if @fd.CheckUStr<>nil then
-                isNeedToAdd:=fd.CheckUStr(PGDBObjText(pv)^.Template,utext)
-              else
-                isNeedToAdd:=fd.CheckStr(PGDBObjText(pv)^.Template,utext)
-            end;
-        end;
-        if not isNeedToAdd then
-          if (FindCommandParam.Area.InVariables)and(FindCommandParam.Area.Variables<>'') then begin
-            pentvarext:=pv^.GetExtension<TVariablesExtender>;
-            if pentvarext<>nil then begin
-              vars:=FindCommandParam.Area.Variables;
-              repeat
-                GetPartOfPath(&var,vars,';');
-                v:=pentvarext.entityunit.FindVariable(&var);
-                if v<>nil then begin
-                  &var:=v^.data.PTD.GetValueAsString(v^.data.Addr.Instance);
-                  isNeedToAdd:=fd.CheckStr(&var,text);
-                end;
-              until (vars='')or isNeedToAdd;
-            end;
-          end;
-      end;
-      CFCheckEntity:
-        isNeedToAdd:=fd.CheckEnt(pv);
-    end;
-    if isNeedToAdd then
+    if CheckEntity(pv,fd,text,utext,details,false) then
       Finded.PushBackData(pv);
     pv:=arr.iterate(ir);
   until pv=nil;
@@ -314,9 +321,15 @@ end;
 procedure ShowEntity(fe:TFindInDrawingExtender);
 var
   pv:pGDBObjEntity;
+  Details:String;
 begin
-  ZCMsgCallBackInterface.TextMessage(format(rscmNEntityFrom,[fe.Current+1,fe.Finded.Count]),TMWOHistoryOut);
   pv:=pGDBObjEntity(fe.Finded.getData(fe.Current));
+  Details:='';
+  CheckEntity(pv,fe.fd,'','',Details,true);
+  if Details='' then
+    ZCMsgCallBackInterface.TextMessage(format(rscmNEntityFrom,[fe.Current+1,fe.Finded.Count]),TMWOHistoryOut)
+  else
+    ZCMsgCallBackInterface.TextMessage(format(rscmNEntityFromWithDetails,[fe.Current+1,fe.Finded.Count,Details]),TMWOHistoryOut);
   drawings.GetCurrentDWG.wa.ZoomToVolume(ScaleBB(pv^.vp.BoundingBox,10));
 end;
 
@@ -400,6 +413,7 @@ begin
     if fe<>nil then begin
       fe.Current:=-1;
       fe.Finded.Clear;
+      fe.fd:=fd;
       Finded.copyto(fe.Finded);
       result:=FindNext_com(Context,'');
     end;

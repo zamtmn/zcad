@@ -35,11 +35,11 @@ const
 var
   IsAllInited:Boolean;
 
-function SpellCheckString(FindIn,Text:string):boolean;
-var
-  errW:string;
+function SpellCheckString(FindIn,Text:string;var Details:String;const NeedDetails:Boolean=false):boolean;
+//var
+//  errW:string;
 begin
-  result:=SpellChecker.SpellTextSimple(FindIn,errW)=SpellChecker.WrongLang;
+  result:=SpellChecker.SpellTextSimple(FindIn,{errW}Details)=SpellChecker.WrongLang;
 end;
 
 procedure doInit;

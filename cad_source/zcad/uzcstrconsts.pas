@@ -135,6 +135,7 @@ resourcestring
   rscmNEntitiesDeselected='%d entities deselected';
   rscmNEntitiesFounded='%d entities founded';
   rscmNEntityFrom='Show entity %d from %d';
+  rscmNEntityFromWithDetails='Show entity %d from %d with details "%s"';
 
   rscmEntitiesCounter='%d entities processed (%d total, %d selected, %d filtred)';
 

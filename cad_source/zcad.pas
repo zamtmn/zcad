@@ -247,6 +247,7 @@ uses
   uzcCommand_MoveEntsByMouse,
   uzcCommand_LPCSRun,
   uzcCommand_Find,
+  uzcCommand_SpellCheck,
 
   uzcenitiesvariablesextender,uzcExtdrLayerControl,uzcExtdrSmartTextEnt,
   uzcExtdrIncludingVolume,uzcExtdrSCHConnection,uzcExtdrSCHConnector,

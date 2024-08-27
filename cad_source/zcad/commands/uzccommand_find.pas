@@ -66,6 +66,7 @@ procedure RegisterCheckStrProc(AKey:TFindProcKeyType;ACheckStr:TCheckStr;ACheckU
 procedure RegisterCheckEntProc(AKey:TFindProcKeyType;ACheckEnt:TCheckEnt);
 
 procedure ShowFindCommandParams;
+function Find_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 
 implementation
 

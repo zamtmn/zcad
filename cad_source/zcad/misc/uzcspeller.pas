@@ -32,7 +32,7 @@ uses
   uzcSysParams;
 
 var
-  SpellChecker:TZCSpeller;
+  SpellChecker:TSpeller;
 
 implementation
 

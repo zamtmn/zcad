@@ -24,7 +24,7 @@ interface
 uses
   uzcLog,
   uzccommandsabstract,uzccommandsimpl,
-  uzcinterface,uzcSpeller,
+  uzcinterface,uzcSpeller,uSpeller,
   uzcCommand_Find;
 
 implementation
@@ -35,11 +35,16 @@ const
 var
   IsAllInited:Boolean;
 
-function SpellCheckString(FindIn,Text:string;var Details:String;const NeedDetails:Boolean=false):boolean;
-//var
+function SpellCheckString(FindIn,Text:string;var Details:String;const NeedDetails:Boolean):boolean;
+var
+  Opt:TSpeller.TSpellOpts;
 //  errW:string;
 begin
-  result:=SpellChecker.SpellTextSimple(FindIn,{errW}Details)=SpellChecker.WrongLang;
+  if NeedDetails then
+    Opt:=TSpeller.CSpellOptDetail
+  else
+    Opt:=TSpeller.CSpellOptFast;
+  result:=SpellChecker.SpellTextSimple(FindIn,{errW}Details,Opt)=TSpeller.WrongLang;
 end;
 
 procedure doInit;

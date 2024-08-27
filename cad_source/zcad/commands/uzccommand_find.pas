@@ -50,9 +50,9 @@ const
 
 type
   TCheckFuncType=(CFCheckEntity,CFCheckText);
-  TCheckUStr=function(FindIn,Text:TDXFEntsInternalStringType;var Details:String;const NeedDetails:Boolean=false):boolean;
-  TCheckStr=function(FindIn,Text:string;var Details:String;const NeedDetails:Boolean=false):boolean;
-  TCheckEnt=function(PEntity:pGDBObjEntity;var Details:String;const NeedDetails:Boolean=false):boolean;
+  TCheckUStr=function(FindIn,Text:TDXFEntsInternalStringType;var Details:String;const NeedDetails:Boolean):boolean;
+  TCheckStr=function(FindIn,Text:string;var Details:String;const NeedDetails:Boolean):boolean;
+  TCheckEnt=function(PEntity:pGDBObjEntity;var Details:String;const NeedDetails:Boolean):boolean;
   TFindProcData=record
     CheckUStr:TCheckUStr;
     case CheckFuncType:TCheckFuncType of
@@ -186,7 +186,7 @@ begin
   result:=cmd_ok;
 end;
 
-function CheckUStr(FindIn,Text:TDXFEntsInternalStringType;var Details:String;const NeedDetails:Boolean=false):boolean;overload;
+function CheckUStr(FindIn,Text:TDXFEntsInternalStringType;var Details:String;const NeedDetails:Boolean):boolean;overload;
 var
   i:integer;
 begin
@@ -206,7 +206,7 @@ begin
     end;
   end;
 end;
-function CheckStr(FindIn,Text:string;var Details:String;const NeedDetails:Boolean=false):boolean;overload;
+function CheckStr(FindIn,Text:string;var Details:String;const NeedDetails:Boolean):boolean;overload;
 var
   i:integer;
 begin
@@ -241,16 +241,16 @@ begin
       if (pvt=GDBMTextID)or(pvt=GDBTextID) then begin
         if FindCommandParam.Area.InTextContent then begin
           if @fd.CheckUStr<>nil then
-            result:=fd.CheckUStr(PGDBObjText(pv)^.Content,utext,details)
+            result:=fd.CheckUStr(PGDBObjText(pv)^.Content,utext,details,NeedDetails)
           else
-            result:=fd.CheckStr(PGDBObjText(pv)^.Content,utext,details)
+            result:=fd.CheckStr(PGDBObjText(pv)^.Content,utext,details,NeedDetails)
         end;
         if not result then
           if FindCommandParam.Area.InTextTemplate then begin
             if @fd.CheckUStr<>nil then
-              result:=fd.CheckUStr(PGDBObjText(pv)^.Template,utext,details)
+              result:=fd.CheckUStr(PGDBObjText(pv)^.Template,utext,details,NeedDetails)
             else
-              result:=fd.CheckStr(PGDBObjText(pv)^.Template,utext,details)
+              result:=fd.CheckStr(PGDBObjText(pv)^.Template,utext,details,NeedDetails)
           end;
       end;
       if not result then
@@ -263,14 +263,14 @@ begin
               v:=pentvarext.entityunit.FindVariable(&var);
               if v<>nil then begin
                 &var:=v^.data.PTD.GetValueAsString(v^.data.Addr.Instance);
-                result:=fd.CheckStr(&var,text,details);
+                result:=fd.CheckStr(&var,text,details,NeedDetails);
               end;
             until (vars='')or result;
           end;
         end;
     end;
     CFCheckEntity:
-      result:=fd.CheckEnt(pv,details);
+      result:=fd.CheckEnt(pv,details,NeedDetails);
   end;
 end;
 

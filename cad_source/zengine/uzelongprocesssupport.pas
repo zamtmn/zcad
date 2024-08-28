@@ -134,7 +134,7 @@ procedure TZELongProcessSupport.DoEndLongProcess(plpi:PTLPInfo;LPHandle:TLPSHand
 var
   i:integer;
 begin
-  if OnLPProgressProcVector.size>0 then
+  if OnLPEndProcVector.size>0 then
     for i:=0 to OnLPEndProcVector.size-1 do
       OnLPEndProcVector[i](LPHandle,plpi^.LPTime);
 end;

@@ -22,10 +22,12 @@ unit uzcCommand_SpellCheck;
 
 interface
 uses
+  SysUtils,
   uzcLog,
   uzccommandsabstract,uzccommandsimpl,
   uzcinterface,uzcSpeller,uSpeller,
-  uzcCommand_Find;
+  uzcCommand_Find,
+  uzcdrawings;
 
 implementation
 
@@ -57,8 +59,17 @@ end;
 
 function SpellCheck_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 begin
-  doInit;
-  result:=Find_com(Context,CSpellCheckFN);
+  if uppercase(operands)='RESET' then begin
+    DestroySpellChecker;
+    CreateSpellChecker;
+    result:=cmd_ok;
+  end else begin
+    if drawings.GetCurrentDWG<>nil then begin
+      doInit;
+      result:=Find_com(Context,CSpellCheckFN);
+    end else
+      result:=cmd_error;
+  end;
 end;
 
 initialization

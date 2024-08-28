@@ -29,15 +29,20 @@ uses
   uHunspell,uSpeller,
   uzbPaths,
   uzcLog,uzbLog,uzbLogTypes,
-  uzcSysParams;
+  uzcSysParams,
+  uzelongprocesssupport;
 
 var
   SpellChecker:TSpeller;
+
+procedure CreateSpellChecker;
+procedure DestroySpellChecker;
 
 implementation
 
 var
   LMDSpeller:TModuleDesk;
+  lph:TLPSHandle;
 
 procedure SpellLogCallBack(MsgType:TMsgType;Msg:TMsg);
 begin
@@ -53,10 +58,24 @@ begin
   end;
 end;
 
-initialization
-  LMDSpeller:=ProgramLog.RegisterModule('Speller/Hunspell');
+procedure CreateSpellChecker;
+var
+  lph:TLPSHandle;
+begin
+  lph:=LPS.StartLongProcess('SpellChecker.Create аnd LoadDictionaries',nil);
   SpellChecker.CreateRec(@SpellLogCallBack);
   SpellChecker.LoadDictionaries(ExpandPath(SysParam.saved.DictionariesPath));
+  LPS.EndLongProcess(lph);
+end;
+
+procedure DestroySpellChecker;
+begin
+  SpellChecker.DestroyRec;
+end;
+
+initialization
+  LMDSpeller:=ProgramLog.RegisterModule('Speller/Hunspell');
+  CreateSpellChecker;
   {t:=SpellChecker.SpellTextSimple('претворяя в');
   t:=SpellChecker.SpellTextSimple('претворяя the');
   t:=SpellChecker.SpellTextSimple('претворяя ##');
@@ -65,6 +84,6 @@ initialization
   t:=SpellChecker.SpellWord('the');
   t:=SpellChecker.SpellWord('притваряя');}
 finalization
-  SpellChecker.DestroyRec;
+  DestroySpellChecker;
 end.
 

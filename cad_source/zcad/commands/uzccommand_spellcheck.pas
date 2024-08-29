@@ -46,6 +46,7 @@ begin
     Opt:=TSpeller.CSpellOptDetail
   else
     Opt:=TSpeller.CSpellOptFast;
+  //Opt:=Opt-[SOCheckOneLetterWords];
   result:=SpellChecker.SpellTextSimple(FindIn,{errW}Details,Opt)=TSpeller.WrongLang;
 end;
 

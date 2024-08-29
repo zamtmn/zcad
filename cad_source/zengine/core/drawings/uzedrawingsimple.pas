@@ -674,6 +674,7 @@ begin
                                 pcamera^.done;
                                 Freemem(pointer(pcamera));
                            end;
+     DrawingExtensions.Free;
 end;
 constructor TSimpleDrawing.init;
 var {tp:GDBTextStyleProp;}

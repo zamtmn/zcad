@@ -322,7 +322,7 @@ begin
   lpsh:=LPS.StartLongProcess('Start program',@lpsh,0);
 {$IFDEF REPORTMMEMORYLEAKS}printleakedblock:=true;{$ENDIF}
 {$IFDEF REPORTMMEMORYLEAKS}
-       SetHeapTraceOutput(sysvar.PATH.Program_Run^+'log/memory-heaptrace.txt');
+       SetHeapTraceOutput(sysvar.PATH.Program_Run^+'/log/memory-heaptrace.txt');
        keepreleased:=true;
 {$ENDIF}
   //Application_Initialize перемещен в инициализацию uzcfsplash чтоб показать сплэш пораньше

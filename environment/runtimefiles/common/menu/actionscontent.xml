@@ -73,6 +73,9 @@
       <ZAction Name="ACN_DSTYLES" Command="DimStyles" Img="dimstyles.bmp" Caption="Dimension styles ..." Hint="Dimension styles properties manager"/>
       <ZAction Name="ACN_LTYPES" Command="LineTypes" Img="linetypes" Caption="Line types ..." Hint="Line types properties manager"/>
     </Group>
+    <Group Category="Tools">
+      <ZAction Name="ACN_SPELLCHECK" Command="SpellCheck" Img="#SC" Caption="Spell check" Hint="Spell check"/>
+    </Group>
     <Group Category="Modify">
       <ZAction Name="ACN_COPY" Command="Copy" Img="copy" Caption="Copy" Hint="Copy primitives" ShortCut="CTRL+ALT+C" SecondaryShortCuts="Q"/>
       <ZAction Name="ACN_MOVE" Command="Move" Img="move" Caption="Move" Hint="Move primitives" ShortCut="CTRL+ALT+M" SecondaryShortCuts="A"/>

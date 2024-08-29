@@ -114,6 +114,9 @@
       <Command Caption="Numerators (objinsp)" Command="SetObjInsp(NUMERATORS)"/> 
       <Command Caption="Layouts (not impl)" Command="fuckoff"/> 
     </Menu>
+    <Menu Name="Tools">
+      <Action Name="ACN_SPELLCHECK"/>
+    </Menu>
     <Menu Name="Draw">
       <Action Name="ACN_LINE"/>
       <Action Name="ACN_3DPOLY"/>
@@ -349,6 +352,7 @@
         <InsertMenu Name="Edit"/>
         <InsertMenu Name="View"/>
         <InsertMenu Name="Format"/>
+        <InsertMenu Name="Tools"/>
         <InsertMenu Name="Draw"/>
         <InsertMenu Name="Dimension"/>
         <InsertMenu Name="Modify"/>

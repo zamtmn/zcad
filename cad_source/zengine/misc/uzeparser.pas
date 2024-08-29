@@ -406,11 +406,11 @@ begin
   if not SetupFromHere then
     dec(ADDPositionData.CurrentCodeUnitSize)
   else
-    ADDPositionData.CurrentCodeUnitSize:=Utf8CodePointLen(@AStr[APos.CodeUnitPos],4,true);
+    ADDPositionData.CurrentCodeUnitSize:=Utf8CodePointLen(@AStr[APos.CodeUnitPos],4,false);
 
   if (ADDPositionData.CurrentCodeUnitSize=0)or SetupFromHere then begin
     if not SetupFromHere then begin
-      ADDPositionData.CurrentCodeUnitSize:=Utf8CodePointLen(@AStr[APos.CodeUnitPos],4,true);
+      ADDPositionData.CurrentCodeUnitSize:=Utf8CodePointLen(@AStr[APos.CodeUnitPos],4,false);
       inc(ADDPositionData.CodePointPos);
     end;
     if AStr[APos.CodeUnitPos]=#10 then begin
@@ -586,10 +586,10 @@ begin
   if not SetupFromHere then
     dec(APos.AdditionalPosData.CurrentCodeUnitSize)
   else
-    APos.AdditionalPosData.CurrentCodeUnitSize:=Utf8CodePointLen(@AStr[APos.CodeUnitPos],4,true);
+    APos.AdditionalPosData.CurrentCodeUnitSize:=Utf8CodePointLen(@AStr[APos.CodeUnitPos],4,false);
 
   if APos.AdditionalPosData.CurrentCodeUnitSize=0 then begin
-    APos.AdditionalPosData.CurrentCodeUnitSize:=Utf8CodePointLen(@AStr[APos.CodeUnitPos],4,true);
+    APos.AdditionalPosData.CurrentCodeUnitSize:=Utf8CodePointLen(@AStr[APos.CodeUnitPos],4,false);
     inc(APos.AdditionalPosData.CodePointPos);
     if AStr[APos.CodeUnitPos]=#10 then begin
       inc(APos.AdditionalPosData.Line);

@@ -62,7 +62,7 @@ const
                                    UpdatePO:false;
                                    MemProfiling:false;
                                    LangOverride:'';
-                                   DictionariesPath:'ru=$(ZCADPath)\dictionaries\ru_RU.dic|$(ZCADPath)\dictionaries\en_US.dic;$(ZCADPath)\dictionaries\en_US_interface.dic');
+                                   DictionariesPath:'ru=$(ZCADDictionariesPath)\ru_RU.dic|en=$(ZCADDictionariesPath)\en_US.dic;$(ZCADDictionariesPath)\en_US_interface.dic');
   zcaduniqueinstanceid='zcad unique instance';
 var
   SysParam: tsysparam;

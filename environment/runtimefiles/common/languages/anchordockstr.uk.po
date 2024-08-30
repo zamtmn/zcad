@@ -97,6 +97,14 @@ msgstr "Кожне прикріплене вікно має заголовок �
 msgid "Empty name: "
 msgstr "Порожня назва: "
 
+#: anchordockstr.adrsenableanchordock
+msgid "Enable docking of IDE Windows (Requires IDE restart)"
+msgstr ""
+
+#: anchordockstr.adrsenableanchordockhint
+msgid "This option allows to organize groups of windows (or all windows) into a single window. For a \"classic\" IDE with only floating windows turn the option off."
+msgstr ""
+
 #: anchordockstr.adrsenlargeside
 #, object-pascal-format
 msgid "Enlarge %s side"
@@ -299,4 +307,36 @@ msgstr "Щоб використовувати якірне стикування,
 #: anchordockstr.adrsundock
 msgid "Undock"
 msgstr "Відстикувати"
+
+#: anchordockstr.setupmultiwindowideclassic
+msgid "Classic IDE (Multi-Window):"
+msgstr ""
+
+#: anchordockstr.setupmultiwindowideinfo
+msgid "The \"modern\" single Window mode still allows you to undock individual Windows and have several groups of Windows. The IDE will show additional \"Dock-Handles\" in each Window, which will allow you to change layout, but also require additional space."
+msgstr ""
+
+#: anchordockstr.setupmultiwindowidemodern
+msgid "Modern IDE (Single-Window):"
+msgstr ""
+
+#: anchordockstr.setupmultiwindowideoption
+msgid "You can change this in the IDE options under: \"Anchordocking\""
+msgstr ""
+
+#: anchordockstr.setupmultiwindowideseperatewindows
+msgid "There are separate windows for each part of the IDE (Editor, Components, Debug,...). They can all be individually moved around on the screen."
+msgstr ""
+
+#: anchordockstr.setupmultiwindowidesinglewindow
+msgid "The IDE consists out of a single Window. Different parts of the IDE are shown in panels of that Window. Some can be reached through a tabbed interface."
+msgstr ""
+
+#: anchordockstr.sidelayout
+msgid "IDE Layout"
+msgstr ""
+
+#: anchordockstr.ssinglemultiwindow
+msgid "Single/Multi Window"
+msgstr ""
 

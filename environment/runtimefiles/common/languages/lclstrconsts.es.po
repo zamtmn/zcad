@@ -250,10 +250,12 @@ msgid "&Directory"
 msgstr "&Directorio"
 
 #: lclstrconsts.rsdocopy
+msgctxt "lclstrconsts.rsdocopy"
 msgid "Copy"
 msgstr "Copiar"
 
 #: lclstrconsts.rsdopaste
+msgctxt "lclstrconsts.rsdopaste"
 msgid "Paste"
 msgstr "Pegar"
 
@@ -262,6 +264,7 @@ msgid "Duplicate icon format."
 msgstr "Duplicar formato de icono."
 
 #: lclstrconsts.rseditrecordhint
+msgctxt "lclstrconsts.rseditrecordhint"
 msgid "Edit"
 msgstr "Editar"
 
@@ -774,9 +777,45 @@ msgstr "Lima"
 msgid "List index exceeds bounds (%d)"
 msgstr "El índice de lista excede los límites (%d)"
 
+#: lclstrconsts.rsmacoseditmenu
+msgctxt "lclstrconsts.rsmacoseditmenu"
+msgid "Edit"
+msgstr "Editar"
+
+#: lclstrconsts.rsmacoseditmenucopy
+msgctxt "lclstrconsts.rsmacoseditmenucopy"
+msgid "Copy"
+msgstr "Copiar"
+
+#: lclstrconsts.rsmacoseditmenucut
+msgid "Cut"
+msgstr "Cortar"
+
+#: lclstrconsts.rsmacoseditmenupaste
+msgctxt "lclstrconsts.rsmacoseditmenupaste"
+msgid "Paste"
+msgstr "Pegar"
+
+#: lclstrconsts.rsmacoseditmenuredo
+msgid "Redo"
+msgstr "Rehacer"
+
+#: lclstrconsts.rsmacoseditmenuselectall
+msgid "Select All"
+msgstr "Seleccionar todo"
+
+#: lclstrconsts.rsmacoseditmenuundo
+msgid "Undo"
+msgstr "Deshacer"
+
 #: lclstrconsts.rsmacosfileformat
 msgid "File Format:"
 msgstr "Formato de archivo:"
+
+#: lclstrconsts.rsmacosmenuabout
+#, object-pascal-format
+msgid "About %s"
+msgstr "Acerca de %s"
 
 #: lclstrconsts.rsmacosmenuhide
 #, object-pascal-format
@@ -787,10 +826,14 @@ msgstr "Ocultar %s"
 msgid "Hide Others"
 msgstr "Ocultar otros"
 
+#: lclstrconsts.rsmacosmenupreferences
+msgid "Preferences..."
+msgstr "Preferencias..."
+
 #: lclstrconsts.rsmacosmenuquit
 #, object-pascal-format
 msgid "Quit %s"
-msgstr "Salir %s"
+msgstr "Salir de %s"
 
 #: lclstrconsts.rsmacosmenuservices
 msgid "Services"

@@ -256,18 +256,23 @@ msgid "&Directory"
 msgstr "תיקייה"
 
 #: lclstrconsts.rsdocopy
+#, fuzzy
+msgctxt "lclstrconsts.rsdocopy"
 msgid "Copy"
-msgstr ""
+msgstr "העתק את הבחירה ללוח הזמני"
 
 #: lclstrconsts.rsdopaste
+#, fuzzy
+msgctxt "lclstrconsts.rsdopaste"
 msgid "Paste"
-msgstr ""
+msgstr "הדבק מלוח הגזירים למיקום הנוכחי"
 
 #: lclstrconsts.rsduplicateiconformat
 msgid "Duplicate icon format."
 msgstr "פומט צלמית כפול"
 
 #: lclstrconsts.rseditrecordhint
+msgctxt "lclstrconsts.rseditrecordhint"
 msgid "Edit"
 msgstr "ערוך"
 
@@ -803,8 +808,44 @@ msgstr "לימוני"
 msgid "List index exceeds bounds (%d)"
 msgstr "אינדקס הרשימה עובר את הגבול"
 
+#: lclstrconsts.rsmacoseditmenu
+msgctxt "lclstrconsts.rsmacoseditmenu"
+msgid "Edit"
+msgstr "ערוך"
+
+#: lclstrconsts.rsmacoseditmenucopy
+msgctxt "lclstrconsts.rsmacoseditmenucopy"
+msgid "Copy"
+msgstr "העתק את הבחירה ללוח הזמני"
+
+#: lclstrconsts.rsmacoseditmenucut
+msgid "Cut"
+msgstr "גזור את הבחירה אל הלוח הזמני"
+
+#: lclstrconsts.rsmacoseditmenupaste
+msgctxt "lclstrconsts.rsmacoseditmenupaste"
+msgid "Paste"
+msgstr "הדבק מלוח הגזירים למיקום הנוכחי"
+
+#: lclstrconsts.rsmacoseditmenuredo
+msgid "Redo"
+msgstr "בצע שוב"
+
+#: lclstrconsts.rsmacoseditmenuselectall
+msgid "Select All"
+msgstr "בחר הכל"
+
+#: lclstrconsts.rsmacoseditmenuundo
+msgid "Undo"
+msgstr "בטל פעולה"
+
 #: lclstrconsts.rsmacosfileformat
 msgid "File Format:"
+msgstr ""
+
+#: lclstrconsts.rsmacosmenuabout
+#, object-pascal-format
+msgid "About %s"
 msgstr ""
 
 #: lclstrconsts.rsmacosmenuhide
@@ -814,6 +855,10 @@ msgstr ""
 
 #: lclstrconsts.rsmacosmenuhideothers
 msgid "Hide Others"
+msgstr ""
+
+#: lclstrconsts.rsmacosmenupreferences
+msgid "Preferences..."
 msgstr ""
 
 #: lclstrconsts.rsmacosmenuquit

@@ -258,20 +258,26 @@ msgid "&Directory"
 msgstr "&Direktori"
 
 #: lclstrconsts.rsdocopy
+#, fuzzy
+msgctxt "lclstrconsts.rsdocopy"
 msgid "Copy"
-msgstr ""
+msgstr "Menyalin"
 
 #: lclstrconsts.rsdopaste
+#, fuzzy
+msgctxt "lclstrconsts.rsdopaste"
 msgid "Paste"
-msgstr ""
+msgstr "Tempel"
 
 #: lclstrconsts.rsduplicateiconformat
 msgid "Duplicate icon format."
 msgstr ""
 
 #: lclstrconsts.rseditrecordhint
+#, fuzzy
+msgctxt "lclstrconsts.rseditrecordhint"
 msgid "Edit"
-msgstr ""
+msgstr "Sunting"
 
 #: lclstrconsts.rsentirescope
 msgid "Search entire file"
@@ -800,31 +806,71 @@ msgstr ""
 msgid "List index exceeds bounds (%d)"
 msgstr "Indeks List melebihi jangkauan (%d)"
 
+#: lclstrconsts.rsmacoseditmenu
+msgctxt "lclstrconsts.rsmacoseditmenu"
+msgid "Edit"
+msgstr "Sunting"
+
+#: lclstrconsts.rsmacoseditmenucopy
+msgctxt "lclstrconsts.rsmacoseditmenucopy"
+msgid "Copy"
+msgstr "Menyalin"
+
+#: lclstrconsts.rsmacoseditmenucut
+msgid "Cut"
+msgstr "Memotong"
+
+#: lclstrconsts.rsmacoseditmenupaste
+msgctxt "lclstrconsts.rsmacoseditmenupaste"
+msgid "Paste"
+msgstr "Tempel"
+
+#: lclstrconsts.rsmacoseditmenuredo
+msgid "Redo"
+msgstr "Mengulangi"
+
+#: lclstrconsts.rsmacoseditmenuselectall
+msgid "Select All"
+msgstr "Pilih Semua"
+
+#: lclstrconsts.rsmacoseditmenuundo
+msgid "Undo"
+msgstr "Membuka"
+
 #: lclstrconsts.rsmacosfileformat
 msgid "File Format:"
 msgstr ""
 
+#: lclstrconsts.rsmacosmenuabout
+#, object-pascal-format
+msgid "About %s"
+msgstr "Perihal %s"
+
 #: lclstrconsts.rsmacosmenuhide
 #, object-pascal-format
 msgid "Hide %s"
-msgstr ""
+msgstr "Sembunyikan %s"
 
 #: lclstrconsts.rsmacosmenuhideothers
 msgid "Hide Others"
-msgstr ""
+msgstr "Sembunyikan Lain"
+
+#: lclstrconsts.rsmacosmenupreferences
+msgid "Preferences..."
+msgstr "Keutamaan..."
 
 #: lclstrconsts.rsmacosmenuquit
 #, object-pascal-format
 msgid "Quit %s"
-msgstr ""
+msgstr "Keluar daripada %s"
 
 #: lclstrconsts.rsmacosmenuservices
 msgid "Services"
-msgstr ""
+msgstr "Perkhidmatan"
 
 #: lclstrconsts.rsmacosmenushowall
 msgid "Show All"
-msgstr ""
+msgstr "Tunjukkan Al"
 
 #: lclstrconsts.rsmarooncolorcaption
 msgid "Maroon"

@@ -143,6 +143,8 @@ var
   Item: TPOFileItem;
   errW:string;
 begin
+  if OriginalValue='' then
+    exit(OriginalValue);
   case SpellChecker.SpellTextSimple(OriginalValue,errW,SpellChecker.CSpellOptFast) of
     SpellChecker.WrongLang:programlog.LogOutFormatStr('InterfaceTranslate-SpellChecker: identifier:"%s" originalValue:"%s" spell check error [%s]',[Identifier,OriginalValue,errW],LM_Error,TranslateSpellerLogModuleId);
     SpellChecker.MixedLang:programlog.LogOutFormatStr('InterfaceTranslate-SpellChecker: identifier:"%s" originalValue:"%s" spell check mixed langs',[Identifier,OriginalValue],LM_Warning,TranslateSpellerLogModuleId);
@@ -237,6 +239,7 @@ begin
     case Identifier[i] of
       ':':Identifier[i]:='.';
       ' ':Identifier[i]:='_';
+      '\':Identifier[i]:='|';
     end;
 end;
 
@@ -247,7 +250,8 @@ var
   FullIdentifier:String;
   LatinIdentifier:boolean;
 begin
-
+  if OriginalValue='' then
+    exit(OriginalValue);
   {if lowercase(Identifier)='menu~file' then begin
     Item:=nil;
   end;

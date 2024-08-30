@@ -250,10 +250,12 @@ msgid "&Directory"
 msgstr "&Dizin"
 
 #: lclstrconsts.rsdocopy
+msgctxt "lclstrconsts.rsdocopy"
 msgid "Copy"
 msgstr "Kopyala"
 
 #: lclstrconsts.rsdopaste
+msgctxt "lclstrconsts.rsdopaste"
 msgid "Paste"
 msgstr "Yapıştır"
 
@@ -262,6 +264,7 @@ msgid "Duplicate icon format."
 msgstr "Tekrarlanan simge biçimi."
 
 #: lclstrconsts.rseditrecordhint
+msgctxt "lclstrconsts.rseditrecordhint"
 msgid "Edit"
 msgstr "Düzenle"
 
@@ -769,9 +772,45 @@ msgstr "Limon"
 msgid "List index exceeds bounds (%d)"
 msgstr "Liste tanımlayıcısı sınırları aşıyor (%d)"
 
+#: lclstrconsts.rsmacoseditmenu
+msgctxt "lclstrconsts.rsmacoseditmenu"
+msgid "Edit"
+msgstr "Düzenle"
+
+#: lclstrconsts.rsmacoseditmenucopy
+msgctxt "lclstrconsts.rsmacoseditmenucopy"
+msgid "Copy"
+msgstr "Kopyala"
+
+#: lclstrconsts.rsmacoseditmenucut
+msgid "Cut"
+msgstr "Kes"
+
+#: lclstrconsts.rsmacoseditmenupaste
+msgctxt "lclstrconsts.rsmacoseditmenupaste"
+msgid "Paste"
+msgstr "Yapıştır"
+
+#: lclstrconsts.rsmacoseditmenuredo
+msgid "Redo"
+msgstr "Yinele"
+
+#: lclstrconsts.rsmacoseditmenuselectall
+msgid "Select All"
+msgstr "Tümünü Seç"
+
+#: lclstrconsts.rsmacoseditmenuundo
+msgid "Undo"
+msgstr "Geri A"
+
 #: lclstrconsts.rsmacosfileformat
 msgid "File Format:"
 msgstr "Dosya Biçimi:"
+
+#: lclstrconsts.rsmacosmenuabout
+#, object-pascal-format
+msgid "About %s"
+msgstr ""
 
 #: lclstrconsts.rsmacosmenuhide
 #, object-pascal-format
@@ -781,6 +820,10 @@ msgstr "Gizle %s"
 #: lclstrconsts.rsmacosmenuhideothers
 msgid "Hide Others"
 msgstr "Diğerlerini Gizle"
+
+#: lclstrconsts.rsmacosmenupreferences
+msgid "Preferences..."
+msgstr ""
 
 #: lclstrconsts.rsmacosmenuquit
 #, object-pascal-format

@@ -257,20 +257,26 @@ msgid "&Directory"
 msgstr "&Directori"
 
 #: lclstrconsts.rsdocopy
+#, fuzzy
+msgctxt "lclstrconsts.rsdocopy"
 msgid "Copy"
-msgstr ""
+msgstr "Copia"
 
 #: lclstrconsts.rsdopaste
+#, fuzzy
+msgctxt "lclstrconsts.rsdopaste"
 msgid "Paste"
-msgstr ""
+msgstr "Enganxa"
 
 #: lclstrconsts.rsduplicateiconformat
 msgid "Duplicate icon format."
 msgstr ""
 
 #: lclstrconsts.rseditrecordhint
+#, fuzzy
+msgctxt "lclstrconsts.rseditrecordhint"
 msgid "Edit"
-msgstr ""
+msgstr "Edita"
 
 #: lclstrconsts.rsentirescope
 msgid "Search entire file"
@@ -801,31 +807,71 @@ msgstr ""
 msgid "List index exceeds bounds (%d)"
 msgstr "L'índex de la llista excedeix els límits (%d)"
 
+#: lclstrconsts.rsmacoseditmenu
+msgctxt "lclstrconsts.rsmacoseditmenu"
+msgid "Edit"
+msgstr "Edita"
+
+#: lclstrconsts.rsmacoseditmenucopy
+msgctxt "lclstrconsts.rsmacoseditmenucopy"
+msgid "Copy"
+msgstr "Copia"
+
+#: lclstrconsts.rsmacoseditmenucut
+msgid "Cut"
+msgstr "Retalla"
+
+#: lclstrconsts.rsmacoseditmenupaste
+msgctxt "lclstrconsts.rsmacoseditmenupaste"
+msgid "Paste"
+msgstr "Enganxa"
+
+#: lclstrconsts.rsmacoseditmenuredo
+msgid "Redo"
+msgstr "Refà"
+
+#: lclstrconsts.rsmacoseditmenuselectall
+msgid "Select All"
+msgstr "Selecciona tot"
+
+#: lclstrconsts.rsmacoseditmenuundo
+msgid "Undo"
+msgstr "Desfà"
+
 #: lclstrconsts.rsmacosfileformat
 msgid "File Format:"
 msgstr ""
 
+#: lclstrconsts.rsmacosmenuabout
+#, object-pascal-format
+msgid "About %s"
+msgstr "Sobre %s"
+
 #: lclstrconsts.rsmacosmenuhide
 #, object-pascal-format
 msgid "Hide %s"
-msgstr ""
+msgstr "Ocultar %s"
 
 #: lclstrconsts.rsmacosmenuhideothers
 msgid "Hide Others"
-msgstr ""
+msgstr "Ocultar els altres"
+
+#: lclstrconsts.rsmacosmenupreferences
+msgid "Preferences..."
+msgstr "Preferències..."
 
 #: lclstrconsts.rsmacosmenuquit
 #, object-pascal-format
 msgid "Quit %s"
-msgstr ""
+msgstr "Sortir d’%s"
 
 #: lclstrconsts.rsmacosmenuservices
 msgid "Services"
-msgstr ""
+msgstr "Serveis"
 
 #: lclstrconsts.rsmacosmenushowall
 msgid "Show All"
-msgstr ""
+msgstr "Mostrar tots"
 
 #: lclstrconsts.rsmarooncolorcaption
 msgid "Maroon"

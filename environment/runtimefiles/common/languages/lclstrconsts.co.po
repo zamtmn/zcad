@@ -253,10 +253,12 @@ msgid "&Directory"
 msgstr "&Cartulare"
 
 #: lclstrconsts.rsdocopy
+msgctxt "lclstrconsts.rsdocopy"
 msgid "Copy"
 msgstr "Cupià"
 
 #: lclstrconsts.rsdopaste
+msgctxt "lclstrconsts.rsdopaste"
 msgid "Paste"
 msgstr "Incullà"
 
@@ -265,6 +267,7 @@ msgid "Duplicate icon format."
 msgstr "Duppià u furmatu d’icona."
 
 #: lclstrconsts.rseditrecordhint
+msgctxt "lclstrconsts.rseditrecordhint"
 msgid "Edit"
 msgstr "Mudificà"
 
@@ -748,9 +751,45 @@ msgstr "Limone verde"
 msgid "List index exceeds bounds (%d)"
 msgstr "Indice di lista fora di e cunfine (%d)"
 
+#: lclstrconsts.rsmacoseditmenu
+msgctxt "lclstrconsts.rsmacoseditmenu"
+msgid "Edit"
+msgstr "Mudificà"
+
+#: lclstrconsts.rsmacoseditmenucopy
+msgctxt "lclstrconsts.rsmacoseditmenucopy"
+msgid "Copy"
+msgstr "Cupià"
+
+#: lclstrconsts.rsmacoseditmenucut
+msgid "Cut"
+msgstr ""
+
+#: lclstrconsts.rsmacoseditmenupaste
+msgctxt "lclstrconsts.rsmacoseditmenupaste"
+msgid "Paste"
+msgstr "Incullà"
+
+#: lclstrconsts.rsmacoseditmenuredo
+msgid "Redo"
+msgstr ""
+
+#: lclstrconsts.rsmacoseditmenuselectall
+msgid "Select All"
+msgstr ""
+
+#: lclstrconsts.rsmacoseditmenuundo
+msgid "Undo"
+msgstr ""
+
 #: lclstrconsts.rsmacosfileformat
 msgid "File Format:"
 msgstr "Furmatu di schedariu :"
+
+#: lclstrconsts.rsmacosmenuabout
+#, object-pascal-format
+msgid "About %s"
+msgstr ""
 
 #: lclstrconsts.rsmacosmenuhide
 #, object-pascal-format
@@ -760,6 +799,10 @@ msgstr "Piattà %s"
 #: lclstrconsts.rsmacosmenuhideothers
 msgid "Hide Others"
 msgstr "Piattà l’altri"
+
+#: lclstrconsts.rsmacosmenupreferences
+msgid "Preferences..."
+msgstr ""
 
 #: lclstrconsts.rsmacosmenuquit
 #, object-pascal-format

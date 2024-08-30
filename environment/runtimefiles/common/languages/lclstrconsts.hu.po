@@ -254,10 +254,12 @@ msgid "&Directory"
 msgstr "&Könyvtár"
 
 #: lclstrconsts.rsdocopy
+msgctxt "lclstrconsts.rsdocopy"
 msgid "Copy"
 msgstr "Másolás"
 
 #: lclstrconsts.rsdopaste
+msgctxt "lclstrconsts.rsdopaste"
 msgid "Paste"
 msgstr "Beillesztés"
 
@@ -266,6 +268,7 @@ msgid "Duplicate icon format."
 msgstr "Kettős ikonformátum"
 
 #: lclstrconsts.rseditrecordhint
+msgctxt "lclstrconsts.rseditrecordhint"
 msgid "Edit"
 msgstr "Szerkesztés"
 
@@ -781,9 +784,45 @@ msgstr "Élénkzöld"
 msgid "List index exceeds bounds (%d)"
 msgstr "A lista indexe a határon kívül esik (%d)"
 
+#: lclstrconsts.rsmacoseditmenu
+msgctxt "lclstrconsts.rsmacoseditmenu"
+msgid "Edit"
+msgstr "Szerkesztés"
+
+#: lclstrconsts.rsmacoseditmenucopy
+msgctxt "lclstrconsts.rsmacoseditmenucopy"
+msgid "Copy"
+msgstr "Másolás"
+
+#: lclstrconsts.rsmacoseditmenucut
+msgid "Cut"
+msgstr "Kivágás"
+
+#: lclstrconsts.rsmacoseditmenupaste
+msgctxt "lclstrconsts.rsmacoseditmenupaste"
+msgid "Paste"
+msgstr "Beillesztés"
+
+#: lclstrconsts.rsmacoseditmenuredo
+msgid "Redo"
+msgstr "Ismét"
+
+#: lclstrconsts.rsmacoseditmenuselectall
+msgid "Select All"
+msgstr "Összes kijelölése"
+
+#: lclstrconsts.rsmacoseditmenuundo
+msgid "Undo"
+msgstr "Visszavonás"
+
 #: lclstrconsts.rsmacosfileformat
 msgid "File Format:"
 msgstr ""
+
+#: lclstrconsts.rsmacosmenuabout
+#, object-pascal-format
+msgid "About %s"
+msgstr "%s névjegye"
 
 #: lclstrconsts.rsmacosmenuhide
 #, object-pascal-format
@@ -793,6 +832,10 @@ msgstr "%s elrejtése"
 #: lclstrconsts.rsmacosmenuhideothers
 msgid "Hide Others"
 msgstr "Többi elrejtése"
+
+#: lclstrconsts.rsmacosmenupreferences
+msgid "Preferences..."
+msgstr "Beállítások..."
 
 #: lclstrconsts.rsmacosmenuquit
 #, object-pascal-format

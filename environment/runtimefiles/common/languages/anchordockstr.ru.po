@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Language: ru\n"
-"X-Generator: Poedit 2.4.3\n"
+"X-Generator: Poedit 2.3.1\n"
 
 #: anchordockstr.adrsafreesideofasplittermustnotbeanchorednodetypeancho
 #, object-pascal-format
@@ -93,6 +93,14 @@ msgstr "Каждое пристыкованное окно имеет загол
 #: anchordockstr.adrsemptyname
 msgid "Empty name: "
 msgstr "Имя пусто: "
+
+#: anchordockstr.adrsenableanchordock
+msgid "Enable docking of IDE Windows (Requires IDE restart)"
+msgstr "Включить стыковку окон IDE (требует перезапуска)"
+
+#: anchordockstr.adrsenableanchordockhint
+msgid "This option allows to organize groups of windows (or all windows) into a single window. For a \"classic\" IDE with only floating windows turn the option off."
+msgstr "Этот параметр позволяет объединить все окна (или их группы) в рамках одного окна. Отключите его, чтобы получить \"классическую\" IDE с плавающими окнами."
 
 #: anchordockstr.adrsenlargeside
 #, object-pascal-format
@@ -296,4 +304,36 @@ msgstr "Для использования anchordocking сначала удал�
 #: anchordockstr.adrsundock
 msgid "Undock"
 msgstr "Расстыковать"
+
+#: anchordockstr.setupmultiwindowideclassic
+msgid "Classic IDE (Multi-Window):"
+msgstr "Классическая IDE (многооконная):"
+
+#: anchordockstr.setupmultiwindowideinfo
+msgid "The \"modern\" single Window mode still allows you to undock individual Windows and have several groups of Windows. The IDE will show additional \"Dock-Handles\" in each Window, which will allow you to change layout, but also require additional space."
+msgstr "\"Современный\" однооконный режим позволяет отстыковывать отдельные окна и иметь несколько групп окон. IDE отобразит дополнительные заголовки в каждом окне, которые позволят менять порядок окон, но в то же время потребуют дополнительного пространства."
+
+#: anchordockstr.setupmultiwindowidemodern
+msgid "Modern IDE (Single-Window):"
+msgstr "Современная IDE (однооконная):"
+
+#: anchordockstr.setupmultiwindowideoption
+msgid "You can change this in the IDE options under: \"Anchordocking\""
+msgstr "Это поведение можно изменить в параметрах IDE на вкладке \"Стыковка / Anchordocking\""
+
+#: anchordockstr.setupmultiwindowideseperatewindows
+msgid "There are separate windows for each part of the IDE (Editor, Components, Debug,...). They can all be individually moved around on the screen."
+msgstr "Все части IDE (например, редактор, палитра компонентов, окна отладки) будут в отдельных окнах, которые можно независимо перемещать на экране."
+
+#: anchordockstr.setupmultiwindowidesinglewindow
+msgid "The IDE consists out of a single Window. Different parts of the IDE are shown in panels of that Window. Some can be reached through a tabbed interface."
+msgstr "IDE состоит из одного окна, в панелях которого отображаются её части. К некоторым из них можно получить доступ, выбирая нужную вкладку."
+
+#: anchordockstr.sidelayout
+msgid "IDE Layout"
+msgstr "Вид интерфейса IDE"
+
+#: anchordockstr.ssinglemultiwindow
+msgid "Single/Multi Window"
+msgstr "Режим многооконности"
 

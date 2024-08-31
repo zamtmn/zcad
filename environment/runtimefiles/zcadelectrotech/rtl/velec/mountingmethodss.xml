@@ -2,14 +2,14 @@
 <CONFIG>
   <STRINGTREE>
     <hidden Desc="Скрытая">
-      <inPipeMetal Desc="В металической трубе"/>
+      <inPipeMetal Desc="В металлической трубе"/>
       <underPlaster Desc="под штукатуркой"/>
     </hidden>
     <open Desc="Открытая">
       <inMetalTray Desc="В металлическом лотке"/>
       <inCableChannel Desc="В кабельном канале"/>
       <inPipePVC Desc="В ПВХ трубе"/>
-      <inPipеMetal Desc="В металической трубе"/>
+      <inPipеMetal Desc="В металлической трубе"/>
     </open>
     <land Desc="Наружные сети электроснабжения">
       <lowCable Desc="КЛ-0,4 (-N-)"/>

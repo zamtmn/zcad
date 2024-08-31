@@ -7,7 +7,7 @@ type
   PTDeviceClass=^TDeviceClass;
   TDeviceClass=(
                TDC_Unknown(*'Не определен'*),
-               TDC_Connector(*'Коннестор'*),
+               TDC_Connector(*'Коннектор'*),
                TDC_Shell(*'Оболочка устройства'*)
               );
   PTDeviceGroup=^TDeviceGroup;

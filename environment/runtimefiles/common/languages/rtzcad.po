@@ -1845,7 +1845,7 @@ msgid "dbgMemProfiler(on)"
 msgstr ""
 
 #: zcadexternal.menucommand~dbgmemsummary
-msgid "Report on memory allocation(for debugbuild)"
+msgid "Report on memory allocation(debug mode)"
 msgstr ""
 
 #: zcadexternal.menucommand~el_autogen_cable_remove

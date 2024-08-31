@@ -6,7 +6,7 @@ type
   TConnectorType=(
                TCT_ElCable(*'Кабель'*),
                TCT_ElWire(*'Цепь'*),
-               TCT_Unknown(*'Неопределен'*)
+               TCT_Unknown(*'Не определен'*)
                  );
   PTConnectorBorderType=^TConnectorBorderType;
   TConnectorBorderType=(

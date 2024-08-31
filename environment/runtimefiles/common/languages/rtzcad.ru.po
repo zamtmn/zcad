@@ -1868,7 +1868,7 @@ msgstr ""
 #: zcadexternal.menucommand~dbgclipboard
 msgctxt "zcadexternal.menucommand~dbgclipboard"
 msgid "Check clipboard"
-msgstr "Проверить клипбоард"
+msgstr "Проверить буфер обмена"
 
 #: zcadexternal.menucommand~dbgmemprofiler
 msgid "dbgMemProfiler"
@@ -1883,7 +1883,7 @@ msgid "dbgMemProfiler(on)"
 msgstr ""
 
 #: zcadexternal.menucommand~dbgmemsummary
-msgid "Report on memory allocation(for debugbuild)"
+msgid "Report on memory allocation(debug mode)"
 msgstr "Отчет о выделениях памяти (отладка)"
 
 #: zcadexternal.menucommand~el_autogen_cable_remove
@@ -2275,17 +2275,17 @@ msgstr "Цвет"
 #: zcadexternal.oimultiproperty~delta_x
 msgctxt "zcadexternal.oimultiproperty~delta_x"
 msgid "Delta X"
-msgstr "Делта X"
+msgstr "Дельта X"
 
 #: zcadexternal.oimultiproperty~delta_y
 msgctxt "zcadexternal.oimultiproperty~delta_y"
 msgid "Delta Y"
-msgstr "Делта Y"
+msgstr "Дельта Y"
 
 #: zcadexternal.oimultiproperty~delta_z
 msgctxt "zcadexternal.oimultiproperty~delta_z"
 msgid "Delta Z"
-msgstr "Делта Z"
+msgstr "Дельта Z"
 
 #: zcadexternal.oimultiproperty~diameter
 msgctxt "zcadexternal.oimultiproperty~diameter"
@@ -2325,7 +2325,7 @@ msgstr "Конец Z"
 #: zcadexternal.oimultiproperty~entityaddress
 msgctxt "zcadexternal.oimultiproperty~entityaddress"
 msgid "Entity address"
-msgstr "Адреc примитива"
+msgstr "Адрес примитива"
 
 #: zcadexternal.oimultiproperty~entityname
 msgctxt "zcadexternal.oimultiproperty~entityname"
@@ -2916,12 +2916,12 @@ msgstr "Инженерные"
 #: zcadexternal.tdimunit~dufractional
 msgctxt "zcadexternal.tdimunit~dufractional"
 msgid "Fractional"
-msgstr "Длобные"
+msgstr "Дробные"
 
 #: zcadexternal.tdimunit~duscientific
 msgctxt "zcadexternal.tdimunit~duscientific"
 msgid "Scientific"
-msgstr "Нацчные"
+msgstr "Научные"
 
 #: zcadexternal.tdimunit~dusystem
 msgctxt "zcadexternal.tdimunit~dusystem"
@@ -2946,7 +2946,7 @@ msgstr "Размер прицела"
 
 #: zcadexternal.tdisp~disp_defaultlw
 msgid "Default line weight"
-msgstr "Толщина линии по умочанию"
+msgstr "Толщина линии по умолчанию"
 
 #: zcadexternal.tdisp~disp_drawzaxis
 msgid "Show Z axis"
@@ -2975,7 +2975,7 @@ msgstr "Убирать системный курсор в области отр�
 
 #: zcadexternal.tdisp~disp_selectedgripcolor
 msgid "Selected grip color"
-msgstr "Цвет выбраных ручек"
+msgstr "Цвет выбранных ручек"
 
 #: zcadexternal.tdisp~disp_systmgeometrycolor
 msgid "Help color"
@@ -2987,7 +2987,7 @@ msgstr "Системная геометрия"
 
 #: zcadexternal.tdisp~disp_unselectedgripcolor
 msgid "Unselected grip color"
-msgstr "Цвет не выбраных ручек"
+msgstr "Цвет не выбранных ручек"
 
 #: zcadexternal.tdisp~disp_zoomfactor
 msgid "Mouse wheel scale factor"
@@ -3007,11 +3007,11 @@ msgstr "AngDir (направление положительного угла)"
 
 #: zcadexternal.tdwg~dwg_aunits
 msgid "AUnits (angular units format)"
-msgstr "AUnits (формат угловых едениц)"
+msgstr "AUnits (формат угловых единиц)"
 
 #: zcadexternal.tdwg~dwg_auprec
 msgid "AUPrec (angular units precision)"
-msgstr "AUPrec (точность угловых едениц)"
+msgstr "AUPrec (точность угловых единиц)"
 
 #: zcadexternal.tdwg~dwg_ccolor
 msgid "Current color"
@@ -3068,15 +3068,15 @@ msgstr "InsUnits (масштаб вставки блока)"
 
 #: zcadexternal.tdwg~dwg_ltscale
 msgid "Global line type scale"
-msgstr "Масштаб типов линий чертжа"
+msgstr "Масштаб типов линий чертежа"
 
 #: zcadexternal.tdwg~dwg_lunits
 msgid "LUnits (linear units format)"
-msgstr "LUnits (формат линейных едениц)"
+msgstr "LUnits (формат линейных единиц)"
 
 #: zcadexternal.tdwg~dwg_luprec
 msgid "LUPrec (linear units precision)"
-msgstr "LUPrec (точность линейных едениц)"
+msgstr "LUPrec (точность линейных единиц)"
 
 #: zcadexternal.tdwg~dwg_osmode
 msgid "Snap mode"
@@ -3105,11 +3105,11 @@ msgstr "Шаг"
 
 #: zcadexternal.tdwg~dwg_textsize
 msgid "TextSize (size of new crreated text ents)"
-msgstr "TextSize (размер вновь созданных текстоывх примитивов)"
+msgstr "TextSize (размер вновь созданных текстовых примитивов)"
 
 #: zcadexternal.tdwg~dwg_unitmode
 msgid "UnitMode (display format for units)"
-msgstr "UnitMode (формат отображения едениц)"
+msgstr "UnitMode (формат отображения единиц)"
 
 #: zcadexternal.tdxdata~rd_renderer
 msgctxt "zcadexternal.tdxdata~rd_renderer"
@@ -3235,7 +3235,7 @@ msgstr "Ангстремы"
 
 #: zcadexternal.tinsunits~iuastronomicalunits
 msgid "Astronomical units"
-msgstr "Астрономические еденицы"
+msgstr "Астрономические единицы"
 
 #: zcadexternal.tinsunits~iucentimeters
 msgid "Centimeters"
@@ -3291,7 +3291,7 @@ msgstr "Мили"
 
 #: zcadexternal.tinsunits~iumillimeters
 msgid "Millimeters"
-msgstr "Милиметры"
+msgstr "Миллиметры"
 
 #: zcadexternal.tinsunits~iumils
 msgid "Mils"
@@ -3774,7 +3774,7 @@ msgstr "Версия"
 
 #: zcadexternal.topengldata~rd_vsync
 msgid "VSync"
-msgstr "Вертикальная снхронизация"
+msgstr "Вертикальная синхронизация"
 
 #: zcadexternal.topsdattype~topsdt_smoke
 msgctxt "zcadexternal.topsdattype~topsdt_smoke"
@@ -3961,7 +3961,7 @@ msgstr "Ближайшая"
 
 #: zcadexternal.tosmode~kosm_paralel
 msgid "Paralel"
-msgstr "Паралель"
+msgstr "Параллель"
 
 #: zcadexternal.tosmode~kosm_perpendicular
 msgid "Perpendicular"

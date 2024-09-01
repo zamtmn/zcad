@@ -16,10 +16,10 @@ VL_Length:String;(*'Длина'*)
 VL_Paired:String;(*'Спаренные кабеля'*)
 VL_Track:String;(*'Групповая прокладка'*)
 VL_K1:String;(*'Коэф. прокладка'*)
-VL_K2:String;(*'Коэф. температура'*)
 VL_Inom:String;(*'Допустимый ток'*)
-VL_Imin:String;(*'Ток прокладки'*)
+VL_Ipad:String;(*'Допустимый ток, по прокладке'*)
 VL_Imax:String;(*'Ток наибольшей фазы'*)
+VL_Ifire:String;(*'Ток в пожарном режиме'*)
 VL_K3:String;(*'Кратность аппарата'*)
 VL_Current:String;(*'Ток по кратности'*)
 VL_Voltage:String;(*'Падение напряжения'*)
@@ -45,10 +45,10 @@ VL_Length:='??';
 VL_Paired:='??';
 VL_Track:='??';
 VL_K1:='??';
-VL_K2:='??';
 VL_Inom:='??';
-VL_Imin:='??';
+VL_Ipad:='??';
 VL_Imax:='??';
+VL_Ifire:='??';
 VL_K3:='??';
 VL_Current:='??';
 VL_Voltage:='??';

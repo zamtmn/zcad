@@ -14,13 +14,13 @@ VL_Device:String;(*'Тип аппарата'*)
 VL_Inom:String;(*'Номинальный ток'*)
 VL_Temp:String;(*'Теп. расцепитель'*)
 VL_ElMag:String;(*'Эл.маг. расцепитель'*)
-VL_Imax:String;(*'Наибольший ток'*)
-VL_ReserveK:String;(*'Коэф. запаса'*)
-VL_ReserveI:String;(*'Ток с учетом запаса'*)
+VL_Ip:String;(*'Расчетный ток'*)
+VL_Ifire:String;(*'Ток в пож.режиме'*)
+VL_Res:String;(*'Коэф. запаса'*)
+VL_Ires:String;(*'Ток с учетом запаса'*)
 VL_Ikz3:String;(*'3-ф ток КЗ'*)
 VL_Iyd:String;(*'Ударный ток КЗ'*)
 VL_Ikz1:String;(*'1-ф ток КЗ в начале'*)
-VL_Ikz2:String;(*'1-ф ток КЗ в конце'*)
 VL_TempI:String;(*'Порог теп.расцепителя'*)
 VL_ElMagI:String;(*'Порог эл.маг.расцепителя'*)
 VL_Panel:String;(*'Электрощит'*)
@@ -43,13 +43,13 @@ VL_Device:='??';
 VL_Inom:='??';
 VL_Temp:='??';
 VL_ElMag:='??';
-VL_Imax:='??';
-VL_ReserveK:='??';
-VL_ReserveI:='??';
+VL_Ip:='??';
+VL_Ifire:='??';
+VL_Res:='??';
+VL_Ires:='??';
 VL_Ikz3:='??';
 VL_Iyd:='??';
 VL_Ikz1:='??';
-VL_Ikz2:='??';
 VL_TempI:='??';
 VL_ElMagI:='??';
 VL_Panel:='??';

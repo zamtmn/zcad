@@ -19,6 +19,7 @@
 	   <ZTreeCommand Command="Insert(A0A)" Img='A0A_300' Caption='Рамка А0 альбом'/>
 	   <ZTreeCommand Command="Insert(A0A+)" Img='A0A+_300' Caption='Рамка А1х3 альбом'/>
 	   <ZTreeCommand Command="Insert(A0K)" Img='A0K_300' Caption='Рамка А0 книга'/>
+	   <ZTreeCommand Command="Insert(A0A++)" Img='A0A++_300' Caption='Рамка А0х2 альбом'/>
 	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_STAMP1)" Img='DEVICE_EL_VL_STAMP1_300' Caption='Штамп - первый'/>
 	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_STAMP2)" Img='DEVICE_EL_VL_STAMP2_300' Caption='Штамп - последующий'/>
 	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_STAMP3)" Img='DEVICE_EL_VL_STAMP3_300' Caption='Штамп - изменения'/>
@@ -180,6 +181,7 @@
            <ZTreeCommand Command="Insert(DEVICE_EL_VL_DIAGRAM_QS4)" Img='DEVICE_EL_VL_DIAGRAM_QS4_300' Caption='Переключатель "крест" левый'/>
            <ZTreeCommand Command="Insert(DEVICE_EL_VL_DIAGRAM_QS5)" Img='DEVICE_EL_VL_DIAGRAM_QS5_300' Caption='Переключатель "крест" правый'/>
            <ZTreeCommand Command="Insert(DEVICE_EL_VL_DIAGRAM_QS6)" Img='DEVICE_EL_VL_DIAGRAM_QS6_300' Caption='Переключатель в низ'/>
+           <ZTreeCommand Command="Insert(DEVICE_EL_VL_DIAGRAM_QS7)" Img='DEVICE_EL_VL_DIAGRAM_QS7_300' Caption='Переключатель в верх'/>
            <ZTreeCommand Command="Insert(DEVICE_EL_VL_DIAGRAM_FU1)" Img='DEVICE_EL_VL_DIAGRAM_FU1_300' Caption='Предохранитель'/>
            <ZTreeCommand Command="Insert(DEVICE_EL_VL_DIAGRAM_TT1)" Img='DEVICE_EL_VL_DIAGRAM_TT1_300' Caption='Трансформатор тока'/>
            <ZTreeCommand Command="Insert(DEVICE_EL_VL_DIAGRAM_WH1)" Img='DEVICE_EL_VL_DIAGRAM_WH1_300' Caption='Эл.счетчик прямого/включения'/>

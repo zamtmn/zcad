@@ -34,7 +34,7 @@ const
   ontracignoredist=25;
 
 resourcestring
-  rswonlyparalel='Works only for parallel projection!';
+  rswonlyparallel='Works only for parallel projection!';
   rswonlytop='Works only for top view!';
 
 type
@@ -1138,7 +1138,7 @@ procedure TGeneralViewArea.ZoomToVolume(Volume:TBoundingBox);
     if param.projtype = PROJPerspective then
                                             begin
                                                  //historyout('Zoom: Works only for parallel projection!');
-                                                 DebugLn('{WH}Zoom:'+rswonlyparalel);
+                                                 DebugLn('{WH}Zoom:'+rswonlyparallel);
                                             end;
     //historyout('Zoom: Works only for top view!');
     DebugLn('{WH}Zoom:'+rswonlytop);
@@ -1237,7 +1237,7 @@ begin
                                     mouseunproject(getviewcontrol.clientwidth div 2, getviewcontrol.clientheight div 2);
         glx1 := param.md.mouseray.lbegin.x;
         gly1 := param.md.mouseray.lbegin.y;
-        if param.projtype = ProjParalel then
+        if param.projtype = ProjParallel then
           PDWG.Getpcamera^.prop.zoom := PDWG.Getpcamera^.prop.zoom * x
         else
         begin
@@ -1254,7 +1254,7 @@ begin
                                 mouseunproject(param.md.mouse.x, getviewcontrol.clientheight-param.md.mouse.y)
                             else
                                 mouseunproject(getviewcontrol.clientwidth div 2, getviewcontrol.clientheight div 2);
-        if param.projtype = ProjParalel then
+        if param.projtype = ProjParallel then
         begin
         PDWG.Getpcamera^.prop.point.x := PDWG.Getpcamera^.prop.point.x - (glx1 - param.md.mouseray.lbegin.x);
         PDWG.Getpcamera^.prop.point.y := PDWG.Getpcamera^.prop.point.y - (gly1 - param.md.mouseray.lbegin.y);
@@ -1874,7 +1874,7 @@ begin
      if (param.ospoint.ostype <> os_none)or(currentmousemovesnaptogrid) then
      begin
 
-     if param.projtype = ProjParalel then
+     if param.projtype = ProjParallel then
      begin
           d:=pdwg.getpcamera^.prop.look;
           b1:=PointOfLinePlaneIntersect(param.ospoint.worldcoord,d,pdwg.getpcamera^.frustum[4],tv1);
@@ -2502,7 +2502,7 @@ begin
 
 
 
-  if param.projtype = ProjParalel then
+  if param.projtype = ProjParallel then
                                       begin
                                       pcamera^.projMatrix:=ortho(-getviewcontrol.clientwidth*pcamera^.prop.zoom/2,getviewcontrol.clientwidth*pcamera^.prop.zoom/2,
                                                                                  -getviewcontrol.clientheight*pcamera^.prop.zoom/2,getviewcontrol.clientheight*pcamera^.prop.zoom/2,
@@ -2614,7 +2614,7 @@ begin
 
   //glLoadIdentity;
   //pdwg.pcamera^.projMatrix:=onematrix;
-  if param.projtype = ProjParalel then
+  if param.projtype = ProjParallel then
                                       begin
                                       pcamera^.projMatrixLCS:=ortho(-getviewcontrol.clientwidth*pcamera^.prop.zoom/2,getviewcontrol.clientwidth*pcamera^.prop.zoom/2,
                                                                                  -getviewcontrol.clientheight*pcamera^.prop.zoom/2,getviewcontrol.clientheight*pcamera^.prop.zoom/2,
@@ -2625,7 +2625,7 @@ begin
                                            pcamera^.projMatrixLCS:=Perspective(pcamera^.fovy, getviewcontrol.Width / getviewcontrol.Height, pcamera^.zminLCS, pcamera^.zmaxLCS,@onematrix);
   //glGetDoublev(GL_PROJECTION_MATRIX, @pdwg.pcamera^.projMatrix);
                                       end;
-  if param.projtype = ProjParalel then
+  if param.projtype = ProjParallel then
                                       begin
                                            if {uzegeometry.oneVertexlength(pcamera^.CamCSOffset)>1000000}true then
                                            begin
@@ -2813,7 +2813,7 @@ begin
      posr.arrayworldaxis.PushBackData(axis);
 
      if @posr<>@param.ontrackarray.otrackarray[0] then
-     if (sysvarDWGOSMode and osm_paralel)<>0 then
+     if (sysvarDWGOSMode and osm_parallel)<>0 then
      begin
           param.ontrackarray.otrackarray[0].arrayworldaxis.PushBackData(axis);
      end;

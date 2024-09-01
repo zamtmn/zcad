@@ -312,7 +312,7 @@
       <Action Name="ACN_OS_TANGENT"/>
       <Action Name="ACN_OS_NEAREST"/>
       <Action Name="ACN_OS_APARENTINTERSECTION"/>
-      <Action Name="ACN_OS_PARALEL"/>
+      <Action Name="ACN_OS_PARALLEL"/>
     </Menu>
     <Menu Name="VIEWAREACXMENU">
       <IFONE Сonditions="EntsSelected">

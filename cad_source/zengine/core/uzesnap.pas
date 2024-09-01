@@ -168,7 +168,7 @@ const
   osm_tangent=1024;
   osm_nearest=2048;
   osm_apparentintersection=4096;
-  osm_paralel=8192;
+  osm_parallel=8192;
 
 var
     os_p1,

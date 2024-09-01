@@ -177,7 +177,7 @@ type
   //**Список стен с их ориентацией относительно перпендикуляра
   TWallInfo=record
          p1,p2:GDBVertex;
-         paralel:boolean;
+         parallel:boolean;
   end;
   TListWallOrient=specialize TVector<TWallInfo>;
   //**Список суперлиний
@@ -796,7 +796,7 @@ implementation
        iwall.p2:=contourRoomEmbedSL[i];
 
        //** если угол лежит в определеном промежутки от угла стены
-       iwall.paralel:=isOrientAngle(iwall.p1,iwall.p2,perpendListVertex.front,perpendListVertex[1]);
+       iwall.parallel:=isOrientAngle(iwall.p1,iwall.p2,perpendListVertex.front,perpendListVertex[1]);
        //uzvtestdraw.testTempDrawLine(iwall.p1,iwall.p2);
        //uzvtestdraw.testTempDrawLine(iwall.p1,tempVertex);
 
@@ -1398,7 +1398,7 @@ begin
 
                //Создаем 1-й список всех возможных перпендикуляров к стенам
                for k:=0 to listWall.size-1 do begin
-                  if (listWall[k].paralel = false) and (uzvsgeom.perpendToLine(listWall[k].p1,listWall[k].p2,listColumnDev[i].listLineDev[j].coord,tempVertex)) then
+                  if (listWall[k].parallel = false) and (uzvsgeom.perpendToLine(listWall[k].p1,listWall[k].p2,listColumnDev[i].listLineDev[j].coord,tempVertex)) then
                     listPerp1.PushBack(tempVertex);
                end;
 

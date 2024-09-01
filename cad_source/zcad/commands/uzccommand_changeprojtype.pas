@@ -32,14 +32,14 @@ implementation
 
 function ChangeProjType_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 begin
-  if drawings.GetCurrentDWG.wa.param.projtype = projparalel then
+  if drawings.GetCurrentDWG.wa.param.projtype = projparallel then
   begin
     drawings.GetCurrentDWG.wa.param.projtype := projperspective;
   end
   else
     if drawings.GetCurrentDWG.wa.param.projtype = projPerspective then
     begin
-    drawings.GetCurrentDWG.wa.param.projtype := projparalel;
+    drawings.GetCurrentDWG.wa.param.projtype := projparallel;
     end;
   zcRedrawCurrentDrawing;
   result:=cmd_ok;

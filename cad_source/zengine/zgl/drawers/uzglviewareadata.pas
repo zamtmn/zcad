@@ -190,7 +190,7 @@ constructor OGLWndtype.init;
 var
   i:integer;
 begin
-  projtype := Projparalel;
+  projtype := Projparallel;
   firstdraw := true;
   SelDesc.OnMouseObject := nil;
   lastonmouseobject:=nil;

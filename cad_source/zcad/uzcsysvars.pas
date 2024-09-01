@@ -131,7 +131,7 @@ type
              DWG_OSMode:PTGDBOSMode;(*'Snap mode'*)
              DWG_PolarMode:PBoolean;(*'Polar tracking mode'*)
              DWG_CLayer:{-}PPointer{/PPGDBLayerPropObjInsp/};(*'Current layer'*)
-             DWG_CLinew:PTGDBLineWeight;(*'Current line weigwt'*)
+             DWG_CLinew:PTGDBLineWeight;(*'Current line weight'*)
              DWG_CColor:PTGDBPaletteColor;(*'Current color'*)
              DWG_LTScale:PDouble;(*'Global line type scale'*)
              DWG_CLTScale:PDouble;(*'Current line type scale'*)

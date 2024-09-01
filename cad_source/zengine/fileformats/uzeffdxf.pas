@@ -1056,7 +1056,7 @@ begin
                          if (flags and 1)<>0 then
                            drawing.wa.param.projtype:=PROJPerspective
                          else
-                           drawing.wa.param.projtype:=PROJParalel;
+                           drawing.wa.param.projtype:=PROJParallel;
                        end;
              end;
            75:

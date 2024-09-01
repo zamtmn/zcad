@@ -74,20 +74,20 @@ GDBObjGenericWithSubordinated= object(GDBObjDrawable)
 
 
 end;
-{REGISTERRECORDTYPE TEntityAdress}
-TEntityAdress=record
-                          Owner:PGDBObjGenericWithSubordinated;(*'Adress'*)
+{REGISTERRECORDTYPE TEntityAddress}
+TEntityAddress=record
+                          Owner:PGDBObjGenericWithSubordinated;(*'Address'*)
                           SelfIndex:TArrayIndex;(*'Position'*)
               end;
-{REGISTERRECORDTYPE TTreeAdress}
-TTreeAdress=record
-                          Owner:Pointer;(*'Adress'*)
+{REGISTERRECORDTYPE TTreeAddress}
+TTreeAddress=record
+                          Owner:Pointer;(*'Address'*)
                           SelfIndex:TArrayIndex;(*'Position'*)
               end;
 {REGISTERRECORDTYPE GDBObjBaseProp}
 GDBObjBaseProp=record
-                      ListPos:TEntityAdress;(*'List'*)
-                      TreePos:TTreeAdress;(*'Tree'*)
+                      ListPos:TEntityAddress;(*'List'*)
+                      TreePos:TTreeAddress;(*'Tree'*)
                  end;
 TOSnapModeControl=(On,Off,AsOwner);
 {REGISTEROBJECTTYPE GDBObjSubordinated}

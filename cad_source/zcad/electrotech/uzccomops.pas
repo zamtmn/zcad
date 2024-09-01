@@ -60,7 +60,7 @@ type
   TAxisReduceDistanceMode=(TARDM_Nothing(*'Nothing'*),
                            TARDM_LongAxis(*'Long axis'*),
                            TARDM_ShortAxis(*'Short axis'*),
-                           TARDM_AllAxis(*'All xxis'*));
+                           TARDM_AllAxis(*'All axis'*));
   PTOPSPlaceSmokeDetectorOrtoParam=^TOPSPlaceSmokeDetectorOrtoParam;
   {REGISTERRECORDTYPE TOPSPlaceSmokeDetectorOrtoParam}
   TOPSPlaceSmokeDetectorOrtoParam=record

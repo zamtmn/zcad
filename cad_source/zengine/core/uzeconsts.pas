@@ -64,7 +64,7 @@ const {as_normal=0;
   GDBRadialDimensionID = 108;
   GDBSuperLineID = 109;
 
-  PROJParalel = 1;
+  PROJParallel = 1;
   PROJPerspective = 2;
 
   DXFjstl = 1;

@@ -67,19 +67,19 @@ end;
          {REGISTERRECORDTYPE TBlockScaleParams}
          TBlockScaleParams=record
                              Scale:GDBVertex;(*'New scale'*)
-                             Absolytly:Boolean;(*'Absolytly'*)
+                             Absolutely:Boolean;(*'Absolutely'*)
                            end;
          PTBlockRotateParams=^TBlockRotateParams;
          {REGISTERRECORDTYPE TBlockRotateParams}
          TBlockRotateParams=record
                              Rotate:Double;(*'Rotation angle'*)
-                             Absolytly:Boolean;(*'Absolytly'*)
+                             Absolutely:Boolean;(*'Absolutely'*)
                            end;
          {TSetVarStyle=packed record
                             ent:TMSType;(*'Entity'*)
                             CurrentFindBlock:String;(*'**CurrentFind'*)
                              Scale:GDBVertex;(*'New scale'*)
-                             Absolytly:Boolean;(*'Absolytly'*)
+                             Absolutely:Boolean;(*'Absolutely'*)
                            end;}
          PTExportDevWithAxisParams=^TExportDevWithAxisParams;
          {REGISTERRECORDTYPE TExportDevWithAxisParams}
@@ -349,7 +349,7 @@ begin
           repeat
                 if (pb^.Selected)and((pb^.GetObjType=GDBDeviceID)or(pb^.GetObjType=GDBBlockInsertID)) then
                 begin
-                case BlockRotateParams.Absolytly of
+                case BlockRotateParams.Absolutely of
                             true:begin
                                       pb^.rotate:=BlockRotateParams.Rotate;
                                  end;
@@ -419,7 +419,7 @@ begin
           repeat
                 if (pb^.Selected)and((pb^.GetObjType=GDBDeviceID)or(pb^.GetObjType=GDBBlockInsertID)) then
                 begin
-                case BlockScaleParams.Absolytly of
+                case BlockScaleParams.Absolutely of
                             true:begin
                                       pb^.scale:=BlockScaleParams.Scale;
                                  end;
@@ -1197,13 +1197,13 @@ begin
   BlockScale.init('BlockScale',0,0);
   BlockScale.CEndActionAttr:=[];
   BlockScaleParams.Scale:=uzegeometry.CreateVertex(1,1,1);
-  BlockScaleParams.Absolytly:=true;
+  BlockScaleParams.Absolutely:=true;
   BlockScale.SetCommandParam(@BlockScaleParams,'PTBlockScaleParams');
 
   BlockRotate.init('BlockRotate',0,0);
   BlockRotate.CEndActionAttr:=[];
   BlockRotateParams.Rotate:=0;
-  BlockRotateParams.Absolytly:=true;
+  BlockRotateParams.Absolutely:=true;
   BlockRotate.SetCommandParam(@BlockRotateParams,'PTBlockRotateParams');
 
 

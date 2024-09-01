@@ -2609,7 +2609,7 @@ msgid "Surveyors units"
 msgstr ""
 
 #: zcadexternal.taxisreducedistancemode~tardm_allaxis
-msgid "All xxis"
+msgid "All axis"
 msgstr ""
 
 #: zcadexternal.taxisreducedistancemode~tardm_longaxis
@@ -2664,18 +2664,18 @@ msgstr ""
 msgid "Block type"
 msgstr ""
 
-#: zcadexternal.tblockrotateparams~absolytly
-msgctxt "zcadexternal.tblockrotateparams~absolytly"
-msgid "Absolytly"
+#: zcadexternal.tblockrotateparams~Absolutely
+msgctxt "zcadexternal.tblockrotateparams~Absolutely"
+msgid "Absolutely"
 msgstr ""
 
 #: zcadexternal.tblockrotateparams~rotate
 msgid "Rotation angle"
 msgstr ""
 
-#: zcadexternal.tblockscaleparams~absolytly
-msgctxt "zcadexternal.tblockscaleparams~absolytly"
-msgid "Absolytly"
+#: zcadexternal.tblockscaleparams~Absolutely
+msgctxt "zcadexternal.tblockscaleparams~Absolutely"
+msgid "Absolutely"
 msgstr ""
 
 #: zcadexternal.tblockscaleparams~scale
@@ -2916,7 +2916,7 @@ msgid "Current layer"
 msgstr ""
 
 #: zcadexternal.tdwg~dwg_clinew
-msgid "Current line weigwt"
+msgid "Current line weight"
 msgstr ""
 
 #: zcadexternal.tdwg~dwg_cltscale

@@ -2718,7 +2718,7 @@ msgid "Surveyors units"
 msgstr "Топографические единицы"
 
 #: zcadexternal.taxisreducedistancemode~tardm_allaxis
-msgid "All xxis"
+msgid "All axis"
 msgstr ""
 
 #: zcadexternal.taxisreducedistancemode~tardm_longaxis
@@ -2773,18 +2773,18 @@ msgstr "Группа блока"
 msgid "Block type"
 msgstr "Тип блока"
 
-#: zcadexternal.tblockrotateparams~absolytly
-msgctxt "zcadexternal.tblockrotateparams~absolytly"
-msgid "Absolytly"
+#: zcadexternal.tblockrotateparams~Absolutely
+msgctxt "zcadexternal.tblockrotateparams~Absolutely"
+msgid "Absolutely"
 msgstr "Абсолютно"
 
 #: zcadexternal.tblockrotateparams~rotate
 msgid "Rotation angle"
 msgstr "Угол поворота"
 
-#: zcadexternal.tblockscaleparams~absolytly
-msgctxt "zcadexternal.tblockscaleparams~absolytly"
-msgid "Absolytly"
+#: zcadexternal.tblockscaleparams~Absolutely
+msgctxt "zcadexternal.tblockscaleparams~Absolutely"
+msgid "Absolutely"
 msgstr "Абсолютно"
 
 #: zcadexternal.tblockscaleparams~scale
@@ -3026,7 +3026,7 @@ msgid "Current layer"
 msgstr "Текущий слой"
 
 #: zcadexternal.tdwg~dwg_clinew
-msgid "Current line weigwt"
+msgid "Current line weight"
 msgstr "Текущий вес линии"
 
 #: zcadexternal.tdwg~dwg_cltscale

@@ -110,7 +110,7 @@ begin
     if osm.kosm_tangent then inc(sysvarDWGOSMode,osm_tangent);
     if osm.kosm_nearest then inc(sysvarDWGOSMode,osm_nearest);
     if osm.kosm_apparentintersection then inc(sysvarDWGOSMode,osm_apparentintersection);
-    if osm.kosm_paralel then inc(sysvarDWGOSMode,osm_paralel);
+    if osm.kosm_parallel then inc(sysvarDWGOSMode,osm_parallel);
 
     case self.trace.Angle of
          TTA90:c:=2;
@@ -187,10 +187,10 @@ begin
                                                        osm.kosm_apparentintersection:=false
                                                    else
                                                        osm.kosm_apparentintersection:=true;
-    if (sysvarDWGOSMode and osm_paralel)=0 then
-                                                       osm.kosm_paralel:=false
+    if (sysvarDWGOSMode and osm_parallel)=0 then
+                                                       osm.kosm_parallel:=false
                                                    else
-                                                       osm.kosm_paralel:=true;
+                                                       osm.kosm_parallel:=true;
 
 end;
 

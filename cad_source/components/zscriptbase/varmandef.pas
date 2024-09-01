@@ -242,7 +242,7 @@ TOSMode=record
               kosm_tangent:Boolean;(*'Tangent'*)
               kosm_nearest:Boolean;(*'Nearest'*)
               kosm_apparentintersection:Boolean;(*'Apparent intersection'*)
-              kosm_paralel:Boolean;(*'Paralel'*)
+              kosm_parallel:Boolean;(*'Parallel'*)
         end;
   indexdesk=record
     indexmin, count: Integer;

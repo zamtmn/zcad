@@ -17,8 +17,8 @@ VL_Number:String;(*'Кол. и сечение жил'*)
 VL_Length:String;(*'Длина'*)
 VL_Power:String;(*'Мощность'*)
 VL_Current:String;(*'Ток'*)
+VL_Fire:String;(*'Пожарный режим'*)
 VL_Switch:String;(*'Аппарат'*)
-VL_Meter:String;(*'Трансформатор'*)
 
 implementation
 
@@ -41,7 +41,7 @@ VL_Number:='??';
 VL_Length:='??';
 VL_Power:='??';
 VL_Current:='??';
+VL_Fire:='??';
 VL_Switch:='??';
-VL_Meter:='??';
 
 end.

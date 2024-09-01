@@ -8,6 +8,10 @@ usescopy objname;
 usescopy objgroup;
 usescopy addtocable;
 
+var
+
+VL_Code:String;(*'Код'*)
+
 implementation
 
 begin

@@ -21,8 +21,8 @@ BTY_TreeCoord:='PLAN_EM_Эл.применик';
 Device_Type:=TDT_SilaPotr;
 Device_Class:=TDC_Shell;
 
-NMO_Name:='ЭК0';
-NMO_BaseName:='ЭК';
+NMO_Name:='ЭК.0';
+NMO_BaseName:='ЭК.';
 NMO_Suffix:='';
 
 SerialConnection:=1;

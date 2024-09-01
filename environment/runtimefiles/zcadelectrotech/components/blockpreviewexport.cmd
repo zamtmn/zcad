@@ -69,6 +69,10 @@ BlockPreViewExport(24|A0A+|*images/palettes/A0A+.png)
 BlockPreViewExport(24|A0A+|*images/palettes/A0A+_150.png)
 BlockPreViewExport(48|A0A+|*images/palettes/A0A+_300.png)
 
+BlockPreViewExport(24|A0A++|*images/palettes/A0A++.png)
+BlockPreViewExport(24|A0A++|*images/palettes/A0A++_150.png)
+BlockPreViewExport(48|A0A++|*images/palettes/A0A++_300.png)
+
 BlockPreViewExport(24|EL_VL_REPORT1_1|*images/palettes/EL_VL_REPORT1_1+.png)
 BlockPreViewExport(24|EL_VL_REPORT1_1|*images/palettes/EL_VL_REPORT1_1_150.png)
 BlockPreViewExport(48|EL_VL_REPORT1_1|*images/palettes/EL_VL_REPORT1_1_300.png)

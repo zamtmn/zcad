@@ -241,7 +241,7 @@ var
    lastv:GDBFontVertex2D;
    tparrayindex:integer;
    tv:gdbvertex;
-procedure CompareAndTess(v:GDBFontVertex2D);
+procedure CompareAndTess(const v:GDBFontVertex2D);
 begin
      if (abs(lastv.x-v.x)>eps)or(abs(lastv.y-v.y)>eps) then
      begin

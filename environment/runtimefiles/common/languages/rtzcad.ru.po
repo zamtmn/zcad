@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 3.4.2\n"
+"X-Generator: Poedit 3.5\n"
 
 #: zcadexternal.acn_3dpoly~caption
 msgid "3DPolyLine"
@@ -306,10 +306,6 @@ msgstr "Стили размеров..."
 msgid "Dimension styles properties manager"
 msgstr "Менеджер стилей размеров"
 
-#: zcadexternal.acn_el_find~caption
-msgid "Find device"
-msgstr "Найти устройство"
-
 #: zcadexternal.acn_erase~caption
 msgctxt "zcadexternal.acn_erase~caption"
 msgid "Erase"
@@ -337,6 +333,38 @@ msgstr ""
 
 #: zcadexternal.acn_exportmodeltoexcell~textimage
 msgid "M>X"
+msgstr ""
+
+#: zcadexternal.acn_extdralllist~caption
+msgid "List of available extenders"
+msgstr ""
+
+#: zcadexternal.acn_extdralllist~textimage
+msgid "exAL"
+msgstr ""
+
+#: zcadexternal.acn_extdrentlist~caption
+msgid "List of extenders of selected entities"
+msgstr ""
+
+#: zcadexternal.acn_extdrentlist~textimage
+msgid "exEL"
+msgstr ""
+
+#: zcadexternal.acn_findnext~caption
+msgid "Find next"
+msgstr ""
+
+#: zcadexternal.acn_findparams~caption
+msgid "Find params"
+msgstr ""
+
+#: zcadexternal.acn_findprev~caption
+msgid "Find prev"
+msgstr ""
+
+#: zcadexternal.acn_find~caption
+msgid "Find ..."
 msgstr ""
 
 #: zcadexternal.acn_generatoronediagram~caption
@@ -727,7 +755,7 @@ msgid "Save as ..."
 msgstr "Сохранить как ..."
 
 #: zcadexternal.acn_saveas~hint
-msgid "Save drawing as"
+msgid "Save drawing as ..."
 msgstr "Сохранить чертеж как ..."
 
 #: zcadexternal.acn_savelayout~caption
@@ -914,6 +942,20 @@ msgstr ""
 #: zcadexternal.acn_snapruntime~caption
 msgid "Run time snap editor"
 msgstr "Редактор привязок"
+
+#: zcadexternal.acn_spellcheck~caption
+msgctxt "zcadexternal.acn_spellcheck~caption"
+msgid "Spell check"
+msgstr "Проверка орфографии"
+
+#: zcadexternal.acn_spellcheck~hint
+msgctxt "zcadexternal.acn_spellcheck~hint"
+msgid "Spell check"
+msgstr "Проверка орфографии"
+
+#: zcadexternal.acn_spellcheck~textimage
+msgid "SC"
+msgstr ""
 
 #: zcadexternal.acn_stretch~caption
 msgid "Stretch"
@@ -1255,7 +1297,6 @@ msgid "Connections"
 msgstr ""
 
 #: zcadexternal.functionsroot~connections~electrotechnics
-#, fuzzy
 msgctxt "zcadexternal.functionsroot~connections~electrotechnics"
 msgid "Electrotechnics"
 msgstr "Электротехника"
@@ -1829,6 +1870,18 @@ msgctxt "zcadexternal.menucommand~dbgclipboard"
 msgid "Check clipboard"
 msgstr "Проверить клипбоард"
 
+#: zcadexternal.menucommand~dbgmemprofiler
+msgid "dbgMemProfiler"
+msgstr ""
+
+#: zcadexternal.menucommand~dbgmemprofiler(off)
+msgid "dbgMemProfiler(off)"
+msgstr ""
+
+#: zcadexternal.menucommand~dbgmemprofiler(on)
+msgid "dbgMemProfiler(on)"
+msgstr ""
+
 #: zcadexternal.menucommand~dbgmemsummary
 msgid "Report on memory allocation(for debugbuild)"
 msgstr "Отчет о выделениях памяти (отладка)"
@@ -1849,21 +1902,45 @@ msgstr ""
 msgid "Process auto cables"
 msgstr ""
 
-#: zcadexternal.menucommand~el_find
-msgid "Find device/cable"
-msgstr ""
-
 #: zcadexternal.menucommand~el_material_legend
 msgid "Create material report"
 msgstr ""
 
-#: zcadexternal.menucommand~executefile(*components/blockpreviewexport.cmd)
-msgctxt "zcadexternal.menucommand~executefile(*components/blockpreviewexport.cmd)"
+#: zcadexternal.menucommand~executefile($(zcadpath)|components|blockpreviewexport.cmd)
+msgctxt "zcadexternal.menucommand~executefile($(zcadpath)|components|blockpreviewexport.cmd)"
 msgid "BlockPreviewExport"
 msgstr ""
 
 #: zcadexternal.menucommand~exportdevwithaxis
 msgid "Names of devices with axis"
+msgstr ""
+
+#: zcadexternal.menucommand~extdradd(extdrincludingvolume)
+msgid "Add extdrIncludingVolume"
+msgstr ""
+
+#: zcadexternal.menucommand~extdradd(extdrlayercontrol)
+msgid "Add extdrLayerControl"
+msgstr ""
+
+#: zcadexternal.menucommand~extdradd(extdrreport)
+msgid "Add extdrReport"
+msgstr ""
+
+#: zcadexternal.menucommand~extdradd(extdrschconnection)
+msgid "Add extdrSCHConnection"
+msgstr ""
+
+#: zcadexternal.menucommand~extdradd(extdrschconnector)
+msgid "Add extdrSCHConnector"
+msgstr ""
+
+#: zcadexternal.menucommand~extdradd(extdrsmarttextent)
+msgid "Add extdrSmartTextEnt"
+msgstr ""
+
+#: zcadexternal.menucommand~extdradd(extdrvariables)
+msgid "Add extdrVariables"
 msgstr ""
 
 #: zcadexternal.menucommand~findallintersections
@@ -2014,6 +2091,11 @@ msgstr "Чертить"
 msgid "Edit"
 msgstr "Правка"
 
+#: zcadexternal.menu~extenders
+msgctxt "zcadexternal.menu~extenders"
+msgid "Extenders"
+msgstr "Расширения"
+
 #: zcadexternal.menu~file
 msgid "File"
 msgstr "Файл"
@@ -2080,6 +2162,7 @@ msgid "Placement equipment"
 msgstr ""
 
 #: zcadexternal.menu~plan
+msgctxt "zcadexternal.menu~plan"
 msgid "Plan"
 msgstr "План"
 
@@ -2088,7 +2171,6 @@ msgid "Polygon"
 msgstr ""
 
 #: zcadexternal.menu~power_supply
-#, fuzzy
 msgctxt "zcadexternal.menu~power_supply"
 msgid "Power supply"
 msgstr "Электроснабжение"
@@ -2128,6 +2210,10 @@ msgstr "Панели инструментов"
 #: zcadexternal.menu~toolpalettes
 msgid "ToolPalettes"
 msgstr "Палитры"
+
+#: zcadexternal.menu~tools
+msgid "Tools"
+msgstr "Инструменты"
 
 #: zcadexternal.menu~view
 msgid "View"
@@ -2314,6 +2400,10 @@ msgstr "Переопределение вертикального выравни
 #: zcadexternal.oimultiproperty~filter_blocksbynames
 msgctxt "zcadexternal.oimultiproperty~filter_blocksbynames"
 msgid "Blocks by names"
+msgstr ""
+
+#: zcadexternal.oimultiproperty~filter_entsbyextenders
+msgid "Ents by extenders"
 msgstr ""
 
 #: zcadexternal.oimultiproperty~filter_entsbylayers
@@ -2598,37 +2688,6 @@ msgstr ""
 msgctxt "zcadexternal.representationsroot~not_classified"
 msgid "Not classified"
 msgstr ""
-
-#: zcadexternal.rgbcolorname~blue
-msgctxt "zcadexternal.rgbcolorname~blue"
-msgid "Blue"
-msgstr "Синий"
-
-#: zcadexternal.rgbcolorname~cyan
-msgid "Cyan"
-msgstr "Голубой"
-
-#: zcadexternal.rgbcolorname~green
-msgctxt "zcadexternal.rgbcolorname~green"
-msgid "Green"
-msgstr "Зеленый"
-
-#: zcadexternal.rgbcolorname~magenta
-msgid "Magenta"
-msgstr "Пурпурный"
-
-#: zcadexternal.rgbcolorname~red
-msgctxt "zcadexternal.rgbcolorname~red"
-msgid "Red"
-msgstr "Красный"
-
-#: zcadexternal.rgbcolorname~white
-msgid "White"
-msgstr "Белый"
-
-#: zcadexternal.rgbcolorname~yellow
-msgid "Yellow"
-msgstr "Желтый"
 
 #: zcadexternal.tangdir~adclockwise
 msgid "Clockwise"
@@ -3109,19 +3168,6 @@ msgstr "Позиция"
 msgid "AxisDeviceName"
 msgstr ""
 
-#: zcadexternal.tfinddeviceparam~findmethod
-msgid "Use symbols *, ?"
-msgstr "Использовать символы *, ?"
-
-#: zcadexternal.tfinddeviceparam~findstring
-msgctxt "zcadexternal.tfinddeviceparam~findstring"
-msgid "Text"
-msgstr "Текст"
-
-#: zcadexternal.tfinddeviceparam~findtype
-msgid "Find in"
-msgstr "Искать в"
-
 #: zcadexternal.tforcresult~iscreated
 msgid "IsCreated"
 msgstr ""
@@ -3394,6 +3440,7 @@ msgid "Suppress doubles"
 msgstr ""
 
 #: zcadexternal.tmseditor~extendersunit
+msgctxt "zcadexternal.tmseditor~extendersunit"
 msgid "Extenders"
 msgstr "Расширения"
 
@@ -3529,7 +3576,6 @@ msgid "Power supply"
 msgstr "Электроснабжение"
 
 #: zcadexternal.toolpalette_blocklib_itemcaption~schemes
-#, fuzzy
 msgctxt "zcadexternal.toolpalette_blocklib_itemcaption~schemes"
 msgid "Schemes"
 msgstr "Схемы"
@@ -3541,6 +3587,10 @@ msgstr "Без сортировки"
 
 #: zcadexternal.toolpalette_blocklib_itemcaption~velectrical
 msgid "Velectrical"
+msgstr ""
+
+#: zcadexternal.toolpalette_blocklib_itemcaption~vlowcurrentnetworks
+msgid "Vlowcurrentnetworks"
 msgstr ""
 
 #: zcadexternal.toolpalette_blocklib_low-current_alarm_fire_alarm_itemcaption~detectors
@@ -3624,16 +3674,37 @@ msgid "Switches"
 msgstr "Выключатели"
 
 #: zcadexternal.toolpalette_blocklib_schemes_itemcaption~unsorted
-#, fuzzy
 msgctxt "zcadexternal.toolpalette_blocklib_schemes_itemcaption~unsorted"
 msgid "Unsorted"
 msgstr "Без сортировки"
 
+#: zcadexternal.toolpalette_blocklib_velectrical_itemcaption~plan
+msgctxt "zcadexternal.toolpalette_blocklib_velectrical_itemcaption~plan"
+msgid "Plan"
+msgstr "План"
+
 #: zcadexternal.toolpalette_blocklib_velectrical_itemcaption~schemes
-#, fuzzy
 msgctxt "zcadexternal.toolpalette_blocklib_velectrical_itemcaption~schemes"
 msgid "Schemes"
 msgstr "Схемы"
+
+#: zcadexternal.toolpalette_blocklib_velectrical_plan_itemcaption~elreceiver
+msgid "ElReceiver"
+msgstr ""
+
+#: zcadexternal.toolpalette_blocklib_velectrical_plan_itemcaption~lighting
+msgctxt "zcadexternal.toolpalette_blocklib_velectrical_plan_itemcaption~lighting"
+msgid "Lighting"
+msgstr "Освещение"
+
+#: zcadexternal.toolpalette_blocklib_velectrical_plan_itemcaption~shields
+msgid "Shields"
+msgstr ""
+
+#: zcadexternal.toolpalette_blocklib_velectrical_plan_itemcaption~sockets
+msgctxt "zcadexternal.toolpalette_blocklib_velectrical_plan_itemcaption~sockets"
+msgid "Sockets"
+msgstr "Розетки"
 
 #: zcadexternal.toolpalette_blocklib_velectrical_schemes_itemcaption~shield_devices
 msgid "Shield devices"
@@ -3642,6 +3713,11 @@ msgstr ""
 #: zcadexternal.toolpalette_blocklib_velectrical_schemes_itemcaption~shield_diagram
 msgid "Shield diagram"
 msgstr ""
+
+#: zcadexternal.toolpalette_blocklib_vlowcurrentnetworks_itemcaption~plan
+msgctxt "zcadexternal.toolpalette_blocklib_vlowcurrentnetworks_itemcaption~plan"
+msgid "Plan"
+msgstr "План"
 
 #: zcadexternal.toolpalette_blocklib~caption
 msgid "Рамка А4 книга"
@@ -3915,6 +3991,10 @@ msgstr "Файл альтернативного шрифта"
 msgid "Device base"
 msgstr "База описаний устройств"
 
+#: zcadexternal.tpath~dictionaries
+msgid "Dictionaries"
+msgstr ""
+
 #: zcadexternal.tpath~fonts_path
 msgid "Fonts"
 msgstr "Шрифты"
@@ -4079,9 +4159,17 @@ msgctxt "zcadexternal.trgb~r"
 msgid "Red"
 msgstr "Красный"
 
+#: zcadexternal.tsavedparams~dictionariespath
+msgid "Dictionaries path"
+msgstr ""
+
 #: zcadexternal.tsavedparams~langoverride
 msgctxt "zcadexternal.tsavedparams~langoverride"
 msgid "Language override"
+msgstr ""
+
+#: zcadexternal.tsavedparams~memprofiling
+msgid "Internal memory profiler"
 msgstr ""
 
 #: zcadexternal.tsavedparams~noloadlayout
@@ -4137,6 +4225,10 @@ msgstr ""
 #: zcadexternal.tsys~ssy_compileinfo
 msgid "Build info"
 msgstr "Информация о сборке"
+
+#: zcadexternal.tsys~sys_memprofiling
+msgid "Memory profiling"
+msgstr ""
 
 #: zcadexternal.tsys~sys_noloadlayout
 msgctxt "zcadexternal.tsys~sys_noloadlayout"

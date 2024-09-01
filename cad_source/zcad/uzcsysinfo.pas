@@ -98,12 +98,14 @@ begin
     //начальные значения некоторых параметров и загрузка параметров
     SysParam.notsaved.otherinstancerun:=false;
     SysParam.saved.UniqueInstance:=true;
-    LoadParams(expandpath(ProgramPath+'rtl/config.xml'),SysParam.saved);
+    LoadParams(expandpath(ProgramPath+'/rtl/config.xml'),SysParam.saved);
     SysParam.notsaved.PreloadedFile:='';
 
     //значения некоторых параметров из комстроки, если есть
     if CommandLineParser.HasOption(NOSPLASHHDL) then
       SysParam.saved.NoSplash:=true;
+    if CommandLineParser.HasOption(MemProfiling) then
+      SysParam.saved.MemProfiling:=true;
     if CommandLineParser.HasOption(UPDATEPOHDL) then
       SysParam.saved.UpdatePO:=true;
     if CommandLineParser.HasOption(NOLOADLAYOUTHDL) then

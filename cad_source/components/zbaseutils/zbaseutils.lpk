@@ -59,6 +59,9 @@
     </Files>
     <RequiredPkgs>
       <Item>
+        <PackageName Value="zcontainers"/>
+      </Item>
+      <Item>
         <PackageName Value="LazUtils"/>
       </Item>
       <Item>

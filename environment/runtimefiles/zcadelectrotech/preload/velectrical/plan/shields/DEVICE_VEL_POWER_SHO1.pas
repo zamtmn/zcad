@@ -9,6 +9,7 @@ usescopy objgroup;
 usescopy addtocable;
 usescopy elreceivers;
 usescopy vlocation;
+usescopy vtextpointer;
 usescopy vspecification;
 usescopy vinfopersonaluse;
 
@@ -34,6 +35,11 @@ Voltage:=_AC_380V_50Hz;
 Phase:=_ABC;
 
 GC_NameGroupTemplate:='@@[GC_HeadDevice].@@[GC_HDGroup]';
+
+INFOTEXTPOINTER_Tp1Up.format:='@@[NMO_BaseName]@@[NMO_Suffix]';
+INFOTEXTPOINTER_Tp1Bottom.format:=' ';
+INFOTEXTPOINTER_Tp2Up.format:=' ';
+INFOTEXTPOINTER_Tp2Bottom.format:=' ';
 
 VSPECIFICATION_Position:='';
 VSPECIFICATION_Name:='Щит освещения';

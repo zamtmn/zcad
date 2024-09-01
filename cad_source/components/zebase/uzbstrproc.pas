@@ -20,18 +20,18 @@ unit uzbstrproc;
 
 interface
 uses {$IFNDEF DELPHI}{fileutil,}{$ENDIF}uzbtypes,sysutils,strutils{$IFNDEF DELPHI},{LCLProc}LazUTF8,lazutf16{$ENDIF};
-function GetPredStr(var s: String; substr: String): String;overload;
-function GetPredStr(var s: String; substrs: array of const; out nearestsubstr:string): String;overload;
-function readspace(expr: String): String;
+function GetPredStr(var s: String; const substr: String): String;overload;
+function GetPredStr(var s: String; const substrs: array of const; var nearestsubstr:string): String;overload;
+function readspace(const expr: String): String;
 
 //function sys2interf(s:String):String;
 function Tria_Utf8ToAnsi(const s:string):string;
 function Tria_AnsiToUtf8(const s:string):string;
 
-function Ansi2CP(astr:AnsiString):String;
-function Uni2CP(astr:AnsiString):String;
-function CP2Ansi(astr:AnsiString):String;
-function CP2Uni(astr:AnsiString):String;
+function Ansi2CP(const astr:AnsiString):String;
+function Uni2CP(const astr:AnsiString):String;
+function CP2Ansi(const astr:AnsiString):String;
+function CP2Uni(const astr:AnsiString):String;
 
 function uch2ach(uch:word):byte;
 function ach2uch(ach:byte):word;
@@ -39,8 +39,8 @@ function ach2uch(ach:byte):word;
 function CompareNUMSTR(str1,str2:String):Boolean;
 function AnsiNaturalCompare(const str1, str2: string; vCaseSensitive: boolean = False): integer;
 
-function ConvertFromDxfString(str:TDXFEntsInternalStringType):String;
-function ConvertToDxfString(str:String):TDXFEntsInternalStringType;
+function ConvertFromDxfString(const str:TDXFEntsInternalStringType):String;
+function ConvertToDxfString(const str:String):TDXFEntsInternalStringType;
 function MakeHash(const s: String):SizeUInt;//TODO в gzctnrSTL есть копия этой процедуры. надо убирать
 
 procedure KillString(var str:String);inline;
@@ -120,13 +120,13 @@ begin
     Result := ((Result shl 7) or (Result shr 25)) + Ord(s[I]);
 end;
 
-function ConvertFromDxfString(str:TDXFEntsInternalStringType):String;
+function ConvertFromDxfString(const str:TDXFEntsInternalStringType):String;
 begin
      //result:=Tria_AnsiToUtf8(str);
      {$IFNDEF DELPHI}result:=UTF8Encode(StringsReplace(str, ['\P'],[LineEnding],[rfReplaceAll,rfIgnoreCase]));{$ENDIF}
 end;
 
-function ConvertToDxfString(str:String):TDXFEntsInternalStringType;
+function ConvertToDxfString(const str:String):TDXFEntsInternalStringType;
 begin
      //{$IFNDEF DELPHI}result:=StringsReplace(str, [LineEnding],['\P'],[rfReplaceAll,rfIgnoreCase]);{$ENDIF}
      result:={Tria_Utf8ToAnsi}UTF8ToString(StringsReplace(str, [LineEnding],['\P'],[rfReplaceAll,rfIgnoreCase]));
@@ -175,7 +175,7 @@ begin
      //                uch:=uch;
      {$ENDIF}
 end;
-function GetDigitCount(str1:String):Integer;
+function GetDigitCount(const str1:String):Integer;
 begin
 
      if str1='' then
@@ -370,7 +370,7 @@ else
           end;
      end;
 end;
-function readspace(expr: String): String;
+function readspace(const expr: String): String;
 var
   i: Integer;
 //  s:string;
@@ -390,11 +390,14 @@ begin
   //programlog.LogOut(@expr[1],0);
 
   //expr:=expr;
-  result := copy(expr, i, length(expr) - i + 1);
+  if i=1 then
+    result:=expr
+  else
+    result := copy(expr, i, length(expr) - i + 1);
   //result :=s;// copy(expr, i, length(expr) - i + 1);
   //expr:=expr;
 end;
-function GetPredStr(var s: String; substr: String): String;
+function GetPredStr(var s: String; const substr: String): String;
 var i{, c,a}: Integer;
 begin
   i:=pos(substr,s);
@@ -410,7 +413,7 @@ begin
                   s:='';
              end;
 end;
-function GetPredStr(var s: String; substrs: array of const; out nearestsubstr:string): String;
+function GetPredStr(var s: String; const substrs: array of const; var nearestsubstr:string): String;
 var i,current: Integer;
     substr:String;
     itstring:boolean;
@@ -462,7 +465,7 @@ begin
   //end;
 end;
 
-function Ansi2CP(astr:AnsiString):String;
+function Ansi2CP(const astr:AnsiString):String;
 begin
      case CodePage of
                      CP_utf8:result:=
@@ -470,14 +473,14 @@ begin
                      CP_win:result:=astr;
      end;
 end;
-function Uni2CP(astr:AnsiString):String;
+function Uni2CP(const astr:AnsiString):String;
 begin
      case CodePage of
                      CP_utf8:result:=astr;
                      CP_win:result:=Tria_Utf8ToAnsi(astr);
      end;
 end;
-function CP2Ansi(astr:AnsiString):String;
+function CP2Ansi(const astr:AnsiString):String;
 begin
 case CodePage of
                 CP_utf8:result:=
@@ -486,7 +489,7 @@ case CodePage of
 end;
 end;
 
-function CP2Uni(astr:AnsiString):String;
+function CP2Uni(const astr:AnsiString):String;
 begin
 case CodePage of
                 CP_utf8:result:=astr;

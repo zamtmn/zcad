@@ -256,10 +256,12 @@ msgid "&Directory"
 msgstr "&Adresář"
 
 #: lclstrconsts.rsdocopy
+msgctxt "lclstrconsts.rsdocopy"
 msgid "Copy"
 msgstr "Kopírovat"
 
 #: lclstrconsts.rsdopaste
+msgctxt "lclstrconsts.rsdopaste"
 msgid "Paste"
 msgstr "Vložit"
 
@@ -268,6 +270,7 @@ msgid "Duplicate icon format."
 msgstr "Duplicitní formát ikony."
 
 #: lclstrconsts.rseditrecordhint
+msgctxt "lclstrconsts.rseditrecordhint"
 msgid "Edit"
 msgstr "Upravit"
 
@@ -783,31 +786,71 @@ msgstr "Citrusová"
 msgid "List index exceeds bounds (%d)"
 msgstr "Index seznamu překročil meze (%d)"
 
+#: lclstrconsts.rsmacoseditmenu
+msgctxt "lclstrconsts.rsmacoseditmenu"
+msgid "Edit"
+msgstr "Upravit"
+
+#: lclstrconsts.rsmacoseditmenucopy
+msgctxt "lclstrconsts.rsmacoseditmenucopy"
+msgid "Copy"
+msgstr "Kopírovat"
+
+#: lclstrconsts.rsmacoseditmenucut
+msgid "Cut"
+msgstr "Vyjmout"
+
+#: lclstrconsts.rsmacoseditmenupaste
+msgctxt "lclstrconsts.rsmacoseditmenupaste"
+msgid "Paste"
+msgstr "Vložit"
+
+#: lclstrconsts.rsmacoseditmenuredo
+msgid "Redo"
+msgstr "Krok vpřed"
+
+#: lclstrconsts.rsmacoseditmenuselectall
+msgid "Select All"
+msgstr "Vybrat vše"
+
+#: lclstrconsts.rsmacoseditmenuundo
+msgid "Undo"
+msgstr "Krok zpět"
+
 #: lclstrconsts.rsmacosfileformat
 msgid "File Format:"
 msgstr ""
 
+#: lclstrconsts.rsmacosmenuabout
+#, object-pascal-format
+msgid "About %s"
+msgstr "O aplikaci %s"
+
 #: lclstrconsts.rsmacosmenuhide
 #, object-pascal-format
 msgid "Hide %s"
-msgstr ""
+msgstr "Skrýt %s"
 
 #: lclstrconsts.rsmacosmenuhideothers
 msgid "Hide Others"
-msgstr ""
+msgstr "Skrýt ostatní"
+
+#: lclstrconsts.rsmacosmenupreferences
+msgid "Preferences..."
+msgstr "Předvolby..."
 
 #: lclstrconsts.rsmacosmenuquit
 #, object-pascal-format
 msgid "Quit %s"
-msgstr ""
+msgstr "Ukončit %s"
 
 #: lclstrconsts.rsmacosmenuservices
 msgid "Services"
-msgstr ""
+msgstr "Služby"
 
 #: lclstrconsts.rsmacosmenushowall
 msgid "Show All"
-msgstr ""
+msgstr "Ukázat vše"
 
 #: lclstrconsts.rsmarooncolorcaption
 msgid "Maroon"

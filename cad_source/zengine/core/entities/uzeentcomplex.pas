@@ -40,8 +40,8 @@ GDBObjComplex= object(GDBObjWithLocalCS)
                     destructor done;virtual;
                     constructor initnul;
                     constructor init(own:Pointer;layeraddres:PGDBLayerProp;LW:SmallInt);
-                    function CalcInFrustum(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:Integer; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double):Boolean;virtual;
-                    function CalcTrueInFrustum(frustum:ClipArray;visibleactualy:TActulity):TInBoundingVolume;virtual;
+                    function CalcInFrustum(const frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:Integer; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double):Boolean;virtual;
+                    function CalcTrueInFrustum(const frustum:ClipArray;visibleactualy:TActulity):TInBoundingVolume;virtual;
                     function onmouse(var popa:TZctnrVectorPGDBaseObjects;const MF:ClipArray;InSubEntry:Boolean):Boolean;virtual;
                     procedure renderfeedbac(infrustumactualy:TActulity;pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc;var DC:TDrawContext);virtual;
                     procedure addcontrolpoints(tdesc:Pointer);virtual;
@@ -178,12 +178,12 @@ end;
 constructor GDBObjComplex.initnul;
 begin
   inherited initnul(nil);
-  ConstObjArray.init(100);
+  ConstObjArray.init(3);
 end;
 constructor GDBObjComplex.init;
 begin
   inherited init(own,layeraddres,LW);
-  ConstObjArray.init(100);
+  ConstObjArray.init(3);
 end;
 destructor GDBObjComplex.done;
 begin
@@ -191,7 +191,7 @@ begin
      ConstObjArray.done;
      inherited done;
 end;
-function GDBObjComplex.CalcInFrustum(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:Integer; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double):Boolean;
+function GDBObjComplex.CalcInFrustum(const frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:Integer; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double):Boolean;
 begin
      result:=ConstObjArray.calcvisible(frustum,infrustumactualy,visibleactualy,totalobj,infrustumobj, ProjectProc,zoom,currentdegradationfactor);
      ProcessTree(frustum,infrustumactualy,visibleactualy,ConstObjArray.ObjTree,IRPartially,TDTFulDraw,totalobj,infrustumobj,ProjectProc,zoom,currentdegradationfactor);

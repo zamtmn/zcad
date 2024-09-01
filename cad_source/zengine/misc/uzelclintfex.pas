@@ -33,7 +33,7 @@ const
      FR_PRIVATE=$10;//from WinGDI.h//#define FR_PRIVATE     0x10
  {$IFNDEF WINDOWS}type winbool=longint;{$ENDIF}
 
-function AddFontResourceFile(FontResourceFileName:string):integer;
+function AddFontResourceFile(const FontResourceFileName:string):integer;
 function SetGraphicsMode_(hdc:HDC; iMode:longint):longint;
 function SetWorldTransform_(hdc:HDC; const tm:DMatrix4D):WINBOOL;
 function SetTextAlignToBaseLine(hdc:HDC):UINT;
@@ -52,7 +52,7 @@ begin
   TQtDeviceContext(hdc).translate(0,-TQtDeviceContext(hdc).Metrics.ascent)
   {$ENDIF}
 end;
-function AddFontResourceFile(FontResourceFileName:string):integer;
+function AddFontResourceFile(const FontResourceFileName:string):integer;
 begin
   {$IFDEF WINDOWS}
     result:=__AddFontResourceEx(@FontResourceFileName[1],FR_PRIVATE,nil);

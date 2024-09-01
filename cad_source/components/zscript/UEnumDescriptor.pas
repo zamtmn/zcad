@@ -37,8 +37,8 @@ EnumDescriptor=object(TUserTypeDescriptor)
                      UserValue:TZctnrVectorStrings;
                      Value:PTByteVector;
                      constructor init(size:Integer;tname:string;pu:pointer);
-                     function CreateProperties(const f:TzeUnitsFormat;mode:PDMode;PPDA:PTPropertyDeskriptorArray;Name:TInternalScriptString;PCollapsed:Pointer;ownerattrib:Word;var bmode:Integer;const addr:Pointer;ValKey,ValType:TInternalScriptString):PTPropertyDeskriptorArray;virtual;
-                     function CreateEditor(TheOwner:TPropEditorOwner;rect:trect;pinstance:pointer;psa:PTZctnrVectorStrings;FreeOnLostFocus:boolean;InitialValue:TInternalScriptString;preferedHeight:integer;f:TzeUnitsFormat):TEditorDesc;virtual;
+                     function CreateProperties(const f:TzeUnitsFormat;mode:PDMode;PPDA:PTPropertyDeskriptorArray;const Name:TInternalScriptString;PCollapsed:Pointer;ownerattrib:Word;var bmode:Integer;const addr:Pointer;const ValKey,ValType:TInternalScriptString):PTPropertyDeskriptorArray;virtual;
+                     function CreateEditor(TheOwner:TPropEditorOwner;rect:trect;pinstance:pointer;psa:PTZctnrVectorStrings;FreeOnLostFocus:boolean;const InitialValue:TInternalScriptString;preferedHeight:integer;f:TzeUnitsFormat):TEditorDesc;virtual;
                      function GetNumberInArrays(addr:Pointer;out number:LongWord):Boolean;virtual;
                      //function Serialize(PInstance:Pointer;SaveFlag:Word;var membuf:PTZctnrVectorBytes;var  linkbuf:PGDBOpenArrayOfTObjLinkRecord;var sub:integer):integer;virtual;
                      //function DeSerialize(PInstance:Pointer;SaveFlag:Word;var membuf:TZctnrVectorBytes;linkbuf:PGDBOpenArrayOfTObjLinkRecord):integer;virtual;
@@ -46,7 +46,7 @@ EnumDescriptor=object(TUserTypeDescriptor)
                      function GetUserValueAsString(pinstance:Pointer):TInternalScriptString;virtual;
                      destructor Done;virtual;
                      function GetTypeAttributes:TTypeAttr;virtual;
-                     procedure SetValueFromString(PInstance:Pointer;_Value:TInternalScriptString);virtual;
+                     procedure SetValueFromString(PInstance:Pointer; const _Value:TInternalScriptString);virtual;
                end;
 var
     EnumGlobalEditor:TCreateEditorFunc;
@@ -126,14 +126,15 @@ begin
                         end;
      end;
 end;
-procedure EnumDescriptor.SetValueFromString(PInstance:Pointer;_Value:TInternalScriptString);
+procedure EnumDescriptor.SetValueFromString(PInstance:Pointer; const _Value:TInternalScriptString);
 var //currval:LongWord;
     p,p2,pp:Pointer;
 //    found:Boolean;
 //    i:Integer;
         ir,ir2,irr:itrec;
+        uppercase_value:TInternalScriptString;
 begin
-     _value:=uppercase(_value);
+     uppercase_value:=uppercase(_value);
      case SizeInBytes of
                       1:begin
                              p:=SourceValue.beginiterate(ir);
@@ -141,8 +142,8 @@ begin
                              pp:=Value.beginiterate(irr);
                              if p<>nil then
                              repeat
-                             if (_value=uppercase(pstring(p)^))
-                             or (_value=uppercase(pstring(p2)^))then
+                             if (uppercase_value=uppercase(pstring(p)^))
+                             or (uppercase_value=uppercase(pstring(p2)^))then
                              begin
                                   PByte(pinstance)^:=pbyte(pp)^;
                                   exit;

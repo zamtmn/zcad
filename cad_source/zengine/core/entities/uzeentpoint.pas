@@ -25,7 +25,7 @@ uses uzeentityfactory,uzgldrawcontext,uzeffdxfsupport,uzedrawingdef,uzecamera,
      uzestyleslayers,UGDBSelectedObjArray,
      uzeentsubordinated,uzeent3d,uzeentity,sysutils,uzctnrVectorBytes,
      uzegeometrytypes,uzbtypes,uzeconsts,uzglviewareadata,uzegeometry,
-     uzctnrvectorpgdbaseobjects,uzeSnap;
+     uzctnrvectorpgdbaseobjects,uzeSnap,uzMVReader;
 type
 {Export+}
 PGDBObjPoint=^GDBObjPoint;
@@ -36,16 +36,16 @@ GDBObjPoint= object(GDBObj3d)
                  ProjPoint:GDBvertex;
                  constructor init(own:Pointer;layeraddres:PGDBLayerProp;LW:SmallInt;p:GDBvertex);
                  constructor initnul(owner:PGDBObjGenericWithSubordinated);
-                 procedure LoadFromDXF(var f:TZctnrVectorBytes;ptu:PExtensionData;var drawing:TDrawingDef);virtual;
+                 procedure LoadFromDXF(var f:TZMemReader;ptu:PExtensionData;var drawing:TDrawingDef);virtual;
                  procedure SaveToDXF(var outhandle:{Integer}TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
                  procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext;Stage:TEFStages=EFAllStages);virtual;
 
                  procedure DrawGeometry(lw:Integer;var DC:TDrawContext{infrustumactualy:TActulity;subrender:Integer});virtual;
-                 function calcinfrustum(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:Integer; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double):Boolean;virtual;
+                 function calcinfrustum(const frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:Integer; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double):Boolean;virtual;
                  procedure RenderFeedback(pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc;var DC:TDrawContext);virtual;
                  function getsnap(var osp:os_record; var pdata:Pointer; const param:OGLWndtype; ProjectProc:GDBProjectProc;SnapMode:TGDBOSMode):Boolean;virtual;
                  function onmouse(var popa:TZctnrVectorPGDBaseObjects;const MF:ClipArray;InSubEntry:Boolean):Boolean;virtual;
-                 function CalcTrueInFrustum(frustum:ClipArray;visibleactualy:TActulity):TInBoundingVolume;virtual;
+                 function CalcTrueInFrustum(const frustum:ClipArray;visibleactualy:TActulity):TInBoundingVolume;virtual;
                  procedure addcontrolpoints(tdesc:Pointer);virtual;
                  procedure remaponecontrolpoint(pdesc:pcontrolpointdesc);virtual;
                  procedure rtmodifyonepoint(const rtmod:TRTModifyData);virtual;
@@ -118,50 +118,24 @@ begin
   dxfvertexout(outhandle,10,P_insertInOCS);
 end;
 procedure GDBObjPoint.LoadFromDXF;
-var s, layername: String;
-  byt, code: Integer;
+var
+  byt:Integer;
 begin
-  //inherited init(nil,0, 10);
-  //vp.ID := GDBPointID;
   P_insertInOCS:=NulVertex;
-  s := f.readString;
-  val(s, byt, code);
+  byt:=f.ParseInteger;
   while byt <> 0 do
   begin
     case byt of
-      8:
-        begin
-          layername := f.readString;
-          vp.Layer := {gdb.GetCurrentDWG.LayerTable}drawing.GetLayerTable.getaddres(layername);
-              //layername:=Pointer(s);
-        end;
-      10:
-        begin
-          s := f.readString;
-          val(s, P_insertInOCS.x, code);
-        end;
-      20:
-        begin
-          s := f.readString;
-          val(s, P_insertInOCS.y, code);
-        end;
-      30:
-        begin
-          s := f.readString;
-          val(s, P_insertInOCS.z, code);
-        end;
-      370:
-        begin
-          s := f.readString;
-          vp.lineweight := strtoint(s);
-        end;
+      8  :vp.Layer :=drawing.GetLayerTable.getaddres(f.ParseString);
+      10 :P_insertInOCS.x:=f.ParseDouble;
+      20 :P_insertInOCS.y:=f.ParseDouble;
+      30 :P_insertInOCS.z:=f.ParseDouble;
+      370:vp.lineweight:=f.ParseInteger;
     else
-      s := f.readString;
+      f.SkipString;
     end;
-    s := f.readString;
-    val(s, byt, code);
+    byt:=f.ParseInteger;
   end;
-
 end;
 
 procedure GDBObjPoint.DrawGeometry;

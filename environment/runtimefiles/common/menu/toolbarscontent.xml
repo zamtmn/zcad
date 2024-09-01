@@ -39,10 +39,14 @@
       <Separator/>
       <Action Name="ACN_REBUILDTREE"/>
     </Standard>
+    <Find Type="ToolBar">
+      <FindEditBox Width="200" Hint="Find"/>
+      <Action Name="ACN_FINDNEXT"/>
+      <Action Name="ACN_FINDPREV"/>
+      <Action Name="ACN_FINDPARAMS"/>
+    </Find>
     <ObjInspUpToolbar Type="ToolBar2">
       <Action Name="ACN_SNAPRUNTIME"/>
-      <Separator/>
-      <Action Name="ACN_El_FIND"/>
       <Separator/>
       <Action Name="ACN_VARSED"/>
       <Action Name="ACN_VARSEDSEL"/>

@@ -233,11 +233,11 @@ begin
     result:=PGDBObjMText(pEntity).text.Count;
 end;
 
-function getXsign(p:GDBvertex):integer;
+function getXsign(const p:GDBvertex):integer;
 begin
   result:=-sign(p.x);
 end;
-function getYsign(p:GDBvertex):integer;
+function getYsign(const p:GDBvertex):integer;
 begin
   result:=-sign(p.y);
 end;

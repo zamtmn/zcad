@@ -6,7 +6,7 @@
       <ZAction Name="ACN_LOADQS" Command="Load($(ZCADAutoSaveFilePath))" Img="qload" Caption="Open (Autosave)" Hint="Open last autosave"/>
       <ZAction Name="ACN_NEW" Command="DWGNew" Img="new" Caption="New drawing" ShortCut="CTRL+N"/>
       <ZAction Name="ACN_QSAVE" Command="QSave" Img="save" Caption="Save" Hint="Save drawing" ShortCut="CTRL+S"/>
-      <ZAction Name="ACN_SAVEAS" Command="SaveAs" Img="saveas" Caption="Save as ..." Hint="Save drawing as" ShortCut="CTRL+SHIFT+S"/>
+      <ZAction Name="ACN_SAVEAS" Command="SaveAs" Img="saveas" Caption="Save as ..." Hint="Save drawing as ..." ShortCut="CTRL+SHIFT+S"/>
       <ZAction Name="ACN_SAVEQS" Command="QSave(QS)" Img="qsave" Caption="Save (Autosave)" Hint="Autosave"/>
       <ZAction Name="ACN_PRINT" Command="Print" Img="print" Caption="Print" Hint="Print" ShortCut="CTRL+P"/>
       <ZAction Name="ACN_CLOSE" Command="DWGClose" Img="close" Caption="Close drawing" ShortCut="CTRL+F4"/>
@@ -24,7 +24,10 @@
       <ZAction Name="ACN_INVERSESELECTED" Command="InverseSelected" Img="#SI" Caption="Inverse selected"/>
       <ZAction Name="ACN_DESELECTALL" Command="DeSelectAll" Img="#DSA" Caption="DeSelect all" ShortCut="CTRL+SHIFT+A"/>
       <ZAction Name="ACN_SELSIM" Command="SelSim" Img="#SSim" Caption="Select similar"/>
-      <ZAction Name="ACN_El_FIND" Command="EL_Find" Img="find" Caption="Find device" ShortCut="CTRL+F"/>
+      <ZAction Name="ACN_FIND" Command="Find" Img="find" Caption="Find ..." ShortCut="CTRL+F"/>
+      <ZAction Name="ACN_FINDNEXT" Command="FindNext" Img="#˄" Caption="Find next" ShortCut="F3"/>
+      <ZAction Name="ACN_FINDPREV" Command="FindPrev" Img="#˅" Caption="Find prev" ShortCut="SHIFT+F3"/>
+      <ZAction Name="ACN_FINDPARAMS" Command="FindParams" Img="#⁕" Caption="Find params" ShortCut="CTRL+SHIFT+F3"/>
     </Group>
     <Group Category="View">
       <ZAction Name="ACN_PROJECTTREE" Command="ProjectTree" Img="projecttree" Caption="Project tree" ShortCut="CTRL+T"/>
@@ -70,6 +73,9 @@
       <ZAction Name="ACN_DSTYLES" Command="DimStyles" Img="dimstyles.bmp" Caption="Dimension styles ..." Hint="Dimension styles properties manager"/>
       <ZAction Name="ACN_LTYPES" Command="LineTypes" Img="linetypes" Caption="Line types ..." Hint="Line types properties manager"/>
     </Group>
+    <Group Category="Tools">
+      <ZAction Name="ACN_SPELLCHECK" Command="SpellCheck" Img="#SC" Caption="Spell check" Hint="Spell check"/>
+    </Group>
     <Group Category="Modify">
       <ZAction Name="ACN_COPY" Command="Copy" Img="copy" Caption="Copy" Hint="Copy primitives" ShortCut="CTRL+ALT+C" SecondaryShortCuts="Q"/>
       <ZAction Name="ACN_MOVE" Command="Move" Img="move" Caption="Move" Hint="Move primitives" ShortCut="CTRL+ALT+M" SecondaryShortCuts="A"/>
@@ -91,6 +97,8 @@
       <ZAction Name="ACN_smtextall" Command="stripmtext(ALL)" Img="stripmtextall" Caption="Start command clear mtext all"/>
       <ZAction Name="ACN_smtextarea" Command="stripmtext" Img="stripmtextsel" Caption="Start command clear mtext area"/>
       <ZAction Name="ACN_LAYOFF" Command="LayOff" Img="#LO" Caption="Layer off" Hint="Turns off the layer of selected object"/>
+      <ZAction Name="ACN_EXTDRALLLIST" Command="extdrAllList" Img="#exAL" Caption="List of available extenders"/>
+      <ZAction Name="ACN_EXTDRENTLIST" Command="extdrEntsList" Img="#exEL" Caption="List of extenders of selected entities"/>
     </Group>
     <Group Category="Draw">
       <ZAction Name="ACN_LINE" Command="Line" Img="line" Caption="Line" Hint="Draw line" ShortCut="CTRL+ALT+L" SecondaryShortCuts="L"/>

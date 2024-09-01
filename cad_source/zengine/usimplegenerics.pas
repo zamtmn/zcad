@@ -36,7 +36,7 @@ LessInteger= TLess<Integer>;
 
 {$IFNDEF DELPHI}
 StringHash=class
-  class function hash(s:String; n:longint):SizeUInt;
+  class function hash(const s:String; n:longint):SizeUInt;
 end;
 {$ENDIF}
 TObjID2Counter=TMyMapCounter<TObjID>;
@@ -68,7 +68,7 @@ end;
 implementation
 
 {$IFNDEF DELPHI}
-class function StringHash.hash(s:String; n:longint):SizeUInt;
+class function StringHash.hash(const s:String; n:longint):SizeUInt;
 begin
      result:=makehash(s) mod SizeUInt(n);
 end;

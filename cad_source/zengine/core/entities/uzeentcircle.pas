@@ -25,7 +25,7 @@ uses
     uzestyleslayers,uzehelpobj,UGDBSelectedObjArray,
     uzegeometrytypes,uzeentity,UGDBOutbound2DIArray,UGDBPoint3DArray,uzctnrVectorBytes,
     uzbtypes,uzeentwithlocalcs,uzeconsts,uzglviewareadata,uzegeometry,uzeffdxfsupport,
-    uzctnrvectorpgdbaseobjects,uzeSnap;
+    uzctnrvectorpgdbaseobjects,uzeSnap,uzMVReader;
 type
 {Export+}
   ptcirclertmodify=^tcirclertmodify;
@@ -49,11 +49,11 @@ GDBObjCircle= object(GDBObjWithLocalCS)
                  Vertex3D_in_WCS_Array:GDBPoint3DArray;(*oi_readonly*)(*hidden_in_objinsp*)
                  constructor init(own:Pointer;layeraddres:PGDBLayerProp;LW:SmallInt;p:GDBvertex;RR:Double);
                  constructor initnul;
-                 procedure LoadFromDXF(var f:TZctnrVectorBytes;ptu:PExtensionData;var drawing:TDrawingDef);virtual;
+                 procedure LoadFromDXF(var f:TZMemReader;ptu:PExtensionData;var drawing:TDrawingDef);virtual;
 
                  procedure CalcObjMatrix(pdrawing:PTDrawingDef=nil);virtual;
-                 function calcinfrustum(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:Integer; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double):Boolean;virtual;
-                 function CalcTrueInFrustum(frustum:ClipArray;visibleactualy:TActulity):TInBoundingVolume;virtual;
+                 function calcinfrustum(const frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:Integer; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double):Boolean;virtual;
+                 function CalcTrueInFrustum(const frustum:ClipArray;visibleactualy:TActulity):TInBoundingVolume;virtual;
                  procedure RenderFeedback(pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc;var DC:TDrawContext);virtual;
                  procedure getoutbound(var DC:TDrawContext);virtual;
                  procedure SaveToDXF(var outhandle:{Integer}TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
@@ -73,7 +73,7 @@ GDBObjCircle= object(GDBObjWithLocalCS)
                  procedure rtmodifyonepoint(const rtmod:TRTModifyData);virtual;
                  function IsRTNeedModify(const Point:PControlPointDesc; p:Pointer):Boolean;virtual;
 
-                 function ObjToString(prefix,sufix:String):String;virtual;
+                 function ObjToString(const prefix,sufix:String):String;virtual;
                  destructor done;virtual;
 
                  function GetObjTypeName:String;virtual;
@@ -82,7 +82,7 @@ GDBObjCircle= object(GDBObjWithLocalCS)
                  function IsIntersect_Line(lbegin,lend:gdbvertex):Intercept3DProp;virtual; //<**Пересечение с линией описанной 2-я точками
                  procedure ReCalcFromObjMatrix;virtual;
 
-                 function GetTangentInPoint(point:GDBVertex):GDBVertex;virtual;
+                 function GetTangentInPoint(const point:GDBVertex):GDBVertex;virtual;
                  procedure AddOnTrackAxis(var posr:os_record;const processaxis:taddotrac);virtual;
                  function onpoint(var objects:TZctnrVectorPGDBaseObjects;const point:GDBVertex):Boolean;virtual;
 
@@ -120,10 +120,12 @@ begin
      processaxis(posr,tv);
 end;
 
-function GDBObjCircle.GetTangentInPoint(point:GDBVertex):GDBVertex;
+function GDBObjCircle.GetTangentInPoint(const point:GDBVertex):GDBVertex;
 begin
-     point:=uzegeometry.VertexSub(self.P_insert_in_WCS,point);
-     result:=normalizevertex(uzegeometry.vectordot(point,self.Local.basis.oz));
+     result:=normalizevertex(
+                             uzegeometry.vectordot(
+                                                   uzegeometry.VertexSub(self.P_insert_in_WCS,point)
+                                                   ,self.Local.basis.oz));
 end;
 procedure GDBObjCircle.ReCalcFromObjMatrix;
 var
@@ -257,7 +259,7 @@ begin
      Vertex3D_in_WCS_Array.Done;
      inherited done;
 end;
-function GDBObjCircle.ObjToString(prefix,sufix:String):String;
+function GDBObjCircle.ObjToString(const prefix,sufix:String):String;
 begin
      result:=prefix+inherited ObjToString('GDBObjCircle (addr:',')')+sufix;
 end;
@@ -267,7 +269,7 @@ begin
   //vp.ID := GDBCircleID;
   Radius := 1;
   PProjoutbound:=nil;
-  Vertex3D_in_WCS_Array.init(100);
+  Vertex3D_in_WCS_Array.init(4);
 end;
 constructor GDBObjCircle.init;
 begin
@@ -280,7 +282,7 @@ begin
   Radius := rr;
   //ObjToString('','');
   PProjoutbound:=nil;
-  Vertex3D_in_WCS_Array.init(100);
+  Vertex3D_in_WCS_Array.init(4);
   //format;
 end;
 function GDBObjCircle.GetObjType;
@@ -374,7 +376,7 @@ begin
                  end
             else
                 l:=32;
-
+  Vertex3D_in_WCS_Array.SetSize(circlepointoflod[l].Count);
   pvertex:=circlepointoflod[l].beginiterate(ir);
   if pvertex<>nil then
   repeat
@@ -497,13 +499,13 @@ var //s: String;
   byt{, code}: Integer;
 begin
   //initnul;
-  byt:=readmystrtoint(f);
+  byt:=f.ParseInteger;
   while byt <> 0 do
   begin
     if not LoadFromDXFObjShared(f,byt,ptu,drawing) then
     if not dxfvertexload(f,10,byt,Local.P_insert) then
-    if not dxfDoubleload(f,40,byt,Radius) then {s := }f.readString;
-    byt:=readmystrtoint(f);
+    if not dxfDoubleload(f,40,byt,Radius) then {s := }f.SkipString;
+    byt:=f.ParseInteger;
   end;
   //PProjoutbound:=nil;
   //pprojpoint:=nil;
@@ -574,7 +576,7 @@ begin
   for i:=0 to 5 do
     if(frustum[i].v[0] * P_insert_in_WCS.x + frustum[i].v[1] * P_insert_in_WCS.y + frustum[i].v[2] * P_insert_in_WCS.z + frustum[i].v[3]+r{+GetLTCorrectH} < 0 ) then
       exit(IREmpty);
-  result:=Vertex3D_in_WCS_Array.CalcTrueInFrustum(frustum);
+  result:=Vertex3D_in_WCS_Array.CalcTrueInFrustum(frustum,false);
 end;
 function GDBObjCircle.getsnap;
 var
@@ -788,7 +790,7 @@ begin
   result.initnul{(owner)};
   result.bp.ListPos.Owner:=owner;
 end;
-procedure SetCircleGeomProps(Pcircle:PGDBObjCircle;args:array of const);
+procedure SetCircleGeomProps(Pcircle:PGDBObjCircle; const args:array of const);
 var
    counter:integer;
 begin
@@ -796,7 +798,7 @@ begin
   Pcircle.Local.p_insert:=CreateVertexFromArray(counter,args);
   Pcircle.Radius:=CreateDoubleFromArray(counter,args);
 end;
-function AllocAndCreateCircle(owner:PGDBObjGenericWithSubordinated;args:array of const):PGDBObjCircle;
+function AllocAndCreateCircle(owner:PGDBObjGenericWithSubordinated; const args:array of const):PGDBObjCircle;
 begin
   result:=AllocAndInitCircle(owner);
   //owner^.AddMi(@result);

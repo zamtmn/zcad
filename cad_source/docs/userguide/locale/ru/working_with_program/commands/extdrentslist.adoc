@@ -7,6 +7,6 @@
 
 include::../../_elements/commandsummary.adoc[]
 
-Команда выводит список привязаных к выбранным примитивам расширений (см. <<ent_extenders>>)
+Команда выводит список привязанных к выбранным примитивам расширений (см. <<ent_extenders>>)
 
 include::commandsummaryfree.adoc[]

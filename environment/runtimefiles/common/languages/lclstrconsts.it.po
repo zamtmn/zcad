@@ -256,18 +256,23 @@ msgid "&Directory"
 msgstr "&Cartella"
 
 #: lclstrconsts.rsdocopy
+#, fuzzy
+msgctxt "lclstrconsts.rsdocopy"
 msgid "Copy"
-msgstr ""
+msgstr "Copia"
 
 #: lclstrconsts.rsdopaste
+#, fuzzy
+msgctxt "lclstrconsts.rsdopaste"
 msgid "Paste"
-msgstr ""
+msgstr "Incolla"
 
 #: lclstrconsts.rsduplicateiconformat
 msgid "Duplicate icon format."
 msgstr "Formato icona duplicato."
 
 #: lclstrconsts.rseditrecordhint
+msgctxt "lclstrconsts.rseditrecordhint"
 msgid "Edit"
 msgstr "Modifica"
 
@@ -785,31 +790,71 @@ msgstr "Verde brillante"
 msgid "List index exceeds bounds (%d)"
 msgstr "Indice della lista fuori dai limiti (%d)"
 
+#: lclstrconsts.rsmacoseditmenu
+msgctxt "lclstrconsts.rsmacoseditmenu"
+msgid "Edit"
+msgstr "Modifica"
+
+#: lclstrconsts.rsmacoseditmenucopy
+msgctxt "lclstrconsts.rsmacoseditmenucopy"
+msgid "Copy"
+msgstr "Copia"
+
+#: lclstrconsts.rsmacoseditmenucut
+msgid "Cut"
+msgstr "Taglia"
+
+#: lclstrconsts.rsmacoseditmenupaste
+msgctxt "lclstrconsts.rsmacoseditmenupaste"
+msgid "Paste"
+msgstr "Incolla"
+
+#: lclstrconsts.rsmacoseditmenuredo
+msgid "Redo"
+msgstr "Ripristina"
+
+#: lclstrconsts.rsmacoseditmenuselectall
+msgid "Select All"
+msgstr "Seleziona Tutto"
+
+#: lclstrconsts.rsmacoseditmenuundo
+msgid "Undo"
+msgstr "Annulla"
+
 #: lclstrconsts.rsmacosfileformat
 msgid "File Format:"
 msgstr ""
 
+#: lclstrconsts.rsmacosmenuabout
+#, object-pascal-format
+msgid "About %s"
+msgstr "Informazioni su %s"
+
 #: lclstrconsts.rsmacosmenuhide
 #, object-pascal-format
 msgid "Hide %s"
-msgstr ""
+msgstr "Nascondi %s"
 
 #: lclstrconsts.rsmacosmenuhideothers
 msgid "Hide Others"
-msgstr ""
+msgstr "Nascondi altre"
+
+#: lclstrconsts.rsmacosmenupreferences
+msgid "Preferences..."
+msgstr "Preferenze..."
 
 #: lclstrconsts.rsmacosmenuquit
 #, object-pascal-format
 msgid "Quit %s"
-msgstr ""
+msgstr "Esci da %s"
 
 #: lclstrconsts.rsmacosmenuservices
 msgid "Services"
-msgstr ""
+msgstr "Servizi"
 
 #: lclstrconsts.rsmacosmenushowall
 msgid "Show All"
-msgstr ""
+msgstr "Mostra Tutto"
 
 #: lclstrconsts.rsmarooncolorcaption
 msgid "Maroon"

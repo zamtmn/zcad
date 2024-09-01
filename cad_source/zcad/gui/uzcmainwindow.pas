@@ -187,7 +187,7 @@ var
   ZCADMainWindow: TZCADMainWindow;
 
 function IsRealyQuit:Boolean;
-procedure RunCmdFile(filename:String;pdata:pointer);
+procedure RunCmdFile(const filename:String;pdata:pointer);
 
 implementation
 {$R *.lfm}
@@ -324,19 +324,21 @@ procedure TZCADMainWindow.IPCMessage(Sender: TObject);
 var
    msgstring,ts:string;
 begin
-     msgstring:=TSimpleIPCServer(Sender).StringMessage;
-     {$ifndef windows}application.BringToFront;{$endif}
-     {$ifdef windows}settop;{$endif}
-     application.processmessages;
-     //{ifdef windows}msgstring:=Tria_AnsiToUtf8(msgstring);{endif}
-     repeat
-           GetPartOfPath(ts,msgstring,'|');
-           if FileExists({$IFNDEF DELPHI}utf8tosys{$ENDIF}(ts)) then
-           begin
-                commandmanager.executecommandtotalend;
-                commandmanager.executecommand('Load('+ts+')',drawings.GetCurrentDWG,drawings.GetCurrentOGLWParam);
-           end;
-     until msgstring='';
+  msgstring:=TSimpleIPCServer(Sender).StringMessage;
+ {$ifndef windows}
+  application.BringToFront;
+ {$else}
+  settop;
+ {$endif}
+  application.processmessages;
+  msgstring:=StringReplace(msgstring,#13,'',[rfReplaceAll]);
+  repeat
+    GetPartOfPath(ts,msgstring,'|');
+    if FileExists({$IFNDEF DELPHI}utf8tosys{$ENDIF}(ts)) then begin
+      commandmanager.executecommandtotalend;
+      commandmanager.executecommand('Load('+ts+')',drawings.GetCurrentDWG,drawings.GetCurrentOGLWParam);
+    end;
+  until msgstring='';
 end;
 
 procedure TZCADMainWindow.setvisualprop(sender:TObject;GUIAction:TZMessageID);
@@ -946,7 +948,7 @@ begin
   SetupFIPCServer;
 end;
 
-procedure RunCmdFile(filename:String;pdata:pointer);
+procedure RunCmdFile(const filename:String;pdata:pointer);
 begin
   commandmanager.executefile(filename,drawings.GetCurrentDWG,nil);
 end;
@@ -959,7 +961,7 @@ begin
   TZGuiExceptionsHandler.InstallHandler(ZcadException);
 
   SuppressedShortcuts:=TXMLConfig.Create(nil);
-  SuppressedShortcuts.Filename:=ProgramPath+'components/suppressedshortcuts.xml';
+  SuppressedShortcuts.Filename:=ProgramPath+'/components/suppressedshortcuts.xml';
 
   if SysParam.saved.UniqueInstance then
     CreateOrRunFIPCServer;
@@ -978,15 +980,15 @@ begin
 
   InitSystemCalls;
 
-  ImagesManager.ScanDir(ProgramPath+'images/');
-  ImagesManager.LoadAliasesDir(ProgramPath+'images/navigator.ima');
+  ImagesManager.ScanDir(ProgramPath+'/images/');
+  ImagesManager.LoadAliasesDir(ProgramPath+'/images/navigator.ima');
 
   //StandartActions:=TActionList.Create(self);
   InsertComponent(StandartActions);
 
   if not assigned(StandartActions.Images) then
                              StandartActions.Images:={TImageList.Create(StandartActions)}ImagesManager.IconList;
-  brocenicon:=StandartActions.LoadImage(ProgramPath+'menu/BMP/noimage.bmp');
+  brocenicon:=StandartActions.LoadImage(ProgramPath+'/menu/BMP/noimage.bmp');
 
 
   ToolBarsManager.setup(self,StandartActions,sysvar.INTF.INTF_DefaultControlHeight^);
@@ -1003,12 +1005,12 @@ begin
   toolbars.Sorted:=true;
   CreateInterfaceLists;
 
-  //commandmanager.executefile('*components/stage0.cmd0',drawings.GetCurrentDWG,nil);
   FromDirsIterator(sysvar.PATH.Preload_Path^,'*.cmd0','stage0.cmd0',RunCmdFile,nil);
 
   CreateAnchorDockingInterface;
   ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIActionRedraw);
   MouseTimer:=TMouseTimer.Create;
+  SetupFIPCServer;
   finally programlog.leave(IfEntered);end;end;
 end;
 
@@ -1154,7 +1156,7 @@ begin
     end;
 
     if ((ActiveControl<>cmdedit)and(ActiveControl<>HistoryLine){and(ActiveControl<>LayerBox)and(ActiveControl<>LineWBox)})then begin
-      if (ActiveControl is tedit)or (ActiveControl is tmemo)or (ActiveControl is TComboBox)then begin
+      if (ActiveControl is TCustomEdit)or (ActiveControl is TCustomMemo)or (ActiveControl is TCustomComboBox)then begin
         //programlog.leave(IfEntered);
         exit;
       end;
@@ -1361,10 +1363,12 @@ begin
   str(TotalLPTime*10e4:3:2,TimeStr);
   LPName:=lps.getLPName(LPHandle);
 
-  if LPName='' then
-    ZCMsgCallBackInterface.TextMessage(format(rscompiledtimemsg,[TimeStr]),TMWOHistoryOut)
-  else
-    ZCMsgCallBackInterface.TextMessage(format(rsprocesstimemsg,[LPName,TimeStr]),TMWOHistoryOut);
+  if (not lps.hasOptions(LPHandle,LPSOSilent))and(not CommandManager.isBusy) then begin
+    if (LPName='')or(lps.hasOptions(LPHandle,LPSOSilent)) then
+      ZCMsgCallBackInterface.TextMessage(format(rscompiledtimemsg,[TimeStr]),[TMWOToConsole])
+    else
+      ZCMsgCallBackInterface.TextMessage(format(rsprocesstimemsg,[LPName,TimeStr]),[TMWOToConsole]);
+  end;
 end;
 procedure TZCADMainWindow.MainMouseMove;
 begin

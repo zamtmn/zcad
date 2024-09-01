@@ -21,7 +21,8 @@ unit uzeblockdef;
 interface
 uses gzctnrVectorTypes,uzeentity,uzeentityfactory,uzgldrawcontext,uzeobjectextender,uzedrawingdef,
      uzeentsubordinated,uzeffdxfsupport,uzctnrVectorBytes,sysutils,uzbtypes,
-     uzegeometrytypes,uzegeometry,uzestyleslayers,uzeconsts,uzeentgenericsubentry,LazLogger;
+     uzegeometrytypes,uzegeometry,uzestyleslayers,uzeconsts,uzeentgenericsubentry,LazLogger,
+     uzMVReader;
 type
 {Export+}
 PGDBObjBlockdef=^GDBObjBlockdef;
@@ -36,8 +37,8 @@ GDBObjBlockdef= object(GDBObjGenericSubEntry)
                      constructor init(_name:String);
                      procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext;Stage:TEFStages=EFAllStages);virtual;
                      //function FindVariable(varname:String):pvardesk;virtual;
-                     procedure LoadFromDXF(var f: TZctnrVectorBytes;ptu:PExtensionData;var drawing:TDrawingDef);virtual;
-                     function ProcessFromDXFObjXData(_Name,_Value:String;ptu:PExtensionData;const drawing:TDrawingDef):Boolean;virtual;
+                     procedure LoadFromDXF(var f:TZMemReader;ptu:PExtensionData;var drawing:TDrawingDef);virtual;
+                     function ProcessFromDXFObjXData(const _Name,_Value:String;ptu:PExtensionData;const drawing:TDrawingDef):Boolean;virtual;
                      destructor done;virtual;
                      function GetMatrix:PDMatrix4D;virtual;
                      function GetHandle:PtrInt;virtual;
@@ -78,12 +79,12 @@ var
   byt: Integer;
 begin
   //initnul(@gdb.ObjRoot);
-  byt:=readmystrtoint(f);
+  byt:=f.ParseInteger;
   while byt <> 0 do
   begin
     if not LoadFromDXFObjShared(f,byt,ptu,drawing) then
-                                           f.ReadString;
-    byt:=readmystrtoint(f);
+                                           f.SkipString;
+    byt:=f.ParseInteger;
   end;
   GetDXFIOFeatures.RunAfterLoadFeature(@self);
 end;
@@ -164,7 +165,7 @@ begin
   result:=AllocBlockDef;
   result.initnul(owner);
 end;
-procedure SetLineGeomProps(PBlockdef:PGDBObjBlockDef;args:array of const);
+procedure SetLineGeomProps(PBlockdef:PGDBObjBlockDef; const args:array of const);
 var
    counter:integer;
 begin
@@ -172,7 +173,7 @@ begin
   PBlockdef.Name:=CreateStringFromArray(counter,args);
   PBlockdef.Base:=CreateVertexFromArray(counter,args);
 end;
-function AllocAndCreateBlockDef(owner:PGDBObjGenericWithSubordinated;args:array of const):PGDBObjBlockDef;
+function AllocAndCreateBlockDef(owner:PGDBObjGenericWithSubordinated; const args:array of const):PGDBObjBlockDef;
 begin
   result:= AllocAndInitBlockDef(owner);
   SetLineGeomProps(result,args);

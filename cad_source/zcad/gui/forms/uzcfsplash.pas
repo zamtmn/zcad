@@ -42,7 +42,7 @@ procedure SplashTextOutProc(s:string;pm:boolean);
 implementation
 type
   TLogerSplashBackend=object(TLogerBaseBackend)
-    procedure doLog(msg:TLogMsg;MsgOptions:TMsgOpt;LogMode:TLogLevel;LMDI:TModuleDesk);virtual;
+    procedure doLog(const msg:TLogMsg;MsgOptions:TMsgOpt;LogMode:TLogLevel;LMDI:TModuleDesk);virtual;
     constructor init;
   end;
 
@@ -69,8 +69,8 @@ begin
   self.DoubleBuffered:=true;
   Logo:=TImage.create(self);
   Logo.Align:=alclient;
-  if FileExists({$IFNDEF DELPHI}utf8tosys{$ENDIF}(ProgramPath)+'components/logo.png') then
-                                                                 Logo.Picture.LoadFromFile((ProgramPath)+'components/logo.png');
+  if FileExists({$IFNDEF DELPHI}utf8tosys{$ENDIF}(ProgramPath)+'/components/logo.png') then
+                                                                 Logo.Picture.LoadFromFile((ProgramPath)+'/components/logo.png');
   Logo.Parent:=self;
   self.BorderStyle:=bsNone;
   self.Color:=clNone;
@@ -113,7 +113,7 @@ begin
           SplashForm:=nil;
      end;
 end;
-procedure TLogerSplashBackend.doLog(msg:TLogMsg;MsgOptions:TMsgOpt;LogMode:TLogLevel;LMDI:TModuleDesk);
+procedure TLogerSplashBackend.doLog(const msg:TLogMsg;MsgOptions:TMsgOpt;LogMode:TLogLevel;LMDI:TModuleDesk);
 begin
   if (lp_IncPos and MsgOptions)<>0 then
   SplashTextOutProc(msg,false);

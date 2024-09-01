@@ -23,14 +23,14 @@ unit uzeBoundaryPath;
 interface
 
 uses uzegeometrytypes,UGDBPolyline2DArray,gzctnrVector,
-  uzctnrVectorBytes,gzctnrVectorTypes,uzegeometry,uzeffdxfsupport;
+  uzctnrVectorBytes,gzctnrVectorTypes,uzegeometry,uzeffdxfsupport,uzMVReader;
 type
 PBoundaryPath=^TBoundaryPath;
 TBoundaryPath=object
   paths:GZVector<GDBPolyline2DArray>;
   constructor init(m:TArrayIndex);
   destructor done;virtual;
-  function LoadFromDXF(var f:TZctnrVectorBytes;dxfcod:Integer):Boolean; {todo: вынести это нафиг из простых типов}
+  function LoadFromDXF(var f:TZMemReader;DXFCode:Integer):Boolean; {todo: вынести это нафиг из простых типов}
   procedure SaveToDXF(var outhandle:TZctnrVectorBytes);
   procedure CloneTo(var Dest:TBoundaryPath);
   procedure Clear;virtual;
@@ -38,12 +38,12 @@ TBoundaryPath=object
   procedure transform(const t_matrix:DMatrix4D);virtual;
   function getDataMutableByPlainIndex(index:TArrayIndex):PGDBVertex2D;
 
-  function DummyCalcTrueInFrustum(pv1:pgdbvertex;frustum:ClipArray):TInBoundingVolume;virtual;
+  function DummyCalcTrueInFrustum(pv1:pgdbvertex;const frustum:ClipArray):TInBoundingVolume;virtual;
 end;
 
 implementation
 
-function TBoundaryPath.DummyCalcTrueInFrustum(pv1:pgdbvertex;frustum:ClipArray):TInBoundingVolume;
+function TBoundaryPath.DummyCalcTrueInFrustum(pv1:pgdbvertex;const frustum:ClipArray):TInBoundingVolume;
 var i,j:integer;
    ppla:PGDBPolyline2DArray;
    firstp,pv2:pgdbvertex;
@@ -132,7 +132,7 @@ begin
   paths.Clear;
 end;
 
-function TBoundaryPath.LoadFromDXF(var f:TZctnrVectorBytes;dxfcod:Integer):Boolean;
+function TBoundaryPath.LoadFromDXF(var f:TZMemReader;DXFCode:Integer):Boolean;
 type
   TNotPolyLine=(NPL_Line,NPL_CircularArc,NPL_EllipticArc,NPL_Spline);
 var
@@ -145,38 +145,38 @@ var
   NotPolyLine:TNotPolyLine;
   isFirst:boolean;
 begin
-     result:=dxfIntegerload(f,91,dxfcod,pathscount);
+     result:=dxfIntegerload(f,91,DXFCode,pathscount);
      if result then begin
        isPolyLine:=false;
-       byt:=readmystrtoint(f);
+       byt:=f.ParseInteger;
        Clear;
        for i:=1 to pathscount do begin
          while not dxfintegerload(f,92,byt,bt) do
-           byt:=readmystrtoint(f);
+           byt:=f.ParseInteger;
          isPolyLine:=(bt and 2)<>0;
-         byt:=readmystrtoint(f);
+         byt:=f.ParseInteger;
          if isPolyLine then begin
-           if dxfintegerload(f,72,byt,bt) then byt:=readmystrtoint(f);
-           if dxfintegerload(f,73,byt,bt) then byt:=readmystrtoint(f);
-           if dxfintegerload(f,93,byt,vertexcount) then byt:=readmystrtoint(f);
+           if dxfintegerload(f,72,byt,bt) then byt:=f.ParseInteger;
+           if dxfintegerload(f,73,byt,bt) then byt:=f.ParseInteger;
+           if dxfintegerload(f,93,byt,vertexcount) then byt:=f.ParseInteger;
            currpath.init(vertexcount,true);
            for j:=1 to vertexcount do begin
-             if dxfdoubleload(f,10,byt,p.x) then byt:=readmystrtoint(f);
-             if dxfdoubleload(f,20,byt,p.y) then byt:=readmystrtoint(f);
-             if dxfdoubleload(f,42,byt,tmp) then byt:=readmystrtoint(f);
+             if dxfdoubleload(f,10,byt,p.x) then byt:=f.ParseInteger;
+             if dxfdoubleload(f,20,byt,p.y) then byt:=f.ParseInteger;
+             if dxfdoubleload(f,42,byt,tmp) then byt:=f.ParseInteger;
              currpath.PushBackData(p);
            end;
          end else begin
-           if dxfintegerload(f,93,byt,vertexcount) then byt:=readmystrtoint(f);
+           if dxfintegerload(f,93,byt,vertexcount) then byt:=f.ParseInteger;
            currpath.init(vertexcount,true);
            isFirst:=true;
            for j:=1 to vertexcount do begin
              if dxfintegerload(f,72,byt,bt) then begin
-               byt:=readmystrtoint(f);
+               byt:=f.ParseInteger;
                case bt of
                  1:begin
-                     if dxfdoubleload(f,10,byt,p.x) then byt:=readmystrtoint(f);
-                     if dxfdoubleload(f,20,byt,p.y) then byt:=readmystrtoint(f);
+                     if dxfdoubleload(f,10,byt,p.x) then byt:=f.ParseInteger;
+                     if dxfdoubleload(f,20,byt,p.y) then byt:=f.ParseInteger;
                      if not isFirst then begin
                        if not(IsPoint2DEqual(p,prevp)) then
                          currpath.PushBackData(p);
@@ -185,8 +185,8 @@ begin
                        firstp:=p;
                      end;
                      isFirst:=false;
-                     if dxfdoubleload(f,11,byt,p.x) then byt:=readmystrtoint(f);
-                     if dxfdoubleload(f,21,byt,p.y) then byt:=readmystrtoint(f);
+                     if dxfdoubleload(f,11,byt,p.x) then byt:=f.ParseInteger;
+                     if dxfdoubleload(f,21,byt,p.y) then byt:=f.ParseInteger;
                      if j<>vertexcount then
                        currpath.PushBackData(p)
                      else
@@ -196,23 +196,23 @@ begin
                    end;
                  2:begin
                      NotPolyLine:=NPL_CircularArc;
-                     if dxfdoubleload(f,10,byt,p.x) then byt:=readmystrtoint(f);
-                     if dxfdoubleload(f,20,byt,p.y) then byt:=readmystrtoint(f);
-                     if dxfdoubleload(f,40,byt,p.x) then byt:=readmystrtoint(f);
-                     if dxfdoubleload(f,50,byt,p.y) then byt:=readmystrtoint(f);
-                     if dxfdoubleload(f,51,byt,p.x) then byt:=readmystrtoint(f);
-                     if dxfdoubleload(f,73,byt,p.y) then byt:=readmystrtoint(f);
+                     if dxfdoubleload(f,10,byt,p.x) then byt:=f.ParseInteger;
+                     if dxfdoubleload(f,20,byt,p.y) then byt:=f.ParseInteger;
+                     if dxfdoubleload(f,40,byt,p.x) then byt:=f.ParseInteger;
+                     if dxfdoubleload(f,50,byt,p.y) then byt:=f.ParseInteger;
+                     if dxfdoubleload(f,51,byt,p.x) then byt:=f.ParseInteger;
+                     if dxfdoubleload(f,73,byt,p.y) then byt:=f.ParseInteger;
                    end;
                  3:begin
                      NotPolyLine:=NPL_EllipticArc;
-                     if dxfdoubleload(f,10,byt,p.x) then byt:=readmystrtoint(f);
-                     if dxfdoubleload(f,20,byt,p.y) then byt:=readmystrtoint(f);
-                     if dxfdoubleload(f,11,byt,p.x) then byt:=readmystrtoint(f);
-                     if dxfdoubleload(f,21,byt,p.y) then byt:=readmystrtoint(f);
-                     if dxfdoubleload(f,40,byt,p.x) then byt:=readmystrtoint(f);
-                     if dxfdoubleload(f,50,byt,p.y) then byt:=readmystrtoint(f);
-                     if dxfdoubleload(f,51,byt,p.x) then byt:=readmystrtoint(f);
-                     if dxfdoubleload(f,73,byt,p.y) then byt:=readmystrtoint(f);
+                     if dxfdoubleload(f,10,byt,p.x) then byt:=f.ParseInteger;
+                     if dxfdoubleload(f,20,byt,p.y) then byt:=f.ParseInteger;
+                     if dxfdoubleload(f,11,byt,p.x) then byt:=f.ParseInteger;
+                     if dxfdoubleload(f,21,byt,p.y) then byt:=f.ParseInteger;
+                     if dxfdoubleload(f,40,byt,p.x) then byt:=f.ParseInteger;
+                     if dxfdoubleload(f,50,byt,p.y) then byt:=f.ParseInteger;
+                     if dxfdoubleload(f,51,byt,p.x) then byt:=f.ParseInteger;
+                     if dxfdoubleload(f,73,byt,p.y) then byt:=f.ParseInteger;
                    end;
                  4:begin
                      NotPolyLine:=NPL_Spline;
@@ -223,9 +223,9 @@ begin
          end;
          if dxfintegerload(f,97,byt,bt) then
            if bt<>0 then
-             byt:=readmystrtoint(f);
+             byt:=f.ParseInteger;
          for j:=1 to bt do begin
-           if (dxfstringload(f,330,byt,s))and(j<>bt) then byt:=readmystrtoint(f);
+           if (dxfstringload(f,330,byt,s))and(j<>bt) then byt:=f.ParseInteger;
          end;
          currpath.Shrink;
          paths.PushBackData(currpath);

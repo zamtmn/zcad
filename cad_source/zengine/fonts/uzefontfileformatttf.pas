@@ -156,13 +156,14 @@ var
    tv:gdbvertex;
    p:GDBvertex2D;
    glyphBounds:TRect;
-procedure CompareAndTess(v:GDBFontVertex2D);
+procedure CompareAndTess(const v:GDBFontVertex2D);
 begin
   if (abs(lastv.x-v.x)>eps)or(abs(lastv.y-v.y)>eps) then begin
     inc(tparrayindex);
     lastv:=v;
   end else
-    v:=v;
+    //v:=v
+    ;
 end;
 
 procedure EndSymContour;

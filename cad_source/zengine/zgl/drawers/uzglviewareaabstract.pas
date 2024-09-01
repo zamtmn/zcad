@@ -105,7 +105,7 @@ type
                            procedure RestoreMouse;virtual;abstract;
                            procedure myKeyPress(var Key: Word; Shift: TShiftState);virtual;abstract;
                            procedure finishdraw(var RC:TDrawContext);virtual;abstract;
-                            procedure SetCameraPosZoom(_pos:gdbvertex;_zoom:Double;finalcalk:Boolean);virtual;abstract;
+                            procedure SetCameraPosZoom(const _pos:gdbvertex;_zoom:Double;finalcalk:Boolean);virtual;abstract;
 
                            procedure showmousecursor;virtual;abstract;
                            procedure hidemousecursor;virtual;abstract;
@@ -157,7 +157,7 @@ type
 var
    otracktimer: Integer;
 procedure copyospoint(var dest:os_record; source:os_record);
-function correcttogrid(point:GDBVertex;const grid:GDBSnap2D):GDBVertex;
+function correcttogrid(const point:GDBVertex;const grid:GDBSnap2D):GDBVertex;
 function CreateFaceRC:TDrawContext;
 implementation
 function CreateFaceRC:TDrawContext;
@@ -196,7 +196,7 @@ begin
                                inherited;
 end;
 {$ENDIF}
-function correcttogrid(point:GDBVertex;const grid:GDBSnap2D):GDBVertex;
+function correcttogrid(const point:GDBVertex;const grid:GDBSnap2D):GDBVertex;
 begin
   result.x:=round((point.x-grid.Base.x)/grid.Spacing.x)*grid.Spacing.x+grid.Base.x;
   result.y:=round((point.y-grid.Base.y)/grid.Spacing.y)*grid.Spacing.y+grid.Base.y;

@@ -24,7 +24,8 @@ interface
 uses uzeentityfactory,uzgldrawcontext,uzedrawingdef,uzecamera,UGDBVectorSnapArray,
      uzestyleslayers,uzeentsubordinated,uzeentcurve,
      uzeentity,uzctnrVectorBytes,uzbtypes,uzeconsts,uzglviewareadata,
-     uzegeometrytypes,uzegeometry,uzeffdxfsupport,sysutils,uzctnrvectorpgdbaseobjects;
+     uzegeometrytypes,uzegeometry,uzeffdxfsupport,sysutils,uzctnrvectorpgdbaseobjects,
+     uzMVReader;
 type
 {Export+}
 PGDBObjPolyline=^GDBObjPolyline;
@@ -33,7 +34,7 @@ GDBObjPolyline= object(GDBObjCurve)
                  Closed:Boolean;(*saved_to_shd*)
                  constructor init(own:Pointer;layeraddres:PGDBLayerProp;LW:SmallInt;c:Boolean);
                  constructor initnul(owner:PGDBObjGenericWithSubordinated);
-                 procedure LoadFromDXF(var f:TZctnrVectorBytes;ptu:PExtensionData;var drawing:TDrawingDef);virtual;
+                 procedure LoadFromDXF(var f:TZMemReader;ptu:PExtensionData;var drawing:TDrawingDef);virtual;
 
                  procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext;Stage:TEFStages=EFAllStages);virtual;
                  procedure startsnap(out osp:os_record; out pdata:Pointer);virtual;
@@ -50,10 +51,14 @@ GDBObjPolyline= object(GDBObjCurve)
 
                  class function CreateInstance:PGDBObjPolyline;static;
                  function GetObjType:TObjID;virtual;
+                 function CalcTrueInFrustum(const frustum:ClipArray;visibleactualy:TActulity):TInBoundingVolume;virtual;
            end;
 {Export-}
 implementation
-//uses log;
+function GDBObjPolyline.CalcTrueInFrustum;
+begin
+  result:=VertexArrayInWCS.CalcTrueInFrustum(frustum,closed);
+end;
 function GDBObjPolyline.GetLength:Double;
 var
    ptpv0,ptpv1:PGDBVertex;
@@ -188,7 +193,7 @@ begin
   tv:=NulVertex;
 
   //initnul(@gdb.ObjRoot);
-  byt:=readmystrtoint(f);
+  byt:=f.ParseInteger;
   while true do
   begin
     s:='';
@@ -208,8 +213,8 @@ begin
                                                   if s='VERTEX' then vertexgo := true;
                                                   if s='SEQEND' then system.Break;
                                              end
-                                      else s:= f.readString;
-    byt:=readmystrtoint(f);
+                                      else s:= f.ParseString;
+    byt:=f.ParseInteger;
   end;
 
   vertexarrayinocs.SetSize(curveVertexArrayInWCS.Count);

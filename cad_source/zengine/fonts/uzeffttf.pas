@@ -26,11 +26,11 @@ type ptsyminfo=^tsyminfo;
      tsyminfo=record
                            number,size:word;
                      end;
-function CreateNewfontFromTTF(name:String;var pf:PGDBfont):Boolean;
+function CreateNewfontFromTTF(const name:String;var pf:PGDBfont):Boolean;
 
 implementation
 
-function CreateNewfontFromTTF(name:String;var pf:PGDBfont):Boolean;
+function CreateNewfontFromTTF(const name:String;var pf:PGDBfont):Boolean;
 var
   i:integer;
   chcode:integer;

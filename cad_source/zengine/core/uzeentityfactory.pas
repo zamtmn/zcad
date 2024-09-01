@@ -28,8 +28,8 @@ uses uzeentsubordinated,usimplegenerics,uzedrawingdef,uzeconsts,gzctnrSTL,
 type
 TAllocEntFunc=function:Pointer;
 TAllocAndInitEntFunc=function (owner:PGDBObjGenericWithSubordinated): PGDBObjEntity;
-TAllocAndInitAndSetGeomPropsFunc=function (owner:PGDBObjGenericWithSubordinated;args:array of const): PGDBObjEntity;
-TSetGeomPropsFunc=procedure (ent:PGDBObjEntity;args:array of const);
+TAllocAndInitAndSetGeomPropsFunc=function (owner:PGDBObjGenericWithSubordinated; const args:array of const): PGDBObjEntity;
+TSetGeomPropsFunc=procedure (ent:PGDBObjEntity; const args:array of const);
 TEntityUpgradeFunc=function (ptu:PExtensionData;ent:PGDBObjEntity;const drawing:TDrawingDef): PGDBObjEntity;
 TEntInfoData=record
                           DXFName,UserName:String;

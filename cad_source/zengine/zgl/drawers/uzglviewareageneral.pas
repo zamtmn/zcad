@@ -95,7 +95,7 @@ type
                            procedure asyncupdatemouse(Data: PtrInt);override;
                            procedure asyncsendmouse(Data: PtrInt);override;
                            procedure set3dmouse;override;
-                           procedure SetCameraPosZoom(_pos:gdbvertex;_zoom:Double;finalcalk:Boolean);override;
+                           procedure SetCameraPosZoom(const _pos:gdbvertex;_zoom:Double;finalcalk:Boolean);override;
                            procedure DISP_ZoomFactor(x: double{; MousePos: TPoint});
                            procedure showmousecursor;override;
                            procedure hidemousecursor;override;
@@ -1189,7 +1189,12 @@ procedure TGeneralViewArea.ZoomToVolume(Volume:TBoundingBox);
                                                                            DebugLn('{WH}'+'ZoomToVolume: Пустой чертеж?');
                                                                            exit;
                                                                       end;
-    target:=createvertex(-(wcsLBN.x+(wcsRTF.x-wcsLBN.x)/2),-(wcsLBN.y+(wcsRTF.y-wcsLBN.y)/2),-(wcsLBN.z+(wcsRTF.z-wcsLBN.z)/2));
+    //без этого разделения камера уползает по Z
+    if IsPointEqual(pdwg.Getpcamera^.prop.look,xy_MinusZ_Vertex) then
+      //добавоено чтоб не уполжала камера
+      target:=createvertex(-(wcsLBN.x+(wcsRTF.x-wcsLBN.x)/2),-(wcsLBN.y+(wcsRTF.y-wcsLBN.y)/2),pdwg.Getpcamera^.prop.point.z)
+    else
+      target:=createvertex(-(wcsLBN.x+(wcsRTF.x-wcsLBN.x)/2),-(wcsLBN.y+(wcsRTF.y-wcsLBN.y)/2),-(wcsLBN.z+(wcsRTF.z-wcsLBN.z)/2));
     camerapos:=pdwg.Getpcamera^.prop.point;
     target:=vertexsub(target,camerapos);
 
@@ -1260,7 +1265,7 @@ begin
   doCameraChanged;
 end;
 
-procedure TGeneralViewArea.SetCameraPosZoom(_pos:gdbvertex;_zoom:Double;finalcalk:Boolean);
+procedure TGeneralViewArea.SetCameraPosZoom(const _pos:gdbvertex;_zoom:Double;finalcalk:Boolean);
 var
   fv1: GDBVertex;
 begin
@@ -2521,8 +2526,7 @@ begin
 
   tm:=pcamera^.modelMatrix;
   //MatrixInvert(tm);
-  pcamera^.CamCSOffset:=uzegeometry.VectorTransform3D(pcamera^.CamCSOffset,tm);
-  pcamera^.CamCSOffset:=pcamera^.prop.point;
+  pcamera^.CamCSOffset:=pcamera^.prop.point-pcamera^.prop.look*(pcamera^.zmax+pcamera^.zmin)/2;
 
   {получение центра виевфрустума}
   tm:=uzegeometry.CreateTranslationMatrix({minusvertex(pdwg.pcamera^.CamCSOffset)}nulvertex);

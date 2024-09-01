@@ -113,10 +113,10 @@ function Cos_TInteger(var stack: operandstack): vardesk;
 //function DecodeStringBase64_TAnsiString(var stack: operandstack): vardesk;
 function DecodeStringBase64_TGBDString(var stack: operandstack): vardesk;
 
-function itbasicoperator(expr: String): Integer;
-function itbasicfunction(expr: String): Integer;
-function findbasicoperator(expr: String; rez, hrez: {PUserTypeDescriptor}vardesk): Integer;
-function findbasicfunction(name: String; opstack: operandstack): Integer;
+function itbasicoperator(const expr: String): Integer;
+function itbasicfunction(const expr: String): Integer;
+function findbasicoperator(const expr: String; rez, hrez: {PUserTypeDescriptor}vardesk): Integer;
+function findbasicfunction(const name: String; opstack: operandstack): Integer;
 const
   basicoperatorname: array[1..basicoperatorcount] of operatornam =
   (
@@ -197,7 +197,7 @@ begin
                                              end;
 end;
 
-function findbasicfunction(name: String; opstack: operandstack): Integer;
+function findbasicfunction(const name: String; opstack: operandstack): Integer;
 var
   i{, j}: Integer;
 begin
@@ -592,7 +592,7 @@ begin
   result := r;
 end;
 
-function itbasicoperator(expr: String): Integer;
+function itbasicoperator(const expr: String): Integer;
 var
   i: Integer;
 begin
@@ -605,7 +605,7 @@ begin
     end
 end;
 
-function itbasicfunction(expr: String): Integer;
+function itbasicfunction(const expr: String): Integer;
 var
   i: Integer;
 begin
@@ -618,7 +618,7 @@ begin
     end
 end;
 
-function findbasicoperator(expr: String; rez, hrez: vardesk): Integer;
+function findbasicoperator(const expr: String; rez, hrez: vardesk): Integer;
 var
   i: Integer;
   rezptd,hrezptd:PUserTypeDescriptor;

@@ -24,7 +24,8 @@ uses uzepalette,uzeobjectextender,uzgldrawerabstract,uzgldrawcontext,uzedrawingd
      uzecamera,uzeentitiesprop,uzestyleslinetypes,
      uzegeometrytypes,UGDBControlPointArray,uzeentsubordinated,uzbtypes,uzeconsts,
      uzglviewareadata,uzegeometry,uzeffdxfsupport,sysutils,uzctnrVectorBytes,
-     uzestyleslayers,uzeenrepresentation,LazLogger,uzctnrvectorpgdbaseobjects;
+     uzestyleslayers,uzeenrepresentation,LazLogger,uzctnrvectorpgdbaseobjects,
+     uzMVReader;
 type
 taddotrac=procedure (var posr:os_record;const axis:GDBVertex) of object;
 {Export+}
@@ -61,8 +62,8 @@ GDBObjEntity= object(GDBObjSubordinated)
                     constructor init(own:Pointer;layeraddres:PGDBLayerProp;LW:SmallInt);
                     constructor initnul(owner:PGDBObjGenericWithSubordinated);
                     procedure SaveToDXFObjPrefix(var  outhandle:{Integer}TZctnrVectorBytes;entname,dbname:String;var IODXFContext:TIODXFContext;notprocessHandle:boolean=false);
-                    function LoadFromDXFObjShared(var f:TZctnrVectorBytes;dxfcod:Integer;ptu:PExtensionData;var drawing:TDrawingDef):Boolean;
-                    function ProcessFromDXFObjXData(_Name,_Value:String;ptu:PExtensionData;const drawing:TDrawingDef):Boolean;virtual;
+                    function LoadFromDXFObjShared(var f:TZMemReader;DXFCode:Integer;ptu:PExtensionData;var drawing:TDrawingDef):Boolean;
+                    function ProcessFromDXFObjXData(const _Name,_Value:String;ptu:PExtensionData;const drawing:TDrawingDef):Boolean;virtual;
                     function FromDXFPostProcessBeforeAdd(ptu:PExtensionData;const drawing:TDrawingDef):PGDBObjSubordinated;virtual;
                     procedure FromDXFPostProcessAfterAdd;virtual;
                     procedure postload(var context:TIODXFLoadContext);virtual;
@@ -72,7 +73,7 @@ GDBObjEntity= object(GDBObjSubordinated)
                     procedure createfield;virtual;
                     function AddExtAttrib:PTExtAttrib;
                     function CopyExtAttrib:PTExtAttrib;
-                    procedure LoadFromDXF(var f: TZctnrVectorBytes;ptu:PExtensionData;var drawing:TDrawingDef);virtual;abstract;
+                    procedure LoadFromDXF(var f:TZMemReader;ptu:PExtensionData;var drawing:TDrawingDef);virtual;abstract;
                     procedure SaveToDXF(var outhandle:{Integer}TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
                     procedure DXFOut(var outhandle:{Integer}TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
                     procedure SaveToDXFfollow(var outhandle:{Integer}TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
@@ -111,12 +112,12 @@ GDBObjEntity= object(GDBObjSubordinated)
                     function GetLTCorrectL(GlobalLTScale:Double):Double;virtual;
                     procedure calcbb(var DC:TDrawContext);virtual;
                     procedure DrawBB(var DC:TDrawContext);
-                    function calcvisible(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:Integer; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double):Boolean;virtual;
+                    function calcvisible(const frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:Integer; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double):Boolean;virtual;
 
                     function onmouse(var popa:TZctnrVectorPGDBaseObjects;const MF:ClipArray;InSubEntry:Boolean):Boolean;virtual;
                     function onpoint(var objects:TZctnrVectorPGDBaseObjects;const point:GDBVertex):Boolean;virtual;
 
-                    function isonmouse(var popa:TZctnrVectorPGDBaseObjects;mousefrustum:ClipArray;InSubEntry:Boolean):Boolean;virtual;
+                    function isonmouse(var popa:TZctnrVectorPGDBaseObjects;const mousefrustum:ClipArray;InSubEntry:Boolean):Boolean;virtual;
                     procedure startsnap(out osp:os_record; out pdata:Pointer);virtual;
                     function getsnap(var osp:os_record; var pdata:Pointer; const param:OGLWndtype; ProjectProc:GDBProjectProc;SnapMode:TGDBOSMode):Boolean;virtual;
                     procedure endsnap(out osp:os_record; var pdata:Pointer);virtual;
@@ -141,7 +142,7 @@ GDBObjEntity= object(GDBObjSubordinated)
                     function GetMainOwner:PGDBObjSubordinated;virtual;
                     function getmatrix:PDMatrix4D;virtual;
                     function getownermatrix:PDMatrix4D;virtual;
-                    function ObjToString(prefix,sufix:String):String;virtual;
+                    function ObjToString(const prefix,sufix:String):String;virtual;
                     function ReturnLastOnMouse(InSubEntry:Boolean):PGDBObjEntity;virtual;
                     procedure YouDeleted(var drawing:TDrawingDef);virtual;
                     procedure YouChanged(var drawing:TDrawingDef);virtual;
@@ -159,8 +160,8 @@ GDBObjEntity= object(GDBObjSubordinated)
                     procedure SetInFrustum(infrustumactualy:TActulity;var totalobj,infrustumobj:Integer);virtual;
                     procedure SetInFrustumFromTree(const frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:Integer; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double);virtual;
                     procedure SetNotInFrustum(infrustumactualy:TActulity;var totalobj,infrustumobj:Integer);virtual;
-                    function CalcInFrustum(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:Integer; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double):Boolean;virtual;
-                    function CalcTrueInFrustum(frustum:ClipArray;visibleactualy:TActulity):TInBoundingVolume;virtual;
+                    function CalcInFrustum(const frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:Integer; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double):Boolean;virtual;
+                    function CalcTrueInFrustum(const frustum:ClipArray;visibleactualy:TActulity):TInBoundingVolume;virtual;
                     function IsIntersect_Line(lbegin,lend:gdbvertex):Intercept3DProp;virtual;
                     procedure BuildGeometry(var drawing:TDrawingDef);virtual;
                     procedure AddOnTrackAxis(var posr:os_record; const processaxis:taddotrac);virtual;
@@ -168,7 +169,7 @@ GDBObjEntity= object(GDBObjSubordinated)
                     function CalcObjMatrixWithoutOwner:DMatrix4D;virtual;
 
                     procedure EraseMi(pobj:pGDBObjEntity;pobjinarray:Integer;var drawing:TDrawingDef);virtual;
-                    function GetTangentInPoint(point:GDBVertex):GDBVertex;virtual;
+                    function GetTangentInPoint(const point:GDBVertex):GDBVertex;virtual;
                     procedure CalcObjMatrix(pdrawing:PTDrawingDef=nil);virtual;
                     procedure ReCalcFromObjMatrix;virtual;
                     procedure correctsublayers(var la:GDBLayerArray);virtual;
@@ -279,7 +280,7 @@ begin
 
 end;
 
-function GDBObjEntity.GetTangentInPoint(point:GDBVertex):GDBVertex;
+function GDBObjEntity.GetTangentInPoint(const point:GDBVertex):GDBVertex;
 begin
      result:=nulvertex;
 end;
@@ -462,7 +463,7 @@ function GDBObjEntity.ReturnLastOnMouse;
 begin
      result:=@self;
 end;
-function GDBObjEntity.ObjToString(prefix,sufix:String):String;
+function GDBObjEntity.ObjToString(const prefix,sufix:String):String;
 begin
      result:=prefix+'#'+inttohex(PtrInt(@self),10)+sufix;
 end;
@@ -1184,116 +1185,73 @@ begin
      result:=false;
 end;
 function GDBObjEntity.LoadFromDXFObjShared;
-var APP_NAME:String;
-    XGroup:Integer;
-    XValue:String;
-    Name,Value{,vn,vt,vv,vun}:String;
-    i:integer;
-//    vd: vardesk;
+var
+  APP_NAME:ShortString;
+  XGroup:Integer;
+  XValue:String;
+  Name,Value:String;
+  i:integer;
 begin
-     result:=false;
-     case dxfcod of
-                5:begin
-                          if AddExtAttrib^.dwgHandle=0 then begin
-                            if not TryStrToQWord('$'+readmystr(f),PExtAttrib^.dwgHandle)then
-                              begin
-                                //нужно залупиться
-                              end
-                          end else begin
-                            readmystr(f);
-                            //нужно залупиться
-                          end;
-                          result:=true;
-                  end;
-                6:begin
-                       //vp.LineType:=readmystr(f);
-                       vp.LineType:=drawing.GetLTypeTable.getAddres(readmystr(f));
-                       result:=true
-                  end;
-                     8:begin
-                          if {vp.layer.name=LNSysLayerName}vp.layer=@DefaultErrorLayer then
-                                                   begin
-                                                        name:=readmystr(f);
-                                                   vp.Layer :=drawing.getlayertable.getAddres(name);
-                                                   if vp.Layer=nil then
-                                                                        vp.Layer:=vp.Layer;
-                                                   end
-                                               else
-                                                   APP_NAME:=readmystr(f);
-                          result:=true
-                     end;
-                    48:begin
-                            vp.LineTypeScale :=readmystrtodouble(f);
-                            result:=true
-                       end;
-                    62:begin
-                            vp.color:=readmystrtoint(f);
-                            result:=true
-                       end;
-                 370:begin
-                          vp.lineweight :=readmystrtoint(f);
-                          result:=true
-                     end;
-                1001:begin
-                          APP_NAME:=readmystr(f);
-                          result:=true;
-                          if APP_NAME=ZCADAppNameInDXF then
-                          begin
-                               repeat
-                                 XGroup:=readmystrtoint(f);
-                                 XValue:=readmystr(f);
-                                 if XGroup=1000 then
-                                                    begin
-                                                         i:=pos('=',Xvalue);
-                                                         Name:=copy(Xvalue,1,i-1);
-                                                         if name='' then
-                                                                        name:='empty';
-                                                         Value:=copy(Xvalue,i+1,length(xvalue)-i);
-                                                         (*if Name='_OWNERHANDLE' then
-                                                                                 begin
-                                                                                      {$IFNDEF DELPHI}
-                                                                                      if not TryStrToQWord('$'+value,self.AddExtAttrib^.OwnerHandle)then
-                                                                                      {$ENDIF}
-                                                                                      begin
-                                                                                           //нужно залупиться
-                                                                                      end;
-
-                                                                                      //self.AddExtAttrib^.OwnerHandle:=StrToInt('$'+value);
-                                                                                 end;
-                                                         if Name='_HANDLE' then
-                                                                               begin
-                                                                                    {$IFNDEF DELPHI}
-                                                                                    if not TryStrToQWord('$'+value,self.AddExtAttrib^.Handle)then
-                                                                                    {$ENDIF}
-                                                                                    begin
-                                                                                         //нужно залупиться
-                                                                                    end;
-                                                                                    //self.AddExtAttrib^.Handle:=strtoint('$'+value);
-                                                                               end;
-                                                         if Name='_UPGRADE' then
-                                                                               begin
-                                                                                    self.AddExtAttrib^.Upgrade:=strtoint(value);
-                                                                               end;
-                                                         if Name='_LAYER' then
-                                                                               begin
-                                                                                    vp.Layer:=drawing.getlayertable.getAddres(value);
-                                                                               end;
-
-                                                    //else*)
-                                                           ProcessFromDXFObjXData(Name,Value,ptu,drawing);
-                                                    end;
-                               until (XGroup=1002)and(XValue='}')
-                          end;
-
-                     end;
-     end;
-
+  result:=false;
+  case DXFCode of
+    5:begin
+      if AddExtAttrib^.dwgHandle=0 then begin
+        PExtAttrib^.dwgHandle:=f.ParseHexInteger;
+      end else begin
+        //при загрузке полилинии у вертексов есть хэндл
+        f.SkipString;
+      end;
+      result:=true;
+    end;
+    6:begin
+      vp.LineType:=drawing.GetLTypeTable.getAddres(f.ParseShortString);
+      result:=true
+    end;
+    8:begin
+      if vp.layer=@DefaultErrorLayer then begin
+        vp.Layer :=drawing.getlayertable.getAddres(f.ParseShortString);
+        if vp.Layer=nil then
+          vp.Layer:=vp.Layer;
+      end else
+        APP_NAME:=f.ParseString;
+        result:=true
+    end;
+    48:begin
+      vp.LineTypeScale:=f.ParseDouble;
+      result:=true
+    end;
+    62:begin
+      vp.color:=f.ParseInteger;
+      result:=true
+    end;
+    370:begin
+      vp.lineweight:=f.ParseInteger;
+      result:=true
+    end;
+    1001:begin
+      APP_NAME:=f.ParseShortString;
+      result:=true;
+      if (Length(APP_NAME) = Length(ZCADAppNameInDXF)) and
+         (StrLComp(@APP_NAME[1], @ZCADAppNameInDXF[1], Length(APP_NAME))=0) then begin
+        repeat
+          XGroup:=f.ParseInteger;
+          XValue:=f.ParseString;
+          if XGroup=1000 then begin
+            i:=pos('=',Xvalue);
+            if i>1 then Name:=copy(Xvalue,1,i-1) else name:='empty';
+            Value:=copy(Xvalue,i+1,length(xvalue)-i);
+            ProcessFromDXFObjXData(Name,Value,ptu,drawing);
+          end;
+        until (XGroup=1002)and(XValue='}')
+      end;
+    end;
+  end;
 end;
 class function GDBObjEntity.GetDXFIOFeatures:TDXFEntIODataManager;
 begin
   result:=GDBObjEntityDXFFeatures;
 end;
-function GDBObjEntity.ProcessFromDXFObjXData(_Name,_Value:String;ptu:PExtensionData;const drawing:TDrawingDef):Boolean;
+function GDBObjEntity.ProcessFromDXFObjXData(const _Name,_Value:String;ptu:PExtensionData;const drawing:TDrawingDef):Boolean;
 var
    features:TDXFEntIODataManager;
    FeatureLoadProc:TDXFEntLoadFeature;

@@ -35,7 +35,7 @@ ArrayDescriptor=object(TUserTypeDescriptor)
                      Indexs:{GDBOpenArrayOfData}TArrayIndexDescriptorVector;
                      constructor init(var t:PUserTypeDescriptor;tname:string;pu:pointer);
                      procedure AddIndex(var Index:ArrayIndexDescriptor);
-                     function CreateProperties(const f:TzeUnitsFormat;mode:PDMode;PPDA:PTPropertyDeskriptorArray;Name:TInternalScriptString;PCollapsed:Pointer;ownerattrib:Word;var bmode:Integer;const addr:Pointer;ValKey,ValType:TInternalScriptString):PTPropertyDeskriptorArray;virtual;
+                     function CreateProperties(const f:TzeUnitsFormat;mode:PDMode;PPDA:PTPropertyDeskriptorArray;const Name:TInternalScriptString;PCollapsed:Pointer;ownerattrib:Word;var bmode:Integer;const addr:Pointer;const ValKey,ValType:TInternalScriptString):PTPropertyDeskriptorArray;virtual;
                      destructor Done;virtual;
                      function GetValueAsString(pinstance:Pointer):TInternalScriptString;virtual;
                end;
@@ -87,7 +87,7 @@ end;
 function ArrayDescriptor.CreateProperties;
 var ppd:PPropertyDeskriptor;
 begin
-     zTraceLn(sysutils.Format('{T}[ZSCRIPT]ArrayDescriptor.CreateProperties(%s)',[name]));
+     zTraceLn('{T}[ZSCRIPT]ArrayDescriptor.CreateProperties(%s)',[name]);
      //programlog.LogOutFormatStr('ArrayDescriptor.CreateProperties(%s)',[name],lp_OldPos,LM_Trace);
      ppd:=GetPPD(ppda,bmode);
      ppd^.Name:=name;

@@ -26,7 +26,7 @@ uses
     uzbstrproc,uzefont,uzeentabstracttext,UGDBPoint3DArray,uzestyleslayers,SysUtils,
     uzeentity,UGDBOutbound2DIArray,uzctnrVectorBytes,
     uzbtypes,uzeenttext,uzeconsts,uzegeometry,uzeffdxfsupport,math,uzeentsubordinated,
-    gzctnrVectorTypes,uzegeometrytypes,uzestylestexts,StrUtils,gzctnrVector;
+    gzctnrVectorTypes,uzegeometrytypes,uzestylestexts,StrUtils,gzctnrVector,uzMVReader;
 const maxdxfmtextlen=250;
 type
 //procedure CalcObjMatrix;virtual;
@@ -44,7 +44,7 @@ GDBObjMText= object(GDBObjText)
                  text:XYZWStringArray;(*oi_readonly*)(*hidden_in_objinsp*)
                  constructor init(own:Pointer;layeraddres:PGDBLayerProp;LW:SmallInt;c:TDXFEntsInternalStringType;p:GDBvertex;s,o,w,a:Double;j:TTextJustify;wi,l:Double);
                  constructor initnul(owner:PGDBObjGenericWithSubordinated);
-                 procedure LoadFromDXF(var f: TZctnrVectorBytes;ptu:PExtensionData;var drawing:TDrawingDef);virtual;
+                 procedure LoadFromDXF(var f:TZMemReader;ptu:PExtensionData;var drawing:TDrawingDef);virtual;
                  procedure SaveToDXF(var outhandle:{Integer}TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
                  procedure CalcGabarit(const drawing:TDrawingDef);virtual;
                  //procedure getoutbound;virtual;
@@ -62,7 +62,7 @@ GDBObjMText= object(GDBObjText)
                  function GetObjType:TObjID;virtual;
             end;
 {Export-}
-procedure FormatMtext(pfont:pgdbfont;width,size,wfactor:Double;content:TDXFEntsInternalStringType;var text:XYZWStringArray);
+procedure FormatMtext(pfont:pgdbfont;width,size,wfactor:Double;const content:TDXFEntsInternalStringType;var text:XYZWStringArray);
 function GetLinesH(linespace,size:Double;var lines:XYZWStringArray):Double;
 function GetLinesW(var lines:XYZWStringArray):Double;
 function GetLineSpaceFromLineSpaceF(linespacef,size:Double):Double;
@@ -155,7 +155,7 @@ begin
                else
                    result:=0;
 end;
-procedure FormatMtext(pfont:pgdbfont;width,size,wfactor:Double;content:TDXFEntsInternalStringType;var text:XYZWStringArray);
+procedure FormatMtext(pfont:pgdbfont;width,size,wfactor:Double;const content:TDXFEntsInternalStringType;var text:XYZWStringArray);
 var
   canbreak: Boolean;
   currsymbol, lastbreak, lastcanbreak: Integer;
@@ -927,7 +927,7 @@ begin
   style:='';
   ttemplate:='';
   j:=0;
-  byt:=readmystrtoint(f);
+  byt:=f.ParseInteger;
   while byt <> 0 do
   begin
     if not LoadFromDXFObjShared(f,byt,ptu,drawing) then
@@ -948,8 +948,8 @@ begin
                                                  if TXTStyleIndex=nil then
                                                                      TXTStyleIndex:=pointer(drawing.GetTextStyleTable^.getDataMutable(0));
                                                  end
-    else {s := }f.readString;
-    byt:=readmystrtoint(f);
+    else {s := }f.SkipString;
+    byt:=f.ParseInteger;
   end;
   if TXTStyleIndex=nil then
                            begin

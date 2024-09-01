@@ -50,7 +50,7 @@ type
     LAPEData:TLAPEData;
     Ctx:TBaseScriptContext;
     FIndividualCDA:TCompilerDefAdders;
-    constructor CreateRec(AFileName:string);
+    constructor CreateRec(const AFileName:string);
   end;
 
   {TExternalScriptData=record
@@ -69,16 +69,16 @@ type
     FCDA:TCompilerDefAdders;
     CtxClass:TMetaScriptContext;
 
-    procedure FoundScriptFile(FileName:String;PData:Pointer);
+    procedure FoundScriptFile(const FileName:String;PData:Pointer);
 
-    constructor Create(AScriptsType:String;ACtxClass:TMetaScriptContext;ACDA:TCompilerDefAdders);
+    constructor Create(const AScriptsType:String;ACtxClass:TMetaScriptContext;ACDA:TCompilerDefAdders);
     destructor Destroy;override;
 
-    procedure ScanDir(DirPath:string);
-    procedure ScanDirs(DirPaths:string);
+    procedure ScanDir(const DirPath:string);
+    procedure ScanDirs(const DirPaths:string);
 
-    procedure RunScript(AScriptName:string);overload;
-    function CreateExternalScriptData(AScriptName:string;AICtxClass:TMetaScriptContext;AICDA:TCompilerDefAdders):TScriptData;
+    procedure RunScript(const AScriptName:string);overload;
+    function CreateExternalScriptData(const AScriptName:string;AICtxClass:TMetaScriptContext;AICDA:TCompilerDefAdders):TScriptData;
     class procedure FreeExternalScriptData(var ESD:TScriptData);
     procedure RunScript(var SD:TScriptData);overload;
     procedure CheckScriptActuality(var SD:TScriptData);
@@ -92,7 +92,7 @@ type
           Description:string;
           CtxClass:TMetaScriptContext;
           FCDA:TCompilerDefAdders;
-          constructor CreateRec(AScriptsType:TScriptsType;ADescription:string;ACtxClass:TMetaScriptContext;AFCDA:TCompilerDefAdders);
+          constructor CreateRec(const AScriptsType:TScriptsType;ADescription:string;ACtxClass:TMetaScriptContext;AFCDA:TCompilerDefAdders);
         end;
         PTScriptTypeData=^TScriptTypeData;
         TScriptTypeData=record
@@ -110,7 +110,7 @@ type
     public
       constructor Create;
       destructor Destroy;override;
-      function CreateType(AScriptsType:TScriptsType;ADescription:string;
+      function CreateType(const AScriptsType:TScriptsType;ADescription:string;
                           ACtxClass:TMetaScriptContext;AFCDA:TCompilerDefAdders)
 :TScriptsManager;
   end;
@@ -121,7 +121,7 @@ var
 
 implementation
 
-constructor TScriptsTypeManager.TScriptTypeDesc.CreateRec(AScriptsType:TScriptsType;ADescription:string;ACtxClass:TMetaScriptContext;AFCDA:TCompilerDefAdders);
+constructor TScriptsTypeManager.TScriptTypeDesc.CreateRec(const AScriptsType:TScriptsType;ADescription:string;ACtxClass:TMetaScriptContext;AFCDA:TCompilerDefAdders);
 begin
   ScriptsType:=AScriptsType;
   Description:=ADescription;
@@ -175,7 +175,7 @@ begin
   inherited;
 end;
 
-function TScriptsTypeManager.CreateType(AScriptsType:TScriptsType;ADescription:string;ACtxClass:TMetaScriptContext;AFCDA:TCompilerDefAdders):TScriptsManager;
+function TScriptsTypeManager.CreateType(const AScriptsType:TScriptsType;ADescription:string;ACtxClass:TMetaScriptContext;AFCDA:TCompilerDefAdders):TScriptsManager;
   function addScriptsType:TScriptsManager;
   begin
     result:=TScriptsManager.Create(AScriptsType,ACtxClass,AFCDA);
@@ -187,14 +187,14 @@ begin
   if CreateSTN2SNDIfNeeded then
     result:=addScriptsType
   else begin
-    if STN2SND.MyGetMutableValue(AScriptsType,PSTD) then
+    if STN2SND.tryGetMutableValue(AScriptsType,PSTD) then
       result:=PSTD.Manager
     else
       result:=addScriptsType;
   end;
 end;
 
-constructor TScriptData.CreateRec(AFileName:string);
+constructor TScriptData.CreateRec(const AFileName:string);
 begin
   FileData.Name:=AFileName;
   FileData.Age:=-1;
@@ -204,7 +204,7 @@ begin
   Ctx:=nil;
 end;
 
-constructor TScriptsmanager.Create(AScriptsType:String;ACtxClass:TMetaScriptContext;ACDA:TCompilerDefAdders);
+constructor TScriptsmanager.Create(const AScriptsType:String;ACtxClass:TMetaScriptContext;ACDA:TCompilerDefAdders);
 begin
   FScriptType:=AScriptsType;
   FScriptFileMask:=format('*.%s',[AScriptsType]);
@@ -219,13 +219,13 @@ begin
 end;
 
 
-procedure TScriptsmanager.FoundScriptFile(FileName:String;PData:Pointer);
+procedure TScriptsmanager.FoundScriptFile(const FileName:String;PData:Pointer);
 var
   scrname:string;
   PSD:PTScriptData;
 begin
   scrname:=UpperCase(ChangeFileExt(ExtractFileName(FileName),''));
-  if not SN2SD.MyGetMutableValue(scrname,PSD) then begin
+  if not SN2SD.tryGetMutableValue(scrname,PSD) then begin
     SN2SD.Add(scrname,TScriptData.CreateRec(FileName));
   end;
 end;
@@ -263,13 +263,13 @@ begin
   end;
 end;
 
-procedure TScriptsmanager.RunScript(AScriptName:string);
+procedure TScriptsmanager.RunScript(const AScriptName:string);
 var
   scrname:string;
   PSD:PTScriptData;
 begin
   scrname:=UpperCase(AScriptName);
-  if SN2SD.MyGetMutableValue(scrname,PSD) then
+  if SN2SD.tryGetMutableValue(scrname,PSD) then
     RunScript(PSD^)
   else
     raise Exception.CreateFmt('Script "%s" (type "%s", file mask "%s") not found',[AScriptName,FScriptType,FScriptFileMask]);
@@ -299,7 +299,7 @@ begin
   end;
 end;
 
-function TScriptsmanager.CreateExternalScriptData(AScriptName:string;AICtxClass:TMetaScriptContext;AICDA:TCompilerDefAdders):TScriptData;
+function TScriptsmanager.CreateExternalScriptData(const AScriptName:string;AICtxClass:TMetaScriptContext;AICDA:TCompilerDefAdders):TScriptData;
 var
   scrname:string;
   PSD:PTScriptData;
@@ -308,7 +308,7 @@ begin
   result.LAPEData.FCompiler:=nil;
   result.FileData.Age:=-1;
   result.FIndividualCDA:=AICDA;
-  if SN2SD.MyGetMutableValue(scrname,PSD) then begin
+  if SN2SD.tryGetMutableValue(scrname,PSD) then begin
     result.FileData.Name:=PSD^.FileData.Name;
     if AICtxClass<>nil then
       result.Ctx:=AICtxClass.Create
@@ -329,11 +329,11 @@ begin
   FreeAndNil(ESD.Ctx);
 end;
 
-procedure TScriptsmanager.ScanDir(DirPath:string);
+procedure TScriptsmanager.ScanDir(const DirPath:string);
 begin
   FromDirIterator(utf8tosys(DirPath),FScriptFileMask,'',nil,FoundScriptFile);
 end;
-procedure TScriptsmanager.ScanDirs(DirPaths:string);
+procedure TScriptsmanager.ScanDirs(const DirPaths:string);
 begin
   FromDirsIterator(utf8tosys(DirPaths),FScriptFileMask,'',nil,FoundScriptFile);
 end;

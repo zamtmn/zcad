@@ -27,7 +27,7 @@ type
 {----REGISTEROBJECTTYPE GZVectorSimple}
 GZVectorStr{-}<T>{//}=object
                             (GZVectorSimple{-}<T>{//})
-                        procedure loadfromfile(fname:RawByteString);
+                        procedure loadfromfile(const fname:RawByteString);
                         function findstring(s:T;ucase:Boolean):integer;
                         procedure sort;virtual;
                         procedure SortAndSaveIndex(var index:TArrayIndex);virtual;
@@ -37,7 +37,7 @@ GZVectorStr{-}<T>{//}=object
                       end;
 {Export-}
 implementation
-procedure GZVectorStr<T>.loadfromfile(fname:RawByteString);
+procedure GZVectorStr<T>.loadfromfile(const fname:RawByteString);
 var f:TZctnrVectorBytes;
     line:AnsiString;
 begin

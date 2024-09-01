@@ -40,7 +40,8 @@ var
   LDMMHDL,                  //опция ldmm -(Log Disable Modules Mask) запрещение записи в лог модулей с именем удовлетворяющим маске, требует аргумент(ы)
   LCLHDL,                   //опция lcl -(Log Current Level) установка текущего уровня лога, требует аргумент
   MaxStackFrameCountHDL,    //опция MaxStackFrameCount - максимальная глубина стека для обработчика исключений
-  RunScript                //опция runscript - запуск скрипта при старте программы, требует аргумент(ы)
+  RunScript,                //опция runscript - запуск скрипта при старте программы, требует аргумент(ы)
+  MemProfiling              //опция nosplash - не показывать сплэш
   :TCLOptionHandle;
 
 implementation
@@ -60,6 +61,7 @@ initialization
   LCLHDL:=CommandLineParser.RegisterArgument('lcl',AT_WithOperands);
   MaxStackFrameCountHDL:=CommandLineParser.RegisterArgument('maxstackframecount',AT_WithOperands);
   RunScript:=CommandLineParser.RegisterArgument('runscript',AT_WithOperands);
+  MemProfiling:=CommandLineParser.RegisterArgument('memprofiling',AT_WithOperands);
   CommandLineParser.ParseCommandLine;
 finalization
   CommandLineParser.Done;

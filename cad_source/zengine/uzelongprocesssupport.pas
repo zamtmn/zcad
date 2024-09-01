@@ -22,13 +22,15 @@ unit uzelongprocesssupport;
 
 
 interface
-uses sysutils,gzctnrSTL,LazLogger;
+uses sysutils,gzctnrSTL,LazLogger,uzbSets;
 const
   LPSHEmpty=-1;
+  LPSDefaultOptions=0;
 type
 TLPSHandle=integer;
 TLPSCounter=integer;
 TLPName=string;
+TLPOpt=LongWord;
 
 TOnLPStartProc=procedure(LPHandle:TLPSHandle;Total:TLPSCounter;LPName:TLPName) of object;
 TOnLPProgressProc=procedure(LPHandle:TLPSHandle;Current:TLPSCounter) of object;
@@ -39,6 +41,7 @@ TLPInfo=record
               LPContext:Pointer;
               LPUseCounter:Integer;
               LPTime:TDateTime;
+              Options:TLPOpt;
         end;
 TLPInfoVector=TMyVector<TLPInfo>;
 PTLPInfo=^TLPInfo;
@@ -48,9 +51,11 @@ TOnLPEndProcVector=TMyVector<TOnLPEndProc>;
 
 TZELongProcessSupport=class
                        private
-                       {type
-                         PTLPInfo=TLPInfoVector.PT;}
+                       type
+                         TMsgOptions=GTSet<TLPOpt,TLPOpt>;
+                         {PTLPInfo=TLPInfoVector.PT;}
                        var
+                         OptionsGenerator:TMsgOptions;
                          ActiveProcessCount:Integer;
                          LPInfoVector:TLPInfoVector;
                          OnLPStartProcVector:TOnLPStartProcVector;
@@ -61,7 +66,7 @@ TZELongProcessSupport=class
                          procedure DoEndLongProcess(plpi:PTLPInfo;LPHandle:TLPSHandle);
 
                        public
-                         function StartLongProcess(LPName:TLPName;Context:pointer;Total:TLPSCounter=0):TLPSHandle;
+                         function StartLongProcess(LPName:TLPName;Context:pointer;Total:TLPSCounter=0;Options:TLPOpt=LPSDefaultOptions):TLPSHandle;
                          procedure ProgressLongProcess(LPHandle:TLPSHandle;Current:TLPSCounter);
                          procedure EndLongProcess(LPHandle:TLPSHandle);
 
@@ -72,19 +77,33 @@ TZELongProcessSupport=class
                          destructor Destroy;override;
                          function isProcessed:boolean;
                          function isFirstProcess:boolean;
-                         function getLPName(index:integer):TLPName;
+                         function getLPName(LPHandle:TLPSHandle):TLPName;
+                         function hasOptions(LPHandle:TLPSHandle;Options:TLPOpt):boolean;
+                         function CreateOption:TLPOpt;
                        end;
 var
   LPS:TZELongProcessSupport;
+  LPSOSilent:TLPOpt;
 implementation
-function TZELongProcessSupport.getLPName(index:integer):TLPName;
+
+function TZELongProcessSupport.CreateOption:TLPOpt;
 begin
-  if index<LPInfoVector.Size then
-    result:=LPInfoVector.Mutable[index].LPName
+ result:=OptionsGenerator.GetEnum;
+end;
+function TZELongProcessSupport.getLPName(LPHandle:TLPSHandle):TLPName;
+begin
+  if LPHandle<LPInfoVector.Size then
+    result:=LPInfoVector.Mutable[LPHandle].LPName
   else
     result:='';
 end;
-
+function TZELongProcessSupport.hasOptions(LPHandle:TLPSHandle;Options:TLPOpt):boolean;
+begin
+  if LPHandle<LPInfoVector.Size then
+    result:=OptionsGenerator.IsAllPresent(LPInfoVector.Mutable[LPHandle].Options,Options)
+  else
+    result:=false;
+end;
 function TZELongProcessSupport.isProcessed:boolean;
 begin
   result:=ActiveProcessCount>0;
@@ -115,11 +134,11 @@ procedure TZELongProcessSupport.DoEndLongProcess(plpi:PTLPInfo;LPHandle:TLPSHand
 var
   i:integer;
 begin
-  if OnLPProgressProcVector.size>0 then
+  if OnLPEndProcVector.size>0 then
     for i:=0 to OnLPEndProcVector.size-1 do
       OnLPEndProcVector[i](LPHandle,plpi^.LPTime);
 end;
-function TZELongProcessSupport.StartLongProcess(LPName:TLPName;Context:pointer;Total:TLPSCounter):TLPSHandle;
+function TZELongProcessSupport.StartLongProcess(LPName:TLPName;Context:pointer;Total:TLPSCounter=0;Options:TLPOpt=LPSDefaultOptions):TLPSHandle;
 var
   LPI:TLPInfo;
   PLPI:PTLPInfo;
@@ -139,6 +158,7 @@ begin
   LPI.LPTotal:=Total;
   LPI.LPContext:=Context;
   LPI.LPUseCounter:=0;
+  LPI.Options:=Options;
   LPInfoVector.PushBack(LPI);
 
   inc(ActiveProcessCount);
@@ -189,6 +209,7 @@ end;
 constructor TZELongProcessSupport.Create;
 begin
   inherited;
+  OptionsGenerator.init;
   LPInfoVector:=TLPInfoVector.create;
   OnLPStartProcVector:=TOnLPStartProcVector.create;
   OnLPProgressProcVector:=TOnLPProgressProcVector.create;
@@ -197,6 +218,7 @@ begin
 end;
 destructor TZELongProcessSupport.Destroy;
 begin
+  OptionsGenerator.done;
   LPInfoVector.destroy;
   OnLPStartProcVector.destroy;
   OnLPProgressProcVector.destroy;
@@ -205,6 +227,7 @@ begin
 end;
 initialization
   LPS:=TZELongProcessSupport.Create;
+  LPSOSilent:=LPS.CreateOption;
 finalization
   debugln('{I}[UnitsFinalization] Unit "',{$INCLUDE %FILE%},'" finalization');
   LPS.destroy;

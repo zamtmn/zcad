@@ -30,13 +30,13 @@ TZctnrVectorBytes=object(GZVector{-}<byte>{//})
                       name:AnsiString;
                       constructor init(m:Integer);
                       constructor initnul;
-                      constructor InitFromFile(FileName:Ansistring);
+                      constructor InitFromFile(const FileName:Ansistring);
                       function AddByte(PData:Pointer):Integer;virtual;
                       function AddByteByVal(Data:Byte):Integer;virtual;
                       function AddWord(PData:Pointer):Integer;virtual;
                       //function AddFontFloat(PData:Pointer):Integer;virtual;
-                      procedure TXTAddStringEOL(s:AnsiString);virtual;
-                      procedure TXTAddString(s:AnsiString);virtual;
+                      procedure TXTAddStringEOL(const s:AnsiString);virtual;
+                      procedure TXTAddString(const s:AnsiString);virtual;
                       function ReadData(PData:Pointer;SData:Word):Integer;virtual;
                       //function PopData(PData:Pointer;SData:Word):Integer;virtual;
                       function ReadString3(break, ignore: AnsiString): AnsiString;inline;
@@ -44,13 +44,13 @@ TZctnrVectorBytes=object(GZVector{-}<byte>{//})
                       function ReadString2:AnsiString;inline;
                       function GetCurrentReadAddres:Pointer;virtual;
                       function Jump(offset:Integer):Pointer;virtual;
-                      function SaveToFile(FileName:Ansistring):Integer;
-                      function ReadByte: Byte;
+                      function SaveToFile(const FileName:Ansistring):Integer;
+                      function ReadByte: Byte; inline;
                       function ReadWord: Word;
-                      function GetChar(rp:integer): Ansichar;
+                      function GetChar(rp:integer): Ansichar; inline;
                       function Seek(pos:Integer):integer;
                       function notEOF:Boolean;
-                      function readtoparser(break:AnsiString):AnsiString;
+                      function readtoparser(const break:AnsiString):AnsiString;
                       destructor done;virtual;
                    end;
 procedure WriteString_EOL(h: Integer; s: AnsiString);
@@ -70,8 +70,8 @@ end;
 
 procedure TZctnrVectorBytes.TXTAddStringEOL;
 begin
-     s:=s+lineend;
      self.TXTAddString(s);
+     self.TXTAddString(lineend);
 end;
 procedure TZctnrVectorBytes.TXTAddString;
 begin
@@ -89,14 +89,46 @@ end;
 function TZctnrVectorBytes.readtoparser;
 var
   s: String;
+  s_len, s_pos: integer;
   scobcacount:Integer;
   mode:(parse,commenttoendline,commenttouncomment);
   lastbreak:Boolean;
   stringread:Boolean;
+
+  procedure append_char(ch: AnsiChar); inline;
+  const
+    len_increment = 20;
+  begin
+    inc(s_pos);
+    if s_pos>s_len then
+    begin
+      SetLength(s, s_len+len_increment);
+      inc(s_len, len_increment)
+    end;
+    PByte(@s[s_pos])^:=Ord(ch);
+  end;
+  procedure append_string(const s_add: AnsiString); inline;
+  var
+    s_add_len: integer;
+  begin
+    s_add_len:=Length(s_add);
+
+    if (s_pos+s_add_len)>s_len then
+    begin
+      SetLength(s, s_len+s_add_len);
+      inc(s_len, s_add_len)
+    end;
+
+    Move(s_add[1], s[s_pos+1], s_add_len);
+
+    inc(s_pos, s_add_len);
+  end;
 begin
   lastbreak:=false;
   scobcacount:=0;
   s:='';
+  s_len:=0;
+  s_pos:=0;
   //i:=1;
   mode:=parse;
   stringread:=false;
@@ -111,7 +143,8 @@ begin
       end
       else if (GetChar(readpos)='}')and(mode=commenttouncomment) then begin
         mode:=parse;
-        s:= s+' ';
+        append_char(' ');
+        //s:= s+' ';
         lastbreak:=true;
         inc(readpos);
       end
@@ -123,7 +156,8 @@ begin
       end
       else if (GetChar(readpos)=#10)and(mode=commenttoendline) then begin
         mode:=parse;
-        s:= s+' ';
+        append_char(' ');
+        //s:= s+' ';
         inc(readpos);
       end
 
@@ -137,12 +171,13 @@ begin
                             if ((GetChar(readpos) in syn_breacer))and(not stringread) then
                                                  begin
                                                       if not lastbreak then
-                                                                           s:=s+{bufer^[readpos]}' ';
+                                                                           append_char(' '); //s:=s+{bufer^[readpos]}' ';
                                                       lastbreak:=true;
                                                  end
                                              else
                                                  begin
-                                                      s:=s+GetChar(readpos);
+                                                      append_char(GetChar(readpos));
+                                                      //s:=s+GetChar(readpos);
                                                       lastbreak:=false;
                                                  end;
           end;
@@ -150,7 +185,8 @@ begin
           //inc(currentpos);
       end
       else if stringread then begin
-        s:=s+GetChar(readpos);
+        append_char(GetChar(readpos));
+        //s:=s+GetChar(readpos);
         inc(readpos);
       end
       else
@@ -159,13 +195,14 @@ begin
                           begin
                                if GetChar(readpos)='(' then inc(scobcacount);
                                if GetChar(readpos)=')' then dec(scobcacount);
-                               s:=s+break;
-                               result:=s;
+                               append_string(break);
+                               //s:=s+break;
+                               //result:=s;
                                inc(readpos);
                                //inc(currentpos);
                                {if readpos = buferread then
                                                            readtobufer;}
-                               if scobcacount=0 then exit;
+                               if scobcacount=0 then system.break;
 //                                                else
 //                                                     s:=s;
                           end
@@ -175,9 +212,11 @@ begin
     //readtobufer;
   end;
   //setlength(s,i-1);
+
+  SetLength(s, s_pos);
   result := s;
 end;
-function readspace(expr:String):String;
+function readspace(const expr:String):String;
 var
   i:Integer;
 begin

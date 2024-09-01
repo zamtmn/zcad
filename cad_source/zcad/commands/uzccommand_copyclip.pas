@@ -57,7 +57,7 @@ begin
   s:=temppath+'Z$C'+inttohex(random(15),1)+inttohex(random(15),1)+inttohex(random(15),1)+inttohex(random(15),1)
      +inttohex(random(15),1)+inttohex(random(15),1)+inttohex(random(15),1)+inttohex(random(15),1)+'.dxf';
   CopyClipFile:=s;
-  savedxf2000(s,ProgramPath + 'components/empty.dxf',ClipboardDWG^);
+  savedxf2000(s,ProgramPath + '/components/empty.dxf',ClipboardDWG^);
   s:=s+#0;
   suni:=s;
   //setlength(suni,length(s)*2+2);
@@ -83,7 +83,7 @@ begin
     ClipboardDWG.done;
     Freemem(ClipboardDWG);
   end;
-  ClipboardDWG:=drawings.CreateDWG('*rtl/dwg/DrawingVars.pas','');
+  ClipboardDWG:=drawings.CreateDWG('$(ZCADPath)/rtl/dwg/DrawingVars.pas','');
   //ClipboardDWG.DimStyleTable.AddItem('Standart',pds);
 end;
 

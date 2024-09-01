@@ -36,7 +36,10 @@
       <Action Name="ACN_INVERSESELECTED"/>
       <Action Name="ACN_SELSIM"/>
       <Separator/>
-      <Action Name="ACN_El_FIND"/>
+      <Action Name="ACN_FIND"/>
+      <Action Name="ACN_FINDNEXT"/>
+      <Action Name="ACN_FINDPREV"/>
+      <Action Name="ACN_FINDPARAMS"/>
     </Menu>
     <Menu Name="View">
       <Action Name="ACN_REGEN"/>
@@ -110,6 +113,9 @@
       <Command Caption="Dim styles (objinsp)" Command="SetObjInsp(DIMSTYLES)"/> 
       <Command Caption="Numerators (objinsp)" Command="SetObjInsp(NUMERATORS)"/> 
       <Command Caption="Layouts (not impl)" Command="fuckoff"/> 
+    </Menu>
+    <Menu Name="Tools">
+      <Action Name="ACN_SPELLCHECK"/>
     </Menu>
     <Menu Name="Draw">
       <Action Name="ACN_LINE"/>
@@ -346,6 +352,7 @@
         <InsertMenu Name="Edit"/>
         <InsertMenu Name="View"/>
         <InsertMenu Name="Format"/>
+        <InsertMenu Name="Tools"/>
         <InsertMenu Name="Draw"/>
         <InsertMenu Name="Dimension"/>
         <InsertMenu Name="Modify"/>

@@ -26,11 +26,11 @@ type
   TPaletteStack=TStack<TGDBPalette>;
 var
   PaletteStack:TPaletteStack=nil;
-procedure readpalette(filename:string);
-procedure PushAndSetNewPalette(NewPalette:TGDBPalette);
+procedure readpalette(const filename:string);
+procedure PushAndSetNewPalette(const NewPalette:TGDBPalette);
 procedure PopPalette;
 implementation
-procedure PushAndSetNewPalette(NewPalette:TGDBPalette);
+procedure PushAndSetNewPalette(const NewPalette:TGDBPalette);
 begin
   if PaletteStack=nil then
     PaletteStack:=TPaletteStack.Create;

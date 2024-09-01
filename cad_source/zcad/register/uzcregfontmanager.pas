@@ -23,18 +23,22 @@ uses
   uzcsysvars,uzefontmanager,uzeFontFileFormatTTFBackend,
   uzbpaths,uzctranslations,UUnitManager,Varman,
   TypeDescriptors,uzcLog;
+
 implementation
+var
+  system_pas_path:string;
 
 initialization
-units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'PATH_Fonts','String',@sysvarPATHFontsPath);
-units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'PATH_AlternateFont','String',@sysvarAlternateFont);
-{$IF DEFINED(USELAZFREETYPETTFIMPLEMENTATION) and DEFINED(USEFREETYPETTFIMPLEMENTATION)}
-units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'RD_UseLazFreeTypeImplementation','Boolean',@sysvarTTFUseLazFreeTypeImplementation);
-sysvar.RD.RD_UseLazFreeTypeImplementation:=@sysvarTTFUseLazFreeTypeImplementation;
-{$ELSE}
-{$ENDIF}
-sysvar.PATH.Fonts_Path:=@sysvarPATHFontsPath;
-sysvar.PATH.Alternate_Font:=@sysvarAlternateFont;
+  system_pas_path:=expandpath('$(ZCADPath)/rtl/system.pas');
+  units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPath,system_pas_path,InterfaceTranslate,'PATH_Fonts','String',@sysvarPATHFontsPath);
+  units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPath,system_pas_path,InterfaceTranslate,'PATH_AlternateFont','String',@sysvarAlternateFont);
+  {$IF DEFINED(USELAZFREETYPETTFIMPLEMENTATION) and DEFINED(USEFREETYPETTFIMPLEMENTATION)}
+  units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPath,system_pas_path,InterfaceTranslate,'RD_UseLazFreeTypeImplementation','Boolean',@sysvarTTFUseLazFreeTypeImplementation);
+  sysvar.RD.RD_UseLazFreeTypeImplementation:=@sysvarTTFUseLazFreeTypeImplementation;
+  {$ELSE}
+  {$ENDIF}
+  sysvar.PATH.Fonts_Path:=@sysvarPATHFontsPath;
+  sysvar.PATH.Alternate_Font:=@sysvarAlternateFont;
 finalization
   ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
 end.

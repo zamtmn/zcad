@@ -354,7 +354,7 @@ begin
   inc(ChangedData.PSetDataInEtity,sizeof(GDBVertex));
   V2:=PGDBVertex(ChangedData.PSetDataInEtity)^;
   d:=vertexlength(v2,v1);
-  l1:=PDouble(pvardesk(pdata)^.data.Addr.Instance)^{*pi/180};
+  l1:=PDouble(pvardesk(pdata)^.data.Addr.Instance)^;
   SinCos(l1,V2.y,V2.x);
   V2.z:=0;
   V2:=VertexMulOnSc(V2,d);

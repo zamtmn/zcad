@@ -58,13 +58,13 @@ GDBObjCurve= object(GDBObj3d)
                  function GetObjTypeName:String;virtual;
                  procedure getoutbound(var DC:TDrawContext);virtual;
 
-                 procedure AddVertex(Vertex:GDBVertex);virtual;
+                 procedure AddVertex(const Vertex:GDBVertex);virtual;
 
                  procedure SaveToDXFfollow(var outhandle:{Integer}TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
                  procedure TransformAt(p:PGDBObjEntity;t_matrix:PDMatrix4D);virtual;
                  procedure transform(const t_matrix:DMatrix4D);virtual;
 
-                 function CalcTrueInFrustum(frustum:ClipArray;visibleactualy:TActulity):TInBoundingVolume;virtual;
+                 function CalcTrueInFrustum(const frustum:ClipArray;visibleactualy:TActulity):TInBoundingVolume;virtual;
                  procedure AddOnTrackAxis(var posr:os_record;const processaxis:taddotrac);virtual;
                  procedure InsertVertex(const PolyData:TPolyData);
                  procedure DeleteVertex(const PolyData:TPolyData);
@@ -76,14 +76,14 @@ procedure BuildSnapArray(const VertexArrayInWCS:GDBPoint3dArray;var snaparray:GD
 function GDBPoint3dArraygetsnap(const VertexArrayInWCS:GDBPoint3dArray; const PProjPoint:PGDBpolyline2DArray; const snaparray:GDBVectorSnapArray; var osp:os_record;const closed:Boolean; const param:OGLWndtype; ProjectProc:GDBProjectProc;SnapMode:TGDBOSMode):Boolean;
 procedure GDBPoint3dArrayAddOnTrackAxis(const VertexArrayInWCS:GDBPoint3dArray;var posr:os_record;const processaxis:taddotrac;const closed:Boolean);
 function GetDirInPoint(const VertexArrayInWCS:GDBPoint3dArray;point:GDBVertex;closed:Boolean):GDBVertex;
-procedure FastAddVertex(Vertex:GDBVertex);
+procedure FastAddVertex(const Vertex:GDBVertex);
 
 var
   curveVertexArrayInWCS:GDBPoint3dArray;
 
 implementation
 
-procedure FastAddVertex(Vertex:GDBVertex);
+procedure FastAddVertex(const Vertex:GDBVertex);
 begin
   curveVertexArrayInWCS.PushBackData(vertex);
 end;
@@ -201,7 +201,7 @@ begin
 end;
 function GDBObjCurve.CalcTrueInFrustum;
 begin
-      result:=VertexArrayInWCS.CalcTrueInFrustum(frustum);
+      result:=VertexArrayInWCS.CalcTrueInFrustum(frustum,false);
 end;
 procedure GDBObjCurve.SaveToDXFFollow;
 var
@@ -219,7 +219,7 @@ begin
   until ptv=nil;
   SaveToDXFObjPrefix(outhandle,'SEQEND','',IODXFContext,true);
 end;
-procedure GDBObjCurve.AddVertex(Vertex:GDBVertex);
+procedure GDBObjCurve.AddVertex(const Vertex:GDBVertex);
 begin
      vertexarrayinocs.PushBackData(vertex);
 end;
@@ -248,8 +248,8 @@ constructor GDBObjCurve.init;
 begin
   inherited init(own,layeraddres, lw);
   //vp.ID := GDBPolylineID;
-  VertexArrayInWCS.init(1000);
-  vertexarrayinocs.init(1000);
+  VertexArrayInWCS.init(10);
+  vertexarrayinocs.init(10);
   //------------snaparray.init(100);
   PProjPoint:=nil;
   //Format;
@@ -259,8 +259,8 @@ begin
   inherited initnul(nil);
   bp.ListPos.Owner:=owner;
   //vp.ID := GDBPolylineID;
-  VertexArrayInWCS.init(1000);
-  vertexarrayinocs.init(1000);
+  VertexArrayInWCS.init(10);
+  vertexarrayinocs.init(10);
   //------------snaparray.init(100);
   PProjPoint:=nil;
 end;

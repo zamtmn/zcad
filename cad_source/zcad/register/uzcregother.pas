@@ -32,9 +32,9 @@ implementation
 var
   mem:TZctnrVectorBytes;
 initialization;
-  units.loadunit(GetSupportPath,InterfaceTranslate,expandpath('*rtl/sysvar.pas'),nil);
-  units.loadunit(GetSupportPath,InterfaceTranslate,expandpath('*rtl/savedvar.pas'),nil);
-  units.loadunit(GetSupportPath,InterfaceTranslate,expandpath('*rtl/devicebase.pas'),nil);
+  units.loadunit(GetSupportPath,InterfaceTranslate,expandpath('$(ZCADPath)/rtl/sysvar.pas'),nil);
+  units.loadunit(GetSupportPath,InterfaceTranslate,expandpath('$(ZCADPath)/rtl/savedvar.pas'),nil);
+  units.loadunit(GetSupportPath,InterfaceTranslate,expandpath('$(ZCADPath)/rtl/devicebase.pas'),nil);
 
   SysVarUnit:=units.findunit(GetSupportPath,InterfaceTranslate,'sysvar');
   SavedUnit:=units.findunit(GetSupportPath,InterfaceTranslate,'savedvar');
@@ -200,31 +200,10 @@ initialization;
   end;
 
 
-  units.loadunit(GetSupportPath,InterfaceTranslate,expandpath('*rtl/cables.pas'),nil);
-  units.loadunit(GetSupportPath,InterfaceTranslate,expandpath('*rtl/devices.pas'),nil);
-  units.loadunit(GetSupportPath,InterfaceTranslate,expandpath('*rtl/connectors.pas'),nil);
-  units.loadunit(GetSupportPath,InterfaceTranslate,expandpath('*rtl/styles/styles.pas'),nil);
-
-  //units.loadunit(expandpath('*rtl\objdefunits\objname.pas'),nil);
-  //units.loadunit(expandpath('*rtl\objdefunits\blocktype.pas'),nil);
-  //units.loadunit(expandpath('*rtl\objdefunits\ark.pas'),nil);
-  //units.loadunit(expandpath('*rtl\objdefunits\connector.pas'),nil);
-  //units.loadunit(expandpath('*rtl\objdefunits\elcableconnector.pas'),nil);
-  //units.loadunit(expandpath('*rtl\objdefunits\cable.pas'),nil);
-  //units.loadunit(expandpath('*rtl\objdefunits\trace.pas'),nil);
-  //units.loadunit(expandpath('*rtl\objdefunits\elwire.pas'),nil);
-  //units.loadunit(expandpath('*rtl\objdefunits\objroot.pas'),nil);
-  //units.loadunit(expandpath('*rtl\objdefunits\firesensor.pas'),nil);
-  //units.loadunit(expandpath('*rtl\objdefunits\smokesensor.pas'),nil);
-  //units.loadunit(expandpath('*rtl\objdefunits\termosensor.pas'),nil);
-  //units.loadunit(expandpath('*rtl\objdefunits\handsensor.pas'),nil);
-  //units.loadunit(expandpath('*rtl\objdefunits\elmotor.pas'),nil);
-  //units.loadunit(expandpath('*rtl\objdefunits\elsr.pas'),nil);
-
-  //units.loadunit(expandpath('*rtl\objdefunits\bgbsensor.pas'),nil);
-  //units.loadunit(expandpath('*rtl\objdefunits\bgtsensor.pas'),nil);
-  //units.loadunit(expandpath('*rtl\objdefunits\bglsensor.pas'),nil);
-  //units.loadunit(expandpath('*rtl\objdefunits\bias.pas'),nil);
+  units.loadunit(GetSupportPath,InterfaceTranslate,expandpath('$(ZCADPath)/rtl/cables.pas'),nil);
+  units.loadunit(GetSupportPath,InterfaceTranslate,expandpath('$(ZCADPath)/rtl/devices.pas'),nil);
+  units.loadunit(GetSupportPath,InterfaceTranslate,expandpath('$(ZCADPath)/rtl/connectors.pas'),nil);
+  units.loadunit(GetSupportPath,InterfaceTranslate,expandpath('$(ZCADPath)/rtl/styles/styles.pas'),nil);
 
   SysVar.debug.memdeb.GetMemCount:=nil;
   SysVar.debug.memdeb.FreeMemCount:=nil;
@@ -248,7 +227,7 @@ finalization;
 
   mem.init(1024);
   SavedUnit^.SavePasToMem(mem);
-  mem.SaveToFile(expandpath(ProgramPath+'rtl'+PathDelim+'savedvar.pas'));
+  mem.SaveToFile(expandpath(ProgramPath+'/rtl'+PathDelim+'savedvar.pas'));
   mem.done;
   //units.FreeAndDone;
 end.

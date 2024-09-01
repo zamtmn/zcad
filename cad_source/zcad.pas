@@ -39,11 +39,14 @@ uses
 
   Interfaces,forms, classes,LCLVersion,
   uzclog,uzcreglog,
+
   uzcSysInfo,uzcfsplash,
   uzcsysvars,
 
   uzcsysparams,uzcPathMacros,
   uzbpaths,uzbCommandLineParser,uzcCommandLineParser,
+
+  uzcregMemProfiler,
 
   varman,
   //
@@ -67,7 +70,10 @@ uses
   {$INCLUDE allgeneratedfiles.inc}//correct defs in system.pas
   uzcregother,//setup SysVar
 
-  {$IFDEF WINDOWS}uMetaDarkStyle,uDarkStyleSchemes,uDarkStyleSchemesLoader,{$ENDIF}
+ {$IFDEF WINDOWS}
+  uMetaDarkStyle,uDarkStyleSchemes,uDarkStyleSchemesAdditional,
+  uDarkStyleSchemesLoader,
+ {$ENDIF}
 
   UUnitManager,
   uzefontmanager,
@@ -188,7 +194,7 @@ uses
   uzccommand_show,uzccommand_showtoolbar,
 
   uzccommand_setobjinsp,
-  uzccommand_dbgmemsummary,
+  uzccommand_dbgmemsummary,uzccommand_dbgMemProfiler,
   uzccommand_executefile,
   uzccommand_dbgClipboard,
   uzccommand_dbgCmdList,uzccommand_dbgBlocksList,
@@ -240,7 +246,8 @@ uses
   uzccommand_DockingOptions,
   uzcCommand_MoveEntsByMouse,
   uzcCommand_LPCSRun,
-
+  uzcCommand_Find,
+  uzcCommand_SpellCheck,
 
   uzcenitiesvariablesextender,uzcExtdrLayerControl,uzcExtdrSmartTextEnt,
   uzcExtdrIncludingVolume,uzcExtdrSCHConnection,uzcExtdrSCHConnector,
@@ -260,7 +267,8 @@ uses
   uzvmanemcom, //управления и обработка полученой электрической модели
   uzvmanemschemalevelone, //создание одноуровневой схемы
   uzvmanemdialogcom,//запуск генератора схемы через диалоговое окно
-  {$IFDEF WINDOWS}uzvmodeltoxlsx,uzvdevtoxlsx, uzvxlsxtocad,{$ENDIF}  //запуск экспорта информации из veb модели в xlsx на OLE
+  {$IFDEF WINDOWS}//uzvmodeltoxlsx,
+  uzvmodeltoxlsxfps, uzvdevtoxlsx, uzvxlsxtocad,uzvelectricalexcelcom,{$ENDIF}  //запуск экспорта информации из veb модели в xlsx на OLE
 
   //uzvelectricalexcelcom,
   //**//
@@ -314,7 +322,7 @@ begin
   lpsh:=LPS.StartLongProcess('Start program',@lpsh,0);
 {$IFDEF REPORTMMEMORYLEAKS}printleakedblock:=true;{$ENDIF}
 {$IFDEF REPORTMMEMORYLEAKS}
-       SetHeapTraceOutput(sysvar.PATH.Program_Run^+'log/memory-heaptrace.txt');
+       SetHeapTraceOutput(sysvar.PATH.Program_Run^+'/log/memory-heaptrace.txt');
        keepreleased:=true;
 {$ENDIF}
   //Application_Initialize перемещен в инициализацию uzcfsplash чтоб показать сплэш пораньше
@@ -322,7 +330,7 @@ begin
 
   //инициализация drawings
   FontManager.EnumerateFontFiles;
-  uzcdrawings.startup('*rtl/dwg/DrawingVars.pas','');
+  uzcdrawings.startup('$(ZCADPath)/rtl/dwg/DrawingVars.pas','');
   uzcdevicebase.startup;
   {$IF lcl_fullversion>2001200}
   {$ELSE}
@@ -340,9 +348,7 @@ begin
   ZCMsgCallBackInterface.TextMessage(format(rsZCADStarted,[programname,sysvar.SYS.SYS_Version^]),TMWOHistoryOut);
   application.ProcessMessages;
 
-  //SplashForm.TXTOut(rsStartAutorun,false);commandmanager.executefile('*components/autorun.cmd',drawings.GetCurrentDWG,nil);
   FromDirsIterator(sysvar.PATH.Preload_Path^,'*.cmd','autorun.cmd',RunCmdFile,nil);
-  //*components/blockpreviewexport.cmd
   if CommandLineParser.HasOption(RunScript)then
     for i:=0 to CommandLineParser.OptionOperandsCount(RunScript)-1 do begin
       scrfile:=CommandLineParser.OptionOperand(RunScript,i);

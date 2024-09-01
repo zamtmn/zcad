@@ -22,11 +22,11 @@ interface
 uses uzbtypes,Masks,LCLProc,{$IFNDEF DELPHI}LazUTF8,{$ENDIF}sysutils,
      uzmacros,uzbLogIntf;
 type
-  TFromDirIterator=procedure (filename:String;pdata:pointer);
-  TFromDirIteratorObj=procedure (filename:String;pdata:pointer) of object;
+  TFromDirIterator=procedure (const filename:String;pdata:pointer);
+  TFromDirIteratorObj=procedure (const filename:String;pdata:pointer) of object;
 function ExpandPath(path:String):String;
-function FindInSupportPath(PPaths:String;FileName:String):String;
-function FindInPaths(Paths,FileName:String):String;
+function FindInSupportPath(const PPaths:String; FileName:String):String;
+function FindInPaths(const Paths:String; FileName:String):String;
 
 //**Получает части текста разделеные разделителем.
 //**path - текст в котором идет поиск.
@@ -36,7 +36,7 @@ function GetPartOfPath(out part:String;var path:String;const separator:String):S
 function GetSupportPath:String;
 {TODO: костыли))}
 function GeAddrSupportPath:PString;
-procedure AddSupportPath(APath:String);
+procedure AddSupportPath(const APath:String);
 
 procedure FromDirIterator(const path,mask,firstloadfilename:String;proc:TFromDirIterator;method:TFromDirIteratorObj;pdata:pointer=nil);
 procedure FromDirsIterator(const path,mask,firstloadfilename:String;proc:TFromDirIterator;method:TFromDirIteratorObj;pdata:pointer=nil);
@@ -44,7 +44,7 @@ var ProgramPath,AdditionalSupportPath,TempPath:String;
 implementation
 var SupportPath:String;
 //uses log;
-procedure AddSupportPath(APath:String);
+procedure AddSupportPath(const APath:String);
 begin
   if APath=''then exit;
   if AdditionalSupportPath='' then
@@ -73,7 +73,7 @@ function GeAddrSupportPath:PString;
 begin
   result:=@SupportPath;
 end;
-function FindInPaths(Paths,FileName:String):String;
+function FindInPaths(const Paths:String; FileName:String):String;
 var
    s,ts,ts2:String;
 begin
@@ -140,20 +140,20 @@ begin
                        end;
      result:=part;
 end;
-function FindInSupportPath(PPaths:String;FileName:String):String;
+function FindInSupportPath(const PPaths:String; FileName:String):String;
 const
      cFindInSupportPath='[FILEOPS]FindInSupportPath: found file:"%s"';
 var
    s,ts:String;
 begin
-     zTraceLn(sysutils.Format('[FILEOPS]FindInSupportPath: searh file:"%s"',[{$IFNDEF DELPHI}utf8tosys{$ENDIF}(FileName)]));
+     zTraceLn('[FILEOPS]FindInSupportPath: searh file:"%s"',[{$IFNDEF DELPHI}utf8tosys{$ENDIF}(FileName)]);
      FileName:=ExpandPath(FileName);
-     zTraceLn(sysutils.Format('[FILEOPS]FindInSupportPath: file name expand to:"%s"',[{$IFNDEF DELPHI}utf8tosys{$ENDIF}(FileName)]));
+     zTraceLn('[FILEOPS]FindInSupportPath: file name expand to:"%s"',[{$IFNDEF DELPHI}utf8tosys{$ENDIF}(FileName)]);
      if FileExists({$IFNDEF DELPHI}utf8tosys{$ENDIF}(FileName)) then
                                  begin
                                       result:=FileName;
                                       //programlog.LogOutStr(format(FindInSupportPath,[{$IFNDEF DELPHI}utf8tosys{$ENDIF}(ts)]),0,LM_Info);
-                                      zTraceLn(sysutils.Format(cFindInSupportPath,[{$IFNDEF DELPHI}utf8tosys{$ENDIF}(FileName)]));
+                                      zTraceLn(cFindInSupportPath,[{$IFNDEF DELPHI}utf8tosys{$ENDIF}(FileName)]);
                                       exit;
                                  end;
      //if PPaths<>nil then
@@ -162,12 +162,12 @@ begin
      repeat
            GetPartOfPath(ts,s,';');
            ts:=ExpandPath(ts);
-           zTraceLn(sysutils.Format('[FILEOPS]FindInSupportPath: searh in "%s"',[{$IFNDEF DELPHI}utf8tosys{$ENDIF}(ts)]));
+           zTraceLn('[FILEOPS]FindInSupportPath: searh in "%s"',[{$IFNDEF DELPHI}utf8tosys{$ENDIF}(ts)]);
            ts:=ts+FileName;
            if FileExists({$IFNDEF DELPHI}utf8tosys{$ENDIF}(ts)) then
                                  begin
                                       result:=ts;
-                                      zTraceLn(sysutils.Format(cFindInSupportPath,[{$IFNDEF DELPHI}utf8tosys{$ENDIF}(result)]));
+                                      zTraceLn(cFindInSupportPath,[{$IFNDEF DELPHI}utf8tosys{$ENDIF}(result)]);
                                       exit;
                                  end;
      until s='';
@@ -178,17 +178,18 @@ end;
 function ExpandPath(path:String):String;
 begin
   DefaultMacros.SubstituteMacros(path);
-     if path='' then
-                    result:=programpath
-else if path[1]='*' then
-                    result:=programpath+copy(path,2,length(path)-1)
-else result:=path;
-result:=StringReplace(result,'/', PathDelim,[rfReplaceAll, rfIgnoreCase]);
-if DirectoryExists({$IFNDEF DELPHI}utf8tosys{$ENDIF}(result)) then
-  if (result[length(result)]<>{'/'}PathDelim)
-  //or (result[length(result)]<>'\')
-  then
-                                     result:=result+PathDelim;
+  if path='' then
+    result:=programpath
+  {else if path[1]='*' then
+         result:=programpath+'/'+copy(path,2,length(path)-1)}
+  else
+    result:=path;
+  result:=StringReplace(result,'/', PathDelim,[rfReplaceAll, rfIgnoreCase]);
+  if DirectoryExists({$IFNDEF DELPHI}utf8tosys{$ENDIF}(result)) then
+    if (result[length(result)]<>{'/'}PathDelim)
+      //or (result[length(result)]<>'\')
+    then
+      result:=result+PathDelim;
 end;
 procedure FromDirsIterator(const path,mask,firstloadfilename:String;proc:TFromDirIterator;method:TFromDirIteratorObj;pdata:pointer);
 var
@@ -205,7 +206,7 @@ end;
 procedure FromDirIterator(const path,mask,firstloadfilename:String;proc:TFromDirIterator;method:TFromDirIteratorObj;pdata:pointer);
 var sr: TSearchRec;
     s:String;
-procedure processfile(s:String);
+procedure processfile(const s:String);
 var
    fn:String;
 function IsASCII(const s: string): boolean; inline;
@@ -263,7 +264,7 @@ begin
   //programlog.LogOutStr('FromDirIterator....{end}',lp_DecPos,LM_Debug);
 end;
 initialization
-  programpath:={$IFNDEF DELPHI}SysToUTF8{$ENDIF}(SysUtils.ExpandFileName(ExtractFilePath(paramstr(0))+'../../'));
+  programpath:={$IFNDEF DELPHI}SysToUTF8{$ENDIF}(SysUtils.ExpandFileName(ExtractFilePath(paramstr(0))+'../..'));
   {$IfNDef DELPHI}
     TempPath:=GetTempDir;
   {$Else}

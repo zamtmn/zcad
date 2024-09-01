@@ -1,12 +1,12 @@
 ;Комментарий
-;*-путь к программе
-LoadActions(*menu/actionscontent.xml)
-LoadActions(*menu/electrotechactionscontent.xml)
-LoadActions(*menu/velecactionscontent.xml)
-LoadToolBars(*menu/toolbarscontent.xml)
-LoadToolBars(*menu/electrotechtoolbarscontent.xml)
-LoadToolBars(*menu/velectoolbarscontent.xml)
-LoadPalettes(*menu/palettescontent.xml)
-LoadMenus(*menu/menuscontent.xml)
-LoadMenus(*menu/electrotechmenuscontent.xml)
-LoadMenus(*menu/velecmenuscontent.xml)
+;$(ZCADPath)-путь к программе
+LoadActions($(ZCADPath)/menu/actionscontent.xml)
+LoadActions($(ZCADPath)/menu/electrotechactionscontent.xml)
+LoadActions($(ZCADPath)/menu/velecactionscontent.xml)
+LoadToolBars($(ZCADPath)/menu/toolbarscontent.xml)
+LoadToolBars($(ZCADPath)/menu/electrotechtoolbarscontent.xml)
+LoadToolBars($(ZCADPath)/menu/velectoolbarscontent.xml)
+LoadPalettes($(ZCADPath)/menu/palettescontent.xml)
+LoadMenus($(ZCADPath)/menu/menuscontent.xml)
+LoadMenus($(ZCADPath)/menu/electrotechmenuscontent.xml)
+LoadMenus($(ZCADPath)/menu/velecmenuscontent.xml)

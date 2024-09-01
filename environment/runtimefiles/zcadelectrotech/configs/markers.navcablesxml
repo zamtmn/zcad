@@ -1,4 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <CONFIG>
-  <NavigatorParams TreeBuildMap="-CableMaterial|+@@[CableName]" CreateRootNode="True" NodeNameFormat="%0:s(%1:d,%2:d)" TreeProperties="SetColumnsCount(2,0);&#xA;SetColumnParams(0,'Tree','@@[NMO_Name]','tmpGUIParamSave_NavCab_C0',1);&#xA;SetColumnParams(1,'Segment','@@[CABLE_Segment]','tmpGUIParamSave_NavCab_C1',1)" IncludeEntities="IncludeEntityName('Device')" IncludeProperties="IncludeIfSame(SameMask(%%('Name'),'CABLE_*'))"/>
+  <NavigatorParams TreeBuildMap="-CableMaterial|+@@[CableName]" CreateRootNode="True" NodeNameFormat="%0:s(%1:d,%2:d)" TreeProperties="SetColumnsCount(3,0);&#xD;&#xA;SetColumnParams(0,'Name','@@[CableName]','tmpGUIParamSave_NavCab_C0',1);&#xD;&#xA;SetColumnParams(1,'Material','@@[CableMaterial]','tmpGUIParamSave_NavCab_C1',1)&#xD;&#xA;SetColumnParams(2,'Length','@@[CableLength]','tmpGUIParamSave_NavCab_C2',1)" IncludeEntities="IncludeEntityName('Device')" IncludeProperties="IncludeIfSame(SameMask(%%('Name'),'CABLE_*'))"/>
 </CONFIG>

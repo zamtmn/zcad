@@ -5,57 +5,57 @@
       <Item1 Name="DockPanel" Type="CustomSite" ChildCount="1" PixelsPerInch="0">
         <Bounds Top="5" Left="-2" Width="1332" Height="923"/>
         <Anchors Align="Client"/>
-        <Item1 Name="AnchorDockSite9" Type="Layout" ChildCount="7">
-          <Bounds Width="1298" Height="840"/>
+        <Item1 Name="AnchorDockSite9" Type="Layout" ChildCount="7" PixelsPerInch="168">
+          <Bounds Width="1232" Height="749"/>
           <Anchors Align="Client"/>
-          <Item1 Name="AnchorDockSite10" Type="Pages" ChildCount="2">
-            <Bounds Top="637" Left="305" Width="993" Height="203"/>
+          <Item1 Name="AnchorDockSite10" Type="Pages" ChildCount="2" PixelsPerInch="168">
+            <Bounds Top="600" Left="293" Width="939" Height="149"/>
             <Anchors Top="AnchorDockSplitter1" Left="AnchorDockSplitter2"/>
-            <Item1 Name="CommandLine" Type="Control">
-              <Bounds Width="976" Height="175"/>
+            <Item1 Name="CommandLine" Type="Control" PixelsPerInch="168">
+              <Bounds Width="897" Height="106"/>
               <Anchors Align="Client"/>
             </Item1>
-            <Item2 Name="TOOLPALETTE_PSDat" Type="Control">
-              <Bounds Width="976" Height="175"/>
+            <Item2 Name="TOOLPALETTE_PSDat" Type="Control" PixelsPerInch="168">
+              <Bounds Width="897" Height="106"/>
               <Anchors Align="Client"/>
             </Item2>
           </Item1>
-          <Item2 Name="AnchorDockSplitter1" Type="SplitterHorizontal">
-            <Bounds Top="633" Left="305" Width="993" Height="4"/>
+          <Item2 Name="AnchorDockSplitter1" Type="SplitterHorizontal" PixelsPerInch="168">
+            <Bounds Top="596" Left="293" Width="939" Height="4"/>
             <Anchors Left="AnchorDockSplitter2"/>
           </Item2>
-          <Item3 Name="PageControl" Type="Control">
-            <Bounds Left="305" Width="707" Height="633"/>
+          <Item3 Name="PageControl" Type="Control" PixelsPerInch="168">
+            <Bounds Left="293" Width="680" Height="596"/>
             <Anchors Left="AnchorDockSplitter2" Right="AnchorDockSplitter3" Bottom="AnchorDockSplitter1"/>
           </Item3>
-          <Item4 Name="AnchorDockSplitter2" Type="SplitterVertical">
-            <Bounds Left="301" Width="4" Height="840"/>
+          <Item4 Name="AnchorDockSplitter2" Type="SplitterVertical" PixelsPerInch="168">
+            <Bounds Left="289" Width="4" Height="749"/>
           </Item4>
-          <Item5 Name="ObjectInspector" Type="Control">
-            <Bounds Width="301" Height="840"/>
+          <Item5 Name="ObjectInspector" Type="Control" PixelsPerInch="168">
+            <Bounds Width="289" Height="749"/>
             <Anchors Right="AnchorDockSplitter2"/>
           </Item5>
-          <Item6 Name="AnchorDockSplitter3" Type="SplitterVertical">
-            <Bounds Left="1012" Width="4" Height="633"/>
+          <Item6 Name="AnchorDockSplitter3" Type="SplitterVertical" PixelsPerInch="168">
+            <Bounds Left="973" Width="4" Height="596"/>
             <Anchors Bottom="AnchorDockSplitter1"/>
           </Item6>
-          <Item7 Name="AnchorDockSite11" Type="Pages" ChildCount="4">
-            <Bounds Left="1016" Width="282" Height="633"/>
+          <Item7 Name="AnchorDockSite11" Type="Pages" ChildCount="4" PixelsPerInch="168">
+            <Bounds Left="977" Width="255" Height="596"/>
             <Anchors Left="AnchorDockSplitter3" Bottom="AnchorDockSplitter1"/>
-            <Item1 Name="NavigatorDevices" Type="Control">
-              <Bounds Width="274" Height="587"/>
+            <Item1 Name="NavigatorDevices" Type="Control" PixelsPerInch="168">
+              <Bounds Width="247" Height="519"/>
               <Anchors Align="Client"/>
             </Item1>
-            <Item2 Name="NavigatorCables" Type="Control">
-              <Bounds Width="274" Height="587"/>
+            <Item2 Name="NavigatorCables" Type="Control" PixelsPerInch="168">
+              <Bounds Width="247" Height="519"/>
               <Anchors Align="Client"/>
             </Item2>
-            <Item3 Name="NavigatorRisers" Type="Control">
-              <Bounds Width="274" Height="587"/>
+            <Item3 Name="NavigatorRisers" Type="Control" PixelsPerInch="168">
+              <Bounds Width="247" Height="519"/>
               <Anchors Align="Client"/>
             </Item3>
-            <Item4 Name="TOOLPALETTE_BlockLib" Type="Control">
-              <Bounds Width="274" Height="587"/>
+            <Item4 Name="TOOLPALETTE_BlockLib" Type="Control" PixelsPerInch="168">
+              <Bounds Width="247" Height="519"/>
               <Anchors Align="Client"/>
             </Item4>
           </Item7>
@@ -65,20 +65,21 @@
   </MainConfig>
   <Settings HeaderStyle="Lines" FlatHeadersButtons="True" FloatingWindowsOnTop="True" DockSitesCanBeMinimized="True"/>
   <ToolBarsConfig ItemCount="4">
-    <Item0 Name="CoolBarU" Type="CoolBar" ItemCount="1">
-      <Item0 Name="Standard" Type="ToolBar" Width="1318"/>
+    <Item0 Name="CoolBarU" Type="CoolBar" ItemCount="2">
+      <Item0 Name="Standard" Type="ToolBar" Width="1709"/>
+      <Item1 Name="Find" Type="ToolBar" Break="False" Width="345"/>
     </Item0>
     <Item1 Name="CoolBarL" Type="CoolBar" ItemCount="0"/>
     <Item2 Name="CoolBarR" Type="CoolBar" ItemCount="3">
-      <Item0 Name="Quick" Type="ToolBar" Width="105"/>
-      <Item1 Name="Modify" Type="ToolBar" Break="False" Width="213"/>
-      <Item2 Name="Draw" Type="ToolBar" Break="False" Width="186"/>
+      <Item0 Name="Quick" Type="ToolBar" Width="138"/>
+      <Item1 Name="Modify" Type="ToolBar" Break="False" Width="404"/>
+      <Item2 Name="Draw" Type="ToolBar" Break="False" Width="252"/>
     </Item2>
     <Item3 Name="CoolBarD" Type="CoolBar" ItemCount="4">
-      <Item0 Name="ElectrotechEnts" Type="ToolBar" Width="133"/>
-      <Item1 Name="ElectrotechPlacing" Type="ToolBar" Break="False"/>
-      <Item2 Name="ElectrotechVelec" Type="ToolBar" Break="False" Width="502"/>
-      <Item3 Name="ElectrotechActions" Type="ToolBar" Break="False" Width="396"/>
+      <Item0 Name="ElectrotechEnts" Type="ToolBar" Width="185"/>
+      <Item1 Name="ElectrotechPlacing" Type="ToolBar" Break="False" Width="105"/>
+      <Item2 Name="ElectrotechVelec" Type="ToolBar" Break="False" Width="808"/>
+      <Item3 Name="ElectrotechActions" Type="ToolBar" Break="False" Width="558"/>
     </Item3>
   </ToolBarsConfig>
 </CONFIG>

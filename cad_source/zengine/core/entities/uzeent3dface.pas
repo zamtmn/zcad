@@ -24,7 +24,7 @@ uses
     uzeentityfactory,uzgldrawcontext,uzedrawingdef,uzecamera,
     uzegeometry,uzeffdxfsupport,uzestyleslayers,UGDBSelectedObjArray,uzeentsubordinated,
     uzegeometrytypes,uzeent3d,uzeentity,sysutils,uzctnrVectorBytes,uzbtypes,uzeconsts,
-    uzctnrvectorpgdbaseobjects,uzglviewareadata;
+    uzctnrvectorpgdbaseobjects,uzglviewareadata,uzMVReader;
 type
 {Export+}
 {REGISTEROBJECTTYPE GDBObj3DFace}
@@ -39,16 +39,16 @@ GDBObj3DFace= object(GDBObj3d)
                  //ProjPoint:GDBvertex;
                  constructor init(own:Pointer;layeraddres:PGDBLayerProp;LW:SmallInt;p:GDBvertex);
                  constructor initnul(owner:PGDBObjGenericWithSubordinated);
-                 procedure LoadFromDXF(var f:TZctnrVectorBytes;ptu:PExtensionData;var drawing:TDrawingDef);virtual;
+                 procedure LoadFromDXF(var f:TZMemReader;ptu:PExtensionData;var drawing:TDrawingDef);virtual;
                  procedure SaveToDXF(var outhandle:{Integer}TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
                  procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext;Stage:TEFStages=EFAllStages);virtual;
 
                  procedure DrawGeometry(lw:Integer;var DC:TDrawContext{infrustumactualy:TActulity;subrender:Integer});virtual;
-                 function calcinfrustum(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:Integer; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double):Boolean;virtual;
+                 function calcinfrustum(const frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:Integer; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double):Boolean;virtual;
                  procedure RenderFeedback(pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc;var DC:TDrawContext);virtual;
                  //function getsnap(var osp:os_record):Boolean;virtual;
                  function onmouse(var popa:TZctnrVectorPGDBaseObjects;const MF:ClipArray;InSubEntry:Boolean):Boolean;virtual;
-                 function CalcTrueInFrustum(frustum:ClipArray;visibleactualy:TActulity):TInBoundingVolume;virtual;
+                 function CalcTrueInFrustum(const frustum:ClipArray;visibleactualy:TActulity):TInBoundingVolume;virtual;
                  procedure addcontrolpoints(tdesc:Pointer);virtual;
                  procedure remaponecontrolpoint(pdesc:pcontrolpointdesc);virtual;
                  procedure rtmodifyonepoint(const rtmod:TRTModifyData);virtual;
@@ -171,7 +171,7 @@ procedure GDBObj3DFace.LoadFromDXF;
 var //s: String;
   byt: Integer;
 begin
-  byt:=readmystrtoint(f);
+  byt:=f.ParseInteger;
   while byt <> 0 do
   begin
     if not LoadFromDXFObjShared(f,byt,ptu,drawing) then
@@ -179,8 +179,8 @@ begin
           if not dxfvertexload(f,11,byt,PInOCS[1]) then
           if not dxfvertexload(f,12,byt,PInOCS[2]) then
           if not dxfvertexload(f,13,byt,PInOCS[3]) then
-          {s := }f.readString;
-    byt:=readmystrtoint(f);
+          {s := }f.SkipString;
+    byt:=f.ParseInteger;
   end;
 end;
 procedure GDBObj3DFace.SaveToDXF;

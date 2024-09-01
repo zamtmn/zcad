@@ -252,10 +252,12 @@ msgid "&Directory"
 msgstr "A&dresár"
 
 #: lclstrconsts.rsdocopy
+msgctxt "lclstrconsts.rsdocopy"
 msgid "Copy"
 msgstr "Kopírovať"
 
 #: lclstrconsts.rsdopaste
+msgctxt "lclstrconsts.rsdopaste"
 msgid "Paste"
 msgstr "Prilepiť"
 
@@ -264,6 +266,7 @@ msgid "Duplicate icon format."
 msgstr "Zdvojený formát ikony."
 
 #: lclstrconsts.rseditrecordhint
+msgctxt "lclstrconsts.rseditrecordhint"
 msgid "Edit"
 msgstr "Upraviť"
 
@@ -771,9 +774,45 @@ msgstr "Limetková"
 msgid "List index exceeds bounds (%d)"
 msgstr "Index zoznamu prekračuje hranice (%d)"
 
+#: lclstrconsts.rsmacoseditmenu
+msgctxt "lclstrconsts.rsmacoseditmenu"
+msgid "Edit"
+msgstr "Upraviť"
+
+#: lclstrconsts.rsmacoseditmenucopy
+msgctxt "lclstrconsts.rsmacoseditmenucopy"
+msgid "Copy"
+msgstr "Kopírovať"
+
+#: lclstrconsts.rsmacoseditmenucut
+msgid "Cut"
+msgstr "Vystrihnúť"
+
+#: lclstrconsts.rsmacoseditmenupaste
+msgctxt "lclstrconsts.rsmacoseditmenupaste"
+msgid "Paste"
+msgstr "Prilepiť"
+
+#: lclstrconsts.rsmacoseditmenuredo
+msgid "Redo"
+msgstr "Opakovať"
+
+#: lclstrconsts.rsmacoseditmenuselectall
+msgid "Select All"
+msgstr "Vybrať všetko"
+
+#: lclstrconsts.rsmacoseditmenuundo
+msgid "Undo"
+msgstr "Späť"
+
 #: lclstrconsts.rsmacosfileformat
 msgid "File Format:"
 msgstr "Formát súboru:"
+
+#: lclstrconsts.rsmacosmenuabout
+#, object-pascal-format
+msgid "About %s"
+msgstr ""
 
 #: lclstrconsts.rsmacosmenuhide
 #, object-pascal-format
@@ -783,6 +822,10 @@ msgstr "Skryť %s"
 #: lclstrconsts.rsmacosmenuhideothers
 msgid "Hide Others"
 msgstr "Skryť ostatné"
+
+#: lclstrconsts.rsmacosmenupreferences
+msgid "Preferences..."
+msgstr ""
 
 #: lclstrconsts.rsmacosmenuquit
 #, object-pascal-format

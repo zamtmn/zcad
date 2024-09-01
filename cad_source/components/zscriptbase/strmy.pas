@@ -28,13 +28,13 @@ type
 //function pac_GDBWord_to_String(w: Word): String;
 //function unpac_String_to_GDBWord(s: String): Word;
 //function unpac_String_to_lGDBWord(s: String): LongWord;
-function countchar(s: String; ch: ansichar): Integer;
-procedure replaceeqlen(var s: String; substr,newstr: String);
-function replacenull(s:String): String;
-function strtohex(s:String): String;
-function parse(template, str:String; Stringarray:PTZctnrVectorStrings;mode:Boolean;lexema:PLexema; var position:Integer):Boolean;
-function runparser(template:String;var str:String; out parsed:Boolean):PTZctnrVectorStrings;
-function IsParsed(template:String;var str:String; out strins:PTZctnrVectorStrings):boolean;
+function countchar(const s: String; ch: ansichar): Integer;
+procedure replaceeqlen(var s: String; const substr,newstr: String);
+function replacenull(const s:String): String;
+function strtohex(const s:String): String;
+function parse(const template, str:String; Stringarray:PTZctnrVectorStrings;mode:Boolean;lexema:PLexema; var position:Integer):Boolean;
+function runparser(const template:String;var str:String; out parsed:Boolean):PTZctnrVectorStrings;
+function IsParsed(const template:String;var str:String; out strins:PTZctnrVectorStrings):boolean;
 const maxlexem=16;
 
 const
@@ -62,20 +62,24 @@ const
 
 implementation
 uses varmandef{,log,URecordDescriptor};
-function findlexem(s:String):String;
+function findlexem(const s:String; start, len: Integer):String; overload;
 var
    i:Integer;
+   s2:string;
 begin
      result:='';
      for i:=0 to maxlexem do
-     if lexemarray[i,0]=s then
-                              begin
-                                   result:=lexemarray[i,1];
-                                   exit;
-                              end;
+     begin
+       s2:=lexemarray[i,0];
+       if (Length(s2)=len) and (CompareChar(s2[1], s[start], len)=0) then
+                                begin
+                                     result:=lexemarray[i,1];
+                                     exit;
+                                end;
+     end;
 end;
 
-function replacenull(s:String): String;
+function replacenull(const s:String): String;
 var si,ri:Integer;
     temp:String;
 begin
@@ -105,7 +109,7 @@ begin
      end;
      setlength(result,ri-1);
 end;
-function strtohex(s:String): String;
+function strtohex(const s:String): String;
 var si,ri:Integer;
     temp:String;
 begin
@@ -152,7 +156,7 @@ begin
   result := LongWord(pGDBLongword(s)^);
 end;}
 
-function countchar(s: String; ch: ansichar): Integer;
+function countchar(const s: String; ch: ansichar): Integer;
 var i, c: Integer;
 begin
   c := 0;
@@ -160,7 +164,7 @@ begin
     for i := 1 to length(s) do if s[i] = ch then inc(c);
   result := c;
 end;
-procedure replaceeqlen(var s: String; substr,newstr: String);
+procedure replaceeqlen(var s: String; const substr,newstr: String);
 var i, c,a: Integer;
 begin
   i:=pos(substr,s);
@@ -173,7 +177,7 @@ begin
   end;
 end;
 
-procedure readsubexpr(r1,r2:ansichar; expr: String;var substart,subend:Integer);
+procedure readsubexpr(r1,r2:ansichar; const expr: String;var substart,subend:Integer);
 var
   {i, }count: Integer;
   s,f:Integer;
@@ -198,16 +202,16 @@ begin
   substart:=s;
   subend:=f;
 end;
-procedure foundsym(sym:ansichar; expr: String;var subend:Integer);
+procedure foundsym(sym:ansichar; const expr: String;var subend:Integer);
 begin
   while (expr[subend]<>sym) and (subend < length(expr)) do
         inc(subend);
 end;
-function IsParsed(template:String;var str:String; out strins:PTZctnrVectorStrings):boolean;
+function IsParsed(const template:String;var str:String; out strins:PTZctnrVectorStrings):boolean;
 begin
      strins:=runparser(template,str,result);
 end;
-function runparser(template:String;var str:String; out parsed:Boolean):PTZctnrVectorStrings;
+function runparser(const template:String;var str:String; out parsed:Boolean):PTZctnrVectorStrings;
 var i:Integer;
     Stringarray:PTZctnrVectorStrings;
 begin
@@ -245,7 +249,7 @@ begin
                                  end;
      result:=Stringarray;
 end;
-function parse(template, str:String; Stringarray:PTZctnrVectorStrings;mode:Boolean;lexema:PLexema; var position:Integer):Boolean;
+function parse(const template, str:String; Stringarray:PTZctnrVectorStrings;mode:Boolean;lexema:PLexema; var position:Integer):Boolean;
 var i,iend{,subpos},subi:Integer;
     subexpr:String;
     {error,}subresult:Boolean;
@@ -270,8 +274,7 @@ begin
                '_':begin
                         subi:=i;
                         foundsym(#0,template,subi);
-                        subexpr:=copy(template,i,subi-i);
-                        subexpr:=findlexem(subexpr);
+                        subexpr:=findlexem(template,i,subi-i);
                         if subexpr<>'' then
                         begin
                              l:='';
@@ -290,8 +293,7 @@ begin
                '?':begin
                         subi:=i;
                         foundsym(#0,template,subi);
-                        subexpr:=copy(template,i,subi-i);
-                        if pos(str[position],subexpr)<>0 then
+                        if IndexByte(template[i], subi-i, Byte(str[position]))>=0 then
                                                              begin
                                                                   if (lexema<>nil) and mode then lexema^:=lexema^+str[position];
                                                                   inc(position);
@@ -321,8 +323,7 @@ begin
                '^':begin
                         subi:=i;
                         foundsym(#0,template,subi);
-                        subexpr:=copy(template,i,subi-i);
-                        if pos(str[position],subexpr)<>0 then
+                        if IndexByte(template[i], subi-i, Byte(str[position]))>=0 then
                                                              begin
                                                                   result:=true
                                                              end
@@ -385,8 +386,7 @@ begin
                '{':begin
                         iend:=i;
                         readsubexpr('{','}',template,i,iend);
-                        subexpr:=copy(template,i+1,iend-i-1);
-                        subexpr:=findlexem(subexpr);
+                        subexpr:=findlexem(template,i+1,iend-i-1);
                         if subexpr<>'' then
                         begin
                              {error:=}parse(template,str,Stringarray,mode,nil,position);

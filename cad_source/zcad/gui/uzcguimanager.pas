@@ -55,7 +55,7 @@ end;
 
 function TZCADGUIManager.GetZCADFormInfo(FormName:String; out PFormInfoData:PTFormInfoData):boolean;
 begin
-     result:=FormsInfo.MyGetMutableValue(FormName,PFormInfoData);
+     result:=FormsInfo.tryGetMutableValue(FormName,PFormInfoData);
 end;
 
 procedure TZCADGUIManager.RegisterZCADFormInfo(FormName,FormCaption:String;const FormClass:TClass;const bounds:TRect;SetupProc:TZCADFormSetupProc;CreateProc:TZCADFormCreateProc;PInstanceVariable:pointer;DesignTimeForm:boolean=false);

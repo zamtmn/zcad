@@ -48,13 +48,13 @@ GDBObjDiametricDimension= object(GDBObjDimension)
                         function Clone(own:Pointer):PGDBObjEntity;virtual;
                         procedure addcontrolpoints(tdesc:Pointer);virtual;
 
-                        function P10ChangeTo(tv:GDBVertex):GDBVertex;virtual;
-                        function P15ChangeTo(tv:GDBVertex):GDBVertex;virtual;
-                        function P11ChangeTo(tv:GDBVertex):GDBVertex;virtual;
-                        procedure DrawCenterMarker(cp:GDBVertex;r:Double;var drawing:TDrawingDef;var DC:TDrawContext);
+                        function P10ChangeTo(const tv:GDBVertex):GDBVertex;virtual;
+                        function P15ChangeTo(const tv:GDBVertex):GDBVertex;virtual;
+                        function P11ChangeTo(const tv:GDBVertex):GDBVertex;virtual;
+                        procedure DrawCenterMarker(const cp:GDBVertex;r:Double;var drawing:TDrawingDef;var DC:TDrawContext);
                         procedure CalcDNVectors;virtual;
 
-                        function TextNeedOffset(dimdir:gdbvertex):Boolean;virtual;
+                        function TextNeedOffset(const dimdir:gdbvertex):Boolean;virtual;
                         function TextAlwaysMoved:Boolean;virtual;
                         function GetCenterPoint:GDBVertex;virtual;
                         procedure CalcTextInside;virtual;
@@ -94,7 +94,7 @@ begin
      vectorN:=normalizevertex(vectorN)
 end;
 
-procedure GDBObjDiametricDimension.DrawCenterMarker(cp:GDBVertex;r:Double;var drawing:TDrawingDef;var DC:TDrawContext);
+procedure GDBObjDiametricDimension.DrawCenterMarker(const cp:GDBVertex;r:Double;var drawing:TDrawingDef;var DC:TDrawContext);
 var
    ls:Double;
 begin
@@ -113,7 +113,7 @@ begin
      end;
 end;
 
-function GDBObjDiametricDimension.P10ChangeTo(tv:GDBVertex):GDBVertex;
+function GDBObjDiametricDimension.P10ChangeTo(const tv:GDBVertex):GDBVertex;
 var
   dirv,center:GDBVertex;
   d:double;
@@ -128,7 +128,7 @@ begin
      d:=Vertexlength(center,DimData.P11InOCS);
      DimData.P11InOCS:=VertexDmorph(center,dirv,-d);
 end;
-function GDBObjDiametricDimension.P15ChangeTo(tv:GDBVertex):GDBVertex;
+function GDBObjDiametricDimension.P15ChangeTo(const tv:GDBVertex):GDBVertex;
 var
   dirv,center:GDBVertex;
   d:double;
@@ -143,7 +143,7 @@ begin
      d:=Vertexlength(center,DimData.P11InOCS);
      DimData.P11InOCS:=VertexDmorph(center,dirv,d);
 end;
-function GDBObjDiametricDimension.P11ChangeTo(tv:GDBVertex):GDBVertex;
+function GDBObjDiametricDimension.P11ChangeTo(const tv:GDBVertex):GDBVertex;
 var
   dirv,center:GDBVertex;
   d:double;
@@ -238,7 +238,7 @@ begin
           if assigned(EntExtensions)then
             EntExtensions.RunOnAfterEntityFormat(@self,drawing,DC);
 end;
-function GDBObjDiametricDimension.TextNeedOffset(dimdir:gdbvertex):Boolean;
+function GDBObjDiametricDimension.TextNeedOffset(const dimdir:gdbvertex):Boolean;
 begin
    result:=true;
 end;

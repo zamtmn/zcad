@@ -67,6 +67,7 @@ type
              Template_Path:PString;(*'Templates'*)
              Template_File:PString;(*'Default template'*)
              LayoutFile:PString;(*'Current layout'*)
+             Dictionaries:PString;(*'Dictionaries'*)
              Program_Run:PString;(*'Program'*)(*oi_readonly*)
              Temp_files:PString;(*'Temporary files'*)(*oi_readonly*)
              Device_Library:PString;(*'Device base'*)
@@ -122,7 +123,7 @@ type
              SYS_NoSplash:PBoolean;(*'No splash screen'*)
              SYS_NoLoadLayout:PBoolean;(*'No load layout'*)(*oi_readonly*)
              SYS_UpdatePO:PBoolean;(*'Update PO file'*)(*oi_readonly*)
-
+             SYS_MemProfiling:PBoolean;(*'Memory profiling'*)(*oi_readonly*)
        end;
   {REGISTERRECORDTYPE tdwg}
   tdwg=record

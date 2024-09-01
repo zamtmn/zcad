@@ -1,7 +1,7 @@
 begin
-       if Input = 'Hidden~inPipe' then
+       if Input = 'hidden~inPipeMetal' then
           Output:='cabtruba'; 
-	   if Input = 'Hidden~underPlaster' then
+	   if Input = 'hidden~underPlaster' then
           Output:='ByLayer';   
        if Input = 'open~inMetalTray' then
           Output:='cablotok';
@@ -9,12 +9,14 @@ begin
           Output:='cabkorob';
 	   if Input = 'open~inPipePVC' then
           Output:='cabtruba';
-	   if Input = 'open~inPip' then
+	   if Input = 'open~inPipеMetal' then
           Output:='cabtruba'; 		  
-       if Input = 'EPSN~CL04' then
+       if Input = 'land~lowCable' then
           Output:='Cable_N'; 
-       if Input = 'EPSN~CL10' then
+       if Input = 'land~highCable' then
           Output:='Cable_W'; 
-       if Input = 'EPSN~OutLightLines' then
+       if Input = 'land~OutLight' then
           Output:='Cable_V'; 
+       if Input = 'land~inPipeSDR' then
+          Output:='cabsdr'; 		  
 end.

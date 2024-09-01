@@ -9,6 +9,7 @@ usescopy objgroup;
 usescopy addtocable;
 usescopy elreceivers;
 usescopy vlocation;
+usescopy vtextpointer;
 usescopy vspecification;
 usescopy vinfopersonaluse;
 var
@@ -40,6 +41,10 @@ Phase:=_A;
 
 INFOPERSONALUSE_TextTemplate:='';
 
+INFOTEXTPOINTER_Tp1Up.format:='@@[NMO_BaseName]@@[NMO_Suffix]';
+INFOTEXTPOINTER_Tp1Bottom.format:=' ';
+INFOTEXTPOINTER_Tp2Up.format:='@@[GC_HeadDevice].@@[GC_HDGroup]';
+INFOTEXTPOINTER_Tp2Bottom.format:=' ';
 
 VSPECIFICATION_Position:='';
 VSPECIFICATION_Name:='Светильник 2х18';

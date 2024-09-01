@@ -75,19 +75,19 @@ GDBObjDimension= object(GDBObjComplex)
                 function GetLinearDimStr(l:Double;var drawing:TDrawingDef):TDXFEntsInternalStringType;
                 function GetDimStr(var drawing:TDrawingDef):TDXFEntsInternalStringType;virtual;
                 procedure rtmodifyonepoint(const rtmod:TRTModifyData);virtual;
-                function P10ChangeTo(tv:GDBVertex):GDBVertex;virtual;
-                function P11ChangeTo(tv:GDBVertex):GDBVertex;virtual;
-                function P12ChangeTo(tv:GDBVertex):GDBVertex;virtual;
-                function P13ChangeTo(tv:GDBVertex):GDBVertex;virtual;
-                function P14ChangeTo(tv:GDBVertex):GDBVertex;virtual;
-                function P15ChangeTo(tv:GDBVertex):GDBVertex;virtual;
-                function P16ChangeTo(tv:GDBVertex):GDBVertex;virtual;
+                function P10ChangeTo(const tv:GDBVertex):GDBVertex;virtual;
+                function P11ChangeTo(const tv:GDBVertex):GDBVertex;virtual;
+                function P12ChangeTo(const tv:GDBVertex):GDBVertex;virtual;
+                function P13ChangeTo(const tv:GDBVertex):GDBVertex;virtual;
+                function P14ChangeTo(const tv:GDBVertex):GDBVertex;virtual;
+                function P15ChangeTo(const tv:GDBVertex):GDBVertex;virtual;
+                function P16ChangeTo(const tv:GDBVertex):GDBVertex;virtual;
                 procedure transform(const t_matrix:DMatrix4D);virtual;
                 procedure TransformAt(p:PGDBObjEntity;t_matrix:PDMatrix4D);virtual;
 
                 procedure DrawDimensionText(p:GDBVertex;var drawing:TDrawingDef;var DC:TDrawContext);virtual;
                 function GetTextOffset(var drawing:TDrawingDef):GDBVertex;virtual;
-                function TextNeedOffset(dimdir:gdbvertex):Boolean;virtual;
+                function TextNeedOffset(const dimdir:gdbvertex):Boolean;virtual;
                 function TextAlwaysMoved:Boolean;virtual;
                 function GetPSize:Double;virtual;
 
@@ -285,7 +285,7 @@ begin
   if vectorN.y<0 then
                      Result:=-Result;
 end;
-function GDBObjDimension.TextNeedOffset(dimdir:gdbvertex):Boolean;
+function GDBObjDimension.TextNeedOffset(const dimdir:gdbvertex):Boolean;
 begin
      result:=(((textangle<>0)or(PDimStyle.Text.DIMTAD=DTVPCenters))and(TextInside and not PDimStyle.Text.DIMTIH))or(abs(dimdir.x)<eps)or(DimData.TextMoved);
 end;
@@ -450,31 +450,31 @@ begin
   DimData.P15InWCS:=VectorTransform3D(PGDBObjDimension(p)^.DimData.P15InWCS,t_matrix^);
   DimData.P16InOCS:=VectorTransform3D(PGDBObjDimension(p)^.DimData.P16InOCS,t_matrix^);
 end;
-function GDBObjDimension.P10ChangeTo(tv:GDBVertex):GDBVertex;
+function GDBObjDimension.P10ChangeTo(const tv:GDBVertex):GDBVertex;
 begin
      result:=tv;
 end;
-function GDBObjDimension.P11ChangeTo(tv:GDBVertex):GDBVertex;
+function GDBObjDimension.P11ChangeTo(const tv:GDBVertex):GDBVertex;
 begin
      result:=tv;
 end;
-function GDBObjDimension.P12ChangeTo(tv:GDBVertex):GDBVertex;
+function GDBObjDimension.P12ChangeTo(const tv:GDBVertex):GDBVertex;
 begin
      result:=tv;
 end;
-function GDBObjDimension.P13ChangeTo(tv:GDBVertex):GDBVertex;
+function GDBObjDimension.P13ChangeTo(const tv:GDBVertex):GDBVertex;
 begin
      result:=tv;
 end;
-function GDBObjDimension.P14ChangeTo(tv:GDBVertex):GDBVertex;
+function GDBObjDimension.P14ChangeTo(const tv:GDBVertex):GDBVertex;
 begin
      result:=tv;
 end;
-function GDBObjDimension.P15ChangeTo(tv:GDBVertex):GDBVertex;
+function GDBObjDimension.P15ChangeTo(const tv:GDBVertex):GDBVertex;
 begin
      result:=tv;
 end;
-function GDBObjDimension.P16ChangeTo(tv:GDBVertex):GDBVertex;
+function GDBObjDimension.P16ChangeTo(const tv:GDBVertex):GDBVertex;
 begin
      result:=tv;
 end;

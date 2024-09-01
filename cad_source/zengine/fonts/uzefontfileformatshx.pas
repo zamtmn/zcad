@@ -31,7 +31,7 @@ type ptsyminfo=^tsyminfo;
      tsyminfo=record
                            number,size:word;
                      end;
-function createnewfontfromshx(name:String;var pf:PGDBfont):Boolean;
+function createnewfontfromshx(const name:String;var pf:PGDBfont):Boolean;
 
 implementation
 
@@ -690,7 +690,7 @@ begin
             result:=inccounter;
           end;
 
-function createnewfontfromshx(name:String;var pf:PGDBfont):Boolean;
+function createnewfontfromshx(const name:String;var pf:PGDBfont):Boolean;
 var
    //f:filestream;
    line{,sub}:AnsiString;

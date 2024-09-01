@@ -38,14 +38,14 @@ grafelement= object(GDBaseObject)
                   pathlength:Double;
 
                   constructor initnul;
-                  constructor init(v:gdbvertex);
+                  constructor init(const v:gdbvertex);
                   procedure addline(pv:pgdbobjEntity);
                   function IsConnectedTo(node:pgrafelement):pgdbobjEntity;
             end;
 {REGISTEROBJECTTYPE GDBGraf}
 GDBGraf= object(GZVector{-}<grafelement>{//})(*OpenArrayOfData=grafelement*)
                 constructor init(m:Integer);
-                function addge(v:gdbvertex):pgrafelement;
+                function addge(const v:gdbvertex):pgrafelement;
                 procedure clear;virtual;
                 function minimalize(var drawing:TDrawingDef):Boolean;
                 function divide:Boolean;
@@ -253,7 +253,7 @@ begin
      linkcount:=0;
      connected:=0;
 end;
-constructor grafelement.init(v:gdbvertex);
+constructor grafelement.init(const v:gdbvertex);
 begin
      point:=v;
      link.init(100);

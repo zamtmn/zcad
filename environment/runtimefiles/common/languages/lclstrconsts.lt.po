@@ -256,10 +256,12 @@ msgid "&Directory"
 msgstr "&Aplankas"
 
 #: lclstrconsts.rsdocopy
+msgctxt "lclstrconsts.rsdocopy"
 msgid "Copy"
 msgstr "Kopijuoti"
 
 #: lclstrconsts.rsdopaste
+msgctxt "lclstrconsts.rsdopaste"
 msgid "Paste"
 msgstr "Įdėti"
 
@@ -268,6 +270,7 @@ msgid "Duplicate icon format."
 msgstr "Piktogramos formatai dubliuojasi."
 
 #: lclstrconsts.rseditrecordhint
+msgctxt "lclstrconsts.rseditrecordhint"
 msgid "Edit"
 msgstr "Redaguoti"
 
@@ -784,8 +787,44 @@ msgstr "Gelsvai žalsva"
 msgid "List index exceeds bounds (%d)"
 msgstr "Sąrašo indeksas peržengė ribas (%d)"
 
+#: lclstrconsts.rsmacoseditmenu
+msgctxt "lclstrconsts.rsmacoseditmenu"
+msgid "Edit"
+msgstr "Redaguoti"
+
+#: lclstrconsts.rsmacoseditmenucopy
+msgctxt "lclstrconsts.rsmacoseditmenucopy"
+msgid "Copy"
+msgstr "Kopijuoti"
+
+#: lclstrconsts.rsmacoseditmenucut
+msgid "Cut"
+msgstr "Iškirpti į iškarpinę"
+
+#: lclstrconsts.rsmacoseditmenupaste
+msgctxt "lclstrconsts.rsmacoseditmenupaste"
+msgid "Paste"
+msgstr "Įdėti"
+
+#: lclstrconsts.rsmacoseditmenuredo
+msgid "Redo"
+msgstr "Pakartoti"
+
+#: lclstrconsts.rsmacoseditmenuselectall
+msgid "Select All"
+msgstr "Žymėti viską"
+
+#: lclstrconsts.rsmacoseditmenuundo
+msgid "Undo"
+msgstr "Grąžinti"
+
 #: lclstrconsts.rsmacosfileformat
 msgid "File Format:"
+msgstr ""
+
+#: lclstrconsts.rsmacosmenuabout
+#, object-pascal-format
+msgid "About %s"
 msgstr ""
 
 #: lclstrconsts.rsmacosmenuhide
@@ -795,6 +834,10 @@ msgstr ""
 
 #: lclstrconsts.rsmacosmenuhideothers
 msgid "Hide Others"
+msgstr ""
+
+#: lclstrconsts.rsmacosmenupreferences
+msgid "Preferences..."
 msgstr ""
 
 #: lclstrconsts.rsmacosmenuquit

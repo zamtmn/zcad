@@ -62,7 +62,7 @@ begin
   result := s;
 end;
 
-function itString(expr: String): Boolean;
+function itString(const expr: String): Boolean;
 begin
   if (expr[1] = '"') and (expr[length(expr)] = '"') then
     result := true
@@ -70,7 +70,7 @@ begin
     result := false;
 end;
 
-function ithex(expr: String): Boolean;
+function ithex(const expr: String): Boolean;
 var
   i: Integer;
 begin
@@ -90,7 +90,7 @@ begin
   end;
 end;
 
-function itint(expr: String): Boolean;
+function itint(const expr: String): Boolean;
 var
   i: Integer;
 begin
@@ -105,7 +105,7 @@ begin
   result := false;
 end;
 
-function itreal(expr: String): Boolean;
+function itreal(const expr: String): Boolean;
 var
   i: Integer;
 begin
@@ -131,13 +131,13 @@ begin
   end;
   result := false;
 end;
-function itBoolean(expr: String): Boolean;
+function itBoolean(const expr: String): Boolean;
 begin
   if (uppercase(expr)='TRUE')or(uppercase(expr)='FALSE') then result := true
                                                          else result := false;
 end;
 
-function itconst(expr: String): Boolean;
+function itconst(const expr: String): Boolean;
 begin
   result := itString(expr) or ithex(expr) or itint(expr) or itreal(expr) or itBoolean(expr);
 end;

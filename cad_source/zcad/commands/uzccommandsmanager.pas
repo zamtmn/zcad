@@ -79,7 +79,7 @@ type
                           constructor init(m:Integer);
                           procedure execute(const comm:string;silent:Boolean;pdrawing:PTDrawingDef;POGLWndParam:POGLWndtype);virtual;
                           procedure executecommand(const comm:string;pdrawing:PTDrawingDef;POGLWndParam:POGLWndtype);virtual;
-                          procedure executecommandsilent(const comm:pansichar;pdrawing:PTDrawingDef;POGLWndParam:POGLWndtype);virtual;
+                          procedure executecommandsilent(const comm:string;pdrawing:PTDrawingDef;POGLWndParam:POGLWndtype);virtual;
                           procedure DisableExecuteCommandEnd;virtual;
                           procedure EnableExecuteCommandEnd;virtual;
                           function hasDisabledExecuteCommandEnd:boolean;virtual;
@@ -90,7 +90,7 @@ type
                           procedure ChangeModeAndEnd(newmode:TGetPointMode);
                           procedure executefile(fn:String;pdrawing:PTDrawingDef;POGLWndParam:POGLWndtype);virtual;
                           procedure executelastcommad(pdrawing:PTDrawingDef;POGLWndParam:POGLWndtype);virtual;
-                          procedure sendpoint2command(p3d:gdbvertex; p2d:gdbvertex2di; var mode:Byte;osp:pos_record;const drawing:TDrawingDef);virtual;
+                          procedure sendpoint2command(const p3d:gdbvertex; const p2d:gdbvertex2di; var mode:Byte;osp:pos_record;const drawing:TDrawingDef);virtual;
                           procedure CommandRegister(pc:PCommandObjectDef);virtual;
                           procedure run(pc:PCommandObjectDef;operands:String;pdrawing:PTDrawingDef);virtual;
                           destructor done;virtual;
@@ -860,16 +860,18 @@ begin
           //lastcommand := command;
 
           if silent then begin
-                        programlog.LogOutFormatStr('GDBCommandManager.ExecuteCommandSilent(%s)',[pfoundcommand^.CommandName],LM_Info);
-                        inc(SilentCounter);
-                    end else
-                        begin
-                        ZCMsgCallBackInterface.TextMessage(rsRunCommand+':'+pfoundcommand^.CommandName,TMWOHistoryOut);
-                        lastcommand := command;
-                        if not (isBusy) then
-                        if assigned(OnCommandRun) then
-                                                      OnCommandRun(command);
-                        end;
+            programlog.LogOutFormatStr('GDBCommandManager.ExecuteCommandSilent(%s)',[pfoundcommand^.CommandName],LM_Info);
+            inc(SilentCounter);
+          end else begin
+             if isBusy then
+               ZCMsgCallBackInterface.TextMessage(rsRunCommand+':'+pfoundcommand^.CommandName,[TMWOToLog])
+             else
+               ZCMsgCallBackInterface.TextMessage(rsRunCommand+':'+pfoundcommand^.CommandName,TMWOHistoryOut);
+             lastcommand := command;
+             if not (isBusy) then
+               if assigned(OnCommandRun) then
+                 OnCommandRun(command);
+          end;
 
           run(pfoundcommand,operands,pdrawing);
           if CurrCmd.pcommandrunning<>nil then
@@ -900,7 +902,7 @@ end;
 procedure GDBcommandmanager.executecommandsilent{(const comm:pansichar): Integer};
 begin
      if not isBusy then
-     execute(comm,true,pdrawing,POGLWndParam);
+       execute(comm,true,pdrawing,POGLWndParam);
 end;
 procedure GDBcommandmanager.PrepairVarStack;
 var

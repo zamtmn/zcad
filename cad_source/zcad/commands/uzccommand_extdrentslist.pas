@@ -41,6 +41,7 @@ var
   count:integer;
   extcounter:TExtCounter;
   pair:TExtCounter.TDictionaryPair;
+  ee:TAbstractEntityExtender;
 begin
   extcounter:=TExtCounter.create;
   try
@@ -51,7 +52,8 @@ begin
       inc(count);
       if Assigned(pls^.EntExtensions) then begin
         for i:=0 to pls^.EntExtensions.GetExtensionsCount-1 do begin
-          extcounter.CountKey(typeof(pls^.EntExtensions.GetExtension(i)),1);
+          ee:=pls^.EntExtensions.GetExtension(i);
+          extcounter.CountKey(typeof(ee),1);
         end;
       end;
     end;
@@ -63,7 +65,8 @@ begin
         inc(count);
         if Assigned(pv^.EntExtensions) then begin
           for i:=0 to pv^.EntExtensions.GetExtensionsCount-1 do begin
-            extcounter.CountKey(typeof(pv^.EntExtensions.GetExtension(i)),1);
+            ee:=pls^.EntExtensions.GetExtension(i);
+            extcounter.CountKey(typeof(ee),1);
           end;
         end;
       end;

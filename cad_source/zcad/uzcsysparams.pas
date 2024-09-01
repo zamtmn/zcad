@@ -16,7 +16,7 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
 
-unit uzcsysparams;
+unit uzcSysParams;
 {$INCLUDE zengineconfig.inc}
 interface
 uses XMLConf,XMLPropStorage,LazConfigStorage,fileutil,
@@ -35,7 +35,9 @@ type
     NoSplash:Boolean;(*'No splash screen'*)
     NoLoadLayout:Boolean;(*'No load layout'*)
     UpdatePO:Boolean;(*'Update PO file'*)
+    MemProfiling:Boolean;(*'Internal memory profiler'*)
     LangOverride:string;(*'Language override'*)
+    DictionariesPath:string;(*'Dictionaries path'*)
   end;
   {REGISTERRECORDTYPE tnotsavedparams}
   tnotsavedparams=record
@@ -58,7 +60,9 @@ const
                                    NoSplash:false;
                                    NoLoadLayout:false;
                                    UpdatePO:false;
-                                   LangOverride:'');
+                                   MemProfiling:false;
+                                   LangOverride:'';
+                                   DictionariesPath:'ru=$(ZCADDictionariesPath)\ru_RU.dic|en=$(ZCADDictionariesPath)\en_US.dic;$(ZCADDictionariesPath)\en_US_interface.dic|abbrv=$(ZCADDictionariesPath)\abbrv.dic');
   zcaduniqueinstanceid='zcad unique instance';
 var
   SysParam: tsysparam;
@@ -73,7 +77,9 @@ begin
   Config.SetDeleteValue('NoSplash',Params.NoSplash,DefaultSavedParams.NoSplash);
   Config.SetDeleteValue('NoLoadLayout',Params.NoLoadLayout,DefaultSavedParams.NoLoadLayout);
   Config.SetDeleteValue('UpdatePO',Params.UpdatePO,DefaultSavedParams.UpdatePO);
+  Config.SetDeleteValue('MemProfiling',Params.MemProfiling,DefaultSavedParams.MemProfiling);
   Config.SetDeleteValue('LangOverride',Params.LangOverride,DefaultSavedParams.LangOverride);
+  Config.SetDeleteValue('DictionariesPath',Params.DictionariesPath,DefaultSavedParams.DictionariesPath);
   Config.UndoAppendBasePath;
 end;
 
@@ -111,7 +117,9 @@ begin
   Params.NoSplash:=XMLConfig.GetValue('NoSplash',DefaultSavedParams.NoSplash);
   Params.NoLoadLayout:=XMLConfig.GetValue('NoLoadLayout',DefaultSavedParams.NoLoadLayout);
   Params.UpdatePO:=XMLConfig.GetValue('UpdatePO',DefaultSavedParams.UpdatePO);
+  Params.MemProfiling:=XMLConfig.GetValue('MemProfiling',DefaultSavedParams.MemProfiling);
   Params.LangOverride:=XMLConfig.GetValue('LangOverride',DefaultSavedParams.LangOverride);
+  Params.DictionariesPath:=XMLConfig.GetValue('DictionariesPath',DefaultSavedParams.DictionariesPath);
   XMLConfig.CloseKey;
   FreeAndNil(XMLConfig);
 end;

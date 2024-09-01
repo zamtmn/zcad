@@ -24,7 +24,7 @@ uses uzcinterface,uzeffdxf,uzbpaths,uzcsysvars,uzcTranslations,sysutils,
      uzetextpreprocessor,uzctnrVectorBytes,uzbtypes,uzeobjectextender,
      uzeentsubordinated,uzeentity,uzeenttext,uzeblockdef,varmandef,Varman,UUnitManager,
      URecordDescriptor,UBaseTypeDescriptor,uzedrawingdef,
-     uzbstrproc,uzeentitiesprop,uzcentelleader,math,gzctnrVectorTypes;
+     uzbstrproc,uzeentitiesprop,uzcentelleader,math,gzctnrVectorTypes,uzccommandsmanager;
 var
    PFCTTD:Pointer=nil;
    extvarunit:TUnit;
@@ -126,7 +126,7 @@ begin
 end;
 procedure TextIOSave_TMPL1(var outhandle:TZctnrVectorBytes;PEnt:PGDBObjText);
 begin
-     if UnicodeStringReplace(pent^.content,#10,'\P',[rfReplaceAll])<>convertfromunicode(pent^.template) then
+     if UnicodeStringReplace(pent^.content,#10,'\P',[rfReplaceAll])<>pent^.template{convertfromunicode(pent^.template)} then
        dxfStringout(outhandle,1000,'_TMPL1='+string(pent^.template));
 end;
 
@@ -409,25 +409,19 @@ procedure GDBObjBlockDefLoadVarsFromFile(pEntity:PGDBObjBlockDef);
 var
   uou:PTEntityUnit;
   pentvarext:TVariablesExtender;
-  //p:PTUnitManager;
-  //S:string;
 begin
-     if pos(DevicePrefix,pEntity^.name)=1 then
-     begin
-         //p:=@units;
-         //S:=pEntity^.name;
-         //S:=SupportPath;
-         uou:=pointer(units.findunit(GetSupportPath,InterfaceTranslate,pEntity^.name));
-         if uou<>nil then
-                         begin
-                              pentvarext:=pEntity^.GetExtension<TVariablesExtender>;
-                              pentvarext.entityunit.CopyFrom(uou);
-                         end
-                     else
-                         begin
-                                ZCMsgCallBackInterface.TextMessage(sysutils.format(rsfardeffilenotfounf,[pEntity^.Name]),TMWOHistoryOut);
-                         end;
-     end;
+  if pos(DevicePrefix,pEntity^.name)=1 then begin
+  uou:=pointer(units.findunit(GetSupportPath,InterfaceTranslate,pEntity^.name));
+  if uou<>nil then begin
+    pentvarext:=pEntity^.GetExtension<TVariablesExtender>;
+    pentvarext.entityunit.CopyFrom(uou);
+  end else begin
+    if commandmanager.isBusy then
+      ZCMsgCallBackInterface.TextMessage(sysutils.format(rsfardeffilenotfounf,[pEntity^.Name]),[TMWOToLog])
+    else
+      ZCMsgCallBackInterface.TextMessage(sysutils.format(rsfardeffilenotfounf,[pEntity^.Name]),TMWOHistoryOut);
+  end;
+  end;
 end;
 function CreateExtDxfLoadData:pointer;
 begin

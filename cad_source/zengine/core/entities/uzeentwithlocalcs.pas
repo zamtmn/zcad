@@ -23,7 +23,8 @@ unit uzeentwithlocalcs;
 interface
 uses uzepalette,uzgldrawcontext,uzedrawingdef,uzecamera,uzeentity,
      uzegeometrytypes,UGDBOutbound2DIArray,uzctnrVectorBytes,uzeentwithmatrix,uzbtypes,
-     uzegeometry,uzeffdxfsupport,sysutils,uzeentsubordinated,uzestyleslayers;
+     uzegeometry,uzeffdxfsupport,sysutils,uzeentsubordinated,uzestyleslayers,
+     uzMVReader;
 type
 //pprojoutbound:{-}PGDBOOutbound2DIArray{/Pointer/};
 {EXPORT+}
@@ -47,7 +48,7 @@ GDBObjWithLocalCS= object(GDBObjWithMatrix)
                constructor initnul(owner:PGDBObjGenericWithSubordinated);
                destructor done;virtual;
                procedure SaveToDXFObjPostfix(var outhandle:{Integer}TZctnrVectorBytes);{todo: проверить использование, выкинуть нах}
-               function LoadFromDXFObjShared(var f:TZctnrVectorBytes;dxfcod:Integer;ptu:PExtensionData;var drawing:TDrawingDef):Boolean;
+               function LoadFromDXFObjShared(var f:TZMemReader;DXFCode:Integer;ptu:PExtensionData;var drawing:TDrawingDef):Boolean;
 
                procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext;Stage:TEFStages=EFAllStages);virtual;
                procedure CalcObjMatrix(pdrawing:PTDrawingDef=nil);virtual;
@@ -306,8 +307,8 @@ end;
 function GDBObjWithLocalCS.LoadFromDXFObjShared;
 //var s:String;
 begin
-     result:=inherited LoadFromDXFObjShared(f,dxfcod,ptu,drawing);
-     if not result then result:=dxfvertexload(f,210,dxfcod,Local.basis.oz);
+     result:=inherited LoadFromDXFObjShared(f,DXFCode,ptu,drawing);
+     if not result then result:=dxfvertexload(f,210,DXFCode,Local.basis.oz);
 end;
 destructor GDBObjWithLocalCS.done;
 begin

@@ -12,7 +12,7 @@ type
 
   TMemoBackend=object(TLogerBaseBackend)
     enbl:Boolean;
-    procedure doLog(msg:TLogMsg;MsgOptions:TMsgOpt;LogMode:TLogLevel;LMDI:TModuleDesk);virtual;
+    procedure doLog(const msg:TLogMsg;MsgOptions:TMsgOpt;LogMode:TLogLevel;LMDI:TModuleDesk);virtual;
     constructor Init;
     //procedure endLog;virtual;
   end;
@@ -89,7 +89,7 @@ implementation
 
 {$R *.lfm}
 
-procedure TMemoBackend.doLog(msg:TLogMsg;MsgOptions:TMsgOpt;LogMode:TLogLevel;LMDI:TModuleDesk);
+procedure TMemoBackend.doLog(const msg:TLogMsg;MsgOptions:TMsgOpt;LogMode:TLogLevel;LMDI:TModuleDesk);
 begin
   if enbl then
     if Assigned(Form1) then

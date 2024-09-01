@@ -96,7 +96,7 @@ type
 
 
 
-  function drawInsertBlock(pt:GDBVertex;scalex,scaley:double;InsertionName:string):PGDBObjBlockInsert;
+  function drawInsertBlock(pt:GDBVertex;scalex,scaley,iRotate:double;InsertionName:string):PGDBObjBlockInsert;
   var
       rc:TDrawContext;
       entvarext:TVariablesExtender;
@@ -123,6 +123,7 @@ type
         result^.Name:=blockName;
         result^.Local.P_insert:=pt;
         result^.scale:=uzegeometry.CreateVertex(scalex,scaley,1);
+        result^.rotate:=iRotate;
         //строим переменную часть примитива (та что может редактироваться)
         result^.BuildVarGeometry(drawings.GetCurrentDWG^);
         //строим постоянную часть примитива
@@ -162,7 +163,7 @@ type
       cellValueVar,cellValueVar2:string;
       insertBlockName:string;
       movex,movey:double;
-      scalex,scaley:double;
+      scalex,scaley,iRotate:double;
       //textCell:string;
       isSpecName:boolean;
 
@@ -185,8 +186,10 @@ type
         scalex:=strtofloat(uzvzcadxlsxole.getCellValue(nameSheet,stRow,stColNew));
         inc(stColNew);
         scaley:=strtofloat(uzvzcadxlsxole.getCellValue(nameSheet,stRow,stColNew));
+        inc(stColNew);
+        iRotate:=strtofloat(uzvzcadxlsxole.getCellValue(nameSheet,stRow,stColNew));
 
-        ourDevOrInsert:=drawInsertBlock(uzegeometry.CreateVertex(movex,movey,0),scalex,scaley,insertBlockName);
+        ourDevOrInsert:=drawInsertBlock(uzegeometry.CreateVertex(movex,movey,0),scalex,scaley,iRotate,insertBlockName);
       except
         ourDevOrInsert:=nil;
       end;

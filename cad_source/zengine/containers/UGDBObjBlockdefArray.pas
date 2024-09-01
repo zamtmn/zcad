@@ -22,7 +22,7 @@ unit UGDBObjBlockdefArray;
 {$PointerMath ON}
 interface
 uses LCLProc,uzgldrawcontext,uzedrawingdef,uzbstrproc,uzeblockdef,gzctnrVectorObjects,
-     gzctnrVectorTypes,sysutils,uzbtypes,uzegeometry,uzbLogIntf;
+     gzctnrVectorTypes,sysutils,uzbtypes,uzegeometry,uzbLogIntf,Strings;
 type
 {Export+}
 {REGISTEROBJECTTYPE GDBObjBlockdefArray}
@@ -33,10 +33,10 @@ GDBObjBlockdefArray= object(GZVectorObjects{-}<GDBObjBlockdef>{//})(*OpenArrayOf
                       constructor init(m:Integer);
                       constructor initnul;
 
-                      function getindex(name:String):Integer;virtual;
-                      function getblockdef(name:String):PGDBObjBlockdef;virtual;
+                      function getindex(const name:String):Integer;virtual;
+                      function getblockdef(const name:String):PGDBObjBlockdef;virtual;
                       //function loadblock(filename,bname:pansichar;pdrawing:Pointer):Integer;virtual;
-                      function create(name:String):PGDBObjBlockdef;virtual;
+                      function create(const name:String):PGDBObjBlockdef;virtual;
                       procedure freeelement(PItem:PT);virtual;
                       procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);virtual;
                       procedure Grow(newmax:Integer=0);virtual;
@@ -98,12 +98,14 @@ end;
 function GDBObjBlockdefArray.getindex;
 var
    i:Integer;
-   Name_Upper: String;
+   name_: String;
 begin
-  Name_Upper:=UpperCase(Name);
   for i:=0 to count-1 do
-    if uppercase(PGDBObjBlockdef(parray)[i].Name)=Name_Upper then
+  begin
+    name_:=PGDBObjBlockdef(parray)[i].Name;
+    if (Length(name_)=Length(name)) and (StrLIComp(@name_[1], @name[1], Length(name))=0) then
       exit(i);
+  end;
   result:=-1;
 end;
 procedure GDBObjBlockdefArray.FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext);
@@ -134,13 +136,14 @@ function GDBObjBlockdefArray.getblockdef;
 var
   p:PGDBObjBlockdef;
       ir:itrec;
+  name_: String;
 begin
-  name:=uppercase(name);
   result:=nil;
   p:=beginiterate(ir);
   if p<>nil then
   repeat
-       if uppercase(p^.Name)=name then
+       name_:=p^.Name;
+       if (Length(name_)=Length(name)) and (StrLIComp(@name_[1], @name[1], Length(name))=0) then
                                            begin
                                                 result := p;
                                                 exit;

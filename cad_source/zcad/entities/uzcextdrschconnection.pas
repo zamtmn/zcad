@@ -341,12 +341,12 @@ begin
     pThisEntity^.Representation.DrawLineWithoutLT(DC,p2,l2);
   end;
 end;
-procedure drawCross(p1:GDBVertex;pThisEntity:PGDBObjEntity;var DC:TDrawContext);
+procedure drawCross(const p1:GDBVertex;pThisEntity:PGDBObjEntity;var DC:TDrawContext);
 begin
   pThisEntity^.Representation.DrawLineWithoutLT(DC,p1-_XY_zVertex,p1+_XY_zVertex);
   pThisEntity^.Representation.DrawLineWithoutLT(DC,p1-_MinusXY_zVertex,p1+_MinusXY_zVertex);
 end;
-procedure drawFilledCircle(p0:GDBVertex;r:Double;pThisEntity:PGDBObjEntity;var DC:TDrawContext);
+procedure drawFilledCircle(const p0:GDBVertex;r:Double;pThisEntity:PGDBObjEntity;var DC:TDrawContext);
 var
   p1,p2,p3,p4,p5,p6,p7,p8,p9,p10,p11,p12:GDBVertex;
   sine,cosine:Double;

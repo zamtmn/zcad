@@ -254,10 +254,12 @@ msgid "&Directory"
 msgstr "ディレクトリ(&D)"
 
 #: lclstrconsts.rsdocopy
+msgctxt "lclstrconsts.rsdocopy"
 msgid "Copy"
 msgstr "コピー"
 
 #: lclstrconsts.rsdopaste
+msgctxt "lclstrconsts.rsdopaste"
 msgid "Paste"
 msgstr "貼り付け"
 
@@ -266,6 +268,7 @@ msgid "Duplicate icon format."
 msgstr "アイコンの形式が重複しています。"
 
 #: lclstrconsts.rseditrecordhint
+msgctxt "lclstrconsts.rseditrecordhint"
 msgid "Edit"
 msgstr "編集"
 
@@ -782,31 +785,71 @@ msgstr "黄緑色"
 msgid "List index exceeds bounds (%d)"
 msgstr "リストインデックスが範囲外です (%d)"
 
+#: lclstrconsts.rsmacoseditmenu
+msgctxt "lclstrconsts.rsmacoseditmenu"
+msgid "Edit"
+msgstr "編集"
+
+#: lclstrconsts.rsmacoseditmenucopy
+msgctxt "lclstrconsts.rsmacoseditmenucopy"
+msgid "Copy"
+msgstr "コピー"
+
+#: lclstrconsts.rsmacoseditmenucut
+msgid "Cut"
+msgstr "切り取り"
+
+#: lclstrconsts.rsmacoseditmenupaste
+msgctxt "lclstrconsts.rsmacoseditmenupaste"
+msgid "Paste"
+msgstr "貼り付け"
+
+#: lclstrconsts.rsmacoseditmenuredo
+msgid "Redo"
+msgstr "やり直し"
+
+#: lclstrconsts.rsmacoseditmenuselectall
+msgid "Select All"
+msgstr "すべて選択"
+
+#: lclstrconsts.rsmacoseditmenuundo
+msgid "Undo"
+msgstr "元に戻す"
+
 #: lclstrconsts.rsmacosfileformat
 msgid "File Format:"
 msgstr ""
 
+#: lclstrconsts.rsmacosmenuabout
+#, object-pascal-format
+msgid "About %s"
+msgstr "%s について"
+
 #: lclstrconsts.rsmacosmenuhide
 #, object-pascal-format
 msgid "Hide %s"
-msgstr ""
+msgstr "%s を隠す"
 
 #: lclstrconsts.rsmacosmenuhideothers
 msgid "Hide Others"
-msgstr ""
+msgstr "ほかを隠す"
+
+#: lclstrconsts.rsmacosmenupreferences
+msgid "Preferences..."
+msgstr "環境設定..."
 
 #: lclstrconsts.rsmacosmenuquit
 #, object-pascal-format
 msgid "Quit %s"
-msgstr ""
+msgstr "%s を終了"
 
 #: lclstrconsts.rsmacosmenuservices
 msgid "Services"
-msgstr ""
+msgstr "サービス"
 
 #: lclstrconsts.rsmacosmenushowall
 msgid "Show All"
-msgstr ""
+msgstr "すべて表示"
 
 #: lclstrconsts.rsmarooncolorcaption
 msgid "Maroon"

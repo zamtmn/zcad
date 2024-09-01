@@ -38,45 +38,45 @@ end;
 TOrdinalTypeManipulator<T>=class(TBaseTypeManipulator<T>)
   class function GetValueAsString(const data:T):TInternalScriptString;
   class function GetFormattedValueAsString(const data:T; const f:TzeUnitsFormat):TInternalScriptString;
-  class procedure setFormattedValueAsString(var data:T; const f:TzeUnitsFormat;Value:TInternalScriptString);
-  class procedure SetValueFromString(var data:T;Value:TInternalScriptString);
+  class procedure setFormattedValueAsString(var data:T; const f:TzeUnitsFormat; const Value:TInternalScriptString);
+  class procedure SetValueFromString(var data:T; const Value:TInternalScriptString);
 end;
 TBoolTypeManipulator<T>=class(TBaseTypeManipulator<T>)
   class function GetValueAsString(const data:T):TInternalScriptString;
   class function GetFormattedValueAsString(const data:T; const f:TzeUnitsFormat):TInternalScriptString;
-  class procedure setFormattedValueAsString(var data:T; const f:TzeUnitsFormat;Value:TInternalScriptString);
-  class procedure SetValueFromString(var data:T;Value:TInternalScriptString);
+  class procedure setFormattedValueAsString(var data:T; const f:TzeUnitsFormat; const Value:TInternalScriptString);
+  class procedure SetValueFromString(var data:T; const Value:TInternalScriptString);
 end;
 TFloatTypeManipulator<T>=class(TBaseTypeManipulator<T>)
   class function GetValueAsString(const data:T):TInternalScriptString;
   class function GetFormattedValueAsString(const data:T; const f:TzeUnitsFormat):TInternalScriptString;
-  class procedure setFormattedValueAsString(var data:T; const f:TzeUnitsFormat;Value:TInternalScriptString);
-  class procedure SetValueFromString(var data:T;Value:TInternalScriptString);
+  class procedure setFormattedValueAsString(var data:T; const f:TzeUnitsFormat; const Value:TInternalScriptString);
+  class procedure SetValueFromString(var data:T; const Value:TInternalScriptString);
 end;
 TStringTypeManipulator<T>=class(TBaseTypeManipulator<T>)
   class function GetValueAsString(const data:T):TInternalScriptString;
   class function GetFormattedValueAsString(const data:T; const f:TzeUnitsFormat):TInternalScriptString;
-  class procedure setFormattedValueAsString(var data:T; const f:TzeUnitsFormat;Value:TInternalScriptString);
-  class procedure SetValueFromString(var data:T;Value:TInternalScriptString);
+  class procedure setFormattedValueAsString(var data:T; const f:TzeUnitsFormat; const Value:TInternalScriptString);
+  class procedure SetValueFromString(var data:T; const Value:TInternalScriptString);
 end;
 TAnsiStringTypeManipulator<T>=class(TBaseTypeManipulator<T>)
   class function GetValueAsString(const data:T):TInternalScriptString;
   class function GetFormattedValueAsString(const data:T; const f:TzeUnitsFormat):TInternalScriptString;
-  class procedure setFormattedValueAsString(var data:T; const f:TzeUnitsFormat;Value:TInternalScriptString);
-  class procedure SetValueFromString(var data:T;Value:TInternalScriptString);
+  class procedure setFormattedValueAsString(var data:T; const f:TzeUnitsFormat; const Value:TInternalScriptString);
+  class procedure SetValueFromString(var data:T; const Value:TInternalScriptString);
 end;
 TTempAnsiStringStoredIn1251TypeManipulator<T>=class(TBaseTypeManipulator<T>)
   class function GetValueAsString(const data:T):TInternalScriptString;
   class function GetFormattedValueAsString(const data:T; const f:TzeUnitsFormat):TInternalScriptString;
-  class procedure setFormattedValueAsString(var data:T; const f:TzeUnitsFormat;Value:TInternalScriptString);
-  class procedure SetValueFromString(var data:T;Value:TInternalScriptString);
+  class procedure setFormattedValueAsString(var data:T; const f:TzeUnitsFormat; const Value:TInternalScriptString);
+  class procedure SetValueFromString(var data:T; const Value:TInternalScriptString);
 end;
 
 TPointerTypeManipulator<T>=class(TBaseTypeManipulator<T>)
   class function GetValueAsString(const data:T):TInternalScriptString;
   class function GetFormattedValueAsString(const data:T; const f:TzeUnitsFormat):TInternalScriptString;
-  class procedure setFormattedValueAsString(var data:T; const f:TzeUnitsFormat;Value:TInternalScriptString);
-  class procedure SetValueFromString(var data:T;Value:TInternalScriptString);
+  class procedure setFormattedValueAsString(var data:T; const f:TzeUnitsFormat; const Value:TInternalScriptString);
+  class procedure SetValueFromString(var data:T; const Value:TInternalScriptString);
 end;
 PBaseTypeDescriptor=^{BaseTypeDescriptor}TUserTypeDescriptor;
 BaseTypeDescriptor<T,TManipulator>=object(TUserTypeDescriptor)
@@ -86,9 +86,9 @@ BaseTypeDescriptor<T,TManipulator>=object(TUserTypeDescriptor)
 
                          function GetValueAsString(pinstance:Pointer):TInternalScriptString;virtual;
                          function GetFormattedValueAsString(PInstance:Pointer;const f:TzeUnitsFormat):TInternalScriptString;virtual;
-                         procedure SetFormattedValueFromString(PInstance:Pointer;const f:TzeUnitsFormat;Value:TInternalScriptString);virtual;
-                         function CreateProperties(const f:TzeUnitsFormat;mode:PDMode;PPDA:PTPropertyDeskriptorArray;Name:TInternalScriptString;PCollapsed:Pointer;ownerattrib:Word;var bmode:Integer;const addr:Pointer;ValKey,ValType:TInternalScriptString):PTPropertyDeskriptorArray;virtual;
-                         procedure SetValueFromString(PInstance:Pointer;Value:TInternalScriptString);virtual;
+                         procedure SetFormattedValueFromString(PInstance:Pointer;const f:TzeUnitsFormat; const Value:TInternalScriptString);virtual;
+                         function CreateProperties(const f:TzeUnitsFormat;mode:PDMode;PPDA:PTPropertyDeskriptorArray;const Name:TInternalScriptString;PCollapsed:Pointer;ownerattrib:Word;var bmode:Integer;const addr:Pointer;const ValKey,ValType:TInternalScriptString):PTPropertyDeskriptorArray;virtual;
+                         procedure SetValueFromString(PInstance:Pointer; const Value:TInternalScriptString);virtual;
                          procedure InitInstance(PInstance:Pointer);virtual;
                          function AllocInstance:Pointer;virtual;
                    end;
@@ -138,11 +138,11 @@ GDBUnicodeStringDescriptor=object(StringGeneralDescriptor<UnicodeString,TSTM_Uni
                     end;
 TSTM_String=TStringTypeManipulator<String>;
 StringDescriptor=object(StringGeneralDescriptor<string,{TStringTypeManipulator<string>}TSTM_String>)
-                          procedure SavePasToMem(var membuf:TZctnrVectorBytes;PInstance:Pointer;prefix:TInternalScriptString);virtual;
+                          procedure SavePasToMem(var membuf:TZctnrVectorBytes;PInstance:Pointer;const prefix:TInternalScriptString);virtual;
                     end;
 TASTM_String=TAnsiStringTypeManipulator<String>;
 AnsiStringDescriptor=object(StringGeneralDescriptor<string,{TAnsiStringTypeManipulator<string>}TASTM_String>)
-                          procedure SavePasToMem(var membuf:TZctnrVectorBytes;PInstance:Pointer;prefix:TInternalScriptString);virtual;
+                          procedure SavePasToMem(var membuf:TZctnrVectorBytes;PInstance:Pointer;const prefix:TInternalScriptString);virtual;
                     end;
 TAS1251TM_String=TTempAnsiStringStoredIn1251TypeManipulator<String>;
 TempAnsiString1251Descriptor=object(StringGeneralDescriptor<string,TAS1251TM_String>)
@@ -156,17 +156,17 @@ TEnumDataDescriptor=object(BaseTypeDescriptor<TEnumData,{TOrdinalTypeManipulator
                      constructor init;
                      function GetValueAsString(pinstance:Pointer):TInternalScriptString;virtual;
                      function GetDecoratedValueAsString(pinstance:Pointer; const f:TzeUnitsFormat):TInternalScriptString;virtual;
-                     procedure SetValueFromString(PInstance:Pointer;_Value:TInternalScriptString);virtual;
-                     function CreateProperties(const f:TzeUnitsFormat;mode:PDMode;PPDA:PTPropertyDeskriptorArray;Name:TInternalScriptString;PCollapsed:Pointer;ownerattrib:Word;var bmode:Integer;const addr:Pointer;ValKey,ValType:TInternalScriptString):PTPropertyDeskriptorArray;virtual;
+                     procedure SetValueFromString(PInstance:Pointer; const _Value:TInternalScriptString);virtual;
+                     function CreateProperties(const f:TzeUnitsFormat;mode:PDMode;PPDA:PTPropertyDeskriptorArray;const Name:TInternalScriptString;PCollapsed:Pointer;ownerattrib:Word;var bmode:Integer;const addr:Pointer;const ValKey,ValType:TInternalScriptString):PTPropertyDeskriptorArray;virtual;
                      destructor Done;virtual;
                end;
 TCalculatedStringDescriptor=object(BaseTypeDescriptor<TCalculatedString,TASTM_String>)
   constructor init;
   function GetEditableAsString(PInstance:Pointer; const f:TzeUnitsFormat):TInternalScriptString;virtual;
   function GetValueAsString(pinstance:Pointer):TInternalScriptString;virtual;
-  //procedure SetValueFromString(PInstance:Pointer;_Value:TInternalScriptString);virtual;
-  procedure SetEditableFromString(PInstance:Pointer;const f:TzeUnitsFormat;Value:TInternalScriptString);virtual;
-  function CreateProperties(const f:TzeUnitsFormat;mode:PDMode;PPDA:PTPropertyDeskriptorArray;Name:TInternalScriptString;PCollapsed:Pointer;ownerattrib:Word;var bmode:Integer;const addr:Pointer;ValKey,ValType:TInternalScriptString):PTPropertyDeskriptorArray;virtual;
+  procedure SetValueFromString(PInstance:Pointer; const _Value:TInternalScriptString);virtual;
+  procedure SetEditableFromString(PInstance:Pointer;const f:TzeUnitsFormat; const Value:TInternalScriptString);virtual;
+  function CreateProperties(const f:TzeUnitsFormat;mode:PDMode;PPDA:PTPropertyDeskriptorArray;const Name:TInternalScriptString;PCollapsed:Pointer;ownerattrib:Word;var bmode:Integer;const addr:Pointer;const ValKey,ValType:TInternalScriptString):PTPropertyDeskriptorArray;virtual;
   //destructor Done;virtual;
 end;
 
@@ -255,7 +255,7 @@ begin
      //Str(data,result)
   //result:=inttostr(LongInt(data));
 end;
-class procedure TOrdinalTypeManipulator<T>.SetValueFromString(var data:T;Value:TInternalScriptString);
+class procedure TOrdinalTypeManipulator<T>.SetValueFromString(var data:T; const Value:TInternalScriptString);
 var
   td:T;
   e:integer;
@@ -268,7 +268,7 @@ class function TOrdinalTypeManipulator<T>.GetFormattedValueAsString(const data:T
 begin
    result:=GetValueAsString(data);
 end;
-class procedure TOrdinalTypeManipulator<T>.setFormattedValueAsString(var data:T; const f:TzeUnitsFormat;Value:TInternalScriptString);
+class procedure TOrdinalTypeManipulator<T>.setFormattedValueAsString(var data:T; const f:TzeUnitsFormat; const Value:TInternalScriptString);
 var
   td:T;
   e:integer;
@@ -290,7 +290,7 @@ class function TFloatTypeManipulator<T>.GetFormattedValueAsString(const data:T; 
 begin
    result:=zeDimensionToString(data,f);
 end;
-class procedure TFloatTypeManipulator<T>.SetValueFromString(var data:T;Value:TInternalScriptString);
+class procedure TFloatTypeManipulator<T>.SetValueFromString(var data:T; const Value:TInternalScriptString);
 var
      td:T;
      error:integer;
@@ -299,7 +299,7 @@ begin
      if error=0 then
                     data:=td;
 end;
-class procedure TFloatTypeManipulator<T>.setFormattedValueAsString(var data:T; const f:TzeUnitsFormat;Value:TInternalScriptString);
+class procedure TFloatTypeManipulator<T>.setFormattedValueAsString(var data:T; const f:TzeUnitsFormat; const Value:TInternalScriptString);
 var
      td:T;
      error:integer;
@@ -316,11 +316,11 @@ class function TStringTypeManipulator<T>.GetFormattedValueAsString(const data:T;
 begin
    result:=GetValueAsString(data);
 end;
-class procedure TStringTypeManipulator<T>.SetValueFromString(var data:T;Value:TInternalScriptString);
+class procedure TStringTypeManipulator<T>.SetValueFromString(var data:T; const Value:TInternalScriptString);
 begin
      data:={cp2uni}(Value);
 end;
-class procedure TStringTypeManipulator<T>.setFormattedValueAsString(var data:T; const f:TzeUnitsFormat;Value:TInternalScriptString);
+class procedure TStringTypeManipulator<T>.setFormattedValueAsString(var data:T; const f:TzeUnitsFormat; const Value:TInternalScriptString);
 begin
      data:={cp2uni}(Value);
 end;
@@ -333,11 +333,11 @@ class function TAnsiStringTypeManipulator<T>.GetFormattedValueAsString(const dat
 begin
    result:=GetValueAsString(data);
 end;
-class procedure TAnsiStringTypeManipulator<T>.SetValueFromString(var data:T;Value:TInternalScriptString);
+class procedure TAnsiStringTypeManipulator<T>.SetValueFromString(var data:T; const Value:TInternalScriptString);
 begin
      data:={cp2ansi}(Value);
 end;
-class procedure TAnsiStringTypeManipulator<T>.setFormattedValueAsString(var data:T; const f:TzeUnitsFormat;Value:TInternalScriptString);
+class procedure TAnsiStringTypeManipulator<T>.setFormattedValueAsString(var data:T; const f:TzeUnitsFormat; const Value:TInternalScriptString);
 begin
      data:={cp2uni}(Value);
 end;
@@ -351,11 +351,11 @@ class function TTempAnsiStringStoredIn1251TypeManipulator<T>.GetFormattedValueAs
 begin
    result:=GetValueAsString(data);
 end;
-class procedure TTempAnsiStringStoredIn1251TypeManipulator<T>.SetValueFromString(var data:T;Value:TInternalScriptString);
+class procedure TTempAnsiStringStoredIn1251TypeManipulator<T>.SetValueFromString(var data:T; const Value:TInternalScriptString);
 begin
      data:=Tria_Utf8ToAnsi(Value);
 end;
-class procedure TTempAnsiStringStoredIn1251TypeManipulator<T>.setFormattedValueAsString(var data:T; const f:TzeUnitsFormat;Value:TInternalScriptString);
+class procedure TTempAnsiStringStoredIn1251TypeManipulator<T>.setFormattedValueAsString(var data:T; const f:TzeUnitsFormat; const Value:TInternalScriptString);
 begin
      data:=Tria_Utf8ToAnsi(Value);
 end;
@@ -365,7 +365,7 @@ class function TBoolTypeManipulator<T>.GetValueAsString(const data:T):TInternalS
 begin
   result:=BoolToStr(data,'True','False');
 end;
-class procedure TBoolTypeManipulator<T>.SetValueFromString(var data:T;Value:TInternalScriptString);
+class procedure TBoolTypeManipulator<T>.SetValueFromString(var data:T; const Value:TInternalScriptString);
 begin
   data:=StrToBoolDef(Value,False);
 end;
@@ -373,7 +373,7 @@ class function TBoolTypeManipulator<T>.GetFormattedValueAsString(const data:T; c
 begin
    result:=GetValueAsString(data);
 end;
-class procedure TBoolTypeManipulator<T>.setFormattedValueAsString(var data:T; const f:TzeUnitsFormat;Value:TInternalScriptString);
+class procedure TBoolTypeManipulator<T>.setFormattedValueAsString(var data:T; const f:TzeUnitsFormat; const Value:TInternalScriptString);
 begin
   data:=StrToBoolDef(Value,False);
 end;
@@ -440,7 +440,7 @@ procedure BaseTypeDescriptor<T,TManipulator>.SetValueFromString;
 begin
   TManipulator.SetValueFromString(TManipulator.pt(PInstance)^,Value);
 end;
-procedure BaseTypeDescriptor<T,TManipulator>.SetFormattedValueFromString(PInstance:Pointer;const f:TzeUnitsFormat;Value:TInternalScriptString);
+procedure BaseTypeDescriptor<T,TManipulator>.SetFormattedValueFromString(PInstance:Pointer;const f:TzeUnitsFormat; const Value:TInternalScriptString);
 begin
   TManipulator.setFormattedValueAsString(TManipulator.pt(PInstance)^,f,Value);
 end;
@@ -478,17 +478,17 @@ begin
                       end
                   else result := 'nil';
 end;
-class procedure TPointerTypeManipulator<T>.SetValueFromString(var data:T;Value:TInternalScriptString);
+class procedure TPointerTypeManipulator<T>.SetValueFromString(var data:T; const Value:TInternalScriptString);
 begin
 end;
-class procedure TPointerTypeManipulator<T>.setFormattedValueAsString(var data:T; const f:TzeUnitsFormat;Value:TInternalScriptString);
+class procedure TPointerTypeManipulator<T>.setFormattedValueAsString(var data:T; const f:TzeUnitsFormat; const Value:TInternalScriptString);
 begin
 end;
 class function TPointerTypeManipulator<T>.GetFormattedValueAsString(const data:T; const f:TzeUnitsFormat):TInternalScriptString;
 begin
    result:=GetValueAsString(data);
 end;
-function IsNeedBase64(value:TInternalScriptString):boolean;
+function IsNeedBase64(const value:TInternalScriptString):boolean;
 var
   i:integer;
 begin
@@ -529,16 +529,17 @@ constructor TEnumDataDescriptor.init;
 begin
      inherited init('TEnumDataDescriptor',nil);
 end;
-procedure TEnumDataDescriptor.SetValueFromString(PInstance:Pointer;_Value:TInternalScriptString);
+procedure TEnumDataDescriptor.SetValueFromString(PInstance:Pointer; const _Value:TInternalScriptString);
 var
     p:pstring;
     ir:itrec;
+    uppercase_value:TInternalScriptString;
 begin
-     _value:=uppercase(_value);
+     uppercase_value:=uppercase(_value);
                              p:=PTEnumData(Pinstance)^.Enums.beginiterate(ir);
                              if p<>nil then
                              repeat
-                             if _value=uppercase(p^)then
+                             if uppercase_value=uppercase(p^)then
                              begin
                                   PTEnumData(Pinstance)^.Selected:=ir.itc;
                                   exit;
@@ -570,14 +571,19 @@ function TCalculatedStringDescriptor.GetEditableAsString(PInstance:Pointer; cons
 begin
   result:=PTCalculatedString(pinstance)^.format;
 end;
-procedure TCalculatedStringDescriptor.SetEditableFromString(PInstance:Pointer;const f:TzeUnitsFormat;Value:TInternalScriptString);
+procedure TCalculatedStringDescriptor.SetEditableFromString(PInstance:Pointer;const f:TzeUnitsFormat; const Value:TInternalScriptString);
 begin
   PTCalculatedString(pinstance)^.format:=Value;
 end;
+procedure TCalculatedStringDescriptor.SetValueFromString(PInstance:Pointer; const _Value:TInternalScriptString);
+begin
+  PTCalculatedString(pinstance)^.format:=_Value;
+end;
+
 //procedure TCalculatedStringDescriptor.SetValueFromString(PInstance:Pointer;_Value:TInternalScriptString);
 //begin
 //end;
-function TCalculatedStringDescriptor.CreateProperties(const f:TzeUnitsFormat;mode:PDMode;PPDA:PTPropertyDeskriptorArray;Name:TInternalScriptString;PCollapsed:Pointer;ownerattrib:Word;var bmode:Integer;const addr:Pointer;ValKey,ValType:TInternalScriptString):PTPropertyDeskriptorArray;
+function TCalculatedStringDescriptor.CreateProperties(const f:TzeUnitsFormat;mode:PDMode;PPDA:PTPropertyDeskriptorArray;const Name:TInternalScriptString;PCollapsed:Pointer;ownerattrib:Word;var bmode:Integer;const addr:Pointer;const ValKey,ValType:TInternalScriptString):PTPropertyDeskriptorArray;
 var ppd:PPropertyDeskriptor;
 begin
   zTraceLn('{T}[ZSCRIPT]TEnumDataDescriptor.CreateProperties(%s,ppda=%p)',[name,ppda]);

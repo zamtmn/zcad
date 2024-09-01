@@ -450,7 +450,7 @@ begin
           if img[1]<>'#' then
                               begin
                               action.imgstr:='';
-                              action.ImageIndex:=LoadImage(ProgramPath+'menu/BMP/'+img);
+                              action.ImageIndex:=LoadImage(ProgramPath+'/menu/BMP/'+img);
                               if action.ImageIndex=-1 then
                                                   begin
                                                        action.ImageIndex:=brocenicon;
@@ -710,7 +710,7 @@ begin
      _action:=Action;
      ACtion:=nil;
      if fsilent then
-                    commandmanager.executecommandsilent(@Fcommand[1],drawings.GetCurrentDWG,drawings.GetCurrentOGLWParam)
+                    commandmanager.executecommandsilent(Fcommand,drawings.GetCurrentDWG,drawings.GetCurrentOGLWParam)
                 else
                     commandmanager.executecommand(Fcommand,drawings.GetCurrentDWG,drawings.GetCurrentOGLWParam);
      inherited;

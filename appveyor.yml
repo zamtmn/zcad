@@ -30,14 +30,15 @@ platform:
 install:
   - cmd: git submodule update --init --recursive
   - cmd: echo %PATH%
-  - cmd: echo Download lazarus-3.0-fpc-3.2.2-win64.exe
-  - cmd: curl -fsSL -o lazarus-3.0-fpc-3.2.2-win64.exe "https://fossies.org/windows/misc/lazarus-3.2-fpc-3.2.2-win64.exe"
-  - cmd: echo Installing lazarus-3.0-fpc-3.2.2-win64.exe
-  - cmd: lazarus-3.0-fpc-3.2.2-win64.exe /verysilent /supressmsgboxes
+  - cmd: echo Download lazarus-3.4-fpc-3.2.2-win64.exe
+  - cmd: curl -fsSL -o lazarus-3.4-fpc-3.2.2-win64.exe "https://fossies.org/windows/misc/lazarus-3.4-fpc-3.2.2-win64.exe"
+  - cmd: echo Installing lazarus-3.4-fpc-3.2.2-win64.exe
+  - cmd: lazarus-3.4-fpc-3.2.2-win64.exe /verysilent /supressmsgboxes
   - cmd: rmdir /S /Q c:\lazarus\docs
   - cmd: rmdir /S /Q c:\lazarus\examples
   - cmd: echo Fix https://gitlab.com/freepascal.org/lazarus/lazarus/-/issues/39630
   - ps: (Get-Content -Path 'C:\lazarus\environmentoptions.xml') -replace '\$Lazarusdir\\','$(Lazarusdir)' | Set-Content -Path 'C:\lazarus\environmentoptions.xml'
+  - cmd: C:\lazarus\fpc\3.2.2\bin\x86_64-win64\make.exe checkallvars
   - cmd: echo Installing Asciidoctor
   - cmd: gem install asciidoctor
   - cmd: gem install asciidoctor-pdf
@@ -51,7 +52,7 @@ build_script:
   - cmd: C:\lazarus\fpc\3.2.2\bin\x86_64-win64\make.exe documentation
   - cmd: 7z a ZCAD-%APPVEYOR_REPO_COMMIT%.zip "cad"
   - cmd: C:\lazarus\fpc\3.2.2\bin\x86_64-win64\make.exe cleanzcadelectrotech
-  - cmd: C:\lazarus\fpc\3.2.2\bin\x86_64-win64\make.exe afterzcadelectrotechbuild
+#  - cmd: C:\lazarus\fpc\3.2.2\bin\x86_64-win64\make.exe afterzcadelectrotechbuild
   - cmd: C:\lazarus\fpc\3.2.2\bin\x86_64-win64\make.exe documentation
   - cmd: C:\lazarus\fpc\3.2.2\bin\x86_64-win64\make.exe tests
 

@@ -82,10 +82,10 @@ begin
                  else
                      begin
                      s:=Operands;
-                     filename:={utf8tosys}(ProgramPath+'components/'+s);
+                     filename:={utf8tosys}(ProgramPath+'/components/'+s);
                      end;
   if not fileexists(filename) then
-                              filename:={utf8tosys}(ProgramPath+'components/defaultlayout.xml');
+                              filename:={utf8tosys}(ProgramPath+'/components/defaultlayout.xml');
   LoadLayoutFromFile(Filename);
   exit;
   try

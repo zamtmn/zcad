@@ -55,7 +55,7 @@ TObjID=Word;
 PGDBaseObject=^GDBaseObject;
 {----REGISTEROBJECTTYPE GDBaseObject----}
 GDBaseObject=object
-    function ObjToString(prefix,sufix:String):String; virtual;
+    function ObjToString(const prefix,sufix:String):String; virtual;
     function GetObjType:TObjID;virtual;
     //procedure Format;virtual;
     procedure FormatAfterFielfmod(PField,PTypeDescriptor:Pointer);virtual;
@@ -190,7 +190,7 @@ end;
 function IsIt(PType,PChecedType:Pointer):Boolean;
 
 {$IFDEF DELPHI}
-function StrToQWord(sh:string):UInt64;
+function StrToQWord(const sh:string):UInt64;
 {$ENDIF}
 implementation
 
@@ -198,7 +198,7 @@ function GDBaseObject.GetObjType:Word;
 begin
      result:=GDBBaseObjectID;
 end;
-function GDBaseObject.ObjToString(prefix,sufix:String):String;
+function GDBaseObject.ObjToString(const prefix,sufix:String):String;
 begin
      result:=prefix+GetObjTypeName+sufix;
 end;
@@ -257,7 +257,7 @@ begin
   result:=IsIt({$ifdef VER3_0}CurrParent{$else}CurrParent^{$endif},PChecedType);
 end;
 {$IFDEF DELPHI}
-function StrToQWord(sh:string):UInt64;
+function StrToQWord(const sh:string):UInt64;
 begin
       result:=strtoint(sh);
 end;

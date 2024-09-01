@@ -27,9 +27,9 @@ type
 {REGISTEROBJECTTYPE GDBPoint3dArray}
 PGDBPoint3dArray=^GDBPoint3dArray;
 GDBPoint3dArray= object(GZVector{-}<GDBVertex>{//})(*OpenArrayOfData=GDBVertex*)
-                function onpoint(p:gdbvertex;closed:Boolean):Boolean;
+                function onpoint(const p:gdbvertex;closed:Boolean):Boolean;
                 function onmouse(const mf:ClipArray;const closed:Boolean):Boolean;virtual;
-                function CalcTrueInFrustum(frustum:ClipArray):TInBoundingVolume;virtual;
+                function CalcTrueInFrustum(const frustum:ClipArray; const closed:boolean):TInBoundingVolume;virtual;
                 {procedure DrawGeometry;virtual;
                 procedure DrawGeometry2;virtual;
                 procedure DrawGeometryWClosed(closed:Boolean);virtual;}
@@ -178,10 +178,24 @@ begin
       inc(ptpv1);
       inc(ptpv0);
    end;
-     if emptycount=0 then
-                       result:=IRFully
-                     else
-                       result:=IREmpty;
+
+   if Closed then
+     if count>2 then begin
+       ptpv1:=getPFirst;
+       ptpv0:=getPLast;
+       subresult:=uzegeometry.CalcTrueInFrustum(ptpv0^,ptpv1^,frustum);
+       if subresult=IREmpty then
+         inc(emptycount);
+       if subresult=IRPartially then
+         exit(IRPartially);
+       if (subresult=IRFully)and(emptycount>0) then
+         exit(IRPartially)
+     end;
+
+   if emptycount=0 then
+     result:=IRFully
+   else
+     result:=IREmpty;
 end;
 function GDBPoint3DArray.onmouse;
 var i{,counter}:Integer;
@@ -221,7 +235,7 @@ begin
    end;
 end;
 
-function GDBPoint3DArray.onpoint(p:gdbvertex;closed:Boolean):Boolean;
+function GDBPoint3DArray.onpoint(const p:gdbvertex;closed:Boolean):Boolean;
 var i{,counter}:Integer;
     d:Double;
     ptpv0,ptpv1:PGDBVertex;

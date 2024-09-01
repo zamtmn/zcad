@@ -133,6 +133,9 @@ resourcestring
   rscmSelOrSpecEntity='Select or specify the parameters entity!';
   rscmNEntitiesProcessed='%d entities processed';
   rscmNEntitiesDeselected='%d entities deselected';
+  rscmNEntitiesFounded='%d entities founded';
+  rscmNEntityFrom='Show entity %d from %d';
+  rscmNEntityFromWithDetails='Show entity %d from %d with details "%s"';
 
   rscmEntitiesCounter='%d entities processed (%d total, %d selected, %d filtred)';
 
@@ -163,6 +166,7 @@ resourcestring
   rsCloseDrawings='Close drawings';
 
   {messages}
+  rsLoadFile='Load file';
   rsMsgRepeatCountStr=' [%d]';
   rsDWGAlreadyContainsData='Drawing already contains data. Load anyway?';
   rsCAUTIONnoSyntaxCheckYet='CAUTION! There is no syntax check yet. Clicking "OK" the object will be updated. Error - CRASHES!!!';

@@ -53,7 +53,7 @@ TAbstractDrawing= object(TDrawingDef)
                        TextSize:Double;
 
                        procedure myGluProject2(objcoord:GDBVertex; out wincoord:GDBVertex);virtual;abstract;
-                       procedure myGluUnProject(win:GDBVertex;out obj:GDBvertex);virtual;abstract;
+                       procedure myGluUnProject(const win:GDBVertex;out obj:GDBvertex);virtual;abstract;
                        function GetPcamera:PGDBObjCamera;virtual;abstract;
                        function GetCurrentROOT:PGDBObjGenericSubEntry;virtual;abstract;
                        function GetConstructObjRoot:PGDBObjRoot;virtual;abstract;

@@ -154,7 +154,7 @@ var
 procedure finalize;}
 
 implementation
-function docorrecttogrid(point:GDBVertex;need:Boolean):GDBVertex;
+function docorrecttogrid(const point:GDBVertex;need:Boolean):GDBVertex;
 var
    gr:Boolean;
 begin
@@ -687,7 +687,7 @@ begin
   UManager.init;
 
   defaultunit.init(DefNumMetric);
-  units.loadunit(GetSupportPath,InterfaceTranslate,expandpath('*rtl/objcalc/opsmarkdef.pas'),(@defaultunit));
+  units.loadunit(GetSupportPath,InterfaceTranslate,expandpath('$(ZCADPath)/rtl/objcalc/opsmarkdef.pas'),(@defaultunit));
   pcabledesk:=cman.beginiterate(ir);
   if pcabledesk<>nil then
   repeat
@@ -801,7 +801,7 @@ begin
                            //cpGC_HDShortName.ChangedData.StoreUndoData(pvd4^.data.Addr.GetInstance);
                          end;
 
-                         units.loadunit(GetSupportPath,InterfaceTranslate,expandpath('*rtl/objcalc/opsmark.pas'),(currentunit));
+                         units.loadunit(GetSupportPath,InterfaceTranslate,expandpath('$(ZCADPath)/rtl/objcalc/opsmark.pas'),(currentunit));
 
                          //if pvd1<>nil then begin
                          //  cpGC_NumberInGroup.ChangedData.StoreDoData(pvd1^.data.Addr.GetInstance);;
@@ -1387,7 +1387,7 @@ begin
                             ny:=OrtoDevPlaceParam.NY;
                        end;
      end;
-  if button=0 then
+  if button<>MZW_LBUTTON then
   begin
        placedev(@drawings.GetCurrentDWG.ConstructObjRoot.ObjArray,gdbobjline(pl^).CoordInWCS.lbegin, gdbobjline(pl^).CoordInWCS.lend, NX, NY,@OrtoDevPlaceParam.Name[1],OrtoDevPlaceParam.Angle,OrtoDevPlaceParam.AutoAngle,OrtoDevPlaceParam.NormalizePoint);
   end

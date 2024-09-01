@@ -252,10 +252,12 @@ msgid "&Directory"
 msgstr "&Hakemisto"
 
 #: lclstrconsts.rsdocopy
+msgctxt "lclstrconsts.rsdocopy"
 msgid "Copy"
 msgstr "Kopioi"
 
 #: lclstrconsts.rsdopaste
+msgctxt "lclstrconsts.rsdopaste"
 msgid "Paste"
 msgstr "Liitä"
 
@@ -264,6 +266,7 @@ msgid "Duplicate icon format."
 msgstr "Samanlaisen kuvakemuodot."
 
 #: lclstrconsts.rseditrecordhint
+msgctxt "lclstrconsts.rseditrecordhint"
 msgid "Edit"
 msgstr "Muokkaa"
 
@@ -775,8 +778,44 @@ msgstr "Limetti"
 msgid "List index exceeds bounds (%d)"
 msgstr "Luettelon osoitin ylittää rajat (%d)"
 
+#: lclstrconsts.rsmacoseditmenu
+msgctxt "lclstrconsts.rsmacoseditmenu"
+msgid "Edit"
+msgstr "Muokkaa"
+
+#: lclstrconsts.rsmacoseditmenucopy
+msgctxt "lclstrconsts.rsmacoseditmenucopy"
+msgid "Copy"
+msgstr "Kopioi"
+
+#: lclstrconsts.rsmacoseditmenucut
+msgid "Cut"
+msgstr "Leikkaa"
+
+#: lclstrconsts.rsmacoseditmenupaste
+msgctxt "lclstrconsts.rsmacoseditmenupaste"
+msgid "Paste"
+msgstr "Liitä"
+
+#: lclstrconsts.rsmacoseditmenuredo
+msgid "Redo"
+msgstr "Tee uudelleen"
+
+#: lclstrconsts.rsmacoseditmenuselectall
+msgid "Select All"
+msgstr "Valitse kaikki"
+
+#: lclstrconsts.rsmacoseditmenuundo
+msgid "Undo"
+msgstr "Kumoa"
+
 #: lclstrconsts.rsmacosfileformat
 msgid "File Format:"
+msgstr ""
+
+#: lclstrconsts.rsmacosmenuabout
+#, object-pascal-format
+msgid "About %s"
 msgstr ""
 
 #: lclstrconsts.rsmacosmenuhide
@@ -786,6 +825,10 @@ msgstr ""
 
 #: lclstrconsts.rsmacosmenuhideothers
 msgid "Hide Others"
+msgstr ""
+
+#: lclstrconsts.rsmacosmenupreferences
+msgid "Preferences..."
 msgstr ""
 
 #: lclstrconsts.rsmacosmenuquit

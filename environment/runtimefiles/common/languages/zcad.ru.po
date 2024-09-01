@@ -126,219 +126,80 @@ msgctxt "tdimstylesform.toolbar1.caption"
 msgid "ToolBar1"
 msgstr ""
 
-#: tlayersform.addlayer.caption
-msgid "AddLayer"
+#: tnavigatordevices.caption
+#, fuzzy
+msgctxt "tnavigatordevices.caption"
+msgid "Devices"
+msgstr "Устройства"
+
+#: tnavigatordevices.collapseall.caption
+msgctxt "tnavigatordevices.collapseall.caption"
+msgid "Collapse all"
 msgstr ""
 
-#: tlayersform.addlayer.hint
-msgid "Add layer"
-msgstr "Добавить слой"
-
-#: tlayersform.buttonapplyclose.caption
-msgctxt "tlayersform.buttonapplyclose.caption"
-msgid "Apply and close"
-msgstr "Применить и закрыть"
-
-#: tlayersform.button_apply.caption
-msgid "Apply"
-msgstr "Применить"
-
-#: tlayersform.caption
-msgid "Layers"
-msgstr "Слои"
-
-#: tlayersform.dellayer.caption
-msgid "DelLayer"
+#: tnavigatordevices.collapseallbtn.hint
+msgctxt "tnavigatordevices.collapseallbtn.hint"
+msgid "Collapse all"
 msgstr ""
 
-#: tlayersform.dellayer.hint
-msgid "Delete layer"
-msgstr "Удалить слой"
-
-#: tlayersform.listview1.columns[0].caption
-msgctxt "tlayersform.listview1.columns[0].caption"
-msgid "Status"
-msgstr "Статус"
-
-#: tlayersform.listview1.columns[1].caption
-msgctxt "tlayersform.listview1.columns[1].caption"
-msgid "Name"
-msgstr "Имя"
-
-#: tlayersform.listview1.columns[2].caption
-msgid "On"
-msgstr "Включен"
-
-#: tlayersform.listview1.columns[3].caption
-msgid "Freze"
-msgstr "Заморожен"
-
-#: tlayersform.listview1.columns[4].caption
-msgid "Lock"
-msgstr "Заблокирован"
-
-#: tlayersform.listview1.columns[5].caption
-msgctxt "tlayersform.listview1.columns[5].caption"
-msgid "Color"
-msgstr "Цвет"
-
-#: tlayersform.listview1.columns[6].caption
-msgctxt "tlayersform.listview1.columns[6].caption"
-msgid "Line type"
-msgstr "Тип линии"
-
-#: tlayersform.listview1.columns[7].caption
-msgid "Line weight"
-msgstr "Вес линии"
-
-#: tlayersform.listview1.columns[8].caption
-msgid "Plot"
-msgstr "Печать"
-
-#: tlayersform.listview1.columns[9].caption
-msgctxt "tlayersform.listview1.columns[9].caption"
-msgid "Description"
-msgstr "Описание"
-
-#: tlayersform.mkcurrentlayer.caption
-msgid "MkCurrentLayer"
+#: tnavigatordevices.expandall.caption
+msgctxt "tnavigatordevices.expandall.caption"
+msgid "Expand all"
 msgstr ""
 
-#: tlayersform.mkcurrentlayer.hint
-msgid "Make selected layer current"
-msgstr "Сделать выбраный слой текущим"
-
-#: tlayersform.purgelayers.caption
-msgid "PurgeLayers"
+#: tnavigatordevices.expandallbtn.hint
+msgctxt "tnavigatordevices.expandallbtn.hint"
+msgid "Expand all"
 msgstr ""
 
-#: tlayersform.purgelayers.hint
-msgid "Purge layers"
-msgstr "Очистить слои"
-
-#: tlayersform.refreshlayers.caption
-msgid "RefreshLayers"
+#: tnavigatordevices.filterbtn.buttonhint
+msgid "Clear filter"
 msgstr ""
 
-#: tlayersform.refreshlayers.hint
-msgid "Refresh layers"
-msgstr "Обновить слои"
-
-#: tlayersform.toolbar1.caption
-msgctxt "tlayersform.toolbar1.caption"
-msgid "ToolBar1"
+#: tnavigatordevices.includeents.caption
+msgid "Edit include entities"
 msgstr ""
 
-#: tlayersform.toolbutton4.caption
-msgid "ToolButton4"
+#: tnavigatordevices.includeprops.caption
+msgid "Edit include properties"
 msgstr ""
 
-#: ttextstylesform.addstyle.caption
-msgctxt "ttextstylesform.addstyle.caption"
-msgid "AddStyle"
+#: tnavigatordevices.loadfromfile.caption
+msgid "Load from file"
 msgstr ""
 
-#: ttextstylesform.addstyle.hint
-msgctxt "ttextstylesform.addstyle.hint"
-msgid "Add text style"
-msgstr "Добавить стиль текста"
-
-#: ttextstylesform.buttonapplyclose.caption
-msgctxt "ttextstylesform.buttonapplyclose.caption"
-msgid "Apply and close"
-msgstr "Применить и закрыть"
-
-#: ttextstylesform.caption
-msgid "Text styles"
+#: tnavigatordevices.refresh.caption
+msgid "Refresh tree"
 msgstr ""
 
-#: ttextstylesform.delstyle.caption
-msgctxt "ttextstylesform.delstyle.caption"
-msgid "DelStyle"
+#: tnavigatordevices.savetofile.caption
+msgid "Save to file"
 msgstr ""
 
-#: ttextstylesform.delstyle.hint
-msgctxt "ttextstylesform.delstyle.hint"
-msgid "Delete text style"
-msgstr "Удалить стиль текста"
-
-#: ttextstylesform.fonttypefiltercombobox.text
-msgctxt "ttextstylesform.fonttypefiltercombobox.text"
-msgid "All"
-msgstr "Все"
-
-#: ttextstylesform.fonttypefilterdesc.caption
-msgid "Fonts types filter:"
+#: tnavigatordevices.treeprops.caption
+msgid "Edit tree properties"
 msgstr ""
 
-#: ttextstylesform.listview1.columns[0].caption
-msgctxt "ttextstylesform.listview1.columns[0].caption"
-msgid "Status"
-msgstr "Статус"
+#: tnavigatorentities.caption
+#, fuzzy
+msgctxt "tnavigatorentities.caption"
+msgid "Entities"
+msgstr "Примитивы"
 
-#: ttextstylesform.listview1.columns[1].caption
-msgctxt "ttextstylesform.listview1.columns[1].caption"
-msgid "Name"
-msgstr "Имя"
-
-#: ttextstylesform.listview1.columns[2].caption
-msgid "FontName"
+#: tnavigatorentities.maintoolbar.caption
+msgid "MainToolBar"
 msgstr ""
 
-#: ttextstylesform.listview1.columns[3].caption
-msgid "FontPath"
+#: tnavigatorentities.refresh.caption
+msgid "Refresh"
 msgstr ""
 
-#: ttextstylesform.listview1.columns[4].caption
-msgid "Height"
+#: tnavigatorentities.toolbutton1.caption
+msgid "ToolButton1"
 msgstr ""
 
-#: ttextstylesform.listview1.columns[5].caption
-msgid "Width factor"
-msgstr ""
-
-#: ttextstylesform.listview1.columns[6].caption
-msgid "Oblique"
-msgstr ""
-
-#: ttextstylesform.mkcurrentstyle.caption
-msgctxt "ttextstylesform.mkcurrentstyle.caption"
-msgid "MkCurrentStyle"
-msgstr ""
-
-#: ttextstylesform.mkcurrentstyle.hint
-msgctxt "ttextstylesform.mkcurrentstyle.hint"
-msgid "Make selected style curretn"
-msgstr ""
-
-#: ttextstylesform.purgestyles.caption
-msgctxt "ttextstylesform.purgestyles.caption"
-msgid "PurgeStyles"
-msgstr ""
-
-#: ttextstylesform.purgestyles.hint
-msgctxt "ttextstylesform.purgestyles.hint"
-msgid "Purge not used styles"
-msgstr ""
-
-#: ttextstylesform.refreshstyles.caption
-msgctxt "ttextstylesform.refreshstyles.caption"
-msgid "RefreshStyles"
-msgstr ""
-
-#: ttextstylesform.refreshstyles.hint
-msgctxt "ttextstylesform.refreshstyles.hint"
-msgid "Refresh styles list"
-msgstr ""
-
-#: ttextstylesform.separator1.caption
-msgctxt "ttextstylesform.separator1.caption"
-msgid "Separator1"
-msgstr ""
-
-#: ttextstylesform.toolbar1.caption
-msgctxt "ttextstylesform.toolbar1.caption"
-msgid "ToolBar1"
+#: tnavigatorentities.toolbutton3.caption
+msgid "ToolButton3"
 msgstr ""
 
 #: tzcadmainwindow.toolbard.caption
@@ -561,10 +422,25 @@ msgstr ""
 msgid "%d entities deselected"
 msgstr "С %d примитивов выбор снят"
 
+#: uzcstrconsts.rscmnentitiesfounded
+#, object-pascal-format
+msgid "%d entities founded"
+msgstr ""
+
 #: uzcstrconsts.rscmnentitiesprocessed
 #, object-pascal-format
 msgid "%d entities processed"
 msgstr "Обработано %d примитивов"
+
+#: uzcstrconsts.rscmnentityfrom
+#, object-pascal-format
+msgid "Show entity %d from %d"
+msgstr ""
+
+#: uzcstrconsts.rscmnentityfromwithdetails
+#, object-pascal-format
+msgid "Show entity %d from %d with details \"%s\""
+msgstr ""
 
 #: uzcstrconsts.rscmnewbasepoint
 msgid "New base point:"
@@ -965,6 +841,10 @@ msgstr ""
 msgid "Line type \"%s\" used in: %d-model, %d-blockdef table"
 msgstr "Тип линии  \"%s\" используется: %d-в модели, %d-в таблице блоков"
 
+#: uzcstrconsts.rsloadfile
+msgid "Load file"
+msgstr ""
+
 #: uzcstrconsts.rsmessagecaption
 msgid "Message:"
 msgstr "Сообщение:"
@@ -1342,6 +1222,3 @@ msgstr "Работает только при паралельной проекц
 msgid "Works only for top view!"
 msgstr "Работает только при виде сверху!"
 
-#: zcad.rsstartautorun
-msgid "Execute *components\\autorun.cmd"
-msgstr "*componentsautorun.cmd выполняется"

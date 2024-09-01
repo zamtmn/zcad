@@ -43,6 +43,8 @@ var
   INTFObjInspRowHeight:TIntegerOverrider;
   dummyclass:tdummyclass;
 implementation
+var
+  system_pas_path:string;
 procedure SetCurrentObjDefault;
 begin
        if assigned(GDBobjinsp)then
@@ -301,57 +303,58 @@ begin
 end;
 
 initialization
-units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'INTF_ObjInsp_WhiteBackground','Boolean',@INTFObjInspWhiteBackground);
-units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'INTF_ObjInsp_ShowHeaders','Boolean',@INTFObjInspShowHeaders);
-units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'INTF_ObjInsp_ShowSeparator','Boolean',@INTFObjInspShowSeparator);
-units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'INTF_ObjInsp_OldStyleDraw','Boolean',@INTFObjInspOldStyleDraw);
-units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'INTF_ObjInsp_ShowFastEditors','Boolean',@INTFObjInspShowFastEditors);
-units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'INTF_ObjInsp_ShowOnlyHotFastEditors','Boolean',@INTFObjInspShowOnlyHotFastEditors);
-INTFObjInspRowHeight.Enable:=LocalRowHeightOverride;
-INTFObjInspRowHeight.Value:=LocalRowHeight;
-units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'INTF_ObjInsp_RowHeight_OverriderEnable','Boolean',@INTFObjInspRowHeight.Enable);
-PRowHeight:=@INTFObjInspRowHeight.Value;
-PRowHeightOverride:=@INTFObjInspRowHeight.Enable;
-units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'INTF_ObjInsp_RowHeight_OverriderValue','Integer',@INTFObjInspRowHeight.Value);
-units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'INTF_ObjInsp_SpaceHeight','Integer',@INTFObjInspSpaceHeight);
-units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'INTF_ObjInsp_ShowEmptySections','Boolean',@INTFObjInspShowEmptySections);
-units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPath,expandpath('*rtl/system.pas'),InterfaceTranslate,'INTF_ObjInsp_ButtonSizeReducing','Integer',@INTFObjInspButtonSizeReducing);
-SysVar.INTF.INTF_OBJINSP_Properties.INTF_ObjInsp_RowHeight:=@INTFObjInspRowHeight;
-zcobjectinspector.INTFDefaultControlHeight:=sysparam.notsaved.defaultheight;
-ZCADGUIManager.RegisterZCADFormInfo('ObjectInspector',rsGDBObjinspWndName,TGDBobjinsp,rect(0,100,200,600),ZCADFormSetupProc,CreateObjInspInstance,@GDBobjinsp);
-PropertyRowName:=rsProperty;
-ValueRowName:=rsValue;
-DifferentName:=rsDifferent;
-onGetOtherValues:=_onGetOtherValues;
-onUpdateObjectInInsp:=_onUpdateObjectInInsp;
-onNotify:=_onNotify;
-onAfterFreeEditor:=_onAfterFreeEditor;
+  system_pas_path:=expandpath('$(ZCADPath)/rtl/system.pas');
+  units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPath,system_pas_path,InterfaceTranslate,'INTF_ObjInsp_WhiteBackground','Boolean',@INTFObjInspWhiteBackground);
+  units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPath,system_pas_path,InterfaceTranslate,'INTF_ObjInsp_ShowHeaders','Boolean',@INTFObjInspShowHeaders);
+  units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPath,system_pas_path,InterfaceTranslate,'INTF_ObjInsp_ShowSeparator','Boolean',@INTFObjInspShowSeparator);
+  units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPath,system_pas_path,InterfaceTranslate,'INTF_ObjInsp_OldStyleDraw','Boolean',@INTFObjInspOldStyleDraw);
+  units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPath,system_pas_path,InterfaceTranslate,'INTF_ObjInsp_ShowFastEditors','Boolean',@INTFObjInspShowFastEditors);
+  units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPath,system_pas_path,InterfaceTranslate,'INTF_ObjInsp_ShowOnlyHotFastEditors','Boolean',@INTFObjInspShowOnlyHotFastEditors);
+  INTFObjInspRowHeight.Enable:=LocalRowHeightOverride;
+  INTFObjInspRowHeight.Value:=LocalRowHeight;
+  units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPath,system_pas_path,InterfaceTranslate,'INTF_ObjInsp_RowHeight_OverriderEnable','Boolean',@INTFObjInspRowHeight.Enable);
+  PRowHeight:=@INTFObjInspRowHeight.Value;
+  PRowHeightOverride:=@INTFObjInspRowHeight.Enable;
+  units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPath,system_pas_path,InterfaceTranslate,'INTF_ObjInsp_RowHeight_OverriderValue','Integer',@INTFObjInspRowHeight.Value);
+  units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPath,system_pas_path,InterfaceTranslate,'INTF_ObjInsp_SpaceHeight','Integer',@INTFObjInspSpaceHeight);
+  units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPath,system_pas_path,InterfaceTranslate,'INTF_ObjInsp_ShowEmptySections','Boolean',@INTFObjInspShowEmptySections);
+  units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPath,system_pas_path,InterfaceTranslate,'INTF_ObjInsp_ButtonSizeReducing','Integer',@INTFObjInspButtonSizeReducing);
+  SysVar.INTF.INTF_OBJINSP_Properties.INTF_ObjInsp_RowHeight:=@INTFObjInspRowHeight;
+  zcobjectinspector.INTFDefaultControlHeight:=sysparam.notsaved.defaultheight;
+  ZCADGUIManager.RegisterZCADFormInfo('ObjectInspector',rsGDBObjinspWndName,TGDBobjinsp,rect(0,100,200,600),ZCADFormSetupProc,CreateObjInspInstance,@GDBobjinsp);
+  PropertyRowName:=rsProperty;
+  ValueRowName:=rsValue;
+  DifferentName:=rsDifferent;
+  onGetOtherValues:=_onGetOtherValues;
+  onUpdateObjectInInsp:=_onUpdateObjectInInsp;
+  onNotify:=_onNotify;
+  onAfterFreeEditor:=_onAfterFreeEditor;
 
-//GDBobjinsp.currpd:=nil;
-ZCMsgCallBackInterface.RegisterHandler_PrepareObject(StoreAndSetGDBObjInsp());
-//PrepareObject:={TSetGDBObjInsp}(StoreAndSetGDBObjInsp);
-//StoreAndSetGDBObjInspProc:=TSetGDBObjInsp(StoreAndSetGDBObjInsp);
-//ReStoreGDBObjInspProc:=ReStoreGDBObjInsp;
-dummyclass:=tdummyclass.create;
-ZCMsgCallBackInterface.RegisterHandler_GUIAction(dummyclass.UpdateObjInsp);
-//UpdateObjInspProc:=dummyclass.UpdateObjInsp;
-ZCMsgCallBackInterface.RegisterHandler_GUIAction(dummyclass.ReturnToDefault());
-//ReturnToDefaultProc:=ReturnToDefault;
-//ClrarIfItIsProc:=ClrarIfItIs;
-ZCMsgCallBackInterface.RegisterHandler_GUIAction(dummyclass.ReBuild);
-//ReBuildProc:=ReBuild;
-ZCMsgCallBackInterface.RegisterHandler_GUIAction(dummyclass.SetCurrentObjDefault);
-//SetCurrentObjDefaultProc:=SetCurrentObjDefault;
-//GetCurrentObjProc:=GetCurrentObj;
-GetNameColWidthProc:=GetNameColWidth;
-GetOIWidthProc:=GetOIWidth;
-//GetPeditorProc:=GetPeditor;
-ZCMsgCallBackInterface.RegisterHandler_GUIAction(dummyclass.FreEditor);
-//FreEditorProc:=FreEditor;
-ZCMsgCallBackInterface.RegisterHandler_GUIAction(dummyclass.StoreAndFreeEditor);
-ZCMsgCallBackInterface.RegisterHandler_GetFocusedControl(dummyclass.GetPeditorFocusPriority);
-//StoreAndFreeEditorProc:=StoreAndFreeEditor;
-CreateZCADCommand(@ObjInspCopyToClip_com,'ObjInspCopyToClip',0,0).overlay:=true;
+  //GDBobjinsp.currpd:=nil;
+  ZCMsgCallBackInterface.RegisterHandler_PrepareObject(StoreAndSetGDBObjInsp());
+  //PrepareObject:={TSetGDBObjInsp}(StoreAndSetGDBObjInsp);
+  //StoreAndSetGDBObjInspProc:=TSetGDBObjInsp(StoreAndSetGDBObjInsp);
+  //ReStoreGDBObjInspProc:=ReStoreGDBObjInsp;
+  dummyclass:=tdummyclass.create;
+  ZCMsgCallBackInterface.RegisterHandler_GUIAction(dummyclass.UpdateObjInsp);
+  //UpdateObjInspProc:=dummyclass.UpdateObjInsp;
+  ZCMsgCallBackInterface.RegisterHandler_GUIAction(dummyclass.ReturnToDefault());
+  //ReturnToDefaultProc:=ReturnToDefault;
+  //ClrarIfItIsProc:=ClrarIfItIs;
+  ZCMsgCallBackInterface.RegisterHandler_GUIAction(dummyclass.ReBuild);
+  //ReBuildProc:=ReBuild;
+  ZCMsgCallBackInterface.RegisterHandler_GUIAction(dummyclass.SetCurrentObjDefault);
+  //SetCurrentObjDefaultProc:=SetCurrentObjDefault;
+  //GetCurrentObjProc:=GetCurrentObj;
+  GetNameColWidthProc:=GetNameColWidth;
+  GetOIWidthProc:=GetOIWidth;
+  //GetPeditorProc:=GetPeditor;
+  ZCMsgCallBackInterface.RegisterHandler_GUIAction(dummyclass.FreEditor);
+  //FreEditorProc:=FreEditor;
+  ZCMsgCallBackInterface.RegisterHandler_GUIAction(dummyclass.StoreAndFreeEditor);
+  ZCMsgCallBackInterface.RegisterHandler_GetFocusedControl(dummyclass.GetPeditorFocusPriority);
+  //StoreAndFreeEditorProc:=StoreAndFreeEditor;
+  CreateZCADCommand(@ObjInspCopyToClip_com,'ObjInspCopyToClip',0,0).overlay:=true;
 
 finalization
   dummyclass.free;

@@ -157,7 +157,7 @@ type
     {$IFNDEF FPC}type PValue=^TValue;{$ENDIF}
     {$IFDEF USETDICTIONARY}type PTValue=PValue;{$ENDIF}
     public
-    function MyGetMutableValue(key:TKey; out PValue:PTValue):boolean;inline;
+    //function MyGetMutableValue(key:TKey; out PValue:PTValue):boolean;inline;
     {$IFDEF USETDICTIONARY}function IsEmpty:boolean;inline;{$ENDIF}
     {$IFNDEF USETDICTIONARY}property count:SizeUInt read {$IFDEF FPC}Size{$ELSE}FCount{$ENDIF};{$ENDIF}
   end;
@@ -406,11 +406,11 @@ begin
   if not SetupFromHere then
     dec(ADDPositionData.CurrentCodeUnitSize)
   else
-    ADDPositionData.CurrentCodeUnitSize:=Utf8CodePointLen(@AStr[APos.CodeUnitPos],4,true);
+    ADDPositionData.CurrentCodeUnitSize:=Utf8CodePointLen(@AStr[APos.CodeUnitPos],4,false);
 
   if (ADDPositionData.CurrentCodeUnitSize=0)or SetupFromHere then begin
     if not SetupFromHere then begin
-      ADDPositionData.CurrentCodeUnitSize:=Utf8CodePointLen(@AStr[APos.CodeUnitPos],4,true);
+      ADDPositionData.CurrentCodeUnitSize:=Utf8CodePointLen(@AStr[APos.CodeUnitPos],4,false);
       inc(ADDPositionData.CodePointPos);
     end;
     if AStr[APos.CodeUnitPos]=#10 then begin
@@ -586,10 +586,10 @@ begin
   if not SetupFromHere then
     dec(APos.AdditionalPosData.CurrentCodeUnitSize)
   else
-    APos.AdditionalPosData.CurrentCodeUnitSize:=Utf8CodePointLen(@AStr[APos.CodeUnitPos],4,true);
+    APos.AdditionalPosData.CurrentCodeUnitSize:=Utf8CodePointLen(@AStr[APos.CodeUnitPos],4,false);
 
   if APos.AdditionalPosData.CurrentCodeUnitSize=0 then begin
-    APos.AdditionalPosData.CurrentCodeUnitSize:=Utf8CodePointLen(@AStr[APos.CodeUnitPos],4,true);
+    APos.AdditionalPosData.CurrentCodeUnitSize:=Utf8CodePointLen(@AStr[APos.CodeUnitPos],4,false);
     inc(APos.AdditionalPosData.CodePointPos);
     if AStr[APos.CodeUnitPos]=#10 then begin
       inc(APos.AdditionalPosData.Line);
@@ -715,6 +715,7 @@ begin
   Add(Value);
 end;
 {$ENDIF}
+(*
 function TmyMap<TKey, TValue{$IFNDEF USETDICTIONARY},TCompare{$ENDIF}>.MyGetMutableValue(key:TKey; out PValue:PTValue):boolean;
 {$IFNDEF USETDICTIONARY}
 var Pair:TPair;
@@ -746,6 +747,7 @@ begin
     end;
 end;
 {$ENDIF}
+*)
 {$IFDEF USETDICTIONARY}
 function TmyMap<TKey, TValue{$IFNDEF USETDICTIONARY},TCompare{$ENDIF}>.IsEmpty:boolean;inline;
 begin
@@ -1023,7 +1025,7 @@ var
   //SubStrLastsym:integer;
 begin
   //SubStrLastsym:=SubStr.StartPos+SubStr.L-1;
-  if TTokenOptions.IsAllPresent(TokenDataVector.GetMutable(TokenId)^.Options,TGOWholeWordOnly) then begin
+  if TTokenOptions.IsAllPresent(TokenDataVector.Mutable[TokenId]^.Options,TGOWholeWordOnly) then begin
     if {GManipulator.PosToIndex(NextPos)>SubStr.StartPos+SubStr.L-1}GManipulator.PosInInterval(NextPos,SubStr.P,SubStr.CUL)>0 then exit(true);
     OptChar:=GTokenizerSymbolToOptChar.convert(GManipulator.CodeUnitAtPos(Text,NextPos));
     if OptCharIncluded(FirstSymbol.includedChars,OptChar) then
@@ -1032,7 +1034,7 @@ begin
       PTokenizerSymbolData:=nil;
     if PTokenizerSymbolData<>nil then begin
       if PTokenizerSymbolData^.TokenId<>0 then
-        if TTokenOptions.IsAllPresent(TokenDataVector.GetMutable(PTokenizerSymbolData^.TokenId)^.Options,TGOSeparator) then
+        if TTokenOptions.IsAllPresent(TokenDataVector.Mutable[PTokenizerSymbolData^.TokenId]^.Options,TGOSeparator) then
           exit(true);
     end;
     exit(false);
@@ -1174,7 +1176,7 @@ begin
       //PTokenizerSymbolData:=nil;
       exit(nil);
   end else
-    {result:=}map.MyGetMutableValue({UpCase}(GManipulator.CodeUnitAtPos(Text,CurrentPos)),{PTokenizerSymbolData}result);
+    {result:=}map.tryGetMutableValue({UpCase}(GManipulator.CodeUnitAtPos(Text,CurrentPos)),{PTokenizerSymbolData}result);
 end;
 
 function TGZTokenizer<GManipulator,GTokenizerString,GTokenizerSymbol,GManipulatorCUIndex,GManipulatorCharIndex,GManipulatorCharLength,GManipulatorInterval,GManipulatorCharRange,GTokenizerSymbolToOptChar,GTokenizerDataType>.Sub2GetToken(Text:GTokenizerString;const SubStr:GManipulatorInterval;constref CurrentPos:GManipulatorCharIndex;var TokenTextInfo:TTokenTextInfo;level:integer;var TokenDataVector:TTokenDataVector;var FirstSymbol:TGZTokenizer<GManipulator,GTokenizerString,GTokenizerSymbol,GManipulatorCUIndex,GManipulatorCharIndex,GManipulatorCharLength,GManipulatorInterval,GManipulatorCharRange,GTokenizerSymbolToOptChar,GTokenizerDataType>):TTokenId;
@@ -1300,9 +1302,9 @@ end;
 function TGZParser<GManipulator,GParserString,GParserSymbol,GManipulatorCUIndex,GManipulatorCharIndex,GManipulatorCharLength,GManipulatorInterval,GManipulatorCharRange,GDataType,GSymbolToOptChar>.GetTokensFromSubStr(Text:GParserString;const SubStr:GManipulatorInterval):TGeneralParsedText;
 function ParseOperands(TTI:TParserTokenizer.TTokenTextInfo):TGeneralParsedText;
 begin
-  if (TokenDataVector.getmutable(TTI.TokenId).InsideBracketParser<>nil)
+  if (TokenDataVector.Mutable[TTI.TokenId].InsideBracketParser<>nil)
   and(TTI.OperandsPos.L.CodeUnits>0)then
-    result:=TGZParser<GManipulator,GParserString,GParserSymbol,GManipulatorCUIndex,GManipulatorCharIndex,GManipulatorCharLength,GManipulatorInterval,GManipulatorCharRange,GDataType,GSymbolToOptChar>(TokenDataVector.getmutable(TTI.TokenId).InsideBracketParser).GetTokensFromSubStr(Text,GManipulator.CharRange2CharInterval(TTI.OperandsPos))
+    result:=TGZParser<GManipulator,GParserString,GParserSymbol,GManipulatorCUIndex,GManipulatorCharIndex,GManipulatorCharLength,GManipulatorInterval,GManipulatorCharRange,GDataType,GSymbolToOptChar>(TokenDataVector.mutable[TTI.TokenId].InsideBracketParser).GetTokensFromSubStr(Text,GManipulator.CharRange2CharInterval(TTI.OperandsPos))
   else
     result:=nil;
 end;
@@ -1320,7 +1322,7 @@ begin
   repeat
     GetTokenFromSubStr(Text,substr,TokenTextInfo.NextPos,PrevTokenTextInfo);
     TokenTextInfo:=PrevTokenTextInfo;
-  until  not TTokenOptions.IsAllPresent(TokenDataVector.getmutable(TokenTextInfo.TokenId).Options,TGOCanBeOmitted);
+  until  not TTokenOptions.IsAllPresent(TokenDataVector.mutable[TokenTextInfo.TokenId].Options,TGOCanBeOmitted);
   PrevParesdOperands:=ParseOperands(TokenTextInfo);
 
   while TokenTextInfo.TokenId<>tkEOF do begin
@@ -1328,10 +1330,10 @@ begin
     //GetTokenFromSubStr(Text,TokenTextInfo.NextPos,TokenTextInfo);
     repeat
       GetTokenFromSubStr(Text,Substr,TokenTextInfo.NextPos,TokenTextInfo);
-    until  not TTokenOptions.IsAllPresent(TokenDataVector.getmutable(TokenTextInfo.TokenId).Options,TGOCanBeOmitted);
+    until  not TTokenOptions.IsAllPresent(TokenDataVector.mutable[TokenTextInfo.TokenId].Options,TGOCanBeOmitted);
     ParesdOperands:=ParseOperands(TokenTextInfo);
 
-    if (TokenTextInfo.TokenId=TokenDataVector.getmutable(PrevTokenTextInfo.TokenId)^.FollowOperandsId)and(PrevParesdOperands=nil) then begin
+    if (TokenTextInfo.TokenId=TokenDataVector.mutable[PrevTokenTextInfo.TokenId]^.FollowOperandsId)and(PrevParesdOperands=nil) then begin
       PrevTokenTextInfo.OperandsPos:=TokenTextInfo.OperandsPos;
       PrevTokenTextInfo.NextPos:=TokenTextInfo.NextPos;
       PrevParesdOperands:=ParesdOperands;
@@ -1561,7 +1563,7 @@ var
   savesym:GManipulatorCharIndex;
 begin
   PTokenizerSymbolData:=nil;
-  if map.MyGetMutableValue(GManipulator.CodeUnitAtPos(Token,sym),PTokenizerSymbolData)then begin
+  if map.tryGetMutableValue(GManipulator.CodeUnitAtPos(Token,sym),PTokenizerSymbolData)then begin
     if GManipulator.CompareI(sym,GManipulator.LenToSize(GManipulator.Len(Token)))<0 {GManipulator.PosToIndex(sym)<length(Token)} then begin   {сравнение}
       if not assigned(PTokenizerSymbolData^.NextSymbol) then
         PTokenizerSymbolData^.NextSymbol:=TGZTokenizer<GManipulator,GTokenizerString,GTokenizerSymbol,GManipulatorCUIndex,GManipulatorCharIndex,GManipulatorCharLength,GManipulatorInterval,GManipulatorCharRange,GTokenizerSymbolToOptChar,GTokenizerDataType>.Create;

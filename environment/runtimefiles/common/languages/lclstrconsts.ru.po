@@ -250,10 +250,12 @@ msgid "&Directory"
 msgstr "&Каталог"
 
 #: lclstrconsts.rsdocopy
+msgctxt "lclstrconsts.rsdocopy"
 msgid "Copy"
 msgstr "Копировать"
 
 #: lclstrconsts.rsdopaste
+msgctxt "lclstrconsts.rsdopaste"
 msgid "Paste"
 msgstr "Вставить"
 
@@ -262,6 +264,7 @@ msgid "Duplicate icon format."
 msgstr "Формат значков дублируется."
 
 #: lclstrconsts.rseditrecordhint
+msgctxt "lclstrconsts.rseditrecordhint"
 msgid "Edit"
 msgstr "Редактировать"
 
@@ -745,9 +748,45 @@ msgstr "Зелёный"
 msgid "List index exceeds bounds (%d)"
 msgstr "Индекс списка вне диапазона (%d)"
 
+#: lclstrconsts.rsmacoseditmenu
+msgctxt "lclstrconsts.rsmacoseditmenu"
+msgid "Edit"
+msgstr "Правка"
+
+#: lclstrconsts.rsmacoseditmenucopy
+msgctxt "lclstrconsts.rsmacoseditmenucopy"
+msgid "Copy"
+msgstr "Копировать"
+
+#: lclstrconsts.rsmacoseditmenucut
+msgid "Cut"
+msgstr "Вырезать"
+
+#: lclstrconsts.rsmacoseditmenupaste
+msgctxt "lclstrconsts.rsmacoseditmenupaste"
+msgid "Paste"
+msgstr "Вставить"
+
+#: lclstrconsts.rsmacoseditmenuredo
+msgid "Redo"
+msgstr "Вернуть"
+
+#: lclstrconsts.rsmacoseditmenuselectall
+msgid "Select All"
+msgstr "Выделить все"
+
+#: lclstrconsts.rsmacoseditmenuundo
+msgid "Undo"
+msgstr "Отменить"
+
 #: lclstrconsts.rsmacosfileformat
 msgid "File Format:"
 msgstr "Формат файла:"
+
+#: lclstrconsts.rsmacosmenuabout
+#, object-pascal-format
+msgid "About %s"
+msgstr "О проекте %s"
 
 #: lclstrconsts.rsmacosmenuhide
 #, object-pascal-format
@@ -757,6 +796,10 @@ msgstr "Скрыть %s"
 #: lclstrconsts.rsmacosmenuhideothers
 msgid "Hide Others"
 msgstr "Скрыть остальные"
+
+#: lclstrconsts.rsmacosmenupreferences
+msgid "Preferences..."
+msgstr "Настройки..."
 
 #: lclstrconsts.rsmacosmenuquit
 #, object-pascal-format

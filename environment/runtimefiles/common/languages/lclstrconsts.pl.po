@@ -255,10 +255,12 @@ msgid "&Directory"
 msgstr "&Folder"
 
 #: lclstrconsts.rsdocopy
+msgctxt "lclstrconsts.rsdocopy"
 msgid "Copy"
 msgstr "Kopiuj"
 
 #: lclstrconsts.rsdopaste
+msgctxt "lclstrconsts.rsdopaste"
 msgid "Paste"
 msgstr "Wklej"
 
@@ -267,6 +269,7 @@ msgid "Duplicate icon format."
 msgstr "Zduplikowany format ikony."
 
 #: lclstrconsts.rseditrecordhint
+msgctxt "lclstrconsts.rseditrecordhint"
 msgid "Edit"
 msgstr "Edycja"
 
@@ -782,31 +785,71 @@ msgstr "Jasnozielony"
 msgid "List index exceeds bounds (%d)"
 msgstr "Indeks listy poza zakresem (%d)"
 
+#: lclstrconsts.rsmacoseditmenu
+msgctxt "lclstrconsts.rsmacoseditmenu"
+msgid "Edit"
+msgstr "Edycja"
+
+#: lclstrconsts.rsmacoseditmenucopy
+msgctxt "lclstrconsts.rsmacoseditmenucopy"
+msgid "Copy"
+msgstr "Kopiuj"
+
+#: lclstrconsts.rsmacoseditmenucut
+msgid "Cut"
+msgstr "Wytnij"
+
+#: lclstrconsts.rsmacoseditmenupaste
+msgctxt "lclstrconsts.rsmacoseditmenupaste"
+msgid "Paste"
+msgstr "Wklej"
+
+#: lclstrconsts.rsmacoseditmenuredo
+msgid "Redo"
+msgstr "Wykonaj ponownie"
+
+#: lclstrconsts.rsmacoseditmenuselectall
+msgid "Select All"
+msgstr "Zaznacz Wszystko"
+
+#: lclstrconsts.rsmacoseditmenuundo
+msgid "Undo"
+msgstr "Cofnij"
+
 #: lclstrconsts.rsmacosfileformat
 msgid "File Format:"
 msgstr ""
 
+#: lclstrconsts.rsmacosmenuabout
+#, object-pascal-format
+msgid "About %s"
+msgstr "O %s"
+
 #: lclstrconsts.rsmacosmenuhide
 #, object-pascal-format
 msgid "Hide %s"
-msgstr ""
+msgstr "Ukryj %s"
 
 #: lclstrconsts.rsmacosmenuhideothers
 msgid "Hide Others"
-msgstr ""
+msgstr "Ukryj pozostałe"
+
+#: lclstrconsts.rsmacosmenupreferences
+msgid "Preferences..."
+msgstr "Preferencje..."
 
 #: lclstrconsts.rsmacosmenuquit
 #, object-pascal-format
 msgid "Quit %s"
-msgstr ""
+msgstr "Zakończ %s"
 
 #: lclstrconsts.rsmacosmenuservices
 msgid "Services"
-msgstr ""
+msgstr "Usługi"
 
 #: lclstrconsts.rsmacosmenushowall
 msgid "Show All"
-msgstr ""
+msgstr "Pokaż wszystko"
 
 #: lclstrconsts.rsmarooncolorcaption
 msgid "Maroon"

@@ -64,7 +64,7 @@ type
     FItems: TObjectList<THighlightItem>;
     FEmpty: Boolean;
     FTempHighlightItem: THighlightItem;
-  private
+  protected
     class procedure SetToCanvas(ACanvas: TCanvas; Item: THighlightItem;
       Style: TSetToCanvasStyle);
     class procedure GetFromCanvas(ACanvas: TCanvas; Item: THighlightItem);

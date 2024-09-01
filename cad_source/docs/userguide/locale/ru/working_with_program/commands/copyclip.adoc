@@ -9,6 +9,6 @@
 
 include::../../_elements/commandsummary.adoc[]
 
-Копирует выбраные примитивы в буфер обмена
+Копирует выбранные примитивы в буфер обмена
 
 include::commandsummaryfree.adoc[]

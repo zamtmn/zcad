@@ -28,7 +28,8 @@ uses
   TypeDescriptors,URecordDescriptor,UObjectDescriptor,uzbstrproc,classes,typinfo,
   UPointerDescriptor,
   gzctnrVectorPData,gzctnrVector,
-  uzbLogIntf,uzctnrAlignedVectorBytes,uzbtypes;
+  uzbLogIntf,uzctnrAlignedVectorBytes,uzbtypes,
+  StrUtils;
 type
     td=record
              template:String;
@@ -160,8 +161,8 @@ typemanager=object(typemanagerdef)
                   exttype:TZctnrVectorPUserTypeDescriptors;
                   constructor init;
                   procedure CreateBaseTypes;virtual;
-                  function _TypeName2PTD(name: TInternalScriptString):PUserTypeDescriptor;virtual;
-                  function _ObjectTypeName2PTD(name: TInternalScriptString):PObjectDescriptor;virtual;
+                  function _TypeName2PTD(const name: TInternalScriptString):PUserTypeDescriptor;virtual;
+                  function _ObjectTypeName2PTD(const name: TInternalScriptString):PObjectDescriptor;virtual;
                   function _TypeIndex2PTD(ind:integer):PUserTypeDescriptor;virtual;
                   destructor done;virtual;
                   destructor systemdone;virtual;
@@ -179,14 +180,14 @@ varmanager=object(varmanagerdef)
             vardescarray:Tvardescarray;
             vararray:TZctnrAlignedVectorBytes;
                  constructor init;
-                 function findvardesc(varname:TInternalScriptString):pvardesk;virtual;
+                 function findvardesc(const varname:TInternalScriptString):pvardesk;virtual;
                  function findvardescbyinst(varinst:Pointer):pvardesk;virtual;
                  function findvardescbytype(pt:PUserTypeDescriptor):pvardesk;virtual;
-                 function CreateVariable(varname:TInternalScriptString; var vd:vardesk;attr:TVariableAttributes=0):pvardesk;virtual;
-                 function CreateVariable2(varname:TInternalScriptString; var vd:vardesk;attr:TVariableAttributes=0):TInVectorAddr;virtual;
+                 function CreateVariable(const varname:TInternalScriptString; var vd:vardesk;attr:TVariableAttributes=0):pvardesk;virtual;
+                 function CreateVariable2(const varname:TInternalScriptString; var vd:vardesk;attr:TVariableAttributes=0):TInVectorAddr;virtual;
                  procedure RemoveVariable(pvd:pvardesk);virtual;
-                 function findvardesc2(varname:TInternalScriptString):TInVectorAddr;virtual;
-                 function findfieldcustom(var pdesc: pByte; var offset: Integer;var tc:PUserTypeDescriptor; nam: ShortString): Boolean;virtual;
+                 function findvardesc2(const varname:TInternalScriptString):TInVectorAddr;virtual;
+                 function findfieldcustom(var pdesc: pByte; var offset: Integer;var tc:PUserTypeDescriptor; const nam: String): Boolean;virtual;
                  function getDS:Pointer;virtual;
                  destructor done;virtual;
                  procedure free;virtual;
@@ -199,19 +200,19 @@ TSimpleUnit=object(TAbstractUnit)
                   Name:TInternalScriptString;
                   InterfaceUses:TZctnrVectorPointer;
                   InterfaceVariables: varmanager;
-                  constructor init(nam:TInternalScriptString);
+                  constructor init(const nam:TInternalScriptString);
                   destructor done;virtual;
-                  function CreateFixedVariable(varname,vartype:TInternalScriptString;_pinstance:pointer):Pointer;virtual;
-                  function CreateVariable(varname,vartype:TInternalScriptString):vardesk;virtual;
-                  function FindVariable(varname:TInternalScriptString;InInterfaceOnly:Boolean=False):pvardesk;virtual;
-                  function FindVarDesc(varname:TInternalScriptString):TInVectorAddr;virtual;
+                  function CreateFixedVariable(const varname,vartype:TInternalScriptString;_pinstance:pointer):Pointer;virtual;
+                  function CreateVariable(const varname,vartype:TInternalScriptString):vardesk;virtual;
+                  function FindVariable(const varname:TInternalScriptString;InInterfaceOnly:Boolean=False):pvardesk;virtual;
+                  function FindVarDesc(const varname:TInternalScriptString):TInVectorAddr;virtual;
                   function FindVariableByInstance(_Instance:Pointer):pvardesk;virtual;
-                  function FindValue(varname:TInternalScriptString):pvardesk;virtual;
-                  function FindOrCreateValue(varname,vartype:TInternalScriptString):vardesk;virtual;
-                  function TypeName2PTD(n: TInternalScriptString):PUserTypeDescriptor;virtual;
+                  function FindValue(const varname:TInternalScriptString):pvardesk;virtual;
+                  function FindOrCreateValue(const varname,vartype:TInternalScriptString):vardesk;virtual;
+                  function TypeName2PTD(const n: TInternalScriptString):PUserTypeDescriptor;virtual;
                   function SaveToMem(var membuf:TZctnrVectorBytes;PEntUnits:PTZctnrVectorPointer=nil):PUserTypeDescriptor;virtual;
                   function SavePasToMem(var membuf:TZctnrVectorBytes):PUserTypeDescriptor;virtual;abstract;
-                  procedure setvardesc(out vd: vardesk; varname, username, typename: TInternalScriptString;_pinstance:pointer=nil);
+                  procedure setvardesc(out vd: vardesk; const varname, username, typename: TInternalScriptString;_pinstance:pointer=nil);
                   procedure free;virtual;abstract;
                   procedure CopyTo(source:PTSimpleUnit);virtual;
                   procedure CopyFrom(source:PTSimpleUnit);virtual;
@@ -221,11 +222,11 @@ PTEntityUnit=^TEntityUnit;
 TEntityUnit=object(TSimpleUnit)
                   ConnectedUses:TZctnrVectorPointer;
                   procedure free;virtual;
-                  constructor init(nam:TInternalScriptString);
+                  constructor init(const nam:TInternalScriptString);
                   destructor done;virtual;
 
-                  function FindVariable(varname:TInternalScriptString;InInterfaceOnly:Boolean=False):pvardesk;virtual;
-                  function FindVarDesc(varname:TInternalScriptString):TInVectorAddr;virtual;
+                  function FindVariable(const varname:TInternalScriptString;InInterfaceOnly:Boolean=False):pvardesk;virtual;
+                  function FindVarDesc(const varname:TInternalScriptString):TInVectorAddr;virtual;
             end;
 {REGISTEROBJECTWITHOUTCONSTRUCTORTYPE TUnit}
 TUnit=object(TSimpleUnit)
@@ -234,16 +235,16 @@ TUnit=object(TSimpleUnit)
             ImplementationTypes:typemanager;
             ImplementationVariables: varmanager;
 
-            constructor init(nam:TInternalScriptString);
+            constructor init(const nam:TInternalScriptString);
             function TypeIndex2PTD(ind:Integer):PUserTypeDescriptor;virtual;
-            function TypeName2PTD(n: TInternalScriptString):PUserTypeDescriptor;virtual;
-            function ObjectTypeName2PTD(n: TInternalScriptString):PObjectDescriptor;virtual;
-            function AssignToSymbol(var psymbol;symbolname:TInternalScriptString):Integer;
+            function TypeName2PTD(const n: TInternalScriptString):PUserTypeDescriptor;virtual;
+            function ObjectTypeName2PTD(const n: TInternalScriptString):PObjectDescriptor;virtual;
+            function AssignToSymbol(var psymbol;const symbolname:TInternalScriptString):Integer;
             function SavePasToMem(var membuf:TZctnrVectorBytes):PUserTypeDescriptor;virtual;
             destructor done;virtual;
             procedure free;virtual;
             function RegisterType(ti:PTypeInfo):PUserTypeDescriptor;
-            function SetTypeDesk(ti:PTypeInfo;fieldnames:array of const;SetNames:TFieldNames=[FNUser,FNProgram]):PUserTypeDescriptor;
+            function SetTypeDesk(ti:PTypeInfo; const fieldnames:array of const;SetNames:TFieldNames=[FNUser,FNProgram]):PUserTypeDescriptor;
             function RegisterRecordType(ti:PTypeInfo):PUserTypeDescriptor;
             function RegisterPointerType(ti:PTypeInfo):PUserTypeDescriptor;
             function RegisterEnumType(ti:PTypeInfo):PUserTypeDescriptor;
@@ -266,21 +267,21 @@ var
 function getpattern(ptd:ptdarray; max:Integer;var line:TInternalScriptString; out typ:Integer):PTZctnrVectorStrings;
 function ObjOrRecordRead(TranslateFunc:TTranslateFunction;var f: TZctnrVectorBytes; var line,Stringtypearray:TInternalScriptString; var fieldoffset: SmallInt; ptd:PRecordDescriptor):Boolean;
 function GetPVarMan: Pointer; export;
-function FindCategory(category:TInternalScriptString;var catname:TInternalScriptString):Pointer;
-procedure SetCategoryCollapsed(category:TInternalScriptString;value:Boolean);
-function GetBoundsFromSavedUnit(name:string;w,h:integer):Trect;
-procedure StoreBoundsToSavedUnit(name:string;tr:Trect);
-procedure SetTypedDataVariable(out TypedTataVariable:THardTypedData;pTypedTata:pointer;TypeName:string);
-function GetIntegerFromSavedUnit(name,suffix:string;def,min,max:integer):integer;
-function GetAnsiStringFromSavedUnit(name,suffix:ansistring;def:ansistring):ansistring;
-function GetBooleanFromSavedUnit(name,suffix:ansistring;def:Boolean):Boolean;
-procedure StoreIntegerToSavedUnit(name,suffix:string;value:integer);
-procedure StoreAnsiStringToSavedUnit(name,suffix:string;value:string);
-procedure RegisterVarCategory(CategoryName,CategoryUserName:string;TranslateFunc:TTranslateFunction);
+function FindCategory(const category:TInternalScriptString;var catname:TInternalScriptString):Pointer;
+procedure SetCategoryCollapsed(const category:TInternalScriptString;value:Boolean);
+function GetBoundsFromSavedUnit(const name:string;w,h:integer):Trect;
+procedure StoreBoundsToSavedUnit(const name:string;tr:Trect);
+procedure SetTypedDataVariable(out TypedTataVariable:THardTypedData;pTypedTata:pointer;const TypeName:string);
+function GetIntegerFromSavedUnit(const name,suffix:string;def,min,max:integer):integer;
+function GetAnsiStringFromSavedUnit(const name,suffix:ansistring;const def:ansistring):ansistring;
+function GetBooleanFromSavedUnit(const name,suffix:ansistring;def:Boolean):Boolean;
+procedure StoreIntegerToSavedUnit(const name,suffix:string;value:integer);
+procedure StoreAnsiStringToSavedUnit(const name,suffix:string;const value:string);
+procedure RegisterVarCategory(const CategoryName,CategoryUserName:string;TranslateFunc:TTranslateFunction);
 implementation
 uses strmy;
 
-procedure RegisterVarCategory(CategoryName,CategoryUserName:string;TranslateFunc:TTranslateFunction);
+procedure RegisterVarCategory(const CategoryName,CategoryUserName:string;TranslateFunc:TTranslateFunction);
 begin
   if (CategoryUserName<>'')and(CategoryName<>'')then begin
     if assigned(TranslateFunc)then
@@ -290,7 +291,7 @@ begin
   end;
 end;
 
-procedure SetTypedDataVariable(out TypedTataVariable:THardTypedData;pTypedTata:pointer;TypeName:string);
+procedure SetTypedDataVariable(out TypedTataVariable:THardTypedData;pTypedTata:pointer;const TypeName:string);
 var
   ptd:PUserTypeDescriptor;
 begin
@@ -315,7 +316,7 @@ begin
                                   else
                                       result:=value;
 end;
-function GetIntegerFromSavedUnit(name,suffix:string;def,min,max:integer):integer;
+function GetIntegerFromSavedUnit(const name,suffix:string;def,min,max:integer):integer;
 var
   pvd:pvardesk;
   pint:PInteger;
@@ -331,7 +332,7 @@ begin
   end else
     result:=def;
 end;
-function GetAnsiStringFromSavedUnit(name,suffix:ansistring;def:ansistring):ansistring;
+function GetAnsiStringFromSavedUnit(const name,suffix:ansistring;const def:ansistring):ansistring;
 var
   pvd:pvardesk;
   pstr:PAnsiString;
@@ -346,7 +347,7 @@ begin
   end else
     result:=def;
 end;
-function GetBooleanFromSavedUnit(name,suffix:ansistring;def:Boolean):Boolean;
+function GetBooleanFromSavedUnit(const name,suffix:ansistring;def:Boolean):Boolean;
 var
   pvd:pvardesk;
   pbool:PBoolean;
@@ -361,7 +362,7 @@ begin
   end else
     result:=def;
 end;
-procedure StoreIntegerToSavedUnit(name,suffix:string;value:integer);
+procedure StoreIntegerToSavedUnit(const name,suffix:string;value:integer);
 var
    pint:PInteger;
    pvd:pvardesk;
@@ -375,7 +376,7 @@ begin
        pint:=pvd^.data.Addr.Instance;
      pint^:=value;
 end;
-procedure StoreAnsiStringToSavedUnit(name,suffix:string;value:string);
+procedure StoreAnsiStringToSavedUnit(const name,suffix:string;const value:string);
 var
    pas:PAnsiString;
    pvd:pvardesk;
@@ -389,7 +390,7 @@ begin
        pas:=pvd^.data.Addr.Instance;
      pas^:=value;
 end;
-function GetBoundsFromSavedUnit(name:string;w,h:integer):Trect;
+function GetBoundsFromSavedUnit(const name:string;w,h:integer):Trect;
 var
    pint:PInteger;
    pvd:pvardesk;
@@ -422,7 +423,7 @@ begin
                             result.Bottom:=result.Top+pint^;
      end;
 end;
-procedure StoreBoundsToSavedUnit(name:string;tr:Trect);
+procedure StoreBoundsToSavedUnit(const name:string;tr:Trect);
 var
    pint:PInteger;
    vn:TInternalScriptString;
@@ -610,8 +611,8 @@ begin
        tkEnumeration:result:=RegisterEnumType(ti);
      end;
 end;
-function TUnit.SetTypeDesk(ti:PTypeInfo;fieldnames:array of const;SetNames:TFieldNames=[FNUser,FNProgram]):PUserTypeDescriptor;
-function GetFieldName(index:integer;oldname:string):string;
+function TUnit.SetTypeDesk(ti:PTypeInfo; const fieldnames:array of const;SetNames:TFieldNames=[FNUser,FNProgram]):PUserTypeDescriptor;
+function GetFieldName(index:integer;const oldname:string):string;
 begin
   if index>high(fieldnames) then
                             begin
@@ -662,7 +663,7 @@ begin
 end;
 constructor TEntityUnit.init;
 begin
-  inherited;
+  inherited init(nam);
   ConnectedUses.init(10);
 end;
 destructor TEntityUnit.done;
@@ -689,7 +690,7 @@ begin
   end;
 end;
 
-function TEntityUnit.FindVarDesc(varname:TInternalScriptString):TInVectorAddr;
+function TEntityUnit.FindVarDesc(const varname:TInternalScriptString):TInVectorAddr;
 var
   p:ptunit;
   ir:itrec;
@@ -864,7 +865,7 @@ var
   S:TInternalScriptString;}
   rr:tarrayindex;
 begin
-  if n2i.MyGetValue(uppercase(name),rr) then
+  if n2i.GetValue(uppercase(name),rr) then
   begin
        result:=_TypeIndex2PTD(rr);
   end
@@ -930,12 +931,11 @@ end;
 
 
 
-procedure tsimpleunit.setvardesc(out vd: vardesk; varname, username, typename: TInternalScriptString;_pinstance:pointer=nil);
+procedure tsimpleunit.setvardesc(out vd: vardesk; const varname, username, typename: TInternalScriptString;_pinstance:pointer=nil);
 //var
 //  tpe:PUserTypeDescriptor;
 begin
-  varname := readspace(varname);
-  vd.name := varname;
+  vd.name := readspace(varname);
   vd.username := username;
   vd.SetInstance(_pinstance);
   //vd.Instance := _pinstance;
@@ -967,7 +967,7 @@ begin
 
      //programlog.LogOutStr('end;',lp_DecPos,LM_Trace);
 end;
-function varmanager.CreateVariable(varname: TInternalScriptString; var vd: vardesk;attr:TVariableAttributes=0):pvardesk;
+function varmanager.CreateVariable(const varname: TInternalScriptString; var vd: vardesk;attr:TVariableAttributes=0):pvardesk;
 var
   size: LongWord;
   i:TArrayIndex;
@@ -990,7 +990,7 @@ begin
        //KillString(vd.name);
        //KillString(vd.username);
 end;
-function varmanager.CreateVariable2(varname:TInternalScriptString; var vd:vardesk;attr:TVariableAttributes=0):TInVectorAddr;
+function varmanager.CreateVariable2(const varname:TInternalScriptString; var vd:vardesk;attr:TVariableAttributes=0):TInVectorAddr;
 var
   size: LongWord;
   i:TArrayIndex;
@@ -1014,7 +1014,7 @@ begin
   pvd.data.PTD.MagicFreeInstance(pvd.data.Addr.GetInstance);
   Vardescarray.DeleteElementByP(pvd);
 end;
-function varmanager.findvardesc2(varname: TInternalScriptString):TInVectorAddr;
+function varmanager.findvardesc2(const varname: TInternalScriptString):TInVectorAddr;
 var
   //pblock: pdblock;
   pdesc: pvardesk;
@@ -1321,7 +1321,7 @@ begin
   end;
   //deb1:=pvardesk(pdesc)^.name;
   //deb2:=copy(nam, 1, length(pvardesk(pdesc)^.name));
-  if pvardesk(pdesc)^.name <> copy(nam, 1, length(pvardesk(pdesc)^.name)) then
+  if not StartsStr(pvardesk(pdesc)^.name, nam) then
   begin
     exit;
   end;
@@ -1513,7 +1513,7 @@ begin
   pdesc:=self.vardescarray.iterate(ir);
   until pdesc=nil;
 end;
-function varmanager.findvardesc(varname: TInternalScriptString): pvardesk;
+function varmanager.findvardesc(const varname: TInternalScriptString): pvardesk;
 var
   //pblock: pdblock;
   pdesc: pvardesk;
@@ -1649,7 +1649,7 @@ begin
      InterfaceUses.done;
      name:='';
 end;
-function tsimpleunit.FindValue(varname:TInternalScriptString):pvardesk;
+function tsimpleunit.FindValue(const varname:TInternalScriptString):pvardesk;
 var
   temp:pvardesk;
 begin
@@ -1659,7 +1659,7 @@ begin
                       else
                           result:=nil;
 end;
-function tsimpleunit.FindOrCreateValue(varname,vartype:TInternalScriptString):vardesk;
+function tsimpleunit.FindOrCreateValue(const varname,vartype:TInternalScriptString):vardesk;
 var
   temp:pvardesk;
 begin
@@ -1710,7 +1710,7 @@ begin
      end;
 end;
 
-function tsimpleunit.FindVarDesc(varname:TInternalScriptString):TInVectorAddr;
+function tsimpleunit.FindVarDesc(const varname:TInternalScriptString):TInVectorAddr;
 var p:ptunit;
     ir:itrec;
     i:integer;
@@ -1728,7 +1728,7 @@ begin
      end;
 end;
 
-function tsimpleunit.CreateFixedVariable(varname,vartype:TInternalScriptString;_pinstance:pointer):Pointer;
+function tsimpleunit.CreateFixedVariable(const varname,vartype:TInternalScriptString;_pinstance:pointer):Pointer;
 var
   vd:vardesk;
 begin
@@ -1736,7 +1736,7 @@ begin
   InterfaceVariables.createvariable(varname,vd);
   result:=vd.data.Addr.Instance;
 end;
-function tsimpleunit.CreateVariable(varname,vartype:TInternalScriptString):vardesk;
+function tsimpleunit.CreateVariable(const varname,vartype:TInternalScriptString):vardesk;
 var
   vd:vardesk;
 begin
@@ -1745,7 +1745,7 @@ begin
   result:=vd;
 end;
 
-constructor tunit.init(nam: TInternalScriptString);
+constructor tunit.init(const nam: TInternalScriptString);
 begin
   inherited init(nam);
   InterfaceTypes.init;
@@ -1919,7 +1919,7 @@ begin
      if vd<>nil then
      pointer(psymbol):=vd^.data.Addr.Instance;
 end;
-function FindCategory(category:TInternalScriptString;var catname:TInternalScriptString):Pointer;
+function FindCategory(const category:TInternalScriptString;var catname:TInternalScriptString):Pointer;
 var
    ps:pString;
    ir:itrec;
@@ -1942,7 +1942,7 @@ begin
      result:=@CategoryUnknownCOllapsed;
      catname:=category;
 end;
-procedure SetCategoryCollapsed(category:TInternalScriptString;value:Boolean);
+procedure SetCategoryCollapsed(const category:TInternalScriptString;value:Boolean);
 var
   cn:TInternalScriptString;
   pc:PBoolean;
@@ -1955,11 +1955,8 @@ end;
 initialization;
 begin
   zTraceLn('{D+}[ZSCRIPT]Varman.startup');
-  //programlog.logoutstr('Varman.startup',lp_IncPos,LM_Debug);
-  //DecimalSeparator := '.';
   ShortDateFormat:='MM.yy';
   VarCategory.init(100);
-  //VarCategory.loadfromfile(expandpath('*rtl/VarCategory.cat'));
   CategoryCollapsed.init(VarCategory.Max);
   CategoryCollapsed.CreateArray;
   fillchar(CategoryCollapsed.parray^,CategoryCollapsed.max,byte(true));

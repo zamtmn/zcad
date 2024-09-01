@@ -24,7 +24,7 @@ uses
     uzecamera,uzestyleslayers,UGDBSelectedObjArray,
     uzeentity,UGDBOutbound2DIArray,UGDBPoint3DArray,uzctnrVectorBytes,uzbtypes,
     uzegeometrytypes,uzeconsts,uzglviewareadata,uzegeometry,uzeffdxfsupport,uzeentplain,
-    uzctnrvectorpgdbaseobjects,uzeSnap,math;
+    uzctnrvectorpgdbaseobjects,uzeSnap,math,uzMVReader;
 type
 {Export+}
 {REGISTEROBJECTTYPE GDBObjArc}
@@ -43,7 +43,7 @@ GDBObjArc= object(GDBObjPlain)
                  pq2:GDBvertex;(*oi_readonly*)(*hidden_in_objinsp*)
                  constructor init(own:Pointer;layeraddres:PGDBLayerProp;LW:SmallInt;p:GDBvertex;RR,S,E:Double);
                  constructor initnul;
-                 procedure LoadFromDXF(var f:TZctnrVectorBytes;ptu:PExtensionData;var drawing:TDrawingDef);virtual;
+                 procedure LoadFromDXF(var f:TZMemReader;ptu:PExtensionData;var drawing:TDrawingDef);virtual;
 
                  procedure SaveToDXF(var outhandle:{Integer}TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
                  procedure DrawGeometry(lw:Integer;var DC:TDrawContext{infrustumactualy:TActulity;subrender:Integer});virtual;
@@ -66,8 +66,8 @@ GDBObjArc= object(GDBObjPlain)
                  procedure rtsave(refp:Pointer);virtual;
                  destructor done;virtual;
                  function GetObjTypeName:String;virtual;
-                 function calcinfrustum(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:Integer; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double):Boolean;virtual;
-                 function CalcTrueInFrustum(frustum:ClipArray;visibleactualy:TActulity):TInBoundingVolume;virtual;
+                 function calcinfrustum(const frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:Integer; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double):Boolean;virtual;
+                 function CalcTrueInFrustum(const frustum:ClipArray;visibleactualy:TActulity):TInBoundingVolume;virtual;
                  procedure ReCalcFromObjMatrix;virtual;
                  procedure transform(const t_matrix:DMatrix4D);virtual;
                  //function GetTangentInPoint(point:GDBVertex):GDBVertex;virtual;
@@ -187,7 +187,7 @@ begin
   for i:=0 to 5 do
     if(frustum[i].v[0] * P_insert_in_WCS.x + frustum[i].v[1] * P_insert_in_WCS.y + frustum[i].v[2] * P_insert_in_WCS.z + frustum[i].v[3]+rad{+GetLTCorrectH} < 0 ) then
       exit(IREmpty);
-  result:=Vertex3D_in_WCS_Array.CalcTrueInFrustum(frustum);
+  result:=Vertex3D_in_WCS_Array.CalcTrueInFrustum(frustum,false);
 end;
 function GDBObjARC.calcinfrustum;
 var i:Integer;
@@ -224,7 +224,7 @@ begin
   startangle := 0;
   endangle := pi/2;
   PProjoutbound:=nil;
-  Vertex3D_in_WCS_Array.init(100);
+  Vertex3D_in_WCS_Array.init(3);
 end;
 constructor GDBObjARC.init;
 begin
@@ -235,7 +235,7 @@ begin
   startangle := s;
   endangle := e;
   PProjoutbound:=nil;
-  Vertex3D_in_WCS_Array.init(100);
+  Vertex3D_in_WCS_Array.init(3);
   //format;
 end;
 function GDBObjArc.GetObjType;
@@ -280,17 +280,17 @@ var
 begin
   angle := endangle - startangle;
   if angle < 0 then angle := 2 * pi + angle;
-  SinCos(startangle{*pi/180},v.y,v.x);
+  SinCos(startangle,v.y,v.x);
   v.z:=0;
   v.w:=1;
   v:=VectorTransform(v,objMatrix);
   q0:=pgdbvertex(@v)^;
-  SinCos(startangle+angle{*pi/180}/2,v.y,v.x);
+  SinCos(startangle+angle/2,v.y,v.x);
   v.z:=0;
   v.w:=1;
   v:=VectorTransform(v,objMatrix);
   q1:=pgdbvertex(@v)^;
-  SinCos(endangle{*pi/180},v.y,v.x);
+  SinCos(endangle,v.y,v.x);
   v.z:=0;
   v.w:=1;
   v:=VectorTransform(v,objMatrix);
@@ -431,12 +431,6 @@ begin
   angle := endangle - startangle;
   if angle < 0 then angle := 2 * pi + angle;
 
-  Vertex3D_in_WCS_Array.clear;
-  SinCos(startangle,v.y,v.x);
-  v.z:=0;
-  pv:=VectorTransform3D(v,objmatrix);
-  Vertex3D_in_WCS_Array.PushBackData(pv);
-
   if dc.MaxDetail then
                       maxlod:=100
                   else
@@ -449,6 +443,13 @@ begin
                     lod:=round(l);
                     if lod<5 then lod:=5;
                end;
+  Vertex3D_in_WCS_Array.SetSize(lod+1);
+
+  Vertex3D_in_WCS_Array.clear;
+  SinCos(startangle,v.y,v.x);
+  v.z:=0;
+  pv:=VectorTransform3D(v,objmatrix);
+  Vertex3D_in_WCS_Array.PushBackData(pv);
 
   for i:=1 to lod do
   begin
@@ -571,15 +572,15 @@ var //s: String;
   dc:TDrawContext;
 begin
   //initnul;
-  byt:=readmystrtoint(f);
+  byt:=f.ParseInteger;
   while byt <> 0 do
   begin
     if not LoadFromDXFObjShared(f,byt,ptu,drawing) then
     if not dxfvertexload(f,10,byt,Local.P_insert) then
     if not dxfDoubleload(f,40,byt,r) then
     if not dxfDoubleload(f,50,byt,startangle) then
-    if not dxfDoubleload(f,51,byt,endangle) then {s := }f.readString;
-    byt:=readmystrtoint(f);
+    if not dxfDoubleload(f,51,byt,endangle) then {s := }f.SkipString;
+    byt:=f.ParseInteger;
   end;
   startangle := startangle * pi / 180;
   endangle := endangle * pi / 180;
@@ -797,7 +798,7 @@ begin
   result.initnul{(owner)};
   result.bp.ListPos.Owner:=owner;
 end;
-procedure SetArcGeomProps(AArc:PGDBObjArc;args:array of const);
+procedure SetArcGeomProps(AArc:PGDBObjArc; const args:array of const);
 var
    counter:integer;
 begin
@@ -807,7 +808,7 @@ begin
   AArc^.StartAngle:=CreateDoubleFromArray(counter,args);
   AArc^.EndAngle:=CreateDoubleFromArray(counter,args);
 end;
-function AllocAndCreateArc(owner:PGDBObjGenericWithSubordinated;args:array of const):PGDBObjArc;
+function AllocAndCreateArc(owner:PGDBObjGenericWithSubordinated; const args:array of const):PGDBObjArc;
 begin
   result:=AllocAndInitArc(owner);
   SetArcGeomProps(result,args);

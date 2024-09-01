@@ -61,14 +61,14 @@ TLLPrimitive= object(GDBaseObject)
                        constructor init;
                        destructor done;virtual;
                        function draw(drawer:TZGLAbstractDrawer;var rc:TDrawContext;var GeomData:ZGLGeomData;var LLPArray:TLLPrimitivesArray;var OptData:ZGLOptimizerData):Integer;virtual;
-                       function CalcTrueInFrustum(frustum:ClipArray;var GeomData:ZGLGeomData;out InRect:TInBoundingVolume):Integer;virtual;
+                       function CalcTrueInFrustum(const frustum:ClipArray;var GeomData:ZGLGeomData;out InRect:TInBoundingVolume):Integer;virtual;
                    end;
 PTLLLine=^TLLLine;
 {---REGISTEROBJECTTYPE TLLLine}
 TLLLine= object(TLLPrimitive)
               P1Index:TLLVertexIndex;{P2Index=P1Index+1}
               function draw(drawer:TZGLAbstractDrawer;var rc:TDrawContext;var GeomData:ZGLGeomData;var LLPArray:TLLPrimitivesArray;var OptData:ZGLOptimizerData):Integer;virtual;
-              function CalcTrueInFrustum(frustum:ClipArray;var GeomData:ZGLGeomData;out InRect:TInBoundingVolume):Integer;virtual;
+              function CalcTrueInFrustum(const frustum:ClipArray;var GeomData:ZGLGeomData;out InRect:TInBoundingVolume):Integer;virtual;
               procedure getEntIndexs(var GeomData:ZGLGeomData;out eid:TEntIndexesData);virtual;
               procedure CorrectIndexes(const offset:TEntIndexesOffsetData);virtual;
         end;
@@ -109,6 +109,7 @@ PTLLPoint=^TLLPoint;
 TLLPoint= object(TLLPrimitive)
               PIndex:TLLVertexIndex;
               function draw(drawer:TZGLAbstractDrawer;var rc:TDrawContext;var GeomData:ZGLGeomData;var LLPArray:TLLPrimitivesArray;var OptData:ZGLOptimizerData):Integer;virtual;
+              function CalcTrueInFrustum(const frustum:ClipArray;var GeomData:ZGLGeomData;out InRect:TInBoundingVolume):Integer;virtual;
               procedure getEntIndexs(var GeomData:ZGLGeomData;out eid:TEntIndexesData);virtual;
               procedure CorrectIndexes(const offset:TEntIndexesOffsetData);virtual;
         end;
@@ -135,7 +136,7 @@ TLLSymbol= object(TLLPrimitive)
               function draw(drawer:TZGLAbstractDrawer;var rc:TDrawContext;var GeomData:ZGLGeomData;var LLPArray:TLLPrimitivesArray;var OptData:ZGLOptimizerData):Integer;virtual;
               procedure drawSymbol(drawer:TZGLAbstractDrawer;var rc:TDrawContext;var GeomData:ZGLGeomData;var LLPArray:TLLPrimitivesArray;var OptData:ZGLOptimizerData;const PSymbolsParam:PTSymbolSParam);virtual;
               constructor init;
-              function CalcTrueInFrustum(frustum:ClipArray;var GeomData:ZGLGeomData;out InRect:TInBoundingVolume):Integer;virtual;
+              function CalcTrueInFrustum(const frustum:ClipArray;var GeomData:ZGLGeomData;out InRect:TInBoundingVolume):Integer;virtual;
         end;
 PTLLSymbolLine=^TLLSymbolLine;
 {---REGISTEROBJECTTYPE TLLSymbolLine}
@@ -146,13 +147,13 @@ TLLSymbolLine= object(TLLPrimitive)
               FirstOutBoundIndex,LastOutBoundIndex:TLLVertexIndex;
               function draw(drawer:TZGLAbstractDrawer;var rc:TDrawContext;var GeomData:ZGLGeomData;var LLPArray:TLLPrimitivesArray;var OptData:ZGLOptimizerData):Integer;virtual;
               constructor init;
-              function CalcTrueInFrustum(frustum:ClipArray;var GeomData:ZGLGeomData;out InRect:TInBoundingVolume):Integer;virtual;
+              function CalcTrueInFrustum(const frustum:ClipArray;var GeomData:ZGLGeomData;out InRect:TInBoundingVolume):Integer;virtual;
         end;
 PTLLSymbolEnd=^TLLSymbolEnd;
 {---REGISTEROBJECTTYPE TLLSymbolEnd}
 TLLSymbolEnd= object(TLLPrimitive)
               function draw(drawer:TZGLAbstractDrawer;var rc:TDrawContext;var GeomData:ZGLGeomData;var LLPArray:TLLPrimitivesArray;var OptData:ZGLOptimizerData):Integer;virtual;
-              function CalcTrueInFrustum(frustum:ClipArray;var GeomData:ZGLGeomData;out InRect:TInBoundingVolume):Integer;virtual;
+              function CalcTrueInFrustum(const frustum:ClipArray;var GeomData:ZGLGeomData;out InRect:TInBoundingVolume):Integer;virtual;
                    end;
 PTLLPolyLine=^TLLPolyLine;
 {---REGISTEROBJECTTYPE TLLPolyLine}
@@ -160,7 +161,7 @@ TLLPolyLine= object(TLLPrimitive)
               P1Index,Count,SimplifiedContourIndex,SimplifiedContourSize:TLLVertexIndex;
               Closed:Boolean;
               function draw(drawer:TZGLAbstractDrawer;var rc:TDrawContext;var GeomData:ZGLGeomData;var LLPArray:TLLPrimitivesArray;var OptData:ZGLOptimizerData):Integer;virtual;
-              function CalcTrueInFrustum(frustum:ClipArray;var GeomData:ZGLGeomData;out InRect:TInBoundingVolume):Integer;virtual;
+              function CalcTrueInFrustum(const frustum:ClipArray;var GeomData:ZGLGeomData;out InRect:TInBoundingVolume):Integer;virtual;
               procedure getEntIndexs(var GeomData:ZGLGeomData;out eid:TEntIndexesData);virtual;
               procedure AddSimplifiedIndex(Index:TLLVertexIndex);virtual;
               procedure CorrectIndexes(const offset:TEntIndexesOffsetData);virtual;
@@ -193,7 +194,7 @@ function TLLPrimitive.draw(drawer:TZGLAbstractDrawer;var rc:TDrawContext;var Geo
 begin
      result:=getPrimitiveSize;
 end;
-function TLLPrimitive.CalcTrueInFrustum(frustum:ClipArray;var GeomData:ZGLGeomData;out InRect:TInBoundingVolume):Integer;
+function TLLPrimitive.CalcTrueInFrustum(const frustum:ClipArray;var GeomData:ZGLGeomData;out InRect:TInBoundingVolume):Integer;
 begin
      InRect:=IREmpty;
      result:=getPrimitiveSize;
@@ -204,7 +205,7 @@ begin
                                     Drawer.DrawLine(@geomdata.Vertex3S,P1Index,P1Index+1);
      result:=inherited;
 end;
-function TLLLine.CalcTrueInFrustum(frustum:ClipArray;var GeomData:ZGLGeomData;out InRect:TInBoundingVolume):Integer;
+function TLLLine.CalcTrueInFrustum(const frustum:ClipArray;var GeomData:ZGLGeomData;out InRect:TInBoundingVolume):Integer;
 begin
      InRect:=uzegeometry.CalcTrueInFrustum(geomdata.Vertex3S.getDataMutable(self.P1Index)^,geomdata.Vertex3S.getDataMutable(self.P1Index+1)^,frustum);
      result:=getPrimitiveSize;
@@ -225,6 +226,12 @@ begin
      Drawer.DrawPoint(@geomdata.Vertex3S,PIndex);
      result:=inherited;
 end;
+function TLLPoint.CalcTrueInFrustum(const frustum:ClipArray;var GeomData:ZGLGeomData;out InRect:TInBoundingVolume):Integer;
+begin
+     InRect:=uzegeometry.CalcPointTrueInFrustum(geomdata.Vertex3S.getDataMutable(self.PIndex)^,frustum);
+     result:=getPrimitiveSize;
+end;
+
 procedure TLLPoint.getEntIndexs(var GeomData:ZGLGeomData;out eid:TEntIndexesData);
 begin
      eid.GeomIndexMin:=PIndex;
@@ -414,7 +421,7 @@ begin
      P1Index:=P1Index+offset.GeomIndexOffset;
      SimplifiedContourIndex:=SimplifiedContourIndex+offset.IndexsIndexOffset;
 end;
-function TLLPolyLine.CalcTrueInFrustum(frustum:ClipArray;var GeomData:ZGLGeomData;out InRect:TInBoundingVolume):Integer;
+function TLLPolyLine.CalcTrueInFrustum(const frustum:ClipArray;var GeomData:ZGLGeomData;out InRect:TInBoundingVolume):Integer;
 var
   i,index:integer;
   SubRect:TInBoundingVolume;
@@ -457,7 +464,7 @@ begin
      OptData.symplify:=false;
      result:=inherited;
 end;
-function TLLSymbolEnd.CalcTrueInFrustum(frustum:ClipArray;var GeomData:ZGLGeomData;out InRect:TInBoundingVolume):Integer;
+function TLLSymbolEnd.CalcTrueInFrustum(const frustum:ClipArray;var GeomData:ZGLGeomData;out InRect:TInBoundingVolume):Integer;
 begin
   result:=getPrimitiveSize;
   InRect:=IRNotAplicable;
@@ -486,7 +493,7 @@ begin
                                                 self.SimplyDrawed:=false;
   result:=inherited;
 end;
-function TLLSymbolLine.CalcTrueInFrustum(frustum:ClipArray;var GeomData:ZGLGeomData;out InRect:TInBoundingVolume):Integer;
+function TLLSymbolLine.CalcTrueInFrustum(const frustum:ClipArray;var GeomData:ZGLGeomData;out InRect:TInBoundingVolume):Integer;
 begin
   result:=getPrimitiveSize;
   InRect:=IRNotAplicable;
@@ -502,7 +509,7 @@ begin
   ExternalLLPOffset:=-1;
   ExternalLLPCount:=-1;
 end;
-function TLLSymbol.CalcTrueInFrustum(frustum:ClipArray;var GeomData:ZGLGeomData;out InRect:TInBoundingVolume):Integer;
+function TLLSymbol.CalcTrueInFrustum(const frustum:ClipArray;var GeomData:ZGLGeomData;out InRect:TInBoundingVolume):Integer;
 var
   myfrustum:ClipArray;
   OutBound:OutBound4V;

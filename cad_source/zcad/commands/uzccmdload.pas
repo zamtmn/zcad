@@ -102,14 +102,21 @@ var
    DC:TDrawContext;
    ZCDCtx:TZDrawingContext;
    lph,lph2:TLPSHandle;
+   dbpas:string;
 begin
   lph:=lps.StartLongProcess(rsLoadFile,nil,0);
   ZCDCtx.CreateRec(drawings.GetCurrentDWG^,drawings.GetCurrentDWG^.pObjRoot^,loadmode,drawings.GetCurrentDWG.CreateDrawingRC);
   loadproc(s,ZCDCtx,@DXFLoadCallBack);
-  if FileExists(utf8tosys(s+'.dbpas')) then begin
+  dbpas:=utf8tosys(ChangeFileExt(s,'.dbpas'));
+  if not FileExists(dbpas) then begin
+    dbpas:=utf8tosys(s+'.dbpas');
+    if not FileExists(dbpas) then
+        dbpas:='';
+  end;
+  if dbpas<>'' then begin
     pu:=PTZCADDrawing(drawings.GetCurrentDWG).DWGUnits.findunit(GetSupportPath,InterfaceTranslate,DrawingDeviceBaseUnitName);
     if assigned(pu) then begin
-      mem.InitFromFile(s+'.dbpas');
+      mem.InitFromFile(dbpas);
       units.parseunit(GetSupportPath,InterfaceTranslate,mem,PTSimpleUnit(pu));
       remapprjdb(pu);
       mem.done;

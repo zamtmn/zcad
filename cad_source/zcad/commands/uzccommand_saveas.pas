@@ -51,7 +51,7 @@ begin
      pu:=PTZCADDrawing(dwg).DWGUnits.findunit(GetSupportPath,InterfaceTranslate,DrawingDeviceBaseUnitName);
      mem.init(1024);
      pu^.SavePasToMem(mem);
-     mem.SaveToFile(expandpath(s+'.dbpas'));
+     mem.SaveToFile(ChangeFileExt(expandpath(s),'.dbpas'));
      mem.done;
      if allok then
                   result:=cmd_ok

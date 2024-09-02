@@ -196,7 +196,7 @@ begin
   RD_VSync:=T3SB_Fale;
   SAVE_Auto_Interval:=300;
   SAVE_Auto_Current_Interval:=300;
-  SAVE_Auto_FileName:='$(ZCADPath)/autosave/autosave.dxf';
+  SAVE_Auto_FileName:='$(CurrentDrawingPath)/$(CurrentDrawingFileNameOnly)_autosave.dxf';
   SAVE_Auto_On:=True;
   SYS_RunTime:=0;
   SYS_Version:='';

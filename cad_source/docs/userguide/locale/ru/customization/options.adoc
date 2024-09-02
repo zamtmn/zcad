@@ -52,7 +52,7 @@ image::zcad_oi_options.png[width=25%,pdfwidth=25%]
 [cols=">3,<6"]
 |==========================
 | [.filepath]#$(ZCADPath)# | Путь к бинарному файлу
-| [.filepath]#$(ZCADAutoSaveFilePath)# | Путь к файлу автосохранения
+| [.filepath]#$(LastAutoSaveFile)# | Путь к последнему файлу автосохранения
 | [.filepath]#$(TEMP)# | Путь к папке временных файлов
 | [.filepath]#$(SystemFontsPath)# | Путь к папке шрифтов ОС (пока только win, возвращает [.filepath]#SHGetSpecialFolderPath(CSIDL_FONTS)#)
 | [.filepath]#$(UserFontsPath)# | Путь к папке шрифтов пользователя (пока только win, возвращает [.filepath]#SHGetSpecialFolderPath(CSIDL_LOCAL_APPDATA)\Microsoft\Windows\Fonts#)

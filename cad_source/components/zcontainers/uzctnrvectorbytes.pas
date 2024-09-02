@@ -384,9 +384,13 @@ begin
      end;
 end;
 function TZctnrVectorBytes.SaveToFile;
-var infile:Integer;
+var
+  infile:Integer;
+  fp:RawByteString;
 begin
-     infile:=filecreate({$IFNDEF DELPHI}UTF8ToSys{$ENDIF}({ExpandPath}(FileName)));
+  fp:={$IFNDEF DELPHI}UTF8ToSys{$ENDIF}(FileName);
+  ForceDirectories(ExtractFilePath(fp));
+  infile:=filecreate(fp);
      if infile>0 then
                      begin
                            FileWrite(InFile,parray^,count);

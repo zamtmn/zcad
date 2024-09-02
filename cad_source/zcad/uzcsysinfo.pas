@@ -98,7 +98,7 @@ begin
     //начальные значения некоторых параметров и загрузка параметров
     SysParam.notsaved.otherinstancerun:=false;
     SysParam.saved.UniqueInstance:=true;
-    LoadParams(expandpath(ProgramPath+'/rtl/config.xml'),SysParam.saved);
+    LoadParams(expandpath(ProgramPath+CParamsFile),SysParam.saved);
     SysParam.notsaved.PreloadedFile:='';
 
     //значения некоторых параметров из комстроки, если есть

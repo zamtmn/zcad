@@ -29,7 +29,7 @@ uses
   uzeffmanager,
   uzccommand_DWGNew,
   uzccommandsimpl,uzccommandsabstract,
-  uzcsysvars,
+  uzcsysvars,uzcSysParams,
   uzcstrconsts,
   uzcdrawings,
   uzcinterface,
@@ -38,8 +38,10 @@ uses
 implementation
 
 function QSave_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
-var s,s1:AnsiString;
-    itautoseve:boolean;
+var
+  s,s1:AnsiString;
+  itautoseve:boolean;
+  TempSavedParam:tsavedparams;
 begin
   itautoseve:=false;
   if operands='QS' then begin
@@ -55,6 +57,11 @@ begin
       s1:=drawings.GetCurrentDWG.GetFileName;
   end;
     result:=SaveDXFDPAS(s1);
+    LoadParams(expandpath(ProgramPath+CParamsFile),TempSavedParam);
+    TempSavedParam.LastAutoSaveFile:=s1;
+    SysParam.saved.LastAutoSaveFile:=s1;
+    SaveParams(expandpath(ProgramPath+CParamsFile),TempSavedParam);
+
     if (not itautoseve)and(result=cmd_ok) then
       drawings.GetCurrentDWG.ChangeStampt(false);
     SysVar.SAVE.SAVE_Auto_Current_Interval^:=SysVar.SAVE.SAVE_Auto_Interval^;

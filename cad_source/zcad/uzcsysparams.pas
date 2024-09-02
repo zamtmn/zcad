@@ -21,6 +21,8 @@ unit uzcSysParams;
 interface
 uses XMLConf,XMLPropStorage,LazConfigStorage,fileutil,
   LCLProc,uzclog,uzbpaths,Forms{$IFNDEF DELPHI},LazUTF8{$ENDIF},sysutils;
+const
+  CParamsFile='/rtl/config.xml';
 type
 {EXPORT+}
   {REGISTERRECORDTYPE TmyFileVersionInfo}
@@ -38,6 +40,7 @@ type
     MemProfiling:Boolean;(*'Internal memory profiler'*)
     LangOverride:string;(*'Language override'*)
     DictionariesPath:string;(*'Dictionaries path'*)
+    LastAutoSaveFile:string;(*'Last autosave file'*)
   end;
   {REGISTERRECORDTYPE tnotsavedparams}
   tnotsavedparams=record
@@ -62,7 +65,8 @@ const
                                    UpdatePO:false;
                                    MemProfiling:false;
                                    LangOverride:'';
-                                   DictionariesPath:'ru=$(ZCADDictionariesPath)\ru_RU.dic|en=$(ZCADDictionariesPath)\en_US.dic;$(ZCADDictionariesPath)\en_US_interface.dic|abbrv=$(ZCADDictionariesPath)\abbrv.dic');
+                                   DictionariesPath:'ru=$(ZCADDictionariesPath)\ru_RU.dic|en=$(ZCADDictionariesPath)\en_US.dic;$(ZCADDictionariesPath)\en_US_interface.dic|abbrv=$(ZCADDictionariesPath)\abbrv.dic';
+                                   LastAutoSaveFile:'noAutoSaveFile');
   zcaduniqueinstanceid='zcad unique instance';
 var
   SysParam: tsysparam;
@@ -80,6 +84,7 @@ begin
   Config.SetDeleteValue('MemProfiling',Params.MemProfiling,DefaultSavedParams.MemProfiling);
   Config.SetDeleteValue('LangOverride',Params.LangOverride,DefaultSavedParams.LangOverride);
   Config.SetDeleteValue('DictionariesPath',Params.DictionariesPath,DefaultSavedParams.DictionariesPath);
+  Config.SetDeleteValue('LastAutoSaveFile',Params.LastAutoSaveFile,DefaultSavedParams.LastAutoSaveFile);
   Config.UndoAppendBasePath;
 end;
 
@@ -120,6 +125,7 @@ begin
   Params.MemProfiling:=XMLConfig.GetValue('MemProfiling',DefaultSavedParams.MemProfiling);
   Params.LangOverride:=XMLConfig.GetValue('LangOverride',DefaultSavedParams.LangOverride);
   Params.DictionariesPath:=XMLConfig.GetValue('DictionariesPath',DefaultSavedParams.DictionariesPath);
+  Params.LastAutoSaveFile:=XMLConfig.GetValue('LastAutoSaveFile',DefaultSavedParams.LastAutoSaveFile);
   XMLConfig.CloseKey;
   FreeAndNil(XMLConfig);
 end;

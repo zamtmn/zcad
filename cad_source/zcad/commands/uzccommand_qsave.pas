@@ -56,15 +56,17 @@ begin
     end;
       s1:=drawings.GetCurrentDWG.GetFileName;
   end;
-    result:=SaveDXFDPAS(s1);
+
+  if itautoseve then begin
     LoadParams(expandpath(ProgramPath+CParamsFile),TempSavedParam);
     TempSavedParam.LastAutoSaveFile:=s1;
     SysParam.saved.LastAutoSaveFile:=s1;
     SaveParams(expandpath(ProgramPath+CParamsFile),TempSavedParam);
-
-    if (not itautoseve)and(result=cmd_ok) then
-      drawings.GetCurrentDWG.ChangeStampt(false);
-    SysVar.SAVE.SAVE_Auto_Current_Interval^:=SysVar.SAVE.SAVE_Auto_Interval^;
+  end;
+  result:=SaveDXFDPAS(s1);
+  if (not itautoseve)and(result=cmd_ok) then
+    drawings.GetCurrentDWG.ChangeStampt(false);
+  SysVar.SAVE.SAVE_Auto_Current_Interval^:=SysVar.SAVE.SAVE_Auto_Interval^;
 end;
 
 initialization

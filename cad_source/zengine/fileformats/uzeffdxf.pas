@@ -1563,6 +1563,7 @@ end;
 
 function savedxf2000(const SavedFileName:String; const TemplateFileName:String;var drawing:TSimpleDrawing):boolean;
 var
+  sysfilename:RawByteString;
   templatefile: TZctnrVectorBytes;
   outstream: {Integer}TZctnrVectorBytes;
   groups, values, {ucvalues,}ts: String;
@@ -2668,14 +2669,12 @@ ENDTAB}
   OldHandele2NewHandle.Destroy;
   templatefile.done;
 
-  if FileExists({$IFNDEF DELPHI}utf8tosys{$ENDIF}(SavedFileName)) then
-                           begin
-                                if (not(deletefile(SavedFileName+'.bak')) or (not renamefile(SavedFileName,SavedFileName+'.bak'))) then
-                                begin
-                                   DebugLn('{WH}'+rsUnableRenameFileToBak,[SavedFileName]);
-                                   //HistoryOutStr(format(rsUnableRenameFileToBak,[SavedFileName]));
-                                end;
-                           end;
+  sysfilename:={$IFNDEF DELPHI}utf8tosys{$ENDIF}(SavedFileName);
+  if FileExists(sysfilename) then begin
+    deletefile(sysfilename+'.bak');
+    if not renamefile(sysfilename,sysfilename+'.bak') then
+      DebugLn('{WH}'+rsUnableRenameFileToBak,[SavedFileName]);
+  end;
 
   if outstream.SaveToFile({expandpath}(SavedFileName))<=0 then
                                        begin

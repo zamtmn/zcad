@@ -137,7 +137,7 @@ type
   TNotPolyLine=(NPL_Line,NPL_CircularArc,NPL_EllipticArc,NPL_Spline);
 var
   currpath:GDBPolyline2DArray;
-  i,j,pathscount,vertexcount,byt,bt:integer;
+  i,j,k,knotcount,pathscount,vertexcount,byt,bt:integer;
   firstp,prevp,p:GDBVertex2D;
   tmp:double;
   s:string;
@@ -216,6 +216,22 @@ begin
                    end;
                  4:begin
                      NotPolyLine:=NPL_Spline;
+                     if dxfIntegerload(f,94,byt,bt) then byt:=f.ParseInteger;
+                     if dxfIntegerload(f,73,byt,bt) then byt:=f.ParseInteger;
+                     if dxfIntegerload(f,74,byt,bt) then byt:=f.ParseInteger;
+                     if dxfIntegerload(f,95,byt,knotcount) then byt:=f.ParseInteger;
+                     if dxfIntegerload(f,96,byt,vertexcount) then byt:=f.ParseInteger;
+                     for k:=1 to knotcount do
+                       if dxfdoubleload(f,40,byt,p.y) then byt:=f.ParseInteger;
+                     for k:=1 to vertexcount do begin
+                       if dxfdoubleload(f,10,byt,p.x) then byt:=f.ParseInteger;
+                       if dxfdoubleload(f,20,byt,p.y) then byt:=f.ParseInteger;
+                     end;
+                     if dxfdoubleload(f,42,byt,p.y) then byt:=f.ParseInteger;
+                     if dxfdoubleload(f,12,byt,p.x) then byt:=f.ParseInteger;
+                     if dxfdoubleload(f,22,byt,p.y) then byt:=f.ParseInteger;
+                     if dxfdoubleload(f,13,byt,p.x) then byt:=f.ParseInteger;
+                     if dxfdoubleload(f,23,byt,p.y) then byt:=f.ParseInteger;
                    end;
                end;
              end;

@@ -69,10 +69,12 @@ begin
     repeat
     if pobj^.Selected then begin
       pentvarext:=pobj^.GetExtension<TVariablesExtender>;
-      pentvarext.entityunit.free;
-      units.parseunit(GetSupportPath,InterfaceTranslate,mem,@pentvarext.entityunit);
-      mem.Seek(0);
-      inc(counter);
+      if pentvarext<>nil then begin
+        pentvarext.entityunit.free;
+        units.parseunit(GetSupportPath,InterfaceTranslate,mem,@pentvarext.entityunit);
+        mem.Seek(0);
+        inc(counter);
+      end;
     end;
     pobj:=drawings.GetCurrentROOT.ObjArray.iterate(ir);
     until pobj=nil;

@@ -46,7 +46,7 @@ begin
   itautoseve:=false;
   if operands='QS' then begin
     s1:=ExpandPath(sysvar.SAVE.SAVE_Auto_FileName^);
-    s:=rsAutoSave+': '''+s1+'''';
+    s:=format(rsAutoSave,[s1]);
     ZCMsgCallBackInterface.TextMessage(s,TMWOHistoryOut);
     itautoseve:=true;
   end else begin

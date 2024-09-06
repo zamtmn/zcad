@@ -210,7 +210,7 @@ resourcestring
   {window names}
   rsOpenFile='Open file...';
   rsSaveFile='Save file...';
-  rsAutoSave='Autosave';
+  rsAutoSave='Autosave "%s"';
   rsQuitCaption='Quit';
   rsWarningCaption='Warning!';
   rsErrorCaption='Error!';

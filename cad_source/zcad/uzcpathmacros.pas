@@ -20,21 +20,13 @@ unit uzcPathMacros;
 {$INCLUDE zengineconfig.inc}
 interface
 uses
-  MacroDefIntf,uzmacros,uzcsysparams,
-  uzclog,uzblog,uzbpaths,Forms,uzcstrconsts,uzcdrawings,uzedrawingsimple,
+  MacroDefIntf,uzmacros,
+  uzclog,uzblog,uzbpaths,Forms,uzcstrconsts,
   {$IFDEF WINDOWS}ShlObj,{$ENDIF}{$IFNDEF DELPHI}LazUTF8,{$ENDIF}sysutils,uzcsysvars;
 type
   TZCADPathsMacroMethods=class
     class function MacroFuncZCADPath       (const {%H-}Param: string; const Data: PtrInt;
                                               var {%H-}Abort: boolean): string;
-    class function MacroFuncCurrentDrawingPath(const {%H-}Param: string; const Data: PtrInt;
-                                              var {%H-}Abort: boolean): string;
-    class function MacroFuncCurrentDrawingFileNameOnly(const {%H-}Param: string; const Data: PtrInt;
-                                                  var {%H-}Abort: boolean): string;
-    class function MacroFuncCurrentDrawingFileName(const {%H-}Param: string; const Data: PtrInt;
-                                                  var {%H-}Abort: boolean): string;
-    class function MacroFuncLastAutoSaveFile(const {%H-}Param: string; const Data: PtrInt;
-                                                 var {%H-}Abort: boolean): string;
     class function MacroFuncZCADDictionariesPath(const {%H-}Param: string; const Data: PtrInt;
                                                  var {%H-}Abort: boolean): string;
     class function MacroFuncTEMPPath       (const {%H-}Param: string; const Data: PtrInt;
@@ -60,50 +52,6 @@ implementation
 class function TZCADPathsMacroMethods.MacroFuncZCADPath(const {%H-}Param: string; const Data: PtrInt;var {%H-}Abort: boolean): string;
 begin
   result:=ProgramPath;
-end;
-class function TZCADPathsMacroMethods.MacroFuncCurrentDrawingPath(const {%H-}Param: string; const Data: PtrInt;var {%H-}Abort: boolean): string;
-var
-  cdwg:PTSimpleDrawing;
-begin
-  cdwg:=drawings.GetCurrentDWG;
-  if cdwg<>nil then begin
-    result:=ExtractFileDir(cdwg^.GetFileName);
-    if result=''then
-      result:=TempPath;
-  end else
-    result:=TempPath;
-end;
-
-class function TZCADPathsMacroMethods.MacroFuncCurrentDrawingFileNameOnly(const {%H-}Param: string; const Data: PtrInt;var {%H-}Abort: boolean): string;
-var
-  cdwg:PTSimpleDrawing;
-begin
-  cdwg:=drawings.GetCurrentDWG;
-  if cdwg<>nil then begin
-    result:=ExtractFileName(cdwg^.GetFileName);
-    result:=ChangeFileExt(result,'');
-    if result=''then
-      result:=TempPath;
-  end else
-    result:=TempPath;
-end;
-
-class function TZCADPathsMacroMethods.MacroFuncCurrentDrawingFileName(const {%H-}Param: string; const Data: PtrInt;var {%H-}Abort: boolean): string;
-var
-  cdwg:PTSimpleDrawing;
-begin
-  cdwg:=drawings.GetCurrentDWG;
-  if cdwg<>nil then begin
-    result:=ExtractFileName(cdwg^.GetFileName);
-    if result=''then
-      result:=TempPath;
-  end else
-    result:=TempPath;
-end;
-
-class function TZCADPathsMacroMethods.MacroFuncLastAutoSaveFile(const {%H-}Param: string; const Data: PtrInt;var {%H-}Abort: boolean): string;
-begin
-  result:=ExpandPath(SysParam.saved.LastAutoSaveFile);
 end;
 class function TZCADPathsMacroMethods.MacroFuncZCADDictionariesPath(const {%H-}Param: string; const Data: PtrInt;
                                              var {%H-}Abort: boolean): string;
@@ -174,18 +122,10 @@ end;
 initialization
 DefaultMacros.AddMacro(TTransferMacro.Create('ZCADPath','',
                        'Path to ZCAD',TZCADPathsMacroMethods.MacroFuncZCADPath,[]));
-DefaultMacros.AddMacro(TTransferMacro.Create('CurrentDrawingPath','',
-                       'Current drawing path',TZCADPathsMacroMethods.MacroFuncCurrentDrawingPath,[]));
-DefaultMacros.AddMacro(TTransferMacro.Create('CurrentDrawingFileNameOnly','',
-                       'Current drawing file name only',TZCADPathsMacroMethods.MacroFuncCurrentDrawingFileNameOnly(),[]));
-DefaultMacros.AddMacro(TTransferMacro.Create('CurrentDrawingFileName','',
-                       'Current drawing file name',TZCADPathsMacroMethods.MacroFuncCurrentDrawingFileName(),[]));
-DefaultMacros.AddMacro(TTransferMacro.Create('LastAutoSaveFile','',
-                       'Last auto save file',TZCADPathsMacroMethods.MacroFuncLastAutoSaveFile,[]));
 DefaultMacros.AddMacro(TTransferMacro.Create('TEMP','',
                        'TEMP path',TZCADPathsMacroMethods.MacroFuncTEMPPath,[]));
 DefaultMacros.AddMacro(TTransferMacro.Create('ZCADDictionariesPath','',
-                       'TEMP path',TZCADPathsMacroMethods.MacroFuncZCADDictionariesPath(),[]));
+                       'Dictionaries path',TZCADPathsMacroMethods.MacroFuncZCADDictionariesPath(),[]));
 DefaultMacros.AddMacro(TTransferMacro.Create('SystemFontsPath','',
                        'System fonts path',TZCADPathsMacroMethods.MacroFuncSystemFontsPath(),[]));
 DefaultMacros.AddMacro(TTransferMacro.Create('UserFontsPath','',

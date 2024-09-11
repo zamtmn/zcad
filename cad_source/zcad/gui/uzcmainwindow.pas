@@ -16,7 +16,7 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
 
-unit uzcmainwindow;
+unit uzcMainWindow;
 {$INCLUDE zengineconfig.inc}
 
 interface
@@ -1547,47 +1547,30 @@ begin
     end}
 
     //Выделение одного объекта под мышью
-    if sender.param.SelDesc.OnMouseObject <> nil then
-    begin
-         result:=true;
-         if (zc and MZW_SHIFT)=0
-         then
-             begin
-                  //if assigned(sysvar.DSGN.DSGN_SelNew)then
-                  if sysvarDSGNSelNew then
-                  begin
-                        sender.pdwg.GetCurrentROOT.ObjArray.DeSelect(sender.param.SelDesc.Selectedobjcount,drawings.GetCurrentDWG^.deselector);
-                        sender.param.SelDesc.LastSelectedObject := nil;
-                        //wa.param.SelDesc.OnMouseObject := nil;
-                        sender.param.seldesc.Selectedobjcount:=0;
-                        sender.PDWG^.GetSelObjArray.Free;
-                  end;
-                  sender.param.SelDesc.LastSelectedObject := sender.param.SelDesc.OnMouseObject;
-                  if assigned(sender.OnWaMouseSelect)then
-                    sender.OnWaMouseSelect(sender,sender.param.SelDesc.LastSelectedObject);
-             end
-         else
-             begin
-                  PGDBObjEntity(sender.param.SelDesc.OnMouseObject)^.DeSelect(sender.param.SelDesc.Selectedobjcount,drawings.CurrentDWG^.DeSelector);
-                  sender.param.SelDesc.LastSelectedObject := nil;
-                  //addoneobject;
-                  ZCMsgCallBackInterface.Do_GUIaction(sender,ZMsgID_GUIActionSelectionChanged);
-                  //sender.SetObjInsp;
-                  ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIActionRedraw);
-                  //if assigned(updatevisibleproc) then updatevisibleproc(ZMsgID_GUIActionRedraw);
-             end;
-             //wa.param.SelDesc.LastSelectedObject := wa.param.SelDesc.OnMouseObject;
-             if commandmanager.CurrCmd.pcommandrunning<>nil then
-             if commandmanager.CurrCmd.pcommandrunning.IData.GetPointMode=TGPMWaitEnt then
-             if sender.param.SelDesc.LastSelectedObject<>nil then
-             begin
-               commandmanager.CurrCmd.pcommandrunning^.IData.GetPointMode:=TGPMEnt;
-             end;
-         NeedRedraw:=true;
-    end
-
-    else if ((sender.param.md.mode and MGetSelectionFrame) <> 0) and ((zc and MZW_LBUTTON)<>0) then
-    begin
+    if sender.param.SelDesc.OnMouseObject <> nil then begin
+      result:=true;
+      if (zc and MZW_SHIFT)=0 then begin
+        if (not PGDBObjEntity(sender.param.SelDesc.OnMouseObject).Selected)and(sysvarDSGNSelNew)and((zc and MZW_CONTROL)=0) then begin
+          sender.pdwg.GetCurrentROOT.ObjArray.DeSelect(sender.param.SelDesc.Selectedobjcount,drawings.GetCurrentDWG^.deselector);
+          sender.param.SelDesc.LastSelectedObject := nil;
+          sender.param.seldesc.Selectedobjcount:=0;
+          sender.PDWG^.GetSelObjArray.Free;
+        end;
+        sender.param.SelDesc.LastSelectedObject := sender.param.SelDesc.OnMouseObject;
+        if assigned(sender.OnWaMouseSelect)then
+          sender.OnWaMouseSelect(sender,sender.param.SelDesc.LastSelectedObject);
+      end else begin
+        PGDBObjEntity(sender.param.SelDesc.OnMouseObject)^.DeSelect(sender.param.SelDesc.Selectedobjcount,drawings.CurrentDWG^.DeSelector);
+        sender.param.SelDesc.LastSelectedObject:=nil;
+        ZCMsgCallBackInterface.Do_GUIaction(sender,ZMsgID_GUIActionSelectionChanged);
+        ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIActionRedraw);
+      end;
+      if commandmanager.CurrCmd.pcommandrunning<>nil then
+        if commandmanager.CurrCmd.pcommandrunning.IData.GetPointMode=TGPMWaitEnt then
+          if sender.param.SelDesc.LastSelectedObject<>nil then
+            commandmanager.CurrCmd.pcommandrunning^.IData.GetPointMode:=TGPMEnt;
+      NeedRedraw:=true;
+    end else if ((sender.param.md.mode and MGetSelectionFrame) <> 0) and ((zc and MZW_LBUTTON)<>0) then begin
       result:=true;
     { TODO : Добавить возможность выбора объектов без секрамки во время выполнения команды }
       commandmanager.ExecuteCommandSilent('SelectFrame',sender.pdwg,@sender.param);

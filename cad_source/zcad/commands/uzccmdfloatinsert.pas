@@ -31,6 +31,10 @@ type
 {EXPORT+}
   {REGISTEROBJECTTYPE FloatInsert_com}
   FloatInsert_com =  object(CommandRTEdObject)
+    protected
+      FSelectInsertedEnts:boolean;
+    public
+    constructor init(cn:String;SA,DA:TCStartAttr;ASelectInsertedEnts:boolean=false);
     procedure CommandStart(const Context:TZCADCommandContext;Operands:TCommandOperands); virtual;
     procedure Build(Operands:TCommandOperands); virtual;
     procedure Command(Operands:TCommandOperands); virtual;abstract;
@@ -51,6 +55,13 @@ type
 {EXPORT-}
 
 implementation
+constructor FloatInsert_com.init(cn:String;SA,DA:TCStartAttr;ASelectInsertedEnts:boolean=false);
+begin
+  inherited init(cn,SA,DA);
+  FSelectInsertedEnts:=ASelectInsertedEnts;
+  if FSelectInsertedEnts then
+    CEndActionAttr:=CEndActionAttr-[CEDeSelect];
+end;
 
 procedure FloatInsert_com.Build(Operands:TCommandOperands);
 begin
@@ -94,6 +105,15 @@ begin
 
   if (button and MZW_LBUTTON)<>0 then
   begin
+    if FSelectInsertedEnts then begin
+      {todo: выделение\развыделение примитивов в командах нужно кудато вынести отдельно}
+      drawings.GetCurrentROOT.ObjArray.DeSelect(drawings.GetCurrentDWG.wa.param.SelDesc.Selectedobjcount,drawings.GetCurrentDWG^.deselector);
+      drawings.GetCurrentDWG.wa.param.SelDesc.LastSelectedObject := nil;
+      drawings.GetCurrentDWG.wa.param.SelDesc.OnMouseObject := nil;
+      drawings.GetCurrentDWG.wa.param.seldesc.Selectedobjcount:=0;
+      drawings.GetCurrentDWG.SelObjArray.Free;
+    end;
+
    pobj:=drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.beginiterate(ir);
    if pobj<>nil then
    repeat
@@ -114,6 +134,9 @@ begin
                      FreeArray:=false;
                      //comit;
                 end;
+
+                if FSelectInsertedEnts then
+                  tv^.SelectQuik;
 
               end;
           end;

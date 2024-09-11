@@ -553,6 +553,7 @@
         <ComponentName Value="ZCADMainWindow"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
+        <UnitName Value="uzcMainWindow"/>
       </Unit22>
       <Unit23>
         <Filename Value="zcad/entities/uzcenitiesvariablesextender.pas"/>

@@ -31,7 +31,8 @@ uses
   gzctnrVectorTypes,
   uzgldrawcontext,
   uzcdrawings,
-  uzccommandsabstract,uzccommandsimpl;
+  uzccommandsabstract,uzccommandsimpl,
+  uzegeometry,uzegeometrytypes;
 
 const
   ZCAD_DXF_CLIPBOARD_NAME='DXF2000@ZCADv0.9';
@@ -89,34 +90,49 @@ end;
 
 function CopyClip_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 var
-   pobj: pGDBObjEntity;
-   ir:itrec;
-   DC:TDrawContext;
-   NeedReCreateClipboardDWG:boolean;
+  pobj,pobjcopy:pGDBObjEntity;
+  ir:itrec;
+  DC:TDrawContext;
+  NeedReCreateClipboardDWG:boolean;
+  FoundEnts:boolean;
+  SelectedAABB:TBoundingBox;
+  m:DMatrix4D;
 begin
-   ClipboardDWG.pObjRoot.ObjArray.free;
-   dc:=drawings.GetCurrentDwg^.CreateDrawingRC;
-   NeedReCreateClipboardDWG:=true;
-   pobj:=drawings.GetCurrentROOT.ObjArray.beginiterate(ir);
-   if pobj<>nil then
-   repeat
-          begin
-              if pobj.selected then
-              begin
-                   if NeedReCreateClipboardDWG then
-                                                   begin
-                                                        ReCreateClipboardDWG;
-                                                        NeedReCreateClipboardDWG:=false;
-                                                   end;
-                drawings.CopyEnt(drawings.GetCurrentDWG,ClipboardDWG,pobj).Formatentity(drawings.GetCurrentDWG^,dc);
-              end;
-          end;
-          pobj:=drawings.GetCurrentROOT.ObjArray.iterate(ir);
-   until pobj=nil;
+  ClipboardDWG.pObjRoot.ObjArray.free;
+  dc:=drawings.GetCurrentDwg^.CreateDrawingRC(false,[DCODrawable]);
+  NeedReCreateClipboardDWG:=true;
+  FoundEnts:=false;
+  SelectedAABB:=default(TBoundingBox);
 
-   copytoclipboard;
+  pobj:=drawings.GetCurrentROOT.ObjArray.beginiterate(ir);
+  if pobj<>nil then repeat
+    if pobj.selected then begin
+      if FoundEnts then
+        ConcatBB(SelectedAABB,pobj.vp.BoundingBox)
+      else
+        SelectedAABB:=pobj.vp.BoundingBox;
+      FoundEnts:=true;
+    end;
+    pobj:=drawings.GetCurrentROOT.ObjArray.iterate(ir);
+  until pobj=nil;
 
-   result:=cmd_ok;
+  if FoundEnts then begin
+    ReCreateClipboardDWG;
+    m:=CreateTranslationMatrix(-(SelectedAABB.RTF+SelectedAABB.LBN)/2);
+    pobj:=drawings.GetCurrentROOT.ObjArray.beginiterate(ir);
+    if pobj<>nil then
+    repeat
+      if pobj.selected then begin
+        pobjcopy:=drawings.CopyEnt(drawings.GetCurrentDWG,ClipboardDWG,pobj);
+        pobjcopy^.Formatentity(drawings.GetCurrentDWG^,dc);
+        pobjcopy^.transform(m);
+        //pobjcopy^.Formatentity(drawings.GetCurrentDWG^,dc);
+      end;
+      pobj:=drawings.GetCurrentROOT.ObjArray.iterate(ir);
+    until pobj=nil;
+    copytoclipboard;
+  end;
+  result:=cmd_ok;
 end;
 
 initialization

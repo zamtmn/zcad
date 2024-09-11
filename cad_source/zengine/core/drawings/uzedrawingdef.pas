@@ -42,7 +42,7 @@ TDrawingDef= object(GDBaseobject)
                        function GetChangeStampt:Boolean;virtual;abstract;
                        function CanUndo:boolean;virtual;abstract;
                        function CanRedo:boolean;virtual;abstract;
-                       function CreateDrawingRC(_maxdetail:Boolean=false):TDrawContext;virtual;abstract;
+                       function CreateDrawingRC(_maxdetail:Boolean=false;ExcludeOpts:TDContextOptions=[]):TDrawContext;virtual;abstract;
                        function GetUnitsFormat:TzeUnitsFormat;virtual;abstract;
                  end;
 {EXPORT-}

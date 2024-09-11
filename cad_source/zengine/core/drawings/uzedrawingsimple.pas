@@ -94,7 +94,7 @@ TSimpleDrawing= object(TAbstractDrawing)
                        function SetMouseEditorMode(mode:Byte):Byte;virtual;
                        procedure FreeConstructionObjects;virtual;
                        function GetChangeStampt:Boolean;virtual;
-                       function CreateDrawingRC(_maxdetail:Boolean=false):TDrawContext;virtual;
+                       function CreateDrawingRC(_maxdetail:Boolean=false;ExcludeOpts:TDContextOptions=[]):TDrawContext;virtual;
                        procedure FillDrawingPartRC(var dc:TDrawContext);virtual;
                        function GetUnitsFormat:TzeUnitsFormat;virtual;
                        procedure CreateBlockDef(name:String);virtual;
@@ -216,7 +216,7 @@ begin
      result.RemoveTrailingZeros:=true;
 end;
 
-function TSimpleDrawing.CreateDrawingRC(_maxdetail:Boolean=false):TDrawContext;
+function TSimpleDrawing.CreateDrawingRC(_maxdetail:Boolean=false;ExcludeOpts:TDContextOptions=[]):TDrawContext;
 begin
   if assigned(wa)then
                      result:=wa.CreateRC(_maxdetail)
@@ -225,6 +225,7 @@ begin
        result:=CreateFaceRC;
        FillDrawingPartRC(result);
   end;
+  Result.Options:=Result.Options-ExcludeOpts;
 end;
 procedure TSimpleDrawing.FillDrawingPartRC(var dc:TDrawContext);
 begin

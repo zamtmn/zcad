@@ -16,7 +16,7 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
 {$MODE OBJFPC}{$H+}
-unit uzccommand_PasteClip;
+unit uzcCommand_PasteClip;
 {$INCLUDE zengineconfig.inc}
 
 interface

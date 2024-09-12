@@ -248,6 +248,7 @@ uses
   uzcCommand_LPCSRun,
   uzcCommand_Find,
   uzcCommand_SpellCheck,
+  uzcCommand_Duplicate,
 
   uzcenitiesvariablesextender,uzcExtdrLayerControl,uzcExtdrSmartTextEnt,
   uzcExtdrIncludingVolume,uzcExtdrSCHConnection,uzcExtdrSCHConnector,

@@ -16,7 +16,7 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>)
 }
 {$mode delphi}
-unit uzccommand_copyclip;
+unit uzcCommand_CopyClip;
 
 {$INCLUDE zengineconfig.inc}
 
@@ -32,7 +32,7 @@ uses
   uzgldrawcontext,
   uzcdrawings,
   uzccommandsabstract,uzccommandsimpl,
-  uzegeometry,uzegeometrytypes;
+  uzegeometry,uzegeometrytypes,uzcCommand_Duplicate;
 
 const
   ZCAD_DXF_CLIPBOARD_NAME='DXF2000@ZCADv0.9';
@@ -50,7 +50,6 @@ procedure CopyToClipboard;
 var
   s:ansistring;
   suni:unicodestring;
-  I:integer;
   zcformat:TClipboardFormat;
 begin
   if fileexists(utf8tosys(CopyClipFile)) then
@@ -61,10 +60,6 @@ begin
   savedxf2000(s,ProgramPath + '/components/empty.dxf',ClipboardDWG^);
   s:=s+#0;
   suni:=s;
-  //setlength(suni,length(s)*2+2);
-  //fillchar(suni[1],length(suni),0);
-  //for I := 1 to length(s) do
-  //  suni[i*2-1]:=s[i];
   Clipboard.Open;
   Clipboard.Clear;
   zcformat:=RegisterClipboardFormat(ZCAD_DXF_CLIPBOARD_NAME);
@@ -93,30 +88,13 @@ var
   pobj,pobjcopy:pGDBObjEntity;
   ir:itrec;
   DC:TDrawContext;
-  NeedReCreateClipboardDWG:boolean;
-  FoundEnts:boolean;
   SelectedAABB:TBoundingBox;
   m:DMatrix4D;
 begin
   ClipboardDWG.pObjRoot.ObjArray.free;
   dc:=drawings.GetCurrentDwg^.CreateDrawingRC(false,[DCODrawable]);
-  NeedReCreateClipboardDWG:=true;
-  FoundEnts:=false;
-  SelectedAABB:=default(TBoundingBox);
 
-  pobj:=drawings.GetCurrentROOT.ObjArray.beginiterate(ir);
-  if pobj<>nil then repeat
-    if pobj.selected then begin
-      if FoundEnts then
-        ConcatBB(SelectedAABB,pobj.vp.BoundingBox)
-      else
-        SelectedAABB:=pobj.vp.BoundingBox;
-      FoundEnts:=true;
-    end;
-    pobj:=drawings.GetCurrentROOT.ObjArray.iterate(ir);
-  until pobj=nil;
-
-  if FoundEnts then begin
+  if GetSelectedEntsAABB(drawings.GetCurrentROOT.ObjArray,SelectedAABB) then begin
     ReCreateClipboardDWG;
     m:=CreateTranslationMatrix(-SelectedAABB.LBN{-(SelectedAABB.RTF+SelectedAABB.LBN)/2});
     pobj:=drawings.GetCurrentROOT.ObjArray.beginiterate(ir);

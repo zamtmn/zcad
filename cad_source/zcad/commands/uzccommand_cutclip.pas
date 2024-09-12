@@ -16,7 +16,7 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>)
 }
 {$mode delphi}
-unit uzccommand_cutclip;
+unit uzcCommand_CutClip;
 
 {$INCLUDE zengineconfig.inc}
 

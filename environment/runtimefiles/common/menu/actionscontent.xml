@@ -20,6 +20,7 @@
       <ZAction Name="ACN_COPYCLIPBASE" Command="CopyBase" Img="copyclipbase" Caption="Copy to clipboard with base point" ShortCut="CTRL+SHIFT+C" SecondaryShortCuts="CTRL+INS"/>
       <ZAction Name="ACN_PASTE" Command="PasteClip" Img="pasteclip" Caption="Paste" Hint="Paste from clipboard" ShortCut="CTRL+V" SecondaryShortCuts="SHIFT+INS"/>
       <ZAction Name="ACN_ERASE" Command="Erase" Img="erase" Caption="Erase" ShortCut="DEL"/>
+      <ZAction Name="ACN_DUPLICATE" Command="Duplicate" Img="#dbl" Caption="Duplicate" ShortCut="CTRL+D"/>
       <ZAction Name="ACN_SELECTALL" Command="SelectAll" Img="#SA" Caption="Select all" ShortCut="CTRL+A"/>
       <ZAction Name="ACN_INVERSESELECTED" Command="InverseSelected" Img="#SI" Caption="Inverse selected"/>
       <ZAction Name="ACN_DESELECTALL" Command="DeSelectAll" Img="#DSA" Caption="DeSelect all" ShortCut="CTRL+SHIFT+A"/>

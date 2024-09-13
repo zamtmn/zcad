@@ -55,9 +55,9 @@ type
   move_com =  object(CommandRTEdObject)
     t3dp: gdbvertex;
     pcoa:ptpcoavector;
-    protected
+    {-}protected{//}
       function InternalCommandStart(const Context:TZCADCommandContext;Operands:TCommandOperands):Boolean;virtual;
-    public
+    {-}public{//}
     procedure CommandStart(const Context:TZCADCommandContext;Operands:TCommandOperands);virtual;
     procedure CommandCancel(const Context:TZCADCommandContext); virtual;
     function BeforeClick(const Context:TZCADCommandContext;wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record): Integer; virtual;

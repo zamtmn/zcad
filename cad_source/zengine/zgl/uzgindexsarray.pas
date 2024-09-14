@@ -17,7 +17,7 @@
 }
 
 unit uzgindexsarray;
-{$Mode delphi}{$H+)
+{$Mode delphi}{$H+}
 {$INCLUDE zengineconfig.inc}
 interface
 uses gzctnrVector,sysutils,

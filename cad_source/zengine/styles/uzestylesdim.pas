@@ -17,7 +17,7 @@
 }
 
 unit uzestylesdim;
-{$Mode delphi}{$H+)
+{$Mode delphi}{$H+}
 {$INCLUDE zengineconfig.inc}
 interface
 uses uzepalette,uzeconsts,uzestyleslinetypes,uzestylestexts,usimplegenerics,

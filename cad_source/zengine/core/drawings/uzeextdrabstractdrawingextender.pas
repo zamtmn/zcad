@@ -16,7 +16,7 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
 unit uzeExtdrAbstractDrawingExtender;
-{$Mode delphi}{$H+)
+{$Mode delphi}{$H+}
 {$INCLUDE zengineconfig.inc}
 
 interface

@@ -17,7 +17,7 @@
 }
 
 unit uzeStylesLineTypes;
-{$Mode delphi}{$H+)
+{$Mode delphi}{$H+}
 {$INCLUDE zengineconfig.inc}
 interface
 uses LCLProc,LazUTF8,Classes,gzctnrVector,sysutils,uzbtypes,

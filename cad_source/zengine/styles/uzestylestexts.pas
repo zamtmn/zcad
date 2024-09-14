@@ -17,7 +17,7 @@
 }
 
 unit uzestylestexts;
-{$Mode delphi}{$H+)
+{$Mode delphi}{$H+}
 {$INCLUDE zengineconfig.inc}
 interface
 uses LCLProc,uzbpaths,uzefontmanager,sysutils,uzbtypes,uzegeometry,

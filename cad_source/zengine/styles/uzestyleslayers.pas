@@ -17,7 +17,7 @@
 }
 
 unit uzestyleslayers;
-{$Mode delphi}{$H+)
+{$Mode delphi}{$H+}
 {$INCLUDE zengineconfig.inc}
 interface
 uses sysutils,uzbtypes,uzegeometry,

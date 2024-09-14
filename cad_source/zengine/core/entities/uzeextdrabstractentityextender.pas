@@ -20,7 +20,7 @@ unit uzeExtdrAbstractEntityExtender;
 {$INCLUDE zengineconfig.inc}
 
 interface
-uses uzedrawingdef,usimplegenerics,   ;lk
+uses uzedrawingdef,usimplegenerics,
      uzctnrVectorBytes,gzctnrSTL,uzeffdxfsupport,uzeBaseExtender,
      uzgldrawcontext;
 

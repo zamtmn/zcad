@@ -16,16 +16,16 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
 unit uzeExtdrAbstractEntityExtender;
-{$Mode delphi}{$H+)
+{$Mode objfpc}{$H+}
 {$INCLUDE zengineconfig.inc}
 
 interface
-uses uzedrawingdef,usimplegenerics,
+uses uzedrawingdef,usimplegenerics,   ;lk
      uzctnrVectorBytes,gzctnrSTL,uzeffdxfsupport,uzeBaseExtender,
      uzgldrawcontext;
 
 type
-  TAbstractEntityExtender=class(TExtender<pointer>)
+  TAbstractEntityExtender=class(specialize TExtender<pointer>)
 
     class function CanBeAddedTo(pEntity:Pointer):Boolean;override;
 
@@ -50,9 +50,9 @@ type
 
   TMetaEntityExtender=class of TAbstractEntityExtender;
 
-  TEntityExtensions=class(TExtensions<TAbstractEntityExtender,TMetaEntityExtender,Pointer>)
+  TEntityExtensions=class(specialize TExtensions<TAbstractEntityExtender,TMetaEntityExtender,Pointer>)
 
-    function GetExtension<GEntityExtenderType>:GEntityExtenderType;overload;
+    generic function GetExtensionOf<GEntityExtenderType>:GEntityExtenderType;
 
     procedure CopyAllExtToEnt(pSourceEntity,pDestEntity:pointer);
 
@@ -74,7 +74,7 @@ type
     procedure RunOnBeforeConnect(pEntity:Pointer;const drawing:TDrawingDef;var DC:TDrawContext);
     procedure RunSetRoot(pEntity:Pointer;pNewRoot:Pointer);
   end;
-  TEntityExtendersMap=GKey2DataMap<string,TMetaEntityExtender>;
+  TEntityExtendersMap=specialize GKey2DataMap<string,TMetaEntityExtender>;
 var
   EntityExtenders:TEntityExtendersMap;
 implementation
@@ -114,7 +114,7 @@ procedure TAbstractEntityExtender.onEntityBeforeConnect(pEntity:Pointer;const dr
 begin
 end;
 
-function TEntityExtensions.GetExtension<GEntityExtenderType>:GEntityExtenderType;
+generic function TEntityExtensions.GetExtensionOf<GEntityExtenderType>:GEntityExtenderType;
 var
   index:SizeUInt;
 begin

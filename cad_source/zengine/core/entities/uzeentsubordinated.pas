@@ -17,7 +17,7 @@
 }
 
 unit uzeentsubordinated;
-{$Mode delphi}{$H+}
+{$Mode objfpc}{$H+}
 {$INCLUDE zengineconfig.inc}
 
 interface
@@ -32,7 +32,7 @@ GDBObjExtendable=object(GDBaseObject)
                                  EntExtensions:{-}TEntityExtensions{/Pointer/};
                                  procedure AddExtension(ExtObj:TAbstractEntityExtender);
                                  procedure RemoveExtension(ExtType:TMetaEntityExtender);
-                                 function GetExtension<GEntityExtenderType>:GEntityExtenderType;overload;
+                                 generic function GetExtension<GEntityExtenderType>:GEntityExtenderType;overload;
                                  function GetExtension(ExtType:TMetaEntityExtender):TAbstractEntityExtender;overload;
                                  function GetExtension(n:Integer):TAbstractEntityExtender;overload;
                                  function GetExtensionsCount:Integer;
@@ -122,10 +122,10 @@ begin
      if assigned(EntExtensions) then
        EntExtensions.RemoveExtension(ExtType);
 end;
-function GDBObjExtendable.GetExtension<GEntityExtenderType>:GEntityExtenderType;
+generic function GDBObjExtendable.GetExtension<GEntityExtenderType>:GEntityExtenderType;
 begin
   if assigned(EntExtensions) then
-    result:=EntExtensions.GetExtensionOf<GEntityExtenderType>
+    result:=EntExtensions. specialize GetExtensionOf<GEntityExtenderType>
   else
     result:=nil;
 end;
@@ -163,7 +163,7 @@ begin
   for i:=0 to GetExtensionsCount-1 do begin
     SourceExt:=GetExtension(i);
     if SourceExt<>nil then begin
-      DestExt:=Dest.GetExtension(TypeOf(SourceExt));
+      DestExt:=Dest.GetExtension(TMetaEntityExtender(TypeOf(SourceExt)));
       if not Assigned(DestExt) then begin
         DestExt:=TMetaEntityExtender(SourceExt.ClassType).Create(@Dest);
         DestExt.Assign(SourceExt);
@@ -206,7 +206,7 @@ begin
      //ou.done;
      inherited;
 end;
-procedure GDBObjGenericWithSubordinated.FormatAfterDXFLoad;
+procedure GDBObjGenericWithSubordinated.FormatAfterDXFLoad(var drawing:TDrawingDef;var DC:TDrawContext);
 begin
      //format;
      //CalcObjMatrix;
@@ -395,7 +395,7 @@ begin
                         end;
 
 end;
-procedure GDBObjGenericWithSubordinated.Build;
+procedure GDBObjGenericWithSubordinated.Build(var drawing:TDrawingDef);
 begin
 
 end;
@@ -424,13 +424,13 @@ begin
                                                  result:=self.bp.ListPos.Owner.FindVariable(varname);
 
 end;}
-procedure GDBObjGenericWithSubordinated.ImEdited;
+procedure GDBObjGenericWithSubordinated.ImEdited(pobj:PGDBObjSubordinated;pobjinarray:Integer;var drawing:TDrawingDef);
 begin
 end;
-procedure GDBObjGenericWithSubordinated.ImSelected;
+procedure GDBObjGenericWithSubordinated.ImSelected(pobj:PGDBObjSubordinated;pobjinarray:Integer);
 begin
 end;
-procedure GDBObjGenericWithSubordinated.DelSelectedSubitem;
+procedure GDBObjGenericWithSubordinated.DelSelectedSubitem(var drawing:TDrawingDef);
 begin
 end;
 begin

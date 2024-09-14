@@ -124,9 +124,10 @@ begin
 end;
 generic function GDBObjExtendable.GetExtension<GEntityExtenderType>:GEntityExtenderType;
 begin
-  if assigned(EntExtensions) then
-    result:=EntExtensions. specialize GetExtensionOf<GEntityExtenderType>
-  else
+  {todo: тут какаято хрень с сборкой 3.2.2 на appveyor}
+  if assigned(EntExtensions) then begin
+    result:=self.EntExtensions.specialize GetExtensionOf<GEntityExtenderType>;
+  end else
     result:=nil;
 end;
 function GDBObjExtendable.GetExtension(ExtType:TMetaEntityExtender):TAbstractEntityExtender;

@@ -329,10 +329,10 @@ procedure TSCHConnectorExtender.onEntityClone(pSourceEntity,pDestEntity:pointer)
 var
   NetConnectorExtender:TSCHConnectorExtender;
 begin
-  NetConnectorExtender:=PGDBObjEntity(pDestEntity)^.EntExtensions.GetExtension<TSCHConnectorExtender>;
+  NetConnectorExtender:=PGDBObjEntity(pDestEntity)^.EntExtensions.GetExtensionOf<TSCHConnectorExtender>;
   if NetConnectorExtender=nil then
     NetConnectorExtender:=AddConnectorExtenderToEntity(pDestEntity);
-  NetConnectorExtender.Assign(PGDBObjEntity(pSourceEntity)^.EntExtensions.GetExtension<TSCHConnectorExtender>);
+  NetConnectorExtender.Assign(PGDBObjEntity(pSourceEntity)^.EntExtensions.GetExtensionOf<TSCHConnectorExtender>);
 end;
 procedure TSCHConnectorExtender.onEntityBuildVarGeometry(pEntity:pointer;const drawing:TDrawingDef);
 begin

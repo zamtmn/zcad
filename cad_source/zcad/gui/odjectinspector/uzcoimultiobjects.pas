@@ -534,10 +534,7 @@ begin
                 for j:=0 to pv^.GetExtensionsCount-1 do begin
                   Extender:=pv^.GetExtension(j);
                   ObjIDWithExtender.ObjID:=pv^.GetObjType;
-                  if Extender=nil then
-                    ObjIDWithExtender.ExtenderClass:=nil
-                  else
-                    ObjIDWithExtender.ExtenderClass:=typeof(Extender);
+                  ObjIDWithExtender.ExtenderClass:=typeof(Extender);
                   if MultiPropertiesManager.MultiPropertyVector[i].MPObjectsData.tryGetValue(ObjIDWithExtender,MultiPropertyDataForObjects)then begin
                     if @MultiPropertyDataForObjects.EntBeforeIterateProc<>nil then begin
                       ChangedData:=CreateChangedData(Extender,MultiPropertyDataForObjects.GSData);
@@ -582,10 +579,7 @@ begin
                 for j:=0 to pv^.GetExtensionsCount-1 do begin
                   Extender:=pv^.GetExtension(j);
                   ObjIDWithExtender.ObjID:=pv^.GetObjType;
-                    if Extender=nil then
-                      ObjIDWithExtender.ExtenderClass:=nil
-                    else
-                      ObjIDWithExtender.ExtenderClass:=typeof(Extender);
+                  ObjIDWithExtender.ExtenderClass:=typeof(Extender);
                   if MultiPropertiesManager.MultiPropertyVector[i].MPObjectsData.tryGetValue(ObjIDWithExtender,MultiPropertyDataForObjects)then begin
                     if @MultiPropertyDataForObjects.EntIterateProc<>nil then begin
                       ChangedData:=CreateChangedData(Extender,MultiPropertyDataForObjects.GSData);

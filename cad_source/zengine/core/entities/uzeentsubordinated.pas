@@ -125,7 +125,7 @@ end;
 function GDBObjExtendable.GetExtension<GEntityExtenderType>:GEntityExtenderType;
 begin
      if assigned(EntExtensions) then
-                                    result:=EntExtensions.GetExtension<GEntityExtenderType>
+                                    result:=EntExtensions.GetExtensionOf<GEntityExtenderType>
                                 else
                                     result:=nil;
 end;

@@ -260,12 +260,12 @@ procedure TVariablesExtender.onEntityClone(pSourceEntity,pDestEntity:pointer);
 var
     pDestVariablesExtender,pbdunit:TVariablesExtender;
 begin
-     pDestVariablesExtender:=PGDBObjEntity(pDestEntity)^.EntExtensions.GetExtension<TVariablesExtender>;
+     pDestVariablesExtender:=PGDBObjEntity(pDestEntity)^.EntExtensions.GetExtensionOf<TVariablesExtender>;
      if pDestVariablesExtender=nil then
                        pDestVariablesExtender:=AddVariablesToEntity(pDestEntity);
      entityunit.CopyTo(@pDestVariablesExtender.entityunit);
      if pMainFuncEntity<>nil then begin
-       pbdunit:=pMainFuncEntity^.EntExtensions.GetExtension<TVariablesExtender>;
+       pbdunit:=pMainFuncEntity^.EntExtensions.GetExtensionOf<TVariablesExtender>;
        if pbdunit<>nil then
          pbdunit.addDelegate(pDestEntity,pDestVariablesExtender);
      end;
@@ -278,7 +278,7 @@ begin
      pblockdef:=PGDBObjBlockdefArray(drawing.GetBlockDefArraySimple).getDataMutable(PGDBObjDevice(pEntity)^.index);
      pbdunit:=nil;
      if assigned(pblockdef^.EntExtensions)then
-     pbdunit:=pblockdef^.EntExtensions.GetExtension<TVariablesExtender>;
+     pbdunit:=pblockdef^.EntExtensions.GetExtensionOf<TVariablesExtender>;
      if pbdunit<>nil then
        pbdunit.entityunit.CopyTo(@self.entityunit);
      //PTEntityUnit(pblockdef^.ou.Instance)^.copyto(PTEntityUnit(ou.Instance));
@@ -330,10 +330,10 @@ begin
   if pMainFuncEntity<>nil then begin
     if OldEnts2NewEntsMap.TryGetValue(pMainFuncEntity,CopiedMainfunction)then
       if CopiedMainfunction<>nil then begin
-        pbdunit:=pMainFuncEntity^.EntExtensions.GetExtension<TVariablesExtender>;
+        pbdunit:=pMainFuncEntity^.EntExtensions.GetExtensionOf<TVariablesExtender>;
         if pbdunit<>nil then
           pbdunit.removeDelegate(pThisEntity,self);
-        pbdunit:=CopiedMainfunction^.EntExtensions.GetExtension<TVariablesExtender>;
+        pbdunit:=CopiedMainfunction^.EntExtensions.GetExtensionOf<TVariablesExtender>;
         if pbdunit<>nil then
           pbdunit.addDelegate(pThisEntity,self);
       end;
@@ -362,7 +362,7 @@ begin
     if pThisEntity.PExtAttrib<>nil then
       if pThisEntity.PExtAttrib^.MainFunctionHandle<>0 then begin
         if context.h2p.TryGetValue(pThisEntity.PExtAttrib^.MainFunctionHandle,pmf)then begin
-          pbdunit:=pmf^.EntExtensions.GetExtension<TVariablesExtender>;
+          pbdunit:=pmf^.EntExtensions.GetExtensionOf<TVariablesExtender>;
           if pbdunit<>nil then
             pbdunit.addDelegate(pThisEntity,self);
         end;

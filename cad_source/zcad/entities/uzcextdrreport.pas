@@ -98,10 +98,10 @@ procedure TReportExtender.onEntityClone(pSourceEntity,pDestEntity:pointer);
 var
   ReportExtender:TReportExtender;
 begin
-  ReportExtender:=PGDBObjEntity(pDestEntity)^.EntExtensions.GetExtension<TReportExtender>;
+  ReportExtender:=PGDBObjEntity(pDestEntity)^.EntExtensions.GetExtensionOf<TReportExtender>;
   if ReportExtender=nil then
     ReportExtender:=AddReportExtenderToEntity(pDestEntity);
-  ReportExtender.Assign(PGDBObjEntity(pSourceEntity)^.EntExtensions.GetExtension<TReportExtender>);
+  ReportExtender.Assign(PGDBObjEntity(pSourceEntity)^.EntExtensions.GetExtensionOf<TReportExtender>);
 end;
 
 procedure TReportExtender.onEntityBuildVarGeometry(pEntity:pointer;const drawing:TDrawingDef);

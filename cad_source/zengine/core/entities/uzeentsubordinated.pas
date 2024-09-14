@@ -124,10 +124,10 @@ begin
 end;
 function GDBObjExtendable.GetExtension<GEntityExtenderType>:GEntityExtenderType;
 begin
-     if assigned(EntExtensions) then
-                                    result:=EntExtensions.GetExtensionOf<GEntityExtenderType>
-                                else
-                                    result:=nil;
+  if assigned(EntExtensions) then
+    result:=EntExtensions.GetExtensionOf<GEntityExtenderType>
+  else
+    result:=nil;
 end;
 function GDBObjExtendable.GetExtension(ExtType:TMetaEntityExtender):TAbstractEntityExtender;
 begin

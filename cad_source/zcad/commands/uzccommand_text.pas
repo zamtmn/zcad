@@ -43,7 +43,7 @@ type
                        procedure Command(Operands:TCommandOperands); virtual;
                        procedure BuildPrimitives; virtual;
                        procedure Format;virtual;
-                       function DoEnd(pdata:Pointer):Boolean;virtual;
+                       function DoEnd(Context:TZCADCommandContext;pdata:Pointer):Boolean;virtual;
   end;
 {EXPORT-}
 TIMode=(
@@ -164,7 +164,7 @@ begin
      format;
      end;
 end;
-function TextInsert_com.DoEnd(pdata:Pointer):Boolean;
+function TextInsert_com.DoEnd(Context:TZCADCommandContext;pdata:Pointer):Boolean;
 begin
      result:=false;
      dec(self.mouseclic);
@@ -172,7 +172,7 @@ begin
      if TextInsertParams.runtexteditor then
                                            RunTextEditor(pdata,drawings.GetCurrentDWG^);
      //redrawoglwnd;
-     build('');
+     build(context,'');
 end;
 
 procedure TextInsert_com.Format;

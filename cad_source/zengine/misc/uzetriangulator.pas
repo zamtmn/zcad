@@ -24,6 +24,8 @@ uses uzgprimitivescreator,uzgprimitives,uzglvectorobject,uzegluinterface,
      sysutils,uzegeometry,LazLogger,gzctnrVectorTypes,uzgloglstatemanager,
      uzbtypes,uzeenrepresentation;
 type
+  TV4P = array [0..3] of Pointer;
+  TArray4F = Array [0..3] of {Float}Double;
   TTriangulationMode=(TM_Triangles,TM_TriangleStrip,TM_TriangleFan);
   TTriangulator=class
     type
@@ -38,7 +40,6 @@ type
       triangle:array[0..2] of integer;
 
     function GetExtDataType:TExtDataType;
-    class function GetIntDataType(EDT:TExtDataType):TIntDataType;
     class function GetTriangulatorInstance(EDT:TExtDataType):TTriangulator;
     function NewTesselator:TTesselator;
     procedure DeleteTess(tesselator:TTesselator);
@@ -48,9 +49,10 @@ type
     procedure EndContour(TS:TTesselator);
     procedure TessVertex(TS:TTesselator; const V:GDBVertex);
 
-    procedure ErrorCallBack(error: Cardinal;Data: Pointer);
-    procedure BeginCallBack(gmode: Cardinal;Data: Pointer);
-    procedure VertexCallBack(const VertexData: Pointer;const PolygonData: Pointer);
+    procedure ErrorCallBack(error: Cardinal);
+    procedure BeginCallBack(gmode: Cardinal);
+    procedure VertexCallBack(const VertexData: Pointer);
+    procedure CombineCallback(const coords:GDBvertex;const vertex_data:TV4P;const weight:TArray4F;var dataout:Pointer);{$IFDEF Windows}stdcall{$ELSE}cdecl{$ENDIF};
 
     //constructor create;
     //destructor Destroy;override;
@@ -59,17 +61,21 @@ var
   Triangulator:TTriangulator;
 implementation
 
-procedure TessErrorCallBack(error: Cardinal;Data: Pointer);{$IFDEF Windows}stdcall{$ELSE}cdecl{$ENDIF};
+procedure TessErrorCallBackData(error: Cardinal;Data: Pointer);{$IFDEF Windows}stdcall{$ELSE}cdecl{$ENDIF};
 begin
-  TTriangulator.GetTriangulatorInstance(Data).ErrorCallBack(error,TTriangulator.GetIntDataType(Data));
+  TTriangulator.GetTriangulatorInstance(Data).ErrorCallBack(error);
 end;
-procedure TessBeginCallBack(gmode: Cardinal;Data: Pointer);{$IFDEF Windows}stdcall{$ELSE}cdecl{$ENDIF};
+procedure TessBeginCallBackData(gmode: Cardinal;Data: Pointer);{$IFDEF Windows}stdcall{$ELSE}cdecl{$ENDIF};
 begin
-  TTriangulator.GetTriangulatorInstance(Data).BeginCallBack(gmode,TTriangulator.GetIntDataType(Data));
+  TTriangulator.GetTriangulatorInstance(Data).BeginCallBack(gmode);
 end;
-procedure TessVertexCallBack(const v: Pdouble;const Data: Pointer);{$IFDEF Windows}stdcall{$ELSE}cdecl{$ENDIF};
+procedure TessVertexCallBackData(const v: Pdouble;const Data: Pointer);{$IFDEF Windows}stdcall{$ELSE}cdecl{$ENDIF};
 begin
-  TTriangulator.GetTriangulatorInstance(Data).VertexCallBack(v,TTriangulator.GetIntDataType(Data));
+  TTriangulator.GetTriangulatorInstance(Data).VertexCallBack(v);
+end;
+procedure TessCombineCallbackData(const coords:GDBvertex;const vertex_data:TV4P;const weight:TArray4F;var dataout:Pointer;const Data: Pointer);{$IFDEF Windows}stdcall{$ELSE}cdecl{$ENDIF};
+begin
+  TTriangulator.GetTriangulatorInstance(Data).CombineCallback(coords,vertex_data,weight,dataout);
 end;
 
 function TTriangulator.GetExtDataType:TExtDataType;
@@ -77,10 +83,6 @@ begin
   result:=Self;
 end;
 
-class function TTriangulator.GetIntDataType(EDT:TExtDataType):TIntDataType;
-begin
-  result:=EDT;
-end;
 class function TTriangulator.GetTriangulatorInstance(EDT:TExtDataType):TTriangulator;
 begin
   result:=EDT;
@@ -89,9 +91,10 @@ end;
 function TTriangulator.NewTesselator:TTesselator;
 begin
   result:=GLUIntrf.NewTess;
-  GLUIntrf.TessCallback(result,GLU_TESS_VERTEX_DATA,@TessVertexCallBack);
-  GLUIntrf.TessCallback(result,GLU_TESS_BEGIN_DATA,@TessBeginCallBack);
-  GLUIntrf.TessCallback(result,GLU_TESS_ERROR_DATA,@TessErrorCallBack);
+  GLUIntrf.TessCallback(result,GLU_TESS_VERTEX_DATA,@TessVertexCallBackData);
+  GLUIntrf.TessCallback(result,GLU_TESS_BEGIN_DATA,@TessBeginCallBackData);
+  GLUIntrf.TessCallback(result,GLU_TESS_ERROR_DATA,@TessErrorCallBackData);
+  GLUIntrf.TessCallback(result,GLU_TESS_COMBINE_DATA,@TessCombineCallbackData);
 end;
 
 procedure TTriangulator.DeleteTess(tesselator:TTesselator);
@@ -123,11 +126,11 @@ begin
   i:=PZR^.Graphix.GeomData.Vertex3S.AddGDBVertex(V);
   GLUIntrf.TessVertex(TS,@V,i);
 end;
-procedure TTriangulator.ErrorCallBack(error: Cardinal;Data: Pointer);
+procedure TTriangulator.ErrorCallBack(error: Cardinal);
 begin
      debugln('{F}GLU_TESS_ERROR_DATA!!');
 end;
-procedure TTriangulator.BeginCallBack(gmode: Cardinal;Data: Pointer);
+procedure TTriangulator.BeginCallBack(gmode: Cardinal);
 begin
      CurrentLLentity:=-1;
 //     if gmode=GL_TRIANGLES then
@@ -154,7 +157,7 @@ GL_TRIANGLE_STRIP:begin
          end;
      end;
 end;
-procedure TTriangulator.VertexCallBack(const VertexData: Pointer;const PolygonData: Pointer);
+procedure TTriangulator.VertexCallBack(const VertexData: Pointer);
 var
    pts:PTLLTriangleStrip;
    index:TLLVertexIndex;
@@ -199,7 +202,11 @@ begin
                               end;
                          end;
 end;
-
+procedure TTriangulator.CombineCallback(const coords:GDBvertex;const vertex_data:TV4P;const weight:TArray4F;var dataout:Pointer);{$IFDEF Windows}stdcall{$ELSE}cdecl{$ENDIF};
+begin
+  ptruint(dataout):=pzr.Graphix.GeomData.Vertex3S.AddGDBVertex(coords);
+  dataout:=dataout;
+end;
 
 initialization
   Triangulator:=TTriangulator.Create;

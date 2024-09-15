@@ -56,6 +56,7 @@ type
     procedure Error(msg:String);
     procedure SetCommandParam(PTypedTata:pointer;TypeName:string;AShowParams:Boolean=true);
     constructor init(cn:String;SA,DA:TCStartAttr);
+    function SimulateMouseMove(const Context:TZCADCommandContext):Integer;virtual;
     //function BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; button: Byte;osp:pos_record): Integer; virtual; abstract;
     //function AfterClick(wc: GDBvertex; mc: GDBvertex2DI; button: Byte;osp:pos_record): Integer; virtual; abstract;
   end;
@@ -205,6 +206,15 @@ begin
   CommandString := '';
   commandmanager.CommandRegister(@self);
 end;
+function CommandRTEdObject.SimulateMouseMove(const Context:TZCADCommandContext):Integer;
+var
+  t:byte;
+begin
+  t:=0;
+  MouseMoveCallback(Context,drawings.GetCurrentDWG^.wa.param.md.mouse3dcoord,drawings.GetCurrentDWG^.wa.param.md.mouse,t,@drawings.GetCurrentDWG^.wa.param.ospoint);
+  zcRedrawCurrentDrawing;
+end;
+
 constructor CommandFastObjectPlugin.Init;
 begin
          CommandName:=name;

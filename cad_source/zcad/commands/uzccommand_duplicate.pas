@@ -29,7 +29,6 @@ uses
   uzeentity,
   uzeffdxf,
   gzctnrVectorTypes,
-  uzgldrawcontext,
   uzcdrawings,
   uzcstrconsts,
   uzccommandsabstract,uzccommandsimpl,UGDBVisibleOpenArray,
@@ -41,6 +40,7 @@ type
     procedure CommandStart(const Context:TZCADCommandContext;Operands:TCommandOperands);virtual;
     //function CalcTransformMatrix(p1,p2: GDBvertex):DMatrix4D; virtual;
     function AfterClick(const Context:TZCADCommandContext;wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record): Integer; virtual;
+    constructor init(cn:String;SA,DA:TCStartAttr);
   end;
 var
   duplicade:duplicade_com;
@@ -70,6 +70,12 @@ begin
   until pobj=nil;
 end;
 
+constructor duplicade_com.init(cn:String;SA,DA:TCStartAttr);
+begin
+  inherited;
+  CEndActionAttr:=CEndActionAttr-[CEDeSelect];
+end;
+
 procedure duplicade_com.CommandStart(const Context:TZCADCommandContext;Operands:TCommandOperands);
 var
   SelectedAABB:TBoundingBox;
@@ -79,6 +85,7 @@ begin
     GetSelectedEntsAABB(drawings.GetCurrentROOT.ObjArray,SelectedAABB);
     t3dp:=SelectedAABB.LBN;
     inc(mouseclic);
+    SimulateMouseMove(Context);
   end else begin
     ZCMsgCallBackInterface.TextMessage(rscmSelEntBeforeComm,TMWOHistoryOut);
     Commandmanager.executecommandend;

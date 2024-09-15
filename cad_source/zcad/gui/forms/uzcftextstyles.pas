@@ -95,6 +95,8 @@ type
     SupportTypedEditors:TSupportTypedEditors;
     FontChange:boolean;
     IsUndoEndMarkerCreated:boolean;
+
+    PAngleDoubleTD:PUserTypeDescriptor;
     { private declarations }
     procedure UpdateItem2(Item:TObject);
     procedure CreateUndoStartMarkerNeeded;
@@ -246,11 +248,18 @@ end;
 {Oblique handle procedures}
 function TTextStylesForm.GetOblique(Item: TListItem):string;
 begin
-  result:=floattostr(PGDBTextStyle(Item.Data)^.prop.oblique);
+  if PAngleDoubleTD=nil then begin
+    if SysUnit<>nil then
+      PAngleDoubleTD:=SysUnit^.TypeName2PTD('GDBAngleDouble');
+  end;
+  if PAngleDoubleTD=nil then
+    result:=floattostr(PGDBTextStyle(Item.Data)^.prop.oblique)
+  else
+    result:=PAngleDoubleTD^.GetDecoratedValueAsString(@PGDBTextStyle(Item.Data)^.prop.oblique,drawings.GetCurrentDWG^.GetUnitsFormat);
 end;
 function TTextStylesForm.CreateObliqueEditor(Item: TListItem;r: TRect):boolean;
 begin
-  result:=SupportTypedEditors.createeditor(ListView1,Item,r,PGDBTextStyle(Item.Data)^.prop.oblique,'Double',@CreateUndoStartMarkerNeeded,r.Bottom-r.Top,drawings.GetUnitsFormat)
+  result:=SupportTypedEditors.createeditor(ListView1,Item,r,PGDBTextStyle(Item.Data)^.prop.oblique,'GDBAngleDouble',@CreateUndoStartMarkerNeeded,r.Bottom-r.Top,drawings.GetUnitsFormat)
 end;
 procedure TTextStylesForm.FillFontsSelector(currentitem:string;currentitempfont:PGDBfont);
 var i:integer;
@@ -321,6 +330,7 @@ end;
 
 procedure TTextStylesForm.FormCreate(Sender: TObject);
 begin
+  PAngleDoubleTD:=nil;
   ActionList1.Images:=ImagesManager.IconList;
   ToolBar1.Images:=ImagesManager.IconList;
   AddStyle.ImageIndex:=ImagesManager.GetImageIndex('plus');

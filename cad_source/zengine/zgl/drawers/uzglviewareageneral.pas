@@ -28,7 +28,7 @@ uses
      ExtCtrls,Controls,Classes,{$IFDEF DELPHI}Types,{$ENDIF}{$IFNDEF DELPHI}LCLType,{$ENDIF}Forms,
      UGDBOpenArrayOfPV,uzeentgenericsubentry,uzecamera,UGDBVisibleOpenArray,uzgldrawerabstract,
      uzgldrawergeneral,uzglviewareaabstract,uzeentitiesprop,gzctnrSTL,uzbLogIntf,
-     uzeSnap;
+     uzeSnap,uzeMouseTimer;
 const
   ontracdist=10;
   ontracignoredist=25;
@@ -47,6 +47,8 @@ type
 
                        var WorkArea:TCADControl;
                            InsidePaintMessage:integer;
+                           TrackPointMouseTimer:TMouseTimer;
+                           OHTimer:TTimer;
 
                            function getviewcontrol:TCADControl;override;
 
@@ -73,9 +75,7 @@ type
                            procedure CalcOptimalMatrix;override;
                            procedure SetOGLMatrix;virtual;
                            procedure CalcMouseFrustum;override;
-                           procedure ProcOTrackTimer(Sender:TObject);override;
-                           procedure KillOTrackTimer(Sender: TObject);override;
-                           procedure SetOTrackTimer(Sender: TObject);override;
+                           procedure SetOTrackTimer(Sender: TObject;const mp:TPoint);
                            procedure KillOHintTimer(Sender: TObject);override;
                            procedure SetOHintTimer(Sender: TObject);override;
                            procedure getosnappoint(radius: Single);override;
@@ -127,6 +127,8 @@ type
                            procedure WaMouseLeave(Sender:TObject);
                            procedure WaResize(sender:tobject);override;
                            procedure mypaint(sender:tobject);
+
+                           procedure AddOTPoint(StartX,StartY,X,Y:Integer);
 
                            procedure idle(Sender: TObject; var Done: Boolean);override;
 
@@ -1417,12 +1419,12 @@ end;
 
 procedure TGeneralViewArea.WaMouseMove(sender:tobject;Shift: TShiftState; X, Y: Integer);
 var
-  //glmcoord1: gdbpiece;
   ux,uy:Double;
-  //htext,htext2:String;
+  mp:TPoint;
   key: Byte;
-  //f:TzeUnitsFormat;
 begin
+  mp:=Point(X,Y);
+  TrackPointMouseTimer.Touch(mp,[TMouseTimer.TReason.RMMove]);
   if assigned(mainmousemove)then
                                 mainmousemove;
   KillOHintTimer(self);
@@ -1561,19 +1563,11 @@ end;
       //create0axis;-------------------------------
     if sysvarDWGOSMode <> 0 then
     begin
-      if otracktimer = 1 then
-      begin
-        otracktimer := 0;
-        projectaxis;
-        project0axis;//-------------------------------
-        AddOntrackpoint;
-      end;
       if (param.ospoint.ostype <> os_none)and(param.ospoint.ostype <> os_snap)and(param.ospoint.ostype <> os_nearest)and(param.ospoint.ostype<>os_perpendicular) then
       begin
-        SetOTrackTimer(@self);
+        SetOTrackTimer(@self,mp);
         copyospoint(param.oldospoint,param.ospoint);
       end
-      else KillOTrackTimer(@self)
     end
     else param.ospoint.ostype := os_none;
 
@@ -1658,8 +1652,8 @@ begin
   PolarAxis.done;
   param.done;
   freeandnil(drawer);
-  freeandnil(OTTimer);
   freeandnil(OHTimer);
+  TrackPointMouseTimer.Free;
   inherited;
 end;
 
@@ -1676,7 +1670,6 @@ begin
      CreateDrawer;
      SetupWorkArea;
 
-     OTTimer:=TTimer.create(self);
      OHTimer:=TTimer.create(self);
 
      PDWG:=nil;
@@ -1716,6 +1709,7 @@ begin
      WorkArea.onmouseenter:=WaMouseEnter;
      WorkArea.onmouseleave:=WaMouseLeave;
      WorkArea.onresize:=WaResize;
+     TrackPointMouseTimer:=TMouseTimer.Create;
 end;
 function MouseBS2ZKey(Button:TMouseButton;Shift:TShiftState):TZKeys;
 begin
@@ -1766,6 +1760,7 @@ var //key: Byte;
     //FreeClick:boolean;
 begin
   //FreeClick:=true;
+  TrackPointMouseTimer.Touch(Point(X,Y),[TMouseTimer.TReason.RMDown]);
   if assigned(MainmouseDown)then
   if mainmousedown(self) then
                        exit;
@@ -1815,6 +1810,7 @@ procedure TGeneralViewArea.WaMouseUp(Sender:TObject;Button: TMouseButton; Shift:
 var
   needredraw:boolean;
 begin
+  TrackPointMouseTimer.Touch(Point(X,Y),[TMouseTimer.TReason.RMUp]);
   inherited;
   if button = mbMiddle then
   begin
@@ -2216,41 +2212,22 @@ begin
   end;
 end;
 
-procedure TGeneralViewArea.ProcOTrackTimer(Sender:TObject);
+procedure TGeneralViewArea.AddOTPoint(StartX,StartY,X,Y:Integer);
 begin
-  //timeKillEvent(uEventID);
-  otracktimer := 1;
-  OTTimer.Interval:=0;
-  OTTimer.Enabled:=false;
+  projectaxis;
+  project0axis;//-------------------------------
+  AddOntrackpoint;
 end;
-procedure TGeneralViewArea.KillOTrackTimer(Sender: TObject);
-begin
-  if param.otracktimerwork = 0 then exit;
-  dec(param.otracktimerwork);
-  OTTimer.Interval:=0;
-  OTTimer.Enabled:=false;
-  //timeKillEvent(uEventID);
-end;
-procedure TGeneralViewArea.SetOTrackTimer(Sender: TObject);
+
+procedure TGeneralViewArea.SetOTrackTimer(Sender: TObject;const mp:TPoint);
 var
    interval:integer;
 begin
-  if param.otracktimerwork = 1 then exit;
-  inc(param.otracktimerwork);
-  if param.otracktimerwork > 0 then
-                                   begin
-                                        //if assigned(sysvar.DSGN.DSGN_OTrackTimerInterval) then
-                                        begin
-                                             if sysvarDSGNOTrackTimerInterval>0 then
-                                                                                   interval:=sysvarDSGNOTrackTimerInterval
-                                                                                else
-                                                                                   interval:=0;
-                                        end;
-                                        OTTimer.Interval:=interval;
-                                        OTTimer.OnTimer:=ProcOTrackTimer;
-                                        OTTimer.Enabled:=true;
-
-                                   end;
+  if sysvarDSGNOTrackTimerInterval>0 then
+    interval:=sysvarDSGNOTrackTimerInterval
+  else
+    interval:=0;
+  TrackPointMouseTimer.&Set(mp,0,[RMMove,RMDown,RMUp,RReSet,RLeave],AddOTPoint,interval);
 end;
 procedure TGeneralViewArea.KillOHintTimer(Sender: TObject);
 begin

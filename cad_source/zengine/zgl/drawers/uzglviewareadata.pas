@@ -151,7 +151,6 @@ end;
     ospoint, oldospoint: os_record;
     height, width: Integer;
     SelDesc: Selectiondesc;
-    otracktimerwork: Integer;
     scrollmode:Boolean;
     lastcp3dpoint,lastpoint: GDBVertex;
     lastonmouseobject:Pointer;
@@ -200,7 +199,6 @@ begin
   cpdist.cpdist := 99999;
 
   seldesc.MouseFrameON := false;
-  otracktimerwork := 0;
   ontrackarray.total := 1;
   ontrackarray.current := 1;
   md.workplane.v[0] := 0;

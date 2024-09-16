@@ -63,8 +63,6 @@ type
                            Drawer:TZGLAbstractDrawer;
                            param: OGLWndtype;
                            PolarAxis:GDBPoint3dArray;
-                           OTTimer:TTimer;
-                           OHTimer:TTimer;
                            PDWG:PTAbstractDrawing;
                            onCameraChanged:TCameraChangedNotify;
                            ShowCXMenu:procedure of object;
@@ -116,9 +114,6 @@ type
                            procedure mouseunproject(X, Y: integer);virtual;abstract;
                            procedure CalcMouseFrustum;virtual;abstract;
                            procedure ClearOntrackpoint;virtual;abstract;
-                           procedure ProcOTrackTimer(Sender:TObject);virtual;abstract;
-                           procedure KillOTrackTimer(Sender: TObject);virtual;abstract;
-                           procedure SetOTrackTimer(Sender: TObject);virtual;abstract;
                            procedure KillOHintTimer(Sender: TObject);virtual;abstract;
                            procedure SetOHintTimer(Sender: TObject);virtual;abstract;
                            procedure getonmouseobjectbytree(var Node:TEntTreeNode;InSubEntry:Boolean);virtual;abstract;
@@ -154,8 +149,6 @@ type
                            procedure asynczoomsel(Data: PtrInt); virtual;abstract;
                            procedure asynczoomall(Data: PtrInt); virtual;abstract;
                       end;
-var
-   otracktimer: Integer;
 procedure copyospoint(var dest:os_record; source:os_record);
 function correcttogrid(const point:GDBVertex;const grid:GDBSnap2D):GDBVertex;
 function CreateFaceRC:TDrawContext;

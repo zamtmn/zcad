@@ -31,7 +31,7 @@ type
 PGDBObjPoint=^GDBObjPoint;
 {REGISTEROBJECTTYPE GDBObjPoint}
 GDBObjPoint= object(GDBObj3d)
-                 P_insertInOCS:GDBvertex;(*'Coordinates OCS'*)(*saved_to_shd*)
+                 P_insertInOCS:GDBvertex;(*'Coordinates OCS'*)
                  P_insertInWCS:GDBvertex;(*'Coordinates WCS'*)(*hidden_in_objinsp*)
                  ProjPoint:GDBvertex;
                  constructor init(own:Pointer;layeraddres:PGDBLayerProp;LW:SmallInt;p:GDBvertex);

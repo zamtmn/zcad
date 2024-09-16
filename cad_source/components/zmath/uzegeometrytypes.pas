@@ -199,23 +199,23 @@ type
                 end;
   {REGISTERRECORDTYPE GDBBasis}
   GDBBasis=record
-                  ox:GDBvertex;(*'OX Axis'*)(*saved_to_shd*)
-                  oy:GDBvertex;(*'OY Axis'*)(*saved_to_shd*)
-                  oz:GDBvertex;(*'OZ Axis'*)(*saved_to_shd*)
+                  ox:GDBvertex;(*'OX Axis'*)
+                  oy:GDBvertex;(*'OY Axis'*)
+                  oz:GDBvertex;(*'OZ Axis'*)
             end;
   PGDBvertex4S=^GDBvertex4S;
   {REGISTERRECORDTYPE GDBvertex4S}
   GDBvertex4S=record
-                  x:Single;(*saved_to_shd*)
-                  y:Single;(*saved_to_shd*)
-                  z:Single;(*saved_to_shd*)
-                  w:Single;(*saved_to_shd*)
+                  x:Single;
+                  y:Single;
+                  z:Single;
+                  w:Single;
             end;
   PGDBLineProp=^GDBLineProp;
   {REGISTERRECORDTYPE GDBLineProp}
   GDBLineProp=record
-                    lBegin:GDBCoordinates3D;(*'Begin'*)(*saved_to_shd*)
-                    lEnd:GDBCoordinates3D;(*'End'*)(*saved_to_shd*)
+                    lBegin:GDBCoordinates3D;(*'Begin'*)
+                    lEnd:GDBCoordinates3D;(*'End'*)
                 end;
   PGDBvertex4D=^GDBvertex4D;
   {REGISTERRECORDTYPE GDBvertex4D}
@@ -229,8 +229,8 @@ type
   PGDBSnap2D=^GDBSnap2D;
   {REGISTERRECORDTYPE GDBSnap2D}
   GDBSnap2D=record
-                  Base:GDBvertex2D;(*'Base'*)(*saved_to_shd*)
-                  Spacing:GDBvertex2D;(*'Spacing'*)(*saved_to_shd*)
+                  Base:GDBvertex2D;(*'Base'*)
+                  Spacing:GDBvertex2D;(*'Spacing'*)
               end;
   PGDBFontVertex2D=^GDBFontVertex2D;
   {REGISTERRECORDTYPE GDBFontVertex2D}

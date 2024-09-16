@@ -33,8 +33,8 @@ type
 PGDBObjCurve=^GDBObjCurve;
 {REGISTEROBJECTTYPE GDBObjCurve}
 GDBObjCurve= object(GDBObj3d)
-                 VertexArrayInOCS:GDBPoint3dArray;(*saved_to_shd*)(*hidden_in_objinsp*)
-                 VertexArrayInWCS:GDBPoint3dArray;(*saved_to_shd*)(*hidden_in_objinsp*)
+                 VertexArrayInOCS:GDBPoint3dArray;(*hidden_in_objinsp*)
+                 VertexArrayInWCS:GDBPoint3dArray;(*hidden_in_objinsp*)
                  length:Double;
                  PProjPoint:PGDBpolyline2DArray;(*hidden_in_objinsp*)
                  constructor init(own:Pointer;layeraddres:PGDBLayerProp;LW:SmallInt);

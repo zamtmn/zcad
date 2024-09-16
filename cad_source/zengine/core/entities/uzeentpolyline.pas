@@ -31,7 +31,7 @@ type
 PGDBObjPolyline=^GDBObjPolyline;
 {REGISTEROBJECTTYPE GDBObjPolyline}
 GDBObjPolyline= object(GDBObjCurve)
-                 Closed:Boolean;(*saved_to_shd*)
+                 Closed:Boolean;
                  constructor init(own:Pointer;layeraddres:PGDBLayerProp;LW:SmallInt;c:Boolean);
                  constructor initnul(owner:PGDBObjGenericWithSubordinated);
                  procedure LoadFromDXF(var f:TZMemReader;ptu:PExtensionData;var drawing:TDrawingDef);virtual;

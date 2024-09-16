@@ -32,7 +32,7 @@ type
 
     PTCableManager=^TCableManager;
     {---REGISTEROBJECTTYPE TCableManager}
-    TCableManager= object(GZVectorObjects<TCableDesctiptor>)(*OpenArrayOfPObj*)
+    TCableManager= object(GZVectorObjects<TCableDesctiptor>)
                        constructor init;
                        destructor done;virtual;
                        procedure build;virtual;

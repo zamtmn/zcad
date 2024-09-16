@@ -36,7 +36,7 @@ type
 PGDBObjCircle=^GDBObjCircle;
 {REGISTEROBJECTTYPE GDBObjCircle}
 GDBObjCircle= object(GDBObjWithLocalCS)
-                 Radius:GDBLength;(*'Radius'*)(*saved_to_shd*)
+                 Radius:GDBLength;(*'Radius'*)
                  q0:GDBvertex;(*oi_readonly*)(*hidden_in_objinsp*)
                  q1:GDBvertex;(*oi_readonly*)(*hidden_in_objinsp*)
                  q2:GDBvertex;(*oi_readonly*)(*hidden_in_objinsp*)

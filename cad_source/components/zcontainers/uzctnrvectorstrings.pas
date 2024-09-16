@@ -24,10 +24,10 @@ type
 {EXPORT+}
     PTZctnrVectorStrings=^TZctnrVectorStrings;
     {REGISTEROBJECTTYPE TZctnrVectorStrings}
-    TZctnrVectorStrings=object(GZVectorStr{-}<String>{//})(*OpenArrayOfData=String*)
+    TZctnrVectorStrings=object(GZVectorStr{-}<String>{//})
     end;
     {REGISTEROBJECTTYPE TZctnrVectorUnicodeStrings}
-    TZctnrVectorUnicodeStrings=object(GZVectorStr{-}<UnicodeString>{//})(*OpenArrayOfData=TZctnrVectorUnicodeString*)
+    TZctnrVectorUnicodeStrings=object(GZVectorStr{-}<UnicodeString>{//})
     end;
     PTEnumData=^TEnumData;
     {REGISTERRECORDTYPE TEnumData}

@@ -32,7 +32,7 @@ GDBBOMItem=record
                 end;
 PBbillOfMaterial=^GDBBbillOfMaterial;
 {REGISTEROBJECTTYPE GDBBbillOfMaterial}
-GDBBbillOfMaterial= object(GZVector{-}<GDBBOMItem>{//})(*OpenArrayOfData=GDBNumItem*)
+GDBBbillOfMaterial= object(GZVector{-}<GDBBOMItem>{//})
                        constructor init(m:Integer);
                        procedure freeelement(PItem:PT);virtual;
                        //function getnamenumber(_Name:String):String;

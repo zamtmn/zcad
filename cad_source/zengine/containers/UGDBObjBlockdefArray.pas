@@ -29,7 +29,7 @@ type
 PGDBObjBlockdefArray=^GDBObjBlockdefArray;
 PBlockdefArray=^BlockdefArray;
 BlockdefArray=packed array [0..0] of GDBObjBlockdef;
-GDBObjBlockdefArray= object(GZVectorObjects{-}<GDBObjBlockdef>{//})(*OpenArrayOfData=GDBObjBlockdef*)
+GDBObjBlockdefArray= object(GZVectorObjects{-}<GDBObjBlockdef>{//})
                       constructor init(m:Integer);
                       constructor initnul;
 

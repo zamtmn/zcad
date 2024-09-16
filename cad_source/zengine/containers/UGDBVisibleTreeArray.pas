@@ -26,7 +26,7 @@ type
 {Export+}
 PGDBObjEntityTreeArray=^GDBObjEntityTreeArray;
 {REGISTEROBJECTTYPE GDBObjEntityTreeArray}
-GDBObjEntityTreeArray= object(GDBObjEntityOpenArray)(*OpenArrayOfPObj*)
+GDBObjEntityTreeArray= object(GDBObjEntityOpenArray)
                             ObjTree:TEntTreeNode;
                             constructor init(m:Integer);
                             constructor initnul;

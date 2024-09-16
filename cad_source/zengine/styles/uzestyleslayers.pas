@@ -30,13 +30,13 @@ PGDBLayerPropObjInsp={GDBPtrUInt}Pointer;
 PGDBLayerProp=^GDBLayerProp;
 {REGISTEROBJECTTYPE GDBLayerProp}
 GDBLayerProp= object(GDBNamedObject)
-               color:Byte;(*saved_to_shd*)(*'Color'*)
-               lineweight:SmallInt;(*saved_to_shd*)(*'Line weight'*)
-               LT:Pointer;(*saved_to_shd*)(*'Line type'*)
-               _on:Boolean;(*saved_to_shd*)(*'On'*)
-               _lock:Boolean;(*saved_to_shd*)(*'Lock'*)
-               _print:Boolean;(*saved_to_shd*)(*'Print'*)
-               desk:AnsiString;(*saved_to_shd*)(*'Description'*)
+               color:Byte;(*'Color'*)
+               lineweight:SmallInt;(*'Line weight'*)
+               LT:Pointer;(*'Line type'*)
+               _on:Boolean;(*'On'*)
+               _lock:Boolean;(*'Lock'*)
+               _print:Boolean;(*'Print'*)
+               desk:AnsiString;(*'Description'*)
                constructor InitWithParam(const N:String; C: Integer; LW: Integer;oo,ll,pp:Boolean;const d:String);
                function GetFullName:String;virtual;
                procedure SetValueFromDxf(group:Integer;const value:String);virtual;
@@ -47,7 +47,7 @@ PGDBLayerPropArray=^GDBLayerPropArray;
 GDBLayerPropArray=packed array [0..0] of PGDBLayerProp;
 PGDBLayerArray=^GDBLayerArray;
 {REGISTEROBJECTTYPE GDBLayerArray}
-GDBLayerArray= object(GDBNamedObjectsArray{-}<PGDBLayerProp,GDBLayerProp>{//})(*OpenArrayOfData=GDBLayerProp*)
+GDBLayerArray= object(GDBNamedObjectsArray{-}<PGDBLayerProp,GDBLayerProp>{//})
                     constructor init(m:Integer;psyslt:Pointer);
                     constructor initnul;
 

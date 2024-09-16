@@ -55,9 +55,9 @@ ObjectDescriptor=object(RecordDescriptor)
                        PVMT:Pointer;
                        VMTCurrentOffset:Integer;
                        PDefaultConstructor:Pointer;
-                       SimpleMenods:{GDBOpenArrayOfObjects}TSimpleMenodsVector;
-                       LincedData:String;
-                       LincedObjects:Boolean;
+                       SimpleMenods:TSimpleMenodsVector;
+                       //LincedData:String;
+                       //LincedObjects:Boolean;
                        ColArray:TZctnrVectorBytes;
                        Properties:TPropertiesVector;
 
@@ -381,7 +381,6 @@ begin
      //Properties.FreeAndDone;
      parent:=nil;
      ColArray.done;
-     LincedData:='';
      inherited;
 end;
 constructor ObjectDescriptor.init;
@@ -399,8 +398,6 @@ begin
      {$IFDEF CPU64}VMTCurrentOffset:=24{sizeof(VMT)};{$ENDIF}
      {$IFDEF DELPHI}VMTCurrentOffset:=0;{$ENDIF}
      PDefaultConstructor:=nil;
-     pointer(LincedData):=nil;
-     LincedObjects:=false;
      ColArray.init(200);
 end;
 procedure ObjectDescriptor.AddMetod;
@@ -758,104 +755,7 @@ begin
      //eaddr:=addr;
         if colarray.parray=nil then
                                    colarray.CreateArray;
-     if LincedObjects or(LincedData<>'') then begin
-        colarray.Count:=colarray.max;
-        sca:=colarray.max;
-        sa:={PGDBOpenArrayOfData}PTGenericVectorData(baddr)^.getcount;
-        if sa<=0 then exit;
-        if sca>sa then
-                      begin
-                           //colarray.SetSize(sa);
-                           fillchar(colarray.PArray^,sa,true);
-                      end
-                  else if sca=sa then
-                                     begin
-
-                                     end
-                  else
-                      begin
-                           colarray.SetSize(sa);
-                           //colarray.grow;
-                           fillchar(colarray.PArray^,sa,true);
-                      end;
-                  end;
         if ppointer(baddr)^=nil then exit;
-        if LincedData<>''then
-        begin
- (*       bmodesave:=property_build;
-     if PCollapsed<>field_no_attrib then
-     begin
-           ppd:=GetPPD(ppda,bmode);
-           ppd^.Name:='LincedData';
-           ppd^.Attr:=ownerattrib;
-           ppd^.Collapsed:=PCollapsed;
-           if bmode=property_build then
-           begin
-                Getmem(Pointer(pda),sizeof(TPropertyDeskriptorArray));
-                pda^.init(100);;
-                ppd^.SubProperty:=Pointer(pda);
-                ppda:=pda;
-           end else
-           begin
-                bmodesave:=bmode;
-                bmode:=0;
-                ppda:=PTPropertyDeskriptorArray(ppd^.subproperty);
-                ppd:=GetPPD(ppda,bmode);
-           end;
-     end;
-             if LincedData='TObjLinkRecord' then
-                                    LincedData:=LincedData;
- *)
-             pld:=pointer(SysUnit.TypeName2PTD(LincedData));
-             //pld:=pointer(PUserTypeDescriptor(SysUnit.InterfaceTypes.exttype.getDataMutable(SysUnit.InterfaceTypes._TypeName2Index(LincedData))^));
-             p:={PGDBOpenArrayOfData}PTGenericVectorData(baddr)^.beginiterate(ir);
-             pcol:=colarray.beginiterate(ir2);
-             if p<>nil then
-             repeat
-                   //b2addr:=p;
-                   //pcol^:=false;
-                   //---------------------------------if bmode=property_build then
-                                               pld^.CreateProperties(f,PDM_Field,{PPDA}ts,LincedData,pcol{PCollapsed}{field_no_attrib},ownerattrib,bmode,p,'','');
-                   //p:=b2addr;
-                   pcol:=colarray.iterate(ir2);
-                   p:={PGDBOpenArrayOfData}PTGenericVectorData(baddr)^.iterate(ir);
-                   //if (bmode<>property_build)then inc(bmode);
-             until p=nil;
-             //if bmodesave<>property_build then bmode:=bmodesave;
-        end;
-        if LincedObjects then
-        begin
-             //if assigned(sysvar.debug.ShowHiddenFieldInObjInsp) then
-             if not debugShowHiddenFieldInObjInsp{sysvar.debug.ShowHiddenFieldInObjInsp^} then
-                                                                exit;
-             p:={PGDBOpenArrayOfData}PTGenericVectorData(baddr)^.beginiterate(ir);
-             pcol:=colarray.beginiterate(ir2);
-             if p<>nil then
-             repeat
-                   objtypename:=PGDBaseObject(P)^.GetObjName{ObjToString('','')};
-                   pld:=pointer(SysUnit.TypeName2PTD(PGDBaseObject(P)^.GetObjTypeName));
-                   if bmode=property_build then
-                                               pld^.CreateProperties(f,PDM_Field,{PPDA}ts,objtypename,pcol{PCollapsed}{field_no_attrib},ownerattrib,bmode,p,'','');
-                   pcol:=colarray.iterate(ir2);
-                   p:={PGDBOpenArrayOfData}PTGenericVectorData(baddr)^.iterate(ir);
-             until p=nil;
-             {p:=PGDBOpenArrayOfGDBPointer(PInstance)^.beginiterate(ir);
-             if p<>nil then
-             repeat
-                   objtypename:=PGDBaseObject(P)^.GetObjTypeName;
-                   if objtypename<>ObjN_NotRecognized then
-                   begin
-                        if objtypename<>ObjN_GDBObjLine then
-                                                            objtypename:=objtypename;
-                        FundamentalStringDescriptorObj.Serialize(@objtypename,saveflag,membuf,linkbuf);
-                        pld:=pointer(PUserTypeDescriptor(SysUnit.InterfaceTypes.exttype.getDataMutable(SysUnit.InterfaceTypes._TypeName2Index(objtypename))^));
-                        pld^.Serialize(p,saveflag,membuf,linkbuf);
-                   end;
-                   p:=PGDBOpenArrayOfGDBPointer(PInstance)^.iterate(ir);
-             until p=nil;
-             objtypename:=ObjN_ArrayEnd;
-             FundamentalStringDescriptorObj.Serialize(@objtypename,saveflag,membuf,linkbuf);}
-     end;
 end;
 begin
 end.

@@ -32,12 +32,12 @@ type
 {REGISTEROBJECTTYPE GDBObjBlockInsert}
 PGDBObjBlockInsert=^GDBObjBlockInsert;
 GDBObjBlockInsert= object(GDBObjComplex)
-                     scale:GDBvertex;(*saved_to_shd*)
-                     rotate:Double;(*saved_to_shd*)
-                     index:Integer;(*saved_to_shd*)(*oi_readonly*)(*hidden_in_objinsp*)
-                     Name:AnsiString;(*saved_to_shd*)(*oi_readonly*)
+                     scale:GDBvertex;
+                     rotate:Double;
+                     index:Integer;(*oi_readonly*)(*hidden_in_objinsp*)
+                     Name:AnsiString;(*oi_readonly*)
                      pattrib:Pointer;(*hidden_in_objinsp*)
-                     BlockDesc:TBlockDesc;(*'Block params'*)(*saved_to_shd*)(*oi_readonly*)
+                     BlockDesc:TBlockDesc;(*'Block params'*)(*oi_readonly*)
                      constructor initnul;
                      constructor init(own:Pointer;layeraddres:PGDBLayerProp;LW:SmallInt);
                      procedure LoadFromDXF(var f:TZMemReader;ptu:PExtensionData;var drawing:TDrawingDef);virtual;

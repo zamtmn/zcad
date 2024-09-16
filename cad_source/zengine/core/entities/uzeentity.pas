@@ -51,7 +51,7 @@ TExtAttrib=record
            end;
 {REGISTEROBJECTTYPE GDBObjEntity}
 GDBObjEntity= object(GDBObjSubordinated)
-                    vp:GDBObjVisualProp;(*'General'*)(*saved_to_shd*)
+                    vp:GDBObjVisualProp;(*'General'*)
                     Selected:Boolean;(*'Selected'*)(*hidden_in_objinsp*)
                     Visible:TActulity;(*'Visible'*)(*oi_readonly*)(*hidden_in_objinsp*)
                     infrustum:TActulity;(*'In frustum'*)(*oi_readonly*)(*hidden_in_objinsp*)

@@ -56,7 +56,7 @@ type
   end;
   PGDBFontManager=^GDBFontManager;
   {REGISTEROBJECTTYPE GDBFontManager}
-  GDBFontManager=object({GDBOpenArrayOfData}GDBNamedObjectsArray{-}<PGDBfont,GDBfont>{//})(*OpenArrayOfData=GDBfont*)
+  GDBFontManager=object({GDBOpenArrayOfData}GDBNamedObjectsArray{-}<PGDBfont,GDBfont>{//})
     FontFiles:{-}TFontName2FontFileMap{/pointer/};
     shxfontfiles:TStringList;
     constructor init(m:Integer);

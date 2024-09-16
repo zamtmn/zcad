@@ -30,9 +30,9 @@ type
 {REGISTEROBJECTTYPE GDBObjArc}
 PGDBObjArc=^GDBObjARC;
 GDBObjArc= object(GDBObjPlain)
-                 R:Double;(*saved_to_shd*)
-                 StartAngle:Double;(*saved_to_shd*)
-                 EndAngle:Double;(*saved_to_shd*)
+                 R:Double;
+                 StartAngle:Double;
+                 EndAngle:Double;
                  angle:Double;(*oi_readonly*)
                  Vertex3D_in_WCS_Array:GDBPoint3DArray;(*oi_readonly*)(*hidden_in_objinsp*)
                  q0:GDBvertex;(*oi_readonly*)(*hidden_in_objinsp*)

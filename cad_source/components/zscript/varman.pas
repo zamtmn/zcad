@@ -84,17 +84,13 @@ const
      field=6;
      objend=7;
      oi_readonly=8;
-     savedtoshd=9;
-     username=10;
-     oi_hidden=11;
-     oaod=12;
-     oaopo=13;
-     propertymember=14;
-     maxobjmember=15;
+     //savedtoshd=9;
+     username=9;
+     oi_hidden=10;
+     propertymember=11;
+     maxobjmember=12;
      parseobjmember:array [1..maxobjmember] of td=
      (
-      (template:'_softspace'#0'=(=*=O=p=e=n=A=r=r=a=y=O=f=P=O=b=j=*=)';id:oaopo),
-      (template:'_softspace'#0'=(=*=O=p=e=n=A=r=r=a=y=O=f=D=a=t=a==_identifier'#0'=*=)';id:oaod),
       (template:'_softspace'#0'=p=r=o=c=e=d=u=r=e_hardspace'#0;id:proceduremember),
       (template:'_softspace'#0'=f=u=n=c=t=i=o=n_hardspace'#0;id:functionmember),
       (template:'_softspace'#0'=c=o=n=s=t=r=u=c=t=o=r_hardspace'#0;id:constructormember),
@@ -102,7 +98,6 @@ const
       (template:'_softspace'#0'=a=b=s=t=r=a=c=t_softend'#0;id:membermodifier),
       (template:'_softspace'#0'=v=i=r=t=u=a=l_softend'#0;id:membermodifier),
       (template:'_softspace'#0'=(=*=o=i=_=r=e=a=d=o=n=l=y=*=)';id:oi_readonly),
-      (template:'_softspace'#0'=(=*=s=a=v=e=d=_=t=o=_=s=h=d=*=)';id:savedtoshd),
       (template:'_softspace'#0'=(=*=h=i=d=d=e=n=_=i=n=_=o=b=j=i=n=s=p=*=)';id:oi_hidden),
       (template:'_identifiers_cs'#0'=:_identifier'#0'_softend'#0;id:field),
       (template:'_softspace'#0'=e=n=d_softspace'#0'=;';id:objend),
@@ -1100,14 +1095,6 @@ begin
            //programlog.LogOutStr(line,0);
            parseresult:=getpattern(@parseobjmember,maxobjmember,line,typ);
            case typ of
-           oaopo:begin
-                      PObjectDescriptor(ptd)^.LincedObjects:=True;
-                 end;
-
-           oaod:begin
-                     PObjectDescriptor(ptd)^.LincedData:=parseresult^.getData(0);
-//                     state:=state;
-                end;
            functionmember,
            proceduremember,
            constructormember,
@@ -1175,9 +1162,6 @@ begin
                                getlastfirld.Attributes:=
                                getlastfirld.Attributes or FA_READONLY;
                           end;
-           savedtoshd:
-                      getlastfirld.saved:=
-                      getlastfirld.saved or SA_SAVED_TO_SHD;
            username:
                     begin
                       fieldtype:=parseresult^.getData(0);

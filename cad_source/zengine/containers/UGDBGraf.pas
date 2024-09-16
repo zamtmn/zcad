@@ -43,7 +43,7 @@ grafelement= object(GDBaseObject)
                   function IsConnectedTo(node:pgrafelement):pgdbobjEntity;
             end;
 {REGISTEROBJECTTYPE GDBGraf}
-GDBGraf= object(GZVector{-}<grafelement>{//})(*OpenArrayOfData=grafelement*)
+GDBGraf= object(GZVector{-}<grafelement>{//})
                 constructor init(m:Integer);
                 function addge(const v:gdbvertex):pgrafelement;
                 procedure clear;virtual;

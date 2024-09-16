@@ -34,13 +34,13 @@ type
 PGLLWWidth=^GLLWWidth;
 {REGISTERRECORDTYPE GLLWWidth}
 GLLWWidth=record
-                startw:Double;(*saved_to_shd*)
-                endw:Double;(*saved_to_shd*)
-                hw:Boolean;(*saved_to_shd*)
+                startw:Double;
+                endw:Double;
+                hw:Boolean;
                 quad:GDBQuad2d;
           end;
 {REGISTEROBJECTTYPE GDBLineWidthArray}
-GDBLineWidthArray= object(GZVector{-}<GLLWWidth>{//})(*OpenArrayOfData=GLLWWidth*)
+GDBLineWidthArray= object(GZVector{-}<GLLWWidth>{//})
              end;
 {REGISTEROBJECTTYPE TWidth3D_in_WCS_Vector}
 TWidth3D_in_WCS_Vector= object(GZVector{-}<GDBQuad3d>{//})
@@ -48,10 +48,10 @@ TWidth3D_in_WCS_Vector= object(GZVector{-}<GDBQuad3d>{//})
 PGDBObjLWPolyline=^GDBObjLWpolyline;
 {REGISTEROBJECTTYPE GDBObjLWPolyline}
 GDBObjLWPolyline= object(GDBObjWithLocalCS)
-                 Closed:Boolean;(*saved_to_shd*)
-                 Vertex2D_in_OCS_Array:GDBpolyline2DArray;(*saved_to_shd*)
+                 Closed:Boolean;
+                 Vertex2D_in_OCS_Array:GDBpolyline2DArray;
                  Vertex3D_in_WCS_Array:GDBPoint3dArray;
-                 Width2D_in_OCS_Array:GDBLineWidthArray;(*saved_to_shd*)
+                 Width2D_in_OCS_Array:GDBLineWidthArray;
                  Width3D_in_WCS_Array:{GDBOpenArray}TWidth3D_in_WCS_Vector;
                  PProjPoint:PGDBpolyline2DArray;(*hidden_in_objinsp*)
                  Square:Double;(*'Oriented area'*)

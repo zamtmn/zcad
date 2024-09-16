@@ -31,16 +31,16 @@ type
 PGDBObj2dprop=^GDBObj2dprop;
 {REGISTERRECORDTYPE GDBObj2dprop}
 GDBObj2dprop=record
-                   Basis:GDBBasis;(*'Basis'*)(*saved_to_shd*)
-                   P_insert:GDBCoordinates3D;(*'Insertion point OCS'*)(*saved_to_shd*)
+                   Basis:GDBBasis;(*'Basis'*)
+                   P_insert:GDBCoordinates3D;(*'Insertion point OCS'*)
              end;
 PGDBObjWithLocalCS=^GDBObjWithLocalCS;
 {REGISTEROBJECTTYPE GDBObjWithLocalCS}
 GDBObjWithLocalCS= object(GDBObjWithMatrix)
-               Local:GDBObj2dprop;(*'Object orientation'*)(*saved_to_shd*)
+               Local:GDBObj2dprop;(*'Object orientation'*)
 
                //**получить на чтение координаты в мировой системе координат
-               P_insert_in_WCS:GDBvertex;(*'Insertion point WCS'*)(*saved_to_shd*)(*oi_readonly*)(*hidden_in_objinsp*)
+               P_insert_in_WCS:GDBvertex;(*'Insertion point WCS'*)(*oi_readonly*)(*hidden_in_objinsp*)
                ProjP_insert:GDBvertex;(*'Insertion point DCS'*)(*oi_readonly*)(*hidden_in_objinsp*)
                PProjOutBound:PGDBOOutbound2DIArray;(*'Bounding box DCS'*)(*oi_readonly*)(*hidden_in_objinsp*)
                lod:Byte;(*'Level of detail'*)(*oi_readonly*)(*hidden_in_objinsp*)

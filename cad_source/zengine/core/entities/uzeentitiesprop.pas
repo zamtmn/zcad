@@ -28,10 +28,10 @@ type
 PGDBObjVisualProp=^GDBObjVisualProp;
 {REGISTERRECORDTYPE GDBObjVisualProp}
 GDBObjVisualProp=record
-                      Layer:{-}PGDBLayerProp{/PGDBLayerPropObjInsp/};(*'Layer'*)(*saved_to_shd*)
-                      LineWeight:TGDBLineWeight;(*'Line weight'*)(*saved_to_shd*)
-                      LineType:{-}PGDBLtypeProp{/PGDBLtypePropObjInsp/};(*'Line type'*)(*saved_to_shd*)
-                      LineTypeScale:GDBNonDimensionDouble;(*'Line type scale'*)(*saved_to_shd*)
+                      Layer:{-}PGDBLayerProp{/PGDBLayerPropObjInsp/};(*'Layer'*)
+                      LineWeight:TGDBLineWeight;(*'Line weight'*)
+                      LineType:{-}PGDBLtypeProp{/PGDBLtypePropObjInsp/};(*'Line type'*)
+                      LineTypeScale:GDBNonDimensionDouble;(*'Line type scale'*)
                       BoundingBox:TBoundingBox;(*'Bounding box'*)(*oi_readonly*)(*hidden_in_objinsp*)
                       LastCameraPos:TActulity;(*oi_readonly*)(*hidden_in_objinsp*)
                       Color:TGDBPaletteColor;

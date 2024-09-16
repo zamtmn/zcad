@@ -38,7 +38,7 @@ TDrawingPreCalcData=record
 PGDBObjGenericSubEntry=^GDBObjGenericSubEntry;
 {REGISTEROBJECTTYPE GDBObjGenericSubEntry}
 GDBObjGenericSubEntry= object(GDBObjWithMatrix)
-                            ObjArray:GDBObjEntityTreeArray;(*saved_to_shd*)
+                            ObjArray:GDBObjEntityTreeArray;
                             ObjCasheArray:GDBObjOpenArrayOfPV;
                             ObjToConnectedArray:GDBObjOpenArrayOfPV;
                             lstonmouse:PGDBObjEntity;

@@ -26,7 +26,7 @@ type
 {Export+}
 {REGISTEROBJECTTYPE GDBPoint3dArray}
 PGDBPoint3dArray=^GDBPoint3dArray;
-GDBPoint3dArray= object(GZVector{-}<GDBVertex>{//})(*OpenArrayOfData=GDBVertex*)
+GDBPoint3dArray= object(GZVector{-}<GDBVertex>{//})
                 function onpoint(const p:gdbvertex;closed:Boolean):Boolean;
                 function onmouse(const mf:ClipArray;const closed:Boolean):Boolean;virtual;
                 function CalcTrueInFrustum(const frustum:ClipArray; const closed:boolean):TInBoundingVolume;virtual;

@@ -26,8 +26,8 @@ type
 {Export+}
 {REGISTEROBJECTTYPE GDBPolyline2DArray}
 PGDBPolyline2DArray=^GDBPolyline2DArray;
-GDBPolyline2DArray= object(GZVector{-}<GDBVertex2D>{//})(*OpenArrayOfData=GDBVertex2D*)
-                      closed:Boolean;(*saved_to_shd*)
+GDBPolyline2DArray= object(GZVector{-}<GDBVertex2D>{//})
+                      closed:Boolean;
                       constructor init(m:Integer;c:Boolean);
 
                       //function onmouse(mc:GDBvertex2DI):Boolean;virtual;

@@ -66,11 +66,11 @@ ShapeProp= object(BasicSHXDashProp)
                 destructor done;virtual;
           end;
 {REGISTEROBJECTTYPE GDBDashInfoArray}
-GDBDashInfoArray= object(GZVector{-}<TDashInfo>{//})(*OpenArrayOfData=TDashInfo*)
+GDBDashInfoArray= object(GZVector{-}<TDashInfo>{//})
                end;
 PTStrokesArray=^TStrokesArray;
 {REGISTEROBJECTTYPE TStrokesArray}
-TStrokesArray= object(GZVector{-}<Double>{//})(*OpenArrayOfData=Double*)
+TStrokesArray= object(GZVector{-}<Double>{//})
                 LengthFact:Double;(*'Length'*)
                 constructor init(m:Integer);
                 function CopyTo(var dest:GZVector{-}<Double>{//}):Integer;virtual;
@@ -78,11 +78,11 @@ TStrokesArray= object(GZVector{-}<Double>{//})(*OpenArrayOfData=Double*)
                 procedure format;
                end;
 {REGISTEROBJECTTYPE GDBShapePropArray}
-GDBShapePropArray= object(GZVectorObjects{-}<ShapeProp>{//})(*OpenArrayOfObject=ShapeProp*)
+GDBShapePropArray= object(GZVectorObjects{-}<ShapeProp>{//})
                 constructor init(m:Integer);
                end;
 {REGISTEROBJECTTYPE GDBTextPropArray}
-GDBTextPropArray= object(GZVectorObjects{-}<TextProp>{//})(*OpenArrayOfObject=TextProp*)
+GDBTextPropArray= object(GZVectorObjects{-}<TextProp>{//})
                 constructor init(m:Integer);
                end;
 PPGDBLtypePropObjInsp=^PGDBLtypePropObjInsp;
@@ -111,7 +111,7 @@ PGDBLtypePropArray=^GDBLtypePropArray;
 GDBLtypePropArray=packed array [0..0] of GDBLtypeProp;
 PGDBLtypeArray=^GDBLtypeArray;
 {REGISTEROBJECTTYPE GDBLtypeArray}
-GDBLtypeArray= object(GDBNamedObjectsArray{-}<PGDBLtypeProp,GDBLtypeProp>{//})(*OpenArrayOfData=GDBLtypeProp*)
+GDBLtypeArray= object(GDBNamedObjectsArray{-}<PGDBLtypeProp,GDBLtypeProp>{//})
                     constructor init(m:Integer);
                     constructor initnul;
                     procedure LoadFromFile(const fname:String;lm:TLoadOpt);

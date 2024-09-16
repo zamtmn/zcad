@@ -28,11 +28,11 @@ type
 PGDBObjBlockdef=^GDBObjBlockdef;
 {REGISTEROBJECTTYPE GDBObjBlockdef}
 GDBObjBlockdef= object(GDBObjGenericSubEntry)
-                     Name:String;(*saved_to_shd*)
-                     VarFromFile:String;(*saved_to_shd*)
-                     Base:GDBvertex;(*saved_to_shd*)
+                     Name:String;
+                     VarFromFile:String;
+                     Base:GDBvertex;
                      Formated:Boolean;
-                     BlockDesc:TBlockDesc;(*'Block params'*)(*saved_to_shd*)(*oi_readonly*)
+                     BlockDesc:TBlockDesc;(*'Block params'*)(*oi_readonly*)
                      constructor initnul(owner:PGDBObjGenericWithSubordinated);
                      constructor init(_name:String);
                      procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext;Stage:TEFStages=EFAllStages);virtual;

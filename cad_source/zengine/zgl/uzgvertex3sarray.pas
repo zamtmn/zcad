@@ -29,7 +29,7 @@ TCalcedType=Double;
 TStoredCoordType=GDBvertex;
 PZGLVertex3Sarray=^ZGLVertex3Sarray;
 {REGISTEROBJECTTYPE ZGLVertex3Sarray}
-ZGLVertex3Sarray= object(GZVector{-}<TStoredCoordType>{//})(*OpenArrayOfData=GDBvertex3S*)
+ZGLVertex3Sarray= object(GZVector{-}<TStoredCoordType>{//})
                 function AddGDBVertex(const v:GDBvertex):TArrayIndex;overload;
                 function AddGDBVertex(const v:GDBvertex3S):TArrayIndex;overload;
                 function GetLength(const i:TArrayIndex):TCalcedType;virtual;

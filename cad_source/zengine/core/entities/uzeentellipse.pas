@@ -35,11 +35,11 @@ type
 PGDBObjEllipse=^GDBObjEllipse;
 {REGISTEROBJECTTYPE GDBObjEllipse}
 GDBObjEllipse= object(GDBObjPlain)
-                 RR:Double;(*saved_to_shd*)
+                 RR:Double;
                  MajorAxis:GDBvertex;
-                 Ratio:Double;(*saved_to_shd*)
-                 StartAngle:Double;(*saved_to_shd*)
-                 EndAngle:Double;(*saved_to_shd*)
+                 Ratio:Double;
+                 StartAngle:Double;
+                 EndAngle:Double;
                  angle:Double;
                  Vertex3D_in_WCS_Array:GDBPoint3DArray;
                  length:Double;

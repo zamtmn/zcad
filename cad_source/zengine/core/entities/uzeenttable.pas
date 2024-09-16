@@ -39,7 +39,7 @@ TGDBTableItemFormat=record
                 end;
 PGDBTableArray=^GDBTableArray;
 {REGISTEROBJECTTYPE GDBTableArray}
-GDBTableArray= object(GZVectorPObects{-}<PTZctnrVectorStrings,TZctnrVectorStrings>{//})(*OpenArrayOfData=TZctnrVectorStrings*)
+GDBTableArray= object(GZVectorPObects{-}<PTZctnrVectorStrings,TZctnrVectorStrings>{//})
               end;
 PGDBObjTable=^GDBObjTable;
 {REGISTEROBJECTTYPE GDBObjTable}

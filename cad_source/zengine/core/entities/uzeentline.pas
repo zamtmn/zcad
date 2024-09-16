@@ -31,7 +31,7 @@ type
 PGDBObjLine=^GDBObjLine;
 {REGISTEROBJECTTYPE GDBObjLine}
 GDBObjLine= object(GDBObj3d)
-                 CoordInOCS:GDBLineProp;(*'Coordinates OCS'*)(*saved_to_shd*)
+                 CoordInOCS:GDBLineProp;(*'Coordinates OCS'*)
                  CoordInWCS:GDBLineProp;(*'Coordinates WCS'*)(*hidden_in_objinsp*)
                  PProjPoint:PGDBLineProj;(*'Coordinates DCS'*)(*hidden_in_objinsp*)
 

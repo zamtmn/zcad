@@ -38,9 +38,9 @@ XYZWStringArray=object(GZVector{-}<GDBStrWithPoint>{//})
 PGDBObjMText=^GDBObjMText;
 {REGISTEROBJECTTYPE GDBObjMText}
 GDBObjMText= object(GDBObjText)
-                 width:Double;(*saved_to_shd*)
-                 linespace:Double;(*saved_to_shd*)(*oi_readonly*)
-                 linespacef:Double;(*saved_to_shd*)
+                 width:Double;
+                 linespace:Double;(*oi_readonly*)
+                 linespacef:Double;
                  text:XYZWStringArray;(*oi_readonly*)(*hidden_in_objinsp*)
                  constructor init(own:Pointer;layeraddres:PGDBLayerProp;LW:SmallInt;c:TDXFEntsInternalStringType;p:GDBvertex;s,o,w,a:Double;j:TTextJustify;wi,l:Double);
                  constructor initnul(owner:PGDBObjGenericWithSubordinated);

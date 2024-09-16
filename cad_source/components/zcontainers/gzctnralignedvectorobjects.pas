@@ -27,7 +27,7 @@ type
 {Export+}
 {----REGISTEROBJECTTYPE GZAlignedVectorObjects}
 GZAlignedVectorObjects{-}<PBaseObj>{//}=
-  object(TZctnrAlignedVectorBytes)(*OpenArrayOfData=Byte*)
+  object(TZctnrAlignedVectorBytes)
                 function iterate(var ir:itrec):Pointer;virtual;
              end;
 {Export-}

@@ -29,25 +29,25 @@ type
 PGDBTextStyleProp=^GDBTextStyleProp;
 {REGISTERRECORDTYPE GDBTextStyleProp}
   GDBTextStyleProp=record
-                    size:Double;(*saved_to_shd*)
-                    oblique:Double;(*saved_to_shd*)
-                    wfactor:Double;(*saved_to_shd*)
+                    size:Double;
+                    oblique:Double;
+                    wfactor:Double;
               end;
   PPGDBTextStyleObjInsp=^PGDBTextStyleObjInsp;
   PGDBTextStyleObjInsp=Pointer;
   PGDBTextStyle=^GDBTextStyle;
   {REGISTEROBJECTTYPE GDBTextStyle}
   GDBTextStyle = object(GDBNamedObject)
-    FontFile:String;(*saved_to_shd*)
-    FontFamily:String;(*saved_to_shd*)
+    FontFile:String;
+    FontFamily:String;
     pfont: PGDBfont;
-    prop:GDBTextStyleProp;(*saved_to_shd*)
+    prop:GDBTextStyleProp;
     UsedInLTYPE:Boolean;
     destructor Done;virtual;
   end;
 PGDBTextStyleArray=^GDBTextStyleArray;
 {REGISTEROBJECTTYPE GDBTextStyleArray}
-GDBTextStyleArray= object(GDBNamedObjectsArray{-}<PGDBTextStyle,GDBTextStyle>{//})(*OpenArrayOfData=GDBTextStyle*)
+GDBTextStyleArray= object(GDBNamedObjectsArray{-}<PGDBTextStyle,GDBTextStyle>{//})
                     constructor init(m:Integer);
                     constructor initnul;
 
@@ -61,10 +61,10 @@ GDBTextStyleArray= object(GDBNamedObjectsArray{-}<PGDBTextStyle,GDBTextStyle>{//
 {EXPORT-}
   TTextStyle = class(TNamedObject)
     public
-      FontFile:String;(*saved_to_shd*)
-      FontFamily:String;(*saved_to_shd*)
+      FontFile:String;
+      FontFamily:String;
       pfont: PGDBfont;
-      prop:GDBTextStyleProp;(*saved_to_shd*)
+      prop:GDBTextStyleProp;
       UsedInLTYPE:Boolean;
   end;
 implementation

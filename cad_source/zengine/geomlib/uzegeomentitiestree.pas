@@ -36,7 +36,7 @@ TFirstStageData=record
 TGeomTreeNodeData=record
                   end;
 {---REGISTEROBJECTTYPE TEntityArray}
-TEntityArray= object(GZAlignedVectorObjects{-}<PTGeomEntity>{//})(*OpenArrayOfData=Byte*)
+TEntityArray= object(GZAlignedVectorObjects{-}<PTGeomEntity>{//})
 end;
          PTEntTreeNode=^TGeomEntTreeNode;
          {---REGISTEROBJECTTYPE TGeomEntTreeNode}

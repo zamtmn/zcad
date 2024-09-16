@@ -31,7 +31,7 @@ GDBNumItem= object(GDBNamedObject)
                 end;
 PGDBNumerator=^GDBNumerator;
 {---REGISTEROBJECTTYPE GDBNumerator}
-GDBNumerator= object(GDBNamedObjectsArray<PGDBNumItem,GDBNumItem>)(*OpenArrayOfData=GDBNumItem*)
+GDBNumerator= object(GDBNamedObjectsArray<PGDBNumItem,GDBNumItem>)
                        constructor init(m:Integer);
                        function getnamenumber(_Name:String;AutoInc:Boolean):String;
                        function getnumber(_Name:String;AutoInc:Boolean):Integer;

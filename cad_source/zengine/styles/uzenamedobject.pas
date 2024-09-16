@@ -34,7 +34,7 @@ type
   PGDBNamedObject=^GDBNamedObject;
   {REGISTEROBJECTTYPE GDBNamedObject}
   GDBNamedObject=object(GDBaseObject)
-                       Name:AnsiString;(*saved_to_shd*)(*'Name'*)
+                       Name:AnsiString;(*'Name'*)
                        constructor initnul;
                        constructor init(const n:String);
                        destructor Done;virtual;

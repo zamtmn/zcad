@@ -34,8 +34,8 @@ PTSimpleDrawing=^TSimpleDrawing;
 {REGISTEROBJECTTYPE TSimpleDrawing}
 TSimpleDrawing= object(TAbstractDrawing)
                        pObjRoot:PGDBObjGenericSubEntry;
-                       mainObjRoot:GDBObjRoot;(*saved_to_shd*)
-                       LayerTable:GDBLayerArray;(*saved_to_shd*)
+                       mainObjRoot:GDBObjRoot;
+                       LayerTable:GDBLayerArray;
                        ConstructObjRoot:GDBObjRoot;
                        SelObjArray:GDBSelectedObjArray;
                        pcamera:PGDBObjCamera;
@@ -45,10 +45,10 @@ TSimpleDrawing= object(TAbstractDrawing)
                        //OGLwindow1:toglwnd;
                        wa:TAbstractViewArea;
 
-                       TextStyleTable:GDBTextStyleArray;(*saved_to_shd*)
-                       BlockDefArray:GDBObjBlockdefArray;(*saved_to_shd*)
-                       Numerator:GDBNumerator;(*saved_to_shd*)
-                       TableStyleTable:GDBTableStyleArray;(*saved_to_shd*)
+                       TextStyleTable:GDBTextStyleArray;
+                       BlockDefArray:GDBObjBlockdefArray;
+                       Numerator:GDBNumerator;
+                       TableStyleTable:GDBTableStyleArray;
                        LTypeStyleTable:GDBLtypeArray;
                        DimStyleTable:GDBDimStyleArray;
                        DrawingExtensions:TDrawingExtensions;

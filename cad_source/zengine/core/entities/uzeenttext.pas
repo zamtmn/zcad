@@ -33,8 +33,8 @@ PGDBObjText=^GDBObjText;
 {REGISTEROBJECTTYPE GDBObjText}
 GDBObjText= object(GDBObjAbstractText)
                  Content:TDXFEntsInternalStringType;
-                 Template:TDXFEntsInternalStringType;(*saved_to_shd*)
-                 TXTStyleIndex:{-}PGDBTextStyle{/PGDBTextStyleObjInsp/};(*saved_to_shd*)(*'Style'*)
+                 Template:TDXFEntsInternalStringType;
+                 TXTStyleIndex:{-}PGDBTextStyle{/PGDBTextStyleObjInsp/};(*'Style'*)
                  obj_height:Double;(*oi_readonly*)(*hidden_in_objinsp*)
                  obj_width:Double;(*oi_readonly*)(*hidden_in_objinsp*)
                  obj_y:Double;(*oi_readonly*)(*hidden_in_objinsp*)

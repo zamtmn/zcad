@@ -37,12 +37,12 @@ TCPVector= object(GZVector{-}<GDBvertex4S>{//})
 PGDBObjSpline=^GDBObjSpline;
 {REGISTEROBJECTTYPE GDBObjSpline}
 GDBObjSpline= object(GDBObjCurve)
-                 ControlArrayInOCS:GDBPoint3dArray;(*saved_to_shd*)(*hidden_in_objinsp*)
-                 ControlArrayInWCS:GDBPoint3dArray;(*saved_to_shd*)(*hidden_in_objinsp*)
-                 Knots:{GDBOpenArrayOfData}TKnotsVector;(*saved_to_shd*)(*hidden_in_objinsp*)
-                 AproxPointInWCS:GDBPoint3dArray;(*saved_to_shd*)(*hidden_in_objinsp*)
-                 Closed:Boolean;(*saved_to_shd*)
-                 Degree:Integer;(*saved_to_shd*)
+                 ControlArrayInOCS:GDBPoint3dArray;(*hidden_in_objinsp*)
+                 ControlArrayInWCS:GDBPoint3dArray;(*hidden_in_objinsp*)
+                 Knots:{GDBOpenArrayOfData}TKnotsVector;(*hidden_in_objinsp*)
+                 AproxPointInWCS:GDBPoint3dArray;(*hidden_in_objinsp*)
+                 Closed:Boolean;
+                 Degree:Integer;
                  constructor init(own:Pointer;layeraddres:PGDBLayerProp;LW:SmallInt;c:Boolean);
                  constructor initnul(owner:PGDBObjGenericWithSubordinated);
                  destructor done;virtual;

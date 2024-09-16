@@ -43,19 +43,19 @@ TTextJustify=(jstl(*'TopLeft'*),
 PGDBTextProp=^GDBTextProp;
 {REGISTERRECORDTYPE GDBTextProp}
 GDBTextProp=record
-                  size:Double;(*saved_to_shd*)
-                  oblique:Double;(*saved_to_shd*)
-                  wfactor:Double;(*saved_to_shd*)
-                  aaaangle:Double;(*saved_to_shd*)
-                  justify:TTextJustify;(*saved_to_shd*)
+                  size:Double;
+                  oblique:Double;
+                  wfactor:Double;
+                  aaaangle:Double;
+                  justify:TTextJustify;
                   upsidedown:Boolean;
                   backward:Boolean;
             end;
 PGDBObjAbstractText=^GDBObjAbstractText;
 {REGISTEROBJECTTYPE GDBObjAbstractText}
 GDBObjAbstractText= object(GDBObjPlainWithOX)
-                         textprop:GDBTextProp;(*saved_to_shd*)
-                         P_drawInOCS:GDBvertex;(*saved_to_shd*)(*oi_readonly*)(*hidden_in_objinsp*)
+                         textprop:GDBTextProp;
+                         P_drawInOCS:GDBvertex;(*oi_readonly*)(*hidden_in_objinsp*)
                          DrawMatrix:DMatrix4D;(*oi_readonly*)(*hidden_in_objinsp*)
                          //Vertex3D_in_WCS_Array:GDBPolyPoint3DArray;(*oi_readonly*)(*hidden_in_objinsp*)
                          procedure CalcObjMatrix(pdrawing:PTDrawingDef=nil);virtual;

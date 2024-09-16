@@ -121,7 +121,7 @@ GDBDimStyle = object(GDBNamedObject)
              end;
 PGDBDimStyleArray=^GDBDimStyleArray;
 {REGISTEROBJECTTYPE GDBDimStyleArray}
-GDBDimStyleArray= object(GDBNamedObjectsArray{-}<PGDBDimStyle,GDBDimStyle>{//})(*OpenArrayOfData=GDBDimStyle*)
+GDBDimStyleArray= object(GDBNamedObjectsArray{-}<PGDBDimStyle,GDBDimStyle>{//})
                     constructor init(m:Integer);
                     constructor initnul;
                     procedure ResolveDXFHandles(const Handle2BlockName:TMapBlockHandle_BlockNames);

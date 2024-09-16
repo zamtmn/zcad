@@ -18,68 +18,82 @@
 
 unit uzctextenteditor;
 {$INCLUDE zengineconfig.inc}
+{$mode objfpc}{$H+}
+
 interface
+
 uses
-     uzcsysparams,uzcutils,uzcsysvars,
-     uzcinfoform,Varman,uzcinterface,
-     uzedrawingdef,uzbstrproc,uzeenttext,uzeconsts,uzcstrconsts,uzcfsinglelinetexteditor,
-     Controls,Classes,Forms,uzccommandsmanager,uzcuitypes;
+  uzcsysparams,uzcutils,uzcsysvars,
+  uzcinfoform,Varman,uzcinterface,
+  uzedrawingdef,uzbstrproc,uzeenttext,uzeconsts,uzcstrconsts,uzcfsinglelinetexteditor,
+  Controls,Classes,Forms,uzccommandsmanager,uzcuitypes,
+  zUndoCmdChgTypes,zUndoCmdChgVariable,uzcdrawing,uzcdrawings,uzbtypes;
+
+const
+  MTextWndSaveParamName='MTEdWND';
+  TextWndSaveParamName='TEdWND';
+
 var
-    InfoForm:TInfoForm=nil;
+  InfoForm:TInfoForm=nil;
+
 procedure RunTextEditor(Pobj:Pointer;var drawing:TDrawingDef);
+
 implementation
+
 procedure RunTextEditor(Pobj:Pointer;var drawing:TDrawingDef);
 var
-   modalresult:integer;
-   astring:ansistring;
+  ModalResult:integer;
+  AString:ansistring;
+  UString:TDXFEntsInternalStringType;
 begin
-     astring:=ConvertFromDxfString(PGDBObjText(pobj)^.Template);
+  AString:=ConvertFromDxfString(PGDBObjText(pobj)^.Template);
+  if PGDBObjText(pobj)^.GetObjType=GDBMTextID then begin
+    if not assigned(InfoForm) then
+      InfoForm:=TInfoForm.createnew(application.MainForm);
+    InfoForm.BoundsRect:=GetBoundsFromSavedUnit(MTextWndSaveParamName,SysParam.notsaved.ScreenX,SysParam.notsaved.Screeny);
+    InfoForm.caption:=rsMTextEditor;
 
+    InfoForm.memo.text:=AString;
+    if assigned(SysVar.INTF.INTF_DefaultEditorFontHeight) then
+      InfoForm.memo.Font.Height:=SysVar.INTF.INTF_DefaultEditorFontHeight^;
+    ModalResult:=ZCMsgCallBackInterface.DOShowModal(InfoForm);
 
-     if PGDBObjText(pobj)^.GetObjType=GDBMTextID then
-     begin
-     if not assigned(InfoForm) then
-     begin
-     InfoForm:=TInfoForm.createnew(application.MainForm);
-     InfoForm.BoundsRect:=GetBoundsFromSavedUnit('TEdWND',SysParam.notsaved.ScreenX,SysParam.notsaved.Screeny);
-     end;
-     //InfoForm.DialogPanel.ShowButtons:=[pbOK, pbCancel{, pbClose, pbHelp}];
-     InfoForm.caption:=(rsMTextEditor);
+    if ModalResult=ZCMrOk then begin
+      UString:=ConvertToDxfString(InfoForm.memo.text);
+      StoreBoundsToSavedUnit(MTextWndSaveParamName,InfoForm.BoundsRect);
+    end;
+  end else begin
+    if not assigned(SingleLineTextEditorForm) then
+      Application.CreateForm(TSingleLineTextEditorForm,SingleLineTextEditorForm);
+    SingleLineTextEditorForm.BoundsRect:=GetBoundsFromSavedUnit(TextWndSaveParamName,SysParam.notsaved.ScreenX,SysParam.notsaved.Screeny);
+    SingleLineTextEditorForm.caption:=rsTextEditor;
 
-     InfoForm.memo.text:=astring;
-     if assigned(SysVar.INTF.INTF_DefaultEditorFontHeight) then
-        InfoForm.memo.Font.Height:=SysVar.INTF.INTF_DefaultEditorFontHeight^;
-     modalresult:=ZCMsgCallBackInterface.DOShowModal(InfoForm);
-     if modalresult=ZCMrOk then
-                         begin
-                              PGDBObjText(pobj)^.Template:=ConvertToDxfString(InfoForm.memo.text);
-                              StoreBoundsToSavedUnit('TEdWND',InfoForm.BoundsRect);
-                         end;
-     end
-     else
-     begin
-     if not assigned(SingleLineTextEditorForm) then
-     Application.CreateForm(TSingleLineTextEditorForm, SingleLineTextEditorForm);
-     SingleLineTextEditorForm.caption:=(rsTextEditor);
+    SingleLineTextEditorForm.HelpText.Caption:=rsTextEdCaption;
+    SingleLineTextEditorForm.EditField.TEXT:=AString;
+    if assigned(SysVar.INTF.INTF_DefaultEditorFontHeight) then
+      SingleLineTextEditorForm.EditField.Font.Height:=SysVar.INTF.INTF_DefaultEditorFontHeight^;
 
-     SingleLineTextEditorForm.HelpText.Caption:=rsTextEdCaption;
-     SingleLineTextEditorForm.EditField.TEXT:=astring;
-     if assigned(SysVar.INTF.INTF_DefaultEditorFontHeight) then
-        SingleLineTextEditorForm.EditField.Font.Height:=SysVar.INTF.INTF_DefaultEditorFontHeight^;
+    ModalResult:=ZCMsgCallBackInterface.DOShowModal(SingleLineTextEditorForm);
 
-     modalresult:=ZCMsgCallBackInterface.DOShowModal(SingleLineTextEditorForm);
+    if ModalResult=ZCMrOk then begin
+      UString:=ConvertToDxfString(SingleLineTextEditorForm.EditField.text);
+      StoreBoundsToSavedUnit(TextWndSaveParamName,SingleLineTextEditorForm.BoundsRect);
+    end;
+  end;
 
-     if modalresult=ZCMrOk then
-                         begin
-                              PGDBObjText(pobj)^.Template:=ConvertToDxfString(SingleLineTextEditorForm.EditField.text);
-                         end;
-     end;
-     if modalresult=ZCMrOk then
-                         begin
-                              PGDBObjText(pobj)^.YouChanged(drawing);
-                              zcRedrawCurrentDrawing;
-                         end;
-
+  if ModalResult=ZCMrOk then begin
+    if UString<>PGDBObjText(pobj)^.Template then begin
+      UCmdChgField.CreateAndPush(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,
+                                 TChangedFieldDesc.CreateRec(SysUnit^.TypeName2PTD('TDXFEntsInternalStringType'),
+                                                             @PGDBObjText(pobj)^.Template,
+                                                             @PGDBObjText(pobj)^.Template),
+                                 TSharedPEntityData.CreateRec(pobj),
+                                 TAfterChangePDrawing.CreateRec(@drawing));
+      PGDBObjText(pobj)^.Template:=UString;
+    end;
+    PGDBObjText(pobj)^.YouChanged(drawing);
+    zcRedrawCurrentDrawing;
+  end;
 end;
 begin
 end.

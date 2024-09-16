@@ -13,7 +13,6 @@ object SingleLineTextEditorForm: TSingleLineTextEditorForm
   OnKeyDown = _onKeyDown
   OnMouseWheel = _onMouseWheel
   OnShow = _onShow
-  Position = poOwnerFormCenter
   LCLVersion = '2.3.0.0'
   object EditField: TEdit
     Left = -30

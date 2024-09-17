@@ -25,7 +25,7 @@ uses LCLProc,uzeentityfactory,uzgldrawcontext,uzedrawingdef,uzecamera,
      uzestyleslayers,uzeentsubordinated,
      UGDBSelectedObjArray,uzeent3d,uzeentity,uzctnrVectorBytes,uzbtypes,uzeconsts,
      uzegeometrytypes,uzglviewareadata,uzegeometry,uzeffdxfsupport,
-     uzctnrvectorpgdbaseobjects,uzeSnap,uzMVReader;
+     uzctnrvectorpgdbaseobjects,uzeSnap,uzMVReader,uzCtnrVectorpBaseEntity;
 type
 {Export+}
 PGDBObjLine=^GDBObjLine;
@@ -48,8 +48,8 @@ GDBObjLine= object(GDBObj3d)
                   function Clone(own:Pointer):PGDBObjEntity;virtual;
                  procedure rtsave(refp:Pointer);virtual;
                  procedure TransformAt(p:PGDBObjEntity;t_matrix:PDMatrix4D);virtual;
-                  function onmouse(var popa:TZctnrVectorPGDBaseObjects;const MF:ClipArray;InSubEntry:Boolean):Boolean;virtual;
-                  function onpoint(var objects:TZctnrVectorPGDBaseObjects;const point:GDBVertex):Boolean;virtual;
+                  function onmouse(var popa:TZctnrVectorPGDBaseEntity;const MF:ClipArray;InSubEntry:Boolean):Boolean;virtual;
+                  function onpoint(var objects:TZctnrVectorPGDBaseEntity;const point:GDBVertex):Boolean;virtual;
                  //procedure feedbackinrect;virtual;
                  //function InRect:TInRect;virtual;
                   function getsnap(var osp:os_record; var pdata:Pointer; const param:OGLWndtype; ProjectProc:GDBProjectProc;SnapMode:TGDBOSMode):Boolean;virtual;
@@ -286,7 +286,7 @@ function GDBObjLine.CalcTrueInFrustum;
 begin
       result:=Representation.CalcTrueInFrustum(frustum,true);
 end;
-function GDBObjLine.onpoint(var objects:TZctnrVectorPGDBaseObjects;const point:GDBVertex):Boolean;
+function GDBObjLine.onpoint(var objects:TZctnrVectorPGDBaseEntity;const point:GDBVertex):Boolean;
 begin
      if {distance2piece}SQRdist_Point_to_Segment(point,self.CoordInWCS.lBegin,self.CoordInWCS.lEnd)<bigeps then
                                                                                   begin

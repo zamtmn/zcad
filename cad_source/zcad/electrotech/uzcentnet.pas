@@ -14,7 +14,7 @@ uses uzcinterface,uzeobjectextender,uzeentityfactory,Varman,uzgldrawcontext,uzes
      varmandef,uzegeometry,uzbtypes,UGDBGraf,uzeentsubordinated,uunitmanager,
      gzctnrVectorTypes,uzegeometrytypes,sysutils,
      uzcenitiesvariablesextender,uzeentline,uzeffdxfsupport,math,uzclog,
-     uzctnrvectorpgdbaseobjects;
+     uzctnrvectorpgdbaseobjects,uzCtnrVectorpBaseEntity;
 resourcestring
   rscannotbeconnected='Can not be connected';
 const
@@ -25,7 +25,7 @@ PGDBObjNet=^GDBObjNet;
 {REGISTEROBJECTTYPE GDBObjNet}
 GDBObjNet= object(GDBObjConnected)
                  graf:GDBGraf;
-                 riserarray:TZctnrVectorPGDBaseObjects;
+                 riserarray:TZctnrVectorPGDBaseEntity;
                  constructor initnul(owner:PGDBObjGenericWithSubordinated);
                  function CanAddGDBObj(pobj:PGDBObjEntity):Boolean;virtual;
                  function EubEntryType:Integer;virtual;

@@ -1,11 +1,12 @@
 object ZCADMainWindow: TZCADMainWindow
   Left = 649
-  Height = 599
+  Height = 799
   Top = 205
-  Width = 805
-  ClientHeight = 599
-  ClientWidth = 805
-  DesignTimePPI = 144
+  Width = 1073
+  ClientHeight = 799
+  ClientWidth = 1073
+  DesignTimePPI = 192
+  LCLVersion = '3.99.0.0'
   OnCreate = _onCreate
   object DockPanel: TAnchorDockPanel
     Left = 4

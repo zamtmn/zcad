@@ -20,17 +20,17 @@ unit zcmultiobjectcreateundocommand;
 {$INCLUDE zengineconfig.inc}
 interface
 uses UGDBOpenArrayOfPV,zeundostack,zebaseundocommands,uzbtypes,
-     gzctnrVectorTypes,uzeentity,uzcdrawings,uzedrawingdef;
+     gzctnrVectorTypes,uzeentity,uzcdrawings,uzedrawingdef,uzeEntBase;
 
 type
-generic TGMultiObjectProcessCommand<_LT> =class(TUCmdBase)
+generic TGMultiObjectProcessCommand<_TArrOfPT,PT> =class(TUCmdBase)
                                       DoData,UnDoData:tmethod;
-                                      ObjArray:_LT;
+                                      ObjArray:_TArrOfPT;
                                       FreeArray:boolean;
                                       public
                                       constructor Create(const _dodata,_undodata:tmethod;const objcount:Integer);
                                       //procedure StoreUndoData(var _undodata:_T);virtual;
-                                      procedure AddObject(PObject:PGDBaseObject);virtual;
+                                      procedure AddObject(PObject:PT);virtual;
 
                                       procedure UnDo;override;
                                       procedure Comit;override;
@@ -38,7 +38,7 @@ generic TGMultiObjectProcessCommand<_LT> =class(TUCmdBase)
                                   end;
 
 PTGDBMultiCreateCommand=^TGDBMultiCreateCommand;
-TGDBMultiCreateCommand=specialize TGMultiObjectProcessCommand<GDBObjOpenArrayOfPV>;
+TGDBMultiCreateCommand=specialize TGMultiObjectProcessCommand<GDBObjOpenArrayOfPV,PGDBObjBaseEntity>;
 
 
 function CreateMultiObjectCreateCommand(var dodata,undodata:tmethod;objcount:integer):TGDBMultiCreateCommand;overload;
@@ -53,7 +53,7 @@ begin
      self.ObjArray.init(objcount);
      FreeArray:={false}true;
 end;
-procedure TGMultiObjectProcessCommand.AddObject(PObject:PGDBaseObject);
+procedure TGMultiObjectProcessCommand.AddObject(PObject:PT);
 var
    p:pointer;
 begin

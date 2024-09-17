@@ -27,7 +27,8 @@ uses gzctnrVector,uzeentityfactory,uzeentsubordinated,
      UGDBPoint3DArray,UGDBPolyLine2DArray,
      uzctnrVectorBytes,uzbtypes,uzeentwithlocalcs,uzeconsts,math,
      gzctnrVectorTypes,uzegeometrytypes,uzeffdxfsupport,sysutils,
-     UGDBSelectedObjArray,uzctnrvectorpgdbaseobjects,uzMVReader;
+     UGDBSelectedObjArray,uzctnrvectorpgdbaseobjects,uzMVReader,
+     uzCtnrVectorpBaseEntity;
 type
 //----------------snaparray:GDBVectorSnapArray;(*hidden_in_objinsp*)
 {Export+}
@@ -78,8 +79,8 @@ GDBObjLWPolyline= object(GDBObjWithLocalCS)
                  procedure getoutbound(var DC:TDrawContext);virtual;
                  function CalcTrueInFrustum(const frustum:ClipArray;visibleactualy:TActulity):TInBoundingVolume;virtual;
                  //function InRect:TInRect;virtual;
-                 function onmouse(var popa:TZctnrVectorPGDBaseObjects;const MF:ClipArray;InSubEntry:Boolean):Boolean;virtual;
-                 function onpoint(var objects:TZctnrVectorPGDBaseObjects;const point:GDBVertex):Boolean;virtual;
+                 function onmouse(var popa:TZctnrVectorPGDBaseEntity;const MF:ClipArray;InSubEntry:Boolean):Boolean;virtual;
+                 function onpoint(var objects:TZctnrVectorPGDBaseEntity;const point:GDBVertex):Boolean;virtual;
                  function getsnap(var osp:os_record; var pdata:Pointer; const param:OGLWndtype; ProjectProc:GDBProjectProc;SnapMode:TGDBOSMode):Boolean;virtual;
                  procedure startsnap(out osp:os_record; out pdata:Pointer);virtual;
                  procedure endsnap(out osp:os_record; var pdata:Pointer);virtual;
@@ -207,7 +208,7 @@ function GDBObjLWpolyline.getsnap;
 begin
      result:=GDBPoint3dArraygetsnap(Vertex3D_in_WCS_Array,PProjPoint,{snaparray}PGDBVectorSnapArray(pdata)^,osp,closed,param,ProjectProc,snapmode);
 end;
-function GDBObjLWpolyline.onpoint(var objects:TZctnrVectorPGDBaseObjects;const point:GDBVertex):Boolean;
+function GDBObjLWpolyline.onpoint(var objects:TZctnrVectorPGDBaseEntity;const point:GDBVertex):Boolean;
 begin
      if Vertex3D_in_WCS_Array.onpoint(point,closed) then
                                                 begin

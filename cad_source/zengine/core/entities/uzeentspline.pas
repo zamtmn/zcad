@@ -25,7 +25,7 @@ uses LCLProc,uzegluinterface,uzeentityfactory,uzgldrawcontext,uzgloglstatemanage
      uzestyleslayers,uzeentsubordinated,uzeentcurve,
      uzeentity,uzctnrVectorBytes,uzbtypes,uzeconsts,uzglviewareadata,
      gzctnrVectorTypes,uzegeometrytypes,uzegeometry,uzeffdxfsupport,sysutils,
-     uzctnrvectorpgdbaseobjects,uzMVReader;
+     uzctnrvectorpgdbaseobjects,uzMVReader,uzCtnrVectorpBaseEntity;
 type
 {Export+}
 {REGISTEROBJECTTYPE TKnotsVector}
@@ -58,8 +58,8 @@ GDBObjSpline= object(GDBObjCurve)
                  function Clone(own:Pointer):PGDBObjEntity;virtual;
                  function GetObjTypeName:String;virtual;
                  function FromDXFPostProcessBeforeAdd(ptu:PExtensionData;const drawing:TDrawingDef):PGDBObjSubordinated;virtual;
-                 function onmouse(var popa:TZctnrVectorPGDBaseObjects;const MF:ClipArray;InSubEntry:Boolean):Boolean;virtual;
-                 function onpoint(var objects:TZctnrVectorPGDBaseObjects;const point:GDBVertex):Boolean;virtual;
+                 function onmouse(var popa:TZctnrVectorPGDBaseEntity;const MF:ClipArray;InSubEntry:Boolean):Boolean;virtual;
+                 function onpoint(var objects:TZctnrVectorPGDBaseEntity;const point:GDBVertex):Boolean;virtual;
                  procedure AddOnTrackAxis(var posr:os_record;const processaxis:taddotrac);virtual;
                  procedure getoutbound(var DC:TDrawContext);virtual;
 
@@ -91,7 +91,7 @@ begin
                                   end;
    result:={VertexArrayInWCS}AproxPointInWCS.onmouse(mf,closed);
 end;
-function GDBObjSpline.onpoint(var objects:TZctnrVectorPGDBaseObjects;const point:GDBVertex):Boolean;
+function GDBObjSpline.onpoint(var objects:TZctnrVectorPGDBaseEntity;const point:GDBVertex):Boolean;
 begin
      if VertexArrayInWCS.onpoint(point,closed) then
                                                 begin

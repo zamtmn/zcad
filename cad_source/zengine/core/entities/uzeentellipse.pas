@@ -24,7 +24,7 @@ uses
     UGDBSelectedObjArray,uzeentity,UGDBOutbound2DIArray,UGDBPoint3DArray,
     uzegeometrytypes,uzctnrVectorBytes,varman,varmandef,uzbtypes,uzeconsts,
     uzglviewareadata,uzegeometry,uzeffdxfsupport,uzeentplain,
-    uzctnrvectorpgdbaseobjects,uzeSnap,math,uzMVReader;
+    uzctnrvectorpgdbaseobjects,uzeSnap,math,uzMVReader,uzCtnrVectorpBaseEntity;
 type
 {Export+}
   ptEllipsertmodify=^tEllipsertmodify;
@@ -59,7 +59,7 @@ GDBObjEllipse= object(GDBObjPlain)
                  procedure getoutbound(var DC:TDrawContext);virtual;
                  procedure RenderFeedback(pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc;var DC:TDrawContext);virtual;
                  procedure projectpoint;virtual;
-                 function onmouse(var popa:TZctnrVectorPGDBaseObjects;const MF:ClipArray;InSubEntry:Boolean):Boolean;virtual;
+                 function onmouse(var popa:TZctnrVectorPGDBaseEntity;const MF:ClipArray;InSubEntry:Boolean):Boolean;virtual;
                  function getsnap(var osp:os_record; var pdata:Pointer; const param:OGLWndtype; ProjectProc:GDBProjectProc;SnapMode:TGDBOSMode):Boolean;virtual;
                  function beforertmodify:Pointer;virtual;
                  procedure rtmodifyonepoint(const rtmod:TRTModifyData);virtual;

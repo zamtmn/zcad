@@ -25,7 +25,7 @@ uses uzeentityfactory,uzgldrawcontext,uzeffdxfsupport,uzedrawingdef,uzecamera,
      uzestyleslayers,UGDBSelectedObjArray,
      uzeentsubordinated,uzeent3d,uzeentity,sysutils,uzctnrVectorBytes,
      uzegeometrytypes,uzbtypes,uzeconsts,uzglviewareadata,uzegeometry,
-     uzctnrvectorpgdbaseobjects,uzeSnap,uzMVReader;
+     uzctnrvectorpgdbaseobjects,uzeSnap,uzMVReader,uzCtnrVectorpBaseEntity;
 type
 {Export+}
 PGDBObjPoint=^GDBObjPoint;
@@ -44,7 +44,7 @@ GDBObjPoint= object(GDBObj3d)
                  function calcinfrustum(const frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:Integer; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double):Boolean;virtual;
                  procedure RenderFeedback(pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc;var DC:TDrawContext);virtual;
                  function getsnap(var osp:os_record; var pdata:Pointer; const param:OGLWndtype; ProjectProc:GDBProjectProc;SnapMode:TGDBOSMode):Boolean;virtual;
-                 function onmouse(var popa:TZctnrVectorPGDBaseObjects;const MF:ClipArray;InSubEntry:Boolean):Boolean;virtual;
+                 function onmouse(var popa:TZctnrVectorPGDBaseEntity;const MF:ClipArray;InSubEntry:Boolean):Boolean;virtual;
                  function CalcTrueInFrustum(const frustum:ClipArray;visibleactualy:TActulity):TInBoundingVolume;virtual;
                  procedure addcontrolpoints(tdesc:Pointer);virtual;
                  procedure remaponecontrolpoint(pdesc:pcontrolpointdesc);virtual;

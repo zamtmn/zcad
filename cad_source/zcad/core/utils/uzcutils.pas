@@ -27,12 +27,12 @@ uses uzeutils,LCLProc,zcmultiobjectcreateundocommand,uzepalette,
      uzestyleslayers,sysutils,uzbtypes,uzcdrawings,varmandef,
      uzeconsts,UGDBVisibleOpenArray,uzeentgenericsubentry,uzeentity,
      uzegeometrytypes,uzeentblockinsert,uzcinterface,gzctnrVectorTypes,uzeentitiesmanager,
-     uzegeometry,zcmultiobjectchangeundocommand;
+     uzegeometry,zcmultiobjectchangeundocommand,uzeEntBase;
 
   {**Добавление в чертеж примитива с обвязкой undo
     @param(PEnt Указатель на добавляемый примитив)
     @param(Drawing Чертеж куда будет добавлен примитив)}
-  procedure zcAddEntToDrawingWithUndo(const PEnt:PGDBObjEntity;var Drawing:TZCADDrawing);
+  procedure zcAddEntToDrawingWithUndo(const PEnt:PGDBObjBaseEntity;var Drawing:TZCADDrawing);
 
   procedure zcMoveEntsFromConstructRootToCurrentDrawingWithUndo(CommandName:String);
 
@@ -136,7 +136,7 @@ begin
   pobj:=drawings.GetCurrentROOT^.ObjArray.iterate(ir);
   until pobj=nil;
 end;
-procedure zcAddEntToDrawingWithUndo(const PEnt:PGDBObjEntity;var Drawing:TZCADDrawing);
+procedure zcAddEntToDrawingWithUndo(const PEnt:PGDBObjBaseEntity;var Drawing:TZCADDrawing);
 var
     domethod,undomethod:tmethod;
 begin

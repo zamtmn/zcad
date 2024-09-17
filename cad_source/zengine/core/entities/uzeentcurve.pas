@@ -26,7 +26,7 @@ uses uzgldrawcontext,uzedrawingdef,uzecamera,
      UGDBSelectedObjArray,uzeent3d,uzeentity,UGDBPolyLine2DArray,UGDBPoint3DArray,
      uzbtypes,uzegeometry,uzeconsts,uzglviewareadata,uzeffdxfsupport,sysutils,
      gzctnrVectorTypes,uzegeometrytypes,uzeentsubordinated,
-     uzctnrvectorpgdbaseobjects,uzeSnap;
+     uzctnrvectorpgdbaseobjects,uzeSnap,uzCtnrVectorpBaseEntity;
 type
 //------------snaparray:GDBVectorSnapArray;(*hidden_in_objinsp*)
 {Export+}
@@ -45,8 +45,8 @@ GDBObjCurve= object(GDBObj3d)
                  function Clone(own:Pointer):PGDBObjEntity;virtual;
                  procedure rtsave(refp:Pointer);virtual;
                  procedure RenderFeedback(pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc;var DC:TDrawContext);virtual;
-                 function onmouse(var popa:TZctnrVectorPGDBaseObjects;const MF:ClipArray;InSubEntry:Boolean):Boolean;virtual;
-                 function onpoint(var objects:TZctnrVectorPGDBaseObjects;const point:GDBVertex):Boolean;virtual;
+                 function onmouse(var popa:TZctnrVectorPGDBaseEntity;const MF:ClipArray;InSubEntry:Boolean):Boolean;virtual;
+                 function onpoint(var objects:TZctnrVectorPGDBaseEntity;const point:GDBVertex):Boolean;virtual;
                  procedure rtmodifyonepoint(const rtmod:TRTModifyData);virtual;
                  procedure remaponecontrolpoint(pdesc:pcontrolpointdesc);virtual;
                  procedure addcontrolpoints(tdesc:Pointer);virtual;
@@ -461,7 +461,7 @@ begin
                                   end;
    result:=VertexArrayInWCS.onmouse(mf,false);
 end;
-function GDBObjCurve.onpoint(var objects:TZctnrVectorPGDBaseObjects;const point:GDBVertex):Boolean;
+function GDBObjCurve.onpoint(var objects:TZctnrVectorPGDBaseEntity;const point:GDBVertex):Boolean;
 begin
      if VertexArrayInWCS.onpoint(point,false) then
                                                 begin

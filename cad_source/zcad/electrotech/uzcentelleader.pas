@@ -16,7 +16,7 @@ uses uzcenitiesvariablesextender,uzeentityfactory,Varman,uzgldrawcontext,
      gzctnrVectorTypes,uzeentity,varmandef,uzbtypes,uzeconsts,uzeffdxfsupport,
      uzegeometrytypes,uzeentsubordinated,uzestylestables,uzclog,
      UGDBOpenArrayOfPV,uzeentcurve,uzeobjectextender,uzetextpreprocessor,
-     uzctnrvectorpgdbaseobjects,uzglviewareadata;
+     uzctnrvectorpgdbaseobjects,uzglviewareadata,uzCtnrVectorpBaseEntity;
 type
 {EXPORT+}
 PGDBObjElLeader=^GDBObjElLeader;
@@ -37,7 +37,7 @@ GDBObjElLeader= object(GDBObjComplex)
             procedure getoutbound(var DC:TDrawContext);virtual;
             function CalcInFrustum(const frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:Integer; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double):Boolean;virtual;
             function CalcTrueInFrustum(const frustum:ClipArray;visibleactualy:TActulity):TInBoundingVolume;virtual;
-            function onmouse(var popa:TZctnrVectorPGDBaseObjects;const MF:ClipArray;InSubEntry:Boolean):Boolean;virtual;
+            function onmouse(var popa:TZctnrVectorPGDBaseEntity;const MF:ClipArray;InSubEntry:Boolean):Boolean;virtual;
             procedure RenderFeedback(pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc;var DC:TDrawContext);virtual;
             procedure addcontrolpoints(tdesc:Pointer);virtual;
             procedure rtmodifyonepoint(const rtmod:TRTModifyData);virtual;

@@ -30,7 +30,7 @@ uses
     UGDBOpenArrayOfPV,uzefont,UGDBVisibleOpenArray,
     gzctnrVectorTypes,uzedimensionaltypes,uzetrash,uzctnrVectorBytes,uzglviewareadata,
     uzccommandsabstract,
-    uzeentitiestypefilter,uzctnrvectorpgdbaseobjects,
+    uzeentitiestypefilter,uzctnrvectorpgdbaseobjects,uzCtnrVectorpBaseEntity,
     LCLProc;
 type
 {EXPORT+}
@@ -66,9 +66,9 @@ TZCADDrawingsManager= object(TZctnrVectorPGDBaseObjects)
                     //procedure rtmodify(obj:PGDBObjEntity;md:Pointer;dist,wc:gdbvertex;save:Boolean);virtual;
                     function FindOneInArray(const entities:GDBObjOpenArrayOfPV;objID:Word; InOwner:Boolean):PGDBObjEntity;
                     function FindEntityByVar(objID:Word;vname,vvalue:String):PGDBObjEntity;
-                    procedure FindMultiEntityByType(Filter:TEntsTypeFilter;var entarray:TZctnrVectorPGDBaseObjects);
-                    procedure FindMultiEntityByVar(objID:Word;vname,vvalue:String;var entarray:TZctnrVectorPGDBaseObjects);
-                    procedure FindMultiEntityByVar2(objID:Word;vname:String;var entarray:TZctnrVectorPGDBaseObjects);
+                    procedure FindMultiEntityByType(Filter:TEntsTypeFilter;var entarray:TZctnrVectorPGDBaseEntity);
+                    procedure FindMultiEntityByVar(objID:Word;vname,vvalue:String;var entarray:TZctnrVectorPGDBaseEntity);
+                    procedure FindMultiEntityByVar2(objID:Word;vname:String;var entarray:TZctnrVectorPGDBaseEntity);
                     procedure standardization(PEnt:PGDBObjEntity;ObjType:TObjID);
                     //procedure AddEntToCurrentDrawingWithUndo(PEnt:PGDBObjEntity);
                     function GetDefaultDrawingName:String;
@@ -812,7 +812,7 @@ begin
     end;
     result:=tv;
 end;
-procedure TZCADDrawingsManager.FindMultiEntityByType(Filter:TEntsTypeFilter;var entarray:TZctnrVectorPGDBaseObjects);
+procedure TZCADDrawingsManager.FindMultiEntityByType(Filter:TEntsTypeFilter;var entarray:TZctnrVectorPGDBaseEntity);
 var
    croot:PGDBObjGenericSubEntry;
    pvisible:PGDBObjEntity;
@@ -831,7 +831,7 @@ begin
     until pvisible=nil;
   end;
 end;
-procedure TZCADDrawingsManager.FindMultiEntityByVar(objID:Word;vname,vvalue:String;var entarray:TZctnrVectorPGDBaseObjects);
+procedure TZCADDrawingsManager.FindMultiEntityByVar(objID:Word;vname,vvalue:String;var entarray:TZctnrVectorPGDBaseEntity);
 var
    croot:PGDBObjGenericSubEntry;
    pvisible{,pvisible2,pv}:PGDBObjEntity;
@@ -861,7 +861,7 @@ begin
          until pvisible=nil;
      end;
 end;
-procedure TZCADDrawingsManager.FindMultiEntityByVar2(objID:Word;vname:String;var entarray:TZctnrVectorPGDBaseObjects);
+procedure TZCADDrawingsManager.FindMultiEntityByVar2(objID:Word;vname:String;var entarray:TZctnrVectorPGDBaseEntity);
 var
    croot:PGDBObjGenericSubEntry;
    pvisible{,pvisible2,pv}:PGDBObjEntity;

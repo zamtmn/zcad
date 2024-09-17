@@ -63,8 +63,6 @@ GDBaseObject=object
     function GetObjName:String;virtual;
     constructor initnul;
     destructor Done;virtual;{ abstract;}
-    function IsEntity:Boolean;virtual;
-
   end;
 TActulity=Integer;
 TEntUpgradeInfo=LongWord;
@@ -186,6 +184,7 @@ TCalculatedString=record
   value:string;
   format:string;
 end;
+TOSnapModeControl=(On,Off,AsOwner);
 {EXPORT-}
 function IsIt(PType,PChecedType:Pointer):Boolean;
 
@@ -204,10 +203,6 @@ begin
 end;
 constructor GDBaseObject.initnul;
 begin
-end;
-function GDBaseObject.IsEntity:Boolean;
-begin
-     result:=false;
 end;
 destructor GDBaseObject.Done;
 begin

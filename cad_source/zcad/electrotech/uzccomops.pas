@@ -21,7 +21,7 @@ uses
   gzctnrVectorTypes,uzccomelectrical,URecordDescriptor,TypeDescriptors,uzcLog,
   uzcstrconsts,uzccmdfloatinsert,uzctnrvectorpgdbaseobjects,
   zUndoCmdChgTypes,zUndoCmdChgVariable,
-  uzcdrawing;
+  uzcdrawing,uzCtnrVectorpBaseEntity;
 
 type
   TPlaceParam=record
@@ -657,7 +657,7 @@ var //i: Integer;
     cman:TCableManager;
     SaveEntUName,SaveCabUName:String;
     cablemetric,devicemetric,numingroupmetric:String;
-    ProcessedDevices:TZctnrVectorPGDBaseObjects;
+    ProcessedDevices:TZctnrVectorPGDBaseEntity;
     name:String;
     DC:TDrawContext;
     pcablestartsegmentvarext,pptnownervarext:TVariablesExtender;

@@ -26,7 +26,8 @@ uses uzestyleslayers,uzepalette,uzeobjectextender,uabstractunit,uzeentityfactory
      uzeconsts,uzeentity,uzeentsubordinated,varmandef,
      uzegeometrytypes,uzeentblockinsert,uzbtypes,UGDBVisibleOpenArray,UGDBObjBlockdefArray,
      gzctnrVectorTypes,uzeblockdef,uzeffdxfsupport,UGDBSelectedObjArray,uzeentitiestree,
-     LazLogger,uzestrconsts,uzctnrvectorpgdbaseobjects,uzglviewareadata,uzeSnap;
+     LazLogger,uzestrconsts,uzctnrvectorpgdbaseobjects,uzglviewareadata,uzeSnap,
+     uzCtnrVectorpBaseEntity;
 
 type
 {EXPORT+}
@@ -47,7 +48,7 @@ GDBObjDevice= object(GDBObjBlockInsert)
                    procedure DrawGeometry(lw:Integer;var DC:TDrawContext{infrustumactualy:TActulity;subrender:Integer});virtual;
                    procedure DrawOnlyGeometry(lw:Integer;var DC:TDrawContext{infrustumactualy:TActulity;subrender:Integer});virtual;
                    procedure renderfeedbac(infrustumactualy:TActulity;pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc;var DC:TDrawContext);virtual;
-                   function onmouse(var popa:TZctnrVectorPGDBaseObjects;const MF:ClipArray;InSubEntry:Boolean):Boolean;virtual;
+                   function onmouse(var popa:TZctnrVectorPGDBaseEntity;const MF:ClipArray;InSubEntry:Boolean):Boolean;virtual;
                    function ReturnLastOnMouse(InSubEntry:Boolean):PGDBObjEntity;virtual;
                    procedure ImEdited(pobj:PGDBObjSubordinated;pobjinarray:Integer;var drawing:TDrawingDef);virtual;
                    procedure DeSelect(var SelectedObjCount:Integer;ds2s:TDeSelect2Stage);virtual;

@@ -55,10 +55,9 @@ end;
 function IsCurrObjInUndoContext(_GDBobj:boolean;_pcurrobj:pointer):boolean;
 begin
   result:=false;
-  if _GDBobj then
-    if PGDBaseObject(_pcurrobj)^.IsEntity then
-      //if PGDBObjEntity(pcurrobj).bp.ListPos.Owner=PTDrawingDef(pcurcontext)^.GetCurrentRootSimple then
-      result:=true;
+  //if _GDBobj then
+  //  if PGDBaseObject(_pcurrobj)^.IsEntity then
+  //    result:=true;
 end;
 procedure ZCADFormSetupProc(Form:TControl);
 var
@@ -110,11 +109,10 @@ end;
 procedure _onUpdateObjectInInsp(const EDContext:TEditorContext;const currobjgdbtype:PUserTypeDescriptor;const pcurcontext:pointer;const pcurrobj:pointer;const GDBobj:boolean);
 function CurrObjIsEntity:boolean;
 begin
-result:=false;
-            if GDBobj then
-            if PGDBaseObject(pcurrobj)^.IsEntity then
-            //if PGDBObjEntity(pcurrobj).bp.ListPos.Owner=PTDrawingDef(pcurcontext)^.GetCurrentRootSimple then
-                                                     result:=true;
+  result:=false;
+  //if GDBobj then
+  //  if PGDBaseObject(pcurrobj)^.IsEntity then
+  //    result:=true;
 end;
 function IsEntityInCurrentContext:boolean;
 begin

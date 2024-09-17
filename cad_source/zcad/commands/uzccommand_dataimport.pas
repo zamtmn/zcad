@@ -30,14 +30,14 @@ uses
   uzeentitiestypefilter,
   uzcdrawings,uzedrawingsimple,uzgldrawcontext,
   varmandef,uzcenitiesvariablesextender,
-  CsvDocument,uzctnrvectorpgdbaseobjects;
+  CsvDocument,uzctnrvectorpgdbaseobjects,uzCtnrVectorpBaseEntity;
 
 implementation
 
 const
   IdentEnd='<<<';
 
-procedure FilterArray(source,dest:PGDBOpenArrayOfPObjects;prop,value:string);
+procedure FilterArray(source,dest:PZctnrVectorPGDBaseEntity;prop,value:string);
 var
    pvisible:PGDBObjEntity;
    ir:itrec;
@@ -57,7 +57,7 @@ begin
   until pvisible=nil;
 end;
 
-procedure SetArray(source:PGDBOpenArrayOfPObjects;prop,value:string;var drawing:TSimpleDrawing;var DC:TDrawContext);
+procedure SetArray(source:PZctnrVectorPGDBaseEntity;prop,value:string;var drawing:TSimpleDrawing;var DC:TDrawContext);
 var
   pvisible:PGDBObjEntity;
   ir:itrec;
@@ -99,9 +99,9 @@ end;
 procedure ProcessCSVLine(FDoc:TCSVDocument;Row:Integer;var drawing:TSimpleDrawing;var DC:TDrawContext);
 var
   Filter:TEntsTypeFilter;
-  entarray,filtredentarray:TZctnrVectorPGDBaseObjects;
+  entarray,filtredentarray:TZctnrVectorPGDBaseEntity;
   fltcounter,fltcount,FactColCount,setvarfrom:integer;
-  a1,a2,atemp:PGDBOpenArrayOfPObjects;
+  a1,a2,atemp:PZctnrVectorPGDBaseEntity;
   VarName,VarValue:string;
 begin
   FactColCount:=GetFactColCount(FDoc,row);

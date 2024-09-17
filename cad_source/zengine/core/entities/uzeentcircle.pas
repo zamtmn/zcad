@@ -25,7 +25,7 @@ uses
     uzestyleslayers,uzehelpobj,UGDBSelectedObjArray,
     uzegeometrytypes,uzeentity,UGDBOutbound2DIArray,UGDBPoint3DArray,uzctnrVectorBytes,
     uzbtypes,uzeentwithlocalcs,uzeconsts,uzglviewareadata,uzegeometry,uzeffdxfsupport,
-    uzctnrvectorpgdbaseobjects,uzeSnap,uzMVReader;
+    uzctnrvectorpgdbaseobjects,uzeSnap,uzMVReader,uzCtnrVectorpBaseEntity;
 type
 {Export+}
   ptcirclertmodify=^tcirclertmodify;
@@ -63,7 +63,7 @@ GDBObjCircle= object(GDBObjWithLocalCS)
                  procedure rtsave(refp:Pointer);virtual;
                  procedure createpoint(var DC:TDrawContext);virtual;
                  procedure projectpoint;virtual;
-                 function onmouse(var popa:TZctnrVectorPGDBaseObjects;const MF:ClipArray;InSubEntry:Boolean):Boolean;virtual;
+                 function onmouse(var popa:TZctnrVectorPGDBaseEntity;const MF:ClipArray;InSubEntry:Boolean):Boolean;virtual;
                  //procedure higlight;virtual;
                  function getsnap(var osp:os_record; var pdata:Pointer; const param:OGLWndtype; ProjectProc:GDBProjectProc;SnapMode:TGDBOSMode):Boolean;virtual;
                  //function InRect:TInRect;virtual;
@@ -84,7 +84,7 @@ GDBObjCircle= object(GDBObjWithLocalCS)
 
                  function GetTangentInPoint(const point:GDBVertex):GDBVertex;virtual;
                  procedure AddOnTrackAxis(var posr:os_record;const processaxis:taddotrac);virtual;
-                 function onpoint(var objects:TZctnrVectorPGDBaseObjects;const point:GDBVertex):Boolean;virtual;
+                 function onpoint(var objects:TZctnrVectorPGDBaseEntity;const point:GDBVertex):Boolean;virtual;
 
                  class function CreateInstance:PGDBObjCircle;static;
                  function GetObjType:TObjID;virtual;
@@ -93,7 +93,7 @@ GDBObjCircle= object(GDBObjWithLocalCS)
 implementation
 //uses
 //    log;
-function GDBObjCircle.onpoint(var objects:TZctnrVectorPGDBaseObjects;const point:GDBVertex):Boolean;
+function GDBObjCircle.onpoint(var objects:TZctnrVectorPGDBaseEntity;const point:GDBVertex):Boolean;
 var
    m1:DMatrix4D;
    ppoint:GDBVertex;

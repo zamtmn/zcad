@@ -23,12 +23,13 @@ unit uzeentsubordinated;
 interface
 uses strutils,uzgldrawcontext,uzeExtdrAbstractEntityExtender,uzedrawingdef,
      uzbstrproc{$IFNDEF DELPHI},LazUTF8{$ENDIF},uzctnrVectorBytes,uzegeometrytypes,uzbtypes,
-     sysutils,uzestyleslayers,uzeffdxfsupport,gzctnrVectorTypes,uzecamera;
+     sysutils,uzestyleslayers,uzeffdxfsupport,gzctnrVectorTypes,uzecamera,uzeentbase;
 type
 {EXPORT+}
+
 PGDBObjExtendable=^GDBObjExtendable;
 {REGISTEROBJECTTYPE GDBObjExtendable}
-GDBObjExtendable=object(GDBaseObject)
+GDBObjExtendable=object(GDBObjBaseEntity)
                                  EntExtensions:{-}TEntityExtensions{/Pointer/};
                                  procedure AddExtension(ExtObj:TAbstractEntityExtender);
                                  procedure RemoveExtension(ExtType:TMetaEntityExtender);
@@ -89,7 +90,6 @@ GDBObjBaseProp=record
                       ListPos:TEntityAddress;(*'List'*)
                       TreePos:TTreeAddress;(*'Tree'*)
                  end;
-TOSnapModeControl=(On,Off,AsOwner);
 {REGISTEROBJECTTYPE GDBObjSubordinated}
 GDBObjSubordinated= object(GDBObjGenericWithSubordinated)
                          bp:GDBObjBaseProp;(*'Owner'*)(*oi_readonly*)(*hidden_in_objinsp*)

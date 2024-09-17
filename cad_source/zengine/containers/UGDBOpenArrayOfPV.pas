@@ -22,7 +22,8 @@ unit UGDBOpenArrayOfPV;
 interface
 uses uzegeometrytypes,uzgldrawcontext,uzedrawingdef,uzeentity,uzecamera,
      gzctnrVectorTypes,sysutils,uzbtypes,uzegeometry,
-     uzeentsubordinated,uzeentityfactory,uzctnrvectorpgdbaseobjects;
+     uzeentsubordinated,uzeentityfactory,uzctnrvectorpgdbaseobjects,
+     uzctnrvectorpbaseentity,uzeEntBase;
 type
 {PGDBObjEntityArray=^GDBObjEntityArray;
 objvizarray = array[0..0] of PGDBObjEntity;
@@ -31,7 +32,7 @@ GDBObjEntityArray=array [0..0] of PGDBObjEntity;}
 {Export+}
 PGDBObjOpenArrayOfPV=^GDBObjOpenArrayOfPV;
 {REGISTEROBJECTTYPE GDBObjOpenArrayOfPV}
-GDBObjOpenArrayOfPV= object(TZctnrVectorPGDBaseObjects)
+GDBObjOpenArrayOfPV= object({TZctnrVectorPGDBaseObjects}TZctnrVectorPGDBaseEntity)
                       procedure DrawWithattrib(var DC:TDrawContext);virtual;
                       procedure DrawGeometry(lw:Integer;var DC:TDrawContext{infrustumactualy:TActulity;subrender:Integer});virtual;
                       procedure DrawOnlyGeometry(lw:Integer;var DC:TDrawContext{infrustumactualy:TActulity;subrender:Integer});virtual;
@@ -50,17 +51,17 @@ GDBObjOpenArrayOfPV= object(TZctnrVectorPGDBaseObjects)
                       procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext;Stage:TEFStages=EFAllStages);virtual;
                       procedure FormatAfterEdit(var drawing:TDrawingDef;var DC:TDrawContext);virtual;
                       //function InRect:TInRect;virtual;
-                      function onpoint(var objects:TZctnrVectorPGDBaseObjects;const point:GDBVertex):Boolean;virtual;
+                      function onpoint(var objects:TZctnrVectorPGDBaseEntity;const point:GDBVertex):Boolean;virtual;
                       //function FindEntityByVar(objID:Word;vname,vvalue:String):PGDBObjSubordinated;virtual;
                 end;
 {Export-}
-function EqualFuncPGDBaseObject(const a, b: PGDBaseObject):Boolean;
+function EqualFuncPGDBaseEntity(const a, b: PGDBObjBaseEntity):Boolean;
 implementation
-function EqualFuncPGDBaseObject(const a, b: PGDBaseObject):Boolean;
+function EqualFuncPGDBaseEntity(const a, b: PGDBObjBaseEntity):Boolean;
 begin
   result:=(a=b);
 end;
-function GDBObjOpenArrayOfPV.onpoint(var objects:TZctnrVectorPGDBaseObjects;const point:GDBVertex):Boolean;
+function GDBObjOpenArrayOfPV.onpoint(var objects:TZctnrVectorPGDBaseEntity;const point:GDBVertex):Boolean;
 var pobj:pGDBObjEntity;
     ir:itrec;
     //fr:TInRect;

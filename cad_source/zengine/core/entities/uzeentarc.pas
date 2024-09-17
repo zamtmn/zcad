@@ -24,7 +24,7 @@ uses
     uzecamera,uzestyleslayers,UGDBSelectedObjArray,
     uzeentity,UGDBOutbound2DIArray,UGDBPoint3DArray,uzctnrVectorBytes,uzbtypes,
     uzegeometrytypes,uzeconsts,uzglviewareadata,uzegeometry,uzeffdxfsupport,uzeentplain,
-    uzctnrvectorpgdbaseobjects,uzeSnap,math,uzMVReader;
+    uzctnrvectorpgdbaseobjects,uzeSnap,math,uzMVReader,uzCtnrVectorpBaseEntity;
 type
 {Export+}
 {REGISTEROBJECTTYPE GDBObjArc}
@@ -56,7 +56,7 @@ GDBObjArc= object(GDBObjPlain)
                  procedure getoutbound(var DC:TDrawContext);virtual;
                  procedure RenderFeedback(pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc;var DC:TDrawContext);virtual;
                  procedure projectpoint;virtual;
-                 function onmouse(var popa:TZctnrVectorPGDBaseObjects;const MF:ClipArray;InSubEntry:Boolean):Boolean;virtual;
+                 function onmouse(var popa:TZctnrVectorPGDBaseEntity;const MF:ClipArray;InSubEntry:Boolean):Boolean;virtual;
                  function getsnap(var osp:os_record; var pdata:Pointer; const param:OGLWndtype; ProjectProc:GDBProjectProc;SnapMode:TGDBOSMode):Boolean;virtual;
                  function beforertmodify:Pointer;virtual;
                  procedure rtmodifyonepoint(const rtmod:TRTModifyData);virtual;
@@ -72,7 +72,7 @@ GDBObjArc= object(GDBObjPlain)
                  procedure transform(const t_matrix:DMatrix4D);virtual;
                  //function GetTangentInPoint(point:GDBVertex):GDBVertex;virtual;
                  procedure AddOnTrackAxis(var posr:os_record;const processaxis:taddotrac);virtual;
-                 function onpoint(var objects:TZctnrVectorPGDBaseObjects;const point:GDBVertex):Boolean;virtual;
+                 function onpoint(var objects:TZctnrVectorPGDBaseEntity;const point:GDBVertex):Boolean;virtual;
                  procedure TransformAt(p:PGDBObjEntity;t_matrix:PDMatrix4D);virtual;
 
                  class function CreateInstance:PGDBObjArc;static;
@@ -108,7 +108,7 @@ begin
 
      Local.p_insert:=PGDBVertex(@objmatrix[3])^;}ReCalcFromObjMatrix;
 end;
-function GDBObjARC.onpoint(var objects:TZctnrVectorPGDBaseObjects;const point:GDBVertex):Boolean;
+function GDBObjARC.onpoint(var objects:TZctnrVectorPGDBaseEntity;const point:GDBVertex):Boolean;
 begin
      if Vertex3D_in_WCS_Array.onpoint(point,false) then
                                                                                   begin

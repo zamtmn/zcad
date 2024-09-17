@@ -25,7 +25,7 @@ uses uzepalette,uzeobjectextender,uzgldrawerabstract,uzgldrawcontext,uzedrawingd
      uzegeometrytypes,UGDBControlPointArray,uzeentsubordinated,uzbtypes,uzeconsts,
      uzglviewareadata,uzegeometry,uzeffdxfsupport,sysutils,uzctnrVectorBytes,
      uzestyleslayers,uzeenrepresentation,LazLogger,uzctnrvectorpgdbaseobjects,
-     uzMVReader;
+     uzMVReader,uzCtnrVectorpBaseEntity;
 type
 taddotrac=procedure (var posr:os_record;const axis:GDBVertex) of object;
 {Export+}
@@ -114,10 +114,10 @@ GDBObjEntity= object(GDBObjSubordinated)
                     procedure DrawBB(var DC:TDrawContext);
                     function calcvisible(const frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:Integer; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double):Boolean;virtual;
 
-                    function onmouse(var popa:TZctnrVectorPGDBaseObjects;const MF:ClipArray;InSubEntry:Boolean):Boolean;virtual;
-                    function onpoint(var objects:TZctnrVectorPGDBaseObjects;const point:GDBVertex):Boolean;virtual;
+                    function onmouse(var popa:TZctnrVectorPGDBaseEntity;const MF:ClipArray;InSubEntry:Boolean):Boolean;virtual;
+                    function onpoint(var objects:TZctnrVectorPGDBaseEntity;const point:GDBVertex):Boolean;virtual;
 
-                    function isonmouse(var popa:TZctnrVectorPGDBaseObjects;const mousefrustum:ClipArray;InSubEntry:Boolean):Boolean;virtual;
+                    function isonmouse(var popa:TZctnrVectorPGDBaseEntity;const mousefrustum:ClipArray;InSubEntry:Boolean):Boolean;virtual;
                     procedure startsnap(out osp:os_record; out pdata:Pointer);virtual;
                     function getsnap(var osp:os_record; var pdata:Pointer; const param:OGLWndtype; ProjectProc:GDBProjectProc;SnapMode:TGDBOSMode):Boolean;virtual;
                     procedure endsnap(out osp:os_record; var pdata:Pointer);virtual;
@@ -154,7 +154,6 @@ GDBObjEntity= object(GDBObjSubordinated)
                     function IsActualy:Boolean;virtual;
                     function IsHaveLCS:Boolean;virtual;
                     function IsHaveGRIPS:Boolean;virtual;
-                    function IsEntity:Boolean;virtual;
                     function GetLayer:PGDBLayerProp;virtual;
                     function GetCenterPoint:GDBVertex;virtual;
                     procedure SetInFrustum(infrustumactualy:TActulity;var totalobj,infrustumobj:Integer);virtual;
@@ -180,14 +179,20 @@ GDBObjEntity= object(GDBObjSubordinated)
                     procedure IterateCounter(PCounted:Pointer;var Counter:Integer;proc:TProcCounter);virtual;
                     class function GetDXFIOFeatures:TDXFEntIODataManager;static;
                     function GetNameInBlockTable:String;virtual;
-                    procedure addtoconnect2(pobj:pgdbobjEntity;var ConnectedArray:TZctnrVectorPGDBaseObjects);
+                    procedure addtoconnect2(pobj:pgdbobjEntity;var ConnectedArray:TZctnrVectorPGDBaseEntity);
                     function CheckState(AStates:TEntityStates):Boolean;
+                    function GetObjName:String;virtual;
               end;
 {Export-}
 var onlygetsnapcount:Integer;
     GDBObjEntityDXFFeatures:TDXFEntIODataManager;
 implementation
 uses usimplegenerics,uzeentityfactory{,UGDBSelectedObjArray};
+function GDBObjEntity.GetObjName:String;
+begin
+  result:='entity'
+end;
+
 function GDBObjEntity.CheckState(AStates:TEntityStates):Boolean;
 begin
   result:=(AStates*State)<>[];
@@ -197,7 +202,7 @@ begin
         result:=PGDBObjEntity(bp.ListPos.Owner)^.CheckState(AStates);
 end;
 
-procedure GDBObjEntity.addtoconnect2(pobj:pgdbobjEntity;var ConnectedArray:TZctnrVectorPGDBaseObjects);
+procedure GDBObjEntity.addtoconnect2(pobj:pgdbobjEntity;var ConnectedArray:TZctnrVectorPGDBaseEntity);
 begin
   ConnectedArray.PushBackIfNotPresent(pobj);
 end;
@@ -260,10 +265,6 @@ begin
 end;
 
 function GDBObjEntity.IsHaveGRIPS:Boolean;
-begin
-     result:=true;
-end;
-function GDBObjEntity.IsEntity:Boolean;
 begin
      result:=true;
 end;
@@ -893,11 +894,11 @@ end;
 function GDBObjEntity.isonmouse;
 begin
      if IsActualy then
-                          result:=onmouse(popa,{GDB.GetCurrentDWG.OGLwindow1.param.}mousefrustum,InSubEntry)
+                          result:=onmouse(popa,mousefrustum,InSubEntry)
                       else
                           result:=false;
 end;
-function GDBObjEntity.onpoint(var objects:TZctnrVectorPGDBaseObjects;const point:GDBVertex):Boolean;
+function GDBObjEntity.onpoint(var objects:TZctnrVectorPGDBaseEntity;const point:GDBVertex):Boolean;
 begin
      result:=false;
 end;

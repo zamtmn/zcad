@@ -41,7 +41,8 @@ uses
   uzelongprocesssupport,uzcLog,
   generics.Collections,
   uzccommand_treestat,uzccommand_line2,uzccmdfloatinsert,uzcregother,uzcfcommandline,
-  uzeparsercmdprompt,uzctnrvectorpgdbaseobjects,uzeSnap;
+  uzeparsercmdprompt,uzctnrvectorpgdbaseobjects,uzeSnap,uzCtnrVectorpBaseEntity,
+  uzeEntBase;
 type
 {Export+}
   TFindType=(
@@ -1734,7 +1735,7 @@ begin
     AddPolySegmentIfZnotMatch(firstpoint,lastpoint,cable);
   end;
 end;
-function RootByMultiTrace(firstpoint,lastpoint:GDBVertex;PTrace:PGDBObjNet;cable:PGDBObjCable;addfirstpoint:Boolean):TZctnrVectorPGDBaseObjects;
+function RootByMultiTrace(firstpoint,lastpoint:GDBVertex;PTrace:PGDBObjNet;cable:PGDBObjCable;addfirstpoint:Boolean):TZctnrVectorPGDBaseEntity;
 var //po:PGDBObjSubordinated;
     //plastw:pgdbvertex;
     tw1,tw2:gdbvertex;
@@ -2964,9 +2965,9 @@ var
     supernet,net,net2:PGDBObjNet;
     cable:PGDBObjCable;
     pvd,pvd2:pvardesk;
-    netarray,riserarray,linesarray:TZctnrVectorPGDBaseObjects;
-    processednets:TZctnrVectorPGDBaseObjects;
-    segments:TZctnrVectorPGDBaseObjects;
+    netarray,riserarray,linesarray:TZctnrVectorPGDBaseEntity;
+    processednets:TZctnrVectorPGDBaseEntity;
+    segments:TZctnrVectorPGDBaseEntity;
 
     ir_net,ir_net2,ir_riser,ir_riser2:itrec;
     nline,new_line:pgdbobjline;
@@ -3071,7 +3072,7 @@ begin
                  if (startdev<>nil)and(enddev<>nil) then
                  if netarray.Count=1 then
                  begin
-                  PGDBaseObject(net):=netarray.getDataMutable(0);
+                  PGDBObjBaseEntity(net):=netarray.getDataMutable(0);
                  if net=nil then
                                 //ZCMsgCallBackInterface.TextMessage('В строке '+inttostr(row)+' не найдена трасса '+FDoc.Cells[3,row],TMWOHistoryOut);
                                 ZCMsgCallBackInterface.TextMessage(format('In row %d trace "%s" not found',[row,FDoc.Cells[3,row]]),TMWOHistoryOut);

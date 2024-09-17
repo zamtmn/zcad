@@ -10,7 +10,7 @@ interface
 uses uzcenitiesvariablesextender,uzcvariablesutils,Varman,uzbstrproc,uzcentcable,
      uzeentdevice,uzeconsts,gzctnrVectorObjects,
      gzctnrVectorTypes,SysUtils,uzbtypes,varmandef,uzcdrawings,
-     uzcstrconsts,uzctnrvectorpgdbaseobjects;
+     uzcstrconsts,uzctnrvectorpgdbaseobjects,uzCtnrVectorpBaseEntity;
 resourcestring
      DefCableName='Created. Not named';
 type
@@ -19,10 +19,10 @@ type
     {REGISTEROBJECTTYPE TCableDesctiptor}
     TCableDesctiptor= object(GDBaseObject)
                      Name:String;
-                     Segments:TZctnrVectorPGDBaseObjects;   // сборщик всех кабелей с одинаковым именем (ШС..)
+                     Segments:TZctnrVectorPGDBaseEntity;   // сборщик всех кабелей с одинаковым именем (ШС..)
                      StartDevice,EndDevice:PGDBObjDevice;
                      StartSegment:PGDBObjCable;
-                     Devices:TZctnrVectorPGDBaseObjects;
+                     Devices:TZctnrVectorPGDBaseEntity;
                      length:Double;
                      constructor init;
                      destructor done;virtual;

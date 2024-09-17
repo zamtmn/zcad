@@ -25,7 +25,7 @@ uses uzeentityfactory,uzgldrawcontext,uzedrawingdef,uzecamera,UGDBVectorSnapArra
      uzestyleslayers,uzeentsubordinated,uzeentcurve,
      uzeentity,uzctnrVectorBytes,uzbtypes,uzeconsts,uzglviewareadata,
      uzegeometrytypes,uzegeometry,uzeffdxfsupport,sysutils,uzctnrvectorpgdbaseobjects,
-     uzMVReader;
+     uzMVReader,uzCtnrVectorpBaseEntity;
 type
 {Export+}
 PGDBObjPolyline=^GDBObjPolyline;
@@ -44,8 +44,8 @@ GDBObjPolyline= object(GDBObjCurve)
                  procedure DrawGeometry(lw:Integer;var DC:TDrawContext{infrustumactualy:TActulity;subrender:Integer});virtual;
                  function Clone(own:Pointer):PGDBObjEntity;virtual;
                  function GetObjTypeName:String;virtual;
-                 function onmouse(var popa:TZctnrVectorPGDBaseObjects;const MF:ClipArray;InSubEntry:Boolean):Boolean;virtual;
-                 function onpoint(var objects:TZctnrVectorPGDBaseObjects;const point:GDBVertex):Boolean;virtual;
+                 function onmouse(var popa:TZctnrVectorPGDBaseEntity;const MF:ClipArray;InSubEntry:Boolean):Boolean;virtual;
+                 function onpoint(var objects:TZctnrVectorPGDBaseEntity;const point:GDBVertex):Boolean;virtual;
                  procedure AddOnTrackAxis(var posr:os_record;const processaxis:taddotrac);virtual;
                  function GetLength:Double;virtual;
 
@@ -84,7 +84,7 @@ begin
                                   end;
    result:=VertexArrayInWCS.onmouse(mf,closed);
 end;
-function GDBObjPolyline.onpoint(var objects:TZctnrVectorPGDBaseObjects;const point:GDBVertex):Boolean;
+function GDBObjPolyline.onpoint(var objects:TZctnrVectorPGDBaseEntity;const point:GDBVertex):Boolean;
 begin
      if VertexArrayInWCS.onpoint(point,closed) then
                                                 begin

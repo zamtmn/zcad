@@ -194,7 +194,7 @@ begin
     uzegeometry.MatrixInvert(im);
     pcd^.UndoStack.PushStartMarker(CommandName);
     dc:=pcd^.CreateDrawingRC;
-    with PushCreateTGMultiObjectChangeCommand(pcd^.UndoStack,Transform,im,Count) do begin
+    with PushCreateTGMultiObjectChangeCommand(@pcd^.UndoStack,Transform,im,Count) do begin
       pobj:=pcd^.GetCurrentROOT.ObjArray.beginiterate(ir);
       if pobj<>nil then
       repeat

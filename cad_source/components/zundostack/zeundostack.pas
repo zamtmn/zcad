@@ -30,7 +30,7 @@ TUndoRedoResult=(URROk,
                  URRNoCommandsToRedo);
 TOnUndoRedoProc=procedure of object;
 PTZctnrVectorUndoCommands=^TZctnrVectorUndoCommands;
-TZctnrVectorUndoCommands=class(specialize GZVectorClass{-}<{PTElementaryCommand,}TUCmdBase>{//})
+TZctnrVectorUndoCommands=object(specialize GZVectorClass<TUCmdBase>)
                                  public
                                  CurrentCommand:TArrayIndex;
                                  currentcommandstartmarker:TArrayIndex;
@@ -42,7 +42,7 @@ TZctnrVectorUndoCommands=class(specialize GZVectorClass{-}<{PTElementaryCommand,
                                  function undo(out msg:string;prevheap:TArrayIndex;overlay:Boolean):TUndoRedoResult;
                                  procedure KillLastCommand;
                                  function redo(out msg:string):TUndoRedoResult;
-                                 constructor Create;
+                                 constructor init;
                                  procedure doOnUndoRedo;
                                  function PushBackData(const data:TUCmdBase):TArrayIndex;virtual;
                                  Procedure ClearFrom(cc:TArrayIndex);
@@ -216,9 +216,9 @@ begin
      doOnUndoRedo;
 end;
 
-constructor TZctnrVectorUndoCommands.Create;
+constructor TZctnrVectorUndoCommands.init;
 begin
-     inherited Create(1);
+     inherited init(1);
      CurrentCommand:=0;
      onUndoRedo:=nil;;
 end;

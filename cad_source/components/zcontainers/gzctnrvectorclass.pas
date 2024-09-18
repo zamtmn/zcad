@@ -19,12 +19,12 @@
 unit gzctnrVectorClass;
 
 interface
-uses gzctnrVectorTypes,gzctnrVectorc,gvector;
+uses gzctnrVectorTypes,gzctnrVector,gvector;
 type
 {Export+}
 {----REGISTEROBJECTTYPE GZVectorClass}
-GZVectorClass{-}<T:class>{//}=class
-                               (GZVectorc{-}<T>{//})
+GZVectorClass{-}<T:class>{//}=object
+                               (GZVector{-}<T>{//})
                                procedure cleareraseobjfrom2(n:Integer);
                                  end;
 {Export-}

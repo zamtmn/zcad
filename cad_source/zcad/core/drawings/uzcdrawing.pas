@@ -276,7 +276,7 @@ begin
   Pointer(FileName):=nil;
   FileName:=rsHardUnnamed;
   Changed:=False;
-  UndoStack:=TZctnrVectorUndoCommands.Create;
+  UndoStack.init;//:=TZctnrVectorUndoCommands.Create;
   UndoStack.onUndoRedo:=self.onUndoRedo;
   zebaseundocommands.onUndoRedoDataOwner:=self.onUndoRedoDataOwner;
 

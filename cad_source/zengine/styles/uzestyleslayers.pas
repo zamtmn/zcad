@@ -59,9 +59,6 @@ GDBLayerArray= object(GDBNamedObjectsArray{-}<PGDBLayerProp,GDBLayerProp>{//})
 {EXPORT-}
 TLayerProp=class(TNamedObject)
 end;
-TLayerPropClass=class of TLayerProp;
-TLayers=GZVectorClass<TLayerProp>;
-TLayersClass=class of TLayers;
 function GetLTName(LT:PGDBLayerProp):String;
 var
    DefaultErrorLayer:GDBLayerProp;

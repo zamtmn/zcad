@@ -219,24 +219,36 @@ var
   plane_optimal: TSeparator;
 
   testSeparatorCount:integer;
+  isVeryOptimal:boolean;
+  TenPercentOfTotalCount:integer;
 
   function IsOptimalTestNode: Boolean;
+  var
+    d:integer;
   begin
-    if nul_count < entcount then
+    d:=abs(plus_count - minus_count);
+    if (nul_count=0)and(d<TenPercentOfTotalCount)then begin
+      entcount:=nul_count;
+      dentcount:=d;
+      Result:=True;
+      isVeryOptimal:=true;
+    end
+    else if nul_count < entcount then
     begin
       entcount:=nul_count;
-      dentcount:=abs(plus_count - minus_count);
+      dentcount:=d;
       Result:=True;
     end
     else if nul_count = entcount then
     begin
-      if abs(plus_count - minus_count) < dentcount then
+      if d < dentcount then
       begin
         entcount:=nul_count;
-        dentcount:=abs(plus_count-minus_count);
+        dentcount:=d;
         Result:=True;
       end;
     end else Result:=False;
+
   end;
 
 begin
@@ -246,7 +258,7 @@ begin
                                                                     exit;
                                                                   end;
   MoveSub(self);
-
+  TenPercentOfTotalCount:=nul.count div 10;
   PFirstStageData:=nil;
   TEntsManipulator.FirstStageCalcSeparatirs(BoundingBox,TEntity(nil^),PFirstStageData,TSMStart);
   if PFirstStageData<>nil then
@@ -270,7 +282,7 @@ begin
   // TODO: Если кол-во элементов в массиве = 1 (а это довольно часто!), то смысла в переборе нету
   // не так. сейчас перебора как такового нет, выбирается максимальный размер BB и по этой оси
   // далается сечение. но по идее в некоторых вариантах придется выбирать
-
+  isVeryOptimal:=false;
   testSeparatorCount:=TEntsManipulator.GetTestNodesCount-1;
   for i:=0 to TEntsManipulator.GetTestNodesCount-1 do
   begin
@@ -283,25 +295,35 @@ begin
       minus_count:=0;
       nul_count:=0;
       repeat
-         pobj:=TEntsManipulator.IterateResult2PEntity(pobj);
-         ep:=TEntsManipulator.GetBBPosition(TestNode.plane,TEntsManipulator.GetEntityBoundingBox(pobj^));
-         case ep of
-           TEP_Plus:  inc(plus_count,TEntsManipulator.EntitySizeOrOne(pobj^));
-           TEP_Minus: inc(minus_count,TEntsManipulator.EntitySizeOrOne(pobj^));
-           TEP_nul:   inc(nul_count,TEntsManipulator.EntitySizeOrOne(pobj^));
-         end;
-         pobj:=nul.iterate(ir);
+        pobj:=TEntsManipulator.IterateResult2PEntity(pobj);
+        ep:=TEntsManipulator.GetBBPosition(TestNode.plane,TEntsManipulator.GetEntityBoundingBox(pobj^));
+        case ep of
+          TEP_Plus:  inc(plus_count,TEntsManipulator.EntitySizeOrOne(pobj^));
+          TEP_Minus: inc(minus_count,TEntsManipulator.EntitySizeOrOne(pobj^));
+          TEP_nul:   inc(nul_count,TEntsManipulator.EntitySizeOrOne(pobj^));
+        end;
+        pobj:=nul.iterate(ir);
       until pobj=nil;
 
       //вариант единственный, его и выбираем
-      if (IsOptimalTestNode)or(testSeparatorCount=i) then
+      if testSeparatorCount=0 then begin
+        plus_count_optimal:=plus_count;
+        minus_count_optimal:=minus_count;
+        nul_count_optimal:=nul_count;
+        plane_optimal:=TestNode.plane;
+        Break;
+      end;
+
+      //вариант не единственный, выбираем лучший перебирая все,
+      //или берем сразу тот который показался лучшим isVeryOptimal
+      if IsOptimalTestNode then
       begin
         plus_count_optimal:=plus_count;
         minus_count_optimal:=minus_count;
         nul_count_optimal:=nul_count;
-
         plane_optimal:=TestNode.plane;
-        break;
+        if isVeryOptimal then
+          Break;
       end;
     end;
   end;

@@ -25,13 +25,11 @@ uses uzepalette,uzgldrawcontext,uzedrawingdef,uzecamera,
      uzestyleslayers,sysutils,UGDBSelectedObjArray,UGDBVisibleOpenArray,
      uzeentity,UGDBVisibleTreeArray,uzeentitiestree,uzbtypes,uzeentwithlocalcs,
      gzctnrVectorTypes,uzegeometrytypes,uzeconsts,uzegeometry,
-     uzctnrvectorpgdbaseobjects,uzglviewareadata,uzeSnap,uzCtnrVectorpBaseEntity;
+     uzglviewareadata,uzeSnap,uzCtnrVectorpBaseEntity;
 type
-{EXPORT+}
 PGDBObjComplex=^GDBObjComplex;
-{REGISTEROBJECTTYPE GDBObjComplex}
 GDBObjComplex= object(GDBObjWithLocalCS)
-                    ConstObjArray:{GDBObjEntityOpenArray;}GDBObjEntityTreeArray;(*oi_readonly*)(*hidden_in_objinsp*)
+                    ConstObjArray:GDBObjEntityTreeArray;
                     procedure DrawGeometry(lw:Integer;var DC:TDrawContext{infrustumactualy:TActulity;subrender:Integer});virtual;
                     procedure DrawOnlyGeometry(lw:Integer;var DC:TDrawContext{infrustumactualy:TActulity;subrender:Integer});virtual;
                     procedure getoutbound(var DC:TDrawContext);virtual;
@@ -56,7 +54,6 @@ GDBObjComplex= object(GDBObjWithLocalCS)
                     procedure BuildGeometry(var drawing:TDrawingDef);virtual;
                     procedure FormatAfterDXFLoad(var drawing:TDrawingDef;var DC:TDrawContext);virtual;
               end;
-{EXPORT-}
 implementation
 //uses
 //    log{,varmandef};

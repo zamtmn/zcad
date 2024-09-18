@@ -27,9 +27,7 @@ uses uzemathutils,uzgldrawcontext,uzeentabstracttext,uzestylestexts,
      uzedimensionaltypes,uzeentitiesmanager,UGDBOpenArrayOfPV,uzeentblockinsert,
      uzglviewareadata,uzeSnap,math;
 type
-{EXPORT+}
 PTDXFDimData2D=^TDXFDimData2D;
-{REGISTERRECORDTYPE TDXFDimData2D}
 TDXFDimData2D=record
   P10:GDBVertex2D;
   P11:GDBVertex2D;
@@ -40,7 +38,6 @@ TDXFDimData2D=record
   P16:GDBVertex2D;
 end;
 PTDXFDimData=^TDXFDimData;
-{REGISTERRECORDTYPE TDXFDimData}
 TDXFDimData=record
   P10InWCS:GDBVertex;
   P11InOCS:GDBVertex;
@@ -54,10 +51,9 @@ TDXFDimData=record
   MidPoint:GDBVertex;
 end;
 PGDBObjDimension=^GDBObjDimension;
-{REGISTEROBJECTTYPE GDBObjDimension}
 GDBObjDimension= object(GDBObjComplex)
                       DimData:TDXFDimData;
-                      PDimStyle:{-}PGDBDimStyle{/PGDBDimStyleObjInsp/};
+                      PDimStyle:PGDBDimStyle;
                       PProjPoint:PTDXFDimData2D;
                       vectorD,vectorN,vectorT:GDBVertex;
                       TextTParam,TextAngle,DimAngle:Double;
@@ -100,7 +96,6 @@ GDBObjDimension= object(GDBObjComplex)
                 destructor done;virtual;
                 //function GetObjType:TObjID;virtual;
                 end;
-{EXPORT-}
 implementation
 function GDBObjDimension.GetDIMSCALE:double;
 begin

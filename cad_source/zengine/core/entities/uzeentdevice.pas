@@ -26,16 +26,14 @@ uses uzestyleslayers,uzepalette,uzeobjectextender,uabstractunit,uzeentityfactory
      uzeconsts,uzeentity,uzeentsubordinated,varmandef,
      uzegeometrytypes,uzeentblockinsert,uzbtypes,UGDBVisibleOpenArray,UGDBObjBlockdefArray,
      gzctnrVectorTypes,uzeblockdef,uzeffdxfsupport,UGDBSelectedObjArray,uzeentitiestree,
-     LazLogger,uzestrconsts,uzctnrvectorpgdbaseobjects,uzglviewareadata,uzeSnap,
+     LazLogger,uzestrconsts,uzglviewareadata,uzeSnap,
      uzCtnrVectorpBaseEntity;
 
 type
-{EXPORT+}
 PGDBObjDevice=^GDBObjDevice;
-{REGISTEROBJECTTYPE GDBObjDevice}
 GDBObjDevice= object(GDBObjBlockInsert)
-                   VarObjArray:GDBObjEntityOpenArray;(*oi_readonly*)(*hidden_in_objinsp*)
-                   lstonmouse:PGDBObjEntity;(*oi_readonly*)(*hidden_in_objinsp*)
+                   VarObjArray:GDBObjEntityOpenArray;
+                   lstonmouse:PGDBObjEntity;
                    function Clone(own:Pointer):PGDBObjEntity;virtual;
                    constructor initnul;
                    constructor init(own:Pointer;layeraddres:PGDBLayerProp;LW:SmallInt);
@@ -84,7 +82,6 @@ GDBObjDevice= object(GDBObjBlockInsert)
                    procedure GoodRemoveMiFromArray(const obj:PGDBObjSubordinated;const drawing:TDrawingDef);virtual;
 
              end;
-{EXPORT-}
 var
     GDBObjDeviceDXFFeatures:TDXFEntIODataManager;
 implementation

@@ -41,17 +41,14 @@ TIntercept2dpropWithLICCompate=class
 end;
 TIntercept2dpropWithLICVector=TVector<TIntercept2dpropWithLIC>;
 TVSorter=TOrderingArrayUtils<TIntercept2dpropWithLICVector,TIntercept2dpropWithLIC,TIntercept2dpropWithLICCompate>;
-{Export+}
 THatchIslandDetection=(HID_Normal,Hid_Ignore,HID_Outer);
 PGDBObjHatch=^GDBObjHatch;
-{REGISTEROBJECTTYPE GDBObjHatch}
 GDBObjHatch= object(GDBObjWithLocalCS)
                  Path:TBoundaryPath;
                  PPattern:PTHatchPattern;
-                 Outbound:OutBound4V;(*oi_readonly*)(*hidden_in_objinsp*)
-                 //Vertex2D_in_OCS_Array:GDBpolyline2DArray;(*oi_readonly*)(*hidden_in_objinsp*)
-                 Vertex3D_in_WCS_Array:GDBPoint3DArray;(*oi_readonly*)(*hidden_in_objinsp*)
-                 PProjPoint:PGDBpolyline2DArray;(*hidden_in_objinsp*)
+                 Outbound:OutBound4V;
+                 Vertex3D_in_WCS_Array:GDBPoint3DArray;
+                 PProjPoint:PGDBpolyline2DArray;
                  PatternName:string;
                  IslandDetection:THatchIslandDetection;
                  Angle,Scale:Double;
@@ -90,7 +87,6 @@ GDBObjHatch= object(GDBObjWithLocalCS)
                  procedure transform(const t_matrix:DMatrix4D);virtual;
                  procedure TransformAt(p:PGDBObjEntity;t_matrix:PDMatrix4D);virtual;
            end;
-{Export-}
 const
   HID2DXF:array[THatchIslandDetection] of integer=(0,2,1);
 implementation

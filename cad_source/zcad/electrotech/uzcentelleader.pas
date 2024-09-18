@@ -16,11 +16,9 @@ uses uzcenitiesvariablesextender,uzeentityfactory,Varman,uzgldrawcontext,
      gzctnrVectorTypes,uzeentity,varmandef,uzbtypes,uzeconsts,uzeffdxfsupport,
      uzegeometrytypes,uzeentsubordinated,uzestylestables,uzclog,
      UGDBOpenArrayOfPV,uzeentcurve,uzeobjectextender,uzetextpreprocessor,
-     uzctnrvectorpgdbaseobjects,uzglviewareadata,uzCtnrVectorpBaseEntity;
+     uzglviewareadata,uzCtnrVectorpBaseEntity;
 type
-{EXPORT+}
 PGDBObjElLeader=^GDBObjElLeader;
-{REGISTEROBJECTTYPE GDBObjElLeader}
 GDBObjElLeader= object(GDBObjComplex)
             MainLine:GDBObjLine;
             MarkLine:GDBObjLine;
@@ -68,7 +66,6 @@ GDBObjElLeader= object(GDBObjComplex)
             class function GetDXFIOFeatures:TDXFEntIODataManager;static;
             procedure SaveToDXFObjXData(var outhandle:{Integer}TZctnrVectorBytes;var IODXFContext:TIODXFContext);virtual;
             end;
-{EXPORT-}
 implementation
 var
   GDBObjElLeaderDXFFeatures:TDXFEntIODataManager;

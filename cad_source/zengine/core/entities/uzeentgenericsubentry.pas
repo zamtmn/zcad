@@ -25,18 +25,13 @@ uses uzepalette,uzgldrawcontext,uzedrawingdef,uzecamera,uzestyleslayers,
      UGDBVisibleTreeArray,UGDBOpenArrayOfPV,
      uzeentwithmatrix,uzeentsubordinated,uzbtypes,uzegeometry,uzeentity,
      gzctnrVectorTypes,uzegeometrytypes,uzeconsts,uzeentitiestree,uzeffdxfsupport,
-     uzctnrvectorpgdbaseobjects,uzCtnrVectorpBaseEntity;
+     uzCtnrVectorpBaseEntity;
 type
-//GDBObjGenericSubEntry=object(GDBObjWithLocalCS)
-//GDBObjGenericSubEntry=object(GDBObj3d)
-{Export+}
 PTDrawingPreCalcData=^TDrawingPreCalcData;
-{REGISTERRECORDTYPE TDrawingPreCalcData}
 TDrawingPreCalcData=record
                           InverseObjMatrix:DMatrix4D;
                     end;
 PGDBObjGenericSubEntry=^GDBObjGenericSubEntry;
-{REGISTEROBJECTTYPE GDBObjGenericSubEntry}
 GDBObjGenericSubEntry= object(GDBObjWithMatrix)
                             ObjArray:GDBObjEntityTreeArray;
                             ObjCasheArray:GDBObjOpenArrayOfPV;
@@ -105,7 +100,6 @@ GDBObjGenericSubEntry= object(GDBObjWithMatrix)
                               function GetMainOwner:PGDBObjSubordinated;virtual;
 
                       end;
-{Export-}
 implementation
 function GDBObjGenericSubEntry.GetMainOwner:PGDBObjSubordinated;
 begin

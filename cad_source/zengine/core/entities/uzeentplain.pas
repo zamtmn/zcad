@@ -24,14 +24,11 @@ interface
 uses
  uzegeometrytypes,uzgldrawcontext,uzegeometry,uzeentwithlocalcs;
 type
-{EXPORT+}
-{REGISTEROBJECTTYPE GDBObjPlain}
-GDBObjPlain= object(GDBObjWithLocalCS)
-                  Outbound:OutBound4V;(*oi_readonly*)(*hidden_in_objinsp*)
 
-                  procedure DrawGeometry(lw:Integer;var DC:TDrawContext{infrustumactualy:TActulity;subrender:Integer});virtual;
-            end;
-{EXPORT-}
+  GDBObjPlain=object(GDBObjWithLocalCS)
+    Outbound:OutBound4V;
+    procedure DrawGeometry(lw:Integer;var DC:TDrawContext{infrustumactualy:TActulity;subrender:Integer});virtual;
+  end;
 implementation
 //uses
 //    log;

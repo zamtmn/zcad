@@ -26,10 +26,8 @@ uses uzeentityfactory,uzeentwithlocalcs,uzeentdimension,uzestylesdim,uzestylesla
      uzeentdimradial,uzeentdimdiametric,uzeentdimrotated,uzeentdimaligned,
      uzMVReader;
 type
-{EXPORT+}
 TDimType=(DTRotated,DTAligned,DTAngular,DTDiameter,DTRadius,DTAngular3P,DTOrdinate);
 PGDBObjGenericDimension=^GDBObjGenericDimension;
-{REGISTEROBJECTTYPE GDBObjGenericDimension}
 GDBObjGenericDimension= object(GDBObjWithLocalCS)
                       DimData:TDXFDimData;
                       PDimStyle:PGDBDimStyle;
@@ -41,7 +39,6 @@ GDBObjGenericDimension= object(GDBObjWithLocalCS)
                       function FromDXFPostProcessBeforeAdd(ptu:PExtensionData;const drawing:TDrawingDef):PGDBObjSubordinated;virtual;
                       function GetObjType:TObjID;virtual;
                    end;
-{EXPORT-}
 implementation
 var
   WorkingFormatSettings:TFormatSettings;

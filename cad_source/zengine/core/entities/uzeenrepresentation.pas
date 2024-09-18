@@ -25,9 +25,7 @@ uses uzgldrawcontext,uzgldrawerabstract,uzglvectorobject,
      uzegeomentitiestree,uzbtypes,
      gzctnrVectorTypes,uzgeomline3d,uzgeomproxy;
 type
-{Export+}
 PTZEntityRepresentation=^TZEntityRepresentation;
-{REGISTEROBJECTTYPE TZEntityRepresentation}
 TZEntityRepresentation= object(GDBaseObject)
                        {-}//private{//}
                        Graphix:ZGLGraphix;
@@ -53,7 +51,6 @@ TZEntityRepresentation= object(GDBaseObject)
                        procedure StartSurface;
                        procedure EndSurface;
                        end;
-{Export-}
 implementation
 function TZEntityRepresentation.GetGraphix:PZGLGraphix;
 begin

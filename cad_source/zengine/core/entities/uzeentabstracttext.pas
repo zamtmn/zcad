@@ -20,29 +20,15 @@ unit uzeentabstracttext;
 {$INCLUDE zengineconfig.inc}
 
 interface
-uses {эти нужно убрать}{uzglviewareageneral,}UGDBSelectedObjArray,
+uses UGDBSelectedObjArray,
      uzgldrawcontext,uzeentity,uzecamera,
      uzbstrproc,sysutils,uzeentplainwithox,
-     UGDBOutbound2DIArray,uzegeometrytypes,uzbtypes,uzeconsts,uzegeometry,math,
-     uzctnrvectorpgdbaseobjects,uzglviewareadata,uzeSnap,uzedrawingdef,
+     UGDBOutbound2DIArray,uzegeometrytypes,uzbtypes,uzegeometry,math,
+     uzglviewareadata,uzeSnap,uzedrawingdef,
      uzCtnrVectorpBaseEntity;
 type
-//jstm(*'TopCenter'*)=2,
-{EXPORT+}
-TTextJustify=(jstl(*'TopLeft'*),
-              jstc(*'TopCenter'*),
-              jstr(*'TopRight'*),
-              jsml(*'MiddleLeft'*),
-              jsmc(*'MiddleCenter'*), //СерединаЦентр
-              jsmr(*'MiddleRight'*),
-              jsbl(*'BottomLeft'*),
-              jsbc(*'BottomCenter'*),
-              jsbr(*'BottomRight'*),
-              jsbtl(*'Left'*),
-              jsbtc(*'Center'*),
-              jsbtr(*'Right'*));
+
 PGDBTextProp=^GDBTextProp;
-{REGISTERRECORDTYPE GDBTextProp}
 GDBTextProp=record
                   size:Double;
                   oblique:Double;
@@ -53,20 +39,17 @@ GDBTextProp=record
                   backward:Boolean;
             end;
 PGDBObjAbstractText=^GDBObjAbstractText;
-{REGISTEROBJECTTYPE GDBObjAbstractText}
 GDBObjAbstractText= object(GDBObjPlainWithOX)
                          textprop:GDBTextProp;
-                         P_drawInOCS:GDBvertex;(*oi_readonly*)(*hidden_in_objinsp*)
-                         DrawMatrix:DMatrix4D;(*oi_readonly*)(*hidden_in_objinsp*)
-                         //Vertex3D_in_WCS_Array:GDBPolyPoint3DArray;(*oi_readonly*)(*hidden_in_objinsp*)
+                         P_drawInOCS:GDBvertex;
+                         DrawMatrix:DMatrix4D;
                          procedure CalcObjMatrix(pdrawing:PTDrawingDef=nil);virtual;
-                         procedure DrawGeometry(lw:Integer;var DC:TDrawContext{infrustumactualy:TActulity;subrender:Integer});virtual;
+                         procedure DrawGeometry(lw:Integer;var DC:TDrawContext);virtual;
                          procedure SimpleDrawGeometry(var DC:TDrawContext);virtual;
                          procedure RenderFeedback(pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc;var DC:TDrawContext);virtual;
                          function CalcInFrustum(const frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:Integer; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double):Boolean;virtual;
                          function CalcTrueInFrustum(const frustum:ClipArray;visibleactualy:TActulity):TInBoundingVolume;virtual;
                          function onmouse(var popa:TZctnrVectorPGDBaseEntity;const MF:ClipArray;InSubEntry:Boolean):Boolean;virtual;
-                         //function InRect:TInRect;virtual;
                          procedure addcontrolpoints(tdesc:Pointer);virtual;
                          procedure remaponecontrolpoint(pdesc:pcontrolpointdesc);virtual;
                          procedure ReCalcFromObjMatrix;virtual;
@@ -75,12 +58,11 @@ GDBObjAbstractText= object(GDBObjPlainWithOX)
                          procedure setrot(r:Double);
                          procedure transform(const t_matrix:DMatrix4D);virtual;
                    end;
-{EXPORT-}
 var
    SysVarRDPanObjectDegradation:Boolean=false;
+
 implementation
-//uses
-//   log;
+
 procedure GDBObjAbstractText.transform;
 var tv{,tv2}:GDBVertex;
    m:DMatrix4D;

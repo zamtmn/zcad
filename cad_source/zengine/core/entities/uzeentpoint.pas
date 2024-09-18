@@ -25,14 +25,12 @@ uses uzeentityfactory,uzgldrawcontext,uzeffdxfsupport,uzedrawingdef,uzecamera,
      uzestyleslayers,UGDBSelectedObjArray,
      uzeentsubordinated,uzeent3d,uzeentity,sysutils,uzctnrVectorBytes,
      uzegeometrytypes,uzbtypes,uzeconsts,uzglviewareadata,uzegeometry,
-     uzctnrvectorpgdbaseobjects,uzeSnap,uzMVReader,uzCtnrVectorpBaseEntity;
+     uzeSnap,uzMVReader,uzCtnrVectorpBaseEntity;
 type
-{Export+}
 PGDBObjPoint=^GDBObjPoint;
-{REGISTEROBJECTTYPE GDBObjPoint}
 GDBObjPoint= object(GDBObj3d)
-                 P_insertInOCS:GDBvertex;(*'Coordinates OCS'*)
-                 P_insertInWCS:GDBvertex;(*'Coordinates WCS'*)(*hidden_in_objinsp*)
+                 P_insertInOCS:GDBvertex;
+                 P_insertInWCS:GDBvertex;
                  ProjPoint:GDBvertex;
                  constructor init(own:Pointer;layeraddres:PGDBLayerProp;LW:SmallInt;p:GDBvertex);
                  constructor initnul(owner:PGDBObjGenericWithSubordinated);
@@ -59,7 +57,6 @@ GDBObjPoint= object(GDBObj3d)
                  function CreateInstance:PGDBObjPoint;static;
                  function GetObjType:TObjID;virtual;
            end;
-{Export-}
 
 implementation
 //uses

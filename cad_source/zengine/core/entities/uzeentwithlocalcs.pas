@@ -26,24 +26,21 @@ uses uzepalette,uzgldrawcontext,uzedrawingdef,uzecamera,uzeentity,
      uzegeometry,uzeffdxfsupport,sysutils,uzeentsubordinated,uzestyleslayers,
      uzMVReader;
 type
-//pprojoutbound:{-}PGDBOOutbound2DIArray{/Pointer/};
-{EXPORT+}
+
 PGDBObj2dprop=^GDBObj2dprop;
-{REGISTERRECORDTYPE GDBObj2dprop}
 GDBObj2dprop=record
                    Basis:GDBBasis;(*'Basis'*)
                    P_insert:GDBCoordinates3D;(*'Insertion point OCS'*)
              end;
 PGDBObjWithLocalCS=^GDBObjWithLocalCS;
-{REGISTEROBJECTTYPE GDBObjWithLocalCS}
 GDBObjWithLocalCS= object(GDBObjWithMatrix)
-               Local:GDBObj2dprop;(*'Object orientation'*)
+               Local:GDBObj2dprop;
 
                //**получить на чтение координаты в мировой системе координат
-               P_insert_in_WCS:GDBvertex;(*'Insertion point WCS'*)(*oi_readonly*)(*hidden_in_objinsp*)
-               ProjP_insert:GDBvertex;(*'Insertion point DCS'*)(*oi_readonly*)(*hidden_in_objinsp*)
-               PProjOutBound:PGDBOOutbound2DIArray;(*'Bounding box DCS'*)(*oi_readonly*)(*hidden_in_objinsp*)
-               lod:Byte;(*'Level of detail'*)(*oi_readonly*)(*hidden_in_objinsp*)
+               P_insert_in_WCS:GDBvertex;
+               ProjP_insert:GDBvertex;
+               PProjOutBound:PGDBOOutbound2DIArray;
+               lod:Byte;
                constructor init(own:Pointer;layeraddres:PGDBLayerProp;LW:SmallInt);
                constructor initnul(owner:PGDBObjGenericWithSubordinated);
                destructor done;virtual;
@@ -65,9 +62,9 @@ GDBObjWithLocalCS= object(GDBObjWithMatrix)
                function IsHaveLCS:Boolean;virtual;
                function CanSimplyDrawInOCS(const DC:TDrawContext;const ParamSize,TargetSize:Double):Boolean;inline;
          end;
-{EXPORT-}
+
 implementation
-//uses log;
+
 function GDBObjWithLocalCS.CanSimplyDrawInOCS(const DC:TDrawContext;const ParamSize,TargetSize:Double):Boolean;
 var
    templod:Double;

@@ -14,15 +14,13 @@ uses uzcinterface,uzeobjectextender,uzeentityfactory,Varman,uzgldrawcontext,uzes
      varmandef,uzegeometry,uzbtypes,UGDBGraf,uzeentsubordinated,uunitmanager,
      gzctnrVectorTypes,uzegeometrytypes,sysutils,
      uzcenitiesvariablesextender,uzeentline,uzeffdxfsupport,math,uzclog,
-     uzctnrvectorpgdbaseobjects,uzCtnrVectorpBaseEntity;
+     uzCtnrVectorpBaseEntity;
 resourcestring
   rscannotbeconnected='Can not be connected';
 const
      UNNAMEDNET='NET';
 type
-{Export+}
 PGDBObjNet=^GDBObjNet;
-{REGISTEROBJECTTYPE GDBObjNet}
 GDBObjNet= object(GDBObjConnected)
                  graf:GDBGraf;
                  riserarray:TZctnrVectorPGDBaseEntity;
@@ -56,7 +54,6 @@ GDBObjNet= object(GDBObjConnected)
                  class function GetDXFIOFeatures:TDXFEntIODataManager;static;
                  function GetObjType:TObjID;virtual;
            end;
-{Export-}
 var
     GDBObjNetDXFFeatures:TDXFEntIODataManager;
 implementation

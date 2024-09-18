@@ -38,9 +38,7 @@ X (13,23,33)     X (14,24,34)
 
 *)
 type
-{EXPORT+}
 PGDBObjAlignedDimension=^GDBObjAlignedDimension;
-{REGISTEROBJECTTYPE GDBObjAlignedDimension}
 GDBObjAlignedDimension= object(GDBObjDimension)
                       constructor init(own:Pointer;layeraddres:PGDBLayerProp;LW:SmallInt);
                       constructor initnul(owner:PGDBObjGenericWithSubordinated);
@@ -73,7 +71,7 @@ GDBObjAlignedDimension= object(GDBObjDimension)
                        function GetDimStr(var drawing:TDrawingDef):TDXFEntsInternalStringType;virtual;
                        function GetObjType:TObjID;virtual;
                    end;
-{EXPORT-}
+
 function CorrectPointLine(const q:GDBvertex;p1:GDBvertex; const p2:GDBvertex;out d:Double):GDBVertex;
 function GetTFromDirNormalizedPoint(const q:GDBvertex; const p1,dirNormalized:GDBvertex):double;
 implementation

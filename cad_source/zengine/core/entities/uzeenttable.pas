@@ -24,25 +24,18 @@ uses uzgldrawcontext,uzeentabstracttext,uzetrash,uzedrawingdef,uzbstrproc,uzctnr
      uzestylestables,uzeentline,uzeentcomplex,sysutils,gzctnrVectorPObjects,
      uzctnrvectorstrings,uzeentmtext,uzeentity,uzbtypes,uzeconsts,uzegeometry,
      gzctnrVectorTypes,uzegeometrytypes,uzeentblockinsert,uzeffdxfsupport;
-//jcm(*'TopMiddle'*),
-type
-{TTableCellJustify=(jcl(*'TopLeft'*),
-              jcc(*'TopCenter'*),
-              jcr(*'TopRight'*));}
 
-{EXPORT+}
+type
+
 PTGDBTableItemFormat=^TGDBTableItemFormat;
-{REGISTERRECORDTYPE TGDBTableItemFormat}
 TGDBTableItemFormat=record
                  Width,TextWidth:Double;
                  CF:TTableCellJustify;
                 end;
 PGDBTableArray=^GDBTableArray;
-{REGISTEROBJECTTYPE GDBTableArray}
-GDBTableArray= object(GZVectorPObects{-}<PTZctnrVectorStrings,TZctnrVectorStrings>{//})
+GDBTableArray= object(GZVectorPObects<PTZctnrVectorStrings,TZctnrVectorStrings>)
               end;
 PGDBObjTable=^GDBObjTable;
-{REGISTEROBJECTTYPE GDBObjTable}
 GDBObjTable= object(GDBObjComplex)
             PTableStyle:PTGDBTableStyle;
             tbl:GDBTableArray;
@@ -56,7 +49,6 @@ GDBObjTable= object(GDBObjComplex)
             procedure ReCalcFromObjMatrix;virtual;
             function GetObjType:TObjID;virtual;
             end;
-{EXPORT-}
 implementation
 procedure GDBObjTable.ReCalcFromObjMatrix;
 //var

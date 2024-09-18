@@ -25,12 +25,10 @@ uses strutils,uzgldrawcontext,uzeExtdrAbstractEntityExtender,uzedrawingdef,
      uzbstrproc{$IFNDEF DELPHI},LazUTF8{$ENDIF},uzctnrVectorBytes,uzegeometrytypes,uzbtypes,
      sysutils,uzestyleslayers,uzeffdxfsupport,gzctnrVectorTypes,uzecamera,uzeentbase;
 type
-{EXPORT+}
 
 PGDBObjExtendable=^GDBObjExtendable;
-{REGISTEROBJECTTYPE GDBObjExtendable}
 GDBObjExtendable=object(GDBObjBaseEntity)
-                                 EntExtensions:{-}TEntityExtensions{/Pointer/};
+                                 EntExtensions:TEntityExtensions;
                                  procedure AddExtension(ExtObj:TAbstractEntityExtender);
                                  procedure RemoveExtension(ExtType:TMetaEntityExtender);
                                  generic function GetExtension<GEntityExtenderType>:GEntityExtenderType;overload;
@@ -42,16 +40,13 @@ GDBObjExtendable=object(GDBObjBaseEntity)
 end;
 
 PGDBObjDrawable=^GDBObjDrawable;
-{REGISTEROBJECTTYPE GDBObjDrawable}
 GDBObjDrawable=object(GDBObjExtendable)
   procedure RenderFeedback(pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc;var DC:TDrawContext);virtual;abstract;
 end;
 
 PGDBObjSubordinated=^GDBObjSubordinated;
 PGDBObjGenericWithSubordinated=^GDBObjGenericWithSubordinated;
-{REGISTEROBJECTTYPE GDBObjGenericWithSubordinated}
 GDBObjGenericWithSubordinated= object(GDBObjDrawable)
-                                    {OU:TFaceTypedData;(*'Variables'*)}
                                     procedure GoodAddObjectToObjArray(const obj:PGDBObjSubordinated);virtual;abstract;
                                     procedure GoodRemoveMiFromArray(const obj:PGDBObjSubordinated;const drawing:TDrawingDef);virtual;abstract;
                                     procedure ImEdited(pobj:PGDBObjSubordinated;pobjinarray:Integer;var drawing:TDrawingDef);virtual;
@@ -75,25 +70,21 @@ GDBObjGenericWithSubordinated= object(GDBObjDrawable)
 
 
 end;
-{REGISTERRECORDTYPE TEntityAddress}
 TEntityAddress=record
-                          Owner:PGDBObjGenericWithSubordinated;(*'Address'*)
-                          SelfIndex:TArrayIndex;(*'Position'*)
+                          Owner:PGDBObjGenericWithSubordinated;
+                          SelfIndex:TArrayIndex;
               end;
-{REGISTERRECORDTYPE TTreeAddress}
 TTreeAddress=record
-                          Owner:Pointer;(*'Address'*)
-                          SelfIndex:TArrayIndex;(*'Position'*)
+                          Owner:Pointer;
+                          SelfIndex:TArrayIndex;
               end;
-{REGISTERRECORDTYPE GDBObjBaseProp}
 GDBObjBaseProp=record
-                      ListPos:TEntityAddress;(*'List'*)
-                      TreePos:TTreeAddress;(*'Tree'*)
+                      ListPos:TEntityAddress;
+                      TreePos:TTreeAddress;
                  end;
-{REGISTEROBJECTTYPE GDBObjSubordinated}
 GDBObjSubordinated= object(GDBObjGenericWithSubordinated)
-                         bp:GDBObjBaseProp;(*'Owner'*)(*oi_readonly*)(*hidden_in_objinsp*)
-                         OSnapModeControl:TOSnapModeControl;(*'OSnap mode control'*)
+                         bp:GDBObjBaseProp;
+                         OSnapModeControl:TOSnapModeControl;
                          function GetOwner:PGDBObjSubordinated;virtual;abstract;
                          procedure createfield;virtual;
                          //function FindVariable(varname:String):pvardesk;virtual;
@@ -101,7 +92,6 @@ GDBObjSubordinated= object(GDBObjGenericWithSubordinated)
                          destructor done;virtual;
                          procedure postload(var context:TIODXFLoadContext);virtual;abstract;
          end;
-{EXPORT-}
 
 procedure extractvarfromdxfstring2(_Value:String;out vn,vt,vun:String);
 procedure extractvarfromdxfstring(_Value:String;out vn,vt,vv,vun:String);

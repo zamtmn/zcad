@@ -25,28 +25,25 @@ uses
     uzestyleslayers,uzehelpobj,UGDBSelectedObjArray,
     uzegeometrytypes,uzeentity,UGDBOutbound2DIArray,UGDBPoint3DArray,uzctnrVectorBytes,
     uzbtypes,uzeentwithlocalcs,uzeconsts,uzglviewareadata,uzegeometry,uzeffdxfsupport,
-    uzctnrvectorpgdbaseobjects,uzeSnap,uzMVReader,uzCtnrVectorpBaseEntity;
+    uzeSnap,uzMVReader,uzCtnrVectorpBaseEntity;
 type
-{Export+}
   ptcirclertmodify=^tcirclertmodify;
-  {REGISTERRECORDTYPE tcirclertmodify}
   tcirclertmodify=record
                         r,p_insert:Boolean;
                   end;
 PGDBObjCircle=^GDBObjCircle;
-{REGISTEROBJECTTYPE GDBObjCircle}
 GDBObjCircle= object(GDBObjWithLocalCS)
                  Radius:GDBLength;(*'Radius'*)
-                 q0:GDBvertex;(*oi_readonly*)(*hidden_in_objinsp*)
-                 q1:GDBvertex;(*oi_readonly*)(*hidden_in_objinsp*)
-                 q2:GDBvertex;(*oi_readonly*)(*hidden_in_objinsp*)
-                 q3:GDBvertex;(*oi_readonly*)(*hidden_in_objinsp*)
-                 pq0:GDBvertex;(*oi_readonly*)(*hidden_in_objinsp*)
-                 pq1:GDBvertex;(*oi_readonly*)(*hidden_in_objinsp*)
-                 pq2:GDBvertex;(*oi_readonly*)(*hidden_in_objinsp*)
-                 pq3:GDBvertex;(*oi_readonly*)(*hidden_in_objinsp*)
-                 Outbound:OutBound4V;(*oi_readonly*)(*hidden_in_objinsp*)
-                 Vertex3D_in_WCS_Array:GDBPoint3DArray;(*oi_readonly*)(*hidden_in_objinsp*)
+                 q0:GDBvertex;
+                 q1:GDBvertex;
+                 q2:GDBvertex;
+                 q3:GDBvertex;
+                 pq0:GDBvertex;
+                 pq1:GDBvertex;
+                 pq2:GDBvertex;
+                 pq3:GDBvertex;
+                 Outbound:OutBound4V;
+                 Vertex3D_in_WCS_Array:GDBPoint3DArray;
                  constructor init(own:Pointer;layeraddres:PGDBLayerProp;LW:SmallInt;p:GDBvertex;RR:Double);
                  constructor initnul;
                  procedure LoadFromDXF(var f:TZMemReader;ptu:PExtensionData;var drawing:TDrawingDef);virtual;
@@ -89,7 +86,6 @@ GDBObjCircle= object(GDBObjWithLocalCS)
                  class function CreateInstance:PGDBObjCircle;static;
                  function GetObjType:TObjID;virtual;
            end;
-{Export-}
 implementation
 //uses
 //    log;

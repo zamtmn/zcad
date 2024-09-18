@@ -25,15 +25,13 @@ uses LCLProc,uzeentityfactory,uzgldrawcontext,uzedrawingdef,uzecamera,
      uzestyleslayers,uzeentsubordinated,
      UGDBSelectedObjArray,uzeent3d,uzeentity,uzctnrVectorBytes,uzbtypes,uzeconsts,
      uzegeometrytypes,uzglviewareadata,uzegeometry,uzeffdxfsupport,
-     uzctnrvectorpgdbaseobjects,uzeSnap,uzMVReader,uzCtnrVectorpBaseEntity;
+     uzeSnap,uzMVReader,uzCtnrVectorpBaseEntity;
 type
-{Export+}
 PGDBObjLine=^GDBObjLine;
-{REGISTEROBJECTTYPE GDBObjLine}
 GDBObjLine= object(GDBObj3d)
-                 CoordInOCS:GDBLineProp;(*'Coordinates OCS'*)
-                 CoordInWCS:GDBLineProp;(*'Coordinates WCS'*)(*hidden_in_objinsp*)
-                 PProjPoint:PGDBLineProj;(*'Coordinates DCS'*)(*hidden_in_objinsp*)
+                 CoordInOCS:GDBLineProp;
+                 CoordInWCS:GDBLineProp;
+                 PProjPoint:PGDBLineProj;
 
                  constructor init(own:Pointer;layeraddres:PGDBLayerProp;LW:SmallInt;p1,p2:GDBvertex);
                  constructor initnul(owner:PGDBObjGenericWithSubordinated);
@@ -78,7 +76,6 @@ GDBObjLine= object(GDBObj3d)
                   class function CreateInstance:PGDBObjLine;static;
                   function GetObjType:TObjID;virtual;
            end;
-{Export-}
 ptlinertmodify=^tlinertmodify;
 tlinertmodify=record
                     lbegin,lmidle,lend:Boolean;

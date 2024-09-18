@@ -24,23 +24,23 @@ uses
     uzecamera,uzestyleslayers,UGDBSelectedObjArray,
     uzeentity,UGDBOutbound2DIArray,UGDBPoint3DArray,uzctnrVectorBytes,uzbtypes,
     uzegeometrytypes,uzeconsts,uzglviewareadata,uzegeometry,uzeffdxfsupport,uzeentplain,
-    uzctnrvectorpgdbaseobjects,uzeSnap,math,uzMVReader,uzCtnrVectorpBaseEntity;
+    uzeSnap,math,uzMVReader,uzCtnrVectorpBaseEntity;
+
 type
-{Export+}
-{REGISTEROBJECTTYPE GDBObjArc}
+
 PGDBObjArc=^GDBObjARC;
 GDBObjArc= object(GDBObjPlain)
                  R:Double;
                  StartAngle:Double;
                  EndAngle:Double;
-                 angle:Double;(*oi_readonly*)
-                 Vertex3D_in_WCS_Array:GDBPoint3DArray;(*oi_readonly*)(*hidden_in_objinsp*)
-                 q0:GDBvertex;(*oi_readonly*)(*hidden_in_objinsp*)
-                 q1:GDBvertex;(*oi_readonly*)(*hidden_in_objinsp*)
-                 q2:GDBvertex;(*oi_readonly*)(*hidden_in_objinsp*)
-                 pq0:GDBvertex;(*oi_readonly*)(*hidden_in_objinsp*)
-                 pq1:GDBvertex;(*oi_readonly*)(*hidden_in_objinsp*)
-                 pq2:GDBvertex;(*oi_readonly*)(*hidden_in_objinsp*)
+                 angle:Double;
+                 Vertex3D_in_WCS_Array:GDBPoint3DArray;
+                 q0:GDBvertex;
+                 q1:GDBvertex;
+                 q2:GDBvertex;
+                 pq0:GDBvertex;
+                 pq1:GDBvertex;
+                 pq2:GDBvertex;
                  constructor init(own:Pointer;layeraddres:PGDBLayerProp;LW:SmallInt;p:GDBvertex;RR,S,E:Double);
                  constructor initnul;
                  procedure LoadFromDXF(var f:TZMemReader;ptu:PExtensionData;var drawing:TDrawingDef);virtual;
@@ -78,7 +78,7 @@ GDBObjArc= object(GDBObjPlain)
                  class function CreateInstance:PGDBObjArc;static;
                  function GetObjType:TObjID;virtual;
            end;
-{EXPORT-}
+
 implementation
 //uses log;
 {function GDBObjARC.GetTangentInPoint(point:GDBVertex):GDBVertex;

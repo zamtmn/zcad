@@ -24,11 +24,9 @@ interface
 uses uzgldrawcontext,uzedrawingdef,uzecamera,uzeentity,uzbtypes,
      gzctnrVectorTypes,uzegeometrytypes,uzegeometry,uzeentsubordinated,uzeentitiestree;
 type
-{EXPORT+}
 PGDBObjWithMatrix=^GDBObjWithMatrix;
-{REGISTEROBJECTTYPE GDBObjWithMatrix}
 GDBObjWithMatrix= object(GDBObjEntity)
-                       ObjMatrix:DMatrix4D;(*'OCS Matrix'*)(*oi_readonly*)(*hidden_in_objinsp*)
+                       ObjMatrix:DMatrix4D;
                        constructor initnul(owner:PGDBObjGenericWithSubordinated);
                        function GetMatrix:PDMatrix4D;virtual;
                        procedure CalcObjMatrix(pdrawing:PTDrawingDef=nil);virtual;
@@ -39,7 +37,6 @@ GDBObjWithMatrix= object(GDBObjEntity)
                        procedure CalcInFrustumByTree(const frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var enttree:TEntTreeNode;var totalobj,infrustumobj:Integer; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double);virtual;
                        procedure ProcessTree(const frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var enttree:TEntTreeNode;OwnerInFrustum:TInBoundingVolume;OwnerFuldraw:TDrawType;var totalobj,infrustumobj:Integer; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double);virtual;
                  end;
-{EXPORT-}
 implementation
 //uses
 //    log{,zcadsysvars};

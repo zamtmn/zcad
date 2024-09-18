@@ -25,22 +25,18 @@ uses LCLProc,uzegluinterface,uzeentityfactory,uzgldrawcontext,uzgloglstatemanage
      uzestyleslayers,uzeentsubordinated,uzeentcurve,
      uzeentity,uzctnrVectorBytes,uzbtypes,uzeconsts,uzglviewareadata,
      gzctnrVectorTypes,uzegeometrytypes,uzegeometry,uzeffdxfsupport,sysutils,
-     uzctnrvectorpgdbaseobjects,uzMVReader,uzCtnrVectorpBaseEntity;
+     uzMVReader,uzCtnrVectorpBaseEntity;
 type
-{Export+}
-{REGISTEROBJECTTYPE TKnotsVector}
 TKnotsVector= object(GZVector{-}<Single>{//})
                              end;
-{REGISTEROBJECTTYPE TCPVector}
 TCPVector= object(GZVector{-}<GDBvertex4S>{//})
                              end;
 PGDBObjSpline=^GDBObjSpline;
-{REGISTEROBJECTTYPE GDBObjSpline}
 GDBObjSpline= object(GDBObjCurve)
-                 ControlArrayInOCS:GDBPoint3dArray;(*hidden_in_objinsp*)
-                 ControlArrayInWCS:GDBPoint3dArray;(*hidden_in_objinsp*)
-                 Knots:{GDBOpenArrayOfData}TKnotsVector;(*hidden_in_objinsp*)
-                 AproxPointInWCS:GDBPoint3dArray;(*hidden_in_objinsp*)
+                 ControlArrayInOCS:GDBPoint3dArray;
+                 ControlArrayInWCS:GDBPoint3dArray;
+                 Knots:TKnotsVector;
+                 AproxPointInWCS:GDBPoint3dArray;
                  Closed:Boolean;
                  Degree:Integer;
                  constructor init(own:Pointer;layeraddres:PGDBLayerProp;LW:SmallInt;c:Boolean);
@@ -66,7 +62,6 @@ GDBObjSpline= object(GDBObjCurve)
                  function CreateInstance:PGDBObjSpline;static;
                  function GetObjType:TObjID;virtual;
            end;
-{Export-}
 implementation
 var
     parr:PGDBPoint3dArray;

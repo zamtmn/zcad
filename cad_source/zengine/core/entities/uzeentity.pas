@@ -24,23 +24,21 @@ uses uzepalette,uzeobjectextender,uzgldrawerabstract,uzgldrawcontext,uzedrawingd
      uzecamera,uzeentitiesprop,uzestyleslinetypes,
      uzegeometrytypes,UGDBControlPointArray,uzeentsubordinated,uzbtypes,uzeconsts,
      uzglviewareadata,uzegeometry,uzeffdxfsupport,sysutils,uzctnrVectorBytes,
-     uzestyleslayers,uzeenrepresentation,LazLogger,uzctnrvectorpgdbaseobjects,
+     uzestyleslayers,uzeenrepresentation,LazLogger,
      uzMVReader,uzCtnrVectorpBaseEntity;
 type
 taddotrac=procedure (var posr:os_record;const axis:GDBVertex) of object;
-{Export+}
 TEFStage=(EFCalcEntityCS,EFDraw);
-{-}TEFStages=set of TEFStage;{/TEFStages=Integer;/}
-{-}const{//}
-{-}EFAllStages=[EFCalcEntityCS,EFDraw];{//}
-{-}type{//}
+TEFStages=set of TEFStage;
+const
+EFAllStages=[EFCalcEntityCS,EFDraw];
+type
 PGDBObjEntity=^GDBObjEntity;
-{-}TSelect2Stage=procedure(PEntity,PGripsCreator:PGDBObjEntity;var SelectedObjCount:Integer)of object;{//}
-{-}TDeSelect2Stage=procedure(PV:PGDBObjEntity;var SelectedObjCount:Integer)of object;{//}
+TSelect2Stage=procedure(PEntity,PGripsCreator:PGDBObjEntity;var SelectedObjCount:Integer)of object;
+TDeSelect2Stage=procedure(PV:PGDBObjEntity;var SelectedObjCount:Integer)of object;
 TEntityState=(ESCalcWithoutOwner,ESTemp,ESConstructProxy);
-{-}TEntityStates=set of TEntityState;{/TEntityStates=Integer;/}
+TEntityStates=set of TEntityState;
 PTExtAttrib=^TExtAttrib;
-{REGISTERRECORDTYPE TExtAttrib}
 TExtAttrib=record
                  OwnerHandle:QWord;
                  MainFunctionHandle:QWord;
@@ -49,13 +47,12 @@ TExtAttrib=record
                  Upgrade:TEntUpgradeInfo;
                  ExtAttrib2:Boolean;
            end;
-{REGISTEROBJECTTYPE GDBObjEntity}
 GDBObjEntity= object(GDBObjSubordinated)
-                    vp:GDBObjVisualProp;(*'General'*)
-                    Selected:Boolean;(*'Selected'*)(*hidden_in_objinsp*)
-                    Visible:TActulity;(*'Visible'*)(*oi_readonly*)(*hidden_in_objinsp*)
-                    infrustum:TActulity;(*'In frustum'*)(*oi_readonly*)(*hidden_in_objinsp*)
-                    PExtAttrib:PTExtAttrib;(*hidden_in_objinsp*)
+                    vp:GDBObjVisualProp;
+                    Selected:Boolean;
+                    Visible:TActulity;
+                    infrustum:TActulity;
+                    PExtAttrib:PTExtAttrib;
                     Representation:TZEntityRepresentation;
                     State:TEntityStates;
                     destructor done;virtual;
@@ -183,7 +180,6 @@ GDBObjEntity= object(GDBObjSubordinated)
                     function CheckState(AStates:TEntityStates):Boolean;
                     function GetObjName:String;virtual;
               end;
-{Export-}
 var onlygetsnapcount:Integer;
     GDBObjEntityDXFFeatures:TDXFEntIODataManager;
 implementation

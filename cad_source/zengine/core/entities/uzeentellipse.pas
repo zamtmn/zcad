@@ -24,16 +24,13 @@ uses
     UGDBSelectedObjArray,uzeentity,UGDBOutbound2DIArray,UGDBPoint3DArray,
     uzegeometrytypes,uzctnrVectorBytes,varman,varmandef,uzbtypes,uzeconsts,
     uzglviewareadata,uzegeometry,uzeffdxfsupport,uzeentplain,
-    uzctnrvectorpgdbaseobjects,uzeSnap,math,uzMVReader,uzCtnrVectorpBaseEntity;
+    uzeSnap,math,uzMVReader,uzCtnrVectorpBaseEntity;
 type
-{Export+}
   ptEllipsertmodify=^tEllipsertmodify;
-  {REGISTERRECORDTYPE tEllipsertmodify}
   tEllipsertmodify=record
                         p1,p2,p3:GDBVertex2d;
                   end;
 PGDBObjEllipse=^GDBObjEllipse;
-{REGISTEROBJECTTYPE GDBObjEllipse}
 GDBObjEllipse= object(GDBObjPlain)
                  RR:Double;
                  MajorAxis:GDBvertex;
@@ -78,7 +75,6 @@ GDBObjEllipse= object(GDBObjPlain)
                  function CreateInstance:PGDBObjEllipse;static;
                  function GetObjType:TObjID;virtual;
            end;
-{EXPORT-}
 implementation
 //uses log;
 procedure GDBObjEllipse.TransformAt;

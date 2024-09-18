@@ -27,35 +27,30 @@ uses gzctnrVector,uzeentityfactory,uzeentsubordinated,
      UGDBPoint3DArray,UGDBPolyLine2DArray,
      uzctnrVectorBytes,uzbtypes,uzeentwithlocalcs,uzeconsts,math,
      gzctnrVectorTypes,uzegeometrytypes,uzeffdxfsupport,sysutils,
-     UGDBSelectedObjArray,uzctnrvectorpgdbaseobjects,uzMVReader,
+     UGDBSelectedObjArray,uzMVReader,
      uzCtnrVectorpBaseEntity;
 type
-//----------------snaparray:GDBVectorSnapArray;(*hidden_in_objinsp*)
-{Export+}
+
 PGLLWWidth=^GLLWWidth;
-{REGISTERRECORDTYPE GLLWWidth}
 GLLWWidth=record
                 startw:Double;
                 endw:Double;
                 hw:Boolean;
                 quad:GDBQuad2d;
           end;
-{REGISTEROBJECTTYPE GDBLineWidthArray}
-GDBLineWidthArray= object(GZVector{-}<GLLWWidth>{//})
+GDBLineWidthArray= object(GZVector<GLLWWidth>)
              end;
-{REGISTEROBJECTTYPE TWidth3D_in_WCS_Vector}
-TWidth3D_in_WCS_Vector= object(GZVector{-}<GDBQuad3d>{//})
+TWidth3D_in_WCS_Vector= object(GZVector<GDBQuad3d>)
                 end;
 PGDBObjLWPolyline=^GDBObjLWpolyline;
-{REGISTEROBJECTTYPE GDBObjLWPolyline}
 GDBObjLWPolyline= object(GDBObjWithLocalCS)
                  Closed:Boolean;
                  Vertex2D_in_OCS_Array:GDBpolyline2DArray;
                  Vertex3D_in_WCS_Array:GDBPoint3dArray;
                  Width2D_in_OCS_Array:GDBLineWidthArray;
-                 Width3D_in_WCS_Array:{GDBOpenArray}TWidth3D_in_WCS_Vector;
-                 PProjPoint:PGDBpolyline2DArray;(*hidden_in_objinsp*)
-                 Square:Double;(*'Oriented area'*)
+                 Width3D_in_WCS_Array:TWidth3D_in_WCS_Vector;
+                 PProjPoint:PGDBpolyline2DArray;
+                 Square:Double;
                  constructor init(own:Pointer;layeraddres:PGDBLayerProp;LW:SmallInt;c:Boolean);
                  constructor initnul;
                  procedure LoadFromDXF(var f:TZMemReader;ptu:PExtensionData;var drawing:TDrawingDef);virtual;
@@ -95,7 +90,6 @@ GDBObjLWPolyline= object(GDBObjWithLocalCS)
                  class function CreateInstance:PGDBObjLWPolyline;static;
                  function GetObjType:TObjID;virtual;
            end;
-{Export-}
 implementation
 var
    lwtv:GDBpolyline2DArray;

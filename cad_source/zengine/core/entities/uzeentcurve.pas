@@ -26,17 +26,14 @@ uses uzgldrawcontext,uzedrawingdef,uzecamera,
      UGDBSelectedObjArray,uzeent3d,uzeentity,UGDBPolyLine2DArray,UGDBPoint3DArray,
      uzbtypes,uzegeometry,uzeconsts,uzglviewareadata,uzeffdxfsupport,sysutils,
      gzctnrVectorTypes,uzegeometrytypes,uzeentsubordinated,
-     uzctnrvectorpgdbaseobjects,uzeSnap,uzCtnrVectorpBaseEntity;
+     uzeSnap,uzCtnrVectorpBaseEntity;
 type
-//------------snaparray:GDBVectorSnapArray;(*hidden_in_objinsp*)
-{Export+}
 PGDBObjCurve=^GDBObjCurve;
-{REGISTEROBJECTTYPE GDBObjCurve}
 GDBObjCurve= object(GDBObj3d)
-                 VertexArrayInOCS:GDBPoint3dArray;(*hidden_in_objinsp*)
-                 VertexArrayInWCS:GDBPoint3dArray;(*hidden_in_objinsp*)
+                 VertexArrayInOCS:GDBPoint3dArray;
+                 VertexArrayInWCS:GDBPoint3dArray;
                  length:Double;
-                 PProjPoint:PGDBpolyline2DArray;(*hidden_in_objinsp*)
+                 PProjPoint:PGDBpolyline2DArray;
                  constructor init(own:Pointer;layeraddres:PGDBLayerProp;LW:SmallInt);
                  constructor initnul(owner:PGDBObjGenericWithSubordinated);
                  procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext;Stage:TEFStages=EFAllStages);virtual;
@@ -71,7 +68,6 @@ GDBObjCurve= object(GDBObj3d)
 
                  function GetLength:Double;virtual;
            end;
-{Export-}
 procedure BuildSnapArray(const VertexArrayInWCS:GDBPoint3dArray;var snaparray:GDBVectorSnapArray;const closed:Boolean);
 function GDBPoint3dArraygetsnap(const VertexArrayInWCS:GDBPoint3dArray; const PProjPoint:PGDBpolyline2DArray; const snaparray:GDBVectorSnapArray; var osp:os_record;const closed:Boolean; const param:OGLWndtype; ProjectProc:GDBProjectProc;SnapMode:TGDBOSMode):Boolean;
 procedure GDBPoint3dArrayAddOnTrackAxis(const VertexArrayInWCS:GDBPoint3dArray;var posr:os_record;const processaxis:taddotrac;const closed:Boolean);

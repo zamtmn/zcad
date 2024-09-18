@@ -29,17 +29,14 @@ uses
     gzctnrVectorTypes,uzegeometrytypes,uzestylestexts,StrUtils,gzctnrVector,uzMVReader;
 const maxdxfmtextlen=250;
 type
-//procedure CalcObjMatrix;virtual;
-{Export+}
+
 PGDBXYZWStringArray=^XYZWStringArray;
-{REGISTEROBJECTTYPE XYZWStringArray}
-XYZWStringArray=object(GZVector{-}<GDBStrWithPoint>{//})
+XYZWStringArray=object(GZVector<GDBStrWithPoint>)
                 end;
 PGDBObjMText=^GDBObjMText;
-{REGISTEROBJECTTYPE GDBObjMText}
 GDBObjMText= object(GDBObjText)
                  width:Double;
-                 linespace:Double;(*oi_readonly*)
+                 linespace:Double;
                  linespacef:Double;
                  text:XYZWStringArray;(*oi_readonly*)(*hidden_in_objinsp*)
                  constructor init(own:Pointer;layeraddres:PGDBLayerProp;LW:SmallInt;c:TDXFEntsInternalStringType;p:GDBvertex;s,o,w,a:Double;j:TTextJustify;wi,l:Double);
@@ -61,7 +58,7 @@ GDBObjMText= object(GDBObjText)
                  function CreateInstance:PGDBObjMText;static;
                  function GetObjType:TObjID;virtual;
             end;
-{Export-}
+
 procedure FormatMtext(pfont:pgdbfont;width,size,wfactor:Double;const content:TDXFEntsInternalStringType;var text:XYZWStringArray);
 function GetLinesH(linespace,size:Double;var lines:XYZWStringArray):Double;
 function GetLinesW(var lines:XYZWStringArray):Double;

@@ -24,12 +24,10 @@ interface
 uses uzeentityfactory,uzgldrawcontext,uzedrawingdef,uzecamera,UGDBVectorSnapArray,
      uzestyleslayers,uzeentsubordinated,uzeentcurve,
      uzeentity,uzctnrVectorBytes,uzbtypes,uzeconsts,uzglviewareadata,
-     uzegeometrytypes,uzegeometry,uzeffdxfsupport,sysutils,uzctnrvectorpgdbaseobjects,
+     uzegeometrytypes,uzegeometry,uzeffdxfsupport,sysutils,
      uzMVReader,uzCtnrVectorpBaseEntity;
 type
-{Export+}
 PGDBObjPolyline=^GDBObjPolyline;
-{REGISTEROBJECTTYPE GDBObjPolyline}
 GDBObjPolyline= object(GDBObjCurve)
                  Closed:Boolean;
                  constructor init(own:Pointer;layeraddres:PGDBLayerProp;LW:SmallInt;c:Boolean);
@@ -53,7 +51,7 @@ GDBObjPolyline= object(GDBObjCurve)
                  function GetObjType:TObjID;virtual;
                  function CalcTrueInFrustum(const frustum:ClipArray;visibleactualy:TActulity):TInBoundingVolume;virtual;
            end;
-{Export-}
+
 implementation
 function GDBObjPolyline.CalcTrueInFrustum;
 begin

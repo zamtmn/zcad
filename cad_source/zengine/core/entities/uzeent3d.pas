@@ -19,13 +19,15 @@ unit uzeent3d;
 {$INCLUDE zengineconfig.inc}
 
 interface
+
 uses uzeentity;
+
 type
-{EXPORT+}
-{REGISTEROBJECTTYPE GDBObj3d}
-GDBObj3d= object(GDBObjEntity)
-         end;
-{EXPORT-}
+
+  GDBObj3d=object(GDBObjEntity)
+  end;
+
 implementation
+
 begin
 end.

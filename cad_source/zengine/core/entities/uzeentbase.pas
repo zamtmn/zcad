@@ -21,19 +21,16 @@ unit uzeEntBase;
 {$INCLUDE zengineconfig.inc}
 
 interface
-uses strutils,uzgldrawcontext,uzeExtdrAbstractEntityExtender,uzedrawingdef,
-     uzbstrproc{$IFNDEF DELPHI},LazUTF8{$ENDIF},uzctnrVectorBytes,uzegeometrytypes,uzbtypes,
-     sysutils,uzestyleslayers,uzeffdxfsupport,gzctnrVectorTypes,uzecamera;
+uses
+  uzbtypes,
+  sysutils;
 type
-{EXPORT+}
 PGDBObjBaseEntity=^GDBObjBaseEntity;
-{REGISTEROBJECTTYPE GDBObjBaseEntity}
 GDBObjBaseEntity=object//(GDBaseObject)
   destructor Done;virtual;abstract;
   function GetObjType:TObjID;virtual;abstract;
   constructor initnul;
 end;
-{EXPORT-}
 implementation
 constructor GDBObjBaseEntity.initnul;
 begin

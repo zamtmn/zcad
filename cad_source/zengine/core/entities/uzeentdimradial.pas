@@ -34,9 +34,7 @@ X<----X(text)----->X (10,20,30)
 
 *)
 type
-{EXPORT+}
 PGDBObjRadialDimension=^GDBObjRadialDimension;
-{REGISTEROBJECTTYPE GDBObjRadialDimension}
 GDBObjRadialDimension= object(GDBObjDiametricDimension)
                         constructor init(own:Pointer;layeraddres:PGDBLayerProp;LW:SmallInt);
                         constructor initnul(owner:PGDBObjGenericWithSubordinated);
@@ -54,7 +52,6 @@ GDBObjRadialDimension= object(GDBObjDiametricDimension)
                         procedure SaveToDXF(var outhandle:TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
                         function GetObjType:TObjID;virtual;
                    end;
-{EXPORT-}
 implementation
 //uses log;
 procedure GDBObjRadialDimension.SaveToDXF;

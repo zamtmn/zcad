@@ -25,9 +25,7 @@ uses uzeentityfactory,uzeentdimaligned,uzeentdimension,uzestylesdim,
      uzegeometry,sysutils,uzeentity,uzbtypes,uzeconsts,uzeffdxfsupport,
      uzegeometrytypes,uzeentsubordinated;
 type
-{EXPORT+}
 PGDBObjRotatedDimension=^GDBObjRotatedDimension;
-{REGISTEROBJECTTYPE GDBObjRotatedDimension}
 GDBObjRotatedDimension= object(GDBObjAlignedDimension)
                         function GetObjTypeName:String;virtual;
                         procedure CalcDNVectors;virtual;
@@ -41,7 +39,6 @@ GDBObjRotatedDimension= object(GDBObjAlignedDimension)
                         constructor initnul(owner:PGDBObjGenericWithSubordinated);
                         function GetObjType:TObjID;virtual;
                    end;
-{EXPORT-}
 implementation
 //uses log;
 constructor GDBObjRotatedDimension.initnul;

@@ -24,16 +24,16 @@ uses
     uzeentityfactory,uzgldrawcontext,uzedrawingdef,uzecamera,uzeentwithlocalcs,
     uzegeometry,uzeffdxfsupport,uzestyleslayers,
     UGDBSelectedObjArray,uzeentsubordinated,uzeentity,sysutils,uzctnrVectorBytes,
-    uzegeometrytypes,uzbtypes,uzeconsts,uzctnrvectorpgdbaseobjects,uzglviewareadata,
+    uzegeometrytypes,uzbtypes,uzeconsts,uzglviewareadata,
     uzMVReader,uzCtnrVectorpBaseEntity;
+
 type
-{Export+}
+
 PGDBObjSolid=^GDBObjSolid;
-{REGISTEROBJECTTYPE GDBObjSolid}
 GDBObjSolid= object(GDBObjWithLocalCS)
-                 PInOCS:OutBound4V;(*'Coordinates OCS'*)
-                 PInWCS:OutBound4V;(*'Coordinates WCS'*)(*hidden_in_objinsp*)
-                 PInDCS:OutBound4V;(*'Coordinates DCS'*)(*hidden_in_objinsp*)
+                 PInOCS:OutBound4V;
+                 PInWCS:OutBound4V;
+                 PInDCS:OutBound4V;
                  normal:GDBVertex;
                  triangle:Boolean;
                  n,p1,p2,p3:GDBVertex3S;
@@ -64,7 +64,6 @@ GDBObjSolid= object(GDBObjWithLocalCS)
                  procedure TransformAt(p:PGDBObjEntity;t_matrix:PDMatrix4D);virtual;
                  procedure transform(const t_matrix:DMatrix4D);virtual;
            end;
-{Export-}
 
 implementation
 //uses log;

@@ -24,15 +24,14 @@ uses
     uzeentityfactory,uzgldrawcontext,uzedrawingdef,uzecamera,
     uzegeometry,uzeffdxfsupport,uzestyleslayers,UGDBSelectedObjArray,uzeentsubordinated,
     uzegeometrytypes,uzeent3d,uzeentity,sysutils,uzctnrVectorBytes,uzbtypes,uzeconsts,
-    uzctnrvectorpgdbaseobjects,uzglviewareadata,uzMVReader,uzCtnrVectorpBaseEntity;
+    uzglviewareadata,uzMVReader,uzCtnrVectorpBaseEntity;
 type
-{Export+}
-{REGISTEROBJECTTYPE GDBObj3DFace}
+
 PGDBObj3DFace=^GDBObj3DFace;
 GDBObj3DFace= object(GDBObj3d)
-                 PInOCS:OutBound4V;(*'Coordinates OCS'*)
-                 PInWCS:OutBound4V;(*'Coordinates WCS'*)(*hidden_in_objinsp*)
-                 PInDCS:OutBound4V;(*'Coordinates DCS'*)(*hidden_in_objinsp*)
+                 PInOCS:OutBound4V;
+                 PInWCS:OutBound4V;
+                 PInDCS:OutBound4V;
                  normal:GDBVertex;
                  triangle:Boolean;
                  n,p1,p2,p3:GDBVertex3S;
@@ -63,7 +62,6 @@ GDBObj3DFace= object(GDBObj3d)
                  class function CreateInstance:PGDBObj3DFace;static;
                  function GetObjType:TObjID;virtual;
            end;
-{Export-}
 
 implementation
 //uses log;

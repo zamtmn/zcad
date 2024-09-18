@@ -28,16 +28,14 @@ uses uzeentity,uzgldrawcontext,uzeentityfactory,uzedrawingdef,uzestyleslayers,ma
      uzbLogIntf,uzMVReader;
 const zcadmetric='!!ZMODIFIER:';
 type
-{Export+}
-{REGISTEROBJECTTYPE GDBObjBlockInsert}
 PGDBObjBlockInsert=^GDBObjBlockInsert;
 GDBObjBlockInsert= object(GDBObjComplex)
                      scale:GDBvertex;
                      rotate:Double;
-                     index:Integer;(*oi_readonly*)(*hidden_in_objinsp*)
-                     Name:AnsiString;(*oi_readonly*)
-                     pattrib:Pointer;(*hidden_in_objinsp*)
-                     BlockDesc:TBlockDesc;(*'Block params'*)(*oi_readonly*)
+                     index:Integer;
+                     Name:AnsiString;
+                     pattrib:Pointer;
+                     BlockDesc:TBlockDesc;
                      constructor initnul;
                      constructor init(own:Pointer;layeraddres:PGDBLayerProp;LW:SmallInt);
                      procedure LoadFromDXF(var f:TZMemReader;ptu:PExtensionData;var drawing:TDrawingDef);virtual;
@@ -69,7 +67,6 @@ GDBObjBlockInsert= object(GDBObjComplex)
                      function GetNameInBlockTable:String;virtual;
                      function GetObjType:TObjID;virtual;
                   end;
-{Export-}
 procedure SetBlockInsertGeomProps(PBlockInsert:PGDBObjBlockInsert; const args:array of const);
 implementation
 //uses log;

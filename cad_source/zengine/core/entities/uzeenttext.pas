@@ -28,16 +28,14 @@ uses
     uzeconsts,uzglviewareadata,uzegeometry,uzeffdxfsupport,uzeentsubordinated,LazLogger,
     uzegeometrytypes,uzestylestexts,uzeSnap,uzMVReader;
 type
-{Export+}
 PGDBObjText=^GDBObjText;
-{REGISTEROBJECTTYPE GDBObjText}
 GDBObjText= object(GDBObjAbstractText)
                  Content:TDXFEntsInternalStringType;
                  Template:TDXFEntsInternalStringType;
-                 TXTStyleIndex:{-}PGDBTextStyle{/PGDBTextStyleObjInsp/};(*'Style'*)
-                 obj_height:Double;(*oi_readonly*)(*hidden_in_objinsp*)
-                 obj_width:Double;(*oi_readonly*)(*hidden_in_objinsp*)
-                 obj_y:Double;(*oi_readonly*)(*hidden_in_objinsp*)
+                 TXTStyleIndex:PGDBTextStyle;
+                 obj_height:Double;
+                 obj_width:Double;
+                 obj_y:Double;
                  constructor init(own:Pointer;layeraddres:PGDBLayerProp;LW:SmallInt;c:TDXFEntsInternalStringType;p:GDBvertex;s,o,w,a:Double;j:TTextJustify);
                  constructor initnul(owner:PGDBObjGenericWithSubordinated);
                  procedure LoadFromDXF(var f:TZMemReader;ptu:PExtensionData;var drawing:TDrawingDef);virtual;
@@ -63,7 +61,6 @@ GDBObjText= object(GDBObjAbstractText)
                  function CreateInstance:PGDBObjText;static;
                  function GetObjType:TObjID;virtual;
            end;
-{Export-}
 var
 jt: array[0..3, 0..4] of TTextJustify = ((jsbl, jsbc, jsbr, jsbl, jsmc), (jsbtl, jsbtc, jsbtr, jsbl, jsbl), (jsml, jsmc, jsmr, jsbl, jsbl), (jstl, jstc, jstr, jsbl, jsbl));
 j2b: array[TTextJustify] of byte=(1,2,3,4,5,6,7,8,9,10,11,12);

@@ -22,33 +22,28 @@ type
                TCT_Control(*'Контрольный'*),
                TCT_Sila(*'Силовой'*)
               );
-{Export+}
-
 PTNodeProp=^TNodeProp;
-{REGISTERRECORDTYPE TNodeProp}
 TNodeProp=record
                 //**Точка в котором кабель был усечен устройством исчез и появился
                 PrevP,NextP:GDBVertex;
                 //**Устройство коннектор которого попадает в узел кабеля
                 DevLink:PGDBObjDevice;
           end;
-{REGISTEROBJECTTYPE TNodePropArray}
-TNodePropArray= object(GZVector{-}<TNodeProp>{//})
+TNodePropArray= object(GZVector<TNodeProp>)
 end;
 
 PGDBObjCable=^GDBObjCable;
-{REGISTEROBJECTTYPE GDBObjCable}
 GDBObjCable= object(GDBObjCurve)
                  {**Список устройств DevLink коннектор которых попадает в узел кабеля,
                     а так же показывается PrevP,NextP точка в котором кабель был усечен устройством
                     и точка в которой появился**}
                  NodePropArray:TNodePropArray;(*hidden_in_objinsp*)
-                 str11:GDBVertex;(*hidden_in_objinsp*)
-                 str12:GDBVertex;(*hidden_in_objinsp*)
-                 str13:GDBVertex;(*hidden_in_objinsp*)
-                 str21:GDBVertex;(*hidden_in_objinsp*)
-                 str22:GDBVertex;(*hidden_in_objinsp*)
-                 str23:GDBVertex;(*hidden_in_objinsp*)
+                 str11:GDBVertex;
+                 str12:GDBVertex;
+                 str13:GDBVertex;
+                 str21:GDBVertex;
+                 str22:GDBVertex;
+                 str23:GDBVertex;
                  constructor init(own:Pointer;layeraddres:PGDBLayerProp;LW:SmallInt);
                  constructor initnul(owner:PGDBObjGenericWithSubordinated);
                  procedure DrawGeometry(lw:Integer;var DC:TDrawContext{infrustumactualy:TActulity;subrender:Integer});virtual;
@@ -67,7 +62,6 @@ GDBObjCable= object(GDBObjCurve)
                  //function Clone(own:Pointer):PGDBObjEntity;virtual;
                  function GetObjType:TObjID;virtual;
            end;
-{Export-}
 function AllocCable:PGDBObjCable;
 var
     GDBObjCableDXFFeatures:TDXFEntIODataManager;

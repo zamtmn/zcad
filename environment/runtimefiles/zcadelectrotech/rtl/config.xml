@@ -1,4 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <CONFIG>
-  <Stage0Params DictionariesPath="ru=$(ZCADDictionariesPath)\ru_RU.dic;$(ZCADDictionariesPath)\ops.dic|en=$(ZCADDictionariesPath)\en_US.dic;$(ZCADDictionariesPath)\en_US_interface.dic|abbrv=$(ZCADDictionariesPath)\abbrv.dic"/>
+  <Stage0Params DictionariesPath="ru=$(ZCADDictionariesPath)/ru_RU.dic;$(ZCADDictionariesPath)/ops.dic|en=$(ZCADDictionariesPath)/en_US.dic;$(ZCADDictionariesPath)/en_US_interface.dic|abbrv=$(ZCADDictionariesPath)/abbrv.dic"/>
 </CONFIG>

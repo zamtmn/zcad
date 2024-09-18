@@ -65,7 +65,7 @@ const
                                    UpdatePO:false;
                                    MemProfiling:false;
                                    LangOverride:'';
-                                   DictionariesPath:'ru=$(ZCADDictionariesPath)\ru_RU.dic|en=$(ZCADDictionariesPath)\en_US.dic;$(ZCADDictionariesPath)\en_US_interface.dic|abbrv=$(ZCADDictionariesPath)\abbrv.dic';
+                                   DictionariesPath:'ru=$(ZCADDictionariesPath)/ru_RU.dic|en=$(ZCADDictionariesPath)/en_US.dic;$(ZCADDictionariesPath)/en_US_interface.dic|abbrv=$(ZCADDictionariesPath)/abbrv.dic';
                                    LastAutoSaveFile:'noAutoSaveFile');
   zcaduniqueinstanceid='zcad unique instance';
 var

@@ -185,6 +185,18 @@ TCalculatedString=record
   format:string;
 end;
 TOSnapModeControl=(On,Off,AsOwner);
+TTextJustify=(jstl(*'TopLeft'*),
+              jstc(*'TopCenter'*),
+              jstr(*'TopRight'*),
+              jsml(*'MiddleLeft'*),
+              jsmc(*'MiddleCenter'*), //СерединаЦентр
+              jsmr(*'MiddleRight'*),
+              jsbl(*'BottomLeft'*),
+              jsbc(*'BottomCenter'*),
+              jsbr(*'BottomRight'*),
+              jsbtl(*'Left'*),
+              jsbtc(*'Center'*),
+              jsbtr(*'Right'*));
 {EXPORT-}
 function IsIt(PType,PChecedType:Pointer):Boolean;
 

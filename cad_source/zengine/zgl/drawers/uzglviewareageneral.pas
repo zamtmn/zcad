@@ -2382,14 +2382,14 @@ begin
   ProjectPoint2(proot.vp.BoundingBox.RTF.x,proot.vp.BoundingBox.RTF.y,proot.vp.BoundingBox.RTF.Z,pdwg.pcamera^.modelMatrix,ccsLBN,ccsRTF);
   ProjectPoint2(proot.vp.BoundingBox.LBN.x,proot.vp.BoundingBox.RTF.y,proot.vp.BoundingBox.RTF.Z,pdwg.pcamera^.modelMatrix,ccsLBN,ccsRTF);
   }
-  {ProjectPoint2(proot.VisibleOBJBoundingBox.LBN.x,proot.VisibleOBJBoundingBox.LBN.y,proot.VisibleOBJBoundingBox.LBN.Z,pdwg.pcamera^.modelMatrix,ccsLBN,ccsRTF);
-  ProjectPoint2(proot.VisibleOBJBoundingBox.RTF.x,proot.VisibleOBJBoundingBox.LBN.y,proot.VisibleOBJBoundingBox.LBN.Z,pdwg.pcamera^.modelMatrix,ccsLBN,ccsRTF);
-  ProjectPoint2(proot.VisibleOBJBoundingBox.RTF.x,proot.VisibleOBJBoundingBox.RTF.y,proot.VisibleOBJBoundingBox.LBN.Z,pdwg.pcamera^.modelMatrix,ccsLBN,ccsRTF);
-  ProjectPoint2(proot.VisibleOBJBoundingBox.LBN.x,proot.VisibleOBJBoundingBox.RTF.y,proot.VisibleOBJBoundingBox.LBN.Z,pdwg.pcamera^.modelMatrix,ccsLBN,ccsRTF);
-  ProjectPoint2(proot.VisibleOBJBoundingBox.LBN.x,proot.VisibleOBJBoundingBox.LBN.y,proot.VisibleOBJBoundingBox.RTF.Z,pdwg.pcamera^.modelMatrix,ccsLBN,ccsRTF);
-  ProjectPoint2(proot.VisibleOBJBoundingBox.RTF.x,proot.VisibleOBJBoundingBox.LBN.y,proot.VisibleOBJBoundingBox.RTF.Z,pdwg.pcamera^.modelMatrix,ccsLBN,ccsRTF);
-  ProjectPoint2(proot.VisibleOBJBoundingBox.RTF.x,proot.VisibleOBJBoundingBox.RTF.y,proot.VisibleOBJBoundingBox.RTF.Z,pdwg.pcamera^.modelMatrix,ccsLBN,ccsRTF);
-  ProjectPoint2(proot.VisibleOBJBoundingBox.LBN.x,proot.VisibleOBJBoundingBox.RTF.y,proot.VisibleOBJBoundingBox.RTF.Z,pdwg.pcamera^.modelMatrix,ccsLBN,ccsRTF);}
+  {ProjectPoint2(proot.InFrustumAABB.LBN.x,proot.InFrustumAABB.LBN.y,proot.InFrustumAABB.LBN.Z,pdwg.pcamera^.modelMatrix,ccsLBN,ccsRTF);
+  ProjectPoint2(proot.InFrustumAABB.RTF.x,proot.InFrustumAABB.LBN.y,proot.InFrustumAABB.LBN.Z,pdwg.pcamera^.modelMatrix,ccsLBN,ccsRTF);
+  ProjectPoint2(proot.InFrustumAABB.RTF.x,proot.InFrustumAABB.RTF.y,proot.InFrustumAABB.LBN.Z,pdwg.pcamera^.modelMatrix,ccsLBN,ccsRTF);
+  ProjectPoint2(proot.InFrustumAABB.LBN.x,proot.InFrustumAABB.RTF.y,proot.InFrustumAABB.LBN.Z,pdwg.pcamera^.modelMatrix,ccsLBN,ccsRTF);
+  ProjectPoint2(proot.InFrustumAABB.LBN.x,proot.InFrustumAABB.LBN.y,proot.InFrustumAABB.RTF.Z,pdwg.pcamera^.modelMatrix,ccsLBN,ccsRTF);
+  ProjectPoint2(proot.InFrustumAABB.RTF.x,proot.InFrustumAABB.LBN.y,proot.InFrustumAABB.RTF.Z,pdwg.pcamera^.modelMatrix,ccsLBN,ccsRTF);
+  ProjectPoint2(proot.InFrustumAABB.RTF.x,proot.InFrustumAABB.RTF.y,proot.InFrustumAABB.RTF.Z,pdwg.pcamera^.modelMatrix,ccsLBN,ccsRTF);
+  ProjectPoint2(proot.InFrustumAABB.LBN.x,proot.InFrustumAABB.RTF.y,proot.InFrustumAABB.RTF.Z,pdwg.pcamera^.modelMatrix,ccsLBN,ccsRTF);}
 
   tbb:=proot.vp.BoundingBox;
 
@@ -2516,7 +2516,7 @@ begin
   pcamera^.modelMatrixLCS:=uzegeometry.MatrixMultiply(tm,pcamera^.modelMatrixLCS);
   ccsLBN:=InfinityVertex;
   ccsRTF:=MinusInfinityVertex;
-  tbb:=proot.VisibleOBJBoundingBox;
+  tbb:=proot.InFrustumAABB;
   if IsBBNul(tbb) then
   begin
        concatBBandPoint(tbb,param.CSIcon.CSIconCoord);
@@ -2528,7 +2528,7 @@ begin
   tbb2:=pdwg.getConstructObjRoot.vp.BoundingBox;
   ConcatBB(tbb,tbb2);
 
-  //proot.VisibleOBJBoundingBox:=tbb;
+  //proot.InFrustumAABB:=tbb;
 
   if not IsBBNul(tbb) then
   begin

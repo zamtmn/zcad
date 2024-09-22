@@ -37,7 +37,7 @@ GDBObjGenericSubEntry= object(GDBObjWithMatrix)
                             ObjCasheArray:GDBObjOpenArrayOfPV;
                             ObjToConnectedArray:GDBObjOpenArrayOfPV;
                             lstonmouse:PGDBObjEntity;
-                            VisibleOBJBoundingBox:TBoundingBox;
+                            InFrustumAABB:TBoundingBox;
                             //ObjTree:TEntTreeNode;
                             function AddObjectToObjArray(p:Pointer):Integer;virtual;
                             procedure RemoveMiFromArray(pobj:PGDBObjSubordinated;pobjinarray:Integer;const drawing:TDrawingDef);virtual;
@@ -351,28 +351,28 @@ begin
   begin
 
   dc.drawer.SetColor(palette[{sysvar.SYS.SYS_SystmGeometryColor^+2}4].RGB);
-  dc.drawer.DrawAABB3DInModelSpace(VisibleOBJBoundingBox,dc.DrawingContext.matrixs);
+  dc.drawer.DrawAABB3DInModelSpace(InFrustumAABB,dc.DrawingContext.matrixs);
   {oglsm.myglbegin(GL_LINE_LOOP);
-     oglsm.myglVertex(VisibleOBJBoundingBox.LBN.x,VisibleOBJBoundingBox.LBN.y,VisibleOBJBoundingBox.LBN.Z);
-     oglsm.myglVertex(VisibleOBJBoundingBox.RTF.x,VisibleOBJBoundingBox.LBN.y,VisibleOBJBoundingBox.LBN.Z);
-     oglsm.myglVertex(VisibleOBJBoundingBox.RTF.x,VisibleOBJBoundingBox.RTF.y,VisibleOBJBoundingBox.LBN.Z);
-     oglsm.myglVertex(VisibleOBJBoundingBox.LBN.x,VisibleOBJBoundingBox.RTF.y,VisibleOBJBoundingBox.LBN.Z);
+     oglsm.myglVertex(InFrustumAABB.LBN.x,InFrustumAABB.LBN.y,InFrustumAABB.LBN.Z);
+     oglsm.myglVertex(InFrustumAABB.RTF.x,InFrustumAABB.LBN.y,InFrustumAABB.LBN.Z);
+     oglsm.myglVertex(InFrustumAABB.RTF.x,InFrustumAABB.RTF.y,InFrustumAABB.LBN.Z);
+     oglsm.myglVertex(InFrustumAABB.LBN.x,InFrustumAABB.RTF.y,InFrustumAABB.LBN.Z);
   oglsm.myglend();
   oglsm.myglbegin(GL_LINE_LOOP);
-     oglsm.myglVertex(VisibleOBJBoundingBox.LBN.x,VisibleOBJBoundingBox.LBN.y,VisibleOBJBoundingBox.RTF.Z);
-     oglsm.myglVertex(VisibleOBJBoundingBox.RTF.x,VisibleOBJBoundingBox.LBN.y,VisibleOBJBoundingBox.RTF.Z);
-     oglsm.myglVertex(VisibleOBJBoundingBox.RTF.x,VisibleOBJBoundingBox.RTF.y,VisibleOBJBoundingBox.RTF.Z);
-     oglsm.myglVertex(VisibleOBJBoundingBox.LBN.x,VisibleOBJBoundingBox.RTF.y,VisibleOBJBoundingBox.RTF.Z);
+     oglsm.myglVertex(InFrustumAABB.LBN.x,InFrustumAABB.LBN.y,InFrustumAABB.RTF.Z);
+     oglsm.myglVertex(InFrustumAABB.RTF.x,InFrustumAABB.LBN.y,InFrustumAABB.RTF.Z);
+     oglsm.myglVertex(InFrustumAABB.RTF.x,InFrustumAABB.RTF.y,InFrustumAABB.RTF.Z);
+     oglsm.myglVertex(InFrustumAABB.LBN.x,InFrustumAABB.RTF.y,InFrustumAABB.RTF.Z);
   oglsm.myglend();
   oglsm.myglbegin(GL_LINES);
-     oglsm.myglVertex(VisibleOBJBoundingBox.LBN.x,VisibleOBJBoundingBox.LBN.y,VisibleOBJBoundingBox.LBN.Z);
-     oglsm.myglVertex(VisibleOBJBoundingBox.LBN.x,VisibleOBJBoundingBox.LBN.y,VisibleOBJBoundingBox.RTF.Z);
-     oglsm.myglVertex(VisibleOBJBoundingBox.RTF.x,VisibleOBJBoundingBox.LBN.y,VisibleOBJBoundingBox.LBN.Z);
-     oglsm.myglVertex(VisibleOBJBoundingBox.RTF.x,VisibleOBJBoundingBox.LBN.y,VisibleOBJBoundingBox.RTF.Z);
-     oglsm.myglVertex(VisibleOBJBoundingBox.RTF.x,VisibleOBJBoundingBox.RTF.y,VisibleOBJBoundingBox.LBN.Z);
-     oglsm.myglVertex(VisibleOBJBoundingBox.RTF.x,VisibleOBJBoundingBox.RTF.y,VisibleOBJBoundingBox.RTF.Z);
-     oglsm.myglVertex(VisibleOBJBoundingBox.LBN.x,VisibleOBJBoundingBox.RTF.y,VisibleOBJBoundingBox.LBN.Z);
-     oglsm.myglVertex(VisibleOBJBoundingBox.LBN.x,VisibleOBJBoundingBox.RTF.y,VisibleOBJBoundingBox.RTF.Z);
+     oglsm.myglVertex(InFrustumAABB.LBN.x,InFrustumAABB.LBN.y,InFrustumAABB.LBN.Z);
+     oglsm.myglVertex(InFrustumAABB.LBN.x,InFrustumAABB.LBN.y,InFrustumAABB.RTF.Z);
+     oglsm.myglVertex(InFrustumAABB.RTF.x,InFrustumAABB.LBN.y,InFrustumAABB.LBN.Z);
+     oglsm.myglVertex(InFrustumAABB.RTF.x,InFrustumAABB.LBN.y,InFrustumAABB.RTF.Z);
+     oglsm.myglVertex(InFrustumAABB.RTF.x,InFrustumAABB.RTF.y,InFrustumAABB.LBN.Z);
+     oglsm.myglVertex(InFrustumAABB.RTF.x,InFrustumAABB.RTF.y,InFrustumAABB.RTF.Z);
+     oglsm.myglVertex(InFrustumAABB.LBN.x,InFrustumAABB.RTF.y,InFrustumAABB.LBN.Z);
+     oglsm.myglVertex(InFrustumAABB.LBN.x,InFrustumAABB.RTF.y,InFrustumAABB.RTF.Z);
   oglsm.myglend();}
   end;
 end;
@@ -510,7 +510,7 @@ end;
 function GDBObjGenericSubEntry.CalcInFrustum(const frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:Integer; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double):Boolean;
 begin
      result:=ObjArray.calcvisible(frustum,infrustumactualy,visibleactualy,totalobj,infrustumobj, ProjectProc,zoom,currentdegradationfactor);
-     self.VisibleOBJBoundingBox:=ObjArray.calcvisbb({gdb.GetCurrentDWG.pcamera^.POSCOUNT}{visibleactualy}infrustumactualy);
+     self.InFrustumAABB:=ObjArray.calcvisbb({gdb.GetCurrentDWG.pcamera^.POSCOUNT}{visibleactualy}infrustumactualy);
      {ObjArray.calcvisible;
      visible:=true;}
 end;

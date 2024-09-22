@@ -36,6 +36,7 @@ TEntTreeNodeData=record
                      infrustum:TActulity;
                      nuldrawpos,minusdrawpos,plusdrawpos:TActulity;
                      FulDraw:TDrawType;
+                     InFrustumBoundingBox:TBoundingBox;
                      //nodedepth:Integer;
                      //pluscount,minuscount:Integer;
                  end;

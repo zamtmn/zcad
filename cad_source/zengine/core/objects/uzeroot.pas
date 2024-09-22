@@ -46,6 +46,7 @@ GDBObjRoot= object(GDBObjGenericSubEntry)
                  procedure DrawWithAttrib(var DC:TDrawContext{visibleactualy:TActulity;subrender:Integer});virtual;
                  function CalcInFrustum(const frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:Integer; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double):Boolean;virtual;
                  procedure CalcInFrustumByTree(const frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var enttree:TEntTreeNode;var totalobj,infrustumobj:Integer; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double);virtual;
+                 procedure CalcVisibleBBByTree(infrustumactualy:TActulity;visibleactualy:TActulity;var enttree:TEntTreeNode);virtual;
                  procedure calcbb(var DC:TDrawContext);virtual;
                  //function FindShellByClass(_type:TDeviceClass):PGDBObjSubordinated;virtual;
                  function GetObjType:TObjID;virtual;
@@ -66,13 +67,19 @@ begin
      vp.BoundingBox.LBN:=VectorTransform3D(vp.BoundingBox.LBN,ObjMatrix);
      vp.BoundingBox.RTF:=VectorTransform3D(vp.BoundingBox.RTF,ObjMatrix);
 end;
+procedure GDBObjRoot.CalcVisibleBBByTree(infrustumactualy:TActulity;visibleactualy:TActulity;var enttree:TEntTreeNode);
+begin
+  InFrustumAABB:=enttree.NodeData.InFrustumBoundingBox;
+end;
 procedure GDBObjRoot.CalcInFrustumByTree(const frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var enttree:TEntTreeNode;var totalobj,infrustumobj:Integer; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double);
 var
    myfrustum:ClipArray;
 begin
      myfrustum:=FrustumTransform(frustum,ObjMatrix);
      ProcessTree(myfrustum,infrustumactualy,visibleactualy,enttree,IRPartially,TDTFulDraw,totalobj,infrustumobj,ProjectProc,zoom,currentdegradationfactor);
-     self.VisibleOBJBoundingBox:=ObjArray.calcvisbb({gdb.GetCurrentDWG.pcamera^.POSCOUNT}{visibleactualy}infrustumactualy);
+
+     CalcVisibleBBByTree(infrustumactualy,visibleactualy,enttree);
+     //InFrustumAABB:=ObjArray.calcvisbb(infrustumactualy);
 end;
 function GDBObjRoot.CalcInFrustum;
 var

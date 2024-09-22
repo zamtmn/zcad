@@ -64,6 +64,7 @@ const
       NulVertex2D:GDBVertex2D=(x:0;y:0);
       XWCS2D:GDBVertex2D=(x:1;y:0);
       YWCS2D:GDBVertex2D=(x:0;y:1);
+      BBNul:TBoundingBox=(LBN:(x:0;y:0;z:0);RTF:(x:0;y:0;z:0));
 type Intercept3DProp=record
                            isintercept:Boolean;   //**< Есть это пересение или нет
                            interceptcoord:GDBVertex; //**< Точка пересечения X,Y,Z
@@ -655,60 +656,62 @@ begin
       result:=IRFully;
 end;
 
-function CalcAABBInFrustum (const AABB:TBoundingBox; const frustum:ClipArray):TInBoundingVolume;
-var i,count:Integer;
-    p1,p2,p3,p4,p5,p6,p7,p8:Gdbvertex;
-    d1,d2,d3,d4,d5,d6,d7,d8:Double;
+function CalcAABBInFrustum (const AABB:TBoundingBox;
+  const frustum:ClipArray):TInBoundingVolume;
+var
+  i,Count:integer;
+  p1,p2,p3,p4,p5,p6,p7,p8:Gdbvertex;
+  d1,d2,d3,d4,d5,d6,d7,d8:double;
 begin
-     //result:=irfully;
-     //system.exit;
+  p1:=AABB.LBN;
+  p2:=CreateVertex(AABB.RTF.x,AABB.LBN.y,AABB.LBN.Z);
+  p3:=CreateVertex(AABB.RTF.x,AABB.RTF.y,AABB.LBN.Z);
+  p4:=CreateVertex(AABB.LBN.x,AABB.RTF.y,AABB.LBN.Z);
+  p5:=CreateVertex(AABB.LBN.x,AABB.LBN.y,AABB.RTF.Z);
+  p6:=CreateVertex(AABB.RTF.x,AABB.LBN.y,AABB.RTF.Z);
+  p7:=AABB.RTF;
+  p8:=CreateVertex(AABB.LBN.x,AABB.RTF.y,AABB.RTF.Z);
 
-     p1:=AABB.LBN;
-     p2:=CreateVertex(AABB.RTF.x,AABB.LBN.y,AABB.LBN.Z);
-     p3:=CreateVertex(AABB.RTF.x,AABB.RTF.y,AABB.LBN.Z);
-     p4:=CreateVertex(AABB.LBN.x,AABB.RTF.y,AABB.LBN.Z);
-     p5:=CreateVertex(AABB.LBN.x,AABB.LBN.y,AABB.RTF.Z);
-     p6:=CreateVertex(AABB.RTF.x,AABB.LBN.y,AABB.RTF.Z);
-     p7:=AABB.RTF;
-     p8:=CreateVertex(AABB.LBN.x,AABB.RTF.y,AABB.RTF.Z);
+  //Count:=0;
+  for i:=0 to 5 do begin
+    with frustum[i] do begin
+      d1:=v[0] * p1.x + v[1] * p1.y + v[2] * p1.z + v[3];
+      d2:=v[0] * p2.x + v[1] * p2.y + v[2] * p2.z + v[3];
+      d3:=v[0] * p3.x + v[1] * p3.y + v[2] * p3.z + v[3];
+      d4:=v[0] * p4.x + v[1] * p4.y + v[2] * p4.z + v[3];
+      d5:=v[0] * p5.x + v[1] * p5.y + v[2] * p5.z + v[3];
+      d6:=v[0] * p6.x + v[1] * p6.y + v[2] * p6.z + v[3];
+      d7:=v[0] * p7.x + v[1] * p7.y + v[2] * p7.z + v[3];
+      d8:=v[0] * p8.x + v[1] * p8.y + v[2] * p8.z + v[3];
+    end;
 
-      count:=0;
-      for i:=0 to 5 do
-      begin
-        with frustum[i] do
-        begin
-          d1:=v[0] * p1.x + v[1] * p1.y + v[2] * p1.z + v[3];
-          d2:=v[0] * p2.x + v[1] * p2.y + v[2] * p2.z + v[3];
-          d3:=v[0] * p3.x + v[1] * p3.y + v[2] * p3.z + v[3];
-          d4:=v[0] * p4.x + v[1] * p4.y + v[2] * p4.z + v[3];
-          d5:=v[0] * p5.x + v[1] * p5.y + v[2] * p5.z + v[3];
-          d6:=v[0] * p6.x + v[1] * p6.y + v[2] * p6.z + v[3];
-          d7:=v[0] * p7.x + v[1] * p7.y + v[2] * p7.z + v[3];
-          d8:=v[0] * p8.x + v[1] * p8.y + v[2] * p8.z + v[3];
-        end;
+    if (d1<0)and(d2<0)and(d3<0)and(d4<0)and(d5<0)and(d6<0)and
+      (d7<0)and(d8<0)  then begin
+      Result:=IREmpty;
+      system.exit;
+    end;
 
-          if (d1<0)and(d2<0)and(d3<0)and(d4<0)and(d5<0)and(d6<0)and(d7<0)and(d8<0)
-          then
-              begin
-                   result:=irempty;
-                   system.exit;
-              end;
-          if d1>=0 then inc(count);
-          if d2>=0 then inc(count);
-          if d3>=0 then inc(count);
-          if d4>=0 then inc(count);
-          if d5>=0 then inc(count);
-          if d6>=0 then inc(count);
-          if d7>=0 then inc(count);
-          if d8>=0 then inc(count);
-      end;
-      if count=48 then
-                      begin
-                          result:=irfully;
-                          exit;
-                      end;
+    if (d1<0)or(d2<0)or(d3<0)or(d4<0)or(d5<0)or(d6<0)or
+      (d7<0)or(d8<0)  then begin
+      Result:=IRPartially;
+      system.exit;
+    end;
 
-      result:=IRPartially;
+    //if d1>=0 then Inc(Count);
+    //if d2>=0 then Inc(Count);
+    //if d3>=0 then Inc(Count);
+    //if d4>=0 then Inc(Count);
+    //if d5>=0 then Inc(Count);
+    //if d6>=0 then Inc(Count);
+    //if d7>=0 then Inc(Count);
+    //if d8>=0 then Inc(Count);
+  end;
+  Result:=irfully;
+  //if Count=48 then begin
+  //  Result:=irfully;
+  //  exit;
+  //end;
+  //Result:=IRPartially;
 end;
 function PointOf3PlaneIntersect(const P1,P2,P3:DVector4D):GDBVertex;
 var

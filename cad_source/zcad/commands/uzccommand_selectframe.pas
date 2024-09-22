@@ -21,10 +21,11 @@ unit uzccommand_selectframe;
 
 interface
 uses
- uzglviewareageneral,
- uzgldrawcontext,
- uzccommandsmanager,
- uzcstrconsts,
+  SysUtils,
+  uzglviewareageneral,
+  uzgldrawcontext,
+  uzccommandsmanager,
+  uzcstrconsts,
   uzccommandsabstract,
   uzccommandsimpl,
   uzbtypes,
@@ -33,9 +34,11 @@ uses
   uzcinterface,
   uzeconsts,
   uzeentity,
- uzclog,
- uzegeometrytypes,
- gzctnrVectorTypes,uzegeometry;
+  uzclog,
+  uzegeometrytypes,
+  uzCtnrVectorPBaseEntity,
+  gzctnrVectorTypes,uzegeometry,
+  uzcsysvars;
 var
   selframecommand:PCommandObjectDef;
 
@@ -78,6 +81,9 @@ var
   DC:TDrawContext;
   glmcoord1:gdbpiece;
   OnlyOnScreenSelect:boolean;
+  objects:TZctnrVectorPGDBaseEntity;
+  oldSelCount:integer;
+  TrueSel:Boolean;
 begin
   result:=mclick;
   OnlyOnScreenSelect:=(button and MZW_CONTROL)=0;
@@ -147,6 +153,8 @@ begin
 
       drawings.GetCurrentDWG.wa.param.seldesc.BigMouseFrustum:=CalcDisplaySubFrustum(x,y,w,h,drawings.getcurrentdwg.pcamera.modelMatrix,drawings.getcurrentdwg.pcamera.projMatrix,drawings.getcurrentdwg.pcamera.viewport);
 
+      objects.init(25000);
+
       pv:=drawings.GetCurrentROOT.ObjArray.beginiterate(ir);
       if pv<>nil then
       repeat
@@ -160,30 +168,52 @@ begin
                         begin
                              if r<>IREmpty then
                                                begin
-                                               pv^.RenderFeedbackIFNeed(drawings.GetCurrentDWG.pcamera^.POSCOUNT,drawings.GetCurrentDWG.pcamera^,drawings.GetCurrentDWG^.myGluProject2,dc);
-                                               if (button and MZW_SHIFT)=0 then
-                                                                               pv^.select(drawings.GetCurrentDWG.wa.param.SelDesc.Selectedobjcount,drawings.CurrentDWG^.selector)
-                                                                           else
-                                                                               pv^.deselect(drawings.GetCurrentDWG.wa.param.SelDesc.Selectedobjcount,drawings.CurrentDWG^.deselector);
-                                               drawings.GetCurrentDWG.wa.param.SelDesc.LastSelectedObject:=pv;
+                                                 objects.PushBackData(pv);
+                                                 pv^.RenderFeedbackIFNeed(drawings.GetCurrentDWG.pcamera^.POSCOUNT,drawings.GetCurrentDWG.pcamera^,drawings.GetCurrentDWG^.myGluProject2,dc);
+                                                 drawings.GetCurrentDWG.wa.param.SelDesc.LastSelectedObject:=pv;
                                                end;
                         end
                     else
                         begin
                              if r=IRFully then
                                               begin
-                                               pv^.RenderFeedbackIFNeed(drawings.GetCurrentDWG.pcamera^.POSCOUNT,drawings.GetCurrentDWG.pcamera^,drawings.GetCurrentDWG^.myGluProject2,dc);
-                                               if (button and MZW_SHIFT)=0 then
-                                                                               pv^.select(drawings.GetCurrentDWG.wa.param.SelDesc.Selectedobjcount,drawings.CurrentDWG^.selector)
-                                                                           else
-                                                                               pv^.deselect(drawings.GetCurrentDWG.wa.param.SelDesc.Selectedobjcount,drawings.CurrentDWG^.deselector);
-                                               drawings.GetCurrentDWG.wa.param.SelDesc.LastSelectedObject:=pv;
+                                                objects.PushBackData(pv);
+                                                pv^.RenderFeedbackIFNeed(drawings.GetCurrentDWG.pcamera^.POSCOUNT,drawings.GetCurrentDWG.pcamera^,drawings.GetCurrentDWG^.myGluProject2,dc);
+                                                drawings.GetCurrentDWG.wa.param.SelDesc.LastSelectedObject:=pv;
                                               end;
                         end
             end;
 
             pv:=drawings.GetCurrentROOT.ObjArray.iterate(ir);
       until pv=nil;
+
+      if sysvar.DSGN.DSGN_MaxTrueSelectEntsCount<>nil then
+        TrueSel:=objects.Count<=sysvar.DSGN.DSGN_MaxTrueSelectEntsCount^
+      else
+        TrueSel:=true;
+
+      oldSelCount:=drawings.GetCurrentDWG.wa.param.SelDesc.Selectedobjcount;
+
+      pv:=objects.beginiterate(ir);
+      if pv<>nil then
+        repeat
+          if (button and MZW_SHIFT)=0 then begin
+            if TrueSel then
+              pv^.select(drawings.GetCurrentDWG.wa.param.SelDesc.Selectedobjcount,drawings.CurrentDWG^.selector)
+            else
+              pv^.SelectQuik;
+          end else
+            pv^.deselect(drawings.GetCurrentDWG.wa.param.SelDesc.Selectedobjcount,drawings.CurrentDWG^.deselector);
+          pv:=objects.iterate(ir);
+        until pv=nil;
+
+      if (button and MZW_SHIFT)=0 then
+        ZCMsgCallBackInterface.TextMessage(format(rscmNEntitiesSelected,[objects.Count]),TMWOHistoryOut)
+      else
+        ZCMsgCallBackInterface.TextMessage(format(rscmNEntitiesDeSelected,[oldSelCount-drawings.GetCurrentDWG.wa.param.SelDesc.Selectedobjcount]),TMWOHistoryOut);
+
+      objects.Clear;
+      objects.done;
 
       {if drawings.GetCurrentDWG.ObjRoot.ObjArray.count = 0 then exit;
       ti:=0;

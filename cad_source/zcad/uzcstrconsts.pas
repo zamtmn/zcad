@@ -132,7 +132,8 @@ resourcestring
   rscmOptions2OI='Options are available in the Object Inspector';
   rscmSelOrSpecEntity='Select or specify the parameters entity!';
   rscmNEntitiesProcessed='%d entities processed';
-  rscmNEntitiesDeselected='%d entities deselected';
+  rscmNEntitiesSelected='%d entities selected';
+  rscmNEntitiesDeSelected='%d entities deselected';
   rscmNEntitiesFounded='%d entities founded';
   rscmNEntityFrom='Show entity %d from %d';
   rscmNEntityFromWithDetails='Show entity %d from %d with details "%s"';

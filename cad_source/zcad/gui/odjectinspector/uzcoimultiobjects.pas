@@ -28,7 +28,7 @@ uses
   gzctnrVectorTypes,uzbtypes,uzcdrawings,varmandef,uzeentity,
   Varman,uzctnrvectorstrings,UGDBSelectedObjArray,uzcoimultipropertiesutil,
   uzeExtdrAbstractEntityExtender,uzelongprocesssupport,uzbLogIntf,uzcutils,
-  zUndoCmdChgVariable,uzcdrawing,zUndoCmdChgTypes,uzeBaseExtender;
+  zUndoCmdChgVariable,uzcdrawing,zUndoCmdChgTypes,uzeBaseExtender,uzcsysvars;
 type
   TObjIDWithExtender2Counter=TMyMapCounter<TObjIDWithExtender>;
 {Export+}
@@ -727,14 +727,14 @@ begin
 end;
 
 procedure  TMSEditor.createunit;
-var //i: Integer;
-    pv:pGDBObjEntity;
-    psd:PSelectedObjDesc;
-    pu:pointer;
-    //pvd,pvdmy:pvardesk;
-    //vd:vardesk;
-    ir,ir2:itrec;
-    pentvarext:TVariablesExtender;
+var
+  pv:pGDBObjEntity;
+  psd:PSelectedObjDesc;
+  pu:pointer;
+  ir,ir2:itrec;
+  pentvarext:TVariablesExtender;
+  entscount:integer;
+  TrueSel:Boolean;
 begin
   with ProgramLog.Enter('TMSEditor.createunit',LM_Debug) do begin
   //debugln('{D+}TMSEditor.createunit start');
@@ -777,33 +777,45 @@ begin
       SummaryUnit.InterfaceUses.PushBackIfNotPresent(sysunit);
     programlog.leave(IfEntered);end;
 
-    CheckMultiPropertyUse;
-    CreateMultiPropertys(f);
-    //etype:=GetObjType;
-    psd:=drawings.GetCurrentDWG.SelObjArray.beginiterate(ir);
-    //pv:=drawings.GetCurrentDWG.ObjRoot.ObjArray.beginiterate(ir);
-    if psd<>nil then repeat
-      pv:=psd^.objaddr;
-      if pv<>nil then
-        if pv^.Selected then begin
-          pentvarext:=pv^.GetExtension<TVariablesExtender>;
-          if ((pv^.GetObjType=GetObjType)or(GetObjType=0))and(pentvarext<>nil) then begin
-            if VariableProcessSelector<>VPS_OnlyRelatedEnts then
-              processunit(pentvarext.entityunit);
-            if VariableProcessSelector<>VPS_OnlyThisEnts then begin
-              pu:=pentvarext.entityunit.InterfaceUses.beginiterate(ir2);
-              if pu<>nil then
-                repeat
-                  if typeof(PTSimpleUnit(pu)^)=typeof(TEntityUnit) then
-                    processunit(PTEntityUnit(pu)^,true);
-                  pu:=pentvarext.entityunit.InterfaceUses.iterate(ir2)
-                until pu=nil;
+    if TxtEntType.Selected=0 then
+      entscount:=drawings.GetCurrentDWG.SelObjArray.Count
+    else
+      entscount:=ObjID2Counter.MyGetValue(ObjIDVector[TxtEntType.Selected]);
+
+    if sysvar.DSGN.DSGN_MaxTrueSelectEntsCount<>nil then
+      TrueSel:=entscount<=sysvar.DSGN.DSGN_MaxTrueSelectEntsCount^
+    else
+      TrueSel:=true;
+
+    if TrueSel then begin
+      CheckMultiPropertyUse;
+      CreateMultiPropertys(f);
+      //etype:=GetObjType;
+      psd:=drawings.GetCurrentDWG.SelObjArray.beginiterate(ir);
+      //pv:=drawings.GetCurrentDWG.ObjRoot.ObjArray.beginiterate(ir);
+      if psd<>nil then repeat
+        pv:=psd^.objaddr;
+        if pv<>nil then
+          if pv^.Selected then begin
+            pentvarext:=pv^.GetExtension<TVariablesExtender>;
+            if ((pv^.GetObjType=GetObjType)or(GetObjType=0))and(pentvarext<>nil) then begin
+              if VariableProcessSelector<>VPS_OnlyRelatedEnts then
+                processunit(pentvarext.entityunit);
+              if VariableProcessSelector<>VPS_OnlyThisEnts then begin
+                pu:=pentvarext.entityunit.InterfaceUses.beginiterate(ir2);
+                if pu<>nil then
+                  repeat
+                    if typeof(PTSimpleUnit(pu)^)=typeof(TEntityUnit) then
+                      processunit(PTEntityUnit(pu)^,true);
+                    pu:=pentvarext.entityunit.InterfaceUses.iterate(ir2)
+                  until pu=nil;
+              end;
             end;
           end;
-        end;
-      //pv:=drawings.GetCurrentDWG.ObjRoot.ObjArray.iterate(ir);
-      psd:=drawings.GetCurrentDWG.SelObjArray.iterate(ir);
-    until psd=nil;
+        //pv:=drawings.GetCurrentDWG.ObjRoot.ObjArray.iterate(ir);
+        psd:=drawings.GetCurrentDWG.SelObjArray.iterate(ir);
+      until psd=nil;
+    end;
   programlog.leave(IfEntered);end;
   //debugln('{D-}TMSEditor.createunit end');
 end;

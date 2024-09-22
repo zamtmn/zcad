@@ -208,7 +208,7 @@ begin
         until pv=nil;
 
       if (button and MZW_SHIFT)=0 then
-        ZCMsgCallBackInterface.TextMessage(format(rscmNEntitiesSelected,[objects.Count]),TMWOHistoryOut)
+        ZCMsgCallBackInterface.TextMessage(format(rscmNEntitiesSelected,[drawings.GetCurrentDWG.wa.param.SelDesc.Selectedobjcount-oldSelCount]),TMWOHistoryOut)
       else
         ZCMsgCallBackInterface.TextMessage(format(rscmNEntitiesDeSelected,[oldSelCount-drawings.GetCurrentDWG.wa.param.SelDesc.Selectedobjcount]),TMWOHistoryOut);
 

@@ -26,7 +26,7 @@ uses uzedrawingdef,uzeblockdefsfactory,uzestylesdim,
      uzestyleslayers,uzestyleslinetypes,uzeentity,UGDBSelectedObjArray,uzestylestexts,
      uzedimensionaltypes,uzegeometrytypes,uzecamera,UGDBOpenArrayOfPV,uzeroot,uzefont,
      uzglviewareaabstract,uzglviewareageneral,uzgldrawcontext,UGDBControlPointArray,
-     uzglviewareadata,uzeExtdrAbstractDrawingExtender;
+     uzglviewareadata,uzeExtdrAbstractDrawingExtender,uzCtnrVectorPBaseEntity,uzcsysvars;
 type
 TMainBlockCreateProc=procedure (_to:PTDrawingDef;name:String) of object;
 {EXPORT+}
@@ -110,12 +110,38 @@ TSimpleDrawing= object(TAbstractDrawing)
                        procedure SelectorWOGrips(PEntity,PGripsCreator:PGDBObjEntity;var SelectedObjCount:Integer);
                        procedure DeSelector(PV:PGDBObjEntity;var SelectedObjCount:Integer);
                        procedure DeSelectAll;virtual;
+                       procedure SelectEnts(var Ents:TZctnrVectorPGDBaseEntity);
                  end;
 {EXPORT-}
 function CreateSimpleDWG:PTSimpleDrawing;
 var
     MainBlockCreateProc:TMainBlockCreateProc=nil;
 implementation
+procedure TSimpleDrawing.SelectEnts(var Ents:TZctnrVectorPGDBaseEntity);
+var
+  pv:PGDBObjEntity;
+  ir:itrec;
+  TrueSel:Boolean;
+  SelProc:TSimpleDrawing.TSelector;
+begin
+  if sysvar.DSGN.DSGN_MaxSelectEntsCountWithGrips<>nil then
+    TrueSel:=Ents.Count<=sysvar.DSGN.DSGN_MaxSelectEntsCountWithGrips^
+  else
+    TrueSel:=true;
+
+  if TrueSel then
+    SelProc:=Selector
+  else
+    SelProc:=SelectorWOGrips;
+
+  pv:=Ents.beginiterate(ir);
+  if pv<>nil then
+    repeat
+      pv^.select(wa.param.SelDesc.Selectedobjcount,SelProc);
+      pv:=Ents.iterate(ir);
+    until pv=nil;
+end;
+
 procedure TSimpleDrawing.DeSelectAll;
 var tdesc:pselectedobjdesc;
     i:Integer;

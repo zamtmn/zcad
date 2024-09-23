@@ -81,7 +81,7 @@ var
   DC:TDrawContext;
   glmcoord1:gdbpiece;
   OnlyOnScreenSelect:boolean;
-  objects:TZctnrVectorPGDBaseEntity;
+  Ents:TZctnrVectorPGDBaseEntity;
   oldSelCount:integer;
   TrueSel:Boolean;
   SelProc:TSimpleDrawing.TSelector;
@@ -154,7 +154,7 @@ begin
 
       drawings.GetCurrentDWG.wa.param.seldesc.BigMouseFrustum:=CalcDisplaySubFrustum(x,y,w,h,drawings.getcurrentdwg.pcamera.modelMatrix,drawings.getcurrentdwg.pcamera.projMatrix,drawings.getcurrentdwg.pcamera.viewport);
 
-      objects.init(25000);
+      Ents.init(25000);
 
       pv:=drawings.GetCurrentROOT.ObjArray.beginiterate(ir);
       if pv<>nil then
@@ -169,7 +169,7 @@ begin
                         begin
                              if r<>IREmpty then
                                                begin
-                                                 objects.PushBackData(pv);
+                                                 Ents.PushBackData(pv);
                                                  pv^.RenderFeedbackIFNeed(drawings.GetCurrentDWG.pcamera^.POSCOUNT,drawings.GetCurrentDWG.pcamera^,drawings.GetCurrentDWG^.myGluProject2,dc);
                                                  drawings.GetCurrentDWG.wa.param.SelDesc.LastSelectedObject:=pv;
                                                end;
@@ -178,7 +178,7 @@ begin
                         begin
                              if r=IRFully then
                                               begin
-                                                objects.PushBackData(pv);
+                                                Ents.PushBackData(pv);
                                                 pv^.RenderFeedbackIFNeed(drawings.GetCurrentDWG.pcamera^.POSCOUNT,drawings.GetCurrentDWG.pcamera^,drawings.GetCurrentDWG^.myGluProject2,dc);
                                                 drawings.GetCurrentDWG.wa.param.SelDesc.LastSelectedObject:=pv;
                                               end;
@@ -189,7 +189,7 @@ begin
       until pv=nil;
 
       if sysvar.DSGN.DSGN_MaxSelectEntsCountWithGrips<>nil then
-        TrueSel:=objects.Count<=sysvar.DSGN.DSGN_MaxSelectEntsCountWithGrips^
+        TrueSel:=Ents.Count<=sysvar.DSGN.DSGN_MaxSelectEntsCountWithGrips^
       else
         TrueSel:=true;
 
@@ -200,7 +200,7 @@ begin
 
       oldSelCount:=drawings.GetCurrentDWG.wa.param.SelDesc.Selectedobjcount;
 
-      pv:=objects.beginiterate(ir);
+      pv:=Ents.beginiterate(ir);
       if pv<>nil then
         repeat
           if (button and MZW_SHIFT)=0 then begin
@@ -211,7 +211,7 @@ begin
               pv^.SelectQuik;}
           end else
             pv^.deselect(drawings.GetCurrentDWG.wa.param.SelDesc.Selectedobjcount,drawings.CurrentDWG^.deselector);
-          pv:=objects.iterate(ir);
+          pv:=Ents.iterate(ir);
         until pv=nil;
 
       if (button and MZW_SHIFT)=0 then
@@ -219,8 +219,8 @@ begin
       else
         ZCMsgCallBackInterface.TextMessage(format(rscmNEntitiesDeSelected,[oldSelCount-drawings.GetCurrentDWG.wa.param.SelDesc.Selectedobjcount]),TMWOHistoryOut);
 
-      objects.Clear;
-      objects.done;
+      Ents.Clear;
+      Ents.done;
 
       {if drawings.GetCurrentDWG.ObjRoot.ObjArray.count = 0 then exit;
       ti:=0;

@@ -240,7 +240,8 @@ procedure CommandFastObjectPlugin.CommandEnd;
 begin
   if drawings.currentdwg<>nil then begin
     if CEDeSelect in self.CEndActionAttr then begin
-      drawings.GetCurrentROOT.ObjArray.DeSelect(drawings.GetCurrentDWG.wa.param.SelDesc.Selectedobjcount,drawings.GetCurrentDWG^.deselector);
+      //drawings.GetCurrentROOT.ObjArray.DeSelect(drawings.GetCurrentDWG.wa.param.SelDesc.Selectedobjcount,drawings.GetCurrentDWG^.deselector);
+      drawings.GetCurrentDWG.DeSelectAll;
       drawings.GetCurrentDWG.wa.param.SelDesc.LastSelectedObject := nil;
       drawings.GetCurrentDWG.wa.param.SelDesc.OnMouseObject := nil;
       drawings.GetCurrentDWG.wa.param.seldesc.Selectedobjcount:=0;
@@ -276,7 +277,8 @@ procedure CommandRTEdObject.CommandEnd;
 begin
     //inherited;
   if CEDeSelect in self.CEndActionAttr then begin
-    drawings.GetCurrentROOT.ObjArray.DeSelect(drawings.GetCurrentDWG.wa.param.SelDesc.Selectedobjcount,drawings.GetCurrentDWG^.deselector);
+    //drawings.GetCurrentROOT.ObjArray.DeSelect(drawings.GetCurrentDWG.wa.param.SelDesc.Selectedobjcount,drawings.GetCurrentDWG^.deselector);
+    drawings.GetCurrentDWG.DeSelectAll;
     drawings.GetCurrentDWG.wa.param.SelDesc.LastSelectedObject := nil;
     drawings.GetCurrentDWG.wa.param.SelDesc.OnMouseObject := nil;
     drawings.GetCurrentDWG.wa.param.seldesc.Selectedobjcount:=0;

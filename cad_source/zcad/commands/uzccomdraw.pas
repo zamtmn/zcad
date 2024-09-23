@@ -925,7 +925,7 @@ begin
     if tn='' then
       ZCMsgCallBackInterface.Do_PrepareObject(nil,drawings.GetUnitsFormat,SysUnit^.TypeName2PTD('CommandRTEdObject'),pbeditcom,drawings.GetCurrentDWG);
     drawings.GetCurrentDWG^.SelObjArray.Free;
-    drawings.GetCurrentROOT^.ObjArray.DeSelect(drawings.GetCurrentDWG^.wa.param.SelDesc.Selectedobjcount,@drawings.GetCurrentDWG^.deselector);
+    drawings.GetCurrentROOT^.ObjArray.DeSelect(drawings.GetCurrentDWG^.wa.param.SelDesc.Selectedobjcount,@drawings.GetCurrentDWG^.DeSelector);
     //result:=cmd_ok;
     //zcRedrawCurrentDrawing;
     if tn<>'' then

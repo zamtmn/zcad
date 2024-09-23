@@ -29,7 +29,7 @@ uses
   uzccommandsabstract,
   uzccommandsimpl,
   uzbtypes,
-  uzcdrawings,
+  uzcdrawings,uzedrawingsimple,
   uzglviewareadata,
   uzcinterface,
   uzeconsts,
@@ -84,6 +84,7 @@ var
   objects:TZctnrVectorPGDBaseEntity;
   oldSelCount:integer;
   TrueSel:Boolean;
+  SelProc:TSimpleDrawing.TSelector;
 begin
   result:=mclick;
   OnlyOnScreenSelect:=(button and MZW_CONTROL)=0;
@@ -187,10 +188,15 @@ begin
             pv:=drawings.GetCurrentROOT.ObjArray.iterate(ir);
       until pv=nil;
 
-      if sysvar.DSGN.DSGN_MaxTrueSelectEntsCount<>nil then
-        TrueSel:=objects.Count<=sysvar.DSGN.DSGN_MaxTrueSelectEntsCount^
+      if sysvar.DSGN.DSGN_MaxSelectEntsCountWithGrips<>nil then
+        TrueSel:=objects.Count<=sysvar.DSGN.DSGN_MaxSelectEntsCountWithGrips^
       else
         TrueSel:=true;
+
+      if TrueSel then
+        SelProc:=drawings.CurrentDWG^.Selector
+      else
+        SelProc:=drawings.CurrentDWG^.SelectorWOGrips;
 
       oldSelCount:=drawings.GetCurrentDWG.wa.param.SelDesc.Selectedobjcount;
 
@@ -198,10 +204,11 @@ begin
       if pv<>nil then
         repeat
           if (button and MZW_SHIFT)=0 then begin
-            if TrueSel then
-              pv^.select(drawings.GetCurrentDWG.wa.param.SelDesc.Selectedobjcount,drawings.CurrentDWG^.selector)
+            pv^.select(drawings.GetCurrentDWG.wa.param.SelDesc.Selectedobjcount,SelProc)
+            {if TrueSel then
+              pv^.select(drawings.GetCurrentDWG.wa.param.SelDesc.Selectedobjcount,drawings.CurrentDWG^.SelectorWOGrips())
             else
-              pv^.SelectQuik;
+              pv^.SelectQuik;}
           end else
             pv^.deselect(drawings.GetCurrentDWG.wa.param.SelDesc.Selectedobjcount,drawings.CurrentDWG^.deselector);
           pv:=objects.iterate(ir);

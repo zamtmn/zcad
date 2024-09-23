@@ -37,6 +37,7 @@ GDBSelectedObjArray= object(GZVector{-}<selectedobjdesc>{//})
                           SelectedCount:Integer;
 
                           function addobject(PEntity:PGDBObjEntity):pselectedobjdesc;virtual;
+                          procedure pushobject(PEntity:PGDBObjEntity);
                           procedure free;virtual;
                           procedure remappoints(pcount:TActulity;ScrollMode:Boolean;var camera:GDBObjCamera; ProjectProc:GDBProjectProc;var DC:TDrawContext);virtual;
                           procedure drawpoint(var DC:TDrawContext;const GripSize:Integer; const SelColor,UnSelColor:TRGB);virtual;
@@ -113,6 +114,15 @@ begin
                 i:=PushBackData(dummyseldesc);
               end;
   result:=@PArray^[i];}
+end;
+procedure GDBSelectedObjArray.pushobject(PEntity:PGDBObjEntity);
+var
+  dummyseldesc:selectedobjdesc;
+begin
+  dummyseldesc.objaddr:=PEntity;
+  dummyseldesc.pcontrolpoint:=nil;
+  dummyseldesc.ptempobj:=nil;
+  PushBackData(dummyseldesc);
 end;
 procedure GDBSelectedObjArray.free;
 var tdesc:pselectedobjdesc;

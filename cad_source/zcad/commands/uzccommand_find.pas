@@ -399,12 +399,12 @@ begin
     if FindCommandParam.Action.SelectResult<>SR_Nohhing then begin
       if FindCommandParam.Action.SelectResult=SR_Select then begin
         drawings.GetCurrentDWG.SelObjArray.Free;
-        drawings.GetCurrentROOT.ObjArray.DeSelect(drawings.GetCurrentDWG.wa.param.SelDesc.Selectedobjcount,drawings.GetCurrentDWG^.deselector);
+        drawings.GetCurrentROOT.ObjArray.DeSelect(drawings.GetCurrentDWG.wa.param.SelDesc.Selectedobjcount,drawings.GetCurrentDWG^.DeSelector);
       end;
       pv:=Finded.beginiterate(ir);
       if pv<>nil then
       repeat
-        pv^.select(drawings.GetCurrentDWG.wa.param.SelDesc.Selectedobjcount,drawings.CurrentDWG^.selector);
+        pv^.select(drawings.GetCurrentDWG.wa.param.SelDesc.Selectedobjcount,drawings.CurrentDWG^.Selector);
         pv:=Finded.iterate(ir);
       until pv=nil;
     end;

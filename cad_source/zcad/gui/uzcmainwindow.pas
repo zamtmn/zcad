@@ -1439,7 +1439,7 @@ begin
       result:=true;
       if (zc and MZW_SHIFT)=0 then begin
         if (not PGDBObjEntity(sender.param.SelDesc.OnMouseObject).Selected)and(sysvarDSGNSelNew)and((zc and MZW_CONTROL)=0) then begin
-          sender.pdwg.GetCurrentROOT.ObjArray.DeSelect(sender.param.SelDesc.Selectedobjcount,drawings.GetCurrentDWG^.deselector);
+          sender.pdwg.GetCurrentROOT.ObjArray.DeSelect(sender.param.SelDesc.Selectedobjcount,drawings.GetCurrentDWG^.DeSelector);
           sender.param.SelDesc.LastSelectedObject := nil;
           sender.param.seldesc.Selectedobjcount:=0;
           sender.PDWG^.GetSelObjArray.Free;
@@ -1544,7 +1544,7 @@ begin
                               if pvname2<>nil then
                               if pString(pvname2^.data.Addr.Instance)^=pString(pvname^.data.Addr.Instance)^ then
                               begin
-                                   if pobj^.select(param.SelDesc.Selectedobjcount,drawings.CurrentDWG^.selector)then
+                                   if pobj^.select(param.SelDesc.Selectedobjcount,drawings.CurrentDWG^.Selector)then
                                                                                                           inc(result);
                               end;
                          end;
@@ -1573,7 +1573,8 @@ begin
        Sender.ClearOntrackpoint;
        if commandmanager.CurrCmd.pcommandrunning=nil then
          begin
-         Sender.PDWG.GetCurrentROOT.ObjArray.DeSelect(Sender.param.SelDesc.Selectedobjcount,drawings.GetCurrentDWG^.deselector);
+         //Sender.PDWG.GetCurrentROOT.ObjArray.DeSelect(Sender.param.SelDesc.Selectedobjcount,drawings.GetCurrentDWG^.DeSelector);
+         Sender.PDWG.DeSelectAll;
          Sender.param.SelDesc.LastSelectedObject := nil;
          Sender.param.SelDesc.OnMouseObject := nil;
          Sender.param.seldesc.Selectedobjcount:=0;
@@ -1615,7 +1616,7 @@ begin
                               ZCMsgCallBackInterface.TextMessage(format(rsAdditionalSelected,[RelSelectedObjects]),TMWOHistoryOut);
   if (commandmanager.CurrCmd.pcommandrunning=nil)or(commandmanager.CurrCmd.pcommandrunning^.IData.GetPointMode<>TGPMWaitEnt) then
   begin
-  if PGDBObjEntity(Sender.param.SelDesc.OnMouseObject)^.select(Sender.param.SelDesc.Selectedobjcount,drawings.CurrentDWG^.selector) then
+  if PGDBObjEntity(Sender.param.SelDesc.OnMouseObject)^.select(Sender.param.SelDesc.Selectedobjcount,drawings.CurrentDWG^.Selector) then
     begin
           ZCMsgCallBackInterface.Do_GUIaction(sender,ZMsgID_GUIActionSelectionChanged);
           ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIActionRedraw);

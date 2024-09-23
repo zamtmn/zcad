@@ -534,7 +534,7 @@ implementation
         repeat
           if pobj^.selected then
             begin
-             pobj^.DeSelect(drawings.GetCurrentDWG^.wa.param.SelDesc.Selectedobjcount,@drawings.CurrentDWG^.deselector);
+             pobj^.DeSelect(drawings.GetCurrentDWG^.wa.param.SelDesc.Selectedobjcount,@drawings.CurrentDWG^.DeSelector);
              if pobj^.GetObjType=GDBPolyLineID then
                begin
                  contourRoom:=PGDBObjPolyLine(pobj);

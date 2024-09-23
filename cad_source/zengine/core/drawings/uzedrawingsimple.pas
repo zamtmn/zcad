@@ -33,6 +33,9 @@ TMainBlockCreateProc=procedure (_to:PTDrawingDef;name:String) of object;
 PTSimpleDrawing=^TSimpleDrawing;
 {REGISTEROBJECTTYPE TSimpleDrawing}
 TSimpleDrawing= object(TAbstractDrawing)
+                     type
+                       TSelector=procedure(PEntity,PGripsCreator:PGDBObjEntity;var SelectedObjCount:Integer)of object;
+                     var
                        pObjRoot:PGDBObjGenericSubEntry;
                        mainObjRoot:GDBObjRoot;
                        LayerTable:GDBLayerArray;
@@ -103,14 +106,35 @@ TSimpleDrawing= object(TAbstractDrawing)
                        function GetCurrentLType:PGDBLtypeProp;
                        function GetCurrentTextStyle:PGDBTextStyle;
                        function GetCurrentDimStyle:PGDBDimStyle;
-                       procedure Selector(PEntity,PGripsCreator:PGDBObjEntity;var SelectedObjCount:Integer);virtual;
-                       procedure DeSelector(PV:PGDBObjEntity;var SelectedObjCount:Integer);virtual;
+                       procedure Selector(PEntity,PGripsCreator:PGDBObjEntity;var SelectedObjCount:Integer);
+                       procedure SelectorWOGrips(PEntity,PGripsCreator:PGDBObjEntity;var SelectedObjCount:Integer);
+                       procedure DeSelector(PV:PGDBObjEntity;var SelectedObjCount:Integer);
+                       procedure DeSelectAll;virtual;
                  end;
 {EXPORT-}
 function CreateSimpleDWG:PTSimpleDrawing;
 var
     MainBlockCreateProc:TMainBlockCreateProc=nil;
 implementation
+procedure TSimpleDrawing.DeSelectAll;
+var tdesc:pselectedobjdesc;
+    i:Integer;
+begin
+  tdesc:=SelObjArray.GetParrayAsPointer;
+  if SelObjArray.count<>0 then
+    for i:=0 to SelObjArray.count-1 do begin
+      tdesc.objaddr.selected:=false;
+      SelObjArray.freeelement(tdesc);
+      inc(tdesc);
+    end;
+end;
+
+
+procedure TSimpleDrawing.SelectorWOGrips(PEntity,PGripsCreator:PGDBObjEntity;var SelectedObjCount:Integer);
+begin
+  SelObjArray.pushobject(PEntity);
+  inc(Selectedobjcount);
+end;
 procedure TSimpleDrawing.Selector;
 var tdesc:pselectedobjdesc;
 begin

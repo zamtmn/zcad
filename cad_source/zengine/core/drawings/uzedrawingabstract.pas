@@ -68,6 +68,7 @@ TAbstractDrawing= object(TDrawingDef)
                        procedure SetUnitsFormat(f:TzeUnitsFormat);virtual;abstract;
                        procedure rtmodify(obj:PGDBObjEntity;md:Pointer;dist,wc:gdbvertex;save:Boolean);virtual;abstract;
                        procedure FillDrawingPartRC(var dc:TDrawContext);virtual;abstract;
+                       procedure DeSelectAll;virtual;abstract;
                  end;
 {EXPORT-}
 implementation

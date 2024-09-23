@@ -67,7 +67,7 @@ initialization;
   SysVarUnit.AssignToSymbol(sysvar.DSGN.DSGN_LayerControls.DSGN_LC_Leader,'DSGN_LCLeader');
   //SysVarUnit.AssignToSymbol(sysvar.DSGN.DSGN_SelNew,'DSGN_SelNew');
   SysVarUnit.AssignToSymbol(sysvar.DSGN.DSGN_SelSameName,'DSGN_SelSameName');
-  SysVarUnit.AssignToSymbol(sysvar.DSGN.DSGN_MaxSelectEntsCountWithOdjInsp,'DSGN_MaxSelectEntsCountWithOdjInsp');
+  SysVarUnit.AssignToSymbol(sysvar.DSGN.DSGN_MaxSelectEntsCountWithObjInsp,'DSGN_MaxSelectEntsCountWithObjInsp');
   SysVarUnit.AssignToSymbol(sysvar.DSGN.DSGN_MaxSelectEntsCountWithGrips,'DSGN_MaxSelectEntsCountWithGrips');
   //SysVarUnit.AssignToSymbol(sysvar.DSGN.DSGN_OTrackTimerInterval,'DSGN_OTrackTimerInterval');
 

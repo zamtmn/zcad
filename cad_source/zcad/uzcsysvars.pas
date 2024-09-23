@@ -173,8 +173,8 @@ type
              DSGN_HelpScale:PDouble;(*'Scale of auxiliary elements'*)
              DSGN_SelNew:PBoolean;(*'New selection set'*)
              DSGN_SelSameName:PBoolean;(*'Auto select devices with same name'*)
-             DSGN_MaxSelectEntsCountWithOdjInsp:PInteger;(*'Maximum count true selected entities'*)
-             DSGN_MaxSelectEntsCountWithGrips:PInteger;(*'Maximum count true selected entities'*)
+             DSGN_MaxSelectEntsCountWithObjInsp:PInteger;(*'Maximum selected entities to object inspector'*)
+             DSGN_MaxSelectEntsCountWithGrips:PInteger;(*'Maximum selected entities with grips'*)
              DSGN_OTrackTimerInterval:PInteger;(*'Object track timer interval'*)
              DSGN_EntityMoveStartTimerInterval:PInteger;
              DSGN_EntityMoveStartOffset:PInteger;

@@ -69,7 +69,7 @@ var
   DSGN_LCCable:TLayerControl;
   DSGN_LCLeader:TLayerControl;
   DSGN_SelSameName:Boolean;
-  DSGN_MaxSelectEntsCountWithOdjInsp:Integer;
+  DSGN_MaxSelectEntsCountWithObjInsp:Integer;
   DSGN_MaxSelectEntsCountWithGrips:Integer;
   INTF_ShowScrollBars:Boolean;
   INTF_ShowDwgTabs:Boolean;
@@ -176,7 +176,7 @@ begin
   DSGN_LCLeader.Enabled:=True;
   DSGN_LCLeader.LayerName:='TEXT';
   DSGN_SelSameName:=False;
-  DSGN_MaxSelectEntsCountWithOdjInsp:=25000;
+  DSGN_MaxSelectEntsCountWithObjInsp:=25000;
   DSGN_MaxSelectEntsCountWithGrips:=100;
   INTF_ShowScrollBars:=True;
   INTF_ShowDwgTabs:=True;

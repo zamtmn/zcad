@@ -783,8 +783,8 @@ begin
     else
       entscount:=ObjID2Counter.MyGetValue(ObjIDVector[TxtEntType.Selected]);
 
-    if sysvar.DSGN.DSGN_MaxSelectEntsCountWithOdjInsp<>nil then
-      TrueSel:=entscount<=sysvar.DSGN.DSGN_MaxSelectEntsCountWithOdjInsp^
+    if sysvar.DSGN.DSGN_MaxSelectEntsCountWithObjInsp<>nil then
+      TrueSel:=entscount<=sysvar.DSGN.DSGN_MaxSelectEntsCountWithObjInsp^
     else
       TrueSel:=true;
 

@@ -127,6 +127,7 @@ begin
       SelObjArray.freeelement(tdesc);
       inc(tdesc);
     end;
+  SelObjArray.Clear;
 end;
 
 

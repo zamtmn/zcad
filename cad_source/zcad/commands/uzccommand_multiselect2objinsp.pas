@@ -29,6 +29,8 @@ uses
   uzcinterface,
   Varman;
 
+function MultiSelect2ObjIbsp_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
+
 implementation
 
 var

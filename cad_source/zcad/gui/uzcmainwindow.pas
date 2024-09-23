@@ -55,7 +55,8 @@ uses
  {}
   uzgldrawcontext,uzglviewareaabstract,uzcguimanager,uzcinterfacedata,
   uzcenitiesvariablesextender,uzglviewareageneral,UniqueInstanceRaw,
-  uzmacros,uzcviewareacxmenu,uzccommand_quit,uzeMouseTimer;
+  uzmacros,uzcviewareacxmenu,uzccommand_quit,uzeMouseTimer,
+  uzccommand_multiselect2objinsp;
 
 resourcestring
   rsClosed='Closed';
@@ -1687,15 +1688,13 @@ begin
                                                                                       objcount:=0
                                                                                   else
                                                                                       objcount:=1;
-  if sender_wa.param.SelDesc.Selectedobjcount>objcount then
-    begin
-       if drawings.GetCurrentDWG.SelObjArray.Count>0 then
-                                                    commandmanager.ExecuteCommandSilent('MultiSelect2ObjIbsp',sender_wa.pdwg,@sender_wa.param)
-                                                else
-                                                  ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIReturnToDefaultObject);
-    end
-  else
-  begin
+  if sender_wa.param.SelDesc.Selectedobjcount>objcount then begin
+    if drawings.GetCurrentDWG.SelObjArray.Count>0 then begin
+      //commandmanager.ExecuteCommandSilent('MultiSelect2ObjIbsp',sender_wa.pdwg,@sender_wa.param)
+      MultiSelect2ObjIbsp_com(TZCADCommandContext.CreateRec,'');
+    end else
+      ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIReturnToDefaultObject);
+  end else begin
   if assigned(SysVar.DWG.DWG_SelectedObjToInsp)then
   if (sender_wa.param.SelDesc.LastSelectedObject <> nil)and(SysVar.DWG.DWG_SelectedObjToInsp^)and(sender_wa.param.SelDesc.Selectedobjcount>0) then
   begin

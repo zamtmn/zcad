@@ -145,15 +145,24 @@ end;
 procedure TSimpleDrawing.DeSelectAll;
 var tdesc:pselectedobjdesc;
     i:Integer;
+    pv:PGDBObjEntity;
+    ir:itrec;
 begin
-  tdesc:=SelObjArray.GetParrayAsPointer;
-  if SelObjArray.count<>0 then
+  if SelObjArray.count<>0 then begin
+    tdesc:=SelObjArray.GetParrayAsPointer;
     for i:=0 to SelObjArray.count-1 do begin
       tdesc.objaddr.selected:=false;
       SelObjArray.freeelement(tdesc);
       inc(tdesc);
     end;
-  SelObjArray.Clear;
+    SelObjArray.Clear;
+  end;
+  pv:=GetCurrentROOT^.ObjArray.beginiterate(ir);
+  if pv<>nil then
+    repeat
+      pv^.Selected:=false;
+      pv:=GetCurrentROOT^.ObjArray.iterate(ir);
+    until pv=nil;
 end;
 
 

@@ -869,133 +869,262 @@ begin
 end;
 procedure DeselectBlocsByName(PInstance:Pointer);
 var
-    pv:pGDBObjEntity;
-    ir:itrec;
-    count,selected:integer;
-    blockname:AnsiString;
+  pv:pGDBObjEntity;
+  ir:itrec;
+  Count,selected:integer;
+  blockname:ansistring;
+  ents:TZctnrVectorPGDBaseEntity;
 begin
-    selected:=PTEnumDataWithOtherStrings(PInstance)^.Selected;
-    blockname:=PTEnumDataWithOtherStrings(PInstance)^.Strings.getData(selected);
-    count:=0;
-    pv:=drawings.GetCurrentROOT.ObjArray.beginiterate(ir);
-    if pv<>nil then
+  selected:=PTEnumDataWithOtherStrings(PInstance)^.Selected;
+  blockname:=PTEnumDataWithOtherStrings(PInstance)^.Strings.getData(selected);
+  Count:=0;
+  pv:=drawings.GetCurrentROOT.ObjArray.beginiterate(ir);
+  if pv<>nil then
     repeat
       if pv^.Selected then
-      if (pv^.GetObjType=GDBDeviceID)or(pv^.GetObjType=GDBBlockInsertID) then
-      if (selected=0)or(PGDBObjBlockInsert(pv)^.Name=blockname)then
-      begin
-        inc(count);
-        pv^.DeSelect(drawings.GetCurrentDWG.wa.param.SelDesc.Selectedobjcount,drawings.CurrentDWG^.DeSelector);
-      end;
+        if (pv^.GetObjType=GDBDeviceID)or(pv^.GetObjType=GDBBlockInsertID)then begin
+          if selected<>0 then begin
+            if PGDBObjBlockInsert(pv)^.Name<>blockname then
+              Inc(Count);
+          end;
+        end else
+          Inc(Count);
       pv:=drawings.GetCurrentROOT.ObjArray.iterate(ir);
     until pv=nil;
-    ZCMsgCallBackInterface.TextMessage(sysutils.Format(rscmNEntitiesDeselected,[count]),TMWOHistoryOut);
-    if count>0 then
-      ZCMsgCallBackInterface.Do_GUIaction(drawings.GetCurrentDWG.wa,ZMsgID_GUIActionSelectionChanged);
+  ents.init(Count);
+
+  pv:=drawings.GetCurrentROOT.ObjArray.beginiterate(ir);
+  if pv<>nil then
+    repeat
+      if pv^.Selected then
+        if (pv^.GetObjType=GDBDeviceID)or(pv^.GetObjType=GDBBlockInsertID)then begin
+          if selected<>0 then begin
+            if PGDBObjBlockInsert(pv)^.Name<>blockname then
+              ents.PushBackData(pv);
+          end;
+        end else
+          ents.PushBackData(pv);
+      pv:=drawings.GetCurrentROOT.ObjArray.iterate(ir);
+    until pv=nil;
+
+  Count:=drawings.GetCurrentDWG.SelObjArray.Count-Count;
+  drawings.GetCurrentDWG.DeSelectAll;
+  drawings.GetCurrentDWG.SelectEnts(ents);
+  ents.Clear;
+  ents.Free;
+
+  ZCMsgCallBackInterface.TextMessage(Format(rscmNEntitiesDeselected,[Count]),
+                                     TMWOHistoryOut);
+  if Count>0 then
+    ZCMsgCallBackInterface.Do_GUIaction(drawings.GetCurrentDWG.wa,
+                                        ZMsgID_GUIActionSelectionChanged);
 end;
 procedure DeselectTextsByStyle(PInstance:Pointer);
 var
-    pv:pGDBObjEntity;
-    ir:itrec;
-    count,selected:integer;
-    ptextstyle:pointer;
+  pv:pGDBObjEntity;
+  ir:itrec;
+  Count,selected:integer;
+  ptextstyle:pointer;
+  ents:TZctnrVectorPGDBaseEntity;
 begin
-    selected:=PTEnumDataWithOtherPointers(PInstance)^.Selected;
-    ptextstyle:=PTEnumDataWithOtherPointers(PInstance)^.Pointers.getData(selected);
-    count:=0;
-    pv:=drawings.GetCurrentROOT.ObjArray.beginiterate(ir);
-    if pv<>nil then
+  selected:=PTEnumDataWithOtherPointers(PInstance)^.Selected;
+  ptextstyle:=PTEnumDataWithOtherPointers(PInstance)^.Pointers.getData(selected);
+  Count:=0;
+  pv:=drawings.GetCurrentROOT.ObjArray.beginiterate(ir);
+  if pv<>nil then
     repeat
       if pv^.Selected then
-      if (pv^.GetObjType=GDBtextID)or(pv^.GetObjType=GDBMTextID) then
-      if (selected=0)or(PGDBObjText(pv)^.TXTStyleIndex=ptextstyle)then
-      begin
-        inc(count);
-        pv^.DeSelect(drawings.GetCurrentDWG.wa.param.SelDesc.Selectedobjcount,drawings.CurrentDWG^.DeSelector);
-      end;
+        if (pv^.GetObjType=GDBtextID)or(pv^.GetObjType=GDBMTextID)then begin
+          if selected<>0 then begin
+            if PGDBObjText(pv)^.TXTStyleIndex<>ptextstyle then
+              inc(Count);
+          end
+        end else
+            inc(Count);
       pv:=drawings.GetCurrentROOT.ObjArray.iterate(ir);
     until pv=nil;
-    ZCMsgCallBackInterface.TextMessage(sysutils.Format(rscmNEntitiesDeselected,[count]),TMWOHistoryOut);
-    if count>0 then
-      ZCMsgCallBackInterface.Do_GUIaction(drawings.GetCurrentDWG.wa,ZMsgID_GUIActionSelectionChanged);
+  ents.init(Count);
+
+  pv:=drawings.GetCurrentROOT.ObjArray.beginiterate(ir);
+  if pv<>nil then
+    repeat
+      if pv^.Selected then
+        if (pv^.GetObjType=GDBtextID)or(pv^.GetObjType=GDBMTextID)then begin
+          if selected<>0 then begin
+            if PGDBObjText(pv)^.TXTStyleIndex<>ptextstyle then
+              ents.PushBackData(pv);
+          end
+        end else
+            ents.PushBackData(pv);
+      pv:=drawings.GetCurrentROOT.ObjArray.iterate(ir);
+    until pv=nil;
+
+  Count:=drawings.GetCurrentDWG.SelObjArray.Count-Count;
+  drawings.GetCurrentDWG.DeSelectAll;
+  drawings.GetCurrentDWG.SelectEnts(ents);
+  ents.Clear;
+  ents.Free;
+
+
+  ZCMsgCallBackInterface.TextMessage(Format(rscmNEntitiesDeselected,[Count]),
+                                     TMWOHistoryOut);
+  if Count>0 then
+    ZCMsgCallBackInterface.Do_GUIaction(drawings.GetCurrentDWG.wa,
+                                        ZMsgID_GUIActionSelectionChanged);
 end;
 
 procedure DeselectEntsByLayer(PInstance:Pointer);
 var
-    pv:pGDBObjEntity;
-    ir:itrec;
-    count,selected:integer;
-    ptextstyle:pointer;
+  pv:pGDBObjEntity;
+  ir:itrec;
+  Count,selected:integer;
+  player:pointer;
+  ents:TZctnrVectorPGDBaseEntity;
 begin
-    selected:=PTEnumDataWithOtherPointers(PInstance)^.Selected;
-    ptextstyle:=PTEnumDataWithOtherPointers(PInstance)^.Pointers.getData(selected);
-    count:=0;
+  selected:=PTEnumDataWithOtherPointers(PInstance)^.Selected;
+  player:=PTEnumDataWithOtherPointers(PInstance)^.Pointers.getData(selected);
+
+  Count:=0;
+  if selected<>0 then begin
     pv:=drawings.GetCurrentROOT.ObjArray.beginiterate(ir);
     if pv<>nil then
-    repeat
-      if pv^.Selected then
-      if (selected=0)or(pv^.vp.Layer=ptextstyle)then
-      begin
-        inc(count);
-        pv^.DeSelect(drawings.GetCurrentDWG.wa.param.SelDesc.Selectedobjcount,drawings.CurrentDWG^.DeSelector);
-      end;
-      pv:=drawings.GetCurrentROOT.ObjArray.iterate(ir);
-    until pv=nil;
-    ZCMsgCallBackInterface.TextMessage(sysutils.Format(rscmNEntitiesDeselected,[count]),TMWOHistoryOut);
-    if count>0 then
-      ZCMsgCallBackInterface.Do_GUIaction(drawings.GetCurrentDWG.wa,ZMsgID_GUIActionSelectionChanged);
+      repeat
+        if pv^.Selected then
+          if pv^.vp.Layer<>player then
+            Inc(Count);
+        pv:=drawings.GetCurrentROOT.ObjArray.iterate(ir);
+      until pv=nil;
+    ents.init(Count);
+
+    pv:=drawings.GetCurrentROOT.ObjArray.beginiterate(ir);
+    if pv<>nil then
+      repeat
+        if pv^.Selected then
+          if pv^.vp.Layer<>player then
+            ents.PushBackData(pv);
+        pv:=drawings.GetCurrentROOT.ObjArray.iterate(ir);
+      until pv=nil;
+  end;
+
+  Count:=drawings.GetCurrentDWG.SelObjArray.Count-Count;
+  drawings.GetCurrentDWG.DeSelectAll;
+  if selected<>0 then begin
+    drawings.GetCurrentDWG.SelectEnts(ents);
+    ents.Clear;
+    ents.Free;
+  end;
+
+  ZCMsgCallBackInterface.TextMessage(Format(rscmNEntitiesDeselected,[Count]),
+                                     TMWOHistoryOut);
+  if Count>0 then
+    ZCMsgCallBackInterface.Do_GUIaction(drawings.GetCurrentDWG.wa,
+      ZMsgID_GUIActionSelectionChanged);
 end;
 
 procedure DeselectEntsByLinetype(PInstance:Pointer);
 var
-    pv:pGDBObjEntity;
-    ir:itrec;
-    count,selected:integer;
-    plinetype:pointer;
+  pv:pGDBObjEntity;
+  ir:itrec;
+  Count,selected:integer;
+  plinetype:pointer;
+  ents:TZctnrVectorPGDBaseEntity;
 begin
-    selected:=PTEnumDataWithOtherPointers(PInstance)^.Selected;
-    plinetype:=PTEnumDataWithOtherPointers(PInstance)^.Pointers.getData(selected);
-    count:=0;
+  selected:=PTEnumDataWithOtherPointers(PInstance)^.Selected;
+  plinetype:=PTEnumDataWithOtherPointers(PInstance)^.Pointers.getData(selected);
+  Count:=0;
+  pv:=drawings.GetCurrentROOT.ObjArray.beginiterate(ir);
+
+  Count:=0;
+  if selected<>0 then begin
     pv:=drawings.GetCurrentROOT.ObjArray.beginiterate(ir);
     if pv<>nil then
-    repeat
-      if pv^.Selected then
-      if (selected=0)or(pv^.vp.LineType=plinetype)then
-      begin
-        inc(count);
-        pv^.DeSelect(drawings.GetCurrentDWG.wa.param.SelDesc.Selectedobjcount,drawings.CurrentDWG^.DeSelector);
-      end;
-      pv:=drawings.GetCurrentROOT.ObjArray.iterate(ir);
-    until pv=nil;
-    ZCMsgCallBackInterface.TextMessage(sysutils.Format(rscmNEntitiesDeselected,[count]),TMWOHistoryOut);
-    if count>0 then
-      ZCMsgCallBackInterface.Do_GUIaction(drawings.GetCurrentDWG.wa,ZMsgID_GUIActionSelectionChanged);
+      repeat
+        if pv^.Selected then
+          if pv^.vp.LineType<>plinetype then
+            Inc(Count);
+        pv:=drawings.GetCurrentROOT.ObjArray.iterate(ir);
+      until pv=nil;
+    ents.init(Count);
+
+    pv:=drawings.GetCurrentROOT.ObjArray.beginiterate(ir);
+    if pv<>nil then
+      repeat
+        if pv^.Selected then
+          if pv^.vp.LineType<>plinetype then
+            ents.PushBackData(pv);
+        pv:=drawings.GetCurrentROOT.ObjArray.iterate(ir);
+      until pv=nil;
+  end;
+
+  Count:=drawings.GetCurrentDWG.SelObjArray.Count-Count;
+  drawings.GetCurrentDWG.DeSelectAll;
+  if selected<>0 then begin
+    drawings.GetCurrentDWG.SelectEnts(ents);
+    ents.Clear;
+    ents.Free;
+  end;
+
+  ZCMsgCallBackInterface.TextMessage(Format(rscmNEntitiesDeselected,[Count]),
+                                     TMWOHistoryOut);
+  if Count>0 then
+    ZCMsgCallBackInterface.Do_GUIaction(drawings.GetCurrentDWG.wa,
+                                        ZMsgID_GUIActionSelectionChanged);
 end;
 
 procedure DeselectEntsByExtender(PInstance:Pointer);
 var
   pv:pGDBObjEntity;
   ir:itrec;
-  count,selected:integer;
+  Count,selected:integer;
   extdrClass:TMetaEntityExtender;
+  ents:TZctnrVectorPGDBaseEntity;
 begin
   selected:=PTEnumDataWithOtherPointers(PInstance)^.Selected;
   extdrClass:=PTEnumDataWithOtherPointers(PInstance)^.Pointers.getData(selected);
-  count:=0;
+
+  Count:=0;
   pv:=drawings.GetCurrentROOT.ObjArray.beginiterate(ir);
   if pv<>nil then
-  repeat
-    if pv^.Selected then
-    if (selected=0)or(pv^.GetExtension(extdrClass)<>nil)then
-    begin
-      inc(count);
-      pv^.DeSelect(drawings.GetCurrentDWG.wa.param.SelDesc.Selectedobjcount,drawings.CurrentDWG^.DeSelector);
-    end;
-    pv:=drawings.GetCurrentROOT.ObjArray.iterate(ir);
-  until pv=nil;
-  ZCMsgCallBackInterface.TextMessage(sysutils.Format(rscmNEntitiesDeselected,[count]),TMWOHistoryOut);
-  if count>0 then
-    ZCMsgCallBackInterface.Do_GUIaction(drawings.GetCurrentDWG.wa,ZMsgID_GUIActionSelectionChanged);
+    repeat
+      if pv^.Selected then begin
+        if selected=0 then begin
+          if pv^.GetExtensionsCount=0 then
+            Inc(Count);
+        end else begin
+          if pv^.GetExtension(extdrClass)=nil then
+            Inc(Count);
+        end;
+      end;
+      pv:=drawings.GetCurrentROOT.ObjArray.iterate(ir);
+    until pv=nil;
+  ents.init(Count);
+
+  pv:=drawings.GetCurrentROOT.ObjArray.beginiterate(ir);
+  if pv<>nil then
+    repeat
+      if pv^.Selected then begin
+        if selected=0 then begin
+          if pv^.GetExtensionsCount=0 then
+            ents.PushBackData(pv);
+        end else begin
+          if pv^.GetExtension(extdrClass)=nil then
+            ents.PushBackData(pv);
+        end;
+      end;
+      pv:=drawings.GetCurrentROOT.ObjArray.iterate(ir);
+    until pv=nil;
+
+  Count:=drawings.GetCurrentDWG.SelObjArray.Count-Count;
+  drawings.GetCurrentDWG.DeSelectAll;
+  drawings.GetCurrentDWG.SelectEnts(ents);
+  ents.Clear;
+  ents.Free;
+
+  ZCMsgCallBackInterface.TextMessage(Format(rscmNEntitiesDeselected,[Count]),
+                                     TMWOHistoryOut);
+  if Count>0 then
+    ZCMsgCallBackInterface.Do_GUIaction(drawings.GetCurrentDWG.wa,
+      ZMsgID_GUIActionSelectionChanged);
 end;
 
 procedure Extendrs2ExtendersCounterIterateProc(pdata:Pointer;ChangedData:TChangedData;mp:TMultiProperty;fistrun:boolean;ecp:TEntChangeProc; const f:TzeUnitsFormat);
@@ -1033,9 +1162,13 @@ begin
   if pv<>nil then
     repeat
       if pv^.Selected then
-        if (pv^.GetObjType=GDBDeviceID)or(pv^.GetObjType=GDBBlockInsertID) then
-          if (selected<>0)and(PGDBObjBlockInsert(pv)^.Name=blockname) then
+        if (pv^.GetObjType=GDBDeviceID)or(pv^.GetObjType=GDBBlockInsertID)then begin
+          if (selected<>0) then begin
+            if PGDBObjBlockInsert(pv)^.Name=blockname then
+              Inc(Count);
+          end else
             Inc(Count);
+        end;
       pv:=drawings.GetCurrentROOT.ObjArray.iterate(ir);
     until pv=nil;
   ents.init(count);
@@ -1044,9 +1177,13 @@ begin
   if pv<>nil then
     repeat
       if pv^.Selected then
-        if (pv^.GetObjType=GDBDeviceID)or(pv^.GetObjType=GDBBlockInsertID) then
-          if (selected<>0)and(PGDBObjBlockInsert(pv)^.Name=blockname) then
+        if (pv^.GetObjType=GDBDeviceID)or(pv^.GetObjType=GDBBlockInsertID)then begin
+          if (selected<>0) then begin
+            if PGDBObjBlockInsert(pv)^.Name=blockname then
+              ents.PushBackData(pv);
+          end else
             ents.PushBackData(pv);
+        end;
       pv:=drawings.GetCurrentROOT.ObjArray.iterate(ir);
     until pv=nil;
 
@@ -1079,9 +1216,13 @@ begin
   if pv<>nil then
     repeat
       if pv^.Selected then
-        if (pv^.GetObjType=GDBtextID)or(pv^.GetObjType=GDBMTextID) then
-          if (selected<>0)and(PGDBObjText(pv)^.TXTStyleIndex=ptextstyle)then
+        if (pv^.GetObjType=GDBtextID)or(pv^.GetObjType=GDBMTextID)then begin
+          if (selected<>0) then begin
+            if PGDBObjText(pv)^.TXTStyleIndex=ptextstyle then
+              Inc(Count);
+          end else
             Inc(Count);
+        end;
       pv:=drawings.GetCurrentROOT.ObjArray.iterate(ir);
     until pv=nil;
   ents.init(count);
@@ -1090,9 +1231,13 @@ begin
   if pv<>nil then
     repeat
       if pv^.Selected then
-        if (pv^.GetObjType=GDBtextID)or(pv^.GetObjType=GDBMTextID) then
-          if (selected<>0)and(PGDBObjText(pv)^.TXTStyleIndex=ptextstyle)then
+        if (pv^.GetObjType=GDBtextID)or(pv^.GetObjType=GDBMTextID)then begin
+          if (selected<>0) then begin
+            if PGDBObjText(pv)^.TXTStyleIndex=ptextstyle then
+              ents.PushBackData(pv);
+          end else
             ents.PushBackData(pv);
+        end;
       pv:=drawings.GetCurrentROOT.ObjArray.iterate(ir);
     until pv=nil;
 
@@ -1118,6 +1263,8 @@ var
   ents:TZctnrVectorPGDBaseEntity;
 begin
   selected:=PTEnumDataWithOtherPointers(PInstance)^.Selected;
+  if selected=0 then
+    exit;
   player:=PTEnumDataWithOtherPointers(PInstance)^.Pointers.getData(selected);
 
   Count:=0;
@@ -1162,6 +1309,8 @@ var
   ents:TZctnrVectorPGDBaseEntity;
 begin
   selected:=PTEnumDataWithOtherPointers(PInstance)^.Selected;
+  if selected=0 then
+    exit;
   plinetype:=PTEnumDataWithOtherPointers(PInstance)^.Pointers.getData(selected);
   Count:=0;
   pv:=drawings.GetCurrentROOT.ObjArray.beginiterate(ir);
@@ -1212,8 +1361,12 @@ begin
   if pv<>nil then
     repeat
       if pv^.Selected then
-        if (selected<>0)and(pv^.GetExtension(extdrClass)<>nil) then begin
-          Inc(Count);
+        if selected=0 then begin
+          if pv^.GetExtensionsCount>0 then
+            inc(count);
+        end else begin
+          if (pv^.GetExtensionsCount>0)and(pv^.GetExtension(extdrClass)<>nil) then
+            inc(count);
         end;
       pv:=drawings.GetCurrentROOT.ObjArray.iterate(ir);
     until pv=nil;
@@ -1223,8 +1376,12 @@ begin
   if pv<>nil then
     repeat
       if pv^.Selected then
-        if (selected<>0)and(pv^.GetExtension(extdrClass)<>nil) then begin
-          ents.PushBackData(pv);
+        if selected=0 then begin
+          if pv^.GetExtensionsCount>0 then
+            ents.PushBackData(pv);
+        end else begin
+          if (pv^.GetExtensionsCount>0)and(pv^.GetExtension(extdrClass)<>nil) then
+            ents.PushBackData(pv);
         end;
       pv:=drawings.GetCurrentROOT.ObjArray.iterate(ir);
     until pv=nil;

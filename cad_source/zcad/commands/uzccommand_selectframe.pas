@@ -37,8 +37,7 @@ uses
   uzclog,
   uzegeometrytypes,
   uzCtnrVectorPBaseEntity,
-  gzctnrVectorTypes,uzegeometry,
-  uzcsysvars;
+  gzctnrVectorTypes,uzegeometry;
 var
   selframecommand:PCommandObjectDef;
 
@@ -188,10 +187,7 @@ begin
             pv:=drawings.GetCurrentROOT.ObjArray.iterate(ir);
       until pv=nil;
 
-      if sysvar.DSGN.DSGN_MaxSelectEntsCountWithGrips<>nil then
-        TrueSel:=Ents.Count<=sysvar.DSGN.DSGN_MaxSelectEntsCountWithGrips^
-      else
-        TrueSel:=true;
+      TrueSel:=Ents.Count<=sysvarDSGNMaxSelectEntsCountWithGrips;
 
       if TrueSel then
         SelProc:=drawings.CurrentDWG^.Selector

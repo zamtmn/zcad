@@ -26,7 +26,7 @@ uses uzedrawingdef,uzeblockdefsfactory,uzestylesdim,
      uzestyleslayers,uzestyleslinetypes,uzeentity,UGDBSelectedObjArray,uzestylestexts,
      uzedimensionaltypes,uzegeometrytypes,uzecamera,UGDBOpenArrayOfPV,uzeroot,uzefont,
      uzglviewareaabstract,uzglviewareageneral,uzgldrawcontext,UGDBControlPointArray,
-     uzglviewareadata,uzeExtdrAbstractDrawingExtender,uzCtnrVectorPBaseEntity,uzcsysvars;
+     uzglviewareadata,uzeExtdrAbstractDrawingExtender,uzCtnrVectorPBaseEntity;
 type
 TMainBlockCreateProc=procedure (_to:PTDrawingDef;name:String) of object;
 {EXPORT+}
@@ -124,10 +124,7 @@ var
   TrueSel:Boolean;
   SelProc:TSimpleDrawing.TSelector;
 begin
-  if sysvar.DSGN.DSGN_MaxSelectEntsCountWithGrips<>nil then
-    TrueSel:=Ents.Count<=sysvar.DSGN.DSGN_MaxSelectEntsCountWithGrips^
-  else
-    TrueSel:=true;
+  TrueSel:=Ents.Count<=sysvarDSGNMaxSelectEntsCountWithGrips;
 
   if TrueSel then
     SelProc:=Selector

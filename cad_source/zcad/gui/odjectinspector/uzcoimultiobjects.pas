@@ -28,8 +28,8 @@ uses
   gzctnrVectorTypes,uzbtypes,uzcdrawings,varmandef,uzeentity,
   Varman,uzctnrvectorstrings,UGDBSelectedObjArray,uzcoimultipropertiesutil,
   uzeExtdrAbstractEntityExtender,uzelongprocesssupport,uzbLogIntf,uzcutils,
-  zUndoCmdChgVariable,uzcdrawing,zUndoCmdChgTypes,uzeBaseExtender,uzcsysvars,
-  uzCtnrVectorPBaseEntity;
+  zUndoCmdChgVariable,uzcdrawing,zUndoCmdChgTypes,uzeBaseExtender,
+  uzCtnrVectorPBaseEntity,uzglviewareageneral;
 type
   TObjIDWithExtender2Counter=TMyMapCounter<TObjIDWithExtender>;
 {Export+}
@@ -783,10 +783,7 @@ begin
     else
       entscount:=ObjID2Counter.MyGetValue(ObjIDVector[TxtEntType.Selected]);
 
-    if sysvar.DSGN.DSGN_MaxSelectEntsCountWithObjInsp<>nil then
-      TrueSel:=entscount<=sysvar.DSGN.DSGN_MaxSelectEntsCountWithObjInsp^
-    else
-      TrueSel:=true;
+    TrueSel:=entscount<=sysvarDSGNMaxSelectEntsCountWithObjInsp;
 
     if TrueSel then begin
       CheckMultiPropertyUse;

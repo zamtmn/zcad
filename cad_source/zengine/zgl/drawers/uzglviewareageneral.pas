@@ -200,6 +200,8 @@ var
    sysvarDSGNEntityMoveStartTimerInterval:Integer=300;
    sysvarDSGNEntityMoveStartOffset:Integer=-30;
    sysvarDSGNEntityMoveByMouseUp:Boolean=True;
+   sysvarDSGNMaxSelectEntsCountWithObjInsp:Integer=25000;
+   sysvarDSGNMaxSelectEntsCountWithGrips:Integer=100;
 
 implementation
 

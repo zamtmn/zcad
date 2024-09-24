@@ -89,6 +89,9 @@ initialization
   units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPath,system_pas_path,InterfaceTranslate,'DSGN_EntityMoveStartOffset','Integer',@sysvarDSGNEntityMoveStartOffset);
   units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPath,system_pas_path,InterfaceTranslate,'DSGN_EntityMoveByMouseUp','Boolean',@sysvarDSGNEntityMoveByMouseUp);
 
+  units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPath,system_pas_path,InterfaceTranslate,'DSGN_MaxSelectEntsCountWithObjInsp','Integer',@sysvarDSGNMaxSelectEntsCountWithObjInsp);
+  units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPath,system_pas_path,InterfaceTranslate,'DSGN_MaxSelectEntsCountWithGrips','Integer',@sysvarDSGNMaxSelectEntsCountWithGrips);
+
   units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPath,system_pas_path,InterfaceTranslate,'DISP_LWDisplayScale','Integer',@sysvarDISPLWDisplayScale);
   units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPath,system_pas_path,InterfaceTranslate,'RD_Light','Boolean',@sysvarRDLight);
 
@@ -136,6 +139,8 @@ initialization
   sysvar.DSGN.DSGN_EntityMoveStartTimerInterval:=@sysvarDSGNEntityMoveStartTimerInterval;
   sysvar.DSGN.DSGN_EntityMoveStartOffset:=@sysvarDSGNEntityMoveStartOffset;
   sysvar.DSGN.DSGN_EntityMoveByMouseUp:=@sysvarDSGNEntityMoveByMouseUp;
+  sysvar.DSGN.DSGN_MaxSelectEntsCountWithObjInsp:=@sysvarDSGNMaxSelectEntsCountWithObjInsp;
+  sysvar.DSGN.DSGN_MaxSelectEntsCountWithGrips:=@sysvarDSGNMaxSelectEntsCountWithGrips;
 
   sysvar.DSGN.DSGN_SelNew:=@sysvarDSGNSelNew;
   sysvar.RD.RD_LastCalcVisible:=@sysvarRDLastCalcVisible;;

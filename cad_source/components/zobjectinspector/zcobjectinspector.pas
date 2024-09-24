@@ -1878,6 +1878,7 @@ procedure TGDBobjinsp.updateinsp;
 begin
   //exit;
   setptr(EDContext.UndoStack,CurrUnitsFormat,CurrObjGDBType,CurrPObj,CurrContext);
+  updateeditorBounds;
 end;
 
 

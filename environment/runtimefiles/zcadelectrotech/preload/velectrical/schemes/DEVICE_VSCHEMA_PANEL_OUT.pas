@@ -12,6 +12,8 @@ VSCHEMATransfer:boolean;(*'Перекидка секции'*)
 VSCHEMAPhase3:boolean;(*'3-и фазы'*)
 VSCHEMABusn:boolean;(*'Шина N'*)
 VSCHEMABuspe:boolean;(*'Шина PE'*)
+VSCHEMACircuitBreaker1:Integer;(*'Авт.выкл. 1 ур'*)
+VSCHEMACircuitBreaker2:Integer;(*'Авт.выкл. 2 ур'*)
 VSCHEMALevel0start:Integer;(*'Ур.0 автомат'*)
 VSCHEMALevel1start:Integer;(*'Ур.1 стартовый'*)
 VSCHEMALevel1continue:Integer;(*'Ур.1 продолжаемый'*)
@@ -41,6 +43,8 @@ VSCHEMATransfer:=false;
 VSCHEMAPhase3:=true;
 VSCHEMABusn:=true;
 VSCHEMABuspe:=true;
+VSCHEMACircuitBreaker1:=0;
+VSCHEMACircuitBreaker2:=0;
 VSCHEMALevel0start:=0;
 VSCHEMALevel1start:=0;
 VSCHEMALevel1continue:=0;

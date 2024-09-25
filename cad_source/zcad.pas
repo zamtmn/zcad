@@ -82,31 +82,28 @@ uses
 
   uzcdrawings,
 
-  (*            //все нужные файлы перечислены в allgeneratedfiles.inc
-  {DXF entities}
-  GDBLine,
-  GDBText,
-  GDBMText,
-  GDBPolyLine,
-  GDBCircle,
-  GDBArc,
-  GDBLWPolyLine,
-  GDBPoint,
-  GDBBlockInsert,
-  gdbellipse,
-  gdbspline,
-  GDB3DFace,
-  GDBSolid,
-  gdbgenericdimension,
 
+  {DXF entities}
+  uzeent3dface,uzeentsolid,
+  uzeentcircle,uzeentarc,uzeentellipse,
+  uzeentblockinsert,uzeentdevice,
+  uzeentdimaligned,uzeentdimdiametric,uzeentdimension,
+  uzeentdimensiongeneric,uzeentdimradial,uzeentdimrotated,
+  uzeenthatch,
+  uzeentline,
+  uzeentlwpolyline,
+  uzeenttext,uzeentmtext,
+  uzeentpoint,
+  uzeentpolyline,
+  uzeentspline,
+  uzeenttable,
+
+  {$IFDEF ELECTROTECH}
   {ZCAD entities}
-  GDBCable,
-  GDBDevice,
-  gdbaligneddimension,
-  gdbrotateddimension,
-  gdbdiametricdimension,
-  gdbradialdimension,
-  *)
+  uzcentcable,
+  uzcentelleader,
+  uzcentnet,
+  {$ENDIF}
 
 
 

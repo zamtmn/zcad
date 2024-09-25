@@ -15,7 +15,9 @@
       <lowCable Desc="КЛ-0,4 (-N-)"/>
       <highCable  Desc="КЛ-6/10 кВ (-W-)"/>
       <OutLight Desc="Наружное освещение (-V-)"/>
-      <inPipeSDR Desc="Кабель в защитной трубе"/>
+      <inPipeFutlyr Desc="Кабель в защитной трубе"/>
+      <lowWire Desc="ВЛ-0,4 (->-<-)"/>
+      <highWire  Desc="ВЛ-6/10 кВ (->>-<<-)"/>
     </land>
   </STRINGTREE>
 </CONFIG>

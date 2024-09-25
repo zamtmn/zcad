@@ -11,6 +11,8 @@ var
 VSCHEMAShieldpos:String;(*'Щит обозначение'*)
 VSCHEMAShieldname:String;(*'Щит наименование'*)
 VSCHEMAPhase3:boolean;(*'3-х фазный'*)
+VSCHEMACircuitBreaker1:Integer;(*'Авт.выкл. 1 ур'*)
+VSCHEMACircuitBreaker2:Integer;(*'Авт.выкл. 2 ур'*)
 VSCHEMAPy:String;(*'Py'*)
 VSCHEMAKc:String;(*'Kc'*)
 VSCHEMAPp:String;(*'Pp'*)
@@ -26,6 +28,8 @@ begin
 VSCHEMAShieldpos:='??';
 VSCHEMAShieldname:='??';
 VSCHEMAPhase3:=true;
+VSCHEMACircuitBreaker1:=0;
+VSCHEMACircuitBreaker2:=0;
 VSCHEMAPy:='Py';
 VSCHEMAKc:='Kc';
 VSCHEMAPp:='Pp';

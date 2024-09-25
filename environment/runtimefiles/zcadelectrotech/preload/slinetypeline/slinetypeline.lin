@@ -6,8 +6,8 @@ A,.00005,[LT,cablotok.shx,s=1],-5.0
 A,.00003,[TB,cabtruba.shx,s=1],-3.0
 *cabtros,Прокладка кабеля на тросе ----=-----
 A,.00004,[TRS,cabtros.shx,s=1],-4.0
-*cabsdr,Прокладка кабеля в SDR ----SDR-----
-A,2.0,[SDR,cabsdr.shx,s=1],0
+*Futlyr,Кабель в футляре -=-=
+A,0.001,-0.001,[Futlyr,Futlyr.shx,S=1],-0.001,0.9
 
 
 *Cable_N, ___N___
@@ -17,5 +17,8 @@ A,20,-.5,["V", STANDART,X=0,Y=-1,U=0,S=2.5],-3
 *Cable_W, ___W___
 A,20,-.5,["W", STANDART,X=0,Y=-1,U=0,S=2.5],-3
 
-
+*Wire_0.4kV, Провод воздушный 0.4кВ, 
+A,2,[ZIG,ltypeshp.shx,X=-1.4,Y=-0.6,S=0.6,R=90],2,2,[ZIG,ltypeshp.shx,X=1.4,Y=0.6,S=0.6,R=-90],2,2,8,2
+*Wire_10kV, Провод воздушный 10кВ, 
+A,2,[ZIG,ltypeshp.shx,X=-1.4,Y=-0.6,S=0.6,R=90],2,[ZIG,ltypeshp.shx,X=-3.0,Y=-0.4,S=0.4,R=90],2,[ZIG,ltypeshp.shx,X=1.4,Y=0.6,S=0.6,R=-90],2,[ZIG,ltypeshp.shx,X=-1,Y=0.4,S=0.4,R=-90],2,8,2
 

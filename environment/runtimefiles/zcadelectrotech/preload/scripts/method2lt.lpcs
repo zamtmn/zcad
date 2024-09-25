@@ -17,6 +17,10 @@ begin
           Output:='Cable_W'; 
        if Input = 'land~OutLight' then
           Output:='Cable_V'; 
-       if Input = 'land~inPipeSDR' then
-          Output:='cabsdr'; 		  
+       if Input = 'land~inPipeFutlyr' then
+          Output:='Futlyr'; 		  
+       if Input = 'land~lowWire' then
+          Output:='Wire_0.4kV'; 
+       if Input = 'land~highWire' then
+          Output:='Wire_10kV'; 		  
 end.

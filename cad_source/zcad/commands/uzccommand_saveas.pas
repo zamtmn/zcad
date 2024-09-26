@@ -36,7 +36,7 @@ uses
   uzeffdxf,uzedrawingsimple,Varman,uzctnrVectorBytes,uzcdrawing,uzcTranslations,uzeconsts;
 
 function SaveAs_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
-function SaveDXFDPAS(s:ansistring):Integer;
+function SaveDXFDPAS(AFileName:String;AProcessFileHistory:Boolean=True):Integer;
 function dwgQSave_com(dwg:PTSimpleDrawing):Integer;
 
 implementation
@@ -79,11 +79,11 @@ begin
 end;
 
 
-function SaveDXFDPAS(s:ansistring):Integer;
+function SaveDXFDPAS(AFileName:string;AProcessFileHistory:boolean=True):integer;
 begin
-     result:=dwgSaveDXFDPAS(s, drawings.GetCurrentDWG);
-     if assigned(ProcessFilehistoryProc) then
-                                             ProcessFilehistoryProc(s);
+  Result:=dwgSaveDXFDPAS(AFileName, drawings.GetCurrentDWG);
+  if AProcessFileHistory and assigned(ProcessFilehistoryProc) then
+    ProcessFilehistoryProc(AFileName);
 end;
 
 function SaveAs_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;

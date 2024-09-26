@@ -37,35 +37,36 @@ uses
 
 implementation
 
-function QSave_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
+function QSave_com(const Context:TZCADCommandContext;
+                   operands:TCommandOperands):TCommandResult;
 var
-  s,s1:AnsiString;
-  itautoseve:boolean;
+  s,s1:ansistring;
+  itAutoSeve:boolean;
   TempSavedParam:tsavedparams;
 begin
-  itautoseve:=false;
+  itAutoSeve:=False;
   if operands='QS' then begin
     s1:=ExpandPath(sysvar.SAVE.SAVE_Auto_FileName^);
     s:=format(rsAutoSave,[s1]);
     ZCMsgCallBackInterface.TextMessage(s,TMWOHistoryOut);
-    itautoseve:=true;
+    itAutoSeve:=True;
   end else begin
     if extractfilepath(drawings.GetCurrentDWG.GetFileName)='' then begin
       SaveAs_com(Context,EmptyCommandOperands);
       exit;
     end;
-      s1:=drawings.GetCurrentDWG.GetFileName;
+    s1:=drawings.GetCurrentDWG.GetFileName;
   end;
 
-  if itautoseve then begin
+  if itAutoSeve then begin
     LoadParams(expandpath(ProgramPath+CParamsFile),TempSavedParam);
     TempSavedParam.LastAutoSaveFile:=s1;
     SysParam.saved.LastAutoSaveFile:=s1;
     SaveParams(expandpath(ProgramPath+CParamsFile),TempSavedParam);
   end;
-  result:=SaveDXFDPAS(s1);
-  if (not itautoseve)and(result=cmd_ok) then
-    drawings.GetCurrentDWG.ChangeStampt(false);
+  Result:=SaveDXFDPAS(s1,not itAutoSeve);
+  if (not itAutoSeve)and(Result=cmd_ok) then
+    drawings.GetCurrentDWG.ChangeStampt(False);
   SysVar.SAVE.SAVE_Auto_Current_Interval^:=SysVar.SAVE.SAVE_Auto_Interval^;
 end;
 

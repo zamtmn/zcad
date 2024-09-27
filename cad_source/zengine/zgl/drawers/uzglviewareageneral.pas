@@ -682,7 +682,7 @@ end;
 
 function TGeneralViewArea.treerender;
 const
-  MaxLODDeepDrtaw={2}10;
+  MaxLODDeepDrtaw={2}8;
 var
   currtime:TDateTime;
   Hour,Minute,Second,MilliSecond:word;
@@ -703,7 +703,7 @@ begin
     if DC.LOD=LODCalculatedDetail then begin
       if LODDeep=0 then begin
         v:=Node.BoundingBox.RTF-Node.BoundingBox.LBN;
-        if not SqrCanSimplyDrawInWCS(DC,uzegeometry.SqrOneVertexlength(v),4900) then begin
+        if not SqrCanSimplyDrawInWCS(DC,uzegeometry.SqrOneVertexlength(v),6400) then begin
           DC.LOD:=LODLowDetail;
           inc(LODDeep);
         end;

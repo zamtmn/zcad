@@ -83,8 +83,8 @@ GDBObjEntity= object(GDBObjSubordinated)
                     procedure FormatAfterEdit(var drawing:TDrawingDef;var DC:TDrawContext;Stage:TEFStages=EFAllStages);virtual;
                     procedure FormatAfterFielfmod(PField,PTypeDescriptor:Pointer);virtual;
 
-                    procedure DrawWithAttrib(var DC:TDrawContext{visibleactualy:TActulity;subrender:Integer});virtual;
-                    procedure DrawWithOutAttrib({visibleactualy:TActulity;}var DC:TDrawContext{subrender:Integer});virtual;
+                    procedure DrawWithAttrib(var DC:TDrawContext);virtual;
+                    procedure DrawWithOutAttrib(var DC:TDrawContext);virtual;
 
                     procedure DrawGeometry(lw:Integer;var DC:TDrawContext{visibleactualy:TActulity;subrender:Integer});virtual;
                     procedure DrawOnlyGeometry(lw:Integer;var DC:TDrawContext{visibleactualy:TActulity;subrender:Integer});virtual;

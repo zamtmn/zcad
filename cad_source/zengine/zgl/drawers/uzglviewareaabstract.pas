@@ -135,8 +135,8 @@ type
                            procedure DrawGrid(var DC:TDrawContext); virtual;abstract;
                            procedure showcursor(var DC:TDrawContext); virtual;abstract;
                            procedure render(const Root:GDBObjGenericSubEntry;var DC:TDrawContext); virtual;abstract;
-                           function treerender(var Node:TEntTreeNode;StartTime:TDateTime;var DC:TDrawContext):Boolean;virtual;abstract;
-                           procedure partailtreerender(var Node:TEntTreeNode;const part:TBoundingBox; var DC:TDrawContext);virtual;abstract;
+                           function treerender(var Node:TEntTreeNode;StartTime:TDateTime;var DC:TDrawContext;LODDeep:integer=0):Boolean;virtual;abstract;
+                           procedure partailtreerender(var Node:TEntTreeNode;const part:TBoundingBox; var DC:TDrawContext;LODDeep:integer=0);virtual;abstract;
                            function startpaint:boolean;virtual;abstract;
                            procedure endpaint;virtual;abstract;
                            procedure asyncupdatemouse(Data: PtrInt);virtual;abstract;
@@ -162,6 +162,7 @@ begin
   result.DrawingContext.DRAWCOUNT:=-1;
   result.DrawingContext.SysLayer:=nil;
   result.MaxDetail:=false;
+  result.LOD:=LODCalculatedDetail;
   result.DrawMode:=true;
   result.OwnerLineWeight:=-3;
   result.OwnerColor:=7;

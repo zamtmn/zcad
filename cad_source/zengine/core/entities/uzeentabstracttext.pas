@@ -426,42 +426,13 @@ var
 begin
   dc.subrender := dc.subrender + 1;
   PanObjectDegradation:=SysVarRDPanObjectDegradation;
-  if {true//}(((not {GDB.GetCurrentDWG.OGLwindow1.param.scrollmode}dc.scrollmode)or(not PanObjectDegradation)) {and (lod=0)})
-  then
-      begin
-           (*templod:=sqrt(objmatrix[0,0]*objmatrix[0,0]+objmatrix[1,1]*objmatrix[1,1]+objmatrix[2,2]*objmatrix[2,2]);
-           templod:=(templod*self.textprop.size)/({GDB.GetCurrentDWG.pcamera.prop}dc.zoom{*GDB.GetCurrentDWG.pcamera.prop.zoom});
-           //_lod:=round({self.textprop.size/}10*GDB.GetCurrentDWG.pcamera.prop.zoom*GDB.GetCurrentDWG.pcamera.prop.zoom+1);
-           if ({(self.textprop.size/GDB.GetCurrentDWG.pcamera.prop.zoom)}templod>1.5{0.04}{0.2})or(dc.maxdetail) then*)
-           if CanSimplyDrawInOCS(DC,self.textprop.size,1.5) then
-
-                                                                                   //Vertex3D_in_WCS_Array.simpledrawgeometry({_lod}3)
-                                                                                   //simpledrawgeometry
-                                                                                   begin
-                                                                                   //Representation.SHX.drawgeometry;
-                                                                                   Representation.DrawGeometry(DC);
-                                                                                   end
-                                                                               else
-                                                                                   Representation.DrawGeometry(DC);
-                                                                                   //simpledrawgeometry(dc);
-                                                                                     {begin
-                                                                                           myglbegin(gl_line_loop);
-                                                                                           myglvertex3dv(@outbound[0]);
-                                                                                           myglvertex3dv(@outbound[1]);
-                                                                                           myglvertex3dv(@outbound[2]);
-                                                                                           myglvertex3dv(@outbound[3]);
-                                                                                           myglend;
-                                                                                      end;}
-           {myglbegin(gl_points);
-           Vertex3D_in_WCS_Array.iterategl(@myglvertex3dv);
-           myglend;}
-      end
-  else
-  begin
-       DC.Drawer.DrawLine3DInModelSpace(outbound[0],outbound[1],DC.DrawingContext.matrixs);
-       DC.Drawer.DrawLine3DInModelSpace(outbound[1],outbound[2],DC.DrawingContext.matrixs);
-       DC.Drawer.DrawLine3DInModelSpace(outbound[2],outbound[3],DC.DrawingContext.matrixs);
-       DC.Drawer.DrawLine3DInModelSpace(outbound[3],outbound[0],DC.DrawingContext.matrixs);
+  if(not dc.scrollmode)or(not PanObjectDegradation)then
+    Representation.DrawGeometry(DC)
+  else begin
+    DC.Drawer.DrawLine3DInModelSpace(outbound[0],outbound[1],DC.DrawingContext.matrixs);
+    DC.Drawer.DrawLine3DInModelSpace(outbound[1],outbound[2],DC.DrawingContext.matrixs);
+    DC.Drawer.DrawLine3DInModelSpace(outbound[2],outbound[3],DC.DrawingContext.matrixs);
+    DC.Drawer.DrawLine3DInModelSpace(outbound[3],outbound[0],DC.DrawingContext.matrixs);
   end;
   dc.subrender := dc.subrender - 1;
   inherited;

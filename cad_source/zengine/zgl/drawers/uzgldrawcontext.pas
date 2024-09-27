@@ -35,12 +35,14 @@ TDrawingContext=record
 end;
 TDContextOption=(DCODrawable);
 TDContextOptions=set of TDContextOption;
+TLOD=(LODMaxDetail,LODCalculatedDetail,LODLowDetail);
 PTDrawContext=^TDrawContext;
 TDrawContext=record
                    DrawingContext:TDrawingContext;
                    Subrender:Integer;
                    Selected:Boolean;
                    MaxDetail:Boolean;
+                   LOD:TLOD;
                    DrawMode:Boolean;
                    LWDisplayScale:Integer{=2};
                    DefaultLW:Integer{=25};
@@ -64,6 +66,7 @@ begin
       result.DrawingContext.DRAWCOUNT:=0;
       result.DrawingContext.SysLayer:=nil;
       result.MaxDetail:=true;
+      result.LOD:=LODMaxDetail;
       result.DrawMode:=true;
       result.LWDisplayScale:=2;
       result.DefaultLW:=25;

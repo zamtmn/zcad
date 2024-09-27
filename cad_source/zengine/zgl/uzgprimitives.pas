@@ -478,19 +478,11 @@ end;
 
 function TLLSymbolLine.draw(drawer:TZGLAbstractDrawer;var rc:TDrawContext;var GeomData:ZGLGeomData;var LLPArray:TLLPrimitivesArray;var OptData:ZGLOptimizerData):Integer;
 begin
-  if (MaxSqrSymH/(rc.DrawingContext.zoom*rc.DrawingContext.zoom)<3)and(not rc.maxdetail) then
-                                                begin
-                                                  Drawer.DrawLine(@geomdata.Vertex3S,FirstOutBoundIndex,LastOutBoundIndex+3);
-                                                  //Drawer.DrawLine(FirstOutBoundIndex+1,LastOutBoundIndex+2);
-                                                  {Drawer.DrawQuad(FirstOutBoundIndex,FirstOutBoundIndex+1,LastOutBoundIndex+2,LastOutBoundIndex+3);
-                                                  Drawer.DrawLine(FirstOutBoundIndex,FirstOutBoundIndex+1);
-                                                  Drawer.DrawLine(FirstOutBoundIndex+1,LastOutBoundIndex+2);
-                                                  Drawer.DrawLine(FirstOutBoundIndex+2,LastOutBoundIndex+3);
-                                                  Drawer.DrawLine(FirstOutBoundIndex+3,FirstOutBoundIndex);}
-                                                  self.SimplyDrawed:=true;
-                                                end
-                                            else
-                                                self.SimplyDrawed:=false;
+  if (rc.LOD=LODLowDetail)or(MaxSqrSymH/(rc.DrawingContext.zoom*rc.DrawingContext.zoom)<3)and(not rc.maxdetail) then begin
+    Drawer.DrawLine(@geomdata.Vertex3S,FirstOutBoundIndex,LastOutBoundIndex+3);
+    self.SimplyDrawed:=true;
+  end else
+    self.SimplyDrawed:=false;
   result:=inherited;
 end;
 function TLLSymbolLine.CalcTrueInFrustum(const frustum:ClipArray;var GeomData:ZGLGeomData;out InRect:TInBoundingVolume):Integer;

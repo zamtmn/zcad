@@ -100,8 +100,8 @@ type
                            procedure showmousecursor;override;
                            procedure hidemousecursor;override;
                            Procedure Paint; override;
-                           function treerender(var Node:TEntTreeNode;StartTime:TDateTime;var DC:TDrawContext):Boolean; override;
-                           procedure partailtreerender(var Node:TEntTreeNode;const part:TBoundingBox; var DC:TDrawContext); override;
+                           function treerender(var Node:TEntTreeNode;StartTime:TDateTime;var DC:TDrawContext;LODDeep:integer=0):Boolean; override;
+                           procedure partailtreerender(var Node:TEntTreeNode;const part:TBoundingBox; var DC:TDrawContext;LODDeep:integer=0); override;
                            procedure render(const Root:GDBObjGenericSubEntry;var DC:TDrawContext); override;
                            procedure finishdraw(var RC:TDrawContext); override;
                            procedure draw;override;
@@ -653,25 +653,41 @@ procedure TGeneralViewArea.SwapBuffers(var DC:TDrawContext);
 begin
      drawer.SwapBuffers;
 end;
-procedure TGeneralViewArea.partailtreerender(var Node:TEntTreeNode;const part:TBoundingBox; var DC:TDrawContext);
+procedure TGeneralViewArea.partailtreerender(var Node:TEntTreeNode;const part:TBoundingBox; var DC:TDrawContext;LODDeep:integer=0);
 //копипаста из treerender
 begin
   if (Node.NodeData.infrustum=PDWG.Getpcamera.POSCOUNT)and(boundingintersect(Node.BoundingBox,part)) then begin
     if (Node.NodeData.FulDraw=TDTFulDraw)or(Node.nul.count=0) then begin
       if assigned(node.pminusnode)then
-        partailtreerender(PTEntTreeNode(node.pminusnode)^,part,dc);
+        partailtreerender(PTEntTreeNode(node.pminusnode)^,part,dc,LODDeep);
       if assigned(node.pplusnode)then
-        partailtreerender(PTEntTreeNode(node.pplusnode)^,part,dc);
+        partailtreerender(PTEntTreeNode(node.pplusnode)^,part,dc,LODDeep);
     end;
     TEntTreeNode(Node).DrawWithAttribExternalArray(dc);
   end;
 end;
 
+function SqrCanSimplyDrawInWCS(const DC:TDrawContext;const ParamSize,TargetSize:Double):Boolean;
+var
+   templod:Double;
+begin
+     if dc.maxdetail then
+                         exit(true);
+  templod:=(ParamSize)/(dc.DrawingContext.zoom*dc.DrawingContext.zoom);
+  if templod>TargetSize then
+                            exit(true)
+                        else
+                            exit(false);
+end;
 
 function TGeneralViewArea.treerender;
+const
+  MaxLODDeepDrtaw={2}10;
 var
   currtime:TDateTime;
   Hour,Minute,Second,MilliSecond:word;
+  v:gdbvertex;
+  LODSave:TLOD;
 begin
   if (sysvarRDMaxRenderTime<>0) then begin
     currtime:=now;
@@ -682,27 +698,43 @@ begin
   Result:=false;
 
   if Node.NodeData.infrustum=PDWG.Getpcamera.POSCOUNT then begin
+
+    LODSave:=DC.LOD;
+    if DC.LOD=LODCalculatedDetail then begin
+      if LODDeep=0 then begin
+        v:=Node.BoundingBox.RTF-Node.BoundingBox.LBN;
+        if not SqrCanSimplyDrawInWCS(DC,uzegeometry.SqrOneVertexlength(v),4900) then begin
+          DC.LOD:=LODLowDetail;
+          inc(LODDeep);
+        end;
+      end else
+        inc(LODDeep);
+      end else if LODDeep>0 then
+        inc(loddeep);
+
     if (Node.NodeData.FulDraw=TDTFulDraw)or(Node.nul.count=0) then begin
-      if assigned(node.pminusnode)then
+      if assigned(node.pminusnode)and(LODDeep<MaxLODDeepDrtaw)then
         if node.NodeData.minusdrawpos<>PDWG.Getpcamera.DRAWCOUNT then begin
-          if not treerender(PTEntTreeNode(node.pminusnode)^,StartTime,dc) then
+          if not treerender(PTEntTreeNode(node.pminusnode)^,StartTime,dc,LODDeep) then
             node.NodeData.minusdrawpos:=PDWG.Getpcamera.DRAWCOUNT
           else
             Result:=true;
         end;
-      if assigned(node.pplusnode)then
+      if assigned(node.pplusnode)and(LODDeep<MaxLODDeepDrtaw)then
         if node.NodeData.plusdrawpos<>PDWG.Getpcamera.DRAWCOUNT then begin
-          if not treerender(PTEntTreeNode(node.pplusnode)^,StartTime,dc) then
+          if not treerender(PTEntTreeNode(node.pplusnode)^,StartTime,dc,LODDeep) then
             node.NodeData.plusdrawpos:=PDWG.Getpcamera.DRAWCOUNT
           else
             Result:=true;
         end;
     end;
+
     if node.NodeData.nuldrawpos<>PDWG.Getpcamera.DRAWCOUNT then begin
-      TEntTreeNode(Node).DrawWithAttribExternalArray(dc);
+      TEntTreeNode(Node).DrawWithAttribExternalArray(dc,LODDeep);
       //GDBObjEntityOpenArray(Node.nul).DrawWithattrib(dc{gdb.GetCurrentDWG.pcamera.POSCOUNT,subrender});
       node.NodeData.nuldrawpos:=PDWG.Getpcamera.DRAWCOUNT;
     end;
+    DC.LOD:=LODSave;
   end;
 end;
 procedure TGeneralViewArea.render;
@@ -1845,6 +1877,10 @@ begin
   result.Subrender:=0;
   result.Selected:=false;
   result.MaxDetail:=_maxdetail;
+  if result.MaxDetail then
+    result.LOD:=LODMaxDetail
+  else
+    result.LOD:=LODCalculatedDetail;
 
   {if sysvar.dwg.DWG_DrawMode<>nil then
                                       result.DrawMode:=sysvar.dwg.DWG_DrawMode^

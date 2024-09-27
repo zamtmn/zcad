@@ -480,136 +480,75 @@ begin
      result:=GDBLWPolylineID;
 end;
 procedure GDBObjLWpolyline.DrawGeometry;
-var i,ie: Integer;
-    q3d:PGDBQuad3d;
-    plw:PGLlwwidth;
-    v:gdbvertex;
+var
+  i,ie: integer;
+  q3d:PGDBQuad3d;
+  plw:PGLlwwidth;
+  v:gdbvertex;
+  simplydraw:boolean;
 begin
-  {glPolygonMode(GL_FRONT_AND_BACK, GL_fill);
-  if closed then
-    for i := 0 to vertexarray.count - 1 do
-    begin
-      begin
-                                      //oglsm.myglEnable(GL_LIGHTING);
-        myglbegin(GL_QUADS);
-        glVertex2dv(@PGDBArrayGLlwwidth(widtharray.PArray)^[i].quad[0]);
-        glVertex2dv(@PGDBArrayGLlwwidth(widtharray.PArray)^[i].quad[1]);
-        glVertex2dv(@PGDBArrayGLlwwidth(widtharray.PArray)^[i].quad[2]);
-        glVertex2dv(@PGDBArrayGLlwwidth(widtharray.PArray)^[i].quad[3]);
-        myglend();
-                                      //oglsm.myglDisable(GL_LIGHTING);
-      end;
-      begin
-        myglbegin(GL_LINEs);
-        glVertex2dv(@PGDBArrayVertex2D(vertexarray.parray)^[i]);
-        if i <> vertexarray.count - 1 then
-          glVertex2dv(@PGDBArrayVertex2D(vertexarray.parray)^[i + 1])
-        else
-          glVertex2dv(@PGDBArrayVertex2D(vertexarray.parray)^[0]);
-        myglend();
-      end;
-    end
-  else
-    for i := 0 to vertexarray.count - 2 do
-    begin
-                                  //if PGDBlwpolyline(temp)^.pwidtharray^.widtharray[i2].hw then
-      begin
-                                      //oglsm.myglEnable(GL_LIGHTING);
-        myglbegin(GL_QUADS);
-        glVertex2dv(@PGDBArrayGLlwwidth(widtharray.PArray)^[i].quad[0]);
-        glVertex2dv(@PGDBArrayGLlwwidth(widtharray.PArray)^[i].quad[1]);
-        glVertex2dv(@PGDBArrayGLlwwidth(widtharray.PArray)^[i].quad[2]);
-        glVertex2dv(@PGDBArrayGLlwwidth(widtharray.PArray)^[i].quad[3]);
-        myglend();
-                                      //oglsm.myglDisable(GL_LIGHTING);
-      end;
-                                  //else
-      begin
-        myglbegin(GL_LINE_STRIP);
-        glVertex2dv(@PGDBArrayVertex2D(vertexarray.parray)^[i]);
-        glVertex2dv(@PGDBArrayVertex2D(vertexarray.parray)^[i + 1]);
-        myglend();
-      end;
-    end;}
-    {if closed then myglbegin(GL_LINE_LOOP)
-              else myglbegin(GL_LINE_STRIP);
-    Vertex3D_in_WCS_Array.iterategl(@myglVertex3dv);
-    myglend();}
+
+  if dc.lod=LODCalculatedDetail then begin
     v:=uzegeometry.VertexSub(vp.BoundingBox.RTF,vp.BoundingBox.LBN);
+    simplydraw:=not SqrCanSimplyDrawInWCS(DC,uzegeometry.SqrOneVertexlength(v),49);
+  end else
+    simplydraw:=dc.lod=LODLowDetail;
 
-    if not SqrCanSimplyDrawInWCS(DC,uzegeometry.SqrOneVertexlength(v),49) then
-    if Width3D_in_WCS_Array.parray<>nil then
-           begin
-                q3d:=Width3D_in_WCS_Array.GetParrayAsPointer;
-                ie:=(Width3D_in_WCS_Array.count div 4)+1;
-                for i := 0 to (Width3D_in_WCS_Array.count-2)div ie do begin
-                dc.drawer.DrawLine3DInModelSpace(q3d^[0],q3d^[1],dc.DrawingContext.matrixs);
-                inc(q3d,ie);
-                end;
-                {oglsm.myglbegin(GL_Lines);
-                oglsm.myglVertex3dv(@q3d^[0]);
-                oglsm.myglVertex3dv(@q3d^[1]);
-                oglsm.myglend();}
-                exit;
-           end;
-
-    if closed then ie:=Width3D_in_WCS_Array.count - 1
-              else ie:=Width3D_in_WCS_Array.count - 2;
-
-
+  if simplydraw then begin
     q3d:=Width3D_in_WCS_Array.GetParrayAsPointer;
-    plw:=Width2D_in_OCS_Array.GetParrayAsPointer;
-    for i := 0 to ie do
-    begin
-      begin
-        if plw^.hw then
-        begin
-        dc.drawer.DrawQuad3DInModelSpace(q3d^[0],q3d^[1],q3d^[2],q3d^[3],dc.DrawingContext.matrixs);
-        {oglsm.myglbegin(GL_QUADS);
-        oglsm.myglVertex3dv(@q3d^[0]);
-        oglsm.myglVertex3dv(@q3d^[1]);
-        oglsm.myglVertex3dv(@q3d^[2]);
-        oglsm.myglVertex3dv(@q3d^[3]);
-        oglsm.myglend();}
+
+    if Width3D_in_WCS_Array.Count>10 then begin
+      if Width3D_in_WCS_Array.parray<>nil then begin
+        ie:=(Width3D_in_WCS_Array.Count div 4)+2;
+        for i := 0 to (Width3D_in_WCS_Array.Count-2)div ie do begin
+          dc.drawer.DrawLine3DInModelSpace(
+            q3d^[0],q3d^[1],dc.DrawingContext.matrixs);
+          Inc(q3d,ie);
         end;
-        inc(plw);
-        inc(q3d);
       end;
-   end;
+    end else if Width3D_in_WCS_Array.Count>2 then begin
+      dc.drawer.DrawLine3DInModelSpace(vp.BoundingBox.LBN,vp.BoundingBox.RTF,
+                                       dc.DrawingContext.matrixs);
+    end else begin
+      dc.drawer.DrawLine3DInModelSpace(q3d^[0],q3d^[1],
+                                       dc.DrawingContext.matrixs);
+    end;
+    exit;
+  end;
 
-    //oglsm.myglbegin(GL_Lines);
-    q3d:=Width3D_in_WCS_Array.GetParrayAsPointer;
-    plw:=Width2D_in_OCS_Array.GetParrayAsPointer;
-    for i := 0 to ie do
+  if closed then ie:=Width3D_in_WCS_Array.Count - 1
+  else
+    ie:=Width3D_in_WCS_Array.Count - 2;
+
+
+  q3d:=Width3D_in_WCS_Array.GetParrayAsPointer;
+  plw:=Width2D_in_OCS_Array.GetParrayAsPointer;
+  for i := 0 to ie do begin
     begin
-      begin
-        dc.drawer.DrawLine3DInModelSpace(q3d^[0],q3d^[1],dc.DrawingContext.matrixs);
-        //oglsm.myglVertex3dv(@q3d^[0]);
-        //oglsm.myglVertex3dv(@q3d^[1]);
-        if plw^.hw then
-        begin
+      if plw^.hw then
+        dc.drawer.DrawQuad3DInModelSpace(q3d^[0],q3d^[1],q3d^[2],
+          q3d^[3],dc.DrawingContext.matrixs);
+      Inc(plw);
+      Inc(q3d);
+    end;
+  end;
+
+  //oglsm.myglbegin(GL_Lines);
+  q3d:=Width3D_in_WCS_Array.GetParrayAsPointer;
+  plw:=Width2D_in_OCS_Array.GetParrayAsPointer;
+  for i := 0 to ie do begin
+    begin
+      dc.drawer.DrawLine3DInModelSpace(q3d^[0],q3d^[1],dc.DrawingContext.matrixs);
+      if plw^.hw then begin
         dc.drawer.DrawLine3DInModelSpace(q3d^[1],q3d^[2],dc.DrawingContext.matrixs);
-        //oglsm.myglVertex3dv(@q3d^[1]);
-        //oglsm.myglVertex3dv(@q3d^[2]);
         dc.drawer.DrawLine3DInModelSpace(q3d^[2],q3d^[3],dc.DrawingContext.matrixs);
-        //oglsm.myglVertex3dv(@q3d^[2]);
-        //oglsm.myglVertex3dv(@q3d^[3]);
         dc.drawer.DrawLine3DInModelSpace(q3d^[3],q3d^[0],dc.DrawingContext.matrixs);
-        //oglsm.myglVertex3dv(@q3d^[3]);
-        //oglsm.myglVertex3dv(@q3d^[0]);
-        end;
-        inc(plw);
-        inc(q3d);
       end;
-   end;
-   //oglsm.myglend();
-   inherited;
-
-
-
-    {myglbegin(GL_LINE_STRIP);
-    vertexarray.iterate(@glVertex2dv);
-    myglend();}
+      Inc(plw);
+      Inc(q3d);
+    end;
+  end;
+  inherited;
 end;
 
 procedure GDBObjLWpolyline.LoadFromDXF;

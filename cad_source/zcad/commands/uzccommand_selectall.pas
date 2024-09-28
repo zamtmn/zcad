@@ -26,8 +26,8 @@ uses
   uzccommandsabstract,uzccommandsimpl,
   uzeentity,
   uzcdrawings,
-  uzcinterface,
-  gzctnrVectorTypes;
+  uzcinterface{,
+  gzctnrVectorTypes};
 
 implementation
 

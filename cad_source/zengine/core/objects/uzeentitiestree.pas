@@ -91,9 +91,9 @@ begin
        if pobj^.infrustum=dc.DrawingContext.infrustumactualy then
                            pobj^.DrawWithAttrib(dc);
        pobj:=nul.iterate(ir);
-       {if LODDeep>0 then
-         pobj:=nul.iterate(ir);}
        if LODDeep>2 then
+         pobj:=nul.iterate(ir);
+       if LODDeep>3 then
          pobj:=nul.iterate(ir);
   until pobj=nil;
 end;

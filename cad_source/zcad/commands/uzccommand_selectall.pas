@@ -35,10 +35,10 @@ var
   selall:pCommandFastObjectPlugin;
 
 function SelectAll_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
-var
+{var
     pv:pGDBObjEntity;
     ir:itrec;
-    count:integer;
+    count:integer;}
 begin
 
   drawings.GetCurrentDWG.DeSelectAll;

@@ -40,7 +40,11 @@ var
     ir:itrec;
     count:integer;
 begin
-  if drawings.GetCurrentROOT.ObjArray.Count = 0 then exit;
+
+  drawings.GetCurrentDWG.DeSelectAll;
+  drawings.GetCurrentDWG.SelectEnts(drawings.GetCurrentROOT.ObjArray);
+
+  {if drawings.GetCurrentROOT.ObjArray.Count = 0 then exit;
   drawings.GetCurrentDWG.wa.param.SelDesc.Selectedobjcount:=0;
 
   count:=0;
@@ -62,7 +66,7 @@ begin
       pv^.select(drawings.GetCurrentDWG.wa.param.SelDesc.Selectedobjcount,drawings.CurrentDWG^.selector);
 
   pv:=drawings.GetCurrentROOT.ObjArray.iterate(ir);
-  until pv=nil;
+  until pv=nil;}
 
   ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIActionRedraw);
   //if assigned(updatevisibleproc) then updatevisibleproc(ZMsgID_GUIActionRedraw);

@@ -110,21 +110,21 @@ TSimpleDrawing= object(TAbstractDrawing)
                        procedure SelectorWOGrips(PEntity,PGripsCreator:PGDBObjEntity;var SelectedObjCount:Integer);
                        procedure DeSelector(PV:PGDBObjEntity;var SelectedObjCount:Integer);
                        procedure DeSelectAll;virtual;
-                       procedure SelectEnts(var Ents:TZctnrVectorPGDBaseEntity);
+                       procedure SelectEnts(constref Ents:TZctnrVectorPGDBaseEntity);
                  end;
 {EXPORT-}
 function CreateSimpleDWG:PTSimpleDrawing;
 var
     MainBlockCreateProc:TMainBlockCreateProc=nil;
 implementation
-procedure TSimpleDrawing.SelectEnts(var Ents:TZctnrVectorPGDBaseEntity);
+procedure TSimpleDrawing.SelectEnts(constref Ents:TZctnrVectorPGDBaseEntity);
 var
   pv:PGDBObjEntity;
   ir:itrec;
   TrueSel:Boolean;
   SelProc:TSimpleDrawing.TSelector;
 begin
-  TrueSel:=Ents.Count<=sysvarDSGNMaxSelectEntsCountWithGrips;
+  TrueSel:=Ents.GetRealCount<=sysvarDSGNMaxSelectEntsCountWithGrips;
 
   if TrueSel then
     SelProc:=Selector

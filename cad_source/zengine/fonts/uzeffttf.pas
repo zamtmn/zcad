@@ -16,12 +16,13 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
 
-unit uzeffttf;
+unit uzeFFTTF;
 {$INCLUDE zengineconfig.inc}
 interface
-uses uzefontmanager,EasyLazFreeType,uzeFontFileFormatTTF,uzegeometry,
-    uzefont,uzbstrproc,{$IFNDEF DELPHI}FileUtil,LCLProc,{$ENDIF}sysutils,
-    uzctnrVectorBytes,uzefontttfpreloader;
+uses
+  uzefontmanager,uzeFontFileFormatTTF,uzegeometry,uzefont,uzbstrproc,
+  {$IFNDEF DELPHI}FileUtil,LCLProc,{$ENDIF}sysutils,uzctnrVectorBytes,
+  uzefontttfpreloader;
 type ptsyminfo=^tsyminfo;
      tsyminfo=record
                            number,size:word;

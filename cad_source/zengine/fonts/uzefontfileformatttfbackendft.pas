@@ -218,8 +218,14 @@ begin
   pos2:=FT_Get_Sfnt_Table(FontMgr.GetFreeTypeFont(FreeTypeTTFImpl.FontID),FT_SFNT_OS2);
   phead:=FT_Get_Sfnt_Table(FontMgr.GetFreeTypeFont(FreeTypeTTFImpl.FontID),FT_SFNT_HEAD);
   if pos2<>nil then begin
-    if PTT_OS(pos2)^.version>=2 then
-      result:=PTT_OS(pos2)^.sCapHeight
+    if PTT_OS(pos2)^.version>=2 then begin
+      if PTT_OS(pos2)^.sCapHeight<>0 then
+        result:=PTT_OS(pos2)^.sCapHeight
+      else if PTT_OS(pos2)^.usWinAscent<>0 then
+        result:=PTT_OS(pos2)^.usWinAscent
+      else
+        result:=PTT_OS(pos2)^.sTypoAscender;
+    end
     else begin
       phori:=FT_Get_Sfnt_Table(FontMgr.GetFreeTypeFont(FreeTypeTTFImpl.FontID),FT_SFNT_HHEA);
       if phori<>nil then

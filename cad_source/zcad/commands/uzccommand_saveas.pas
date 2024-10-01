@@ -62,20 +62,12 @@ end;
 function dwgQSave_com(dwg:PTSimpleDrawing):Integer;
 var s1:String;
 begin
-     begin
-          if dwg.GetFileName=rsUnnamedWindowTitle then
-          begin
-               s1:='';
-               if not(SaveFileDialog(s1,'dxf',ProjectFileFilter,'',rsSaveFile)) then
-               begin
-                    result:=cmd_error;
-                    exit;
-               end;
-          end
-          else
-              s1:=drawings.GetCurrentDWG.GetFileName;
-     end;
-     result:=dwgSaveDXFDPAS(s1,dwg);
+  s1:=dwg.GetFileName;
+  if not FileExists(s1) then begin
+    if not(SaveFileDialog(s1,'dxf',ProjectFileFilter,'',rsSaveFile)) then
+      exit(cmd_ok);
+  end;
+  result:=dwgSaveDXFDPAS(s1,dwg);
 end;
 
 

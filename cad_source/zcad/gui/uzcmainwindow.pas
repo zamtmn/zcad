@@ -526,11 +526,13 @@ procedure TZCADMainWindow.PageControlMouseDown(Sender: TObject;
 var
    i: integer;
 begin
-  I:=(Sender as TPageControl).IndexOfPageAt{TabIndexAtClientPos}(classes.Point(X,Y));
+  I:=(Sender as TPageControl).IndexOfPageAt(classes.Point(X,Y));
   if i>-1 then
-  if ssMiddle in Shift then
-  if (Sender is TPageControl) then
-                                  CloseDWGPage((Sender as TPageControl).Pages[I],false,nil);
+    if ssMiddle in Shift then
+      if (Sender is TPageControl) then begin
+        CommandManager.executecommandtotalend;
+        CloseDWGPage((Sender as TPageControl).Pages[I],false,nil);
+      end;
 end;
 procedure TZCADMainWindow.ShowFastMenu(Sender: TObject);
 begin

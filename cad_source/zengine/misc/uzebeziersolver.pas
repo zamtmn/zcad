@@ -39,10 +39,10 @@ TBezierSolver2D=class
                      BOrder:integer;
                      VectorData:PZGLVectorObject;
                      shxsize:PWord;
-                     scontur,truescontur:GDBvertex2D;
-                     sconturpa:TPointAttr;
+                     scontur,truescontur,truessegment:GDBvertex2D;
+                     sconturpa,lastpa:TPointAttr;
                      Conturs:TMyVectorArrayGDBFontVertex2D;
-                     LastOncurveLineAdded:boolean;
+                     truesconturAdded,LastOncurveLineAdded:boolean;
                      constructor create;
                      destructor Destroy;override;
                      procedure AddPoint(x,y:double;pa:TPointAttr);overload;
@@ -94,47 +94,54 @@ begin
      AddPoint(p,pa);
 end;
 procedure TBezierSolver2D.AddPoint(const p:GDBvertex2D;pa:TPointAttr);
+  procedure checktruescontur(const p:GDBvertex2D);
+  begin
+    if not truesconturAdded then begin
+      truesconturAdded:=true;
+      truescontur:=p;
+    end;
+  end;
 begin
-     case FMode of
-     TSM_WaitStartCountur:begin
-                             LastOncurveLineAdded:=false;
-                             scontur:=p;
-                             sconturpa:=pa;
-                             if pa=TPA_OnCurve then
-                                                   FArray.PushBack(p);
-                             ChangeMode(TSM_WaitPoint);
-                        end;
-     TSM_WaitStartPoint:begin
-                             FArray.PushBack(p);
-                             ChangeMode(TSM_WaitPoint);
-                        end;
-     TSM_WaitPoint:begin
-                        if pa=TPA_OnCurve then
-                        begin
-                             FArray.PushBack(p);
-                             ChangeMode(TSM_WaitStartPoint);
-                             AddPoint(p,pa);
-                        end
-                        else
-                            begin
-                                 if FArray.Size=0 then
-                                 begin
-                                      truescontur:=Vertexmorph(scontur,p,0.5);
-                                      AddPoint(truescontur,TPA_OnCurve);
-                                      AddPoint(p,pa);
-                                 end
-                            else if FArray.Size=2 then
-                                 begin
-                                      AddPoint(Vertexmorph(FArray.Back,p,0.5),TPA_OnCurve);
-                                      AddPoint(p,pa);
-                                 end
-                                 else
-                                 begin
-                                      FArray.PushBack(p);
-                                 end;
-                            end;
-                   end;
-     end;
+  lastpa:=pa;
+  case FMode of
+    TSM_WaitStartCountur:begin
+      LastOncurveLineAdded:=false;
+      scontur:=p;
+      sconturpa:=pa;
+      if pa=TPA_OnCurve then begin
+        FArray.PushBack(p);
+        truesconturAdded:=true;
+        truescontur:=p;
+      end else
+        truesconturAdded:=false;
+      ChangeMode(TSM_WaitPoint);
+    end;
+    TSM_WaitStartPoint:begin
+      if pa=TPA_OnCurve then
+        checktruescontur(p);
+      FArray.PushBack(p);
+      ChangeMode(TSM_WaitPoint);
+    end;
+    TSM_WaitPoint:begin
+      if pa=TPA_OnCurve then begin
+        checktruescontur(p);
+        FArray.PushBack(p);
+        ChangeMode(TSM_WaitStartPoint);
+        AddPoint(p,pa);
+      end else begin
+        if FArray.Size=0 then begin
+          truessegment:=Vertexmorph(scontur,p,0.5);
+          AddPoint(truessegment,TPA_OnCurve);
+          AddPoint(p,pa);
+        end else if FArray.Size=2 then begin
+          AddPoint(Vertexmorph(FArray.Back,p,0.5),TPA_OnCurve);
+          AddPoint(p,pa);
+        end else begin
+          FArray.PushBack(p);
+        end;
+      end;
+    end;
+  end;
 end;
 procedure TBezierSolver2D.ChangeMode(Mode:TSolverMode);
 begin
@@ -151,19 +158,18 @@ begin
 end;
 procedure TBezierSolver2D.EndCountur;
 begin
-  //case fMode of
-  //TSM_WaitStartPoint:begin
-
   if sconturpa=TPA_OnCurve then
                                AddPoint(scontur,TPA_OnCurve)
-                           else
-                               begin
-                                    AddPoint(scontur,TPA_NotOnCurve);
-                                    AddPoint(truescontur,TPA_OnCurve);
-                               end;
-  //                   end;
-  //end;
-  //solve;
+  else begin
+  if lastpa=TPA_OnCurve then begin
+    AddPoint(scontur,TPA_NotOnCurve);
+    AddPoint(truessegment,TPA_OnCurve);
+  end else begin
+    AddPoint((FArray.Back+scontur)/2,TPA_OnCurve);
+    AddPoint(scontur,TPA_NotOnCurve);
+    AddPoint(truescontur,TPA_OnCurve);
+  end;
+  end;
   ChangeMode(TSM_WaitStartCountur);
   farray.Clear;
 end;

@@ -235,12 +235,14 @@ begin
     for i:=0 to bs.Conturs.VArray.Size-1 do begin
       zTraceLn('{T+}[TTF_CONTENTS]Contur=%d',[i]);
       GLUIntrf.TessBeginContour(tesselator);
+      tv.z:=0;
       for j:=0 to bs.Conturs.VArray[i].Size-1 do begin
-        zTraceLn('[TTF_CONTENTS]x=%f;y=%f',[(bs.Conturs.VArray[i][j].v.x),(bs.Conturs.VArray[i][j].v.y)]);
-        tv.x:=bs.Conturs.VArray[i][j].v.x;
-        tv.y:=bs.Conturs.VArray[i][j].v.y;
-        tv.z:=0;
-        GLUIntrf.TessVertex(tesselator,@tv,bs.Conturs.VArray[i][j].index);
+        with bs.Conturs.VArray[i][j] do begin
+          zTraceLn('[TTF_CONTENTS]x=%f;y=%f',[v.x,v.y]);
+          tv.x:=v.x;
+          tv.y:=v.y;
+          GLUIntrf.TessVertex(tesselator,@tv,index);
+        end;
       end;
       GLUIntrf.TessEndContour(tesselator);
       zTraceLn('{T-}[TTF_CONTENTS]End contur');

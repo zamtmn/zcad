@@ -507,7 +507,8 @@ end;
 
 procedure TZCADMainWindow.asynccloseapp(Data: PtrInt);
 begin
-      CloseApp;
+  CommandManager.executecommandtotalend;
+  CloseApp;
 end;
 procedure TZCADMainWindow.FormClose(Sender: TObject; var CloseAction: TCloseAction);
 begin

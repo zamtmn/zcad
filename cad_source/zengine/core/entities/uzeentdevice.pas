@@ -227,6 +227,7 @@ begin
      m4:={self.ObjMatrix; //}getmatrix^;
      //MatrixInvert(m4);
      dc:=drawing.createdrawingrc;
+     dc.Options:=dc.Options-[DCODrawable];
      pv:=VarObjArray.beginiterate(ir);
      if pv<>nil then
      repeat

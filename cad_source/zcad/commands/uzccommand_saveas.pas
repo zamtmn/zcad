@@ -26,6 +26,7 @@ uses
   sysutils,
   uzbpaths,
 
+  uzcuitypes,uzcuidialogs,
   uzeffmanager,
   uzccommand_DWGNew,
   uzccommandsimpl,uzccommandsabstract,
@@ -60,14 +61,23 @@ begin
 end;
 
 function dwgQSave_com(dwg:PTSimpleDrawing):Integer;
-var s1:String;
+var
+  s:String;
+  dr:TZCMsgDialogResult;
 begin
-  s1:=dwg.GetFileName;
-  if not FileExists(s1) then begin
-    if not(SaveFileDialog(s1,'dxf',ProjectFileFilter,'',rsSaveFile)) then
-      exit(cmd_ok);
+  s:=dwg.GetFileName;
+  if not FileExists(s) then begin
+    if not(SaveFileDialog(s,'dxf',ProjectFileFilter,'',rsSaveFile)) then
+      exit(cmd_error);
+    if FileExists(s) then begin
+      dr:=zcMsgDlg(format(rsOverwriteFileQuery,[s]),zcdiQuestion,[zccbYes,zccbNo,zccbCancel],false,nil,rsQuitCaption);
+      if dr.ModalResult=ZCmrCancel then
+        exit(cmd_error)
+      else if dr.ModalResult=ZCmrNo then
+        exit(cmd_ok);
+    end;
   end;
-  result:=dwgSaveDXFDPAS(s1,dwg);
+  result:=dwgSaveDXFDPAS(s,dwg);
 end;
 
 
@@ -80,12 +90,20 @@ end;
 
 function SaveAs_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 var
-   s:AnsiString;
-   fileext:AnsiString;
+  s:AnsiString;
+  fileext:AnsiString;
+  dr:TZCMsgDialogResult;
 begin
   ZCMsgCallBackInterface.Do_BeforeShowModal(nil);
   s:=drawings.GetCurrentDWG.GetFileName;
   if SaveFileDialog(s,'dxf',ProjectFileFilter,'',rsSaveFile) then begin
+    if FileExists(s) then begin
+      dr:=zcMsgDlg(format(rsOverwriteFileQuery,[s]),zcdiQuestion,[zccbYes,zccbNo,zccbCancel],false,nil,rsQuitCaption);
+      if dr.ModalResult=ZCmrCancel then
+        exit(cmd_cancel)
+      else if dr.ModalResult=ZCmrNo then
+        exit(cmd_ok);
+    end;
     fileext:=uppercase(ExtractFileEXT(s));
     if fileext='.ZCP' then
       saveZCP(s, drawings.GetCurrentDWG^)

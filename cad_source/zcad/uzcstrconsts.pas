@@ -191,6 +191,7 @@ resourcestring
   rsSysLineTypeWarning='This is system line type!';
   rsQuitQuery='Do you want to quit ZCAD?';
   rsCloseDWGQuery='Drawing "%s" not saved. Save?';
+  rsOverwriteFileQuery='Drawing "%s" already exists. Overwrite?';
   rsCurrentLayerOff='The current layer is turned off';
 
   rsLayerMustBeSelected='Layer must be selected';

@@ -227,7 +227,12 @@ begin
      m4:={self.ObjMatrix; //}getmatrix^;
      //MatrixInvert(m4);
      dc:=drawing.createdrawingrc;
-     dc.Options:=dc.Options-[DCODrawable];
+
+     //пытался так починить https://github.com/zamtmn/zcad/issues/141
+     //но это ведет https://github.com/zamtmn/zcad/issues/143
+     {dc.Options:=dc.Options-[DCODrawable];}
+     //пока просто чищу списки на присоединение примитивов при закрытии чертежа
+
      pv:=VarObjArray.beginiterate(ir);
      if pv<>nil then
      repeat

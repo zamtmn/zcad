@@ -17,31 +17,43 @@
 }
 
 unit uzeFontFileFormatTTFBackendFTTest;
-{$INCLUDE zengineconfig.inc}
+
+{$Include zengineconfig.inc}
+
 interface
+
 uses
-  sysutils,freetypehdyn,
+  SysUtils,freetypehdyn,
   uzbLogIntf,
   uzeFontFileFormatTTFBackend;
+
 implementation
+
 initialization
- {$IF DEFINED(USEFREETYPETTFIMPLEMENTATION)}
+ {$IfDef USEFREETYPETTFIMPLEMENTATION}
+  //если LazFreeType не включен по умолчанию
   if not sysvarTTFUseLazFreeTypeImplementation then begin
     try
       try
-        InitializeFreetype(FreeTypeDLL)
+        //пытаемся занрузить FreeType
+        InitializeFreetype(FreeTypeDLL);
       except
         on E: Exception do begin
-          zDebugLn('{E}Exception in InitializeFreetype(FreeTypeDLL) with msg "%s"',[e.Message]);
-         {$IFDEF USELAZFREETYPETTFIMPLEMENTATION}
-          zDebugLn('{E}Set sysvarTTFUseLazFreeTypeImplementation to True');
-          sysvarTTFUseLazFreeTypeImplementation:=true;
-         {$ENDIF}
+         {$IfDef USELAZFREETYPETTFIMPLEMENTATION}
+          //если LazFreeType доступен
+          //тихо ругаемся в лог, включаем LazFreeType
+          zDebugLn('{EH}Exception in InitializeFreetype(FreeTypeDLL) with msg "%s", Set sysvarTTFUseLazFreeTypeImplementation to True',[e.Message]);
+          sysvarTTFUseLazFreeTypeImplementation:=True;
+         {$Else}
+          //если LazFreeType не доступен
+          //громко ругаемся в лог и окно, работаем дальше, но с TTF работать будет нечем
+          zDebugLn('{EM}Exception in InitializeFreetype(FreeTypeDLL) with msg "%s", TTF fonts won''t work',[e.Message]);
+         {$EndIf}
         end;
       end;
     finally
       ReleaseFreetype;
     end;
   end;
-{$ENDIF}
+ {$EndIf}
 end.

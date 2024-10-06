@@ -34,6 +34,8 @@ type
   TTTFBackends=class of TTTFBackend;
   TTTFBackend=class
     protected
+      FCapHeight:single;
+
       function GetHinted:Boolean;virtual;abstract;
       procedure SetHinted(const AValue:Boolean);virtual;abstract;
       function GetFullName:String;virtual;abstract;
@@ -44,7 +46,9 @@ type
 
       function GetAscent: single; virtual; abstract;
       function GetDescent: single; virtual; abstract;
-      function GetCapHeight: single; virtual; abstract;
+      function CalcCapHeight: single;
+      function GetCapHeight: single; virtual;
+      function InternalGetCapHeight: single; virtual; abstract;
       function GetGlyph(Index: integer): TGlyphData; virtual; abstract;
 
     public
@@ -81,6 +85,36 @@ implementation
 function TTTFBackend.TTFImplDummyGlobalScale:Double;
 begin
   result:=1;
+end;
+
+function TTTFBackend.CalcCapHeight: single;
+var
+  ndx:integer;
+  ch:char;
+  GenGlyph:TGlyphData;
+  glyphBounds:TRect;
+begin
+  for ch in 'XYZABCDEFGHIJKLMNOPQRSTUWV' do begin
+    ndx:=CharIndex[ord(ch)];
+    if ndx<>0 then begin
+      GenGlyph:=Glyph[ndx];
+      glyphBounds:=GetGlyphBounds(GenGlyph);
+      exit(glyphBounds.Top);
+    end;
+  end;
+  result:=-1;
+end;
+
+function TTTFBackend.GetCapHeight:single;
+var
+  pos2,phead,phori:pointer;
+begin
+  if FCapHeight<>0 then
+    result:=FCapHeight
+  else begin
+    FCapHeight:=InternalGetCapHeight;
+    result:=FCapHeight;
+  end;
 end;
 
 end.

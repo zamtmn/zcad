@@ -39,7 +39,7 @@ type
 
       function GetAscent: single;override;
       function GetDescent: single;override;
-      function GetCapHeight: single;override;
+      function InternalGetCapHeight: single;override;
       function GetGlyph(Index: integer): TGlyphData;override;
 
     public
@@ -99,9 +99,12 @@ procedure TTTFBackendLazFreeType.DoneGlyph(var GD:TGlyphData);
 begin
   GD.PG:=nil;
 end;
-function TTTFBackendLazFreeType.GetCapHeight: single;
+function TTTFBackendLazFreeType.InternalGetCapHeight: single;
 begin
   Result:=LazFreeTypeTTFImpl.CapHeight;
+  if Result=0 then begin
+    Result:=-CalcCapHeight;
+  end;
 end;
 function TTTFBackendLazFreeType.GetAscent:single;
 begin

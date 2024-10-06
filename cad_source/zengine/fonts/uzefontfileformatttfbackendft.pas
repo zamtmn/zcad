@@ -48,7 +48,7 @@ type
 
       function GetAscent: single;override;
       function GetDescent: single;override;
-      function GetCapHeight: single;override;
+      function InternalGetCapHeight: single;override;
       function GetGlyph(Index: integer):TGlyphData;override;
 
     public
@@ -211,7 +211,7 @@ begin
   result:=result * FPointSize * FDPI / 72;
 end;
 
-function TTTFBackendFreeType.GetCapHeight:single;
+function TTTFBackendFreeType.InternalGetCapHeight:single;
 var
   pos2,phead,phori:pointer;
 begin
@@ -219,40 +219,33 @@ begin
   phead:=FT_Get_Sfnt_Table(FontMgr.GetFreeTypeFont(FreeTypeTTFImpl.FontID),FT_SFNT_HEAD);
   if pos2<>nil then begin
     if PTT_OS(pos2)^.version>=2 then begin
-      if PTT_OS(pos2)^.sCapHeight<>0 then
-        result:=PTT_OS(pos2)^.sCapHeight
-      else if PTT_OS(pos2)^.usWinAscent<>0 then
-        result:=PTT_OS(pos2)^.usWinAscent
-      else
-        result:=PTT_OS(pos2)^.sTypoAscender;
-    end
-    else begin
-      phori:=FT_Get_Sfnt_Table(FontMgr.GetFreeTypeFont(FreeTypeTTFImpl.FontID),FT_SFNT_HHEA);
-      if phori<>nil then
-        result:= PTT_HoriHeader(phori)^.Ascender
-      else
-        result:=0;
-      if result = 0 then
-      begin
-        if PTT_OS(pos2)^.version<>$ffff then
-        begin
-          if PTT_OS(pos2)^.usWinAscent <> 0 then
-            result := PTT_OS(pos2)^.usWinAscent
-          else
-            result := PTT_OS(pos2)^.sTypoAscender;
-        end;
-      end;
-      result:=result*2/3 {todo: добавить это в LazFreeType (если sCapHeight в заголовке нет, то она 3/2 Ascender)}
-    end;
+      if PTT_OS(pos2)^.sCapHeight<>0 then begin
+        FCapHeight:=PTT_OS(pos2)^.sCapHeight;
+      end else
+      FCapHeight:=CalcCapHeight;
+    end else
+      FCapHeight:=CalcCapHeight;
   end else
-    exit(0);
-  if phead<>nil then
-    result:=result/PTT_Header(phead)^.Units_Per_EM
-  else
-    exit(0);
+    FCapHeight:=CalcCapHeight;
 
-  result:=(result * FPointSize * FDPI / 72);
+
+  if FCapHeight=-1 then begin
+    if pos2=nil then
+      FCapHeight:=PTT_HoriHeader(phori)^.Ascender-PTT_HoriHeader(phori)^.Descender
+    else
+      FCapHeight:=PTT_OS(pos2)^.usWinAscent-PTT_OS(pos2)^.usWinDescent;
+  end;
+
+  if phead<>nil then
+    FCapHeight:=FCapHeight/PTT_Header(phead)^.Units_Per_EM
+  else begin
+    FCapHeight:=0;
+    exit(0);
+  end;
+
+  result:=FCapHeight*FPointSize*FDPI/72;
 end;
+
 
 function TTTFBackendFreeType.GetCharIndex(AUnicodeChar:integer):integer;
 begin

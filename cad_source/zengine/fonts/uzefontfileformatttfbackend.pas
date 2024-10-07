@@ -76,6 +76,8 @@ type
       property CapHeight: single read GetCapHeight;
       property Glyph[Index: integer]: TGlyphData read GetGlyph;
   end;
+const
+  CTTFDefaultSizeInPoints=10000;
 var
   TTFBackend:TTTFBackends;
   {$IF DEFINED(USELAZFREETYPETTFIMPLEMENTATION) and DEFINED(USEFREETYPETTFIMPLEMENTATION)}
@@ -99,6 +101,7 @@ begin
     if ndx<>0 then begin
       GenGlyph:=Glyph[ndx];
       glyphBounds:=GetGlyphBounds(GenGlyph);
+      DoneGlyph(GenGlyph);
       exit(glyphBounds.Top);
     end;
   end;

@@ -104,8 +104,18 @@ begin
 end;
 
 function TTTFBackendFreeType.TTFImplDummyGlobalScale:Double;
+var
+  phead:PTT_Header;
+  s1,s2:LongWord;
 begin
-  result:=6.51;
+  s1:=CTTFDefaultSizeInPoints*64*1{width}*96 div 72;
+  phead:=FT_Get_Sfnt_Table(FontMgr.GetFreeTypeFont(FreeTypeTTFImpl.FontID),FT_SFNT_HEAD);
+  s2:=phead^.Units_Per_EM*64;
+  phead:=FT_Get_Sfnt_Table(FontMgr.GetFreeTypeFont(FreeTypeTTFImpl.FontID),FT_SFNT_HEAD);
+  if (PTT_Header(phead)^.Flags and 8)<>0 then
+    s1:=(s1+32)and -64;
+  result:=s1/s2
+  //result:={6.51}853312/(256*64);
 end;
 
 function TTTFBackendFreeType.GetGlyph(Index: integer):TGlyphData;
@@ -155,8 +165,11 @@ begin
   result:=FontMgr.GetFreeTypeFont(FreeTypeTTFImpl.FontID).glyph^.outline.n_points;
 end;
 function TTTFBackendFreeType.GetGlyphPoint(GD:TGlyphData;np:integer):GDBvertex2D;
+//var
+//  sm:FT_Size_Metrics;
 begin
   GetGlyph(PtrInt(GD.PG));
+  //sm:=FontMgr.GetFreeTypeFont(FreeTypeTTFImpl.FontID).glyph^.face.size.metrics;
   with FontMgr.GetFreeTypeFont(FreeTypeTTFImpl.FontID).glyph^.outline.points[np] do begin
     result.x:=x*64;
     result.y:=y*64;
@@ -220,30 +233,30 @@ begin
   if pos2<>nil then begin
     if PTT_OS(pos2)^.version>=2 then begin
       if PTT_OS(pos2)^.sCapHeight<>0 then begin
-        FCapHeight:=PTT_OS(pos2)^.sCapHeight;
+        Result:=PTT_OS(pos2)^.sCapHeight;
       end else
-      FCapHeight:=CalcCapHeight;
+      Result:=CalcCapHeight;
     end else
-      FCapHeight:=CalcCapHeight;
+      Result:=CalcCapHeight;
   end else
-    FCapHeight:=CalcCapHeight;
+    Result:=CalcCapHeight;
 
 
-  if FCapHeight=-1 then begin
+  if Result=-1 then begin
     if pos2=nil then
-      FCapHeight:=PTT_HoriHeader(phori)^.Ascender-PTT_HoriHeader(phori)^.Descender
+      Result:=PTT_HoriHeader(phori)^.Ascender-PTT_HoriHeader(phori)^.Descender
     else
-      FCapHeight:=PTT_OS(pos2)^.usWinAscent-PTT_OS(pos2)^.usWinDescent;
+      Result:=PTT_OS(pos2)^.usWinAscent-PTT_OS(pos2)^.usWinDescent;
   end;
 
   if phead<>nil then
-    FCapHeight:=FCapHeight/PTT_Header(phead)^.Units_Per_EM
+    Result:=Result/PTT_Header(phead)^.Units_Per_EM
   else begin
-    FCapHeight:=0;
+    Result:=0;
     exit(0);
   end;
 
-  result:=FCapHeight*FPointSize*FDPI/72;
+  result:=Result*FPointSize*FDPI/72;
 end;
 
 

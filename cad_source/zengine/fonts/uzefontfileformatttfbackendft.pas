@@ -122,12 +122,12 @@ function TTTFBackendFreeType.GetGlyph(Index: integer):TGlyphData;
 begin
   if GlyphInSlotIndex<>Index then begin
     if FT_Load_Glyph(FontMgr.GetFreeTypeFont(FreeTypeTTFImpl.FontID),Index,FT_LOAD_DEFAULT)=0 then begin
-      PtrInt(Result.PG):=Index;
       GlyphInSlotIndex:=Index;
       //FT_Get_Glyph(FontMgr.GetFreeTypeFont(FreeTypeTTFImpl.FontID).glyph,Result.PG);
     end else
       raise Exception.CreateFmt('TTTFBackendFreeType.GetGlyph FT_Load_Glyph(%d)<>0', [Index]);
   end;
+  PtrInt(Result.PG):=Index;
 end;
 procedure TTTFBackendFreeType.DoneGlyph(var GD:TGlyphData);
 begin

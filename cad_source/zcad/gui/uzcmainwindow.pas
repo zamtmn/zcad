@@ -1134,6 +1134,13 @@ var
    rc:TDrawContext;
 begin
   with programlog.Enter('TZCADMainWindow.idle',LM_Debug,LMD) do begin try
+
+    if LastHintText<>'' then begin
+      if assigned(HintText) then
+        HintText.caption:=LastHintText;
+      LastHintText:='';
+    end;
+
     {IFDEF linux}
     if assigned(UniqueInstanceBase.FIPCServer)then
       if UniqueInstanceBase.FIPCServer.active then

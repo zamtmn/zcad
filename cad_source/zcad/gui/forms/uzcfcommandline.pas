@@ -61,6 +61,7 @@ var
   LastHistoryMsgRepeatCounter:integer=0;
 
   HintText:TLabel;
+  LastHintText:string;
   //historychanged:boolean;
 
 implementation
@@ -408,9 +409,9 @@ begin
 end;
 procedure StatusLineTextOut(s:String);
 begin
-     if assigned(HintText) then
-     HintText.caption:=(s);
-     //HintText.{Update}repaint;
+  LastHintText:=s;
+  //if assigned(HintText) then
+  //  HintText.caption:=(s);
 end;
 procedure LogError(errstr:String); export;
 begin

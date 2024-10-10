@@ -825,7 +825,7 @@ begin
     pvisible:=croot.ObjArray.beginiterate(ir);
     if pvisible<>nil then
     repeat
-      if Filter.IsEntytyTypeAccepted(pvisible.GetObjType) then
+      if Filter.IsEntytyAccepted(pvisible) then
         entarray.PushBackData(pvisible);
       pvisible:=croot.ObjArray.iterate(ir);
     until pvisible=nil;

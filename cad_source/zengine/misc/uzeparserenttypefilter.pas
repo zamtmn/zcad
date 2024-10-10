@@ -65,6 +65,44 @@ type
                                var Data:TEntsTypeFilter);override;
   end;
 
+  TIncludeExtenderName=class(TParserEntityTypeFilter.TParserTokenizer.TStaticProcessor)
+    class procedure StaticDoit(const Source:TRawByteStringManipulator.TStringType;
+                               const Token :TRawByteStringManipulator.TCharRange;
+                               const Operands :TRawByteStringManipulator.TCharRange;
+                               const ParsedOperands :TAbstractParsedText<TRawByteStringManipulator.TStringType,TEntsTypeFilter>;
+                               InsideBracketParser:TObject;
+                               var Data:TEntsTypeFilter);override;
+  end;
+
+  TIncludeExtenderNameMask=class(TParserEntityTypeFilter.TParserTokenizer.TStaticProcessor)
+    class procedure StaticDoit(const Source:TRawByteStringManipulator.TStringType;
+                               const Token :TRawByteStringManipulator.TCharRange;
+                               const Operands :TRawByteStringManipulator.TCharRange;
+                               const ParsedOperands :TAbstractParsedText<TRawByteStringManipulator.TStringType,TEntsTypeFilter>;
+                               InsideBracketParser:TObject;
+                               var Data:TEntsTypeFilter);override;
+  end;
+
+  TExcludeExtenderName=class(TParserEntityTypeFilter.TParserTokenizer.TStaticProcessor)
+    class procedure StaticDoit(const Source:TRawByteStringManipulator.TStringType;
+                               const Token :TRawByteStringManipulator.TCharRange;
+                               const Operands :TRawByteStringManipulator.TCharRange;
+                               const ParsedOperands :TAbstractParsedText<TRawByteStringManipulator.TStringType,TEntsTypeFilter>;
+                               InsideBracketParser:TObject;
+                               var Data:TEntsTypeFilter);override;
+  end;
+
+  TExcludeExtenderNameMask=class(TParserEntityTypeFilter.TParserTokenizer.TStaticProcessor)
+    class procedure StaticDoit(const Source:TRawByteStringManipulator.TStringType;
+                               const Token :TRawByteStringManipulator.TCharRange;
+                               const Operands :TRawByteStringManipulator.TCharRange;
+                               const ParsedOperands :TAbstractParsedText<TRawByteStringManipulator.TStringType,TEntsTypeFilter>;
+                               InsideBracketParser:TObject;
+                               var Data:TEntsTypeFilter);override;
+  end;
+
+
+
 var
   ParserEntityTypeFilter:TParserEntityTypeFilter;
 
@@ -111,6 +149,72 @@ begin
   else
     Raise Exception.CreateFmt(rsRunTimeError,[Operands.P.CodeUnitPos]);
 end;
+
+class procedure TIncludeExtenderName.StaticDoit(const Source:TRawByteStringManipulator.TStringType;
+                             const Token :TRawByteStringManipulator.TCharRange;
+                             const Operands :TRawByteStringManipulator.TCharRange;
+                             const ParsedOperands :TAbstractParsedText<TRawByteStringManipulator.TStringType,TEntsTypeFilter>;
+                             InsideBracketParser:TObject;
+                             var Data:TEntsTypeFilter);
+var
+  s:TRawByteStringManipulator.TStringType;
+begin
+  if (ParsedOperands<>nil) then begin
+    s:=ParsedOperands.GetResult(data);
+    TEntsTypeFilter(Data).AddExtdrName(s);
+  end  else
+    Raise Exception.CreateFmt(rsRunTimeError,[Operands.P.CodeUnitPos]);
+end;
+
+class procedure TIncludeExtenderNameMask.StaticDoit(const Source:TRawByteStringManipulator.TStringType;
+                             const Token :TRawByteStringManipulator.TCharRange;
+                             const Operands :TRawByteStringManipulator.TCharRange;
+                             const ParsedOperands :TAbstractParsedText<TRawByteStringManipulator.TStringType,TEntsTypeFilter>;
+                             InsideBracketParser:TObject;
+                             var Data:TEntsTypeFilter);
+var
+  s:TRawByteStringManipulator.TStringType;
+begin
+  if (ParsedOperands<>nil) then begin
+    s:=ParsedOperands.GetResult(data);
+    TEntsTypeFilter(Data).AddExtdrNameMask(s);
+  end  else
+    Raise Exception.CreateFmt(rsRunTimeError,[Operands.P.CodeUnitPos]);
+end;
+
+class procedure TExcludeExtenderName.StaticDoit(const Source:TRawByteStringManipulator.TStringType;
+                             const Token :TRawByteStringManipulator.TCharRange;
+                             const Operands :TRawByteStringManipulator.TCharRange;
+                             const ParsedOperands :TAbstractParsedText<TRawByteStringManipulator.TStringType,TEntsTypeFilter>;
+                             InsideBracketParser:TObject;
+                             var Data:TEntsTypeFilter);
+var
+  s:TRawByteStringManipulator.TStringType;
+begin
+  if (ParsedOperands<>nil) then begin
+    s:=ParsedOperands.GetResult(data);
+    TEntsTypeFilter(Data).SubExtdrName(s);
+  end  else
+    Raise Exception.CreateFmt(rsRunTimeError,[Operands.P.CodeUnitPos]);
+end;
+
+class procedure TExcludeExtenderNameMask.StaticDoit(const Source:TRawByteStringManipulator.TStringType;
+                             const Token :TRawByteStringManipulator.TCharRange;
+                             const Operands :TRawByteStringManipulator.TCharRange;
+                             const ParsedOperands :TAbstractParsedText<TRawByteStringManipulator.TStringType,TEntsTypeFilter>;
+                             InsideBracketParser:TObject;
+                             var Data:TEntsTypeFilter);
+var
+  s:TRawByteStringManipulator.TStringType;
+begin
+  if (ParsedOperands<>nil) then begin
+    s:=ParsedOperands.GetResult(data);
+    TEntsTypeFilter(Data).SubExtdrNameMask(s);
+  end  else
+    Raise Exception.CreateFmt(rsRunTimeError,[Operands.P.CodeUnitPos]);
+end;
+
+
 class procedure TExcludeEntityNameMask.StaticDoit(const Source:TRawByteStringManipulator.TStringType;
                            const Token :TRawByteStringManipulator.TCharRange;
                            const Operands :TRawByteStringManipulator.TCharRange;
@@ -166,6 +270,12 @@ initialization
   ParserEntityTypeFilter.RegisterToken('IncludeEntityName',#0,#0,TIncludeEntityName,ParserEntityTypeFilter,TGOWholeWordOnly,BracketTockenId);
   ParserEntityTypeFilter.RegisterToken('ExcludeEntityMask',#0,#0,TExcludeEntityNameMask,ParserEntityTypeFilter,TGOWholeWordOnly,BracketTockenId);
   ParserEntityTypeFilter.RegisterToken('ExcludeEntityName',#0,#0,TExcludeEntityName,ParserEntityTypeFilter,TGOWholeWordOnly,BracketTockenId);
+
+  ParserEntityTypeFilter.RegisterToken('IncludeExtenderMask',#0,#0,TIncludeExtenderNameMask,ParserEntityTypeFilter,TGOWholeWordOnly,BracketTockenId);
+  ParserEntityTypeFilter.RegisterToken('IncludeExtenderName',#0,#0,TIncludeExtenderName,ParserEntityTypeFilter,TGOWholeWordOnly,BracketTockenId);
+  ParserEntityTypeFilter.RegisterToken('ExcludeExtenderMask',#0,#0,TExcludeExtenderNameMask,ParserEntityTypeFilter,TGOWholeWordOnly,BracketTockenId);
+  ParserEntityTypeFilter.RegisterToken('ExcludeExtenderName',#0,#0,TExcludeExtenderName,ParserEntityTypeFilter,TGOWholeWordOnly,BracketTockenId);
+
   ParserEntityTypeFilter.RegisterToken('''','''','''',ParserEntityTypeFilter.TParserTokenizer.TStringProcessor,nil,TGOIncludeBrackeOpen);
   ParserEntityTypeFilter.RegisterToken(',',#0,#0,nil,nil,TGOSeparator);
   ParserEntityTypeFilter.RegisterToken(';',#0,#0,nil,nil,TGOSeparator);

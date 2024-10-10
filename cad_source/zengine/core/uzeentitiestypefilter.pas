@@ -21,7 +21,7 @@ unit uzeentitiestypefilter;
 
 
 interface
-uses LCLProc,uzeentityfactory,
+uses LCLProc,uzeentityfactory,uzeentity,
      uzeBaseExtender,uzeExtdrAbstractEntityExtender,
      sysutils,uzbtypes,
      usimplegenerics,Masks;
@@ -34,6 +34,10 @@ type
       ExtdrFilter,
       ExtdrInclude,
       ExtdrExclude:TMetaExtender2Counter;
+
+      function IsEntytyTypeAccepted(EntType:TObjID):boolean;
+      function IsExtdrTypeAccepted(ExtdrType:TMetaExtender):boolean;
+
     public
       constructor Create;
       destructor Destroy;override;
@@ -41,6 +45,7 @@ type
       procedure AddType(EntType:TObjID);
       procedure AddTypeName(EntTypeName:String);
       procedure AddTypeNameMask(EntTypeNameMask:String);
+
       procedure SubType(EntType:TObjID);
       procedure SubTypeName(EntTypeName:String);
       procedure SubTypeNameMask(EntTypeNameMask:String);
@@ -48,14 +53,16 @@ type
       procedure AddExtdr(ExtdrType:TMetaExtender);
       procedure AddExtdrName(ExtdrTypeName:String);
       procedure AddExtdrNameMask(ExtdrTypeNameMask:String);
+
       procedure SubExtdr(ExtdrType:TMetaExtender);
       procedure SubExtdrName(ExtdrTypeName:String);
       procedure SubExtdrNameMask(ExtdrTypeNameMask:String);
 
       procedure SetFilter;
       procedure ResetFilter;
-      function IsEntytyTypeAccepted(EntType:TObjID):boolean;
-      function IsExtdrTypeAccepted(ExtdrType:TMetaExtender):boolean;
+
+      function IsEntytyAccepted(pv:pGDBObjEntity):boolean;
+
       function IsEmpty:boolean;
   end;
 implementation
@@ -198,20 +205,28 @@ begin
   for EntPair in EntInclude do
     if not EntExclude.TryGetValue(EntPair.Key,Count) then
       EntFilter.CountKey(EntPair.Key,1);
-  for ExtdrPair in ExtdrExclude do
+  for ExtdrPair in ExtdrInclude do
     if not  ExtdrExclude.TryGetValue(ExtdrPair.Key,Count) then
       ExtdrFilter.CountKey(ExtdrPair.Key,1);
 end;
 
 procedure TEntsTypeFilter.ResetFilter;
 begin
-  FreeAndNil(EntFilter);
-  FreeAndNil(EntInclude);
-  FreeAndNil(EntExclude);
+  EntFilter.Destroy;
+  EntInclude.Destroy;
+  EntExclude.Destroy;
+
+  ExtdrFilter.Destroy;
+  ExtdrInclude.Destroy;
+  ExtdrExclude.Destroy;
 
   EntFilter:=TObjID2Counter.create;
   EntInclude:=TObjID2Counter.create;
   EntExclude:=TObjID2Counter.create;
+
+  ExtdrFilter:=TMetaExtender2Counter.create;
+  ExtdrInclude:=TMetaExtender2Counter.create;
+  ExtdrExclude:=TMetaExtender2Counter.create;
 end;
 
 function TEntsTypeFilter.IsEntytyTypeAccepted(EntType:TObjID):boolean;
@@ -231,6 +246,18 @@ begin
     result:=true
   else
     result:=false;
+end;
+function TEntsTypeFilter.IsEntytyAccepted(pv:pGDBObjEntity):boolean;
+var
+  i:integer;
+begin
+  result:=IsEntytyTypeAccepted(pv.GetObjType);
+  if result and (ExtdrFilter.Count>0) then begin
+    for i:=0 to pv^.GetExtensionsCount-1 do
+      if IsExtdrTypeAccepted(typeof(pv^.GetExtension(i)))then
+        exit(true);
+    exit(false);
+  end;
 end;
 
 function TEntsTypeFilter.IsEmpty:boolean;

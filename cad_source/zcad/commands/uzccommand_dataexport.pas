@@ -533,7 +533,7 @@ begin
          pv:=drawings.GetCurrentROOT^.ObjArray.beginiterate(ir);
          if pv<>nil then
          repeat
-           if EntsTypeFilter.IsEntytyTypeAccepted(pv^.GetObjType) then begin
+           if EntsTypeFilter.IsEntytyAccepted(pv) then begin
              if assigned(EntityIncluder) then begin
                propdata.CurrentEntity:=pv;
                propdata.IncludeEntity:=T3SB_Default;

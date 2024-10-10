@@ -344,7 +344,7 @@ begin
   {if pent^.GetObjTypeName<>ObjN_GDBObjDevice then
       exit(false);}
 
-  if not EntsTypeFilter.IsEntytyTypeAccepted(pent^.GetObjType)then
+  if not EntsTypeFilter.IsEntytyAccepted(pent)then
     exit(false);
   if assigned(EntityIncluder) then begin
     propdata.CurrentEntity:=pent;

@@ -32,6 +32,7 @@ uses
 const
   ontracdist=10;
   ontracignoredist=25;
+  cDefaultMouseMode=MGetControlpoint or MGetSelectObject or MMoveCamera or MRotateCamera or MGetSelectionFrame;
 
 resourcestring
   rswonlyparallel='Works only for parallel projection!';
@@ -1709,7 +1710,7 @@ begin
      PDWG:=nil;
 
      param.init;
-     SetMouseMode((MGetControlpoint) or (MGetSelectObject) or (MMoveCamera) or (MRotateCamera) or (MGetSelectionFrame));
+     SetMouseMode(cDefaultMouseMode);
 
      PolarAxis.init(10);
 

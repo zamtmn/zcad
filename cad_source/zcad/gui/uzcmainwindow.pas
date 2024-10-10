@@ -1578,6 +1578,7 @@ begin
        if commandmanager.CurrCmd.pcommandrunning=nil then
          begin
          //Sender.PDWG.GetCurrentROOT.ObjArray.DeSelect(Sender.param.SelDesc.Selectedobjcount,drawings.GetCurrentDWG^.DeSelector);
+         Sender.SetMouseMode(cDefaultMouseMode);
          Sender.PDWG.DeSelectAll;
          Sender.param.SelDesc.LastSelectedObject := nil;
          Sender.param.SelDesc.OnMouseObject := nil;

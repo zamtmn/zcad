@@ -27,8 +27,8 @@ uses
 type
 
   TLPSSupporthelper=class
-    class procedure StartLongProcessHandler(LPHandle:TLPSHandle;Total:TLPSCounter;LPName:TLPName);
-    class procedure EndLongProcessHandler(LPHandle:TLPSHandle;TotalLPTime:TDateTime);
+    class procedure StartLongProcessHandler(LPHandle:TLPSHandle;Total:TLPSCounter;LPName:TLPName;Options:TLPOpt);
+    class procedure EndLongProcessHandler(LPHandle:TLPSHandle;TotalLPTime:TDateTime;Options:TLPOpt);
   end;
 
 procedure FatalError(errstr:String);
@@ -55,7 +55,7 @@ begin
     FreeAndNil(Context);
 end;
 
-class procedure TLPSSupporthelper.EndLongProcessHandler(LPHandle:TLPSHandle;TotalLPTime:TDateTime);
+class procedure TLPSSupporthelper.EndLongProcessHandler(LPHandle:TLPSHandle;TotalLPTime:TDateTime;Options:TLPOpt);
 begin
   if lps.{isProcessed}isFirstProcess then begin
     if assigned(SuppressedMessages)then
@@ -63,7 +63,7 @@ begin
     TaskNameSave:='';
   end;
 end;
-class procedure TLPSSupporthelper.StartLongProcessHandler(LPHandle:TLPSHandle;Total:TLPSCounter;LPName:TLPName);
+class procedure TLPSSupporthelper.StartLongProcessHandler(LPHandle:TLPSHandle;Total:TLPSCounter;LPName:TLPName;Options:TLPOpt);
 begin
   if lps.isFirstProcess then begin
     if assigned(SuppressedMessages)then

@@ -31,7 +31,7 @@ implementation
 
 type
   TLogHelper=class
-    class procedure EndLongProcessHandler(LPHandle:TLPSHandle;TotalLPTime:TDateTime);
+    class procedure EndLongProcessHandler(LPHandle:TLPSHandle;TotalLPTime:TDateTime;Options:TLPOpt);
     class procedure LCLOnDebugLN(Sender: TObject; S: string; var Handled: Boolean);
   end;
 
@@ -47,7 +47,7 @@ var
   LPSTIMINGModuleDeskIndex:TModuleDesk;
   LogerMBoxBackend:TLogerMBoxBackend;
 
-class procedure TLogHelper.EndLongProcessHandler(LPHandle:TLPSHandle;TotalLPTime:TDateTime);
+class procedure TLogHelper.EndLongProcessHandler(LPHandle:TLPSHandle;TotalLPTime:TDateTime;Options:TLPOpt);
 var
    ts:string;
 begin

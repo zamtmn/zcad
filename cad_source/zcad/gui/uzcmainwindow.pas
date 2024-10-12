@@ -115,9 +115,9 @@ type
       procedure WaShowCursor(Sender:TAbstractViewArea;var DC:TDrawContext);
 
       //Long process support - draw progressbar. See uzelongprocesssupport unit
-      procedure StartLongProcess(LPHandle:TLPSHandle;Total:TLPSCounter;processname:TLPName);
-      procedure ProcessLongProcess(LPHandle:TLPSHandle;Current:TLPSCounter);
-      procedure EndLongProcess(LPHandle:TLPSHandle;TotalLPTime:TDateTime);
+      procedure StartLongProcess(LPHandle:TLPSHandle;Total:TLPSCounter;processname:TLPName;Options:TLPOpt);
+      procedure ProcessLongProcess(LPHandle:TLPSHandle;Current:TLPSCounter;Options:TLPOpt);
+      procedure EndLongProcess(LPHandle:TLPSHandle;TotalLPTime:TDateTime;Options:TLPOpt);
 
     public
       SuppressedShortcuts:TXMLConfig;
@@ -1207,9 +1207,9 @@ begin
                                            dec(sysvar.SAVE.SAVE_Auto_Current_Interval^);
      end;
 end;
-procedure TZCADMainWindow.StartLongProcess(LPHandle:TLPSHandle;Total:TLPSCounter;processname:TLPName);
+procedure TZCADMainWindow.StartLongProcess(LPHandle:TLPSHandle;Total:TLPSCounter;processname:TLPName;Options:TLPOpt);
 begin
-  if (assigned(ProcessBar)and assigned(HintText)) then begin
+  if (assigned(ProcessBar)and assigned(HintText))and((Options and LPSONoProgressBar)=0) then begin
     ProcessBar.max:=total;
     ProcessBar.min:=0;
     ProcessBar.position:=0;
@@ -1219,11 +1219,11 @@ begin
   end;
 end;
 
-procedure TZCADMainWindow.ProcessLongProcess(LPHandle:TLPSHandle;Current:TLPSCounter);
+procedure TZCADMainWindow.ProcessLongProcess(LPHandle:TLPSHandle;Current:TLPSCounter;Options:TLPOpt);
 var
     LongProcessPos:integer;
 begin
-  if (assigned(ProcessBar)and assigned(HintText)) then begin
+  if (assigned(ProcessBar)and assigned(HintText))and((Options and LPSONoProgressBar)=0) then begin
     LongProcessPos:=round(clientwidth*(single(current)/single(ProcessBar.max)));
     if LongProcessPos>NextLongProcessPos then begin
       ProcessBar.position:=Current;
@@ -1251,8 +1251,7 @@ procedure TZCADMainWindow.EndLongProcess;
 var
    TimeStr,LPName:String;
 begin
-  if (assigned(ProcessBar)and assigned(HintText)) then
-  begin
+  if (assigned(ProcessBar)and assigned(HintText))and((Options and LPSONoProgressBar)=0) then begin
     ProcessBar.Hide;
     HintText.Show;
     ProcessBar.min:=0;
@@ -1262,8 +1261,8 @@ begin
   str(TotalLPTime*10e4:3:2,TimeStr);
   LPName:=lps.getLPName(LPHandle);
 
-  if (not lps.hasOptions(LPHandle,LPSOSilent))and(not CommandManager.isBusy) then begin
-    if (LPName='')or(lps.hasOptions(LPHandle,LPSOSilent)) then
+  if (not lps.hasOptions(LPHandle,LPSOSilent))and(not CommandManager.isBusy)and((Options and LPSOSilent)=0) then begin
+    if (LPName='') then
       ZCMsgCallBackInterface.TextMessage(format(rscompiledtimemsg,[TimeStr]),[TMWOToConsole])
     else
       ZCMsgCallBackInterface.TextMessage(format(rsprocesstimemsg,[LPName,TimeStr]),[TMWOToConsole]);

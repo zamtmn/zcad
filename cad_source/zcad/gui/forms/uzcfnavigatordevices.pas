@@ -890,7 +890,7 @@ var
   HaveErrors:boolean;
 begin
   NavTree.BeginUpdate;
-  lpsh:=LPS.StartLongProcess('NavigatorEntities.RefreshTree',@self,0,LPSOSilent);
+  lpsh:=LPS.StartLongProcess('NavigatorEntities.RefreshTree',@self,0,LPSOSilent or LPSONoProgressBar);
   EraseRoots;
   CreateRoots;
   try

@@ -32,9 +32,9 @@ TLPSCounter=integer;
 TLPName=string;
 TLPOpt=LongWord;
 
-TOnLPStartProc=procedure(LPHandle:TLPSHandle;Total:TLPSCounter;LPName:TLPName) of object;
-TOnLPProgressProc=procedure(LPHandle:TLPSHandle;Current:TLPSCounter) of object;
-TOnLPEndProc=procedure(LPHandle:TLPSHandle;TotalLPTime:TDateTime) of object;
+TOnLPStartProc=procedure(LPHandle:TLPSHandle;Total:TLPSCounter;LPName:TLPName;Options:TLPOpt) of object;
+TOnLPProgressProc=procedure(LPHandle:TLPSHandle;Current:TLPSCounter;Options:TLPOpt) of object;
+TOnLPEndProc=procedure(LPHandle:TLPSHandle;TotalLPTime:TDateTime;Options:TLPOpt) of object;
 TLPInfo=record
               LPTotal:TLPSCounter;
               LPName:TLPName;
@@ -61,9 +61,9 @@ TZELongProcessSupport=class
                          OnLPStartProcVector:TOnLPStartProcVector;
                          OnLPProgressProcVector:TOnLPProgressProcVector;
                          OnLPEndProcVector:TOnLPEndProcVector;
-                         procedure DoStartLongProcess(plpi:PTLPInfo;LPHandle:TLPSHandle);
-                         procedure DoProgressLongProcess(plpi:PTLPInfo;LPHandle:TLPSHandle;Current:TLPSCounter);
-                         procedure DoEndLongProcess(plpi:PTLPInfo;LPHandle:TLPSHandle);
+                         procedure DoStartLongProcess(plpi:PTLPInfo;LPHandle:TLPSHandle;Options:TLPOpt);
+                         procedure DoProgressLongProcess(plpi:PTLPInfo;LPHandle:TLPSHandle;Current:TLPSCounter;Options:TLPOpt);
+                         procedure DoEndLongProcess(plpi:PTLPInfo;LPHandle:TLPSHandle;Options:TLPOpt);
 
                        public
                          function StartLongProcess(LPName:TLPName;Context:pointer;Total:TLPSCounter=0;Options:TLPOpt=LPSDefaultOptions):TLPSHandle;
@@ -83,7 +83,7 @@ TZELongProcessSupport=class
                        end;
 var
   LPS:TZELongProcessSupport;
-  LPSOSilent:TLPOpt;
+  LPSOSilent,LPSONoProgressBar:TLPOpt;
 implementation
 
 function TZELongProcessSupport.CreateOption:TLPOpt;
@@ -114,29 +114,29 @@ begin
   result:=ActiveProcessCount=1;
 end;
 
-procedure TZELongProcessSupport.DoStartLongProcess(plpi:PTLPInfo;LPHandle:TLPSHandle);
+procedure TZELongProcessSupport.DoStartLongProcess(plpi:PTLPInfo;LPHandle:TLPSHandle;Options:TLPOpt);
 var
   i:integer;
 begin
   if OnLPStartProcVector.size>0 then
     for i:=0 to OnLPStartProcVector.size-1 do
-      OnLPStartProcVector[i](LPHandle,plpi^.LPTotal,plpi^.LPName);
+      OnLPStartProcVector[i](LPHandle,plpi^.LPTotal,plpi^.LPName,Options);
 end;
-procedure TZELongProcessSupport.DoProgressLongProcess(plpi:PTLPInfo;LPHandle:TLPSHandle;Current:TLPSCounter);
+procedure TZELongProcessSupport.DoProgressLongProcess(plpi:PTLPInfo;LPHandle:TLPSHandle;Current:TLPSCounter;Options:TLPOpt);
 var
   i:integer;
 begin
   if OnLPProgressProcVector.size>0 then
     for i:=0 to OnLPProgressProcVector.size-1 do
-      OnLPProgressProcVector[i](LPHandle,Current);
+      OnLPProgressProcVector[i](LPHandle,Current,Options);
 end;
-procedure TZELongProcessSupport.DoEndLongProcess(plpi:PTLPInfo;LPHandle:TLPSHandle);
+procedure TZELongProcessSupport.DoEndLongProcess(plpi:PTLPInfo;LPHandle:TLPSHandle;Options:TLPOpt);
 var
   i:integer;
 begin
   if OnLPEndProcVector.size>0 then
     for i:=0 to OnLPEndProcVector.size-1 do
-      OnLPEndProcVector[i](LPHandle,plpi^.LPTime);
+      OnLPEndProcVector[i](LPHandle,plpi^.LPTime,Options);
 end;
 function TZELongProcessSupport.StartLongProcess(LPName:TLPName;Context:pointer;Total:TLPSCounter=0;Options:TLPOpt=LPSDefaultOptions):TLPSHandle;
 var
@@ -165,14 +165,14 @@ begin
   result:=LPInfoVector.Size-1;
   PLPI:=LPInfoVector.mutable{$IFDEF DELPHI}({$ENDIF}{$IFNDEF DELPHI}[{$ENDIF}result{$IFNDEF DELPHI}]{$ENDIF}{$IFDEF DELPHI}){$ENDIF};
   PLPI^.LPTime:=now;
-  DoStartLongProcess(PLPI,result);
+  DoStartLongProcess(PLPI,result,Options);
 end;
 procedure TZELongProcessSupport.ProgressLongProcess(LPHandle:TLPSHandle;Current:TLPSCounter);
 var
   PLPI:PTLPInfo;
 begin
   PLPI:=LPInfoVector.mutable{$IFDEF DELPHI}({$ENDIF}{$IFNDEF DELPHI}[{$ENDIF}LPHandle{$IFNDEF DELPHI}]{$ENDIF}{$IFDEF DELPHI}){$ENDIF};
-  DoProgressLongProcess(PLPI,LPHandle,Current);
+  DoProgressLongProcess(PLPI,LPHandle,Current,PLPI^.Options);
 end;
 procedure TZELongProcessSupport.EndLongProcess(LPHandle:TLPSHandle);
 var
@@ -186,7 +186,7 @@ begin
   end;
   PLPI^.LPTime:=now-PLPI^.LPTime;
 
-  DoEndLongProcess(PLPI,LPHandle);
+  DoEndLongProcess(PLPI,LPHandle,PLPI^.Options);
 
   PLPI^.LPName:='';
   PLPI^.LPContext:=nil;
@@ -228,6 +228,7 @@ end;
 initialization
   LPS:=TZELongProcessSupport.Create;
   LPSOSilent:=LPS.CreateOption;
+  LPSONoProgressBar:=LPS.CreateOption;
 finalization
   debugln('{I}[UnitsFinalization] Unit "',{$INCLUDE %FILE%},'" finalization');
   LPS.destroy;

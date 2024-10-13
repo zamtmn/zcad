@@ -175,7 +175,8 @@ type
       procedure IPCMessage(Sender: TObject);
       {$ifdef windows}procedure SetTop;{$endif}
       procedure AsyncFree(Data:PtrInt);
-      procedure UpdateVisible(sender:TObject;GUIMode:TZMessageID);
+      procedure UpdateVisible(Sender:TObject;GUIMode:TZMessageID);
+      procedure AsyncUpdateVisible(Sender:PtrInt);
       procedure DoUpdateMainMenu;
       procedure NeedUpdateMainMenu;
       function GetFocusPriority:TControlWithPriority;
@@ -1957,7 +1958,7 @@ begin
   end;
 end;
 
-procedure TZCADMainWindow.updatevisible(sender:TObject;GUIMode:TZMessageID);
+procedure TZCADMainWindow.AsyncUpdateVisible(Sender:PtrInt);
 var
    GVA:TGeneralViewArea;
    name:String;
@@ -1967,8 +1968,6 @@ var
    //otherinstancerunning:boolean;
    oldmenu,newmenu:TMainMenu;
 begin
-  if GUIMode<>ZMsgID_GUIActionRedraw then
-    exit;
 
   NeedUpdateMainMenu;
 
@@ -1989,164 +1988,121 @@ begin
               end;
             end;
     end;
+
   if commandmanager.SilentCounter=0 then
     ZCMsgCallBackInterface.Do_GUIMode(ZMsgID_GUICMDLineCheck);
 
-   pdwg:=drawings.GetCurrentDWG;
-   if assigned(ZCADMainWindow)then
-   begin
-   ZCADMainWindow.UpdateControls;
-   ZCADMainWindow.correctscrollbars;
-   k:=0;
-  if (pdwg<>nil)and(pdwg<>PTSimpleDrawing(BlockBaseDWG)) then
-  begin
-  //ZCADMainWindow.setvisualprop;
-  ZCMsgCallBackInterface.Do_GUIaction(self,ZMsgID_GUIActionRebuild);
-  ZCADMainWindow.Caption:=programname+' v'+sysvar.SYS.SYS_Version^+' - ['+drawings.GetCurrentDWG.GetFileName+']';
-
-  EnableControls(true);
-
-  {if assigned(LayerBox) then
-  LayerBox.enabled:=true;}
-  {if assigned(LineWBox) then
-  LineWBox.enabled:=true;}
-  {if assigned(ColorBox) then
-  ColorBox.enabled:=true;}
-  {if assigned(LTypeBox) then
-  LTypeBox.enabled:=true;}
-  {if assigned(TStyleBox) then
-  TStyleBox.enabled:=true;}
-  {if assigned(DimStyleBox) then
-  DimStyleBox.enabled:=true;}
-
-
-  if assigned(ZCADMainWindow.PageControl) then
-  if assigned(SysVar.INTF.INTF_ShowDwgTabs) then
-  if sysvar.INTF.INTF_ShowDwgTabs^ then
-                                       ZCADMainWindow.PageControl.ShowTabs:=true
-                                   else
-                                       ZCADMainWindow.PageControl.ShowTabs:=false;
-  if assigned(SysVar.INTF.INTF_DwgTabsPosition) then
-  begin
-       case SysVar.INTF.INTF_DwgTabsPosition^ of
-                                                TATop:ZCADMainWindow.PageControl.TabPosition:=tpTop;
-                                                TABottom:ZCADMainWindow.PageControl.TabPosition:=tpBottom;
-                                                TALeft:ZCADMainWindow.PageControl.TabPosition:=tpLeft;
-                                                TARight:ZCADMainWindow.PageControl.TabPosition:=tpRight;
+  pdwg:=drawings.GetCurrentDWG;
+  if assigned(ZCADMainWindow)then begin
+    ZCADMainWindow.UpdateControls;
+    ZCADMainWindow.correctscrollbars;
+    k:=0;
+    if (pdwg<>nil)and(pdwg<>PTSimpleDrawing(BlockBaseDWG)) then begin
+      ZCMsgCallBackInterface.Do_GUIaction(self,ZMsgID_GUIActionRebuild);
+      ZCADMainWindow.Caption:=programname+' v'+sysvar.SYS.SYS_Version^+' - ['+drawings.GetCurrentDWG.GetFileName+']';
+      EnableControls(true);
+      if assigned(ZCADMainWindow.PageControl) then
+        if assigned(SysVar.INTF.INTF_ShowDwgTabs) then
+          if sysvar.INTF.INTF_ShowDwgTabs^ then
+            ZCADMainWindow.PageControl.ShowTabs:=true
+          else
+            ZCADMainWindow.PageControl.ShowTabs:=false;
+      if assigned(SysVar.INTF.INTF_DwgTabsPosition) then begin
+        case SysVar.INTF.INTF_DwgTabsPosition^ of
+          TATop:ZCADMainWindow.PageControl.TabPosition:=tpTop;
+          TABottom:ZCADMainWindow.PageControl.TabPosition:=tpBottom;
+          TALeft:ZCADMainWindow.PageControl.TabPosition:=tpLeft;
+          TARight:ZCADMainWindow.PageControl.TabPosition:=tpRight;
        end;
-  end;
-
-  if assigned(SysVar.INTF.INTF_ThemedUpToolbars) then
-    ZCADMainWindow.CoolBarU.Themed:=SysVar.INTF.INTF_ThemedUpToolbars^;
-  if assigned(SysVar.INTF.INTF_ThemedRightToolbars) then
-    ZCADMainWindow.CoolBarR.Themed:=SysVar.INTF.INTF_ThemedRightToolbars^;
-  if assigned(SysVar.INTF.INTF_ThemedDownToolbars) then
-    ZCADMainWindow.CoolBarD.Themed:=SysVar.INTF.INTF_ThemedDownToolbars^;
-  if assigned(SysVar.INTF.INTF_ThemedLeftToolbars) then
-    ZCADMainWindow.CoolBarL.Themed:=SysVar.INTF.INTF_ThemedLeftToolbars^;
-
-  if assigned(ZCADMainWindow.PageControl) then
-  if assigned(SysVar.INTF.INTF_ShowDwgTabCloseBurron) then
-  begin
-       if SysVar.INTF.INTF_ShowDwgTabCloseBurron^ then
-                                                      ZCADMainWindow.PageControl.Options:=ZCADMainWindow.PageControl.Options+[nboShowCloseButtons]
-                                                  else
-                                                      ZCADMainWindow.PageControl.Options:=ZCADMainWindow.PageControl.Options-[nboShowCloseButtons];
-  end;
-
-  if assigned(ZCADMainWindow.HScrollBar) then
-  begin
-  ZCADMainWindow.HScrollBar.enabled:=true;
-  ZCADMainWindow.correctscrollbars;
-  if assigned(sysvar.INTF.INTF_ShowScrollBars) then
-  if sysvar.INTF.INTF_ShowScrollBars^ then
-                                       ZCADMainWindow.HScrollBar.Show
-                                   else
-                                       ZCADMainWindow.HScrollBar.Hide;
-  end;
-
-  if assigned(ZCADMainWindow.VScrollBar) then
-  begin
-  ZCADMainWindow.VScrollBar.enabled:=true;
-  if assigned(sysvar.INTF.INTF_ShowScrollBars) then
-  if sysvar.INTF.INTF_ShowScrollBars^ then
-                                       ZCADMainWindow.VScrollBar.Show
-                                   else
-                                       ZCADMainWindow.VScrollBar.Hide;
-  end;
-  for i:=0 to ZCADMainWindow.PageControl.PageCount-1 do
-    begin
-         GVA:=TGeneralViewArea(FindComponentByType(ZCADMainWindow.PageControl.Pages[i],TGeneralViewArea));
-           if assigned(GVA) then
-            if GVA.PDWG<>nil then
-            begin
-                name:=extractfilename(PTZCADDrawing(GVA.PDWG)^.FileName);
-                if @PTZCADDrawing(GVA.PDWG).mainObjRoot=(PTZCADDrawing(GVA.PDWG).pObjRoot) then
-                                                                     ZCADMainWindow.PageControl.Pages[i].caption:=(name)
-                                                                 else
-                                                                     ZCADMainWindow.PageControl.Pages[i].caption:='BEdit('+name+':'+Tria_AnsiToUtf8(PGDBObjBlockdef(PTZCADDrawing(GVA.PDWG).pObjRoot).Name)+')';
-
-                if k<=high(OpenedDrawings) then
-                begin
-                OpenedDrawings[k].Caption:=ZCADMainWindow.PageControl.Pages[i].caption;
-                OpenedDrawings[k].visible:=true;
-                OpenedDrawings[k].command:='ShowPage';
-                OpenedDrawings[k].options:=inttostr(i);
-                inc(k);
-                end;
-                end;
-
-            end;
-  for i:=k to high(OpenedDrawings) do
-  begin
-       OpenedDrawings[i].visible:=false;
-  end;
-  end
-  else
-      begin
-           for i:=low(OpenedDrawings) to high(OpenedDrawings) do
-             begin
-                         OpenedDrawings[i].Caption:='';
-                         OpenedDrawings[i].visible:=false;
-                         OpenedDrawings[i].command:='';
-             end;
-           ZCADMainWindow.Caption:=(programname+' v'+sysvar.SYS.SYS_Version^);
-           EnableControls(false);
-           {if assigned(LayerBox)then
-           LayerBox.enabled:=false;
-           if assigned(LineWBox)then
-           LineWBox.enabled:=false;
-           if assigned(ColorBox) then
-           ColorBox.enabled:=false;
-           if assigned(TStyleBox) then
-           TStyleBox.enabled:=false;
-           if assigned(DimStyleBox) then
-           DimStyleBox.enabled:=false;
-           if assigned(LTypeBox) then
-           LTypeBox.enabled:=false;}
-           if assigned(ZCADMainWindow.HScrollBar) then
-           begin
-           ZCADMainWindow.HScrollBar.enabled:=false;
-           if assigned(sysvar.INTF.INTF_ShowScrollBars) then
-           if sysvar.INTF.INTF_ShowScrollBars^ then
-
-                                       ZCADMainWindow.HScrollBar.Show
-                                   else
-                                       ZCADMainWindow.HScrollBar.Hide;
-
-           end;
-           if assigned(ZCADMainWindow.VScrollBar) then
-           begin
-           ZCADMainWindow.VScrollBar.enabled:=false;
-           if assigned(sysvar.INTF.INTF_ShowScrollBars) then
-           if sysvar.INTF.INTF_ShowScrollBars^ then
-                                       ZCADMainWindow.VScrollBar.Show
-                                   else
-                                       ZCADMainWindow.VScrollBar.Hide;
-           end;
       end;
+      if assigned(SysVar.INTF.INTF_ThemedUpToolbars) then
+        ZCADMainWindow.CoolBarU.Themed:=SysVar.INTF.INTF_ThemedUpToolbars^;
+      if assigned(SysVar.INTF.INTF_ThemedRightToolbars) then
+        ZCADMainWindow.CoolBarR.Themed:=SysVar.INTF.INTF_ThemedRightToolbars^;
+      if assigned(SysVar.INTF.INTF_ThemedDownToolbars) then
+        ZCADMainWindow.CoolBarD.Themed:=SysVar.INTF.INTF_ThemedDownToolbars^;
+      if assigned(SysVar.INTF.INTF_ThemedLeftToolbars) then
+        ZCADMainWindow.CoolBarL.Themed:=SysVar.INTF.INTF_ThemedLeftToolbars^;
+      if assigned(ZCADMainWindow.PageControl) then
+        if assigned(SysVar.INTF.INTF_ShowDwgTabCloseBurron) then begin
+          if SysVar.INTF.INTF_ShowDwgTabCloseBurron^ then
+            ZCADMainWindow.PageControl.Options:=ZCADMainWindow.PageControl.Options+[nboShowCloseButtons]
+          else
+            ZCADMainWindow.PageControl.Options:=ZCADMainWindow.PageControl.Options-[nboShowCloseButtons];
+        end;
+      if assigned(ZCADMainWindow.HScrollBar) then begin
+        ZCADMainWindow.HScrollBar.enabled:=true;
+        ZCADMainWindow.correctscrollbars;
+        if assigned(sysvar.INTF.INTF_ShowScrollBars) then
+          if sysvar.INTF.INTF_ShowScrollBars^ then
+            ZCADMainWindow.HScrollBar.Show
+          else
+            ZCADMainWindow.HScrollBar.Hide;
+      end;
+      if assigned(ZCADMainWindow.VScrollBar) then begin
+        ZCADMainWindow.VScrollBar.enabled:=true;
+        if assigned(sysvar.INTF.INTF_ShowScrollBars) then
+          if sysvar.INTF.INTF_ShowScrollBars^ then
+            ZCADMainWindow.VScrollBar.Show
+          else
+            ZCADMainWindow.VScrollBar.Hide;
+      end;
+      for i:=0 to ZCADMainWindow.PageControl.PageCount-1 do begin
+        GVA:=TGeneralViewArea(FindComponentByType(ZCADMainWindow.PageControl.Pages[i],TGeneralViewArea));
+        if assigned(GVA) then
+          if GVA.PDWG<>nil then begin
+            name:=extractfilename(PTZCADDrawing(GVA.PDWG)^.FileName);
+            if @PTZCADDrawing(GVA.PDWG).mainObjRoot=(PTZCADDrawing(GVA.PDWG).pObjRoot) then
+              ZCADMainWindow.PageControl.Pages[i].caption:=(name)
+            else
+              ZCADMainWindow.PageControl.Pages[i].caption:='BEdit('+name+':'+Tria_AnsiToUtf8(PGDBObjBlockdef(PTZCADDrawing(GVA.PDWG).pObjRoot).Name)+')';
+            if k<=high(OpenedDrawings) then begin
+              OpenedDrawings[k].Caption:=ZCADMainWindow.PageControl.Pages[i].caption;
+              OpenedDrawings[k].visible:=true;
+              OpenedDrawings[k].command:='ShowPage';
+              OpenedDrawings[k].options:=inttostr(i);
+              inc(k);
+            end;
+          end;
+      end;
+      for i:=k to high(OpenedDrawings) do begin
+        OpenedDrawings[i].visible:=false;
+      end;
+    end else begin
+      for i:=low(OpenedDrawings) to high(OpenedDrawings) do begin
+        OpenedDrawings[i].Caption:='';
+        OpenedDrawings[i].visible:=false;
+        OpenedDrawings[i].command:='';
+      end;
+      ZCADMainWindow.Caption:=(programname+' v'+sysvar.SYS.SYS_Version^);
+      EnableControls(false);
+      if assigned(ZCADMainWindow.HScrollBar) then begin
+        ZCADMainWindow.HScrollBar.enabled:=false;
+        if assigned(sysvar.INTF.INTF_ShowScrollBars) then
+          if sysvar.INTF.INTF_ShowScrollBars^ then
+
+            ZCADMainWindow.HScrollBar.Show
+          else
+            ZCADMainWindow.HScrollBar.Hide;
+      end;
+      if assigned(ZCADMainWindow.VScrollBar) then begin
+        ZCADMainWindow.VScrollBar.enabled:=false;
+        if assigned(sysvar.INTF.INTF_ShowScrollBars) then
+          if sysvar.INTF.INTF_ShowScrollBars^ then
+            ZCADMainWindow.VScrollBar.Show
+          else
+            ZCADMainWindow.VScrollBar.Hide;
+      end;
+    end;
   end;
-  end;
+end;
+
+procedure TZCADMainWindow.updatevisible(Sender:TObject;GUIMode:TZMessageID);
+begin
+  if GUIMode<>ZMsgID_GUIActionRedraw then
+    exit;
+  Application.QueueAsyncCall(AsyncUpdateVisible,PtrInt(Sender));
+end;
 initialization
 begin
   LMD:=programlog.RegisterModule('zcad\gui\uzcmainwindow-gui');

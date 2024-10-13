@@ -62,19 +62,39 @@ resourcestring
   rsClosed='Closed';
 
 type
+  TZInfoProgress=class(TPanel)
+    strict private
+      ProcessBarCounter:integer;
+      ProcessBar:TProgressBar;
+      HintText:TLabel;
+      LastHintText:string;
+      NextLongProcessPos:integer;
+    public
+      constructor CreateOnTB(tb:TToolBar);
+
+      procedure SetText(AText:string;Force:Boolean=false);
+      procedure SetText2;
+
+      procedure ShowProcessBar(Total:Integer);
+      procedure ProcessProcessBar(Current:Integer);
+      procedure EndProcessBar;
+
+      procedure SwithToProcessBar;
+      procedure SwithToHintText;
+  end;
 
   { TZCADMainWindow }
 
   TZCADMainWindow = class(TForm)
     private
-      NextLongProcessPos:integer;
-      ProcessBar:TProgressBar;
+      InfoProgress:TZInfoProgress;
       SystemTimer:TTimer;
       toolbars:tstringlist;
       MainPanel:TForm;
       DHPanel:TPanel;
       HScrollBar,VScrollBar:TScrollBar;
       MouseTimer:TMouseTimer;
+      fNeedUpdateMainMenu:Boolean;
 
     published
       DockPanel:TAnchorDockPanel;
@@ -89,7 +109,6 @@ type
       procedure _onCreate(Sender: TObject);
 
     public
-
       PageControl:TmyPageControl;
 
       procedure ZcadException(Sender: TObject; E: Exception);
@@ -157,9 +176,14 @@ type
       {$ifdef windows}procedure SetTop;{$endif}
       procedure AsyncFree(Data:PtrInt);
       procedure UpdateVisible(sender:TObject;GUIMode:TZMessageID);
+      procedure DoUpdateMainMenu;
+      procedure NeedUpdateMainMenu;
       function GetFocusPriority:TControlWithPriority;
 
       procedure StartEntityDrag(StartX,StartY,X,Y:Integer);
+
+      procedure SwithToProcessBar;
+      procedure SwithToHintText;
   end;
 
 var
@@ -172,6 +196,120 @@ implementation
 {$R *.lfm}
 var
   LMD:TModuleDesk;
+
+procedure TZCADMainWindow.SwithToProcessBar;
+begin
+  InfoProgress.SwithToProcessBar;
+end;
+
+procedure TZCADMainWindow.SwithToHintText;
+begin
+  InfoProgress.SwithToHintText;
+end;
+
+constructor TZInfoProgress.CreateOnTB(tb:TToolBar);
+begin
+  inherited create(tb);
+
+  ProcessBarCounter:=0;
+
+  Align:=alLeft;
+  Width:=400;
+  Height:=tb.ButtonHeight;
+  BorderStyle:=bsNone;
+  BevelOuter:=bvNone;
+
+  ProcessBar:=TProgressBar.create(tb);
+  ProcessBar.Hide;
+  ProcessBar.Align:=alClient;
+  ProcessBar.Width:=400;
+  ProcessBar.Height:=tb.ButtonHeight;
+  ProcessBar.min:=0;
+  ProcessBar.max:=0;
+  ProcessBar.step:=10000;
+  ProcessBar.position:=0;
+  ProcessBar.Smooth:=true;
+  ProcessBar.Parent:=self;
+
+  HintText:=TLabel.Create(tb);
+  HintText.Align:=alClient;
+  HintText.AutoSize:=false;
+  HintText.Width:=400;
+  HintText.Height:=tb.ButtonHeight;
+  HintText.Layout:=tlCenter;
+  HintText.Alignment:=taCenter;
+  HintText.Parent:=self;
+
+  Parent:=tb;
+end;
+
+procedure TZInfoProgress.SetText(AText:string;Force:Boolean=false);
+begin
+  LastHintText:=AText;
+end;
+
+procedure TZInfoProgress.SetText2;
+begin
+  if LastHintText<>'' then begin
+    if assigned(HintText) then
+      HintText.caption:=LastHintText;
+    LastHintText:='';
+  end;
+end;
+
+procedure TZInfoProgress.SwithToProcessBar;
+begin
+  inc(ProcessBarCounter);
+  if ProcessBarCounter=1 then begin
+    HintText.Hide;
+    ProcessBar.Show;
+  end;
+end;
+
+procedure TZInfoProgress.SwithToHintText;
+begin
+  dec(ProcessBarCounter);
+  if ProcessBarCounter=0 then begin
+    ProcessBar.Hide;
+    HintText.Show;
+  end;
+end;
+
+procedure TZInfoProgress.ShowProcessBar(Total:Integer);
+begin
+  ProcessBar.max:=total;
+  ProcessBar.min:=0;
+  ProcessBar.position:=0;
+
+  SwithToProcessBar;
+
+  NextLongProcessPos:=0;
+end;
+
+procedure TZInfoProgress.ProcessProcessBar(Current:Integer);
+var
+  LongProcessPos:integer;
+begin
+  LongProcessPos:=round(clientwidth*(single(current)/single(ProcessBar.max)));
+  if LongProcessPos>NextLongProcessPos then begin
+      ProcessBar.position:=Current;
+      NextLongProcessPos:=LongProcessPos+20;
+      ProcessBar.repaint;
+  end;
+end;
+
+procedure TZInfoProgress.EndProcessBar;
+begin
+  SwithToHintText;
+  ProcessBar.min:=0;
+  ProcessBar.max:=0;
+  ProcessBar.position:=0;
+end;
+
+procedure StatusLineTextOut(s:String);
+begin
+  ZCADMainWindow.InfoProgress.SetText(s);
+end;
 
 procedure TZCADMainWindow.StartEntityDrag(StartX,StartY,X,Y:Integer);
 begin
@@ -574,6 +712,9 @@ begin
   //EndLongProcessProc:=EndLongProcess;
   lps.AddOnLPEndHandler(EndLongProcess);
   //messageboxproc:=self.MessageBox;
+
+  ZCMsgCallBackInterface.RegisterHandler_StatusLineTextOut(StatusLineTextOut);
+
   ZCMsgCallBackInterface.RegisterHandler_GUIAction(self.setvisualprop);
   //SetVisuaProplProc:=self.setvisualprop;
   ZCMsgCallBackInterface.RegisterHandler_GUIAction(self.UpdateVisible);
@@ -903,6 +1044,8 @@ begin
   ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIActionRedraw);
   MouseTimer:=TMouseTimer.Create;
   SetupFIPCServer;
+  fNeedUpdateMainMenu:=True;
+  DoUpdateMainMenu;
   finally programlog.leave(IfEntered);end;end;
 end;
 
@@ -1107,26 +1250,7 @@ end;
 
 procedure TZCADMainWindow.CreateHTPB(tb:TToolBar);
 begin
-  ProcessBar:=TProgressBar.create(tb);
-  ProcessBar.Hide;
-  ProcessBar.Align:=alLeft;
-  ProcessBar.Width:=400;
-  ProcessBar.Height:=tb.ButtonHeight;
-  ProcessBar.min:=0;
-  ProcessBar.max:=0;
-  ProcessBar.step:=10000;
-  ProcessBar.position:=0;
-  ProcessBar.Smooth:=true;
-  ProcessBar.Parent:=tb;
-
-  HintText:=TLabel.Create(tb);
-  HintText.Align:=alLeft;
-  HintText.AutoSize:=false;
-  HintText.Width:=400;
-  HintText.Height:=tb.ButtonHeight;
-  HintText.Layout:=tlCenter;
-  HintText.Alignment:=taCenter;
-  HintText.Parent:=tb;
+  InfoProgress:=TZInfoProgress.CreateOnTB(tb);
 end;
 procedure TZCADMainWindow.idle(Sender: TObject; var Done: Boolean);
 var
@@ -1135,11 +1259,9 @@ var
 begin
   with programlog.Enter('TZCADMainWindow.idle',LM_Debug,LMD) do begin try
 
-    if LastHintText<>'' then begin
-      if assigned(HintText) then
-        HintText.caption:=LastHintText;
-      LastHintText:='';
-    end;
+    InfoProgress.SetText2;
+
+    DoUpdateMainMenu;
 
     {IFDEF linux}
     if assigned(UniqueInstanceBase.FIPCServer)then
@@ -1209,28 +1331,14 @@ begin
 end;
 procedure TZCADMainWindow.StartLongProcess(LPHandle:TLPSHandle;Total:TLPSCounter;processname:TLPName;Options:TLPOpt);
 begin
-  if (assigned(ProcessBar)and assigned(HintText))and((Options and LPSONoProgressBar)=0) then begin
-    ProcessBar.max:=total;
-    ProcessBar.min:=0;
-    ProcessBar.position:=0;
-    HintText.Hide;
-    ProcessBar.Show;
-    NextLongProcessPos:=0;
-  end;
+  if (Options and LPSONoProgressBar)=0 then
+    InfoProgress.ShowProcessBar(Total);
 end;
 
 procedure TZCADMainWindow.ProcessLongProcess(LPHandle:TLPSHandle;Current:TLPSCounter;Options:TLPOpt);
-var
-    LongProcessPos:integer;
 begin
-  if (assigned(ProcessBar)and assigned(HintText))and((Options and LPSONoProgressBar)=0) then begin
-    LongProcessPos:=round(clientwidth*(single(current)/single(ProcessBar.max)));
-    if LongProcessPos>NextLongProcessPos then begin
-      ProcessBar.position:=Current;
-      NextLongProcessPos:=LongProcessPos+20;
-      ProcessBar.repaint;
-    end;
-  end;
+  if (Options and LPSONoProgressBar)=0 then
+    InfoProgress.ProcessProcessBar(Current);
 end;
 
 procedure TZCADMainWindow.ShowAllCursors;
@@ -1251,13 +1359,9 @@ procedure TZCADMainWindow.EndLongProcess;
 var
    TimeStr,LPName:String;
 begin
-  if (assigned(ProcessBar)and assigned(HintText))and((Options and LPSONoProgressBar)=0) then begin
-    ProcessBar.Hide;
-    HintText.Show;
-    ProcessBar.min:=0;
-    ProcessBar.max:=0;
-    ProcessBar.position:=0;
-  end;
+  if (Options and LPSONoProgressBar)=0 then
+  InfoProgress.EndProcessBar;
+
   str(TotalLPTime*10e4:3:2,TimeStr);
   LPName:=lps.getLPName(LPHandle);
 
@@ -1824,6 +1928,35 @@ begin
     result:=true;
 end;
 
+procedure TZCADMainWindow.NeedUpdateMainMenu;
+begin
+  fNeedUpdateMainMenu:=true;
+end;
+
+procedure TZCADMainWindow.DoUpdateMainMenu;
+var
+  oldmenu,newmenu:TMainMenu;
+begin
+  if fNeedUpdateMainMenu then begin
+    fNeedUpdateMainMenu:=false;
+    oldmenu:=self.Menu;
+    if assigned(oldmenu) then
+      oldmenu.Name:='';
+    newmenu:=TMainMenu(MenusManager.GetMainMenu('MAINMENU',application));
+    if IsDifferentMenu(oldmenu,newmenu) then begin
+      BeginFormUpdate;
+      self.Menu:=newmenu;
+
+      MetaDarkFormChanged(self);
+
+      if assigned(oldmenu) then
+        Application.QueueAsyncCall(AsyncFree,PtrInt(oldmenu));
+      EndFormUpdate;
+    end else
+      FreeAndNil(newmenu);
+  end;
+end;
+
 procedure TZCADMainWindow.updatevisible(sender:TObject;GUIMode:TZMessageID);
 var
    GVA:TGeneralViewArea;
@@ -1837,19 +1970,7 @@ begin
   if GUIMode<>ZMsgID_GUIActionRedraw then
     exit;
 
-  oldmenu:=self.Menu;
-  if assigned(oldmenu) then
-    oldmenu.Name:='';
-  newmenu:=TMainMenu(MenusManager.GetMainMenu('MAINMENU',application));
-  if IsDifferentMenu(oldmenu,newmenu) then begin
-    self.Menu:=newmenu;
-
-    MetaDarkFormChanged(self);
-
-    if assigned(oldmenu) then
-      Application.QueueAsyncCall(AsyncFree,PtrInt(oldmenu));
-  end else
-    FreeAndNil(newmenu);
+  NeedUpdateMainMenu;
 
   if assigned(UniqueInstanceBase.FIPCServer) then
     FIPCServerRunning:=UniqueInstanceBase.FIPCServer.Active

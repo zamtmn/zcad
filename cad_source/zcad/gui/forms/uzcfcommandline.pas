@@ -59,11 +59,6 @@ var
   LastHistoryMsg:string='';
   LastSuffixMsg:string='';
   LastHistoryMsgRepeatCounter:integer=0;
-
-  HintText:TLabel;
-  LastHintText:string;
-  //historychanged:boolean;
-
 implementation
 
 procedure TCLine.mypaint(sender:tobject);
@@ -407,12 +402,6 @@ begin
     end;
   end;
 end;
-procedure StatusLineTextOut(s:String);
-begin
-  LastHintText:=s;
-  //if assigned(HintText) then
-  //  HintText.caption:=(s);
-end;
 procedure LogError(errstr:String); export;
 begin
      {errstr:=rserrorprefix+errstr;
@@ -430,8 +419,6 @@ begin
   //uzcinterface.HistoryOutStr:=HistoryOutStr;
 
   ZCMsgCallBackInterface.RegisterHandler_GUIMode(HandleCmdLine);
-
-  ZCMsgCallBackInterface.RegisterHandler_StatusLineTextOut(StatusLineTextOut);
   //uzcinterface.StatusLineTextOut:=StatusLineTextOut;
   ZCMsgCallBackInterface.RegisterHandler_LogError(LogError);
   ZCMsgCallBackInterface.RegisterHandler_GetFocusedControl(CLine.GetCLineFocusPriority);

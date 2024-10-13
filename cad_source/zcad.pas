@@ -348,6 +348,8 @@ begin
   ZCMsgCallBackInterface.TextMessage(format(rsZCADStarted,[programname,sysvar.SYS.SYS_Version^]),TMWOHistoryOut);
   application.ProcessMessages;
 
+  ZCADMainWindow.SwithToProcessBar;
+
   FromDirsIterator(sysvar.PATH.Preload_Path^,'*.cmd','autorun.cmd',RunCmdFile,nil);
   if CommandLineParser.HasOption(RunScript)then
     for i:=0 to CommandLineParser.OptionOperandsCount(RunScript)-1 do begin
@@ -359,6 +361,8 @@ begin
     commandmanager.executecommand('Load('+sysparam.notsaved.preloadedfile+')',drawings.GetCurrentDWG,drawings.GetCurrentOGLWParam);
     sysparam.notsaved.preloadedfile:='';
   end;
+
+  ZCADMainWindow.SwithToHintText;
   //убираем сплэш
   ZCMsgCallBackInterface.Do_SetNormalFocus;
   removesplash;

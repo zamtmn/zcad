@@ -96,7 +96,11 @@ begin
                        ClByBlock:
                            result:=rsByBlock;
                        else
-                           result:=palette[ColorInfex].name+' '+'(Red='+inttostr(palette[ColorInfex].RGB.r)+' Green='+inttostr(palette[ColorInfex].RGB.g)+' Blue='+inttostr(palette[ColorInfex].RGB.b)+')';
+                           result:=palette[ColorInfex].name+'(#'
+                                   +IntToHex(palette[ColorInfex].RGB.r,2)
+                                   +IntToHex(palette[ColorInfex].RGB.g,2)
+                                   +IntToHex(palette[ColorInfex].RGB.b,2)
+                                   +')';
      end;
 end;
 

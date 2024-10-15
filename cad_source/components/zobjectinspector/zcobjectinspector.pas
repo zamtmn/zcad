@@ -188,6 +188,8 @@ var
   INTFObjInspShowFastEditors:boolean=true;
   INTFObjInspShowOnlyHotFastEditors:boolean=true;
   INTFDefaultControlHeight:integer=21;
+  INTFObjInspHeaderColor:TColor=clBtnShadow;
+
   LocalRowHeight:integer=21;
   LocalRowHeightOverride:boolean=false;
   PRowHeight:PInteger;
@@ -636,64 +638,68 @@ begin
              end;
   dec(r.left,size.cx+1);}
 end;
-function drawrect(cnvs:tcanvas;r:trect;active:boolean;onmouse:boolean;readonly:boolean): TThemedElementDetails;
+function DrawRect(ACanvas:TCanvas;ARect:TRect;AActive:Boolean;AOnMouse:Boolean;AReadOnly:Boolean;AWithChildren:Boolean):TThemedElementDetails;
 var
    tc:tcolor;
 begin
+  //AWithChildren:=false;
   result:=defaultdetails;
-  if (not ThemeServices.ThemesAvailable)or isOldStyleDraw then
-  begin
-  if onmouse and ThemeServices.ThemesAvailable then
-                 result := ThemeServices.GetElementDetails(ttItemHot);
-  if active and ThemeServices.ThemesAvailable then
-                 result := ThemeServices.GetElementDetails(ttItemSelected);
-  tc:=cnvs.Brush.Color;
-  if active then
-                begin
-                     cnvs.Brush.Color := clHighlight{clBtnHiLight};
-                     cnvs.Pen.Style:=psDot;
-                     inflaterect(r,0,-1);
-                     cnvs.Rectangle(r);
-                     cnvs.Pen.Style:=psSolid;
-                end
-            else
-                begin
-                     if IsWgiteBackground then
-                                              cnvs.Brush.Color := clWindow
-                                          else
-                                              cnvs.Brush.Color := clBtnFace;
-                     if isOldStyleDraw then
-                     cnvs.Rectangle(r);
-                end;
-  cnvs.Brush.Color:=tc;
+  if (not ThemeServices.ThemesAvailable)or isOldStyleDraw then begin
+    if AOnMouse and ThemeServices.ThemesAvailable then
+      result:=ThemeServices.GetElementDetails(ttItemHot);
+    if AActive and ThemeServices.ThemesAvailable then
+      result:=ThemeServices.GetElementDetails(ttItemSelected);
+
+    tc:=ACanvas.Brush.Color;
+    ACanvas.Brush.Color:=clGrayText;
+    if AActive then begin
+      ACanvas.Brush.Color := clHighlight{clBtnHiLight};
+      ACanvas.Pen.Style:=psDot;
+      inflaterect(ARect,0,-1);
+      ACanvas.Rectangle(ARect);
+      ACanvas.Pen.Style:=psSolid;
+    end else begin
+      if IsWgiteBackground then
+        ACanvas.Brush.Color := clWindow
+      else
+        ACanvas.Brush.Color := clBtnFace;
+
+      if AWithChildren then
+        if INTFObjInspHeaderColor<>clDefault then
+          ACanvas.Brush.Color:=INTFObjInspHeaderColor;
+
+      if isOldStyleDraw then
+        ACanvas.Rectangle(ARect);
+    end;
+    ACanvas.Brush.Color:=tc;
   end
   else
   begin
-       if active then
+       if AActive then
                      begin
                      result := ThemeServices.GetElementDetails(ttItemSelected);
-                     ThemeServices.DrawElement(cnvs.Handle, result, r, nil);
+                     ThemeServices.DrawElement(ACanvas.Handle, result, ARect, nil);
                      end
                  else
-                     if readonly then
+                     if AReadOnly then
                      begin
                      if isOldStyleDraw then
                      begin
                        result := {ThemeServices.GetElementDetails(ttItemNormal)}DefaultDetails;
-                       ThemeServices.DrawElement(cnvs.Handle, result, r, nil);
+                       ThemeServices.DrawElement(ACanvas.Handle, result, ARect, nil);
                      end;
                      result := ThemeServices.GetElementDetails(ttItemDisabled);
                      end
                      else
-                     if onmouse then
+                     if AOnMouse then
                      begin
                      result := ThemeServices.GetElementDetails(ttItemHot);
                      {$IFDEF LCLWIN32}
                      if ((WindowsVersion >= wvVista)and ThemeServices.ThemesEnabled) then
-                                                                                         ThemeServices.DrawElement(cnvs.Handle, result, r, nil)
+                                                                                         ThemeServices.DrawElement(ACanvas.Handle, result, ARect, nil)
                                                                                      else
                                                                                          if isOldStyleDraw then
-                                                                                         ThemeServices.DrawElement(cnvs.Handle, ThemeServices.GetElementDetails(ttItemNormal), r, nil)
+                                                                                         ThemeServices.DrawElement(ACanvas.Handle, ThemeServices.GetElementDetails(ttItemNormal), ARect, nil)
                      {$ENDIF}
                      {$IFNDEF LCLWIN32}
                      ThemeServices.DrawElement(cnvs.Handle, result, r, nil);
@@ -706,7 +712,7 @@ begin
                      if isOldStyleDraw then
                      begin
                      result := {ThemeServices.GetElementDetails(ttItemNormal)}DefaultDetails;
-                     ThemeServices.DrawElement(cnvs.Handle, result, r, nil);
+                     ThemeServices.DrawElement(ACanvas.Handle, result, ARect, nil);
                      end;
                      end;
                      {$IFDEF LCLWIN32}
@@ -714,10 +720,10 @@ begin
                      {$ENDIF}
                      if isOldStyleDraw then
                      begin
-                        cnvs.Line(r.Left,r.Top,r.Right,r.Top);
-                        cnvs.Line(r.Right,r.Top,r.Right,r.Bottom);
-                        cnvs.Line(r.Right,r.Bottom,r.Left,r.Bottom);
-                        cnvs.Line(r.Left,r.Bottom,r.Left,r.Top);
+                        ACanvas.Line(ARect.Left,ARect.Top,ARect.Right,ARect.Top);
+                        ACanvas.Line(ARect.Right,ARect.Top,ARect.Right,ARect.Bottom);
+                        ACanvas.Line(ARect.Right,ARect.Bottom,ARect.Left,ARect.Bottom);
+                        ACanvas.Line(ARect.Left,ARect.Bottom,ARect.Left,ARect.Top);
                      end;
   end;
 end;
@@ -739,7 +745,7 @@ begin
                                ThemeServices.DrawText(cnvs,TextDetails,s2,r,DT_END_ELLIPSIS,0);
                           end;}
 end;
-procedure drawvalue(ppd:PPropertyDeskriptor;canvas:tcanvas;fulldraw:boolean;TextDetails: TThemedElementDetails; onm:boolean);
+procedure drawvalue(ppd:PPropertyDeskriptor;canvas:tcanvas;fulldraw:boolean;TextDetails:TThemedElementDetails;onm:boolean;AWithChildren:Boolean);
 var
    r:trect;
    tempcolor:TColor;
@@ -756,7 +762,7 @@ begin
 
   r:=ppd.rect;
   if fulldraw then
-  drawrect(canvas,r,false,false,false);
+  DrawRect(canvas,r,false,false,false,AWithChildren);
   r.Top:=r.Top+3;
   r.Left:=r.Left+3;
   r.Right:=r.Right-1;
@@ -860,7 +866,7 @@ begin
                                     s:=ppd^.Name;
                                     if not NeedShowSeparator then
                                                              r.Right:=arect.Right-1;
-                                    TextDetails:=drawrect(canvas,r,false,OnMouseProp,(ppd^.Attr and FA_READONLY)<>0);
+                                    TextDetails:=DrawRect(canvas,r,false,OnMouseProp,(ppd^.Attr and FA_READONLY)<>0,{true}sub=0);
                                     //r.Left:={r.Left+3}arect.Left+5+subtab*sub;
                                     r.Left:=arect.Left+{2+}(subtab+GetSizeTreeIcon(not ppd^.Collapsed^,false).cx)*sub;
                                     r.Top:=r.Top+3;
@@ -890,7 +896,7 @@ begin
         begin
           if visible then
           begin
-          TextDetails:=drawrect(canvas,r,(ppd=EDContext.ppropcurrentedit),OnMouseProp,(ppd^.Attr and FA_READONLY)<>0);
+          TextDetails:=DrawRect(canvas,r,(ppd=EDContext.ppropcurrentedit),OnMouseProp,(ppd^.Attr and FA_READONLY)<>0,{false}sub=0);
 
           if (ppd^.Attr and FA_HIDDEN_IN_OBJ_INSP)<>0 then
           begin
@@ -943,7 +949,7 @@ begin
           r.Right:=arect.Right-1;
 
           ppd.rect:=r;
-          drawvalue(ppd,canvas,true,TextDetails,onmouseprop);
+          drawvalue(ppd,canvas,true,TextDetails,onmouseprop,sub=0);
 
           {if (ppd^.Attr and FA_HIDDEN_IN_OBJ_INSP)<>0 then
           begin

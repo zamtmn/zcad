@@ -188,7 +188,7 @@ var
   INTFObjInspShowFastEditors:boolean=true;
   INTFObjInspShowOnlyHotFastEditors:boolean=true;
   INTFDefaultControlHeight:integer=21;
-  INTFObjInspHeaderColor:TColor=clBtnShadow;
+  INTFObjInspLevel0HeaderColor:TColor=clBtnShadow;
 
   LocalRowHeight:integer=21;
   LocalRowHeightOverride:boolean=false;
@@ -665,8 +665,8 @@ begin
         ACanvas.Brush.Color := clBtnFace;
 
       if AWithChildren then
-        if INTFObjInspHeaderColor<>clDefault then
-          ACanvas.Brush.Color:=INTFObjInspHeaderColor;
+        if INTFObjInspLevel0HeaderColor<>clDefault then
+          ACanvas.Brush.Color:=INTFObjInspLevel0HeaderColor;
 
       if isOldStyleDraw then
         ACanvas.Rectangle(ARect);

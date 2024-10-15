@@ -496,24 +496,26 @@ begin
 
   if simplydraw then begin
     q3d:=Width3D_in_WCS_Array.GetParrayAsPointer;
-    //if dc.lod=LODLowDetail then
-    //  dc.drawer.SetLineWidth(2);
+    if q3d<>nil then begin
+      //if dc.lod=LODLowDetail then
+      //  dc.drawer.SetLineWidth(2);
 
-    if Width3D_in_WCS_Array.Count>15 then begin
-      if Width3D_in_WCS_Array.parray<>nil then begin
-        ie:=(Width3D_in_WCS_Array.Count div 4)+4;
-        for i := 0 to (Width3D_in_WCS_Array.Count-2)div ie do begin
-          dc.drawer.DrawLine3DInModelSpace(
-            q3d^[0],q3d^[1],dc.DrawingContext.matrixs);
-          Inc(q3d,ie);
+      if Width3D_in_WCS_Array.Count>15 then begin
+        if Width3D_in_WCS_Array.parray<>nil then begin
+          ie:=(Width3D_in_WCS_Array.Count div 4)+4;
+          for i := 0 to (Width3D_in_WCS_Array.Count-2)div ie do begin
+            dc.drawer.DrawLine3DInModelSpace(
+              q3d^[0],q3d^[1],dc.DrawingContext.matrixs);
+            Inc(q3d,ie);
+          end;
         end;
+      end else if Width3D_in_WCS_Array.Count>2 then begin
+        dc.drawer.DrawLine3DInModelSpace(vp.BoundingBox.LBN,vp.BoundingBox.RTF,
+                                         dc.DrawingContext.matrixs);
+      end else begin
+        dc.drawer.DrawLine3DInModelSpace(q3d^[0],q3d^[1],
+                                         dc.DrawingContext.matrixs);
       end;
-    end else if Width3D_in_WCS_Array.Count>2 then begin
-      dc.drawer.DrawLine3DInModelSpace(vp.BoundingBox.LBN,vp.BoundingBox.RTF,
-                                       dc.DrawingContext.matrixs);
-    end else begin
-      dc.drawer.DrawLine3DInModelSpace(q3d^[0],q3d^[1],
-                                       dc.DrawingContext.matrixs);
     end;
     exit;
   end;

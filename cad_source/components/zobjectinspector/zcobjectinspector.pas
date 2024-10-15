@@ -28,7 +28,7 @@ uses
   {$IFDEF LCLWIN32}win32proc,{$endif}
   Types,Graphics,Themes,LCLIntf,LCLType,
   ExtCtrls,Controls,Menus,Forms,
-  StdCtrls,
+  StdCtrls,ColorBox,
   usupportgui,
   zeundostack,zebaseundocommands,
 
@@ -188,7 +188,7 @@ var
   INTFObjInspShowFastEditors:boolean=true;
   INTFObjInspShowOnlyHotFastEditors:boolean=true;
   INTFDefaultControlHeight:integer=21;
-  INTFObjInspLevel0HeaderColor:TColor=clBtnShadow;
+  INTFObjInspLevel0HeaderColor:TColor=clDefault;
 
   LocalRowHeight:integer=21;
   LocalRowHeightOverride:boolean=false;
@@ -1731,19 +1731,23 @@ begin
                                        TED.Editor.SetEditorBounds(pp,INTFObjInspShowOnlyHotFastEditors);
                                        editorcontrol:=TED.Editor.geteditor;
                                        //editorcontrol.SetBounds(tr.Left+2,tr.Top,tr.Right-tr.Left-2,tr.Bottom-tr.Top);
-                                       if (editorcontrol is TCombobox) then
-                                                                           begin
-                                                                                {$IFNDEF LCLWIN32}
-                                                                                editorcontrol.Visible:=false;
-                                                                                {$ENDIF}
-                                                                                editorcontrol.Parent:=self;
-                                                                                SetComboSize(editorcontrol as TCombobox,rowh-6,CBDoNotTouch);
-                                                                                //(editorcontrol as TCombobox).itemheight:=pp^.rect.Bottom-pp^.rect.Top-6;
-                                                                                if (editorcontrol as TCombobox).Style in [csDropDownList,csOwnerDrawFixed,csOwnerDrawVariable] then
-                                                                                (editorcontrol as TCombobox).droppeddown:=true;//автооткрытие комбика мещает вводу, открываем только те что без возможности ввода значений
-                                                                           end
-                                                                       else
-                                                                           editorcontrol.Parent:=self;
+                                       if (editorcontrol is TComboBox) then begin
+                                         {$IFNDEF LCLWIN32}
+                                         editorcontrol.Visible:=false;
+                                         {$ENDIF}
+                                         editorcontrol.Parent:=self;
+                                         SetComboSize(editorcontrol as TCombobox,rowh-6,CBDoNotTouch);
+                                         //(editorcontrol as TCombobox).itemheight:=pp^.rect.Bottom-pp^.rect.Top-6;
+                                         if (editorcontrol as TCombobox).Style in [csDropDownList,csOwnerDrawFixed,csOwnerDrawVariable] then
+                                         (editorcontrol as TCombobox).droppeddown:=true;//автооткрытие комбика мещает вводу, открываем только те что без возможности ввода значений
+                                       end else if (editorcontrol is TColorBox) then begin
+                                         {$IFNDEF LCLWIN32}
+                                         editorcontrol.Visible:=false;
+                                         {$ENDIF}
+                                         editorcontrol.Parent:=self;
+                                         (editorcontrol as TColorBox).droppeddown:=true;
+                                       end else
+                                         editorcontrol.Parent:=self;
                                        PEditor:=TED.Editor;
                                   end;
      end;

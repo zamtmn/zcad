@@ -136,7 +136,7 @@ GZVector{-}<T>{//}=object(TZAbsVector)
         function GetSpecializedTypeInfo:PTypeInfo;inline;
 
         {**Возвращает размер элемента массива}
-        function SizeOfData:TArrayIndex;
+        function SizeOfData:TArrayIndex; inline;
         {**Возвращает указатель на массив}
         function GetParray:pointer;virtual;
         {**Возвращает указатель на массив}
@@ -189,6 +189,10 @@ begin
   FreeMem(pblock);
 end;
 
+function GZVector<T>.SizeOfData:TArrayIndex;
+begin
+  result:=sizeof(T);
+end;
 function GZVector<T>.GetSpecializedTypeInfo:PTypeInfo;
 begin
   result:=TypeInfo(T);
@@ -507,10 +511,6 @@ begin
        for i:=0 to count-1 do
                              PArray^[i]:=default(t);
   count:=0;
-end;
-function GZVector<T>.SizeOfData:TArrayIndex;
-begin
-  result:=sizeof(T);
 end;
 procedure GZVector<T>.clear;
 begin

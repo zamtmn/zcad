@@ -60,7 +60,7 @@ type
             constructor initnul;
             procedure AddObjToNul(var Entity:TEntity);
             procedure updateenttreeadress;
-            procedure CorrectNodeBoundingBox(var Entity:TEntity);
+            procedure CorrectNodeBoundingBox(var Entity:TEntity); inline;
             procedure AddObjectToNodeTree(var Entity:TEntity);
             procedure SetSize(ns:integer);
             procedure Lock;

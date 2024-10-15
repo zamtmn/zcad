@@ -67,7 +67,6 @@ var
    i:Integer;
    s2:string;
 begin
-     result:='';
      for i:=0 to maxlexem do
      begin
        s2:=lexemarray[i,0];
@@ -77,6 +76,7 @@ begin
                                      exit;
                                 end;
      end;
+     result:='';
 end;
 
 function replacenull(const s:String): String;

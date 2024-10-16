@@ -302,7 +302,7 @@ var
   Tempplane,plx,ply,plz:DVector4D;
   a: Integer;
   i2d,i2dresult:intercept2dprop;
-  _NotUseLCS:boolean;
+  //_NotUseLCS:boolean;
 begin
   if param.scrollmode then
                           exit;
@@ -574,7 +574,7 @@ end;
 procedure TGeneralViewArea.DrawCSAxis(var DC:TDrawContext);
 var
   td,td2,td22:Double;
-  d2dx,d2dy,d2d:GDBvertex2D;
+  //d2dx,d2dy,d2d:GDBvertex2D;
 begin
   dc.drawer.SetDrawMode(TDM_Normal);
 

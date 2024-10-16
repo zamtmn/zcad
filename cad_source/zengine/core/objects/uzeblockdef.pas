@@ -20,7 +20,7 @@ unit uzeblockdef;
 {$INCLUDE zengineconfig.inc}
 interface
 uses gzctnrVectorTypes,uzeentity,uzeentityfactory,uzgldrawcontext,uzeobjectextender,uzedrawingdef,
-     uzeentsubordinated,uzeffdxfsupport,uzctnrVectorBytes,sysutils,uzbtypes,
+     uzeentsubordinated,{uzeffdxfsupport,}uzctnrVectorBytes,sysutils,uzbtypes,
      uzegeometrytypes,uzegeometry,uzestyleslayers,uzeconsts,uzeentgenericsubentry,LazLogger,
      uzMVReader;
 type

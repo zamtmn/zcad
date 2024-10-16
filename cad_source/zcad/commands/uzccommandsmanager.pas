@@ -184,7 +184,7 @@ end;
 function GDBcommandmanager.ProcessCommandShortcuts(const ShortCut:TShortCut):Boolean;
 var
   data:TCommandLinePromptOption;
-  ts:TParserCommandLinePrompt.TParserString;
+  //ts:TParserCommandLinePrompt.TParserString;
 begin
   result:=false;
   if CurrCmd.pcommandrunning<>nil then

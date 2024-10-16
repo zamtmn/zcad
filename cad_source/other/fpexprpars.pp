@@ -886,7 +886,7 @@ Resourcestring
   SErrNoNegation = 'Cannot negate expression of type %s : %s';
   SErrNoNOTOperation = 'Cannot perform "not" on expression of type %s: %s';
   SErrTypesDoNotMatch = 'Type mismatch: %s<>%s for expressions "%s" and "%s".';
-  SErrTypesIncompatible = 'Incompatible types: %s<>%s for expressions "%s" and "%s".';
+  //SErrTypesIncompatible = 'Incompatible types: %s<>%s for expressions "%s" and "%s".';
   SErrNoNodeToCheck = 'Internal error: No node to check !';
   SInvalidNodeType = 'Node type (%s) not in allowed types (%s) for expression: %s';
   SErrUnterminatedExpression = 'Badly terminated expression. Found token at position %d : %s';
@@ -896,7 +896,7 @@ Resourcestring
   SErrInvalidArgumentType = 'Invalid type for argument %d: Expected %s, got %s';
   SErrInvalidResultType = 'Invalid result type: %s';
   SErrNotVariable = 'Identifier %s is not a variable';
-  SErrInactive = 'Operation not allowed while an expression is active';
+  //SErrInactive = 'Operation not allowed while an expression is active';
   SErrIFNeedsBoolean = 'First argument to IF must be of type boolean: %s';
   SErrCaseNeeds3 = 'Case statement needs to have at least 4 arguments';
   SErrCaseEvenCount = 'Case statement needs to have an even number of arguments';

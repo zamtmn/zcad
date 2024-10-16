@@ -30,7 +30,7 @@ uses
   uzeentitiestypefilter,
   uzcdrawings,uzedrawingsimple,uzgldrawcontext,
   varmandef,uzcenitiesvariablesextender,
-  CsvDocument,uzctnrvectorpgdbaseobjects,uzCtnrVectorpBaseEntity;
+  CsvDocument{,uzctnrvectorpgdbaseobjects},uzCtnrVectorpBaseEntity;
 
 implementation
 

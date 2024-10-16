@@ -102,7 +102,7 @@ var
    td:PTypeData;
    mf: PManagedField;
    i:integer;
-   etd:PRecordDescriptor;
+   //etd:PRecordDescriptor;
    pfd:pFieldDescriptor;
 begin
   td:=GetTypeData(ti);

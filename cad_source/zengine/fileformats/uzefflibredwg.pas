@@ -26,7 +26,7 @@ uses
   SysUtils,
   dwg,dwgproc,
   uzeffmanager,
-  uzelongprocesssupport,uzgldrawcontext,forms,
+  uzelongprocesssupport,{uzgldrawcontext,}forms,
   uzcstrconsts,uzeLogIntf,
   LazUTF8;
 
@@ -67,7 +67,7 @@ var
   dwg:Dwg_Data;
   Success:integer;
   lph:TLPSHandle;
-  DC:TDrawContext;
+  //DC:TDrawContext;
 begin
   try
     DebugLn('{WH}%s',[rsNotYetImplemented]);
@@ -103,7 +103,7 @@ var
   dwg:Dwg_Data;
   Success:integer;
   lph:TLPSHandle;
-  DC:TDrawContext;
+  //DC:TDrawContext;
 begin
   try
     DebugLn('{WH}%s',[rsNotYetImplemented]);

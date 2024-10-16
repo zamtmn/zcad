@@ -10,7 +10,7 @@ interface
 uses uzcenitiesvariablesextender,uzcvariablesutils,Varman,uzbstrproc,uzcentcable,
      uzeentdevice,uzeconsts,gzctnrVectorObjects,
      gzctnrVectorTypes,SysUtils,uzbtypes,varmandef,uzcdrawings,
-     uzcstrconsts,uzctnrvectorpgdbaseobjects,uzCtnrVectorpBaseEntity;
+     uzcstrconsts{,uzctnrvectorpgdbaseobjects},uzCtnrVectorpBaseEntity;
 resourcestring
      DefCableName='Created. Not named';
 type

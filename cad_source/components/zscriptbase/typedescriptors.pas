@@ -19,8 +19,8 @@ unit typedescriptors;
 
 {$MODE DELPHI}
 interface
-uses uzedimensionaltypes,uzctnrVectorPointers,LCLProc,
-     varmandef,uzctnrvectorstrings,
+uses uzedimensionaltypes,{uzctnrVectorPointers,}LCLProc,
+     varmandef,//uzctnrvectorstrings,
      gzctnrVectorTypes,gzctnrVectorP,uzbstrproc,sysutils,uzbLogIntf;
 const
      m_procedure=1;

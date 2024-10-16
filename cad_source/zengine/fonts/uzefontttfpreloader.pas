@@ -90,7 +90,7 @@ type
 
   //from TTTables.pas
   (* TrueType collection header *)
-  PTTCHeader=^TTTCHeader;
+  //PTTCHeader=^TTTCHeader;
   TTTCHeader=record
     Tag            : Long;
     version        : TT_Fixed;
@@ -98,7 +98,7 @@ type
     TableDirectory : PStorage;
   end;
 
-  PTableDir=^TTableDir;
+  //PTableDir=^TTableDir;
   TTableDir=record
     version        : TT_Fixed;(* should be $10000 *)
     numTables      : UShort;  (* Tables number    *)
@@ -124,12 +124,12 @@ type
     length     : UShort;
     offset     : UShort;
   end;
-  PNameRecord  = ^TNameRecord;
+  //PNameRecord  = ^TNameRecord;
   TNameRecords = array [0..maxNameID-1] of TNameRecord;
-  PNameRecords = ^TNameRecords;
+  //PNameRecords = ^TNameRecords;
 
 
-  PNameTable = ^TNameTable;
+  //PNameTable = ^TNameTable;
   TNameTable = record
     format         : UShort;
     numNameRecords : UShort;
@@ -142,7 +142,7 @@ type
   TulUnicodeRange = array [0..3] of uint32;
   TachVendID = array [0..3]  of int8;
 
-  POS2Table = ^TOS2Table;
+  //POS2Table = ^TOS2Table;
   TOS2Table = record
     version:UShort;//table version number (set to 0)
     xAvgCharWidth:Short;//average weighted advance width of lower case letters and space

@@ -22,7 +22,7 @@ unit UGDBOpenArrayOfPV;
 interface
 uses uzegeometrytypes,uzgldrawcontext,uzedrawingdef,uzeentity,uzecamera,
      gzctnrVectorTypes,sysutils,uzbtypes,uzegeometry,
-     uzeentsubordinated,uzeentityfactory,uzctnrvectorpgdbaseobjects,
+     uzeentsubordinated,uzeentityfactory,//uzctnrvectorpgdbaseobjects,
      uzctnrvectorpbaseentity,uzeEntBase;
 type
 {PGDBObjEntityArray=^GDBObjEntityArray;

@@ -24,7 +24,7 @@ uses sysutils,uzedrawingdef,uzeExtdrAbstractEntityExtender,
      uzeentdevice,TypeDescriptors,uzctnrVectorBytes,
      uzbtypes,uzeentsubordinated,uzeentity,uzeblockdef,
      usimplegenerics,uzeffdxfsupport,
-     gzctnrVectorSimple,gzctnrVectorTypes,uzeBaseExtender,uzgldrawcontext,
+     {gzctnrVectorSimple,}gzctnrVectorTypes,uzeBaseExtender,uzgldrawcontext,
      uzegeometrytypes,uzcsysvars,
      uzctnrVectorDouble,gzctnrVector,garrayutils,
      uzcExtdrSCHConnector,uzcEnitiesVariablesExtender,
@@ -228,7 +228,7 @@ var
   setter:TBaseSCHConnectExtender;
   ir,eir:itrec;
   SVExtdr,PVExtdr:TVariablesExtender;
-  ConnectorExtender:TSCHConnectorExtender;
+  //ConnectorExtender:TSCHConnectorExtender;
 begin
   if Assigned(Net) then begin
     setter:=Net.Setters.beginiterate(ir);
@@ -407,7 +407,7 @@ var
   v,onel,p1,p2:GDBVertex;
   tp2,tp3:GDBVertex;
   m,rotmatr:DMatrix4D;
-  l,x,y,z:double;
+  l{,x,y,z}:double;
   sine,cosine:Double;
   chg:boolean;
 begin

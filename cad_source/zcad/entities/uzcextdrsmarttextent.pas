@@ -244,7 +244,7 @@ end;
 
 function TSmartTextEntExtender.getBaseLineStartPoint(pEntity:Pointer):GDBVertex;
 var
-  t,n:GDBvertex;
+  t{,n}:GDBvertex;
   dx:double;
 begin
   result:=getTextInsertPoint(pEntity);
@@ -389,7 +389,7 @@ procedure TSmartTextEntExtender.onBeforeEntityFormat(pEntity:Pointer;const drawi
 var
   currXDir,currYDir,newXDir,newYDir:integer;
   PD2J:PDir2J;
-  v1,v2:GDBVertex;
+  v1{,v2}:GDBVertex;
   l0:Double;
   a:double;
   sine,cosine:double;

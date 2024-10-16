@@ -19,7 +19,7 @@
 unit uzbPaths;
 
 interface
-uses uzbtypes,Masks,LCLProc,{$IFNDEF DELPHI}LazUTF8,{$ENDIF}sysutils,
+uses {uzbtypes,}Masks,LCLProc,{$IFNDEF DELPHI}LazUTF8,{$ENDIF}sysutils,
      uzmacros,uzbLogIntf;
 type
   TFromDirIterator=procedure (const filename:String;pdata:pointer);

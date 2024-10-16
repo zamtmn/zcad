@@ -616,8 +616,8 @@ begin
   LCS:=LCSSave;
 end;
 procedure TZGLGeneral2DDrawer.DisableLCS(var matrixs:tmatrixs);
-var
-  m:DMatrix4D;
+//var
+//  m:DMatrix4D;
 begin
   {m:=uzegeometry.MatrixMultiply(matrwoLCS,ProjMatrwoLCS);
   sx:=(m[0].v[0]/m[3].v[3]*0.5)*matrixs.pviewport.v[2] ;
@@ -633,8 +633,8 @@ begin
   LCS.CurrentCamCSOffsetS:=NulVertex3S;
 end;
 procedure TZGLGeneral2DDrawer.EnableLCS(var matrixs:tmatrixs);
-var
-  m:DMatrix4D;
+//var
+  //m:DMatrix4D;
 begin
   (*m:=uzegeometry.MatrixMultiply({matrWithLCS,ProjMatrWithLCS}matrixs.pmodelMatrix^,matrixs.pprojMatrix^);
   sx:=(m[0].v[0]/m[3].v[3]*0.5)*matrixs.pviewport.v[2] ;

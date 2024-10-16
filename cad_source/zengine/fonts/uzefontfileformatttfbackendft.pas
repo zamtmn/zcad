@@ -135,13 +135,13 @@ begin
 end;
 
 function TTTFBackendFreeType.GetGlyphBounds(GD:TGlyphData):TRect;
-var
-  BB:FT_BBox;
-  gm:FT_Glyph_Metrics;
+//var
+  //BB:FT_BBox;
+  //gm:FT_Glyph_Metrics;
 begin
   GetGlyph(PtrInt(GD.PG));
-  BB:=FontMgr.GetFreeTypeFont(FreeTypeTTFImpl.FontID).bbox;
-  gm:=FontMgr.GetFreeTypeFont(FreeTypeTTFImpl.FontID).glyph^.metrics;
+  //BB:=FontMgr.GetFreeTypeFont(FreeTypeTTFImpl.FontID).bbox;
+  //gm:=FontMgr.GetFreeTypeFont(FreeTypeTTFImpl.FontID).glyph^.metrics;
   with FontMgr.GetFreeTypeFont(FreeTypeTTFImpl.FontID).glyph^.metrics do begin
     result.left:=horiBearingX;
     result.right:=horiBearingX+width;
@@ -270,8 +270,8 @@ begin
 end;
 
 procedure TTTFBackendFreeType.SetSizeInPoints(const AValue:single);
-var
-  err:integer;
+//var
+//  err:integer;
 begin
   FPointSize:=AValue;
   FT_Set_Char_Size(FontMgr.GetFreeTypeFont(FreeTypeTTFImpl.FontID),round(64*AValue),round(64*AValue),600,600);

@@ -924,15 +924,15 @@ end;
 procedure TGZParser<GManipulator,GParserString,GParserSymbol,GManipulatorCUIndex,GManipulatorCharIndex,GManipulatorCharLength,GManipulatorInterval,GManipulatorCharRange,GDataType,GSymbolToOptChar>.TParsedText.Doit(var data:GDataType);
 var
   i:integer;
-  dbg1:TParserTokenizer.TTextPart;
-  p:pointer;
-  part:TParserTokenizer.TTokenData;
-  Opt:TTokenOptions.TSetType;
+  //dbg1:TParserTokenizer.TTextPart;
+  //p:pointer;
+  //part:TParserTokenizer.TTokenData;
+  //Opt:TTokenOptions.TSetType;
 begin
   for i:=0 to Parts.size-1 do begin
-    dbg1:=parts[i];
-    part:=dbg1.TokenInfo;
-    p:=parts[i].TokenInfo.ProcessorClass;
+    //dbg1:=parts[i];
+    //part:=dbg1.TokenInfo;
+    //p:=parts[i].TokenInfo.ProcessorClass;
     if (parts[i].TokenInfo.ProcessorClass<>nil)and(not(TTokenOptions.IsAllPresent(parts[i].TokenInfo.Options,TGOFake))) then begin
       if parts[i].TokenInfo.ProcessorClass.GetProcessorType=PTStatic then begin
         parts[i].TokenInfo.ProcessorClass.StaticDoit(Source,parts[i].TextInfo.TokenPos,parts[i].TextInfo.OperandsPos,parts[i].Operands,parts[i].TokenInfo.InsideBracketParser,data);

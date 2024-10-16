@@ -133,8 +133,8 @@ begin
 end;
 
 function TBoundaryPath.LoadFromDXF(var f:TZMemReader;DXFCode:Integer):Boolean;
-type
-  TNotPolyLine=(NPL_Line,NPL_CircularArc,NPL_EllipticArc,NPL_Spline);
+//type
+//  TNotPolyLine=(NPL_Line,NPL_CircularArc,NPL_EllipticArc,NPL_Spline);
 var
   currpath:GDBPolyline2DArray;
   i,j,k,knotcount,pathscount,vertexcount,byt,bt:integer;
@@ -142,7 +142,7 @@ var
   tmp:double;
   s:string;
   isPolyLine:boolean;
-  NotPolyLine:TNotPolyLine;
+  //NotPolyLine:TNotPolyLine;
   isFirst:boolean;
 begin
      result:=dxfIntegerload(f,91,DXFCode,pathscount);
@@ -195,7 +195,7 @@ begin
                      prevp:=p;
                    end;
                  2:begin
-                     NotPolyLine:=NPL_CircularArc;
+                     //NotPolyLine:=NPL_CircularArc;
                      if dxfdoubleload(f,10,byt,p.x) then byt:=f.ParseInteger;
                      if dxfdoubleload(f,20,byt,p.y) then byt:=f.ParseInteger;
                      if dxfdoubleload(f,40,byt,p.x) then byt:=f.ParseInteger;
@@ -204,7 +204,7 @@ begin
                      if dxfdoubleload(f,73,byt,p.y) then byt:=f.ParseInteger;
                    end;
                  3:begin
-                     NotPolyLine:=NPL_EllipticArc;
+                     //NotPolyLine:=NPL_EllipticArc;
                      if dxfdoubleload(f,10,byt,p.x) then byt:=f.ParseInteger;
                      if dxfdoubleload(f,20,byt,p.y) then byt:=f.ParseInteger;
                      if dxfdoubleload(f,11,byt,p.x) then byt:=f.ParseInteger;
@@ -215,7 +215,7 @@ begin
                      if dxfdoubleload(f,73,byt,p.y) then byt:=f.ParseInteger;
                    end;
                  4:begin
-                     NotPolyLine:=NPL_Spline;
+                     //NotPolyLine:=NPL_Spline;
                      if dxfIntegerload(f,94,byt,bt) then byt:=f.ParseInteger;
                      if dxfIntegerload(f,73,byt,bt) then byt:=f.ParseInteger;
                      if dxfIntegerload(f,74,byt,bt) then byt:=f.ParseInteger;

@@ -21,7 +21,7 @@ unit USinonimDescriptor;
 {$MODE DELPHI}
 interface
 uses TypeDescriptors,uzctnrVectorBytes,
-     uzedimensionaltypes,varmandef,uzbtypes,TypInfo;
+     uzedimensionaltypes,varmandef,{uzbtypes,}TypInfo;
 type
 PGDBSinonimDescriptor=^GDBSinonimDescriptor;
 GDBSinonimDescriptor=object(TUserTypeDescriptor)

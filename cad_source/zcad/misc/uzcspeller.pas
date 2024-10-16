@@ -42,7 +42,7 @@ implementation
 
 var
   LMDSpeller:TModuleDesk;
-  lph:TLPSHandle;
+  //lph:TLPSHandle;
 
 procedure SpellLogCallBack(MsgType:TMsgType;Msg:TMsg);
 begin

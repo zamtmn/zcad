@@ -25,7 +25,7 @@ uses
   uzcLog,
   uzccommandsabstract,uzccommandsimpl,
   uzestyleslayers,uzbtypes,
-  uzcstrconsts,uzccommandsmanager,uzcdrawings,uzeentity,uzccominteractivemanipulators,
+  uzcstrconsts,uzccommandsmanager,{uzcdrawings,}uzeentity,//uzccominteractivemanipulators,
   uzegeometrytypes,
   uzeentmtext,
   uzegeometry,

@@ -339,9 +339,9 @@ begin
 end;
 
 procedure TSCHConnectorExtender.AddToDWGPostProcs(pEntity:Pointer;const drawing:TDrawingDef);
-var
-  p:PGDBObjLine;
-  ir:itrec;
+//var
+//  p:PGDBObjLine;
+//  ir:itrec;
 begin
   if Assigned(Net) then
     Net.AddToDWGPostProcs(pEntity,drawing);

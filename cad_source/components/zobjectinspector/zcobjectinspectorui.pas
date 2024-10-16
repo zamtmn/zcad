@@ -44,9 +44,9 @@ var
 
 implementation
 function OIUI_FE_ButtonGetPrefferedSize(PInstance:Pointer;ARect:TRect):TSize;
-var
-  Details: TThemedElementDetails;
-  ComboElem:TThemedButton;
+//var
+  //Details: TThemedElementDetails;
+  //ComboElem:TThemedButton;
 begin
      {if assigned(PInstance) then
      begin

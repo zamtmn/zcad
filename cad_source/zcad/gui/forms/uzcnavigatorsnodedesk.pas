@@ -336,7 +336,7 @@ end;
 function findin(Path:TNodePath;var StartInNodestates:integer;OpNod:TNodesStatesVector;Dist:Integer):boolean;
 var
   i:SizeUInt;
-  deb:TNodeIdent;
+  //deb:TNodeIdent;
   IsEqual:Boolean;
 begin
   //dbg('Start compare ',Path);

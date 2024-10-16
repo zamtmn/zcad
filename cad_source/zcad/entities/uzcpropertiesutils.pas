@@ -19,7 +19,7 @@ unit uzcpropertiesutils;
 {$INCLUDE zengineconfig.inc}
 
 interface
-uses sysutils,uzbtypes,
+uses sysutils,//uzbtypes,
      uzeentity,varmandef,uzeentsubordinated,
      uzcoimultiproperties,uzcoimultipropertiesutil,uzcdrawings,
      Varman,uzedimensionaltypes;

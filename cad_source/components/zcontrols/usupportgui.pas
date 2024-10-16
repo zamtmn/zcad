@@ -136,7 +136,7 @@ end;
 
 function getNodeMode(const aNode:TDomNode):TShortCutContextCheckMode;
 var
-  aNodeAttr:TDomNode;
+  //aNodeAttr:TDomNode;
   value:string;
 begin
   value:=uppercase(aNode.NodeName);

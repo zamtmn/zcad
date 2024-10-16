@@ -189,6 +189,7 @@ var
   INTFObjInspShowOnlyHotFastEditors:boolean=true;
   INTFDefaultControlHeight:integer=21;
   INTFObjInspLevel0HeaderColor:TColor=clDefault;
+  INTFObjInspBorderColor:TColor=clDefault;
 
   LocalRowHeight:integer=21;
   LocalRowHeightOverride:boolean=false;
@@ -651,7 +652,8 @@ begin
       result:=ThemeServices.GetElementDetails(ttItemSelected);
 
     tc:=ACanvas.Brush.Color;
-    ACanvas.Brush.Color:=clGrayText;
+    if INTFObjInspBorderColor<>clDefault then
+      ACanvas.Pen.Color:=INTFObjInspBorderColor;
     if AActive then begin
       ACanvas.Brush.Color := clHighlight{clBtnHiLight};
       ACanvas.Pen.Style:=psDot;

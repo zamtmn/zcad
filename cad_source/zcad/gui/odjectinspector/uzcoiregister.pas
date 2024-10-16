@@ -90,7 +90,7 @@ begin
     tb.AutoSize:=true;
     tb.ShowCaptions:=true;
     tb.Align:=alTop;
-    tb.EdgeBorders:=[ebBottom];
+    tb.EdgeBorders:=[];//[ebBottom];
     ToolBarsManager.CreateToolbarContent(tb,TBNode);
     tb.Parent:=tform(Form);
   end;
@@ -304,6 +304,7 @@ initialization
   system_pas_path:=expandpath('$(ZCADPath)/rtl/system.pas');
   units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPath,system_pas_path,InterfaceTranslate,'INTF_ObjInsp_WhiteBackground','Boolean',@INTFObjInspWhiteBackground);
   units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPath,system_pas_path,InterfaceTranslate,'INTF_ObjInsp_Level0HeaderColor','Integer',@INTFObjInspLevel0HeaderColor);
+  units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPath,system_pas_path,InterfaceTranslate,'INTF_ObjInsp_BorledColor','Integer',@INTFObjInspBorderColor);
   units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPath,system_pas_path,InterfaceTranslate,'INTF_ObjInsp_ShowHeaders','Boolean',@INTFObjInspShowHeaders);
   units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPath,system_pas_path,InterfaceTranslate,'INTF_ObjInsp_ShowSeparator','Boolean',@INTFObjInspShowSeparator);
   units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPath,system_pas_path,InterfaceTranslate,'INTF_ObjInsp_OldStyleDraw','Boolean',@INTFObjInspOldStyleDraw);
@@ -320,6 +321,7 @@ initialization
   units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPath,system_pas_path,InterfaceTranslate,'INTF_ObjInsp_ButtonSizeReducing','Integer',@INTFObjInspButtonSizeReducing);
   SysVar.INTF.INTF_OBJINSP_Properties.INTF_ObjInsp_RowHeight:=@INTFObjInspRowHeight;
   SysVar.INTF.INTF_OBJINSP_Properties.INTF_ObjInsp_Level0HeaderColor:=@INTFObjInspLevel0HeaderColor;
+  SysVar.INTF.INTF_OBJINSP_Properties.INTF_ObjInsp_BorderColor:=@INTFObjInspBorderColor;
   zcobjectinspector.INTFDefaultControlHeight:=sysparam.notsaved.defaultheight;
   ZCADGUIManager.RegisterZCADFormInfo('ObjectInspector',rsGDBObjinspWndName,TGDBobjinsp,rect(0,100,200,600),ZCADFormSetupProc,CreateObjInspInstance,@GDBobjinsp);
   PropertyRowName:=rsProperty;

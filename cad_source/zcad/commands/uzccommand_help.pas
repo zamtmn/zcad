@@ -25,7 +25,7 @@ uses
   {$ifdef unix}Process,sysutils,{$else}windows,Forms,{$endif}
   uzcLog,LCLIntf,
   uzccommandsabstract,uzccommandsimpl,uzccommandsmanager,
-  uzbpaths, profiler_proxy;
+  uzbpaths;
 
 implementation
 
@@ -74,29 +74,15 @@ begin
     OpenDocument(AFile);
 end;
 
-var
-  bbbb:integer = 0;
-
 function Help_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
-//var
-//  htmlDoc:string;
+var
+  htmlDoc:string;
 begin
-  if bbbb=0 then
-    begin
-      profiler_proxy.profiler_init;
-      inc(bbbb);
-    end
-  else if bbbb=1 then
-    begin
-      profiler_proxy.profiler_reset;
-      inc(bbbb);
-    end;
-
-  //htmlDoc:=ProgramPath+'/help/userguide.ru.html';//todo: расхардкодить
-  //if CommandManager.CommandsStack.isEmpty then
-  //  OpenDocument(htmlDoc)
-  //else
-  //  OpenDocumentWithAnchor(htmlDoc,'#_'+lowercase(CommandManager.CommandsStack.getLast^.CommandName));
+  htmlDoc:=ProgramPath+'/help/userguide.ru.html';//todo: расхардкодить
+  if CommandManager.CommandsStack.isEmpty then
+    OpenDocument(htmlDoc)
+  else
+    OpenDocumentWithAnchor(htmlDoc,'#_'+lowercase(CommandManager.CommandsStack.getLast^.CommandName));
   result:=cmd_ok;
 end;
 

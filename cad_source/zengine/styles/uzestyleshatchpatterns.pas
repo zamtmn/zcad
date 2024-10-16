@@ -82,7 +82,7 @@ end;
 procedure THatchPattern.SaveToDXF(var outhandle:TZctnrVectorBytes;const MainAngle,MainScale:Double);
 var
    i,j: Integer;
-   pv:PGDBvertex2D;
+   //pv:PGDBvertex2D;
    psa:PTPatStrokesArray;
    angle:Double;
    sinA,cosA:Double;

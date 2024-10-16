@@ -61,22 +61,22 @@ begin
 end;
 
 procedure ShowMessageForLog(errstr:String);
-var
-   dr:TZCMsgDialogResult;
+//var
+//   dr:TZCMsgDialogResult;
 begin
-  dr:=zcMsgDlg(ErrStr,zcdiInformation,[],true);
+  {dr:=}zcMsgDlg(ErrStr,zcdiInformation,[],true);
 end;
 procedure ShowWarningForLog(errstr:String);
-var
-   dr:TZCMsgDialogResult;
+//var
+//   dr:TZCMsgDialogResult;
 begin
-  dr:=zcMsgDlg(ErrStr,zcdiWarning,[],true);
+  {dr:=}zcMsgDlg(ErrStr,zcdiWarning,[],true);
 end;
 procedure ShowErrorForLog(errstr:String);
-var
-   dr:TZCMsgDialogResult;
+//var
+//   dr:TZCMsgDialogResult;
 begin
-  dr:=zcMsgDlg(ErrStr,zcdiError,[],true);
+  {dr:=}zcMsgDlg(ErrStr,zcdiError,[],true);
 end;
 
 procedure TLogerMBoxBackend.doLog(const msg:TLogMsg;MsgOptions:TMsgOpt;LogMode:TLogLevel;LMDI:TModuleDesk);

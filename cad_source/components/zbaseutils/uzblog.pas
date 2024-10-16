@@ -667,8 +667,8 @@ begin
 end;
 
 destructor TLog.done;
-var
-  i:integer;
+//var
+//  i:integer;
 begin
   //processMsg('-------------------------Log ended-------------------------',LogModeDefault,LMDIDefault,MsgDefaultOptions);
   LogLevels.done;

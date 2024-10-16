@@ -23,7 +23,7 @@ interface
 uses
   SysUtils,
   uzbpaths,
-  lptypes,lpvartypes,lpparser,lpcompiler,lputils,lpeval,lpinterpreter,lpmessages,
+  lptypes,lpvartypes,lpparser,lpcompiler,{lputils,}lpeval,lpinterpreter,lpmessages,
   gzctnrSTL,
   LazUTF8,
   uzbLogTypes,uzcLog,

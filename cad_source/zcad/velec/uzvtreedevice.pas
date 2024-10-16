@@ -418,7 +418,7 @@ end;
   procedure getEasyTreeDevice(var listMasterDevice:TVectorOfMasterDevice);
   var
      i,j,k,l:integer;
-     VertexPath: TClassList;
+     //VertexPath: TClassList;
      VPath: TClassList;
      infoGTree:TGraph;
      tempVertexGraph:TVertex;
@@ -606,16 +606,16 @@ end;
 
 procedure visualGraphConnection(GGraph:TGraphBuilder;listMasterDevice:TVectorOfMasterDevice;graphFull,graphEasy:boolean;var fTreeVertex:GDBVertex;var eTreeVertex:GDBVertex);
 var
-    globalGraph: TGraph;
+    //globalGraph: TGraph;
     //sumWeightPath: Float;
-    easyListMasterDevice:TVectorOfMasterDevice;
+    //easyListMasterDevice:TVectorOfMasterDevice;
 
     i,j,k: Integer;
     //l,m,tnum: Integer;
     //counter,counter2,counterColor:integer; //счетчики
 
     //listAllTree:tvectorofGraph;
-    inVertex:GDBVertex;
+    //inVertex:GDBVertex;
 
   begin
     //визуализация номеров точек на плане для совмещения их с деревом
@@ -672,14 +672,14 @@ var
 
      VPath: TClassList;
 
-     edgeLength,edgeLengthParent:float;
+     //edgeLength,edgeLengthParent:float;
 
 
-    polyObj:PGDBObjPolyLine;
+    //polyObj:PGDBObjPolyLine;
     //i,j,counter:integer;
-    mtext:string;
-    notVertex:boolean;
-    pvdHeadDevice,pvdHDGroup:pvardesk; //для работы со свойствами устройств
+    //mtext:string;
+    //notVertex:boolean;
+    //pvdHeadDevice,pvdHDGroup:pvardesk; //для работы со свойствами устройств
 
 
     colorNum,numberGDev:integer;
@@ -1050,7 +1050,7 @@ type
            counter:Integer;
        end;
 
-       TCounterGroupDevice=specialize TVector<counterGroupDevice>;
+       //TCounterGroupDevice=specialize TVector<counterGroupDevice>;
        TVectorofInteger=specialize TVector<integer>;
        TListDevice=specialize TVector<PGDBObjDevice>;
 var
@@ -1059,34 +1059,34 @@ var
 
      VPath: TClassList;
 
-     edgeLength,edgeLengthParent:float;
+     //edgeLength,edgeLengthParent:float;
 
     beforeCabellingMountigName,CabellingMountigName:string;
-    polyObj:PGDBObjPolyLine;
+    //polyObj:PGDBObjPolyLine;
     //i,j,counter:integer;
-    mtext:string;
-    notVertex:boolean;
-    pvdHeadDevice,pvdHDGroup:pvardesk; //для работы со свойствами устройств
+    //mtext:string;
+    //notVertex:boolean;
+    //pvdHeadDevice,pvdHDGroup:pvardesk; //для работы со свойствами устройств
     CabellingMountigNamePVD:pvardesk;
     //myVertex,vertexAnalized:TListVertexWayOnlyVertex;
     //myTerminalBox:TListVertexTerminalBox;
     superlinedev:PGDBObjSuperLine;
-    superlinedevone:PGDBObjSuperLine;
-    superlinedevonePVD:pvardesk;
-    superlinedevoneDO:boolean;
+    //superlinedevone:PGDBObjSuperLine;
+    //superlinedevonePVD:pvardesk;
+    //superlinedevoneDO:boolean;
     superlinedevoneDOcount:integer;
     numConnectCabDev:integer;
     cableNameinGraph:string;
-    heightText:double;
-    colorNum,numberGDev:integer;
-    listCounterGroupDevice:TCounterGroupDevice;
+    //heightText:double;
+    //colorNum,numberGDev:integer;
+    //listCounterGroupDevice:TCounterGroupDevice;
     listInteger:TVectorofInteger;
-    needParent,needVertex,newCabellingMountig:boolean;
-    nowDevCounter:counterGroupDevice;
+    needParent{,needVertex,newCabellingMountig}:boolean;
+    //nowDevCounter:counterGroupDevice;
 
     listAllDeviceMainAndDelegate:TListDevice; //список главной функции и делегатов
     iRootTree:boolean;
-    pvd2:pvardesk;
+    //pvd2:pvardesk;
     //isDevTogether:boolean
 
     //Метрирование датчиков
@@ -1111,8 +1111,8 @@ var
     function getListAllDeviceMainAndDelegate(dev:PGDBObjDevice):TListDevice;
     var
         pvd:pvardesk;
-        name:string;
-        pobj,pdelegateobj: pGDBObjEntity;   //выделеные объекты в пространстве листа
+        //name:string;
+        {pobj,}pdelegateobj: pGDBObjEntity;   //выделеные объекты в пространстве листа
         ir:itrec;  // применяется для обработки списка выделений, но что это понятия не имею :)
         devExtens:TVariablesExtender;
     begin
@@ -1324,7 +1324,7 @@ var
         //dev:PGDBObjDevice;
         isHaveDev:boolean;
         specNameTravelNode:string;
-        numConnectCabDev:integer;
+        //numConnectCabDev:integer;
     begin
         result:=false;
         isHaveDev:=false;
@@ -1473,8 +1473,8 @@ begin
                 beforeCabellingMountigName:=velec_cableMountingNon;
                 superlinedev:=nil;
                 needParent:=false;
-                needVertex:=false;
-                newCabellingMountig:=false;  // если новый тип прокладки кабеля
+                //needVertex:=false;
+                //newCabellingMountig:=false;  // если новый тип прокладки кабеля
 
                 if (uzvslagcabComParams.settingVizCab.vizFullTreeCab = true) then
                   ZCMsgCallBackInterface.TextMessage('ИНДЕКС РУТА = ' + inttostr(listMasterDevice[i].LGroup[j].AllTreeDev.Root.AsInt32[vGGIndex]) + ' !',TMWOHistoryOut);
@@ -1495,7 +1495,7 @@ begin
 
                 if (uzvslagcabComParams.settingVizCab.vizFullTreeCab = true) then
                   ZCMsgCallBackInterface.TextMessage('listInteger добавил Рут',TMWOHistoryOut);
-                superlinedevoneDO:=false;
+                //superlinedevoneDO:=false;
                 superlinedevoneDOcount:=0;
                 //iRootTree:=true;
                 ///Старт укладки кабеля по супелиниям
@@ -1768,7 +1768,7 @@ end;
   //** Добавляет пункт к вершинам графа длина с Конца (от головного устройства)
   procedure addItemLengthFromEndNew(var listMasterDevice:TVectorOfMasterDevice);
   var
-     i,j,k,l:integer;
+     i,j,{k,}l:integer;
 
      VPath: TClassList;
 
@@ -1814,17 +1814,17 @@ end;
   //type
     //tempuseVertex:Tvectorofinteger;
   var
-     pvd:pvardesk; //для работы со свойствами устройств
-     polyObj:PGDBObjPolyLine;
-     i,j,k,m,n,counter1,counter2,counter3:integer;
+     //pvd:pvardesk; //для работы со свойствами устройств
+     //polyObj:PGDBObjPolyLine;
+     i,j,k,m,n{,counter1,counter2,counter3}:integer;
      tIndex,tIndexLocal,tIndexGlobal:integer;
      EdgePath, VertexPath: TClassList;
      infoGTree:TGraph;
 
      tempString:string;
-     sumWeightPath,tempFloat: Float;
+     //sumWeightPath,tempFloat: Float;
      tempLVertex:TvectorOfInteger;
-     gg:GDBVertex;
+     //gg:GDBVertex;
 
      function isVertexAdded(tempLVertex:tvectorofinteger;index:integer):boolean;
      var
@@ -1883,7 +1883,7 @@ end;
         EdgePath:=TClassList.Create;     //Создаем реберный путь
         VertexPath:=TClassList.Create;   //Создаем вершиный путь
         //Получение ребер минимального пути в графе из одной точки в другую
-        sumWeightPath:=globalGraph.FindMinWeightPath(globalGraph[isMaster], globalGraph[isSub], EdgePath);
+        {sumWeightPath:=}globalGraph.FindMinWeightPath(globalGraph[isMaster], globalGraph[isSub], EdgePath);
         //Получение вершин минимального пути в графе на основе минимального пути в ребер, указывается из какой точки старт
         globalGraph.EdgePathToVertexPath(globalGraph[isMaster], EdgePath, VertexPath);
 
@@ -1905,7 +1905,7 @@ end;
           EdgePath:=TClassList.Create;     //Создаем реберный путь
           VertexPath:=TClassList.Create;   //Создаем вершиный путь
           //Получение ребер минимального пути в графе из одной точки в другую
-          sumWeightPath:=globalGraph.FindMinWeightPath(globalGraph[listMasterIndex[i]], globalGraph[isSub], EdgePath);
+          {sumWeightPath:=}globalGraph.FindMinWeightPath(globalGraph[listMasterIndex[i]], globalGraph[isSub], EdgePath);
           //Получение вершин минимального пути в графе на основе минимального пути в ребер, указывается из какой точки старт
           globalGraph.EdgePathToVertexPath(globalGraph[listMasterIndex[i]], EdgePath, VertexPath);
 
@@ -1962,7 +1962,7 @@ end;
                   EdgePath:=TClassList.Create;     //Создаем реберный путь
                   VertexPath:=TClassList.Create;   //Создаем вершиный путь
                   //Получение ребер минимального пути в графе из одной точки в другую
-                  sumWeightPath:=globalGraph.FindMinWeightPath(globalGraph[listMasterDevice[i].LGroup[j].LNumSubDevice[k].indexMaster], globalGraph[listMasterDevice[i].LGroup[j].LNumSubDevice[k].indexSub], EdgePath);
+                  {sumWeightPath:=}globalGraph.FindMinWeightPath(globalGraph[listMasterDevice[i].LGroup[j].LNumSubDevice[k].indexMaster], globalGraph[listMasterDevice[i].LGroup[j].LNumSubDevice[k].indexSub], EdgePath);
                   //Получение вершин минимального пути в графе на основе минимального пути в ребер, указывается из какой точки старт
                   //ZCMsgCallBackInterface.TextMessage('master = '+inttostr(listMasterDevice[i].LGroup[j].LNumSubDevice[k].indexMaster)+' sub - ' + inttostr(listMasterDevice[i].LGroup[j].LNumSubDevice[k].indexSub),TMWOHistoryOut);
 
@@ -2224,7 +2224,7 @@ function getListMasterDevNew(listVertexEdge:TGraphBuilder;globalGraph: TGraph;li
       //end;
       TVertexofCableLaying=specialize TVector<TMasterDevice.TGroupInfo.TdevConnectInfo>;
 
-      TVertexofString=specialize TVector<string>;
+      //TVertexofString=specialize TVector<string>;
   var
   /////////////////////////
 
@@ -2308,7 +2308,7 @@ function getListMasterDevNew(listVertexEdge:TGraphBuilder;globalGraph: TGraph;li
     function listCollectConnect(nowDev:PGDBObjDevice;var listCableLaying:TVertexofCableLaying;nameSL:string;listSLname:TGDBlistSLname):boolean;
     var
        pvd,pvd2:pvardesk; //для работы со свойствами устройств
-       numConnect,i:integer;
+       numConnect{,i}:integer;
        varName,tempName:String;
        iHaveSLName,iCloneDevConnect:boolean;
        infoLay,tempInfoLay:TMasterDevice.TGroupInfo.TdevConnectInfo;
@@ -3424,13 +3424,13 @@ function getListMasterDevNew(listVertexEdge:TGraphBuilder;globalGraph: TGraph;li
     //function getListVertexDevUnit(dev:PGDBObjDevice):TVertexofString;
     function getListVertexDevUnit(devinList:TMasterDevice.TGroupInfo.TInfoSubDev):TVertexofString;
     var
-      i,j:integer;
-      listName:TVertexofString;
-      dev:PGDBObjDevice;
+      i{,j}:integer;
+      //listName:TVertexofString;
+      //dev:PGDBObjDevice;
       nameCU:string;
     begin
         result:=TVertexofString.Create;
-        listName:=TVertexofString.Create;
+        //listName:=TVertexofString.Create;
 
         //dev:=listVertexEdge.listVertex[devinList.indexSub].deviceEnt;
 
@@ -4253,7 +4253,7 @@ var
     globalGraph: TGraph;
     listMasterDevice:TVectorOfMasterDevice;
 
-    i,j,k: Integer;
+    i,j{,k}: Integer;
     pvd:pvardesk;
     gg:GDBVertex;
     //mastDev:TVectorOfMasterDevice;
@@ -4278,9 +4278,9 @@ var
 
         //** Поиск существует ли устройства с нужным именем
     procedure visualGraphTreeNew222(G: TGraph; var startPt:GDBVertex;height:double);
-    var
-       i: Integer;
-       pvd:pvardesk; //для работы со свойствами устройств
+    //var
+    //   i: Integer;
+    //   pvd:pvardesk; //для работы со свойствами устройств
     begin
          ZCMsgCallBackInterface.TextMessage('индекс рут - ' + inttostr(G.Root.Index) + ' - кол дет - ' + inttostr(G.Root.ChildCount),TMWOHistoryOut);
          ZCMsgCallBackInterface.TextMessage(G.Root.AsString[vGInfoVertex],TMWOHistoryOut);
@@ -4346,8 +4346,8 @@ var
     //** Проверка на централизацию и выдача ошибки
     procedure checkCentralDev(listVertexEdge:TGraphBuilder;globalGraph: TGraph;listNumMasters:TVectorOfInteger);
     var
-       i,j: Integer;
-       pvd:pvardesk; //для работы со свойствами устройств
+       i{,j}: Integer;
+       //pvd:pvardesk; //для работы со свойствами устройств
        devExtens:TVariablesExtender;
        devMainFunc:pGDBObjDevice;
        iHaveMainFunc,iHaveError:boolean;

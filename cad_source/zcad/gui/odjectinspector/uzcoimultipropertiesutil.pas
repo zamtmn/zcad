@@ -22,7 +22,7 @@ unit uzcoimultipropertiesutil;
 interface
 uses
   uzctnrVectorPointers,uzbstrproc,uzctnrvectorstrings,uzepalette,sysutils,uzeentityfactory,
-  uzegeometrytypes,uzbtypes,
+  uzegeometrytypes,//uzbtypes,
   varmandef,
   uzeentity,
   

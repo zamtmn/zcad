@@ -659,7 +659,7 @@ end;
 function CalcAABBInFrustum (const AABB:TBoundingBox;
   const frustum:ClipArray):TInBoundingVolume;
 var
-  i,Count:integer;
+  i{,Count}:integer;
   p1,p2,p3,p4,p5,p6,p7,p8:Gdbvertex;
   d1,d2,d3,d4,d5,d6,d7,d8:double;
 begin
@@ -1599,7 +1599,7 @@ begin
   M := TM;
 end;
 procedure MatrixNormalize(var M: DMatrix4D);
-var I, J: Integer;
+var I{, J}: Integer;
     D: Double;
 begin
   D:=M[3].v[3];

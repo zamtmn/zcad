@@ -28,7 +28,7 @@ uses
   gzctnrVectorTypes,uzbtypes,uzcdrawings,varmandef,uzeentity,
   Varman,uzctnrvectorstrings,UGDBSelectedObjArray,uzcoimultipropertiesutil,
   uzeExtdrAbstractEntityExtender,uzelongprocesssupport,uzbLogIntf,uzcutils,
-  zUndoCmdChgVariable,uzcdrawing,zUndoCmdChgTypes,uzeBaseExtender,
+  zUndoCmdChgVariable,uzcdrawing,zUndoCmdChgTypes,//uzeBaseExtender,
   uzCtnrVectorPBaseEntity,uzglviewareageneral;
 type
   TObjIDWithExtender2Counter=TMyMapCounter<TObjIDWithExtender>;

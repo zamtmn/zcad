@@ -125,8 +125,8 @@ implementation
   function getTestLayer(createdlayername:string):PGDBLayerProp;
   var
       pproglayer:PGDBLayerProp;
-      pnevlayer:PGDBLayerProp;
-      pe:PGDBObjEntity;
+      //pnevlayer:PGDBLayerProp;
+      //pe:PGDBObjEntity;
   //const
   //    createdlayername='systemTempVisualLayer';
   begin
@@ -241,7 +241,7 @@ implementation
   var
       polyObj:PGDBObjPolyLine;
       tempPoint:GDBVertex;
-      i:integer;
+      //i:integer;
       //vertexObj:GDBvertex;
      // pe:T3PointCircleModePentity;
      // p1,p2:gdbvertex;
@@ -276,7 +276,7 @@ implementation
 
   procedure DrawInOutPoly(pt:GDBVertex; radius: double; sides, color, where, alpha: Integer);
  var
-    x, y: Integer;
+    //x, y: Integer;
     i   : Integer;
     tempPt:GDBVertex;
     sine,cosine:double;
@@ -347,8 +347,8 @@ function TestModul_com(const Context:TZCADCommandContext;operands:TCommandOperan
 
 
      var
-    x, y: Integer;
-    i   : Integer;
+    //x, y: Integer;
+    //i   : Integer;
     tempPoint:GDBVertex;
  begin
 

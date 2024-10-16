@@ -23,7 +23,7 @@ unit zcobjectinspector;
 interface
 
 uses
-  Classes,SysUtils,strutils,
+  Classes,SysUtils,//strutils,
   {$IFDEF LCLGTK2}gtk2,{$ENDIF}
   {$IFDEF LCLWIN32}win32proc,{$endif}
   Types,Graphics,Themes,LCLIntf,LCLType,
@@ -579,9 +579,9 @@ end;
 
 procedure drawfasteditors(ppd:PPropertyDeskriptor;canvas:tcanvas;var r:trect);
 var
-   fer:trect;
-   FESize:TSize;
-   temp:integer;
+   //fer:trect;
+   //FESize:TSize;
+   //temp:integer;
    i:integer;
 begin
      if assigned(ppd.FastEditors)then
@@ -1393,7 +1393,7 @@ var
 //  pb:Pboolean;
   tp:pointer;
   tempstr:string;
-  FESize:TSize;
+  //FESize:TSize;
   needredraw:boolean;
   i:integer;
   currstate:TFastEditorState;
@@ -1550,7 +1550,7 @@ procedure TGDBobjinsp.MouseUp(Button: TMouseButton; Shift:TShiftState; X,Y:Integ
 var
   pp:PPropertyDeskriptor;
   my:integer;
-  FESize:TSize;
+  //FESize:TSize;
   i:integer;
   needexit:boolean;
 begin
@@ -1782,7 +1782,7 @@ var
   my:integer;
   pp:PPropertyDeskriptor;
   //menu:TPopupMenu;
-  fesize:tsize;
+  //fesize:tsize;
   clickonheader:boolean;
   i,count:integer;
   handled:boolean;
@@ -1994,12 +1994,12 @@ begin
     pEditor.SetEditorBounds(EDContext.ppropcurrentedit,INTFObjInspShowOnlyHotFastEditors);
 end;
 procedure TGDBobjinsp._onresize(sender:tobject);
-var x,xn:integer;
-   v:boolean;
+//var x,xn:integer;
+   //v:boolean;
 {$IFDEF LCLGTK2}var Widget: PGtkWidget;{$ENDIF}
 begin
-  x:=clientwidth;
-  v:=isVisible;
+  //x:=clientwidth;
+  //v:=isVisible;
      if NameColumnWidthCorrector.LastClientWidth>0 then
        NameColumnWidth:=round(NameColumnWidthCorrector.LastNameColumnWidth*(clientwidth/NameColumnWidthCorrector.LastClientWidth));
      if NameColumnWidth>clientwidth-subtab then

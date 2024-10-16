@@ -37,11 +37,11 @@ uses
   uzeentsubordinated,uzcentcable,varman,uzcdialogsfiles,uunitmanager,
   uzcbillofmaterial,uzccablemanager,uzeentdevice,uzeenttable,
   uzbpaths,uzctnrvectorstrings,math,Masks,uzbstrproc,
-  uzeentabstracttext,uzeentmtext,uzeblockdef,UGDBPoint3DArray,uzcdevicebaseabstract,
+  {uzeentabstracttext,}uzeentmtext,uzeblockdef,UGDBPoint3DArray,uzcdevicebaseabstract,
   uzelongprocesssupport,uzcLog,
   generics.Collections,
   uzccommand_treestat,uzccommand_line2,uzccmdfloatinsert,uzcregother,uzcfcommandline,
-  uzeparsercmdprompt,uzctnrvectorpgdbaseobjects,uzeSnap,uzCtnrVectorpBaseEntity,
+  uzeparsercmdprompt{,uzctnrvectorpgdbaseobjects},uzeSnap,uzCtnrVectorpBaseEntity,
   uzeEntBase;
 type
 {Export+}
@@ -2556,7 +2556,7 @@ var pv:pGDBObjEntity;
     ir:itrec;
     pvd:pvardesk;
     name,ConnectTo,ConnectFrom:String;
-    ps{,pspred}:pString;
+    //ps{,pspred}:pString;
     pentvarext:TVariablesExtender;
 begin
   name:=Operands;

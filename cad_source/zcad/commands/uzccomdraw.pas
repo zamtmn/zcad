@@ -861,7 +861,7 @@ type
  TMethodWithPointer=procedure(pdata:ptrint)of object;
 var
   i:integer;
-  sd:TSelEntsDesk;
+  //sd:TSelEntsDesk;
   //tn:String;
 begin
   if _self=@BEditParam.Blocks then

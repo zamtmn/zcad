@@ -701,7 +701,7 @@ begin
 SetLength(Result,j-1);
 end;
 function isNotUtf8(const s:RawByteString):boolean;
-var i,n,j:integer;
+var i,{n,}j:integer;
 begin
   i:=1;
   While i<=Length(s) do begin

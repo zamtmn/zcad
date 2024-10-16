@@ -28,26 +28,26 @@ uses
   SysUtils,
   uzcLog,
   uzccommandsabstract,uzccommandsimpl,uzccommandsmanager,
-  uzeparsercmdprompt,uzegeometrytypes,
-  uzcinterface,uzcdialogsfiles,uzcutils,
+  uzeparsercmdprompt,//uzegeometrytypes,
+  uzcinterface,uzcdialogsfiles,//uzcutils,
   uzvmanemgetgem,
-  uzvagraphsdev,
-  gvector,
+  //uzvagraphsdev,
+  //gvector,
   uzeentdevice,
   uzeentity,
-  gzctnrVectorTypes,
-  uzcdrawings,
-  uzeconsts,
+  //gzctnrVectorTypes,
+  //uzcdrawings,
+  //uzeconsts,
   varmandef,
-  uzcvariablesutils,
-  uzvconsts,
+  //uzcvariablesutils,
+  //uzvconsts,
   uzcenitiesvariablesextender,
   uzvmanemshieldsgroupparams,
   uzegeometry,
   //garrayutils,
   Varman,
-  fpsTypes, fpSpreadsheet, fpsUtils, fpsSearch, fpsAllFormats,fpsClasses,fpsExprParser,  uzbstrproc,
-  comobj, variants, LConvEncoding, strutils;
+  fpsTypes, fpSpreadsheet, fpsUtils, {fpsSearch, fpsAllFormats,}fpsClasses,fpsExprParser,  uzbstrproc,
+  comobj, variants, LConvEncoding{, strutils};
 
 
 implementation
@@ -85,15 +85,15 @@ implementation
 //end;
 
 
-type TRegion = Array of Array of String;
+//type TRegion = Array of Array of String;
 
 
   function textexcel_com(operands:TCommandOperands):TCommandResult;
   var
   MyWorkbook: TsWorkbook;
-  foundWorksheet: TsWorksheet;
-  foundRow, foundCol: Cardinal;
-  MySearchParams: TsSearchParams;
+  //foundWorksheet: TsWorksheet;
+  //foundRow, foundCol: Cardinal;
+  //MySearchParams: TsSearchParams;
   MyWorksheet: TsWorksheet;
   cell: PCell;
 begin
@@ -141,10 +141,10 @@ begin
   end;
   function textexcel333_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
   var
-    MyWorkbook,MyWorkbook2: TsWorkbook;
-    old_worksheet,MyWorksheet: TsWorksheet;
-    new_worksheet: TsWorksheet;
-    new_Name: String;
+    MyWorkbook{,MyWorkbook2}: TsWorkbook;
+    {old_worksheet,}MyWorksheet: TsWorksheet;
+    //new_worksheet: TsWorksheet;
+    //new_Name: String;
   //const
   //  xlCellTypeLastCell = 11;
   begin
@@ -186,8 +186,8 @@ begin
   var
   b: TsWorkbook;
   sh: TsWorksheet;
-  cl:PCell;
-  f: PsFormula;
+  //cl:PCell;
+  //f: PsFormula;
 begin
   b := TsWorkbook.Create;
   try
@@ -349,8 +349,8 @@ end;
   var
   b: TsWorkbook;
   sh: TsWorksheet;
-  cl:PCell;
-  f: PsFormula;
+  //cl:PCell;
+  //f: PsFormula;
 begin
   b := TsWorkbook.Create;
   try
@@ -499,11 +499,11 @@ end;
 function textexcel34_com(operands:TCommandOperands):TCommandResult;
 var
   Excel, Books, Sheet : OleVariant;
-  Matrix : Variant;
-  i, j: Integer;
-  Region: TRegion;
-const
-  xlCellTypeLastCell = 11;
+  //Matrix : Variant;
+  //i, j: Integer;
+  //Region: TRegion;
+//const
+//  xlCellTypeLastCell = 11;
 begin
   ZCMsgCallBackInterface.TextMessage('Начал читать',TMWOHistoryOut);
 
@@ -592,13 +592,13 @@ end;
 //end;
 function textexcel222_com(operands:TCommandOperands):TCommandResult;
 var
-  Excel, Books,Books2, Sheet, Sheet2: OleVariant;
-  Range,Range2: Variant;
-  Matrix : Variant;
-  i, j: Integer;
-  Region: TRegion;
-const
-  xlCellTypeLastCell = 11;
+  Excel, {Books,}Books2{, Sheet, Sheet2}: OleVariant;
+  //Range,Range2: Variant;
+  //Matrix : Variant;
+  //i, j: Integer;
+  //Region: TRegion;
+//const
+//  xlCellTypeLastCell = 11;
 begin
   ZCMsgCallBackInterface.TextMessage('Начал читать',TMWOHistoryOut);
   Excel := CreateOleObject('Excel.Application');

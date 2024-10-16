@@ -206,8 +206,8 @@ begin
 end;
 
 function TMap.TryGetMutableValue(key:TKey;out pvalue:PTValue):boolean;
-var Pair:TPair;
-    Node:TMSet.PNode;
+//var Pair:TPair;
+    //Node:TMSet.PNode;
 begin
   pvalue:=GetMutableValue(key);
   Result:=pvalue<>nil;

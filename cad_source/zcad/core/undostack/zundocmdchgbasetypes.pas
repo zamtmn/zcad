@@ -20,7 +20,7 @@ unit zUndoCmdChgBaseTypes;
 {$INCLUDE zengineconfig.inc}
 interface
 uses zeundostack,zebaseundocommands,
-     uzeentity,gzUndoCmdChgData,
+     uzeentity,{gzUndoCmdChgData,}
      gzUndoCmdChgData2,zUndoCmdChgTypes;
 type
   //команда изменения строки, только меняет строку, ничего больше

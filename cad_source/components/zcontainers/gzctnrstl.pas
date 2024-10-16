@@ -254,8 +254,8 @@ begin
 end;}
 function GKey2DataMapOld<TKey, TValue,TCompare>.MyContans(const key:TKey):boolean;
 var
-   Pair:TPair;
-   Node: TMSet.PNode;
+   //Pair:TPair;
+   //Node: TMSet.PNode;
    p:pointer;
 begin
   result:=tryGetMutableValue(key,p);

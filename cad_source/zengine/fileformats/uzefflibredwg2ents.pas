@@ -25,7 +25,7 @@ uses
   LCLProc,
   SysUtils,
   dwg,dwgproc,
-  uzeentgenericsubentry,uzbtypes,uzedrawingsimple,
+  uzeentgenericsubentry,{uzbtypes,}uzedrawingsimple,
   uzbstrproc,
   uzestyleslayers,
   uzeentline,uzeentity,//uzgldrawcontext,

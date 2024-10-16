@@ -185,6 +185,8 @@ type
 
       procedure SwithToProcessBar;
       procedure SwithToHintText;
+
+      procedure DropFiles(Sender: TObject; const FileNames: array of string);
   end;
 
 var
@@ -206,6 +208,23 @@ end;
 procedure TZCADMainWindow.SwithToHintText;
 begin
   InfoProgress.SwithToHintText;
+end;
+
+procedure TZCADMainWindow.DropFiles(Sender: TObject; const FileNames: array of string);
+var
+  filename, ts:string;
+  i: integer;
+begin
+  for i:=Low(FileNames) to High(FileNames) do
+    begin
+      filename:=FileNames[i];
+
+      GetPartOfPath(ts, filename, '|');
+      if FileExists({$IFNDEF DELPHI}utf8tosys{$ENDIF}(ts)) then begin
+        commandmanager.executecommandtotalend;
+        commandmanager.executecommand('Load('+ts+')',drawings.GetCurrentDWG,drawings.GetCurrentOGLWParam);
+      end;
+    end;
 end;
 
 constructor TZInfoProgress.CreateOnTB(tb:TToolBar);
@@ -951,6 +970,9 @@ begin
   ZCADMainWindow.PageControl.OnCloseTabClicked:=ZCADMainWindow.CloseDWGPageInterf;
   ZCADMainWindow.PageControl.OnMouseDown:=ZCADMainWindow.PageControlMouseDown;
   ZCADMainWindow.PageControl.ShowTabs:=SysVar.INTF.INTF_ShowDwgTabs^;
+
+  ZCADMainWindow.AllowDropFiles:=True;
+  ZCADMainWindow.OnDropFiles:=ZCADMainWindow.DropFiles;
 end;
 procedure SetupFIPCServer;
 begin
@@ -1966,7 +1988,7 @@ var
    pdwg:PTSimpleDrawing;
    FIPCServerRunning:boolean;
    //otherinstancerunning:boolean;
-   oldmenu,newmenu:TMainMenu;
+   //oldmenu,newmenu:TMainMenu;
 begin
 
   NeedUpdateMainMenu;

@@ -20,7 +20,7 @@ unit uzglviewareaabstract;
 {$INCLUDE zengineconfig.inc}
 interface
 uses
-     UGDBOpenArrayOfPV,uzgldrawerabstract,uzeentgenericsubentry,uzbtypes,
+     UGDBOpenArrayOfPV,uzgldrawerabstract,uzeentgenericsubentry,//uzbtypes,
      uzglviewareadata,uzgldrawcontext,UGDBPoint3DArray,uzeentitiestree,uzegeometry,uzedrawingabstract,
      uzegeometrytypes,sysutils,
      ExtCtrls,Controls,Classes,{$IFDEF DELPHI}Types,Messages,Graphics,{$ENDIF}{$IFNDEF DELPHI}LCLType,{$ENDIF}Forms,uzeentity;

@@ -76,7 +76,7 @@ procedure gotodxf(var f:TZMemReader; fcode: Integer; const fname: String);
 var
   byt: Byte;
   s: String;
-  error: Integer;
+  //error: Integer;
 begin
   if fname<>'' then begin
     while not f.EOF do begin
@@ -170,7 +170,7 @@ const
 var
   group: integer;
   s,varname: String;
-  error,varcount: Integer;
+  {error,}varcount: Integer;
   ParseMode:TDXFHeaderMode;
   //grouppsarray:array[0..maxlines]of integer;
   valuesarray:array[0..maxlines]of string;
@@ -264,7 +264,7 @@ function GoToDXForENDTAB(var f:TZMemReader; fcode: Integer; const fname: String)
 var
   byt: Byte;
   s: String;
-  error: Integer;
+  //error: Integer;
 begin
   result:=false;
   while not f.EOF do

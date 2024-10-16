@@ -31,8 +31,8 @@ uses
   uzeparsercmdprompt,uzegeometrytypes,
   uzcinterface,uzcdialogsfiles,uzcutils,
   uzvmanemgetgem,
-  uzvagraphsdev,
-  gvector,
+  //uzvagraphsdev,
+  //gvector,
   uzeentdevice,uzeentblockinsert,
   uzeentity,
   gzctnrVectorTypes,
@@ -80,11 +80,11 @@ resourcestring
     //arrayCodeName: TArray<String> = ['<zimportdev','<zimportcab','<zcopyrow', '<zcopycol'];
 
 implementation
-type
+//type
 
-  TListDev=TVector<pGDBObjDevice>;
+  //TListDev=TVector<pGDBObjDevice>;
 
-  TListGroupHeadDev=TVector<string>;
+  //TListGroupHeadDev=TVector<string>;
 
 //var
   //clFileParam:CMDLinePromptParser.TGeneralParsedText=nil;

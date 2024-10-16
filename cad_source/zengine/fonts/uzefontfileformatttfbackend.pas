@@ -109,8 +109,8 @@ begin
 end;
 
 function TTTFBackend.GetCapHeight:single;
-var
-  pos2,phead,phori:pointer;
+//var
+//  pos2,phead,phori:pointer;
 begin
   if FCapHeight<>0 then
     result:=FCapHeight

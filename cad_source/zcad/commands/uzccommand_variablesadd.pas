@@ -29,7 +29,7 @@ uses
   
   uzccommandsmanager,
   uzccommandsimpl,
-  uzbtypes,
+  //uzbtypes,
   uzcdrawings,
   uzcutils,
   sysutils,

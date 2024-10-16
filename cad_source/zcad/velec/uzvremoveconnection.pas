@@ -46,7 +46,7 @@ var
   //pe:PGDBObjEntity;
   pvd,pvdadd:pvardesk;
   pu:PTSimpleUnit;
-  vd:vardesk;
+  //vd:vardesk;
   ir,iradd:itrec;
   varName:string;
   countEnt,countDev,numConnect:integer;

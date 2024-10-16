@@ -302,7 +302,7 @@ begin
 end;
 procedure TVariablesExtender.onAfterEntityFormat(pEntity:Pointer;const drawing:TDrawingDef;var DC:TDrawContext);
 var
-   pvn,pvnt:pvardesk;
+   pvn{,pvnt}:pvardesk;
    ir:itrec;
    p:PUserTypeDescriptor;
    ptcs:PTCalculatedString;

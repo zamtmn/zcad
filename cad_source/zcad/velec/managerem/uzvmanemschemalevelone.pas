@@ -41,7 +41,7 @@ uses
 
   uzeentpolyline,             //unit describes line entity
                        //модуль описывающий примитив трехмерная ПОЛИлиния
-  uzeentabstracttext,uzeenttext,
+  {uzeentabstracttext,}uzeenttext,
                        //модуль описывающий примитив текст
 
   uzeentdimaligned, //unit describes aligned dimensional entity
@@ -61,7 +61,7 @@ uses
 
   uzcentcable,
   uzeentdevice,
-  UGDBOpenArrayOfPV,
+  //UGDBOpenArrayOfPV,
 
   uzegeometry,
   //uzeentitiesmanager,
@@ -73,7 +73,7 @@ uses
                       //системные переменные
   //uzgldrawcontext,
   uzcinterface,
-  uzbtypes, //base types
+  //uzbtypes, //base types
                       //описания базовых типов
   uzeconsts, //base constants
                       //описания базовых констант
@@ -93,22 +93,22 @@ uses
 
   uzclog,                //log system
                       //<**система логирования
-  uzcvariablesutils, // для работы с ртти
+  //uzcvariablesutils, // для работы с ртти
 
-   gzctnrVectorTypes,                  //itrec
+   //gzctnrVectorTypes,                  //itrec
 
   //для работы графа
-  ExtType,
-  Pointerv,
+  //ExtType,
+  //Pointerv,
   Graphs,
   AttrType,
-  AttrSet,
+  //AttrSet,
   //*
     uzcstrconsts,
    uzcenitiesvariablesextender,
    UUnitManager,
    uzbpaths,
-   uzeroot,
+   //uzeroot,
    uzctranslations,
    uzgldrawcontext,
    uzeExtdrAbstractEntityExtender,
@@ -147,8 +147,8 @@ TVectorOfColumnSchemaOneLevel=specialize TVector<TColumnSchemaOneLevel>;
 
 
 implementation
-type
-  TVectorOfVertex=specialize TVector<GDBVertex>;
+//type
+//  TVectorOfVertex=specialize TVector<GDBVertex>;
 
 const
 zonaHeightHead=5;
@@ -198,11 +198,11 @@ end;
 
 function drawConnectDevice(stDev,edDev:TVertex;stPoint,edPoint:GDBVertex;lColumnSchemaOneLevel:TVectorOfColumnSchemaOneLevel;countColumn:integer;newGroup:boolean):PGDBObjPolyLine;
 type
-   TVectorOfInteger=specialize TVector<integer>;
+   //TVectorOfInteger=specialize TVector<integer>;
    TVectorOfGDBVertex=specialize TVector<GDBVertex>;
 var
     stPtNumColumn,edPtNumColumn:integer;
-    listCountCablesGone:TVectorOfInteger;
+    //listCountCablesGone:TVectorOfInteger;
     listPoints:TVectorOfGDBVertex;
     ptVertex:GDBVertex;
 
@@ -235,8 +235,8 @@ function getDotsBetweenColumns(stNumColumn,edNumColumn:integer;beforePt:GDBVerte
 var
   i,numWay:integer;
   ptX,ptY:double;
-  vertexWay:GDBVertex;
-  stDev:PGDBObjDevice;
+  //vertexWay:GDBVertex;
+  //stDev:PGDBObjDevice;
 begin
    result:=TVectorOfGDBVertex.Create;
 
@@ -255,7 +255,7 @@ end;
 //Получить точки выхода от устройства
 function getDotsStartDevice(stNumColumn:integer;stDev:TVertex;beforePt:GDBVertex):TVectorOfGDBVertex;
 var
-  i,numWay:integer;
+  {i,}numWay:integer;
   pt1,pt2,newPt:GDBVertex;
   //vertexWay:GDBVertex;
 begin
@@ -274,9 +274,9 @@ end;
 
 //Получить точки подключения устройства
 function getDotsEndDevice(edPtNumColumn:integer;edDev:TVertex;beforePt:GDBVertex):TVectorOfGDBVertex;
-var
-  i,numWay:integer;
-  pt1,pt2,newPt:GDBVertex;
+//var
+//  i,numWay:integer;
+//  pt1,pt2,newPt:GDBVertex;
   //vertexWay:GDBVertex;
 begin
    result:=TVectorOfGDBVertex.Create;
@@ -373,9 +373,9 @@ function createSchemaLevelOne_com(const Context:TZCADCommandContext;operands:TCo
      listColumnSchemaOneLevel:TVectorOfColumnSchemaOneLevel;
 
      columnShemaOneLevel:TColumnSchemaOneLevel;
-     i,temp:integer;
+     //i,temp:integer;
      columnShema:integer;
-     graphDev,graphDevNew:TGraphDev;
+     //graphDev,graphDevNew:TGraphDev;
      //listGraphStrDev:TListGraphDev;
 
 
@@ -415,8 +415,8 @@ function createSchemaLevelOne_com(const Context:TZCADCommandContext;operands:TCo
      function getNumWay(numIWay:integer):integer;
      var
      i:integer;
-     countChild:integer;
-     countOtherWay:integer;
+     //countChild:integer;
+     //countOtherWay:integer;
      begin
          //countChild:=0;
          //countRootWay:=0;

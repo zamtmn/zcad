@@ -401,12 +401,12 @@ end;
 
 function TemplateForVeb_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 var
-    pc,pc2:PGDBObjCable;                //указатель на кабель
-    LastPoint:GDBVertex;            //точка в конце кабеля
-    NearObjects:GDBObjOpenArrayOfPV;//список примитивов рядом с точкой
-    l1begin,l1end,l2begin,l2end,l222:GDBVertex;
+    pc{,pc2}:PGDBObjCable;                //указатель на кабель
+    //LastPoint:GDBVertex;            //точка в конце кабеля
+    //NearObjects:GDBObjOpenArrayOfPV;//список примитивов рядом с точкой
+    l1begin,l1end,l2begin,l2end{,l222}:GDBVertex;
 
-    ir:itrec;
+    //ir:itrec;
 
 begin
     if commandmanager.getentity('Select Cable: ',pc) then  //просим выбрать примитив
@@ -432,7 +432,7 @@ begin
          l2end.y := 60;
          l2end.z := 0;
 
-         l222 := uzegeometry.intercept3d(l1begin,l1end,l2begin,l2end).interceptcoord;
+         //l222 := uzegeometry.intercept3d(l1begin,l1end,l2begin,l2end).interceptcoord;
 
          if pc^.GetObjType=GDBCableID then                      //проверяем, кабель это или нет
 
@@ -483,7 +483,7 @@ function visualGraphError(point:GDBVertex;rr:Double;color:integer;nameLayer:stri
 var
     polyObj:PGDBObjPolyLine;
     tempPoint:GDBVertex;
-    i:integer;
+    //i:integer;
     //vertexObj:GDBvertex;
    // pe:T3PointCircleModePentity;
    // p1,p2:gdbvertex;
@@ -735,9 +735,9 @@ end;
 //** Определение попадает ли точка внутрь прямоугольника полученого линиией с учетом погрешности
 function vertexPointInAreaRectangle(rectLine:TRectangleLine;vertexPt:GDBVertex):boolean;
 var
-   areaLine:TBoundingBox;
-   areaRect,areaTriangle,sumAreaTriangle:double; //площадь прямоугольника
-   xline,yline,xyline:double;
+   //areaLine:TBoundingBox;
+   areaRect{,areaTriangle},sumAreaTriangle:double; //площадь прямоугольника
+   //xline,yline,xyline:double;
 begin
      //при создании прямоугольника все вершины z координаты были обнулены
      areaRect:=areaOfRectangle(rectLine.Pt1,rectLine.Pt2,rectLine.Pt3,rectLine.Pt4); //получим площадь прямоугольника
@@ -765,7 +765,7 @@ var
    //areaLine:TBoundingBox;
    //areaRect,areaTriangle,sumAreaTriangle:double; //площадь прямоугольника
    tempvert,tempVertex,newEdPtLine:GDBVertex;
-   xline,yline,xyline,angle,anglePerpendCos:double;
+   xline,{yline,}xyline,angle,anglePerpendCos:double;
    vertexRectangleLine:TRectangleLine;
    sine,cosine:double;
 begin
@@ -1092,10 +1092,10 @@ var
    inAddEdge:boolean;
    vertexLine:GDBVertex;
    colDevice,numVertDevice:integer;
-   pc:PGDBObjCable;
+   //pc:PGDBObjCable;
     pobj: pGDBObjEntity;   //выделеные объекты в пространстве листа
     pObjDevice:PGDBObjDevice;
-    pSuperLine:PGDBObjSuperLine;
+    //pSuperLine:PGDBObjSuperLine;
     ir:itrec;  // применяется для обработки списка выделений, но что это понятия не имею :)
     NearObjects:GDBObjOpenArrayOfPV;//список примитивов рядом с точкой
     templength:double;
@@ -1242,7 +1242,7 @@ end;
 
 procedure getVertexConnectSL(var graph:TGraphBuilder;listCable:TListCableLine;accuracy:double);
 var
-  i,j,k:integer;
+  i,j{,k}:integer;
   areaLine,areaVertex:TBoundingBox;
   infoDevice:TStructDeviceLine; //инфо по объекта списка
 begin
@@ -1397,7 +1397,7 @@ var
    listBreak:TListBreakInfo;
    infoVertex:TInfoListNumVertex;
    infoEdge:TInfoEdgeGraph;
-   nameBreak,nameDevice:string;
+   nameBreak{,nameDevice}:string;
    pvd:pvardesk; //для работы со свойствами устройств
    haveName,IsExchange:boolean;
    pnodestartvarext:TVariablesExtender;
@@ -1406,7 +1406,7 @@ begin
     listBreak:=TListBreakInfo.Create;                                    //создаем список номеров вершин стойков/разрывов с одинаковыми именами
     for i:=0 to graph.listVertex.Size-1 do
     begin
-     nameDevice:=graph.listVertex[i].deviceEnt^.Name;
+     //nameDevice:=graph.listVertex[i].deviceEnt^.Name;
      //ZCMsgCallBackInterface.TextMessage('breakname= ' + nameDevice);
 
         pnodestartvarext:=graph.listVertex[i].deviceEnt^.specialize GetExtension<TVariablesExtender>;
@@ -1485,8 +1485,8 @@ end;
 //*** поиск точки координаты коннектора в устройстве
 function getPointConnector(pobj:pGDBObjEntity; out pConnect:GDBVertex):Boolean;
 var
-   pd,pObjDevice,pObjDevice2,currentSubObj,currentSubObj2:PGDBObjDevice;
-   ir,ir_inDevice,ir_inDevice2:itrec;  // применяется для обработки списка выделений, но что это понятия не имею :)
+   {pd,}pObjDevice,{pObjDevice2,}currentSubObj{,currentSubObj2}:PGDBObjDevice;
+   {ir,}ir_inDevice{,ir_inDevice2}:itrec;  // применяется для обработки списка выделений, но что это понятия не имею :)
 Begin
    result:=false;
   pObjDevice:= PGDBObjDevice(pobj); // передача объекта в девайсы
@@ -1529,35 +1529,35 @@ var
 
     //список всех ребер между вершинами графа
     //listEdge:TListEdgeGraph;   //список ребер
-    tempListEdge:TListEdgeGraph;   //временный список ребер
-    infoEdge:TInfoEdgeGraph;   //описание ребра
+    //tempListEdge:TListEdgeGraph;   //временный список ребер
+    //infoEdge:TInfoEdgeGraph;   //описание ребра
 
     pobj: pGDBObjEntity;   //выделеные объекты в пространстве листа
-    pc:PGDBObjCable;
-    pcdev:PGDBObjLine;
-    pcdevCircle:PGDBObjCircle;
-    pd,pObjDevice,pObjDevice2,currentSubObj,currentSubObj2:PGDBObjDevice;
+    //pc:PGDBObjCable;
+    //pcdev:PGDBObjLine;
+    //pcdevCircle:PGDBObjCircle;
+    {pd,}pObjDevice{,pObjDevice2,currentSubObj,currentSubObj2}:PGDBObjDevice;
 
-    ir,ir_inDevice,ir_inDevice2:itrec;  // применяется для обработки списка выделений, но что это понятия не имею :)
+    ir{,ir_inDevice,ir_inDevice2}:itrec;  // применяется для обработки списка выделений, но что это понятия не имею :)
     NearObjects:GDBObjOpenArrayOfPV;//список примитивов рядом с точкой
 
 
     extMainLine,extNextLine:TextendedLine;
 
     counter,counter1,counter2:integer; //счетчики
-    i,j:integer;
+    i{,j}:integer;
 
     areaLine:TBoundingBox;            //Ограничивающий объем, обычно в графике его называют AABB - axis aligned bounding box
                                     //куб со сторонами паралелльными осям, определяется 2мя диагональными точками
                                     //левая-нижняя-ближняя и правая-верхняя-дальня
-    interceptVertex,devpoint:GDBVertex;
-    tempPoint1,tempPoint2,pConnect:GDBVertex;
+    interceptVertex{,devpoint}:GDBVertex;
+    {tempPoint1,tempPoint2,}pConnect:GDBVertex;
 
-    psldb:pointer;
+    //psldb:pointer;
 
     drawing:PTSimpleDrawing; //для работы с чертежом
     pvd:pvardesk; //для работы со свойствами устройств
-    headDevName,tempName:string;
+    {headDevName,}tempName:string;
     pSuperLine:PGDBObjSuperLine;
 
 
@@ -1571,7 +1571,7 @@ var
 begin
    listCable := TListCableLine.Create;  // инициализация списка кабелей
    result:=TGraphBuilder.Create;
-   tempListEdge := TListEdgeGraph.Create;
+   //tempListEdge := TListEdgeGraph.Create;
    result.nameSuperLine:=nameCable;
    counter:=0; //обнуляем счетчик
    counter1:=0;
@@ -1673,7 +1673,7 @@ begin
             теперь не пересечения с гранями устройства, а поподание в коннектор**********}
 
   drawing:=drawings.GetCurrentDWG; // присваиваем наш чертеж
-  psldb:=drawing^.GetLayerTable^.{drawings.GetCurrentDWG.LayerTable.}getAddres('SYS_DEVICE_BORDER');
+  //psldb:=drawing^.GetLayerTable^.{drawings.GetCurrentDWG.LayerTable.}getAddres('SYS_DEVICE_BORDER');
 
   for i:=0 to listCable.Size-1 do
   begin
@@ -2056,7 +2056,7 @@ function Testcablemanager_com(const Context:TZCADCommandContext;operands:TComman
 
   cman:TCableManager;
   pcabledesk:PTCableDesctiptor;
-  pobj,pobj2:PGDBObjCable;
+  pobj{,pobj2}:PGDBObjCable;
   pnp:PTNodeProp;
   ir,ir2,ir3:itrec;
   begin

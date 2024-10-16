@@ -237,7 +237,7 @@ const
     function zdevsettings:boolean;
     const
       nameKey='name';
-      typeKey='type';
+      //typeKey='type';
       calcKey='calc';
       devmodelKey='devmodel';
       numconnectKey='<numconnect>';
@@ -316,7 +316,7 @@ const
     function zcabsettings:boolean;
     const
       nameKey='name';
-      typeKey='type';
+      //typeKey='type';
       calcKey='calc';
       //devmodelKey='devmodel';
       //numconnectKey='<numconnect>';
@@ -712,8 +712,8 @@ const
     procedure zimportdevcommand(graphDev:TGraphDev;nameEtalon,nameSheet:string;stRow,stCol:Cardinal);
     var
       pvd2:pvardesk;
-      nameGroup:string;
-      listGroupHeadDev:TListGroupHeadDev;
+      //nameGroup:string;
+      //listGroupHeadDev:TListGroupHeadDev;
       listDev:TListDev;
       ourDev:PGDBObjDevice;
       stRowNew,stColNew:Cardinal;
@@ -1025,7 +1025,7 @@ const
       speckeynumcol:integer;
       spectargetSheet:string;
       spectargetcodename:string;
-      isStartCopy:boolean;
+      //isStartCopy:boolean;
       calcVal:string;
       //stInfoDevCell:TVXLSXCELL;
 
@@ -1480,21 +1480,21 @@ const
     var
       stInfoDevCell:TVXLSXCELL;    //
       ourgraphDev:TGraphDev;       //
-      pvd,pvd2:pvardesk;
+      pvd{,pvd2}:pvardesk;
       //nameGroup:string;
       //listGroupHeadDev:TListGroupHeadDev;
       listCab:TListPolyline;       //
       ourCab:PGDBObjPolyline;
       stRowNew,stColNew,stRow,stCol:Cardinal;
       cellValueVar,codeCellValue:string;
-      textCell,finishCommand:string;
+      {textCell,}finishCommand:string;
       j:integer;
       {cabNowvarext,}polyext:TVariablesExtender;
       cableNowMF:PGDBObjCable;
-      iHaveParam:boolean;
-    graphDev:TGraphDev;
+      //iHaveParam:boolean;
+    //graphDev:TGraphDev;
 
-    namePanel:string;
+    //namePanel:string;
     //listDev:TListDev;
     listAllHeadDev:TListDev;
     devMaincFunc:PGDBObjDevice;
@@ -1637,7 +1637,7 @@ procedure zallimportdevcommand(listGraphEM:TListGraphDev;nameEtalon,nameSheet,na
 var
   stInfoDevCell:TVXLSXCELL;    //
   ourgraphDev:TGraphDev;       //
-  pvd,pvd2:pvardesk;
+  //pvd,pvd2:pvardesk;
   //nameGroup:string;
   //listGroupHeadDev:TListGroupHeadDev;
   listDev:TListDev;       //
@@ -1645,12 +1645,12 @@ var
   devNowvarext:TVariablesExtender;
   stRowNew,stColNew,stRow,stCol:Cardinal;
   cellValueVar,codeCellValue:string;
-  textCell:string;
+  //textCell:string;
   j:integer;
   {cabNowvarext,}devext:TVariablesExtender;
   devNowMF:PGDBObjDevice;
-  iHaveParam:boolean;
-  lph:TLPSHandle;
+  //iHaveParam:boolean;
+  //lph:TLPSHandle;
   finishCommand:string;
 
   //node:PTNodeProp;
@@ -1864,7 +1864,7 @@ procedure generatorSheetAllCab(listGraphEM:TListGraphDev);
        numRow:Cardinal;
        valueCell,codeCellValue,newNameSheet:string;
        i:integer;
-       nameNewSheet:string;
+       //nameNewSheet:string;
 
 
 
@@ -1994,7 +1994,7 @@ procedure generatorSheetAllDev(listGraphEM:TListGraphDev);
        numRow:Cardinal;
        valueCell,codeCellValue,newNameSheet:string;
        i:integer;
-       nameNewSheet:string;
+       //nameNewSheet:string;
 
 
 

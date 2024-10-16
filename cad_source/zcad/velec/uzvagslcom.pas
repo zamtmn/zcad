@@ -26,7 +26,7 @@ uses uzccommandsimpl,    //тут реализация объекта CommandRTE
        uzeentpolyline,
        uzcinterface,
        sysutils,
-     uzegeometrytypes,
+     //uzegeometrytypes,
      uzegeometry,
      //uzvcom,             //
      //uzvnum,
@@ -105,9 +105,9 @@ var
  contourRoom:PGDBObjPolyLine;
  //listDeviceinRoom:TListVertexDevice;
  //contourRoomEmbedSL:TListVertex;
- stPoint:gdbvertex;
+ //stPoint:gdbvertex;
 begin
-  stPoint:=uzegeometry.CreateVertex(0,0,0);
+  //stPoint:=uzegeometry.CreateVertex(0,0,0);
   //if commandmanager.get3dpoint('Specify insert point:',stPoint)= GRNormal then
   //     ZCMsgCallBackInterface.TextMessage('координата введена',TMWOHistoryOut)
   //   else

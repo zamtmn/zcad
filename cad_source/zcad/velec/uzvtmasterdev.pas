@@ -26,7 +26,7 @@ uses
   sysutils,
 
   uzeentmtext,
-  uzbtypes,
+  //uzbtypes,
   //uzeconsts, //base constants
              //описания базовых констант
   //uzccommandsabstract,

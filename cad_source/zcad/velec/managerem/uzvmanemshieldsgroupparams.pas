@@ -1,7 +1,7 @@
 unit uzvmanemshieldsgroupparams;
 interface
-uses
-  uzctnrVectorStrings;
+//uses
+//  uzctnrVectorStrings;
 type
   TuzvmanemSGSetConstruct=(
         TSC_Short(*'Кратко'*),

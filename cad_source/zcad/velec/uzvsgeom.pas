@@ -73,7 +73,7 @@ uses
                       //системные переменные
   //uzgldrawcontext,
   uzcinterface,
-  {}uzbtypes, //base types
+  //{}uzbtypes, //base types
                       //описания базовых типов
   //uzeconsts, //base constants
                       //описания базовых констант
@@ -261,7 +261,7 @@ end;
      //areaLine:TBoundingBox;
      //areaRect,areaTriangle,sumAreaTriangle:double; //площадь прямоугольника
      tempvert,tempVertex,newEdPtLine:GDBVertex;
-     xline,yline,xyline,angle,anglePerpendCos:double;
+     xline{,yline},xyline,angle,anglePerpendCos:double;
      vertexRectangleLine:TRectangleLine;
      sine,cosine:double;
   begin

@@ -25,6 +25,8 @@ uses LCLProc,uzeentityfactory,uzeentity,
      uzeBaseExtender,uzeExtdrAbstractEntityExtender,
      sysutils,uzbtypes,
      usimplegenerics,Masks;
+const
+  CachedValuesCount=2;
 type
   TEntsTypeFilter=class
     protected
@@ -34,6 +36,12 @@ type
       ExtdrFilter,
       ExtdrInclude,
       ExtdrExclude:TMetaExtender2Counter;
+
+      FCachedEntsCount:Integer;
+      FCachedExtdrsCount:Integer;
+
+      FCachedEntsArray:array[0..CachedValuesCount-1] of TObjID;
+      FCachedExtdrsArray:array[0..CachedValuesCount-1] of TMetaExtender;
 
       function IsEntytyTypeAccepted(EntType:TObjID):boolean;
       function IsExtdrTypeAccepted(ExtdrType:TMetaExtender):boolean;
@@ -75,6 +83,9 @@ begin
   ExtdrFilter:=TMetaExtender2Counter.create;
   ExtdrInclude:=TMetaExtender2Counter.create;
   ExtdrExclude:=TMetaExtender2Counter.create;
+
+  FCachedEntsCount:=-1;
+  FCachedExtdrsCount:=-1;
 end;
 
 destructor TEntsTypeFilter.Destroy;
@@ -202,12 +213,30 @@ var
   ExtdrPair:TMetaExtender2Counter.TDictionaryPair;
   Count:SizeUInt;
 begin
+  count:=0;
   for EntPair in EntInclude do
-    if not EntExclude.TryGetValue(EntPair.Key,Count) then
+    if not EntExclude.TryGetValue(EntPair.Key,Count) then begin
       EntFilter.CountKey(EntPair.Key,1);
+      if count<High(FCachedEntsArray) then
+        FCachedEntsArray[count]:=EntPair.Key;
+      inc(count);
+    end;
+  count:=0;
   for ExtdrPair in ExtdrInclude do
-    if not  ExtdrExclude.TryGetValue(ExtdrPair.Key,Count) then
+    if not  ExtdrExclude.TryGetValue(ExtdrPair.Key,Count) then begin
       ExtdrFilter.CountKey(ExtdrPair.Key,1);
+      if count<High(FCachedExtdrsArray) then
+        FCachedExtdrsArray[count]:=ExtdrPair.Key;
+      inc(count);
+    end;
+  if EntFilter.Count<=CachedValuesCount then
+    FCachedEntsCount:=EntFilter.Count-1
+  else
+    FCachedEntsCount:=-1;
+  if ExtdrFilter.Count<=CachedValuesCount then
+    FCachedExtdrsCount:=ExtdrFilter.Count-1
+  else
+    FCachedExtdrsCount:=-1;
 end;
 
 procedure TEntsTypeFilter.ResetFilter;
@@ -233,19 +262,32 @@ function TEntsTypeFilter.IsEntytyTypeAccepted(EntType:TObjID):boolean;
 var
   count:SizeUInt;
 begin
-  if EntFilter.TryGetValue(EntType,count) then
-    result:=true
-  else
-    result:=false;
+
+  if FCachedEntsCount<0 then begin
+    if EntFilter.TryGetValue(EntType,count) then
+      result:=true
+    else
+      result:=false;
+  end else
+    for count:=0 to FCachedEntsCount do
+      if FCachedEntsArray[count]=EntType then
+        exit(true);
+  result:=false;
 end;
 function TEntsTypeFilter.IsExtdrTypeAccepted(ExtdrType:TMetaExtender):boolean;
 var
   count:SizeUInt;
 begin
-  if ExtdrFilter.TryGetValue(ExtdrType,count) then
-    result:=true
-  else
-    result:=false;
+  if FCachedExtdrsCount<0 then begin
+    if ExtdrFilter.TryGetValue(ExtdrType,count) then
+      result:=true
+    else
+      result:=false;
+  end else
+    for count:=0 to FCachedExtdrsCount do
+      if FCachedExtdrsArray[count]=ExtdrType then
+        exit(true);
+  result:=false;
 end;
 function TEntsTypeFilter.IsEntytyAccepted(pv:pGDBObjEntity):boolean;
 var

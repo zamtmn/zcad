@@ -704,7 +704,7 @@ begin
                                                                                          ThemeServices.DrawElement(ACanvas.Handle, ThemeServices.GetElementDetails(ttItemNormal), ARect, nil)
                      {$ENDIF}
                      {$IFNDEF LCLWIN32}
-                     ThemeServices.DrawElement(cnvs.Handle, result, r, nil);
+                     ThemeServices.DrawElement(ACanvas.Handle, result, ARect, nil);
                      {$ENDIF}
                      end
                      else

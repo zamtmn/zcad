@@ -226,8 +226,9 @@ begin
                      for k:=1 to vertexcount do begin
                        if dxfdoubleload(f,10,byt,p.x) then byt:=f.ParseInteger;
                        if dxfdoubleload(f,20,byt,p.y) then byt:=f.ParseInteger;
+                       if dxfdoubleload(f,42,byt,p.y) then byt:=f.ParseInteger;
                      end;
-                     if dxfdoubleload(f,42,byt,p.y) then byt:=f.ParseInteger;
+                     //if dxfdoubleload(f,42,byt,p.y) then byt:=f.ParseInteger;
                      if dxfdoubleload(f,12,byt,p.x) then byt:=f.ParseInteger;
                      if dxfdoubleload(f,22,byt,p.y) then byt:=f.ParseInteger;
                      if dxfdoubleload(f,13,byt,p.x) then byt:=f.ParseInteger;

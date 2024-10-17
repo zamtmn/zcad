@@ -215,6 +215,8 @@ rmpkgslibs:
 	rm -rf  cad_source$(PATHDELIM)components$(PATHDELIM)zundostack$(PATHDELIM)lib$(PATHDELIM)*
 	rm -rf  cad_source$(PATHDELIM)components$(PATHDELIM)fpdwg$(PATHDELIM)lib$(PATHDELIM)*
 	rm -rf  cad_source$(PATHDELIM)components$(PATHDELIM)fpspreadsheet$(PATHDELIM)lib$(PATHDELIM)*
+	rm -rf  cad_source$(PATHDELIM)components$(PATHDELIM)fpspreadsheet$(PATHDELIM)source$(PATHDELIM)common$(PATHDELIM)lib$(PATHDELIM)*
+	rm -rf  cad_source$(PATHDELIM)components$(PATHDELIM)fpspreadsheet$(PATHDELIM)source$(PATHDELIM)visual$(PATHDELIM)lib$(PATHDELIM)*
 	rm -rf  cad_source$(PATHDELIM)components$(PATHDELIM)lape$(PATHDELIM)package$(PATHDELIM)lib$(PATHDELIM)*
 	rm -rf  cad_source$(PATHDELIM)components$(PATHDELIM)zreaders$(PATHDELIM)lib$(PATHDELIM)*
 	rm -rf  cad_source$(PATHDELIM)components$(PATHDELIM)fphunspell$(PATHDELIM)lib$(PATHDELIM)*

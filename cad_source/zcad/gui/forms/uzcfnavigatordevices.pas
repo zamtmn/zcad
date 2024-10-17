@@ -19,7 +19,7 @@ uses
   uzeparserenttypefilter,uzeparserentpropfilter,uzeparsernavparam,uzclog,uzcuidialogs,
   XMLConf,XMLPropStorage, EditBtn,LazConfigStorage,uzcdialogsfiles,
   Masks,garrayutils,LCLType,LCLIntf, Buttons,
-  gzctnrSTL,uzcActionsManager;
+  gzctnrSTL,uzcActionsManager,uzglviewareageneral,uzedrawingsimple;
 
 resourcestring
   rsStandaloneDevices='Standalone devices';
@@ -485,6 +485,7 @@ procedure TNavigatorDevices.VTFocuschanged(Sender: TBaseVirtualTree; Node: PVirt
 var
   pnd:PTNodeData;
   s:string;
+  pdwg:PTSimpleDrawing;
 begin
   if Sender.Focused then begin
     pnd := Sender.GetNodeData(Node);
@@ -493,6 +494,17 @@ begin
         begin
          CurrentSel:=pnd^;
          if (LastAutoselectedEnt<>pnd^.Ident.pent)and( not pnd^.Ident.pent^.Selected) then begin
+
+           if sysvarDSGNSelNew then begin
+             pdwg:=drawings.GetCurrentDWG;
+             if pdwg<>nil then begin
+               pdwg.GetCurrentROOT.ObjArray.DeSelect(pdwg.wa.param.SelDesc.Selectedobjcount,drawings.GetCurrentDWG^.DeSelector);
+               pdwg.wa.param.SelDesc.LastSelectedObject := nil;
+               pdwg.wa.param.seldesc.Selectedobjcount:=0;
+               pdwg.GetSelObjArray.Free;
+             end;
+           end;
+
            s:='SelectObjectByAddres('+inttostr(PtrUInt(pnd^.Ident.pent))+')';
            //commandmanager.executecommandsilent(@s[1],drawings.GetCurrentDWG,drawings.GetCurrentOGLWParam);
            Application.QueueAsyncCall(AsyncRunCommand,PtrInt(@s[1]));

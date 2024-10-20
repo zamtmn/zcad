@@ -22,7 +22,9 @@ unit uzeBoundaryPath;
 
 interface
 
-uses uzegeometrytypes,UGDBPolyline2DArray,gzctnrVector,
+uses
+  Math,
+  uzegeometrytypes,UGDBPolyline2DArray,gzctnrVector,
   uzctnrVectorBytes,gzctnrVectorTypes,uzegeometry,uzeffdxfsupport,uzMVReader;
 type
 PBoundaryPath=^TBoundaryPath;
@@ -135,13 +137,107 @@ end;
 function TBoundaryPath.LoadFromDXF(var f:TZMemReader;DXFCode:Integer):Boolean;
 //type
 //  TNotPolyLine=(NPL_Line,NPL_CircularArc,NPL_EllipticArc,NPL_Spline);
+
+  procedure DrawArc(constref p1,p2:GDBVertex2D;const bulge:double;var currpath:GDBPolyline2DArray;divcount:integer);//inline;
+  var
+    d,pc,pac,n:GDBVertex2D;
+    l,h,nextbulge:double;
+  begin
+    d:=p2-p1;
+    l:=d.Length;
+    h:=l*bulge/2;
+    pc:=(p1+p2)/2;
+    n.x:=-d.y;
+    n.y:=d.x;
+    n:=n.NormalizeVertex;
+    pac:=pc-n*h;
+    if divcount=0 then begin
+    currpath.PushBackData(p1);
+    currpath.PushBackData(pac);
+    end else begin
+      dec(divcount);
+      nextbulge:=bulge/(1+sqrt(1+bulge*bulge));
+      DrawArc(p1,pac,nextbulge,currpath,divcount);
+      DrawArc(pac,p2,nextbulge,currpath,divcount);
+    end;
+  end;
+
+  procedure DrawFullArc(constref p1,p2:GDBVertex2D;const bulge:double;var currpath:GDBPolyline2DArray);//inline;
+  begin
+    DrawArc(p1,p2,bulge,currpath,3);
+    currpath.PushBackData(p2);
+  end;
+
+  procedure loadPolyWithBulges(var byt:integer;var currpath:GDBPolyline2DArray;const VertexCount:integer;const Closed:Boolean);//inline;
+  var
+    p1,pcurr,pnext:GDBVertex2D;
+    j:Integer;
+    bulge,nextbulge:double;
+  begin
+    currpath.init(vertexcount*10,true);
+    bulge:=0;
+    if dxfdoubleload(f,10,byt,pcurr.x) then byt:=f.ParseInteger;
+    if dxfdoubleload(f,20,byt,pcurr.y) then byt:=f.ParseInteger;
+    if dxfdoubleload(f,42,byt,bulge) then byt:=f.ParseInteger;
+    p1:=pcurr;
+    for j:=2 to VertexCount do begin
+      nextbulge:=0;
+      if dxfdoubleload(f,10,byt,pnext.x) then byt:=f.ParseInteger;
+      if dxfdoubleload(f,20,byt,pnext.y) then byt:=f.ParseInteger;
+      if dxfdoubleload(f,42,byt,nextbulge) then byt:=f.ParseInteger;
+
+      if IsZero(bulge) then begin
+        currpath.PushBackData(pcurr);
+        currpath.PushBackData(pnext);
+      end else
+        DrawFullArc(pcurr,pnext,bulge,currpath);
+      pcurr:=pnext;
+      bulge:=nextbulge;
+    end;
+    if closed then
+      if IsZero(bulge) then begin
+        currpath.PushBackData(pcurr);
+        currpath.PushBackData(p1);
+      end else
+        DrawFullArc(pcurr,p1,bulge,currpath);
+  end;
+
+  procedure loadPoly(var byt:integer;var currpath:GDBPolyline2DArray;const VertexCount:integer;const Closed:Boolean);//inline;
+  var
+    p:GDBVertex2D;
+    j:Integer;
+  begin
+    currpath.init(vertexcount,true);
+    for j:=1 to VertexCount do begin
+      if dxfdoubleload(f,10,byt,p.x) then byt:=f.ParseInteger;
+      if dxfdoubleload(f,20,byt,p.y) then byt:=f.ParseInteger;
+      currpath.PushBackData(p);
+    end;
+  end;
+
+  procedure loadPolyBoundary(var byt:integer;var currpath:GDBPolyline2DArray);//inline;
+  var
+    hasBulge:integer=0;
+    isClosed:integer=0;
+    vertexcount:integer;
+  begin
+    if dxfintegerload(f,72,byt,hasBulge) then byt:=f.ParseInteger;
+    if dxfintegerload(f,73,byt,isClosed) then byt:=f.ParseInteger;
+    if dxfintegerload(f,93,byt,vertexcount) then byt:=f.ParseInteger;
+    if hasBulge=0 then
+      loadPoly(byt,currpath,VertexCount,isClosed<>0)
+    else
+      loadPolyWithBulges(byt,currpath,VertexCount,isClosed<>0);
+  end;
+
 var
   currpath:GDBPolyline2DArray;
   i,j,k,knotcount,pathscount,vertexcount,byt,bt:integer;
-  firstp,prevp,p:GDBVertex2D;
-  tmp:double;
+  firstp,prevp,p,cp:GDBVertex2D;
+  tmp,r,sa,ea,a:double;
   s:string;
   isPolyLine:boolean;
+  isNegative:integer;
   //NotPolyLine:TNotPolyLine;
   isFirst:boolean;
 begin
@@ -156,7 +252,8 @@ begin
          isPolyLine:=(bt and 2)<>0;
          byt:=f.ParseInteger;
          if isPolyLine then begin
-           if dxfintegerload(f,72,byt,bt) then byt:=f.ParseInteger;
+           loadPolyBoundary(byt,currpath);
+           {if dxfintegerload(f,72,byt,bt) then byt:=f.ParseInteger;
            if dxfintegerload(f,73,byt,bt) then byt:=f.ParseInteger;
            if dxfintegerload(f,93,byt,vertexcount) then byt:=f.ParseInteger;
            currpath.init(vertexcount,true);
@@ -165,7 +262,7 @@ begin
              if dxfdoubleload(f,20,byt,p.y) then byt:=f.ParseInteger;
              if dxfdoubleload(f,42,byt,tmp) then byt:=f.ParseInteger;
              currpath.PushBackData(p);
-           end;
+           end;}
          end else begin
            if dxfintegerload(f,93,byt,vertexcount) then byt:=f.ParseInteger;
            currpath.init(vertexcount,true);
@@ -196,12 +293,21 @@ begin
                    end;
                  2:begin
                      //NotPolyLine:=NPL_CircularArc;
-                     if dxfdoubleload(f,10,byt,p.x) then byt:=f.ParseInteger;
-                     if dxfdoubleload(f,20,byt,p.y) then byt:=f.ParseInteger;
-                     if dxfdoubleload(f,40,byt,p.x) then byt:=f.ParseInteger;
-                     if dxfdoubleload(f,50,byt,p.y) then byt:=f.ParseInteger;
-                     if dxfdoubleload(f,51,byt,p.x) then byt:=f.ParseInteger;
-                     if dxfdoubleload(f,73,byt,p.y) then byt:=f.ParseInteger;
+                     if dxfdoubleload(f,10,byt,cp.x) then byt:=f.ParseInteger;
+                     if dxfdoubleload(f,20,byt,cp.y) then byt:=f.ParseInteger;
+                     if dxfdoubleload(f,40,byt,r) then byt:=f.ParseInteger;
+                     if dxfdoubleload(f,50,byt,sa) then byt:=f.ParseInteger;
+                     if dxfdoubleload(f,51,byt,ea) then byt:=f.ParseInteger;
+                     if dxfIntegerload(f,73,byt,isNegative) then byt:=f.ParseInteger;
+
+                     a:=ea-sa;
+                     if a<0 then a:=2*pi+a;
+
+                     for k:=1 to 16 do begin
+                       SinCos(sa+k/16*a,p.y,p.x);
+                       p:=cp+p*r;
+                       currpath.PushBackData(p);
+                     end;
                    end;
                  3:begin
                      //NotPolyLine:=NPL_EllipticArc;

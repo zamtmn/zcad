@@ -43,6 +43,10 @@ const
       GLU_NURBS_END_EXT={$IFNDEF DELPHI}glu.{$ELSE}dglOpenGL.{$ENDIF}GLU_NURBS_END_EXT;
       GLU_NURBS_ERROR={$IFNDEF DELPHI}glu.{$ELSE}dglOpenGL.{$ENDIF}GLU_NURBS_ERROR;
       GLU_AUTO_LOAD_MATRIX={$IFNDEF DELPHI}glu.{$ELSE}dglOpenGL.{$ENDIF}GLU_AUTO_LOAD_MATRIX;
+
+      GLU_NURBS_BEGIN_DATA_EXT={$IFNDEF DELPHI}glu.{$ELSE}dglOpenGL.{$ENDIF}GLU_NURBS_BEGIN_DATA_EXT;
+      GLU_NURBS_END_DATA_EXT={$IFNDEF DELPHI}glu.{$ELSE}dglOpenGL.{$ENDIF}GLU_NURBS_END_DATA_EXT;
+      GLU_NURBS_VERTEX_DATA_EXT={$IFNDEF DELPHI}glu.{$ELSE}dglOpenGL.{$ENDIF}GLU_NURBS_VERTEX_DATA_EXT;
 type
     PTViewPortArray=^TViewPortArray;
 
@@ -69,6 +73,7 @@ type
                            procedure NurbsCurve(nurb:PGLUnurbs; knotCount:GLint; knots:PGLfloat; stride:GLint; control:PGLfloat;
                                                 order:GLint; _type:GLenum);
                            procedure NurbsProperty(nurb:PGLUnurbs; _property:GLenum; value:GLfloat);
+                           procedure NurbsCallbackData(nurb:PGLUnurbs; userData:Pointer);
                            function ErrorString(error:GLenum):glu.PGLubyte;
                            function mygluGetString(name: GLenum): PAnsiChar;
                            procedure mygluPickMatrix(x:GLdouble; y:GLdouble; delX:GLdouble; delY:GLdouble; viewport:PGLint);
@@ -118,6 +123,10 @@ end;
 procedure TGLUInterface.NurbsProperty(nurb:PGLUnurbs; _property:GLenum; value:GLfloat);
 begin
      gluNurbsProperty(nurb,_property,value);
+end;
+procedure TGLUInterface.NurbsCallbackData(nurb:PGLUnurbs; userData:Pointer);
+begin
+  gluNurbsCallbackData(nurb,userData);
 end;
 function TGLUInterface.ErrorString(error:GLenum):glu.PGLubyte;
 begin

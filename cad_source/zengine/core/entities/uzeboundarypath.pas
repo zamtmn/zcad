@@ -178,7 +178,7 @@ function TBoundaryPath.LoadFromDXF(var f:TZMemReader;DXFCode:Integer):Boolean;
     pac:=pc-n*h;
     if divcount=-1 then begin
       //пытаемся сделать лод. вариантов не много
-      divcount:=min(max(2,abs(round(bulge*1.5))),4);
+      divcount:=min(max(2,abs(round(bulge*2))),5);
       {if abs(h)*2>l then
         divcount:=3
       else
@@ -320,7 +320,7 @@ function TBoundaryPath.LoadFromDXF(var f:TZMemReader;DXFCode:Integer):Boolean;
     nurbsobj:=GLUIntrf.NewNurbsRenderer;
 
     GLUIntrf.NurbsProperty(nurbsobj,GLU_NURBS_MODE_EXT,GLU_NURBS_TESSELLATOR_EXT);
-    GLUIntrf.NurbsProperty(nurbsobj,GLU_SAMPLING_TOLERANCE,currL/10);
+    GLUIntrf.NurbsProperty(nurbsobj,GLU_SAMPLING_TOLERANCE,currL/15);
     GLUIntrf.NurbsProperty(nurbsobj,GLU_DISPLAY_MODE,GLU_POINT);
     GLUIntrf.NurbsProperty(nurbsobj,GLU_AUTO_LOAD_MATRIX,GL_FALSE{GL_TRUE});
 
@@ -404,10 +404,21 @@ begin
                      if dxfdoubleload(f,40,byt,r) then byt:=f.ParseInteger;
                      if dxfdoubleload(f,50,byt,sa) then byt:=f.ParseInteger;
                      if dxfdoubleload(f,51,byt,ea) then byt:=f.ParseInteger;
-                     if dxfIntegerload(f,73,byt,isNegative) then byt:=f.ParseInteger;
 
+                     if dxfIntegerload(f,73,byt,isNegative) then
+                       byt:=f.ParseInteger
+                     else
+                       isNegative:=0;
+
+                     sa:=sa*pi/180;
+                     ea:=ea*pi/180;
                      a:=ea-sa;
-                     if a<0 then a:=2*pi+a;
+
+                     if isNegative=0 then begin
+                       sa:=2*pi-sa;
+                       ea:=2*pi-ea;
+                       a:=-a;
+                     end;
 
                      for k:=1 to 16 do begin
                        SinCos(sa+k/16*a,p.y,p.x);

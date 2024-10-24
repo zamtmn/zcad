@@ -26,7 +26,7 @@ uses
   Math,
   uzegeometrytypes,UGDBPolyline2DArray,gzctnrVector,
   uzctnrVectorBytes,gzctnrVectorTypes,uzegeometry,uzeffdxfsupport,uzMVReader,
-  uzeSplineUtils,uzgloglstatemanager,uzegluinterface,LazLoggerBase;
+  uzeSplineUtils,uzegluinterface,LazLoggerBase;
 type
 PBoundaryPath=^TBoundaryPath;
 TBoundaryPath=object
@@ -145,12 +145,12 @@ begin
   PGDBPolyline2DArray(data)^.PushBackData(tv);
 end;
 
-procedure NurbsErrorCallBack(const v: GLenum);{$IFDEF Windows}stdcall{$ELSE}cdecl{$ENDIF};
+procedure NurbsErrorCallBack(const v: TGLUIntf_GLenum);{$IFDEF Windows}stdcall{$ELSE}cdecl{$ENDIF};
 begin
   debugln('{E}'+GLUIntrf.ErrorString(v));
 end;
 
-procedure NurbsBeginCallBack(const v: GLenum;const Data: Pointer);{$IFDEF Windows}stdcall{$ELSE}cdecl{$ENDIF};
+procedure NurbsBeginCallBack(const v: TGLUIntf_GLenum;const Data: Pointer);{$IFDEF Windows}stdcall{$ELSE}cdecl{$ENDIF};
 begin
 end;
 
@@ -322,7 +322,7 @@ function TBoundaryPath.LoadFromDXF(var f:TZMemReader;DXFCode:Integer):Boolean;
     GLUIntrf.NurbsProperty(nurbsobj,GLU_NURBS_MODE_EXT,GLU_NURBS_TESSELLATOR_EXT);
     GLUIntrf.NurbsProperty(nurbsobj,GLU_SAMPLING_TOLERANCE,currL/15);
     GLUIntrf.NurbsProperty(nurbsobj,GLU_DISPLAY_MODE,GLU_POINT);
-    GLUIntrf.NurbsProperty(nurbsobj,GLU_AUTO_LOAD_MATRIX,GL_FALSE{GL_TRUE});
+    //GLUIntrf.NurbsProperty(nurbsobj,GLU_AUTO_LOAD_MATRIX,GL_FALSE{GL_TRUE});
 
     GLUIntrf.NurbsCallbackData(nurbsobj,@currpath);
 
@@ -332,7 +332,7 @@ function TBoundaryPath.LoadFromDXF(var f:TZMemReader;DXFCode:Integer):Boolean;
     GLUIntrf.NurbsCallback(nurbsobj,GLU_NURBS_ERROR,@NurbsErrorCallBack);
 
     GLUIntrf.BeginCurve(nurbsobj);
-    GLUIntrf.NurbsCurve (nurbsobj,Knots.Count,Knots.GetParrayAsPointer,{CP.Count}4,CP.GetParrayAsPointer,4,GL_MAP1_VERTEX_4);
+    //GLUIntrf.NurbsCurve (nurbsobj,Knots.Count,Knots.GetParrayAsPointer,{CP.Count}4,CP.GetParrayAsPointer,4,GL_MAP1_VERTEX_4);
     GLUIntrf.EndCurve(nurbsobj);
 
 

@@ -17,15 +17,12 @@
 }
 
 unit uzeSplineUtils;
-{$INCLUDE zengineconfig.inc}
+{$Mode delphi}{$H+}
+{$Include zengineconfig.inc}
 
 interface
-uses LCLProc,uzegluinterface,uzeentityfactory,uzgldrawcontext,uzgloglstatemanager,gzctnrVector,
-     UGDBPoint3DArray,uzedrawingdef,uzecamera,UGDBVectorSnapArray,
-     uzestyleslayers,uzeentsubordinated,uzeentcurve,
-     uzeentity,uzctnrVectorBytes,uzbtypes,uzeconsts,uzglviewareadata,
-     gzctnrVectorTypes,uzegeometrytypes,uzegeometry,uzeffdxfsupport,sysutils,
-     uzMVReader,uzCtnrVectorpBaseEntity;
+uses
+  gzctnrVector,uzegeometrytypes;
 type
   TKnotsVector=object(GZVector<Single>)
   end;

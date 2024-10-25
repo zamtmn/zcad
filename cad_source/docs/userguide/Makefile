@@ -1,21 +1,8 @@
 .PHONY: pdf html all example getpdftheme
 default: all
 
-OSDETECT:=
-ifeq ($(OS),Windows_NT)
-	OSDETECT:=WIN32
-else
-	UNAME_S:=$(shell uname -s)
-	ifeq ($(UNAME_S),Linux)
-		OSDETECT:=LINUX
-	endif
-	ifeq ($(UNAME_S),Darwin)
-		OSDETECT:=OSX
-	endif
-endif
-
 PATHDELIM:=/
-ifeq ($(OSDETECT),WIN32)
+ifeq ($(OS),Windows_NT)
 	PATHDELIM:=\\
 endif
 PATHDELIM:=$(strip $(PATHDELIM))

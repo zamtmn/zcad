@@ -177,7 +177,7 @@ cad/help/locale/ru/_images:
 	mkdir $(subst /,$(PATHDELIM),cad/help/locale/ru/_images)
 
 documentation: checkvars cad cad/help cad/help/locale cad/help/locale/ru cad/help/locale/ru/_images
-	$(MAKE) -C cad_source/docs/userguide LP=$(LP) PCP=$(PCP) all
+	$(MAKE) -C cad_source/docs/userguide all
 	cp cad_source/docs/userguide/*.html cad/help
 	cp cad_source/docs/userguide/*.pdf cad/help
 	cp -r cad_source/docs/userguide/locale/ru/_images/* cad/help/locale/ru/_images

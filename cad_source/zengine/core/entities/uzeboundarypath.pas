@@ -82,7 +82,7 @@ procedure TBoundaryPath.transform(const t_matrix:DMatrix4D);
 var i,j:integer;
    ppla:PGDBPolyline2DArray;
    pv:PGDBVertex2D;
-   tv:GDBVertex;
+   tv:GDBvertex;
 begin
   for i:=0 to paths.count-1 do begin
     ppla:=paths.getDataMutable(i);
@@ -150,13 +150,13 @@ begin
   debugln('{E}'+GLUIntrf.ErrorString(v));
 end;
 
-procedure NurbsBeginCallBack(const v: TGLUIntf_GLenum;const Data: Pointer);{$IFDEF Windows}stdcall{$ELSE}cdecl{$ENDIF};
+(*procedure NurbsBeginCallBack(const v: TGLUIntf_GLenum;const Data: Pointer);{$IFDEF Windows}stdcall{$ELSE}cdecl{$ENDIF};
 begin
 end;
 
 procedure NurbsEndCallBack(const Data: Pointer);{$IFDEF Windows}stdcall{$ELSE}cdecl{$ENDIF};
 begin
-end;
+end;*)
 
 
 function TBoundaryPath.LoadFromDXF(var f:TZMemReader;DXFCode:Integer):Boolean;
@@ -252,7 +252,7 @@ function TBoundaryPath.LoadFromDXF(var f:TZMemReader;DXFCode:Integer):Boolean;
   var
     hasBulge:integer=0;
     isClosed:integer=0;
-    vertexcount:integer;
+    vertexcount:integer=0;
   begin
     if dxfintegerload(f,72,byt,hasBulge) then byt:=f.ParseInteger;
     if dxfintegerload(f,73,byt,isClosed) then byt:=f.ParseInteger;
@@ -322,17 +322,17 @@ function TBoundaryPath.LoadFromDXF(var f:TZMemReader;DXFCode:Integer):Boolean;
     GLUIntrf.NurbsProperty(nurbsobj,GLU_NURBS_MODE_EXT,GLU_NURBS_TESSELLATOR_EXT);
     GLUIntrf.NurbsProperty(nurbsobj,GLU_SAMPLING_TOLERANCE,currL/15);
     GLUIntrf.NurbsProperty(nurbsobj,GLU_DISPLAY_MODE,GLU_POINT);
-    //GLUIntrf.NurbsProperty(nurbsobj,GLU_AUTO_LOAD_MATRIX,GL_FALSE{GL_TRUE});
+    GLUIntrf.NurbsProperty(nurbsobj,GLU_AUTO_LOAD_MATRIX,GLUIntf_GL_FALSE{GL_TRUE});
 
     GLUIntrf.NurbsCallbackData(nurbsobj,@currpath);
 
-    GLUIntrf.NurbsCallback(nurbsobj,GLU_NURBS_BEGIN_DATA_EXT,@NurbsBeginCallBack);
-    GLUIntrf.NurbsCallback(nurbsobj,GLU_NURBS_END_DATA_EXT,@NurbsEndCallBack);
+    GLUIntrf.NurbsCallback(nurbsobj,GLU_NURBS_BEGIN_DATA_EXT,nil{@NurbsBeginCallBack});
+    GLUIntrf.NurbsCallback(nurbsobj,GLU_NURBS_END_DATA_EXT,nil{@NurbsEndCallBack});
     GLUIntrf.NurbsCallback(nurbsobj,GLU_NURBS_VERTEX_DATA_EXT,@NurbsVertexCallBack);
     GLUIntrf.NurbsCallback(nurbsobj,GLU_NURBS_ERROR,@NurbsErrorCallBack);
 
     GLUIntrf.BeginCurve(nurbsobj);
-    //GLUIntrf.NurbsCurve (nurbsobj,Knots.Count,Knots.GetParrayAsPointer,{CP.Count}4,CP.GetParrayAsPointer,4,GL_MAP1_VERTEX_4);
+    GLUIntrf.NurbsCurve (nurbsobj,Knots.Count,Knots.GetParrayAsPointer,{CP.Count}4,CP.GetParrayAsPointer,4,GLUIntf_GL_MAP1_VERTEX_4);
     GLUIntrf.EndCurve(nurbsobj);
 
 
@@ -348,8 +348,8 @@ function TBoundaryPath.LoadFromDXF(var f:TZMemReader;DXFCode:Integer):Boolean;
 
 var
   currpath:GDBPolyline2DArray;
-  i,j,k,knotcount,pathscount,vertexcount,byt,bt:integer;
-  firstp,prevp,p,cp:GDBVertex2D;
+  i,j,k,pathscount,vertexcount,byt,bt:integer;
+  firstp,{prevp,}p,cp:GDBVertex2D;
   r,sa,ea,a:double;
   s:string;
   isPolyLine:boolean;
@@ -381,7 +381,7 @@ begin
                      if dxfdoubleload(f,10,byt,p.x) then byt:=f.ParseInteger;
                      if dxfdoubleload(f,20,byt,p.y) then byt:=f.ParseInteger;
                      if not isFirst then begin
-                       if not(IsPoint2DEqual(p,prevp)) then
+                       if not(IsPoint2DEqual(p,{prevp}currpath.getPLast^)) then
                          currpath.PushBackData(p);
                      end else begin
                        currpath.PushBackData(p);
@@ -395,20 +395,17 @@ begin
                      else
                        if not(IsPoint2DEqual(p,firstp)) then
                          currpath.PushBackData(p);
-                     prevp:=p;
+                     //prevp:=p;
                    end;
                  2:begin
                      //NotPolyLine:=NPL_CircularArc;
-                     if dxfdoubleload(f,10,byt,cp.x) then byt:=f.ParseInteger;
-                     if dxfdoubleload(f,20,byt,cp.y) then byt:=f.ParseInteger;
-                     if dxfdoubleload(f,40,byt,r) then byt:=f.ParseInteger;
-                     if dxfdoubleload(f,50,byt,sa) then byt:=f.ParseInteger;
-                     if dxfdoubleload(f,51,byt,ea) then byt:=f.ParseInteger;
-
+                     cp:=dxfRequiredVertex2D(f,10,byt);
+                     r:=dxfRequiredDouble(f,40,byt);
+                     sa:=dxfRequiredDouble(f,50,byt);
+                     ea:=dxfRequiredDouble(f,51,byt);
+                     isNegative:=0;
                      if dxfIntegerload(f,73,byt,isNegative) then
-                       byt:=f.ParseInteger
-                     else
-                       isNegative:=0;
+                       byt:=f.ParseInteger;
 
                      sa:=sa*pi/180;
                      ea:=ea*pi/180;
@@ -437,27 +434,8 @@ begin
                      if dxfdoubleload(f,51,byt,p.x) then byt:=f.ParseInteger;
                      if dxfdoubleload(f,73,byt,p.y) then byt:=f.ParseInteger;
                    end;
-                 4:begin
-                     //NotPolyLine:=NPL_Spline;
-                     loadSplineBoundary(byt,currpath)
-                     {if dxfIntegerload(f,94,byt,bt) then byt:=f.ParseInteger;
-                     if dxfIntegerload(f,73,byt,bt) then byt:=f.ParseInteger;
-                     if dxfIntegerload(f,74,byt,bt) then byt:=f.ParseInteger;
-                     if dxfIntegerload(f,95,byt,knotcount) then byt:=f.ParseInteger;
-                     if dxfIntegerload(f,96,byt,vertexcount) then byt:=f.ParseInteger;
-                     for k:=1 to knotcount do
-                       if dxfdoubleload(f,40,byt,p.y) then byt:=f.ParseInteger;
-                     for k:=1 to vertexcount do begin
-                       if dxfdoubleload(f,10,byt,p.x) then byt:=f.ParseInteger;
-                       if dxfdoubleload(f,20,byt,p.y) then byt:=f.ParseInteger;
-                       if dxfdoubleload(f,42,byt,p.y) then byt:=f.ParseInteger;
-                     end;
-                     //if dxfdoubleload(f,42,byt,p.y) then byt:=f.ParseInteger;
-                     if dxfdoubleload(f,12,byt,p.x) then byt:=f.ParseInteger;
-                     if dxfdoubleload(f,22,byt,p.y) then byt:=f.ParseInteger;
-                     if dxfdoubleload(f,13,byt,p.x) then byt:=f.ParseInteger;
-                     if dxfdoubleload(f,23,byt,p.y) then byt:=f.ParseInteger;}
-                   end;
+                 4://NotPolyLine:=NPL_Spline;
+                   loadSplineBoundary(byt,currpath);
                end;
              end;
            end;

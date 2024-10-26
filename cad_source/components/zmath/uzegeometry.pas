@@ -39,25 +39,25 @@ const
         DefaultVP:IMatrix4=(x:2;y:0;z:100;w:100);
         IdentityQuaternion: GDBQuaternion = (ImagPart:(x:0;y:0;z:0); RealPart: 1);
       xAxisIndex=0;yAxisIndex=1;zAxisIndex=2;wAxisIndex=3;
-      ScaleOne:GDBVertex=(x:1;y:1;z:1);
-      OneVertex:GDBVertex=(x:1;y:1;z:1);
-      xy_Z_Vertex:GDBVertex=(x:0;y:0;z:1);
-      xy_MinusZ_Vertex:GDBVertex=(x:0;y:0;z:-1);
-      _XY_zVertex:GDBVertex=(x:1;y:1;z:0);
-      _MinusXY_zVertex:GDBVertex=(x:-1;y:1;z:0);
-      x_Y_zVertex:GDBVertex=(x:0;y:1;z:0);
-      _X_yzVertex:GDBVertex=(x:1;y:0;z:0);
-      MinusOneVertex:GDBVertex=(x:-1;y:-1;z:-1);
-      MinusInfinityVertex:GDBVertex=(x:NegInfinity;y:NegInfinity;z:NegInfinity);
-      InfinityVertex:GDBVertex=(x:Infinity;y:Infinity;z:Infinity);
+      ScaleOne:GDBvertex=(x:1;y:1;z:1);
+      OneVertex:GDBvertex=(x:1;y:1;z:1);
+      xy_Z_Vertex:GDBvertex=(x:0;y:0;z:1);
+      xy_MinusZ_Vertex:GDBvertex=(x:0;y:0;z:-1);
+      _XY_zVertex:GDBvertex=(x:1;y:1;z:0);
+      _MinusXY_zVertex:GDBvertex=(x:-1;y:1;z:0);
+      x_Y_zVertex:GDBvertex=(x:0;y:1;z:0);
+      _X_yzVertex:GDBvertex=(x:1;y:0;z:0);
+      MinusOneVertex:GDBvertex=(x:-1;y:-1;z:-1);
+      MinusInfinityVertex:GDBvertex=(x:NegInfinity;y:NegInfinity;z:NegInfinity);
+      InfinityVertex:GDBvertex=(x:Infinity;y:Infinity;z:Infinity);
       NulVertex4D:GDBVertex4d=(x:0;y:0;z:0;w:1);
       NulVector4D:DVector4D=(v:(0,0,0,0));
       NulVector4D2:DVector4D=(v:(0,0,0,1));
-      NulVertex:GDBVertex=(x:0;y:0;z:0);
+      NulVertex:GDBvertex=(x:0;y:0;z:0);
       NulVertex3S:GDBVertex3S=(x:0;y:0;z:0);
-      XWCS:GDBVertex=(x:1;y:0;z:0);
-      YWCS:GDBVertex=(x:0;y:1;z:0);
-      ZWCS:GDBVertex=(x:0;y:0;z:1);
+      XWCS:GDBvertex=(x:1;y:0;z:0);
+      YWCS:GDBvertex=(x:0;y:1;z:0);
+      ZWCS:GDBvertex=(x:0;y:0;z:1);
       XWCS4D:DVector4D=(v:(1,0,0,1));
       YWCS4D:DVector4D=(v:(0,1,0,1));
       ZWCS4D:DVector4D=(v:(0,0,1,1));
@@ -67,7 +67,7 @@ const
       BBNul:TBoundingBox=(LBN:(x:0;y:0;z:0);RTF:(x:0;y:0;z:0));
 type Intercept3DProp=record
                            isintercept:Boolean;   //**< Есть это пересение или нет
-                           interceptcoord:GDBVertex; //**< Точка пересечения X,Y,Z
+                           interceptcoord:GDBvertex; //**< Точка пересечения X,Y,Z
                            t1,t2:Double;          //**< позиция на линии 1 и 2 в виде относительных цифр от 0 до 1
                      end;
     Intercept2DProp=record
@@ -76,7 +76,7 @@ type Intercept3DProp=record
                            t1,t2:Double;
                          end;
      DistAndPoint=record
-                           point:gdbvertex;
+                           point:GDBvertex;
                            d:Double;
                     end;
      DistAndt=record
@@ -85,59 +85,59 @@ type Intercept3DProp=record
      TCSDir=(TCSDLeft,TCSDRight);
 function ToDVector4F(const m:DVector4D):DVector4F; inline;
 function ToDMatrix4F(const m:DMatrix4D):DMatrix4F; inline;
-function ToVertex2DI(const _V:GDBVertex):GDBVertex2DI; inline;
-function CrossVertex(const Vector1, Vector2: GDBVertex): GDBVertex;inline;
-function VertexD2S(const Vector1:GDBVertex): GDBVertex3S;inline;
+function ToVertex2DI(const _V:GDBvertex):GDBVertex2DI; inline;
+function CrossVertex(const Vector1, Vector2: GDBvertex): GDBvertex;inline;
+function VertexD2S(const Vector1:GDBvertex): GDBVertex3S;inline;
 function intercept2d(const x1, y1, x2, y2, x3, y3, x4, y4: Double): Boolean;inline;
 function intercept2d2(const x11, y11, x12, y12, x21, y21, x22, y22: Single): Boolean;inline;
 function intercept2dmy(const l1begin,l1end,l2begin,l2end:gdbvertex2d):intercept2dprop;//inline;
-function intercept3dmy(const l1begin,l1end,l2begin,l2end:gdbvertex):intercept3dprop;inline;
-function intercept3dmy2(const l1begin,l1end,l2begin,l2end:gdbvertex):intercept3dprop;//inline;
+function intercept3dmy(const l1begin,l1end,l2begin,l2end:GDBvertex):intercept3dprop;inline;
+function intercept3dmy2(const l1begin,l1end,l2begin,l2end:GDBvertex):intercept3dprop;//inline;
 
 //** Функция позволяет найти пересечение по 2-м координатам одной линии и другой
-function intercept3d(const l1begin,l1end,l2begin,l2end:gdbvertex):intercept3dprop;//inline;
+function intercept3d(const l1begin,l1end,l2begin,l2end:GDBvertex):intercept3dprop;//inline;
 
 
 function pointinquad2d(const x1, y1, x2, y2, xp, yp: Single): Boolean;inline;
 
 //**Функция определения длины по двум точкам с учетом 3-х мерного пространства
-function Vertexlength(const Vector1, Vector2: GDBVertex): Double;inline;
+function Vertexlength(const Vector1, Vector2: GDBvertex): Double;inline;
 
 function Vertexlength2d(const Vector1, Vector2: GDBVertex2d): Double;inline;
 
-function SqrVertexlength(const Vector1, Vector2: GDBVertex): Double;inline;overload;
+function SqrVertexlength(const Vector1, Vector2: GDBvertex): Double;inline;overload;
 function SqrVertexlength(const Vector1, Vector2: GDBVertex2d): Double;inline; overload;
 //**нахождение точки смещения от одной точки к другой в зависимости от коэффициент а
-function Vertexmorph(const Vector1, Vector2: GDBVertex; a: Double): GDBVertex;inline;overload;
+function Vertexmorph(const Vector1, Vector2: GDBvertex; a: Double): GDBvertex;inline;overload;
 //**нахождение точки смещения от одной точки к другой в зависимости от коэффициент а
 function Vertexmorph(const Vector1, Vector2: GDBVertex2D; a: Double): GDBVertex2D;inline;overload;
 //**нахождение точки смещения от одной точки к другой в зависимости от коэффициент а
-function VertexDmorph(const Vector1, Vector2: GDBVertex; a: Double): GDBVertex;overload;inline;
+function VertexDmorph(const Vector1, Vector2: GDBvertex; a: Double): GDBvertex;overload;inline;
 //**нахождение точки смещения от одной точки к другой в зависимости от коэффициент а
 function VertexDmorph(const Vector1, Vector2: GDBVertex3S; a: Double): GDBVertex3S;overload;inline;
 function Vertexangle(const Vector1, Vector2: GDBVertex2d): Double;inline;
-function TwoVectorAngle(const Vector1, Vector2: GDBVertex): Double;inline;
-function oneVertexlength(const Vector1: GDBVertex): Double;inline;
+function TwoVectorAngle(const Vector1, Vector2: GDBvertex): Double;inline;
+function oneVertexlength(const Vector1: GDBvertex): Double;inline;
 function oneVertexlength2D(const Vector1: GDBVertex2D): Double;inline;
-function SqrOneVertexlength(const Vector1: GDBVertex): Double;inline;
+function SqrOneVertexlength(const Vector1: GDBvertex): Double;inline;
 function vertexlen2df(const x1, y1, x2, y2: Single): Single;inline;
-function NormalizeVertex(const Vector1: GDBVertex): GDBVertex;inline;
+function NormalizeVertex(const Vector1: GDBvertex): GDBvertex;inline;
 function NormalizeVertex2D(const Vector1: GDBVertex2D): GDBVertex2D;inline;
-function VertexMulOnSc(const Vector1:GDBVertex;sc:Double): GDBVertex;inline;
+function VertexMulOnSc(const Vector1:GDBvertex;sc:Double): GDBvertex;inline;
 function Vertex2DMulOnSc(const Vector1:GDBVertex2D;sc:Double): GDBVertex2D;inline;
 
 //к первой вершине прибавить вторую по осям Vector1.х + Vector2.х
-function VertexAdd(const Vector1, Vector2: GDBVertex): GDBVertex;inline;overload;
+function VertexAdd(const Vector1, Vector2: GDBvertex): GDBvertex;inline;overload;
 function VertexAdd(const Vector1, Vector2: GDBVertex3S): GDBVertex3S;inline;overload;
 function VertexAdd(const Vector1, Vector2: GDBVertex2D): GDBVertex2D;inline;overload;
-function VertexSub(const Vector1, Vector2: GDBVertex): GDBVertex;overload;inline;
+function VertexSub(const Vector1, Vector2: GDBvertex): GDBvertex;overload;inline;
 function VertexSub(const Vector1, Vector2: GDBVertex2D): GDBVertex2D;overload;inline;
 function VertexSub(const Vector1, Vector2: GDBvertex3S): GDBVertex3S;overload;inline;
 //function MinusVertex(const Vector1: GDBVertex): GDBVertex;inline;
 function vertexlen2id(const x1, y1, x2, y2: Integer): Double;inline;
-function Vertexdmorphabs(const Vector1, Vector2: GDBVertex;a: Double): GDBVertex;inline;
-function Vertexmorphabs(const Vector1, Vector2: GDBVertex;a: Double): GDBVertex;inline;
-function Vertexmorphabs2(const Vector1, Vector2: GDBVertex;a: Double): GDBVertex;inline;
+function Vertexdmorphabs(const Vector1, Vector2: GDBvertex;a: Double): GDBvertex;inline;
+function Vertexmorphabs(const Vector1, Vector2: GDBvertex;a: Double): GDBvertex;inline;
+function Vertexmorphabs2(const Vector1, Vector2: GDBvertex;a: Double): GDBvertex;inline;
 function MatrixMultiply(const M1, M2: DMatrix4D):DMatrix4D;overload;inline;
 function MatrixMultiply(const M1: DMatrix4D; const M2: DMatrix4F):DMatrix4D;overload;inline;
 function MatrixMultiplyF(const M1, M2: DMatrix4D):DMatrix4F;inline;
@@ -146,8 +146,8 @@ function VectorTransform(const V:GDBVertex4D;const M:DMatrix4F):GDBVertex4D;over
 function VectorTransform(const V:GDBVertex4F;const M:DMatrix4F):GDBVertex4F;overload;inline;
 procedure normalize4d(var tv:GDBVertex4d);overload;inline;
 procedure normalize4F(var tv:GDBVertex4F);overload;inline;
-function VectorTransform3D(const V:GDBVertex;const M:DMatrix4D):GDBVertex;overload;inline;
-function VectorTransform3D(const V:GDBVertex;const M:DMatrix4F):GDBVertex;overload;inline;
+function VectorTransform3D(const V:GDBvertex;const M:DMatrix4D):GDBvertex;overload;inline;
+function VectorTransform3D(const V:GDBvertex;const M:DMatrix4F):GDBvertex;overload;inline;
 function VectorTransform3D(const V:GDBVertex3S;const M:DMatrix4D):GDBVertex3S;overload;inline;
 function VectorTransform3D(const V:GDBVertex3S;const M:DMatrix4F):GDBVertex3S;overload;inline;
 
@@ -160,8 +160,8 @@ procedure MatrixNormalize(var M: DMatrix4D);inline;
 function CreateRotationMatrixX(const angle: Double): DMatrix4D;inline;
 function CreateRotationMatrixY(const angle: Double): DMatrix4D;inline;
 function CreateRotationMatrixZ(const angle: Double): DMatrix4D;inline;
-function CreateRotatedXVector(const angle: Double):GDBVertex;inline;
-function CreateRotatedYVector(const angle: Double):GDBVertex;inline;
+function CreateRotatedXVector(const angle: Double):GDBvertex;inline;
+function CreateRotatedYVector(const angle: Double):GDBvertex;inline;
 function CreateAffineRotationMatrix(const anAxis: GDBvertex; angle: double):DMatrix4D;inline;
 function distance2piece(const q:GDBvertex2DI;const p1,p2:GDBvertex2D): double;overload;inline;
 function distance2piece(const q,p1,p2:GDBvertex): {DistAndPoint}double;overload;inline;
@@ -178,8 +178,8 @@ function CreateTranslationMatrix(const _V:GDBvertex): DMatrix4D;//inline;
 function CreateScaleMatrix(const V:GDBvertex): DMatrix4D;inline;
 function CreateReflectionMatrix(const plane:DVector4D): DMatrix4D;
 //**Создать 3D вершину
-function CreateVertex(const _x,_y,_z:Double):GDBVertex;inline;
-function CreateVertexFromArray(var counter:integer;const args:array of const):GDBVertex;
+function CreateVertex(const _x,_y,_z:Double):GDBvertex;inline;
+function CreateVertexFromArray(var counter:integer;const args:array of const):GDBvertex;
 function CreateVertex2DFromArray(var counter:integer;const args:array of const):GDBVertex2D;
 function CreateDoubleFromArray(var counter:integer;const args:array of const):Double; inline;
 function CreateStringFromArray(var counter:integer;const args:array of const):String; inline;
@@ -197,20 +197,20 @@ function IsBBNul(const bb:TBoundingBox):boolean; overload; inline;
 function boundingintersect(const bb1,bb2:TBoundingBox):Boolean;inline;
 function ScaleBB(const bb:TBoundingBox;const k:Double):TBoundingBox;
 procedure MatrixInvert(var M: DMatrix4D);inline;
-function vectordot(const v1,v2:GDBVertex):GDBVertex;inline;
-function scalardot(const v1,v2:GDBVertex):Double;inline;
-function vertexeq(const v1,v2:gdbvertex):Boolean;inline;
-function SQRdist_Point_to_Segment(const p:GDBVertex;const s0,s1:GDBvertex):Double;inline;
-function NearestPointOnSegment(const p:GDBVertex;const s0,s1:GDBvertex):GDBvertex;inline;
-function IsPointEqual(const p1,p2:gdbvertex;const _eps:Double=eps):boolean;inline;
+function vectordot(const v1,v2:GDBvertex):GDBvertex;inline;
+function scalardot(const v1,v2:GDBvertex):Double;inline;
+function vertexeq(const v1,v2:GDBvertex):Boolean;inline;
+function SQRdist_Point_to_Segment(const p:GDBvertex;const s0,s1:GDBvertex):Double;inline;
+function NearestPointOnSegment(const p:GDBvertex;const s0,s1:GDBvertex):GDBvertex;inline;
+function IsPointEqual(const p1,p2:GDBvertex;const _eps:Double=eps):boolean;inline;
 function IsPoint2DEqual(const p1,p2:gdbvertex2D):boolean;inline;
-function IsVectorNul(const p2:gdbvertex):boolean;inline;
+function IsVectorNul(const p2:GDBvertex):boolean;inline;
 function IsDoubleNotEqual(const d1,d2:Double;const _eps:Double=eps):boolean;inline;
 function IsDoubleEqual(const d1,d2:Double;const _eps:Double=eps):boolean;inline;
 function IsFloatNotEqual(const d1,d2:Single;const _floateps:Single=floateps):boolean;inline;
 
 procedure _myGluProject(const objx,objy,objz:Double;const modelMatrix,projMatrix:PDMatrix4D;const viewport:PIMatrix4; out winx,winy,winz:Double);inline;
-procedure _myGluProject2(const objcoord:GDBVertex;const modelMatrix,projMatrix:PDMatrix4D;const viewport:PIMatrix4; out wincoord:GDBVertex);inline;
+procedure _myGluProject2(const objcoord:GDBvertex;const modelMatrix,projMatrix:PDMatrix4D;const viewport:PIMatrix4; out wincoord:GDBvertex);inline;
 procedure _myGluUnProject(const winx,winy,winz:Double;const modelMatrix,projMatrix:PDMatrix4D;const viewport:PIMatrix4;out objx,objy,objz:Double);inline;
 
 function ortho(const xmin,xmax,ymin,ymax,zmin,zmax:Double;const matrix:PDMatrix4D):DMatrix4D;{inline;}
@@ -218,9 +218,9 @@ function Perspective(const fovy,W_H,zmin,zmax:Double;const matrix:PDMatrix4D):DM
 function LookAt(point,ex,ey,ez:GDBvertex;const matrix:PDMatrix4D):DMatrix4D;inline;
 
 function calcfrustum(const clip:PDMatrix4D):cliparray;inline;
-function PointOf3PlaneIntersect(const P1,P2,P3:DVector4D):GDBVertex;inline;
-function PointOfLinePlaneIntersect(const p1,d:GDBVertex;const plane:DVector4D;out point :GDBVertex):Boolean;inline;
-function PlaneFrom3Pont(const P1,P2,P3:GDBVertex):DVector4D;inline;
+function PointOf3PlaneIntersect(const P1,P2,P3:DVector4D):GDBvertex;inline;
+function PointOfLinePlaneIntersect(const p1,d:GDBvertex;const plane:DVector4D;out point :GDBvertex):Boolean;inline;
+function PlaneFrom3Pont(const P1,P2,P3:GDBvertex):DVector4D;inline;
 procedure NormalizePlane(var plane:DVector4D);inline;
 
 function CalcTrueInFrustum (const lbegin,lend:GDBvertex; const frustum:ClipArray):TInBoundingVolume;overload;//inline;
@@ -229,11 +229,11 @@ function CalcPointTrueInFrustum (const lbegin:GDBvertex; const frustum:ClipArray
 function CalcOutBound4VInFrustum (const OutBound:OutBound4V; const frustum:ClipArray):TInBoundingVolume;inline;
 function CalcAABBInFrustum (const AABB:TBoundingBox; const frustum:ClipArray):TInBoundingVolume;{inline;}
 
-function GetXfFromZ(const oz:GDBVertex):GDBVertex;
+function GetXfFromZ(const oz:GDBvertex):GDBvertex;
 
 function MatrixDeterminant(const M: DMatrix4D): Double;
-function CreateMatrixFromBasis(const ox,oy,oz:GDBVertex):DMatrix4D; inline;
-procedure CreateBasisFromMatrix(const m:DMatrix4D;out ox,oy,oz:GDBVertex); inline;
+function CreateMatrixFromBasis(const ox,oy,oz:GDBvertex):DMatrix4D; inline;
+procedure CreateBasisFromMatrix(const m:DMatrix4D;out ox,oy,oz:GDBvertex); inline;
 
 function QuaternionFromMatrix(const mat : DMatrix4D) : GDBQuaternion;
 function QuaternionSlerp(const source, dest: GDBQuaternion; const t: Double): GDBQuaternion;
@@ -244,7 +244,7 @@ function GetArcParamFrom3Point2D(Const PointData:tarcrtmodify;out ad:TArcData):B
 function isNotReadableAngle(Angle:Double):Boolean; inline;
 function CorrectAngleIfNotReadable(Angle:Double):Double; inline;
 
-function GetCSDirFrom0x0y2D(const ox,oy:GDBVertex):TCSDir;
+function GetCSDirFrom0x0y2D(const ox,oy:GDBvertex):TCSDir;
 
 function CalcDisplaySubFrustum(const x,y,w,h:Double;const mm,pm:DMatrix4D;const vp:IMatrix4):ClipArray;
 function myPickMatrix(const x,y,deltax,deltay:Double;const vp:IMatrix4): DMatrix4D;
@@ -280,7 +280,7 @@ begin
   result[2]:=ToDVector4F(m[2]);
   result[3]:=ToDVector4F(m[3]);
 end;
-function ToVertex2DI(const _V:GDBVertex):GDBVertex2DI;
+function ToVertex2DI(const _V:GDBvertex):GDBVertex2DI;
 begin
   result.x:=round(_V.x);
   result.y:=round(_V.y);
@@ -329,13 +329,13 @@ begin
     tm := MatrixMultiply(mm, tm);
     result := calcfrustum(@tm);
 end;
-function VertexD2S(const Vector1:GDBVertex): GDBVertex3S;
+function VertexD2S(const Vector1:GDBvertex): GDBVertex3S;
 begin
      result.x:=Vector1.x;
      result.y:=Vector1.y;
      result.z:=Vector1.z;
 end;
-function GetCSDirFrom0x0y2D(const ox,oy:GDBVertex):TCSDir;
+function GetCSDirFrom0x0y2D(const ox,oy:GDBvertex):TCSDir;
 begin
     if vectordot(ox,oy).z>eps then
                                   result:=TCSDLeft
@@ -358,7 +358,7 @@ begin
                                       result:=angle;
 end;
 
-function GetXfFromZ(const oz:GDBVertex):GDBVertex;
+function GetXfFromZ(const oz:GDBvertex):GDBvertex;
 begin
      if (abs (oz.x) < 1/64) and (abs (oz.y) < 1/64) then
                                                                     result:=CrossVertex(YWCS,oz)
@@ -367,7 +367,7 @@ begin
      normalizevertex(oz);
 end;
 
-function IsPointEqual(const p1,p2:gdbvertex;const _eps:Double):boolean;
+function IsPointEqual(const p1,p2:GDBvertex;const _eps:Double):boolean;
 begin
      if SqrVertexlength(p1,p2)>_eps then
                                           result:=false
@@ -383,7 +383,7 @@ begin
                                           result:=true;
 
 end;
-function IsVectorNul(const p2:gdbvertex):boolean;
+function IsVectorNul(const p2:GDBvertex):boolean;
 begin
      if SqrOneVertexlength(p2)>sqreps then
                                           result:=false
@@ -417,7 +417,7 @@ var i,hpos:Integer;
     d1{,d2}:Double;
 //    bytebegin,byteend,bit:integer;
 //    cacount:integer;
-//    d:gdbvertex;
+//    d:GDBvertex;
 begin
      result:=ca[position];
      hpos:=-1;
@@ -477,7 +477,7 @@ var i,j:Integer;
     bytebegin,byteend,bit:integer;
     ca:TLineClipArray;
     cacount:integer;
-    d,p:gdbvertex;
+    d,p:GDBvertex;
 begin
       fillchar((@ca)^,sizeof(ca),0);
       result:=IREmpty;
@@ -647,7 +647,7 @@ var i{,j}:Integer;
     //bytebegin,byteend,bit:integer;
     //ca:TLineClipArray;
     //cacount:integer;
-    //d,p:gdbvertex;
+    //d,p:GDBvertex;
 begin
       for i:=0 to 5 do
       begin
@@ -660,7 +660,7 @@ function CalcAABBInFrustum (const AABB:TBoundingBox;
   const frustum:ClipArray):TInBoundingVolume;
 var
   i{,Count}:integer;
-  p1,p2,p3,p4,p5,p6,p7,p8:Gdbvertex;
+  p1,p2,p3,p4,p5,p6,p7,p8:GDBvertex;
   d1,d2,d3,d4,d5,d6,d7,d8:double;
 begin
   p1:=AABB.LBN;
@@ -713,9 +713,9 @@ begin
   //end;
   //Result:=IRPartially;
 end;
-function PointOf3PlaneIntersect(const P1,P2,P3:DVector4D):GDBVertex;
+function PointOf3PlaneIntersect(const P1,P2,P3:DVector4D):GDBvertex;
 var
-   N1,N2,N3,N12,N23,N31,a1,a2,a3:GDBVertex;
+   N1,N2,N3,N12,N23,N31,a1,a2,a3:GDBvertex;
    a4:Double;
 begin
      result:=nulvertex;
@@ -753,12 +753,12 @@ begin
   end;
 end;
 
-function PlaneFrom3Pont(const P1,P2,P3:GDBVertex):DVector4D;
+function PlaneFrom3Pont(const P1,P2,P3:GDBvertex):DVector4D;
 //var
-//   N1,N2,N3,N12,N23,N31,a1,a2,a3:GDBVertex;
+//   N1,N2,N3,N12,N23,N31,a1,a2,a3:GDBvertex;
 //   a4:Double;
 begin
-  with GDBVertex((@P1)^) do
+  with GDBvertex((@P1)^) do
   begin
     result.v[0]:=   y*(P2.z - P3.z)           + P2.y*(P3.z - z)        + P3.y*(z - P2.z);
     result.v[1]:=   z*(P2.x - P3.x)           + P2.z*(P3.x - x)        + P3.z*(x - P2.x);
@@ -766,9 +766,9 @@ begin
     result.v[3]:= -(x*(P2.y*P3.z - P3.y*P2.z) + P2.x*(P3.y*z - y*P3.z) + P3.x*(y*P2.z - P2.y*z));
   end;
 end;
-function PointOfLinePlaneIntersect(const p1,d:GDBVertex;const plane:DVector4D;out point :GDBVertex):Boolean;
+function PointOfLinePlaneIntersect(const p1,d:GDBvertex;const plane:DVector4D;out point :GDBvertex):Boolean;
 var
-//   N1,N2,N3,N12,N23,N31,a1,a2,a3:GDBVertex;
+//   N1,N2,N3,N12,N23,N31,a1,a2,a3:GDBvertex;
    td:Double;
 begin
   with DVector4D((@plane)^) do
@@ -1034,7 +1034,7 @@ begin
     objy:=_out.y/_out.w;
     objz:=_out.z/_out.w;
 end;
-procedure _myGluProject2(const objcoord:GDBVertex;const modelMatrix,projMatrix:PDMatrix4D;const viewport:PIMatrix4; out wincoord:GDBVertex);
+procedure _myGluProject2(const objcoord:GDBvertex;const modelMatrix,projMatrix:PDMatrix4D;const viewport:PIMatrix4; out wincoord:GDBvertex);
 begin
      _myGluProject(objcoord.x,objcoord.y,objcoord.z,modelMatrix,projMatrix,viewport,wincoord.x,wincoord.y,wincoord.z);
 end;
@@ -1063,7 +1063,7 @@ begin
     winz:=_in.z;
     //return(GL_TRUE);
 end;
-function vertexeq(const v1,v2:gdbvertex):Boolean;
+function vertexeq(const v1,v2:GDBvertex):Boolean;
 var x,y,z:Double;
 begin
      x:=v2.x-v1.x;
@@ -1205,7 +1205,7 @@ end;
 
 function SQRdist_Point_to_Segment(const p,s0,s1:GDBvertex):Double;
 var
-   v,w,pb:gdbvertex;
+   v,w,pb:GDBvertex;
    c1,c2,b:Double;
 begin
     v:=vertexsub(s1,s0);
@@ -1231,7 +1231,7 @@ begin
 end;
 function NearestPointOnSegment(const p,s0,s1:GDBvertex):GDBvertex;
 var
-   v,w:gdbvertex;
+   v,w:GDBvertex;
    c1,c2:Double;
 begin
     v:=vertexsub(s1,s0);
@@ -1275,7 +1275,7 @@ begin
   //result.point:=
 end;
 function distance2ray(const q,p1,p2:GDBvertex):DistAndt;
-var w,v:gdbvertex;
+var w,v:GDBvertex;
     c1,c2:double;
 begin
      v:=VertexSub(p2,p1);
@@ -1482,12 +1482,12 @@ begin
   Result[2].v[2] := Cosine;
   Result[3].v[3] := 1;
 end;
-function CreateRotatedXVector(const angle: Double):GDBVertex;
+function CreateRotatedXVector(const angle: Double):GDBvertex;
 begin
   SinCos(angle, Result.y, Result.x);
   Result.z:=0;
 end;
-function CreateRotatedYVector(const angle: Double):GDBVertex;
+function CreateRotatedYVector(const angle: Double):GDBvertex;
 begin
   Result:=CreateRotatedXVector(angle+pi/2);
 end;
@@ -1671,7 +1671,7 @@ begin
     end;
   end;
 end;
-function VectorTransform3D(const V:GDBVertex;const M:DMatrix4D):GDBVertex;
+function VectorTransform3D(const V:GDBvertex;const M:DMatrix4D):GDBvertex;
 var TV: GDBVertex4D;
 begin
   pgdbvertex(@tv)^:=v;
@@ -1682,7 +1682,7 @@ begin
 
   Result := pgdbvertex(@tv)^
 end;
-function VectorTransform3D(const V:GDBVertex;const M:DMatrix4F):GDBVertex;
+function VectorTransform3D(const V:GDBvertex;const M:DMatrix4F):GDBvertex;
 var TV: GDBVertex4D;
 begin
   pgdbvertex(@tv)^:=v;
@@ -1771,26 +1771,26 @@ begin
           PGDBVertex4D(@result[5])^:=VectorTransform(PGDBVertex4D(@frustum[5])^,m1);
         end;
 end;
-function Vertexlength(const Vector1, Vector2: GDBVertex): Double;
+function Vertexlength(const Vector1, Vector2: GDBvertex): Double;
 begin
-  with GDBVertex((@vector1)^) do result := sqrt(sqr(x - vector2.x) + sqr(y - vector2.y) + sqr(z - vector2.z));
+  with GDBvertex((@vector1)^) do result := sqrt(sqr(x - vector2.x) + sqr(y - vector2.y) + sqr(z - vector2.z));
 end;
 function Vertexlength2d(const Vector1, Vector2: GDBVertex2d): Double;
 begin
   with GDBVertex2d((@vector1)^) do result := sqrt(sqr(x - vector2.x) + sqr(y - vector2.y));
 end;
-function SqrVertexlength(const Vector1, Vector2: GDBVertex): Double;
+function SqrVertexlength(const Vector1, Vector2: GDBvertex): Double;
 begin
-  with GDBVertex((@vector1)^) do result := (sqr(x - vector2.x) + sqr(y - vector2.y) + sqr(z - vector2.z));
+  with GDBvertex((@vector1)^) do result := (sqr(x - vector2.x) + sqr(y - vector2.y) + sqr(z - vector2.z));
 end;
 function SqrVertexlength(const Vector1, Vector2: GDBVertex2d): Double;
 begin
   with GDBVertex2d((@vector1)^) do result := (sqr(x - vector2.x) + sqr(y - vector2.y));
 end;
 
-function oneVertexlength(const Vector1: GDBVertex): Double;
+function oneVertexlength(const Vector1: GDBvertex): Double;
 begin
-  with GDBVertex((@vector1)^) do result := sqrt(sqr(x) + sqr(y) + sqr(z));
+  with GDBvertex((@vector1)^) do result := sqrt(sqr(x) + sqr(y) + sqr(z));
 end;
 
 function oneVertexlength2D(const Vector1: GDBVertex2D): Double;
@@ -1798,9 +1798,9 @@ begin
   with GDBVertex2D((@vector1)^) do result := sqrt(sqr(x) + sqr(y));
 end;
 
-function SqrOneVertexlength(const Vector1: GDBVertex): Double;
+function SqrOneVertexlength(const Vector1: GDBvertex): Double;
 begin
-  with GDBVertex((@vector1)^) do result := (sqr(x) + sqr(y) + sqr(z));
+  with GDBvertex((@vector1)^) do result := (sqr(x) + sqr(y) + sqr(z));
 end;
 
 function vertexlen2df(const x1, y1, x2, y2: Single): Single;
@@ -1838,13 +1838,13 @@ begin
         if (dx > 0) and (dy < 0) then
           result := 2 * pi - temp
 end;
-function TwoVectorAngle(const Vector1, Vector2: GDBVertex): Double;inline;
+function TwoVectorAngle(const Vector1, Vector2: GDBvertex): Double;inline;
 begin
   Result:=ArcCos(scalardot(Vector1, Vector2));
 end;
-function Vertexmorph(const Vector1, Vector2: GDBVertex; a: Double): GDBVertex;
+function Vertexmorph(const Vector1, Vector2: GDBvertex; a: Double): GDBvertex;
 begin
-  with GDBVertex((@vector1)^) do
+  with GDBvertex((@vector1)^) do
   begin
     result.x := x + (vector2.x - x) * a;
     result.y := y + (vector2.y - y) * a;
@@ -1860,9 +1860,9 @@ begin
   end;
 end;
 
-function VertexDmorph(const Vector1, Vector2: GDBVertex; a: Double): GDBVertex;
+function VertexDmorph(const Vector1, Vector2: GDBvertex; a: Double): GDBvertex;
 begin
-  with GDBVertex((@vector1)^) do
+  with GDBvertex((@vector1)^) do
   begin
     result.x := x + (vector2.x) * a;
     result.y := y + (vector2.y) * a;
@@ -1879,14 +1879,14 @@ begin
   end;
 end;
 
-function Vertexdmorphabs(const Vector1, Vector2: GDBVertex; a: Double): GDBVertex;
+function Vertexdmorphabs(const Vector1, Vector2: GDBvertex; a: Double): GDBvertex;
 var
   l: Double;
 begin
   l := oneVertexlength(Vector2);
   if a > 0 then a := a / l
   else a := 1 + a / l;
-  with GDBVertex((@vector1)^) do
+  with GDBvertex((@vector1)^) do
   begin
     result.x := x + (vector2.x) * a;
     result.y := y + (vector2.y) * a;
@@ -1894,28 +1894,28 @@ begin
   end;
 end;
 
-function Vertexmorphabs(const Vector1, Vector2: GDBVertex; a: Double): GDBVertex;
+function Vertexmorphabs(const Vector1, Vector2: GDBvertex; a: Double): GDBvertex;
 var
   l: Double;
 begin
   l := Vertexlength(Vector1, Vector2);
   if a > 0 then a := 1+a / l
   else a := 1 + a / l;
-  with GDBVertex((@vector1)^) do
+  with GDBvertex((@vector1)^) do
   begin
     result.x := x + (vector2.x - x) * a;
     result.y := y + (vector2.y - y) * a;
     result.z := z + (vector2.z - z) * a;
   end;
 end;
-function Vertexmorphabs2(const Vector1, Vector2: GDBVertex; a: Double): GDBVertex;
+function Vertexmorphabs2(const Vector1, Vector2: GDBvertex; a: Double): GDBvertex;
 var
   l: Double;
 begin
   l := Vertexlength(Vector1, Vector2);
   if a > 0 then a := a / l
   else a := 1 + a / l;
-  with GDBVertex((@vector1)^) do
+  with GDBvertex((@vector1)^) do
   begin
     result.x := x + (vector2.x - x) * a;
     result.y := y + (vector2.y - y) * a;
@@ -1923,13 +1923,13 @@ begin
   end;
 end;
 
-function NormalizeVertex(const Vector1: GDBVertex): GDBVertex;
+function NormalizeVertex(const Vector1: GDBvertex): GDBvertex;
 var len:Double;
 begin
   len:=oneVertexlength(Vector1);
   if abs(len)>eps then
                  begin
-                     with GDBVertex((@Result)^) do
+                     with GDBvertex((@Result)^) do
                      begin
                           X := Vector1.x / len;
                           Y := Vector1.y / len;
@@ -1960,9 +1960,9 @@ begin
                  len:=len+2;
                  end;
 end;
-function VertexMulOnSc(const Vector1:GDBVertex;sc:Double): GDBVertex;
+function VertexMulOnSc(const Vector1:GDBvertex;sc:Double): GDBvertex;
 begin
-  with GDBVertex((@Result)^) do
+  with GDBvertex((@Result)^) do
   begin
     X := Vector1.x*sc;
     Y := Vector1.y*sc;
@@ -1977,9 +1977,9 @@ begin
     Y := Vector1.y*sc;
   end;
 end;
-function VertexAdd(const Vector1, Vector2: GDBVertex): GDBVertex;
+function VertexAdd(const Vector1, Vector2: GDBvertex): GDBvertex;
 begin
-  with GDBVertex((@Result)^) do
+  with GDBvertex((@Result)^) do
   begin
     X := Vector1.x + Vector2.x;
     Y := Vector1.y + Vector2.y;
@@ -2004,9 +2004,9 @@ begin
   end;
 end;
 
-function VertexSub(const Vector1, Vector2: GDBVertex): GDBVertex;
+function VertexSub(const Vector1, Vector2: GDBvertex): GDBvertex;
 begin
-  with GDBVertex((@Result)^) do
+  with GDBvertex((@Result)^) do
   begin
     X := Vector1.x - Vector2.x;
     Y := Vector1.y - Vector2.y;
@@ -2030,7 +2030,7 @@ begin
     Z := Vector1.z - Vector2.z;
   end;
 end;
-{function MinusVertex(const Vector1: GDBVertex): GDBVertex;
+{function MinusVertex(const Vector1: GDBvertex): GDBvertex;
 begin
   Result.X := -Vector1.x;
   Result.Y := -Vector1.y;
@@ -2038,7 +2038,7 @@ begin
 end;}
 function CrossVertex;
 begin
-  with GDBVertex((@Vector1)^) do
+  with GDBvertex((@Vector1)^) do
   begin
     Result.X := (Y * Vector2.Z) - (Z * Vector2.Y);
     Result.Y := (Z * Vector2.X) - (X * Vector2.Z);
@@ -2095,7 +2095,7 @@ begin
     end;
   end;
 end;
-function intercept3dmy(const l1begin,l1end,l2begin,l2end:gdbvertex):intercept3dprop;
+function intercept3dmy(const l1begin,l1end,l2begin,l2end:GDBvertex):intercept3dprop;
 var
   z, {t,} _t1, _t2, d: Double;
 begin
@@ -2110,7 +2110,7 @@ begin
     _t2 := ((l2begin.y - l1begin.y) * (l2begin.x - l2end.x) - (l2begin.y - l2end.y) * (l2begin.x - l1begin.x)) / D;
     if ((_t1 <= 1) and (_t1 >= 0) and (_t2 >= 0) and (_t2 <= 1)) then
     begin
-      with gdbvertex((@l1begin)^) do
+      with GDBvertex((@l1begin)^) do
       begin
         result.interceptcoord.x := x + (l1end.x - x) * _t2;
         result.interceptcoord.y := y + (l1end.y - y) * _t2;
@@ -2129,10 +2129,10 @@ begin
     end;
   end;
 end;
-function intercept3dmy2(const l1begin,l1end,l2begin,l2end:gdbvertex):intercept3dprop;
+function intercept3dmy2(const l1begin,l1end,l2begin,l2end:GDBvertex):intercept3dprop;
 var
   {z, t, }t1{, t2, d, d1, d2}: Double;
-  p13,p43,p21{,pp}:gdbvertex;
+  p13,p43,p21{,pp}:GDBvertex;
   d1343,d4321,d1321,d4343,d2121,numer,denom:Double;
 begin
    result.isintercept := false;
@@ -2185,10 +2185,10 @@ begin
    result.isintercept:=true;
    end;
 end;
-function intercept3d(const l1begin,l1end,l2begin,l2end:gdbvertex):intercept3dprop;
+function intercept3d(const l1begin,l1end,l2begin,l2end:GDBvertex):intercept3dprop;
 var
   {z, t, }t1, t2{, d, d1, d2}: Double;
-  p13,p43,p21,pp:gdbvertex;
+  p13,p43,p21,pp:GDBvertex;
   d1343,d4321,d1321,d4343,d2121,numer,denom:Double;
 begin
    result.isintercept := false;
@@ -2325,22 +2325,22 @@ begin
     end;
   end;
 end;
-function vectordot(const v1,v2:GDBVertex):GDBVertex;
+function vectordot(const v1,v2:GDBvertex):GDBvertex;
 begin
-  with GDBVertex((@v1)^) do
+  with GDBvertex((@v1)^) do
   begin
      result.x:=y * v2.z - z * v2.y;
      result.y:=z * v2.x - x * v2.z;
      result.z:=x * v2.y - y * v2.x;
   end;
 end;
-function scalardot(const v1,v2:GDBVertex):Double;
+function scalardot(const v1,v2:GDBvertex):Double;
 begin
-  with GDBVertex((@v1)^) do result:=x * v2.x + y * v2.y +z*v2.z;
+  with GDBvertex((@v1)^) do result:=x * v2.x + y * v2.y +z*v2.z;
 end;
-function CreateVertex(const _x,_y,_z:Double):GDBVertex;
+function CreateVertex(const _x,_y,_z:Double):GDBvertex;
 begin
-  with GDBVertex((@result)^) do
+  with GDBvertex((@result)^) do
   begin
      x:=_x;
      y:=_y;
@@ -2377,14 +2377,14 @@ begin
   end;{case}
   inc(counter);
 end;
-function CreateVertexFromArray(var counter:integer;const args:array of const):GDBVertex;
+function CreateVertexFromArray(var counter:integer;const args:array of const):GDBvertex;
 //var
 //  len:integer;
 begin
      //len:=high(args);
      if (counter+2)<=(high(args)) then
                                  begin
-                                      with GDBVertex((@result)^) do
+                                      with GDBvertex((@result)^) do
                                       begin
                                         x:=CreateDoubleFromArray(counter,args);
                                         y:=CreateDoubleFromArray(counter,args);
@@ -2555,7 +2555,7 @@ else if IsPointInBB(CreateVertex(bb2.rtf.x,bb2.lbn.y,bb2.rtf.z),bb1) then begin 
 end;}
 function ScaleBB(const bb:TBoundingBox;const k:Double):TBoundingBox;
 var
-  p,v:gdbvertex;
+  p,v:GDBvertex;
 begin
   p:=(bb.RTF+bb.LBN)/2;
   v:=(bb.RTF-p)*k;
@@ -2565,7 +2565,7 @@ end;
 
 function boundingintersect(const bb1,bb2:TBoundingBox):Boolean;
 var
-  b1,b2,b1c,b2c,dist:gdbvertex;
+  b1,b2,b1c,b2c,dist:GDBvertex;
 begin
   //половина диагонали первого бокса
   b1.x:=(bb1.RTF.x-bb1.LBN.x)/2;
@@ -2590,14 +2590,14 @@ begin
      and(((b1.z+b2.z)-dist.z)>-bigeps) then
     result:=true
 end;
-function CreateMatrixFromBasis(const ox,oy,oz:GDBVertex):DMatrix4D;
+function CreateMatrixFromBasis(const ox,oy,oz:GDBvertex):DMatrix4D;
 begin
      result:=onematrix;
      PGDBVertex(@result[0])^:=ox;
      PGDBVertex(@result[1])^:=oy;
      PGDBVertex(@result[2])^:=oz;
 end;
-procedure CreateBasisFromMatrix(const m:DMatrix4D;out ox,oy,oz:GDBVertex);
+procedure CreateBasisFromMatrix(const m:DMatrix4D;out ox,oy,oz:GDBvertex);
 begin
      ox:=PGDBVertex(@m[0])^;
      oy:=PGDBVertex(@m[1])^;
@@ -2737,7 +2737,7 @@ end;
 function GetArcParamFrom3Point2D(Const PointData:tarcrtmodify;out ad:TArcData):Boolean;
 var a,b,c,d,e,f,g,rr:Double;
     tv:gdbvertex2d;
-    //tv3d:gdbvertex;
+    //tv3d:GDBvertex;
 begin
   A:= PointData.p2.x - PointData.p1.x;
   B:= PointData.p2.y - PointData.p1.y;

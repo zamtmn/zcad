@@ -48,6 +48,10 @@ const
       GLU_NURBS_BEGIN_DATA_EXT={$IFNDEF DELPHI}glu.{$ELSE}dglOpenGL.{$ENDIF}GLU_NURBS_BEGIN_DATA_EXT;
       GLU_NURBS_END_DATA_EXT={$IFNDEF DELPHI}glu.{$ELSE}dglOpenGL.{$ENDIF}GLU_NURBS_END_DATA_EXT;
       GLU_NURBS_VERTEX_DATA_EXT={$IFNDEF DELPHI}glu.{$ELSE}dglOpenGL.{$ENDIF}GLU_NURBS_VERTEX_DATA_EXT;
+
+      GLUIntf_GL_FALSE=gl.GL_FALSE;
+      GLUIntf_GL_TRUE=gl.GL_TRUE;
+      GLUIntf_GL_MAP1_VERTEX_4=gl.GL_MAP1_VERTEX_4;
 type
     PTViewPortArray=^TViewPortArray;
 
@@ -167,7 +171,7 @@ procedure TGLUInterface.TessVertex(tess:TessObj; location:PGDBVertex; data:PtrIn
 {type
     PT3darray=^T3darray;}
 //var
-//   tv:gdbvertex;
+//   tv:GDBvertex;
 begin
      //tv.x:=location.x;
      //tv.y:=location.y;

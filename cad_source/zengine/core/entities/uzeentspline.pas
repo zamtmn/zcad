@@ -310,7 +310,7 @@ function GDBObjSpline.Clone;
 var tpo: PGDBObjSpline;
 begin
   Getmem(Pointer(tpo), sizeof(GDBObjSpline));
-  tpo^.init(bp.ListPos.owner,vp.Layer, vp.LineWeight,closed);
+  tpo^.init(own,vp.Layer, vp.LineWeight,closed);
   CopyVPto(tpo^);
   CopyExtensionsTo(tpo^);
   //tpo^.vertexarray.init(1000);

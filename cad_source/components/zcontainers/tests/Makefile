@@ -7,7 +7,7 @@ ifeq ($(OS),Windows_NT)
 else
 	UNAME_S:=$(shell uname -s)
 	ifeq ($(UNAME_S),Linux)
-		OSDETECT=LINUX
+		OSDETECT:=LINUX
 	endif
 	ifeq ($(UNAME_S),Darwin)
 		OSDETECT:=OSX
@@ -17,63 +17,61 @@ endif
 CPUDETECT:=
 ifeq ($(OS),Windows_NT)
 	ifeq ($(PROCESSOR_ARCHITECTURE),AMD64)
-		CPUDETECT=AMD64
+		CPUDETECT:=AMD64
 	endif
 	ifeq ($(PROCESSOR_ARCHITECTURE),x86)
-		CPUDETECT=IA32
+		CPUDETECT:=IA32
 	endif
 else
 	UNAME_P := $(shell uname -p)
 	ifeq ($(UNAME_P),x86_64)
-		CPUDETECT=AMD64
+		CPUDETECT:=AMD64
 	endif
-		ifneq ($(filter %86,$(UNAME_P)),)
-	CPUDETECT=IA32
-		endif
+	ifneq ($(filter %86,$(UNAME_P)),)
+		CPUDETECT:=IA32
+	endif
 	ifneq ($(filter arm%,$(UNAME_P)),)
-		CPUDETECT=ARM
+		CPUDETECT:=ARM
 	endif
 endif
 
-PATHDELIM:=
+PATHDELIM:=/
 ifeq ($(OSDETECT),WIN32)
-	PATHDELIM =\\
-else
-	PATHDELIM =/
+	PATHDELIM:=\\
 endif
-
+PATHDELIM:=$(strip $(PATHDELIM))
 
 PCP:=
 ifeq ($(OSDETECT),WIN32)
-	PCP=$(LOCALAPPDATA)\lazarus
+	PCP:=$(LOCALAPPDATA)\lazarus
 else
 	ifeq ($(OSDETECT),LINUX)
-		PCP='~/.lazarus'
+		PCP:='~/.lazarus'
 	else
 		ifeq ($(OSDETECT),OSX)
-			PCP=~/.lazarus
+			PCP:=~/.lazarus
 		else
-			PCP=~/.lazarus
+			PCP:=~/.lazarus
 		endif
-
 	endif
 endif
 
 LP:=
 ifeq ($(OSDETECT),WIN32)
-	LP =C:\lazarus
+	LP:=C:\lazarus
 else
 	ifeq ($(OSDETECT),LINUX)
-		LP=~/lazarus
+		LP:=~/lazarus
 	else
 		ifeq ($(OSDETECT),OSX)
-			PCP=~/lazarus
+			LP:=~/lazarus
 		else
-			PCP=~/lazarus
+			LP:=~/lazarus
 		endif
-
 	endif
 endif
+
+LAZBUILD:=$(LP)$(PATHDELIM)lazbuild
 
 checkallvars: checkvars 
 	@echo OSDETECT=$(OSDETECT)
@@ -88,4 +86,4 @@ clean:
 	rm -rf lib
 
 all: checkvars
-	$(LP)$(PATHDELIM)lazbuild --pcp=$(PCP) testzcontainers.lpr
+	$(LAZBUILD) --pcp=$(PCP) testzcontainers.lpr

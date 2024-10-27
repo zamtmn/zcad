@@ -161,7 +161,7 @@ end;*)
 
 function TBoundaryPath.LoadFromDXF(var f:TZMemReader;DXFCode:Integer):Boolean;
 //type
-//  TNotPolyLine=(NPL_Line,NPL_CircularArc,NPL_EllipticArc,NPL_Spline);
+//  TNotPolyLineEdge=(NPLE_Line,NPLE_CircularArc,NPLE_EllipticArc,NPLE_Spline);
 
   procedure DrawArc(constref p1,p2:GDBVertex2D;const bulge:double;var currpath:GDBPolyline2DArray;divcount:integer);//inline;
   var
@@ -201,23 +201,25 @@ function TBoundaryPath.LoadFromDXF(var f:TZMemReader;DXFCode:Integer):Boolean;
     currpath.PushBackData(p2);
   end;
 
-  procedure loadPolyWithBulges(var byt:integer;var currpath:GDBPolyline2DArray;const VertexCount:integer;const Closed:Boolean);//inline;
+  procedure loadPolyWithBulges(var currDXFGroupCode:integer;out currpath:GDBPolyline2DArray;const VertexCount:integer;const Closed:Boolean);//inline;
   var
     p1,pcurr,pnext:GDBVertex2D;
     j:Integer;
     bulge,nextbulge:double;
   begin
     currpath.init(vertexcount*10,true);
+    //if dxfdoubleload(f,10,currDXFGroupCode,pcurr.x) then currDXFGroupCode:=f.ParseInteger;
+    //if dxfdoubleload(f,20,currDXFGroupCode,pcurr.y) then currDXFGroupCode:=f.ParseInteger;
+    pcurr:=dxfRequiredVertex2D(f,10,currDXFGroupCode);
     bulge:=0;
-    if dxfdoubleload(f,10,byt,pcurr.x) then byt:=f.ParseInteger;
-    if dxfdoubleload(f,20,byt,pcurr.y) then byt:=f.ParseInteger;
-    if dxfdoubleload(f,42,byt,bulge) then byt:=f.ParseInteger;
+    if dxfdoubleload(f,42,currDXFGroupCode,bulge) then currDXFGroupCode:=f.ParseInteger;
     p1:=pcurr;
     for j:=2 to VertexCount do begin
+      //if dxfdoubleload(f,10,currDXFGroupCode,pnext.x) then currDXFGroupCode:=f.ParseInteger;
+      //if dxfdoubleload(f,20,currDXFGroupCode,pnext.y) then currDXFGroupCode:=f.ParseInteger;
+      pnext:=dxfRequiredVertex2D(f,10,currDXFGroupCode);
       nextbulge:=0;
-      if dxfdoubleload(f,10,byt,pnext.x) then byt:=f.ParseInteger;
-      if dxfdoubleload(f,20,byt,pnext.y) then byt:=f.ParseInteger;
-      if dxfdoubleload(f,42,byt,nextbulge) then byt:=f.ParseInteger;
+      if dxfdoubleload(f,42,currDXFGroupCode,nextbulge) then currDXFGroupCode:=f.ParseInteger;
 
       if IsZero(bulge) then begin
         currpath.PushBackData(pcurr);
@@ -235,39 +237,41 @@ function TBoundaryPath.LoadFromDXF(var f:TZMemReader;DXFCode:Integer):Boolean;
         DrawFullArc(pcurr,p1,bulge,currpath);
   end;
 
-  procedure loadPoly(var byt:integer;var currpath:GDBPolyline2DArray;const VertexCount:integer;const Closed:Boolean);//inline;
+  procedure loadPoly(var currDXFGroupCode:integer;out currpath:GDBPolyline2DArray;const VertexCount:integer{;const Closed:Boolean});//inline;
   var
     p:GDBVertex2D;
     j:Integer;
   begin
     currpath.init(vertexcount,true);
     for j:=1 to VertexCount do begin
-      if dxfdoubleload(f,10,byt,p.x) then byt:=f.ParseInteger;
-      if dxfdoubleload(f,20,byt,p.y) then byt:=f.ParseInteger;
+      //if dxfdoubleload(f,10,currDXFGroupCode,p.x) then currDXFGroupCode:=f.ParseInteger;
+      //if dxfdoubleload(f,20,currDXFGroupCode,p.y) then currDXFGroupCode:=f.ParseInteger;
+      p:=dxfRequiredVertex2D(f,10,currDXFGroupCode);
       currpath.PushBackData(p);
     end;
   end;
 
-  procedure loadPolyBoundary(var byt:integer;var currpath:GDBPolyline2DArray);//inline;
+  procedure loadPolyBoundary(var currDXFGroupCode:integer;out currpath:GDBPolyline2DArray);//inline;
   var
     hasBulge:integer=0;
     isClosed:integer=0;
-    vertexcount:integer=0;
+    vertexcount:integer;
   begin
-    if dxfintegerload(f,72,byt,hasBulge) then byt:=f.ParseInteger;
-    if dxfintegerload(f,73,byt,isClosed) then byt:=f.ParseInteger;
-    if dxfintegerload(f,93,byt,vertexcount) then byt:=f.ParseInteger;
+    if dxfintegerload(f,72,currDXFGroupCode,hasBulge) then currDXFGroupCode:=f.ParseInteger;
+    if dxfintegerload(f,73,currDXFGroupCode,isClosed) then currDXFGroupCode:=f.ParseInteger;
+    vertexcount:=dxfRequiredInteger(f,93,currDXFGroupCode);
     if hasBulge=0 then
-      loadPoly(byt,currpath,VertexCount,isClosed<>0)
+      loadPoly(currDXFGroupCode,currpath,VertexCount{,isClosed<>0})
     else
-      loadPolyWithBulges(byt,currpath,VertexCount,isClosed<>0);
+      loadPolyWithBulges(currDXFGroupCode,currpath,VertexCount,isClosed<>0);
   end;
 
-  procedure loadSplineBoundary(var byt:integer;var currpath:GDBPolyline2DArray);//inline;
+  procedure loadSplineEdge(var currDXFGroupCode:integer;var currpath:GDBPolyline2DArray);//inline;
   var
-    vertexcount,bt,k:integer;
+    vertexcount,k:integer;
+    dummy:integer=0;
     knotcount:integer=0;
-    p:GDBVertex2D;
+    startTg,endTg:GDBVertex2D;
     Knots:TKnotsVector;
     PCurrKnot:TKnotsVector.PT;
     CP:TCPVector;
@@ -275,17 +279,18 @@ function TBoundaryPath.LoadFromDXF(var f:TZMemReader;DXFCode:Integer):Boolean;
     nurbsobj:GLUnurbsObj;
     currL,L:float;
   begin
-    if dxfIntegerload(f,94,byt,bt) then byt:=f.ParseInteger;
-    if dxfIntegerload(f,73,byt,bt) then byt:=f.ParseInteger;
-    if dxfIntegerload(f,74,byt,bt) then byt:=f.ParseInteger;
-    if dxfIntegerload(f,95,byt,knotcount) then byt:=f.ParseInteger;
-    if dxfIntegerload(f,96,byt,vertexcount) then byt:=f.ParseInteger;
+    if dxfIntegerload(f,94,currDXFGroupCode,dummy) then currDXFGroupCode:=f.ParseInteger;
+    if dxfIntegerload(f,73,currDXFGroupCode,dummy) then currDXFGroupCode:=f.ParseInteger;
+    if dxfIntegerload(f,74,currDXFGroupCode,dummy) then currDXFGroupCode:=f.ParseInteger;
+    if dxfIntegerload(f,95,currDXFGroupCode,knotcount) then currDXFGroupCode:=f.ParseInteger;
+    //if dxfIntegerload(f,96,currDXFGroupCode,vertexcount) then currDXFGroupCode:=f.ParseInteger;
+    vertexcount:=dxfRequiredInteger(f,96,currDXFGroupCode);
     if knotcount>0 then begin
       Knots.init(knotcount);
       Knots.AllocData(knotcount);
       PCurrKnot:=Knots.GetParray;
       for k:=0 to knotcount-1 do begin
-        if dxfFloatload(f,40,byt,PCurrKnot^) then byt:=f.ParseInteger;
+        if dxfFloatload(f,40,currDXFGroupCode,PCurrKnot^) then currDXFGroupCode:=f.ParseInteger;
         inc(PCurrKnot);
       end;
     end;
@@ -296,11 +301,13 @@ function TBoundaryPath.LoadFromDXF(var f:TZMemReader;DXFCode:Integer):Boolean;
       PPrevCP:=nil;
       currL:=10;
       for k:=0 to vertexcount-1 do begin
-        if dxfFloatLoad(f,10,byt,PCurrCP^.x) then byt:=f.ParseInteger;
-        if dxfFloatLoad(f,20,byt,PCurrCP^.y) then byt:=f.ParseInteger;
+        //if dxfFloatLoad(f,10,currDXFGroupCode,PCurrCP^.x) then currDXFGroupCode:=f.ParseInteger;
+        //if dxfFloatLoad(f,20,currDXFGroupCode,PCurrCP^.y) then currDXFGroupCode:=f.ParseInteger;
+        PCurrCP^.x:=dxfRequiredDouble(f,10,currDXFGroupCode);
+        PCurrCP^.y:=dxfRequiredDouble(f,20,currDXFGroupCode);
         PCurrCP^.z:=0;
         PCurrCP^.w:=1;
-        if dxfFloatLoad(f,42,byt,PCurrCP^.w) then byt:=f.ParseInteger;
+        if dxfFloatLoad(f,42,currDXFGroupCode,PCurrCP^.w) then currDXFGroupCode:=f.ParseInteger;
         if PPrevCP<>nil then begin
           L:=vertexlen2df(PPrevCP^.x,PPrevCP^.y,PCurrCP^.x,PCurrCP^.y);
           if L>currL then
@@ -310,11 +317,11 @@ function TBoundaryPath.LoadFromDXF(var f:TZMemReader;DXFCode:Integer):Boolean;
         inc(PCurrCP);
       end;
     end;
-    //if dxfdoubleload(f,42,byt,p.y) then byt:=f.ParseInteger;
-    if dxfdoubleload(f,12,byt,p.x) then byt:=f.ParseInteger;
-    if dxfdoubleload(f,22,byt,p.y) then byt:=f.ParseInteger;
-    if dxfdoubleload(f,13,byt,p.x) then byt:=f.ParseInteger;
-    if dxfdoubleload(f,23,byt,p.y) then byt:=f.ParseInteger;
+    //if dxfdoubleload(f,42,currDXFGroupCode,p.y) then currDXFGroupCode:=f.ParseInteger;
+    if dxfdoubleload(f,12,currDXFGroupCode,startTg.x) then currDXFGroupCode:=f.ParseInteger;
+    if dxfdoubleload(f,22,currDXFGroupCode,startTg.y) then currDXFGroupCode:=f.ParseInteger;
+    if dxfdoubleload(f,13,currDXFGroupCode,endTg.x) then currDXFGroupCode:=f.ParseInteger;
+    if dxfdoubleload(f,23,currDXFGroupCode,endTg.y) then currDXFGroupCode:=f.ParseInteger;
 
 
     nurbsobj:=GLUIntrf.NewNurbsRenderer;
@@ -345,111 +352,129 @@ function TBoundaryPath.LoadFromDXF(var f:TZMemReader;DXFCode:Integer):Boolean;
     if vertexcount>0 then
       CP.done;
   end;
+  procedure loadArcEdge(var currDXFGroupCode:integer;var currpath:GDBPolyline2DArray);//inline;
+  var
+    k:integer;
+    p,cp:GDBVertex2D;
+    r,sa,ea,a:double;
+    IsCounterClockWise:integer;
+  begin
+    //NotPolyLine:=NPLE_CircularArc;
+    cp:=dxfRequiredVertex2D(f,10,currDXFGroupCode);
+    r:=dxfRequiredDouble(f,40,currDXFGroupCode);
+    sa:=dxfRequiredDouble(f,50,currDXFGroupCode);
+    ea:=dxfRequiredDouble(f,51,currDXFGroupCode);
+    IsCounterClockWise:=0;
+    if dxfIntegerload(f,73,currDXFGroupCode,IsCounterClockWise) then
+     currDXFGroupCode:=f.ParseInteger;
+
+    sa:=sa*pi/180;
+    ea:=ea*pi/180;
+    a:=ea-sa;
+
+    if IsCounterClockWise=0 then begin
+     sa:=2*pi-sa;
+     ea:=2*pi-ea;
+     a:=-a;
+    end;
+
+    for k:=1 to 16 do begin
+     SinCos(sa+k/16*a,p.y,p.x);
+     p:=cp+p*r;
+     currpath.PushBackData(p);
+    end;
+  end;
+
+  procedure loadEllipseEdge(var currDXFGroupCode:integer;var currpath:GDBPolyline2DArray);//inline;
+  var
+    p,axis:GDBVertex2D;
+    r,sa,ea,a:double;
+    IsCounterClockWise:integer;
+  begin
+    //NotPolyLine:=NPLE_EllipticArc;
+    p:=dxfRequiredVertex2D(f,10,currDXFGroupCode);
+    axis:=dxfRequiredVertex2D(f,11,currDXFGroupCode);
+    r:=dxfRequiredDouble(f,40,currDXFGroupCode);
+    sa:=dxfRequiredDouble(f,50,currDXFGroupCode);
+    ea:=dxfRequiredDouble(f,51,currDXFGroupCode);
+    IsCounterClockWise:=0;
+    if dxfIntegerload(f,73,currDXFGroupCode,IsCounterClockWise) then
+      currDXFGroupCode:=f.ParseInteger;
+  end;
+
+  procedure loadLineEdge(var currDXFGroupCode:integer;var currpath:GDBPolyline2DArray;EdgeNum,EdgesCount:Integer);//inline;
+  var
+    p:GDBVertex2D;
+  begin
+    //if dxfdoubleload(f,10,currDXFGroupCode,p.x) then currDXFGroupCode:=f.ParseInteger;
+    //if dxfdoubleload(f,20,currDXFGroupCode,p.y) then currDXFGroupCode:=f.ParseInteger;
+    p:=dxfRequiredVertex2D(f,10,currDXFGroupCode);
+    if EdgeNum<>1 then begin
+      if not(IsPoint2DEqual(p,currpath.getPLast^)) then
+        currpath.PushBackData(p);
+    end else begin
+      currpath.PushBackData(p);
+    end;
+    //if dxfdoubleload(f,11,currDXFGroupCode,p.x) then currDXFGroupCode:=f.ParseInteger;
+    //if dxfdoubleload(f,21,currDXFGroupCode,p.y) then currDXFGroupCode:=f.ParseInteger;
+    p:=dxfRequiredVertex2D(f,11,currDXFGroupCode);
+    if EdgeNum<>EdgesCount then
+      currpath.PushBackData(p)
+    else
+      if not(IsPoint2DEqual(p,currpath.getPFirst^)) then
+        currpath.PushBackData(p);
+  end;
 
 var
   currpath:GDBPolyline2DArray;
-  i,j,k,pathscount,vertexcount,byt,bt:integer;
-  firstp,{prevp,}p,cp:GDBVertex2D;
-  r,sa,ea,a:double;
-  s:string;
+  pathscount:Integer=0;
+  i,EdgeNum,EdgesCount,currDXFGroupCode,EdgeType:integer;
+  s:string='';
   isPolyLine:boolean;
-  isNegative:integer;
-  //NotPolyLine:TNotPolyLine;
-  isFirst:boolean;
+  BoundaryPathTypeFlag:Integer;
 begin
-     result:=dxfIntegerload(f,91,DXFCode,pathscount);
-     if result then begin
-       isPolyLine:=false;
-       byt:=f.ParseInteger;
-       Clear;
-       for i:=1 to pathscount do begin
-         while not dxfintegerload(f,92,byt,bt) do
-           byt:=f.ParseInteger;
-         isPolyLine:=(bt and 2)<>0;
-         byt:=f.ParseInteger;
-         if isPolyLine then
-           loadPolyBoundary(byt,currpath)
-         else begin
-           if dxfintegerload(f,93,byt,vertexcount) then byt:=f.ParseInteger;
-           currpath.init(vertexcount,true);
-           isFirst:=true;
-           for j:=1 to vertexcount do begin
-             if dxfintegerload(f,72,byt,bt) then begin
-               byt:=f.ParseInteger;
-               case bt of
-                 1:begin
-                     if dxfdoubleload(f,10,byt,p.x) then byt:=f.ParseInteger;
-                     if dxfdoubleload(f,20,byt,p.y) then byt:=f.ParseInteger;
-                     if not isFirst then begin
-                       if not(IsPoint2DEqual(p,{prevp}currpath.getPLast^)) then
-                         currpath.PushBackData(p);
-                     end else begin
-                       currpath.PushBackData(p);
-                       firstp:=p;
-                     end;
-                     isFirst:=false;
-                     if dxfdoubleload(f,11,byt,p.x) then byt:=f.ParseInteger;
-                     if dxfdoubleload(f,21,byt,p.y) then byt:=f.ParseInteger;
-                     if j<>vertexcount then
-                       currpath.PushBackData(p)
-                     else
-                       if not(IsPoint2DEqual(p,firstp)) then
-                         currpath.PushBackData(p);
-                     //prevp:=p;
-                   end;
-                 2:begin
-                     //NotPolyLine:=NPL_CircularArc;
-                     cp:=dxfRequiredVertex2D(f,10,byt);
-                     r:=dxfRequiredDouble(f,40,byt);
-                     sa:=dxfRequiredDouble(f,50,byt);
-                     ea:=dxfRequiredDouble(f,51,byt);
-                     isNegative:=0;
-                     if dxfIntegerload(f,73,byt,isNegative) then
-                       byt:=f.ParseInteger;
-
-                     sa:=sa*pi/180;
-                     ea:=ea*pi/180;
-                     a:=ea-sa;
-
-                     if isNegative=0 then begin
-                       sa:=2*pi-sa;
-                       ea:=2*pi-ea;
-                       a:=-a;
-                     end;
-
-                     for k:=1 to 16 do begin
-                       SinCos(sa+k/16*a,p.y,p.x);
-                       p:=cp+p*r;
-                       currpath.PushBackData(p);
-                     end;
-                   end;
-                 3:begin
-                     //NotPolyLine:=NPL_EllipticArc;
-                     if dxfdoubleload(f,10,byt,p.x) then byt:=f.ParseInteger;
-                     if dxfdoubleload(f,20,byt,p.y) then byt:=f.ParseInteger;
-                     if dxfdoubleload(f,11,byt,p.x) then byt:=f.ParseInteger;
-                     if dxfdoubleload(f,21,byt,p.y) then byt:=f.ParseInteger;
-                     if dxfdoubleload(f,40,byt,p.x) then byt:=f.ParseInteger;
-                     if dxfdoubleload(f,50,byt,p.y) then byt:=f.ParseInteger;
-                     if dxfdoubleload(f,51,byt,p.x) then byt:=f.ParseInteger;
-                     if dxfdoubleload(f,73,byt,p.y) then byt:=f.ParseInteger;
-                   end;
-                 4://NotPolyLine:=NPL_Spline;
-                   loadSplineBoundary(byt,currpath);
-               end;
-             end;
-           end;
-         end;
-         if dxfintegerload(f,97,byt,bt) then
-           if bt<>0 then
-             byt:=f.ParseInteger;
-         for j:=1 to bt do begin
-           if (dxfstringload(f,330,byt,s))and(j<>bt) then byt:=f.ParseInteger;
-         end;
-         currpath.Shrink;
-         paths.PushBackData(currpath);
-       end;
-     end;
+  result:=dxfIntegerload(f,91,DXFCode,pathscount);
+  if result then begin
+    isPolyLine:=false;
+    currDXFGroupCode:=f.ParseInteger;
+    Clear;
+    BoundaryPathTypeFlag:=0;
+    for i:=1 to pathscount do begin
+      while not dxfintegerload(f,92,currDXFGroupCode,BoundaryPathTypeFlag) do
+       currDXFGroupCode:=f.ParseInteger;
+      isPolyLine:=(BoundaryPathTypeFlag and 2)<>0;
+      currDXFGroupCode:=f.ParseInteger;
+      if isPolyLine then
+       loadPolyBoundary(currDXFGroupCode,currpath)
+      else begin
+        EdgesCount:=dxfRequiredInteger(f,93,currDXFGroupCode);
+        currpath.init(EdgesCount,true);
+        for EdgeNum:=1 to EdgesCount do begin
+          EdgeType:=dxfRequiredInteger(f,72,currDXFGroupCode);
+          case EdgeType of
+            1://NotPolyLine:=NPLE_Line;
+              loadLineEdge(currDXFGroupCode,currpath,EdgeNum,EdgesCount);
+            2://NotPolyLine:=NPLE_CircularArc;
+              loadArcEdge(currDXFGroupCode,currpath);
+            3://NotPolyLine:=NPLE_EllipticArc;
+              loadEllipseEdge(currDXFGroupCode,currpath);
+            4://NotPolyLine:=NPLE_Spline;
+              loadSplineEdge(currDXFGroupCode,currpath);
+            else
+              raise EDXFReadException.CreateFmt('Wrong boundary edge type "1".."4" expected, but "%d" found',[EdgeType]);
+          end;
+        end;
+      end;
+      if dxfintegerload(f,97,currDXFGroupCode,EdgeType) then
+        if EdgeType<>0 then
+          currDXFGroupCode:=f.ParseInteger;
+      for EdgeNum:=1 to EdgeType do begin
+        if (dxfstringload(f,330,currDXFGroupCode,s))and(EdgeNum<>EdgeType) then currDXFGroupCode:=f.ParseInteger;
+      end;
+      currpath.Shrink;
+      paths.PushBackData(currpath);
+    end;
+  end;
 end;
 procedure TBoundaryPath.SaveToDXF(var outhandle:TZctnrVectorBytes);
 var

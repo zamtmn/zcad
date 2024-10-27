@@ -8,7 +8,7 @@ uses
   SysUtils,TypInfo,
   fpcunit,
   uzeBoundaryPath in '../core/entities/uzeboundarypath',
-  gzctnrVectorSimple,gvector,strutils,UGDBPolyLine2DArray,uzegeometrytypes,
+  UGDBPolyLine2DArray,uzegeometrytypes,
   testregistry,
   math;
 

@@ -27,6 +27,7 @@ uses uzegeometrytypes,uzbtypes,sysutils,uzctnrVectorBytes,usimplegenerics,
 const
   cDXFError_WrogGroupCode='DXF group code "%d" expected but "%d" found';
 
+
   dxfName_AcDbEntity='AcDbEntity';
   dxfName_AcDbLine='AcDbLine';
   dxfName_Line='LINE';
@@ -79,6 +80,7 @@ function DXFHandle(const sh:string):TDWGHandle;
 
 function dxfRequiredVertex2D(var f:TZMemReader;const RequiredDXFGroupCode:Integer;var CurrentDXFGroupCode:Integer):GDBvertex2D;
 function dxfRequiredDouble(var f:TZMemReader;const RequiredDXFGroupCode:Integer;var CurrentDXFGroupCode:Integer):Double;
+function dxfRequiredInteger(var f:TZMemReader;const RequiredDXFGroupCode:Integer;var CurrentDXFGroupCode:Integer):Integer;
 
 implementation
 
@@ -213,6 +215,14 @@ function dxfRequiredDouble(var f:TZMemReader;const RequiredDXFGroupCode:Integer;
 begin
   if CurrentDXFGroupCode=RequiredDXFGroupCode then begin
     result:=f.ParseDouble;
+    CurrentDXFGroupCode:=f.ParseInteger;
+  end else
+    raise EDXFReadException.CreateFmt(cDXFError_WrogGroupCode,[RequiredDXFGroupCode,CurrentDXFGroupCode]);
+end;
+function dxfRequiredInteger(var f:TZMemReader;const RequiredDXFGroupCode:Integer;var CurrentDXFGroupCode:Integer):Integer;
+begin
+  if CurrentDXFGroupCode=RequiredDXFGroupCode then begin
+    result:=f.ParseInteger;
     CurrentDXFGroupCode:=f.ParseInteger;
   end else
     raise EDXFReadException.CreateFmt(cDXFError_WrogGroupCode,[RequiredDXFGroupCode,CurrentDXFGroupCode]);

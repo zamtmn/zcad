@@ -30,7 +30,8 @@ uses
   uzglviewareadata,
   uzcinterface,
   uzegeometry,
-                                          gzctnrSTL,
+  gzctnrSTL,
+  UGDBGraf,
   uzeconsts,
   uzeentity,uzeentline,
   uzcentnet,
@@ -3449,9 +3450,9 @@ end;
 end;
 
 procedure startup;
-//var
-  // s:String;
 begin
+  SysUnit^.RegisterType(TypeInfo(TLinkType));
+
   MainSpecContentFormat.init(100);
   MainSpecContentFormat.loadfromfile(FindInSupportPath(GetSupportPath,'main.sf'));
   CreateZCADCommand(@RegenZEnts_com,'RegenZEnts',CADWG,0);

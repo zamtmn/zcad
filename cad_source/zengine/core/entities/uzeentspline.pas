@@ -20,12 +20,13 @@ unit uzeentspline;
 {$INCLUDE zengineconfig.inc}
 
 interface
-uses LCLProc,uzegluinterface,uzeentityfactory,uzgldrawcontext,uzgloglstatemanager,gzctnrVector,
-     UGDBPoint3DArray,uzedrawingdef,uzecamera,UGDBVectorSnapArray,
-     uzestyleslayers,uzeentsubordinated,uzeentcurve,
-     uzeentity,uzctnrVectorBytes,uzbtypes,uzeconsts,uzglviewareadata,
-     gzctnrVectorTypes,uzegeometrytypes,uzegeometry,uzeffdxfsupport,sysutils,
-     uzMVReader,uzCtnrVectorpBaseEntity,uzeSplineUtils;
+uses
+  LCLProc,uzegluinterface,uzeentityfactory,uzgldrawcontext,uzgloglstatemanager,
+  gzctnrVector,UGDBPoint3DArray,uzedrawingdef,uzecamera,UGDBVectorSnapArray,
+  uzestyleslayers,uzeentsubordinated,uzeentcurve,
+  uzeentity,uzctnrVectorBytes,uzbtypes,uzeconsts,uzglviewareadata,
+  gzctnrVectorTypes,uzegeometrytypes,uzegeometry,uzeffdxfsupport,sysutils,
+  uzMVReader,uzCtnrVectorpBaseEntity,uzeSplineUtils;
 type
   PGDBObjSpline=^GDBObjSpline;
   GDBObjSpline= object(GDBObjCurve)
@@ -152,7 +153,7 @@ var //i,j: Integer;
     m:DMatrix4D;
     fm,fp:DMatrix4F;
     notfirst:boolean;
-    currL,L:single;
+    //maxL,minL,L:single;
 begin
      if assigned(EntExtensions)then
        EntExtensions.RunOnBeforeEntityFormat(@self,drawing,DC);
@@ -171,7 +172,6 @@ begin
                                                                                    end;
      tv0:=uzegeometry.VectorTransform3d(tv0,m);
      notfirst:=false;
-     currL:=10;
   if ptv<>nil then
   repeat
         tfv.x:=ptv^.x{-ptv0^.x};
@@ -189,11 +189,16 @@ begin
         tfvs.z:=tfv.z;
         tfvs.w:=tfv.w;
         CP.PushBackData(tfvs);
-        if notfirst then begin
+        {if notfirst then begin
           L:=vertexlen2df(tfvs.x,tfvs.y,tfvsprev.x,tfvsprev.y);
-          if L>currL then
-            currL:=L;
-        end;
+          if L>maxL then
+            maxL:=L;
+          if L<minL then
+            minL:=L;
+        end else begin
+          maxL:=-Infinity;
+          minL:=Infinity;
+        end;}
         tfvsprev:=tfvs;
         notfirst:=true;
         ptv:=VertexArrayInOCS.iterate(ir);
@@ -223,7 +228,7 @@ begin
   nurbsobj:=GLUIntrf.NewNurbsRenderer;
 
   GLUIntrf.NurbsProperty(nurbsobj,GLU_NURBS_MODE_EXT,GLU_NURBS_TESSELLATOR_EXT);
-  GLUIntrf.NurbsProperty(nurbsobj,GLU_SAMPLING_TOLERANCE,currL/100);
+  GLUIntrf.NurbsProperty(nurbsobj,GLU_SAMPLING_TOLERANCE,{max(maxL/100,minL/5)}10);
   GLUIntrf.NurbsProperty(nurbsobj,GLU_DISPLAY_MODE,{GLU_FILL}GLU_POINT);
   GLUIntrf.NurbsProperty(nurbsobj,GLU_AUTO_LOAD_MATRIX, {GL_TRUE}GL_FALSE);
   fm:=ToDMatrix4F(DC.DrawingContext.matrixs.pmodelMatrix^);

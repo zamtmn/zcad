@@ -326,17 +326,9 @@ function TBoundaryPath.LoadFromDXF(var f:TZMemReader;DXFCode:Integer):Boolean;
 
     nurbsobj:=GLUIntrf.NewNurbsRenderer;
 
-    GLUIntrf.NurbsProperty(nurbsobj,GLU_NURBS_MODE_EXT,GLU_NURBS_TESSELLATOR_EXT);
-    GLUIntrf.NurbsProperty(nurbsobj,GLU_SAMPLING_TOLERANCE,currL/15);
-    GLUIntrf.NurbsProperty(nurbsobj,GLU_DISPLAY_MODE,GLU_POINT);
-    GLUIntrf.NurbsProperty(nurbsobj,GLU_AUTO_LOAD_MATRIX,GLUIntf_GL_FALSE{GL_TRUE});
-
-    GLUIntrf.NurbsCallbackData(nurbsobj,@currpath);
-
-    GLUIntrf.NurbsCallback(nurbsobj,GLU_NURBS_BEGIN_DATA_EXT,nil{@NurbsBeginCallBack});
-    GLUIntrf.NurbsCallback(nurbsobj,GLU_NURBS_END_DATA_EXT,nil{@NurbsEndCallBack});
-    GLUIntrf.NurbsCallback(nurbsobj,GLU_NURBS_VERTEX_DATA_EXT,@NurbsVertexCallBack);
-    GLUIntrf.NurbsCallback(nurbsobj,GLU_NURBS_ERROR,@NurbsErrorCallBack);
+    GLUIntrf.SetupNurbsRenderer(nurbsobj,currL/15,
+                                nil,nil,@NurbsVertexCallBack,@NurbsErrorCallBack,
+                                @currpath);
 
     GLUIntrf.BeginCurve(nurbsobj);
     GLUIntrf.NurbsCurve (nurbsobj,Knots.Count,Knots.GetParrayAsPointer,{CP.Count}4,CP.GetParrayAsPointer,4,GLUIntf_GL_MAP1_VERTEX_4);

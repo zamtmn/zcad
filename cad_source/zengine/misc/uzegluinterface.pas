@@ -54,8 +54,13 @@ const
       GLUIntf_GL_MAP1_VERTEX_4=gl.GL_MAP1_VERTEX_4;
 type
     PTViewPortArray=^TViewPortArray;
-
     TGLUIntf_GLenum=GLenum;
+
+    TBeginCB=procedure(const v: TGLUIntf_GLenum;const Data: Pointer);{$IFDEF Windows}stdcall{$ELSE}cdecl{$ENDIF};
+    TVertexCB=procedure(const v: PGDBvertex3S;const Data: Pointer);{$IFDEF Windows}stdcall{$ELSE}cdecl{$ENDIF};
+    TEndCB=procedure (const Data: Pointer);{$IFDEF Windows}stdcall{$ELSE}cdecl{$ENDIF};
+    TErrorCB=procedure(const v: GLenum);{$IFDEF Windows}stdcall{$ELSE}cdecl{$ENDIF};
+
     TessObj=Pointer;
     GLUnurbsObj=Pointer;
     PTGLUInterface=^TGLUInterface;
@@ -72,6 +77,16 @@ type
                            procedure TessCallback(tess:TessObj; which:TGLUIntf_GLenum; CallBackFunc:_GLUfuncptr);
 
                            function NewNurbsRenderer:GLUnurbsObj;
+                           procedure SetupNurbsRenderer(const renderer:GLUnurbsObj;
+                                                        const tolerance:GLfloat;
+                                                        constref model,perspective:DMatrix4D;
+                                                        constref view:IMatrix4;
+                                                        const BeginCB:TBeginCB;const EndCB:TVertexCB;const VertexCB:TVertexCB;const ErrorCB:TErrorCB;
+                                                        const Data: Pointer);overload;
+                           procedure SetupNurbsRenderer(const renderer:GLUnurbsObj;
+                                                        const tolerance:GLfloat;
+                                                        const BeginCB:TBeginCB;const EndCB:TVertexCB;const VertexCB:TVertexCB;const ErrorCB:TErrorCB;
+                                                        const Data: Pointer);overload;
                            procedure DeleteNurbsRenderer(renderer:GLUnurbsObj);
                            procedure NurbsCallback(nurb:GLUnurbsObj; which:TGLUIntf_GLenum; CallBackFunc:_GLUfuncptr);
                            procedure BeginCurve(renderer:GLUnurbsObj);
@@ -106,6 +121,47 @@ function TGLUInterface.NewNurbsRenderer:GLUnurbsObj;
 begin
      result:=gluNewNurbsRenderer;
 end;
+procedure TGLUInterface.SetupNurbsRenderer(const renderer:GLUnurbsObj;
+                                           const tolerance:GLfloat;
+                                           constref model,perspective:DMatrix4D;
+                                           constref view:IMatrix4;
+                                           const BeginCB:TBeginCB;const EndCB:TVertexCB;const VertexCB:TVertexCB;const ErrorCB:TErrorCB;
+                                           const Data: Pointer);
+var
+  fm,fp:DMatrix4F;
+begin
+  fm:=ToDMatrix4F(model);
+  fp:=ToDMatrix4F(perspective);
+
+  NurbsProperty(renderer,GLU_NURBS_MODE_EXT,GLU_NURBS_TESSELLATOR_EXT);
+  NurbsProperty(renderer,GLU_SAMPLING_TOLERANCE,tolerance);
+  NurbsProperty(renderer,GLU_DISPLAY_MODE,{GLU_FILL}GLU_POINT);
+  NurbsProperty(renderer,GLU_AUTO_LOAD_MATRIX,{GL_TRUE}GL_FALSE);
+  mygluLoadSamplingMatrices(renderer,@fm,@fp,@view);
+  NurbsCallback(renderer,GLU_NURBS_BEGIN_DATA_EXT,_GLUfuncptr(BeginCB));
+  NurbsCallback(renderer,GLU_NURBS_END_DATA_EXT,_GLUfuncptr(EndCB));
+  NurbsCallback(renderer,GLU_NURBS_VERTEX_DATA_EXT,_GLUfuncptr(VertexCB));
+  NurbsCallback(renderer,GLU_NURBS_ERROR,_GLUfuncptr(ErrorCB));
+  NurbsCallbackData(renderer,Data);
+end;
+
+procedure TGLUInterface.SetupNurbsRenderer(const renderer:GLUnurbsObj;
+                                           const tolerance:GLfloat;
+                                           const BeginCB:TBeginCB;const EndCB:TVertexCB;const VertexCB:TVertexCB;const ErrorCB:TErrorCB;
+                                           const Data: Pointer);
+begin
+  NurbsProperty(renderer,GLU_NURBS_MODE_EXT,GLU_NURBS_TESSELLATOR_EXT);
+  NurbsProperty(renderer,GLU_SAMPLING_TOLERANCE,tolerance);
+  NurbsProperty(renderer,GLU_DISPLAY_MODE,{GLU_FILL}GLU_POINT);
+  NurbsProperty(renderer,GLU_AUTO_LOAD_MATRIX,{GL_TRUE}GL_FALSE);
+  NurbsCallback(renderer,GLU_NURBS_BEGIN_DATA_EXT,_GLUfuncptr(BeginCB));
+  NurbsCallback(renderer,GLU_NURBS_END_DATA_EXT,_GLUfuncptr(EndCB));
+  NurbsCallback(renderer,GLU_NURBS_VERTEX_DATA_EXT,_GLUfuncptr(VertexCB));
+  NurbsCallback(renderer,GLU_NURBS_ERROR,_GLUfuncptr(ErrorCB));
+  NurbsCallbackData(renderer,Data);
+end;
+
+
 procedure TGLUInterface.DeleteNurbsRenderer(renderer:GLUnurbsObj);
 begin
      gluDeleteNurbsRenderer(renderer)

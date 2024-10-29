@@ -46,7 +46,7 @@ uses
   uzegeometry,
   //garrayutils,
   Varman,
-  fpsTypes, fpSpreadsheet, fpsUtils, {fpsSearch, fpsAllFormats,}fpsClasses,fpsExprParser,  uzbstrproc,
+  fpsTypes, fpSpreadsheet, fpsUtils, fpsSearch, fpsAllFormats,fpsClasses,fpsExprParser,  uzbstrproc,
   comobj, variants, LConvEncoding{, strutils};
 
 

@@ -318,6 +318,8 @@ function TBoundaryPath.LoadFromDXF(var f:TZMemReader;DXFCode:Integer):Boolean;
       end;
     end;
     //if dxfdoubleload(f,42,currDXFGroupCode,p.y) then currDXFGroupCode:=f.ParseInteger;
+    startTg:=NulVertex2D;
+    endTg:=NulVertex2D;
     if dxfdoubleload(f,12,currDXFGroupCode,startTg.x) then currDXFGroupCode:=f.ParseInteger;
     if dxfdoubleload(f,22,currDXFGroupCode,startTg.y) then currDXFGroupCode:=f.ParseInteger;
     if dxfdoubleload(f,13,currDXFGroupCode,endTg.x) then currDXFGroupCode:=f.ParseInteger;
@@ -331,7 +333,7 @@ function TBoundaryPath.LoadFromDXF(var f:TZMemReader;DXFCode:Integer):Boolean;
                                 @currpath);
 
     GLUIntrf.BeginCurve(nurbsobj);
-    GLUIntrf.NurbsCurve (nurbsobj,Knots.Count,Knots.GetParrayAsPointer,{CP.Count}4,CP.GetParrayAsPointer,4,GLUIntf_GL_MAP1_VERTEX_4);
+    GLUIntrf.NurbsCurve(nurbsobj,Knots.Count,Knots.GetParrayAsPointer,{CP.Count}4,CP.GetParrayAsPointer,4,GLUIntf_GL_MAP1_VERTEX_4);
     GLUIntrf.EndCurve(nurbsobj);
 
 

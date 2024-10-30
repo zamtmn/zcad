@@ -7,10 +7,10 @@ interface
 uses
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, StdCtrls,
   ButtonPanel, Buttons, ExtCtrls, ComCtrls, Spin, ActnList,LCLProc,
-
-  uzcinterface,uzcgui2linetypes,uzcflinetypesload,uzcsysvars,uzedrawingsimple,//uzbtypes,
+  uzcinterface,uzcgui2linetypes,uzcflinetypesload,uzcsysvars,uzedrawingsimple,
   uzestyleslinetypes,uzcdrawings,uzcimagesmanager,uzbstrproc,usupportgui,uzeutils,
-  gzctnrVectorTypes,uzbpaths,uzcstrconsts,UGDBNamedObjectsArray,uzcuitypes;
+  gzctnrVectorTypes,uzbpaths,uzcstrconsts,UGDBNamedObjectsArray,uzcuitypes,
+  uzcLog,uzcreglog;
 
 type
 
@@ -263,14 +263,12 @@ end;
 
 procedure TLineTypesForm.MakeCurrentLT(Sender: TObject);
 begin
-  DebugLn('{WHM}%s',[rsNotYetImplemented]);
+  ProgramLog.LogOutStr(rsNotYetImplemented,LM_Warning,1,MO_SH or MO_SM);
 end;
 procedure TLineTypesForm.DeletetLT(Sender: TObject);
 begin
-  DebugLn('{WHM}%s',[rsNotYetImplemented]);
+  ProgramLog.LogOutStr(rsNotYetImplemented,LM_Warning,1,MO_SH or MO_SM);
 end;
-
-
 
 procedure TLineTypesForm._close(Sender: TObject; var CloseAction: TCloseAction);
 begin

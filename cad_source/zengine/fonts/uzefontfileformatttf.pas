@@ -20,7 +20,7 @@ unit uzeFontFileFormatTTF;
 {$INCLUDE zengineconfig.inc}
 interface
 uses
-  LCLProc,uzgprimitivescreator,uzgprimitives,uzglvectorobject,uzefontbase,
+  uzgprimitivescreator,uzgprimitives,uzglvectorobject,uzefontbase,
   uzebeziersolver,math,uzgloglstatemanager,uzegluinterface,
   usimplegenerics,EasyLazFreeType,uzbstrproc,sysutils,
   uzegeometrytypes,uzbtypes,uzegeometry,gzctnrSTL,gzctnrVectorTypes,uzbLogIntf,
@@ -96,7 +96,7 @@ begin
       inc(ptrsize^);
     end;
     else begin
-      debugln('{F}Wrong triangulation mode!!');
+      zDebugLn('{F}Wrong triangulation mode!!');
       halt(0);
     end;
   end;

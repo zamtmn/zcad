@@ -22,11 +22,12 @@ unit uzeenttext;
 
 interface
 uses
-    uzglgeometry,uzgldrawcontext,uzeobjectextender,uzetextpreprocessor,uzeentityfactory,
-    uzedrawingdef,uzecamera,uzbstrproc,sysutils,uzefont,uzestyleslayers,
-    uzeentabstracttext,uzeentity,UGDBOutbound2DIArray,uzctnrVectorBytes,uzbtypes,
-    uzeconsts,uzglviewareadata,uzegeometry,uzeffdxfsupport,uzeentsubordinated,LazLogger,
-    uzegeometrytypes,uzestylestexts,uzeSnap,uzMVReader;
+  uzglgeometry,uzgldrawcontext,uzeobjectextender,uzetextpreprocessor,
+  uzeentityfactory,uzedrawingdef,uzecamera,uzbstrproc,sysutils,uzefont,
+  uzestyleslayers,uzeentabstracttext,uzeentity,UGDBOutbound2DIArray,
+  uzctnrVectorBytes,uzbtypes,uzeconsts,uzglviewareadata,uzegeometry,
+  uzeffdxfsupport,uzeentsubordinated,uzbLogIntf,uzegeometrytypes,uzestylestexts,
+  uzeSnap,uzMVReader;
 type
 PGDBObjText=^GDBObjText;
 GDBObjText= object(GDBObjAbstractText)
@@ -767,6 +768,6 @@ initialization
   RegisterDXFEntity(GDBTextID,'TEXT','Text',@AllocText,@AllocAndInitText);
   GDBObjTextDXFFeatures:=TDXFEntIODataManager.Create;
 finalization
-  debugln('{I}[UnitsFinalization] Unit "',{$INCLUDE %FILE%},'" finalization');
+  ZDebugLN('{I}[UnitsFinalization] Unit "'+{$INCLUDE %FILE%}+'" finalization');
   GDBObjTextDXFFeatures.Destroy;
 end.

@@ -19,10 +19,11 @@ unit uzeblockdef;
 {$Mode delphi}{$H+}
 {$INCLUDE zengineconfig.inc}
 interface
-uses gzctnrVectorTypes,uzeentity,uzeentityfactory,uzgldrawcontext,uzeobjectextender,uzedrawingdef,
-     uzeentsubordinated,{uzeffdxfsupport,}uzctnrVectorBytes,sysutils,uzbtypes,
-     uzegeometrytypes,uzegeometry,uzestyleslayers,uzeconsts,uzeentgenericsubentry,LazLogger,
-     uzMVReader;
+uses
+  gzctnrVectorTypes,uzeentity,uzeentityfactory,uzgldrawcontext,uzeobjectextender,
+  uzedrawingdef,uzeentsubordinated,uzctnrVectorBytes,sysutils,uzbtypes,
+  uzegeometrytypes,uzegeometry,uzestyleslayers,uzeconsts,uzeentgenericsubentry,
+  uzbLogIntf,uzMVReader;
 type
 {Export+}
 PGDBObjBlockdef=^GDBObjBlockdef;
@@ -182,6 +183,6 @@ initialization
   GDBObjBlockDefDXFFeatures:=TDXFEntIODataManager.Create;
   {RegisterDXFEntity}RegisterEntity(GDBBlockDefID,'BlockDef',@AllocBlockDef,@AllocAndInitBlockDef,@SetLineGeomProps,@AllocAndCreateBlockDef);
 finalization
-  debugln('{I}[UnitsFinalization] Unit "',{$INCLUDE %FILE%},'" finalization');
+  ZDebugLN('{I}[UnitsFinalization] Unit "'+{$INCLUDE %FILE%}+'" finalization');
   GDBObjBlockDefDXFFeatures.Destroy;
 end.

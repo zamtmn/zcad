@@ -22,7 +22,7 @@ unit uzgprimitivescreator;
 interface
 uses uzgprimitivescreatorabstract,uzgindexsarray,uzgprimitives,
      sysutils,uzbtypes,uzgprimitivessarray,
-     uzegeometry,LazLogger,gzctnrVectorTypes;
+     uzegeometry,uzbLogIntf,gzctnrVectorTypes;
 type
 
 TLLPrimitivesCreator=class(TLLPrimitivesCreatorAbstract)
@@ -148,7 +148,7 @@ end;
 initialization
   DefaultLLPCreator:=TLLPrimitivesCreator.create;
 finalization
-  debugln('{I}[UnitsFinalization] Unit "',{$INCLUDE %FILE%},'" finalization');
+  zDebugln('{I}[UnitsFinalization] Unit "'+{$INCLUDE %FILE%}+'" finalization');
   DefaultLLPCreator.Destroy;
 end.
 

@@ -20,7 +20,7 @@ unit UUnitManager;
 
 {$MODE DELPHI}
 interface
-uses LCLProc,uzbpaths,uzbstrproc,Varman,languade,gzctnrVectorObjects,SysUtils,
+uses uzbpaths,uzbstrproc,Varman,languade,gzctnrVectorObjects,SysUtils,
      UBaseTypeDescriptor, {uzbtypes,}uzctnrVectorBytes, strmy,
      varmandef,gzctnrVectorTypes,gzctnrVector,uzctnrvectorstrings,
      TypeDescriptors,UEnumDescriptor,UArrayDescriptor,UPointerDescriptor,
@@ -314,7 +314,7 @@ begin
                         //inc(kolvo);
                         if {kolvo=20}line=oldline then
                                    begin
-                                        debugln('{E}Unable to parse line "%s"',[line]);
+                                        zdebugln('{E}Unable to parse line "%s"',[line]);
                                         raise Exception.CreateFmt('Unable to parse line "%s"',[line]);
                                         line := f.readtoparser(';');
                                    end
@@ -395,7 +395,7 @@ begin
                                 begin
                                 currentunit:=internalfindunit(unitname);
                                 if currentunit<>nil then
-                                   DebugLn('{W}Unit "%s" already exists',[unitname]);
+                                   zDebugLn('{W}Unit "%s" already exists',[unitname]);
                                 end;
                               if currentunit=nil
                                                then
@@ -645,7 +645,7 @@ begin
                                                                 else
                                                                     begin
                                                                       //FatalError('Syntax error in file '+f.name);
-                                                                      debugln('{E}Syntax error in file "%s"',[f.name]);
+                                                                      zdebugln('{E}Syntax error in file "%s"',[f.name]);
                                                                       raise Exception.CreateFmt('Syntax error in file "%s"',[f.name]);
                                                                     end;
                                                   if parseresult<>nil then begin parseresult^.Done;Freemem(Pointer(parseresult));parseresult:=nil;end;
@@ -674,7 +674,7 @@ begin
                                              else if maxvalue<65536 then maxvalue:=2
                                              else if maxvalue<4294967296 then maxvalue:=4
                                              else begin
-                                                    debugln('{E}Syntax error in file "%s"',[f.name]);
+                                                    zdebugln('{E}Syntax error in file "%s"',[f.name]);
                                                     raise Exception.CreateFmt('Syntax error in file "%s"',[f.name]);
                                                   end;
                                              Getmem(Pointer(etd),sizeof(EnumDescriptor));
@@ -698,7 +698,7 @@ begin
 
                                              end;
                                            0:begin
-                                              debugln('{E}Syntax error in file "%s"',[f.name]);
+                                              zdebugln('{E}Syntax error in file "%s"',[f.name]);
                                               raise Exception.CreateFmt('Syntax error in file "%s"',[f.name]);
                                              end;
                                 end;
@@ -750,7 +750,7 @@ if addtype then
                         //inc(kolvo);
                         if {kolvo=20}line=oldline then
                                    begin
-                                     debugln('{E}Unable to parse line "%s"',[line]);
+                                     zdebugln('{E}Unable to parse line "%s"',[line]);
                                      raise Exception.CreateFmt('Unable to parse line "%s"',[line]);
                                    end
                                    else
@@ -846,7 +846,7 @@ end;
 initialization;
      units.init;
 finalization;
-     debugln('{I}[UnitsFinalization] Unit "',{$INCLUDE %FILE%},'" finalization');
+     zdebugln('{I}[UnitsFinalization] Unit "'+{$INCLUDE %FILE%}+'" finalization');
      if DBUnit<>nil then
      begin
           PVardeskInDBUnit:=DBUnit.InterfaceVariables.vardescarray.beginiterate(IrInDBUnit);

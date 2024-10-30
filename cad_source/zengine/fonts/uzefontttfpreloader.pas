@@ -22,7 +22,8 @@ unit uzefontttfpreloader;
 interface
 
 uses
-  sysutils,classes,LCLProc,bufstream{,StrUtils};
+  sysutils,classes,bufstream,
+  uzbLogIntf;
 
 const
   maxNameID=26;
@@ -292,7 +293,7 @@ begin
     AStream.Seek(0,soBeginning);
     TTCHeader:=readTTCheader(AStream);
     if TTCHeader.Tag=TTC_Tag then begin
-      debugln('{W}getTTFFileParams: TTFFile "%s" is collection',[filename]);
+      zDebugln('{W}getTTFFileParams: TTFFile "%s" is collection',[filename]);
       exit;
     end;
 
@@ -307,7 +308,7 @@ begin
       result.FileType:=TTFTApple
     else begin
       result.FileType:=TTFTOther;
-      debugln('{W}getTTFFileParams: TTFFile "%s" TableDir.version=%x (not MS or MAC)',[filename,TableDir.version]);
+      zDebugLn('{W}getTTFFileParams: TTFFile "%s" TableDir.version=%x (not MS or MAC)',[filename,TableDir.version]);
       exit;
     end;
 
@@ -326,7 +327,6 @@ begin
     NameTable.numNameRecords:=BEtoN(AStream.GET_UShort);
     StartOffs:=AStream.Seek(0,soCurrent);
     NameTable.storageOffset:=BEtoN(AStream.GET_UShort){+TableDirEntries[nametableindex].Offset};
-
     //debugln('{E}NameTable.numNameRecords=%d',[NameTable.numNameRecords]);
 
     //setlength(NameRecords,NameTable.numNameRecords);
@@ -448,7 +448,7 @@ begin
     TableLength:=AStream.Seek(0,soCurrent)-StartOffs;
 
     if TableLength<>TableDirEntries[os2tableindex].Length then begin
-      debugln('{W}getTTFFileParams: TTFFile "%s" OS/2 table length in file header <> fact length %d<>%d',[filename,TableDirEntries[os2tableindex].Length,TableLength]);
+      zDebugLn('{W}getTTFFileParams: TTFFile "%s" OS/2 table length in file header <> fact length %d<>%d',[filename,TableDirEntries[os2tableindex].Length,TableLength]);
       exit;
     end;
 
@@ -457,28 +457,28 @@ begin
 
     result.ValidTTFFile:=result.FontFamily<>'';
 
-    debugln('TTFName "%s"',[filename]);
+    zDebugLn('TTFName "%s"',[filename]);
     //debugln('CopyrightNotice="%s"',[result.CopyrightNotice]);
-    debugln('FontFamily="%s"',[result.FontFamily]);
-    debugln('FontSubfamily"%s"',[result.FontSubfamily]);
-    debugln('UniqueSubfamily="%s"',[result.UniqueSubfamily]);
-    debugln('FullName="%s"',[result.FullName]);
-    debugln('Version="%s"',[result.Version]);
-    debugln('PostScriptName="%s"',[result.PostScriptName]);
-    {debugln('TrademarkNotice="%s"',[result.TrademarkNotice]);
-    debugln('ManufacturerName="%s"',[result.ManufacturerName]);
-    debugln('DesignerName="%s"',[result.DesignerName]);
-    debugln('Description="%s"',[result.Description]);
-    debugln('URLVendor="%s"',[result.URLVendor]);
-    debugln('URLDesigner="%s"',[result.URLDesigner]);
-    debugln('LicenseDescription="%s"',[result.LicenseDescription]);
-    debugln('LicenseInformationURL="%s"',[result.LicenseInformationURL]);
-    debugln('Reserved="%s"',[result.Reserved]);}
-    debugln('PreferredFamily="%s"',[result.PreferredFamily]);
-    debugln('PreferredSubfamily="%s"',[result.PreferredSubfamily]);
-    debugln('CompatibleFull="%s"',[result.CompatibleFull]);
-    {debugln('SampleText="%s"',[result.SampleText]);
-    debugln('VariationsPostScriptNamePrefix="%s"',[result.VariationsPostScriptNamePrefix]);}
+    zDebugLn('FontFamily="%s"',[result.FontFamily]);
+    zDebugLn('FontSubfamily"%s"',[result.FontSubfamily]);
+    zDebugLn('UniqueSubfamily="%s"',[result.UniqueSubfamily]);
+    zDebugLn('FullName="%s"',[result.FullName]);
+    zDebugLn('Version="%s"',[result.Version]);
+    zDebugLn('PostScriptName="%s"',[result.PostScriptName]);
+    {zDebugLn('TrademarkNotice="%s"',[result.TrademarkNotice]);
+    zDebugLn('ManufacturerName="%s"',[result.ManufacturerName]);
+    zDebugLn('DesignerName="%s"',[result.DesignerName]);
+    zDebugLn('Description="%s"',[result.Description]);
+    zDebugLn('URLVendor="%s"',[result.URLVendor]);
+    zDebugLn('URLDesigner="%s"',[result.URLDesigner]);
+    zDebugLn('LicenseDescription="%s"',[result.LicenseDescription]);
+    zDebugLn('LicenseInformationURL="%s"',[result.LicenseInformationURL]);
+    zDebugLn('Reserved="%s"',[result.Reserved]);}
+    zDebugLn('PreferredFamily="%s"',[result.PreferredFamily]);
+    zDebugLn('PreferredSubfamily="%s"',[result.PreferredSubfamily]);
+    zDebugLn('CompatibleFull="%s"',[result.CompatibleFull]);
+    {zDebugLn('SampleText="%s"',[result.SampleText]);
+    zDebugLn('VariationsPostScriptNamePrefix="%s"',[result.VariationsPostScriptNamePrefix]);}
 
   finally
     setlength(TableDirEntries,0);

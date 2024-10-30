@@ -37,7 +37,7 @@ uses
     {$IFNDEF DELPHI}LCLIntf,LCLType,{$ENDIF}
     Classes,Controls,
     uzegeometrytypes,uzegeometry,uzgldrawergeneral,uzgldrawerabstract,
-    Graphics,LazLogger,gzctnrVectorTypes,uzgvertex3sarray;
+    Graphics,uzbLogIntf,gzctnrVectorTypes,uzgvertex3sarray;
 const
   NeedScreenInvalidrect=true;
 type
@@ -632,7 +632,7 @@ initialization
   LLGDIPrimitivesCreator:=TLLGDIPrimitivesCreator.Create;
   {$IFDEF WINDOWS}(*GDIPlusDrawer:=TZGLGDIPlusDrawer.create;*){$ENDIF}
 finalization
-  debugln('{I}[UnitsFinalization] Unit "',{$INCLUDE %FILE%},'" finalization');
+  zDebugln('{I}[UnitsFinalization] Unit "'+{$INCLUDE %FILE%}+'" finalization');
   GDIDrawer.Destroy;
   LLGDIPrimitivesCreator.Destroy;
   {$IFDEF WINDOWS}(*GDIPlusDrawer.Destroy;*){$ENDIF}

@@ -22,7 +22,7 @@ unit uzeffmanager;
 interface
 uses
   uzbnamedhandles,uzbnamedhandleswithdata,uzbtypes,uzeentgenericsubentry,
-  uzedrawingsimple,sysutils,gzctnrSTL,LazLogger,uzgldrawcontext,uzeLogIntf;
+  uzedrawingsimple,sysutils,gzctnrSTL,uzgldrawcontext,uzbLogIntf,uzeLogIntf;
 
 type
   TExt2LoadProcMap<GFileProcessProc>=class
@@ -173,7 +173,7 @@ end;
 initialization
   Ext2LoadProcMap:=TLoadFomats.create;
 finalization
-  debugln('{I}[UnitsFinalization] Unit "',{$INCLUDE %FILE%},'" finalization');
+  zDebugln('{I}[UnitsFinalization] Unit "'+{$INCLUDE %FILE%}+'" finalization');
   Ext2LoadProcMap.Destroy;
 end.
 

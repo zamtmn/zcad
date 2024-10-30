@@ -19,8 +19,12 @@
 unit uzehelpobj;
 {$Mode delphi}{$H+}
 {$INCLUDE zengineconfig.inc}
+
 interface
-uses uzegeometrytypes,LazLogger,gzctnrVector,math;
+
+uses
+  uzegeometrytypes,uzbLogIntf,gzctnrVector,math;
+
 const
   CircleLODCount=100;
 type
@@ -60,6 +64,6 @@ end;
 initialization
   createcircle;
 finalization
-  debugln('{I}[UnitsFinalization] Unit "',{$INCLUDE %FILE%},'" finalization');
+  ZDebugLN('{I}[UnitsFinalization] Unit "'+{$INCLUDE %FILE%}+'" finalization');
   freecircle;
 end.

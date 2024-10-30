@@ -20,7 +20,7 @@ unit uzeFontFileFormatSHX;
 {$INCLUDE zengineconfig.inc}
 interface
 uses uzgprimitivescreator,uzglvectorobject,uzefontmanager,uzefontshx,uzegeometry,
-     uzefont,uzbstrproc,{$IFNDEF DELPHI}FileUtil,LCLProc,{$ENDIF}math,sysutils,
+     uzefont,uzbstrproc,{$IFNDEF DELPHI}FileUtil,{$ENDIF}math,sysutils,
      uzegeometrytypes,uzctnrVectorBytes,uzbtypes,uzgprimitives,
      gzctnrVectorTypes,uzbLogIntf;
 const
@@ -263,7 +263,7 @@ begin
                       end
                          else
                            begin
-                             debugln('{E}IOSHX.CreateSymbol(%d), cannot find subform %d',[integer(symbol),integer(subsymbol)]);
+                             zDebugLn('{E}IOSHX.CreateSymbol(%d), cannot find subform %d',[integer(symbol),integer(subsymbol)]);
                              //programlog.LogOutFormatStr('IOSHX.CreateSymbol(%d), cannot find subform %d',[integer(symbol),integer(subsymbol)],lp_OldPos,LM_Error);
                            end;
 
@@ -708,7 +708,7 @@ begin
   line:=uppercase(line);
   if (line='AUTOCAD-86 SHAPES 1.0')or(line='AUTOCAD-86 SHAPES 1.1') then
   begin
-    debugln('{D}[SHX]AUTOCAD-86 SHAPES 1.0');
+    zDebugLn('{D}[SHX]AUTOCAD-86 SHAPES 1.0');
     //programlog.LogOutStr('AUTOCAD-86 SHAPES 1.0',lp_OldPos,LM_Debug);
   initfont(pf,extractfilename(name));
   pf^.font:=TZESHXFontImpl.Create;
@@ -781,7 +781,7 @@ begin
   end
 else if line='AUTOCAD-86 UNIFONT 1.0' then
   begin
-       debugln('{D}[SHX]AUTOCAD-86 UNIFONT 1.0');
+       zDebugLn('{D}[SHX]AUTOCAD-86 UNIFONT 1.0');
        //programlog.LogOutStr('AUTOCAD-86 UNIFONT 1.0',lp_OldPos,LM_Debug);
        initfont(pf,extractfilename(name));
        pf^.font:=TZESHXFontImpl.Create;

@@ -111,14 +111,12 @@ begin
             pstart:=pv
           else
             ProgramLog.LogOutStr('Other "Start" text marker found',LM_Error,LogModeDefault,MO_SM or MO_SH);
-            //debugln('{EHM}'+'Other "Start" text marker found',[]);
       end;
     pv:=drawings.GetCurrentROOT^.ObjArray.iterate(ir);
     until pv=nil;
 
     if pstart=nil then
       ProgramLog.LogOutStr('"Start" text marker not found',LM_Error,LogModeDefault,MO_SM or MO_SH)
-      //debugln('{EHM}'+'"Start" text marker not found',[])
     else begin
       minx:=pstart^.P_insert_in_WCS.x;
       maxy:=pstart^.P_insert_in_WCS.y;
@@ -133,7 +131,6 @@ begin
         Widths.PushBack(l)
       end else
         ProgramLog.LogOutFormatStr('"%s" Not a float',[ts],LM_Error,LogModeDefault,MO_SM or MO_SH);
-        //debugln('{EHM}'+'"%s" Not a float',[ts]);
     until s='';
     if Widths.IsEmpty then
       Widths.PushBack(20.0);

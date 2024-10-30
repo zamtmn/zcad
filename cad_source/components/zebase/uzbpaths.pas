@@ -19,7 +19,7 @@
 unit uzbPaths;
 
 interface
-uses {uzbtypes,}Masks,LCLProc,{$IFNDEF DELPHI}LazUTF8,{$ENDIF}sysutils,
+uses Masks,{$IFNDEF DELPHI}LazUTF8,{$ENDIF}sysutils,
      uzmacros,uzbLogIntf;
 type
   TFromDirIterator=procedure (const filename:String;pdata:pointer);
@@ -173,7 +173,7 @@ begin
      until s='';
      end;
      result:='';
-     DebugLn(sysutils.Format('{E}FindInSupportPath: file not found:"%s"',[{$IFNDEF DELPHI}utf8tosys{$ENDIF}(FileName)]));
+     zDebugLn(sysutils.Format('{E}FindInSupportPath: file not found:"%s"',[{$IFNDEF DELPHI}utf8tosys{$ENDIF}(FileName)]));
 end;
 function ExpandPath(path:String):String;
 begin

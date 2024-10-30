@@ -21,7 +21,7 @@ unit uzccmdload;
 
 interface
 uses
-  uzcLog,LCLType,LazUTF8,LCLProc,
+  uzcLog,LCLType,LazUTF8,
   uzbpaths,uzbtypes,uzcuitypes,
 
   uzeffmanager,uzctranslations,
@@ -91,7 +91,7 @@ begin
       ZEMsgWarning:ProgramLog.LogOutStr(msg,LM_Info,1,MO_SH);
       ZEMsgError:ProgramLog.LogOutStr(msg,LM_Info,1,MO_SM);
     end;
-    DebugLn(msg);
+    //zDebugLn(msg);
   end;
 end;
 

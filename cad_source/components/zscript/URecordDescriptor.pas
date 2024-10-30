@@ -21,7 +21,7 @@ unit URecordDescriptor;
 {$MODE DELPHI}
 interface
 uses
-  LCLProc,UPointerDescriptor,uzbstrproc,uzctnrVectorBytes,sysutils,UBaseTypeDescriptor,
+  UPointerDescriptor,uzbstrproc,uzctnrVectorBytes,sysutils,UBaseTypeDescriptor,
   gzctnrVectorTypes,uzedimensionaltypes,TypeDescriptors,gzctnrVector,
   TypInfo,varmandef,uzbtypes,uzbLogIntf,math;
 type
@@ -110,7 +110,7 @@ begin
   mf:=@td.ManagedFldCount;
   inc(pointer(mf),sizeof(td.ManagedFldCount));
   if td.ManagedFldCount<>Fields.Count then
-    DebugLn('{W}Fields count of "%s" record = %d, but rtti.ManagedFldCount = %d',[TypeName,Fields.Count,td.ManagedFldCount]);
+    zDebugLn('{W}Fields count of "%s" record = %d, but rtti.ManagedFldCount = %d',[TypeName,Fields.Count,td.ManagedFldCount]);
   for i:=0 to min(td.ManagedFldCount,Fields.Count)-1 do
   begin
       ti:=mf.TypeRef;

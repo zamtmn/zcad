@@ -21,7 +21,8 @@ unit uzecamera;
 {$INCLUDE zengineconfig.inc}
 
 interface
-uses LCLProc,uzegeometrytypes,uzbtypes,uzegeometry;
+uses
+  uzbLogIntf,uzegeometrytypes,uzbtypes,uzegeometry;
 
 type
 GDBProjectProc=procedure (objcoord:GDBVertex; out wincoord:GDBVertex) of object;
@@ -145,7 +146,7 @@ begin
       end;
 
       end else
-              Debugln('GDBObjCamera.MoveInLocalCSXY:'+rsDivByZero);
+              zDebugln('GDBObjCamera.MoveInLocalCSXY:'+rsDivByZero);
               //HistoryOutStr('Divide by zero');
 end;
 

@@ -20,7 +20,7 @@ unit uzgldrawerdx;
 {$INCLUDE zengineconfig.inc}
 interface
 uses
-    uzgindexsarray,LCLProc,uzepalette,
+    uzgindexsarray,uzbLogIntf,uzepalette,
     {$IFDEF LCLGTK2}
     Gtk2Def,
     {$ENDIF}
@@ -459,7 +459,7 @@ begin
                  inc(texture);
                  if texture>high(myscrbuf)then
                                               begin
-                                                debugln('{E}TZGLOpenGLDrawer.CreateScrbuf: texture buffer overflow!');
+                                                zDebugln('{E}TZGLOpenGLDrawer.CreateScrbuf: texture buffer overflow!');
                                                 //programlog.LogOutStr('TZGLOpenGLDrawer.CreateScrbuf: texture buffer overflow!',lp_OldPos,LM_Error);
                                                 texture:=0;
                                               end;
@@ -585,7 +585,7 @@ end;
 initialization
   OGLDrawer:=TZGLDXDrawer.create;
 finalization
-  debugln('{I}[UnitsFinalization] Unit "',{$INCLUDE %FILE%},'" finalization');
+  ZDebugLN('{I}[UnitsFinalization] Unit "'+{$INCLUDE %FILE%}+'" finalization');
   OGLDrawer.Destroy;
 end.
 

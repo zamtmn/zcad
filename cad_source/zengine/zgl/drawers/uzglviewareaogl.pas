@@ -26,7 +26,7 @@ uses
      (*{$IFDEF LCLQT}
      qt4,
      {$ENDIF}*)
-     LCLProc,uzglviewareaabstract,uzgldrawerogl,sysutils,
+     uzglviewareaabstract,uzgldrawerogl,sysutils,
      uzgloglstatemanager,uzbtypes,
      uzglviewareadata,uzgldrawcontext,uzegeometry,LCLType,
      ExtCtrls,classes,Controls,Graphics,uzglviewareageneral,math,uzglbackendmanager,
@@ -101,7 +101,7 @@ var tarray:array [0..1] of Double;
     p:pansichar;
 begin
   //programlog.logoutstr('TOGLWnd.SetDeiceVariable',lp_IncPos,LM_Debug);
-  debugln('{D+}TOGLWnd.SetDeiceVariable');
+  zDebugLn('{D+}TOGLWnd.SetDeiceVariable');
   oglsm.myglGetDoublev(GL_LINE_WIDTH_RANGE,@tarray[0]);
   //if assigned(sysvar.RD.RD_MaxLineWidth) then   m,.
   OpenGLParam.RD_MaxLineWidth:=tarray[1];
@@ -109,37 +109,37 @@ begin
   //if assigned(sysvar.RD.RD_MaxPointSize) then
   OpenGLParam.RD_MaxPointSize:=tarray[1];
   Pointer(p):=oglsm.myglGetString(GL_VENDOR);
-  debugln('{I}RD_Vendor:="%s"',[p]);
+  zDebugLn('{I}RD_Vendor:="%s"',[p]);
   //programlog.LogOutFormatStr('RD_Vendor:="%s"',[p],0,LM_Info);
   //if assigned(OpenglParam.RD_Vendor) then
   OpenglParam.RD_Vendor:=p;
   Pointer(p):=oglsm.myglGetString(GL_RENDERER);
-  debugln('{I}RD_Renderer:="%s"',[p]);
+  zDebugLn('{I}RD_Renderer:="%s"',[p]);
   //programlog.LogOutFormatStr('RD_Renderer:="%s"',[p],0,LM_Info);
   //if assigned(OpenglParam.RD_Renderer) then
   OpenglParam.RD_Renderer:=p;
   Pointer(p):=oglsm.myglGetString(GL_VERSION);
-  debugln('{I}RD_Version:="%s"',[p]);
+  zDebugLn('{I}RD_Version:="%s"',[p]);
   //programlog.LogOutFormatStr('RD_Version:="%s"',[p],0,LM_Info);
   //if assigned(OpenglParam.RD_Version) then
   OpenglParam.RD_Version:=p;
 
   Pointer(p):=oglsm.myglGetString(GL_EXTENSIONS);
-  debugln('{I}RD_Extensions:="%s"',[p]);
+  zDebugLn('{I}RD_Extensions:="%s"',[p]);
   //programlog.LogOutFormatStr('RD_Extensions:="%s"',[p],0,LM_Info);
   //if assigned(OpenglParam.RD_Extensions) then
   OpenglParam.RD_Extensions:=p;
   //if assigned(sysvar.RD.RD_MaxWidth) and assigned(sysvar.RD.RD_MaxLineWidth) then
   begin
   OpenGLParam.RD_MaxWidth:=round(min(OpenGLParam.RD_MaxPointSize,OpenGLParam.RD_MaxLineWidth));
-  debugln('{I}RD_MaxWidth:="%G"',[min(OpenGLParam.RD_MaxPointSize,OpenGLParam.RD_MaxLineWidth)]);
+  zDebugLn('{I}RD_MaxWidth:="%G"',[min(OpenGLParam.RD_MaxPointSize,OpenGLParam.RD_MaxLineWidth)]);
   //programlog.LogOutFormatStr('RD_MaxWidth:="%G"',[min(sysvar.RD.RD_MaxPointSize^,sysvar.RD.RD_MaxLineWidth^)],0,LM_Info);
   end;
   //programlog.logoutstr('end;',lp_DecPos,LM_Debug);
   OpenglParam.RD_UseStencil:=@sysvarRDUseStencil;
   OpenglParam.RD_Light:=@sysvarRDLight;
   OpenglParam.RD_LineSmooth:=@SysVarRDLineSmooth;
-  debugln('{D-}TOGLWnd.SetDeiceVariable');
+  zDebugLn('{D-}TOGLWnd.SetDeiceVariable');
 end;
 
 procedure TOpenGLViewArea.getareacaps;
@@ -167,7 +167,7 @@ begin
       else
         wglSwapIntervalEXT(0);
     end else begin
-      DebugLn('{EH}wglSwapIntervalEXT not supported by your video driver. Please set the VSync in the defaul');
+      zDebugLn('{EH}wglSwapIntervalEXT not supported by your video driver. Please set the VSync in the defaul');
     end;
   end;
   {$ENDIF}

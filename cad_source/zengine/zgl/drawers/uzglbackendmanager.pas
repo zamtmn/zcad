@@ -22,7 +22,7 @@ unit uzglbackendmanager;
 interface
 uses
   SysUtils,
-  uzctnrvectorstrings,uzglviewareaabstract,uzctnrVectorPointers,LazLogger;
+  uzctnrvectorstrings,uzglviewareaabstract,uzctnrVectorPointers,uzbLogIntf;
 const test:String='asdasd';
 type
     TVA=class of TAbstractViewArea;
@@ -41,7 +41,7 @@ begin
   if i>=0 then
     BackendsNames.Selected:=i
   else
-    debugln('{E}RendererBackEnd "',BackEndName,'" not found');
+    zDebugln('{E}RendererBackEnd "'+BackEndName+'" not found');
 end;
 procedure RegisterBackend(BackEndClass:TVA;Name:string);
 begin
@@ -58,7 +58,7 @@ initialization
   BackendsNames.Selected:=0;
   Backends.init(10);
 finalization
-  debugln('{I}[UnitsFinalization] Unit "',{$INCLUDE %FILE%},'" finalization');
+  ZDebugLN('{I}[UnitsFinalization] Unit "'+{$INCLUDE %FILE%}+'" finalization');
   BackendsNames.Enums.done;
   Backends.done;
 end.

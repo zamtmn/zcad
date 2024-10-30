@@ -21,7 +21,7 @@ unit uzeentline;
 {$INCLUDE zengineconfig.inc}
 
 interface
-uses LCLProc,uzeentityfactory,uzgldrawcontext,uzedrawingdef,uzecamera,
+uses uzbLogIntf,uzeentityfactory,uzgldrawcontext,uzedrawingdef,uzecamera,
      uzestyleslayers,uzeentsubordinated,
      UGDBSelectedObjArray,uzeent3d,uzeentity,uzctnrVectorBytes,uzbtypes,uzeconsts,
      uzegeometrytypes,uzglviewareadata,uzegeometry,uzeffdxfsupport,
@@ -552,7 +552,7 @@ begin
             if not assigned(pgdbobjline(pobj)^.pprojpoint) then
                                                                begin
                                                                //pgdbobjline(pobj)^.RenderFeedback(gdb.GetCurrentDWG.pcamera^.POSCOUNT,gdb.GetCurrentDWG.pcamera^,nil);
-                                                               debugln('{E}pobj)^.pprojpoint=nil;//(((((((');
+                                                               ZDebugLN('{E}pobj)^.pprojpoint=nil;//(((((((');
                                                                osp.ostype:=os_none;
                                                                exit;
                                                                end;

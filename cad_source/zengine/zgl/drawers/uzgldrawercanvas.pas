@@ -25,7 +25,7 @@ uses
     Gtk2Def,
     {$ENDIF}
     LCLIntf,LCLType,Classes,Controls,
-    uzegeometry,uzgldrawergeneral,uzgldrawerabstract,Graphics,LazLogger,uzgvertex3sarray;
+    uzegeometry,uzgldrawergeneral,uzgldrawerabstract,Graphics,uzbLogIntf,uzgvertex3sarray;
 const
   NeedScreenInvalidrect=true;
 type
@@ -189,7 +189,7 @@ end;
 initialization
   CanvasDrawer:=TZGLCanvasDrawer.create;
 finalization
-  debugln('{I}[UnitsFinalization] Unit "',{$INCLUDE %FILE%},'" finalization');
+  zDebugln('{I}[UnitsFinalization] Unit "'+{$INCLUDE %FILE%}+'" finalization');
   CanvasDrawer.Destroy;
 end.
 

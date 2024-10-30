@@ -22,7 +22,7 @@ unit Varman;
 
 interface
 uses
-  UEnumDescriptor,uzctnrVectorPointers,LCLProc,uabstractunit,
+  UEnumDescriptor,uzctnrVectorPointers,uabstractunit,
   SysUtils,UBaseTypeDescriptor,uzctnrVectorBytes,
   gzctnrVectorTypes,uzctnrvectorstrings,varmandef,gzctnrSTL,
   TypeDescriptors,URecordDescriptor,UObjectDescriptor,uzbstrproc,classes,typinfo,
@@ -1179,7 +1179,7 @@ begin
                           begin
                                if state<>metods then
                                                     begin
-                                                      debugln('{E}Syntax error in file "%s"',[f.name]);
+                                                      zdebugln('{E}Syntax error in file "%s"',[f.name]);
                                                       raise Exception.CreateFmt('Syntax error in file "%s"',[f.name]);
                                                     end;
 
@@ -1188,7 +1188,7 @@ begin
           begin
                if state<>metods then
                                     begin
-                                      debugln('{E}Syntax error in file "%s"',[f.name]);
+                                      zdebugln('{E}Syntax error in file "%s"',[f.name]);
                                       raise Exception.CreateFmt('Syntax error in file "%s"',[f.name]);
                                     end;
                //oldline:=line;
@@ -1216,7 +1216,7 @@ begin
                           begin
                                if state=metods then
                                                   begin
-                                                    debugln('{E}Syntax error in file "%s"',[f.name]);
+                                                    zdebugln('{E}Syntax error in file "%s"',[f.name]);
                                                     raise Exception.CreateFmt('Syntax error in file "%s"',[f.name]);
                                                   end
                                                else
@@ -1950,7 +1950,7 @@ begin
 end;
 finalization;
 begin
-  debugln('{I}[UnitsFinalization] Unit "',{$INCLUDE %FILE%},'" finalization');
+  zdebugln('{I}[UnitsFinalization] Unit "'+{$INCLUDE %FILE%}+'" finalization');
   VarCategory.Done;
   CategoryCollapsed.done;
 end;

@@ -20,12 +20,13 @@ unit uzeentity;
 {$Mode delphi}{$H+}
 {$INCLUDE zengineconfig.inc}
 interface
-uses uzepalette,uzeobjectextender,uzgldrawerabstract,uzgldrawcontext,uzedrawingdef,
-     uzecamera,uzeentitiesprop,uzestyleslinetypes,
-     uzegeometrytypes,UGDBControlPointArray,uzeentsubordinated,uzbtypes,uzeconsts,
-     uzglviewareadata,uzegeometry,uzeffdxfsupport,sysutils,uzctnrVectorBytes,
-     uzestyleslayers,uzeenrepresentation,LazLogger,
-     uzMVReader,uzCtnrVectorpBaseEntity;
+uses
+  uzepalette,uzeobjectextender,uzgldrawerabstract,uzgldrawcontext,uzedrawingdef,
+  uzecamera,uzeentitiesprop,uzestyleslinetypes,
+  uzegeometrytypes,UGDBControlPointArray,uzeentsubordinated,uzbtypes,uzeconsts,
+  uzglviewareadata,uzegeometry,uzeffdxfsupport,sysutils,uzctnrVectorBytes,
+  uzestyleslayers,uzeenrepresentation,uzbLogIntf,
+  uzMVReader,uzCtnrVectorpBaseEntity;
 type
 taddotrac=procedure (var posr:os_record;const axis:GDBVertex) of object;
 TEFStage=(EFCalcEntityCS,EFDraw);
@@ -1270,6 +1271,6 @@ end;
 initialization
   GDBObjEntityDXFFeatures:=TDXFEntIODataManager.Create;
 finalization
-  debugln('{I}[UnitsFinalization] Unit "',{$INCLUDE %FILE%},'" finalization');
+  ZDebugLN('{I}[UnitsFinalization] Unit "'+{$INCLUDE %FILE%}+'" finalization');
   GDBObjEntityDXFFeatures.Destroy;
 end.

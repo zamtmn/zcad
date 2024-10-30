@@ -22,7 +22,10 @@ unit uzelongprocesssupport;
 
 
 interface
-uses sysutils,gzctnrSTL,LazLogger,uzbSets;
+uses
+  sysutils,
+  gzctnrSTL,uzbSets,
+  uzbLogIntf;
 const
   LPSHEmpty=-1;
   LPSDefaultOptions=0;
@@ -230,6 +233,6 @@ initialization
   LPSOSilent:=LPS.CreateOption;
   LPSONoProgressBar:=LPS.CreateOption;
 finalization
-  debugln('{I}[UnitsFinalization] Unit "',{$INCLUDE %FILE%},'" finalization');
+  zDebugLn('{I}[UnitsFinalization] Unit "'+{$INCLUDE %FILE%}+'" finalization');
   LPS.destroy;
 end.

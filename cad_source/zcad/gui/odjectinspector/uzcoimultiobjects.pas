@@ -28,7 +28,7 @@ uses
   gzctnrVectorTypes,uzbtypes,uzcdrawings,varmandef,uzeentity,
   Varman,uzctnrvectorstrings,UGDBSelectedObjArray,uzcoimultipropertiesutil,
   uzeExtdrAbstractEntityExtender,uzelongprocesssupport,uzbLogIntf,uzcutils,
-  zUndoCmdChgVariable,uzcdrawing,zUndoCmdChgTypes,//uzeBaseExtender,
+  zUndoCmdChgVariable,uzcdrawing,zUndoCmdChgTypes,
   uzCtnrVectorPBaseEntity,uzglviewareageneral;
 type
   TObjIDWithExtender2Counter=TMyMapCounter<TObjIDWithExtender>;
@@ -738,7 +738,6 @@ var
   TrueSel:Boolean;
 begin
   with ProgramLog.Enter('TMSEditor.createunit',LM_Debug) do begin
-  //debugln('{D+}TMSEditor.createunit start');
     SavezeUnitsFormat:=f;
     if _GetEntsTypes then
       GetEntsTypes;
@@ -815,7 +814,6 @@ begin
       until psd=nil;
     end;
   programlog.leave(IfEntered);end;
-  //debugln('{D-}TMSEditor.createunit end');
 end;
 procedure DeselectEnts(PInstance:Pointer);
 var

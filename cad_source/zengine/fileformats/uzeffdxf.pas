@@ -19,15 +19,16 @@ unit uzeffdxf;
 {$INCLUDE zengineconfig.inc}
 {$MODE delphi}{$H+}
 interface
-uses LCLProc,uzbpaths,uzbstrproc,uzgldrawcontext,usimplegenerics,uzestylesdim,uzeentityfactory,
-    {$IFNDEF DELPHI}LazUTF8,{$ENDIF}
-    UGDBNamedObjectsArray,uzestyleslinetypes,uzedrawingsimple,uzelongprocesssupport,
-    gzctnrVectorTypes,uzglviewareadata,uzeffdxfsupport,uzestrconsts,uzestylestexts,
-    uzegeometry,uzeentsubordinated,uzeentgenericsubentry,uzbtypes,
-    uzedimensionaltypes,uzegeometrytypes,sysutils,uzeconsts,UGDBObjBlockdefArray,
-    uzctnrVectorBytes,UGDBVisibleOpenArray,uzeentity,uzeblockdef,uzestyleslayers,
-    uzeffmanager,uzbLogIntf,uzeLogIntf,
-    uzMVSMemoryMappedFile,uzMVReader;
+uses
+  uzbpaths,uzbstrproc,uzgldrawcontext,usimplegenerics,uzestylesdim,uzeentityfactory,
+  {$IFNDEF DELPHI}LazUTF8,{$ENDIF}
+  UGDBNamedObjectsArray,uzestyleslinetypes,uzedrawingsimple,uzelongprocesssupport,
+  gzctnrVectorTypes,uzglviewareadata,uzeffdxfsupport,uzestrconsts,uzestylestexts,
+  uzegeometry,uzeentsubordinated,uzeentgenericsubentry,uzbtypes,
+  uzedimensionaltypes,uzegeometrytypes,sysutils,uzeconsts,UGDBObjBlockdefArray,
+  uzctnrVectorBytes,UGDBVisibleOpenArray,uzeentity,uzeblockdef,uzestyleslayers,
+  uzeffmanager,uzbLogIntf,uzeLogIntf,
+  uzMVSMemoryMappedFile,uzMVReader;
 resourcestring
   rsLoadDXFFile='Load DXF file';
 type
@@ -211,7 +212,7 @@ begin
     (*s := f.ParseString;
     val(s, group, error);
     if error <> 0 then
-      DebugLn('{EM}ReadDXFHeader wrong group code');*)
+      zDebugLn('{EM}ReadDXFHeader wrong group code');*)
     s := f.ParseString;
     if group<>999 then
     begin
@@ -222,7 +223,7 @@ begin
                                                                   ParseMode:=TDXFHMSection;
                                                              end
                                                             else
-                                                                DebugLn('{EM}ReadDXFHeader error');
+                                                                zDebugLn('{EM}ReadDXFHeader error');
                       end;
         TDXFHMSection:begin
                            if uppercase(s)=dxfName_HEADER then
@@ -230,7 +231,7 @@ begin
                                                               ParseMode:=TDXFHMHeader;
                                                             end
                                                           else
-                                                            DebugLn('{EM}ReadDXFHeader error');
+                                                            zDebugLn('{EM}ReadDXFHeader error');
                       end;
          TDXFHMHeader:begin
                            if group=0 then
@@ -252,7 +253,7 @@ begin
     end
        else
            begin
-                DebugLn('{IH}Found dxf comment "%s",[s]');
+                zDebugLn('{IH}Found dxf comment "%s",[s]');
            end;
     end;
     finally
@@ -360,7 +361,7 @@ begin
                                 end;
                                 if newowner=nil then
                                                     begin
-                                                         DebugLn('{EH}Warning! OwnerHandle $'+inttohex(PGDBObjEntity(pobj)^.PExtAttrib^.OwnerHandle,8)+' not found');
+                                                         zDebugLn('{EH}Warning! OwnerHandle $'+inttohex(PGDBObjEntity(pobj)^.PExtAttrib^.OwnerHandle,8)+' not found');
                                                          //historyoutstr('Warning! OwnerHandle $'+inttohex(PGDBObjEntity(pobj)^.PExtAttrib^.OwnerHandle,8)+' not found');
                                                          newowner:=owner;
                                                     end;
@@ -503,7 +504,7 @@ var
 begin
   s:='';
   lph:=lps.StartLongProcess('addfromdxf12',@f,f.CurrentPos);
-  debugln('{D+}AddFromDXF12');
+  zDebugLn('{D+}AddFromDXF12');
   //programlog.LogOutStr('AddFromDXF12',lp_IncPos,LM_Debug);
   //phandlearray := dxfhandlearraycreate(10000);
   context.h2p:=TMapHandleToPointer.Create;
@@ -516,7 +517,7 @@ begin
     s := f.ParseString;
     if s = dxfName_Layer then
     begin
-      debugln('{D+}[DXF_CONTENTS]Found layer table');
+      zDebugLn('{D+}[DXF_CONTENTS]Found layer table');
       repeat
             scode := f.ParseString;
             sname := f.ParseString;
@@ -524,7 +525,7 @@ begin
       until GroupCode=0;
       repeat
         if sname=dxfName_ENDTAB then system.break;
-        if sname<>dxfName_Layer then DebugLn('{FM}''LAYER'' expected but '''+sname+''' found');
+        if sname<>dxfName_Layer then zDebugLn('{FM}''LAYER'' expected but '''+sname+''' found');
         //FatalError('''LAYER'' expected but '''+sname+''' found');
         repeat
               scode := f.ParseString;
@@ -535,15 +536,15 @@ begin
                                62:val(sname,LayerColor,ErrorCode);
               end;{case}
         until GroupCode=0;
-        debugln('{D}[DXF_CONTENTS]Found layer ',LayerName);
+        zDebugLn('{D}[DXF_CONTENTS]Found layer '+LayerName);
         drawing.LayerTable.addlayer(LayerName,LayerColor,-3,true,false,true,'',TLOLoad);
       until sname=dxfName_ENDTAB;
-      debugln('{D-}[DXF_CONTENTS]end; {layer table}');
+      zDebugLn('{D-}[DXF_CONTENTS]end; {layer table}');
       //programlog.LogOutStr('end; {layer table}',lp_DecPos,LM_Debug);
     end
     else if s = 'BLOCKS' then
     begin
-      debugln('{D+}[DXF_CONTENTS]Found block table');
+      zDebugLn('{D+}[DXF_CONTENTS]Found block table');
       //programlog.LogOutStr('Found block table',lp_IncPos,LM_Debug);
       sname := '';
       repeat
@@ -556,31 +557,31 @@ begin
           else
           begin
             tp := drawing.BlockDefArray.create(s);
-            debugln('{D+}[DXF_CONTENTS]Found block ',s);
+            zDebugLn('{D+}[DXF_CONTENTS]Found block '+s);
             //programlog.LogOutFormatStr('Found block "%s"',[s],lp_IncPos,LM_Debug);
             {addfromdxf12}addentitiesfromdxf(f, 'ENDBLK',tp,drawing,dc,context);
-            debugln('{D-}[DXF_CONTENTS]end; {block}');
+            zDebugLn('{D-}[DXF_CONTENTS]end; {block}');
             //programlog.LogOutFormatStr('end; {block "%s"}',[s],lp_DecPos,LM_Debug);
           end;
         sname := f.ParseString;
         s := f.ParseString;
       until (s = dxfName_ENDSEC);
-      debugln('{D-}end; {block table}');
+      zDebugLn('{D-}end; {block table}');
       //programlog.LogOutStr('end; {block table}',lp_DecPos,LM_Debug);
     end
     else if s = 'ENTITIES' then
     begin
-         debugln('{D+}[DXF_CONTENTS]Found entities section');
+         zDebugLn('{D+}[DXF_CONTENTS]Found entities section');
          //programlog.LogOutStr('Found entities section',lp_IncPos,LM_Debug);
          addentitiesfromdxf(f, 'EOF',owner,drawing,dc,context);
-         debugln('{D-}[DXF_CONTENTS]end {entities section}');
+         zDebugLn('{D-}[DXF_CONTENTS]end {entities section}');
          //programlog.LogOutStr('end {entities section}',lp_DecPos,LM_Debug);
     end;
   end;
   //Freemem(Pointer(phandlearray));
   context.h2p.Destroy;
   lps.EndLongProcess(lph);
-  debugln('{D-}end; {AddFromDXF12}');
+  zDebugLn('{D-}end; {AddFromDXF12}');
   //programlog.LogOutStr('end; {AddFromDXF12}',lp_DecPos,LM_Debug);
 end;
 procedure ReadLTStyles(var s:ansiString; const cltype:string;var f:TZMemReader; const exitString: String;owner:PGDBObjGenericSubEntry;LoadMode:TLoadOpt;var drawing:TSimpleDrawing;var context:TIODXFLoadContext);
@@ -772,7 +773,7 @@ begin
         nulisread:=false;
       case byt of
         2:begin
-          debugln('{D}[DXF_CONTENTS]Found layer  ',s);
+          zDebugLn('{D}[DXF_CONTENTS]Found layer  '+s);
           lname:=s;
           player:=drawing.LayerTable.MergeItem(s,LoadMode);
           if player<>nil then
@@ -910,7 +911,7 @@ begin
        pltypeprop:=drawing.LTypeStyleTable.iterate(ir);
       until pltypeprop=nil;
     end;
-    debugln('{D}[DXF_CONTENTS]Found style  ',tstyle.Name);
+    zDebugLn('{D}[DXF_CONTENTS]Found style  '+tstyle.Name);
     if drawing.CurrentTextStyle=nil then
       drawing.CurrentTextStyle:=drawing.TextStyleTable.FindStyle(tstyle.Name,false)
     else if uppercase(tstyle.Name)=uppercase(ctstyle)then
@@ -925,7 +926,7 @@ var
    active:boolean;
    flags: Integer;
 begin
-     debugln('{D+}[DXF_CONTENTS]ReadVport');
+     zDebugLn('{D+}[DXF_CONTENTS]ReadVport');
      if GoToDXForENDTAB(f, 0, 'VPORT') then
      begin
        byt := -100;
@@ -1087,7 +1088,7 @@ begin
 
      end;
      end;
-     debugln('{D-}[DXF_CONTENTS]end;{ReadVport}');
+     zDebugLn('{D-}[DXF_CONTENTS]end;{ReadVport}');
 end;
 procedure ReadDimStyles(var s:ansistring; const cdimstyle:string;var f:TZMemReader; const exitString: String;owner:PGDBObjGenericSubEntry;LoadMode:TLoadOpt;var drawing:TSimpleDrawing;var context:TIODXFLoadContext);
 var
@@ -1175,7 +1176,7 @@ begin
   lph:=lps.StartLongProcess('addfromdxf2000',@f,f.CurrentPos);
   Handle2BlockName:=TMapBlockHandle_BlockNames.Create;
   blockload:=false;
-  debugln('{D+}[DXF_CONTENTS]AddFromDXF2000');
+  zDebugLn('{D+}[DXF_CONTENTS]AddFromDXF2000');
   //programlog.LogOutStr('AddFromDXF2000',lp_IncPos,LM_Debug);
   readvariables(drawing,f,ctstyle,clayer,cltype,cdimstyle,LoadMode,DWGVarsDict);
   repeat
@@ -1204,40 +1205,40 @@ begin
                                     gotodxf(f, 0, dxfName_ENDTAB)//scip this table
                else if s = dxfName_BLOCK_RECORD{:}then
                                     begin
-                                    debugln('{D+}[DXF_CONTENTS]Found BLOCK_RECORD table');
+                                    zDebugLn('{D+}[DXF_CONTENTS]Found BLOCK_RECORD table');
                                     //programlog.LogOutStr('Found BLOCK_RECORD table',lp_IncPos,LM_Debug);
                                     ReadBlockRecird(Handle2BlockName,s,f,exitString,owner,LoadMode,drawing);
-                                    debugln('{D-}[DXF_CONTENTS]end; {BLOCK_RECORD table}');
+                                    zDebugLn('{D-}[DXF_CONTENTS]end; {BLOCK_RECORD table}');
                                     //programlog.LogOutStr('end; {BLOCK_RECORD table}',lp_DecPos,LM_Debug);
                                     end
                    else if s = dxfName_DIMSTYLE{:}then
                                     begin
-                                      debugln('{D+}[DXF_CONTENTS]Found dimstyles table');
+                                      zDebugLn('{D+}[DXF_CONTENTS]Found dimstyles table');
                                       //programlog.LogOutStr('Found dimstyles table',lp_IncPos,LM_Debug);
                                       ReadDimStyles(s,cdimstyle,f,exitString,owner,LoadMode,drawing,context);
-                                      debugln('{D-}[DXF_CONTENTS]end; {dimstyles table}');
+                                      zDebugLn('{D-}[DXF_CONTENTS]end; {dimstyles table}');
                                       //programlog.LogOutStr('end; {dimstyles table}',lp_DecPos,LM_Debug);
                                     end
                       else if s = dxfName_Layer{:}then
                                     begin
-                                      debugln('{D+}[DXF_CONTENTS]Found layer table');
+                                      zDebugLn('{D+}[DXF_CONTENTS]Found layer table');
                                       ReadLayers(s,clayer,f,exitString,owner,LoadMode,drawing);
-                                      debugln('{D-}[DXF_CONTENTS]end; {layer table}');
+                                      zDebugLn('{D-}[DXF_CONTENTS]end; {layer table}');
                                       //programlog.LogOutStr('end; {layer table}',lp_DecPos,LM_Debug);
                                     end
                       else if s = dxfName_LType{:}then
                                     begin
-                                      debugln('{D+}[DXF_CONTENTS]Found line types table');
+                                      zDebugLn('{D+}[DXF_CONTENTS]Found line types table');
                                       //programlog.LogOutStr('Found line types table',lp_IncPos,LM_Debug);
                                       ReadLTStyles(s,cltype,f,exitString,owner,LoadMode,drawing,context);
-                                      debugln('{D-}[DXF_CONTENTS]end; (line types table)');
+                                      zDebugLn('{D-}[DXF_CONTENTS]end; (line types table)');
                                       //programlog.LogOutStr('end; (line types table)',lp_DecPos,LM_Debug);
                                     end
                       else if s = dxfName_Style{:}then
                                     begin
-                                      debugln('{D+}[DXF_CONTENTS]Found style table');
+                                      zDebugLn('{D+}[DXF_CONTENTS]Found style table');
                                       ReadTextstyles(s,ctstyle,f,exitString,owner,LoadMode,drawing,context,LogProc);
-                                      debugln('{D-}[DXF_CONTENTS]end; {style table}');
+                                      zDebugLn('{D-}[DXF_CONTENTS]end; {style table}');
                                     end
                               else if s = 'UCS'{:}then
                                     gotodxf(f, 0, dxfName_ENDTAB)//scip this table
@@ -1245,10 +1246,10 @@ begin
                                     gotodxf(f, 0, dxfName_ENDTAB)//scip this table
                             else if s = 'VPORT'{:}then
                                     begin
-                                    debugln('{D+}[DXF_CONTENTS]Found vports table');
+                                    zDebugLn('{D+}[DXF_CONTENTS]Found vports table');
                                     //programlog.LogOutStr('Found vports table',lp_IncPos,LM_Debug);
                                     ReadVport(s,f,exitString,owner,LoadMode,drawing);
-                                    debugln('{D-}[DXF_CONTENTS]end; {vports table}');
+                                    zDebugLn('{D-}[DXF_CONTENTS]end; {vports table}');
                                     //programlog.LogOutStr('end; {vports table}',lp_DecPos,LM_Debug);
                                     end;
         //end;{case}
@@ -1260,20 +1261,20 @@ begin
     else
       if s = 'ENTITIES' then
       begin
-        debugln('{D+}[DXF_CONTENTS]Found entities section');
+        zDebugLn('{D+}[DXF_CONTENTS]Found entities section');
         //programlog.LogOutStr('Found entities section',lp_IncPos,LM_Debug);
         //inc(foc);
         {addfromdxf12}addentitiesfromdxf(f, dxfName_ENDSEC,owner,drawing,dc,context);
         owner^.ObjArray.pack;
         owner^.correctobjects(nil,0);
         //inc(foc);
-        debugln('{D-}[DXF_CONTENTS]end; {entities section}');
+        zDebugLn('{D-}[DXF_CONTENTS]end; {entities section}');
         //programlog.LogOutStr('end; {entities section}',lp_DecPos,LM_Debug);
       end
       else
         if s = 'BLOCKS' then
         begin
-          debugln('{D+}[DXF_CONTENTS]Found block table');
+          zDebugLn('{D+}[DXF_CONTENTS]Found block table');
           //programlog.LogOutStr('Found block table',lp_IncPos,LM_Debug);
           sname := '';
           repeat
@@ -1282,7 +1283,7 @@ begin
               if (pos('MODEL_SPACE',US)<>0)or(pos('PAPER_SPACE',US)<>0)or(pos('*A',US)=1)or(pos('*D',US)=1){or(pos('*U',US)=1)}then   //блоки *U игнорировать нестоит, что то связанное с параметризацией
               begin
                 //programlog.logoutstr('Ignored block '+s+';',lp_OldPos);
-                DebugLn('{I}'+rsBlockIgnored,[s]);
+                zDebugLn('{I}'+rsBlockIgnored,[s]);
                 //HistoryOutStr(format(rsBlockIgnored,[s]));
                 while (s <> 'ENDBLK') do
                   s := f.ParseString;
@@ -1291,7 +1292,7 @@ begin
                                begin
                                     //programlog.logoutstr('Ignored double definition block '+s+';',lp_OldPos);
                                     //HistoryOutStr(format(rsDoubleBlockIgnored,[Tria_AnsiToUtf8(s)]));
-                                    DebugLn('{I}'+rsDoubleBlockIgnored,[Tria_AnsiToUtf8(s)]);
+                                    zDebugLn('{I}'+rsDoubleBlockIgnored,[Tria_AnsiToUtf8(s)]);
 //                                    if s='DEVICE_PS_UK-VK'then
 //                                               s:=s;
                                     while (s <> 'ENDBLK') do
@@ -1302,7 +1303,7 @@ begin
 //                                  s:=s;
 
                 tp := drawing.BlockDefArray.create(s);
-                debugln('{D+}[DXF_CONTENTS]Found blockdef ',s);
+                zDebugLn('{D+}[DXF_CONTENTS]Found blockdef '+s);
                    //addfromdxf12(f, Pointer(GDB.pgdbblock^.blockarray[GDB.pgdbblock^.count].ppa),@tp^.Entities, 'ENDBLK');
                 while (s <> ' 30') and (s <> '30') do
                 begin
@@ -1334,7 +1335,7 @@ begin
                                                            tp^.name:=tp^.name;
                 tp^.LoadFromDXF(f,nil,drawing);
                 blockload:=true;
-                debugln('{D-}[DXF_CONTENTS]end block;');
+                zDebugLn('{D-}[DXF_CONTENTS]end block;');
                 sname:='##'
               end;
             if not blockload then
@@ -1342,7 +1343,7 @@ begin
             blockload:=false;
             s := f.ParseString;
           until (s = dxfName_ENDSEC);
-          debugln('{D-}[DXF_CONTENTS]end; {block table}');
+          zDebugLn('{D-}[DXF_CONTENTS]end; {block table}');
           //programlog.LogOutStr('end; {block table}',lp_DecPos,LM_Debug);
           //drawing.BlockDefArray.Format;
           drawing.DimStyleTable.ResolveTextstyles(TGenericNamedObjectsArray(drawing.TextStyleTable));
@@ -1359,7 +1360,7 @@ begin
   {$IFNDEF DELPHI}
   Handle2BlockName.destroy;
   {$ENDIF}
-  debugln('{D-}[DXF_CONTENTS]end; {AddFromDXF2000}');
+  zDebugLn('{D-}[DXF_CONTENTS]end; {AddFromDXF2000}');
   //programlog.LogOutStr('end; {AddFromDXF2000}',lp_DecPos,LM_Debug);
   lps.EndLongProcess(lph);
 end;
@@ -1380,7 +1381,7 @@ const
    ffs='%s (%s)';
 begin
   DefaultFormatSettings.DecimalSeparator:='.';
-  debugln('{D+}AddFromDXF("%s")',[AFileName]);
+  zDebugLn('{D+}AddFromDXF("%s")',[AFileName]);
   Log(LogIntf,ZESGeneral,ZEMsgCriticalInfo,format(rsLoadingFile,[AFileName]));
   dc:=ZCDCtx.PDrawing^.CreateDrawingRC;
   //f.InitFromFile(AFileName);
@@ -1423,21 +1424,21 @@ begin
             addfromdxf2000(MemReader,'EOF',ZCDCtx.POwner,ZCDCtx.LoadMode,ZCDCtx.PDrawing^,context,dc,DWGVarsDict,LogIntf)
           end;
           else
-            DebugLn('{EM}'+rsUnknownFileFormat+' $ACADVER='+s);
+            zDebugLn('{EM}'+rsUnknownFileFormat+' $ACADVER='+s);
         end;
       end
-        else DebugLn('{EM}'+rsUnknownFileFormat+' $ACADVER='+s);
+        else zDebugLn('{EM}'+rsUnknownFileFormat+' $ACADVER='+s);
     end;
     lps.EndLongProcess(lph);
     ZCDCtx.POwner^.calcbb(ZCDCtx.DC{ dc});
     context.h2p.Destroy;
     DWGVarsDict.destroy;
   end else
-    DebugLn('{EM}'+'IODXF.ADDFromDXF: Не могу открыть файл: '+AFileName);
+    zDebugLn('{EM}'+'IODXF.ADDFromDXF: Не могу открыть файл: '+AFileName);
   //f.done;
   DxfStream.Free;
   MemReader.Free;
-  debugln('{D-}end; {AddFromDXF}');
+  zDebugLn('{D-}end; {AddFromDXF}');
 end;
 procedure saveentitiesdxf2000(pva: PGDBObjEntityOpenArray; var outhandle:TZctnrVectorBytes;var drawing:TSimpleDrawing;var IODXFContext:TIODXFContext);
 var
@@ -1730,7 +1731,7 @@ begin
               if {p}drawing.BlockDefArray.count>0 then
               for i := 0 to {p}drawing.BlockDefArray.count - 1 do
               begin
-                debugln('{D}[DXF_CONTENTS]write BlockDef '+PBlockdefArray({p}drawing.BlockDefArray.parray)^[i].name);
+                zDebugLn('{D}[DXF_CONTENTS]write BlockDef '+PBlockdefArray({p}drawing.BlockDefArray.parray)^[i].name);
                 outstream.TXTAddStringEOL(dxfGroupCode(0));
                 outstream.TXTAddStringEOL('BLOCK');
 
@@ -2064,7 +2065,7 @@ begin
                    pltp:=drawing.LTypeStyleTable.beginiterate(ir);
                    if pltp<>nil then
                    repeat
-                         debugln('{D}[DXF_CONTENTS]write linetype ',pltp^.Name);
+                         zDebugLn('{D}[DXF_CONTENTS]write linetype '+pltp^.Name);
                          outstream.TXTAddStringEOL(dxfGroupCode(0));
                          outstream.TXTAddStringEOL(dxfName_LTYPE);
                          IODXFContext.p2h.MyGetOrCreateValue(pltp,IODXFContext.handle,temphandle);
@@ -2673,13 +2674,13 @@ ENDTAB}
   if FileExists(sysfilename) then begin
     deletefile(sysfilename+'.bak');
     if not renamefile(sysfilename,sysfilename+'.bak') then
-      DebugLn('{WH}'+rsUnableRenameFileToBak,[SavedFileName]);
+      zDebugLn('{WH}'+rsUnableRenameFileToBak,[SavedFileName]);
   end;
 
   if outstream.SaveToFile({expandpath}(SavedFileName))<=0 then
                                        begin
                                        //ShowError(format(rsUnableToWriteFile,[SavedFileName]));
-                                       DebugLn('{EM}'+rsUnableToWriteFile,[SavedFileName]);
+                                       zDebugLn('{EM}'+rsUnableToWriteFile,[SavedFileName]);
                                        result:=false;
                                        end
                                    else

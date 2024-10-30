@@ -24,7 +24,7 @@ uses
   uzedrawingsimple,uzgldrawcontext,uzgldrawergeneral2d,uzgldrawerabstract,
   uzegeometry,uzeconsts,
   uzeiopalette,uzepalette,uzcutils,
-  LazLogger,Graphics,Classes,
+  uzbLogIntf,Graphics,Classes,
   uzgldrawercanvas;
 type
   TRasterizeColor=(PC_Color,PC_Grayscale,PC_Monochrome);
@@ -121,7 +121,7 @@ begin
   case PrintParam.Palette of
     PC_Monochrome:PushAndSetNewPalette(MonochromePalette);
     PC_Grayscale: begin
-                    DebugLn('{WH}Print: Grayscale palette not yet implemented, use monochrome palette');
+                    zDebugLn('{WH}Print: Grayscale palette not yet implemented, use monochrome palette');
                     PushAndSetNewPalette(grayscalepalette);
                   end;
     PC_Color:     ;//заглушка

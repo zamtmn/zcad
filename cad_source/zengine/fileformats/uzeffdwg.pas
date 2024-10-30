@@ -19,14 +19,19 @@
 unit uzeffdwg;
 {$INCLUDE zengineconfig.inc}
 {$MODE OBJFPC}{$H+}
+
 interface
-uses LCLIntf,gdbentityfactory,zcadinterface,GDBLine,gdbobjectsconstdef,typinfo,
-     zcadstrconsts,iodxf,fileutil,varman,uzegeometry,gdbasetypes,
-     GDBGenericSubEntry,SysInfo,gdbase, GDBManager, sysutils, memman,UGDBDescriptor,
-     uzctnrVectorBytes,GDBEntity,TypeDescriptors,ugdbsimpledrawing;
+
+uses
+  uzbLogIntf,gdbentityfactory,zcadinterface,GDBLine,gdbobjectsconstdef,typinfo,
+  zcadstrconsts,iodxf,fileutil,varman,uzegeometry,gdbasetypes,
+  GDBGenericSubEntry,SysInfo,gdbase, GDBManager, sysutils, memman,UGDBDescriptor,
+  uzctnrVectorBytes,GDBEntity,TypeDescriptors,ugdbsimpledrawing;
 procedure addfromdwg(const name: String;owner:PGDBObjGenericSubEntry;LoadMode:TLoadOpt;var drawing:TSimpleDrawing);
+
 implementation
-uses {GDBBlockDef,}UGDBLayerArray,fileformatsmanager;
+
+uses UGDBLayerArray,fileformatsmanager;
 
 type
     PDWGByte=^DWGByte;
@@ -1400,7 +1405,7 @@ var
   f: TZctnrVectorBytes;
   s: String;
 begin
-  DebugLn('{D+}AddFromDWG');
+  zDebugLn('{D+}AddFromDWG');
   //programlog.logoutstr('AddFromDWG',lp_IncPos);
   HistoryOutStr(format(rsLoadingFile,[name]));
   f.InitFromFile(name);
@@ -1424,7 +1429,7 @@ begin
      else
          ShowError('IODWG.ADDFromDWG:'+format(rsUnableToOpenFile,[name]));
   f.done;
-  DebugLn('{D-}end; {AddFromDWG}');
+  zDebugLn('{D-}end; {AddFromDWG}');
   //programlog.logoutstr('end; {AddFromDWG}',lp_DecPos);
 end;
 begin

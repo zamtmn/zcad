@@ -21,7 +21,7 @@ unit uzegluinterface;
 {$Include zengineconfig.inc}
 
 interface
-uses LCLProc,{$IFNDEF DELPHI}LCLType,{$ENDIF}
+uses uzbLogIntf,
      {$IFNDEF DELPHI}glu,gl,{$ELSE}dglOpenGL,windows,{$ENDIF}
      {$IFDEF SLINUX}glx,{$ENDIF}
      uzegeometrytypes,sysutils,uzegeometry;
@@ -247,13 +247,13 @@ begin
      GLUIntrf.init;
      p:=GLUIntrf.mygluGetString(GLU_VERSION);
      GLUVersion:=p;
-     debugln('{I}GLU Version:="%s"',[GLUVersion]);
+     zDebugLn('{I}GLU Version:="%s"',[GLUVersion]);
      //programlog.LogOutFormatStr('GLU Version:="%s"',[GLUVersion],0,LM_Info);
      p:=GLUIntrf.mygluGetString(GLU_EXTENSIONS);
      GLUExtensions:=p;
-     debugln('{I}GLU Extensions:="%s"',[p]);
+     zDebugLn('{I}GLU Extensions:="%s"',[p]);
      //programlog.LogOutFormatStr('GLU Extensions:="%s"',[p],0,LM_Info);
 end
 finalization
-  debugln('{I}[UnitsFinalization] Unit "',{$INCLUDE %FILE%},'" finalization');
+  zDebugLn('{I}[UnitsFinalization] Unit "'+{$INCLUDE %FILE%}+'" finalization');
 end.

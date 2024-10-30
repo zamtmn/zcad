@@ -26,7 +26,7 @@ uses
   Math,
   uzegeometrytypes,UGDBPolyline2DArray,gzctnrVector,
   uzctnrVectorBytes,gzctnrVectorTypes,uzegeometry,uzeffdxfsupport,uzMVReader,
-  uzeSplineUtils,uzegluinterface,LazLoggerBase;
+  uzeSplineUtils,uzegluinterface,uzbLogIntf;
 type
 PBoundaryPath=^TBoundaryPath;
 TBoundaryPath=object
@@ -147,7 +147,7 @@ end;
 
 procedure NurbsErrorCallBack(const v: TGLUIntf_GLenum);{$IFDEF Windows}stdcall{$ELSE}cdecl{$ENDIF};
 begin
-  debugln('{E}'+GLUIntrf.ErrorString(v));
+  zDebugLn('{E}'+GLUIntrf.ErrorString(v));
 end;
 
 (*procedure NurbsBeginCallBack(const v: TGLUIntf_GLenum;const Data: Pointer);{$IFDEF Windows}stdcall{$ELSE}cdecl{$ENDIF};

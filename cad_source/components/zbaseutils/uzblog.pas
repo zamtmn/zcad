@@ -172,7 +172,7 @@ type
       procedure SetDefaultLogLevel(LogLevel:TLogLevel;silent:boolean=false);
 
       procedure ZOnDebugLN(Sender: TObject; const S: TLogMsg; var Handled: Boolean);
-      procedure ZDebugLN(const S: TLogMsg);
+      procedure zDebugLn(const S: TLogMsg);
       function isTraceEnabled:boolean;
 
       procedure AddEnableModuleMask(Mask:TModuleDeskNameType);

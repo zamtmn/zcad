@@ -22,7 +22,7 @@ unit uzeffLibreDWG2Ents;
 {$ModeSwitch advancedrecords}
 interface
 uses
-  LCLProc,
+  uzbLogIntf,
   SysUtils,
   dwg,dwgproc,
   uzeentgenericsubentry,{uzbtypes,}uzedrawingsimple,
@@ -42,7 +42,7 @@ var
   name:string;
 begin
   BITCODE_T2Text(PDWGLayer^.name,DWGContext,name);
-  DebugLn(['{WH}Layer: ',name]);
+  zDebugLn(['{WH}Layer: ',name]);
   if DWGContext.DWGVer>R_2006 then
     name:=Tria_Utf8ToAnsi(name);
   player:=ZContext.PDrawing^.LayerTable.MergeItem(name,ZContext.LoadMode);
@@ -64,7 +64,7 @@ var
   name:string;
 begin
   BITCODE_T2Text(PDWGLType^.name,DWGContext,name);
-  DebugLn(['{WH}LineType: ',name]);
+  zDebugLn(['{WH}LineType: ',name]);
 end;
 
 procedure AddBlockHeader(var ZContext:TZDrawingContext;var DWGContext:TDWGCtx;var DWGObject:Dwg_Object;PDWGBlock_Header:PDwg_Object_BLOCK_HEADER);
@@ -72,7 +72,7 @@ var
   name:string;
 begin
   BITCODE_T2Text(PDWGBlock_Header^.name,DWGContext,name);
-  DebugLn(['{WH}BlockHeader: ',name]);
+  zDebugLn(['{WH}BlockHeader: ',name]);
 end;
 
 procedure AddBlock(var ZContext:TZDrawingContext;var DWGContext:TDWGCtx;var DWGObject:Dwg_Object;PDWGBlock_Header:PDwg_Object_BLOCK_HEADER);
@@ -80,7 +80,7 @@ var
   name:string;
 begin
   BITCODE_T2Text(PDWGBlock_Header^.name,DWGContext,name);
-  DebugLn(['{WH}Block: ',name]);
+  zDebugLn(['{WH}Block: ',name]);
 end;
 
 procedure AddLineEntity(var ZContext:TZDrawingContext;var DWGContext:TDWGCtx;var DWGObject:Dwg_Object;PLine:PDwg_Entity_LINE);

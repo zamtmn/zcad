@@ -19,7 +19,7 @@
 unit uzegeometry;
 
 interface
-uses LCLProc,uzegeometrytypes,math;
+uses uzbLogIntf,uzegeometrytypes,math;
 resourcestring
   rsDivByZero='Divide by zero';
 const
@@ -1938,7 +1938,7 @@ begin
                  end
              else
                  begin
-                 DebugLn('{EH}'+rsDivByZero);
+                 zDebugLn('{EH}'+rsDivByZero);
                  len:=len+2;
                  end;
 end;
@@ -1956,7 +1956,7 @@ begin
                  end
              else
                  begin
-                 DebugLn('{EH}'+rsDivByZero);
+                 zDebugLn('{EH}'+rsDivByZero);
                  len:=len+2;
                  end;
 end;
@@ -2353,7 +2353,7 @@ begin
     vtInteger:result:=args[counter].VInteger;
     vtExtended:result:=args[counter].VExtended^;
   else
-      DebugLn('{E}CreateDoubleFromArray: not Integer, not Extended');
+      zDebugLn('{E}CreateDoubleFromArray: not Integer, not Extended');
   end;{case}
   inc(counter);
 end;
@@ -2362,7 +2362,7 @@ begin
   case args[counter].VType of
     vtBoolean:result:=args[counter].VBoolean;
   else
-    DebugLn('{E}CreateStrinBooleanFromArray: not boolean');
+    zDebugLn('{E}CreateStrinBooleanFromArray: not boolean');
   end;{case}
   inc(counter);
 end;
@@ -2373,7 +2373,7 @@ begin
     vtString:result:=args[counter].VString^;
     vtAnsiString:result:=ansistring(args[counter].VAnsiString);
   else
-    DebugLn('{E}CreateStringFromArray: not String');
+    zDebugLn('{E}CreateStringFromArray: not String');
   end;{case}
   inc(counter);
 end;
@@ -2393,7 +2393,7 @@ begin
                                  end
                              else
                                  begin
-                                      DebugLn('{E}CreateVertexFromArray: no enough params in args');
+                                      zDebugLn('{E}CreateVertexFromArray: no enough params in args');
                                       //programlog.LogOutStr('CreateVertexFromArray: no enough params in args',lp_OldPos,LM_Error);
                                  end;
 
@@ -2411,7 +2411,7 @@ begin
       y:=CreateDoubleFromArray(counter,args);
     end;
   end else begin
-    DebugLn('{E}CreateVertex2DFromArray: no enough params in args');
+    zDebugLn('{E}CreateVertex2DFromArray: no enough params in args');
   end;
 end;
 

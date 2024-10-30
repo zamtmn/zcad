@@ -2600,8 +2600,8 @@ begin
                                  begin
                                       if abs(ccsLBN.z)>eps then
                                       begin
-                                      ccsLBN.z:=ccsLBN.z/10;
-                                      ccsRTF.z:=ccsRTF.z*10;
+                                      ccsLBN.z:=ccsLBN.z+abs(ccsLBN.z/10);
+                                      ccsRTF.z:=ccsRTF.z-abs(ccsRTF.z/10);
                                       end
                                       else
                                       begin

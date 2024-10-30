@@ -250,7 +250,7 @@ function TMySpeedButton.GetDrawDetails: TThemedElementDetails;
   procedure TMySpeedButton.CalculatePreferredSize(var PreferredWidth,
     PreferredHeight: integer; WithThemeSpace: Boolean);
   begin
-    with ThemeServices.GetDetailSize(ThemeServices.GetElementDetails(tsArrowBtnDownNormal)) do
+    with ThemeServices.GetDetailSizeForPPI(ThemeServices.GetElementDetails(tsArrowBtnDownNormal),Screen.PixelsPerInch) do
     begin
       PreferredWidth:=cx;
       PreferredHeight:=1;

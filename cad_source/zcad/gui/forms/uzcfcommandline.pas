@@ -250,7 +250,7 @@ begin
     sbutton.OnClick:=ButtonPressed;
     //sbutton.Width:=panel.Constraints.MinHeight;
     sbutton.Align:=alLeft;
-    with ThemeServices.GetDetailSize(ThemeServices.GetElementDetails(tsArrowBtnDownNormal)) do
+    with ThemeServices.GetDetailSizeForPPI(ThemeServices.GetElementDetails(tsArrowBtnDownNormal),Screen.PixelsPerInch) do
     begin
          if cx>0 then
                      sbutton.width:=cx

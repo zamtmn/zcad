@@ -677,7 +677,9 @@ begin
             P:=Vertexmorph(PGDBObjLine(pThisEntity)^.CoordInWCS.lBegin,PGDBObjLine(pThisEntity)^.CoordInWCS.lEnd,knot.t);
           oldP:=p;
         end;
-
+        //это пока не реализовано, или хз
+        //KTCircle:
+        //KTFilledCircle:
       end;
     end;
     if IsDoubleNotEqual(knot.t,1,bigeps) then

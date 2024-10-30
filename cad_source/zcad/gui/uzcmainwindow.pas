@@ -343,8 +343,8 @@ end;
 {$ifdef windows}
 procedure TZCADMainWindow.SetTop;
 var
-  hWnd{, hCurWnd, dwThreadID, dwCurThreadID}: THandle;
-  OldTimeOut: Cardinal;
+  hWnd{,hCurWnd, dwThreadID, dwCurThreadID}:THandle;
+  OldTimeOut:DWORD;
   //AResult: Boolean;
 begin
   if GetActiveWindow=Application.MainForm.Handle then Exit;
@@ -364,7 +364,7 @@ begin
         AttachThreadInput(dwThreadID, dwCurThreadID, False);
      end;}
      SetWindowPos(hWnd, HWND_NOTOPMOST, 0, 0, 0, 0, SWP_NOMOVE or SWP_NOSIZE);
-     SystemParametersInfo(SPI_SETFOREGROUNDLOCKTIMEOUT, 0, Pointer(OldTimeOut), 0);
+     SystemParametersInfo(SPI_SETFOREGROUNDLOCKTIMEOUT, 0, @OldTimeOut, 0);
 end;
 {$endif}
 procedure TZCADMainWindow.IPCMessage(Sender: TObject);
@@ -1511,6 +1511,7 @@ end;
 
 function TZCADMainWindow.wamu(Sender:TAbstractViewArea;ZC:TZKeys;X,Y:Integer;onmouseobject:Pointer;var NeedRedraw:Boolean):boolean;
 begin
+  result:=false;
   MouseTimer.Touch(Point(X,Y),[TMouseTimer.TReason.RMUp]);
 end;
 

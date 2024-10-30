@@ -2643,13 +2643,13 @@ begin
                                       end;
   if param.projtype = ProjParallel then
                                       begin
-                                           if {uzegeometry.oneVertexlength(pcamera^.CamCSOffset)>1000000}true then
+                                           //if uzegeometry.oneVertexlength(pcamera^.CamCSOffset)>1000000 then
                                            begin
                                                 LCS.CurrentCamCSOffset:=pcamera^.CamCSOffset;
                                                 LCS.CurrentCamCSOffsetS:=VertexD2S(LCS.CurrentCamCSOffset);
                                                 LCS.notuseLCS:=pcamera^.notuseLCS;
                                            end
-                                           else LCS.notuseLCS:=true;
+                                           //else LCS.notuseLCS:=true;
                                       end
                                   else
                                       begin

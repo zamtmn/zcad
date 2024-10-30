@@ -39,6 +39,7 @@ begin
     RestoreMemoryManager
   else
     SaveProfileToFile;
+  result:=cmd_ok;
 end;
 
 initialization

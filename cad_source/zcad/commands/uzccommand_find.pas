@@ -345,6 +345,7 @@ begin
         fe.Current:=0;
       showentity(fe);
     end;
+  result:=cmd_ok;
 end;
 
 function FindPrev_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
@@ -359,6 +360,7 @@ begin
         fe.Current:=0;
       showentity(fe);
     end;
+  result:=cmd_ok;
 end;
 
 function Find_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;

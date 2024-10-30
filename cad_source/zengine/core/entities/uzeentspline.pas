@@ -141,6 +141,7 @@ var
   m:DMatrix4D;
   //notfirst:boolean;
   TSD:TTempSplineData;
+  tv:GDBvertex;
 begin
   if assigned(EntExtensions)then
     EntExtensions.RunOnBeforeEntityFormat(@self,drawing,DC);
@@ -191,9 +192,15 @@ begin
   AproxPointInWCS.Clear;
   TSD.PAproxPointInWCS:=@AproxPointInWCS;
 
+  //попытка расчета масштаба при невыставленых матрицах вида, при загрузке dxf
+  //по идее наверно надо матрицы выставлять, а не тут заниматься херней
+  tv:=VectorTransform3D(OneVertex,m);
+  tv:=VectorTransform3D(tv,DC.DrawingContext.matrixs.pmodelMatrix^);
+  tv:=VectorTransform3D(tv,DC.DrawingContext.matrixs.pprojMatrix^);
+
   nurbsobj:=GLUIntrf.NewNurbsRenderer;
 
-  GLUIntrf.SetupNurbsRenderer(nurbsobj,{max(maxL/100,minL/5)}10,
+  GLUIntrf.SetupNurbsRenderer(nurbsobj,{max(maxL/100,minL/5)}50/tv.Length,
                               DC.DrawingContext.matrixs.pmodelMatrix^,DC.DrawingContext.matrixs.pprojMatrix^,DC.DrawingContext.matrixs.pviewport^,
                               nil,nil,@NurbsVertexCallBack,@NurbsErrorCallBack,
                               @TSD);

@@ -268,6 +268,11 @@ begin
                      case volt of
                                  _AC_220V_50Hz:u:=0.22;
                                  _AC_380V_50Hz:u:=0.38;
+                                 _DC_6V,_DC_12V,_DC_24V,_DC_27V,
+                                 _DC_48V,_DC_60V,_DC_110V,
+                                 _AC_12V_50Hz,_AC_24V_50Hz,
+                                 _AC_36V_50Hz,_AC_40V_50Hz,
+                                 _AC_110V_50Hz:u:=0.00000001;
                      end;{case}
                      pvn:=pentvarext.entityunit.FindVariable('CalcIP');
                      if pvn<>nil then

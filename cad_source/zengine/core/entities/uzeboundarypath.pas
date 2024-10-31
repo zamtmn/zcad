@@ -403,7 +403,7 @@ function TBoundaryPath.LoadFromDXF(var f:TZMemReader;DXFCode:Integer):Boolean;
     //if dxfdoubleload(f,10,currDXFGroupCode,p.x) then currDXFGroupCode:=f.ParseInteger;
     //if dxfdoubleload(f,20,currDXFGroupCode,p.y) then currDXFGroupCode:=f.ParseInteger;
     p:=dxfRequiredVertex2D(f,10,currDXFGroupCode);
-    if EdgeNum<>1 then begin
+    if (EdgeNum<>1)and(currpath.Count>0) then begin
       if not(IsPoint2DEqual(p,currpath.getPLast^)) then
         currpath.PushBackData(p);
     end else begin

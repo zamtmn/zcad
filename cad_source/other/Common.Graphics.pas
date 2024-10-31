@@ -365,6 +365,7 @@ var
     ResultList: TList<Integer>;
     Tmp: TCharInfos;
   begin
+    Result:=[];
     X := 0;
     Y := 0;
   {$ifdef fpc}
@@ -742,6 +743,7 @@ var
   AWord: TWord;
   CurrentLine: Integer;
 begin
+  Result:=[];
   if Length(CharInfos) = 0 then Exit;
   Len := 0;
   CurrentLine := 0;

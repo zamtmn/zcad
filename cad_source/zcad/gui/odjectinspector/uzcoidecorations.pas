@@ -89,7 +89,7 @@ begin
   cbedit:=TColorBox.Create(propeditor);
   cbedit.Text:=PTD.GetValueAsString(pinstance);
   cbedit.OnChange:=propeditor.EditingProcess;
-  SetComboSize(TComboBox(cbedit),sysvar.INTF.INTF_DefaultControlHeight^-6,CBReadOnly);
+  SetComboSize(cbedit,sysvar.INTF.INTF_DefaultControlHeight^-6);
   {$IFNDEF DELPHI}
   {cbedit.ReadOnly:=true;//now it deprecated, see in SetComboSize}
   {$ENDIF}
@@ -330,7 +330,7 @@ var
   cbedit:TColorBox;
 begin
   CreateTColorPropEditor(TheOwner,pinstance,FreeOnLostFocus,PTD,result.editor,cbedit,f);
-  SetComboSize(TComboBox(cbedit),sysvar.INTF.INTF_DefaultControlHeight^-6,CBReadOnly);
+  SetComboSize(cbedit,sysvar.INTF.INTF_DefaultControlHeight^-6);
   cbedit.Style:=cbedit.Style+[cbStandardColors,cbExtendedColors,cbSystemColors,cbIncludeDefault];
   cbedit.Selected:=PColor(pinstance)^;
   result.mode:=TEM_Integrate;

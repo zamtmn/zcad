@@ -79,7 +79,8 @@ begin
         exit;
       end;
     end;
-    fillchar(dwg,sizeof(dwg),0);
+    //fillchar(dwg,sizeof(dwg),0);
+    dwg:=default(Dwg_Data);
     dwg.opts:=0;
     zDebugLn(['{WH}try load file: ',ansistring(filename)]);
     lph:=lps.StartLongProcess('LibreDWG.dwg_read_file',nil);
@@ -115,7 +116,8 @@ begin
         exit;
       end;
     end;
-    fillchar(dwg,sizeof(dwg),0);
+    //fillchar(dwg,sizeof(dwg),0);
+    dwg:=default(Dwg_Data);
     dwg.opts:=0;
     zDebugLn(['{WH}try load file: ',ansistring(filename)]);
     lph:=lps.StartLongProcess('LibreDWG.dxf_read_file',nil);

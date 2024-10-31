@@ -47,7 +47,6 @@ GDBObjOpenArrayOfPV= object({TZctnrVectorPGDBaseObjects}TZctnrVectorPGDBaseEntit
                       function getoutbound(var DC:TDrawContext):TBoundingBox;
                       function getonlyoutbound(var DC:TDrawContext):TBoundingBox;
                       function getonlyvisibleoutbound(var DC:TDrawContext):TBoundingBox;
-                      procedure Format;virtual;abstract;
                       procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext;Stage:TEFStages=EFAllStages);virtual;
                       procedure FormatAfterEdit(var drawing:TDrawingDef;var DC:TDrawContext);virtual;
                       //function InRect:TInRect;virtual;

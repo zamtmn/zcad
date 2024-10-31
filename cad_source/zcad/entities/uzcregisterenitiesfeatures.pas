@@ -258,8 +258,7 @@ begin
      pvn:=pentvarext.entityunit.FindVariable('Device_Type');
      if pvn<>nil then
      begin
-          case PTDeviceType(pvn^.data.Addr.Instance)^ of
-          TDT_SilaPotr:
+          if PTDeviceType(pvn^.data.Addr.Instance)^=TDT_SilaPotr then
           begin
                pvn:=pentvarext.entityunit.FindVariable('Voltage');
                if pvn<>nil then
@@ -309,7 +308,6 @@ begin
                      end;
                end;
           end;
-          end;{case}
      end;
 end;
 procedure CableNameProcess(pCable:PGDBObjCable;const drawing:TDrawingDef);

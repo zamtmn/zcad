@@ -211,7 +211,7 @@ var
   t:byte;
 begin
   t:=0;
-  MouseMoveCallback(Context,drawings.GetCurrentDWG^.wa.param.md.mouse3dcoord,drawings.GetCurrentDWG^.wa.param.md.mouse,t,@drawings.GetCurrentDWG^.wa.param.ospoint);
+  result:=MouseMoveCallback(Context,drawings.GetCurrentDWG^.wa.param.md.mouse3dcoord,drawings.GetCurrentDWG^.wa.param.md.mouse,t,@drawings.GetCurrentDWG^.wa.param.ospoint);
   zcRedrawCurrentDrawing;
 end;
 

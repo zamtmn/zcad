@@ -216,6 +216,7 @@ var
   sr:TRect;
 begin
   if fShadowShow then begin
+    sr.Create(0,0,0,0);
     HintDockImage(self,sr,sr,disHide);
     //WidgetSet.DrawDefaultDockImage(sr,sr,disHide);
     fShadowShow:=false;

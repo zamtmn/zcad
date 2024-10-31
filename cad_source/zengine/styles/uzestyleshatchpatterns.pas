@@ -70,7 +70,7 @@ begin
 end;
 function TPatStrokesArray.CopyTo(var dest:GZVector<Double>):Integer;
 begin
-  inherited;
+  result:=inherited;
   if IsIt(TypeOf(dest),TypeOf(TPatStrokesArray)) then begin
     PTPatStrokesArray(@dest)^.fAngle:=fAngle;
     PTPatStrokesArray(@dest)^.Base:=Base;

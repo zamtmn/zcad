@@ -94,7 +94,7 @@ end;
 
 function duplicade_com.AfterClick(const Context:TZCADCommandContext;wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record): Integer;
 begin
-  inherited;
+  result:=inherited;
   if (button and MZW_LBUTTON)<>0 then
     Commandmanager.executecommandend;
 end;

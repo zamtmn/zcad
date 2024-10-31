@@ -23,7 +23,7 @@ unit uzeentspline;
 interface
 uses
   uzegluinterface,uzeentityfactory,uzgldrawcontext,uzgloglstatemanager,
-  gzctnrVector,UGDBPoint3DArray,uzedrawingdef,uzecamera,UGDBVectorSnapArray,
+  UGDBPoint3DArray,uzedrawingdef,uzecamera,UGDBVectorSnapArray,
   uzestyleslayers,uzeentsubordinated,uzeentcurve,
   uzeentity,uzctnrVectorBytes,uzbtypes,uzeconsts,uzglviewareadata,
   gzctnrVectorTypes,uzegeometrytypes,uzegeometry,uzeffdxfsupport,sysutils,

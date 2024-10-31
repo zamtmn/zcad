@@ -243,14 +243,14 @@ begin
           if @fd.CheckUStr<>nil then
             result:=fd.CheckUStr(PGDBObjText(pv)^.Content,utext,details,NeedDetails)
           else
-            result:=fd.CheckStr(PGDBObjText(pv)^.Content,utext,details,NeedDetails)
+            result:=fd.CheckUStr(PGDBObjText(pv)^.Content,utext,details,NeedDetails)
         end;
         if not result then
           if FindCommandParam.Area.InTextTemplate then begin
             if @fd.CheckUStr<>nil then
               result:=fd.CheckUStr(PGDBObjText(pv)^.Template,utext,details,NeedDetails)
             else
-              result:=fd.CheckStr(PGDBObjText(pv)^.Template,utext,details,NeedDetails)
+              result:=fd.CheckUStr(PGDBObjText(pv)^.Template,utext,details,NeedDetails)
           end;
       end;
       if not result then
@@ -281,7 +281,7 @@ var
   utext:TDXFEntsInternalStringType;
   details:string;
 begin
-  utext:=Text;
+  utext:=TDXFEntsInternalStringType(Text);
   pv:=arr.beginiterate(ir);
   if pv<>nil then
   repeat

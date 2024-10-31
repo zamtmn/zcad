@@ -293,7 +293,7 @@ begin
     if assigned(SubNode) then
       while assigned(SubNode)do
       begin
-        TMenuDefaults.TryRunMenuCreateFunc(TMenuType.TMT_PopupMenu,fmf,SubNode.NodeName,SubNode,actlist,tmenuitem(tbutton.PopupMenu),mpf);
+        TMenuDefaults.TryRunMenuCreateFunc(TMenuType.TMT_PopupMenu,fmf,SubNode.NodeName,SubNode,actlist,tmenuitem(tbutton.PopupMenu){,mpf});
         SubNode:=SubNode.NextSibling;
       end;
     if (ActionIndex>=0)and(ActionIndex<tbutton.PopupMenu.Items.Count) then
@@ -393,7 +393,7 @@ begin
   if actionshortcuts<>'' then begin
     repeat
           GetPartOfPath(actionshortcut,actionshortcuts,'|');
-          action.SecondaryShortCuts.AddObject(actionshortcut,TObject(pointer(MyTextToShortCut(actionshortcut))));
+          action.SecondaryShortCuts.AddObject(actionshortcut,TObject(MyTextToShortCut(actionshortcut)));
     until actionshortcuts='';
   end;
   actioncommand:=getAttrValue(aNode,'Command','');

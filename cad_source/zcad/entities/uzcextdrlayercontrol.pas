@@ -27,7 +27,7 @@ uses
   uzbtypes,uzeentsubordinated,uzeentity,uzeenttext,uzeblockdef,
   varmandef,Varman,UUnitManager,URecordDescriptor,UBaseTypeDescriptor,
   uzeffdxfsupport,uzcvariablesutils,usimplegenerics,
-  uzeBaseExtender,uzgldrawcontext,fpexprpars,LCLProc;
+  uzeBaseExtender,uzgldrawcontext,fpexprpars,uzcLog,uzcreglog;
 const
   LayerControlExtenderName='extdrLayerControl';
   //добавить это расширение к примитиву можно командой
@@ -272,7 +272,7 @@ begin
       end;
     except
        on E:Exception do
-            DbgOut('{EM}Entity"%p".TLayerControlExtender.Expr="%s" raise "%s"',[pEntity,Expr,E.Message]);
+            programlog.LogOutFormatStr('Entity"%p".TLayerControlExtender.Expr="%s" raise "%s"',[pEntity,Expr,E.Message],LM_Error,1,MO_SH or MO_SM);
          //raise ELayerControlExtender.CreateFmt('TLayerControlExtender error for expression "%s": %s',[Expr,E.Message]);
     end;
   finally

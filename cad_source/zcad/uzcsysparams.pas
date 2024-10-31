@@ -19,7 +19,9 @@
 unit uzcSysParams;
 {$INCLUDE zengineconfig.inc}
 interface
-uses XMLConf,XMLPropStorage,LazConfigStorage,fileutil,
+uses
+  XMLConf,XMLPropStorage,LazConfigStorage,DOM,
+  fileutil,
   LCLProc,uzclog,uzbpaths,Forms{$IFNDEF DELPHI},LazUTF8{$ENDIF},sysutils;
 const
   CParamsFile='/rtl/config.xml';
@@ -74,6 +76,11 @@ var
 procedure SaveParams(xmlfile:string;var Params:tsavedparams);
 procedure LoadParams(xmlfile:string;out Params:tsavedparams);
 implementation
+type
+  TXMLConfigHelper=class helper for TXMLConfig
+    function  GetAnsiValue(const APath: DOMString; const ADefault: AnsiString): AnsiString;
+  end;
+
 procedure SaveParamToConfig(Config: TConfigStorage; var Params:tsavedparams);
 begin
   Config.AppendBasePath('Stage0Params/');
@@ -110,6 +117,11 @@ begin
     XMLConfig.Free;
   end;
 end;
+function TXMLConfigHelper.GetAnsiValue(const APath: DOMString; const ADefault: AnsiString): AnsiString;
+begin
+  result:=AnsiString(GetValue(APath,DOMString(ADefault)));
+end;
+
 procedure LoadParams(xmlfile:string;out Params:tsavedparams);
 var
   XMLConfig:TXMLConfig;
@@ -123,9 +135,9 @@ begin
   Params.NoLoadLayout:=XMLConfig.GetValue('NoLoadLayout',DefaultSavedParams.NoLoadLayout);
   Params.UpdatePO:=XMLConfig.GetValue('UpdatePO',DefaultSavedParams.UpdatePO);
   Params.MemProfiling:=XMLConfig.GetValue('MemProfiling',DefaultSavedParams.MemProfiling);
-  Params.LangOverride:=XMLConfig.GetValue('LangOverride',DefaultSavedParams.LangOverride);
-  Params.DictionariesPath:=XMLConfig.GetValue('DictionariesPath',DefaultSavedParams.DictionariesPath);
-  Params.LastAutoSaveFile:=XMLConfig.GetValue('LastAutoSaveFile',DefaultSavedParams.LastAutoSaveFile);
+  Params.LangOverride:=XMLConfig.GetAnsiValue('LangOverride',DefaultSavedParams.LangOverride);
+  Params.DictionariesPath:=XMLConfig.GetAnsiValue('DictionariesPath',DefaultSavedParams.DictionariesPath);
+  Params.LastAutoSaveFile:=XMLConfig.GetAnsiValue('LastAutoSaveFile',DefaultSavedParams.LastAutoSaveFile);
   XMLConfig.CloseKey;
   FreeAndNil(XMLConfig);
 end;

@@ -38,10 +38,13 @@ var
   i:integer;
 begin
   i:=BackendsNames.Enums.findstring(uppercase(BackEndName),true);
-  if i>=0 then
-    BackendsNames.Selected:=i
-  else
+  if i>=0 then begin
+    BackendsNames.Selected:=i;
+    result:=True;
+  end else begin
     zDebugln('{E}RendererBackEnd "'+BackEndName+'" not found');
+    result:=False;
+  end;
 end;
 procedure RegisterBackend(BackEndClass:TVA;Name:string);
 begin

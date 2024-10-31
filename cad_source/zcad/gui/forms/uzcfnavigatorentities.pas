@@ -218,7 +218,7 @@ else
       if assigned(pnd) then
         begin
           case pnd^.NodeMode of
-          TNMGroup:ImageIndex:=NavGroupIconIndex;
+          TNMGroup,TNMHardGroup:ImageIndex:=NavGroupIconIndex;
           TNMAutoGroup:ImageIndex:=NavAutoGroupIconIndex;
           TNMData:begin
                     if pnd^.Ident.pent<>nil then

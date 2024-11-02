@@ -336,7 +336,17 @@ begin
   P_drawInOCS:=NulVertex;
   angle:=0;
 
+  if textprop.justify=jsbtl then
+    textprop.justify:=jsbl
+  else if textprop.justify=jsbtc then
+    textprop.justify:=jsbc
+  else if textprop.justify=jsbtr then
+    textprop.justify:=jsbr;
+
   case textprop.justify of
+    jsbtl,
+    jsbtc,
+    jsbtr:;//у мтекста таких выравниывний нет
     jstl:
       begin
         P_drawInOCS.y := P_drawInOCS.y - textprop.size;

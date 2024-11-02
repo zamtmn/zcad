@@ -295,6 +295,7 @@ begin
                      end;
 
                      case calcip of
+                          _ICOS_from_P:;
                           _I_from_P:begin
                                          //if PTPhase(pvphase^.data.Addr.Instance)^=_ABC
                                          if volt = _AC_380V_50Hz

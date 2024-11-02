@@ -70,7 +70,8 @@ type
   end;
 
 implementation
-function readFT_SfntName(var SfntName:TFT_SfntName):UnicodeString;
+{TODO: нужен вариант функции с String}
+function readFT_SfntNameU(var SfntName:TFT_SfntName):UnicodeString;
 const
   maxstringlength=16000;
 var
@@ -98,7 +99,40 @@ begin
       ts:='';
       setlength(ts,len);
       system.Move(SfntName.aString^,ts[1],len);
-      result:=ts;
+      result:=UnicodeString(ts);
+    end;
+  end;
+end;
+
+function readFT_SfntNameA(var SfntName:TFT_SfntName):AnsiString;
+const
+  maxstringlength=16000;
+var
+  len,i:integer;
+  uresult:UnicodeString;
+begin
+  if SfntName.String_len=0 then
+    result:=''
+  else begin
+    if SfntName.platform_id<>1 then begin
+      if SfntName.String_len>maxstringlength then
+        len:=maxstringlength
+      else
+        len:=SfntName.String_len div 2;
+      uresult:='';
+      setlength(uresult,len);
+      system.Move(SfntName.aString^,uresult[1],len*2);
+      for i:=1 to len do
+        PWord(@uresult[i])^:=BEtoN(PWord(@uresult[i])^);
+      result:=string(uresult);
+    end else begin
+      if SfntName.String_len>maxstringlength then
+        len:=maxstringlength
+      else
+        len:=SfntName.String_len;
+      result:='';
+      setlength(result,len);
+      system.Move(SfntName.aString^,result[1],len);
     end;
   end;
 end;
@@ -241,14 +275,6 @@ begin
   end else
     Result:=CalcCapHeight;
 
-
-  if Result=-1 then begin
-    if pos2=nil then
-      Result:=PTT_HoriHeader(phori)^.Ascender-PTT_HoriHeader(phori)^.Descender
-    else
-      Result:=PTT_OS(pos2)^.usWinAscent-PTT_OS(pos2)^.usWinDescent;
-  end;
-
   if phead<>nil then
     Result:=Result/PTT_Header(phead)^.Units_Per_EM
   else begin
@@ -283,7 +309,7 @@ var
 begin
   SfntName:=Default(TFT_SfntName);
   FT_Get_Sfnt_Name(FontMgr.GetFreeTypeFont(FreeTypeTTFImpl.FontID),TT_NAME_ID_FULL_NAME,SfntName);
-  result:=readFT_SfntName(SfntName);
+  result:=readFT_SfntNameA(SfntName);
 end;
 function TTTFBackendFreeType.GetFamily:String;
 var
@@ -291,15 +317,18 @@ var
 begin
   SfntName:=Default(TFT_SfntName);
   FT_Get_Sfnt_Name(FontMgr.GetFreeTypeFont(FreeTypeTTFImpl.FontID),TT_NAME_ID_FONT_FAMILY,SfntName);
-  result:=readFT_SfntName(SfntName);
+  result:=readFT_SfntNameA(SfntName);
 end;
 
 function TTTFBackendFreeType.GetHinted:Boolean;
 begin
   //Result:=FreeTypeTTFImpl.Hinted;
+  //не реализовано
+  Result:=False;
 end;
 procedure TTTFBackendFreeType.SetHinted(const AValue:Boolean);
 begin
+  //не реализовано
   //FreeTypeTTFImpl.Hinted:=AValue;
 end;
 

@@ -37,7 +37,7 @@ const
 var
   IsAllInited:Boolean;
 
-function SpellCheckString(FindIn,Text:string;var Details:String;const NeedDetails:Boolean):boolean;
+function SpellCheckString(FindIn:AnsiString;const TextA:AnsiString;const TextU:unicodestring;var Details:String;const NeedDetails:Boolean):boolean;
 var
   Opt:TSpeller.TSpellOpts;
 //  errW:string;

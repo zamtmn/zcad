@@ -15,9 +15,9 @@
 {
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
-{$IFDEF FPC}
-  {$CODEPAGE UTF8}
-  {$MODE DELPHI}
+{$IfDef FPC}
+  {$Codepage UTF8}
+  {$Mode objfpc}{$H+}
 {$ENDIF}
 unit uzcCommand_Find;
 {$INCLUDE zengineconfig.inc}
@@ -50,19 +50,21 @@ const
 
 type
   TCheckFuncType=(CFCheckEntity,CFCheckText);
-  TCheckUStr=function(FindIn,Text:TDXFEntsInternalStringType;var Details:String;const NeedDetails:Boolean):boolean;
-  TCheckStr=function(FindIn,Text:string;var Details:String;const NeedDetails:Boolean):boolean;
-  TCheckEnt=function(PEntity:pGDBObjEntity;var Details:String;const NeedDetails:Boolean):boolean;
+  //                  |где ищем                  |что ищем (в двух вариантах utf8 и utf16)      | ответ от сравнения, например предложения
+  //                  ˅                          ˅                                              ˅ озамене при проверке орфографии
+  TCheckStrU=function(FindIn:UnicodeString;const TextA:Ansistring;const TextU:UnicodeString;var Details:String;const NeedDetails:Boolean):boolean;
+  TCheckStrA=function(FindIn:Ansistring;   const TextA:Ansistring;const TextU:UnicodeString;var Details:String;const NeedDetails:Boolean):boolean;
+  TCheckEnt =function(PEntity:pGDBObjEntity;                                                var Details:String;const NeedDetails:Boolean):boolean;
   TFindProcData=record
-    CheckUStr:TCheckUStr;
+    CheckStrU:TCheckStrU;
     case CheckFuncType:TCheckFuncType of
-      CFCheckText:(CheckStr:TCheckStr);
+      CFCheckText:(CheckStrA:TCheckStrA);
       CFCheckEntity:(CheckEnt:TCheckEnt);
   end;
 
   TFindProcKeyType=string;
 
-procedure RegisterCheckStrProc(AKey:TFindProcKeyType;ACheckStr:TCheckStr;ACheckUStr:TCheckUStr=nil);
+procedure RegisterCheckStrProc(AKey:TFindProcKeyType;ACheckStr:TCheckStrA;ACheckUStr:TCheckStrU=nil);
 procedure RegisterCheckEntProc(AKey:TFindProcKeyType;ACheckEnt:TCheckEnt);
 
 procedure ShowFindCommandParams;
@@ -94,7 +96,7 @@ const
                   ' '];
 
 type
-  TFindProcsRegister=GKey2DataMap<TFindProcKeyType,TFindProcData>;
+  TFindProcsRegister=specialize GKey2DataMap<TFindProcKeyType,TFindProcData>;
   //** Тип данных для отображения в инспекторе опций
   TCompareOptions=record
     CaseSensitive:boolean;
@@ -135,14 +137,14 @@ begin
     FindProcsRegister:=TFindProcsRegister.Create;
 end;
 
-procedure RegisterCheckStrProc(AKey:TFindProcKeyType;ACheckStr:TCheckStr;ACheckUStr:TCheckUStr=nil);
+procedure RegisterCheckStrProc(AKey:TFindProcKeyType;ACheckStr:TCheckStrA;ACheckUStr:TCheckStrU=nil);
 var
   fd:TFindProcData;
 begin
   CreateFindProcsRegisterIfNeed;
-  fd.CheckUStr:=ACheckUStr;
+  fd.CheckStrU:=ACheckUStr;
   fd.CheckFuncType:=CFCheckText;
-  fd.CheckStr:=ACheckStr;
+  fd.CheckStrA:=ACheckStr;
   FindProcsRegister.RegisterKey(AKey,fd);
 end;
 procedure RegisterCheckEntProc(AKey:TFindProcKeyType;ACheckEnt:TCheckEnt);
@@ -150,7 +152,7 @@ var
   fd:TFindProcData;
 begin
   CreateFindProcsRegisterIfNeed;
-  fd.CheckUStr:=nil;
+  fd.CheckStrU:=nil;
   fd.CheckFuncType:=CFCheckEntity;
   fd.CheckEnt:=ACheckEnt;
   FindProcsRegister.RegisterKey(AKey,fd);
@@ -186,84 +188,84 @@ begin
   result:=cmd_ok;
 end;
 
-function CheckUStr(FindIn,Text:TDXFEntsInternalStringType;var Details:String;const NeedDetails:Boolean):boolean;overload;
+function FCheckStrU(FindIn:UnicodeString;const TextA:Ansistring;const TextU:UnicodeString;var Details:String;const NeedDetails:Boolean):boolean;overload;
 var
   i:integer;
 begin
   if not FindCommandParam.Options.CaseSensitive then
     FindIn:=UnicodeUpperCase(FindIn);
   if FindCommandParam.Options.UseWildcards then begin
-    result:=MatchesMask(FindIn,Text)
+    result:=MatchesMask(AnsiString(FindIn),TextA)
   end else begin
-    i:=pos(Text,FindIn);
+    i:=pos(TextU,FindIn);
     result:=i>0;
     if result and FindCommandParam.Options.WholeWords then begin
       if i>1 then
         result:=(ord(FindIn[i-1])<256)and(FindIn[i-1] in WordBreakChars);
       if result then
-        if i+length(text)<=length(FindIn) then
-          result:=(ord(FindIn[i+length(text)])<256)and(FindIn[i+length(text)] in WordBreakChars);
+        if i+length(TextU)<=length(FindIn) then
+          result:=(ord(FindIn[i+length(TextU)])<256)and(FindIn[i+length(TextU)] in WordBreakChars);
     end;
   end;
 end;
-function CheckStr(FindIn,Text:string;var Details:String;const NeedDetails:Boolean):boolean;overload;
+function FCheckStrA(FindIn:Ansistring;const TextA:Ansistring;const TextU:UnicodeString;var Details:String;const NeedDetails:Boolean):boolean;overload;
 var
   i:integer;
 begin
   if not FindCommandParam.Options.CaseSensitive then
     FindIn:=UTF8UpperCase(FindIn);
   if FindCommandParam.Options.UseWildcards then begin
-    result:=MatchesMask(FindIn,Text)
+    result:=MatchesMask(FindIn,TextA)
   end else begin
-    i:=pos(Text,FindIn);
+    i:=pos(TextA,FindIn);
     result:=i>0;
     if result and FindCommandParam.Options.WholeWords then begin
       if i>1 then
         result:=FindIn[i-1] in WordBreakChars;
       if result then
-        if i+length(text)<=length(FindIn) then
-          result:=FindIn[i+length(text)] in WordBreakChars;
+        if i+length(textA)<=length(FindIn) then
+          result:=FindIn[i+length(textA)] in WordBreakChars;
     end;
   end;
 end;
 
-function CheckEntity(const pv:pGDBObjEntity;const fd:TFindProcData;const text:string;const utext:TDXFEntsInternalStringType;var details:string;const NeedDetails:Boolean):boolean;
+function CheckEntity(const pv:pGDBObjEntity;const fd:TFindProcData;const TextA:Ansistring;const TextU:UnicodeString;var details:string;const NeedDetails:Boolean):boolean;
 var
   pvt:TObjID;
   pentvarext:TVariablesExtender;
   vars,&var:string;
   v:pvardesk;
 begin
-  pvt:=pv.GetObjType;
+  pvt:=pv^.GetObjType;
   result:=False;
   case fd.CheckFuncType of
     CFCheckText:begin
       if (pvt=GDBMTextID)or(pvt=GDBTextID) then begin
         if FindCommandParam.Area.InTextContent then begin
-          if @fd.CheckUStr<>nil then
-            result:=fd.CheckUStr(PGDBObjText(pv)^.Content,utext,details,NeedDetails)
+          if fd.CheckStrU<>nil then
+            result:=fd.CheckStrU(PGDBObjText(pv)^.Content,TextA,TextU,details,NeedDetails)
           else
-            result:=fd.CheckUStr(PGDBObjText(pv)^.Content,utext,details,NeedDetails)
+            result:=fd.CheckStrA(AnsiString(PGDBObjText(pv)^.Content),TextA,TextU,details,NeedDetails)
         end;
         if not result then
           if FindCommandParam.Area.InTextTemplate then begin
-            if @fd.CheckUStr<>nil then
-              result:=fd.CheckUStr(PGDBObjText(pv)^.Template,utext,details,NeedDetails)
+            if fd.CheckStrU<>nil then
+              result:=fd.CheckStrU(PGDBObjText(pv)^.Template,TextA,TextU,details,NeedDetails)
             else
-              result:=fd.CheckUStr(PGDBObjText(pv)^.Template,utext,details,NeedDetails)
+              result:=fd.CheckStrA(AnsiString(PGDBObjText(pv)^.Template),TextA,TextU,details,NeedDetails)
           end;
       end;
       if not result then
         if (FindCommandParam.Area.InVariables)and(FindCommandParam.Area.Variables<>'') then begin
-          pentvarext:=pv^.GetExtension<TVariablesExtender>;
+          pentvarext:=pv^.specialize GetExtension<TVariablesExtender>;
           if pentvarext<>nil then begin
             vars:=FindCommandParam.Area.Variables;
             repeat
               GetPartOfPath(&var,vars,';');
               v:=pentvarext.entityunit.FindVariable(&var);
               if v<>nil then begin
-                &var:=v^.data.PTD.GetValueAsString(v^.data.Addr.Instance);
-                result:=fd.CheckStr(&var,text,details,NeedDetails);
+                &var:=v^.data.PTD^.GetValueAsString(v^.data.Addr.Instance);
+                result:=fd.CheckStrA(&var,TextA,TextU,details,NeedDetails);
               end;
             until (vars='')or result;
           end;
@@ -278,14 +280,12 @@ procedure FindInArray(const fd:TFindProcData;const text:string; constref arr:GDB
 var
   pv:pGDBObjEntity;
   ir:itrec;
-  utext:TDXFEntsInternalStringType;
   details:string;
 begin
-  utext:=TDXFEntsInternalStringType(Text);
   pv:=arr.beginiterate(ir);
   if pv<>nil then
   repeat
-    if CheckEntity(pv,fd,text,utext,details,false) then
+    if CheckEntity(pv,fd,AnsiString(text),UnicodeString(text),details,false) then
       Finded.PushBackData(pv);
     pv:=arr.iterate(ir);
   until pv=nil;
@@ -301,7 +301,7 @@ begin
   Selection.init(PSelArr^.Count);
   psd:=PSelArr^.beginiterate(ir);
   if psd<>nil then repeat
-    Selection.PushBackData(psd.objaddr);
+    Selection.PushBackData(psd^.objaddr);
     psd:=PSelArr^.iterate(ir);
   until psd=nil;
   FindInArray(fd,text,Selection,Finded);
@@ -311,7 +311,7 @@ end;
 
 function FindFindInDrawingExtender(dwg:TSimpleDrawing;CreateIfnotFound:boolean=true):TFindInDrawingExtender;
 begin
-  result:=dwg.DrawingExtensions.GetExtension<TFindInDrawingExtender>;
+  result:=dwg.DrawingExtensions.specialize GetExtension<TFindInDrawingExtender>;
   if (CreateIfnotFound)and(result=nil) then begin
     result:=TFindInDrawingExtender.Create(dwg);
     dwg.DrawingExtensions.AddExtension(result);
@@ -330,7 +330,7 @@ begin
     ZCMsgCallBackInterface.TextMessage(format(rscmNEntityFrom,[fe.Current+1,fe.Finded.Count]),TMWOHistoryOut)
   else
     ZCMsgCallBackInterface.TextMessage(format(rscmNEntityFromWithDetails,[fe.Current+1,fe.Finded.Count,Details]),TMWOHistoryOut);
-  drawings.GetCurrentDWG.wa.ZoomToVolume(ScaleBB(pv^.vp.BoundingBox,10));
+  drawings.GetCurrentDWG^.wa.ZoomToVolume(ScaleBB(pv^.vp.BoundingBox,10));
 end;
 
 function FindNext_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
@@ -366,9 +366,9 @@ end;
 function Find_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 const
   DefaultFindProcData:TFindProcData=(
-    CheckUStr:@CheckUStr;
+    CheckStrU:@FCheckStrU;
     CheckFuncType:CFCheckText;
-    CheckStr:@CheckStr
+    CheckStrA:@FCheckStrA
   );
 var
   Finded:GDBObjOpenArrayOfPV;
@@ -391,22 +391,22 @@ begin
     else
       text:=operands;
     Finded.init(100);
-    PSelArr:=@drawings.GetCurrentDWG.SelObjArray;
+    PSelArr:=@drawings.GetCurrentDWG^.SelObjArray;
     if (FindCommandParam.Area.InSelection)and(PSelArr^.Count>0) then
       FindInSelection(fd,text,PSelArr,Finded)
     else
-      FindInArray(fd,text,drawings.GetCurrentDWG.GetCurrentROOT.ObjArray,Finded);
+      FindInArray(fd,text,drawings.GetCurrentDWG^.GetCurrentROOT^.ObjArray,Finded);
     ZCMsgCallBackInterface.TextMessage(format(rscmNEntitiesFounded,[Finded.Count]),TMWOHistoryOut);
 
     if FindCommandParam.Action.SelectResult<>SR_Nohhing then begin
       if FindCommandParam.Action.SelectResult=SR_Select then begin
-        drawings.GetCurrentDWG.SelObjArray.Free;
-        drawings.GetCurrentROOT.ObjArray.DeSelect(drawings.GetCurrentDWG.wa.param.SelDesc.Selectedobjcount,drawings.GetCurrentDWG^.DeSelector);
+        drawings.GetCurrentDWG^.SelObjArray.Free;
+        drawings.GetCurrentROOT^.ObjArray.DeSelect(drawings.GetCurrentDWG^.wa.param.SelDesc.Selectedobjcount,@drawings.GetCurrentDWG^.DeSelector);
       end;
       pv:=Finded.beginiterate(ir);
       if pv<>nil then
       repeat
-        pv^.select(drawings.GetCurrentDWG.wa.param.SelDesc.Selectedobjcount,drawings.CurrentDWG^.Selector);
+        pv^.select(drawings.GetCurrentDWG^.wa.param.SelDesc.Selectedobjcount,@drawings.CurrentDWG^.Selector);
         pv:=Finded.iterate(ir);
       until pv=nil;
     end;
@@ -442,8 +442,8 @@ initialization
 
   CreateZCADCommand(@FindCommandParam_com,'FindParams',0,0);
   CreateZCADCommand(@Find_com,CMDNFind,CADWG,0);
-  CreateZCADCommand(@FindNext_com,'FindNext',CADWG,0).overlay:=true;
-  CreateZCADCommand(@FindPrev_com,'FindPrev',CADWG,0).overlay:=true;
+  CreateZCADCommand(@FindNext_com,'FindNext',CADWG,0)^.overlay:=true;
+  CreateZCADCommand(@FindPrev_com,'FindPrev',CADWG,0)^.overlay:=true;
 finalization
   ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
   FindProcsRegister.Free;

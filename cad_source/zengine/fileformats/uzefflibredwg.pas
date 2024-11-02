@@ -93,7 +93,7 @@ begin
     zDebugLn(['{WH}Success: ',Success]);
     DebugDWG(@dwg);
     lph:=lps.StartLongProcess('Parse DWG data',nil,dwg.num_objects);
-    ZCDWGParser.parseDwg_Data(ZCDCtx,dwg,@PLP,pointer(lph));
+    ZCDWGParser.parseDwg_Data(ZCDCtx,dwg,@PLP,TData(lph));
     lps.EndLongProcess(lph);
     dwg_free(@dwg);
   finally
@@ -126,7 +126,7 @@ begin
     zDebugLn(['{WH}Success: ',Success]);
     DebugDWG(@dwg);
     lph:=lps.StartLongProcess('Parse DWG data',nil,dwg.num_objects);
-    ZCDWGParser.parseDwg_Data(ZCDCtx,dwg,@PLP,pointer(lph));
+    ZCDWGParser.parseDwg_Data(ZCDCtx,dwg,@PLP,TData(lph));
     lps.EndLongProcess(lph);
     dwg_free(@dwg);
   finally

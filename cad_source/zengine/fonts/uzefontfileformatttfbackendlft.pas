@@ -93,11 +93,11 @@ begin
 end;
 function TTTFBackendLazFreeType.GetGlyph(Index: integer):TGlyphData;
 begin
-  Result.PG:=LazFreeTypeTTFImpl.Glyph[Index];
+  Result.PG:=PtrInt(LazFreeTypeTTFImpl.Glyph[Index]);
 end;
 procedure TTTFBackendLazFreeType.DoneGlyph(var GD:TGlyphData);
 begin
-  GD.PG:=nil;
+  GD.PG:={nil}0;
 end;
 function TTTFBackendLazFreeType.InternalGetCapHeight: single;
 begin

@@ -25,7 +25,7 @@ uses
   uzegeometrytypes;
 type
   TGlyphData=record
-    PG:Pointer;
+    PG:PtrInt;
   end;
 
   TTTFPointFlag=(TTFPFOnCurve);

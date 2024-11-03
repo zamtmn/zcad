@@ -20,18 +20,18 @@ unit uzcuilcl2zc;
 {$INCLUDE zengineconfig.inc}
 interface
 uses
-    Controls,LCLTaskDialog,SysUtils,Forms,{$IFNDEF DELPHI}LCLtype,{$ELSE}windows,{$ENDIF}
+    Controls,{LCLTaskDialog,}Dialogs,SysUtils,Forms,{$IFNDEF DELPHI}LCLtype,{$ELSE}windows,{$ENDIF}
     uzcuitypes,uzcuiutils;
 type
   TZCMsgCommonButton2TCommonButton_Converter=class
-    class function TryConvert(valueIn:TZCMsgCommonButton;out valueOut:TCommonButton):boolean;
+    class function TryConvert(valueIn:TZCMsgCommonButton;out valueOut:TTaskDialogCommonButton):boolean;
   end;
 
   TLCLModalResult2TZCMsgModalResult_Converter=class
     class function TryConvert(valueIn:Integer;out valueOut:TZCMsgModalResult):boolean;
   end;
 
-  TZCMsgCommonButtons2TCommonButtons=TGSetConverter<TZCMsgCommonButton,TZCMsgCommonButtons,TCommonButton,TCommonButtons,TZCMsgCommonButton2TCommonButton_Converter>;
+  TZCMsgCommonButtons2TCommonButtons=TGSetConverter<TZCMsgCommonButton,TZCMsgCommonButtons,TTaskDialogCommonButton,TTaskDialogCommonButtons,TZCMsgCommonButton2TCommonButton_Converter>;
   TLCLModalResult2TZCMsgModalResult=TGConverter<Integer,TZCMsgModalResult,TLCLModalResult2TZCMsgModalResult_Converter>;
 
 function ID2TZCMsgCommonButton(ID:Integer):TZCMsgCommonButton;
@@ -39,20 +39,20 @@ function TZCMsgModalResult2TZCMsgCommonButton(MR:TZCMsgModalResult):TZCMsgCommon
 
 implementation
 
-class function TZCMsgCommonButton2TCommonButton_Converter.TryConvert(valueIn:TZCMsgCommonButton;out valueOut:TCommonButton):boolean;
+class function TZCMsgCommonButton2TCommonButton_Converter.TryConvert(valueIn:TZCMsgCommonButton;out valueOut:TTaskDialogCommonButton):boolean;
 begin
   if valueIn in [zccbOK..zccbClose] then begin
     case valueIn of
-      zccbOK:valueOut:=cbOK;
-      zccbYes:valueOut:=cbYes;
-      zccbNo:valueOut:=cbNo;
-      zccbCancel:valueOut:=cbCancel;
-      zccbRetry:valueOut:=cbRetry;
-      zccbClose:valueOut:=cbClose;
+      zccbOK:valueOut:=tcbOK;
+      zccbYes:valueOut:=tcbYes;
+      zccbNo:valueOut:=tcbNo;
+      zccbCancel:valueOut:=tcbCancel;
+      zccbRetry:valueOut:=tcbRetry;
+      zccbClose:valueOut:=tcbClose;
     end;
     result:=true;
   end else begin
-    valueOut:=cbCancel;
+    valueOut:=tcbCancel;
     result:=false;
   end;
 end;

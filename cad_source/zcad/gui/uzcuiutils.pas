@@ -20,7 +20,7 @@ unit uzcuiutils;
 {$INCLUDE zengineconfig.inc}
 interface
 uses
-    Controls,LCLTaskDialog,SysUtils,Forms,{$IFNDEF DELPHI}LCLtype,{$ELSE}windows,{$ENDIF}
+    Controls,SysUtils,Forms,{$IFNDEF DELPHI}LCLtype,{$ELSE}windows,{$ENDIF}
     uzclog,uzelongprocesssupport,uzcuitypes;
 
 type

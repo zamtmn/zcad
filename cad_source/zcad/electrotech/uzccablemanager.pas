@@ -34,7 +34,7 @@ type
     {---REGISTEROBJECTTYPE TCableManager}
     TCableManager= object(GZVectorObjects<TCableDesctiptor>)
                        constructor init;
-                       destructor done;virtual;
+                       procedure done;virtual;
                        procedure build;virtual;
                        function FindOrCreate(sname:String):PTCableDesctiptor;virtual;
                        function Find(sname:String):PTCableDesctiptor;virtual;
@@ -251,7 +251,7 @@ begin
      end;
      result:=pcd;
 end;
-destructor TCableManager.done;
+procedure TCableManager.done;
 var
     pcd:PTCableDesctiptor;
     ir:itrec;

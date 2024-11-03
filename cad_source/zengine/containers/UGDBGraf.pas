@@ -49,7 +49,7 @@ GDBGraf= object(GZVector{-}<grafelement>{//})
                 procedure clear;virtual;
                 function minimalize(var drawing:TDrawingDef):Boolean;
                 function divide:Boolean;
-                destructor done;virtual;
+                procedure done;virtual;
                 procedure freeelement(PItem:PT);virtual;
 
                 procedure BeginFindPath;
@@ -305,7 +305,7 @@ begin
        end;
   end;
 end;
-destructor GDBGraf.done;
+procedure GDBGraf.done;
 begin
      //clear;
      inherited done;

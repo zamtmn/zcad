@@ -30,7 +30,7 @@ GDBObjEntityTreeArray= object(GDBObjEntityOpenArray)
                             ObjTree:TEntTreeNode;
                             constructor init(m:Integer);
                             constructor initnul;
-                            destructor done;virtual;
+                            procedure done;virtual;
                             function AddPEntity(var entity:GDBObjEntity):TArrayIndex;virtual;
                             procedure RemoveFromTree(p:PGDBObjEntity);
 
@@ -44,7 +44,7 @@ begin
      p^.bp.TreePos.SelfIndex:=-1;
      p^.bp.TreePos.Owner:=nil;
 end;
-destructor GDBObjEntityTreeArray.done;
+procedure GDBObjEntityTreeArray.done;
 //var
   //p:PGDBaseObject;
   //ir:itrec;

@@ -29,7 +29,7 @@ PGDBControlPointArray=^GDBControlPointArray;
 GDBControlPointArray= object(GZVector{-}<controlpointdesc>{//})
                            SelectedCount:Integer;
 
-                           destructor done;virtual;
+                           procedure done;virtual;
                            procedure draw(var DC:TDrawContext;const SelColor,UnSelColor:TRGB);virtual;
                            procedure selectcontrolpointinframe(f1,f2: GDBvertex2DI);virtual;
                            procedure getnearesttomouse(var td:tcontrolpointdist;mx,my:integer);virtual;
@@ -37,7 +37,7 @@ GDBControlPointArray= object(GZVector{-}<controlpointdesc>{//})
                      end;
 {Export-}
 implementation
-destructor GDBControlPointArray.done;
+procedure GDBControlPointArray.done;
 begin
   destroy;
 end;

@@ -51,7 +51,7 @@ TZctnrVectorBytes=object(GZVector{-}<byte>{//})
                       function Seek(pos:Integer):integer;
                       function notEOF:Boolean;
                       function readtoparser(const break:AnsiString):AnsiString;
-                      destructor done;virtual;
+                      procedure done;virtual;
                    end;
 procedure WriteString_EOL(h: Integer; s: AnsiString);
 implementation
@@ -62,7 +62,7 @@ begin
      //writeln(s);
   FileWrite(h, s[1], length(s));
 end;
-destructor TZctnrVectorBytes.done;
+procedure TZctnrVectorBytes.done;
 begin
      name:='';
      inherited;

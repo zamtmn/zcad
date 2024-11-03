@@ -43,7 +43,7 @@ function CmdLinePrompt_com(const Context:TZCADCommandContext;operands:TCommandOp
 var
   //inpt:String;
   gr:TGetResult;
-  filename:string;
+  filename:string='';
   p:GDBVertex;
 begin
   if clFileParam=nil then

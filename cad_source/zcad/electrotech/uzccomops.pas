@@ -661,7 +661,7 @@ var //i: Integer;
     name:String;
     DC:TDrawContext;
     pcablestartsegmentvarext,pptnownervarext:TVariablesExtender;
-    cpGC_NumberInGroup,cpGC_HeadDevice,cpGC_HDGroup,cpGC_HDShortName:UCmdChgVariable;
+    //cpGC_NumberInGroup,cpGC_HeadDevice,cpGC_HDGroup,cpGC_HDShortName:UCmdChgVariable;
     UndoStartMarkerPlaced:boolean;
 const
       DefNumMetric='default_num_in_group';
@@ -767,7 +767,7 @@ begin
                          pvd1:=pptnownervarext.entityunit.FindVariable('GC_NumberInGroup');
                          if pvd1<>nil then begin
                            zcPlaceUndoStartMarkerIfNeed(UndoStartMarkerPlaced,'OPS_Sensor_Mark');
-                           cpGC_NumberInGroup:=UCmdChgVariable.CreateAndPush(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,
+                           {cpGC_NumberInGroup:=}UCmdChgVariable.CreateAndPush(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,
                                                                              TChangedVariableDesc.CreateRec(pvd1^.data.PTD,pvd1^.data.Addr.GetInstance,'GC_NumberInGroup'),
                                                                              TSharedPEntityData.CreateRec(PGDBObjEntity(ptn^.bp.ListPos.Owner)),
                                                                              TAfterChangePDrawing.CreateRec(drawings.GetCurrentDWG));
@@ -776,7 +776,7 @@ begin
                          pvd2:=pptnownervarext.entityunit.FindVariable('GC_HeadDevice');
                          if pvd2<>nil then begin
                            zcPlaceUndoStartMarkerIfNeed(UndoStartMarkerPlaced,'OPS_Sensor_Mark');
-                           cpGC_HeadDevice:=UCmdChgVariable.CreateAndPush(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,
+                           {cpGC_HeadDevice:=}UCmdChgVariable.CreateAndPush(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,
                                                                           TChangedVariableDesc.CreateRec(pvd2^.data.PTD,pvd2^.data.Addr.GetInstance,'GC_HeadDevice'),
                                                                           TSharedPEntityData.CreateRec(PGDBObjEntity(ptn^.bp.ListPos.Owner)),
                                                                           TAfterChangePDrawing.CreateRec(drawings.GetCurrentDWG));
@@ -785,7 +785,7 @@ begin
                          pvd3:=pptnownervarext.entityunit.FindVariable('GC_HDGroup');
                          if pvd3<>nil then begin
                            zcPlaceUndoStartMarkerIfNeed(UndoStartMarkerPlaced,'OPS_Sensor_Mark');
-                           cpGC_HDGroup:=UCmdChgVariable.CreateAndPush(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,
+                           {cpGC_HDGroup:=}UCmdChgVariable.CreateAndPush(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,
                                                                        TChangedVariableDesc.CreateRec(pvd3^.data.PTD,pvd3^.data.Addr.GetInstance,'GC_HDGroup'),
                                                                        TSharedPEntityData.CreateRec(PGDBObjEntity(ptn^.bp.ListPos.Owner)),
                                                                        TAfterChangePDrawing.CreateRec(drawings.GetCurrentDWG));
@@ -794,7 +794,7 @@ begin
                          pvd4:=pptnownervarext.entityunit.FindVariable('GC_HDShortName');
                          if pvd4<>nil then begin
                            zcPlaceUndoStartMarkerIfNeed(UndoStartMarkerPlaced,'OPS_Sensor_Mark');
-                           cpGC_HDShortName:=UCmdChgVariable.CreateAndPush(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,
+                           {cpGC_HDShortName:=}UCmdChgVariable.CreateAndPush(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,
                                                                            TChangedVariableDesc.CreateRec(pvd3^.data.PTD,pvd4^.data.Addr.GetInstance,'GC_HDShortName'),
                                                                            TSharedPEntityData.CreateRec(PGDBObjEntity(ptn^.bp.ListPos.Owner)),
                                                                            TAfterChangePDrawing.CreateRec(drawings.GetCurrentDWG));

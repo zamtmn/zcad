@@ -50,7 +50,7 @@ GZVector{-}<T>{//}=object(TZAbsVector)
         Max:TArrayIndex;(*hidden_in_objinsp*)                 //**< Размер массива (под сколько элементов выделено памяти)
 
         {**~Деструктор}
-        destructor done;virtual;
+        procedure done;virtual;
         {**Деструктор}
         destructor destroy;virtual;
         {**Конструктор}
@@ -491,7 +491,7 @@ begin
   Count:=0;
   Max:=m;
 end;
-destructor GZVector<T>.done;
+procedure GZVector<T>.done;
 begin
   free;
   destroy;

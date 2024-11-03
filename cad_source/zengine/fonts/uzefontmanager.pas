@@ -60,7 +60,7 @@ type
     FontFiles:{-}TFontName2FontFileMap{/pointer/};
     shxfontfiles:TStringList;
     constructor init(m:Integer);
-    destructor done;virtual;
+    procedure done;virtual;
     procedure CreateBaseFont;
 
     function addFonfByFile(const FontPathName:String):PGDBfont;
@@ -135,7 +135,7 @@ procedure GDBFontManager.EnumerateSHXFontFile(const filename:String;pdata:pointe
 begin
      shxfontfiles.Add(filename);
 end;
-destructor GDBFontManager.done;
+procedure GDBFontManager.done;
 begin
   inherited;
   if assigned(FontFiles)then

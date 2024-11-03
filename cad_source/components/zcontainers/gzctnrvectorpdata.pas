@@ -31,11 +31,11 @@ GZVectorPData{-}<PTData>{//}=object
                                        procedure RemoveData(const data:PTData);virtual;
                                        procedure pack;virtual;
                                        procedure free;virtual;
-                                       destructor done;virtual;
+                                       procedure done;virtual;
                                  end;
 {Export-}
 implementation
-destructor GZVectorPData<PTData>.done;
+procedure GZVectorPData<PTData>.done;
 var
   p:PTData;
   ir:itrec;

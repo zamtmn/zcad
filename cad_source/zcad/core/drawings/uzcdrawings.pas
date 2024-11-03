@@ -42,7 +42,7 @@ TZCADDrawingsManager= object(TZctnrVectorPGDBaseObjects)
                     FileNameCounter:integer;
                     constructor init;
                     constructor initnul;
-                    destructor done;virtual;
+                    procedure done;virtual;
                     //function AfterDeSerialize(SaveFlag:Word; membuf:Pointer):integer;virtual;
 
                     function GetCurrentROOT:PGDBObjGenericSubEntry;
@@ -565,7 +565,7 @@ end;*)
 //procedure TZCADDrawing.SetEntFromOriginal(_dest,_source:PGDBObjEntity;PCD_dest,PCD_source:PTDrawingPreCalcData);
 //begin
 //end;
-destructor TZCADDrawingsManager.done;
+procedure TZCADDrawingsManager.done;
 begin
     CurrentDWG:=nil;
     inherited;

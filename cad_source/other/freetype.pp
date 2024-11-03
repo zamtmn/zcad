@@ -225,7 +225,7 @@ begin
     FTError(Msg,Result);
 end;
 
-{procedure WriteFT_Face(CurFont: PFT_Face);
+(*procedure WriteFT_Face(CurFont: PFT_Face);
 var
   i: Integer;
 begin
@@ -264,7 +264,7 @@ begin
     ' size=',CurFont^.size<>nil,
     ' charmap=',CurFont^.charmap<>nil,
     '');
-end;}
+end;*)
 
 { TMgrFont }
 

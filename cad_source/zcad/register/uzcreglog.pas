@@ -37,7 +37,6 @@ type
 
   TLogerMBoxBackend=object(TLogerBaseBackend)
     procedure doLog(const msg:TLogMsg;MsgOptions:TMsgOpt;LogMode:TLogLevel;LMDI:TModuleDesk);virtual;
-    constructor init;
   end;
 
 const
@@ -90,10 +89,6 @@ begin
   end;
   if (MO_SH and MsgOptions)<>0 then
     ZCMsgCallBackInterface.Do_HistoryOut(msg);
-end;
-
-constructor TLogerMBoxBackend.init;
-begin
 end;
 
 var

@@ -200,7 +200,7 @@ begin
      else if cmd.GetCommandType=TTC_MBegin then
                                                 begin
                                                      if mcounter=0 then
-                                                     {HistoryOutStr}msg:=msg+('Redo "'+TUCmdMarker(cmd).Name+'"');
+                                                     {HistoryOutStr}msg:={msg+}('Redo "'+TUCmdMarker(cmd).Name+'"');
                                                      dec(mcounter);
                                                      cmd.undo;
                                                 end

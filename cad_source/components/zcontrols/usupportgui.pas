@@ -23,7 +23,7 @@ interface
 uses
   StdCtrls,Controls,Classes,LCLType,ComCtrls,ColorBox,Graphics,
   LMessages,LCLIntf,LCLProc,
-  Laz2_XMLCfg,Laz2_DOM,sysutils,EditBtn,Masks;
+  Laz2_XMLCfg,Laz2_DOM,sysutils,Masks;
 
 type
   TIsShortcutFunc=function(var Message: TLMKey): boolean of object;
@@ -270,6 +270,7 @@ begin
      case ReadOnlyMode of
        CBReadOnly:cb.Style:=csOwnerDrawFixed;
        CBEditable:cb.Style:=csOwnerDrawEditableFixed;
+       CBDoNotTouch:;
      end;
      cb.ItemHeight:=ItemH;
      {$ENDIF}

@@ -32,17 +32,28 @@ type
   PTLogerBaseBackend=^TLogerBaseBackend;
   TLogerBaseBackend=object
     procedure DoLog(const msg:TLogMsg;MsgOptions:TMsgOpt;LogMode:TLogLevel;LMDI:TModuleDesk);virtual;abstract;
+    constructor init;
     destructor Done;virtual;
   end;
   PTLogerBaseDecorator=^TLogerBaseDecorator;
   TLogerBaseDecorator=object
     function GetDecor(const msg:TLogMsg;MsgOptions:TMsgOpt;LogMode:TLogLevel;LMDI:TModuleDesk):TLogMsg;virtual;abstract;
+    constructor init;
     destructor Done;virtual;
   end;
 
 implementation
 
+constructor TLogerBaseDecorator.init;
+begin
+end;
+
+
 destructor TLogerBaseDecorator.Done;
+begin
+end;
+
+constructor TLogerBaseBackend.init;
 begin
 end;
 

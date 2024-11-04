@@ -43,7 +43,6 @@ implementation
 type
   TLogerSplashBackend=object(TLogerBaseBackend)
     procedure doLog(const msg:TLogMsg;MsgOptions:TMsgOpt;LogMode:TLogLevel;LMDI:TModuleDesk);virtual;
-    constructor init;
   end;
 
 var
@@ -117,9 +116,6 @@ procedure TLogerSplashBackend.doLog(const msg:TLogMsg;MsgOptions:TMsgOpt;LogMode
 begin
   if (lp_IncPos and MsgOptions)<>0 then
   SplashTextOutProc(msg,false);
-end;
-constructor TLogerSplashBackend.init;
-begin
 end;
 
 initialization

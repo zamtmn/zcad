@@ -14,7 +14,7 @@
  **********************************************************************}
 {$mode objfpc}{$h+}
 {$IFNDEF FPC_DOTTEDUNITS}
-unit ftfont;
+unit tmp322_ftfont;
 {$ENDIF FPC_DOTTEDUNITS}
 
 interface
@@ -29,8 +29,8 @@ uses
 {$ELSE FPC_DOTTEDUNITS}
 uses
   SysUtils, Classes, FPCanvas, fpimgcmn, math,
-  {$IFDEF DYNAMIC}freetypehdyn{$ELSE} freetypeh{$ENDIF},
-  freetype;
+  {$IFDEF DYNAMIC}tmp322_freetypehdyn{$ELSE} tmp322_freetypeh{$ENDIF},
+  tmp322_freetype;
 {$ENDIF FPC_DOTTEDUNITS}
 
 type

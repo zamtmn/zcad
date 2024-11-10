@@ -16,7 +16,7 @@
 {$h+}
 
 {$IFNDEF FPC_DOTTEDUNITS}
-unit freetype;
+unit tmp322_freetype;
 {$ENDIF FPC_DOTTEDUNITS}
 
 {$DEFINE DYNAMIC}
@@ -26,7 +26,7 @@ interface
 {$IFDEF FPC_DOTTEDUNITS}
 uses System.SysUtils, System.Classes, System.Math, {$IFDEF DYNAMIC}Api.Freetypehdyn{$ELSE}Api.Freetypeh{$ENDIF}, FpImage.Common;
 {$ELSE FPC_DOTTEDUNITS}
-uses sysutils, classes, math, {$IFDEF DYNAMIC}freetypehdyn{$ELSE}freetypeh{$ENDIF}, FPImgCmn;
+uses sysutils, classes, math, {$IFDEF DYNAMIC}tmp322_freetypehdyn{$ELSE}tmp322_freetypeh{$ENDIF}, FPImgCmn;
 {$ENDIF FPC_DOTTEDUNITS}
 
 { TODO : take resolution in account to find the size }

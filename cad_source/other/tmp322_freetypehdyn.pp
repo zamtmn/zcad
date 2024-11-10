@@ -14,11 +14,25 @@
  **********************************************************************}
 {$mode objfpc}
 {$IFNDEF FPC_DOTTEDUNITS}
-unit freetypeh;
+unit tmp322_freetypehdyn;
 {$ENDIF FPC_DOTTEDUNITS}
 
 interface
 
-{$I libfreetype.inc}
+{$IFDEF FPC_DOTTEDUNITS}
+uses System.SysUtils, System.DynLibs;
+{$ELSE FPC_DOTTEDUNITS}
+uses sysutils, dynlibs;
+{$ENDIF FPC_DOTTEDUNITS}
 
+{$DEFINE DYNAMIC}
+
+{$i tmp322_libfreetype.inc}
+
+
+initialization
+  //InitializeFreetype(FreeTypeDLL); - do not load DLL in initialization, it is loaded when needed in ftfont.InitEngine
+
+finalization
+  ReleaseFreetype;
 end.

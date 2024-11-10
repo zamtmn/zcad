@@ -594,7 +594,7 @@ var
   Details: TThemedElementDetails;
 begin
   Details := ThemeServices.GetElementDetails(PlusMinusDetail(Minus,hot));
-  result := ThemeServices.GetDetailSize(Details);
+  result := ThemeServices.GetDetailSizeForPPI(Details,Screen.PixelsPerInch);
 end;
 procedure drawheader(Canvas:tcanvas;ppd:PPropertyDeskriptor;r:trect;name:string;onm:boolean;TextDetails: TThemedElementDetails);
 procedure DrawTreeIcon(X, Y: Integer; Minus, hot: Boolean);
@@ -603,7 +603,7 @@ var
   Size: TSize;
 begin
   Details := ThemeServices.GetElementDetails(PlusMinusDetail(Minus,hot));
-  Size := ThemeServices.GetDetailSize(Details);
+  Size := ThemeServices.GetDetailSizeForPPI(Details,Screen.PixelsPerInch);
   ThemeServices.DrawElement(Canvas.Handle, Details, Rect(X, Y, X + Size.cx, Y + Size.cy), {nil}@r);
 end;
 var

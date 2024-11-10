@@ -37,7 +37,7 @@ INFOPERSONALUSE_TextTemplate:='';
 
 
 INFOTEXTPOINTER_Tp1Up.format:='@@[NMO_BaseName]@@[NMO_Suffix]';
-INFOTEXTPOINTER_Tp1Bottom.format:='@@[Power] @@[LOCATION_height]';
+INFOTEXTPOINTER_Tp1Bottom.format:='@@[Power];@@[LOCATION_height]';
 INFOTEXTPOINTER_Tp2Up.format:='@@[GC_HeadDevice].@@[GC_HDGroup]';
 INFOTEXTPOINTER_Tp2Bottom.format:=' ';
 

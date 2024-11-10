@@ -23,7 +23,13 @@ uses
   sysutils,Types,
   uzeFontFileFormatTTFBackend,
   uzegeometrytypes,
-  freetypehdyn,ftfont;
+  {todo: убрать после выхода нового fpc}
+ {$IF FPC_FULLVERSION > 30202}
+  freetypehdyn,ftfont
+ {$ELSE}
+  tmp322_freetypehdyn,tmp322_ftfont
+ {$ENDIF}
+ ;
 const
   EmptyIndex=-1;
 type

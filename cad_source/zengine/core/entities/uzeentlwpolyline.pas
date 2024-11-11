@@ -49,7 +49,6 @@ GDBObjLWPolyline= object(GDBObjWithLocalCS)
                  Vertex3D_in_WCS_Array:GDBPoint3dArray;
                  Width2D_in_OCS_Array:GDBLineWidthArray;
                  Width3D_in_WCS_Array:TWidth3D_in_WCS_Vector;
-                 PProjPoint:PGDBpolyline2DArray;
                  Square:Double;
                  constructor init(own:Pointer;layeraddres:PGDBLayerProp;LW:SmallInt;c:Boolean);
                  constructor initnul;
@@ -66,7 +65,6 @@ GDBObjLWPolyline= object(GDBObjWithLocalCS)
                  destructor done;virtual;
                  function GetObjTypeName:String;virtual;
                  function Clone(own:Pointer):PGDBObjEntity;virtual;
-                 procedure RenderFeedback(pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc;var DC:TDrawContext);virtual;
                  procedure addcontrolpoints(tdesc:Pointer);virtual;
                  procedure remaponecontrolpoint(pdesc:pcontrolpointdesc;ProjectProc:GDBProjectProc);virtual;
                  procedure rtmodifyonepoint(const rtmod:TRTModifyData);virtual;
@@ -200,7 +198,7 @@ end;
 
 function GDBObjLWpolyline.getsnap;
 begin
-     result:=GDBPoint3dArraygetsnap(Vertex3D_in_WCS_Array,PProjPoint,{snaparray}PGDBVectorSnapArray(pdata)^,osp,closed,param,ProjectProc,snapmode);
+     result:=GDBPoint3dArraygetsnapWOPProjPoint(Vertex3D_in_WCS_Array,{snaparray}PGDBVectorSnapArray(pdata)^,osp,closed,param,ProjectProc,snapmode);
 end;
 function GDBObjLWpolyline.onpoint(var objects:TZctnrVectorPGDBaseEntity;const point:GDBVertex):Boolean;
 begin
@@ -385,12 +383,16 @@ begin
   GDBPolyline2DArray.PTArr(Vertex2D_in_OCS_Array.parray)^[vertexnumber].y:=wwc.y;
 end;
 procedure GDBObjLWpolyline.remaponecontrolpoint(pdesc:pcontrolpointdesc;ProjectProc:GDBProjectProc);
-var vertexnumber:Integer;
+var
+  vertexnumber:Integer;
+  tv:GDBvertex;
 begin
      vertexnumber:=pdesc^.vertexnum;
      pdesc.worldcoord:=GDBPoint3dArray.PTArr(Vertex3D_in_WCS_Array.parray)^[vertexnumber];
-     pdesc.dispcoord.x:=round(GDBPolyline2DArray.PTArr(PProjPoint.parray)^[vertexnumber].x);
-     pdesc.dispcoord.y:=round(GDBPolyline2DArray.PTArr(PProjPoint.parray)^[vertexnumber].y);
+     ProjectProc(pdesc.worldcoord,tv);
+     pdesc.dispcoord:=ToVertex2DI(tv);
+     //pdesc.dispcoord.x:=round(GDBPolyline2DArray.PTArr(PProjPoint.parray)^[vertexnumber].x);
+     //pdesc.dispcoord.y:=round(GDBPolyline2DArray.PTArr(PProjPoint.parray)^[vertexnumber].y);
 end;
 procedure GDBObjLWpolyline.AddControlpoints;
 var pdesc:controlpointdesc;
@@ -439,11 +441,11 @@ begin
 end;
 destructor GDBObjLWpolyline.done;
 begin
-     if pprojpoint<>nil then
+     {if pprojpoint<>nil then
                             begin
                             pprojpoint^.done;
                             Freemem(pointer(pprojpoint));
-                            end;
+                            end;}
      Vertex2D_in_OCS_Array.done;
      Width2D_in_OCS_Array.done;
      Vertex3D_in_WCS_Array.done;
@@ -461,7 +463,7 @@ begin
   Vertex3D_in_WCS_Array.init(4);
   Width3D_in_WCS_Array.init(4);
   //----------------snaparray.init(1000);
-  PProjPoint:=nil;
+  //PProjPoint:=nil;
 end;
 constructor GDBObjLWpolyline.initnul;
 begin
@@ -473,7 +475,7 @@ begin
   Vertex3D_in_WCS_Array.init(4);
   Width3D_in_WCS_Array.init(4{, sizeof(GDBQuad3d)});
   //----------------snaparray.init(1000);
-  PProjPoint:=nil;
+  //PProjPoint:=nil;
 end;
 function GDBObjLWpolyline.GetObjType;
 begin
@@ -740,29 +742,6 @@ begin
   end;
   Vertex3D_in_WCS_Array.Shrink;
   //----------------BuildSnapArray(Vertex3D_in_WCS_Array,snaparray,closed);
-end;
-procedure GDBObjLWpolyline.Renderfeedback;
-var tv:GDBvertex;
-    tpv:GDBVertex2D;
-    ptpv:PGDBVertex;
-    i:Integer;
-begin
-  if pprojpoint=nil then
-  begin
-       Getmem(Pointer(pprojpoint),sizeof(GDBpolyline2DArray));
-       pprojpoint^.init(Vertex3D_in_WCS_Array.count,closed);
-  end;
-  pprojpoint^.clear;
-                    ptpv:=Vertex3D_in_WCS_Array.GetParrayAsPointer;
-                    for i:=0 to Vertex3D_in_WCS_Array.count-1 do
-                    begin
-                         ProjectProc(ptpv^,tv);
-                         tpv.x:=tv.x;
-                         tpv.y:=tv.y;
-                         PprojPoint^.PushBackData(tpv);
-                         inc(ptpv);
-                    end;
-
 end;
 procedure GDBObjLWpolyline.CalcWidthSegment;
 var

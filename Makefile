@@ -221,6 +221,27 @@ rmpkgslibs:
 	rm -rf cad_source$(PATHDELIM)simplecad$(PATHDELIM)lib$(PATHDELIM)*
 	rm -rf lib$(PATHDELIM)*
 
+rmsrcbackups:
+	rm -rf cad_source$(PATHDELIM)components$(PATHDELIM)metadarkstyle$(PATHDELIM)src$(PATHDELIM)backup$(PATHDELIM)*
+	rm -rf cad_source$(PATHDELIM)components$(PATHDELIM)zcontainers$(PATHDELIM)backup$(PATHDELIM)*
+	rm -rf cad_source$(PATHDELIM)components$(PATHDELIM)zbaseutils$(PATHDELIM)backup$(PATHDELIM)*
+	rm -rf cad_source$(PATHDELIM)components$(PATHDELIM)zbaseutilsgui$(PATHDELIM)backup$(PATHDELIM)*
+	rm -rf cad_source$(PATHDELIM)components$(PATHDELIM)zebase$(PATHDELIM)backup$(PATHDELIM)*
+	rm -rf cad_source$(PATHDELIM)components$(PATHDELIM)zcontrols$(PATHDELIM)backup$(PATHDELIM)*
+	rm -rf cad_source$(PATHDELIM)components$(PATHDELIM)zmacros$(PATHDELIM)src$(PATHDELIM)backup$(PATHDELIM)*
+	rm -rf cad_source$(PATHDELIM)components$(PATHDELIM)zmath$(PATHDELIM)backup$(PATHDELIM)*
+	rm -rf cad_source$(PATHDELIM)components$(PATHDELIM)zobjectinspector$(PATHDELIM)backup$(PATHDELIM)*
+	rm -rf cad_source$(PATHDELIM)components$(PATHDELIM)zscriptbase$(PATHDELIM)backup$(PATHDELIM)*
+	rm -rf cad_source$(PATHDELIM)components$(PATHDELIM)zscript$(PATHDELIM)backup$(PATHDELIM)*
+	rm -rf cad_source$(PATHDELIM)components$(PATHDELIM)ztoolbars$(PATHDELIM)src$(PATHDELIM)backup$(PATHDELIM)*
+	rm -rf cad_source$(PATHDELIM)components$(PATHDELIM)zundostack$(PATHDELIM)backup$(PATHDELIM)*
+	rm -rf cad_source$(PATHDELIM)components$(PATHDELIM)fpdwg$(PATHDELIM)backup$(PATHDELIM)*
+	rm -rf cad_source$(PATHDELIM)components$(PATHDELIM)zreaders$(PATHDELIM)src$(PATHDELIM)backup$(PATHDELIM)*
+	rm -rf cad_source$(PATHDELIM)components$(PATHDELIM)fphunspell$(PATHDELIM)src$(PATHDELIM)backup$(PATHDELIM)*
+	rm -rf cad_source$(PATHDELIM)simplecad$(PATHDELIM)lib$(PATHDELIM)*
+	rm -rf lib$(PATHDELIM)*
+
+
 installpkgstolaz: checkvars rmpkgslibs
 ifneq ($(OSDETECT),OSX)
 	$(LAZBUILD) --pcp=$(PCP) --add-package cad_source$(PATHDELIM)other$(PATHDELIM)agraphlaz$(PATHDELIM)lazarus$(PATHDELIM)ag_graph.lpk

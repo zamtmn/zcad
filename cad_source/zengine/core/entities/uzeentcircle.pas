@@ -38,10 +38,6 @@ GDBObjCircle= object(GDBObjWithLocalCS)
                  q1:GDBvertex;
                  q2:GDBvertex;
                  q3:GDBvertex;
-                 pq0:GDBvertex;
-                 pq1:GDBvertex;
-                 pq2:GDBvertex;
-                 pq3:GDBvertex;
                  Outbound:OutBound4V;
                  Vertex3D_in_WCS_Array:GDBPoint3DArray;
                  constructor init(own:Pointer;layeraddres:PGDBLayerProp;LW:SmallInt;p:GDBvertex;RR:Double);
@@ -236,10 +232,6 @@ begin
      q1:=nulvertex;
      q2:=nulvertex;
      q3:=nulvertex;
-     pq0:=nulvertex;
-     pq1:=nulvertex;
-     pq2:=nulvertex;
-     pq3:=nulvertex;
      Outbound[0]:=nulvertex;
      Outbound[1]:=nulvertex;
      Outbound[2]:=nulvertex;
@@ -407,10 +399,6 @@ begin
            pprojoutbound^.PushBackIfNotLastWithCompareProc(ToVertex2DI(tv),EqualVertex2DI);
            {gdb.GetCurrentDWG^.myGluProject2}ProjectProc(outbound[3],tv);
            pprojoutbound^.PushBackIfNotLastOrFirstWithCompareProc(ToVertex2DI(tv),EqualVertex2DI);
-           {gdb.GetCurrentDWG^.myGluProject2}ProjectProc(q0,pq0);
-           {gdb.GetCurrentDWG^.myGluProject2}ProjectProc(q1,pq1);
-           {gdb.GetCurrentDWG^.myGluProject2}ProjectProc(q2,pq2);
-           {gdb.GetCurrentDWG^.myGluProject2}ProjectProc(q3,pq3);
            if pprojoutbound^.count<4 then
            begin
             lod:=4;
@@ -601,7 +589,7 @@ begin
             then
             begin
             osp.worldcoord:=q0;
-            osp.dispcoord:=pq0;
+            ProjectProc(osp.worldcoord,osp.dispcoord);
             osp.ostype:=os_q0;
             end
             else osp.ostype:=os_none;
@@ -611,7 +599,7 @@ begin
             then
             begin
             osp.worldcoord:=q1;
-            osp.dispcoord:=pq1;
+            ProjectProc(osp.worldcoord,osp.dispcoord);
             osp.ostype:=os_q1;
             end
             else osp.ostype:=os_none;
@@ -621,7 +609,7 @@ begin
             then
             begin
             osp.worldcoord:=q2;
-            osp.dispcoord:=pq2;
+            ProjectProc(osp.worldcoord,osp.dispcoord);
             osp.ostype:=os_q2;
             end
             else osp.ostype:=os_none;
@@ -631,7 +619,7 @@ begin
             then
             begin
             osp.worldcoord:=q3;
-            osp.dispcoord:=pq3;
+            ProjectProc(osp.worldcoord,osp.dispcoord);
             osp.ostype:=os_q3;
             end
        end;
@@ -680,27 +668,29 @@ begin
      result:=IREmpty;}
 end;*)
 procedure GDBObjCircle.remaponecontrolpoint(pdesc:pcontrolpointdesc;ProjectProc:GDBProjectProc);
+var
+  tv:GDBvertex;
 begin
   if pdesc^.pointtype=os_center then begin
     pdesc.worldcoord:=P_insert_in_WCS;
-    pdesc.dispcoord.x:=round(ProjP_insert.x);
-    pdesc.dispcoord.y:=round(ProjP_insert.y);
+    ProjectProc(pdesc.worldcoord,tv);
+    pdesc.dispcoord:=ToVertex2DI(tv);
   end else if pdesc^.pointtype=os_q0 then begin
     pdesc.worldcoord:=q0;
-    pdesc.dispcoord.x:=round(Pq0.x);
-    pdesc.dispcoord.y:=round(Pq0.y);
+    ProjectProc(pdesc.worldcoord,tv);
+    pdesc.dispcoord:=ToVertex2DI(tv);
   end else if pdesc^.pointtype=os_q1 then begin
     pdesc.worldcoord:=q1;
-    pdesc.dispcoord.x:=round(Pq1.x);
-    pdesc.dispcoord.y:=round(Pq1.y);
+    ProjectProc(pdesc.worldcoord,tv);
+    pdesc.dispcoord:=ToVertex2DI(tv);
   end else if pdesc^.pointtype=os_q2 then begin
     pdesc.worldcoord:=q2;
-    pdesc.dispcoord.x:=round(Pq2.x);
-    pdesc.dispcoord.y:=round(Pq2.y);
+    ProjectProc(pdesc.worldcoord,tv);
+    pdesc.dispcoord:=ToVertex2DI(tv);
   end else if pdesc^.pointtype=os_q3 then begin
     pdesc.worldcoord:=q3;
-    pdesc.dispcoord.x:=round(Pq3.x);
-    pdesc.dispcoord.y:=round(Pq3.y);
+    ProjectProc(pdesc.worldcoord,tv);
+    pdesc.dispcoord:=ToVertex2DI(tv);
   end;
 end;
 procedure GDBObjCircle.addcontrolpoints(tdesc:Pointer);

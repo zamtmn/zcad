@@ -48,7 +48,6 @@ GDBObjHatch= object(GDBObjWithLocalCS)
                  PPattern:PTHatchPattern;
                  Outbound:OutBound4V;
                  Vertex3D_in_WCS_Array:GDBPoint3DArray;
-                 PProjPoint:PGDBpolyline2DArray;
                  PatternName:string;
                  IslandDetection:THatchIslandDetection;
                  Angle,Scale:Double;
@@ -79,7 +78,6 @@ GDBObjHatch= object(GDBObjWithLocalCS)
                  procedure getoutbound(var DC:TDrawContext);virtual;
                  function CalcTrueInFrustum(const frustum:ClipArray;visibleactualy:TActulity):TInBoundingVolume;virtual;
                  procedure remaponecontrolpoint(pdesc:pcontrolpointdesc;ProjectProc:GDBProjectProc);virtual;
-                 procedure RenderFeedback(pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc;var DC:TDrawContext);virtual;
                  procedure addcontrolpoints(tdesc:Pointer);virtual;
                  procedure rtmodifyonepoint(const rtmod:TRTModifyData);virtual;
                  function Clone(own:Pointer):PGDBObjEntity;virtual;
@@ -137,10 +135,6 @@ begin
   Vertex3D_in_WCS_Array.Done;
   //Vertex2D_in_OCS_Array.Done;
   inherited done;
-  if pprojpoint<>nil then begin
-    pprojpoint^.done;
-    Freemem(pointer(pprojpoint));
-  end;
   Path.done;
   if PPattern<>nil then begin
     PPattern^.done;
@@ -156,7 +150,6 @@ constructor GDBObjHatch.initnul;
 begin
   inherited initnul(nil);
   PProjoutbound:=nil;
-  PProjPoint:=nil;
   Vertex3D_in_WCS_Array.init(4);
   //Vertex2D_in_OCS_Array.init(10,true);
   Path.init(10);
@@ -174,7 +167,6 @@ begin
   Local.basis.oy:=YWCS;
   Local.basis.oz:=ZWCS;
   PProjoutbound:=nil;
-  PProjPoint:=nil;
   Vertex3D_in_WCS_Array.init(4);
   //Vertex2D_in_OCS_Array.init(10,true);
   Path.init(10);
@@ -669,35 +661,14 @@ begin
     result:=IRFully;
 end;
 procedure GDBObjHatch.remaponecontrolpoint(pdesc:pcontrolpointdesc;ProjectProc:GDBProjectProc);
-var vertexnumber:Integer;
+var
+  vertexnumber:Integer;
+  tv:GDBvertex;
 begin
-     vertexnumber:=pdesc^.vertexnum;
-     pdesc.worldcoord:=GDBPoint3dArray.PTArr(Vertex3D_in_WCS_Array.parray)^[vertexnumber];
-     pdesc.dispcoord.x:=round(GDBPolyline2DArray.PTArr(PProjPoint.parray)^[vertexnumber].x);
-     pdesc.dispcoord.y:=round(GDBPolyline2DArray.PTArr(PProjPoint.parray)^[vertexnumber].y);
-end;
-procedure GDBObjHatch.Renderfeedback;
-var tv:GDBvertex;
-    tpv:GDBVertex2D;
-    ptpv:PGDBVertex;
-    i:Integer;
-begin
-  if pprojpoint=nil then
-  begin
-       Getmem(Pointer(pprojpoint),sizeof(GDBpolyline2DArray));
-       pprojpoint^.init(Vertex3D_in_WCS_Array.count,true);
-  end;
-  pprojpoint^.clear;
-                    ptpv:=Vertex3D_in_WCS_Array.GetParrayAsPointer;
-                    for i:=0 to Vertex3D_in_WCS_Array.count-1 do
-                    begin
-                         ProjectProc(ptpv^,tv);
-                         tpv.x:=tv.x;
-                         tpv.y:=tv.y;
-                         PprojPoint^.PushBackData(tpv);
-                         inc(ptpv);
-                    end;
-
+  vertexnumber:=pdesc^.vertexnum;
+  pdesc.worldcoord:=GDBPoint3dArray.PTArr(Vertex3D_in_WCS_Array.parray)^[vertexnumber];
+  ProjectProc(pdesc.worldcoord,tv);
+  pdesc.dispcoord:=ToVertex2DI(tv);
 end;
 
 procedure GDBObjHatch.AddControlpoints;

@@ -36,7 +36,6 @@ GDBObjElLeader= object(GDBObjComplex)
             function CalcInFrustum(const frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:Integer; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double):Boolean;virtual;
             function CalcTrueInFrustum(const frustum:ClipArray;visibleactualy:TActulity):TInBoundingVolume;virtual;
             function onmouse(var popa:TZctnrVectorPGDBaseEntity;const MF:ClipArray;InSubEntry:Boolean):Boolean;virtual;
-            procedure RenderFeedback(pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc;var DC:TDrawContext);virtual;
             procedure addcontrolpoints(tdesc:Pointer);virtual;
             procedure rtmodifyonepoint(const rtmod:TRTModifyData);virtual;
             procedure remaponecontrolpoint(pdesc:pcontrolpointdesc;ProjectProc:GDBProjectProc);virtual;
@@ -647,16 +646,7 @@ procedure GDBObjElLeader.addcontrolpoints(tdesc:Pointer);
 begin
      MainLine.addcontrolpoints(tdesc);
 end;
-procedure GDBObjElLeader.RenderFeedback;
-//var pblockdef:PGDBObjBlockdef;
-//    pvisible:PGDBObjEntity;
-//    i:Integer;
-begin
-     inherited;
-     MainLine.RenderFeedback(pcount,camera,ProjectProc,dc);
-     markline.RenderFeedback(pcount,camera,ProjectProc,dc);
-     tbl.RenderFeedback(pcount,camera,ProjectProc,dc);
-end;
+
 function GDBObjElLeader.onmouse;
 var //t,xx,yy:Double;
     //i:Integer;

@@ -38,9 +38,6 @@ GDBObjArc= object(GDBObjPlain)
                  q0:GDBvertex;
                  q1:GDBvertex;
                  q2:GDBvertex;
-                 pq0:GDBvertex;
-                 pq1:GDBvertex;
-                 pq2:GDBvertex;
                  constructor init(own:Pointer;layeraddres:PGDBLayerProp;LW:SmallInt;p:GDBvertex;RR,S,E:Double);
                  constructor initnul;
                  procedure LoadFromDXF(var f:TZMemReader;ptu:PExtensionData;var drawing:TDrawingDef);virtual;
@@ -92,6 +89,22 @@ begin
      result:=VectorTransform3D(point,m1);
      result:=normalizevertex(result);
 end;}
+
+procedure GDBObjARC.Renderfeedback;
+var
+  tv:GDBVertex;
+begin
+  ProjectProc(Local.p_insert,ProjP_insert);
+  pprojoutbound^.clear;
+  ProjectProc(outbound[0],tv);
+  pprojoutbound^.PushBackIfNotLastWithCompareProc(ToVertex2DI(tv),EqualVertex2DI);
+  ProjectProc(outbound[1],tv);
+  pprojoutbound^.PushBackIfNotLastWithCompareProc(ToVertex2DI(tv),EqualVertex2DI);
+  ProjectProc(outbound[2],tv);
+  pprojoutbound^.PushBackIfNotLastWithCompareProc(ToVertex2DI(tv),EqualVertex2DI);
+  ProjectProc(outbound[3],tv);
+  pprojoutbound^.PushBackIfNotLastOrFirstWithCompareProc(ToVertex2DI(tv),EqualVertex2DI);
+end;
 
 procedure GDBObjARC.TransformAt;
 var
@@ -460,44 +473,7 @@ begin
   end;
   Vertex3D_in_WCS_Array.Shrink;
 end;
-procedure GDBObjARC.Renderfeedback;
-var //pm:DMatrix4D;
-    tv:GDBvertex;
-    //d:Double;
-begin
-           {gdb.GetCurrentDWG^.myGluProject2}ProjectProc(Local.p_insert,ProjP_insert);
-           pprojoutbound^.clear;
-           //pm:=gdb.GetCurrentDWG.pcamera^.modelMatrix;
-           {gdb.GetCurrentDWG^.myGluProject2}ProjectProc(outbound[0],tv);
-           pprojoutbound^.PushBackIfNotLastWithCompareProc(ToVertex2DI(tv),EqualVertex2DI);
-           {gdb.GetCurrentDWG^.myGluProject2}ProjectProc(outbound[1],tv);
-           pprojoutbound^.PushBackIfNotLastWithCompareProc(ToVertex2DI(tv),EqualVertex2DI);
-           {gdb.GetCurrentDWG^.myGluProject2}ProjectProc(outbound[2],tv);
-           pprojoutbound^.PushBackIfNotLastWithCompareProc(ToVertex2DI(tv),EqualVertex2DI);
-           {gdb.GetCurrentDWG^.myGluProject2}ProjectProc(outbound[3],tv);
-           pprojoutbound^.PushBackIfNotLastOrFirstWithCompareProc(ToVertex2DI(tv),EqualVertex2DI);
-           {gdb.GetCurrentDWG^.myGluProject2}ProjectProc(q0,pq0);
-           {gdb.GetCurrentDWG^.myGluProject2}ProjectProc(q1,pq1);
-           {gdb.GetCurrentDWG^.myGluProject2}ProjectProc(q2,pq2);
-           (*if pprojoutbound^.count<4 then
-           begin
-            lod:=4;
-            //projectpoint;
-           end
-           else
-           begin
-                d:=pprojoutbound^.perimetr;
-                d:=(angle/(2*pi))*(d/10);
-                if d>255 then d:=255;
-                if d<10 then d:=10;
-                if lod<>round(d) then
-                begin
-                     lod:=round(d);
-                     createpoints(dc);
-                end;
-                projectpoint;
-           end;*)
-end;
+
 procedure GDBObjARC.DrawGeometry;
 var
 //  i: Integer;
@@ -606,19 +582,21 @@ begin
      result:=true;
 end;
 procedure GDBObjARC.remaponecontrolpoint(pdesc:pcontrolpointdesc;ProjectProc:GDBProjectProc);
+var
+  tv:GDBvertex;
 begin
   if pdesc^.pointtype=os_begin then begin
     pdesc.worldcoord:=q0;
-    pdesc.dispcoord.x:=round(Pq0.x);
-    pdesc.dispcoord.y:=round(Pq0.y);
+    ProjectProc(pdesc.worldcoord,tv);
+    pdesc.dispcoord:=ToVertex2DI(tv);
   end else if pdesc^.pointtype=os_midle then begin
     pdesc.worldcoord:=q1;
-    pdesc.dispcoord.x:=round(Pq1.x);
-    pdesc.dispcoord.y:=round(Pq1.y);
+    ProjectProc(pdesc.worldcoord,tv);
+    pdesc.dispcoord:=ToVertex2DI(tv);
   end else if pdesc^.pointtype=os_end then begin
     pdesc.worldcoord:=q2;
-    pdesc.dispcoord.x:=round(Pq2.x);
-    pdesc.dispcoord.y:=round(Pq2.y);
+    ProjectProc(pdesc.worldcoord,tv);
+    pdesc.dispcoord:=ToVertex2DI(tv);
   end;
 end;
 procedure GDBObjARC.addcontrolpoints(tdesc:Pointer);
@@ -675,7 +653,7 @@ begin
             then
             begin
             osp.worldcoord:=q0;
-            pgdbvertex2d(@osp.dispcoord)^:=pgdbvertex2d(@pq0)^;
+            ProjectProc(osp.worldcoord,osp.dispcoord);
             osp.ostype:=os_begin;
             end
             else osp.ostype:=os_none;
@@ -685,7 +663,7 @@ begin
             then
             begin
             osp.worldcoord:=q1;
-            pgdbvertex2d(@osp.dispcoord)^:=pgdbvertex2d(@pq1)^;
+            ProjectProc(osp.worldcoord,osp.dispcoord);
             osp.ostype:=os_midle;
             end
             else osp.ostype:=os_none;
@@ -695,7 +673,7 @@ begin
             then
             begin
             osp.worldcoord:=q2;
-            pgdbvertex2d(@osp.dispcoord)^:=pgdbvertex2d(@pq2)^;
+            ProjectProc(osp.worldcoord,osp.dispcoord);
             osp.ostype:=os_end;
             end
             else osp.ostype:=os_none;

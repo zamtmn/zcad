@@ -45,7 +45,7 @@ GDBObjPoint= object(GDBObj3d)
                  function onmouse(var popa:TZctnrVectorPGDBaseEntity;const MF:ClipArray;InSubEntry:Boolean):Boolean;virtual;
                  function CalcTrueInFrustum(const frustum:ClipArray;visibleactualy:TActulity):TInBoundingVolume;virtual;
                  procedure addcontrolpoints(tdesc:Pointer);virtual;
-                 procedure remaponecontrolpoint(pdesc:pcontrolpointdesc);virtual;
+                 procedure remaponecontrolpoint(pdesc:pcontrolpointdesc;ProjectProc:GDBProjectProc);virtual;
                  procedure rtmodifyonepoint(const rtmod:TRTModifyData);virtual;
                  function Clone(own:Pointer):PGDBObjEntity;virtual;
                  procedure rtsave(refp:Pointer);virtual;
@@ -221,7 +221,7 @@ begin
       end;
       result:=IRFully;
 end;
-procedure GDBObjPoint.remaponecontrolpoint(pdesc:pcontrolpointdesc);
+procedure GDBObjPoint.remaponecontrolpoint(pdesc:pcontrolpointdesc;ProjectProc:GDBProjectProc);
 begin
   if pdesc^.pointtype=os_point then begin
     pdesc.worldcoord:=P_insertInOCS;

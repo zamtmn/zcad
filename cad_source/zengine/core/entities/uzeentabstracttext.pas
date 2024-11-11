@@ -51,7 +51,7 @@ GDBObjAbstractText= object(GDBObjPlainWithOX)
                          function CalcTrueInFrustum(const frustum:ClipArray;visibleactualy:TActulity):TInBoundingVolume;virtual;
                          function onmouse(var popa:TZctnrVectorPGDBaseEntity;const MF:ClipArray;InSubEntry:Boolean):Boolean;virtual;
                          procedure addcontrolpoints(tdesc:Pointer);virtual;
-                         procedure remaponecontrolpoint(pdesc:pcontrolpointdesc);virtual;
+                         procedure remaponecontrolpoint(pdesc:pcontrolpointdesc;ProjectProc:GDBProjectProc);virtual;
                          procedure ReCalcFromObjMatrix;virtual;
                          function CalcRotate:Double;virtual;
                          procedure FormatAfterFielfmod(PField,PTypeDescriptor:Pointer);virtual;
@@ -209,7 +209,7 @@ begin
      if l1>2*pi then l1:=l1-2*pi;
      result:=l1;
 end;
-procedure GDBObjAbstractText.remaponecontrolpoint(pdesc:pcontrolpointdesc);
+procedure GDBObjAbstractText.remaponecontrolpoint(pdesc:pcontrolpointdesc;ProjectProc:GDBProjectProc);
 begin
   if pdesc^.pointtype=os_point then begin
     pdesc.worldcoord:=P_insert_in_WCS;

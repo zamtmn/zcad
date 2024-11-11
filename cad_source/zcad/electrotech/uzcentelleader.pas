@@ -39,7 +39,7 @@ GDBObjElLeader= object(GDBObjComplex)
             procedure RenderFeedback(pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc;var DC:TDrawContext);virtual;
             procedure addcontrolpoints(tdesc:Pointer);virtual;
             procedure rtmodifyonepoint(const rtmod:TRTModifyData);virtual;
-            procedure remaponecontrolpoint(pdesc:pcontrolpointdesc);virtual;
+            procedure remaponecontrolpoint(pdesc:pcontrolpointdesc;ProjectProc:GDBProjectProc);virtual;
             function beforertmodify:Pointer;virtual;
             function select(var SelectedObjCount:Integer;s2s:TSelect2Stage):Boolean;virtual;
             procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext;Stage:TEFStages=EFAllStages);virtual;
@@ -637,9 +637,9 @@ procedure GDBObjElLeader.rtmodifyonepoint(const rtmod:TRTModifyData);
 begin
      mainline.rtmodifyonepoint(rtmod);
 end;
-procedure GDBObjElLeader.remaponecontrolpoint(pdesc:pcontrolpointdesc);
+procedure GDBObjElLeader.remaponecontrolpoint(pdesc:pcontrolpointdesc;ProjectProc:GDBProjectProc);
 begin
-     mainline.remaponecontrolpoint(pdesc);
+     mainline.remaponecontrolpoint(pdesc,ProjectProc);
 end;
 
 procedure GDBObjElLeader.addcontrolpoints(tdesc:Pointer);

@@ -52,7 +52,7 @@ GDBObjSolid= object(GDBObjWithLocalCS)
                  function onmouse(var popa:TZctnrVectorPGDBaseEntity;const MF:ClipArray;InSubEntry:Boolean):Boolean;virtual;
                  function CalcTrueInFrustum(const frustum:ClipArray;visibleactualy:TActulity):TInBoundingVolume;virtual;
                  procedure addcontrolpoints(tdesc:Pointer);virtual;
-                 procedure remaponecontrolpoint(pdesc:pcontrolpointdesc);virtual;
+                 procedure remaponecontrolpoint(pdesc:pcontrolpointdesc;ProjectProc:GDBProjectProc);virtual;
                  procedure rtmodifyonepoint(const rtmod:TRTModifyData);virtual;
                  function Clone(own:Pointer):PGDBObjEntity;virtual;
                  procedure rtsave(refp:Pointer);virtual;
@@ -329,7 +329,7 @@ function GDBObjSolid.CalcTrueInFrustum;
 begin
       result:=CalcOutBound4VInFrustum(PInWCS,frustum);
 end;
-procedure GDBObjSolid.remaponecontrolpoint(pdesc:pcontrolpointdesc);
+procedure GDBObjSolid.remaponecontrolpoint(pdesc:pcontrolpointdesc;ProjectProc:GDBProjectProc);
 var vertexnumber:Integer;
 begin
      vertexnumber:=pdesc^.vertexnum;

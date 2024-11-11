@@ -31,7 +31,7 @@ PGDBObjLine=^GDBObjLine;
 GDBObjLine= object(GDBObj3d)
                  CoordInOCS:GDBLineProp;
                  CoordInWCS:GDBLineProp;
-                 PProjPoint:PGDBLineProj;
+                 //PProjPoint:PGDBLineProj;
 
                  constructor init(own:Pointer;layeraddres:PGDBLayerProp;LW:SmallInt;p1,p2:GDBvertex);
                  constructor initnul(owner:PGDBObjGenericWithSubordinated);
@@ -42,7 +42,7 @@ GDBObjLine= object(GDBObj3d)
                  procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext;Stage:TEFStages=EFAllStages);virtual;
                  procedure CalcGeometry;virtual;
                  procedure DrawGeometry(lw:Integer;var DC:TDrawContext{infrustumactualy:TActulity;subrender:Integer});virtual;
-                 procedure RenderFeedback(pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc;var DC:TDrawContext);virtual;
+                 //procedure RenderFeedback(pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc;var DC:TDrawContext);virtual;
                   function Clone(own:Pointer):PGDBObjEntity;virtual;
                  procedure rtsave(refp:Pointer);virtual;
                  procedure TransformAt(p:PGDBObjEntity;t_matrix:PDMatrix4D);virtual;
@@ -58,7 +58,7 @@ GDBObjLine= object(GDBObj3d)
                   procedure clearrtmodify(p:Pointer);virtual;
                  procedure rtmodifyonepoint(const rtmod:TRTModifyData);virtual;
                  function IsRTNeedModify(const Point:PControlPointDesc; p:Pointer):Boolean;virtual;
-                 procedure remaponecontrolpoint(pdesc:pcontrolpointdesc);virtual;
+                 procedure remaponecontrolpoint(pdesc:pcontrolpointdesc;ProjectProc:GDBProjectProc);virtual;
                  procedure transform(const t_matrix:DMatrix4D);virtual;
                   function jointoline(pl:pgdbobjline;var drawing:TDrawingDef):Boolean;virtual;
 
@@ -173,7 +173,7 @@ begin
   //vp.ID := GDBlineID;
   CoordInOCS.lBegin := NulVertex;
   CoordInOCS.lEnd := NulVertex;
-  PProjPoint:=nil;
+  //PProjPoint:=nil;
 end;
 constructor GDBObjLine.init;
 begin
@@ -181,7 +181,7 @@ begin
   //vp.ID := GDBlineID;
   CoordInOCS.lBegin := p1;
   CoordInOCS.lEnd := p2;
-  PProjPoint:=nil;
+  //PProjPoint:=nil;
   //format;
 end;
 function GDBObjLine.GetObjType;
@@ -203,8 +203,8 @@ begin
 end;
 destructor GDBObjLine.done;
 begin
-     if PProjPoint<>nil then
-                            Freemem(Pointer(PProjPoint));
+     //if PProjPoint<>nil then
+     //                       Freemem(Pointer(PProjPoint));
      inherited done;
 end;
 procedure GDBObjLine.CalcGeometry;
@@ -328,18 +328,10 @@ begin
   myglVertex3dV(@CoordInWCS.lEnd);
   oglsm.myglend;}
 end;
-procedure GDBObjLine.RenderFeedback;
+(*procedure GDBObjLine.RenderFeedback;
 var tv:GDBvertex;
-//    ptv:PGDBvertex;
-//    ptv2d:PGDBvertex2D;
-//    i:Integer;
 begin
-  //if POGLWnd=nil then exit;
-  {if PProjPoint<>nil then
-  begin
-       Freemem(Pointer(PProjPoint));
-  end;}
-  if PProjPoint=nil then Getmem(Pointer(pprojpoint),sizeof(GDBLineProj));
+  {if PProjPoint=nil then Getmem(Pointer(pprojpoint),sizeof(GDBLineProj));
 
   ProjectProc(CoordInWCS.lbegin,tv);
   pprojpoint^[0]:=pGDBvertex2D(@tv)^;
@@ -354,21 +346,11 @@ begin
   ProjectProc(Vertexmorph(CoordInWCS.lbegin, CoordInWCS.lend, 2 / 3),tv);
   pprojpoint^[5]:=pGDBvertex2D(@tv)^;
   ProjectProc(Vertexmorph(CoordInWCS.lbegin, CoordInWCS.lend, 3 / 4),tv);
-  pprojpoint^[6]:=pGDBvertex2D(@tv)^;
+  pprojpoint^[6]:=pGDBvertex2D(@tv)^;}
 
-  {ptv:=@CoordInWCS.lbegin;
-  ptv2d:=@pprojpoint^[0];
-  for i:=0 to 6 do
-  begin                   iuy
-  myGluProject(ptv^.x,ptv^.y,ptv^.z,@gdb.GetCurrentDWG.pcamera^.modelMatrix,@gdb.GetCurrentDWG.pcamera^.projMatrix,@gdb.GetCurrentDWG.pcamera^.viewport,ptv2d.x,ptv2d.y,tv.z);
-  inc(ptv);
-  inc(ptv2d);
-  end;}
-  //pdx:=PProjPoint[1].x-PProjPoint[0].x;
-  //pdy:=PProjPoint[1].y-PProjPoint[0].y;
   inherited;
 
-end;
+end;*)
 function GDBObjLine.getsnap;
 var t,d,e:Double;
     tv,n,v,dir:gdbvertex;
@@ -386,7 +368,8 @@ begin
             then
             begin
             osp.worldcoord:=CoordInWCS.lend;
-            pgdbvertex2d(@osp.dispcoord)^:=pprojpoint^[1];
+            ProjectProc(osp.worldcoord,osp.dispcoord);
+            //pgdbvertex2d(@osp.dispcoord)^:=pprojpoint^[1];
             osp.ostype:=os_end;
             end
             else osp.ostype:=os_none;
@@ -396,7 +379,8 @@ begin
             then
             begin
             osp.worldcoord:=Vertexmorph(CoordInWCS.lbegin, CoordInWCS.lend, 1 / 4);
-            pgdbvertex2d(@osp.dispcoord)^:=pprojpoint^[2];
+            ProjectProc(osp.worldcoord,osp.dispcoord);
+            //pgdbvertex2d(@osp.dispcoord)^:=pprojpoint^[2];
             osp.ostype:=os_1_4;
             end
             else osp.ostype:=os_none;
@@ -406,7 +390,8 @@ begin
             then
             begin
             osp.worldcoord:=Vertexmorph(CoordInWCS.lbegin, CoordInWCS.lend, 1 / 3);
-            pgdbvertex2d(@osp.dispcoord)^:=pprojpoint^[3];
+            ProjectProc(osp.worldcoord,osp.dispcoord);
+            //pgdbvertex2d(@osp.dispcoord)^:=pprojpoint^[3];
             osp.ostype:=os_1_3;
             end
             else osp.ostype:=os_none;
@@ -416,7 +401,8 @@ begin
             then
             begin
             osp.worldcoord:=Vertexmorph(CoordInWCS.lbegin, CoordInWCS.lend, 1 / 2);
-            pgdbvertex2d(@osp.dispcoord)^:=pprojpoint^[4];
+            ProjectProc(osp.worldcoord,osp.dispcoord);
+            //pgdbvertex2d(@osp.dispcoord)^:=pprojpoint^[4];
             osp.ostype:=os_midle;
             end
             else osp.ostype:=os_none;
@@ -426,7 +412,8 @@ begin
             then
             begin
             osp.worldcoord:=Vertexmorph(CoordInWCS.lbegin, CoordInWCS.lend, 2 / 3);
-            pgdbvertex2d(@osp.dispcoord)^:=pprojpoint^[5];
+            ProjectProc(osp.worldcoord,osp.dispcoord);
+            //pgdbvertex2d(@osp.dispcoord)^:=pprojpoint^[5];
             osp.ostype:=os_2_3;
             end
             else osp.ostype:=os_none;
@@ -436,7 +423,8 @@ begin
             then
             begin
             osp.worldcoord:=Vertexmorph(CoordInWCS.lbegin, CoordInWCS.lend, 3 / 4);
-            pgdbvertex2d(@osp.dispcoord)^:=pprojpoint^[6];
+            ProjectProc(osp.worldcoord,osp.dispcoord);
+            //pgdbvertex2d(@osp.dispcoord)^:=pprojpoint^[6];
             osp.ostype:=os_3_4;
             end
             else osp.ostype:=os_none;
@@ -446,7 +434,8 @@ begin
             then
             begin
             osp.worldcoord:=CoordInWCS.lbegin;
-            pgdbvertex2d(@osp.dispcoord)^:=pprojpoint^[0];
+            ProjectProc(osp.worldcoord,osp.dispcoord);
+            //pgdbvertex2d(@osp.dispcoord)^:=pprojpoint^[0];
             osp.ostype:=os_begin;
             end
             else osp.ostype:=os_none;
@@ -535,28 +524,35 @@ begin
   end;
 end;
 function GDBObjLine.getintersect;
-var t1,t2,dist:Double;
-    tv1,tv2,dir,dir2{,e}:gdbvertex;
+var
+  t1,t2,dist:Double;
+  l1b,l1e,l2b,l2e,tv1,tv2,dir,dir2:gdbvertex;
 begin
-     if (onlygetsnapcount=1)or(pobj^.{vp.id}getobjtype<>gdblineid) then
+     if (onlygetsnapcount=1)or(pobj^.getobjtype<>gdblineid) then
      begin
           result:=false;
           exit;
      end;
      result:=true;
+
+     ProjectProc(CoordInWCS.lbegin,l1b);
+     ProjectProc(CoordInWCS.lEnd,l1e);
+     ProjectProc(pgdbobjline(pobj)^.CoordInWCS.lbegin,l2b);
+     ProjectProc(pgdbobjline(pobj)^.CoordInWCS.lEnd,l2e);
+
      case onlygetsnapcount of
      0:begin
             if ((SnapMode and osm_apparentintersection)<>0)or((SnapMode and osm_intersection)<>0)
             then
             begin
-            if not assigned(pgdbobjline(pobj)^.pprojpoint) then
+            (*if not assigned(pgdbobjline(pobj)^.pprojpoint) then
                                                                begin
                                                                //pgdbobjline(pobj)^.RenderFeedback(gdb.GetCurrentDWG.pcamera^.POSCOUNT,gdb.GetCurrentDWG.pcamera^,nil);
                                                                ZDebugLN('{E}pobj)^.pprojpoint=nil;//(((((((');
                                                                osp.ostype:=os_none;
                                                                exit;
-                                                               end;
-            if line2dintercep(pprojpoint[0].x,pprojpoint[0].y,pprojpoint[1].x,pprojpoint[1].y,   pgdbobjline(pobj)^.pprojpoint[0].x,pgdbobjline(pobj)^.pprojpoint[0].y,pgdbobjline(pobj)^.pprojpoint[1].x,pgdbobjline(pobj)^.pprojpoint[1].y,  t1,t2)
+                                                               end;*)
+            if line2dintercep(l1b.x,l1b.y,l1e.x,l1e.y,l2b.x,l2b.y,l2e.x,l2e.y,t1,t2)
             then
                 begin
                      dir:=VertexSub(CoordInWCS.lEnd,CoordInWCS.lBegin);
@@ -586,7 +582,7 @@ begin
                               then
                               begin
                               osp.worldcoord:=tv1;
-                              line2dintercep(pprojpoint[0].x,pprojpoint[0].y,pprojpoint[1].x,pprojpoint[1].y,   pgdbobjline(pobj)^.pprojpoint[0].x,pgdbobjline(pobj)^.pprojpoint[0].y,pgdbobjline(pobj)^.pprojpoint[1].x,pgdbobjline(pobj)^.pprojpoint[1].y,  t1,t2);
+                              line2dintercep(l1b.x,l1b.y,l1e.x,l1e.y,l2b.x,l2b.y,l2e.x,l2e.y,t1,t2);
                               {gdb.GetCurrentDWG^.myGluProject2}ProjectProc(osp.worldcoord,osp.dispcoord);
                               osp.ostype:=os_apparentintersection;
                               end
@@ -675,20 +671,22 @@ begin
     CoordInOCS.lend:=VertexAdd(tv2,tv);
   end;
 end;
-procedure GDBObjLine.remaponecontrolpoint(pdesc:pcontrolpointdesc);
+procedure GDBObjLine.remaponecontrolpoint(pdesc:pcontrolpointdesc;ProjectProc:GDBProjectProc);
+var
+  tv:GDBvertex;
 begin
   if pdesc^.pointtype=os_begin then begin
     pdesc.worldcoord:=CoordInWCS.lbegin;
-    pdesc.dispcoord.x:=round(PProjPoint[0].x);
-    pdesc.dispcoord.y:=round(PProjPoint[0].y);
+    ProjectProc(pdesc.worldcoord,tv);
+    pdesc.dispcoord:=ToVertex2DI(tv);
   end else if pdesc^.pointtype=os_end then begin
     pdesc.worldcoord:=CoordInWCS.lend;
-    pdesc.dispcoord.x:=round(PProjPoint[1].x);
-    pdesc.dispcoord.y:=round(PProjPoint[1].y);
+    ProjectProc(pdesc.worldcoord,tv);
+    pdesc.dispcoord:=ToVertex2DI(tv);
   end else if pdesc^.pointtype=os_midle then begin
     pdesc.worldcoord:=Vertexmorph(CoordInWCS.lbegin, CoordInWCS.lend, 1 / 2);
-    pdesc.dispcoord.x:=round(PProjPoint[4].x);
-    pdesc.dispcoord.y:=round(PProjPoint[4].y);
+    ProjectProc(pdesc.worldcoord,tv);
+    pdesc.dispcoord:=ToVertex2DI(tv);
   end;
 end;
 procedure GDBObjLine.addcontrolpoints(tdesc:Pointer);

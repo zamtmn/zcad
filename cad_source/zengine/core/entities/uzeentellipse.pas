@@ -49,7 +49,7 @@ GDBObjEllipse= object(GDBObjPlain)
                  procedure SaveToDXF(var outhandle:{Integer}TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
                  procedure DrawGeometry(lw:Integer;var DC:TDrawContext{infrustumactualy:TActulity;subrender:Integer});virtual;
                  procedure addcontrolpoints(tdesc:Pointer);virtual;
-                 procedure remaponecontrolpoint(pdesc:pcontrolpointdesc);virtual;
+                 procedure remaponecontrolpoint(pdesc:pcontrolpointdesc;ProjectProc:GDBProjectProc);virtual;
                  procedure CalcObjMatrix(pdrawing:PTDrawingDef=nil);virtual;
                  procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext;Stage:TEFStages=EFAllStages);virtual;
                  procedure createpoint;virtual;
@@ -466,7 +466,7 @@ begin
      end;
      result:=Vertex3D_in_WCS_Array.onmouse(mf,false);
 end;
-procedure GDBObjEllipse.remaponecontrolpoint(pdesc:pcontrolpointdesc);
+procedure GDBObjEllipse.remaponecontrolpoint(pdesc:pcontrolpointdesc;ProjectProc:GDBProjectProc);
 begin
   if pdesc^.pointtype=os_begin then begin
     pdesc.worldcoord:=q0;

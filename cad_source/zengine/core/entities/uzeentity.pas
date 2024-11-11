@@ -131,7 +131,7 @@ GDBObjEntity= object(GDBObjSubordinated)
                     //procedure rtmodify(md:Pointer;dist,wc:gdbvertex;save:Boolean);virtual;
                     procedure rtmodifyonepoint(const rtmod:TRTModifyData);virtual;abstract;
                     procedure transform(const t_matrix:DMatrix4D);virtual;
-                    procedure remaponecontrolpoint(pdesc:PControlPointDesc);virtual;abstract;
+                    procedure remaponecontrolpoint(pdesc:PControlPointDesc;ProjectProc:GDBProjectProc);virtual;abstract;
                     function beforertmodify:Pointer;virtual;
                     procedure afterrtmodify(p:Pointer);virtual;
                     function IsRTNeedModify(const Point:PControlPointDesc; p:Pointer):Boolean;virtual;
@@ -1025,7 +1025,7 @@ begin
                begin
                     if pdesc.PDrawable<>nil then
                                               pdesc.PDrawable.RenderFeedback(pcount,camera,ProjectProc,dc);
-                    remaponecontrolpoint(pdesc);
+                    remaponecontrolpoint(pdesc,ProjectProc);
                     inc(pdesc);
                end;
           end;

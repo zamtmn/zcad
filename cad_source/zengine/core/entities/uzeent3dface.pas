@@ -49,7 +49,7 @@ GDBObj3DFace= object(GDBObj3d)
                  function onmouse(var popa:TZctnrVectorPGDBaseEntity;const MF:ClipArray;InSubEntry:Boolean):Boolean;virtual;
                  function CalcTrueInFrustum(const frustum:ClipArray;visibleactualy:TActulity):TInBoundingVolume;virtual;
                  procedure addcontrolpoints(tdesc:Pointer);virtual;
-                 procedure remaponecontrolpoint(pdesc:pcontrolpointdesc);virtual;
+                 procedure remaponecontrolpoint(pdesc:pcontrolpointdesc;ProjectProc:GDBProjectProc);virtual;
                  procedure rtmodifyonepoint(const rtmod:TRTModifyData);virtual;
                  function Clone(own:Pointer):PGDBObjEntity;virtual;
                  procedure rtsave(refp:Pointer);virtual;
@@ -433,7 +433,7 @@ begin
    result:=IRempty;
 
 end;
-procedure GDBObj3DFace.remaponecontrolpoint(pdesc:pcontrolpointdesc);
+procedure GDBObj3DFace.remaponecontrolpoint(pdesc:pcontrolpointdesc;ProjectProc:GDBProjectProc);
 var vertexnumber:Integer;
 begin
      vertexnumber:=pdesc^.vertexnum;

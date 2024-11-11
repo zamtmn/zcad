@@ -68,7 +68,7 @@ GDBObjLWPolyline= object(GDBObjWithLocalCS)
                  function Clone(own:Pointer):PGDBObjEntity;virtual;
                  procedure RenderFeedback(pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc;var DC:TDrawContext);virtual;
                  procedure addcontrolpoints(tdesc:Pointer);virtual;
-                 procedure remaponecontrolpoint(pdesc:pcontrolpointdesc);virtual;
+                 procedure remaponecontrolpoint(pdesc:pcontrolpointdesc;ProjectProc:GDBProjectProc);virtual;
                  procedure rtmodifyonepoint(const rtmod:TRTModifyData);virtual;
                  procedure rtsave(refp:Pointer);virtual;
                  procedure getoutbound(var DC:TDrawContext);virtual;
@@ -384,7 +384,7 @@ begin
   GDBPolyline2DArray.PTArr(Vertex2D_in_OCS_Array.parray)^[vertexnumber].x:=wwc.x{VertexAdd(wwc,tv)};
   GDBPolyline2DArray.PTArr(Vertex2D_in_OCS_Array.parray)^[vertexnumber].y:=wwc.y;
 end;
-procedure GDBObjLWpolyline.remaponecontrolpoint(pdesc:pcontrolpointdesc);
+procedure GDBObjLWpolyline.remaponecontrolpoint(pdesc:pcontrolpointdesc;ProjectProc:GDBProjectProc);
 var vertexnumber:Integer;
 begin
      vertexnumber:=pdesc^.vertexnum;

@@ -65,7 +65,7 @@ GDBObjCircle= object(GDBObjWithLocalCS)
                  function getsnap(var osp:os_record; var pdata:Pointer; const param:OGLWndtype; ProjectProc:GDBProjectProc;SnapMode:TGDBOSMode):Boolean;virtual;
                  //function InRect:TInRect;virtual;
                  procedure addcontrolpoints(tdesc:Pointer);virtual;
-                 procedure remaponecontrolpoint(pdesc:pcontrolpointdesc);virtual;
+                 procedure remaponecontrolpoint(pdesc:pcontrolpointdesc;ProjectProc:GDBProjectProc);virtual;
                  function beforertmodify:Pointer;virtual;
                  procedure rtmodifyonepoint(const rtmod:TRTModifyData);virtual;
                  function IsRTNeedModify(const Point:PControlPointDesc; p:Pointer):Boolean;virtual;
@@ -679,7 +679,7 @@ begin
      end;
      result:=IREmpty;}
 end;*)
-procedure GDBObjCircle.remaponecontrolpoint(pdesc:pcontrolpointdesc);
+procedure GDBObjCircle.remaponecontrolpoint(pdesc:pcontrolpointdesc;ProjectProc:GDBProjectProc);
 begin
   if pdesc^.pointtype=os_center then begin
     pdesc.worldcoord:=P_insert_in_WCS;

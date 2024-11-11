@@ -78,7 +78,7 @@ GDBObjHatch= object(GDBObjWithLocalCS)
                  procedure createpoint;virtual;
                  procedure getoutbound(var DC:TDrawContext);virtual;
                  function CalcTrueInFrustum(const frustum:ClipArray;visibleactualy:TActulity):TInBoundingVolume;virtual;
-                 procedure remaponecontrolpoint(pdesc:pcontrolpointdesc);virtual;
+                 procedure remaponecontrolpoint(pdesc:pcontrolpointdesc;ProjectProc:GDBProjectProc);virtual;
                  procedure RenderFeedback(pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc;var DC:TDrawContext);virtual;
                  procedure addcontrolpoints(tdesc:Pointer);virtual;
                  procedure rtmodifyonepoint(const rtmod:TRTModifyData);virtual;
@@ -668,7 +668,7 @@ begin
   else
     result:=IRFully;
 end;
-procedure GDBObjHatch.remaponecontrolpoint(pdesc:pcontrolpointdesc);
+procedure GDBObjHatch.remaponecontrolpoint(pdesc:pcontrolpointdesc;ProjectProc:GDBProjectProc);
 var vertexnumber:Integer;
 begin
      vertexnumber:=pdesc^.vertexnum;

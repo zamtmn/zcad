@@ -45,7 +45,7 @@ GDBObjCurve= object(GDBObj3d)
                  function onmouse(var popa:TZctnrVectorPGDBaseEntity;const MF:ClipArray;InSubEntry:Boolean):Boolean;virtual;
                  function onpoint(var objects:TZctnrVectorPGDBaseEntity;const point:GDBVertex):Boolean;virtual;
                  procedure rtmodifyonepoint(const rtmod:TRTModifyData);virtual;
-                 procedure remaponecontrolpoint(pdesc:pcontrolpointdesc);virtual;
+                 procedure remaponecontrolpoint(pdesc:pcontrolpointdesc;ProjectProc:GDBProjectProc);virtual;
                  procedure addcontrolpoints(tdesc:Pointer);virtual;
                  function getsnap(var osp:os_record; var pdata:Pointer; const param:OGLWndtype; ProjectProc:GDBProjectProc;SnapMode:TGDBOSMode):Boolean;virtual;
                  procedure startsnap(out osp:os_record; out pdata:Pointer);virtual;
@@ -478,7 +478,7 @@ begin
 
      GDBPoint3dArray.PTArr(vertexarrayinocs.parray)^[vertexnumber]:=VertexAdd(rtmod.point.worldcoord, rtmod.dist);
 end;
-procedure GDBObjCurve.remaponecontrolpoint(pdesc:pcontrolpointdesc);
+procedure GDBObjCurve.remaponecontrolpoint(pdesc:pcontrolpointdesc;ProjectProc:GDBProjectProc);
 var vertexnumber:Integer;
 begin
      vertexnumber:=pdesc^.vertexnum;

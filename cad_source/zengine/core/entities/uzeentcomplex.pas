@@ -43,7 +43,7 @@ GDBObjComplex= object(GDBObjWithLocalCS)
                     function onmouse(var popa:TZctnrVectorPGDBaseEntity;const MF:ClipArray;InSubEntry:Boolean):Boolean;virtual;
                     procedure renderfeedbac(infrustumactualy:TActulity;pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc;var DC:TDrawContext);virtual;
                     procedure addcontrolpoints(tdesc:Pointer);virtual;
-                    procedure remaponecontrolpoint(pdesc:pcontrolpointdesc);virtual;
+                    procedure remaponecontrolpoint(pdesc:pcontrolpointdesc;ProjectProc:GDBProjectProc);virtual;
                     procedure rtmodifyonepoint(const rtmod:TRTModifyData);virtual;
                     procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext;Stage:TEFStages=EFAllStages);virtual;
                     //procedure feedbackinrect;virtual;
@@ -99,7 +99,7 @@ begin
   end;
 end;
 
-procedure GDBObjComplex.remaponecontrolpoint(pdesc:pcontrolpointdesc);
+procedure GDBObjComplex.remaponecontrolpoint(pdesc:pcontrolpointdesc;ProjectProc:GDBProjectProc);
 begin
   if pdesc^.pointtype=os_point then begin
     if pdesc.PDrawable=nil then begin

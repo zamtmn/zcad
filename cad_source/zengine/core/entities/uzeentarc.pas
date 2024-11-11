@@ -48,7 +48,7 @@ GDBObjArc= object(GDBObjPlain)
                  procedure SaveToDXF(var outhandle:{Integer}TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
                  procedure DrawGeometry(lw:Integer;var DC:TDrawContext{infrustumactualy:TActulity;subrender:Integer});virtual;
                  procedure addcontrolpoints(tdesc:Pointer);virtual;
-                 procedure remaponecontrolpoint(pdesc:pcontrolpointdesc);virtual;
+                 procedure remaponecontrolpoint(pdesc:pcontrolpointdesc;ProjectProc:GDBProjectProc);virtual;
                  procedure CalcObjMatrix(pdrawing:PTDrawingDef=nil);virtual;
                  procedure precalc;
                  procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext;Stage:TEFStages=EFAllStages);virtual;
@@ -605,7 +605,7 @@ begin
    if CalcPointTrueInFrustum(P_insert_in_WCS,mf)=IRFully then
      result:=true;
 end;
-procedure GDBObjARC.remaponecontrolpoint(pdesc:pcontrolpointdesc);
+procedure GDBObjARC.remaponecontrolpoint(pdesc:pcontrolpointdesc;ProjectProc:GDBProjectProc);
 begin
   if pdesc^.pointtype=os_begin then begin
     pdesc.worldcoord:=q0;

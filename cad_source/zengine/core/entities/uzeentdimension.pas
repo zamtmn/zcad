@@ -65,7 +65,7 @@ GDBObjDimension= object(GDBObjComplex)
 
                 function DrawDimensionLineLinePart(p1,p2:GDBVertex;var drawing:TDrawingDef):pgdbobjline;
                 function DrawExtensionLineLinePart(p1,p2:GDBVertex;var drawing:TDrawingDef; part:integer):pgdbobjline;
-                procedure remaponecontrolpoint(pdesc:pcontrolpointdesc);virtual;
+                procedure remaponecontrolpoint(pdesc:pcontrolpointdesc;ProjectProc:GDBProjectProc);virtual;
                 procedure RenderFeedback(pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc;var DC:TDrawContext);virtual;
                 function LinearFloatToStr(l:Double;var drawing:TDrawingDef):TDXFEntsInternalStringType;
                 function GetLinearDimStr(l:Double;var drawing:TDrawingDef):TDXFEntsInternalStringType;
@@ -560,7 +560,7 @@ begin
   inherited;
 end;
 
-procedure GDBObjDimension.remaponecontrolpoint(pdesc:pcontrolpointdesc);
+procedure GDBObjDimension.remaponecontrolpoint(pdesc:pcontrolpointdesc;ProjectProc:GDBProjectProc);
 begin
   if pdesc^.pointtype=os_p10 then begin
     pdesc.worldcoord:=DimData.P10InWCS;

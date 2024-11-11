@@ -42,7 +42,6 @@ GDBObjLine= object(GDBObj3d)
                  procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext;Stage:TEFStages=EFAllStages);virtual;
                  procedure CalcGeometry;virtual;
                  procedure DrawGeometry(lw:Integer;var DC:TDrawContext{infrustumactualy:TActulity;subrender:Integer});virtual;
-                 //procedure RenderFeedback(pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc;var DC:TDrawContext);virtual;
                   function Clone(own:Pointer):PGDBObjEntity;virtual;
                  procedure rtsave(refp:Pointer);virtual;
                  procedure TransformAt(p:PGDBObjEntity;t_matrix:PDMatrix4D);virtual;
@@ -328,29 +327,7 @@ begin
   myglVertex3dV(@CoordInWCS.lEnd);
   oglsm.myglend;}
 end;
-(*procedure GDBObjLine.RenderFeedback;
-var tv:GDBvertex;
-begin
-  {if PProjPoint=nil then Getmem(Pointer(pprojpoint),sizeof(GDBLineProj));
 
-  ProjectProc(CoordInWCS.lbegin,tv);
-  pprojpoint^[0]:=pGDBvertex2D(@tv)^;
-  ProjectProc(CoordInWCS.lEnd,tv);
-  pprojpoint^[1]:=pGDBvertex2D(@tv)^;
-  ProjectProc(Vertexmorph(CoordInWCS.lbegin, CoordInWCS.lend, 1 / 4),tv);
-  pprojpoint^[2]:=pGDBvertex2D(@tv)^;
-  ProjectProc(Vertexmorph(CoordInWCS.lbegin, CoordInWCS.lend, 1 / 3),tv);
-  pprojpoint^[3]:=pGDBvertex2D(@tv)^;
-  ProjectProc(Vertexmorph(CoordInWCS.lbegin, CoordInWCS.lend, 1 / 2),tv);
-  pprojpoint^[4]:=pGDBvertex2D(@tv)^;
-  ProjectProc(Vertexmorph(CoordInWCS.lbegin, CoordInWCS.lend, 2 / 3),tv);
-  pprojpoint^[5]:=pGDBvertex2D(@tv)^;
-  ProjectProc(Vertexmorph(CoordInWCS.lbegin, CoordInWCS.lend, 3 / 4),tv);
-  pprojpoint^[6]:=pGDBvertex2D(@tv)^;}
-
-  inherited;
-
-end;*)
 function GDBObjLine.getsnap;
 var t,d,e:Double;
     tv,n,v,dir:gdbvertex;
@@ -528,72 +505,50 @@ var
   t1,t2,dist:Double;
   l1b,l1e,l2b,l2e,tv1,tv2,dir,dir2:gdbvertex;
 begin
-     if (onlygetsnapcount=1)or(pobj^.getobjtype<>gdblineid) then
-     begin
-          result:=false;
-          exit;
-     end;
-     result:=true;
+  if (onlygetsnapcount=1)or(pobj^.getobjtype<>gdblineid) then
+    exit(false);
 
-     ProjectProc(CoordInWCS.lbegin,l1b);
-     ProjectProc(CoordInWCS.lEnd,l1e);
-     ProjectProc(pgdbobjline(pobj)^.CoordInWCS.lbegin,l2b);
-     ProjectProc(pgdbobjline(pobj)^.CoordInWCS.lEnd,l2e);
+  result:=true;
+  ProjectProc(CoordInWCS.lbegin,l1b);
+  ProjectProc(CoordInWCS.lEnd,l1e);
+  ProjectProc(pgdbobjline(pobj)^.CoordInWCS.lbegin,l2b);
+  ProjectProc(pgdbobjline(pobj)^.CoordInWCS.lEnd,l2e);
 
-     case onlygetsnapcount of
-     0:begin
-            if ((SnapMode and osm_apparentintersection)<>0)or((SnapMode and osm_intersection)<>0)
-            then
-            begin
-            (*if not assigned(pgdbobjline(pobj)^.pprojpoint) then
-                                                               begin
-                                                               //pgdbobjline(pobj)^.RenderFeedback(gdb.GetCurrentDWG.pcamera^.POSCOUNT,gdb.GetCurrentDWG.pcamera^,nil);
-                                                               ZDebugLN('{E}pobj)^.pprojpoint=nil;//(((((((');
-                                                               osp.ostype:=os_none;
-                                                               exit;
-                                                               end;*)
-            if line2dintercep(l1b.x,l1b.y,l1e.x,l1e.y,l2b.x,l2b.y,l2e.x,l2e.y,t1,t2)
-            then
-                begin
-                     dir:=VertexSub(CoordInWCS.lEnd,CoordInWCS.lBegin);
-                     dir2:=VertexSub(pgdbobjline(pobj)^.CoordInWCS.lEnd,pgdbobjline(pobj)^.CoordInWCS.lBegin);
-                     tv1.x:=CoordInWCS.lbegin.x+dir.x*t1;
-                     tv1.y:=CoordInWCS.lbegin.y+dir.y*t1;
-                     tv1.z:=CoordInWCS.lbegin.z+dir.z*t1;
-                     tv2.x:=pgdbobjline(pobj)^.CoordInWCS.lbegin.x+dir2.x*t2;
-                     tv2.y:=pgdbobjline(pobj)^.CoordInWCS.lbegin.y+dir2.y*t2;
-                     tv2.z:=pgdbobjline(pobj)^.CoordInWCS.lbegin.z+dir2.z*t2;
-                     dist:=Vertexlength(tv1,tv2);
-                     if dist<bigeps
-                     then
-                         begin
-                              if (SnapMode and osm_intersection)<>0
-                              then
-                              begin
-                              osp.worldcoord:=tv1;
-                              {gdb.GetCurrentDWG^.myGluProject2}ProjectProc(osp.worldcoord,osp.dispcoord);
-                              osp.ostype:=os_intersection;
-                              end
-                              else osp.ostype:=os_none;
-                         end
-                     else
-                         begin
-                              if (SnapMode and osm_apparentintersection)<>0
-                              then
-                              begin
-                              osp.worldcoord:=tv1;
-                              line2dintercep(l1b.x,l1b.y,l1e.x,l1e.y,l2b.x,l2b.y,l2e.x,l2e.y,t1,t2);
-                              {gdb.GetCurrentDWG^.myGluProject2}ProjectProc(osp.worldcoord,osp.dispcoord);
-                              osp.ostype:=os_apparentintersection;
-                              end
-                              else osp.ostype:=os_none;
-                         end;
-                end;
-            end
-            else osp.ostype:=os_none;
-       end;
-     end;
-     inc(onlygetsnapcount);
+  case onlygetsnapcount of
+    0:begin
+      if ((SnapMode and osm_apparentintersection)<>0)or((SnapMode and osm_intersection)<>0) then begin
+        if line2dintercep(l1b.x,l1b.y,l1e.x,l1e.y,l2b.x,l2b.y,l2e.x,l2e.y,t1,t2) then begin
+          dir:=VertexSub(CoordInWCS.lEnd,CoordInWCS.lBegin);
+          dir2:=VertexSub(pgdbobjline(pobj)^.CoordInWCS.lEnd,pgdbobjline(pobj)^.CoordInWCS.lBegin);
+          tv1.x:=CoordInWCS.lbegin.x+dir.x*t1;
+          tv1.y:=CoordInWCS.lbegin.y+dir.y*t1;
+          tv1.z:=CoordInWCS.lbegin.z+dir.z*t1;
+          tv2.x:=pgdbobjline(pobj)^.CoordInWCS.lbegin.x+dir2.x*t2;
+          tv2.y:=pgdbobjline(pobj)^.CoordInWCS.lbegin.y+dir2.y*t2;
+          tv2.z:=pgdbobjline(pobj)^.CoordInWCS.lbegin.z+dir2.z*t2;
+          dist:=Vertexlength(tv1,tv2);
+          if dist<bigeps then begin
+            if (SnapMode and osm_intersection)<>0 then begin
+              osp.worldcoord:=tv1;
+              {gdb.GetCurrentDWG^.myGluProject2}ProjectProc(osp.worldcoord,osp.dispcoord);
+              osp.ostype:=os_intersection;
+            end else
+              osp.ostype:=os_none;
+          end else begin
+            if (SnapMode and osm_apparentintersection)<>0 then begin
+              osp.worldcoord:=tv1;
+              line2dintercep(l1b.x,l1b.y,l1e.x,l1e.y,l2b.x,l2b.y,l2e.x,l2e.y,t1,t2);
+              {gdb.GetCurrentDWG^.myGluProject2}ProjectProc(osp.worldcoord,osp.dispcoord);
+              osp.ostype:=os_apparentintersection;
+            end else
+              osp.ostype:=os_none;
+          end;
+        end;
+      end else
+        osp.ostype:=os_none;
+    end;
+  end;
+  inc(onlygetsnapcount);
 end;
 function GDBObjLine.Clone;
 var tvo: PGDBObjLine;
@@ -720,28 +675,6 @@ begin
           pdesc.dispcoord.y:=round(PProjPoint[1].y);}
           PSelectedObjDesc(tdesc)^.pcontrolpoint^.PushBackData(pdesc);
 end;
-{function GDBObjLine.InRect;
-begin
-     result:=IREmpty;
-     if pprojpoint=nil then
-                           exit;
-     if pointinquad2d(GDB.GetCurrentDWG.OGLwindow1.param.seldesc.Frame1.x, GDB.GetCurrentDWG.OGLwindow1.param.seldesc.Frame1.y, GDB.GetCurrentDWG.OGLwindow1.param.seldesc.Frame2.x, GDB.GetCurrentDWG.OGLwindow1.param.seldesc.Frame2.y, pprojpoint[0].x,pprojpoint[0].y)
-    and pointinquad2d(GDB.GetCurrentDWG.OGLwindow1.param.seldesc.Frame1.x, GDB.GetCurrentDWG.OGLwindow1.param.seldesc.Frame1.y, GDB.GetCurrentDWG.OGLwindow1.param.seldesc.Frame2.x, GDB.GetCurrentDWG.OGLwindow1.param.seldesc.Frame2.y, pprojpoint[1].x,pprojpoint[1].y)
-      then
-          begin
-               result:=IRFully;
-          end
-      else
-          if
-          intercept2d2(GDB.GetCurrentDWG.OGLwindow1.param.seldesc.Frame1.x, GDB.GetCurrentDWG.OGLwindow1.param.seldesc.Frame1.y, GDB.GetCurrentDWG.OGLwindow1.param.seldesc.Frame2.x, GDB.GetCurrentDWG.OGLwindow1.param.seldesc.Frame1.y, pprojpoint[0].x,pprojpoint[0].y,pprojpoint[1].x,pprojpoint[1].y)
-       or intercept2d2(GDB.GetCurrentDWG.OGLwindow1.param.seldesc.Frame2.x, GDB.GetCurrentDWG.OGLwindow1.param.seldesc.Frame1.y, GDB.GetCurrentDWG.OGLwindow1.param.seldesc.Frame2.x, GDB.GetCurrentDWG.OGLwindow1.param.seldesc.Frame2.y, pprojpoint[0].x,pprojpoint[0].y,pprojpoint[1].x,pprojpoint[1].y)
-       or intercept2d2(GDB.GetCurrentDWG.OGLwindow1.param.seldesc.Frame2.x, GDB.GetCurrentDWG.OGLwindow1.param.seldesc.Frame2.y, GDB.GetCurrentDWG.OGLwindow1.param.seldesc.Frame1.x, GDB.GetCurrentDWG.OGLwindow1.param.seldesc.Frame2.y, pprojpoint[0].x,pprojpoint[0].y,pprojpoint[1].x,pprojpoint[1].y)
-       or intercept2d2(GDB.GetCurrentDWG.OGLwindow1.param.seldesc.Frame1.x, GDB.GetCurrentDWG.OGLwindow1.param.seldesc.Frame2.y, GDB.GetCurrentDWG.OGLwindow1.param.seldesc.Frame1.x, GDB.GetCurrentDWG.OGLwindow1.param.seldesc.Frame1.y, pprojpoint[0].x,pprojpoint[0].y,pprojpoint[1].x,pprojpoint[1].y)
-          then
-          begin
-               result:=IRPartially;
-          end
-end;}
 
 procedure GDBObjLine.transform;
 var tv:GDBVertex4D;

@@ -223,23 +223,74 @@ rmpkgslibs:
 
 rmsrcbackups:
 	rm -rf cad_source$(PATHDELIM)components$(PATHDELIM)metadarkstyle$(PATHDELIM)src$(PATHDELIM)backup$(PATHDELIM)*
+	rm -rf cad_source$(PATHDELIM)components$(PATHDELIM)metadarkstyle$(PATHDELIM)src$(PATHDELIM)backup
+	rm -rf cad_source$(PATHDELIM)components$(PATHDELIM)metadarkstyle$(PATHDELIM)examples$(PATHDELIM)defaultallowdark$(PATHDELIM)backup$(PATHDELIM)*
+	rm -rf cad_source$(PATHDELIM)components$(PATHDELIM)metadarkstyle$(PATHDELIM)examples$(PATHDELIM)defaultallowdark$(PATHDELIM)backup
 	rm -rf cad_source$(PATHDELIM)components$(PATHDELIM)zcontainers$(PATHDELIM)backup$(PATHDELIM)*
+	rm -rf cad_source$(PATHDELIM)components$(PATHDELIM)zcontainers$(PATHDELIM)backup
 	rm -rf cad_source$(PATHDELIM)components$(PATHDELIM)zbaseutils$(PATHDELIM)backup$(PATHDELIM)*
+	rm -rf cad_source$(PATHDELIM)components$(PATHDELIM)zbaseutils$(PATHDELIM)backup
 	rm -rf cad_source$(PATHDELIM)components$(PATHDELIM)zbaseutilsgui$(PATHDELIM)backup$(PATHDELIM)*
+	rm -rf cad_source$(PATHDELIM)components$(PATHDELIM)zbaseutilsgui$(PATHDELIM)backup
+	rm -rf cad_source$(PATHDELIM)components$(PATHDELIM)zbaseutilsgui$(PATHDELIM)examples$(PATHDELIM)simpleapp$(PATHDELIM)backup$(PATHDELIM)*
+	rm -rf cad_source$(PATHDELIM)components$(PATHDELIM)zbaseutilsgui$(PATHDELIM)examples$(PATHDELIM)simpleapp$(PATHDELIM)backup
 	rm -rf cad_source$(PATHDELIM)components$(PATHDELIM)zebase$(PATHDELIM)backup$(PATHDELIM)*
+	rm -rf cad_source$(PATHDELIM)components$(PATHDELIM)zebase$(PATHDELIM)backup
 	rm -rf cad_source$(PATHDELIM)components$(PATHDELIM)zcontrols$(PATHDELIM)backup$(PATHDELIM)*
+	rm -rf cad_source$(PATHDELIM)components$(PATHDELIM)zcontrols$(PATHDELIM)backup
 	rm -rf cad_source$(PATHDELIM)components$(PATHDELIM)zmacros$(PATHDELIM)src$(PATHDELIM)backup$(PATHDELIM)*
+	rm -rf cad_source$(PATHDELIM)components$(PATHDELIM)zmacros$(PATHDELIM)src$(PATHDELIM)backup
 	rm -rf cad_source$(PATHDELIM)components$(PATHDELIM)zmath$(PATHDELIM)backup$(PATHDELIM)*
+	rm -rf cad_source$(PATHDELIM)components$(PATHDELIM)zmath$(PATHDELIM)backup
 	rm -rf cad_source$(PATHDELIM)components$(PATHDELIM)zobjectinspector$(PATHDELIM)backup$(PATHDELIM)*
+	rm -rf cad_source$(PATHDELIM)components$(PATHDELIM)zobjectinspector$(PATHDELIM)backup
 	rm -rf cad_source$(PATHDELIM)components$(PATHDELIM)zscriptbase$(PATHDELIM)backup$(PATHDELIM)*
+	rm -rf cad_source$(PATHDELIM)components$(PATHDELIM)zscriptbase$(PATHDELIM)backup
 	rm -rf cad_source$(PATHDELIM)components$(PATHDELIM)zscript$(PATHDELIM)backup$(PATHDELIM)*
+	rm -rf cad_source$(PATHDELIM)components$(PATHDELIM)zscript$(PATHDELIM)backup
 	rm -rf cad_source$(PATHDELIM)components$(PATHDELIM)ztoolbars$(PATHDELIM)src$(PATHDELIM)backup$(PATHDELIM)*
+	rm -rf cad_source$(PATHDELIM)components$(PATHDELIM)ztoolbars$(PATHDELIM)src$(PATHDELIM)backup
 	rm -rf cad_source$(PATHDELIM)components$(PATHDELIM)zundostack$(PATHDELIM)backup$(PATHDELIM)*
+	rm -rf cad_source$(PATHDELIM)components$(PATHDELIM)zundostack$(PATHDELIM)backup
 	rm -rf cad_source$(PATHDELIM)components$(PATHDELIM)fpdwg$(PATHDELIM)backup$(PATHDELIM)*
+	rm -rf cad_source$(PATHDELIM)components$(PATHDELIM)fpdwg$(PATHDELIM)backup
 	rm -rf cad_source$(PATHDELIM)components$(PATHDELIM)zreaders$(PATHDELIM)src$(PATHDELIM)backup$(PATHDELIM)*
+	rm -rf cad_source$(PATHDELIM)components$(PATHDELIM)zreaders$(PATHDELIM)src$(PATHDELIM)backup
 	rm -rf cad_source$(PATHDELIM)components$(PATHDELIM)fphunspell$(PATHDELIM)src$(PATHDELIM)backup$(PATHDELIM)*
-	rm -rf cad_source$(PATHDELIM)simplecad$(PATHDELIM)lib$(PATHDELIM)*
-	rm -rf lib$(PATHDELIM)*
+	rm -rf cad_source$(PATHDELIM)components$(PATHDELIM)fphunspell$(PATHDELIM)src$(PATHDELIM)backup$
+	rm -rf cad_source$(PATHDELIM)backup$(PATHDELIM)*
+	rm -rf cad_source$(PATHDELIM)backup
+	rm -rf cad_source$(PATHDELIM)other$(PATHDELIM)backup
+	rm -rf cad_source$(PATHDELIM)simplecad$(PATHDELIM)backup
+	rm -rf cad_source$(PATHDELIM)zcad$(PATHDELIM)backup
+	rm -rf cad_source$(PATHDELIM)zcad$(PATHDELIM)commands$(PATHDELIM)backup
+	rm -rf cad_source$(PATHDELIM)zcad$(PATHDELIM)core$(PATHDELIM)backup
+	rm -rf cad_source$(PATHDELIM)zcad$(PATHDELIM)core$(PATHDELIM)drawings$(PATHDELIM)backup
+	rm -rf cad_source$(PATHDELIM)zcad$(PATHDELIM)core$(PATHDELIM)undostack$(PATHDELIM)backup
+	rm -rf cad_source$(PATHDELIM)zcad$(PATHDELIM)core$(PATHDELIM)utils$(PATHDELIM)backup
+	rm -rf cad_source$(PATHDELIM)zcad$(PATHDELIM)devicebase$(PATHDELIM)backup
+	rm -rf cad_source$(PATHDELIM)zcad$(PATHDELIM)electrotech$(PATHDELIM)backup
+	rm -rf cad_source$(PATHDELIM)zcad$(PATHDELIM)entities$(PATHDELIM)backup
+	rm -rf cad_source$(PATHDELIM)zcad$(PATHDELIM)gui$(PATHDELIM)backup
+	rm -rf cad_source$(PATHDELIM)zcad$(PATHDELIM)gui$(PATHDELIM)forms$(PATHDELIM)backup
+	rm -rf cad_source$(PATHDELIM)zcad$(PATHDELIM)gui$(PATHDELIM)odjectinspector$(PATHDELIM)backup
+	rm -rf cad_source$(PATHDELIM)zcad$(PATHDELIM)lclmod$(PATHDELIM)backup
+	rm -rf cad_source$(PATHDELIM)zcad$(PATHDELIM)register$(PATHDELIM)backup
+	rm -rf cad_source$(PATHDELIM)zcad$(PATHDELIM)velec$(PATHDELIM)backup
+	rm -rf cad_source$(PATHDELIM)zengine$(PATHDELIM)backup
+	rm -rf cad_source$(PATHDELIM)zengine$(PATHDELIM)containers$(PATHDELIM)backup
+	rm -rf cad_source$(PATHDELIM)zengine$(PATHDELIM)core$(PATHDELIM)backup
+	rm -rf cad_source$(PATHDELIM)zengine$(PATHDELIM)core$(PATHDELIM)drawings$(PATHDELIM)backup
+	rm -rf cad_source$(PATHDELIM)zengine$(PATHDELIM)core$(PATHDELIM)entities$(PATHDELIM)backup
+	rm -rf cad_source$(PATHDELIM)zengine$(PATHDELIM)core$(PATHDELIM)objects$(PATHDELIM)backup
+	rm -rf cad_source$(PATHDELIM)zengine$(PATHDELIM)core$(PATHDELIM)utils$(PATHDELIM)backup
+	rm -rf cad_source$(PATHDELIM)zengine$(PATHDELIM)fileformats$(PATHDELIM)backup
+	rm -rf cad_source$(PATHDELIM)zengine$(PATHDELIM)fonts$(PATHDELIM)backup
+	rm -rf cad_source$(PATHDELIM)zengine$(PATHDELIM)misc$(PATHDELIM)backup
+	rm -rf cad_source$(PATHDELIM)zengine$(PATHDELIM)styles$(PATHDELIM)backup
+	rm -rf cad_source$(PATHDELIM)zengine$(PATHDELIM)tests$(PATHDELIM)backup
+	rm -rf cad_source$(PATHDELIM)zengine$(PATHDELIM)zgl$(PATHDELIM)backup
+	rm -rf cad_source$(PATHDELIM)zengine$(PATHDELIM)zgl$(PATHDELIM)drawers$(PATHDELIM)backup
 
 
 installpkgstolaz: checkvars rmpkgslibs

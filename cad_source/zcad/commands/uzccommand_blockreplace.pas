@@ -175,7 +175,7 @@ begin
     drawings.GetCurrentROOT^.ObjArray.ObjTree.CorrectNodeBoundingBox(nb^);
     nb^.Visible:=0;
     drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.Count := 0;
-    nb^.RenderFeedback(drawings.GetCurrentDWG^.pcamera^.POSCOUNT,drawings.GetCurrentDWG^.pcamera^,drawings.GetCurrentDWG^.myGluProject2,dc);
+    //nb^.RenderFeedback(drawings.GetCurrentDWG^.pcamera^.POSCOUNT,drawings.GetCurrentDWG^.pcamera^,drawings.GetCurrentDWG^.myGluProject2,dc);
 
 
      pb^.YouDeleted(drawings.GetCurrentDWG^);

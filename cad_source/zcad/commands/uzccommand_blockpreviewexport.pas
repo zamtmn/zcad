@@ -112,7 +112,7 @@ begin
     pb^.FormatEntity(cdwg^,dc);
     drawings.GetCurrentROOT^.ObjArray.ObjTree.CorrectNodeBoundingBox(pb^);
     cdwg^.ConstructObjRoot.ObjArray.Count := 0;
-    pb^.RenderFeedback(cdwg^.pcamera^.POSCOUNT,cdwg^.pcamera^,@cdwg^.myGluProject2,dc);
+    //pb^.RenderFeedback(cdwg^.pcamera^.POSCOUNT,cdwg^.pcamera^,@cdwg^.myGluProject2,dc);
 
 
     PrintParam.FitToPage:=true;

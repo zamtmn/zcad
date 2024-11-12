@@ -144,7 +144,7 @@ begin
         comit;
       end;
       p3dpl^.Formatentity(drawings.GetCurrentDWG^,dc);
-      p3dpl^.RenderFeedback(drawings.GetCurrentDWG^.pcamera^.POSCOUNT,drawings.GetCurrentDWG^.pcamera^,@drawings.GetCurrentDWG^.myGluProject2,dc);
+      //p3dpl^.RenderFeedback(drawings.GetCurrentDWG^.pcamera^.POSCOUNT,drawings.GetCurrentDWG^.pcamera^,@drawings.GetCurrentDWG^.myGluProject2,dc);
       result:=1;
       zcRedrawCurrentDrawing;
     end;

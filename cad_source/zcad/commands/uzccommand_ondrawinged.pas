@@ -136,7 +136,7 @@ begin
       drawings.GetCurrentDWG^{.UndoStack}.PushStartMarker('On drawing edit');
       modifyobj(dist,wc,true,pobj,drawings.GetCurrentDWG^,@drawings.GetCurrentDWG^.SelObjArray);
       drawings.GetCurrentDWG^{.UndoStack}.PushEndMarker;
-      drawings.GetCurrentDWG^.SelObjArray.resprojparam(drawings.GetCurrentDWG^.pcamera^.POSCOUNT,drawings.GetCurrentDWG^.pcamera^,@drawings.GetCurrentDWG^.myGluProject2,dc);
+      //drawings.GetCurrentDWG^.SelObjArray.resprojparam(drawings.GetCurrentDWG^.pcamera^.POSCOUNT,drawings.GetCurrentDWG^.pcamera^,@drawings.GetCurrentDWG^.myGluProject2,dc);
 
 
       if fixentities then

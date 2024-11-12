@@ -1052,7 +1052,7 @@ begin
   //gdb.GetCurrentROOT.calcvisible(gdb.GetCurrentDWG.pcamera^.frustum,gdb.GetCurrentDWG.pcamera.POSCOUNT,gdb.GetCurrentDWG.pcamera.VISCOUNT);
   pdwg.GetCurrentROOT.calcvisible(pdwg.getpcamera^.frustum,pdwg.getpcamera.POSCOUNT,pdwg.getpcamera.VISCOUNT,pdwg.getpcamera.totalobj,pdwg.getpcamera.infrustum,pdwg.myGluProject2,pdwg.getpcamera.prop.zoom,SysVarRDImageDegradationCurrentDegradationFactor);
   DC:=self.CreateRC;
-  pdwg.GetSelObjArray.RenderFeedBack(pdwg^.GetPcamera^.POSCOUNT,pdwg^.GetPcamera^,pdwg^.myGluProject2,dc);
+  //pdwg.GetSelObjArray.RenderFeedBack(pdwg^.GetPcamera^.POSCOUNT,pdwg^.GetPcamera^,pdwg^.myGluProject2,dc);
 
   calcmousefrustum;
 
@@ -1992,19 +1992,19 @@ begin
   if param.processObjConstruct then
                                    findonmobj(@PDWG.GetConstructObjRoot.ObjArray,i,InSubEntry);
 
-  pp:=PDWG.GetOnMouseObj.beginiterate(ir);
+  {pp:=PDWG.GetOnMouseObj.beginiterate(ir);
   if pp<>nil then
                  begin
                       param.lastonmouseobject:=pp;
                       dc:=CreateRC;
                       repeat
-                            if pp^.vp.LastCameraPos<>PDWG.Getpcamera^.POSCOUNT then
-                            pp^.RenderFeedback(PDWG.Getpcamera^.POSCOUNT,PDWG.Getpcamera^,PDWG.myGluProject2,dc);
+                            //if pp^.vp.LastCameraPos<>PDWG.Getpcamera^.POSCOUNT then
+                            //pp^.RenderFeedback(PDWG.Getpcamera^.POSCOUNT,PDWG.Getpcamera^,PDWG.myGluProject2,dc);
 
 
                             pp:=PDWG.GetOnMouseObj.iterate(ir);
                       until pp=nil;
-                 end;
+                 end;}
 
   {gdb.GetCurrentDWG.OnMouseObj.clear;
   param.SelDesc.OnMouseObject := nil;
@@ -2089,7 +2089,7 @@ begin
   param.SelDesc.OnMouseObject := nil;
   findonmobj(pva, i,InSubEntry);
   pp:=PDWG.GetOnMouseObj.beginiterate(ir);
-  if pp<>nil then
+  {if pp<>nil then
                  begin
                      param.lastonmouseobject:=pp;
                      dc:=CreateRC;
@@ -2100,7 +2100,7 @@ begin
 
                             pp:=PDWG.GetOnMouseObj.iterate(ir);
                       until pp=nil;
-                 end;
+                 end;}
 
   {gdb.GetCurrentDWG.OnMouseObj.clear;
   wa.param.SelDesc.OnMouseObject := nil;

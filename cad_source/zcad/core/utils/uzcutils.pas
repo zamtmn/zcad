@@ -317,7 +317,7 @@ begin
   begin
   drawings.GetCurrentROOT^.ObjArray.ObjTree.CorrectNodeBoundingBox(result^);
   result^.Visible:=0;
-  result^.RenderFeedback(drawings.GetCurrentDWG^.pcamera^.POSCOUNT,drawings.GetCurrentDWG^.pcamera^,drawings.GetCurrentDWG^.myGluProject2,dc);
+  //result^.RenderFeedback(drawings.GetCurrentDWG^.pcamera^.POSCOUNT,drawings.GetCurrentDWG^.pcamera^,drawings.GetCurrentDWG^.myGluProject2,dc);
   end;
 end;
 function zcGetSelEntsDeskInCurrentRoot:TSelEntsDesk;

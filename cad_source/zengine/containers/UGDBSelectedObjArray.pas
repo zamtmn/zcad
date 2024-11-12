@@ -46,7 +46,7 @@ GDBSelectedObjArray= object(GZVector{-}<selectedobjdesc>{//})
                           function getonlyoutbound(var DC:TDrawContext):TBoundingBox;
                           procedure selectcurrentcontrolpoint(key:Byte;mx,my,h:integer);virtual;
                           procedure selectcontrolpointinframe(f1,f2: GDBvertex2DI);virtual;
-                          procedure RenderFeedBack(pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc;var DC:TDrawContext);virtual;
+                          //procedure RenderFeedBack(pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc;var DC:TDrawContext);virtual;
                           //destructor done;virtual;
                           procedure freeclones;
                           procedure Transform(const dispmatr:DMatrix4D);
@@ -57,12 +57,12 @@ GDBSelectedObjArray= object(GZVector{-}<selectedobjdesc>{//})
                           procedure drawobj(var DC:TDrawContext{infrustumactualy:TActulity;subrender:Integer});virtual;
                           procedure freeelement(PItem:PT);virtual;
                           procedure calcvisible(const frustum:cliparray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:Integer; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double);virtual;
-                          procedure resprojparam(pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc;var DC:TDrawContext);
+                          //procedure resprojparam(pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc;var DC:TDrawContext);
                     end;
 {EXPORT-}
 implementation
 //uses uzedrawingabstract,uzeentgenericsubentry;
-procedure GDBSelectedObjArray.resprojparam;
+{procedure GDBSelectedObjArray.resprojparam;
 var tdesc:pselectedobjdesc;
     i:Integer;
 begin
@@ -71,12 +71,11 @@ begin
        tdesc:=GetParrayAsPointer;
        for i:=0 to count-1 do
        begin
-            //dec(tdesc^.objaddr^.vp.LastCameraPos);
             tdesc^.objaddr^.Renderfeedback(pcount,camera,ProjectProc,dc);
             inc(tdesc);
        end;
   end;
-end;
+end;}
 procedure GDBSelectedObjArray.freeelement;
 begin
   if PSelectedObjDesc(PItem).pcontrolpoint<>nil then
@@ -167,7 +166,7 @@ begin
        dc.drawer.SetPointSize(1);
   end;
 end;
-procedure GDBSelectedObjArray.RenderFeedBack;
+{procedure GDBSelectedObjArray.RenderFeedBack;
 var tdesc:pselectedobjdesc;
     i:Integer;
 begin
@@ -187,7 +186,8 @@ begin
             inc(tdesc);
        end;
   end;
-end;procedure GDBSelectedObjArray.drawobject;
+end;}
+procedure GDBSelectedObjArray.drawobject;
 var tdesc:pselectedobjdesc;
     i:Integer;
 begin

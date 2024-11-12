@@ -93,8 +93,8 @@ GDBObjEntity= object(GDBObjSubordinated)
                     procedure Draw(lw:Integer;var DC:TDrawContext{visibleactualy:TActulity;subrender:Integer});virtual;
                     procedure DrawG(lw:Integer;var DC:TDrawContext{visibleactualy:TActulity;subrender:Integer});virtual;
 
-                    procedure RenderFeedback(pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc;var DC:TDrawContext);virtual;
-                    procedure RenderFeedbackIFNeed(pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc;var DC:TDrawContext);virtual;
+                    //procedure RenderFeedback(pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc;var DC:TDrawContext);virtual;
+                    //procedure RenderFeedbackIFNeed(pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc;var DC:TDrawContext);virtual;
                     function CalculateLineWeight(const DC:TDrawContext):Integer;//inline;
                     //function InRect:TInRect;virtual;
                     function Clone(own:Pointer):PGDBObjEntity;virtual;
@@ -668,15 +668,15 @@ begin
                   dc.selected:=_selected;
              end;
 end;
-procedure GDBObjEntity.RenderFeedbackIFNeed;
+{procedure GDBObjEntity.RenderFeedbackIFNeed;
 begin
   if vp.LastCameraPos<>pcount then
     Renderfeedback(pcount,camera,ProjectProc,dc);
-end;
-procedure GDBObjEntity.Renderfeedback;
+end;}
+{procedure GDBObjEntity.Renderfeedback;
 begin
   vp.LastCameraPos:=pcount;
-end;
+end;}
 
 {procedure GDBObjEntity.format;
 begin

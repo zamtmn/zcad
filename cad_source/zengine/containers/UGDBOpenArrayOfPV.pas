@@ -295,7 +295,7 @@ begin
                          p^.vp.ID:=p^.vp.ID;}
        if (p^.infrustum=infrustumactualy)or(p^.Selected) then
                                             begin
-                                                 p^.renderfeedback(pcount,camera,ProjectProc,dc);
+                                                 //p^.renderfeedback(pcount,camera,ProjectProc,dc);
                                             end;
        p:=iterate(ir);
   until p=nil;

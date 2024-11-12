@@ -410,25 +410,6 @@ begin
   end
 end;
 
-{function _3DPolyEd_com_AfterClick(wc: GDBvertex; mc: GDBvertex2DI; button: Byte;osp:pos_record;mclick:Integer): Integer;
-var po:PGDBObjSubordinated;
-begin
-  exit;
-  result:=mclick;
-  p3dpl^.vp.Layer :=drawings.LayerTable.GetCurrentLayer;
-  p3dpl^.vp.lineweight := sysvar.dwg.DWG_CLinew^;
-  //p3dpl^.CoordInOCS.lEnd:= wc;
-  p3dpl^.Format;
-  if button = 1 then
-  begin
-    p3dpl^.AddVertex(wc);
-    p3dpl^.RenderFeedback;
-    drawings.GetCurrentDWG^.ConstructObjRoot.Count := 0;
-    result:=1;
-    redrawoglwnd;
-  end;
-end;}
-
 initialization
   programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
   PEProp.Action:=TSPE_Insert;

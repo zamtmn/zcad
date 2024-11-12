@@ -169,7 +169,7 @@ begin
                              if r<>IREmpty then
                                                begin
                                                  Ents.PushBackData(pv);
-                                                 pv^.RenderFeedbackIFNeed(drawings.GetCurrentDWG.pcamera^.POSCOUNT,drawings.GetCurrentDWG.pcamera^,drawings.GetCurrentDWG^.myGluProject2,dc);
+                                                 //pv^.RenderFeedbackIFNeed(drawings.GetCurrentDWG.pcamera^.POSCOUNT,drawings.GetCurrentDWG.pcamera^,drawings.GetCurrentDWG^.myGluProject2,dc);
                                                  drawings.GetCurrentDWG.wa.param.SelDesc.LastSelectedObject:=pv;
                                                end;
                         end
@@ -178,7 +178,7 @@ begin
                              if r=IRFully then
                                               begin
                                                 Ents.PushBackData(pv);
-                                                pv^.RenderFeedbackIFNeed(drawings.GetCurrentDWG.pcamera^.POSCOUNT,drawings.GetCurrentDWG.pcamera^,drawings.GetCurrentDWG^.myGluProject2,dc);
+                                                //pv^.RenderFeedbackIFNeed(drawings.GetCurrentDWG.pcamera^.POSCOUNT,drawings.GetCurrentDWG.pcamera^,drawings.GetCurrentDWG^.myGluProject2,dc);
                                                 drawings.GetCurrentDWG.wa.param.SelDesc.LastSelectedObject:=pv;
                                               end;
                         end

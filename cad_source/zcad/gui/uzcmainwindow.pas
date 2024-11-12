@@ -1807,7 +1807,7 @@ procedure TZCADMainWindow.WaShowCursor(Sender:TAbstractViewArea;var DC:TDrawCont
 begin
      if sender.param.lastonmouseobject<>nil then
                                            begin
-                                             PGDBObjEntity(sender.param.lastonmouseobject)^.RenderFeedBack(sender.pdwg.GetPcamera^.POSCOUNT,sender.pdwg^.GetPcamera^, sender.pdwg^.myGluProject2,dc);
+                                             //PGDBObjEntity(sender.param.lastonmouseobject)^.RenderFeedBack(sender.pdwg.GetPcamera^.POSCOUNT,sender.pdwg^.GetPcamera^, sender.pdwg^.myGluProject2,dc);
                                              pGDBObjEntity(sender.param.lastonmouseobject)^.higlight(dc);
                                            end;
 end;

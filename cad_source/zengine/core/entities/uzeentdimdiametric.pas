@@ -253,7 +253,7 @@ end;
 constructor GDBObjDiametricDimension.initnul;
 begin
   inherited initnul;
-  PProjPoint:=nil;
+  //PProjPoint:=nil;
   bp.ListPos.Owner:=owner;
   //vp.ID := GDBDiametricDimensionID;
   DimData.P13InWCS := createvertex(1,1,0);
@@ -262,7 +262,7 @@ end;
 constructor GDBObjDiametricDimension.init;
 begin
   inherited init(own,layeraddres, lw);
-  PProjPoint:=nil;
+  //PProjPoint:=nil;
   //vp.ID := GDBDiametricDimensionID;
   DimData.P13InWCS := createvertex(1,1,0);
   DimData.P14InWCS:= createvertex(300,1,0);

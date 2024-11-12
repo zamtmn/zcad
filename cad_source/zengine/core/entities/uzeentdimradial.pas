@@ -140,7 +140,7 @@ end;
 constructor GDBObjRadialDimension.init;
 begin
   inherited init(own,layeraddres, lw);
-  PProjPoint:=nil;
+  //PProjPoint:=nil;
   //vp.ID := GDBRadialDimensionID;
 end;
 function GDBObjRadialDimension.GetObjType;

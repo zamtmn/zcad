@@ -271,6 +271,7 @@ function GetIntegerFromSavedUnit(const name,suffix:string;def,min,max:integer):i
 function GetAnsiStringFromSavedUnit(const name,suffix:ansistring;const def:ansistring):ansistring;
 function GetBooleanFromSavedUnit(const name,suffix:ansistring;def:Boolean):Boolean;
 procedure StoreIntegerToSavedUnit(const name,suffix:string;value:integer);
+procedure StoreBooleanToSavedUnit(const name,suffix:string;value:Boolean);
 procedure StoreAnsiStringToSavedUnit(const name,suffix:string;const value:string);
 procedure RegisterVarCategory(const CategoryName,CategoryUserName:string;TranslateFunc:TTranslateFunction);
 implementation
@@ -370,6 +371,20 @@ begin
      else
        pint:=pvd^.data.Addr.Instance;
      pint^:=value;
+end;
+procedure StoreBooleanToSavedUnit(const name,suffix:string;value:Boolean);
+var
+   pbool:PBoolean;
+   pvd:pvardesk;
+   vn:TInternalScriptString;
+begin
+     vn:=name+suffix;
+     pvd:=SavedUnit.FindValue(vn);
+     if not assigned(pvd) then
+       pbool:=SavedUnit.CreateVariable(vn,'Boolean').data.Addr.instance
+     else
+       pbool:=pvd^.data.Addr.Instance;
+     pbool^:=value;
 end;
 procedure StoreAnsiStringToSavedUnit(const name,suffix:string;const value:string);
 var

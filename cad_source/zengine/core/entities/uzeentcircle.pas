@@ -47,7 +47,7 @@ GDBObjCircle= object(GDBObjWithLocalCS)
                  procedure CalcObjMatrix(pdrawing:PTDrawingDef=nil);virtual;
                  function calcinfrustum(const frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:Integer; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double):Boolean;virtual;
                  function CalcTrueInFrustum(const frustum:ClipArray;visibleactualy:TActulity):TInBoundingVolume;virtual;
-                 procedure RenderFeedback(pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc;var DC:TDrawContext);virtual;
+                 //procedure RenderFeedback(pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc;var DC:TDrawContext);virtual;
                  procedure getoutbound(var DC:TDrawContext);virtual;
                  procedure SaveToDXF(var outhandle:{Integer}TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
                  procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext;Stage:TEFStages=EFAllStages);virtual;
@@ -256,7 +256,7 @@ begin
   inherited initnul(nil);
   //vp.ID := GDBCircleID;
   Radius := 1;
-  PProjoutbound:=nil;
+  //PProjoutbound:=nil;
   Vertex3D_in_WCS_Array.init(4);
 end;
 constructor GDBObjCircle.init;
@@ -269,7 +269,7 @@ begin
   Local.basis.oz:=ZWCS;
   Radius := rr;
   //ObjToString('','');
-  PProjoutbound:=nil;
+  //PProjoutbound:=nil;
   Vertex3D_in_WCS_Array.init(4);
   //format;
 end;
@@ -341,11 +341,11 @@ begin
 
 
 
-  if PProjoutbound=nil then
+  {if PProjoutbound=nil then
   begin
        Getmem(Pointer(PProjoutbound),sizeof(GDBOOutbound2DIArray));
        PProjoutbound^.init(4);
-  end;
+  end;}
 end;
 procedure GDBObjCircle.createpoint(var DC:TDrawContext);
 var
@@ -379,45 +379,7 @@ begin
   until pvertex=nil;
   Vertex3D_in_WCS_Array.Shrink;
 end;
-procedure GDBObjCircle.Renderfeedback;
-var //pm:DMatrix4D;
-    tv:GDBvertex;
-    d:Double;
-begin
-           //myGluProject(Local.p_insert.x,Local.p_insert.y,Local.p_insert.z,@POGLWnd^.pcamera^.modelMatrix,@POGLWnd^.pcamera^.projMatrix,@POGLWnd^.pcamera^.viewport,ProjP_insert.x,ProjP_insert.y,ProjP_insert.z);
-           {gdb.GetCurrentDWG^.myGluProject2}ProjectProc(P_insert_in_WCS,ProjP_insert);
-           if assigned(pprojoutbound)then
-             pprojoutbound^.clear
-           else
-             getoutbound(dc);
-           //pm:=gdb.GetCurrentDWG.pcamera^.modelMatrix;
-           {gdb.GetCurrentDWG^.myGluProject2}ProjectProc(outbound[0],tv);
-           pprojoutbound^.PushBackIfNotLastWithCompareProc(ToVertex2DI(tv),EqualVertex2DI);
-           {gdb.GetCurrentDWG^.myGluProject2}ProjectProc(outbound[1],tv);
-           pprojoutbound^.PushBackIfNotLastWithCompareProc(ToVertex2DI(tv),EqualVertex2DI);
-           {gdb.GetCurrentDWG^.myGluProject2}ProjectProc(outbound[2],tv);
-           pprojoutbound^.PushBackIfNotLastWithCompareProc(ToVertex2DI(tv),EqualVertex2DI);
-           {gdb.GetCurrentDWG^.myGluProject2}ProjectProc(outbound[3],tv);
-           pprojoutbound^.PushBackIfNotLastOrFirstWithCompareProc(ToVertex2DI(tv),EqualVertex2DI);
-           if pprojoutbound^.count<4 then
-           begin
-            lod:=4;
-            //projectpoint;
-           end
-           else
-           begin
-                d:=pprojoutbound^.perimetr;
-                d:=d/10;
-                if d>255 then d:=255;
-                if d<10 then d:=10;
-                if lod<>round(d) then
-                begin
-                     lod:=round(d);
-                     createpoint(dc);
-                end;
-                projectpoint;
-           end;
-end;
+
 procedure GDBObjCircle.CalcObjMatrix;
 var m1{,m2,m3,m4}:DMatrix4D;
 begin
@@ -579,7 +541,8 @@ begin
             then
             begin
             osp.worldcoord:=P_insert_in_WCS;
-            osp.dispcoord:=ProjP_insert;
+            ProjectProc(osp.worldcoord,osp.dispcoord);
+            //osp.dispcoord:=ProjP_insert;
             osp.ostype:=os_center;
             end
             else osp.ostype:=os_none;

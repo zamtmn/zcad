@@ -38,8 +38,8 @@ GDBObjWithLocalCS= object(GDBObjWithMatrix)
 
                //**получить на чтение координаты в мировой системе координат
                P_insert_in_WCS:GDBvertex;
-               ProjP_insert:GDBvertex;
-               PProjOutBound:PGDBOOutbound2DIArray;
+               //ProjP_insert:GDBvertex;
+               //PProjOutBound:PGDBOOutbound2DIArray;
                lod:Byte;
                constructor init(own:Pointer;layeraddres:PGDBLayerProp;LW:SmallInt);
                constructor initnul(owner:PGDBObjGenericWithSubordinated);
@@ -51,7 +51,6 @@ GDBObjWithLocalCS= object(GDBObjWithMatrix)
                procedure CalcObjMatrix(pdrawing:PTDrawingDef=nil);virtual;
                function CalcObjMatrixWithoutOwner:DMatrix4D;virtual;
                procedure transform(const t_matrix:DMatrix4D);virtual;
-               procedure Renderfeedback(pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc;var DC:TDrawContext);virtual;
                function GetCenterPoint:GDBVertex;virtual;
                procedure createfield;virtual;
 
@@ -118,9 +117,9 @@ begin
   oglsm.myglVertex2d(ProjP_insert.x,ProjP_insert.y-10);
   oglsm.myglVertex2d(ProjP_insert.x,ProjP_insert.y+10);
   oglsm.myglend;}
-  dc.drawer.DrawLine2DInDCS(ProjP_insert.x-10,ProjP_insert.y,ProjP_insert.x+10,ProjP_insert.y);
-  dc.drawer.DrawLine2DInDCS(ProjP_insert.x,ProjP_insert.y-10,ProjP_insert.x,ProjP_insert.y+10);
-  if PProjOutBound<>nil then PProjOutBound.DrawGeometry(dc);
+  //dc.drawer.DrawLine2DInDCS(ProjP_insert.x-10,ProjP_insert.y,ProjP_insert.x+10,ProjP_insert.y);
+  //dc.drawer.DrawLine2DInDCS(ProjP_insert.x,ProjP_insert.y-10,ProjP_insert.x,ProjP_insert.y+10);
+  //if PProjOutBound<>nil then PProjOutBound.DrawGeometry(dc);
 
 end;
 procedure GDBObjWithLocalCS.TransformAt;
@@ -148,21 +147,13 @@ begin
      inherited;
      Local.P_insert:=nulvertex;
      P_insert_in_WCS:=nulvertex;
-     ProjP_insert:=nulvertex;
-     PProjOutBound:=nil;
+     //ProjP_insert:=nulvertex;
+     //PProjOutBound:=nil;
      lod:=0;
 end;
 function GDBObjWithLocalCS.GetCenterPoint;
 begin
      result:=P_insert_in_WCS;
-end;
-procedure GDBObjWithLocalCS.Renderfeedback;
-//var pm:DMatrix4D;
-//    tv:GDBvertex;
-begin
-           inherited;
-           ProjectProc(P_insert_in_WCS,ProjP_insert);
-           if pprojoutbound<>nil then pprojoutbound^.clear;
 end;
 constructor GDBObjWithLocalCS.initnul;
 begin
@@ -172,7 +163,7 @@ begin
   Local.basis.oz:=ZWCS;
   local.p_insert:=nulvertex;
   inherited initnul(owner);
-  pprojoutbound:=nil;
+  //pprojoutbound:=nil;
 end;
 constructor GDBObjWithLocalCS.init;
 var
@@ -193,7 +184,7 @@ begin
   Local.basis.oz:=ZWCS;
   end;
 
-  pprojoutbound:=nil;
+  //pprojoutbound:=nil;
   //CalcObjMatrix;
 end;
 procedure GDBObjWithLocalCS.FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext;Stage:TEFStages=EFAllStages);
@@ -309,11 +300,11 @@ begin
 end;
 destructor GDBObjWithLocalCS.done;
 begin
-          if assigned(PProjoutbound) then
+          (*if assigned(PProjoutbound) then
                             begin
                             PProjoutbound^.{FreeAnd}Done;
                             Freemem(Pointer(PProjoutbound));
-                            end;
+                            end;*)
           inherited done;
 end;
 begin

@@ -102,7 +102,7 @@ begin
   textprop.justify := jstl;
   //Representation.SHX.init(100);
   //Vertex2D_in_DCS_Array.init({100);
-  PProjoutbound:=nil;
+  //PProjoutbound:=nil;
 end;
 constructor GDBObjText.init;
 begin
@@ -118,7 +118,7 @@ begin
   textprop.justify := j;
   //Representation.SHX.init(1000);
   //Vertex2D_in_DCS_Array.init(100);
-  PProjoutbound:=nil;
+  //PProjoutbound:=nil;
   //format;
 end;
 function GDBObjText.GetObjType;
@@ -383,13 +383,6 @@ begin
 
   vp.BoundingBox.LBN:=CreateVertex(l,B,n);
   vp.BoundingBox.RTF:=CreateVertex(r,T,f);
-
-
-  if PProjoutbound=nil then
-  begin
-       Getmem(Pointer(PProjoutbound),sizeof(GDBOOutbound2DIArray));
-       PProjoutbound^.init(4);
-  end;
 end;
 (*procedure GDBObjText.CreateSymbol(_symbol:Integer;matr:DMatrix4D;var minx,miny,maxx,maxy:Double;pfont:pgdbfont;ln:Integer);
 var
@@ -567,7 +560,8 @@ begin
             then
             begin
             osp.worldcoord:=P_insert_in_WCS;
-            osp.dispcoord:=ProjP_insert;
+            ProjectProc(osp.worldcoord,osp.dispcoord);
+            //osp.dispcoord:=ProjP_insert;
             osp.ostype:=os_textinsert;
             end
             else osp.ostype:=os_none;

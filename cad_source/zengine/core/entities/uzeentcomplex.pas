@@ -99,16 +99,20 @@ begin
 end;
 
 procedure GDBObjComplex.remaponecontrolpoint(pdesc:pcontrolpointdesc;ProjectProc:GDBProjectProc);
+var
+  tv:GDBvertex;
 begin
   if pdesc^.pointtype=os_point then begin
     if pdesc.PDrawable=nil then begin
       pdesc.worldcoord:=self.P_insert_in_WCS;
-      pdesc.dispcoord.x:=round(ProjP_insert.x);
-      pdesc.dispcoord.y:=round(ProjP_insert.y);
+      ProjectProc(pdesc.worldcoord,tv);
+      pdesc.dispcoord:=ToVertex2DI(tv);
     end else begin
       pdesc.worldcoord:=PGDBObjComplex(pdesc.PDrawable).P_insert_in_WCS;
-      pdesc.dispcoord.x:=round(PGDBObjComplex(pdesc.PDrawable).ProjP_insert.x);
-      pdesc.dispcoord.y:=round(PGDBObjComplex(pdesc.PDrawable).ProjP_insert.y);
+      ProjectProc(pdesc.worldcoord,tv);
+      pdesc.dispcoord:=ToVertex2DI(tv);
+      //pdesc.dispcoord.x:=round(PGDBObjComplex(pdesc.PDrawable).ProjP_insert.x);
+      //pdesc.dispcoord.y:=round(PGDBObjComplex(pdesc.PDrawable).ProjP_insert.y);
       pdesc.dcoord:=vertexsub(PGDBObjComplex(pdesc.PDrawable).P_insert_in_WCS,P_insert_in_WCS);
     end
 

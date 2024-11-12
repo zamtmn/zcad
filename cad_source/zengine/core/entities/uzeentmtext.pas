@@ -830,11 +830,11 @@ begin
   v.w:=1;
   v:=VectorTransform(v,objMatrix);
   outbound[3]:=pgdbvertex(@v)^;
-  if PProjoutbound=nil then
+  {if PProjoutbound=nil then
   begin
        Getmem(Pointer(PProjoutbound),sizeof(GDBOOutbound2DIArray));
        PProjoutbound^.init(4);
-  end;
+  end;}
 
   {plp:=pl.beginiterate(ir);
   plp2:=pl.iterate(ir);
@@ -977,7 +977,7 @@ begin
   //ptext := nil;
   //text.init(10);
   //Vertex2D_in_DCS_Array.init(100);
-  PProjoutbound:=nil;
+  //PProjoutbound:=nil;
   //format;
 end;
 function z2dxfmtext(s:String;var ul:boolean):String;

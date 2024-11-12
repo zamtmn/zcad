@@ -149,7 +149,7 @@ end;
 constructor GDBObjHatch.initnul;
 begin
   inherited initnul(nil);
-  PProjoutbound:=nil;
+  //PProjoutbound:=nil;
   Vertex3D_in_WCS_Array.init(4);
   //Vertex2D_in_OCS_Array.init(10,true);
   Path.init(10);
@@ -166,7 +166,7 @@ begin
   Local.basis.ox:=XWCS;
   Local.basis.oy:=YWCS;
   Local.basis.oz:=ZWCS;
-  PProjoutbound:=nil;
+  //PProjoutbound:=nil;
   Vertex3D_in_WCS_Array.init(4);
   //Vertex2D_in_OCS_Array.init(10,true);
   Path.init(10);
@@ -672,29 +672,27 @@ begin
 end;
 
 procedure GDBObjHatch.AddControlpoints;
-var pdesc:controlpointdesc;
-    i:Integer;
-    //pv2d:pGDBvertex2d;
-    pv:pGDBvertex;
+var
+  pdesc:controlpointdesc;
+  i:Integer;
+  pv:pGDBvertex;
 begin
-          //renderfeedback(gdb.GetCurrentDWG.pcamera^.POSCOUNT,gdb.GetCurrentDWG.pcamera^,nil);
-          PSelectedObjDesc(tdesc)^.pcontrolpoint^.init(Vertex3D_in_WCS_Array.count);
-          //pv2d:=pprojpoint^.parray;
-          pv:=Vertex3D_in_WCS_Array.GetParrayAsPointer;
-          pdesc.selected:=false;
-          pdesc.PDrawable:=nil;
+  PSelectedObjDesc(tdesc)^.pcontrolpoint^.init(Vertex3D_in_WCS_Array.count);
+  pv:=Vertex3D_in_WCS_Array.GetParrayAsPointer;
+  pdesc.selected:=false;
+  pdesc.PDrawable:=nil;
 
-          for i:=0 to {pprojpoint}Vertex3D_in_WCS_Array.count-1 do
-          begin
-               pdesc.vertexnum:=i;
-               pdesc.attr:=[CPA_Strech];
-               pdesc.worldcoord:=pv^;
-               {pdesc.dispcoord.x:=round(pv2d^.x);
-               pdesc.dispcoord.y:=round(pv2d.y);}
-               PSelectedObjDesc(tdesc)^.pcontrolpoint^.PushBackData(pdesc);
-               inc(pv);
-               //inc(pv2d);
-          end;
+  for i:=0 to Vertex3D_in_WCS_Array.count-1 do
+  begin
+       pdesc.vertexnum:=i;
+       pdesc.attr:=[CPA_Strech];
+       pdesc.worldcoord:=pv^;
+       {pdesc.dispcoord.x:=round(pv2d^.x);
+       pdesc.dispcoord.y:=round(pv2d.y);}
+       PSelectedObjDesc(tdesc)^.pcontrolpoint^.PushBackData(pdesc);
+       inc(pv);
+       //inc(pv2d);
+  end;
 end;
 procedure GDBObjHatch.rtmodifyonepoint(const rtmod:TRTModifyData);
 var

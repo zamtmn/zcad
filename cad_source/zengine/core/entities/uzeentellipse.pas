@@ -53,7 +53,6 @@ GDBObjEllipse= object(GDBObjPlain)
                  procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext;Stage:TEFStages=EFAllStages);virtual;
                  procedure createpoint;virtual;
                  procedure getoutbound(var DC:TDrawContext);virtual;
-                 procedure RenderFeedback(pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc;var DC:TDrawContext);virtual;
                  procedure projectpoint;virtual;
                  function onmouse(var popa:TZctnrVectorPGDBaseEntity;const MF:ClipArray;InSubEntry:Boolean):Boolean;virtual;
                  function getsnap(var osp:os_record; var pdata:Pointer; const param:OGLWndtype; ProjectProc:GDBProjectProc;SnapMode:TGDBOSMode):Boolean;virtual;
@@ -200,7 +199,7 @@ constructor GDBObjEllipse.initnul;
 begin
   startangle := 0;
   endangle := 2*pi;
-  PProjoutbound:=nil;
+  //PProjoutbound:=nil;
   majoraxis:=onevertex;
   inherited initnul(nil);
   //vp.ID:=GDBEllipseID;
@@ -216,7 +215,7 @@ begin
   startangle := s;
   endangle := e;
   majoraxis:=majaxis;
-  PProjoutbound:=nil;
+  //PProjoutbound:=nil;
   Vertex3D_in_WCS_Array.init(4);
   //format;
 end;
@@ -323,11 +322,11 @@ begin
 
   vp.BoundingBox.LBN:=CreateVertex(l,B,n);
   vp.BoundingBox.RTF:=CreateVertex(rrr,T,f);
-  if PProjoutbound=nil then
+  {if PProjoutbound=nil then
   begin
        Getmem(Pointer(PProjoutbound),sizeof(GDBOOutbound2DIArray));
        PProjoutbound^.init(4);
-  end;
+  end;}
 end;
 procedure GDBObjEllipse.createpoint;
 var
@@ -357,41 +356,7 @@ begin
   end;
   Vertex3D_in_WCS_Array.Shrink;
 end;
-procedure GDBObjEllipse.Renderfeedback;
-var //pm:DMatrix4D;
-    tv:GDBvertex;
-    d:Double;
-begin
-           {gdb.GetCurrentDWG^.myGluProject2}ProjectProc(Local.p_insert,ProjP_insert);
-           pprojoutbound^.clear;
-           //pm:=gdb.GetCurrentDWG.pcamera^.modelMatrix;
-           {gdb.GetCurrentDWG^.myGluProject2}ProjectProc(outbound[0],tv);
-           pprojoutbound^.PushBackIfNotLastWithCompareProc(ToVertex2DI(tv),EqualVertex2DI);
-           {gdb.GetCurrentDWG^.myGluProject2}ProjectProc(outbound[1],tv);
-           pprojoutbound^.PushBackIfNotLastWithCompareProc(ToVertex2DI(tv),EqualVertex2DI);
-           {gdb.GetCurrentDWG^.myGluProject2}ProjectProc(outbound[2],tv);
-           pprojoutbound^.PushBackIfNotLastWithCompareProc(ToVertex2DI(tv),EqualVertex2DI);
-           {gdb.GetCurrentDWG^.myGluProject2}ProjectProc(outbound[3],tv);
-           pprojoutbound^.PushBackIfNotLastOrFirstWithCompareProc(ToVertex2DI(tv),EqualVertex2DI);
-           if pprojoutbound^.count<4 then
-           begin
-            lod:=4;
-            //projectpoint;
-           end
-           else
-           begin
-                d:=pprojoutbound^.perimetr;
-                d:=(angle/(2*pi))*(d/10);
-                if d>255 then d:=255;
-                if d<10 then d:=10;
-                if lod<>round(d) then
-                begin
-                     lod:=round(d);
-                     createpoint;
-                end;
-                projectpoint;
-           end;
-end;
+
 procedure GDBObjEllipse.DrawGeometry;
 //var
 //  i: Integer;
@@ -444,7 +409,7 @@ begin
   end;
   startangle := startangle{ * pi / 180};
   endangle := endangle{ * pi / 180};
-  PProjoutbound:=nil;
+  //PProjoutbound:=nil;
   //format;
 end;
 function GDBObjEllipse.onmouse;
@@ -626,8 +591,6 @@ begin
                                                                                       startangle:=endangle;
                                                                                       endangle:=rrr
                                                                                  end;
-        //format;
-        //renderfeedback(gdb.GetCurrentDWG.pcamera^.POSCOUNT,gdb.GetCurrentDWG.pcamera^,nil);
         end;
 
 end;
@@ -655,8 +618,6 @@ begin
   PGDBObjEllipse(refp)^.RR:=RR;
   PGDBObjEllipse(refp)^.MajorAxis:=MajorAxis;
   PGDBObjEllipse(refp)^.Ratio:=Ratio;
-  //PGDBObjEllipse(refp)^.format;
-  //PGDBObjEllipse(refp)^.renderfeedback(gdb.GetCurrentDWG.pcamera^.POSCOUNT,gdb.GetCurrentDWG.pcamera^,nil);
 end;
 function AllocEllipse:PGDBObjEllipse;
 begin

@@ -383,7 +383,7 @@ begin
   rotate:=0;
   index:=-1;
   pattrib:=nil;
-  pprojoutbound:=nil;
+  //pprojoutbound:=nil;
 end;
 constructor GDBObjBlockInsert.initnul;
 begin
@@ -400,7 +400,7 @@ begin
   //ConstObjArray.init(100);
   //varman.init('Block_Variable');
   //varman.mergefromfile(programpath+'components\defaultblockvar.ini');
-  pprojoutbound:=nil;
+  //pprojoutbound:=nil;
 end;
 function GDBObjBlockInsert.GetObjType;
 begin

@@ -652,8 +652,6 @@ begin
           pdesc.selected:=false;
           pdesc.PDrawable:=nil;
 
-          //renderfeedback(gdb.GetCurrentDWG.pcamera^.POSCOUNT,gdb.GetCurrentDWG.pcamera^,nil);
-
           pdesc.pointtype:=os_midle;
           pdesc.attr:=[];
           pdesc.worldcoord:=Vertexmorph(CoordInWCS.lbegin, CoordInWCS.lend, 1 / 2);

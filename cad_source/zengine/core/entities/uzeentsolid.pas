@@ -47,7 +47,6 @@ GDBObjSolid= object(GDBObjWithLocalCS)
 
                  procedure DrawGeometry(lw:Integer;var DC:TDrawContext{infrustumactualy:TActulity;subrender:Integer});virtual;
                  function calcinfrustum(const frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:Integer; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double):Boolean;virtual;
-                 //procedure RenderFeedback(pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc;var DC:TDrawContext);virtual;
                  //function getsnap(var osp:os_record):Boolean;virtual;
                  function onmouse(var popa:TZctnrVectorPGDBaseEntity;const MF:ClipArray;InSubEntry:Boolean):Boolean;virtual;
                  function CalcTrueInFrustum(const frustum:ClipArray;visibleactualy:TActulity):TInBoundingVolume;virtual;
@@ -272,14 +271,6 @@ begin
       end;
       end;
 end;
-{procedure GDBObjSolid.RenderFeedback;
-begin
-  inherited;
-  ProjectProc(PInWCS[0],PInDCS[0]);
-  ProjectProc(PInWCS[1],PInDCS[1]);
-  ProjectProc(PInWCS[2],PInDCS[2]);
-  ProjectProc(PInWCS[3],PInDCS[3]);
-end;}
 
 {function GDBObjSolid.getsnap;
 

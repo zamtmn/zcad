@@ -46,7 +46,6 @@ GDBObjAbstractText= object(GDBObjPlainWithOX)
                          procedure CalcObjMatrix(pdrawing:PTDrawingDef=nil);virtual;
                          procedure DrawGeometry(lw:Integer;var DC:TDrawContext);virtual;
                          procedure SimpleDrawGeometry(var DC:TDrawContext);virtual;
-                         procedure RenderFeedback(pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc;var DC:TDrawContext);virtual;
                          function CalcInFrustum(const frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:Integer; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double):Boolean;virtual;
                          function CalcTrueInFrustum(const frustum:ClipArray;visibleactualy:TActulity):TInBoundingVolume;virtual;
                          function onmouse(var popa:TZctnrVectorPGDBaseEntity;const MF:ClipArray;InSubEntry:Boolean):Boolean;virtual;
@@ -210,11 +209,13 @@ begin
      result:=l1;
 end;
 procedure GDBObjAbstractText.remaponecontrolpoint(pdesc:pcontrolpointdesc;ProjectProc:GDBProjectProc);
+var
+  tv:GDBvertex;
 begin
   if pdesc^.pointtype=os_point then begin
     pdesc.worldcoord:=P_insert_in_WCS;
-    pdesc.dispcoord.x:=round(ProjP_insert.x);
-    pdesc.dispcoord.y:=round(ProjP_insert.y);
+    ProjectProc(pdesc.worldcoord,tv);
+    pdesc.dispcoord:=ToVertex2DI(tv);
   end;
 end;
 procedure GDBObjAbstractText.addcontrolpoints(tdesc:Pointer);
@@ -335,37 +336,6 @@ begin
       if result<>IRPartially then
                                  exit;
       result:=Representation.CalcTrueInFrustum(frustum,true);
-end;
-procedure GDBObjAbstractText.Renderfeedback;
-var //pm:DMatrix4D;
-    tv:GDBvertex;
-begin
-           inherited;
-           //myGluProject(Local.p_insert.x,Local.p_insert.y,Local.p_insert.z,@gdb.pcamera^.modelMatrix,@gdb.pcamera^.projMatrix,@gdb.pcamera^.viewport,ProjP_insert.x,ProjP_insert.y,ProjP_insert.z);
-           //pprojoutbound^.clear;
-           //pm:=gdb.GetCurrentDWG.pcamera^.modelMatrix;
-           {gdb.GetCurrentDWG^.myGluProject2}ProjectProc(outbound[0],tv);
-           pprojoutbound^.PushBackIfNotLastWithCompareProc(ToVertex2DI(tv),EqualVertex2DI);
-           {gdb.GetCurrentDWG^.myGluProject2}ProjectProc(outbound[1],tv);
-           pprojoutbound^.PushBackIfNotLastWithCompareProc(ToVertex2DI(tv),EqualVertex2DI);
-           {gdb.GetCurrentDWG^.myGluProject2}ProjectProc(outbound[2],tv);
-           pprojoutbound^.PushBackIfNotLastWithCompareProc(ToVertex2DI(tv),EqualVertex2DI);
-           {gdb.GetCurrentDWG^.myGluProject2}ProjectProc(outbound[3],tv);
-           pprojoutbound^.PushBackIfNotLastOrFirstWithCompareProc(ToVertex2DI(tv),EqualVertex2DI);
-           //if (pprojoutbound^.count<4) then visible:=false;
-           {if (projoutbound[0].x=projoutbound[1].x) and (projoutbound[0].y=projoutbound[1].y) then visible:=false;
-           if (projoutbound[1].x=projoutbound[2].x) and (projoutbound[1].y=projoutbound[2].y) then visible:=false;
-           if (projoutbound[2].x=projoutbound[3].x) and (projoutbound[2].y=projoutbound[3].y) then visible:=false;
-           if (projoutbound[3].x=projoutbound[0].x) and (projoutbound[3].y=projoutbound[0].y) then visible:=false;}
-           if pprojoutbound^.count<4 then
-           begin
-            lod:=1;
-           end
-           else
-           begin
-                lod:=0;
-           end;
-           //projectpoint;
 end;
 procedure GDBObjAbstractText.CalcObjMatrix;
 var m1,m2,m3:DMatrix4D;

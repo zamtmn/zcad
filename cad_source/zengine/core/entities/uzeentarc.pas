@@ -51,7 +51,6 @@ GDBObjArc= object(GDBObjPlain)
                  procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext;Stage:TEFStages=EFAllStages);virtual;
                  procedure createpoints(var DC:TDrawContext);virtual;
                  procedure getoutbound(var DC:TDrawContext);virtual;
-                 procedure RenderFeedback(pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc;var DC:TDrawContext);virtual;
                  procedure projectpoint;virtual;
                  function onmouse(var popa:TZctnrVectorPGDBaseEntity;const MF:ClipArray;InSubEntry:Boolean):Boolean;virtual;
                  function getsnap(var osp:os_record; var pdata:Pointer; const param:OGLWndtype; ProjectProc:GDBProjectProc;SnapMode:TGDBOSMode):Boolean;virtual;
@@ -89,22 +88,6 @@ begin
      result:=VectorTransform3D(point,m1);
      result:=normalizevertex(result);
 end;}
-
-procedure GDBObjARC.Renderfeedback;
-var
-  tv:GDBVertex;
-begin
-  ProjectProc(Local.p_insert,ProjP_insert);
-  pprojoutbound^.clear;
-  ProjectProc(outbound[0],tv);
-  pprojoutbound^.PushBackIfNotLastWithCompareProc(ToVertex2DI(tv),EqualVertex2DI);
-  ProjectProc(outbound[1],tv);
-  pprojoutbound^.PushBackIfNotLastWithCompareProc(ToVertex2DI(tv),EqualVertex2DI);
-  ProjectProc(outbound[2],tv);
-  pprojoutbound^.PushBackIfNotLastWithCompareProc(ToVertex2DI(tv),EqualVertex2DI);
-  ProjectProc(outbound[3],tv);
-  pprojoutbound^.PushBackIfNotLastOrFirstWithCompareProc(ToVertex2DI(tv),EqualVertex2DI);
-end;
 
 procedure GDBObjARC.TransformAt;
 var
@@ -236,7 +219,7 @@ begin
   r := 1;
   startangle := 0;
   endangle := pi/2;
-  PProjoutbound:=nil;
+  //PProjoutbound:=nil;
   Vertex3D_in_WCS_Array.init(3);
 end;
 constructor GDBObjARC.init;
@@ -247,7 +230,7 @@ begin
   r := rr;
   startangle := s;
   endangle := e;
-  PProjoutbound:=nil;
+  //PProjoutbound:=nil;
   Vertex3D_in_WCS_Array.init(3);
   //format;
 end;
@@ -427,11 +410,11 @@ begin
          outbound[3]:=VectorTransform3d(CreateVertex(minx,miny,0),objMatrix);
 
 
-  if PProjoutbound=nil then
+  {if PProjoutbound=nil then
   begin
        Getmem(Pointer(PProjoutbound),sizeof(GDBOOutbound2DIArray));
        PProjoutbound^.init(4);
-  end;
+  end;}
 end;
 procedure GDBObjARC.createpoints(var DC:TDrawContext);
 var
@@ -560,7 +543,7 @@ begin
   end;
   startangle := startangle * pi / 180;
   endangle := endangle * pi / 180;
-  PProjoutbound:=nil;
+  //PProjoutbound:=nil;
   dc:=drawing.createdrawingrc;
   if vp.Layer=nil then
                       vp.Layer:=nil;
@@ -643,7 +626,8 @@ begin
             then
             begin
             osp.worldcoord:=P_insert_in_WCS;
-            osp.dispcoord:=ProjP_insert;
+            ProjectProc(osp.worldcoord,osp.dispcoord);
+            //osp.dispcoord:=ProjP_insert;
             osp.ostype:=os_center;
             end
             else osp.ostype:=os_none;
@@ -763,8 +747,6 @@ begin
   pgdbobjarc(refp)^.startangle := startangle;
   pgdbobjarc(refp)^.endangle := endangle;
   pgdbobjarc(refp)^.r := r;
-  //pgdbobjarc(refp)^.format;
-  //pgdbobjarc(refp)^.renderfeedback(gdb.GetCurrentDWG.pcamera^.POSCOUNT,gdb.GetCurrentDWG.pcamera^,nil);
 end;
 function AllocArc:PGDBObjArc;
 begin

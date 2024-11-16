@@ -29,9 +29,10 @@ uses uzbLogIntf,uzeentityfactory,uzgldrawcontext,uzedrawingdef,uzecamera,
 type
 PGDBObjLine=^GDBObjLine;
 GDBObjLine= object(GDBObj3d)
+                 {-}private{//}
+                 fCoordInWCS:GDBLineProp;
+                 {-}public{//}
                  CoordInOCS:GDBLineProp;
-                 CoordInWCS:GDBLineProp;
-                 //PProjPoint:PGDBLineProj;
 
                  constructor init(own:Pointer;layeraddres:PGDBLayerProp;LW:SmallInt;p1,p2:GDBvertex);
                  constructor initnul(owner:PGDBObjGenericWithSubordinated);
@@ -74,6 +75,10 @@ GDBObjLine= object(GDBObj3d)
 
                   class function CreateInstance:PGDBObjLine;static;
                   function GetObjType:TObjID;virtual;
+
+                  function getCoordInWCS:GDBLineProp;
+
+                  {-}property CoordInWCS:GDBLineProp read fCoordInWCS write fCoordInWCS;{//}
            end;
 ptlinertmodify=^tlinertmodify;
 tlinertmodify=record
@@ -139,10 +144,10 @@ begin
      end;
      dir:=VertexSub(CoordInWCS.lEnd,CoordInWCS.lBegin);
      u:=NormalizeVertex(dir);
-     w:=VertexSub(pl.coordinwcs.lbegin,coordinwcs.lbegin);
+     w:=VertexSub(pl.CoordInWCS.lbegin,CoordInWCS.lbegin);
      t1:=(scalardot(w,dir))/SqrOneVertexlength(dir);
      q:=online(w,u);
-     w:=VertexSub(pl.coordinwcs.lend,coordinwcs.lbegin);
+     w:=VertexSub(pl.CoordInWCS.lend,CoordInWCS.lbegin);
      t2:=(scalardot(w,dir))/SqrOneVertexlength(dir);
      q:=q and online(w,u);
      if not q then exit;
@@ -154,8 +159,8 @@ begin
      if t2>a2 then a2:=t2;
      self.CoordInOCS.lend:=VertexDmorph(self.CoordInOCS.lbegin,dir,a2);
      self.CoordInOCS.lbegin:=VertexDmorph(self.CoordInOCS.lbegin,dir,a1);
-     self.CoordInWCS.lend:=VertexDmorph(self.CoordInWCS.lbegin,dir,a2);
-     self.CoordInWCS.lbegin:=VertexDmorph(self.CoordInWCS.lbegin,dir,a1);
+     //self.CoordInWCS.lend:=VertexDmorph(self.CoordInWCS.lbegin,dir,a2);
+     //self.CoordInWCS.lbegin:=VertexDmorph(self.CoordInWCS.lbegin,dir,a1);
      dc:=drawing.CreateDrawingRC;
      FormatEntity(drawing,dc);
      pl^.YouDeleted(drawing);
@@ -206,28 +211,42 @@ begin
      //                       Freemem(Pointer(PProjPoint));
      inherited done;
 end;
-procedure GDBObjLine.CalcGeometry;
+function GDBObjLine.getCoordInWCS:GDBLineProp;
 var m:DMatrix4D;
 begin
-     if bp.ListPos.owner<>nil then
-                                    begin
-                                         if bp.ListPos.owner^.GetHandle=H_Root then
-                                                                                   begin
-                                                                                        CoordInWCS.lbegin:=CoordInOCS.lbegin;
-                                                                                        CoordInWCS.lend:=CoordInOCS.lend;
-                                                                                    end
-                                                                               else
-                                                                                   begin
-                                                                                         m:=bp.ListPos.owner^.GetMatrix^;
-                                                                                         CoordInWCS.lbegin:=VectorTransform3D(CoordInOCS.lbegin,m);
-                                                                                         CoordInWCS.lend:=VectorTransform3D(CoordInOCS.lend,m);
-                                                                                   end;
-                                    end
-                                else
-                                    begin
-                                         CoordInWCS.lbegin:=CoordInOCS.lbegin;
-                                         CoordInWCS.lend:=CoordInOCS.lend;
-                                    end;
+  if bp.ListPos.owner<>nil then begin
+    if bp.ListPos.owner^.GetHandle=H_Root then begin
+      result.lbegin:=CoordInOCS.lbegin;
+      result.lend:=CoordInOCS.lend;
+    end else begin
+      m:=bp.ListPos.owner^.GetMatrix^;
+      result.lbegin:=VectorTransform3D(CoordInOCS.lbegin,m);
+      result.lend:=VectorTransform3D(CoordInOCS.lend,m);
+    end;
+  end else begin
+    result.lbegin:=CoordInOCS.lbegin;
+    result.lend:=CoordInOCS.lend;
+  end;
+end;
+
+procedure GDBObjLine.CalcGeometry;
+var
+  m:DMatrix4D;
+  tlp:GDBLineProp;
+begin
+  if bp.ListPos.owner<>nil then begin
+    if bp.ListPos.owner^.GetHandle=H_Root then begin
+      CoordInWCS:=CoordInOCS;
+    end else begin
+      m:=bp.ListPos.owner^.GetMatrix^;
+
+      tlp.lbegin:=VectorTransform3D(CoordInOCS.lbegin,m);
+      tlp.lend:=VectorTransform3D(CoordInOCS.lend,m);
+      CoordInWCS:=tlp;
+    end;
+  end else begin
+    CoordInWCS:=CoordInOCS;
+  end;
 end;
 
 function GDBObjLine.IsStagedFormatEntity:boolean;
@@ -250,9 +269,9 @@ begin
     if (not (ESTemp in State))and(DCODrawable in DC.Options) then begin
       if assigned(EntExtensions)then begin
         if EntExtensions.NeedStandardDraw(@self,drawing,DC) then
-          Representation.DrawLineWithLT(dc,CoordInWCS.lBegin,CoordInWCS.lEnd,vp);
+          Representation.DrawLineWithLT(getmatrix^,dc,CoordInOCS.lBegin,CoordInOCS.lEnd,vp);
       end else
-        Representation.DrawLineWithLT(dc,CoordInWCS.lBegin,CoordInWCS.lEnd,vp);
+        Representation.DrawLineWithLT(getmatrix^,dc,CoordInOCS.lBegin,CoordInOCS.lEnd,vp);
     end;
     if assigned(EntExtensions)then
       EntExtensions.RunOnAfterEntityFormat(@self,drawing,DC);

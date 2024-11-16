@@ -657,7 +657,7 @@ begin
       case knot.&Type of
         KTArc:begin
           P:=Vertexmorph(PGDBObjLine(pThisEntity)^.CoordInWCS.lBegin,PGDBObjLine(pThisEntity)^.CoordInWCS.lEnd,knot.t-l);
-          pThisEntity^.Representation.DrawLineWithLT(DC,oldP,P,pThisEntity.vp);
+          pThisEntity^.Representation.DrawLineWithLT(OneMatrix,DC,oldP,P,pThisEntity.vp);
           oldP:=Vertexmorph(PGDBObjLine(pThisEntity)^.CoordInWCS.lBegin,PGDBObjLine(pThisEntity)^.CoordInWCS.lEnd,knot.t+l);
           P:=Vertexmorph(PGDBObjLine(pThisEntity)^.CoordInWCS.lBegin,PGDBObjLine(pThisEntity)^.CoordInWCS.lEnd,knot.t);
           drawIntersectArc(P,oldP,pThisEntity,DC);
@@ -665,14 +665,14 @@ begin
         KTEmpty:begin
           if knot.t>bigeps then begin
             P:=Vertexmorph(PGDBObjLine(pThisEntity)^.CoordInWCS.lBegin,PGDBObjLine(pThisEntity)^.CoordInWCS.lEnd,knot.t-l);
-            pThisEntity^.Representation.DrawLineWithLT(DC,oldP,P,pThisEntity.vp);
+            pThisEntity^.Representation.DrawLineWithLT(OneMatrix,DC,oldP,P,pThisEntity.vp);
           end;
           oldP:=Vertexmorph(PGDBObjLine(pThisEntity)^.CoordInWCS.lBegin,PGDBObjLine(pThisEntity)^.CoordInWCS.lEnd,knot.t+l);
         end;
         KTNormal:begin
           if knot.t>bigeps then begin
             P:=Vertexmorph(PGDBObjLine(pThisEntity)^.CoordInWCS.lBegin,PGDBObjLine(pThisEntity)^.CoordInWCS.lEnd,knot.t);
-            pThisEntity^.Representation.DrawLineWithLT(DC,oldP,P,pThisEntity.vp);
+            pThisEntity^.Representation.DrawLineWithLT(OneMatrix,DC,oldP,P,pThisEntity.vp);
           end else
             P:=Vertexmorph(PGDBObjLine(pThisEntity)^.CoordInWCS.lBegin,PGDBObjLine(pThisEntity)^.CoordInWCS.lEnd,knot.t);
           oldP:=p;
@@ -683,7 +683,7 @@ begin
       end;
     end;
     if IsDoubleNotEqual(knot.t,1,bigeps) then
-      pThisEntity^.Representation.DrawLineWithLT(DC,oldP,PGDBObjLine(pThisEntity)^.CoordInWCS.lEnd,pThisEntity.vp);
+      pThisEntity^.Representation.DrawLineWithLT(OneMatrix,DC,oldP,PGDBObjLine(pThisEntity)^.CoordInWCS.lEnd,pThisEntity.vp);
     result:=false;
   end;
 end;

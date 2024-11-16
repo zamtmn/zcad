@@ -162,7 +162,7 @@ begin
      repeat
            np.NextP:=ptvnext^;
            np.PrevP:=ptvprev^;
-           Representation.DrawLineWithLT(DC,np.NextP,np.PrevP,vp);
+           Representation.DrawLineWithLT(OneMatrix,DC,np.NextP,np.PrevP,vp);
            ptvprev:=ptvnext;
            ptvnext:=vertexarrayInWCS.iterate(ir_inVertexArray);
            NodePropArray.PushBackData(np);
@@ -447,7 +447,7 @@ begin
   if ptn1<>nil then
   begin
   repeat
-    Representation.DrawLineWithLT(DC,ptn2^.Nextp,ptn1^.PrevP,vp);
+    Representation.DrawLineWithLT(OneMatrix,DC,ptn2^.Nextp,ptn1^.PrevP,vp);
     //DC.Drawer.DrawLine3DInModelSpace(ptn2^.Nextp,ptn1^.PrevP,DC.DrawingContext.matrixs);
     ptn2:=ptn1;
     ptn1:=NodePropArray.iterate(ir_inNodeArray);

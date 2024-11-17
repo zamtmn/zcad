@@ -38,6 +38,7 @@ type
     mtr:TMtr;
     t:TMatrixType;
     constructor CreateRec(AMtr:TMtr;At:TMatrixType);
+    function IsIdentity:Boolean;inline;
   end;
   GVector4<T;TT:record>=record
     const
@@ -389,4 +390,9 @@ begin
   mtr:=AMtr;
   t:=At;
 end;
+function GMatrix4<TMtr>.IsIdentity:Boolean;
+begin
+  result:=(t=CMTIdentity);
+end;
+
 end.

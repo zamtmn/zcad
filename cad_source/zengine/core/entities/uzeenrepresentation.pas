@@ -22,6 +22,7 @@ interface
 uses uzgldrawcontext,uzgldrawerabstract,uzglvectorobject,
      sysutils,
      uzegeometrytypes,uzegeometry,uzglgeometry,uzefont,uzeentitiesprop,UGDBPoint3DArray,
+     uzeentsubordinated,
      uzegeomentitiestree,uzbtypes,
      gzctnrVectorTypes,uzgeomline3d,uzgeomproxy;
 type
@@ -44,7 +45,8 @@ TZEntityRepresentation= object(GDBaseObject)
 
                        {Команды которыми примитив рисует сам себя}
                        procedure DrawTextContent(drawer:TZGLAbstractDrawer;content:TDXFEntsInternalStringType;_pfont: PGDBfont;const DrawMatrix,objmatrix:DMatrix4D;const textprop_size:Double;var Outbound:OutBound4V);
-                       procedure DrawLineWithLT(var ObjMatrix:DMatrix4D; var rc:TDrawContext;const StartPointOCS,EndPointOCS:GDBVertex; const vp:GDBObjVisualProp);
+                       procedure DrawLineWithLT(var Entity:GDBObjDrawable;var ObjMatrix:DMatrix4D; var rc:TDrawContext;const StartPointOCS,EndPointOCS:GDBVertex; const vp:GDBObjVisualProp);
+                       procedure DrawLineByConstRefLinePropWithLT(var Entity:GDBObjDrawable;var ObjMatrix:DMatrix4D; var rc:TDrawContext;constref LP:GDBLineProp; const vp:GDBObjVisualProp);
                        procedure DrawLineWithoutLT(var rc:TDrawContext;const startpoint,endpoint:GDBVertex);
                        procedure DrawPolyLineWithLT(var rc:TDrawContext;const points:GDBPoint3dArray; const vp:GDBObjVisualProp; const closed,ltgen:Boolean);virtual;
                        procedure DrawPoint(var rc:TDrawContext;const point:GDBVertex; const vp:GDBObjVisualProp);
@@ -94,7 +96,7 @@ procedure TZEntityRepresentation.DrawTextContent(drawer:TZGLAbstractDrawer;conte
 begin
   Graphix.DrawTextContent(drawer,content,_pfont,DrawMatrix,objmatrix,textprop_size,Outbound);
 end;
-procedure TZEntityRepresentation.DrawLineWithLT(var ObjMatrix:DMatrix4D;var rc:TDrawContext;const StartPointOCS,EndPointOCS:GDBVertex; const vp:GDBObjVisualProp);
+procedure TZEntityRepresentation.DrawLineWithLT(var Entity:GDBObjDrawable;var ObjMatrix:DMatrix4D;var rc:TDrawContext;const StartPointOCS,EndPointOCS:GDBVertex; const vp:GDBObjVisualProp);
 var
   gl:TGeomLine3D;
   gp:TGeomProxy;
@@ -114,6 +116,27 @@ begin
   Geometry.AddObjectToNodeTree(gl);
   Geometry.UnLock;
 end;
+procedure TZEntityRepresentation.DrawLineByConstRefLinePropWithLT(var Entity:GDBObjDrawable;var ObjMatrix:DMatrix4D; var rc:TDrawContext;constref LP:GDBLineProp; const vp:GDBObjVisualProp);
+var
+  gpl:TGeomPLine3D;
+  gp:TGeomProxy;
+  dr:TLLDrawResult;
+begin
+  if ObjMatrix.IsIdentity then begin
+    dr:=Graphix.DrawLineWithLT(rc,LP.lBegin,LP.lEnd,vp);
+    Geometry.Lock;
+    if dr.Appearance<>TAMatching then
+    begin
+      gp.init(dr.LLPStart,dr.LLPEndi-1,dr.BB);
+      Geometry.AddObjectToNodeTree(gp);
+    end;
+    gpl.init(LP,0);
+    Geometry.AddObjectToNodeTree(gpl);
+    Geometry.UnLock;
+  end else
+    DrawLineWithLT(Entity,ObjMatrix,rc,LP.lBegin,LP.lEnd,vp);
+end;
+
 procedure TZEntityRepresentation.DrawLineWithoutLT(var rc:TDrawContext;const startpoint,endpoint:GDBVertex);
 var
   gl:TGeomLine3D;

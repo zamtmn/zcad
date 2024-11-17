@@ -269,10 +269,11 @@ begin
     if (not (ESTemp in State))and(DCODrawable in DC.Options) then begin
       if assigned(EntExtensions)then begin
         if EntExtensions.NeedStandardDraw(@self,drawing,DC) then
-          Representation.DrawLineWithLT(getmatrix^,dc,CoordInOCS.lBegin,CoordInOCS.lEnd,vp);
+          Representation.DrawLineByConstRefLinePropWithLT(self,getmatrix^,dc,CoordInOCS,vp);
       end else
-        Representation.DrawLineWithLT(getmatrix^,dc,CoordInOCS.lBegin,CoordInOCS.lEnd,vp);
+        Representation.DrawLineByConstRefLinePropWithLT(self,getmatrix^,dc,CoordInOCS,vp);
     end;
+    Representation.Shrink;
     if assigned(EntExtensions)then
       EntExtensions.RunOnAfterEntityFormat(@self,drawing,DC);
   end;

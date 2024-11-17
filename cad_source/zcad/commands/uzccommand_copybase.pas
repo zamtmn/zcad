@@ -78,7 +78,7 @@ begin
 end;
 function copybase_com.BeforeClick(const Context:TZCADCommandContext;wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record): Integer;
 var
-  dist:gdbvertex;
+  //dist:gdbvertex;
   dispmatr:DMatrix4D;
   ir:itrec;
   tv,pobj: pGDBObjEntity;
@@ -88,13 +88,8 @@ begin
   NeedReCreateClipboardDWG:=true;
   if (button and MZW_LBUTTON)<>0 then
   begin
-      ClipboardDWG^.pObjRoot^.ObjArray.free;
-      dist.x := -wc.x;
-      dist.y := -wc.y;
-      dist.z := -wc.z;
-
-      dispmatr:=onematrix;
-      PGDBVertex(@dispmatr[3])^:=dist;
+    ClipboardDWG^.pObjRoot^.ObjArray.free;
+    dispmatr:=CreateTranslationMatrix(-wc);
 
    dc:=drawings.GetCurrentDWG^.CreateDrawingRC;
    pobj:=drawings.GetCurrentROOT^.ObjArray.beginiterate(ir);

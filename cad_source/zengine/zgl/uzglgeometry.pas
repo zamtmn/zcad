@@ -210,14 +210,14 @@ begin
     begin
          ispl:=not(ispl);
          if ispl then begin
-                             lp:=pgdbvertex(@matr[3].v[0])^;
+                             lp:=pgdbvertex(@matr.mtr[3].v[0])^;
                              lp.y:=lp.y-0.2*textprop_size;
                              lp.x:=lp.x-0.1*textprop_size;
                              lp:=VectorTransform3d(lp,objmatrix);
                              pl.PushBackData(lp);
                         end
                    else begin
-                             lp:=pgdbvertex(@matr[3].v[0])^;
+                             lp:=pgdbvertex(@matr.mtr[3].v[0])^;
                              lp.y:=lp.y-0.2*textprop_size;
                              lp.x:=lp.x-0.1*textprop_size;
                              lp:=VectorTransform3d(lp,objmatrix);
@@ -231,8 +231,8 @@ begin
     end;
     if sym<>1 then
     begin
-      m1:=onematrix;
-      m1[3].v[0] := pgdbfont(pfont)^.GetOrReplaceSymbolInfo({ach2uch}{(ord(content[i]))}sym{//-ttf-//,tdinfo}).NextSymX;
+      m1.CreateRec(OneMtr,CMTTranslate);
+      m1.mtr[3].v[0] := pgdbfont(pfont)^.GetOrReplaceSymbolInfo({ach2uch}{(ord(content[i]))}sym{//-ttf-//,tdinfo}).NextSymX;
       matr:=MatrixMultiply(m1,matr);
     end;
   inc(i,symlen);
@@ -240,7 +240,7 @@ begin
                        if ispl then
 
                      begin
-                             lp:=pgdbvertex(@matr[3].v[0])^;
+                             lp:=pgdbvertex(@matr.mtr[3].v[0])^;
                              lp.y:=lp.y-0.2*textprop_size;
                              lp.x:=lp.x-0.1*textprop_size;
                              lp:=VectorTransform3d(lp,objmatrix);
@@ -555,7 +555,8 @@ begin
           if ptp.param.PStyle.pfont.font.IsUnicode then
                                                      sym:=ach2uch(sym);
 PTP^.param.PStyle.pfont.CreateSymbol(drawer,self,sym,objmatrix,matr,Bound,sli);
-matr[3].v[0]:=matr[3].v[0]+PTP^.param.PStyle.pfont^.GetOrReplaceSymbolInfo(byte(PTP^.Text[j]){//-ttf-//,tdinfo}).NextSymX;
+matr.mtr[3].v[0]:=matr.mtr[3].v[0]+PTP^.param.PStyle.pfont^.GetOrReplaceSymbolInfo(byte(PTP^.Text[j]){//-ttf-//,tdinfo}).NextSymX;
+matr.t:=matr.t+CMTTranslate;
 end;
 end;
 procedure ZGLGraphix.PlaceOnePattern(var rc:TDrawContext;var Segmentator:ZSegmentator;//стартовая точка паттернов, стартовая точка линии (добавка в начало линии)

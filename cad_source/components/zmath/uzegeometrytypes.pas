@@ -29,6 +29,16 @@ const
   sqreps=1e-7;
   bigeps=1e-10;
 type
+
+{EXPORT+}
+  TMatrixComponents=(MTIdentity,MTScale,MTTranslate,MTRotate,MTShear);
+  TMatrixType={-}set of TMatrixComponents{/Byte/};
+{EXPORT-}
+  GMatrix4<TMtr>=record
+    mtr:TMtr;
+    t:TMatrixType;
+    constructor CreateRec(AMtr:TMtr;At:TMatrixType);
+  end;
   GVector4<T;TT:record>=record
     const
       ArrS=4;
@@ -179,13 +189,25 @@ type
     {-}{/y:Double;/}
     {-}{/z:Double;/}
   {-}{/end;/}
-
+  PMatrix4D=^TMatrix4D;
+  TMatrix4D=packed array[0..3]of DVector4D;
   PDMatrix4D=^DMatrix4D;
-  DMatrix4D=packed array[0..3]of DVector4D;
+  {-}DMatrix4D=GMatrix4<TMatrix4D>;{//}
+  {-}{/DMatrix4D=record/}
+  {-}{/  mtr:TMatrix4D;/}
+  {-}{/  t:TMatrixType;/}
+  {-}{/end;            /}
+
+  TMatrix4F=packed array[0..3]of DVector4F;
+  PDMatrix4F=^DMatrix4F;
+  {-}DMatrix4F=GMatrix4<TMatrix4F>;{//}
+  {-}{/DMatrix4F=record/}
+  {-}{/  mtr:TMatrix4F;/}
+  {-}{/  t:TMatrixType;/}
+  {-}{/end;            /}
+
   DMatrix3D=packed array[0..2]of DVector3D;
   ClipArray=packed array[0..5]of DVector4D;
-  PDMatrix4F=^DMatrix4F;
-  DMatrix4F=packed array[0..3]of DVector4F;
 
   PGDBCoordinates3D=^GDBCoordinates3D;
   GDBCoordinates3D=GDBvertex;
@@ -325,6 +347,13 @@ type
                  p:GDBvertex2D;
   end;
 {EXPORT-}
+const
+ CMTScale=[MTIdentity,MTScale];
+ CMTTranslate=[MTIdentity,MTTranslate];
+ CMTRotate=[MTIdentity,MTRotate];
+ CMTTransform=[MTIdentity,MTScale,MTTranslate,MTRotate];
+ CMTIdentity=[MTIdentity];
+ CMTShear=[MTShear];
 implementation
 {$Define VectorTypeName := GVector4}
 {$Include gvectorimpl.inc}
@@ -355,4 +384,9 @@ implementation
 {$Include gvectorimpl.inc}
 {$UnDef IntParam}
 {$UnDef VectorTypeName}
+constructor GMatrix4<TMtr>.CreateRec(AMtr:TMtr;At:TMatrixType);
+begin
+  mtr:=AMtr;
+  t:=At;
+end;
 end.

@@ -601,9 +601,12 @@ begin
   {$IF DEFINED(LCLQt) OR DEFINED(LCLQt5)}_transminusM2:=CreateTranslationMatrix(CreateVertex(0,-TQtDeviceContext(TZGLGDIDrawer(drawer).OffScreedDC).Metrics.ascent,0));{$ENDIF}
   _transminusM:=CreateTranslationMatrix(CreateVertex(-x,-y,0));
   _scaleM:=CreateScaleMatrix(CreateVertex(txtSx,txtSy,1));
-  _obliqueM:=OneMatrix;
-  if txtOblique<>0 then
-                       _obliqueM[1].v[0]:=-cotan(txtOblique);
+  if txtOblique<>0 then begin
+    _obliqueM.CreateRec(OneMtr,CMTShear);
+    _obliqueM.mtr[1].v[0]:=-cotan(txtOblique)
+  end
+  else
+    _obliqueM:=OneMatrix;
   _transplusM:=CreateTranslationMatrix(CreateVertex(x,y,0));
   _rotateM:=CreateRotationMatrixZ(-txtRotate);
 

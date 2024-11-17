@@ -419,13 +419,15 @@ begin
   tp2:=NormalizeVertex(tp2);
   tp:=NormalizeVertex(tp);
 
-   rotmatr:=onematrix;
-   PGDBVertex(@rotmatr[0])^:=tp;
-   PGDBVertex(@rotmatr[1])^:=tp2;
-   PGDBVertex(@rotmatr[2])^:=tp3;
+   //rotmatr:=onematrix;
+   //PGDBVertex(@rotmatr.mtr[0])^:=tp;
+   //PGDBVertex(@rotmatr.mtr[1])^:=tp2;
+   //PGDBVertex(@rotmatr.mtr[2])^:=tp3;
+   rotmatr:=CreateMatrixFromBasis(tp,tp2,tp3);
 
-   m:=onematrix;
-   PGDBVertex(@m[3])^:=ptnlastCutted.PrevP;
+   //m:=onematrix;
+   //PGDBVertex(@m.mtr[3])^:=ptnlastCutted.PrevP;
+   m:=CreateTranslationMatrix(ptnlastCutted.PrevP);
 
    m:=MatrixMultiply(rotmatr,m);
 

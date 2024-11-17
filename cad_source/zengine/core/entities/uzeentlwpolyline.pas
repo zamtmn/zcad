@@ -573,7 +573,7 @@ begin
   widthload:=false;
   closed:=false;
   if bp.ListPos.owner<>nil then
-    local.p_insert:=PGDBVertex(@bp.ListPos.owner^.GetMatrix^[3])^
+    local.p_insert:=PGDBVertex(@bp.ListPos.owner^.GetMatrix^.mtr[3])^
   else
     local.P_insert:=nulvertex;
 

@@ -154,19 +154,20 @@ begin
            //tv:=vertexadd(wc,drawings.GetCurrentDWG^.OGLwindow1.param.startgluepoint.dcoord);
            dispmatr:=uzegeometry.CreateTranslationMatrix(createvertex(-tv.x,-tv.y,-tv.z));
 
-           rotmatr:=onematrix;
-           PGDBVertex(@rotmatr[0])^:=xdir;
-           PGDBVertex(@rotmatr[1])^:=ydir;
+           //rotmatr:=onematrix;
+           //PGDBVertex(@rotmatr.mtr[0])^:=xdir;
+           //PGDBVertex(@rotmatr.mtr[1])^:=ydir;
            if pgdbobjentity(osp^.PGDBObject)^.IsHaveLCS then
-                                                           PGDBVertex(@rotmatr[2])^:=PGDBObjWithLocalCS(osp^.PGDBObject)^.Local.basis.OZ
-                                                       else
-                                                           PGDBVertex(@rotmatr[2])^:={ZWCS}normalizevertex(uzegeometry.vectordot(ydir,xdir));
+             rotmatr:=CreateMatrixFromBasis(xdir,ydir,PGDBObjWithLocalCS(osp^.PGDBObject)^.Local.basis.OZ)
+           else
+             rotmatr:=CreateMatrixFromBasis(xdir,ydir,normalizevertex(uzegeometry.vectordot(ydir,xdir)));
+
            //rotmatr:=uzegeometry.MatrixMultiply(dispmatr,rotmatr);
            dispmatr2:=uzegeometry.CreateTranslationMatrix(createvertex(tv.x,tv.y,tv.z));
            //dispmatr:=uzegeometry.MatrixMultiply(rotmatr,dispmatr2);
 
            //drawings.GetCurrentDWG^.SelObjArray.TransformObj(dispmatr);
-           drawings.GetCurrentDWG^.SelObjArray.SetRotateObj(dispmatr,dispmatr2,rotmatr,PGDBVertex(@rotmatr[0])^,PGDBVertex(@rotmatr[1])^,PGDBVertex(@rotmatr[2])^);
+           drawings.GetCurrentDWG^.SelObjArray.SetRotateObj(dispmatr,dispmatr2,rotmatr,PGDBVertex(@rotmatr.mtr[0])^,PGDBVertex(@rotmatr.mtr[1])^,PGDBVertex(@rotmatr.mtr[2])^);
            end;
 
            fixentities:=true;
@@ -200,13 +201,13 @@ begin
            //tv:=vertexadd(wc,drawings.GetCurrentDWG^.OGLwindow1.param.startgluepoint.dcoord);
            dispmatr:=uzegeometry.CreateTranslationMatrix(createvertex(-tv.x,-tv.y,-tv.z));
 
-           rotmatr:=onematrix;
-           PGDBVertex(@rotmatr[0])^:=xdir;
-           PGDBVertex(@rotmatr[1])^:=ydir;
+           //rotmatr:=onematrix;
+           //PGDBVertex(@rotmatr.mtr[0])^:=xdir;
+           //PGDBVertex(@rotmatr.mtr[1])^:=ydir;
            if pgdbobjentity(osp^.PGDBObject)^.IsHaveLCS then
-                                                           PGDBVertex(@rotmatr[2])^:=PGDBObjWithLocalCS(osp^.PGDBObject)^.Local.basis.OZ
-                                                       else
-                                                           PGDBVertex(@rotmatr[2])^:={ZWCS}normalizevertex(uzegeometry.vectordot(ydir,xdir));;
+             rotmatr:=CreateMatrixFromBasis(xdir,ydir,PGDBObjWithLocalCS(osp^.PGDBObject)^.Local.basis.OZ)
+           else
+             rotmatr:=CreateMatrixFromBasis(xdir,ydir,normalizevertex(uzegeometry.vectordot(ydir,xdir)));
            {xdir:=normalizevertex(xdir);
            ydir:=uzegeometry.vectordot(pgdbobjlwPolyline(osp^.PGDBObject).Local.OZ,xdir);
 
@@ -224,7 +225,7 @@ begin
 
 
            //drawings.GetCurrentDWG^.SelObjArray.Transform(dispmatr);
-           drawings.GetCurrentDWG^.SelObjArray.SetRotate(dispmatr,dispmatr2,rotmatr,PGDBVertex(@rotmatr[0])^,PGDBVertex(@rotmatr[1])^,PGDBVertex(@rotmatr[2])^);
+           drawings.GetCurrentDWG^.SelObjArray.SetRotate(dispmatr,dispmatr2,rotmatr,PGDBVertex(@rotmatr.mtr[0])^,PGDBVertex(@rotmatr.mtr[1])^,PGDBVertex(@rotmatr.mtr[2])^);
 
            fixentities:=true;
            end;

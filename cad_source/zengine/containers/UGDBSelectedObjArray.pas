@@ -297,12 +297,13 @@ begin
   pobj^.Transform(minusd);
 
   m:=PGDBObjWithMatrix(pobj)^.ObjMatrix;
-  P_insert_in_OCS:=PGDBVertex(@m[3])^;
-  PGDBVertex(@m[3])^:=nulvertex;
+  P_insert_in_OCS:=PGDBVertex(@m.mtr[3])^;
+  PGDBVertex(@m.mtr[3])^:=nulvertex;
   matrixinvert(m);
   P_insert_in_WCS:=VectorTransform3D(P_insert_in_OCS,m);
-  m:=onematrix;
-  PGDBVertex(@m[3])^:=P_insert_in_wCS;
+  //m:=onematrix;
+  //PGDBVertex(@m.mtr[3])^:=P_insert_in_wCS;
+  m:=CreateTranslationMatrix(P_insert_in_wCS);
   PGDBObjWithMatrix(pobj)^.ObjMatrix:=m;
   pobj^.Transform(rm);
 

@@ -70,7 +70,7 @@ var
 begin
      if dc.maxdetail then
                          exit(true);
-  templod:=sqrt(objmatrix[0].v[0]*objmatrix[0].v[0]+objmatrix[1].v[1]*objmatrix[1].v[1]+objmatrix[2].v[2]*objmatrix[2].v[2]);
+  templod:=sqrt(objmatrix.mtr[0].v[0]*objmatrix.mtr[0].v[0]+objmatrix.mtr[1].v[1]*objmatrix.mtr[1].v[1]+objmatrix.mtr[2].v[2]*objmatrix.mtr[2].v[2]);
   templod:=(templod*ParamSize)/(dc.DrawingContext.zoom);
   if templod>TargetSize then
                             exit(true)
@@ -85,9 +85,9 @@ procedure GDBObjWithLocalCS.ReCalcFromObjMatrix;
 //var
     //ox:gdbvertex;
 begin
-     Local.basis.ox:=PGDBVertex(@objmatrix[0])^;
-     Local.basis.oy:=PGDBVertex(@objmatrix[1])^;
-     Local.basis.oz:=PGDBVertex(@objmatrix[2])^;
+     Local.basis.ox:=PGDBVertex(@objmatrix.mtr[0])^;
+     Local.basis.oy:=PGDBVertex(@objmatrix.mtr[1])^;
+     Local.basis.oz:=PGDBVertex(@objmatrix.mtr[2])^;
 
      Local.basis.ox:=normalizevertex(Local.basis.ox);
      Local.basis.oy:=normalizevertex(Local.basis.oy);
@@ -163,7 +163,6 @@ begin
   Local.basis.oz:=ZWCS;
   local.p_insert:=nulvertex;
   inherited initnul(owner);
-  //pprojoutbound:=nil;
 end;
 constructor GDBObjWithLocalCS.init;
 var
@@ -173,9 +172,9 @@ begin
   powner:=bp.ListPos.owner;
   if powner<>nil then
   begin
-  Local.basis.ox:={wx^}PGDBVertex(@powner^.GetMatrix^[0])^;
-  Local.basis.oy:={wy^}PGDBVertex(@powner^.GetMatrix^[1])^;
-  Local.basis.oz:={wz^}PGDBVertex(@powner^.GetMatrix^[2])^;
+  Local.basis.ox:={wx^}PGDBVertex(@powner^.GetMatrix^.mtr[0])^;
+  Local.basis.oy:={wy^}PGDBVertex(@powner^.GetMatrix^.mtr[1])^;
+  Local.basis.oz:={wz^}PGDBVertex(@powner^.GetMatrix^.mtr[2])^;
   end
   else
   begin
@@ -205,13 +204,15 @@ begin
      Local.basis.oy:=NormalizeVertex(Local.basis.oy);
      Local.basis.oz:=NormalizeVertex(Local.basis.oz);
 
-     rotmatr:=onematrix;
-     PGDBVertex(@rotmatr[0])^:=Local.basis.ox;
-     PGDBVertex(@rotmatr[1])^:=Local.basis.oy;
-     PGDBVertex(@rotmatr[2])^:=Local.basis.oz;
+     //rotmatr:=onematrix;
+     //PGDBVertex(@rotmatr.mtr[0])^:=Local.basis.ox;
+     //PGDBVertex(@rotmatr.mtr[1])^:=Local.basis.oy;
+     //PGDBVertex(@rotmatr.mtr[2])^:=Local.basis.oz;
+     rotmatr:=CreateMatrixFromBasis(Local.basis.ox,Local.basis.oy,Local.basis.oz);
 
-     dispmatr:=onematrix;
-     PGDBVertex(@dispmatr[3])^:=Local.p_insert;
+     //dispmatr:=onematrix;
+     //PGDBVertex(@dispmatr.mtr[3])^:=Local.p_insert;
+     dispmatr:=CreateTranslationMatrix(Local.p_insert);
 
      result:=MatrixMultiply(dispmatr,rotmatr);
 end;

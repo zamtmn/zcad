@@ -80,16 +80,17 @@ var
   //len:Double;
 
 begin
-      tempmatr:=onematrix;
-      pgdbvertex(@tempmatr[0])^:=prop.xdir;
-      pgdbvertex(@tempmatr[1])^:=prop.ydir;
-      pgdbvertex(@tempmatr[2])^:=prop.look;
+      //tempmatr:=onematrix;
+      //pgdbvertex(@tempmatr.mtr[0])^:=prop.xdir;
+      //pgdbvertex(@tempmatr.mtr[1])^:=prop.ydir;
+      //pgdbvertex(@tempmatr.mtr[2])^:=prop.look;
+      tempmatr:=CreateMatrixFromBasis(prop.xdir,prop.ydir,prop.look);
       rotmatr:=MatrixMultiply(CreateRotationMatrixY(uy),CreateRotationMatrixX(ux));
       tempmatr:=MatrixMultiply(rotmatr,tempmatr);
 
-      prop.xdir:=pgdbvertex(@tempmatr[0])^;
-      prop.ydir:=pgdbvertex(@tempmatr[1])^;
-      prop.look:=pgdbvertex(@tempmatr[2])^;
+      prop.xdir:=pgdbvertex(@tempmatr.mtr[0])^;
+      prop.ydir:=pgdbvertex(@tempmatr.mtr[1])^;
+      prop.look:=pgdbvertex(@tempmatr.mtr[2])^;
 
       prop.look:=NormalizeVertex(prop.look);
       prop.xdir := CrossVertex(prop.ydir,prop.look);
@@ -106,12 +107,14 @@ var
   len,d:Double;
 
 begin
-      tempmatr:=onematrix;
+      //tempmatr:=onematrix;
       //tempmatr2:=onematrix;
-      rotmatr:=onematrix;
-      pgdbvertex(@rotmatr[0])^:=prop.xdir;
-      pgdbvertex(@rotmatr[1])^:=prop.ydir;
-      pgdbvertex(@rotmatr[2])^:=prop.look;
+      //rotmatr:=onematrix;
+      //rotmatr.t:=CMTRotate;
+      //pgdbvertex(@rotmatr.mtr[0])^:=prop.xdir;
+      //pgdbvertex(@rotmatr.mtr[1])^:=prop.ydir;
+      //pgdbvertex(@rotmatr.mtr[2])^:=prop.look;
+      rotmatr:=CreateMatrixFromBasis(prop.xdir,prop.ydir,prop.look);
 
       tv2.x:=-oldx;
       tv2.y:=-oldy;
@@ -139,10 +142,10 @@ begin
       //normalize4d(tv);
 
       tv.x:=tv.x;
-      Pgdbvertex(@rotmatr[3])^:=prop.point;
+      Pgdbvertex(@rotmatr.mtr[3])^:=prop.point;
       tempmatr:=CreateTranslationMatrix(Pgdbvertex(@tv)^);
       tempmatr:=MatrixMultiply(rotmatr,tempmatr);
-      prop.point:=Pgdbvertex(@tempmatr[3])^;
+      prop.point:=Pgdbvertex(@tempmatr.mtr[3])^;
       end;
 
       end else

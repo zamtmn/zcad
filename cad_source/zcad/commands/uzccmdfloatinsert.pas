@@ -80,16 +80,8 @@ var
     domethod,undomethod:tmethod;
     dc:TDrawContext;
 begin
-
-      //drawings.GetCurrentDWG^.ConstructObjRoot.ObjMatrix:=dispmatr;
-      dist.x := wc.x;
-      dist.y := wc.y;
-      dist.z := wc.z;
-
-      dispmatr:=onematrix;
-      PGDBVertex(@dispmatr[3])^:=dist;
-
-      drawings.GetCurrentDWG^.ConstructObjRoot.ObjMatrix:=dispmatr;
+  dispmatr:=CreateTranslationMatrix(wc);
+  drawings.GetCurrentDWG^.ConstructObjRoot.ObjMatrix:=dispmatr;
 
   if (button and MZW_LBUTTON)<>0 then
   begin

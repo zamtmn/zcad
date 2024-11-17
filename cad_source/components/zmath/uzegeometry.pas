@@ -17,27 +17,34 @@
 }
 
 unit uzegeometry;
+{$Inline off}
 
 interface
 uses uzbLogIntf,uzegeometrytypes,math;
 resourcestring
   rsDivByZero='Divide by zero';
 const
+  EmptyMtr:TMatrix4D=((v:(0,0,0,0)),
+                      (v:(0,0,0,0)),
+                      (v:(0,0,0,0)),
+                      (v:(0,0,0,0)));
+  OneMtr:TMatrix4D=((v:(1,0,0,0)),
+                    (v:(0,1,0,0)),
+                    (v:(0,0,1,0)),
+                    (v:(0,0,0,1)));
+  EmptyMatrix:DMatrix4D=(mtr:((v:(0,0,0,0)),
+                              (v:(0,0,0,0)),
+                              (v:(0,0,0,0)),
+                              (v:(0,0,0,0)));
+                         t:[]);
+  OneMatrix:DMatrix4D=(mtr:((v:(1,0,0,0)),
+                            (v:(0,1,0,0)),
+                            (v:(0,0,1,0)),
+                            (v:(0,0,0,1)));
+                       t:CMTIdentity);
       RightAngle=pi/2;
-      EmptyMatrix: DMatrix4D = ((v:(0,0,0,0)),
-                                (v:(0,0,0,0)),
-                                (v:(0,0,0,0)),
-                                (v:(0,0,0,0)));
-        OneMatrix: DMatrix4D = ((x:1;y:0;z:0;w:0),
-                                (x:0;y:1;z:0;w:0),
-                                (x:0;y:0;z:1;w:0),
-                                (x:0;y:0;z:0;w:1));
-        TwoMatrix: DMatrix4D = ((x:2;y:0;z:0;w:0),
-                                (x:0;y:2;z:0;w:0),
-                                (x:0;y:0;z:2;w:0),
-                                (x:0;y:0;z:0;w:2));
-        DefaultVP:IMatrix4=(x:2;y:0;z:100;w:100);
-        IdentityQuaternion: GDBQuaternion = (ImagPart:(x:0;y:0;z:0); RealPart: 1);
+      DefaultVP:IMatrix4=(x:2;y:0;z:100;w:100);
+      IdentityQuaternion: GDBQuaternion = (ImagPart:(x:0;y:0;z:0); RealPart: 1);
       xAxisIndex=0;yAxisIndex=1;zAxisIndex=2;wAxisIndex=3;
       ScaleOne:GDBvertex=(x:1;y:1;z:1);
       OneVertex:GDBvertex=(x:1;y:1;z:1);
@@ -174,8 +181,11 @@ function distance2piece_2_xy(const q:GDBvertex2DI;const p1,p2:GDBvertex2D):GDBve
 
 function distance2point_2(const p1,p2:GDBvertex2DI):Integer;inline;
 function distance2ray(const q:GDBvertex;const p1,p2:GDBvertex):DistAndt;
-function CreateTranslationMatrix(const _V:GDBvertex): DMatrix4D;//inline;
-function CreateScaleMatrix(const V:GDBvertex): DMatrix4D;inline;
+function CreateTranslationMatrix(const _V:GDBvertex):DMatrix4D;inline;overload;
+function CreateTranslationMatrix(const tx,ty,tz:Double):DMatrix4D;inline;overload;
+function CreateScaleMatrix(const V:GDBvertex): DMatrix4D;inline;overload;
+function CreateScaleMatrix(const s:Double): DMatrix4D;inline;overload;
+function CreateScaleMatrix(const sx,sy,sz:Double): DMatrix4D;inline;overload;
 function CreateReflectionMatrix(const plane:DVector4D): DMatrix4D;
 //**Создать 3D вершину
 function CreateVertex(const _x,_y,_z:Double):GDBvertex;inline;
@@ -275,10 +285,11 @@ begin
 end;
 function ToDMatrix4F(const m:DMatrix4D):DMatrix4F;
 begin
-  result[0]:=ToDVector4F(m[0]);
-  result[1]:=ToDVector4F(m[1]);
-  result[2]:=ToDVector4F(m[2]);
-  result[3]:=ToDVector4F(m[3]);
+  result.mtr[0]:=ToDVector4F(m.mtr[0]);
+  result.mtr[1]:=ToDVector4F(m.mtr[1]);
+  result.mtr[2]:=ToDVector4F(m.mtr[2]);
+  result.mtr[3]:=ToDVector4F(m.mtr[3]);
+  result.t:=m.t;
 end;
 function ToVertex2DI(const _V:GDBvertex):GDBVertex2DI;
 begin
@@ -293,6 +304,7 @@ begin
 	                                              (vp.v[3]-2*(y-vp.v[1]))/deltay, 0));
     sm:=CreateScaleMatrix(createvertex(vp.v[2]/deltax,vp.v[3]/deltay, 1.0));
     result:=MatrixMultiply(sm,tm);
+    result.t:=CMTTransform;
 end;
 
 (*
@@ -789,10 +801,10 @@ begin
    //* Находим A, B, C, D для ПРАВОЙ плоскости */
    with DVector4D((@result[0])^) do
    begin
-     v[0] := clip[0].v[3] - clip[0].v[0];
-     v[1] := clip[1].v[3] - clip[1].v[0];
-     v[2] := clip[2].v[3] - clip[2].v[0];
-     v[3] := clip[3].v[3] - clip[3].v[0];
+     v[0] := clip.mtr[0].v[3] - clip.mtr[0].v[0];
+     v[1] := clip.mtr[1].v[3] - clip.mtr[1].v[0];
+     v[2] := clip.mtr[2].v[3] - clip.mtr[2].v[0];
+     v[3] := clip.mtr[3].v[3] - clip.mtr[3].v[0];
 
      t := sqrt( v[0] * v[0] + v[1] * v[1] + v[2] * v[2] );
      v[0] := v[0]/t;
@@ -804,10 +816,10 @@ begin
    //* Находим A, B, C, D для ЛЕВОЙ плоскости */
    with DVector4D((@result[1])^) do
    begin
-     v[0] := clip[0].v[3] + clip[0].v[0];
-     v[1] := clip[1].v[3] + clip[1].v[0];
-     v[2] := clip[2].v[3] + clip[2].v[0];
-     v[3] := clip[3].v[3] + clip[3].v[0];
+     v[0] := clip.mtr[0].v[3] + clip.mtr[0].v[0];
+     v[1] := clip.mtr[1].v[3] + clip.mtr[1].v[0];
+     v[2] := clip.mtr[2].v[3] + clip.mtr[2].v[0];
+     v[3] := clip.mtr[3].v[3] + clip.mtr[3].v[0];
      t := sqrt( v[0] * v[0] + v[1] * v[1] + v[2] * v[2] );
      v[0] := v[0]/t;
      v[1] := v[1]/t;
@@ -818,10 +830,10 @@ begin
    //* Находим A, B, C, D для НИЖНЕЙ плоскости */
    with DVector4D((@result[2])^) do
    begin
-     v[0] := clip[0].v[3] + clip[0].v[1];
-     v[1] := clip[1].v[3] + clip[1].v[1];
-     v[2] := clip[2].v[3] + clip[2].v[1];
-     v[3] := clip[3].v[3] + clip[3].v[1];
+     v[0] := clip.mtr[0].v[3] + clip.mtr[0].v[1];
+     v[1] := clip.mtr[1].v[3] + clip.mtr[1].v[1];
+     v[2] := clip.mtr[2].v[3] + clip.mtr[2].v[1];
+     v[3] := clip.mtr[3].v[3] + clip.mtr[3].v[1];
      t := sqrt( v[0] * v[0] + v[1] * v[1] + v[2] * v[2] );
      v[0] := v[0]/t;
      v[1] := v[1]/t;
@@ -832,10 +844,10 @@ begin
    //* ВЕРХНЯЯ плоскость */
    with DVector4D((@result[3])^) do
    begin
-     v[0] := clip[0].v[3] - clip[0].v[1];
-     v[1] := clip[1].v[3] - clip[1].v[1];
-     v[2] := clip[2].v[3] - clip[2].v[1];
-     v[3] := clip[3].v[3] - clip[3].v[1];
+     v[0] := clip.mtr[0].v[3] - clip.mtr[0].v[1];
+     v[1] := clip.mtr[1].v[3] - clip.mtr[1].v[1];
+     v[2] := clip.mtr[2].v[3] - clip.mtr[2].v[1];
+     v[3] := clip.mtr[3].v[3] - clip.mtr[3].v[1];
      t := sqrt( v[0] * v[0] + v[1] * v[1] + v[2] * v[2] );
      v[0] := v[0]/t;
      v[1] := v[1]/t;
@@ -846,10 +858,10 @@ begin
    //* ПЕРЕДНЯЯ плоскость */
    with DVector4D((@result[4])^) do
    begin
-     v[0] := clip[0].v[3] + clip[0].v[2];
-     v[1] := clip[1].v[3] + clip[1].v[2];
-     v[2] := clip[2].v[3] + clip[2].v[2];
-     v[3] := clip[3].v[3] + clip[3].v[2];
+     v[0] := clip.mtr[0].v[3] + clip.mtr[0].v[2];
+     v[1] := clip.mtr[1].v[3] + clip.mtr[1].v[2];
+     v[2] := clip.mtr[2].v[3] + clip.mtr[2].v[2];
+     v[3] := clip.mtr[3].v[3] + clip.mtr[3].v[2];
      t := sqrt( v[0] * v[0] + v[1] * v[1] + v[2] * v[2] );
      v[0] := v[0]/t;
      v[1] := v[1]/t;
@@ -860,10 +872,10 @@ begin
    //* ?? плоскость */
    with DVector4D((@result[5])^) do
    begin
-     v[0] := clip[0].v[3] - clip[0].v[2];
-     v[1] := clip[1].v[3] - clip[1].v[2];
-     v[2] := clip[2].v[3] - clip[2].v[2];
-     v[3] := clip[3].v[3] - clip[3].v[2];
+     v[0] := clip.mtr[0].v[3] - clip.mtr[0].v[2];
+     v[1] := clip.mtr[1].v[3] - clip.mtr[1].v[2];
+     v[2] := clip.mtr[2].v[3] - clip.mtr[2].v[2];
+     v[3] := clip.mtr[3].v[3] - clip.mtr[3].v[2];
      t := sqrt( v[0] * v[0] + v[1] * v[1] + v[2] * v[2] );
      v[0] := v[0]/t;
      v[1] := v[1]/t;
@@ -884,23 +896,20 @@ begin
      xmaxplusxmin:=xmax+xmin;
      ymaxplusymin:=ymax+ymin;
      zmaxpluszmin:=zmax+zmin;
-     m:=OneMatrix;
      if (abs(xmaxminusxmin)<eps) or
         (abs(ymaxminusymin)<eps) or
         (abs(zmaxminuszmin)<eps) then
-                                   begin
-                                        result:=matrix^;
-                                        exit;
-                                   end;
-     {Все коэффициенты домножены на xmaxminusxmin, воччтановить оригинал - соответственно всё разделить}
-     m[0].v[0]:=2{/xmaxminusxmin};
-     m[1].v[1]:=(2/ymaxminusymin)*xmaxminusxmin;
-     m[2].v[2]:=(2/zmaxminuszmin)*xmaxminusxmin;
-     m[3].v[0]:=(-xmaxplusxmin/xmaxminusxmin)*xmaxminusxmin;
-     m[3].v[1]:=(-ymaxplusymin/ymaxminusymin)*xmaxminusxmin;
-     m[3].v[2]:=(zmaxpluszmin/zmaxminuszmin)*xmaxminusxmin;
+       exit(matrix^);
 
-     m[3].v[3]:=xmaxminusxmin;
+     m.CreateRec(OneMtr,CMTTransform);
+     {Все коэффициенты домножены на xmaxminusxmin, воччтановить оригинал - соответственно всё разделить}
+     m.mtr[0].v[0]:=2{/xmaxminusxmin};
+     m.mtr[1].v[1]:=(2/ymaxminusymin)*xmaxminusxmin;
+     m.mtr[2].v[2]:=(2/zmaxminuszmin)*xmaxminusxmin;
+     m.mtr[3].v[0]:=(-xmaxplusxmin/xmaxminusxmin)*xmaxminusxmin;
+     m.mtr[3].v[1]:=(-ymaxplusymin/ymaxminusymin)*xmaxminusxmin;
+     m.mtr[3].v[2]:=(zmaxpluszmin/zmaxminuszmin)*xmaxminusxmin;
+     m.mtr[3].v[3]:=xmaxminusxmin;
 
      result:=MatrixMultiply(m,matrix^);
      //glMultMatrixd(@m);
@@ -940,14 +949,15 @@ begin
 
     cotangent:= cosine / sine;
 
-    m:=OneMatrix;
-
-    m[0].v[0] := cotangent / w_h;
-    m[1].v[1] := cotangent;
-    m[2].v[2] := -(zmax + zmin) / deltaZ;
-    m[2].v[3] := -1;
-    m[3].v[2] := -2 * zmin * zmax / deltaZ;
-    m[3].v[3] := 0;
+    m.CreateRec(OneMtr,CMTTransform);
+    //m:=OneMatrix;
+    m.mtr[0].v[0] := cotangent / w_h;
+    m.mtr[1].v[1] := cotangent;
+    m.mtr[2].v[2] := -(zmax + zmin) / deltaZ;
+    m.mtr[2].v[3] := -1;
+    m.mtr[3].v[2] := -2 * zmin * zmax / deltaZ;
+    m.mtr[3].v[3] := 0;
+    //m.t:=CMTTransform;
 
     result:=MatrixMultiply(m,matrix^);
 end;
@@ -980,33 +990,20 @@ gluPerspective(GLdouble fovy, GLdouble aspect, GLdouble zNear, GLdouble zFar)
 *)
 
 function lookat;
-var m:DMatrix4D;
-    m2:DMatrix4D;
+var
+  m:DMatrix4D;
+  m2:DMatrix4D;
 begin
-     m:=OneMatrix;
-     m2:=OneMatrix;
-     ex.x:=-ex.x;
-     ex.y:=-ex.y;
-     ex.z:=-ex.z;
-     ez.x:=-ez.x;
-     ez.y:=-ez.y;
-     ez.z:=-ez.z;
-     PGDBVertex(@m[0])^:=ex;
-     PGDBVertex(@m[1])^:=ey;
-     PGDBVertex(@m[2])^:=ez;
-     MatrixTranspose(m);
-     point.x:=point.x;
-     point.y:=point.y;
-     point.z:=point.z;
-     PGDBVertex(@m2[3])^:=point;
-     //m2[3][3]:=1/point.y*point.y;
+  m:=CreateMatrixFromBasis(-ex,ey,-ez);
+  MatrixTranspose(m);
 
-     m:=MatrixMultiply(M2,M);
+  m2:=CreateTranslationMatrix(point);
 
-     result:=MatrixMultiply(m,matrix^);
-     //glMultMatrixd(@m);
+  m:=MatrixMultiply(m2,m);
 
+  result:=MatrixMultiply(m,matrix^);
 end;
+
 procedure _myGluUnProject(const winx,winy,winz:Double;const modelMatrix,projMatrix:PDMatrix4D;const viewport:PIMatrix4;out objx,objy,objz:Double);
 var
    _in,_out:GDBVertex4D;
@@ -1090,16 +1087,16 @@ var a1, a2, a3, a4,
     c1, c2, c3, c4,
     d1, d2, d3, d4: Double;
 begin
-  with DVector4D((@M[0])^) do begin
+  with DVector4D((@M.mtr[0])^) do begin
     a1 := v[0];  b1 := v[1];  c1 := v[2];  d1 := v[3];
   end;
-  with DVector4D((@M[1])^) do begin
+  with DVector4D((@M.mtr[1])^) do begin
     a2 := v[0];  b2 := v[1];  c2 := v[2];  d2 := v[3];
   end;
-  with DVector4D((@M[2])^) do begin
+  with DVector4D((@M.mtr[2])^) do begin
     a3 := v[0];  b3 := v[1];  c3 := v[2];  d3 := v[3];
   end;
-  with DVector4D((@M[3])^) do begin
+  with DVector4D((@M.mtr[3])^) do begin
     a4 := v[0];  b4 := v[1];  c4 := v[2];  d4 := v[3];
   end;
     //a1 :=  M[0].v[0]; b1 :=  M[0].v[1];
@@ -1112,25 +1109,25 @@ begin
     //c4 :=  M[3].v[2]; d4 :=  M[3].v[3];
 
     // row column labeling reversed since we transpose rows & columns
-    M[XAxisIndex].v[XAxisIndex] :=  MatrixDetInternal(b2, b3, b4, c2, c3, c4, d2, d3, d4);
-    M[XAxisIndex].v[YAxisIndex] := -MatrixDetInternal(b1, b3, b4, c1, c3, c4, d1, d3, d4);
-    M[XAxisIndex].v[ZAxisIndex] :=  MatrixDetInternal(b1, b2, b4, c1, c2, c4, d1, d2, d4);
-    M[XAxisIndex].v[WAxisIndex] := -MatrixDetInternal(b1, b2, b3, c1, c2, c3, d1, d2, d3);
+    M.mtr[XAxisIndex].v[XAxisIndex] :=  MatrixDetInternal(b2, b3, b4, c2, c3, c4, d2, d3, d4);
+    M.mtr[XAxisIndex].v[YAxisIndex] := -MatrixDetInternal(b1, b3, b4, c1, c3, c4, d1, d3, d4);
+    M.mtr[XAxisIndex].v[ZAxisIndex] :=  MatrixDetInternal(b1, b2, b4, c1, c2, c4, d1, d2, d4);
+    M.mtr[XAxisIndex].v[WAxisIndex] := -MatrixDetInternal(b1, b2, b3, c1, c2, c3, d1, d2, d3);
 
-    M[YAxisIndex].v[XAxisIndex] := -MatrixDetInternal(a2, a3, a4, c2, c3, c4, d2, d3, d4);
-    M[YAxisIndex].v[YAxisIndex] :=  MatrixDetInternal(a1, a3, a4, c1, c3, c4, d1, d3, d4);
-    M[YAxisIndex].v[ZAxisIndex] := -MatrixDetInternal(a1, a2, a4, c1, c2, c4, d1, d2, d4);
-    M[YAxisIndex].v[WAxisIndex] :=  MatrixDetInternal(a1, a2, a3, c1, c2, c3, d1, d2, d3);
+    M.mtr[YAxisIndex].v[XAxisIndex] := -MatrixDetInternal(a2, a3, a4, c2, c3, c4, d2, d3, d4);
+    M.mtr[YAxisIndex].v[YAxisIndex] :=  MatrixDetInternal(a1, a3, a4, c1, c3, c4, d1, d3, d4);
+    M.mtr[YAxisIndex].v[ZAxisIndex] := -MatrixDetInternal(a1, a2, a4, c1, c2, c4, d1, d2, d4);
+    M.mtr[YAxisIndex].v[WAxisIndex] :=  MatrixDetInternal(a1, a2, a3, c1, c2, c3, d1, d2, d3);
 
-    M[ZAxisIndex].v[XAxisIndex] :=  MatrixDetInternal(a2, a3, a4, b2, b3, b4, d2, d3, d4);
-    M[ZAxisIndex].v[YAxisIndex] := -MatrixDetInternal(a1, a3, a4, b1, b3, b4, d1, d3, d4);
-    M[ZAxisIndex].v[ZAxisIndex] :=  MatrixDetInternal(a1, a2, a4, b1, b2, b4, d1, d2, d4);
-    M[ZAxisIndex].v[WAxisIndex] := -MatrixDetInternal(a1, a2, a3, b1, b2, b3, d1, d2, d3);
+    M.mtr[ZAxisIndex].v[XAxisIndex] :=  MatrixDetInternal(a2, a3, a4, b2, b3, b4, d2, d3, d4);
+    M.mtr[ZAxisIndex].v[YAxisIndex] := -MatrixDetInternal(a1, a3, a4, b1, b3, b4, d1, d3, d4);
+    M.mtr[ZAxisIndex].v[ZAxisIndex] :=  MatrixDetInternal(a1, a2, a4, b1, b2, b4, d1, d2, d4);
+    M.mtr[ZAxisIndex].v[WAxisIndex] := -MatrixDetInternal(a1, a2, a3, b1, b2, b3, d1, d2, d3);
 
-    M[WAxisIndex].v[XAxisIndex] := -MatrixDetInternal(a2, a3, a4, b2, b3, b4, c2, c3, c4);
-    M[WAxisIndex].v[YAxisIndex] :=  MatrixDetInternal(a1, a3, a4, b1, b3, b4, c1, c3, c4);
-    M[WAxisIndex].v[ZAxisIndex] := -MatrixDetInternal(a1, a2, a4, b1, b2, b4, c1, c2, c4);
-    M[WAxisIndex].v[WAxisIndex] :=  MatrixDetInternal(a1, a2, a3, b1, b2, b3, c1, c2, c3);
+    M.mtr[WAxisIndex].v[XAxisIndex] := -MatrixDetInternal(a2, a3, a4, b2, b3, b4, c2, c3, c4);
+    M.mtr[WAxisIndex].v[YAxisIndex] :=  MatrixDetInternal(a1, a3, a4, b1, b3, b4, c1, c3, c4);
+    M.mtr[WAxisIndex].v[ZAxisIndex] := -MatrixDetInternal(a1, a2, a4, b1, b2, b4, c1, c2, c4);
+    M.mtr[WAxisIndex].v[WAxisIndex] :=  MatrixDetInternal(a1, a2, a3, b1, b2, b3, c1, c2, c3);
 end;
 function MatrixDeterminant(const M: DMatrix4D): Double;
 var a1, a2, a3, a4,
@@ -1138,16 +1135,16 @@ var a1, a2, a3, a4,
     c1, c2, c3, c4,
     d1, d2, d3, d4  : Double;
 begin
-  with DVector4D((@M[0])^) do begin
+  with DVector4D((@M.mtr[0])^) do begin
     a1 := v[0];  b1 := v[1];  c1 := v[2];  d1 := v[3];
   end;
-  with DVector4D((@M[1])^) do begin
+  with DVector4D((@M.mtr[1])^) do begin
     a2 := v[0];  b2 := v[1];  c2 := v[2];  d2 := v[3];
   end;
-  with DVector4D((@M[2])^) do begin
+  with DVector4D((@M.mtr[2])^) do begin
     a3 := v[0];  b3 := v[1];  c3 := v[2];  d3 := v[3];
   end;
-  with DVector4D((@M[3])^) do begin
+  with DVector4D((@M.mtr[3])^) do begin
     a4 := v[0];  b4 := v[1];  c4 := v[2];  d4 := v[3];
   end;
   //a1 := M[0].v[0];  b1 := M[0].v[1];  c1 := M[0].v[2];  d1 := M[0].v[3];
@@ -1163,25 +1160,25 @@ end;
 procedure MatrixScale(var M: DMatrix4D; const Factor: Double);
 //var I, J: Integer;
 begin
-  with DVector4D((@M[0])^) do begin
+  with DVector4D((@M.mtr[0])^) do begin
     v[0] := v[0] * Factor;
     v[1] := v[1] * Factor;
     v[2] := v[2] * Factor;
     v[3] := v[3] * Factor;
   end;
-  with DVector4D((@M[1])^) do begin
+  with DVector4D((@M.mtr[1])^) do begin
     v[0] := v[0] * Factor;
     v[1] := v[1] * Factor;
     v[2] := v[2] * Factor;
     v[3] := v[3] * Factor;
   end;
-  with DVector4D((@M[2])^) do begin
+  with DVector4D((@M.mtr[2])^) do begin
     v[0] := v[0] * Factor;
     v[1] := v[1] * Factor;
     v[2] := v[2] * Factor;
     v[3] := v[3] * Factor;
   end;
-  with DVector4D((@M[3])^) do begin
+  with DVector4D((@M.mtr[3])^) do begin
     v[0] := v[0] * Factor;
     v[1] := v[1] * Factor;
     v[2] := v[2] * Factor;
@@ -1407,13 +1404,23 @@ end;
 
 function CreateTranslationMatrix(const _V:GDBvertex): DMatrix4D;
 begin
-  Result := onematrix;
-  with DVector4D((@Result[3])^) do
+  Result.CreateRec(onemtr,CMTTranslate);
+  with DVector4D((@Result.mtr[3])^) do
   begin
     v[0] := _V.x;
     v[1] := _V.y;
     v[2] := _V.z;
     v[3] := 1;
+  end;
+end;
+function CreateTranslationMatrix(const tx,ty,tz:Double):DMatrix4D;
+begin
+  Result.CreateRec(onemtr,CMTTranslate);
+  with DVector4D((@Result.mtr[3])^) do begin
+    v[0]:=tx;
+    v[1]:=ty;
+    v[2]:=tz;
+    v[3]:=1;
   end;
 end;
 function CreateReflectionMatrix(const plane:DVector4D): DMatrix4D;
@@ -1423,37 +1430,59 @@ begin
   with DVector4D((@plane)^) do
   begin
     d:=v[0];
-    result[0].v[0] :=-2 * d * v[0] + 1;
-    result[1].v[0] :=-2 * d * v[1];
-    result[2].v[0] :=-2 * d * v[2];
-    result[3].v[0] :=-2 * d * v[3];
+    result.mtr[0].v[0] :=-2 * d * v[0] + 1;
+    result.mtr[1].v[0] :=-2 * d * v[1];
+    result.mtr[2].v[0] :=-2 * d * v[2];
+    result.mtr[3].v[0] :=-2 * d * v[3];
 
     d:=v[1];
-    result[0].v[1] :=-2 * d * v[0];
-    result[1].v[1] :=-2 * d * v[1] + 1;
-    result[2].v[1] :=-2 * d * v[2];
-    result[3].v[1] :=-2 * d * v[3];
+    result.mtr[0].v[1] :=-2 * d * v[0];
+    result.mtr[1].v[1] :=-2 * d * v[1] + 1;
+    result.mtr[2].v[1] :=-2 * d * v[2];
+    result.mtr[3].v[1] :=-2 * d * v[3];
 
     d:=v[2];
-    result[0].v[2] :=-2 * d * v[0];
-    result[1].v[2] :=-2 * d * v[1];
-    result[2].v[2] :=-2 * d * v[2] + 1;
-    result[3].v[2] :=-2 * d * v[3];
+    result.mtr[0].v[2] :=-2 * d * v[0];
+    result.mtr[1].v[2] :=-2 * d * v[1];
+    result.mtr[2].v[2] :=-2 * d * v[2] + 1;
+    result.mtr[3].v[2] :=-2 * d * v[3];
   end;
 
-  result[0].v[3]:=0;
-  result[1].v[3]:=0;
-  result[2].v[3]:=0;
-  result[3].v[3]:=1;
+  result.mtr[0].v[3]:=0;
+  result.mtr[1].v[3]:=0;
+  result.mtr[2].v[3]:=0;
+  result.mtr[3].v[3]:=1;
+  Result.t:=[MTIdentity,MTScale,MTTranslate];
 end;
 
 function CreateScaleMatrix(const V:GDBvertex): DMatrix4D;
 begin
-  Result := onematrix;
-  Result[0].v[0] := V.x;
-  Result[1].v[1] := V.y;
-  Result[2].v[2] := V.z;
-  Result[3].v[3] := 1;
+  Result.mtr:=onemtr;
+  Result.mtr[0].v[0]:=V.x;
+  Result.mtr[1].v[1]:=V.y;
+  Result.mtr[2].v[2]:=V.z;
+  Result.mtr[3].v[3]:=1;
+  Result.t:=CMTScale;
+end;
+
+function CreateScaleMatrix(const s:Double): DMatrix4D;
+begin
+  Result.mtr:=onemtr;
+  Result.mtr[0].v[0]:=S;
+  Result.mtr[1].v[1]:=S;
+  Result.mtr[2].v[2]:=S;
+  Result.mtr[3].v[3]:=1;
+  Result.t:=CMTScale;
+end;
+
+function CreateScaleMatrix(const sx,sy,sz:Double): DMatrix4D;inline;overload;
+begin
+  Result.mtr:=onemtr;
+  Result.mtr[0].v[0]:=sx;
+  Result.mtr[1].v[1]:=sy;
+  Result.mtr[2].v[2]:=sz;
+  Result.mtr[3].v[3]:=1;
+  Result.t:=CMTScale;
 end;
 
 function CreateRotationMatrixX(const angle: Double): DMatrix4D;
@@ -1462,12 +1491,13 @@ var
 begin
   SinCos(angle, Sine, Cosine);
   Result := EmptyMatrix;
-  Result[0].v[0] := 1;
-  Result[1].v[1] := Cosine;
-  Result[1].v[2] := Sine;
-  Result[2].v[1] := -Sine;
-  Result[2].v[2] := Cosine;
-  Result[3].v[3] := 1;
+  Result.mtr[0].v[0] := 1;
+  Result.mtr[1].v[1] := Cosine;
+  Result.mtr[1].v[2] := Sine;
+  Result.mtr[2].v[1] := -Sine;
+  Result.mtr[2].v[2] := Cosine;
+  Result.mtr[3].v[3] := 1;
+  Result.t:=CMTRotate;
 end;
 function CreateRotationMatrixY(const angle: Double): DMatrix4D;
 var
@@ -1475,12 +1505,13 @@ var
 begin
   SinCos(angle, Sine, Cosine);
   Result := EmptyMatrix;
-  Result[0].v[0] := Cosine;
-  Result[0].v[2] := -Sine;
-  Result[1].v[1] := 1;
-  Result[2].v[0] := Sine;
-  Result[2].v[2] := Cosine;
-  Result[3].v[3] := 1;
+  Result.mtr[0].v[0] := Cosine;
+  Result.mtr[0].v[2] := -Sine;
+  Result.mtr[1].v[1] := 1;
+  Result.mtr[2].v[0] := Sine;
+  Result.mtr[2].v[2] := Cosine;
+  Result.mtr[3].v[3] := 1;
+  Result.t:=CMTRotate;
 end;
 function CreateRotatedXVector(const angle: Double):GDBvertex;
 begin
@@ -1497,10 +1528,11 @@ var
 begin
   SinCos(angle, Sine, Cosine);
   Result := Onematrix;
-  Result[0].v[0] := Cosine;
-  Result[0].v[1] := Sine;
-  Result[1].v[1] := Cosine;
-  Result[1].v[0] := -Sine;
+  Result.mtr[0].v[0] := Cosine;
+  Result.mtr[0].v[1] := Sine;
+  Result.mtr[1].v[1] := Cosine;
+  Result.mtr[1].v[0] := -Sine;
+  Result.t:=CMTRotate;
 end;
 function CreateAffineRotationMatrix(const anAxis: GDBvertex; angle: double):DMatrix4D;
 var
@@ -1510,18 +1542,21 @@ begin
    SinCos(angle, SINE, cosine);
    one_minus_cosine:=1 - cosine;
    axis:=NormalizeVertex(anAxis);
-   result:=onematrix;
-   Result[XAxisIndex].v[XAxisIndex]:=(one_minus_cosine * Sqr(Axis.x)) + Cosine;
-   Result[XAxisIndex].v[YAxisIndex]:=(one_minus_cosine * Axis.x * Axis.y) - (Axis.z * Sine);
-   Result[XAxisIndex].v[ZAxisIndex]:=(one_minus_cosine * Axis.z * Axis.x) + (Axis.y * Sine);
 
-   Result[YAxisIndex].v[XAxisIndex]:=(one_minus_cosine * Axis.x * Axis.y) + (Axis.z * Sine);
-   Result[YAxisIndex].v[YAxisIndex]:=(one_minus_cosine * Sqr(Axis.y)) + Cosine;
-   Result[YAxisIndex].v[ZAxisIndex]:=(one_minus_cosine * Axis.y * Axis.z) - (Axis.x * Sine);
+   Result.CreateRec(OneMtr,CMTRotate);
+   //result:=onematrix;
+   Result.mtr[XAxisIndex].v[XAxisIndex]:=(one_minus_cosine * Sqr(Axis.x)) + Cosine;
+   Result.mtr[XAxisIndex].v[YAxisIndex]:=(one_minus_cosine * Axis.x * Axis.y) - (Axis.z * Sine);
+   Result.mtr[XAxisIndex].v[ZAxisIndex]:=(one_minus_cosine * Axis.z * Axis.x) + (Axis.y * Sine);
 
-   Result[ZAxisIndex].v[XAxisIndex]:=(one_minus_cosine * Axis.z * Axis.x) - (Axis.y * Sine);
-   Result[ZAxisIndex].v[YAxisIndex]:=(one_minus_cosine * Axis.y * Axis.z) + (Axis.x * Sine);
-   Result[ZAxisIndex].v[ZAxisIndex]:=(one_minus_cosine * Sqr(Axis.z)) + Cosine;
+   Result.mtr[YAxisIndex].v[XAxisIndex]:=(one_minus_cosine * Axis.x * Axis.y) + (Axis.z * Sine);
+   Result.mtr[YAxisIndex].v[YAxisIndex]:=(one_minus_cosine * Sqr(Axis.y)) + Cosine;
+   Result.mtr[YAxisIndex].v[ZAxisIndex]:=(one_minus_cosine * Axis.y * Axis.z) - (Axis.x * Sine);
+
+   Result.mtr[ZAxisIndex].v[XAxisIndex]:=(one_minus_cosine * Axis.z * Axis.x) - (Axis.y * Sine);
+   Result.mtr[ZAxisIndex].v[YAxisIndex]:=(one_minus_cosine * Axis.y * Axis.z) + (Axis.x * Sine);
+   Result.mtr[ZAxisIndex].v[ZAxisIndex]:=(one_minus_cosine * Sqr(Axis.z)) + Cosine;
+   //Result.t:=CMTRotate;
 end;
 
 function MatrixMultiply(const M1, M2: DMatrix4D): DMatrix4D;
@@ -1529,42 +1564,45 @@ var I: Integer;
 begin
   for I := 3 downto 0 do
   begin
-    with M1[I] do
+    with M1.mtr[I] do
     begin
-      Result[I].v[0] := v[0]*M2[0].v[0] + v[1]*M2[1].v[0] + v[2]*M2[2].v[0] + v[3]*M2[3].v[0];
-      Result[I].v[1] := v[0]*M2[0].v[1] + v[1]*M2[1].v[1] + v[2]*M2[2].v[1] + v[3]*M2[3].v[1];
-      Result[I].v[2] := v[0]*M2[0].v[2] + v[1]*M2[1].v[2] + v[2]*M2[2].v[2] + v[3]*M2[3].v[2];
-      Result[I].v[3] := v[0]*M2[0].v[3] + v[1]*M2[1].v[3] + v[2]*M2[2].v[3] + v[3]*M2[3].v[3];
+      Result.mtr[I].v[0] := v[0]*M2.mtr[0].v[0] + v[1]*M2.mtr[1].v[0] + v[2]*M2.mtr[2].v[0] + v[3]*M2.mtr[3].v[0];
+      Result.mtr[I].v[1] := v[0]*M2.mtr[0].v[1] + v[1]*M2.mtr[1].v[1] + v[2]*M2.mtr[2].v[1] + v[3]*M2.mtr[3].v[1];
+      Result.mtr[I].v[2] := v[0]*M2.mtr[0].v[2] + v[1]*M2.mtr[1].v[2] + v[2]*M2.mtr[2].v[2] + v[3]*M2.mtr[3].v[2];
+      Result.mtr[I].v[3] := v[0]*M2.mtr[0].v[3] + v[1]*M2.mtr[1].v[3] + v[2]*M2.mtr[2].v[3] + v[3]*M2.mtr[3].v[3];
     end;
   end;
+  Result.t:=M1.t+M2.t;
 end;
 function MatrixMultiply(const M1: DMatrix4D; const M2: DMatrix4F):DMatrix4D;
 var I: Integer;
 begin
   for I := 3 downto 0 do
   begin
-    with M1[I] do
+    with M1.mtr[I] do
     begin
-      Result[I].v[0] := v[0]*M2[0].v[0] + v[1]*M2[1].v[0] + v[2]*M2[2].v[0] + v[3]*M2[3].v[0];
-      Result[I].v[1] := v[0]*M2[0].v[1] + v[1]*M2[1].v[1] + v[2]*M2[2].v[1] + v[3]*M2[3].v[1];
-      Result[I].v[2] := v[0]*M2[0].v[2] + v[1]*M2[1].v[2] + v[2]*M2[2].v[2] + v[3]*M2[3].v[2];
-      Result[I].v[3] := v[0]*M2[0].v[3] + v[1]*M2[1].v[3] + v[2]*M2[2].v[3] + v[3]*M2[3].v[3];
+      Result.mtr[I].v[0] := v[0]*M2.mtr[0].v[0] + v[1]*M2.mtr[1].v[0] + v[2]*M2.mtr[2].v[0] + v[3]*M2.mtr[3].v[0];
+      Result.mtr[I].v[1] := v[0]*M2.mtr[0].v[1] + v[1]*M2.mtr[1].v[1] + v[2]*M2.mtr[2].v[1] + v[3]*M2.mtr[3].v[1];
+      Result.mtr[I].v[2] := v[0]*M2.mtr[0].v[2] + v[1]*M2.mtr[1].v[2] + v[2]*M2.mtr[2].v[2] + v[3]*M2.mtr[3].v[2];
+      Result.mtr[I].v[3] := v[0]*M2.mtr[0].v[3] + v[1]*M2.mtr[1].v[3] + v[2]*M2.mtr[2].v[3] + v[3]*M2.mtr[3].v[3];
     end;
   end;
+  Result.t:=M1.t+M2.t;
 end;
 function MatrixMultiplyF(const M1, M2: DMatrix4D):DMatrix4F;
 var I: Integer;
 begin
   for I := 3 downto 0 do
   begin
-    with M1[I] do
+    with M1.mtr[I] do
     begin
-      Result[I].v[0] := v[0]*M2[0].v[0] + v[1]*M2[1].v[0] + v[2]*M2[2].v[0] + v[3]*M2[3].v[0];
-      Result[I].v[1] := v[0]*M2[0].v[1] + v[1]*M2[1].v[1] + v[2]*M2[2].v[1] + v[3]*M2[3].v[1];
-      Result[I].v[2] := v[0]*M2[0].v[2] + v[1]*M2[1].v[2] + v[2]*M2[2].v[2] + v[3]*M2[3].v[2];
-      Result[I].v[3] := v[0]*M2[0].v[3] + v[1]*M2[1].v[3] + v[2]*M2[2].v[3] + v[3]*M2[3].v[3];
+      Result.mtr[I].v[0] := v[0]*M2.mtr[0].v[0] + v[1]*M2.mtr[1].v[0] + v[2]*M2.mtr[2].v[0] + v[3]*M2.mtr[3].v[0];
+      Result.mtr[I].v[1] := v[0]*M2.mtr[0].v[1] + v[1]*M2.mtr[1].v[1] + v[2]*M2.mtr[2].v[1] + v[3]*M2.mtr[3].v[1];
+      Result.mtr[I].v[2] := v[0]*M2.mtr[0].v[2] + v[1]*M2.mtr[1].v[2] + v[2]*M2.mtr[2].v[2] + v[3]*M2.mtr[3].v[2];
+      Result.mtr[I].v[3] := v[0]*M2.mtr[0].v[3] + v[1]*M2.mtr[1].v[3] + v[2]*M2.mtr[2].v[3] + v[3]*M2.mtr[3].v[3];
     end;
   end;
+  Result.t:=M1.t+M2.t;
 end;
 procedure MatrixTranspose(var M: DMatrix4D);
 var I: Integer;
@@ -1572,15 +1610,15 @@ var I: Integer;
 begin
   for I := 3 downto 0 do
   begin
-    with M[I] do
+    with M.mtr[I] do
     begin
-      TM[0].v[I] := v[0];
-      TM[1].v[I] := v[1];
-      TM[2].v[I] := v[2];
-      TM[3].v[I] := v[3];
+      TM.mtr[0].v[I] := v[0];
+      TM.mtr[1].v[I] := v[1];
+      TM.mtr[2].v[I] := v[2];
+      TM.mtr[3].v[I] := v[3];
     end;
   end;
-  M := TM;
+  M.mtr:=TM.mtr;
 end;
 procedure MatrixTranspose(var M: DMatrix4F);
 var I: Integer;
@@ -1588,24 +1626,24 @@ var I: Integer;
 begin
   for I := 3 downto 0 do
   begin
-    with M[I] do
+    with M.mtr[I] do
     begin
-      TM[0].v[I] := v[0];
-      TM[1].v[I] := v[1];
-      TM[2].v[I] := v[2];
-      TM[3].v[I] := v[3];
+      TM.mtr[0].v[I] := v[0];
+      TM.mtr[1].v[I] := v[1];
+      TM.mtr[2].v[I] := v[2];
+      TM.mtr[3].v[I] := v[3];
     end;
   end;
-  M := TM;
+  M.mtr:=TM.mtr;
 end;
 procedure MatrixNormalize(var M: DMatrix4D);
 var I{, J}: Integer;
     D: Double;
 begin
-  D:=M[3].v[3];
+  D:=M.mtr[3].v[3];
   for I := 3 downto 0 do
   begin
-    with M[I] do
+    with M.mtr[I] do
     begin
       v[0]:=v[0]/D;
       v[1]:=v[1]/D;
@@ -1617,33 +1655,42 @@ end;
 
 function VectorTransform(const V:GDBVertex4D;const M:DMatrix4D):GDBVertex4D;
 begin
-  with GDBVertex4D((@V)^) do
-  begin
-    Result.X := X * M[0].v[0] + y * M[1].v[0] + z * M[2].v[0] + w * M[3].v[0];
-    Result.Y := X * M[0].v[1] + y * M[1].v[1] + z * M[2].v[1] + w * M[3].v[1];
-    Result.z := x * M[0].v[2] + y * M[1].v[2] + z * M[2].v[2] + w * M[3].v[2];
-    Result.W := x * M[0].v[3] + y * M[1].v[3] + z * M[2].v[3] + w * M[3].v[3];
-  end;
+  if M.t=CMTIdentity then
+    Result:=V
+  else
+    with GDBVertex4D((@V)^) do
+    begin
+      Result.X := X * M.mtr[0].v[0] + y * M.mtr[1].v[0] + z * M.mtr[2].v[0] + w * M.mtr[3].v[0];
+      Result.Y := X * M.mtr[0].v[1] + y * M.mtr[1].v[1] + z * M.mtr[2].v[1] + w * M.mtr[3].v[1];
+      Result.z := x * M.mtr[0].v[2] + y * M.mtr[1].v[2] + z * M.mtr[2].v[2] + w * M.mtr[3].v[2];
+      Result.W := x * M.mtr[0].v[3] + y * M.mtr[1].v[3] + z * M.mtr[2].v[3] + w * M.mtr[3].v[3];
+    end;
 end;
 function VectorTransform(const V:GDBVertex4D;const M:DMatrix4F):GDBVertex4D;
 begin
-  with GDBVertex4D((@V)^) do
-  begin
-    Result.X := X * M[0].v[0] + y * M[1].v[0] + z * M[2].v[0] + w * M[3].v[0];
-    Result.Y := X * M[0].v[1] + y * M[1].v[1] + z * M[2].v[1] + w * M[3].v[1];
-    Result.z := x * M[0].v[2] + y * M[1].v[2] + z * M[2].v[2] + w * M[3].v[2];
-    Result.W := x * M[0].v[3] + y * M[1].v[3] + z * M[2].v[3] + w * M[3].v[3];
-  end;
+  if M.t=CMTIdentity then
+    Result:=V
+  else
+    with GDBVertex4D((@V)^) do
+    begin
+      Result.X := X * M.mtr[0].v[0] + y * M.mtr[1].v[0] + z * M.mtr[2].v[0] + w * M.mtr[3].v[0];
+      Result.Y := X * M.mtr[0].v[1] + y * M.mtr[1].v[1] + z * M.mtr[2].v[1] + w * M.mtr[3].v[1];
+      Result.z := x * M.mtr[0].v[2] + y * M.mtr[1].v[2] + z * M.mtr[2].v[2] + w * M.mtr[3].v[2];
+      Result.W := x * M.mtr[0].v[3] + y * M.mtr[1].v[3] + z * M.mtr[2].v[3] + w * M.mtr[3].v[3];
+    end;
 end;
 function VectorTransform(const V:GDBVertex4F;const M:DMatrix4F):GDBVertex4F;
 begin
-  with GDBVertex4F((@V)^) do
-  begin
-    Result.X := X * M[0].v[0] + y * M[1].v[0] + z * M[2].v[0] + w * M[3].v[0];
-    Result.Y := X * M[0].v[1] + y * M[1].v[1] + z * M[2].v[1] + w * M[3].v[1];
-    Result.z := x * M[0].v[2] + y * M[1].v[2] + z * M[2].v[2] + w * M[3].v[2];
-    Result.W := x * M[0].v[3] + y * M[1].v[3] + z * M[2].v[3] + w * M[3].v[3];
-  end;
+  if M.t=CMTIdentity then
+    Result:=V
+  else
+    with GDBVertex4F((@V)^) do
+    begin
+      Result.X := X * M.mtr[0].v[0] + y * M.mtr[1].v[0] + z * M.mtr[2].v[0] + w * M.mtr[3].v[0];
+      Result.Y := X * M.mtr[0].v[1] + y * M.mtr[1].v[1] + z * M.mtr[2].v[1] + w * M.mtr[3].v[1];
+      Result.z := x * M.mtr[0].v[2] + y * M.mtr[1].v[2] + z * M.mtr[2].v[2] + w * M.mtr[3].v[2];
+      Result.W := x * M.mtr[0].v[3] + y * M.mtr[1].v[3] + z * M.mtr[2].v[3] + w * M.mtr[3].v[3];
+    end;
 end;
 procedure normalize4F(var tv:GDBVertex4F); inline;
 begin
@@ -1674,28 +1721,39 @@ end;
 function VectorTransform3D(const V:GDBvertex;const M:DMatrix4D):GDBvertex;
 var TV: GDBVertex4D;
 begin
-  pgdbvertex(@tv)^:=v;
-  tv.w:=1;
-  tv:=VectorTransform(tv,m);
+  if M.t=CMTIdentity then
+    Result:=V
+  else begin
+    pgdbvertex(@tv)^:=v;
+    tv.w:=1;
+    tv:=VectorTransform(tv,m);
 
-  normalize4d(tv);
+    normalize4d(tv);
 
-  Result := pgdbvertex(@tv)^
+    Result := pgdbvertex(@tv)^
+  end;
 end;
 function VectorTransform3D(const V:GDBvertex;const M:DMatrix4F):GDBvertex;
 var TV: GDBVertex4D;
 begin
-  pgdbvertex(@tv)^:=v;
-  tv.w:=1;
-  tv:=VectorTransform(tv,m);
+  if M.t=CMTIdentity then
+    Result:=V
+  else begin
+    pgdbvertex(@tv)^:=v;
+    tv.w:=1;
+    tv:=VectorTransform(tv,m);
 
-  normalize4d(tv);
+    normalize4d(tv);
 
-  Result := pgdbvertex(@tv)^
+    Result := pgdbvertex(@tv)^
+  end;
 end;
 function VectorTransform3D(const V:GDBVertex3S;const M:DMatrix4D):GDBVertex3S;
 var tv: GDBVertex4D;
 begin
+  if M.t=CMTIdentity then
+    Result:=V
+  else begin
   tv.x:=v.x;
   tv.y:=v.y;
   tv.z:=v.z;
@@ -1705,6 +1763,7 @@ begin
   result.x:=tv.x;
   result.y:=tv.y;
   result.z:=tv.z;
+  end;
 end;
 function VectorTransform3D(const V:GDBVertex3S;const M:DMatrix4F):GDBVertex3S;
 var tv: GDBVertex4F;
@@ -2592,20 +2651,22 @@ begin
 end;
 function CreateMatrixFromBasis(const ox,oy,oz:GDBvertex):DMatrix4D;
 begin
-     result:=onematrix;
-     PGDBVertex(@result[0])^:=ox;
-     PGDBVertex(@result[1])^:=oy;
-     PGDBVertex(@result[2])^:=oz;
+  Result.CreateRec(OneMtr,CMTRotate);
+  //result:=onematrix;
+  PGDBVertex(@result.mtr[0])^:=ox;
+  PGDBVertex(@result.mtr[1])^:=oy;
+  PGDBVertex(@result.mtr[2])^:=oz;
+  //result.t:=CMTRotate;
 end;
 procedure CreateBasisFromMatrix(const m:DMatrix4D;out ox,oy,oz:GDBvertex);
 begin
-     ox:=PGDBVertex(@m[0])^;
-     oy:=PGDBVertex(@m[1])^;
-     oz:=PGDBVertex(@m[2])^;
+  ox:=PGDBVertex(@m.mtr[0])^;
+  oy:=PGDBVertex(@m.mtr[1])^;
+  oz:=PGDBVertex(@m.mtr[2])^;
 end;
 function QuaternionMagnitude(const q : GDBQuaternion) : Double;
 begin
-   Result:=Sqrt(SqrOneVertexlength(q.ImagPart)+Sqr(q.RealPart));
+  Result:=Sqrt(SqrOneVertexlength(q.ImagPart)+Sqr(q.RealPart));
 end;
 procedure NormalizeQuaternion(var q : GDBQuaternion);
 var
@@ -2623,35 +2684,35 @@ function QuaternionFromMatrix(const mat : DMatrix4D) : GDBQuaternion;
 var
    traceMat, s, invS : Double;
 begin
-   traceMat := 1 + mat[0].v[0] + mat[1].v[1] + mat[2].v[2];
+   traceMat := 1 + mat.mtr[0].v[0] + mat.mtr[1].v[1] + mat.mtr[2].v[2];
    if traceMat>EPSILON2 then begin
       s:=Sqrt(traceMat)*2;
       invS:=1/s;
-      Result.ImagPart.x:=(mat[1].v[2]-mat[2].v[1])*invS;
-      Result.ImagPart.y:=(mat[2].v[0]-mat[0].v[2])*invS;
-      Result.ImagPart.z:=(mat[0].v[1]-mat[1].v[0])*invS;
-      Result.RealPart   :=0.25*s;
-   end else if (mat[0].v[0]>mat[1].v[1]) and (mat[0].v[0]>mat[2].v[2]) then begin  // Row 0:
-      s:=Sqrt(Max{Float}(EPSILON2, {cOne}1+mat[0].v[0]-mat[1].v[1]-mat[2].v[2]))*2;
+      Result.ImagPart.x:=(mat.mtr[1].v[2]-mat.mtr[2].v[1])*invS;
+      Result.ImagPart.y:=(mat.mtr[2].v[0]-mat.mtr[0].v[2])*invS;
+      Result.ImagPart.z:=(mat.mtr[0].v[1]-mat.mtr[1].v[0])*invS;
+      Result.RealPart  :=0.25*s;
+   end else if (mat.mtr[0].v[0]>mat.mtr[1].v[1]) and (mat.mtr[0].v[0]>mat.mtr[2].v[2]) then begin  // Row 0:
+      s:=Sqrt(Max{Float}(EPSILON2, {cOne}1+mat.mtr[0].v[0]-mat.mtr[1].v[1]-mat.mtr[2].v[2]))*2;
       invS:=1/s;
       Result.ImagPart.x:=0.25*s;
-      Result.ImagPart.y:=(mat[0].v[1]+mat[1].v[0])*invS;
-      Result.ImagPart.z:=(mat[2].v[0]+mat[0].v[2])*invS;
-      Result.RealPart   :=(mat[1].v[2]-mat[2].v[1])*invS;
-   end else if (mat[1].v[1]>mat[2].v[2]) then begin  // Row 1:
-      s:=Sqrt(Max{Float}(EPSILON2, {cOne}1+mat[1].v[1]-mat[0].v[0]-mat[2].v[2]))*2;
+      Result.ImagPart.y:=(mat.mtr[0].v[1]+mat.mtr[1].v[0])*invS;
+      Result.ImagPart.z:=(mat.mtr[2].v[0]+mat.mtr[0].v[2])*invS;
+      Result.RealPart  :=(mat.mtr[1].v[2]-mat.mtr[2].v[1])*invS;
+   end else if (mat.mtr[1].v[1]>mat.mtr[2].v[2]) then begin  // Row 1:
+      s:=Sqrt(Max{Float}(EPSILON2, {cOne}1+mat.mtr[1].v[1]-mat.mtr[0].v[0]-mat.mtr[2].v[2]))*2;
       invS:=1/s;
-      Result.ImagPart.x:=(mat[0].v[1]+mat[1].v[0])*invS;
+      Result.ImagPart.x:=(mat.mtr[0].v[1]+mat.mtr[1].v[0])*invS;
       Result.ImagPart.y:=0.25*s;
-      Result.ImagPart.z:=(mat[1].v[2]+mat[2].v[1])*invS;
-      Result.RealPart   :=(mat[2].v[0]-mat[0].v[2])*invS;
+      Result.ImagPart.z:=(mat.mtr[1].v[2]+mat.mtr[2].v[1])*invS;
+      Result.RealPart  :=(mat.mtr[2].v[0]-mat.mtr[0].v[2])*invS;
    end else begin  // Row 2:
-      s:=Sqrt(Max{Float}(EPSILON2, {cOne}1+mat[2].v[2]-mat[0].v[0]-mat[1].v[1]))*2;
+      s:=Sqrt(Max{Float}(EPSILON2, {cOne}1+mat.mtr[2].v[2]-mat.mtr[0].v[0]-mat.mtr[1].v[1]))*2;
       invS:=1/s;
-      Result.ImagPart.x:=(mat[2].v[0]+mat[0].v[2])*invS;
-      Result.ImagPart.y:=(mat[1].v[2]+mat[2].v[1])*invS;
+      Result.ImagPart.x:=(mat.mtr[2].v[0]+mat.mtr[0].v[2])*invS;
+      Result.ImagPart.y:=(mat.mtr[1].v[2]+mat.mtr[2].v[1])*invS;
       Result.ImagPart.z:=0.25*s;
-      Result.RealPart   :=(mat[0].v[1]-mat[1].v[0])*invS;
+      Result.RealPart  :=(mat.mtr[0].v[1]-mat.mtr[1].v[0])*invS;
    end;
    NormalizeQuaternion(Result);
 end;
@@ -2702,7 +2763,8 @@ function QuaternionToMatrix(quat : GDBQuaternion) :  DMatrix4D;
 var
    w, x, y, z, xx, xy, xz, xw, yy, yz, yw, zz, zw: Double;
 begin
-   result:=onematrix;
+   Result.CreateRec(OneMtr,CMTRotate);
+   //result:=onematrix;
    NormalizeQuaternion(quat);
    w := quat.RealPart;
    x := quat.ImagPart.x;
@@ -2717,22 +2779,23 @@ begin
    yw := y * w;
    zz := z * z;
    zw := z * w;
-   Result[0].v[0] := 1 - 2 * ( yy + zz );
-   Result[1].v[0] :=     2 * ( xy - zw );
-   Result[2].v[0] :=     2 * ( xz + yw );
-   Result[3].v[0] := 0;
-   Result[0].v[1] :=     2 * ( xy + zw );
-   Result[1].v[1] := 1 - 2 * ( xx + zz );
-   Result[2].v[1] :=     2 * ( yz - xw );
-   Result[3].v[1] := 0;
-   Result[0].v[2] :=     2 * ( xz - yw );
-   Result[1].v[2] :=     2 * ( yz + xw );
-   Result[2].v[2] := 1 - 2 * ( xx + yy );
-   Result[3].v[2] := 0;
-   Result[0].v[3] := 0;
-   Result[1].v[3] := 0;
-   Result[2].v[3] := 0;
-   Result[3].v[3] := 1;
+   Result.mtr[0].v[0] := 1 - 2 * ( yy + zz );
+   Result.mtr[1].v[0] :=     2 * ( xy - zw );
+   Result.mtr[2].v[0] :=     2 * ( xz + yw );
+   Result.mtr[3].v[0] := 0;
+   Result.mtr[0].v[1] :=     2 * ( xy + zw );
+   Result.mtr[1].v[1] := 1 - 2 * ( xx + zz );
+   Result.mtr[2].v[1] :=     2 * ( yz - xw );
+   Result.mtr[3].v[1] := 0;
+   Result.mtr[0].v[2] :=     2 * ( xz - yw );
+   Result.mtr[1].v[2] :=     2 * ( yz + xw );
+   Result.mtr[2].v[2] := 1 - 2 * ( xx + yy );
+   Result.mtr[3].v[2] := 0;
+   Result.mtr[0].v[3] := 0;
+   Result.mtr[1].v[3] := 0;
+   Result.mtr[2].v[3] := 0;
+   Result.mtr[3].v[3] := 1;
+   //Result.t:=CMTRotate;
 end;
 function GetArcParamFrom3Point2D(Const PointData:tarcrtmodify;out ad:TArcData):Boolean;
 var a,b,c,d,e,f,g,rr:Double;
@@ -2785,10 +2848,5 @@ end;
 
 
 begin
-     WorldMatrix:=oneMatrix;
-     //CurrentCS:=OneMatrix;
-     //wx:=@CurrentCS[0];
-     //wy:=@CurrentCS[1];
-     //wz:=@CurrentCS[2];
-     //w0:=@CurrentCS[3];
+  WorldMatrix.CreateRec(OneMtr,CMTIdentity);
 end.

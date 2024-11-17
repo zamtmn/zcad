@@ -73,7 +73,7 @@ begin
   tv:=NulVertex;
   tv.x:=textprop.size;
   m:=t_matrix;
-  PGDBVertex(@m[3])^:=NulVertex;
+  PGDBVertex(@m.mtr[3])^:=NulVertex;
 
   tv:=VectorTransform3d(tv,m);
   textprop.size:=oneVertexlength(tv);
@@ -85,14 +85,16 @@ procedure GDBObjAbstractText.setrot(r:Double);
 var m1:DMatrix4D;
    sine,cosine:double;
 begin
-m1:=onematrix;
+{m1:=onematrix;
 SinCos(r,sine,cosine);
-m1[0].v[0]:=cosine;
-m1[1].v[1]:=cosine;
-m1[1].v[0]:=-sine;
-m1[0].v[1]:=sine;
+m1.mtr[0].v[0]:=cosine;
+m1.mtr[1].v[1]:=cosine;
+m1.mtr[1].v[0]:=-sine;
+m1.mtr[0].v[1]:=sine;}
+m1:=CreateRotationMatrixZ(r);
 objMatrix:=MatrixMultiply(m1,objMatrix);
 end;
+
 procedure GDBObjAbstractText.FormatAfterFielfmod(PField,PTypeDescriptor:Pointer);
 (*var
    r:double;
@@ -130,14 +132,14 @@ procedure GDBObjAbstractText.ReCalcFromObjMatrix;
     ox:gdbvertex;}
 begin
      inherited;
-     Local.basis.ox:=PGDBVertex(@objmatrix[0])^;
-     Local.basis.oy:=PGDBVertex(@objmatrix[1])^;
+     Local.basis.ox:=PGDBVertex(@objmatrix.mtr[0])^;
+     Local.basis.oy:=PGDBVertex(@objmatrix.mtr[1])^;
 
      Local.basis.ox:=normalizevertex(Local.basis.ox);
      Local.basis.oy:=normalizevertex(Local.basis.oy);
      Local.basis.oz:=normalizevertex(Local.basis.oz);
 
-     Local.P_insert:=PGDBVertex(@objmatrix[3])^;
+     Local.P_insert:=PGDBVertex(@objmatrix.mtr[3])^;
 
      {scale.x:=PGDBVertex(@objmatrix[0])^.x/local.OX.x;
      scale.y:=PGDBVertex(@objmatrix[1])^.y/local.Oy.y;
@@ -190,7 +192,7 @@ var
 begin
 
      if bp.ListPos.owner<>nil then begin
-       V1:=PGDBvertex(@bp.ListPos.owner^.GetMatrix^[0])^;
+       V1:=PGDBvertex(@bp.ListPos.owner^.GetMatrix^.mtr[0])^;
        l0:=scalardot(NormalizeVertex(V1),_X_yzVertex);
        l0:=arccos(l0);
        if v1.y<-eps then l0:=2*pi-l0;
@@ -344,15 +346,15 @@ begin
   inherited CalcObjMatrix;
   if textprop.upsidedown then
   begin
-        PGDBVertex(@objmatrix[1])^.x:=-Local.basis.oy.x;
-        PGDBVertex(@objmatrix[1])^.y:=-Local.basis.oy.y;
-        PGDBVertex(@objmatrix[1])^.z:=-Local.basis.oy.z;
+        PGDBVertex(@objmatrix.mtr[1])^.x:=-Local.basis.oy.x;
+        PGDBVertex(@objmatrix.mtr[1])^.y:=-Local.basis.oy.y;
+        PGDBVertex(@objmatrix.mtr[1])^.z:=-Local.basis.oy.z;
   end;
   if textprop.backward then
   begin
-        PGDBVertex(@objmatrix[0])^.x:=-Local.basis.ox.x;
-        PGDBVertex(@objmatrix[0])^.y:=-Local.basis.ox.y;
-        PGDBVertex(@objmatrix[0])^.z:=-Local.basis.ox.z;
+        PGDBVertex(@objmatrix.mtr[0])^.x:=-Local.basis.ox.x;
+        PGDBVertex(@objmatrix.mtr[0])^.y:=-Local.basis.ox.y;
+        PGDBVertex(@objmatrix.mtr[0])^.z:=-Local.basis.ox.z;
   end;
   m1:= OneMatrix;
 
@@ -365,23 +367,25 @@ begin
 
 
 
-  m1:= OneMatrix;
-  //angle:=pi/2 - textprop.oblique*(pi/180);
-  angle:=(pi/2 - textprop.oblique);
-  if angle<>pi/2 then
-                     begin
-                          m1[1].v[0] :=cotan(angle);//1/tan(angle)
-                     end
-                else
-                   m1[1].v[ 0] := 0;
-  m2:= OneMatrix;
-  Pgdbvertex(@m2[3])^:=P_drawInOCS;
-  m3:=OneMatrix;
-  m3[0].v[0] := textprop.wfactor*textprop.size;
-  m3[1].v[1] := textprop.size;
-  m3[2].v[2] := textprop.size;
-  {DrawMatrix:=MatrixMultiply(m1,m3);
-  DrawMatrix:=MatrixMultiply(DrawMatrix,m2);}
+  //m1 := OneMatrix;
+
+  angle:=(pi/2-textprop.oblique);
+  if abs(angle-pi/2)>eps then begin
+    m1.CreateRec(OneMtr,CMTShear);
+    m1.mtr[1].v[0]:=cotan(angle);
+  end else
+    m1:=OneMatrix;
+
+  //m2:= OneMatrix;
+  //Pgdbvertex(@m2.mtr[3])^:=P_drawInOCS;
+  m2:=CreateTranslationMatrix(P_drawInOCS);
+
+  //m3:=OneMatrix;
+  //m3.mtr[0].v[0] := textprop.wfactor*textprop.size;
+  //m3.mtr[1].v[1] := textprop.size;
+  //m3.mtr[2].v[2] := textprop.size;
+  m3:=CreateScaleMatrix(textprop.wfactor*textprop.size,textprop.size,textprop.size);
+
   DrawMatrix:=MatrixMultiply(m3,m1);
   DrawMatrix:=MatrixMultiply(DrawMatrix,m2);
 end;

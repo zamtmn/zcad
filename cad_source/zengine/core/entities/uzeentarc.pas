@@ -95,10 +95,10 @@ var
 begin
     objmatrix:=uzegeometry.MatrixMultiply(PGDBObjWithLocalCS(p)^.objmatrix,t_matrix^);
 
-    tv:=PGDBVertex4D(@t_matrix[3])^;
-    PGDBVertex4D(@t_matrix[3])^:=NulVertex4D;
+    tv:=PGDBVertex4D(@t_matrix.mtr[3])^;
+    PGDBVertex4D(@t_matrix.mtr[3])^:=NulVertex4D;
     //MajorAxis:=VectorTransform3D(PGDBObjEllipse(p)^.MajorAxis,t_matrix^);
-    PGDBVertex4D(@t_matrix[3])^:=tv;
+    PGDBVertex4D(@t_matrix.mtr[3])^:=tv;
 
      {Local.oz:=PGDBVertex(@objmatrix[2])^;
 
@@ -138,7 +138,7 @@ var
   sav,eav,pins:gdbvertex;
 begin
   precalc;
-  if t_matrix[0].v[0]*t_matrix[1].v[1]*t_matrix[2].v[2]<eps then begin
+  if t_matrix.mtr[0].v[0]*t_matrix.mtr[1].v[1]*t_matrix.mtr[2].v[2]<eps then begin
     sav:=q2;
     eav:=q0;
   end else begin
@@ -171,15 +171,15 @@ begin
      oy:=NormalizeVertex(CrossVertex(Local.basis.oz,Local.basis.ox));
      m:=CreateMatrixFromBasis(ox,oy,Local.basis.oz);
 
-     Local.P_insert:=VectorTransform3D(PGDBVertex(@objmatrix[3])^,m);
-     self.R:=PGDBVertex(@objmatrix[0])^.x/local.basis.OX.x;
+     Local.P_insert:=VectorTransform3D(PGDBVertex(@objmatrix.mtr[3])^,m);
+     self.R:=PGDBVertex(@objmatrix.mtr[0])^.x/local.basis.OX.x;
 end;
 function GDBObjARC.CalcTrueInFrustum;
 var
   i:Integer;
   rad:Double;
 begin
-  rad:=abs(ObjMatrix[0].v[0]);
+  rad:=abs(ObjMatrix.mtr[0].v[0]);
   for i:=0 to 5 do
     if(frustum[i].v[0] * P_insert_in_WCS.x + frustum[i].v[1] * P_insert_in_WCS.y + frustum[i].v[2] * P_insert_in_WCS.z + frustum[i].v[3]+rad{+GetLTCorrectH} < 0 ) then
       exit(IREmpty);
@@ -256,11 +256,11 @@ var m1:DMatrix4D;
     v:GDBvertex4D;
 begin
   inherited CalcObjMatrix;
-  m1:=ONEMATRIX;
-  m1[0].v[0] := r;
-  m1[1].v[1] := r;
-  m1[2].v[2] := r;
-  //m1[3, 3] := r;
+  //m1:=ONEMATRIX;
+  //m1.mtr[0].v[0] := r;
+  //m1.mtr[1].v[1] := r;
+  //m1.mtr[2].v[2] := r;
+  m1:=CreateScaleMatrix(r);
   objmatrix:=matrixmultiply(m1,objmatrix);
 
     pgdbvertex(@v)^:=local.p_insert;
@@ -554,7 +554,7 @@ var
  i:Integer;
  rad:Double;
 begin
- rad:=abs(ObjMatrix[0].v[0]);
+ rad:=abs(ObjMatrix.mtr[0].v[0]);
  for i:=0 to 5 do begin
    if(mf[i].v[0] * P_insert_in_WCS.x + mf[i].v[1] * P_insert_in_WCS.y + mf[i].v[2] * P_insert_in_WCS.z + mf[i].v[3]+rad < 0 ) then
    exit(false);
@@ -696,7 +696,7 @@ var
 begin
   m:=ObjMatrix;
   MatrixInvert(m);
-  m[3]:=NulVector4D;
+  m.mtr[3]:=NulVector4D;
 
   tq0:=VectorTransform3D(q0*R,m);
   tq1:=VectorTransform3D(q1*R,m);

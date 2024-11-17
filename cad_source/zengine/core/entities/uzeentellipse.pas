@@ -81,10 +81,10 @@ var
 begin
     objmatrix:=uzegeometry.MatrixMultiply(PGDBObjWithLocalCS(p)^.objmatrix,t_matrix^);
 
-    tv:=PGDBVertex4D(@t_matrix[3])^;
-    PGDBVertex4D(@t_matrix[3])^:=NulVertex4D;
+    tv:=PGDBVertex4D(@t_matrix.mtr[3])^;
+    PGDBVertex4D(@t_matrix.mtr[3])^:=NulVertex4D;
     MajorAxis:=VectorTransform3D(PGDBObjEllipse(p)^.MajorAxis,t_matrix^);
-    PGDBVertex4D(@t_matrix[3])^:=tv;
+    PGDBVertex4D(@t_matrix.mtr[3])^:=tv;
 
      {Local.oz:=PGDBVertex(@objmatrix[2])^;
 
@@ -95,10 +95,10 @@ var {tv,}tv2:GDBVertex4D;
 begin
   inherited;
 
-  tv2:=PGDBVertex4D(@t_matrix[3])^;
-  PGDBVertex4D(@t_matrix[3])^:=NulVertex4D;
+  tv2:=PGDBVertex4D(@t_matrix.mtr[3])^;
+  PGDBVertex4D(@t_matrix.mtr[3])^:=NulVertex4D;
   MajorAxis:=VectorTransform3D(MajorAxis,t_matrix);
-  PGDBVertex4D(@t_matrix[3])^:=tv2;
+  PGDBVertex4D(@t_matrix.mtr[3])^:=tv2;
 
   ReCalcFromObjMatrix;
 end;
@@ -114,7 +114,7 @@ begin
      Local.basis.oy:=normalizevertex(Local.basis.oy);
      Local.basis.oz:=normalizevertex(Local.basis.oz);}
 
-     Local.P_insert:=PGDBVertex(@objmatrix[3])^;
+     Local.P_insert:=PGDBVertex(@objmatrix.mtr[3])^;
 
 
      //scale.x:=uzegeometry.oneVertexlength(PGDBVertex(@objmatrix[0])^);
@@ -142,13 +142,15 @@ begin
      Local.basis.oy:=NormalizeVertex(Local.basis.oy);
      Local.basis.oz:=NormalizeVertex(Local.basis.oz);
 
-     rotmatr:=onematrix;
-     PGDBVertex(@rotmatr[0])^:=Local.basis.ox;
-     PGDBVertex(@rotmatr[1])^:=Local.basis.oy;
-     PGDBVertex(@rotmatr[2])^:=Local.basis.oz;
+     //rotmatr:=onematrix;
+     //PGDBVertex(@rotmatr.mtr[0])^:=Local.basis.ox;
+     //PGDBVertex(@rotmatr.mtr[1])^:=Local.basis.oy;
+     //PGDBVertex(@rotmatr.mtr[2])^:=Local.basis.oz;
+     rotmatr:=CreateMatrixFromBasis(Local.basis.ox,Local.basis.oy,Local.basis.oz);
 
-     dispmatr:=onematrix;
-     PGDBVertex(@dispmatr[3])^:=Local.p_insert;
+     //dispmatr:=onematrix;
+     //PGDBVertex(@dispmatr.mtr[3])^:=Local.p_insert;
+     dispmatr:=CreateTranslationMatrix(Local.p_insert);
 
      result:=MatrixMultiply({dispmatr,}rotmatr,dispmatr);
 end;
@@ -226,15 +228,18 @@ end;
 procedure GDBObjEllipse.CalcObjMatrix;
 var m1:DMatrix4D;
     v:GDBvertex4D;
+    l:Double;
 begin
   inherited CalcObjMatrix;
-  m1:=ONEMATRIX;
-  m1[0].v[0] := {ratio*}onevertexlength(majoraxis);
-  m1[1].v[1] := ratio*onevertexlength(majoraxis);
-  m1[2].v[2] := {ratio*onevertexlength(majoraxis)}1;
+  l:=onevertexlength(majoraxis);
+  //m1:=ONEMATRIX;
+  //m1.mtr[0].v[0] := l;
+  //m1.mtr[1].v[1] := ratio*l;
+  //m1.mtr[2].v[2] := 1;
+  m1:=CreateScaleMatrix(l,ratio*l,1);
   objmatrix:=matrixmultiply(m1,objmatrix);
 
-    pgdbvertex(@v)^:=local.p_insert;
+  pgdbvertex(@v)^:=local.p_insert;
   v.z:=0;
   v.w:=1;
   m1:=objMatrix;

@@ -627,33 +627,33 @@ function CalcLCS(const m:DMatrix4D):GDBvertex;
 var
   t:Double;
 begin
-  t:=m[0].v[2]*m[1].v[1]*m[2].v[0]
-    -m[0].v[1]*m[1].v[2]*m[2].v[0]
-    -m[0].v[2]*m[1].v[0]*m[2].v[1]
-    +m[0].v[0]*m[1].v[2]*m[2].v[1]
-    +m[0].v[1]*m[1].v[0]*m[2].v[2]
-    -m[0].v[0]*m[1].v[1]*m[2].v[2];
+  t:=m.mtr[0].v[2]*m.mtr[1].v[1]*m.mtr[2].v[0]
+    -m.mtr[0].v[1]*m.mtr[1].v[2]*m.mtr[2].v[0]
+    -m.mtr[0].v[2]*m.mtr[1].v[0]*m.mtr[2].v[1]
+    +m.mtr[0].v[0]*m.mtr[1].v[2]*m.mtr[2].v[1]
+    +m.mtr[0].v[1]*m.mtr[1].v[0]*m.mtr[2].v[2]
+    -m.mtr[0].v[0]*m.mtr[1].v[1]*m.mtr[2].v[2];
   if abs(t)>eps then begin
-    result.x:=-(( m[1].v[2]*m[2].v[1]*m[3].v[0]
-                 +m[1].v[1]*m[2].v[2]*m[3].v[0]
-                 +m[1].v[2]*m[2].v[0]*m[3].v[1]
-                 -m[1].v[0]*m[2].v[2]*m[3].v[1]
-                 -m[1].v[1]*m[2].v[0]*m[3].v[2]
-                 +m[1].v[0]*m[2].v[1]*m[3].v[2])
+    result.x:=-(( m.mtr[1].v[2]*m.mtr[2].v[1]*m.mtr[3].v[0]
+                 +m.mtr[1].v[1]*m.mtr[2].v[2]*m.mtr[3].v[0]
+                 +m.mtr[1].v[2]*m.mtr[2].v[0]*m.mtr[3].v[1]
+                 -m.mtr[1].v[0]*m.mtr[2].v[2]*m.mtr[3].v[1]
+                 -m.mtr[1].v[1]*m.mtr[2].v[0]*m.mtr[3].v[2]
+                 +m.mtr[1].v[0]*m.mtr[2].v[1]*m.mtr[3].v[2])
                /t);
-    result.y:=-(( m[0].v[2]*m[2].v[1]*m[3].v[0]
-                 -m[0].v[1]*m[2].v[2]*m[3].v[0]
-                 -m[0].v[2]*m[2].v[0]*m[3].v[1]
-                 +m[0].v[0]*m[2].v[2]*m[3].v[1]
-                 +m[0].v[1]*m[2].v[0]*m[3].v[2]
-                 -m[0].v[0]*m[2].v[1]*m[3].v[2])
+    result.y:=-(( m.mtr[0].v[2]*m.mtr[2].v[1]*m.mtr[3].v[0]
+                 -m.mtr[0].v[1]*m.mtr[2].v[2]*m.mtr[3].v[0]
+                 -m.mtr[0].v[2]*m.mtr[2].v[0]*m.mtr[3].v[1]
+                 +m.mtr[0].v[0]*m.mtr[2].v[2]*m.mtr[3].v[1]
+                 +m.mtr[0].v[1]*m.mtr[2].v[0]*m.mtr[3].v[2]
+                 -m.mtr[0].v[0]*m.mtr[2].v[1]*m.mtr[3].v[2])
                /t);
-    result.z:=-(( m[0].v[2]*m[1].v[1]*m[3].v[0]
-                 +m[0].v[1]*m[1].v[2]*m[3].v[0]
-                 +m[0].v[2]*m[1].v[0]*m[3].v[1]
-                 -m[0].v[0]*m[1].v[2]*m[3].v[1]
-                 -m[0].v[1]*m[1].v[0]*m[3].v[2]
-                 +m[0].v[0]*m[1].v[1]*m[3].v[2])
+    result.z:=-(( m.mtr[0].v[2]*m.mtr[1].v[1]*m.mtr[3].v[0]
+                 +m.mtr[0].v[1]*m.mtr[1].v[2]*m.mtr[3].v[0]
+                 +m.mtr[0].v[2]*m.mtr[1].v[0]*m.mtr[3].v[1]
+                 -m.mtr[0].v[0]*m.mtr[1].v[2]*m.mtr[3].v[1]
+                 -m.mtr[0].v[1]*m.mtr[1].v[0]*m.mtr[3].v[2]
+                 +m.mtr[0].v[0]*m.mtr[1].v[1]*m.mtr[3].v[2])
                /t);
   end else
     Result:=NulVertex;
@@ -674,33 +674,33 @@ function CorrectLCS(const m:DMatrix4D;LCS:GDBvertex):GDBvertex;
 var
   t:Double;
 begin
-  t:=m[0].v[2]*m[1].v[1]*m[2].v[0]
-    -m[0].v[1]*m[1].v[2]*m[2].v[0]
-    -m[0].v[2]*m[1].v[0]*m[2].v[1]
-    +m[0].v[0]*m[1].v[2]*m[2].v[1]
-    +m[0].v[1]*m[1].v[0]*m[2].v[2]
-    -m[0].v[0]*m[1].v[1]*m[2].v[2];
+  t:=m.mtr[0].v[2]*m.mtr[1].v[1]*m.mtr[2].v[0]
+    -m.mtr[0].v[1]*m.mtr[1].v[2]*m.mtr[2].v[0]
+    -m.mtr[0].v[2]*m.mtr[1].v[0]*m.mtr[2].v[1]
+    +m.mtr[0].v[0]*m.mtr[1].v[2]*m.mtr[2].v[1]
+    +m.mtr[0].v[1]*m.mtr[1].v[0]*m.mtr[2].v[2]
+    -m.mtr[0].v[0]*m.mtr[1].v[1]*m.mtr[2].v[2];
   if abs(t)>eps then begin
-    Result.x:=-((-lcs.z*m[1].v[1]*m[2].v[0]
-                 +lcs.y*m[1].v[2]*m[2].v[0]
-                 +lcs.z*m[1].v[0]*m[2].v[1]
-                 -lcs.x*m[1].v[2]*m[2].v[1]
-                 -lcs.y*m[1].v[0]*m[2].v[2]
-                 +lcs.x*m[1].v[1]*m[2].v[2])
+    Result.x:=-((-lcs.z*m.mtr[1].v[1]*m.mtr[2].v[0]
+                 +lcs.y*m.mtr[1].v[2]*m.mtr[2].v[0]
+                 +lcs.z*m.mtr[1].v[0]*m.mtr[2].v[1]
+                 -lcs.x*m.mtr[1].v[2]*m.mtr[2].v[1]
+                 -lcs.y*m.mtr[1].v[0]*m.mtr[2].v[2]
+                 +lcs.x*m.mtr[1].v[1]*m.mtr[2].v[2])
               /t);
-    Result.y:=-(( lcs.z*m[0].v[1]*m[2].v[0]
-                 -lcs.y*m[0].v[2]*m[2].v[0]
-                 -lcs.z*m[0].v[0]*m[2].v[1]
-                 +lcs.x*m[0].v[2]*m[2].v[1]
-                 +lcs.y*m[0].v[0]*m[2].v[2]
-                 -lcs.x*m[0].v[1]*m[2].v[2])
+    Result.y:=-(( lcs.z*m.mtr[0].v[1]*m.mtr[2].v[0]
+                 -lcs.y*m.mtr[0].v[2]*m.mtr[2].v[0]
+                 -lcs.z*m.mtr[0].v[0]*m.mtr[2].v[1]
+                 +lcs.x*m.mtr[0].v[2]*m.mtr[2].v[1]
+                 +lcs.y*m.mtr[0].v[0]*m.mtr[2].v[2]
+                 -lcs.x*m.mtr[0].v[1]*m.mtr[2].v[2])
               /t);
-    Result.z:= (( lcs.z*m[0].v[1]*m[1].v[0]
-                 -lcs.y*m[0].v[2]*m[1].v[0]
-                 -lcs.z*m[0].v[0]*m[1].v[1]
-                 +lcs.x*m[0].v[2]*m[1].v[1]
-                 +lcs.y*m[0].v[0]*m[1].v[2]
-                 -lcs.x*m[0].v[1]*m[1].v[2])
+    Result.z:= (( lcs.z*m.mtr[0].v[1]*m.mtr[1].v[0]
+                 -lcs.y*m.mtr[0].v[2]*m.mtr[1].v[0]
+                 -lcs.z*m.mtr[0].v[0]*m.mtr[1].v[1]
+                 +lcs.x*m.mtr[0].v[2]*m.mtr[1].v[1]
+                 +lcs.y*m.mtr[0].v[0]*m.mtr[1].v[2]
+                 -lcs.x*m.mtr[0].v[1]*m.mtr[1].v[2])
               /t);
   end else
     Result:=NulVertex;
@@ -716,9 +716,9 @@ begin
   sm:=SymMatr;
   tv:=CalcLCS(SymMatr);
 
-  SymMatr[3].x:=0;
-  SymMatr[3].y:=0;
-  SymMatr[3].z:=0;
+  SymMatr.mtr[3].x:=0;
+  SymMatr.mtr[3].y:=0;
+  SymMatr.mtr[3].z:=0;
 
   oldlcs:=drawer.GetLCS;
   newLCS:=CorrectLCS(SymMatr,oldlcs);

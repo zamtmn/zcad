@@ -129,8 +129,8 @@ begin
      oy:=NormalizeVertex(CrossVertex(Local.basis.oz,Local.basis.ox));
      m:=CreateMatrixFromBasis(ox,oy,Local.basis.oz);
 
-     Local.P_insert:=VectorTransform3D(PGDBVertex(@objmatrix[3])^,m);
-     self.Radius:=PGDBVertex(@objmatrix[0])^.x/local.basis.OX.x;
+     Local.P_insert:=VectorTransform3D(PGDBVertex(@objmatrix.mtr[3])^,m);
+     self.Radius:=PGDBVertex(@objmatrix.mtr[0])^.x/local.basis.OX.x;
      {scale.y:=PGDBVertex(@objmatrix[1])^.y/local.Oy.y;
      scale.z:=PGDBVertex(@objmatrix[2])^.z/local.Oz.z;}
 
@@ -383,10 +383,11 @@ procedure GDBObjCircle.CalcObjMatrix;
 var m1{,m2,m3,m4}:DMatrix4D;
 begin
   inherited CalcObjMatrix;
-  m1:=ONEMATRIX;
-  m1[0].v[0] := Radius;
-  m1[1].v[1] := Radius;
-  m1[2].v[2] := Radius;
+  //m1:=ONEMATRIX;
+  //m1.mtr[0].v[0] := Radius;
+  //m1.mtr[1].v[1] := Radius;
+  //m1.mtr[2].v[2] := Radius;
+  m1:=CreateScaleMatrix(Radius);
   objmatrix:=matrixmultiply(m1,objmatrix);
 end;
 
@@ -484,7 +485,7 @@ var
   i:Integer;
   r:Double;
 begin
-  r:=abs(ObjMatrix[0].v[0]);
+  r:=abs(ObjMatrix.mtr[0].v[0]);
   for i:=0 to 5 do begin
     if(mf[i].v[0] * P_insert_in_WCS.x + mf[i].v[1] * P_insert_in_WCS.y + mf[i].v[2] * P_insert_in_WCS.z + mf[i].v[3]+r < 0 ) then
     exit(false);
@@ -506,7 +507,7 @@ var
   i:Integer;
   r:Double;
 begin
-  r:=abs(ObjMatrix[0].v[0]);
+  r:=abs(ObjMatrix.mtr[0].v[0]);
   for i:=0 to 5 do
     if(frustum[i].v[0] * P_insert_in_WCS.x + frustum[i].v[1] * P_insert_in_WCS.y + frustum[i].v[2] * P_insert_in_WCS.z + frustum[i].v[3]+r{+GetLTCorrectH} < 0 ) then
        exit(false);
@@ -517,7 +518,7 @@ var
   i:Integer;
   r:Double;
 begin
-  r:=abs(ObjMatrix[0].v[0]);
+  r:=abs(ObjMatrix.mtr[0].v[0]);
   for i:=0 to 5 do
     if(frustum[i].v[0] * P_insert_in_WCS.x + frustum[i].v[1] * P_insert_in_WCS.y + frustum[i].v[2] * P_insert_in_WCS.z + frustum[i].v[3]+r{+GetLTCorrectH} < 0 ) then
       exit(IREmpty);
@@ -721,7 +722,7 @@ var
 begin
   m:=ObjMatrix;
   MatrixInvert(m);
-  m[3]:=NulVector4D;
+  m.mtr[3]:=NulVector4D;
   if rtmod.point.pointtype=os_center then begin
     Local.p_insert:=VectorTransform3D(rtmod.wc*Radius,m);
   end else if (rtmod.point.pointtype=os_q0)or(rtmod.point.pointtype=os_q1)or(rtmod.point.pointtype=os_q2)or(rtmod.point.pointtype=os_q3) then begin

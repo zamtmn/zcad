@@ -53,12 +53,12 @@ ZGLGraphix= object(ZGLVectorObject)
                 procedure DrawNiceGeometry(var rc:TDrawContext);virtual;
                 constructor init();
                 destructor done;virtual;
-                function DrawLineWithLT(var rc:TDrawContext;const startpoint,endpoint:GDBVertex; const vp:GDBObjVisualProp):TLLDrawResult;virtual;
+                function DrawLineWithLT(var rc:TDrawContext;const startpoint,endpoint:GDBVertex; const vp:GDBObjVisualProp;OnlyOne:Boolean=False):TLLDrawResult;virtual;
                 function DrawPolyLineWithLT(var rc:TDrawContext;const points:GDBPoint3dArray; const vp:GDBObjVisualProp; const closed,ltgen:Boolean):TLLDrawResult;virtual;
-                procedure DrawLineWithoutLT(var rc:TDrawContext;const p1,p2:GDBVertex;var dr:TLLDrawResult);virtual;
+                procedure DrawLineWithoutLT(var rc:TDrawContext;const p1,p2:GDBVertex;var dr:TLLDrawResult;OnlyOne:Boolean=False);virtual;
                 procedure DrawPointWithoutLT(var rc:TDrawContext;const p:GDBVertex;var dr:TLLDrawResult);virtual;
                 {}
-                procedure AddLine(var rc:TDrawContext;const p1,p2:GDBVertex);
+                procedure AddLine(var rc:TDrawContext;const p1,p2:GDBVertex;OnlyOne:Boolean=False);
                 procedure AddPoint(var rc:TDrawContext;const p:GDBVertex);
                 {Patterns func}
                 procedure PlaceNPatterns(var rc:TDrawContext;var Segmentator:ZSegmentator;num:integer; const vp:PGDBLtypeProp;TangentScale,NormalScale,length:Double;var dr:TLLDrawResult;SupressFirstDash:boolean=false);
@@ -293,30 +293,13 @@ begin
      rc.drawer.GetLLPrimitivesCreator.CreateLLPoint(LLprimitives,GeomData.Vertex3S.AddGDBVertex{PushBackData}({tv}p));
 end;
 
-procedure ZGLGraphix.AddLine(var rc:TDrawContext;const p1,p2:GDBVertex);
-//var
-//    tv1,tv2:GDBVertex3S;
+procedure ZGLGraphix.AddLine(var rc:TDrawContext;const p1,p2:GDBVertex;OnlyOne:Boolean=False);
 begin
-     //tv1:=VertexD2S(p1);
-     //tv2:=VertexD2S(p2);
-     if rc.drawer<>nil then
-                           rc.drawer.GetLLPrimitivesCreator.CreateLLLine(LLprimitives,GeomData.Vertex3S.AddGDBVertex{PushBackData}({tv1}p1));
-                       {else
-                           DefaultLLPCreator.CreateLLLine(LLprimitives,GeomData.Vertex3S.Add(@tv1));}
-     GeomData.Vertex3S.AddGDBVertex{PushBackData}({tv2}p2);
-
-     //lines.Add(@p1);
-     //lines.Add(@p2);
-
-     {d:=uzegeometry.Vertexlength(p1,p2)/30;
-     a:=d/2;
-     for i:=0 to 2 do
-     begin
-          tv:=uzegeometry.VertexAdd(p1,createvertex(random*d-a,random*d-a,0));
-          lines.Add(@tv);
-          tv:=uzegeometry.VertexAdd(p2,createvertex(random*d-a,random*d-a,0));
-          lines.Add(@tv);
-     end;}
+  if OnlyOne then
+    GeomData.Vertex3S.SetSize(GeomData.Vertex3S.GetCount+2);
+  if rc.drawer<>nil then
+    rc.drawer.GetLLPrimitivesCreator.CreateLLLine(LLprimitives,GeomData.Vertex3S.AddGDBVertex(p1),OnlyOne);
+  GeomData.Vertex3S.AddGDBVertex(p2);
 end;
 function CalcSegment(const startpoint,endpoint:GDBVertex;out segment:ZPolySegmentData;prevlength:Double):Double;
 begin
@@ -427,7 +410,7 @@ begin
      cdp:=0;
      cp:=pcurrsegment^.startpoint;
 end;
-procedure ZGLGraphix.DrawLineWithoutLT(var rc:TDrawContext;const p1,p2:GDBVertex;var dr:TLLDrawResult);
+procedure ZGLGraphix.DrawLineWithoutLT(var rc:TDrawContext;const p1,p2:GDBVertex;var dr:TLLDrawResult;OnlyOne:Boolean=False);
 {var
    d,a:Double;
    tv:GDBVertex;
@@ -441,7 +424,7 @@ begin
                             concatBBandPoint(dr.BB,p2);
                           end;
      inc(dr.LLPCount);
-     self.AddLine(rc,p1,p2);
+     self.AddLine(rc,p1,p2,OnlyOne);
 end;
 procedure ZGLGraphix.DrawPointWithoutLT(var rc:TDrawContext;const p:GDBVertex;var dr:TLLDrawResult);
 begin
@@ -781,7 +764,7 @@ begin
   Shrink;
   FinishLLDrawResult(LLprimitives,result);
 end;
-function ZGLGraphix.DrawLineWithLT(var rc:TDrawContext;const startpoint,endpoint:GDBVertex; const vp:GDBObjVisualProp):TLLDrawResult;
+function ZGLGraphix.DrawLineWithLT(var rc:TDrawContext;const startpoint,endpoint:GDBVertex; const vp:GDBObjVisualProp;OnlyOne:Boolean=False):TLLDrawResult;
 var
   scale,length:Double;
   num,normalizedD,D,halfStroke,dend:Double;
@@ -794,7 +777,7 @@ begin
   result:=CreateLLDrawResult(LLprimitives);
   LT:=getLTfromVP(vp);
   if (LT=nil) or (LT.dasharray.Count=0) then begin
-    DrawLineWithoutLT(rc,startpoint,endpoint,result);
+    DrawLineWithoutLT(rc,startpoint,endpoint,result,OnlyOne);
     result.Appearance:=TAMatching;
   end else begin
     //LT:=getLTfromVP(vp);
@@ -802,7 +785,7 @@ begin
     scale:={SysVar.dwg.DWG_LTScale^}rc.DrawingContext.GlobalLTScale*vp.LineTypeScale;//фактический масштаб линии
     num:=Length/(scale*LT.strokesarray.LengthFact);//количество повторений шаблона
     if ((num<1)and(not LT^.WithoutLines))or(num>SysVarRDMaxLTPatternsInEntity) then begin
-      DrawLineWithoutLT(rc,startpoint,endpoint,result); //не рисуем шаблон при большом количестве повторений
+      DrawLineWithoutLT(rc,startpoint,endpoint,result,OnlyOne); //не рисуем шаблон при большом количестве повторений
       result.Appearance:=TAMatching;
     end else begin
       Segmentator.InitFromLine(startpoint,endpoint,length,@self);//длина линии

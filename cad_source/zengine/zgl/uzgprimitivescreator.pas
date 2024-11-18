@@ -26,7 +26,7 @@ uses uzgprimitivescreatorabstract,uzgindexsarray,uzgprimitives,
 type
 
 TLLPrimitivesCreator=class(TLLPrimitivesCreatorAbstract)
-                function CreateLLLine(var pa:TLLPrimitivesArray;const P1Index:TLLVertexIndex):TArrayIndex;override;
+                function CreateLLLine(var pa:TLLPrimitivesArray;const P1Index:TLLVertexIndex;OnlyOne:Boolean=False):TArrayIndex;override;
                 function CreateLLTriangle(var pa:TLLPrimitivesArray;const P1Index:TLLVertexIndex):TArrayIndex;override;
                 function CreateLLFreeTriangle(var pa:TLLPrimitivesArray;const P1Index,P2Index,P3Index:TLLVertexIndex; var ia:ZGLIndexsArray):TArrayIndex;override;
                 function CreateLLTriangleStrip(var pa:TLLPrimitivesArray):TArrayIndex;override;
@@ -86,15 +86,17 @@ begin
   ptf.init;
 end;
 
-function TLLPrimitivesCreator.CreateLLLine(var pa:TLLPrimitivesArray;const P1Index:TLLVertexIndex):TArrayIndex;
+function TLLPrimitivesCreator.CreateLLLine(var pa:TLLPrimitivesArray;const P1Index:TLLVertexIndex;OnlyOne:Boolean=False):TArrayIndex;
 var
    ptl:PTLLLine;
 begin
   pa.AlignDataSize;
-     result:=pa.count;
-     pointer(ptl):=pa.getDataMutable(pa.AllocData(sizeof(TLLLine)));
-     ptl.init;
-     ptl.P1Index:=P1Index;
+  result:=pa.count;
+  if OnlyOne then
+    pa.SetSize(result+sizeof(TLLLine));
+  pointer(ptl):=pa.getDataMutable(pa.AllocData(sizeof(TLLLine)));
+  ptl.init;
+  ptl.P1Index:=P1Index;
 end;
 function TLLPrimitivesCreator.CreateLLPolyLine(var pa:TLLPrimitivesArray;const P1Index,_Count:TLLVertexIndex;_closed:Boolean=false):tarrayindex;
 var

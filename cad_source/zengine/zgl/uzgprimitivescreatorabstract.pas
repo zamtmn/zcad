@@ -23,7 +23,7 @@ uses uzgprimitivessarray,uzgindexsarray,sysutils,uzbtypes,//
      gzctnrVectorTypes,uzegeometry;
 type
 TLLPrimitivesCreatorAbstract=class
-                function CreateLLLine(var pa:TLLPrimitivesArray;const P1Index:TLLVertexIndex):TArrayIndex;virtual;abstract;
+                function CreateLLLine(var pa:TLLPrimitivesArray;const P1Index:TLLVertexIndex;OnlyOne:Boolean=False):TArrayIndex;virtual;abstract;
                 function CreateLLTriangle(var pa:TLLPrimitivesArray;const P1Index:TLLVertexIndex):TArrayIndex;virtual;abstract;
                 function CreateLLFreeTriangle(var pa:TLLPrimitivesArray;const P1Index,P2Index,P3Index:TLLVertexIndex; var ia:ZGLIndexsArray):TArrayIndex;virtual;abstract;
                 function CreateLLTriangleStrip(var pa:TLLPrimitivesArray):TArrayIndex;virtual;abstract;

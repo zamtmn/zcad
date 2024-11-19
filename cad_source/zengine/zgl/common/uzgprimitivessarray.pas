@@ -23,10 +23,10 @@ interface
 uses gzctnrAlignedVectorObjects,uzbtypes;
 type
 {Export+}
-PTLLPrimitivesArray=^TLLPrimitivesArray;
-{REGISTEROBJECTTYPE TLLPrimitivesArray}
-TLLPrimitivesArray= object(GZAlignedVectorObjects{-}<PGDBaseObject>{//})
-             end;
+  PTLLPrimitivesArray=^TLLPrimitivesArray;
+  {REGISTEROBJECTTYPE TLLPrimitivesArray}
+  TLLPrimitivesArray= object(GZAlignedVectorObjects{-}<PGDBaseObject>{//})
+  end;
 {Export-}
 { #todo : Убрать PGDBaseObject, сделать абстрактный примитив }
 implementation

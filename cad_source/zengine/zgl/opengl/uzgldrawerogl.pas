@@ -32,6 +32,10 @@ const
   texturesize=128;
 type
 {EXPORT+}
+TGLVersion=(GLV_1_0,GLV_1_2,GLV_1_3,GLV_1_4,
+            GLV_1_5,GLV_2_0,GLV_2_1,GLV_3_0,
+            GLV_3_1,GLV_3_2,GLV_3_3,GLV_4_0,
+            GLV_4_3);
 ptrestoremode=^trestoremode;
 TRestoreMode=(
               WND_AuxBuffer(*'AUX buffer'*),
@@ -43,8 +47,9 @@ TRestoreMode=(
 PTOpenglData=^TOpenglData;
 {REGISTERRECORDTYPE TOpenglData}
 TOpenglData=record
+          RD_DraverVersion:TGLVersion;(*'Draver version'*)(*oi_readonly*)
           RD_Renderer:String;(*'Device'*)(*oi_readonly*)
-          RD_Version:String;(*'Version'*)(*oi_readonly*)
+          RD_DriverVersion:String;(*'Driver version'*)(*oi_readonly*)
           RD_Extensions:String;(*'Extensions'*)(*oi_readonly*)
           RD_Vendor:String;(*'Vendor'*)(*oi_readonly*)
           RD_Restore_Mode:trestoremode;(*'Restore mode'*)
@@ -115,7 +120,6 @@ TZGLOpenGLDrawer=class(TZGLGeneralDrawer)
                         procedure popMatrix;override;
                    end;
 var
-   OGLDrawer:TZGLAbstractDrawer;
    code:integer;
 implementation
 //uses log;
@@ -629,9 +633,6 @@ begin
   oglsm.myglend;
 end;
 initialization
-  OGLDrawer:=TZGLOpenGLDrawer.create;
 finalization
-  ZDebugLN('{I}[UnitsFinalization] Unit "'+{$INCLUDE %FILE%}+'" finalization');
-  OGLDrawer.Destroy;
 end.
 

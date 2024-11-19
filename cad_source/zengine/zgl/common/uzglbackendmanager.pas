@@ -58,7 +58,7 @@ begin
 end;
 initialization
   BackendsNames.Enums.init(10);
-  BackendsNames.Selected:=0;
+  BackendsNames.Selected:=1;
   Backends.init(10);
 finalization
   ZDebugLN('{I}[UnitsFinalization] Unit "'+{$INCLUDE %FILE%}+'" finalization');

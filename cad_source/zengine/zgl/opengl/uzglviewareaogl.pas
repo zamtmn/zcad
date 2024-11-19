@@ -30,7 +30,7 @@ uses
      uzgloglstatemanager,uzbtypes,
      uzglviewareadata,uzgldrawcontext,uzegeometry,LCLType,
      ExtCtrls,classes,Controls,Graphics,uzglviewareageneral,math,uzglbackendmanager,
-     uzegeometrytypes,uzbLogIntf,{$IFNDEF DELPHI}OpenGLContext{$ENDIF};
+     uzegeometrytypes,uzbLogIntf,{$IFNDEF DELPHI}OpenGLContext{$ENDIF},GLext;
 type
     PTOGLWnd = ^TOGLWnd;
     TOGLWnd = class({TPanel}TOpenGLControl)
@@ -121,8 +121,8 @@ begin
   Pointer(p):=oglsm.myglGetString(GL_VERSION);
   zDebugLn('{I}RD_Version:="%s"',[p]);
   //programlog.LogOutFormatStr('RD_Version:="%s"',[p],0,LM_Info);
-  //if assigned(OpenglParam.RD_Version) then
-  OpenglParam.RD_Version:=p;
+  //if assigned(OpenglParam.RD_DriverVersion) then
+  OpenglParam.RD_DriverVersion:=p;
 
   Pointer(p):=oglsm.myglGetString(GL_EXTENSIONS);
   zDebugLn('{I}RD_Extensions:="%s"',[p]);
@@ -157,6 +157,12 @@ begin
   setdeicevariable;
 
   {$IFDEF WINDOWS}
+
+  if Load_GL_version_1_2 then
+    OpenGLParam.RD_DraverVersion:=GLV_1_2
+  else
+    OpenGLParam.RD_DraverVersion:=GLV_1_0;
+
   //if assigned(OpenglParam.RD_VSync) then
   if OpenglParam.RD_VSync<>T3SB_Default then
   begin

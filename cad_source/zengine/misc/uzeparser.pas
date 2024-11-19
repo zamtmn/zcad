@@ -160,6 +160,10 @@ type
     //function MyGetMutableValue(key:TKey; out PValue:PTValue):boolean;inline;
     {$IFDEF USETDICTIONARY}function IsEmpty:boolean;inline;{$ENDIF}
     {$IFNDEF USETDICTIONARY}property count:SizeUInt read {$IFDEF FPC}Size{$ELSE}FCount{$ENDIF};{$ENDIF}
+    {$If FPC_FULLVERSION <= 30202}
+    function GetMutableValue(const AKey: TKey): PValue; inline;
+    function TryGetMutableValue(const AKey: TKey; out APValue: PValue): Boolean;
+    {$EndIf}
   end;
 
   TOptChar=Byte;
@@ -753,6 +757,25 @@ function TmyMap<TKey, TValue{$IFNDEF USETDICTIONARY},TCompare{$ENDIF}>.IsEmpty:b
 begin
   result:= count=0;
 end;
+{$If FPC_FULLVERSION <= 30202}
+function TmyMap<TKey, TValue{$IFNDEF USETDICTIONARY},TCompare{$ENDIF}>.GetMutableValue(const AKey: TKey): PValue;
+var
+  LIndex: SizeInt;
+  LHash: UInt32;
+begin
+  LIndex := FindBucketIndex(FItems, AKey, LHash);
+  if LIndex < 0 then
+    Result := Nil
+  else
+    Result := @FItems[LIndex].Pair.Value;
+end;
+
+function TmyMap<TKey, TValue{$IFNDEF USETDICTIONARY},TCompare{$ENDIF}>.TryGetMutableValue(const AKey: TKey; out APValue: PValue): Boolean;
+begin
+  APValue := GetMutableValue(AKey);
+  Result := APValue <>Nil;
+end;
+{$EndIf}
 {$ENDIF}
 
 class function TStaticStrProcessor<GManipulator,GString,GSymbol,GManipulatorCharRange,GDataType>.GetProcessorType:TProcessorType;

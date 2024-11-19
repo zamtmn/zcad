@@ -20,7 +20,7 @@ unit gzctnrSTL;
 interface
 uses
   gvector,
-  gutil,gzmap,ghashmap,generics.collections,
+  gutil,gmap,ghashmap,generics.collections,
   sysutils;
 type
 TMyMapGenOld <TKey, TValue, TCompare> = class( TMap<TKey, TValue, TCompare>);

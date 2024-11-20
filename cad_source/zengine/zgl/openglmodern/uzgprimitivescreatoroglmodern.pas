@@ -51,6 +51,7 @@ destructor TLLVBOLine.done;
 begin
   if vboID<>WrongVBOID then
     glDeleteBuffers(1,@vboID);
+  vboID:=WrongVBOID;
 end;
 function TLLVBOLine.draw(drawer:TZGLAbstractDrawer;var rc:TDrawContext;var GeomData:ZGLGeomData;var LLPArray:TLLPrimitivesArray;var OptData:ZGLOptimizerData):Integer;
 begin
@@ -58,12 +59,12 @@ begin
     OGLSM.mytotalglend;
     if vboID=WrongVBOID then begin
       glGenBuffers(1,@vboID);
-      if vboID=0 then
+      if vboID=WrongVBOID then
         old:=old
       else
         old:=vboID;
       glBindBuffer(GL_ARRAY_BUFFER,vboID);
-      glBufferData(GL_ARRAY_BUFFER,sizeof(TStoredCoordType)*2,geomdata.Vertex3S.getDataMutable(P1Index),GL_STATIC_DRAW);
+      glBufferData(GL_ARRAY_BUFFER,{sizeof(TStoredCoordType)*2}sizeof(Double)*3*2,geomdata.Vertex3S.getDataMutable(P1Index),GL_STATIC_DRAW);
     end else
       glBindBuffer(GL_ARRAY_BUFFER,vboID);
 
@@ -75,7 +76,8 @@ begin
     //Рисование треугольника, указывая количества вершин
     glDrawArrays(GL_LINES, 0, 2);
 
-    glBindBuffer(GL_ARRAY_BUFFER,0);
+    glDisableClientState(GL_VERTEX_ARRAY);
+    glBindBuffer(GL_ARRAY_BUFFER,WrongVBOID);
     //Drawer.DrawLine(@geomdata.Vertex3S,P1Index,P1Index+1);
   end;
   result:=getPrimitiveSize;

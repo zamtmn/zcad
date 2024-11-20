@@ -30,9 +30,17 @@ type
   GZAlignedVectorObjects{-}<PObj>{//}=
   object(TZctnrAlignedVectorBytes)
     function iterate(var ir:itrec):Pointer;virtual;
+    procedure Clear;virtual;
+    procedure free;virtual;
   end;
 {Export-}
 implementation
+procedure GZAlignedVectorObjects<PObj>.free;
+begin
+  clear;
+  inherited;
+end;
+
 function GZAlignedVectorObjects<PObj>.iterate(var ir:itrec):Pointer;
 var
   s:integer;
@@ -51,6 +59,24 @@ begin
       result:=ir.itp;
     end else result:=nil;
   end;
+end;
+procedure GZAlignedVectorObjects<PObj>.Clear;
+var
+   PEnt:PObj;
+   ProcessedSize:TArrayIndex;
+   CurrentSize:TArrayIndex;
+begin
+  if count>0 then begin
+    ProcessedSize:=0;
+    PEnt:=GetParrayAsPointer;
+    while ProcessedSize<count do begin
+      CurrentSize:=Align(sizeof(PEnt^));
+      PEnt^.done;
+      ProcessedSize:=ProcessedSize+CurrentSize;
+      inc(pbyte(PEnt),CurrentSize);
+    end;
+  end;
+  inherited;
 end;
 begin
 end.

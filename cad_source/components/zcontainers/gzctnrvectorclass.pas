@@ -22,11 +22,12 @@ interface
 uses gzctnrVectorTypes,gzctnrVector,gvector;
 type
 {Export+}
-{----REGISTEROBJECTTYPE GZVectorClass}
-GZVectorClass{-}<T:class>{//}=object
-                               (GZVector{-}<T>{//})
-                               procedure cleareraseobjfrom2(n:Integer);
-                                 end;
+  {----REGISTEROBJECTTYPE GZVectorClass}
+  GZVectorClass{-}<T:class>{//}=object
+                                      (GZVector{-}<T>{//})
+    procedure cleareraseobjfrom2(n:Integer);
+    destructor destroy;virtual;
+  end;
 {Export-}
 implementation
 procedure GZVectorClass<T>.cleareraseobjfrom2(n:Integer);
@@ -45,5 +46,19 @@ begin
   until p=nil;
   count:=n;
 end;
+destructor GZVectorClass<T>.destroy;
+var
+  p:^TDataType;
+  ir:itrec;
+begin
+  p:=beginiterate(ir);
+  if p<>nil then
+    repeat
+      p^.free;
+      p:=(iterate(ir));
+    until p=nil;
+  inherited;
+end;
+
 begin
 end.

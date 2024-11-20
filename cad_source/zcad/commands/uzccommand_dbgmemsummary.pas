@@ -47,7 +47,9 @@ type
   TBTDic=TDictionary<codepointer,string>;
 
   TMyMap<TKey,TValue,TCompare>=class(TMap<TKey, TValue, TCompare>)
+   {$If FPC_FULLVERSION <= 30202}
     function TryGetMutableValue(key:TKey; out PValue:PTValue):boolean;
+   {$EndIf}
   end;
 
   TStackCounter=TMyMap<tcodepointerarray,Integer,TCodePointerArrayCompare>;
@@ -55,7 +57,7 @@ type
   TSizeSorter=TVector<tmemallocinfo>;
 
   TSizeSorterUtils=TOrderingArrayUtils<TSizeSorter,tmemallocinfo,TtmemallocinfoCompare>;
-
+{$If FPC_FULLVERSION <= 30202}
 function TMyMap<TKey,TValue,TCompare>.TryGetMutableValue(key:TKey; out PValue:PTValue):boolean;
 var
   Pair:TPair;
@@ -70,7 +72,7 @@ begin
     PValue:=@Node^.Data.Value;
   end;
 end;
-
+{$EndIf}
 
 class function TCodePointerArrayCompare.c(a,b:tcodepointerarray):boolean;
 var

@@ -24,7 +24,7 @@ endif
 #	rm -rf ../lib/i386-win32/uzeparser.*
 #	rm -rf ../lib/x86_64-linux/uzeparser.*
 #	rm -rf ../lib/i386-linux/uzeparser.*
-#	rm -rf ../lib/x86_64-win64/uzcextdrschconnector.*
-#	rm -rf ../lib/i386-win32/uzcextdrschconnector.*
-#	rm -rf ../lib/x86_64-linux/uzcextdrschconnector.*
-#	rm -rf ../lib/i386-linux/uzcextdrschconnector.*
+	rm -rf ../lib/x86_64-win64/uzcextdrschconnector.*
+	rm -rf ../lib/i386-win32/uzcextdrschconnector.*
+	rm -rf ../lib/x86_64-linux/uzcextdrschconnector.*
+	rm -rf ../lib/i386-linux/uzcextdrschconnector.*

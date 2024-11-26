@@ -16,10 +16,13 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>)
 }
 unit uzbtypes;
+{$Mode delphi}
 
 interface
-uses uzegeometrytypes,sysutils;
-     //gdbobjectsconstdef;
+uses
+  sysutils,
+  uzegeometrytypes,uzbHandles;
+
 const
      GDBBaseObjectID = 30000;
      ObjN_NotRecognized='NotRecognized';
@@ -64,7 +67,7 @@ GDBaseObject=object
     constructor initnul;
     destructor Done;virtual;{ abstract;}
   end;
-TActulity=Integer;
+TActuality=PtrUInt;
 TEntUpgradeInfo=LongWord;
 PGDBBaseCamera=^GDBBaseCamera;
 {REGISTEROBJECTTYPE GDBBaseCamera}
@@ -81,9 +84,9 @@ GDBBaseCamera=object(GDBaseObject)
                 infrustum:Integer;
                 obj_zmax,obj_zmin:Double;
                 DRAWNOTEND:Boolean;
-                DRAWCOUNT:TActulity;
-                POSCOUNT:TActulity;
-                VISCOUNT:TActulity;
+                DRAWCOUNT:TActuality;
+                POSCOUNT:TActuality;
+                VISCOUNT:TActuality;
                 CamCSOffset:GDBvertex;
                 procedure NextPosition;virtual; abstract;
           end;
@@ -201,6 +204,11 @@ TTextJustify=(jstl(*'TopLeft'*),
 PTZColor=^TZColor;
 TZColor={-}type {//}Integer;
 {EXPORT-}
+TZHandleCreator=GTSimpleHandles<TActuality,GTHandleManipulator<TActuality>>;
+
+var
+  zeHandles:TZHandleCreator;
+
 function IsIt(PType,PChecedType:Pointer):Boolean;
 
 {$IFDEF DELPHI}
@@ -272,7 +280,9 @@ begin
       result:=strtoint(sh);
 end;
 {$ENDIF}
-begin
-
+initialization
+  zeHandles.init;
+finalization
+  zeHandles.done;
 end.
 

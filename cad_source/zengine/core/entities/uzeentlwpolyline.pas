@@ -55,7 +55,7 @@ GDBObjLWPolyline= object(GDBObjWithLocalCS)
                  procedure LoadFromDXF(var f:TZMemReader;ptu:PExtensionData;var drawing:TDrawingDef);virtual;
 
                  procedure SaveToDXF(var outhandle:{Integer}TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
-                 procedure DrawGeometry(lw:Integer;var DC:TDrawContext{infrustumactualy:TActulity;subrender:Integer});virtual;
+                 procedure DrawGeometry(lw:Integer;var DC:TDrawContext{infrustumactualy:TActuality;subrender:Integer});virtual;
                  procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext;Stage:TEFStages=EFAllStages);virtual;
                  function CalcSquare:Double;virtual;
                  //**попадаетли данная координата внутрь контура
@@ -70,7 +70,7 @@ GDBObjLWPolyline= object(GDBObjWithLocalCS)
                  procedure rtmodifyonepoint(const rtmod:TRTModifyData);virtual;
                  procedure rtsave(refp:Pointer);virtual;
                  procedure getoutbound(var DC:TDrawContext);virtual;
-                 function CalcTrueInFrustum(const frustum:ClipArray;visibleactualy:TActulity):TInBoundingVolume;virtual;
+                 function CalcTrueInFrustum(const frustum:ClipArray;visibleactualy:TActuality):TInBoundingVolume;virtual;
                  //function InRect:TInRect;virtual;
                  function onmouse(var popa:TZctnrVectorPGDBaseEntity;const MF:ClipArray;InSubEntry:Boolean):Boolean;virtual;
                  function onpoint(var objects:TZctnrVectorPGDBaseEntity;const point:GDBVertex):Boolean;virtual;

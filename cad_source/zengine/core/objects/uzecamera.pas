@@ -50,13 +50,13 @@ implementation
 
 procedure GDBObjCamera.NextPosition;
 begin
-     Inc(POSCOUNT);
-     inc(VISCOUNT);
+  POSCOUNT:=zeHandles.CreateHandle;
+  VISCOUNT:=zeHandles.CreateHandle;
 end;
 constructor GDBObjCamera.initnul;
 begin
-     POSCOUNT:=1;
-     VISCOUNT:=1;
+  POSCOUNT:=zeHandles.CreateHandle;
+  VISCOUNT:=zeHandles.CreateHandle;
 end;
 function GDBObjCamera.GetObjTypeName;
 begin

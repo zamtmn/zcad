@@ -43,10 +43,10 @@ GDBObjRoot= object(GDBObjGenericSubEntry)
                  procedure EraseMi(pobj:pGDBObjEntity;pobjinarray:Integer;var drawing:TDrawingDef);virtual;
 
                  function GetMatrix:PDMatrix4D;virtual;
-                 procedure DrawWithAttrib(var DC:TDrawContext{visibleactualy:TActulity;subrender:Integer});virtual;
-                 function CalcInFrustum(const frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:Integer; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double):Boolean;virtual;
-                 procedure CalcInFrustumByTree(const frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var enttree:TEntTreeNode;var totalobj,infrustumobj:Integer; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double);virtual;
-                 procedure CalcVisibleBBByTree(infrustumactualy:TActulity;visibleactualy:TActulity;var enttree:TEntTreeNode);virtual;
+                 procedure DrawWithAttrib(var DC:TDrawContext{visibleactualy:TActualityTActuality;subrender:Integer});virtual;
+                 function CalcInFrustum(const frustum:ClipArray;infrustumactualy:TActuality;visibleactualy:TActuality;var totalobj,infrustumobj:Integer; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double):Boolean;virtual;
+                 procedure CalcInFrustumByTree(const frustum:ClipArray;infrustumactualy:TActuality;visibleactualy:TActuality;var enttree:TEntTreeNode;var totalobj,infrustumobj:Integer; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double);virtual;
+                 procedure CalcVisibleBBByTree(infrustumactualy:TActuality;visibleactualy:TActuality;var enttree:TEntTreeNode);virtual;
                  procedure calcbb(var DC:TDrawContext);virtual;
                  //function FindShellByClass(_type:TDeviceClass):PGDBObjSubordinated;virtual;
                  function GetObjType:TObjID;virtual;
@@ -67,11 +67,11 @@ begin
      vp.BoundingBox.LBN:=VectorTransform3D(vp.BoundingBox.LBN,ObjMatrix);
      vp.BoundingBox.RTF:=VectorTransform3D(vp.BoundingBox.RTF,ObjMatrix);
 end;
-procedure GDBObjRoot.CalcVisibleBBByTree(infrustumactualy:TActulity;visibleactualy:TActulity;var enttree:TEntTreeNode);
+procedure GDBObjRoot.CalcVisibleBBByTree(infrustumactualy:TActuality;visibleactualy:TActuality;var enttree:TEntTreeNode);
 begin
   InFrustumAABB:=enttree.NodeData.InFrustumBoundingBox;
 end;
-procedure GDBObjRoot.CalcInFrustumByTree(const frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var enttree:TEntTreeNode;var totalobj,infrustumobj:Integer; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double);
+procedure GDBObjRoot.CalcInFrustumByTree(const frustum:ClipArray;infrustumactualy:TActuality;visibleactualy:TActuality;var enttree:TEntTreeNode;var totalobj,infrustumobj:Integer; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double);
 var
    myfrustum:ClipArray;
 begin

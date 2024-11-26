@@ -22,9 +22,17 @@ interface
 uses
   GLext,
   uzglbackendmanager,
-  uzgldrawerogl,uzglviewareaogl,uzgldraweroglmodern;
+  uzgldrawerogl,uzglviewareaogl,uzgldraweroglmodern,gl,
+  gzctnrBufferAllocator;
+const
+  CVBOSize=256*1024*1024;
 type
+
+  TVBOAllocator=GBufferAllocator<ptruint,ptruint,integer>;
+
   TOpenGLModernViewArea=class(TOpenGLViewArea)
+    public
+      VBO:TVBOData;
     procedure CreateDrawer;override;
     procedure getareacaps;override;
   end;
@@ -32,6 +40,7 @@ implementation
 procedure TOpenGLModernViewArea.CreateDrawer;
 begin
   drawer:=TZGLOpenGLDrawerModern.Create;
+  TZGLOpenGLDrawerModern(drawer).PVBO:=@VBO;
 end;
 procedure TOpenGLModernViewArea.getareacaps;
 begin
@@ -71,6 +80,10 @@ begin
   if OpenGLParam.RD_DraverVersion=GLV_4_0 then
     if Load_GL_version_4_3 then
       OpenGLParam.RD_DraverVersion:=GLV_4_3;
+  glGenBuffers(1,@VBO.vboID);
+  glBindBuffer(GL_ARRAY_BUFFER,VBO.vboID);
+  glBufferData(GL_ARRAY_BUFFER,CVBOSize,nil,GL_STATIC_DRAW);
+  VBO.vboAllocator.init(CVBOSize);
 end;
 begin
   RegisterBackend(TOpenGLModernViewArea,'OpenGLModern');

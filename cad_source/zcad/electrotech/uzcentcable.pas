@@ -46,7 +46,7 @@ GDBObjCable= object(GDBObjCurve)
                  str23:GDBVertex;
                  constructor init(own:Pointer;layeraddres:PGDBLayerProp;LW:SmallInt);
                  constructor initnul(owner:PGDBObjGenericWithSubordinated);
-                 procedure DrawGeometry(lw:Integer;var DC:TDrawContext{infrustumactualy:TActulity;subrender:Integer});virtual;
+                 procedure DrawGeometry(lw:Integer;var DC:TDrawContext{infrustumactualy:TActuality;subrender:Integer});virtual;
                  function GetObjTypeName:String;virtual;
                  procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext;Stage:TEFStages=EFAllStages);virtual;
                  procedure FormatFast(var drawing:TDrawingDef;var DC:TDrawContext);virtual;

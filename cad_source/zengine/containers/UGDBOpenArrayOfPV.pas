@@ -34,16 +34,16 @@ PGDBObjOpenArrayOfPV=^GDBObjOpenArrayOfPV;
 {REGISTEROBJECTTYPE GDBObjOpenArrayOfPV}
 GDBObjOpenArrayOfPV= object({TZctnrVectorPGDBaseObjects}TZctnrVectorPGDBaseEntity)
                       procedure DrawWithattrib(var DC:TDrawContext);virtual;
-                      procedure DrawGeometry(lw:Integer;var DC:TDrawContext{infrustumactualy:TActulity;subrender:Integer});virtual;
-                      procedure DrawOnlyGeometry(lw:Integer;var DC:TDrawContext{infrustumactualy:TActulity;subrender:Integer});virtual;
-                      procedure renderfeedbac(infrustumactualy:TActulity;pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc;var DC:TDrawContext);virtual;
-                      function calcvisible(const frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:Integer; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double):Boolean;virtual;
-                      function CalcTrueInFrustum(const frustum:ClipArray;visibleactualy:TActulity):TInBoundingVolume;virtual;
+                      procedure DrawGeometry(lw:Integer;var DC:TDrawContext{infrustumactualy:TActuality;subrender:Integer});virtual;
+                      procedure DrawOnlyGeometry(lw:Integer;var DC:TDrawContext{infrustumactualy:TActuality;subrender:Integer});virtual;
+                      procedure renderfeedbac(infrustumactualy:TActuality;pcount:TActuality;var camera:GDBObjCamera; ProjectProc:GDBProjectProc;var DC:TDrawContext);virtual;
+                      function calcvisible(const frustum:ClipArray;infrustumactualy:TActuality;visibleactualy:TActuality;var totalobj,infrustumobj:Integer; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double):Boolean;virtual;
+                      function CalcTrueInFrustum(const frustum:ClipArray;visibleactualy:TActuality):TInBoundingVolume;virtual;
                       procedure DeSelect(var SelectedObjCount:Integer;ds2s:TDeSelect2Stage);virtual;
                       function CreateObj(t: Byte{;owner:Pointer}):Pointer;virtual;
                       function CreateInitObj(t: Byte;owner:Pointer):PGDBObjSubordinated;virtual;
                       function calcbb:TBoundingBox;
-                      function calcvisbb(infrustumactualy:TActulity):TBoundingBox;
+                      function calcvisbb(infrustumactualy:TActuality):TBoundingBox;
                       function getoutbound(var DC:TDrawContext):TBoundingBox;
                       function getonlyoutbound(var DC:TDrawContext):TBoundingBox;
                       function getonlyvisibleoutbound(var DC:TDrawContext):TBoundingBox;
@@ -103,7 +103,7 @@ begin
                        until pobj=nil;
                   end;
 end;
-function GDBObjOpenArrayOfPV.calcvisbb(infrustumactualy:TActulity):TBoundingBox;
+function GDBObjOpenArrayOfPV.calcvisbb(infrustumactualy:TActuality):TBoundingBox;
 var pobj:pGDBObjEntity;
     ir:itrec;
 begin
@@ -278,7 +278,7 @@ begin
        p:=iterate(ir);
   until p=nil;
 end;
-procedure GDBObjOpenArrayOfPV.renderfeedbac(infrustumactualy:TActulity;pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc;var DC:TDrawContext);
+procedure GDBObjOpenArrayOfPV.renderfeedbac(infrustumactualy:TActuality;pcount:TActuality;var camera:GDBObjCamera; ProjectProc:GDBProjectProc;var DC:TDrawContext);
 var
   p:pGDBObjEntity;
       ir:itrec;

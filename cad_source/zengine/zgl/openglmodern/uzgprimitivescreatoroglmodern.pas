@@ -33,51 +33,61 @@ TLLPrimitivesCreatorOGLModern=class(TLLPrimitivesCreator)
                 function CreateLLLine(var pa:TLLPrimitivesArray;const P1Index:TLLVertexIndex;OnlyOne:Boolean=False):TArrayIndex;override;
              end;
 implementation
+uses
+  uzgldraweroglmodern;
 var
   old:integer=0;
 type
   PTLLVBOLine=^TLLVBOLine;
   TLLVBOLine= object(TLLLine)
-    vboID:GLuint;
+    //vboID:GLuint;
+    VBOIndex:TVBOAllocator.TIndexInRanges;
     constructor init;
     destructor done;virtual;
     function draw(drawer:TZGLAbstractDrawer;var rc:TDrawContext;var GeomData:ZGLGeomData;var LLPArray:TLLPrimitivesArray;var OptData:ZGLOptimizerData):Integer;virtual;
   end;
 constructor TLLVBOLine.init;
 begin
-  vboID:=WrongVBOID;
+  VBOIndex:=-1;
+  //vboID:=WrongVBOID;
 end;
 destructor TLLVBOLine.done;
 begin
-  if vboID<>WrongVBOID then
-    glDeleteBuffers(1,@vboID);
-  vboID:=WrongVBOID;
+  //if vboID<>WrongVBOID then
+  //  glDeleteBuffers(1,@vboID);
+  //vboID:=WrongVBOID;
 end;
 function TLLVBOLine.draw(drawer:TZGLAbstractDrawer;var rc:TDrawContext;var GeomData:ZGLGeomData;var LLPArray:TLLPrimitivesArray;var OptData:ZGLOptimizerData):Integer;
+var
+  offs:integer;
+const
+  size=sizeof(Double)*3*2;
 begin
   if not OptData.ignorelines then begin
     OGLSM.mytotalglend;
-    if vboID=WrongVBOID then begin
-      glGenBuffers(1,@vboID);
-      if vboID=WrongVBOID then
-        old:=old
-      else
-        old:=vboID;
-      glBindBuffer(GL_ARRAY_BUFFER,vboID);
-      glBufferData(GL_ARRAY_BUFFER,{sizeof(TStoredCoordType)*2}sizeof(Double)*3*2,geomdata.Vertex3S.getDataMutable(P1Index),GL_STATIC_DRAW);
-    end else
-      glBindBuffer(GL_ARRAY_BUFFER,vboID);
+    if VBOIndex=-1 then begin
+      glBindBuffer(GL_ARRAY_BUFFER,TZGLOpenGLDrawerModern(drawer).PVBO^.vboID);
+      VBOIndex:=TZGLOpenGLDrawerModern(drawer).PVBO^.vboAllocator.Allocate(size,-1);
+      offs:=TZGLOpenGLDrawerModern(drawer).PVBO^.vboAllocator.AllocatedRanges.mutable[VBOIndex]^.offset;
+      glBufferSubData(GL_ARRAY_BUFFER,offs,size,geomdata.Vertex3S.getDataMutable(P1Index));
+      glVertexPointer(3, GL_DOUBLE, 0, nil);
+      glEnableClientState(GL_VERTEX_ARRAY);
+    end else begin
+      //glBindBuffer(GL_ARRAY_BUFFER,TZGLOpenGLDrawerModern(drawer).PVBO^.vboID);
+      offs:=TZGLOpenGLDrawerModern(drawer).PVBO^.vboAllocator.AllocatedRanges.mutable[VBOIndex]^.offset;
+    end;
 
     //Устанавливаем 3 координаты каждой вершины с 0 шагом в этом массиве; тут необходимо
-    glVertexPointer(3, GL_DOUBLE, 0, nil);
+    //glVertexPointer(3, GL_DOUBLE, 0, nil);
 
     //Данный массив содержит вершины(не нормалей, цвета, текстуры и т.д.)
-    glEnableClientState(GL_VERTEX_ARRAY);
+    //glEnableClientState(GL_VERTEX_ARRAY);
     //Рисование треугольника, указывая количества вершин
-    glDrawArrays(GL_LINES, 0, 2);
+    //glDrawArrays(GL_LINES,offs div (size div 2), 2);
+    //Drawer.DrawLine(@geomdata.Vertex3S,P1Index,P1Index+1);
 
-    glDisableClientState(GL_VERTEX_ARRAY);
-    glBindBuffer(GL_ARRAY_BUFFER,WrongVBOID);
+    //glDisableClientState(GL_VERTEX_ARRAY);
+    //glBindBuffer(GL_ARRAY_BUFFER,WrongVBOID);
     //Drawer.DrawLine(@geomdata.Vertex3S,P1Index,P1Index+1);
   end;
   result:=getPrimitiveSize;

@@ -33,8 +33,8 @@ TFirstStageData=record
 {EXPORT+}
 TDrawType=(TDTFulDraw,TDTSimpleDraw);
 TEntTreeNodeData=record
-                     infrustum:TActulity;
-                     nuldrawpos,minusdrawpos,plusdrawpos:TActulity;
+                     infrustum:TActuality;
+                     nuldrawpos,minusdrawpos,plusdrawpos:TActuality;
                      FulDraw:TDrawType;
                      InFrustumBoundingBox:TBoundingBox;
                      //nodedepth:Integer;

@@ -30,11 +30,11 @@ GDBObjElLeader= object(GDBObjComplex)
             TextContent:string;
 
 
-            procedure DrawGeometry(lw:Integer;var DC:TDrawContext{infrustumactualy:TActulity;subrender:Integer});virtual;
-            procedure DrawOnlyGeometry(lw:Integer;var DC:TDrawContext{infrustumactualy:TActulity;subrender:Integer});virtual;
+            procedure DrawGeometry(lw:Integer;var DC:TDrawContext{infrustumactualy:TActuality;subrender:Integer});virtual;
+            procedure DrawOnlyGeometry(lw:Integer;var DC:TDrawContext{infrustumactualy:TActuality;subrender:Integer});virtual;
             procedure getoutbound(var DC:TDrawContext);virtual;
-            function CalcInFrustum(const frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:Integer; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double):Boolean;virtual;
-            function CalcTrueInFrustum(const frustum:ClipArray;visibleactualy:TActulity):TInBoundingVolume;virtual;
+            function CalcInFrustum(const frustum:ClipArray;infrustumactualy:TActuality;visibleactualy:TActuality;var totalobj,infrustumobj:Integer; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double):Boolean;virtual;
+            function CalcTrueInFrustum(const frustum:ClipArray;visibleactualy:TActuality):TInBoundingVolume;virtual;
             function onmouse(var popa:TZctnrVectorPGDBaseEntity;const MF:ClipArray;InSubEntry:Boolean):Boolean;virtual;
             procedure addcontrolpoints(tdesc:Pointer);virtual;
             procedure rtmodifyonepoint(const rtmod:TRTModifyData);virtual;
@@ -59,8 +59,8 @@ GDBObjElLeader= object(GDBObjComplex)
 
             procedure transform(const t_matrix:DMatrix4D);virtual;
             procedure TransformAt(p:PGDBObjEntity;t_matrix:PDMatrix4D);virtual;
-            procedure SetInFrustumFromTree(const frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:Integer; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double);virtual;
-            function calcvisible(const frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:Integer; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double):Boolean;virtual;
+            procedure SetInFrustumFromTree(const frustum:ClipArray;infrustumactualy:TActuality;visibleactualy:TActuality;var totalobj,infrustumobj:Integer; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double);virtual;
+            function calcvisible(const frustum:ClipArray;infrustumactualy:TActuality;visibleactualy:TActuality;var totalobj,infrustumobj:Integer; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double):Boolean;virtual;
             function GetObjType:TObjID;virtual;
             class function GetDXFIOFeatures:TDXFEntIODataManager;static;
             procedure SaveToDXFObjXData(var outhandle:{Integer}TZctnrVectorBytes;var IODXFContext:TIODXFContext);virtual;

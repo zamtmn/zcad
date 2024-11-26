@@ -830,7 +830,7 @@ begin
   if needredraw then
   begin
     param.ForceRedrawVolume.ForceRedraw:=false;
-    inc(PDWG.Getpcamera^.DRAWCOUNT);
+    PDWG.Getpcamera^.DRAWCOUNT:=zeHandles.CreateHandle;
     dc.drawer.ClearStatesMachine;
 
     dc.drawer.SetClearColor(sysvarDISPBackGroundColor.r,sysvarDISPBackGroundColor.g,sysvarDISPBackGroundColor.b,sysvarDISPBackGroundColor.a);

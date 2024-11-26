@@ -76,7 +76,7 @@ GDBObjHatch= object(GDBObjWithLocalCS)
 
                  procedure createpoint;virtual;
                  procedure getoutbound(var DC:TDrawContext);virtual;
-                 function CalcTrueInFrustum(const frustum:ClipArray;visibleactualy:TActulity):TInBoundingVolume;virtual;
+                 function CalcTrueInFrustum(const frustum:ClipArray;visibleactualy:TActuality):TInBoundingVolume;virtual;
                  procedure remaponecontrolpoint(pdesc:pcontrolpointdesc;ProjectProc:GDBProjectProc);virtual;
                  procedure addcontrolpoints(tdesc:Pointer);virtual;
                  procedure rtmodifyonepoint(const rtmod:TRTModifyData);virtual;

@@ -22,9 +22,9 @@ uses uzepalette,uzbtypes,uzgldrawerabstract,uzeconsts,uzegeometry,uzegeometrytyp
 type
 TDrawHeplGeometry=procedure  of object;
 TDrawingContext=record
-                   VisibleActualy:TActulity;
-                   InfrustumActualy:TActulity;
-                   DRAWCOUNT:TActulity;
+                   VisibleActualy:TActuality;
+                   InfrustumActualy:TActuality;
+                   DRAWCOUNT:TActuality;
                    SysLayer:Pointer;
                    Zoom:Double;
                    matrixs:tmatrixs;

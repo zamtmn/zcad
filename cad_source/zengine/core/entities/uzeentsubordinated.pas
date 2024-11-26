@@ -42,7 +42,7 @@ end;
 PGDBObjDrawable=^GDBObjDrawable;
 GDBObjDrawable=object(GDBObjExtendable)
   {procedure RenderFeedback(pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc;var DC:TDrawContext);virtual;abstract;
-  procedure RenderFeedbackIFNeed(pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc;var DC:TDrawContext);virtual;abstract;}
+  procedure RenderFeedbackIFNeed(pcount:TActuality;var camera:GDBObjCamera; ProjectProc:GDBProjectProc;var DC:TDrawContext);virtual;abstract;}
 end;
 
 PGDBObjSubordinated=^GDBObjSubordinated;

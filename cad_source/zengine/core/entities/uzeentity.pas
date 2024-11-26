@@ -51,8 +51,8 @@ TExtAttrib=record
 GDBObjEntity= object(GDBObjSubordinated)
                     vp:GDBObjVisualProp;
                     Selected:Boolean;
-                    Visible:TActulity;
-                    infrustum:TActulity;
+                    Visible:TActuality;
+                    infrustum:TActuality;
                     PExtAttrib:PTExtAttrib;
                     Representation:TZEntityRepresentation;
                     State:TEntityStates;
@@ -87,14 +87,14 @@ GDBObjEntity= object(GDBObjSubordinated)
                     procedure DrawWithAttrib(var DC:TDrawContext);virtual;
                     procedure DrawWithOutAttrib(var DC:TDrawContext);virtual;
 
-                    procedure DrawGeometry(lw:Integer;var DC:TDrawContext{visibleactualy:TActulity;subrender:Integer});virtual;
-                    procedure DrawOnlyGeometry(lw:Integer;var DC:TDrawContext{visibleactualy:TActulity;subrender:Integer});virtual;
+                    procedure DrawGeometry(lw:Integer;var DC:TDrawContext{visibleactualy:TActuality;subrender:Integer});virtual;
+                    procedure DrawOnlyGeometry(lw:Integer;var DC:TDrawContext{visibleactualy:TActuality;subrender:Integer});virtual;
 
-                    procedure Draw(lw:Integer;var DC:TDrawContext{visibleactualy:TActulity;subrender:Integer});virtual;
-                    procedure DrawG(lw:Integer;var DC:TDrawContext{visibleactualy:TActulity;subrender:Integer});virtual;
+                    procedure Draw(lw:Integer;var DC:TDrawContext{visibleactualy:TActuality;subrender:Integer});virtual;
+                    procedure DrawG(lw:Integer;var DC:TDrawContext{visibleactualy:TActuality;subrender:Integer});virtual;
 
-                    //procedure RenderFeedback(pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc;var DC:TDrawContext);virtual;
-                    //procedure RenderFeedbackIFNeed(pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc;var DC:TDrawContext);virtual;
+                    //procedure RenderFeedback(pcount:TActuality;var camera:GDBObjCamera; ProjectProc:GDBProjectProc;var DC:TDrawContext);virtual;
+                    //procedure RenderFeedbackIFNeed(pcount:TActuality;var camera:GDBObjCamera; ProjectProc:GDBProjectProc;var DC:TDrawContext);virtual;
                     function CalculateLineWeight(const DC:TDrawContext):Integer;//inline;
                     //function InRect:TInRect;virtual;
                     function Clone(own:Pointer):PGDBObjEntity;virtual;
@@ -110,7 +110,7 @@ GDBObjEntity= object(GDBObjSubordinated)
                     function GetLTCorrectL(GlobalLTScale:Double):Double;virtual;
                     procedure calcbb(var DC:TDrawContext);virtual;
                     procedure DrawBB(var DC:TDrawContext);
-                    function calcvisible(const frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:Integer; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double):Boolean;virtual;
+                    function calcvisible(const frustum:ClipArray;infrustumactualy:TActuality;visibleactualy:TActuality;var totalobj,infrustumobj:Integer; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double):Boolean;virtual;
 
                     function onmouse(var popa:TZctnrVectorPGDBaseEntity;const MF:ClipArray;InSubEntry:Boolean):Boolean;virtual;
                     function onpoint(var objects:TZctnrVectorPGDBaseEntity;const point:GDBVertex):Boolean;virtual;
@@ -127,7 +127,7 @@ GDBObjEntity= object(GDBObjSubordinated)
                     //procedure DeSelector(SelObjArray:Pointer;var SelectedObjCount:Integer);virtual;
                     procedure DeSelect(var SelectedObjCount:Integer;ds2s:TDeSelect2Stage);virtual;
                     function SelectQuik:Boolean;virtual;
-                    procedure remapcontrolpoints(pp:PGDBControlPointArray;pcount:TActulity;ScrollMode:Boolean;var camera:GDBObjCamera; ProjectProc:GDBProjectProc;var DC:TDrawContext);virtual;
+                    procedure remapcontrolpoints(pp:PGDBControlPointArray;pcount:TActuality;ScrollMode:Boolean;var camera:GDBObjCamera; ProjectProc:GDBProjectProc;var DC:TDrawContext);virtual;
                     //procedure rtmodify(md:Pointer;dist,wc:gdbvertex;save:Boolean);virtual;
                     procedure rtmodifyonepoint(const rtmod:TRTModifyData);virtual;abstract;
                     procedure transform(const t_matrix:DMatrix4D);virtual;
@@ -154,11 +154,11 @@ GDBObjEntity= object(GDBObjSubordinated)
                     function IsHaveGRIPS:Boolean;virtual;
                     function GetLayer:PGDBLayerProp;virtual;
                     function GetCenterPoint:GDBVertex;virtual;
-                    procedure SetInFrustum(infrustumactualy:TActulity;var totalobj,infrustumobj:Integer);virtual;
-                    procedure SetInFrustumFromTree(const frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:Integer; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double);virtual;
-                    procedure SetNotInFrustum(infrustumactualy:TActulity;var totalobj,infrustumobj:Integer);virtual;
-                    function CalcInFrustum(const frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:Integer; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double):Boolean;virtual;
-                    function CalcTrueInFrustum(const frustum:ClipArray;visibleactualy:TActulity):TInBoundingVolume;virtual;
+                    procedure SetInFrustum(infrustumactualy:TActuality;var totalobj,infrustumobj:Integer);virtual;
+                    procedure SetInFrustumFromTree(const frustum:ClipArray;infrustumactualy:TActuality;visibleactualy:TActuality;var totalobj,infrustumobj:Integer; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double);virtual;
+                    procedure SetNotInFrustum(infrustumactualy:TActuality;var totalobj,infrustumobj:Integer);virtual;
+                    function CalcInFrustum(const frustum:ClipArray;infrustumactualy:TActuality;visibleactualy:TActuality;var totalobj,infrustumobj:Integer; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double):Boolean;virtual;
+                    function CalcTrueInFrustum(const frustum:ClipArray;visibleactualy:TActuality):TInBoundingVolume;virtual;
                     function IsIntersect_Line(lbegin,lend:gdbvertex):Intercept3DProp;virtual;
                     procedure BuildGeometry(var drawing:TDrawingDef);virtual;
                     procedure AddOnTrackAxis(var posr:os_record; const processaxis:taddotrac);virtual;

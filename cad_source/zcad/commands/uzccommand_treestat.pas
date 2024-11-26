@@ -99,7 +99,7 @@ begin
   result:=format(' _%s',[inttohex(ptruint(node),8)])
 end;
 
-procedure WriteNode(node:PTEntTreeNode;infrustum:TActulity;nodedepth:integer);
+procedure WriteNode(node:PTEntTreeNode;infrustum:TActuality;nodedepth:integer);
 var
    nodename:string;
 begin

@@ -122,8 +122,9 @@ end;
 
 procedure TZCADDrawingsManager.redrawoglwnd(Sender:TObject;GUIAction:TZMessageID);
 var
-   pdwg:PTSimpleDrawing;
-   DC:TDrawContext;
+  pdwg:PTSimpleDrawing;
+  DC:TDrawContext;
+  Actlt:TVisActuality;
 begin
   if GUIAction=ZMsgID_GUIActionRedrawContent then
   begin
@@ -135,8 +136,10 @@ begin
       pdwg.wa.CalcOptimalMatrix;
       pdwg.pcamera^.totalobj:=0;
       pdwg.pcamera^.infrustum:=0;
-      drawings.GetCurrentROOT.CalcVisibleByTree(drawings.GetCurrentDWG.pcamera^.frustum,drawings.GetCurrentDWG.pcamera.POSCOUNT,drawings.GetCurrentDWG.pcamera.VISCOUNT,drawings.GetCurrentROOT.ObjArray.ObjTree,pdwg.pcamera^.totalobj,pdwg.pcamera^.infrustum,pdwg^.myGluProject2,pdwg.pcamera.prop.zoom,SysVarRDImageDegradationCurrentDegradationFactor);
-      pdwg.ConstructObjRoot.calcvisible(drawings.GetCurrentDWG.pcamera^.frustum,drawings.GetCurrentDWG.pcamera.POSCOUNT,drawings.GetCurrentDWG.pcamera.VISCOUNT,pdwg.pcamera^.totalobj,pdwg.pcamera^.infrustum,pdwg.myGluProject2,pdwg.getpcamera.prop.zoom,SysVarRDImageDegradationCurrentDegradationFactor);
+      Actlt.InfrustumActualy:=pdwg.pcamera^.POSCOUNT;
+      Actlt.VisibleActualy:=pdwg.pcamera^.VISCOUNT;
+      drawings.GetCurrentROOT.CalcVisibleByTree(drawings.GetCurrentDWG.pcamera^.frustum,Actlt,drawings.GetCurrentROOT.ObjArray.ObjTree,pdwg.pcamera^.totalobj,pdwg.pcamera^.infrustum,pdwg^.myGluProject2,pdwg.pcamera.prop.zoom,SysVarRDImageDegradationCurrentDegradationFactor);
+      pdwg.ConstructObjRoot.calcvisible(drawings.GetCurrentDWG.pcamera^.frustum,Actlt,pdwg.pcamera^.totalobj,pdwg.pcamera^.infrustum,pdwg.myGluProject2,pdwg.getpcamera.prop.zoom,SysVarRDImageDegradationCurrentDegradationFactor);
       pdwg.wa.calcgrid;
       pdwg.wa.draworinvalidate;
     end;

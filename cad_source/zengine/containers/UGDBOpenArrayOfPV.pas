@@ -34,11 +34,11 @@ PGDBObjOpenArrayOfPV=^GDBObjOpenArrayOfPV;
 {REGISTEROBJECTTYPE GDBObjOpenArrayOfPV}
 GDBObjOpenArrayOfPV= object({TZctnrVectorPGDBaseObjects}TZctnrVectorPGDBaseEntity)
                       procedure DrawWithattrib(var DC:TDrawContext);virtual;
-                      procedure DrawGeometry(lw:Integer;var DC:TDrawContext{infrustumactualy:TActuality;subrender:Integer});virtual;
-                      procedure DrawOnlyGeometry(lw:Integer;var DC:TDrawContext{infrustumactualy:TActuality;subrender:Integer});virtual;
+                      procedure DrawGeometry(lw:Integer;var DC:TDrawContext);virtual;
+                      procedure DrawOnlyGeometry(lw:Integer;var DC:TDrawContext);virtual;
                       procedure renderfeedbac(infrustumactualy:TActuality;pcount:TActuality;var camera:GDBObjCamera; ProjectProc:GDBProjectProc;var DC:TDrawContext);virtual;
-                      function calcvisible(const frustum:ClipArray;infrustumactualy:TActuality;visibleactualy:TActuality;var totalobj,infrustumobj:Integer; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double):Boolean;virtual;
-                      function CalcTrueInFrustum(const frustum:ClipArray;visibleactualy:TActuality):TInBoundingVolume;virtual;
+                      function calcvisible(const frustum:ClipArray;const Actuality:TVisActuality;var totalobj,infrustumobj:Integer; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double):Boolean;virtual;
+                      function CalcTrueInFrustum(const frustum:ClipArray):TInBoundingVolume;virtual;
                       procedure DeSelect(var SelectedObjCount:Integer;ds2s:TDeSelect2Stage);virtual;
                       function CreateObj(t: Byte{;owner:Pointer}):Pointer;virtual;
                       function CreateInitObj(t: Byte;owner:Pointer):PGDBObjSubordinated;virtual;
@@ -310,7 +310,7 @@ begin
   p:=beginiterate(ir);
   if p<>nil then
   repeat
-       if p^.infrustum=dc.DrawingContext.infrustumactualy then
+       if p^.infrustum=dc.DrawingContext.VActuality.infrustumactualy then
                            p^.DrawWithAttrib(dc);
        p:=iterate(ir);
   until p=nil;
@@ -318,35 +318,27 @@ end;
 procedure GDBObjOpenArrayOfPV.DrawGeometry;
 var
   p:pGDBObjEntity;
-      ir:itrec;
+  ir:itrec;
 begin
-//  if Count>1 then
-//                    Count:=Count;
   p:=beginiterate(ir);
   if p<>nil then
   repeat
-       //if p^.vp.ID<>0 then
-                         //p^.vp.ID:=p^.vp.ID;
-       if p^.infrustum=dc.DrawingContext.infrustumactualy then
-                           p^.DrawGeometry(lw,dc{infrustumactualy,subrender});
-       p:=iterate(ir);
+    if p^.infrustum=dc.DrawingContext.VActuality.infrustumactualy then
+      p^.DrawGeometry(lw,dc);
+    p:=iterate(ir);
   until p=nil;
 end;
 procedure GDBObjOpenArrayOfPV.DrawOnlyGeometry;
 var
   p:pGDBObjEntity;
-      ir:itrec;
+  ir:itrec;
 begin
-//  if Count>1 then
-//                    Count:=Count;
   p:=beginiterate(ir);
   if p<>nil then
   repeat
-       //if p^.vp.ID<>0 then
-                         //p^.vp.ID:=p^.vp.ID;
-       if p^.infrustum=dc.DrawingContext.infrustumactualy then
-                           p^.DrawOnlyGeometry(lw,dc{infrustumactualy,subrender});
-       p:=iterate(ir);
+    if p^.infrustum=dc.DrawingContext.VActuality.infrustumactualy then
+      p^.DrawOnlyGeometry(lw,dc);
+    p:=iterate(ir);
   until p=nil;
 end;
 function GDBObjOpenArrayOfPV.calcvisible;
@@ -359,7 +351,7 @@ begin
   p:=beginiterate(ir);
   if p<>nil then
   repeat
-       q:=p^.calcvisible(frustum,infrustumactualy,visibleactualy,totalobj,infrustumobj, ProjectProc,zoom,currentdegradationfactor);
+       q:=p^.calcvisible(frustum,Actuality,totalobj,infrustumobj, ProjectProc,zoom,currentdegradationfactor);
        result:=result or q;
        p:=iterate(ir);
   until p=nil;
@@ -384,7 +376,7 @@ begin
     if p^.vp.Layer^._on then
         begin
              inc(objcount);
-             q:=p^.CalcTrueInFrustum(frustum,visibleactualy);
+             q:=p^.CalcTrueInFrustum(frustum);
 
     if q=IREmpty then
                             begin

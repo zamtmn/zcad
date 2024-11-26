@@ -30,11 +30,11 @@ GDBObjElLeader= object(GDBObjComplex)
             TextContent:string;
 
 
-            procedure DrawGeometry(lw:Integer;var DC:TDrawContext{infrustumactualy:TActuality;subrender:Integer});virtual;
-            procedure DrawOnlyGeometry(lw:Integer;var DC:TDrawContext{infrustumactualy:TActuality;subrender:Integer});virtual;
+            procedure DrawGeometry(lw:Integer;var DC:TDrawContext);virtual;
+            procedure DrawOnlyGeometry(lw:Integer;var DC:TDrawContext);virtual;
             procedure getoutbound(var DC:TDrawContext);virtual;
-            function CalcInFrustum(const frustum:ClipArray;infrustumactualy:TActuality;visibleactualy:TActuality;var totalobj,infrustumobj:Integer; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double):Boolean;virtual;
-            function CalcTrueInFrustum(const frustum:ClipArray;visibleactualy:TActuality):TInBoundingVolume;virtual;
+            function CalcInFrustum(const frustum:ClipArray;const Actuality:TVisActuality;var totalobj,infrustumobj:Integer; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double):Boolean;virtual;
+            function CalcTrueInFrustum(const frustum:ClipArray):TInBoundingVolume;virtual;
             function onmouse(var popa:TZctnrVectorPGDBaseEntity;const MF:ClipArray;InSubEntry:Boolean):Boolean;virtual;
             procedure addcontrolpoints(tdesc:Pointer);virtual;
             procedure rtmodifyonepoint(const rtmod:TRTModifyData);virtual;
@@ -59,8 +59,8 @@ GDBObjElLeader= object(GDBObjComplex)
 
             procedure transform(const t_matrix:DMatrix4D);virtual;
             procedure TransformAt(p:PGDBObjEntity;t_matrix:PDMatrix4D);virtual;
-            procedure SetInFrustumFromTree(const frustum:ClipArray;infrustumactualy:TActuality;visibleactualy:TActuality;var totalobj,infrustumobj:Integer; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double);virtual;
-            function calcvisible(const frustum:ClipArray;infrustumactualy:TActuality;visibleactualy:TActuality;var totalobj,infrustumobj:Integer; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double):Boolean;virtual;
+            procedure SetInFrustumFromTree(const frustum:ClipArray;const Actuality:TVisActuality;var totalobj,infrustumobj:Integer; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double);virtual;
+            function calcvisible(const frustum:ClipArray;const Actuality:TVisActuality;var totalobj,infrustumobj:Integer; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double):Boolean;virtual;
             function GetObjType:TObjID;virtual;
             class function GetDXFIOFeatures:TDXFEntIODataManager;static;
             procedure SaveToDXFObjXData(var outhandle:{Integer}TZctnrVectorBytes;var IODXFContext:TIODXFContext);virtual;
@@ -82,18 +82,18 @@ function GDBObjElLeader.calcvisible;
 //    tv,tv1:gdbvertex4d;
 //    m:DMatrix4D;
 begin
-      visible:=visibleactualy;
+      visible:=Actuality.visibleactualy;
       result:=false;
-      result:=result or MainLine.calcvisible(frustum,infrustumactualy,visibleactualy,totalobj,infrustumobj, ProjectProc,zoom,currentdegradationfactor);
-      result:=result or MarkLine.calcvisible(frustum,infrustumactualy,visibleactualy,totalobj,infrustumobj, ProjectProc,zoom,currentdegradationfactor);
-      result:=result or Tbl.calcvisible(frustum,infrustumactualy,visibleactualy,totalobj,infrustumobj, ProjectProc,zoom,currentdegradationfactor);
+      result:=result or MainLine.calcvisible(frustum,Actuality,totalobj,infrustumobj, ProjectProc,zoom,currentdegradationfactor);
+      result:=result or MarkLine.calcvisible(frustum,Actuality,totalobj,infrustumobj, ProjectProc,zoom,currentdegradationfactor);
+      result:=result or Tbl.calcvisible(frustum,Actuality,totalobj,infrustumobj, ProjectProc,zoom,currentdegradationfactor);
       if result then
                            begin
-                                setinfrustum(infrustumactualy,totalobj,infrustumobj);
+                                setinfrustum(Actuality.infrustumactualy,totalobj,infrustumobj);
                            end
                        else
                            begin
-                                setnotinfrustum(infrustumactualy,totalobj,infrustumobj);
+                                setnotinfrustum(Actuality.infrustumactualy,totalobj,infrustumobj);
                                 visible:=0;
                                 result:=false;
                            end;
@@ -106,9 +106,9 @@ end;
 procedure GDBObjElLeader.SetInFrustumFromTree;
 begin
      inherited;
-            MainLine.SetInFrustumFromTree(frustum,infrustumactualy,visibleactualy,totalobj,infrustumobj, ProjectProc,zoom,currentdegradationfactor);
-            MarkLine.SetInFrustumFromTree(frustum,infrustumactualy,visibleactualy,totalobj,infrustumobj, ProjectProc,zoom,currentdegradationfactor);
-            Tbl.SetInFrustumFromTree(frustum,infrustumactualy,visibleactualy,totalobj,infrustumobj, ProjectProc,zoom,currentdegradationfactor);
+            MainLine.SetInFrustumFromTree(frustum,Actuality,totalobj,infrustumobj, ProjectProc,zoom,currentdegradationfactor);
+            MarkLine.SetInFrustumFromTree(frustum,Actuality,totalobj,infrustumobj, ProjectProc,zoom,currentdegradationfactor);
+            Tbl.SetInFrustumFromTree(frustum,Actuality,totalobj,infrustumobj, ProjectProc,zoom,currentdegradationfactor);
 end;
 procedure GDBObjElLeader.TransformAt;
 begin
@@ -668,11 +668,11 @@ function GDBObjElLeader.CalcInFrustum;
 var a:boolean;
 begin
      result:=false;
-     a:=(inherited CalcInFrustum(frustum,infrustumactualy,visibleactualy,totalobj,infrustumobj, ProjectProc,zoom,currentdegradationfactor));
+     a:=(inherited CalcInFrustum(frustum,Actuality,totalobj,infrustumobj, ProjectProc,zoom,currentdegradationfactor));
      result:=result or a;
-     a:=(MainLine.CalcInFrustum(frustum,infrustumactualy,visibleactualy,totalobj,infrustumobj, ProjectProc,zoom,currentdegradationfactor));
+     a:=(MainLine.CalcInFrustum(frustum,Actuality,totalobj,infrustumobj, ProjectProc,zoom,currentdegradationfactor));
      result:=result or a;
-     a:=(tbl.CalcInFrustum(frustum,infrustumactualy,visibleactualy,totalobj,infrustumobj, ProjectProc,zoom,currentdegradationfactor));
+     a:=(tbl.CalcInFrustum(frustum,Actuality,totalobj,infrustumobj, ProjectProc,zoom,currentdegradationfactor));
      result:=result or a;
 end;
 function GDBObjElLeader.CalcTrueInFrustum;
@@ -681,23 +681,23 @@ var
 begin
       if ConstObjArray.Count<>0 then
       begin
-      result:=inherited CalcTrueInFrustum(frustum,visibleactualy);
+      result:=inherited CalcTrueInFrustum(frustum);
       if result=IRPartially then
                                 exit;
       end;
-      q1:=MainLine.CalcTrueInFrustum(frustum,visibleactualy);
+      q1:=MainLine.CalcTrueInFrustum(frustum);
       if q1=IRPartially then
                            begin
                                 result:=IRPartially;
                                 exit;
                            end;
-      q2:=tbl.CalcTrueInFrustum(frustum,visibleactualy);
+      q2:=tbl.CalcTrueInFrustum(frustum);
       if q2=IRPartially then
                            begin
                                 result:=IRPartially;
                                 exit;
                            end;
-      q3:=MarkLine.CalcTrueInFrustum(frustum,visibleactualy);
+      q3:=MarkLine.CalcTrueInFrustum(frustum);
       if q3=IRPartially then
                            begin
                                 result:=IRPartially;

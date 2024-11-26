@@ -157,8 +157,8 @@ function CreateFaceRC:TDrawContext;
 begin
   result.Subrender:=0;
   result.Selected:=false;
-  result.DrawingContext.VisibleActualy:=-1;
-  result.DrawingContext.InfrustumActualy:=-1;
+  result.DrawingContext.VActuality.VisibleActualy:=-1;
+  result.DrawingContext.VActuality.InfrustumActualy:=-1;
   result.DrawingContext.DRAWCOUNT:=-1;
   result.DrawingContext.SysLayer:=nil;
   result.MaxDetail:=false;

@@ -231,6 +231,7 @@ end;
 procedure TSimpleDrawing.HardReDraw;
 var
    DC:TDrawContext;
+   Actlt:TVisActuality;
 begin
   DC:=CreateDrawingRC;
   GetCurrentRoot^.FormatAfterEdit(self,dc);
@@ -238,9 +239,11 @@ begin
   wa.CalcOptimalMatrix;
   pcamera^.totalobj:=0;
   pcamera^.infrustum:=0;
-  GetCurrentRoot^.CalcVisibleByTree(pcamera^.frustum,pcamera^.POSCOUNT,pcamera^.VISCOUNT,GetCurrentROOT^.ObjArray.ObjTree,pcamera^.totalobj,pcamera^.infrustum,myGluProject2,pcamera^.prop.zoom,SysVarRDImageDegradationCurrentDegradationFactor);
+  Actlt.InfrustumActualy:=pcamera^.POSCOUNT;
+  Actlt.VisibleActualy:=pcamera^.VISCOUNT;
+  GetCurrentRoot^.CalcVisibleByTree(pcamera^.frustum,Actlt,GetCurrentROOT^.ObjArray.ObjTree,pcamera^.totalobj,pcamera^.infrustum,myGluProject2,pcamera^.prop.zoom,SysVarRDImageDegradationCurrentDegradationFactor);
   //gdb.GetCurrentROOT.calcvisible(gdb.GetCurrentDWG.pcamera^.frustum,gdb.GetCurrentDWG.pcamera.POSCOUNT,gdb.GetCurrentDWG.pcamera.VISCOUNT);
-  ConstructObjRoot.calcvisible(pcamera^.frustum,pcamera^.POSCOUNT,pcamera^.VISCOUNT,pcamera^.totalobj,pcamera^.infrustum,myGluProject2,getpcamera^.prop.zoom,SysVarRDImageDegradationCurrentDegradationFactor);
+  ConstructObjRoot.calcvisible(pcamera^.frustum,Actlt,pcamera^.totalobj,pcamera^.infrustum,myGluProject2,getpcamera^.prop.zoom,SysVarRDImageDegradationCurrentDegradationFactor);
   wa.calcgrid;
   wa.draworinvalidate;
 end;
@@ -286,8 +289,8 @@ begin
 end;
 procedure TSimpleDrawing.FillDrawingPartRC(var dc:TDrawContext);
 begin
-  dc.DrawingContext.VisibleActualy:=Getpcamera.POSCOUNT;
-  dc.DrawingContext.InfrustumActualy:=Getpcamera.POSCOUNT;
+  dc.DrawingContext.VActuality.VisibleActualy:=Getpcamera.VISCOUNT;
+  dc.DrawingContext.VActuality.InfrustumActualy:=Getpcamera.POSCOUNT;
   dc.DrawingContext.DRAWCOUNT:=Getpcamera.DRAWCOUNT;
   dc.DrawingContext.SysLayer:=GetLayerTable.GetSystemLayer;
   dc.DrawingContext.Zoom:=GetPcamera.prop.zoom;

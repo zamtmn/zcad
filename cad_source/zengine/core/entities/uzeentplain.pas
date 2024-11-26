@@ -27,7 +27,7 @@ type
 
   GDBObjPlain=object(GDBObjWithLocalCS)
     Outbound:OutBound4V;
-    procedure DrawGeometry(lw:Integer;var DC:TDrawContext{infrustumactualy:TActulity;subrender:Integer});virtual;
+    procedure DrawGeometry(lw:Integer;var DC:TDrawContext);virtual;
   end;
 implementation
 //uses

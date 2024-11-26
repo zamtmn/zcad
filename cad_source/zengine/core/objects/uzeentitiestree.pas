@@ -88,8 +88,8 @@ begin
   if pobj<>nil then
   repeat
        pobj:=TZEntsManipulator.IterateResult2PEntity(pobj);
-       if pobj^.infrustum=dc.DrawingContext.infrustumactualy then
-                           pobj^.DrawWithAttrib(dc);
+       if pobj^.infrustum=dc.DrawingContext.VActuality.infrustumactualy then
+         pobj^.DrawWithAttrib(dc);
        pobj:=nul.iterate(ir);
        if LODDeep>2 then
          pobj:=nul.iterate(ir);
@@ -112,7 +112,7 @@ end;
 class procedure TZEntsManipulator.treerender(var Node:GZBInarySeparatedGeometry<TBoundingBox,DVector4D,TEntTreeNodeData,TZEntsManipulator,GDBObjEntity,PGDBObjEntity,TEntityArray>;var DC:TDrawContext);
 begin
      begin
-       if (Node.NodeData.infrustum=dc.DrawingContext.InfrustumActualy) then
+       if (Node.NodeData.infrustum=dc.DrawingContext.VActuality.InfrustumActualy) then
        begin
             if Node.NodeData.FulDraw=TDTFulDraw then
             if (Node.NodeData.FulDraw=TDTFulDraw)or(Node.nul.count=0) then

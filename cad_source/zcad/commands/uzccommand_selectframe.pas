@@ -161,7 +161,7 @@ begin
             if (pv^.Visible=drawings.GetCurrentDWG.pcamera.VISCOUNT)or(not OnlyOnScreenSelect) then
             if (pv^.infrustum=drawings.GetCurrentDWG.pcamera.POSCOUNT)or(not OnlyOnScreenSelect) then
             begin
-                 r:=pv^.CalcTrueInFrustum(drawings.GetCurrentDWG.wa.param.seldesc.BigMouseFrustum,drawings.GetCurrentDWG.pcamera.VISCOUNT);
+                 r:=pv^.CalcTrueInFrustum(drawings.GetCurrentDWG.wa.param.seldesc.BigMouseFrustum);
 
                  if drawings.GetCurrentDWG.wa.param.seldesc.MouseFrameInverse
                     then

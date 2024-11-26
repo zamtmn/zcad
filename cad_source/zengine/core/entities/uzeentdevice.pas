@@ -38,13 +38,13 @@ GDBObjDevice= object(GDBObjBlockInsert)
                    constructor initnul;
                    constructor init(own:Pointer;layeraddres:PGDBLayerProp;LW:SmallInt);
                    destructor done;virtual;
-                   function CalcInFrustum(const frustum:ClipArray;infrustumactualy:TActuality;visibleactualy:TActuality;var totalobj,infrustumobj:Integer; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double):Boolean;virtual;
-                   function CalcTrueInFrustum(const frustum:ClipArray;visibleactualy:TActuality):TInBoundingVolume;virtual;
+                   function CalcInFrustum(const frustum:ClipArray;const Actuality:TVisActuality;var totalobj,infrustumobj:Integer; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double):Boolean;virtual;
+                   function CalcTrueInFrustum(const frustum:ClipArray):TInBoundingVolume;virtual;
                    procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext;Stage:TEFStages=EFAllStages);virtual;
                    function IsStagedFormatEntity:boolean;virtual;
                    procedure FormatFeatures(var drawing:TDrawingDef);virtual;
-                   procedure DrawGeometry(lw:Integer;var DC:TDrawContext{infrustumactualy:TActuality;subrender:Integer});virtual;
-                   procedure DrawOnlyGeometry(lw:Integer;var DC:TDrawContext{infrustumactualy:TActuality;subrender:Integer});virtual;
+                   procedure DrawGeometry(lw:Integer;var DC:TDrawContext);virtual;
+                   procedure DrawOnlyGeometry(lw:Integer;var DC:TDrawContext);virtual;
                    procedure renderfeedbac(infrustumactualy:TActuality;pcount:TActuality;var camera:GDBObjCamera; ProjectProc:GDBProjectProc;var DC:TDrawContext);virtual;
                    function onmouse(var popa:TZctnrVectorPGDBaseEntity;const MF:ClipArray;InSubEntry:Boolean):Boolean;virtual;
                    function ReturnLastOnMouse(InSubEntry:Boolean):PGDBObjEntity;virtual;
@@ -66,7 +66,7 @@ GDBObjDevice= object(GDBObjBlockInsert)
                    procedure SaveToDXFObjXData(var outhandle:{Integer}TZctnrVectorBytes;var IODXFContext:TIODXFContext);virtual;
                    procedure AddMi(pobj:PGDBObjSubordinated);virtual;
                    //procedure select;virtual;
-                   procedure SetInFrustumFromTree(const frustum:ClipArray;infrustumactualy:TActuality;visibleactualy:TActuality;var totalobj,infrustumobj:Integer; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double);virtual;
+                   procedure SetInFrustumFromTree(const frustum:ClipArray;const Actuality:TVisActuality;var totalobj,infrustumobj:Integer; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double);virtual;
                    procedure addcontrolpoints(tdesc:Pointer);virtual;
 
                    procedure EraseMi(pobj:pGDBObjEntity;pobjinarray:Integer;var drawing:TDrawingDef);virtual;
@@ -183,8 +183,8 @@ end;
 
 procedure GDBObjDevice.SetInFrustumFromTree;
 begin
-     inherited SetInFrustumFromTree(frustum,infrustumactualy,visibleactualy,totalobj,infrustumobj, ProjectProc,zoom,currentdegradationfactor);
-     VarObjArray.SetInFrustumFromTree(frustum,infrustumactualy,visibleactualy,totalobj,infrustumobj, ProjectProc,zoom,currentdegradationfactor);
+  inherited SetInFrustumFromTree(frustum,Actuality,totalobj,infrustumobj, ProjectProc,zoom,currentdegradationfactor);
+  VarObjArray.SetInFrustumFromTree(frustum,Actuality,totalobj,infrustumobj, ProjectProc,zoom,currentdegradationfactor);
 end;
 procedure GDBObjDevice.AddMi;
 begin
@@ -316,8 +316,8 @@ end;}
 function GDBObjDevice.CalcInFrustum;
 var a:boolean;
 begin
-     result:=inherited CalcInFrustum(frustum,infrustumactualy,visibleactualy,totalobj,infrustumobj, ProjectProc,zoom,currentdegradationfactor);
-     a:=VarObjArray.calcvisible(frustum,infrustumactualy,visibleactualy,totalobj,infrustumobj, ProjectProc,zoom,currentdegradationfactor);
+     result:=inherited CalcInFrustum(frustum,Actuality,totalobj,infrustumobj, ProjectProc,zoom,currentdegradationfactor);
+     a:=VarObjArray.calcvisible(frustum,Actuality,totalobj,infrustumobj, ProjectProc,zoom,currentdegradationfactor);
      result:=result or a;
 end;
 function GDBObjDevice.CalcTrueInFrustum;
@@ -325,7 +325,7 @@ var
   inhresult:TInBoundingVolume;
 begin
   inhresult:=inherited;
-  result:=VarObjArray.CalcTrueInFrustum(frustum,visibleactualy);
+  result:=VarObjArray.CalcTrueInFrustum(frustum);
   if result<>inhresult then begin
     if result=IRNotAplicable then
       exit(inhresult);

@@ -30,16 +30,16 @@ type
 PGDBObjComplex=^GDBObjComplex;
 GDBObjComplex= object(GDBObjWithLocalCS)
                     ConstObjArray:GDBObjEntityTreeArray;
-                    procedure DrawGeometry(lw:Integer;var DC:TDrawContext{infrustumactualy:TActuality;subrender:Integer});virtual;
-                    procedure DrawOnlyGeometry(lw:Integer;var DC:TDrawContext{infrustumactualy:TActuality;subrender:Integer});virtual;
+                    procedure DrawGeometry(lw:Integer;var DC:TDrawContext);virtual;
+                    procedure DrawOnlyGeometry(lw:Integer;var DC:TDrawContext);virtual;
                     procedure getoutbound(var DC:TDrawContext);virtual;
                     procedure getonlyoutbound(var DC:TDrawContext);virtual;
                     function getonlyvisibleoutbound(var DC:TDrawContext):TBoundingBox;virtual;
                     destructor done;virtual;
                     constructor initnul;
                     constructor init(own:Pointer;layeraddres:PGDBLayerProp;LW:SmallInt);
-                    function CalcInFrustum(const frustum:ClipArray;infrustumactualy:TActuality;visibleactualy:TActuality;var totalobj,infrustumobj:Integer; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double):Boolean;virtual;
-                    function CalcTrueInFrustum(const frustum:ClipArray;visibleactualy:TActuality):TInBoundingVolume;virtual;
+                    function CalcInFrustum(const frustum:ClipArray;const Actuality:TVisActuality;var totalobj,infrustumobj:Integer; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double):Boolean;virtual;
+                    function CalcTrueInFrustum(const frustum:ClipArray):TInBoundingVolume;virtual;
                     function onmouse(var popa:TZctnrVectorPGDBaseEntity;const MF:ClipArray;InSubEntry:Boolean):Boolean;virtual;
                     procedure addcontrolpoints(tdesc:Pointer);virtual;
                     procedure remaponecontrolpoint(pdesc:pcontrolpointdesc;ProjectProc:GDBProjectProc);virtual;
@@ -48,7 +48,7 @@ GDBObjComplex= object(GDBObjWithLocalCS)
                     //procedure feedbackinrect;virtual;
                     //function InRect:TInRect;virtual;
                     //procedure Draw(lw:Integer);virtual;
-                    procedure SetInFrustumFromTree(const frustum:ClipArray;infrustumactualy:TActuality;visibleactualy:TActuality;var totalobj,infrustumobj:Integer; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double);virtual;
+                    procedure SetInFrustumFromTree(const frustum:ClipArray;const Actuality:TVisActuality;var totalobj,infrustumobj:Integer; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double);virtual;
                     function onpoint(var objects:TZctnrVectorPGDBaseEntity;const point:GDBVertex):Boolean;virtual;
                     procedure BuildGeometry(var drawing:TDrawingDef);virtual;
                     procedure FormatAfterDXFLoad(var drawing:TDrawingDef;var DC:TDrawContext);virtual;
@@ -78,9 +78,9 @@ end;
 procedure GDBObjComplex.SetInFrustumFromTree;
 begin
      inherited;
-     ConstObjArray.SetInFrustumFromTree(frustum,infrustumactualy,visibleactualy,totalobj,infrustumobj, ProjectProc,zoom,currentdegradationfactor);
+     ConstObjArray.SetInFrustumFromTree(frustum,Actuality,totalobj,infrustumobj, ProjectProc,zoom,currentdegradationfactor);
      ConstObjArray.ObjTree.BoundingBox:=vp.BoundingBox;
-     ProcessTree(frustum,infrustumactualy,visibleactualy,ConstObjArray.ObjTree,IRFully,TDTFulDraw,totalobj,infrustumobj,ProjectProc,zoom,currentdegradationfactor);
+     ProcessTree(frustum,Actuality,ConstObjArray.ObjTree,IRFully,TDTFulDraw,totalobj,infrustumobj,ProjectProc,zoom,currentdegradationfactor);
 end;
 {function GDBObjComplex.InRect:TInRect;
 begin
@@ -191,14 +191,14 @@ begin
      ConstObjArray.done;
      inherited done;
 end;
-function GDBObjComplex.CalcInFrustum(const frustum:ClipArray;infrustumactualy:TActuality;visibleactualy:TActuality;var totalobj,infrustumobj:Integer; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double):Boolean;
+function GDBObjComplex.CalcInFrustum(const frustum:ClipArray;const Actuality:TVisActuality;var totalobj,infrustumobj:Integer; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double):Boolean;
 begin
-     result:=ConstObjArray.calcvisible(frustum,infrustumactualy,visibleactualy,totalobj,infrustumobj, ProjectProc,zoom,currentdegradationfactor);
-     ProcessTree(frustum,infrustumactualy,visibleactualy,ConstObjArray.ObjTree,IRPartially,TDTFulDraw,totalobj,infrustumobj,ProjectProc,zoom,currentdegradationfactor);
+     result:=ConstObjArray.calcvisible(frustum,Actuality,totalobj,infrustumobj, ProjectProc,zoom,currentdegradationfactor);
+     ProcessTree(frustum,Actuality,ConstObjArray.ObjTree,IRPartially,TDTFulDraw,totalobj,infrustumobj,ProjectProc,zoom,currentdegradationfactor);
 end;
 function GDBObjComplex.CalcTrueInFrustum;
 begin
-      result:=ConstObjArray.CalcTrueInFrustum(frustum,visibleactualy);
+      result:=ConstObjArray.CalcTrueInFrustum(frustum);
 end;
 procedure GDBObjComplex.FormatAfterDXFLoad;
 var

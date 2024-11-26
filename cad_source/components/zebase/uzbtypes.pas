@@ -68,6 +68,10 @@ GDBaseObject=object
     destructor Done;virtual;{ abstract;}
   end;
 TActuality=PtrUInt;
+TVisActuality=record
+  VisibleActualy:TActuality;
+  InfrustumActualy:TActuality;
+end;
 TEntUpgradeInfo=LongWord;
 PGDBBaseCamera=^GDBBaseCamera;
 {REGISTEROBJECTTYPE GDBBaseCamera}

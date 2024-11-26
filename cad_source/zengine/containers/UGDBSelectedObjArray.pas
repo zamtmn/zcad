@@ -41,7 +41,7 @@ GDBSelectedObjArray= object(GZVector{-}<selectedobjdesc>{//})
                           procedure free;virtual;
                           procedure remappoints(pcount:TActuality;ScrollMode:Boolean;var camera:GDBObjCamera; ProjectProc:GDBProjectProc;var DC:TDrawContext);virtual;
                           procedure drawpoint(var DC:TDrawContext;const GripSize:Integer; const SelColor,UnSelColor:TRGB);virtual;
-                          procedure drawobject(var DC:TDrawContext{infrustumactualy:TActuality;subrender:Integer});virtual;
+                          procedure drawobject(var DC:TDrawContext);virtual;
                           function getnearesttomouse(mx,my:integer):tcontrolpointdist;virtual;
                           function getonlyoutbound(var DC:TDrawContext):TBoundingBox;
                           procedure selectcurrentcontrolpoint(key:Byte;mx,my,h:integer);virtual;
@@ -54,9 +54,9 @@ GDBSelectedObjArray= object(GZVector{-}<selectedobjdesc>{//})
                           procedure SetRotateObj(const minusd,plusd,rm:DMatrix4D;const x,y,z:GDBVertex);
                           procedure TransformObj(const dispmatr:DMatrix4D);
 
-                          procedure drawobj(var DC:TDrawContext{infrustumactualy:TActuality;subrender:Integer});virtual;
+                          procedure drawobj(var DC:TDrawContext);virtual;
                           procedure freeelement(PItem:PT);virtual;
-                          procedure calcvisible(const frustum:cliparray;infrustumactualy:TActuality;visibleactualy:TActuality;var totalobj,infrustumobj:Integer; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double);virtual;
+                          procedure calcvisible(const frustum:cliparray;const Actuality:TVisActuality;var totalobj,infrustumobj:Integer; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double);virtual;
                           //procedure resprojparam(pcount:TActuality;var camera:GDBObjCamera; ProjectProc:GDBProjectProc;var DC:TDrawContext);
                     end;
 {EXPORT-}
@@ -520,7 +520,7 @@ begin
       if tdesc^.ptempobj<>nil then
                                   begin
                                   //tdesc^.ptempobj^.getoutbound;
-                                  tdesc^.ptempobj^.calcvisible(frustum,infrustumactualy,visibleactualy,totalobj,infrustumobj, ProjectProc,zoom,currentdegradationfactor);
+                                  tdesc^.ptempobj^.calcvisible(frustum,Actuality,totalobj,infrustumobj, ProjectProc,zoom,currentdegradationfactor);
                                   end;
       inc(tdesc);
     end;

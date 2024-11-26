@@ -110,7 +110,7 @@ GDBObjEntity= object(GDBObjSubordinated)
                     function GetLTCorrectL(GlobalLTScale:Double):Double;virtual;
                     procedure calcbb(var DC:TDrawContext);virtual;
                     procedure DrawBB(var DC:TDrawContext);
-                    function calcvisible(const frustum:ClipArray;infrustumactualy:TActuality;visibleactualy:TActuality;var totalobj,infrustumobj:Integer; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double):Boolean;virtual;
+                    function calcvisible(const frustum:ClipArray;const Actuality:TVisActuality;var totalobj,infrustumobj:Integer; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double):Boolean;virtual;
 
                     function onmouse(var popa:TZctnrVectorPGDBaseEntity;const MF:ClipArray;InSubEntry:Boolean):Boolean;virtual;
                     function onpoint(var objects:TZctnrVectorPGDBaseEntity;const point:GDBVertex):Boolean;virtual;
@@ -155,10 +155,10 @@ GDBObjEntity= object(GDBObjSubordinated)
                     function GetLayer:PGDBLayerProp;virtual;
                     function GetCenterPoint:GDBVertex;virtual;
                     procedure SetInFrustum(infrustumactualy:TActuality;var totalobj,infrustumobj:Integer);virtual;
-                    procedure SetInFrustumFromTree(const frustum:ClipArray;infrustumactualy:TActuality;visibleactualy:TActuality;var totalobj,infrustumobj:Integer; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double);virtual;
+                    procedure SetInFrustumFromTree(const frustum:ClipArray;const Actuality:TVisActuality;var totalobj,infrustumobj:Integer; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double);virtual;
                     procedure SetNotInFrustum(infrustumactualy:TActuality;var totalobj,infrustumobj:Integer);virtual;
-                    function CalcInFrustum(const frustum:ClipArray;infrustumactualy:TActuality;visibleactualy:TActuality;var totalobj,infrustumobj:Integer; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double):Boolean;virtual;
-                    function CalcTrueInFrustum(const frustum:ClipArray;visibleactualy:TActuality):TInBoundingVolume;virtual;
+                    function CalcInFrustum(const frustum:ClipArray;const Actuality:TVisActuality;var totalobj,infrustumobj:Integer; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double):Boolean;virtual;
+                    function CalcTrueInFrustum(const frustum:ClipArray):TInBoundingVolume;virtual;
                     function IsIntersect_Line(lbegin,lend:gdbvertex):Intercept3DProp;virtual;
                     procedure BuildGeometry(var drawing:TDrawingDef);virtual;
                     procedure AddOnTrackAxis(var posr:os_record; const processaxis:taddotrac);virtual;
@@ -295,10 +295,10 @@ end;
 
 procedure GDBObjEntity.SetInFrustumFromTree;
 begin
-     infrustum:=infrustumactualy;
+     infrustum:=Actuality.infrustumactualy;
      if (self.vp.Layer._on) then
      begin
-          visible:=visibleactualy;
+          visible:=Actuality.visibleactualy;
      end
       else
           visible:=0;
@@ -317,16 +317,16 @@ begin
 end;
 procedure GDBObjEntity.Draw;
 begin
-  if visible=dc.DrawingContext.visibleactualy then
+  if visible=dc.DrawingContext.VActuality.visibleactualy then
   begin
-       DrawGeometry(lw,dc{visibleactualy,subrender});
+       DrawGeometry(lw,dc);
   end;
 end;
 procedure GDBObjEntity.Drawg;
 begin
-  if visible=dc.DrawingContext.visibleactualy then
+  if visible=dc.DrawingContext.VActuality.visibleactualy then
   begin
-       DrawOnlyGeometry(lw,dc{visibleactualy,subrender});
+       DrawOnlyGeometry(lw,dc);
   end;
 end;
 
@@ -771,16 +771,16 @@ function GDBObjEntity.calcvisible;
 //    tv,tv1:gdbvertex4d;
 //    m:DMatrix4D;
 begin
-      visible:=visibleactualy;
+      visible:=Actuality.visibleactualy;
       result:=true;
       //inc(gdb.GetCurrentDWG.pcamera^.totalobj);
-      if CalcInFrustum(frustum,infrustumactualy,visibleactualy,totalobj,infrustumobj, ProjectProc,zoom,currentdegradationfactor) then
+      if CalcInFrustum(frustum,Actuality,totalobj,infrustumobj, ProjectProc,zoom,currentdegradationfactor) then
                            begin
-                                setinfrustum(infrustumactualy,totalobj,infrustumobj);
+                                setinfrustum(Actuality.infrustumactualy,totalobj,infrustumobj);
                            end
                        else
                            begin
-                                setnotinfrustum(infrustumactualy,totalobj,infrustumobj);
+                                setnotinfrustum(Actuality.infrustumactualy,totalobj,infrustumobj);
                                 visible:=0;
                                 result:=false;
                            end;

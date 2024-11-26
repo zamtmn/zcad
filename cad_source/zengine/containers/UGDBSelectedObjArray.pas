@@ -46,7 +46,6 @@ GDBSelectedObjArray= object(GZVector{-}<selectedobjdesc>{//})
                           function getonlyoutbound(var DC:TDrawContext):TBoundingBox;
                           procedure selectcurrentcontrolpoint(key:Byte;mx,my,h:integer);virtual;
                           procedure selectcontrolpointinframe(f1,f2: GDBvertex2DI);virtual;
-                          //procedure RenderFeedBack(pcount:TActuality;var camera:GDBObjCamera; ProjectProc:GDBProjectProc;var DC:TDrawContext);virtual;
                           //destructor done;virtual;
                           procedure freeclones;
                           procedure Transform(const dispmatr:DMatrix4D);

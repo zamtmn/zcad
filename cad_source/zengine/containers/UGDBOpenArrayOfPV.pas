@@ -36,7 +36,6 @@ GDBObjOpenArrayOfPV= object({TZctnrVectorPGDBaseObjects}TZctnrVectorPGDBaseEntit
                       procedure DrawWithattrib(var DC:TDrawContext);virtual;
                       procedure DrawGeometry(lw:Integer;var DC:TDrawContext);virtual;
                       procedure DrawOnlyGeometry(lw:Integer;var DC:TDrawContext);virtual;
-                      procedure renderfeedbac(infrustumactualy:TActuality;pcount:TActuality;var camera:GDBObjCamera; ProjectProc:GDBProjectProc;var DC:TDrawContext);virtual;
                       function calcvisible(const frustum:ClipArray;const Actuality:TVisActuality;var totalobj,infrustumobj:Integer; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double):Boolean;virtual;
                       function CalcTrueInFrustum(const frustum:ClipArray):TInBoundingVolume;virtual;
                       procedure DeSelect(var SelectedObjCount:Integer;ds2s:TDeSelect2Stage);virtual;
@@ -275,28 +274,6 @@ begin
   if p<>nil then
   repeat
        p^.formatafteredit(drawing,dc);
-       p:=iterate(ir);
-  until p=nil;
-end;
-procedure GDBObjOpenArrayOfPV.renderfeedbac(infrustumactualy:TActuality;pcount:TActuality;var camera:GDBObjCamera; ProjectProc:GDBProjectProc;var DC:TDrawContext);
-var
-  p:pGDBObjEntity;
-      ir:itrec;
-begin
-//  if count>500 then
-//                   count:=count;
-  p:=beginiterate(ir);
-  if p<>nil then
-  repeat
-//  if ir.itc=12 then
-//                         count:=count;
-
-  {if p^.GetObjType=0 then
-                         p^.vp.ID:=p^.vp.ID;}
-       if (p^.infrustum=infrustumactualy)or(p^.Selected) then
-                                            begin
-                                                 //p^.renderfeedback(pcount,camera,ProjectProc,dc);
-                                            end;
        p:=iterate(ir);
   until p=nil;
 end;

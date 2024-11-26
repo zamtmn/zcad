@@ -93,8 +93,6 @@ GDBObjEntity= object(GDBObjSubordinated)
                     procedure Draw(lw:Integer;var DC:TDrawContext{visibleactualy:TActuality;subrender:Integer});virtual;
                     procedure DrawG(lw:Integer;var DC:TDrawContext{visibleactualy:TActuality;subrender:Integer});virtual;
 
-                    //procedure RenderFeedback(pcount:TActuality;var camera:GDBObjCamera; ProjectProc:GDBProjectProc;var DC:TDrawContext);virtual;
-                    //procedure RenderFeedbackIFNeed(pcount:TActuality;var camera:GDBObjCamera; ProjectProc:GDBProjectProc;var DC:TDrawContext);virtual;
                     function CalculateLineWeight(const DC:TDrawContext):Integer;//inline;
                     //function InRect:TInRect;virtual;
                     function Clone(own:Pointer):PGDBObjEntity;virtual;

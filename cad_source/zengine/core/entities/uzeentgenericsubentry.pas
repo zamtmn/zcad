@@ -52,7 +52,6 @@ GDBObjGenericSubEntry= object(GDBObjWithMatrix)
                             procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext;Stage:TEFStages=EFAllStages);virtual;
                             procedure FormatAfterEdit(var drawing:TDrawingDef;var DC:TDrawContext;Stage:TEFStages=EFAllStages);virtual;
                             procedure restructure(var drawing:TDrawingDef);virtual;
-                            procedure renderfeedbac(infrustumactualy:TActuality;pcount:TActuality;var camera:GDBObjCamera; ProjectProc:GDBProjectProc;var DC:TDrawContext);virtual;
                             //function select:Boolean;virtual;
                             function getowner:PGDBObjSubordinated;virtual;
                             function CanAddGDBObj(pobj:PGDBObjEntity):Boolean;virtual;
@@ -543,10 +542,6 @@ begin
 end;
 procedure GDBObjGenericSubEntry.restructure;
 begin
-end;
-procedure GDBObjGenericSubEntry.renderfeedbac(infrustumactualy:TActuality;pcount:TActuality;var camera:GDBObjCamera; ProjectProc:GDBProjectProc;var DC:TDrawContext);
-begin
-  ObjArray.renderfeedbac(infrustumactualy,pcount,camera,ProjectProc,dc);
 end;
 function GDBObjGenericSubEntry.onpoint(var objects:TZctnrVectorPGDBaseEntity;const point:GDBVertex):Boolean;
 var //t,xx,yy:Double;

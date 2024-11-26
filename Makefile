@@ -63,7 +63,7 @@ ifeq ($(OSDETECT),WIN32)
 	LP:=C:\lazarus
 else
 	ifeq ($(OSDETECT),LINUX)
-		LP:=~/lazarus
+		LP:=/usr/bin
 	else
 		ifeq ($(OSDETECT),OSX)
 			LP:=~/lazarus

@@ -46,7 +46,7 @@ GDBObjAbstractText= object(GDBObjPlainWithOX)
                          procedure CalcObjMatrix(pdrawing:PTDrawingDef=nil);virtual;
                          procedure DrawGeometry(lw:Integer;var DC:TDrawContext);virtual;
                          procedure SimpleDrawGeometry(var DC:TDrawContext);virtual;
-                         function CalcInFrustum(const frustum:ClipArray;const Actuality:TVisActuality;var totalobj,infrustumobj:Integer; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double):Boolean;virtual;
+                         function CalcInFrustum(const frustum:ClipArray;const Actuality:TVisActuality;var Counters:TCameraCounters; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double):Boolean;virtual;
                          function CalcTrueInFrustum(const frustum:ClipArray):TInBoundingVolume;virtual;
                          function onmouse(var popa:TZctnrVectorPGDBaseEntity;const MF:ClipArray;InSubEntry:Boolean):Boolean;virtual;
                          procedure addcontrolpoints(tdesc:Pointer);virtual;

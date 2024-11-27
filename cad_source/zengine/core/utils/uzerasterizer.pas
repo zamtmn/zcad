@@ -171,7 +171,7 @@ begin
 
   Actlt.InfrustumActualy:=cdwg^.pcamera^.POSCOUNT;
   Actlt.VisibleActualy:=cdwg^.pcamera^.VISCOUNT;
-  cdwg^.GetCurrentROOT^.CalcVisibleByTree(_frustum,Actlt,cdwg^.GetCurrentROOT^.ObjArray.ObjTree,cdwg^.pcamera^.totalobj,cdwg^.pcamera^.infrustum,@cdwg^.myGluProject2,cdwg^.pcamera^.prop.zoom,0);
+  cdwg^.GetCurrentROOT^.CalcVisibleByTree(_frustum,Actlt,cdwg^.GetCurrentROOT^.ObjArray.ObjTree,cdwg^.pcamera^.Counters,@cdwg^.myGluProject2,cdwg^.pcamera^.prop.zoom,0);
   cdwg^.GetCurrentROOT^.FormatEntity(cdwg^,dc);
   //drawings.GetCurrentDWG^.OGLwindow1.draw;
   //prn.startrender;

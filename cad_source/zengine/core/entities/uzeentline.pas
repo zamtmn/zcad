@@ -66,7 +66,7 @@ GDBObjLine= object(GDBObj3d)
                   function GetObjTypeName:String;virtual;
                   function GetCenterPoint:GDBVertex;virtual;
                   procedure getoutbound(var DC:TDrawContext);virtual;
-                  function CalcInFrustum(const frustum:ClipArray;const Actuality:TVisActuality;var totalobj,infrustumobj:Integer; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double):Boolean;virtual;
+                  function CalcInFrustum(const frustum:ClipArray;const Actuality:TVisActuality;var Counters:TCameraCounters; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double):Boolean;virtual;
                   function CalcTrueInFrustum(const frustum:ClipArray):TInBoundingVolume;virtual;
 
                   function IsIntersect_Line(lbegin,lend:gdbvertex):Intercept3DProp;virtual;
@@ -322,30 +322,11 @@ begin
                                                                               result:=false;
 end;
 procedure GDBObjLine.DrawGeometry;
-//var
-//  templod:Double;
 begin
   if (selected)or(dc.selected) then
-                     Representation.DrawNiceGeometry(DC)
-                 else
-                     begin
-                     Representation.DrawGeometry(DC);
-                     exit;
-                     end;
-  {if vp.LineType<>nil then
-     if vp.LineType.h>0 then
-  begin
-  templod:=(vp.LineType.h*vp.LineTypeScale*SysVar.dwg.DWG_LTScale^)/(dc.zoom);
-  if templod<3 then
-     begin
-     DC.Drawer.DrawLine3DInModelSpace(CoordInWCS.lBegin,CoordInWCS.lEnd,DC.matrixs);
-     end;
-  end;}
-  inherited;
-  {oglsm.myglbegin(GL_points);
-  myglVertex3dV(@CoordInWCS.lBegin);
-  myglVertex3dV(@CoordInWCS.lEnd);
-  oglsm.myglend;}
+    Representation.DrawNiceGeometry(DC)
+  else
+    Representation.DrawGeometry(DC);
 end;
 
 function GDBObjLine.getsnap;

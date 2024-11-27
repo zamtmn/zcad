@@ -237,13 +237,13 @@ begin
   GetCurrentRoot^.FormatAfterEdit(self,dc);
   wa.param.firstdraw := TRUE;
   wa.CalcOptimalMatrix;
-  pcamera^.totalobj:=0;
-  pcamera^.infrustum:=0;
+  pcamera^.Counters.totalobj:=0;
+  pcamera^.Counters.infrustum:=0;
   Actlt.InfrustumActualy:=pcamera^.POSCOUNT;
   Actlt.VisibleActualy:=pcamera^.VISCOUNT;
-  GetCurrentRoot^.CalcVisibleByTree(pcamera^.frustum,Actlt,GetCurrentROOT^.ObjArray.ObjTree,pcamera^.totalobj,pcamera^.infrustum,myGluProject2,pcamera^.prop.zoom,SysVarRDImageDegradationCurrentDegradationFactor);
+  GetCurrentRoot^.CalcVisibleByTree(pcamera^.frustum,Actlt,GetCurrentROOT^.ObjArray.ObjTree,pcamera^.Counters,myGluProject2,pcamera^.prop.zoom,SysVarRDImageDegradationCurrentDegradationFactor);
   //gdb.GetCurrentROOT.calcvisible(gdb.GetCurrentDWG.pcamera^.frustum,gdb.GetCurrentDWG.pcamera.POSCOUNT,gdb.GetCurrentDWG.pcamera.VISCOUNT);
-  ConstructObjRoot.calcvisible(pcamera^.frustum,Actlt,pcamera^.totalobj,pcamera^.infrustum,myGluProject2,getpcamera^.prop.zoom,SysVarRDImageDegradationCurrentDegradationFactor);
+  ConstructObjRoot.calcvisible(pcamera^.frustum,Actlt,pcamera^.Counters,myGluProject2,getpcamera^.prop.zoom,SysVarRDImageDegradationCurrentDegradationFactor);
   wa.calcgrid;
   wa.draworinvalidate;
 end;

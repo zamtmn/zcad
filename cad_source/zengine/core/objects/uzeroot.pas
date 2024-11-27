@@ -44,8 +44,8 @@ GDBObjRoot= object(GDBObjGenericSubEntry)
 
                  function GetMatrix:PDMatrix4D;virtual;
                  procedure DrawWithAttrib(var DC:TDrawContext{visibleactualy:TActualityTActuality;subrender:Integer});virtual;
-                 function CalcInFrustum(const frustum:ClipArray;const Actuality:TVisActuality;var totalobj,infrustumobj:Integer; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double):Boolean;virtual;
-                 procedure CalcInFrustumByTree(const frustum:ClipArray;const Actuality:TVisActuality;var enttree:TEntTreeNode;var totalobj,infrustumobj:Integer; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double);virtual;
+                 function CalcInFrustum(const frustum:ClipArray;const Actuality:TVisActuality;var Counters:TCameraCounters; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double):Boolean;virtual;
+                 procedure CalcInFrustumByTree(const frustum:ClipArray;const Actuality:TVisActuality;var enttree:TEntTreeNode;var Counters:TCameraCounters; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double);virtual;
                  procedure CalcVisibleBBByTree(const Actuality:TVisActuality;var enttree:TEntTreeNode);virtual;
                  procedure calcbb(var DC:TDrawContext);virtual;
                  //function FindShellByClass(_type:TDeviceClass):PGDBObjSubordinated;virtual;
@@ -71,12 +71,12 @@ procedure GDBObjRoot.CalcVisibleBBByTree(const Actuality:TVisActuality;var enttr
 begin
   InFrustumAABB:=enttree.NodeData.InFrustumBoundingBox;
 end;
-procedure GDBObjRoot.CalcInFrustumByTree(const frustum:ClipArray;const Actuality:TVisActuality;var enttree:TEntTreeNode;var totalobj,infrustumobj:Integer; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double);
+procedure GDBObjRoot.CalcInFrustumByTree(const frustum:ClipArray;const Actuality:TVisActuality;var enttree:TEntTreeNode;var Counters:TCameraCounters; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double);
 var
    myfrustum:ClipArray;
 begin
      myfrustum:=FrustumTransform(frustum,ObjMatrix);
-     ProcessTree(myfrustum,Actuality,enttree,IRPartially,TDTFulDraw,totalobj,infrustumobj,ProjectProc,zoom,currentdegradationfactor);
+     ProcessTree(myfrustum,Actuality,enttree,IRPartially,TDTFulDraw,Counters,ProjectProc,zoom,currentdegradationfactor);
 
      CalcVisibleBBByTree(Actuality,enttree);
      //InFrustumAABB:=ObjArray.calcvisbb(infrustumactualy);
@@ -86,7 +86,7 @@ var
    myfrustum:ClipArray;
 begin
      myfrustum:=FrustumTransform(frustum,ObjMatrix);
-     result:=inherited CalcInFrustum(myfrustum,Actuality,totalobj,infrustumobj, ProjectProc,zoom,currentdegradationfactor);
+     result:=inherited CalcInFrustum(myfrustum,Actuality,Counters, ProjectProc,zoom,currentdegradationfactor);
 end;
 procedure GDBObjRoot.DrawWithAttrib;
 begin

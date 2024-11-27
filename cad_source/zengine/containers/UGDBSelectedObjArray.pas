@@ -55,7 +55,7 @@ GDBSelectedObjArray= object(GZVector{-}<selectedobjdesc>{//})
 
                           procedure drawobj(var DC:TDrawContext);virtual;
                           procedure freeelement(PItem:PT);virtual;
-                          procedure calcvisible(const frustum:cliparray;const Actuality:TVisActuality;var totalobj,infrustumobj:Integer; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double);virtual;
+                          procedure calcvisible(const frustum:cliparray;const Actuality:TVisActuality;var Counters:TCameraCounters; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double);virtual;
                           //procedure resprojparam(pcount:TActuality;var camera:GDBObjCamera; ProjectProc:GDBProjectProc;var DC:TDrawContext);
                     end;
 {EXPORT-}
@@ -519,7 +519,7 @@ begin
       if tdesc^.ptempobj<>nil then
                                   begin
                                   //tdesc^.ptempobj^.getoutbound;
-                                  tdesc^.ptempobj^.calcvisible(frustum,Actuality,totalobj,infrustumobj, ProjectProc,zoom,currentdegradationfactor);
+                                  tdesc^.ptempobj^.calcvisible(frustum,Actuality,Counters, ProjectProc,zoom,currentdegradationfactor);
                                   end;
       inc(tdesc);
     end;

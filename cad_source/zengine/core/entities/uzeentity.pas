@@ -108,7 +108,7 @@ GDBObjEntity= object(GDBObjSubordinated)
                     function GetLTCorrectL(GlobalLTScale:Double):Double;virtual;
                     procedure calcbb(var DC:TDrawContext);virtual;
                     procedure DrawBB(var DC:TDrawContext);
-                    function calcvisible(const frustum:ClipArray;const Actuality:TVisActuality;var totalobj,infrustumobj:Integer; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double):Boolean;virtual;
+                    function calcvisible(const frustum:ClipArray;const Actuality:TVisActuality;var Counters:TCameraCounters;ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double):Boolean;virtual;
 
                     function onmouse(var popa:TZctnrVectorPGDBaseEntity;const MF:ClipArray;InSubEntry:Boolean):Boolean;virtual;
                     function onpoint(var objects:TZctnrVectorPGDBaseEntity;const point:GDBVertex):Boolean;virtual;
@@ -152,10 +152,10 @@ GDBObjEntity= object(GDBObjSubordinated)
                     function IsHaveGRIPS:Boolean;virtual;
                     function GetLayer:PGDBLayerProp;virtual;
                     function GetCenterPoint:GDBVertex;virtual;
-                    procedure SetInFrustum(infrustumactualy:TActuality;var totalobj,infrustumobj:Integer);virtual;
-                    procedure SetInFrustumFromTree(const frustum:ClipArray;const Actuality:TVisActuality;var totalobj,infrustumobj:Integer; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double);virtual;
-                    procedure SetNotInFrustum(infrustumactualy:TActuality;var totalobj,infrustumobj:Integer);virtual;
-                    function CalcInFrustum(const frustum:ClipArray;const Actuality:TVisActuality;var totalobj,infrustumobj:Integer; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double):Boolean;virtual;
+                    procedure SetInFrustum(infrustumactualy:TActuality;var Counters:TCameraCounters);virtual;
+                    procedure SetInFrustumFromTree(const frustum:ClipArray;const Actuality:TVisActuality;var Counters:TCameraCounters; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double);virtual;
+                    procedure SetNotInFrustum(infrustumactualy:TActuality;var Counters:TCameraCounters);virtual;
+                    function CalcInFrustum(const frustum:ClipArray;const Actuality:TVisActuality;var Counters:TCameraCounters;ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double):Boolean;virtual;
                     function CalcTrueInFrustum(const frustum:ClipArray):TInBoundingVolume;virtual;
                     function IsIntersect_Line(lbegin,lend:gdbvertex):Intercept3DProp;virtual;
                     procedure BuildGeometry(var drawing:TDrawingDef);virtual;
@@ -712,14 +712,14 @@ procedure GDBObjEntity.SetInFrustum;
 begin
      //result:=infrustum;
      infrustum:=infrustumactualy;
-     inc({gdb.GetCurrentDWG.pcamera^.}totalobj);
-     inc({gdb.GetCurrentDWG.pcamera^.}infrustumobj);
+     inc(Counters.totalobj);
+     inc(Counters.infrustum);
 end;
 procedure GDBObjEntity.SetNotInFrustum;
 begin
      //result:=infrustum;
      //infrustum:=false;
-     inc({gdb.GetCurrentDWG.pcamera^.}totalobj);
+     inc(Counters.totalobj);
 end;
 procedure GDBObjEntity.DXFOut;
 begin
@@ -772,13 +772,13 @@ begin
       visible:=Actuality.visibleactualy;
       result:=true;
       //inc(gdb.GetCurrentDWG.pcamera^.totalobj);
-      if CalcInFrustum(frustum,Actuality,totalobj,infrustumobj, ProjectProc,zoom,currentdegradationfactor) then
+      if CalcInFrustum(frustum,Actuality,Counters,ProjectProc,zoom,currentdegradationfactor) then
                            begin
-                                setinfrustum(Actuality.infrustumactualy,totalobj,infrustumobj);
+                                setinfrustum(Actuality.infrustumactualy,Counters);
                            end
                        else
                            begin
-                                setnotinfrustum(Actuality.infrustumactualy,totalobj,infrustumobj);
+                                setnotinfrustum(Actuality.infrustumactualy,Counters);
                                 visible:=0;
                                 result:=false;
                            end;

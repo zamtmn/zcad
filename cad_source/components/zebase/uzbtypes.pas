@@ -17,6 +17,7 @@
 }
 unit uzbtypes;
 {$Mode delphi}
+{Mode advancedrecords}
 
 interface
 uses
@@ -67,10 +68,15 @@ GDBaseObject=object
     constructor initnul;
     destructor Done;virtual;{ abstract;}
   end;
+TCameraCounters=record
+  totalobj,infrustum:Integer;
+  {-}constructor CreateRec(AT,AI:Integer);{//}
+end;
 TActuality=PtrUInt;
 TVisActuality=record
   VisibleActualy:TActuality;
   InfrustumActualy:TActuality;
+  {-}constructor CreateRec(AV,AI:TActuality);{//}
 end;
 TEntUpgradeInfo=LongWord;
 PGDBBaseCamera=^GDBBaseCamera;
@@ -78,14 +84,15 @@ PGDBBaseCamera=^GDBBaseCamera;
 GDBBaseCamera=object(GDBaseObject)
                 modelMatrix:DMatrix4D;
                 fovy:Double;
-                totalobj:Integer;
+                Counters:TCameraCounters;
+                //totalobj:Integer;
                 prop:GDBCameraBaseProp;
                 anglx,angly,zmin,zmax:Double;
                 projMatrix:DMatrix4D;
                 viewport:IMatrix4;
                 clip:DMatrix4D;
                 frustum:ClipArray;
-                infrustum:Integer;
+                //infrustum:Integer;
                 obj_zmax,obj_zmin:Double;
                 DRAWNOTEND:Boolean;
                 DRAWCOUNT:TActuality;
@@ -219,6 +226,16 @@ function IsIt(PType,PChecedType:Pointer):Boolean;
 function StrToQWord(const sh:string):UInt64;
 {$ENDIF}
 implementation
+constructor TCameraCounters.CreateRec(AT,AI:Integer);
+begin
+  totalobj:=AT;
+  infrustum:=AI;
+end;
+constructor TVisActuality.CreateRec(AV,AI:TActuality);
+begin
+  VisibleActualy:=AV;
+  InfrustumActualy:=AI;
+end;
 
 function GDBaseObject.GetObjType:Word;
 begin

@@ -28,7 +28,7 @@ PGDBObjEntityOpenArray=^GDBObjEntityOpenArray;
 GDBObjEntityOpenArray= object(GDBObjOpenArrayOfPV)
                       function AddPEntity(var entity:GDBObjEntity):TArrayIndex;virtual;
                       procedure CloneEntityTo(PEA:PGDBObjEntityOpenArray;own:Pointer);virtual;
-                      procedure SetInFrustumFromTree(const frustum:ClipArray;const Actuality:TVisActuality;var totalobj,infrustumobj:Integer; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double);virtual;
+                      procedure SetInFrustumFromTree(const frustum:ClipArray;const Actuality:TVisActuality;var Counters:TCameraCounters;ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double);virtual;
 
                 end;
 {Export-}
@@ -40,7 +40,7 @@ begin
      pobj:=beginiterate(ir);
      if pobj<>nil then
      repeat
-           pobj^.SetInFrustumFromTree(frustum,Actuality,totalobj,infrustumobj, ProjectProc,zoom,currentdegradationfactor);
+           pobj^.SetInFrustumFromTree(frustum,Actuality,Counters,ProjectProc,zoom,currentdegradationfactor);
            pobj:=iterate(ir);
      until pobj=nil;
 end;

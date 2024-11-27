@@ -51,9 +51,9 @@ begin
   else begin
     s:=sizeof(PObj(ir.itp)^);
     if ir.itc<(count-s) then begin
-      m:=s mod ObjAlign;
+      m:=s mod cAlignment;
       if m<>0 then
-       s:=s+ObjAlign-m;
+       s:=s+cAlignment-m;
       inc(PByte(ir.itp),s);
       inc(ir.itc,s);
       result:=ir.itp;

@@ -36,7 +36,7 @@ GDBObjOpenArrayOfPV= object({TZctnrVectorPGDBaseObjects}TZctnrVectorPGDBaseEntit
                       procedure DrawWithattrib(var DC:TDrawContext);virtual;
                       procedure DrawGeometry(lw:Integer;var DC:TDrawContext);virtual;
                       procedure DrawOnlyGeometry(lw:Integer;var DC:TDrawContext);virtual;
-                      function calcvisible(const frustum:ClipArray;const Actuality:TVisActuality;var totalobj,infrustumobj:Integer; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double):Boolean;virtual;
+                      function calcvisible(const frustum:ClipArray;const Actuality:TVisActuality;var Counters:TCameraCounters;ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double):Boolean;virtual;
                       function CalcTrueInFrustum(const frustum:ClipArray):TInBoundingVolume;virtual;
                       procedure DeSelect(var SelectedObjCount:Integer;ds2s:TDeSelect2Stage);virtual;
                       function CreateObj(t: Byte{;owner:Pointer}):Pointer;virtual;
@@ -328,7 +328,7 @@ begin
   p:=beginiterate(ir);
   if p<>nil then
   repeat
-       q:=p^.calcvisible(frustum,Actuality,totalobj,infrustumobj, ProjectProc,zoom,currentdegradationfactor);
+       q:=p^.calcvisible(frustum,Actuality,Counters,ProjectProc,zoom,currentdegradationfactor);
        result:=result or q;
        p:=iterate(ir);
   until p=nil;

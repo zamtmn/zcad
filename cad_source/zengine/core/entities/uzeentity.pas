@@ -48,14 +48,19 @@ TExtAttrib=record
                  Upgrade:TEntUpgradeInfo;
                  ExtAttrib2:Boolean;
            end;
-GDBObjEntity= object(GDBObjSubordinated)
+  GDBObjEntity= object(GDBObjSubordinated)
+    {-}protected{//}
+      fInfrustum:TActuality;
+    {-}public{//}
                     vp:GDBObjVisualProp;
                     Selected:Boolean;
                     Visible:TActuality;
-                    infrustum:TActuality;
                     PExtAttrib:PTExtAttrib;
                     Representation:TZEntityRepresentation;
                     State:TEntityStates;
+    {-}protected{//}
+      function GetInfrustumFromTree:TActuality;
+    {-}public{//}
                     destructor done;virtual;
                     constructor init(own:Pointer;layeraddres:PGDBLayerProp;LW:SmallInt);
                     constructor initnul(owner:PGDBObjGenericWithSubordinated);
@@ -178,11 +183,20 @@ GDBObjEntity= object(GDBObjSubordinated)
                     procedure addtoconnect2(pobj:pgdbobjEntity;var ConnectedArray:TZctnrVectorPGDBaseEntity);
                     function CheckState(AStates:TEntityStates):Boolean;
                     function GetObjName:String;virtual;
-              end;
+                    {-}property infrustum:TActuality read GetInfrustumFromTree write fInfrustum;{//}
+  end;
 var onlygetsnapcount:Integer;
     GDBObjEntityDXFFeatures:TDXFEntIODataManager;
 implementation
-uses usimplegenerics,uzeentityfactory{,UGDBSelectedObjArray};
+uses usimplegenerics,uzeentityfactory,uzeentitiestree;
+function GDBObjEntity.GetInfrustumFromTree:TActuality;
+begin
+  if bp.TreePos.Owner=nil then
+    result:=0
+  else
+    result:=PTEntTreeNode(bp.TreePos.Owner)^.NodeData.infrustum;
+end;
+
 function GDBObjEntity.GetObjName:String;
 begin
   result:='entity'

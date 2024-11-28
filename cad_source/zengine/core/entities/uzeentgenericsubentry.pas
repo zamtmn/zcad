@@ -411,7 +411,7 @@ begin
     pobj^.EntExtensions.RunRemoveFromArray(pobj,drawing);
 
   if pobj^.bp.TreePos.Owner<>nil then begin
-    PTEntTreeNode(pobj^.bp.TreePos.Owner)^.nulDeleteElement(pobj^.bp.TreePos.SelfIndex);
+    PTEntTreeNode(pobj^.bp.TreePos.Owner)^.nulDeleteElement(pobj^.bp.TreePos.SelfIndexInNode);
   end;
   pobj^.bp.TreePos.Owner:=nil;
   //pointer(p):=ObjArray.getDataMutable(pobjinarray);

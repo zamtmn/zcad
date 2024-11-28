@@ -40,8 +40,8 @@ implementation
 //uses {UGDBDescriptor,}{GDBManager,}log;
 procedure GDBObjEntityTreeArray.RemoveFromTree(p:PGDBObjEntity);
 begin
-     PTEntTreeNode(p^.bp.TreePos.Owner).nul.DeleteElement(p^.bp.TreePos.SelfIndex);
-     p^.bp.TreePos.SelfIndex:=-1;
+     PTEntTreeNode(p^.bp.TreePos.Owner).nul.DeleteElement(p^.bp.TreePos.SelfIndexInNode);
+     p^.bp.TreePos.SelfIndexInNode:=-1;
      p^.bp.TreePos.Owner:=nil;
 end;
 procedure GDBObjEntityTreeArray.done;

@@ -71,10 +71,10 @@ TEntityAddress=record
                           Owner:PGDBObjGenericWithSubordinated;
                           SelfIndex:TArrayIndex;
               end;
-TTreeAddress=record
-                          Owner:Pointer;
-                          SelfIndex:TArrayIndex;
-              end;
+  TTreeAddress=record
+    Owner:Pointer;
+    SelfIndexInNode:TArrayIndex;
+  end;
 GDBObjBaseProp=record
                       ListPos:TEntityAddress;
                       TreePos:TTreeAddress;

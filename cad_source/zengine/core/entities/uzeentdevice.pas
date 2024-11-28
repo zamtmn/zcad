@@ -95,7 +95,7 @@ begin
     obj^.EntExtensions.RunRemoveFromArray(obj,drawing);
 
   if obj^.bp.TreePos.Owner<>nil then begin
-    PTEntTreeNode(obj^.bp.TreePos.Owner)^.nulDeleteElement(obj^.bp.TreePos.SelfIndex);
+    PTEntTreeNode(obj^.bp.TreePos.Owner)^.nulDeleteElement(obj^.bp.TreePos.SelfIndexInNode);
   end;
   obj^.bp.TreePos.Owner:=nil;
   VarObjArray.DeleteElement(obj.bp.ListPos.SelfIndex);
@@ -127,7 +127,7 @@ procedure GDBObjDevice.EraseMi;
 begin
      if pobj^.bp.TreePos.Owner<>nil then
      begin
-          PTEntTreeNode(pobj^.bp.TreePos.Owner)^.nul.DeleteElement(pobj^.bp.TreePos.SelfIndex);
+          PTEntTreeNode(pobj^.bp.TreePos.Owner)^.nul.DeleteElement(pobj^.bp.TreePos.SelfIndexInNode);
      end;
 
      //pointer(p):= VarObjArray.getDataMutable(pobjinarray);

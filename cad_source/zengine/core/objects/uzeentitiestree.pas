@@ -22,7 +22,8 @@ unit uzeentitiestree;
 interface
 uses
     gzctnrVectorTypes,graphics,gzctnrVectorSimple,gzctnrVectorPObjects,
-    uzegeometrytypes,gzctnrBinarySeparatedTree,uzgldrawcontext,uzegeometry,UGDBVisibleOpenArray,uzeentity,uzbtypes;
+    uzegeometrytypes,gzctnrBinarySeparatedTree,uzgldrawcontext,uzegeometry,
+    UGDBVisibleOpenArray,uzeentity,uzbtypes;
 type
 TZEntsManipulator=class;
 TFirstStageData=record
@@ -203,7 +204,7 @@ end;
 class procedure TZEntsManipulator.StoreTreeAdressInOnject(var Entity:GDBObjEntity;var Node:GZBInarySeparatedGeometry{-}<TBoundingBox,DVector4D,TEntTreeNodeData,TZEntsManipulator,GDBObjEntity,PGDBObjEntity,TEntityArray>;const index:Integer);
 begin
   Entity.bp.TreePos.Owner:=@Node;
-  Entity.bp.TreePos.SelfIndex:=index;
+  Entity.bp.TreePos.SelfIndexInNode:=index;
 end;
 class procedure TZEntsManipulator.CorrectNodeBoundingBox(var NodeBB:TBoundingBox;var Entity:GDBObjEntity);
 begin

@@ -59,7 +59,7 @@ TZEntsManipulator=class
                    class function GetTestNodesCount:integer;
                    class procedure FirstStageCalcSeparatirs(var NodeBB:TBoundingBox;var Entity:GDBObjEntity;var PFirstStageData:pointer;TSM:TStageMode);
                    class procedure CreateSeparator(var NodeBB:TBoundingBox;var TestNode:TEntTreeNode.TTestNode;var PFirstStageData:pointer;const NodeNum:integer);
-                   class function IterateResult2PEntity(const IterateResult:pointer):PGDBObjEntity;
+                   class function IterateResult2PEntity(const IterateResult:pointer):PGDBObjEntity;inline;
                    class function StoreEntityToArray(var Entity:GDBObjEntity;var arr:TEntityArray):TArrayIndex;
                    class function EntitySizeOrOne(var Entity:GDBObjEntity):integer;
                    class procedure SetSizeInArray(ns:integer;var arr:TEntityArray);

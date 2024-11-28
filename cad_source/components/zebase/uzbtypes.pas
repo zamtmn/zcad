@@ -31,6 +31,15 @@ type
 TProcCounter=procedure(const PInstance,PCounted:Pointer;var Counter:Integer);
 TControlPointAttr=(CPA_Strech);
 TControlPointAttrs=set of TControlPointAttr;
+TTimeMeter=record
+  private
+    fLPTime:TDateTime;
+  public
+    class function StartMeasure:TTimeMeter;static;
+    procedure EndMeasure;
+    function ElapsedMiliSec:Integer;
+end;
+
 {EXPORT+}
 (*varcategoryforoi SUMMARY='Summary'*)
 (*varcategoryforoi CABLE='Cable params'*)
@@ -226,6 +235,20 @@ function IsIt(PType,PChecedType:Pointer):Boolean;
 function StrToQWord(const sh:string):UInt64;
 {$ENDIF}
 implementation
+
+class function TTimeMeter.StartMeasure:TTimeMeter;static;
+begin
+  result.fLPTime:=now();
+end;
+procedure TTimeMeter.EndMeasure;
+begin
+  fLPTime:=now()-fLPTime;
+end;
+function TTimeMeter.ElapsedMiliSec:Integer;
+begin
+  result:=round(fLPTime*10e7);
+end;
+
 constructor TCameraCounters.CreateRec(AT,AI:Integer);
 begin
   totalobj:=AT;

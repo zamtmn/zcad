@@ -131,6 +131,7 @@ begin
     pdwg:=drawings.GetCurrentDWG;
     if pdwg<>nil then begin
       DC:=pdwg^.CreateDrawingRC;
+      drawings.GetCurrentDWG.UpdateActuality;
       drawings.GetCurrentRoot.FormatAfterEdit(pdwg^,dc);
       pdwg.wa.param.firstdraw := TRUE;
       pdwg.wa.CalcOptimalMatrix;

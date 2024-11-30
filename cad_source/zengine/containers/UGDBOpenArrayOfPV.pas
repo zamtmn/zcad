@@ -37,6 +37,7 @@ GDBObjOpenArrayOfPV= object({TZctnrVectorPGDBaseObjects}TZctnrVectorPGDBaseEntit
                       procedure DrawGeometry(lw:Integer;var DC:TDrawContext);virtual;
                       procedure DrawOnlyGeometry(lw:Integer;var DC:TDrawContext);virtual;
                       function calcvisible(const frustum:ClipArray;const Actuality:TVisActuality;var Counters:TCameraCounters;ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double):Boolean;virtual;
+                      function CalcActualVisible(const Actuality:TVisActuality):Boolean;virtual;
                       function CalcTrueInFrustum(const frustum:ClipArray):TInBoundingVolume;virtual;
                       procedure DeSelect(var SelectedObjCount:Integer;ds2s:TDeSelect2Stage);virtual;
                       function CreateObj(t: Byte{;owner:Pointer}):Pointer;virtual;
@@ -332,6 +333,21 @@ begin
        result:=result or q;
        p:=iterate(ir);
   until p=nil;
+end;
+function GDBObjOpenArrayOfPV.CalcActualVisible(const Actuality:TVisActuality):Boolean;
+var
+  p:pGDBObjEntity;
+  ir:itrec;
+  q:boolean;
+begin
+  result:=false;
+  p:=beginiterate(ir);
+  if p<>nil then
+    repeat
+      q:=p^.CalcActualVisible(Actuality);
+      result:=result or q;
+      p:=iterate(ir);
+    until p=nil;
 end;
 function GDBObjOpenArrayOfPV.CalcTrueInFrustum;
 var

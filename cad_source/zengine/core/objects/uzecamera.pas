@@ -51,7 +51,7 @@ implementation
 procedure GDBObjCamera.NextPosition;
 begin
   POSCOUNT:=zeHandles.CreateHandle;
-  VISCOUNT:=zeHandles.CreateHandle;
+  //VISCOUNT:=zeHandles.CreateHandle;
 end;
 constructor GDBObjCamera.initnul;
 begin

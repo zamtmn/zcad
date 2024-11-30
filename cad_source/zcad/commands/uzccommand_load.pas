@@ -140,6 +140,7 @@ begin
     ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIActionRedrawContent);
     if assigned(ProcessFilehistoryProc) then
       ProcessFilehistoryProc(s);
+    drawings.GetCurrentDWG^.LostActuality;
     result:=cmd_ok;
   end else begin
     ZCMsgCallBackInterface.TextMessage('LOAD:'+format(rsUnableToOpenFile,[s+'('+Operands+')']),TMWOShowError);

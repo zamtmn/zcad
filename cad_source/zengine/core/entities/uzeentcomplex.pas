@@ -52,17 +52,17 @@ GDBObjComplex= object(GDBObjWithLocalCS)
                     function onpoint(var objects:TZctnrVectorPGDBaseEntity;const point:GDBVertex):Boolean;virtual;
                     procedure BuildGeometry(var drawing:TDrawingDef);virtual;
                     procedure FormatAfterDXFLoad(var drawing:TDrawingDef;var DC:TDrawContext);virtual;
+                    function CalcActualVisible(const Actuality:TVisActuality):Boolean;virtual;
               end;
 implementation
-//uses
-//    log{,varmandef};
-{procedure GDBObjComplex.Draw;
+function GDBObjComplex.CalcActualVisible(const Actuality:TVisActuality):Boolean;
+var
+  q:boolean;
 begin
-  if visible then
-  begin
-       self.DrawWithAttrib; //DrawGeometry(lw);
-  end;
-end;}
+  result:=inherited;
+  q:=ConstObjArray.CalcActualVisible(Actuality);
+  result:=result or q;
+end;
 procedure GDBObjComplex.BuildGeometry;
 begin
      //ConstObjArray.ObjTree.done;
@@ -82,6 +82,7 @@ begin
      ConstObjArray.ObjTree.BoundingBox:=vp.BoundingBox;
      ProcessTree(frustum,Actuality,ConstObjArray.ObjTree,IRFully,TDTFulDraw,Counters,ProjectProc,zoom,currentdegradationfactor);
 end;
+
 {function GDBObjComplex.InRect:TInRect;
 begin
      result:=ConstObjArray.InRect;

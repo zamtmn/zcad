@@ -50,7 +50,7 @@ TExtAttrib=record
            end;
   GDBObjEntity= object(GDBObjSubordinated)
     {-}protected{//}
-      fInfrustum:TActuality;
+      //fInfrustum:TActuality;
     {-}public{//}
                     vp:GDBObjVisualProp;
                     Selected:Boolean;
@@ -159,6 +159,7 @@ TExtAttrib=record
                     function GetCenterPoint:GDBVertex;virtual;
                     procedure SetInFrustum(infrustumactualy:TActuality;var Counters:TCameraCounters);virtual;
                     procedure SetInFrustumFromTree(const frustum:ClipArray;const Actuality:TVisActuality;var Counters:TCameraCounters; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double);virtual;
+                    function CalcActualVisible(const Actuality:TVisActuality):Boolean;virtual;
                     procedure SetNotInFrustum(infrustumactualy:TActuality;var Counters:TCameraCounters);virtual;
                     function CalcInFrustum(const frustum:ClipArray;const Actuality:TVisActuality;var Counters:TCameraCounters;ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double):Boolean;virtual;
                     function CalcTrueInFrustum(const frustum:ClipArray):TInBoundingVolume;virtual;
@@ -183,7 +184,7 @@ TExtAttrib=record
                     procedure addtoconnect2(pobj:pgdbobjEntity;var ConnectedArray:TZctnrVectorPGDBaseEntity);
                     function CheckState(AStates:TEntityStates):Boolean;
                     function GetObjName:String;virtual;
-                    {-}property infrustum:TActuality read GetInfrustumFromTree write fInfrustum;{//}
+                    {-}property infrustum:TActuality read GetInfrustumFromTree{ write fInfrustum};{//}
   end;
 var onlygetsnapcount:Integer;
     GDBObjEntityDXFFeatures:TDXFEntIODataManager;
@@ -307,7 +308,7 @@ end;
 
 procedure GDBObjEntity.SetInFrustumFromTree;
 begin
-     infrustum:=Actuality.infrustumactualy;
+     //infrustum:=Actuality.infrustumactualy;
      if (self.vp.Layer._on) then
      begin
           visible:=Actuality.visibleactualy;
@@ -315,6 +316,18 @@ begin
       else
           visible:=0;
 end;
+function GDBObjEntity.CalcActualVisible(const Actuality:TVisActuality):Boolean;
+var
+  oldValue:TActuality;
+begin
+  oldValue:=visible;
+  if (self.vp.Layer._on) then
+    visible:=Actuality.visibleactualy
+  else
+    visible:=0;
+  result:=oldValue<>Visible;
+end;
+
 procedure GDBObjEntity.AddOnTrackAxis(var posr:os_record;const processaxis:taddotrac);
 begin
 
@@ -725,7 +738,7 @@ end;
 procedure GDBObjEntity.SetInFrustum;
 begin
      //result:=infrustum;
-     infrustum:=infrustumactualy;
+     //infrustum:=infrustumactualy;
      inc(Counters.totalobj);
      inc(Counters.infrustum);
 end;

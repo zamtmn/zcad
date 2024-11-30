@@ -60,6 +60,7 @@ GDBObjElLeader= object(GDBObjComplex)
             procedure transform(const t_matrix:DMatrix4D);virtual;
             procedure TransformAt(p:PGDBObjEntity;t_matrix:PDMatrix4D);virtual;
             procedure SetInFrustumFromTree(const frustum:ClipArray;const Actuality:TVisActuality;var Counters:TCameraCounters; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double);virtual;
+            function CalcActualVisible(const Actuality:TVisActuality):Boolean;virtual;
             function calcvisible(const frustum:ClipArray;const Actuality:TVisActuality;var Counters:TCameraCounters; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double):Boolean;virtual;
             function GetObjType:TObjID;virtual;
             class function GetDXFIOFeatures:TDXFEntIODataManager;static;
@@ -109,6 +110,16 @@ begin
             MainLine.SetInFrustumFromTree(frustum,Actuality,Counters, ProjectProc,zoom,currentdegradationfactor);
             MarkLine.SetInFrustumFromTree(frustum,Actuality,Counters, ProjectProc,zoom,currentdegradationfactor);
             Tbl.SetInFrustumFromTree(frustum,Actuality,Counters, ProjectProc,zoom,currentdegradationfactor);
+end;
+function GDBObjElLeader.CalcActualVisible(const Actuality:TVisActuality):Boolean;
+var
+  q1,q2,q3:boolean;
+begin
+  result:=inherited;
+  q1:=MainLine.CalcActualVisible(Actuality);
+  q2:=MarkLine.CalcActualVisible(Actuality);
+  q3:=Tbl.CalcActualVisible(Actuality);
+  result:=result or q1 or q2 or q3;
 end;
 procedure GDBObjElLeader.TransformAt;
 begin

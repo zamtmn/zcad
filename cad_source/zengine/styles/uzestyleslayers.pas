@@ -47,15 +47,20 @@ PGDBLayerPropArray=^GDBLayerPropArray;
 GDBLayerPropArray=packed array [0..0] of PGDBLayerProp;
 PGDBLayerArray=^GDBLayerArray;
 {REGISTEROBJECTTYPE GDBLayerArray}
-GDBLayerArray= object(GDBNamedObjectsArray{-}<PGDBLayerProp,GDBLayerProp>{//})
-                    constructor init(m:Integer;psyslt:Pointer);
-                    constructor initnul;
+  GDBLayerArray= object(GDBNamedObjectsArray{-}<PGDBLayerProp,GDBLayerProp>{//})
+    private
+      fActlState:TActuality;
+    public
+      constructor init(m:Integer;psyslt:Pointer);
+      constructor initnul;
 
-                    function addlayer(const name:String;color:Integer;lw:Integer;oo,ll,pp:Boolean;const d:String;lm:TLoadOpt):PGDBLayerProp;virtual;
-                    function GetSystemLayer:PGDBLayerProp;
-                    function createlayerifneed(_source:PGDBLayerProp):PGDBLayerProp;
-                    function createlayerifneedbyname(const lname:String;_source:PGDBLayerProp):PGDBLayerProp;
-              end;
+      function addlayer(const name:String;color:Integer;lw:Integer;oo,ll,pp:Boolean;const d:String;lm:TLoadOpt):PGDBLayerProp;virtual;
+      function GetSystemLayer:PGDBLayerProp;
+      function createlayerifneed(_source:PGDBLayerProp):PGDBLayerProp;
+      function createlayerifneedbyname(const lname:String;_source:PGDBLayerProp):PGDBLayerProp;
+      procedure NewState;
+      {-}property ActlState:TActuality read fActlState;{//}
+  end;
 {EXPORT-}
 TLayerProp=class(TNamedObject)
 end;
@@ -64,8 +69,11 @@ var
    DefaultErrorLayer:GDBLayerProp;
    LayerHandle:TStyleDeskHandle;
 implementation
-//uses
-//    log;
+procedure GDBLayerArray.NewState;
+begin
+  fActlState:=zeHandles.CreateHandle;
+end;
+
 function GetLTName(LT:PGDBLayerProp):String;
 begin
      if assigned(LT) then
@@ -112,12 +120,12 @@ begin
   inherited init(m);
   addlayer(LNSysLayerName,CGDBWhile,lwgdbdefault,true,false,true,'',TLOLoad).LT:=psyslt;
   addlayer(LNMetricLayerName,CGDBWhile,lwgdbdefault,false,false,false,'',TLOLoad).LT:=psyslt;
+  NewState;
 end;
 constructor GDBLayerArray.initnul;
 begin
   inherited initnul;
-  //objsizeof:=sizeof(GDBLayerProp);
-  //size:=sizeof(GDBLayerProp);
+  NewState;
 end;
 destructor GDBLayerProp.done;
 begin

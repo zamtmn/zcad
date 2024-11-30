@@ -48,6 +48,7 @@ GDBObjGenericSubEntry= object(GDBObjWithMatrix)
                             constructor initnul(owner:PGDBObjGenericWithSubordinated);
                             procedure DrawGeometry(lw:Integer;var DC:TDrawContext);virtual;
                             function CalcInFrustum(const frustum:ClipArray;const Actuality:TVisActuality;var Counters:TCameraCounters; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double):Boolean;virtual;
+                            function CalcActualVisible(const Actuality:TVisActuality):Boolean;virtual;
                             function onmouse(var popa:TZctnrVectorPGDBaseEntity;const MF:ClipArray;InSubEntry:Boolean):Boolean;virtual;
                             procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext;Stage:TEFStages=EFAllStages);virtual;
                             procedure FormatAfterEdit(var drawing:TDrawingDef;var DC:TDrawContext;Stage:TEFStages=EFAllStages);virtual;
@@ -301,8 +302,8 @@ begin
 end;*)
 function GDBObjGenericSubEntry.CalcVisibleByTree(const frustum:ClipArray;const Actuality:TVisActuality;var enttree:TEntTreeNode;var Counters:TCameraCounters; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double):Boolean;
 begin
-  visible:=Actuality.visibleactualy;
-     result:=true;
+  //visible:=Actuality.visibleactualy;
+  //   result:=true;
      //inc(gdb.GetCurrentDWG.pcamera^.totalobj);
      {if }CalcInFrustumByTree(frustum,Actuality,enttree,Counters,ProjectProc,zoom,currentdegradationfactor);{ then}
              {             begin
@@ -314,12 +315,12 @@ begin
                                visible:=false;
                                result:=false;
                           end;}
-     if self.vp.Layer<>nil then
+     {if self.vp.Layer<>nil then
      if not(self.vp.Layer._on) then
                           begin
                                visible:=0;
                                result:=false;
-                          end;
+                          end;}
 end;
 function GDBObjGenericSubEntry.CreatePreCalcData:PTDrawingPreCalcData;
 begin
@@ -512,6 +513,14 @@ function GDBObjGenericSubEntry.CalcInFrustum(const frustum:ClipArray;const Actua
 begin
   result:=ObjArray.calcvisible(frustum,Actuality,Counters, ProjectProc,zoom,currentdegradationfactor);
   self.InFrustumAABB:=ObjArray.calcvisbb(Actuality.infrustumactualy);
+end;
+function GDBObjGenericSubEntry.CalcActualVisible(const Actuality:TVisActuality):Boolean;
+var
+  q:boolean;
+begin
+  result:=inherited;
+  q:=ObjArray.CalcActualVisible(Actuality);
+  result:=result or q;
 end;
 procedure GDBObjGenericSubEntry.getoutbound;
 begin

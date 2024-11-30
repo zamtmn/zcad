@@ -66,6 +66,7 @@ GDBObjDevice= object(GDBObjBlockInsert)
                    procedure AddMi(pobj:PGDBObjSubordinated);virtual;
                    //procedure select;virtual;
                    procedure SetInFrustumFromTree(const frustum:ClipArray;const Actuality:TVisActuality;var Counters:TCameraCounters; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double);virtual;
+                   function CalcActualVisible(const Actuality:TVisActuality):Boolean;virtual;
                    procedure addcontrolpoints(tdesc:Pointer);virtual;
 
                    procedure EraseMi(pobj:pGDBObjEntity;pobjinarray:Integer;var drawing:TDrawingDef);virtual;
@@ -185,6 +186,15 @@ begin
   inherited SetInFrustumFromTree(frustum,Actuality,Counters, ProjectProc,zoom,currentdegradationfactor);
   VarObjArray.SetInFrustumFromTree(frustum,Actuality,Counters, ProjectProc,zoom,currentdegradationfactor);
 end;
+function GDBObjDevice.CalcActualVisible(const Actuality:TVisActuality):Boolean;
+var
+  q:boolean;
+begin
+  result:=inherited;
+  q:=VarObjArray.CalcActualVisible(Actuality);
+  result:=result or q;
+end;
+
 procedure GDBObjDevice.AddMi;
 begin
      //pobj^.bp.PSelfInOwnerArray:=ObjArray.getDataMutable(ObjArray.add(pobj));

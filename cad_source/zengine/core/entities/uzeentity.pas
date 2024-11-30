@@ -193,8 +193,12 @@ implementation
 uses usimplegenerics,uzeentityfactory,uzeentitiestree;
 function GDBObjEntity.GetInfrustumFromTree:TActuality;
 begin
-  if bp.TreePos.Owner=nil then
-    result:=0
+  if bp.TreePos.Owner=nil then BEGIN
+    if bp.ListPos.Owner=nil then
+      result:=0
+    else
+      Result:=pgdbobjEntity(bp.ListPos.Owner).infrustum;
+  end
   else
     result:=PTEntTreeNode(bp.TreePos.Owner)^.NodeData.infrustum;
 end;

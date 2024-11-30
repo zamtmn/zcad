@@ -53,8 +53,14 @@ GDBObjComplex= object(GDBObjWithLocalCS)
                     procedure BuildGeometry(var drawing:TDrawingDef);virtual;
                     procedure FormatAfterDXFLoad(var drawing:TDrawingDef;var DC:TDrawContext);virtual;
                     function CalcActualVisible(const Actuality:TVisActuality):Boolean;virtual;
+                    function IsNeedSeparate:Boolean;virtual;
               end;
 implementation
+function GDBObjComplex.IsNeedSeparate:Boolean;
+begin
+  result:=true;
+end;
+
 function GDBObjComplex.CalcActualVisible(const Actuality:TVisActuality):Boolean;
 var
   q:boolean;

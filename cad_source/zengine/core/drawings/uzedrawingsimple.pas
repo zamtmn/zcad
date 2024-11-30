@@ -32,7 +32,7 @@ type
 {EXPORT+}
   TDrawingActualy=record
     EntityLayers:TActuality;
-    procedure CreateDef;
+    {-}procedure CreateDef;{//}
   end;
   PTSimpleDrawing=^TSimpleDrawing;
 {REGISTEROBJECTTYPE TSimpleDrawing}

@@ -104,15 +104,14 @@ begin
     IRFully:begin
       enttree.NodeData.infrustum:=Actuality.infrustumactualy;
       enttree.NodeData.InFrustumBoundingBox:=enttree.BoundingBox;
-      {pobj:=enttree.nulbeginiterate(ir);
+      pobj:=enttree.NodeData.NeedToSeparated.beginiterate(ir);
       if pobj<>nil then
         repeat
           pobj^.SetInFrustumFromTree(
             frustum,Actuality,Counters,
             ProjectProc,zoom,currentdegradationfactor);
-          //pobj^.infrustum:=infrustumactualy;
-          pobj:=enttree.nuliterate(ir);
-        until pobj=nil;}
+          pobj:=enttree.NodeData.NeedToSeparated.iterate(ir);
+        until pobj=nil;
       if assigned(enttree.pminusnode) then
         ProcessTree(
           frustum,Actuality,PTEntTreeNode(enttree.pminusnode)^,
@@ -133,14 +132,14 @@ begin
         IRFully:begin
           enttree.NodeData.infrustum:=Actuality.infrustumactualy;
           enttree.NodeData.InFrustumBoundingBox:=enttree.BoundingBox;
-          {pobj:=enttree.nulbeginiterate(ir);
+          pobj:=enttree.NodeData.NeedToSeparated.beginiterate(ir);
           if pobj<>nil then
             repeat
               pobj^.SetInFrustumFromTree(
                 frustum,Actuality,Counters,
                 ProjectProc,zoom,currentdegradationfactor);
-              pobj:=enttree.nuliterate(ir);
-            until pobj=nil;}
+              pobj:=enttree.NodeData.NeedToSeparated.iterate(ir);
+            until pobj=nil;
           if assigned(enttree.pminusnode) then
             ProcessTree(frustum
               ,Actuality,PTEntTreeNode(enttree.pminusnode)^,
@@ -156,12 +155,12 @@ begin
         IRPartially:begin
           enttree.NodeData.infrustum:=Actuality.infrustumactualy;
           inFrustomEnts:=0;
-          {pobj:=enttree.nulbeginiterate(ir);
+          pobj:=enttree.NodeData.NeedToSeparated.beginiterate(ir);
           if pobj<>nil then
             repeat
-              if pobj^.CalcInFrustum(
+              {if pobj^.CalcInFrustum(
                 frustum,Actuality,Counters,
-                ProjectProc,zoom,currentdegradationfactor) then begin
+                ProjectProc,zoom,currentdegradationfactor) then} begin
                 pobj^.SetInFrustumFromTree(
                   frustum,Actuality,Counters,
                   ProjectProc,zoom,currentdegradationfactor);
@@ -171,8 +170,8 @@ begin
                   ConcatBB(enttree.NodeData.InFrustumBoundingBox,pobj^.vp.BoundingBox);
                 Inc(inFrustomEnts);
               end;
-              pobj:=enttree.nuliterate(ir);
-            until pobj=nil;}
+              pobj:=enttree.NodeData.NeedToSeparated.iterate(ir);
+            until pobj=nil;
 
           if assigned(enttree.pminusnode) then begin
             ProcessTree(

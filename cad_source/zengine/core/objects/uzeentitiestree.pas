@@ -32,16 +32,20 @@ TFirstStageData=record
                   counter:integer;
                 end;
 {EXPORT+}
-TDrawType=(TDTFulDraw,TDTSimpleDraw);
-TEntTreeNodeData=record
-                     infrustum:TActuality;
-                     nuldrawpos,minusdrawpos,plusdrawpos:TActuality;
-                     FulDraw:TDrawType;
-                     InFrustumBoundingBox:TBoundingBox;
-                     //nodedepth:Integer;
-                     //pluscount,minuscount:Integer;
-                 end;
-TEntityArray=GZVectorPObects{GZVectorSimple}{-}<PGDBObjEntity,GDBObjEntity>{//}; {надо вынести куданить отдельно}
+  TDrawType=(TDTFulDraw,TDTSimpleDraw);
+  TEntityArray=GZVectorPObects<PGDBObjEntity,GDBObjEntity>;
+  TEntTreeNodeData=record
+    infrustum:TActuality;
+    nuldrawpos,minusdrawpos,plusdrawpos:TActuality;
+    FulDraw:TDrawType;
+    InFrustumBoundingBox:TBoundingBox;
+    NeedToSeparated:TEntityArray;
+    //nodedepth:Integer;
+    //pluscount,minuscount:Integer;
+    procedure CreateDef;
+    procedure Destroy;
+    procedure AfterSeparateNode(var nul:TEntityArray);
+  end;
          PTEntTreeNode=^TEntTreeNode;
          {---REGISTEROBJECTTYPE TEntTreeNode}
          TEntTreeNode=object(GZBInarySeparatedGeometry{-}<TBoundingBox,DVector4D,TEntTreeNodeData,TZEntsManipulator,GDBObjEntity,PGDBObjEntity,TEntityArray>{//})
@@ -75,6 +79,36 @@ var
    FirstStageData:TFirstStageData;
 function GetInNodeCount(_InNodeCount:Integer):Integer;
 implementation
+procedure TEntTreeNodeData.CreateDef;
+begin
+  infrustum:=0;
+  nuldrawpos:=0;
+  FulDraw:=TDTFulDraw;
+  InFrustumBoundingBox:=default(TBoundingBox);
+  NeedToSeparated.initnul;
+end;
+procedure TEntTreeNodeData.Destroy;
+begin
+  NeedToSeparated.Clear;
+  NeedToSeparated.done;
+end;
+procedure TEntTreeNodeData.AfterSeparateNode(var nul:TEntityArray);
+var
+  pobj:PGDBObjEntity;
+  ir:itrec;
+begin
+  pobj:=nul.beginiterate(ir);
+  if pobj<>nil then
+  repeat
+    if pobj^.IsNeedSeparate then begin
+      if NeedToSeparated.GetCount=0 then begin
+        NeedToSeparated.SetSize(nul.Count-ir.itc+1);
+      end;
+      NeedToSeparated.PushBackData(pobj);
+    end;
+    pobj:=nul.iterate(ir);
+  until pobj=nil;
+end;
 class function TZEntsManipulator.EntitySizeOrOne(var Entity:GDBObjEntity):integer;
 begin
   result:=1;

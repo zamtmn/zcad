@@ -80,6 +80,7 @@ const ls = $AAAA;
 
       GL_TEXTURE_2D={$IFNDEF DELPHI}gl.{$ELSE}dglOpenGL.{$ENDIF}GL_TEXTURE_2D;
       GL_DEPTH_TEST={$IFNDEF DELPHI}gl.{$ELSE}dglOpenGL.{$ENDIF}GL_DEPTH_TEST;
+      GL_LEQUAL={$IFNDEF DELPHI}gl.{$ELSE}dglOpenGL.{$ENDIF}GL_LEQUAL;
       GL_STENCIL_TEST={$IFNDEF DELPHI}gl.{$ELSE}dglOpenGL.{$ENDIF}GL_STENCIL_TEST;
       GL_BLEND={$IFNDEF DELPHI}gl.{$ELSE}dglOpenGL.{$ENDIF}GL_BLEND;
       GL_SRC_ALPHA={$IFNDEF DELPHI}gl.{$ELSE}dglOpenGL.{$ENDIF}GL_SRC_ALPHA;
@@ -161,6 +162,7 @@ type
                            procedure myglbegin(mode:GLenum);inline;
                            procedure myglend;inline;
                            procedure mytotalglend;inline;
+                           procedure myglDepthFunc(const cap: GLenum);inline;
                            procedure myglEnable(const cap: GLenum);inline;
                            procedure myglDisable(const cap: GLenum);inline;
                            procedure myglPointSize(const size: GLfloat);virtual;//inline;
@@ -570,6 +572,11 @@ begin
                                           {$IFDEF DEBUGCOUNTGEOMETRY}inc(bathcount);{$ENDIF}
                                           currentmode:=MY_EmptyMode;
                                      end;
+end;
+procedure TOGLStateManager.myglDepthFunc(const cap: GLenum);
+begin
+     mytotalglend;
+     glDepthFunc(cap);
 end;
 procedure TOGLStateManager.myglEnable(const cap: GLenum);
 begin

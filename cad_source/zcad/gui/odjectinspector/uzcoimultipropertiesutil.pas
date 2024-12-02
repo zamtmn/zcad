@@ -17,6 +17,7 @@
 }
 
 unit uzcoimultipropertiesutil;
+{$Mode delphi}
 {$INCLUDE zengineconfig.inc}
 
 interface
@@ -34,6 +35,16 @@ uses
   gzctnrSTL,gzctnrVectorTypes,uzeNamedObject,zUndoCmdChgVariable,
   uzcutils,uzcdrawing,uzcdrawings,zUndoCmdChgTypes,uzeExtdrAbstractEntityExtender;
 type
+  GCacheCalculatedValue<GT,PGT>=record
+    PValue:PGT;
+    Cache:GT;
+    procedure lock;inline;
+    procedure unlock;inline;
+    function IsThisNotCashed(const APValue:PGT):boolean;inline;
+    procedure CasheThis(const APValue:PGT;const CalculatedValue:GT);inline;
+  end;
+  TCachedVertex=GCacheCalculatedValue<GDBvertex,PGDBvertex>;
+
   PTOneVarData=^TOneVarData;
   TOneVarData=record
                     StrValue:String;
@@ -105,6 +116,10 @@ procedure Extendrs2ExtendersCounterIterateProc(pdata:Pointer;ChangedData:TChange
 procedure PolylineVertex3DControlBeforeEntIterateProc(pdata:Pointer;ChangedData:TChangedData);
 function CreateChangedData(pentity:pointer;GSData:TGetSetData):TChangedData;
 procedure GeneralFromVarEntChangeProc(var UMPlaced:boolean;pu:PTEntityUnit;pdata:PVarDesk;ChangedData:TChangedData;mp:TMultiProperty);
+
+procedure VertexXOCSEntIterateProc(pdata:Pointer;ChangedData:TChangedData;mp:TMultiProperty;fistrun:boolean;ecp:TEntChangeProc; const f:TzeUnitsFormat);
+procedure VertexYOCSEntIterateProc(pdata:Pointer;ChangedData:TChangedData;mp:TMultiProperty;fistrun:boolean;ecp:TEntChangeProc; const f:TzeUnitsFormat);
+procedure VertexZOCSEntIterateProc(pdata:Pointer;ChangedData:TChangedData;mp:TMultiProperty;fistrun:boolean;ecp:TEntChangeProc; const f:TzeUnitsFormat);
 const
   OneVarDataMIPD:TMainIterateProcsData=(BeforeIterateProc:GetOneVarData;
                                         AfterIterateProc:FreeOneVarData);
@@ -120,6 +135,23 @@ const
 implementation
 var
    Vertex3DControl:TArrayIndex=0;
+   CachedVertex:TCachedVertex;
+
+procedure GCacheCalculatedValue<GT,PGT>.lock;
+begin
+end;
+procedure GCacheCalculatedValue<GT,PGT>.unlock;
+begin
+end;
+function GCacheCalculatedValue<GT,PGT>.IsThisNotCashed(const APValue:PGT):boolean;
+begin
+  result:=(PValue<>APValue);
+end;
+procedure GCacheCalculatedValue<GT,PGT>.CasheThis(const APValue:PGT;const CalculatedValue:GT);
+begin
+  PValue:=APValue;
+  Cache:=CalculatedValue;
+end;
 
 procedure GeneralFromVarEntChangeProc(var UMPlaced:boolean;pu:PTEntityUnit;pdata:PVarDesk;ChangedData:TChangedData;mp:TMultiProperty);
 var
@@ -493,7 +525,7 @@ var
 {
 общая процедура копирования имени примитива в мультипроперти
 pdata - указатель на структуру созданную GetOneVarData
-pentity - указатель на примитив
+ChangedData - указатель на примитив и на копируемое\устанавливаемое поле, если смещение полей было задано при регистрации
 mp - описание мультипроперти
 fistrun - флаг установлен при первой итерации (только копировать, не сравнивать)
 ecp - указатель на процедуру копирования значения из мультипроперти в примитив, если nil то делаем readonly
@@ -531,7 +563,7 @@ procedure GeneralEntIterateProc(pdata:Pointer;ChangedData:TChangedData;mp:TMulti
 {
 общая процедура копирования значения в мультипроперти
 pdata - указатель на структуру созданную GetOneVarData или аналогичной прцедурой
-pentity - указатель на примитив или на копируемое поле, если смещение поля было задано при регистрации
+ChangedData - указатель на примитив и на копируемое\устанавливаемое поле, если смещение полей было задано при регистрации
 mp - описание мультипроперти
 fistrun - флаг установлен при первой итерации (только копировать, не сравнивать)
 ecp - указатель на процедуру копирования значения из мультипроперти в примитив, если nil то делаем readonly
@@ -540,26 +572,145 @@ var
   PVD:pvardesk;
 begin
   PVD:=PTOneVarData(pdata).VDAddr.Instance;
-     if @ecp=nil then ProcessVariableAttributes(PVD.attrib,vda_RO,0);
-     if fistrun then
-                    begin
-                      ProcessVariableAttributes(PVD.attrib,0,vda_different);
-                      mp.MPType.CopyInstanceTo(ChangedData.PGetDataInEtity,PVD.data.Addr.Instance);
-                      PTOneVarData(pdata).StrValue:=mp.MPType.GetDecoratedValueAsString(ChangedData.PGetDataInEtity,f);
-                    end
-                else
-                    begin
-                         if mp.MPType.Compare(ChangedData.PGetDataInEtity,PVD.data.Addr.Instance)<>CREqual then
-                            ProcessVariableAttributes(PVD.attrib,vda_approximately,0);
-                         if PTOneVarData(pdata).StrValue<>mp.MPType.GetDecoratedValueAsString(ChangedData.PGetDataInEtity,f) then
-                            ProcessVariableAttributes(PVD.attrib,vda_different,vda_approximately);
-                    end;
+  if @ecp=nil then ProcessVariableAttributes(PVD.attrib,vda_RO,0);
+  if fistrun then begin
+    ProcessVariableAttributes(PVD.attrib,0,vda_different);
+    mp.MPType.CopyInstanceTo(ChangedData.PGetDataInEtity,PVD.data.Addr.Instance);
+    PTOneVarData(pdata).StrValue:=mp.MPType.GetDecoratedValueAsString(ChangedData.PGetDataInEtity,f);
+  end else begin
+    if mp.MPType.Compare(ChangedData.PGetDataInEtity,PVD.data.Addr.Instance)<>CREqual then
+      ProcessVariableAttributes(PVD.attrib,vda_approximately,0);
+    if PTOneVarData(pdata).StrValue<>mp.MPType.GetDecoratedValueAsString(ChangedData.PGetDataInEtity,f) then
+      ProcessVariableAttributes(PVD.attrib,vda_different,vda_approximately);
+  end;
 end;
+
+procedure VertexXOCSEntIterateProc(pdata:Pointer;ChangedData:TChangedData;mp:TMultiProperty;fistrun:boolean;ecp:TEntChangeProc; const f:TzeUnitsFormat);
+{
+процедура копирования значения X составляющей вертекса заданного в OCS в мультипроперти
+pdata - указатель на структуру созданную GetOneVarData или аналогичной прцедурой
+ChangedData - указатель на примитив и на вертекс
+mp - описание мультипроперти
+fistrun - флаг установлен при первой итерации (только копировать, не сравнивать)
+ecp - указатель на процедуру копирования значения из мультипроперти в примитив, если nil то делаем readonly
+}
+var
+  PVD:pvardesk;
+  value:Double;
+begin
+  PVD:=PTOneVarData(pdata).VDAddr.Instance;
+  if @ecp=nil then ProcessVariableAttributes(PVD.attrib,vda_RO,0);
+
+  CachedVertex.lock;
+  try
+    if (ChangedData.PGetDataInEtity<>nil)and(ChangedData.PEntity<>nil) then begin
+      if CachedVertex.IsThisNotCashed(ChangedData.PGetDataInEtity) then
+        CachedVertex.CasheThis(ChangedData.PGetDataInEtity,VectorTransform3D(PGDBvertex(ChangedData.PGetDataInEtity)^,PGDBObjEntity(ChangedData.PEntity)^.getmatrix^));
+      value:=CachedVertex.Cache.x;
+    end else
+      value:=0;
+  finally
+    CachedVertex.unlock;
+  end;
+
+  if fistrun then begin
+    ProcessVariableAttributes(PVD.attrib,0,vda_different);
+    mp.MPType.CopyInstanceTo(@value,PVD.data.Addr.Instance);
+    PTOneVarData(pdata).StrValue:=mp.MPType.GetDecoratedValueAsString(@value,f);
+  end else begin
+    if mp.MPType.Compare(@value,PVD.data.Addr.Instance)<>CREqual then
+      ProcessVariableAttributes(PVD.attrib,vda_approximately,0);
+    if PTOneVarData(pdata).StrValue<>mp.MPType.GetDecoratedValueAsString(@value,f) then
+      ProcessVariableAttributes(PVD.attrib,vda_different,vda_approximately);
+  end;
+end;
+procedure VertexYOCSEntIterateProc(pdata:Pointer;ChangedData:TChangedData;mp:TMultiProperty;fistrun:boolean;ecp:TEntChangeProc; const f:TzeUnitsFormat);
+{
+процедура копирования значения X составляющей вертекса заданного в OCS в мультипроперти
+pdata - указатель на структуру созданную GetOneVarData или аналогичной прцедурой
+ChangedData - указатель на примитив и на вертекс
+mp - описание мультипроперти
+fistrun - флаг установлен при первой итерации (только копировать, не сравнивать)
+ecp - указатель на процедуру копирования значения из мультипроперти в примитив, если nil то делаем readonly
+}
+var
+  PVD:pvardesk;
+  value:Double;
+begin
+  PVD:=PTOneVarData(pdata).VDAddr.Instance;
+  if @ecp=nil then ProcessVariableAttributes(PVD.attrib,vda_RO,0);
+
+  CachedVertex.lock;
+  try
+    if (ChangedData.PGetDataInEtity<>nil)and(ChangedData.PEntity<>nil) then begin
+      if CachedVertex.IsThisNotCashed(ChangedData.PGetDataInEtity) then
+        CachedVertex.CasheThis(ChangedData.PGetDataInEtity,VectorTransform3D(PGDBvertex(ChangedData.PGetDataInEtity)^,PGDBObjEntity(ChangedData.PEntity)^.getmatrix^));
+      value:=CachedVertex.Cache.y;
+    end else
+      value:=0;
+  finally
+    CachedVertex.unlock;
+  end;
+
+  if fistrun then begin
+    ProcessVariableAttributes(PVD.attrib,0,vda_different);
+    mp.MPType.CopyInstanceTo(@value,PVD.data.Addr.Instance);
+    PTOneVarData(pdata).StrValue:=mp.MPType.GetDecoratedValueAsString(@value,f);
+  end else begin
+    if mp.MPType.Compare(@value,PVD.data.Addr.Instance)<>CREqual then
+      ProcessVariableAttributes(PVD.attrib,vda_approximately,0);
+    if PTOneVarData(pdata).StrValue<>mp.MPType.GetDecoratedValueAsString(@value,f) then
+      ProcessVariableAttributes(PVD.attrib,vda_different,vda_approximately);
+  end;
+end;
+procedure VertexZOCSEntIterateProc(pdata:Pointer;ChangedData:TChangedData;mp:TMultiProperty;fistrun:boolean;ecp:TEntChangeProc; const f:TzeUnitsFormat);
+{
+процедура копирования значения X составляющей вертекса заданного в OCS в мультипроперти
+pdata - указатель на структуру созданную GetOneVarData или аналогичной прцедурой
+ChangedData - указатель на примитив и на вертекс
+mp - описание мультипроперти
+fistrun - флаг установлен при первой итерации (только копировать, не сравнивать)
+ecp - указатель на процедуру копирования значения из мультипроперти в примитив, если nil то делаем readonly
+}
+var
+  PVD:pvardesk;
+  value:Double;
+begin
+  PVD:=PTOneVarData(pdata).VDAddr.Instance;
+  if @ecp=nil then ProcessVariableAttributes(PVD.attrib,vda_RO,0);
+
+  CachedVertex.lock;
+  try
+    if (ChangedData.PGetDataInEtity<>nil)and(ChangedData.PEntity<>nil) then begin
+      if CachedVertex.IsThisNotCashed(ChangedData.PGetDataInEtity) then
+        CachedVertex.CasheThis(ChangedData.PGetDataInEtity,VectorTransform3D(PGDBvertex(ChangedData.PGetDataInEtity)^,PGDBObjEntity(ChangedData.PEntity)^.getmatrix^));
+      value:=CachedVertex.Cache.z;
+    end else
+      value:=0;
+  finally
+    CachedVertex.unlock;
+  end;
+
+  if fistrun then begin
+    ProcessVariableAttributes(PVD.attrib,0,vda_different);
+    mp.MPType.CopyInstanceTo(@value,PVD.data.Addr.Instance);
+    PTOneVarData(pdata).StrValue:=mp.MPType.GetDecoratedValueAsString(@value,f);
+  end else begin
+    if mp.MPType.Compare(@value,PVD.data.Addr.Instance)<>CREqual then
+      ProcessVariableAttributes(PVD.attrib,vda_approximately,0);
+    if PTOneVarData(pdata).StrValue<>mp.MPType.GetDecoratedValueAsString(@value,f) then
+      ProcessVariableAttributes(PVD.attrib,vda_different,vda_approximately);
+  end;
+end;
+
+
+
+
 procedure EntityAddressEntIterateProc(pdata:Pointer;ChangedData:TChangedData;mp:TMultiProperty;fistrun:boolean;ecp:TEntChangeProc; const f:TzeUnitsFormat);
 {
 процедура копирования адреса примитива в мультипроперти
 pdata - указатель на структуру созданную GetOneVarData или аналогичной прцедурой
-pentity - указатель на примитив или на копируемое поле, если смещение поля было задано при регистрации
+ChangedData - указатель на примитив и на копируемое\устанавливаемое поле, если смещение полей было задано при регистрации
 mp - описание мультипроперти
 fistrun - флаг установлен при первой итерации (только копировать, не сравнивать)
 ecp - указатель на процедуру копирования значения из мультипроперти в примитив, если nil то делаем readonly
@@ -588,7 +739,7 @@ procedure Double2SumEntIterateProc(pdata:Pointer;ChangedData:TChangedData;mp:TMu
 {
 процедура суммирования Double значения в мультипроперти
 pdata - указатель на структуру созданную GetOneVarData или аналогичной прцедурой
-pentity - указатель на примитив или на копируемое поле, если смещение поля было задано при регистрации
+ChangedData - указатель на примитив и на копируемое\устанавливаемое поле, если смещение полей было задано при регистрации
 mp - описание мультипроперти
 fistrun - флаг установлен при первой итерации (только копировать, не суммировать)
 ecp - указатель на процедуру копирования значения из мультипроперти в примитив, если nil то делаем readonly
@@ -607,7 +758,7 @@ procedure TArrayIndex2SumEntIterateProc(pdata:Pointer;ChangedData:TChangedData;m
 {
 процедура суммирования TArrayIndex значения в мультипроперти
 pdata - указатель на структуру созданную GetOneVarData или аналогичной прцедурой
-pentity - указатель на примитив или на копируемое поле, если смещение поля было задано при регистрации
+ChangedData - указатель на примитив и на копируемое\устанавливаемое поле, если смещение полей было задано при регистрации
 mp - описание мультипроперти
 fistrun - флаг установлен при первой итерации (только копировать, не суммировать)
 ecp - указатель на процедуру копирования значения из мультипроперти в примитив, если nil то делаем readonly

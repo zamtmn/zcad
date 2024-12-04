@@ -556,7 +556,8 @@ begin
         psd:=drawings.GetCurrentDWG.SelObjArray.iterate(ir);
       until psd=nil;
     end;
-
+  {TODO: надо переделать вложенность циклов снаружи примитивы, внутри мультипроперти}
+  {это ускорит расчет при кэшировании, например при получении составляющих из вертекса}
   for i:=0 to MultiPropertiesManager.MultiPropertyVector.Size-1 do
     if MultiPropertiesManager.MultiPropertyVector[i].usecounter<>0 then
     begin

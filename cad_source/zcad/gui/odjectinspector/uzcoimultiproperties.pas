@@ -91,6 +91,8 @@ type
   LessObjIDWithExtender=class
     class function c(a,b:TObjIDWithExtender):boolean;inline;
   end;
+  TMPFlag=(MPFFirstPass{Установлен на первом проходе, когда значение из примитива просто копируется});
+  TMPFlags=set of TMPFlag;
 
   TObjID2MultiPropertyProcs=GKey2DataMapOld<TObjIDWithExtender,TMultiPropertyDataForObjects,LessObjIDWithExtender>;
   TMultiProperty=class
@@ -99,7 +101,8 @@ type
                        MPType:PUserTypeDescriptor;
                        MPCategory:TMultiPropertyCategory;
                        MPObjectsData:TObjID2MultiPropertyProcs;
-                       usecounter:SizeUInt;
+                       UseCounter:SizeUInt;
+                       Flags:TMPFlags;
                        sortedid:integer;
                        MIPD:TMainIterateProcsData;
                        {BeforeIterateProc:TBeforeIterateProc;
@@ -366,7 +369,7 @@ begin
      MPType:=mp.MPType;
      MPCategory:=mp.MPCategory;
      MPObjectsData:=mp.MPObjectsData;
-     usecounter:=mp.usecounter;
+     UseCounter:=mp.UseCounter;
      sortedid:=mp.sortedid;
      MIPD:=mp.MIPD;
      //BeforeIterateProc:=mp.BeforeIterateProc;

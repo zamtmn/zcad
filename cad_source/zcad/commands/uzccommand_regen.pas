@@ -22,10 +22,10 @@ unit uzccommand_regen;
 
 interface
 uses
-  uzcLog,uzbtypes,
+  uzcLog,//uzbtypes,
   uzccommandsabstract,uzccommandsimpl,
-  uzeentity,uzeentconnected,
-  gzctnrVectorTypes,
+  uzeentity,//uzeentconnected,
+  //gzctnrVectorTypes,
   uzedrawingsimple,uzcdrawings,
   uzcinterface,
   uzgldrawcontext,

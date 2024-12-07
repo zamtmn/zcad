@@ -59,10 +59,6 @@ var
   LastHistoryMsg:string='';
   LastSuffixMsg:string='';
   LastHistoryMsgRepeatCounter:integer=0;
-
-  HintText:TLabel;
-  //historychanged:boolean;
-
 implementation
 
 procedure TCLine.mypaint(sender:tobject);
@@ -254,7 +250,7 @@ begin
     sbutton.OnClick:=ButtonPressed;
     //sbutton.Width:=panel.Constraints.MinHeight;
     sbutton.Align:=alLeft;
-    with ThemeServices.GetDetailSize(ThemeServices.GetElementDetails(tsArrowBtnDownNormal)) do
+    with ThemeServices.GetDetailSizeForPPI(ThemeServices.GetElementDetails(tsArrowBtnDownNormal),Screen.PixelsPerInch) do
     begin
          if cx>0 then
                      sbutton.width:=cx
@@ -406,12 +402,6 @@ begin
     end;
   end;
 end;
-procedure StatusLineTextOut(s:String);
-begin
-     if assigned(HintText) then
-     HintText.caption:=(s);
-     //HintText.{Update}repaint;
-end;
 procedure LogError(errstr:String); export;
 begin
      {errstr:=rserrorprefix+errstr;
@@ -429,8 +419,6 @@ begin
   //uzcinterface.HistoryOutStr:=HistoryOutStr;
 
   ZCMsgCallBackInterface.RegisterHandler_GUIMode(HandleCmdLine);
-
-  ZCMsgCallBackInterface.RegisterHandler_StatusLineTextOut(StatusLineTextOut);
   //uzcinterface.StatusLineTextOut:=StatusLineTextOut;
   ZCMsgCallBackInterface.RegisterHandler_LogError(LogError);
   ZCMsgCallBackInterface.RegisterHandler_GetFocusedControl(CLine.GetCLineFocusPriority);

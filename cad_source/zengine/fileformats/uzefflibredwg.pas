@@ -22,11 +22,11 @@ unit uzeffLibreDWG;
 {$ModeSwitch advancedrecords}
 interface
 uses
-  LCLProc,
+  uzbLogIntf, LazLoggerBase,
   SysUtils,
   dwg,dwgproc,
   uzeffmanager,
-  uzelongprocesssupport,uzgldrawcontext,forms,
+  uzelongprocesssupport,{uzgldrawcontext,}forms,
   uzcstrconsts,uzeLogIntf,
   LazUTF8;
 
@@ -41,20 +41,20 @@ implementation
 
 procedure DebugDWG(dwg:PDwg_Data);
 begin
-  DebugLn(['{WH}header.version: ',DWG_V2Str(dwg^.header.version)]);
-  DebugLn(['{WH}header.from_version: ',DWG_V2Str(dwg^.header.from_version)]);
+  DebugLn(['{WH}header.version: '+DWG_V2Str(dwg^.header.version)]);
+  zDebugLn(['{WH}header.from_version: ',DWG_V2Str(dwg^.header.from_version)]);
   if (dwg^.header.zero_5[0]=0)and(dwg^.header.zero_5[1]=0)and(dwg^.header.zero_5[2]=0)and(dwg^.header.zero_5[3]=0)and(dwg^.header.zero_5[4]=0)then
-    DebugLn(['{WH}header.zero_5: 0,0,0,0,0'])
+    zDebugLn(['{WH}header.zero_5: 0,0,0,0,0'])
   else
-    DebugLn(['{WHM}header.zero_5: ',dwg^.header.zero_5[0],',',dwg^.header.zero_5[1],',',dwg^.header.zero_5[2],',',dwg^.header.zero_5[3],',',dwg^.header.zero_5[4]]);
-  DebugLn(['{WH}header.is_maint: ',dwg^.header.is_maint]);
-  DebugLn(['{WH}header.zero_one_or_three: ',dwg^.header.zero_one_or_three]);
-  DebugLn(['{WH}header.unknown_3: ',dwg^.header.unknown_3]);
-  DebugLn(['{WH}header.numheader_vars: ',dwg^.header.numheader_vars]);
-  DebugLn(['{WH}header.thumbnail_address: ',dwg^.header.thumbnail_address]);
-  DebugLn(['{WH}header.dwg_version: ',dwg^.header.dwg_version]);
-  DebugLn(['{WH}header.maint_version: ',dwg^.header.maint_version]);
-  DebugLn(['{WH}header.codepage: ',dwg^.header.codepage]);
+    zDebugLn(['{WHM}header.zero_5: ',dwg^.header.zero_5[0],',',dwg^.header.zero_5[1],',',dwg^.header.zero_5[2],',',dwg^.header.zero_5[3],',',dwg^.header.zero_5[4]]);
+  zDebugLn(['{WH}header.is_maint: ',dwg^.header.is_maint]);
+  zDebugLn(['{WH}header.zero_one_or_three: ',dwg^.header.zero_one_or_three]);
+  zDebugLn(['{WH}header.unknown_3: ',dwg^.header.unknown_3]);
+  zDebugLn(['{WH}header.numheader_vars: ',dwg^.header.numheader_vars]);
+  zDebugLn(['{WH}header.thumbnail_address: ',dwg^.header.thumbnail_address]);
+  zDebugLn(['{WH}header.dwg_version: ',dwg^.header.dwg_version]);
+  zDebugLn(['{WH}header.maint_version: ',dwg^.header.maint_version]);
+  zDebugLn(['{WH}header.codepage: ',dwg^.header.codepage]);
 end;
 
 procedure PLP(const Data:TData;const Counter:TCounter);
@@ -67,21 +67,22 @@ var
   dwg:Dwg_Data;
   Success:integer;
   lph:TLPSHandle;
-  DC:TDrawContext;
+  //DC:TDrawContext;
 begin
   try
-    DebugLn('{WH}%s',[rsNotYetImplemented]);
+    zDebugLn('{WH}%s',[rsNotYetImplemented]);
     try
       LoadLibreDWG;
     except
       on E : Exception do begin
-        debugln('{EHM}LibreDWG: ',E.Message);
+        zDebugLn(['{EHM}LibreDWG: ',E.Message]);
         exit;
       end;
     end;
-    fillchar(dwg,sizeof(dwg),0);
+    //fillchar(dwg,sizeof(dwg),0);
+    dwg:=default(Dwg_Data);
     dwg.opts:=0;
-    DebugLn(['{WH}try load file: ',ansistring(filename)]);
+    zDebugLn(['{WH}try load file: ',ansistring(filename)]);
     lph:=lps.StartLongProcess('LibreDWG.dwg_read_file',nil);
     {$IFDEF WINDOWS}
     Success:=dwg_read_file(pchar(UTF8ToWinCP(filename)),@dwg);
@@ -89,10 +90,10 @@ begin
     Success:=dwg_read_file(pchar(ansistring(filename)),@dwg);
     {$ENDIF}
     lps.EndLongProcess(lph);
-    DebugLn(['{WH}Success: ',Success]);
+    zDebugLn(['{WH}Success: ',Success]);
     DebugDWG(@dwg);
     lph:=lps.StartLongProcess('Parse DWG data',nil,dwg.num_objects);
-    ZCDWGParser.parseDwg_Data(ZCDCtx,dwg,@PLP,pointer(lph));
+    ZCDWGParser.parseDwg_Data(ZCDCtx,dwg,@PLP,TData(lph));
     lps.EndLongProcess(lph);
     dwg_free(@dwg);
   finally
@@ -103,10 +104,10 @@ var
   dwg:Dwg_Data;
   Success:integer;
   lph:TLPSHandle;
-  DC:TDrawContext;
+  //DC:TDrawContext;
 begin
   try
-    DebugLn('{WH}%s',[rsNotYetImplemented]);
+    zDebugLn('{WH}%s',[rsNotYetImplemented]);
     try
       LoadLibreDWG;
     except
@@ -115,16 +116,17 @@ begin
         exit;
       end;
     end;
-    fillchar(dwg,sizeof(dwg),0);
+    //fillchar(dwg,sizeof(dwg),0);
+    dwg:=default(Dwg_Data);
     dwg.opts:=0;
-    DebugLn(['{WH}try load file: ',ansistring(filename)]);
+    zDebugLn(['{WH}try load file: ',ansistring(filename)]);
     lph:=lps.StartLongProcess('LibreDWG.dxf_read_file',nil);
     Success:=dxf_read_file(pchar(ansistring(filename)),@dwg);
     lps.EndLongProcess(lph);
-    DebugLn(['{WH}Success: ',Success]);
+    zDebugLn(['{WH}Success: ',Success]);
     DebugDWG(@dwg);
     lph:=lps.StartLongProcess('Parse DWG data',nil,dwg.num_objects);
-    ZCDWGParser.parseDwg_Data(ZCDCtx,dwg,@PLP,pointer(lph));
+    ZCDWGParser.parseDwg_Data(ZCDCtx,dwg,@PLP,TData(lph));
     lps.EndLongProcess(lph);
     dwg_free(@dwg);
   finally

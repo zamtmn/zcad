@@ -70,7 +70,7 @@ begin
     dc:=drawings.GetCurrentDWG^.CreateDrawingRC;
     BLINSERT^.FormatEntity(drawings.GetCurrentDWG^,dc);
     BLINSERT^.Visible:=0;
-    BLINSERT^.RenderFeedback(drawings.GetCurrentDWG^.pcamera^.POSCOUNT,drawings.GetCurrentDWG^.pcamera^,@drawings.GetCurrentDWG^.myGluProject2,dc);
+    //BLINSERT^.RenderFeedback(drawings.GetCurrentDWG^.pcamera^.POSCOUNT,drawings.GetCurrentDWG^.pcamera^,@drawings.GetCurrentDWG^.myGluProject2,dc);
     //BLINSERT:=nil;
     //commandmanager.executecommandend;
 

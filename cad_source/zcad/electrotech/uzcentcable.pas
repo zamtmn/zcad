@@ -162,7 +162,7 @@ begin
      repeat
            np.NextP:=ptvnext^;
            np.PrevP:=ptvprev^;
-           Representation.DrawLineWithLT(DC,np.NextP,np.PrevP,vp);
+           Representation.DrawLineWithLT(self,getmatrix^,DC,np.NextP,np.PrevP,vp);
            ptvprev:=ptvnext;
            ptvnext:=vertexarrayInWCS.iterate(ir_inVertexArray);
            NodePropArray.PushBackData(np);
@@ -419,13 +419,15 @@ begin
   tp2:=NormalizeVertex(tp2);
   tp:=NormalizeVertex(tp);
 
-   rotmatr:=onematrix;
-   PGDBVertex(@rotmatr[0])^:=tp;
-   PGDBVertex(@rotmatr[1])^:=tp2;
-   PGDBVertex(@rotmatr[2])^:=tp3;
+   //rotmatr:=onematrix;
+   //PGDBVertex(@rotmatr.mtr[0])^:=tp;
+   //PGDBVertex(@rotmatr.mtr[1])^:=tp2;
+   //PGDBVertex(@rotmatr.mtr[2])^:=tp3;
+   rotmatr:=CreateMatrixFromBasis(tp,tp2,tp3);
 
-   m:=onematrix;
-   PGDBVertex(@m[3])^:=ptnlastCutted.PrevP;
+   //m:=onematrix;
+   //PGDBVertex(@m.mtr[3])^:=ptnlastCutted.PrevP;
+   m:=CreateTranslationMatrix(ptnlastCutted.PrevP);
 
    m:=MatrixMultiply(rotmatr,m);
 
@@ -447,7 +449,7 @@ begin
   if ptn1<>nil then
   begin
   repeat
-    Representation.DrawLineWithLT(DC,ptn2^.Nextp,ptn1^.PrevP,vp);
+    Representation.DrawLineWithLT(self,getmatrix^,DC,ptn2^.Nextp,ptn1^.PrevP,vp);
     //DC.Drawer.DrawLine3DInModelSpace(ptn2^.Nextp,ptn1^.PrevP,DC.DrawingContext.matrixs);
     ptn2:=ptn1;
     ptn1:=NodePropArray.iterate(ir_inNodeArray);

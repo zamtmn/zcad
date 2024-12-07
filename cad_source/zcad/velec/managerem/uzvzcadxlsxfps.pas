@@ -25,18 +25,18 @@ uses
   sysutils,
 
   uzeentmtext,
-  uzbtypes,
-  uzeconsts, //base constants
+  //uzbtypes,
+  //uzeconsts, //base constants
              //описания базовых констант
   uzccommandsabstract,
   uzccommandsimpl, //Commands manager and related objects
                    //менеджер команд и объекты связанные с ним
-  uzcdrawings,     //Drawings manager, all open drawings are processed him
+  //uzcdrawings,     //Drawings manager, all open drawings are processed him
   //uzccombase,
-  gzctnrVectorTypes,LazUTF8,
+  {gzctnrVectorTypes,}LazUTF8,
   uzcinterface,
   comobj, variants, LConvEncoding, strutils,
-  fpsTypes, fpSpreadsheet, fpsUtils, fpsSearch,gvector, fpsAllFormats,  uzbstrproc;
+  fpsTypes, fpSpreadsheet, fpsUtils, fpsSearch,gvector{, fpsAllFormats},  uzbstrproc;
 
   //uzvsettingform,
   //LCLIntf, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
@@ -146,9 +146,9 @@ var
 
   //** Выполнить пересчет книги
 procedure nowCalcFormulas();
-const
-  xlManual = -4135;
-  xlAutomatic = -4105;
+//const
+//  xlManual = -4135;
+//  xlAutomatic = -4105;
 var
     Excel:OleVariant;
     ExcelWorkbook: OleVariant;
@@ -271,7 +271,7 @@ end;
 function getActiveWorkSheetName:string;
 var
     Excel:OleVariant;
-    ExcelWorkbook: OleVariant;
+    //ExcelWorkbook: OleVariant;
     ExcelActiveWorkSheet: OleVariant;
 begin
   result:='nil';
@@ -290,8 +290,8 @@ begin
 end;
 
 function getNumWorkSheetName(nameSheet:string):integer; //-1 отсутствует
-var
-  i:integer;
+//var
+//  i:integer;
   //nowWorkSheet: TsWorksheet;
 begin
   result:=-1;
@@ -331,7 +331,7 @@ end;
 procedure sheetVisibleOff(partNameSheet:string);
 var
   i:integer;
-  nowWorkSheet: TsWorksheet;
+  //nowWorkSheet: TsWorksheet;
 begin
   //nowWorkSheet:=BasicWorkbook.GetFirstWorksheet;
   //while nowWorkSheet<>BasicWorkbook.GetLastWorksheet do
@@ -401,8 +401,8 @@ begin
   //result:=rows_cache.get(nameSheet,iRow,iCol);
 end;
 procedure setCellValOrFomula(nameSheet:string;iRow,iCol:Cardinal;iText:string);
-var
-  now_worksheet: TsWorksheet;
+//var
+//  now_worksheet: TsWorksheet;
 begin
       if (iHaveFormula(nameSheet,iRow,iCol) = false) then
          setCellValue(nameSheet,iRow,iCol,iText)
@@ -480,11 +480,11 @@ begin
 end;
 
 procedure calcFormulas(nameSheet:string);
-var
-  now_worksheet: TsWorksheet;
+//var
+//  now_worksheet: TsWorksheet;
 begin
   //ZCMsgCallBackInterface.TextMessage('КАЛЬКУЛЯТОР КАЛЬКУЛЯТОР КАЛЬКУЛЯТОР КАЛЬКУЛЯТОР КАЛЬКУЛЯТОР КАЛЬКУЛЯТОР СТАРТ'+ nameSheet ,TMWOHistoryOut);
-  now_worksheet:=BasicWorkbook.GetWorksheetByName(nameSheet);
+  //now_worksheet:=BasicWorkbook.GetWorksheetByName(nameSheet);
   //now_worksheet.CalcFormulas;
     ZCMsgCallBackInterface.TextMessage('ОТМЕНА ОТМЕНА calcFormulas nameSheet='+ nameSheet ,TMWOHistoryOut);
 end;
@@ -506,10 +506,10 @@ begin
   //result:=rows_cache.get(nameSheet,iRow,iCol);
 end;
 function getAddress(nameSheet:string;iRow,iCol:Cardinal):string;
-var
-  now_worksheet: TsWorksheet;
+//var
+//  now_worksheet: TsWorksheet;
 begin
-  now_worksheet:=BasicWorkbook.GetWorksheetByName(nameSheet);
+  //now_worksheet:=BasicWorkbook.GetWorksheetByName(nameSheet);
   //result:='';
   //result:=now_worksheet.GetCellString(iRow,iCol);
   result:=GetCellString(iRow,iCol);
@@ -523,7 +523,7 @@ begin
 end;
 procedure copyCell(nameStSheet:string;stRow,stCol:Cardinal;nameEdSheet:string;edRow,edCol:Cardinal);
 var
-  stWorksheet,edWorksheet: TsWorksheet;
+  {stWorksheet,}edWorksheet: TsWorksheet;
   //cl:PCell;
 begin
   edWorksheet:=BasicWorkbook.GetWorksheetByName(nameEdSheet);
@@ -547,7 +547,7 @@ end;
 procedure searchCellRowCol(nameSheet:string;nameValueCell:string;var iRow,iCol:Cardinal);
 var
   now_worksheet: TsWorksheet;
-  MyRow, MyCol: Cardinal;
+  //MyRow, MyCol: Cardinal;
   MySearchParams: TsSearchParams;
   isFind:boolean;
 begin
@@ -601,14 +601,14 @@ begin
 end;
 
 procedure searchNextCellRowCol(nameSheet:string;nameValueCell:string;var iRow,iCol:Cardinal);
-var
-  now_worksheet: TsWorksheet;
-  MyRow, MyCol: Cardinal;
-  MySearchParams: TsSearchParams;
-  searchEngine: TsSearchParams;
+//var
+  //now_worksheet: TsWorksheet;
+  //MyRow, MyCol: Cardinal;
+  //MySearchParams: TsSearchParams;
+  //searchEngine: TsSearchParams;
   //MySearchParams: TsSearchParams;
 begin
-    now_worksheet:=BasicWorkbook.GetWorksheetByName(nameSheet);
+    //now_worksheet:=BasicWorkbook.GetWorksheetByName(nameSheet);
     ////MySearchParams.SearchText := nameValueCell;
     ////MySearchParams.Options := [soEntireDocument];
     ////MySearchParams.Within := swWorkbook;
@@ -629,11 +629,11 @@ begin
     //  ZCMsgCallBackInterface.TextMessage('searchNextCellRowCol iCol = '+ inttostr(iCol),TMWOHistoryOut);
 end;
 procedure copyRow(fromSheet:string;stRow:Cardinal;ToSheet:string;edRow:Cardinal);
-var
-  stWorksheet,edWorksheet: TsWorksheet;
+//var
+//  stWorksheet,edWorksheet: TsWorksheet;
   //cl:PCell;
 begin
-  edWorksheet:=BasicWorkbook.GetWorksheetByName(ToSheet);
+  //edWorksheet:=BasicWorkbook.GetWorksheetByName(ToSheet);
   //ZCMsgCallBackInterface.TextMessage('copyRow fromSheet = '+fromSheet + '---- ToSheet = '+ToSheet,TMWOHistoryOut);
   //ZCMsgCallBackInterface.TextMessage('copyRow stRow = '+ inttostr(stRow) + '---- edRow = '+ inttostr(edRow),TMWOHistoryOut);
   BasicWorkbook.GetWorksheetByName(ToSheet).CopyRow(stRow,edRow);

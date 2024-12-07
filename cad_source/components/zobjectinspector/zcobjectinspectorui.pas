@@ -20,7 +20,7 @@ unit zcobjectinspectorui;
 
 {$MODE DELPHI}
 interface
-uses Classes,Types,Themes,Graphics,LCLIntf,LCLType,
+uses Classes,Types,Themes,Graphics,LCLIntf,LCLType,Forms,
      varmandef;
 function OIUI_FE_ButtonGetPrefferedSize(PInstance:Pointer;ARect:TRect):TSize;
 function OIUI_FE_HalfButtonGetPrefferedSize(PInstance:Pointer;ARect:TRect):TSize;
@@ -44,9 +44,9 @@ var
 
 implementation
 function OIUI_FE_ButtonGetPrefferedSize(PInstance:Pointer;ARect:TRect):TSize;
-var
-  Details: TThemedElementDetails;
-  ComboElem:TThemedButton;
+//var
+  //Details: TThemedElementDetails;
+  //ComboElem:TThemedButton;
 begin
      {if assigned(PInstance) then
      begin
@@ -89,7 +89,7 @@ begin
      begin
      ComboElem:=tbCheckBoxUncheckedNormal;
      Details:=ThemeServices.GetElementDetails(ComboElem);
-     result:=ThemeServices.GetDetailSize(Details);
+     result:=ThemeServices.GetDetailSizeForPPI(Details,Screen.PixelsPerInch);
      end
      else
          result:=types.size(0,0);

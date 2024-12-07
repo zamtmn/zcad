@@ -19,13 +19,15 @@
 unit uzedimblocksregister;
 {$INCLUDE zengineconfig.inc}
 
-
 interface
-uses uzeutils,uzestyleslayers,uzestyleslinetypes,uzeconsts,uzeentitiesmanager,
-     UGDBObjBlockdefArray,uzeblockdefsfactory,uzeblockdef,uzedrawingdef,
-     uzcsysvars,uzeentgenericsubentry,uzeentity,LazLogger,uzegeometrytypes,uzegeometry,
-     math;
+
+uses
+  uzeutils,uzestyleslayers,uzestyleslinetypes,uzeconsts,uzeentitiesmanager,
+  UGDBObjBlockdefArray,uzeblockdefsfactory,uzeblockdef,uzedrawingdef,uzcsysvars,
+  uzeentgenericsubentry,uzeentity,uzbLogIntf,uzegeometrytypes,uzegeometry,math;
+
 implementation
+
 function CreateClosedFilledBlock(var dwg:PTDrawingDef;const BlockName,BlockDependsOn,BlockDeffinedIn:String):PGDBObjBlockdef;
 var
   BlockDefArray:PGDBObjBlockdefArray;
@@ -470,5 +472,5 @@ initialization
   RegisterBlockDefCreateFunc('_DatumFilled','','',CreateDatumFilledBlock);
   RegisterBlockDefCreateFunc('_Integral','','',CreateIntegralBlock);
 finalization
-  debugln('{I}[UnitsFinalization] Unit "',{$INCLUDE %FILE%},'" finalization');
+  zDebugLn('{I}[UnitsFinalization] Unit "'+{$INCLUDE %FILE%}+'" finalization');
 end.

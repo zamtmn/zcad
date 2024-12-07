@@ -31,13 +31,12 @@ implementation
 
 type
   TLogHelper=class
-    class procedure EndLongProcessHandler(LPHandle:TLPSHandle;TotalLPTime:TDateTime);
+    class procedure EndLongProcessHandler(LPHandle:TLPSHandle;TotalLPTime:TDateTime;Options:TLPOpt);
     class procedure LCLOnDebugLN(Sender: TObject; S: string; var Handled: Boolean);
   end;
 
   TLogerMBoxBackend=object(TLogerBaseBackend)
     procedure doLog(const msg:TLogMsg;MsgOptions:TMsgOpt;LogMode:TLogLevel;LMDI:TModuleDesk);virtual;
-    constructor init;
   end;
 
 const
@@ -47,7 +46,7 @@ var
   LPSTIMINGModuleDeskIndex:TModuleDesk;
   LogerMBoxBackend:TLogerMBoxBackend;
 
-class procedure TLogHelper.EndLongProcessHandler(LPHandle:TLPSHandle;TotalLPTime:TDateTime);
+class procedure TLogHelper.EndLongProcessHandler(LPHandle:TLPSHandle;TotalLPTime:TDateTime;Options:TLPOpt);
 var
    ts:string;
 begin
@@ -61,22 +60,22 @@ begin
 end;
 
 procedure ShowMessageForLog(errstr:String);
-var
-   dr:TZCMsgDialogResult;
+//var
+//   dr:TZCMsgDialogResult;
 begin
-  dr:=zcMsgDlg(ErrStr,zcdiInformation,[],true);
+  {dr:=}zcMsgDlg(ErrStr,zcdiInformation,[],true);
 end;
 procedure ShowWarningForLog(errstr:String);
-var
-   dr:TZCMsgDialogResult;
+//var
+//   dr:TZCMsgDialogResult;
 begin
-  dr:=zcMsgDlg(ErrStr,zcdiWarning,[],true);
+  {dr:=}zcMsgDlg(ErrStr,zcdiWarning,[],true);
 end;
 procedure ShowErrorForLog(errstr:String);
-var
-   dr:TZCMsgDialogResult;
+//var
+//   dr:TZCMsgDialogResult;
 begin
-  dr:=zcMsgDlg(ErrStr,zcdiError,[],true);
+  {dr:=}zcMsgDlg(ErrStr,zcdiError,[],true);
 end;
 
 procedure TLogerMBoxBackend.doLog(const msg:TLogMsg;MsgOptions:TMsgOpt;LogMode:TLogLevel;LMDI:TModuleDesk);
@@ -90,10 +89,6 @@ begin
   end;
   if (MO_SH and MsgOptions)<>0 then
     ZCMsgCallBackInterface.Do_HistoryOut(msg);
-end;
-
-constructor TLogerMBoxBackend.init;
-begin
 end;
 
 var

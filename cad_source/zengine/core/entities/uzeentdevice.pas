@@ -20,14 +20,14 @@ unit uzeentdevice;
 {$INCLUDE zengineconfig.inc}
 
 interface
-uses uzestyleslayers,uzepalette,uzeobjectextender,uabstractunit,uzeentityfactory,
-     uzgldrawcontext,uzedrawingdef,uzecamera,uzcsysvars,sysutils,
-     uzctnrVectorBytes,uunitmanager,uzegeometry,
-     uzeconsts,uzeentity,uzeentsubordinated,varmandef,
-     uzegeometrytypes,uzeentblockinsert,uzbtypes,UGDBVisibleOpenArray,UGDBObjBlockdefArray,
-     gzctnrVectorTypes,uzeblockdef,uzeffdxfsupport,UGDBSelectedObjArray,uzeentitiestree,
-     LazLogger,uzestrconsts,uzglviewareadata,uzeSnap,
-     uzCtnrVectorpBaseEntity;
+uses
+  uzestyleslayers,uzepalette,uzeobjectextender,uabstractunit,uzeentityfactory,
+  uzgldrawcontext,uzedrawingdef,uzecamera,uzcsysvars,sysutils, uzctnrVectorBytes,
+  uunitmanager,uzegeometry,uzeconsts,uzeentity,uzeentsubordinated,varmandef,
+  uzegeometrytypes,uzeentblockinsert,uzbtypes,UGDBVisibleOpenArray,
+  UGDBObjBlockdefArray,gzctnrVectorTypes,uzeblockdef,uzeffdxfsupport,
+  UGDBSelectedObjArray,uzeentitiestree,uzbLogIntf,uzestrconsts,uzglviewareadata,
+  uzeSnap,uzCtnrVectorpBaseEntity;
 
 type
 PGDBObjDevice=^GDBObjDevice;
@@ -227,6 +227,12 @@ begin
      m4:={self.ObjMatrix; //}getmatrix^;
      //MatrixInvert(m4);
      dc:=drawing.createdrawingrc;
+
+     //пытался так починить https://github.com/zamtmn/zcad/issues/141
+     //но это ведет https://github.com/zamtmn/zcad/issues/143
+     {dc.Options:=dc.Options-[DCODrawable];}
+     //пока просто чищу списки на присоединение примитивов при закрытии чертежа
+
      pv:=VarObjArray.beginiterate(ir);
      if pv<>nil then
      repeat
@@ -741,6 +747,6 @@ initialization
   RegisterEntityUpgradeInfo(GDBBlockInsertID,1,@UpgradeBlockInsert2Device);
   GDBObjDeviceDXFFeatures:=TDXFEntIODataManager.Create;
 finalization
-  debugln('{I}[UnitsFinalization] Unit "',{$INCLUDE %FILE%},'" finalization');
+  ZDebugLN('{I}[UnitsFinalization] Unit "'+{$INCLUDE %FILE%}+'" finalization');
   GDBObjDeviceDXFFeatures.Destroy;
 end.

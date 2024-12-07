@@ -22,7 +22,7 @@ unit uzeffmanager;
 interface
 uses
   uzbnamedhandles,uzbnamedhandleswithdata,uzbtypes,uzeentgenericsubentry,
-  uzedrawingsimple,sysutils,gzctnrSTL,LazLogger,uzgldrawcontext,uzeLogIntf;
+  uzedrawingsimple,sysutils,gzctnrSTL,uzgldrawcontext,uzbLogIntf,uzeLogIntf;
 
 type
   TExt2LoadProcMap<GFileProcessProc>=class
@@ -94,7 +94,7 @@ end;
 function TExt2LoadProcMap<GFileProcessProc>.GetLoadProc(const _Wxt:String):TFileLoadProcedure;
 var
   ExtHandle:TFileFormatHandle;
-  _key:String;
+  //_key:String;
 begin
   ExtHandle:=GetDefaultFileFormatHandle(_Wxt);
   if ExtHandle>=0 then
@@ -118,7 +118,7 @@ end;
 
 procedure TExt2LoadProcMap<GFileProcessProc>.RegisterExt(const _Wxt:String; const _FormatDesk:String; _FileLoadProcedure:GFileProcessProc; const DefaultForThisExt:boolean=false);
 var
-  FileFormatData:TFileFormatData;
+  //FileFormatData:TFileFormatData;
   StandartizedName:string;
   ExtHandle:integer;
   PValue:TExt2LoadProcMapGen.PValue;
@@ -173,7 +173,7 @@ end;
 initialization
   Ext2LoadProcMap:=TLoadFomats.create;
 finalization
-  debugln('{I}[UnitsFinalization] Unit "',{$INCLUDE %FILE%},'" finalization');
+  zDebugln('{I}[UnitsFinalization] Unit "'+{$INCLUDE %FILE%}+'" finalization');
   Ext2LoadProcMap.Destroy;
 end.
 

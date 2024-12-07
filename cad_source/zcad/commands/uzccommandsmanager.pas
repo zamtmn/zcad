@@ -93,7 +93,7 @@ type
                           procedure sendpoint2command(const p3d:gdbvertex; const p2d:gdbvertex2di; var mode:Byte;osp:pos_record;const drawing:TDrawingDef);virtual;
                           procedure CommandRegister(pc:PCommandObjectDef);virtual;
                           procedure run(pc:PCommandObjectDef;operands:String;pdrawing:PTDrawingDef);virtual;
-                          destructor done;virtual;
+                          procedure done;virtual;
                           procedure cleareraseobj;virtual;
                           procedure DMShow;
                           procedure DMHide;
@@ -184,7 +184,7 @@ end;
 function GDBcommandmanager.ProcessCommandShortcuts(const ShortCut:TShortCut):Boolean;
 var
   data:TCommandLinePromptOption;
-  ts:TParserCommandLinePrompt.TParserString;
+  //ts:TParserCommandLinePrompt.TParserString;
 begin
   result:=false;
   if CurrCmd.pcommandrunning<>nil then
@@ -1072,7 +1072,7 @@ begin
      pvardesk(p)^.vartypecustom:=0;
      Freemem(pvardesk(p)^.pvalue);}
 end;
-destructor GDBcommandmanager.done;
+procedure GDBcommandmanager.done;
 begin
   cleareraseobj;
   lastcommand:='';

@@ -26,6 +26,7 @@ uses
   sysutils,
   uzbpaths,
 
+  uzcuitypes,uzcuidialogs,
   uzeffmanager,
   uzccommand_DWGNew,
   uzccommandsimpl,uzccommandsabstract,
@@ -36,7 +37,7 @@ uses
   uzeffdxf,uzedrawingsimple,Varman,uzctnrVectorBytes,uzcdrawing,uzcTranslations,uzeconsts;
 
 function SaveAs_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
-function SaveDXFDPAS(s:ansistring):Integer;
+function SaveDXFDPAS(AFileName:String;AProcessFileHistory:Boolean=True):Integer;
 function dwgQSave_com(dwg:PTSimpleDrawing):Integer;
 
 implementation
@@ -60,40 +61,49 @@ begin
 end;
 
 function dwgQSave_com(dwg:PTSimpleDrawing):Integer;
-var s1:String;
+var
+  s:String;
+  dr:TZCMsgDialogResult;
 begin
-     begin
-          if dwg.GetFileName=rsUnnamedWindowTitle then
-          begin
-               s1:='';
-               if not(SaveFileDialog(s1,'dxf',ProjectFileFilter,'',rsSaveFile)) then
-               begin
-                    result:=cmd_error;
-                    exit;
-               end;
-          end
-          else
-              s1:=drawings.GetCurrentDWG.GetFileName;
-     end;
-     result:=dwgSaveDXFDPAS(s1,dwg);
+  s:=dwg.GetFileName;
+  if not FileExists(s) then begin
+    if not(SaveFileDialog(s,'dxf',ProjectFileFilter,'',rsSaveFile)) then
+      exit(cmd_error);
+    if FileExists(s) then begin
+      dr:=zcMsgDlg(format(rsOverwriteFileQuery,[s]),zcdiQuestion,[zccbYes,zccbNo,zccbCancel],false,nil,rsQuitCaption);
+      if dr.ModalResult=ZCmrCancel then
+        exit(cmd_error)
+      else if dr.ModalResult=ZCmrNo then
+        exit(cmd_ok);
+    end;
+  end;
+  result:=dwgSaveDXFDPAS(s,dwg);
 end;
 
 
-function SaveDXFDPAS(s:ansistring):Integer;
+function SaveDXFDPAS(AFileName:string;AProcessFileHistory:boolean=True):integer;
 begin
-     result:=dwgSaveDXFDPAS(s, drawings.GetCurrentDWG);
-     if assigned(ProcessFilehistoryProc) then
-                                             ProcessFilehistoryProc(s);
+  Result:=dwgSaveDXFDPAS(AFileName, drawings.GetCurrentDWG);
+  if AProcessFileHistory and assigned(ProcessFilehistoryProc) then
+    ProcessFilehistoryProc(AFileName);
 end;
 
 function SaveAs_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 var
-   s:AnsiString;
-   fileext:AnsiString;
+  s:AnsiString;
+  fileext:AnsiString;
+  dr:TZCMsgDialogResult;
 begin
   ZCMsgCallBackInterface.Do_BeforeShowModal(nil);
   s:=drawings.GetCurrentDWG.GetFileName;
   if SaveFileDialog(s,'dxf',ProjectFileFilter,'',rsSaveFile) then begin
+    if FileExists(s) then begin
+      dr:=zcMsgDlg(format(rsOverwriteFileQuery,[s]),zcdiQuestion,[zccbYes,zccbNo,zccbCancel],false,nil,rsQuitCaption);
+      if dr.ModalResult=ZCmrCancel then
+        exit(cmd_cancel)
+      else if dr.ModalResult=ZCmrNo then
+        exit(cmd_ok);
+    end;
     fileext:=uppercase(ExtractFileEXT(s));
     if fileext='.ZCP' then
       saveZCP(s, drawings.GetCurrentDWG^)

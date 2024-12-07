@@ -483,6 +483,8 @@ begin
 end;
 destructor GDBObjGenericSubEntry.done;
 begin
+  ObjCasheArray.Clear;
+  ObjToConnectedArray.Clear;
   ObjArray.Done;
   ObjCasheArray.Done;
   ObjToConnectedArray.Done;

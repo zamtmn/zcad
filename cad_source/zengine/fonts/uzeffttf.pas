@@ -16,16 +16,18 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
 
-unit uzeffttf;
+unit uzeFFTTF;
 {$INCLUDE zengineconfig.inc}
 interface
-uses uzefontmanager,EasyLazFreeType,uzeFontFileFormatTTF,uzegeometry,
-    uzefont,uzbstrproc,{$IFNDEF DELPHI}FileUtil,LCLProc,{$ENDIF}sysutils,
-    uzctnrVectorBytes,uzefontttfpreloader;
-type ptsyminfo=^tsyminfo;
-     tsyminfo=record
-                           number,size:word;
-                     end;
+uses
+  uzefontmanager,uzeFontFileFormatTTF,uzegeometry,uzefont,uzbstrproc,
+  {$IFNDEF DELPHI}FileUtil,LCLProc,{$ENDIF}sysutils,uzctnrVectorBytes,
+  uzefontttfpreloader,uzeFontFileFormatTTFBackend;
+type
+  ptsyminfo=^tsyminfo;
+  tsyminfo=record
+    number,size:word;
+  end;
 function CreateNewfontFromTTF(const name:String;var pf:PGDBfont):Boolean;
 
 implementation
@@ -57,7 +59,7 @@ begin
   si.PSymbolInfo:=nil;
   ttf.MapChar.Insert(0,si);
 
-  ttf.TTFImpl.SizeInPoints:=10000;
+  ttf.TTFImpl.SizeInPoints:=CTTFDefaultSizeInPoints;
   for i:=TTFFileParams.FirstCharIndex to TTFFileParams.LastCharIndex do begin
     chcode:=ttf.TTFImpl.CharIndex[i];
     if chcode>0 then begin

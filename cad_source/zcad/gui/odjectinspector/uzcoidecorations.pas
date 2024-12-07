@@ -22,7 +22,7 @@ unit uzcoidecorations;
 interface
 
 uses
-  SysUtils,Graphics,LCLType,Themes,Forms,
+  SysUtils,Graphics,LCLType,Themes,Forms,ColorBox,
   zcobjectinspectorui,uzctypesdecorations,uzccommandsabstract,uzepalette,
   zcobjectinspectoreditors,UEnumDescriptor,zcobjectinspector,uzcinfoform,
   uzestyleslinetypes,uzctreenode,uzcfsnapeditor,
@@ -63,6 +63,10 @@ function PaletteColorDecorator(PInstance:Pointer):String;
 begin
      result:=ColorIndex2Name(PTGDBPaletteColor(PInstance)^);
 end;
+function ZColorDecorator(PInstance:Pointer):String;
+begin
+     result:=ColorToString(PColor(PInstance)^);
+end;
 procedure CreateComboPropEditor(TheOwner:TPropEditorOwner;pinstance:pointer;FreeOnLostFocus:boolean;PTD:PUserTypeDescriptor;out propeditor:TPropEditor; out cbedit:TComboBox;f:TzeUnitsFormat);
 begin
   propeditor:=TPropEditor.Create(theowner,PInstance,ptd^,FreeOnLostFocus,f);
@@ -76,6 +80,21 @@ begin
   {cbedit.ReadOnly:=true;//now it deprecated, see in SetComboSize}
   {$ENDIF}
 end;
+
+procedure CreateTColorPropEditor(TheOwner:TPropEditorOwner;pinstance:pointer;FreeOnLostFocus:boolean;PTD:PUserTypeDescriptor;out propeditor:TPropEditor; out cbedit:TColorBox;f:TzeUnitsFormat);
+begin
+  propeditor:=TPropEditor.Create(theowner,PInstance,ptd^,FreeOnLostFocus,f);
+  propeditor.byObjects:=true;
+  propeditor.changed:=false;
+  cbedit:=TColorBox.Create(propeditor);
+  cbedit.Text:=PTD.GetValueAsString(pinstance);
+  cbedit.OnChange:=propeditor.EditingProcess;
+  SetComboSize(cbedit,sysvar.INTF.INTF_DefaultControlHeight^-6);
+  {$IFNDEF DELPHI}
+  {cbedit.ReadOnly:=true;//now it deprecated, see in SetComboSize}
+  {$ENDIF}
+end;
+
 
 function NamedObjectsDecoratorCreateEditor(TheOwner:TPropEditorOwner;rect:trect;pinstance:pointer;psa:PTZctnrVectorStrings;FreeOnLostFocus:boolean;PTD:PUserTypeDescriptor;NO:PTGenericNamedObjectsArray;f:TzeUnitsFormat):TEditorDesc;
 var
@@ -305,6 +324,19 @@ begin
      cbedit.ItemIndex:=seli;
      result.mode:=TEM_Integrate;
 end;
+
+function ZColorDecoratorCreateEditor(TheOwner:TPropEditorOwner;rect:trect;pinstance:pointer;psa:PTZctnrVectorStrings;FreeOnLostFocus:boolean;PTD:PUserTypeDescriptor;f:TzeUnitsFormat):TEditorDesc;
+var
+  cbedit:TColorBox;
+begin
+  CreateTColorPropEditor(TheOwner,pinstance,FreeOnLostFocus,PTD,result.editor,cbedit,f);
+  SetComboSize(cbedit,sysvar.INTF.INTF_DefaultControlHeight^-6);
+  cbedit.Style:=cbedit.Style+[cbStandardColors,cbExtendedColors,cbSystemColors,cbIncludeDefault];
+  cbedit.Selected:=PColor(pinstance)^;
+  result.mode:=TEM_Integrate;
+end;
+
+
 procedure drawLTProp(canvas:TCanvas;ARect:TRect;PInstance:Pointer);
 var
    PLT:PGDBLtypeProp;
@@ -551,6 +583,7 @@ begin
      DecorateType(SysUnit.TypeName2PTD('PGDBDimStyleObjInsp'),NamedObjectsDecorator,DimStyleDecoratorCreateEditor,nil);
      DecorateType(SysUnit.TypeName2PTD('TGDBPaletteColor'),PaletteColorDecorator,ColorDecoratorCreateEditor,drawIndexColorProp);
      DecorateType(SysUnit.TypeName2PTD('TGDBOSMode'),nil,CreateEmptyEditor,nil);
+     DecorateType(SysUnit.TypeName2PTD('TZColor'),ZColorDecorator,ZColorDecoratorCreateEditor,{drawIndexColorProp}nil);
 
      AddFastEditorToType(SysUnit.TypeName2PTD('Integer'),@OIUI_FE_HalfButtonGetPrefferedSize,@OIUI_FE_ButtonGreatThatDraw,@OIUI_FE_IntegerInc);
      AddFastEditorToType(SysUnit.TypeName2PTD('Integer'),@OIUI_FE_HalfButtonGetPrefferedSize,@OIUI_FE_ButtonLessThatDraw,@OIUI_FE_IntegerDec);

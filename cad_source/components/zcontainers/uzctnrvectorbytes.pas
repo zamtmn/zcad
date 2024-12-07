@@ -51,7 +51,7 @@ TZctnrVectorBytes=object(GZVector{-}<byte>{//})
                       function Seek(pos:Integer):integer;
                       function notEOF:Boolean;
                       function readtoparser(const break:AnsiString):AnsiString;
-                      destructor done;virtual;
+                      procedure done;virtual;
                    end;
 procedure WriteString_EOL(h: Integer; s: AnsiString);
 implementation
@@ -62,7 +62,7 @@ begin
      //writeln(s);
   FileWrite(h, s[1], length(s));
 end;
-destructor TZctnrVectorBytes.done;
+procedure TZctnrVectorBytes.done;
 begin
      name:='';
      inherited;
@@ -386,19 +386,19 @@ end;
 function TZctnrVectorBytes.SaveToFile;
 var
   infile:Integer;
-  fp:RawByteString;
+  fn,fp:RawByteString;
 begin
-  fp:={$IFNDEF DELPHI}UTF8ToSys{$ENDIF}(FileName);
-  ForceDirectories(ExtractFilePath(fp));
-  infile:=filecreate(fp);
-     if infile>0 then
-                     begin
-                           FileWrite(InFile,parray^,count);
-                           fileclose(infile);
-                           result:=count;
-                     end
-                 else
-                     result:=infile;
+  fn:={$IFNDEF DELPHI}UTF8ToSys{$ENDIF}(FileName);
+  fp:=ExtractFilePath(fn);
+  if fp<>'' then
+    ForceDirectories(ExtractFilePath(fn));
+  infile:=filecreate(fn);
+  if infile>0 then begin
+    FileWrite(InFile,parray^,count);
+    fileclose(infile);
+    result:=count;
+  end else
+    result:=infile;
 end;
 constructor TZctnrVectorBytes.init;
 begin

@@ -100,6 +100,7 @@ end;
 constructor TMemoBackend.Init;
 begin
   enbl:=True;
+  inherited;
 end;
 
 

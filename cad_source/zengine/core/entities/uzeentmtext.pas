@@ -336,7 +336,17 @@ begin
   P_drawInOCS:=NulVertex;
   angle:=0;
 
+  if textprop.justify=jsbtl then
+    textprop.justify:=jsbl
+  else if textprop.justify=jsbtc then
+    textprop.justify:=jsbc
+  else if textprop.justify=jsbtr then
+    textprop.justify:=jsbr;
+
   case textprop.justify of
+    jsbtl,
+    jsbtc,
+    jsbtr:;//у мтекста таких выравниывний нет
     jstl:
       begin
         P_drawInOCS.y := P_drawInOCS.y - textprop.size;
@@ -700,20 +710,21 @@ begin
   repeat
   ln:=-1;
   matr:=DrawMatrix;
-  //matr:=matrixmultiply(DrawMatrix,objmatrix);
-  m1:=onematrix;
-  m1[0].v[0] := 1;
-  m1[1].v[1] := 1;
-  m1[2].v[2] := 1;
-  m1[3].v[3] := 1;
-  m1[3].v[0] := pswp^.x-(pswp^.y)*cotan(pi/2-textprop.oblique)/textprop.wfactor;
-  m1[3].v[1] := pswp^.y;
+
+  //m1:=onematrix;
+  //m1.mtr[0].v[0] := 1;
+  //m1.mtr[1].v[1] := 1;
+  //m1.mtr[2].v[2] := 1;
+  //m1.mtr[3].v[3] := 1;
+  m1.CreateRec(OneMtr,CMTShear);
+  m1.mtr[3].v[0] := pswp^.x-(pswp^.y)*cotan(pi/2-textprop.oblique)/textprop.wfactor;
+  m1.mtr[3].v[1] := pswp^.y;
   matr:=MatrixMultiply(m1,matr);
   i := 1;
                        if ispl then
 
                      begin
-                             lp:=pgdbvertex(@matr[3].v[0])^;
+                             lp:=pgdbvertex(@matr.mtr[3].v[0])^;
                              lp.y:=lp.y-0.2*textprop.size;
                              lp:=VectorTransform3d(lp,objmatrix);
                              pl.PushBackData(lp);
@@ -727,7 +738,7 @@ begin
     begin
          ispl:=not(ispl);
          if ispl then begin
-                             lp:=pgdbvertex(@matr[3].v[0])^;
+                             lp:=pgdbvertex(@matr.mtr[3].v[0])^;
                              lp.y:=lp.y-0.2*textprop.size;
                              lp:=VectorTransform3d(lp,objmatrix);
                              pl.PushBackData(lp);
@@ -754,7 +765,7 @@ begin
                              lin:=0;
                         end;}
                    else begin
-                             lp:=pgdbvertex(@matr[3].v[0])^;
+                             lp:=pgdbvertex(@matr.mtr[3].v[0])^;
                              lp.y:=lp.y-0.2*textprop.size;
                              lp:=VectorTransform3d(lp,objmatrix);
                              pl.PushBackData(lp);
@@ -768,14 +779,14 @@ begin
 
       matr:=m1;
       FillChar(m1, sizeof(DMatrix4D), 0);
-  m1[0].v[0] := 1;
-  m1[1].v[1] := 1;
-  m1[2].v[2] := 1;
-  m1[3].v[3] := 1;
+  m1.mtr[0].v[0] := 1;
+  m1.mtr[1].v[1] := 1;
+  m1.mtr[2].v[2] := 1;
+  m1.mtr[3].v[3] := 1;
     {if sym<256 then
                     sym:=ach2uch(sym);}
-  m1[3].v[0] := pgdbfont(pfont)^.GetOrReplaceSymbolInfo({ach2uch(ord(pswp^.str[i]))}sym{//-ttf-//,tdinfo}).NextSymX;
-  m1[3].v[1] := 0;
+  m1.mtr[3].v[0] := pgdbfont(pfont)^.GetOrReplaceSymbolInfo({ach2uch(ord(pswp^.str[i]))}sym{//-ttf-//,tdinfo}).NextSymX;
+  m1.mtr[3].v[1] := 0;
   matr:=MatrixMultiply(m1,matr);
   end;
   inc(i,l);
@@ -783,7 +794,7 @@ begin
                      if ispl then
 
                      begin
-                             lp:=pgdbvertex(@matr[3].v[0])^;
+                             lp:=pgdbvertex(@matr.mtr[3].v[0])^;
                              lp.y:=lp.y-0.2*textprop.size;
                              lp:=VectorTransform3d(lp,objmatrix);
                              pl.PushBackData(lp);
@@ -820,11 +831,11 @@ begin
   v.w:=1;
   v:=VectorTransform(v,objMatrix);
   outbound[3]:=pgdbvertex(@v)^;
-  if PProjoutbound=nil then
+  {if PProjoutbound=nil then
   begin
        Getmem(Pointer(PProjoutbound),sizeof(GDBOOutbound2DIArray));
        PProjoutbound^.init(4);
-  end;
+  end;}
 
   {plp:=pl.beginiterate(ir);
   plp2:=pl.iterate(ir);
@@ -967,7 +978,7 @@ begin
   //ptext := nil;
   //text.init(10);
   //Vertex2D_in_DCS_Array.init(100);
-  PProjoutbound:=nil;
+  //PProjoutbound:=nil;
   //format;
 end;
 function z2dxfmtext(s:String;var ul:boolean):String;

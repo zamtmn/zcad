@@ -216,6 +216,7 @@ var
   sr:TRect;
 begin
   if fShadowShow then begin
+    sr.Create(0,0,0,0);
     HintDockImage(self,sr,sr,disHide);
     //WidgetSet.DrawDefaultDockImage(sr,sr,disHide);
     fShadowShow:=false;
@@ -236,7 +237,7 @@ end;
 procedure TPartEnabler.MouseMove(Shift: TShiftState; X, Y: Integer);
 var
   sr:TRect;
-  a:TDockImageWindow;
+  //a:TDockImageWindow;
 begin
   inherited MouseMove(Shift,X,Y);
   if fButtonDrag then begin
@@ -246,8 +247,8 @@ begin
 end;
 
 procedure TPartEnabler.MouseUp(Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
-var
-  sr:TRect;
+//var
+//  sr:TRect;
 begin
   inherited;
   if InsertTo>0 then begin

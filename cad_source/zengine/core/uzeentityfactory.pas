@@ -20,11 +20,11 @@ unit uzeentityfactory;
 {$Mode delphi}{$H+}
 {$INCLUDE zengineconfig.inc}
 
-
 interface
-uses uzeentsubordinated,usimplegenerics,uzedrawingdef,uzeconsts,gzctnrSTL,
-     uzbtypes,uzeentity,LazLogger,
-     SysUtils;
+
+uses
+  uzeentsubordinated,usimplegenerics,uzedrawingdef,uzeconsts,gzctnrSTL,uzbtypes,
+  uzeentity,uzbLogIntf,SysUtils;
 type
 TAllocEntFunc=function:Pointer;
 TAllocAndInitEntFunc=function (owner:PGDBObjGenericWithSubordinated): PGDBObjEntity;
@@ -206,7 +206,7 @@ initialization
     NeedInit:=false;
   end;
 finalization
-  debugln('{I}[UnitsFinalization] Unit "',{$INCLUDE %FILE%},'" finalization');
+  ZDebugLN('{I}[UnitsFinalization] Unit "'+{$INCLUDE %FILE%}+'" finalization');
   FreeAndNil(DXFName2EntInfoData);
   FreeAndNil(ObjID2EntInfoData);
   FreeAndNil(EntUpgradeKey2EntUpgradeData);

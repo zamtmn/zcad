@@ -25,7 +25,7 @@ interface
 
 uses
   Classes,StdCtrls,Graphics,Controls,
-  LCLIntf,LCLType,
+  LCLIntf,LCLType,Types,
   Common.Graphics;
 
 const
@@ -264,8 +264,8 @@ begin
   begin
     case Layout of
       tlTop: ; // nothing
-      tlCenter: OffsetRect(R, 0, (R.Height-CalcRect.Height) div 2);
-      tlBottom: OffsetRect(R, 0, R.Height-CalcRect.Height)
+      tlCenter: Types.OffsetRect(R, 0, (R.Height-CalcRect.Height) div 2);
+      tlBottom: Types.OffsetRect(R, 0, R.Height-CalcRect.Height)
     end;
     R.Height := CalcRect.Height;
   end;

@@ -25,7 +25,7 @@ uses
   sysutils,
   gvector,
   Generics.Collections,Generics.Defaults,
-  uzbHandles,uzbNamedHandles,uzbNamedHandlesWithData,uzbSets,uzeNamedObject;
+  uzbHandles,uzbNamedHandles,uzbNamedHandlesWithData,{uzbSets,}uzeNamedObject;
 
 type
 
@@ -66,8 +66,8 @@ type
 implementation
 
 function TEntityStylesRegister.RegisterStyle(StyleClass:TNamedObjectClass;StyleArrayClass:TNamedObjectArrayClass):TStyleDeskHandle;
-var
-  i:integer;
+//var
+//  i:integer;
 begin
   if not StylesDesks.TryGetHandle(StyleClass,result) then
   begin
@@ -85,8 +85,8 @@ begin
 end;
 
 destructor TEntityStylesRegister.done;
-var
-  i:integer;
+//var
+//  i:integer;
 begin
   StylesDesks.Done;
 end;

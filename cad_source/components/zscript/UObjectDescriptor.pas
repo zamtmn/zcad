@@ -210,10 +210,10 @@ end;
 procedure ObjectDescriptor.CorrectFieldsOffset(ti:PTypeInfo);
 var
    td:PTypeData;
-   mf: PManagedField;
-   i,j:integer;
-   etd:PRecordDescriptor;
-   pfd:pFieldDescriptor;
+   //mf: PManagedField;
+   i{,j}:integer;
+   //etd:PRecordDescriptor;
+   //pfd:pFieldDescriptor;
 begin
      td:=GetTypeData(ti);
      self.SizeInBytes:=td.RecSize;
@@ -704,23 +704,23 @@ begin
 end;
 function ObjectDescriptor.CreateProperties;
 var
-   pld:PtUserTypeDescriptor;
+   //pld:PtUserTypeDescriptor;
    p{,p2}:pointer;
    pp:PPropertyDescriptor;
-   objtypename,propname:string;
-   ir,ir2:itrec;
+   {objtypename,}propname:string;
+   ir{,ir2}:itrec;
    baddr{,b2addr,eaddr}:Pointer;
 //   ppd:PPropertyDeskriptor;
 //   PDA:PTPropertyDeskriptorArray;
 //   bmodesave:Integer;
-   ts:PTPropertyDeskriptorArray;
-   sca,sa:Integer;
-   pcol:pboolean;
+   //ts:PTPropertyDeskriptorArray;
+   //sca,sa:Integer;
+   //pcol:pboolean;
    ppd:PPropertyDeskriptor;
 begin
      baddr:=addr;
      //b2addr:=baddr;
-     ts:=inherited CreateProperties(f,PDM_Field,PPDA,Name,PCollapsed,ownerattrib,bmode,addr,valkey,valtype);
+     {ts:=}inherited CreateProperties(f,PDM_Field,PPDA,Name,PCollapsed,ownerattrib,bmode,addr,valkey,valtype);
      exit;
 
      pp:=Properties.beginiterate(ir);

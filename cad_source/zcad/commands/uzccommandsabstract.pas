@@ -138,6 +138,7 @@ const
 implementation
 class function TZCADCommandContext.CreateRec;
 begin
+  result:=default(TZCADCommandContext);
 end;
 function CommandObjectDef.IsRTECommand:Boolean;
 begin

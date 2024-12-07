@@ -20,7 +20,8 @@ unit uzetextpreprocessor;
 {$INCLUDE zengineconfig.inc}
 
 interface
-uses uzbtypes,uzbstrproc,sysutils,gzctnrSTL,LazLogger,uzeparser;
+uses
+  uzbtypes,uzbstrproc,sysutils,gzctnrSTL,uzbLogIntf,uzeparser;
 type
   TInternalCharType=UnicodeChar;
   TInternalStringType=UnicodeString;
@@ -196,7 +197,7 @@ initialization
   Parser:=TMyParser.create;
   ZCADToken:=Parser.Tokenizer.Description.GetEnum;
 finalization
-  debugln('{I}[UnitsFinalization] Unit "',{$INCLUDE %FILE%},'" finalization');
+  ZDebugLN('{I}[UnitsFinalization] Unit "'+{$INCLUDE %FILE%}+'" finalization');
   FreeAndNil(Prefix2ProcessFunc);
   FreeAndNil(Parser);
 end.

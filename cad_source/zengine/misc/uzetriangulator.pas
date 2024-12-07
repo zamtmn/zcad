@@ -21,7 +21,7 @@ unit uzeTriangulator;
 interface
 uses uzgprimitivescreator,uzgprimitives,uzglvectorobject,uzegluinterface,
      uzegeometrytypes,uzctnrVectorBytes,
-     sysutils,uzegeometry,LazLogger,gzctnrVectorTypes,uzgloglstatemanager,
+     sysutils,uzegeometry,uzbLogIntf,gzctnrVectorTypes,uzgloglstatemanager,
      uzbtypes,uzeenrepresentation;
 type
   TV4P = array [0..3] of Pointer;
@@ -128,7 +128,7 @@ begin
 end;
 procedure TTriangulator.ErrorCallBack(error: Cardinal);
 begin
-     debugln('{F}GLU_TESS_ERROR_DATA!!');
+     zDebugln('{F}GLU_TESS_ERROR_DATA!!');
 end;
 procedure TTriangulator.BeginCallBack(gmode: Cardinal);
 begin
@@ -152,7 +152,7 @@ GL_TRIANGLE_STRIP:begin
                   end;
      else
          begin
-           debugln('{F}Wrong triangulation mode!!');
+           zDebugLn('{F}Wrong triangulation mode!!');
            raise Exception.Create('Wrong triangulation mode!!');
          end;
      end;
@@ -212,5 +212,5 @@ initialization
   Triangulator:=TTriangulator.Create;
 finalization
   Triangulator.Free;
-  debugln('{I}[UnitsFinalization] Unit "',{$INCLUDE %FILE%},'" finalization');
+  zDebugLn('{I}[UnitsFinalization] Unit "'+{$INCLUDE %FILE%}+'" finalization');
 end.

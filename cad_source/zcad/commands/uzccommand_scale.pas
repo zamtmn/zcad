@@ -72,15 +72,16 @@ var
 begin
 if a<eps then a:=1;
 
-dispmatr:=uzegeometry.CreateTranslationMatrix(createvertex(-t3dp.x,-t3dp.y,-t3dp.z));
+dispmatr:=uzegeometry.CreateTranslationMatrix(-t3dp);
 
-rotmatr:=onematrix;
-rotmatr[0].v[0]:=a;
-rotmatr[1].v[1]:=a;
-rotmatr[2].v[2]:=a;
+//rotmatr:=onematrix;
+//rotmatr.mtr[0].v[0]:=a;
+//rotmatr.mtr[1].v[1]:=a;
+//rotmatr.mtr[2].v[2]:=a;
+rotmatr:=CreateScaleMatrix(a);
 
 rotmatr:=uzegeometry.MatrixMultiply(dispmatr,rotmatr);
-dispmatr:=uzegeometry.CreateTranslationMatrix(createvertex(t3dp.x,t3dp.y,t3dp.z));
+dispmatr:=uzegeometry.CreateTranslationMatrix(t3dp);
 dispmatr:=uzegeometry.MatrixMultiply(rotmatr,dispmatr);
 dc:=drawings.GetCurrentDWG^.CreateDrawingRC;
 {pcd:=pcoa^.beginiterate(ir);

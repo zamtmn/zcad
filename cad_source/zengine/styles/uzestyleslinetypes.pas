@@ -20,7 +20,7 @@ unit uzeStylesLineTypes;
 {$Mode delphi}{$H+}
 {$INCLUDE zengineconfig.inc}
 interface
-uses LCLProc,LazUTF8,Classes,gzctnrVector,sysutils,uzbtypes,
+uses uzbLogIntf,LazUTF8,Classes,gzctnrVector,sysutils,uzbtypes,
      uzegeometry,uzegeometrytypes,uzestylestexts,gzctnrVectorObjects,
      UGDBNamedObjectsArray,gzctnrVectorTypes,uzbstrproc,uzeNamedObject;
 const
@@ -578,7 +578,7 @@ begin
                                  SHXDashProp.param.AD:=TACUpRight;
                             end
   else
-      debugln('{EH}CreateLineTypeFrom: unknow value "'+paramname+'"');
+      zDebugln('{EH}CreateLineTypeFrom: unknow value "'+paramname+'"');
       //programlog.LogOutStr('CreateLineTypeFrom: unknow value "'+paramname+'"',lp_OldPos,LM_Error);
        //ShowError('CreateLineTypeFrom: unknow value "'+paramname+'"');
        subelement:=GetPredStr(element,',');

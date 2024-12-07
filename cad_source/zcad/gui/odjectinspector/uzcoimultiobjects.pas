@@ -28,7 +28,7 @@ uses
   gzctnrVectorTypes,uzbtypes,uzcdrawings,varmandef,uzeentity,
   Varman,uzctnrvectorstrings,UGDBSelectedObjArray,uzcoimultipropertiesutil,
   uzeExtdrAbstractEntityExtender,uzelongprocesssupport,uzbLogIntf,uzcutils,
-  zUndoCmdChgVariable,uzcdrawing,zUndoCmdChgTypes,uzeBaseExtender,
+  zUndoCmdChgVariable,uzcdrawing,zUndoCmdChgTypes,
   uzCtnrVectorPBaseEntity,uzglviewareageneral;
 type
   TObjIDWithExtender2Counter=TMyMapCounter<TObjIDWithExtender>;
@@ -556,7 +556,8 @@ begin
         psd:=drawings.GetCurrentDWG.SelObjArray.iterate(ir);
       until psd=nil;
     end;
-
+  {TODO: надо переделать вложенность циклов снаружи примитивы, внутри мультипроперти}
+  {это ускорит расчет при кэшировании, например при получении составляющих из вертекса}
   for i:=0 to MultiPropertiesManager.MultiPropertyVector.Size-1 do
     if MultiPropertiesManager.MultiPropertyVector[i].usecounter<>0 then
     begin
@@ -738,7 +739,6 @@ var
   TrueSel:Boolean;
 begin
   with ProgramLog.Enter('TMSEditor.createunit',LM_Debug) do begin
-  //debugln('{D+}TMSEditor.createunit start');
     SavezeUnitsFormat:=f;
     if _GetEntsTypes then
       GetEntsTypes;
@@ -815,7 +815,6 @@ begin
       until psd=nil;
     end;
   programlog.leave(IfEntered);end;
-  //debugln('{D-}TMSEditor.createunit end');
 end;
 procedure DeselectEnts(PInstance:Pointer);
 var

@@ -20,7 +20,7 @@ unit uzeFontFileFormatTTF;
 {$INCLUDE zengineconfig.inc}
 interface
 uses
-  LCLProc,uzgprimitivescreator,uzgprimitives,uzglvectorobject,uzefontbase,
+  uzgprimitivescreator,uzgprimitives,uzglvectorobject,uzefontbase,
   uzebeziersolver,math,uzgloglstatemanager,uzegluinterface,
   usimplegenerics,EasyLazFreeType,uzbstrproc,sysutils,
   uzegeometrytypes,uzbtypes,uzegeometry,gzctnrSTL,gzctnrVectorTypes,uzbLogIntf,
@@ -96,7 +96,7 @@ begin
       inc(ptrsize^);
     end;
     else begin
-      debugln('{F}Wrong triangulation mode!!');
+      zDebugLn('{F}Wrong triangulation mode!!');
       halt(0);
     end;
   end;
@@ -235,12 +235,14 @@ begin
     for i:=0 to bs.Conturs.VArray.Size-1 do begin
       zTraceLn('{T+}[TTF_CONTENTS]Contur=%d',[i]);
       GLUIntrf.TessBeginContour(tesselator);
+      tv.z:=0;
       for j:=0 to bs.Conturs.VArray[i].Size-1 do begin
-        zTraceLn('[TTF_CONTENTS]x=%f;y=%f',[(bs.Conturs.VArray[i][j].v.x),(bs.Conturs.VArray[i][j].v.y)]);
-        tv.x:=bs.Conturs.VArray[i][j].v.x;
-        tv.y:=bs.Conturs.VArray[i][j].v.y;
-        tv.z:=0;
-        GLUIntrf.TessVertex(tesselator,@tv,bs.Conturs.VArray[i][j].index);
+        with bs.Conturs.VArray[i][j] do begin
+          zTraceLn('[TTF_CONTENTS]x=%f;y=%f',[v.x,v.y]);
+          tv.x:=v.x;
+          tv.y:=v.y;
+          GLUIntrf.TessVertex(tesselator,@tv,index);
+        end;
       end;
       GLUIntrf.TessEndContour(tesselator);
       zTraceLn('{T-}[TTF_CONTENTS]End contur');
@@ -257,7 +259,7 @@ end;
 procedure TZETFFFontImpl.SetupSymbolLineParams(const matr:DMatrix4D; var SymsParam:TSymbolSParam);
 begin
   if SymsParam.IsCanSystemDraw then begin
-    SymsParam.NeededFontHeight:=oneVertexlength(PGDBVertex(@matr[1])^)*((TTFImplementation.Ascent+TTFImplementation.Descent)/(TTFImplementation.CapHeight));
+    SymsParam.NeededFontHeight:=oneVertexlength(PGDBVertex(@matr.mtr[1])^)*((TTFImplementation.Ascent+TTFImplementation.Descent)/(TTFImplementation.CapHeight));
   end
 end;
 function TZETFFFontImpl.IsCanSystemDraw:Boolean;

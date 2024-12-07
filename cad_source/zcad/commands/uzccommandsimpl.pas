@@ -21,7 +21,7 @@ unit uzccommandsimpl;
 
 
 interface
-uses uzcutils,uzgldrawcontext,uzglviewareageneral,uzeconsts,uzcsysvars,uzegeometry,
+uses uzcutils,uzgldrawcontext,uzglviewareageneral,{uzeconsts,}uzcsysvars,uzegeometry,
      varmandef,uzbtypes,uzccommandsabstract,uzccommandsmanager,
      uzegeometrytypes,uzglviewareadata,uzcdrawings,
      uzcinterface,varman,uzclog,uzeSnap,math;
@@ -211,7 +211,7 @@ var
   t:byte;
 begin
   t:=0;
-  MouseMoveCallback(Context,drawings.GetCurrentDWG^.wa.param.md.mouse3dcoord,drawings.GetCurrentDWG^.wa.param.md.mouse,t,@drawings.GetCurrentDWG^.wa.param.ospoint);
+  result:=MouseMoveCallback(Context,drawings.GetCurrentDWG^.wa.param.md.mouse3dcoord,drawings.GetCurrentDWG^.wa.param.md.mouse,t,@drawings.GetCurrentDWG^.wa.param.ospoint);
   zcRedrawCurrentDrawing;
 end;
 
@@ -271,7 +271,7 @@ begin
     OSModeEditor.GetState;
     zcRedrawCurrentDrawing;
     ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIActionRedraw);
-    if (uzccommandsmanager.commandmanager.CommandsStack.Count=0){and(CEDeSelect in self.CEndActionAttr)} then
+    if (uzccommandsmanager.commandmanager.CommandsStack.Count=0)and(CEDeSelect in self.CEndActionAttr) then
       ZCMsgCallBackInterface.Do_GUIaction(drawings.GetCurrentDWG.wa,ZMsgID_GUIActionSelectionChanged);
   end;
 end;

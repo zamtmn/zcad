@@ -205,18 +205,18 @@ var
     //mmm:TMatrix;
 begin
      inherited;
-     Local.basis.ox:=PGDBVertex(@objmatrix[0])^;
-     Local.basis.oy:=PGDBVertex(@objmatrix[1])^;
+     Local.basis.ox:=PGDBVertex(@objmatrix.mtr[0])^;
+     Local.basis.oy:=PGDBVertex(@objmatrix.mtr[1])^;
 
      Local.basis.ox:=normalizevertex(Local.basis.ox);
      Local.basis.oy:=normalizevertex(Local.basis.oy);
      Local.basis.oz:=normalizevertex(Local.basis.oz);
 
-     Local.P_insert:=PGDBVertex(@objmatrix[3])^;
+     Local.P_insert:=PGDBVertex(@objmatrix.mtr[3])^;
 
-     scale.x:=oneVertexlength(PGDBVertex(@objmatrix[0])^)*sign(scale.x);
-     scale.y:=oneVertexlength(PGDBVertex(@objmatrix[1])^)*sign(scale.y);
-     scale.z:=oneVertexlength(PGDBVertex(@objmatrix[2])^)*sign(scale.z);
+     scale.x:=oneVertexlength(PGDBVertex(@objmatrix.mtr[0])^)*sign(scale.x);
+     scale.y:=oneVertexlength(PGDBVertex(@objmatrix.mtr[1])^)*sign(scale.y);
+     scale.z:=oneVertexlength(PGDBVertex(@objmatrix.mtr[2])^)*sign(scale.z);
 
      {m1:=objmatrix;
      PGDBVertex(@m1[0])^.x:=(PGDBVertex(@m1[0])^.x/scale.x);
@@ -287,17 +287,18 @@ procedure GDBObjBlockInsert.setrot(r:Double);
 var m1:DMatrix4D;
     sine,cosine:double;
 begin
-m1:=onematrix;
-SinCos(r,sine,cosine);
-m1[0].v[0]:=cosine;
-m1[1].v[1]:=cosine;
-m1[1].v[0]:=-sine;
-m1[0].v[1]:=sine;
-objMatrix:=MatrixMultiply(m1,objMatrix);
+  //m1:=onematrix;
+  //SinCos(r,sine,cosine);
+  //m1.mtr[0].v[0]:=cosine;
+  //m1.mtr[1].v[1]:=cosine;
+  //m1.mtr[1].v[0]:=-sine;
+  //m1.mtr[0].v[1]:=sine;
+  m1:=CreateRotationMatrixZ(r);
+  objMatrix:=MatrixMultiply(m1,objMatrix);
 end;
 function GDBObjBlockInsert.getrot:Double;
 begin
-     result:=arccos((objmatrix[0].v[0])/oneVertexlength(PGDBVertex(@objmatrix[0])^))
+     result:=arccos((objmatrix.mtr[0].v[0])/oneVertexlength(PGDBVertex(@objmatrix.mtr[0])^))
 end;
 
 procedure GDBObjBlockInsert.FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext;Stage:TEFStages=EFAllStages);
@@ -383,7 +384,7 @@ begin
   rotate:=0;
   index:=-1;
   pattrib:=nil;
-  pprojoutbound:=nil;
+  //pprojoutbound:=nil;
 end;
 constructor GDBObjBlockInsert.initnul;
 begin
@@ -400,7 +401,7 @@ begin
   //ConstObjArray.init(100);
   //varman.init('Block_Variable');
   //varman.mergefromfile(programpath+'components\defaultblockvar.ini');
-  pprojoutbound:=nil;
+  //pprojoutbound:=nil;
 end;
 function GDBObjBlockInsert.GetObjType;
 begin

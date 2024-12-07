@@ -40,7 +40,7 @@ uses
 
   uzeentpolyline,             //unit describes line entity
                        //модуль описывающий примитив трехмерная ПОЛИлиния
-  uzeentabstracttext,uzeenttext,
+  {uzeentabstracttext,}uzeenttext,
                        //модуль описывающий примитив текст
 
   uzeentdimaligned, //unit describes aligned dimensional entity
@@ -222,50 +222,50 @@ implementation
 
 function TestModul_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
  var
-    x, y: Integer;
-    i   : Integer;
-    tempPoint:GDBVertex;
+    //x, y: Integer;
+    //i   : Integer;
+    //tempPoint:GDBVertex;
 
-    listGraph:TListGraph;
-    edgeGraph:PTEdgeTree;
-    vertexGraph:PTVertexTree;
-    oGraph:TGraph;
-    oGraphVertex:TVertex;
-    oGraphStartVertex:TVertex;
-    oGraphEndVertex:TVertex;
+    //listGraph:TListGraph;
+    //edgeGraph:PTEdgeTree;
+    //vertexGraph:PTVertexTree;
+    //oGraph:TGraph;
+    //oGraphVertex:TVertex;
+    //oGraphStartVertex:TVertex;
+    //oGraphEndVertex:TVertex;
 
-    oGraphEdge:TEdge;
-    stVertexIndex:integer;
+    //oGraphEdge:TEdge;
+    //stVertexIndex:integer;
 
 
-    count: Integer;
+    //count: Integer;
     pcabledesk:PTCableDesctiptor;
     PCableSS:PGDBObjCable;
-    ir,ir_inNodeArray,irSegment,irCable:itrec;
+    {ir,ir_inNodeArray,}irSegment,irCable:itrec;
     pvCab,pvmc:pvardesk;
 //    currentunit:TUnit;
 //    ucount:Integer;
 //    ptn:PGDBObjDevice;
 //    p:pointer;
     cman:TCableManager;
-    pv:pGDBObjDevice;
+    //pv:pGDBObjDevice;
 
-    coord,currentcoord:GDBVertex;
+    //coord,currentcoord:GDBVertex;
 //    pbd:PGDBObjBlockdef;
-    {pvn,pvm,}pvSegm,pvSegmLength, pvd{,pvl}:pvardesk;
+    {pvn,pvm,}pvSegm{,pvSegmLength, pvd}{,pvl}:pvardesk;
 
-    node:PTNodeProp;
+    //node:PTNodeProp;
 
-    nodeend,nodestart:PGDBObjDevice;
+    //nodeend,nodestart:PGDBObjDevice;
     segmCable:PGDBObjCable;
-    isfirst:boolean;
-    startmat,endmat,startname,endname,prevname:String;
+    //isfirst:boolean;
+    //startmat,endmat,startname,endname,prevname:String;
 
     //cmlx,cmrx,cmuy,cmdy:Double;
-    {lx,rx,}uy,dy:Double;
-    lsave:{integer}PPointer;
+    //{lx,rx,}uy,dy:Double;
+    //lsave:{integer}PPointer;
     DC:TDrawContext;
-    pCableSSvarext,pSegmCablevarext,pSegmCableLength,ppvvarext,pnodeendvarext:TVariablesExtender;
+    pCableSSvarext,pSegmCablevarext{,pSegmCableLength,ppvvarext,pnodeendvarext}:TVariablesExtender;
 
 
  begin
@@ -531,7 +531,7 @@ function createStructureSchema_com(const Context:TZCADCommandContext;operands:TC
 var
    listGraph:TListGraph;
    insertPoint:gdbvertex;
-   a:GDBVertex;
+   //a:GDBVertex;
    i,j:integer;
 begin
 
@@ -574,7 +574,7 @@ procedure buildSSScheme(listGraph:TListGraph;insertPoint:GDBVertex);
 type
 
  //** Характеристики типов кабелей
-   PTiCable=^TiCable;
+   //PTiCable=^TiCable;
    TiCable=record
         name:string;
         length:double;
@@ -584,19 +584,19 @@ type
    TListiCable=specialize TVector<TiCable>;
 
    //** Создание списка устройств и их количества
-      PTiAllDev=^TiAllDev;
-      TiAllDev=record
-           name:string;
-           col:integer;
-      end;
+      //PTiAllDev=^TiAllDev;
+      //TiAllDev=record
+      //     name:string;
+      //     col:integer;
+      //end;
 
-      TListiAllDev=specialize TVector<TiAllDev>;
+      //TListiAllDev=specialize TVector<TiAllDev>;
 
 
 var
-   pv:pGDBObjDevice;
+   //pv:pGDBObjDevice;
    i:integer;
-   pt:GDBVertex;
+   //pt:GDBVertex;
    coord_x,coord_y:double;
 
    //**Получаем общую длину кабельной группы
@@ -623,7 +623,7 @@ var
        i,j,last:integer;
        line,linetemp:String;
        listCab:TListiCable;
-       iCab,nowCab:TiCable;
+       iCab{,nowCab}:TiCable;
        istrue:boolean;
    begin
 
@@ -819,7 +819,7 @@ var
    procedure AddDeviceCable(gGroup:TGraph;var insertPoint:GDBVertex);
       type
    //** Создание информации для списка устройств и их количества
-      PTinfoDev=^TinfoDev;
+      //PTinfoDev=^TinfoDev;
       TinfoDev=record
            dev:pGDBObjDevice;
            fullname:string;
@@ -834,14 +834,14 @@ var
       TListDev=specialize TVector<TinfoDev>;
 
     var
-       pv:pGDBObjDevice;
-       ppvvarext,pvarv:TVariablesExtender;
-       pvmc,pvv:pvardesk;
+       //pv:pGDBObjDevice;
+       {ppvvarext,}pvarv:TVariablesExtender;
+       {pvmc,}pvv:pvardesk;
        idev,stDev,endDev:TinfoDev;
        listDev:TListDev;
        i,j,col:integer;
-       strNameCab:string;
-       lengthCab:double;
+       //strNameCab:string;
+       //lengthCab:double;
    begin
          //ZCMsgCallBackInterface.TextMessage('s1',TMWOHistoryOut);
         listDev:= TListDev.Create;
@@ -957,12 +957,12 @@ end;
 function getListGroupGraph():TListGraph;
 //function OPS_SPBuild_com(Operands:pansichar):Integer;
 var
-    iii:integer;
+    //iii:integer;
 
     edgeGraph:PTEdgeTree;
     vertexGraph:PTVertexTree;
     oGraph:TGraph;
-    oGraphVertex:TVertex;
+    //oGraphVertex:TVertex;
     oGraphStartVertex:TVertex;
     oGraphEndVertex:TVertex;
 
@@ -971,34 +971,34 @@ var
 
     graphVizPt:GDBVertex;
 
-    count: Integer;
+    //count: Integer;
     pcabledesk:PTCableDesctiptor;
     PCableSS:PGDBObjCable;
-    ir,ir_inNodeArray,irSegment,irCable:itrec;
+    {ir,}ir_inNodeArray,irSegment,irCable:itrec;
     pvCab:pvardesk;
 //    currentunit:TUnit;
 //    ucount:Integer;
 //    ptn:PGDBObjDevice;
 //    p:pointer;
     cman:TCableManager;
-    pv:pGDBObjDevice;
+    //pv:pGDBObjDevice;
 
-    coord,currentcoord:GDBVertex;
+    //coord,currentcoord:GDBVertex;
 //    pbd:PGDBObjBlockdef;
     {pvn,pvm,}pvSegm,pvSegmLength, pvd{,pvl}:pvardesk;
 
     node:PTNodeProp;
 
-    nodeend,nodestart:PGDBObjDevice;
+    //nodeend,nodestart:PGDBObjDevice;
     segmCable:PGDBObjCable;
-    isfirst:boolean;
-    startmat,endmat,startname,endname,prevname:String;
+    //isfirst:boolean;
+    //startmat,endmat,startname,endname,prevname:String;
 
     //cmlx,cmrx,cmuy,cmdy:Double;
-    {lx,rx,}uy,dy:Double;
-    lsave:{integer}PPointer;
+    //{lx,rx,}uy,dy:Double;
+    //lsave:{integer}PPointer;
     DC:TDrawContext;
-    pCableSSvarext,pSegmCablevarext,pSegmCableLength,ppvvarext,pnodeendvarext:TVariablesExtender;
+    pCableSSvarext,pSegmCablevarext,{pSegmCableLength,ppvvarext,}pnodeendvarext:TVariablesExtender;
 
 
     function getVertexGraphIndex(oGraph:TGraph;devVertex:PGDBObjDevice):integer;
@@ -1089,13 +1089,13 @@ var
 
     procedure graphAddEdgeRiser(var oGraph:TGraph); //создаем ребра между разрывами
     var
-        i,j,count:integer;
+        i,j{,count}:integer;
         sum:double;
-        oGraphStartVertex:TVertex;
+        //oGraphStartVertex:TVertex;
         pnodeendvarext,pnodestartvarext:TVariablesExtender;
-        pvend,pvstart,pvendelevation,pvstartelevation:pvardesk;
+        {pvend,}pvstart,pvendelevation,pvstartelevation:pvardesk;
         edgeGraph:PTEdgeTree;
-        vertexGraph:PTVertexTree;
+        //vertexGraph:PTVertexTree;
         listRiserName:TListString;
         listRiserNumber:TListInteger;
 

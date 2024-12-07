@@ -30,10 +30,10 @@ platform:
 install:
   - cmd: git submodule update --init --recursive
   - cmd: echo %PATH%
-  - cmd: echo Download lazarus-3.4-fpc-3.2.2-win64.exe
-  - cmd: curl -fsSL -o lazarus-3.4-fpc-3.2.2-win64.exe "https://fossies.org/windows/misc/lazarus-3.4-fpc-3.2.2-win64.exe"
-  - cmd: echo Installing lazarus-3.4-fpc-3.2.2-win64.exe
-  - cmd: lazarus-3.4-fpc-3.2.2-win64.exe /verysilent /supressmsgboxes
+  - cmd: echo Download lazarus-3.6-fpc-3.2.2-win64.exe
+  - cmd: curl -fsSL -o lazarus-3.6-fpc-3.2.2-win64.exe "https://fossies.org/windows/misc/lazarus-3.6-fpc-3.2.2-win64.exe"
+  - cmd: echo Installing lazarus-3.6-fpc-3.2.2-win64.exe
+  - cmd: lazarus-3.6-fpc-3.2.2-win64.exe /verysilent /supressmsgboxes
   - cmd: rmdir /S /Q c:\lazarus\docs
   - cmd: rmdir /S /Q c:\lazarus\examples
   - cmd: echo Fix https://gitlab.com/freepascal.org/lazarus/lazarus/-/issues/39630
@@ -121,66 +121,66 @@ on_finish:
 # https://www.appveyor.com/docs/environment-variables/
 # Environment variables that are set by AppVeyor for every build:
 # APPVEYOR - True if build runs in AppVeyor environment;
-  - ECHO %APPVEYOR%
+  - ECHO "%APPVEYOR%"
 # CI - True if build runs in AppVeyor environment;
-  - ECHO %CI%
+  - ECHO "%CI%"
 # APPVEYOR_API_URL - AppVeyor Build Agent API URL;
-  - ECHO %APPVEYOR_API_URL%
+  - ECHO "%APPVEYOR_API_URL%"
 # APPVEYOR_ACCOUNT_NAME - account name;
-  - ECHO %APPVEYOR_ACCOUNT_NAME%
+  - ECHO "%APPVEYOR_ACCOUNT_NAME%"
 # APPVEYOR_PROJECT_ID - AppVeyor unique project ID;
-  - ECHO %APPVEYOR_PROJECT_ID%
+  - ECHO "%APPVEYOR_PROJECT_ID%"
 # APPVEYOR_PROJECT_NAME - project name;
-  - ECHO %APPVEYOR_PROJECT_NAME%
+  - ECHO "%APPVEYOR_PROJECT_NAME%"
 # APPVEYOR_PROJECT_SLUG - project slug (as seen in project details URL);
-  - ECHO %APPVEYOR_PROJECT_SLUG%
+  - ECHO "%APPVEYOR_PROJECT_SLUG%"
 # APPVEYOR_BUILD_FOLDER - path to clone directory;
-  - ECHO %APPVEYOR_BUILD_FOLDER%
+  - ECHO "%APPVEYOR_BUILD_FOLDER%"
 # APPVEYOR_BUILD_ID - AppVeyor unique build ID;
-  - ECHO %APPVEYOR_BUILD_ID%
+  - ECHO "%APPVEYOR_BUILD_ID%"
 # APPVEYOR_BUILD_NUMBER - build number;
-  - ECHO %APPVEYOR_BUILD_NUMBER%
+  - ECHO "%APPVEYOR_BUILD_NUMBER%"
 # APPVEYOR_BUILD_VERSION - build version;
-  - ECHO %APPVEYOR_BUILD_VERSION%
+  - ECHO "%APPVEYOR_BUILD_VERSION%"
 # APPVEYOR_PULL_REQUEST_NUMBER - GitHub Pull Request number;
-  - ECHO %APPVEYOR_PULL_REQUEST_NUMBER%
+  - ECHO "%APPVEYOR_PULL_REQUEST_NUMBER%"
 # APPVEYOR_PULL_REQUEST_TITLE - GitHub Pull Request title
-  - ECHO %APPVEYOR_PULL_REQUEST_TITLE%
+  - ECHO "%APPVEYOR_PULL_REQUEST_TITLE%"
 # APPVEYOR_JOB_ID - AppVeyor unique job ID;
-  - ECHO %APPVEYOR_JOB_ID%
+  - ECHO "%APPVEYOR_JOB_ID%"
 # APPVEYOR_JOB_NAME - job name;
-  - ECHO %APPVEYOR_JOB_NAME%
+  - ECHO "%APPVEYOR_JOB_NAME%"
 # APPVEYOR_REPO_PROVIDER - github, bitbucket, kiln, vso or gitlab;
-  - ECHO %APPVEYOR_REPO_PROVIDER%
+  - ECHO "%APPVEYOR_REPO_PROVIDER%"
 # APPVEYOR_REPO_SCM - git or mercurial;
-  - ECHO %APPVEYOR_REPO_SCM%
+  - ECHO "%APPVEYOR_REPO_SCM%"
 # APPVEYOR_REPO_NAME - repository name in format owner-name/repo-name;
-  - ECHO %APPVEYOR_REPO_NAME%
+  - ECHO "%APPVEYOR_REPO_NAME%"
 # APPVEYOR_REPO_BRANCH - build branch. For Pull Request commits it is base branch PR is merging into;
-  - ECHO %APPVEYOR_REPO_BRANCH%
+  - ECHO "%APPVEYOR_REPO_BRANCH%"
 # APPVEYOR_REPO_TAG - true if build has started by pushed tag; otherwise false;
-  - ECHO %APPVEYOR_REPO_TAG%
+  - ECHO "%APPVEYOR_REPO_TAG%"
 # APPVEYOR_REPO_TAG_NAME - contains tag name for builds started by tag; otherwise this variable is undefined;
-  - ECHO %APPVEYOR_REPO_TAG_NAME%
+  - ECHO "%APPVEYOR_REPO_TAG_NAME%"
 # APPVEYOR_REPO_COMMIT - commit ID (SHA);
-  - ECHO %APPVEYOR_REPO_COMMIT%
+  - ECHO "%APPVEYOR_REPO_COMMIT%"
 # APPVEYOR_REPO_COMMIT_AUTHOR - commit author’s name;
-  - ECHO %APPVEYOR_REPO_COMMIT_AUTHOR%
+  - ECHO "%APPVEYOR_REPO_COMMIT_AUTHOR%"
 # APPVEYOR_REPO_COMMIT_AUTHOR_EMAIL - commit author’s email address;
-  - ECHO %APPVEYOR_REPO_COMMIT_AUTHOR_EMAIL%
+  - ECHO "%APPVEYOR_REPO_COMMIT_AUTHOR_EMAIL%"
 # APPVEYOR_REPO_COMMIT_TIMESTAMP - commit date/time;
-  - ECHO %APPVEYOR_REPO_COMMIT_TIMESTAMP%
+  - ECHO "%APPVEYOR_REPO_COMMIT_TIMESTAMP%"
 # APPVEYOR_REPO_COMMIT_MESSAGE - commit message;
-  - ECHO %APPVEYOR_REPO_COMMIT_MESSAGE%
+  - ECHO "%APPVEYOR_REPO_COMMIT_MESSAGE%"
 # APPVEYOR_REPO_COMMIT_MESSAGE_EXTENDED - the rest of commit message after line break (if exists);
-  - ECHO %APPVEYOR_REPO_COMMIT_MESSAGE_EXTENDED%
+  - ECHO "%APPVEYOR_REPO_COMMIT_MESSAGE_EXTENDED%"
 # APPVEYOR_SCHEDULED_BUILD - True if the build runs by scheduler;
-  - ECHO %APPVEYOR_SCHEDULED_BUILD%
+  - ECHO "%APPVEYOR_SCHEDULED_BUILD%"
 # APPVEYOR_FORCED_BUILD (True or undefined) - builds started by “New build” button or from the same API;
-  - ECHO %APPVEYOR_FORCED_BUILD%
+  - ECHO "%APPVEYOR_FORCED_BUILD%"
 # APPVEYOR_RE_BUILD (True or undefined) - build started by “Re-build commit/PR” button of from the same API;
-  - ECHO %APPVEYOR_RE_BUILD%
+  - ECHO "%APPVEYOR_RE_BUILD%"
 # PLATFORM - platform name set on Build tab of project settings (or through platform parameter in appveyor.yml);
-  - ECHO %PLATFORM%
+  - ECHO "%PLATFORM%"
 # CONFIGURATION - configuration name set on Build tab of project settings (or through configuration parameter in appveyor.yml);
-  - ECHO %CONFIGURATION%
+  - ECHO "%CONFIGURATION%"

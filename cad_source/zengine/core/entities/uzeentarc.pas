@@ -38,9 +38,6 @@ GDBObjArc= object(GDBObjPlain)
                  q0:GDBvertex;
                  q1:GDBvertex;
                  q2:GDBvertex;
-                 pq0:GDBvertex;
-                 pq1:GDBvertex;
-                 pq2:GDBvertex;
                  constructor init(own:Pointer;layeraddres:PGDBLayerProp;LW:SmallInt;p:GDBvertex;RR,S,E:Double);
                  constructor initnul;
                  procedure LoadFromDXF(var f:TZMemReader;ptu:PExtensionData;var drawing:TDrawingDef);virtual;
@@ -48,13 +45,12 @@ GDBObjArc= object(GDBObjPlain)
                  procedure SaveToDXF(var outhandle:{Integer}TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
                  procedure DrawGeometry(lw:Integer;var DC:TDrawContext{infrustumactualy:TActulity;subrender:Integer});virtual;
                  procedure addcontrolpoints(tdesc:Pointer);virtual;
-                 procedure remaponecontrolpoint(pdesc:pcontrolpointdesc);virtual;
+                 procedure remaponecontrolpoint(pdesc:pcontrolpointdesc;ProjectProc:GDBProjectProc);virtual;
                  procedure CalcObjMatrix(pdrawing:PTDrawingDef=nil);virtual;
                  procedure precalc;
                  procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext;Stage:TEFStages=EFAllStages);virtual;
                  procedure createpoints(var DC:TDrawContext);virtual;
                  procedure getoutbound(var DC:TDrawContext);virtual;
-                 procedure RenderFeedback(pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc;var DC:TDrawContext);virtual;
                  procedure projectpoint;virtual;
                  function onmouse(var popa:TZctnrVectorPGDBaseEntity;const MF:ClipArray;InSubEntry:Boolean):Boolean;virtual;
                  function getsnap(var osp:os_record; var pdata:Pointer; const param:OGLWndtype; ProjectProc:GDBProjectProc;SnapMode:TGDBOSMode):Boolean;virtual;
@@ -99,10 +95,10 @@ var
 begin
     objmatrix:=uzegeometry.MatrixMultiply(PGDBObjWithLocalCS(p)^.objmatrix,t_matrix^);
 
-    tv:=PGDBVertex4D(@t_matrix[3])^;
-    PGDBVertex4D(@t_matrix[3])^:=NulVertex4D;
+    tv:=PGDBVertex4D(@t_matrix.mtr[3])^;
+    PGDBVertex4D(@t_matrix.mtr[3])^:=NulVertex4D;
     //MajorAxis:=VectorTransform3D(PGDBObjEllipse(p)^.MajorAxis,t_matrix^);
-    PGDBVertex4D(@t_matrix[3])^:=tv;
+    PGDBVertex4D(@t_matrix.mtr[3])^:=tv;
 
      {Local.oz:=PGDBVertex(@objmatrix[2])^;
 
@@ -142,7 +138,7 @@ var
   sav,eav,pins:gdbvertex;
 begin
   precalc;
-  if t_matrix[0].v[0]*t_matrix[1].v[1]*t_matrix[2].v[2]<eps then begin
+  if t_matrix.mtr[0].v[0]*t_matrix.mtr[1].v[1]*t_matrix.mtr[2].v[2]<eps then begin
     sav:=q2;
     eav:=q0;
   end else begin
@@ -175,15 +171,15 @@ begin
      oy:=NormalizeVertex(CrossVertex(Local.basis.oz,Local.basis.ox));
      m:=CreateMatrixFromBasis(ox,oy,Local.basis.oz);
 
-     Local.P_insert:=VectorTransform3D(PGDBVertex(@objmatrix[3])^,m);
-     self.R:=PGDBVertex(@objmatrix[0])^.x/local.basis.OX.x;
+     Local.P_insert:=VectorTransform3D(PGDBVertex(@objmatrix.mtr[3])^,m);
+     self.R:=PGDBVertex(@objmatrix.mtr[0])^.x/local.basis.OX.x;
 end;
 function GDBObjARC.CalcTrueInFrustum;
 var
   i:Integer;
   rad:Double;
 begin
-  rad:=abs(ObjMatrix[0].v[0]);
+  rad:=abs(ObjMatrix.mtr[0].v[0]);
   for i:=0 to 5 do
     if(frustum[i].v[0] * P_insert_in_WCS.x + frustum[i].v[1] * P_insert_in_WCS.y + frustum[i].v[2] * P_insert_in_WCS.z + frustum[i].v[3]+rad{+GetLTCorrectH} < 0 ) then
       exit(IREmpty);
@@ -223,7 +219,7 @@ begin
   r := 1;
   startangle := 0;
   endangle := pi/2;
-  PProjoutbound:=nil;
+  //PProjoutbound:=nil;
   Vertex3D_in_WCS_Array.init(3);
 end;
 constructor GDBObjARC.init;
@@ -234,7 +230,7 @@ begin
   r := rr;
   startangle := s;
   endangle := e;
-  PProjoutbound:=nil;
+  //PProjoutbound:=nil;
   Vertex3D_in_WCS_Array.init(3);
   //format;
 end;
@@ -260,11 +256,11 @@ var m1:DMatrix4D;
     v:GDBvertex4D;
 begin
   inherited CalcObjMatrix;
-  m1:=ONEMATRIX;
-  m1[0].v[0] := r;
-  m1[1].v[1] := r;
-  m1[2].v[2] := r;
-  //m1[3, 3] := r;
+  //m1:=ONEMATRIX;
+  //m1.mtr[0].v[0] := r;
+  //m1.mtr[1].v[1] := r;
+  //m1.mtr[2].v[2] := r;
+  m1:=CreateScaleMatrix(r);
   objmatrix:=matrixmultiply(m1,objmatrix);
 
     pgdbvertex(@v)^:=local.p_insert;
@@ -414,11 +410,11 @@ begin
          outbound[3]:=VectorTransform3d(CreateVertex(minx,miny,0),objMatrix);
 
 
-  if PProjoutbound=nil then
+  {if PProjoutbound=nil then
   begin
        Getmem(Pointer(PProjoutbound),sizeof(GDBOOutbound2DIArray));
        PProjoutbound^.init(4);
-  end;
+  end;}
 end;
 procedure GDBObjARC.createpoints(var DC:TDrawContext);
 var
@@ -460,44 +456,7 @@ begin
   end;
   Vertex3D_in_WCS_Array.Shrink;
 end;
-procedure GDBObjARC.Renderfeedback;
-var //pm:DMatrix4D;
-    tv:GDBvertex;
-    //d:Double;
-begin
-           {gdb.GetCurrentDWG^.myGluProject2}ProjectProc(Local.p_insert,ProjP_insert);
-           pprojoutbound^.clear;
-           //pm:=gdb.GetCurrentDWG.pcamera^.modelMatrix;
-           {gdb.GetCurrentDWG^.myGluProject2}ProjectProc(outbound[0],tv);
-           pprojoutbound^.PushBackIfNotLastWithCompareProc(ToVertex2DI(tv),EqualVertex2DI);
-           {gdb.GetCurrentDWG^.myGluProject2}ProjectProc(outbound[1],tv);
-           pprojoutbound^.PushBackIfNotLastWithCompareProc(ToVertex2DI(tv),EqualVertex2DI);
-           {gdb.GetCurrentDWG^.myGluProject2}ProjectProc(outbound[2],tv);
-           pprojoutbound^.PushBackIfNotLastWithCompareProc(ToVertex2DI(tv),EqualVertex2DI);
-           {gdb.GetCurrentDWG^.myGluProject2}ProjectProc(outbound[3],tv);
-           pprojoutbound^.PushBackIfNotLastOrFirstWithCompareProc(ToVertex2DI(tv),EqualVertex2DI);
-           {gdb.GetCurrentDWG^.myGluProject2}ProjectProc(q0,pq0);
-           {gdb.GetCurrentDWG^.myGluProject2}ProjectProc(q1,pq1);
-           {gdb.GetCurrentDWG^.myGluProject2}ProjectProc(q2,pq2);
-           (*if pprojoutbound^.count<4 then
-           begin
-            lod:=4;
-            //projectpoint;
-           end
-           else
-           begin
-                d:=pprojoutbound^.perimetr;
-                d:=(angle/(2*pi))*(d/10);
-                if d>255 then d:=255;
-                if d<10 then d:=10;
-                if lod<>round(d) then
-                begin
-                     lod:=round(d);
-                     createpoints(dc);
-                end;
-                projectpoint;
-           end;*)
-end;
+
 procedure GDBObjARC.DrawGeometry;
 var
 //  i: Integer;
@@ -584,7 +543,7 @@ begin
   end;
   startangle := startangle * pi / 180;
   endangle := endangle * pi / 180;
-  PProjoutbound:=nil;
+  //PProjoutbound:=nil;
   dc:=drawing.createdrawingrc;
   if vp.Layer=nil then
                       vp.Layer:=nil;
@@ -595,7 +554,7 @@ var
  i:Integer;
  rad:Double;
 begin
- rad:=abs(ObjMatrix[0].v[0]);
+ rad:=abs(ObjMatrix.mtr[0].v[0]);
  for i:=0 to 5 do begin
    if(mf[i].v[0] * P_insert_in_WCS.x + mf[i].v[1] * P_insert_in_WCS.y + mf[i].v[2] * P_insert_in_WCS.z + mf[i].v[3]+rad < 0 ) then
    exit(false);
@@ -605,20 +564,22 @@ begin
    if CalcPointTrueInFrustum(P_insert_in_WCS,mf)=IRFully then
      result:=true;
 end;
-procedure GDBObjARC.remaponecontrolpoint(pdesc:pcontrolpointdesc);
+procedure GDBObjARC.remaponecontrolpoint(pdesc:pcontrolpointdesc;ProjectProc:GDBProjectProc);
+var
+  tv:GDBvertex;
 begin
   if pdesc^.pointtype=os_begin then begin
     pdesc.worldcoord:=q0;
-    pdesc.dispcoord.x:=round(Pq0.x);
-    pdesc.dispcoord.y:=round(Pq0.y);
+    ProjectProc(pdesc.worldcoord,tv);
+    pdesc.dispcoord:=ToVertex2DI(tv);
   end else if pdesc^.pointtype=os_midle then begin
     pdesc.worldcoord:=q1;
-    pdesc.dispcoord.x:=round(Pq1.x);
-    pdesc.dispcoord.y:=round(Pq1.y);
+    ProjectProc(pdesc.worldcoord,tv);
+    pdesc.dispcoord:=ToVertex2DI(tv);
   end else if pdesc^.pointtype=os_end then begin
     pdesc.worldcoord:=q2;
-    pdesc.dispcoord.x:=round(Pq2.x);
-    pdesc.dispcoord.y:=round(Pq2.y);
+    ProjectProc(pdesc.worldcoord,tv);
+    pdesc.dispcoord:=ToVertex2DI(tv);
   end;
 end;
 procedure GDBObjARC.addcontrolpoints(tdesc:Pointer);
@@ -665,7 +626,8 @@ begin
             then
             begin
             osp.worldcoord:=P_insert_in_WCS;
-            osp.dispcoord:=ProjP_insert;
+            ProjectProc(osp.worldcoord,osp.dispcoord);
+            //osp.dispcoord:=ProjP_insert;
             osp.ostype:=os_center;
             end
             else osp.ostype:=os_none;
@@ -675,7 +637,7 @@ begin
             then
             begin
             osp.worldcoord:=q0;
-            pgdbvertex2d(@osp.dispcoord)^:=pgdbvertex2d(@pq0)^;
+            ProjectProc(osp.worldcoord,osp.dispcoord);
             osp.ostype:=os_begin;
             end
             else osp.ostype:=os_none;
@@ -685,7 +647,7 @@ begin
             then
             begin
             osp.worldcoord:=q1;
-            pgdbvertex2d(@osp.dispcoord)^:=pgdbvertex2d(@pq1)^;
+            ProjectProc(osp.worldcoord,osp.dispcoord);
             osp.ostype:=os_midle;
             end
             else osp.ostype:=os_none;
@@ -695,7 +657,7 @@ begin
             then
             begin
             osp.worldcoord:=q2;
-            pgdbvertex2d(@osp.dispcoord)^:=pgdbvertex2d(@pq2)^;
+            ProjectProc(osp.worldcoord,osp.dispcoord);
             osp.ostype:=os_end;
             end
             else osp.ostype:=os_none;
@@ -734,7 +696,7 @@ var
 begin
   m:=ObjMatrix;
   MatrixInvert(m);
-  m[3]:=NulVector4D;
+  m.mtr[3]:=NulVector4D;
 
   tq0:=VectorTransform3D(q0*R,m);
   tq1:=VectorTransform3D(q1*R,m);
@@ -785,8 +747,6 @@ begin
   pgdbobjarc(refp)^.startangle := startangle;
   pgdbobjarc(refp)^.endangle := endangle;
   pgdbobjarc(refp)^.r := r;
-  //pgdbobjarc(refp)^.format;
-  //pgdbobjarc(refp)^.renderfeedback(gdb.GetCurrentDWG.pcamera^.POSCOUNT,gdb.GetCurrentDWG.pcamera^,nil);
 end;
 function AllocArc:PGDBObjArc;
 begin

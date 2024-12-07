@@ -1,27 +1,15 @@
 .PHONY: pdf html all example getpdftheme
 default: all
 
-OSDETECT:=
+PATHDELIM:=/
 ifeq ($(OS),Windows_NT)
-	OSDETECT:=WIN32
-else
-	UNAME_S:=$(shell uname -s)
-	ifeq ($(UNAME_S),Linux)
-		OSDETECT=LINUX
-	endif
-	ifeq ($(UNAME_S),Darwin)
-		OSDETECT:=OSX
-	endif
+	PATHDELIM:=\\
 endif
+PATHDELIM:=$(strip $(PATHDELIM))
+
 ASCIIDOCTOR_PDF_DIR:=$(shell gem contents asciidoctor-pdf --show-install-dir)
 RULASTCOMMIT:=$(shell git log --pretty=tformat:\"%H\" -n1 locale/ru)
 RUVERSION:=$(shell git describe --tags  $(RULASTCOMMIT))
-PATHDELIM:=
-ifeq ($(OSDETECT),WIN32)
-	PATHDELIM =\\
-else
-	PATHDELIM =/
-endif
 
 version:
 	@echo RULASTCOMMIT: $(RULASTCOMMIT)

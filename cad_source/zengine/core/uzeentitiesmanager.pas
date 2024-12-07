@@ -21,7 +21,7 @@ unit uzeentitiesmanager;
 
 
 interface
-uses LCLProc,uzeconsts,uzepalette,uzestyleslinetypes,uzeentityfactory,
+uses uzbLogIntf,uzeconsts,uzepalette,uzestyleslinetypes,uzeentityfactory,
      uzeutils,uzestyleslayers,sysutils,uzbtypes,UGDBVisibleOpenArray,
      uzegeometrytypes,uzeentgenericsubentry,uzeentity;
 function ENTF_CreateLine(owner:PGDBObjGenericSubEntry;ownerarray:PGDBObjEntityOpenArray;
@@ -75,7 +75,7 @@ begin
                        else
                            begin
                                 pb:=nil;
-                                debugln('{E}ENTF_CreateBlockInsert: BlockInsert entity not registred');
+                                ZDebugLN('{E}ENTF_CreateBlockInsert: BlockInsert entity not registred');
                                 //programlog.LogOutStr('ENTF_CreateBlockInsert: BlockInsert entity not registred',lp_OldPos,LM_Error);
                            end;
   if pb=nil then exit;
@@ -95,7 +95,7 @@ begin
     end;
   end else begin
     result:=nil;
-    debugln('{E}ENTF_CreateSolid: Solid entity not registred');
+    zDebugLn('{E}ENTF_CreateSolid: Solid entity not registred');
   end;
 end;
 function ENTF_CreateSolid(owner:PGDBObjGenericSubEntry;ownerarray:PGDBObjEntityOpenArray;
@@ -111,7 +111,7 @@ begin
     end;
   end else begin
     result:=nil;
-    debugln('{E}ENTF_CreateSolid: Solid entity not registred');
+    zDebugLn('{E}ENTF_CreateSolid: Solid entity not registred');
   end;
 end;
 
@@ -129,7 +129,7 @@ begin
                                            else
                                                begin
                                                     result:=nil;
-                                                    debugln('{E}ENTF_CreateLine: Line entity not registred');
+                                                    zDebugLn('{E}ENTF_CreateLine: Line entity not registred');
                                                     //programlog.LogOutStr('ENTF_CreateLine: Line entity not registred',lp_OldPos,LM_Error);
                                                end;
 end;
@@ -146,7 +146,7 @@ begin
     end;
   end else begin
     result:=nil;
-    debugln('{E}ENTF_CreateCircle: Circle entity not registred');
+    zDebugLn('{E}ENTF_CreateCircle: Circle entity not registred');
       //programlog.LogOutStr('ENTF_CreateCircle: Circle entity not registred',lp_OldPos,LM_Error);
   end;
 end;
@@ -163,7 +163,7 @@ begin
     end;
   end else begin
     result:=nil;
-    debugln('{E}ENTF_CreateArc: Arc entity not registred');
+    zDebugLn('{E}ENTF_CreateArc: Arc entity not registred');
       //programlog.LogOutStr('ENTF_CreateCircle: Circle entity not registred',lp_OldPos,LM_Error);
   end;
 end;
@@ -180,7 +180,7 @@ begin
     end;
   end else begin
     result:=nil;
-    debugln('{E}NTF_CreateLWPolyLine: LWPolyLine entity not registred');
+    zDebugLn('{E}NTF_CreateLWPolyLine: LWPolyLine entity not registred');
       //programlog.LogOutStr('ENTF_CreateCircle: Circle entity not registred',lp_OldPos,LM_Error);
   end;
 end;

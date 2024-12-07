@@ -7,7 +7,7 @@ interface
 uses
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, ComCtrls,
   ActnList, laz.VirtualTrees,
-  uzbtypes,gzctnrVectorTypes,uzegeometrytypes ,uzegeometry, uzccommandsmanager,
+  {uzbtypes,}gzctnrVectorTypes,uzegeometrytypes ,uzegeometry, uzccommandsmanager,
   uzcinterface,uzeentity,uzcimagesmanager,uzcdrawings,
   varmandef,uzbstrproc,uzcnavigatorsnodedesk,LCLVersion;
 
@@ -218,7 +218,7 @@ else
       if assigned(pnd) then
         begin
           case pnd^.NodeMode of
-          TNMGroup:ImageIndex:=NavGroupIconIndex;
+          TNMGroup,TNMHardGroup:ImageIndex:=NavGroupIconIndex;
           TNMAutoGroup:ImageIndex:=NavAutoGroupIconIndex;
           TNMData:begin
                     if pnd^.Ident.pent<>nil then

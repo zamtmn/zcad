@@ -41,7 +41,7 @@ uses
 
   uzeentpolyline,             //unit describes line entity
                        //модуль описывающий примитив трехмерная ПОЛИлиния
-  uzeentabstracttext,uzeenttext,
+  {uzeentabstracttext,}uzeenttext,
                        //модуль описывающий примитив текст
 
   uzeentdimaligned, //unit describes aligned dimensional entity
@@ -73,7 +73,7 @@ uses
                       //системные переменные
   //uzgldrawcontext,
   uzcinterface,
-  uzbtypes, //base types
+  //uzbtypes, //base types
                       //описания базовых типов
   uzeconsts, //base constants
                       //описания базовых констант
@@ -285,13 +285,13 @@ var
   //**Получить список кабелей внутри группы для данного щита (графа)
   function getListCabInGroupHD(nameGroup:string;graphDev:TGraphDev):TListPolyline;
   var
-    i,j:integer;
-    cabNowMF:PGDBObjEntity;
-    cabNowvarext,polyext:TVariablesExtender;
-    cableNowMF:PGDBObjCable;
-    isHaveList:boolean;
+    //i,j:integer;
+    //cabNowMF:PGDBObjEntity;
+    //cabNowvarext,polyext:TVariablesExtender;
+    //cableNowMF:PGDBObjCable;
+    //isHaveList:boolean;
     pvd:pvardesk;
-    polyCab:PGDBObjPolyline;
+    //polyCab:PGDBObjPolyline;
 
     function getMainFuncCable(devNowvarext:TVariablesExtender):PGDBObjCable;
     begin
@@ -303,7 +303,7 @@ var
     //** Рекурсия получаем номер нужного нам головного устройства внутри нужного нам графа
     procedure getListCabPoly(intVertex:integer;var listPolyInGroup:TListPolyline);
     var
-      i,j:integer;
+      i{,j}:integer;
       cableNowMF:PGDBObjCable;
       polyCab:PGDBObjPolyline;
       devNowvarext:TVariablesExtender;
@@ -369,14 +369,14 @@ var
 
   //**Получить список всех кабелей внутри графа
   function getListAllCabInGraph(graphDev:TGraphDev):TListPolyline;
-  var
-    i,j:integer;
-    cabNowMF:PGDBObjEntity;
-    cabNowvarext,polyext:TVariablesExtender;
-    cableNowMF:PGDBObjCable;
-    isHaveList:boolean;
-    pvd:pvardesk;
-    polyCab:PGDBObjPolyline;
+  //var
+    //i,j:integer;
+    //cabNowMF:PGDBObjEntity;
+    //cabNowvarext,polyext:TVariablesExtender;
+    //cableNowMF:PGDBObjCable;
+    //isHaveList:boolean;
+    //pvd:pvardesk;
+    //polyCab:PGDBObjPolyline;
 
     function getMainFuncCable(devNowvarext:TVariablesExtender):PGDBObjCable;
     begin
@@ -388,7 +388,7 @@ var
     //** Рекурсия получаем номер нужного нам головного устройства внутри нужного нам графа
     procedure getListCabPoly(intVertex:integer;var listPolyInGroup:TListPolyline);
     var
-      i,j:integer;
+      i{,j}:integer;
       cableNowMF:PGDBObjCable;
       polyCab:PGDBObjPolyline;
       devNowvarext:TVariablesExtender;
@@ -454,14 +454,14 @@ var
 
   //**Получить список всех устройств внутри графа
   function getListAllDevInGraph(graphDev:TGraphDev):TListDev;
-  var
-    i,j:integer;
-    cabNowMF:PGDBObjEntity;
-    cabNowvarext,polyext:TVariablesExtender;
-    cableNowMF:PGDBObjCable;
-    isHaveList:boolean;
-    pvd:pvardesk;
-    polyCab:PGDBObjPolyline;
+  //var
+    //i,j:integer;
+    //cabNowMF:PGDBObjEntity;
+    //cabNowvarext,polyext:TVariablesExtender;
+    //cableNowMF:PGDBObjCable;
+    //isHaveList:boolean;
+    //pvd:pvardesk;
+    //polyCab:PGDBObjPolyline;
 
     function getMainFuncDev(devNowvarext:TVariablesExtender):PGDBObjDevice;
     begin
@@ -473,10 +473,10 @@ var
     //** Рекурсия получаем номер нужного нам головного устройства внутри нужного нам графа
     procedure getListDev(intVertex:integer;var listDevInGroup:TListDev);
     var
-      i,j:integer;
+      i{,j}:integer;
       //cableNowMF:PGDBObjCable;
-      myDev, myDevMF:PGDBObjDevice;
-      devNowvarext:TVariablesExtender;
+      myDev{, myDevMF}:PGDBObjDevice;
+      //devNowvarext:TVariablesExtender;
       //devNameGroup:string;
 
     begin
@@ -739,10 +739,10 @@ var
     //**Получить список устройств внутри группы для данного щита (графа)
   function getListDevInGroupHD(nameGroup:string;graphDev:TGraphDev):TListDev;
   var
-    i,j:integer;
-    cabNowMF:PGDBObjEntity;
-    cabNowvarext:TVariablesExtender;
-    isHaveList:boolean;
+    //i,j:integer;
+    //cabNowMF:PGDBObjEntity;
+    //cabNowvarext:TVariablesExtender;
+    //isHaveList:boolean;
     pvd:pvardesk;
     //** Рекурсия получаем номер нужного нам головного устройства внутри нужного нам графа
     procedure getListDev(deepdontlook:boolean;intVertex:integer;var listDevInGroup:TListDev);
@@ -750,8 +750,8 @@ var
       i:integer;
       devNowMF:PGDBObjDevice;
       devNowvarext:TVariablesExtender;
-      devNameGroup:string;
-      pvd2:pvardesk;
+      //devNameGroup:string;
+      //pvd2:pvardesk;
 
     begin
        //if deepdontlook then
@@ -828,10 +828,10 @@ var
   //**Получить список устройств внутри группы для данного щита (графа)
   function getListDevInGroupHDALL(graphDev:TGraphDev):TListDev;
   var
-    i,j:integer;
-    cabNowMF:PGDBObjEntity;
-    cabNowvarext:TVariablesExtender;
-    isHaveList:boolean;
+    //i,j:integer;
+    //cabNowMF:PGDBObjEntity;
+    //cabNowvarext:TVariablesExtender;
+    //isHaveList:boolean;
     pvd:pvardesk;
     //** Рекурсия получаем номер нужного нам головного устройства внутри нужного нам графа
     procedure getListDev(deepdontlook:boolean;intVertex:integer;var listDevInGroup:TListDev);
@@ -839,8 +839,8 @@ var
       i:integer;
       devNowMF:PGDBObjDevice;
       devNowvarext:TVariablesExtender;
-      devNameGroup:string;
-      pvd2:pvardesk;
+      //devNameGroup:string;
+      //pvd2:pvardesk;
 
     begin
        //if deepdontlook then
@@ -958,7 +958,7 @@ var
   procedure createNewGraph(graphDev:TGraphDev;intVertex:integer;var newGraph:TGraphDev;newInt:integer;cab:PGDBObjPolyLine;lastChild:boolean);
   var
     i:integer;
-    pvd,pvd2:pvardesk;
+    pvd{,pvd2}:pvardesk;
     newVertex:TVertex;
     childDevVarExt:TVariablesExtender;
     newcab:PGDBObjPolyLine;
@@ -1057,13 +1057,13 @@ var
   type
     TListString=specialize TVector<string>;
   var
-  graphDev,graphDevNew:TGraphDev;
+  graphDev{,graphDevNew}:TGraphDev;
   listNameHeadDev:TListString;
-  listHeadDev:TListDev;
+  //listHeadDev:TListDev;
   tempStr:string;
-  pvd:pvardesk;
-  devMaincFunc:PGDBObjDevice;
-  listGraphStrDev:TListGraphDev;
+  //pvd:pvardesk;
+  //devMaincFunc:PGDBObjDevice;
+  //listGraphStrDev:TListGraphDev;
 
   function getEntToDev(pEnt:PGDBObjEntity):PGDBObjDevice;
   begin
@@ -1075,13 +1075,13 @@ var
   //** Рекурсия получаем список имен всех головных устройств без учета ограничителей
   procedure getListNameHeadDevinGraph(graphFullDev:TGraphDev;intVertex:integer;var listStr:TListString);
   var
-    i,count:integer;
-    lenCable:double;
+    i{,count}:integer;
+    //lenCable:double;
     pvd:pvardesk;
     devName:string;
     isListDev:boolean;
-    newVertex:TVertex;
-    newVertexIndex:integer;
+    //newVertex:TVertex;
+    //newVertexIndex:integer;
   begin
      isListDev:=true;
      pvd:=FindVariableInEnt(graphFullDev.Vertices[intVertex].getDevice,velec_GC_HeadDevice);
@@ -1110,9 +1110,9 @@ var
     pvd,pvd2:pvardesk;
     //devName:string;
     devNow:PGDBObjDevice;
-    devNowMF,listDevMF:PGDBObjDevice;
+    devNowMF{,listDevMF}:PGDBObjDevice;
     isListDev:boolean;
-    listdevvarext,devNowvarext:TVariablesExtender;
+    {listdevvarext,}devNowvarext:TVariablesExtender;
 
   begin
      isListDev:=true;
@@ -1178,7 +1178,7 @@ var
   function getListStructurGraphEM(listFullGraphEM:TListGraphDev):TListGraphDev;
   var
      graphDev,graphDevNew:TGraphDev;
-     listGraphStrDev:TListGraphDev;
+     //listGraphStrDev:TListGraphDev;
 
 
   //procedure getStructurGraphEM(var graphStrDev:TGraphDev;intVertex:integer);
@@ -1193,9 +1193,9 @@ var
   //** Рекурсия если вершина разрыв или переход, то пропускаем
   procedure getStructurGraphEM(graphFullDev:TGraphDev;intVertex:integer;var graphStrDev:TGraphDev;parentIntVert:integer;lengthCab:double);
   var
-    i,count:integer;
+    i{,count}:integer;
     lenCable:double;
-    pvd:pvardesk;
+    //pvd:pvardesk;
     newVertex:TVertex;
     newVertexIndex:integer;
   begin
@@ -1331,10 +1331,10 @@ var
   procedure addMainSumSubVertex(graphDev:TGraphDev;listEndIntVertex:TListInteger);
   var
     i:integer;
-    count:integer;
-    vert:TVertex;
-    pvd:pvardesk;
-    intVert:integer;
+    //count:integer;
+    //vert:TVertex;
+    //pvd:pvardesk;
+    //intVert:integer;
   begin
      for i:=0 to listEndIntVertex.size-1 do
          addSumSubVertex(graphDev,graphDev.Vertices[listEndIntVertex[i]].Parent.Index,0);
@@ -1397,7 +1397,7 @@ type
  TListDevice=specialize TVector<pGDBObjDevice>;
  TListCable=specialize TVector<PGDBObjPolyLine>;
 var
-   i:integer;
+   //i:integer;
    graphDev:TGraphDev;
    vertexDev:TVertex;
    listDevice:TListDevice;
@@ -1682,7 +1682,7 @@ const
   size=5;
   indent=30;
 type
-   PTInfoVertex=^TInfoVertex;
+   //PTInfoVertex=^TInfoVertex;
    TInfoVertex=record
        num,kol,childs:Integer;
        poz:GDBVertex2D;
@@ -1698,9 +1698,9 @@ var
   //iNum:integer;
   listVertex:TListVertex;
   infoVertex:TInfoVertex;
-  pt1,pt2,pt3,ptext,ptSt,ptEd:GDBVertex;
+  pt1,pt2{,pt3,ptext},ptSt,ptEd:GDBVertex;
   VertexPath: TClassList;
-  pv:pGDBObjDevice;
+  //pv:pGDBObjDevice;
   //ppvvarext,pvarv:TVariablesExtender;
   //pvmc,pvv:pvardesk;
 
@@ -1717,20 +1717,20 @@ var
 
   procedure addBlockonDraw(dev:pGDBObjDevice;var currentcoord:GDBVertex; var root:GDBObjRoot);
   var
-      datname:String;
-      pv:pGDBObjDevice;
+      //datname:String;
+      //pv:pGDBObjDevice;
       DC:TDrawContext;
-      lx,{rx,}uy,dy:Double;
-        c:integer;
-        pCentralVarext,pVarext:TVariablesExtender;
-        pu:PTSimpleUnit;
-        extensionssave:TEntityExtensions;
+      //lx,{rx,}uy,dy:Double;
+        //c:integer;
+        //pCentralVarext,pVarext:TVariablesExtender;
+        //pu:PTSimpleUnit;
+        //extensionssave:TEntityExtensions;
         pnevdev:PGDBObjDevice;
-        entvarext,delvarext:TVariablesExtender;
+        //entvarext,delvarext:TVariablesExtender;
         PBH:PGDBObjBlockdef;
-        t_matrix:DMatrix4D;
-        ir2:itrec;
-        pobj,pcobj:PGDBObjEntity;
+        //t_matrix:DMatrix4D;
+        //ir2:itrec;
+        //pobj,pcobj:PGDBObjEntity;
   begin
 
       //ZCMsgCallBackInterface.TextMessage('addBlockonDraw DEVICE-' + dev^.Name,TMWOHistoryOut);
@@ -1986,11 +1986,11 @@ end;
 
 function TDummyComparer.Compare (Edge1, Edge2: Pointer): Integer;
 var
-  e1,e2:TAttrSet;
+  e1{,e2}:TAttrSet;
 begin
    result:=0;
    e1:=TAttrSet(Edge1);
-   e2:=TAttrSet(Edge2);
+   //e2:=TAttrSet(Edge2);
 
    ZCMsgCallBackInterface.TextMessage('sssssssssssssss'+e1.ClassName,TMWOHistoryOut);
    //ZCMsgCallBackInterface.TextMessage('xxxxxxssssss'+e1.AsString['infoEdge'],TMWOHistoryOut);
@@ -2016,8 +2016,8 @@ begin
    //в зависимости что чего меньше-больше
 end;
 function TDummyComparer.CompareEdges (Edge1, Edge2: Pointer): Integer;
-var
-  e1,e2:TAttrSet;
+//var
+  //e1,e2:TAttrSet;
 begin
 
    ////result:=1;

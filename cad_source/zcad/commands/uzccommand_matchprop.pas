@@ -33,7 +33,7 @@ uses
   uzbtypes,
   uzegeometry,
   uzeentity,uzeenttext,uzgldrawcontext,uzcdrawing,uzeconsts,
-  gzUndoCmdChgData,zUndoCmdChgBaseTypes,
+  //gzUndoCmdChgData,zUndoCmdChgBaseTypes,
   URecordDescriptor,typedescriptors,Varman,
   uzeentabstracttext,uzepalette,
   zUndoCmdChgTypes,gzUndoCmdChgData2,zUndoCmdChgExtTypes;

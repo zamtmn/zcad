@@ -21,8 +21,9 @@ unit UGDBObjBlockdefArray;
 {$INCLUDE zengineconfig.inc}
 {$PointerMath ON}
 interface
-uses LCLProc,uzgldrawcontext,uzedrawingdef,uzbstrproc,uzeblockdef,gzctnrVectorObjects,
-     gzctnrVectorTypes,sysutils,uzbtypes,uzegeometry,uzbLogIntf,Strings;
+uses
+  uzgldrawcontext,uzedrawingdef,uzbstrproc,uzeblockdef, gzctnrVectorObjects,
+  gzctnrVectorTypes,sysutils,uzbtypes,uzegeometry,uzbLogIntf,Strings;
 type
 {Export+}
 {REGISTEROBJECTTYPE GDBObjBlockdefArray}
@@ -114,7 +115,7 @@ var
       ir:itrec;
 begin
   //programlog.LogOutStr('GDBObjBlockdefArray.FormatEntity;',lp_IncPos,LM_Debug);
-  debugln('{D+}GDBObjBlockdefArray.FormatEntity;');
+  zDebugLn('{D+}GDBObjBlockdefArray.FormatEntity;');
   p:=beginiterate(ir);
   if p<>nil then
   repeat
@@ -129,7 +130,7 @@ begin
        //programlog.LogOutStr('end;{Formatting}',lp_DecPos,LM_Debug);
        p:=iterate(ir);
   until p=nil;
-  debugln('{D-}end;{GDBObjBlockdefArray.FormatEntity;}');
+  zDebugLn('{D-}end;{GDBObjBlockdefArray.FormatEntity;}');
   //programlog.LogOutStr('end;{GDBObjBlockdefArray.FormatEntity;}',lp_DecPos,LM_Debug);
 end;
 function GDBObjBlockdefArray.getblockdef;

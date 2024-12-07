@@ -23,8 +23,8 @@ unit uzeutils;
 interface
 uses
   uzepalette,uzestyleslinetypes,uzestyleslayers,uzedrawingsimple,
-  gzctnrVectorTypes,uzbtypes,uzeentity,uzegeometry,uzeentgenericsubentry,gzctnrSTL
-  ,LazLogger;
+  gzctnrVectorTypes,uzbtypes,uzeentity,uzegeometry,uzeentgenericsubentry,
+  gzctnrSTL,uzbLogIntf;
 type
   TEntPropSetterFromDrawing=procedure(const PEnt: PGDBObjEntity; var Drawing:TSimpleDrawing);
   TEntPropSetters=TMyVector<TEntPropSetterFromDrawing>;
@@ -144,6 +144,6 @@ begin
   zeRegisterEntPropSetter(zeSetBaseEntPropFromDrawingProp);
 end;
 finalization
-  debugln('{I}[UnitsFinalization] Unit "',{$INCLUDE %FILE%},'" finalization');
+  zDebugln('{I}[UnitsFinalization] Unit "'+{$INCLUDE %FILE%}+'" finalization');
   EntPropSetters.Destroy;
 end.

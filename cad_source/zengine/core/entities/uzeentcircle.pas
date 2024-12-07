@@ -38,10 +38,6 @@ GDBObjCircle= object(GDBObjWithLocalCS)
                  q1:GDBvertex;
                  q2:GDBvertex;
                  q3:GDBvertex;
-                 pq0:GDBvertex;
-                 pq1:GDBvertex;
-                 pq2:GDBvertex;
-                 pq3:GDBvertex;
                  Outbound:OutBound4V;
                  Vertex3D_in_WCS_Array:GDBPoint3DArray;
                  constructor init(own:Pointer;layeraddres:PGDBLayerProp;LW:SmallInt;p:GDBvertex;RR:Double);
@@ -51,7 +47,6 @@ GDBObjCircle= object(GDBObjWithLocalCS)
                  procedure CalcObjMatrix(pdrawing:PTDrawingDef=nil);virtual;
                  function calcinfrustum(const frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:Integer; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double):Boolean;virtual;
                  function CalcTrueInFrustum(const frustum:ClipArray;visibleactualy:TActulity):TInBoundingVolume;virtual;
-                 procedure RenderFeedback(pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc;var DC:TDrawContext);virtual;
                  procedure getoutbound(var DC:TDrawContext);virtual;
                  procedure SaveToDXF(var outhandle:{Integer}TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
                  procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext;Stage:TEFStages=EFAllStages);virtual;
@@ -65,7 +60,7 @@ GDBObjCircle= object(GDBObjWithLocalCS)
                  function getsnap(var osp:os_record; var pdata:Pointer; const param:OGLWndtype; ProjectProc:GDBProjectProc;SnapMode:TGDBOSMode):Boolean;virtual;
                  //function InRect:TInRect;virtual;
                  procedure addcontrolpoints(tdesc:Pointer);virtual;
-                 procedure remaponecontrolpoint(pdesc:pcontrolpointdesc);virtual;
+                 procedure remaponecontrolpoint(pdesc:pcontrolpointdesc;ProjectProc:GDBProjectProc);virtual;
                  function beforertmodify:Pointer;virtual;
                  procedure rtmodifyonepoint(const rtmod:TRTModifyData);virtual;
                  function IsRTNeedModify(const Point:PControlPointDesc; p:Pointer):Boolean;virtual;
@@ -134,8 +129,8 @@ begin
      oy:=NormalizeVertex(CrossVertex(Local.basis.oz,Local.basis.ox));
      m:=CreateMatrixFromBasis(ox,oy,Local.basis.oz);
 
-     Local.P_insert:=VectorTransform3D(PGDBVertex(@objmatrix[3])^,m);
-     self.Radius:=PGDBVertex(@objmatrix[0])^.x/local.basis.OX.x;
+     Local.P_insert:=VectorTransform3D(PGDBVertex(@objmatrix.mtr[3])^,m);
+     self.Radius:=PGDBVertex(@objmatrix.mtr[0])^.x/local.basis.OX.x;
      {scale.y:=PGDBVertex(@objmatrix[1])^.y/local.Oy.y;
      scale.z:=PGDBVertex(@objmatrix[2])^.z/local.Oz.z;}
 
@@ -236,10 +231,6 @@ begin
      q1:=nulvertex;
      q2:=nulvertex;
      q3:=nulvertex;
-     pq0:=nulvertex;
-     pq1:=nulvertex;
-     pq2:=nulvertex;
-     pq3:=nulvertex;
      Outbound[0]:=nulvertex;
      Outbound[1]:=nulvertex;
      Outbound[2]:=nulvertex;
@@ -264,7 +255,7 @@ begin
   inherited initnul(nil);
   //vp.ID := GDBCircleID;
   Radius := 1;
-  PProjoutbound:=nil;
+  //PProjoutbound:=nil;
   Vertex3D_in_WCS_Array.init(4);
 end;
 constructor GDBObjCircle.init;
@@ -277,7 +268,7 @@ begin
   Local.basis.oz:=ZWCS;
   Radius := rr;
   //ObjToString('','');
-  PProjoutbound:=nil;
+  //PProjoutbound:=nil;
   Vertex3D_in_WCS_Array.init(4);
   //format;
 end;
@@ -349,11 +340,11 @@ begin
 
 
 
-  if PProjoutbound=nil then
+  {if PProjoutbound=nil then
   begin
        Getmem(Pointer(PProjoutbound),sizeof(GDBOOutbound2DIArray));
        PProjoutbound^.init(4);
-  end;
+  end;}
 end;
 procedure GDBObjCircle.createpoint(var DC:TDrawContext);
 var
@@ -387,57 +378,16 @@ begin
   until pvertex=nil;
   Vertex3D_in_WCS_Array.Shrink;
 end;
-procedure GDBObjCircle.Renderfeedback;
-var //pm:DMatrix4D;
-    tv:GDBvertex;
-    d:Double;
-begin
-           //myGluProject(Local.p_insert.x,Local.p_insert.y,Local.p_insert.z,@POGLWnd^.pcamera^.modelMatrix,@POGLWnd^.pcamera^.projMatrix,@POGLWnd^.pcamera^.viewport,ProjP_insert.x,ProjP_insert.y,ProjP_insert.z);
-           {gdb.GetCurrentDWG^.myGluProject2}ProjectProc(P_insert_in_WCS,ProjP_insert);
-           if assigned(pprojoutbound)then
-             pprojoutbound^.clear
-           else
-             getoutbound(dc);
-           //pm:=gdb.GetCurrentDWG.pcamera^.modelMatrix;
-           {gdb.GetCurrentDWG^.myGluProject2}ProjectProc(outbound[0],tv);
-           pprojoutbound^.PushBackIfNotLastWithCompareProc(ToVertex2DI(tv),EqualVertex2DI);
-           {gdb.GetCurrentDWG^.myGluProject2}ProjectProc(outbound[1],tv);
-           pprojoutbound^.PushBackIfNotLastWithCompareProc(ToVertex2DI(tv),EqualVertex2DI);
-           {gdb.GetCurrentDWG^.myGluProject2}ProjectProc(outbound[2],tv);
-           pprojoutbound^.PushBackIfNotLastWithCompareProc(ToVertex2DI(tv),EqualVertex2DI);
-           {gdb.GetCurrentDWG^.myGluProject2}ProjectProc(outbound[3],tv);
-           pprojoutbound^.PushBackIfNotLastOrFirstWithCompareProc(ToVertex2DI(tv),EqualVertex2DI);
-           {gdb.GetCurrentDWG^.myGluProject2}ProjectProc(q0,pq0);
-           {gdb.GetCurrentDWG^.myGluProject2}ProjectProc(q1,pq1);
-           {gdb.GetCurrentDWG^.myGluProject2}ProjectProc(q2,pq2);
-           {gdb.GetCurrentDWG^.myGluProject2}ProjectProc(q3,pq3);
-           if pprojoutbound^.count<4 then
-           begin
-            lod:=4;
-            //projectpoint;
-           end
-           else
-           begin
-                d:=pprojoutbound^.perimetr;
-                d:=d/10;
-                if d>255 then d:=255;
-                if d<10 then d:=10;
-                if lod<>round(d) then
-                begin
-                     lod:=round(d);
-                     createpoint(dc);
-                end;
-                projectpoint;
-           end;
-end;
+
 procedure GDBObjCircle.CalcObjMatrix;
 var m1{,m2,m3,m4}:DMatrix4D;
 begin
   inherited CalcObjMatrix;
-  m1:=ONEMATRIX;
-  m1[0].v[0] := Radius;
-  m1[1].v[1] := Radius;
-  m1[2].v[2] := Radius;
+  //m1:=ONEMATRIX;
+  //m1.mtr[0].v[0] := Radius;
+  //m1.mtr[1].v[1] := Radius;
+  //m1.mtr[2].v[2] := Radius;
+  m1:=CreateScaleMatrix(Radius);
   objmatrix:=matrixmultiply(m1,objmatrix);
 end;
 
@@ -535,7 +485,7 @@ var
   i:Integer;
   r:Double;
 begin
-  r:=abs(ObjMatrix[0].v[0]);
+  r:=abs(ObjMatrix.mtr[0].v[0]);
   for i:=0 to 5 do begin
     if(mf[i].v[0] * P_insert_in_WCS.x + mf[i].v[1] * P_insert_in_WCS.y + mf[i].v[2] * P_insert_in_WCS.z + mf[i].v[3]+r < 0 ) then
     exit(false);
@@ -557,7 +507,7 @@ var
   i:Integer;
   r:Double;
 begin
-  r:=abs(ObjMatrix[0].v[0]);
+  r:=abs(ObjMatrix.mtr[0].v[0]);
   for i:=0 to 5 do
     if(frustum[i].v[0] * P_insert_in_WCS.x + frustum[i].v[1] * P_insert_in_WCS.y + frustum[i].v[2] * P_insert_in_WCS.z + frustum[i].v[3]+r{+GetLTCorrectH} < 0 ) then
        exit(false);
@@ -568,7 +518,7 @@ var
   i:Integer;
   r:Double;
 begin
-  r:=abs(ObjMatrix[0].v[0]);
+  r:=abs(ObjMatrix.mtr[0].v[0]);
   for i:=0 to 5 do
     if(frustum[i].v[0] * P_insert_in_WCS.x + frustum[i].v[1] * P_insert_in_WCS.y + frustum[i].v[2] * P_insert_in_WCS.z + frustum[i].v[3]+r{+GetLTCorrectH} < 0 ) then
       exit(IREmpty);
@@ -591,7 +541,8 @@ begin
             then
             begin
             osp.worldcoord:=P_insert_in_WCS;
-            osp.dispcoord:=ProjP_insert;
+            ProjectProc(osp.worldcoord,osp.dispcoord);
+            //osp.dispcoord:=ProjP_insert;
             osp.ostype:=os_center;
             end
             else osp.ostype:=os_none;
@@ -601,7 +552,7 @@ begin
             then
             begin
             osp.worldcoord:=q0;
-            osp.dispcoord:=pq0;
+            ProjectProc(osp.worldcoord,osp.dispcoord);
             osp.ostype:=os_q0;
             end
             else osp.ostype:=os_none;
@@ -611,7 +562,7 @@ begin
             then
             begin
             osp.worldcoord:=q1;
-            osp.dispcoord:=pq1;
+            ProjectProc(osp.worldcoord,osp.dispcoord);
             osp.ostype:=os_q1;
             end
             else osp.ostype:=os_none;
@@ -621,7 +572,7 @@ begin
             then
             begin
             osp.worldcoord:=q2;
-            osp.dispcoord:=pq2;
+            ProjectProc(osp.worldcoord,osp.dispcoord);
             osp.ostype:=os_q2;
             end
             else osp.ostype:=os_none;
@@ -631,7 +582,7 @@ begin
             then
             begin
             osp.worldcoord:=q3;
-            osp.dispcoord:=pq3;
+            ProjectProc(osp.worldcoord,osp.dispcoord);
             osp.ostype:=os_q3;
             end
        end;
@@ -679,28 +630,30 @@ begin
      end;
      result:=IREmpty;}
 end;*)
-procedure GDBObjCircle.remaponecontrolpoint(pdesc:pcontrolpointdesc);
+procedure GDBObjCircle.remaponecontrolpoint(pdesc:pcontrolpointdesc;ProjectProc:GDBProjectProc);
+var
+  tv:GDBvertex;
 begin
   if pdesc^.pointtype=os_center then begin
     pdesc.worldcoord:=P_insert_in_WCS;
-    pdesc.dispcoord.x:=round(ProjP_insert.x);
-    pdesc.dispcoord.y:=round(ProjP_insert.y);
+    ProjectProc(pdesc.worldcoord,tv);
+    pdesc.dispcoord:=ToVertex2DI(tv);
   end else if pdesc^.pointtype=os_q0 then begin
     pdesc.worldcoord:=q0;
-    pdesc.dispcoord.x:=round(Pq0.x);
-    pdesc.dispcoord.y:=round(Pq0.y);
+    ProjectProc(pdesc.worldcoord,tv);
+    pdesc.dispcoord:=ToVertex2DI(tv);
   end else if pdesc^.pointtype=os_q1 then begin
     pdesc.worldcoord:=q1;
-    pdesc.dispcoord.x:=round(Pq1.x);
-    pdesc.dispcoord.y:=round(Pq1.y);
+    ProjectProc(pdesc.worldcoord,tv);
+    pdesc.dispcoord:=ToVertex2DI(tv);
   end else if pdesc^.pointtype=os_q2 then begin
     pdesc.worldcoord:=q2;
-    pdesc.dispcoord.x:=round(Pq2.x);
-    pdesc.dispcoord.y:=round(Pq2.y);
+    ProjectProc(pdesc.worldcoord,tv);
+    pdesc.dispcoord:=ToVertex2DI(tv);
   end else if pdesc^.pointtype=os_q3 then begin
     pdesc.worldcoord:=q3;
-    pdesc.dispcoord.x:=round(Pq3.x);
-    pdesc.dispcoord.y:=round(Pq3.y);
+    ProjectProc(pdesc.worldcoord,tv);
+    pdesc.dispcoord:=ToVertex2DI(tv);
   end;
 end;
 procedure GDBObjCircle.addcontrolpoints(tdesc:Pointer);
@@ -769,7 +722,7 @@ var
 begin
   m:=ObjMatrix;
   MatrixInvert(m);
-  m[3]:=NulVector4D;
+  m.mtr[3]:=NulVector4D;
   if rtmod.point.pointtype=os_center then begin
     Local.p_insert:=VectorTransform3D(rtmod.wc*Radius,m);
   end else if (rtmod.point.pointtype=os_q0)or(rtmod.point.pointtype=os_q1)or(rtmod.point.pointtype=os_q2)or(rtmod.point.pointtype=os_q3) then begin

@@ -23,7 +23,7 @@ interface
 
 uses
   uzbLogTypes,uzbLog,
-  StrUtils,SysUtils,
+  {StrUtils,}SysUtils,
   LazUTF8;
 
 const
@@ -78,7 +78,7 @@ constructor TLogFileBackend.init(fn:AnsiString);
 begin
   logfilename:=fn;
   CreateLog;
-  inherited;
+  inherited init;
 end;
 
 destructor TLogFileBackend.done;

@@ -272,44 +272,40 @@ var
   SubNode: TDomNode;
   i:integer;
   proxy:TPopUpMenyProxyAction;
-  tbutton:TZToolButton;
+  tmpBtn:TZToolButton;
   MPF:TMacroProcessFunc;
 begin
   ActionIndex:=getAttrValue(aNode,'Index',0);
-  tbutton:=TZToolButton.Create(tb);
+  tmpBtn:=TZToolButton.Create(tb);
   begin
-    //tbutton.style:=tbsButtonDrop;
-    tbutton.ShowCaption:=false;
-    tbutton.ShowHint:=true;
-    tbutton.PopupMenu:=TPopupMenu.Create(application);
-    tbutton.PopupMenu.Images:=actlist.Images;
-    {if assigned(_action) then
-      Caption:=_action.imgstr;}
-    tbutton.Parent:=tb;
-    tbutton.Visible:=true;
+    tmpBtn.ShowCaption:=false;
+    tmpBtn.ShowHint:=true;
+    tmpBtn.PopupMenu:=TPopupMenu.Create(application);
+    tmpBtn.PopupMenu.Images:=actlist.Images;
+    tmpBtn.Parent:=tb;
+    tmpBtn.Visible:=true;
 
     if assigned(aNode) then
       SubNode:=aNode.FirstChild;
     if assigned(SubNode) then
       while assigned(SubNode)do
       begin
-        TMenuDefaults.TryRunMenuCreateFunc(TMenuType.TMT_PopupMenu,fmf,SubNode.NodeName,SubNode,actlist,tmenuitem(tbutton.PopupMenu),mpf);
+        TMenuDefaults.TryRunMenuCreateFunc(TMenuType.TMT_PopupMenu,fmf,SubNode.NodeName,SubNode,actlist,tmenuitem(tmpBtn.PopupMenu){,mpf});
         SubNode:=SubNode.NextSibling;
       end;
-    if (ActionIndex>=0)and(ActionIndex<tbutton.PopupMenu.Items.Count) then
-      tbutton.action:=tbutton.PopupMenu.Items[ActionIndex].action;
-    for i:=0 to tbutton.PopupMenu.Items.Count-1 do
+    if (ActionIndex>=0)and(ActionIndex<tmpBtn.PopupMenu.Items.Count) then
+      tmpBtn.action:=tmpBtn.PopupMenu.Items[ActionIndex].action;
+    for i:=0 to tmpBtn.PopupMenu.Items.Count-1 do
     begin
-      if assigned(tbutton.PopupMenu.Items[i].action)then begin
+      if assigned(tmpBtn.PopupMenu.Items[i].action)then begin
         proxy:=TPopUpMenyProxyAction.Create(Application);
-        proxy.MainAction:=TAction(tbutton.PopupMenu.Items[i].action);
-        proxy.ToolButton:=tbutton;
-        proxy.Assign(tbutton.PopupMenu.Items[i].action);
-        tbutton.PopupMenu.Items[i].action:=proxy;
-        if proxy.MainAction.ImageIndex<>-1 then tbutton.caption:='';
+        proxy.MainAction:=TAction(tmpBtn.PopupMenu.Items[i].action);
+        proxy.ToolButton:=tmpBtn;
+        proxy.Assign(tmpBtn.PopupMenu.Items[i].action);
+        tmpBtn.PopupMenu.Items[i].action:=proxy;
+        if proxy.MainAction.ImageIndex<>-1 then tmpBtn.caption:='';
       end;
     end;
-    //Caption:='';
   end;
 end;
 
@@ -393,7 +389,7 @@ begin
   if actionshortcuts<>'' then begin
     repeat
           GetPartOfPath(actionshortcut,actionshortcuts,'|');
-          action.SecondaryShortCuts.AddObject(actionshortcut,TObject(pointer(MyTextToShortCut(actionshortcut))));
+          action.SecondaryShortCuts.AddObject(actionshortcut,TObject(MyTextToShortCut(actionshortcut)));
     until actionshortcuts='';
   end;
   actioncommand:=getAttrValue(aNode,'Command','');

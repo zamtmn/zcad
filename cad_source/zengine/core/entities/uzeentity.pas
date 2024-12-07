@@ -20,12 +20,13 @@ unit uzeentity;
 {$Mode delphi}{$H+}
 {$INCLUDE zengineconfig.inc}
 interface
-uses uzepalette,uzeobjectextender,uzgldrawerabstract,uzgldrawcontext,uzedrawingdef,
-     uzecamera,uzeentitiesprop,uzestyleslinetypes,
-     uzegeometrytypes,UGDBControlPointArray,uzeentsubordinated,uzbtypes,uzeconsts,
-     uzglviewareadata,uzegeometry,uzeffdxfsupport,sysutils,uzctnrVectorBytes,
-     uzestyleslayers,uzeenrepresentation,LazLogger,
-     uzMVReader,uzCtnrVectorpBaseEntity;
+uses
+  uzepalette,uzeobjectextender,uzgldrawerabstract,uzgldrawcontext,uzedrawingdef,
+  uzecamera,uzeentitiesprop,uzestyleslinetypes,
+  uzegeometrytypes,UGDBControlPointArray,uzeentsubordinated,uzbtypes,uzeconsts,
+  uzglviewareadata,uzegeometry,uzeffdxfsupport,sysutils,uzctnrVectorBytes,
+  uzestyleslayers,uzeenrepresentation,uzbLogIntf,
+  uzMVReader,uzCtnrVectorpBaseEntity;
 type
 taddotrac=procedure (var posr:os_record;const axis:GDBVertex) of object;
 TEFStage=(EFCalcEntityCS,EFDraw);
@@ -83,8 +84,8 @@ GDBObjEntity= object(GDBObjSubordinated)
                     procedure FormatAfterEdit(var drawing:TDrawingDef;var DC:TDrawContext;Stage:TEFStages=EFAllStages);virtual;
                     procedure FormatAfterFielfmod(PField,PTypeDescriptor:Pointer);virtual;
 
-                    procedure DrawWithAttrib(var DC:TDrawContext{visibleactualy:TActulity;subrender:Integer});virtual;
-                    procedure DrawWithOutAttrib({visibleactualy:TActulity;}var DC:TDrawContext{subrender:Integer});virtual;
+                    procedure DrawWithAttrib(var DC:TDrawContext);virtual;
+                    procedure DrawWithOutAttrib(var DC:TDrawContext);virtual;
 
                     procedure DrawGeometry(lw:Integer;var DC:TDrawContext{visibleactualy:TActulity;subrender:Integer});virtual;
                     procedure DrawOnlyGeometry(lw:Integer;var DC:TDrawContext{visibleactualy:TActulity;subrender:Integer});virtual;
@@ -92,8 +93,8 @@ GDBObjEntity= object(GDBObjSubordinated)
                     procedure Draw(lw:Integer;var DC:TDrawContext{visibleactualy:TActulity;subrender:Integer});virtual;
                     procedure DrawG(lw:Integer;var DC:TDrawContext{visibleactualy:TActulity;subrender:Integer});virtual;
 
-                    procedure RenderFeedback(pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc;var DC:TDrawContext);virtual;
-                    procedure RenderFeedbackIFNeed(pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc;var DC:TDrawContext);virtual;
+                    //procedure RenderFeedback(pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc;var DC:TDrawContext);virtual;
+                    //procedure RenderFeedbackIFNeed(pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc;var DC:TDrawContext);virtual;
                     function CalculateLineWeight(const DC:TDrawContext):Integer;//inline;
                     //function InRect:TInRect;virtual;
                     function Clone(own:Pointer):PGDBObjEntity;virtual;
@@ -130,7 +131,7 @@ GDBObjEntity= object(GDBObjSubordinated)
                     //procedure rtmodify(md:Pointer;dist,wc:gdbvertex;save:Boolean);virtual;
                     procedure rtmodifyonepoint(const rtmod:TRTModifyData);virtual;abstract;
                     procedure transform(const t_matrix:DMatrix4D);virtual;
-                    procedure remaponecontrolpoint(pdesc:PControlPointDesc);virtual;abstract;
+                    procedure remaponecontrolpoint(pdesc:PControlPointDesc;ProjectProc:GDBProjectProc);virtual;abstract;
                     function beforertmodify:Pointer;virtual;
                     procedure afterrtmodify(p:Pointer);virtual;
                     function IsRTNeedModify(const Point:PControlPointDesc; p:Pointer):Boolean;virtual;
@@ -667,17 +668,15 @@ begin
                   dc.selected:=_selected;
              end;
 end;
-procedure GDBObjEntity.RenderFeedbackIFNeed;
+{procedure GDBObjEntity.RenderFeedbackIFNeed;
 begin
-     if vp.LastCameraPos<>{gdb.GetCurrentDWG.pcamera^.POSCOUNT}pcount then
-                                                               Renderfeedback(pcount,camera,ProjectProc,dc);
-
-end;
-procedure GDBObjEntity.Renderfeedback;
+  if vp.LastCameraPos<>pcount then
+    Renderfeedback(pcount,camera,ProjectProc,dc);
+end;}
+{procedure GDBObjEntity.Renderfeedback;
 begin
-     vp.LastCameraPos:={gdb.GetCurrentDWG.pcamera^.POSCOUNT}pcount;
-  //DrawGeometry;
-end;
+  vp.LastCameraPos:=pcount;
+end;}
 
 {procedure GDBObjEntity.format;
 begin
@@ -1015,16 +1014,12 @@ procedure GDBObjEntity.remapcontrolpoints;
 var pdesc:pcontrolpointdesc;
     i:Integer;
 begin
-          { TODO : В примитивах нахуй ненужна проекция точек, убрать это хозяйство }
-          {if ScrollMode then }renderfeedback({gdb.GetCurrentDWG.pcamera^.POSCOUNT}pcount,camera,ProjectProc,dc);
           if pp.count<>0 then
           begin
                pdesc:=pp^.getparrayaspointer;
                for i:=0 to pp.count-1 do
                begin
-                    if pdesc.PDrawable<>nil then
-                                              pdesc.PDrawable.RenderFeedback(pcount,camera,ProjectProc,dc);
-                    remaponecontrolpoint(pdesc);
+                    remaponecontrolpoint(pdesc,ProjectProc);
                     inc(pdesc);
                end;
           end;
@@ -1033,99 +1028,7 @@ function GDBObjEntity.beforertmodify;
 begin
      result:=nil;
 end;
-(*procedure GDBObjEntity.rtmodify;
-var i:Integer;
-    point:pcontrolpointdesc;
-    p:Pointer;
-    var m:DMatrix4D;
-    t:gdbvertex;
-    tt:dvector4d;
-begin
-     if PSelectedObjDesc(md).pcontrolpoint^.count=0 then exit;
-     if PSelectedObjDesc(md).ptempobj=nil then
-     begin
-          PSelectedObjDesc(md).ptempobj:=Clone(nil);
-          //PSelectedObjDesc(md).ptempobj.BuildGeometry;
-          PSelectedObjDesc(md).ptempobj^.bp.Owner:=bp.Owner;
-          PSelectedObjDesc(md).ptempobj.format;
-     end;
-     p:=beforertmodify;
-     if save then PSelectedObjDesc(md).pcontrolpoint^.SelectedCount:=0;
-     point:=PSelectedObjDesc(md).pcontrolpoint^.parray;
-     for i:=1 to PSelectedObjDesc(md).pcontrolpoint^.count do
-     begin
-          if point.selected then
-          begin
-               if save then
-                           save:=save;
-               m:=PSelectedObjDesc(md).objaddr^.getownermatrix^;
-               tt:=m[3];
-               //dist.x:=0;
-               MatrixInvert(m);
-               m[3,0]:=0;
-               m[3,1]:=0;
-               m[3,2]:=0;
 
-               {t.x:=m[0,0];
-               t.y:=m[0,1];
-               t.z:=m[0,2];
-               t:=normalizevertex(t);
-               m[0,0]:=t.x;
-               m[0,1]:=t.y;
-               m[0,2]:=t.z;
-
-               t.x:=m[1,0];
-               t.y:=m[1,1];
-               t.z:=m[1,2];
-               t:=normalizevertex(t);
-               m[1,0]:=t.x;
-               m[1,1]:=t.y;
-               m[1,2]:=t.z;
-
-               t.x:=m[2,0];
-               t.y:=m[2,1];
-               t.z:=m[2,2];
-               t:=normalizevertex(t);
-               m[2,0]:=t.x;
-               m[2,1]:=t.y;
-               m[2,2]:=t.z;}
-
-
-
-
-
-
-
-               //uzegeometry.NormalizeVertex(tt)
-
-               t:=VectorTransform3D(dist,m);
-               if save then
-                           begin
-                                rtmodifyonepoint(point,@self,VectorTransform3D(dist,m),VectorTransform3D(wc,m),p);
-                                point.selected:=false;
-                           end
-                       else
-                           rtmodifyonepoint(point,PSelectedObjDesc(md).ptempobj,VectorTransform3D(dist,m),VectorTransform3D(wc,m),p);
-          end;
-          inc(point);
-     end;
-     if save then
-     begin
-          //--------------(PSelectedObjDesc(md).ptempobj).rtsave(@self);
-
-          PGDBObjGenericWithSubordinated(bp.owner)^.ImEdited(@self,bp.PSelfInOwnerArray);
-          PSelectedObjDesc(md).ptempobj^.done;
-          Freemem(Pointer(PSelectedObjDesc(md).ptempobj));
-          PSelectedObjDesc(md).ptempobj:=nil;
-     end
-     else
-     begin
-          PSelectedObjDesc(md).ptempobj.format;
-          //PSelectedObjDesc(md).ptempobj.renderfeedback;
-     end;
-     afterrtmodify(p);
-end;
-*)
 procedure GDBObjEntity.clearrtmodify(p:Pointer);
 begin
 
@@ -1270,6 +1173,6 @@ end;
 initialization
   GDBObjEntityDXFFeatures:=TDXFEntIODataManager.Create;
 finalization
-  debugln('{I}[UnitsFinalization] Unit "',{$INCLUDE %FILE%},'" finalization');
+  ZDebugLN('{I}[UnitsFinalization] Unit "'+{$INCLUDE %FILE%}+'" finalization');
   GDBObjEntityDXFFeatures.Destroy;
 end.

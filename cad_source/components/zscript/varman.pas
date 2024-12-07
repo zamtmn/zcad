@@ -22,7 +22,7 @@ unit Varman;
 
 interface
 uses
-  UEnumDescriptor,uzctnrVectorPointers,LCLProc,uabstractunit,
+  UEnumDescriptor,uzctnrVectorPointers,uabstractunit,
   SysUtils,UBaseTypeDescriptor,uzctnrVectorBytes,
   gzctnrVectorTypes,uzctnrvectorstrings,varmandef,gzctnrSTL,
   TypeDescriptors,URecordDescriptor,UObjectDescriptor,uzbstrproc,classes,typinfo,
@@ -271,6 +271,7 @@ function GetIntegerFromSavedUnit(const name,suffix:string;def,min,max:integer):i
 function GetAnsiStringFromSavedUnit(const name,suffix:ansistring;const def:ansistring):ansistring;
 function GetBooleanFromSavedUnit(const name,suffix:ansistring;def:Boolean):Boolean;
 procedure StoreIntegerToSavedUnit(const name,suffix:string;value:integer);
+procedure StoreBooleanToSavedUnit(const name,suffix:string;value:Boolean);
 procedure StoreAnsiStringToSavedUnit(const name,suffix:string;const value:string);
 procedure RegisterVarCategory(const CategoryName,CategoryUserName:string;TranslateFunc:TTranslateFunction);
 implementation
@@ -370,6 +371,20 @@ begin
      else
        pint:=pvd^.data.Addr.Instance;
      pint^:=value;
+end;
+procedure StoreBooleanToSavedUnit(const name,suffix:string;value:Boolean);
+var
+   pbool:PBoolean;
+   pvd:pvardesk;
+   vn:TInternalScriptString;
+begin
+     vn:=name+suffix;
+     pvd:=SavedUnit.FindValue(vn);
+     if not assigned(pvd) then
+       pbool:=SavedUnit.CreateVariable(vn,'Boolean').data.Addr.instance
+     else
+       pbool:=pvd^.data.Addr.Instance;
+     pbool^:=value;
 end;
 procedure StoreAnsiStringToSavedUnit(const name,suffix:string;const value:string);
 var
@@ -543,10 +558,10 @@ end;
 function TUnit.RegisterPointerType(ti:PTypeInfo):PUserTypeDescriptor;
 var
    td:PTypeData;
-   mf: PManagedField;
-   i:integer;
+   //mf: PManagedField;
+   //i:integer;
    etd:PGDBPointerDescriptor;
-   fd:FieldDescriptor;
+   //fd:FieldDescriptor;
 begin
      td:=GetTypeData(ti);
      Getmem(Pointer(etd),sizeof(GDBPointerDescriptor));
@@ -689,7 +704,7 @@ function TEntityUnit.FindVarDesc(const varname:TInternalScriptString):TInVectorA
 var
   p:ptunit;
   ir:itrec;
-  i:integer;
+  //i:integer;
 begin
   result:=inherited FindVarDesc(varname);
   if result.IsNil then begin
@@ -711,7 +726,7 @@ var
    pu:PTUnit;
    pv:pvardesk;
    ir:itrec;
-   value:TInternalScriptString;
+   //value:TInternalScriptString;
    realUsesCount:integer;
 begin
      membuf.TXTAddStringEOL('unit '+Name+';');
@@ -988,7 +1003,7 @@ end;
 function varmanager.CreateVariable2(const varname:TInternalScriptString; var vd:vardesk;attr:TVariableAttributes=0):TInVectorAddr;
 var
   size: LongWord;
-  i:TArrayIndex;
+  //i:TArrayIndex;
 begin
        if vd.data.ptd<>nil then
                           size:=vd.data.ptd^.SizeInBytes
@@ -1013,9 +1028,9 @@ function varmanager.findvardesc2(const varname: TInternalScriptString):TInVector
 var
   //pblock: pdblock;
   pdesc: pvardesk;
-  offset: Integer;
-  temp: pvardesk;
-  bc:PUserTypeDescriptor;
+  //offset: Integer;
+  //temp: pvardesk;
+  //bc:PUserTypeDescriptor;
       ir:itrec;
 begin
    pdesc:=self.vardescarray.beginiterate(ir);
@@ -1062,7 +1077,7 @@ type
 var parseerror{,parsesuberror}:Boolean;
     parseresult{,parsesubresult}:PTZctnrVectorStrings;
     count,typ:Integer;
-    {typename,}oldline, fieldname, {fieldvalue,} fieldtype, {sub, indmins, indmaxs, arrind1,}rname,wname,functionname,functionoperands: TInternalScriptString;
+    {typename,}{oldline,} fieldname, {fieldvalue,} fieldtype, {sub, indmins, indmaxs, arrind1,}{rname,wname,}functionname,functionoperands: TInternalScriptString;
     fieldgdbtype:PUserTypeDescriptor;
     i: Integer;
 //  indmin, indcount, size: LongWord;
@@ -1076,7 +1091,7 @@ var parseerror{,parsesuberror}:Boolean;
   //vv:smallint;
   mattr:GDBMetodModifier;
   //md:MetodDescriptor;
-  pf:PFieldDescriptor;
+  //pf:PFieldDescriptor;
 //function getla
 function getlastfirld:PBaseDescriptor;
 begin
@@ -1116,7 +1131,7 @@ begin
                                                 mattr:=m_destructor;
                                            end;
                                end;
-                               oldline:=line;
+                               //oldline:=line;
                                parseresult:=runparser('_softspace'#0'_identifier'#0'_softspace'#0,line,parseerror);
                                if parseerror then
                                                   begin
@@ -1179,7 +1194,7 @@ begin
                           begin
                                if state<>metods then
                                                     begin
-                                                      debugln('{E}Syntax error in file "%s"',[f.name]);
+                                                      zdebugln('{E}Syntax error in file "%s"',[f.name]);
                                                       raise Exception.CreateFmt('Syntax error in file "%s"',[f.name]);
                                                     end;
 
@@ -1188,10 +1203,10 @@ begin
           begin
                if state<>metods then
                                     begin
-                                      debugln('{E}Syntax error in file "%s"',[f.name]);
+                                      zdebugln('{E}Syntax error in file "%s"',[f.name]);
                                       raise Exception.CreateFmt('Syntax error in file "%s"',[f.name]);
                                     end;
-               oldline:=line;
+               //oldline:=line;
                parseresult:=runparser('_softspace'#0'_identifier'#0'_softspace'#0'=:'#0'_softspace'#0'_identifier'#0'_softspace'#0'=r=e=a=d'#0'_softspace'#0'_identifier'#0'_softspace'#0'=w=r=i=t=e'#0'_softspace'#0'_identifier'#0'_softspace'#0'=;',line,parseerror);
                if parseerror then
                                   begin
@@ -1216,7 +1231,7 @@ begin
                           begin
                                if state=metods then
                                                   begin
-                                                    debugln('{E}Syntax error in file "%s"',[f.name]);
+                                                    zdebugln('{E}Syntax error in file "%s"',[f.name]);
                                                     raise Exception.CreateFmt('Syntax error in file "%s"',[f.name]);
                                                   end
                                                else
@@ -1697,7 +1712,7 @@ end;
 function tsimpleunit.FindVarDesc(const varname:TInternalScriptString):TInVectorAddr;
 var p:ptunit;
     ir:itrec;
-    i:integer;
+    //i:integer;
 begin
      result:=self.InterfaceVariables.findvardesc2(varname);
      if result.IsNil then begin
@@ -1950,7 +1965,7 @@ begin
 end;
 finalization;
 begin
-  debugln('{I}[UnitsFinalization] Unit "',{$INCLUDE %FILE%},'" finalization');
+  zdebugln('{I}[UnitsFinalization] Unit "'+{$INCLUDE %FILE%}+'" finalization');
   VarCategory.Done;
   CategoryCollapsed.done;
 end;

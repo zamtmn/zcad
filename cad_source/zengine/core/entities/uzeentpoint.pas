@@ -31,7 +31,6 @@ PGDBObjPoint=^GDBObjPoint;
 GDBObjPoint= object(GDBObj3d)
                  P_insertInOCS:GDBvertex;
                  P_insertInWCS:GDBvertex;
-                 ProjPoint:GDBvertex;
                  constructor init(own:Pointer;layeraddres:PGDBLayerProp;LW:SmallInt;p:GDBvertex);
                  constructor initnul(owner:PGDBObjGenericWithSubordinated);
                  procedure LoadFromDXF(var f:TZMemReader;ptu:PExtensionData;var drawing:TDrawingDef);virtual;
@@ -40,12 +39,11 @@ GDBObjPoint= object(GDBObj3d)
 
                  procedure DrawGeometry(lw:Integer;var DC:TDrawContext{infrustumactualy:TActulity;subrender:Integer});virtual;
                  function calcinfrustum(const frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:Integer; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double):Boolean;virtual;
-                 procedure RenderFeedback(pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc;var DC:TDrawContext);virtual;
                  function getsnap(var osp:os_record; var pdata:Pointer; const param:OGLWndtype; ProjectProc:GDBProjectProc;SnapMode:TGDBOSMode):Boolean;virtual;
                  function onmouse(var popa:TZctnrVectorPGDBaseEntity;const MF:ClipArray;InSubEntry:Boolean):Boolean;virtual;
                  function CalcTrueInFrustum(const frustum:ClipArray;visibleactualy:TActulity):TInBoundingVolume;virtual;
                  procedure addcontrolpoints(tdesc:Pointer);virtual;
-                 procedure remaponecontrolpoint(pdesc:pcontrolpointdesc);virtual;
+                 procedure remaponecontrolpoint(pdesc:pcontrolpointdesc;ProjectProc:GDBProjectProc);virtual;
                  procedure rtmodifyonepoint(const rtmod:TRTModifyData);virtual;
                  function Clone(own:Pointer):PGDBObjEntity;virtual;
                  procedure rtsave(refp:Pointer);virtual;
@@ -163,10 +161,6 @@ begin
       end;
       end;
 end;
-procedure GDBObjPoint.RenderFeedback;
-begin
-  ProjectProc(P_insertInWCS,ProjPoint);
-end;
 function GDBObjPoint.getsnap;
 //var t,d,e:Double;
  //   tv,n,v:gdbvertex;
@@ -183,7 +177,8 @@ begin
             then
             begin
             osp.worldcoord:=P_insertInWCS;
-            osp.dispcoord:=projpoint;
+            ProjectProc(osp.worldcoord,osp.dispcoord);
+            //osp.dispcoord:=projpoint;
             osp.ostype:=os_point;
             end
             else osp.ostype:=os_none;
@@ -221,12 +216,16 @@ begin
       end;
       result:=IRFully;
 end;
-procedure GDBObjPoint.remaponecontrolpoint(pdesc:pcontrolpointdesc);
+procedure GDBObjPoint.remaponecontrolpoint(pdesc:pcontrolpointdesc;ProjectProc:GDBProjectProc);
+var
+  tv:GDBvertex;
 begin
   if pdesc^.pointtype=os_point then begin
     pdesc.worldcoord:=P_insertInOCS;
-    pdesc.dispcoord.x:=round(ProjPoint.x);
-    pdesc.dispcoord.y:=round(ProjPoint.y);
+    ProjectProc(pdesc.worldcoord,tv);
+    pdesc.dispcoord:=ToVertex2DI(tv);
+    //pdesc.dispcoord.x:=round(ProjPoint.x);
+    //pdesc.dispcoord.y:=round(ProjPoint.y);
   end;
 end;
 procedure GDBObjPoint.addcontrolpoints(tdesc:Pointer);

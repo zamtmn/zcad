@@ -47,15 +47,17 @@ begin
      Local.basis.oy:=NormalizeVertex(Local.basis.oy);
      Local.basis.oz:=NormalizeVertex(Local.basis.oz);
 
-     rotmatr:=onematrix;
-     PGDBVertex(@rotmatr[0])^:=Local.basis.ox;
-     PGDBVertex(@rotmatr[1])^:=Local.basis.oy;
-     PGDBVertex(@rotmatr[2])^:=Local.basis.oz;
+     //rotmatr:=onematrix;
+     //PGDBVertex(@rotmatr.mtr[0])^:=Local.basis.ox;
+     //PGDBVertex(@rotmatr.mtr[1])^:=Local.basis.oy;
+     //PGDBVertex(@rotmatr.mtr[2])^:=Local.basis.oz;
+     rotmatr:=CreateMatrixFromBasis(Local.basis.ox,Local.basis.oy,Local.basis.oz);
 
      //MatrixTranspose(rotmatr);
 
-     dispmatr:=onematrix;
-     PGDBVertex(@dispmatr[3])^:=Local.p_insert;
+     //dispmatr:=onematrix;
+     //PGDBVertex(@dispmatr.mtr[3])^:=Local.p_insert;
+     dispmatr:=CreateTranslationMatrix(Local.p_insert);
 
      objmatrix:=MatrixMultiply(rotmatr,dispmatr);
      if bp.ListPos.owner<>nil then

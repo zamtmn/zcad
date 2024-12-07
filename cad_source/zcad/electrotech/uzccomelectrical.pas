@@ -30,18 +30,19 @@ uses
   uzglviewareadata,
   uzcinterface,
   uzegeometry,
-                                          gzctnrSTL,
+  gzctnrSTL,
+  UGDBGraf,
   uzeconsts,
   uzeentity,uzeentline,
   uzcentnet,
   uzeentsubordinated,uzcentcable,varman,uzcdialogsfiles,uunitmanager,
   uzcbillofmaterial,uzccablemanager,uzeentdevice,uzeenttable,
   uzbpaths,uzctnrvectorstrings,math,Masks,uzbstrproc,
-  uzeentabstracttext,uzeentmtext,uzeblockdef,UGDBPoint3DArray,uzcdevicebaseabstract,
+  {uzeentabstracttext,}uzeentmtext,uzeblockdef,UGDBPoint3DArray,uzcdevicebaseabstract,
   uzelongprocesssupport,uzcLog,
   generics.Collections,
   uzccommand_treestat,uzccommand_line2,uzccmdfloatinsert,uzcregother,uzcfcommandline,
-  uzeparsercmdprompt,uzctnrvectorpgdbaseobjects,uzeSnap,uzCtnrVectorpBaseEntity,
+  uzeparsercmdprompt{,uzctnrvectorpgdbaseobjects},uzeSnap,uzCtnrVectorpBaseEntity,
   uzeEntBase;
 type
 {Export+}
@@ -1400,10 +1401,9 @@ begin
             //SecondOwner:=Pointer(po);
        end
   end {else SecondOwner:=nil};
-  //pl^.RenderFeedback;
   if (button and MZW_LBUTTON)<>0 then
   begin
-    New_line^.RenderFeedback(drawings.GetCurrentDWG.pcamera^.POSCOUNT,drawings.GetCurrentDWG.pcamera^,drawings.GetCurrentDWG^.myGluProject2,dc);
+    //New_line^.RenderFeedback(drawings.GetCurrentDWG.pcamera^.POSCOUNT,drawings.GetCurrentDWG.pcamera^,drawings.GetCurrentDWG^.myGluProject2,dc);
     if FirstOwner<>nil then
     begin
          if FirstOwner^.EubEntryType<>se_ElectricalWires then FirstOwner:=nil;
@@ -1848,7 +1848,7 @@ begin
          end;
           {p3dpl^.AddVertex(wc);}
           p3dpl^.Formatentity(drawings.GetCurrentDWG^,dc);
-          p3dpl^.RenderFeedback(drawings.GetCurrentDWG.pcamera^.POSCOUNT,drawings.GetCurrentDWG.pcamera^,drawings.GetCurrentDWG^.myGluProject2,dc);
+          //p3dpl^.RenderFeedback(drawings.GetCurrentDWG.pcamera^.POSCOUNT,drawings.GetCurrentDWG.pcamera^,drawings.GetCurrentDWG^.myGluProject2,dc);
           drawings.GetCurrentROOT.ObjArray.ObjTree.CorrectNodeBoundingBox(p3dpl^);
     end
 else begin
@@ -1886,7 +1886,7 @@ else begin
                             pa.done;
                        end;*)
         p3dpl^.Formatentity(drawings.GetCurrentDWG^,dc);
-        p3dpl^.RenderFeedback(drawings.GetCurrentDWG.pcamera^.POSCOUNT,drawings.GetCurrentDWG.pcamera^,drawings.GetCurrentDWG^.myGluProject2,dc);
+        //p3dpl^.RenderFeedback(drawings.GetCurrentDWG.pcamera^.POSCOUNT,drawings.GetCurrentDWG.pcamera^,drawings.GetCurrentDWG^.myGluProject2,dc);
         drawings.GetCurrentROOT.ObjArray.ObjTree.CorrectNodeBoundingBox(p3dpl^);
      end;
     drawings.GetCurrentDWG.ConstructObjRoot.ObjArray.Count := 0;
@@ -2556,7 +2556,7 @@ var pv:pGDBObjEntity;
     ir:itrec;
     pvd:pvardesk;
     name,ConnectTo,ConnectFrom:String;
-    ps{,pspred}:pString;
+    //ps{,pspred}:pString;
     pentvarext:TVariablesExtender;
 begin
   name:=Operands;
@@ -2777,7 +2777,6 @@ begin
             pold:=osp^.PGDBObject;
        end
   end else pold:=nil;
-  //pl^.RenderFeedback;
   if (button and MZW_LBUTTON)<>0 then
   begin
     begin
@@ -3084,7 +3083,7 @@ begin
                  rootbytrace(startdev.P_insert_in_WCS,enddev.P_insert_in_WCS,net,Cable,true);
                  zcAddEntToCurrentDrawingWithUndo(Cable);
                  Cable^.Formatentity(drawings.GetCurrentDWG^,dc);
-                 Cable^.RenderFeedback(drawings.GetCurrentDWG.pcamera^.POSCOUNT,drawings.GetCurrentDWG.pcamera^,drawings.GetCurrentDWG^.myGluProject2,dc);
+                 //Cable^.RenderFeedback(drawings.GetCurrentDWG.pcamera^.POSCOUNT,drawings.GetCurrentDWG.pcamera^,drawings.GetCurrentDWG^.myGluProject2,dc);
                  end;
 
                  end;
@@ -3201,7 +3200,7 @@ begin
                           zcSetEntPropFromCurrentDrawingProp(Cable);
                           drawings.standardization(Cable,GDBCableID);
                           Cable^.Formatentity(drawings.GetCurrentDWG^,dc);
-                          Cable^.RenderFeedback(drawings.GetCurrentDWG.pcamera^.POSCOUNT,drawings.GetCurrentDWG.pcamera^,drawings.GetCurrentDWG^.myGluProject2,dc);
+                          //Cable^.RenderFeedback(drawings.GetCurrentDWG.pcamera^.POSCOUNT,drawings.GetCurrentDWG.pcamera^,drawings.GetCurrentDWG^.myGluProject2,dc);
 
                           cable:=segments.beginiterate(ir_net);
                           if (cable<>nil) then
@@ -3210,7 +3209,7 @@ begin
                                 zcSetEntPropFromCurrentDrawingProp(Cable);
                                 drawings.standardization(Cable,GDBCableID);
                                 Cable^.Formatentity(drawings.GetCurrentDWG^,dc);
-                                Cable^.RenderFeedback(drawings.GetCurrentDWG.pcamera^.POSCOUNT,drawings.GetCurrentDWG.pcamera^,drawings.GetCurrentDWG^.myGluProject2,dc);
+                                //Cable^.RenderFeedback(drawings.GetCurrentDWG.pcamera^.POSCOUNT,drawings.GetCurrentDWG.pcamera^,drawings.GetCurrentDWG^.myGluProject2,dc);
 
                           cable:=segments.iterate(ir_net);
                           until cable=nil;
@@ -3227,7 +3226,7 @@ begin
                               rootbytrace(startdev.P_insert_in_WCS,enddev.P_insert_in_WCS,nil,Cable,true);
                               zcAddEntToCurrentDrawingWithUndo(Cable);
                               Cable^.Formatentity(drawings.GetCurrentDWG^,dc);
-                              Cable^.RenderFeedback(drawings.GetCurrentDWG.pcamera^.POSCOUNT,drawings.GetCurrentDWG.pcamera^,drawings.GetCurrentDWG^.myGluProject2,dc);
+                              //Cable^.RenderFeedback(drawings.GetCurrentDWG.pcamera^.POSCOUNT,drawings.GetCurrentDWG.pcamera^,drawings.GetCurrentDWG^.myGluProject2,dc);
                             end else
                               //ZCMsgCallBackInterface.TextMessage('В строке "'+inttostr(row)+'" обнаружена трасса "'+FDoc.Cells[3,row]+'" отсутствующая в чертеже((',TMWOShowError);
                               ZCMsgCallBackInterface.TextMessage(format('In row %d trace "%s" not found in drawing',[row,FDoc.Cells[3,row]]),TMWOHistoryOut);
@@ -3449,9 +3448,9 @@ end;
 end;
 
 procedure startup;
-//var
-  // s:String;
 begin
+  SysUnit^.RegisterType(TypeInfo(TLinkType));
+
   MainSpecContentFormat.init(100);
   MainSpecContentFormat.loadfromfile(FindInSupportPath(GetSupportPath,'main.sf'));
   CreateZCADCommand(@RegenZEnts_com,'RegenZEnts',CADWG,0);

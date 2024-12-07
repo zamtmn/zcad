@@ -197,6 +197,9 @@ TTextJustify=(jstl(*'TopLeft'*),
               jsbtl(*'Left'*),
               jsbtc(*'Center'*),
               jsbtr(*'Right'*));
+
+PTZColor=^TZColor;
+TZColor={-}type {//}Integer;
 {EXPORT-}
 function IsIt(PType,PChecedType:Pointer):Boolean;
 

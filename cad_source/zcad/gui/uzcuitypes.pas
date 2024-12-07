@@ -58,8 +58,8 @@ type
 
   TZCMsgDialogResult=record
     ModalResult:TZCMsgModalResult;
-    RadioRes: integer;
-    SelectionRes: integer;
+    //RadioRes: integer;
+    //SelectionRes: integer;
     VerifyChecked: Boolean;
     constructor CreateMR(mr:TZCMsgModalResult);
   end;

@@ -27,7 +27,7 @@ uses uzemathutils,uzgldrawcontext,uzeentabstracttext,uzestylestexts,
      uzedimensionaltypes,uzeentitiesmanager,UGDBOpenArrayOfPV,uzeentblockinsert,
      uzglviewareadata,uzeSnap,math;
 type
-PTDXFDimData2D=^TDXFDimData2D;
+{PTDXFDimData2D=^TDXFDimData2D;
 TDXFDimData2D=record
   P10:GDBVertex2D;
   P11:GDBVertex2D;
@@ -36,7 +36,7 @@ TDXFDimData2D=record
   P14:GDBVertex2D;
   P15:GDBVertex2D;
   P16:GDBVertex2D;
-end;
+end;}
 PTDXFDimData=^TDXFDimData;
 TDXFDimData=record
   P10InWCS:GDBVertex;
@@ -54,7 +54,7 @@ PGDBObjDimension=^GDBObjDimension;
 GDBObjDimension= object(GDBObjComplex)
                       DimData:TDXFDimData;
                       PDimStyle:PGDBDimStyle;
-                      PProjPoint:PTDXFDimData2D;
+                      //PProjPoint:PTDXFDimData2D;
                       vectorD,vectorN,vectorT:GDBVertex;
                       TextTParam,TextAngle,DimAngle:Double;
                       TextInside:Boolean;
@@ -65,8 +65,7 @@ GDBObjDimension= object(GDBObjComplex)
 
                 function DrawDimensionLineLinePart(p1,p2:GDBVertex;var drawing:TDrawingDef):pgdbobjline;
                 function DrawExtensionLineLinePart(p1,p2:GDBVertex;var drawing:TDrawingDef; part:integer):pgdbobjline;
-                procedure remaponecontrolpoint(pdesc:pcontrolpointdesc);virtual;
-                procedure RenderFeedback(pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc;var DC:TDrawContext);virtual;
+                procedure remaponecontrolpoint(pdesc:pcontrolpointdesc;ProjectProc:GDBProjectProc);virtual;
                 function LinearFloatToStr(l:Double;var drawing:TDrawingDef):TDXFEntsInternalStringType;
                 function GetLinearDimStr(l:Double;var drawing:TDrawingDef):TDXFEntsInternalStringType;
                 function GetDimStr(var drawing:TDrawingDef):TDXFEntsInternalStringType;virtual;
@@ -534,62 +533,43 @@ begin
 end;
 destructor GDBObjDimension.done;
 begin
-  if PProjPoint<>nil then Freemem(pprojpoint);
+  //if PProjPoint<>nil then Freemem(pprojpoint);
   dimtext:='';
   inherited;
 end;
-procedure GDBObjDimension.RenderFeedback;
-var tv:GDBvertex;
-begin
-  if PProjPoint=nil then Getmem(Pointer(pprojpoint),sizeof(TDXFDimData2D));
 
-  ProjectProc(DimData.P10InWCS,tv);
-  pprojpoint.P10:=pGDBvertex2D(@tv)^;
-  ProjectProc(DimData.P11InOCS,tv);
-  pprojpoint.P11:=pGDBvertex2D(@tv)^;
-  ProjectProc(DimData.P12InOCS,tv);
-  pprojpoint.P12:=pGDBvertex2D(@tv)^;
-  ProjectProc(DimData.P13InWCS,tv);
-  pprojpoint.P13:=pGDBvertex2D(@tv)^;
-  ProjectProc(DimData.P14InWCS,tv);
-  pprojpoint.P14:=pGDBvertex2D(@tv)^;
-  ProjectProc(DimData.P15InWCS,tv);
-  pprojpoint.P15:=pGDBvertex2D(@tv)^;
-  ProjectProc(DimData.P16InOCS,tv);
-  pprojpoint.P16:=pGDBvertex2D(@tv)^;
-  inherited;
-end;
-
-procedure GDBObjDimension.remaponecontrolpoint(pdesc:pcontrolpointdesc);
+procedure GDBObjDimension.remaponecontrolpoint(pdesc:pcontrolpointdesc;ProjectProc:GDBProjectProc);
+var
+  tv:GDBvertex;
 begin
   if pdesc^.pointtype=os_p10 then begin
     pdesc.worldcoord:=DimData.P10InWCS;
-    pdesc.dispcoord.x:=round(pprojpoint.P10.x);
-    pdesc.dispcoord.y:=round(pprojpoint.P10.y);
+    ProjectProc(pdesc.worldcoord,tv);
+    pdesc.dispcoord:=ToVertex2DI(tv);
   end else if pdesc^.pointtype=os_p11 then begin
     pdesc.worldcoord:=DimData.P11InOCS;
-    pdesc.dispcoord.x:=round(pprojpoint.P11.x);
-    pdesc.dispcoord.y:=round(pprojpoint.P11.y);
+    ProjectProc(pdesc.worldcoord,tv);
+    pdesc.dispcoord:=ToVertex2DI(tv);
   end else if pdesc^.pointtype=os_p12 then begin
     pdesc.worldcoord:=DimData.P12InOCS;
-    pdesc.dispcoord.x:=round(pprojpoint.P12.x);
-    pdesc.dispcoord.y:=round(pprojpoint.P12.y);
+    ProjectProc(pdesc.worldcoord,tv);
+    pdesc.dispcoord:=ToVertex2DI(tv);
   end else if pdesc^.pointtype=os_p13 then begin
     pdesc.worldcoord:=DimData.P13InWCS;
-    pdesc.dispcoord.x:=round(pprojpoint.P13.x);
-    pdesc.dispcoord.y:=round(pprojpoint.P13.y);
+    ProjectProc(pdesc.worldcoord,tv);
+    pdesc.dispcoord:=ToVertex2DI(tv);
   end else if pdesc^.pointtype=os_p14 then begin
     pdesc.worldcoord:=DimData.P14InWCS;
-    pdesc.dispcoord.x:=round(pprojpoint.P14.x);
-    pdesc.dispcoord.y:=round(pprojpoint.P14.y);
+    ProjectProc(pdesc.worldcoord,tv);
+    pdesc.dispcoord:=ToVertex2DI(tv);
   end else if pdesc^.pointtype=os_p15 then begin
     pdesc.worldcoord:=DimData.P15InWCS;
-    pdesc.dispcoord.x:=round(pprojpoint.P15.x);
-    pdesc.dispcoord.y:=round(pprojpoint.P15.y);
+    ProjectProc(pdesc.worldcoord,tv);
+    pdesc.dispcoord:=ToVertex2DI(tv);
   end else if pdesc^.pointtype=os_p16 then begin
     pdesc.worldcoord:=DimData.P16InOCS;
-    pdesc.dispcoord.x:=round(pprojpoint.P16.x);
-    pdesc.dispcoord.y:=round(pprojpoint.P16.y);
+    ProjectProc(pdesc.worldcoord,tv);
+    pdesc.dispcoord:=ToVertex2DI(tv);
   end;
 end;
 

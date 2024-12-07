@@ -22,7 +22,7 @@ interface
 uses
   uzbCommandLineParser,uzcCommandLineParser,
   uzcsysparams,uzcsysvars,
-  uzbLogTypes,uzbLog,uzcLog,
+  {uzbLogTypes,}uzbLog,uzcLog,
   uzbPaths,
   Forms,{$IFNDEF DELPHI}LazUTF8,{$ENDIF}sysutils;
 resourcestring
@@ -71,7 +71,7 @@ var
    i,prm,operandsc:integer;
    pod:PTCLOptionData;
    mn:String;
-   ll:TLogLevel;
+   //ll:TLogLevel;
 begin
   with programlog.Enter('ProcessParamStr',LM_Info) do try
 

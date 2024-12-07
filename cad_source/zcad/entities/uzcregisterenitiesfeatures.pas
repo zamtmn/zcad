@@ -258,8 +258,7 @@ begin
      pvn:=pentvarext.entityunit.FindVariable('Device_Type');
      if pvn<>nil then
      begin
-          case PTDeviceType(pvn^.data.Addr.Instance)^ of
-          TDT_SilaPotr:
+          if PTDeviceType(pvn^.data.Addr.Instance)^=TDT_SilaPotr then
           begin
                pvn:=pentvarext.entityunit.FindVariable('Voltage');
                if pvn<>nil then
@@ -269,6 +268,11 @@ begin
                      case volt of
                                  _AC_220V_50Hz:u:=0.22;
                                  _AC_380V_50Hz:u:=0.38;
+                                 _DC_6V,_DC_12V,_DC_24V,_DC_27V,
+                                 _DC_48V,_DC_60V,_DC_110V,
+                                 _AC_12V_50Hz,_AC_24V_50Hz,
+                                 _AC_36V_50Hz,_AC_40V_50Hz,
+                                 _AC_110V_50Hz:u:=0.00000001;
                      end;{case}
                      pvn:=pentvarext.entityunit.FindVariable('CalcIP');
                      if pvn<>nil then
@@ -291,6 +295,7 @@ begin
                      end;
 
                      case calcip of
+                          _ICOS_from_P:;
                           _I_from_P:begin
                                          //if PTPhase(pvphase^.data.Addr.Instance)^=_ABC
                                          if volt = _AC_380V_50Hz
@@ -309,7 +314,6 @@ begin
                      end;
                end;
           end;
-          end;{case}
      end;
 end;
 procedure CableNameProcess(pCable:PGDBObjCable;const drawing:TDrawingDef);

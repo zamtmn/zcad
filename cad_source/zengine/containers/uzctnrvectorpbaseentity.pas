@@ -21,7 +21,7 @@ unit uzCtnrVectorPBaseEntity;
 
 interface
 uses
-  uzbtypes,gzctnrVectorPData,uzeEntBase;
+  {uzbtypes,}gzctnrVectorPData,uzeEntBase;
 type
 {Export+}
 TZctnrVectorPGDBaseEntity=object(GZVectorPData{-}<PGDBObjBaseEntity>{//})

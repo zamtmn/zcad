@@ -60,6 +60,7 @@ begin
   setlength(LatestLogStrings,MaxLLStrings);
   LatestLogStringsCount:=0;
   TotalLogStringsCount:=0;
+  inherited init;
 end;
 
 destructor TLatestMsgsBackend.done;

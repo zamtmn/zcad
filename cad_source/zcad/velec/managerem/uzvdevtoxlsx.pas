@@ -28,7 +28,7 @@ uses
   SysUtils,
   uzcLog,
   uzccommandsabstract,uzccommandsimpl,uzccommandsmanager,
-  uzeparsercmdprompt,uzegeometrytypes,
+  uzeparsercmdprompt,{uzegeometrytypes,}
   uzcinterface,uzcdialogsfiles,{uzcutils,}
   uzvmanemgetgem,
   uzvagraphsdev,
@@ -133,7 +133,7 @@ type
 
   TListDev=TVector<pGDBObjDevice>;
 
-  TListGroupHeadDev=TVector<string>;
+  //TListGroupHeadDev=TVector<string>;
   //TSortComparer=class
   // function Compare (str11, str2:string):boolean;{inline;}
   //end;

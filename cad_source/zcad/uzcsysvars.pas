@@ -185,6 +185,8 @@ type
   tobjinspinterface=record
                 INTF_ObjInsp_ShowHeaders:PBoolean;(*'Show headers'*)
                 INTF_ObjInsp_OldStyleDraw:PBoolean;(*'Old style'*)
+                INTF_ObjInsp_Level0HeaderColor:PTZColor;(*'Level0 header color'*)
+                INTF_ObjInsp_BorderColor:PTZColor;(*'Border color'*)
                 INTF_ObjInsp_WhiteBackground:PBoolean;(*'White background'*)
                 INTF_ObjInsp_ShowSeparator:PBoolean;(*'Show separator'*)
                 INTF_ObjInsp_ShowFastEditors:PBoolean;(*'Show fast editors'*)

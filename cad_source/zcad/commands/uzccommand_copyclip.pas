@@ -59,7 +59,7 @@ begin
   CopyClipFile:=s;
   savedxf2000(s,ProgramPath + '/components/empty.dxf',ClipboardDWG^);
   s:=s+#0;
-  suni:=s;
+  suni:=unicodestring(s);
   Clipboard.Open;
   Clipboard.Clear;
   zcformat:=RegisterClipboardFormat(ZCAD_DXF_CLIPBOARD_NAME);

@@ -41,9 +41,8 @@ GDBObjComplex= object(GDBObjWithLocalCS)
                     function CalcInFrustum(const frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:Integer; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double):Boolean;virtual;
                     function CalcTrueInFrustum(const frustum:ClipArray;visibleactualy:TActulity):TInBoundingVolume;virtual;
                     function onmouse(var popa:TZctnrVectorPGDBaseEntity;const MF:ClipArray;InSubEntry:Boolean):Boolean;virtual;
-                    procedure renderfeedbac(infrustumactualy:TActulity;pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc;var DC:TDrawContext);virtual;
                     procedure addcontrolpoints(tdesc:Pointer);virtual;
-                    procedure remaponecontrolpoint(pdesc:pcontrolpointdesc);virtual;
+                    procedure remaponecontrolpoint(pdesc:pcontrolpointdesc;ProjectProc:GDBProjectProc);virtual;
                     procedure rtmodifyonepoint(const rtmod:TRTModifyData);virtual;
                     procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext;Stage:TEFStages=EFAllStages);virtual;
                     //procedure feedbackinrect;virtual;
@@ -99,17 +98,21 @@ begin
   end;
 end;
 
-procedure GDBObjComplex.remaponecontrolpoint(pdesc:pcontrolpointdesc);
+procedure GDBObjComplex.remaponecontrolpoint(pdesc:pcontrolpointdesc;ProjectProc:GDBProjectProc);
+var
+  tv:GDBvertex;
 begin
   if pdesc^.pointtype=os_point then begin
     if pdesc.PDrawable=nil then begin
       pdesc.worldcoord:=self.P_insert_in_WCS;
-      pdesc.dispcoord.x:=round(ProjP_insert.x);
-      pdesc.dispcoord.y:=round(ProjP_insert.y);
+      ProjectProc(pdesc.worldcoord,tv);
+      pdesc.dispcoord:=ToVertex2DI(tv);
     end else begin
       pdesc.worldcoord:=PGDBObjComplex(pdesc.PDrawable).P_insert_in_WCS;
-      pdesc.dispcoord.x:=round(PGDBObjComplex(pdesc.PDrawable).ProjP_insert.x);
-      pdesc.dispcoord.y:=round(PGDBObjComplex(pdesc.PDrawable).ProjP_insert.y);
+      ProjectProc(pdesc.worldcoord,tv);
+      pdesc.dispcoord:=ToVertex2DI(tv);
+      //pdesc.dispcoord.x:=round(PGDBObjComplex(pdesc.PDrawable).ProjP_insert.x);
+      //pdesc.dispcoord.y:=round(PGDBObjComplex(pdesc.PDrawable).ProjP_insert.y);
       pdesc.dcoord:=vertexsub(PGDBObjComplex(pdesc.PDrawable).P_insert_in_WCS,P_insert_in_WCS);
     end
 
@@ -268,17 +271,6 @@ begin
               end;
      end;
 end;}
-procedure GDBObjComplex.renderfeedbac(infrustumactualy:TActulity;pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc;var DC:TDrawContext);
-//var pblockdef:PGDBObjBlockdef;
-    //pvisible:PGDBObjEntity;
-    //i:Integer;
-begin
-  //if POGLWnd=nil then exit;
-  {gdb.GetCurrentDWG^.myGluProject2}ProjectProc(P_insert_in_WCS,ProjP_insert);
-  //pdx:=PProjPoint[1].x-PProjPoint[0].x;
-  //pdy:=PProjPoint[1].y-PProjPoint[0].y;
-     ConstObjArray.RenderFeedbac(infrustumactualy,pcount,camera,ProjectProc,dc);
-end;
 procedure GDBObjComplex.FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext;Stage:TEFStages=EFAllStages);
 {var pblockdef:PGDBObjBlockdef;
     pvisible,pvisible2:PGDBObjEntity;

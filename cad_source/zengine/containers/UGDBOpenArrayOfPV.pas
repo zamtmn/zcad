@@ -22,7 +22,7 @@ unit UGDBOpenArrayOfPV;
 interface
 uses uzegeometrytypes,uzgldrawcontext,uzedrawingdef,uzeentity,uzecamera,
      gzctnrVectorTypes,sysutils,uzbtypes,uzegeometry,
-     uzeentsubordinated,uzeentityfactory,uzctnrvectorpgdbaseobjects,
+     uzeentsubordinated,uzeentityfactory,//uzctnrvectorpgdbaseobjects,
      uzctnrvectorpbaseentity,uzeEntBase;
 type
 {PGDBObjEntityArray=^GDBObjEntityArray;
@@ -47,7 +47,6 @@ GDBObjOpenArrayOfPV= object({TZctnrVectorPGDBaseObjects}TZctnrVectorPGDBaseEntit
                       function getoutbound(var DC:TDrawContext):TBoundingBox;
                       function getonlyoutbound(var DC:TDrawContext):TBoundingBox;
                       function getonlyvisibleoutbound(var DC:TDrawContext):TBoundingBox;
-                      procedure Format;virtual;abstract;
                       procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext;Stage:TEFStages=EFAllStages);virtual;
                       procedure FormatAfterEdit(var drawing:TDrawingDef;var DC:TDrawContext);virtual;
                       //function InRect:TInRect;virtual;
@@ -296,7 +295,7 @@ begin
                          p^.vp.ID:=p^.vp.ID;}
        if (p^.infrustum=infrustumactualy)or(p^.Selected) then
                                             begin
-                                                 p^.renderfeedback(pcount,camera,ProjectProc,dc);
+                                                 //p^.renderfeedback(pcount,camera,ProjectProc,dc);
                                             end;
        p:=iterate(ir);
   until p=nil;

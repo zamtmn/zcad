@@ -38,8 +38,8 @@ GDBObjWithLocalCS= object(GDBObjWithMatrix)
 
                //**получить на чтение координаты в мировой системе координат
                P_insert_in_WCS:GDBvertex;
-               ProjP_insert:GDBvertex;
-               PProjOutBound:PGDBOOutbound2DIArray;
+               //ProjP_insert:GDBvertex;
+               //PProjOutBound:PGDBOOutbound2DIArray;
                lod:Byte;
                constructor init(own:Pointer;layeraddres:PGDBLayerProp;LW:SmallInt);
                constructor initnul(owner:PGDBObjGenericWithSubordinated);
@@ -51,7 +51,6 @@ GDBObjWithLocalCS= object(GDBObjWithMatrix)
                procedure CalcObjMatrix(pdrawing:PTDrawingDef=nil);virtual;
                function CalcObjMatrixWithoutOwner:DMatrix4D;virtual;
                procedure transform(const t_matrix:DMatrix4D);virtual;
-               procedure Renderfeedback(pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc;var DC:TDrawContext);virtual;
                function GetCenterPoint:GDBVertex;virtual;
                procedure createfield;virtual;
 
@@ -71,7 +70,7 @@ var
 begin
      if dc.maxdetail then
                          exit(true);
-  templod:=sqrt(objmatrix[0].v[0]*objmatrix[0].v[0]+objmatrix[1].v[1]*objmatrix[1].v[1]+objmatrix[2].v[2]*objmatrix[2].v[2]);
+  templod:=sqrt(objmatrix.mtr[0].v[0]*objmatrix.mtr[0].v[0]+objmatrix.mtr[1].v[1]*objmatrix.mtr[1].v[1]+objmatrix.mtr[2].v[2]*objmatrix.mtr[2].v[2]);
   templod:=(templod*ParamSize)/(dc.DrawingContext.zoom);
   if templod>TargetSize then
                             exit(true)
@@ -86,9 +85,9 @@ procedure GDBObjWithLocalCS.ReCalcFromObjMatrix;
 //var
     //ox:gdbvertex;
 begin
-     Local.basis.ox:=PGDBVertex(@objmatrix[0])^;
-     Local.basis.oy:=PGDBVertex(@objmatrix[1])^;
-     Local.basis.oz:=PGDBVertex(@objmatrix[2])^;
+     Local.basis.ox:=PGDBVertex(@objmatrix.mtr[0])^;
+     Local.basis.oy:=PGDBVertex(@objmatrix.mtr[1])^;
+     Local.basis.oz:=PGDBVertex(@objmatrix.mtr[2])^;
 
      Local.basis.ox:=normalizevertex(Local.basis.ox);
      Local.basis.oy:=normalizevertex(Local.basis.oy);
@@ -118,9 +117,9 @@ begin
   oglsm.myglVertex2d(ProjP_insert.x,ProjP_insert.y-10);
   oglsm.myglVertex2d(ProjP_insert.x,ProjP_insert.y+10);
   oglsm.myglend;}
-  dc.drawer.DrawLine2DInDCS(ProjP_insert.x-10,ProjP_insert.y,ProjP_insert.x+10,ProjP_insert.y);
-  dc.drawer.DrawLine2DInDCS(ProjP_insert.x,ProjP_insert.y-10,ProjP_insert.x,ProjP_insert.y+10);
-  if PProjOutBound<>nil then PProjOutBound.DrawGeometry(dc);
+  //dc.drawer.DrawLine2DInDCS(ProjP_insert.x-10,ProjP_insert.y,ProjP_insert.x+10,ProjP_insert.y);
+  //dc.drawer.DrawLine2DInDCS(ProjP_insert.x,ProjP_insert.y-10,ProjP_insert.x,ProjP_insert.y+10);
+  //if PProjOutBound<>nil then PProjOutBound.DrawGeometry(dc);
 
 end;
 procedure GDBObjWithLocalCS.TransformAt;
@@ -148,21 +147,13 @@ begin
      inherited;
      Local.P_insert:=nulvertex;
      P_insert_in_WCS:=nulvertex;
-     ProjP_insert:=nulvertex;
-     PProjOutBound:=nil;
+     //ProjP_insert:=nulvertex;
+     //PProjOutBound:=nil;
      lod:=0;
 end;
 function GDBObjWithLocalCS.GetCenterPoint;
 begin
      result:=P_insert_in_WCS;
-end;
-procedure GDBObjWithLocalCS.Renderfeedback;
-//var pm:DMatrix4D;
-//    tv:GDBvertex;
-begin
-           inherited;
-           ProjectProc(P_insert_in_WCS,ProjP_insert);
-           if pprojoutbound<>nil then pprojoutbound^.clear;
 end;
 constructor GDBObjWithLocalCS.initnul;
 begin
@@ -172,7 +163,6 @@ begin
   Local.basis.oz:=ZWCS;
   local.p_insert:=nulvertex;
   inherited initnul(owner);
-  pprojoutbound:=nil;
 end;
 constructor GDBObjWithLocalCS.init;
 var
@@ -182,9 +172,9 @@ begin
   powner:=bp.ListPos.owner;
   if powner<>nil then
   begin
-  Local.basis.ox:={wx^}PGDBVertex(@powner^.GetMatrix^[0])^;
-  Local.basis.oy:={wy^}PGDBVertex(@powner^.GetMatrix^[1])^;
-  Local.basis.oz:={wz^}PGDBVertex(@powner^.GetMatrix^[2])^;
+  Local.basis.ox:={wx^}PGDBVertex(@powner^.GetMatrix^.mtr[0])^;
+  Local.basis.oy:={wy^}PGDBVertex(@powner^.GetMatrix^.mtr[1])^;
+  Local.basis.oz:={wz^}PGDBVertex(@powner^.GetMatrix^.mtr[2])^;
   end
   else
   begin
@@ -193,7 +183,7 @@ begin
   Local.basis.oz:=ZWCS;
   end;
 
-  pprojoutbound:=nil;
+  //pprojoutbound:=nil;
   //CalcObjMatrix;
 end;
 procedure GDBObjWithLocalCS.FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext;Stage:TEFStages=EFAllStages);
@@ -214,13 +204,15 @@ begin
      Local.basis.oy:=NormalizeVertex(Local.basis.oy);
      Local.basis.oz:=NormalizeVertex(Local.basis.oz);
 
-     rotmatr:=onematrix;
-     PGDBVertex(@rotmatr[0])^:=Local.basis.ox;
-     PGDBVertex(@rotmatr[1])^:=Local.basis.oy;
-     PGDBVertex(@rotmatr[2])^:=Local.basis.oz;
+     //rotmatr:=onematrix;
+     //PGDBVertex(@rotmatr.mtr[0])^:=Local.basis.ox;
+     //PGDBVertex(@rotmatr.mtr[1])^:=Local.basis.oy;
+     //PGDBVertex(@rotmatr.mtr[2])^:=Local.basis.oz;
+     rotmatr:=CreateMatrixFromBasis(Local.basis.ox,Local.basis.oy,Local.basis.oz);
 
-     dispmatr:=onematrix;
-     PGDBVertex(@dispmatr[3])^:=Local.p_insert;
+     //dispmatr:=onematrix;
+     //PGDBVertex(@dispmatr.mtr[3])^:=Local.p_insert;
+     dispmatr:=CreateTranslationMatrix(Local.p_insert);
 
      result:=MatrixMultiply(dispmatr,rotmatr);
 end;
@@ -309,11 +301,11 @@ begin
 end;
 destructor GDBObjWithLocalCS.done;
 begin
-          if assigned(PProjoutbound) then
+          (*if assigned(PProjoutbound) then
                             begin
                             PProjoutbound^.{FreeAnd}Done;
                             Freemem(Pointer(PProjoutbound));
-                            end;
+                            end;*)
           inherited done;
 end;
 begin

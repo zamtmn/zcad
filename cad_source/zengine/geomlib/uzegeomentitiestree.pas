@@ -52,18 +52,18 @@ end;
                       end;
 {EXPORT-}
 TZEntsManipulator=class
-                   class procedure StoreTreeAdressInOnject(var Entity:TGeomEntity;var Node:GZBInarySeparatedGeometry<TBoundingBox,DVector4D,TGeomTreeNodeData,TZEntsManipulator,TGeomEntity,PTGeomEntity,TEntityArray>;const index:Integer);
-                   class procedure CorrectNodeBoundingBox(var NodeBB:TBoundingBox;var Entity:TGeomEntity);
-                   class function GetEntityBoundingBox(var Entity:TGeomEntity):TBoundingBox;
-                   class function GetBBPosition(const sep:DVector4D;const BB:TBoundingBox):TElemPosition;
-                   class function isUnneedSeparate(const count,depth:integer):boolean;
-                   class function GetTestNodesCount:integer;
-                   class procedure FirstStageCalcSeparatirs(var NodeBB:TBoundingBox;var Entity:TGeomEntity;var PFirstStageData:pointer;TSM:TStageMode);
-                   class procedure CreateSeparator(var NodeBB:TBoundingBox;var TestNode:TGeomEntTreeNode.TTestNode;var PFirstStageData:pointer;const NodeNum:integer);
-                   class function IterateResult2PEntity(const IterateResult:pointer):PTGeomEntity;
-                   class function StoreEntityToArray(var Entity:TGeomEntity;var arr:TEntityArray):TArrayIndex;
-                   class function EntitySizeOrOne(var Entity:TGeomEntity):integer;
-                   class procedure SetSizeInArray(ns:integer;var arr:TEntityArray);
+                   class procedure StoreTreeAdressInOnject(var Entity:TGeomEntity;var Node:GZBInarySeparatedGeometry<TBoundingBox,DVector4D,TGeomTreeNodeData,TZEntsManipulator,TGeomEntity,PTGeomEntity,TEntityArray>;const index:Integer); static;
+                   class procedure CorrectNodeBoundingBox(var NodeBB:TBoundingBox;var Entity:TGeomEntity); static; inline;
+                   class function GetEntityBoundingBox(var Entity:TGeomEntity):TBoundingBox; static; inline;
+                   class function GetBBPosition(const sep:DVector4D;const BB:TBoundingBox):TElemPosition; static;
+                   class function isUnneedSeparate(const count,depth:integer):boolean; static; inline;
+                   class function GetTestNodesCount:integer; static; inline;
+                   class procedure FirstStageCalcSeparatirs(var NodeBB:TBoundingBox;var Entity:TGeomEntity;var PFirstStageData:pointer;TSM:TStageMode); static;
+                   class procedure CreateSeparator(var NodeBB:TBoundingBox;var TestNode:TGeomEntTreeNode.TTestNode;var PFirstStageData:pointer;const NodeNum:integer); static;
+                   class function IterateResult2PEntity(const IterateResult:pointer):PTGeomEntity; static; inline;
+                   class function StoreEntityToArray(var Entity:TGeomEntity;var arr:TEntityArray):TArrayIndex; static; inline;
+                   class function EntitySizeOrOne(var Entity:TGeomEntity):integer; static; inline;
+                   class procedure SetSizeInArray(ns:integer;var arr:TEntityArray); static; inline;
                   end;
 var
    SysVarRDSpatialNodeCount:integer=2;

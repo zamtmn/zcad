@@ -47,7 +47,7 @@ TEntityArray=GZVectorPObects{GZVectorSimple}{-}<PGDBObjEntity,GDBObjEntity>{//};
                             procedure MakeTreeFrom(var entitys:GDBObjEntityOpenArray;AABB:TBoundingBox;const RN:Pointer);
                             procedure DrawVolume(var DC:TDrawContext);
                             procedure DrawNodeVolume(var DC:TDrawContext);
-                            procedure DrawWithAttribExternalArray(var DC:TDrawContext);
+                            procedure DrawWithAttribExternalArray(var DC:TDrawContext;LODDeep:integer=0);
                       end;
 {EXPORT-}
 TZEntsManipulator=class
@@ -79,7 +79,7 @@ begin
   result:=1;
 end;
 
-procedure TEntTreeNode.DrawWithAttribExternalArray(var DC:TDrawContext);
+procedure TEntTreeNode.DrawWithAttribExternalArray(var DC:TDrawContext;LODDeep:integer=0);
 var
   pobj:pGDBObjEntity;
   ir:itrec;
@@ -91,6 +91,10 @@ begin
        if pobj^.infrustum=dc.DrawingContext.infrustumactualy then
                            pobj^.DrawWithAttrib(dc);
        pobj:=nul.iterate(ir);
+       if LODDeep>2 then
+         pobj:=nul.iterate(ir);
+       if LODDeep>3 then
+         pobj:=nul.iterate(ir);
   until pobj=nil;
 end;
 procedure TEntTreeNode.DrawNodeVolume(var DC:TDrawContext);

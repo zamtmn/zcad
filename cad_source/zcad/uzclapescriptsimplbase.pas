@@ -24,7 +24,7 @@ uses
   SysUtils,
   lptypes,lpvartypes,lpparser,lpcompiler,lpeval,
   LazUTF8,
-  uzbLogTypes,uzcLog,
+  {uzbLogTypes,}uzcLog,
   uzeentity,uzeExtdrAbstractEntityExtender,
   uzedrawingsimple,uzcdrawings,
   uzeentline,uzeentityfactory,uzeconsts,uzcutils,

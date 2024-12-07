@@ -232,7 +232,7 @@ begin
           if ((i+1) mod 4)=0 then
           begin
                p3dpl^.Formatentity(drawings.GetCurrentDWG^,dc);
-               p3dpl^.RenderFeedback(drawings.GetCurrentDWG.pcamera^.POSCOUNT,drawings.GetCurrentDWG.pcamera^,drawings.GetCurrentDWG^.myGluProject2,dc);
+               //p3dpl^.RenderFeedback(drawings.GetCurrentDWG.pcamera^.POSCOUNT,drawings.GetCurrentDWG.pcamera^,drawings.GetCurrentDWG^.myGluProject2,dc);
                zcAddEntToCurrentDrawingWithUndo(p3dpl);
                //drawings.GetCurrentROOT.ObjArray.ObjTree.CorrectNodeBoundingBox(p3dpl^);
                if i<>pvr.Count-1 then
@@ -245,7 +245,6 @@ begin
      end;
 
      //p3dpl^.Formatentity(drawings.GetCurrentDWG^,dc);
-     //p3dpl^.RenderFeedback(drawings.GetCurrentDWG.pcamera^.POSCOUNT,drawings.GetCurrentDWG.pcamera^,drawings.GetCurrentDWG^.myGluProject2,dc);
      //zcAddEntToCurrentDrawingWithUndo(p3dpl);
      end;
      //drawings.GetCurrentROOT.ObjArray.ObjTree.CorrectNodeBoundingBox(p3dpl^);

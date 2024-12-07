@@ -30,7 +30,7 @@ implementation
 function FindVariableInEnt(PEnt:PGDBObjEntity;varname:String):pvardesk;
 var
   pentvarext,connectedentvarext:TVariablesExtender;
-  p:PTEntityUnit;
+  //p:PTEntityUnit;
   ir:itrec;
 begin
   result:=nil;

@@ -24,7 +24,7 @@ interface
 uses
   uzcinterfacedata,uzepalette,uzeconsts,uzcflineweights,uzgldrawergdi,uzegeometry,
   graphics,  usupportgui,StdCtrls,uzcdrawings,Controls,Classes,
-  uzbstrproc,uzcsysvars,uzccommandsmanager;
+  uzbstrproc,uzcsysvars,uzccommandsmanager,uzcfcolors;
 
 procedure DrawColor(Canvas:TCanvas; Index: Integer; ARect: TRect);
 
@@ -49,6 +49,8 @@ const
      textoffset=cellsize+5;
 begin
   s:=GetColorNameFromIndex(index);
+  if s='' then
+    s:=ColorIndex2Name(index);
   ARect.Left:=ARect.Left+2;
   textrect:=ARect;
   SaveBrushColor:=canvas.Brush.Color;

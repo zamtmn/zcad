@@ -149,7 +149,7 @@ begin
     drawings.GetCurrentROOT^.ObjArray.ObjTree.CorrectNodeBoundingBox(pb^);
     pb^.Visible:=0;
     drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.Count := 0;
-    pb^.RenderFeedback(drawings.GetCurrentDWG^.pcamera^.POSCOUNT,drawings.GetCurrentDWG^.pcamera^,drawings.GetCurrentDWG^.myGluProject2,dc);
+    //pb^.RenderFeedback(drawings.GetCurrentDWG^.pcamera^.POSCOUNT,drawings.GetCurrentDWG^.pcamera^,drawings.GetCurrentDWG^.myGluProject2,dc);
     pb:=nil;
     //commandmanager.executecommandend;
     //result:=1;
@@ -199,7 +199,6 @@ begin
     pb^.BuildVarGeometry(drawings.GetCurrentDWG^);
     pb^.FormatEntity(drawings.GetCurrentDWG^,dc);
     //drawings.GetCurrentDWG^.ConstructObjRoot.Count := 0;
-    //pb^.RenderFeedback;
   end;
 end;
 procedure Insert_com_CommandEnd(const Context:TZCADCommandContext;_self:pointer);

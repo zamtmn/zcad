@@ -31,7 +31,7 @@ uses
     gzctnrVectorTypes,uzedimensionaltypes,uzetrash,uzctnrVectorBytes,uzglviewareadata,
     uzccommandsabstract,
     uzeentitiestypefilter,uzctnrvectorpgdbaseobjects,uzCtnrVectorpBaseEntity,
-    LCLProc;
+    uzcLog,uzcreglog;
 type
 {EXPORT+}
 PTZCADDrawingsManager=^TZCADDrawingsManager;
@@ -42,7 +42,7 @@ TZCADDrawingsManager= object(TZctnrVectorPGDBaseObjects)
                     FileNameCounter:integer;
                     constructor init;
                     constructor initnul;
-                    destructor done;virtual;
+                    procedure done;virtual;
                     //function AfterDeSerialize(SaveFlag:Word; membuf:Pointer):integer;virtual;
 
                     function GetCurrentROOT:PGDBObjGenericSubEntry;
@@ -565,7 +565,7 @@ end;*)
 //procedure TZCADDrawing.SetEntFromOriginal(_dest,_source:PGDBObjEntity;PCD_dest,PCD_source:PTDrawingPreCalcData);
 //begin
 //end;
-destructor TZCADDrawingsManager.done;
+procedure TZCADDrawingsManager.done;
 begin
     CurrentDWG:=nil;
     inherited;
@@ -587,7 +587,7 @@ begin
         exit;
     end;
     if td=nil then begin
-      DebugLn(sysutils.format('{EM}Block "%s" not found! If this dimension arrow block - manually creating block not implemented yet((',[name]));
+      ProgramLog.LogOutFormatStr('Block "%s" not found! If this dimension arrow block - manually creating block not implemented yet((',[name],LM_Error,1,MO_SH or MO_SM);
       exit;
     end;
     CopyBlock(BlockBaseDWG,PTSimpleDrawing(_to),td);
@@ -633,7 +633,7 @@ begin
     if lt<>nil then
       RemapLStyle2(BlockBaseDWG,_to,lt)
     else
-      DebugLn(sysutils.format('{EM}Line type "%s" not found!',[name]));
+      ProgramLog.LogOutFormatStr('Line type "%s" not found!',[name],LM_Error,1,MO_SH or MO_SM);
     end;
 end;
 
@@ -825,7 +825,7 @@ begin
     pvisible:=croot.ObjArray.beginiterate(ir);
     if pvisible<>nil then
     repeat
-      if Filter.IsEntytyTypeAccepted(pvisible.GetObjType) then
+      if Filter.IsEntytyAccepted(pvisible) then
         entarray.PushBackData(pvisible);
       pvisible:=croot.ObjArray.iterate(ir);
     until pvisible=nil;

@@ -46,7 +46,7 @@
     <CompatibilityMode Value="True"/>
     <RequiredPkgs Count="2">
       <Item1>
-        <PackageName Value="LCLBase"/>
+        <PackageName Value="zbaseutils"/>
       </Item1>
       <Item2>
         <PackageName Value="FCL"/>

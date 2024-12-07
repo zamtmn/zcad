@@ -29,7 +29,7 @@ uses
   
   uzccommandsmanager,
   uzccommandsimpl,
-  uzbtypes,
+  //uzbtypes,
   uzcdrawings,
   uzcutils,
   sysutils,
@@ -205,7 +205,7 @@ begin
         repeat
           counter.IncTotal;
           if (psubobj^.GetObjType=GDBMTextID)or(psubobj^.GetObjType=GDBTextID) then
-            if MatchesWindowsMask(PGDBObjText(psubobj)^.Template,VarTextSelectParams.TemplateToFind) then begin
+            if MatchesWindowsMask(string(PGDBObjText(psubobj)^.Template),VarTextSelectParams.TemplateToFind) then begin
               counter.IncProcessed;
               psubobj^.Select(drawings.GetCurrentDWG^.wa.param.SelDesc.Selectedobjcount,drawings.CurrentDWG^.Selector);
             end;

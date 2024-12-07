@@ -49,7 +49,6 @@ GDBObjLWPolyline= object(GDBObjWithLocalCS)
                  Vertex3D_in_WCS_Array:GDBPoint3dArray;
                  Width2D_in_OCS_Array:GDBLineWidthArray;
                  Width3D_in_WCS_Array:TWidth3D_in_WCS_Vector;
-                 PProjPoint:PGDBpolyline2DArray;
                  Square:Double;
                  constructor init(own:Pointer;layeraddres:PGDBLayerProp;LW:SmallInt;c:Boolean);
                  constructor initnul;
@@ -66,9 +65,8 @@ GDBObjLWPolyline= object(GDBObjWithLocalCS)
                  destructor done;virtual;
                  function GetObjTypeName:String;virtual;
                  function Clone(own:Pointer):PGDBObjEntity;virtual;
-                 procedure RenderFeedback(pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc;var DC:TDrawContext);virtual;
                  procedure addcontrolpoints(tdesc:Pointer);virtual;
-                 procedure remaponecontrolpoint(pdesc:pcontrolpointdesc);virtual;
+                 procedure remaponecontrolpoint(pdesc:pcontrolpointdesc;ProjectProc:GDBProjectProc);virtual;
                  procedure rtmodifyonepoint(const rtmod:TRTModifyData);virtual;
                  procedure rtsave(refp:Pointer);virtual;
                  procedure getoutbound(var DC:TDrawContext);virtual;
@@ -200,7 +198,7 @@ end;
 
 function GDBObjLWpolyline.getsnap;
 begin
-     result:=GDBPoint3dArraygetsnap(Vertex3D_in_WCS_Array,PProjPoint,{snaparray}PGDBVectorSnapArray(pdata)^,osp,closed,param,ProjectProc,snapmode);
+     result:=GDBPoint3dArraygetsnapWOPProjPoint(Vertex3D_in_WCS_Array,{snaparray}PGDBVectorSnapArray(pdata)^,osp,closed,param,ProjectProc,snapmode);
 end;
 function GDBObjLWpolyline.onpoint(var objects:TZctnrVectorPGDBaseEntity;const point:GDBVertex):Boolean;
 begin
@@ -384,13 +382,17 @@ begin
   GDBPolyline2DArray.PTArr(Vertex2D_in_OCS_Array.parray)^[vertexnumber].x:=wwc.x{VertexAdd(wwc,tv)};
   GDBPolyline2DArray.PTArr(Vertex2D_in_OCS_Array.parray)^[vertexnumber].y:=wwc.y;
 end;
-procedure GDBObjLWpolyline.remaponecontrolpoint(pdesc:pcontrolpointdesc);
-var vertexnumber:Integer;
+procedure GDBObjLWpolyline.remaponecontrolpoint(pdesc:pcontrolpointdesc;ProjectProc:GDBProjectProc);
+var
+  vertexnumber:Integer;
+  tv:GDBvertex;
 begin
      vertexnumber:=pdesc^.vertexnum;
      pdesc.worldcoord:=GDBPoint3dArray.PTArr(Vertex3D_in_WCS_Array.parray)^[vertexnumber];
-     pdesc.dispcoord.x:=round(GDBPolyline2DArray.PTArr(PProjPoint.parray)^[vertexnumber].x);
-     pdesc.dispcoord.y:=round(GDBPolyline2DArray.PTArr(PProjPoint.parray)^[vertexnumber].y);
+     ProjectProc(pdesc.worldcoord,tv);
+     pdesc.dispcoord:=ToVertex2DI(tv);
+     //pdesc.dispcoord.x:=round(GDBPolyline2DArray.PTArr(PProjPoint.parray)^[vertexnumber].x);
+     //pdesc.dispcoord.y:=round(GDBPolyline2DArray.PTArr(PProjPoint.parray)^[vertexnumber].y);
 end;
 procedure GDBObjLWpolyline.AddControlpoints;
 var pdesc:controlpointdesc;
@@ -398,7 +400,6 @@ var pdesc:controlpointdesc;
     //pv2d:pGDBvertex2d;
     pv:pGDBvertex;
 begin
-          //renderfeedback(gdb.GetCurrentDWG.pcamera^.POSCOUNT,gdb.GetCurrentDWG.pcamera^,nil);
           PSelectedObjDesc(tdesc)^.pcontrolpoint^.init(Vertex3D_in_WCS_Array.count);
           //pv2d:=pprojpoint^.parray;
           pv:=Vertex3D_in_WCS_Array.GetParrayAsPointer;
@@ -439,11 +440,11 @@ begin
 end;
 destructor GDBObjLWpolyline.done;
 begin
-     if pprojpoint<>nil then
+     {if pprojpoint<>nil then
                             begin
                             pprojpoint^.done;
                             Freemem(pointer(pprojpoint));
-                            end;
+                            end;}
      Vertex2D_in_OCS_Array.done;
      Width2D_in_OCS_Array.done;
      Vertex3D_in_WCS_Array.done;
@@ -461,7 +462,7 @@ begin
   Vertex3D_in_WCS_Array.init(4);
   Width3D_in_WCS_Array.init(4);
   //----------------snaparray.init(1000);
-  PProjPoint:=nil;
+  //PProjPoint:=nil;
 end;
 constructor GDBObjLWpolyline.initnul;
 begin
@@ -473,143 +474,88 @@ begin
   Vertex3D_in_WCS_Array.init(4);
   Width3D_in_WCS_Array.init(4{, sizeof(GDBQuad3d)});
   //----------------snaparray.init(1000);
-  PProjPoint:=nil;
+  //PProjPoint:=nil;
 end;
 function GDBObjLWpolyline.GetObjType;
 begin
      result:=GDBLWPolylineID;
 end;
 procedure GDBObjLWpolyline.DrawGeometry;
-var i,ie: Integer;
-    q3d:PGDBQuad3d;
-    plw:PGLlwwidth;
-    v:gdbvertex;
+var
+  i,ie: integer;
+  q3d:PGDBQuad3d;
+  plw:PGLlwwidth;
+  v:gdbvertex;
+  simplydraw:boolean;
 begin
-  {glPolygonMode(GL_FRONT_AND_BACK, GL_fill);
-  if closed then
-    for i := 0 to vertexarray.count - 1 do
-    begin
-      begin
-                                      //oglsm.myglEnable(GL_LIGHTING);
-        myglbegin(GL_QUADS);
-        glVertex2dv(@PGDBArrayGLlwwidth(widtharray.PArray)^[i].quad[0]);
-        glVertex2dv(@PGDBArrayGLlwwidth(widtharray.PArray)^[i].quad[1]);
-        glVertex2dv(@PGDBArrayGLlwwidth(widtharray.PArray)^[i].quad[2]);
-        glVertex2dv(@PGDBArrayGLlwwidth(widtharray.PArray)^[i].quad[3]);
-        myglend();
-                                      //oglsm.myglDisable(GL_LIGHTING);
-      end;
-      begin
-        myglbegin(GL_LINEs);
-        glVertex2dv(@PGDBArrayVertex2D(vertexarray.parray)^[i]);
-        if i <> vertexarray.count - 1 then
-          glVertex2dv(@PGDBArrayVertex2D(vertexarray.parray)^[i + 1])
-        else
-          glVertex2dv(@PGDBArrayVertex2D(vertexarray.parray)^[0]);
-        myglend();
-      end;
-    end
-  else
-    for i := 0 to vertexarray.count - 2 do
-    begin
-                                  //if PGDBlwpolyline(temp)^.pwidtharray^.widtharray[i2].hw then
-      begin
-                                      //oglsm.myglEnable(GL_LIGHTING);
-        myglbegin(GL_QUADS);
-        glVertex2dv(@PGDBArrayGLlwwidth(widtharray.PArray)^[i].quad[0]);
-        glVertex2dv(@PGDBArrayGLlwwidth(widtharray.PArray)^[i].quad[1]);
-        glVertex2dv(@PGDBArrayGLlwwidth(widtharray.PArray)^[i].quad[2]);
-        glVertex2dv(@PGDBArrayGLlwwidth(widtharray.PArray)^[i].quad[3]);
-        myglend();
-                                      //oglsm.myglDisable(GL_LIGHTING);
-      end;
-                                  //else
-      begin
-        myglbegin(GL_LINE_STRIP);
-        glVertex2dv(@PGDBArrayVertex2D(vertexarray.parray)^[i]);
-        glVertex2dv(@PGDBArrayVertex2D(vertexarray.parray)^[i + 1]);
-        myglend();
-      end;
-    end;}
-    {if closed then myglbegin(GL_LINE_LOOP)
-              else myglbegin(GL_LINE_STRIP);
-    Vertex3D_in_WCS_Array.iterategl(@myglVertex3dv);
-    myglend();}
+
+  if dc.lod=LODCalculatedDetail then begin
     v:=uzegeometry.VertexSub(vp.BoundingBox.RTF,vp.BoundingBox.LBN);
+    simplydraw:=not SqrCanSimplyDrawInWCS(DC,uzegeometry.SqrOneVertexlength(v),49);
+  end else
+    simplydraw:=dc.lod=LODLowDetail;
 
-    if not SqrCanSimplyDrawInWCS(DC,uzegeometry.SqrOneVertexlength(v),49) then
-    if Width3D_in_WCS_Array.parray<>nil then
-           begin
-                q3d:=Width3D_in_WCS_Array.GetParrayAsPointer;
-                ie:=(Width3D_in_WCS_Array.count div 4)+1;
-                for i := 0 to (Width3D_in_WCS_Array.count-2)div ie do begin
-                dc.drawer.DrawLine3DInModelSpace(q3d^[0],q3d^[1],dc.DrawingContext.matrixs);
-                inc(q3d,ie);
-                end;
-                {oglsm.myglbegin(GL_Lines);
-                oglsm.myglVertex3dv(@q3d^[0]);
-                oglsm.myglVertex3dv(@q3d^[1]);
-                oglsm.myglend();}
-                exit;
-           end;
-
-    if closed then ie:=Width3D_in_WCS_Array.count - 1
-              else ie:=Width3D_in_WCS_Array.count - 2;
-
-
+  if simplydraw then begin
     q3d:=Width3D_in_WCS_Array.GetParrayAsPointer;
-    plw:=Width2D_in_OCS_Array.GetParrayAsPointer;
-    for i := 0 to ie do
-    begin
-      begin
-        if plw^.hw then
-        begin
-        dc.drawer.DrawQuad3DInModelSpace(q3d^[0],q3d^[1],q3d^[2],q3d^[3],dc.DrawingContext.matrixs);
-        {oglsm.myglbegin(GL_QUADS);
-        oglsm.myglVertex3dv(@q3d^[0]);
-        oglsm.myglVertex3dv(@q3d^[1]);
-        oglsm.myglVertex3dv(@q3d^[2]);
-        oglsm.myglVertex3dv(@q3d^[3]);
-        oglsm.myglend();}
+    if q3d<>nil then begin
+      //if dc.lod=LODLowDetail then
+      //  dc.drawer.SetLineWidth(2);
+
+      if Width3D_in_WCS_Array.Count>15 then begin
+        if Width3D_in_WCS_Array.parray<>nil then begin
+          ie:=(Width3D_in_WCS_Array.Count div 4)+4;
+          for i := 0 to (Width3D_in_WCS_Array.Count-2)div ie do begin
+            dc.drawer.DrawLine3DInModelSpace(
+              q3d^[0],q3d^[1],dc.DrawingContext.matrixs);
+            Inc(q3d,ie);
+          end;
         end;
-        inc(plw);
-        inc(q3d);
+      end else if Width3D_in_WCS_Array.Count>2 then begin
+        dc.drawer.DrawLine3DInModelSpace(vp.BoundingBox.LBN,vp.BoundingBox.RTF,
+                                         dc.DrawingContext.matrixs);
+      end else begin
+        dc.drawer.DrawLine3DInModelSpace(q3d^[0],q3d^[1],
+                                         dc.DrawingContext.matrixs);
       end;
-   end;
+    end;
+    exit;
+  end;
 
-    //oglsm.myglbegin(GL_Lines);
-    q3d:=Width3D_in_WCS_Array.GetParrayAsPointer;
-    plw:=Width2D_in_OCS_Array.GetParrayAsPointer;
-    for i := 0 to ie do
+  //dc.drawer.SetLineWidth(lw);
+
+  if closed then ie:=Width3D_in_WCS_Array.Count - 1
+  else
+    ie:=Width3D_in_WCS_Array.Count - 2;
+
+
+  q3d:=Width3D_in_WCS_Array.GetParrayAsPointer;
+  plw:=Width2D_in_OCS_Array.GetParrayAsPointer;
+  for i := 0 to ie do begin
     begin
-      begin
-        dc.drawer.DrawLine3DInModelSpace(q3d^[0],q3d^[1],dc.DrawingContext.matrixs);
-        //oglsm.myglVertex3dv(@q3d^[0]);
-        //oglsm.myglVertex3dv(@q3d^[1]);
-        if plw^.hw then
-        begin
+      if plw^.hw then
+        dc.drawer.DrawQuad3DInModelSpace(q3d^[0],q3d^[1],q3d^[2],
+          q3d^[3],dc.DrawingContext.matrixs);
+      Inc(plw);
+      Inc(q3d);
+    end;
+  end;
+
+  //oglsm.myglbegin(GL_Lines);
+  q3d:=Width3D_in_WCS_Array.GetParrayAsPointer;
+  plw:=Width2D_in_OCS_Array.GetParrayAsPointer;
+  for i := 0 to ie do begin
+    begin
+      dc.drawer.DrawLine3DInModelSpace(q3d^[0],q3d^[1],dc.DrawingContext.matrixs);
+      if plw^.hw then begin
         dc.drawer.DrawLine3DInModelSpace(q3d^[1],q3d^[2],dc.DrawingContext.matrixs);
-        //oglsm.myglVertex3dv(@q3d^[1]);
-        //oglsm.myglVertex3dv(@q3d^[2]);
         dc.drawer.DrawLine3DInModelSpace(q3d^[2],q3d^[3],dc.DrawingContext.matrixs);
-        //oglsm.myglVertex3dv(@q3d^[2]);
-        //oglsm.myglVertex3dv(@q3d^[3]);
         dc.drawer.DrawLine3DInModelSpace(q3d^[3],q3d^[0],dc.DrawingContext.matrixs);
-        //oglsm.myglVertex3dv(@q3d^[3]);
-        //oglsm.myglVertex3dv(@q3d^[0]);
-        end;
-        inc(plw);
-        inc(q3d);
       end;
-   end;
-   //oglsm.myglend();
-   inherited;
-
-
-
-    {myglbegin(GL_LINE_STRIP);
-    vertexarray.iterate(@glVertex2dv);
-    myglend();}
+      Inc(plw);
+      Inc(q3d);
+    end;
+  end;
+  inherited;
 end;
 
 procedure GDBObjLWpolyline.LoadFromDXF;
@@ -627,7 +573,7 @@ begin
   widthload:=false;
   closed:=false;
   if bp.ListPos.owner<>nil then
-    local.p_insert:=PGDBVertex(@bp.ListPos.owner^.GetMatrix^[3])^
+    local.p_insert:=PGDBVertex(@bp.ListPos.owner^.GetMatrix^.mtr[3])^
   else
     local.P_insert:=nulvertex;
 
@@ -795,29 +741,6 @@ begin
   end;
   Vertex3D_in_WCS_Array.Shrink;
   //----------------BuildSnapArray(Vertex3D_in_WCS_Array,snaparray,closed);
-end;
-procedure GDBObjLWpolyline.Renderfeedback;
-var tv:GDBvertex;
-    tpv:GDBVertex2D;
-    ptpv:PGDBVertex;
-    i:Integer;
-begin
-  if pprojpoint=nil then
-  begin
-       Getmem(Pointer(pprojpoint),sizeof(GDBpolyline2DArray));
-       pprojpoint^.init(Vertex3D_in_WCS_Array.count,closed);
-  end;
-  pprojpoint^.clear;
-                    ptpv:=Vertex3D_in_WCS_Array.GetParrayAsPointer;
-                    for i:=0 to Vertex3D_in_WCS_Array.count-1 do
-                    begin
-                         ProjectProc(ptpv^,tv);
-                         tpv.x:=tv.x;
-                         tpv.y:=tv.y;
-                         PprojPoint^.PushBackData(tpv);
-                         inc(ptpv);
-                    end;
-
 end;
 procedure GDBObjLWpolyline.CalcWidthSegment;
 var

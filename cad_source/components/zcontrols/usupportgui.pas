@@ -21,8 +21,9 @@ unit usupportgui;
 interface
 
 uses
-  StdCtrls,Controls,Classes,LCLType,ComCtrls,Graphics,LMessages,LCLIntf,LCLProc,
-  Laz2_XMLCfg,Laz2_DOM,sysutils,EditBtn,Masks;
+  StdCtrls,Controls,Classes,LCLType,ComCtrls,ColorBox,Graphics,
+  LMessages,LCLIntf,LCLProc,
+  Laz2_XMLCfg,Laz2_DOM,sysutils,Masks;
 
 type
   TIsShortcutFunc=function(var Message: TLMKey): boolean of object;
@@ -49,7 +50,8 @@ type
 procedure SetcomboItemsCount(cb:tcombobox;ItemsCount:integer);
 procedure ComboBoxDrawItem(Control:TWinControl;ARect:TRect;State:TOwnerDrawState);
 function ListViewDrawSubItem(State: TCustomDrawState;canvas:tcanvas;Item: TListItem;SubItem: Integer): TRect;
-procedure SetComboSize(cb:tcombobox;ItemH:Integer;ReadOnlyMode:TCBReadOnlyMode);
+procedure SetComboSize(cb:TComboBox;ItemH:Integer;ReadOnlyMode:TCBReadOnlyMode);overload;
+procedure SetComboSize(cb:TColorBox;ItemH:Integer);overload;
 function IsZShortcut(var Message: TLMKey;const ActiveControl,DefaultControl:TWinControl; const OldFunction:TIsShortcutFunc;SuppressedShortcuts:TXMLConfig): boolean;
 function MyTextToShortCut(const ShortCutText: string): TShortCut;
 function LMKey2ShortCut(var Message: TLMKey):TShortCut;
@@ -136,7 +138,7 @@ end;
 
 function getNodeMode(const aNode:TDomNode):TShortCutContextCheckMode;
 var
-  aNodeAttr:TDomNode;
+  //aNodeAttr:TDomNode;
   value:string;
 begin
   value:=uppercase(aNode.NodeName);
@@ -261,14 +263,27 @@ begin
   result:=not SuppresShortcut(TestedShortCut,ShortCutContext,SuppressedShortcuts);
   if result then result:=OldFunction(Message);
 end;
-procedure SetComboSize(cb:tcombobox;ItemH:Integer;ReadOnlyMode:TCBReadOnlyMode);
+procedure SetComboSize(cb:TComboBox;ItemH:Integer;ReadOnlyMode:TCBReadOnlyMode);
 begin
      cb.AutoSize:=false;
      {$IFDEF LCLWIN32}
      case ReadOnlyMode of
        CBReadOnly:cb.Style:=csOwnerDrawFixed;
        CBEditable:cb.Style:=csOwnerDrawEditableFixed;
+       CBDoNotTouch:;
      end;
+     cb.ItemHeight:=ItemH;
+     {$ENDIF}
+end;
+
+procedure SetComboSize(cb:TColorBox;ItemH:Integer);overload;
+begin
+     cb.AutoSize:=false;
+     {$IFDEF LCLWIN32}
+     //case ReadOnlyMode of
+     //  CBReadOnly:cb.Style:=csOwnerDrawFixed;
+     //  CBEditable:cb.Style:=csOwnerDrawEditableFixed;
+     //end;
      cb.ItemHeight:=ItemH;
      {$ENDIF}
 end;

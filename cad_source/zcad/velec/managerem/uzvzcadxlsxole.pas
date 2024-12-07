@@ -84,9 +84,9 @@ procedure copyRow(fromSheet:string;stRow:Cardinal;ToSheet:string;edRow:Cardinal)
 procedure ReplaceTextInRow(nameSheet:string;stRow:Cardinal;FromText,ToText:string);
 
 implementation
-const
-  xlCalculationAutomatic = -4105; // Excel controls recalculation.
-  xlCalculationManual    = -4135; // Calculation is done when the user requests it.
+//const
+//  xlCalculationAutomatic = -4105; // Excel controls recalculation.
+//  xlCalculationManual    = -4135; // Calculation is done when the user requests it.
 
 var
   Excel:OleVariant;

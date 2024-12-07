@@ -20,15 +20,15 @@ unit uzcuidialogs;
 {$INCLUDE zengineconfig.inc}
 interface
 uses
-    Controls,LCLTaskDialog,SysUtils,Forms,{$IFNDEF DELPHI}LCLtype,{$ELSE}windows,{$ENDIF}
+    Controls,{LCLTaskDialog,}Dialogs, SysUtils,Forms,{$IFNDEF DELPHI}LCLtype,{$ELSE}windows,{$ENDIF}
     uzcinterface,uzclog,uzelongprocesssupport,
     uzcuitypes,uzcuiutils,uzcuilcl2zc;
 
 type
 
   TLPSSupporthelper=class
-    class procedure StartLongProcessHandler(LPHandle:TLPSHandle;Total:TLPSCounter;LPName:TLPName);
-    class procedure EndLongProcessHandler(LPHandle:TLPSHandle;TotalLPTime:TDateTime);
+    class procedure StartLongProcessHandler(LPHandle:TLPSHandle;Total:TLPSCounter;LPName:TLPName;Options:TLPOpt);
+    class procedure EndLongProcessHandler(LPHandle:TLPSHandle;TotalLPTime:TDateTime;Options:TLPOpt);
   end;
 
 procedure FatalError(errstr:String);
@@ -55,7 +55,7 @@ begin
     FreeAndNil(Context);
 end;
 
-class procedure TLPSSupporthelper.EndLongProcessHandler(LPHandle:TLPSHandle;TotalLPTime:TDateTime);
+class procedure TLPSSupporthelper.EndLongProcessHandler(LPHandle:TLPSHandle;TotalLPTime:TDateTime;Options:TLPOpt);
 begin
   if lps.{isProcessed}isFirstProcess then begin
     if assigned(SuppressedMessages)then
@@ -63,7 +63,7 @@ begin
     TaskNameSave:='';
   end;
 end;
-class procedure TLPSSupporthelper.StartLongProcessHandler(LPHandle:TLPSHandle;Total:TLPSCounter;LPName:TLPName);
+class procedure TLPSSupporthelper.StartLongProcessHandler(LPHandle:TLPSHandle;Total:TLPSCounter;LPName:TLPName;Options:TLPOpt);
 begin
   if lps.isFirstProcess then begin
     if assigned(SuppressedMessages)then
@@ -88,11 +88,11 @@ end;
 function TZCMsgDlgIcon2TTaskDialogIcon(value:TZCMsgDlgIcon):TTaskDialogIcon;
 begin
   case value of
-    zcdiWarning:result:=tiWarning;
-   zcdiQuestion:result:=tiQuestion;
-      zcdiError:result:=tiError;
-zcdiInformation:result:=tiInformation;
-    zcdiNotUsed:result:=tiNotUsed;
+    zcdiWarning:result:=tdiWarning;
+   zcdiQuestion:result:=tdiQuestion;
+      zcdiError:result:=tdiError;
+zcdiInformation:result:=tdiInformation;
+    zcdiNotUsed:result:=tdiNone;
   end;
 end;
 
@@ -122,86 +122,100 @@ var
   FirstMainParent,MainParent:TWinControl;
   i:integer;
 begin
-  Task:=Default(TTaskDialog);
-  Result:=Default(TZCMsgDialogResult);
-  //FillChar(Task,SizeOf(Task),0);
-  if assigned(Context) then begin
-    PContext:=@Context;
-    TaskName:=Context.TaskName;
-  end else begin
-    PContext:=@SuppressedMessages;
-    TaskName:=TaskNameSave;
-  end;
-  if isSupressedMsgPresent(PContext) then begin
-    MsgID:=getMsgID(MsgStr);
-    if isMsgSupressed(PContext,MsgID,Result) then begin
-      exit;
+  Result.ModalResult:=ZCmrCancel;
+  Task:=TTaskDialog.Create(nil);
+  try
+    Result:=Default(TZCMsgDialogResult);
+    //FillChar(Task,SizeOf(Task),0);
+    if assigned(Context) then begin
+      PContext:=@Context;
+      TaskName:=Context.TaskName;
+    end else begin
+      PContext:=@SuppressedMessages;
+      TaskName:=TaskNameSave;
     end;
-  end else
-    MsgID:='';
-  ZCMsgCallBackInterface.Do_BeforeShowModal(nil);
-
-  CorrectButtons(buttons);
-
-  if MsgTitle='' then
-    Task.Title:=rsMsgWndTitle
-  else
-    Task.Title:=MsgTitle;
-
-  Task.Inst:='';
-  Task.Content:=MsgStr;
-  if (NeedAskDonShow)and((lps.isProcessed)or(assigned(PContext^))) then begin
-    if buttons=[zccbOK] then
-      Task.Verify:=format(rsDontShowThisNextTime,[TaskName])
-    else
-      Task.Verify:=format(rsMsgKeepChoice,[TaskName]);
-  end
-  else
-    Task.Verify:='';
-  Task.VerifyChecked := false;
-
-  ParentHWND:=0;
-
-  //считаем сколько фактически форм зкада показано на экране
-  FirstMainParent:=nil;
-  MainParent:=nil;
-  for i:=0 to Screen.CustomFormCount-1 do begin
-    MainParent:=Screen.CustomForms[i];
-    if MainParent.IsVisible then begin
-      while MainParent.Parent<>nil do
-        MainParent:=MainParent.Parent;
-      if MainParent is TCustomForm then
-        //сплэшскрин за отдельнцю форму не считаем
-        if (MainParent as TCustomForm).FormStyle=fsSplash then
-          continue;
-      if FirstMainParent=nil then
-        FirstMainParent:=MainParent
-      else
-        if FirstMainParent<>MainParent then
-          Break;
-    end else
-      MainParent:=FirstMainParent;
-  end;
-
-  //если одна, Task в центре формы, если несколько или нет вообще - в центре экрана
-  if (FirstMainParent=MainParent)and(FirstMainParent<>nil) then
-    TDF:=[tdfPositionRelativeToWindow]
-  else
-    TDF:=[];
-
-  Result.ModalResult:=TLCLModalResult2TZCMsgModalResult.Convert(Task.Execute(TZCMsgCommonButtons2TCommonButtons.Convert(buttons),0,TDF,TZCMsgDlgIcon2TTaskDialogIcon(aDialogIcon),tfiWarning,0,0,ParentHWND));//controls.mrOk
-  Result.RadioRes:=Task.RadioRes;
-  Result.SelectionRes:=Task.SelectionRes;
-  Result.VerifyChecked:=Task.VerifyChecked;
-
-  ZCMsgCallBackInterface.Do_AfterShowModal(nil);
-
-  if Task.VerifyChecked then begin
-    if MsgID='' then
+    if isSupressedMsgPresent(PContext) then begin
       MsgID:=getMsgID(MsgStr);
-    if not assigned(PContext^) then
-      PContext^:=TMessagesContext.Create(TaskNameSave);
-    PContext^.add(MsgID,Result);
+      if isMsgSupressed(PContext,MsgID,Result) then begin
+        exit;
+      end;
+    end else
+      MsgID:='';
+    ZCMsgCallBackInterface.Do_BeforeShowModal(nil);
+
+    CorrectButtons(buttons);
+
+    if MsgTitle='' then
+      Task.Caption:=rsMsgWndTitle
+    else
+      Task.Caption:=MsgTitle;
+
+    Task.{Inst}Title:='';
+    Task.Text:=MsgStr;
+    if (NeedAskDonShow)and((lps.isProcessed)or(assigned(PContext^))) then begin
+      if buttons=[zccbOK] then
+        Task.VerificationText:=format(rsDontShowThisNextTime,[TaskName])
+      else
+        Task.VerificationText:=format(rsMsgKeepChoice,[TaskName]);
+    end
+    else
+      Task.VerificationText:='';
+    Task.Flags:=Task.Flags-[tfVerificationFlagChecked];
+    //Task.VerifyChecked := false;
+
+    ParentHWND:=0;
+
+    //считаем сколько фактически форм зкада показано на экране
+    FirstMainParent:=nil;
+    MainParent:=nil;
+    for i:=0 to Screen.CustomFormCount-1 do begin
+      MainParent:=Screen.CustomForms[i];
+      if MainParent.IsVisible then begin
+        while MainParent.Parent<>nil do
+          MainParent:=MainParent.Parent;
+        if MainParent is TCustomForm then
+          //сплэшскрин за отдельнцю форму не считаем
+          if (MainParent as TCustomForm).FormStyle=fsSplash then
+            continue;
+        if FirstMainParent=nil then
+          FirstMainParent:=MainParent
+        else
+          if FirstMainParent<>MainParent then
+            Break;
+      end else
+        MainParent:=FirstMainParent;
+    end;
+
+    //если одна, Task в центре формы, если несколько или нет вообще - в центре экрана
+    if (FirstMainParent=MainParent)and(FirstMainParent<>nil) then
+      TDF:=[tfPositionRelativeToWindow]
+    else
+      TDF:=[];
+
+    Task.Flags:=Task.Flags+TDF;
+    Task.CommonButtons:=TZCMsgCommonButtons2TCommonButtons.Convert(buttons);
+    Task.MainIcon:=TZCMsgDlgIcon2TTaskDialogIcon(aDialogIcon);
+    //Task.Execute(TZCMsgCommonButtons2TCommonButtons.Convert(buttons),0,TDF,TZCMsgDlgIcon2TTaskDialogIcon(aDialogIcon),tdiWarning,0,0,}ParentHWND)
+
+    if Task.Execute{(ParentHWND)} then begin
+    Result.ModalResult:=TLCLModalResult2TZCMsgModalResult.Convert(Task.ModalResult);
+    //Result.RadioRes:=Task.RadioRes;
+    //Result.SelectionRes:=Task.SelectionRes;
+    Result.VerifyChecked:={Task.VerifyChecked}tfVerificationFlagChecked in Task.Flags;
+    end;
+
+
+    ZCMsgCallBackInterface.Do_AfterShowModal(nil);
+
+    if {Task.VerifyChecked}tfVerificationFlagChecked in Task.Flags then begin
+      if MsgID='' then
+        MsgID:=getMsgID(MsgStr);
+      if not assigned(PContext^) then
+        PContext^:=TMessagesContext.Create(TaskNameSave);
+      PContext^.add(MsgID,Result);
+    end;
+  finally
+    Task.Free;
   end;
 end;
 function zcQuestion(Caption,Question:TZCMsgStr;buttons:TZCMsgCommonButtons;icon:TZCMsgDlgIcon):TZCMsgCommonButton;

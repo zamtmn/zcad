@@ -26,13 +26,13 @@ uses
   uzeentdevice,TypeDescriptors,uzctnrVectorBytes,
   uzbtypes,uzeentsubordinated,uzeentity,uzeblockdef,
   varmandef,Varman,UUnitManager,URecordDescriptor,UBaseTypeDescriptor,
-  uzeentitiestree,usimplegenerics,uzeffdxfsupport,uzbpaths,uzcTranslations,
-  gzctnrVectorTypes,uzeBaseExtender,uzeconsts,uzgldrawcontext,
-  lptypes,lpvartypes,lpparser,lpcompiler,lputils,
-  lpeval,lpinterpreter,lpmessages,
-  gzctnrSTL,uzcsysvars,
+  {uzeentitiestree,}usimplegenerics,uzeffdxfsupport,uzbpaths,uzcTranslations,
+  {gzctnrVectorTypes,}uzeBaseExtender,{uzeconsts,}uzgldrawcontext,
+  lptypes,lpvartypes,lpparser,lpcompiler,//lputils,
+  lpeval,//lpinterpreter,lpmessages,
+  {gzctnrSTL,}uzcsysvars,
   LazUTF8,
-  uzbLogTypes,uzcLog,
+  {uzbLogTypes,}uzcLog,
   uzcLapeScriptsManager,uzcLapeScriptsImplBase;
 
 const

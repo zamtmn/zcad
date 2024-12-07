@@ -43,7 +43,7 @@ function CmdLinePrompt_com(const Context:TZCADCommandContext;operands:TCommandOp
 var
   //inpt:String;
   gr:TGetResult;
-  filename:string;
+  filename:string='';
   p:GDBVertex;
 begin
   if clFileParam=nil then
@@ -64,7 +64,9 @@ begin
              end;
              else ZCMsgCallBackInterface.TextMessage(format('GRId: %d',[commandmanager.GetLastId]),TMWOHistoryOut);
           end;
-  GRNormal:ZCMsgCallBackInterface.TextMessage(format('GRNormal: %g,%g,%g',[p.x,p.y,p.z]),TMWOHistoryOut);
+      GRNormal:ZCMsgCallBackInterface.TextMessage(format('GRNormal: %g,%g,%g',[p.x,p.y,p.z]),TMWOHistoryOut);
+      GRInput:ZCMsgCallBackInterface.TextMessage(format('You enter: %s',[commandmanager.GetLastInput]),TMWOHistoryOut);
+      GRCancel:ZCMsgCallBackInterface.TextMessage('You cancel',TMWOHistoryOut);
     end;
   until gr=GRCancel;
   result:=cmd_ok;

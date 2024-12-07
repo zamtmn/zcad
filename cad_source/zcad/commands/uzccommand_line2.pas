@@ -98,10 +98,9 @@ begin
             pold:=osp^.PGDBObject;
        end
   end else pold:=nil;
-  //pl^.RenderFeedback;
   if (button and MZW_LBUTTON)<>0 then
   begin
-    PCreatedGDBLine^.RenderFeedback(drawings.GetCurrentDWG^.pcamera^.POSCOUNT,drawings.GetCurrentDWG^.pcamera^,drawings.GetCurrentDWG^.myGluProject2,dc);
+    //PCreatedGDBLine^.RenderFeedback(drawings.GetCurrentDWG^.pcamera^.POSCOUNT,drawings.GetCurrentDWG^.pcamera^,drawings.GetCurrentDWG^.myGluProject2,dc);
     if po<>nil then
     begin
     PCreatedGDBLine^.bp.ListPos.Owner:=po;

@@ -23,7 +23,13 @@ uses
   sysutils,Types,
   uzeFontFileFormatTTFBackend,
   uzegeometrytypes,
-  freetypehdyn,ftfont;
+  {todo: убрать после выхода нового fpc}
+ {$IF FPC_FULLVERSION > 30202}
+  freetypehdyn,ftfont
+ {$ELSE}
+  tmp322_freetypehdyn,tmp322_ftfont
+ {$ENDIF}
+ ;
 const
   EmptyIndex=-1;
 type
@@ -48,7 +54,7 @@ type
 
       function GetAscent: single;override;
       function GetDescent: single;override;
-      function GetCapHeight: single;override;
+      function InternalGetCapHeight: single;override;
       function GetGlyph(Index: integer):TGlyphData;override;
 
     public
@@ -70,7 +76,8 @@ type
   end;
 
 implementation
-function readFT_SfntName(var SfntName:TFT_SfntName):UnicodeString;
+{TODO: нужен вариант функции с String}
+function readFT_SfntNameU(var SfntName:TFT_SfntName):UnicodeString;
 const
   maxstringlength=16000;
 var
@@ -98,26 +105,69 @@ begin
       ts:='';
       setlength(ts,len);
       system.Move(SfntName.aString^,ts[1],len);
-      result:=ts;
+      result:=UnicodeString(ts);
+    end;
+  end;
+end;
+
+function readFT_SfntNameA(var SfntName:TFT_SfntName):AnsiString;
+const
+  maxstringlength=16000;
+var
+  len,i:integer;
+  uresult:UnicodeString;
+begin
+  if SfntName.String_len=0 then
+    result:=''
+  else begin
+    if SfntName.platform_id<>1 then begin
+      if SfntName.String_len>maxstringlength then
+        len:=maxstringlength
+      else
+        len:=SfntName.String_len div 2;
+      uresult:='';
+      setlength(uresult,len);
+      system.Move(SfntName.aString^,uresult[1],len*2);
+      for i:=1 to len do
+        PWord(@uresult[i])^:=BEtoN(PWord(@uresult[i])^);
+      result:=string(uresult);
+    end else begin
+      if SfntName.String_len>maxstringlength then
+        len:=maxstringlength
+      else
+        len:=SfntName.String_len;
+      result:='';
+      setlength(result,len);
+      system.Move(SfntName.aString^,result[1],len);
     end;
   end;
 end;
 
 function TTTFBackendFreeType.TTFImplDummyGlobalScale:Double;
+var
+  phead:PTT_Header;
+  s1,s2:LongWord;
 begin
-  result:=6.51;
+  s1:=CTTFDefaultSizeInPoints*64*1{width}*96 div 72;
+  phead:=FT_Get_Sfnt_Table(FontMgr.GetFreeTypeFont(FreeTypeTTFImpl.FontID),FT_SFNT_HEAD);
+  s2:=phead^.Units_Per_EM*64;
+  phead:=FT_Get_Sfnt_Table(FontMgr.GetFreeTypeFont(FreeTypeTTFImpl.FontID),FT_SFNT_HEAD);
+  if (PTT_Header(phead)^.Flags and 8)<>0 then
+    s1:=(s1+32)and -64;
+  result:=s1/s2
+  //result:={6.51}853312/(256*64);
 end;
 
 function TTTFBackendFreeType.GetGlyph(Index: integer):TGlyphData;
 begin
   if GlyphInSlotIndex<>Index then begin
     if FT_Load_Glyph(FontMgr.GetFreeTypeFont(FreeTypeTTFImpl.FontID),Index,FT_LOAD_DEFAULT)=0 then begin
-      PtrInt(Result.PG):=Index;
       GlyphInSlotIndex:=Index;
       //FT_Get_Glyph(FontMgr.GetFreeTypeFont(FreeTypeTTFImpl.FontID).glyph,Result.PG);
     end else
       raise Exception.CreateFmt('TTTFBackendFreeType.GetGlyph FT_Load_Glyph(%d)<>0', [Index]);
   end;
+  PtrInt(Result.PG):=Index;
 end;
 procedure TTTFBackendFreeType.DoneGlyph(var GD:TGlyphData);
 begin
@@ -125,13 +175,13 @@ begin
 end;
 
 function TTTFBackendFreeType.GetGlyphBounds(GD:TGlyphData):TRect;
-var
-  BB:FT_BBox;
-  gm:FT_Glyph_Metrics;
+//var
+  //BB:FT_BBox;
+  //gm:FT_Glyph_Metrics;
 begin
   GetGlyph(PtrInt(GD.PG));
-  BB:=FontMgr.GetFreeTypeFont(FreeTypeTTFImpl.FontID).bbox;
-  gm:=FontMgr.GetFreeTypeFont(FreeTypeTTFImpl.FontID).glyph^.metrics;
+  //BB:=FontMgr.GetFreeTypeFont(FreeTypeTTFImpl.FontID).bbox;
+  //gm:=FontMgr.GetFreeTypeFont(FreeTypeTTFImpl.FontID).glyph^.metrics;
   with FontMgr.GetFreeTypeFont(FreeTypeTTFImpl.FontID).glyph^.metrics do begin
     result.left:=horiBearingX;
     result.right:=horiBearingX+width;
@@ -155,8 +205,11 @@ begin
   result:=FontMgr.GetFreeTypeFont(FreeTypeTTFImpl.FontID).glyph^.outline.n_points;
 end;
 function TTTFBackendFreeType.GetGlyphPoint(GD:TGlyphData;np:integer):GDBvertex2D;
+//var
+//  sm:FT_Size_Metrics;
 begin
   GetGlyph(PtrInt(GD.PG));
+  //sm:=FontMgr.GetFreeTypeFont(FreeTypeTTFImpl.FontID).glyph^.face.size.metrics;
   with FontMgr.GetFreeTypeFont(FreeTypeTTFImpl.FontID).glyph^.outline.points[np] do begin
     result.x:=x*64;
     result.y:=y*64;
@@ -211,42 +264,33 @@ begin
   result:=result * FPointSize * FDPI / 72;
 end;
 
-function TTTFBackendFreeType.GetCapHeight:single;
+function TTTFBackendFreeType.InternalGetCapHeight:single;
 var
   pos2,phead,phori:pointer;
 begin
   pos2:=FT_Get_Sfnt_Table(FontMgr.GetFreeTypeFont(FreeTypeTTFImpl.FontID),FT_SFNT_OS2);
   phead:=FT_Get_Sfnt_Table(FontMgr.GetFreeTypeFont(FreeTypeTTFImpl.FontID),FT_SFNT_HEAD);
   if pos2<>nil then begin
-    if PTT_OS(pos2)^.version>=2 then
-      result:=PTT_OS(pos2)^.sCapHeight
-    else begin
-      phori:=FT_Get_Sfnt_Table(FontMgr.GetFreeTypeFont(FreeTypeTTFImpl.FontID),FT_SFNT_HHEA);
-      if phori<>nil then
-        result:= PTT_HoriHeader(phori)^.Ascender
-      else
-        result:=0;
-      if result = 0 then
-      begin
-        if PTT_OS(pos2)^.version<>$ffff then
-        begin
-          if PTT_OS(pos2)^.usWinAscent <> 0 then
-            result := PTT_OS(pos2)^.usWinAscent
-          else
-            result := PTT_OS(pos2)^.sTypoAscender;
-        end;
-      end;
-      result:=result*2/3 {todo: добавить это в LazFreeType (если sCapHeight в заголовке нет, то она 3/2 Ascender)}
-    end;
+    if PTT_OS(pos2)^.version>=2 then begin
+      if PTT_OS(pos2)^.sCapHeight<>0 then begin
+        Result:=PTT_OS(pos2)^.sCapHeight;
+      end else
+      Result:=CalcCapHeight;
+    end else
+      Result:=CalcCapHeight;
   end else
-    exit(0);
-  if phead<>nil then
-    result:=result/PTT_Header(phead)^.Units_Per_EM
-  else
-    exit(0);
+    Result:=CalcCapHeight;
 
-  result:=(result * FPointSize * FDPI / 72);
+  if phead<>nil then
+    Result:=Result/PTT_Header(phead)^.Units_Per_EM
+  else begin
+    Result:=0;
+    exit(0);
+  end;
+
+  result:=Result*FPointSize*FDPI/72;
 end;
+
 
 function TTTFBackendFreeType.GetCharIndex(AUnicodeChar:integer):integer;
 begin
@@ -258,8 +302,8 @@ begin
 end;
 
 procedure TTTFBackendFreeType.SetSizeInPoints(const AValue:single);
-var
-  err:integer;
+//var
+//  err:integer;
 begin
   FPointSize:=AValue;
   FT_Set_Char_Size(FontMgr.GetFreeTypeFont(FreeTypeTTFImpl.FontID),round(64*AValue),round(64*AValue),600,600);
@@ -271,7 +315,7 @@ var
 begin
   SfntName:=Default(TFT_SfntName);
   FT_Get_Sfnt_Name(FontMgr.GetFreeTypeFont(FreeTypeTTFImpl.FontID),TT_NAME_ID_FULL_NAME,SfntName);
-  result:=readFT_SfntName(SfntName);
+  result:=readFT_SfntNameA(SfntName);
 end;
 function TTTFBackendFreeType.GetFamily:String;
 var
@@ -279,15 +323,18 @@ var
 begin
   SfntName:=Default(TFT_SfntName);
   FT_Get_Sfnt_Name(FontMgr.GetFreeTypeFont(FreeTypeTTFImpl.FontID),TT_NAME_ID_FONT_FAMILY,SfntName);
-  result:=readFT_SfntName(SfntName);
+  result:=readFT_SfntNameA(SfntName);
 end;
 
 function TTTFBackendFreeType.GetHinted:Boolean;
 begin
   //Result:=FreeTypeTTFImpl.Hinted;
+  //не реализовано
+  Result:=False;
 end;
 procedure TTTFBackendFreeType.SetHinted(const AValue:Boolean);
 begin
+  //не реализовано
   //FreeTypeTTFImpl.Hinted:=AValue;
 end;
 

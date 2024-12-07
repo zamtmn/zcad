@@ -37,6 +37,8 @@ type
 
   TMetaExtender=class of TBaseExtender;
 
+  TMetaExtender2Counter=TMyMapCounter<TMetaExtender>;
+
   TExtensions<GExtender:class;GMetaExtender;GExtendable>=class
   type
     TEntityExtenderVector=TMyVector<GExtender>;

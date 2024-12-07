@@ -62,19 +62,39 @@ resourcestring
   rsClosed='Closed';
 
 type
+  TZInfoProgress=class(TPanel)
+    strict private
+      ProcessBarCounter:integer;
+      ProcessBar:TProgressBar;
+      HintText:TLabel;
+      LastHintText:string;
+      NextLongProcessPos:integer;
+    public
+      constructor CreateOnTB(tb:TToolBar);
+
+      procedure SetText(AText:string;Force:Boolean=false);
+      procedure SetText2;
+
+      procedure ShowProcessBar(Total:Integer);
+      procedure ProcessProcessBar(Current:Integer);
+      procedure EndProcessBar;
+
+      procedure SwithToProcessBar;
+      procedure SwithToHintText;
+  end;
 
   { TZCADMainWindow }
 
   TZCADMainWindow = class(TForm)
     private
-      NextLongProcessPos:integer;
-      ProcessBar:TProgressBar;
+      InfoProgress:TZInfoProgress;
       SystemTimer:TTimer;
       toolbars:tstringlist;
       MainPanel:TForm;
       DHPanel:TPanel;
       HScrollBar,VScrollBar:TScrollBar;
       MouseTimer:TMouseTimer;
+      fNeedUpdateMainMenu:Boolean;
 
     published
       DockPanel:TAnchorDockPanel;
@@ -89,7 +109,6 @@ type
       procedure _onCreate(Sender: TObject);
 
     public
-
       PageControl:TmyPageControl;
 
       procedure ZcadException(Sender: TObject; E: Exception);
@@ -115,9 +134,9 @@ type
       procedure WaShowCursor(Sender:TAbstractViewArea;var DC:TDrawContext);
 
       //Long process support - draw progressbar. See uzelongprocesssupport unit
-      procedure StartLongProcess(LPHandle:TLPSHandle;Total:TLPSCounter;processname:TLPName);
-      procedure ProcessLongProcess(LPHandle:TLPSHandle;Current:TLPSCounter);
-      procedure EndLongProcess(LPHandle:TLPSHandle;TotalLPTime:TDateTime);
+      procedure StartLongProcess(LPHandle:TLPSHandle;Total:TLPSCounter;processname:TLPName;Options:TLPOpt);
+      procedure ProcessLongProcess(LPHandle:TLPSHandle;Current:TLPSCounter;Options:TLPOpt);
+      procedure EndLongProcess(LPHandle:TLPSHandle;TotalLPTime:TDateTime;Options:TLPOpt);
 
     public
       SuppressedShortcuts:TXMLConfig;
@@ -156,10 +175,18 @@ type
       procedure IPCMessage(Sender: TObject);
       {$ifdef windows}procedure SetTop;{$endif}
       procedure AsyncFree(Data:PtrInt);
-      procedure UpdateVisible(sender:TObject;GUIMode:TZMessageID);
+      procedure UpdateVisible(Sender:TObject;GUIMode:TZMessageID);
+      procedure AsyncUpdateVisible(Sender:PtrInt);
+      procedure DoUpdateMainMenu;
+      procedure NeedUpdateMainMenu;
       function GetFocusPriority:TControlWithPriority;
 
       procedure StartEntityDrag(StartX,StartY,X,Y:Integer);
+
+      procedure SwithToProcessBar;
+      procedure SwithToHintText;
+
+      procedure DropFiles(Sender: TObject; const FileNames: array of string);
   end;
 
 var
@@ -173,6 +200,137 @@ implementation
 var
   LMD:TModuleDesk;
 
+procedure TZCADMainWindow.SwithToProcessBar;
+begin
+  InfoProgress.SwithToProcessBar;
+end;
+
+procedure TZCADMainWindow.SwithToHintText;
+begin
+  InfoProgress.SwithToHintText;
+end;
+
+procedure TZCADMainWindow.DropFiles(Sender: TObject; const FileNames: array of string);
+var
+  filename, ts:string;
+  i: integer;
+begin
+  for i:=Low(FileNames) to High(FileNames) do
+    begin
+      filename:=FileNames[i];
+
+      GetPartOfPath(ts, filename, '|');
+      if FileExists({$IFNDEF DELPHI}utf8tosys{$ENDIF}(ts)) then begin
+        commandmanager.executecommandtotalend;
+        commandmanager.executecommand('Load('+ts+')',drawings.GetCurrentDWG,drawings.GetCurrentOGLWParam);
+      end;
+    end;
+end;
+
+constructor TZInfoProgress.CreateOnTB(tb:TToolBar);
+begin
+  inherited create(tb);
+
+  ProcessBarCounter:=0;
+
+  Align:=alLeft;
+  Width:=400;
+  Height:=tb.ButtonHeight;
+  BorderStyle:=bsNone;
+  BevelOuter:=bvNone;
+
+  ProcessBar:=TProgressBar.create(tb);
+  ProcessBar.Hide;
+  ProcessBar.Align:=alClient;
+  ProcessBar.Width:=400;
+  ProcessBar.Height:=tb.ButtonHeight;
+  ProcessBar.min:=0;
+  ProcessBar.max:=0;
+  ProcessBar.step:=10000;
+  ProcessBar.position:=0;
+  ProcessBar.Smooth:=true;
+  ProcessBar.Parent:=self;
+
+  HintText:=TLabel.Create(tb);
+  HintText.Align:=alClient;
+  HintText.AutoSize:=false;
+  HintText.Width:=400;
+  HintText.Height:=tb.ButtonHeight;
+  HintText.Layout:=tlCenter;
+  HintText.Alignment:=taCenter;
+  HintText.Parent:=self;
+
+  Parent:=tb;
+end;
+
+procedure TZInfoProgress.SetText(AText:string;Force:Boolean=false);
+begin
+  LastHintText:=AText;
+end;
+
+procedure TZInfoProgress.SetText2;
+begin
+  if LastHintText<>'' then begin
+    if assigned(HintText) then
+      HintText.caption:=LastHintText;
+    LastHintText:='';
+  end;
+end;
+
+procedure TZInfoProgress.SwithToProcessBar;
+begin
+  inc(ProcessBarCounter);
+  if ProcessBarCounter=1 then begin
+    HintText.Hide;
+    ProcessBar.Show;
+  end;
+end;
+
+procedure TZInfoProgress.SwithToHintText;
+begin
+  dec(ProcessBarCounter);
+  if ProcessBarCounter=0 then begin
+    ProcessBar.Hide;
+    HintText.Show;
+  end;
+end;
+
+procedure TZInfoProgress.ShowProcessBar(Total:Integer);
+begin
+  ProcessBar.max:=total;
+  ProcessBar.min:=0;
+  ProcessBar.position:=0;
+
+  SwithToProcessBar;
+
+  NextLongProcessPos:=0;
+end;
+
+procedure TZInfoProgress.ProcessProcessBar(Current:Integer);
+var
+  LongProcessPos:integer;
+begin
+  LongProcessPos:=round(clientwidth*(single(current)/single(ProcessBar.max)));
+  if LongProcessPos>NextLongProcessPos then begin
+      ProcessBar.position:=Current;
+      NextLongProcessPos:=LongProcessPos+20;
+      ProcessBar.repaint;
+  end;
+end;
+
+procedure TZInfoProgress.EndProcessBar;
+begin
+  SwithToHintText;
+  ProcessBar.min:=0;
+  ProcessBar.max:=0;
+  ProcessBar.position:=0;
+end;
+
+procedure StatusLineTextOut(s:String);
+begin
+  ZCADMainWindow.InfoProgress.SetText(s);
+end;
+
 procedure TZCADMainWindow.StartEntityDrag(StartX,StartY,X,Y:Integer);
 begin
   if commandmanager.CurrCmd.pcommandrunning=nil then begin
@@ -185,8 +343,8 @@ end;
 {$ifdef windows}
 procedure TZCADMainWindow.SetTop;
 var
-  hWnd{, hCurWnd, dwThreadID, dwCurThreadID}: THandle;
-  OldTimeOut: Cardinal;
+  hWnd{,hCurWnd, dwThreadID, dwCurThreadID}:THandle;
+  OldTimeOut:DWORD;
   //AResult: Boolean;
 begin
   if GetActiveWindow=Application.MainForm.Handle then Exit;
@@ -206,7 +364,7 @@ begin
         AttachThreadInput(dwThreadID, dwCurThreadID, False);
      end;}
      SetWindowPos(hWnd, HWND_NOTOPMOST, 0, 0, 0, 0, SWP_NOMOVE or SWP_NOSIZE);
-     SystemParametersInfo(SPI_SETFOREGROUNDLOCKTIMEOUT, 0, Pointer(OldTimeOut), 0);
+     SystemParametersInfo(SPI_SETFOREGROUNDLOCKTIMEOUT, 0, @OldTimeOut, 0);
 end;
 {$endif}
 procedure TZCADMainWindow.IPCMessage(Sender: TObject);
@@ -507,7 +665,8 @@ end;
 
 procedure TZCADMainWindow.asynccloseapp(Data: PtrInt);
 begin
-      CloseApp;
+  CommandManager.executecommandtotalend;
+  CloseApp;
 end;
 procedure TZCADMainWindow.FormClose(Sender: TObject; var CloseAction: TCloseAction);
 begin
@@ -526,11 +685,13 @@ procedure TZCADMainWindow.PageControlMouseDown(Sender: TObject;
 var
    i: integer;
 begin
-  I:=(Sender as TPageControl).IndexOfPageAt{TabIndexAtClientPos}(classes.Point(X,Y));
+  I:=(Sender as TPageControl).IndexOfPageAt(classes.Point(X,Y));
   if i>-1 then
-  if ssMiddle in Shift then
-  if (Sender is TPageControl) then
-                                  CloseDWGPage((Sender as TPageControl).Pages[I],false,nil);
+    if ssMiddle in Shift then
+      if (Sender is TPageControl) then begin
+        CommandManager.executecommandtotalend;
+        CloseDWGPage((Sender as TPageControl).Pages[I],false,nil);
+      end;
 end;
 procedure TZCADMainWindow.ShowFastMenu(Sender: TObject);
 begin
@@ -571,6 +732,9 @@ begin
   //EndLongProcessProc:=EndLongProcess;
   lps.AddOnLPEndHandler(EndLongProcess);
   //messageboxproc:=self.MessageBox;
+
+  ZCMsgCallBackInterface.RegisterHandler_StatusLineTextOut(StatusLineTextOut);
+
   ZCMsgCallBackInterface.RegisterHandler_GUIAction(self.setvisualprop);
   //SetVisuaProplProc:=self.setvisualprop;
   ZCMsgCallBackInterface.RegisterHandler_GUIAction(self.UpdateVisible);
@@ -806,6 +970,9 @@ begin
   ZCADMainWindow.PageControl.OnCloseTabClicked:=ZCADMainWindow.CloseDWGPageInterf;
   ZCADMainWindow.PageControl.OnMouseDown:=ZCADMainWindow.PageControlMouseDown;
   ZCADMainWindow.PageControl.ShowTabs:=SysVar.INTF.INTF_ShowDwgTabs^;
+
+  ZCADMainWindow.AllowDropFiles:=True;
+  ZCADMainWindow.OnDropFiles:=ZCADMainWindow.DropFiles;
 end;
 procedure SetupFIPCServer;
 begin
@@ -900,6 +1067,8 @@ begin
   ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIActionRedraw);
   MouseTimer:=TMouseTimer.Create;
   SetupFIPCServer;
+  fNeedUpdateMainMenu:=True;
+  DoUpdateMainMenu;
   finally programlog.leave(IfEntered);end;end;
 end;
 
@@ -1104,26 +1273,7 @@ end;
 
 procedure TZCADMainWindow.CreateHTPB(tb:TToolBar);
 begin
-  ProcessBar:=TProgressBar.create(tb);
-  ProcessBar.Hide;
-  ProcessBar.Align:=alLeft;
-  ProcessBar.Width:=400;
-  ProcessBar.Height:=tb.ButtonHeight;
-  ProcessBar.min:=0;
-  ProcessBar.max:=0;
-  ProcessBar.step:=10000;
-  ProcessBar.position:=0;
-  ProcessBar.Smooth:=true;
-  ProcessBar.Parent:=tb;
-
-  HintText:=TLabel.Create(tb);
-  HintText.Align:=alLeft;
-  HintText.AutoSize:=false;
-  HintText.Width:=400;
-  HintText.Height:=tb.ButtonHeight;
-  HintText.Layout:=tlCenter;
-  HintText.Alignment:=taCenter;
-  HintText.Parent:=tb;
+  InfoProgress:=TZInfoProgress.CreateOnTB(tb);
 end;
 procedure TZCADMainWindow.idle(Sender: TObject; var Done: Boolean);
 var
@@ -1131,6 +1281,11 @@ var
    rc:TDrawContext;
 begin
   with programlog.Enter('TZCADMainWindow.idle',LM_Debug,LMD) do begin try
+
+    InfoProgress.SetText2;
+
+    DoUpdateMainMenu;
+
     {IFDEF linux}
     if assigned(UniqueInstanceBase.FIPCServer)then
       if UniqueInstanceBase.FIPCServer.active then
@@ -1197,30 +1352,16 @@ begin
                                            dec(sysvar.SAVE.SAVE_Auto_Current_Interval^);
      end;
 end;
-procedure TZCADMainWindow.StartLongProcess(LPHandle:TLPSHandle;Total:TLPSCounter;processname:TLPName);
+procedure TZCADMainWindow.StartLongProcess(LPHandle:TLPSHandle;Total:TLPSCounter;processname:TLPName;Options:TLPOpt);
 begin
-  if (assigned(ProcessBar)and assigned(HintText)) then begin
-    ProcessBar.max:=total;
-    ProcessBar.min:=0;
-    ProcessBar.position:=0;
-    HintText.Hide;
-    ProcessBar.Show;
-    NextLongProcessPos:=0;
-  end;
+  if (Options and LPSONoProgressBar)=0 then
+    InfoProgress.ShowProcessBar(Total);
 end;
 
-procedure TZCADMainWindow.ProcessLongProcess(LPHandle:TLPSHandle;Current:TLPSCounter);
-var
-    LongProcessPos:integer;
+procedure TZCADMainWindow.ProcessLongProcess(LPHandle:TLPSHandle;Current:TLPSCounter;Options:TLPOpt);
 begin
-  if (assigned(ProcessBar)and assigned(HintText)) then begin
-    LongProcessPos:=round(clientwidth*(single(current)/single(ProcessBar.max)));
-    if LongProcessPos>NextLongProcessPos then begin
-      ProcessBar.position:=Current;
-      NextLongProcessPos:=LongProcessPos+20;
-      ProcessBar.repaint;
-    end;
-  end;
+  if (Options and LPSONoProgressBar)=0 then
+    InfoProgress.ProcessProcessBar(Current);
 end;
 
 procedure TZCADMainWindow.ShowAllCursors;
@@ -1241,19 +1382,14 @@ procedure TZCADMainWindow.EndLongProcess;
 var
    TimeStr,LPName:String;
 begin
-  if (assigned(ProcessBar)and assigned(HintText)) then
-  begin
-    ProcessBar.Hide;
-    HintText.Show;
-    ProcessBar.min:=0;
-    ProcessBar.max:=0;
-    ProcessBar.position:=0;
-  end;
+  if (Options and LPSONoProgressBar)=0 then
+  InfoProgress.EndProcessBar;
+
   str(TotalLPTime*10e4:3:2,TimeStr);
   LPName:=lps.getLPName(LPHandle);
 
-  if (not lps.hasOptions(LPHandle,LPSOSilent))and(not CommandManager.isBusy) then begin
-    if (LPName='')or(lps.hasOptions(LPHandle,LPSOSilent)) then
+  if (not lps.hasOptions(LPHandle,LPSOSilent))and(not CommandManager.isBusy)and((Options and LPSOSilent)=0) then begin
+    if (LPName='') then
       ZCMsgCallBackInterface.TextMessage(format(rscompiledtimemsg,[TimeStr]),[TMWOToConsole])
     else
       ZCMsgCallBackInterface.TextMessage(format(rsprocesstimemsg,[LPName,TimeStr]),[TMWOToConsole]);
@@ -1375,6 +1511,7 @@ end;
 
 function TZCADMainWindow.wamu(Sender:TAbstractViewArea;ZC:TZKeys;X,Y:Integer;onmouseobject:Pointer;var NeedRedraw:Boolean):boolean;
 begin
+  result:=false;
   MouseTimer.Touch(Point(X,Y),[TMouseTimer.TReason.RMUp]);
 end;
 
@@ -1575,6 +1712,7 @@ begin
        if commandmanager.CurrCmd.pcommandrunning=nil then
          begin
          //Sender.PDWG.GetCurrentROOT.ObjArray.DeSelect(Sender.param.SelDesc.Selectedobjcount,drawings.GetCurrentDWG^.DeSelector);
+         Sender.SetMouseMode(cDefaultMouseMode);
          Sender.PDWG.DeSelectAll;
          Sender.param.SelDesc.LastSelectedObject := nil;
          Sender.param.SelDesc.OnMouseObject := nil;
@@ -1669,7 +1807,7 @@ procedure TZCADMainWindow.WaShowCursor(Sender:TAbstractViewArea;var DC:TDrawCont
 begin
      if sender.param.lastonmouseobject<>nil then
                                            begin
-                                             PGDBObjEntity(sender.param.lastonmouseobject)^.RenderFeedBack(sender.pdwg.GetPcamera^.POSCOUNT,sender.pdwg^.GetPcamera^, sender.pdwg^.myGluProject2,dc);
+                                             //PGDBObjEntity(sender.param.lastonmouseobject)^.RenderFeedBack(sender.pdwg.GetPcamera^.POSCOUNT,sender.pdwg^.GetPcamera^, sender.pdwg^.myGluProject2,dc);
                                              pGDBObjEntity(sender.param.lastonmouseobject)^.higlight(dc);
                                            end;
 end;
@@ -1814,7 +1952,36 @@ begin
     result:=true;
 end;
 
-procedure TZCADMainWindow.updatevisible(sender:TObject;GUIMode:TZMessageID);
+procedure TZCADMainWindow.NeedUpdateMainMenu;
+begin
+  fNeedUpdateMainMenu:=true;
+end;
+
+procedure TZCADMainWindow.DoUpdateMainMenu;
+var
+  oldmenu,newmenu:TMainMenu;
+begin
+  if fNeedUpdateMainMenu then begin
+    fNeedUpdateMainMenu:=false;
+    oldmenu:=self.Menu;
+    if assigned(oldmenu) then
+      oldmenu.Name:='';
+    newmenu:=TMainMenu(MenusManager.GetMainMenu('MAINMENU',application));
+    if IsDifferentMenu(oldmenu,newmenu) then begin
+      BeginFormUpdate;
+      self.Menu:=newmenu;
+
+      MetaDarkFormChanged(self);
+
+      if assigned(oldmenu) then
+        Application.QueueAsyncCall(AsyncFree,PtrInt(oldmenu));
+      EndFormUpdate;
+    end else
+      FreeAndNil(newmenu);
+  end;
+end;
+
+procedure TZCADMainWindow.AsyncUpdateVisible(Sender:PtrInt);
 var
    GVA:TGeneralViewArea;
    name:String;
@@ -1822,24 +1989,10 @@ var
    pdwg:PTSimpleDrawing;
    FIPCServerRunning:boolean;
    //otherinstancerunning:boolean;
-   oldmenu,newmenu:TMainMenu;
+   //oldmenu,newmenu:TMainMenu;
 begin
-  if GUIMode<>ZMsgID_GUIActionRedraw then
-    exit;
 
-  oldmenu:=self.Menu;
-  if assigned(oldmenu) then
-    oldmenu.Name:='';
-  newmenu:=TMainMenu(MenusManager.GetMainMenu('MAINMENU',application));
-  if IsDifferentMenu(oldmenu,newmenu) then begin
-    self.Menu:=newmenu;
-
-    MetaDarkFormChanged(self);
-
-    if assigned(oldmenu) then
-      Application.QueueAsyncCall(AsyncFree,PtrInt(oldmenu));
-  end else
-    FreeAndNil(newmenu);
+  NeedUpdateMainMenu;
 
   if assigned(UniqueInstanceBase.FIPCServer) then
     FIPCServerRunning:=UniqueInstanceBase.FIPCServer.Active
@@ -1858,164 +2011,121 @@ begin
               end;
             end;
     end;
+
   if commandmanager.SilentCounter=0 then
     ZCMsgCallBackInterface.Do_GUIMode(ZMsgID_GUICMDLineCheck);
 
-   pdwg:=drawings.GetCurrentDWG;
-   if assigned(ZCADMainWindow)then
-   begin
-   ZCADMainWindow.UpdateControls;
-   ZCADMainWindow.correctscrollbars;
-   k:=0;
-  if (pdwg<>nil)and(pdwg<>PTSimpleDrawing(BlockBaseDWG)) then
-  begin
-  //ZCADMainWindow.setvisualprop;
-  ZCMsgCallBackInterface.Do_GUIaction(self,ZMsgID_GUIActionRebuild);
-  ZCADMainWindow.Caption:=programname+' v'+sysvar.SYS.SYS_Version^+' - ['+drawings.GetCurrentDWG.GetFileName+']';
-
-  EnableControls(true);
-
-  {if assigned(LayerBox) then
-  LayerBox.enabled:=true;}
-  {if assigned(LineWBox) then
-  LineWBox.enabled:=true;}
-  {if assigned(ColorBox) then
-  ColorBox.enabled:=true;}
-  {if assigned(LTypeBox) then
-  LTypeBox.enabled:=true;}
-  {if assigned(TStyleBox) then
-  TStyleBox.enabled:=true;}
-  {if assigned(DimStyleBox) then
-  DimStyleBox.enabled:=true;}
-
-
-  if assigned(ZCADMainWindow.PageControl) then
-  if assigned(SysVar.INTF.INTF_ShowDwgTabs) then
-  if sysvar.INTF.INTF_ShowDwgTabs^ then
-                                       ZCADMainWindow.PageControl.ShowTabs:=true
-                                   else
-                                       ZCADMainWindow.PageControl.ShowTabs:=false;
-  if assigned(SysVar.INTF.INTF_DwgTabsPosition) then
-  begin
-       case SysVar.INTF.INTF_DwgTabsPosition^ of
-                                                TATop:ZCADMainWindow.PageControl.TabPosition:=tpTop;
-                                                TABottom:ZCADMainWindow.PageControl.TabPosition:=tpBottom;
-                                                TALeft:ZCADMainWindow.PageControl.TabPosition:=tpLeft;
-                                                TARight:ZCADMainWindow.PageControl.TabPosition:=tpRight;
+  pdwg:=drawings.GetCurrentDWG;
+  if assigned(ZCADMainWindow)then begin
+    ZCADMainWindow.UpdateControls;
+    ZCADMainWindow.correctscrollbars;
+    k:=0;
+    if (pdwg<>nil)and(pdwg<>PTSimpleDrawing(BlockBaseDWG)) then begin
+      ZCMsgCallBackInterface.Do_GUIaction(self,ZMsgID_GUIActionRebuild);
+      ZCADMainWindow.Caption:=programname+' v'+sysvar.SYS.SYS_Version^+' - ['+drawings.GetCurrentDWG.GetFileName+']';
+      EnableControls(true);
+      if assigned(ZCADMainWindow.PageControl) then
+        if assigned(SysVar.INTF.INTF_ShowDwgTabs) then
+          if sysvar.INTF.INTF_ShowDwgTabs^ then
+            ZCADMainWindow.PageControl.ShowTabs:=true
+          else
+            ZCADMainWindow.PageControl.ShowTabs:=false;
+      if assigned(SysVar.INTF.INTF_DwgTabsPosition) then begin
+        case SysVar.INTF.INTF_DwgTabsPosition^ of
+          TATop:ZCADMainWindow.PageControl.TabPosition:=tpTop;
+          TABottom:ZCADMainWindow.PageControl.TabPosition:=tpBottom;
+          TALeft:ZCADMainWindow.PageControl.TabPosition:=tpLeft;
+          TARight:ZCADMainWindow.PageControl.TabPosition:=tpRight;
        end;
-  end;
-
-  if assigned(SysVar.INTF.INTF_ThemedUpToolbars) then
-    ZCADMainWindow.CoolBarU.Themed:=SysVar.INTF.INTF_ThemedUpToolbars^;
-  if assigned(SysVar.INTF.INTF_ThemedRightToolbars) then
-    ZCADMainWindow.CoolBarR.Themed:=SysVar.INTF.INTF_ThemedRightToolbars^;
-  if assigned(SysVar.INTF.INTF_ThemedDownToolbars) then
-    ZCADMainWindow.CoolBarD.Themed:=SysVar.INTF.INTF_ThemedDownToolbars^;
-  if assigned(SysVar.INTF.INTF_ThemedLeftToolbars) then
-    ZCADMainWindow.CoolBarL.Themed:=SysVar.INTF.INTF_ThemedLeftToolbars^;
-
-  if assigned(ZCADMainWindow.PageControl) then
-  if assigned(SysVar.INTF.INTF_ShowDwgTabCloseBurron) then
-  begin
-       if SysVar.INTF.INTF_ShowDwgTabCloseBurron^ then
-                                                      ZCADMainWindow.PageControl.Options:=ZCADMainWindow.PageControl.Options+[nboShowCloseButtons]
-                                                  else
-                                                      ZCADMainWindow.PageControl.Options:=ZCADMainWindow.PageControl.Options-[nboShowCloseButtons];
-  end;
-
-  if assigned(ZCADMainWindow.HScrollBar) then
-  begin
-  ZCADMainWindow.HScrollBar.enabled:=true;
-  ZCADMainWindow.correctscrollbars;
-  if assigned(sysvar.INTF.INTF_ShowScrollBars) then
-  if sysvar.INTF.INTF_ShowScrollBars^ then
-                                       ZCADMainWindow.HScrollBar.Show
-                                   else
-                                       ZCADMainWindow.HScrollBar.Hide;
-  end;
-
-  if assigned(ZCADMainWindow.VScrollBar) then
-  begin
-  ZCADMainWindow.VScrollBar.enabled:=true;
-  if assigned(sysvar.INTF.INTF_ShowScrollBars) then
-  if sysvar.INTF.INTF_ShowScrollBars^ then
-                                       ZCADMainWindow.VScrollBar.Show
-                                   else
-                                       ZCADMainWindow.VScrollBar.Hide;
-  end;
-  for i:=0 to ZCADMainWindow.PageControl.PageCount-1 do
-    begin
-         GVA:=TGeneralViewArea(FindComponentByType(ZCADMainWindow.PageControl.Pages[i],TGeneralViewArea));
-           if assigned(GVA) then
-            if GVA.PDWG<>nil then
-            begin
-                name:=extractfilename(PTZCADDrawing(GVA.PDWG)^.FileName);
-                if @PTZCADDrawing(GVA.PDWG).mainObjRoot=(PTZCADDrawing(GVA.PDWG).pObjRoot) then
-                                                                     ZCADMainWindow.PageControl.Pages[i].caption:=(name)
-                                                                 else
-                                                                     ZCADMainWindow.PageControl.Pages[i].caption:='BEdit('+name+':'+Tria_AnsiToUtf8(PGDBObjBlockdef(PTZCADDrawing(GVA.PDWG).pObjRoot).Name)+')';
-
-                if k<=high(OpenedDrawings) then
-                begin
-                OpenedDrawings[k].Caption:=ZCADMainWindow.PageControl.Pages[i].caption;
-                OpenedDrawings[k].visible:=true;
-                OpenedDrawings[k].command:='ShowPage';
-                OpenedDrawings[k].options:=inttostr(i);
-                inc(k);
-                end;
-                end;
-
-            end;
-  for i:=k to high(OpenedDrawings) do
-  begin
-       OpenedDrawings[i].visible:=false;
-  end;
-  end
-  else
-      begin
-           for i:=low(OpenedDrawings) to high(OpenedDrawings) do
-             begin
-                         OpenedDrawings[i].Caption:='';
-                         OpenedDrawings[i].visible:=false;
-                         OpenedDrawings[i].command:='';
-             end;
-           ZCADMainWindow.Caption:=(programname+' v'+sysvar.SYS.SYS_Version^);
-           EnableControls(false);
-           {if assigned(LayerBox)then
-           LayerBox.enabled:=false;
-           if assigned(LineWBox)then
-           LineWBox.enabled:=false;
-           if assigned(ColorBox) then
-           ColorBox.enabled:=false;
-           if assigned(TStyleBox) then
-           TStyleBox.enabled:=false;
-           if assigned(DimStyleBox) then
-           DimStyleBox.enabled:=false;
-           if assigned(LTypeBox) then
-           LTypeBox.enabled:=false;}
-           if assigned(ZCADMainWindow.HScrollBar) then
-           begin
-           ZCADMainWindow.HScrollBar.enabled:=false;
-           if assigned(sysvar.INTF.INTF_ShowScrollBars) then
-           if sysvar.INTF.INTF_ShowScrollBars^ then
-
-                                       ZCADMainWindow.HScrollBar.Show
-                                   else
-                                       ZCADMainWindow.HScrollBar.Hide;
-
-           end;
-           if assigned(ZCADMainWindow.VScrollBar) then
-           begin
-           ZCADMainWindow.VScrollBar.enabled:=false;
-           if assigned(sysvar.INTF.INTF_ShowScrollBars) then
-           if sysvar.INTF.INTF_ShowScrollBars^ then
-                                       ZCADMainWindow.VScrollBar.Show
-                                   else
-                                       ZCADMainWindow.VScrollBar.Hide;
-           end;
       end;
+      if assigned(SysVar.INTF.INTF_ThemedUpToolbars) then
+        ZCADMainWindow.CoolBarU.Themed:=SysVar.INTF.INTF_ThemedUpToolbars^;
+      if assigned(SysVar.INTF.INTF_ThemedRightToolbars) then
+        ZCADMainWindow.CoolBarR.Themed:=SysVar.INTF.INTF_ThemedRightToolbars^;
+      if assigned(SysVar.INTF.INTF_ThemedDownToolbars) then
+        ZCADMainWindow.CoolBarD.Themed:=SysVar.INTF.INTF_ThemedDownToolbars^;
+      if assigned(SysVar.INTF.INTF_ThemedLeftToolbars) then
+        ZCADMainWindow.CoolBarL.Themed:=SysVar.INTF.INTF_ThemedLeftToolbars^;
+      if assigned(ZCADMainWindow.PageControl) then
+        if assigned(SysVar.INTF.INTF_ShowDwgTabCloseBurron) then begin
+          if SysVar.INTF.INTF_ShowDwgTabCloseBurron^ then
+            ZCADMainWindow.PageControl.Options:=ZCADMainWindow.PageControl.Options+[nboShowCloseButtons]
+          else
+            ZCADMainWindow.PageControl.Options:=ZCADMainWindow.PageControl.Options-[nboShowCloseButtons];
+        end;
+      if assigned(ZCADMainWindow.HScrollBar) then begin
+        ZCADMainWindow.HScrollBar.enabled:=true;
+        ZCADMainWindow.correctscrollbars;
+        if assigned(sysvar.INTF.INTF_ShowScrollBars) then
+          if sysvar.INTF.INTF_ShowScrollBars^ then
+            ZCADMainWindow.HScrollBar.Show
+          else
+            ZCADMainWindow.HScrollBar.Hide;
+      end;
+      if assigned(ZCADMainWindow.VScrollBar) then begin
+        ZCADMainWindow.VScrollBar.enabled:=true;
+        if assigned(sysvar.INTF.INTF_ShowScrollBars) then
+          if sysvar.INTF.INTF_ShowScrollBars^ then
+            ZCADMainWindow.VScrollBar.Show
+          else
+            ZCADMainWindow.VScrollBar.Hide;
+      end;
+      for i:=0 to ZCADMainWindow.PageControl.PageCount-1 do begin
+        GVA:=TGeneralViewArea(FindComponentByType(ZCADMainWindow.PageControl.Pages[i],TGeneralViewArea));
+        if assigned(GVA) then
+          if GVA.PDWG<>nil then begin
+            name:=extractfilename(PTZCADDrawing(GVA.PDWG)^.FileName);
+            if @PTZCADDrawing(GVA.PDWG).mainObjRoot=(PTZCADDrawing(GVA.PDWG).pObjRoot) then
+              ZCADMainWindow.PageControl.Pages[i].caption:=(name)
+            else
+              ZCADMainWindow.PageControl.Pages[i].caption:='BEdit('+name+':'+Tria_AnsiToUtf8(PGDBObjBlockdef(PTZCADDrawing(GVA.PDWG).pObjRoot).Name)+')';
+            if k<=high(OpenedDrawings) then begin
+              OpenedDrawings[k].Caption:=ZCADMainWindow.PageControl.Pages[i].caption;
+              OpenedDrawings[k].visible:=true;
+              OpenedDrawings[k].command:='ShowPage';
+              OpenedDrawings[k].options:=inttostr(i);
+              inc(k);
+            end;
+          end;
+      end;
+      for i:=k to high(OpenedDrawings) do begin
+        OpenedDrawings[i].visible:=false;
+      end;
+    end else begin
+      for i:=low(OpenedDrawings) to high(OpenedDrawings) do begin
+        OpenedDrawings[i].Caption:='';
+        OpenedDrawings[i].visible:=false;
+        OpenedDrawings[i].command:='';
+      end;
+      ZCADMainWindow.Caption:=(programname+' v'+sysvar.SYS.SYS_Version^);
+      EnableControls(false);
+      if assigned(ZCADMainWindow.HScrollBar) then begin
+        ZCADMainWindow.HScrollBar.enabled:=false;
+        if assigned(sysvar.INTF.INTF_ShowScrollBars) then
+          if sysvar.INTF.INTF_ShowScrollBars^ then
+
+            ZCADMainWindow.HScrollBar.Show
+          else
+            ZCADMainWindow.HScrollBar.Hide;
+      end;
+      if assigned(ZCADMainWindow.VScrollBar) then begin
+        ZCADMainWindow.VScrollBar.enabled:=false;
+        if assigned(sysvar.INTF.INTF_ShowScrollBars) then
+          if sysvar.INTF.INTF_ShowScrollBars^ then
+            ZCADMainWindow.VScrollBar.Show
+          else
+            ZCADMainWindow.VScrollBar.Hide;
+      end;
+    end;
   end;
-  end;
+end;
+
+procedure TZCADMainWindow.updatevisible(Sender:TObject;GUIMode:TZMessageID);
+begin
+  if GUIMode<>ZMsgID_GUIActionRedraw then
+    exit;
+  Application.QueueAsyncCall(AsyncUpdateVisible,PtrInt(Sender));
+end;
 initialization
 begin
   LMD:=programlog.RegisterModule('zcad\gui\uzcmainwindow-gui');

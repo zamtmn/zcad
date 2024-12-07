@@ -37,8 +37,9 @@ uses
   LazUTF8,
   SysUtils,
   uzbtypes,
-  uzeffdxf,
-  uzcutils;
+  uzeffdxf
+  //,uzcutils
+  ;
 
 type
   PasteClip_com =  object(FloatInsert_com)

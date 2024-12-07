@@ -64,17 +64,22 @@ begin
 end;
 procedure rotate_com.rot(a:Double; button: Byte);
 var
-    dispmatr,im,rotmatr:DMatrix4D;
-    ir:itrec;
-    pcd:PTCopyObjectDesc;
-    //v1,v2:GDBVertex2d;
-    m:tmethod;
-    dc:TDrawContext;
+  dispmatr,im,rotmatr:DMatrix4D;
+  ir:itrec;
+  pcd:PTCopyObjectDesc;
+  m:tmethod;
+  dc:TDrawContext;
+  tr:GDBvertex;
 begin
-  dispmatr:=uzegeometry.CreateTranslationMatrix(createvertex(-t3dp.x,-t3dp.y,-t3dp.z));
+  if (drawings.GetCurrentDWG^.GetPcamera^.notuseLCS)or((button and MZW_LBUTTON)<>0) then
+    tr:=t3dp
+  else
+    tr:=t3dp+drawings.GetCurrentDWG^.GetPcamera^.CamCSOffset;
+
+  dispmatr:=uzegeometry.CreateTranslationMatrix(-tr);
   rotmatr:=uzegeometry.CreateRotationMatrixZ(a);
   rotmatr:=uzegeometry.MatrixMultiply(dispmatr,rotmatr);
-  dispmatr:=uzegeometry.CreateTranslationMatrix(createvertex(t3dp.x,t3dp.y,t3dp.z));
+  dispmatr:=uzegeometry.CreateTranslationMatrix(tr);
   dispmatr:=uzegeometry.MatrixMultiply(rotmatr,dispmatr);
   dc:=drawings.GetCurrentDWG^.CreateDrawingRC;
 

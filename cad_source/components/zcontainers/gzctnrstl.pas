@@ -20,13 +20,16 @@ unit gzctnrSTL;
 interface
 uses
   gvector,
-  gutil,gzmap,ghashmap,generics.collections,
+  gutil,gmap,ghashmap,generics.collections,
   sysutils;
 type
 TMyMapGenOld <TKey, TValue, TCompare> = class( TMap<TKey, TValue, TCompare>);
 TMyMapGen <TKey,TValue> = class( TDictionary<TKey,TValue>)
   function MyGetValue(const key:TKey):TValue;inline;
-  //function MyGetMutableValue(key:TKey; out PAValue:PValue):boolean;
+ {$If FPC_FULLVERSION <= 30202}
+  function GetMutableValue(const AKey: TKey): PValue; inline;
+  function TryGetMutableValue(const AKey: TKey; out APValue: PValue): Boolean;
+ {$EndIf}
 end;
 TMyMap <TKey, TValue> = class( TMyMapGen<TKey, TValue>)
   procedure MyGetOrCreateValue(const key:TKey; var Value:TValue; out OutValue:TValue);inline;
@@ -47,6 +50,10 @@ end;
     //function MyGetValue(key:TKey; out Value:TValue):boolean;
     //function MyGetMutableValue(key:TKey; out PValue:{$IFNDEF DELPHI}PTValue{$ENDIF}{$IFDEF DELPHI}pointer{$ENDIF}):boolean;
     function MyContans(const key:TKey):boolean;
+   {$If FPC_FULLVERSION <= 30202}
+    function GetMutableValue(key:TKey):PTValue;inline;
+    function TryGetMutableValue(key:TKey;out pvalue:PTValue):boolean;inline;
+   {$EndIf}
 end;
 TMyVector <T> = class(TVector<T>)
    procedure CopyTo(Dst:TMyVector<T>);
@@ -187,6 +194,45 @@ begin
     PAValue:=@FItems[LIndex].Pair.Value;
   end;
 end;}
+{$If FPC_FULLVERSION <= 30202}
+function TMyMapGen<TKey, TValue>.GetMutableValue(const AKey: TKey): PValue;
+var
+  LIndex: SizeInt;
+  LHash: UInt32;
+begin
+  LIndex := FindBucketIndex(FItems, AKey, LHash);
+  if LIndex < 0 then
+    Result := Nil
+  else
+    Result := @FItems[LIndex].Pair.Value;
+end;
+
+function TMyMapGen<TKey, TValue>.TryGetMutableValue(const AKey: TKey; out APValue: PValue): Boolean;
+begin
+  APValue := GetMutableValue(AKey);
+  Result := APValue <>Nil;
+end;
+
+function GKey2DataMapOld<TKey, TValue, TCompare>.GetMutableValue(key:TKey):PTValue;inline;
+var Pair:TPair;
+    Node:TMSet.PNode;
+begin
+ Pair.Key:=key;
+ Node:=FSet.NFind(Pair);
+ if Node=nil then
+   result:=nil
+ else
+   result:=@Node^.Data.Value;
+end;
+
+function GKey2DataMapOld<TKey, TValue, TCompare>.TryGetMutableValue(key:TKey;out pvalue:PTValue):boolean;
+var Pair:TPair;
+    Node:TMSet.PNode;
+begin
+  pvalue:=GetMutableValue(key);
+  Result:=pvalue<>nil;
+end;
+{$EndIf}
 
 function TMyGenMapCounter<TKey,TValue>.CountKey(const key:TKey; const InitialCounter:TValue=1):TValue;inline;
 var
@@ -254,8 +300,8 @@ begin
 end;}
 function GKey2DataMapOld<TKey, TValue,TCompare>.MyContans(const key:TKey):boolean;
 var
-   Pair:TPair;
-   Node: TMSet.PNode;
+   //Pair:TPair;
+   //Node: TMSet.PNode;
    p:pointer;
 begin
   result:=tryGetMutableValue(key,p);

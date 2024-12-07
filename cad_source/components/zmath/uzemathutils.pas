@@ -121,8 +121,8 @@ var
    _min,_sec:integer;
    degs,mins,secs:string;
    subaprec:TUPrec;
-   SUDir:TSUDir;
-   SUSubDir:TSUSubDir;
+   //SUDir:TSUDir;
+   //SUSubDir:TSUSubDir;
 function GetAngleDegreesMinutesSeconds:String;
 var
    i:integer;

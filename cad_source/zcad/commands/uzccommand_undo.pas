@@ -52,6 +52,7 @@ begin
   case PTZCADDrawing(drawings.GetCurrentDWG).UndoStack.undo(msg,prevundo,overlay) of
     URRNoCommandsToUndoInOverlayMode:ZCMsgCallBackInterface.TextMessage(rscmNoCTUSE,TMWOShowError);
     URRNoCommandsToUndo:ZCMsgCallBackInterface.TextMessage(rscmNoCTU,TMWOShowError);
+    URROk,URRNoCommandsToRedo:;//заглушка от варнинга
   end;
   if msg<>'' then ZCMsgCallBackInterface.TextMessage(msg,TMWOHistoryOut);
   zcRedrawCurrentDrawing;

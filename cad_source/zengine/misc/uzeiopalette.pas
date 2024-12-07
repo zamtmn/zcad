@@ -20,7 +20,7 @@ unit uzeiopalette;
 {$INCLUDE zengineconfig.inc}
 interface
 uses uzbpaths,uzepalette,uzcstrconsts,{$IFNDEF DELPHI}uzctranslations,{$ENDIF}
-     uzbstrproc,{$IFNDEF DELPHI}FileUtil,LCLProc,{$ENDIF}{log,}sysutils,
+     uzbstrproc,{$IFNDEF DELPHI}FileUtil,uzbLogIntf,{$ENDIF}{log,}sysutils,
      uzctnrVectorBytes,gstack;
 type
   TPaletteStack=TStack<TGDBPalette>;
@@ -43,7 +43,7 @@ begin
     palette:=PaletteStack.Top;
     PaletteStack.Pop
   end else
-    DebugLn('{E}PopPalette: PaletteStack not created');
+    zDebugLn('{E}PopPalette: PaletteStack not created');
 end;
 
 

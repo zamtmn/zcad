@@ -112,6 +112,8 @@
       <Command Caption="Verifying rules" Command="EL_Сheck"/>
       <Command Caption="Create cable report" Command="El_Cable_Legend"/>
       <Command Caption="Create material report" Command="El_Material_Legend"/>
+      <Command Caption="Buffer Import" Command="DataImport"/> 
+      <Command Caption="Buffer Export" Command="DataExport"/>
     </Menu>
     <SubMenu Name="DB">
         <Command Caption="Add to the drawing database" Command="DBaseAdd"/>

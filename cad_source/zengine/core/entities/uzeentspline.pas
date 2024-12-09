@@ -213,7 +213,7 @@ begin
 
   CP.done;
   AproxPointInWCS.Shrink;
-
+  CalcActualVisible(dc.DrawingContext.VActuality);
   Representation.Clear;
   if (not (ESTemp in State))and(DCODrawable in DC.Options) then
     Representation.DrawPolyLineWithLT(dc,AproxPointInWCS,vp,false,false);

@@ -110,6 +110,7 @@ begin
   FormatWithoutSnapArray;
   calcbb(dc);
   //-------------BuildSnapArray(VertexArrayInWCS,snaparray,Closed);
+  CalcActualVisible(dc.DrawingContext.VActuality);
   Representation.Clear;
   if (not (ESTemp in State))and(DCODrawable in DC.Options) then
     if VertexArrayInWCS.Count>1 then

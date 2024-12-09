@@ -280,6 +280,7 @@ begin
 
   calcbb(dc);
   createpoint;
+  CalcActualVisible(dc.DrawingContext.VActuality);
   if assigned(EntExtensions)then
     EntExtensions.RunOnAfterEntityFormat(@self,drawing,DC);
 end;

@@ -59,7 +59,7 @@ TExtAttrib=record
                     Representation:TZEntityRepresentation;
                     State:TEntityStates;
     {-}protected{//}
-      function GetInfrustumFromTree:TActuality;
+      function GetInfrustumFromTree:TActuality;virtual;
     {-}public{//}
                     destructor done;virtual;
                     constructor init(own:Pointer;layeraddres:PGDBLayerProp;LW:SmallInt);

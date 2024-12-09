@@ -82,7 +82,7 @@ begin
 
   P_insertInWCS:=VectorTransform3D(P_insertInOCS,{CurrentCS}bp.ListPos.owner^.GetMatrix^);
   calcbb(dc);
-
+  CalcActualVisible(dc.DrawingContext.VActuality);
   if assigned(EntExtensions)then
     EntExtensions.RunOnAfterEntityFormat(@self,drawing,DC);
 end;

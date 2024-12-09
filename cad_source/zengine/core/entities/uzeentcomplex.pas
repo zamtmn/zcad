@@ -291,6 +291,7 @@ begin
      ConstObjArray.FormatEntity(drawing,dc);
      calcbb(dc);
      self.BuildGeometry(drawing);
+     CalcActualVisible(dc.DrawingContext.VActuality);
 end;
 begin
 end.

@@ -98,9 +98,17 @@ GDBObjGenericSubEntry= object(GDBObjWithMatrix)
 
                               procedure postload(var context:TIODXFLoadContext);virtual;
                               function GetMainOwner:PGDBObjSubordinated;virtual;
+                              function calcvisible(const frustum:ClipArray;const Actuality:TVisActuality;var Counters:TCameraCounters;ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double):Boolean;virtual;
+
 
                       end;
 implementation
+function GDBObjGenericSubEntry.calcvisible(const frustum:ClipArray;const Actuality:TVisActuality;var Counters:TCameraCounters;ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double):Boolean;
+begin
+  inherited;
+  result:=ObjArray.calcvisible(frustum,Actuality,Counters,ProjectProc,zoom,currentdegradationfactor);
+end;
+
 function GDBObjGenericSubEntry.GetMainOwner:PGDBObjSubordinated;
 begin
      result:=@self;

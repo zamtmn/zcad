@@ -189,6 +189,7 @@ end;
 procedure GDBObjWithLocalCS.FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext;Stage:TEFStages=EFAllStages);
 begin
      CalcObjMatrix;
+     CalcActualVisible(dc.DrawingContext.VActuality);
 end;
 function GDBObjWithLocalCS.CalcObjMatrixWithoutOwner;
 var rotmatr,dispmatr:DMatrix4D;

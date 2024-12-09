@@ -490,6 +490,7 @@ begin
   calcObjMatrix;
   createpoint;
   calcbb(dc);
+  CalcActualVisible(dc.DrawingContext.VActuality);
   Representation.Clear;
   if not (ESTemp in State)and(DCODrawable in DC.Options) then begin
     Representation.Geometry.Lock;

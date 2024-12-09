@@ -512,7 +512,7 @@ begin
   if (not (ESTemp in State))and(DCODrawable in DC.Options) then
     createpoint(drawing,dc);
   calcbb(dc);
-
+  CalcActualVisible(dc.DrawingContext.VActuality);
   if assigned(EntExtensions)then
     EntExtensions.RunOnAfterEntityFormat(@self,drawing,DC);
 end;

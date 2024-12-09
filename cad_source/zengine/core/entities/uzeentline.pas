@@ -263,7 +263,7 @@ begin
     calcgeometry;
     calcbb(dc);
   end;
-
+  CalcActualVisible(dc.DrawingContext.VActuality);
   if EFDraw in stage then begin
     Representation.Clear;
     if (not (ESTemp in State))and(DCODrawable in DC.Options) then begin

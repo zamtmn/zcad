@@ -28,14 +28,21 @@ Uses
    uzelongprocesssupport;
 type
 {Export+}
-PGDBObjRoot=^GDBObjRoot;
-{REGISTEROBJECTTYPE GDBObjRoot}
-GDBObjRoot= object(GDBObjGenericSubEntry)
+  PGDBObjRoot=^GDBObjRoot;
+  {REGISTEROBJECTTYPE GDBObjRoot}
+  GDBObjRoot= object(GDBObjGenericSubEntry)
+    {-}protected{//}
+       fInfrustum:TActuality;
+       fFrustumPosition:GDBvertex;
+       function GetInfrustumFromTree:TActuality;virtual;
+       procedure SetObjMatrix(const AObjMatrix:DMatrix4D);virtual;
+
+    {-}public{//}
+       {-}property FrustumPosition:GDBvertex read fFrustumPosition write fFrustumPosition;{//}
                  constructor initnul;
                  destructor done;virtual;
                  //function ImEdited(pobj:PGDBObjSubordinated;pobjinarray:Integer):Integer;virtual;
                  procedure FormatAfterEdit(var drawing:TDrawingDef;var DC:TDrawContext;Stage:TEFStages=EFAllStages);virtual;
-                 procedure AfterDeSerialize(SaveFlag:Word; membuf:Pointer);virtual;
                  function getowner:PGDBObjSubordinated;virtual;
                  procedure getoutbound(var DC:TDrawContext);virtual;
                  //function FindVariable(varname:String):pvardesk;virtual;
@@ -47,60 +54,103 @@ GDBObjRoot= object(GDBObjGenericSubEntry)
                  function CalcInFrustum(const frustum:ClipArray;const Actuality:TVisActuality;var Counters:TCameraCounters; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double):Boolean;virtual;
                  procedure CalcInFrustumByTree(const frustum:ClipArray;const Actuality:TVisActuality;var enttree:TEntTreeNode;var Counters:TCameraCounters; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double);virtual;
                  procedure CalcVisibleBBByTree(const Actuality:TVisActuality;var enttree:TEntTreeNode);virtual;
+                 function calcvisible(const frustum:ClipArray;const Actuality:TVisActuality;var Counters:TCameraCounters;ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double):Boolean;virtual;
                  procedure calcbb(var DC:TDrawContext);virtual;
                  //function FindShellByClass(_type:TDeviceClass):PGDBObjSubordinated;virtual;
                  function GetObjType:TObjID;virtual;
+                 procedure SetInFrustum(infrustumactualy:TActuality;var Counters:TCameraCounters);virtual;
+                 procedure SetNotInFrustum(infrustumactualy:TActuality;var Counters:TCameraCounters);virtual;
            end;
 
 {Export-}
 procedure DoFormat(var ConnectedArea:GDBObjGenericSubEntry;var ents,ents2Connected:GDBObjOpenArrayOfPV;var drawing:TDrawingDef;var DC:TDrawContext;lpsh:TLPSHandle;Stage:TEFStages{=EFAllStages});
 implementation
-//uses
-//    log;
-{function GDBObjRoot.FindShellByClass(_type:TDeviceClass):PGDBObjSubordinated;
+procedure GDBObjRoot.SetObjMatrix(const AObjMatrix:DMatrix4D);
 begin
-     result:=nil;
-end;}
+  inherited;
+  fFrustumPosition.x:=AObjMatrix.mtr[3].v[0];
+  fFrustumPosition.y:=AObjMatrix.mtr[3].v[1];
+  fFrustumPosition.z:=AObjMatrix.mtr[3].v[2];
+end;
+
+function GDBObjRoot.GetInfrustumFromTree:TActuality;
+begin
+  result:=fInfrustum;
+end;
+procedure GDBObjRoot.SetInFrustum(infrustumactualy:TActuality;var Counters:TCameraCounters);
+begin
+  fInfrustum:=infrustumactualy;
+  inherited;
+end;
+procedure GDBObjRoot.SetNotInFrustum(infrustumactualy:TActuality;var Counters:TCameraCounters);
+begin
+  fInfrustum:=0;
+  inherited;
+end;
+
 procedure GDBObjRoot.calcbb;
 begin
-     inherited;
-     vp.BoundingBox.LBN:=VectorTransform3D(vp.BoundingBox.LBN,ObjMatrix);
-     vp.BoundingBox.RTF:=VectorTransform3D(vp.BoundingBox.RTF,ObjMatrix);
+  inherited;
+  vp.BoundingBox.LBN:=VectorTransform3D(vp.BoundingBox.LBN,ObjMatrix);
+  vp.BoundingBox.RTF:=VectorTransform3D(vp.BoundingBox.RTF,ObjMatrix);
 end;
 procedure GDBObjRoot.CalcVisibleBBByTree(const Actuality:TVisActuality;var enttree:TEntTreeNode);
 begin
   InFrustumAABB:=enttree.NodeData.InFrustumBoundingBox;
 end;
+
+function correctFrustum(const frustum:ClipArray;const objmatrix:DMatrix4D;frustumpos:GDBvertex):ClipArray;
+var
+  im:DMatrix4D;
+begin
+  im:=ObjMatrix;
+  im.mtr[3].v[0]:=frustumpos.x;
+  im.mtr[3].v[1]:=frustumpos.y;
+  im.mtr[3].v[2]:=frustumpos.z;
+  result:=FrustumTransform(frustum,im);
+end;
+
+function GDBObjRoot.calcvisible(const frustum:ClipArray;const Actuality:TVisActuality;var Counters:TCameraCounters;ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double):Boolean;
+var
+  tfrustum:ClipArray;
+begin
+  tfrustum:=correctFrustum(frustum,ObjMatrix,FrustumPosition);
+  result:=inherited calcvisible(tfrustum,Actuality,Counters,ProjectProc,zoom,currentdegradationfactor);
+end;
+
 procedure GDBObjRoot.CalcInFrustumByTree(const frustum:ClipArray;const Actuality:TVisActuality;var enttree:TEntTreeNode;var Counters:TCameraCounters; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double);
 var
-   myfrustum:ClipArray;
+   tfrustum:ClipArray;
+   im:DMatrix4D;
 begin
-     myfrustum:=FrustumTransform(frustum,ObjMatrix);
-     ProcessTree(myfrustum,Actuality,enttree,IRPartially,TDTFulDraw,Counters,ProjectProc,zoom,currentdegradationfactor);
+  im:=ObjMatrix;
 
-     CalcVisibleBBByTree(Actuality,enttree);
-     //InFrustumAABB:=ObjArray.calcvisbb(infrustumactualy);
+  fInfrustum:=Actuality.InfrustumActualy;
+  tfrustum:=correctFrustum(frustum,ObjMatrix,FrustumPosition);
+  ProcessTree(tfrustum,Actuality,enttree,IRPartially,TDTFulDraw,Counters,ProjectProc,zoom,currentdegradationfactor);
+  CalcVisibleBBByTree(Actuality,enttree);
 end;
 function GDBObjRoot.CalcInFrustum;
 var
    myfrustum:ClipArray;
+   im:DMatrix4D;
 begin
-     myfrustum:=FrustumTransform(frustum,ObjMatrix);
+     exit(true);
+  im:=ObjMatrix;
+  //MatrixInvert(im);
+     myfrustum:=FrustumTransform(frustum,im);
+     myfrustum:=frustum;
      result:=inherited CalcInFrustum(myfrustum,Actuality,Counters, ProjectProc,zoom,currentdegradationfactor);
 end;
 procedure GDBObjRoot.DrawWithAttrib;
 begin
-     DC.drawer.pushMatrixAndSetTransform(objmatrix);
-     //oglsm.myglpushmatrix;
-     //oglsm.myglMultMatrixD(objmatrix);
-     inherited;//self.ObjArray.DrawWithattrib;
-     DC.drawer.popMatrix;
-     //oglsm.myglpopmatrix;
-
+  DC.drawer.pushMatrixAndSetTransform(objmatrix);
+  inherited;
+  DC.drawer.popMatrix;
 end;
 function GDBObjRoot.GetMatrix;
 begin
-     result:={@self.ObjMatrix}@OneMatrix;
+  result:={@self.ObjMatrix}@OneMatrix;
 end;
 procedure GDBObjRoot.EraseMi(pobj:pGDBObjEntity;pobjinarray:Integer;var drawing:TDrawingDef);
 var p:PGDBObjConnected;
@@ -120,25 +170,15 @@ function GDBObjRoot.GetHandle:PtrInt;
 begin
      result:=H_Root;
 end;
-{function GDBObjRoot.FindVariable;
-begin
-     result:=PTObjectUnit(ou.Instance)^.FindVariable(varname);
-end;}
 procedure GDBObjRoot.getoutbound;
 begin
-     vp.BoundingBox.LBN:=NulVertex;
-     vp.BoundingBox.RTF:=NulVertex;
-     inherited;
+  vp.BoundingBox.LBN:=NulVertex;
+  vp.BoundingBox.RTF:=NulVertex;
+  inherited;
 end;
 function GDBObjRoot.getowner;
 begin
-     result:=nil;
-end;
-procedure GDBObjRoot.AfterDeSerialize;
-begin
-     //inherited AfterDeSerialize(SaveFlag,membuf);
-     correctobjects(nil,-1);
-     //format;
+  result:=nil;
 end;
 destructor GDBObjRoot.done;
 begin

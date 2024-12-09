@@ -109,6 +109,7 @@ begin
                                                 else
                                                     triangle:=false;
   calcbb(dc);
+  CalcActualVisible(dc.DrawingContext.VActuality);
    if assigned(EntExtensions)then
      EntExtensions.RunOnAfterEntityFormat(@self,drawing,DC);
 end;

@@ -303,6 +303,7 @@ begin
 
   calcbb(dc);
   createpoints(dc);
+  CalcActualVisible(dc.DrawingContext.VActuality);
   Representation.Clear;
   if not (ESTemp in State)and(DCODrawable in DC.Options) then
     Representation.DrawPolyLineWithLT(dc,Vertex3D_in_WCS_Array,vp,false,false);

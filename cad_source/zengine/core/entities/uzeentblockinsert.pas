@@ -310,6 +310,7 @@ begin
   calcobjmatrix(@drawing);
   ConstObjArray.FormatEntity(drawing,dc);
   calcbb(dc);
+  CalcActualVisible(dc.DrawingContext.VActuality);
   //self.BuildGeometry(drawing); //fix https://github.com/zamtmn/zcad/issues/17
   if assigned(EntExtensions)then
     EntExtensions.RunOnAfterEntityFormat(@self,drawing,DC);

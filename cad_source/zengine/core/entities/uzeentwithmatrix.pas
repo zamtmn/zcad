@@ -24,20 +24,29 @@ interface
 uses uzgldrawcontext,uzedrawingdef,uzecamera,uzeentity,uzbtypes,
      gzctnrVectorTypes,uzegeometrytypes,uzegeometry,uzeentsubordinated,uzeentitiestree;
 type
-PGDBObjWithMatrix=^GDBObjWithMatrix;
-GDBObjWithMatrix= object(GDBObjEntity)
-                       ObjMatrix:DMatrix4D;
-                       constructor initnul(owner:PGDBObjGenericWithSubordinated);
-                       function GetMatrix:PDMatrix4D;virtual;
-                       procedure CalcObjMatrix(pdrawing:PTDrawingDef=nil);virtual;
-                       procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext;Stage:TEFStages=EFAllStages);virtual;
-                       procedure createfield;virtual;
-                       procedure transform(const t_matrix:DMatrix4D);virtual;
-                       procedure ReCalcFromObjMatrix;virtual;abstract;
-                       procedure CalcInFrustumByTree(const frustum:ClipArray;const Actuality:TVisActuality;var enttree:TEntTreeNode;var Counters:TCameraCounters; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double);virtual;
-                       procedure ProcessTree(const frustum:ClipArray;const Actuality:TVisActuality;var enttree:TEntTreeNode;OwnerInFrustum:TInBoundingVolume;OwnerFuldraw:TDrawType;var Counters:TCameraCounters; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double);virtual;
-                 end;
+  PGDBObjWithMatrix=^GDBObjWithMatrix;
+  GDBObjWithMatrix= object(GDBObjEntity)
+    {-}protected{//}
+       fObjMatrix:DMatrix4D;
+       procedure SetObjMatrix(const AObjMatrix:DMatrix4D);virtual;
+    {-}public{//}
+       constructor initnul(owner:PGDBObjGenericWithSubordinated);
+       function GetMatrix:PDMatrix4D;virtual;
+       procedure CalcObjMatrix(pdrawing:PTDrawingDef=nil);virtual;
+       procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext;Stage:TEFStages=EFAllStages);virtual;
+       procedure createfield;virtual;
+       procedure transform(const t_matrix:DMatrix4D);virtual;
+       procedure ReCalcFromObjMatrix;virtual;abstract;
+       procedure CalcInFrustumByTree(const frustum:ClipArray;const Actuality:TVisActuality;var enttree:TEntTreeNode;var Counters:TCameraCounters; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double);virtual;
+       procedure ProcessTree(const frustum:ClipArray;const Actuality:TVisActuality;var enttree:TEntTreeNode;OwnerInFrustum:TInBoundingVolume;OwnerFuldraw:TDrawType;var Counters:TCameraCounters; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double);virtual;
+
+       {-}property ObjMatrix:DMatrix4D read fObjMatrix write SetObjMatrix;{//}
+  end;
 implementation
+procedure GDBObjWithMatrix.SetObjMatrix(const AObjMatrix:DMatrix4D);
+begin
+  fObjMatrix:=AObjMatrix;
+end;
 procedure GDBObjWithMatrix.ProcessTree(const frustum:ClipArray;const Actuality:TVisActuality;var enttree:TEntTreeNode;OwnerInFrustum:TInBoundingVolume;OwnerFuldraw:TDrawType;var Counters:TCameraCounters; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double);
 var
   ImInFrustum:TInBoundingVolume;
@@ -164,10 +173,10 @@ begin
                 pobj^.SetInFrustumFromTree(
                   frustum,Actuality,Counters,
                   ProjectProc,zoom,currentdegradationfactor);
-                if inFrustomEnts=0 then
+                {if inFrustomEnts=0 then
                   enttree.NodeData.InFrustumBoundingBox:=pobj^.vp.BoundingBox
                 else
-                  ConcatBB(enttree.NodeData.InFrustumBoundingBox,pobj^.vp.BoundingBox);
+                  ConcatBB(enttree.NodeData.InFrustumBoundingBox,pobj^.vp.BoundingBox);}
                 Inc(inFrustomEnts);
               end;
               pobj:=enttree.NodeData.NeedToSeparated.iterate(ir);
@@ -205,7 +214,7 @@ begin
           end;
 
           if inFrustomEnts=0 then
-            enttree.NodeData.InFrustumBoundingBox:=BBNul;
+            enttree.NodeData.InFrustumBoundingBox:={BBNul}enttree.BoundingBox;
         end;
         IRNotAplicable,IREmpty:
           enttree.NodeData.InFrustumBoundingBox:=BBNul;
@@ -233,7 +242,7 @@ begin
 end;
 function GDBObjWithMatrix.GetMatrix;
 begin
-     result:=@ObjMatrix;
+  result:=@ObjMatrix;
 end;
 procedure GDBObjWithMatrix.CalcObjMatrix;
 begin
@@ -241,7 +250,8 @@ begin
 end;
 procedure GDBObjWithMatrix.FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext;Stage:TEFStages=EFAllStages);
 begin
-     CalcObjMatrix;
+  CalcObjMatrix;
+  CalcActualVisible(dc.DrawingContext.VActuality);
 end;
 constructor GDBObjWithMatrix.initnul;
 begin

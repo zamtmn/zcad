@@ -139,6 +139,7 @@ begin
      n.x:=normal.x;
      n.y:=normal.y;
      n.z:=normal.z;
+  CalcActualVisible(dc.DrawingContext.VActuality);
    if assigned(EntExtensions)then
      EntExtensions.RunOnAfterEntityFormat(@self,drawing,DC);
 end;

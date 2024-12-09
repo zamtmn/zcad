@@ -691,6 +691,7 @@ begin
   VarObjArray.FormatEntity(drawing,dc,stage);
   self.lstonmouse:=nil;
   calcbb(dc);
+  CalcActualVisible(dc.DrawingContext.VActuality);
   if EFDraw in stage then begin
     if assigned(EntExtensions)then
       EntExtensions.RunOnAfterEntityFormat(@self,drawing,DC);

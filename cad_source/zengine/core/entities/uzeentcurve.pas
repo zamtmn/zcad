@@ -352,6 +352,7 @@ procedure GDBObjCurve.FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext;S
 begin
   FormatWithoutSnapArray;
   calcbb(dc);
+  CalcActualVisible(dc.DrawingContext.VActuality);
   //------------BuildSnapArray(VertexArrayInWCS,snaparray,false);
 end;
 

@@ -22,49 +22,47 @@ unit uzeroot;
 
 interface
 Uses
-   uzgldrawcontext,uzedrawingdef,uzecamera,uzeentitiestree,uzbtypes,
-   uzeconsts,uzeentity,uzeentgenericsubentry,uzeentconnected,uzeentsubordinated,
-   gzctnrVectorTypes,uzegeometrytypes,uzegeometry,UGDBOpenArrayOfPV,
-   uzelongprocesssupport;
+  uzgldrawcontext,uzedrawingdef,uzecamera,uzeentitiestree,uzbtypes,
+  uzeconsts,uzeentity,uzeentgenericsubentry,uzeentconnected,uzeentsubordinated,
+  gzctnrVectorTypes,uzegeometrytypes,uzegeometry,UGDBOpenArrayOfPV,
+  uzelongprocesssupport;
+
 type
-{Export+}
+
   PGDBObjRoot=^GDBObjRoot;
-  {REGISTEROBJECTTYPE GDBObjRoot}
   GDBObjRoot= object(GDBObjGenericSubEntry)
-    {-}protected{//}
-       fInfrustum:TActuality;
-       fFrustumPosition:GDBvertex;
-       function GetInfrustumFromTree:TActuality;virtual;
-       procedure SetObjMatrix(const AObjMatrix:DMatrix4D);virtual;
+    private
+      fInfrustum:TActuality;
+      fFrustumPosition:GDBvertex;
+    protected
+      function GetInfrustumFromTree:TActuality;virtual;
+      procedure SetObjMatrix(const AObjMatrix:DMatrix4D);virtual;
+    public
+      constructor initnul;
+      destructor done;virtual;
+      procedure FormatAfterEdit(var drawing:TDrawingDef;var DC:TDrawContext;Stage:TEFStages=EFAllStages);virtual;
+      function getowner:PGDBObjSubordinated;virtual;
+      procedure getoutbound(var DC:TDrawContext);virtual;
+      function GetHandle:PtrInt;virtual;
+      procedure EraseMi(pobj:pGDBObjEntity;pobjinarray:Integer;var drawing:TDrawingDef);virtual;
+      function GetMatrix:PDMatrix4D;virtual;
+      procedure DrawWithAttrib(var DC:TDrawContext);virtual;
+      function CalcInFrustum(const frustum:ClipArray;const Actuality:TVisActuality;var Counters:TCameraCounters; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double):Boolean;virtual;
+      procedure CalcInFrustumByTree(const frustum:ClipArray;const Actuality:TVisActuality;var enttree:TEntTreeNode;var Counters:TCameraCounters; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double);virtual;
+      procedure CalcVisibleBBByTree(const Actuality:TVisActuality;var enttree:TEntTreeNode);virtual;
+      function calcvisible(const frustum:ClipArray;const Actuality:TVisActuality;var Counters:TCameraCounters;ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double):Boolean;virtual;
+      procedure calcbb(var DC:TDrawContext);virtual;
+      function GetObjType:TObjID;virtual;
+      procedure SetInFrustum(infrustumactualy:TActuality;var Counters:TCameraCounters);virtual;
+      procedure SetNotInFrustum(infrustumactualy:TActuality;var Counters:TCameraCounters);virtual;
 
-    {-}public{//}
-       {-}property FrustumPosition:GDBvertex read fFrustumPosition write fFrustumPosition;{//}
-                 constructor initnul;
-                 destructor done;virtual;
-                 //function ImEdited(pobj:PGDBObjSubordinated;pobjinarray:Integer):Integer;virtual;
-                 procedure FormatAfterEdit(var drawing:TDrawingDef;var DC:TDrawContext;Stage:TEFStages=EFAllStages);virtual;
-                 function getowner:PGDBObjSubordinated;virtual;
-                 procedure getoutbound(var DC:TDrawContext);virtual;
-                 //function FindVariable(varname:String):pvardesk;virtual;
-                 function GetHandle:PtrInt;virtual;
-                 procedure EraseMi(pobj:pGDBObjEntity;pobjinarray:Integer;var drawing:TDrawingDef);virtual;
+      property FrustumPosition:GDBvertex read fFrustumPosition write fFrustumPosition;
+  end;
 
-                 function GetMatrix:PDMatrix4D;virtual;
-                 procedure DrawWithAttrib(var DC:TDrawContext{visibleactualy:TActualityTActuality;subrender:Integer});virtual;
-                 function CalcInFrustum(const frustum:ClipArray;const Actuality:TVisActuality;var Counters:TCameraCounters; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double):Boolean;virtual;
-                 procedure CalcInFrustumByTree(const frustum:ClipArray;const Actuality:TVisActuality;var enttree:TEntTreeNode;var Counters:TCameraCounters; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double);virtual;
-                 procedure CalcVisibleBBByTree(const Actuality:TVisActuality;var enttree:TEntTreeNode);virtual;
-                 function calcvisible(const frustum:ClipArray;const Actuality:TVisActuality;var Counters:TCameraCounters;ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double):Boolean;virtual;
-                 procedure calcbb(var DC:TDrawContext);virtual;
-                 //function FindShellByClass(_type:TDeviceClass):PGDBObjSubordinated;virtual;
-                 function GetObjType:TObjID;virtual;
-                 procedure SetInFrustum(infrustumactualy:TActuality;var Counters:TCameraCounters);virtual;
-                 procedure SetNotInFrustum(infrustumactualy:TActuality;var Counters:TCameraCounters);virtual;
-           end;
-
-{Export-}
 procedure DoFormat(var ConnectedArea:GDBObjGenericSubEntry;var ents,ents2Connected:GDBObjOpenArrayOfPV;var drawing:TDrawingDef;var DC:TDrawContext;lpsh:TLPSHandle;Stage:TEFStages{=EFAllStages});
+
 implementation
+
 procedure GDBObjRoot.SetObjMatrix(const AObjMatrix:DMatrix4D);
 begin
   inherited;

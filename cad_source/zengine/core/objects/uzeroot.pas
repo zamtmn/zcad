@@ -121,10 +121,7 @@ end;
 procedure GDBObjRoot.CalcInFrustumByTree(const frustum:ClipArray;const Actuality:TVisActuality;var enttree:TEntTreeNode;var Counters:TCameraCounters; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double);
 var
    tfrustum:ClipArray;
-   im:DMatrix4D;
 begin
-  im:=ObjMatrix;
-
   fInfrustum:=Actuality.InfrustumActualy;
   tfrustum:=correctFrustum(frustum,ObjMatrix,FrustumPosition);
   ProcessTree(tfrustum,Actuality,enttree,IRPartially,TDTFulDraw,Counters,ProjectProc,zoom,currentdegradationfactor);
@@ -132,15 +129,11 @@ begin
 end;
 function GDBObjRoot.CalcInFrustum;
 var
-   myfrustum:ClipArray;
-   im:DMatrix4D;
+  tfrustum:ClipArray;
 begin
-     exit(true);
-  im:=ObjMatrix;
-  //MatrixInvert(im);
-     myfrustum:=FrustumTransform(frustum,im);
-     myfrustum:=frustum;
-     result:=inherited CalcInFrustum(myfrustum,Actuality,Counters, ProjectProc,zoom,currentdegradationfactor);
+  fInfrustum:=Actuality.InfrustumActualy;
+  tfrustum:=correctFrustum(frustum,ObjMatrix,FrustumPosition);
+  result:=inherited CalcInFrustum(tfrustum,Actuality,Counters, ProjectProc,zoom,currentdegradationfactor);
 end;
 procedure GDBObjRoot.DrawWithAttrib;
 begin

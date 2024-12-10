@@ -387,7 +387,9 @@
         <InsertMenu Name="Window"/>
       </IFONE>
       <InsertMenu Name="Help"/>
+     <IFONE Сonditions="DebugUI">
       <InsertMenu Name="Debug"/>
+     </IFONE>
     </Menu>
     <Menu2 Name="MAINMENU2">
       <InsertMenu Name="File"/>
@@ -404,7 +406,9 @@
       <InsertMenu Name="Settings"/>
       <InsertMenu Name="Window"/>
       <InsertMenu Name="Help"/>
+     <IFONE Сonditions="DebugUI">
       <InsertMenu Name="Debug"/>
+     </IFONE>
       <InsertMenu Name="DB"/>
     </Menu2>
   </MenusContent>

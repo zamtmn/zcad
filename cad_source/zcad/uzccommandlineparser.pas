@@ -30,6 +30,7 @@ var
 
   NOSPLASHHDL,              //опция nosplash - не показывать сплэш
   UPDATEPOHDL,              //опция updatepo - актуализация файлов локализации, необходима для команды updatepo
+  DEBUGUIHDL,               //опция debugui - наличие отладочных элементов в интерфейсе
   NOLOADLAYOUTHDL,          //опция noloadlayout - запуск без загрузки начального состояния раскладки окон
   LOGFILEHDL,               //опция logfile - указание лог файла, требует аргумент(ы) имя файла
   NOTCHECKUNIQUEINSTANCEHDL,//опция noloadlayout - запуск без загрузки начального состояния раскладки окон
@@ -50,6 +51,7 @@ initialization
   CommandLineParser.Init;
   NOSPLASHHDL:=CommandLineParser.RegisterArgument('nosplash',AT_Flag);
   UPDATEPOHDL:=CommandLineParser.RegisterArgument('updatepo',AT_Flag);
+  DEBUGUIHDL:=CommandLineParser.RegisterArgument('debugui',AT_Flag);
   NOLOADLAYOUTHDL:=CommandLineParser.RegisterArgument('noloadlayout',AT_Flag);
   LOGFILEHDL:=CommandLineParser.RegisterArgument('logfile',AT_WithOperands);
   NOTCHECKUNIQUEINSTANCEHDL:=CommandLineParser.RegisterArgument('notcheckuniqueinstance',AT_Flag);

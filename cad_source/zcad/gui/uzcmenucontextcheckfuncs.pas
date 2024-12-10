@@ -21,7 +21,7 @@ unit uzcmenucontextcheckfuncs;
 interface
 uses
   LCLIntf,LCLType,
-  uzedrawingsimple,uzcdrawings;
+  uzedrawingsimple,uzcdrawings,uzcCommandLineParser;
 function GMCCFTrue(const Context:TObject):boolean;
 function GMCCFFalse(const Context:TObject):boolean;
 
@@ -29,6 +29,7 @@ function GMCCFCtrlPressed(const Context:TObject):boolean;
 function GMCCFShiftPressed(const Context:TObject):boolean;
 function GMCCFAltPressed(const Context:TObject):boolean;
 function GMCCFActiveDrawing(const Context:TObject):boolean;
+function GMCCFDebugUI(const Context:TObject):boolean;
 implementation
 function GMCCFTrue(const Context:TObject):boolean;
 begin
@@ -60,7 +61,10 @@ begin
   //end else
   //  result:=false;
 end;
-
+function GMCCFDebugUI(const Context:TObject):boolean;
+begin
+  result:=CommandLineParser.HasOption(DEBUGUIHDL);
+end;
 
 begin
 end.

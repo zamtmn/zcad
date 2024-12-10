@@ -362,7 +362,9 @@
         <InsertMenu Name="Window"/>
       </IFONE>
       <InsertMenu Name="Help"/>
+     <IFONE Сonditions="DebugUI">
       <InsertMenu Name="Debug"/>
+     </IFONE>
     </Menu>
   </MenusContent>
 </CONFIG>

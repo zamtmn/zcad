@@ -1055,6 +1055,7 @@ begin
   RegisterGeneralContextCheckFunc('ShiftPressed',@GMCCFShiftPressed);
   RegisterGeneralContextCheckFunc('AltPressed',@GMCCFAltPressed);
   RegisterGeneralContextCheckFunc('ActiveDrawing',@GMCCFActiveDrawing);
+  RegisterGeneralContextCheckFunc('DebugUI',@GMCCFDebugUI);
 
   LoadActions;
   toolbars:=tstringlist.Create;

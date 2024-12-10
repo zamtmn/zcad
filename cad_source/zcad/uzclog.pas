@@ -26,11 +26,6 @@ uses
   sysutils,
   uzbLogTypes,uzblog;
 
-const
-  {$IFDEF LINUX}filelog='../../log/zcad_linux.log';{$ENDIF}
-  {$IFDEF WINDOWS}filelog='../../log/zcad_windows.log';{$ENDIF}
-  {$IFDEF DARWIN}filelog='../../log/zcad_darwin.log';{$ENDIF}
-
 var
 //LM_Trace,     //уже определен в uzbLog.TLog // — вывод всего подряд. На тот случай, если Debug не позволяет локализовать ошибку.
   LM_Debug,     // — журналирование моментов вызова «крупных» операций.

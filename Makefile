@@ -1,6 +1,6 @@
 .PHONY: checkallvars checkvars clean zcadenv zcadelectrotechenv version zcad zcadelectrotech afterzcadelectrotechbuild cleanzcad cleanzcadelectrotech installpkgstolaz zcadelectrotechpdfuseguide rmpkgslibs tests
 default: cleanzcad
-ZCVERSION:=$(shell git describe --tags)
+ZCVERSION:=$(shell git describe --tags) ($(shell git symbolic-ref --short HEAD))
 QZCVERSION:='$(ZCVERSION)'
 
 OSDETECT:=

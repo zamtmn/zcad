@@ -8,6 +8,12 @@ usescopy objname;
 usescopy objgroup;
 usescopy addtocable;
 
+var
+
+VL_Type:String;(*'Опора'*)
+VL_Room:String;(*'Помещение'*)
+VL_Floor:String;(*'Этаж'*)
+
 implementation
 
 begin
@@ -24,5 +30,8 @@ SerialConnection:=1;
 GC_HeadDevice:='ЩНО??';
 GC_HDShortName:='??';
 GC_HDGroup:=0;
+
+VL_Room:='.';
+VL_Floor:='0';
 
 end.

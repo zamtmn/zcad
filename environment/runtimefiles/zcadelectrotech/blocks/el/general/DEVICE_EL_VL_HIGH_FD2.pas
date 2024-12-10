@@ -8,9 +8,10 @@ usescopy objname;
 
 var
 
-VL_Mark:String;(*'Обозначение'*)
-VL_Type:String;(*'Камера'*)
 VL_Number:String;(*'Номер'*)
+VL_Mark:String;(*'Обозначение'*)
+VL_Goal:String;(*'Назначение'*)
+VL_Type:String;(*'Ячейка'*)
 VL_Pp:String;(*'P активная'*)
 VL_Ip:String;(*'I расчетный'*)
 VL_Cos:String;(*'Cos Ф'*)
@@ -27,9 +28,10 @@ NMO_Name:='ФВ0';
 NMO_BaseName:='ФВ';
 NMO_Suffix:='??';
 
-VL_Mark:='??';
-VL_Type:='??';
 VL_Number:='??';
+VL_Mark:='??';
+VL_Goal:='??';
+VL_Type:='??';
 VL_Pp:='??';
 VL_Ip:='??';
 VL_Cos:='??';

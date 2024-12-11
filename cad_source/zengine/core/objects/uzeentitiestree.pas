@@ -23,7 +23,7 @@ interface
 uses
     gzctnrVectorTypes,graphics,gzctnrVectorSimple,gzctnrVectorPObjects,
     uzegeometrytypes,gzctnrBinarySeparatedTree,uzgldrawcontext,uzegeometry,
-    UGDBVisibleOpenArray,uzeentity,uzbtypes;
+    UGDBVisibleOpenArray,uzeentity,uzbtypes,gzctnrVectorP;
 type
 TZEntsManipulator=class;
 TFirstStageData=record
@@ -39,7 +39,7 @@ TFirstStageData=record
     nuldrawpos,minusdrawpos,plusdrawpos:TActuality;
     FulDraw:TDrawType;
     InFrustumBoundingBox:TBoundingBox;
-    NeedToSeparated:TEntityArray;
+    NeedToSeparated:GZVectorP<PGDBObjEntity>;
     //nodedepth:Integer;
     //pluscount,minuscount:Integer;
     procedure CreateDef;
@@ -53,6 +53,7 @@ TFirstStageData=record
                             procedure DrawVolume(var DC:TDrawContext);
                             procedure DrawNodeVolume(var DC:TDrawContext);
                             procedure DrawWithAttribExternalArray(var DC:TDrawContext;LODDeep:integer=0);
+                            procedure DeleteFromSeparated(var Entity:GDBObjEntity);
                       end;
 {EXPORT-}
 TZEntsManipulator=class
@@ -132,6 +133,11 @@ begin
          pobj:=nul.iterate(ir);
   until pobj=nil;
 end;
+procedure TEntTreeNode.DeleteFromSeparated(var Entity:GDBObjEntity);
+begin
+  NodeData.NeedToSeparated.RemoveData(@Entity);
+end;
+
 procedure TEntTreeNode.DrawNodeVolume(var DC:TDrawContext);
 begin
   dc.drawer.DrawAABB3DInModelSpace(BoundingBox,dc.DrawingContext.matrixs);
@@ -239,6 +245,8 @@ class procedure TZEntsManipulator.StoreTreeAdressInOnject(var Entity:GDBObjEntit
 begin
   Entity.bp.TreePos.Owner:=@Node;
   Entity.bp.TreePos.SelfIndexInNode:=index;
+  if Entity.IsNeedSeparate then
+    node.NodeData.NeedToSeparated.PushBackData(@Entity);
 end;
 class procedure TZEntsManipulator.CorrectNodeBoundingBox(var NodeBB:TBoundingBox;var Entity:GDBObjEntity);
 begin

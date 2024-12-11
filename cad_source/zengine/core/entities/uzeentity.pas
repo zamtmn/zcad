@@ -155,7 +155,6 @@ TExtAttrib=record
                     function IsActualy:Boolean;virtual;
                     function IsHaveLCS:Boolean;virtual;
                     function IsHaveGRIPS:Boolean;virtual;
-                    function IsNeedSeparate:Boolean;virtual;
                     function GetLayer:PGDBLayerProp;virtual;
                     function GetCenterPoint:GDBVertex;virtual;
                     procedure SetInFrustum(infrustumactualy:TActuality;var Counters:TCameraCounters);virtual;
@@ -282,10 +281,6 @@ end;
 function GDBObjEntity.IsHaveGRIPS:Boolean;
 begin
      result:=true;
-end;
-function GDBObjEntity.IsNeedSeparate:Boolean;
-begin
-     result:=false;
 end;
 procedure GDBObjEntity.ReCalcFromObjMatrix;
 begin

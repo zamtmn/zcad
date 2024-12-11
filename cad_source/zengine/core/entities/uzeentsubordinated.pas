@@ -86,6 +86,7 @@ GDBObjSubordinated= object(GDBObjGenericWithSubordinated)
                          procedure createfield;virtual;
                          destructor done;virtual;
                          procedure postload(var context:TIODXFLoadContext);virtual;abstract;
+                         function IsNeedSeparate:Boolean;virtual;
          end;
 
 procedure extractvarfromdxfstring2(_Value:String;out vn,vt,vun:String);
@@ -164,6 +165,11 @@ destructor GDBObjSubordinated.done;
 begin
      inherited;
 end;
+function GDBObjSubordinated.IsNeedSeparate:Boolean;
+begin
+     result:=false;
+end;
+
 
 {function GDBObjSubordinated.FindShellByClass(_type:TDeviceClass):PGDBObjSubordinated;
 var

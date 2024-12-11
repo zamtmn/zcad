@@ -85,6 +85,7 @@ procedure GDBObjComplex.SetInFrustumFromTree;
 begin
      inherited;
      ConstObjArray.SetInFrustumFromTree(frustum,Actuality,Counters, ProjectProc,zoom,currentdegradationfactor);
+     ConstObjArray.ObjTree.NodeData.infrustum:=Actuality.InfrustumActualy;
      ConstObjArray.ObjTree.BoundingBox:=vp.BoundingBox;
      ProcessTree(frustum,Actuality,ConstObjArray.ObjTree,IRFully,TDTFulDraw,Counters,ProjectProc,zoom,currentdegradationfactor);
 end;

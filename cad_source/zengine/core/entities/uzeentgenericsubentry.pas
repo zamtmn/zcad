@@ -421,6 +421,8 @@ begin
 
   if pobj^.bp.TreePos.Owner<>nil then begin
     PTEntTreeNode(pobj^.bp.TreePos.Owner)^.nulDeleteElement(pobj^.bp.TreePos.SelfIndexInNode);
+    if pobj^.IsNeedSeparate then
+      PTEntTreeNode(pobj^.bp.TreePos.Owner)^.DeleteFromSeparated(PGDBObjEntity(pobj)^);
   end;
   pobj^.bp.TreePos.Owner:=nil;
   //pointer(p):=ObjArray.getDataMutable(pobjinarray);

@@ -39,6 +39,8 @@ VSCHEMAAddtext:String;(*'Доп текст'*)
 implementation
 
 begin
+BTY_TreeCoord:='PLAN_VEL_Схемы_Распред.отх';
+
 VSCHEMATransfer:=false;
 VSCHEMAPhase3:=true;
 VSCHEMABusn:=true;

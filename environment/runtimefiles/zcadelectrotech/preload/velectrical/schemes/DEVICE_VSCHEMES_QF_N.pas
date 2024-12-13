@@ -14,6 +14,7 @@ VSCHEMAUGOtext:String;(*'Обозначение'*)
 implementation
 
 begin
+BTY_TreeCoord:='PLAN_VEL_Схемы_АВ+N';
 
 VSCHEMAUGOtext:='??\P??\P??';
 VSPECIFICATION_Position:='QF';

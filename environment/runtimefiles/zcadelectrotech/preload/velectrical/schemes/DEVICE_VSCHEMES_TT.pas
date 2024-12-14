@@ -14,6 +14,7 @@ VSCHEMAUGOtext:String;(*'Обозначение'*)
 implementation
 
 begin
+BTY_TreeCoord:='PLAN_VEL_Схемы_Трансформатор тока';
 
 VSCHEMAUGOtext:='??\P??\P??';
 VSPECIFICATION_Position:='TT';

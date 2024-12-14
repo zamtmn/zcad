@@ -6,8 +6,11 @@
 	    <ZTreeNode Caption='Plan'>
 		    <ZTreeNode Caption='Shields'>
 			  <ZTreeCommand Command="Insert(DEVICE_VEL_POWER_SHR1)" Caption='Щит распределительный' />
+			  <ZTreeCommand Command="Insert(DEVICE_VEL_POWER_SHR05)" Caption='Щит распределительный 1/2' />
 			  <ZTreeCommand Command="Insert(DEVICE_VEL_POWER_SHO1)" Caption='Щит освещения' />
+			  <ZTreeCommand Command="Insert(DEVICE_VEL_POWER_SHO05)" Caption='Щит освещения 1/2' />
 			  <ZTreeCommand Command="Insert(DEVICE_VEL_POWER_SHAO1)" Caption='Щит аварийного освещения' />
+			  <ZTreeCommand Command="Insert(DEVICE_VEL_POWER_SHAO05)" Caption='Щит аварийного освещения 1/2' />
 			</ZTreeNode>	
 		    <ZTreeNode Caption='ElReceiver'>
 			  <ZTreeCommand Command="Insert(DEVICE_VEL_POWER_MOTOR)" Caption='Двигатель' />

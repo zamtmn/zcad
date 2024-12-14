@@ -24,6 +24,7 @@ VSCHEMACable12:String;(*'Кабель 1.2'*)
 implementation
 
 begin
+BTY_TreeCoord:='PLAN_VEL_Схемы_Распред.ввод';
 
 VSCHEMAShieldpos:='??';
 VSCHEMAShieldname:='??';

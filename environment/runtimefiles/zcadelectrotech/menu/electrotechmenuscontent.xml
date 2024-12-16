@@ -114,6 +114,8 @@
       <Command Caption="Create material report" Command="El_Material_Legend"/>
       <Command Caption="Buffer Import" Command="DataImport"/> 
       <Command Caption="Buffer Export" Command="DataExport"/>
+      <Action Name="ACN_DATAIMPORT"/>
+      <Action Name="ACN_DATAEXPORT"/>
     </Menu>
     <SubMenu Name="DB">
         <Command Caption="Add to the drawing database" Command="DBaseAdd"/>

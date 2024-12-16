@@ -19,6 +19,8 @@
       <ZAction Name="ACN_KIPCDBUILD" Command="KIP_CDBuild" Img="#CDB" Caption="Connection diagram"/>
       <ZAction Name="ACN_KIPLUGTABLEBUILD" Command="KIP_LugTableBuild" Img="#ТЗК" Caption="Lug table build"/>
       <ZAction Name="ACN_REGENZENTS" Command="RegenZEnts" Img="regenz" Caption="Regenerate zcad entities"/>
+      <ZAction Name="ACN_DATAIMPORT" Command="DataImport" Img="#DI" Caption="Import data to entities"/>
+      <ZAction Name="ACN_DATAEXPORT" Command="DataExport" Img="#DE" Caption="Export entities data"/>
     </Group>
   </ActionsContent>
 </CONFIG>

@@ -24,7 +24,7 @@ uses Masks,{$IFNDEF DELPHI}LazUTF8,{$ENDIF}sysutils,
 type
   TFromDirIterator=procedure (const filename:String;pdata:pointer);
   TFromDirIteratorObj=procedure (const filename:String;pdata:pointer) of object;
-function ExpandPath(path:String):String;
+function ExpandPath(APath:String;AItDirectory:boolean=false):String;
 function FindInSupportPath(const PPaths:String; FileName:String):String;
 function FindInPaths(const Paths:String; FileName:String):String;
 
@@ -175,17 +175,17 @@ begin
      result:='';
      zDebugLn(sysutils.Format('{E}FindInSupportPath: file not found:"%s"',[{$IFNDEF DELPHI}utf8tosys{$ENDIF}(FileName)]));
 end;
-function ExpandPath(path:String):String;
+function ExpandPath(APath:String;AItDirectory:boolean=false):String;
 begin
-  DefaultMacros.SubstituteMacros(path);
-  if path='' then
+  DefaultMacros.SubstituteMacros(APath);
+  if APath='' then
     result:=programpath
-  {else if path[1]='*' then
-         result:=programpath+'/'+copy(path,2,length(path)-1)}
+  {else if APath[1]='*' then
+         result:=programpath+'/'+copy(APath,2,length(APath)-1)}
   else
-    result:=path;
+    result:=APath;
   result:=StringReplace(result,'/', PathDelim,[rfReplaceAll, rfIgnoreCase]);
-  if DirectoryExists({$IFNDEF DELPHI}utf8tosys{$ENDIF}(result)) then
+  if AItDirectory or DirectoryExists({$IFNDEF DELPHI}utf8tosys{$ENDIF}(result)) then
     if (result[length(result)]<>{'/'}PathDelim)
       //or (result[length(result)]<>'\')
     then

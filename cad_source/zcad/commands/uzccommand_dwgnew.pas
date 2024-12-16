@@ -93,7 +93,7 @@ begin
   ZCADMainWindow.PageControl.ActivePage:=TabSheet;
 
   if not fileexists(FileName) then begin
-    FileName:=expandpath(sysvar.PATH.Template_Path^)+sysvar.PATH.Template_File^;
+    FileName:=expandpath(sysvar.PATH.Template_Path^,true)+sysvar.PATH.Template_File^;
     if fileExists(utf8tosys(FileName)) then
       Load_merge(FileName,TLOLoad)
     else

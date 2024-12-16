@@ -180,14 +180,11 @@ begin
   DefaultMacros.SubstituteMacros(APath);
   if APath='' then
     result:=programpath
-  {else if APath[1]='*' then
-         result:=programpath+'/'+copy(APath,2,length(APath)-1)}
   else
     result:=APath;
   result:=StringReplace(result,'/', PathDelim,[rfReplaceAll, rfIgnoreCase]);
   if AItDirectory or DirectoryExists({$IFNDEF DELPHI}utf8tosys{$ENDIF}(result)) then
-    if (result[length(result)]<>{'/'}PathDelim)
-      //or (result[length(result)]<>'\')
+    if (result[length(result)]<>PathDelim)
     then
       result:=result+PathDelim;
 end;

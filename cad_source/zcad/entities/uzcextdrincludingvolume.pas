@@ -25,7 +25,7 @@ uses
   uzeentdevice,TypeDescriptors,uzctnrVectorBytes,
   uzbtypes,uzeentsubordinated,uzeentity,uzeblockdef,
   varmandef,Varman,UUnitManager,URecordDescriptor,UBaseTypeDescriptor,
-  {uzeentitiestree,}usimplegenerics,uzeffdxfsupport,uzbpaths,uzcTranslations,
+  usimplegenerics,uzeffdxfsupport,uzbpaths,uzcTranslations,
   gzctnrVectorTypes,uzeBaseExtender,uzeconsts,uzgldrawcontext,
   UGDBOpenArrayOfPV,uzeentgenericsubentry,uzegeometry,
   uzcEnitiesVariablesExtender,gzctnrVectorc,uzegeometrytypes,

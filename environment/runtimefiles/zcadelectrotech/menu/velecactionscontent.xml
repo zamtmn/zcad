@@ -2,14 +2,14 @@
 <CONFIG>
   <ActionsContent>
     <Group Category="SL">
-      <ZAction Name="ACN_slagcabCom" Command="slagcab" Img="#ACL" Caption="Start command panels for autocabeling SL"/>
+      <ZAction Name="ACN_slagcabCom" Command="slagcab" Img="#ACL" Caption="Automatic cable laying by SuperLine"/>
       <ZAction Name="ACN_vBuildSSSchema" Command="vBuildSSSchema" Img="#vSS" Caption="Start building vSS Schema"/>
-      <ZAction Name="ACN_vBuildMC" Command="vBuildELSchema" Img="#MC" Caption="Start building connection model"/>
+      <ZAction Name="ACN_vBuildMC" Command="vBuildELSchema" Img="#MC" Caption="Create model connection"/>
       <ZAction Name="ACN_agslr" Command="AGSLROOM" Img="#ASL" Caption="Start command ASL"/>
       <ZAction Name="ACN_SupeLine" Command="DrawSuperLine" Img="superline.bmp" Caption="SuperLine" ShortCut="CTRL+ALT+S" SecondaryShortCuts="S"/>
-      <ZAction Name="ACN_SupeLineHT1" Command="DrawSuperLine(1)" Img="#1" Caption="SuperLine" SecondaryShortCuts="1"/>
-      <ZAction Name="ACN_SupeLineHT2" Command="DrawSuperLine(2)" Img="#2" Caption="SuperLine" SecondaryShortCuts="2"/>
-      <ZAction Name="ACN_SupeLineHT3" Command="DrawSuperLine(3)" Img="#3" Caption="SuperLine" SecondaryShortCuts="3"/>
+      <ZAction Name="ACN_SupeLineHT1" Command="DrawSuperLine(1)" Img="#1" Caption="SuperLine1" SecondaryShortCuts="1"/>
+      <ZAction Name="ACN_SupeLineHT2" Command="DrawSuperLine(2)" Img="#2" Caption="SuperLine2" SecondaryShortCuts="2"/>
+      <ZAction Name="ACN_SupeLineHT3" Command="DrawSuperLine(3)" Img="#3" Caption="SuperLine3" SecondaryShortCuts="3"/>
       <ZAction Name="ACN_uzvaddconnection" Command="uzvaddconnection" Img="#C+" Caption="Add connection"/>
       <ZAction Name="ACN_uzvremoveconnection" Command="uzvremoveconnection" Img="#С-" Caption="Remove connection"/>
       <ZAction Name="ACN_managerEM" Command="manem" Img="#MEM" Caption="Manager electrical model"/>

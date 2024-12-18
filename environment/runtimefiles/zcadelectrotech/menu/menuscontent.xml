@@ -44,7 +44,6 @@
     </Menu>
     <Menu Name="View">
       <Action Name="ACN_REGEN"/>
-      <Action Name="ACN_PROJECTTREE"/>
       <Separator/>
       <SubMenu Name="View">
         <Action Name="ACN_VIEWTOP"/>
@@ -377,7 +376,7 @@
         <InsertMenu Name="Dimension"/>
         <InsertMenu Name="Modify"/>
         <InsertMenu Name="Schematic"/>
-        <InsertMenu Name="Plan"/>
+        <InsertMenu Name="Engineering"/>
         <InsertMenu Name="Info"/>
         <InsertMenu Name="Model"/>
       </IFONE>
@@ -400,7 +399,7 @@
       <InsertMenu Name="Dimension"/>
       <InsertMenu Name="Modify"/>
       <InsertMenu Name="Schematic"/>
-      <InsertMenu Name="Plan"/>
+      <InsertMenu Name="Engineering"/>
       <InsertMenu Name="Info"/>
       <InsertMenu Name="Model"/>
       <InsertMenu Name="Settings"/>

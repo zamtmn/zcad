@@ -8,20 +8,83 @@
         <Action Name="ACN_SHOW_NAVIGATORCABLES"/>
       </SubMenu>
     </Menu>
-    <Menu Name="Schematic">
-      <SubMenu Name="Circuit diagram">
-        <Command Caption="**Connection" Command="EL_Wire"/> 
-        <Command Caption="**NO1 Contact" Command="Insert(DEVICE_NOC)"/> 
-        <Command Caption="**NO2 Contact" Command="Insert(DEVICE_NOC2)"/> 
-      </SubMenu>
-      <SubMenu Name="Connections diagram">
-        <Command Caption="**Placing markers cable" Command="Insert(DEVICE_CABLE_MARK)"/> 
-        <Command Caption="**Updating markers cable" Command="KIP_Cable_Mark"/> 
-      </SubMenu>
-    </Menu>
     <Menu Name="Engineering">
 	  <Action Name="ACN_PROJECTTREE"/>
-      <Separator/>	  
+      <Separator/>	 
+      <SubMenu Name="Device">
+		  <SubMenu Name="Graphic legend">
+			  <SubMenu Name="Instrumentation and Control">
+				<SubMenu Name="Placement equipment">
+				  <Command Caption="Датчик" Command="Insert(DEVICE_KIP_SENSOR)"/> 
+				  <Command Caption="Соединительная коробка" Command="Insert(DEVICE_KIP_CONNECTION_BOX)"/> 
+				  <Command Caption="Щит автоматики" Command="Insert(DEVICE_KIP_AUTOMATION_BOX)"/> 
+				  <Command Caption="Привод клапана" Command="Insert(DEVICE_KIP_ACTUATOR)"/> 
+				  <Command Caption="Соленоид" Command="Insert(DEVICE_KIP_SOLENOID)"/> 
+				  <Command Caption="Кнопочный пост" Command="Insert(DEVICE_KIP_KNOPKA)"/> 
+				  <Command Caption="Ответвительная коробка" Command="Insert(DEVICE_KIP_UKP)"/> 
+				</SubMenu>
+			  </SubMenu>
+			  <SubMenu Name="Alarm system">
+				<SubMenu Name="Placement equipment">
+				  <SubMenu Name="Fire alarm">
+					<Command Caption="Авто расстановка извещателей" Command="PLACESMOKEDETECTORORTO"/> 
+					<Command Caption="Дымовой извещатель" Command="Insert(DEVICE_PS_DAT_SMOKE)"/> 
+					<Command Caption="Тепловой извещатель" Command="Insert(DEVICE_PS_DAT_TERMO)"/> 
+					<Command Caption="Ручной извещатель" Command="Insert(DEVICE_PS_DAT_HAND)"/> 
+				  </SubMenu>
+				  <SubMenu Name="Security alarm">
+					<Command Caption="Магнитоконтактный извещатель" Command="Insert(DEVICE_OS_DAT_BGB)"/> 
+					<Command Caption="Звуковой извещатель" Command="Insert(DEVICE_OS_DAT_BGT)"/> 
+					<Command Caption="Оптоэлектронный извещатель" Command="Insert(DEVICE_OS_DAT_BGL)"/> 
+				  </SubMenu>
+				  <Command Caption="Прибор ОПС" Command="Insert(DEVICE_PS_ARK_DEVICE)"/> 
+				  <Command Caption="Блок питания" Command="Insert(DEVICE_PS_GB)"/> 
+				  <Command Caption="Коробка распределительная" Command="Insert(DEVICE_OPS_DISTRIBUTION_BOX)"/> 
+				  <Command Caption="Оповещатель светозвуковой" Command="Insert(DEVICE_PS_BIASL)"/> 
+				  <Command Caption="Оповещатель световой" Command="Insert(DEVICE_PS_BIAL)"/> 
+				  <Command Caption="Оповещатель звуковой" Command="Insert(DEVICE_PS_BIAS)"/> 
+				</SubMenu>
+			  <Command Caption="Автонумерация извещателей" Command="OPS_Sensor_Mark"/> 
+			  </SubMenu>
+			  <SubMenu Name="Power supply">
+				<SubMenu Name="Placement equipment">
+				  <Command Caption="Двигатель" Command="Insert(DEVICE_EL_MOTOR)"/> 
+				  <Command Caption="Распредустройство" Command="Insert(DEVICE_EL_SR)"/> 
+				</SubMenu>
+			  </SubMenu>
+			  <SubMenu Name="Lighting">
+				<SubMenu Name="Placement equipment">
+				  <Command Caption="Светильник 1" Command="Insert(DEVICE_EL_LIGHT_FBULB)"/> 
+				  <Command Caption="Светильник 2" Command="Insert(DEVICE_EL_LIGHT_LBULB)"/> 
+				  <Command Caption="Светильник 3" Command="Insert(DEVICE_EL_LIGHT_LBULB2)"/> 
+				  <Command Caption="Выключатель" Command="Insert(DEVICE_EL_LIGHT_SWITH)"/> 
+				</SubMenu>
+			  </SubMenu>
+			  <SubMenu Name="CCTV">
+				<SubMenu Name="Placement equipment">
+				  <Command Caption="Видеокамера" Command="Insert(DEVICE_SS_VCAM)"/> 
+				  <Command Caption="Видеокамера в кожухе" Command="Insert(DEVICE_SS_VCAMTC)"/> 
+				</SubMenu>
+			  </SubMenu>
+			  <SubMenu Name="Miscellaneous">
+				<SubMenu Name="Placement equipment">
+				  <Command Caption="АТС" Command="Insert(DEVICE_SS_ATS)"/> 
+				  <Command Caption="Стойка 19" Command="Insert(DEVICE_SS_19)"/> 
+				  <Command Caption="Микрофон" Command="Insert(DEVICE_SS_MIC)"/> 
+				  <Command Caption="Розетка телефонная" Command="Insert(DEVICE_SS_RT)"/> 
+				  <Command Caption="Громкоговоритель" Command="Insert(DEVICE_SS_BIAS)"/> 
+				  <Command Caption="Первичные часы" Command="Insert(DEVICE_SS_PRICLOCK)"/> 
+				  <Command Caption="Вторичные часы" Command="Insert(DEVICE_SS_SECCLOCK)"/> 
+				</SubMenu>
+			  </SubMenu>
+		  </SubMenu>
+		  <Separator/>
+		  <Command Caption="Names of entities" Command="VarReport(NMO_Name)"/> 
+		  <Separator/>
+		  <Action Name="ACN_BEDIT"/>
+		  <Command Caption="Alignment blocks array" Command="OrtoDevPlace"/> 		  
+      </SubMenu>
+      <Separator/>	 	  
       <SubMenu Name="Cable/Trace">
 	    <SubMenu Name="Plan">
 			<Action Name="ACN_WIRE"/>
@@ -37,100 +100,59 @@
 		<Action Name="ACN_CABLEJOIN"/> 
 		<Action Name="ACN_CABLESELECT"/> 
 		<Action Name="ACN_CABLEINVERT"/> 
-		<Separator/>	 		
-		<SubMenu Name="Generating cables">
-			<Command Caption="Automatic cable laying by CSV" Command="EL_ExternalKZ"/> 
-			<Separator/>	
-			<Command Caption="Remove generated cables" Command="EL_AutoGen_Cable_Remove"/> 
-        </SubMenu>
+		<Separator/>
+		<Command Caption="Automatic cable laying by CSV" Command="EL_ExternalKZ"/> 		
+		<Command Caption="Remove generated cables" Command="EL_AutoGen_Cable_Remove"/> 
       </SubMenu>
-	  <Separator/>	
-	  <SubMenu Name="Graphic legend">
-		  <SubMenu Name="Instrumentation and Control">
-			<SubMenu Name="Placement equipment">
-			  <Command Caption="Датчик" Command="Insert(DEVICE_KIP_SENSOR)"/> 
-			  <Command Caption="Соединительная коробка" Command="Insert(DEVICE_KIP_CONNECTION_BOX)"/> 
-			  <Command Caption="Щит автоматики" Command="Insert(DEVICE_KIP_AUTOMATION_BOX)"/> 
-			  <Command Caption="Привод клапана" Command="Insert(DEVICE_KIP_ACTUATOR)"/> 
-			  <Command Caption="Соленоид" Command="Insert(DEVICE_KIP_SOLENOID)"/> 
-			  <Command Caption="Кнопочный пост" Command="Insert(DEVICE_KIP_KNOPKA)"/> 
-			  <Command Caption="Ответвительная коробка" Command="Insert(DEVICE_KIP_UKP)"/> 
-			</SubMenu>
+	  <Separator/>
+  	  <SubMenu Name="Superline">	
+      </SubMenu>	  
+	  <Separator/>
+	  <SubMenu Name="Schematic">
+		  <SubMenu Name="Circuit diagram">
+			<Command Caption="**Connection" Command="EL_Wire"/> 
+			<Command Caption="**NO1 Contact" Command="Insert(DEVICE_NOC)"/> 
+			<Command Caption="**NO2 Contact" Command="Insert(DEVICE_NOC2)"/> 
 		  </SubMenu>
-		  <SubMenu Name="Alarm system">
-			<SubMenu Name="Placement equipment">
-			  <SubMenu Name="Fire alarm">
-				<Command Caption="Авто расстановка извещателей" Command="PLACESMOKEDETECTORORTO"/> 
-				<Command Caption="Дымовой извещатель" Command="Insert(DEVICE_PS_DAT_SMOKE)"/> 
-				<Command Caption="Тепловой извещатель" Command="Insert(DEVICE_PS_DAT_TERMO)"/> 
-				<Command Caption="Ручной извещатель" Command="Insert(DEVICE_PS_DAT_HAND)"/> 
-			  </SubMenu>
-			  <SubMenu Name="Security alarm">
-				<Command Caption="Магнитоконтактный извещатель" Command="Insert(DEVICE_OS_DAT_BGB)"/> 
-				<Command Caption="Звуковой извещатель" Command="Insert(DEVICE_OS_DAT_BGT)"/> 
-				<Command Caption="Оптоэлектронный извещатель" Command="Insert(DEVICE_OS_DAT_BGL)"/> 
-			  </SubMenu>
-			  <Command Caption="Прибор ОПС" Command="Insert(DEVICE_PS_ARK_DEVICE)"/> 
-			  <Command Caption="Блок питания" Command="Insert(DEVICE_PS_GB)"/> 
-			  <Command Caption="Коробка распределительная" Command="Insert(DEVICE_OPS_DISTRIBUTION_BOX)"/> 
-			  <Command Caption="Оповещатель светозвуковой" Command="Insert(DEVICE_PS_BIASL)"/> 
-			  <Command Caption="Оповещатель световой" Command="Insert(DEVICE_PS_BIAL)"/> 
-			  <Command Caption="Оповещатель звуковой" Command="Insert(DEVICE_PS_BIAS)"/> 
-			</SubMenu>
-		  <Command Caption="Автонумерация извещателей" Command="OPS_Sensor_Mark"/> 
+		  <SubMenu Name="Connections diagram">
+			<Command Caption="**Placing markers cable" Command="Insert(DEVICE_CABLE_MARK)"/> 
+			<Command Caption="**Updating markers cable" Command="KIP_Cable_Mark"/> 
 		  </SubMenu>
-		  <SubMenu Name="Power supply">
-			<SubMenu Name="Placement equipment">
-			  <Command Caption="Двигатель" Command="Insert(DEVICE_EL_MOTOR)"/> 
-			  <Command Caption="Распредустройство" Command="Insert(DEVICE_EL_SR)"/> 
-			</SubMenu>
-		  </SubMenu>
-		  <SubMenu Name="Lighting">
-			<SubMenu Name="Placement equipment">
-			  <Command Caption="Светильник 1" Command="Insert(DEVICE_EL_LIGHT_FBULB)"/> 
-			  <Command Caption="Светильник 2" Command="Insert(DEVICE_EL_LIGHT_LBULB)"/> 
-			  <Command Caption="Светильник 3" Command="Insert(DEVICE_EL_LIGHT_LBULB2)"/> 
-			  <Command Caption="Выключатель" Command="Insert(DEVICE_EL_LIGHT_SWITH)"/> 
-			</SubMenu>
-		  </SubMenu>
-		  <SubMenu Name="CCTV">
-			<SubMenu Name="Placement equipment">
-			  <Command Caption="Видеокамера" Command="Insert(DEVICE_SS_VCAM)"/> 
-			  <Command Caption="Видеокамера в кожухе" Command="Insert(DEVICE_SS_VCAMTC)"/> 
-			</SubMenu>
-		  </SubMenu>
-		  <SubMenu Name="Miscellaneous">
-			<SubMenu Name="Placement equipment">
-			  <Command Caption="АТС" Command="Insert(DEVICE_SS_ATS)"/> 
-			  <Command Caption="Стойка 19" Command="Insert(DEVICE_SS_19)"/> 
-			  <Command Caption="Микрофон" Command="Insert(DEVICE_SS_MIC)"/> 
-			  <Command Caption="Розетка телефонная" Command="Insert(DEVICE_SS_RT)"/> 
-			  <Command Caption="Громкоговоритель" Command="Insert(DEVICE_SS_BIAS)"/> 
-			  <Command Caption="Первичные часы" Command="Insert(DEVICE_SS_PRICLOCK)"/> 
-			  <Command Caption="Вторичные часы" Command="Insert(DEVICE_SS_SECCLOCK)"/> 
-			</SubMenu>
-		  </SubMenu>
+      </SubMenu>
+	  <Separator/>
+	  <SubMenu Name="Model">
+		  <Command Caption="Buffer Import" Command="DataImport"/> 
+		  <Command Caption="Buffer Export" Command="DataExport"/>
+		  <Action Name="ACN_DATAIMPORT"/>
+		  <Action Name="ACN_DATAEXPORT"/>	  
 	  </SubMenu>
-      <Command Caption="Alignment blocks array" Command="OrtoDevPlace"/> 
-    </Menu>
-    <Menu Name="Model">
-      <Command Caption="Cable manager" Command="EL_CableMan"/> 
-      <SubMenu Name="Alarm system">
-        <Command Caption="Connection diagram" Command="OPS_SPBuild"/> 
-        <Command Caption="Создание расчетной схемы распределительной сети" Command="EM_SRBuild"/> 
-        <Command Caption="Создание схемы электрической принципиальной распределительной сети" Command="EM_SEPBuild"/> 
-      </SubMenu>
-      <Command Caption="Verifying rules" Command="EL_Сheck"/>
-      <Command Caption="Create cable report" Command="El_Cable_Legend"/>
-      <Command Caption="Create material report" Command="El_Material_Legend"/>
-      <Command Caption="Buffer Import" Command="DataImport"/> 
-      <Command Caption="Buffer Export" Command="DataExport"/>
-      <Action Name="ACN_DATAIMPORT"/>
-      <Action Name="ACN_DATAEXPORT"/>	  
-    </Menu>
-	<Menu Name="DB">
+	  <SubMenu Name="Reports">
+		  <Command Caption="Cable manager" Command="EL_CableMan"/> 
+		  <Command Caption="Connection diagram" Command="OPS_SPBuild"/> 		  
+		  <Command Caption="Create cable report" Command="El_Cable_Legend"/>
+		  <Command Caption="Create material report" Command="El_Material_Legend"/> 
+	  </SubMenu>	
+      <SubMenu Name="Extenders">
+         <Action Name="ACN_EXTDRALLLIST"/>
+         <Action Name="ACN_EXTDRENTLIST"/>
+		 <Separator/>
+			<Command Caption="Add extdrVariables" Command="extdrAdd(extdrVariables)"/>
+			<Command Caption="Add extdrIncludingVolume" Command="extdrAdd(extdrIncludingVolume)"/>
+			<Command Caption="Add extdrLayerControl" Command="extdrAdd(extdrLayerControl)"/>
+			<Command Caption="Add extdrReport" Command="extdrAdd(extdrReport)"/>
+			<Command Caption="Add extdrSCHConnection" Command="extdrAdd(extdrSCHConnection)"/>
+			<Command Caption="Add extdrSCHConnector" Command="extdrAdd(extdrSCHConnector)"/>
+			<Command Caption="Add extdrSmartTextEnt" Command="extdrAdd(extdrSmartTextEnt)"/>
+	  </SubMenu>	  
+	  <Separator/>
+      <Action Name="ACN_VARSED"/>
+      <Action Name="ACN_VARSEDSEL"/>
+	  <Separator/>
+   	  <SubMenu Name="DB">
 		<Command Caption="Add to the drawing database" Command="DBaseAdd"/>
 		<Command Caption="linked to entity" Command="DBaseLink"/>
-	</Menu>	
+	  </SubMenu>	
+    </Menu>
+
   </MenusContent>
 </CONFIG>

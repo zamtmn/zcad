@@ -21,9 +21,11 @@
         </SubMenu>			
         <Separator/>	 		
 		<Action Name="ACN_slagcabCom"/>
+		<Command Caption="Remove generated cables" Command="EL_AutoGen_Cable_Remove"/> 		
       </SubMenu>
 	  <Separator/>
-	  <SubMenu Name="ModelConnect">	 		
+	  <SubMenu Name="Model">	 	
+		  <Separator/>	  
 		  <Action Name="ACN_vBuildMC"/>
 		  <Action Name="ACN_exportModeltoExcell"/>
 		  <Action Name="ACN_exportDevtoExcell"/>

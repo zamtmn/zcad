@@ -310,7 +310,7 @@ initialization
   TranslateLogModuleId:=programlog.RegisterModule('TRANSLATOR');
   TranslateSpellerLogModuleId:=ProgramLog.RegisterModule('TRANSLATOR/SPELLER');
   DisableTranslateCount:=0;
-  PODirectory := ProgramPath+'/languages/';
+  PODirectory := DataPath+'/languages/';
   GetLanguageIDs(Lang, FallbackLang); // определено в модуле gettext
   if sysparam.saved.LangOverride<>'' then begin
     Lang:=sysparam.saved.LangOverride;

@@ -301,7 +301,7 @@ begin
 end;
 
 initialization
-  system_pas_path:=expandpath('$(ZCADPath)/rtl/system.pas');
+  system_pas_path:=expandpath('$(ZDataPath)/rtl/system.pas');
   units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPath,system_pas_path,InterfaceTranslate,'INTF_ObjInsp_WhiteBackground','Boolean',@INTFObjInspWhiteBackground);
   units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPath,system_pas_path,InterfaceTranslate,'INTF_ObjInsp_Level0HeaderColor','Integer',@INTFObjInspLevel0HeaderColor);
   units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPath,system_pas_path,InterfaceTranslate,'INTF_ObjInsp_BorledColor','Integer',@INTFObjInspBorderColor);

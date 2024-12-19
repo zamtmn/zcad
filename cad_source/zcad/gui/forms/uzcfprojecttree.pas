@@ -361,8 +361,8 @@ begin
   ProjectTreeForm:=nil;
   BlockCategory.init(100);
   EqCategory.init(100);
-  BlockCategory.loadfromfile(expandpath('$(ZCADPath)/rtl/BlockCategory.cat'));
-  EqCategory.loadfromfile(expandpath('$(ZCADPath)/rtl/EqCategory.cat'));
+  BlockCategory.loadfromfile(expandpath('$(ZDataPath)/rtl/BlockCategory.cat'));
+  EqCategory.loadfromfile(expandpath('$(ZDataPath)/rtl/EqCategory.cat'));
   CreateZCADCommand(@ProjectTree_com,'ProjectTree',CADWG,0);
 end;
 finalization

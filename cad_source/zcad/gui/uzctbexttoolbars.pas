@@ -317,7 +317,7 @@ begin
      begin
           if img[1]<>'#' then
                               begin
-                              img:={SysToUTF8}(ProgramPath)+'/menu/BMP/'+img;
+                              img:={SysToUTF8}(DataPath)+'/menu/BMP/'+img;
                               bmp:=Graphics.TBitmap.create;
                               bmp.LoadFromFile(img);
                               bmp.Transparent:=true;
@@ -624,7 +624,7 @@ var
     s:string;
 begin
   if sender is TComboBox then begin
-    s:=ProgramPath+'/components/'+(sender as TComboBox).text+'.xml';
+    s:=DataPath+'/components/'+(sender as TComboBox).text+'.xml';
     LoadLayoutFromFile(s);
   end;
 end;
@@ -649,7 +649,7 @@ begin
   result:=TComboBox.Create(tb);
   result.Style:=csDropDownList;
   result.Sorted:=true;
-  FromDirIterator(ProgramPath+'/components/','*.xml','',addfiletoLayoutbox,nil,pointer(result));
+  FromDirIterator(DataPath+'/components/','*.xml','',addfiletoLayoutbox,nil,pointer(result));
   result.OnChange:=ChangeLayout;
 
   s:=extractfilename(sysvar.PATH.LayoutFile^);

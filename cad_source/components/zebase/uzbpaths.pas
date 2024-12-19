@@ -24,6 +24,7 @@ uses Masks,{$IFNDEF DELPHI}LazUTF8,{$ENDIF}sysutils,
 type
   TFromDirIterator=procedure (const filename:String;pdata:pointer);
   TFromDirIteratorObj=procedure (const filename:String;pdata:pointer) of object;
+  TDataFilesExistChecFunc=function(ACheckedPath:string):boolean;
 function ExpandPath(APath:String;AItDirectory:boolean=false):String;
 function FindInSupportPath(const PPaths:String; FileName:String):String;
 function FindInPaths(const Paths:String; FileName:String):String;
@@ -40,10 +41,11 @@ procedure AddSupportPath(const APath:String);
 
 procedure FromDirIterator(const path,mask,firstloadfilename:String;proc:TFromDirIterator;method:TFromDirIteratorObj;pdata:pointer=nil);
 procedure FromDirsIterator(const path,mask,firstloadfilename:String;proc:TFromDirIterator;method:TFromDirIteratorObj;pdata:pointer=nil);
-var ProgramPath,AdditionalSupportPath,TempPath:String;
+function FindDataPath(CF:TDataFilesExistChecFunc):string;
+var DataPath,BinPath,AdditionalSupportPath,TempPath:String;
 implementation
 var SupportPath:String;
-//uses log;
+
 procedure AddSupportPath(const APath:String);
 begin
   if APath=''then exit;
@@ -179,7 +181,7 @@ function ExpandPath(APath:String;AItDirectory:boolean=false):String;
 begin
   DefaultMacros.SubstituteMacros(APath);
   if APath='' then
-    result:=programpath
+    result:=DataPath
   else
     result:=APath;
   result:=StringReplace(result,'/', PathDelim,[rfReplaceAll, rfIgnoreCase]);
@@ -260,8 +262,22 @@ begin
   zTraceLn('{D-}[FILEOPS]end; {FromDirIterator}');
   //programlog.LogOutStr('FromDirIterator....{end}',lp_DecPos,LM_Debug);
 end;
+function FindDataPath(CF:TDataFilesExistChecFunc):string;
+var
+  ts:string;
+begin
+  if @cf<>nil then begin
+    if cf(DataPath) then
+      exit(DataPath);
+    ts:=GetAppConfigDir(true);
+    if cf(ts) then
+      exit(ts);
+  end;
+  result:='';
+end;
 initialization
-  programpath:={$IFNDEF DELPHI}SysToUTF8{$ENDIF}(SysUtils.ExpandFileName(ExtractFilePath(paramstr(0))+'../..'));
+  BinPath:={$IFNDEF DELPHI}SysToUTF8{$ENDIF}(ExtractFilePath(paramstr(0)));
+  DataPath:={$IFNDEF DELPHI}SysToUTF8{$ENDIF}(ExpandFileName(ExtractFilePath(paramstr(0))+'../..'));;
   {$IfNDef DELPHI}
     TempPath:=GetTempDir;
   {$Else}

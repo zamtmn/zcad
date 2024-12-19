@@ -32,9 +32,9 @@ implementation
 var
   mem:TZctnrVectorBytes;
 initialization;
-  units.loadunit(GetSupportPath,InterfaceTranslate,expandpath('$(ZCADPath)/rtl/sysvar.pas'),nil);
-  units.loadunit(GetSupportPath,InterfaceTranslate,expandpath('$(ZCADPath)/rtl/savedvar.pas'),nil);
-  units.loadunit(GetSupportPath,InterfaceTranslate,expandpath('$(ZCADPath)/rtl/devicebase.pas'),nil);
+  units.loadunit(GetSupportPath,InterfaceTranslate,expandpath('$(ZDataPath)/rtl/sysvar.pas'),nil);
+  units.loadunit(GetSupportPath,InterfaceTranslate,expandpath('$(ZDataPath)/rtl/savedvar.pas'),nil);
+  units.loadunit(GetSupportPath,InterfaceTranslate,expandpath('$(ZDataPath)/rtl/devicebase.pas'),nil);
 
   SysVarUnit:=units.findunit(GetSupportPath,InterfaceTranslate,'sysvar');
   SavedUnit:=units.findunit(GetSupportPath,InterfaceTranslate,'savedvar');
@@ -200,10 +200,10 @@ initialization;
   end;
 
 
-  units.loadunit(GetSupportPath,InterfaceTranslate,expandpath('$(ZCADPath)/rtl/cables.pas'),nil);
-  units.loadunit(GetSupportPath,InterfaceTranslate,expandpath('$(ZCADPath)/rtl/devices.pas'),nil);
-  units.loadunit(GetSupportPath,InterfaceTranslate,expandpath('$(ZCADPath)/rtl/connectors.pas'),nil);
-  units.loadunit(GetSupportPath,InterfaceTranslate,expandpath('$(ZCADPath)/rtl/styles/styles.pas'),nil);
+  units.loadunit(GetSupportPath,InterfaceTranslate,expandpath('$(ZDataPath)/rtl/cables.pas'),nil);
+  units.loadunit(GetSupportPath,InterfaceTranslate,expandpath('$(ZDataPath)/rtl/devices.pas'),nil);
+  units.loadunit(GetSupportPath,InterfaceTranslate,expandpath('$(ZDataPath)/rtl/connectors.pas'),nil);
+  units.loadunit(GetSupportPath,InterfaceTranslate,expandpath('$(ZDataPath)/rtl/styles/styles.pas'),nil);
 
   SysVar.debug.memdeb.GetMemCount:=nil;
   SysVar.debug.memdeb.FreeMemCount:=nil;
@@ -227,7 +227,7 @@ finalization;
 
   mem.init(1024);
   SavedUnit^.SavePasToMem(mem);
-  mem.SaveToFile(expandpath(ProgramPath+'/rtl'+PathDelim+'savedvar.pas'));
+  mem.SaveToFile(expandpath(DataPath+'/rtl'+PathDelim+'savedvar.pas'));
   mem.done;
   //units.FreeAndDone;
 end.

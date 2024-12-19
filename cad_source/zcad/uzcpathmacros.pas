@@ -25,12 +25,14 @@ uses
   {$IFDEF WINDOWS}ShlObj,{$ENDIF}{$IFNDEF DELPHI}LazUTF8,{$ENDIF}sysutils,uzcsysvars;
 type
   TZCADPathsMacroMethods=class
-    class function MacroFuncZCADPath       (const {%H-}Param: string; const Data: PtrInt;
-                                              var {%H-}Abort: boolean): string;
+    class function MacroFuncZDataPath(const {%H-}Param: string; const Data: PtrInt;
+                                        var {%H-}Abort: boolean): string;
+    class function MacroFuncZBinPath(const {%H-}Param: string; const Data: PtrInt;
+                                       var {%H-}Abort: boolean): string;
     class function MacroFuncZCADDictionariesPath(const {%H-}Param: string; const Data: PtrInt;
                                                  var {%H-}Abort: boolean): string;
-    class function MacroFuncTEMPPath       (const {%H-}Param: string; const Data: PtrInt;
-                                              var {%H-}Abort: boolean): string;
+    class function MacroFuncTEMPPath(const {%H-}Param: string; const Data: PtrInt;
+                                       var {%H-}Abort: boolean): string;
     class function MacroFuncSystemFontsPath(const {%H-}Param: string; const Data: PtrInt;
                                               var {%H-}Abort: boolean): string;
     class function MacroFuncsUserFontsPath (const {%H-}Param: string; const Data: PtrInt;
@@ -49,14 +51,18 @@ type
                                                var {%H-}Abort: boolean): string;
   end;
 implementation
-class function TZCADPathsMacroMethods.MacroFuncZCADPath(const {%H-}Param: string; const Data: PtrInt;var {%H-}Abort: boolean): string;
+class function TZCADPathsMacroMethods.MacroFuncZDataPath(const {%H-}Param: string; const Data: PtrInt;var {%H-}Abort: boolean): string;
 begin
-  result:=ProgramPath;
+  result:=DataPath;
+end;
+class function TZCADPathsMacroMethods.MacroFuncZBinPath(const {%H-}Param: string; const Data: PtrInt;var {%H-}Abort: boolean): string;
+begin
+  result:=BinPath;
 end;
 class function TZCADPathsMacroMethods.MacroFuncZCADDictionariesPath(const {%H-}Param: string; const Data: PtrInt;
                                              var {%H-}Abort: boolean): string;
 begin
-  result:=ProgramPath+'/dictionaries';
+  result:=DataPath+'/dictionaries';
 end;
 class function TZCADPathsMacroMethods.MacroFuncTEMPPath(const {%H-}Param: string; const Data: PtrInt;var {%H-}Abort: boolean): string;
 begin
@@ -120,8 +126,10 @@ begin
 end;
 
 initialization
-DefaultMacros.AddMacro(TTransferMacro.Create('ZCADPath','',
-                       'Path to ZCAD',TZCADPathsMacroMethods.MacroFuncZCADPath,[]));
+DefaultMacros.AddMacro(TTransferMacro.Create('ZBinPath','',
+                       'Path to ZCAD binary',TZCADPathsMacroMethods.MacroFuncZBinPath,[]));
+DefaultMacros.AddMacro(TTransferMacro.Create('ZDataPath','',
+                       'Path to ZCAD data',TZCADPathsMacroMethods.MacroFuncZDataPath,[]));
 DefaultMacros.AddMacro(TTransferMacro.Create('TEMP','',
                        'TEMP path',TZCADPathsMacroMethods.MacroFuncTEMPPath,[]));
 DefaultMacros.AddMacro(TTransferMacro.Create('ZCADDictionariesPath','',

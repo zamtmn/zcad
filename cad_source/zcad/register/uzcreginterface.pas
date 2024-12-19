@@ -28,7 +28,7 @@ var
 
 initialization
   DecorateSysTypes;
-  system_pas_path:=expandpath('$(ZCADPath)/rtl/system.pas');
+  system_pas_path:=expandpath('$(ZDataPath)/rtl/system.pas');
   units.CreateExtenalSystemVariable(SysVarNotSavedUnit,SysVarNSN,GetSupportPath,system_pas_path,InterfaceTranslate,'RD_GLUVersion','String',@GLUVersion);
   SysVarNotSavedUnit.AssignToSymbol(SysVar.RD.RD_GLUVersion,'RD_GLUVersion');
   sysvar.RD.RD_GLUVersion^:=GLUVersion;

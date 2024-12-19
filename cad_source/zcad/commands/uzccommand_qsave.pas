@@ -59,10 +59,10 @@ begin
   end;
 
   if itAutoSeve then begin
-    LoadParams(expandpath(ProgramPath+CParamsFile),TempSavedParam);
+    LoadParams(expandpath(DataPath+CParamsFile),TempSavedParam);
     TempSavedParam.LastAutoSaveFile:=s1;
     SysParam.saved.LastAutoSaveFile:=s1;
-    SaveParams(expandpath(ProgramPath+CParamsFile),TempSavedParam);
+    SaveParams(expandpath(DataPath+CParamsFile),TempSavedParam);
   end;
   Result:=SaveDXFDPAS(s1,not itAutoSeve);
   if (not itAutoSeve)and(Result=cmd_ok) then

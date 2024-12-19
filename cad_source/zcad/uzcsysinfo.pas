@@ -23,7 +23,7 @@ uses
   uzbCommandLineParser,uzcCommandLineParser,
   uzcsysparams,uzcsysvars,
   {uzbLogTypes,}uzbLog,uzcLog,
-  uzbPaths,
+  uzbPaths,uzcPathMacros,
   Forms,{$IFNDEF DELPHI}LazUTF8,{$ENDIF}sysutils;
 resourcestring
   rsCommandLine='Command line "%s"';
@@ -174,6 +174,18 @@ begin
     programlog.LogOutFormatStr('SysParam.PreloadedFile="%s"',[SysParam.notsaved.PreloadedFile],LM_Necessarily);
 
     if disabledefaultmodule then programlog.DisableModule('DEFAULT');
+
+    with programlog.Enter('Macros',LM_Info) do try
+      programlog.LogOutFormatStr('$(AppName)="%s"',[ExpandPath('$(AppName)')],LM_Necessarily);
+      programlog.LogOutFormatStr('$(ZCADPath)="%s"',[ExpandPath('$(ZCADPath)')],LM_Necessarily);
+      programlog.LogOutFormatStr('$(UserDir)="%s"',[ExpandPath('$(UserDir)')],LM_Necessarily);
+      programlog.LogOutFormatStr('$(GlobalConfigDir)="%s"',[ExpandPath('$(GlobalConfigDir)')],LM_Necessarily);
+      programlog.LogOutFormatStr('$(LocalConfigDir)="%s"',[ExpandPath('$(LocalConfigDir)')],LM_Necessarily);
+      programlog.LogOutFormatStr('$(SystemFontsPath)="%s"',[ExpandPath('$(SystemFontsPath)')],LM_Necessarily);
+      programlog.LogOutFormatStr('$(UserFontsPath)="%s"',[ExpandPath('$(UserFontsPath)')],LM_Necessarily);
+      programlog.LogOutFormatStr('$(TEMP)="%s"',[ExpandPath('$(TEMP)')],LM_Necessarily);
+      programlog.LogOutFormatStr('$(ZCADDictionariesPath)="%s"',[ExpandPath('$(ZCADDictionariesPath)')],LM_Necessarily);
+    finally programlog.leave(IfEntered);end;
 
   finally programlog.leave(IfEntered);end;
 end;

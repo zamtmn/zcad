@@ -388,30 +388,31 @@ end;
 
 initialization
   programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
+  if SysUnit<>nil then begin
+    SysUnit^.RegisterType(TypeInfo(TAlgoType));
+    SysUnit^.RegisterType(TypeInfo(TPerimetrNumberingParam));
+    SysUnit^.SetTypeDesk(TypeInfo(TPerimetrNumberingParam),['StartAngle','Clockwise']);
+    SysUnit^.RegisterType(TypeInfo(PTPerimetrNumberingParam));
 
-  SysUnit^.RegisterType(TypeInfo(TAlgoType));
-  SysUnit^.RegisterType(TypeInfo(TPerimetrNumberingParam));
-  SysUnit^.SetTypeDesk(TypeInfo(TPerimetrNumberingParam),['StartAngle','Clockwise']);
-  SysUnit^.RegisterType(TypeInfo(PTPerimetrNumberingParam));
+    SysUnit^.RegisterType(TypeInfo(TST));
+    SysUnit^.SetTypeDesk(TypeInfo(TST),['Y-X','X-Y','Unsorted']);
 
-  SysUnit^.RegisterType(TypeInfo(TST));
-  SysUnit^.SetTypeDesk(TypeInfo(TST),['Y-X','X-Y','Unsorted']);
+    SysUnit^.RegisterType(TypeInfo(TAreaNumberingParam));
+    SysUnit^.SetTypeDesk(TypeInfo(TAreaNumberingParam),['Sorting','Inverse X axis dir','Inverse Y axis dir','Deadband X','Deadband Y']);
+    SysUnit^.RegisterType(TypeInfo(PTAreaNumberingParam));
 
-  SysUnit^.RegisterType(TypeInfo(TAreaNumberingParam));
-  SysUnit^.SetTypeDesk(TypeInfo(TAreaNumberingParam),['Sorting','Inverse X axis dir','Inverse Y axis dir','Deadband X','Deadband Y']);
-  SysUnit^.RegisterType(TypeInfo(PTAreaNumberingParam));
-
-  SysUnit^.RegisterType(TypeInfo(TAlgoType));
-  SysUnit^.SetTypeDesk(TypeInfo(TAlgoType),['Area','Perimetral']);
+    SysUnit^.RegisterType(TypeInfo(TAlgoType));
+    SysUnit^.SetTypeDesk(TypeInfo(TAlgoType),['Area','Perimetral']);
 
 
-  SysUnit^.RegisterType(TypeInfo(TNumberingParams));
-  SysUnit^.SetTypeDesk(TypeInfo(TNumberingParams),['AlgoType','AlgoParams','Only devices','Start',
-                                                   'Increment','Save start number','Base name sorting devices','Metric variable','Number variable']);
-  SysUnit^.RegisterType(TypeInfo(PTNumberingParams));
-
+    SysUnit^.RegisterType(TypeInfo(TNumberingParams));
+    SysUnit^.SetTypeDesk(TypeInfo(TNumberingParams),['AlgoType','AlgoParams','Only devices','Start',
+                                                     'Increment','Save start number','Base name sorting devices','Metric variable','Number variable']);
+    SysUnit^.RegisterType(TypeInfo(PTNumberingParams));
+    NumberingParams.AlgoParams.PTD:=SysUnit^.TypeName2PTD('PTAreaNumberingParam');
+  end;
   NumberingParams.AlgoParams.Instance:=@AreaParam;
-  NumberingParams.AlgoParams.PTD:=SysUnit^.TypeName2PTD('PTAreaNumberingParam');
+
 
   NumberingParams.AlgoType:=AT_Area;
 

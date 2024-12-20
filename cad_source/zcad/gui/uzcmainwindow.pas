@@ -1021,8 +1021,8 @@ begin
 
   if SysParam.saved.UniqueInstance then
     CreateOrRunFIPCServer;
-
-  sysvar.INTF.INTF_DefaultControlHeight^:=sysparam.notsaved.defaultheight;
+  if sysvar.INTF.INTF_DefaultControlHeight<>nil then
+    sysvar.INTF.INTF_DefaultControlHeight^:=sysparam.notsaved.defaultheight;
 
   //DecorateSysTypes;
   self.onclose:=self.FormClose;

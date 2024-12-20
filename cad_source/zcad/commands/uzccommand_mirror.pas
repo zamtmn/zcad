@@ -84,10 +84,12 @@ end;
 
 initialization
   programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
-  SysUnit^.RegisterType(TypeInfo(TMirrorParam));
-  SysUnit^.RegisterType(TypeInfo(PTMirrorParam));
-  SysUnit^.SetTypeDesk(TypeInfo(TMirrorParam),[rscmSourceEntities],[FNUser]);
-  SysUnit^.SetTypeDesk(TypeInfo(TEntityProcess),[rscmErase,rscmLeave],[FNUser]);
+  if SysUnit<>nil then begin
+    SysUnit^.RegisterType(TypeInfo(TMirrorParam));
+    SysUnit^.RegisterType(TypeInfo(PTMirrorParam));
+    SysUnit^.SetTypeDesk(TypeInfo(TMirrorParam),[rscmSourceEntities],[FNUser]);
+    SysUnit^.SetTypeDesk(TypeInfo(TEntityProcess),[rscmErase,rscmLeave],[FNUser]);
+  end;
 
   MirrorParam.SourceEnts:=TEP_Erase;
   mirror.init('Mirror',0,0);

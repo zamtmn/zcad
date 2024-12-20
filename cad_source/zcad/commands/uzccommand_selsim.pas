@@ -276,16 +276,18 @@ end;
 
 initialization
   programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
-  SysUnit^.RegisterType(TypeInfo(TDiff));
-  SysUnit^.RegisterType(TypeInfo(TSelBlockParams));
-  SysUnit^.RegisterType(TypeInfo(TSelTextParams));
-  SysUnit^.RegisterType(TypeInfo(TSelGeneralParams));
-  SysUnit^.RegisterType(TypeInfo(PTSelSimParams));
-  SysUnit^.SetTypeDesk(TypeInfo(TDiff),['Diff','Not Diff']);
-  SysUnit^.SetTypeDesk(TypeInfo(TSelBlockParams),['Same Name','Block and Device']);
-  SysUnit^.SetTypeDesk(TypeInfo(TSelTextParams),['Same content','Same template','Text and Mtext']);
-  SysUnit^.SetTypeDesk(TypeInfo(TSelGeneralParams),['Same layer','Same line weight','Same line type','Same line type scale','Same entity type','Same color']);
-  SysUnit^.SetTypeDesk(TypeInfo(TSelSimParams),['General','Blocks','Texts']);
+  if SysUnit<>nil then begin
+    SysUnit^.RegisterType(TypeInfo(TDiff));
+    SysUnit^.RegisterType(TypeInfo(TSelBlockParams));
+    SysUnit^.RegisterType(TypeInfo(TSelTextParams));
+    SysUnit^.RegisterType(TypeInfo(TSelGeneralParams));
+    SysUnit^.RegisterType(TypeInfo(PTSelSimParams));
+    SysUnit^.SetTypeDesk(TypeInfo(TDiff),['Diff','Not Diff']);
+    SysUnit^.SetTypeDesk(TypeInfo(TSelBlockParams),['Same Name','Block and Device']);
+    SysUnit^.SetTypeDesk(TypeInfo(TSelTextParams),['Same content','Same template','Text and Mtext']);
+    SysUnit^.SetTypeDesk(TypeInfo(TSelGeneralParams),['Same layer','Same line weight','Same line type','Same line type scale','Same entity type','Same color']);
+    SysUnit^.SetTypeDesk(TypeInfo(TSelSimParams),['General','Blocks','Texts']);
+  end;
   SelSim.init('SelSim',CADWG or CASelEnts,0);
   SelSim.CEndActionAttr:=[];
   SelSimParams.General.SameEntType:=true;

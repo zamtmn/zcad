@@ -258,11 +258,13 @@ end;
 
 initialization
   programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
-  SysUnit^.RegisterType(TypeInfo(TBlockReplaceParams));
-  SysUnit^.RegisterType(TypeInfo(PTBlockReplaceParams));
-  SysUnit^.SetTypeDesk(TypeInfo(TBlockReplaceParams),['Process','**CurrentFind',
-  'Find','**CurrentReplace','Replace','Save orientation','Save variables',
-  'Save var values','Save variable part','Save variable text']);
+  if SysUnit<>nil then begin
+    SysUnit^.RegisterType(TypeInfo(TBlockReplaceParams));
+    SysUnit^.RegisterType(TypeInfo(PTBlockReplaceParams));
+    SysUnit^.SetTypeDesk(TypeInfo(TBlockReplaceParams),['Process','**CurrentFind',
+    'Find','**CurrentReplace','Replace','Save orientation','Save variables',
+    'Save var values','Save variable part','Save variable text']);
+  end;
   BlockReplace.init('BlockReplace',0,0);
   BlockReplaceParams.Find.Enums.init(10);
   BlockReplaceParams.Replace.Enums.init(10);

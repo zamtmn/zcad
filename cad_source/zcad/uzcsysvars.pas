@@ -68,7 +68,7 @@ type
              Template_File:PString;(*'Default template'*)
              LayoutFile:PString;(*'Current layout'*)
              Dictionaries:PString;(*'Dictionaries'*)
-             Program_Run:PString;(*'Program'*)(*oi_readonly*)
+             Program_Data:PString;(*'Program data'*)(*oi_readonly*)
              Temp_files:PString;(*'Temporary files'*)(*oi_readonly*)
              Device_Library:PString;(*'Device base'*)
         end;

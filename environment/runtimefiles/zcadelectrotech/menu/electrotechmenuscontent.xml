@@ -101,8 +101,10 @@
 		<Action Name="ACN_CABLESELECT"/> 
 		<Action Name="ACN_CABLEINVERT"/> 
 		<Separator/>
+		<Action Name="ACN_LEADER"/>
+		<Separator/>
 		<Command Caption="Automatic cable laying by CSV" Command="EL_ExternalKZ"/> 		
-		<Command Caption="Remove generated cables" Command="EL_AutoGen_Cable_Remove"/> 
+		<Action Name="ACN_REMAUTOCABLES"/>
       </SubMenu>
 	  <Separator/>
   	  <SubMenu Name="Superline">	
@@ -119,6 +121,9 @@
 			<Command Caption="**Updating markers cable" Command="KIP_Cable_Mark"/> 
 		  </SubMenu>
       </SubMenu>
+	  <Action Name="ACN_SENSORMARK"/>
+      <Action Name="ACN_DEVNUMBERING"/>
+      <Action Name="ACN_REMAUTOCABLES"/>
 	  <Separator/>
 	  <SubMenu Name="Model">
 		  <Command Caption="Buffer Import" Command="DataImport"/> 

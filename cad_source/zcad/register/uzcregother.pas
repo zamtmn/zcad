@@ -228,9 +228,10 @@ initialization;
 finalization;
   ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
 
-  mem.init(1024);
-  SavedUnit^.SavePasToMem(mem);
-  mem.SaveToFile(expandpath(DataPath+'/rtl'+PathDelim+'savedvar.pas'));
-  mem.done;
-  //units.FreeAndDone;
+  if SavedUnit<>nil then begin
+    mem.init(1024);
+    SavedUnit^.SavePasToMem(mem);
+    mem.SaveToFile(expandpath(DataPath+'/rtl'+PathDelim+'savedvar.pas'));
+    mem.done;
+  end;
 end.

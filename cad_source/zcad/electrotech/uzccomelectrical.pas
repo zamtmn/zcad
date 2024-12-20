@@ -3449,7 +3449,8 @@ end;
 
 procedure startup;
 begin
-  SysUnit^.RegisterType(TypeInfo(TLinkType));
+  if SysUnit<>nil then
+    SysUnit^.RegisterType(TypeInfo(TLinkType));
 
   MainSpecContentFormat.init(100);
   MainSpecContentFormat.loadfromfile(FindInSupportPath(GetSupportPath,'main.sf'));

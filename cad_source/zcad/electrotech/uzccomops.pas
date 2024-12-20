@@ -471,7 +471,10 @@ var s:String;
     pcfd:PRecordDescriptor;
     pf:PfieldDescriptor;
 begin
-  pcfd:=pointer(SysUnit.TypeName2PTD('TOPSPlaceSmokeDetectorOrtoParam'));
+  if SysUnit<>nil then
+    pcfd:=pointer(SysUnit.TypeName2PTD('TOPSPlaceSmokeDetectorOrtoParam'))
+  else
+    pcfd:=nil;
   if pcfd<>nil then
   begin
   pf:=pcfd^.FindField('SensorSensorDistance');
@@ -1128,7 +1131,10 @@ var
    pcfd:PRecordDescriptor;
    pf:PfieldDescriptor;
 begin
-   pcfd:=pointer(SysUnit.TypeName2PTD('TOrtoDevPlaceParam'));
+  if SysUnit<>nil then
+    pcfd:=pointer(SysUnit.TypeName2PTD('TOrtoDevPlaceParam'))
+  else
+    pcfd:=nil;
    if pcfd<>nil then
 
      case OrtoDevPlaceParam.CountType of

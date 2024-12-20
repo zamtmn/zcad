@@ -579,22 +579,31 @@ initialization
 
   VU.init('test');
   VU.InterfaceUses.PushBackIfNotPresent(sysunit);
-
-  DataExportParam.EntFilter:=savedunit.FindOrCreateValue('tmpCmdParamSave_DataExportParam_EntFilter','AnsiString').data.Addr.Instance;
-  if DataExportParam.EntFilter^='' then
-    DataExportParam.EntFilter^:='IncludeEntityName(''Cable'');'#13#10'IncludeEntityName(''Device'')';
+  DataExportParam.EntFilter:=nil;
+  DataExportParam.PropFilter:=nil;
+  DataExportParam.Exporter:=nil;
+  if savedunit<>nil then
+    DataExportParam.EntFilter:=savedunit.FindOrCreateValue('tmpCmdParamSave_DataExportParam_EntFilter','AnsiString').data.Addr.Instance;
+  if DataExportParam.EntFilter<>nil then
+    if DataExportParam.EntFilter^='' then
+      DataExportParam.EntFilter^:='IncludeEntityName(''Cable'');'#13#10'IncludeEntityName(''Device'')';
+  if savedunit<>nil then
   DataExportParam.PropFilter:=savedunit.FindOrCreateValue('tmpCmdParamSave_DataExportParam_PropFilter','AnsiString').data.Addr.Instance;
   //if DataExportParam.PropFilter^='' then
   //  DataExportParam.PropFilter:='';
-  DataExportParam.Exporter:=savedunit.FindOrCreateValue('tmpCmdParamSave_DataExportParam_Exporter','AnsiString').data.Addr.Instance;
-  if DataExportParam.Exporter^='' then
-    DataExportParam.Exporter^:='DoIf(SameMask(%%(''EntityName''),''Device''),Export(%%(''EntityName''),''NMO_Name'',@@(''NMO_Name''),''Position'',@@(''Position'')))'+
-                           #10+'DoIf(SameMask(%%(''EntityName''),''Device''),Export(%%(''EntityName''),''NMO_Name'',@@(''NMO_Name''),''Power'',@@(''Power'')))'+
-                           #10+'DoIf(SameMask(%%(''EntityName''),''Cable''),Export(%%(''EntityName''),''NMO_Name'',@@(''NMO_Name''),''AmountD'',@@(''AmountD'')))'+
-                           #10+'DoIf(SameMask(%%(''EntityName''),''Cable''),Export(%%(''EntityName''),''NMO_Name'',@@(''NMO_Name''),''CABLE_Segment'',@@(''CABLE_Segment'')))';
-  DataExportParam.FileName:=savedunit.FindOrCreateValue('tmpCmdParamSave_DataExportParam_FileName','AnsiString').data.Addr.Instance;
-  if DataExportParam.FileName^='' then
-    DataExportParam.FileName^:='d:\test.csv';
+  if savedunit<>nil then
+    DataExportParam.Exporter:=savedunit.FindOrCreateValue('tmpCmdParamSave_DataExportParam_Exporter','AnsiString').data.Addr.Instance;
+  if DataExportParam.Exporter<>nil then
+    if DataExportParam.Exporter^='' then
+      DataExportParam.Exporter^:='DoIf(SameMask(%%(''EntityName''),''Device''),Export(%%(''EntityName''),''NMO_Name'',@@(''NMO_Name''),''Position'',@@(''Position'')))'+
+                             #10+'DoIf(SameMask(%%(''EntityName''),''Device''),Export(%%(''EntityName''),''NMO_Name'',@@(''NMO_Name''),''Power'',@@(''Power'')))'+
+                             #10+'DoIf(SameMask(%%(''EntityName''),''Cable''),Export(%%(''EntityName''),''NMO_Name'',@@(''NMO_Name''),''AmountD'',@@(''AmountD'')))'+
+                             #10+'DoIf(SameMask(%%(''EntityName''),''Cable''),Export(%%(''EntityName''),''NMO_Name'',@@(''NMO_Name''),''CABLE_Segment'',@@(''CABLE_Segment'')))';
+  if savedunit<>nil then
+    DataExportParam.FileName:=savedunit.FindOrCreateValue('tmpCmdParamSave_DataExportParam_FileName','AnsiString').data.Addr.Instance;
+  if DataExportParam.FileName<>nil then
+    if DataExportParam.FileName^='' then
+      DataExportParam.FileName^:='d:\test.csv';
   if SysUnit<>nil then begin
     SysUnit^.RegisterType(TypeInfo(TDataExportParam));//регистрируем тип данных в зкадном RTTI
     SysUnit^.SetTypeDesk(TypeInfo(TDataExportParam),['EntFilter','PropFilter','Exporter','FileName'],[FNProgram]);//Даем програмные имена параметрам, по идее это должно быть в ртти, но ненашел

@@ -140,8 +140,10 @@ end;
 
 initialization
   programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
-  SysUnit^.RegisterType(TypeInfo(TCmdProp));
-  SysUnit^.SetTypeDesk(TypeInfo(TCmdProp),['параметры']);
+  if SysUnit<>nil then begin
+    SysUnit^.RegisterType(TypeInfo(TCmdProp));
+    SysUnit^.SetTypeDesk(TypeInfo(TCmdProp),['параметры']);
+  end;
   CmdProp.props.init('test');
   CreateZCADCommand(@ExampleConstructToModalSpace_com,'ExampleConstructToModalSpace',CADWG,0);
   CreateZCADCommand(@ExampleRandomizeLines_com,'ExampleRandomizeLines',CADWG,0);

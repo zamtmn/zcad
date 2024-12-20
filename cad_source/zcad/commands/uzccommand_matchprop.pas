@@ -264,10 +264,11 @@ initialization
   MatchPropParam.TextParams.ProcessTextOblique:=true;
   MatchPropParam.TextParams.ProcessTextWFactor:=true;
   MatchPropParam.TextParams.ProcessTextJustify:=true;
-
-  SysUnit.RegisterType(TypeInfo(TMatchPropParam));//регистрируем тип данных в зкадном RTTI
-  SysUnit.SetTypeDesk(TypeInfo(TMatchPropParam),['Process layer','Process line weight','Process line type','Process line type scale','Process color','Text params'],[FNProgram]);//Даем програмные имена параметрам, по идее это должно быть в ртти, но ненашел
-  SysUnit.SetTypeDesk(TypeInfo(TMatchPropTextParam),['Process style','Process size','Process oblique','Process wfactor','Process justify'],[FNUser]);//Даем человечьи имена параметрам
+  if SysUnit<>nil then begin
+    SysUnit.RegisterType(TypeInfo(TMatchPropParam));//регистрируем тип данных в зкадном RTTI
+    SysUnit.SetTypeDesk(TypeInfo(TMatchPropParam),['Process layer','Process line weight','Process line type','Process line type scale','Process color','Text params'],[FNProgram]);//Даем програмные имена параметрам, по идее это должно быть в ртти, но ненашел
+    SysUnit.SetTypeDesk(TypeInfo(TMatchPropTextParam),['Process style','Process size','Process oblique','Process wfactor','Process justify'],[FNUser]);//Даем человечьи имена параметрам
+  end;
 
   CreateZCADCommand(@matchprop_com,'MatchProp',  CADWG,0);
 finalization

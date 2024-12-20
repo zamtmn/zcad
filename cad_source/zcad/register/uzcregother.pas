@@ -162,13 +162,15 @@ initialization;
   SysVarUnit.AssignToSymbol(SysVar.RD.RD_SpatialNodeCount,'RD_SpatialNodeCount');
   SysVarUnit.AssignToSymbol(SysVar.SAVE.SAVE_Auto_Current_Interval,'SAVE_Auto_Current_Interval');
   SysVarUnit.AssignToSymbol(SysVar.SAVE.SAVE_Auto_Interval,'SAVE_Auto_Interval');
-  SysVar.SAVE.SAVE_Auto_Current_Interval^:=SysVar.SAVE.SAVE_Auto_Interval^;
+  if (SysVar.SAVE.SAVE_Auto_Current_Interval<>nil)and(SysVar.SAVE.SAVE_Auto_Interval<>nil) then
+    SysVar.SAVE.SAVE_Auto_Current_Interval^:=SysVar.SAVE.SAVE_Auto_Interval^;
   SysVarUnit.AssignToSymbol(SysVar.SAVE.SAVE_Auto_FileName,'SAVE_Auto_FileName');
   SysVarUnit.AssignToSymbol(SysVar.SAVE.SAVE_Auto_On,'SAVE_Auto_On');
 
   SysVarUnit.AssignToSymbol(SysVar.SYS.SYS_Version,'SYS_Version');
   SysVarUnit.AssignToSymbol(SysVar.SYS.SYS_RunTime,'SYS_RunTime');
-  SysVar.SYS.SYS_RunTime^:=0;
+  if SysVar.SYS.SYS_RunTime<>nil then
+    SysVar.SYS.SYS_RunTime^:=0;
   //SysVarUnit.AssignToSymbol(SysVar.SYS.SYS_ActiveMouse,'SYS_ActiveMouse');
   //SysVarUnit.AssignToSymbol(SysVar.SYS.SYS_SystmGeometryColor,'SYS_SystmGeometryColor');
   //SysVarUnit.AssignToSymbol(SysVar.SYS.SYS_IsHistoryLineCreated,'SYS_IsHistoryLineCreated');
@@ -177,8 +179,8 @@ initialization;
 
   SysVarUnit.AssignToSymbol(SysVar.PATH.device_library,'PATH_Device_Library');
   //s:=SysVar.PATH.device_library^;
-  //SysVarUnit.AssignToSymbol(SysVar.PATH.Program_Run,'PATH_Program_Run');
-  //s:=SysVar.PATH.Program_Run^;
+  //SysVarUnit.AssignToSymbol(SysVar.PATH.Program_Data,'PATH_Program_Run');
+  //s:=SysVar.PATH.Program_Data^;
   //SysVarUnit.AssignToSymbol(SysVar.PATH.Support_Path,'PATH_Support_Path');
   //s:=SysVar.PATH.Support_Path^;
 
@@ -194,9 +196,10 @@ initialization;
   //SysVarUnit.AssignToSymbol(SysVar.PATH.Fonts_Path,'PATH_Fonts');
 
   //sysvar.RD.RD_LastRenderTime^:=0;
-  //sysvar.PATH.Program_Run^:=sysparam.programpath;
+  //sysvar.PATH.Program_Data^:=sysparam.programpath;
   //sysvar.PATH.Temp_files:=@temppath;
-  sysvar.SYS.SYS_Version^:=sysparam.notsaved.ver.versionstring;
+  if sysvar.SYS.SYS_Version<>nil then
+    sysvar.SYS.SYS_Version^:=sysparam.notsaved.ver.versionstring;
   end;
 
 

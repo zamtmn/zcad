@@ -27,7 +27,7 @@ implementation
 initialization
   units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPath,expandpath('$(ZDataPath)/rtl/system.pas'),InterfaceTranslate,'PATH_Support_Path','String',GeAddrSupportPath);
   sysvar.PATH.Dictionaries:=@SysParam.saved.DictionariesPath;
-  sysvar.PATH.Program_Run:=@DataPath;
+  sysvar.PATH.Program_Data:=@DataPath;
   sysvar.PATH.Support_Path:=GeAddrSupportPath;
   sysvar.PATH.AdditionalSupport_Path:=@AdditionalSupportPath;
   sysvar.PATH.Temp_files:=@TempPath;

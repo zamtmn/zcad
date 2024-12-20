@@ -138,10 +138,11 @@ var
 
 initialization
   programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
-
-  SysUnit.RegisterType(TypeInfo(TRectangParam));//регистрируем тип данных в зкадном RTTI
-  SysUnit.SetTypeDesk(TypeInfo(TRectangParam),['ET','PolyWidth'],[FNProgram]);//Даем програмные имена параметрам, по идее это должно быть в ртти, но ненашел
-  SysUnit.SetTypeDesk(TypeInfo(TRectangParam),['Entity type','Polyline width'],[FNUser]);//Даем человечьи имена параметрам
+  if SysUnit<>nil then begin
+    SysUnit.RegisterType(TypeInfo(TRectangParam));//регистрируем тип данных в зкадном RTTI
+    SysUnit.SetTypeDesk(TypeInfo(TRectangParam),['ET','PolyWidth'],[FNProgram]);//Даем програмные имена параметрам, по идее это должно быть в ртти, но ненашел
+    SysUnit.SetTypeDesk(TypeInfo(TRectangParam),['Entity type','Polyline width'],[FNUser]);//Даем человечьи имена параметрам
+  end;
 
   CreateZCADCommand(@DrawRectangle_com,'Rectangle',CADWG,0);
   RectangParam.ET:=RET_3DPoly;

@@ -20,6 +20,7 @@
       <ZAction Name="ACN_XLSXtoCADinsertblock" Command="vXLSXtoCAD" Img="#X>Z" Caption="Import block from xlsx"/>
       <ZAction Name="ACN_CreateLL" Command="extdrAdd(extdrSmartTextEnt)" Img="#CLL" Caption="Creating Leader Lines"/>
       <ZAction Name="ACN_vVarsLink" Command="VarsLink" Img="#VL" Caption="Creating master/slave device"/>
+	  <ZAction Name="ACN_L2SL" Command="L2SL" Caption="Lines to superlines"/>
     </Group>
   </ActionsContent>
 </CONFIG>

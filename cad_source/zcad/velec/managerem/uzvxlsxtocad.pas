@@ -274,33 +274,32 @@ begin
     end;
 
 
-   //Получаем имя активного листа
-   nameActiveSheet:=uzvzcadxlsxole.getActiveWorkSheetName;
+     //Получаем имя активного листа
+     nameActiveSheet:=uzvzcadxlsxole.getActiveWorkSheetName;
 
-   //Ищем команду всавки блоков из Excel
-      uzvzcadxlsxole.searchCellRowCol(nameActiveSheet,xlsxInsertBlockST,ourCell.vRow,ourCell.vCol);
-      i:=0;
+     //Ищем команду всавки блоков из Excel
+     uzvzcadxlsxole.searchCellRowCol(nameActiveSheet,xlsxInsertBlockST,ourCell.vRow,ourCell.vCol);
+     i:=0;
 
-      isFinishSearch:= true;      //когда поиск пошел с начала
-      stRow:=ourCell.vRow;
+     isFinishSearch:= true;      //когда поиск пошел с начала
+     stRow:=ourCell.vRow;
 
-      while (ourCell.vRow > 0) and isFinishSearch do
-      begin
-        inc(i);
+     while (ourCell.vRow > 0) and isFinishSearch do
+     begin
+       inc(i);
+       //Создание блоков
+       creatorBlockXLSX(nameActiveSheet,ourCell.vRow,ourCell.vCol);
+       //ищем вхождение спец символов
+       uzvzcadxlsxole.searchNextCellRowCol(nameActiveSheet,xlsxInsertBlockST,ourCell.vRow,ourCell.vCol);
+       if (stRow=ourCell.vRow) and (stCol=ourCell.vCol) then
+         isFinishSearch:=false;
+       if (stRow>ourCell.vRow) then
+         isFinishSearch:=false;
+       if (stRow=ourCell.vRow) and (stCol>ourCell.vCol) then
+         isFinishSearch:=false;
 
-        //Создание блоков
-        creatorBlockXLSX(nameActiveSheet,ourCell.vRow,ourCell.vCol);
-        //ищем вхождение спец символов
-        uzvzcadxlsxole.searchNextCellRowCol(nameActiveSheet,xlsxInsertBlockST,ourCell.vRow,ourCell.vCol);
-        if (stRow=ourCell.vRow) and (stCol=ourCell.vCol) then
-          isFinishSearch:=false;
-        if (stRow>ourCell.vRow) then
-          isFinishSearch:=false;
-        if (stRow=ourCell.vRow) and (stCol>ourCell.vCol) then
-          isFinishSearch:=false;
-
-        stRow:=ourCell.vRow;
-        stCol:=ourCell.vCol;
+       stRow:=ourCell.vRow;
+       stCol:=ourCell.vCol;
      end;
 
      ZCMsgCallBackInterface.TextMessage('Количество добавленных блоков = ' + xlsxInsertBlockST + ' = ' + inttostr(i),TMWOHistoryOut);

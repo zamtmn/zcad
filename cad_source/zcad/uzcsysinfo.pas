@@ -23,7 +23,7 @@ uses
   uzbCommandLineParser,uzcCommandLineParser,
   uzcsysparams,uzcsysvars,
   {uzbLogTypes,}uzbLog,uzcLog,
-  uzbPaths,
+  uzbPaths,uzcPathMacros,
   Forms,{$IFNDEF DELPHI}LazUTF8,{$ENDIF}sysutils;
 resourcestring
   rsCommandLine='Command line "%s"';
@@ -98,7 +98,7 @@ begin
     //начальные значения некоторых параметров и загрузка параметров
     SysParam.notsaved.otherinstancerun:=false;
     SysParam.saved.UniqueInstance:=true;
-    LoadParams(expandpath(ProgramPath+CParamsFile),SysParam.saved);
+    LoadParams(expandpath(DataPath+CParamsFile),SysParam.saved);
     SysParam.notsaved.PreloadedFile:='';
 
     //значения некоторых параметров из комстроки, если есть
@@ -141,6 +141,12 @@ begin
 
   finally programlog.leave(IfEntered);end;
 end;
+function DataFilesExistChec(ACheckedPath:string):boolean;
+begin
+  result:=DirectoryExists(ACheckedPath+'/rtl')
+      and FileExists(ACheckedPath+'/rtl/system.pas');
+end;
+
 Procedure GetSysInfo;
 begin
   with programlog.Enter('GetSysInfo',LM_Info) do try
@@ -164,7 +170,7 @@ begin
     programlog.LogOutStr('DefaultUnicodeCodePage:='+inttostr(DefaultUnicodeCodePage),LM_Info);
     programlog.LogOutStr('UTF8CompareLocale:='+inttostr(UTF8CompareLocale),LM_Info);
 
-    programlog.LogOutFormatStr('SysParam.ProgramPath="%s"',[ProgramPath],LM_Necessarily);
+    programlog.LogOutFormatStr('SysParam.ProgramPath="%s"',[DataPath],LM_Necessarily);
     programlog.LogOutFormatStr('SysParam.TempPath="%s"',[TempPath],LM_Necessarily);
     programlog.LogOutFormatStr('SysParam.ScreenX=%d',[SysParam.notsaved.ScreenX],LM_Info);
     programlog.LogOutFormatStr('SysParam.ScreenY=%d',[SysParam.notsaved.ScreenY],LM_Info);
@@ -175,8 +181,31 @@ begin
 
     if disabledefaultmodule then programlog.DisableModule('DEFAULT');
 
+    with programlog.Enter('Macros',LM_Info) do try
+      programlog.LogOutFormatStr('$(AppName)="%s"',[ExpandPath('$(AppName)')],LM_Necessarily);
+      programlog.LogOutFormatStr('$(ZBinPath)="%s"',[ExpandPath('$(ZBinPath)')],LM_Necessarily);
+      programlog.LogOutFormatStr('$(ZDataPath)="%s"',[ExpandPath('$(ZDataPath)')],LM_Necessarily);
+      programlog.LogOutFormatStr('$(UserDir)="%s"',[ExpandPath('$(UserDir)')],LM_Necessarily);
+      programlog.LogOutFormatStr('$(GlobalConfigDir)="%s"',[ExpandPath('$(GlobalConfigDir)')],LM_Necessarily);
+      programlog.LogOutFormatStr('$(LocalConfigDir)="%s"',[ExpandPath('$(LocalConfigDir)')],LM_Necessarily);
+      programlog.LogOutFormatStr('$(SystemFontsPath)="%s"',[ExpandPath('$(SystemFontsPath)')],LM_Necessarily);
+      programlog.LogOutFormatStr('$(UserFontsPath)="%s"',[ExpandPath('$(UserFontsPath)')],LM_Necessarily);
+      programlog.LogOutFormatStr('$(TEMP)="%s"',[ExpandPath('$(TEMP)')],LM_Necessarily);
+      programlog.LogOutFormatStr('$(ZCADDictionariesPath)="%s"',[ExpandPath('$(ZCADDictionariesPath)')],LM_Necessarily);
+    finally programlog.leave(IfEntered);end;
+
   finally programlog.leave(IfEntered);end;
 end;
+procedure FindData;
+var
+  tdp:string;
+begin
+  tdp:=FindDataPath(DataFilesExistChec);
+  if tdp<>'' then
+    DataPath:=tdp;
+end;
+
 initialization
-GetSysInfo;
+  FindData;
+  GetSysInfo;
 end.

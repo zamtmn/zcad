@@ -24,7 +24,8 @@ uses Masks,{$IFNDEF DELPHI}LazUTF8,{$ENDIF}sysutils,
 type
   TFromDirIterator=procedure (const filename:String;pdata:pointer);
   TFromDirIteratorObj=procedure (const filename:String;pdata:pointer) of object;
-function ExpandPath(path:String):String;
+  TDataFilesExistChecFunc=function(ACheckedPath:string):boolean;
+function ExpandPath(APath:String;AItDirectory:boolean=false):String;
 function FindInSupportPath(const PPaths:String; FileName:String):String;
 function FindInPaths(const Paths:String; FileName:String):String;
 
@@ -40,10 +41,11 @@ procedure AddSupportPath(const APath:String);
 
 procedure FromDirIterator(const path,mask,firstloadfilename:String;proc:TFromDirIterator;method:TFromDirIteratorObj;pdata:pointer=nil);
 procedure FromDirsIterator(const path,mask,firstloadfilename:String;proc:TFromDirIterator;method:TFromDirIteratorObj;pdata:pointer=nil);
-var ProgramPath,AdditionalSupportPath,TempPath:String;
+function FindDataPath(CF:TDataFilesExistChecFunc):string;
+var DataPath,BinPath,AdditionalSupportPath,TempPath:String;
 implementation
 var SupportPath:String;
-//uses log;
+
 procedure AddSupportPath(const APath:String);
 begin
   if APath=''then exit;
@@ -175,19 +177,16 @@ begin
      result:='';
      zDebugLn(sysutils.Format('{E}FindInSupportPath: file not found:"%s"',[{$IFNDEF DELPHI}utf8tosys{$ENDIF}(FileName)]));
 end;
-function ExpandPath(path:String):String;
+function ExpandPath(APath:String;AItDirectory:boolean=false):String;
 begin
-  DefaultMacros.SubstituteMacros(path);
-  if path='' then
-    result:=programpath
-  {else if path[1]='*' then
-         result:=programpath+'/'+copy(path,2,length(path)-1)}
+  DefaultMacros.SubstituteMacros(APath);
+  if APath='' then
+    result:=DataPath
   else
-    result:=path;
+    result:=APath;
   result:=StringReplace(result,'/', PathDelim,[rfReplaceAll, rfIgnoreCase]);
-  if DirectoryExists({$IFNDEF DELPHI}utf8tosys{$ENDIF}(result)) then
-    if (result[length(result)]<>{'/'}PathDelim)
-      //or (result[length(result)]<>'\')
+  if AItDirectory or DirectoryExists({$IFNDEF DELPHI}utf8tosys{$ENDIF}(result)) then
+    if (result[length(result)]<>PathDelim)
     then
       result:=result+PathDelim;
 end;
@@ -263,8 +262,22 @@ begin
   zTraceLn('{D-}[FILEOPS]end; {FromDirIterator}');
   //programlog.LogOutStr('FromDirIterator....{end}',lp_DecPos,LM_Debug);
 end;
+function FindDataPath(CF:TDataFilesExistChecFunc):string;
+var
+  ts:string;
+begin
+  if @cf<>nil then begin
+    if cf(DataPath) then
+      exit(DataPath);
+    ts:=GetAppConfigDir(true);
+    if cf(ts) then
+      exit(ts);
+  end;
+  result:='';
+end;
 initialization
-  programpath:={$IFNDEF DELPHI}SysToUTF8{$ENDIF}(SysUtils.ExpandFileName(ExtractFilePath(paramstr(0))+'../..'));
+  BinPath:={$IFNDEF DELPHI}SysToUTF8{$ENDIF}(ExtractFilePath(paramstr(0)));
+  DataPath:={$IFNDEF DELPHI}SysToUTF8{$ENDIF}(ExpandFileName(ExtractFilePath(paramstr(0))+'../..'));;
   {$IfNDef DELPHI}
     TempPath:=GetTempDir;
   {$Else}

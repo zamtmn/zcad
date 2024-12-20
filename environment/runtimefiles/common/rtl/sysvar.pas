@@ -156,10 +156,10 @@ begin
   DSGN_OTrackTimerInterval:=500;
   DISP_LWDisplayScale:=10;
   RD_Light:=False;
-  PATH_Preload_Path:='$(ZCADPath)/preload/;$(UserDir)/zcad/preload/;$(LocalConfigDir)/$(AppName)/preload/;$(GlobalConfigDir)/$(AppName)/preload/';
-  PATH_Fonts:='$(SystemFontsPath)/;$(UserFontsPath)/;$(ZCADPath)/fonts/;C:/APPS/MY/acad/support/;C:/Program Files/Autodesk/AutoCAD 2020/Fonts/';
+  PATH_Preload_Path:='$(ZDataPath)/preload/;$(UserDir)/zcad/preload/;$(LocalConfigDir)/$(AppName)/preload/;$(GlobalConfigDir)/$(AppName)/preload/';
+  PATH_Fonts:='$(SystemFontsPath)/;$(UserFontsPath)/;$(ZDataPath)/fonts/;C:/APPS/MY/acad/support/;C:/Program Files/Autodesk/AutoCAD 2020/Fonts/';
   PATH_AlternateFont:='_mipGost.shx';
-  PATH_Support_Path:='$(ZCADPath)/rtl;$(ZCADPath)/rtl/objdefunits;$(ZCADPath)/rtl/objdefunits/include;$(ZCADPath)/components;$(ZCADPath)/blocks/el/general;$(ZCADPath)/blocks/el/general/velecdevice;$(ZCADPath)/rtl/styles';
+  PATH_Support_Path:='$(ZDataPath)/rtl;$(ZDataPath)/rtl/objdefunits;$(ZDataPath)/rtl/objdefunits/include;$(ZDataPath)/components;$(ZDataPath)/blocks/el/general;$(ZDataPath)/blocks/el/general/velecdevice;$(ZDataPath)/rtl/styles';
   INTF_CommandLineEnabled:=True;
   DSGN_NavigatorsUseMainFunction:=True;
   INTF_ObjInspButtonSizeReducing:=4;
@@ -204,8 +204,8 @@ begin
   SAVE_Auto_On:=True;
   SYS_RunTime:=0;
   SYS_Version:='';
-  PATH_Device_Library:='$(ZCADPath)/programdb;$(ZCADPath)/userdb';
-  PATH_Template_Path:='$(ZCADPath)/template';
+  PATH_Device_Library:='$(ZDataPath)/programdb;$(ZDataPath)/userdb';
+  PATH_Template_Path:='$(ZDataPath)/templates';
   PATH_Template_File:='minimal.dxf';
-  PATH_LayoutFile:='$(ZCADPath)/defaultlayout.xml';
+  PATH_LayoutFile:='$(ZDataPath)/defaultlayout.xml';
 end.

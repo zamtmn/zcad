@@ -68,8 +68,8 @@ begin
   self.DoubleBuffered:=true;
   Logo:=TImage.create(self);
   Logo.Align:=alclient;
-  if FileExists({$IFNDEF DELPHI}utf8tosys{$ENDIF}(ProgramPath)+'/components/logo.png') then
-                                                                 Logo.Picture.LoadFromFile((ProgramPath)+'/components/logo.png');
+  if FileExists({$IFNDEF DELPHI}utf8tosys{$ENDIF}(DataPath)+'/components/logo.png') then
+                                                                 Logo.Picture.LoadFromFile((DataPath)+'/components/logo.png');
   Logo.Parent:=self;
   self.BorderStyle:=bsNone;
   self.Color:=clNone;

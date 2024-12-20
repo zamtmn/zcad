@@ -53,7 +53,7 @@ var
   line,sub:String;
   f:TZctnrVectorBytes;
 begin
-  f.InitFromFile(ProgramPath+filename);
+  f.InitFromFile(DataPath+filename);
   while f.notEOF do
     begin
       line:=f.readString;

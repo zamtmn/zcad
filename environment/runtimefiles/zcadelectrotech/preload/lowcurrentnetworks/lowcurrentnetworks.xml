@@ -4,10 +4,38 @@
     <BlockLib Type="Tree" Caption='Blocks' ImagesWidth='24'>
       <ZTreeNode Caption='Vlowcurrentnetworks'>
 	    <ZTreeNode Caption='Plan'>
-		    <ZTreeNode Caption='Домофон'>
+		    <ZTreeNode Caption='Fire protection system'>
+			  <ZTreeCommand Command="Insert(DEVICE_PS_ARK_DEVICE)" Caption='Приборы ОПС' />
+			  <ZTreeCommand Command="PlaceSmokeDetectorOrto" Caption='Автоматическая расстановка извещателей' />
+			  <ZTreeCommand Command="Insert(DEVICE_PS_DAT_SMOKE)" Caption='Дымовой пожарный извещатель' />
+			  <ZTreeCommand Command="Insert(DEVICE_PS_DAT_TERMO)" Caption='Тепловой пожарный извещатель' />
+			  <ZTreeCommand Command="Insert(DEVICE_PS_DAT_HAND)" Caption='Ручной пожарный извещатель' />
+			  <ZTreeCommand Command="Insert(DEVICE_PS_DAT_EDU)" Caption='Устройство дистанционного пуска' />
+			  <ZTreeCommand Command="Insert(DEVICE_PS_BRIZ)" Caption='Изолятор линии' />
+			  <ZTreeCommand Command="Insert(DEVICE_PS_SHU)" Caption='Щит управления' />
+			  <ZTreeCommand Command="Insert(DEVICE_KIP_KPV)" Caption='Клапан ПД' />
+			  <ZTreeCommand Command="Insert(DEVICE_KIP_KDU)" Caption='Клапан ДУ' />
+			  <ZTreeCommand Command="Insert(DEVICE_KIP_OZK)" Caption='Клапан ОЗ' />
+			  <ZTreeCommand Command="Insert(DEVICE_PS_VENT)" Caption='Вентилятор' />			  
+			  <ZTreeCommand Command="Insert(DEVICE_OS_ELLOCK)" Caption='Эл.магнитный замок' />
+		    </ZTreeNode>
+			<ZTreeNode Caption='Security alarm system'>
+			  <ZTreeCommand Command="Insert(DEVICE_PS_ARK_DEVICE)" Caption='Приборы ОПС' />
+			  <ZTreeCommand Command="Insert(DEVICE_OS_DAT_BGB)" Caption='Магнитоконтактный извещатель' />
+			  <ZTreeCommand Command="Insert(DEVICE_OS_DAT_BGT)" Caption='Звуковой извещатель' />
+			  <ZTreeCommand Command="Insert(DEVICE_OS_DAT_BGL)" Caption='Объемный извещатель' />		  
+		    </ZTreeNode>
+			<ZTreeNode Caption='Warning system and evacuation management'>
+			  <ZTreeCommand Command="Insert(DEVICE_PS_ARK_DEVICE)" Caption='Приборы ОПС' />
+			  <ZTreeCommand Command="Insert(DEVICE_PS_BIAL)" Caption='Световое табло условное' />
+			  <ZTreeCommand Command="Insert(DEVICE_PS_TABLO_EXIT)" Caption='Световое табло ВЫХОД' />
+			  <ZTreeCommand Command="Insert(DEVICE_PS_TABLO_ARROW)" Caption='Световое табло СТРЕЛКА' />	
+			  <ZTreeCommand Command="Insert(DEVICE_PS_BIAS)" Caption='Звуковой оповещатель' />	
+		    </ZTreeNode>			
+		    <ZTreeNode Caption='Intercom'>
 			  <ZTreeCommand Command="Insert(DEVICE_SS_CALLPANELMULTIBUTTON)" Caption='Вызывная панель на 8 абонентов' />
 		    </ZTreeNode>	
-		    <ZTreeNode Caption='Сетевое оборудование'>
+		    <ZTreeNode Caption='Local Area Network'>
 			  <ZTreeCommand Command="Insert(DEVICE_SS_19)" Caption='Коммутационная стойка' />
 			  <ZTreeCommand Command="Insert(DEVICE_SS_NETWORKSWITCH)" Caption='Сетевой коммутатор' />
 			  <ZTreeCommand Command="Insert(DEVICE_SS_NETWIFI)" Caption='Точка доступа WiFi настенный' />

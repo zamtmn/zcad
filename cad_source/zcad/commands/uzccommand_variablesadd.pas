@@ -222,19 +222,22 @@ end;
 
 initialization
   programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
-  SysUnit^.RegisterType(TypeInfo(TMFunction));
-  SysUnit^.RegisterType(TypeInfo(PTVariablesAddParams));
-  SysUnit^.SetTypeDesk(TypeInfo(TMFunction),['MainFunction','Delegate', 'All']);
-  SysUnit^.SetTypeDesk(TypeInfo(TVariablesAddParams),['Process only','Variables']);
+  if SysUnit<>nil then begin
+    SysUnit^.RegisterType(TypeInfo(TMFunction));
+    SysUnit^.RegisterType(TypeInfo(PTVariablesAddParams));
+    SysUnit^.SetTypeDesk(TypeInfo(TMFunction),['MainFunction','Delegate', 'All']);
+    SysUnit^.SetTypeDesk(TypeInfo(TVariablesAddParams),['Process only','Variables']);
+  end;
   VariablesAdd.init('VariablesAdd',CADWG or CASelEnts,0);
   VariablesAdd.CEndActionAttr:=[];
   VariablesAddParams.MFunction:=TMF_MainFunction;
   VariablesAddParams.NevVars:='NMO_SpecPos|String|??|Позиция по спецификации';
   VariablesAdd.SetCommandParam(@VariablesAddParams,'PTVariablesAddParams');
 
-
-  SysUnit^.RegisterType(TypeInfo(PTVarTextSelectParams));
-  SysUnit^.SetTypeDesk(TypeInfo(TVarTextSelectParams),['TemplateToFind']);
+  if SysUnit<>nil then begin
+    SysUnit^.RegisterType(TypeInfo(PTVarTextSelectParams));
+    SysUnit^.SetTypeDesk(TypeInfo(TVarTextSelectParams),['TemplateToFind']);
+  end;
   VarTextSelect.init('VarTextSelect',CADWG or CASelEnts,0);
   VarTextSelect.CEndActionAttr:=[];
   VarTextSelectParams.TemplateToFind:='*NMO_Name*';

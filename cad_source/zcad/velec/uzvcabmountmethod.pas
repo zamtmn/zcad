@@ -94,7 +94,7 @@ end;
 
 initialization
   MountingMethodsTree:=TTreePropManager.Create('~','MountingMethodsRoot');//создаем экземпляр, указываем разделитель и имя корневого узла
-  MountingMethodsTree.LoadTree(expandpath('$(ZCADPath)/rtl/velec/mountingmethodss.xml'),InterfaceTranslate);//грузим файл передаем путь  и переводчика
+  MountingMethodsTree.LoadTree(expandpath('$(ZDataPath)/rtl/velec/mountingmethodss.xml'),InterfaceTranslate);//грузим файл передаем путь  и переводчика
   CreateZCADCommand(@MountingMethodsTest_com,'mt',CADWG,0);//тестовая команда, вызывает окно с твоим деревом
 
 

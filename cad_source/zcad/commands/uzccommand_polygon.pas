@@ -157,10 +157,12 @@ end;
 initialization
   programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
 
-  SysUnit.RegisterType(TypeInfo(TPolygonParam));//регистрируем тип данных в зкадном RTTI
-  SysUnit.SetTypeDesk(TypeInfo(TPolygonParam),['ET','VNum','PolyWidth'],[FNProgram]);//Даем програмные имена параметрам, по идее это должно быть в ртти, но ненашел
-  SysUnit.SetTypeDesk(TypeInfo(TPolygonParam),['Entity type','Number of vertices','Polyline width'],[FNUser]);//Даем человечьи имена параметрам
-  SysUnit.SetTypeDesk(TypeInfo(TRectangEntType),['3DPoly','LWPoly'],[FNUser]);//Даем человечьи имена параметрам
+  if SysUnit<>nil then begin
+    SysUnit.RegisterType(TypeInfo(TPolygonParam));//регистрируем тип данных в зкадном RTTI
+    SysUnit.SetTypeDesk(TypeInfo(TPolygonParam),['ET','VNum','PolyWidth'],[FNProgram]);//Даем програмные имена параметрам, по идее это должно быть в ртти, но ненашел
+    SysUnit.SetTypeDesk(TypeInfo(TPolygonParam),['Entity type','Number of vertices','Polyline width'],[FNUser]);//Даем человечьи имена параметрам
+    SysUnit.SetTypeDesk(TypeInfo(TRectangEntType),['3DPoly','LWPoly'],[FNUser]);//Даем человечьи имена параметрам
+  end;
 
   CreateZCADCommand(@DrawPolygon_com,'Polygon',CADWG,0);
 

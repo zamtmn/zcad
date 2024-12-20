@@ -214,8 +214,10 @@ end;
 
 initialization
   ProgramLog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
-  SysUnit^.RegisterType(TypeInfo(PTRasterizeParams));
-  SysUnit^.SetTypeDesk(TypeInfo(TRasterizeParams),['FitToPage','Center','Scale','Palette']);
+  if SysUnit<>nil then begin
+    SysUnit^.RegisterType(TypeInfo(PTRasterizeParams));
+    SysUnit^.SetTypeDesk(TypeInfo(TRasterizeParams),['FitToPage','Center','Scale','Palette']);
+  end;
 
   Print.init('Print',CADWG,0);
   PrintParam.Scale:=1;

@@ -30,12 +30,14 @@
       <Action Name="ACN_COPYCLIPBASE"/>
       <Action Name="ACN_PASTE"/>
       <Action Name="ACN_DUPLICATE"/>
+	  <Separator/>
       <Action Name="ACN_ERASE"/>
       <Separator/>
       <Action Name="ACN_SELECTALL"/>
       <Action Name="ACN_DESELECTALL"/>
       <Action Name="ACN_INVERSESELECTED"/>
       <Action Name="ACN_SELSIM"/>
+	  <Action Name="ACN_MATCHPROP"/>
       <Separator/>
       <Action Name="ACN_FIND"/>
       <Action Name="ACN_FINDNEXT"/>
@@ -44,7 +46,6 @@
     </Menu>
     <Menu Name="View">
       <Action Name="ACN_REGEN"/>
-      <Action Name="ACN_PROJECTTREE"/>
       <Separator/>
       <SubMenu Name="View">
         <Action Name="ACN_VIEWTOP"/>
@@ -99,41 +100,55 @@
       </SubMenu>
     </Menu>
     <Menu Name="Format">
-      <Action Name="ACN_UNITS"/>
-      <Command Caption="Layers (objinsp)" Command="SetObjInsp(LAYERS)"/> 
       <Action Name="ACN_LAYER"/>
-      <SubMenu Name="Text">
-        <Action Name="ACN_TSTYLES"/>
-        <Command Caption="Styles (objinsp)" Command="SetObjInsp(TSTYLES)"/> 
-        <Command Caption="Fonts (objinsp)" Command="SetObjInsp(FONTS)"/> 
+	  <SubMenu Name="Layer Tools">
+        <Action Name="ACN_LAYOFF"/>
       </SubMenu>
+	  <Separator/>	  
+	  <Action Name="ACN_TSTYLES"/>
       <Action Name="ACN_LTYPES"/>
       <Action Name="ACN_DSTYLES"/>
-      <Command Caption="Line type styles (objinsp)" Command="SetObjInsp(LINETYPESTYLES)"/> 
-      <Command Caption="Table styles (objinsp)" Command="SetObjInsp(TABLESTYLES)"/> 
-      <Command Caption="Dim styles (objinsp)" Command="SetObjInsp(DIMSTYLES)"/> 
-      <Command Caption="Numerators (objinsp)" Command="SetObjInsp(NUMERATORS)"/> 
-      <Command Caption="Layouts (not impl)" Command="fuckoff"/> 
+	  <Separator/>	  
+	  <Action Name="ACN_UNITS"/>
     </Menu>
-    <Menu Name="Tools">
-      <Action Name="ACN_SPELLCHECK"/>
+    <Menu Name="Service">
+	  <IFONE Сonditions="ActiveDrawing">
+        <Action Name="ACN_SPELLCHECK"/>
+	    <Separator/>
+	  </IFONE>		
+	  <IFONE Сonditions="DebugUI">
+		  <Action Name="ACN_REBUILDTREE"/>
+		  <Separator/>
+      </IFONE>
+	  <SubMenu Name="Docking">
+		<Action Name="ACN_DOCKOPT"/>
+		<Action Name="ACN_SAVELAYOUT"/>
+   	  </SubMenu>
+	  <SubMenu Name="Settings">
+		<Action Name="ACN_OPTIONS"/>
+		<Action Name="ACN_SAVEOPTIONS"/>
+   	  </SubMenu>
     </Menu>
     <Menu Name="Draw">
       <Action Name="ACN_LINE"/>
+	  <Separator/>
       <Action Name="ACN_3DPOLY"/>
+      <Action Name="ACN_RECTANGLE"/>	  
+	  <SubMenu Name="Polygon">
+        <Action Name="ACN_POLYGONCC"/>
+        <Action Name="ACN_POLYGONCV"/>
+      </SubMenu>
+	  <Separator/>
       <SubMenu Name="Circle">
         <Action Name="ACN_CIRCLE"/>
         <Action Name="ACN_CIRCLECD"/>
         <Action Name="ACN_CIRCLE2P"/>
         <Action Name="ACN_CIRCLE3P"/>
       </SubMenu>
-      <SubMenu Name="Polygon">
-        <Action Name="ACN_RECTANGLE"/>
-        <Action Name="ACN_POLYGONCC"/>
-        <Action Name="ACN_POLYGONCV"/>
-      </SubMenu>
       <Action Name="ACN_ARC"/>
+	  <Separator/>
       <Action Name="ACN_BInsert"/>
+	  <Separator/>
       <Action Name="ACN_TEXT"/>
     </Menu>
     <Menu Name="Dimension">
@@ -141,14 +156,18 @@
       <Action Name="ACN_DIMLINEAR"/>
       <Action Name="ACN_DIMRADIAL"/>
       <Action Name="ACN_DIMDIAMETRIC"/>
+	  <Separator/>
+	  <Action Name="ACN_DSTYLES"/>
+	  <Separator/>
+      <Action Name="ACN_DIST"/>
     </Menu>
     <Menu Name="Modify">
+	  <Action Name="ACN_MATCHPROP"/>
+	  <Separator/>
       <Action Name="ACN_POLYED"/>
-      <SubMenu Name="Layers">
-        <Action Name="ACN_LAYOFF"/>
-      </SubMenu>
+	  <Separator/>
+	  <Action Name="ACN_BEDIT"/>
       <SubMenu Name="Block/Device">
-        <Action Name="ACN_BEDIT"/>
         <Action Name="ACN_ADDTOOWNER"/>
         <Action Name="ACN_COPYFROMOWNER"/>
         <Separator/>
@@ -156,46 +175,19 @@
         <Action Name="ACN_BSCALE"/>
         <Action Name="ACN_BROTATE"/>
       </SubMenu>
-    <Separator/>
+      <Separator/>
+      <Action Name="ACN_ERASE"/>
+	  <Action Name="ACN_MOVE"/>
       <Action Name="ACN_COPY"/>
-      <Action Name="ACN_MOVE"/>
+      <Action Name="ACN_SCALE"/>	  
+	  <Separator/>
       <Action Name="ACN_ROTATE"/>
-      <Action Name="ACN_SCALE"/>
-      <Action Name="ACN_STRETCH"/>
+	  <Action Name="ACN_ROTATEENTS_R"/>
+      <Action Name="ACN_ROTATEENTS_L"/>
+	  <Separator/>
       <Action Name="ACN_MIRROR"/>
-    <Separator/>
-      <SubMenu Name="Text">
-        <Action Name="ACN_smtextall"/>
-        <Action Name="ACN_smtextarea"/>
-      </SubMenu>
-    <Separator/>
-      <SubMenu Name="Extenders">
-        <Action Name="ACN_EXTDRALLLIST"/>
-        <Action Name="ACN_EXTDRENTLIST"/>
-      <Separator/>
-        <Command Caption="Add extdrVariables" Command="extdrAdd(extdrVariables)"/>
-        <Command Caption="Add extdrIncludingVolume" Command="extdrAdd(extdrIncludingVolume)"/>
-        <Command Caption="Add extdrLayerControl" Command="extdrAdd(extdrLayerControl)"/>
-        <Command Caption="Add extdrReport" Command="extdrAdd(extdrReport)"/>
-        <Command Caption="Add extdrSCHConnection" Command="extdrAdd(extdrSCHConnection)"/>
-        <Command Caption="Add extdrSCHConnector" Command="extdrAdd(extdrSCHConnector)"/>
-        <Command Caption="Add extdrSmartTextEnt" Command="extdrAdd(extdrSmartTextEnt)"/>
-      </SubMenu>
-      <Action Name="ACN_VARSED"/>
-      <Action Name="ACN_VARSEDSEL"/>
-    </Menu>
-    <Menu Name="Info">
-      <Action Name="ACN_DIST"/>
-      <Separator/>
-      <Command Caption="Names of entities" Command="VarReport(NMO_Name)"/> 
-      <Command Caption="Names of devices with axis" Command="ExportDevWithAxis"/> 
-    </Menu>
-    <Menu Name="Settings">
-      <Action Name="ACN_OPTIONS"/>
-      <Action Name="ACN_SAVEOPTIONS"/>
-      <Separator/>
-      <Action Name="ACN_DOCKOPT"/>
-      <Action Name="ACN_SAVELAYOUT"/>
+	  <Separator/>
+      <Action Name="ACN_STRETCH"/>	  
     </Menu>
     <Menu Name="Window">
       <Action Name="ACN_CLOSE"/>
@@ -228,7 +220,7 @@
         <Command Caption="BlocksList" Command="BlocksList"/>
         <Command Caption="Check clipboard" Command="dbgClipboard"/>
         <Command Caption="Report on memory allocation(debug mode)" Command="dbgMemSummary"/>
-        <Command Caption="BlockPreviewExport" Command="ExecuteFile($(ZCADPath)\components\blockpreviewexport.cmd)"/>
+        <Command Caption="BlockPreviewExport" Command="ExecuteFile($(ZDataPath)\components\blockpreviewexport.cmd)"/>
         <Action Name="ACN_TREESTAT"/>
         <Command Caption="AppExplorer" Command="DbgAppExplorer"/>
         <SubMenu Name="**dbgMemProfiler">
@@ -372,18 +364,15 @@
         <InsertMenu Name="View"/>
       <IFONE Сonditions="ActiveDrawing">
         <InsertMenu Name="Format"/>
-        <InsertMenu Name="Tools"/>
+	  </IFONE>	
+        <InsertMenu Name="Service"/>
+      <IFONE Сonditions="ActiveDrawing">		
         <InsertMenu Name="Draw"/>
         <InsertMenu Name="Dimension"/>
         <InsertMenu Name="Modify"/>
-        <InsertMenu Name="Schematic"/>
-        <InsertMenu Name="Plan"/>
-        <InsertMenu Name="Info"/>
-        <InsertMenu Name="Model"/>
+        <InsertMenu Name="Engineering"/>
       </IFONE>
-        <InsertMenu Name="Settings"/>
       <IFONE Сonditions="ActiveDrawing">
-        <InsertMenu Name="DB"/>
         <InsertMenu Name="Window"/>
       </IFONE>
       <InsertMenu Name="Help"/>
@@ -396,20 +385,16 @@
       <InsertMenu Name="Edit"/>
       <InsertMenu Name="View"/>
       <InsertMenu Name="Format"/>
+	  <InsertMenu Name="Service"/>
       <InsertMenu Name="Draw"/>
       <InsertMenu Name="Dimension"/>
       <InsertMenu Name="Modify"/>
-      <InsertMenu Name="Schematic"/>
-      <InsertMenu Name="Plan"/>
-      <InsertMenu Name="Info"/>
-      <InsertMenu Name="Model"/>
-      <InsertMenu Name="Settings"/>
+      <InsertMenu Name="Engineering"/>
       <InsertMenu Name="Window"/>
       <InsertMenu Name="Help"/>
      <IFONE Сonditions="DebugUI">
       <InsertMenu Name="Debug"/>
      </IFONE>
-      <InsertMenu Name="DB"/>
     </Menu2>
   </MenusContent>
 </CONFIG>

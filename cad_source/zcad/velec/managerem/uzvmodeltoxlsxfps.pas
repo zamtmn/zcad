@@ -2383,7 +2383,7 @@ begin
    //открываем шаблон для его заполнения
   fileTemplate:='Не работает!!!!!!!!!!!!!';
   ZCMsgCallBackInterface.Do_BeforeShowModal(nil);
-  isload:=OpenFileDialog(fileTemplate,LastFileHandle,'','Книга XLSX с поддержкой макросов|*.xlsm|Книга Excel 97-2003|*.xls|Книга Excel|*.xlsx',sysvar.PATH.Program_Run^+'preload\xlsxtemplates\modelinxlsx\','Open Excel pattern file...');
+  isload:=OpenFileDialog(fileTemplate,LastFileHandle,'','Книга XLSX с поддержкой макросов|*.xlsm|Книга Excel 97-2003|*.xls|Книга Excel|*.xlsx',sysvar.PATH.Program_Data^+'preload\xlsxtemplates\modelinxlsx\','Open Excel pattern file...');
   ZCMsgCallBackInterface.Do_AfterShowModal(nil);
   if not isload then begin
     result:=cmd_cancel;

@@ -13,6 +13,25 @@
       <Separator/>
       <Action Name="ACN_PRINT"/>
       <Separator/>
+	  <Action Name="ACN_CUTCLIP"/>
+      <Action Name="ACN_COPYCLIP"/>
+      <Action Name="ACN_COPYCLIPBASE"/>
+      <Action Name="ACN_PASTE"/>
+      <Action Name="ACN_MATCHPROP"/>	  
+	  <Action Name="ACN_SELSIM"/>
+	  <Separator/>
+	  <Action Name="ACN_ERASE"/>
+	  <Separator/>
+      <Action Name="ACN_UNDO"/>
+      <Action Name="ACN_REDO"/>
+      <Separator/>
+      <Action Name="ACN_REGEN"/>     
+	  <IFONE Сonditions="DebugUI">
+      <Separator/>
+      <Action Name="ACN_REBUILDTREE"/>
+      </IFONE>
+    </Standard>
+    <ObjProp Type="ToolBar">
       <Action Name="ACN_LAYER"/>
       <LayerComboBox Width="200" Hint="Layer selection"/>
       <Separator/>
@@ -29,16 +48,7 @@
       <Separator/>
       <Action Name="ACN_DSTYLES"/>
       <DimStyleComboBox Width="100" Hint="Dim style selection"/>
-      <Separator/>
-      <Action Name="ACN_UNDO"/>
-      <Action Name="ACN_REDO"/>
-      <Separator/>
-      <Action Name="ACN_MATCHPROP"/>
-      <Separator/>
-      <Action Name="ACN_REGEN"/>
-      <Separator/>
-      <Action Name="ACN_REBUILDTREE"/>
-    </Standard>
+    </ObjProp>	
     <Find Type="ToolBar">
       <FindEditBox Width="200" Hint="Find"/>
       <Action Name="ACN_FINDNEXT"/>
@@ -56,7 +66,7 @@
     </ObjInspUpToolbar>
     <ObjectSnap Type="ToolBar">
       <Action Name="ACN_OS_INSERT"/>
-      <Action Name="ACN_OS_END"/>"/>
+      <Action Name="ACN_OS_END"/>
       <Action Name="ACN_OS_MIDDLE"/>
       <Action Name="ACN_OS_THIRD"/>
       <Action Name="ACN_OS_QUARTER"/>
@@ -99,37 +109,46 @@
     </View>
     <Quick Type="ToolBar">
       <Action Name="ACN_LOADQS"/>
-      <Action Name="ACN_SAVEQS"/>"/>
+      <Action Name="ACN_SAVEQS"/>
       <Action Name="ACN_PROJECTTREE"/>
     </Quick>
     <Modify Type="ToolBar">
-      <Action Name="ACN_BEDIT"/>
-      <Action Name="ACN_POLYED"/>"/>
-      <Action Name="ACN_COPY"/>
-      <Action Name="ACN_MOVE"/>
-      <Action Name="ACN_ROTATE"/>"/>
-      <Action Name="ACN_ROTATEENTS_R"/>"/>
-      <Action Name="ACN_ROTATEENTS_L"/>"/>
-      <Action Name="ACN_SCALE"/>
-      <Action Name="ACN_STRETCH"/>
+	  <Action Name="ACN_MOVE"/>
+	  <Action Name="ACN_COPY"/>
+	  <Action Name="ACN_MATCHPROP"/>
+	  <Action Name="ACN_SCALE"/>
+	  <Separator/>
+	  <Action Name="ACN_ROTATE"/>
+      <Action Name="ACN_ROTATEENTS_R"/>
+      <Action Name="ACN_ROTATEENTS_L"/>
+	  <Separator/>
       <Action Name="ACN_MIRROR"/>
+	  <Separator/>
+	  <Action Name="ACN_STRETCH"/>
+	  <Separator/>
+	  <Action Name="ACN_BEDIT"/>
+      <Action Name="ACN_POLYED"/>
     </Modify>
     <Draw Type="ToolBar">
       <Action Name="ACN_LINE"/>
-      <Action Name="ACN_3DPOLY"/>"/>
+      <Action Name="ACN_3DPOLY"/>
+	  <GroupAction Index="0">
+        <Action Name="ACN_RECTANGLE"/>
+        <Action Name="ACN_POLYGONCC"/>
+        <Action Name="ACN_POLYGONCV"/>
+      </GroupAction>
+	  <Separator/>	  
+	  <Action Name="ACN_ARC"/>
       <GroupAction Index="0">
         <Action Name="ACN_CIRCLE"/>
         <Action Name="ACN_CIRCLECD"/>
         <Action Name="ACN_CIRCLE2P"/>
         <Action Name="ACN_CIRCLE3P"/>
       </GroupAction>
-      <GroupAction Index="0">
-        <Action Name="ACN_RECTANGLE"/>
-        <Action Name="ACN_POLYGONCC"/>
-        <Action Name="ACN_POLYGONCV"/>
-      </GroupAction>
-      <Action Name="ACN_BInsert"/>"/>
-      <Action Name="ACN_TEXT"/>
+	  <Separator/>	  
+	  <Action Name="ACN_TEXT"/>
+	  <Separator/>	  
+      <Action Name="ACN_BInsert"/>
     </Draw>
     <Status Type="ToolBar">
       <Separator/>

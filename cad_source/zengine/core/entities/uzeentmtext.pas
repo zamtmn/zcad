@@ -13,7 +13,7 @@
 *****************************************************************************
 }
 {
-@author(Andrey Zubarev <zamtmn@yandex.ru>) 
+@author(Andrey Zubarev <zamtmn@yandex.ru>)
 }
 
 unit uzeentmtext;
@@ -46,6 +46,7 @@ GDBObjMText= object(GDBObjText)
                  procedure CalcGabarit(const drawing:TDrawingDef);virtual;
                  //procedure getoutbound;virtual;
                  procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext;Stage:TEFStages=EFAllStages);virtual;
+                 function IsStagedFormatEntity:boolean;virtual;
                  procedure FormatContent(var drawing:TDrawingDef);virtual;
                  procedure createpoint(const drawing:TDrawingDef;var DC:TDrawContext);virtual;
                  function Clone(own:Pointer):PGDBObjEntity;virtual;
@@ -88,7 +89,7 @@ end;
 destructor GDBObjMText.done;
 begin
   text.Done;
-  inherited done;  
+  inherited done;
 end;
 constructor GDBObjMText.initnul;
 begin
@@ -499,24 +500,30 @@ begin
 end;
 procedure GDBObjMText.FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext;Stage:TEFStages=EFAllStages);
 begin
-  calcobjmatrix;
-  if assigned(EntExtensions)then
-    EntExtensions.RunOnBeforeEntityFormat(@self,drawing,DC);
+  if EFCalcEntityCS in stage then begin
+    calcobjmatrix;
+    if assigned(EntExtensions)then
+      EntExtensions.RunOnBeforeEntityFormat(@self,drawing,DC);
+  end;
+  if EFDraw in stage then begin
+    Representation.Clear;
 
-  Representation.Clear;
+    formatcontent(drawing);
+    calcobjmatrix;
+    CalcGabarit(drawing);
+    //getoutbound;
+    if (not (ESTemp in State))and(DCODrawable in DC.Options) then
+      createpoint(drawing,dc);
+    calcbb(dc);
 
-  formatcontent(drawing);
-  calcobjmatrix;
-  CalcGabarit(drawing);
-  //getoutbound;
-  if (not (ESTemp in State))and(DCODrawable in DC.Options) then
-    createpoint(drawing,dc);
-  calcbb(dc);
-  CalcActualVisible(dc.DrawingContext.VActuality);
-  if assigned(EntExtensions)then
-    EntExtensions.RunOnAfterEntityFormat(@self,drawing,DC);
+    if assigned(EntExtensions)then
+      EntExtensions.RunOnAfterEntityFormat(@self,drawing,DC);
+  end;
 end;
-
+function GDBObjMText.IsStagedFormatEntity:boolean;
+begin
+  result:=true;
+end;
 procedure GDBObjMText.CalcGabarit;
 var
 //  i: Integer;

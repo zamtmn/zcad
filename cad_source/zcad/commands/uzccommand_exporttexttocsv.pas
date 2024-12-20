@@ -167,9 +167,10 @@ initialization
   ExportTextToCSVParam.W:=20;
   ExportTextToCSVParam.H:=8;
   ExportTextToCSVParam.FileName:='d:\test.csv';
-
-  SysUnit^.RegisterType(TypeInfo(TExportTextToCSVParam));//регистрируем тип данных в зкадном RTTI
-  SysUnit^.SetTypeDesk(TypeInfo(TExportTextToCSVParam),['Widths','W','H','FileName'],[FNProgram]);//Даем програмные имена параметрам, по идее это должно быть в ртти, но ненашел
+  if SysUnit<>nil then begin
+    SysUnit^.RegisterType(TypeInfo(TExportTextToCSVParam));//регистрируем тип данных в зкадном RTTI
+    SysUnit^.SetTypeDesk(TypeInfo(TExportTextToCSVParam),['Widths','W','H','FileName'],[FNProgram]);//Даем програмные имена параметрам, по идее это должно быть в ртти, но ненашел
+  end;
 
   CreateZCADCommand(@ExportTextToCSV_com,'ExportTextToCSV',  CADWG,0);
 finalization

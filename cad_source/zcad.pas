@@ -331,7 +331,7 @@ begin
 
   //инициализация drawings
   FontManager.EnumerateFontFiles;
-  uzcdrawings.startup('$(ZCADPath)/rtl/dwg/DrawingVars.pas','');
+  uzcdrawings.startup('$(ZDataPath)/rtl/dwg/DrawingVars.pas','');
   uzcdevicebase.startup;
   {$IF lcl_fullversion>2001200}
   {$ELSE}
@@ -340,7 +340,8 @@ begin
   //создание окна программы
   {$IF DEFINED(MSWINDOWS)}
   LoadLResources;
-  ApplyMetaDarkStyle(GetScheme(SysVar.INTF.INTF_ColorScheme^));
+  if SysVar.INTF.INTF_ColorScheme<>nil then
+    ApplyMetaDarkStyle(GetScheme(SysVar.INTF.INTF_ColorScheme^));
   {$ENDIF}
   Application.CreateForm(TZCADMainWindow,ZCADMainWindow);
   ZCADMainWindow.show;

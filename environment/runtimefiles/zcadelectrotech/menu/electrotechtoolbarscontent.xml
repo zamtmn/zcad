@@ -26,8 +26,6 @@
       <Action Name="ACN_MATERIALLEGEND"/>
       <Action Name="ACN_KIPCDBUILD"/>
       <Action Name="ACN_KIPLUGTABLEBUILD"/>
-      <Separator/>
-      <Action Name="ACN_REGENZENTS"/>
     </ElectrotechActions>
   </ToolBarsContent>
 </CONFIG>

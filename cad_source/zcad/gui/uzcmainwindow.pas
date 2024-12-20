@@ -654,7 +654,7 @@ begin
 
           (*mem.init(1024);
           SavedUnit^.SavePasToMem(mem);
-          mem.SaveToFile(expandpath(ProgramPath+'rtl'+PathDelim+'savedvar.pas'));
+          mem.SaveToFile(expandpath(DataPath+'rtl'+PathDelim+'savedvar.pas'));
           mem.done;*)
           end;
      end
@@ -755,9 +755,9 @@ procedure TZCADMainWindow.LoadActions;
 var
    i:integer;
 begin
-  //ToolBarsManager.LoadActions(ProgramPath+'menu/actionscontent.xml');
-  //ToolBarsManager.LoadActions(ProgramPath+'menu/electrotechactionscontent.xml');
-  //ToolBarsManager.LoadActions(ProgramPath+'menu/velecactionscontent.xml');
+  //ToolBarsManager.LoadActions(DataPath+'menu/actionscontent.xml');
+  //ToolBarsManager.LoadActions(DataPath+'menu/electrotechactionscontent.xml');
+  //ToolBarsManager.LoadActions(DataPath+'menu/velecactionscontent.xml');
   StandartActions.OnUpdate:=ActionUpdate;
 
   for i:=low(FileHistory) to high(FileHistory) do
@@ -1017,12 +1017,12 @@ begin
   TZGuiExceptionsHandler.InstallHandler(ZcadException);
 
   SuppressedShortcuts:=TXMLConfig.Create(nil);
-  SuppressedShortcuts.Filename:=ProgramPath+'/components/suppressedshortcuts.xml';
+  SuppressedShortcuts.Filename:=DataPath+'/components/suppressedshortcuts.xml';
 
   if SysParam.saved.UniqueInstance then
     CreateOrRunFIPCServer;
-
-  sysvar.INTF.INTF_DefaultControlHeight^:=sysparam.notsaved.defaultheight;
+  if sysvar.INTF.INTF_DefaultControlHeight<>nil then
+    sysvar.INTF.INTF_DefaultControlHeight^:=sysparam.notsaved.defaultheight;
 
   //DecorateSysTypes;
   self.onclose:=self.FormClose;
@@ -1036,15 +1036,15 @@ begin
 
   InitSystemCalls;
 
-  ImagesManager.ScanDir(ProgramPath+'/images/');
-  ImagesManager.LoadAliasesDir(ProgramPath+'/images/navigator.ima');
+  ImagesManager.ScanDir(DataPath+'/images/');
+  ImagesManager.LoadAliasesDir(DataPath+'/images/navigator.ima');
 
   //StandartActions:=TActionList.Create(self);
   InsertComponent(StandartActions);
 
   if not assigned(StandartActions.Images) then
                              StandartActions.Images:={TImageList.Create(StandartActions)}ImagesManager.IconList;
-  brocenicon:=StandartActions.LoadImage(ProgramPath+'/menu/BMP/noimage.bmp');
+  brocenicon:=StandartActions.LoadImage(DataPath+'/menu/BMP/noimage.bmp');
 
 
   ToolBarsManager.setup(self,StandartActions,sysvar.INTF.INTF_DefaultControlHeight^);

@@ -217,8 +217,10 @@ initialization
   BIProp.Blocks.Enums.init(100);
   BIProp.Scale:=uzegeometry.OneVertex;
   BIProp.Rotation:=0;
-  SysUnit^.RegisterType(TypeInfo(TBlockInsert));
-  SysUnit^.SetTypeDesk(TypeInfo(TBlockInsert),['Block','Scale','Rotation']);
+  if SysUnit<>nil then begin
+    SysUnit^.RegisterType(TypeInfo(TBlockInsert));
+    SysUnit^.SetTypeDesk(TypeInfo(TBlockInsert),['Block','Scale','Rotation']);
+  end;
   CreateCommandRTEdObjectPlugin(@Insert_com_CommandStart,@Insert_com_CommandEnd,nil,nil,@Insert_com_BeforeClick,@Insert_com_BeforeClick,nil,nil,'Insert',0,0);
 finalization
   BIProp.Blocks.Enums.done;

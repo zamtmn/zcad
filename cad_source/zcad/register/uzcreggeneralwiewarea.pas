@@ -45,7 +45,7 @@ end;
 
 initialization
   TGeneralViewArea.RegisterShowCursorHandler(TShowCursorHelper.ShowCursorHandlerDrawLine);
-  system_pas_path:=expandpath('$(ZCADPath)/rtl/system.pas');
+  system_pas_path:=expandpath('$(ZDataPath)/rtl/system.pas');
   units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPath,system_pas_path,InterfaceTranslate,'DISP_CursorSize','Integer',@sysvarDISPCursorSize);
   units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPath,system_pas_path,InterfaceTranslate,'DISP_OSSize','Double',@sysvarDISPOSSize);
   units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPath,system_pas_path,InterfaceTranslate,'DISP_CrosshairSize','Double',@SysVarDISPCrosshairSize);

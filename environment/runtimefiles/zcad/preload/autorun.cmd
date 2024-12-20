@@ -1,5 +1,5 @@
 ;Комментарий
-;$(ZCADPath)-путь к программе
+;$(ZDataPath)-путь к программе
 ;------------------------
 ;Создание пустого чертежа
 ;------------------------
@@ -8,10 +8,10 @@
 ;------------------------
 ;Загрузка ткстовых файлов
 ;------------------------
-;Load($(ZCADPath)/sample/test_dxf/teapot.dxf)
-;Load($(ZCADPath)/sample/test_dxf/em.dxf)
-;Load($(ZCADPath)/autosave/autosave.dxf)
-;Load($(ZCADPath)/sample/zigzag.dxf)
+;Load($(ZDataPath)/sample/test_dxf/teapot.dxf)
+;Load($(ZDataPath)/sample/test_dxf/em.dxf)
+;Load($(ZDataPath)/autosave/autosave.dxf)
+;Load($(ZDataPath)/sample/zigzag.dxf)
 
 ;-----------------------------------
 ;Показ окна "О программе" при старте

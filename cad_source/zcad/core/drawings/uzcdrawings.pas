@@ -532,11 +532,11 @@ begin
        CurrentDWG.init(@ProjectUnits);
        dc:=CurrentDWG^.CreateDrawingRC;
        CurrentDWG.pObjRoot^.FormatEntity(CurrentDWG^,dc);
-       //addfromdxf(sysvar.path.Program_Run^+'blocks\el\general\_connector.dxf',@CurrentDWG.ObjRoot);
-       //addfromdxf(sysvar.path.Program_Run^+'blocks\el\general\_nok.dxf',@CurrentDWG.ObjRoot);
-       //addfromdxf(sysvar.path.Program_Run^+'blocks\el\general\_OPS.dxf',@CurrentDWG.ObjRoot);
-       //addfromdxf(sysvar.path.Program_Run^+'sample\test_dxf\teapot.dxf',@CurrentDWG.ObjRoot);
-       //addfromdxf(sysvar.path.Program_Run^+'sample\test_dxf\shema_Poly_Line_Text_Circle_Arc.dxf',@CurrentDWG.ObjRoot);
+       //addfromdxf(sysvar.path.Program_Data^+'blocks\el\general\_connector.dxf',@CurrentDWG.ObjRoot);
+       //addfromdxf(sysvar.path.Program_Data^+'blocks\el\general\_nok.dxf',@CurrentDWG.ObjRoot);
+       //addfromdxf(sysvar.path.Program_Data^+'blocks\el\general\_OPS.dxf',@CurrentDWG.ObjRoot);
+       //addfromdxf(sysvar.path.Program_Data^+'sample\test_dxf\teapot.dxf',@CurrentDWG.ObjRoot);
+       //addfromdxf(sysvar.path.Program_Data^+'sample\test_dxf\shema_Poly_Line_Text_Circle_Arc.dxf',@CurrentDWG.ObjRoot);
   end;
   MainBlockCreateProc:=AddBlockFromDBIfNeed;
   ZCMsgCallBackInterface.RegisterHandler_GUIAction(redrawoglwnd);

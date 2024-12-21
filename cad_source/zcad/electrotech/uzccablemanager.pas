@@ -10,13 +10,11 @@ interface
 uses uzcenitiesvariablesextender,uzcvariablesutils,Varman,uzbstrproc,uzcentcable,
      uzeentdevice,uzeconsts,gzctnrVectorObjects,
      gzctnrVectorTypes,SysUtils,uzbtypes,varmandef,uzcdrawings,
-     uzcstrconsts{,uzctnrvectorpgdbaseobjects},uzCtnrVectorpBaseEntity;
+     uzcstrconsts,uzCtnrVectorpBaseEntity;
 resourcestring
      DefCableName='Created. Not named';
 type
-{EXPORT+}
     PTCableDesctiptor=^TCableDesctiptor;
-    {REGISTEROBJECTTYPE TCableDesctiptor}
     TCableDesctiptor= object(GDBaseObject)
                      Name:String;
                      Segments:TZctnrVectorPGDBaseEntity;   // сборщик всех кабелей с одинаковым именем (ШС..)
@@ -31,7 +29,6 @@ type
                  end;
 
     PTCableManager=^TCableManager;
-    {---REGISTEROBJECTTYPE TCableManager}
     TCableManager= object(GZVectorObjects<TCableDesctiptor>)
                        constructor init;
                        procedure done;virtual;
@@ -39,7 +36,6 @@ type
                        function FindOrCreate(sname:String):PTCableDesctiptor;virtual;
                        function Find(sname:String):PTCableDesctiptor;virtual;
                  end;
-{EXPORT-}
 implementation
 function TCableDesctiptor.GetObjTypeName;
 begin

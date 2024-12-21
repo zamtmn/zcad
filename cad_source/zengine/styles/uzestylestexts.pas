@@ -45,8 +45,8 @@ PGDBTextStyleProp=^GDBTextStyleProp;
     UsedInLTYPE:Boolean;
     destructor Done;virtual;
   end;
+{EXPORT-}
 PGDBTextStyleArray=^GDBTextStyleArray;
-{REGISTEROBJECTTYPE GDBTextStyleArray}
 GDBTextStyleArray= object(GDBNamedObjectsArray{-}<PGDBTextStyle,GDBTextStyle>{//})
                     constructor init(m:Integer);
                     constructor initnul;
@@ -58,7 +58,6 @@ GDBTextStyleArray= object(GDBNamedObjectsArray{-}<PGDBTextStyle,GDBTextStyle>{//
                     procedure freeelement(PItem:PT);virtual;
                     function CorrectNilledTextStyle(pts:PGDBTextStyle):PGDBTextStyle;
               end;
-{EXPORT-}
   TTextStyle = class(TNamedObject)
     public
       FontFile:String;

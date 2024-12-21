@@ -24,13 +24,11 @@ uses gzctnrVectorTypes,gzctnrVectorPObjects,sysutils,uzbtypes,uzegeometry,
      uzeNamedObject,//gzctnrVectorClass,
      Strings;
 type
-{EXPORT+}
 TForCResult=(IsFounded(*'IsFounded'*)=1,
              IsCreated(*'IsCreated'*)=2,
              IsError(*'IsError'*)=3);
-{------REGISTEROBJECTTYPE GDBNamedObjectsArray}
-GDBNamedObjectsArray{-}<PTObj,TObj>{//}
-                     = object(GZVectorPObects{-}<PTObj,TObj>{//})
+GDBNamedObjectsArray<PTObj,TObj>
+                     = object(GZVectorPObects<PTObj,TObj>)
                     constructor init(m:Integer);
                     function getIndex(const name: String):Integer;
                     function getAddres(const name: String):Pointer;overload;
@@ -41,7 +39,6 @@ GDBNamedObjectsArray{-}<PTObj,TObj>{//}
                     function GetFreeName(const NameFormat:String;firstindex:integer):String;
                     procedure IterateCounter(PCounted:Pointer;var Counter:Integer;proc:TProcCounter);virtual;
               end;
-{EXPORT-}
 PTGenericNamedObjectsArray=^TGenericNamedObjectsArray;
 TGenericNamedObjectsArray=GDBNamedObjectsArray{-}<PGDBNamedObject,GDBNamedObject>{//};
 implementation

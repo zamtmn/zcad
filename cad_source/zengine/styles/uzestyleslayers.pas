@@ -43,10 +43,10 @@ GDBLayerProp= object(GDBNamedObject)
                procedure SetDefaultValues;virtual;
                destructor done;virtual;
          end;
+{EXPORT-}
 PGDBLayerPropArray=^GDBLayerPropArray;
 GDBLayerPropArray=packed array [0..0] of PGDBLayerProp;
 PGDBLayerArray=^GDBLayerArray;
-{REGISTEROBJECTTYPE GDBLayerArray}
 GDBLayerArray= object(GDBNamedObjectsArray{-}<PGDBLayerProp,GDBLayerProp>{//})
                     constructor init(m:Integer;psyslt:Pointer);
                     constructor initnul;
@@ -56,7 +56,6 @@ GDBLayerArray= object(GDBNamedObjectsArray{-}<PGDBLayerProp,GDBLayerProp>{//})
                     function createlayerifneed(_source:PGDBLayerProp):PGDBLayerProp;
                     function createlayerifneedbyname(const lname:String;_source:PGDBLayerProp):PGDBLayerProp;
               end;
-{EXPORT-}
 TLayerProp=class(TNamedObject)
 end;
 function GetLTName(LT:PGDBLayerProp):String;

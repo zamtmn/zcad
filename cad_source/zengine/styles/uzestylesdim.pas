@@ -119,8 +119,8 @@ GDBDimStyle = object(GDBNamedObject)
                       procedure ResolveTextstyles(const tst:TGenericNamedObjectsArray);
                       destructor Done;virtual;
              end;
+{EXPORT-}
 PGDBDimStyleArray=^GDBDimStyleArray;
-{REGISTEROBJECTTYPE GDBDimStyleArray}
 GDBDimStyleArray= object(GDBNamedObjectsArray{-}<PGDBDimStyle,GDBDimStyle>{//})
                     constructor init(m:Integer);
                     constructor initnul;
@@ -128,7 +128,6 @@ GDBDimStyleArray= object(GDBNamedObjectsArray{-}<PGDBDimStyle,GDBDimStyle>{//})
                     procedure ResolveTextstyles(const tst:TGenericNamedObjectsArray);
                     procedure ResolveLineTypes(const lta:GDBLtypeArray);
               end;
-{EXPORT-}
 TDimArrowBlockArray=array[TArrowStyle] of TDimArrowBlockParam;
 var
      DimArrows:TDimArrowBlockArray=(

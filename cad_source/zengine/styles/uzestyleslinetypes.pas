@@ -107,10 +107,10 @@ GDBLtypeProp= object(GDBNamedObject)
                function GetLTString:String;
                procedure CreateLineTypeFrom(var LT:String);
              end;
+{EXPORT-}
 PGDBLtypePropArray=^GDBLtypePropArray;
 GDBLtypePropArray=packed array [0..0] of GDBLtypeProp;
 PGDBLtypeArray=^GDBLtypeArray;
-{REGISTEROBJECTTYPE GDBLtypeArray}
 GDBLtypeArray= object(GDBNamedObjectsArray{-}<PGDBLtypeProp,GDBLtypeProp>{//})
                     constructor init(m:Integer);
                     constructor initnul;
@@ -125,10 +125,7 @@ GDBLtypeArray= object(GDBNamedObjectsArray{-}<PGDBLtypeProp,GDBLtypeProp>{//})
                     function createlayerifneed(_source:PGDBLayerProp):PGDBLayerProp;
                     function createlayerifneedbyname(lname:String;_source:PGDBLayerProp):PGDBLayerProp;}
               end;
-{EXPORT-}
 implementation
-//uses
-//    log;
 type
     TSeek=(TSeekInterface,TSeekImplementation);
 procedure GDBLtypeArray.format;

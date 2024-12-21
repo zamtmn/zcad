@@ -46,14 +46,13 @@ TGDBTableStyle= object(GDBNamedObject)
                      constructor Init(const n:String);
                      destructor Done;virtual;
                end;
+{EXPORT-}
 PGDBTableStyleArray=^GDBTableStyleArray;
-{REGISTEROBJECTTYPE GDBTableStyleArray}
 GDBTableStyleArray= object(GDBNamedObjectsArray{-}<PTGDBTableStyle,TGDBTableStyle>{//})
                     constructor init(m:Integer);
                     constructor initnul;
                     function AddStyle(const name:String):PTGDBTableStyle;
               end;
-{EXPORT-}
 var
   PTempTableStyle:PTGDBTableStyle;
 implementation

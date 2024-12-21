@@ -80,10 +80,9 @@
 		  </SubMenu>
 		  <Separator/>
 		  <Command Caption="Names of entities" Command="VarReport(NMO_Name)"/> 
-		  <Separator/>
-		  <Action Name="ACN_BEDIT"/>
-		  <Command Caption="Alignment blocks array" Command="OrtoDevPlace"/> 		  
       </SubMenu>
+	  <Action Name="ACN_BEDIT"/>
+	  <Command Caption="Alignment blocks array" Command="OrtoDevPlace"/> 	
       <Separator/>	 	  
       <SubMenu Name="Cable/Trace">
 	    <SubMenu Name="Plan">
@@ -101,11 +100,10 @@
 		<Action Name="ACN_CABLESELECT"/> 
 		<Action Name="ACN_CABLEINVERT"/> 
 		<Separator/>
-		<Action Name="ACN_LEADER"/>
-		<Separator/>
 		<Command Caption="Automatic cable laying by CSV" Command="EL_ExternalKZ"/> 		
 		<Action Name="ACN_REMAUTOCABLES"/>
       </SubMenu>
+	  <Action Name="ACN_LEADER"/>
 	  <Separator/>
   	  <SubMenu Name="Superline">	
       </SubMenu>	  
@@ -132,7 +130,6 @@
 		  <Action Name="ACN_DATAEXPORT"/>	  
 	  </SubMenu>
 	  <SubMenu Name="Reports">
-		  <Command Caption="Cable manager" Command="EL_CableMan"/> 
 		  <Command Caption="Connection diagram" Command="OPS_SPBuild"/> 		  
 		  <Command Caption="Create cable report" Command="El_Cable_Legend"/>
 		  <Command Caption="Create material report" Command="El_Material_Legend"/> 
@@ -148,6 +145,8 @@
 			<Command Caption="Add extdrSCHConnection" Command="extdrAdd(extdrSCHConnection)"/>
 			<Command Caption="Add extdrSCHConnector" Command="extdrAdd(extdrSCHConnector)"/>
 			<Command Caption="Add extdrSmartTextEnt" Command="extdrAdd(extdrSmartTextEnt)"/>
+		 <Separator/>
+		 <Action Name="ACN_DEVDEFSYNC"/>
 	  </SubMenu>	  
 	  <Separator/>
       <Action Name="ACN_VARSED"/>

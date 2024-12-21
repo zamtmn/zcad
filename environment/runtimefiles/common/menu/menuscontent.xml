@@ -28,8 +28,10 @@
       <Action Name="ACN_CUTCLIP"/>
       <Action Name="ACN_COPYCLIP"/>
       <Action Name="ACN_COPYCLIPBASE"/>
+      <Separator/>
       <Action Name="ACN_PASTE"/>
       <Action Name="ACN_DUPLICATE"/>
+      <Separator/>
       <Action Name="ACN_ERASE"/>
       <Separator/>
       <Action Name="ACN_SELECTALL"/>

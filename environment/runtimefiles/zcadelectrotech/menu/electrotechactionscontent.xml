@@ -21,6 +21,7 @@
       <ZAction Name="ACN_REGENZENTS" Command="RegenZEnts" Img="regenz" Caption="Regenerate zcad entities"/>
       <ZAction Name="ACN_DATAIMPORT" Command="DataImport" Img="#DI" Caption="Import data to entities"/>
       <ZAction Name="ACN_DATAEXPORT" Command="DataExport" Img="#DE" Caption="Export entities data"/>
+	  <ZAction Name="ACN_DEVDEFSYNC" Caption="Synchronize layer visibility in device" Command="DevDefSync" Img="#SL"/>
     </Group>
   </ActionsContent>
 </CONFIG>

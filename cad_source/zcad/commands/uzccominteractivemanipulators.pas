@@ -480,6 +480,10 @@ begin
    countVert:=obj.npoint;
    stPoint := obj.p1;
    xyline:=uzegeometry.Vertexlength(stPoint,Point);
+
+   if xyline<eps then
+     exit;
+
    xline:=uzegeometry.Vertexlength(stPoint,CreateVertex(Point.x,stPoint.y,0));
 
    radius := Vertexlength(stPoint,Point);

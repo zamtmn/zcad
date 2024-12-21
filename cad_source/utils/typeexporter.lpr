@@ -431,10 +431,14 @@ begin
      while GetPartOfPath(CurrentFile,ProcessFiles,'+')<>'' do
      begin
        writeln(format('ProcessFile    =%s',[CurrentFile]));
-       FileNames.loadfromfile({ExtractFilePath(paramstr(0))+'filelist.txt'}CurrentFile);
+       FileNames.loadfromfile(CurrentFile);
 
-       for i:=0 to FileNames.Count-1 do
-         processfileabstract(PathPrefix+FileNames.ValueFromIndex[i],outhandle);
+       for i:=0 to FileNames.Count-1 do begin
+         CurrentFile:=FileNames.ValueFromIndex[i];
+         if Length(CurrentFile)>0 then
+           if (CurrentFile[1]<>'#')and(CurrentFile[1]<>';') then
+             processfileabstract(PathPrefix+CurrentFile,outhandle);
+       end;
        FileNames.Clear;
      end;
 

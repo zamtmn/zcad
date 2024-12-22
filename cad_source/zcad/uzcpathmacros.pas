@@ -29,6 +29,8 @@ type
                                         var {%H-}Abort: boolean): string;
     class function MacroFuncZBinPath(const {%H-}Param: string; const Data: PtrInt;
                                        var {%H-}Abort: boolean): string;
+    class function MacroFuncDataSearhPrefixes(const {%H-}Param: string; const Data: PtrInt;
+                                       var {%H-}Abort: boolean): string;
     class function MacroFuncZCADDictionariesPath(const {%H-}Param: string; const Data: PtrInt;
                                                  var {%H-}Abort: boolean): string;
     class function MacroFuncTEMPPath(const {%H-}Param: string; const Data: PtrInt;
@@ -104,6 +106,11 @@ class function TZCADPathsMacroMethods.MacroFuncEnv(const Param: string; const Da
 begin
   Result:=GetEnvironmentVariableUTF8(Param);
 end;
+class function TZCADPathsMacroMethods.MacroFuncDataSearhPrefixes(const {%H-}Param: string; const Data: PtrInt;
+                                   var {%H-}Abort: boolean): string;
+begin
+  Result:=IncludeTrailingPathDelimiter(IncludeTrailingPathDelimiter(GetAppConfigDir(false))+Param)+';'+IncludeTrailingPathDelimiter(IncludeTrailingPathDelimiter(DataPath)+Param);
+end;
 class function TZCADPathsMacroMethods.MacroFuncUserDir(const Param: string; const {%H-}Data: PtrInt;var {%H-}Abort: boolean): string;
 begin
   Result:=GetUserDir;
@@ -146,6 +153,8 @@ DefaultMacros.AddMacro(TTransferMacro.Create('LocalConfigDir','',
                        'Local config dir',TZCADPathsMacroMethods.MacroFuncLocalConfigDir,[]));
 DefaultMacros.AddMacro(TTransferMacro.Create('GlobalConfigDir','',
                        'Global config dir',TZCADPathsMacroMethods.MacroFuncGlobalConfigDir,[]));
+DefaultMacros.AddMacro(TTransferMacro.Create('DataSearhPrefixes','',
+                       'Expand to data searh paths',TZCADPathsMacroMethods.MacroFuncDataSearhPrefixes,[]));
 DefaultMacros.AddMacro(TTransferMacro.Create('AppName','',
                        'Application name',TZCADPathsMacroMethods.MacroFuncAppName,[]));
 DefaultMacros.AddMacro(TTransferMacro.Create('DirectorySeparator','',

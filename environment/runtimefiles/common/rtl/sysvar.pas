@@ -159,7 +159,7 @@ begin
   PATH_Preload_Path:='$(ZDataPath)/preload/;$(UserDir)/zcad/preload/;$(LocalConfigDir)/$(AppName)/preload/;$(GlobalConfigDir)/$(AppName)/preload/';
   PATH_Fonts:='$(SystemFontsPath)/;$(UserFontsPath)/;$(ZDataPath)/fonts/;C:/APPS/MY/acad/support/;C:/Program Files/Autodesk/AutoCAD 2020/Fonts/';
   PATH_AlternateFont:='_mipGost.shx';
-  PATH_Support_Path:='$(ZDataPath)/rtl;$(ZDataPath)/rtl/objdefunits;$(ZDataPath)/rtl/objdefunits/include;$(ZDataPath)/components;$(ZDataPath)/blocks/el/general;$(ZDataPath)/blocks/el/general/velecdevice;$(ZDataPath)/rtl/styles';
+  PATH_Support_Path:='$DataSearhPrefixes(rtl);$DataSearhPrefixes(rtl/objdefunits);$DataSearhPrefixes(rtl/objdefunits/include);$DataSearhPrefixes(components);$DataSearhPrefixes(blocks/el/general);$DataSearhPrefixes(blocks/el/general/velecdevice)';
   INTF_CommandLineEnabled:=True;
   DSGN_NavigatorsUseMainFunction:=True;
   INTF_ObjInspButtonSizeReducing:=4;

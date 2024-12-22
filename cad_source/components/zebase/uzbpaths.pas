@@ -144,38 +144,30 @@ begin
 end;
 function FindInSupportPath(const PPaths:String; FileName:String):String;
 const
-     cFindInSupportPath='[FILEOPS]FindInSupportPath: found file:"%s"';
+  cFindInSupportPath='[FILEOPS]FindInSupportPath: found file:"%s"';
 var
-   s,ts:String;
+  s,ts:String;
 begin
-     zTraceLn('[FILEOPS]FindInSupportPath: searh file:"%s"',[{$IFNDEF DELPHI}utf8tosys{$ENDIF}(FileName)]);
-     FileName:=ExpandPath(FileName);
-     zTraceLn('[FILEOPS]FindInSupportPath: file name expand to:"%s"',[{$IFNDEF DELPHI}utf8tosys{$ENDIF}(FileName)]);
-     if FileExists({$IFNDEF DELPHI}utf8tosys{$ENDIF}(FileName)) then
-                                 begin
-                                      result:=FileName;
-                                      //programlog.LogOutStr(format(FindInSupportPath,[{$IFNDEF DELPHI}utf8tosys{$ENDIF}(ts)]),0,LM_Info);
-                                      zTraceLn(cFindInSupportPath,[{$IFNDEF DELPHI}utf8tosys{$ENDIF}(FileName)]);
-                                      exit;
-                                 end;
-     //if PPaths<>nil then
-     begin
-     s:=PPaths;
-     repeat
-           GetPartOfPath(ts,s,';');
-           ts:=ExpandPath(ts);
-           zTraceLn('[FILEOPS]FindInSupportPath: searh in "%s"',[{$IFNDEF DELPHI}utf8tosys{$ENDIF}(ts)]);
-           ts:=ts+FileName;
-           if FileExists({$IFNDEF DELPHI}utf8tosys{$ENDIF}(ts)) then
-                                 begin
-                                      result:=ts;
-                                      zTraceLn(cFindInSupportPath,[{$IFNDEF DELPHI}utf8tosys{$ENDIF}(result)]);
-                                      exit;
-                                 end;
-     until s='';
-     end;
-     result:='';
-     zDebugLn(sysutils.Format('{E}FindInSupportPath: file not found:"%s"',[{$IFNDEF DELPHI}utf8tosys{$ENDIF}(FileName)]));
+  zTraceLn('[FILEOPS]FindInSupportPath: searh file:"%s"',[{$IFNDEF DELPHI}utf8tosys{$ENDIF}(FileName)]);
+  FileName:=ExpandPath(FileName);
+  zTraceLn('[FILEOPS]FindInSupportPath: file name expand to:"%s"',[{$IFNDEF DELPHI}utf8tosys{$ENDIF}(FileName)]);
+  if FileExists({$IFNDEF DELPHI}utf8tosys{$ENDIF}(FileName)) then begin
+    zTraceLn(cFindInSupportPath,[{$IFNDEF DELPHI}utf8tosys{$ENDIF}(FileName)]);
+    exit(FileName);
+  end;
+  s:=PPaths;
+  s:=ExpandPath(s);
+  repeat
+    GetPartOfPath(ts,s,';');
+    zTraceLn('[FILEOPS]FindInSupportPath: searh in "%s"',[{$IFNDEF DELPHI}utf8tosys{$ENDIF}(ts)]);
+    ts:=ts+FileName;
+    if FileExists({$IFNDEF DELPHI}utf8tosys{$ENDIF}(ts)) then begin
+      zTraceLn(cFindInSupportPath,[{$IFNDEF DELPHI}utf8tosys{$ENDIF}(result)]);
+      exit(ts);
+    end;
+  until s='';
+  result:='';
+  zDebugLn(sysutils.Format('{E}FindInSupportPath: file not found:"%s"',[{$IFNDEF DELPHI}utf8tosys{$ENDIF}(FileName)]));
 end;
 function ExpandPath(APath:String;AItDirectory:boolean=false):String;
 begin

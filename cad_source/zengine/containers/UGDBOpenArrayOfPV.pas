@@ -34,16 +34,16 @@ PGDBObjOpenArrayOfPV=^GDBObjOpenArrayOfPV;
 {REGISTEROBJECTTYPE GDBObjOpenArrayOfPV}
 GDBObjOpenArrayOfPV= object({TZctnrVectorPGDBaseObjects}TZctnrVectorPGDBaseEntity)
                       procedure DrawWithattrib(var DC:TDrawContext);virtual;
-                      procedure DrawGeometry(lw:Integer;var DC:TDrawContext{infrustumactualy:TActulity;subrender:Integer});virtual;
-                      procedure DrawOnlyGeometry(lw:Integer;var DC:TDrawContext{infrustumactualy:TActulity;subrender:Integer});virtual;
-                      procedure renderfeedbac(infrustumactualy:TActulity;pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc;var DC:TDrawContext);virtual;
-                      function calcvisible(const frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:Integer; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double):Boolean;virtual;
-                      function CalcTrueInFrustum(const frustum:ClipArray;visibleactualy:TActulity):TInBoundingVolume;virtual;
+                      procedure DrawGeometry(lw:Integer;var DC:TDrawContext);virtual;
+                      procedure DrawOnlyGeometry(lw:Integer;var DC:TDrawContext);virtual;
+                      function calcvisible(const frustum:ClipArray;const Actuality:TVisActuality;var Counters:TCameraCounters;ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double):Boolean;virtual;
+                      function CalcActualVisible(const Actuality:TVisActuality):Boolean;virtual;
+                      function CalcTrueInFrustum(const frustum:ClipArray):TInBoundingVolume;virtual;
                       procedure DeSelect(var SelectedObjCount:Integer;ds2s:TDeSelect2Stage);virtual;
                       function CreateObj(t: Byte{;owner:Pointer}):Pointer;virtual;
                       function CreateInitObj(t: Byte;owner:Pointer):PGDBObjSubordinated;virtual;
                       function calcbb:TBoundingBox;
-                      function calcvisbb(infrustumactualy:TActulity):TBoundingBox;
+                      function calcvisbb(infrustumactualy:TActuality):TBoundingBox;
                       function getoutbound(var DC:TDrawContext):TBoundingBox;
                       function getonlyoutbound(var DC:TDrawContext):TBoundingBox;
                       function getonlyvisibleoutbound(var DC:TDrawContext):TBoundingBox;
@@ -103,7 +103,7 @@ begin
                        until pobj=nil;
                   end;
 end;
-function GDBObjOpenArrayOfPV.calcvisbb(infrustumactualy:TActulity):TBoundingBox;
+function GDBObjOpenArrayOfPV.calcvisbb(infrustumactualy:TActuality):TBoundingBox;
 var pobj:pGDBObjEntity;
     ir:itrec;
 begin
@@ -278,28 +278,6 @@ begin
        p:=iterate(ir);
   until p=nil;
 end;
-procedure GDBObjOpenArrayOfPV.renderfeedbac(infrustumactualy:TActulity;pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc;var DC:TDrawContext);
-var
-  p:pGDBObjEntity;
-      ir:itrec;
-begin
-//  if count>500 then
-//                   count:=count;
-  p:=beginiterate(ir);
-  if p<>nil then
-  repeat
-//  if ir.itc=12 then
-//                         count:=count;
-
-  {if p^.GetObjType=0 then
-                         p^.vp.ID:=p^.vp.ID;}
-       if (p^.infrustum=infrustumactualy)or(p^.Selected) then
-                                            begin
-                                                 //p^.renderfeedback(pcount,camera,ProjectProc,dc);
-                                            end;
-       p:=iterate(ir);
-  until p=nil;
-end;
 procedure GDBObjOpenArrayOfPV.DrawWithattrib;
 var
   p:pGDBObjEntity;
@@ -310,7 +288,7 @@ begin
   p:=beginiterate(ir);
   if p<>nil then
   repeat
-       if p^.infrustum=dc.DrawingContext.infrustumactualy then
+       if p^.infrustum=dc.DrawingContext.VActuality.infrustumactualy then
                            p^.DrawWithAttrib(dc);
        p:=iterate(ir);
   until p=nil;
@@ -318,35 +296,27 @@ end;
 procedure GDBObjOpenArrayOfPV.DrawGeometry;
 var
   p:pGDBObjEntity;
-      ir:itrec;
+  ir:itrec;
 begin
-//  if Count>1 then
-//                    Count:=Count;
   p:=beginiterate(ir);
   if p<>nil then
   repeat
-       //if p^.vp.ID<>0 then
-                         //p^.vp.ID:=p^.vp.ID;
-       if p^.infrustum=dc.DrawingContext.infrustumactualy then
-                           p^.DrawGeometry(lw,dc{infrustumactualy,subrender});
-       p:=iterate(ir);
+    if p^.infrustum=dc.DrawingContext.VActuality.infrustumactualy then
+      p^.DrawGeometry(lw,dc);
+    p:=iterate(ir);
   until p=nil;
 end;
 procedure GDBObjOpenArrayOfPV.DrawOnlyGeometry;
 var
   p:pGDBObjEntity;
-      ir:itrec;
+  ir:itrec;
 begin
-//  if Count>1 then
-//                    Count:=Count;
   p:=beginiterate(ir);
   if p<>nil then
   repeat
-       //if p^.vp.ID<>0 then
-                         //p^.vp.ID:=p^.vp.ID;
-       if p^.infrustum=dc.DrawingContext.infrustumactualy then
-                           p^.DrawOnlyGeometry(lw,dc{infrustumactualy,subrender});
-       p:=iterate(ir);
+    if p^.infrustum=dc.DrawingContext.VActuality.infrustumactualy then
+      p^.DrawOnlyGeometry(lw,dc);
+    p:=iterate(ir);
   until p=nil;
 end;
 function GDBObjOpenArrayOfPV.calcvisible;
@@ -359,10 +329,25 @@ begin
   p:=beginiterate(ir);
   if p<>nil then
   repeat
-       q:=p^.calcvisible(frustum,infrustumactualy,visibleactualy,totalobj,infrustumobj, ProjectProc,zoom,currentdegradationfactor);
+       q:=p^.calcvisible(frustum,Actuality,Counters,ProjectProc,zoom,currentdegradationfactor);
        result:=result or q;
        p:=iterate(ir);
   until p=nil;
+end;
+function GDBObjOpenArrayOfPV.CalcActualVisible(const Actuality:TVisActuality):Boolean;
+var
+  p:pGDBObjEntity;
+  ir:itrec;
+  q:boolean;
+begin
+  result:=false;
+  p:=beginiterate(ir);
+  if p<>nil then
+    repeat
+      q:=p^.CalcActualVisible(Actuality);
+      result:=result or q;
+      p:=iterate(ir);
+    until p=nil;
 end;
 function GDBObjOpenArrayOfPV.CalcTrueInFrustum;
 var
@@ -384,7 +369,7 @@ begin
     if p^.vp.Layer^._on then
         begin
              inc(objcount);
-             q:=p^.CalcTrueInFrustum(frustum,visibleactualy);
+             q:=p^.CalcTrueInFrustum(frustum);
 
     if q=IREmpty then
                             begin

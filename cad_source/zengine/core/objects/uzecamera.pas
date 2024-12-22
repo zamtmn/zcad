@@ -25,135 +25,96 @@ uses
   uzbLogIntf,uzegeometrytypes,uzbtypes,uzegeometry;
 
 type
-GDBProjectProc=procedure (objcoord:GDBVertex; out wincoord:GDBVertex) of object;
+  GDBProjectProc=procedure (objcoord:GDBVertex; out wincoord:GDBVertex) of object;
 {EXPORT+}
-PGDBObjCamera=^GDBObjCamera;
+  PGDBObjCamera=^GDBObjCamera;
 {REGISTEROBJECTTYPE GDBObjCamera}
-GDBObjCamera= object(GDBBaseCamera)
-                   modelMatrixLCS:DMatrix4D;
-                   zminLCS,zmaxLCS:Double;
-                   frustumLCS:ClipArray;
-                   clipLCS:DMatrix4D;
-                   projMatrixLCS:DMatrix4D;
-                   notuseLCS:Boolean;
-                   procedure getfrustum(mm,pm:PDMatrix4D;var _clip:DMatrix4D;var _frustum:ClipArray);
-                   procedure RotateInLocalCSXY(ux,uy:Double);
-                   procedure MoveInLocalCSXY(oldx,oldy:Double;ax:gdbvertex);
-                   function GetObjTypeName:String;virtual;
-                   constructor initnul;
+  GDBObjCamera= object(GDBBaseCamera)
+    modelMatrixLCS:DMatrix4D;
+    zminLCS,zmaxLCS:Double;
+    frustumLCS:ClipArray;
+    clipLCS:DMatrix4D;
+    projMatrixLCS:DMatrix4D;
+    notuseLCS:Boolean;
+    procedure getfrustum(mm,pm:PDMatrix4D;var _clip:DMatrix4D;var _frustum:ClipArray);
+    procedure RotateInLocalCSXY(ux,uy:Double);
+    procedure MoveInLocalCSXY(oldx,oldy:Double;ax:gdbvertex);
+    function GetObjTypeName:String;virtual;
+    constructor initnul;
 
-                   procedure NextPosition;virtual;
-             end;
+    procedure NextPosition;virtual;
+  end;
 {EXPORT-}
 
 implementation
 
 procedure GDBObjCamera.NextPosition;
 begin
-     Inc(POSCOUNT);
-     inc(VISCOUNT);
+  POSCOUNT:=zeHandles.CreateHandle;
+  //VISCOUNT:=zeHandles.CreateHandle;
 end;
 constructor GDBObjCamera.initnul;
 begin
-     POSCOUNT:=1;
-     VISCOUNT:=1;
+  POSCOUNT:=zeHandles.CreateHandle;
+  VISCOUNT:=zeHandles.CreateHandle;
 end;
 function GDBObjCamera.GetObjTypeName;
 begin
-     //pointer(result):=typeof(testobj);
-     result:='GDBObjCamera';
-
+  result:='GDBObjCamera';
 end;
 procedure GDBObjCamera.getfrustum;
-//var t:Double;
 begin
-   //t:=sizeof(modelmatrix);
-   _clip:=MatrixMultiply(mm^,pm^);
-   _frustum:=calcfrustum(@_clip);
+  _clip:=MatrixMultiply(mm^,pm^);
+  _frustum:=calcfrustum(@_clip);
 end;
 procedure GDBObjCamera.RotateInLocalCSXY(ux,uy:Double);
 var
-  //glmcoord1: gdbpiece;
-  tempmatr,{tempmatr2,}rotmatr:DMatrix4D;
-  //tv,tv2:gdbvertex4d;
-  //ax,ay:gdbvertex;
-  //len:Double;
-
+  tempmatr,rotmatr:DMatrix4D;
 begin
-      //tempmatr:=onematrix;
-      //pgdbvertex(@tempmatr.mtr[0])^:=prop.xdir;
-      //pgdbvertex(@tempmatr.mtr[1])^:=prop.ydir;
-      //pgdbvertex(@tempmatr.mtr[2])^:=prop.look;
-      tempmatr:=CreateMatrixFromBasis(prop.xdir,prop.ydir,prop.look);
-      rotmatr:=MatrixMultiply(CreateRotationMatrixY(uy),CreateRotationMatrixX(ux));
-      tempmatr:=MatrixMultiply(rotmatr,tempmatr);
+  tempmatr:=CreateMatrixFromBasis(prop.xdir,prop.ydir,prop.look);
+  rotmatr:=MatrixMultiply(CreateRotationMatrixY(uy),CreateRotationMatrixX(ux));
+  tempmatr:=MatrixMultiply(rotmatr,tempmatr);
 
-      prop.xdir:=pgdbvertex(@tempmatr.mtr[0])^;
-      prop.ydir:=pgdbvertex(@tempmatr.mtr[1])^;
-      prop.look:=pgdbvertex(@tempmatr.mtr[2])^;
+  prop.xdir:=pgdbvertex(@tempmatr.mtr[0])^;
+  prop.ydir:=pgdbvertex(@tempmatr.mtr[1])^;
+  prop.look:=pgdbvertex(@tempmatr.mtr[2])^;
 
-      prop.look:=NormalizeVertex(prop.look);
-      prop.xdir := CrossVertex(prop.ydir,prop.look);
-      prop.xdir:=NormalizeVertex(prop.xdir);
-      prop.ydir := CrossVertex(prop.look,prop.xdir);
+  prop.look:=NormalizeVertex(prop.look);
+  prop.xdir := CrossVertex(prop.ydir,prop.look);
+  prop.xdir:=NormalizeVertex(prop.xdir);
+  prop.ydir := CrossVertex(prop.look,prop.xdir);
 end;
 procedure GDBObjCamera.MoveInLocalCSXY(oldx,oldy:Double;ax:gdbvertex);
 var
-  //glmcoord1: gdbpiece;
-  tempmatr,{tempmatr2,}rotmatr:DMatrix4D;
+  tempmatr,rotmatr:DMatrix4D;
   tv,tv2:gdbvertex4d;
-  //ay:gdbvertex;
-  //ux,uy:Double;
   len,d:Double;
-
 begin
-      //tempmatr:=onematrix;
-      //tempmatr2:=onematrix;
-      //rotmatr:=onematrix;
-      //rotmatr.t:=CMTRotate;
-      //pgdbvertex(@rotmatr.mtr[0])^:=prop.xdir;
-      //pgdbvertex(@rotmatr.mtr[1])^:=prop.ydir;
-      //pgdbvertex(@rotmatr.mtr[2])^:=prop.look;
-      rotmatr:=CreateMatrixFromBasis(prop.xdir,prop.ydir,prop.look);
+  rotmatr:=CreateMatrixFromBasis(prop.xdir,prop.ydir,prop.look);
 
-      tv2.x:=-oldx;
-      tv2.y:=-oldy;
-      tv2.z:=0;
-      tv2.w:=1;
+  tv2.x:=-oldx;
+  tv2.y:=-oldy;
+  tv2.z:=0;
+  tv2.w:=1;
 
-      len:=onevertexlength(ax);
-      d:=sqrt(tv2.x*tv2.x+tv2.y*tv2.y+tv2.z*tv2.z);
-      if d>eps then
-      begin
-      len:=len/d;
-      //if (len<eps)or(len>100)  then
-      if (abs(ax.x)>eps)or(abs(ax.y)>eps)  then
-      begin
-
-      tv2.x:=tv2.x*len;
-      tv2.y:=tv2.y*len;
-
-      tv:=tv2;
-
-      tempmatr:=rotmatr;
-
-      tv:=vectortransform(tv,tempmatr);
-
-      //normalize4d(tv);
-
-      tv.x:=tv.x;
-      Pgdbvertex(@rotmatr.mtr[3])^:=prop.point;
-      tempmatr:=CreateTranslationMatrix(Pgdbvertex(@tv)^);
-      tempmatr:=MatrixMultiply(rotmatr,tempmatr);
-      prop.point:=Pgdbvertex(@tempmatr.mtr[3])^;
-      end;
-
-      end else
-              zDebugln('GDBObjCamera.MoveInLocalCSXY:'+rsDivByZero);
-              //HistoryOutStr('Divide by zero');
+  len:=onevertexlength(ax);
+  d:=sqrt(tv2.x*tv2.x+tv2.y*tv2.y+tv2.z*tv2.z);
+  if d>eps then begin
+  len:=len/d;
+  if (abs(ax.x)>eps)or(abs(ax.y)>eps) then begin
+    tv2.x:=tv2.x*len;
+    tv2.y:=tv2.y*len;
+    tv:=tv2;
+    tempmatr:=rotmatr;
+    tv:=vectortransform(tv,tempmatr);
+    tv.x:=tv.x;
+    Pgdbvertex(@rotmatr.mtr[3])^:=prop.point;
+    tempmatr:=CreateTranslationMatrix(Pgdbvertex(@tv)^);
+    tempmatr:=MatrixMultiply(rotmatr,tempmatr);
+    prop.point:=Pgdbvertex(@tempmatr.mtr[3])^;
+  end;
+  end else
+    zDebugln('GDBObjCamera.MoveInLocalCSXY:'+rsDivByZero);
 end;
-
-
-
 begin
 end.

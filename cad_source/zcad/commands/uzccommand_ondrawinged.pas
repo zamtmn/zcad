@@ -78,32 +78,25 @@ begin
 end;
 
 procedure modifyobj(dist,wc:gdbvertex;save:Boolean;pconobj:pgdbobjEntity;var drawing:TDrawingDef;psa:PGDBSelectedObjArray);
-var i: Integer;
-//  d: Double;
-//  td:tcontrolpointdist;
+var
+  i: Integer;
   tdesc:pselectedobjdesc;
   dc:TDrawContext;
-
 begin
-  if psa^.count > 0 then
-  begin
+  if psa^.count > 0 then begin
     tdesc:=psa^.GetParrayAsPointer;
-    for i := 0 to psa^.count - 1 do
-    begin
+    for i := 0 to psa^.count - 1 do begin
       if tdesc^.pcontrolpoint<>nil then
         if tdesc^.pcontrolpoint^.SelectedCount<>0 then
-        begin
-           {tdesc^.objaddr^}PTAbstractDrawing(@drawing)^{gdb.GetCurrentDWG}.rtmodify(tdesc^.objaddr,tdesc,dist,wc,save);
-        end;
+           PTAbstractDrawing(@drawing)^.rtmodify(tdesc^.objaddr,tdesc,dist,wc,save);
       inc(tdesc);
     end;
   end;
-  if save then
-              begin
-                   dc:=drawing.CreateDrawingRC;
-                   PGDBObjGenericSubEntry(drawing.GetCurrentRootSimple)^.FormatAfterEdit(drawing,dc);
-              end;
 
+  if save then begin
+    dc:=drawing.CreateDrawingRC;
+    PGDBObjEntity(drawing.GetCurrentRootSimple)^.FormatAfterEdit(drawing,dc);
+  end;
 end;
 
 function OnDrawingEd_com.AfterClick(const Context:TZCADCommandContext;wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record): Integer;

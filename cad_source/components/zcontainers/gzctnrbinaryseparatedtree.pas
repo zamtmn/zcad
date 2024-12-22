@@ -20,62 +20,64 @@ unit gzctnrBinarySeparatedTree;
 
 interface
 uses
-    gzctnrVectorTypes,gzctnrVectorPObjects,gzctnrVectorSimple;
+  gzctnrVectorTypes,gzctnrVectorPObjects,gzctnrVectorSimple;
 type
-{EXPORT+}
-         TStageMode=(TSMStart,TSMAccumulation,TSMCalc,TSMEnd);
-         TNodeDir=(TND_Plus,TND_Minus,TND_Root);
-         TElemPosition=(TEP_Plus,TEP_Minus,TEP_nul);
-         {----REGISTEROBJECTTYPE GZBInarySeparatedGeometry}
-         GZBInarySeparatedGeometry{-}<TBoundingBox,TSeparator,TNodeData,TEntsManipulator,TEntity,TEntityArrayIterateResult,TEntityArray>{//}
-                                   =object
-         {-}type{//}
-            {-}PGZBInarySeparatedGeometry=^GZBInarySeparatedGeometry<TBoundingBox,//ограничивающий объем{//}
-                                                                  {-}TSeparator,//разделитель{//}
-                                                                  {-}TNodeData,//дополнительные данные в ноде{//}
-                                                                  {-}TEntsManipulator,//то что невозможно закодировать в генерике{//}
-                                                                  {-}TEntity,//примитив{//}
-                                                                  {-}TEntityArrayIterateResult,//примитив{//}
-                                                                  {-}TEntityArray>;//массив примитивов{//}
-            {-}(*TEntityArray={GZVectorPObects}GZVectorSimple<PTEntity{,TEntity}>;*){//}
-            {-}PTEntity=^TEntity;{//}
-            {-}TTestNode=Object{//}
-                 {-}plane:TSeparator;{//}
-                 {-}nul,plus,minus:TEntityArray;{//}
-                 {-}constructor initnul(InNodeCount:integer);{//}
-                 {-}destructor done;virtual;{//}
-            {-}end;{//}
-         {-}var{//}
-            {-}pplusnode,pminusnode:PGZBInarySeparatedGeometry;{//}
-            {-}nul:TEntityArray;{//}
-            {-}Separator:TSeparator;{//}
-            {-}BoundingBox:TBoundingBox;{//}
-            {-}NodeDir:TNodeDir;{//}
-            {-}Root:PGZBInarySeparatedGeometry;{//}
-            {-}NodeData:TNodeData;{//}
-            {-}LockCounter:integer;{//}
-            destructor done;virtual;
-            procedure ClearSub;
-            procedure Shrink;
-            constructor initnul;
-            procedure AddObjToNul(var Entity:TEntity);
-            procedure updateenttreeadress;
-            procedure CorrectNodeBoundingBox(var Entity:TEntity); inline;
-            procedure AddObjectToNodeTree(var Entity:TEntity);
-            procedure SetSize(ns:integer);
-            procedure Lock;
-            procedure UnLock;
-            procedure Separate;virtual;
-            function GetNodeDepth:integer;virtual;
-            procedure MoveSub(var node:GZBInarySeparatedGeometry<TBoundingBox,TSeparator,TNodeData,TEntsManipulator,TEntity,TEntityArrayIterateResult,TEntityArray>);
-            function GetOptimalTestNode(var TNArray:array of TTestNode):integer;
-            procedure StoreOptimalTestNode(var TestNode:TTestNode);
+  TStageMode=(TSMStart,TSMAccumulation,TSMCalc,TSMEnd);
+  TNodeDir=(TND_Plus,TND_Minus,TND_Root);
+  TElemPosition=(TEP_Plus,TEP_Minus,TEP_nul);
+  //TNodeDataBase=object/record
+  //  procedure CreateDef;
+  //  procedure Destroy;
+  //  procedure AfterSeparateNode(var nul:TEntityArray);
+  //end;
+  GZBInarySeparatedGeometry<TBoundingBox,TSeparator,TNodeData,TEntsManipulator,TEntity,TEntityArrayIterateResult,TEntityArray>
+  =object
+    type
+      PGZBInarySeparatedGeometry=^GZBInarySeparatedGeometry<TBoundingBox,//ограничивающий объем
+                                                            TSeparator,//разделитель
+                                                            TNodeData,//дополнительные данные в ноде
+                                                            TEntsManipulator,//то что невозможно закодировать в генерике
+                                                            TEntity,//примитив
+                                                            TEntityArrayIterateResult,
+                                                            TEntityArray>;//массив примитивов
+      PTEntity=^TEntity;
+      TTestNode=Object
+        plane:TSeparator;
+        nul,plus,minus:TEntityArray;
+        constructor initnul(InNodeCount:integer);
+        destructor done;virtual;
+      end;
+    var
+      pplusnode,pminusnode:PGZBInarySeparatedGeometry;
+      nul:TEntityArray;
+      Separator:TSeparator;
+      BoundingBox:TBoundingBox;
+      NodeDir:TNodeDir;
+      Root:PGZBInarySeparatedGeometry;
+      NodeData:TNodeData;
+      LockCounter:integer;
 
-            function nuliterate(var ir:itrec):Pointer;
-            function nulbeginiterate(out ir:itrec):Pointer;
-            function nulDeleteElement(index:Integer):Pointer;
-          end;
-{EXPORT-}
+      destructor done;virtual;
+      procedure ClearSub;
+      procedure Shrink;
+      constructor initnul;
+      procedure AddObjToNul(var Entity:TEntity);
+      procedure updateenttreeadress;
+      procedure CorrectNodeBoundingBox(var Entity:TEntity); inline;
+      procedure AddObjectToNodeTree(var Entity:TEntity);
+      procedure SetSize(ns:integer);
+      procedure Lock;
+      procedure UnLock;
+      procedure Separate;virtual;
+      function GetNodeDepth:integer;virtual;
+      procedure MoveSub(var node:GZBInarySeparatedGeometry<TBoundingBox,TSeparator,TNodeData,TEntsManipulator,TEntity,TEntityArrayIterateResult,TEntityArray>);
+      function GetOptimalTestNode(var TNArray:array of TTestNode):integer;
+      procedure StoreOptimalTestNode(var TestNode:TTestNode);
+
+      function nuliterate(var ir:itrec):Pointer;
+      function nulbeginiterate(out ir:itrec):Pointer;
+      function nulDeleteElement(index:Integer):Pointer;
+  end;
 var
    ttt:integer;
 implementation
@@ -255,6 +257,7 @@ begin
   if TEntsManipulator.isUnneedSeparate(nul.count,GetNodeDepth)then
                                                                   begin
                                                                     updateenttreeadress;
+                                                                    NodeData.AfterSeparateNode(nul);
                                                                     exit;
                                                                   end;
   MoveSub(self);
@@ -382,6 +385,7 @@ begin
   if minus_count_optimal>0 then pminusnode.unlock;
 
   updateenttreeadress;
+  NodeData.AfterSeparateNode(nul);
 end;
 procedure GZBInarySeparatedGeometry<TBoundingBox,TSeparator,TNodeData,TEntsManipulator,TEntity,TEntityArrayIterateResult,TEntityArray>.AddObjectToNodeTree(var Entity:TEntity);
 begin
@@ -428,7 +432,7 @@ end;
 constructor GZBInarySeparatedGeometry<TBoundingBox,TSeparator,TNodeData,TEntsManipulator,TEntity,TEntityArrayIterateResult,TEntityArray>.initnul;
 begin
      nul.init(50);
-     NodeData:=default(TNodeData);
+     NodeData.CreateDef;
      LockCounter:=0;
      //NodeData.FulDraw:={True}TDTFulDraw;
 end;
@@ -446,7 +450,7 @@ begin
      BoundingBox:=default(TBoundingBox);
      //NodeDir:TNodeDir;
      Root:=nil;
-     NodeData:=default(TNodeData);
+     NodeData.CreateDef;
      nul.Clear;
      if assigned(pplusnode) then
                                 begin
@@ -482,6 +486,7 @@ begin
                                      Freemem(pointer(pminusnode));
                                      pminusnode:=nil;
                                 end;
+     NodeData.Destroy;
 end;
 destructor GZBInarySeparatedGeometry<TBoundingBox,TSeparator,TNodeData,TEntsManipulator,TEntity,TEntityArrayIterateResult,TEntityArray>.done;
 begin

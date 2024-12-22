@@ -42,7 +42,7 @@ GDBObjLine= object(GDBObj3d)
                  function IsStagedFormatEntity:boolean;virtual;
                  procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext;Stage:TEFStages=EFAllStages);virtual;
                  procedure CalcGeometry;virtual;
-                 procedure DrawGeometry(lw:Integer;var DC:TDrawContext{infrustumactualy:TActulity;subrender:Integer});virtual;
+                 procedure DrawGeometry(lw:Integer;var DC:TDrawContext);virtual;
                   function Clone(own:Pointer):PGDBObjEntity;virtual;
                  procedure rtsave(refp:Pointer);virtual;
                  procedure TransformAt(p:PGDBObjEntity;t_matrix:PDMatrix4D);virtual;
@@ -66,8 +66,8 @@ GDBObjLine= object(GDBObj3d)
                   function GetObjTypeName:String;virtual;
                   function GetCenterPoint:GDBVertex;virtual;
                   procedure getoutbound(var DC:TDrawContext);virtual;
-                  function CalcInFrustum(const frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:Integer; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double):Boolean;virtual;
-                  function CalcTrueInFrustum(const frustum:ClipArray;visibleactualy:TActulity):TInBoundingVolume;virtual;
+                  function CalcInFrustum(const frustum:ClipArray;const Actuality:TVisActuality;var Counters:TCameraCounters; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double):Boolean;virtual;
+                  function CalcTrueInFrustum(const frustum:ClipArray):TInBoundingVolume;virtual;
 
                   function IsIntersect_Line(lbegin,lend:gdbvertex):Intercept3DProp;virtual;
                   procedure AddOnTrackAxis(var posr:os_record;const processaxis:taddotrac);virtual;
@@ -263,7 +263,7 @@ begin
     calcgeometry;
     calcbb(dc);
   end;
-
+  CalcActualVisible(dc.DrawingContext.VActuality);
   if EFDraw in stage then begin
     Representation.Clear;
     if (not (ESTemp in State))and(DCODrawable in DC.Options) then begin
@@ -322,30 +322,11 @@ begin
                                                                               result:=false;
 end;
 procedure GDBObjLine.DrawGeometry;
-//var
-//  templod:Double;
 begin
   if (selected)or(dc.selected) then
-                     Representation.DrawNiceGeometry(DC)
-                 else
-                     begin
-                     Representation.DrawGeometry(DC);
-                     exit;
-                     end;
-  {if vp.LineType<>nil then
-     if vp.LineType.h>0 then
-  begin
-  templod:=(vp.LineType.h*vp.LineTypeScale*SysVar.dwg.DWG_LTScale^)/(dc.zoom);
-  if templod<3 then
-     begin
-     DC.Drawer.DrawLine3DInModelSpace(CoordInWCS.lBegin,CoordInWCS.lEnd,DC.matrixs);
-     end;
-  end;}
-  inherited;
-  {oglsm.myglbegin(GL_points);
-  myglVertex3dV(@CoordInWCS.lBegin);
-  myglVertex3dV(@CoordInWCS.lEnd);
-  oglsm.myglend;}
+    Representation.DrawNiceGeometry(DC)
+  else
+    Representation.DrawGeometry(DC);
 end;
 
 function GDBObjLine.getsnap;

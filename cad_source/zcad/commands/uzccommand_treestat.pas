@@ -99,7 +99,7 @@ begin
   result:=format(' _%s',[inttohex(ptruint(node),8)])
 end;
 
-procedure WriteNode(node:PTEntTreeNode;infrustum:TActulity;nodedepth:integer);
+procedure WriteNode(node:PTEntTreeNode;infrustum:TActuality;nodedepth:integer);
 var
    nodename:string;
 begin
@@ -133,7 +133,7 @@ begin
    else
      ZCMsgCallBackInterface.TextMessage('level_'+inttostr(i),TMWOHistoryOut);
   dc:=drawings.GetCurrentDWG.CreateDrawingRC;
-  WriteNode(node,dc.DrawingContext.InfrustumActualy,0);
+  WriteNode(node,dc.DrawingContext.VActuality.InfrustumActualy,0);
   ZCMsgCallBackInterface.TextMessage('}',TMWOHistoryOut);
 end;
 

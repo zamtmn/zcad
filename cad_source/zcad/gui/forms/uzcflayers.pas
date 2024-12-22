@@ -76,9 +76,7 @@ type
     procedure CreateUndoStartMarkerNeeded;
     procedure CreateUndoEndMarkerNeeded;
   private
-    changedstamp:boolean;
-    //PEditor:TPropEditor;
-    //EditedItem:TListItem;
+    fChangeStamp:boolean;
     SupportTypedEditors:TSupportTypedEditors;
     IsUndoEndMarkerCreated:boolean;
     { private declarations }
@@ -116,12 +114,24 @@ type
     function GetDescName(Item: TListItem):string;
 
     function IsShortcut(var Message: TLMKey): boolean; override;
+    function ShowModal: Integer; override;
+    procedure IncreaseChangeStamp;
+    {-}property ChangeStamp:Boolean read fChangeStamp;{//}
   end;
 
 var
   LayersForm: TLayersForm;
 implementation
 {$R *.lfm}
+function TLayersForm.ShowModal: Integer;
+begin
+  fChangeStamp:=False;
+  result:=inherited;
+end;
+procedure TLayersForm.IncreaseChangeStamp;
+begin
+  fChangeStamp:=True;
+end;
 procedure TLayersForm.CreateUndoStartMarkerNeeded;
 begin
   zcPlaceUndoStartMarkerIfNeed(IsUndoEndMarkerCreated,'Change layers');
@@ -156,17 +166,22 @@ begin
      result:=PGDBLayerProp(Item.Data)^._lock;
 end;
 function TLayersForm.LayerLockClick(Item: TListItem;r: TRect):boolean;
+var
+  pdwg:PTSimpleDrawing;
 begin
-     result:=true;
-     CreateUndoStartMarkerNeeded;
-     with TBooleanChangeCommand.CreateAndPushIfNeed(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,
-                                                    TChangedBoolean.CreateRec(PGDBLayerProp(Item.Data)^._lock),
-                                                    TSharedEmpty(Default(TEmpty)),
-                                                    TAfterChangeEmpty(Default(TEmpty))) do
-     begin
-       PGDBLayerProp(Item.Data)^._lock:=not PGDBLayerProp(Item.Data)^._lock;
-       //ComitFromObj;
-     end;
+  result:=true;
+  CreateUndoStartMarkerNeeded;
+  with TBooleanChangeCommand.CreateAndPushIfNeed(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,
+                                                 TChangedBoolean.CreateRec(PGDBLayerProp(Item.Data)^._lock),
+                                                 TSharedEmpty(Default(TEmpty)),
+                                                 TAfterChangeEmpty(Default(TEmpty))) do
+  begin
+    PGDBLayerProp(Item.Data)^._lock:=not PGDBLayerProp(Item.Data)^._lock;
+    //ComitFromObj;
+    pdwg:=drawings.GetCurrentDWG;
+    IncreaseChangeStamp;
+    pdwg^.GetLayerTable^.NewState;
+  end;
 end;
 {layer on handle procedures}
 function TLayersForm.IsLayerOn(Item: TListItem):boolean;
@@ -174,17 +189,22 @@ begin
      result:=PGDBLayerProp(Item.Data)^._on;
 end;
 function TLayersForm.LayerOnClick(Item: TListItem;r: TRect):boolean;
+var
+  pdwg:PTSimpleDrawing;
 begin
-     result:=true;
-     CreateUndoStartMarkerNeeded;
-     with TBooleanChangeCommand.CreateAndPushIfNeed(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,
-                                                    TChangedBoolean.CreateRec(PGDBLayerProp(Item.Data)^._on),
-                                                    TSharedEmpty(Default(TEmpty)),
-                                                    TAfterChangeEmpty(Default(TEmpty))) do
-     begin
-       PGDBLayerProp(Item.Data)^._on:=not PGDBLayerProp(Item.Data)^._on;
-       //ComitFromObj;
-     end;
+  result:=true;
+  CreateUndoStartMarkerNeeded;
+  with TBooleanChangeCommand.CreateAndPushIfNeed(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,
+                                                 TChangedBoolean.CreateRec(PGDBLayerProp(Item.Data)^._on),
+                                                 TSharedEmpty(Default(TEmpty)),
+                                                 TAfterChangeEmpty(Default(TEmpty))) do
+  begin
+    PGDBLayerProp(Item.Data)^._on:=not PGDBLayerProp(Item.Data)^._on;
+    //ComitFromObj;
+    pdwg:=drawings.GetCurrentDWG;
+    IncreaseChangeStamp;
+    pdwg^.GetLayerTable^.NewState;
+  end;
 end;
 {layer freze handle procedures}
 function TLayersForm.IsLayerFreze(Item: TListItem):boolean;
@@ -674,7 +694,7 @@ end;
 
 procedure TLayersForm.Aply(Sender: TObject) ;
 begin
-     if changedstamp then
+     if fChangeStamp then
      begin
        ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIActionRedraw);
        //if assigned(UpdateVisibleProc) then UpdateVisibleProc(ZMsgID_GUIActionRedraw);

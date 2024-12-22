@@ -22,7 +22,8 @@ unit uzeentitiestree;
 interface
 uses
     gzctnrVectorTypes,graphics,gzctnrVectorSimple,gzctnrVectorPObjects,
-    uzegeometrytypes,gzctnrBinarySeparatedTree,uzgldrawcontext,uzegeometry,UGDBVisibleOpenArray,uzeentity,uzbtypes;
+    uzegeometrytypes,gzctnrBinarySeparatedTree,uzgldrawcontext,uzegeometry,
+    UGDBVisibleOpenArray,uzeentity,uzbtypes,gzctnrVectorP;
 type
 TZEntsManipulator=class;
 TFirstStageData=record
@@ -31,16 +32,20 @@ TFirstStageData=record
                   counter:integer;
                 end;
 {EXPORT+}
-TDrawType=(TDTFulDraw,TDTSimpleDraw);
-TEntTreeNodeData=record
-                     infrustum:TActulity;
-                     nuldrawpos,minusdrawpos,plusdrawpos:TActulity;
-                     FulDraw:TDrawType;
-                     InFrustumBoundingBox:TBoundingBox;
-                     //nodedepth:Integer;
-                     //pluscount,minuscount:Integer;
-                 end;
-TEntityArray=GZVectorPObects{GZVectorSimple}{-}<PGDBObjEntity,GDBObjEntity>{//}; {надо вынести куданить отдельно}
+  TDrawType=(TDTFulDraw,TDTSimpleDraw);
+  TEntityArray=GZVectorPObects<PGDBObjEntity,GDBObjEntity>;
+  TEntTreeNodeData=record
+    infrustum:TActuality;
+    nuldrawpos,minusdrawpos,plusdrawpos:TActuality;
+    FulDraw:TDrawType;
+    InFrustumBoundingBox:TBoundingBox;
+    NeedToSeparated:GZVectorP<PGDBObjEntity>;
+    //nodedepth:Integer;
+    //pluscount,minuscount:Integer;
+    procedure CreateDef;
+    procedure Destroy;
+    procedure AfterSeparateNode(var nul:TEntityArray);
+  end;
          PTEntTreeNode=^TEntTreeNode;
          {---REGISTEROBJECTTYPE TEntTreeNode}
          TEntTreeNode=object(GZBInarySeparatedGeometry{-}<TBoundingBox,DVector4D,TEntTreeNodeData,TZEntsManipulator,GDBObjEntity,PGDBObjEntity,TEntityArray>{//})
@@ -48,6 +53,7 @@ TEntityArray=GZVectorPObects{GZVectorSimple}{-}<PGDBObjEntity,GDBObjEntity>{//};
                             procedure DrawVolume(var DC:TDrawContext);
                             procedure DrawNodeVolume(var DC:TDrawContext);
                             procedure DrawWithAttribExternalArray(var DC:TDrawContext;LODDeep:integer=0);
+                            procedure DeleteFromSeparated(var Entity:GDBObjEntity);
                       end;
 {EXPORT-}
 TZEntsManipulator=class
@@ -59,7 +65,7 @@ TZEntsManipulator=class
                    class function GetTestNodesCount:integer;
                    class procedure FirstStageCalcSeparatirs(var NodeBB:TBoundingBox;var Entity:GDBObjEntity;var PFirstStageData:pointer;TSM:TStageMode);
                    class procedure CreateSeparator(var NodeBB:TBoundingBox;var TestNode:TEntTreeNode.TTestNode;var PFirstStageData:pointer;const NodeNum:integer);
-                   class function IterateResult2PEntity(const IterateResult:pointer):PGDBObjEntity;
+                   class function IterateResult2PEntity(const IterateResult:pointer):PGDBObjEntity;inline;
                    class function StoreEntityToArray(var Entity:GDBObjEntity;var arr:TEntityArray):TArrayIndex;
                    class function EntitySizeOrOne(var Entity:GDBObjEntity):integer;
                    class procedure SetSizeInArray(ns:integer;var arr:TEntityArray);
@@ -74,6 +80,36 @@ var
    FirstStageData:TFirstStageData;
 function GetInNodeCount(_InNodeCount:Integer):Integer;
 implementation
+procedure TEntTreeNodeData.CreateDef;
+begin
+  infrustum:=0;
+  nuldrawpos:=0;
+  FulDraw:=TDTFulDraw;
+  InFrustumBoundingBox:=default(TBoundingBox);
+  NeedToSeparated.initnul;
+end;
+procedure TEntTreeNodeData.Destroy;
+begin
+  NeedToSeparated.Clear;
+  NeedToSeparated.done;
+end;
+procedure TEntTreeNodeData.AfterSeparateNode(var nul:TEntityArray);
+var
+  pobj:PGDBObjEntity;
+  ir:itrec;
+begin
+  pobj:=nul.beginiterate(ir);
+  if pobj<>nil then
+  repeat
+    if pobj^.IsNeedSeparate then begin
+      if NeedToSeparated.GetCount=0 then begin
+        NeedToSeparated.SetSize(nul.Count-ir.itc+1);
+      end;
+      NeedToSeparated.PushBackData(pobj);
+    end;
+    pobj:=nul.iterate(ir);
+  until pobj=nil;
+end;
 class function TZEntsManipulator.EntitySizeOrOne(var Entity:GDBObjEntity):integer;
 begin
   result:=1;
@@ -88,8 +124,8 @@ begin
   if pobj<>nil then
   repeat
        pobj:=TZEntsManipulator.IterateResult2PEntity(pobj);
-       if pobj^.infrustum=dc.DrawingContext.infrustumactualy then
-                           pobj^.DrawWithAttrib(dc);
+       if pobj^.infrustum=dc.DrawingContext.VActuality.infrustumactualy then
+         pobj^.DrawWithAttrib(dc);
        pobj:=nul.iterate(ir);
        if LODDeep>2 then
          pobj:=nul.iterate(ir);
@@ -97,6 +133,11 @@ begin
          pobj:=nul.iterate(ir);
   until pobj=nil;
 end;
+procedure TEntTreeNode.DeleteFromSeparated(var Entity:GDBObjEntity);
+begin
+  NodeData.NeedToSeparated.RemoveData(@Entity);
+end;
+
 procedure TEntTreeNode.DrawNodeVolume(var DC:TDrawContext);
 begin
   dc.drawer.DrawAABB3DInModelSpace(BoundingBox,dc.DrawingContext.matrixs);
@@ -112,7 +153,7 @@ end;
 class procedure TZEntsManipulator.treerender(var Node:GZBInarySeparatedGeometry<TBoundingBox,DVector4D,TEntTreeNodeData,TZEntsManipulator,GDBObjEntity,PGDBObjEntity,TEntityArray>;var DC:TDrawContext);
 begin
      begin
-       if (Node.NodeData.infrustum=dc.DrawingContext.InfrustumActualy) then
+       if (Node.NodeData.infrustum=dc.DrawingContext.VActuality.InfrustumActualy) then
        begin
             if Node.NodeData.FulDraw=TDTFulDraw then
             if (Node.NodeData.FulDraw=TDTFulDraw)or(Node.nul.count=0) then
@@ -203,7 +244,9 @@ end;
 class procedure TZEntsManipulator.StoreTreeAdressInOnject(var Entity:GDBObjEntity;var Node:GZBInarySeparatedGeometry{-}<TBoundingBox,DVector4D,TEntTreeNodeData,TZEntsManipulator,GDBObjEntity,PGDBObjEntity,TEntityArray>;const index:Integer);
 begin
   Entity.bp.TreePos.Owner:=@Node;
-  Entity.bp.TreePos.SelfIndex:=index;
+  Entity.bp.TreePos.SelfIndexInNode:=index;
+  if Entity.IsNeedSeparate then
+    node.NodeData.NeedToSeparated.PushBackData(@Entity);
 end;
 class procedure TZEntsManipulator.CorrectNodeBoundingBox(var NodeBB:TBoundingBox;var Entity:GDBObjEntity);
 begin

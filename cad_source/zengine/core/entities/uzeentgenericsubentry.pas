@@ -46,13 +46,13 @@ GDBObjGenericSubEntry= object(GDBObjWithMatrix)
                             //function AddObjectToNodeTree(pobj:PGDBObjEntity):Integer;virtual;
                             //function CorrectNodeTreeBB(pobj:PGDBObjEntity):Integer;virtual;
                             constructor initnul(owner:PGDBObjGenericWithSubordinated);
-                            procedure DrawGeometry(lw:Integer;var DC:TDrawContext{infrustumactualy:TActulity;subrender:Integer});virtual;
-                            function CalcInFrustum(const frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:Integer; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double):Boolean;virtual;
+                            procedure DrawGeometry(lw:Integer;var DC:TDrawContext);virtual;
+                            function CalcInFrustum(const frustum:ClipArray;const Actuality:TVisActuality;var Counters:TCameraCounters; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double):Boolean;virtual;
+                            function CalcActualVisible(const Actuality:TVisActuality):Boolean;virtual;
                             function onmouse(var popa:TZctnrVectorPGDBaseEntity;const MF:ClipArray;InSubEntry:Boolean):Boolean;virtual;
                             procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext;Stage:TEFStages=EFAllStages);virtual;
                             procedure FormatAfterEdit(var drawing:TDrawingDef;var DC:TDrawContext;Stage:TEFStages=EFAllStages);virtual;
                             procedure restructure(var drawing:TDrawingDef);virtual;
-                            procedure renderfeedbac(infrustumactualy:TActulity;pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc;var DC:TDrawContext);virtual;
                             //function select:Boolean;virtual;
                             function getowner:PGDBObjSubordinated;virtual;
                             function CanAddGDBObj(pobj:PGDBObjEntity):Boolean;virtual;
@@ -72,16 +72,16 @@ GDBObjGenericSubEntry= object(GDBObjWithMatrix)
                             procedure DrawBB(var DC:TDrawContext);
 
                             procedure RemoveInArray(pobjinarray:Integer);virtual;
-                            procedure DrawWithAttrib(var DC:TDrawContext{visibleactualy:TActulity;subrender:Integer});virtual;
+                            procedure DrawWithAttrib(var DC:TDrawContext{visibleactualy:TActuality;subrender:Integer});virtual;
 
                             function CreatePreCalcData:PTDrawingPreCalcData;virtual;
                             procedure DestroyPreCalcData(PreCalcData:PTDrawingPreCalcData);virtual;
 
-                            //procedure ProcessTree(const frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var enttree:TEntTreeNode;OwnerInFrustum:TInRect);
-                            //function CalcVisibleByTree(frustum:ClipArray;infrustumactualy:TActulity;const enttree:TEntTreeNode):Boolean;virtual;
-                              function CalcVisibleByTree(const frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var enttree:TEntTreeNode;var totalobj,infrustumobj:Integer; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double):Boolean;virtual;
-                              //function CalcInFrustumByTree(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var enttree:TEntTreeNode):Boolean;virtual;
-                              procedure SetInFrustumFromTree(const frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:Integer; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double);virtual;
+                            //procedure ProcessTree(const frustum:ClipArray;infrustumactualy:TActuality;visibleactualy:TActuality;var enttree:TEntTreeNode;OwnerInFrustum:TInRect);
+                            //function CalcVisibleByTree(frustum:ClipArray;infrustumactualy:TActuality;const enttree:TEntTreeNode):Boolean;virtual;
+                              function CalcVisibleByTree(const frustum:ClipArray;const Actuality:TVisActuality;var enttree:TEntTreeNode;var Counters:TCameraCounters; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double):Boolean;virtual;
+                              //function CalcInFrustumByTree(frustum:ClipArray;infrustumactualy:TActuality;visibleactualy:TActuality;var enttree:TEntTreeNode):Boolean;virtual;
+                              procedure SetInFrustumFromTree(const frustum:ClipArray;const Actuality:TVisActuality;var Counters:TCameraCounters; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double);virtual;
 
                               //function FindObjectsInPointStart(const point:GDBVertex;out Objects:GDBObjOpenArrayOfPV):Boolean;virtual;
                               function FindObjectsInVolume(const Volume:TBoundingBox;var Objects:GDBObjOpenArrayOfPV):Boolean;virtual;
@@ -92,15 +92,23 @@ GDBObjGenericSubEntry= object(GDBObjWithMatrix)
                               //function FindObjectsInPointDone(const point:GDBVertex):Boolean;virtual;
                               function onpoint(var objects:TZctnrVectorPGDBaseEntity;const point:GDBVertex):Boolean;virtual;
                               procedure correctsublayers(var la:GDBLayerArray);virtual;
-                              function CalcTrueInFrustum(const frustum:ClipArray;visibleactualy:TActulity):TInBoundingVolume;virtual;
+                              function CalcTrueInFrustum(const frustum:ClipArray):TInBoundingVolume;virtual;
 
                               procedure IterateCounter(PCounted:Pointer;var Counter:Integer;proc:TProcCounter);virtual;
 
                               procedure postload(var context:TIODXFLoadContext);virtual;
                               function GetMainOwner:PGDBObjSubordinated;virtual;
+                              function calcvisible(const frustum:ClipArray;const Actuality:TVisActuality;var Counters:TCameraCounters;ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double):Boolean;virtual;
+
 
                       end;
 implementation
+function GDBObjGenericSubEntry.calcvisible(const frustum:ClipArray;const Actuality:TVisActuality;var Counters:TCameraCounters;ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double):Boolean;
+begin
+  inherited;
+  result:=ObjArray.calcvisible(frustum,Actuality,Counters,ProjectProc,zoom,currentdegradationfactor);
+end;
+
 function GDBObjGenericSubEntry.GetMainOwner:PGDBObjSubordinated;
 begin
      result:=@self;
@@ -148,7 +156,7 @@ begin
 end;
 function GDBObjGenericSubEntry.CalcTrueInFrustum;
 begin
-      result:=ObjArray.CalcTrueInFrustum(frustum,visibleactualy);
+      result:=ObjArray.CalcTrueInFrustum(frustum);
 end;
 
 procedure GDBObjGenericSubEntry.correctsublayers(var la:GDBLayerArray);
@@ -294,18 +302,18 @@ end;
 procedure GDBObjGenericSubEntry.SetInFrustumFromTree;
 begin
      inherited;
-     ObjArray.SetInFrustumFromTree(frustum,infrustumactualy,visibleactualy,totalobj,infrustumobj, ProjectProc,zoom,currentdegradationfactor);
+     ObjArray.SetInFrustumFromTree(frustum,Actuality,Counters, ProjectProc,zoom,currentdegradationfactor);
 end;
-(*function GDBObjGenericSubEntry.CalcInFrustumByTree(frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var enttree:TEntTreeNode):Boolean;
+(*function GDBObjGenericSubEntry.CalcInFrustumByTree(frustum:ClipArray;infrustumactualy:TActuality;visibleactualy:TActuality;var enttree:TEntTreeNode):Boolean;
 begin
      ProcessTree(frustum,infrustumactualy,visibleactualy,enttree,IRPartially)
 end;*)
-function GDBObjGenericSubEntry.CalcVisibleByTree(const frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var enttree:TEntTreeNode;var totalobj,infrustumobj:Integer; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double):Boolean;
+function GDBObjGenericSubEntry.CalcVisibleByTree(const frustum:ClipArray;const Actuality:TVisActuality;var enttree:TEntTreeNode;var Counters:TCameraCounters; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double):Boolean;
 begin
-  visible:=visibleactualy;
-     result:=true;
+  //visible:=Actuality.visibleactualy;
+  //   result:=true;
      //inc(gdb.GetCurrentDWG.pcamera^.totalobj);
-     {if }CalcInFrustumByTree(frustum,infrustumactualy,visibleactualy,enttree,totalobj,infrustumobj,ProjectProc,zoom,currentdegradationfactor);{ then}
+     {if }CalcInFrustumByTree(frustum,Actuality,enttree,Counters,ProjectProc,zoom,currentdegradationfactor);{ then}
              {             begin
                                setinfrustum(infrustumactualy);
                           end
@@ -315,12 +323,12 @@ begin
                                visible:=false;
                                result:=false;
                           end;}
-     if self.vp.Layer<>nil then
+     {if self.vp.Layer<>nil then
      if not(self.vp.Layer._on) then
                           begin
                                visible:=0;
                                result:=false;
-                          end;
+                          end;}
 end;
 function GDBObjGenericSubEntry.CreatePreCalcData:PTDrawingPreCalcData;
 begin
@@ -412,7 +420,9 @@ begin
     pobj^.EntExtensions.RunRemoveFromArray(pobj,drawing);
 
   if pobj^.bp.TreePos.Owner<>nil then begin
-    PTEntTreeNode(pobj^.bp.TreePos.Owner)^.nulDeleteElement(pobj^.bp.TreePos.SelfIndex);
+    PTEntTreeNode(pobj^.bp.TreePos.Owner)^.nulDeleteElement(pobj^.bp.TreePos.SelfIndexInNode);
+    if pobj^.IsNeedSeparate then
+      PTEntTreeNode(pobj^.bp.TreePos.Owner)^.DeleteFromSeparated(PGDBObjEntity(pobj)^);
   end;
   pobj^.bp.TreePos.Owner:=nil;
   //pointer(p):=ObjArray.getDataMutable(pobjinarray);
@@ -509,12 +519,18 @@ begin
      dec(dc.subrender);
   DrawBB(dc);
 end;
-function GDBObjGenericSubEntry.CalcInFrustum(const frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:Integer; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double):Boolean;
+function GDBObjGenericSubEntry.CalcInFrustum(const frustum:ClipArray;const Actuality:TVisActuality;var Counters:TCameraCounters; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double):Boolean;
 begin
-     result:=ObjArray.calcvisible(frustum,infrustumactualy,visibleactualy,totalobj,infrustumobj, ProjectProc,zoom,currentdegradationfactor);
-     self.InFrustumAABB:=ObjArray.calcvisbb({gdb.GetCurrentDWG.pcamera^.POSCOUNT}{visibleactualy}infrustumactualy);
-     {ObjArray.calcvisible;
-     visible:=true;}
+  result:=ObjArray.calcvisible(frustum,Actuality,Counters, ProjectProc,zoom,currentdegradationfactor);
+  self.InFrustumAABB:=ObjArray.calcvisbb(Actuality.infrustumactualy);
+end;
+function GDBObjGenericSubEntry.CalcActualVisible(const Actuality:TVisActuality):Boolean;
+var
+  q:boolean;
+begin
+  result:=inherited;
+  q:=ObjArray.CalcActualVisible(Actuality);
+  result:=result or q;
 end;
 procedure GDBObjGenericSubEntry.getoutbound;
 begin
@@ -545,10 +561,6 @@ begin
 end;
 procedure GDBObjGenericSubEntry.restructure;
 begin
-end;
-procedure GDBObjGenericSubEntry.renderfeedbac(infrustumactualy:TActulity;pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc;var DC:TDrawContext);
-begin
-  ObjArray.renderfeedbac(infrustumactualy,pcount,camera,ProjectProc,dc);
 end;
 function GDBObjGenericSubEntry.onpoint(var objects:TZctnrVectorPGDBaseEntity;const point:GDBVertex):Boolean;
 var //t,xx,yy:Double;

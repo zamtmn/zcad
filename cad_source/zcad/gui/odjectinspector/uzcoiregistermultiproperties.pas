@@ -556,9 +556,9 @@ begin
 
     {Line uzegeometry}
     MultiPropertiesManager.RestartMultipropertySortID;
-    MultiPropertiesManager.RegisterPhysMultiproperty('START_X','Start X',sysunit^.TypeName2PTD('GDBXCoordinate'),MPCGeometry,GDBLineID,nil,PtrInt(@pline^.CoordInWCS.lBegin.x),PtrInt(@pline^.CoordInOCS.lBegin.x),OneVarDataMIPD,OneVarDataEIPD);
-    MultiPropertiesManager.RegisterPhysMultiproperty('START_Y','Start Y',sysunit^.TypeName2PTD('GDBYCoordinate'),MPCGeometry,GDBLineID,nil,PtrInt(@pline^.CoordInWCS.lBegin.y),PtrInt(@pline^.CoordInOCS.lBegin.y),OneVarDataMIPD,OneVarDataEIPD);
-    MultiPropertiesManager.RegisterPhysMultiproperty('START_Z','Start Z',sysunit^.TypeName2PTD('GDBZCoordinate'),MPCGeometry,GDBLineID,nil,PtrInt(@pline^.CoordInWCS.lBegin.z),PtrInt(@pline^.CoordInOCS.lBegin.z),OneVarDataMIPD,OneVarDataEIPD);
+    MultiPropertiesManager.RegisterPhysMultiproperty('START_X','Start X',sysunit^.TypeName2PTD('GDBXCoordinate'),MPCGeometry,GDBLineID,nil,PtrInt(@pline^.CoordInOCS.lBegin),PtrInt(@pline^.CoordInOCS.lBegin.x),OneVarDataMIPD,TEntIterateProcsData.create(nil,@VertexXOCSEntIterateProc,@GeneralFromVarEntChangeProc));
+    MultiPropertiesManager.RegisterPhysMultiproperty('START_Y','Start Y',sysunit^.TypeName2PTD('GDBYCoordinate'),MPCGeometry,GDBLineID,nil,PtrInt(@pline^.CoordInOCS.lBegin),PtrInt(@pline^.CoordInOCS.lBegin.y),OneVarDataMIPD,TEntIterateProcsData.create(nil,@VertexYOCSEntIterateProc,@GeneralFromVarEntChangeProc));
+    MultiPropertiesManager.RegisterPhysMultiproperty('START_Z','Start Z',sysunit^.TypeName2PTD('GDBZCoordinate'),MPCGeometry,GDBLineID,nil,PtrInt(@pline^.CoordInOCS.lBegin),PtrInt(@pline^.CoordInOCS.lBegin.z),OneVarDataMIPD,TEntIterateProcsData.create(nil,@VertexZOCSEntIterateProc,@GeneralFromVarEntChangeProc));
     MultiPropertiesManager.RegisterPhysMultiproperty('END_X','End X',sysunit^.TypeName2PTD('GDBXCoordinate'),MPCGeometry,GDBLineID,nil,PtrInt(@pline^.CoordInWCS.lEnd.x),PtrInt(@pline^.CoordInOCS.lEnd.x),OneVarDataMIPD,OneVarDataEIPD);
     MultiPropertiesManager.RegisterPhysMultiproperty('END_Y','End Y',sysunit^.TypeName2PTD('GDBYCoordinate'),MPCGeometry,GDBLineID,nil,PtrInt(@pline^.CoordInWCS.lEnd.y),PtrInt(@pline^.CoordInOCS.lEnd.y),OneVarDataMIPD,OneVarDataEIPD);
     MultiPropertiesManager.RegisterPhysMultiproperty('END_Z','End Z',sysunit^.TypeName2PTD('GDBZCoordinate'),MPCGeometry,GDBLineID,nil,PtrInt(@pline^.CoordInWCS.lEnd.z),PtrInt(@pline^.CoordInOCS.lEnd.z),OneVarDataMIPD,OneVarDataEIPD);

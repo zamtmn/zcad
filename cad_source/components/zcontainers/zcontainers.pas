@@ -13,7 +13,7 @@ uses
   gzctnrSTL, uzctnrAlignedVectorBytes, gzctnrVectorStr, uzctnrTree, 
   uzctnrVectorStrings, uzctnrVectorPointers, uzctnrVectorBytes, 
   gzctnrAlignedVectorObjects, gzctnrVectorc, gzctnrVectorClass, 
-  LazarusPackageIntf;
+  gzctnrBufferAllocator, LazarusPackageIntf;
 
 implementation
 

@@ -45,12 +45,12 @@ GDBObjCircle= object(GDBObjWithLocalCS)
                  procedure LoadFromDXF(var f:TZMemReader;ptu:PExtensionData;var drawing:TDrawingDef);virtual;
 
                  procedure CalcObjMatrix(pdrawing:PTDrawingDef=nil);virtual;
-                 function calcinfrustum(const frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:Integer; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double):Boolean;virtual;
-                 function CalcTrueInFrustum(const frustum:ClipArray;visibleactualy:TActulity):TInBoundingVolume;virtual;
+                 function calcinfrustum(const frustum:ClipArray;const Actuality:TVisActuality;var Counters:TCameraCounters; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double):Boolean;virtual;
+                 function CalcTrueInFrustum(const frustum:ClipArray):TInBoundingVolume;virtual;
                  procedure getoutbound(var DC:TDrawContext);virtual;
                  procedure SaveToDXF(var outhandle:{Integer}TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
                  procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext;Stage:TEFStages=EFAllStages);virtual;
-                 procedure DrawGeometry(lw:Integer;var DC:TDrawContext{infrustumactualy:TActulity;subrender:Integer});virtual;
+                 procedure DrawGeometry(lw:Integer;var DC:TDrawContext);virtual;
                  function Clone(own:Pointer):PGDBObjEntity;virtual;
                  procedure rtsave(refp:Pointer);virtual;
                  procedure createpoint(var DC:TDrawContext);virtual;
@@ -297,6 +297,7 @@ begin
   q3:=VectorTransform3d(CreateVertex(0,1,0),objMatrix);
   //getoutbound;
   calcbb(dc);
+  CalcActualVisible(dc.DrawingContext.VActuality);
   Representation.Clear;
   if not (ESTemp in State)and(DCODrawable in DC.Options) then
     Representation.DrawPolyLineWithLT(dc,Vertex3D_in_WCS_Array,vp,true,true);

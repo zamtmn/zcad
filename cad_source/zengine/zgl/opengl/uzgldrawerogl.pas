@@ -283,6 +283,7 @@ procedure TZGLOpenGLDrawer.SetZTest(Z:boolean);
 begin
      if Z then
              begin
+                  oglsm.myglDepthFunc(GL_LEQUAL);
                   oglsm.myglEnable(GL_DEPTH_TEST);
              end
          else

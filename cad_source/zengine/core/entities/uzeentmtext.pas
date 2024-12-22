@@ -13,7 +13,7 @@
 *****************************************************************************
 }
 {
-@author(Andrey Zubarev <zamtmn@yandex.ru>) 
+@author(Andrey Zubarev <zamtmn@yandex.ru>)
 }
 
 unit uzeentmtext;
@@ -89,7 +89,7 @@ end;
 destructor GDBObjMText.done;
 begin
   text.Done;
-  inherited done;  
+  inherited done;
 end;
 constructor GDBObjMText.initnul;
 begin

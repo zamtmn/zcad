@@ -20,7 +20,11 @@ unit uzctnrAlignedVectorBytes;
 interface
 uses gzctnrVector,sysutils,gzctnrVectorTypes;
 const
-  ObjAlign=SizeOf(Pointer);
+  cAlignment=SizeOf(Pointer);
+  cAlignmentMask=cAlignment-1;
+  cnAlignmentMask=not cAlignmentMask;
+  cAlignmentBit=cAlignment{*2};
+
 type
 {Export+}
 {----REGISTEROBJECTTYPE TZctnrAlignedVectorBytes}
@@ -29,7 +33,7 @@ TZctnrAlignedVectorBytes=
                 function beginiterate(out ir:itrec):Pointer;virtual;
                 function iterate(var ir:itrec):Pointer;virtual;
 
-                function Align(SData:Integer):Integer;
+                function Align(SData:Integer):Integer;//inline;
                 procedure AlignDataSize;
 
                 function AllocData(SData:Word):Integer;virtual;
@@ -40,11 +44,18 @@ function TZctnrAlignedVectorBytes.Align(SData:Integer):Integer;
 var
   m:integer;
 begin
-  m:=SData mod ObjAlign;
-  if m=0 then
-    result:=SData
-  else
-    result:=SData+ObjAlign-m;
+  m:=sdata and cAlignmentMask;
+  m:=m xor cAlignmentMask;
+  inc(m);
+  m:=m and cnAlignmentMask;
+  m:= m xor cAlignmentBit;
+  Result:=SData and cnAlignmentMask;
+  Result:=SData + m;
+  //m:=SData mod cAlignment;
+  //if m=0 then
+  //  result:=SData
+  //else
+  //  result:=SData+cAlignment-m;
 end;
 
 procedure TZctnrAlignedVectorBytes.AlignDataSize;
@@ -52,10 +63,10 @@ var
   m:integer;
 begin
   if not((parray=nil)or(count=0))then begin
-    m:=Count mod ObjAlign;
+    m:=Count mod cAlignment;
     if m<>0 then
-      inherited AllocData(ObjAlign-m);
-    m:=Count mod ObjAlign
+      inherited AllocData(cAlignment-m);
+    m:=Count mod cAlignment
   end;
 end;
 
@@ -64,10 +75,10 @@ var
   m:integer;
 begin
   if not((parray=nil)or(count=0))then begin
-    m:=Count mod ObjAlign;
+    m:=Count mod cAlignment;
     if m<>0 then
-      inherited AllocData(ObjAlign-m);
-    m:=Count mod ObjAlign
+      inherited AllocData(cAlignment-m);
+    m:=Count mod cAlignment
   end;
   result:=inherited;
 end;
@@ -90,12 +101,12 @@ begin
   if count=0 then result:=nil
   else
   begin
-      s:=ObjAlign;
+      s:=cAlignment;
       if ir.itc<(count-s) then
                       begin
-                           m:=s mod ObjAlign;
+                           m:=s mod cAlignment;
                            if m<>0 then
-                             s:=s+ObjAlign-m;
+                             s:=s+cAlignment-m;
                            inc(PByte(ir.itp),s);
                            inc(ir.itc,s);
 

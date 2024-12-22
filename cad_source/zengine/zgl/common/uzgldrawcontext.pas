@@ -22,9 +22,8 @@ uses uzepalette,uzbtypes,uzgldrawerabstract,uzeconsts,uzegeometry,uzegeometrytyp
 type
 TDrawHeplGeometry=procedure  of object;
 TDrawingContext=record
-                   VisibleActualy:TActulity;
-                   InfrustumActualy:TActulity;
-                   DRAWCOUNT:TActulity;
+                   VActuality:TVisActuality;
+                   DRAWCOUNT:TActuality;
                    SysLayer:Pointer;
                    Zoom:Double;
                    matrixs:tmatrixs;
@@ -61,8 +60,8 @@ function CreateAbstractRC:TDrawContext;
 begin
       result.Subrender:=0;
       result.Selected:=false;
-      result.DrawingContext.VisibleActualy:=0;
-      result.DrawingContext.InfrustumActualy:=0;
+      result.DrawingContext.VActuality.VisibleActualy:=0;
+      result.DrawingContext.VActuality.InfrustumActualy:=0;
       result.DrawingContext.DRAWCOUNT:=0;
       result.DrawingContext.SysLayer:=nil;
       result.MaxDetail:=true;

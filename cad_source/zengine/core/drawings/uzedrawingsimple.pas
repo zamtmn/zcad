@@ -28,14 +28,19 @@ uses uzedrawingdef,uzeblockdefsfactory,uzestylesdim,
      uzglviewareaabstract,uzglviewareageneral,uzgldrawcontext,UGDBControlPointArray,
      uzglviewareadata,uzeExtdrAbstractDrawingExtender,uzCtnrVectorPBaseEntity;
 type
-TMainBlockCreateProc=procedure (_to:PTDrawingDef;name:String) of object;
+  TMainBlockCreateProc=procedure (_to:PTDrawingDef;name:String) of object;
 {EXPORT+}
-PTSimpleDrawing=^TSimpleDrawing;
+  TDrawingActualy=record
+    EntityLayers:TActuality;
+    {-}procedure CreateDef;{//}
+  end;
+  PTSimpleDrawing=^TSimpleDrawing;
 {REGISTEROBJECTTYPE TSimpleDrawing}
-TSimpleDrawing= object(TAbstractDrawing)
-                     type
-                       TSelector=procedure(PEntity,PGripsCreator:PGDBObjEntity;var SelectedObjCount:Integer)of object;
-                     var
+  TSimpleDrawing= object(TAbstractDrawing)
+      type
+        TSelector=procedure(PEntity,PGripsCreator:PGDBObjEntity;var SelectedObjCount:Integer)of object;
+      var
+        LastActl:TDrawingActualy;
                        pObjRoot:PGDBObjGenericSubEntry;
                        mainObjRoot:GDBObjRoot;
                        LayerTable:GDBLayerArray;
@@ -111,12 +116,29 @@ TSimpleDrawing= object(TAbstractDrawing)
                        procedure DeSelector(PV:PGDBObjEntity;var SelectedObjCount:Integer);
                        procedure DeSelectAll;virtual;
                        procedure SelectEnts(constref Ents:TZctnrVectorPGDBaseEntity);
-                 end;
+                       procedure UpdateActuality;
+                       procedure LostActuality;
+  end;
 {EXPORT-}
 function CreateSimpleDWG:PTSimpleDrawing;
 var
     MainBlockCreateProc:TMainBlockCreateProc=nil;
 implementation
+procedure TDrawingActualy.CreateDef;
+begin;
+  EntityLayers:=zeHandles.CreateHandle;
+end;
+procedure TSimpleDrawing.UpdateActuality;
+begin
+  if LastActl.EntityLayers<>LayerTable.ActlState then begin
+    LastActl.EntityLayers:=LayerTable.ActlState;
+    GetCurrentROOT^.CalcActualVisible(TVisActuality.CreateRec(pcamera^.VISCOUNT,pcamera^.POSCOUNT));
+  end;
+end;
+procedure TSimpleDrawing.LostActuality;
+begin
+  LastActl.CreateDef;
+end;
 procedure TSimpleDrawing.SelectEnts(constref Ents:TZctnrVectorPGDBaseEntity);
 var
   pv:PGDBObjEntity;
@@ -231,16 +253,20 @@ end;
 procedure TSimpleDrawing.HardReDraw;
 var
    DC:TDrawContext;
+   Actlt:TVisActuality;
 begin
   DC:=CreateDrawingRC;
   GetCurrentRoot^.FormatAfterEdit(self,dc);
   wa.param.firstdraw := TRUE;
   wa.CalcOptimalMatrix;
-  pcamera^.totalobj:=0;
-  pcamera^.infrustum:=0;
-  GetCurrentRoot^.CalcVisibleByTree(pcamera^.frustum,pcamera^.POSCOUNT,pcamera^.VISCOUNT,GetCurrentROOT^.ObjArray.ObjTree,pcamera^.totalobj,pcamera^.infrustum,myGluProject2,pcamera^.prop.zoom,SysVarRDImageDegradationCurrentDegradationFactor);
+  pcamera^.Counters.totalobj:=0;
+  pcamera^.Counters.infrustum:=0;
+  Actlt.CreateRec(pcamera^.VISCOUNT,pcamera^.POSCOUNT);
+  //Actlt.InfrustumActualy:=pcamera^.POSCOUNT;
+  //Actlt.VisibleActualy:=pcamera^.VISCOUNT;
+  GetCurrentRoot^.CalcVisibleByTree(pcamera^.frustum,Actlt,GetCurrentROOT^.ObjArray.ObjTree,pcamera^.Counters,myGluProject2,pcamera^.prop.zoom,SysVarRDImageDegradationCurrentDegradationFactor);
   //gdb.GetCurrentROOT.calcvisible(gdb.GetCurrentDWG.pcamera^.frustum,gdb.GetCurrentDWG.pcamera.POSCOUNT,gdb.GetCurrentDWG.pcamera.VISCOUNT);
-  ConstructObjRoot.calcvisible(pcamera^.frustum,pcamera^.POSCOUNT,pcamera^.VISCOUNT,pcamera^.totalobj,pcamera^.infrustum,myGluProject2,getpcamera^.prop.zoom,SysVarRDImageDegradationCurrentDegradationFactor);
+  ConstructObjRoot.calcvisible(pcamera^.frustum,Actlt,pcamera^.Counters,myGluProject2,getpcamera^.prop.zoom,SysVarRDImageDegradationCurrentDegradationFactor);
   wa.calcgrid;
   wa.draworinvalidate;
 end;
@@ -286,8 +312,8 @@ begin
 end;
 procedure TSimpleDrawing.FillDrawingPartRC(var dc:TDrawContext);
 begin
-  dc.DrawingContext.VisibleActualy:=Getpcamera.POSCOUNT;
-  dc.DrawingContext.InfrustumActualy:=Getpcamera.POSCOUNT;
+  dc.DrawingContext.VActuality.VisibleActualy:=Getpcamera.VISCOUNT;
+  dc.DrawingContext.VActuality.InfrustumActualy:=Getpcamera.POSCOUNT;
   dc.DrawingContext.DRAWCOUNT:=Getpcamera.DRAWCOUNT;
   dc.DrawingContext.SysLayer:=GetLayerTable.GetSystemLayer;
   dc.DrawingContext.Zoom:=GetPcamera.prop.zoom;
@@ -739,6 +765,7 @@ var {tp:GDBTextStyleProp;}
     ts:PTGDBTableStyle;
     cs:TGDBTableCellStyle;
 begin
+  LastActl.CreateDef;
   LWDisplay:=false;
   SnapGrid:=false;
   GridSpacing.x:=0.5;

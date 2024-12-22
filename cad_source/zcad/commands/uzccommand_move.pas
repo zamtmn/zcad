@@ -111,6 +111,7 @@ begin
     Getmem(Pointer(pcoa),sizeof(tpcoavector));
     pcoa^.init(counter);
     pobj:=drawings.GetCurrentROOT^.ObjArray.beginiterate(ir);
+    drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.ObjTree.Lock;
     if pobj<>nil then
     repeat
       if pobj^.selected then begin
@@ -128,6 +129,9 @@ begin
       end;
       pobj:=drawings.GetCurrentROOT^.ObjArray.iterate(ir);
     until pobj=nil;
+    drawings.GetCurrentDWG^.ConstructObjRoot.formatentity(drawings.GetCurrentDWG^,dc);
+    drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.ObjTree.BoundingBox:=drawings.GetCurrentDWG^.ConstructObjRoot.vp.BoundingBox;
+    drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.ObjTree.UnLock;
     result:=True;
   end else begin
     result:=False;
@@ -163,14 +167,14 @@ begin
   t3dp:=wc;
   result:=0;
   if (button and MZW_LBUTTON)<>0 then
-                                     showprompt(1);
+    showprompt(1);
 end;
 function Move_com.CalcTransformMatrix(p1,p2: GDBvertex):DMatrix4D;
 var
-    dist:gdbvertex;
+  dist:gdbvertex;
 begin
-        dist:=uzegeometry.VertexSub(p2,p1);
-        result:=uzegeometry.CreateTranslationMatrix(dist);
+  dist:=uzegeometry.VertexSub(p2,p1);
+  result:=uzegeometry.CreateTranslationMatrix(dist);
 end;
 function Move_com.Move(const dispmatr:DMatrix4D;UndoMaker:String): Integer;
 var

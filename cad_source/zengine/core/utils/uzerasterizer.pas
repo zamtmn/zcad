@@ -25,7 +25,7 @@ uses
   uzegeometry,uzeconsts,
   uzeiopalette,uzepalette,uzcutils,
   uzbLogIntf,Graphics,Classes,
-  uzgldrawercanvas;
+  uzgldrawercanvas,uzbtypes;
 type
   TRasterizeColor=(PC_Color,PC_Grayscale,PC_Monochrome);
   PTRasterizeParams=^TRasterizeParams;
@@ -50,6 +50,7 @@ procedure rasterize(cdwg:PTSimpleDrawing;pw,ph:integer;point1,point2:GDBVertex;P
   pd1,pd2:GDBvertex2D;
 
   oldforegroundindex:integer;
+  Actlt:TVisActuality;
 begin
 
   dx:=point2.x-point1.x;
@@ -168,7 +169,9 @@ begin
   _clip:=MatrixMultiply(modelMatrix,projMatrix);
   _frustum:=calcfrustum(@_clip);
 
-  cdwg^.GetCurrentROOT^.CalcVisibleByTree(_frustum,cdwg^.pcamera^.POSCOUNT,cdwg^.pcamera^.VISCOUNT,cdwg^.GetCurrentROOT^.ObjArray.ObjTree,cdwg^.pcamera^.totalobj,cdwg^.pcamera^.infrustum,@cdwg^.myGluProject2,cdwg^.pcamera^.prop.zoom,0);
+  Actlt.InfrustumActualy:=cdwg^.pcamera^.POSCOUNT;
+  Actlt.VisibleActualy:=cdwg^.pcamera^.VISCOUNT;
+  cdwg^.GetCurrentROOT^.CalcVisibleByTree(_frustum,Actlt,cdwg^.GetCurrentROOT^.ObjArray.ObjTree,cdwg^.pcamera^.Counters,@cdwg^.myGluProject2,cdwg^.pcamera^.prop.zoom,0);
   cdwg^.GetCurrentROOT^.FormatEntity(cdwg^,dc);
   //drawings.GetCurrentDWG^.OGLwindow1.draw;
   //prn.startrender;

@@ -744,8 +744,8 @@ begin
   begin
     PDWG.Getpcamera^.obj_zmax:=-nan;
     PDWG.Getpcamera^.obj_zmin:=-1000000;
-    PDWG.Getpcamera^.totalobj:=0;
-    PDWG.Getpcamera^.infrustum:=0;
+    PDWG.Getpcamera^.Counters.totalobj:=0;
+    PDWG.Getpcamera^.Counters.infrustum:=0;
     //gdb.pcamera.getfrustum;
     //pva^.calcvisible;
 //    if not wa.param.scrollmode then
@@ -761,34 +761,27 @@ begin
   root.{ObjArray.}DrawWithattrib({gdb.GetCurrentDWG.pcamera.POSCOUNT,0}dc);
 end;
 procedure TGeneralViewArea.finishdraw;
-  var
-    LPTime:Tdatetime;
 begin
-     //inc(sysvar.debug.int1);
-     CalcOptimalMatrix;
-     drawer.RestoreBuffers;
-     LPTime:=now();
-     PDWG.Getpcamera.DRAWNOTEND:=treerender(PDWG.GetCurrentROOT^.ObjArray.ObjTree,lptime,rc);
-     drawer.SaveBuffers;
-     showcursor(rc);
-     SwapBuffers(rc);
+  CalcOptimalMatrix;
+  drawer.RestoreBuffers;
+  PDWG.Getpcamera.DRAWNOTEND:=treerender(PDWG.GetCurrentROOT^.ObjArray.ObjTree,now(),rc);
+  drawer.SaveBuffers;
+  showcursor(rc);
+  SwapBuffers(rc);
 end;
 procedure TGeneralViewArea.DrawOrInvalidate;
 var
-   insidepaint:boolean;
+  insidepaint:boolean;
 begin
-     //if sysvar.RD.RD_DrawInsidePaintMessage<>nil then
-     begin
-          case sysvarDrawInsidePaintMessage of
-              T3SB_Fale:insidepaint:=false;
-              T3SB_True:insidepaint:=true;
-              T3SB_Default:insidepaint:=NeedDrawInsidePaintEvent;
-          end;
-     end;
-     if insidepaint then
-                        getviewcontrol.Invalidate
-                    else
-                        draw;
+  case sysvarDrawInsidePaintMessage of
+    T3SB_Fale:insidepaint:=false;
+    T3SB_True:insidepaint:=true;
+    T3SB_Default:insidepaint:=NeedDrawInsidePaintEvent;
+  end;
+  if insidepaint then
+    getviewcontrol.Invalidate
+  else
+    draw;
 end;
 
 procedure TGeneralViewArea.draw;
@@ -830,7 +823,7 @@ begin
   if needredraw then
   begin
     param.ForceRedrawVolume.ForceRedraw:=false;
-    inc(PDWG.Getpcamera^.DRAWCOUNT);
+    PDWG.Getpcamera^.DRAWCOUNT:=zeHandles.CreateHandle;
     dc.drawer.ClearStatesMachine;
 
     dc.drawer.SetClearColor(sysvarDISPBackGroundColor.r,sysvarDISPBackGroundColor.g,sysvarDISPBackGroundColor.b,sysvarDISPBackGroundColor.a);
@@ -1029,7 +1022,7 @@ end;
 procedure TGeneralViewArea.RestoreMouse;
 var
   fv1: GDBVertex;
-  DC:TDrawContext;
+  Actlt:TVisActuality;
 begin
   CalcOptimalMatrix;
   mouseunproject(param.md.mouse.x, getviewcontrol.clientheight-param.md.mouse.y);
@@ -1048,11 +1041,15 @@ begin
 
   //param.zoommode := true;
   //param.scrollmode:=true;
-  pdwg.GetCurrentROOT.CalcVisibleByTree(pdwg.getpcamera^.frustum,pdwg.getpcamera.POSCOUNT,pdwg.getpcamera.VISCOUNT,pdwg.GetCurrentROOT.ObjArray.ObjTree,pdwg.getpcamera.totalobj,pdwg.getpcamera.infrustum,pdwg.myGluProject2,pdwg.getpcamera.prop.zoom,SysVarRDImageDegradationCurrentDegradationFactor);
-  //gdb.GetCurrentROOT.calcvisible(gdb.GetCurrentDWG.pcamera^.frustum,gdb.GetCurrentDWG.pcamera.POSCOUNT,gdb.GetCurrentDWG.pcamera.VISCOUNT);
-  pdwg.GetCurrentROOT.calcvisible(pdwg.getpcamera^.frustum,pdwg.getpcamera.POSCOUNT,pdwg.getpcamera.VISCOUNT,pdwg.getpcamera.totalobj,pdwg.getpcamera.infrustum,pdwg.myGluProject2,pdwg.getpcamera.prop.zoom,SysVarRDImageDegradationCurrentDegradationFactor);
-  DC:=self.CreateRC;
-  //pdwg.GetSelObjArray.RenderFeedBack(pdwg^.GetPcamera^.POSCOUNT,pdwg^.GetPcamera^,pdwg^.myGluProject2,dc);
+
+  with TTimeMeter.StartMeasure do begin
+    Actlt.CreateRec(pdwg.getpcamera.VISCOUNT,pdwg.getpcamera.POSCOUNT);
+    pdwg.GetCurrentROOT.CalcVisibleByTree(pdwg.Getpcamera^.frustum,Actlt,pdwg.GetCurrentROOT.ObjArray.ObjTree,pdwg.getpcamera.Counters,pdwg.myGluProject2,pdwg.getpcamera.prop.zoom,SysVarRDImageDegradationCurrentDegradationFactor);
+    pdwg.GetConstructObjRoot.calcvisible(pdwg.Getpcamera^.frustum,Actlt,pdwg.getpcamera.Counters,pdwg.myGluProject2,pdwg.getpcamera.prop.zoom,SysVarRDImageDegradationCurrentDegradationFactor);
+    EndMeasure;
+    sysvarRDLastCalcVisible:=ElapsedMiliSec;
+  end;
+
 
   calcmousefrustum;
 
@@ -1079,8 +1076,8 @@ var
   pucommand:pointer;
   q1,q2,q:GDBQuaternion;
   pcam:PGDBBaseCamera;
-
   mat1,mat2,mat : DMatrix4D;
+  Actlt:TVisActuality;
 begin
   pcam:=PDWG.Getpcamera;
   mat1:=CreateMatrixFromBasis(pcam.prop.xdir,pcam.prop.ydir,pcam.prop.look);
@@ -1103,8 +1100,10 @@ begin
   {}CalcOptimalMatrix;
   mouseunproject(param.md.mouse.x,param.md.mouse.y);
   reprojectaxis;
-  PDWG.GetCurrentROOT.CalcVisibleByTree(PDWG.Getpcamera^.frustum,PDWG.Getpcamera.POSCOUNT,PDWG.Getpcamera.VISCOUNT,PDWG.GetCurrentRoot.ObjArray.ObjTree,pdwg.getpcamera.totalobj,pdwg.getpcamera.infrustum,pdwg.myGluProject2,pdwg.getpcamera.prop.zoom,SysVarRDImageDegradationCurrentDegradationFactor);
-  PDWG.GetConstructObjRoot.calcvisible(PDWG.Getpcamera^.frustum,PDWG.Getpcamera.POSCOUNT,PDWG.Getpcamera.VISCOUNT,pdwg.getpcamera.totalobj,pdwg.getpcamera.infrustum,pdwg.myGluProject2,pdwg.getpcamera.prop.zoom,SysVarRDImageDegradationCurrentDegradationFactor);
+  Actlt.InfrustumActualy:=pdwg.getpcamera.POSCOUNT;
+  Actlt.VisibleActualy:=pdwg.getpcamera.VISCOUNT;
+  PDWG.GetCurrentROOT.CalcVisibleByTree(PDWG.Getpcamera^.frustum,Actlt,PDWG.GetCurrentRoot.ObjArray.ObjTree,pdwg.getpcamera.Counters,pdwg.myGluProject2,pdwg.getpcamera.prop.zoom,SysVarRDImageDegradationCurrentDegradationFactor);
+  PDWG.GetConstructObjRoot.calcvisible(PDWG.Getpcamera^.frustum,Actlt,pdwg.getpcamera.Counters,pdwg.myGluProject2,pdwg.getpcamera.prop.zoom,SysVarRDImageDegradationCurrentDegradationFactor);
   WaMouseMove(nil,[],param.md.mouse.x,param.md.mouse.y);
   if i=steps then
     begin
@@ -1305,6 +1304,7 @@ end;
 procedure TGeneralViewArea.SetCameraPosZoom(const _pos:gdbvertex;_zoom:Double;finalcalk:Boolean);
 var
   fv1: GDBVertex;
+  Actlt:TVisActuality;
 begin
     PDWG.Getpcamera^.prop.point:=_pos;
     PDWG.Getpcamera^.prop.zoom:=_zoom;
@@ -1314,8 +1314,10 @@ begin
     CalcOptimalMatrix;
     mouseunproject(param.md.mouse.x,param.md.mouse.y);
     reprojectaxis;
-    PDWG.GetCurrentROOT.CalcVisibleByTree(PDWG.Getpcamera^.frustum,PDWG.Getpcamera.POSCOUNT,PDWG.Getpcamera.VISCOUNT,PDWG.GetCurrentRoot.ObjArray.ObjTree,pdwg.getpcamera.totalobj,pdwg.getpcamera.infrustum,pdwg.myGluProject2,pdwg.getpcamera.prop.zoom,SysVarRDImageDegradationCurrentDegradationFactor);
-    PDWG.GetConstructObjRoot.calcvisible(PDWG.Getpcamera^.frustum,PDWG.Getpcamera.POSCOUNT,PDWG.Getpcamera.VISCOUNT,pdwg.getpcamera.totalobj,pdwg.getpcamera.infrustum,pdwg.myGluProject2,pdwg.getpcamera.prop.zoom,SysVarRDImageDegradationCurrentDegradationFactor);
+    Actlt.InfrustumActualy:=pdwg.getpcamera.POSCOUNT;
+    Actlt.VisibleActualy:=pdwg.getpcamera.VISCOUNT;
+    PDWG.GetCurrentROOT.CalcVisibleByTree(PDWG.Getpcamera^.frustum,Actlt,PDWG.GetCurrentRoot.ObjArray.ObjTree,pdwg.getpcamera.Counters,pdwg.myGluProject2,pdwg.getpcamera.prop.zoom,SysVarRDImageDegradationCurrentDegradationFactor);
+    PDWG.GetConstructObjRoot.calcvisible(PDWG.Getpcamera^.frustum,Actlt,pdwg.getpcamera.Counters,pdwg.myGluProject2,pdwg.getpcamera.prop.zoom,SysVarRDImageDegradationCurrentDegradationFactor);
 
   if finalcalk then
     begin
@@ -1457,6 +1459,7 @@ var
   ux,uy:Double;
   mp:TPoint;
   key: Byte;
+  Actlt:TVisActuality;
 begin
   mp:=Point(X,Y);
   TrackPointMouseTimer.Touch(mp,[TMouseTimer.TReason.RMMove]);
@@ -1483,34 +1486,38 @@ begin
   //if param.ospoint.ostype<>os_none then
   //                                   glmcoord1.lend := param.ospoint.worldcoord;  //пан при привязке ездит меньше
 
-  if ((param.md.mode) and ((MRotateCamera) or (MMoveCamera)) <> 0) then
-    if ((ssCtrl in shift) and ((ssMiddle in shift))) and ((param.md.mode) and (MRotateCamera) <> 0) then
+  if ((ssCtrl in shift)and(ssMiddle in shift)) and (((param.md.mode)and(MRotateCamera))<>0) then begin
+    uy :=(x - param.md.mouse.x) / 1000;
+    ux :=- (y - param.md.mouse.y) / 1000;
+    pdwg.RotateCameraInLocalCSXY(ux,uy);
+    {with gdb.GetCurrentDWG.UndoStack.CreateTGChangeCommand(gdb.GetCurrentDWG.pcamera^.prop)^ do
     begin
-      uy :=(x - param.md.mouse.x) / 1000;
-      ux :=- (y - param.md.mouse.y) / 1000;
-      pdwg.RotateCameraInLocalCSXY(ux,uy);
-      {with gdb.GetCurrentDWG.UndoStack.CreateTGChangeCommand(gdb.GetCurrentDWG.pcamera^.prop)^ do
-      begin
-      gdb.GetCurrentDWG.pcamera.RotateInLocalCSXY(ux,uy);
-      ComitFromObj;
-      end;}
-      param.firstdraw := true;
-      pdwg.GetPcamera^.NextPosition;
-      CalcOptimalMatrix;
-      calcgrid;
-      //-------------------CalcOptimalMatrix;
-
-      pdwg.GetCurrentROOT.CalcVisibleByTree(pdwg.Getpcamera^.frustum,pdwg.Getpcamera.POSCOUNT,pdwg.Getpcamera.VISCOUNT,pdwg.GetCurrentROOT.ObjArray.ObjTree,pdwg.getpcamera.totalobj,pdwg.getpcamera.infrustum,pdwg.myGluProject2,pdwg.getpcamera.prop.zoom,SysVarRDImageDegradationCurrentDegradationFactor);
-      //gdb.GetCurrentROOT.calcalcvisible(gdb.GetCurrentDWG.pcamera^.frustum,gdb.GetCurrentDWG.pcamera.POSCOUNT);
-      pdwg.GetConstructObjRoot.calcvisible(pdwg.Getpcamera^.frustum,pdwg.Getpcamera.POSCOUNT,pdwg.Getpcamera.VISCOUNT,pdwg.getpcamera.totalobj,pdwg.getpcamera.infrustum,pdwg.myGluProject2,pdwg.getpcamera.prop.zoom,SysVarRDImageDegradationCurrentDegradationFactor);
-      doCameraChanged;
-    end
-    else
-      if ssMiddle in shift then     {MK_Control}
-begin
-      PanScreen(param.md.mouse.x,param.md.mouse.y,X,Y{,glmcoord1});
-      doCameraChanged;
-end;
+    gdb.GetCurrentDWG.pcamera.RotateInLocalCSXY(ux,uy);
+    ComitFromObj;
+    end;}
+    param.firstdraw := true;
+    pdwg.GetPcamera^.NextPosition;
+    CalcOptimalMatrix;
+    calcgrid;
+    //-------------------CalcOptimalMatrix;
+    Actlt.InfrustumActualy:=pdwg.getpcamera.POSCOUNT;
+    Actlt.VisibleActualy:=pdwg.getpcamera.VISCOUNT;
+    pdwg.GetCurrentROOT.CalcVisibleByTree(pdwg.Getpcamera^.frustum,Actlt,pdwg.GetCurrentROOT.ObjArray.ObjTree,pdwg.getpcamera.Counters,pdwg.myGluProject2,pdwg.getpcamera.prop.zoom,SysVarRDImageDegradationCurrentDegradationFactor);
+    //gdb.GetCurrentROOT.calcalcvisible(gdb.GetCurrentDWG.pcamera^.frustum,gdb.GetCurrentDWG.pcamera.POSCOUNT);
+    pdwg.GetConstructObjRoot.calcvisible(pdwg.Getpcamera^.frustum,Actlt,pdwg.getpcamera.Counters,pdwg.myGluProject2,pdwg.getpcamera.prop.zoom,SysVarRDImageDegradationCurrentDegradationFactor);
+    doCameraChanged;
+  end else if (ssMiddle in shift)and (((param.md.mode)and(MMoveCamera))<>0) then begin
+    PanScreen(param.md.mouse.x,param.md.mouse.y,X,Y);
+    doCameraChanged;
+  end else if pdwg.GetConstructObjRoot.ObjArray.Count>0 then begin
+    {todo: переделать без перерасчета видимости чертежа, нужно только обновить VISCOUNT}
+    pdwg.GetPcamera^.NextPosition;
+    CalcOptimalMatrix;
+    Actlt.InfrustumActualy:=pdwg.getpcamera.POSCOUNT;
+    Actlt.VisibleActualy:=pdwg.getpcamera.VISCOUNT;
+    pdwg.GetCurrentROOT.CalcVisibleByTree(pdwg.Getpcamera^.frustum,Actlt,pdwg.GetCurrentROOT.ObjArray.ObjTree,pdwg.getpcamera.Counters,pdwg.myGluProject2,pdwg.getpcamera.prop.zoom,SysVarRDImageDegradationCurrentDegradationFactor);
+    doCameraChanged;
+  end;
 
   param.md.mouse.y := y;
   param.md.mouse.x := x;
@@ -1533,8 +1540,7 @@ end;
       param.md.mouseglue := param.nearesttcontrolpoint.pcontrolpoint^.dispcoord;
       param.md.mouseglue.y:=getviewcontrol.clientheight-param.md.mouseglue.y;
     end;
-  end
-  else param.md.mouseglue := param.md.mouse;
+  end else param.md.mouseglue := param.md.mouse;
 
   //wa.param.md.mouse:=wa.param.md.mouseglue;
   param.md.glmouse.x := param.md.mouseglue.x;
@@ -1647,11 +1653,16 @@ end;
      //GDBobjinsp23.reread;
   //CalcOptimalMatrix;
   CalcOptimalMatrix;
-  pdwg.GetConstructObjRoot.calcvisible(pdwg.Getpcamera^.frustum,pdwg.Getpcamera.POSCOUNT,pdwg.Getpcamera.VISCOUNT,pdwg.getpcamera.totalobj,pdwg.getpcamera.infrustum,pdwg.myGluProject2,pdwg.getpcamera.prop.zoom,SysVarRDImageDegradationCurrentDegradationFactor);
+  Actlt.InfrustumActualy:=pdwg.getpcamera.POSCOUNT;
+  Actlt.VisibleActualy:=pdwg.getpcamera.VISCOUNT;
+  if pdwg.GetConstructObjRoot.ObjArray.Count>0 then begin
+  pdwg.GetConstructObjRoot.CalcInFrustumByTree(pdwg.Getpcamera^.frustum,Actlt,pdwg.GetConstructObjRoot.ObjArray.ObjTree,pdwg.getpcamera.Counters,pdwg.myGluProject2,pdwg.getpcamera.prop.zoom,SysVarRDImageDegradationCurrentDegradationFactor);
+  pdwg.GetConstructObjRoot.calcvisible(pdwg.Getpcamera^.frustum,Actlt,pdwg.getpcamera.Counters,pdwg.myGluProject2,pdwg.getpcamera.prop.zoom,SysVarRDImageDegradationCurrentDegradationFactor);
+  end;
 
   //gdb.GetCurrentDWG.ConstructObjRoot.calcvisible(gdb.GetCurrentDWG.OGLwindow1.wa.param.mousefrustum);
 
-  pdwg.GetSelObjArray.calcvisible(pdwg.Getpcamera^.frustum,pdwg.Getpcamera.POSCOUNT,pdwg.Getpcamera.VISCOUNT,pdwg.getpcamera.totalobj,pdwg.getpcamera.infrustum,pdwg.myGluProject2,pdwg.getpcamera.prop.zoom,SysVarRDImageDegradationCurrentDegradationFactor);
+  pdwg.GetSelObjArray.calcvisible(pdwg.Getpcamera^.frustum,Actlt,pdwg.getpcamera.Counters,pdwg.myGluProject2,pdwg.getpcamera.prop.zoom,SysVarRDImageDegradationCurrentDegradationFactor);
   Set3dmouse;
   CorrectMouseAfterOS;
   draworinvalidate;
@@ -2564,8 +2575,20 @@ begin
        concatBBandPoint(tbb,param.CSIcon.CSIconZ);
   end;
   //pdwg.ConstructObjRoot.calcbb;
-  tbb2:=pdwg.getConstructObjRoot.vp.BoundingBox;
+  //tbb2:=pdwg.getConstructObjRoot.vp.BoundingBox;
+  //tbb2.LBN:=VectorTransform3D(tbb2.LBN,pdwg.getConstructObjRoot.ObjMatrix);
+  //tbb2.RTF:=VectorTransform3D(tbb2.RTF,pdwg.getConstructObjRoot.ObjMatrix);
+  //ConcatBB(tbb,tbb2);
+
+
+  if pdwg.GetConstructObjRoot.ObjArray.Count>0 then
+                       begin
+  pdwg.GetConstructObjRoot.calcbb(dc);
+  tbb2:=pdwg.GetConstructObjRoot.vp.BoundingBox;
+  tbb2.LBN:=VectorTransform3D(tbb2.LBN,pdwg.getConstructObjRoot.ObjMatrix);
+  tbb2.RTF:=VectorTransform3D(tbb2.RTF,pdwg.getConstructObjRoot.ObjMatrix);
   ConcatBB(tbb,tbb2);
+  end;
 
   //proot.InFrustumAABB:=tbb;
 
@@ -2706,10 +2729,7 @@ var
   glmcoord1: gdbpiece;
   tv2:gdbvertex4d;
   ax:gdbvertex;
-  //ux,uy:Double;
-  //htext,htext2:String;
-  //key: Byte;
-  lptime:ttime;
+  Actlt:TVisActuality;
 begin
   mouseunproject(oldX, getviewcontrol.clientheight-oldY);
   glmcoord1:= param.md.mouseraywithoutos;
@@ -2733,12 +2753,14 @@ begin
        calcgrid;
        //gdb.GetCurrentDWG.Changed:=true;
        //-------------CalcOptimalMatrix;
-       lptime:=now();
-       pdwg.GetCurrentROOT.CalcVisibleByTree(pdwg.Getpcamera^.frustum,pdwg.Getpcamera.POSCOUNT,pdwg.Getpcamera.VISCOUNT,pdwg.GetCurrentROOT.ObjArray.ObjTree,pdwg.getpcamera.totalobj,pdwg.getpcamera.infrustum,pdwg.myGluProject2,pdwg.getpcamera.prop.zoom,SysVarRDImageDegradationCurrentDegradationFactor);
-       lptime:=now()-LPTime;
-       sysvarRDLastCalcVisible:=round(lptime*10e7);
+       with TTimeMeter.StartMeasure do begin
+         Actlt.CreateRec(pdwg.getpcamera.VISCOUNT,pdwg.getpcamera.POSCOUNT);
+         pdwg.GetCurrentROOT.CalcVisibleByTree(pdwg.Getpcamera^.frustum,Actlt,pdwg.GetCurrentROOT.ObjArray.ObjTree,pdwg.getpcamera.Counters,pdwg.myGluProject2,pdwg.getpcamera.prop.zoom,SysVarRDImageDegradationCurrentDegradationFactor);
+         pdwg.GetConstructObjRoot.calcvisible(pdwg.Getpcamera^.frustum,Actlt,pdwg.getpcamera.Counters,pdwg.myGluProject2,pdwg.getpcamera.prop.zoom,SysVarRDImageDegradationCurrentDegradationFactor);
+         EndMeasure;
+         sysvarRDLastCalcVisible:=ElapsedMiliSec;
+       end;
        //gdb.GetCurrentROOT.calcvisible(gdb.GetCurrentDWG.pcamera^.frustum,gdb.GetCurrentDWG.pcamera.POSCOUNT);
-       pdwg.GetConstructObjRoot.calcvisible(pdwg.Getpcamera^.frustum,pdwg.Getpcamera.POSCOUNT,pdwg.Getpcamera.VISCOUNT,pdwg.getpcamera.totalobj,pdwg.getpcamera.infrustum,pdwg.myGluProject2,pdwg.getpcamera.prop.zoom,SysVarRDImageDegradationCurrentDegradationFactor);
   end;
 
 end;

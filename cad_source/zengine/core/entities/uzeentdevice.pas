@@ -38,14 +38,13 @@ GDBObjDevice= object(GDBObjBlockInsert)
                    constructor initnul;
                    constructor init(own:Pointer;layeraddres:PGDBLayerProp;LW:SmallInt);
                    destructor done;virtual;
-                   function CalcInFrustum(const frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:Integer; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double):Boolean;virtual;
-                   function CalcTrueInFrustum(const frustum:ClipArray;visibleactualy:TActulity):TInBoundingVolume;virtual;
+                   function CalcInFrustum(const frustum:ClipArray;const Actuality:TVisActuality;var Counters:TCameraCounters; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double):Boolean;virtual;
+                   function CalcTrueInFrustum(const frustum:ClipArray):TInBoundingVolume;virtual;
                    procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext;Stage:TEFStages=EFAllStages);virtual;
                    function IsStagedFormatEntity:boolean;virtual;
                    procedure FormatFeatures(var drawing:TDrawingDef);virtual;
-                   procedure DrawGeometry(lw:Integer;var DC:TDrawContext{infrustumactualy:TActulity;subrender:Integer});virtual;
-                   procedure DrawOnlyGeometry(lw:Integer;var DC:TDrawContext{infrustumactualy:TActulity;subrender:Integer});virtual;
-                   procedure renderfeedbac(infrustumactualy:TActulity;pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc;var DC:TDrawContext);virtual;
+                   procedure DrawGeometry(lw:Integer;var DC:TDrawContext);virtual;
+                   procedure DrawOnlyGeometry(lw:Integer;var DC:TDrawContext);virtual;
                    function onmouse(var popa:TZctnrVectorPGDBaseEntity;const MF:ClipArray;InSubEntry:Boolean):Boolean;virtual;
                    function ReturnLastOnMouse(InSubEntry:Boolean):PGDBObjEntity;virtual;
                    procedure ImEdited(pobj:PGDBObjSubordinated;pobjinarray:Integer;var drawing:TDrawingDef);virtual;
@@ -66,7 +65,8 @@ GDBObjDevice= object(GDBObjBlockInsert)
                    procedure SaveToDXFObjXData(var outhandle:{Integer}TZctnrVectorBytes;var IODXFContext:TIODXFContext);virtual;
                    procedure AddMi(pobj:PGDBObjSubordinated);virtual;
                    //procedure select;virtual;
-                   procedure SetInFrustumFromTree(const frustum:ClipArray;infrustumactualy:TActulity;visibleactualy:TActulity;var totalobj,infrustumobj:Integer; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double);virtual;
+                   procedure SetInFrustumFromTree(const frustum:ClipArray;const Actuality:TVisActuality;var Counters:TCameraCounters; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double);virtual;
+                   function CalcActualVisible(const Actuality:TVisActuality):Boolean;virtual;
                    procedure addcontrolpoints(tdesc:Pointer);virtual;
 
                    procedure EraseMi(pobj:pGDBObjEntity;pobjinarray:Integer;var drawing:TDrawingDef);virtual;
@@ -96,7 +96,7 @@ begin
     obj^.EntExtensions.RunRemoveFromArray(obj,drawing);
 
   if obj^.bp.TreePos.Owner<>nil then begin
-    PTEntTreeNode(obj^.bp.TreePos.Owner)^.nulDeleteElement(obj^.bp.TreePos.SelfIndex);
+    PTEntTreeNode(obj^.bp.TreePos.Owner)^.nulDeleteElement(obj^.bp.TreePos.SelfIndexInNode);
   end;
   obj^.bp.TreePos.Owner:=nil;
   VarObjArray.DeleteElement(obj.bp.ListPos.SelfIndex);
@@ -128,7 +128,7 @@ procedure GDBObjDevice.EraseMi;
 begin
      if pobj^.bp.TreePos.Owner<>nil then
      begin
-          PTEntTreeNode(pobj^.bp.TreePos.Owner)^.nul.DeleteElement(pobj^.bp.TreePos.SelfIndex);
+          PTEntTreeNode(pobj^.bp.TreePos.Owner)^.nul.DeleteElement(pobj^.bp.TreePos.SelfIndexInNode);
      end;
 
      //pointer(p):= VarObjArray.getDataMutable(pobjinarray);
@@ -183,9 +183,18 @@ end;
 
 procedure GDBObjDevice.SetInFrustumFromTree;
 begin
-     inherited SetInFrustumFromTree(frustum,infrustumactualy,visibleactualy,totalobj,infrustumobj, ProjectProc,zoom,currentdegradationfactor);
-     VarObjArray.SetInFrustumFromTree(frustum,infrustumactualy,visibleactualy,totalobj,infrustumobj, ProjectProc,zoom,currentdegradationfactor);
+  inherited SetInFrustumFromTree(frustum,Actuality,Counters, ProjectProc,zoom,currentdegradationfactor);
+  VarObjArray.SetInFrustumFromTree(frustum,Actuality,Counters, ProjectProc,zoom,currentdegradationfactor);
 end;
+function GDBObjDevice.CalcActualVisible(const Actuality:TVisActuality):Boolean;
+var
+  q:boolean;
+begin
+  result:=inherited;
+  q:=VarObjArray.CalcActualVisible(Actuality);
+  result:=result or q;
+end;
+
 procedure GDBObjDevice.AddMi;
 begin
      //pobj^.bp.PSelfInOwnerArray:=ObjArray.getDataMutable(ObjArray.add(pobj));
@@ -316,8 +325,8 @@ end;}
 function GDBObjDevice.CalcInFrustum;
 var a:boolean;
 begin
-     result:=inherited CalcInFrustum(frustum,infrustumactualy,visibleactualy,totalobj,infrustumobj, ProjectProc,zoom,currentdegradationfactor);
-     a:=VarObjArray.calcvisible(frustum,infrustumactualy,visibleactualy,totalobj,infrustumobj, ProjectProc,zoom,currentdegradationfactor);
+     result:=inherited CalcInFrustum(frustum,Actuality,Counters, ProjectProc,zoom,currentdegradationfactor);
+     a:=VarObjArray.calcvisible(frustum,Actuality,Counters, ProjectProc,zoom,currentdegradationfactor);
      result:=result or a;
 end;
 function GDBObjDevice.CalcTrueInFrustum;
@@ -325,7 +334,7 @@ var
   inhresult:TInBoundingVolume;
 begin
   inhresult:=inherited;
-  result:=VarObjArray.CalcTrueInFrustum(frustum,visibleactualy);
+  result:=VarObjArray.CalcTrueInFrustum(frustum);
   if result<>inhresult then begin
     if result=IRNotAplicable then
       exit(inhresult);
@@ -433,15 +442,6 @@ begin
        p:=VarObjArray.iterate(ir);
   until p=nil;
   if not result then lstonmouse:=nil;
-end;
-procedure GDBObjDevice.renderfeedbac(infrustumactualy:TActulity;pcount:TActulity;var camera:GDBObjCamera; ProjectProc:GDBProjectProc;var DC:TDrawContext);
-//var pblockdef:PGDBObjBlockdef;
-    //pvisible:PGDBObjEntity;
-    //i:Integer;
-begin
-  //if POGLWnd=nil then exit;
-  inherited;
-  VarObjArray.RenderFeedbac(infrustumactualy,pcount,camera,ProjectProc,dc);
 end;
 procedure GDBObjDevice.DrawOnlyGeometry;
 var p:pgdbobjEntity;
@@ -691,6 +691,7 @@ begin
   VarObjArray.FormatEntity(drawing,dc,stage);
   self.lstonmouse:=nil;
   calcbb(dc);
+  CalcActualVisible(dc.DrawingContext.VActuality);
   if EFDraw in stage then begin
     if assigned(EntExtensions)then
       EntExtensions.RunOnAfterEntityFormat(@self,drawing,DC);

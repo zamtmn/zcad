@@ -18,7 +18,7 @@
         </SyntaxOptions>
       </Parsing>
     </CompilerOptions>
-    <Files Count="17">
+    <Files Count="18">
       <Item1>
         <Filename Value="gzctnrvector.pas"/>
         <UnitName Value="gzctnrVector"/>
@@ -87,6 +87,10 @@
         <Filename Value="gzctnrvectorclass.pas"/>
         <UnitName Value="gzctnrVectorClass"/>
       </Item17>
+      <Item18>
+        <Filename Value="gzctnrbufferallocator.pas"/>
+        <UnitName Value="gzctnrBufferAllocator"/>
+      </Item18>
     </Files>
     <CompatibilityMode Value="True"/>
     <RequiredPkgs Count="2">

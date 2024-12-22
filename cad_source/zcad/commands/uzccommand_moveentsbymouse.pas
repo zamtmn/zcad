@@ -69,8 +69,8 @@ begin
           tv := pobj^.Clone(@drawings.GetCurrentDWG^.ConstructObjRoot);
           if tv<>nil then begin
             tv^.State:=tv^.State+[ESConstructProxy];
-            drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.AddPEntity(tv^);
             tv^.formatentity(drawings.GetCurrentDWG^,RC);
+            drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.AddPEntity(tv^);
           end;
         end;
         pobj:=drawings.GetCurrentROOT^.ObjArray.iterate(ir);
@@ -85,16 +85,23 @@ var
   t_matrix:DMatrix4D;
   p:PGDBObjEntity;
   ir:itrec;
+  RC:TDrawContext;
 begin
   if CloneEnts>0 then begin
     if commandmanager.Get3DPoint('',p1)=GRNormal then begin
+      RC:=drawings.GetCurrentDWG^.CreateDrawingRC;
       t_matrix:=CreateTranslationMatrix(-p1);
       drawings.GetCurrentDWG^.ConstructObjRoot.ObjMatrix:=OneMatrix;
       p:=drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.beginiterate(ir);
       if p<>nil then repeat
         p^.transform(t_matrix);
+        p^.formatentity(drawings.GetCurrentDWG^,RC);
         p:=drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.iterate(ir);
       until p=nil;
+      drawings.GetCurrentDWG^.ConstructObjRoot.formatentity(drawings.GetCurrentDWG^,RC);
+      drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.ObjTree.BoundingBox:=drawings.GetCurrentDWG^.ConstructObjRoot.vp.BoundingBox;
+      drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.ObjTree.Lock;
+      drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.ObjTree.UnLock;
 
       if sysvarDSGNEntityMoveByMouseUp then
         InverseMouseClick:=true;

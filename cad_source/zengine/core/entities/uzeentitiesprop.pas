@@ -30,7 +30,7 @@ GDBObjVisualProp=record
                       LineType:PGDBLtypeProp;
                       LineTypeScale:GDBNonDimensionDouble;
                       BoundingBox:TBoundingBox;
-                      LastCameraPos:TActulity;
+                      LastCameraPos:TActuality;
                       Color:TGDBPaletteColor;
                  end;
 function getLTfromVP(const vp:GDBObjVisualProp):PGDBLtypeProp;

@@ -8,6 +8,12 @@ uses
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, ExtCtrls,
   StdCtrls, Buttons, ButtonPanel,
   uzedimensionaltypes,uzemathutils,uzcuitypes,uzcuidialogs,uzcuilcl2zc;
+resourcestring
+  RSUTScientific='Scientific';
+  RSUTDecimal='Decimal';
+  RSUTEngineering='Engineering';
+  RSUTArchitectural='Architectural';
+  RSUTFractional='Fractional';
 
 const
      UPrecByLUnits:array[TLUnits,0..8]of string=(
@@ -210,6 +216,13 @@ begin
 end;
 procedure TUnitsForm.LocalUnitsFormat2Intterface;
 begin
+  LUnitsComboBox.Clear;
+  LUnitsComboBox.AddItem(RSUTScientific,nil);
+  LUnitsComboBox.AddItem(RSUTDecimal,nil);
+  LUnitsComboBox.AddItem(RSUTEngineering,nil);
+  LUnitsComboBox.AddItem(RSUTArchitectural,nil);
+  LUnitsComboBox.AddItem(RSUTFractional,nil);
+
      //загоняем всё из LocalUnitsFormat в комбобоксы
      LUnitsComboBox.ItemIndex:=ord(LocalUnitsFormat.uformat);
      LUPrecComboBox.ItemIndex:=ord(LocalUnitsFormat.uprec);

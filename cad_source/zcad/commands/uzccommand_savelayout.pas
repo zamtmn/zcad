@@ -28,7 +28,7 @@ uses
   Dialogs,
   XMLPropStorage,
   uzcsysvars,
-  uzbpaths,
+  uzbpaths,uzcFileStructure,
   uztoolbarsmanager,
   uzcinterface,
   uzccommandsabstract,uzccommandsimpl;
@@ -52,6 +52,7 @@ begin
     finally
       Config.Free;
     end;
+    ForceDirectories(ExtractFilePath(Filename));
     XMLConfig.Flush;
   finally
     XMLConfig.Free;
@@ -64,7 +65,7 @@ var
 begin
   try
     // create a new xml config file
-    filename:=utf8tosys(DataPath+'/components/defaultlayout.xml');
+    filename:=GetWritablePath(CFScomponentsDir,CFSdefaultlayoutxmlFile);
     SaveLayoutToFile(filename);
     exit;
     XMLConfig:=TXMLConfigStorage.Create(filename,false);

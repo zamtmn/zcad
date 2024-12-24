@@ -28,7 +28,7 @@ uses
   Dialogs,
   XMLPropStorage,
   uzcsysvars,
-  uzbpaths,
+  uzbpaths,uzcFileStructure,
   uztoolbarsmanager,
   uzcinterface,
   uzcstrconsts,
@@ -73,39 +73,18 @@ end;
 
 function LoadLayout_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 var
-  XMLConfig: TXMLConfigStorage;
   filename:string;
   s:string;
 begin
   if Operands='' then
-                     filename:=sysvar.PATH.LayoutFile^
-                 else
-                     begin
-                     s:=Operands;
-                     filename:={utf8tosys}(DataPath+'/components/'+s);
-                     end;
+    filename:=sysvar.PATH.LayoutFile^
+  else
+    filename:=Operands;
   if not fileexists(filename) then
-                              filename:={utf8tosys}(DataPath+'/components/defaultlayout.xml');
+    filename:=FindInDataPaths(CFScomponentsDir,filename);
+  if filename='' then
+    filename:=FindInDataPaths(CFScomponentsDir,CFSdefaultlayoutxmlFile);
   LoadLayoutFromFile(Filename);
-  exit;
-  try
-    // load the xml config file
-    XMLConfig:=TXMLConfigStorage.Create(Filename,True);
-    try
-      // restore the layout
-      // this will close unneeded forms and call OnCreateControl for all needed
-      DockMaster.LoadLayoutFromConfig(XMLConfig,true);
-    finally
-      XMLConfig.Free;
-    end;
-  except
-    on E: Exception do begin
-                            ZCMsgCallBackInterface.TextMessage(rsLayoutLoad+' '+Filename+':'#13+E.Message,TMWOShowError);
-      //MessageDlg('Error',
-      //  'Error loading layout from file '+Filename+':'#13+E.Message,mtError,
-      //  [mbCancel],0);
-    end;
-  end;
   result:=cmd_ok;
 end;
 

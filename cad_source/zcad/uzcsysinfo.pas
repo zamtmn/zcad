@@ -23,7 +23,7 @@ uses
   uzbCommandLineParser,uzcCommandLineParser,
   uzcsysparams,uzcsysvars,
   {uzbLogTypes,}uzbLog,uzcLog,
-  uzbPaths,uzcPathMacros,
+  uzbPaths,uzcPathMacros,uzcFileStructure,
   Forms,{$IFNDEF DELPHI}LazUTF8,{$ENDIF}sysutils;
 resourcestring
   rsCommandLine='Command line "%s"';
@@ -98,7 +98,7 @@ begin
     //начальные значения некоторых параметров и загрузка параметров
     SysParam.notsaved.otherinstancerun:=false;
     SysParam.saved.UniqueInstance:=true;
-    LoadParams(expandpath(DataPath+CParamsFile),SysParam.saved);
+    LoadParams(FindInDataPaths(CFSRtlDir,CFSconfigxmlFile),SysParam.saved);
     SysParam.notsaved.PreloadedFile:='';
 
     //значения некоторых параметров из комстроки, если есть

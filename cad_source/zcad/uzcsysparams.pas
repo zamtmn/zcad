@@ -23,8 +23,6 @@ uses
   XMLConf,XMLPropStorage,LazConfigStorage,DOM,
   fileutil,
   LCLProc,uzclog,uzbpaths,Forms{$IFNDEF DELPHI},LazUTF8{$ENDIF},sysutils;
-const
-  CParamsFile='/rtl/config.xml';
 type
 {EXPORT+}
   {REGISTERRECORDTYPE TmyFileVersionInfo}

@@ -29,7 +29,7 @@ uses
   uzeffmanager,
   uzccommand_DWGNew,
   uzccommandsimpl,uzccommandsabstract,
-  uzcsysvars,uzcSysParams,
+  uzcsysvars,uzcSysParams,uzcFileStructure,
   uzcstrconsts,
   uzcdrawings,
   uzcinterface,
@@ -41,15 +41,15 @@ function QSave_com(const Context:TZCADCommandContext;
                    operands:TCommandOperands):TCommandResult;
 var
   s,s1:ansistring;
-  itAutoSeve:boolean;
+  itAutoSave:boolean;
   TempSavedParam:tsavedparams;
 begin
-  itAutoSeve:=False;
+  itAutoSave:=False;
   if operands='QS' then begin
     s1:=ExpandPath(sysvar.SAVE.SAVE_Auto_FileName^);
     s:=format(rsAutoSave,[s1]);
     ZCMsgCallBackInterface.TextMessage(s,TMWOHistoryOut);
-    itAutoSeve:=True;
+    itAutoSave:=True;
   end else begin
     if extractfilepath(drawings.GetCurrentDWG.GetFileName)='' then begin
       SaveAs_com(Context,EmptyCommandOperands);
@@ -58,14 +58,14 @@ begin
     s1:=drawings.GetCurrentDWG.GetFileName;
   end;
 
-  if itAutoSeve then begin
-    LoadParams(expandpath(DataPath+CParamsFile),TempSavedParam);
+  if itAutoSave then begin
+    LoadParams(FindInDataPaths(CFSRtlDir,CFSconfigxmlFile),TempSavedParam);
     TempSavedParam.LastAutoSaveFile:=s1;
     SysParam.saved.LastAutoSaveFile:=s1;
-    SaveParams(expandpath(DataPath+CParamsFile),TempSavedParam);
+    SaveParams(FindInDataPaths(CFSRtlDir,CFSconfigxmlFile),TempSavedParam);
   end;
-  Result:=SaveDXFDPAS(s1,not itAutoSeve);
-  if (not itAutoSeve)and(Result=cmd_ok) then
+  Result:=SaveDXFDPAS(s1,not itAutoSave);
+  if (not itAutoSave)and(Result=cmd_ok) then
     drawings.GetCurrentDWG.ChangeStampt(False);
   SysVar.SAVE.SAVE_Auto_Current_Interval^:=SysVar.SAVE.SAVE_Auto_Interval^;
 end;

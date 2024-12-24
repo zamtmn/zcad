@@ -13,39 +13,19 @@
 *****************************************************************************
 }
 {
-@author(Andrey Zubarev <zamtmn@yandex.ru>)
+@author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
-{$mode delphi}
-unit uzccommand_saveoptions;
 
+unit uzcFileStructure;
+{$Mode objfpc}{$H+}
 {$INCLUDE zengineconfig.inc}
-
 interface
-uses
-  uzcLog,
-  uzccommandsabstract,uzccommandsimpl,
-  uzctnrVectorBytes,
-  uzbpaths,
-  Varman,
-  uzcsysparams,uzcFileStructure;
+const
+  CFSrtlDir='rtl';
+  CFSconfigxmlFile='config.xml';
+  CFSsysvarpasFile='sysvar.pas';
 
+  CFScomponentsDir='components';
+  CFSdefaultlayoutxmlFile='defaultlayout.xml';
 implementation
-
-function SaveOptions_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
-var
-   mem:TZctnrVectorBytes;
-begin
-  mem.init(1024);
-  SysVarUnit^.SavePasToMem(mem);
-  mem.SaveToFile(GetWritablePath(CFSRtlDir,CFSsysvarpasFile));
-  mem.done;
-  SaveParams(GetWritablePath(CFSRtlDir,CFSconfigxmlFile),SysParam.saved);
-  result:=cmd_ok;
-end;
-
-initialization
-  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
-  CreateZCADCommand(@SaveOptions_com,'SaveOptions',0,0);
-finalization
-  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
 end.

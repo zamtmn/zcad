@@ -26,8 +26,10 @@ type
   TFromDirIteratorObj=procedure (const filename:String;pdata:pointer) of object;
   TDataFilesExistChecFunc=function(ACheckedPath:string):boolean;
 function ExpandPath(APath:String;AItDirectory:boolean=false):String;
-function FindInSupportPath(const PPaths:String; FileName:String):String;
-function FindInPaths(const Paths:String; FileName:String):String;
+function FindInSupportPath(const APaths:String; FileName:String):String;
+function FindInPaths(const APaths:String; FileName:String):String;
+function FindInDataPaths(const ASuffix:String;const FileName:String):String;
+function GetWritablePath(const ASuffix:String;const FileName:String):String;
 
 //**Получает части текста разделеные разделителем.
 //**path - текст в котором идет поиск.
@@ -44,7 +46,7 @@ procedure FromDirsIterator(const path,mask,firstloadfilename:String;proc:TFromDi
 function FindDataPath(CF:TDataFilesExistChecFunc):string;
 var DataPath,BinPath,AdditionalSupportPath,TempPath:String;
 implementation
-var SupportPath:String;
+var WriteDataPath,SupportPath:String;
 
 procedure AddSupportPath(const APath:String);
 begin
@@ -75,7 +77,22 @@ function GeAddrSupportPath:PString;
 begin
   result:=@SupportPath;
 end;
-function FindInPaths(const Paths:String; FileName:String):String;
+function FindInDataPaths(const ASuffix:String;const FileName:String):String;
+begin
+  result:=IncludeTrailingPathDelimiter(IncludeTrailingPathDelimiter(GetAppConfigDir(false))+ASuffix)+FileName;
+  if FileExists(result)then
+    exit;
+  result:=IncludeTrailingPathDelimiter(IncludeTrailingPathDelimiter(DataPath)+ASuffix)+FileName;
+  if not FileExists(result)then
+    exit('');
+end;
+
+function GetWritablePath(const ASuffix:String;const FileName:String):String;
+begin
+  result:=IncludeTrailingPathDelimiter(IncludeTrailingPathDelimiter(GetAppConfigDir(false))+ASuffix)+FileName;
+end;
+
+function FindInPaths(const APaths:String; FileName:String):String;
 var
    s,ts,ts2:String;
 begin
@@ -94,17 +111,7 @@ begin
                                  exit;
                             end;
      {$ENDIF}
-     {if gdb.GetCurrentDWG<>nil then
-     begin
-                                   s:=ExtractFilePath(gdb.GetCurrentDWG.FileName)+filename;
-     if FileExists(s) then
-                                 begin
-                                      result:=s;
-                                      exit;
-                                 end;
-     end;}
-
-     s:=Paths;
+     s:=APaths;
      repeat
            GetPartOfPath(ts,s,';');
            ts:=ExpandPath(ts)+FileName;
@@ -142,7 +149,7 @@ begin
                        end;
      result:=part;
 end;
-function FindInSupportPath(const PPaths:String; FileName:String):String;
+function FindInSupportPath(const APaths:String; FileName:String):String;
 const
   cFindInSupportPath='[FILEOPS]FindInSupportPath: found file:"%s"';
 var
@@ -155,7 +162,7 @@ begin
     zTraceLn(cFindInSupportPath,[{$IFNDEF DELPHI}utf8tosys{$ENDIF}(FileName)]);
     exit(FileName);
   end;
-  s:=PPaths;
+  s:=APaths;
   s:=ExpandPath(s);
   repeat
     GetPartOfPath(ts,s,';');
@@ -270,6 +277,7 @@ end;
 initialization
   BinPath:={$IFNDEF DELPHI}SysToUTF8{$ENDIF}(ExtractFilePath(paramstr(0)));
   DataPath:={$IFNDEF DELPHI}SysToUTF8{$ENDIF}(ExpandFileName(ExtractFilePath(paramstr(0))+'../..'));;
+  WriteDataPath:=GetAppConfigDir(false);
   {$IfNDef DELPHI}
     TempPath:=GetTempDir;
   {$Else}

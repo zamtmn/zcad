@@ -207,5 +207,5 @@ begin
   PATH_Device_Library:='$(ZDataPath)/programdb;$(ZDataPath)/userdb';
   PATH_Template_Path:='$(ZDataPath)/templates';
   PATH_Template_File:='minimal.dxf';
-  PATH_LayoutFile:='$(ZDataPath)/defaultlayout.xml';
+  PATH_LayoutFile:='defaultlayout.xml';
 end.

@@ -24,6 +24,7 @@ const
   CFSrtlDir='rtl';
   CFSconfigxmlFile='config.xml';
   CFSsysvarpasFile='sysvar.pas';
+  CFSsavedvarpasFile='savedvar.pas';
 
   CFScomponentsDir='components';
   CFSdefaultlayoutxmlFile='defaultlayout.xml';

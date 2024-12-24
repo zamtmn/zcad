@@ -23,7 +23,7 @@ uses uzbpaths,UUnitManager,uzcsysvars,{$IFNDEF DELPHI}uzctranslations,{$ENDIF}
      uzbstrproc,Varman,SysUtils,
      UBaseTypeDescriptor,uzctnrVectorBytes,strmy,varmandef,
      uzcsysparams,TypeDescriptors,URecordDescriptor,
-     uzcLog;
+     uzcLog,uzcFileStructure;
 implementation
 {$IFNDEF WINDOWS}
 //var
@@ -33,7 +33,7 @@ var
   mem:TZctnrVectorBytes;
 initialization;
   units.loadunit(GetSupportPath,InterfaceTranslate,expandpath('$(ZDataPath)/rtl/sysvar.pas'),nil);
-  units.loadunit(GetSupportPath,InterfaceTranslate,expandpath('$(ZDataPath)/rtl/savedvar.pas'),nil);
+  units.loadunit(GetSupportPath,InterfaceTranslate,FindInDataPaths(CFSrtlDir,CFSsavedvarpasFile),nil);
   units.loadunit(GetSupportPath,InterfaceTranslate,expandpath('$(ZDataPath)/rtl/devicebase.pas'),nil);
 
   SysVarUnit:=units.findunit(GetSupportPath,InterfaceTranslate,'sysvar');
@@ -231,7 +231,7 @@ finalization;
   if SavedUnit<>nil then begin
     mem.init(1024);
     SavedUnit^.SavePasToMem(mem);
-    mem.SaveToFile(expandpath(DataPath+'/rtl'+PathDelim+'savedvar.pas'));
+    mem.SaveToFile(GetWritablePath(CFSRtlDir,CFSsavedvarpasFile));
     mem.done;
   end;
 end.

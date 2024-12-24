@@ -110,7 +110,11 @@ begin
     finally
       Config.Free;
     end;
-    XMLConfig.Flush;
+    //не писать файл нельзя(когда все значения по умолчанию)
+    //т.к. при не нахождении конфиг "по умолчанию" создан не будет,
+    //но будет взят конфиг из дитрибутива
+    XMLConfig.SaveToFile(xmlfile);
+    //XMLConfig.Flush;
   finally
     XMLConfig.Free;
   end;

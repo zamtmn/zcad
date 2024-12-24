@@ -9,7 +9,31 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 3.4.2\n"
+"X-Generator: Poedit 3.5\n"
+
+#: tcolorselectform.byblock.caption
+msgid "??ByBlock"
+msgstr ""
+
+#: tcolorselectform.bylayer.caption
+msgid "??ByLayer"
+msgstr ""
+
+#: tcolorselectform.caption
+msgid "Color selection"
+msgstr "Выбор цвета"
+
+#: tcolorselectform.label2.caption
+msgid "Color number:"
+msgstr "Номер цвета:"
+
+#: tcolorselectform.label3.caption
+msgid "??Color description"
+msgstr ""
+
+#: tcolorselectform.tabsheet1.caption
+msgid "Color index"
+msgstr "Номер цвета"
 
 #: tdimstylesform.addstyle.caption
 msgctxt "tdimstylesform.addstyle.caption"
@@ -19,7 +43,7 @@ msgstr ""
 #: tdimstylesform.addstyle.hint
 msgctxt "tdimstylesform.addstyle.hint"
 msgid "Add text style"
-msgstr "Добавить стиль текста"
+msgstr "Добавить стиль"
 
 #: tdimstylesform.buttonapplyclose.caption
 msgctxt "tdimstylesform.buttonapplyclose.caption"
@@ -28,7 +52,7 @@ msgstr "Применить и закрыть"
 
 #: tdimstylesform.caption
 msgid "Dimantion styles"
-msgstr ""
+msgstr "Стили размеров"
 
 #: tdimstylesform.delstyle.caption
 msgctxt "tdimstylesform.delstyle.caption"
@@ -38,7 +62,7 @@ msgstr ""
 #: tdimstylesform.delstyle.hint
 msgctxt "tdimstylesform.delstyle.hint"
 msgid "Delete text style"
-msgstr "Удалить стиль текста"
+msgstr "Удалить стиль"
 
 #: tdimstylesform.inspectlistitem.caption
 msgid "InspectListItem"
@@ -46,7 +70,7 @@ msgstr ""
 
 #: tdimstylesform.inspectlistitem.hint
 msgid "Inspect dimstyle"
-msgstr ""
+msgstr "Редактировать"
 
 #: tdimstylesform.listview1.columns[0].caption
 msgctxt "tdimstylesform.listview1.columns[0].caption"
@@ -60,31 +84,31 @@ msgstr "Имя"
 
 #: tdimstylesform.listview1.columns[2].caption
 msgid "LinearScale"
-msgstr ""
+msgstr "Линейный масштаб"
 
 #: tdimstylesform.listview1.columns[3].caption
 msgid "TextStyleName"
-msgstr ""
+msgstr "Стиль текста"
 
 #: tdimstylesform.listview1.columns[4].caption
 msgid "TextHeight"
-msgstr ""
+msgstr "Высота теста"
 
 #: tdimstylesform.listview1.columns[5].caption
 msgid "DIMBLK1"
-msgstr ""
+msgstr "Стрелка 1"
 
 #: tdimstylesform.listview1.columns[6].caption
 msgid "DIMBLK2"
-msgstr ""
+msgstr "Стрелка 2"
 
 #: tdimstylesform.listview1.columns[7].caption
 msgid "DIMLDRBLK"
-msgstr ""
+msgstr "Выноска"
 
 #: tdimstylesform.listview1.columns[8].caption
 msgid "DIMASZ"
-msgstr ""
+msgstr "Размер стрелки"
 
 #: tdimstylesform.mkcurrentstyle.caption
 msgctxt "tdimstylesform.mkcurrentstyle.caption"
@@ -94,7 +118,7 @@ msgstr ""
 #: tdimstylesform.mkcurrentstyle.hint
 msgctxt "tdimstylesform.mkcurrentstyle.hint"
 msgid "Make selected style curretn"
-msgstr ""
+msgstr "Сделать выбранный стиль текущим"
 
 #: tdimstylesform.purgestyles.caption
 msgctxt "tdimstylesform.purgestyles.caption"
@@ -104,7 +128,7 @@ msgstr ""
 #: tdimstylesform.purgestyles.hint
 msgctxt "tdimstylesform.purgestyles.hint"
 msgid "Purge not used styles"
-msgstr ""
+msgstr "Очистить неиспользуемые стили"
 
 #: tdimstylesform.refreshstyles.caption
 msgctxt "tdimstylesform.refreshstyles.caption"
@@ -114,7 +138,7 @@ msgstr ""
 #: tdimstylesform.refreshstyles.hint
 msgctxt "tdimstylesform.refreshstyles.hint"
 msgid "Refresh styles list"
-msgstr ""
+msgstr "Обновить список стилей"
 
 #: tdimstylesform.separator1.caption
 msgctxt "tdimstylesform.separator1.caption"
@@ -127,7 +151,6 @@ msgid "ToolBar1"
 msgstr ""
 
 #: tnavigatordevices.caption
-#, fuzzy
 msgctxt "tnavigatordevices.caption"
 msgid "Devices"
 msgstr "Устройства"
@@ -140,7 +163,7 @@ msgstr ""
 #: tnavigatordevices.collapseallbtn.hint
 msgctxt "tnavigatordevices.collapseallbtn.hint"
 msgid "Collapse all"
-msgstr ""
+msgstr "Свернуть все"
 
 #: tnavigatordevices.expandall.caption
 msgctxt "tnavigatordevices.expandall.caption"
@@ -150,38 +173,37 @@ msgstr ""
 #: tnavigatordevices.expandallbtn.hint
 msgctxt "tnavigatordevices.expandallbtn.hint"
 msgid "Expand all"
-msgstr ""
+msgstr "Развернуть все"
 
 #: tnavigatordevices.filterbtn.buttonhint
 msgid "Clear filter"
-msgstr ""
+msgstr "Очистить фильтр"
 
 #: tnavigatordevices.includeents.caption
 msgid "Edit include entities"
-msgstr ""
+msgstr "Изменить примитивы..."
 
 #: tnavigatordevices.includeprops.caption
 msgid "Edit include properties"
-msgstr ""
+msgstr "Изменить параметры..."
 
 #: tnavigatordevices.loadfromfile.caption
 msgid "Load from file"
-msgstr ""
+msgstr "Загрузить из файла"
 
 #: tnavigatordevices.refresh.caption
 msgid "Refresh tree"
-msgstr ""
+msgstr "Обновить дерево"
 
 #: tnavigatordevices.savetofile.caption
 msgid "Save to file"
-msgstr ""
+msgstr "Сохранить в файл"
 
 #: tnavigatordevices.treeprops.caption
 msgid "Edit tree properties"
-msgstr ""
+msgstr "Дерево параметров..."
 
 #: tnavigatorentities.caption
-#, fuzzy
 msgctxt "tnavigatorentities.caption"
 msgid "Entities"
 msgstr "Примитивы"
@@ -192,7 +214,7 @@ msgstr ""
 
 #: tnavigatorentities.refresh.caption
 msgid "Refresh"
-msgstr ""
+msgstr "Обновить"
 
 #: tnavigatorentities.toolbutton1.caption
 msgid "ToolButton1"
@@ -201,6 +223,199 @@ msgstr ""
 #: tnavigatorentities.toolbutton3.caption
 msgid "ToolButton3"
 msgstr ""
+
+#: tsinglelinetexteditorform.cancelbutton.caption
+msgid "Cancel"
+msgstr "Отмена"
+
+#: tsinglelinetexteditorform.caption
+msgctxt "tsinglelinetexteditorform.caption"
+msgid "Text editor"
+msgstr "Редактор текста"
+
+#: tsinglelinetexteditorform.helptext.caption
+msgid "Text"
+msgstr "Текст"
+
+#: tsinglelinetexteditorform.okbutton.caption
+msgid "Ok"
+msgstr "Принять"
+
+#: ttextstylesform.addstyle.caption
+msgctxt "ttextstylesform.addstyle.caption"
+msgid "AddStyle"
+msgstr ""
+
+#: ttextstylesform.addstyle.hint
+#, fuzzy
+msgctxt "ttextstylesform.addstyle.hint"
+msgid "Add text style"
+msgstr "Добавить стиль текста"
+
+#: ttextstylesform.buttonapplyclose.caption
+#, fuzzy
+msgctxt "ttextstylesform.buttonapplyclose.caption"
+msgid "Apply and close"
+msgstr "Применить и закрыть"
+
+#: ttextstylesform.caption
+msgid "Text styles"
+msgstr "Стили текста..."
+
+#: ttextstylesform.delstyle.caption
+msgctxt "ttextstylesform.delstyle.caption"
+msgid "DelStyle"
+msgstr ""
+
+#: ttextstylesform.delstyle.hint
+#, fuzzy
+msgctxt "ttextstylesform.delstyle.hint"
+msgid "Delete text style"
+msgstr "Удалить стиль текста"
+
+#: ttextstylesform.fonttypefiltercombobox.text
+#, fuzzy
+msgctxt "ttextstylesform.fonttypefiltercombobox.text"
+msgid "All"
+msgstr "Все"
+
+#: ttextstylesform.fonttypefilterdesc.caption
+msgid "Fonts types filter:"
+msgstr "Фильтр типов:"
+
+#: ttextstylesform.listview1.columns[0].caption
+#, fuzzy
+msgctxt "ttextstylesform.listview1.columns[0].caption"
+msgid "Status"
+msgstr "Статус"
+
+#: ttextstylesform.listview1.columns[1].caption
+#, fuzzy
+msgctxt "ttextstylesform.listview1.columns[1].caption"
+msgid "Name"
+msgstr "Имя"
+
+#: ttextstylesform.listview1.columns[2].caption
+msgid "FontName"
+msgstr "Имя шрифта"
+
+#: ttextstylesform.listview1.columns[3].caption
+msgid "FontPath"
+msgstr "Путь шрифта"
+
+#: ttextstylesform.listview1.columns[4].caption
+msgid "Height"
+msgstr "Высота"
+
+#: ttextstylesform.listview1.columns[5].caption
+msgid "Width factor"
+msgstr "Степень растяжения"
+
+#: ttextstylesform.listview1.columns[6].caption
+msgid "Oblique"
+msgstr "Угол наклона"
+
+#: ttextstylesform.mkcurrentstyle.caption
+msgctxt "ttextstylesform.mkcurrentstyle.caption"
+msgid "MkCurrentStyle"
+msgstr ""
+
+#: ttextstylesform.mkcurrentstyle.hint
+msgctxt "ttextstylesform.mkcurrentstyle.hint"
+msgid "Make selected style curretn"
+msgstr "Сделать выбранный стиль текущим"
+
+#: ttextstylesform.purgestyles.caption
+msgctxt "ttextstylesform.purgestyles.caption"
+msgid "PurgeStyles"
+msgstr ""
+
+#: ttextstylesform.purgestyles.hint
+msgctxt "ttextstylesform.purgestyles.hint"
+msgid "Purge not used styles"
+msgstr "Очистить неиспользуемые стили"
+
+#: ttextstylesform.refreshstyles.caption
+msgctxt "ttextstylesform.refreshstyles.caption"
+msgid "RefreshStyles"
+msgstr ""
+
+#: ttextstylesform.refreshstyles.hint
+msgctxt "ttextstylesform.refreshstyles.hint"
+msgid "Refresh styles list"
+msgstr "Обновить список стилей"
+
+#: ttextstylesform.separator1.caption
+msgctxt "ttextstylesform.separator1.caption"
+msgid "Separator1"
+msgstr ""
+
+#: ttextstylesform.toolbar1.caption
+msgctxt "ttextstylesform.toolbar1.caption"
+msgid "ToolBar1"
+msgstr ""
+
+#: tunitsform.angdircheckbox.caption
+msgid "Clockwise"
+msgstr "По часовой стрелке"
+
+#: tunitsform.angledirectionbitbtn.caption
+msgid "Direction"
+msgstr "Направление..."
+
+#: tunitsform.caption
+msgid "Drawing units"
+msgstr "Единицы чертежа"
+
+#: tunitsform.groupbox1.caption
+msgid "Length"
+msgstr "Линейные"
+
+#: tunitsform.groupbox2.caption
+msgid "Angle"
+msgstr "Угловые"
+
+#: tunitsform.groupbox3.caption
+msgid "Insertion scale"
+msgstr "Масштаб вставки"
+
+#: tunitsform.groupbox4.caption
+msgctxt "tunitsform.groupbox4.caption"
+msgid "Sample output"
+msgstr "Пример вывода"
+
+#: tunitsform.label1.caption
+msgctxt "tunitsform.label1.caption"
+msgid "Sample output"
+msgstr "Пример вывода"
+
+#: tunitsform.label3.caption
+msgctxt "tunitsform.label3.caption"
+msgid "Type:"
+msgstr "Формат:"
+
+#: tunitsform.label4.caption
+msgctxt "tunitsform.label4.caption"
+msgid "Precision:"
+msgstr "Точность:"
+
+#: tunitsform.label5.caption
+msgctxt "tunitsform.label5.caption"
+msgid "Type:"
+msgstr "Формат:"
+
+#: tunitsform.label6.caption
+msgctxt "tunitsform.label6.caption"
+msgid "Precision:"
+msgstr "Точность:"
+
+#: tunitsform.label7.caption
+msgid "Units to scale inserted content:"
+msgstr "Единицы измерения:"
+
+#: tunitsform.unitmodecheckbox.caption
+msgid "Unit mode"
+msgstr "Режим ед. измерения"
 
 #: tzcadmainwindow.toolbard.caption
 msgid "ToolBarD"
@@ -212,7 +427,7 @@ msgstr "Создано, не именовано"
 
 #: uzccommand_dataexport.rsclpdataexportentsfiltercurrentvalue
 msgid "Entities filter current value:"
-msgstr ""
+msgstr "Текущее значение фильтра сущностей:"
 
 #: uzccommand_dataexport.rsclpdataexportentsfilternewvalue
 msgid "${\"&[<]<<\",Keys[<],StrId[CLPIdBack]} Enter new entities filter:"
@@ -220,7 +435,7 @@ msgstr ""
 
 #: uzccommand_dataexport.rsclpdataexportexportscriptcurrentvalue
 msgid "Properties export script current value:"
-msgstr ""
+msgstr "Текущее значение скрипта экспорта свойств:"
 
 #: uzccommand_dataexport.rsclpdataexportexportscriptnewvalue
 msgid "${\"&[<]<<\",Keys[<],StrId[CLPIdBack]} Enter new export script:"
@@ -232,7 +447,7 @@ msgstr ""
 
 #: uzccommand_dataexport.rsclpdataexportpropsfiltercurrentvalue
 msgid "Properties filter current value:"
-msgstr ""
+msgstr "Текущее значение фильтра свойств:"
 
 #: uzccommand_dataexport.rsclpdataexportpropsfilternewvalue
 msgid "${\"&[<]<<\",Keys[<],StrId[CLPIdBack]} Enter new properties filter:"
@@ -244,11 +459,11 @@ msgstr ""
 
 #: uzcdialogsfiles.rsopensomething
 msgid "Open something..."
-msgstr ""
+msgstr "Откройте что-нибудь..."
 
 #: uzcdialogsfiles.rssavesomething
 msgid "Save something..."
-msgstr ""
+msgstr "Сохраните что-нибудь..."
 
 #: uzcentnet.rscannotbeconnected
 msgid "Can not be connected"
@@ -299,7 +514,9 @@ msgid "Writeln by Andrey M. Zubarev"
 msgstr "Автор: Зубарев А.М."
 
 #: uzcstrconsts.rsautosave
-msgid "Autosave"
+#, fuzzy, object-pascal-format
+#| msgid "Autosave"
+msgid "Autosave \"%s\""
 msgstr "Автосохранение"
 
 #: uzcstrconsts.rsblocks
@@ -324,7 +541,7 @@ msgstr "В клипбоарде пусто, нечего вставлять"
 
 #: uzcstrconsts.rsclosedrawings
 msgid "Close drawings"
-msgstr ""
+msgstr "Закрыть чертеж"
 
 #: uzcstrconsts.rsclosedwgquery
 #, object-pascal-format
@@ -374,11 +591,11 @@ msgstr "Копировать"
 #: uzcstrconsts.rscmentitiescounter
 #, object-pascal-format
 msgid "%d entities processed (%d total, %d selected, %d filtred)"
-msgstr ""
+msgstr "Обработано %d примитивов (%d всего, %d выбранных, %d отфильтрованных)"
 
 #: uzcstrconsts.rscmerase
 msgid "Erase"
-msgstr ""
+msgstr "Удалить"
 
 #: uzcstrconsts.rscmexport
 msgid "Export"
@@ -387,7 +604,7 @@ msgstr "Экспорт"
 #: uzcstrconsts.rscmextendernotfound
 #, object-pascal-format
 msgid "Extender \"%s\" not found"
-msgstr ""
+msgstr "Расширитель \"%s\" не найден"
 
 #: uzcstrconsts.rscmfirstcorner
 msgid "First corner:"
@@ -415,7 +632,7 @@ msgstr "В стеке обнаружены следующие данные:"
 
 #: uzcstrconsts.rscmleave
 msgid "Leave"
-msgstr ""
+msgstr "Пропустить"
 
 #: uzcstrconsts.rscmnentitiesdeselected
 #, object-pascal-format
@@ -425,22 +642,27 @@ msgstr "С %d примитивов выбор снят"
 #: uzcstrconsts.rscmnentitiesfounded
 #, object-pascal-format
 msgid "%d entities founded"
-msgstr ""
+msgstr "Создано %d примитивов"
 
 #: uzcstrconsts.rscmnentitiesprocessed
 #, object-pascal-format
 msgid "%d entities processed"
 msgstr "Обработано %d примитивов"
 
+#: uzcstrconsts.rscmnentitiesselected
+#, object-pascal-format
+msgid "%d entities selected"
+msgstr "Выбрано %d примитивов"
+
 #: uzcstrconsts.rscmnentityfrom
 #, object-pascal-format
 msgid "Show entity %d from %d"
-msgstr ""
+msgstr "Показано %d из %d примитивов"
 
 #: uzcstrconsts.rscmnentityfromwithdetails
 #, object-pascal-format
 msgid "Show entity %d from %d with details \"%s\""
-msgstr ""
+msgstr "Показано %d из %d примитивов с подробностями \"%s\""
 
 #: uzcstrconsts.rscmnewbasepoint
 msgid "New base point:"
@@ -555,7 +777,7 @@ msgstr "Выбери или укажи в параметрах примитив!
 
 #: uzcstrconsts.rscmsourceentities
 msgid "Source entities"
-msgstr ""
+msgstr "Исходные примитивы"
 
 #: uzcstrconsts.rscmspecifyfirstpoint
 msgid "Specify first point:"
@@ -843,7 +1065,7 @@ msgstr "Тип линии  \"%s\" используется: %d-в модели, 
 
 #: uzcstrconsts.rsloadfile
 msgid "Load file"
-msgstr ""
+msgstr "Загрузить файл"
 
 #: uzcstrconsts.rsmessagecaption
 msgid "Message:"
@@ -912,6 +1134,11 @@ msgstr "Пока не реализовано"
 #: uzcstrconsts.rsopenfile
 msgid "Open file..."
 msgstr "Открыть файл..."
+
+#: uzcstrconsts.rsoverwritefilequery
+#, object-pascal-format
+msgid "Drawing \"%s\" already exists. Overwrite?"
+msgstr "Чертеж \"%s\" уже существует. Перезаписать?"
 
 #: uzcstrconsts.rsprocesstimemsg
 #, object-pascal-format
@@ -997,7 +1224,7 @@ msgstr "Это системный тип линии!"
 
 #: uzcstrconsts.rstagmissingt
 msgid "Tag is missing"
-msgstr ""
+msgstr "Тег отсутствует"
 
 #: uzcstrconsts.rstemplatenotfound
 #, object-pascal-format
@@ -1056,7 +1283,7 @@ msgstr "Не могу найти файл \"%s\""
 #: uzcstrconsts.rsunabletofindunit
 #, object-pascal-format
 msgid "Unable to find unit \"%s\""
-msgstr ""
+msgstr "Не удалось найти блок \"%s\""
 
 #: uzcstrconsts.rsunabletoopenfile
 #, object-pascal-format
@@ -1109,17 +1336,17 @@ msgstr "%s v%s запущен"
 #: uzcsysinfo.rscommandline
 #, object-pascal-format
 msgid "Command line \"%s\""
-msgstr ""
+msgstr "Командная строка \"%s\""
 
 #: uzcsysinfo.rsfoundcloperand
 #, object-pascal-format
 msgid "Found command line operand \"%s\""
-msgstr ""
+msgstr "Найден операнд командной строки \"%s\""
 
 #: uzcsysinfo.rsfoundcloption
 #, object-pascal-format
 msgid "Found command line option \"%s\""
-msgstr ""
+msgstr "Найден параметр командной строки \"%s\""
 
 #: uzcuitypes.rsdontshowthisnexttime
 #, object-pascal-format
@@ -1213,12 +1440,3 @@ msgstr "Неизвестный формат файла"
 msgctxt "uzestrconsts.rswrongblockdefindex"
 msgid "Wrong blockdef index"
 msgstr "Неверный индекс блока"
-
-#: uzglviewareageneral.rswonlyparalel
-msgid "Works only for parallel projection!"
-msgstr "Работает только при паралельной проекции!"
-
-#: uzglviewareageneral.rswonlytop
-msgid "Works only for top view!"
-msgstr "Работает только при виде сверху!"
-

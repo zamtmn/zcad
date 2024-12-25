@@ -19,7 +19,8 @@ uses
   uzeparserenttypefilter,uzeparserentpropfilter,uzeparsernavparam,uzclog,uzcuidialogs,
   XMLConf,XMLPropStorage, EditBtn,LazConfigStorage,uzcdialogsfiles,
   Masks,garrayutils,LCLType,LCLIntf, Buttons,
-  gzctnrSTL,uzcActionsManager,uzglviewareageneral,uzedrawingsimple;
+  gzctnrSTL,uzcActionsManager,uzglviewareageneral,uzedrawingsimple,
+  uzcFileStructure;
 
 resourcestring
   rsStandaloneDevices='Standalone devices';
@@ -1095,7 +1096,7 @@ begin
         presets.caption:='Presets';
         presets.Clear;
         CfgFilesDesks:=TCfgFilesDesks.Create;
-        FromDirsIterator(SysVar.PATH.Program_Data^,format(AllFilesWithExt,[FileExt]),'',EnumerateCfgs,nil,CfgFilesDesks);
+        FromDirsIterator(DirInDataPaths(CFSconfigsDir),format(AllFilesWithExt,[FileExt]),'',EnumerateCfgs,nil,CfgFilesDesks,true);
         if CfgFilesDesks.Size>0 then begin
           if CfgFilesDesks.Size>1 then
             TCfgFilesDesksSorter.Sort(CfgFilesDesks,CfgFilesDesks.Size-1);

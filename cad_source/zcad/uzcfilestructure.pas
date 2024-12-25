@@ -28,5 +28,7 @@ const
 
   CFScomponentsDir='components';
   CFSdefaultlayoutxmlFile='defaultlayout.xml';
+
+  CFSconfigsDir='configs';
 implementation
 end.

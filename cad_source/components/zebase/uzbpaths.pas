@@ -19,7 +19,8 @@
 unit uzbPaths;
 
 interface
-uses Masks,{$IFNDEF DELPHI}LazUTF8,{$ENDIF}sysutils,
+uses Masks,LazUTF8,sysutils,
+     uzctnrVectorStrings,
      uzmacros,uzbLogIntf;
 type
   TFromDirIterator=procedure (const filename:String;pdata:pointer);
@@ -29,6 +30,7 @@ function ExpandPath(APath:String;AItDirectory:boolean=false):String;
 function FindInSupportPath(const APaths:String; FileName:String):String;
 function FindInPaths(const APaths:String; FileName:String):String;
 function FindInDataPaths(const ASuffix:String;const FileName:String):String;
+function DirInDataPaths(const ASuffix:String):String;
 function GetWritablePath(const ASuffix:String;const FileName:String):String;
 
 //**Получает части текста разделеные разделителем.
@@ -41,8 +43,8 @@ function GetSupportPath:String;
 function GeAddrSupportPath:PString;
 procedure AddSupportPath(const APath:String);
 
-procedure FromDirIterator(const path,mask,firstloadfilename:String;proc:TFromDirIterator;method:TFromDirIteratorObj;pdata:pointer=nil);
-procedure FromDirsIterator(const path,mask,firstloadfilename:String;proc:TFromDirIterator;method:TFromDirIteratorObj;pdata:pointer=nil);
+procedure FromDirIterator(const path,mask,firstloadfilename:String;proc:TFromDirIterator;method:TFromDirIteratorObj;pdata:pointer=nil;IgnoreDoubles:Boolean=False);
+procedure FromDirsIterator(const path,mask,firstloadfilename:String;proc:TFromDirIterator;method:TFromDirIteratorObj;pdata:pointer=nil;IgnoreDoubles:Boolean=False);
 function FindDataPath(CF:TDataFilesExistChecFunc):string;
 var DataPath,BinPath,AdditionalSupportPath,TempPath:String;
 implementation
@@ -85,6 +87,11 @@ begin
   result:=IncludeTrailingPathDelimiter(IncludeTrailingPathDelimiter(DataPath)+ASuffix)+FileName;
   if not FileExists(result)then
     exit('');
+end;
+function DirInDataPaths(const ASuffix:String):String;
+begin
+  result:=IncludeTrailingPathDelimiter(IncludeTrailingPathDelimiter(GetAppConfigDir(false))+ASuffix)+';'
+         +IncludeTrailingPathDelimiter(IncludeTrailingPathDelimiter(DataPath)+ASuffix);
 end;
 
 function GetWritablePath(const ASuffix:String;const FileName:String):String;
@@ -189,77 +196,82 @@ begin
     then
       result:=result+PathDelim;
 end;
-procedure FromDirsIterator(const path,mask,firstloadfilename:String;proc:TFromDirIterator;method:TFromDirIteratorObj;pdata:pointer);
-var
-   s,ts:String;
-begin
-     s:=path;
-     repeat
-           GetPartOfPath(ts,s,';');
-           ts:=ExpandPath(ts);
-           FromDirIterator(ts,mask,firstloadfilename,proc,method,pdata);
-     until s='';
-end;
 
-procedure FromDirIterator(const path,mask,firstloadfilename:String;proc:TFromDirIterator;method:TFromDirIteratorObj;pdata:pointer);
+procedure FromDirIteratorInternal(const path,mask,firstloadfilename:String;proc:TFromDirIterator;method:TFromDirIteratorObj;pdata:pointer;pvs:PTZctnrVectorStrings);
+  procedure processfile(const s:String);
+  var
+    fn:String;
+  begin
+    fn:=SysToUTF8(path)+SysToUTF8(s);
+    zTraceLn(sysutils.Format('{D}[FILEOPS]Process file %s',[fn]));
+    if @method<>nil then
+      method(fn,pdata);
+    if @proc<>nil then
+      proc(fn,pdata);
+  end;
+
 var sr: TSearchRec;
     s:String;
-procedure processfile(const s:String);
-var
-   fn:String;
-function IsASCII(const s: string): boolean; inline;
-   var
-     i: Integer;
-   begin
-     for i:=1 to length(s) do if ord(s[i])>127 then exit(false);
-     Result:=true;
-   end;
 begin
-     (*РАботало на xp,lin, перестало на 7х64*)
-     fn:={systoutf8}({$IFNDEF DELPHI}systoutf8{$ENDIF}{Tria_AnsiToUtf8}(path)+{$IFNDEF DELPHI}systoutf8{$ENDIF}(s));
-
-     (*попытка закостылить*
-     {$IFNDEF DELPHI}if NeedRTLAnsi and (not IsASCII(path)) then{$ENDIF}
-        fn:=Tria_AnsiToUtf8(path){$IFNDEF DELPHI}+systoutf8(s){$ELSE};{$ENDIF}
-     {$IFNDEF DELPHI}else
-         fn:=path+systoutf8(s);{$ENDIF}
-     //fn:=fn+systoutf8(s);
-     *конец попытки*)
-     zTraceLn(sysutils.Format('{D}[FILEOPS]Process file %s',[fn]));
-     //programlog.LogOutFormatStr('Process file %s',[fn],lp_OldPos,LM_Trace);
-     if @method<>nil then
-                         method(fn,pdata);
-     if @proc<>nil then
-                         proc(fn,pdata);
-
-end;
-begin
-  zTraceLn('{D+}[FILEOPS]FromDirIterator start');
-  //programlog.LogOutStr('FromDirIterator start',lp_IncPos,LM_Debug);
+  zTraceLn('{D+}[FILEOPS]FromDirIteratorInternal start');
   if firstloadfilename<>'' then
-  if fileexists(path+firstloadfilename) then
-                                            processfile(firstloadfilename);
-  if FindFirst(path + '*', faDirectory, sr) = 0 then
-  begin
+    if fileexists(path+firstloadfilename) then
+      processfile(firstloadfilename);
+  if FindFirst(path + '*', faDirectory, sr) = 0 then begin
     repeat
       if (sr.Name <> '.') and (sr.Name <> '..') then
       begin
-        if DirectoryExists(path + sr.Name) then FromDirIterator(path + sr.Name + '/',mask,firstloadfilename,proc,method,pdata)
-        else
-        begin
+        if DirectoryExists(path + sr.Name) then
+          FromDirIteratorInternal(path + sr.Name + '/',mask,firstloadfilename,proc,method,pdata,pvs)
+        else begin
           s:=lowercase(sr.Name);
           if s<>firstloadfilename then
-          if MatchesMask(s,mask) then
-                                        begin
-                                             processfile(sr.Name);
-                                        end;
+            if ((pvs<>nil)and(pvs^.findstring(s,false)<0))or(pvs=nil)then
+              if MatchesMask(s,mask) then begin
+                if pvs<>nil then
+                  pvs^.PushBackData(s);
+                processfile(sr.Name);
+              end;
         end;
       end;
     until FindNext(sr) <> 0;
     FindClose(sr);
   end;
   zTraceLn('{D-}[FILEOPS]end; {FromDirIterator}');
-  //programlog.LogOutStr('FromDirIterator....{end}',lp_DecPos,LM_Debug);
+end;
+procedure FromDirsIterator(const path,mask,firstloadfilename:String;proc:TFromDirIterator;method:TFromDirIteratorObj;pdata:pointer;IgnoreDoubles:Boolean=False);
+var
+  s,ts:String;
+  pvs:PTZctnrVectorStrings;
+  vs:TZctnrVectorStrings;
+begin
+  if IgnoreDoubles then begin
+    vs.init(100);
+    pvs:=@vs;
+  end else
+    pvs:=nil;
+  s:=path;
+  repeat
+    GetPartOfPath(ts,s,';');
+    ts:=ExpandPath(ts);
+    FromDirIteratorInternal(ts,mask,firstloadfilename,proc,method,pdata,pvs);
+  until s='';
+  if IgnoreDoubles then
+    vs.done;
+end;
+procedure FromDirIterator(const path,mask,firstloadfilename:String;proc:TFromDirIterator;method:TFromDirIteratorObj;pdata:pointer;IgnoreDoubles:Boolean=False);
+var
+  pvs:PTZctnrVectorStrings;
+  vs:TZctnrVectorStrings;
+begin
+  if IgnoreDoubles then begin
+    vs.init(100);
+    pvs:=@vs;
+  end else
+    pvs:=nil;
+  FromDirIteratorInternal(path,mask,firstloadfilename,proc,method,pdata,pvs);
+  if IgnoreDoubles then
+    vs.done;
 end;
 function FindDataPath(CF:TDataFilesExistChecFunc):string;
 var

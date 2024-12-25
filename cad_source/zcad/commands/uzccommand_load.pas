@@ -123,7 +123,7 @@ begin
     if LastFileHandle>=0 then
       loadproc:=Ext2LoadProcMap.vec.GetPLincedData(LastFileHandle)^.FileLoadProcedure;
   end else begin
-    s:=FindInSupportPath(GetSupportPath,operands);
+    s:=FindInPaths(GetSupportPath,operands);
     if s='' then
     s:=ExpandPath(operands);
   end;

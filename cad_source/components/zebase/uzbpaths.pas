@@ -27,11 +27,10 @@ type
   TFromDirIteratorObj=procedure (const filename:String;pdata:pointer) of object;
   TDataFilesExistChecFunc=function(ACheckedPath:string):boolean;
 function ExpandPath(APath:String;AItDirectory:boolean=false):String;
-function FindInSupportPath(const APaths:String; FileName:String):String;
 function FindInPaths(const APaths:String; FileName:String):String;
-function FindInDataPaths(const ASuffix:String;const FileName:String):String;
-function DirInDataPaths(const ASuffix:String):String;
-function GetWritablePath(const ASuffix:String;const FileName:String):String;
+function FindFileInDataPaths(const ASubFolder:String;const AFileName:String):String;
+function GetPathsInDataPaths(const ASubFolder:String):String;
+function GetWritableFilePath(const ASubFolder:String;const AFileName:String):String;
 
 //**Получает части текста разделеные разделителем.
 //**path - текст в котором идет поиск.
@@ -79,109 +78,73 @@ function GeAddrSupportPath:PString;
 begin
   result:=@SupportPath;
 end;
-function FindInDataPaths(const ASuffix:String;const FileName:String):String;
+function FindFileInDataPaths(const ASubFolder:String;const AFileName:String):String;
 begin
-  result:=IncludeTrailingPathDelimiter(IncludeTrailingPathDelimiter(GetAppConfigDir(false))+ASuffix)+FileName;
+  result:=IncludeTrailingPathDelimiter(IncludeTrailingPathDelimiter(GetAppConfigDir(false))+ASubFolder)+AFileName;
   if FileExists(result)then
     exit;
-  result:=IncludeTrailingPathDelimiter(IncludeTrailingPathDelimiter(DataPath)+ASuffix)+FileName;
+  result:=IncludeTrailingPathDelimiter(IncludeTrailingPathDelimiter(DataPath)+ASubFolder)+AFileName;
   if not FileExists(result)then
     exit('');
 end;
-function DirInDataPaths(const ASuffix:String):String;
+function GetPathsInDataPaths(const ASubFolder:String):String;
 begin
-  result:=IncludeTrailingPathDelimiter(IncludeTrailingPathDelimiter(GetAppConfigDir(false))+ASuffix)+';'
-         +IncludeTrailingPathDelimiter(IncludeTrailingPathDelimiter(DataPath)+ASuffix);
+  result:=IncludeTrailingPathDelimiter(IncludeTrailingPathDelimiter(GetAppConfigDir(false))+ASubFolder)+';'
+         +IncludeTrailingPathDelimiter(IncludeTrailingPathDelimiter(DataPath)+ASubFolder);
 end;
 
-function GetWritablePath(const ASuffix:String;const FileName:String):String;
+function GetWritableFilePath(const ASubFolder:String;const AFileName:String):String;
 begin
-  result:=IncludeTrailingPathDelimiter(IncludeTrailingPathDelimiter(GetAppConfigDir(false))+ASuffix)+FileName;
+  result:=IncludeTrailingPathDelimiter(IncludeTrailingPathDelimiter(GetAppConfigDir(false))+ASubFolder)+AFileName;
+end;
+
+function GetPartOfPath(out part:String;var path:String;const separator:String):String;
+var
+  i:Integer;
+begin
+  i:=pos(separator,path);
+  if i<>0 then begin
+    part:=copy(path,1,i-1);
+    path:=copy(path,i+1,length(path)-i);
+  end else begin
+    part:=path;
+    path:='';
+  end;
+  result:=part;
 end;
 
 function FindInPaths(const APaths:String; FileName:String):String;
-var
-   s,ts,ts2:String;
-begin
-     FileName:=ExpandPath(FileName);
-     ts:={$IFNDEF DELPHI}utf8tosys{$ENDIF}(FileName);
-     if FileExists(ts)  then
-                            begin
-                                 result:=FileName;
-                                 exit;
-                            end;
-     {$IFDEF LINUX}
-     ts:=lowercase(ts);
-     if FileExists(ts)  then
-                            begin
-                                 result:=lowercase(FileName);
-                                 exit;
-                            end;
-     {$ENDIF}
-     s:=APaths;
-     repeat
-           GetPartOfPath(ts,s,';');
-           ts:=ExpandPath(ts)+FileName;
-           ts2:={$IFNDEF DELPHI}utf8tosys{$ENDIF}(ts);
-           if FileExists(ts2) then
-                                 begin
-                                      result:=ts;
-                                      exit;
-                                 end;
-           {$IFDEF LINUX}
-           ts2:=lowercase(ts2);
-           if FileExists(ts2)  then
-                                  begin
-                                       result:=lowercase(ts);
-                                       exit;
-                                  end;
-           {$ENDIF}
-     until s='';
-     result:='';
-end;
-function GetPartOfPath(out part:String;var path:String;const separator:String):String;
-var
-   i:Integer;
-begin
-           i:=pos(separator,path);
-           if i<>0 then
-                       begin
-                            part:=copy(path,1,i-1);
-                            path:=copy(path,i+1,length(path)-i);
-                       end
-                   else
-                       begin
-                            part:=path;
-                            path:='';
-                       end;
-     result:=part;
-end;
-function FindInSupportPath(const APaths:String; FileName:String):String;
 const
-  cFindInSupportPath='[FILEOPS]FindInSupportPath: found file:"%s"';
+  cFindInPaths='[FILEOPS]FindInPaths: found file:"%s"';
 var
-  s,ts:String;
+  s,ts,ts2{$IFDEF LINUX},lfn{$ENDIF}:String;
 begin
-  zTraceLn('[FILEOPS]FindInSupportPath: searh file:"%s"',[{$IFNDEF DELPHI}utf8tosys{$ENDIF}(FileName)]);
+  {$IFDEF LINUX}lfn:=lowercase(FileName);{$ENDIF}
+  zTraceLn('[FILEOPS]FindInPaths: searh file:"%s"',[UTF8ToSys(FileName)]);
   FileName:=ExpandPath(FileName);
-  zTraceLn('[FILEOPS]FindInSupportPath: file name expand to:"%s"',[{$IFNDEF DELPHI}utf8tosys{$ENDIF}(FileName)]);
-  if FileExists({$IFNDEF DELPHI}utf8tosys{$ENDIF}(FileName)) then begin
-    zTraceLn(cFindInSupportPath,[{$IFNDEF DELPHI}utf8tosys{$ENDIF}(FileName)]);
+  zTraceLn('[FILEOPS]FindInPaths: file name expand to:"%s"',[UTF8ToSys(FileName)]);
+  if FileExists(UTF8ToSys(FileName)) then begin
+    zTraceLn(cFindInPaths,[UTF8ToSys(FileName)]);
     exit(FileName);
   end;
   s:=APaths;
   s:=ExpandPath(s);
   repeat
     GetPartOfPath(ts,s,';');
-    zTraceLn('[FILEOPS]FindInSupportPath: searh in "%s"',[{$IFNDEF DELPHI}utf8tosys{$ENDIF}(ts)]);
-    ts:=ts+FileName;
-    if FileExists({$IFNDEF DELPHI}utf8tosys{$ENDIF}(ts)) then begin
-      zTraceLn(cFindInSupportPath,[{$IFNDEF DELPHI}utf8tosys{$ENDIF}(result)]);
-      exit(ts);
+    zTraceLn('[FILEOPS]FindInPaths: searh in "%s"',[UTF8ToSys(ts)]);
+    ts2:=ts+FileName;
+    if FileExists(UTF8ToSys(ts2))then begin
+      zTraceLn(cFindInPaths,[UTF8ToSys(result)]);
+      exit(ts2);
     end;
+   {$IFDEF LINUX}
+    ts2:=ts+lfn;
+    if FileExists(ts2) then
+      exit(ts2);
+   {$ENDIF}
   until s='';
   result:='';
-  zDebugLn(sysutils.Format('{E}FindInSupportPath: file not found:"%s"',[{$IFNDEF DELPHI}utf8tosys{$ENDIF}(FileName)]));
+  zDebugLn(sysutils.Format('{E}FindInPaths: file not found:"%s"',[UTF8ToSys(FileName)]));
 end;
 function ExpandPath(APath:String;AItDirectory:boolean=false):String;
 begin

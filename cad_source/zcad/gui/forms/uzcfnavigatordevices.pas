@@ -1096,7 +1096,7 @@ begin
         presets.caption:='Presets';
         presets.Clear;
         CfgFilesDesks:=TCfgFilesDesks.Create;
-        FromDirsIterator(DirInDataPaths(CFSconfigsDir),format(AllFilesWithExt,[FileExt]),'',EnumerateCfgs,nil,CfgFilesDesks,true);
+        FromDirsIterator(GetPathsInDataPaths(CFSconfigsDir),format(AllFilesWithExt,[FileExt]),'',EnumerateCfgs,nil,CfgFilesDesks,true);
         if CfgFilesDesks.Size>0 then begin
           if CfgFilesDesks.Size>1 then
             TCfgFilesDesksSorter.Sort(CfgFilesDesks,CfgFilesDesks.Size-1);

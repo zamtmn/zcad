@@ -3046,8 +3046,8 @@ begin
                  else
                  begin
                                            begin
-                                           s:=ExpandPath(operands);
-                                           s:=FindInSupportPath(GetSupportPath,operands);
+                                           //s:=ExpandPath(operands);
+                                           s:=FindInPaths(GetSupportPath,operands);
                                            end;
                  end;
   isload:=FileExists(utf8tosys(s));
@@ -3453,7 +3453,7 @@ begin
     SysUnit^.RegisterType(TypeInfo(TLinkType));
 
   MainSpecContentFormat.init(100);
-  MainSpecContentFormat.loadfromfile(FindInSupportPath(GetSupportPath,'main.sf'));
+  MainSpecContentFormat.loadfromfile(FindInPaths(GetSupportPath,'main.sf'));
   CreateZCADCommand(@RegenZEnts_com,'RegenZEnts',CADWG,0);
   Wire.init('El_Wire',0,0);
   commandmanager.CommandRegister(@Wire);

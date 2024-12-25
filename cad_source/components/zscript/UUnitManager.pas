@@ -190,7 +190,7 @@ begin
   result:=internalfindunit(uname);
   if result=nil then
                     begin
-                         nfn:=FindInSupportPath(PPaths,uname+'.pas');
+                         nfn:=FindInPaths(PPaths,uname+'.pas');
                          if nfn<>'' then
                                         begin
                                              tcurrentunit:=currentunit;

@@ -65,7 +65,7 @@ var
 begin
   try
     // create a new xml config file
-    filename:=GetWritablePath(CFScomponentsDir,CFSdefaultlayoutxmlFile);
+    filename:=GetWritableFilePath(CFScomponentsDir,CFSdefaultlayoutxmlFile);
     SaveLayoutToFile(filename);
     exit;
     XMLConfig:=TXMLConfigStorage.Create(filename,false);

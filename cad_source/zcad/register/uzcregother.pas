@@ -33,7 +33,7 @@ var
   mem:TZctnrVectorBytes;
 initialization;
   units.loadunit(GetSupportPath,InterfaceTranslate,expandpath('$(ZDataPath)/rtl/sysvar.pas'),nil);
-  units.loadunit(GetSupportPath,InterfaceTranslate,FindInDataPaths(CFSrtlDir,CFSsavedvarpasFile),nil);
+  units.loadunit(GetSupportPath,InterfaceTranslate,FindFileInDataPaths(CFSrtlDir,CFSsavedvarpasFile),nil);
   units.loadunit(GetSupportPath,InterfaceTranslate,expandpath('$(ZDataPath)/rtl/devicebase.pas'),nil);
 
   SysVarUnit:=units.findunit(GetSupportPath,InterfaceTranslate,'sysvar');
@@ -231,7 +231,7 @@ finalization;
   if SavedUnit<>nil then begin
     mem.init(1024);
     SavedUnit^.SavePasToMem(mem);
-    mem.SaveToFile(GetWritablePath(CFSRtlDir,CFSsavedvarpasFile));
+    mem.SaveToFile(GetWritableFilePath(CFSRtlDir,CFSsavedvarpasFile));
     mem.done;
   end;
 end.

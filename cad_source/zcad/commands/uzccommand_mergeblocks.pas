@@ -42,7 +42,7 @@ begin
   drawings.CurrentDWG:=BlockBaseDWG;
 
   if length(operands)>0 then
-  s:=FindInSupportPath(GetSupportPath,operands);
+  s:=FindInPaths(GetSupportPath,operands);
   result:=Merge_com(Context,s);
 
   drawings.CurrentDWG:=pdwg;

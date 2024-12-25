@@ -188,8 +188,8 @@ begin
     if not isload then
       exit(cmd_cancel);
   end else begin
-    FileName:=ExpandPath(operands);
-    FileName:=FindInSupportPath(GetSupportPath,operands);
+    //FileName:=ExpandPath(operands);
+    FileName:=FindInPaths(GetSupportPath,operands);
   end;
   isload:=FileExists(utf8tosys(FileName));
   if isload then begin

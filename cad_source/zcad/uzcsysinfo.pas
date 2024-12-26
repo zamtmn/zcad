@@ -141,7 +141,7 @@ begin
 
   finally programlog.leave(IfEntered);end;
 end;
-function DataFilesExistChec(ACheckedPath:string):boolean;
+function DataFilesExistChec(const ACheckedPath:string):boolean;
 begin
   result:=DirectoryExists(ACheckedPath+'/rtl')
       and FileExists(ACheckedPath+'/rtl/system.pas');

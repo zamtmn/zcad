@@ -1,2 +1,2 @@
-ExecuteFile($(ZDataPath)/components/blockpreviewexport.cmd)
+ExecuteFile($(DistroPath)/components/blockpreviewexport.cmd)
 Quit

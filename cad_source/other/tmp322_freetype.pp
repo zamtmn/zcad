@@ -390,7 +390,7 @@ end;
 procedure TFontManager.SetSearchPath (AValue : string);
   procedure AddPath (apath : string);
   begin
-    FPaths.Add (IncludeTrailingBackslash(Apath));
+    FPaths.Add (IncludeTrailingPathDelimiter(Apath));
   end;
 var p : integer;
 begin
@@ -1064,7 +1064,7 @@ end;
 {$ifdef WINDOWS}
 procedure SetWindowsFontPath;
 begin
-  DefaultSearchPath := includetrailingbackslash(GetEnvironmentVariable('windir')) + 'fonts';
+  DefaultSearchPath := IncludeTrailingPathDelimiter(GetEnvironmentVariable('windir')) + 'fonts';
 end;
 {$endif}
 

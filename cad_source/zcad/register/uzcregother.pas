@@ -32,13 +32,13 @@ implementation
 var
   mem:TZctnrVectorBytes;
 initialization;
-  units.loadunit(GetSupportPath,InterfaceTranslate,expandpath('$(ZDataPath)/rtl/sysvar.pas'),nil);
-  units.loadunit(GetSupportPath,InterfaceTranslate,FindFileInDataPaths(CFSrtlDir,CFSsavedvarpasFile),nil);
-  units.loadunit(GetSupportPath,InterfaceTranslate,expandpath('$(ZDataPath)/rtl/devicebase.pas'),nil);
+  units.loadunit(GetSupportPaths,InterfaceTranslate,expandpath('$(DistroPath)/rtl/sysvar.pas'),nil);
+  units.loadunit(GetSupportPaths,InterfaceTranslate,FindFileInDataPaths(CFSrtlDir,CFSsavedvarpasFile),nil);
+  units.loadunit(GetSupportPaths,InterfaceTranslate,expandpath('$(DistroPath)/rtl/devicebase.pas'),nil);
 
-  SysVarUnit:=units.findunit(GetSupportPath,InterfaceTranslate,'sysvar');
-  SavedUnit:=units.findunit(GetSupportPath,InterfaceTranslate,'savedvar');
-  DBUnit:=units.findunit(GetSupportPath,InterfaceTranslate,'devicebase');
+  SysVarUnit:=units.findunit(GetSupportPaths,InterfaceTranslate,'sysvar');
+  SavedUnit:=units.findunit(GetSupportPaths,InterfaceTranslate,'savedvar');
+  DBUnit:=units.findunit(GetSupportPaths,InterfaceTranslate,'devicebase');
 
   if SysVarUnit<>nil then
   begin
@@ -203,10 +203,10 @@ initialization;
   end;
 
 
-  units.loadunit(GetSupportPath,InterfaceTranslate,expandpath('$(ZDataPath)/rtl/cables.pas'),nil);
-  units.loadunit(GetSupportPath,InterfaceTranslate,expandpath('$(ZDataPath)/rtl/devices.pas'),nil);
-  units.loadunit(GetSupportPath,InterfaceTranslate,expandpath('$(ZDataPath)/rtl/connectors.pas'),nil);
-  units.loadunit(GetSupportPath,InterfaceTranslate,expandpath('$(ZDataPath)/rtl/styles/styles.pas'),nil);
+  units.loadunit(GetSupportPaths,InterfaceTranslate,expandpath('$(DistroPath)/rtl/cables.pas'),nil);
+  units.loadunit(GetSupportPaths,InterfaceTranslate,expandpath('$(DistroPath)/rtl/devices.pas'),nil);
+  units.loadunit(GetSupportPaths,InterfaceTranslate,expandpath('$(DistroPath)/rtl/connectors.pas'),nil);
+  units.loadunit(GetSupportPaths,InterfaceTranslate,expandpath('$(DistroPath)/rtl/styles/styles.pas'),nil);
 
   SysVar.debug.memdeb.GetMemCount:=nil;
   SysVar.debug.memdeb.FreeMemCount:=nil;

@@ -81,7 +81,7 @@ begin
         psuperline^.init(nil,nil,0,pv^.CoordInWCS.lBegin,pv^.CoordInWCS.lEnd);
         pvarext:=psuperline^.GetExtension<TVariablesExtender>;
         if pvarext<>nil then begin
-          psu:=units.findunit(GetSupportPath,InterfaceTranslate,'superline');
+          psu:=units.findunit(GetSupportPaths,InterfaceTranslate,'superline');
           if psu<>nil then
             pvarext.entityunit.copyfrom(psu);
         end;

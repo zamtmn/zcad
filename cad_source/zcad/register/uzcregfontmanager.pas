@@ -29,11 +29,11 @@ var
   system_pas_path:string;
 
 initialization
-  system_pas_path:=expandpath('$(ZDataPath)/rtl/system.pas');
-  units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPath,system_pas_path,InterfaceTranslate,'PATH_Fonts','String',@sysvarPATHFontsPath);
-  units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPath,system_pas_path,InterfaceTranslate,'PATH_AlternateFont','String',@sysvarAlternateFont);
+  system_pas_path:=expandpath('$(DistroPath)/rtl/system.pas');
+  units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPaths,system_pas_path,InterfaceTranslate,'PATH_Fonts','String',@sysvarPATHFontsPath);
+  units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPaths,system_pas_path,InterfaceTranslate,'PATH_AlternateFont','String',@sysvarAlternateFont);
   {$IF DEFINED(USELAZFREETYPETTFIMPLEMENTATION) and DEFINED(USEFREETYPETTFIMPLEMENTATION)}
-  units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPath,system_pas_path,InterfaceTranslate,'RD_UseLazFreeTypeImplementation','Boolean',@sysvarTTFUseLazFreeTypeImplementation);
+  units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPaths,system_pas_path,InterfaceTranslate,'RD_UseLazFreeTypeImplementation','Boolean',@sysvarTTFUseLazFreeTypeImplementation);
   sysvar.RD.RD_UseLazFreeTypeImplementation:=@sysvarTTFUseLazFreeTypeImplementation;
   {$ELSE}
   {$ENDIF}

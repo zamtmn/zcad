@@ -67,6 +67,10 @@ function ZColorDecorator(PInstance:Pointer):String;
 begin
      result:=ColorToString(PColor(PInstance)^);
 end;
+function TFStringDecorator(PInstance:Pointer):String;
+begin
+     result:=PFString(PInstance)^;
+end;
 procedure CreateComboPropEditor(TheOwner:TPropEditorOwner;pinstance:pointer;FreeOnLostFocus:boolean;PTD:PUserTypeDescriptor;out propeditor:TPropEditor; out cbedit:TComboBox;f:TzeUnitsFormat);
 begin
   propeditor:=TPropEditor.Create(theowner,PInstance,ptd^,FreeOnLostFocus,f);
@@ -585,6 +589,7 @@ begin
     DecorateType(SysUnit.TypeName2PTD('TGDBPaletteColor'),PaletteColorDecorator,ColorDecoratorCreateEditor,drawIndexColorProp);
     DecorateType(SysUnit.TypeName2PTD('TGDBOSMode'),nil,CreateEmptyEditor,nil);
     DecorateType(SysUnit.TypeName2PTD('TZColor'),ZColorDecorator,ZColorDecoratorCreateEditor,{drawIndexColorProp}nil);
+    DecorateType(SysUnit.TypeName2PTD('TFString'),TFStringDecorator,ZColorDecoratorCreateEditor,nil);
 
     AddFastEditorToType(SysUnit.TypeName2PTD('Integer'),@OIUI_FE_HalfButtonGetPrefferedSize,@OIUI_FE_ButtonGreatThatDraw,@OIUI_FE_IntegerInc);
     AddFastEditorToType(SysUnit.TypeName2PTD('Integer'),@OIUI_FE_HalfButtonGetPrefferedSize,@OIUI_FE_ButtonLessThatDraw,@OIUI_FE_IntegerDec);

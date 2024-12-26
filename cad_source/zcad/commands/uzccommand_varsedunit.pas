@@ -45,7 +45,7 @@ var
 begin
   if length(Operands)>0 then begin
     op:=Operands;
-    u:=units.findunit(GetSupportPath,InterfaceTranslate,op);
+    u:=units.findunit(GetSupportPaths,InterfaceTranslate,op);
     if u<>nil then
       EditUnit(u^)
     else

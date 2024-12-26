@@ -114,10 +114,10 @@ begin
         dbpas:='';
   end;
   if dbpas<>'' then begin
-    pu:=PTZCADDrawing(drawings.GetCurrentDWG).DWGUnits.findunit(GetSupportPath,InterfaceTranslate,DrawingDeviceBaseUnitName);
+    pu:=PTZCADDrawing(drawings.GetCurrentDWG).DWGUnits.findunit(GetSupportPaths,InterfaceTranslate,DrawingDeviceBaseUnitName);
     if assigned(pu) then begin
       mem.InitFromFile(dbpas);
-      units.parseunit(GetSupportPath,InterfaceTranslate,mem,PTSimpleUnit(pu));
+      units.parseunit(GetSupportPaths,InterfaceTranslate,mem,PTSimpleUnit(pu));
       remapprjdb(pu);
       mem.done;
     end;

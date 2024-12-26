@@ -20,14 +20,16 @@ unit uzcPathMacros;
 {$INCLUDE zengineconfig.inc}
 interface
 uses
+  SysUtils,Forms,
+  {$IFDEF WINDOWS}ShlObj,{$ENDIF}LazUTF8,
   MacroDefIntf,uzmacros,
-  uzclog,uzblog,uzbpaths,Forms,uzcstrconsts,
-  {$IFDEF WINDOWS}ShlObj,{$ENDIF}{$IFNDEF DELPHI}LazUTF8,{$ENDIF}sysutils,uzcsysvars;
+  uzclog,uzblog,uzbpaths,uzcstrconsts,
+  uzcFileStructure;
 type
   TZCADPathsMacroMethods=class
-    class function MacroFuncZDataPath(const {%H-}Param: string; const Data: PtrInt;
+    class function MacroFuncDistroPath(const {%H-}Param: string; const Data: PtrInt;
                                         var {%H-}Abort: boolean): string;
-    class function MacroFuncZBinPath(const {%H-}Param: string; const Data: PtrInt;
+    class function MacroFuncBinPath(const {%H-}Param: string; const Data: PtrInt;
                                        var {%H-}Abort: boolean): string;
     class function MacroFuncDataSearhPrefixes(const {%H-}Param: string; const Data: PtrInt;
                                        var {%H-}Abort: boolean): string;
@@ -53,22 +55,22 @@ type
                                                var {%H-}Abort: boolean): string;
   end;
 implementation
-class function TZCADPathsMacroMethods.MacroFuncZDataPath(const {%H-}Param: string; const Data: PtrInt;var {%H-}Abort: boolean): string;
+class function TZCADPathsMacroMethods.MacroFuncDistroPath(const {%H-}Param: string; const Data: PtrInt;var {%H-}Abort: boolean): string;
 begin
-  result:=DataPath;
+  result:=GetDistroPath;
 end;
-class function TZCADPathsMacroMethods.MacroFuncZBinPath(const {%H-}Param: string; const Data: PtrInt;var {%H-}Abort: boolean): string;
+class function TZCADPathsMacroMethods.MacroFuncBinPath(const {%H-}Param: string; const Data: PtrInt;var {%H-}Abort: boolean): string;
 begin
-  result:=BinPath;
+  result:=GetBinPath;
 end;
 class function TZCADPathsMacroMethods.MacroFuncZCADDictionariesPath(const {%H-}Param: string; const Data: PtrInt;
                                              var {%H-}Abort: boolean): string;
 begin
-  result:=DataPath+'/dictionaries';
+  result:=ConcatPaths([GetDistroPath,CFSdictionariesDir]);
 end;
 class function TZCADPathsMacroMethods.MacroFuncTEMPPath(const {%H-}Param: string; const Data: PtrInt;var {%H-}Abort: boolean): string;
 begin
-  result:=TempPath;
+  result:=GetTempPath;
 end;
 class function TZCADPathsMacroMethods.MacroFuncSystemFontsPath(const {%H-}Param: string; const Data: PtrInt;var {%H-}Abort: boolean): string;
 {$IF defined(WINDOWS)}
@@ -109,7 +111,7 @@ end;
 class function TZCADPathsMacroMethods.MacroFuncDataSearhPrefixes(const {%H-}Param: string; const Data: PtrInt;
                                    var {%H-}Abort: boolean): string;
 begin
-  Result:=IncludeTrailingPathDelimiter(IncludeTrailingPathDelimiter(GetAppConfigDir(false))+Param)+';'+IncludeTrailingPathDelimiter(IncludeTrailingPathDelimiter(DataPath)+Param);
+  Result:=IncludeTrailingPathDelimiter(IncludeTrailingPathDelimiter(GetAppConfigDir(false))+Param)+';'+IncludeTrailingPathDelimiter(IncludeTrailingPathDelimiter(GetDistroPath)+Param);
 end;
 class function TZCADPathsMacroMethods.MacroFuncUserDir(const Param: string; const {%H-}Data: PtrInt;var {%H-}Abort: boolean): string;
 begin
@@ -133,10 +135,10 @@ begin
 end;
 
 initialization
-DefaultMacros.AddMacro(TTransferMacro.Create('ZBinPath','',
-                       'Path to ZCAD binary',TZCADPathsMacroMethods.MacroFuncZBinPath,[]));
-DefaultMacros.AddMacro(TTransferMacro.Create('ZDataPath','',
-                       'Path to ZCAD data',TZCADPathsMacroMethods.MacroFuncZDataPath,[]));
+DefaultMacros.AddMacro(TTransferMacro.Create('BinPath','',
+                       'Path to ZCAD binary',TZCADPathsMacroMethods.MacroFuncBinPath,[]));
+DefaultMacros.AddMacro(TTransferMacro.Create('DistroPath','',
+                       'Path to ZCAD distributive',TZCADPathsMacroMethods.MacroFuncDistroPath,[]));
 DefaultMacros.AddMacro(TTransferMacro.Create('TEMP','',
                        'TEMP path',TZCADPathsMacroMethods.MacroFuncTEMPPath,[]));
 DefaultMacros.AddMacro(TTransferMacro.Create('ZCADDictionariesPath','',

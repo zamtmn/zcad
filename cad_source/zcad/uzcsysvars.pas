@@ -60,7 +60,7 @@ type
   {REGISTERRECORDTYPE tpath}
   tpath=record
              Support_Path:PString;(*'Support files'*)
-             AdditionalSupport_Path:PString;(*'Additional support files'*)(*oi_readonly*)
+             AdditionalSupport_Path:TFString;(*'Additional support files'*)(*oi_readonly*)
              Preload_Path:PString;(*'Preload files'*)
              Fonts_Path:PString;(*'Fonts'*)
              Alternate_Font:PString;(*'Alternate font file'*)
@@ -68,8 +68,8 @@ type
              Template_File:PString;(*'Default template'*)
              LayoutFile:PString;(*'Current layout'*)
              Dictionaries:PString;(*'Dictionaries'*)
-             Program_Data:PString;(*'Program data'*)(*oi_readonly*)
-             Temp_files:PString;(*'Temporary files'*)(*oi_readonly*)
+             Program_Data:TFString;(*'Program data'*)(*oi_readonly*)
+             Temp_files:TFString;(*'Temporary files'*)(*oi_readonly*)
              Device_Library:PString;(*'Device base'*)
         end;
   PTCanvasData=^TCanvasData;

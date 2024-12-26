@@ -53,7 +53,7 @@ var
 begin
   pum:=drawings.GetCurrentDWG^.GetDWGUnits;//получаем модули подключеные к чертежу
   if pum<>nil then begin
-    pdbu:=pum^.findunit(GetSupportPath,InterfaceTranslate,DrawingDeviceBaseUnitName);//получаем модуль БД чертежа
+    pdbu:=pum^.findunit(GetSupportPaths,InterfaceTranslate,DrawingDeviceBaseUnitName);//получаем модуль БД чертежа
     if pdbu<>nil then
       while commandmanager.getentity(rscmSelectDestinationEntity,pEntity) do begin
         EntVarExt:=pEntity^.GetExtension<TVariablesExtender>;

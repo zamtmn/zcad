@@ -71,7 +71,7 @@ begin
       pentvarext:=pobj^.GetExtension<TVariablesExtender>;
       if pentvarext<>nil then begin
         pentvarext.entityunit.free;
-        units.parseunit(GetSupportPath,InterfaceTranslate,mem,@pentvarext.entityunit);
+        units.parseunit(GetSupportPaths,InterfaceTranslate,mem,@pentvarext.entityunit);
         mem.Seek(0);
         inc(counter);
       end;

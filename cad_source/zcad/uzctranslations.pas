@@ -22,7 +22,7 @@ unit uzcTranslations;
 interface
 uses
   uzbpaths,uzbstrproc,uzbLogTypes,uzcLog,uzbLog,
-  uzcsysparams,
+  uzcsysparams,uzcFileStructure,
   uSpeller,uzcSpeller,
   LazUTF8,gettext,translations,
   fileutil,LResources,sysutils,forms,
@@ -190,19 +190,19 @@ begin
   CreatedPO:=nil;
   if not UpdatePOMode then begin
     if Lang<>'' then begin
-      AFilename:=Format(PODirectory + POFormat,[Lang]);
+      AFilename:=Format(ConcatPaths([PODirectory,POFormat]),[Lang]);
       if FileExists(AFilename) then
         CreatedPO:=TmyPOFile.Create(AFilename);
     end;
     if (FallbackLang<>'')and(not assigned(CreatedPO)) then begin
-      AFilename:=Format(PODirectory + POFormat,[FallbackLang]);
+      AFilename:=Format(ConcatPaths([PODirectory,POFormat]),[FallbackLang]);
       if FileExists(AFilename) then
         CreatedPO:=TmyPOFile.Create(AFilename);
     end;
     if (not assigned(RunTimePO)) then
       CreatedPO:=TmyPOFile.Create;
   end else begin
-    AFilename:=(PODirectory + POFileName);
+    AFilename:=ConcatPaths([PODirectory,POFileName]);
     if FileExists(AFilename) then begin
       CreatedPO:=TmyPOFile.Create(AFilename,true);
       //actualypo:=TmyPOFile.Create;
@@ -310,7 +310,7 @@ initialization
   TranslateLogModuleId:=programlog.RegisterModule('TRANSLATOR');
   TranslateSpellerLogModuleId:=ProgramLog.RegisterModule('TRANSLATOR/SPELLER');
   DisableTranslateCount:=0;
-  PODirectory := DataPath+'/languages/';
+  PODirectory:=ConcatPaths([GetDistroPath,CFSlanguagesDir]);
   GetLanguageIDs(Lang, FallbackLang); // определено в модуле gettext
   if sysparam.saved.LangOverride<>'' then begin
     Lang:=sysparam.saved.LangOverride;
@@ -319,9 +319,9 @@ initialization
   createpo;
   LRSTranslator:=TPoTranslator.Create;
   if not sysparam.saved.updatepo then begin
-    TranslateResourceStrings(PODirectory + ZCADTranslatedPOFileName, Lang, FallbackLang);
-    TranslateUnitResourceStrings('anchordockstr', PODirectory + 'anchordockstr.%s.po', Lang, FallbackLang);
-    TranslateUnitResourceStrings('lclstrconsts', PODirectory + 'lclstrconsts.%S.po', Lang, FallbackLang);
+    TranslateResourceStrings(ConcatPaths([PODirectory,ZCADTranslatedPOFileName]),Lang,FallbackLang);
+    TranslateUnitResourceStrings('anchordockstr',ConcatPaths([PODirectory,'anchordockstr.%s.po']),Lang,FallbackLang);
+    TranslateUnitResourceStrings('lclstrconsts',ConcatPaths([PODirectory,'lclstrconsts.%S.po']),Lang,FallbackLang);
   end;
 
 finalization

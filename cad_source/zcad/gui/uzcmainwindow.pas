@@ -48,6 +48,8 @@ uses
   uzcimagesmanager,usupportgui,uzcuidialogs,
   uzcActionsManager,
 
+  uzcFileStructure,
+
   //это разделять нельзя, иначе загрузятся невыровенные рекорды
   {$INCLUDE allgeneratedfiles.inc}uzcregother,
 
@@ -1017,7 +1019,7 @@ begin
   TZGuiExceptionsHandler.InstallHandler(ZcadException);
 
   SuppressedShortcuts:=TXMLConfig.Create(nil);
-  SuppressedShortcuts.Filename:=DataPath+'/components/suppressedshortcuts.xml';
+  SuppressedShortcuts.Filename:=ConcatPaths([GetDistroPath,CFScomponentsDir,CFSsuppressedshortcutsxmlFile]);
 
   if SysParam.saved.UniqueInstance then
     CreateOrRunFIPCServer;
@@ -1036,15 +1038,15 @@ begin
 
   InitSystemCalls;
 
-  ImagesManager.ScanDir(DataPath+'/images/');
-  ImagesManager.LoadAliasesDir(DataPath+'/images/navigator.ima');
+  ImagesManager.ScanDir(ConcatPaths([GetDistroPath,CFSimagesDir]));
+  ImagesManager.LoadAliasesDir(ConcatPaths([GetDistroPath,CFSimagesDir,CFSnavigatorimaFile]));
 
   //StandartActions:=TActionList.Create(self);
   InsertComponent(StandartActions);
 
   if not assigned(StandartActions.Images) then
                              StandartActions.Images:={TImageList.Create(StandartActions)}ImagesManager.IconList;
-  brocenicon:=StandartActions.LoadImage(DataPath+'/menu/BMP/noimage.bmp');
+  brocenicon:=StandartActions.LoadImage(ConcatPaths([GetDistroPath,'menu/BMP/noimage.bmp']));
 
 
   ToolBarsManager.setup(self,StandartActions,sysvar.INTF.INTF_DefaultControlHeight^);

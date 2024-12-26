@@ -28,7 +28,20 @@ const
 
   CFScomponentsDir='components';
   CFSdefaultlayoutxmlFile='defaultlayout.xml';
+  CFSemptydxfFile='empty.dxf';
+  CFSsuppressedshortcutsxmlFile='suppressedshortcuts.xml';
+  CFSlogopngFile='logo.png';
 
   CFSconfigsDir='configs';
+
+  CFSdictionariesDir='dictionaries';
+
+  CFSlanguagesDir='languages';
+
+  CFShelpDir='help';
+  CFSuserguide_shtmlFile='userguide.%s.html';
+
+  CFSimagesDir='images';
+  CFSnavigatorimaFile='navigator.ima';
 implementation
 end.

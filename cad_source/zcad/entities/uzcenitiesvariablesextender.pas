@@ -352,7 +352,7 @@ begin
       pvd:=EntityUnit.FindVariable('VariablesContentReplaceFrom',true);
       if pvd<>nil then
         if pvd^.data.PTD=@FundamentalStringDescriptorObj then begin
-          uou:=pointer(units.findunit(GetSupportPath,InterfaceTranslate,pvd^.GetValueAsString));
+          uou:=pointer(units.findunit(GetSupportPaths,InterfaceTranslate,pvd^.GetValueAsString));
           if uou<>nil then begin
             EntityUnit.free;
             EntityUnit.CopyFrom(uou);
@@ -435,7 +435,7 @@ var
     vardata:TVariablesExtender;
 begin
      vardata:=PGDBObjEntity(PEnt)^.GetExtension<TVariablesExtender>;
-     usedunit:=pointer(units.findunit(GetSupportPath,InterfaceTranslate,_Value));
+     usedunit:=pointer(units.findunit(GetSupportPaths,InterfaceTranslate,_Value));
      if vardata=nil then
      begin
           vardata:=addvariablestoentity(PEnt);

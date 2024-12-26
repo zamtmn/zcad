@@ -170,8 +170,8 @@ begin
     programlog.LogOutStr('DefaultUnicodeCodePage:='+inttostr(DefaultUnicodeCodePage),LM_Info);
     programlog.LogOutStr('UTF8CompareLocale:='+inttostr(UTF8CompareLocale),LM_Info);
 
-    programlog.LogOutFormatStr('SysParam.ProgramPath="%s"',[DataPath],LM_Necessarily);
-    programlog.LogOutFormatStr('SysParam.TempPath="%s"',[TempPath],LM_Necessarily);
+    programlog.LogOutFormatStr('SysParam.ProgramPath="%s"',[GetDistroPath],LM_Necessarily);
+    programlog.LogOutFormatStr('SysParam.TempPath="%s"',[GetTempPath],LM_Necessarily);
     programlog.LogOutFormatStr('SysParam.ScreenX=%d',[SysParam.notsaved.ScreenX],LM_Info);
     programlog.LogOutFormatStr('SysParam.ScreenY=%d',[SysParam.notsaved.ScreenY],LM_Info);
     programlog.LogOutFormatStr('SysParam.NoSplash=%s',[BoolToStr(SysParam.saved.NoSplash,true)],LM_Info);
@@ -183,8 +183,8 @@ begin
 
     with programlog.Enter('Macros',LM_Info) do try
       programlog.LogOutFormatStr('$(AppName)="%s"',[ExpandPath('$(AppName)')],LM_Necessarily);
-      programlog.LogOutFormatStr('$(ZBinPath)="%s"',[ExpandPath('$(ZBinPath)')],LM_Necessarily);
-      programlog.LogOutFormatStr('$(ZDataPath)="%s"',[ExpandPath('$(ZDataPath)')],LM_Necessarily);
+      programlog.LogOutFormatStr('$(BinPath)="%s"',[ExpandPath('$(BinPath)')],LM_Necessarily);
+      programlog.LogOutFormatStr('$(DistroPath)="%s"',[ExpandPath('$(DistroPath)')],LM_Necessarily);
       programlog.LogOutFormatStr('$(UserDir)="%s"',[ExpandPath('$(UserDir)')],LM_Necessarily);
       programlog.LogOutFormatStr('$(GlobalConfigDir)="%s"',[ExpandPath('$(GlobalConfigDir)')],LM_Necessarily);
       programlog.LogOutFormatStr('$(LocalConfigDir)="%s"',[ExpandPath('$(LocalConfigDir)')],LM_Necessarily);
@@ -197,12 +197,8 @@ begin
   finally programlog.leave(IfEntered);end;
 end;
 procedure FindData;
-var
-  tdp:string;
 begin
-  tdp:=FindDataPath(DataFilesExistChec);
-  if tdp<>'' then
-    DataPath:=tdp;
+  FindDistroPath(DataFilesExistChec);
 end;
 
 initialization

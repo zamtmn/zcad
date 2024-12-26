@@ -450,7 +450,7 @@ begin
           if img[1]<>'#' then
                               begin
                               action.imgstr:='';
-                              action.ImageIndex:=LoadImage(DataPath+'/menu/BMP/'+img);
+                              action.ImageIndex:=LoadImage(ConcatPaths([GetDistroPath,'menu/BMP',img]));
                               if action.ImageIndex=-1 then
                                                   begin
                                                        action.ImageIndex:=brocenicon;

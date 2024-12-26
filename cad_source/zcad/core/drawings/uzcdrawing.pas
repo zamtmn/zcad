@@ -259,14 +259,14 @@ begin
   pdwgwarsunit^.CreateFixedVariable('DWG_TextSize','Double',@TextSize);
 
   if preloadedfile1<>'' then
-    DWGUnits.loadunit(GetSupportPath,InterfaceTranslate,expandpath(preloadedfile1),nil);
+    DWGUnits.loadunit(GetSupportPaths,InterfaceTranslate,expandpath(preloadedfile1),nil);
   if preloadedfile2<>'' then
-    DWGUnits.loadunit(GetSupportPath,InterfaceTranslate,expandpath(preloadedfile2),nil);
-  DWGDBUnit:=DWGUnits.findunit(GetSupportPath,InterfaceTranslate,DrawingDeviceBaseUnitName);
+    DWGUnits.loadunit(GetSupportPaths,InterfaceTranslate,expandpath(preloadedfile2),nil);
+  DWGDBUnit:=DWGUnits.findunit(GetSupportPaths,InterfaceTranslate,DrawingDeviceBaseUnitName);
 
   pcam:=nil;
   pvd:=nil;
-  pdwgwarsunit:=DWGUnits.findunit(GetSupportPath,InterfaceTranslate,'DrawingVars');
+  pdwgwarsunit:=DWGUnits.findunit(GetSupportPaths,InterfaceTranslate,'DrawingVars');
   if assigned(pdwgwarsunit) then
                                 pvd:=pdwgwarsunit.InterfaceVariables.findvardesc('camera');
   if pvd<>nil then

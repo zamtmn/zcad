@@ -926,7 +926,7 @@ var
 
 
       //ищем модуль с переменными дефолтными переменными для представителя устройства
-     // pu:=units.findunit(SupportPath,InterfaceTranslate,'uentrepresentation');
+     // pu:=units.findunit(SupportPaths,InterfaceTranslate,'uentrepresentation');
 
      //временно выключаем все расширители примитива чтоб они не скопировались
       //в клон
@@ -1024,7 +1024,7 @@ var
       //**добавление свойств устройтсва
       if entvarext<>nil then
       begin
-        psu:=units.findunit(GetSupportPath,@InterfaceTranslate,'develscheme'); //
+        psu:=units.findunit(GetSupportPaths,@InterfaceTranslate,'develscheme'); //
         if psu<>nil then
           entvarext.entityunit.copyfrom(psu);
       end;
@@ -1173,7 +1173,7 @@ var
       //**добавление свойств устройтсва
       if entvarext<>nil then
       begin
-        psu:=units.findunit(GetSupportPath,@InterfaceTranslate,'develscheme'); //
+        psu:=units.findunit(GetSupportPaths,@InterfaceTranslate,'develscheme'); //
         if psu<>nil then
           entvarext.entityunit.copyfrom(psu);
       end;
@@ -1326,7 +1326,7 @@ var
               cabl2:=TEdgeTree(G.GetEdge(listVertex[tparent].vertex,listVertex[tparent].vertex.Parent).AsPointer[vpTEdgeTree]^);
               entvarextParent:=cabl2.segm^.specialize GetExtension<TVariablesExtender>;
 
-              psu:=units.findunit(GetSupportPath,@InterfaceTranslate,'cableelscheme'); //
+              psu:=units.findunit(GetSupportPaths,@InterfaceTranslate,'cableelscheme'); //
               if psu<>nil then
                 entvarext.entityunit.copyfrom(psu);
 
@@ -1371,7 +1371,7 @@ var
             delvarext:=cableLine^.specialize GetExtension<TVariablesExtender>;
             if delvarext<>nil then
             begin
-              psu:=units.findunit(GetSupportPath,@InterfaceTranslate,'cableelscheme'); //
+              psu:=units.findunit(GetSupportPaths,@InterfaceTranslate,'cableelscheme'); //
               if psu<>nil then
                 delvarext.entityunit.copyfrom(psu);
             end;
@@ -1452,7 +1452,7 @@ var
       //      //pvarext:=cableLine^.specialize GetExtension<TVariablesExtender>; //подклчаемся к инспектору
       //      if entvarext<>nil then
       //      begin
-      //        psu:=units.findunit(SupportPath,@InterfaceTranslate,'cable'); //
+      //        psu:=units.findunit(SupportPaths,@InterfaceTranslate,'cable'); //
       //        if psu<>nil then
       //          entvarext.entityunit.copyfrom(psu);
       //      end;

@@ -34,6 +34,7 @@ uses
   uzcstrconsts,
   uzcdrawings,
   uzcinterface,
+  uzcFileStructure,
   uzeffdxf,uzedrawingsimple,Varman,uzctnrVectorBytes,uzcdrawing,uzcTranslations,uzeconsts;
 
 function SaveAs_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
@@ -48,8 +49,8 @@ var
    pu:ptunit;
    allok:boolean;
 begin
-     allok:=savedxf2000(s,DataPath + '/components/empty.dxf',dwg^);
-     pu:=PTZCADDrawing(dwg).DWGUnits.findunit(GetSupportPath,InterfaceTranslate,DrawingDeviceBaseUnitName);
+     allok:=savedxf2000(s,ConcatPaths([GetDistroPath,CFScomponentsDir,CFSemptydxfFile]),dwg^);
+     pu:=PTZCADDrawing(dwg).DWGUnits.findunit(GetSupportPaths,InterfaceTranslate,DrawingDeviceBaseUnitName);
      mem.init(1024);
      pu^.SavePasToMem(mem);
      mem.SaveToFile(ChangeFileExt(expandpath(s),'.dbpas'));

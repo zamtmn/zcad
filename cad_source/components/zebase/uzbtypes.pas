@@ -207,6 +207,9 @@ TCalculatedString=record
   value:string;
   format:string;
 end;
+PFString=^TFString;
+TFString={-}function:string{/pointer/};
+
 TOSnapModeControl=(On,Off,AsOwner);
 TTextJustify=(jstl(*'TopLeft'*),
               jstc(*'TopCenter'*),

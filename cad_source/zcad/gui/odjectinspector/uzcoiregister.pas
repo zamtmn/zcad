@@ -301,24 +301,24 @@ begin
 end;
 
 initialization
-  system_pas_path:=expandpath('$(ZDataPath)/rtl/system.pas');
-  units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPath,system_pas_path,InterfaceTranslate,'INTF_ObjInsp_WhiteBackground','Boolean',@INTFObjInspWhiteBackground);
-  units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPath,system_pas_path,InterfaceTranslate,'INTF_ObjInsp_Level0HeaderColor','Integer',@INTFObjInspLevel0HeaderColor);
-  units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPath,system_pas_path,InterfaceTranslate,'INTF_ObjInsp_BorledColor','Integer',@INTFObjInspBorderColor);
-  units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPath,system_pas_path,InterfaceTranslate,'INTF_ObjInsp_ShowHeaders','Boolean',@INTFObjInspShowHeaders);
-  units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPath,system_pas_path,InterfaceTranslate,'INTF_ObjInsp_ShowSeparator','Boolean',@INTFObjInspShowSeparator);
-  units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPath,system_pas_path,InterfaceTranslate,'INTF_ObjInsp_OldStyleDraw','Boolean',@INTFObjInspOldStyleDraw);
-  units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPath,system_pas_path,InterfaceTranslate,'INTF_ObjInsp_ShowFastEditors','Boolean',@INTFObjInspShowFastEditors);
-  units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPath,system_pas_path,InterfaceTranslate,'INTF_ObjInsp_ShowOnlyHotFastEditors','Boolean',@INTFObjInspShowOnlyHotFastEditors);
+  system_pas_path:=expandpath('$(DistroPath)/rtl/system.pas');
+  units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPaths,system_pas_path,InterfaceTranslate,'INTF_ObjInsp_WhiteBackground','Boolean',@INTFObjInspWhiteBackground);
+  units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPaths,system_pas_path,InterfaceTranslate,'INTF_ObjInsp_Level0HeaderColor','Integer',@INTFObjInspLevel0HeaderColor);
+  units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPaths,system_pas_path,InterfaceTranslate,'INTF_ObjInsp_BorledColor','Integer',@INTFObjInspBorderColor);
+  units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPaths,system_pas_path,InterfaceTranslate,'INTF_ObjInsp_ShowHeaders','Boolean',@INTFObjInspShowHeaders);
+  units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPaths,system_pas_path,InterfaceTranslate,'INTF_ObjInsp_ShowSeparator','Boolean',@INTFObjInspShowSeparator);
+  units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPaths,system_pas_path,InterfaceTranslate,'INTF_ObjInsp_OldStyleDraw','Boolean',@INTFObjInspOldStyleDraw);
+  units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPaths,system_pas_path,InterfaceTranslate,'INTF_ObjInsp_ShowFastEditors','Boolean',@INTFObjInspShowFastEditors);
+  units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPaths,system_pas_path,InterfaceTranslate,'INTF_ObjInsp_ShowOnlyHotFastEditors','Boolean',@INTFObjInspShowOnlyHotFastEditors);
   INTFObjInspRowHeight.Enable:=LocalRowHeightOverride;
   INTFObjInspRowHeight.Value:=LocalRowHeight;
-  units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPath,system_pas_path,InterfaceTranslate,'INTF_ObjInsp_RowHeight_OverriderEnable','Boolean',@INTFObjInspRowHeight.Enable);
+  units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPaths,system_pas_path,InterfaceTranslate,'INTF_ObjInsp_RowHeight_OverriderEnable','Boolean',@INTFObjInspRowHeight.Enable);
   PRowHeight:=@INTFObjInspRowHeight.Value;
   PRowHeightOverride:=@INTFObjInspRowHeight.Enable;
-  units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPath,system_pas_path,InterfaceTranslate,'INTF_ObjInsp_RowHeight_OverriderValue','Integer',@INTFObjInspRowHeight.Value);
-  units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPath,system_pas_path,InterfaceTranslate,'INTF_ObjInsp_SpaceHeight','Integer',@INTFObjInspSpaceHeight);
-  units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPath,system_pas_path,InterfaceTranslate,'INTF_ObjInsp_ShowEmptySections','Boolean',@INTFObjInspShowEmptySections);
-  units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPath,system_pas_path,InterfaceTranslate,'INTF_ObjInsp_ButtonSizeReducing','Integer',@INTFObjInspButtonSizeReducing);
+  units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPaths,system_pas_path,InterfaceTranslate,'INTF_ObjInsp_RowHeight_OverriderValue','Integer',@INTFObjInspRowHeight.Value);
+  units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPaths,system_pas_path,InterfaceTranslate,'INTF_ObjInsp_SpaceHeight','Integer',@INTFObjInspSpaceHeight);
+  units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPaths,system_pas_path,InterfaceTranslate,'INTF_ObjInsp_ShowEmptySections','Boolean',@INTFObjInspShowEmptySections);
+  units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPaths,system_pas_path,InterfaceTranslate,'INTF_ObjInsp_ButtonSizeReducing','Integer',@INTFObjInspButtonSizeReducing);
   SysVar.INTF.INTF_OBJINSP_Properties.INTF_ObjInsp_RowHeight:=@INTFObjInspRowHeight;
   SysVar.INTF.INTF_OBJINSP_Properties.INTF_ObjInsp_Level0HeaderColor:=@INTFObjInspLevel0HeaderColor;
   SysVar.INTF.INTF_OBJINSP_Properties.INTF_ObjInsp_BorderColor:=@INTFObjInspBorderColor;

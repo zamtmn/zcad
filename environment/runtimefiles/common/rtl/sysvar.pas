@@ -156,8 +156,8 @@ begin
   DSGN_OTrackTimerInterval:=500;
   DISP_LWDisplayScale:=10;
   RD_Light:=False;
-  PATH_Preload_Path:='$(ZDataPath)/preload/;$(UserDir)/zcad/preload/;$(LocalConfigDir)/$(AppName)/preload/;$(GlobalConfigDir)/$(AppName)/preload/';
-  PATH_Fonts:='$(SystemFontsPath)/;$(UserFontsPath)/;$(ZDataPath)/fonts/;C:/APPS/MY/acad/support/;C:/Program Files/Autodesk/AutoCAD 2020/Fonts/';
+  PATH_Preload_Path:='$(DistroPath)/preload/;$(UserDir)/zcad/preload/;$(LocalConfigDir)/$(AppName)/preload/;$(GlobalConfigDir)/$(AppName)/preload/';
+  PATH_Fonts:='$(SystemFontsPath)/;$(UserFontsPath)/;$(DistroPath)/fonts/;C:/APPS/MY/acad/support/;C:/Program Files/Autodesk/AutoCAD 2020/Fonts/';
   PATH_AlternateFont:='_mipGost.shx';
   PATH_Support_Path:='$DataSearhPrefixes(rtl);$DataSearhPrefixes(rtl/objdefunits);$DataSearhPrefixes(rtl/objdefunits/include);$DataSearhPrefixes(components);$DataSearhPrefixes(blocks/el/general);$DataSearhPrefixes(blocks/el/general/velecdevice)';
   INTF_CommandLineEnabled:=True;
@@ -204,8 +204,8 @@ begin
   SAVE_Auto_On:=True;
   SYS_RunTime:=0;
   SYS_Version:='';
-  PATH_Device_Library:='$(ZDataPath)/programdb;$(ZDataPath)/userdb';
-  PATH_Template_Path:='$(ZDataPath)/templates';
+  PATH_Device_Library:='$(DistroPath)/programdb;$(DistroPath)/userdb';
+  PATH_Template_Path:='$(DistroPath)/templates';
   PATH_Template_File:='minimal.dxf';
   PATH_LayoutFile:='defaultlayout.xml';
 end.

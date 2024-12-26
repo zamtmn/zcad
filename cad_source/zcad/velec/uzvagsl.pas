@@ -1809,7 +1809,7 @@ begin
      SysUnit^.RegisterType(TypeInfo(TAutogenSuperLine));//регистрируем тип данных в зкадном RTTI
 
      SysUnit^.SetTypeDesk(TypeInfo(TAutogenSuperLine),['NameSuperLine','Cable laying type','Accuracy','Distance from the wall','Layer change','Layer name prefix']);//даем человеческие имена параметрам
-     //psu:=units.findunit(SupportPath,InterfaceTranslate,'superline');
+     //psu:=units.findunit(SupportPaths,InterfaceTranslate,'superline');
     //DrawSuperlineParams.pu:=psu;
     zcShowCommandParams(pointer(SysUnit^.TypeName2PTD('TAutogenSuperLine')),@autogenSuperLine);
 

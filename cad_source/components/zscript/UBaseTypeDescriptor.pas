@@ -170,7 +170,6 @@ TCalculatedStringDescriptor=object(BaseTypeDescriptor<TCalculatedString,TASTM_St
   //destructor Done;virtual;
 end;
 
-
 var
 FundamentalDoubleDescriptorObj:DoubleDescriptor;
 FundamentalUnicodeStringDescriptorObj:GDBUnicodeStringDescriptor;
@@ -558,7 +557,6 @@ function TEnumDataDescriptor.GetDecoratedValueAsString(pinstance:Pointer; const 
 begin
   result:=GetValueAsString(pinstance);
 end;
-
 constructor TCalculatedStringDescriptor.init;
 begin
   inherited init('TCalculatedStringDescriptor',nil);
@@ -648,4 +646,5 @@ begin
 
      GDBEnumDataDescriptorObj.init;
      CalculatedStringDescriptor.init;
+
 end.

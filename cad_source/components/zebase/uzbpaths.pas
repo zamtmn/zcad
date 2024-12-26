@@ -19,12 +19,13 @@
 unit uzbPaths;
 
 interface
-uses SysUtils,
-     Masks,LazUTF8,
-     uzctnrVectorStrings,
-     uzmacros,uzbLogIntf;
+uses
+  SysUtils,
+  Masks,LazUTF8,
+  uzctnrVectorStrings,
+  uzmacros,uzbLogIntf;
 type
-  //калбэки для перебора [суб]директорий
+  //калбэки для процедур/методов перебора [суб]директорий
   TFromDirIterator=procedure(const AFileName:String;PData:pointer);
   TFromDirIteratorObj=procedure(const AFileName:String;PData:pointer)of object;
 
@@ -36,70 +37,151 @@ type
 //подстановка макросов в APath
 function ExpandPath(APath:String;AItDirectory:boolean=false):String;
 
+//поиск файла по списку путей разделенных PathSeparator
 function FindInPaths(const APaths:String; const AFileName:String):String;
-function FindFileInDataPaths(const ASubFolder:String;const AFileName:String):String;
+
+//DistroPath - путь к дистрибутиву программы, это /etc/zcad/ или
+//ExtractFilePath(paramstr(0))+'../..' в зависимости где фактически лежат
+//файлы дистрибутива и что найдет FindDistroPath
+
+//DataPaths - пути данных программы, сейчас их 2, разделены PathSeparator
+//1: /home/user/.config/zcad/
+//2: DistroPath
+//всё ищется сначала в 1, потом в 2
+//запись производится в 1
+
+//поиск файла в подпапке в DataPaths
+function FindFileInDataPaths(const ASubFolder:String;
+                             const AFileName:String):String;
+//пути к подпапке в DataPaths
 function GetPathsInDataPaths(const ASubFolder:String):String;
-function GetWritableFilePath(const ASubFolder:String;const AFileName:String):String;
+//путь к подпапке в /home/user/.config/zcad/
+function GetWritableFilePath(const ASubFolder:String;
+                             const AFileName:String):String;
 
 //**Получает части текста разделеные разделителем.
 //**path - текст в котором идет поиск.
 //**separator - разделитель.
 //**part - переменная которая возвращает куски текста
-function GetPartOfPath(out part:String;var path:String;const separator:String):String;
-function GetSupportPath:String;
-{TODO: костыли))}
-function GeAddrSupportPath:PString;
-procedure AddSupportPath(const APath:String);
+function GetPartOfPath(out part:String;
+                       var path:String;const separator:String):String;
 
-procedure FromDirIterator(const APath,AMask,AFirstLoadFileName:String;AProc:TFromDirIterator;AMethod:TFromDirIteratorObj;APData:pointer=nil;AIgnoreDoubles:Boolean=False);
-procedure FromDirsIterator(const APath,AMask,AFirstLoadFileName:String;AProc:TFromDirIterator;AMethod:TFromDirIteratorObj;APData:pointer=nil;AIgnoreDoubles:Boolean=False);
-function FindDataPath(const CF:TDataFilesExistChecFunc):string;
-var DataPath,BinPath,AdditionalSupportPath,TempPath:String;
+//геттеры соответствующих переменных
+
+//разные пути с файлами поддержки, почти всегда поиск файлов осуществляется
+//по этим путям. пути соджет настроить юзер в настройках программы
+function GetSupportPaths:String;
+//путь к бинарнику
+function GetBinPath:String;
+//путь к дистрибутиву
+function GetDistroPath:String;
+//путь к папке временных файлов
+function GetTempPath:String;
+//дополнительные пути с файлами поддержки, сюда рути добавляются скриптами при
+//запуске программы, при загрузке preload, не сохраняются и не редактируются
+function GetAdditionalSupportPaths:String;
+
+function GetTempFileName(const APath,APrefix,AExt:String):String;
+
+//добавить путь в AdditionalSupportPaths
+procedure AddToAdditionalSupportPaths(const APath:String);
+
+//перебор файлов в папке/папках по маске, выполнение AProc и AMethod
+//с подходящими файлами
+procedure FromDirIterator(const APath,AMask,AFirstLoadFileName:String;
+                          AProc:TFromDirIterator;AMethod:TFromDirIteratorObj;
+                          APData:pointer=nil;AIgnoreDoubles:Boolean=False);
+procedure FromDirsIterator(const APath,AMask,AFirstLoadFileName:String;
+                           AProc:TFromDirIterator;AMethod:TFromDirIteratorObj;
+                           APData:pointer=nil;AIgnoreDoubles:Boolean=False);
+
+//поиск расположения дистрибутива, см. вариант 2 выше про DataPaths
+function FindDistroPath(const CF:TDataFilesExistChecFunc):string;
+
+var
+  //SupportPath сохраняется и настраивается, поэтому в интерфейсе с доступом
+  //геттером и прямым
+  SupportPaths:String;
+
 implementation
-var WriteDataPath,SupportPath:String;
 
-procedure AddSupportPath(const APath:String);
+var
+//остальные переменные с доступом только по геттеру
+  AdditionalSupportPaths,DistroPath,BinPath,WriteDataPath,TempPath:String;
+
+procedure AddToAdditionalSupportPaths(const APath:String);
 begin
   if APath=''then exit;
-  if AdditionalSupportPath='' then
-    AdditionalSupportPath:=APath
+  if AdditionalSupportPaths='' then
+    AdditionalSupportPaths:=APath
   else
-    if (AdditionalSupportPath[Length(AdditionalSupportPath)]=PathSeparator)or(APath[1]=PathSeparator) then
-      AdditionalSupportPath:=AdditionalSupportPath+APath
+    if (AdditionalSupportPaths[Length(AdditionalSupportPaths)]=PathSeparator)or
+       (APath[1]=PathSeparator) then
+      AdditionalSupportPaths:=AdditionalSupportPaths+APath
     else
-      AdditionalSupportPath:=AdditionalSupportPath+PathSeparator+APath;
+      AdditionalSupportPaths:=AdditionalSupportPaths+PathSeparator+APath;
 end;
 
-function GetSupportPath:String;
+function GetSupportPaths:String;
 begin
-  if AdditionalSupportPath='' then
-    result:=SupportPath
+  if AdditionalSupportPaths='' then
+    result:=SupportPaths
   else
-    if SupportPath='' then
-      result:=AdditionalSupportPath
+    if SupportPaths='' then
+      result:=AdditionalSupportPaths
     else
-      if SupportPath[Length(SupportPath)]=DirectorySeparator then
-        result:=SupportPath+AdditionalSupportPath
+      if SupportPaths[Length(SupportPaths)]=DirectorySeparator then
+        result:=SupportPaths+AdditionalSupportPaths
       else
-        result:=SupportPath+PathSeparator+AdditionalSupportPath
+        result:=SupportPaths+PathSeparator+AdditionalSupportPaths
 end;
-function GeAddrSupportPath:PString;
+function GetBinPath:String;
 begin
-  result:=@SupportPath;
+  result:=BinPath;
 end;
+function GetDistroPath:String;
+begin
+  result:=DistroPath;
+end;
+function GetTempPath:String;
+begin
+  result:=TempPath;
+end;
+function GetAdditionalSupportPaths:String;
+begin
+  result:=AdditionalSupportPaths;
+end;
+function GetTempFileName(const APath,APrefix,AExt:String):String;
+//модифицированная копипаста из sysutils
+Var
+  I:LongWord;
+  Start:String;
+begin
+  If (APath='') then
+    Start:=GetTempPath
+  else
+    Start:=IncludeTrailingPathDelimiter(APath);
+  Start:=Start+APrefix;
+  I:=Random(high(LongWord));
+  Repeat
+    Result:=Format('%s%.8x.%s',[Start,I,AExt]);
+    Inc(I);
+  Until not (FileExists(Result) or DirectoryExists(Result));
+end;
+
 function FindFileInDataPaths(const ASubFolder:String;const AFileName:String):String;
 begin
   result:=IncludeTrailingPathDelimiter(IncludeTrailingPathDelimiter(GetAppConfigDir(false))+ASubFolder)+AFileName;
   if FileExists(result)then
     exit;
-  result:=IncludeTrailingPathDelimiter(IncludeTrailingPathDelimiter(DataPath)+ASubFolder)+AFileName;
+  result:=IncludeTrailingPathDelimiter(IncludeTrailingPathDelimiter(DistroPath)+ASubFolder)+AFileName;
   if not FileExists(result)then
     exit('');
 end;
 function GetPathsInDataPaths(const ASubFolder:String):String;
 begin
   result:=IncludeTrailingPathDelimiter(IncludeTrailingPathDelimiter(GetAppConfigDir(false))+ASubFolder)+PathSeparator
-         +IncludeTrailingPathDelimiter(IncludeTrailingPathDelimiter(DataPath)+ASubFolder);
+         +IncludeTrailingPathDelimiter(IncludeTrailingPathDelimiter(DistroPath)+ASubFolder);
 end;
 
 function GetWritableFilePath(const ASubFolder:String;const AFileName:String):String;
@@ -158,7 +240,7 @@ function ExpandPath(APath:String;AItDirectory:boolean=false):String;
 begin
   DefaultMacros.SubstituteMacros(APath);
   if APath='' then
-    result:=DataPath
+    result:=DistroPath
   else
     result:=APath;
   result:=StringReplace(result,'/',PathDelim,[rfReplaceAll, rfIgnoreCase]);
@@ -167,31 +249,36 @@ begin
 end;
 
 procedure FromDirIteratorInternal(const path,mask,firstloadfilename:String;proc:TFromDirIterator;method:TFromDirIteratorObj;pdata:pointer;pvs:PTZctnrVectorStrings);
-  procedure processfile(const s:String);
+var sr: TSearchRec;
+    s:String;
+    tpath:string;
+
+  procedure processfile(const AFilename:String);
   var
     fn:String;
   begin
-    fn:=SysToUTF8(path)+SysToUTF8(s);
-    zTraceLn(sysutils.Format('{D}[FILEOPS]Process file %s',[fn]));
+    //todo: убрать лишние операйии с именем файла
+    fn:=ConcatPaths([SysToUTF8(path),SysToUTF8(AFilename)]);
+    //fn:=SysToUTF8(tpath);
+    zTraceLn(sysutils.Format('{D}[FILEOPS]Process file %AFilename',[fn]));
     if @method<>nil then
       method(fn,pdata);
     if @proc<>nil then
       proc(fn,pdata);
   end;
 
-var sr: TSearchRec;
-    s:String;
 begin
   zTraceLn('{D+}[FILEOPS]FromDirIteratorInternal start');
   if firstloadfilename<>'' then
     if fileexists(path+firstloadfilename) then
       processfile(firstloadfilename);
-  if FindFirst(path + '*', faDirectory, sr) = 0 then begin
+  if FindFirst(IncludeTrailingPathDelimiter(path)+'*', faDirectory, sr) = 0 then begin
     repeat
       if (sr.Name <> '.') and (sr.Name <> '..') then
       begin
-        if DirectoryExists(path + sr.Name) then
-          FromDirIteratorInternal(path + sr.Name + '/',mask,firstloadfilename,proc,method,pdata,pvs)
+        tpath:=ConcatPaths([path,sr.Name]);
+        if DirectoryExists(tpath) then
+          FromDirIteratorInternal(IncludeTrailingPathDelimiter(tpath),mask,firstloadfilename,proc,method,pdata,pvs)
         else begin
           s:=lowercase(sr.Name);
           if s<>firstloadfilename then
@@ -242,22 +329,27 @@ begin
   if AIgnoreDoubles then
     vs.done;
 end;
-function FindDataPath(const CF:TDataFilesExistChecFunc):string;
+function FindDistroPath(const CF:TDataFilesExistChecFunc):string;
 var
   ts:string;
 begin
-  if @cf<>nil then begin
-    if cf(DataPath) then
-      exit(DataPath);
-    ts:=GetAppConfigDir(true);
-    if cf(ts) then
-      exit(ts);
+  try
+    if @cf<>nil then begin
+      if cf(DistroPath) then
+        exit(DistroPath);
+      ts:=GetAppConfigDir(true);
+      if cf(ts) then
+        exit(ts);
+    end;
+    Result:='';
+  finally
+    if result<>''then
+      DistroPath:=Result;
   end;
-  result:='';
 end;
 initialization
   BinPath:=SysToUTF8(ExtractFilePath(paramstr(0)));
-  DataPath:=SysToUTF8(ExpandFileName(ExtractFilePath(paramstr(0))+'../..'));;
-  WriteDataPath:=GetAppConfigDir(false);
+  DistroPath:=IncludeTrailingPathDelimiter(SysToUTF8(ExpandFileName(ExtractFilePath(paramstr(0))+'../..')));
+  WriteDataPath:=IncludeTrailingPathDelimiter(GetAppConfigDir(false));
   TempPath:=IncludeTrailingPathDelimiter(GetTempDir);
 end.

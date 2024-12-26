@@ -27,7 +27,7 @@ uses
 implementation
 function cfgAddSupportPath_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 begin
-  AddSupportPath(ExpandPath(operands));
+  AddToAdditionalSupportPaths(ExpandPath(operands));
   result:=cmd_ok;
 end;
 

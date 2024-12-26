@@ -23,6 +23,7 @@ uses
  uzcsysparams,uzbpaths,uniqueinstanceraw,uzcstrconsts,uzbstrproc,Forms,
  stdctrls, Controls, Graphics,ExtCtrls,LazUTF8,sysutils,
  uzbLogTypes,uzbLogDecorators,
+ uzcFileStructure,
  uzcLog;
 type
   TSplashForm = class(TForm)
@@ -63,13 +64,16 @@ begin
                self.txt.repaint;
 end;
 procedure TSplashForm.AfterConstruction;
+var
+  fLogo:string;
 begin
   inherited;
   self.DoubleBuffered:=true;
   Logo:=TImage.create(self);
   Logo.Align:=alclient;
-  if FileExists({$IFNDEF DELPHI}utf8tosys{$ENDIF}(DataPath)+'/components/logo.png') then
-                                                                 Logo.Picture.LoadFromFile((DataPath)+'/components/logo.png');
+  flogo:=ConcatPaths([UTF8ToSys(GetDistroPath),CFScomponentsDir,CFSlogopngFile]);
+  if FileExists(flogo) then
+    Logo.Picture.LoadFromFile(flogo);
   Logo.Parent:=self;
   self.BorderStyle:=bsNone;
   self.Color:=clNone;

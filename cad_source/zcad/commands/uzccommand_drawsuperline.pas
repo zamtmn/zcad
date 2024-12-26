@@ -121,7 +121,7 @@ begin
   end;
   if LSCMContextSetup in mode then begin
     if ctx is TMethod2ltContext then begin
-      psu:=units.findunit(GetSupportPath,InterfaceTranslate,'superline');
+      psu:=units.findunit(GetSupportPaths,InterfaceTranslate,'superline');
       if psu<>nil then
         pvd:=psu.FindVariable('CABLE_MountingMethod')
       else
@@ -176,7 +176,7 @@ begin
     pvarext:=psuperline^.GetExtension<TVariablesExtender>;
     if pvarext<>nil then
     begin
-      psu:=units.findunit(GetSupportPath,InterfaceTranslate,'superline');
+      psu:=units.findunit(GetSupportPaths,InterfaceTranslate,'superline');
       if psu<>nil then
         pvarext.entityunit.copyfrom(psu);
     end;
@@ -234,7 +234,7 @@ begin
     pvarext:=psuperline^.GetExtension<TVariablesExtender>;
     if pvarext<>nil then
     begin
-      psu:=units.findunit(GetSupportPath,InterfaceTranslate,'superline');
+      psu:=units.findunit(GetSupportPaths,InterfaceTranslate,'superline');
       if psu<>nil then
         pvarext.entityunit.copyfrom(psu);
     end;
@@ -292,10 +292,10 @@ end;
 
 begin
     //ZCMsgCallBackInterface.TextMessage('operands:'+operands,TMWOHistoryOut);
-    //psu:=units.findunit(SupportPath,InterfaceTranslate,'superline');
+    //psu:=units.findunit(SupportPaths,InterfaceTranslate,'superline');
 
     //пытаемся найти или загрузить модуль
-    psu:=units.findunit(GetSupportPath,//пути по которым будет искаться юнит если он еще небыл загружен
+    psu:=units.findunit(GetSupportPaths,//пути по которым будет искаться юнит если он еще небыл загружен
                        InterfaceTranslate,//процедура локализации которая будет пытаться перевести на русский все что можно при загрузке
                        'superline');//имя модуля
 

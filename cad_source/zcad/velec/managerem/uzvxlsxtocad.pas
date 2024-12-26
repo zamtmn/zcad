@@ -139,7 +139,7 @@ implementation
           entvarext:=result^.GetExtension<TVariablesExtender>;
           if entvarext<>nil then
             begin
-              psu:=units.findunit(GetSupportPath,@InterfaceTranslate,InsertionName); //
+              psu:=units.findunit(GetSupportPaths,@InterfaceTranslate,InsertionName); //
               if psu<>nil then
                 entvarext.entityunit.copyfrom(psu);
             end;

@@ -1,5 +1,5 @@
 ;Комментарий
-;$(ZDataPath)-путь к программе
+;$(DistroPath)-путь к дистрибутиву программы
 ;------------------------
 ;Создание пустого чертежа
 ;------------------------
@@ -8,10 +8,10 @@
 ;------------------------
 ;Загрузка ткстовых файлов
 ;------------------------
-;Load($(ZDataPath)/sample/test_dxf/teapot.dxf)
-;Load($(ZDataPath)/sample/test_dxf/em.dxf)
-;Load($(ZDataPath)/autosave/autosave.dxf)
-;Load($(ZDataPath)/sample/zigzag.dxf)
+;Load($(DistroPath)/sample/test_dxf/teapot.dxf)
+;Load($(DistroPath)/sample/test_dxf/em.dxf)
+;Load($(DistroPath)/autosave/autosave.dxf)
+;Load($(DistroPath)/sample/zigzag.dxf)
 
 ;-----------------------------------
 ;Показ окна "О программе" при старте

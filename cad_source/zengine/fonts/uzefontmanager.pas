@@ -185,8 +185,8 @@ begin
                       begin
                            f.init(length(r.Value));
                            f.AddData(@r.Value[1],length(r.Value));
-                           f.SaveToFile(expandpath(TempPath+filename));
-                           pbasefont:=addFonfByFile(TempPath+filename);
+                           f.SaveToFile(expandpath(GetTempPath+filename));
+                           pbasefont:=addFonfByFile(GetTempPath+filename);
                            f.done;
                            if pbasefont=nil then
                                                 zDebugLn('{F}'+rsReserveFontNotLoad)

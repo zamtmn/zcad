@@ -22,9 +22,10 @@ unit uzccommand_help;
 
 interface
 uses
+  SysUtils,
   {$ifdef unix}Process,sysutils,{$else}windows,Forms,{$endif}
   uzcLog,LCLIntf,
-  uzccommandsabstract,uzccommandsimpl,uzccommandsmanager,
+  uzccommandsabstract,uzccommandsimpl,uzccommandsmanager,uzcFileStructure,
   uzbpaths;
 
 implementation
@@ -78,11 +79,11 @@ function Help_com(const Context:TZCADCommandContext;operands:TCommandOperands):T
 var
   htmlDoc:string;
 begin
-  htmlDoc:=DataPath+'/help/userguide.ru.html';//todo: расхардкодить
+  htmlDoc:=ConcatPaths([GetDistroPath,CFShelpDir,format(CFSuserguide_shtmlFile,['ru'])]);//todo: расхардкодить
   if CommandManager.CommandsStack.isEmpty then
     OpenDocument(htmlDoc)
   else
-    OpenDocumentWithAnchor(htmlDoc,'#_'+lowercase(CommandManager.CommandsStack.getLast^.CommandName));
+    OpenDocumentWithAnchor(htmlDoc,format('#_%s',[lowercase(CommandManager.CommandsStack.getLast^.CommandName)]));
   result:=cmd_ok;
 end;
 

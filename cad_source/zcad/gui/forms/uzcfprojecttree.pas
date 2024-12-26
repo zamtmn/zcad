@@ -136,7 +136,7 @@ begin
                        begin
                             T_ProjectDB.Selected:=nil;
                             self.ProjectEquipmentN.DeleteChildren;
-                            BuildTreeByEQ(ProjectEquipmentN,PTZCADDrawing(drawings.GetCurrentDWG).DWGUnits.findunit(GetSupportPath,InterfaceTranslate,DrawingDeviceBaseUnitName),MenusManager.GetPopupMenu('PROJECTDBCXMENU',nil));
+                            BuildTreeByEQ(ProjectEquipmentN,PTZCADDrawing(drawings.GetCurrentDWG).DWGUnits.findunit(GetSupportPaths,InterfaceTranslate,DrawingDeviceBaseUnitName),MenusManager.GetPopupMenu('PROJECTDBCXMENU',nil));
                             (*
                             ProjectEquipmentNodeN.free;
                             Getmem(pointer(ProjectEquipmentNode.SubNode),sizeof(TGDBTree));
@@ -346,7 +346,7 @@ begin
 
   BuildTreeByEQ(ProgramEquipmentN,DBUnit,MenusManager.GetPopupMenu('PROGRAMDBCXMENU',nil));
   if drawings.GetCurrentDWG<>nil then
-  BuildTreeByEQ(ProjectEquipmentN,PTZCADDrawing(drawings.GetCurrentDWG).DWGUnits.findunit(GetSupportPath,InterfaceTranslate,DrawingDeviceBaseUnitName),MenusManager.GetPopupMenu('PROJECTDBCXMENU',nil));
+  BuildTreeByEQ(ProjectEquipmentN,PTZCADDrawing(drawings.GetCurrentDWG).DWGUnits.findunit(GetSupportPaths,InterfaceTranslate,DrawingDeviceBaseUnitName),MenusManager.GetPopupMenu('PROJECTDBCXMENU',nil));
 
 end;
 function ProjectTree_com(const Context:TZCADCommandContext;Operands:pansichar):Integer;
@@ -361,8 +361,8 @@ begin
   ProjectTreeForm:=nil;
   BlockCategory.init(100);
   EqCategory.init(100);
-  BlockCategory.loadfromfile(expandpath('$(ZDataPath)/rtl/BlockCategory.cat'));
-  EqCategory.loadfromfile(expandpath('$(ZDataPath)/rtl/EqCategory.cat'));
+  BlockCategory.loadfromfile(expandpath('$(DistroPath)/rtl/BlockCategory.cat'));
+  EqCategory.loadfromfile(expandpath('$(DistroPath)/rtl/EqCategory.cat'));
   CreateZCADCommand(@ProjectTree_com,'ProjectTree',CADWG,0);
 end;
 finalization

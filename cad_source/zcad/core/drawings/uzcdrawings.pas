@@ -376,8 +376,8 @@ begin
    { TODO : переделать }
    if typeof(CurrentDWG^)=typeof(TZCADDrawing) then
    begin
-   DWGDBUnit:=PTZCADDrawing(CurrentDWG).DWGUnits.findunit(GetSupportPath,InterfaceTranslate,DrawingDeviceBaseUnitName);
-   DWGUnit:=PTZCADDrawing(CurrentDWG).DWGUnits.findunit(GetSupportPath,InterfaceTranslate,'DrawingVars');
+   DWGDBUnit:=PTZCADDrawing(CurrentDWG).DWGUnits.findunit(GetSupportPaths,InterfaceTranslate,DrawingDeviceBaseUnitName);
+   DWGUnit:=PTZCADDrawing(CurrentDWG).DWGUnits.findunit(GetSupportPaths,InterfaceTranslate,'DrawingVars');
    //DWGUnit.AssignToSymbol(SysVar.DWG.DWG_SnapGrid,'DWG_SnapGrid');
    SysVar.dwg.DWG_SnapGrid:=@CurrentDWG.SnapGrid;
    //DWGUnit.AssignToSymbol(SysVar.DWG.DWG_DrawGrid,'DWG_DrawGrid');
@@ -989,7 +989,7 @@ begin
 
   LTypeManager.init(100);
 
-  LTypeManager.LoadFromFile(FindInPaths(GetSupportPath,'zcad.lin'),TLOLoad);
+  LTypeManager.LoadFromFile(FindInPaths(GetSupportPaths,'zcad.lin'),TLOLoad);
 
 
   //FromDirIterator({sysparam.programpath+'fonts/'}'C:\Program Files\AutoCAD 2010\Fonts\','*.shx','',addf,nil);

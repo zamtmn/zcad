@@ -39,7 +39,7 @@ var
   PUnit:ptunit;
 begin
   if length(Operands)>0 then begin
-    PUnit:=units.findunit(GetSupportPath,InterfaceTranslate,operands);
+    PUnit:=units.findunit(GetSupportPaths,InterfaceTranslate,operands);
     if PUnit<>nil then
       EditUnit(PUnit^)
     else

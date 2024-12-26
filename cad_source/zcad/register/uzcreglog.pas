@@ -125,7 +125,7 @@ initialization
   PositionDecorator.init;
   PositionDecoratorHandle:=ProgramLog.addDecorator(PositionDecorator);
 
-  LogFileName:=TempPath+filelog;
+  LogFileName:=ConcatPaths([GetTempPath,filelog]);
   if CommandLineParser.HasOption(LOGFILEHDL)then
   for i:=0 to CommandLineParser.OptionOperandsCount(LOGFILEHDL)-1 do
     LogFileName:=CommandLineParser.OptionOperand(LOGFILEHDL,i);

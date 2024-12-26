@@ -33,7 +33,7 @@ uses
   uzcgui2linewidth,uzcflineweights,uzcgui2textstyles,uzcgui2dimstyles,
   uzedrawingsimple,uzcdrawing,uzcuidialogs,uzbstrproc,
   uzestyleslayers,zUndoCmdChgBaseTypes,uzcutils,gzctnrVectorTypes,uzcCtrlFindEditBox,
-  zUndoCmdChgTypes;
+  zUndoCmdChgTypes,uzcLog,uzcFileStructure;
 type
   TMyToolbar=class(TToolBar)
     public
@@ -311,34 +311,33 @@ end;
 
 procedure SetImage(actlist:TActionList;ppanel:TToolBar;b:TToolButton;img:string;autosize:boolean;identifer:string);
 var
-    bmp:Graphics.TBitmap;
+  bmp:Graphics.TBitmap;
 begin
-     if length(img)>1 then
-     begin
-          if img[1]<>'#' then
-                              begin
-                              img:={SysToUTF8}(DataPath)+'/menu/BMP/'+img;
-                              bmp:=Graphics.TBitmap.create;
-                              bmp.LoadFromFile(img);
-                              bmp.Transparent:=true;
-                              if not assigned(ppanel.Images) then
-                                                                 ppanel.Images:=actlist.Images;
-                              b.ImageIndex:=
-                              ppanel.Images.Add(bmp,nil);
-                              freeandnil(bmp);
-                              //-----------b^.SetImageFromFile(img)
-                              end
-                          else
-                              begin
-                              b.caption:=(system.copy(img,2,length(img)-1));
-                              b.caption:=InterfaceTranslate(identifer,b.caption);
-                              if autosize then
-                               if utf8length(img)>3 then
-                                                    b.Font.size:=11-utf8length(img);
-                              end;
-     end;
-                              b.Height:=ppanel.ButtonHeight;
-                              b.Width:=ppanel.ButtonWidth;
+  if length(img)>1 then begin
+    if img[1]<>'#' then begin
+      img:=ConcatPaths([GetDistroPath,'menu/BMP',img]);
+      bmp:=Graphics.TBitmap.create;
+      try
+        bmp.LoadFromFile(img);
+        bmp.Transparent:=true;
+        if not assigned(ppanel.Images) then
+          ppanel.Images:=actlist.Images;
+        b.ImageIndex:=
+        ppanel.Images.Add(bmp,nil);
+      except
+        programlog.LogOutStr(sysutils.format('Image "%s" not not found',[img]),LM_Error);
+      end;
+      bmp.free;
+    end else begin
+      b.caption:=(system.copy(img,2,length(img)-1));
+      b.caption:=InterfaceTranslate(identifer,b.caption);
+      if autosize then
+        if utf8length(img)>3 then
+          b.Font.size:=11-utf8length(img);
+    end;
+  end;
+  b.Height:=ppanel.ButtonHeight;
+  b.Width:=ppanel.ButtonWidth;
 end;
 
 class procedure TZTBZCADExtensions.TBButtonCreateFunc(fmf:TForm;actlist:TActionList;aNode: TDomNode; TB:TToolBar);
@@ -624,7 +623,7 @@ var
     s:string;
 begin
   if sender is TComboBox then begin
-    s:=DataPath+'/components/'+(sender as TComboBox).text+'.xml';
+    s:=ConcatPaths([GetDistroPath,CFScomponentsDir,(sender as TComboBox).text+'.xml']);
     LoadLayoutFromFile(s);
   end;
 end;
@@ -649,7 +648,7 @@ begin
   result:=TComboBox.Create(tb);
   result.Style:=csDropDownList;
   result.Sorted:=true;
-  FromDirIterator(DataPath+'/components/','*.xml','',addfiletoLayoutbox,nil,pointer(result));
+  FromDirsIterator(GetPathsInDataPaths(CFScomponentsDir),'*.xml','',addfiletoLayoutbox,nil,pointer(result));
   result.OnChange:=ChangeLayout;
 
   s:=extractfilename(sysvar.PATH.LayoutFile^);

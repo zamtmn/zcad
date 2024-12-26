@@ -28,19 +28,19 @@ var
 
 initialization
   DecorateSysTypes;
-  system_pas_path:=expandpath('$(ZDataPath)/rtl/system.pas');
-  units.CreateExtenalSystemVariable(SysVarNotSavedUnit,SysVarNSN,GetSupportPath,system_pas_path,InterfaceTranslate,'RD_GLUVersion','String',@GLUVersion);
+  system_pas_path:=expandpath('$(DistroPath)/rtl/system.pas');
+  units.CreateExtenalSystemVariable(SysVarNotSavedUnit,SysVarNSN,GetSupportPaths,system_pas_path,InterfaceTranslate,'RD_GLUVersion','String',@GLUVersion);
   SysVarNotSavedUnit.AssignToSymbol(SysVar.RD.RD_GLUVersion,'RD_GLUVersion');
   sysvar.RD.RD_GLUVersion^:=GLUVersion;
 
-  units.CreateExtenalSystemVariable(SysVarNotSavedUnit,SysVarNSN,GetSupportPath,system_pas_path,InterfaceTranslate,'RD_GLUExtensions','String',@GLUExtensions);
+  units.CreateExtenalSystemVariable(SysVarNotSavedUnit,SysVarNSN,GetSupportPaths,system_pas_path,InterfaceTranslate,'RD_GLUExtensions','String',@GLUExtensions);
   SysVarNotSavedUnit.AssignToSymbol(SysVar.RD.RD_GLUExtensions,'RD_GLUExtensions');
   sysvar.RD.RD_GLUExtensions^:=GLUExtensions;
 
-  units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPath,system_pas_path,InterfaceTranslate,'INTF_CommandLineEnabled','Boolean',@INTFCommandLineEnabled);
+  units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPaths,system_pas_path,InterfaceTranslate,'INTF_CommandLineEnabled','Boolean',@INTFCommandLineEnabled);
   SysVarUnit.AssignToSymbol(SysVar.INTF.INTF_CommandLineEnabled,'INTF_CommandLineEnabled');
 
-  units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPath,system_pas_path,InterfaceTranslate,'INTF_MessagesSuppressDoubles','TGDB3StateBool',@INTFMessagesSuppressDoubles);
+  units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPaths,system_pas_path,InterfaceTranslate,'INTF_MessagesSuppressDoubles','TGDB3StateBool',@INTFMessagesSuppressDoubles);
   SysVarUnit.AssignToSymbol(SysVar.INTF.INTF_MESSAGES_Properties.INTF_Messages_SuppressDoubles,'INTF_MessagesSuppressDoubles');
 
   SysVar.sys.SYS_UniqueInstance:=@SysParam.saved.UniqueInstance;

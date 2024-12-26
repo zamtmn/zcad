@@ -45,55 +45,55 @@ end;
 
 initialization
   TGeneralViewArea.RegisterShowCursorHandler(TShowCursorHelper.ShowCursorHandlerDrawLine);
-  system_pas_path:=expandpath('$(ZDataPath)/rtl/system.pas');
-  units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPath,system_pas_path,InterfaceTranslate,'DISP_CursorSize','Integer',@sysvarDISPCursorSize);
-  units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPath,system_pas_path,InterfaceTranslate,'DISP_OSSize','Double',@sysvarDISPOSSize);
-  units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPath,system_pas_path,InterfaceTranslate,'DISP_CrosshairSize','Double',@SysVarDISPCrosshairSize);
-  units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPath,system_pas_path,InterfaceTranslate,'DISP_BackGroundColor','TRGB',@sysvarDISPBackGroundColor);
-  units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPath,system_pas_path,InterfaceTranslate,'RD_MaxRenderTime','Integer',@sysvarRDMaxRenderTime);
-  units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPath,system_pas_path,InterfaceTranslate,'DISP_ZoomFactor','Double',@sysvarDISPZoomFactor);
-  units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPath,system_pas_path,InterfaceTranslate,'DISP_SystmGeometryDraw','Boolean',@sysvarDISPSystmGeometryDraw);
-  units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPath,system_pas_path,InterfaceTranslate,'DISP_SystmGeometryDraw','Boolean',@sysvarDISPSystmGeometryDraw);
-  units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPath,system_pas_path,InterfaceTranslate,'DISP_SystmGeometryColor','TGDBPaletteColor',@sysvarDISPSystmGeometryColor);
-  units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPath,system_pas_path,InterfaceTranslate,'DISP_HotGripColor','TGDBPaletteColor',@sysvarDISPHotGripColor);
-  units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPath,system_pas_path,InterfaceTranslate,'DISP_SelectedGripColor','TGDBPaletteColor',@sysvarDISPSelGripColor);
-  units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPath,system_pas_path,InterfaceTranslate,'DISP_UnSelectedGripColor','TGDBPaletteColor',@sysvarDISPUnSelGripColor);
-  units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPath,system_pas_path,InterfaceTranslate,'DWG_OSMode','TGDBOSMode',@sysvarDWGOSMode);
-  units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPath,system_pas_path,InterfaceTranslate,'DWG_OSModeControl','Boolean',@sysvarDWGOSModeControl);
-  units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPath,system_pas_path,InterfaceTranslate,'DISP_GripSize','Integer',@sysvarDISPGripSize);
-  units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPath,system_pas_path,InterfaceTranslate,'DISP_ColorAxis','Boolean',@sysvarDISPColorAxis);
-  units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPath,system_pas_path,InterfaceTranslate,'DISP_DrawZAxis','Boolean',@sysvarDISPDrawZAxis);
-  units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPath,system_pas_path,InterfaceTranslate,'RD_DrawInsidePaintMessage','TGDB3StateBool',@sysvarDrawInsidePaintMessage);
-  units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPath,system_pas_path,InterfaceTranslate,'DWG_PolarMode','Boolean',@sysvarDWGPolarMode);
-  units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPath,system_pas_path,InterfaceTranslate,'RD_LineSmooth','Boolean',@SysVarRDLineSmooth);
-  units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPath,system_pas_path,InterfaceTranslate,'RD_UseStencil','Boolean',@sysvarRDUseStencil);
-  units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPath,system_pas_path,InterfaceTranslate,'RD_LastRenderTime','Integer',@sysvarRDLastRenderTime);
-  units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPath,system_pas_path,InterfaceTranslate,'RD_LastUpdateTime','Integer',@sysvarRDLastUpdateTime);
-  units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPath,system_pas_path,InterfaceTranslate,'RD_ID_Enabled','Boolean',@SysVarRDImageDegradationEnabled);
-  units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPath,system_pas_path,InterfaceTranslate,'RD_ID_PrefferedRenderTime','Integer',@SysVarRDImageDegradationPrefferedRenderTime);
-  units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPath,system_pas_path,InterfaceTranslate,'RD_ID_MaxDegradationFactor','Double',@SysVarRDImageDegradationMaxDegradationFactor);
-  units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPath,system_pas_path,InterfaceTranslate,'DISP_RemoveSystemCursorFromWorkArea','Boolean',@SysVarDISPRemoveSystemCursorFromWorkArea);
-  units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPath,system_pas_path,InterfaceTranslate,'DSGN_SelNew','Boolean',@sysvarDSGNSelNew);
-  units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPath,system_pas_path,InterfaceTranslate,'DWG_EditInSubEntry','Boolean',@sysvarDWGEditInSubEntry);
+  system_pas_path:=expandpath('$(DistroPath)/rtl/system.pas');
+  units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPaths,system_pas_path,InterfaceTranslate,'DISP_CursorSize','Integer',@sysvarDISPCursorSize);
+  units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPaths,system_pas_path,InterfaceTranslate,'DISP_OSSize','Double',@sysvarDISPOSSize);
+  units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPaths,system_pas_path,InterfaceTranslate,'DISP_CrosshairSize','Double',@SysVarDISPCrosshairSize);
+  units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPaths,system_pas_path,InterfaceTranslate,'DISP_BackGroundColor','TRGB',@sysvarDISPBackGroundColor);
+  units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPaths,system_pas_path,InterfaceTranslate,'RD_MaxRenderTime','Integer',@sysvarRDMaxRenderTime);
+  units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPaths,system_pas_path,InterfaceTranslate,'DISP_ZoomFactor','Double',@sysvarDISPZoomFactor);
+  units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPaths,system_pas_path,InterfaceTranslate,'DISP_SystmGeometryDraw','Boolean',@sysvarDISPSystmGeometryDraw);
+  units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPaths,system_pas_path,InterfaceTranslate,'DISP_SystmGeometryDraw','Boolean',@sysvarDISPSystmGeometryDraw);
+  units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPaths,system_pas_path,InterfaceTranslate,'DISP_SystmGeometryColor','TGDBPaletteColor',@sysvarDISPSystmGeometryColor);
+  units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPaths,system_pas_path,InterfaceTranslate,'DISP_HotGripColor','TGDBPaletteColor',@sysvarDISPHotGripColor);
+  units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPaths,system_pas_path,InterfaceTranslate,'DISP_SelectedGripColor','TGDBPaletteColor',@sysvarDISPSelGripColor);
+  units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPaths,system_pas_path,InterfaceTranslate,'DISP_UnSelectedGripColor','TGDBPaletteColor',@sysvarDISPUnSelGripColor);
+  units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPaths,system_pas_path,InterfaceTranslate,'DWG_OSMode','TGDBOSMode',@sysvarDWGOSMode);
+  units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPaths,system_pas_path,InterfaceTranslate,'DWG_OSModeControl','Boolean',@sysvarDWGOSModeControl);
+  units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPaths,system_pas_path,InterfaceTranslate,'DISP_GripSize','Integer',@sysvarDISPGripSize);
+  units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPaths,system_pas_path,InterfaceTranslate,'DISP_ColorAxis','Boolean',@sysvarDISPColorAxis);
+  units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPaths,system_pas_path,InterfaceTranslate,'DISP_DrawZAxis','Boolean',@sysvarDISPDrawZAxis);
+  units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPaths,system_pas_path,InterfaceTranslate,'RD_DrawInsidePaintMessage','TGDB3StateBool',@sysvarDrawInsidePaintMessage);
+  units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPaths,system_pas_path,InterfaceTranslate,'DWG_PolarMode','Boolean',@sysvarDWGPolarMode);
+  units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPaths,system_pas_path,InterfaceTranslate,'RD_LineSmooth','Boolean',@SysVarRDLineSmooth);
+  units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPaths,system_pas_path,InterfaceTranslate,'RD_UseStencil','Boolean',@sysvarRDUseStencil);
+  units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPaths,system_pas_path,InterfaceTranslate,'RD_LastRenderTime','Integer',@sysvarRDLastRenderTime);
+  units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPaths,system_pas_path,InterfaceTranslate,'RD_LastUpdateTime','Integer',@sysvarRDLastUpdateTime);
+  units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPaths,system_pas_path,InterfaceTranslate,'RD_ID_Enabled','Boolean',@SysVarRDImageDegradationEnabled);
+  units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPaths,system_pas_path,InterfaceTranslate,'RD_ID_PrefferedRenderTime','Integer',@SysVarRDImageDegradationPrefferedRenderTime);
+  units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPaths,system_pas_path,InterfaceTranslate,'RD_ID_MaxDegradationFactor','Double',@SysVarRDImageDegradationMaxDegradationFactor);
+  units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPaths,system_pas_path,InterfaceTranslate,'DISP_RemoveSystemCursorFromWorkArea','Boolean',@SysVarDISPRemoveSystemCursorFromWorkArea);
+  units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPaths,system_pas_path,InterfaceTranslate,'DSGN_SelNew','Boolean',@sysvarDSGNSelNew);
+  units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPaths,system_pas_path,InterfaceTranslate,'DWG_EditInSubEntry','Boolean',@sysvarDWGEditInSubEntry);
 
-  units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPath,system_pas_path,InterfaceTranslate,'RD_SpatialNodeCount','Integer',@SysVarRDSpatialNodeCount);
-  units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPath,system_pas_path,InterfaceTranslate,'RD_SpatialNodesDepth','Integer',@SysVarRDSpatialNodesDepth);
+  units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPaths,system_pas_path,InterfaceTranslate,'RD_SpatialNodeCount','Integer',@SysVarRDSpatialNodeCount);
+  units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPaths,system_pas_path,InterfaceTranslate,'RD_SpatialNodesDepth','Integer',@SysVarRDSpatialNodesDepth);
 
-  units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPath,system_pas_path,InterfaceTranslate,'DWG_RotateTextInLT','Boolean',@sysvarDWGRotateTextInLT);
-  units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPath,system_pas_path,InterfaceTranslate,'RD_MaxLTPatternsInEntity','Integer',@SysVarRDMaxLTPatternsInEntity);
-  units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPath,system_pas_path,InterfaceTranslate,'RD_PanObjectDegradation','Boolean',@SysVarRDPanObjectDegradation);
-  units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPath,system_pas_path,InterfaceTranslate,'DSGN_OTrackTimerInterval','Integer',@sysvarDSGNOTrackTimerInterval);
+  units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPaths,system_pas_path,InterfaceTranslate,'DWG_RotateTextInLT','Boolean',@sysvarDWGRotateTextInLT);
+  units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPaths,system_pas_path,InterfaceTranslate,'RD_MaxLTPatternsInEntity','Integer',@SysVarRDMaxLTPatternsInEntity);
+  units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPaths,system_pas_path,InterfaceTranslate,'RD_PanObjectDegradation','Boolean',@SysVarRDPanObjectDegradation);
+  units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPaths,system_pas_path,InterfaceTranslate,'DSGN_OTrackTimerInterval','Integer',@sysvarDSGNOTrackTimerInterval);
 
 
-  units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPath,system_pas_path,InterfaceTranslate,'DSGN_EntityMoveStartTimerInterval','Integer',@sysvarDSGNEntityMoveStartTimerInterval);
-  units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPath,system_pas_path,InterfaceTranslate,'DSGN_EntityMoveStartOffset','Integer',@sysvarDSGNEntityMoveStartOffset);
-  units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPath,system_pas_path,InterfaceTranslate,'DSGN_EntityMoveByMouseUp','Boolean',@sysvarDSGNEntityMoveByMouseUp);
+  units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPaths,system_pas_path,InterfaceTranslate,'DSGN_EntityMoveStartTimerInterval','Integer',@sysvarDSGNEntityMoveStartTimerInterval);
+  units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPaths,system_pas_path,InterfaceTranslate,'DSGN_EntityMoveStartOffset','Integer',@sysvarDSGNEntityMoveStartOffset);
+  units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPaths,system_pas_path,InterfaceTranslate,'DSGN_EntityMoveByMouseUp','Boolean',@sysvarDSGNEntityMoveByMouseUp);
 
-  units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPath,system_pas_path,InterfaceTranslate,'DSGN_MaxSelectEntsCountWithObjInsp','Integer',@sysvarDSGNMaxSelectEntsCountWithObjInsp);
-  units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPath,system_pas_path,InterfaceTranslate,'DSGN_MaxSelectEntsCountWithGrips','Integer',@sysvarDSGNMaxSelectEntsCountWithGrips);
+  units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPaths,system_pas_path,InterfaceTranslate,'DSGN_MaxSelectEntsCountWithObjInsp','Integer',@sysvarDSGNMaxSelectEntsCountWithObjInsp);
+  units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPaths,system_pas_path,InterfaceTranslate,'DSGN_MaxSelectEntsCountWithGrips','Integer',@sysvarDSGNMaxSelectEntsCountWithGrips);
 
-  units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPath,system_pas_path,InterfaceTranslate,'DISP_LWDisplayScale','Integer',@sysvarDISPLWDisplayScale);
-  units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPath,system_pas_path,InterfaceTranslate,'RD_Light','Boolean',@sysvarRDLight);
+  units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPaths,system_pas_path,InterfaceTranslate,'DISP_LWDisplayScale','Integer',@sysvarDISPLWDisplayScale);
+  units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPaths,system_pas_path,InterfaceTranslate,'RD_Light','Boolean',@sysvarRDLight);
 
   sysvar.DISP.DISP_CursorSize:=@sysvarDISPCursorSize;
   sysvar.DISP.DISP_OSSize:=@sysvarDISPOSSize;

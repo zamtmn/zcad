@@ -415,7 +415,7 @@ var
   pentvarext:TVariablesExtender;
 begin
   if pos(DevicePrefix,pEntity^.name)=1 then begin
-  uou:=pointer(units.findunit(GetSupportPath,InterfaceTranslate,pEntity^.name));
+  uou:=pointer(units.findunit(GetSupportPaths,InterfaceTranslate,pEntity^.name));
   if uou<>nil then begin
     pentvarext:=pEntity^.GetExtension<TVariablesExtender>;
     pentvarext.entityunit.CopyFrom(uou);

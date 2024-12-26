@@ -53,7 +53,7 @@ var
   line,sub:String;
   f:TZctnrVectorBytes;
 begin
-  f.InitFromFile(DataPath+filename);
+  f.InitFromFile(ConcatPaths([GetDistroPath,filename]));
   while f.notEOF do
     begin
       line:=f.readString;

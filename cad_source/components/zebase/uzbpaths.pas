@@ -37,14 +37,14 @@ type
 //подстановка макросов в APath
 function ExpandPath(APath:String;AItDirectory:boolean=false):String;
 
-//поиск файла по списку путей разделенных PathSeparator
+//поиск файла по списку путей разделенных ';'
 function FindInPaths(const APaths:String; const AFileName:String):String;
 
 //DistroPath - путь к дистрибутиву программы, это /etc/zcad/ или
 //ExtractFilePath(paramstr(0))+'../..' в зависимости где фактически лежат
 //файлы дистрибутива и что найдет FindDistroPath
 
-//DataPaths - пути данных программы, сейчас их 2, разделены PathSeparator
+//DataPaths - пути данных программы, сейчас их 2, разделены ';'
 //1: /home/user/.config/zcad/
 //2: DistroPath
 //всё ищется сначала в 1, потом в 2
@@ -115,11 +115,11 @@ begin
   if AdditionalSupportPaths='' then
     AdditionalSupportPaths:=APath
   else
-    if (AdditionalSupportPaths[Length(AdditionalSupportPaths)]=PathSeparator)or
-       (APath[1]=PathSeparator) then
+    if (AdditionalSupportPaths[Length(AdditionalSupportPaths)]=';')or
+       (APath[1]=';') then
       AdditionalSupportPaths:=AdditionalSupportPaths+APath
     else
-      AdditionalSupportPaths:=AdditionalSupportPaths+PathSeparator+APath;
+      AdditionalSupportPaths:=AdditionalSupportPaths+';'+APath;
 end;
 
 function GetSupportPaths:String;
@@ -133,7 +133,7 @@ begin
       if SupportPaths[Length(SupportPaths)]=DirectorySeparator then
         result:=SupportPaths+AdditionalSupportPaths
       else
-        result:=SupportPaths+PathSeparator+AdditionalSupportPaths
+        result:=SupportPaths+';'+AdditionalSupportPaths
 end;
 function GetBinPath:String;
 begin
@@ -180,7 +180,7 @@ begin
 end;
 function GetPathsInDataPaths(const ASubFolder:String):String;
 begin
-  result:=IncludeTrailingPathDelimiter(IncludeTrailingPathDelimiter(GetAppConfigDir(false))+ASubFolder)+PathSeparator
+  result:=IncludeTrailingPathDelimiter(IncludeTrailingPathDelimiter(GetAppConfigDir(false))+ASubFolder)+';'
          +IncludeTrailingPathDelimiter(IncludeTrailingPathDelimiter(DistroPath)+ASubFolder);
 end;
 
@@ -220,7 +220,7 @@ begin
   end;
   s:=ExpandPath(APaths);
   repeat
-    GetPartOfPath(ts,s,PathSeparator);
+    GetPartOfPath(ts,s,';');
     zTraceLn('[FILEOPS]FindInPaths: searh in "%s"',[UTF8ToSys(ts)]);
     ts2:=ts+ExpandedFileName;
     if FileExists(UTF8ToSys(ts2))then begin
@@ -308,7 +308,7 @@ begin
     pvs:=nil;
   s:=APath;
   repeat
-    GetPartOfPath(ts,s,PathSeparator);
+    GetPartOfPath(ts,s,';');
     ts:=ExpandPath(ts);
     FromDirIteratorInternal(ts,AMask,AFirstLoadFileName,AProc,AMethod,APData,pvs);
   until s='';

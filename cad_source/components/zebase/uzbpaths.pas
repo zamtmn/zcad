@@ -210,7 +210,7 @@ const
 var
   ExpandedFileName,s,ts,ts2{$IFDEF LINUX},lfn{$ENDIF}:String;
 begin
-  {$IFDEF LINUX}lfn:=lowercase(FileName);{$ENDIF}
+  {$IFDEF LINUX}lfn:=lowercase(AFileName);{$ENDIF}
   zTraceLn('[FILEOPS]FindInPaths: searh file:"%s"',[UTF8ToSys(AFileName)]);
   ExpandedFileName:=ExpandPath(AFileName);
   zTraceLn('[FILEOPS]FindInPaths: file name expand to:"%s"',[UTF8ToSys(ExpandedFileName)]);

@@ -23,7 +23,7 @@ unit uzccommand_help;
 interface
 uses
   SysUtils,
-  {$ifdef unix}Process,sysutils,{$else}windows,Forms,{$endif}
+  {$ifdef unix}Process,{$else}windows,Forms,{$endif}
   uzcLog,LCLIntf,
   uzccommandsabstract,uzccommandsimpl,uzccommandsmanager,uzcFileStructure,
   uzbpaths;

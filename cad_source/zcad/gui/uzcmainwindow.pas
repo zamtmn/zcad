@@ -1046,7 +1046,7 @@ begin
 
   if not assigned(StandartActions.Images) then
                              StandartActions.Images:={TImageList.Create(StandartActions)}ImagesManager.IconList;
-  brocenicon:=StandartActions.LoadImage(ConcatPaths([GetDistroPath,'menu/BMP/noimage.bmp']));
+  brocenicon:=ImagesManager.DefaultImageIndex;
 
 
   ToolBarsManager.setup(self,StandartActions,sysvar.INTF.INTF_DefaultControlHeight^);

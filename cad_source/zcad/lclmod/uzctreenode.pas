@@ -442,46 +442,19 @@ begin
 end;
 
 procedure TMyActionListHelper.SetImage(img,identifer:string;var action:TZAction);
-//var
-    //bmp:TBitmap;
 begin
-     if length(img)>1 then
-     begin
-          if img[1]<>'#' then
-                              begin
-                              action.imgstr:='';
-                              action.ImageIndex:=LoadImage(ConcatPaths([GetDistroPath,'menu/BMP',img]));
-                              if action.ImageIndex=-1 then
-                                                  begin
-                                                       action.ImageIndex:=brocenicon;
-                                                  end;
-                              if action.ImageIndex=-1 then
-                                                  begin
-                                                       action.imgstr:=img;
-                                                  end;
-
-                              {img:=sysparam.programpath+'menu/BMP/'+img;
-                              if fileexists(img) then
-                              begin
-                              bmp:=TBitmap.create;
-                              bmp.LoadFromFile(img);
-                              bmp.Transparent:=true;
-                              if not assigned(Images) then
-                                                          Images:=TImageList.Create(self);
-                              action.ImageIndex:=Images.Add(bmp,nil);
-                              freeandnil(bmp);
-                              action.imgstr:='';
-                              end
-                              else
-                              begin
-                              end;}
-                              end
-                          else
-                              begin
-                              //action.imgstr:=(system.copy(img,2,length(img)-1));
-                              action.imgstr:=InterfaceTranslate(identifer,system.copy(img,2,length(img)-1));
-                              end;
-     end;
+  if length(img)>1 then begin
+    if img[1]<>'#' then begin
+      action.imgstr:='';
+      action.ImageIndex:=LoadImage(ConcatPaths([GetDistroPath,'menu/BMP',img]));
+      if action.ImageIndex=-1 then
+        action.ImageIndex:=brocenicon;
+      if action.ImageIndex=-1 then
+        action.imgstr:=img;
+    end else begin
+      action.imgstr:=InterfaceTranslate(identifer,system.copy(img,2,length(img)-1));
+    end;
+  end;
 end;
 function FindControlByType(_parent:TWinControl;_class:TClass):TControl;
 var

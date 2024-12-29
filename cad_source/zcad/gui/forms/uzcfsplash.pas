@@ -71,7 +71,7 @@ begin
   self.DoubleBuffered:=true;
   Logo:=TImage.create(self);
   Logo.Align:=alclient;
-  flogo:=ConcatPaths([UTF8ToSys(GetDistroPath),CFScomponentsDir,CFSlogopngFile]);
+  flogo:=ConcatPaths([GetDistroPath,CFScomponentsDir,CFSlogopngFile]);
   if FileExists(flogo) then
     Logo.Picture.LoadFromFile(flogo);
   Logo.Parent:=self;

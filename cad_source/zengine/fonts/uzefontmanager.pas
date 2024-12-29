@@ -163,34 +163,34 @@ begin
   inherited init(m);
 end;
 procedure GDBFontManager.CreateBaseFont;
+var
+  PathWithFileName:string;
 {NEEDFIXFORDELPHI}
 {$IFNDEF DELPHI}
-var
-   r: TLResource;
-   f:TZctnrVectorBytes;
+  r:TLResource;
+  f:TZctnrVectorBytes;
 {$ENDIF}
 const
-   resname='GEWIND';
-   filename='GEWIND.SHX';
+  resname='GEWIND';
+  filename='GEWIND.SHX';
 begin
   {$IFNDEF DELPHI}
   pbasefont:=addFonfByFile(FindInPaths(sysvarPATHFontsPath,sysvarAlternateFont));
-  if pbasefont=nil then
-  begin
-       zDebugLn('{E}'+rsAlternateFontNotFoundIn,[sysvarAlternateFont,sysvarPATHFontsPath]);
-       r := LazarusResources.Find(resname);
-       if r = nil then
-                      zDebugLn('{F}'+rsReserveFontNotFound)
-                  else
-                      begin
-                           f.init(length(r.Value));
-                           f.AddData(@r.Value[1],length(r.Value));
-                           f.SaveToFile(expandpath(GetTempPath+filename));
-                           pbasefont:=addFonfByFile(GetTempPath+filename);
-                           f.done;
-                           if pbasefont=nil then
-                                                zDebugLn('{F}'+rsReserveFontNotLoad)
-                      end;
+  if pbasefont=nil then begin
+    zDebugLn('{E}'+rsAlternateFontNotFoundIn,[sysvarAlternateFont,sysvarPATHFontsPath]);
+    r := LazarusResources.Find(resname);
+    if r = nil then
+      zDebugLn('{F}'+rsReserveFontNotFound)
+    else begin
+      f.init(length(r.Value));
+      f.AddData(@r.Value[1],length(r.Value));
+      PathWithFileName:=expandpath(ConcatPaths([GetTempPath,filename]));
+      f.SaveToFile(PathWithFileName);
+      pbasefont:=addFonfByFile(PathWithFileName);
+      f.done;
+      if pbasefont=nil then
+        zDebugLn('{F}'+rsReserveFontNotLoad)
+    end;
   end;
   addFonfByFile(FindInPaths(sysvarPATHFontsPath,'ltypeshp.shx'));
   {$ENDIF}

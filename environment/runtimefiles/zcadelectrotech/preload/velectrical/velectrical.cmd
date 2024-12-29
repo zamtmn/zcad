@@ -1,7 +1,7 @@
-MergeBlocks($(CurrentMacrosPath)schemes$(DirectorySeparator)_vschemes.dxf)
-MergeBlocks($(CurrentMacrosPath)schemes$(DirectorySeparator)_vschemesugo.dxf)
-MergeBlocks($(CurrentMacrosPath)plan$(DirectorySeparator)sockets$(DirectorySeparator)_vsockets.dxf)
-MergeBlocks($(CurrentMacrosPath)plan$(DirectorySeparator)shields$(DirectorySeparator)_vshields.dxf)
-MergeBlocks($(CurrentMacrosPath)plan$(DirectorySeparator)elreceiver$(DirectorySeparator)_elreceiver.dxf)
-MergeBlocks($(CurrentMacrosPath)plan$(DirectorySeparator)lighting$(DirectorySeparator)_lighting.dxf)
+MergeBlocks($(CurrentMacrosPath)$(DirectorySeparator)schemes$(DirectorySeparator)_vschemes.dxf)
+MergeBlocks($(CurrentMacrosPath)$(DirectorySeparator)schemes$(DirectorySeparator)_vschemesugo.dxf)
+MergeBlocks($(CurrentMacrosPath)$(DirectorySeparator)plan$(DirectorySeparator)sockets$(DirectorySeparator)_vsockets.dxf)
+MergeBlocks($(CurrentMacrosPath)$(DirectorySeparator)plan$(DirectorySeparator)shields$(DirectorySeparator)_vshields.dxf)
+MergeBlocks($(CurrentMacrosPath)$(DirectorySeparator)plan$(DirectorySeparator)elreceiver$(DirectorySeparator)_elreceiver.dxf)
+MergeBlocks($(CurrentMacrosPath)$(DirectorySeparator)plan$(DirectorySeparator)lighting$(DirectorySeparator)_lighting.dxf)
 

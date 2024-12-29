@@ -111,7 +111,8 @@ end;
 class function TZCADPathsMacroMethods.MacroFuncDataSearhPrefixes(const {%H-}Param: string; const Data: PtrInt;
                                    var {%H-}Abort: boolean): string;
 begin
-  Result:=IncludeTrailingPathDelimiter(IncludeTrailingPathDelimiter(GetAppConfigDir(false))+Param)+';'+IncludeTrailingPathDelimiter(IncludeTrailingPathDelimiter(GetDistroPath)+Param);
+  //Result:=IncludeTrailingPathDelimiter(IncludeTrailingPathDelimiter(GetAppConfigDir(false))+Param)+';'+IncludeTrailingPathDelimiter(IncludeTrailingPathDelimiter(GetDistroPath)+Param);
+  Result:=ConcatPaths([GetAppConfigDir(false),Param])+';'+ConcatPaths([GetDistroPath,Param]);
 end;
 class function TZCADPathsMacroMethods.MacroFuncUserDir(const Param: string; const {%H-}Data: PtrInt;var {%H-}Abort: boolean): string;
 begin

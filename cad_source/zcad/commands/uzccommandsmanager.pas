@@ -155,13 +155,13 @@ implementation
 function GDBcommandmanager.MacroFuncsCurrentMacrosPath (const {%H-}Param: string; const Data: PtrInt;
                                                         var {%H-}Abort: boolean): string;
 begin
-  result:=ExtractFilePath(currMacros);
+  result:=ExcludeTrailingPathDelimiter(ExtractFilePath(currMacros));
 end;
 
 function GDBcommandmanager.MacroFuncsCurrentMacrosFile (const {%H-}Param: string; const Data: PtrInt;
                                                         var {%H-}Abort: boolean): string;
 begin
-  result:=ExtractFileName(currMacros);
+  result:=ExcludeTrailingPathDelimiter(ExtractFileName(currMacros));
 end;
 
 procedure GDBcommandmanager.AddClPrompt(CLP:ICommandLinePrompt);

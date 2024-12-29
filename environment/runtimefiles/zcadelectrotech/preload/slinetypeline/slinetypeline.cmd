@@ -1,1 +1,1 @@
-MergeBlocks($(CurrentMacrosPath)_slinetypeline.dxf)
+MergeBlocks($(CurrentMacrosPath)$(DirectorySeparator)_slinetypeline.dxf)

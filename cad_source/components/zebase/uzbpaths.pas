@@ -35,7 +35,7 @@ type
   TDataFilesExistChecFunc=function(const ACheckedPath:string):boolean;
 
 //подстановка макросов в APath
-function ExpandPath(APath:String;AItDirectory:boolean=false):String;
+function ExpandPath(APath:String):String;
 
 //поиск файла по списку путей разделенных ';'
 function FindInPaths(const APaths:String; const AFileName:String):String;
@@ -130,7 +130,8 @@ begin
     if SupportPaths='' then
       result:=AdditionalSupportPaths
     else
-      if SupportPaths[Length(SupportPaths)]=DirectorySeparator then
+      if (SupportPaths[Length(SupportPaths)]=';')or
+         (AdditionalSupportPaths[1]=';') then
         result:=SupportPaths+AdditionalSupportPaths
       else
         result:=SupportPaths+';'+AdditionalSupportPaths
@@ -222,30 +223,33 @@ begin
   repeat
     GetPartOfPath(ts,s,';');
     zTraceLn('[FILEOPS]FindInPaths: searh in "%s"',[UTF8ToSys(ts)]);
-    ts2:=ts+ExpandedFileName;
+    ts2:=ConcatPaths([ts,ExpandedFileName]);
     if FileExists(UTF8ToSys(ts2))then begin
-      zTraceLn(cFindInPaths,[UTF8ToSys(result)]);
+      zTraceLn(cFindInPaths,[UTF8ToSys(ts2)]);
       exit(ts2);
     end;
    {$IFDEF LINUX}
-    ts2:=ts+lfn;
-    if FileExists(ts2) then
+    ts2:=ConcatPaths([ts,lfn]);
+    if FileExists(ts2) then begin
+      zTraceLn(cFindInPaths,[UTF8ToSys(ts2)]);
       exit(ts2);
+    end;
    {$ENDIF}
   until s='';
   result:='';
   zDebugLn(sysutils.Format('{E}FindInPaths: file not found:"%s"',[UTF8ToSys(ExpandedFileName)]));
 end;
-function ExpandPath(APath:String;AItDirectory:boolean=false):String;
+function ExpandPath(APath:String):String;
 begin
   DefaultMacros.SubstituteMacros(APath);
   if APath='' then
     result:=DistroPath
   else
     result:=APath;
+  DoDirSeparators(result);
   result:=StringReplace(result,'/',PathDelim,[rfReplaceAll, rfIgnoreCase]);
-  if AItDirectory or DirectoryExists(UTF8ToSys(result)) then
-    result:=IncludeTrailingPathDelimiter(result);
+  {if AItDirectory or DirectoryExists(UTF8ToSys(result)) then
+    result:=IncludeTrailingPathDelimiter(result);}
 end;
 
 procedure FromDirIteratorInternal(const path,mask,firstloadfilename:String;proc:TFromDirIterator;method:TFromDirIteratorObj;pdata:pointer;pvs:PTZctnrVectorStrings);
@@ -270,7 +274,7 @@ var sr: TSearchRec;
 begin
   zTraceLn('{D+}[FILEOPS]FromDirIteratorInternal start');
   if firstloadfilename<>'' then
-    if fileexists(path+firstloadfilename) then
+    if fileexists(ConcatPaths([path,firstloadfilename])) then
       processfile(firstloadfilename);
   if FindFirst(IncludeTrailingPathDelimiter(path)+'*', faDirectory, sr) = 0 then begin
     repeat
@@ -348,8 +352,8 @@ begin
   end;
 end;
 initialization
-  BinPath:=SysToUTF8(ExtractFilePath(paramstr(0)));
-  DistroPath:=IncludeTrailingPathDelimiter(SysToUTF8(ExpandFileName(ExtractFilePath(paramstr(0))+'../..')));
-  WriteDataPath:=IncludeTrailingPathDelimiter(GetAppConfigDir(false));
-  TempPath:=IncludeTrailingPathDelimiter(GetTempDir);
+  BinPath:=ExtractFilePath(paramstr(0));
+  DistroPath:=ExpandFileName(ExtractFilePath(paramstr(0))+'../..');
+  WriteDataPath:=GetAppConfigDir(false);
+  TempPath:=GetTempDir;
 end.

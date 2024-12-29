@@ -28,9 +28,9 @@ initialization
   units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPaths,expandpath('$(DistroPath)/rtl/system.pas'),InterfaceTranslate,'PATH_Support_Path','String',@SupportPaths);
   sysvar.PATH.Dictionaries:=@SysParam.saved.DictionariesPath;
   sysvar.PATH.Program_Data:=@GetDistroPath;
-  sysvar.PATH.Support_Path:=@SupportPaths;
-  sysvar.PATH.AdditionalSupport_Path:=@GetAdditionalSupportPaths;
-  sysvar.PATH.Temp_files:=@GetTempPath;
+  sysvar.PATH.Support_Paths:=@SupportPaths;
+  sysvar.PATH.AdditionalSupport_Paths:=@GetAdditionalSupportPaths;
+  sysvar.PATH.Temp_Path:=@GetTempPath;
 finalization
   ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
 end.

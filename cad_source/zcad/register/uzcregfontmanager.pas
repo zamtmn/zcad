@@ -37,7 +37,7 @@ initialization
   sysvar.RD.RD_UseLazFreeTypeImplementation:=@sysvarTTFUseLazFreeTypeImplementation;
   {$ELSE}
   {$ENDIF}
-  sysvar.PATH.Fonts_Path:=@sysvarPATHFontsPath;
+  sysvar.PATH.Fonts_Paths:=@sysvarPATHFontsPath;
   sysvar.PATH.Alternate_Font:=@sysvarAlternateFont;
 finalization
   ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);

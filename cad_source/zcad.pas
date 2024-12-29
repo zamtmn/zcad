@@ -323,7 +323,7 @@ begin
   lpsh:=LPS.StartLongProcess('Start program',@lpsh,0);
 {$IFDEF REPORTMMEMORYLEAKS}printleakedblock:=true;{$ENDIF}
 {$IFDEF REPORTMMEMORYLEAKS}
-       SetHeapTraceOutput(sysvar.PATH.Program_Run^+'/log/memory-heaptrace.txt');
+       SetHeapTraceOutput(ConcatPaths([GetTempPath,'/log/memory-heaptrace.txt']));
        keepreleased:=true;
 {$ENDIF}
   //Application_Initialize перемещен в инициализацию uzcfsplash чтоб показать сплэш пораньше
@@ -352,7 +352,7 @@ begin
 
   ZCADMainWindow.SwithToProcessBar;
 
-  FromDirsIterator(sysvar.PATH.Preload_Path^,'*.cmd','autorun.cmd',RunCmdFile,nil);
+  FromDirsIterator(sysvar.PATH.Preload_Paths^,'*.cmd','autorun.cmd',RunCmdFile,nil);
   if CommandLineParser.HasOption(RunScript)then
     for i:=0 to CommandLineParser.OptionOperandsCount(RunScript)-1 do begin
       scrfile:=CommandLineParser.OptionOperand(RunScript,i);

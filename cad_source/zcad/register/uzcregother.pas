@@ -32,9 +32,9 @@ implementation
 var
   mem:TZctnrVectorBytes;
 initialization;
-  units.loadunit(GetSupportPaths,InterfaceTranslate,expandpath('$(DistroPath)/rtl/sysvar.pas'),nil);
-  units.loadunit(GetSupportPaths,InterfaceTranslate,FindFileInDataPaths(CFSrtlDir,CFSsavedvarpasFile),nil);
-  units.loadunit(GetSupportPaths,InterfaceTranslate,expandpath('$(DistroPath)/rtl/devicebase.pas'),nil);
+  units.loadunit(GetSupportPaths,InterfaceTranslate,FindFileInDataPaths(CFSconfigsDir,CFSsysvarpasFile),nil);
+  units.loadunit(GetSupportPaths,InterfaceTranslate,FindFileInDataPaths(CFSconfigsDir,CFSsavedvarpasFile),nil);
+  units.loadunit(GetSupportPaths,InterfaceTranslate,expandpath('$(RoCfgs)/rtl/devicebase.pas'),nil);
 
   SysVarUnit:=units.findunit(GetSupportPaths,InterfaceTranslate,'sysvar');
   SavedUnit:=units.findunit(GetSupportPaths,InterfaceTranslate,'savedvar');
@@ -203,10 +203,10 @@ initialization;
   end;
 
 
-  units.loadunit(GetSupportPaths,InterfaceTranslate,expandpath('$(DistroPath)/rtl/cables.pas'),nil);
-  units.loadunit(GetSupportPaths,InterfaceTranslate,expandpath('$(DistroPath)/rtl/devices.pas'),nil);
-  units.loadunit(GetSupportPaths,InterfaceTranslate,expandpath('$(DistroPath)/rtl/connectors.pas'),nil);
-  units.loadunit(GetSupportPaths,InterfaceTranslate,expandpath('$(DistroPath)/rtl/styles/styles.pas'),nil);
+  units.loadunit(GetSupportPaths,InterfaceTranslate,expandpath('$(RoCfgs)/rtl/cables.pas'),nil);
+  units.loadunit(GetSupportPaths,InterfaceTranslate,expandpath('$(RoCfgs)/rtl/devices.pas'),nil);
+  units.loadunit(GetSupportPaths,InterfaceTranslate,expandpath('$(RoCfgs)/rtl/connectors.pas'),nil);
+  units.loadunit(GetSupportPaths,InterfaceTranslate,expandpath('$(RoCfgs)/rtl/styles/styles.pas'),nil);
 
   SysVar.debug.memdeb.GetMemCount:=nil;
   SysVar.debug.memdeb.FreeMemCount:=nil;
@@ -231,7 +231,7 @@ finalization;
   if SavedUnit<>nil then begin
     mem.init(1024);
     SavedUnit^.SavePasToMem(mem);
-    mem.SaveToFile(GetWritableFilePath(CFSRtlDir,CFSsavedvarpasFile));
+    mem.SaveToFile(GetWritableFilePath(CFSconfigsDir,CFSsavedvarpasFile));
     mem.done;
   end;
 end.

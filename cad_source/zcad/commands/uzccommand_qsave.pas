@@ -59,10 +59,10 @@ begin
   end;
 
   if itAutoSave then begin
-    LoadParams(FindFileInDataPaths(CFSRtlDir,CFSconfigxmlFile),TempSavedParam);
+    LoadParams(FindFileInDataPaths(CFSconfigsDir,CFSconfigxmlFile),TempSavedParam);
     TempSavedParam.LastAutoSaveFile:=s1;
     SysParam.saved.LastAutoSaveFile:=s1;
-    SaveParams(GetWritableFilePath(CFSRtlDir,CFSconfigxmlFile),TempSavedParam);
+    SaveParams(GetWritableFilePath(CFSconfigsDir,CFSconfigxmlFile),TempSavedParam);
   end;
   Result:=SaveDXFDPAS(s1,not itAutoSave);
   if (not itAutoSave)and(Result=cmd_ok) then

@@ -22,18 +22,21 @@ interface
 uses
   SysUtils,Forms,
   {$IFDEF WINDOWS}ShlObj,{$ENDIF}LazUTF8,
+  uzcSysParams,
   MacroDefIntf,uzmacros,
   uzclog,uzblog,uzbpaths,uzcstrconsts,
   uzcFileStructure;
 type
   TZCADPathsMacroMethods=class
-    class function MacroFuncDistroPath(const {%H-}Param: string; const Data: PtrInt;
+    class function MacroFuncRoCfgs(const {%H-}Param: string; const Data: PtrInt;
                                         var {%H-}Abort: boolean): string;
-    class function MacroFuncBinPath(const {%H-}Param: string; const Data: PtrInt;
+    class function MacroFuncBinaryPath(const {%H-}Param: string; const Data: PtrInt;
+                                       var {%H-}Abort: boolean): string;
+    class function MacroFuncDistribPath(const {%H-}Param: string; const Data: PtrInt;
                                        var {%H-}Abort: boolean): string;
     class function MacroFuncDataSearhPrefixes(const {%H-}Param: string; const Data: PtrInt;
                                        var {%H-}Abort: boolean): string;
-    class function MacroFuncZCADDictionariesPath(const {%H-}Param: string; const Data: PtrInt;
+    class function MacroFuncDictPath(const {%H-}Param: string; const Data: PtrInt;
                                                  var {%H-}Abort: boolean): string;
     class function MacroFuncTEMPPath(const {%H-}Param: string; const Data: PtrInt;
                                        var {%H-}Abort: boolean): string;
@@ -55,18 +58,22 @@ type
                                                var {%H-}Abort: boolean): string;
   end;
 implementation
-class function TZCADPathsMacroMethods.MacroFuncDistroPath(const {%H-}Param: string; const Data: PtrInt;var {%H-}Abort: boolean): string;
+class function TZCADPathsMacroMethods.MacroFuncRoCfgs(const {%H-}Param: string; const Data: PtrInt;var {%H-}Abort: boolean): string;
 begin
-  result:=GetDistroPath;
+  result:=GetRoCfgsPath;
 end;
-class function TZCADPathsMacroMethods.MacroFuncBinPath(const {%H-}Param: string; const Data: PtrInt;var {%H-}Abort: boolean): string;
+class function TZCADPathsMacroMethods.MacroFuncBinaryPath(const {%H-}Param: string; const Data: PtrInt;var {%H-}Abort: boolean): string;
 begin
-  result:=GetBinPath;
+  result:=GetBinaryPath;
 end;
-class function TZCADPathsMacroMethods.MacroFuncZCADDictionariesPath(const {%H-}Param: string; const Data: PtrInt;
+class function TZCADPathsMacroMethods.MacroFuncDistribPath(const {%H-}Param: string; const Data: PtrInt;var {%H-}Abort: boolean): string;
+begin
+  result:=sysparam.saved.DistribPath;
+end;
+class function TZCADPathsMacroMethods.MacroFuncDictPath(const {%H-}Param: string; const Data: PtrInt;
                                              var {%H-}Abort: boolean): string;
 begin
-  result:=ConcatPaths([GetDistroPath,CFSdictionariesDir]);
+  result:=ConcatPaths([GetRoCfgsPath,CFSdictionariesDir]);
 end;
 class function TZCADPathsMacroMethods.MacroFuncTEMPPath(const {%H-}Param: string; const Data: PtrInt;var {%H-}Abort: boolean): string;
 begin
@@ -112,7 +119,7 @@ class function TZCADPathsMacroMethods.MacroFuncDataSearhPrefixes(const {%H-}Para
                                    var {%H-}Abort: boolean): string;
 begin
   //Result:=IncludeTrailingPathDelimiter(IncludeTrailingPathDelimiter(GetAppConfigDir(false))+Param)+';'+IncludeTrailingPathDelimiter(IncludeTrailingPathDelimiter(GetDistroPath)+Param);
-  Result:=ConcatPaths([GetAppConfigDir(false),Param])+';'+ConcatPaths([GetDistroPath,Param]);
+  Result:=ConcatPaths([GetAppConfigDir(false),Param])+';'+ConcatPaths([GetRoCfgsPath,Param]);
 end;
 class function TZCADPathsMacroMethods.MacroFuncUserDir(const Param: string; const {%H-}Data: PtrInt;var {%H-}Abort: boolean): string;
 begin
@@ -136,14 +143,16 @@ begin
 end;
 
 initialization
-DefaultMacros.AddMacro(TTransferMacro.Create('BinPath','',
-                       'Path to ZCAD binary',TZCADPathsMacroMethods.MacroFuncBinPath,[]));
-DefaultMacros.AddMacro(TTransferMacro.Create('DistroPath','',
-                       'Path to ZCAD distributive',TZCADPathsMacroMethods.MacroFuncDistroPath,[]));
+DefaultMacros.AddMacro(TTransferMacro.Create('BinaryPath','',
+                       'Path to ZCAD binary',TZCADPathsMacroMethods.MacroFuncBinaryPath,[]));
+DefaultMacros.AddMacro(TTransferMacro.Create('DistribPath','',
+                       'Path to ZCAD Distributive',TZCADPathsMacroMethods.MacroFuncDistribPath,[]));
+DefaultMacros.AddMacro(TTransferMacro.Create('RoCfgs','',
+                       'Path to read only configs',TZCADPathsMacroMethods.MacroFuncRoCfgs,[]));
 DefaultMacros.AddMacro(TTransferMacro.Create('TEMP','',
                        'TEMP path',TZCADPathsMacroMethods.MacroFuncTEMPPath,[]));
-DefaultMacros.AddMacro(TTransferMacro.Create('ZCADDictionariesPath','',
-                       'Dictionaries path',TZCADPathsMacroMethods.MacroFuncZCADDictionariesPath(),[]));
+DefaultMacros.AddMacro(TTransferMacro.Create('DictPath','',
+                       'Dictionaries path',TZCADPathsMacroMethods.MacroFuncDictPath(),[]));
 DefaultMacros.AddMacro(TTransferMacro.Create('SystemFontsPath','',
                        'System fonts path',TZCADPathsMacroMethods.MacroFuncSystemFontsPath(),[]));
 DefaultMacros.AddMacro(TTransferMacro.Create('UserFontsPath','',

@@ -72,9 +72,9 @@ function GetPartOfPath(out part:String;
 //по этим путям. пути соджет настроить юзер в настройках программы
 function GetSupportPaths:String;
 //путь к бинарнику
-function GetBinPath:String;
+function GetBinaryPath:String;
 //путь к дистрибутиву
-function GetDistroPath:String;
+function GetRoCfgsPath:String;
 //путь к папке временных файлов
 function GetTempPath:String;
 //дополнительные пути с файлами поддержки, сюда рути добавляются скриптами при
@@ -106,8 +106,8 @@ var
 implementation
 
 var
-//остальные переменные с доступом только по геттеру
-  AdditionalSupportPaths,DistroPath,BinPath,WriteDataPath,TempPath:String;
+  //остальные переменные с доступом только по геттеру
+  BinaryPath,TempPath,AdditionalSupportPaths,RoCfgsPath,WrCfgsPath:String;
 
 procedure AddToAdditionalSupportPaths(const APath:String);
 begin
@@ -136,13 +136,13 @@ begin
       else
         result:=SupportPaths+';'+AdditionalSupportPaths
 end;
-function GetBinPath:String;
+function GetBinaryPath:String;
 begin
-  result:=BinPath;
+  result:=BinaryPath;
 end;
-function GetDistroPath:String;
+function GetRoCfgsPath:String;
 begin
-  result:=DistroPath;
+  result:=RoCfgsPath;
 end;
 function GetTempPath:String;
 begin
@@ -175,14 +175,14 @@ begin
   result:=IncludeTrailingPathDelimiter(IncludeTrailingPathDelimiter(GetAppConfigDir(false))+ASubFolder)+AFileName;
   if FileExists(result)then
     exit;
-  result:=IncludeTrailingPathDelimiter(IncludeTrailingPathDelimiter(DistroPath)+ASubFolder)+AFileName;
+  result:=IncludeTrailingPathDelimiter(IncludeTrailingPathDelimiter(RoCfgsPath)+ASubFolder)+AFileName;
   if not FileExists(result)then
     exit('');
 end;
 function GetPathsInDataPaths(const ASubFolder:String):String;
 begin
   result:=IncludeTrailingPathDelimiter(IncludeTrailingPathDelimiter(GetAppConfigDir(false))+ASubFolder)+';'
-         +IncludeTrailingPathDelimiter(IncludeTrailingPathDelimiter(DistroPath)+ASubFolder);
+         +IncludeTrailingPathDelimiter(IncludeTrailingPathDelimiter(RoCfgsPath)+ASubFolder);
 end;
 
 function GetWritableFilePath(const ASubFolder:String;const AFileName:String):String;
@@ -243,7 +243,7 @@ function ExpandPath(APath:String):String;
 begin
   DefaultMacros.SubstituteMacros(APath);
   if APath='' then
-    result:=DistroPath
+    result:=RoCfgsPath
   else
     result:=APath;
   DoDirSeparators(result);
@@ -339,8 +339,8 @@ var
 begin
   try
     if @cf<>nil then begin
-      if cf(DistroPath) then
-        exit(DistroPath);
+      if cf(RoCfgsPath) then
+        exit(RoCfgsPath);
       ts:=GetAppConfigDir(true);
       if cf(ts) then
         exit(ts);
@@ -348,12 +348,12 @@ begin
     Result:='';
   finally
     if result<>''then
-      DistroPath:=Result;
+      RoCfgsPath:=Result;
   end;
 end;
 initialization
-  BinPath:=ExtractFilePath(paramstr(0));
-  DistroPath:=ExpandFileName(ExtractFilePath(paramstr(0))+'../..');
-  WriteDataPath:=GetAppConfigDir(false);
+  BinaryPath:=ExtractFilePath(paramstr(0));
+  RoCfgsPath:=ExpandFileName(ExtractFilePath(paramstr(0))+'../..');
+  WrCfgsPath:=GetAppConfigDir(false);
   TempPath:=GetTempDir;
 end.

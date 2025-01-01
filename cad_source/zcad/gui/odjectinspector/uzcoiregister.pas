@@ -301,7 +301,7 @@ begin
 end;
 
 initialization
-  system_pas_path:=expandpath('$(DistroPath)/rtl/system.pas');
+  system_pas_path:=expandpath('$(DistribPath)/rtl/system.pas');
   units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPaths,system_pas_path,InterfaceTranslate,'INTF_ObjInsp_WhiteBackground','Boolean',@INTFObjInspWhiteBackground);
   units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPaths,system_pas_path,InterfaceTranslate,'INTF_ObjInsp_Level0HeaderColor','Integer',@INTFObjInspLevel0HeaderColor);
   units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPaths,system_pas_path,InterfaceTranslate,'INTF_ObjInsp_BorledColor','Integer',@INTFObjInspBorderColor);

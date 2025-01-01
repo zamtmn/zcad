@@ -59,7 +59,7 @@ begin
   //s:=GetTempPath+'Z$C'+inttohex(random(15),1)+inttohex(random(15),1)+inttohex(random(15),1)+inttohex(random(15),1)
   //   +inttohex(random(15),1)+inttohex(random(15),1)+inttohex(random(15),1)+inttohex(random(15),1)+'.dxf';
   CopyClipFile:=s;
-  savedxf2000(s,ConcatPaths([GetDistroPath,CFScomponentsDir,CFSemptydxfFile]),ClipboardDWG^);
+  savedxf2000(s,ConcatPaths([GetRoCfgsPath,CFScomponentsDir,CFSemptydxfFile]),ClipboardDWG^);
   s:=s+#0;
   suni:=unicodestring(s);
   Clipboard.Open;
@@ -81,7 +81,7 @@ begin
     ClipboardDWG.done;
     Freemem(ClipboardDWG);
   end;
-  ClipboardDWG:=drawings.CreateDWG('$(DistroPath)/rtl/dwg/DrawingVars.pas','');
+  ClipboardDWG:=drawings.CreateDWG('$(RoCfgs)/rtl/dwg/DrawingVars.pas','');
   //ClipboardDWG.DimStyleTable.AddItem('Standart',pds);
 end;
 

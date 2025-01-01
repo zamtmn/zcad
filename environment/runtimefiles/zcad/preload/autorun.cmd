@@ -8,10 +8,10 @@
 ;------------------------
 ;Загрузка ткстовых файлов
 ;------------------------
-;Load($(DistroPath)/sample/test_dxf/teapot.dxf)
-;Load($(DistroPath)/sample/test_dxf/em.dxf)
-;Load($(DistroPath)/autosave/autosave.dxf)
-;Load($(DistroPath)/sample/zigzag.dxf)
+;Load($(RoCfgs)/sample/test_dxf/teapot.dxf)
+;Load($(RoCfgs)/sample/test_dxf/em.dxf)
+;Load($(RoCfgs)/autosave/autosave.dxf)
+;Load($(RoCfgs)/sample/zigzag.dxf)
 
 ;-----------------------------------
 ;Показ окна "О программе" при старте

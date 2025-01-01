@@ -446,7 +446,7 @@ begin
   if length(img)>1 then begin
     if img[1]<>'#' then begin
       action.imgstr:='';
-      action.ImageIndex:=LoadImage(ConcatPaths([GetDistroPath,'menu/BMP',img]));
+      action.ImageIndex:=LoadImage(ConcatPaths([GetRoCfgsPath,'menu/BMP',img]));
       if action.ImageIndex=-1 then
         action.ImageIndex:=brocenicon;
       if action.ImageIndex=-1 then

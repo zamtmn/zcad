@@ -1,12 +1,12 @@
 ;Комментарий
-;$(DistroPath)-путь к программе
-LoadActions($(DistroPath)/menu/actionscontent.xml)
-LoadActions($(DistroPath)/menu/electrotechactionscontent.xml)
-LoadActions($(DistroPath)/menu/velecactionscontent.xml)
-LoadToolBars($(DistroPath)/menu/toolbarscontent.xml)
-LoadToolBars($(DistroPath)/menu/electrotechtoolbarscontent.xml)
-LoadToolBars($(DistroPath)/menu/velectoolbarscontent.xml)
-LoadPalettes($(DistroPath)/menu/palettescontent.xml)
-LoadMenus($(DistroPath)/menu/menuscontent.xml)
-LoadMenus($(DistroPath)/menu/electrotechmenuscontent.xml)
-LoadMenus($(DistroPath)/menu/velecmenuscontent.xml)
+;$(RoCfgs)-путь к программе
+LoadActions($(RoCfgs)/menu/actionscontent.xml)
+LoadActions($(RoCfgs)/menu/electrotechactionscontent.xml)
+LoadActions($(RoCfgs)/menu/velecactionscontent.xml)
+LoadToolBars($(RoCfgs)/menu/toolbarscontent.xml)
+LoadToolBars($(RoCfgs)/menu/electrotechtoolbarscontent.xml)
+LoadToolBars($(RoCfgs)/menu/velectoolbarscontent.xml)
+LoadPalettes($(RoCfgs)/menu/palettescontent.xml)
+LoadMenus($(RoCfgs)/menu/menuscontent.xml)
+LoadMenus($(RoCfgs)/menu/electrotechmenuscontent.xml)
+LoadMenus($(RoCfgs)/menu/velecmenuscontent.xml)

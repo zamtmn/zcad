@@ -220,7 +220,7 @@
         <Command Caption="BlocksList" Command="BlocksList"/>
         <Command Caption="Check clipboard" Command="dbgClipboard"/>
         <Command Caption="Report on memory allocation(debug mode)" Command="dbgMemSummary"/>
-        <Command Caption="BlockPreviewExport" Command="ExecuteFile($(DistroPath)\components\blockpreviewexport.cmd)"/>
+        <Command Caption="BlockPreviewExport" Command="ExecuteFile($(RoCfgs)\components\blockpreviewexport.cmd)"/>
         <Action Name="ACN_TREESTAT"/>
         <Command Caption="AppExplorer" Command="DbgAppExplorer"/>
         <SubMenu Name="**dbgMemProfiler">

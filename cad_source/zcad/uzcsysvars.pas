@@ -68,7 +68,8 @@ type
              Template_File:PString;(*'Default template'*)
              LayoutFile:PString;(*'Current layout'*)
              Dictionaries:PString;(*'Dictionaries'*)
-             Program_Data:TFString;(*'Program data'*)(*oi_readonly*)
+             Distrib_Path:PString;(*'Path to program distributive'*)
+             RoCfg_Path:TFString;(*'Read only cfg path'*)(*oi_readonly*)
              Temp_Path:TFString;(*'Temporary files'*)(*oi_readonly*)
              Device_Library:PString;(*'Device base'*)
         end;

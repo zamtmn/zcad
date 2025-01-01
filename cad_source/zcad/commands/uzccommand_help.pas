@@ -79,7 +79,7 @@ function Help_com(const Context:TZCADCommandContext;operands:TCommandOperands):T
 var
   htmlDoc:string;
 begin
-  htmlDoc:=ConcatPaths([GetDistroPath,CFShelpDir,format(CFSuserguide_shtmlFile,['ru'])]);//todo: расхардкодить
+  htmlDoc:=ConcatPaths([GetRoCfgsPath,CFShelpDir,format(CFSuserguide_shtmlFile,['ru'])]);//todo: расхардкодить
   if CommandManager.CommandsStack.isEmpty then
     OpenDocument(htmlDoc)
   else

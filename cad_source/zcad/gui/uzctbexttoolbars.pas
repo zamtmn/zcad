@@ -315,7 +315,7 @@ var
 begin
   if length(img)>1 then begin
     if img[1]<>'#' then begin
-      img:=ConcatPaths([GetDistroPath,'menu/BMP',img]);
+      img:=ConcatPaths([GetRoCfgsPath,'menu/BMP',img]);
       bmp:=Graphics.TBitmap.create;
       try
         bmp.LoadFromFile(img);
@@ -623,7 +623,7 @@ var
     s:string;
 begin
   if sender is TComboBox then begin
-    s:=ConcatPaths([GetDistroPath,CFScomponentsDir,(sender as TComboBox).text+'.xml']);
+    s:=ConcatPaths([GetRoCfgsPath,CFScomponentsDir,(sender as TComboBox).text+'.xml']);
     LoadLayoutFromFile(s);
   end;
 end;

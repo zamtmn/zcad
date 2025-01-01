@@ -147,7 +147,7 @@ begin
   Write(f,  '  Compile time: ');WriteLn(f,sysvar.SYS.SSY_CompileInfo.SYS_CompileTime);
   Write(f,  '  LCL version: ');WriteLn(f,sysvar.SYS.SSY_CompileInfo.SYS_LCLVersion);
   Write(f,  '  Environment version: ');WriteLn(f,sysvar.SYS.SSY_CompileInfo.SYS_EnvironmentVersion);
-  Write(f,  '  Program  path: ');WriteLn(f,GetDistroPath);
+  Write(f,  '  Read only cfg path: ');WriteLn(f,GetRoCfgsPath);
   Write(f,  '  Temporary  path: ');WriteLn(f,GetTempPath);
   WriteLn(f,'end.');
 end;

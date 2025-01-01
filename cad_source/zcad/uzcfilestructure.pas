@@ -33,6 +33,7 @@ const
   CFSlogopngFile='logo.png';
 
   CFSconfigsDir='configs';
+  CFSnavigatorsDir='navigators';
 
   CFSdictionariesDir='dictionaries';
 

@@ -46,7 +46,7 @@ var
    FileName:ansistring;
    dwgname:ansistring;
 begin
-  PDrawing:=drawings.CreateDWG('$(DistroPath)/rtl/dwg/DrawingDeviceBase.pas','$(DistroPath)/rtl/dwg/DrawingVars.pas');
+  PDrawing:=drawings.CreateDWG('$(RoCfgs)/rtl/dwg/DrawingDeviceBase.pas','$(RoCfgs)/rtl/dwg/DrawingVars.pas');
   drawings.PushBackData(PDrawing);
   FileName:=operands;
 

@@ -91,8 +91,8 @@ end;
 
 
 initialization;
-  FunctionsTree.LoadTree(expandpath('$(DistroPath)/rtl/functions.xml'),InterfaceTranslate);
-  RepresentationsTree.LoadTree(expandpath('$(DistroPath)/rtl/representations.xml'),InterfaceTranslate);
+  FunctionsTree.LoadTree(expandpath('$(DistribPath)/rtl/functions.xml'),InterfaceTranslate);
+  RepresentationsTree.LoadTree(expandpath('$(DistribPath)/rtl/representations.xml'),InterfaceTranslate);
 
   CreateZCADCommand(@FunctionsTest_com,'ft',CADWG,0);
   CreateZCADCommand(@RepresentationsTest_com,'rt',CADWG,0);

@@ -20,9 +20,11 @@ unit uzcSysParams;
 {$INCLUDE zengineconfig.inc}
 interface
 uses
+  SysUtils,
   XMLConf,XMLPropStorage,LazConfigStorage,DOM,
-  fileutil,
-  LCLProc,uzclog,uzbpaths,Forms{$IFNDEF DELPHI},LazUTF8{$ENDIF},sysutils;
+  FileUtil,
+  LCLProc,Forms{$IFNDEF DELPHI},LazUTF8{$ENDIF},
+  uzcLog,uzbPaths;
 type
 {EXPORT+}
   {REGISTERRECORDTYPE TmyFileVersionInfo}
@@ -41,6 +43,7 @@ type
     LangOverride:string;(*'Language override'*)
     DictionariesPath:string;(*'Dictionaries path'*)
     LastAutoSaveFile:string;(*'Last autosave file'*)
+    DistribPath:String;(*'Path to distributive'*)
   end;
   {REGISTERRECORDTYPE tnotsavedparams}
   tnotsavedparams=record
@@ -66,7 +69,8 @@ const
                                    MemProfiling:false;
                                    LangOverride:'';
                                    DictionariesPath:'ru=$(ZCADDictionariesPath)/ru_RU.dic|en=$(ZCADDictionariesPath)/en_US.dic;$(ZCADDictionariesPath)/en_US_interface.dic|abbrv=$(ZCADDictionariesPath)/abbrv.dic';
-                                   LastAutoSaveFile:'noAutoSaveFile');
+                                   LastAutoSaveFile:'noAutoSaveFile';
+                                   DistribPath:'sss');
   zcaduniqueinstanceid='zcad unique instance';
 var
   SysParam: tsysparam;
@@ -90,6 +94,7 @@ begin
   Config.SetDeleteValue('LangOverride',Params.LangOverride,DefaultSavedParams.LangOverride);
   Config.SetDeleteValue('DictionariesPath',Params.DictionariesPath,DefaultSavedParams.DictionariesPath);
   Config.SetDeleteValue('LastAutoSaveFile',Params.LastAutoSaveFile,DefaultSavedParams.LastAutoSaveFile);
+  Config.SetDeleteValue('DistribPath',Params.DistribPath,DefaultSavedParams.DistribPath);
   Config.UndoAppendBasePath;
 end;
 
@@ -140,6 +145,7 @@ begin
   Params.LangOverride:=XMLConfig.GetAnsiValue('LangOverride',DefaultSavedParams.LangOverride);
   Params.DictionariesPath:=XMLConfig.GetAnsiValue('DictionariesPath',DefaultSavedParams.DictionariesPath);
   Params.LastAutoSaveFile:=XMLConfig.GetAnsiValue('LastAutoSaveFile',DefaultSavedParams.LastAutoSaveFile);
+  Params.DistribPath:=XMLConfig.GetAnsiValue('DistribPath',DefaultSavedParams.DistribPath);
   XMLConfig.CloseKey;
   FreeAndNil(XMLConfig);
 end;

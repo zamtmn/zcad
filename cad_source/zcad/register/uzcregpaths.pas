@@ -25,10 +25,12 @@ uses
 implementation
 
 initialization
-  units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPaths,expandpath('$(DistroPath)/rtl/system.pas'),InterfaceTranslate,'PATH_Support_Path','String',@SupportPaths);
+  units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPaths,expandpath('$(DistribPath)/rtl/system.pas'),InterfaceTranslate,'PATH_Support_Path','String',@SupportPaths);
+  units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPaths,expandpath('$(DistribPath)/rtl/system.pas'),InterfaceTranslate,'PATH_Distrib_Path','String',@sysparam.saved.DistribPath);
   sysvar.PATH.Dictionaries:=@SysParam.saved.DictionariesPath;
-  sysvar.PATH.Program_Data:=@GetDistroPath;
+  sysvar.PATH.RoCfg_Path:=@GetRoCfgsPath;
   sysvar.PATH.Support_Paths:=@SupportPaths;
+  sysvar.PATH.Distrib_Path:=@sysparam.saved.DistribPath;
   sysvar.PATH.AdditionalSupport_Paths:=@GetAdditionalSupportPaths;
   sysvar.PATH.Temp_Path:=@GetTempPath;
 finalization

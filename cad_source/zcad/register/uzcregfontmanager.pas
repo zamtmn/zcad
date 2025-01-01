@@ -29,7 +29,7 @@ var
   system_pas_path:string;
 
 initialization
-  system_pas_path:=expandpath('$(DistroPath)/rtl/system.pas');
+  system_pas_path:=expandpath('$(DistribPath)/rtl/system.pas');
   units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPaths,system_pas_path,InterfaceTranslate,'PATH_Fonts','String',@sysvarPATHFontsPath);
   units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPaths,system_pas_path,InterfaceTranslate,'PATH_AlternateFont','String',@sysvarAlternateFont);
   {$IF DEFINED(USELAZFREETYPETTFIMPLEMENTATION) and DEFINED(USEFREETYPETTFIMPLEMENTATION)}

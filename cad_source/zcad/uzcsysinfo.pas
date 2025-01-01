@@ -98,7 +98,7 @@ begin
     //начальные значения некоторых параметров и загрузка параметров
     SysParam.notsaved.otherinstancerun:=false;
     SysParam.saved.UniqueInstance:=true;
-    LoadParams(FindFileInDataPaths(CFSRtlDir,CFSconfigxmlFile),SysParam.saved);
+    LoadParams(FindFileInDataPaths(CFSconfigsDir,CFSconfigxmlFile),SysParam.saved);
     SysParam.notsaved.PreloadedFile:='';
 
     //значения некоторых параметров из комстроки, если есть
@@ -143,8 +143,8 @@ begin
 end;
 function DataFilesExistChec(const ACheckedPath:string):boolean;
 begin
-  result:=DirectoryExists(ACheckedPath+'/rtl')
-      and FileExists(ACheckedPath+'/rtl/system.pas');
+  result:=DirectoryExists(ConcatPaths([ACheckedPath,CFSconfigsDir]))
+      and FileExists(ConcatPaths([ACheckedPath,CFSconfigsDir,CFSsysvarpasFile]));
 end;
 
 Procedure GetSysInfo;
@@ -170,8 +170,6 @@ begin
     programlog.LogOutStr('DefaultUnicodeCodePage:='+inttostr(DefaultUnicodeCodePage),LM_Info);
     programlog.LogOutStr('UTF8CompareLocale:='+inttostr(UTF8CompareLocale),LM_Info);
 
-    programlog.LogOutFormatStr('SysParam.ProgramPath="%s"',[GetDistroPath],LM_Necessarily);
-    programlog.LogOutFormatStr('SysParam.TempPath="%s"',[GetTempPath],LM_Necessarily);
     programlog.LogOutFormatStr('SysParam.ScreenX=%d',[SysParam.notsaved.ScreenX],LM_Info);
     programlog.LogOutFormatStr('SysParam.ScreenY=%d',[SysParam.notsaved.ScreenY],LM_Info);
     programlog.LogOutFormatStr('SysParam.NoSplash=%s',[BoolToStr(SysParam.saved.NoSplash,true)],LM_Info);
@@ -183,8 +181,9 @@ begin
 
     with programlog.Enter('Macros',LM_Info) do try
       programlog.LogOutFormatStr('$(AppName)="%s"',[ExpandPath('$(AppName)')],LM_Necessarily);
-      programlog.LogOutFormatStr('$(BinPath)="%s"',[ExpandPath('$(BinPath)')],LM_Necessarily);
-      programlog.LogOutFormatStr('$(DistroPath)="%s"',[ExpandPath('$(DistroPath)')],LM_Necessarily);
+      programlog.LogOutFormatStr('$(BinaryPath)="%s"',[ExpandPath('$(BinaryPath)')],LM_Necessarily);
+      programlog.LogOutFormatStr('$(DistribPath)="%s"',[ExpandPath('$(DistribPath)')],LM_Necessarily);
+      programlog.LogOutFormatStr('$(RoCfgs)="%s"',[ExpandPath('$(RoCfgs)')],LM_Necessarily);
       programlog.LogOutFormatStr('$(UserDir)="%s"',[ExpandPath('$(UserDir)')],LM_Necessarily);
       programlog.LogOutFormatStr('$(GlobalConfigDir)="%s"',[ExpandPath('$(GlobalConfigDir)')],LM_Necessarily);
       programlog.LogOutFormatStr('$(LocalConfigDir)="%s"',[ExpandPath('$(LocalConfigDir)')],LM_Necessarily);

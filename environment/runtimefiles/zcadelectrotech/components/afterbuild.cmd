@@ -1,2 +1,2 @@
-ExecuteFile($(DistroPath)/components/blockpreviewexport.cmd)
+ExecuteFile($(RoCfgs)/components/blockpreviewexport.cmd)
 Quit

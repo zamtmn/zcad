@@ -1019,7 +1019,7 @@ begin
   TZGuiExceptionsHandler.InstallHandler(ZcadException);
 
   SuppressedShortcuts:=TXMLConfig.Create(nil);
-  SuppressedShortcuts.Filename:=ConcatPaths([GetDistroPath,CFScomponentsDir,CFSsuppressedshortcutsxmlFile]);
+  SuppressedShortcuts.Filename:=ConcatPaths([GetRoCfgsPath,CFScomponentsDir,CFSsuppressedshortcutsxmlFile]);
 
   if SysParam.saved.UniqueInstance then
     CreateOrRunFIPCServer;
@@ -1038,8 +1038,8 @@ begin
 
   InitSystemCalls;
 
-  ImagesManager.ScanDir(ConcatPaths([GetDistroPath,CFSimagesDir]));
-  ImagesManager.LoadAliasesDir(ConcatPaths([GetDistroPath,CFSimagesDir,CFSnavigatorimaFile]));
+  ImagesManager.ScanDir(ConcatPaths([expandpath('$(DistribPath)'),CFSimagesDir]));
+  ImagesManager.LoadAliasesDir(ConcatPaths([expandpath('$(DistribPath)'),CFSimagesDir,CFSnavigatorimaFile]));
 
   //StandartActions:=TActionList.Create(self);
   InsertComponent(StandartActions);

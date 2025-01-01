@@ -1,6 +1,6 @@
 ;Комментарий
 ;*-путь к программе
-LoadActions($(DistroPath)/menu/actionscontent.xml)
-LoadToolBars($(DistroPath)/menu/toolbarscontent.xml)
-LoadPalettes($(DistroPath)/menu/palettescontent.xml)
-LoadMenus($(DistroPath)/menu/menuscontent.xml)
+LoadActions($(RoCfgs)/menu/actionscontent.xml)
+LoadToolBars($(RoCfgs)/menu/toolbarscontent.xml)
+LoadPalettes($(RoCfgs)/menu/palettescontent.xml)
+LoadMenus($(RoCfgs)/menu/menuscontent.xml)

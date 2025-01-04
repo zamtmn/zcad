@@ -26,7 +26,6 @@ implementation
 
 initialization
   units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPaths,expandpath('$(DistribPath)/rtl/system.pas'),InterfaceTranslate,'PATH_Support_Path','String',@SupportPaths);
-  units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPaths,expandpath('$(DistribPath)/rtl/system.pas'),InterfaceTranslate,'PATH_Distrib_Path','String',@sysparam.saved.DistribPath);
   sysvar.PATH.Dictionaries:=@SysParam.saved.DictionariesPath;
   sysvar.PATH.RoCfg_Path:=@GetRoCfgsPath;
   sysvar.PATH.Support_Paths:=@SupportPaths;

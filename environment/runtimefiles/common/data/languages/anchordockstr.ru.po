@@ -1,0 +1,339 @@
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=UTF-8\n"
+"Project-Id-Version: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
+"Last-Translator: Maxim Ganetsky <maxkill@mail.ru>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: ru\n"
+"X-Generator: Poedit 2.3.1\n"
+
+#: anchordockstr.adrsafreesideofasplittermustnotbeanchorednodetypeancho
+#, object-pascal-format
+msgid "A free side of a splitter must not be anchored: Node=\"%s\" Type=%s Anchors[%s]=\"%s\""
+msgstr "Свободная сторона разделителя не должна иметь привязки: Узел=\"%s\" Тип=%s Anchors[%s]=\"%s\""
+
+#: anchordockstr.adrsallowdocksitestobeminimized
+msgid "Allow dock sites to be minimized"
+msgstr "Разрешать областям стыковки сворачиваться"
+
+#: anchordockstr.adrsamountofpixelthemousehastodragbeforedragstarts
+msgid "Amount of pixel the mouse has to drag before drag starts"
+msgstr "Число пикселов, на которые должна переместиться мышь для начала операции перетаскивания"
+
+#: anchordockstr.adrsanchorisnotsplitternodeanchors
+#, object-pascal-format
+msgid "Anchor is not splitter: Node=\"%s\" Anchors[%s]=\"%s\""
+msgstr "Привязка не является разделителем: Узел=\"%s\" Anchors[%s]=\"%s\""
+
+#: anchordockstr.adrsanchornotfoundnodeanchors
+#, object-pascal-format
+msgid "Anchor not found: Node=\"%s\" Anchors[%s]=\"%s\""
+msgstr "Привязка не найдена: Узел=\"%s\" Anchors[%s]=\"%s\""
+
+#: anchordockstr.adrsanchortowrongsideofsplitternodeanchors
+#, object-pascal-format
+msgid "Anchor to wrong side of splitter: Node=\"%s\" Anchors[%s]=\"%s\""
+msgstr "Привязка к неверной стороне разделителя: Узел=\"%s\" Anchors[%s]=\"%s\""
+
+#: anchordockstr.adrsapagemustnotbeanchorednodeparentparenttypeanchors
+#, object-pascal-format
+msgid "A page must not be anchored: Node=\"%s\" Parent=%s ParentType=%s Anchors[%s]=\"%s\""
+msgstr "Вкладка не должна иметь привязок: Узел=\"%s\" Родитель=%s Тип родителя=%s Anchors[%s]=\"%s\""
+
+#: anchordockstr.adrsautomatically
+msgid "Automatically"
+msgstr "Автоматическое"
+
+#: anchordockstr.adrsbottom
+msgid "bottom"
+msgstr "снизу"
+
+#: anchordockstr.adrsclose
+msgid "Close"
+msgstr "Закрыть"
+
+#: anchordockstr.adrscontrolisalreadyadocksite
+msgid "control is already a docksite"
+msgstr "объект уже является областью стыковки"
+
+#: anchordockstr.adrscustomdocksitecanhaveonlyonesite
+#, object-pascal-format
+msgid "Custom dock site \"%s\" can have only one site."
+msgstr "Пользовательская область стыковки \"%s\" может иметь только один стыковочный элемент."
+
+#: anchordockstr.adrsdockinganchordocking
+msgid "Docking / Anchordocking"
+msgstr "Стыковка / Anchordocking"
+
+#: anchordockstr.adrsdockingoptions
+msgid "Docking options"
+msgstr "Параметры стыковки"
+
+#: anchordockstr.adrsdraganddockc
+#, object-pascal-format
+msgid "Use the mouse to drag and dock window \"%s\""
+msgstr "Используйте мышь для перетаскивания и стыковки окна \"%s\""
+
+#: anchordockstr.adrsdragthreshold
+msgid "Drag threshold"
+msgstr "Порог перетаскивания"
+
+#: anchordockstr.adrsduplicatename
+msgid "Duplicate name: "
+msgstr "Имя уже существует: "
+
+#: anchordockstr.adrseachdockedwindowhasaheaderthatallowsdragginghasaco
+msgid "Each docked window has a header that allows dragging, has a context menu with extra layout functions and shows the caption of the docked window"
+msgstr "Каждое пристыкованное окно имеет заголовок, позволяющий осуществить перетаскивание, имеющий контекстное меню с дополнительными функциями разбивки и отображающий его название"
+
+#: anchordockstr.adrsemptyname
+msgid "Empty name: "
+msgstr "Имя пусто: "
+
+#: anchordockstr.adrsenableanchordock
+msgid "Enable docking of IDE Windows (Requires IDE restart)"
+msgstr "Включить стыковку окон IDE (требует перезапуска)"
+
+#: anchordockstr.adrsenableanchordockhint
+msgid "This option allows to organize groups of windows (or all windows) into a single window. For a \"classic\" IDE with only floating windows turn the option off."
+msgstr "Этот параметр позволяет объединить все окна (или их группы) в рамках одного окна. Отключите его, чтобы получить \"классическую\" IDE с плавающими окнами."
+
+#: anchordockstr.adrsenlargeside
+#, object-pascal-format
+msgid "Enlarge %s side"
+msgstr "Вытянуть край %s"
+
+#: anchordockstr.adrsfilledheaders
+msgid "Fill headers"
+msgstr "Отображать заголовки закрашенными"
+
+#: anchordockstr.adrsfilledheadershint
+msgid "Fill headers of docked controls"
+msgstr "Закрашивать заголовки пристыкованных объектов"
+
+#: anchordockstr.adrsflatheadersbuttons
+msgid "Flat header buttons"
+msgstr "Плоские кнопки в заголовках"
+
+#: anchordockstr.adrsflatheadersbuttonshint
+msgid "Flat buttons in headers of docked controls"
+msgstr "Плоские кнопки в заголовках пристыкованных объектов"
+
+#: anchordockstr.adrsflattenheaders
+msgid "Flatten headers"
+msgstr "Отображать заголовки плоскими"
+
+#: anchordockstr.adrsflattenheadershint
+msgid "Flatten headers of docked controls"
+msgstr "Сделать заголовки пристыкованных объектов плоскими"
+
+#: anchordockstr.adrsfloatingwindowsontop
+msgid "Floating windows on top"
+msgstr "Непристыкованные окна поверх других"
+
+#: anchordockstr.adrsfloatingwindowsontophint
+msgid "Show floating windows on top of main form"
+msgstr "Показывать непристыкованные окна поверх главной формы"
+
+#: anchordockstr.adrsgeneraldockingoptions
+msgid "General docking options"
+msgstr "Общие параметры стыковки"
+
+#: anchordockstr.adrsheaderalignleft
+msgid "Header align left"
+msgstr "Помещение заголовка слева"
+
+#: anchordockstr.adrsheaderaligntop
+msgid "Header align top"
+msgstr "Помещение заголовка сверху"
+
+#: anchordockstr.adrsheaderposition
+msgid "Header position"
+msgstr "Положение заголовка"
+
+#: anchordockstr.adrsheaderstyle
+msgid "Header Style:"
+msgstr "Стиль заголовка:"
+
+#: anchordockstr.adrshideheadercaptionsforsiteswithonlyonedockedcontrol
+msgid "Hide header captions for sites with only one docked control, as that is already shown in the normal window title"
+msgstr "Скрывать названия заголовков для областей с единственным пристыкованным объектом (это название уже имеется в обычном заголовке окна)"
+
+#: anchordockstr.adrshighlightfocused
+msgid "Highlight focused"
+msgstr "Выделять объект в фокусе"
+
+#: anchordockstr.adrshighlightfocusedhint
+msgid "Highlight header of focused docked control"
+msgstr "Выделять заголовок пристыкованного объекта в фокусе"
+
+#: anchordockstr.adrsleft
+msgid "left"
+msgstr "слева"
+
+#: anchordockstr.adrslocked
+msgid "Locked"
+msgstr "Зафиксирован"
+
+#: anchordockstr.adrsmerge
+msgid "Merge"
+msgstr "Объединить"
+
+#: anchordockstr.adrsminimize
+msgid "Minimize"
+msgstr "Свернуть"
+
+#: anchordockstr.adrsmissingcontrolname
+msgid "missing control name"
+msgstr "отсутствует имя объекта"
+
+#: anchordockstr.adrsmodalformscannotbemadedockable
+msgid "modal forms can not be made dockable"
+msgstr "модальные формы не могут иметь возможность стыковки"
+
+#: anchordockstr.adrsmoveheadertoleftwhenwidthheight100headeralignleft
+msgid "Move header to left when (Width/Height)*100>=HeaderAlignLeft"
+msgstr "Помещать заголовок слева, когда этот параметр меньше либо равен значению (Ширина/Высота)*100"
+
+#: anchordockstr.adrsmoveheadertotopwhenwidthheight100headeraligntop
+msgid "Move header to top when (Width/Height)*100<=HeaderAlignTop"
+msgstr "Помещать заголовок сверху, когда этот параметр больше либо равен значению (Ширина/Высота)*100"
+
+#: anchordockstr.adrsmovepageleft
+msgid "Move page left"
+msgstr "Переместить вкладку влево"
+
+#: anchordockstr.adrsmovepageleftmost
+msgid "Move page leftmost"
+msgstr "Поместить вкладку слева"
+
+#: anchordockstr.adrsmovepageright
+msgid "Move page right"
+msgstr "Переместить вкладку вправо"
+
+#: anchordockstr.adrsmovepagerightmost
+msgid "Move page rightmost"
+msgstr "Поместить вкладку справа"
+
+#: anchordockstr.adrsmultilinepages
+msgid "Multiline Tabs"
+msgstr "Многострочный список вкладок"
+
+#: anchordockstr.adrsmultilinepageshint
+msgid "Tabs of pages can be shown in multiple lines"
+msgstr "Разрешить показывать заголовки вкладок в нескольких строках"
+
+#: anchordockstr.adrsnocaptionsforfloatingsites
+msgid "No captions for floating sites"
+msgstr "Не показывать названия непристыкованных объектов"
+
+#: anchordockstr.adrsnochildrenallowedfornodetype
+#, object-pascal-format
+msgid "No children allowed for Node=\"%s\" Type=%s"
+msgstr "Не разрешается иметь потомков для Узла=\"%s\" Тип=%s"
+
+#: anchordockstr.adrsnotsupportedhasparent
+#, object-pascal-format
+msgid "Not supported: %s has parent %s"
+msgstr "Не поддерживается: %s имеет родителя %s"
+
+#: anchordockstr.adrsquit
+#, object-pascal-format
+msgid "Quit %s"
+msgstr "Выход из %s"
+
+#: anchordockstr.adrsrequestedbutcreated
+#, object-pascal-format
+msgid "%s requested, but %s created"
+msgstr "Запрошен %s, но создан %s"
+
+#: anchordockstr.adrsright
+msgid "right"
+msgstr "справа"
+
+#: anchordockstr.adrsscaleonresize
+msgid "Scale on resize"
+msgstr "Масштабировать при изменении размера"
+
+#: anchordockstr.adrsscalesubsiteswhenasiteisresized
+msgid "Scale sub sites when a site is resized"
+msgstr "При изменении размеров области масштабировать её подобласти"
+
+#: anchordockstr.adrsshowcaptionsofdockedcontrolsintheheader
+msgid "Show captions of docked controls in the header"
+msgstr "Показывать названия пристыкованных объектов в заголовке"
+
+#: anchordockstr.adrsshowheadercaptions
+msgid "Show header captions"
+msgstr "Показывать названия в заголовках"
+
+#: anchordockstr.adrsshowheaders
+msgid "Show headers"
+msgstr "Показывать заголовки"
+
+#: anchordockstr.adrssplitterthickness
+msgid "Splitter thickness"
+msgstr "Толщина разделителя"
+
+#: anchordockstr.adrssplitterwidth
+msgid "Splitter width"
+msgstr "Ширина разделителя"
+
+#: anchordockstr.adrstabposition
+msgid "Tab position"
+msgstr "Положение заголовков вкладок"
+
+#: anchordockstr.adrsthereisanotherdockmasterinstalledonlyonedockingpac
+#, object-pascal-format
+msgid "There is another dock master installed. Only one docking package can be installed at a time. Please uninstall the other dock master %s and restart the IDE"
+msgstr "Установленный диспетчер стыковки уже имеется. В каждый момент времени может быть установлен только один такой пакет. Удалите диспетчер стыковки %s и перезапустите IDE"
+
+#: anchordockstr.adrstop
+msgid "top"
+msgstr "сверху"
+
+#: anchordockstr.adrstouseanchordockingyoumustfirstuninstall
+#, object-pascal-format
+msgid "To use anchordocking you must first uninstall %s"
+msgstr "Для использования anchordocking сначала удалите %s"
+
+#: anchordockstr.adrsundock
+msgid "Undock"
+msgstr "Расстыковать"
+
+#: anchordockstr.setupmultiwindowideclassic
+msgid "Classic IDE (Multi-Window):"
+msgstr "Классическая IDE (многооконная):"
+
+#: anchordockstr.setupmultiwindowideinfo
+msgid "The \"modern\" single Window mode still allows you to undock individual Windows and have several groups of Windows. The IDE will show additional \"Dock-Handles\" in each Window, which will allow you to change layout, but also require additional space."
+msgstr "\"Современный\" однооконный режим позволяет отстыковывать отдельные окна и иметь несколько групп окон. IDE отобразит дополнительные заголовки в каждом окне, которые позволят менять порядок окон, но в то же время потребуют дополнительного пространства."
+
+#: anchordockstr.setupmultiwindowidemodern
+msgid "Modern IDE (Single-Window):"
+msgstr "Современная IDE (однооконная):"
+
+#: anchordockstr.setupmultiwindowideoption
+msgid "You can change this in the IDE options under: \"Anchordocking\""
+msgstr "Это поведение можно изменить в параметрах IDE на вкладке \"Стыковка / Anchordocking\""
+
+#: anchordockstr.setupmultiwindowideseperatewindows
+msgid "There are separate windows for each part of the IDE (Editor, Components, Debug,...). They can all be individually moved around on the screen."
+msgstr "Все части IDE (например, редактор, палитра компонентов, окна отладки) будут в отдельных окнах, которые можно независимо перемещать на экране."
+
+#: anchordockstr.setupmultiwindowidesinglewindow
+msgid "The IDE consists out of a single Window. Different parts of the IDE are shown in panels of that Window. Some can be reached through a tabbed interface."
+msgstr "IDE состоит из одного окна, в панелях которого отображаются её части. К некоторым из них можно получить доступ, выбирая нужную вкладку."
+
+#: anchordockstr.sidelayout
+msgid "IDE Layout"
+msgstr "Вид интерфейса IDE"
+
+#: anchordockstr.ssinglemultiwindow
+msgid "Single/Multi Window"
+msgstr "Режим многооконности"
+

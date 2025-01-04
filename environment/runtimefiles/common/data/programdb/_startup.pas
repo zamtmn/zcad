@@ -1,0 +1,31 @@
+subunit devicebase;
+uses system;
+interface
+var
+   _cables:String;
+   _cables_sv:String;
+   _detsmokesl:String;
+   _dethandsl:String;
+   _ppkop:String;
+   _puop:String;
+   _ibpops:String;
+   _am:String;
+   _thermoresistance:String;
+   _pressureswitches:String;
+   _pressuremanometer:String;
+   _thermometer:String;
+implementation
+begin
+     _thermoresistance:='Датчикитемпературы_термосопротивления_';
+     _thermometer:='Датчикитемпературы_термометры_';
+     _pressureswitches:='Датчикидавления_реледавления_';
+     _pressuremanometer:='Датчикидавления_манометры_';
+     _cables:='Кабели_';
+     _cables_sv:='Кабели_связь';
+     _detsmokesl:='Извещатели_пожарные_дымовые_шлейфовые_';
+     _dethandsl:='Извещатели_пожарные_ручные_шлейфовые_';
+     _ppkop:='Приборы_ОПС_';
+     _puop:='Приборы_ОПС_ПУ_оповещение';
+     _ibpops:='Приборы_ОПС_ibp';
+     _am:='Приборы_ОПС_СОУЭ_оповещатели_речевые';
+end.

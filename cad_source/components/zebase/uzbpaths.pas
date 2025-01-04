@@ -353,7 +353,7 @@ begin
 end;
 initialization
   BinaryPath:=ExtractFilePath(paramstr(0));
-  RoCfgsPath:=ExpandFileName(ExtractFilePath(paramstr(0))+'../..');
+  RoCfgsPath:=ExpandFileName(BinaryPath+'../../cfg');
   WrCfgsPath:=GetAppConfigDir(false);
   TempPath:=GetTempDir;
 end.

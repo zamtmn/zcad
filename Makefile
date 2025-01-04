@@ -155,12 +155,12 @@ endif
 	@echo $(ZCVERSION) > cad_source/zcadversion.txt
 zcad: checkvars version       
 	$(LAZBUILD) --pcp=$(PCP) cad_source/utils/typeexporter.lpi
-	environment/typeexporter/typeexporter pathprefix=cad_source/ outputfile=cad/rtl/system.pas processfiles=environment/typeexporter/zcad.files
+	environment/typeexporter/typeexporter pathprefix=cad_source/ outputfile=cad/data/rtl/system.pas processfiles=environment/typeexporter/zcad.files
 	$(LAZBUILD) --pcp=$(PCP) cad_source/zcad.lpi
 
 zcadelectrotech: checkvars version
 	$(LAZBUILD) --pcp=$(PCP) cad_source/utils/typeexporter.lpi
-	environment/typeexporter/typeexporter pathprefix=cad_source/ outputfile=cad/rtl/system.pas processfiles=environment/typeexporter/zcad.files+environment/typeexporter/zcadelectrotech.files define=ELECTROTECH
+	environment/typeexporter/typeexporter pathprefix=cad_source/ outputfile=cad/data/rtl/system.pas processfiles=environment/typeexporter/zcad.files+environment/typeexporter/zcadelectrotech.files define=ELECTROTECH
 	$(LAZBUILD) --pcp=$(PCP) cad_source/zcad.lpi
 
 afterzcadelectrotechbuild: checkallvars version

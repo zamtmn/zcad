@@ -1,0 +1,15 @@
+UNCAT_Без категории
+PLAN_УГО на плане
+OPS_Охрано-пожарная сигнализация
+PSSENSORS_Извещатели пожарные
+HSENSORS_Дымовые
+KSENSORS_Тепловые
+MSENSORS_Ручные
+OSSENSORS_Извещатели охранные
+BSENSORS_Магнитоконтактные
+LSENSORS_Объемные
+TSENSORS_Звуковые
+OPSALARM_Оповещатели
+OPSASOUND_Звуковые
+SS_Системы связи
+SSSOCKETS_Розетки

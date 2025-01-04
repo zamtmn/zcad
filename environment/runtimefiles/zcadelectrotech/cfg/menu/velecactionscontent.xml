@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CONFIG>
+  <ActionsContent>
+    <Group Category="SL">
+      <ZAction Name="ACN_slagcabCom" Command="slagcab" Img="#ACL" Caption="Automatic cable laying by SuperLine"/>
+      <ZAction Name="ACN_vBuildSSSchema" Command="vBuildSSSchema" Img="#vSS" Caption="Start building vSS Schema"/>
+      <ZAction Name="ACN_vBuildMC" Command="vBuildELSchema" Img="#MC" Caption="Create model connection"/>
+      <ZAction Name="ACN_agslr" Command="AGSLROOM" Img="#ASL" Caption="Start command ASL"/>
+      <ZAction Name="ACN_SupeLine" Command="DrawSuperLine" Img="superline.bmp" Caption="SuperLine" ShortCut="CTRL+ALT+S" SecondaryShortCuts="S"/>
+      <ZAction Name="ACN_SupeLineHT1" Command="DrawSuperLine(1)" Img="#1" Caption="SuperLine1" SecondaryShortCuts="1"/>
+      <ZAction Name="ACN_SupeLineHT2" Command="DrawSuperLine(2)" Img="#2" Caption="SuperLine2" SecondaryShortCuts="2"/>
+      <ZAction Name="ACN_SupeLineHT3" Command="DrawSuperLine(3)" Img="#3" Caption="SuperLine3" SecondaryShortCuts="3"/>
+      <ZAction Name="ACN_uzvaddconnection" Command="uzvaddconnection" Img="#C+" Caption="Add connection"/>
+      <ZAction Name="ACN_uzvremoveconnection" Command="uzvremoveconnection" Img="#С-" Caption="Remove connection"/>
+      <ZAction Name="ACN_managerEM" Command="manem" Img="#MEM" Caption="Manager electrical model"/>
+      <ZAction Name="ACN_generatorOneDiagram" Command="vGeneratorOneLine" Img="#GD1" Caption="Generator one-level diagram"/>
+      <ZAction Name="ACN_exportModeltoExcell" Command="vExportToXLSXFPS" Img="#M>X" Caption="Export model to excel"/>
+      <ZAction Name="ACN_exportDevtoExcell" Command="vExportDevToXLSX" Img="#D>X" Caption="Export devices to excel"/>
+      <ZAction Name="ACN_exportDevtoExcelTOCAD" Command="vExportDevToXLSXToCAD" Img="#D>Z" Caption="Export devices to excel to CAD"/>
+      <ZAction Name="ACN_XLSXtoCADinsertblock" Command="vXLSXtoCAD" Img="#X>Z" Caption="Import block from xlsx"/>
+      <ZAction Name="ACN_CreateLL" Command="extdrAdd(extdrSmartTextEnt)" Img="#CLL" Caption="Creating Leader Lines"/>
+      <ZAction Name="ACN_vVarsLink" Command="VarsLink" Img="#VL" Caption="Creating master/slave device"/>
+	  <ZAction Name="ACN_L2SL" Command="L2SL" Caption="Lines to superlines"/>
+    </Group>
+  </ActionsContent>
+</CONFIG>

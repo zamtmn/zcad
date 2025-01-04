@@ -1,0 +1,4386 @@
+msgid ""
+msgstr "Content-Type: text/plain; charset=UTF-8"
+
+#: zcadexternal.acn_3dpoly~caption
+msgid "3DPolyLine"
+msgstr ""
+
+#: zcadexternal.acn_3dpoly~hint
+msgid "Draw 3DPolyLine"
+msgstr ""
+
+#: zcadexternal.acn_about~caption
+msgid "About"
+msgstr ""
+
+#: zcadexternal.acn_addtoowner~caption
+msgid "Add to owner"
+msgstr ""
+
+#: zcadexternal.acn_agslr~caption
+msgid "Start command ASL"
+msgstr ""
+
+#: zcadexternal.acn_agslr~textimage
+msgid "ASL"
+msgstr ""
+
+#: zcadexternal.acn_alwaysusemultiselectwwrapper~caption
+msgid "Always use multi select wrapper in object inspector"
+msgstr ""
+
+#: zcadexternal.acn_alwaysusemultiselectwwrapper~textimage
+msgid "aumsw"
+msgstr ""
+
+#: zcadexternal.acn_arc~caption
+msgid "Arc"
+msgstr ""
+
+#: zcadexternal.acn_arc~hint
+msgid "Draw arc"
+msgstr ""
+
+#: zcadexternal.acn_bedit~caption
+msgid "Block editor"
+msgstr ""
+
+#: zcadexternal.acn_binsert~caption
+msgctxt "zcadexternal.acn_binsert~caption"
+msgid "Block"
+msgstr ""
+
+#: zcadexternal.acn_binsert~hint
+msgid "Insert block"
+msgstr ""
+
+#: zcadexternal.acn_breplace~caption
+msgid "Block replace"
+msgstr ""
+
+#: zcadexternal.acn_breplace~textimage
+msgctxt "zcadexternal.acn_breplace~textimage"
+msgid "BR"
+msgstr ""
+
+#: zcadexternal.acn_brotate~caption
+msgid "Block rotate"
+msgstr ""
+
+#: zcadexternal.acn_brotate~textimage
+msgctxt "zcadexternal.acn_brotate~textimage"
+msgid "BR"
+msgstr ""
+
+#: zcadexternal.acn_bscale~caption
+msgid "Block scale"
+msgstr ""
+
+#: zcadexternal.acn_bscale~textimage
+msgid "BS"
+msgstr ""
+
+#: zcadexternal.acn_cableinvert~caption
+msgid "Reverse cable direction"
+msgstr ""
+
+#: zcadexternal.acn_cableinvert~textimage
+msgid "inv"
+msgstr ""
+
+#: zcadexternal.acn_cablejoin~caption
+msgid "Glue cables"
+msgstr ""
+
+#: zcadexternal.acn_cablelegend~caption
+msgid "Export cables legend"
+msgstr ""
+
+#: zcadexternal.acn_cableselect~caption
+msgid "Select connected devices"
+msgstr ""
+
+#: zcadexternal.acn_cable~caption
+msgid "Draw cable,Draw cable"
+msgstr ""
+
+#: zcadexternal.acn_cancel~caption
+msgid "Cancel"
+msgstr ""
+
+#: zcadexternal.acn_cancel~textimage
+msgctxt "zcadexternal.acn_cancel~textimage"
+msgid "C"
+msgstr ""
+
+#: zcadexternal.acn_circle2p~caption
+msgid "Circle(2 points)"
+msgstr ""
+
+#: zcadexternal.acn_circle2p~hint
+msgid "Draw circle(2 points)"
+msgstr ""
+
+#: zcadexternal.acn_circle3p~caption
+msgid "Circle(3 points)"
+msgstr ""
+
+#: zcadexternal.acn_circle3p~hint
+msgid "Draw circle(3 points)"
+msgstr ""
+
+#: zcadexternal.acn_circlecd~caption
+msgid "Circle(Center,diameter)"
+msgstr ""
+
+#: zcadexternal.acn_circlecd~hint
+msgid "Draw circle(Center,diameter)"
+msgstr ""
+
+#: zcadexternal.acn_circle~caption
+msgid "Circle(Center,radius)"
+msgstr ""
+
+#: zcadexternal.acn_circle~hint
+msgid "Draw circle(Center,radius)"
+msgstr ""
+
+#: zcadexternal.acn_close~caption
+msgid "Close drawing"
+msgstr ""
+
+#: zcadexternal.acn_colors~caption
+msgid "Colors ..."
+msgstr ""
+
+#: zcadexternal.acn_colors~hint
+msgid "Select current color"
+msgstr ""
+
+#: zcadexternal.acn_copyclipbase~caption
+msgid "Copy to clipboard with base point"
+msgstr ""
+
+#: zcadexternal.acn_copyclip~caption
+msgid "Copy to clipboard"
+msgstr ""
+
+#: zcadexternal.acn_copyfromowner~caption
+msgid "Copy from owner"
+msgstr ""
+
+#: zcadexternal.acn_copyfromowner~textimage
+msgid "COF"
+msgstr ""
+
+#: zcadexternal.acn_copylinktovartoclip~caption
+msgid "Copy link to var"
+msgstr ""
+
+#: zcadexternal.acn_copylinktovartoclip~textimage
+msgid "CLV"
+msgstr ""
+
+#: zcadexternal.acn_copyvaluetoclip~caption
+msgid "Copy value"
+msgstr ""
+
+#: zcadexternal.acn_copyvaluetoclip~textimage
+msgid "CVL"
+msgstr ""
+
+#: zcadexternal.acn_copyvarnametoclip~caption
+msgid "Copy var name"
+msgstr ""
+
+#: zcadexternal.acn_copyvarnametoclip~textimage
+msgid "CVN"
+msgstr ""
+
+#: zcadexternal.acn_copy~caption
+msgid "Copy"
+msgstr ""
+
+#: zcadexternal.acn_copy~hint
+msgid "Copy primitives"
+msgstr ""
+
+#: zcadexternal.acn_createll~caption
+msgid "Creating Leader Lines"
+msgstr ""
+
+#: zcadexternal.acn_createll~textimage
+msgid "CLL"
+msgstr ""
+
+#: zcadexternal.acn_cutclip~caption
+msgid "Cut to clipboard"
+msgstr ""
+
+#: zcadexternal.acn_dbaseadd~caption
+msgid "Add to drawing database"
+msgstr ""
+
+#: zcadexternal.acn_dbaseadd~textimage
+msgid "DBAdd"
+msgstr ""
+
+#: zcadexternal.acn_dbaselink~caption
+msgid "Link to selected entities"
+msgstr ""
+
+#: zcadexternal.acn_dbaselink~textimage
+msgid "DBLink"
+msgstr ""
+
+#: zcadexternal.acn_dbaserename~caption
+msgid "Rename"
+msgstr ""
+
+#: zcadexternal.acn_dbaserename~textimage
+msgid "DBRename"
+msgstr ""
+
+#: zcadexternal.acn_deselectall~caption
+msgid "DeSelect all"
+msgstr ""
+
+#: zcadexternal.acn_deselectall~textimage
+msgid "DSA"
+msgstr ""
+
+#: zcadexternal.acn_devnumbering~caption
+msgid "Numbering Devices"
+msgstr ""
+
+#: zcadexternal.acn_devnumbering~textimage
+msgid "D++"
+msgstr ""
+
+#: zcadexternal.acn_dimaligned~caption
+msgid "Draw aligned dimension"
+msgstr ""
+
+#: zcadexternal.acn_dimdiametric~caption
+msgid "Draw diametric dimension"
+msgstr ""
+
+#: zcadexternal.acn_dimlinear~caption
+msgid "Draw linear dimension"
+msgstr ""
+
+#: zcadexternal.acn_dimradial~caption
+msgid "Draw radial dimension"
+msgstr ""
+
+#: zcadexternal.acn_dist~caption
+msgid "Distance"
+msgstr ""
+
+#: zcadexternal.acn_dockopt~caption
+msgid "Docking options"
+msgstr ""
+
+#: zcadexternal.acn_dockopt~textimage
+msgid "DO"
+msgstr ""
+
+#: zcadexternal.acn_dstyles~caption
+msgid "Dimension styles ..."
+msgstr ""
+
+#: zcadexternal.acn_dstyles~hint
+msgid "Dimension styles properties manager"
+msgstr ""
+
+#: zcadexternal.acn_erase~caption
+msgid "Erase"
+msgstr ""
+
+#: zcadexternal.acn_exportdevtoexcell~caption
+msgid "Export devices to excel"
+msgstr ""
+
+#: zcadexternal.acn_exportdevtoexcell~textimage
+msgid "D>X"
+msgstr ""
+
+#: zcadexternal.acn_exportdevtoexceltocad~caption
+msgid "Export devices to excel to CAD"
+msgstr ""
+
+#: zcadexternal.acn_exportdevtoexceltocad~textimage
+msgid "D>Z"
+msgstr ""
+
+#: zcadexternal.acn_exportmodeltoexcell~caption
+msgid "Export model to excel"
+msgstr ""
+
+#: zcadexternal.acn_exportmodeltoexcell~textimage
+msgid "M>X"
+msgstr ""
+
+#: zcadexternal.acn_extdralllist~caption
+msgid "List of available extenders"
+msgstr ""
+
+#: zcadexternal.acn_extdralllist~textimage
+msgid "exAL"
+msgstr ""
+
+#: zcadexternal.acn_extdrentlist~caption
+msgid "List of extenders of selected entities"
+msgstr ""
+
+#: zcadexternal.acn_extdrentlist~textimage
+msgid "exEL"
+msgstr ""
+
+#: zcadexternal.acn_findnext~caption
+msgid "Find next"
+msgstr ""
+
+#: zcadexternal.acn_findparams~caption
+msgid "Find params"
+msgstr ""
+
+#: zcadexternal.acn_findprev~caption
+msgid "Find prev"
+msgstr ""
+
+#: zcadexternal.acn_find~caption
+msgid "Find ..."
+msgstr ""
+
+#: zcadexternal.acn_generatoronediagram~caption
+msgid "Generator one-level diagram"
+msgstr ""
+
+#: zcadexternal.acn_generatoronediagram~textimage
+msgid "GD1"
+msgstr ""
+
+#: zcadexternal.acn_help~caption
+msgctxt "zcadexternal.acn_help~caption"
+msgid "Help"
+msgstr ""
+
+#: zcadexternal.acn_inserttodrawing~caption
+msgid "Insert to drawing"
+msgstr ""
+
+#: zcadexternal.acn_inserttodrawing~textimage
+msgid "ITD"
+msgstr ""
+
+#: zcadexternal.acn_inverseselected~caption
+msgid "Inverse selected"
+msgstr ""
+
+#: zcadexternal.acn_inverseselected~textimage
+msgid "SI"
+msgstr ""
+
+#: zcadexternal.acn_kipcdbuild~caption
+msgctxt "zcadexternal.acn_kipcdbuild~caption"
+msgid "Connection diagram"
+msgstr ""
+
+#: zcadexternal.acn_kipcdbuild~textimage
+msgid "CDB"
+msgstr ""
+
+#: zcadexternal.acn_kiplugtablebuild~caption
+msgid "Lug table build"
+msgstr ""
+
+#: zcadexternal.acn_layer~caption
+msgid "Layers ..."
+msgstr ""
+
+#: zcadexternal.acn_layer~hint
+msgid "Layers properties manager"
+msgstr ""
+
+#: zcadexternal.acn_layoff~caption
+msgid "Layer off"
+msgstr ""
+
+#: zcadexternal.acn_layoff~hint
+msgid "Turns off the layer of selected object"
+msgstr ""
+
+#: zcadexternal.acn_layoff~textimage
+msgid "LO"
+msgstr ""
+
+#: zcadexternal.acn_leader~caption
+msgid "Mark cables"
+msgstr ""
+
+#: zcadexternal.acn_line~caption
+msgid "Line"
+msgstr ""
+
+#: zcadexternal.acn_line~hint
+msgid "Draw line"
+msgstr ""
+
+#: zcadexternal.acn_loadqs~caption
+msgid "Open (Autosave)"
+msgstr ""
+
+#: zcadexternal.acn_loadqs~hint
+msgid "Open last autosave"
+msgstr ""
+
+#: zcadexternal.acn_load~caption
+msgid "Open ..."
+msgstr ""
+
+#: zcadexternal.acn_load~hint
+msgid "Open drawing"
+msgstr ""
+
+#: zcadexternal.acn_ltypes~caption
+msgid "Line types ..."
+msgstr ""
+
+#: zcadexternal.acn_ltypes~hint
+msgid "Line types properties manager"
+msgstr ""
+
+#: zcadexternal.acn_managerem~caption
+msgid "Manager electrical model"
+msgstr ""
+
+#: zcadexternal.acn_managerem~textimage
+msgid "MEM"
+msgstr ""
+
+#: zcadexternal.acn_matchprop~caption
+msgid "Match properties"
+msgstr ""
+
+#: zcadexternal.acn_materiallegend~caption
+msgid "Export materials legend,Export materials legend"
+msgstr ""
+
+#: zcadexternal.acn_mirror~caption
+msgid "Mirror"
+msgstr ""
+
+#: zcadexternal.acn_mirror~hint
+msgid "Mirror primitives"
+msgstr ""
+
+#: zcadexternal.acn_move~caption
+msgid "Move"
+msgstr ""
+
+#: zcadexternal.acn_move~hint
+msgid "Move primitives"
+msgstr ""
+
+#: zcadexternal.acn_navselectsubnodes~caption
+msgid "SelectSubNodes"
+msgstr ""
+
+#: zcadexternal.acn_navselectsubnodes~textimage
+msgid "NSSN"
+msgstr ""
+
+#: zcadexternal.acn_new~caption
+msgid "New drawing"
+msgstr ""
+
+#: zcadexternal.acn_oldstyleinobjinsp~caption
+msgctxt "zcadexternal.acn_oldstyleinobjinsp~caption"
+msgid "Old style"
+msgstr ""
+
+#: zcadexternal.acn_oldstyleinobjinsp~textimage
+msgid "os"
+msgstr ""
+
+#: zcadexternal.acn_options~caption
+msgctxt "zcadexternal.acn_options~caption"
+msgid "Options"
+msgstr ""
+
+#: zcadexternal.acn_ortodevplace~caption
+msgid "Device placement"
+msgstr ""
+
+#: zcadexternal.acn_os_aparentintersection~caption
+msgid "Snap to apparent intersection"
+msgstr ""
+
+#: zcadexternal.acn_os_center~caption
+msgid "Snap to center point"
+msgstr ""
+
+#: zcadexternal.acn_os_end~caption
+msgid "Snap to end point"
+msgstr ""
+
+#: zcadexternal.acn_os_insert~caption
+msgid "Snap to insert point"
+msgstr ""
+
+#: zcadexternal.acn_os_intersection~caption
+msgid "Snap to intersection"
+msgstr ""
+
+#: zcadexternal.acn_os_middle~caption
+msgid "Snap to middle point"
+msgstr ""
+
+#: zcadexternal.acn_os_nearest~caption
+msgid "Snap to nearest point"
+msgstr ""
+
+#: zcadexternal.acn_os_paralel~caption
+msgid "Snap to paralel"
+msgstr ""
+
+#: zcadexternal.acn_os_perpendicular~caption
+msgid "Snap to perpendicular"
+msgstr ""
+
+#: zcadexternal.acn_os_point~caption
+msgid "Snap to point"
+msgstr ""
+
+#: zcadexternal.acn_os_point~textimage
+msgctxt "zcadexternal.acn_os_point~textimage"
+msgid "P"
+msgstr ""
+
+#: zcadexternal.acn_os_quadrant~caption
+msgid "Snap to quadrant"
+msgstr ""
+
+#: zcadexternal.acn_os_quarter~caption
+msgid "Snap to 1/4 point"
+msgstr ""
+
+#: zcadexternal.acn_os_quarter~textimage
+msgctxt "zcadexternal.acn_os_quarter~textimage"
+msgid "1/4"
+msgstr ""
+
+#: zcadexternal.acn_os_tangent~caption
+msgid "Snap to tangent"
+msgstr ""
+
+#: zcadexternal.acn_os_third~caption
+msgid "Snap to 1/3 point"
+msgstr ""
+
+#: zcadexternal.acn_os_third~textimage
+msgctxt "zcadexternal.acn_os_third~textimage"
+msgid "1/3"
+msgstr ""
+
+#: zcadexternal.acn_overriderowheightinobjinsp~caption
+msgid "Override row height in object inspector"
+msgstr ""
+
+#: zcadexternal.acn_overriderowheightinobjinsp~textimage
+msgid "orh"
+msgstr ""
+
+#: zcadexternal.acn_pandown~caption
+msgid "Pan down"
+msgstr ""
+
+#: zcadexternal.acn_panleft~caption
+msgid "Pan left"
+msgstr ""
+
+#: zcadexternal.acn_panright~caption
+msgid "Pan right"
+msgstr ""
+
+#: zcadexternal.acn_panup~caption
+msgid "Pan up"
+msgstr ""
+
+#: zcadexternal.acn_paste~caption
+msgid "Paste"
+msgstr ""
+
+#: zcadexternal.acn_paste~hint
+msgid "Paste from clipboard"
+msgstr ""
+
+#: zcadexternal.acn_perspective~caption
+msgid "Perspective"
+msgstr ""
+
+#: zcadexternal.acn_perspective~hint
+msgid "Perspective on/off"
+msgstr ""
+
+#: zcadexternal.acn_placesmokedetectororto~caption
+msgid "Automatic placement of fire detectors"
+msgstr ""
+
+#: zcadexternal.acn_polyed~caption
+msgid "Edit polyline"
+msgstr ""
+
+#: zcadexternal.acn_polygoncc~caption
+msgid "Polygon (Center - Center)"
+msgstr ""
+
+#: zcadexternal.acn_polygoncc~hint
+msgid "Draw polygon center to center"
+msgstr ""
+
+#: zcadexternal.acn_polygoncc~textimage
+msgid "CC"
+msgstr ""
+
+#: zcadexternal.acn_polygoncv~caption
+msgid "Polygon (Center - Vertex)"
+msgstr ""
+
+#: zcadexternal.acn_polygoncv~hint
+msgid "Draw polygon center to vertex"
+msgstr ""
+
+#: zcadexternal.acn_polygoncv~textimage
+msgid "CV"
+msgstr ""
+
+#: zcadexternal.acn_print~caption
+msgctxt "zcadexternal.acn_print~caption"
+msgid "Print"
+msgstr ""
+
+#: zcadexternal.acn_print~hint
+msgctxt "zcadexternal.acn_print~hint"
+msgid "Print"
+msgstr ""
+
+#: zcadexternal.acn_projecttree~caption
+msgid "Project tree"
+msgstr ""
+
+#: zcadexternal.acn_qsave~caption
+msgid "Save"
+msgstr ""
+
+#: zcadexternal.acn_qsave~hint
+msgid "Save drawing"
+msgstr ""
+
+#: zcadexternal.acn_quit~caption
+msgid "Quit"
+msgstr ""
+
+#: zcadexternal.acn_rebuildtree~caption
+msgid "Rebuild current drawing spatial index"
+msgstr ""
+
+#: zcadexternal.acn_rebuildtree~textimage
+msgid "rtree"
+msgstr ""
+
+#: zcadexternal.acn_rectangle~caption
+msgid "Rectangle"
+msgstr ""
+
+#: zcadexternal.acn_rectangle~hint
+msgid "Draw rectangle"
+msgstr ""
+
+#: zcadexternal.acn_redo~caption
+msgid "Redo"
+msgstr ""
+
+#: zcadexternal.acn_regenzents~caption
+msgid "Regenerate zcad entities"
+msgstr ""
+
+#: zcadexternal.acn_regen~caption
+msgid "Regen all"
+msgstr ""
+
+#: zcadexternal.acn_rotateents_l~caption
+msgid "Rotate ents left"
+msgstr ""
+
+#: zcadexternal.acn_rotateents_l~hint
+msgid "Turn ents left"
+msgstr ""
+
+#: zcadexternal.acn_rotateents_r~caption
+msgid "Rotate ents right"
+msgstr ""
+
+#: zcadexternal.acn_rotateents_r~hint
+msgid "Turn ents right"
+msgstr ""
+
+#: zcadexternal.acn_rotate~caption
+msgctxt "zcadexternal.acn_rotate~caption"
+msgid "Rotate"
+msgstr ""
+
+#: zcadexternal.acn_rotate~hint
+msgid "Rotate primitives"
+msgstr ""
+
+#: zcadexternal.acn_saveas~caption
+msgid "Save as ..."
+msgstr ""
+
+#: zcadexternal.acn_saveas~hint
+msgid "Save drawing as ..."
+msgstr ""
+
+#: zcadexternal.acn_savelayout~caption
+msgid "Save window layout as default"
+msgstr ""
+
+#: zcadexternal.acn_savelayout~textimage
+msgid "SLay"
+msgstr ""
+
+#: zcadexternal.acn_saveoptions~caption
+msgid "Save options"
+msgstr ""
+
+#: zcadexternal.acn_saveoptions~textimage
+msgid "so"
+msgstr ""
+
+#: zcadexternal.acn_saveqs~caption
+msgid "Save (Autosave)"
+msgstr ""
+
+#: zcadexternal.acn_saveqs~hint
+msgctxt "zcadexternal.acn_saveqs~hint"
+msgid "Autosave"
+msgstr ""
+
+#: zcadexternal.acn_scale~caption
+msgctxt "zcadexternal.acn_scale~caption"
+msgid "Scale"
+msgstr ""
+
+#: zcadexternal.acn_scale~hint
+msgid "Scale primitives"
+msgstr ""
+
+#: zcadexternal.acn_selectall~caption
+msgid "Select all"
+msgstr ""
+
+#: zcadexternal.acn_selectall~textimage
+msgid "SA"
+msgstr ""
+
+#: zcadexternal.acn_selsim~caption
+msgid "Select similar"
+msgstr ""
+
+#: zcadexternal.acn_selsim~textimage
+msgid "SSim"
+msgstr ""
+
+#: zcadexternal.acn_sensormark~caption
+msgid "Numbering sensors on the plan"
+msgstr ""
+
+#: zcadexternal.acn_sensormark~textimage
+msgid "++"
+msgstr ""
+
+#: zcadexternal.acn_showemptysections~caption
+msgid "Show empty sections in object inspector"
+msgstr ""
+
+#: zcadexternal.acn_showemptysections~textimage
+msgid "ses"
+msgstr ""
+
+#: zcadexternal.acn_showfasteditorsinobjinsp~caption
+msgid "Show fast editors in object inspector"
+msgstr ""
+
+#: zcadexternal.acn_showfasteditorsinobjinsp~textimage
+msgid "sfe"
+msgstr ""
+
+#: zcadexternal.acn_showheadersinobjinsp~caption
+msgid "Show headers in object inspector"
+msgstr ""
+
+#: zcadexternal.acn_showheadersinobjinsp~textimage
+msgid "sh"
+msgstr ""
+
+#: zcadexternal.acn_showhiddenfieldinobjinsp~caption
+msgid "Show hidden field in object inspector"
+msgstr ""
+
+#: zcadexternal.acn_showhiddenfieldinobjinsp~textimage
+msgid "shf"
+msgstr ""
+
+#: zcadexternal.acn_showonlyhotfasteditorsinobjinsp~caption
+msgid "Show only hot fast editors in object inspector"
+msgstr ""
+
+#: zcadexternal.acn_showonlyhotfasteditorsinobjinsp~textimage
+msgid "sohfe"
+msgstr ""
+
+#: zcadexternal.acn_showspliterinobjinsp~caption
+msgid "Show spliter in object inspector"
+msgstr ""
+
+#: zcadexternal.acn_showspliterinobjinsp~textimage
+msgid "ss"
+msgstr ""
+
+#: zcadexternal.acn_show_commandline~caption
+msgid "Command line and history"
+msgstr ""
+
+#: zcadexternal.acn_show_commandline~textimage
+msgid "CL"
+msgstr ""
+
+#: zcadexternal.acn_show_navigatorcables~caption
+msgid "Navigator(Cables)"
+msgstr ""
+
+#: zcadexternal.acn_show_navigatorcables~textimage
+msgid "NC"
+msgstr ""
+
+#: zcadexternal.acn_show_navigatordevices~caption
+msgid "Navigator(Devices)"
+msgstr ""
+
+#: zcadexternal.acn_show_navigatordevices~textimage
+msgctxt "zcadexternal.acn_show_navigatordevices~textimage"
+msgid "NV"
+msgstr ""
+
+#: zcadexternal.acn_show_navigatorentities~caption
+msgid "Navigator(Entities)"
+msgstr ""
+
+#: zcadexternal.acn_show_navigatorentities~textimage
+msgctxt "zcadexternal.acn_show_navigatorentities~textimage"
+msgid "NV"
+msgstr ""
+
+#: zcadexternal.acn_show_navigatorrisers~caption
+msgid "Navigator(Risers)"
+msgstr ""
+
+#: zcadexternal.acn_show_navigatorrisers~textimage
+msgid "NR"
+msgstr ""
+
+#: zcadexternal.acn_show_objectinspector~caption
+msgid "Object inspector"
+msgstr ""
+
+#: zcadexternal.acn_show_objectinspector~textimage
+msgid "OI"
+msgstr ""
+
+#: zcadexternal.acn_show_pagecontrol~caption
+msgid "Drawings window"
+msgstr ""
+
+#: zcadexternal.acn_show_pagecontrol~textimage
+msgid "DW"
+msgstr ""
+
+#: zcadexternal.acn_slagcabcom~caption
+msgid "Start command panels for autocabeling SL"
+msgstr ""
+
+#: zcadexternal.acn_slagcabcom~textimage
+msgid "ACL"
+msgstr ""
+
+#: zcadexternal.acn_smtextall~caption
+msgid "Start command clear mtext all"
+msgstr ""
+
+#: zcadexternal.acn_smtextarea~caption
+msgid "Start command clear mtext area"
+msgstr ""
+
+#: zcadexternal.acn_snapruntime~caption
+msgid "Run time snap editor"
+msgstr ""
+
+#: zcadexternal.acn_spellcheck~caption
+msgctxt "zcadexternal.acn_spellcheck~caption"
+msgid "Spell check"
+msgstr ""
+
+#: zcadexternal.acn_spellcheck~hint
+msgctxt "zcadexternal.acn_spellcheck~hint"
+msgid "Spell check"
+msgstr ""
+
+#: zcadexternal.acn_spellcheck~textimage
+msgid "SC"
+msgstr ""
+
+#: zcadexternal.acn_stretch~caption
+msgid "Stretch"
+msgstr ""
+
+#: zcadexternal.acn_stretch~hint
+msgid "Stretch primitives"
+msgstr ""
+
+#: zcadexternal.acn_supelineht1~caption
+msgctxt "zcadexternal.acn_supelineht1~caption"
+msgid "SuperLine"
+msgstr ""
+
+#: zcadexternal.acn_supelineht1~textimage
+msgctxt "zcadexternal.acn_supelineht1~textimage"
+msgid "1"
+msgstr ""
+
+#: zcadexternal.acn_supelineht2~caption
+msgctxt "zcadexternal.acn_supelineht2~caption"
+msgid "SuperLine"
+msgstr ""
+
+#: zcadexternal.acn_supelineht2~textimage
+msgctxt "zcadexternal.acn_supelineht2~textimage"
+msgid "2"
+msgstr ""
+
+#: zcadexternal.acn_supelineht3~caption
+msgctxt "zcadexternal.acn_supelineht3~caption"
+msgid "SuperLine"
+msgstr ""
+
+#: zcadexternal.acn_supelineht3~textimage
+msgctxt "zcadexternal.acn_supelineht3~textimage"
+msgid "3"
+msgstr ""
+
+#: zcadexternal.acn_supeline~caption
+msgctxt "zcadexternal.acn_supeline~caption"
+msgid "SuperLine"
+msgstr ""
+
+#: zcadexternal.acn_textwindow~caption
+msgid "View text window"
+msgstr ""
+
+#: zcadexternal.acn_textwindow~textimage
+msgid "TW"
+msgstr ""
+
+#: zcadexternal.acn_text~caption
+msgctxt "zcadexternal.acn_text~caption"
+msgid "Text"
+msgstr ""
+
+#: zcadexternal.acn_text~hint
+msgid "Draw text"
+msgstr ""
+
+#: zcadexternal.acn_treestat~caption
+msgid "Spatial index info"
+msgstr ""
+
+#: zcadexternal.acn_treestat~hint
+msgid "Current drawing spatial index info"
+msgstr ""
+
+#: zcadexternal.acn_treestat~textimage
+msgid "ti"
+msgstr ""
+
+#: zcadexternal.acn_tstyles~caption
+msgid "Text styles ..."
+msgstr ""
+
+#: zcadexternal.acn_tstyles~hint
+msgid "Text styles properties manager"
+msgstr ""
+
+#: zcadexternal.acn_undo~caption
+msgid "Undo"
+msgstr ""
+
+#: zcadexternal.acn_units~caption
+msgid "Units format ..."
+msgstr ""
+
+#: zcadexternal.acn_units~hint
+msgid "Units format"
+msgstr ""
+
+#: zcadexternal.acn_units~textimage
+msgctxt "zcadexternal.acn_units~textimage"
+msgid "0.0"
+msgstr ""
+
+#: zcadexternal.acn_uzvaddconnection~caption
+msgid "Add connection"
+msgstr ""
+
+#: zcadexternal.acn_uzvaddconnection~textimage
+msgid "C+"
+msgstr ""
+
+#: zcadexternal.acn_uzvremoveconnection~caption
+msgid "Remove connection"
+msgstr ""
+
+#: zcadexternal.acn_varsedsel~caption
+msgid "Multi object variables editor"
+msgstr ""
+
+#: zcadexternal.acn_varsed~caption
+msgid "Object variables editor"
+msgstr ""
+
+#: zcadexternal.acn_vbuildmc~caption
+msgid "Start building connection model"
+msgstr ""
+
+#: zcadexternal.acn_vbuildmc~textimage
+msgid "MC"
+msgstr ""
+
+#: zcadexternal.acn_vbuildssschema~caption
+msgid "Start building vSS Schema"
+msgstr ""
+
+#: zcadexternal.acn_vbuildssschema~textimage
+msgid "vSS"
+msgstr ""
+
+#: zcadexternal.acn_viewdown~caption
+msgid "View bottom"
+msgstr ""
+
+#: zcadexternal.acn_viewleft~caption
+msgid "View left"
+msgstr ""
+
+#: zcadexternal.acn_viewneiso~caption
+msgid "View NE isometric"
+msgstr ""
+
+#: zcadexternal.acn_viewnwiso~caption
+msgid "View NW isometric"
+msgstr ""
+
+#: zcadexternal.acn_viewrd~caption
+msgid "Rotate camera down"
+msgstr ""
+
+#: zcadexternal.acn_viewrd~textimage
+msgid "RD"
+msgstr ""
+
+#: zcadexternal.acn_viewright~caption
+msgid "View right"
+msgstr ""
+
+#: zcadexternal.acn_viewrl~caption
+msgid "Rotate camera left"
+msgstr ""
+
+#: zcadexternal.acn_viewrl~textimage
+msgid "RL"
+msgstr ""
+
+#: zcadexternal.acn_viewrr~caption
+msgid "Rotate camera right"
+msgstr ""
+
+#: zcadexternal.acn_viewrr~textimage
+msgid "RR"
+msgstr ""
+
+#: zcadexternal.acn_viewru~caption
+msgid "Rotate camera up"
+msgstr ""
+
+#: zcadexternal.acn_viewru~textimage
+msgid "RU"
+msgstr ""
+
+#: zcadexternal.acn_viewseiso~caption
+msgid "View SE isometric"
+msgstr ""
+
+#: zcadexternal.acn_viewswiso~caption
+msgid "View SW isometric"
+msgstr ""
+
+#: zcadexternal.acn_viewtop~caption
+msgid "View top"
+msgstr ""
+
+#: zcadexternal.acn_vvarslink~caption
+msgid "Creating master/slave device"
+msgstr ""
+
+#: zcadexternal.acn_vvarslink~textimage
+msgid "VL"
+msgstr ""
+
+#: zcadexternal.acn_whitebackgrounfdinobjinsp~caption
+msgid "White background in object inspector"
+msgstr ""
+
+#: zcadexternal.acn_whitebackgrounfdinobjinsp~textimage
+msgid "wb"
+msgstr ""
+
+#: zcadexternal.acn_wire~caption
+msgid "Draw net\\trace"
+msgstr ""
+
+#: zcadexternal.acn_wnext~caption
+msgid "Next window"
+msgstr ""
+
+#: zcadexternal.acn_wnext~textimage
+msgid "N"
+msgstr ""
+
+#: zcadexternal.acn_wprev~caption
+msgid "Previous window"
+msgstr ""
+
+#: zcadexternal.acn_wprev~textimage
+msgctxt "zcadexternal.acn_wprev~textimage"
+msgid "P"
+msgstr ""
+
+#: zcadexternal.acn_xlsxtocadinsertblock~caption
+msgid "Import block from xlsx"
+msgstr ""
+
+#: zcadexternal.acn_xlsxtocadinsertblock~textimage
+msgid "X>Z"
+msgstr ""
+
+#: zcadexternal.acn_zoomall~caption
+msgid "Zoom All"
+msgstr ""
+
+#: zcadexternal.acn_zoomin~caption
+msgid "Zoom in"
+msgstr ""
+
+#: zcadexternal.acn_zoomout~caption
+msgid "Zoom out"
+msgstr ""
+
+#: zcadexternal.acn_zoomsel~caption
+msgid "Zoom selected"
+msgstr ""
+
+#: zcadexternal.acn_zoomsel~textimage
+msgid "zsel"
+msgstr ""
+
+#: zcadexternal.acn_zoomwindow~caption
+msgid "Zoom window"
+msgstr ""
+
+#: zcadexternal.brmode~brm_bd
+msgid "Block and Device"
+msgstr ""
+
+#: zcadexternal.brmode~brm_block
+msgctxt "zcadexternal.brmode~brm_block"
+msgid "Block"
+msgstr ""
+
+#: zcadexternal.brmode~brm_device
+msgctxt "zcadexternal.brmode~brm_device"
+msgid "Device"
+msgstr ""
+
+#: zcadexternal.button_variable~disp_systmgeometrydraw
+msgid "SG"
+msgstr ""
+
+#: zcadexternal.button_variable~dsgn_selnew
+msgctxt "zcadexternal.button_variable~dsgn_selnew"
+msgid "1"
+msgstr ""
+
+#: zcadexternal.button_variable~dsgn_selsamename
+msgid "SN"
+msgstr ""
+
+#: zcadexternal.button_variable~dwg_additionalgrips
+msgid "+G"
+msgstr ""
+
+#: zcadexternal.button_variable~dwg_helpgeometrydraw
+msgid "AG"
+msgstr ""
+
+#: zcadexternal.button_variable~dwg_osmodecontrol
+msgid "OSC"
+msgstr ""
+
+#: zcadexternal.button_variable~intf_commandlineenabled
+msgid "C>"
+msgstr ""
+
+#: zcadexternal.combo~colorcombobox
+msgid "Color selection"
+msgstr ""
+
+#: zcadexternal.combo~dimstylecombobox
+msgid "Dim style selection"
+msgstr ""
+
+#: zcadexternal.combo~linewcombobox
+msgid "Line weight selection"
+msgstr ""
+
+#: zcadexternal.combo~ltypecombobox
+msgid "Line type selection"
+msgstr ""
+
+#: zcadexternal.combo~tstylecombobox
+msgid "Text style selection"
+msgstr ""
+
+#: zcadexternal.commandrtedobject~commanddata
+msgid "Command options"
+msgstr ""
+
+#: zcadexternal.functionsroot~connections
+msgid "Connections"
+msgstr ""
+
+#: zcadexternal.functionsroot~connections~electrotechnics
+msgctxt "zcadexternal.functionsroot~connections~electrotechnics"
+msgid "Electrotechnics"
+msgstr ""
+
+#: zcadexternal.functionsroot~connections~electrotechnics~control
+msgid "Control"
+msgstr ""
+
+#: zcadexternal.functionsroot~connections~electrotechnics~power
+msgid "Power"
+msgstr ""
+
+#: zcadexternal.functionsroot~electrotechnics
+msgctxt "zcadexternal.functionsroot~electrotechnics"
+msgid "Electrotechnics"
+msgstr ""
+
+#: zcadexternal.functionsroot~electrotechnics~alarm
+msgctxt "zcadexternal.functionsroot~electrotechnics~alarm"
+msgid "Alarm"
+msgstr ""
+
+#: zcadexternal.functionsroot~electrotechnics~alarm~fire
+msgid "Fire"
+msgstr ""
+
+#: zcadexternal.functionsroot~electrotechnics~alarm~fire~detectors
+msgctxt "zcadexternal.functionsroot~electrotechnics~alarm~fire~detectors"
+msgid "Detectors"
+msgstr ""
+
+#: zcadexternal.functionsroot~electrotechnics~alarm~fire~detectors~smoke
+msgctxt "zcadexternal.functionsroot~electrotechnics~alarm~fire~detectors~smoke"
+msgid "Smoke"
+msgstr ""
+
+#: zcadexternal.functionsroot~electrotechnics~alarm~fire~detectors~smoke~linear
+msgctxt "zcadexternal.functionsroot~electrotechnics~alarm~fire~detectors~smoke~linear"
+msgid "Linear"
+msgstr ""
+
+#: zcadexternal.functionsroot~electrotechnics~alarm~fire~detectors~smoke~spot
+msgctxt "zcadexternal.functionsroot~electrotechnics~alarm~fire~detectors~smoke~spot"
+msgid "Spot"
+msgstr ""
+
+#: zcadexternal.functionsroot~electrotechnics~alarm~fire~detectors~thermal
+msgid "Thermal"
+msgstr ""
+
+#: zcadexternal.functionsroot~electrotechnics~alarm~fire~detectors~thermal~linear
+msgctxt "zcadexternal.functionsroot~electrotechnics~alarm~fire~detectors~thermal~linear"
+msgid "Linear"
+msgstr ""
+
+#: zcadexternal.functionsroot~electrotechnics~alarm~fire~detectors~thermal~spot
+msgctxt "zcadexternal.functionsroot~electrotechnics~alarm~fire~detectors~thermal~spot"
+msgid "Spot"
+msgstr ""
+
+#: zcadexternal.functionsroot~electrotechnics~alarm~security
+msgid "Security"
+msgstr ""
+
+#: zcadexternal.functionsroot~electrotechnics~measuring_equipment
+msgid "Measuring equipment"
+msgstr ""
+
+#: zcadexternal.functionsroot~electrotechnics~measuring_equipment~level
+msgid "Level"
+msgstr ""
+
+#: zcadexternal.functionsroot~electrotechnics~measuring_equipment~level~gauge
+msgid "Level gauge"
+msgstr ""
+
+#: zcadexternal.functionsroot~electrotechnics~measuring_equipment~level~sensor
+msgid "Level sensor"
+msgstr ""
+
+#: zcadexternal.functionsroot~electrotechnics~measuring_equipment~level~switch
+msgid "Level switch"
+msgstr ""
+
+#: zcadexternal.functionsroot~electrotechnics~measuring_equipment~pressure
+msgid "Pressure"
+msgstr ""
+
+#: zcadexternal.functionsroot~electrotechnics~measuring_equipment~pressure~gauge
+msgid "Pressure gauge"
+msgstr ""
+
+#: zcadexternal.functionsroot~electrotechnics~measuring_equipment~pressure~sensor
+msgid "Pressure sensor"
+msgstr ""
+
+#: zcadexternal.functionsroot~electrotechnics~measuring_equipment~pressure~switch
+msgid "Pressure switch"
+msgstr ""
+
+#: zcadexternal.functionsroot~electrotechnics~measuring_equipment~temperature
+msgid "Temperature"
+msgstr ""
+
+#: zcadexternal.functionsroot~electrotechnics~measuring_equipment~temperature~gauge
+msgid "Temperature gauge"
+msgstr ""
+
+#: zcadexternal.functionsroot~electrotechnics~measuring_equipment~temperature~sensor
+msgid "Temperature sensor"
+msgstr ""
+
+#: zcadexternal.functionsroot~electrotechnics~measuring_equipment~temperature~switch
+msgid "Temperature switch"
+msgstr ""
+
+#: zcadexternal.functionsroot~electrotechnics~power_consumer
+msgid "Power consumers"
+msgstr ""
+
+#: zcadexternal.functionsroot~electrotechnics~power_consumer~drives
+msgid "Drives"
+msgstr ""
+
+#: zcadexternal.functionsroot~electrotechnics~power_consumer~drives~motor
+msgid "Motor"
+msgstr ""
+
+#: zcadexternal.functionsroot~electrotechnics~power_consumer~heating
+msgid "Heating"
+msgstr ""
+
+#: zcadexternal.functionsroot~electrotechnics~power_consumer~heating~electric_heater
+msgid "Electric heater"
+msgstr ""
+
+#: zcadexternal.functionsroot~electrotechnics~power_consumer~lighting
+msgctxt "zcadexternal.functionsroot~electrotechnics~power_consumer~lighting"
+msgid "Lighting"
+msgstr ""
+
+#: zcadexternal.functionsroot~electrotechnics~power_consumer~lighting~lamp
+msgid "Lamp"
+msgstr ""
+
+#: zcadexternal.functionsroot~not_classified
+msgctxt "zcadexternal.functionsroot~not_classified"
+msgid "Not classified"
+msgstr ""
+
+#: zcadexternal.gdbbasis~ox
+msgid "OX Axis"
+msgstr ""
+
+#: zcadexternal.gdbbasis~oy
+msgid "OY Axis"
+msgstr ""
+
+#: zcadexternal.gdbbasis~oz
+msgid "OZ Axis"
+msgstr ""
+
+#: zcadexternal.gdblayerprop~color
+msgctxt "zcadexternal.gdblayerprop~color"
+msgid "Color"
+msgstr ""
+
+#: zcadexternal.gdblayerprop~desk
+msgctxt "zcadexternal.gdblayerprop~desk"
+msgid "Description"
+msgstr ""
+
+#: zcadexternal.gdblayerprop~lineweight
+msgctxt "zcadexternal.gdblayerprop~lineweight"
+msgid "Line weight"
+msgstr ""
+
+#: zcadexternal.gdblayerprop~lt
+msgctxt "zcadexternal.gdblayerprop~lt"
+msgid "Line type"
+msgstr ""
+
+#: zcadexternal.gdblayerprop~_lock
+msgid "Lock"
+msgstr ""
+
+#: zcadexternal.gdblayerprop~_on
+msgid "On"
+msgstr ""
+
+#: zcadexternal.gdblayerprop~_print
+msgctxt "zcadexternal.gdblayerprop~_print"
+msgid "Print"
+msgstr ""
+
+#: zcadexternal.gdblineprop~lbegin
+msgid "Begin"
+msgstr ""
+
+#: zcadexternal.gdblineprop~lend
+msgctxt "zcadexternal.gdblineprop~lend"
+msgid "End"
+msgstr ""
+
+#: zcadexternal.gdbltypeprop~dasharray
+msgid "DashInfo array"
+msgstr ""
+
+#: zcadexternal.gdbltypeprop~desk
+msgctxt "zcadexternal.gdbltypeprop~desk"
+msgid "Description"
+msgstr ""
+
+#: zcadexternal.gdbltypeprop~h
+msgctxt "zcadexternal.gdbltypeprop~h"
+msgid "Height"
+msgstr ""
+
+#: zcadexternal.gdbltypeprop~lengthdxf
+msgctxt "zcadexternal.gdbltypeprop~lengthdxf"
+msgid "Length"
+msgstr ""
+
+#: zcadexternal.gdbltypeprop~shapearray
+msgid "Shape array"
+msgstr ""
+
+#: zcadexternal.gdbltypeprop~strokesarray
+msgid "Strokes array"
+msgstr ""
+
+#: zcadexternal.gdbltypeprop~textarray
+msgid "Text array"
+msgstr ""
+
+#: zcadexternal.gdbnamedobject~name
+msgctxt "zcadexternal.gdbnamedobject~name"
+msgid "Name"
+msgstr ""
+
+#: zcadexternal.gdbobj2dprop~basis
+msgid "Basis"
+msgstr ""
+
+#: zcadexternal.gdbobj2dprop~p_insert
+msgid "Insertion point OCS"
+msgstr ""
+
+#: zcadexternal.gdbobj3dface~pindcs
+msgctxt "zcadexternal.gdbobj3dface~pindcs"
+msgid "Coordinates DCS"
+msgstr ""
+
+#: zcadexternal.gdbobj3dface~pinocs
+msgctxt "zcadexternal.gdbobj3dface~pinocs"
+msgid "Coordinates OCS"
+msgstr ""
+
+#: zcadexternal.gdbobj3dface~pinwcs
+msgctxt "zcadexternal.gdbobj3dface~pinwcs"
+msgid "Coordinates WCS"
+msgstr ""
+
+#: zcadexternal.gdbobjbaseprop~listpos
+msgid "List"
+msgstr ""
+
+#: zcadexternal.gdbobjbaseprop~treepos
+msgid "Tree"
+msgstr ""
+
+#: zcadexternal.gdbobjblockdef~blockdesc
+msgctxt "zcadexternal.gdbobjblockdef~blockdesc"
+msgid "Block params"
+msgstr ""
+
+#: zcadexternal.gdbobjblockinsert~blockdesc
+msgctxt "zcadexternal.gdbobjblockinsert~blockdesc"
+msgid "Block params"
+msgstr ""
+
+#: zcadexternal.gdbobjblockinsert~testrotate
+msgctxt "zcadexternal.gdbobjblockinsert~testrotate"
+msgid "Rotate"
+msgstr ""
+
+#: zcadexternal.gdbobjcircle~radius
+msgctxt "zcadexternal.gdbobjcircle~radius"
+msgid "Radius"
+msgstr ""
+
+#: zcadexternal.gdbobjentity~infrustum
+msgid "In frustum"
+msgstr ""
+
+#: zcadexternal.gdbobjentity~selected
+msgid "Selected"
+msgstr ""
+
+#: zcadexternal.gdbobjentity~visible
+msgid "Visible"
+msgstr ""
+
+#: zcadexternal.gdbobjentity~vp
+msgctxt "zcadexternal.gdbobjentity~vp"
+msgid "General"
+msgstr ""
+
+#: zcadexternal.gdbobjline~coordinocs
+msgctxt "zcadexternal.gdbobjline~coordinocs"
+msgid "Coordinates OCS"
+msgstr ""
+
+#: zcadexternal.gdbobjline~coordinwcs
+msgctxt "zcadexternal.gdbobjline~coordinwcs"
+msgid "Coordinates WCS"
+msgstr ""
+
+#: zcadexternal.gdbobjline~pprojpoint
+msgctxt "zcadexternal.gdbobjline~pprojpoint"
+msgid "Coordinates DCS"
+msgstr ""
+
+#: zcadexternal.gdbobjlwpolyline~square
+msgid "Oriented area"
+msgstr ""
+
+#: zcadexternal.gdbobjpoint~p_insertinocs
+msgctxt "zcadexternal.gdbobjpoint~p_insertinocs"
+msgid "Coordinates OCS"
+msgstr ""
+
+#: zcadexternal.gdbobjpoint~p_insertinwcs
+msgctxt "zcadexternal.gdbobjpoint~p_insertinwcs"
+msgid "Coordinates WCS"
+msgstr ""
+
+#: zcadexternal.gdbobjsolid~pindcs
+msgctxt "zcadexternal.gdbobjsolid~pindcs"
+msgid "Coordinates DCS"
+msgstr ""
+
+#: zcadexternal.gdbobjsolid~pinocs
+msgctxt "zcadexternal.gdbobjsolid~pinocs"
+msgid "Coordinates OCS"
+msgstr ""
+
+#: zcadexternal.gdbobjsolid~pinwcs
+msgctxt "zcadexternal.gdbobjsolid~pinwcs"
+msgid "Coordinates WCS"
+msgstr ""
+
+#: zcadexternal.gdbobjsubordinated~bp
+msgid "Owner"
+msgstr ""
+
+#: zcadexternal.gdbobjsubordinated~osnapmodecontrol
+msgctxt "zcadexternal.gdbobjsubordinated~osnapmodecontrol"
+msgid "OSnap mode control"
+msgstr ""
+
+#: zcadexternal.gdbobjtext~txtstyleindex
+msgctxt "zcadexternal.gdbobjtext~txtstyleindex"
+msgid "Style"
+msgstr ""
+
+#: zcadexternal.gdbobjvisualprop~boundingbox
+msgid "Bounding box"
+msgstr ""
+
+#: zcadexternal.gdbobjvisualprop~layer
+msgctxt "zcadexternal.gdbobjvisualprop~layer"
+msgid "Layer"
+msgstr ""
+
+#: zcadexternal.gdbobjvisualprop~linetype
+msgctxt "zcadexternal.gdbobjvisualprop~linetype"
+msgid "Line type"
+msgstr ""
+
+#: zcadexternal.gdbobjvisualprop~linetypescale
+msgid "Line type scale"
+msgstr ""
+
+#: zcadexternal.gdbobjvisualprop~lineweight
+msgctxt "zcadexternal.gdbobjvisualprop~lineweight"
+msgid "Line weight"
+msgstr ""
+
+#: zcadexternal.gdbobjwithlocalcs~local
+msgid "Object orientation"
+msgstr ""
+
+#: zcadexternal.gdbobjwithlocalcs~lod
+msgid "Level of detail"
+msgstr ""
+
+#: zcadexternal.gdbobjwithlocalcs~pprojoutbound
+msgid "Bounding box DCS"
+msgstr ""
+
+#: zcadexternal.gdbobjwithlocalcs~projp_insert
+msgid "Insertion point DCS"
+msgstr ""
+
+#: zcadexternal.gdbobjwithlocalcs~p_insert_in_wcs
+msgid "Insertion point WCS"
+msgstr ""
+
+#: zcadexternal.gdbobjwithmatrix~objmatrix
+msgid "OCS Matrix"
+msgstr ""
+
+#: zcadexternal.gdbsnap2d~base
+msgid "Base"
+msgstr ""
+
+#: zcadexternal.gdbsnap2d~spacing
+msgid "Spacing"
+msgstr ""
+
+#: zcadexternal.gdbsysvariable~debug
+msgctxt "zcadexternal.gdbsysvariable~debug"
+msgid "Debug"
+msgstr ""
+
+#: zcadexternal.gdbsysvariable~disp
+msgid "Display"
+msgstr ""
+
+#: zcadexternal.gdbsysvariable~dsgn
+msgid "Design"
+msgstr ""
+
+#: zcadexternal.gdbsysvariable~dwg
+msgid "Drawing"
+msgstr ""
+
+#: zcadexternal.gdbsysvariable~intf
+msgid "Interface"
+msgstr ""
+
+#: zcadexternal.gdbsysvariable~path
+msgid "Paths"
+msgstr ""
+
+#: zcadexternal.gdbsysvariable~rd
+msgid "Graphics"
+msgstr ""
+
+#: zcadexternal.gdbsysvariable~save
+msgid "Saving"
+msgstr ""
+
+#: zcadexternal.gdbsysvariable~sys
+msgctxt "zcadexternal.gdbsysvariable~sys"
+msgid "System"
+msgstr ""
+
+#: zcadexternal.hint_panel~disp_systmgeometrydraw
+msgid "System graphics (size, communication, etc. for debugging)"
+msgstr ""
+
+#: zcadexternal.hint_panel~dsgn_selnew
+msgctxt "zcadexternal.hint_panel~dsgn_selnew"
+msgid "New selection set"
+msgstr ""
+
+#: zcadexternal.hint_panel~dsgn_selsamename
+msgctxt "zcadexternal.hint_panel~dsgn_selsamename"
+msgid "Auto select devices with same name"
+msgstr ""
+
+#: zcadexternal.hint_panel~dwg_additionalgrips
+msgid "On/Off Additional grips"
+msgstr ""
+
+#: zcadexternal.hint_panel~dwg_drawgrid
+msgctxt "zcadexternal.hint_panel~dwg_drawgrid"
+msgid "Display grid"
+msgstr ""
+
+#: zcadexternal.hint_panel~dwg_drawmode
+msgid "Show/Hide Lineweight"
+msgstr ""
+
+#: zcadexternal.hint_panel~dwg_editinsubentry
+msgid "On/Off Selecting parts of dynamic objects"
+msgstr ""
+
+#: zcadexternal.hint_panel~dwg_helpgeometrydraw
+msgid "Auxiliary graphics (connectivity, direction, etc.)"
+msgstr ""
+
+#: zcadexternal.hint_panel~dwg_osmode
+msgctxt "zcadexternal.hint_panel~dwg_osmode"
+msgid "Object snap"
+msgstr ""
+
+#: zcadexternal.hint_panel~dwg_osmodecontrol
+msgid "Ent object snap control"
+msgstr ""
+
+#: zcadexternal.hint_panel~dwg_polarmode
+msgid "Polar tracking"
+msgstr ""
+
+#: zcadexternal.hint_panel~dwg_snapgrid
+msgctxt "zcadexternal.hint_panel~dwg_snapgrid"
+msgid "Snap"
+msgstr ""
+
+#: zcadexternal.hint_panel~intf_commandlineenabled
+msgctxt "zcadexternal.hint_panel~intf_commandlineenabled"
+msgid "Command line enabled"
+msgstr ""
+
+#: zcadexternal.hint_panel~layercombobox
+msgid "Layer selection"
+msgstr ""
+
+#: zcadexternal.menucommand~blockslist
+msgid "BlocksList"
+msgstr ""
+
+#: zcadexternal.menucommand~cam_reset
+msgid "Reset camera"
+msgstr ""
+
+#: zcadexternal.menucommand~clearfilehistory
+msgid "Clear File History"
+msgstr ""
+
+#: zcadexternal.menucommand~commandlist
+msgid "Command list"
+msgstr ""
+
+#: zcadexternal.menucommand~dbaseadd
+msgid "Add to the drawing database"
+msgstr ""
+
+#: zcadexternal.menucommand~dbaselink
+msgid "linked to entity"
+msgstr ""
+
+#: zcadexternal.menucommand~dbgappexplorer
+msgid "AppExplorer"
+msgstr ""
+
+#: zcadexternal.menucommand~dbgclipboard
+msgid "Check clipboard"
+msgstr ""
+
+#: zcadexternal.menucommand~dbgmemprofiler
+msgid "dbgMemProfiler"
+msgstr ""
+
+#: zcadexternal.menucommand~dbgmemprofiler(off)
+msgid "dbgMemProfiler(off)"
+msgstr ""
+
+#: zcadexternal.menucommand~dbgmemprofiler(on)
+msgid "dbgMemProfiler(on)"
+msgstr ""
+
+#: zcadexternal.menucommand~dbgmemsummary
+msgid "Report on memory allocation(debug mode)"
+msgstr ""
+
+#: zcadexternal.menucommand~el_autogen_cable_remove
+msgid "Remove generated cables"
+msgstr ""
+
+#: zcadexternal.menucommand~el_cableman
+msgid "Cable manager"
+msgstr ""
+
+#: zcadexternal.menucommand~el_cable_legend
+msgid "Create cable report"
+msgstr ""
+
+#: zcadexternal.menucommand~el_externalkz
+msgid "Process auto cables"
+msgstr ""
+
+#: zcadexternal.menucommand~el_material_legend
+msgid "Create material report"
+msgstr ""
+
+#: zcadexternal.menucommand~executefile($(zcadpath)|components|blockpreviewexport.cmd)
+msgid "BlockPreviewExport"
+msgstr ""
+
+#: zcadexternal.menucommand~exportdevwithaxis
+msgid "Names of devices with axis"
+msgstr ""
+
+#: zcadexternal.menucommand~extdradd(extdrincludingvolume)
+msgid "Add extdrIncludingVolume"
+msgstr ""
+
+#: zcadexternal.menucommand~extdradd(extdrlayercontrol)
+msgid "Add extdrLayerControl"
+msgstr ""
+
+#: zcadexternal.menucommand~extdradd(extdrreport)
+msgid "Add extdrReport"
+msgstr ""
+
+#: zcadexternal.menucommand~extdradd(extdrschconnection)
+msgid "Add extdrSCHConnection"
+msgstr ""
+
+#: zcadexternal.menucommand~extdradd(extdrschconnector)
+msgid "Add extdrSCHConnector"
+msgstr ""
+
+#: zcadexternal.menucommand~extdradd(extdrsmarttextent)
+msgid "Add extdrSmartTextEnt"
+msgstr ""
+
+#: zcadexternal.menucommand~extdradd(extdrvariables)
+msgid "Add extdrVariables"
+msgstr ""
+
+#: zcadexternal.menucommand~findallintersections
+msgid "Find all intersections (lines only)"
+msgstr ""
+
+#: zcadexternal.menucommand~fuckoff
+msgid "Layouts (not impl)"
+msgstr ""
+
+#: zcadexternal.menucommand~insert(device_el_cable_break)
+msgid "Break"
+msgstr ""
+
+#: zcadexternal.menucommand~insert(device_el_cable_down)
+msgid "Goes down"
+msgstr ""
+
+#: zcadexternal.menucommand~insert(device_el_cable_fromdown)
+msgid "Comes from below"
+msgstr ""
+
+#: zcadexternal.menucommand~insert(device_el_cable_fromup)
+msgid "Comes from above"
+msgstr ""
+
+#: zcadexternal.menucommand~insert(device_el_cable_up)
+msgid "Goes up"
+msgstr ""
+
+#: zcadexternal.menucommand~ops_spbuild
+msgctxt "zcadexternal.menucommand~ops_spbuild"
+msgid "Connection diagram"
+msgstr ""
+
+#: zcadexternal.menucommand~ortodevplace
+msgid "Alignment blocks array"
+msgstr ""
+
+#: zcadexternal.menucommand~placeallblocks
+msgid "PlaceAllBlocks"
+msgstr ""
+
+#: zcadexternal.menucommand~setobjinsp(camera)
+msgid "Camera"
+msgstr ""
+
+#: zcadexternal.menucommand~setobjinsp(dimstyles)
+msgid "Dim styles (objinsp)"
+msgstr ""
+
+#: zcadexternal.menucommand~setobjinsp(fonts)
+msgid "Fonts (objinsp)"
+msgstr ""
+
+#: zcadexternal.menucommand~setobjinsp(layers)
+msgid "Layers (objinsp)"
+msgstr ""
+
+#: zcadexternal.menucommand~setobjinsp(linetypestyles)
+msgid "Line type styles (objinsp)"
+msgstr ""
+
+#: zcadexternal.menucommand~setobjinsp(numerators)
+msgid "Numerators (objinsp)"
+msgstr ""
+
+#: zcadexternal.menucommand~setobjinsp(osmode)
+msgctxt "zcadexternal.menucommand~setobjinsp(osmode)"
+msgid "Object snap"
+msgstr ""
+
+#: zcadexternal.menucommand~setobjinsp(tablestyles)
+msgid "Table styles (objinsp)"
+msgstr ""
+
+#: zcadexternal.menucommand~setobjinsp(tstyles)
+msgid "Styles (objinsp)"
+msgstr ""
+
+#: zcadexternal.menucommand~setobjinsp(vars)
+msgctxt "zcadexternal.menucommand~setobjinsp(vars)"
+msgid "Options"
+msgstr ""
+
+#: zcadexternal.menucommand~testinsert1
+msgid "TestInsert1"
+msgstr ""
+
+#: zcadexternal.menucommand~varreport(nmo_name)
+msgid "Names of entities"
+msgstr ""
+
+#: zcadexternal.menu~alarm_system
+msgid "Alarm system"
+msgstr ""
+
+#: zcadexternal.menu~block/device
+msgid "Block/Device"
+msgstr ""
+
+#: zcadexternal.menu~cable/trace
+msgid "Cable/Trace"
+msgstr ""
+
+#: zcadexternal.menu~cable_legend
+msgid "Cable legend"
+msgstr ""
+
+#: zcadexternal.menu~cctv
+msgid "CCTV"
+msgstr ""
+
+#: zcadexternal.menu~circle
+msgid "Circle"
+msgstr ""
+
+#: zcadexternal.menu~circuit_diagram
+msgid "Circuit diagram"
+msgstr ""
+
+#: zcadexternal.menu~connections_diagram
+msgid "Connections diagram"
+msgstr ""
+
+#: zcadexternal.menu~db
+msgid "DB"
+msgstr ""
+
+#: zcadexternal.menu~debug
+msgctxt "zcadexternal.menu~debug"
+msgid "Debug"
+msgstr ""
+
+#: zcadexternal.menu~dimension
+msgid "Dimension"
+msgstr ""
+
+#: zcadexternal.menu~draw
+msgid "Draw"
+msgstr ""
+
+#: zcadexternal.menu~edit
+msgid "Edit"
+msgstr ""
+
+#: zcadexternal.menu~extenders
+msgctxt "zcadexternal.menu~extenders"
+msgid "Extenders"
+msgstr ""
+
+#: zcadexternal.menu~file
+msgid "File"
+msgstr ""
+
+#: zcadexternal.menu~fire_alarm
+msgctxt "zcadexternal.menu~fire_alarm"
+msgid "Fire alarm"
+msgstr ""
+
+#: zcadexternal.menu~format
+msgid "Format"
+msgstr ""
+
+#: zcadexternal.menu~help
+msgctxt "zcadexternal.menu~help"
+msgid "Help"
+msgstr ""
+
+#: zcadexternal.menu~info
+msgid "Info"
+msgstr ""
+
+#: zcadexternal.menu~inspector
+msgid "Inspector"
+msgstr ""
+
+#: zcadexternal.menu~instrumentation_and_control
+msgid "Instrumentation and Control"
+msgstr ""
+
+#: zcadexternal.menu~layers
+msgid "Layers"
+msgstr ""
+
+#: zcadexternal.menu~lighting
+msgctxt "zcadexternal.menu~lighting"
+msgid "Lighting"
+msgstr ""
+
+#: zcadexternal.menu~mainmenu
+msgid "MAINMENU"
+msgstr ""
+
+#: zcadexternal.menu~miscellaneous
+msgid "Miscellaneous"
+msgstr ""
+
+#: zcadexternal.menu~model
+msgid "Model"
+msgstr ""
+
+#: zcadexternal.menu~modify
+msgid "Modify"
+msgstr ""
+
+#: zcadexternal.menu~pan
+msgid "Pan"
+msgstr ""
+
+#: zcadexternal.menu~placement_equipment
+msgid "Placement equipment"
+msgstr ""
+
+#: zcadexternal.menu~plan
+msgctxt "zcadexternal.menu~plan"
+msgid "Plan"
+msgstr ""
+
+#: zcadexternal.menu~polygon
+msgid "Polygon"
+msgstr ""
+
+#: zcadexternal.menu~power_supply
+msgctxt "zcadexternal.menu~power_supply"
+msgid "Power supply"
+msgstr ""
+
+#: zcadexternal.menu~sample_files
+msgid "Sample files"
+msgstr ""
+
+#: zcadexternal.menu~schematic
+msgid "Schematic"
+msgstr ""
+
+#: zcadexternal.menu~security_alarm
+msgid "Security alarm"
+msgstr ""
+
+#: zcadexternal.menu~settings
+msgid "Settings"
+msgstr ""
+
+#: zcadexternal.menu~show_window
+msgid "Show window"
+msgstr ""
+
+#: zcadexternal.menu~text
+msgctxt "zcadexternal.menu~text"
+msgid "Text"
+msgstr ""
+
+#: zcadexternal.menu~toolbars
+msgid "ToolBars"
+msgstr ""
+
+#: zcadexternal.menu~toolpalettes
+msgid "ToolPalettes"
+msgstr ""
+
+#: zcadexternal.menu~tools
+msgid "Tools"
+msgstr ""
+
+#: zcadexternal.menu~view
+msgid "View"
+msgstr ""
+
+#: zcadexternal.menu~window
+msgid "Window"
+msgstr ""
+
+#: zcadexternal.menu~zoom
+msgid "Zoom"
+msgstr ""
+
+#: zcadexternal.oimultiproperty~angle
+msgctxt "zcadexternal.oimultiproperty~angle"
+msgid "Angle"
+msgstr ""
+
+#: zcadexternal.oimultiproperty~area
+msgid "Area"
+msgstr ""
+
+#: zcadexternal.oimultiproperty~backward
+msgid "Backward"
+msgstr ""
+
+#: zcadexternal.oimultiproperty~center_x
+msgid "Center X"
+msgstr ""
+
+#: zcadexternal.oimultiproperty~center_y
+msgid "Center Y"
+msgstr ""
+
+#: zcadexternal.oimultiproperty~center_z
+msgid "Center Z"
+msgstr ""
+
+#: zcadexternal.oimultiproperty~circumference
+msgid "Circumference"
+msgstr ""
+
+#: zcadexternal.oimultiproperty~closed
+msgid "Closed"
+msgstr ""
+
+#: zcadexternal.oimultiproperty~color
+msgctxt "zcadexternal.oimultiproperty~color"
+msgid "Color"
+msgstr ""
+
+#: zcadexternal.oimultiproperty~delta_x
+msgid "Delta X"
+msgstr ""
+
+#: zcadexternal.oimultiproperty~delta_y
+msgid "Delta Y"
+msgstr ""
+
+#: zcadexternal.oimultiproperty~delta_z
+msgid "Delta Z"
+msgstr ""
+
+#: zcadexternal.oimultiproperty~diameter
+msgid "Diameter"
+msgstr ""
+
+#: zcadexternal.oimultiproperty~dimstyle
+msgctxt "zcadexternal.oimultiproperty~dimstyle"
+msgid "Style"
+msgstr ""
+
+#: zcadexternal.oimultiproperty~dimtextmoved
+msgid "Text moved"
+msgstr ""
+
+#: zcadexternal.oimultiproperty~endangle
+msgid "End angle"
+msgstr ""
+
+#: zcadexternal.oimultiproperty~end_x
+msgid "End X"
+msgstr ""
+
+#: zcadexternal.oimultiproperty~end_y
+msgid "End Y"
+msgstr ""
+
+#: zcadexternal.oimultiproperty~end_z
+msgid "End Z"
+msgstr ""
+
+#: zcadexternal.oimultiproperty~entityaddress
+msgid "Entity address"
+msgstr ""
+
+#: zcadexternal.oimultiproperty~entityname
+msgid "Entity name"
+msgstr ""
+
+#: zcadexternal.oimultiproperty~extdrlayercontrol_badlayer
+msgid "False layer"
+msgstr ""
+
+#: zcadexternal.oimultiproperty~extdrlayercontrol_expression
+msgid "Expression"
+msgstr ""
+
+#: zcadexternal.oimultiproperty~extdrlayercontrol_goodlayer
+msgid "True layer"
+msgstr ""
+
+#: zcadexternal.oimultiproperty~extdrnetconnector_connectorradius
+msgid "Connector radius"
+msgstr ""
+
+#: zcadexternal.oimultiproperty~extdrnetconnector_connectortype
+msgid "Connector type"
+msgstr ""
+
+#: zcadexternal.oimultiproperty~extdrssmarttextent_baseline
+msgid "Base line"
+msgstr ""
+
+#: zcadexternal.oimultiproperty~extdrssmarttextent_baselineoffsetx
+msgid "Base line offset X"
+msgstr ""
+
+#: zcadexternal.oimultiproperty~extdrssmarttextent_baselineoffsety
+msgid "Base line offset Y"
+msgstr ""
+
+#: zcadexternal.oimultiproperty~extdrssmarttextent_enablerotateoverride
+msgid "Rotate override"
+msgstr ""
+
+#: zcadexternal.oimultiproperty~extdrssmarttextent_extensionline
+msgid "Extension line"
+msgstr ""
+
+#: zcadexternal.oimultiproperty~extdrssmarttextent_extensionlinestartshift
+msgid "Extension line start shift"
+msgstr ""
+
+#: zcadexternal.oimultiproperty~extdrssmarttextent_hjoverride
+msgid "Horizontal justify oferride"
+msgstr ""
+
+#: zcadexternal.oimultiproperty~extdrssmarttextent_leaderstartdrawdist
+msgid "Leader start draw distance"
+msgstr ""
+
+#: zcadexternal.oimultiproperty~extdrssmarttextent_rotateoverride
+msgid "Rotate override value"
+msgstr ""
+
+#: zcadexternal.oimultiproperty~extdrssmarttextent_textheightoverride
+msgid "Height override"
+msgstr ""
+
+#: zcadexternal.oimultiproperty~extdrssmarttextent_vjoverride
+msgid "Vertical justify oferride"
+msgstr ""
+
+#: zcadexternal.oimultiproperty~filter_blocksbynames
+msgid "Blocks by names"
+msgstr ""
+
+#: zcadexternal.oimultiproperty~filter_entsbyextenders
+msgid "Ents by extenders"
+msgstr ""
+
+#: zcadexternal.oimultiproperty~filter_entsbylayers
+msgid "Ents by layers"
+msgstr ""
+
+#: zcadexternal.oimultiproperty~filter_entsbylinestypes
+msgid "Ents by linetypes"
+msgstr ""
+
+#: zcadexternal.oimultiproperty~filter_textsbystyles
+msgid "Texts by styles"
+msgstr ""
+
+#: zcadexternal.oimultiproperty~height
+msgctxt "zcadexternal.oimultiproperty~height"
+msgid "Height"
+msgstr ""
+
+#: zcadexternal.oimultiproperty~insert_x
+msgid "Insert X"
+msgstr ""
+
+#: zcadexternal.oimultiproperty~insert_y
+msgid "Insert Y"
+msgstr ""
+
+#: zcadexternal.oimultiproperty~insert_z
+msgid "Insert Z"
+msgstr ""
+
+#: zcadexternal.oimultiproperty~layer
+msgctxt "zcadexternal.oimultiproperty~layer"
+msgid "Layer"
+msgstr ""
+
+#: zcadexternal.oimultiproperty~leaderscale
+msgctxt "zcadexternal.oimultiproperty~leaderscale"
+msgid "Scale"
+msgstr ""
+
+#: zcadexternal.oimultiproperty~leadersize
+msgctxt "zcadexternal.oimultiproperty~leadersize"
+msgid "Size"
+msgstr ""
+
+#: zcadexternal.oimultiproperty~leaderwidth
+msgctxt "zcadexternal.oimultiproperty~leaderwidth"
+msgid "Width"
+msgstr ""
+
+#: zcadexternal.oimultiproperty~length
+msgctxt "zcadexternal.oimultiproperty~length"
+msgid "Length"
+msgstr ""
+
+#: zcadexternal.oimultiproperty~linespacefactor
+msgid "Linespace factor"
+msgstr ""
+
+#: zcadexternal.oimultiproperty~linetype
+msgid "Linetype"
+msgstr ""
+
+#: zcadexternal.oimultiproperty~linetypescale
+msgid "Linetype scale"
+msgstr ""
+
+#: zcadexternal.oimultiproperty~lineweight
+msgid "Lineweight"
+msgstr ""
+
+#: zcadexternal.oimultiproperty~majorradius
+msgid "Major radius"
+msgstr ""
+
+#: zcadexternal.oimultiproperty~name
+msgctxt "zcadexternal.oimultiproperty~name"
+msgid "Name"
+msgstr ""
+
+#: zcadexternal.oimultiproperty~normal_x
+msgid "Normal X"
+msgstr ""
+
+#: zcadexternal.oimultiproperty~normal_y
+msgid "Normal Y"
+msgstr ""
+
+#: zcadexternal.oimultiproperty~normal_z
+msgid "Normal Z"
+msgstr ""
+
+#: zcadexternal.oimultiproperty~oblique
+msgid "Oblique"
+msgstr ""
+
+#: zcadexternal.oimultiproperty~osnapmodecontrol
+msgctxt "zcadexternal.oimultiproperty~osnapmodecontrol"
+msgid "OSnap mode control"
+msgstr ""
+
+#: zcadexternal.oimultiproperty~radius
+msgctxt "zcadexternal.oimultiproperty~radius"
+msgid "Radius"
+msgstr ""
+
+#: zcadexternal.oimultiproperty~radiusratio
+msgid "Radius ratio"
+msgstr ""
+
+#: zcadexternal.oimultiproperty~rotation
+msgctxt "zcadexternal.oimultiproperty~rotation"
+msgid "Rotation"
+msgstr ""
+
+#: zcadexternal.oimultiproperty~rotationwcs
+msgid "RotationWCS"
+msgstr ""
+
+#: zcadexternal.oimultiproperty~scale_x
+msgid "Scale X"
+msgstr ""
+
+#: zcadexternal.oimultiproperty~scale_y
+msgid "Scale Y"
+msgstr ""
+
+#: zcadexternal.oimultiproperty~scale_z
+msgid "Scale Z"
+msgstr ""
+
+#: zcadexternal.oimultiproperty~startangle
+msgid "Start angle"
+msgstr ""
+
+#: zcadexternal.oimultiproperty~start_x
+msgid "Start X"
+msgstr ""
+
+#: zcadexternal.oimultiproperty~start_y
+msgid "Start Y"
+msgstr ""
+
+#: zcadexternal.oimultiproperty~start_z
+msgid "Start Z"
+msgstr ""
+
+#: zcadexternal.oimultiproperty~textcontent
+msgid "TextContent"
+msgstr ""
+
+#: zcadexternal.oimultiproperty~totalarea
+msgid "Total area"
+msgstr ""
+
+#: zcadexternal.oimultiproperty~totallength
+msgid "Total length"
+msgstr ""
+
+#: zcadexternal.oimultiproperty~totalvertexcount
+msgid "Total vertex count"
+msgstr ""
+
+#: zcadexternal.oimultiproperty~txtcontent
+msgid "Content"
+msgstr ""
+
+#: zcadexternal.oimultiproperty~txtjustify
+msgid "Justify"
+msgstr ""
+
+#: zcadexternal.oimultiproperty~txtstyle
+msgctxt "zcadexternal.oimultiproperty~txtstyle"
+msgid "Style"
+msgstr ""
+
+#: zcadexternal.oimultiproperty~txttemplate
+msgid "Template"
+msgstr ""
+
+#: zcadexternal.oimultiproperty~upsidedown
+msgid "Upside down"
+msgstr ""
+
+#: zcadexternal.oimultiproperty~vertex3dcontrol_
+msgid "Vertex control"
+msgstr ""
+
+#: zcadexternal.oimultiproperty~vertexcount
+msgid "Vertex count"
+msgstr ""
+
+#: zcadexternal.oimultiproperty~width
+msgctxt "zcadexternal.oimultiproperty~width"
+msgid "Width"
+msgstr ""
+
+#: zcadexternal.oimultiproperty~widthfactor
+msgid "Width factor"
+msgstr ""
+
+#: zcadexternal.palette~blocks
+msgid "Blocks"
+msgstr ""
+
+#: zcadexternal.palette~fire_alarm
+msgctxt "zcadexternal.palette~fire_alarm"
+msgid "Fire alarm"
+msgstr ""
+
+#: zcadexternal.representationsroot~graphsymbol
+msgid "Symbols"
+msgstr ""
+
+#: zcadexternal.representationsroot~graphsymbol~onplan
+msgid "On plan"
+msgstr ""
+
+#: zcadexternal.representationsroot~graphsymbol~onscheme
+msgid "On scheme"
+msgstr ""
+
+#: zcadexternal.representationsroot~graphsymbol~onscheme~automation
+msgid "On automation scheme"
+msgstr ""
+
+#: zcadexternal.representationsroot~graphsymbol~onscheme~connection
+msgid "On connection scheme"
+msgstr ""
+
+#: zcadexternal.representationsroot~graphsymbol~onscheme~electrical_circuit
+msgid "On electrical circuit scheme"
+msgstr ""
+
+#: zcadexternal.representationsroot~graphsymbol~onscheme~wiring
+msgid "On wiring scheme"
+msgstr ""
+
+#: zcadexternal.representationsroot~not_classified
+msgctxt "zcadexternal.representationsroot~not_classified"
+msgid "Not classified"
+msgstr ""
+
+#: zcadexternal.tangdir~adclockwise
+msgid "Clockwise"
+msgstr ""
+
+#: zcadexternal.tangdir~adcounterclockwise
+msgid "Counterclockwise"
+msgstr ""
+
+#: zcadexternal.taunits~audecimaldegrees
+msgid "Decimal degrees"
+msgstr ""
+
+#: zcadexternal.taunits~audegreesminutesseconds
+msgid "Degrees minutes seconds"
+msgstr ""
+
+#: zcadexternal.taunits~augradians
+msgid "Gradians"
+msgstr ""
+
+#: zcadexternal.taunits~auradians
+msgid "Radians"
+msgstr ""
+
+#: zcadexternal.taunits~ausurveyorsunits
+msgid "Surveyors units"
+msgstr ""
+
+#: zcadexternal.taxisreducedistancemode~tardm_allaxis
+msgid "All axis"
+msgstr ""
+
+#: zcadexternal.taxisreducedistancemode~tardm_longaxis
+msgid "Long axis"
+msgstr ""
+
+#: zcadexternal.taxisreducedistancemode~tardm_nothing
+msgid "Nothing"
+msgstr ""
+
+#: zcadexternal.taxisreducedistancemode~tardm_shortaxis
+msgid "Short axis"
+msgstr ""
+
+#: zcadexternal.tbasicfinter~excludecable
+msgid "Exclude filter"
+msgstr ""
+
+#: zcadexternal.tbasicfinter~excludecablemask
+msgid "Exclude mask"
+msgstr ""
+
+#: zcadexternal.tbasicfinter~includecable
+msgid "Include filter"
+msgstr ""
+
+#: zcadexternal.tbasicfinter~includecablemask
+msgid "Include mask"
+msgstr ""
+
+#: zcadexternal.tbeditparam~blocks
+msgid "Select block"
+msgstr ""
+
+#: zcadexternal.tbeditparam~currenteditblock
+msgid "Current block"
+msgstr ""
+
+#: zcadexternal.tbeditparam~filter
+msgid "Filter block name"
+msgstr ""
+
+#: zcadexternal.tblockdesc~bborder
+msgid "Border"
+msgstr ""
+
+#: zcadexternal.tblockdesc~bgroup
+msgid "Block group"
+msgstr ""
+
+#: zcadexternal.tblockdesc~btype
+msgid "Block type"
+msgstr ""
+
+#: zcadexternal.tblockrotateparams~Absolutely
+msgctxt "zcadexternal.tblockrotateparams~Absolutely"
+msgid "Absolutely"
+msgstr ""
+
+#: zcadexternal.tblockrotateparams~rotate
+msgid "Rotation angle"
+msgstr ""
+
+#: zcadexternal.tblockscaleparams~Absolutely
+msgctxt "zcadexternal.tblockscaleparams~Absolutely"
+msgid "Absolutely"
+msgstr ""
+
+#: zcadexternal.tblockscaleparams~scale
+msgid "New scale"
+msgstr ""
+
+#: zcadexternal.tboundingbox~lbn
+msgctxt "zcadexternal.tboundingbox~lbn"
+msgid "Near"
+msgstr ""
+
+#: zcadexternal.tboundingbox~rtf
+msgctxt "zcadexternal.tboundingbox~rtf"
+msgid "Far"
+msgstr ""
+
+#: zcadexternal.tboundingrect~lb
+msgctxt "zcadexternal.tboundingrect~lb"
+msgid "Near"
+msgstr ""
+
+#: zcadexternal.tboundingrect~rt
+msgctxt "zcadexternal.tboundingrect~rt"
+msgid "Far"
+msgstr ""
+
+#: zcadexternal.tcalcip~_icos_from_p
+msgid "I,Cos=F(P)"
+msgstr ""
+
+#: zcadexternal.tcalcip~_i_from_p
+msgid "I=F(P,Cos)"
+msgstr ""
+
+#: zcadexternal.tcalcip~_p_from_i
+msgid "P=F(I,Cos)"
+msgstr ""
+
+#: zcadexternal.tcanvasdata~rd_renderer
+msgctxt "zcadexternal.tcanvasdata~rd_renderer"
+msgid "Device"
+msgstr ""
+
+#: zcadexternal.tcompileinfo~sys_compiledate
+msgid "Compile date"
+msgstr ""
+
+#: zcadexternal.tcompileinfo~sys_compiler
+msgid "Compiler"
+msgstr ""
+
+#: zcadexternal.tcompileinfo~sys_compilertargetcpu
+msgid "Target CPU"
+msgstr ""
+
+#: zcadexternal.tcompileinfo~sys_compilertargetos
+msgid "Target OS"
+msgstr ""
+
+#: zcadexternal.tcompileinfo~sys_compilerver
+msgid "Compiler version"
+msgstr ""
+
+#: zcadexternal.tcompileinfo~sys_compiletime
+msgid "Compile time"
+msgstr ""
+
+#: zcadexternal.tcompileinfo~sys_environmentversion
+msgid "Environment version"
+msgstr ""
+
+#: zcadexternal.tcompileinfo~sys_lclfullversion
+msgid "LCL full version"
+msgstr ""
+
+#: zcadexternal.tcompileinfo~sys_lclversion
+msgid "LCL version"
+msgstr ""
+
+#: zcadexternal.tdebug~showhiddenfieldinobjinsp
+msgid "Show hidden fields"
+msgstr ""
+
+#: zcadexternal.tdesigning~dsgn_helpscale
+msgid "Scale of auxiliary elements"
+msgstr ""
+
+#: zcadexternal.tdesigning~dsgn_layercontrols
+msgid "Control layers"
+msgstr ""
+
+#: zcadexternal.tdesigning~dsgn_leaderdefaultwidth
+msgid "Default leader width"
+msgstr ""
+
+#: zcadexternal.tdesigning~dsgn_otracktimerinterval
+msgid "Object track timer interval"
+msgstr ""
+
+#: zcadexternal.tdesigning~dsgn_selnew
+msgctxt "zcadexternal.tdesigning~dsgn_selnew"
+msgid "New selection set"
+msgstr ""
+
+#: zcadexternal.tdesigning~dsgn_selsamename
+msgctxt "zcadexternal.tdesigning~dsgn_selsamename"
+msgid "Auto select devices with same name"
+msgstr ""
+
+#: zcadexternal.tdesigning~dsgn_traceautoinc
+msgid "Increment trace names"
+msgstr ""
+
+#: zcadexternal.tdimunit~duarchitectural
+msgctxt "zcadexternal.tdimunit~duarchitectural"
+msgid "Architectural"
+msgstr ""
+
+#: zcadexternal.tdimunit~dudecimal
+msgctxt "zcadexternal.tdimunit~dudecimal"
+msgid "Decimal"
+msgstr ""
+
+#: zcadexternal.tdimunit~duengineering
+msgctxt "zcadexternal.tdimunit~duengineering"
+msgid "Engineering"
+msgstr ""
+
+#: zcadexternal.tdimunit~dufractional
+msgctxt "zcadexternal.tdimunit~dufractional"
+msgid "Fractional"
+msgstr ""
+
+#: zcadexternal.tdimunit~duscientific
+msgctxt "zcadexternal.tdimunit~duscientific"
+msgid "Scientific"
+msgstr ""
+
+#: zcadexternal.tdimunit~dusystem
+msgctxt "zcadexternal.tdimunit~dusystem"
+msgid "System"
+msgstr ""
+
+#: zcadexternal.tdisp~disp_backgroundcolor
+msgid "Background color"
+msgstr ""
+
+#: zcadexternal.tdisp~disp_coloraxis
+msgid "Colored cursor"
+msgstr ""
+
+#: zcadexternal.tdisp~disp_crosshairsize
+msgid "Crosshair size"
+msgstr ""
+
+#: zcadexternal.tdisp~disp_cursorsize
+msgid "Cursor size"
+msgstr ""
+
+#: zcadexternal.tdisp~disp_defaultlw
+msgid "Default line weight"
+msgstr ""
+
+#: zcadexternal.tdisp~disp_drawzaxis
+msgid "Show Z axis"
+msgstr ""
+
+#: zcadexternal.tdisp~disp_gripsize
+msgid "Grip size"
+msgstr ""
+
+#: zcadexternal.tdisp~disp_hotgripcolor
+msgid "Hot grip color"
+msgstr ""
+
+#: zcadexternal.tdisp~disp_lwdisplayscale
+msgid "Display line weight scale"
+msgstr ""
+
+#: zcadexternal.tdisp~disp_ossize
+msgid "Snap aperture size"
+msgstr ""
+
+#: zcadexternal.tdisp~disp_removesystemcursorfromworkarea
+msgid "Remove system cursor from work area"
+msgstr ""
+
+#: zcadexternal.tdisp~disp_selectedgripcolor
+msgid "Selected grip color"
+msgstr ""
+
+#: zcadexternal.tdisp~disp_systmgeometrycolor
+msgid "Help color"
+msgstr ""
+
+#: zcadexternal.tdisp~disp_systmgeometrydraw
+msgid "System geometry"
+msgstr ""
+
+#: zcadexternal.tdisp~disp_unselectedgripcolor
+msgid "Unselected grip color"
+msgstr ""
+
+#: zcadexternal.tdisp~disp_zoomfactor
+msgid "Mouse wheel scale factor"
+msgstr ""
+
+#: zcadexternal.tdwg~dwg_additionalgrips
+msgid "Additional grips"
+msgstr ""
+
+#: zcadexternal.tdwg~dwg_angbase
+msgid "AngBase (zero base angle)"
+msgstr ""
+
+#: zcadexternal.tdwg~dwg_angdir
+msgid "AngDir (direction of positive angles)"
+msgstr ""
+
+#: zcadexternal.tdwg~dwg_aunits
+msgid "AUnits (angular units format)"
+msgstr ""
+
+#: zcadexternal.tdwg~dwg_auprec
+msgid "AUPrec (angular units precision)"
+msgstr ""
+
+#: zcadexternal.tdwg~dwg_ccolor
+msgid "Current color"
+msgstr ""
+
+#: zcadexternal.tdwg~dwg_cdimstyle
+msgid "Dim style"
+msgstr ""
+
+#: zcadexternal.tdwg~dwg_clayer
+msgid "Current layer"
+msgstr ""
+
+#: zcadexternal.tdwg~dwg_clinew
+msgid "Current line weight"
+msgstr ""
+
+#: zcadexternal.tdwg~dwg_cltscale
+msgid "Current line type scale"
+msgstr ""
+
+#: zcadexternal.tdwg~dwg_cltype
+msgid "Drawing line type"
+msgstr ""
+
+#: zcadexternal.tdwg~dwg_ctstyle
+msgid "Text style"
+msgstr ""
+
+#: zcadexternal.tdwg~dwg_drawgrid
+msgctxt "zcadexternal.tdwg~dwg_drawgrid"
+msgid "Display grid"
+msgstr ""
+
+#: zcadexternal.tdwg~dwg_drawmode
+msgid "Display line weights"
+msgstr ""
+
+#: zcadexternal.tdwg~dwg_editinsubentry
+msgid "SubEntities edit"
+msgstr ""
+
+#: zcadexternal.tdwg~dwg_gridspacing
+msgid "Grid spacing"
+msgstr ""
+
+#: zcadexternal.tdwg~dwg_helpgeometrydraw
+msgid "Help geometry"
+msgstr ""
+
+#: zcadexternal.tdwg~dwg_insunits
+msgid "InsUnits (value for automatic scaling of blocks)"
+msgstr ""
+
+#: zcadexternal.tdwg~dwg_ltscale
+msgid "Global line type scale"
+msgstr ""
+
+#: zcadexternal.tdwg~dwg_lunits
+msgid "LUnits (linear units format)"
+msgstr ""
+
+#: zcadexternal.tdwg~dwg_luprec
+msgid "LUPrec (linear units precision)"
+msgstr ""
+
+#: zcadexternal.tdwg~dwg_osmode
+msgid "Snap mode"
+msgstr ""
+
+#: zcadexternal.tdwg~dwg_polarmode
+msgid "Polar tracking mode"
+msgstr ""
+
+#: zcadexternal.tdwg~dwg_rotatetextinlt
+msgid "Rotate text in line type"
+msgstr ""
+
+#: zcadexternal.tdwg~dwg_selectedobjtoinsp
+msgid "Selected object to inspector"
+msgstr ""
+
+#: zcadexternal.tdwg~dwg_snap
+msgid "Snap settings"
+msgstr ""
+
+#: zcadexternal.tdwg~dwg_snapgrid
+msgctxt "zcadexternal.tdwg~dwg_snapgrid"
+msgid "Snap"
+msgstr ""
+
+#: zcadexternal.tdwg~dwg_textsize
+msgid "TextSize (size of new crreated text ents)"
+msgstr ""
+
+#: zcadexternal.tdwg~dwg_unitmode
+msgid "UnitMode (display format for units)"
+msgstr ""
+
+#: zcadexternal.tdxdata~rd_renderer
+msgctxt "zcadexternal.tdxdata~rd_renderer"
+msgid "Device"
+msgstr ""
+
+#: zcadexternal.tdxfcolor~name
+msgctxt "zcadexternal.tdxfcolor~name"
+msgid "Name"
+msgstr ""
+
+#: zcadexternal.tdxfcolor~rgb
+msgctxt "zcadexternal.tdxfcolor~rgb"
+msgid "Color"
+msgstr ""
+
+#: zcadexternal.telcablecomparam~pcable
+msgid "Cabel"
+msgstr ""
+
+#: zcadexternal.telcablecomparam~ptrace
+msgid "Trace (pointer)"
+msgstr ""
+
+#: zcadexternal.telcablecomparam~traces
+msgctxt "zcadexternal.telcablecomparam~traces"
+msgid "Trace"
+msgstr ""
+
+#: zcadexternal.telleadercomparam~scale
+msgctxt "zcadexternal.telleadercomparam~scale"
+msgid "Scale"
+msgstr ""
+
+#: zcadexternal.telleadercomparam~size
+msgctxt "zcadexternal.telleadercomparam~size"
+msgid "Size"
+msgstr ""
+
+#: zcadexternal.telleadercomparam~twidth
+msgctxt "zcadexternal.telleadercomparam~twidth"
+msgid "Width"
+msgstr ""
+
+#: zcadexternal.tentityadress~owner
+msgctxt "zcadexternal.tentityadress~owner"
+msgid "Adress"
+msgstr ""
+
+#: zcadexternal.tentityadress~selfindex
+msgctxt "zcadexternal.tentityadress~selfindex"
+msgid "Position"
+msgstr ""
+
+#: zcadexternal.texportdevwithaxisparams~axisdevicename
+msgid "AxisDeviceName"
+msgstr ""
+
+#: zcadexternal.tforcresult~iscreated
+msgid "IsCreated"
+msgstr ""
+
+#: zcadexternal.tforcresult~iserror
+msgid "IsError"
+msgstr ""
+
+#: zcadexternal.tforcresult~isfounded
+msgid "IsFounded"
+msgstr ""
+
+#: zcadexternal.tgdb3statebool~t3sb_default
+msgid "Default"
+msgstr ""
+
+#: zcadexternal.tgdb3statebool~t3sb_fale
+msgid "False"
+msgstr ""
+
+#: zcadexternal.tgdb3statebool~t3sb_true
+msgid "True"
+msgstr ""
+
+#: zcadexternal.tgdidata~rd_renderer
+msgctxt "zcadexternal.tgdidata~rd_renderer"
+msgid "Device"
+msgstr ""
+
+#: zcadexternal.tgdidata~rd_version
+msgctxt "zcadexternal.tgdidata~rd_version"
+msgid "Version"
+msgstr ""
+
+#: zcadexternal.timagedegradation~rd_id_currentdegradationfactor
+msgid "Current degradation factor"
+msgstr ""
+
+#: zcadexternal.timagedegradation~rd_id_enabled
+msgctxt "zcadexternal.timagedegradation~rd_id_enabled"
+msgid "Enabled"
+msgstr ""
+
+#: zcadexternal.timagedegradation~rd_id_maxdegradationfactor
+msgid "Max degradation factor"
+msgstr ""
+
+#: zcadexternal.timagedegradation~rd_id_prefferedrendertime
+msgid "Prefered rendertime"
+msgstr ""
+
+#: zcadexternal.tinserttype~tit_block
+msgctxt "zcadexternal.tinserttype~tit_block"
+msgid "Block"
+msgstr ""
+
+#: zcadexternal.tinserttype~tit_device
+msgctxt "zcadexternal.tinserttype~tit_device"
+msgid "Device"
+msgstr ""
+
+#: zcadexternal.tinsunits~iuangstroms
+msgid "Angstroms"
+msgstr ""
+
+#: zcadexternal.tinsunits~iuastronomicalunits
+msgid "Astronomical units"
+msgstr ""
+
+#: zcadexternal.tinsunits~iucentimeters
+msgid "Centimeters"
+msgstr ""
+
+#: zcadexternal.tinsunits~iudecimeters
+msgid "Decimeters"
+msgstr ""
+
+#: zcadexternal.tinsunits~iudekameters
+msgid "Dekameters"
+msgstr ""
+
+#: zcadexternal.tinsunits~iufeet
+msgid "Feet"
+msgstr ""
+
+#: zcadexternal.tinsunits~iugigameters
+msgid "Gigameters"
+msgstr ""
+
+#: zcadexternal.tinsunits~iuhectometers
+msgid "Hectometers"
+msgstr ""
+
+#: zcadexternal.tinsunits~iuinches
+msgid "Inches"
+msgstr ""
+
+#: zcadexternal.tinsunits~iukilometers
+msgid "Kilometers"
+msgstr ""
+
+#: zcadexternal.tinsunits~iulightyears
+msgid "Light years"
+msgstr ""
+
+#: zcadexternal.tinsunits~iumeters
+msgid "Meters"
+msgstr ""
+
+#: zcadexternal.tinsunits~iumicroinches
+msgid "Microinches"
+msgstr ""
+
+#: zcadexternal.tinsunits~iumicrons
+msgid "Microns"
+msgstr ""
+
+#: zcadexternal.tinsunits~iumiles
+msgid "Miles"
+msgstr ""
+
+#: zcadexternal.tinsunits~iumillimeters
+msgid "Millimeters"
+msgstr ""
+
+#: zcadexternal.tinsunits~iumils
+msgid "Mils"
+msgstr ""
+
+#: zcadexternal.tinsunits~iunanometers
+msgid "Nanometers"
+msgstr ""
+
+#: zcadexternal.tinsunits~iuparsecs
+msgid "Parsecs"
+msgstr ""
+
+#: zcadexternal.tinsunits~iuunspecified
+msgid "Unspecified"
+msgstr ""
+
+#: zcadexternal.tinsunits~iuyards
+msgid "Yards"
+msgstr ""
+
+#: zcadexternal.tintegeroverrider~enable
+msgid "Enable"
+msgstr ""
+
+#: zcadexternal.tintegeroverrider~value
+msgid "New value"
+msgstr ""
+
+#: zcadexternal.tinterface~intf_appmode
+msgid "Application mode"
+msgstr ""
+
+#: zcadexternal.tinterface~intf_colorscheme
+msgid "Application color scheme"
+msgstr ""
+
+#: zcadexternal.tinterface~intf_commandlineenabled
+msgctxt "zcadexternal.tinterface~intf_commandlineenabled"
+msgid "Command line enabled"
+msgstr ""
+
+#: zcadexternal.tinterface~intf_defaultcontrolheight
+msgid "Default control height"
+msgstr ""
+
+#: zcadexternal.tinterface~intf_defaulteditorfontheight
+msgid "Default editor font height"
+msgstr ""
+
+#: zcadexternal.tinterface~intf_dwgtabsposition
+msgid "Drawing tabs position"
+msgstr ""
+
+#: zcadexternal.tinterface~intf_languageoverride
+msgctxt "zcadexternal.tinterface~intf_languageoverride"
+msgid "Language override"
+msgstr ""
+
+#: zcadexternal.tinterface~intf_messages_properties
+msgid "Messages properties"
+msgstr ""
+
+#: zcadexternal.tinterface~intf_objinsp_properties
+msgid "Object inspector properties"
+msgstr ""
+
+#: zcadexternal.tinterface~intf_showdwgtabcloseburron
+msgid "Show drawing tab close button"
+msgstr ""
+
+#: zcadexternal.tinterface~intf_showdwgtabs
+msgid "Show drawing tabs"
+msgstr ""
+
+#: zcadexternal.tinterface~intf_showscrollbars
+msgid "Show scroll bars"
+msgstr ""
+
+#: zcadexternal.tinterface~intf_themeddowntoolbars
+msgid "Themed down toolbars"
+msgstr ""
+
+#: zcadexternal.tinterface~intf_themedlefttoolbars
+msgid "Themed left toolbars"
+msgstr ""
+
+#: zcadexternal.tinterface~intf_themedrighttoolbars
+msgid "Themed right toolbars"
+msgstr ""
+
+#: zcadexternal.tinterface~intf_themeduptoolbars
+msgid "Themed up toolbars"
+msgstr ""
+
+#: zcadexternal.tlayercontrols~dsgn_lc_cable
+msgid "Cables"
+msgstr ""
+
+#: zcadexternal.tlayercontrols~dsgn_lc_leader
+msgid "Leaders"
+msgstr ""
+
+#: zcadexternal.tlayercontrols~dsgn_lc_net
+msgid "Nets"
+msgstr ""
+
+#: zcadexternal.tlayercontrol~enabled
+msgctxt "zcadexternal.tlayercontrol~enabled"
+msgid "Enabled"
+msgstr ""
+
+#: zcadexternal.tlayercontrol~layername
+msgid "Layer name"
+msgstr ""
+
+#: zcadexternal.tlunits~luarchitectural
+msgctxt "zcadexternal.tlunits~luarchitectural"
+msgid "Architectural"
+msgstr ""
+
+#: zcadexternal.tlunits~ludecimal
+msgctxt "zcadexternal.tlunits~ludecimal"
+msgid "Decimal"
+msgstr ""
+
+#: zcadexternal.tlunits~luengineering
+msgctxt "zcadexternal.tlunits~luengineering"
+msgid "Engineering"
+msgstr ""
+
+#: zcadexternal.tlunits~lufractional
+msgctxt "zcadexternal.tlunits~lufractional"
+msgid "Fractional"
+msgstr ""
+
+#: zcadexternal.tlunits~luscientific
+msgctxt "zcadexternal.tlunits~luscientific"
+msgid "Scientific"
+msgstr ""
+
+#: zcadexternal.tmessagesinterface~intf_messages_suppressdoubles
+msgid "Suppress doubles"
+msgstr ""
+
+#: zcadexternal.tmseditor~extendersunit
+msgctxt "zcadexternal.tmseditor~extendersunit"
+msgid "Extenders"
+msgstr ""
+
+#: zcadexternal.tmseditor~generalunit
+msgctxt "zcadexternal.tmseditor~generalunit"
+msgid "General"
+msgstr ""
+
+#: zcadexternal.tmseditor~geometryunit
+msgid "Geometry"
+msgstr ""
+
+#: zcadexternal.tmseditor~miscunit
+msgid "Misc"
+msgstr ""
+
+#: zcadexternal.tmseditor~relatedvariablesunit
+msgid "Related variables"
+msgstr ""
+
+#: zcadexternal.tmseditor~summaryunit
+msgctxt "zcadexternal.tmseditor~summaryunit"
+msgid "Summary"
+msgstr ""
+
+#: zcadexternal.tmseditor~txtenttype
+msgid "Process primitives"
+msgstr ""
+
+#: zcadexternal.tmseditor~variableprocessselector
+msgid "Process variables"
+msgstr ""
+
+#: zcadexternal.tmseditor~variablesunit
+msgid "Variables"
+msgstr ""
+
+#: zcadexternal.tnotsavedparams~defaultheight
+msgid "Default controls height"
+msgstr ""
+
+#: zcadexternal.tnotsavedparams~otherinstancerun
+msgid "Other instance run"
+msgstr ""
+
+#: zcadexternal.tnotsavedparams~preloadedfile
+msgid "Preloaded file"
+msgstr ""
+
+#: zcadexternal.tnotsavedparams~screenx
+msgid "Screen X"
+msgstr ""
+
+#: zcadexternal.tnotsavedparams~screeny
+msgid "Screen Y"
+msgstr ""
+
+#: zcadexternal.tnotsavedparams~ver
+msgctxt "zcadexternal.tnotsavedparams~ver"
+msgid "Version"
+msgstr ""
+
+#: zcadexternal.tobjinspinterface~intf_objinsp_alwaysusemultiselectwrapper
+msgid "Always use multiselect wrapper"
+msgstr ""
+
+#: zcadexternal.tobjinspinterface~intf_objinsp_buttonsizereducing
+msgid "Button size reducing"
+msgstr ""
+
+#: zcadexternal.tobjinspinterface~intf_objinsp_oldstyledraw
+msgctxt "zcadexternal.tobjinspinterface~intf_objinsp_oldstyledraw"
+msgid "Old style"
+msgstr ""
+
+#: zcadexternal.tobjinspinterface~intf_objinsp_rowheight
+msgid "Row height"
+msgstr ""
+
+#: zcadexternal.tobjinspinterface~intf_objinsp_showemptysections
+msgid "Show empty sections"
+msgstr ""
+
+#: zcadexternal.tobjinspinterface~intf_objinsp_showfasteditors
+msgid "Show fast editors"
+msgstr ""
+
+#: zcadexternal.tobjinspinterface~intf_objinsp_showheaders
+msgid "Show headers"
+msgstr ""
+
+#: zcadexternal.tobjinspinterface~intf_objinsp_showonlyhotfasteditors
+msgid "Show only hot fast editors"
+msgstr ""
+
+#: zcadexternal.tobjinspinterface~intf_objinsp_showseparator
+msgid "Show separator"
+msgstr ""
+
+#: zcadexternal.tobjinspinterface~intf_objinsp_spaceheight
+msgid "Space height"
+msgstr ""
+
+#: zcadexternal.tobjinspinterface~intf_objinsp_whitebackground
+msgid "White background"
+msgstr ""
+
+#: zcadexternal.todpcounttype~todpct_by_count
+msgid "by number"
+msgstr ""
+
+#: zcadexternal.todpcounttype~todpct_by_xy
+msgid "by width/height"
+msgstr ""
+
+#: zcadexternal.toolpalette_blocklib_instrumentation_itemcaption~unsorted
+msgctxt "zcadexternal.toolpalette_blocklib_instrumentation_itemcaption~unsorted"
+msgid "Unsorted"
+msgstr ""
+
+#: zcadexternal.toolpalette_blocklib_itemcaption~instrumentation
+msgid "Instrumentation"
+msgstr ""
+
+#: zcadexternal.toolpalette_blocklib_itemcaption~low-current
+msgid "Low-current"
+msgstr ""
+
+#: zcadexternal.toolpalette_blocklib_itemcaption~power_supply
+msgctxt "zcadexternal.toolpalette_blocklib_itemcaption~power_supply"
+msgid "Power supply"
+msgstr ""
+
+#: zcadexternal.toolpalette_blocklib_itemcaption~schemes
+msgctxt "zcadexternal.toolpalette_blocklib_itemcaption~schemes"
+msgid "Schemes"
+msgstr ""
+
+#: zcadexternal.toolpalette_blocklib_itemcaption~unsorted
+msgctxt "zcadexternal.toolpalette_blocklib_itemcaption~unsorted"
+msgid "Unsorted"
+msgstr ""
+
+#: zcadexternal.toolpalette_blocklib_itemcaption~velectrical
+msgid "Velectrical"
+msgstr ""
+
+#: zcadexternal.toolpalette_blocklib_itemcaption~vlowcurrentnetworks
+msgid "Vlowcurrentnetworks"
+msgstr ""
+
+#: zcadexternal.toolpalette_blocklib_low-current_alarm_fire_alarm_itemcaption~detectors
+msgctxt "zcadexternal.toolpalette_blocklib_low-current_alarm_fire_alarm_itemcaption~detectors"
+msgid "Detectors"
+msgstr ""
+
+#: zcadexternal.toolpalette_blocklib_low-current_alarm_itemcaption~fire_alarm
+msgctxt "zcadexternal.toolpalette_blocklib_low-current_alarm_itemcaption~fire_alarm"
+msgid "Fire alarm"
+msgstr ""
+
+#: zcadexternal.toolpalette_blocklib_low-current_itemcaption~alarm
+msgctxt "zcadexternal.toolpalette_blocklib_low-current_itemcaption~alarm"
+msgid "Alarm"
+msgstr ""
+
+#: zcadexternal.toolpalette_blocklib_power_supply_itemcaption~calculations
+msgid "Calculations"
+msgstr ""
+
+#: zcadexternal.toolpalette_blocklib_power_supply_itemcaption~detectors
+msgctxt "zcadexternal.toolpalette_blocklib_power_supply_itemcaption~detectors"
+msgid "Detectors"
+msgstr ""
+
+#: zcadexternal.toolpalette_blocklib_power_supply_itemcaption~equipment
+msgid "Equipment"
+msgstr ""
+
+#: zcadexternal.toolpalette_blocklib_power_supply_itemcaption~formats_stamps
+msgid "Formats stamps"
+msgstr ""
+
+#: zcadexternal.toolpalette_blocklib_power_supply_itemcaption~high-voltage_networks
+msgid "High-voltage networks"
+msgstr ""
+
+#: zcadexternal.toolpalette_blocklib_power_supply_itemcaption~lighting
+msgctxt "zcadexternal.toolpalette_blocklib_power_supply_itemcaption~lighting"
+msgid "Lighting"
+msgstr ""
+
+#: zcadexternal.toolpalette_blocklib_power_supply_itemcaption~nodes
+msgid "Nodes"
+msgstr ""
+
+#: zcadexternal.toolpalette_blocklib_power_supply_itemcaption~outdoor_networks
+msgid "Outdoor networks"
+msgstr ""
+
+#: zcadexternal.toolpalette_blocklib_power_supply_itemcaption~risers
+msgid "Risers"
+msgstr ""
+
+#: zcadexternal.toolpalette_blocklib_power_supply_itemcaption~schemes
+msgctxt "zcadexternal.toolpalette_blocklib_power_supply_itemcaption~schemes"
+msgid "Schemes"
+msgstr ""
+
+#: zcadexternal.toolpalette_blocklib_power_supply_itemcaption~sockets
+msgctxt "zcadexternal.toolpalette_blocklib_power_supply_itemcaption~sockets"
+msgid "Sockets"
+msgstr ""
+
+#: zcadexternal.toolpalette_blocklib_power_supply_itemcaption~statements
+msgid "Statements"
+msgstr ""
+
+#: zcadexternal.toolpalette_blocklib_power_supply_itemcaption~switches
+msgid "Switches"
+msgstr ""
+
+#: zcadexternal.toolpalette_blocklib_schemes_itemcaption~unsorted
+msgctxt "zcadexternal.toolpalette_blocklib_schemes_itemcaption~unsorted"
+msgid "Unsorted"
+msgstr ""
+
+#: zcadexternal.toolpalette_blocklib_velectrical_itemcaption~plan
+msgctxt "zcadexternal.toolpalette_blocklib_velectrical_itemcaption~plan"
+msgid "Plan"
+msgstr ""
+
+#: zcadexternal.toolpalette_blocklib_velectrical_itemcaption~schemes
+msgctxt "zcadexternal.toolpalette_blocklib_velectrical_itemcaption~schemes"
+msgid "Schemes"
+msgstr ""
+
+#: zcadexternal.toolpalette_blocklib_velectrical_plan_itemcaption~elreceiver
+msgid "ElReceiver"
+msgstr ""
+
+#: zcadexternal.toolpalette_blocklib_velectrical_plan_itemcaption~lighting
+msgctxt "zcadexternal.toolpalette_blocklib_velectrical_plan_itemcaption~lighting"
+msgid "Lighting"
+msgstr ""
+
+#: zcadexternal.toolpalette_blocklib_velectrical_plan_itemcaption~shields
+msgid "Shields"
+msgstr ""
+
+#: zcadexternal.toolpalette_blocklib_velectrical_plan_itemcaption~sockets
+msgctxt "zcadexternal.toolpalette_blocklib_velectrical_plan_itemcaption~sockets"
+msgid "Sockets"
+msgstr ""
+
+#: zcadexternal.toolpalette_blocklib_velectrical_schemes_itemcaption~shield_devices
+msgid "Shield devices"
+msgstr ""
+
+#: zcadexternal.toolpalette_blocklib_velectrical_schemes_itemcaption~shield_diagram
+msgid "Shield diagram"
+msgstr ""
+
+#: zcadexternal.toolpalette_blocklib_vlowcurrentnetworks_itemcaption~plan
+msgctxt "zcadexternal.toolpalette_blocklib_vlowcurrentnetworks_itemcaption~plan"
+msgid "Plan"
+msgstr ""
+
+#: zcadexternal.toolpalette_blocklib~caption
+msgid "Рамка А4 книга"
+msgstr ""
+
+#: zcadexternal.topengldata~rd_extensions
+msgid "Extensions"
+msgstr ""
+
+#: zcadexternal.topengldata~rd_light
+msgid "Light"
+msgstr ""
+
+#: zcadexternal.topengldata~rd_linesmooth
+msgid "Line smoothing"
+msgstr ""
+
+#: zcadexternal.topengldata~rd_maxlinewidth
+msgid "Max line width"
+msgstr ""
+
+#: zcadexternal.topengldata~rd_maxpointsize
+msgid "Max point size"
+msgstr ""
+
+#: zcadexternal.topengldata~rd_maxwidth
+msgid "Max width"
+msgstr ""
+
+#: zcadexternal.topengldata~rd_renderer
+msgctxt "zcadexternal.topengldata~rd_renderer"
+msgid "Device"
+msgstr ""
+
+#: zcadexternal.topengldata~rd_restore_mode
+msgid "Restore mode"
+msgstr ""
+
+#: zcadexternal.topengldata~rd_usestencil
+msgid "Use STENCIL buffer"
+msgstr ""
+
+#: zcadexternal.topengldata~rd_vendor
+msgid "Vendor"
+msgstr ""
+
+#: zcadexternal.topengldata~rd_version
+msgctxt "zcadexternal.topengldata~rd_version"
+msgid "Version"
+msgstr ""
+
+#: zcadexternal.topengldata~rd_vsync
+msgid "VSync"
+msgstr ""
+
+#: zcadexternal.topsdattype~topsdt_smoke
+msgctxt "zcadexternal.topsdattype~topsdt_smoke"
+msgid "Smoke"
+msgstr ""
+
+#: zcadexternal.topsdattype~topsdt_termo
+msgid "Termo"
+msgstr ""
+
+#: zcadexternal.topsmindatcount~topsmdc_1_2
+msgid "1 in the middle"
+msgstr ""
+
+#: zcadexternal.topsmindatcount~topsmdc_1_4
+msgid "1 in the quarter"
+msgstr ""
+
+#: zcadexternal.topsmindatcount~topsmdc_2
+msgctxt "zcadexternal.topsmindatcount~topsmdc_2"
+msgid "2"
+msgstr ""
+
+#: zcadexternal.topsmindatcount~topsmdc_3
+msgctxt "zcadexternal.topsmindatcount~topsmdc_3"
+msgid "3"
+msgstr ""
+
+#: zcadexternal.topsmindatcount~topsmdc_4
+msgid "4"
+msgstr ""
+
+#: zcadexternal.topsplacesmokedetectorortoparam~dattype
+msgid "Sensor type"
+msgstr ""
+
+#: zcadexternal.topsplacesmokedetectorortoparam~dmc
+msgid "Min. number of sensors"
+msgstr ""
+
+#: zcadexternal.topsplacesmokedetectorortoparam~fdd
+msgid "Sensor-Sensor(fact)"
+msgstr ""
+
+#: zcadexternal.topsplacesmokedetectorortoparam~fdw
+msgid "Sensor-Wall(fact)"
+msgstr ""
+
+#: zcadexternal.topsplacesmokedetectorortoparam~height
+msgid "Height of installation"
+msgstr ""
+
+#: zcadexternal.topsplacesmokedetectorortoparam~inserttype
+msgctxt "zcadexternal.topsplacesmokedetectorortoparam~inserttype"
+msgid "Insert"
+msgstr ""
+
+#: zcadexternal.topsplacesmokedetectorortoparam~ndd
+msgid "Sensor-Sensor(standard)"
+msgstr ""
+
+#: zcadexternal.topsplacesmokedetectorortoparam~ndw
+msgid "Sensor-Wall(standard)"
+msgstr ""
+
+#: zcadexternal.topsplacesmokedetectorortoparam~normalizepoint
+msgctxt "zcadexternal.topsplacesmokedetectorortoparam~normalizepoint"
+msgid "Normalize to grid (if enabled)"
+msgstr ""
+
+#: zcadexternal.topsplacesmokedetectorortoparam~reductionfactor
+msgid "Reduction factor"
+msgstr ""
+
+#: zcadexternal.topsplacesmokedetectorortoparam~scale
+msgid "Plan scale"
+msgstr ""
+
+#: zcadexternal.topsplacesmokedetectorortoparam~scaleblock
+msgctxt "zcadexternal.topsplacesmokedetectorortoparam~scaleblock"
+msgid "Blocks scale"
+msgstr ""
+
+#: zcadexternal.topsplacesmokedetectorortoparam~sensorsensordistance
+msgid "Sensor-sensor distance reduction"
+msgstr ""
+
+#: zcadexternal.topsplacesmokedetectorortoparam~sensorwalldistance
+msgid "Sensor-wall distance reduction"
+msgstr ""
+
+#: zcadexternal.topsplacesmokedetectorortoparam~startauto
+msgid "\"Start\" signal"
+msgstr ""
+
+#: zcadexternal.tortodevplaceparam~angle
+msgctxt "zcadexternal.tortodevplaceparam~angle"
+msgid "Rotation"
+msgstr ""
+
+#: zcadexternal.tortodevplaceparam~autoangle
+msgid "Auto rotation"
+msgstr ""
+
+#: zcadexternal.tortodevplaceparam~count
+msgid "Total number"
+msgstr ""
+
+#: zcadexternal.tortodevplaceparam~counttype
+msgid "Type of placement"
+msgstr ""
+
+#: zcadexternal.tortodevplaceparam~name
+msgctxt "zcadexternal.tortodevplaceparam~name"
+msgid "Block"
+msgstr ""
+
+#: zcadexternal.tortodevplaceparam~normalizepoint
+msgctxt "zcadexternal.tortodevplaceparam~normalizepoint"
+msgid "Normalize to grid (if enabled)"
+msgstr ""
+
+#: zcadexternal.tortodevplaceparam~nx
+msgid "Number of length"
+msgstr ""
+
+#: zcadexternal.tortodevplaceparam~ny
+msgid "Number of width"
+msgstr ""
+
+#: zcadexternal.tortodevplaceparam~scaleblock
+msgctxt "zcadexternal.tortodevplaceparam~scaleblock"
+msgid "Blocks scale"
+msgstr ""
+
+#: zcadexternal.tosmodeeditor~osm
+msgctxt "zcadexternal.tosmodeeditor~osm"
+msgid "Snap"
+msgstr ""
+
+#: zcadexternal.tosmodeeditor~trace
+msgctxt "zcadexternal.tosmodeeditor~trace"
+msgid "Trace"
+msgstr ""
+
+#: zcadexternal.tosmode~kosm_3
+msgctxt "zcadexternal.tosmode~kosm_3"
+msgid "1/3"
+msgstr ""
+
+#: zcadexternal.tosmode~kosm_4
+msgctxt "zcadexternal.tosmode~kosm_4"
+msgid "1/4"
+msgstr ""
+
+#: zcadexternal.tosmode~kosm_apparentintersection
+msgid "Apparent intersection"
+msgstr ""
+
+#: zcadexternal.tosmode~kosm_center
+msgctxt "zcadexternal.tosmode~kosm_center"
+msgid "Center"
+msgstr ""
+
+#: zcadexternal.tosmode~kosm_endpoint
+msgid "Endpoint"
+msgstr ""
+
+#: zcadexternal.tosmode~kosm_inspoint
+msgid "Insertion"
+msgstr ""
+
+#: zcadexternal.tosmode~kosm_intersection
+msgid "Intersection"
+msgstr ""
+
+#: zcadexternal.tosmode~kosm_midpoint
+msgid "Midpoint"
+msgstr ""
+
+#: zcadexternal.tosmode~kosm_nearest
+msgid "Nearest"
+msgstr ""
+
+#: zcadexternal.tosmode~kosm_paralel
+msgid "Paralel"
+msgstr ""
+
+#: zcadexternal.tosmode~kosm_perpendicular
+msgid "Perpendicular"
+msgstr ""
+
+#: zcadexternal.tosmode~kosm_point
+msgid "Point"
+msgstr ""
+
+#: zcadexternal.tosmode~kosm_quadrant
+msgid "Quadrant"
+msgstr ""
+
+#: zcadexternal.tosmode~kosm_tangent
+msgid "Tangent"
+msgstr ""
+
+#: zcadexternal.tpath~additionalsupport_path
+msgid "Additional support files"
+msgstr ""
+
+#: zcadexternal.tpath~alternate_font
+msgid "Alternate font file"
+msgstr ""
+
+#: zcadexternal.tpath~device_library
+msgid "Device base"
+msgstr ""
+
+#: zcadexternal.tpath~dictionaries
+msgid "Dictionaries"
+msgstr ""
+
+#: zcadexternal.tpath~fonts_path
+msgid "Fonts"
+msgstr ""
+
+#: zcadexternal.tpath~layoutfile
+msgid "Current layout"
+msgstr ""
+
+#: zcadexternal.tpath~preload_path
+msgid "Preload files"
+msgstr ""
+
+#: zcadexternal.tpath~program_run
+msgid "Program"
+msgstr ""
+
+#: zcadexternal.tpath~support_path
+msgid "Support files"
+msgstr ""
+
+#: zcadexternal.tpath~template_file
+msgid "Default template"
+msgstr ""
+
+#: zcadexternal.tpath~template_path
+msgid "Templates"
+msgstr ""
+
+#: zcadexternal.tpath~temp_files
+msgid "Temporary files"
+msgstr ""
+
+#: zcadexternal.tphase~_a
+msgid "A"
+msgstr ""
+
+#: zcadexternal.tphase~_abc
+msgid "ABC"
+msgstr ""
+
+#: zcadexternal.tphase~_b
+msgid "B"
+msgstr ""
+
+#: zcadexternal.tphase~_c
+msgctxt "zcadexternal.tphase~_c"
+msgid "C"
+msgstr ""
+
+#: zcadexternal.tplacesensorsstrategy~tpss_bynum
+msgid "By number"
+msgstr ""
+
+#: zcadexternal.tplacesensorsstrategy~tpss_fixdd
+msgid "Sensor-Sensor distance fix"
+msgstr ""
+
+#: zcadexternal.tplacesensorsstrategy~tpss_fixdw
+msgid "Sensor-Wall distance fix"
+msgstr ""
+
+#: zcadexternal.tplacesensorsstrategy~tpss_proportional
+msgid "Proportional"
+msgstr ""
+
+#: zcadexternal.trd~rd_currentwaparam
+msgid "Current graphic device params"
+msgstr ""
+
+#: zcadexternal.trd~rd_drawinsidepaintmessage
+msgid "Draw inside paint message"
+msgstr ""
+
+#: zcadexternal.trd~rd_gluextensions
+msgid "GLU Extensions"
+msgstr ""
+
+#: zcadexternal.trd~rd_gluversion
+msgid "GLU Version"
+msgstr ""
+
+#: zcadexternal.trd~rd_imagedegradation
+msgid "Image degradation"
+msgstr ""
+
+#: zcadexternal.trd~rd_lastcalcvisible
+msgid "Last visible calculation time"
+msgstr ""
+
+#: zcadexternal.trd~rd_lastrendertime
+msgid "Last render time"
+msgstr ""
+
+#: zcadexternal.trd~rd_lastupdatetime
+msgid "Last update time"
+msgstr ""
+
+#: zcadexternal.trd~rd_maxltpatternsinentity
+msgid "Max LT patterns in entity"
+msgstr ""
+
+#: zcadexternal.trd~rd_maxrendertime
+msgid "Maximum single pass time"
+msgstr ""
+
+#: zcadexternal.trd~rd_panobjectdegradation
+msgid "Degradation while pan"
+msgstr ""
+
+#: zcadexternal.trd~rd_rendererbackend
+msgid "Graphic device"
+msgstr ""
+
+#: zcadexternal.trd~rd_spatialnodecount
+msgid "Spatial index ents in node"
+msgstr ""
+
+#: zcadexternal.trd~rd_spatialnodesdepth
+msgid "Spatial index nodes depth"
+msgstr ""
+
+#: zcadexternal.trd~rd_uselazfreetypeimplementation
+msgid "Use LazFreeType engine instead FreeType"
+msgstr ""
+
+#: zcadexternal.trestoremode~wnd_accumbuffer
+msgid "ACCUM buffer"
+msgstr ""
+
+#: zcadexternal.trestoremode~wnd_auxbuffer
+msgid "AUX buffer"
+msgstr ""
+
+#: zcadexternal.trestoremode~wnd_drawpixels
+msgid "Memory"
+msgstr ""
+
+#: zcadexternal.trestoremode~wnd_newdraw
+msgid "Redraw"
+msgstr ""
+
+#: zcadexternal.trestoremode~wnd_texture
+msgid "Texture"
+msgstr ""
+
+#: zcadexternal.trgb~a
+msgid "Alpha"
+msgstr ""
+
+#: zcadexternal.trgb~b
+msgid "Blue"
+msgstr ""
+
+#: zcadexternal.trgb~g
+msgid "Green"
+msgstr ""
+
+#: zcadexternal.trgb~r
+msgid "Red"
+msgstr ""
+
+#: zcadexternal.tsavedparams~dictionariespath
+msgid "Dictionaries path"
+msgstr ""
+
+#: zcadexternal.tsavedparams~langoverride
+msgctxt "zcadexternal.tsavedparams~langoverride"
+msgid "Language override"
+msgstr ""
+
+#: zcadexternal.tsavedparams~memprofiling
+msgid "Internal memory profiler"
+msgstr ""
+
+#: zcadexternal.tsavedparams~noloadlayout
+msgctxt "zcadexternal.tsavedparams~noloadlayout"
+msgid "No load layout"
+msgstr ""
+
+#: zcadexternal.tsavedparams~nosplash
+msgctxt "zcadexternal.tsavedparams~nosplash"
+msgid "No splash screen"
+msgstr ""
+
+#: zcadexternal.tsavedparams~uniqueinstance
+msgctxt "zcadexternal.tsavedparams~uniqueinstance"
+msgid "Unique instance"
+msgstr ""
+
+#: zcadexternal.tsavedparams~updatepo
+msgctxt "zcadexternal.tsavedparams~updatepo"
+msgid "Update PO file"
+msgstr ""
+
+#: zcadexternal.tsave~save_auto_current_interval
+msgid "Time to autosave"
+msgstr ""
+
+#: zcadexternal.tsave~save_auto_filename
+msgid "Autosave file name"
+msgstr ""
+
+#: zcadexternal.tsave~save_auto_interval
+msgid "Time between autosaves"
+msgstr ""
+
+#: zcadexternal.tsave~save_auto_on
+msgctxt "zcadexternal.tsave~save_auto_on"
+msgid "Autosave"
+msgstr ""
+
+#: zcadexternal.tstrokesarray~lengthfact
+msgctxt "zcadexternal.tstrokesarray~lengthfact"
+msgid "Length"
+msgstr ""
+
+#: zcadexternal.tsysparam~notsaved
+msgid "Not saved params"
+msgstr ""
+
+#: zcadexternal.tsysparam~saved
+msgid "Saved params"
+msgstr ""
+
+#: zcadexternal.tsys~ssy_compileinfo
+msgid "Build info"
+msgstr ""
+
+#: zcadexternal.tsys~sys_memprofiling
+msgid "Memory profiling"
+msgstr ""
+
+#: zcadexternal.tsys~sys_noloadlayout
+msgctxt "zcadexternal.tsys~sys_noloadlayout"
+msgid "No load layout"
+msgstr ""
+
+#: zcadexternal.tsys~sys_nosplash
+msgctxt "zcadexternal.tsys~sys_nosplash"
+msgid "No splash screen"
+msgstr ""
+
+#: zcadexternal.tsys~sys_runtime
+msgid "Uptime"
+msgstr ""
+
+#: zcadexternal.tsys~sys_uniqueinstance
+msgctxt "zcadexternal.tsys~sys_uniqueinstance"
+msgid "Unique instance"
+msgstr ""
+
+#: zcadexternal.tsys~sys_updatepo
+msgctxt "zcadexternal.tsys~sys_updatepo"
+msgid "Update PO file"
+msgstr ""
+
+#: zcadexternal.tsys~sys_version
+msgid "Program version"
+msgstr ""
+
+#: zcadexternal.ttablecelljustify~jcc
+msgctxt "zcadexternal.ttablecelljustify~jcc"
+msgid "TopCenter"
+msgstr ""
+
+#: zcadexternal.ttablecelljustify~jcl
+msgctxt "zcadexternal.ttablecelljustify~jcl"
+msgid "TopLeft"
+msgstr ""
+
+#: zcadexternal.ttablecelljustify~jcr
+msgctxt "zcadexternal.ttablecelljustify~jcr"
+msgid "TopRight"
+msgstr ""
+
+#: zcadexternal.ttextjustify~jsbc
+msgid "BottomCenter"
+msgstr ""
+
+#: zcadexternal.ttextjustify~jsbl
+msgid "BottomLeft"
+msgstr ""
+
+#: zcadexternal.ttextjustify~jsbr
+msgid "BottomRight"
+msgstr ""
+
+#: zcadexternal.ttextjustify~jsbtc
+msgctxt "zcadexternal.ttextjustify~jsbtc"
+msgid "Center"
+msgstr ""
+
+#: zcadexternal.ttextjustify~jsbtl
+msgid "Left"
+msgstr ""
+
+#: zcadexternal.ttextjustify~jsbtr
+msgid "Right"
+msgstr ""
+
+#: zcadexternal.ttextjustify~jsmc
+msgid "MiddleCenter"
+msgstr ""
+
+#: zcadexternal.ttextjustify~jsml
+msgid "MiddleLeft"
+msgstr ""
+
+#: zcadexternal.ttextjustify~jsmr
+msgid "MiddleRight"
+msgstr ""
+
+#: zcadexternal.ttextjustify~jstc
+msgctxt "zcadexternal.ttextjustify~jstc"
+msgid "TopCenter"
+msgstr ""
+
+#: zcadexternal.ttextjustify~jstl
+msgctxt "zcadexternal.ttextjustify~jstl"
+msgid "TopLeft"
+msgstr ""
+
+#: zcadexternal.ttextjustify~jstr
+msgctxt "zcadexternal.ttextjustify~jstr"
+msgid "TopRight"
+msgstr ""
+
+#: zcadexternal.ttraceangle~tta30
+msgid "30 deg"
+msgstr ""
+
+#: zcadexternal.ttraceangle~tta45
+msgid "45 deg"
+msgstr ""
+
+#: zcadexternal.ttraceangle~tta90
+msgid "90 deg"
+msgstr ""
+
+#: zcadexternal.ttracemode~angle
+msgctxt "zcadexternal.ttracemode~angle"
+msgid "Angle"
+msgstr ""
+
+#: zcadexternal.ttracemode~zaxis
+msgid "Z Axis"
+msgstr ""
+
+#: zcadexternal.ttreeadress~owner
+msgctxt "zcadexternal.ttreeadress~owner"
+msgid "Adress"
+msgstr ""
+
+#: zcadexternal.ttreeadress~selfindex
+msgctxt "zcadexternal.ttreeadress~selfindex"
+msgid "Position"
+msgstr ""
+
+#: zcadexternal.tunitmode~umwithoutspaces
+msgid "Without spaces"
+msgstr ""
+
+#: zcadexternal.tunitmode~umwithspaces
+msgid "With spaces"
+msgstr ""
+
+#: zcadexternal.tuprec~uprec0
+msgid "0"
+msgstr ""
+
+#: zcadexternal.tuprec~uprec1
+msgctxt "zcadexternal.tuprec~uprec1"
+msgid "0.0"
+msgstr ""
+
+#: zcadexternal.tuprec~uprec2
+msgid "0.00"
+msgstr ""
+
+#: zcadexternal.tuprec~uprec3
+msgid "0.000"
+msgstr ""
+
+#: zcadexternal.tuprec~uprec4
+msgid "0.0000"
+msgstr ""
+
+#: zcadexternal.tuprec~uprec5
+msgid "0.00000"
+msgstr ""
+
+#: zcadexternal.tuprec~uprec6
+msgid "0.000000"
+msgstr ""
+
+#: zcadexternal.tuprec~uprec7
+msgid "0.0000000"
+msgstr ""
+
+#: zcadexternal.tuprec~uprec8
+msgid "0.00000000"
+msgstr ""
+
+#: zcadexternal.tvariableprocessselector~vps_allents
+msgid "All ents"
+msgstr ""
+
+#: zcadexternal.tvariableprocessselector~vps_allentsseparated
+msgid "All ents separated"
+msgstr ""
+
+#: zcadexternal.tvariableprocessselector~vps_onlyrelatedents
+msgid "Only related ents"
+msgstr ""
+
+#: zcadexternal.tvariableprocessselector~vps_onlythisents
+msgid "Only this ents"
+msgstr ""
+
+#: zcadexternal.varcategory~bty
+msgid "Blockdef params"
+msgstr ""
+
+#: zcadexternal.varcategory~cable
+msgid "Cable params"
+msgstr ""
+
+#: zcadexternal.varcategory~center
+msgctxt "zcadexternal.varcategory~center"
+msgid "Center"
+msgstr ""
+
+#: zcadexternal.varcategory~db
+msgid "Data base"
+msgstr ""
+
+#: zcadexternal.varcategory~delta
+msgid "Delta"
+msgstr ""
+
+#: zcadexternal.varcategory~desc
+msgctxt "zcadexternal.varcategory~desc"
+msgid "Description"
+msgstr ""
+
+#: zcadexternal.varcategory~device
+msgid "Device params"
+msgstr ""
+
+#: zcadexternal.varcategory~el
+msgid "El(deprecated)"
+msgstr ""
+
+#: zcadexternal.varcategory~end
+msgctxt "zcadexternal.varcategory~end"
+msgid "End"
+msgstr ""
+
+#: zcadexternal.varcategory~extdrlayercontrol
+msgid "Layer control"
+msgstr ""
+
+#: zcadexternal.varcategory~extdrnetconnector
+msgid "Connector control"
+msgstr ""
+
+#: zcadexternal.varcategory~extdrssmarttextent
+msgid "Text control"
+msgstr ""
+
+#: zcadexternal.varcategory~gc
+msgid "Group connection"
+msgstr ""
+
+#: zcadexternal.varcategory~insert
+msgctxt "zcadexternal.varcategory~insert"
+msgid "Insert"
+msgstr ""
+
+#: zcadexternal.varcategory~length
+msgid "Length params"
+msgstr ""
+
+#: zcadexternal.varcategory~nmo
+msgctxt "zcadexternal.varcategory~nmo"
+msgid "Name"
+msgstr ""
+
+#: zcadexternal.varcategory~normal
+msgid "Normal"
+msgstr ""
+
+#: zcadexternal.varcategory~objfunc
+msgid "Function:object"
+msgstr ""
+
+#: zcadexternal.varcategory~scale
+msgctxt "zcadexternal.varcategory~scale"
+msgid "Scale"
+msgstr ""
+
+#: zcadexternal.varcategory~start
+msgid "Start"
+msgstr ""
+
+#: zcadexternal.varcategory~summary
+msgctxt "zcadexternal.varcategory~summary"
+msgid "Summary"
+msgstr ""
+
+#: zcadexternal.varcategory~unitparam
+msgid "Measured parameter"
+msgstr ""
+

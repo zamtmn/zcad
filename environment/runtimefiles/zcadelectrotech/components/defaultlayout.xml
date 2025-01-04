@@ -25,7 +25,7 @@
             <Anchors Left="AnchorDockSplitter2"/>
           </Item2>
           <Item3 Name="PageControl" Type="Control" Monitor="0">
-            <Bounds Left="300" Width="712" Height="620"/>
+            <Bounds Left="300" Width="493" Height="620"/>
             <Anchors Left="AnchorDockSplitter2" Right="AnchorDockSplitter3" Bottom="AnchorDockSplitter1"/>
           </Item3>
           <Item4 Name="AnchorDockSplitter2" Type="SplitterVertical" Monitor="0">
@@ -36,26 +36,26 @@
             <Anchors Right="AnchorDockSplitter2"/>
           </Item5>
           <Item6 Name="AnchorDockSplitter3" Type="SplitterVertical" Monitor="0">
-            <Bounds Left="1012" Width="4" Height="620"/>
+            <Bounds Left="793" Width="4" Height="620"/>
             <Anchors Bottom="AnchorDockSplitter1"/>
           </Item6>
           <Item7 Name="AnchorDockSite11" Type="Pages" Monitor="0" ChildCount="4">
-            <Bounds Left="1016" Width="282" Height="620"/>
+            <Bounds Left="797" Width="501" Height="620"/>
             <Anchors Left="AnchorDockSplitter3" Bottom="AnchorDockSplitter1"/>
             <Item1 Name="NavigatorDevices" Type="Control" Monitor="0">
-              <Bounds Width="274" Height="573"/>
+              <Bounds Width="493" Height="573"/>
               <Anchors Align="Client"/>
             </Item1>
             <Item2 Name="NavigatorCables" Type="Control" Monitor="0">
-              <Bounds Width="274" Height="573"/>
+              <Bounds Width="493" Height="573"/>
               <Anchors Align="Client"/>
             </Item2>
             <Item3 Name="NavigatorRisers" Type="Control" Monitor="0">
-              <Bounds Width="274" Height="573"/>
+              <Bounds Width="493" Height="573"/>
               <Anchors Align="Client"/>
             </Item3>
             <Item4 Name="TOOLPALETTE_BlockLib" Type="Control" Monitor="0">
-              <Bounds Width="274" Height="573"/>
+              <Bounds Width="493" Height="573"/>
               <Anchors Align="Client"/>
             </Item4>
           </Item7>
@@ -71,9 +71,10 @@
       <Item2 Name="ObjProp" Type="ToolBar" Width="1015"/>
     </Item0>
     <Item1 Name="CoolBarL" Type="CoolBar" ItemCount="0"/>
-    <Item2 Name="CoolBarR" Type="CoolBar" ItemCount="2">
-      <Item0 Name="Draw" Type="ToolBar" Break="False" Width="221"/>
-      <Item1 Name="Modify" Type="ToolBar" Break="False" Width="330"/>
+    <Item2 Name="CoolBarR" Type="CoolBar" ItemCount="3">
+      <Item0 Name="Quick" Type="ToolBar" Width="102"/>
+      <Item1 Name="Draw" Type="ToolBar" Break="False" Width="221"/>
+      <Item2 Name="Modify" Type="ToolBar" Break="False" Width="330"/>
     </Item2>
     <Item3 Name="CoolBarD" Type="CoolBar" ItemCount="4">
       <Item0 Name="ElectrotechEnts" Type="ToolBar" Width="117"/>

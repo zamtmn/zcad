@@ -74,7 +74,12 @@ function GetSupportPaths:String;
 //путь к бинарнику
 function GetBinaryPath:String;
 //путь к дистрибутиву
+function GetDistribPath:String;
+procedure SetDistribPath(const APath:String);
+//путь к конфигам программы
 function GetRoCfgsPath:String;
+//путь к конфигам юзера
+function GetWrCfgsPath:String;
 //путь к папке временных файлов
 function GetTempPath:String;
 //дополнительные пути с файлами поддержки, сюда рути добавляются скриптами при
@@ -95,8 +100,11 @@ procedure FromDirsIterator(const APath,AMask,AFirstLoadFileName:String;
                            AProc:TFromDirIterator;AMethod:TFromDirIteratorObj;
                            APData:pointer=nil;AIgnoreDoubles:Boolean=False);
 
-//поиск расположения дистрибутива, см. вариант 2 выше про DataPaths
-function FindDistroPath(const CF:TDataFilesExistChecFunc):string;
+//поиск расположения конфигов
+function FindDistribPath(const CF:TDataFilesExistChecFunc):string;
+
+//поиск расположения дистрибутива
+function FindConfigsPath(const CF:TDataFilesExistChecFunc):string;
 
 var
   //SupportPath сохраняется и настраивается, поэтому в интерфейсе с доступом
@@ -106,6 +114,10 @@ var
 implementation
 
 var
+  //доступ геттером и сеттером
+  DistribPath:String;
+  //DistribPath переопределен
+  DistribPathOverride:boolean;
   //остальные переменные с доступом только по геттеру
   BinaryPath,TempPath,AdditionalSupportPaths,RoCfgsPath,WrCfgsPath:String;
 
@@ -140,9 +152,22 @@ function GetBinaryPath:String;
 begin
   result:=BinaryPath;
 end;
+function GetDistribPath:String;
+begin
+  result:=DistribPath;
+end;
+procedure SetDistribPath(const APath:String);
+begin
+  if not DistribPathOverride then
+    DistribPath:=APath;
+end;
 function GetRoCfgsPath:String;
 begin
   result:=RoCfgsPath;
+end;
+function GetWrCfgsPath:String;
+begin
+  result:=WrCfgsPath;
 end;
 function GetTempPath:String;
 begin
@@ -333,7 +358,7 @@ begin
   if AIgnoreDoubles then
     vs.done;
 end;
-function FindDistroPath(const CF:TDataFilesExistChecFunc):string;
+function FindConfigsPath(const CF:TDataFilesExistChecFunc):string;
 var
   ts:string;
 begin
@@ -351,9 +376,28 @@ begin
       RoCfgsPath:=Result;
   end;
 end;
+
+function FindDistribPath(const CF:TDataFilesExistChecFunc):string;
+var
+  ts:string;
+begin
+  try
+    if @cf<>nil then begin
+      if cf(DistribPath) then
+        exit(DistribPath);
+    end;
+    Result:='';
+  finally
+    if result<>''then
+      DistribPathOverride:=True;
+  end;
+end;
+
 initialization
-  BinaryPath:=ExtractFilePath(paramstr(0));
-  RoCfgsPath:=ExpandFileName(BinaryPath+'../../cfg');
-  WrCfgsPath:=GetAppConfigDir(false);
-  TempPath:=GetTempDir;
+  BinaryPath:=ExcludeTrailingPathDelimiter(ExtractFilePath(paramstr(0)));
+  DistribPath:=ExpandFileName(ConcatPaths([BinaryPath,'..','..','data']));
+  DistribPathOverride:=false;
+  RoCfgsPath:=ExpandFileName(ConcatPaths([BinaryPath,'..','..','cfg']));
+  WrCfgsPath:=ExcludeTrailingPathDelimiter(GetAppConfigDir(false));
+  TempPath:=ExcludeTrailingPathDelimiter(GetTempDir);
 end.

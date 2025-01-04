@@ -22,9 +22,7 @@ unit uzcFileStructure;
 interface
 const
   CFSrtlDir='rtl';
-  CFSconfigxmlFile='config.xml';
-  CFSsysvarpasFile='sysvar.pas';
-  CFSsavedvarpasFile='savedvar.pas';
+  CFSsystempasFile='system.pas';
 
   CFScomponentsDir='components';
   CFSdefaultlayoutxmlFile='defaultlayout.xml';
@@ -33,6 +31,10 @@ const
   CFSlogopngFile='logo.png';
 
   CFSconfigsDir='configs';
+  CFSconfigxmlFile='config.xml';
+  CFSsysvarpasFile='sysvar.pas';
+  CFSsavedvarpasFile='savedvar.pas';
+
   CFSnavigatorsDir='navigators';
 
   CFSdictionariesDir='dictionaries';

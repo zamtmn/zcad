@@ -68,7 +68,7 @@ begin
 end;
 class function TZCADPathsMacroMethods.MacroFuncDistribPath(const {%H-}Param: string; const Data: PtrInt;var {%H-}Abort: boolean): string;
 begin
-  result:=sysparam.saved.DistribPath;
+  result:=GetDistribPath{sysparam.saved.PreferredDistribPath};
 end;
 class function TZCADPathsMacroMethods.MacroFuncDictPath(const {%H-}Param: string; const Data: PtrInt;
                                              var {%H-}Abort: boolean): string;

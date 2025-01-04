@@ -141,10 +141,15 @@ begin
 
   finally programlog.leave(IfEntered);end;
 end;
-function DataFilesExistChec(const ACheckedPath:string):boolean;
+function ConfigsFilesExistChec(const ACheckedPath:string):boolean;
 begin
   result:=DirectoryExists(ConcatPaths([ACheckedPath,CFSconfigsDir]))
       and FileExists(ConcatPaths([ACheckedPath,CFSconfigsDir,CFSsysvarpasFile]));
+end;
+function DistribFilesExistChec(const ACheckedPath:string):boolean;
+begin
+  result:=DirectoryExists(ConcatPaths([ACheckedPath,CFSrtlDir]))
+      and FileExists(ConcatPaths([ACheckedPath,CFSrtlDir,CFSsystempasFile]));
 end;
 
 Procedure GetSysInfo;
@@ -197,7 +202,8 @@ begin
 end;
 procedure FindData;
 begin
-  FindDistroPath(DataFilesExistChec);
+  FindDistribPath(DistribFilesExistChec);
+  FindConfigsPath(ConfigsFilesExistChec);
 end;
 
 initialization

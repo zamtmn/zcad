@@ -43,7 +43,7 @@ type
     LangOverride:string;(*'Language override'*)
     DictionariesPath:string;(*'Dictionaries path'*)
     LastAutoSaveFile:string;(*'Last autosave file'*)
-    DistribPath:String;(*'Path to distributive'*)
+    PreferredDistribPath:String;(*'Path to distributive'*)
   end;
   {REGISTERRECORDTYPE tnotsavedparams}
   tnotsavedparams=record
@@ -70,7 +70,7 @@ const
                                    LangOverride:'';
                                    DictionariesPath:'ru=$(ZCADDictionariesPath)/ru_RU.dic|en=$(ZCADDictionariesPath)/en_US.dic;$(ZCADDictionariesPath)/en_US_interface.dic|abbrv=$(ZCADDictionariesPath)/abbrv.dic';
                                    LastAutoSaveFile:'noAutoSaveFile';
-                                   DistribPath:'sss');
+                                   PreferredDistribPath:'sss');
   zcaduniqueinstanceid='zcad unique instance';
 var
   SysParam: tsysparam;
@@ -94,7 +94,7 @@ begin
   Config.SetDeleteValue('LangOverride',Params.LangOverride,DefaultSavedParams.LangOverride);
   Config.SetDeleteValue('DictionariesPath',Params.DictionariesPath,DefaultSavedParams.DictionariesPath);
   Config.SetDeleteValue('LastAutoSaveFile',Params.LastAutoSaveFile,DefaultSavedParams.LastAutoSaveFile);
-  Config.SetDeleteValue('DistribPath',Params.DistribPath,DefaultSavedParams.DistribPath);
+  Config.SetDeleteValue('PreferredDistribPath',Params.PreferredDistribPath,DefaultSavedParams.PreferredDistribPath);
   Config.UndoAppendBasePath;
 end;
 
@@ -145,7 +145,8 @@ begin
   Params.LangOverride:=XMLConfig.GetAnsiValue('LangOverride',DefaultSavedParams.LangOverride);
   Params.DictionariesPath:=XMLConfig.GetAnsiValue('DictionariesPath',DefaultSavedParams.DictionariesPath);
   Params.LastAutoSaveFile:=XMLConfig.GetAnsiValue('LastAutoSaveFile',DefaultSavedParams.LastAutoSaveFile);
-  Params.DistribPath:=XMLConfig.GetAnsiValue('DistribPath',DefaultSavedParams.DistribPath);
+  Params.PreferredDistribPath:=XMLConfig.GetAnsiValue('PreferredDistribPath',DefaultSavedParams.PreferredDistribPath);
+  SetDistribPath(Params.PreferredDistribPath);
   XMLConfig.CloseKey;
   FreeAndNil(XMLConfig);
 end;

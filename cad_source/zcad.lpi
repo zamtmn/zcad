@@ -26,7 +26,7 @@
     </General>
     <i18n>
       <EnableI18N Value="True"/>
-      <OutDir Value="../cad/languages"/>
+      <OutDir Value="../cad/data/languages"/>
     </i18n>
     <VersionInfo>
       <UseVersionInfo Value="True"/>

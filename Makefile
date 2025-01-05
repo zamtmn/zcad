@@ -167,16 +167,18 @@ afterzcadelectrotechbuild: checkallvars version
 	$(ZP)/zcad nosplash runscript cad/components/afterbuild.cmd
 cad:
 	mkdir cad
-cad/data/help:
+cad/data:
+	mkdir $(subst /,$(PATHDELIM),cad/data)
+cad/data/help: cad cad/data
 	mkdir $(subst /,$(PATHDELIM),cad/data/help)
-cad/data/help/locale:
+cad/data/help/locale: cad cad/data cad/data/help
 	mkdir $(subst /,$(PATHDELIM),cad/data/help/locale)
-cad/data/help/locale/ru:
+cad/data/help/locale/ru: cad cad/data cad/data/help cad/data/help/locale
 	mkdir $(subst /,$(PATHDELIM),cad/data/help/locale/ru)
-cad/data/help/locale/ru/_images:
+cad/data/help/locale/ru/_images: cad cad/data cad/data/help cad/data/help/locale cad/data/help/locale/ru
 	mkdir $(subst /,$(PATHDELIM),cad/data/help/locale/ru/_images)
 
-documentation: checkvars cad cad/data/help cad/data/help/locale cad/data/help/locale/ru cad/data/help/locale/ru/_images
+documentation: checkvars cad cad/data cad/data/help cad/data/help/locale cad/data/help/locale/ru cad/data/help/locale/ru/_images
 	$(MAKE) -C cad_source/docs/userguide all
 	cp cad_source/docs/userguide/*.html cad/data/help
 	cp cad_source/docs/userguide/*.pdf cad/data/help

@@ -32,7 +32,7 @@ cad:
 	mkdir $(subst /,$(PATHDELIM),../images)
 
 copyimages: ../images
-	cp -r ../../../environment/runtimefiles/common/images/* ../images
+	cp -r ../../../environment/runtimefiles/common/data/images/* ../images
 
 pdf: getpdftheme version copyimages
 	asciidoctor-pdf -a pdf-themesdir=styles -a pdf-theme=zcadd -r asciidoctor-diagram userguide.ru.adoc

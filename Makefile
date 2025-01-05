@@ -167,20 +167,20 @@ afterzcadelectrotechbuild: checkallvars version
 	$(ZP)/zcad nosplash runscript cad/components/afterbuild.cmd
 cad:
 	mkdir cad
-cad/help:
-	mkdir $(subst /,$(PATHDELIM),cad/help)
-cad/help/locale:
-	mkdir $(subst /,$(PATHDELIM),cad/help/locale)
-cad/help/locale/ru:
-	mkdir $(subst /,$(PATHDELIM),cad/help/locale/ru)
-cad/help/locale/ru/_images:
-	mkdir $(subst /,$(PATHDELIM),cad/help/locale/ru/_images)
+cad/data/help:
+	mkdir $(subst /,$(PATHDELIM),cad/data/help)
+cad/data/help/locale:
+	mkdir $(subst /,$(PATHDELIM),cad/data/help/locale)
+cad/data/help/locale/ru:
+	mkdir $(subst /,$(PATHDELIM),cad/data/help/locale/ru)
+cad/data/help/locale/ru/_images:
+	mkdir $(subst /,$(PATHDELIM),cad/data/help/locale/ru/_images)
 
-documentation: checkvars cad cad/help cad/help/locale cad/help/locale/ru cad/help/locale/ru/_images
+documentation: checkvars cad cad/data/help cad/data/help/locale cad/data/help/locale/ru cad/data/help/locale/ru/_images
 	$(MAKE) -C cad_source/docs/userguide all
-	cp cad_source/docs/userguide/*.html cad/help
-	cp cad_source/docs/userguide/*.pdf cad/help
-	cp -r cad_source/docs/userguide/locale/ru/_images/* cad/help/locale/ru/_images
+	cp cad_source/docs/userguide/*.html cad/data/help
+	cp cad_source/docs/userguide/*.pdf cad/data/help
+	cp -r cad_source/docs/userguide/locale/ru/_images/* cad/data/help/locale/ru/_images
 
 tests: checkvars
 	$(MAKE) -C cad_source/components/zcontainers/tests LP=$(LP) PCP=$(PCP) clean all

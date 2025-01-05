@@ -59,7 +59,7 @@ begin
   end;
 
   if itAutoSave then begin
-    LoadParams(FindFileInDataPaths(CFSconfigsDir,CFSconfigxmlFile),TempSavedParam);
+    LoadParams(FindFileInCfgsPaths(CFSconfigsDir,CFSconfigxmlFile),TempSavedParam);
     TempSavedParam.LastAutoSaveFile:=s1;
     SysParam.saved.LastAutoSaveFile:=s1;
     SaveParams(GetWritableFilePath(CFSconfigsDir,CFSconfigxmlFile),TempSavedParam);

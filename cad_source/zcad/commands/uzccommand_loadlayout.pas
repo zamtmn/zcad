@@ -81,9 +81,9 @@ begin
   else
     filename:=Operands;
   if not fileexists(filename) then
-    filename:=FindFileInDataPaths(CFScomponentsDir,filename);
+    filename:=FindFileInCfgsPaths(CFScomponentsDir,filename);
   if filename='' then
-    filename:=FindFileInDataPaths(CFScomponentsDir,CFSdefaultlayoutxmlFile);
+    filename:=FindFileInCfgsPaths(CFScomponentsDir,CFSdefaultlayoutxmlFile);
   LoadLayoutFromFile(Filename);
   result:=cmd_ok;
 end;

@@ -42,7 +42,8 @@ uses
        uzcimagesmanager,
   {}
        uzmacros,uzxmlnodesutils,
-       uzcguimanager;
+       uzcguimanager,
+    uzcFileStructure;
 type
   PTDummyMyActionsArray=^TDummyMyActionsArray;
   TDummyMyActionsArray=Array [0..0] of TmyAction;
@@ -80,6 +81,12 @@ var
   localpm:TFiletoMenuIteratorData;
 implementation
 
+const
+  CDxfMask='*.dxf';
+  CDwgMask='*.dwg';
+  CDxf='Dxf';
+  CParentDir='..';
+
 {function FindMenuItem(name,localizedcaption:string;RootMenuItem:TMenuItem):TMenuItem;
 var
   i:integer;
@@ -109,9 +116,9 @@ end;
 class procedure ZMenuExt.ZMenuExtSampleFiles(MT:TMenuType;fmf:TForm;aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem;MPF:TMacroProcessFunc);
 begin
   localpm.localpm:=RootMenuItem;
-  localpm.ImageIndex:=ImagesManager.GetImageIndex('Dxf');
-  FromDirIterator(expandpath('$(DistribPath)/examples'),'*.dxf','',@bugfileiterator,nil);
-  FromDirIterator(expandpath('$(DistribPath)/examples'),'*.dwg','',@bugfileiterator,nil);
+  localpm.ImageIndex:=ImagesManager.GetImageIndex(CDxf);
+  FromDirIterator(GetPathsInDistribPath(CFSexamplesDir),CDxfMask,'',@bugfileiterator,nil);
+  FromDirIterator(GetPathsInDistribPath(CFSexamplesDir),CDwgMask,'',@bugfileiterator,nil);
   localpm.localpm:=nil;
   localpm.ImageIndex:=-1;
 end;
@@ -119,8 +126,8 @@ end;
 class procedure ZMenuExt.ZMenuExtDebugFiles(MT:TMenuType;fmf:TForm;aName: string;aNode: TDomNode;actlist:TActionList;RootMenuItem:TMenuItem;MPF:TMacroProcessFunc);
 begin
   localpm.localpm:=RootMenuItem;
-  localpm.ImageIndex:=ImagesManager.GetImageIndex('Dxf');
-  FromDirIterator(expandpath('$(RoCfgs)/../errors/'),'*.dxf','',@bugfileiterator,nil);
+  localpm.ImageIndex:=ImagesManager.GetImageIndex(CDxf);
+  FromDirIterator(ExpandPath(ConcatPaths([GetBinaryPath,CParentDir,CParentDir,CParentDir,CFSerrorsDir])),CDxfMask,'',@bugfileiterator,nil);
   localpm.localpm:=nil;
   localpm.ImageIndex:=-1;
 end;

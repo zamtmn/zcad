@@ -30,34 +30,10 @@ type
   TFromDirIteratorObj=procedure(const AFileName:String;PData:pointer)of object;
 
   //функция проверки наличия файлов дистрибутива программы по ACheckedPath
-  //нужно для определения наличия файлов данных дистрибутива рядом с бинарем
-  //или в местах спецефичных для ОС
+  //нужно для определения наличия файлов данных дистрибутива и конфигов рядом
+  //с бинарником (удобно для разработки) или в местах спецефичных для ОС
   TDataFilesExistChecFunc=function(const ACheckedPath:string):boolean;
 
-//подстановка макросов в APath
-function ExpandPath(APath:String):String;
-
-//поиск файла по списку путей разделенных ';'
-function FindInPaths(const APaths:String; const AFileName:String):String;
-
-//DistroPath - путь к дистрибутиву программы, это /etc/zcad/ или
-//ExtractFilePath(paramstr(0))+'../..' в зависимости где фактически лежат
-//файлы дистрибутива и что найдет FindDistroPath
-
-//DataPaths - пути данных программы, сейчас их 2, разделены ';'
-//1: /home/user/.config/zcad/
-//2: DistroPath
-//всё ищется сначала в 1, потом в 2
-//запись производится в 1
-
-//поиск файла в подпапке в DataPaths
-function FindFileInDataPaths(const ASubFolder:String;
-                             const AFileName:String):String;
-//пути к подпапке в DataPaths
-function GetPathsInDataPaths(const ASubFolder:String):String;
-//путь к подпапке в /home/user/.config/zcad/
-function GetWritableFilePath(const ASubFolder:String;
-                             const AFileName:String):String;
 
 //**Получает части текста разделеные разделителем.
 //**path - текст в котором идет поиск.
@@ -65,31 +41,6 @@ function GetWritableFilePath(const ASubFolder:String;
 //**part - переменная которая возвращает куски текста
 function GetPartOfPath(out part:String;
                        var path:String;const separator:String):String;
-
-//геттеры соответствующих переменных
-
-//разные пути с файлами поддержки, почти всегда поиск файлов осуществляется
-//по этим путям. пути соджет настроить юзер в настройках программы
-function GetSupportPaths:String;
-//путь к бинарнику
-function GetBinaryPath:String;
-//путь к дистрибутиву
-function GetDistribPath:String;
-procedure SetDistribPath(const APath:String);
-//путь к конфигам программы
-function GetRoCfgsPath:String;
-//путь к конфигам юзера
-function GetWrCfgsPath:String;
-//путь к папке временных файлов
-function GetTempPath:String;
-//дополнительные пути с файлами поддержки, сюда рути добавляются скриптами при
-//запуске программы, при загрузке preload, не сохраняются и не редактируются
-function GetAdditionalSupportPaths:String;
-
-function GetTempFileName(const APath,APrefix,AExt:String):String;
-
-//добавить путь в AdditionalSupportPaths
-procedure AddToAdditionalSupportPaths(const APath:String);
 
 //перебор файлов в папке/папках по маске, выполнение AProc и AMethod
 //с подходящими файлами
@@ -100,10 +51,78 @@ procedure FromDirsIterator(const APath,AMask,AFirstLoadFileName:String;
                            AProc:TFromDirIterator;AMethod:TFromDirIteratorObj;
                            APData:pointer=nil;AIgnoreDoubles:Boolean=False);
 
-//поиск расположения конфигов
-function FindDistribPath(const CF:TDataFilesExistChecFunc):string;
+//подстановка макросов в APath
+function ExpandPath(APath:String):String;
+
+//поиск файла по списку путей разделенных ';'
+function FindInPaths(const APaths:String; const AFileName:String):String;
+
+//RoCfgsPath - путь к конфигам программы, это /etc/zcad/ или
+//ExtractFilePath(paramstr(0))+'../../cfg' в зависимости где фактически лежат
+//файлы дистрибутива и что найдет FindConfigsPath
+
+//WrCfgsPath - путь к конфигам пользователя, это результат GetAppConfigDir(false)
+//обычно /home/%user%/.config/zcad/
+
+//CfgsPaths - пути данных программы, сейчас их 2, разделены ';'
+//1: WrCfgsPath
+//2: RoCfgsPath
+//конфиги ищутся сначала в 1, потом в 2
+//запись производится в 1
+
+//поиск файла в подпапке в директориях конфигов
+function FindFileInCfgsPaths(const ASubFolder:String;
+                             const AFileName:String):String;
+//пути к подпапке в директориях конфигов
+function GetPathsInCfgsPaths(const ASubFolder:String):String;
+//путь к файлу в WrCfgsPath
+function GetWritableFilePath(const ASubFolder:String;
+                             const AFileName:String):String;
+
+//DistribPath - путь к дистрибутиву программы, это /var/lib/zcad/ или
+//ExtractFilePath(paramstr(0))+'../../data' в зависимости где фактически лежат
+//файлы дистрибутива и что найдет FindDistribPath
+
+//пути к подпапке в DistribPath
+function GetPathsInDistribPath(const ASubFolder:String):String;
+
+//геттеры/сеттеры соответствующих путей
+
+//путь к дистрибутиву
+function GetDistribPath:String;
+//сеттер для возможность установить путь к дистрибутиву из конфигов, работает
+//только если дистрибктив не был обнаружен рядом с бинарником, см. выше
+//описание DistribPath
+procedure SetDistribPath(const APath:String);
+
+//разные пути с файлами поддержки, почти всегда поиск файлов осуществляется
+//по этим путям. пути поддержки моджет настроить юзер в настройках программы
+function GetSupportPaths:String;
+
+//дополнительные пути с файлами поддержки, сюда пути добавляются скриптами при
+//запуске программы, при загрузке preload, не сохраняются и не редактируются
+function GetAdditionalSupportPaths:String;
+//добавить путь в AdditionalSupportPaths
+procedure AddToAdditionalSupportPaths(const APath:String);
+
+//путь к бинарнику
+function GetBinaryPath:String;
+
+//путь к RO конфигам программы
+function GetRoCfgsPath:String;
+
+//путь к WR конфигам юзера
+function GetWrCfgsPath:String;
+
+//путь к папке временных файлов
+function GetTempPath:String;
+//файл в папке временных файлов
+function GetTempFileName(const APath,APrefix,AExt:String):String;
 
 //поиск расположения дистрибутива
+function FindDistribPath(const CF:TDataFilesExistChecFunc):string;
+
+//поиск расположения конфигов
 function FindConfigsPath(const CF:TDataFilesExistChecFunc):string;
 
 var
@@ -116,7 +135,7 @@ implementation
 var
   //доступ геттером и сеттером
   DistribPath:String;
-  //DistribPath переопределен
+  //DistribPath переопределен (FindDistribPath нашел дистрибутив рядом с бинарем)
   DistribPathOverride:boolean;
   //остальные переменные с доступом только по геттеру
   BinaryPath,TempPath,AdditionalSupportPaths,RoCfgsPath,WrCfgsPath:String;
@@ -195,28 +214,32 @@ begin
   Until not (FileExists(Result) or DirectoryExists(Result));
 end;
 
-function FindFileInDataPaths(const ASubFolder:String;const AFileName:String):String;
+function FindFileInCfgsPaths(const ASubFolder:String;const AFileName:String):String;
 begin
-  result:=IncludeTrailingPathDelimiter(IncludeTrailingPathDelimiter(GetAppConfigDir(false))+ASubFolder)+AFileName;
+  result:=IncludeTrailingPathDelimiter(IncludeTrailingPathDelimiter(WrCfgsPath)+ASubFolder)+AFileName;
   if FileExists(result)then
     exit;
   result:=IncludeTrailingPathDelimiter(IncludeTrailingPathDelimiter(RoCfgsPath)+ASubFolder)+AFileName;
   if not FileExists(result)then
     exit('');
 end;
-function GetPathsInDataPaths(const ASubFolder:String):String;
+function GetPathsInCfgsPaths(const ASubFolder:String):String;
 begin
-  result:=IncludeTrailingPathDelimiter(IncludeTrailingPathDelimiter(GetAppConfigDir(false))+ASubFolder)+';'
-         +IncludeTrailingPathDelimiter(IncludeTrailingPathDelimiter(RoCfgsPath)+ASubFolder);
+  result:=ConcatPaths([WrCfgsPath,ASubFolder])+';'
+         +ConcatPaths([RoCfgsPath,ASubFolder]);
 end;
 
 function GetWritableFilePath(const ASubFolder:String;const AFileName:String):String;
 begin
-  result:=IncludeTrailingPathDelimiter(IncludeTrailingPathDelimiter(GetAppConfigDir(false))+ASubFolder);
+  result:=ConcatPaths([WrCfgsPath,ASubFolder]);
   ForceDirectories(result);
-  result:=result+AFileName;
+  result:=ConcatPaths([result,AFileName]);
 end;
 
+function GetPathsInDistribPath(const ASubFolder:String):String;
+ begin
+  result:=ConcatPaths([DistribPath,ASubFolder]);
+end;
 function GetPartOfPath(out part:String;var path:String;const separator:String):String;
 var
   i:Integer;

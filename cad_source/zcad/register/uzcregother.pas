@@ -32,8 +32,8 @@ implementation
 var
   mem:TZctnrVectorBytes;
 initialization;
-  units.loadunit(GetSupportPaths,InterfaceTranslate,FindFileInDataPaths(CFSconfigsDir,CFSsysvarpasFile),nil);
-  units.loadunit(GetSupportPaths,InterfaceTranslate,FindFileInDataPaths(CFSconfigsDir,CFSsavedvarpasFile),nil);
+  units.loadunit(GetSupportPaths,InterfaceTranslate,FindFileInCfgsPaths(CFSconfigsDir,CFSsysvarpasFile),nil);
+  units.loadunit(GetSupportPaths,InterfaceTranslate,FindFileInCfgsPaths(CFSconfigsDir,CFSsavedvarpasFile),nil);
   units.loadunit(GetSupportPaths,InterfaceTranslate,expandpath('$(RoCfgs)/rtl/devicebase.pas'),nil);
 
   SysVarUnit:=units.findunit(GetSupportPaths,InterfaceTranslate,'sysvar');

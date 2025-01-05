@@ -648,7 +648,7 @@ begin
   result:=TComboBox.Create(tb);
   result.Style:=csDropDownList;
   result.Sorted:=true;
-  FromDirsIterator(GetPathsInDataPaths(CFScomponentsDir),'*.xml','',addfiletoLayoutbox,nil,pointer(result));
+  FromDirsIterator(GetPathsInCfgsPaths(CFScomponentsDir),'*.xml','',addfiletoLayoutbox,nil,pointer(result));
   result.OnChange:=ChangeLayout;
 
   s:=extractfilename(sysvar.PATH.LayoutFile^);

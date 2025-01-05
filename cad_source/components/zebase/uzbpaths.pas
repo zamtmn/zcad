@@ -212,7 +212,9 @@ end;
 
 function GetWritableFilePath(const ASubFolder:String;const AFileName:String):String;
 begin
-  result:=IncludeTrailingPathDelimiter(IncludeTrailingPathDelimiter(GetAppConfigDir(false))+ASubFolder)+AFileName;
+  result:=IncludeTrailingPathDelimiter(IncludeTrailingPathDelimiter(GetAppConfigDir(false))+ASubFolder);
+  ForceDirectories(result);
+  result:=result+AFileName;
 end;
 
 function GetPartOfPath(out part:String;var path:String;const separator:String):String;

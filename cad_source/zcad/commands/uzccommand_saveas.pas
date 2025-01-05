@@ -49,16 +49,18 @@ var
    pu:ptunit;
    allok:boolean;
 begin
-     allok:=savedxf2000(s,ConcatPaths([GetRoCfgsPath,CFScomponentsDir,CFSemptydxfFile]),dwg^);
-     pu:=PTZCADDrawing(dwg).DWGUnits.findunit(GetSupportPaths,InterfaceTranslate,DrawingDeviceBaseUnitName);
-     mem.init(1024);
-     pu^.SavePasToMem(mem);
-     mem.SaveToFile(ChangeFileExt(expandpath(s),'.dbpas'));
-     mem.done;
-     if allok then
-                  result:=cmd_ok
-              else
-                  result:=cmd_error;
+  allok:=savedxf2000(s,ConcatPaths([GetRoCfgsPath,CFScomponentsDir,CFSemptydxfFile]),dwg^);
+  pu:=PTZCADDrawing(dwg).DWGUnits.findunit(GetSupportPaths,InterfaceTranslate,DrawingDeviceBaseUnitName);
+  if pu<>nil then begin
+    mem.init(1024);
+    pu^.SavePasToMem(mem);
+    mem.SaveToFile(ChangeFileExt(expandpath(s),'.dbpas'));
+    mem.done;
+  end;
+  if allok then
+    result:=cmd_ok
+  else
+    result:=cmd_error;
 end;
 
 function dwgQSave_com(dwg:PTSimpleDrawing):Integer;

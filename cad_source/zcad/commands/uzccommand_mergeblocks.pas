@@ -16,18 +16,20 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
 
-unit uzccommand_mergeblocks;
+unit uzcCommand_MergeBlocks;
 {$INCLUDE zengineconfig.inc}
 
 interface
 uses
+  SysUtils,
   uzcLog,
   uzbpaths,
 
   uzeffmanager,
   uzccommand_DWGNew,
   uzccommand_merge,uzccommandsimpl,uzccommandsabstract,
-  uzcdrawings,uzedrawingsimple;
+  uzcdrawings,uzedrawingsimple,
+  uzcinterface,uzcstrconsts;
 
 function MergeBlocks_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 
@@ -38,14 +40,19 @@ var
    pdwg:PTSimpleDrawing;
    s:AnsiString;
 begin
-  pdwg:=(drawings.CurrentDWG);
-  drawings.CurrentDWG:=BlockBaseDWG;
-
   if length(operands)>0 then
-  s:=FindInPaths(GetSupportPaths,operands);
-  result:=Merge_com(Context,s);
-
-  drawings.CurrentDWG:=pdwg;
+    s:=FindInPaths(GetSupportPaths,operands)
+  else
+    s:='';
+  if s<>'' then begin
+    pdwg:=drawings.CurrentDWG;
+    drawings.CurrentDWG:=BlockBaseDWG;
+    result:=Merge_com(Context,s);
+    drawings.CurrentDWG:=pdwg;
+  end else begin
+    result:=cmd_error;
+    ZCMsgCallBackInterface.TextMessage('MergeBlocks:'+format(rsUnableToOpenFile,[ExpandPath(operands)]),TMWOShowError);
+  end;
 end;
 
 initialization

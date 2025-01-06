@@ -156,7 +156,8 @@ replaceinstallprefix:
 ifeq ($(OSDETECT),WIN32)
 	powershell -ex bypass -c "(Get-Content -Path 'cad\cfg\configs\config.xml') -replace 'NeedReplaceToDistribPath','$(INSTALLPREFIX)' | Set-Content -Path 'cad\cfg\configs\config.xml'"
 else
-	sed -i "s/NeedReplaceToDistribPath/$(INSTALLPREFIX)/g" cad\cfg\configs\config.xml
+	QUOTEDINSTALLPREFIX=$(shell printf '%s' "$(INSTALLPREFIX)" | sed 's/[]\/$*.^[]/\\&/g')
+	sed -i "s/NeedReplaceToDistribPath/$(shell printf '%s' "$(INSTALLPREFIX)" | sed 's/[]\/$*.^[]/\\&/g')/g" cad/cfg/configs/config.xml
 endif
 
 zcadelectrotechenv: checkvars 

@@ -90,8 +90,7 @@ endif
 
 LAZBUILD:=$(LP)$(PATHDELIM)lazbuild
 
-ZP:=
-$(if $(wildcard $(LAZBUILD)),$(shell $(LAZBUILD) --pcp=$(PCP) cad_source$(PATHDELIM)zcad.lpi --get-expand-text=$$\(ProjPath\)..$(PATHDELIM)cad$(PATHDELIM)bin$(PATHDELIM)$$\(TargetCPU\)-$$\(TargetOS\)),$())
+ZP:=$(if $(wildcard $(LAZBUILD)),$(shell $(LAZBUILD) --pcp=$(PCP) cad_source$(PATHDELIM)zcad.lpi --get-expand-text=$$\(ProjPath\)..$(PATHDELIM)cad$(PATHDELIM)bin$(PATHDELIM)$$\(TargetCPU\)-$$\(TargetOS\)),$())
 
 checkallvars: checkvars 
 	@echo OSDETECT=$(OSDETECT)

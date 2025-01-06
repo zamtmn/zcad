@@ -99,3 +99,50 @@ rmsrcbackups:
 	rm -rf zengine/tests/backup
 	rm -rf zengine/zgl/backup
 	rm -rf zengine/zgl/drawers/backup
+
+rmpkgslibs:
+	rm -rf components/metadarkstyle/lib/*
+	rm -rf components/zcontainers/lib/*
+	rm -rf components/zbaseutils/lib/*
+	rm -rf components/zbaseutilsgui/lib/*
+	rm -rf components/zebase/lib/*
+	rm -rf components/zcontrols/lib/*
+	rm -rf components/zmacros/lib/*
+	rm -rf components/zmath/lib/*
+	rm -rf components/zobjectinspector/lib/*
+	rm -rf components/zscriptbase/lib/*
+	rm -rf components/zscript/lib/*
+	rm -rf components/ztoolbars/lib/*
+	rm -rf components/zundostack/lib/*
+	rm -rf components/fpdwg/lib/*
+	rm -rf components/fpspreadsheet/lib/*
+	rm -rf components/fpspreadsheet/source/common/lib/*
+	rm -rf components/fpspreadsheet/source/visual/lib/*
+	rm -rf components/lape/package/lib/*
+	rm -rf components/zreaders/lib/*
+	rm -rf components/fphunspell/lib/*
+	rm -rf simplecad/lib/*
+	rm -rf ../lib/*
+	rm -rf components/metadarkstyle/lib
+	rm -rf components/zcontainers/lib
+	rm -rf components/zbaseutils/lib
+	rm -rf components/zbaseutilsgui/lib
+	rm -rf components/zebase/lib
+	rm -rf components/zcontrols/lib
+	rm -rf components/zmacros/lib
+	rm -rf components/zmath/lib
+	rm -rf components/zobjectinspector/lib
+	rm -rf components/zscriptbase/lib
+	rm -rf components/zscript/lib
+	rm -rf components/ztoolbars/lib
+	rm -rf components/zundostack/lib
+	rm -rf components/fpdwg/lib
+	rm -rf components/fpspreadsheet/lib
+	rm -rf components/fpspreadsheet/source/common/lib
+	rm -rf components/fpspreadsheet/source/visual/lib
+	rm -rf components/lape/package/lib
+	rm -rf components/zreaders/lib
+	rm -rf components/fphunspell/lib
+	rm -rf simplecad/lib
+#	rm -rf ../lib
+

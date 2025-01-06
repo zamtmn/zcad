@@ -188,6 +188,9 @@ documentation: checkvars cad cad/data cad/data/help cad/data/help/locale cad/dat
 rmsrcbackups:
 	$(MAKE) -C cad_source/ rmsrcbackups
 
+rmpkgslibs:
+	$(MAKE) -C cad_source/ rmpkgslibs
+
 tests: checkvars
 	$(MAKE) -C cad_source/components/zcontainers/tests LP=$(LP) PCP=$(PCP) clean all
 	$(MAKE) -C cad_source/zengine/tests LP=$(LP) PCP=$(PCP) clean all
@@ -202,30 +205,6 @@ updatelocalizedpofiles: checkvars
 cleanzcad: clean zcadenv zcad
 
 cleanzcadelectrotech: clean zcadelectrotechenv zcadelectrotech
-
-rmpkgslibs:
-	rm -rf cad_source$(PATHDELIM)components$(PATHDELIM)metadarkstyle$(PATHDELIM)lib$(PATHDELIM)*
-	rm -rf cad_source$(PATHDELIM)components$(PATHDELIM)zcontainers$(PATHDELIM)lib$(PATHDELIM)*
-	rm -rf cad_source$(PATHDELIM)components$(PATHDELIM)zbaseutils$(PATHDELIM)lib$(PATHDELIM)*
-	rm -rf cad_source$(PATHDELIM)components$(PATHDELIM)zbaseutilsgui$(PATHDELIM)lib$(PATHDELIM)*
-	rm -rf cad_source$(PATHDELIM)components$(PATHDELIM)zebase$(PATHDELIM)lib$(PATHDELIM)*
-	rm -rf cad_source$(PATHDELIM)components$(PATHDELIM)zcontrols$(PATHDELIM)lib$(PATHDELIM)*
-	rm -rf cad_source$(PATHDELIM)components$(PATHDELIM)zmacros$(PATHDELIM)lib$(PATHDELIM)*
-	rm -rf cad_source$(PATHDELIM)components$(PATHDELIM)zmath$(PATHDELIM)lib$(PATHDELIM)*
-	rm -rf cad_source$(PATHDELIM)components$(PATHDELIM)zobjectinspector$(PATHDELIM)lib$(PATHDELIM)*
-	rm -rf cad_source$(PATHDELIM)components$(PATHDELIM)zscriptbase$(PATHDELIM)lib$(PATHDELIM)*
-	rm -rf cad_source$(PATHDELIM)components$(PATHDELIM)zscript$(PATHDELIM)lib$(PATHDELIM)*
-	rm -rf cad_source$(PATHDELIM)components$(PATHDELIM)ztoolbars$(PATHDELIM)lib$(PATHDELIM)*
-	rm -rf cad_source$(PATHDELIM)components$(PATHDELIM)zundostack$(PATHDELIM)lib$(PATHDELIM)*
-	rm -rf cad_source$(PATHDELIM)components$(PATHDELIM)fpdwg$(PATHDELIM)lib$(PATHDELIM)*
-	rm -rf cad_source$(PATHDELIM)components$(PATHDELIM)fpspreadsheet$(PATHDELIM)lib$(PATHDELIM)*
-	rm -rf cad_source$(PATHDELIM)components$(PATHDELIM)fpspreadsheet$(PATHDELIM)source$(PATHDELIM)common$(PATHDELIM)lib$(PATHDELIM)*
-	rm -rf cad_source$(PATHDELIM)components$(PATHDELIM)fpspreadsheet$(PATHDELIM)source$(PATHDELIM)visual$(PATHDELIM)lib$(PATHDELIM)*
-	rm -rf cad_source$(PATHDELIM)components$(PATHDELIM)lape$(PATHDELIM)package$(PATHDELIM)lib$(PATHDELIM)*
-	rm -rf cad_source$(PATHDELIM)components$(PATHDELIM)zreaders$(PATHDELIM)lib$(PATHDELIM)*
-	rm -rf cad_source$(PATHDELIM)components$(PATHDELIM)fphunspell$(PATHDELIM)lib$(PATHDELIM)*
-	rm -rf cad_source$(PATHDELIM)simplecad$(PATHDELIM)lib$(PATHDELIM)*
-	rm -rf lib$(PATHDELIM)*
 
 installpkgstolaz: checkvars rmpkgslibs
 ifneq ($(OSDETECT),OSX)

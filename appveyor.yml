@@ -92,7 +92,7 @@ artifacts:
     name: ZCAD-%APPVEYOR_REPO_COMMIT%
   - path: ZCADElectrotech-%APPVEYOR_REPO_COMMIT%.zip
     name: ZCADElectrotech-%APPVEYOR_REPO_COMMIT%
-  - path: cad\help\userguide.ru.pdf
+  - path: cad\data\help\userguide.ru.pdf
     name: userguide.ru.pdf
 
 #---------------------------------#

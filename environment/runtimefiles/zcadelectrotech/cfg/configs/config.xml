@@ -1,4 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <CONFIG>
-  <Stage0Params DictionariesPath="ru=$(DictPath)/ru_RU.dic;$(DictPath)/ops.dic|en=$(DictPath)/en_US.dic;$(DictPath)/en_US_interface.dic|abbrv=$(DictPath)/abbrv.dic" PreferredDistribPath="C:\Program Files\zcad"/>
+  <Stage0Params DictionariesPath="ru=$(DictPath)/ru_RU.dic;$(DictPath)/ops.dic|en=$(DictPath)/en_US.dic;$(DictPath)/en_US_interface.dic|abbrv=$(DictPath)/abbrv.dic" PreferredDistribPath="NeedReplaceToDistribPath"/>
 </CONFIG>

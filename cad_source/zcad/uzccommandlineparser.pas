@@ -42,7 +42,7 @@ var
   LCLHDL,                   //опция lcl -(Log Current Level) установка текущего уровня лога, требует аргумент
   MaxStackFrameCountHDL,    //опция MaxStackFrameCount - максимальная глубина стека для обработчика исключений
   RunScript,                //опция runscript - запуск скрипта при старте программы, требует аргумент(ы)
-  MemProfiling              //опция nosplash - не показывать сплэш
+  MemProfiling              //опция memprofiling - ранний запуск профилировщика памяти на этапе инициализации программы
   :TCLOptionHandle;
 
 implementation

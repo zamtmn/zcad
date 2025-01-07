@@ -90,8 +90,7 @@ endif
 
 LAZBUILD:=$(LP)$(PATHDELIM)lazbuild
 
-ZP:=
-$(if $(wildcard $(LAZBUILD)),$(shell $(LAZBUILD) --pcp=$(PCP) cad_source$(PATHDELIM)zcad.lpi --get-expand-text=$$\(ProjPath\)..$(PATHDELIM)cad$(PATHDELIM)bin$(PATHDELIM)$$\(TargetCPU\)-$$\(TargetOS\)),$())
+ZP:=$(if $(wildcard $(LAZBUILD)),$(shell $(LAZBUILD) --pcp=$(PCP) cad_source$(PATHDELIM)zcad.lpi --get-expand-text=$$\(ProjPath\)..$(PATHDELIM)cad$(PATHDELIM)bin$(PATHDELIM)$$\(TargetCPU\)-$$\(TargetOS\)),$())
 
 checkallvars: checkvars 
 	@echo OSDETECT=$(OSDETECT)
@@ -156,7 +155,7 @@ replaceinstallprefix:
 ifeq ($(OSDETECT),WIN32)
 	powershell -ex bypass -c "(Get-Content -Path 'cad\cfg\configs\config.xml') -replace 'NeedReplaceToDistribPath','$(INSTALLPREFIX)' | Set-Content -Path 'cad\cfg\configs\config.xml'"
 else
-	sed -i "s/NeedReplaceToDistribPath/$(INSTALLPREFIX)/g" cad\cfg\configs\config.xml
+	sed -i "s/NeedReplaceToDistribPath/$(shell printf '%s' "$(INSTALLPREFIX)" | sed 's/[]\/$*.^[]/\\&/g')/g" cad/cfg/configs/config.xml
 endif
 
 zcadelectrotechenv: checkvars 

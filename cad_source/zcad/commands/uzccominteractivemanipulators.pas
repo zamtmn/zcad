@@ -414,7 +414,6 @@ procedure InteractiveLWRectangleManipulator( const PInteractiveData : PGDBObjLWP
 var
   polyLWObj : PGDBObjLWPolyline absolute PInteractiveData;
   stPoint: GDBvertex2D;
-  dc:TDrawContext;
 begin
 
   zcSetEntPropFromCurrentDrawingProp(polyLWObj);
@@ -430,9 +429,7 @@ begin
   GDBvertex2D(polyLWObj^.Vertex2D_in_OCS_Array.getDataMutable(3)^).x := stPoint.x;
   GDBvertex2D(polyLWObj^.Vertex2D_in_OCS_Array.getDataMutable(3)^).y := Point.y;
 
-  dc:=drawings.GetCurrentDWG^.CreateDrawingRC;
-
-  polyLWObj^.FormatEntity(drawings.GetCurrentDWG^,dc);
+  polyLWObj^.YouChanged(drawings.GetCurrentDWG^);
 
 end;
 
@@ -443,7 +440,6 @@ procedure InteractiveRectangleManipulator( const PInteractiveData : PGDBObjPolyl
 var
   polyObj : PGDBObjPolyline absolute PInteractiveData;
   stPoint: GDBvertex;
-  dc:TDrawContext;
 begin
 
   zcSetEntPropFromCurrentDrawingProp(polyObj);
@@ -459,10 +455,7 @@ begin
   PGDBvertex2D(polyObj^.VertexArrayInOCS.getDataMutable(3))^.x := stPoint.x;
   PGDBvertex2D(polyObj^.VertexArrayInOCS.getDataMutable(3))^.y := Point.y;
 
-  dc:=drawings.GetCurrentDWG^.CreateDrawingRC;
-
-  polyObj^.FormatEntity(drawings.GetCurrentDWG^,dc);
-
+  polyObj^.YouChanged(drawings.GetCurrentDWG^);
 end;
 
 procedure InteractivePolygonManipulator( const PInteractiveData : TPointPolygonDrawModePentity {pointer to the line entity};
@@ -471,7 +464,7 @@ procedure InteractivePolygonManipulator( const PInteractiveData : TPointPolygonD
 var
   obj : TPointPolygonDrawModePentity absolute PInteractiveData;
   stPoint: GDBvertex;
-  dc:TDrawContext;
+  //dc:TDrawContext;
   i,countVert:integer;
   radius,alpha,stalpha,xyline,xline:double;
   sine, cosine: double;
@@ -514,8 +507,9 @@ begin
       GDBvertex2D(obj.plwentity^.Vertex2D_in_OCS_Array.getDataMutable(i)^).x := stPoint.x + radius*cosine;
       GDBvertex2D(obj.plwentity^.Vertex2D_in_OCS_Array.getDataMutable(i)^).y := stPoint.y + radius*sine;
       end;
-      dc:=drawings.GetCurrentDWG^.CreateDrawingRC;
-      obj.plwentity^.FormatEntity(drawings.GetCurrentDWG^,dc);
+      obj.plwentity^.YouChanged(drawings.GetCurrentDWG^);
+      //dc:=drawings.GetCurrentDWG^.CreateDrawingRC;
+      //obj.plwentity^.FormatEntity(drawings.GetCurrentDWG^,dc);
   end
   else
   begin
@@ -526,8 +520,9 @@ begin
        PGDBvertex2D(obj.pentity^.VertexArrayInOCS.getDataMutable(i))^.x := stPoint.x + radius*cosine;
        PGDBvertex2D(obj.pentity^.VertexArrayInOCS.getDataMutable(i))^.y := stPoint.y + radius*sine;
       end;
-     dc:=drawings.GetCurrentDWG^.CreateDrawingRC;
-     obj.pentity^.FormatEntity(drawings.GetCurrentDWG^,dc);
+     obj.pentity^.YouChanged(drawings.GetCurrentDWG^);
+     //dc:=drawings.GetCurrentDWG^.CreateDrawingRC;
+     //obj.pentity^.FormatEntity(drawings.GetCurrentDWG^,dc);
    end;
 
 end;

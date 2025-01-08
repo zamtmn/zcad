@@ -1460,6 +1460,7 @@ var
   mp:TPoint;
   key: Byte;
   Actlt:TVisActuality;
+  DC:TDrawContext;
 begin
   mp:=Point(X,Y);
   TrackPointMouseTimer.Touch(mp,[TMouseTimer.TReason.RMMove]);
@@ -1656,8 +1657,10 @@ begin
   Actlt.InfrustumActualy:=pdwg.getpcamera.POSCOUNT;
   Actlt.VisibleActualy:=pdwg.getpcamera.VISCOUNT;
   if pdwg.GetConstructObjRoot.ObjArray.Count>0 then begin
-  pdwg.GetConstructObjRoot.CalcInFrustumByTree(pdwg.Getpcamera^.frustum,Actlt,pdwg.GetConstructObjRoot.ObjArray.ObjTree,pdwg.getpcamera.Counters,pdwg.myGluProject2,pdwg.getpcamera.prop.zoom,SysVarRDImageDegradationCurrentDegradationFactor);
-  pdwg.GetConstructObjRoot.calcvisible(pdwg.Getpcamera^.frustum,Actlt,pdwg.getpcamera.Counters,pdwg.myGluProject2,pdwg.getpcamera.prop.zoom,SysVarRDImageDegradationCurrentDegradationFactor);
+    DC:=pdwg.CreateDrawingRC;
+    pdwg.GetConstructObjRoot.FormatAfterEdit(pdwg^,DC);
+    pdwg.GetConstructObjRoot.CalcInFrustumByTree(pdwg.Getpcamera^.frustum,Actlt,pdwg.GetConstructObjRoot.ObjArray.ObjTree,pdwg.getpcamera.Counters,pdwg.myGluProject2,pdwg.getpcamera.prop.zoom,SysVarRDImageDegradationCurrentDegradationFactor);
+    pdwg.GetConstructObjRoot.calcvisible(pdwg.Getpcamera^.frustum,Actlt,pdwg.getpcamera.Counters,pdwg.myGluProject2,pdwg.getpcamera.prop.zoom,SysVarRDImageDegradationCurrentDegradationFactor);
   end;
 
   //gdb.GetCurrentDWG.ConstructObjRoot.calcvisible(gdb.GetCurrentDWG.OGLwindow1.wa.param.mousefrustum);

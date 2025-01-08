@@ -30,7 +30,8 @@ var
 
   NOSPLASHHDL,              //опция nosplash - не показывать сплэш
   UPDATEPOHDL,              //опция updatepo - актуализация файлов локализации, необходима для команды updatepo
-  DEBUGUIHDL,               //опция debugui - наличие отладочных элементов в интерфейсе
+  DEBUGUIHDL,               //опция debugui - наличие отладочных элементов в интерфейсе. для разработчика
+  EXPERIMENTALFEATURESHDL,  //опция experimentalfeatures - включение не доделаных возможностей. для разработчика
   NOLOADLAYOUTHDL,          //опция noloadlayout - запуск без загрузки начального состояния раскладки окон
   LOGFILEHDL,               //опция logfile - указание лог файла, требует аргумент(ы) имя файла
   NOTCHECKUNIQUEINSTANCEHDL,//опция noloadlayout - запуск без загрузки начального состояния раскладки окон
@@ -42,7 +43,7 @@ var
   LCLHDL,                   //опция lcl -(Log Current Level) установка текущего уровня лога, требует аргумент
   MaxStackFrameCountHDL,    //опция MaxStackFrameCount - максимальная глубина стека для обработчика исключений
   RunScript,                //опция runscript - запуск скрипта при старте программы, требует аргумент(ы)
-  MemProfiling              //опция memprofiling - ранний запуск профилировщика памяти на этапе инициализации программы
+  MemProfiling              //опция memprofiling - ранний запуск профилировщика памяти на этапе инициализации программы. для разработчика
   :TCLOptionHandle;
 
 implementation
@@ -52,6 +53,7 @@ initialization
   NOSPLASHHDL:=CommandLineParser.RegisterArgument('nosplash',AT_Flag);
   UPDATEPOHDL:=CommandLineParser.RegisterArgument('updatepo',AT_Flag);
   DEBUGUIHDL:=CommandLineParser.RegisterArgument('debugui',AT_Flag);
+  EXPERIMENTALFEATURESHDL:=CommandLineParser.RegisterArgument('experimentalfeatures',AT_Flag);
   NOLOADLAYOUTHDL:=CommandLineParser.RegisterArgument('noloadlayout',AT_Flag);
   LOGFILEHDL:=CommandLineParser.RegisterArgument('logfile',AT_WithOperands);
   NOTCHECKUNIQUEINSTANCEHDL:=CommandLineParser.RegisterArgument('notcheckuniqueinstance',AT_Flag);

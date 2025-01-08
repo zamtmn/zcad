@@ -54,7 +54,7 @@ type
     Ver:TmyFileVersionInfo;(*'Version'*)(*oi_readonly*)
     DefaultHeight:Integer;(*'Default controls height'*)(*oi_readonly*)
   end;
-  PZCsysParam=^TZCSysParams;
+  PZCSysParams=^TZCSysParams;
   {REGISTERRECORDTYPE TZCsysParam}
   TZCSysParams=record
     saved:TZCSavedParams;(*'Saved params'*)

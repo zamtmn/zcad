@@ -23,7 +23,8 @@ uses
   GLext,
   uzglbackendmanager,
   uzgldrawerogl,uzglviewareaogl,uzgldraweroglmodern,gl,
-  gzctnrBufferAllocator;
+  gzctnrBufferAllocator,
+  uzeSysParams;
 const
   CVBOSize=256*1024*1024;
 type
@@ -86,5 +87,6 @@ begin
   VBO.vboAllocator.init(CVBOSize);
 end;
 begin
-  RegisterBackend(TOpenGLModernViewArea,'OpenGLModern');
+  if ZESysParams.UseExperimentalFeatures then
+    RegisterBackend(TOpenGLModernViewArea,'OpenGLModern');
 end.

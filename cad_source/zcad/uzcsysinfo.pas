@@ -21,7 +21,7 @@ unit uzcSysInfo;
 interface
 uses
   uzbCommandLineParser,uzcCommandLineParser,
-  uzcsysparams,uzcsysvars,
+  uzeSysParams,uzcSysParams,uzcsysvars,
   {uzbLogTypes,}uzbLog,uzcLog,
   uzbPaths,uzcPathMacros,uzcFileStructure,
   Forms,{$IFNDEF DELPHI}LazUTF8,{$ENDIF}sysutils;
@@ -102,6 +102,8 @@ begin
     ZCSysParams.notsaved.PreloadedFile:='';
 
     //значения некоторых параметров из комстроки, если есть
+    if CommandLineParser.HasOption(EXPERIMENTALFEATURESHDL) then
+      ZESysParams.UseExperimentalFeatures:=true;
     if CommandLineParser.HasOption(NOSPLASHHDL) then
       ZCSysParams.saved.NoSplash:=true;
     if CommandLineParser.HasOption(MemProfiling) then

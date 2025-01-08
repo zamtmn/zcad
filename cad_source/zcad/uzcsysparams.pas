@@ -55,7 +55,7 @@ type
     DefaultHeight:Integer;(*'Default controls height'*)(*oi_readonly*)
   end;
   PZCSysParams=^TZCSysParams;
-  {REGISTERRECORDTYPE TZCsysParam}
+  {REGISTERRECORDTYPE TZCSysParams}
   TZCSysParams=record
     saved:TZCSavedParams;(*'Saved params'*)
     notsaved:TZCNotSavedParams;(*'Not saved params'*)(*oi_readonly*)

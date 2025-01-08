@@ -24,11 +24,11 @@ uses
 implementation
 
 initialization
-  if SysParam.saved.MemProfiling then
+  if ZCSysParams.saved.MemProfiling then
     ReplaceMemoryManager;
 finalization
   //тут по идее надо проверять установлен профайлер фактически
-  if SysParam.saved.MemProfiling then
+  if ZCSysParams.saved.MemProfiling then
     RestoreMemoryManager;
 end.
 

@@ -45,7 +45,7 @@ begin
    begin
        UnitsForm:=TUnitsForm.Create(nil);
        SetHeightControl(UnitsForm,sysvar.INTF.INTF_DefaultControlHeight^);
-       UnitsForm.BoundsRect:=GetBoundsFromSavedUnit('UnitsWND',SysParam.notsaved.ScreenX,SysParam.notsaved.Screeny)
+       UnitsForm.BoundsRect:=GetBoundsFromSavedUnit('UnitsWND',ZCSysParams.notsaved.ScreenX,ZCSysParams.notsaved.Screeny)
    end;
 
    _UnitsFormat:=drawings.GetUnitsFormat;

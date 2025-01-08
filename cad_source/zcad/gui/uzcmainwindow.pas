@@ -832,10 +832,10 @@ begin
   DockMaster.MakeDockPanel(DockPanel,admrpChild);
   HardcodedButtonSize:=21;
   {Грузим раскладку окон}
-  if not sysparam.saved.noloadlayout then
+  if not ZCSysParams.saved.noloadlayout then
     LoadLayout_com(TZCADCommandContext.CreateRec,EmptyCommandOperands);
 
-  if sysparam.saved.noloadlayout then
+  if ZCSysParams.saved.noloadlayout then
   begin
        DockMaster.ShowControl('CommandLine', true);
        DockMaster.ShowControl('ObjectInspector', true);
@@ -1021,10 +1021,10 @@ begin
   SuppressedShortcuts:=TXMLConfig.Create(nil);
   SuppressedShortcuts.Filename:=ConcatPaths([GetRoCfgsPath,CFScomponentsDir,CFSsuppressedshortcutsxmlFile]);
 
-  if SysParam.saved.UniqueInstance then
+  if ZCSysParams.saved.UniqueInstance then
     CreateOrRunFIPCServer;
   if sysvar.INTF.INTF_DefaultControlHeight<>nil then
-    sysvar.INTF.INTF_DefaultControlHeight^:=sysparam.notsaved.defaultheight;
+    sysvar.INTF.INTF_DefaultControlHeight^:=ZCSysParams.notsaved.defaultheight;
 
   //DecorateSysTypes;
   self.onclose:=self.FormClose;
@@ -2002,14 +2002,14 @@ begin
   else
     FIPCServerRunning:=false;
 
-  if (FIPCServerRunning xor SysParam.saved.UniqueInstance) then
-    case SysParam.saved.UniqueInstance of
+  if (FIPCServerRunning xor ZCSysParams.saved.UniqueInstance) then
+    case ZCSysParams.saved.UniqueInstance of
       false:begin
               UniqueInstanceBase.FIPCServer.StopServer;
             end;
        true:begin
               if CreateOrRunFIPCServer then begin
-                SysParam.saved.UniqueInstance:=false;
+                ZCSysParams.saved.UniqueInstance:=false;
                 ZCMsgCallBackInterface.TextMessage('Other unique instance found',TMWOShowError);
               end;
             end;

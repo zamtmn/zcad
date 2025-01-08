@@ -215,9 +215,9 @@ end;
 
 procedure createpo;
 begin
-  internalCreatePO(RunTimePO,sysparam.saved.updatepo,ZCADRTTranslatedPOFileName,ZCADRTPOFileName);
-  internalCreatePO(CompileTimePO,sysparam.saved.updatepo,ZCADTranslatedPOFileName,ZCADPOFileName);
-  if sysparam.saved.updatepo then
+  internalCreatePO(RunTimePO,ZCSysParams.saved.updatepo,ZCADRTTranslatedPOFileName,ZCADRTPOFileName);
+  internalCreatePO(CompileTimePO,ZCSysParams.saved.updatepo,ZCADTranslatedPOFileName,ZCADPOFileName);
+  if ZCSysParams.saved.updatepo then
     actualypo:=TmyPOFile.Create;
 end;
 
@@ -276,7 +276,7 @@ begin
   result:=RunTimePO.Translate(Identifier, OriginalValue);
   programlog.LogOutFormatStr('InterfaceTranslate: identifier:"%s" originalValue:"%s" translate to "%s"',[Identifier,OriginalValue,result],LM_Debug,TranslateLogModuleId);
 
-  if sysparam.saved.updatepo then begin
+  if ZCSysParams.saved.updatepo then begin
     Item:=RunTimePO.FindPoItem(FullIdentifier);
     if not assigned(item) then begin
       if IsNoNeedTranslate(OriginalValue)then begin
@@ -312,13 +312,13 @@ initialization
   DisableTranslateCount:=0;
   PODirectory:=ConcatPaths([GetDistribPath,CFSlanguagesDir]);
   GetLanguageIDs(Lang, FallbackLang); // определено в модуле gettext
-  if sysparam.saved.LangOverride<>'' then begin
-    Lang:=sysparam.saved.LangOverride;
+  if ZCSysParams.saved.LangOverride<>'' then begin
+    Lang:=ZCSysParams.saved.LangOverride;
     FallbackLang:='';
   end;
   createpo;
   LRSTranslator:=TPoTranslator.Create;
-  if not sysparam.saved.updatepo then begin
+  if not ZCSysParams.saved.updatepo then begin
     TranslateResourceStrings(ConcatPaths([PODirectory,ZCADTranslatedPOFileName]),Lang,FallbackLang);
     TranslateUnitResourceStrings('anchordockstr',ConcatPaths([PODirectory,'anchordockstr.%s.po']),Lang,FallbackLang);
     TranslateUnitResourceStrings('lclstrconsts',ConcatPaths([PODirectory,'lclstrconsts.%S.po']),Lang,FallbackLang);

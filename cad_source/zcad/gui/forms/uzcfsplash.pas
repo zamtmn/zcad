@@ -93,18 +93,18 @@ end;
 procedure createsplash;
 begin
      if RunUniqueInstance then
-       sysparam.notsaved.otherinstancerun:=InstanceRunning(zcaduniqueinstanceid,true,true);
+       ZCSysParams.notsaved.otherinstancerun:=InstanceRunning(zcaduniqueinstanceid,true,true);
      SplashForm:=TSplashForm.CreateNew(nil);
      //SplashForm.cb:=TComboBox.CreateParented(SplashForm.Handle);
      SplashForm.cb:=TComboBox.Create(NIL);
      SplashForm.cb.ParentWindow := SplashForm.Handle;
 
      SplashForm.cb.hide;
-     if not sysparam.notsaved.otherinstancerun then
-     if not sysparam.saved.nosplash then
+     if not ZCSysParams.notsaved.otherinstancerun then
+     if not ZCSysParams.saved.nosplash then
                                   SplashForm.show;
      application.ProcessMessages;
-     sysparam.notsaved.defaultheight:=SplashForm.cb.Height;
+     ZCSysParams.notsaved.defaultheight:=SplashForm.cb.Height;
 end;
 procedure removesplash;
 begin
@@ -124,7 +124,7 @@ end;
 
 initialization
   Application.Initialize;
-  createsplash(SysParam.saved.UniqueInstance);
+  createsplash(ZCSysParams.saved.UniqueInstance);
   LogerSplashBackend.init;
   ProgramLog.addBackend(LogerSplashBackend,'',[]);
 finalization

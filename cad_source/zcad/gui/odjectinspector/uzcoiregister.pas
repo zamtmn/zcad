@@ -322,7 +322,7 @@ initialization
   SysVar.INTF.INTF_OBJINSP_Properties.INTF_ObjInsp_RowHeight:=@INTFObjInspRowHeight;
   SysVar.INTF.INTF_OBJINSP_Properties.INTF_ObjInsp_Level0HeaderColor:=@INTFObjInspLevel0HeaderColor;
   SysVar.INTF.INTF_OBJINSP_Properties.INTF_ObjInsp_BorderColor:=@INTFObjInspBorderColor;
-  zcobjectinspector.INTFDefaultControlHeight:=sysparam.notsaved.defaultheight;
+  zcobjectinspector.INTFDefaultControlHeight:=ZCSysParams.notsaved.defaultheight;
   ZCADGUIManager.RegisterZCADFormInfo('ObjectInspector',rsGDBObjinspWndName,TGDBobjinsp,rect(0,100,200,600),ZCADFormSetupProc,CreateObjInspInstance,@GDBobjinsp);
   PropertyRowName:=rsProperty;
   ValueRowName:=rsValue;

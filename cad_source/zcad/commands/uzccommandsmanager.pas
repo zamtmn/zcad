@@ -668,8 +668,8 @@ begin
                                                     execute(p^,false,{pdrawing}drawings.GetCurrentDWG,POGLWndParam)
                                                 else
                                                     begin
-                                                         if not sysparam.saved.nosplash then
-                                                         if sysparam.notsaved.preloadedfile='' then
+                                                         if not ZCSysParams.saved.nosplash then
+                                                         if ZCSysParams.notsaved.preloadedfile='' then
                                                                                       execute(p^,false,pdrawing,POGLWndParam)
                                                     end;
         p:=sa.iterate(ir);

@@ -601,7 +601,7 @@ begin
   result:=false;
   if not assigned(InfoForm) then begin
     InfoForm:=TInfoForm.createnew(application.MainForm);
-    InfoForm.BoundsRect:=GetBoundsFromSavedUnit(BoundsSaveName,SysParam.notsaved.ScreenX,SysParam.notsaved.Screeny);
+    InfoForm.BoundsRect:=GetBoundsFromSavedUnit(BoundsSaveName,ZCSysParams.notsaved.ScreenX,ZCSysParams.notsaved.Screeny);
   end;
   InfoForm.caption:=cpt;
   InfoForm.memo.text:=AText;

@@ -42,7 +42,7 @@ function QSave_com(const Context:TZCADCommandContext;
 var
   s,s1:ansistring;
   itAutoSave:boolean;
-  TempSavedParam:tsavedparams;
+  TempSavedParam:TZCSavedParams;
 begin
   itAutoSave:=False;
   if operands='QS' then begin
@@ -61,7 +61,7 @@ begin
   if itAutoSave then begin
     LoadParams(FindFileInCfgsPaths(CFSconfigsDir,CFSconfigxmlFile),TempSavedParam);
     TempSavedParam.LastAutoSaveFile:=s1;
-    SysParam.saved.LastAutoSaveFile:=s1;
+    ZCSysParams.saved.LastAutoSaveFile:=s1;
     SaveParams(GetWritableFilePath(CFSconfigsDir,CFSconfigxmlFile),TempSavedParam);
   end;
   Result:=SaveDXFDPAS(s1,not itAutoSave);

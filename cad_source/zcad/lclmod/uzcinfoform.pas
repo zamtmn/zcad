@@ -40,8 +40,8 @@ implementation
 procedure TDialogForm.AfterConstruction;
 begin
   inherited;
-  self.Width:=sysparam.notsaved.screenx div 2;
-  self.Height:=sysparam.notsaved.screeny div 2;
+  self.Width:=ZCSysParams.notsaved.screenx div 2;
+  self.Height:=ZCSysParams.notsaved.screeny div 2;
   self.Position:=poScreenCenter;
   self.BorderStyle:=bsSizeToolWin;
 

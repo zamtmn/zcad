@@ -64,7 +64,7 @@ var
 begin
   lph:=LPS.StartLongProcess('SpellChecker.Create and LoadDictionaries',nil);
   SpellChecker.CreateRec(@SpellLogCallBack);
-  SpellChecker.LoadDictionaries(ExpandPath(SysParam.saved.DictionariesPath));
+  SpellChecker.LoadDictionaries(ExpandPath(ZCSysParams.saved.DictionariesPath));
   LPS.EndLongProcess(lph);
 end;
 

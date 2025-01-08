@@ -44,7 +44,7 @@ begin
   memo.scrollbars:=ssAutoBoth;
   memo.align:=alclient;
 
-  memo.text:=(programname+' v'+sysparam.notsaved.ver.versionstring +#13#10+
+  memo.text:=(programname+' v'+ZCSysParams.notsaved.ver.versionstring +#13#10+
                        rsAuthor+#13#10+
                        'zamtmn@yandex.ru'+#13#10#13#10
                        +rsVinfotext+#13#10+

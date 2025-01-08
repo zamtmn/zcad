@@ -50,7 +50,7 @@ begin
   if PGDBObjText(pobj)^.GetObjType=GDBMTextID then begin
     if not assigned(InfoForm) then
       InfoForm:=TInfoForm.createnew(application.MainForm);
-    InfoForm.BoundsRect:=GetBoundsFromSavedUnit(MTextWndSaveParamName,SysParam.notsaved.ScreenX,SysParam.notsaved.Screeny);
+    InfoForm.BoundsRect:=GetBoundsFromSavedUnit(MTextWndSaveParamName,ZCSysParams.notsaved.ScreenX,ZCSysParams.notsaved.Screeny);
     InfoForm.caption:=rsMTextEditor;
 
     InfoForm.memo.text:=AString;
@@ -65,7 +65,7 @@ begin
   end else begin
     if not assigned(SingleLineTextEditorForm) then
       Application.CreateForm(TSingleLineTextEditorForm,SingleLineTextEditorForm);
-    SingleLineTextEditorForm.BoundsRect:=GetBoundsFromSavedUnit(TextWndSaveParamName,SysParam.notsaved.ScreenX,SysParam.notsaved.Screeny);
+    SingleLineTextEditorForm.BoundsRect:=GetBoundsFromSavedUnit(TextWndSaveParamName,ZCSysParams.notsaved.ScreenX,ZCSysParams.notsaved.Screeny);
     SingleLineTextEditorForm.caption:=rsTextEditor;
 
     SingleLineTextEditorForm.HelpText.Caption:=rsTextEdCaption;

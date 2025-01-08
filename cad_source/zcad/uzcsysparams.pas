@@ -33,8 +33,8 @@ type
     AbbreviatedName:AnsiString;
     VersionString:AnsiString;
   end;
-  {REGISTERRECORDTYPE tsavedparams}
-  tsavedparams=record
+  {REGISTERRECORDTYPE TZCSavedParams}
+  TZCSavedParams=record
     UniqueInstance:Boolean;(*'Unique instance'*)
     NoSplash:Boolean;(*'No splash screen'*)
     NoLoadLayout:Boolean;(*'No load layout'*)
@@ -45,8 +45,8 @@ type
     LastAutoSaveFile:string;(*'Last autosave file'*)
     PreferredDistribPath:String;(*'Path to distributive'*)
   end;
-  {REGISTERRECORDTYPE tnotsavedparams}
-  tnotsavedparams=record
+  {REGISTERRECORDTYPE TZCNotSavedParams}
+  TZCNotSavedParams=record
     ScreenX:Integer;(*'Screen X'*)(*oi_readonly*)
     ScreenY:Integer;(*'Screen Y'*)(*oi_readonly*)
     otherinstancerun:Boolean;(*'Other instance run'*)(*oi_readonly*)
@@ -54,15 +54,15 @@ type
     Ver:TmyFileVersionInfo;(*'Version'*)(*oi_readonly*)
     DefaultHeight:Integer;(*'Default controls height'*)(*oi_readonly*)
   end;
-  ptsysparam=^tsysparam;
-  {REGISTERRECORDTYPE tsysparam}
-  tsysparam=record
-    saved:tsavedparams;(*'Saved params'*)
-    notsaved:tnotsavedparams;(*'Not saved params'*)(*oi_readonly*)
+  PZCsysParam=^TZCSysParams;
+  {REGISTERRECORDTYPE TZCsysParam}
+  TZCSysParams=record
+    saved:TZCSavedParams;(*'Saved params'*)
+    notsaved:TZCNotSavedParams;(*'Not saved params'*)(*oi_readonly*)
   end;
 {EXPORT-}
 const
-  DefaultSavedParams:tsavedparams=(UniqueInstance:true;
+  DefaultSavedParams:TZCSavedParams=(UniqueInstance:true;
                                    NoSplash:false;
                                    NoLoadLayout:false;
                                    UpdatePO:false;
@@ -73,17 +73,17 @@ const
                                    PreferredDistribPath:'sss');
   zcaduniqueinstanceid='zcad unique instance';
 var
-  SysParam: tsysparam;
+  ZCSysParams: TZCSysParams;
 
-procedure SaveParams(xmlfile:string;var Params:tsavedparams);
-procedure LoadParams(xmlfile:string;out Params:tsavedparams);
+procedure SaveParams(xmlfile:string;var Params:TZCSavedParams);
+procedure LoadParams(xmlfile:string;out Params:TZCSavedParams);
 implementation
 type
   TXMLConfigHelper=class helper for TXMLConfig
     function  GetAnsiValue(const APath: DOMString; const ADefault: AnsiString): AnsiString;
   end;
 
-procedure SaveParamToConfig(Config: TConfigStorage; var Params:tsavedparams);
+procedure SaveParamToConfig(Config: TConfigStorage; var Params:TZCSavedParams);
 begin
   Config.AppendBasePath('Stage0Params/');
   Config.SetDeleteValue('UniqueInstance',Params.UniqueInstance,DefaultSavedParams.UniqueInstance);
@@ -98,7 +98,7 @@ begin
   Config.UndoAppendBasePath;
 end;
 
-procedure SaveParams(xmlfile:string;var Params:tsavedparams);
+procedure SaveParams(xmlfile:string;var Params:TZCSavedParams);
 var
   XMLConfig: TXMLConfig;
   Config: TXMLConfigStorage;
@@ -129,7 +129,7 @@ begin
   result:=AnsiString(GetValue(APath,DOMString(ADefault)));
 end;
 
-procedure LoadParams(xmlfile:string;out Params:tsavedparams);
+procedure LoadParams(xmlfile:string;out Params:TZCSavedParams);
 var
   XMLConfig:TXMLConfig;
 begin

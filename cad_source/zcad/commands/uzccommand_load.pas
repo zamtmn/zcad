@@ -99,7 +99,7 @@ var
 
   class function TZCADPathsMacroMethods.MacroFuncLastAutoSaveFile(const {%H-}Param: string; const Data: PtrInt;var {%H-}Abort: boolean): string;
   begin
-    result:=ExpandPath(SysParam.saved.LastAutoSaveFile);
+    result:=ExpandPath(ZCSysParams.saved.LastAutoSaveFile);
   end;
 
 

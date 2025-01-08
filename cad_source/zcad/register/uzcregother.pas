@@ -196,10 +196,10 @@ initialization;
   //SysVarUnit.AssignToSymbol(SysVar.PATH.Fonts_Paths,'PATH_Fonts');
 
   //sysvar.RD.RD_LastRenderTime^:=0;
-  //sysvar.PATH.Program_Data^:=sysparam.programpath;
+  //sysvar.PATH.Program_Data^:=ZCSysParams.programpath;
   //sysvar.PATH.Temp_Path:=@temppath;
   if sysvar.SYS.SYS_Version<>nil then
-    sysvar.SYS.SYS_Version^:=sysparam.notsaved.ver.versionstring;
+    sysvar.SYS.SYS_Version^:=ZCSysParams.notsaved.ver.versionstring;
   end;
 
 

@@ -43,12 +43,12 @@ initialization
   units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPaths,system_pas_path,InterfaceTranslate,'INTF_MessagesSuppressDoubles','TGDB3StateBool',@INTFMessagesSuppressDoubles);
   SysVarUnit.AssignToSymbol(SysVar.INTF.INTF_MESSAGES_Properties.INTF_Messages_SuppressDoubles,'INTF_MessagesSuppressDoubles');
 
-  SysVar.sys.SYS_UniqueInstance:=@SysParam.saved.UniqueInstance;
-  SysVar.sys.SYS_NoSplash:=@SysParam.saved.NoSplash;
-  SysVar.sys.SYS_NoLoadLayout:=@SysParam.saved.NoLoadLayout;
-  SysVar.sys.SYS_UpdatePO:=@SysParam.saved.UpdatePO;
-  SysVar.sys.SYS_MemProfiling:=@SysParam.saved.MemProfiling;
-  SysVar.INTF.INTF_LanguageOverride:=@SysParam.saved.LangOverride;
+  SysVar.sys.SYS_UniqueInstance:=@ZCSysParams.saved.UniqueInstance;
+  SysVar.sys.SYS_NoSplash:=@ZCSysParams.saved.NoSplash;
+  SysVar.sys.SYS_NoLoadLayout:=@ZCSysParams.saved.NoLoadLayout;
+  SysVar.sys.SYS_UpdatePO:=@ZCSysParams.saved.UpdatePO;
+  SysVar.sys.SYS_MemProfiling:=@ZCSysParams.saved.MemProfiling;
+  SysVar.INTF.INTF_LanguageOverride:=@ZCSysParams.saved.LangOverride;
 
   SysVarUnit.AssignToSymbol(SysVar.INTF.INTF_ThemedUpToolbars,'INTF_ThemedUpToolbars');
   SysVarUnit.AssignToSymbol(SysVar.INTF.INTF_ThemedRightToolbars,'INTF_ThemedRightToolbars');

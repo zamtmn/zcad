@@ -318,7 +318,7 @@ var
 
 begin
   programlog.logoutstr('<<<<<<<<<<<<<<<End units initialization',0,LM_Debug);
-     if sysparam.notsaved.otherinstancerun then
+     if ZCSysParams.notsaved.otherinstancerun then
                                       exit;
   lpsh:=LPS.StartLongProcess('Start program',@lpsh,0);
 {$IFDEF REPORTMMEMORYLEAKS}printleakedblock:=true;{$ENDIF}
@@ -359,9 +359,9 @@ begin
       commandmanager.executefile(scrfile,drawings.GetCurrentDWG,nil);
     end;
 
-  if sysparam.notsaved.preloadedfile<>'' then begin
-    commandmanager.executecommand('Load('+sysparam.notsaved.preloadedfile+')',drawings.GetCurrentDWG,drawings.GetCurrentOGLWParam);
-    sysparam.notsaved.preloadedfile:='';
+  if ZCSysParams.notsaved.preloadedfile<>'' then begin
+    commandmanager.executecommand('Load('+ZCSysParams.notsaved.preloadedfile+')',drawings.GetCurrentDWG,drawings.GetCurrentOGLWParam);
+    ZCSysParams.notsaved.preloadedfile:='';
   end;
 
   ZCADMainWindow.SwithToHintText;

@@ -77,7 +77,7 @@ begin
      begin
        MountingMethodsTreeSelector:=TStringsTreeSelector.create(application.MainForm);//создаем форму
        //восстанавливаем размеры формы
-       MountingMethodsTreeSelector.BoundsRect:=GetBoundsFromSavedUnit('MountingMethodsTreeSelectorWND',SysParam.notsaved.ScreenX,SysParam.notsaved.Screeny);
+       MountingMethodsTreeSelector.BoundsRect:=GetBoundsFromSavedUnit('MountingMethodsTreeSelectorWND',ZCSysParams.notsaved.ScreenX,ZCSysParams.notsaved.Screeny);
      end;
      MountingMethodsTreeSelector.clear;//очищаем
      MountingMethodsTreeSelector.fill(MountingMethodsTree.BlobTree);//заполняем

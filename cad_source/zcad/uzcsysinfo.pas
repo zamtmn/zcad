@@ -96,22 +96,22 @@ begin
     end;
 
     //начальные значения некоторых параметров и загрузка параметров
-    SysParam.notsaved.otherinstancerun:=false;
-    SysParam.saved.UniqueInstance:=true;
-    LoadParams(FindFileInCfgsPaths(CFSconfigsDir,CFSconfigxmlFile),SysParam.saved);
-    SysParam.notsaved.PreloadedFile:='';
+    ZCSysParams.notsaved.otherinstancerun:=false;
+    ZCSysParams.saved.UniqueInstance:=true;
+    LoadParams(FindFileInCfgsPaths(CFSconfigsDir,CFSconfigxmlFile),ZCSysParams.saved);
+    ZCSysParams.notsaved.PreloadedFile:='';
 
     //значения некоторых параметров из комстроки, если есть
     if CommandLineParser.HasOption(NOSPLASHHDL) then
-      SysParam.saved.NoSplash:=true;
+      ZCSysParams.saved.NoSplash:=true;
     if CommandLineParser.HasOption(MemProfiling) then
-      SysParam.saved.MemProfiling:=true;
+      ZCSysParams.saved.MemProfiling:=true;
     if CommandLineParser.HasOption(UPDATEPOHDL) then
-      SysParam.saved.UpdatePO:=true;
+      ZCSysParams.saved.UpdatePO:=true;
     if CommandLineParser.HasOption(NOLOADLAYOUTHDL) then
-      SysParam.saved.NoLoadLayout:=true;
+      ZCSysParams.saved.NoLoadLayout:=true;
     if CommandLineParser.HasOption(NOTCHECKUNIQUEINSTANCEHDL) then
-      SysParam.saved.UniqueInstance:=false;
+      ZCSysParams.saved.UniqueInstance:=false;
     if CommandLineParser.HasOption(LEAMHDL) then
       programlog.EnableAllModules;
     if CommandLineParser.HasOption(LEMHDL)then
@@ -136,7 +136,7 @@ begin
     for i:=0 to CommandLineParser.OperandsCount-1 do begin
       mn:=CommandLineParser.Operand[i];
       if fileexists(UTF8toSys(mn)) then
-        SysParam.notsaved.PreloadedFile:=mn;
+        ZCSysParams.notsaved.PreloadedFile:=mn;
     end;
 
   finally programlog.leave(IfEntered);end;
@@ -157,11 +157,11 @@ begin
   with programlog.Enter('GetSysInfo',LM_Info) do try
 
     SysDefaultFormatSettings:=DefaultFormatSettings;
-    SysParam.notsaved.ScreenX:=Screen.Width;
-    SysParam.notsaved.ScreenY:=Screen.Height;
-    SysParam.notsaved.Ver:=GetVersion;
+    ZCSysParams.notsaved.ScreenX:=Screen.Width;
+    ZCSysParams.notsaved.ScreenY:=Screen.Height;
+    ZCSysParams.notsaved.Ver:=GetVersion;
 
-    programlog.LogOutStr('ZCAD v'+sysparam.notsaved.ver.versionstring,LM_Necessarily);
+    programlog.LogOutStr('ZCAD v'+ZCSysParams.notsaved.ver.versionstring,LM_Necessarily);
   {$IFDEF FPC}
     programlog.LogOutStr('Program compiled on Free Pascal Compiler',LM_Info);
   {$ENDIF}
@@ -175,12 +175,12 @@ begin
     programlog.LogOutStr('DefaultUnicodeCodePage:='+inttostr(DefaultUnicodeCodePage),LM_Info);
     programlog.LogOutStr('UTF8CompareLocale:='+inttostr(UTF8CompareLocale),LM_Info);
 
-    programlog.LogOutFormatStr('SysParam.ScreenX=%d',[SysParam.notsaved.ScreenX],LM_Info);
-    programlog.LogOutFormatStr('SysParam.ScreenY=%d',[SysParam.notsaved.ScreenY],LM_Info);
-    programlog.LogOutFormatStr('SysParam.NoSplash=%s',[BoolToStr(SysParam.saved.NoSplash,true)],LM_Info);
-    programlog.LogOutFormatStr('SysParam.NoLoadLayout=%s',[BoolToStr(SysParam.saved.NoLoadLayout,true)],LM_Info);
-    programlog.LogOutFormatStr('SysParam.UpdatePO=%s',[BoolToStr(SysParam.saved.UpdatePO,true)],LM_Info);
-    programlog.LogOutFormatStr('SysParam.PreloadedFile="%s"',[SysParam.notsaved.PreloadedFile],LM_Necessarily);
+    programlog.LogOutFormatStr('SysParam.ScreenX=%d',[ZCSysParams.notsaved.ScreenX],LM_Info);
+    programlog.LogOutFormatStr('SysParam.ScreenY=%d',[ZCSysParams.notsaved.ScreenY],LM_Info);
+    programlog.LogOutFormatStr('SysParam.NoSplash=%s',[BoolToStr(ZCSysParams.saved.NoSplash,true)],LM_Info);
+    programlog.LogOutFormatStr('SysParam.NoLoadLayout=%s',[BoolToStr(ZCSysParams.saved.NoLoadLayout,true)],LM_Info);
+    programlog.LogOutFormatStr('SysParam.UpdatePO=%s',[BoolToStr(ZCSysParams.saved.UpdatePO,true)],LM_Info);
+    programlog.LogOutFormatStr('SysParam.PreloadedFile="%s"',[ZCSysParams.notsaved.PreloadedFile],LM_Necessarily);
 
     if disabledefaultmodule then programlog.DisableModule('DEFAULT');
 

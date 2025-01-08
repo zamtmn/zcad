@@ -21,7 +21,7 @@ unit uzcreginterface;
 interface
 uses uzcsysvars,uzbpaths,uzctranslations,UUnitManager,TypeDescriptors,
      Varman,uzcoidecorations,uzegluinterface,uzcLog,uzccommandlineutil,
-     uzcsysparams;
+     uzeSysParams,uzcSysParams;
 implementation
 var
   system_pas_path:string;
@@ -48,6 +48,7 @@ initialization
   SysVar.sys.SYS_NoLoadLayout:=@ZCSysParams.saved.NoLoadLayout;
   SysVar.sys.SYS_UpdatePO:=@ZCSysParams.saved.UpdatePO;
   SysVar.sys.SYS_MemProfiling:=@ZCSysParams.saved.MemProfiling;
+  SysVar.sys.SYS_UseExperimentalFeatures:=@ZESysParams.UseExperimentalFeatures;
   SysVar.INTF.INTF_LanguageOverride:=@ZCSysParams.saved.LangOverride;
 
   SysVarUnit.AssignToSymbol(SysVar.INTF.INTF_ThemedUpToolbars,'INTF_ThemedUpToolbars');

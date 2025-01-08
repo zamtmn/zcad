@@ -127,6 +127,7 @@ type
              SYS_NoLoadLayout:PBoolean;(*'No load layout'*)(*oi_readonly*)
              SYS_UpdatePO:PBoolean;(*'Update PO file'*)(*oi_readonly*)
              SYS_MemProfiling:PBoolean;(*'Memory profiling'*)(*oi_readonly*)
+             SYS_UseExperimentalFeatures:PBoolean;(*'Use experimental features'*)(*oi_readonly*)
        end;
   {REGISTERRECORDTYPE tdwg}
   tdwg=record

@@ -119,7 +119,7 @@ class function TZCADPathsMacroMethods.MacroFuncDataSearhPrefixes(const {%H-}Para
                                    var {%H-}Abort: boolean): string;
 begin
   //Result:=IncludeTrailingPathDelimiter(IncludeTrailingPathDelimiter(GetAppConfigDir(false))+Param)+';'+IncludeTrailingPathDelimiter(IncludeTrailingPathDelimiter(GetDistroPath)+Param);
-  Result:=ConcatPaths([GetAppConfigDir(false),Param])+';'+ConcatPaths([GetRoCfgsPath,Param]);
+  Result:=ConcatPaths([GetWrCfgsPath{GetAppConfigDir(false)},Param])+';'+ConcatPaths([GetRoCfgsPath,Param]);
 end;
 class function TZCADPathsMacroMethods.MacroFuncUserDir(const Param: string; const {%H-}Data: PtrInt;var {%H-}Abort: boolean): string;
 begin
@@ -127,11 +127,11 @@ begin
 end;
 class function TZCADPathsMacroMethods.MacroFuncLocalConfigDir(const Param: string; const {%H-}Data: PtrInt;var {%H-}Abort: boolean): string;
 begin
-  Result:=GetAppConfigDir(false);
+  Result:=GetWrCfgsPath{GetAppConfigDir(false)};
 end;
 class function TZCADPathsMacroMethods.MacroFuncGlobalConfigDir(const Param: string; const {%H-}Data: PtrInt; var {%H-}Abort: boolean): string;
 begin
-  Result:=GetAppConfigDir(true);
+  Result:=GetRoCfgsPath{GetAppConfigDir(true)};
 end;
 class function TZCADPathsMacroMethods.MacroFuncAppName(const Param: string; const {%H-}Data: PtrInt;var {%H-}Abort: boolean): string;
 begin

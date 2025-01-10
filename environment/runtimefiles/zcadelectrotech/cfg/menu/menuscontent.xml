@@ -6,7 +6,7 @@
       <Separator/>
       <Action Name="ACN_LOAD"/>
       <Action Name="ACN_LOADQS"/>
-      <IFONE Сonditions="ActiveDrawing">
+      <IFONE Conditions="ActiveDrawing">
         <Separator/>
         <Action Name="ACN_QSAVE"/>
         <Action Name="ACN_SAVEAS"/>
@@ -112,11 +112,11 @@
 	  <Action Name="ACN_UNITS"/>
     </Menu>
     <Menu Name="Service">
-	  <IFONE Сonditions="ActiveDrawing">
+	  <IFONE Conditions="ActiveDrawing">
         <Action Name="ACN_SPELLCHECK"/>
 	    <Separator/>
 	  </IFONE>		
-	  <IFONE Сonditions="DebugUI">
+	  <IFONE Conditions="DebugUI">
 		  <Action Name="ACN_REBUILDTREE"/>
 		  <Separator/>
       </IFONE>
@@ -246,10 +246,10 @@
       <Action Name="ACN_INSERTTODRAWING"/>
     </Menu>
     <Menu Name="NAVIGATORNODECONTEXTMENU">
-      <IFONE Сonditions="HaveSubNodes">
+      <IFONE Conditions="HaveSubNodes">
         <Action Name="ACN_NAVSELECTSUBNODES"/>
       </IFONE>
-      <IFONE Сonditions="HaveEntity">
+      <IFONE Conditions="HaveEntity">
         <Command FaceAction="ACN_LOAD" Caption="Select entity" Command="SelectObjectByAddres($(EntInNodeAddr))"/>
       </IFONE>
     </Menu>
@@ -308,7 +308,7 @@
       <Action Name="ACN_OS_PARALLEL"/>
     </Menu>
     <Menu Name="VIEWAREACXMENU">
-      <IFONE Сonditions="EntsSelected">
+      <IFONE Conditions="EntsSelected">
         <Action Name="ACN_COPY"/>
         <Action Name="ACN_MOVE"/>
         <Action Name="ACN_ROTATE"/>
@@ -326,7 +326,7 @@
         <Action Name="ACN_SELSIM"/>
         <Separator/>
       </IFONE>
-      <IFONE Сonditions="~EntsSelected">
+      <IFONE Conditions="~EntsSelected">
         <Action Name="ACN_PASTE"/>
         <Separator/>
         <Action Name="ACN_SELECTALL"/>
@@ -334,17 +334,17 @@
       </IFONE>
       <InsertMenu Name="MAINMENU"/>
       <InsertMenu Name="Object snap"/>
-      <IFONE Сonditions="~CommandRunning">
+      <IFONE Conditions="~CommandRunning">
         <SubMenu Name="Last commands">
           <LastCommands/>
         </SubMenu>
       </IFONE>
-        <IFONE Сonditions="CommandRunning">
+        <IFONE Conditions="CommandRunning">
           <Action Name="ACN_CANCEL"/>
         </IFONE>
     </Menu>
     <Menu Name="LASTCOMMANDSCXMENU">
-      <IFONE Сonditions="CtrlPressed,ShiftPressed">
+      <IFONE Conditions="CtrlPressed,ShiftPressed">
         <Action Name="ACN_PASTE"/>
       </IFONE>
       <LastCommands/>
@@ -358,25 +358,25 @@
     </Menu>
     <Menu Name="MAINMENU">
       <InsertMenu Name="File"/>
-      <IFONE Сonditions="ActiveDrawing">
+      <IFONE Conditions="ActiveDrawing">
         <InsertMenu Name="Edit"/>
       </IFONE>
         <InsertMenu Name="View"/>
-      <IFONE Сonditions="ActiveDrawing">
+      <IFONE Conditions="ActiveDrawing">
         <InsertMenu Name="Format"/>
 	  </IFONE>	
         <InsertMenu Name="Service"/>
-      <IFONE Сonditions="ActiveDrawing">		
+      <IFONE Conditions="ActiveDrawing">		
         <InsertMenu Name="Draw"/>
         <InsertMenu Name="Dimension"/>
         <InsertMenu Name="Modify"/>
         <InsertMenu Name="Engineering"/>
       </IFONE>
-      <IFONE Сonditions="ActiveDrawing">
+      <IFONE Conditions="ActiveDrawing">
         <InsertMenu Name="Window"/>
       </IFONE>
       <InsertMenu Name="Help"/>
-     <IFONE Сonditions="DebugUI">
+     <IFONE Conditions="DebugUI">
       <InsertMenu Name="Debug"/>
      </IFONE>
     </Menu>
@@ -392,7 +392,7 @@
       <InsertMenu Name="Engineering"/>
       <InsertMenu Name="Window"/>
       <InsertMenu Name="Help"/>
-     <IFONE Сonditions="DebugUI">
+     <IFONE Conditions="DebugUI">
       <InsertMenu Name="Debug"/>
      </IFONE>
     </Menu2>

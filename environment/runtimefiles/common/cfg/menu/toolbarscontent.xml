@@ -26,7 +26,7 @@
       <Action Name="ACN_REDO"/>
       <Separator/>
       <Action Name="ACN_REGEN"/>     
-	  <IFONE Сonditions="DebugUI">
+	  <IFONE Conditions="DebugUI">
       <Separator/>
       <Action Name="ACN_REBUILDTREE"/>
       </IFONE>

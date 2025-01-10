@@ -79,6 +79,7 @@ var
   OpenedDrawings:TOpenedDrawings;
 
   localpm:TFiletoMenuIteratorData;
+function CreateTBShowAction({fmf:TForm;}AAcnName:string;ATBName:string;AAcnLst:TActionList):TmyAction;
 implementation
 
 const
@@ -344,6 +345,18 @@ begin
     CreatedMenuItem.Action:=OpenedDrawings[i];
     RootMenuItem.Add(CreatedMenuItem);
   end;
+end;
+
+function CreateTBShowAction({fmf:TForm;}AAcnName:string;ATBName:string;AAcnLst:TActionList):TmyAction;
+begin
+  result:=TmyAction.Create({fmf}AAcnLst);
+  result.Name:=AAcnName;
+  result.Caption:=ATBName;
+  result.command:='ShowToolBar';
+  result.options:=ATBName;
+  result.DisableIfNoHandler:=false;
+  AAcnLst.AddMyAction(result);
+  result.pfoundcommand:=commandmanager.FindCommand(result.command);
 end;
 
 class procedure ZMenuExt.TTBRegisterInAPPFunc(fmf:TForm;actlist:TActionList;aTBNode: TDomNode;aName,aType: string;Data:Pointer);

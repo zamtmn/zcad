@@ -25,7 +25,7 @@ uses Laz2_DOM,Toolwin,Clipbrd,sysutils,uzccommandsabstract,uzcfcommandline,uzcut
      gzctnrVectorTypes,Types,Controls,uzcdrawings,Varman,UUnitManager,uzcsysvars,
      uzcsysparams,zcobjectinspectorui,uzcoimultiobjects,uzccommandsimpl,
      uzmenusmanager,uzcLog,menus,ComCtrls,uztoolbarsmanager,uzcimagesmanager,
-     uzedimensionaltypes;
+     uzedimensionaltypes,uzctreenode,uzcActionsManager;
 const
     PEditorFocusPriority=550;
 type
@@ -64,6 +64,7 @@ var
   pint:PInteger;
   TBNode:TDomNode;
   tb:TToolBar;
+  action:tmyaction;
 begin
 
   GDBobjinsp:=TGDBObjInsp.Create(Application);
@@ -94,6 +95,17 @@ begin
     ToolBarsManager.CreateToolbarContent(tb,TBNode);
     tb.Parent:=tform(Form);
   end;
+
+  action:=tmyaction(StandartActions.ActionByName(ToolBarNameToActionName('ObjInspUpToolbar')));
+  if assigned(action) then
+    begin
+      action.Enabled:=false;
+      action.Checked:=true;
+      action.pfoundcommand:=nil;
+      action.command:='';
+      action.options:='';
+    end;
+
   GDBobjinsp.Align:=alClient;
   GDBobjinsp.BorderStyle:=bsNone;
   GDBobjinsp.Parent:=tform(Form);

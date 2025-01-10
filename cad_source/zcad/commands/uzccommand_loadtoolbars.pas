@@ -22,12 +22,27 @@ unit uzccommand_loadtoolbars;
 interface
 uses
  uzcLog,
- uzbpaths,uzccommandsabstract,uzccommandsimpl,uztoolbarsmanager;
+ Forms,ActnList,Laz2_DOM,
+ uzbpaths,uzccommandsabstract,uzccommandsimpl,uztoolbarsmanager,uzctbextmenus,
+ uzctreenode;
 
 implementation
+function TBCheckFunc(fmf:TForm;AcnLst:TActionList;aTBNode:TDomNode;aName,aType:string):boolean;
+var
+  AcnName:string;
+  Action:tmyaction;
+begin
+  AcnName:=ToolBarNameToActionName(aName);
+  Action:=tmyaction(AcnLst.ActionByName(AcnName));
+  if Action<>nil then
+    exit(false);
+  CreateTBShowAction(AcnName,aName,AcnLst);
+  result:=True;
+end;
+
 function LoadToolbars_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 begin
-  ToolBarsManager.LoadToolBarsContent(ExpandPath(operands));
+  ToolBarsManager.LoadToolBarsContent(ExpandPath(operands),@TBCheckFunc);
   result:=cmd_ok;
 end;
 

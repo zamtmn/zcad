@@ -54,7 +54,7 @@ type
     class procedure TBTStyleComboBoxCreateFunc(fmf:TForm;actlist:TActionList;aNode: TDomNode; TB:TToolBar);
     class procedure TBDimStyleComboBoxCreateFunc(fmf:TForm;actlist:TActionList;aNode: TDomNode; TB:TToolBar);
     class procedure TBVariableCreateFunc(fmf:TForm;actlist:TActionList;aNode: TDomNode; TB:TToolBar);
-    class function TBCreateZCADToolBar(aName,atype: string):TToolBar;
+    class function TBCreateZCADToolBar(fmf:TForm;aName,atype: string):TToolBar;
     class procedure ZActionsReader(aName: string;aNode: TDomNode;CategoryOverrider:string;actlist:TActionList);
     class procedure ZAction2VariableReader(aName: string;aNode: TDomNode;CategoryOverrider:string;actlist:TActionList);
 
@@ -835,9 +835,9 @@ begin
   enabledcontrols.Add(DimStyleBox);
 end;
 
-class function TZTBZCADExtensions.TBCreateZCADToolBar(aName,atype: string):TToolBar;
+class function TZTBZCADExtensions.TBCreateZCADToolBar(fmf:TForm;aName,atype: string):TToolBar;
 begin
-  result:=TmyToolBar.Create(Application);
+  result:=TmyToolBar.Create(fmf{Application});
   ToolBarsManager.SetupDefaultToolBar(aName,atype, result);
 end;
 

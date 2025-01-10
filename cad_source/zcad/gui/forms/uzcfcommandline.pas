@@ -26,7 +26,7 @@ uses
  varman,varmandef,
  uzegeometry,uzctnrvectorstrings,uzcinterface,uzctreenode,uzclog,strmy,
  uzccommandlineutil,uztoolbarsmanager,uzmenusmanager,uzccommandsabstract,gzctnrVectorTypes,
- uzcctrlcommandlineprompt,uzeparsercmdprompt,uzbtypes;
+ uzcctrlcommandlineprompt,uzeparsercmdprompt,uzbtypes,uzcFileStructure;
 
 const
      cheight=48;
@@ -300,7 +300,7 @@ begin
     //---------------BevelOuter:=bvnone;
 
     aliases.init(100);
-    aliases.loadfromfile(expandpath('$(RoCfgs)/menu/default.cla'));
+    aliases.loadfromfile(FindFileInCfgsPaths(CFSmenuDir,CFSdefaultclaFile));
 
     //DMenu:=TDMenuWnd.Create(self);
 

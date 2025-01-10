@@ -47,6 +47,9 @@ const
   CFSimagesDir='images';
   CFSnavigatorimaFile='navigator.ima';
 
+  CFSmenuDir='menu';
+  CFSdefaultclaFile='default.cla';
+
   CFSexamplesDir='examples';
   CFSerrorsDir='errors';
 implementation

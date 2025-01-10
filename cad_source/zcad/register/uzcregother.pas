@@ -34,7 +34,7 @@ var
 initialization;
   units.loadunit(GetSupportPaths,InterfaceTranslate,FindFileInCfgsPaths(CFSconfigsDir,CFSsysvarpasFile),nil);
   units.loadunit(GetSupportPaths,InterfaceTranslate,FindFileInCfgsPaths(CFSconfigsDir,CFSsavedvarpasFile),nil);
-  units.loadunit(GetSupportPaths,InterfaceTranslate,expandpath('$(RoCfgs)/rtl/devicebase.pas'),nil);
+  units.loadunit(GetSupportPaths,InterfaceTranslate,expandpath('$(DistribPath)/rtl/devicebase.pas'),nil);
 
   SysVarUnit:=units.findunit(GetSupportPaths,InterfaceTranslate,'sysvar');
   SavedUnit:=units.findunit(GetSupportPaths,InterfaceTranslate,'savedvar');
@@ -203,10 +203,10 @@ initialization;
   end;
 
 
-  units.loadunit(GetSupportPaths,InterfaceTranslate,expandpath('$(RoCfgs)/rtl/cables.pas'),nil);
-  units.loadunit(GetSupportPaths,InterfaceTranslate,expandpath('$(RoCfgs)/rtl/devices.pas'),nil);
-  units.loadunit(GetSupportPaths,InterfaceTranslate,expandpath('$(RoCfgs)/rtl/connectors.pas'),nil);
-  units.loadunit(GetSupportPaths,InterfaceTranslate,expandpath('$(RoCfgs)/rtl/styles/styles.pas'),nil);
+  units.loadunit(GetSupportPaths,InterfaceTranslate,expandpath('$(DistribPath)/rtl/cables.pas'),nil);
+  units.loadunit(GetSupportPaths,InterfaceTranslate,expandpath('$(DistribPath)/rtl/devices.pas'),nil);
+  units.loadunit(GetSupportPaths,InterfaceTranslate,expandpath('$(DistribPath)/rtl/connectors.pas'),nil);
+  units.loadunit(GetSupportPaths,InterfaceTranslate,expandpath('$(DistribPath)/rtl/styles/styles.pas'),nil);
 
   SysVar.debug.memdeb.GetMemCount:=nil;
   SysVar.debug.memdeb.FreeMemCount:=nil;

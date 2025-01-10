@@ -690,7 +690,7 @@ begin
   UManager.init;
 
   defaultunit.init(DefNumMetric);
-  units.loadunit(GetSupportPaths,InterfaceTranslate,expandpath('$(RoCfgs)/rtl/objcalc/opsmarkdef.pas'),(@defaultunit));
+  units.loadunit(GetSupportPaths,InterfaceTranslate,expandpath('$(DistribPath)/rtl/objcalc/opsmarkdef.pas'),(@defaultunit));
   pcabledesk:=cman.beginiterate(ir);
   if pcabledesk<>nil then
   repeat
@@ -804,7 +804,7 @@ begin
                            //cpGC_HDShortName.ChangedData.StoreUndoData(pvd4^.data.Addr.GetInstance);
                          end;
 
-                         units.loadunit(GetSupportPaths,InterfaceTranslate,expandpath('$(RoCfgs)/rtl/objcalc/opsmark.pas'),(currentunit));
+                         units.loadunit(GetSupportPaths,InterfaceTranslate,expandpath('$(DistribPath)/rtl/objcalc/opsmark.pas'),(currentunit));
 
                          //if pvd1<>nil then begin
                          //  cpGC_NumberInGroup.ChangedData.StoreDoData(pvd1^.data.Addr.GetInstance);;

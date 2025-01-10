@@ -331,7 +331,7 @@ begin
 
   //инициализация drawings
   FontManager.EnumerateFontFiles;
-  uzcdrawings.startup('$(RoCfgs)/rtl/dwg/DrawingVars.pas','');
+  uzcdrawings.startup('$(DistribPath)/rtl/dwg/DrawingVars.pas','');
   uzcdevicebase.startup;
   {$IF lcl_fullversion>2001200}
   {$ELSE}

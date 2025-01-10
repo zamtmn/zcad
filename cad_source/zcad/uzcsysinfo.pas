@@ -191,6 +191,7 @@ begin
       programlog.LogOutFormatStr('$(BinaryPath)="%s"',[ExpandPath('$(BinaryPath)')],LM_Necessarily);
       programlog.LogOutFormatStr('$(DistribPath)="%s"',[ExpandPath('$(DistribPath)')],LM_Necessarily);
       programlog.LogOutFormatStr('$(RoCfgs)="%s"',[ExpandPath('$(RoCfgs)')],LM_Necessarily);
+      programlog.LogOutFormatStr('$(WrCfgs)="%s"',[ExpandPath('$(WrCfgs)')],LM_Necessarily);
       programlog.LogOutFormatStr('$(UserDir)="%s"',[ExpandPath('$(UserDir)')],LM_Necessarily);
       programlog.LogOutFormatStr('$(GlobalConfigDir)="%s"',[ExpandPath('$(GlobalConfigDir)')],LM_Necessarily);
       programlog.LogOutFormatStr('$(LocalConfigDir)="%s"',[ExpandPath('$(LocalConfigDir)')],LM_Necessarily);

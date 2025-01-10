@@ -218,11 +218,11 @@ tests: checkvars
 	$(MAKE) -C cad_source/zengine/tests LP=$(LP) PCP=$(PCP) clean all
 
 updatelocalizedpofiles: checkvars
-	cp cad/languages/rtzcad.po cad/languages/rtzcad.pot
-	$(LP)$(PATHDELIM)tools$(PATHDELIM)updatepofiles cad/languages/rtzcad.pot
-	rm -rf cad/languages/rtzcad.pot
-	cp $(LP)$(PATHDELIM)lcl/languages/*.po cad/languages
-	cp $(LP)$(PATHDELIM)components/anchordocking/languages/*.po cad/languages
+	cp cad/data/languages/rtzcad.po cad/data/languages/rtzcad.pot
+	$(LP)$(PATHDELIM)tools$(PATHDELIM)updatepofiles cad/data/languages/rtzcad.pot
+	rm -rf cad/data/languages/rtzcad.pot
+	cp $(LP)$(PATHDELIM)lcl/languages/*.po cad/data/languages
+	cp $(LP)$(PATHDELIM)components/anchordocking/languages/*.po cad/data/languages
 
 cleanzcad: clean zcadenv replaceinstallprefix zcad
 

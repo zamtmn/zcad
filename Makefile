@@ -112,34 +112,30 @@ clean:
 	rm -rf errors/*.dbpas
 
 updatezcadenv: checkvars      
-	rm -rf cad/blocks
-	rm -rf cad/components
-	rm -rf cad/configs
-	rm -rf cad/examples
-	rm -rf cad/fonts
-	rm -rf cad/images
-	rm -rf cad/languages
-	rm -rf cad/log
-	rm -rf cad/menu
-	rm -rf cad/plugins
-	rm -rf cad/programdb
-	rm -rf cad/template
+	rm -rf cad/data/blocks
+	rm -rf cad/cfg/components
+	rm -rf cad/cfg/configs
+	rm -rf cad/data/examples
+	rm -rf cad/data/fonts
+	rm -rf cad/data/images
+	rm -rf cad/data/languages
+	rm -rf cad/cfg/menu
+	rm -rf cad/data/programdb
+	rm -rf cad/data/template
 	cp -r environment/runtimefiles/common/* cad
 	cp -r environment/runtimefiles/zcad/* cad
 
 updatezcadelectrotechenv: checkvars      
-	rm -rf cad/blocks
-	rm -rf cad/components
-	rm -rf cad/configs
-	rm -rf cad/examples
-	rm -rf cad/fonts
-	rm -rf cad/images
-	rm -rf cad/languages
-	rm -rf cad/log
-	rm -rf cad/menu
-	rm -rf cad/plugins
-	rm -rf cad/programdb
-	rm -rf cad/template
+	rm -rf cad/data/blocks
+	rm -rf cad/cfg/components
+	rm -rf cad/cfg/configs
+	rm -rf cad/data/examples
+	rm -rf cad/data/fonts
+	rm -rf cad/data/images
+	rm -rf cad/data/languages
+	rm -rf cad/cfg/menu
+	rm -rf cad/data/programdb
+	rm -rf cad/data/template
 	cp -r environment/runtimefiles/common/* cad
 	cp -r environment/runtimefiles/zcadelectrotech/* cad
 
@@ -187,7 +183,7 @@ zcadelectrotech: checkvars version
 	$(LAZBUILD) --pcp=$(PCP) cad_source/zcad.lpi
 
 afterzcadelectrotechbuild: checkallvars version
-	$(ZP)/zcad nosplash runscript cad/components/afterbuild.cmd
+	$(ZP)/zcad nosplash runscript cad/cfg/components/afterbuild.cmd
 cad:
 	mkdir cad
 cad/data:

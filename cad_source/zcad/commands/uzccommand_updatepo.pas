@@ -51,8 +51,8 @@ begin
            +#13#10'File zcadrt.po must be rewriten. Confirm?';
                if ZCMsgCallBackInterface.TextQuestion('UpdatePO',s)=zccbNo then
                  exit;
-               RunTimePO.SaveToFile(expandpath(PODirectory + ZCADRTBackupPOFileName));
-               actualypo.SaveToFile(expandpath(PODirectory + ZCADRTPOFileName));
+               RunTimePO.SaveToFile(expandpath(ConcatPaths([PODirectory,ZCADRTBackupPOFileName])));
+               actualypo.SaveToFile(expandpath(ConcatPaths([PODirectory,ZCADRTPOFileName])));
                ZCSysParams.saved.updatepo:=false
           end;
      end

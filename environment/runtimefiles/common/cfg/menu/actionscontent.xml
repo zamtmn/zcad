@@ -42,7 +42,7 @@
       <ZAction Name="ACN_SHOW_NAVIGATORCABLES" Command="Show(NavigatorCables)" Img="#NC" Caption="Navigator(Cables)"/>
       <ZAction Name="ACN_SHOW_NAVIGATORENTITIES" Command="Show(NavigatorEntities)" Img="#NV" Caption="Navigator(Entities)"/>
       <ZAction Name="ACN_SAVELAYOUT" Command="SaveLayout" Img="#SLay" Caption="Save window layout as default"/>
-      <ZAction Name="ACN_DOCKOPT" Command="DockingOptions" Img="#DO" Caption="Docking options"/>
+      <ZAction Name="ACN_DOCKOPT" Command="DockingOptions" Img="#DO" Caption="Setting..."/>
       <ZAction Name="ACN_TEXTWINDOW" Command="TextWindow" Img="#TW" Caption="View text window" ShortCut="F2"/>
       <ZAction Name="ACN_ZOOMALL" Command="Zoom(ALL)" Img="zoomall" Caption="Zoom All" ShortCut="HOME"/>
       <ZAction Name="ACN_ZOOMWINDOW" Command="ZoomWindow" Img="zoomwindow" Caption="Zoom window"/>

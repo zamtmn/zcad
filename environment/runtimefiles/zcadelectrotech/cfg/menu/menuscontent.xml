@@ -120,7 +120,7 @@
 		  <Action Name="ACN_REBUILDTREE"/>
 		  <Separator/>
       </IFONE>
-	  <SubMenu Name="Docking">
+	  <SubMenu Name="Docking toolbars">
 		<Action Name="ACN_DOCKOPT"/>
 		<Action Name="ACN_SAVELAYOUT"/>
    	  </SubMenu>

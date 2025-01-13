@@ -192,12 +192,12 @@ begin
                          Freemem(pointer(pb));
                          pb:=pointer(tb);
     end;
-    drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.AddPEntity(pb^);
     //PGDBObjEntity(pb)^.FromDXFPostProcessAfterAdd;
     pb^.CalcObjMatrix;
     pb^.BuildGeometry(drawings.GetCurrentDWG^);
     pb^.BuildVarGeometry(drawings.GetCurrentDWG^);
     pb^.FormatEntity(drawings.GetCurrentDWG^,dc);
+    drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.AddPEntity(pb^);
     //drawings.GetCurrentDWG^.ConstructObjRoot.Count := 0;
   end;
 end;

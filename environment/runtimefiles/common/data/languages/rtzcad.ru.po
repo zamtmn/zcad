@@ -78,7 +78,7 @@ msgstr ""
 
 #: zcadexternal.acn_brotate~caption
 msgid "Block rotate"
-msgstr "Повернуть блокки"
+msgstr "Повернуть блоки"
 
 #: zcadexternal.acn_brotate~textimage
 msgctxt "zcadexternal.acn_brotate~textimage"
@@ -1873,7 +1873,7 @@ msgstr "Закрепление панелей"
 
 #: zcadexternal.menu~draw
 msgid "Draw"
-msgstr "Чертить"
+msgstr "Черчение"
 
 #: zcadexternal.menu~edit
 msgid "Edit"
@@ -1943,7 +1943,7 @@ msgstr "Модель"
 
 #: zcadexternal.menu~modify
 msgid "Modify"
-msgstr "Изменить"
+msgstr "Изменение"
 
 #: zcadexternal.menu~pan
 msgid "Pan"

@@ -63,7 +63,7 @@ type
       constructor initnul;
       procedure AddObjToNul(var Entity:TEntity);
       procedure updateenttreeadress;
-      procedure CorrectNodeBoundingBox(var Entity:TEntity); inline;
+      procedure CorrectNodeBoundingBox(var AEntity:TEntity;ASetToThis:Boolean=False);inline;
       procedure AddObjectToNodeTree(var Entity:TEntity);
       procedure SetSize(ns:integer);
       procedure Lock;
@@ -400,9 +400,12 @@ begin
   TEntsManipulator.SetSizeInArray(ns,nul);
 end;
 
-procedure GZBInarySeparatedGeometry<TBoundingBox,TSeparator,TNodeData,TEntsManipulator,TEntity,TEntityArrayIterateResult,TEntityArray>.CorrectNodeBoundingBox(var Entity:TEntity);
+procedure GZBInarySeparatedGeometry<TBoundingBox,TSeparator,TNodeData,TEntsManipulator,TEntity,TEntityArrayIterateResult,TEntityArray>.CorrectNodeBoundingBox(var AEntity:TEntity;ASetToThis:Boolean=False);
 begin
-     TEntsManipulator.CorrectNodeBoundingBox(BoundingBox,Entity);
+  if ASetToThis then
+    BoundingBox:=TEntsManipulator.GetEntityBoundingBox(AEntity)
+  else
+    TEntsManipulator.CorrectNodeBoundingBox(BoundingBox,AEntity)
 end;
 procedure GZBInarySeparatedGeometry<TBoundingBox,TSeparator,TNodeData,TEntsManipulator,TEntity,TEntityArrayIterateResult,TEntityArray>.updateenttreeadress;
 var pobj:PTEntity;
@@ -450,7 +453,7 @@ begin
      BoundingBox:=default(TBoundingBox);
      //NodeDir:TNodeDir;
      Root:=nil;
-     NodeData.CreateDef;
+     NodeData.Clear;
      nul.Clear;
      if assigned(pplusnode) then
                                 begin

@@ -21,7 +21,7 @@ uses
   gzctnrVectorTypes,uzccomelectrical,URecordDescriptor,TypeDescriptors,uzcLog,
   uzcstrconsts,uzccmdfloatinsert,//uzctnrvectorpgdbaseobjects,
   zUndoCmdChgTypes,zUndoCmdChgVariable,
-  uzcdrawing,uzCtnrVectorpBaseEntity;
+  uzcdrawing,uzCtnrVectorpBaseEntity,UGDBVisibleTreeArray;
 
 type
   TPlaceParam=record
@@ -217,7 +217,7 @@ begin
             end;
      end;
 end;
-procedure place2(pva:PGDBObjEntityOpenArray;basepoint, dir: gdbvertex; count: integer; length,sd,dd: Double; name: pansichar;angle:Double;norm:Boolean;scaleblock:Double;ps:TPlaceSensorsStrategy);
+procedure place2(pva:PGDBObjEntityTreeArray;basepoint, dir: gdbvertex; count: integer; length,sd,dd: Double; name: pansichar;angle:Double;norm:Boolean;scaleblock:Double;ps:TPlaceSensorsStrategy);
 var //line2: GDBLineOps;
     i: integer;
     d: TPlaceParam;
@@ -248,7 +248,7 @@ begin
          end;
      end;
 end;
-procedure placedatcic(pva:PGDBObjEntityOpenArray;p1, p2: gdbvertex; InitialSD, InitialDD: Double; name: pansichar;norm:Boolean;scaleblock: Double;ps:TPlaceSensorsStrategy);
+procedure placedatcic(pva:PGDBObjEntityTreeArray;p1, p2: gdbvertex; InitialSD, InitialDD: Double; name: pansichar;norm:Boolean;scaleblock: Double;ps:TPlaceSensorsStrategy);
 var dx, dy: Double;
   FirstLine, SecondLine: GDBLineOps;
   FirstCount, SecondCount, i: integer;
@@ -1203,7 +1203,7 @@ begin
       t3dp:=wc;
     end
 end;
-procedure placedev(pva:PGDBObjEntityOpenArray;p1, p2: gdbvertex; nmax, nmin: Integer; name: pansichar;a:Double;aa:Boolean;Norm:Boolean);
+procedure placedev(pva:PGDBObjEntityTreeArray;p1, p2: gdbvertex; nmax, nmin: Integer; name: pansichar;a:Double;aa:Boolean;Norm:Boolean);
 var dx, dy: Double;
   line1, line2: GDBLineOps;
   l1, l2, i: integer;

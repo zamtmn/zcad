@@ -27,7 +27,7 @@ uses uzeutils,LCLProc,zcmultiobjectcreateundocommand,uzepalette,
      uzestyleslayers,sysutils,uzbtypes,uzcdrawings,varmandef,
      uzeconsts,UGDBVisibleOpenArray,uzeentgenericsubentry,uzeentity,
      uzegeometrytypes,uzeentblockinsert,uzcinterface,gzctnrVectorTypes,uzeentitiesmanager,
-     uzegeometry,zcmultiobjectchangeundocommand,uzeEntBase;
+     uzegeometry,zcmultiobjectchangeundocommand,uzeEntBase,UGDBVisibleTreeArray;
 
   {**Добавление в чертеж примитива с обвязкой undo
     @param(PEnt Указатель на добавляемый примитив)
@@ -98,12 +98,12 @@ function GDBInsertBlock(own:PGDBObjGenericSubEntry;BlockName:String;p_insert:GDB
                         scale:GDBVertex;rotate:Double;needundo:Boolean=false
                         ):PGDBObjBlockInsert;
 
-function old_ENTF_CreateBlockInsert(owner:PGDBObjGenericSubEntry;ownerarray: PGDBObjEntityOpenArray;
+function old_ENTF_CreateBlockInsert(owner:PGDBObjGenericSubEntry;ownerarray: PGDBObjEntityTreeArray;
                                 layeraddres:PGDBLayerProp;LTAddres:PGDBLtypeProp;LW:TGDBLineWeight;color:TGDBPaletteColor;
                                 point: gdbvertex; scale, angle: Double; AName: String):PGDBObjBlockInsert;
 function zcGetRealSelEntsCount:integer;
 implementation
-function old_ENTF_CreateBlockInsert(owner:PGDBObjGenericSubEntry;ownerarray: PGDBObjEntityOpenArray;
+function old_ENTF_CreateBlockInsert(owner:PGDBObjGenericSubEntry;ownerarray: PGDBObjEntityTreeArray;
                                 layeraddres:PGDBLayerProp;LTAddres:PGDBLtypeProp;LW:TGDBLineWeight;color:TGDBPaletteColor;
                                 point: gdbvertex; scale, angle: Double; AName: String):PGDBObjBlockInsert;
 var
@@ -119,7 +119,7 @@ begin
   Result^.BuildVarGeometry(drawings.GetCurrentDWG^);
   DC:=drawings.GetCurrentDWG^.CreateDrawingRC;
   Result^.formatEntity(drawings.GetCurrentDWG^,dc);
-  owner.ObjArray.ObjTree.CorrectNodeBoundingBox(Result^);
+  ownerarray.ObjTree.CorrectNodeBoundingBox(Result^,ownerarray.Count=1);
 end;
 function zcGetRealSelEntsCount:integer;
 var

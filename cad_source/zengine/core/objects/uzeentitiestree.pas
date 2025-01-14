@@ -43,6 +43,7 @@ TFirstStageData=record
     //nodedepth:Integer;
     //pluscount,minuscount:Integer;
     procedure CreateDef;
+    procedure Clear;
     procedure Destroy;
     procedure AfterSeparateNode(var nul:TEntityArray);
   end;
@@ -87,6 +88,13 @@ begin
   FulDraw:=TDTFulDraw;
   InFrustumBoundingBox:=default(TBoundingBox);
   NeedToSeparated.initnul;
+end;
+procedure TEntTreeNodeData.Clear;
+begin
+  infrustum:=0;
+  nuldrawpos:=0;
+  FulDraw:=TDTFulDraw;
+  NeedToSeparated.clear;
 end;
 procedure TEntTreeNodeData.Destroy;
 begin

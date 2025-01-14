@@ -35,6 +35,7 @@ type
   end;
   TGeomTreeNodeData=record
     procedure CreateDef;
+    procedure Clear;
     procedure Destroy;
     procedure AfterSeparateNode(var nul:TEntityArray);
   end;
@@ -63,6 +64,9 @@ var
 function GetInNodeCount(_InNodeCount:Integer):Integer;
 implementation
 procedure TGeomTreeNodeData.CreateDef;
+begin
+end;
+procedure TGeomTreeNodeData.Clear;
 begin
 end;
 procedure TGeomTreeNodeData.Destroy;

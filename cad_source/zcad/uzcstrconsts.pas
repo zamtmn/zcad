@@ -258,6 +258,7 @@ resourcestring
 
   rsncOGLc='OpenGL context is not created';
   rsAdditionalSelected='Additional were selected %d primitives';
+  rsThereIsNothingToSelect='There is nothing to select';
 implementation
 
 end.

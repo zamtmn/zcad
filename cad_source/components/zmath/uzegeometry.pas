@@ -671,7 +671,7 @@ end;
 function CalcAABBInFrustum (const AABB:TBoundingBox;
   const frustum:ClipArray):TInBoundingVolume;
 var
-  i{,Count}:integer;
+  i,Count:integer;
   p1,p2,p3,p4,p5,p6,p7,p8:GDBvertex;
   d1,d2,d3,d4,d5,d6,d7,d8:double;
 begin
@@ -684,7 +684,7 @@ begin
   p7:=AABB.RTF;
   p8:=CreateVertex(AABB.LBN.x,AABB.RTF.y,AABB.RTF.Z);
 
-  //Count:=0;
+  Count:=0;
   for i:=0 to 5 do begin
     with frustum[i] do begin
       d1:=v[0] * p1.x + v[1] * p1.y + v[2] * p1.z + v[3];
@@ -703,26 +703,26 @@ begin
       system.exit;
     end;
 
-    if (d1<0)or(d2<0)or(d3<0)or(d4<0)or(d5<0)or(d6<0)or
+    {if (d1<0)or(d2<0)or(d3<0)or(d4<0)or(d5<0)or(d6<0)or
       (d7<0)or(d8<0)  then begin
       Result:=IRPartially;
       system.exit;
-    end;
+    end;}
 
-    //if d1>=0 then Inc(Count);
-    //if d2>=0 then Inc(Count);
-    //if d3>=0 then Inc(Count);
-    //if d4>=0 then Inc(Count);
-    //if d5>=0 then Inc(Count);
-    //if d6>=0 then Inc(Count);
-    //if d7>=0 then Inc(Count);
-    //if d8>=0 then Inc(Count);
+    if d1>=0 then Inc(Count);
+    if d2>=0 then Inc(Count);
+    if d3>=0 then Inc(Count);
+    if d4>=0 then Inc(Count);
+    if d5>=0 then Inc(Count);
+    if d6>=0 then Inc(Count);
+    if d7>=0 then Inc(Count);
+    if d8>=0 then Inc(Count);
   end;
-  Result:=irfully;
-  //if Count=48 then begin
-  //  Result:=irfully;
-  //  exit;
-  //end;
+  //Result:=irfully;
+  Result:=IRPartially;
+  if Count=48 then begin
+    Result:=irfully;
+  end;
   //Result:=IRPartially;
 end;
 function PointOf3PlaneIntersect(const P1,P2,P3:DVector4D):GDBvertex;

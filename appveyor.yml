@@ -33,7 +33,7 @@ install:
   - cmd: echo Download lazarus-3.8-fpc-3.2.2-win64.exe
   - cmd: curl -fsSL -o lazarus-3.8-fpc-3.2.2-win64.exe "https://fossies.org/windows/misc/lazarus-3.8-fpc-3.2.2-win64.exe"
   - cmd: echo Installing lazarus-3.8-fpc-3.2.2-win64.exe
-  - cmd: lazarus-3.6-fpc-3.2.2-win64.exe /verysilent /supressmsgboxes
+  - cmd: lazarus-3.8-fpc-3.2.2-win64.exe /verysilent /supressmsgboxes
   - cmd: rmdir /S /Q c:\lazarus\docs
   - cmd: rmdir /S /Q c:\lazarus\examples
   - cmd: echo Fix https://gitlab.com/freepascal.org/lazarus/lazarus/-/issues/39630

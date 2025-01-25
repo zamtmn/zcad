@@ -1118,7 +1118,7 @@ begin
   case DXFCode of
     5:begin
       if AddExtAttrib^.dwgHandle=0 then begin
-        PExtAttrib^.dwgHandle:=f.ParseHexInteger;
+        PExtAttrib^.dwgHandle:=f.ParseHexQWord;
       end else begin
         //при загрузке полилинии у вертексов есть хэндл
         f.SkipString;

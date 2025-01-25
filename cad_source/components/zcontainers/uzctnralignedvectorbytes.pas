@@ -33,29 +33,33 @@ TZctnrAlignedVectorBytes=
                 function beginiterate(out ir:itrec):Pointer;virtual;
                 function iterate(var ir:itrec):Pointer;virtual;
 
-                function Align(SData:Integer):Integer;//inline;
+                class function Align(SData:Integer):Integer; static; inline;
                 procedure AlignDataSize;
 
                 function AllocData(SData:Word):Integer;virtual;
              end;
 {Export-}
 implementation
-function TZctnrAlignedVectorBytes.Align(SData:Integer):Integer;
-var
-  m:integer;
+class function TZctnrAlignedVectorBytes.Align(SData:Integer):Integer;
+//var
+//  m:integer;
 begin
-  m:=sdata and cAlignmentMask;
-  m:=m xor cAlignmentMask;
-  inc(m);
-  m:=m and cnAlignmentMask;
-  m:= m xor cAlignmentBit;
-  Result:=SData and cnAlignmentMask;
-  Result:=SData + m;
+
+  //m:=sdata and cAlignmentMask;
+  //m:=m xor cAlignmentMask;
+  //inc(m);
+  //m:=m and cnAlignmentMask;
+  //m:= m xor cAlignmentBit;
+  //Result:=SData and cnAlignmentMask;
+  //Result:=SData + m;
+
+
   //m:=SData mod cAlignment;
   //if m=0 then
   //  result:=SData
   //else
   //  result:=SData+cAlignment-m;
+  result:=(SData+cAlignmentMask) and cnAlignmentMask;
 end;
 
 procedure TZctnrAlignedVectorBytes.AlignDataSize;
@@ -66,7 +70,7 @@ begin
     m:=Count mod cAlignment;
     if m<>0 then
       inherited AllocData(cAlignment-m);
-    m:=Count mod cAlignment
+    //m:=Count mod cAlignment
   end;
 end;
 
@@ -78,7 +82,7 @@ begin
     m:=Count mod cAlignment;
     if m<>0 then
       inherited AllocData(cAlignment-m);
-    m:=Count mod cAlignment
+    //m:=Count mod cAlignment
   end;
   result:=inherited;
 end;

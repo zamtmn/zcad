@@ -52,8 +52,14 @@ begin
   GetPartOfPath(Major,AbbreviatedName,'.');
   GetPartOfPath(Minor,AbbreviatedName,'.');
   GetPartOfPath(Micro,AbbreviatedName,'.');
-  GetPartOfPath(Release,AbbreviatedName,'-');
-  GetPartOfPath(CommitsAfter,AbbreviatedName,'-');
+  result.major:=pos('-',AbbreviatedName);
+  if pos('-',AbbreviatedName)>0 then begin
+    GetPartOfPath(Release,AbbreviatedName,'-');
+    GetPartOfPath(CommitsAfter,AbbreviatedName,'-');
+  end else begin
+    GetPartOfPath(Release,AbbreviatedName,' ');
+    //GetPartOfPath(CommitsAfter,AbbreviatedName,'-');
+  end;
 
   TryStrToInt(Major,result.major);
   TryStrToInt(Minor,result.Minor);

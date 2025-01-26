@@ -3,47 +3,47 @@
   <MainConfig>
     <Nodes Monitor="0" ChildCount="1" PixelsPerInch="0">
       <Item1 Name="DockPanel" Type="CustomSite" Monitor="0" ChildCount="1" PixelsPerInch="0">
-        <Bounds Top="234" Left="1064" Width="1373" Height="935"/>
+        <Bounds Top="50" Left="50" Width="1366" Height="768"/>
         <Anchors Align="Client"/>
-        <Item1 Name="AnchorDockSite4" Type="Layout" Monitor="0" ChildCount="5">
-          <Bounds Width="1339" Height="848"/>
+        <Item1 Name="AnchorDockSite4" Type="Layout" Monitor="0" ChildCount="5" PixelsPerInch="192">
+          <Bounds Width="1199" Height="582"/>
           <Anchors Align="Client"/>
-          <Item1 Name="CommandLine" Type="Control" Monitor="0">
-            <Bounds Top="651" Left="343" Width="996" Height="197"/>
+          <Item1 Name="CommandLine" Type="Control" Monitor="0" PixelsPerInch="192">
+            <Bounds Top="504" Left="304" Width="895" Height="78"/>
             <Anchors Top="AnchorDockSplitter1" Left="AnchorDockSplitter2"/>
           </Item1>
-          <Item2 Name="AnchorDockSplitter1" Type="SplitterHorizontal" Monitor="0">
-            <Bounds Top="647" Left="343" Width="996" Height="4"/>
+          <Item2 Name="AnchorDockSplitter1" Type="SplitterHorizontal" Monitor="0" PixelsPerInch="192">
+            <Bounds Top="500" Left="304" Width="895" Height="4"/>
             <Anchors Left="AnchorDockSplitter2"/>
           </Item2>
-          <Item3 Name="PageControl" Type="Control" Monitor="0">
-            <Bounds Left="343" Width="996" Height="647"/>
+          <Item3 Name="PageControl" Type="Control" Monitor="0" PixelsPerInch="192">
+            <Bounds Left="304" Width="895" Height="500"/>
             <Anchors Left="AnchorDockSplitter2" Bottom="AnchorDockSplitter1"/>
           </Item3>
-          <Item4 Name="AnchorDockSplitter2" Type="SplitterVertical" Monitor="0">
-            <Bounds Left="339" Width="4" Height="848"/>
+          <Item4 Name="AnchorDockSplitter2" Type="SplitterVertical" Monitor="0" PixelsPerInch="192">
+            <Bounds Left="300" Width="4" Height="582"/>
           </Item4>
-          <Item5 Name="ObjectInspector" Type="Control" Monitor="0">
-            <Bounds Width="339" Height="848"/>
+          <Item5 Name="ObjectInspector" Type="Control" Monitor="0" PixelsPerInch="192">
+            <Bounds Width="300" Height="582"/>
             <Anchors Right="AnchorDockSplitter2"/>
           </Item5>
         </Item1>
       </Item1>
     </Nodes>
   </MainConfig>
-  <Settings HeaderStyle="Lines"/>
+  <Settings HeaderStyle="Lines" FlatHeadersButtons="True" FloatingWindowsOnTop="True" DockSitesCanBeMinimized="True"/>
   <ToolBarsConfig ItemCount="4">
     <Item0 Name="CoolBarU" Type="CoolBar" ItemCount="4">
-      <Item0 Name="Standard" Type="ToolBar" Width="383"/>
-      <Item1 Name="Find" Type="ToolBar" Break="False" Width="294"/>
-      <Item2 Name="ObjProp" Type="ToolBar" Width="1015"/>
+      <Item0 Name="Standard" Type="ToolBar" Width="713"/>
+      <Item1 Name="Find" Type="ToolBar" Break="False" Width="363"/>
+      <Item2 Name="ObjProp" Type="ToolBar" Width="1130"/>
       <Item3 Name="ObjectSnap" Type="ToolBar" Break="False" Width="351"/>
     </Item0>
     <Item1 Name="CoolBarL" Type="CoolBar" ItemCount="0"/>
     <Item2 Name="CoolBarR" Type="CoolBar" ItemCount="3">
-      <Item0 Name="Quick" Type="ToolBar" Width="102"/>
-      <Item1 Name="Modify" Type="ToolBar" Break="False" Width="330"/>
-      <Item2 Name="Draw" Type="ToolBar" Break="False" Width="221"/>
+      <Item0 Name="Quick" Type="ToolBar" Width="144"/>
+      <Item1 Name="Modify" Type="ToolBar" Break="False" Width="484"/>
+      <Item2 Name="Draw" Type="ToolBar" Break="False" Width="319"/>
     </Item2>
     <Item3 Name="CoolBarD" Type="CoolBar" ItemCount="0"/>
   </ToolBarsConfig>

@@ -1176,13 +1176,7 @@ msgstr "Повторное создание %s!"
 
 #: uzcstrconsts.rsreleasenotes
 msgid ""
-"-If you have problems with rendering or selecting entities, run \"Regen\" and \"RebuildTree\" in command line;\n"
-"\n"
-"-To disable the display of this window comment out line \"About\" in the file \"components\\autorun.cmd\". Encoding of all configuration files - UTF8;\n"
 msgstr ""
-"-При проблемах с отображением или выделением примитивов, запустите \"Regen\" и \"RebuildTree\" в командной строке;\n"
-"\n"
-"-Для отключения показа этого окна закоментируйте строку \"About\" в файле \"components\\autorun.cmd\". Кодировка всех конфигурационных файлов - UTF8;\n"
 
 #: uzcstrconsts.rsrenamedto
 #, object-pascal-format

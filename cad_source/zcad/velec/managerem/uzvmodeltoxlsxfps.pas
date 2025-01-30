@@ -1028,6 +1028,7 @@ const
       spectargetcodename:string;
       //isStartCopy:boolean;
       calcVal:string;
+      lphtime:TLPSHandle;
       //stInfoDevCell:TVXLSXCELL;
 
       //парсим ключи спецключи
@@ -1050,7 +1051,9 @@ const
       end;
     begin
 
+
       ZCMsgCallBackInterface.TextMessage('   - запуск построчное копирования с условиями - начато!',TMWOHistoryOut);
+      lphtime:=lps.StartLongProcess('   -   - копирование строк выполнено за: ',nil);
 
       calcVal:=getkeysCell(uzvzcadxlsxfps.getCellValue(nameEtalon,stRowEtalon,stColEtalon),calcKey);
 
@@ -1150,11 +1153,16 @@ const
                   if uzvzcadxlsxfps.iHaveFormula(nameSheet,stRowEtalonNew,stColEtalonNew) then
                   begin
                      temptextcell:=uzvzcadxlsxfps.getCellFormula(nameSheet,stRowEtalonNew,stColEtalonNew);
+                     //ZCMsgCallBackInterface.TextMessage('    - temptextcell=' + temptextcell,TMWOHistoryOut);
                      // производим замену эталонных кодов на нормальные
                      temptextcellnew:=StringReplace(temptextcell, codeNameEtalonSheet, codeNameNewSheet, [rfReplaceAll, rfIgnoreCase]);
+                     //ZCMsgCallBackInterface.TextMessage('    - temptextcellnew=' + temptextcellnew,TMWOHistoryOut);
                      temptextcellnew:=StringReplace(temptextcellnew, '''' + codeNameNewSheet + '''', codeNameNewSheet, [rfReplaceAll, rfIgnoreCase]);
+                     //ZCMsgCallBackInterface.TextMessage('    - temptextcellnew=' + temptextcellnew,TMWOHistoryOut);
                      temptextcellnew:=StringReplace(temptextcellnew, zallcabexportetalon, zallcabexport, [rfReplaceAll, rfIgnoreCase]);
+                     //ZCMsgCallBackInterface.TextMessage('    - temptextcellnew=' + temptextcellnew,TMWOHistoryOut);
                      temptextcellnew:=StringReplace(temptextcellnew, zalldevexportetalon, zalldevexport, [rfReplaceAll, rfIgnoreCase]);
+                     //ZCMsgCallBackInterface.TextMessage('    - temptextcellnew=' + temptextcellnew,TMWOHistoryOut);
                      uzvzcadxlsxfps.setCellFormula(nameSheet,stRowEtalonNew,stColEtalonNew,temptextcellnew);
 
   //                   if Length(temptextcellnew) > 2 then
@@ -1236,8 +1244,9 @@ const
             cellValueVar:=uzvzcadxlsxfps.getCellValOrFomula(textTargetSheet,stRowNew,stCol);  //Получаем значение ключа, для первой строки
           end;
 
+           lps.EndLongProcess(lphtime);
 
-
+           lphtime:=lps.StartLongProcess('   -   - удаление лишних строк выполнено за: ',nil);
        //uzvzcadxlsxfps.deleteRow(nameSheet,stRowEtalonNew);// удаляем последнию строчку в которую вписали 1
 
        //цикл который удаляет строчки в которые неподходят по ключам
@@ -1261,6 +1270,8 @@ const
               cellValueVar:=uzvzcadxlsxfps.getCellValue(nameSheet,stRowEtalonNew,stColEtalon);  //Получаем значение ключа, для первой строки
          end;
        uzvzcadxlsxfps.setCellValue(nameSheet,0,0,' '); //переводим фокус
+
+       lps.EndLongProcess(lphtime);
 
        if (calcVal = 'after') or (calcVal = 'both') then
         uzvzcadxlsxfps.nowCalcFormulas; //расчитать формулы

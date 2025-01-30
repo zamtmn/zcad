@@ -2191,26 +2191,26 @@ msgstr "Переопределение вертикального выравни
 #: zcadexternal.oimultiproperty~filter_blocksbynames
 msgctxt "zcadexternal.oimultiproperty~filter_blocksbynames"
 msgid "Blocks by names"
-msgstr "Блоки по именам"
+msgstr "По имени устройства"
 
 #: zcadexternal.oimultiproperty~filter_entsbyextenders
 msgid "Ents by extenders"
-msgstr "Прим. по расширителям"
+msgstr "По расширению"
 
 #: zcadexternal.oimultiproperty~filter_entsbylayers
 msgctxt "zcadexternal.oimultiproperty~filter_entsbylayers"
 msgid "Ents by layers"
-msgstr "Прим. по слоям"
+msgstr "По слою"
 
 #: zcadexternal.oimultiproperty~filter_entsbylinestypes
 msgctxt "zcadexternal.oimultiproperty~filter_entsbylinestypes"
 msgid "Ents by linetypes"
-msgstr "Прим. по типам линий"
+msgstr "По типам линии"
 
 #: zcadexternal.oimultiproperty~filter_textsbystyles
 msgctxt "zcadexternal.oimultiproperty~filter_textsbystyles"
 msgid "Texts by styles"
-msgstr "Тексты по стилям"
+msgstr "По стилю текста"
 
 #: zcadexternal.oimultiproperty~height
 msgctxt "zcadexternal.oimultiproperty~height"
@@ -3481,7 +3481,7 @@ msgstr "Схемы"
 
 #: zcadexternal.toolpalette_blocklib_velectrical_plan_itemcaption~elreceiver
 msgid "ElReceiver"
-msgstr ""
+msgstr "Электрооборудование"
 
 #: zcadexternal.toolpalette_blocklib_velectrical_plan_itemcaption~lighting
 msgctxt "zcadexternal.toolpalette_blocklib_velectrical_plan_itemcaption~lighting"

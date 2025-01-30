@@ -1,11 +1,8 @@
 unit elreceivers;
 interface
 uses system,devices;
-usescopy ellocation;
+usescopy xlsxgenerator;
 var
-   ANALYSISEM_icanbeheadunit:boolean;(*'Я могу быть ГУ?'*)
-   ANALYSISEM_exporttoxlsx:boolean;(*'Экспорт в XLSX для анализа'*)
-   nametemplatesxlsx:String;(*'Имя листа в шаблоне в Excel, для заполнения'*)
    realnamedev:String;(*'Реальное имя устройства подключения'*)
 
    labelondev:string;(*'Метка на устройстве'*)
@@ -22,15 +19,11 @@ var
 
 implementation
 begin
-   ANALYSISEM_icanbeheadunit:=false;
-   ANALYSISEM_exporttoxlsx:=true;
    labelondev:='';
    realnamedev:='';
 
    Position.value:='-';
    Position.format:='@@[NMO_BaseName]';
-   
-   nametemplatesxlsx:='-';
 
    Power:=1.0;
    Current:=0;

@@ -159,6 +159,8 @@ type
 
   TListDev=TVector<pGDBObjDevice>;
 
+  TListBoolean=TVector<boolean>;
+
   TListGroupHeadDev=TVector<string>;
   //TSortComparer=class
   // function Compare (str11, str2:string):boolean;{inline;}
@@ -486,7 +488,7 @@ const
       formulaVal := StringReplace(formulaVal, fromSheetKey, fromSheetVal, [rfReplaceAll, rfIgnoreCase]);
       formulaVal := StringReplace(formulaVal, toCellKey, toCellVal, [rfReplaceAll, rfIgnoreCase]);
       formulaVal := StringReplace(formulaVal, fromCellKey, fromCellVal, [rfReplaceAll, rfIgnoreCase]);
-      ZCMsgCallBackInterface.TextMessage('   formulaVal=' + formulaVal + '   toSheetVal=' + toSheetVal +'   fromSheetVal=' + fromSheetVal +'   toCellVal=' + toCellVal +'   fromCellVal=' + fromCellVal,TMWOHistoryOut);
+      //ZCMsgCallBackInterface.TextMessage('   formulaVal=' + formulaVal + '   toSheetVal=' + toSheetVal +'   fromSheetVal=' + fromSheetVal +'   toCellVal=' + toCellVal +'   fromCellVal=' + fromCellVal,TMWOHistoryOut);
       uzvzcadxlsxfps.setCellAddressFormula(toSheetVal,toCellVal,formulaVal);
       //ZCMsgCallBackInterface.TextMessage('  sdfsdfsdfsdf formulaVal=' + formulaVal + '   toSheetVal=' + toSheetVal +'   fromSheetVal=' + fromSheetVal +'   toCellVal=' + toCellVal +'   fromCellVal=' + fromCellVal,TMWOHistoryOut);
 
@@ -1008,7 +1010,7 @@ const
     end;
 
     //Если кодовое имя zcopyrow
-    procedure zcopyrowcommand(nameEtalon,nameSheet:string;stRowEtalon,stColEtalon:Cardinal);
+    procedure zcopyrowcommand(nameEtalon,nameSheet:string;setRow,setCol:Cardinal);
     const
        targetSheet='targetsheet';
        targetcodename='targetcodename';
@@ -1018,17 +1020,24 @@ const
       j:integer;
       stRow,stCol:Cardinal;
       stRowNew{,stColNew}:Cardinal;
+      stRowEtalon,stColEtalon:Cardinal;
       stRowEtalonNew,stColEtalonNew:Cardinal;
+      i,stCopyRows,edCopyRows:Cardinal; //для удаления лишних строк
       cellValueVar:string;
       textTargetSheet:string;
       temptextcell,temptextcellnew:string;
       codeNameEtalonSheet,codeNameEtalonSheetRect,codeNameNewSheet:string;
-      speckeynumcol:integer;
+      speckeynumcol:Cardinal;
       spectargetSheet:string;
       spectargetcodename:string;
       //isStartCopy:boolean;
       calcVal:string;
-      lphtime:TLPSHandle;
+      lphtime,lphone:TLPSHandle;
+
+      countDel:Cardinal;
+      rowKey:Cardinal;
+      oneRowDelete:boolean;
+      //listCopyRows:TListBoolean;
       //stInfoDevCell:TVXLSXCELL;
 
       //парсим ключи спецключи
@@ -1050,10 +1059,11 @@ const
         getcodenameSheet:=strArray[part];
       end;
     begin
+      stRowEtalon:=setRow;
+      stColEtalon:=setCol;
 
-
-      ZCMsgCallBackInterface.TextMessage('   - запуск построчное копирования с условиями - начато!',TMWOHistoryOut);
-      lphtime:=lps.StartLongProcess('   -   - копирование строк выполнено за: ',nil);
+      ZCMsgCallBackInterface.TextMessage('   - копирование с условиями - начато!',TMWOHistoryOut);
+      lphtime:=lps.StartLongProcess('   - копирование строк выполнено за: ',nil);
 
       calcVal:=getkeysCell(uzvzcadxlsxfps.getCellValue(nameEtalon,stRowEtalon,stColEtalon),calcKey);
 
@@ -1098,185 +1108,217 @@ const
          ZCMsgCallBackInterface.TextMessage('textTargetSheet ======= '+textTargetSheet,TMWOHistoryOut);
 
        uzvzcadxlsxfps.searchCellRowCol(textTargetSheet,'<'+spectargetcodename,stRow,stCol);  //Получаем строку и столбец хранения спец символа новой строки
+
        if remotemode then
          ZCMsgCallBackInterface.TextMessage('Ячейка найдена здесь = ' + inttostr(stRow) + ' - ' + inttostr(stCol),TMWOHistoryOut);
 
 
-       stRowNew:=stRow;
-       //stColNew:=stCol;
-       stRowEtalonNew:=stRowEtalon;
        stColEtalonNew:=stColEtalon;
+       cellValueVar:=uzvzcadxlsxfps.getCellValue(nameSheet,stRowEtalon,stColEtalonNew);
+       ////начинаем копировать строки
+       while cellValueVar <> zcopyrowFT do begin
+          try
 
-       //цикл до конца заполнених строчек
-       j:=1;
-       cellValueVar:=uzvzcadxlsxfps.getCellValOrFomula(textTargetSheet,stRowNew,stCol);  //Получаем значение ключа, для первой строки
+            //копируем ячейку с эталонного листа на новый
+            //uzvzcadxlsxfps.copyCell(nameSheet,stRowEtalon,stColEtalonNew,nameSheet,stRowEtalonNew,stColEtalonNew);
+            //ZCMsgCallBackInterface.TextMessage('    - копировал = ' + nameSheet,TMWOHistoryOut);
+            //смотрим значение ячейки
+            temptextcell:=uzvzcadxlsxfps.getCellValue(nameSheet,stRowEtalon,stColEtalonNew);
 
-       if remotemode then
-        ZCMsgCallBackInterface.TextMessage('Удаление если значение не равно 1. Лист = '  + textTargetSheet + ' ключ=(' + inttostr(stRowNew) + ',' + inttostr(stCol)+ ') значение = '+cellValueVar + ' формула = ' + uzvzcadxlsxfps.getCellFormula(textTargetSheet,stRowNew,stCol),TMWOHistoryOut);
+            if uzvzcadxlsxfps.iHaveFormula(nameSheet,stRowEtalon,stColEtalonNew) then
+            begin
+               temptextcell:=uzvzcadxlsxfps.getCellFormula(nameSheet,stRowEtalon,stColEtalonNew);
+               //ZCMsgCallBackInterface.TextMessage('    - temptextcell=' + temptextcell,TMWOHistoryOut);
+               // производим замену эталонных кодов на нормальные
+               temptextcellnew:=StringReplace(temptextcell, codeNameEtalonSheet, codeNameNewSheet, [rfReplaceAll, rfIgnoreCase]);
+               //ZCMsgCallBackInterface.TextMessage('    - temptextcellnew=' + temptextcellnew,TMWOHistoryOut);
+               temptextcellnew:=StringReplace(temptextcellnew, '''' + codeNameNewSheet + '''', codeNameNewSheet, [rfReplaceAll, rfIgnoreCase]);
+               //ZCMsgCallBackInterface.TextMessage('    - temptextcellnew=' + temptextcellnew,TMWOHistoryOut);
+               temptextcellnew:=StringReplace(temptextcellnew, zallcabexportetalon, zallcabexport, [rfReplaceAll, rfIgnoreCase]);
+               //ZCMsgCallBackInterface.TextMessage('    - temptextcellnew=' + temptextcellnew,TMWOHistoryOut);
+               temptextcellnew:=StringReplace(temptextcellnew, zalldevexportetalon, zalldevexport, [rfReplaceAll, rfIgnoreCase]);
+               //ZCMsgCallBackInterface.TextMessage('    - temptextcellnew=' + temptextcellnew,TMWOHistoryOut);
+               uzvzcadxlsxfps.setCellFormula(nameSheet,stRowEtalon,stColEtalonNew,temptextcellnew);
 
-
-       //isStartCopy:=true;
-       while cellValueVar <> '' do
-          begin
-           if remotemode then
-            ZCMsgCallBackInterface.TextMessage('    - скопирована строка №' + inttostr(j),TMWOHistoryOut);
-            inc(j);
-
-            uzvzcadxlsxfps.setCellValOrFomula(nameSheet,stRowEtalonNew,stColEtalon,'1'); //маркер копирование нужен для последующего удаления не нужных строк
-
-            cellValueVar:=uzvzcadxlsxfps.getCellValue(textTargetSheet,stRowNew,speckeynumcol);  //Получаем значение ключа, для первой строки
-            if cellValueVar <> '1' then begin
-              if remotemode then
-                 ZCMsgCallBackInterface.TextMessage('Пропуск копирования. Лист = '  + textTargetSheet + ' ключ=(' + inttostr(stRowNew) + ',' + inttostr(speckeynumcol)+ ') значение = '+cellValueVar + ' формула = ' + uzvzcadxlsxfps.getCellFormula(textTargetSheet,stRowNew,speckeynumcol),TMWOHistoryOut);
-
-              inc(stRowEtalonNew);
-              stColEtalonNew:=stColEtalon;
-              inc(stRowNew);
-              cellValueVar:=uzvzcadxlsxfps.getCellValOrFomula(textTargetSheet,stRowNew,stCol);  //Получаем значение ключа, для первой строки
-              continue;
+            end else begin
+               temptextcell:=uzvzcadxlsxfps.getCellValue(nameSheet,stRowEtalon,stColEtalonNew);
+               // производим замену эталонных кодов на нормальные
+               temptextcellnew:=StringReplace(temptextcell, codeNameEtalonSheet, codeNameNewSheet, [rfReplaceAll, rfIgnoreCase]);
+               temptextcellnew:=StringReplace(temptextcellnew, '''' + codeNameNewSheet + '''', codeNameNewSheet, [rfReplaceAll, rfIgnoreCase]);
+               temptextcellnew:=StringReplace(temptextcellnew, zallcabexportetalon, zallcabexport, [rfReplaceAll, rfIgnoreCase]);
+               temptextcellnew:=StringReplace(temptextcellnew, zalldevexportetalon, zalldevexport, [rfReplaceAll, rfIgnoreCase]);
+               uzvzcadxlsxfps.setCellValue(nameSheet,stRowEtalon,stColEtalonNew,temptextcellnew);
             end;
 
-            inc(stColEtalonNew);
+          except
+            ZCMsgCallBackInterface.TextMessage('ОШИБКА КОПИРОВАНИЯ ЯЧЕЙКИ!!!! Имя листа=' + nameSheet +'  XY='+ inttostr(stRowEtalon) + ' - ' + inttostr(stColEtalonNew) + '-------значение ячейки  = ' + uzvzcadxlsxfps.getCellValue(nameSheet,stRowEtalon,stColEtalonNew),TMWOHistoryOut);
+          end;
+          inc(stColEtalonNew);
+          cellValueVar:=uzvzcadxlsxfps.getCellValOrFomula(nameSheet,stRowEtalon,stColEtalonNew);
+       end;
+
+
+
+
+
+
+
+       if remotemode then
+        ZCMsgCallBackInterface.TextMessage('Удаление если значение не равно 1. Лист = '  + textTargetSheet + ' ключ=(' + inttostr(stRowNew) + ',' + inttostr(speckeynumcol)+ ') значение = '+cellValueVar + ' формула = ' + uzvzcadxlsxfps.getCellFormula(textTargetSheet,stRowNew,speckeynumcol),TMWOHistoryOut);
+
+
+       rowKey:=stRow;
+
+       //isStartCopy:=true;
+
+       //stCopyRows:=stRowEtalonNew+1;
+
+
+       cellValueVar:=uzvzcadxlsxfps.getCellValue(textTargetSheet,rowKey,speckeynumcol);  //Получаем значение ключа, для первой строки
+       //ZCMsgCallBackInterface.TextMessage('Лист 1я строка= '  + textTargetSheet + ' ключ=(' + inttostr(rowKey) + ',' + inttostr(speckeynumcol)+ ') значение = '+cellValueVar + ' формула = ' + uzvzcadxlsxfps.getCellFormula(textTargetSheet,rowKey,speckeynumcol),TMWOHistoryOut);
+
+       //ZCMsgCallBackInterface.TextMessage('    - скопированssfsfssfsfsfsfsf №' + inttostr(stCopyRows),TMWOHistoryOut);
+       oneRowDelete:=false;
+       if uzvzcadxlsxfps.getCellValue(textTargetSheet,rowKey,speckeynumcol) = '0' then begin
+          //stCopyRows:=stRowEtalonNew;
+          oneRowDelete:=true;
+          //ZCMsgCallBackInterface.TextMessage('    - ZPLTCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC №' + inttostr(stCopyRows),TMWOHistoryOut);
+       end;
+       //ZCMsgCallBackInterface.TextMessage('    - скопированssfsfssfsfsfsfsf №' + inttostr(stCopyRows),TMWOHistoryOut);
+
+
+
+
+       inc(rowKey);
+       stRowEtalonNew:=stRowEtalon;
+       //j:=1;
+       //цикл до конца заполнених строчек
+       cellValueVar:=uzvzcadxlsxfps.getCellValOrFomula(textTargetSheet,rowKey,speckeynumcol);  //Получаем значение ключа, для первой строки
+       while cellValueVar <> '' do
+          begin
+           //if remotemode then
+            //ZCMsgCallBackInterface.TextMessage('    - скопирована строка №' + inttostr(j),TMWOHistoryOut);
+            //inc(j);
+
+            stRowEtalonNew:=stRowEtalonNew+1;
+            //uzvzcadxlsxfps.setCellValOrFomula(nameSheet,stRowEtalonNew,stColEtalon,'1'); //маркер копирование нужен для последующего удаления не нужных строк
+
+            cellValueVar:=uzvzcadxlsxfps.getCellValue(textTargetSheet,rowKey,speckeynumcol);  //Получаем значение ключа, для первой строки
+            //ZCMsgCallBackInterface.TextMessage('Лист цикл= '  + textTargetSheet + ' ключ=(' + inttostr(rowKey) + ',' + inttostr(speckeynumcol)+ ') значение = '+cellValueVar + ' формула = ' + uzvzcadxlsxfps.getCellFormula(textTargetSheet,rowKey,speckeynumcol),TMWOHistoryOut);
+
+            //если 0 тогда переводим коретку ключа на следующую строчку
+            if cellValueVar = '0' then begin
+               inc(rowKey);
+               //ZCMsgCallBackInterface.TextMessage(' = пропуск' ,TMWOHistoryOut);
+               cellValueVar:=uzvzcadxlsxfps.getCellValOrFomula(textTargetSheet,rowKey,speckeynumcol);  //Получаем значение ключа, для первой строки
+               continue;
+            end;
+
+
+
+            //inc(stColEtalonNew);
+
+            edCopyRows:=stRowEtalon;  //строки для удаления
 
             //получаем значение ячейки что бы определить является ли она финишной
-            cellValueVar:=uzvzcadxlsxfps.getCellValue(nameEtalon,stRowEtalon,stColEtalonNew);
 
+
+            stColEtalonNew:=stColEtalon;
+            cellValueVar:=uzvzcadxlsxfps.getCellValue(nameSheet,stRowEtalon,stColEtalonNew);
+            //ZCMsgCallBackInterface.TextMessage('ОПИРОВАНИЯ ЯЧЕЙКИ!!!! Имя листа=' + nameSheet +'  XY='+ inttostr(stRowEtalon) + ' - ' + inttostr(stColEtalonNew) + '-------значение ячейки  = ' + uzvzcadxlsxfps.getCellValue(nameSheet,stRowEtalon,stColEtalonNew),TMWOHistoryOut);
             ////начинаем копировать строки
             while cellValueVar <> zcopyrowFT do begin
                 try
-
                   //копируем ячейку с эталонного листа на новый
-                  uzvzcadxlsxfps.copyCell(nameEtalon,stRowEtalon,stColEtalonNew,nameSheet,stRowEtalonNew,stColEtalonNew);
-                  //смотрим значение ячейки
-                  temptextcell:=uzvzcadxlsxfps.getCellValue(nameSheet,stRowEtalonNew,stColEtalonNew);
+                  uzvzcadxlsxfps.copyCell(nameSheet,stRowEtalon,stColEtalonNew,nameSheet,stRowEtalonNew,stColEtalonNew);
+                  //ZCMsgCallBackInterface.TextMessage('    - копировал = ' + nameSheet + '    - rows = ' + inttostr(stRowEtalon) + ' - ' + inttostr(stRowEtalonNew),TMWOHistoryOut);
 
-                  if uzvzcadxlsxfps.iHaveFormula(nameSheet,stRowEtalonNew,stColEtalonNew) then
-                  begin
-                     temptextcell:=uzvzcadxlsxfps.getCellFormula(nameSheet,stRowEtalonNew,stColEtalonNew);
-                     //ZCMsgCallBackInterface.TextMessage('    - temptextcell=' + temptextcell,TMWOHistoryOut);
-                     // производим замену эталонных кодов на нормальные
-                     temptextcellnew:=StringReplace(temptextcell, codeNameEtalonSheet, codeNameNewSheet, [rfReplaceAll, rfIgnoreCase]);
-                     //ZCMsgCallBackInterface.TextMessage('    - temptextcellnew=' + temptextcellnew,TMWOHistoryOut);
-                     temptextcellnew:=StringReplace(temptextcellnew, '''' + codeNameNewSheet + '''', codeNameNewSheet, [rfReplaceAll, rfIgnoreCase]);
-                     //ZCMsgCallBackInterface.TextMessage('    - temptextcellnew=' + temptextcellnew,TMWOHistoryOut);
-                     temptextcellnew:=StringReplace(temptextcellnew, zallcabexportetalon, zallcabexport, [rfReplaceAll, rfIgnoreCase]);
-                     //ZCMsgCallBackInterface.TextMessage('    - temptextcellnew=' + temptextcellnew,TMWOHistoryOut);
-                     temptextcellnew:=StringReplace(temptextcellnew, zalldevexportetalon, zalldevexport, [rfReplaceAll, rfIgnoreCase]);
-                     //ZCMsgCallBackInterface.TextMessage('    - temptextcellnew=' + temptextcellnew,TMWOHistoryOut);
-                     uzvzcadxlsxfps.setCellFormula(nameSheet,stRowEtalonNew,stColEtalonNew,temptextcellnew);
-
-  //                   if Length(temptextcellnew) > 2 then
-  //                     if ContainsText(temptextcellnew, 'zsetformulatocell') or ContainsText(temptextcellnew, 'zsetvaluetocell') then
-  //                     begin
-  //                       ZCMsgCallBackInterface.TextMessage('  адресс=' + nameSheet + '  xy=' + inttostr(stRowEtalon) + ' - ' + inttostr(stColEtalonNew) + '-------значение ячейки temptextcellnew = ' + temptextcellnew,TMWOHistoryOut);
-  //                       ZCMsgCallBackInterface.TextMessage('*********' ,TMWOHistoryOut);
-  //                       ZCMsgCallBackInterface.TextMessage('*Калькуляция ячейки начата*' ,TMWOHistoryOut);
-  //                       //uzvzcadxlsxfps.calcCellFormula(nameSheet,stRowEtalonNew,stColEtalonNew); //расчитать формулы
-  //                       temptextcellnew:=uzvzcadxlsxfps.getCellValue(nameSheet,stRowEtalonNew,stColEtalonNew);
-  //                       ZCMsgCallBackInterface.TextMessage('  адресс=' + nameSheet + '  xy=' + inttostr(stRowEtalon) + ' - ' + inttostr(stColEtalonNew) + '-------значение ячейки temptextcellnew = ' + temptextcellnew,TMWOHistoryOut);
-  //                       ZCMsgCallBackInterface.TextMessage('*Калькуляция ячейки завершина*' ,TMWOHistoryOut);
-  //
-  //                       //ZCMsgCallBackInterface.TextMessage('+++uzvzcadxlsxfps.getCellValue(nameSheet,stRowEtalonNew,stColEtalonNew) = ' + uzvzcadxlsxfps.getCellValue(nameSheet,stRowEtalonNew,stColEtalonNew) ,TMWOHistoryOut);
-  ////
-  ////                       temptextcellnew:=uzvzcadxlsxfps.getCellValue(nameSheet,stRowEtalonNew,stColEtalonNew);
-  ////                       execSpecCodeinCell(nil,nil,temptextcellnew,nameSheet,stRowEtalonNew,stColEtalonNew);
-  //                       //if (execSpecCodeinCell(nil,nil,temptextcellnew,nameSheet,stRowEtalonNew,stColEtalonNew)) then
-  //                       //begin
-  //                       //  //cellValueVar:=uzvzcadxlsxfps.getCellValue(nameEtalon,stRow,stColNew);
-  //                       //  ZCMsgCallBackInterface.TextMessage('финиш execSpecCodeinCell значение ячейки = ',TMWOHistoryOut);
-  //                       //  //continue;
-  //                       //end;
-  //                     end;
-                  end else begin
-                     temptextcell:=uzvzcadxlsxfps.getCellValue(nameSheet,stRowEtalonNew,stColEtalonNew);
-                     // производим замену эталонных кодов на нормальные
-                     temptextcellnew:=StringReplace(temptextcell, codeNameEtalonSheet, codeNameNewSheet, [rfReplaceAll, rfIgnoreCase]);
-                     temptextcellnew:=StringReplace(temptextcellnew, '''' + codeNameNewSheet + '''', codeNameNewSheet, [rfReplaceAll, rfIgnoreCase]);
-                     temptextcellnew:=StringReplace(temptextcellnew, zallcabexportetalon, zallcabexport, [rfReplaceAll, rfIgnoreCase]);
-                     temptextcellnew:=StringReplace(temptextcellnew, zalldevexportetalon, zalldevexport, [rfReplaceAll, rfIgnoreCase]);
-                     uzvzcadxlsxfps.setCellValue(nameSheet,stRowEtalonNew,stColEtalonNew,temptextcellnew);
-                  end;
-
-                  //теперь определяем есть ли спец символ внутри значения ячейки
-                  //temptextcellnew:=uzvzcadxlsxfps.getCellValue(nameSheet,stRowEtalonNew,stColEtalonNew);
-                  ////ZCMsgCallBackInterface.TextMessage('  адресс=' + nameSheet + '  xy=' + inttostr(stRowEtalon) + ' - ' + inttostr(stColEtalonNew) + '-------значение ячейки temptextcellnew = ' + temptextcellnew,TMWOHistoryOut);
-                  //
-                  //if Length(temptextcellnew) > 2 then
-                  //  if ContainsText(temptextcellnew, 'zsetformulatocell') or ContainsText(temptextcellnew, 'zsetvaluetocell') or ContainsText(temptextcellnew, 'zcalculate') then
-                  //    //if (temptextcellnew[1] = '<') then
-                  //    //if uzvzcadxlsxfps.getCellValue(textTargetSheet,stRowNew,speckeynumcol) = '1' then
-                  //    begin
-                  //       ZCMsgCallBackInterface.TextMessage('  адресс=' + nameSheet + '  xy=' + inttostr(stRowEtalon) + ' - ' + inttostr(stColEtalonNew) + '-------значение ячейки temptextcellnew = ' + temptextcellnew,TMWOHistoryOut);
-                  //       //ZCMsgCallBackInterface.TextMessage('temptextcellnew = ' + temptextcellnew ,TMWOHistoryOut);
-                  //       ZCMsgCallBackInterface.TextMessage('*********' ,TMWOHistoryOut);
-                  //
-                  //       //ZCMsgCallBackInterface.TextMessage('uzvzcadxlsxfps.getCellValue(textTargetSheet,stRowNew,speckeynumcol) = ' + uzvzcadxlsxfps.getCellValue(nameEtalon,stRowEtalon,stColEtalonNew) ,TMWOHistoryOut);
-                  //       //ZCMsgCallBackInterface.TextMessage('uzvzcadxlsxfps.getCellValue(nameEtalon,stRowEtalon,stColEtalonNew)[1] = ' + uzvzcadxlsxfps.getCellValue(nameEtalon,stRowEtalon,stColEtalonNew) ,TMWOHistoryOut);
-                  //       //                     ZCMsgCallBackInterface.TextMessage('++uzvzcadxlsxfps.getCellValue(nameSheet,stRowEtalonNew,stColEtalonNew) = ' + uzvzcadxlsxfps.getCellValue(nameSheet,stRowEtalonNew,stColEtalonNew) ,TMWOHistoryOut);
-                  //
-                  //       //if uzvzcadxlsxfps.iHaveFormula(nameSheet,stRowEtalonNew,stColEtalonNew) then
-                  //       //   uzvzcadxlsxfps.calcCellFormula(nameSheet,stRowEtalonNew,stColEtalonNew); //расчитать формулы
-                  //       //
-                  //       //
-                  //       //ZCMsgCallBackInterface.TextMessage('+++uzvzcadxlsxfps.getCellValue(nameSheet,stRowEtalonNew,stColEtalonNew) = ' + uzvzcadxlsxfps.getCellValue(nameSheet,stRowEtalonNew,stColEtalonNew) ,TMWOHistoryOut);
-                  //
-                  //       //temptextcellnew:=uzvzcadxlsxfps.getCellValue(nameSheet,stRowEtalonNew,stColEtalonNew);
-                  //       execSpecCodeinCell(nil,nil,temptextcellnew,nameSheet,stRowEtalonNew,stColEtalonNew);
-                  //       //if (execSpecCodeinCell(nil,nil,temptextcellnew,nameSheet,stRowEtalonNew,stColEtalonNew)) then
-                  //       //begin
-                  //       //  //cellValueVar:=uzvzcadxlsxfps.getCellValue(nameEtalon,stRow,stColNew);
-                  //       //  ZCMsgCallBackInterface.TextMessage('финиш execSpecCodeinCell значение ячейки = ',TMWOHistoryOut);
-                  //       //  //continue;
-                  //       //end;
-                  //     end;
                 except
                   ZCMsgCallBackInterface.TextMessage('ОШИБКА КОПИРОВАНИЯ ЯЧЕЙКИ!!!! Имя листа=' + nameSheet +'  XY='+ inttostr(stRowEtalon) + ' - ' + inttostr(stColEtalonNew) + '-------значение ячейки  = ' + uzvzcadxlsxfps.getCellValue(nameSheet,stRowEtalon,stColEtalonNew),TMWOHistoryOut);
                 end;
                 inc(stColEtalonNew);
-                cellValueVar:=uzvzcadxlsxfps.getCellValOrFomula(nameEtalon,stRowEtalon,stColEtalonNew);
-             end;
+                cellValueVar:=uzvzcadxlsxfps.getCellValue(nameSheet,stRowEtalon,stColEtalonNew);
+                if stColEtalonNew >3000 then
+                   break;
 
-            inc(stRowEtalonNew);
-            stColEtalonNew:=stColEtalon;
+             end;
+            uzvzcadxlsxfps.copyCell(nameSheet,stRowEtalon,stColEtalonNew,nameSheet,stRowEtalonNew,stColEtalonNew);
+
+            inc(rowKey);
+
+
+
+            if oneRowDelete then begin
+               //countDel:=stRowEtalon;
+               //uzvzcadxlsxfps.deleteRow(nameSheet,stRowEtalon);
+               lphone:=lps.StartLongProcess('   -удаление первой строки занимает: ',nil);
+               oneRowDelete:=false;
+               while stRowEtalon <> stRowEtalonNew do begin
+                 //ZCMsgCallBackInterface.TextMessage('stRowEtalonstRowEtalonNew onedelete='+ inttostr(stRowEtalon) + ' - ' + inttostr(stRowEtalonNew),TMWOHistoryOut);
+                 uzvzcadxlsxfps.deleteRow(nameSheet,stRowEtalon);
+                 stRowEtalonNew:=stRowEtalonNew-1;
+               end;
+               stRowEtalon:=stRowEtalon-1;
+               lps.EndLongProcess(lphone);
+            end else begin
+              countDel:=stRowEtalon+1;
+              while countDel <> stRowEtalonNew do begin
+                 //ZCMsgCallBackInterface.TextMessage('stRowEtalonstRowEtalonNew='+ inttostr(stRowEtalon) + ' - ' + inttostr(stRowEtalonNew),TMWOHistoryOut);
+                 uzvzcadxlsxfps.deleteRow(nameSheet,countDel);
+                 stRowEtalonNew:=stRowEtalonNew-1;
+              end;
+            end;
+
+            stRowEtalon:=stRowEtalon+1;
+            //for i:= stRowEtalonNew downto stRowEtalon do begin
+            //  ZCMsgCallBackInterface.TextMessage('stRowEtalonstRowEtalonNew='+ inttostr(stRowEtalon) + ' - ' + inttostr(stRowEtalonNew),TMWOHistoryOut);
+            //  uzvzcadxlsxfps.deleteRow(nameSheet,i);
+            //end;
+            //ZCMsgCallBackInterface.TextMessage('stRowEtalon='+ inttostr(stRowEtalon)+ ' - ' + inttostr(stRowEtalonNew)+ ' - ' + inttostr(stCopyRows) + ' - ' + inttostr(stCopyRows),TMWOHistoryOut);
+            //stRowEtalon:=stRowEtalonNew-1;
+            //stRowEtalonNew:=stRowEtalonNew-edCopyRows+stCopyRows;
+            //stCopyRows:=stCopyRows-1;
+            //stRowEtalon:=stRowEtalon+1;
+            //stColEtalonNew:=stColEtalon;
             //if (stRowEtalonNew <> stRowEtalon) then
             //  uzvzcadxlsxfps.setCellValOrFomula(nameSheet,stRowEtalonNew,stColEtalon,'1');
-            inc(stRowNew);
-            cellValueVar:=uzvzcadxlsxfps.getCellValOrFomula(textTargetSheet,stRowNew,stCol);  //Получаем значение ключа, для первой строки
+            //inc(stRowNew);
+            cellValueVar:=uzvzcadxlsxfps.getCellValOrFomula(textTargetSheet,rowKey,speckeynumcol);  //Получаем значение ключа, для первой строки
           end;
 
            lps.EndLongProcess(lphtime);
 
-           lphtime:=lps.StartLongProcess('   -   - удаление лишних строк выполнено за: ',nil);
-       //uzvzcadxlsxfps.deleteRow(nameSheet,stRowEtalonNew);// удаляем последнию строчку в которую вписали 1
-
-       //цикл который удаляет строчки в которые неподходят по ключам
-       stRowNew:=stRowNew-1;
-       stRowEtalonNew:=stRowEtalonNew-1;
-       cellValueVar:=uzvzcadxlsxfps.getCellValue(nameSheet,stRowEtalonNew,stColEtalon);  //Получаем значение ключа, для первой строки
-       if remotemode then
-         ZCMsgCallBackInterface.TextMessage('удаляем удаляем удаляем= ' + inttostr(stRowNew) + ' - ' + inttostr(stColEtalon)+ ' = '+cellValueVar,TMWOHistoryOut);
-
-       while cellValueVar = '1' do
-         begin
-              cellValueVar:=uzvzcadxlsxfps.getCellValue(textTargetSheet,stRowNew,speckeynumcol);  //Получаем значение ключа, для первой строки
-              if cellValueVar <> '1' then begin
-                if remotemode then
-                 ZCMsgCallBackInterface.TextMessage('Удаление если значение не равно 1. Лист = '  + textTargetSheet + ' ключ=(' + inttostr(stRowNew) + ',' + inttostr(speckeynumcol)+ ') значение = '+cellValueVar + ' формула = ' + uzvzcadxlsxfps.getCellFormula(textTargetSheet,stRowNew,speckeynumcol),TMWOHistoryOut);
-
-                uzvzcadxlsxfps.deleteRow(nameSheet,stRowEtalonNew);
-              end;
-              stRowEtalonNew:=stRowEtalonNew-1;
-              stRowNew:=stRowNew-1;
-              cellValueVar:=uzvzcadxlsxfps.getCellValue(nameSheet,stRowEtalonNew,stColEtalon);  //Получаем значение ключа, для первой строки
-         end;
-       uzvzcadxlsxfps.setCellValue(nameSheet,0,0,' '); //переводим фокус
-
-       lps.EndLongProcess(lphtime);
+       //    lphtime:=lps.StartLongProcess('   -   - удаление лишних строк выполнено за: ',nil);
+       ////uzvzcadxlsxfps.deleteRow(nameSheet,stRowEtalonNew);// удаляем последнию строчку в которую вписали 1
+       //
+       ////цикл который удаляет строчки в которые неподходят по ключам
+       //stRowNew:=stRowNew-1;
+       //stRowEtalonNew:=stRowEtalonNew-1;
+       //cellValueVar:=uzvzcadxlsxfps.getCellValue(nameSheet,stRowEtalonNew,stColEtalon);  //Получаем значение ключа, для первой строки
+       //if remotemode then
+       //  ZCMsgCallBackInterface.TextMessage('удаляем удаляем удаляем= ' + inttostr(stRowNew) + ' - ' + inttostr(stColEtalon)+ ' = '+cellValueVar,TMWOHistoryOut);
+       //
+       //while cellValueVar = '1' do
+       //  begin
+       //       cellValueVar:=uzvzcadxlsxfps.getCellValue(textTargetSheet,stRowNew,speckeynumcol);  //Получаем значение ключа, для первой строки
+       //       if cellValueVar <> '1' then begin
+       //         if remotemode then
+       //          ZCMsgCallBackInterface.TextMessage('Удаление если значение не равно 1. Лист = '  + textTargetSheet + ' ключ=(' + inttostr(stRowNew) + ',' + inttostr(speckeynumcol)+ ') значение = '+cellValueVar + ' формула = ' + uzvzcadxlsxfps.getCellFormula(textTargetSheet,stRowNew,speckeynumcol),TMWOHistoryOut);
+       //
+       //         uzvzcadxlsxfps.deleteRow(nameSheet,stRowEtalonNew);
+       //       end;
+       //       stRowEtalonNew:=stRowEtalonNew-1;
+       //       stRowNew:=stRowNew-1;
+       //       cellValueVar:=uzvzcadxlsxfps.getCellValue(nameSheet,stRowEtalonNew,stColEtalon);  //Получаем значение ключа, для первой строки
+       //  end;
+       //uzvzcadxlsxfps.setCellValue(nameSheet,0,0,' '); //переводим фокус
+       //
+       //lps.EndLongProcess(lphtime);
 
        if (calcVal = 'after') or (calcVal = 'both') then
         uzvzcadxlsxfps.nowCalcFormulas; //расчитать формулы
 
-       ZCMsgCallBackInterface.TextMessage('   - запуск построчное копирования с условиями - завершено!',TMWOHistoryOut);
+       //ZCMsgCallBackInterface.TextMessage('   - запуск построчное копирования с условиями - завершено!',TMWOHistoryOut);
 
        except
         ZCMsgCallBackInterface.TextMessage('ОШИБКА КОПИРОВАНИЯ СТРОКИ!!!! КОПИРОВАНИЕ ОМЕНЕНО! ПРОВЕРЯЙТЕ КЛЮЧИВЫЕ НАСТРОЙКИ ПАРАМЕТРОВ КОМПИРОВАНИЯ!',TMWOHistoryOut);
@@ -2143,7 +2185,7 @@ procedure generatorSheetAllDev(listGraphEM:TListGraphDev);
     i:integer;
     valueCell:string;
     numRow:integer;
-    lph:TLPSHandle;
+    lph,lphbook:TLPSHandle;
 
        function zcreatesheet:boolean;
         begin
@@ -2154,7 +2196,13 @@ procedure generatorSheetAllDev(listGraphEM:TListGraphDev);
              //Создаем копию листа эталона
              newNameSheet:=StringReplace(valueCell, nameSET, namePanel,[rfReplaceAll, rfIgnoreCase]);
              uzvzcadxlsxfps.copyWorksheetName(valueCell,newNameSheet);
-             ZCMsgCallBackInterface.TextMessage('Создаем новый лист ='+newNameSheet,TMWOHistoryOut);
+             ZCMsgCallBackInterface.TextMessage('Создан новый лист ='+newNameSheet,TMWOHistoryOut);
+
+             //Выполняем замену всех специфальных эталонных кодов, на правильные коды внутри формул ячеек
+             //uzvzcadxlsxfps.allFindAndReplaceSheet(newNameSheet,nameSET,namePanel); //Заменяем эталон код на название генерируемого щита
+             //uzvzcadxlsxfps.allFindAndReplaceSheet(newNameSheet,zallcabexportetalon,zallcabexport); //Заменяем эталон код кабелей на название кабелей
+             //uzvzcadxlsxfps.allFindAndReplaceSheet(newNameSheet,zalldevexportetalon,zalldevexport); //Заменяем эталон код устройств на название уствройств
+             //uzvzcadxlsxfps.allFindAndReplaceSheet(newNameSheet,nameSET,namePanel);
 
              //Передаем имя эталона и имя нового листа в генерацию листа
              if remotemode then
@@ -2170,11 +2218,11 @@ procedure generatorSheetAllDev(listGraphEM:TListGraphDev);
        function zbookcalc:boolean;
         begin
           result:=false;
+          ZCMsgCallBackInterface.TextMessage('zbookcalc - начата калькуляция книги ',TMWOHistoryOut);
+          lphbook:=lps.StartLongProcess('zbookcalc - калькуляция книги выполнена за: ',nil);
+          uzvzcadxlsxfps.nowCalcFormulas;
 
-           ZCMsgCallBackInterface.TextMessage('zbookcalc - начата калькуляция книги ',TMWOHistoryOut);
-           uzvzcadxlsxfps.nowCalcFormulas;
-           ZCMsgCallBackInterface.TextMessage('zbookcalc - закончина калькуляция книги ',TMWOHistoryOut);
-
+          lps.EndLongProcess(lphbook);
           result:=true;
         end;
 

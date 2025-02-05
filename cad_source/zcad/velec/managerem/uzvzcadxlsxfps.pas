@@ -666,9 +666,10 @@ begin
     isFind:=false;
 
     //ZCMsgCallBackInterface.TextMessage('BasicWorkbook.ActiveWorksheet = '+BasicWorkbook.ActiveWorksheet.Name,TMWOHistoryOut);
-    //  ZCMsgCallBackInterface.TextMessage('searchCellRowCol nameSheet = '+nameSheet,TMWOHistoryOut);
+      //ZCMsgCallBackInterface.TextMessage('searchCellRowCol nameSheet = '+nameSheet,TMWOHistoryOut);
     ////if remotemode then
-    //  ZCMsgCallBackInterface.TextMessage('searchCellRowCol nameValueCell = '+nameValueCell,TMWOHistoryOut);
+      //ZCMsgCallBackInterface.TextMessage('fromtext = '+fromText,TMWOHistoryOut);
+      //ZCMsgCallBackInterface.TextMessage('toText = '+toText,TMWOHistoryOut);
     ////if remotemode then
     //  ZCMsgCallBackInterface.TextMessage('searchCellRowCol iRow = '+inttostr(iRow),TMWOHistoryOut);
     ////if remotemode then
@@ -683,9 +684,10 @@ begin
         //temptextcellnew:=StringReplace(temptextcell, codeNameEtalonSheet, codeNameNewSheet, [rfReplaceAll, rfIgnoreCase]);
         //ZCMsgCallBackInterface.TextMessage('Первый [искомый текст] "' + searchParams.SearchText + '" найден в ячейке ' + GetCellString(MyRow, MyCol),TMWOHistoryOut);
         //WriteLn('Первый [искомый текст] "', searchParams.SearchText, '" найден в ячейке ', GetCellString(MyRow, MyCol));
-        while FindNext(searchParams, now_worksheet, myRow, MyCol) do
+        while FindNext(searchParams, now_worksheet, myRow, MyCol) do begin
                   setCellValOrFomula(nameSheet, MyRow, MyCol,StringReplace(getCellValOrFomula(nameSheet, MyRow, MyCol), fromText, toText, [rfReplaceAll, rfIgnoreCase]));
                   //ZCMsgCallBackInterface.TextMessage('Следующий [искомый текст] "' + searchParams.SearchText + '" найден в ячейке ' + GetCellString(MyRow, MyCol),TMWOHistoryOut);
+                  end;
           //WriteLn('Следующий [искомый текст] "', searchParams.SearchText, '" найден в ячейке ', GetCellString(MyRow, MyCol));
       end;
       Free;

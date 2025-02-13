@@ -1179,7 +1179,7 @@ const
 
        //ZCMsgCallBackInterface.TextMessage('    - скопированssfsfssfsfsfsfsf №' + inttostr(stCopyRows),TMWOHistoryOut);
        oneRowDelete:=false;
-       if uzvzcadxlsxfps.getCellValue(textTargetSheet,rowKey,speckeynumcol) = '0' then begin
+       if uzvzcadxlsxfps.getCellValue(textTargetSheet,rowKey,speckeynumcol) <> '1' then begin
           //stCopyRows:=stRowEtalonNew;
           oneRowDelete:=true;
           //ZCMsgCallBackInterface.TextMessage('    - ZPLTCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC №' + inttostr(stCopyRows),TMWOHistoryOut);
@@ -1207,7 +1207,7 @@ const
             //ZCMsgCallBackInterface.TextMessage('Лист цикл= '  + textTargetSheet + ' ключ=(' + inttostr(rowKey) + ',' + inttostr(speckeynumcol)+ ') значение = '+cellValueVar + ' формула = ' + uzvzcadxlsxfps.getCellFormula(textTargetSheet,rowKey,speckeynumcol),TMWOHistoryOut);
 
             //если 0 тогда переводим коретку ключа на следующую строчку
-            if cellValueVar = '0' then begin
+            if cellValueVar <> '1' then begin
                inc(rowKey);
                //ZCMsgCallBackInterface.TextMessage(' = пропуск' ,TMWOHistoryOut);
                cellValueVar:=uzvzcadxlsxfps.getCellValOrFomula(textTargetSheet,rowKey,speckeynumcol);  //Получаем значение ключа, для первой строки

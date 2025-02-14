@@ -36,7 +36,7 @@
 			  <ZTreeCommand Command="Insert(DEVICE_SS_CALLPANELMULTIBUTTON)" Caption='Вызывная панель на 8 абонентов' />
 		    </ZTreeNode>	
 		    <ZTreeNode Caption='Local Area Network'>
-			  <ZTreeCommand Command="Insert(DEVICE_SS_19)" Caption='Коммутационная стойка' />
+			  <ZTreeCommand Command="Insert(DEVICE_VEB_SS_NET_19rack600x600)" Caption='Коммутационная стойка 19 600x600' />
 			  <ZTreeCommand Command="Insert(DEVICE_SS_NETWORKSWITCH)" Caption='Сетевой коммутатор' />
 			  <ZTreeCommand Command="Insert(DEVICE_SS_NETWIFI)" Caption='Точка доступа WiFi настенный' />
 			  <ZTreeCommand Command="Insert(DEVICE_SS_NETWIFICEILING)" Caption='Точка доступа WiFi потолочный' />

@@ -1218,7 +1218,7 @@ var
          cableLine^.VertexArrayInOCS.PushBackData(listVertexEdge.listVertex[listInteger[i]].centerPoint);
 
      //**добавление кабельных свойств
-      pvarext:=cableLine^.specialize GetExtension<TVariablesExtender>; //подклчаемся к инспектору
+      pvarext:=cableLine^.specialize GetExtension<TVariablesExtender>; //подключаемся к инспектору
       if pvarext<>nil then
       begin
         psu:=units.findunit(GetSupportPaths,@InterfaceTranslate,'cable'); //
@@ -1646,9 +1646,11 @@ begin
 
                       ///**** костыль что бы первй кабель от ГУ был имел такоеже метод прокладки как и следующий после него
                       //ZCMsgCallBackInterface.TextMessage('superlinedevoneDO ='+ inttostr(superlinedevoneDOcount) + '         beforeCabellingMountigName='+beforeCabellingMountigName+'        CabellingMountigName=' + CabellingMountigName,TMWOHistoryOut);
+
                       if superlinedevoneDOcount < 2 then
                          beforeCabellingMountigName:=CabellingMountigName;
                       inc(superlinedevoneDOcount);
+
                       //ZCMsgCallBackInterface.TextMessage('222superlinedevoneDO ='+ inttostr(superlinedevoneDOcount) + '         beforeCabellingMountigName='+beforeCabellingMountigName+'        CabellingMountigName=' + CabellingMountigName,TMWOHistoryOut);
 
 

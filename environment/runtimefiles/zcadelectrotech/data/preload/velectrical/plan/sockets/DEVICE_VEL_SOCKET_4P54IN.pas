@@ -1,4 +1,4 @@
-unit DEVICE_VEL_SOCKET_1P31IN;
+unit DEVICE_VEL_SOCKET_4P54IN;
 
 interface
 
@@ -17,17 +17,17 @@ implementation
 
 begin
 
-BTY_TreeCoord:='PLAN_VEL_Розетки_Розетка СП31 1Р';
+BTY_TreeCoord:='PLAN_VEL_Розетки_Розетка СП54 4Р';
 Device_Type:=TDT_SilaPotr;
 Device_Class:=TDC_Shell;
 
 NMO_BaseName:='б/п';
-NMO_Suffix:='(??)';
+NMO_Suffix:='';
 NMO_Template:='@@[NMO_BaseName]@@[NMO_Suffix]';
 
 GC_NameGroupTemplate:='@@[GC_HeadDevice].@@[GC_HDGroup]';
 
-realnamedev:='Розетка СП31 1Р';
+realnamedev:='Розетка СП54 4Р';
 Power:=0.06;
 CosPHI:=0.8;
 Voltage:=_AC_220V_50Hz;
@@ -41,7 +41,7 @@ INFOTEXTPOINTER_Tp2Up.format:='@@[GC_HeadDevice].@@[GC_HDGroup]';
 INFOTEXTPOINTER_Tp2Bottom.format:=' ';
 
 VSPECIFICATION_Position:='??';
-VSPECIFICATION_Name:='Розетка СП31 1Р';
+VSPECIFICATION_Name:='Розетка СП54 4Р';
 VSPECIFICATION_Brand:='';
 VSPECIFICATION_Article:='';
 VSPECIFICATION_Factoryname:='';

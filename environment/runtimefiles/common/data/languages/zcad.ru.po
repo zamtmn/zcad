@@ -13,11 +13,11 @@ msgstr ""
 
 #: tcolorselectform.byblock.caption
 msgid "??ByBlock"
-msgstr ""
+msgstr "??ПоБлоку"
 
 #: tcolorselectform.bylayer.caption
 msgid "??ByLayer"
-msgstr ""
+msgstr "??ПоСлою"
 
 #: tcolorselectform.caption
 msgid "Color selection"
@@ -632,7 +632,7 @@ msgstr "В стеке обнаружены следующие данные:"
 
 #: uzcstrconsts.rscmleave
 msgid "Leave"
-msgstr "Пропустить"
+msgstr "Сохранить"
 
 #: uzcstrconsts.rscmnentitiesdeselected
 #, object-pascal-format
@@ -777,7 +777,7 @@ msgstr "Выбери или укажи в параметрах примитив!
 
 #: uzcstrconsts.rscmsourceentities
 msgid "Source entities"
-msgstr "Исходные примитивы"
+msgstr "Исходные примитивы:"
 
 #: uzcstrconsts.rscmspecifyfirstpoint
 msgid "Specify first point:"
@@ -1173,10 +1173,6 @@ msgstr "Закрыть ZCAD?"
 #, object-pascal-format
 msgid "Re-creating %s!"
 msgstr "Повторное создание %s!"
-
-#: uzcstrconsts.rsreleasenotes
-msgid ""
-msgstr ""
 
 #: uzcstrconsts.rsrenamedto
 #, object-pascal-format

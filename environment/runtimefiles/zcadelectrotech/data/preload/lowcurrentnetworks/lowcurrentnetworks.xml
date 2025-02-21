@@ -36,13 +36,18 @@
 			  <ZTreeCommand Command="Insert(DEVICE_SS_CALLPANELMULTIBUTTON)" Caption='Вызывная панель на 8 абонентов' />
 		    </ZTreeNode>	
 		    <ZTreeNode Caption='Local Area Network'>
-			  <ZTreeCommand Command="Insert(DEVICE_SS_19)" Caption='Коммутационная стойка' />
+			  <ZTreeCommand Command="Insert(DEVICE_VEB_SS_NET_19rack600x600)" Caption='Коммутационная стойка 19 600x600' />
 			  <ZTreeCommand Command="Insert(DEVICE_SS_NETWORKSWITCH)" Caption='Сетевой коммутатор' />
 			  <ZTreeCommand Command="Insert(DEVICE_SS_NETWIFI)" Caption='Точка доступа WiFi настенный' />
 			  <ZTreeCommand Command="Insert(DEVICE_SS_NETWIFICEILING)" Caption='Точка доступа WiFi потолочный' />
-			  <ZTreeCommand Command="Insert(DEVICE_SS_RJSOCKET)" Caption='Розетка RJ-45 Ethernet' />
+			  <ZTreeCommand Command="Insert(DEVICE_VEB_SS_NET_RJ45)" Caption='Розетка RJ-45 Ethernet' />
 			  <ZTreeCommand Command="Insert(DEVICE_SS_RT)" Caption='Розетка RJ-12 телефонная' />
 		    </ZTreeNode>				
+		    <ZTreeNode Caption='CCTV'>
+			  <ZTreeCommand Command="Insert(DEVICE_VEB_SS_CCTV_VCAMTC)" Caption='IP-камера уличная, цилиндр' />
+			  <ZTreeCommand Command="Insert(DEVICE_VEB_SS_CCTV_VCAM)" Caption='IP-камера внутренняя, цилиндр' />
+			  <ZTreeCommand Command="Insert(DEVICE_VEB_SS_CCTV_IPCAMIN)" Caption='IP-камера внутренняя, сфера' />
+		    </ZTreeNode>
         </ZTreeNode>
       </ZTreeNode>
     </BlockLib>

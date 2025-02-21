@@ -73,7 +73,7 @@ end;
 class function TZCADPathsMacroMethods.MacroFuncDictPath(const {%H-}Param: string; const Data: PtrInt;
                                              var {%H-}Abort: boolean): string;
 begin
-  result:=ConcatPaths([GetRoCfgsPath,CFSdictionariesDir]);
+  result:=ConcatPaths([GetDistribPath,CFSdictionariesDir]);
 end;
 class function TZCADPathsMacroMethods.MacroFuncTEMPPath(const {%H-}Param: string; const Data: PtrInt;var {%H-}Abort: boolean): string;
 begin

@@ -34,7 +34,7 @@ uses
   uzeentityfactory,uzegeometry,
   UGDBVisibleTreeArray,UGDBSelectedObjArray,uzcenitiesvariablesextender,
   uzeentdevice,UBaseTypeDescriptor,uzccommand_regen,URecordDescriptor,
-  typedescriptors;
+  typedescriptors,uzeentgenericsubentry;
 
 type
 
@@ -111,8 +111,8 @@ var
     pnbvarext,ppbvarext:TVariablesExtender;
     pvdNew,pvdOld:pvardesk;
   begin
-    nb := Pointer(drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.CreateObj(GDBBlockInsertID));
-    PGDBObjBlockInsert(nb)^.init(drawings.GetCurrentROOT,drawings.GetCurrentDWG^.LayerTable.GetSystemLayer,0);
+    nb := Pointer(PGDBObjGenericSubEntry(pb^.bp.ListPos.Owner).ObjArray.CreateObj(GDBBlockInsertID));
+    PGDBObjBlockInsert(nb)^.init(nil,drawings.GetCurrentDWG^.LayerTable.GetSystemLayer,0);
     nb^.Name:=newname;
     nb^.vp:=pb^.vp;
     nb^.Local.p_insert:=pb^.Local.P_insert;
@@ -184,7 +184,8 @@ var
     drawings.GetCurrentROOT^.ObjArray.ObjTree.CorrectNodeBoundingBox(nb^);
     nb^.Visible:=0;
     drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.Count := 0;
-    pb^.YouDeleted(drawings.GetCurrentDWG^);
+    //pb^.YouDeleted(drawings.GetCurrentDWG^);
+    PGDBObjGenericSubEntry(pb^.bp.ListPos.Owner).GoodRemoveMiFromArray(pb,drawings.GetCurrentDWG^);
     inc(rslt);
   end;
 

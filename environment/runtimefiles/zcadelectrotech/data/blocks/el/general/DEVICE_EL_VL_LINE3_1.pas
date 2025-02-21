@@ -11,6 +11,9 @@ usescopy addtocable;
 var
 
 VL_Code:String;(*'Код'*)
+VL_Type:String;(*'Светильник'*)
+VL_Room:String;(*'Помещение'*)
+VL_Floor:String;(*'Этаж'*)
 
 implementation
 
@@ -28,5 +31,8 @@ SerialConnection:=1;
 GC_HeadDevice:='ЩНО??';
 GC_HDShortName:='??';
 GC_HDGroup:=0;
+
+VL_Room:='.';
+VL_Floor:='0';
 
 end.

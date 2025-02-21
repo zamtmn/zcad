@@ -10,7 +10,8 @@ usescopy addtocable;
 
 var
 
-VL_Type:String;(*'Опора'*)
+VL_Code:String;(*'Код'*)
+VL_Type:String;(*'Светильник'*)
 VL_Room:String;(*'Помещение'*)
 VL_Floor:String;(*'Этаж'*)
 

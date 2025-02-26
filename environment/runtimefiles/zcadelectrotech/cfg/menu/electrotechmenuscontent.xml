@@ -124,14 +124,12 @@
       <Action Name="ACN_REMAUTOCABLES"/>
 	  <Separator/>
 	  <SubMenu Name="Model">
-		  <Command Caption="Buffer Import" Command="DataImport"/> 
-		  <Command Caption="Buffer Export" Command="DataExport"/>
 		  <Action Name="ACN_DATAIMPORT"/>
 		  <Action Name="ACN_DATAEXPORT"/>	  
 	  </SubMenu>
 	  <SubMenu Name="Reports">
-		  <Command Caption="Connection diagram" Command="OPS_SPBuild"/> 		  
-		  <Command Caption="Create cable report" Command="El_Cable_Legend"/>
+		  <Action Name="ACN_OPSSPBUILD"/>		  
+		  <Action Name="ACN_CABLELEGEND"/>
 		  <Command Caption="Create material report" Command="El_Material_Legend"/> 
 	  </SubMenu>	
       <SubMenu Name="Extenders">

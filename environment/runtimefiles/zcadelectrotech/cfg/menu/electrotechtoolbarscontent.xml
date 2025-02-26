@@ -27,5 +27,12 @@
       <Action Name="ACN_KIPCDBUILD"/>
       <Action Name="ACN_KIPLUGTABLEBUILD"/>
     </ElectrotechActions>
+	<ElModelReports Type="ToolBar">
+	  <Action Name="ACN_DATAIMPORT"/>
+	  <Action Name="ACN_DATAEXPORT"/>
+      <Separator/>
+	  <Action Name="ACN_OPSSPBUILD"/>		  
+	  <Action Name="ACN_CABLELEGEND"/>
+    </ElModelReports>
   </ToolBarsContent>
 </CONFIG>

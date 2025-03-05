@@ -148,8 +148,8 @@ begin
   DISP_RemoveSystemCursorFromWorkArea:=True;
   DSGN_SelNew:=False;
   DWG_EditInSubEntry:=False;
-  RD_SpatialNodeCount:=2000;
-  RD_SpatialNodesDepth:=8;
+  RD_SpatialNodeCount:=8;
+  RD_SpatialNodesDepth:=10;
   DWG_RotateTextInLT:=True;
   RD_MaxLTPatternsInEntity:=10000;
   RD_PanObjectDegradation:=False;

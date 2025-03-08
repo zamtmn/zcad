@@ -228,7 +228,7 @@ begin
          TExporterParser.TGeneralParsedText.GetResultWithPart(Source,(ParsedOperands as TExporterParser.TParsedText).Parts.Mutable[2]^,data,op2,opResultParam);
          ResultParam.L.CodeUnits:=1;
          if ResultParam.P.CodeUnitPos<>OnlyGetLength then begin
-           if MatchesMask(op1,op2,false)
+           if MatchesMask(op1,op2,false,AllMaskOpCodes)
                or (AnsiCompareText(op1,op2)=0) then
              Result[ResultParam.P.CodeUnitPos]:='+'
            else

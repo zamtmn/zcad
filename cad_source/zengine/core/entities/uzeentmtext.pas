@@ -505,6 +505,7 @@ begin
     if assigned(EntExtensions)then
       EntExtensions.RunOnBeforeEntityFormat(@self,drawing,DC);
   end;
+  CalcActualVisible(dc.DrawingContext.VActuality);
   if EFDraw in stage then begin
     Representation.Clear;
 

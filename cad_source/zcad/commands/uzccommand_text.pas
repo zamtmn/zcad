@@ -43,6 +43,7 @@ type
                        procedure Command(Operands:TCommandOperands); virtual;
                        procedure BuildPrimitives; virtual;
                        procedure Format;virtual;
+                       procedure FormatAfterFielfmod(PField,PTypeDescriptor:Pointer);virtual;
                        function DoEnd(Context:TZCADCommandContext;pdata:Pointer):Boolean;virtual;
   end;
 {EXPORT-}
@@ -173,6 +174,11 @@ begin
                                            RunTextEditor(pdata,drawings.GetCurrentDWG^);
      //redrawoglwnd;
      build(context,'');
+end;
+procedure TextInsert_com.FormatAfterFielfmod(PField,PTypeDescriptor:Pointer);
+begin
+  inherited;
+  Self.Format;
 end;
 
 procedure TextInsert_com.Format;

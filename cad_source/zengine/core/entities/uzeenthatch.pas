@@ -190,7 +190,7 @@ begin
     dxfIntegerout(outhandle,70,1)
   else
     dxfIntegerout(outhandle,70,0);
-  dxfIntegerout(outhandle,71,1);
+  dxfIntegerout(outhandle,71,0);
   Path.SaveToDXF(outhandle);
   dxfIntegerout(outhandle,75,HID2DXF[IslandDetection]);
   dxfIntegerout(outhandle,76,1);
@@ -206,7 +206,9 @@ begin
 
   dxfDoubleout(outhandle,47,1.25);
   dxfIntegerout(outhandle,98,0);
-  SaveToDXFObjPostfix(outhandle);
+  //убрал потому что повторная запись нормали
+  //если она не 0,0,1
+  //SaveToDXFObjPostfix(outhandle);
 end;
 procedure GDBObjHatch.ProcessLine(const c:integer;const l1,l2,c1,c2:GDBvertex2D;var IV:TIntercept2dpropWithLICVector);
 var

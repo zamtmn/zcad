@@ -46,6 +46,7 @@ type
       function GetExpression:String;
       class function getExtenderName:string;override;
       constructor Create(pEntity:Pointer);override;
+      destructor Destroy;override;
       procedure Assign(Source:TBaseExtender);override;
       procedure onEntityClone(pSourceEntity,pDestEntity:pointer);override;
       procedure CopyExt2Ent(pSourceEntity,pDestEntity:pointer);override;
@@ -120,6 +121,14 @@ begin
   BadLayer:='SYS_METRIC';
   FExpression:='Test';
   FParser:=nil;
+end;
+destructor TLayerControlExtender.Destroy;
+begin
+  GoodLayer:='';
+  BadLayer:='';
+  FExpression:='';
+  FParser.Free;
+  inherited;
 end;
 
 procedure TLayerControlExtender.onAfterEntityFormat(pEntity:Pointer;const drawing:TDrawingDef;var DC:TDrawContext);

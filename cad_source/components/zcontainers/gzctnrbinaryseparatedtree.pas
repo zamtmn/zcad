@@ -495,6 +495,7 @@ destructor GZBInarySeparatedGeometry<TBoundingBox,TSeparator,TNodeData,TEntsMani
 begin
      ClearSub;
      nul.done;
+     NodeData.Destroy;
 end;
 begin
 end.

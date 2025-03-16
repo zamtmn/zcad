@@ -64,22 +64,35 @@ end;
 
 function Mirror_com.AfterClick(const Context:TZCADCommandContext;wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record): Integer;
 var
-    dispmatr:DMatrix4D;
+  tempmatr,MirrMatr:DMatrix4D;
+  FrPos:GDBvertex;
 begin
+  MirrMatr:=CalcTransformMatrix(t3dp,wc);
+  if (button and MZW_LBUTTON)<>0 then begin
+    case MirrorParam.SourceEnts of
+      TEP_Erase:move(MirrMatr,self.CommandName);
+      TEP_Leave:copy(MirrMatr,self.CommandName);
+    end;
+    commandmanager.executecommandend;
+  end else begin
+    if (drawings.GetCurrentDWG^.GetPcamera^.notuseLCS) then begin
+      drawings.GetCurrentDWG^.ConstructObjRoot.ObjMatrix:=MirrMatr;
+    end else begin
+      with drawings.GetCurrentDWG^.ConstructObjRoot do begin
 
-  dispmatr:=CalcTransformMatrix(t3dp,wc);
-  drawings.GetCurrentDWG^.ConstructObjRoot.ObjMatrix:=dispmatr;
+        tempmatr:=uzegeometry.MatrixMultiply(OneMatrix,MirrMatr);
+        FrPos.x:=tempmatr.mtr[3].x;
+        FrPos.y:=tempmatr.mtr[3].y;
+        FrPos.z:=tempmatr.mtr[3].z;
 
-   if (button and MZW_LBUTTON)<>0 then
-   begin
-      case MirrorParam.SourceEnts of
-                           TEP_Erase:move(dispmatr,self.CommandName);
-                           TEP_Leave:copy(dispmatr,self.CommandName);
+        ObjMatrix:=uzegeometry.CreateTranslationMatrix(-drawings.GetCurrentDWG^.GetPcamera^.CamCSOffset);
+        ObjMatrix:=uzegeometry.MatrixMultiply(ObjMatrix,MirrMatr);
+        ObjMatrix:=uzegeometry.MatrixMultiply(ObjMatrix,CreateTranslationMatrix(drawings.GetCurrentDWG^.GetPcamera^.CamCSOffset));
+        FrustumPosition:=FrPos;
       end;
-      //redrawoglwnd;
-      commandmanager.executecommandend;
-   end;
-   result:=cmd_ok;
+    end;
+  end;
+  result:=cmd_ok;
 end;
 
 initialization

@@ -189,8 +189,8 @@ begin
   INTF_ThemedRightToolbars:=False;
   INTF_ThemedDownToolbars:=False;
   INTF_ThemedLeftToolbars:=False;
-  INTF_AppMode:=TAMForceLight;
-  INTF_ColorScheme:='CustomDark';
+  INTF_AppMode:=TAMAllowDark;
+  INTF_ColorScheme:='Dark';
   INTF_MessagesSuppressDoubles:=T3SB_Default;
   RD_Vendor:='';
   RD_Renderer:='';

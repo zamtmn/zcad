@@ -1,7 +1,5 @@
 .PHONY: checkallvars checkvars clean zcadenv zcadelectrotechenv version zcad zcadelectrotech afterzcadelectrotechbuild cleanzcad cleanzcadelectrotech installpkgstolaz zcadelectrotechpdfuseguide rmpkgslibs tests
 default: cleanzcad
-ZCVERSION:=$(shell git describe --tags) $(shell git symbolic-ref --short HEAD)
-QZCVERSION:='$(ZCVERSION)'
 
 OSDETECT:=
 ifeq ($(OS),Windows_NT)
@@ -15,6 +13,20 @@ else
 		OSDETECT:=OSX
 	endif
 endif
+
+ZCVERSION:=
+ifeq ($(wildcard .git),)
+	ifeq ($(OSDETECT),WIN32)
+		ZCVERSION:=$(shell type cad_source\zcadversion.notgit)
+	else
+		ZCVERSION:=$(shell cat cad_source/zcadversion.notgit)
+	endif
+
+else
+	ZCVERSION:=$(shell git describe --tags) $(shell git symbolic-ref --short HEAD)
+endif
+
+QZCVERSION:='$(ZCVERSION)'
 
 CPUDETECT:=
 ifeq ($(OS),Windows_NT)

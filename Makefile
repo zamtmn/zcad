@@ -184,6 +184,15 @@ else
 	echo \'$(ZCVERSION)\' > cad_source/zcadversion.inc
 endif
 	@echo $(ZCVERSION) > cad_source/zcadversion.txt
+
+ifneq ($(wildcard .git),)
+ifeq ($(OSDETECT),WIN32)
+	$(shell git describe --tags --abbrev=0 > cad_source\zcadversion.notgit)
+else
+	$(shell git describe --tags --abbrev=0 > cat cad_source/zcadversion.notgit)
+endif
+endif
+
 zcad: checkvars version       
 	$(LAZBUILD) --pcp=$(PCP) cad_source/utils/typeexporter.lpi
 	environment/typeexporter/typeexporter pathprefix=cad_source/ outputfile=cad/data/rtl/system.pas processfiles=environment/typeexporter/zcad.files

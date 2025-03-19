@@ -3347,6 +3347,10 @@ msgstr "по количеству"
 msgid "by width/height"
 msgstr "по ширине/длине"
 
+#: zcadexternal.toolbar_caption~layouts
+msgid "Layouts"
+msgstr "Раскладки окон"
+
 #: zcadexternal.toolpalette_blocklib_instrumentation_itemcaption~unsorted
 msgctxt "zcadexternal.toolpalette_blocklib_instrumentation_itemcaption~unsorted"
 msgid "Unsorted"

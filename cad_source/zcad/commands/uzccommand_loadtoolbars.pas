@@ -21,13 +21,14 @@ unit uzccommand_loadtoolbars;
 
 interface
 uses
+ SysUtils,
  uzcLog,
  Forms,ActnList,Laz2_DOM,
  uzbpaths,uzccommandsabstract,uzccommandsimpl,uztoolbarsmanager,uzctbextmenus,
- uzctreenode;
+ uzcTranslations,uzctreenode,uzctbexttoolbars;
 
 implementation
-function TBCheckFunc(fmf:TForm;AcnLst:TActionList;aTBNode:TDomNode;aName,aType:string):boolean;
+function TBCheckFunc(fmf:TForm;AcnLst:TActionList;aTBNode:TDomNode;aName,aCaption,aType:string):boolean;
 var
   AcnName:string;
   Action:tmyaction;
@@ -36,7 +37,8 @@ begin
   Action:=tmyaction(AcnLst.ActionByName(AcnName));
   if Action<>nil then
     exit(false);
-  CreateTBShowAction(AcnName,aName,AcnLst);
+  aCaption:=InterfaceTranslate(format(CToolBarCaptionTranslateFormat,[aName]),aCaption);
+  CreateTBShowAction(AcnName,aName,aCaption,AcnLst);
   result:=True;
 end;
 

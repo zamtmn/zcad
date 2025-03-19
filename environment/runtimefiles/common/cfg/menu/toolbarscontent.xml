@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CONFIG>
   <ToolBarsContent>
-    <Layouts Type="ToolBar">
+    <Layouts Type="ToolBar" Caption="Layouts">
       <LayoutComboBox Width="200" Hint="Layout selection"/>
       <Action Name="ACN_DOCKOPT"/>
       <Action Name="ACN_SAVELAYOUT"/>

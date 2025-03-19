@@ -79,7 +79,7 @@ var
   OpenedDrawings:TOpenedDrawings;
 
   localpm:TFiletoMenuIteratorData;
-function CreateTBShowAction({fmf:TForm;}AAcnName:string;ATBName:string;AAcnLst:TActionList):TmyAction;
+function CreateTBShowAction(AAcnName:string;ATBName,ATBCaption:string;AAcnLst:TActionList):TmyAction;
 implementation
 
 const
@@ -347,11 +347,11 @@ begin
   end;
 end;
 
-function CreateTBShowAction({fmf:TForm;}AAcnName:string;ATBName:string;AAcnLst:TActionList):TmyAction;
+function CreateTBShowAction({fmf:TForm;}AAcnName:string;ATBName,ATBCaption:string;AAcnLst:TActionList):TmyAction;
 begin
   result:=TmyAction.Create({fmf}AAcnLst);
   result.Name:=AAcnName;
-  result.Caption:=ATBName;
+  result.Caption:=ATBCaption;
   result.command:='ShowToolBar';
   result.options:=ATBName;
   result.DisableIfNoHandler:=false;

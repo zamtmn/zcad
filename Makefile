@@ -57,9 +57,9 @@ else
 		INSTALLPREFIX:=/var/lib/zcad
 	else
 		ifeq ($(OSDETECT),OSX)
-			LP:=/var/lib/zcad
+			INSTALLPREFIX:=/var/lib/zcad
 		else
-			LP:=/var/lib/zcad
+			INSTALLPREFIX:=/var/lib/zcad
 		endif
 	endif
 endif

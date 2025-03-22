@@ -321,12 +321,6 @@
               <CPPInline Value="False"/>
             </SyntaxOptions>
           </Parsing>
-          <Linking>
-            <Debugging>
-              <DebugInfoType Value="dsDwarf3"/>
-              <UseExternalDbgSyms Value="True"/>
-            </Debugging>
-          </Linking>
           <Other>
             <Verbosity>
               <ShowHintsForUnusedUnitsInMainSrc Value="True"/>

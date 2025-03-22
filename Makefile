@@ -49,6 +49,8 @@ else
 	endif
 endif
 
+BUILDMODE:=default
+
 BUILDPREFIX:=cad
 
 INSTALLPREFIX:=NeedReplaceToDistribPath
@@ -198,12 +200,12 @@ endif
 zcad: checkvars version       
 	$(LAZBUILD) --pcp=$(PCP) cad_source/utils/typeexporter.lpi
 	environment/typeexporter/typeexporter pathprefix=cad_source/ outputfile=$(BUILDPREFIX)/data/rtl/system.pas processfiles=environment/typeexporter/zcad.files
-	$(LAZBUILD) --pcp=$(PCP) cad_source/zcad.lpi
+	$(LAZBUILD) --pcp=$(PCP) --bm=$(BUILDMODE) cad_source/zcad.lpi
 
 zcadelectrotech: checkvars version
 	$(LAZBUILD) --pcp=$(PCP) cad_source/utils/typeexporter.lpi
 	environment/typeexporter/typeexporter pathprefix=cad_source/ outputfile=$(BUILDPREFIX)/data/rtl/system.pas processfiles=environment/typeexporter/zcad.files+environment/typeexporter/zcadelectrotech.files define=ELECTROTECH
-	$(LAZBUILD) --pcp=$(PCP) cad_source/zcad.lpi
+	$(LAZBUILD) --pcp=$(PCP) --bm=$(BUILDMODE) cad_source/zcad.lpi
 
 afterzcadelectrotechbuild: checkallvars version
 	$(ZP)/zcad nosplash runscript $(BUILDPREFIX)/cfg/components/afterbuild.cmd

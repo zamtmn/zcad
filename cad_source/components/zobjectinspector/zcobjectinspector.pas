@@ -511,8 +511,8 @@ end;
 procedure TGDBobjinsp.calctreeh;
 var
   ppd:PPropertyDeskriptor;
-      ir:itrec;
-      last:boolean;
+  ir:itrec;
+  last:boolean;
 begin
   if ppa^.Count=0 then exit;
   ppd:=ppa^.beginiterate(ir);
@@ -521,22 +521,19 @@ begin
       last:=false;
       if (ppd^.IsVisible) then
       begin
-        y:=y++rowh;
-        if ppd^.SubNode<>nil
-          then
-        begin
-          if not ppd^.Collapsed^ then
-            begin
+        y:=y+rowh;
+        if ppd^.SubNode<>nil then begin
+          if not ppd^.Collapsed^ then begin
             calctreeh(pointer(ppd.SubNode),y);
             y:=y+INTFObjInspSpaceHeight;
             last:=true;
-            end;
+          end;
         end;
       end;
       ppd:=ppa^.iterate(ir);
     until ppd=nil;
   if last then
-              y:=y-INTFObjInspSpaceHeight;
+    y:=y-INTFObjInspSpaceHeight;
 end;
 procedure drawfasteditor(ppd:PPropertyDeskriptor;canvas:tcanvas;var FastEditorRT:TFastEditorRunTimeData;var r:trect);
 var
@@ -976,7 +973,7 @@ end;
 
 function TGDBobjinsp.gettreeh;
 begin
-  result:=1;
+  result:=0;
   calctreeh(@pda,result);
 end;
 {procedure TGDBobjinsp.WMVScroll(var Message : TLMVScroll);
@@ -1074,8 +1071,7 @@ hrect.Bottom:=hrect.Top+HeadersHeight-1{+1};
 {$IFDEF WINDOWS}hrect.Top:=hrect.Top;{$ENDIF}
 {$IFNDEF WINDOWS}hrect.Top:=hrect.Top+2;{$ENDIF}
 
-if IsHeadersEnabled then
-begin
+  if IsHeadersEnabled then begin
     hrect.Left:=hrect.Left+2;
     hrect.Right:=NameColumnWidth;
 
@@ -1089,35 +1085,32 @@ begin
     {$IFNDEF WINDOWS}hrect.right:=ARect.Right-2;{$ENDIF}
     ThemeServices.DrawElement(Canvas.Handle, DefaultDetails, hrect, nil);
     ThemeServices.DrawText(Canvas,DefaultDetails,ValueRowName,hrect,DT_END_ELLIPSIS or DT_CENTER or DT_VCENTER or DT_NOPREFIX,0);
-end;
-if NeedShowSeparator then
-begin
-     hrect.Left:=NameColumnWidth-2;
-     hrect.right:=NameColumnWidth+{$IFNDEF WINDOWS}2{$ENDIF}{$IFDEF WINDOWS}1{$ENDIF};
-     hrect.Top:= hrect.Bottom;
-     hrect.Bottom:=contentheigth+HeadersHeight;
-     if hrect.Bottom>ARect.Bottom then
-                                      hrect.Bottom:=ARect.Bottom{height};
-     if ThemeServices.ThemesEnabled then
-     begin
-          {$IFNDEF LCLWIN32}DefaultDetails := ThemeServices.GetElementDetails(ttbSeparatorNormal);{$ENDIF}
-          {$IFDEF LCLWIN32}
-          if WindowsVersion < wvVista then
-                                          DefaultDetails := ThemeServices.GetElementDetails(ttbSeparatorNormal)
-                                      else
-                                          DefaultDetails := ThemeServices.GetElementDetails(tsPane);
-          {$ENDIF}
-          ThemeServices.DrawElement(Canvas.Handle, DefaultDetails, hrect, nil);
-     end
-     else
-     begin
-          hrect.Left:=(hrect.Left+hrect.Right)div 2;
-          tc:=Canvas.Pen.Color;
-          Canvas.Pen.Color:=cl3DDkShadow;
-          canvas.Line(hrect.Left,hrect.Top,hrect.Left,hrect.Bottom);
-          Canvas.Pen.Color:=tc;
-     end;
-end;
+  end;
+
+  if NeedShowSeparator then begin
+    hrect.Left:=NameColumnWidth-2;
+    hrect.right:=NameColumnWidth+{$IFNDEF WINDOWS}2{$ENDIF}{$IFDEF WINDOWS}1{$ENDIF};
+    hrect.Top:= hrect.Bottom;
+    hrect.Bottom:=contentheigth+HeadersHeight;
+    if hrect.Bottom>ARect.Bottom then
+      hrect.Bottom:=ARect.Bottom{height};
+    if ThemeServices.ThemesEnabled then begin
+      {$IFNDEF LCLWIN32}DefaultDetails := ThemeServices.GetElementDetails(ttbSeparatorNormal);{$ENDIF}
+      {$IFDEF LCLWIN32}
+      if WindowsVersion < wvVista then
+        DefaultDetails := ThemeServices.GetElementDetails(ttbSeparatorNormal)
+      else
+        DefaultDetails := ThemeServices.GetElementDetails(tsPane);
+      {$ENDIF}
+      ThemeServices.DrawElement(Canvas.Handle, DefaultDetails, hrect, nil);
+    end else begin
+      hrect.Left:=(hrect.Left+hrect.Right)div 2;
+      tc:=Canvas.Pen.Color;
+      Canvas.Pen.Color:=cl3DDkShadow;
+      canvas.Line(hrect.Left,hrect.Top,hrect.Left,hrect.Bottom);
+      Canvas.Pen.Color:=tc;
+    end;
+  end;
 end;
 function findnext(psubtree:PTPropertyDeskriptorArray;current:PPropertyDeskriptor):PPropertyDeskriptor;
 var

@@ -91,7 +91,7 @@ begin
      ppd^.ValKey:=valkey;
      ppd^.ValType:=valtype;
      
-     if FA_DIFFERENT in ppd^.Attr then
+     if fldaDifferent in ppd^.Attr then
        ppd^.value:=rsDifferent
      else begin
        if GetNumberInArrays(Pointer(ppd^.valueAddres),currval)then

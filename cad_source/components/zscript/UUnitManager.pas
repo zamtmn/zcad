@@ -67,21 +67,21 @@ const
                            ProgramName:'#';
                            UserName:'Object';
                            PFT:@FundamentalPointerDescriptorOdj;
-                           Attributes:{FA_HIDDEN_IN_OBJ_INSP or }FA_READONLY;
+                           Attributes:{fldaHidden or }fldaReadOnly;
                            );*)
      FPVMT:FieldDescriptor=
                            (
                             base:(ProgramName:'#';
                                   UserName:'Object';
                                   PFT:@FundamentalPointerDescriptorOdj;
-                                  Attributes:[FA_HIDDEN_IN_OBJ_INSP,FA_READONLY]
+                                  Attributes:[fldaHidden,fldaReadOnly]
                                   );
                             //FieldName:'#';
                             //UserName:'Object';
                             //PFT:@FundamentalPointerDescriptorOdj;
                             Offset:0;
                             Size:sizeof(Pointer);
-                            //Attributes:{FA_HIDDEN_IN_OBJ_INSP or }FA_READONLY
+                            //Attributes:{fldaHidden or }fldaReadOnly
                             );
 procedure TUnitManager.CreateExtenalSystemVariable(var VarUnit:PTUnit;const VarUnitName:string;const PPaths:String;const sysunitname:String;TranslateFunc:TTranslateFunction;const varname,vartype:String;pinstance:Pointer);
 begin

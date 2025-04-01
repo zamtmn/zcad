@@ -30,11 +30,11 @@ const
      m_virtual=16;
      field_no_attrib=nil;
 
-     {FA_HIDDEN_IN_OBJ_INSP=1;
-     FA_READONLY=2;
-     FA_DIFFERENT=4;
-     FA_APPROXIMATELY=8;
-     FA_COLORED1=16;}
+     {fldaHidden=1;
+     fldaReadOnly=2;
+     fldaDifferent=4;
+     fldaApproximately=8;
+     fldaColored1=16;}
 
      property_correct=1;
      property_build=0;
@@ -73,8 +73,8 @@ BaseDescriptor=record
                       {** Сделать строку только для чтения/редактр или скрыть/открыть итд.
                        Пример:
                        samplef:=sampleInternalRTTITypeDesk^.FindField('VNum'); находим описание поля VNum
-                       samplef^.base.Attributes:=samplef^.base.Attributes and (not FA_HIDDEN_IN_OBJ_INSP); сбрасываем ему флаг cкрытности
-                       samplef^.base.Attributes:=samplef^.base.Attributes or FA_HIDDEN_IN_OBJ_INSP; устанавливаем ему флаг cкрытности
+                       samplef^.base.Attributes:=samplef^.base.Attributes and (not fldaHidden); сбрасываем ему флаг cкрытности
+                       samplef^.base.Attributes:=samplef^.base.Attributes or fldaHidden; устанавливаем ему флаг cкрытности
                        }
                       Attributes:TFieldAttrs;
 
@@ -111,6 +111,7 @@ TUserTypeDescriptor=object(UserTypeDescriptor)
 var zcpmode:tzcpmode;
     //currpd:PPropertyDeskriptor;
     debugShowHiddenFieldInObjInsp:boolean=false;
+    INTFObjInspShowEmptySections:boolean=false;
 implementation
 uses strmy;
 function TUserTypeDescriptor.GetPPD(PPDA:PTPropertyDeskriptorArray;var bmode:Integer):PPropertyDeskriptor;
@@ -189,7 +190,8 @@ begin
 end;
 function PropertyDeskriptor.IsVisible;
 begin
-  result:=(not(FA_HIDDEN_IN_OBJ_INSP in Attr))or(debugShowHiddenFieldInObjInsp);
+  result:=(not(fldaHidden in Attr))or(debugShowHiddenFieldInObjInsp);
+  result:=result and ((not(fldaTmpHidden in Attr))or(INTFObjInspShowEmptySections));
 end;
 procedure TPropertyDeskriptorArray.cleareraseobj;
 var curr:PPropertyDeskriptor;

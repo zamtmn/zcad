@@ -322,6 +322,11 @@ begin
     end else
       recreateunitvars:=false;
 
+    if PTEntityUnit(addr)^.InterfaceVariables.vardescarray.Count=0 then
+      Include(ppd^.Attr,fldaTmpHidden)
+    else
+      Exclude(ppd^.Attr,fldaTmpHidden);
+
     pvd:=PTEntityUnit(addr)^.InterfaceVariables.vardescarray.beginiterate(ir2);
     if pvd<>nil then
     repeat
@@ -334,15 +339,15 @@ begin
         tname:=pvd^.name;
       taa:=pvd^.data.Addr.Instance;
       if (pvd^.attrib and vda_different)>0 then
-        tw:=[FA_DIFFERENT]
+        tw:=[fldaDifferent]
       else
         tw:=[];
       if (pvd^.attrib and vda_approximately)>0 then
-        tw:=tw+[FA_APPROXIMATELY];
+        tw:=tw+[fldaApproximately];
       if (pvd^.attrib and vda_RO)>0 then
-        tw:=tw+[FA_READONLY];
+        tw:=tw+[fldaReadOnly];
       if (pvd^.attrib and vda_colored1)>0 then
-        tw:=tw+[FA_COLORED1];
+        tw:=tw+[fldaColored1];
       oldppda:=ppda;
       if i>0 then begin
         category:=uppercase(copy(pvd^.name,1,i-1));
@@ -518,7 +523,7 @@ begin
                                                                else
                                                                begin
                                                                     //tb:=@EmptyTypedData;
-                                                                    defaultptypehandler.CreateProperties(f,PDM_Field,PPDA,{PTTypedData(startaddr)^.ptd^.TypeName}tname,@pfd^.collapsed,{ppd^.Attr}pfd^.base.Attributes+ownerattrib+[FA_READONLY],bmode,tb,'','');
+                                                                    defaultptypehandler.CreateProperties(f,PDM_Field,PPDA,{PTTypedData(startaddr)^.ptd^.TypeName}tname,@pfd^.collapsed,{ppd^.Attr}pfd^.base.Attributes+ownerattrib+[fldaReadOnly],bmode,tb,'','');
                                                                end;
                                                                //inc(PtrInt(startaddr),sizeof(TTypedData));
                                                           end

@@ -1168,12 +1168,12 @@ begin
            oi_hidden:
                           begin
                                //a:=PFieldDescriptor(PRecordDescriptor(ptd)^.Fields.getDataMutable(PRecordDescriptor(ptd)^.Fields.Count-1))^.Attributes;
-                               getlastfirld.Attributes:=getlastfirld.Attributes+[FA_HIDDEN_IN_OBJ_INSP];
+                               getlastfirld.Attributes:=getlastfirld.Attributes+[fldaHidden];
                           end;
            oi_readonly:
                        begin
                                //a:=PFieldDescriptor(PRecordDescriptor(ptd)^.Fields.getDataMutable(PRecordDescriptor(ptd)^.Fields.Count-1))^.Attributes;
-                               getlastfirld.Attributes:=getlastfirld.Attributes+[FA_READONLY];
+                               getlastfirld.Attributes:=getlastfirld.Attributes+[fldaReadOnly];
                           end;
            username:
                     begin

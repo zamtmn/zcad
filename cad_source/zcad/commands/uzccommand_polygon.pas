@@ -76,23 +76,23 @@ begin
 
    PInternalRTTITypeDesk:=pointer(SysUnit^.TypeName2PTD('TPolygonParam'));//находим описание типа TRectangParam, мы сразу знаем что это описание записи, поэтому нужно привести тип
    pf:=PInternalRTTITypeDesk^.FindField('ET'); //находим описание поля ET
-   pf^.base.Attributes:=pf^.base.Attributes-[FA_READONLY];//сбрасываем ему флаг ридонли
+   pf^.base.Attributes:=pf^.base.Attributes-[fldaReadOnly];//сбрасываем ему флаг ридонли
    pf:=PInternalRTTITypeDesk^.FindField('PolyWidth'); //находим описание поля ET
-   pf^.base.Attributes:=pf^.base.Attributes-[FA_READONLY];//сбрасываем ему флаг ридонли
+   pf^.base.Attributes:=pf^.base.Attributes-[fldaReadOnly];//сбрасываем ему флаг ридонли
    pf:=PInternalRTTITypeDesk^.FindField('VNum'); //находим описание поля ET
-   pf^.base.Attributes:=pf^.base.Attributes-[FA_READONLY];//сбрасываем ему флаг ридонли
+   pf^.base.Attributes:=pf^.base.Attributes-[fldaReadOnly];//сбрасываем ему флаг ридонли
    //pf:=PInternalRTTITypeDesk^.FindField('VNum');//находим описание поля VNum
-   //pf^.base.Attributes:=pf^.base.Attributes or FA_HIDDEN_IN_OBJ_INSP;//устанавливаем ему флаг cкрытности
+   //pf^.base.Attributes:=pf^.base.Attributes or fldaHidden;//устанавливаем ему флаг cкрытности
    zcShowCommandParams(PInternalRTTITypeDesk,@PolygonParam);
 
    if commandmanager.get3dpoint(rscmSpecifyFirstPoint,pe.p1)=GRNormal then
    begin
       pf:=PInternalRTTITypeDesk^.FindField('ET');//находим описание поля ET
-      pf^.base.Attributes:=pf^.base.Attributes+[FA_READONLY];//устанавливаем ему флаг ридонли
+      pf^.base.Attributes:=pf^.base.Attributes+[fldaReadOnly];//устанавливаем ему флаг ридонли
       pf:=PInternalRTTITypeDesk^.FindField('PolyWidth');//находим описание поля ET
-      pf^.base.Attributes:=pf^.base.Attributes+[FA_READONLY];//устанавливаем ему флаг ридонли
+      pf^.base.Attributes:=pf^.base.Attributes+[fldaReadOnly];//устанавливаем ему флаг ридонли
       pf:=PInternalRTTITypeDesk^.FindField('VNum'); //находим описание поля ET
-      pf^.base.Attributes:=pf^.base.Attributes+[FA_READONLY];//устанавливаем ему флаг ридонли
+      pf^.base.Attributes:=pf^.base.Attributes+[fldaReadOnly];//устанавливаем ему флаг ридонли
 
       polygonDrawModePentity.npoint:=PolygonParam.VNum;
       polygonDrawModePentity.typeLWPoly:=false;

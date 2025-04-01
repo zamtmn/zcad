@@ -197,7 +197,6 @@ var
   PRowHeightOverride:PBoolean;
   //INTFObjInspRowHeight:TIntegerOverrider;
   INTFObjInspSpaceHeight:integer=0;
-  INTFObjInspShowEmptySections:boolean=false;
 
   PropertyRowName:string='Property';
   ValueRowName:string='Value';
@@ -750,10 +749,10 @@ var
    tempcolor:TColor;
    value:string;
 begin
-  if FA_HIDDEN_IN_OBJ_INSP in ppd^.Attr then
+  if fldaHidden in ppd^.Attr then
     canvas.Font.Italic:=true;
 
-  if FA_APPROXIMATELY in ppd^.Attr then
+  if fldaApproximately in ppd^.Attr then
     value:='≈'+ppd^.value
   else
     value:=ppd^.value;
@@ -764,16 +763,16 @@ begin
   r.Top:=r.Top+3;
   r.Left:=r.Left+3;
   r.Right:=r.Right-1;
-  if FA_READONLY in ppd^.Attr then
+  if fldaReadOnly in ppd^.Attr then
   begin
     tempcolor:=canvas.Font.Color;
     //canvas.Font.Color:=clGrayText;
-    if FA_COLORED1 in ppd^.Attr then
+    if fldaColored1 in ppd^.Attr then
     begin
           canvas.Font.StrikeThrough:=true;
     end;
     if fulldraw then
-    if (assigned(ppd.Decorators.OnDrawProperty) and(ppd^.valueAddres<>nil)and(not(FA_DIFFERENT in ppd^.Attr))) then
+    if (assigned(ppd.Decorators.OnDrawProperty) and(ppd^.valueAddres<>nil)and(not(fldaDifferent in ppd^.Attr))) then
                                        ppd.Decorators.OnDrawProperty(canvas,r,ppd^.valueAddres)
                                    else
                                        drawstring(canvas,r,{r.Left,r.Top,}(value),DefaultDetails);
@@ -785,22 +784,22 @@ begin
          //ppd.FastEditorDrawed:=false;
          if NeedDrawFasteditor(onm) then
          drawfasteditors(ppd,canvas,r);
-     if FA_COLORED1 in ppd^.Attr then
+     if fldaColored1 in ppd^.Attr then
      begin
            canvas.Font.StrikeThrough:=true;
      end;
     if fulldraw then
-    if (assigned(ppd.Decorators.OnDrawProperty) and(ppd^.valueAddres<>nil)and(not(FA_DIFFERENT in ppd^.Attr))) then
+    if (assigned(ppd.Decorators.OnDrawProperty) and(ppd^.valueAddres<>nil)and(not(fldaDifferent in ppd^.Attr))) then
                                                    ppd.Decorators.OnDrawProperty(canvas,r,ppd^.valueAddres)
                                                else
                                                    drawstring(canvas,r,{r.Left,r.Top,}(value),DefaultDetails);
     end;
 
-if FA_HIDDEN_IN_OBJ_INSP in ppd^.Attr then
+if fldaHidden in ppd^.Attr then
 begin
       canvas.Font.Italic:=false;
 end;
-if FA_COLORED1 in ppd^.Attr then
+if fldaColored1 in ppd^.Attr then
 begin
       canvas.Font.StrikeThrough:=false;
 end;
@@ -864,11 +863,11 @@ begin
                                     s:=ppd^.Name;
                                     if not NeedShowSeparator then
                                                              r.Right:=arect.Right-1;
-                                    TextDetails:=DrawRect(canvas,r,false,OnMouseProp,(FA_READONLY in ppd^.Attr),{true}sub=0);
+                                    TextDetails:=DrawRect(canvas,r,false,OnMouseProp,(fldaReadOnly in ppd^.Attr),{true}sub=0);
                                     //r.Left:={r.Left+3}arect.Left+5+subtab*sub;
                                     r.Left:=arect.Left+{2+}(subtab+GetSizeTreeIcon(not ppd^.Collapsed^,false).cx)*sub;
                                     r.Top:=r.Top+3;
-                                    if FA_READONLY in ppd^.Attr then
+                                    if fldaReadOnly in ppd^.Attr then
                                                                           begin
                                                                             tempcolor:=canvas.Font.Color;
                                                                             canvas.Font.Color:=clGrayText;
@@ -894,16 +893,16 @@ begin
         begin
           if visible then
           begin
-          TextDetails:=DrawRect(canvas,r,(ppd=EDContext.ppropcurrentedit),OnMouseProp,FA_READONLY in ppd^.Attr,{false}sub=0);
+          TextDetails:=DrawRect(canvas,r,(ppd=EDContext.ppropcurrentedit),OnMouseProp,fldaReadOnly in ppd^.Attr,{false}sub=0);
 
-          if FA_HIDDEN_IN_OBJ_INSP in ppd^.Attr then
+          if fldaHidden in ppd^.Attr then
           begin
                 canvas.Font.Italic:=true;
           end;
           r.Left:=r.Left+2;
           r.Top:=r.Top+3;
-          //if (FA_READONLY in ppd^.Attr)or(FA_HIDDEN_IN_OBJ_INSP in ppd^.Attr) then
-          if [FA_READONLY,FA_HIDDEN_IN_OBJ_INSP]*ppd^.Attr<>[]then
+          //if (fldaReadOnly in ppd^.Attr)or(fldaHidden in ppd^.Attr) then
+          if [fldaReadOnly,fldaHidden]*ppd^.Attr<>[]then
           begin
             tempcolor:=canvas.Font.Color;
             TextStyle:=canvas.TextStyle;
@@ -950,7 +949,7 @@ begin
           ppd.rect:=r;
           drawvalue(ppd,canvas,true,TextDetails,onmouseprop,sub=0);
 
-          {if (ppd^.Attr and FA_HIDDEN_IN_OBJ_INSP)<>0 then
+          {if (ppd^.Attr and fldaHidden)<>0 then
           begin
                 canvas.Font.Italic:=false;
           end;}
@@ -1519,7 +1518,7 @@ begin
                     invalidate;
 
   oldpp:=pp;
-  if FA_READONLY in pp^.Attr then exit;
+  if fldaReadOnly in pp^.Attr then exit;
 
   exit;
 
@@ -1696,7 +1695,7 @@ begin
      end
    else
    begin
-      if FA_READONLY in pp^.Attr then exit;
+      if fldaReadOnly in pp^.Attr then exit;
       if pp^.PTypeManager<>nil then
      begin
        if peditor<>nil then
@@ -1712,7 +1711,7 @@ begin
 
        if assigned(pp^.valueAddres) then
        begin
-         if FA_DIFFERENT in pp^.Attr then
+         if fldaDifferent in pp^.Attr then
                                                initialvalue:=DifferentName
                                            else
                                                initialvalue:='';

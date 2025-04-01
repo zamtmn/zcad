@@ -63,20 +63,20 @@ var
   begin
      PInternalRTTITypeDesk:=pointer(SysUnit^.TypeName2PTD('TRectangParam'));//находим описание типа TRectangParam, мы сразу знаем что это описание записи, поэтому нужно привести тип
      pf:=PInternalRTTITypeDesk^.FindField('ET'); //находим описание поля ET
-     pf^.base.Attributes:=pf^.base.Attributes-[FA_READONLY];//сбрасываем ему флаг ридонли
+     pf^.base.Attributes:=pf^.base.Attributes-[fldaReadOnly];//сбрасываем ему флаг ридонли
      pf:=PInternalRTTITypeDesk^.FindField('PolyWidth'); //находим описание поля ET
-     //pf^.base.Attributes:=pf^.base.Attributes and (not FA_READONLY);//сбрасываем ему флаг ридонли
+     //pf^.base.Attributes:=pf^.base.Attributes and (not fldaReadOnly);//сбрасываем ему флаг ридонли
      //pf:=PInternalRTTITypeDesk^.FindField('VNum');//находим описание поля VNum
-     //pf^.base.Attributes:=pf^.base.Attributes or FA_HIDDEN_IN_OBJ_INSP;//устанавливаем ему флаг cкрытности
-     //pf^.base.Attributes:=pf^.base.Attributes and (not FA_READONLY);//сбрасываем ему флаг ридонли
+     //pf^.base.Attributes:=pf^.base.Attributes or fldaHidden;//устанавливаем ему флаг cкрытности
+     //pf^.base.Attributes:=pf^.base.Attributes and (not fldaReadOnly);//сбрасываем ему флаг ридонли
      zcShowCommandParams(PInternalRTTITypeDesk,@RectangParam);
 
      if commandmanager.get3dpoint(rscmSpecifyFirstPoint,pe.p1)=GRNormal then
      begin
         pf:=PInternalRTTITypeDesk^.FindField('ET');//находим описание поля ET
-        pf^.base.Attributes:=pf^.base.Attributes+[FA_READONLY];//устанавливаем ему флаг ридонли
+        pf^.base.Attributes:=pf^.base.Attributes+[fldaReadOnly];//устанавливаем ему флаг ридонли
         pf:=PInternalRTTITypeDesk^.FindField('PolyWidth');//находим описание поля ET
-        pf^.base.Attributes:=pf^.base.Attributes+[FA_READONLY];//устанавливаем ему флаг ридонли
+        pf^.base.Attributes:=pf^.base.Attributes+[fldaReadOnly];//устанавливаем ему флаг ридонли
 
        //Создаем сразу 4-е точки прямоугольника, что бы в манипуляторе только управльть их координатами
         widthObj.endw:=RectangParam.PolyWidth;

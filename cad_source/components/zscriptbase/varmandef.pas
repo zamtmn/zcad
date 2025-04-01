@@ -55,8 +55,16 @@ const
   vda_approximately=4;
   vda_colored1=8;
 type
-  TFieldAttr=(FA_HIDDEN_IN_OBJ_INSP,FA_READONLY,FA_DIFFERENT,
-              FA_APPROXIMATELY,FA_COLORED1);
+  TFieldAttr=(fldaHidden,       //скрыто на постоянной основе
+              fldaTmpHidden,    //временно скрыто, например изза какогото особого
+                                //значения
+              fldaReadOnly,     //нельзя отредактировать
+              fldaDifferent,    //вместо значения отображается строка "Different"
+              fldaApproximately,//приближенное значение (текстовое не совпадает
+                                //с двоичным)
+              fldaColored1      //альтернативное оформление, чтоб поле бросалось
+                                //в глаза
+              );
   TFieldAttrs=set of TFieldAttr;
 TInternalScriptString=Ansistring;
 TCompareResult=(CRLess,CREqual,CRGreater,CRNotEqual);

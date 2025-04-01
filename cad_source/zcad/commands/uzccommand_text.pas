@@ -78,11 +78,11 @@ begin
      case TextInsertParams.mode of
            TIM_Text:
            begin
-             PRecordDescriptor(TextInsert.commanddata.PTD)^.SetAttrib('Oblique',[],[FA_READONLY]);
-             PRecordDescriptor(TextInsert.commanddata.PTD)^.SetAttrib('WidthFactor',[],[FA_READONLY]);
+             PRecordDescriptor(TextInsert.commanddata.PTD)^.SetAttrib('Oblique',[],[fldaReadOnly]);
+             PRecordDescriptor(TextInsert.commanddata.PTD)^.SetAttrib('WidthFactor',[],[fldaReadOnly]);
 
-             PRecordDescriptor(TextInsert.commanddata.PTD)^.SetAttrib('Width',[FA_READONLY],[]);
-             PRecordDescriptor(TextInsert.commanddata.PTD)^.SetAttrib('LineSpace',[FA_READONLY],[]);
+             PRecordDescriptor(TextInsert.commanddata.PTD)^.SetAttrib('Width',[fldaReadOnly],[]);
+             PRecordDescriptor(TextInsert.commanddata.PTD)^.SetAttrib('LineSpace',[fldaReadOnly],[]);
 
                 pt := Pointer(AllocEnt(GDBTextID));
                 pt^.init(@drawings.GetCurrentDWG^.ConstructObjRoot,drawings.GetCurrentDWG^.GetCurrentLayer,sysvar.dwg.DWG_CLinew^,'',nulvertex,2.5,0,1,0,jstl);
@@ -90,11 +90,11 @@ begin
            end;
            TIM_MText:
            begin
-                PRecordDescriptor(TextInsert.commanddata.PTD)^.SetAttrib('Oblique',[FA_READONLY],[]);
-                PRecordDescriptor(TextInsert.commanddata.PTD)^.SetAttrib('WidthFactor',[FA_READONLY],[]);
+                PRecordDescriptor(TextInsert.commanddata.PTD)^.SetAttrib('Oblique',[fldaReadOnly],[]);
+                PRecordDescriptor(TextInsert.commanddata.PTD)^.SetAttrib('WidthFactor',[fldaReadOnly],[]);
 
-                PRecordDescriptor(TextInsert.commanddata.PTD)^.SetAttrib('Width',[],[FA_READONLY]);
-                PRecordDescriptor(TextInsert.commanddata.PTD)^.SetAttrib('LineSpace',[],[FA_READONLY]);
+                PRecordDescriptor(TextInsert.commanddata.PTD)^.SetAttrib('Width',[],[fldaReadOnly]);
+                PRecordDescriptor(TextInsert.commanddata.PTD)^.SetAttrib('LineSpace',[],[fldaReadOnly]);
 
                 pt := Pointer(AllocEnt(GDBMTextID));
                 pgdbobjmtext(pt)^.init(@drawings.GetCurrentDWG^.ConstructObjRoot,drawings.GetCurrentDWG^.GetCurrentLayer,sysvar.dwg.DWG_CLinew^,

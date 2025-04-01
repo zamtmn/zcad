@@ -481,17 +481,17 @@ begin
   if pf<>nil then
                  begin
                     if OPSPlaceSmokeDetectorOrtoParam.StartAuto then
-                                                                    pf^.base.Attributes:=pf.base.Attributes-[FA_READONLY]
+                                                                    pf^.base.Attributes:=pf.base.Attributes-[fldaReadOnly]
                                                                 else
-                                                                    pf^.base.Attributes:=pf.base.Attributes+[FA_READONLY];
+                                                                    pf^.base.Attributes:=pf.base.Attributes+[fldaReadOnly];
                  end;
   pf:=pcfd^.FindField('SensorWallDistance');
   if pf<>nil then
                  begin
                     if OPSPlaceSmokeDetectorOrtoParam.StartAuto then
-                                                                    pf^.base.Attributes:=pf.base.Attributes-[FA_READONLY]
+                                                                    pf^.base.Attributes:=pf.base.Attributes-[fldaReadOnly]
                                                                 else
-                                                                    pf^.base.Attributes:=pf.base.Attributes+[FA_READONLY];
+                                                                    pf^.base.Attributes:=pf.base.Attributes+[fldaReadOnly];
                  end;
   end;
 //     sdname:=sdname;
@@ -1141,26 +1141,26 @@ begin
           TODPCT_by_Count:begin
                                pf:=pcfd^.FindField('NX');
                                if pf<>nil then
-                                              pf^.base.Attributes:=pf.base.Attributes+[FA_READONLY];
+                                              pf^.base.Attributes:=pf.base.Attributes+[fldaReadOnly];
 
                                pf:=pcfd^.FindField('NY');
                                if pf<>nil then
-                                              pf^.base.Attributes:=pf.base.Attributes+[FA_READONLY];
+                                              pf^.base.Attributes:=pf.base.Attributes+[fldaReadOnly];
                                pf:=pcfd^.FindField('Count');
                                if pf<>nil then
-                                              pf^.base.Attributes:=pf.base.Attributes-[FA_READONLY];
+                                              pf^.base.Attributes:=pf.base.Attributes-[fldaReadOnly];
                           end;
           TODPCT_by_XY:begin
                                pf:=pcfd^.FindField('NX');
                                if pf<>nil then
-                                              pf^.base.Attributes:=pf.base.Attributes-[FA_READONLY];
+                                              pf^.base.Attributes:=pf.base.Attributes-[fldaReadOnly];
 
                                pf:=pcfd^.FindField('NY');
                                if pf<>nil then
-                                              pf^.base.Attributes:=pf.base.Attributes-[FA_READONLY];
+                                              pf^.base.Attributes:=pf.base.Attributes-[fldaReadOnly];
                                pf:=pcfd^.FindField('Count');
                                if pf<>nil then
-                                              pf^.base.Attributes:=pf.base.Attributes+[FA_READONLY];
+                                              pf^.base.Attributes:=pf.base.Attributes+[fldaReadOnly];
                        end;
      end;
 end;

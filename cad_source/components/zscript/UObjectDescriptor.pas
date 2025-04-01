@@ -750,7 +750,7 @@ begin
 
      if bmode<>property_build then exit;
 
-     //-------------------------ownerattrib:=ownerattrib or FA_READONLY;
+     //-------------------------ownerattrib:=ownerattrib or fldaReadOnly;
 
      //eaddr:=addr;
         if colarray.parray=nil then

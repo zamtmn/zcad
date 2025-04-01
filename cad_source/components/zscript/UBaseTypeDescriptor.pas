@@ -242,7 +242,7 @@ begin
      ppd^.Attr:=ownerattrib;
      ppd^.Collapsed:=PCollapsed;
      ppd^.valueAddres:=addr;
-  if FA_DIFFERENT in ppd^.Attr then
+  if fldaDifferent in ppd^.Attr then
     ppd^.value:=rsDifferent
   else
     ppd^.value:=GetDecoratedValueAsString(addr,f);
@@ -420,7 +420,7 @@ begin
      ppd^.Collapsed:=PCollapsed;
      ppd^.valueAddres:=addr;
      ppd^.mode:=mode;
-     if FA_DIFFERENT in ppd^.Attr then
+     if fldaDifferent in ppd^.Attr then
        ppd^.value:=rsDifferent
      else
        ppd^.value:=GetDecoratedValueAsString(addr,f);
@@ -600,7 +600,7 @@ begin
   ppd^.Attr:=ownerattrib;
   ppd^.Collapsed:=PCollapsed;
   ppd^.valueAddres:=addr;
-  if FA_DIFFERENT in ppd^.Attr then
+  if fldaDifferent in ppd^.Attr then
     ppd^.value:=rsDifferent
   else
     ppd^.value:=GetDecoratedValueAsString(addr,f);

@@ -87,7 +87,7 @@ BaseTypeDescriptor<T,TManipulator>=object(TUserTypeDescriptor)
                          function GetValueAsString(pinstance:Pointer):TInternalScriptString;virtual;
                          function GetFormattedValueAsString(PInstance:Pointer;const f:TzeUnitsFormat):TInternalScriptString;virtual;
                          procedure SetFormattedValueFromString(PInstance:Pointer;const f:TzeUnitsFormat; const Value:TInternalScriptString);virtual;
-                         function CreateProperties(const f:TzeUnitsFormat;mode:PDMode;PPDA:PTPropertyDeskriptorArray;const Name:TInternalScriptString;PCollapsed:Pointer;ownerattrib:Word;var bmode:Integer;const addr:Pointer;const ValKey,ValType:TInternalScriptString):PTPropertyDeskriptorArray;virtual;
+                         function CreateProperties(const f:TzeUnitsFormat;mode:PDMode;PPDA:PTPropertyDeskriptorArray;const Name:TInternalScriptString;PCollapsed:Pointer;ownerattrib:TFieldAttrs;var bmode:Integer;const addr:Pointer;const ValKey,ValType:TInternalScriptString):PTPropertyDeskriptorArray;virtual;
                          procedure SetValueFromString(PInstance:Pointer; const Value:TInternalScriptString);virtual;
                          procedure InitInstance(PInstance:Pointer);virtual;
                          function AllocInstance:Pointer;virtual;
@@ -157,7 +157,7 @@ TEnumDataDescriptor=object(BaseTypeDescriptor<TEnumData,{TOrdinalTypeManipulator
                      function GetValueAsString(pinstance:Pointer):TInternalScriptString;virtual;
                      function GetDecoratedValueAsString(pinstance:Pointer; const f:TzeUnitsFormat):TInternalScriptString;virtual;
                      procedure SetValueFromString(PInstance:Pointer; const _Value:TInternalScriptString);virtual;
-                     function CreateProperties(const f:TzeUnitsFormat;mode:PDMode;PPDA:PTPropertyDeskriptorArray;const Name:TInternalScriptString;PCollapsed:Pointer;ownerattrib:Word;var bmode:Integer;const addr:Pointer;const ValKey,ValType:TInternalScriptString):PTPropertyDeskriptorArray;virtual;
+                     function CreateProperties(const f:TzeUnitsFormat;mode:PDMode;PPDA:PTPropertyDeskriptorArray;const Name:TInternalScriptString;PCollapsed:Pointer;ownerattrib:TFieldAttrs;var bmode:Integer;const addr:Pointer;const ValKey,ValType:TInternalScriptString):PTPropertyDeskriptorArray;virtual;
                      destructor Done;virtual;
                end;
 TCalculatedStringDescriptor=object(BaseTypeDescriptor<TCalculatedString,TASTM_String>)
@@ -166,7 +166,7 @@ TCalculatedStringDescriptor=object(BaseTypeDescriptor<TCalculatedString,TASTM_St
   function GetValueAsString(pinstance:Pointer):TInternalScriptString;virtual;
   procedure SetValueFromString(PInstance:Pointer; const _Value:TInternalScriptString);virtual;
   procedure SetEditableFromString(PInstance:Pointer;const f:TzeUnitsFormat; const Value:TInternalScriptString);virtual;
-  function CreateProperties(const f:TzeUnitsFormat;mode:PDMode;PPDA:PTPropertyDeskriptorArray;const Name:TInternalScriptString;PCollapsed:Pointer;ownerattrib:Word;var bmode:Integer;const addr:Pointer;const ValKey,ValType:TInternalScriptString):PTPropertyDeskriptorArray;virtual;
+  function CreateProperties(const f:TzeUnitsFormat;mode:PDMode;PPDA:PTPropertyDeskriptorArray;const Name:TInternalScriptString;PCollapsed:Pointer;ownerattrib:TFieldAttrs;var bmode:Integer;const addr:Pointer;const ValKey,ValType:TInternalScriptString):PTPropertyDeskriptorArray;virtual;
   //destructor Done;virtual;
 end;
 
@@ -242,11 +242,10 @@ begin
      ppd^.Attr:=ownerattrib;
      ppd^.Collapsed:=PCollapsed;
      ppd^.valueAddres:=addr;
-     if (ppd^.Attr and FA_DIFFERENT)=0 then
-       ppd^.value:=GetDecoratedValueAsString(addr,f)
-     else
-       ppd^.value:=rsDifferent;
-     //ppd^.value:=GetValueAsString(addr);
+  if FA_DIFFERENT in ppd^.Attr then
+    ppd^.value:=rsDifferent
+  else
+    ppd^.value:=GetDecoratedValueAsString(addr,f);
 end;
 class function TOrdinalTypeManipulator<T>.GetValueAsString(const data:T):TInternalScriptString;
 begin
@@ -421,10 +420,10 @@ begin
      ppd^.Collapsed:=PCollapsed;
      ppd^.valueAddres:=addr;
      ppd^.mode:=mode;
-     if (ppd^.Attr and FA_DIFFERENT)=0 then
-                                           ppd^.value:=GetDecoratedValueAsString(addr,f)
-                                       else
-                                           ppd^.value:=rsDifferent;
+     if FA_DIFFERENT in ppd^.Attr then
+       ppd^.value:=rsDifferent
+     else
+       ppd^.value:=GetDecoratedValueAsString(addr,f);
      if ppd^.value='rp_21' then
                                ppd^.value:=ppd^.value;
            if ppd<>nil then
@@ -581,7 +580,7 @@ end;
 //procedure TCalculatedStringDescriptor.SetValueFromString(PInstance:Pointer;_Value:TInternalScriptString);
 //begin
 //end;
-function TCalculatedStringDescriptor.CreateProperties(const f:TzeUnitsFormat;mode:PDMode;PPDA:PTPropertyDeskriptorArray;const Name:TInternalScriptString;PCollapsed:Pointer;ownerattrib:Word;var bmode:Integer;const addr:Pointer;const ValKey,ValType:TInternalScriptString):PTPropertyDeskriptorArray;
+function TCalculatedStringDescriptor.CreateProperties(const f:TzeUnitsFormat;mode:PDMode;PPDA:PTPropertyDeskriptorArray;const Name:TInternalScriptString;PCollapsed:Pointer;ownerattrib:TFieldAttrs;var bmode:Integer;const addr:Pointer;const ValKey,ValType:TInternalScriptString):PTPropertyDeskriptorArray;
 var ppd:PPropertyDeskriptor;
 begin
   zTraceLn('{T}[ZSCRIPT]TEnumDataDescriptor.CreateProperties(%s,ppda=%p)',[name,ppda]);
@@ -601,10 +600,10 @@ begin
   ppd^.Attr:=ownerattrib;
   ppd^.Collapsed:=PCollapsed;
   ppd^.valueAddres:=addr;
-  if (ppd^.Attr and FA_DIFFERENT)=0 then
-    ppd^.value:=GetDecoratedValueAsString(addr,f)
+  if FA_DIFFERENT in ppd^.Attr then
+    ppd^.value:=rsDifferent
   else
-    ppd^.value:=rsDifferent;
+    ppd^.value:=GetDecoratedValueAsString(addr,f);
   //ppd^.value:=GetValueAsString(addr);
 end;
 

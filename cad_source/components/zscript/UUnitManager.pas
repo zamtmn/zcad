@@ -74,7 +74,7 @@ const
                             base:(ProgramName:'#';
                                   UserName:'Object';
                                   PFT:@FundamentalPointerDescriptorOdj;
-                                  Attributes:FA_HIDDEN_IN_OBJ_INSP or FA_READONLY
+                                  Attributes:[FA_HIDDEN_IN_OBJ_INSP,FA_READONLY]
                                   );
                             //FieldName:'#';
                             //UserName:'Object';

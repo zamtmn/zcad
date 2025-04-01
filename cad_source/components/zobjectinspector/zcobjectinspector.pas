@@ -505,7 +505,7 @@ end;
 procedure TGDBobjinsp.buildproplist;
 begin
   if exttype<>nil then
-  PTUserTypeDescriptor(exttype)^.CreateProperties(f,PDM_Field,@PDA,'root',field_no_attrib,0,bmode,addr,'','');
+  PTUserTypeDescriptor(exttype)^.CreateProperties(f,PDM_Field,@PDA,'root',field_no_attrib,[],bmode,addr,'','');
 end;
 
 procedure TGDBobjinsp.calctreeh;
@@ -750,14 +750,13 @@ var
    tempcolor:TColor;
    value:string;
 begin
-     if (ppd^.Attr and FA_HIDDEN_IN_OBJ_INSP)<>0 then
-     begin
-           canvas.Font.Italic:=true;
-     end;
-     if (ppd^.Attr and FA_APPROXIMATELY)<>0 then
-                                              value:='≈'+ppd^.value
-                                          else
-                                              value:=ppd^.value;
+  if FA_HIDDEN_IN_OBJ_INSP in ppd^.Attr then
+    canvas.Font.Italic:=true;
+
+  if FA_APPROXIMATELY in ppd^.Attr then
+    value:='≈'+ppd^.value
+  else
+    value:=ppd^.value;
 
   r:=ppd.rect;
   if fulldraw then
@@ -765,16 +764,16 @@ begin
   r.Top:=r.Top+3;
   r.Left:=r.Left+3;
   r.Right:=r.Right-1;
-  if (ppd^.Attr and FA_READONLY)<>0 then
+  if FA_READONLY in ppd^.Attr then
   begin
     tempcolor:=canvas.Font.Color;
     //canvas.Font.Color:=clGrayText;
-    if (ppd^.Attr and FA_COLORED1)<>0 then
+    if FA_COLORED1 in ppd^.Attr then
     begin
           canvas.Font.StrikeThrough:=true;
     end;
     if fulldraw then
-    if (assigned(ppd.Decorators.OnDrawProperty) and(ppd^.valueAddres<>nil)and((ppd^.Attr and FA_DIFFERENT)=0)) then
+    if (assigned(ppd.Decorators.OnDrawProperty) and(ppd^.valueAddres<>nil)and(not(FA_DIFFERENT in ppd^.Attr))) then
                                        ppd.Decorators.OnDrawProperty(canvas,r,ppd^.valueAddres)
                                    else
                                        drawstring(canvas,r,{r.Left,r.Top,}(value),DefaultDetails);
@@ -786,22 +785,22 @@ begin
          //ppd.FastEditorDrawed:=false;
          if NeedDrawFasteditor(onm) then
          drawfasteditors(ppd,canvas,r);
-     if (ppd^.Attr and FA_COLORED1)<>0 then
+     if FA_COLORED1 in ppd^.Attr then
      begin
            canvas.Font.StrikeThrough:=true;
      end;
     if fulldraw then
-    if (assigned(ppd.Decorators.OnDrawProperty) and(ppd^.valueAddres<>nil)and((ppd^.Attr and FA_DIFFERENT)=0)) then
+    if (assigned(ppd.Decorators.OnDrawProperty) and(ppd^.valueAddres<>nil)and(not(FA_DIFFERENT in ppd^.Attr))) then
                                                    ppd.Decorators.OnDrawProperty(canvas,r,ppd^.valueAddres)
                                                else
                                                    drawstring(canvas,r,{r.Left,r.Top,}(value),DefaultDetails);
     end;
 
-if (ppd^.Attr and FA_HIDDEN_IN_OBJ_INSP)<>0 then
+if FA_HIDDEN_IN_OBJ_INSP in ppd^.Attr then
 begin
       canvas.Font.Italic:=false;
 end;
-if (ppd^.Attr and FA_COLORED1)<>0 then
+if FA_COLORED1 in ppd^.Attr then
 begin
       canvas.Font.StrikeThrough:=false;
 end;
@@ -865,11 +864,11 @@ begin
                                     s:=ppd^.Name;
                                     if not NeedShowSeparator then
                                                              r.Right:=arect.Right-1;
-                                    TextDetails:=DrawRect(canvas,r,false,OnMouseProp,(ppd^.Attr and FA_READONLY)<>0,{true}sub=0);
+                                    TextDetails:=DrawRect(canvas,r,false,OnMouseProp,(FA_READONLY in ppd^.Attr),{true}sub=0);
                                     //r.Left:={r.Left+3}arect.Left+5+subtab*sub;
                                     r.Left:=arect.Left+{2+}(subtab+GetSizeTreeIcon(not ppd^.Collapsed^,false).cx)*sub;
                                     r.Top:=r.Top+3;
-                                    if (ppd^.Attr and FA_READONLY)<>0 then
+                                    if FA_READONLY in ppd^.Attr then
                                                                           begin
                                                                             tempcolor:=canvas.Font.Color;
                                                                             canvas.Font.Color:=clGrayText;
@@ -895,15 +894,16 @@ begin
         begin
           if visible then
           begin
-          TextDetails:=DrawRect(canvas,r,(ppd=EDContext.ppropcurrentedit),OnMouseProp,(ppd^.Attr and FA_READONLY)<>0,{false}sub=0);
+          TextDetails:=DrawRect(canvas,r,(ppd=EDContext.ppropcurrentedit),OnMouseProp,FA_READONLY in ppd^.Attr,{false}sub=0);
 
-          if (ppd^.Attr and FA_HIDDEN_IN_OBJ_INSP)<>0 then
+          if FA_HIDDEN_IN_OBJ_INSP in ppd^.Attr then
           begin
                 canvas.Font.Italic:=true;
           end;
           r.Left:=r.Left+2;
           r.Top:=r.Top+3;
-          if ((ppd^.Attr and FA_READONLY)<>0)or((ppd^.Attr and FA_HIDDEN_IN_OBJ_INSP)<>0) then
+          //if (FA_READONLY in ppd^.Attr)or(FA_HIDDEN_IN_OBJ_INSP in ppd^.Attr) then
+          if [FA_READONLY,FA_HIDDEN_IN_OBJ_INSP]*ppd^.Attr<>[]then
           begin
             tempcolor:=canvas.Font.Color;
             TextStyle:=canvas.TextStyle;
@@ -1519,7 +1519,7 @@ begin
                     invalidate;
 
   oldpp:=pp;
-  if (pp^.Attr and FA_READONLY)<>0 then exit;
+  if FA_READONLY in pp^.Attr then exit;
 
   exit;
 
@@ -1696,7 +1696,7 @@ begin
      end
    else
    begin
-      if (pp^.Attr and FA_READONLY)<>0 then exit;
+      if FA_READONLY in pp^.Attr then exit;
       if pp^.PTypeManager<>nil then
      begin
        if peditor<>nil then
@@ -1712,7 +1712,7 @@ begin
 
        if assigned(pp^.valueAddres) then
        begin
-         if (pp^.Attr and FA_DIFFERENT)<>0 then
+         if FA_DIFFERENT in pp^.Attr then
                                                initialvalue:=DifferentName
                                            else
                                                initialvalue:='';

@@ -558,6 +558,7 @@ begin
   ObjCasheArray.clear;
   calcbb(dc);
   restructure(drawing);
+  formatentity(drawing,dc,Stage);
 end;
 procedure GDBObjGenericSubEntry.restructure;
 begin

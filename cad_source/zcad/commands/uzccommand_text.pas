@@ -31,7 +31,8 @@ uses
   URecordDescriptor,typedescriptors,uzeentityfactory,uzegeometry,Varman,
   uzccommandsabstract,uzccmdfloatinsert,uzeentabstracttext,uzeenttext,uzeentmtext,
   uzcinterface,uzcstrconsts,uzccommandsmanager,
-  uzeentity,uzcLog,uzctnrvectorstrings,uzestylestexts,uzeconsts,uzcsysvars,uzctextenteditor;
+  uzeentity,uzcLog,uzctnrvectorstrings,uzestylestexts,uzeconsts,uzcsysvars,uzctextenteditor,
+  varmandef;
 type
 {EXPORT+}
   {REGISTEROBJECTTYPE TextInsert_com}
@@ -77,11 +78,11 @@ begin
      case TextInsertParams.mode of
            TIM_Text:
            begin
-             PRecordDescriptor(TextInsert.commanddata.PTD)^.SetAttrib('Oblique',0,FA_READONLY);
-             PRecordDescriptor(TextInsert.commanddata.PTD)^.SetAttrib('WidthFactor',0,FA_READONLY);
+             PRecordDescriptor(TextInsert.commanddata.PTD)^.SetAttrib('Oblique',[],[FA_READONLY]);
+             PRecordDescriptor(TextInsert.commanddata.PTD)^.SetAttrib('WidthFactor',[],[FA_READONLY]);
 
-             PRecordDescriptor(TextInsert.commanddata.PTD)^.SetAttrib('Width',FA_READONLY,0);
-             PRecordDescriptor(TextInsert.commanddata.PTD)^.SetAttrib('LineSpace',FA_READONLY,0);
+             PRecordDescriptor(TextInsert.commanddata.PTD)^.SetAttrib('Width',[FA_READONLY],[]);
+             PRecordDescriptor(TextInsert.commanddata.PTD)^.SetAttrib('LineSpace',[FA_READONLY],[]);
 
                 pt := Pointer(AllocEnt(GDBTextID));
                 pt^.init(@drawings.GetCurrentDWG^.ConstructObjRoot,drawings.GetCurrentDWG^.GetCurrentLayer,sysvar.dwg.DWG_CLinew^,'',nulvertex,2.5,0,1,0,jstl);
@@ -89,11 +90,11 @@ begin
            end;
            TIM_MText:
            begin
-                PRecordDescriptor(TextInsert.commanddata.PTD)^.SetAttrib('Oblique',FA_READONLY,0);
-                PRecordDescriptor(TextInsert.commanddata.PTD)^.SetAttrib('WidthFactor',FA_READONLY,0);
+                PRecordDescriptor(TextInsert.commanddata.PTD)^.SetAttrib('Oblique',[FA_READONLY],[]);
+                PRecordDescriptor(TextInsert.commanddata.PTD)^.SetAttrib('WidthFactor',[FA_READONLY],[]);
 
-                PRecordDescriptor(TextInsert.commanddata.PTD)^.SetAttrib('Width',0,FA_READONLY);
-                PRecordDescriptor(TextInsert.commanddata.PTD)^.SetAttrib('LineSpace',0,FA_READONLY);
+                PRecordDescriptor(TextInsert.commanddata.PTD)^.SetAttrib('Width',[],[FA_READONLY]);
+                PRecordDescriptor(TextInsert.commanddata.PTD)^.SetAttrib('LineSpace',[],[FA_READONLY]);
 
                 pt := Pointer(AllocEnt(GDBMTextID));
                 pgdbobjmtext(pt)^.init(@drawings.GetCurrentDWG^.ConstructObjRoot,drawings.GetCurrentDWG^.GetCurrentLayer,sysvar.dwg.DWG_CLinew^,

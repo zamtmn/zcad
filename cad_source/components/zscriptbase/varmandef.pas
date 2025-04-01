@@ -55,6 +55,9 @@ const
   vda_approximately=4;
   vda_colored1=8;
 type
+  TFieldAttr=(FA_HIDDEN_IN_OBJ_INSP,FA_READONLY,FA_DIFFERENT,
+              FA_APPROXIMATELY,FA_COLORED1);
+  TFieldAttrs=set of TFieldAttr;
 TInternalScriptString=Ansistring;
 TCompareResult=(CRLess,CREqual,CRGreater,CRNotEqual);
 TPropEditorOwner=TWinControl;
@@ -96,14 +99,14 @@ TFastEditorRunTimeData=record
 TFastEditorsVector=specialize TMyVector<TFastEditorProcs>;
 TFastEditorsRunTimeVector=specialize TMyVector<TFastEditorRunTimeData>;
   PBasePropertyDeskriptor=^BasePropertyDeskriptor;
-  BasePropertyDeskriptor=object({GDBaseObject}GDBBaseNode)
+  BasePropertyDeskriptor=object(GDBBaseNode)
     Name: String;
     Value: String;
     ValKey: String;
     ValType: String;
     Category: String;
     PTypeManager:PUserTypeDescriptor;
-    Attr:Word;
+    Attr:TFieldAttrs;
     Collapsed:PBoolean;
     ValueOffsetInMem:Word;
     valueAddres:Pointer;

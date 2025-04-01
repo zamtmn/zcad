@@ -252,9 +252,9 @@ begin
     if i>0 then
       BlockReplaceParams.Replace.Selected:=i;
   if BlockReplaceParams.Find.Enums.Count=0 then
-    PRecordDescriptor(commanddata.PTD)^.SetAttrib('Find',FA_READONLY,0)
+    PRecordDescriptor(commanddata.PTD)^.SetAttrib('Find',[FA_READONLY],[])
   else
-    PRecordDescriptor(commanddata.PTD)^.SetAttrib('Find',0,FA_READONLY);
+    PRecordDescriptor(commanddata.PTD)^.SetAttrib('Find',[],[FA_READONLY]);
 end;
 
 initialization

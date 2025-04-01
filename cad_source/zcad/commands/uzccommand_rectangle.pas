@@ -34,7 +34,7 @@ uses
   //uzbtypes,
   uzegeometry,
   uzccommand_polygon,
-  URecordDescriptor,typedescriptors,Varman;
+  URecordDescriptor,typedescriptors,Varman,varmandef;
 
 type
   //** Тип данных для отображения в инспекторе опций команды Rectangle
@@ -63,7 +63,7 @@ var
   begin
      PInternalRTTITypeDesk:=pointer(SysUnit^.TypeName2PTD('TRectangParam'));//находим описание типа TRectangParam, мы сразу знаем что это описание записи, поэтому нужно привести тип
      pf:=PInternalRTTITypeDesk^.FindField('ET'); //находим описание поля ET
-     pf^.base.Attributes:=pf^.base.Attributes and (not FA_READONLY);//сбрасываем ему флаг ридонли
+     pf^.base.Attributes:=pf^.base.Attributes-[FA_READONLY];//сбрасываем ему флаг ридонли
      pf:=PInternalRTTITypeDesk^.FindField('PolyWidth'); //находим описание поля ET
      //pf^.base.Attributes:=pf^.base.Attributes and (not FA_READONLY);//сбрасываем ему флаг ридонли
      //pf:=PInternalRTTITypeDesk^.FindField('VNum');//находим описание поля VNum
@@ -74,9 +74,9 @@ var
      if commandmanager.get3dpoint(rscmSpecifyFirstPoint,pe.p1)=GRNormal then
      begin
         pf:=PInternalRTTITypeDesk^.FindField('ET');//находим описание поля ET
-        pf^.base.Attributes:=pf^.base.Attributes or FA_READONLY;//устанавливаем ему флаг ридонли
+        pf^.base.Attributes:=pf^.base.Attributes+[FA_READONLY];//устанавливаем ему флаг ридонли
         pf:=PInternalRTTITypeDesk^.FindField('PolyWidth');//находим описание поля ET
-        pf^.base.Attributes:=pf^.base.Attributes or FA_READONLY;//устанавливаем ему флаг ридонли
+        pf^.base.Attributes:=pf^.base.Attributes+[FA_READONLY];//устанавливаем ему флаг ридонли
 
        //Создаем сразу 4-е точки прямоугольника, что бы в манипуляторе только управльть их координатами
         widthObj.endw:=RectangParam.PolyWidth;

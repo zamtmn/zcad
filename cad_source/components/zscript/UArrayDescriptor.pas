@@ -35,7 +35,7 @@ ArrayDescriptor=object(TUserTypeDescriptor)
                      Indexs:{GDBOpenArrayOfData}TArrayIndexDescriptorVector;
                      constructor init(var t:PUserTypeDescriptor;tname:string;pu:pointer);
                      procedure AddIndex(var Index:ArrayIndexDescriptor);
-                     function CreateProperties(const f:TzeUnitsFormat;mode:PDMode;PPDA:PTPropertyDeskriptorArray;const Name:TInternalScriptString;PCollapsed:Pointer;ownerattrib:Word;var bmode:Integer;const addr:Pointer;const ValKey,ValType:TInternalScriptString):PTPropertyDeskriptorArray;virtual;
+                     function CreateProperties(const f:TzeUnitsFormat;mode:PDMode;PPDA:PTPropertyDeskriptorArray;const Name:TInternalScriptString;PCollapsed:Pointer;ownerattrib:TFieldAttrs;var bmode:Integer;const addr:Pointer;const ValKey,ValType:TInternalScriptString):PTPropertyDeskriptorArray;virtual;
                      destructor Done;virtual;
                      function GetValueAsString(pinstance:Pointer):TInternalScriptString;virtual;
                end;

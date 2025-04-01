@@ -63,7 +63,7 @@ ObjectDescriptor=object(RecordDescriptor)
 
 
                        constructor init(const tname:string;pu:pointer);
-                       function CreateProperties(const f:TzeUnitsFormat;mode:PDMode;PPDA:PTPropertyDeskriptorArray;const Name:TInternalScriptString;PCollapsed:Pointer;ownerattrib:Word;var bmode:Integer;const addr:Pointer;const ValKey,ValType:TInternalScriptString):PTPropertyDeskriptorArray;virtual;
+                       function CreateProperties(const f:TzeUnitsFormat;mode:PDMode;PPDA:PTPropertyDeskriptorArray;const Name:TInternalScriptString;PCollapsed:Pointer;ownerattrib:TFieldAttrs;var bmode:Integer;const addr:Pointer;const ValKey,ValType:TInternalScriptString):PTPropertyDeskriptorArray;virtual;
                        procedure CopyTo(RD:PTUserTypeDescriptor);
                        procedure RegisterVMT(pv:Pointer);
                        procedure RegisterDefaultConstructor(pv:Pointer);
@@ -743,7 +743,7 @@ begin
                                        end;
            ObjectDescriptor.SimpleRunMetodWithArg(pp.r,baddr,p);
            //p2:=p;
-           PTUserTypeDescriptor(pp^.base.PFT)^.CreateProperties(f,PDM_Property,PPDA,propname,@pp^.collapsed,{ppd^.Attr}pp^.base.Attributes or ownerattrib,bmode,p,'','');
+           PTUserTypeDescriptor(pp^.base.PFT)^.CreateProperties(f,PDM_Property,PPDA,propname,@pp^.collapsed,{ppd^.Attr}pp^.base.Attributes+ownerattrib,bmode,p,'','');
 
            pp:=Properties.iterate(ir);
      until pp=nil;

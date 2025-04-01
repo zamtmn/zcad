@@ -162,6 +162,7 @@ begin
      if assigned(EntExtensions)then
        EntExtensions.RunOnBeforeEntityFormat(@self,drawing,DC);
      GetDXFIOFeatures.RunFormatProcs(drawing,@self);
+     CalcActualVisible(dc.DrawingContext.VActuality);
      inherited;
      if self.ObjArray.Count=0 then
                                   begin

@@ -384,6 +384,14 @@ begin
           CalculatedStringDescriptor.CreateProperties(f,PDM_Field,PPDA,tname,@pvd^.data.PTD^.collapsed,(ownerattrib+tw),bmodesave2,taa,pvd^.name,pvd^.data.ptd.TypeName);
           CalculatedStringDescriptor.Decorators:=SaveDecorators;
           CalculatedStringDescriptor.FastEditors:=SaveFastEditors;
+        end else if (PTUserTypeDescriptor(pvd^.data.PTD)^.GetFactTypedef^.pSuperTypeDeskriptor<>nil)then begin
+          SaveDecorators:=GetterSetterIntegerDescriptor.Decorators;
+          SaveFastEditors:=GetterSetterIntegerDescriptor.FastEditors;
+          PTUserTypeDescriptor(pvd^.data.PTD)^.GetFactTypedef^.pSuperTypeDeskriptor.Decorators:=PTUserTypeDescriptor(pvd^.data.PTD)^.Decorators;
+          PTUserTypeDescriptor(pvd^.data.PTD)^.GetFactTypedef^.pSuperTypeDeskriptor.FastEditors:=PTUserTypeDescriptor(pvd^.data.PTD)^.FastEditors;
+          PTUserTypeDescriptor(pvd^.data.PTD^.GetFactTypedef^.pSuperTypeDeskriptor).CreateProperties(f,PDM_Field,PPDA,tname,@pvd^.data.PTD^.collapsed,(ownerattrib+tw),bmodesave2,taa,pvd^.name,pvd^.data.ptd.TypeName);
+          PTUserTypeDescriptor(pvd^.data.PTD)^.GetFactTypedef^.pSuperTypeDeskriptor.Decorators:=SaveDecorators;
+          PTUserTypeDescriptor(pvd^.data.PTD)^.GetFactTypedef^.pSuperTypeDeskriptor.FastEditors:=SaveFastEditors;
         end else
           PTUserTypeDescriptor(pvd^.data.PTD)^.CreateProperties(f,PDM_Field,PPDA,tname,@pvd^.data.PTD^.collapsed,(ownerattrib+tw),bmodesave2,taa,pvd^.name,pvd^.data.ptd.TypeName)
       end else begin
@@ -406,6 +414,14 @@ begin
           CalculatedStringDescriptor.CreateProperties(f,PDM_Field,PPDA,tname,@pvd^.data.PTD^.collapsed,(ownerattrib+tw),bmodetemp,taa,pvd^.name,pvd^.data.ptd.TypeName);
           CalculatedStringDescriptor.Decorators:=SaveDecorators;
           CalculatedStringDescriptor.FastEditors:=SaveFastEditors;
+        end else if (PTUserTypeDescriptor(pvd^.data.PTD)^.GetFactTypedef^.pSuperTypeDeskriptor<>nil)then begin
+          SaveDecorators:=GetterSetterIntegerDescriptor.Decorators;
+          SaveFastEditors:=GetterSetterIntegerDescriptor.FastEditors;
+          PTUserTypeDescriptor(pvd^.data.PTD)^.GetFactTypedef^.pSuperTypeDeskriptor.Decorators:=PTUserTypeDescriptor(pvd^.data.PTD)^.Decorators;
+          PTUserTypeDescriptor(pvd^.data.PTD)^.GetFactTypedef^.pSuperTypeDeskriptor.FastEditors:=PTUserTypeDescriptor(pvd^.data.PTD)^.FastEditors;
+          PTUserTypeDescriptor(pvd^.data.PTD^.GetFactTypedef^.pSuperTypeDeskriptor).CreateProperties(f,PDM_Field,PPDA,tname,@pvd^.data.PTD^.collapsed,(ownerattrib+tw),bmodetemp,taa,pvd^.name,pvd^.data.ptd.TypeName);
+          PTUserTypeDescriptor(pvd^.data.PTD)^.GetFactTypedef^.pSuperTypeDeskriptor.Decorators:=SaveDecorators;
+          PTUserTypeDescriptor(pvd^.data.PTD)^.GetFactTypedef^.pSuperTypeDeskriptor.FastEditors:=SaveFastEditors;
         end else
           PTUserTypeDescriptor(pvd^.data.PTD)^.CreateProperties(f,PDM_Field,PPDA,tname,@pvd^.data.PTD^.collapsed,(ownerattrib+tw),{bmode}bmodetemp,taa,pvd^.name,pvd^.data.ptd.TypeName);
         if (bmode<>property_build)then
@@ -443,6 +459,16 @@ begin
                             GDBEnumDataDescriptorObj.FastEditors:=SaveFastEditors;
                        end
                    else
+           if pfd^.base.PFT^.pSuperTypeDeskriptor<>nil then begin
+             SaveDecorators:=pfd^.base.PFT^.pSuperTypeDeskriptor.Decorators;
+             SaveFastEditors:=pfd^.base.PFT^.pSuperTypeDeskriptor.FastEditors;
+             pfd^.base.PFT^.pSuperTypeDeskriptor.Decorators:=pfd^.base.PFT^.Decorators;
+             pfd^.base.PFT^.pSuperTypeDeskriptor.FastEditors:=pfd^.base.PFT^.FastEditors;
+             PTUserTypeDescriptor(pfd^.base.PFT^.pSuperTypeDeskriptor).CreateProperties(f,PDM_Field,PPDA,tname,@pfd^.collapsed,pfd^.base.Attributes+ownerattrib,bmode,startaddr,'','');
+             pfd^.base.PFT^.pSuperTypeDeskriptor.Decorators:=SaveDecorators;
+             pfd^.base.PFT^.pSuperTypeDeskriptor.FastEditors:=SaveFastEditors;
+           end else
+
            if (pfd^.base.PFT^.GetFactTypedef^.TypeName='PTEnumData') then
                        begin
                             SaveDecorators:=GDBEnumDataDescriptorObj.Decorators;

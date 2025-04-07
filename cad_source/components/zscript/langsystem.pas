@@ -304,12 +304,16 @@ end;
 function TBoolean_let_TBoolean(var rez, hrez: vardesk): vardesk;
 var
   r: vardesk;
+  pb:pboolean;
 begin
+  pb:=hrez.data.Addr.Instance;
   r.data.ptd:=@FundamentalBooleanDescriptorOdj;
   r.name := '';
   r.SetInstance(FundamentalBooleanDescriptorOdj.AllocAndInitInstance);
-  PBoolean(r.data.Addr.Instance)^ := PBoolean(hrez.data.Addr.Instance)^;
-  PBoolean(rez.data.Addr.Instance)^ := PBoolean(hrez.data.Addr.Instance)^;
+  //PBoolean(r.data.Addr.Instance)^ := PBoolean(hrez.data.Addr.Instance)^;
+  r.data.PTD^.SetValueFromPValue(r.data.Addr.Instance,hrez.data.Addr.Instance);
+  //PBoolean(rez.data.Addr.Instance)^ := PBoolean(hrez.data.Addr.Instance)^;
+  rez.data.PTD^.SetValueFromPValue(rez.data.Addr.Instance,hrez.data.Addr.Instance);
   result := r;
 end;
 
@@ -344,8 +348,10 @@ begin
   r.data.ptd:=@FundamentalLongIntDescriptorObj;
   r.name := '';
   r.SetInstance(FundamentalLongIntDescriptorObj.AllocAndInitInstance);
-  PInteger(r.data.Addr.Instance)^ := PInteger(hrez.data.Addr.Instance)^;
-  PInteger(rez.data.Addr.Instance)^ := PInteger(hrez.data.Addr.Instance)^;
+  r.data.PTD^.SetValueFromPValue(r.data.Addr.Instance,hrez.data.Addr.Instance);
+  //PInteger(r.data.Addr.Instance)^ := PInteger(hrez.data.Addr.Instance)^;
+  rez.data.PTD^.SetValueFromPValue(rez.data.Addr.Instance,hrez.data.Addr.Instance);
+  //PInteger(rez.data.Addr.Instance)^ := PInteger(hrez.data.Addr.Instance)^;
   result := r;
 end;
 function TByte_let_TInteger(var rez, hrez: vardesk): vardesk;

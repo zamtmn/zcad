@@ -17,7 +17,7 @@
 }
 unit uzbtypes;
 {$Mode delphi}
-{Mode advancedrecords}
+{$ModeSwitch ADVANCEDRECORDS}
 
 interface
 uses
@@ -201,6 +201,34 @@ TImageDegradation=record
                     end;
 PExtensionData=Pointer;
 TDCableMountingMethod={-}type {//}string;
+
+{REGISTERRECORDTYPE TDummyMethod}
+TDummyMethod=record
+  Code:Pointer;
+  Data:Pointer;
+end;
+{REGISTERRECORDTYPE TDummyGetterSetter}
+TDummyGetterSetter=record
+  Getter:TDummyMethod;
+  Setter:TDummyMethod;
+end;
+{-}GGetterSetter<T>=record{//}
+{-}  type{//}
+{-}    TGetter=function:T of object;{//}
+{-}    TSetter=procedure(const AValue:T) of object;{//}
+{-}  var{//}
+{-}    Getter:TGetter;{//}
+{-}    Setter:TSetter;{//}
+{-}  procedure Setup(const AGetter:TGetter;const ASetter:TSetter);{//}
+{-}end;{//}
+TGetterSetterString={-}GGetterSetter<string>{/TDummyGetterSetter/};
+
+PTGetterSetterInteger=^TGetterSetterInteger;
+TGetterSetterInteger={-}GGetterSetter<integer>{/TDummyGetterSetter/};
+
+PTGetterSetterBoolean=^TGetterSetterBoolean;
+TGetterSetterBoolean={-}GGetterSetter<boolean>{/TDummyGetterSetter/};
+
 PTCalculatedString=^TCalculatedString;
 {REGISTERRECORDTYPE TCalculatedString}
 TCalculatedString=record
@@ -238,6 +266,12 @@ function IsIt(PType,PChecedType:Pointer):Boolean;
 function StrToQWord(const sh:string):UInt64;
 {$ENDIF}
 implementation
+
+procedure GGetterSetter<T>.Setup(const AGetter:TGetter;const ASetter:TSetter);
+begin
+  Getter:=AGetter;
+  Setter:=ASetter;
+end;
 
 class function TTimeMeter.StartMeasure:TTimeMeter;static;
 begin

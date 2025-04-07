@@ -3,7 +3,7 @@ interface
 uses System;
 var
   ShowHiddenFieldInObjInsp:Boolean;
-  INTF_ObjInsp_WhiteBackground:Boolean;
+  INTF_ObjInsp_WhiteBackground:TGetterSetterBoolean;
   INTF_ObjInsp_ShowHeaders:Boolean;
   INTF_ObjInsp_ShowSeparator:Boolean;
   INTF_ObjInsp_OldStyleDraw:Boolean;
@@ -11,7 +11,7 @@ var
   INTF_ObjInsp_ShowOnlyHotFastEditors:Boolean;
   INTF_ObjInsp_RowHeight_OverriderEnable:Boolean;
   INTF_ObjInsp_RowHeight_OverriderValue:Integer;
-  INTF_ObjInsp_SpaceHeight:Integer;
+  INTF_ObjInsp_SpaceHeight:TGetterSetterInteger;
   INTF_ObjInsp_ShowEmptySections:Boolean;
   INTF_ObjInsp_ButtonSizeReducing:Integer;
   DISP_CursorSize:Integer;

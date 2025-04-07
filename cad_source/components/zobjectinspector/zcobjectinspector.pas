@@ -23,7 +23,7 @@ unit zcobjectinspector;
 interface
 
 uses
-  Classes,SysUtils,//strutils,
+  Classes,SysUtils,
   {$IFDEF LCLGTK2}gtk2,{$ENDIF}
   {$IFDEF LCLWIN32}win32proc,{$endif}
   Types,Graphics,Themes,LCLIntf,LCLType,
@@ -72,6 +72,9 @@ type
   end;
 
   TGDBobjinsp=class(TObjInspCustom)
+    protected
+      DefaultDetails: TThemedElementDetails;
+      rowh:integer;
     public
     currpd:PPropertyDeskriptor;
     GDBobj:boolean;
@@ -164,6 +167,50 @@ type
     procedure myKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
   end;
 
+  TObjInspsManager=object
+    private
+      fPropertyRowName:string;
+      fValueRowName:string;
+      fDifferentName:string;
+      fOpenNodeIdent:integer;
+      fDefaultRowHeight:integer;
+      fWhiteBackground:boolean;
+    public
+
+      LocalRowHeight:integer;
+      LocalRowHeightOverride:boolean;
+      PRowHeight:PInteger;
+      PRowHeightOverride:PBoolean;
+
+      //INTFObjInspWhiteBackground:boolean;
+      INTFObjInspShowHeaders:boolean;
+      INTFObjInspShowSeparator:boolean;
+      INTFObjInspOldStyleDraw:boolean;
+      INTFObjInspShowFastEditors:boolean;
+      INTFObjInspShowOnlyHotFastEditors:boolean;
+      INTFObjInspLevel0HeaderColor:TColor;
+      INTFObjInspBorderColor:TColor;
+
+      function getOpenNodeIdent:integer;
+      procedure setOpenNodeIdent(const AValue:integer);
+
+      function getDefaultRowHeight:integer;
+      procedure setDefaultRowHeight(const AValue:integer);
+
+      function getWhiteBackground:boolean;
+      procedure setWhiteBackground(const AValue:boolean);
+
+      constructor Init;
+      destructor Done;virtual;
+      property PropertyRowName:string read fPropertyRowName write fPropertyRowName;
+      property ValueRowName:string read fValueRowName write fValueRowName;
+      property DifferentName:string read fDifferentName write fDifferentName;
+
+      property INTFObjInspSpaceHeight:integer read getOpenNodeIdent write setOpenNodeIdent;
+      property INTFObjInspWhiteBackground:boolean read getWhiteBackground write setWhiteBackground;
+      property DefaultRowHeight:integer read getDefaultRowHeight write setDefaultRowHeight;
+  end;
+
 //procedure SetGDBObjInsp(const UndoStack:PTZctnrVectorUndoCommands;const f:TzeUnitsFormat;exttype:PUserTypeDescriptor; addr,context:pointer:);
 procedure StoreAndSetGDBObjInsp(const UndoStack:PTZctnrVectorUndoCommands;const f:TzeUnitsFormat;exttype:PUserTypeDescriptor; addr,context:pointer;popoldpos:boolean=false);
 //function ReStoreGDBObjInsp:boolean;
@@ -177,36 +224,64 @@ function GetPeditor:TComponent;
 procedure Register;
 var
   GDBobjinsp:TGDBobjinsp;
-  //proptreeptr:propdeskptr;
-  rowh:integer;
-  DefaultDetails: TThemedElementDetails;
-
-  INTFObjInspWhiteBackground:boolean=false;
-  INTFObjInspShowHeaders:boolean=true;
-  INTFObjInspShowSeparator:boolean=true;
-  INTFObjInspOldStyleDraw:boolean=false;
-  INTFObjInspShowFastEditors:boolean=true;
-  INTFObjInspShowOnlyHotFastEditors:boolean=true;
-  INTFDefaultControlHeight:integer=21;
-  INTFObjInspLevel0HeaderColor:TColor=clDefault;
-  INTFObjInspBorderColor:TColor=clDefault;
-
-  LocalRowHeight:integer=21;
-  LocalRowHeightOverride:boolean=false;
-  PRowHeight:PInteger;
-  PRowHeightOverride:PBoolean;
-  //INTFObjInspRowHeight:TIntegerOverrider;
-  INTFObjInspSpaceHeight:integer=0;
-
-  PropertyRowName:string='Property';
-  ValueRowName:string='Value';
-  DifferentName:string='Different';
+  OIManager:TObjInspsManager;
 
   onGetOtherValues:TOnGetOtherValues=nil;
   onUpdateObjectInInsp:TOnUpdateObjectInInsp=nil;
   onNotify:TOnNotify=nil;
   onAfterFreeEditor:TMyNotifyEvent=nil;
+
 implementation
+function TObjInspsManager.getOpenNodeIdent:integer;
+begin
+  result:=fOpenNodeIdent;
+end;
+procedure TObjInspsManager.setOpenNodeIdent(const AValue:integer);
+begin
+  fOpenNodeIdent:=AValue;
+end;
+
+function TObjInspsManager.getDefaultRowHeight:integer;
+begin
+  result:=fDefaultRowHeight;
+end;
+procedure TObjInspsManager.setDefaultRowHeight(const AValue:integer);
+begin
+  fDefaultRowHeight:=AValue;
+end;
+
+function TObjInspsManager.getWhiteBackground:boolean;
+begin
+  result:=fWhiteBackground;
+end;
+procedure TObjInspsManager.setWhiteBackground(const AValue:boolean);
+begin
+  fWhiteBackground:=AValue;
+end;
+
+constructor TObjInspsManager.Init;
+begin
+  fPropertyRowName:='Property';
+  fValueRowName:='Value';
+  fDifferentName:='Different';
+  LocalRowHeight:=21;
+  LocalRowHeightOverride:=false;
+
+  INTFObjInspWhiteBackground:=false;
+  INTFObjInspShowHeaders:=true;
+  INTFObjInspShowSeparator:=true;
+  INTFObjInspOldStyleDraw:=false;
+  INTFObjInspShowFastEditors:=true;
+  INTFObjInspShowOnlyHotFastEditors:=true;
+  DefaultRowHeight:=21;
+  INTFObjInspLevel0HeaderColor:=clDefault;
+  INTFObjInspBorderColor:=clDefault;
+  INTFObjInspSpaceHeight:=0;
+end;
+destructor TObjInspsManager.Done;
+begin
+end;
+
 procedure TGDBobjinsp.myKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
 begin
   if Peditor<>nil then
@@ -263,12 +338,12 @@ begin
 end;
 function IsWgiteBackground:boolean;
 begin
-     result:=INTFObjInspWhiteBackground;
+     result:=OIManager.INTFObjInspWhiteBackground;
 end;
 
 function TGDBobjinsp.IsHeadersEnabled:boolean;
 begin
-     result:=INTFObjInspShowHeaders;
+     result:=OIManager.INTFObjInspShowHeaders;
 end;
 function TGDBobjinsp.HeadersHeight:integer;
 begin
@@ -279,20 +354,20 @@ begin
 end;
 function NeedShowSeparator:boolean;
 begin
-     if INTFObjInspOldStyleDraw then
+     if OIManager.INTFObjInspOldStyleDraw then
         result:=false
      else
-        result:=INTFObjInspShowSeparator;
+        result:=OIManager.INTFObjInspShowSeparator;
 end;
 function isOldStyleDraw:boolean;
 begin
-       result:=INTFObjInspOldStyleDraw;
+       result:=OIManager.INTFObjInspOldStyleDraw;
 end;
 function NeedDrawFasteditor(OnMouseProp:boolean):boolean;
 begin
-     if INTFObjInspShowFastEditors then
+     if OIManager.INTFObjInspShowFastEditors then
      begin
-         if INTFObjInspShowOnlyHotFastEditors then
+         if OIManager.INTFObjInspShowOnlyHotFastEditors then
          result:=OnMouseProp
          else
              result:=true;
@@ -416,13 +491,10 @@ begin
 end;
 procedure TGDBobjinsp.CalcRowHeight;
 begin
-  //spaceh:=5;
-  rowh:=INTFDefaultControlHeight;
-
-  if {INTFObjInspRowHeight.Enable}PRowHeightOverride^ then
-  if {INTFObjInspRowHeight.Value}PRowHeight^>0 then
-                                      rowh:={INTFObjInspRowHeight.Value}PRowHeight^;
-   //spaceh:=INTFObjInspSpaceHeight;
+  rowh:=OIManager.DefaultRowHeight;
+  if OIManager.PRowHeightOverride^ then
+    if OIManager.PRowHeight^>0 then
+      rowh:=OIManager.PRowHeight^;
 end;
 
 procedure TGDBobjinsp.AfterConstruction;
@@ -524,7 +596,7 @@ begin
         if ppd^.SubNode<>nil then begin
           if not ppd^.Collapsed^ then begin
             calctreeh(pointer(ppd.SubNode),y);
-            y:=y+INTFObjInspSpaceHeight;
+            y:=y+OIManager.INTFObjInspSpaceHeight;
             last:=true;
           end;
         end;
@@ -532,7 +604,7 @@ begin
       ppd:=ppa^.iterate(ir);
     until ppd=nil;
   if last then
-    y:=y-INTFObjInspSpaceHeight;
+    y:=y-OIManager.INTFObjInspSpaceHeight;
 end;
 procedure drawfasteditor(ppd:PPropertyDeskriptor;canvas:tcanvas;var FastEditorRT:TFastEditorRunTimeData;var r:trect);
 var
@@ -635,7 +707,7 @@ begin
              end;
   dec(r.left,size.cx+1);}
 end;
-function DrawRect(ACanvas:TCanvas;ARect:TRect;AActive:Boolean;AOnMouse:Boolean;AReadOnly:Boolean;AWithChildren:Boolean):TThemedElementDetails;
+function DrawRect(DefaultDetails:TThemedElementDetails;ACanvas:TCanvas;ARect:TRect;AActive:Boolean;AOnMouse:Boolean;AReadOnly:Boolean;AWithChildren:Boolean):TThemedElementDetails;
 var
    tc:tcolor;
 begin
@@ -648,8 +720,8 @@ begin
       result:=ThemeServices.GetElementDetails(ttItemSelected);
 
     tc:=ACanvas.Brush.Color;
-    if INTFObjInspBorderColor<>clDefault then
-      ACanvas.Pen.Color:=INTFObjInspBorderColor;
+    if OIManager.INTFObjInspBorderColor<>clDefault then
+      ACanvas.Pen.Color:=OIManager.INTFObjInspBorderColor;
     if AActive then begin
       ACanvas.Brush.Color := clHighlight{clBtnHiLight};
       ACanvas.Pen.Style:=psDot;
@@ -663,8 +735,8 @@ begin
         ACanvas.Brush.Color := clBtnFace;
 
       if AWithChildren then
-        if INTFObjInspLevel0HeaderColor<>clDefault then
-          ACanvas.Brush.Color:=INTFObjInspLevel0HeaderColor;
+        if OIManager.INTFObjInspLevel0HeaderColor<>clDefault then
+          ACanvas.Brush.Color:=OIManager.INTFObjInspLevel0HeaderColor;
 
       if isOldStyleDraw then
         ACanvas.Rectangle(ARect);
@@ -743,7 +815,7 @@ begin
                                ThemeServices.DrawText(cnvs,TextDetails,s2,r,DT_END_ELLIPSIS,0);
                           end;}
 end;
-procedure drawvalue(ppd:PPropertyDeskriptor;canvas:tcanvas;fulldraw:boolean;TextDetails:TThemedElementDetails;onm:boolean;AWithChildren:Boolean);
+procedure drawvalue(DefaultDetails:TThemedElementDetails;ppd:PPropertyDeskriptor;canvas:tcanvas;fulldraw:boolean;TextDetails:TThemedElementDetails;onm:boolean;AWithChildren:Boolean);
 var
    r:trect;
    tempcolor:TColor;
@@ -759,7 +831,7 @@ begin
 
   r:=ppd.rect;
   if fulldraw then
-  DrawRect(canvas,r,false,false,false,AWithChildren);
+  DrawRect(DefaultDetails,canvas,r,false,false,false,AWithChildren);
   r.Top:=r.Top+3;
   r.Left:=r.Left+3;
   r.Right:=r.Right-1;
@@ -863,7 +935,7 @@ begin
                                     s:=ppd^.Name;
                                     if not NeedShowSeparator then
                                                              r.Right:=arect.Right-1;
-                                    TextDetails:=DrawRect(canvas,r,false,OnMouseProp,(fldaReadOnly in ppd^.Attr),{true}sub=0);
+                                    TextDetails:=DrawRect(DefaultDetails,canvas,r,false,OnMouseProp,(fldaReadOnly in ppd^.Attr),{true}sub=0);
                                     //r.Left:={r.Left+3}arect.Left+5+subtab*sub;
                                     r.Left:=arect.Left+{2+}(subtab+GetSizeTreeIcon(not ppd^.Collapsed^,false).cx)*sub;
                                     r.Top:=r.Top+3;
@@ -893,7 +965,7 @@ begin
         begin
           if visible then
           begin
-          TextDetails:=DrawRect(canvas,r,(ppd=EDContext.ppropcurrentedit),OnMouseProp,fldaReadOnly in ppd^.Attr,{false}sub=0);
+          TextDetails:=DrawRect(DefaultDetails,canvas,r,(ppd=EDContext.ppropcurrentedit),OnMouseProp,fldaReadOnly in ppd^.Attr,{false}sub=0);
 
           if fldaHidden in ppd^.Attr then
           begin
@@ -947,7 +1019,7 @@ begin
           r.Right:=arect.Right-1;
 
           ppd.rect:=r;
-          drawvalue(ppd,canvas,true,TextDetails,onmouseprop,sub=0);
+          drawvalue(DefaultDetails,ppd,canvas,true,TextDetails,onmouseprop,sub=0);
 
           {if (ppd^.Attr and fldaHidden)<>0 then
           begin
@@ -965,7 +1037,7 @@ begin
     until ppd=nil;
     if not LastPropAddFreespace then
                                     begin
-                                      y:=y+INTFObjInspSpaceHeight;
+                                      y:=y+OIManager.INTFObjInspSpaceHeight;
                                       LastPropAddFreespace:=true;
                                     end;
 end;
@@ -1076,14 +1148,14 @@ hrect.Bottom:=hrect.Top+HeadersHeight-1{+1};
 
     DefaultDetails := ThemeServices.GetElementDetails(thHeaderItemNormal);
     ThemeServices.DrawElement(Canvas.Handle, DefaultDetails, hrect, nil);
-    ThemeServices.DrawText(Canvas,DefaultDetails,PropertyRowName,hrect,DT_END_ELLIPSIS or DT_CENTER or DT_VCENTER or DT_NOPREFIX,0);
+    ThemeServices.DrawText(Canvas,DefaultDetails,OIManager.PropertyRowName,hrect,DT_END_ELLIPSIS or DT_CENTER or DT_VCENTER or DT_NOPREFIX,0);
 
     DefaultDetails := ThemeServices.GetElementDetails(thHeaderItemRightNormal);
     hrect.Left:=hrect.right;
     {$IFDEF WINDOWS}hrect.right:=ARect.Right-1;{$ENDIF}
     {$IFNDEF WINDOWS}hrect.right:=ARect.Right-2;{$ENDIF}
     ThemeServices.DrawElement(Canvas.Handle, DefaultDetails, hrect, nil);
-    ThemeServices.DrawText(Canvas,DefaultDetails,ValueRowName,hrect,DT_END_ELLIPSIS or DT_CENTER or DT_VCENTER or DT_NOPREFIX,0);
+    ThemeServices.DrawText(Canvas,DefaultDetails,OIManager.ValueRowName,hrect,DT_END_ELLIPSIS or DT_CENTER or DT_VCENTER or DT_NOPREFIX,0);
   end;
 
   if NeedShowSeparator then begin
@@ -1136,7 +1208,7 @@ begin
       curr:=psubtree^.iterate(ir);
     until curr=nil;
 end;
-function InternalMousetoprop(psubtree:PTPropertyDeskriptorArray; mx,my:integer; var y:integer;var LastPropAddFreeSpace:boolean):PPropertyDeskriptor;
+function InternalMousetoprop(rowh:integer;psubtree:PTPropertyDeskriptorArray; mx,my:integer; var y:integer;var LastPropAddFreeSpace:boolean):PPropertyDeskriptor;
 var
   curr:PPropertyDeskriptor;
   dy:integer;
@@ -1158,23 +1230,23 @@ begin
           exit;
         end;
         inc(y,rowh);
-        if (curr^.SubNode<>nil)and(not curr^.Collapsed^) then result:=InternalMousetoprop(pointer(curr^.SubNode),mx,my,y,LastPropAddFreeSpace);
+        if (curr^.SubNode<>nil)and(not curr^.Collapsed^) then result:=InternalMousetoprop(rowh,pointer(curr^.SubNode),mx,my,y,LastPropAddFreeSpace);
         if result<>nil then exit;
       end;
       curr:=psubtree^.iterate(ir);
     until curr=nil;
     if not LastPropAddFreeSpace then
     begin
-    y:=y+INTFObjInspSpaceHeight;
+    y:=y+OIManager.INTFObjInspSpaceHeight;
     LastPropAddFreeSpace:=true;
     end;
 end;
-function mousetoprop(psubtree:PTPropertyDeskriptorArray; mx,my:integer; var y:integer):PPropertyDeskriptor;
+function mousetoprop(rowh:integer;psubtree:PTPropertyDeskriptorArray; mx,my:integer; var y:integer):PPropertyDeskriptor;
 var
    lpafs:boolean;
 begin
      lpafs:=false;
-     result:=InternalMousetoprop(psubtree,mx,my,y,lpafs);
+     result:=InternalMousetoprop(rowh,psubtree,mx,my,y,lpafs);
 end;
 procedure TGDBobjinsp.ClearEDContext;
 begin
@@ -1424,7 +1496,7 @@ begin
   //application.HintPause:=1;
   //application.HintShortPause:=10;
   my:=HeadersHeight;
-  pp:=mousetoprop(@pda,x,y,my);
+  pp:=mousetoprop(rowh,@pda,x,y,my);
   if OnMousePP<>pp then
                        begin
                             needredraw:=true;
@@ -1569,7 +1641,7 @@ begin
                             begin
                                  y:=y+VertScrollBar.scrollpos-self.BorderWidth;
                                  my:=HeadersHeight;
-                                 pp:=mousetoprop(@pda,x,y,my);
+                                 pp:=mousetoprop(rowh,@pda,x,y,my);
                                  if pp=nil then
                                                exit;
                                  if assigned(pp.FastEditors)then
@@ -1712,7 +1784,7 @@ begin
        if assigned(pp^.valueAddres) then
        begin
          if fldaDifferent in pp^.Attr then
-                                               initialvalue:=DifferentName
+                                               initialvalue:=OIManager.DifferentName
                                            else
                                                initialvalue:='';
          tr:=pp^.rect;
@@ -1722,7 +1794,7 @@ begin
                                                       TED:=pp^.PTypeManager^.CreateEditor(self,tr,pp^.valueAddres,@vsa,{false}true,initialvalue,rowh,CurrUnitsFormat);
      case ted.Mode of
                      TEM_Integrate:begin
-                                       TED.Editor.SetEditorBounds(pp,INTFObjInspShowOnlyHotFastEditors);
+                                       TED.Editor.SetEditorBounds(pp,OIManager.INTFObjInspShowOnlyHotFastEditors);
                                        editorcontrol:=TED.Editor.geteditor;
                                        //editorcontrol.SetBounds(tr.Left+2,tr.Top,tr.Right-tr.Left-2,tr.Bottom-tr.Top);
                                        if (editorcontrol is TComboBox) then begin
@@ -1798,7 +1870,7 @@ begin
   y:=y+VertScrollBar.scrollpos-self.BorderWidth;
   //if proptreeptr=nil then exit;
   my:=HeadersHeight;
-  pp:=mousetoprop(@pda,x,y,my);
+  pp:=mousetoprop(rowh,@pda,x,y,my);
 
   if (button=mbLeft)
   and (IsMouseOnSpliter(pp,X,Y)) then
@@ -1985,7 +2057,7 @@ end;}
 procedure TGDBobjinsp.updateeditorBounds;
 begin
   if (peditor<>nil)and(EDContext.ppropcurrentedit<>nil) then
-    pEditor.SetEditorBounds(EDContext.ppropcurrentedit,INTFObjInspShowOnlyHotFastEditors);
+    pEditor.SetEditorBounds(EDContext.ppropcurrentedit,OIManager.INTFObjInspShowOnlyHotFastEditors);
 end;
 procedure TGDBobjinsp._onresize(sender:tobject);
 //var x,xn:integer;
@@ -2012,7 +2084,9 @@ begin
   RegisterComponents('zcadcontrols',[TGDBobjinsp]);
 end;
 initialization
-  PRowHeight:=@LocalRowHeight;
-  PRowHeightOverride:=@LocalRowHeightOverride;
+  OIManager.Init;
+  OIManager.PRowHeight:=@OIManager.LocalRowHeight;
+  OIManager.PRowHeightOverride:=@OIManager.LocalRowHeightOverride;
+finalization
+  OIManager.Done;
 end.
-

@@ -100,13 +100,13 @@ initialization;
 
   SysVarUnit.AssignToSymbol(SysVar.INTF.INTF_OBJINSP_Properties.INTF_ObjInsp_ShowHeaders,'INTF_ObjInsp_ShowHeaders');
   SysVarUnit.AssignToSymbol(SysVar.INTF.INTF_OBJINSP_Properties.INTF_ObjInsp_OldStyleDraw,'INTF_ObjInsp_OldStyleDraw');
-  SysVarUnit.AssignToSymbol(SysVar.INTF.INTF_OBJINSP_Properties.INTF_ObjInsp_WhiteBackground,'INTF_ObjInsp_WhiteBackground');
+  //SysVarUnit.AssignToSymbol(SysVar.INTF.INTF_OBJINSP_Properties.INTF_ObjInsp_WhiteBackground,'INTF_ObjInsp_WhiteBackground');
   SysVarUnit.AssignToSymbol(SysVar.INTF.INTF_OBJINSP_Properties.INTF_ObjInsp_ShowSeparator,'INTF_ObjInsp_ShowSeparator');
   SysVarUnit.AssignToSymbol(SysVar.INTF.INTF_OBJINSP_Properties.INTF_ObjInsp_ShowFastEditors,'INTF_ObjInsp_ShowFastEditors');
   SysVarUnit.AssignToSymbol(SysVar.INTF.INTF_OBJINSP_Properties.INTF_ObjInsp_ShowOnlyHotFastEditors,'INTF_ObjInsp_ShowOnlyHotFastEditors');
   //SysVarUnit.AssignToSymbol(SysVar.INTF.INTF_OBJINSP_Properties.INTF_ObjInsp_RowHeight.Enable,'INTF_ObjInsp_RowHeight_OverriderEnable');
   //SysVarUnit.AssignToSymbol(SysVar.INTF.INTF_OBJINSP_Properties.INTF_ObjInsp_RowHeight.Value,'INTF_ObjInsp_RowHeight_OverriderValue');
-  SysVarUnit.AssignToSymbol(SysVar.INTF.INTF_OBJINSP_Properties.INTF_ObjInsp_SpaceHeight,'INTF_ObjInsp_SpaceHeight');
+  //SysVarUnit.AssignToSymbol(SysVar.INTF.INTF_OBJINSP_Properties.INTF_ObjInsp_SpaceHeight,'INTF_ObjInsp_SpaceHeight');
   SysVarUnit.AssignToSymbol(SysVar.INTF.INTF_OBJINSP_Properties.INTF_ObjInsp_AlwaysUseMultiSelectWrapper,'INTF_ObjInsp_AlwaysUseMultiSelectWrapper');
   SysVarUnit.AssignToSymbol(SysVar.INTF.INTF_OBJINSP_Properties.INTF_ObjInsp_ShowEmptySections,'INTF_ObjInsp_ShowEmptySections');
   SysVarUnit.AssignToSymbol(SysVar.INTF.INTF_OBJINSP_Properties.INTF_ObjInsp_ButtonSizeReducing,'INTF_ObjInsp_ButtonSizeReducing');

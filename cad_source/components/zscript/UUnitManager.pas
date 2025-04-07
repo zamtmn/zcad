@@ -35,6 +35,7 @@ type
                        constructor init;
                        function CreateUnit(const PPaths:String;TranslateFunc:TTranslateFunction;const UName:String):PTUnit;
                        function loadunit(const PPaths:String;TranslateFunc:TTranslateFunction;const fname:String; pcreatedunit:PTSimpleUnit):ptunit;virtual;
+                       procedure MagictypePostProcess(etd:PUserTypeDescriptor);
                        function parseunit(const PPaths:String;TranslateFunc:TTranslateFunction;var f: TZctnrVectorBytes; pcreatedunit:PTSimpleUnit):ptunit;virtual;
                        function changeparsemode(const PPaths:String;TranslateFunc:TTranslateFunction;newmode:Integer;var mode:Integer):pasparsemode;
                        function findunit(const PPaths:String;TranslateFunc:TTranslateFunction;const uname:String):ptunit;virtual;
@@ -47,6 +48,7 @@ type
                        procedure free;virtual;
 
                        procedure CreateExtenalSystemVariable(var VarUnit:PTUnit;const VarUnitName:string;const PPaths:String;const sysunitname:String;TranslateFunc:TTranslateFunction;const varname,vartype:String;pinstance:Pointer);
+                       function CreateInternalSystemVariable(var VarUnit:PTUnit;const VarUnitName:string;const PPaths:String;const sysunitname:String;TranslateFunc:TTranslateFunction;const varname,vartype:String):vardesk;
                  end;
 {EXPORT-}
 var
@@ -98,10 +100,21 @@ begin
     end;
   VarUnit.CreateFixedVariable(varname,vartype,pinstance);
 end;
-{procedure TUnitManager.AfterObjectDone;
+function TUnitManager.CreateInternalSystemVariable(var VarUnit:PTUnit;const VarUnitName:string;const PPaths:String;const sysunitname:String;TranslateFunc:TTranslateFunction;const varname,vartype:String):vardesk;
 begin
-     //Freemem(pointer(p));
-end;}
+  //TODO: убрать такуюже шнягу из urtl, сделать создание SysUnit в одном месте
+  if SysUnit=nil then
+    begin
+      units.loadunit(ppaths,TranslateFunc,sysunitname,nil);
+      SysUnit:=units.findunit(PPaths,TranslateFunc,'System');
+    end;
+  if VarUnit=nil then
+    begin
+      VarUnit:=units.FindOrCreateEmptyUnit(VarUnitName);
+      VarUnit.InterfaceUses.PushBackIfNotPresent(SysUnit);
+    end;
+  result:=VarUnit.CreateVariable(varname,vartype);
+end;
 procedure TUnitManager.free;
 var //p:Pointer;
     //ir:itrec;
@@ -263,6 +276,34 @@ begin
           end;
           result.InterfaceUses.PushBackIfNotPresent(pfu);
         end;
+end;
+
+function GetGSTyprName(TypeName:string):string;
+const
+  gsp:string='TGetterSetter';
+begin
+  result:='';
+  if Length(TypeName)<Length(gsp) then
+    exit;
+  if not CompareMem(@TypeName[1],@gsp[1],Length(gsp)) then
+    exit;
+  result:=copy(TypeName,length(gsp)+1,Length(TypeName)-Length(gsp));
+end;
+
+procedure TUnitManager.MagictypePostProcess(etd:PUserTypeDescriptor);
+var
+  gstn:string;
+  gsft,gstd:PUserTypeDescriptor;
+begin
+  gstn:=GetGSTyprName(etd^.TypeName);
+  if gstn<>'' then begin
+    gsft:=currentunit.TypeName2PTD(gstn);
+    if gsft<>nil then begin
+      gstd:=currentunit.TypeName2PTD(format('TGetterSetter%sDescriptor',[gsft^.TypeName]));
+      if gstd<>nil then
+        etd.pSuperTypeDeskriptor:=gstd;
+    end;
+  end;
 end;
 
 function TUnitManager.parseunit;
@@ -718,6 +759,7 @@ if addtype then
         //etd.name := typename;
 
         //p:=@etd;
+        MagictypePostProcess(etd);
         currentunit.InterfaceTypes.{exttype.}AddTypeByPP(@etd);
         zTraceLn('{T}[ZSCRIPT]Type "%s" added',[typename]);
 

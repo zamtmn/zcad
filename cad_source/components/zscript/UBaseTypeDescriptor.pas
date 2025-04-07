@@ -38,14 +38,14 @@ end;
 TOrdinalTypeManipulator<T>=class(TBaseTypeManipulator<T>)
   class function GetValueAsString(const data:T):TInternalScriptString;
   class function GetFormattedValueAsString(const data:T; const f:TzeUnitsFormat):TInternalScriptString;
-  class procedure setFormattedValueAsString(var data:T; const f:TzeUnitsFormat; const Value:TInternalScriptString);
-  class procedure SetValueFromString(var data:T; const Value:TInternalScriptString);
+  class function setFormattedValueAsString(var data:T; const f:TzeUnitsFormat; const Value:TInternalScriptString):boolean;
+  class function SetValueFromString(var data:T; const Value:TInternalScriptString):boolean;
 end;
 TBoolTypeManipulator<T>=class(TBaseTypeManipulator<T>)
   class function GetValueAsString(const data:T):TInternalScriptString;
   class function GetFormattedValueAsString(const data:T; const f:TzeUnitsFormat):TInternalScriptString;
-  class procedure setFormattedValueAsString(var data:T; const f:TzeUnitsFormat; const Value:TInternalScriptString);
-  class procedure SetValueFromString(var data:T; const Value:TInternalScriptString);
+  class function setFormattedValueAsString(var data:T; const f:TzeUnitsFormat; const Value:TInternalScriptString):boolean;
+  class function SetValueFromString(var data:T; const Value:TInternalScriptString):boolean;
 end;
 TFloatTypeManipulator<T>=class(TBaseTypeManipulator<T>)
   class function GetValueAsString(const data:T):TInternalScriptString;
@@ -82,6 +82,7 @@ PBaseTypeDescriptor=^{BaseTypeDescriptor}TUserTypeDescriptor;
 BaseTypeDescriptor<T,TManipulator>=object(TUserTypeDescriptor)
                          type
                           PT=^T;
+                          Manipulator=TManipulator;
                          constructor init(tname:string;pu:pointer);
 
                          function GetValueAsString(pinstance:Pointer):TInternalScriptString;virtual;
@@ -91,6 +92,7 @@ BaseTypeDescriptor<T,TManipulator>=object(TUserTypeDescriptor)
                          procedure SetValueFromString(PInstance:Pointer; const Value:TInternalScriptString);virtual;
                          procedure InitInstance(PInstance:Pointer);virtual;
                          function AllocInstance:Pointer;virtual;
+                         procedure SetValueFromPValue(const APInstance:Pointer;const APValue:Pointer);virtual;
                    end;
 TBTM_Boolean=TBoolTypeManipulator<Boolean>;
 BooleanDescriptor=object(BaseTypeDescriptor<boolean,{TBoolTypeManipulator<boolean>}TBTM_Boolean>)
@@ -166,9 +168,32 @@ TCalculatedStringDescriptor=object(BaseTypeDescriptor<TCalculatedString,TASTM_St
   function GetValueAsString(pinstance:Pointer):TInternalScriptString;virtual;
   procedure SetValueFromString(PInstance:Pointer; const _Value:TInternalScriptString);virtual;
   procedure SetEditableFromString(PInstance:Pointer;const f:TzeUnitsFormat; const Value:TInternalScriptString);virtual;
-  function CreateProperties(const f:TzeUnitsFormat;mode:PDMode;PPDA:PTPropertyDeskriptorArray;const Name:TInternalScriptString;PCollapsed:Pointer;ownerattrib:TFieldAttrs;var bmode:Integer;const addr:Pointer;const ValKey,ValType:TInternalScriptString):PTPropertyDeskriptorArray;virtual;
-  //destructor Done;virtual;
+  //function CreateProperties(const f:TzeUnitsFormat;mode:PDMode;PPDA:PTPropertyDeskriptorArray;const Name:TInternalScriptString;PCollapsed:Pointer;ownerattrib:TFieldAttrs;var bmode:Integer;const addr:Pointer;const ValKey,ValType:TInternalScriptString):PTPropertyDeskriptorArray;virtual;
 end;
+
+TGetterSetterIntegerDescriptor=object(BaseTypeDescriptor<TGetterSetterInteger,TOTM_Integer>)
+  constructor init;
+  function GetEditableAsString(PInstance:Pointer; const f:TzeUnitsFormat):TInternalScriptString;virtual;
+  function GetDecoratedValueAsString(pinstance:Pointer; const f:TzeUnitsFormat):TInternalScriptString;virtual;
+  function GetValueAsString(pinstance:Pointer):TInternalScriptString;virtual;
+  procedure SetValueFromString(PInstance:Pointer; const _Value:TInternalScriptString);virtual;
+  procedure SetEditableFromString(PInstance:Pointer;const f:TzeUnitsFormat; const Value:TInternalScriptString);virtual;
+  function GetDescribedTypedef:PUserTypeDescriptor;virtual;
+  procedure SetValueFromPValue(const APInstance:Pointer;const APValue:Pointer);virtual;
+end;
+
+TGetterSetterBooleanDescriptor=object(BaseTypeDescriptor<TGetterSetterBoolean,TBTM_Boolean>)
+  constructor init;
+  function GetEditableAsString(PInstance:Pointer; const f:TzeUnitsFormat):TInternalScriptString;virtual;
+  function GetDecoratedValueAsString(pinstance:Pointer; const f:TzeUnitsFormat):TInternalScriptString;virtual;
+  function GetValueAsString(pinstance:Pointer):TInternalScriptString;virtual;
+  procedure SetValueFromString(PInstance:Pointer; const _Value:TInternalScriptString);virtual;
+  procedure SetEditableFromString(PInstance:Pointer;const f:TzeUnitsFormat; const Value:TInternalScriptString);virtual;
+  function GetDescribedTypedef:PUserTypeDescriptor;virtual;
+  procedure SetValueFromPValue(const APInstance:Pointer;const APValue:Pointer);virtual;
+end;
+
+
 
 var
 FundamentalDoubleDescriptorObj:DoubleDescriptor;
@@ -189,6 +214,8 @@ FundamentalBooleanDescriptorOdj:BooleanDescriptor;
 FundamentalPointerDescriptorOdj:PointerDescriptor;
 GDBEnumDataDescriptorObj:TEnumDataDescriptor;
 CalculatedStringDescriptor:TCalculatedStringDescriptor;
+GetterSetterIntegerDescriptor:TGetterSetterIntegerDescriptor;
+GetterSetterBooleanDescriptor:TGetterSetterBooleanDescriptor;
 
 AliasIntegerDescriptorOdj:GDBSinonimDescriptor;
 AliasCardinalDescriptorOdj:GDBSinonimDescriptor;
@@ -253,27 +280,33 @@ begin
      //Str(data,result)
   //result:=inttostr(LongInt(data));
 end;
-class procedure TOrdinalTypeManipulator<T>.SetValueFromString(var data:T; const Value:TInternalScriptString);
+class function TOrdinalTypeManipulator<T>.SetValueFromString(var data:T; const Value:TInternalScriptString):boolean;
 var
   td:T;
   e:integer;
 begin
   val(Value,td,e);
-  if e=0 then
+  if e=0 then begin
     data:=td;
+    Result:=true;
+  end else
+    Result:=false;
 end;
 class function TOrdinalTypeManipulator<T>.GetFormattedValueAsString(const data:T; const f:TzeUnitsFormat):TInternalScriptString;
 begin
    result:=GetValueAsString(data);
 end;
-class procedure TOrdinalTypeManipulator<T>.setFormattedValueAsString(var data:T; const f:TzeUnitsFormat; const Value:TInternalScriptString);
+class function TOrdinalTypeManipulator<T>.setFormattedValueAsString(var data:T; const f:TzeUnitsFormat; const Value:TInternalScriptString):boolean;
 var
   td:T;
   e:integer;
 begin
   val(Value,td,e);
-  if e=0 then
+  if e=0 then begin
     data:=td;
+    Result:=true;
+  end else
+    Result:=false;
 end;
 
 class function TFloatTypeManipulator<T>.GetValueAsString(const data:T):TInternalScriptString;
@@ -363,17 +396,19 @@ class function TBoolTypeManipulator<T>.GetValueAsString(const data:T):TInternalS
 begin
   result:=BoolToStr(data,'True','False');
 end;
-class procedure TBoolTypeManipulator<T>.SetValueFromString(var data:T; const Value:TInternalScriptString);
+class function TBoolTypeManipulator<T>.SetValueFromString(var data:T; const Value:TInternalScriptString):boolean;
 begin
-  data:=StrToBoolDef(Value,False);
+  result:=TryStrToBool(Value,data);
+  //data:=StrToBoolDef(Value,False);
 end;
 class function TBoolTypeManipulator<T>.GetFormattedValueAsString(const data:T; const f:TzeUnitsFormat):TInternalScriptString;
 begin
    result:=GetValueAsString(data);
 end;
-class procedure TBoolTypeManipulator<T>.setFormattedValueAsString(var data:T; const f:TzeUnitsFormat; const Value:TInternalScriptString);
+class function TBoolTypeManipulator<T>.setFormattedValueAsString(var data:T; const f:TzeUnitsFormat; const Value:TInternalScriptString):boolean;
 begin
-  data:=StrToBoolDef(Value,False);
+  result:=TryStrToBool(Value,data);
+  //data:=StrToBoolDef(Value,False);
 end;
 constructor BaseTypeDescriptor<T,TManipulator>.init(tname:string;pu:pointer);
 begin
@@ -437,6 +472,13 @@ end;
 procedure BaseTypeDescriptor<T,TManipulator>.SetValueFromString;
 begin
   TManipulator.SetValueFromString(TManipulator.pt(PInstance)^,Value);
+end;
+procedure BaseTypeDescriptor<T,TManipulator>.SetValueFromPValue(const APInstance:Pointer;const APValue:Pointer);
+begin
+  if pSuperTypeDeskriptor<>nil then
+    pSuperTypeDeskriptor^.SetValueFromPValue(APInstance,APValue)
+  else
+    PT(APInstance)^:=PT(APValue)^;
 end;
 procedure BaseTypeDescriptor<T,TManipulator>.SetFormattedValueFromString(PInstance:Pointer;const f:TzeUnitsFormat; const Value:TInternalScriptString);
 begin
@@ -576,11 +618,7 @@ procedure TCalculatedStringDescriptor.SetValueFromString(PInstance:Pointer; cons
 begin
   PTCalculatedString(pinstance)^.format:=_Value;
 end;
-
-//procedure TCalculatedStringDescriptor.SetValueFromString(PInstance:Pointer;_Value:TInternalScriptString);
-//begin
-//end;
-function TCalculatedStringDescriptor.CreateProperties(const f:TzeUnitsFormat;mode:PDMode;PPDA:PTPropertyDeskriptorArray;const Name:TInternalScriptString;PCollapsed:Pointer;ownerattrib:TFieldAttrs;var bmode:Integer;const addr:Pointer;const ValKey,ValType:TInternalScriptString):PTPropertyDeskriptorArray;
+(*function TCalculatedStringDescriptor.CreateProperties(const f:TzeUnitsFormat;mode:PDMode;PPDA:PTPropertyDeskriptorArray;const Name:TInternalScriptString;PCollapsed:Pointer;ownerattrib:TFieldAttrs;var bmode:Integer;const addr:Pointer;const ValKey,ValType:TInternalScriptString):PTPropertyDeskriptorArray;
 var ppd:PPropertyDeskriptor;
 begin
   zTraceLn('{T}[ZSCRIPT]TEnumDataDescriptor.CreateProperties(%s,ppda=%p)',[name,ppda]);
@@ -604,7 +642,85 @@ begin
     ppd^.value:=rsDifferent
   else
     ppd^.value:=GetDecoratedValueAsString(addr,f);
-  //ppd^.value:=GetValueAsString(addr);
+end;*)
+
+constructor TGetterSetterIntegerDescriptor.init;
+begin
+  inherited init('TGetterSetterIntegerDescriptor',nil);
+end;
+function TGetterSetterIntegerDescriptor.GetValueAsString(pinstance:Pointer):TInternalScriptString;
+begin
+  result:=Manipulator.GetValueAsString(PTGetterSetterInteger(pinstance)^.Getter);
+end;
+procedure TGetterSetterIntegerDescriptor.SetValueFromPValue(const APInstance:Pointer;const APValue:Pointer);
+begin
+  PTGetterSetterInteger(APInstance)^.Setter(PInteger(APValue)^);
+end;
+function TGetterSetterIntegerDescriptor.GetEditableAsString(PInstance:Pointer; const f:TzeUnitsFormat):TInternalScriptString;
+begin
+  if @PTGetterSetterInteger(pinstance)^.Getter<>nil then
+    result:=Manipulator.GetValueAsString(PTGetterSetterInteger(pinstance)^.Getter)
+  else
+    result:='Getter=nil';
+end;
+function TGetterSetterIntegerDescriptor.GetDecoratedValueAsString(pinstance:Pointer; const f:TzeUnitsFormat):TInternalScriptString;
+begin
+  result:=GetEditableAsString(pinstance,f);
+end;
+procedure TGetterSetterIntegerDescriptor.SetEditableFromString(PInstance:Pointer;const f:TzeUnitsFormat; const Value:TInternalScriptString);
+begin
+  SetValueFromString(PInstance,Value);
+end;
+procedure TGetterSetterIntegerDescriptor.SetValueFromString(PInstance:Pointer; const _Value:TInternalScriptString);
+var
+  d:Integer;
+begin
+  if Manipulator.SetValueFromString(d,_Value) then
+    PTGetterSetterInteger(pinstance)^.Setter(d);
+end;
+function TGetterSetterIntegerDescriptor.GetDescribedTypedef:PUserTypeDescriptor;
+begin
+  result:=AliasIntegerDescriptorOdj.GetFactTypedef;
+end;
+
+
+constructor TGetterSetterBooleanDescriptor.init;
+begin
+  inherited init('TGetterSetterBooleanDescriptor',nil);
+end;
+function TGetterSetterBooleanDescriptor.GetValueAsString(pinstance:Pointer):TInternalScriptString;
+begin
+  result:=Manipulator.GetValueAsString(PTGetterSetterBoolean(pinstance)^.Getter);
+end;
+procedure TGetterSetterBooleanDescriptor.SetValueFromPValue(const APInstance:Pointer;const APValue:Pointer);
+begin
+  PTGetterSetterBoolean(APInstance)^.Setter(PBoolean(APValue)^);
+end;
+function TGetterSetterBooleanDescriptor.GetEditableAsString(PInstance:Pointer; const f:TzeUnitsFormat):TInternalScriptString;
+begin
+  if @PTGetterSetterBoolean(pinstance)^.Getter<>nil then
+    result:=Manipulator.GetValueAsString(PTGetterSetterBoolean(pinstance)^.Getter)
+  else
+    result:='Getter=nil';
+end;
+function TGetterSetterBooleanDescriptor.GetDecoratedValueAsString(pinstance:Pointer; const f:TzeUnitsFormat):TInternalScriptString;
+begin
+  result:=GetEditableAsString(pinstance,f);
+end;
+procedure TGetterSetterBooleanDescriptor.SetEditableFromString(PInstance:Pointer;const f:TzeUnitsFormat; const Value:TInternalScriptString);
+begin
+  SetValueFromString(PInstance,Value);
+end;
+procedure TGetterSetterBooleanDescriptor.SetValueFromString(PInstance:Pointer; const _Value:TInternalScriptString);
+var
+  d:boolean;
+begin
+  if Manipulator.SetValueFromString(d,_Value) then
+    PTGetterSetterBoolean(pinstance)^.Setter(d);
+end;
+function TGetterSetterBooleanDescriptor.GetDescribedTypedef:PUserTypeDescriptor;
+begin
+  result:=FundamentalBooleanDescriptorOdj.GetFactTypedef;
 end;
 
 begin
@@ -645,5 +761,6 @@ begin
 
      GDBEnumDataDescriptorObj.init;
      CalculatedStringDescriptor.init;
-
+     GetterSetterIntegerDescriptor.init;
+     GetterSetterBooleanDescriptor.init;
 end.

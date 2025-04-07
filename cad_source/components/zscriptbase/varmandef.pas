@@ -167,6 +167,7 @@ UserTypeDescriptor=object
                          onGetValueAsString:TonGetValueAsString;
                          onGetEditableAsString:TonGetEditableAsString;
                          onSetEditableFromString:TonSetEditableFromString;
+                         pSuperTypeDeskriptor:PUserTypeDescriptor;
                          constructor init(size:Integer;tname:string;pu:pointer);
                          constructor baseinit(size:Integer;tname:string;pu:pointer);
                          procedure _init(size:Integer;tname:string;pu:pointer);
@@ -186,6 +187,7 @@ UserTypeDescriptor=object
                          function Compare(pleft,pright:pointer):TCompareResult;virtual;
                          procedure SetEditableFromString(PInstance:Pointer;const f:TzeUnitsFormat; const Value:TInternalScriptString);virtual;
                          procedure SetValueFromString(PInstance:Pointer; const _Value:TInternalScriptString);virtual;abstract;
+                         procedure SetValueFromPValue(const APInstance:Pointer;const APValue:Pointer);virtual;
                          procedure InitInstance(PInstance:Pointer);virtual;
                          function AllocInstance:Pointer;virtual;
                          function AllocAndInitInstance:Pointer;virtual;
@@ -195,6 +197,7 @@ UserTypeDescriptor=object
                          procedure SavePasToMem(var membuf:TZctnrVectorBytes;PInstance:Pointer;const prefix:TInternalScriptString);virtual;
                          procedure IncAddr(var addr:Pointer);virtual;
                          function GetFactTypedef:PUserTypeDescriptor;virtual;
+                         function GetDescribedTypedef:PUserTypeDescriptor;virtual;
                          procedure Format;virtual;
                          procedure RegisterTypeinfo(ti:PTypeInfo);virtual;
                    end;
@@ -540,7 +543,14 @@ begin
 end;
 function UserTypeDescriptor.GetFactTypedef:PUserTypeDescriptor;
 begin
-     result:=@self;
+  if pSuperTypeDeskriptor=nil then
+    result:=@self
+  else
+    Result:=pSuperTypeDeskriptor^.GetDescribedTypedef;
+end;
+function UserTypeDescriptor.GetDescribedTypedef:PUserTypeDescriptor;
+begin
+  result:=nil;
 end;
 procedure UserTypeDescriptor.Format;
 begin
@@ -550,7 +560,10 @@ begin
 end;
 procedure UserTypeDescriptor.SavePasToMem(var membuf:TZctnrVectorBytes;PInstance:Pointer;const prefix:TInternalScriptString);
 begin
-     membuf.TXTAddStringEOL(prefix+':='+{pvd.data.PTD.}GetValueAsString(PInstance)+';');
+  if pSuperTypeDeskriptor<>nil then
+    pSuperTypeDeskriptor^.SavePasToMem(membuf,PInstance,prefix)
+  else
+    membuf.TXTAddStringEOL(prefix+':='+GetValueAsString(PInstance)+';');
 end;
 procedure UserTypeDescriptor.MagicFreeInstance(PInstance:Pointer);
 begin
@@ -563,6 +576,14 @@ procedure UserTypeDescriptor.InitInstance(PInstance:Pointer);
 begin
      fillchar(pinstance^,SizeInBytes,0)
 end;
+procedure UserTypeDescriptor.SetValueFromPValue(const APInstance:Pointer;const APValue:Pointer);
+begin
+  if pSuperTypeDeskriptor<>nil then
+    pSuperTypeDeskriptor^.SetValueFromPValue(APInstance,APValue)
+  else
+    raise Exception.Create('UserTypeDescriptor.SetValue error');
+end;
+
 function UserTypeDescriptor.AllocInstance:Pointer;
 begin
   Getmem(result,SizeInBytes);
@@ -614,6 +635,7 @@ begin
      onGetValueAsString:=nil;
      onGetEditableAsString:=nil;
      onSetEditableFromString:=nil;
+     pSuperTypeDeskriptor:=nil;
 end;
 
 destructor UserTypeDescriptor.done;

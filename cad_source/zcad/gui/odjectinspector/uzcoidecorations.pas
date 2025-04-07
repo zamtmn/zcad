@@ -554,9 +554,6 @@ procedure DecorateSysTypes;
 begin
   if SysUnit<>nil then begin
     AddEditorToType(SysUnit.TypeName2PTD('Boolean'),TBaseTypesEditors.BooleanCreateEditor);
-    //AddEditorToType(SysUnit.TypeName2PTD('Boolean'),TBaseTypesEditors.BooleanCreateEditor);
-
-
     AddEditorToType(SysUnit.TypeName2PTD('ShortInt'),TBaseTypesEditors.BaseCreateEditor);
     AddEditorToType(SysUnit.TypeName2PTD('Byte'),TBaseTypesEditors.BaseCreateEditor);
     AddEditorToType(SysUnit.TypeName2PTD('SmallInt'),TBaseTypesEditors.BaseCreateEditor);
@@ -565,7 +562,6 @@ begin
     AddEditorToType(SysUnit.TypeName2PTD('LongWord'),TBaseTypesEditors.BaseCreateEditor);
     AddEditorToType(SysUnit.TypeName2PTD('QWord'),TBaseTypesEditors.BaseCreateEditor);
     AddEditorToType(SysUnit.TypeName2PTD('Double'),TBaseTypesEditors.BaseCreateEditor);
-    //AddEditorToType(SysUnit.TypeName2PTD('Double'),TBaseTypesEditors.BaseCreateEditor);
     AddEditorToType(SysUnit.TypeName2PTD('GDBNonDimensionDouble'),TBaseTypesEditors.BaseCreateEditor);
     AddEditorToType(SysUnit.TypeName2PTD('GDBAngleDouble'),TBaseTypesEditors.BaseCreateEditor);
     AddEditorToType(SysUnit.TypeName2PTD('GDBAngleDegDouble'),TBaseTypesEditors.BaseCreateEditor);
@@ -579,6 +575,8 @@ begin
     AddEditorToType(SysUnit.TypeName2PTD('TEnumDataDescriptor'),TBaseTypesEditors.TEnumDataCreateEditor);
     EnumGlobalEditor:=TBaseTypesEditors.EnumDescriptorCreateEditor;
     AddEditorToType(SysUnit.TypeName2PTD('TCalculatedStringDescriptor'),TBaseTypesEditors.BaseCreateEditor);
+    AddEditorToType(SysUnit.TypeName2PTD('TGetterSetterIntegerDescriptor'),TBaseTypesEditors.BaseCreateEditor);
+    AddEditorToType(SysUnit.TypeName2PTD('TGetterSetterBooleanDescriptor'),TBaseTypesEditors.BooleanCreateEditor);
 
 
     DecorateType(SysUnit.TypeName2PTD('TGDBLineWeight'),LWDecorator,LineWeightDecoratorCreateEditor,drawLWProp);
@@ -590,6 +588,11 @@ begin
     DecorateType(SysUnit.TypeName2PTD('TGDBOSMode'),nil,CreateEmptyEditor,nil);
     DecorateType(SysUnit.TypeName2PTD('TZColor'),ZColorDecorator,ZColorDecoratorCreateEditor,{drawIndexColorProp}nil);
     DecorateType(SysUnit.TypeName2PTD('TFString'),TFStringDecorator,ZColorDecoratorCreateEditor,nil);
+
+    AddFastEditorToType(SysUnit.TypeName2PTD('TGetterSetterInteger'),@OIUI_FE_HalfButtonGetPrefferedSize,@OIUI_FE_ButtonGreatThatDraw,@OIUI_FE_GetterSetterIntegerInc);
+    AddFastEditorToType(SysUnit.TypeName2PTD('TGetterSetterInteger'),@OIUI_FE_HalfButtonGetPrefferedSize,@OIUI_FE_ButtonLessThatDraw,@OIUI_FE_GetterSetterIntegerDec);
+    AddFastEditorToType(SysUnit.TypeName2PTD('TGetterSetterBoolean'),@OIUI_FE_BooleanGetPrefferedSize,@OIUI_FE_GetterSetterBooleanDraw,@OIUI_FE_GetterSetterBooleanInverse);
+
 
     AddFastEditorToType(SysUnit.TypeName2PTD('Integer'),@OIUI_FE_HalfButtonGetPrefferedSize,@OIUI_FE_ButtonGreatThatDraw,@OIUI_FE_IntegerInc);
     AddFastEditorToType(SysUnit.TypeName2PTD('Integer'),@OIUI_FE_HalfButtonGetPrefferedSize,@OIUI_FE_ButtonLessThatDraw,@OIUI_FE_IntegerDec);

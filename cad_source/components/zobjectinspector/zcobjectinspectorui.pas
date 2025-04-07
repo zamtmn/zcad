@@ -21,13 +21,14 @@ unit zcobjectinspectorui;
 {$MODE DELPHI}
 interface
 uses Classes,Types,Themes,Graphics,LCLIntf,LCLType,Forms,
-     varmandef;
+     varmandef,uzbtypes;
 function OIUI_FE_ButtonGetPrefferedSize(PInstance:Pointer;ARect:TRect):TSize;
 function OIUI_FE_HalfButtonGetPrefferedSize(PInstance:Pointer;ARect:TRect):TSize;
 function OIUI_FE_BooleanGetPrefferedSize(PInstance:Pointer;ARect:TRect):TSize;
 
 procedure OIUI_ButtonDraw(canvas:TCanvas;r:trect;state:TFastEditorState;s:string;boundr:trect);
 procedure OIUI_FE_BooleanDraw(canvas:TCanvas;r:trect;PInstance:Pointer;state:TFastEditorState;boundr:trect);
+procedure OIUI_FE_GetterSetterBooleanDraw(canvas:TCanvas;r:trect;PInstance:Pointer;state:TFastEditorState;boundr:trect);
 procedure OIUI_FE_ButtonDraw(canvas:TCanvas;r:trect;PInstance:Pointer;state:TFastEditorState;boundr:trect);
 procedure OIUI_FE_ButtonCrossDraw(canvas:TCanvas;r:trect;PInstance:Pointer;state:TFastEditorState;boundr:trect);
 procedure OIUI_FE_ButtonMultiplyDraw(canvas:TCanvas;r:trect;PInstance:Pointer;state:TFastEditorState;boundr:trect);
@@ -38,6 +39,11 @@ procedure OIUI_FE_ButtonLessThatDraw(canvas:TCanvas;r:trect;PInstance:Pointer;st
 procedure OIUI_FE_BooleanInverse(PInstance:Pointer);
 procedure OIUI_FE_IntegerInc(PInstance:Pointer);
 procedure OIUI_FE_IntegerDec(PInstance:Pointer);
+
+procedure OIUI_FE_GetterSetterIntegerInc(PInstance:Pointer);
+procedure OIUI_FE_GetterSetterIntegerDec(PInstance:Pointer);
+procedure OIUI_FE_GetterSetterBooleanInverse(PInstance:Pointer);
+
 
 var
   INTFObjInspButtonSizeReducing:Integer=4;
@@ -95,33 +101,39 @@ begin
          result:=types.size(0,0);
 end;
 
-
-procedure OIUI_FE_BooleanDraw(canvas:TCanvas;r:trect;PInstance:Pointer;state:TFastEditorState;boundr:trect);
+procedure BooleanDraw(AValue:boolean;canvas:TCanvas;r:trect;state:TFastEditorState;boundr:trect);
 var
   Details: TThemedElementDetails;
   ComboElem:TThemedButton;
 begin
-     if pboolean(PInstance)^ then
-                                 begin
-                                 if state=TFES_Hot then
-                                                       ComboElem:=tbCheckBoxCheckedHot
-                                                   else if state=TFES_Pressed then
-                                                       ComboElem:=tbCheckBoxCheckedPressed
-                                                   else
-                                                       ComboElem:=tbCheckBoxCheckedNormal
-                                 end
-                             else
-                                 begin
-                                 if state=TFES_Hot then
-                                                       ComboElem:=tbCheckBoxUncheckedHot
-                                                   else if state=TFES_Pressed then
-                                                       ComboElem:=tbCheckBoxUncheckedPressed
-                                                   else
-                                                       ComboElem:=tbCheckBoxUncheckedNormal
-                                 end;
-     Details:=ThemeServices.GetElementDetails(ComboElem);
-     ThemeServices.DrawElement(Canvas.Handle,Details,r,@boundr);
+  if AValue then begin
+    if state=TFES_Hot then
+      ComboElem:=tbCheckBoxCheckedHot
+    else if state=TFES_Pressed then
+      ComboElem:=tbCheckBoxCheckedPressed
+    else
+      ComboElem:=tbCheckBoxCheckedNormal
+  end else begin
+    if state=TFES_Hot then
+      ComboElem:=tbCheckBoxUncheckedHot
+    else if state=TFES_Pressed then
+      ComboElem:=tbCheckBoxUncheckedPressed
+    else
+      ComboElem:=tbCheckBoxUncheckedNormal
+  end;
+    Details:=ThemeServices.GetElementDetails(ComboElem);
+    ThemeServices.DrawElement(Canvas.Handle,Details,r,@boundr);
 end;
+
+procedure OIUI_FE_BooleanDraw(canvas:TCanvas;r:trect;PInstance:Pointer;state:TFastEditorState;boundr:trect);
+begin
+  BooleanDraw(pboolean(PInstance)^,canvas,r,state,boundr);
+end;
+procedure OIUI_FE_GetterSetterBooleanDraw(canvas:TCanvas;r:trect;PInstance:Pointer;state:TFastEditorState;boundr:trect);
+begin
+  BooleanDraw(PTGetterSetterBoolean(PInstance)^.Getter,canvas,r,state,boundr);
+end;
+
 procedure OIUI_ButtonDraw(canvas:TCanvas;r:trect;state:TFastEditorState;s:string;boundr:trect);
 var
   Details: TThemedElementDetails;
@@ -177,5 +189,37 @@ procedure OIUI_FE_IntegerDec(PInstance:Pointer);
 begin
      dec(pinteger(PInstance)^);
 end;
+
+procedure OIUI_FE_GetterSetterIntegerInc(PInstance:Pointer);
+var
+  d:Integer;
+begin
+  if (@PTGetterSetterInteger(PInstance).Getter<>nil)
+  and(@PTGetterSetterInteger(PInstance).Setter<>nil)then begin
+    d:=PTGetterSetterInteger(PInstance).Getter;
+    Inc(d);
+    PTGetterSetterInteger(PInstance).Setter(d);
+  end;
+end;
+procedure OIUI_FE_GetterSetterIntegerDec(PInstance:Pointer);
+var
+  d:Integer;
+begin
+  if (@PTGetterSetterInteger(PInstance).Getter<>nil)
+  and(@PTGetterSetterInteger(PInstance).Setter<>nil)then begin
+    d:=PTGetterSetterInteger(PInstance).Getter;
+    Dec(d);
+    PTGetterSetterInteger(PInstance).Setter(d);
+  end;
+end;
+
+procedure OIUI_FE_GetterSetterBooleanInverse(PInstance:Pointer);
+begin
+  if (@PTGetterSetterBoolean(PInstance).Getter<>nil)
+    and(@PTGetterSetterBoolean(PInstance).Setter<>nil)then begin
+      PTGetterSetterBoolean(PInstance).Setter(not PTGetterSetterBoolean(PInstance).Getter);
+  end;
+end;
+
 
 end.

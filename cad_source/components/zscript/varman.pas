@@ -928,6 +928,8 @@ begin
      AddTypeByRef(FundamentalSingleDescriptorObj);
      AddTypeByRef(GDBEnumDataDescriptorObj);
      AddTypeByRef(CalculatedStringDescriptor);
+     AddTypeByRef(GetterSetterIntegerDescriptor);
+     AddTypeByRef(GetterSetterBooleanDescriptor);
      AddTypeByRef(AliasIntegerDescriptorOdj);
      AddTypeByRef(AliasCardinalDescriptorOdj);
      AddTypeByRef(AliasDWordDescriptorOdj);

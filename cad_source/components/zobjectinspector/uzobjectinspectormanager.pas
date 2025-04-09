@@ -23,19 +23,9 @@ unit uzObjectInspectorManager;
 interface
 
 uses
-  Classes,SysUtils,
-  {$IFDEF LCLGTK2}gtk2,{$ENDIF}
-  {$IFDEF LCLWIN32}win32proc,{$endif}
-  Types,Graphics,Themes,LCLIntf,LCLType,
-  ExtCtrls,Controls,Menus,Forms,
-  StdCtrls,ColorBox,
-  uzbtypes,usupportgui,
-  zeundostack,zebaseundocommands,
-
-  uzedimensionaltypes,
-  varmandef,
-  TypeDescriptors,
-  gzctnrVectorTypes,uzctnrvectorstrings;
+  SysUtils,
+  Graphics,
+  uzbtypes;
 type
   TObjInspsManager=object
     private
@@ -253,8 +243,6 @@ procedure TObjInspsManager.setBorderZColor(const AValue:TZColor);
 begin
   fBorderColor:=AValue;
 end;
-
-
 constructor TObjInspsManager.Init;
 begin
   fPropertyRowName:='Property';
@@ -268,11 +256,11 @@ begin
   fShowSeparator:=true;
   fOldStyleDraw:=false;
   fShowFastEditors:=true;
-  INTFObjInspShowOnlyHotFastEditors:=true;
-  DefaultRowHeight:=21;
-  INTFObjInspLevel0HeaderColor:=clDefault;
-  INTFObjInspBorderColor:=clDefault;
-  INTFObjInspSpaceHeight:=0;
+  fShowOnlyHotFastEditors:=true;
+  fDefaultRowHeight:=21;
+  fLevel0HeaderColor:=clDefault;
+  fBorderColor:=clDefault;
+  fOpenNodeIdent:=0;
 end;
 destructor TObjInspsManager.Done;
 begin

@@ -12,7 +12,7 @@
         <UnitOutputDirectory Value="lib\$(TargetCPU)-$(TargetOS)"/>
       </SearchPaths>
     </CompilerOptions>
-    <Files Count="3">
+    <Files Count="4">
       <Item1>
         <Filename Value="zcobjectinspector.pas"/>
         <HasRegisterProc Value="True"/>
@@ -26,6 +26,11 @@
         <Filename Value="zcobjectinspectorui.pas"/>
         <UnitName Value="zcobjectinspectorui"/>
       </Item3>
+      <Item4>
+        <Filename Value="uzobjectinspectormanager.pas"/>
+        <AddToUsesPkgSection Value="False"/>
+        <UnitName Value="uzObjectInspectorManager"/>
+      </Item4>
     </Files>
     <CompatibilityMode Value="True"/>
     <RequiredPkgs Count="4">

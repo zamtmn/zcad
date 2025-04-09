@@ -340,6 +340,20 @@ begin
   result.mode:=TEM_Integrate;
 end;
 
+function TGetterSetterTZColorDecoratorCreateEditor(TheOwner:TPropEditorOwner;rect:trect;pinstance:pointer;psa:PTZctnrVectorStrings;FreeOnLostFocus:boolean;PTD:PUserTypeDescriptor;f:TzeUnitsFormat):TEditorDesc;
+var
+  cbedit:TColorBox;
+begin
+  CreateTColorPropEditor(TheOwner,pinstance,FreeOnLostFocus,PTD,result.editor,cbedit,f);
+  SetComboSize(cbedit,sysvar.INTF.INTF_DefaultControlHeight^-6);
+  cbedit.Style:=cbedit.Style+[cbStandardColors,cbExtendedColors,cbSystemColors,cbIncludeDefault];
+  cbedit.Selected:=PTGetterSetterTZColor(pinstance)^.Getter{PColor(pinstance)^};
+  result.mode:=TEM_Integrate;
+end;
+function TGetterSetterTZColorDecorator(PInstance:Pointer):String;
+begin
+     result:=ColorToString(PTGetterSetterTZColor(pinstance)^.Getter);
+end;
 
 procedure drawLTProp(canvas:TCanvas;ARect:TRect;PInstance:Pointer);
 var
@@ -577,6 +591,7 @@ begin
     AddEditorToType(SysUnit.TypeName2PTD('TCalculatedStringDescriptor'),TBaseTypesEditors.BaseCreateEditor);
     AddEditorToType(SysUnit.TypeName2PTD('TGetterSetterIntegerDescriptor'),TBaseTypesEditors.BaseCreateEditor);
     AddEditorToType(SysUnit.TypeName2PTD('TGetterSetterBooleanDescriptor'),TBaseTypesEditors.BooleanCreateEditor);
+    AddEditorToType(SysUnit.TypeName2PTD('TGetterSetterTUsableIntegerDescriptor'),TBaseTypesEditors.BaseCreateEditor);
 
 
     DecorateType(SysUnit.TypeName2PTD('TGDBLineWeight'),LWDecorator,LineWeightDecoratorCreateEditor,drawLWProp);
@@ -586,12 +601,18 @@ begin
     DecorateType(SysUnit.TypeName2PTD('PGDBDimStyleObjInsp'),NamedObjectsDecorator,DimStyleDecoratorCreateEditor,nil);
     DecorateType(SysUnit.TypeName2PTD('TGDBPaletteColor'),PaletteColorDecorator,ColorDecoratorCreateEditor,drawIndexColorProp);
     DecorateType(SysUnit.TypeName2PTD('TGDBOSMode'),nil,CreateEmptyEditor,nil);
-    DecorateType(SysUnit.TypeName2PTD('TZColor'),ZColorDecorator,ZColorDecoratorCreateEditor,{drawIndexColorProp}nil);
+    DecorateType(SysUnit.TypeName2PTD('TZColor'),ZColorDecorator,ZColorDecoratorCreateEditor,nil);
     DecorateType(SysUnit.TypeName2PTD('TFString'),TFStringDecorator,ZColorDecoratorCreateEditor,nil);
 
     AddFastEditorToType(SysUnit.TypeName2PTD('TGetterSetterInteger'),@OIUI_FE_HalfButtonGetPrefferedSize,@OIUI_FE_ButtonGreatThatDraw,@OIUI_FE_GetterSetterIntegerInc);
     AddFastEditorToType(SysUnit.TypeName2PTD('TGetterSetterInteger'),@OIUI_FE_HalfButtonGetPrefferedSize,@OIUI_FE_ButtonLessThatDraw,@OIUI_FE_GetterSetterIntegerDec);
     AddFastEditorToType(SysUnit.TypeName2PTD('TGetterSetterBoolean'),@OIUI_FE_BooleanGetPrefferedSize,@OIUI_FE_GetterSetterBooleanDraw,@OIUI_FE_GetterSetterBooleanInverse);
+
+    AddFastEditorToType(SysUnit.TypeName2PTD('TGetterSetterTUsableInteger'),@OIUI_FE_HalfButtonGetPrefferedSize,@OIUI_FE_ButtonGreatThatDraw,@OIUI_FE_GetterSetterUsableIntegerInc);
+    AddFastEditorToType(SysUnit.TypeName2PTD('TGetterSetterTUsableInteger'),@OIUI_FE_HalfButtonGetPrefferedSize,@OIUI_FE_ButtonLessThatDraw,@OIUI_FE_GetterSetterUsableIntegerDec);
+    AddFastEditorToType(SysUnit.TypeName2PTD('TGetterSetterTUsableInteger'),@OIUI_FE_BooleanGetPrefferedSize,@OIUI_FE_GetterSetterUsableIntegerUsableDraw,@OIUI_FE_GetterSetterUsableIntegerUsableInverse);
+    DecorateType(SysUnit.TypeName2PTD('TGetterSetterTZColor'),TGetterSetterTZColorDecorator,TGetterSetterTZColorDecoratorCreateEditor,nil);
+
 
 
     AddFastEditorToType(SysUnit.TypeName2PTD('Integer'),@OIUI_FE_HalfButtonGetPrefferedSize,@OIUI_FE_ButtonGreatThatDraw,@OIUI_FE_IntegerInc);

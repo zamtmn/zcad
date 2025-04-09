@@ -29,7 +29,7 @@ uses
   Types,Graphics,Themes,LCLIntf,LCLType,
   ExtCtrls,Controls,Menus,Forms,
   StdCtrls,ColorBox,
-  usupportgui,
+  uzbtypes,usupportgui,
   zeundostack,zebaseundocommands,
 
   uzedimensionaltypes,
@@ -172,25 +172,19 @@ type
       fPropertyRowName:string;
       fValueRowName:string;
       fDifferentName:string;
+
       fOpenNodeIdent:integer;
       fDefaultRowHeight:integer;
       fWhiteBackground:boolean;
+      fShowHeaders:boolean;
+      fShowSeparator:boolean;
+      fOldStyleDraw:boolean;
+      fShowFastEditors:boolean;
+      fShowOnlyHotFastEditors:boolean;
+      fRowHeightOverride:TUsableInteger;
+      fLevel0HeaderColor:TColor;
+      fBorderColor:TColor;
     public
-
-      LocalRowHeight:integer;
-      LocalRowHeightOverride:boolean;
-      PRowHeight:PInteger;
-      PRowHeightOverride:PBoolean;
-
-      //INTFObjInspWhiteBackground:boolean;
-      INTFObjInspShowHeaders:boolean;
-      INTFObjInspShowSeparator:boolean;
-      INTFObjInspOldStyleDraw:boolean;
-      INTFObjInspShowFastEditors:boolean;
-      INTFObjInspShowOnlyHotFastEditors:boolean;
-      INTFObjInspLevel0HeaderColor:TColor;
-      INTFObjInspBorderColor:TColor;
-
       function getOpenNodeIdent:integer;
       procedure setOpenNodeIdent(const AValue:integer);
 
@@ -200,15 +194,58 @@ type
       function getWhiteBackground:boolean;
       procedure setWhiteBackground(const AValue:boolean);
 
+      function getShowHeaders:boolean;
+      procedure setShowHeaders(const AValue:boolean);
+
+      function getShowSeparator:boolean;
+      procedure setShowSeparator(const AValue:boolean);
+
+      function getOldStyleDraw:boolean;
+      procedure setOldStyleDraw(const AValue:boolean);
+
+      function getShowFastEditors:boolean;
+      procedure setShowFastEditors(const AValue:boolean);
+
+      function getShowOnlyHotFastEditors:boolean;
+      procedure setShowOnlyHotFastEditors(const AValue:boolean);
+
+      function getRowHeightOverride:TUsableInteger;
+      procedure setRowHeightOverride(const AValue:TUsableInteger);
+      function getRowHeightOverrideValue:integer;
+      procedure setRowHeightOverrideValue(const AValue:integer);
+      function getRowHeightOverrideUsable:boolean;
+      procedure setRowHeightOverrideUsable(const AValue:boolean);
+
+      function getLevel0HeaderColor:TColor;
+      procedure setLevel0HeaderColor(const AValue:TColor);
+      function getLevel0HeaderZColor:TZColor;
+      procedure setLevel0HeaderZColor(const AValue:TZColor);
+
+      function getBorderColor:TColor;
+      procedure setBorderColor(const AValue:TColor);
+      function getBorderZColor:TZColor;
+      procedure setBorderZColor(const AValue:TZColor);
+
+
       constructor Init;
       destructor Done;virtual;
+
       property PropertyRowName:string read fPropertyRowName write fPropertyRowName;
       property ValueRowName:string read fValueRowName write fValueRowName;
       property DifferentName:string read fDifferentName write fDifferentName;
 
       property INTFObjInspSpaceHeight:integer read getOpenNodeIdent write setOpenNodeIdent;
       property INTFObjInspWhiteBackground:boolean read getWhiteBackground write setWhiteBackground;
+      property INTFObjInspShowHeaders:boolean read getShowHeaders write setShowHeaders;
+      property INTFObjInspShowSeparator:boolean read getShowSeparator write setShowSeparator;
+      property INTFObjInspOldStyleDraw:boolean read getOldStyleDraw write setOldStyleDraw;
+      property INTFObjInspShowFastEditors:boolean read getShowFastEditors write setShowFastEditors;
+      property INTFObjInspShowOnlyHotFastEditors:boolean read getShowOnlyHotFastEditors write setShowOnlyHotFastEditors;
+      property INTFObjInspLevel0HeaderColor:TColor read getLevel0HeaderColor write setLevel0HeaderColor;
+      property INTFObjInspBorderColor:TColor read getBorderColor write setBorderColor;
+
       property DefaultRowHeight:integer read getDefaultRowHeight write setDefaultRowHeight;
+      property RowHeightOverride:TUsableInteger read getRowHeightOverride write setRowHeightOverride;
   end;
 
 //procedure SetGDBObjInsp(const UndoStack:PTZctnrVectorUndoCommands;const f:TzeUnitsFormat;exttype:PUserTypeDescriptor; addr,context:pointer:);
@@ -259,19 +296,125 @@ begin
   fWhiteBackground:=AValue;
 end;
 
+function TObjInspsManager.getShowHeaders:boolean;
+begin
+  result:=fShowHeaders;
+end;
+procedure TObjInspsManager.setShowHeaders(const AValue:boolean);
+begin
+  fShowHeaders:=AValue;
+end;
+
+function TObjInspsManager.getShowSeparator:boolean;
+begin
+  result:=fShowSeparator;
+end;
+procedure TObjInspsManager.setShowSeparator(const AValue:boolean);
+begin
+  fShowSeparator:=AValue;
+end;
+
+function TObjInspsManager.getOldStyleDraw:boolean;
+begin
+  result:=fOldStyleDraw;
+end;
+procedure TObjInspsManager.setOldStyleDraw(const AValue:boolean);
+begin
+  fOldStyleDraw:=AValue;
+end;
+
+function TObjInspsManager.getShowFastEditors:boolean;
+begin
+  result:=fShowFastEditors;
+end;
+procedure TObjInspsManager.setShowFastEditors(const AValue:boolean);
+begin
+  fShowFastEditors:=AValue;
+end;
+
+function TObjInspsManager.getShowOnlyHotFastEditors:boolean;
+begin
+  result:=fShowOnlyHotFastEditors;
+end;
+procedure TObjInspsManager.setShowOnlyHotFastEditors(const AValue:boolean);
+begin
+  fShowOnlyHotFastEditors:=AValue;
+end;
+
+function TObjInspsManager.getRowHeightOverride:TUsableInteger;
+begin
+  result:=fRowHeightOverride;
+end;
+procedure TObjInspsManager.setRowHeightOverride(const AValue:TUsableInteger);
+begin
+  fRowHeightOverride:=AValue;
+end;
+function TObjInspsManager.getRowHeightOverrideValue:integer;
+begin
+  result:=fRowHeightOverride.Value;
+end;
+procedure TObjInspsManager.setRowHeightOverrideValue(const AValue:integer);
+begin
+  fRowHeightOverride.Value:=AValue;
+end;
+function TObjInspsManager.getRowHeightOverrideUsable:boolean;
+begin
+  result:=fRowHeightOverride.Usable;
+end;
+procedure TObjInspsManager.setRowHeightOverrideUsable(const AValue:boolean);
+begin
+  fRowHeightOverride.Usable:=AValue;
+end;
+
+function TObjInspsManager.getLevel0HeaderColor:TColor;
+begin
+  result:=fLevel0HeaderColor;
+end;
+procedure TObjInspsManager.setLevel0HeaderColor(const AValue:TColor);
+begin
+  fLevel0HeaderColor:=AValue;
+end;
+function TObjInspsManager.getLevel0HeaderZColor:TZColor;
+begin
+  result:=fLevel0HeaderColor;
+end;
+procedure TObjInspsManager.setLevel0HeaderZColor(const AValue:TZColor);
+begin
+  fLevel0HeaderColor:=AValue;
+end;
+
+
+function TObjInspsManager.getBorderColor:TColor;
+begin
+  result:=fBorderColor;
+end;
+procedure TObjInspsManager.setBorderColor(const AValue:TColor);
+begin
+  fBorderColor:=AValue;
+end;
+function TObjInspsManager.getBorderZColor:TZColor;
+begin
+  result:=fBorderColor;
+end;
+procedure TObjInspsManager.setBorderZColor(const AValue:TZColor);
+begin
+  fBorderColor:=AValue;
+end;
+
+
 constructor TObjInspsManager.Init;
 begin
   fPropertyRowName:='Property';
   fValueRowName:='Value';
   fDifferentName:='Different';
-  LocalRowHeight:=21;
-  LocalRowHeightOverride:=false;
+  fRowHeightOverride.value:=21;
+  fRowHeightOverride.Usable:=false;
 
-  INTFObjInspWhiteBackground:=false;
-  INTFObjInspShowHeaders:=true;
-  INTFObjInspShowSeparator:=true;
-  INTFObjInspOldStyleDraw:=false;
-  INTFObjInspShowFastEditors:=true;
+  fWhiteBackground:=false;
+  fShowHeaders:=true;
+  fShowSeparator:=true;
+  fOldStyleDraw:=false;
+  fShowFastEditors:=true;
   INTFObjInspShowOnlyHotFastEditors:=true;
   DefaultRowHeight:=21;
   INTFObjInspLevel0HeaderColor:=clDefault;
@@ -491,10 +634,11 @@ begin
 end;
 procedure TGDBobjinsp.CalcRowHeight;
 begin
-  rowh:=OIManager.DefaultRowHeight;
-  if OIManager.PRowHeightOverride^ then
-    if OIManager.PRowHeight^>0 then
-      rowh:=OIManager.PRowHeight^;
+  rowh:=OIManager.RowHeightOverride.ValueOrDefault(OIManager.DefaultRowHeight);
+  {rowh:=OIManager.DefaultRowHeight;
+  if OIManager.RowHeightOverride.Usable then
+    if OIManager.RowHeightOverride.Value>0 then
+      rowh:=OIManager.RowHeightOverride.Value;}
 end;
 
 procedure TGDBobjinsp.AfterConstruction;
@@ -2085,8 +2229,6 @@ begin
 end;
 initialization
   OIManager.Init;
-  OIManager.PRowHeight:=@OIManager.LocalRowHeight;
-  OIManager.PRowHeightOverride:=@OIManager.LocalRowHeightOverride;
 finalization
   OIManager.Done;
 end.

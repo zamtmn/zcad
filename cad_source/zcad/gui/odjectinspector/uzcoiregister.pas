@@ -40,7 +40,6 @@ type
     function GetPeditorFocusPriority:TControlWithPriority;
   end;
 var
-  INTFObjInspRowHeight:TIntegerOverrider;
   dummyclass:tdummyclass;
 implementation
 var
@@ -320,28 +319,55 @@ initialization
   PTGetterSetterBoolean(vd.data.Addr.GetInstance)^.Setup(OIManager.getWhiteBackground,OIManager.setWhiteBackground);
   SysVar.INTF.INTF_OBJINSP_Properties.INTF_ObjInsp_WhiteBackground.Setup(OIManager.getWhiteBackground,OIManager.setWhiteBackground);
 
+  vd:=units.CreateInternalSystemVariable(SysVarUnit,SysVarN,GetSupportPaths,system_pas_path,InterfaceTranslate,'INTF_ObjInsp_ShowHeaders','TGetterSetterBoolean');
+  PTGetterSetterBoolean(vd.data.Addr.GetInstance)^.Setup(OIManager.getShowHeaders,OIManager.setShowHeaders);
+  SysVar.INTF.INTF_OBJINSP_Properties.INTF_ObjInsp_ShowHeaders.Setup(OIManager.getShowHeaders,OIManager.setShowHeaders);
 
-  units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPaths,system_pas_path,InterfaceTranslate,'INTF_ObjInsp_Level0HeaderColor','Integer',@OIManager.INTFObjInspLevel0HeaderColor);
-  units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPaths,system_pas_path,InterfaceTranslate,'INTF_ObjInsp_BorledColor','Integer',@OIManager.INTFObjInspBorderColor);
-  units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPaths,system_pas_path,InterfaceTranslate,'INTF_ObjInsp_ShowHeaders','Boolean',@OIManager.INTFObjInspShowHeaders);
-  units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPaths,system_pas_path,InterfaceTranslate,'INTF_ObjInsp_ShowSeparator','Boolean',@OIManager.INTFObjInspShowSeparator);
-  units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPaths,system_pas_path,InterfaceTranslate,'INTF_ObjInsp_OldStyleDraw','Boolean',@OIManager.INTFObjInspOldStyleDraw);
-  units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPaths,system_pas_path,InterfaceTranslate,'INTF_ObjInsp_ShowFastEditors','Boolean',@OIManager.INTFObjInspShowFastEditors);
-  units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPaths,system_pas_path,InterfaceTranslate,'INTF_ObjInsp_ShowOnlyHotFastEditors','Boolean',@OIManager.INTFObjInspShowOnlyHotFastEditors);
-  INTFObjInspRowHeight.Enable:=OIManager.LocalRowHeightOverride;
-  INTFObjInspRowHeight.Value:=OIManager.LocalRowHeight;
-  units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPaths,system_pas_path,InterfaceTranslate,'INTF_ObjInsp_RowHeight_OverriderEnable','Boolean',@INTFObjInspRowHeight.Enable);
-  OIManager.PRowHeight:=@INTFObjInspRowHeight.Value;
-  OIManager.PRowHeightOverride:=@INTFObjInspRowHeight.Enable;
-  units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPaths,system_pas_path,InterfaceTranslate,'INTF_ObjInsp_RowHeight_OverriderValue','Integer',@INTFObjInspRowHeight.Value);
+  vd:=units.CreateInternalSystemVariable(SysVarUnit,SysVarN,GetSupportPaths,system_pas_path,InterfaceTranslate,'INTF_ObjInsp_ShowSeparator','TGetterSetterBoolean');
+  PTGetterSetterBoolean(vd.data.Addr.GetInstance)^.Setup(OIManager.getShowSeparator,OIManager.setShowSeparator);
+  SysVar.INTF.INTF_OBJINSP_Properties.INTF_ObjInsp_ShowSeparator.Setup(OIManager.getShowSeparator,OIManager.setShowSeparator);
+
+  vd:=units.CreateInternalSystemVariable(SysVarUnit,SysVarN,GetSupportPaths,system_pas_path,InterfaceTranslate,'INTF_ObjInsp_OldStyleDraw','TGetterSetterBoolean');
+  PTGetterSetterBoolean(vd.data.Addr.GetInstance)^.Setup(OIManager.getOldStyleDraw,OIManager.setOldStyleDraw);
+  SysVar.INTF.INTF_OBJINSP_Properties.INTF_ObjInsp_OldStyleDraw.Setup(OIManager.getOldStyleDraw,OIManager.setOldStyleDraw);
+
+  vd:=units.CreateInternalSystemVariable(SysVarUnit,SysVarN,GetSupportPaths,system_pas_path,InterfaceTranslate,'INTF_ObjInsp_ShowFastEditors','TGetterSetterBoolean');
+  PTGetterSetterBoolean(vd.data.Addr.GetInstance)^.Setup(OIManager.getShowFastEditors,OIManager.setShowFastEditors);
+  SysVar.INTF.INTF_OBJINSP_Properties.INTF_ObjInsp_ShowFastEditors.Setup(OIManager.getShowFastEditors,OIManager.setShowFastEditors);
+
+  vd:=units.CreateInternalSystemVariable(SysVarUnit,SysVarN,GetSupportPaths,system_pas_path,InterfaceTranslate,'INTF_ObjInsp_ShowOnlyHotFastEditors','TGetterSetterBoolean');
+  PTGetterSetterBoolean(vd.data.Addr.GetInstance)^.Setup(OIManager.getShowOnlyHotFastEditors,OIManager.setShowOnlyHotFastEditors);
+  SysVar.INTF.INTF_OBJINSP_Properties.INTF_ObjInsp_ShowOnlyHotFastEditors.Setup(OIManager.getShowOnlyHotFastEditors,OIManager.setShowOnlyHotFastEditors);
+
+
+  vd:=units.CreateInternalSystemVariable(SysVarUnit,SysVarN,GetSupportPaths,system_pas_path,InterfaceTranslate,'INTF_ObjInsp_Level0HeaderColor','TGetterSetterTZColor');
+  PTGetterSetterTZColor(vd.data.Addr.GetInstance)^.Setup(OIManager.getLevel0HeaderZColor,OIManager.setLevel0HeaderZColor);
+  SysVar.INTF.INTF_OBJINSP_Properties.INTF_ObjInsp_Level0HeaderColor.Setup(OIManager.getLevel0HeaderZColor,OIManager.setLevel0HeaderZColor);
+
+  vd:=units.CreateInternalSystemVariable(SysVarUnit,SysVarN,GetSupportPaths,system_pas_path,InterfaceTranslate,'INTF_ObjInsp_BorledColor','TGetterSetterTZColor');
+  PTGetterSetterTZColor(vd.data.Addr.GetInstance)^.Setup(OIManager.getBorderZColor,OIManager.setBorderZColor);
+  SysVar.INTF.INTF_OBJINSP_Properties.INTF_ObjInsp_BorderColor.Setup(OIManager.getBorderZColor,OIManager.setBorderZColor);
+
+  vd:=units.CreateInternalSystemVariable(SysVarUnit,SysVarN,GetSupportPaths,system_pas_path,InterfaceTranslate,'INTF_ObjInsp_RowHeight_OverriderEnable','TGetterSetterBoolean');
+  PTGetterSetterBoolean(vd.data.Addr.GetInstance)^.Setup(OIManager.getRowHeightOverrideUsable,OIManager.setRowHeightOverrideUsable);
+  vd:=units.CreateInternalSystemVariable(SysVarUnit,SysVarN,GetSupportPaths,system_pas_path,InterfaceTranslate,'INTF_ObjInsp_RowHeight_OverriderValue','TGetterSetterInteger');
+  PTGetterSetterInteger(vd.data.Addr.GetInstance)^.Setup(OIManager.getRowHeightOverrideValue,OIManager.setRowHeightOverrideValue);
+  SysVar.INTF.INTF_OBJINSP_Properties.INTF_ObjInsp_RowHeight.Setup(OIManager.getRowHeightOverride,OIManager.setRowHeightOverride);
+
+  //INTFObjInspRowHeight.Enable:=OIManager.LocalRowHeightOverride;
+  //INTFObjInspRowHeight.Value:=OIManager.LocalRowHeight;
+  //OIManager.PRowHeight:=@INTFObjInspRowHeight.Value;
+  //OIManager.PRowHeightOverride:=@INTFObjInspRowHeight.Enable;
+
   vd:=units.CreateInternalSystemVariable(SysVarUnit,SysVarN,GetSupportPaths,system_pas_path,InterfaceTranslate,'INTF_ObjInsp_SpaceHeight','TGetterSetterInteger');
   PTGetterSetterInteger(vd.data.Addr.GetInstance)^.Setup(OIManager.getOpenNodeIdent,OIManager.setOpenNodeIdent);
   SysVar.INTF.INTF_OBJINSP_Properties.INTF_ObjInsp_SpaceHeight.Setup(OIManager.getOpenNodeIdent,OIManager.setOpenNodeIdent);
   units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPaths,system_pas_path,InterfaceTranslate,'INTF_ObjInsp_ShowEmptySections','Boolean',@INTFObjInspShowEmptySections);
   units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPaths,system_pas_path,InterfaceTranslate,'INTF_ObjInsp_ButtonSizeReducing','Integer',@INTFObjInspButtonSizeReducing);
-  SysVar.INTF.INTF_OBJINSP_Properties.INTF_ObjInsp_RowHeight:=@INTFObjInspRowHeight;
-  SysVar.INTF.INTF_OBJINSP_Properties.INTF_ObjInsp_Level0HeaderColor:=@OIManager.INTFObjInspLevel0HeaderColor;
-  SysVar.INTF.INTF_OBJINSP_Properties.INTF_ObjInsp_BorderColor:=@OIManager.INTFObjInspBorderColor;
+  //SysVar.INTF.INTF_OBJINSP_Properties.INTF_ObjInsp_RowHeight:=@INTFObjInspRowHeight;
+  //SysVar.INTF.INTF_OBJINSP_Properties.INTF_ObjInsp_Level0HeaderColor:=@OIManager.INTFObjInspLevel0HeaderColor;
+  //SysVar.INTF.INTF_OBJINSP_Properties.INTF_ObjInsp_BorderColor:=@OIManager.INTFObjInspBorderColor;
+
   OIManager.DefaultRowHeight:=ZCSysParams.notsaved.defaultheight;
   ZCADGUIManager.RegisterZCADFormInfo('ObjectInspector',rsGDBObjinspWndName,TGDBobjinsp,rect(0,100,200,600),ZCADFormSetupProc,CreateObjInspInstance,@GDBobjinsp);
   OIManager.PropertyRowName:=rsProperty;

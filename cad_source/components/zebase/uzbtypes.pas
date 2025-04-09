@@ -202,6 +202,10 @@ TImageDegradation=record
 PExtensionData=Pointer;
 TDCableMountingMethod={-}type {//}string;
 
+
+PTZColor=^TZColor;
+TZColor={-}type {//}Integer;
+
 {REGISTERRECORDTYPE TDummyMethod}
 TDummyMethod=record
   Code:Pointer;
@@ -229,6 +233,28 @@ TGetterSetterInteger={-}GGetterSetter<integer>{/TDummyGetterSetter/};
 PTGetterSetterBoolean=^TGetterSetterBoolean;
 TGetterSetterBoolean={-}GGetterSetter<boolean>{/TDummyGetterSetter/};
 
+PTGetterSetterTZColor=^TGetterSetterTZColor;
+TGetterSetterTZColor={-}GGetterSetter<TZColor>{/TDummyGetterSetter/};
+
+{-}GUsable<T>=record                                      {//}
+{-}  public type                                          {//}
+{-}    PT=^T;                                             {//}
+{-}    TSelfType=GUsable<T>;                              {//}
+{-}  private                                              {//}
+{-}    FValue:T;                                          {//}
+{-}    FUsable:Boolean;                                   {//}
+{-}  Public                                               {//}
+{-}    function ValueOrDefault(const ADefaultValue:T):T;  {//}
+{-}    Property Value:T  read FValue write FValue;        {//}
+{-}    Property Usable:Boolean read FUsable write FUsable;{//}
+{-}end;                                                   {//}
+
+PTUsableInteger=^TUsableInteger;
+TUsableInteger={-}GUsable<Integer>;{/record Value:integer; Usable:boolean; end;/}
+
+PTGetterSetterTUsableInteger=^TGetterSetterTUsableInteger;
+TGetterSetterTUsableInteger={-}GGetterSetter<TUsableInteger>{/TDummyGetterSetter/};
+
 PTCalculatedString=^TCalculatedString;
 {REGISTERRECORDTYPE TCalculatedString}
 TCalculatedString=record
@@ -251,9 +277,6 @@ TTextJustify=(jstl(*'TopLeft'*),
               jsbtl(*'Left'*),
               jsbtc(*'Center'*),
               jsbtr(*'Right'*));
-
-PTZColor=^TZColor;
-TZColor={-}type {//}Integer;
 {EXPORT-}
 TZHandleCreator=GTSimpleHandles<TActuality,GTHandleManipulator<TActuality>>;
 
@@ -361,6 +384,13 @@ begin
       result:=strtoint(sh);
 end;
 {$ENDIF}
+function GUsable<T>.ValueOrDefault(const ADefaultValue:T):T;
+begin
+  if FUsable then
+    result:=FValue
+  else
+    result:=ADefaultValue
+end;
 initialization
   zeHandles.init;
 finalization

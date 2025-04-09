@@ -930,6 +930,8 @@ begin
      AddTypeByRef(CalculatedStringDescriptor);
      AddTypeByRef(GetterSetterIntegerDescriptor);
      AddTypeByRef(GetterSetterBooleanDescriptor);
+     AddTypeByRef(GetterSetterTUsableIntegerDescriptor);
+     AddTypeByRef(GetterSetterTZColorDescriptor);
      AddTypeByRef(AliasIntegerDescriptorOdj);
      AddTypeByRef(AliasCardinalDescriptorOdj);
      AddTypeByRef(AliasDWordDescriptorOdj);

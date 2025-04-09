@@ -193,6 +193,29 @@ TGetterSetterBooleanDescriptor=object(BaseTypeDescriptor<TGetterSetterBoolean,TB
   procedure SetValueFromPValue(const APInstance:Pointer;const APValue:Pointer);virtual;
 end;
 
+TGetterSetterTUsableIntegerDescriptor=object(BaseTypeDescriptor<TGetterSetterInteger,TOTM_Integer>)
+  constructor init;
+  function GetEditableAsString(PInstance:Pointer; const f:TzeUnitsFormat):TInternalScriptString;virtual;
+  function GetDecoratedValueAsString(pinstance:Pointer; const f:TzeUnitsFormat):TInternalScriptString;virtual;
+  function GetValueAsString(pinstance:Pointer):TInternalScriptString;virtual;
+  procedure SetValueFromString(PInstance:Pointer; const _Value:TInternalScriptString);virtual;
+  procedure SetEditableFromString(PInstance:Pointer;const f:TzeUnitsFormat; const Value:TInternalScriptString);virtual;
+  function GetDescribedTypedef:PUserTypeDescriptor;virtual;
+  procedure SetValueFromPValue(const APInstance:Pointer;const APValue:Pointer);virtual;
+end;
+
+TGetterSetterTZColorDescriptor=object(BaseTypeDescriptor<TGetterSetterTZColor,TOTM_Integer>)
+  constructor init;
+  function GetEditableAsString(PInstance:Pointer; const f:TzeUnitsFormat):TInternalScriptString;virtual;
+  function GetDecoratedValueAsString(pinstance:Pointer; const f:TzeUnitsFormat):TInternalScriptString;virtual;
+  function GetValueAsString(pinstance:Pointer):TInternalScriptString;virtual;
+  procedure SetValueFromString(PInstance:Pointer; const _Value:TInternalScriptString);virtual;
+  procedure SetEditableFromString(PInstance:Pointer;const f:TzeUnitsFormat; const Value:TInternalScriptString);virtual;
+  function GetDescribedTypedef:PUserTypeDescriptor;virtual;
+  procedure SetValueFromPValue(const APInstance:Pointer;const APValue:Pointer);virtual;
+  procedure CopyInstanceTo(source,dest:pointer);virtual;
+end;
+
 
 
 var
@@ -216,6 +239,8 @@ GDBEnumDataDescriptorObj:TEnumDataDescriptor;
 CalculatedStringDescriptor:TCalculatedStringDescriptor;
 GetterSetterIntegerDescriptor:TGetterSetterIntegerDescriptor;
 GetterSetterBooleanDescriptor:TGetterSetterBooleanDescriptor;
+GetterSetterTUsableIntegerDescriptor:TGetterSetterTUsableIntegerDescriptor;
+GetterSetterTZColorDescriptor:TGetterSetterTZColorDescriptor;
 
 AliasIntegerDescriptorOdj:GDBSinonimDescriptor;
 AliasCardinalDescriptorOdj:GDBSinonimDescriptor;
@@ -723,6 +748,99 @@ begin
   result:=FundamentalBooleanDescriptorOdj.GetFactTypedef;
 end;
 
+
+constructor TGetterSetterTUsableIntegerDescriptor.init;
+begin
+  inherited init('TGetterSetterTUsableIntegerDescriptor',nil);
+end;
+function TGetterSetterTUsableIntegerDescriptor.GetValueAsString(pinstance:Pointer):TInternalScriptString;
+var
+  ui:TUsableInteger;
+begin
+  ui:=PTGetterSetterTUsableInteger(pinstance)^.Getter;
+  result:=Manipulator.GetValueAsString(ui.Value);
+end;
+procedure TGetterSetterTUsableIntegerDescriptor.SetValueFromPValue(const APInstance:Pointer;const APValue:Pointer);
+begin
+  PTGetterSetterTUsableInteger(APInstance)^.Setter(PTUsableInteger(APValue)^);
+end;
+function TGetterSetterTUsableIntegerDescriptor.GetEditableAsString(PInstance:Pointer; const f:TzeUnitsFormat):TInternalScriptString;
+var
+  ui:TUsableInteger;
+begin
+  if @PTGetterSetterTUsableInteger(pinstance)^.Getter<>nil then begin
+    ui:=PTGetterSetterTUsableInteger(pinstance)^.Getter;
+    result:=Manipulator.GetValueAsString(ui.Value)
+  end else
+    result:='Getter=nil';
+end;
+function TGetterSetterTUsableIntegerDescriptor.GetDecoratedValueAsString(pinstance:Pointer; const f:TzeUnitsFormat):TInternalScriptString;
+begin
+  result:=GetEditableAsString(pinstance,f);
+end;
+procedure TGetterSetterTUsableIntegerDescriptor.SetEditableFromString(PInstance:Pointer;const f:TzeUnitsFormat; const Value:TInternalScriptString);
+begin
+  SetValueFromString(PInstance,Value);
+end;
+procedure TGetterSetterTUsableIntegerDescriptor.SetValueFromString(PInstance:Pointer; const _Value:TInternalScriptString);
+var
+  d:Integer;
+  ui:TUsableInteger;
+begin
+  if Manipulator.SetValueFromString(d,_Value) then begin
+    ui:=PTGetterSetterTUsableInteger(pinstance)^.Getter;
+    ui.Value:=d;
+    PTGetterSetterTUsableInteger(pinstance)^.Setter(ui);
+  end;
+end;
+function TGetterSetterTUsableIntegerDescriptor.GetDescribedTypedef:PUserTypeDescriptor;
+begin
+  result:=AliasIntegerDescriptorOdj.GetFactTypedef;
+end;
+
+constructor TGetterSetterTZColorDescriptor.init;
+begin
+  inherited init('TGetterSetterTZColorDescriptor',nil);
+end;
+function TGetterSetterTZColorDescriptor.GetValueAsString(pinstance:Pointer):TInternalScriptString;
+begin
+  result:=Manipulator.GetValueAsString(PTGetterSetterInteger(pinstance)^.Getter);
+end;
+procedure TGetterSetterTZColorDescriptor.SetValueFromPValue(const APInstance:Pointer;const APValue:Pointer);
+begin
+  PTGetterSetterInteger(APInstance)^.Setter(PInteger(APValue)^);
+end;
+function TGetterSetterTZColorDescriptor.GetEditableAsString(PInstance:Pointer; const f:TzeUnitsFormat):TInternalScriptString;
+begin
+  if @PTGetterSetterInteger(pinstance)^.Getter<>nil then
+    result:=ColorToString(PTGetterSetterTZColor(pinstance)^.Getter)
+  else
+    result:='Getter=nil';
+end;
+function TGetterSetterTZColorDescriptor.GetDecoratedValueAsString(pinstance:Pointer; const f:TzeUnitsFormat):TInternalScriptString;
+begin
+  result:=GetEditableAsString(pinstance,f);
+end;
+procedure TGetterSetterTZColorDescriptor.SetEditableFromString(PInstance:Pointer;const f:TzeUnitsFormat; const Value:TInternalScriptString);
+begin
+  SetValueFromString(PInstance,Value);
+end;
+procedure TGetterSetterTZColorDescriptor.SetValueFromString(PInstance:Pointer; const _Value:TInternalScriptString);
+var
+  d:Integer;
+begin
+  if Manipulator.SetValueFromString(d,_Value) then
+    PTGetterSetterInteger(pinstance)^.Setter(d);
+end;
+function TGetterSetterTZColorDescriptor.GetDescribedTypedef:PUserTypeDescriptor;
+begin
+  result:=AliasIntegerDescriptorOdj.GetFactTypedef;
+end;
+procedure TGetterSetterTZColorDescriptor.CopyInstanceTo(source,dest:pointer);
+begin
+  PTGetterSetterInteger(dest)^.Setter(PTZColor(source)^);
+end;
+
 begin
      FundamentalLongIntDescriptorObj.init('LongInt',nil);
      FundamentalLongWordDescriptorObj.init('LongWord',nil);
@@ -763,4 +881,6 @@ begin
      CalculatedStringDescriptor.init;
      GetterSetterIntegerDescriptor.init;
      GetterSetterBooleanDescriptor.init;
+     GetterSetterTUsableIntegerDescriptor.init;
+     GetterSetterTZColorDescriptor.init;
 end.

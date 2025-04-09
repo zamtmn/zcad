@@ -187,15 +187,15 @@ type
        end;
   {REGISTERRECORDTYPE tobjinspinterface}
   tobjinspinterface=record
-                INTF_ObjInsp_ShowHeaders:PBoolean;(*'Show headers'*)
-                INTF_ObjInsp_OldStyleDraw:PBoolean;(*'Old style'*)
-                INTF_ObjInsp_Level0HeaderColor:PTZColor;(*'Level0 header color'*)
-                INTF_ObjInsp_BorderColor:PTZColor;(*'Border color'*)
+                INTF_ObjInsp_ShowHeaders:TGetterSetterBoolean;(*'Show headers'*)
+                INTF_ObjInsp_OldStyleDraw:TGetterSetterBoolean;(*'Old style'*)
+                INTF_ObjInsp_Level0HeaderColor:TGetterSetterTZColor;(*'Level0 header color'*)
+                INTF_ObjInsp_BorderColor:TGetterSetterTZColor;(*'Border color'*)
                 INTF_ObjInsp_WhiteBackground:TGetterSetterBoolean;(*'White background'*)
-                INTF_ObjInsp_ShowSeparator:PBoolean;(*'Show separator'*)
-                INTF_ObjInsp_ShowFastEditors:PBoolean;(*'Show fast editors'*)
-                INTF_ObjInsp_ShowOnlyHotFastEditors:PBoolean;(*'Show only hot fast editors'*)
-                INTF_ObjInsp_RowHeight:PTIntegerOverrider;(*'Row height'*)
+                INTF_ObjInsp_ShowSeparator:TGetterSetterBoolean;(*'Show separator'*)
+                INTF_ObjInsp_ShowFastEditors:TGetterSetterBoolean;(*'Show fast editors'*)
+                INTF_ObjInsp_ShowOnlyHotFastEditors:TGetterSetterBoolean;(*'Show only hot fast editors'*)
+                INTF_ObjInsp_RowHeight:TGetterSetterTUsableInteger;(*'Row height override'*)
                 INTF_ObjInsp_SpaceHeight:TGetterSetterInteger;(*'Space height'*)
                 INTF_ObjInsp_AlwaysUseMultiSelectWrapper:PBoolean;(*'Always use multiselect wrapper'*)
                 INTF_ObjInsp_ShowEmptySections:PBoolean;(*'Show empty sections'*)

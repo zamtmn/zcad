@@ -884,8 +884,7 @@ hrect.Bottom:=hrect.Top+HeadersHeight-1{+1};
 
   if IsHeadersEnabled then begin
     hrect.Left:=hrect.Left+2;
-    hrect.Right:=NameColumnWidth;
-
+    hrect.Right:=NameColumnWidth{$IFDEF WINDOWS}+1{$ENDIF};
     DefaultDetails := ThemeServices.GetElementDetails(thHeaderItemNormal);
     ThemeServices.DrawElement(Canvas.Handle, DefaultDetails, hrect, nil);
     ThemeServices.DrawText(Canvas,DefaultDetails,OIManager.PropertyRowName,hrect,DT_END_ELLIPSIS or DT_CENTER or DT_VCENTER or DT_NOPREFIX,0);

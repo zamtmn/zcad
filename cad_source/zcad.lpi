@@ -674,6 +674,7 @@
       <Unit30>
         <Filename Value="zcad/gui/odjectinspector/uzcoidecorations.pas"/>
         <IsPartOfProject Value="True"/>
+        <UnitName Value="uzcOIDecorations"/>
       </Unit30>
       <Unit31>
         <Filename Value="zcad/gui/odjectinspector/uzcoimultiobjects.pas"/>

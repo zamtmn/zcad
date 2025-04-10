@@ -191,6 +191,8 @@ TGetterSetterBooleanDescriptor=object(BaseTypeDescriptor<TGetterSetterBoolean,TB
   procedure SetEditableFromString(PInstance:Pointer;const f:TzeUnitsFormat; const Value:TInternalScriptString);virtual;
   function GetDescribedTypedef:PUserTypeDescriptor;virtual;
   procedure SetValueFromPValue(const APInstance:Pointer;const APValue:Pointer);virtual;
+  procedure CopyValueToInstance(PValue,PInstance:pointer);virtual;
+  procedure CopyInstanceToValue(PInstance,PValue:pointer);virtual;
 end;
 
 TGetterSetterTUsableIntegerDescriptor=object(BaseTypeDescriptor<TGetterSetterInteger,TOTM_Integer>)
@@ -213,7 +215,8 @@ TGetterSetterTZColorDescriptor=object(BaseTypeDescriptor<TGetterSetterTZColor,TO
   procedure SetEditableFromString(PInstance:Pointer;const f:TzeUnitsFormat; const Value:TInternalScriptString);virtual;
   function GetDescribedTypedef:PUserTypeDescriptor;virtual;
   procedure SetValueFromPValue(const APInstance:Pointer;const APValue:Pointer);virtual;
-  procedure CopyInstanceTo(source,dest:pointer);virtual;
+  procedure CopyValueToInstance(PValue,PInstance:pointer);virtual;
+  procedure CopyInstanceToValue(PInstance,PValue:pointer);virtual;
 end;
 
 
@@ -747,6 +750,15 @@ function TGetterSetterBooleanDescriptor.GetDescribedTypedef:PUserTypeDescriptor;
 begin
   result:=FundamentalBooleanDescriptorOdj.GetFactTypedef;
 end;
+procedure TGetterSetterBooleanDescriptor.CopyValueToInstance(PValue,PInstance:pointer);
+begin
+  PTGetterSetterBoolean(PInstance)^.Setter(PBoolean(PValue)^);
+end;
+procedure TGetterSetterBooleanDescriptor.CopyInstanceToValue(PInstance,PValue:pointer);
+begin
+  PBoolean(PValue)^:=PTGetterSetterBoolean(PInstance)^.Getter;
+end;
+
 
 
 constructor TGetterSetterTUsableIntegerDescriptor.init;
@@ -836,9 +848,13 @@ function TGetterSetterTZColorDescriptor.GetDescribedTypedef:PUserTypeDescriptor;
 begin
   result:=AliasIntegerDescriptorOdj.GetFactTypedef;
 end;
-procedure TGetterSetterTZColorDescriptor.CopyInstanceTo(source,dest:pointer);
+procedure TGetterSetterTZColorDescriptor.CopyValueToInstance(PValue,PInstance:pointer);
 begin
-  PTGetterSetterInteger(dest)^.Setter(PTZColor(source)^);
+  PTGetterSetterInteger(PInstance)^.Setter(PTZColor(PValue)^);
+end;
+procedure TGetterSetterTZColorDescriptor.CopyInstanceToValue(PInstance,PValue:pointer);
+begin
+  PTZColor(PValue)^:=PTGetterSetterInteger(PInstance)^.Getter;
 end;
 
 begin

@@ -490,7 +490,7 @@ begin
           if source^.FindVariable(pv^.name,True)=nil then begin
             source^.setvardesc(vd,pv^.name,pv^.username,pv^.data.ptd^.TypeName);
             source^.InterfaceVariables.createvariable(vd.name, vd);
-            pv^.data.ptd^.CopyInstanceTo(pv^.data.Addr.Instance,vd.data.Addr.Instance);
+            pv^.data.ptd^.CopyValueToInstance(pv^.data.Addr.Instance,vd.data.Addr.Instance);
           end;
           pv:=InterfaceVariables.vardescarray.iterate(ir);
         until pv=nil;
@@ -514,7 +514,7 @@ begin
           if FindVariable(pv^.name,True)=nil then begin
               setvardesc(vd,pv^.name,pv^.username,pv^.data.ptd^.TypeName);
               InterfaceVariables.createvariable(vd.name, vd);
-              pv^.data.ptd^.CopyInstanceTo(pv^.data.Addr.Instance,vd.data.Addr.Instance);
+              pv^.data.ptd^.CopyValueToInstance(pv^.data.Addr.Instance,vd.data.Addr.Instance);
           end;
           pv:=source.InterfaceVariables.vardescarray.iterate(ir);
         until pv=nil;

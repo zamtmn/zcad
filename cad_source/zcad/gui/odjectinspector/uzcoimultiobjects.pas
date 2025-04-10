@@ -155,7 +155,7 @@ begin
                                             TSharedPEntityData.CreateRec(pentity),
                                             TAfterChangePDrawing.CreateRec(drawings.GetCurrentDWG));
           //cp.ChangedData.StoreUndoData(PDestVD^.data.Addr.GetInstance);
-          PDestVD.data.PTD.CopyInstanceTo(PSourceVD.data.Addr.Instance,PDestVD.data.Addr.Instance);
+          PDestVD.data.PTD.CopyValueToInstance(PSourceVD.data.Addr.Instance,PDestVD.data.Addr.Instance);
           //cp.ChangedData.StoreDoData(PDestVD^.data.Addr.GetInstance);
           pentity^.YouChanged(drawings.GetCurrentDWG^);
           result:=true;
@@ -713,7 +713,7 @@ begin
         if linkedunit then
           vd.attrib:=vd.attrib or vda_colored1;
         WorkedUnit.InterfaceVariables.createvariable(pvd^.name,vd,vd.attrib);
-        pvd^.data.PTD.CopyInstanceTo(pvd.data.Addr.Instance,vd.data.Addr.Instance);
+        pvd^.data.PTD.CopyValueToInstance(pvd.data.Addr.Instance,vd.data.Addr.Instance);
         end
         {   else
         begin

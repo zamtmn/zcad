@@ -566,7 +566,7 @@ begin
      vd.SetInstance(nil);
      //vd.Instance:=nil;
      varstack.createvariable(varname,vd);
-     vd.data.PTD.CopyInstanceTo(instance,vd.data.Addr.Instance);
+     vd.data.PTD.CopyValueToInstance(instance,vd.data.Addr.Instance);
 end;
 function GDBcommandmanager.GetValue:vardesk;
 var

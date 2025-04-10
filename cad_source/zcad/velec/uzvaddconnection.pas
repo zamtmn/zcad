@@ -99,7 +99,7 @@ begin
                       pvd^.username:=pvdadd^.username;
                       //ProcessVariableAttributes(pvd^.attrib,vda_RO,0);//ставим ридонли для инспектора
 
-                      pvdadd^.data.PTD.CopyInstanceTo(pvdadd^.data.Addr.Instance,pvd.data.Addr.Instance);//копируем значение из старой переменной в новую
+                      pvdadd^.data.PTD.CopyValueToInstance(pvdadd^.data.Addr.Instance,pvd.data.Addr.Instance);//копируем значение из старой переменной в новую
 
                       RegisterVarCategory(velec_VarNameForConnectBefore+inttostr(numConnect),velec_VarNameForConnectBeforeName+inttostr(numConnect),@InterfaceTranslate);
 

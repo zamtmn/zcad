@@ -164,7 +164,7 @@ begin
                                  TSharedPEntityData.CreateRec(ChangedData.PEntity),
                                  TAfterChangePDrawing.CreateRec(drawings.GetCurrentDWG));
 
-     mp.MPType^.CopyInstanceTo(pvardesk(pdata)^.data.Addr.Instance,ChangedData.PSetDataInEtity);
+     mp.MPType^.CopyValueToInstance(pvardesk(pdata)^.data.Addr.Instance,ChangedData.PSetDataInEtity);
      ProcessVariableAttributes(pvardesk(pdata)^.attrib,0,vda_approximately or vda_different);
 end;
 
@@ -284,7 +284,7 @@ begin
     pointer(PTVertex3DControlVarData(result)^.StrValueY):=nil;
     pointer(PTVertex3DControlVarData(result)^.StrValueZ):=nil;
     if FindOrCreateVar(pu,mp.MPName,mp.MPUserName,mp.MPType^.TypeName,PTVertex3DControlVarData(result).ArrayIndexVarDescAddr) then
-       mp.MPType.CopyInstanceTo(@Vertex3DControl,pvardesk(PTVertex3DControlVarData(result).ArrayIndexVarDescAddr.Instance)^.data.Addr.Instance);
+       mp.MPType.CopyValueToInstance(@Vertex3DControl,pvardesk(PTVertex3DControlVarData(result).ArrayIndexVarDescAddr.Instance)^.data.Addr.Instance);
     FindOrCreateVar(pu,mp.MPName+'x','x','Double',PTVertex3DControlVarData(result).XVarDescAddr);
     FindOrCreateVar(pu,mp.MPName+'y','y','Double',PTVertex3DControlVarData(result).YVarDescAddr);
     FindOrCreateVar(pu,mp.MPName+'z','z','Double',PTVertex3DControlVarData(result).ZVarDescAddr);
@@ -467,11 +467,11 @@ begin
                          ProcessVariableAttributes(pvardesk(PTVertex3DControlVarData(pdata).YVarDescAddr.Instance)^.attrib,0,vda_different);
                          ProcessVariableAttributes(pvardesk(PTVertex3DControlVarData(pdata).ZVarDescAddr.Instance)^.attrib,0,vda_different);
 
-                         PTVertex3DControlVarData(pdata).PGDBDTypeDesc.CopyInstanceTo(@tv^.x,pvardesk(PTVertex3DControlVarData(pdata).XVarDescAddr.Instance)^.data.Addr.Instance);
+                         PTVertex3DControlVarData(pdata).PGDBDTypeDesc.CopyValueToInstance(@tv^.x,pvardesk(PTVertex3DControlVarData(pdata).XVarDescAddr.Instance)^.data.Addr.Instance);
                          PTVertex3DControlVarData(pdata).StrValueX:=PTVertex3DControlVarData(pdata).PGDBDTypeDesc.GetDecoratedValueAsString(@tv^.x,f);
-                         PTVertex3DControlVarData(pdata).PGDBDTypeDesc.CopyInstanceTo(@tv^.y,pvardesk(PTVertex3DControlVarData(pdata).YVarDescAddr.Instance)^.data.Addr.Instance);
+                         PTVertex3DControlVarData(pdata).PGDBDTypeDesc.CopyValueToInstance(@tv^.y,pvardesk(PTVertex3DControlVarData(pdata).YVarDescAddr.Instance)^.data.Addr.Instance);
                          PTVertex3DControlVarData(pdata).StrValueY:=PTVertex3DControlVarData(pdata).PGDBDTypeDesc.GetDecoratedValueAsString(@tv^.y,f);
-                         PTVertex3DControlVarData(pdata).PGDBDTypeDesc.CopyInstanceTo(@tv^.z,pvardesk(PTVertex3DControlVarData(pdata).ZVarDescAddr.Instance)^.data.Addr.Instance);
+                         PTVertex3DControlVarData(pdata).PGDBDTypeDesc.CopyValueToInstance(@tv^.z,pvardesk(PTVertex3DControlVarData(pdata).ZVarDescAddr.Instance)^.data.Addr.Instance);
                          PTVertex3DControlVarData(pdata).StrValueZ:=PTVertex3DControlVarData(pdata).PGDBDTypeDesc.GetDecoratedValueAsString(@tv^.z,f);
                     end
                 else
@@ -500,18 +500,18 @@ var
    PGDBDTypeDesc:PUserTypeDescriptor;
 begin
      if pvardesk(pdata).name=mp.MPName then
-                                           mp.MPType.CopyInstanceTo(pvardesk(pdata).data.Addr.Instance,@Vertex3DControl)
+                                           mp.MPType.CopyValueToInstance(pvardesk(pdata).data.Addr.Instance,@Vertex3DControl)
      else begin
        PGDBDTypeDesc:=SysUnit.TypeName2PTD('Double');
        pindex:=pu^.FindValue(mp.MPName).data.Addr.Instance;
        tv:=PGDBObjPolyline(ChangedData.pentity).VertexArrayInWCS.getDataMutable(pindex^);
        v:=tv^;
        if pvardesk(pdata).name=mp.MPName+'x' then
-                                                 PGDBDTypeDesc.CopyInstanceTo(pvardesk(pdata).data.Addr.Instance,@v.x);
+                                                 PGDBDTypeDesc.CopyValueToInstance(pvardesk(pdata).data.Addr.Instance,@v.x);
        if pvardesk(pdata).name=mp.MPName+'y' then
-                                                 PGDBDTypeDesc.CopyInstanceTo(pvardesk(pdata).data.Addr.Instance,@v.y);
+                                                 PGDBDTypeDesc.CopyValueToInstance(pvardesk(pdata).data.Addr.Instance,@v.y);
        if pvardesk(pdata).name=mp.MPName+'z' then
-                                                 PGDBDTypeDesc.CopyInstanceTo(pvardesk(pdata).data.Addr.Instance,@v.z);
+                                                 PGDBDTypeDesc.CopyValueToInstance(pvardesk(pdata).data.Addr.Instance,@v.z);
        tv:=PGDBPoint3dArray(ChangedData.PSetDataInEtity).getDataMutable(pindex^);
        tv^:=v;
      end;
@@ -542,7 +542,7 @@ begin
                       else
                         ts:=rsNotRegistred;
 
-                      mp.MPType.CopyInstanceTo(@ts,PVD.data.Addr.Instance);
+                      mp.MPType.CopyValueToInstance(@ts,PVD.data.Addr.Instance);
                       PTOneVarData(pdata).StrValue:=mp.MPType.GetDecoratedValueAsString(@ts,f);
                     end
                 else
@@ -575,7 +575,7 @@ begin
   if @ecp=nil then ProcessVariableAttributes(PVD.attrib,vda_RO,0);
   if fistrun then begin
     ProcessVariableAttributes(PVD.attrib,0,vda_different);
-    mp.MPType.CopyInstanceTo(ChangedData.PGetDataInEtity,PVD.data.Addr.Instance);
+    mp.MPType.CopyValueToInstance(ChangedData.PGetDataInEtity,PVD.data.Addr.Instance);
     PTOneVarData(pdata).StrValue:=mp.MPType.GetDecoratedValueAsString(ChangedData.PGetDataInEtity,f);
   end else begin
     if mp.MPType.Compare(ChangedData.PGetDataInEtity,PVD.data.Addr.Instance)<>CREqual then
@@ -615,7 +615,7 @@ begin
 
   if fistrun then begin
     ProcessVariableAttributes(PVD.attrib,0,vda_different);
-    mp.MPType.CopyInstanceTo(@value,PVD.data.Addr.Instance);
+    mp.MPType.CopyValueToInstance(@value,PVD.data.Addr.Instance);
     PTOneVarData(pdata).StrValue:=mp.MPType.GetDecoratedValueAsString(@value,f);
   end else begin
     if mp.MPType.Compare(@value,PVD.data.Addr.Instance)<>CREqual then
@@ -654,7 +654,7 @@ begin
 
   if fistrun then begin
     ProcessVariableAttributes(PVD.attrib,0,vda_different);
-    mp.MPType.CopyInstanceTo(@value,PVD.data.Addr.Instance);
+    mp.MPType.CopyValueToInstance(@value,PVD.data.Addr.Instance);
     PTOneVarData(pdata).StrValue:=mp.MPType.GetDecoratedValueAsString(@value,f);
   end else begin
     if mp.MPType.Compare(@value,PVD.data.Addr.Instance)<>CREqual then
@@ -693,7 +693,7 @@ begin
 
   if fistrun then begin
     ProcessVariableAttributes(PVD.attrib,0,vda_different);
-    mp.MPType.CopyInstanceTo(@value,PVD.data.Addr.Instance);
+    mp.MPType.CopyValueToInstance(@value,PVD.data.Addr.Instance);
     PTOneVarData(pdata).StrValue:=mp.MPType.GetDecoratedValueAsString(@value,f);
   end else begin
     if mp.MPType.Compare(@value,PVD.data.Addr.Instance)<>CREqual then
@@ -723,7 +723,7 @@ begin
      if fistrun then
                     begin
                       ProcessVariableAttributes(PVD.attrib,0,vda_different);
-                      mp.MPType.CopyInstanceTo(@ChangedData.PEntity,PVD.data.Addr.Instance);
+                      mp.MPType.CopyValueToInstance(@ChangedData.PEntity,PVD.data.Addr.Instance);
                       PTOneVarData(pdata).StrValue:=mp.MPType.GetDecoratedValueAsString(ChangedData.PGetDataInEtity,f);
                     end
                 else
@@ -750,7 +750,7 @@ begin
   PVD:=PTOneVarData(pdata).VDAddr.Instance;
      if @ecp=nil then ProcessVariableAttributes(PVD.attrib,vda_RO,0);
      if fistrun then
-                    mp.MPType.CopyInstanceTo(ChangedData.PGetDataInEtity,PVD.data.Addr.Instance)
+                    mp.MPType.CopyValueToInstance(ChangedData.PGetDataInEtity,PVD.data.Addr.Instance)
                 else
                     PDouble(PVD.data.Addr.Instance)^:=PDouble(PVD.data.Addr.Instance)^+PDouble(ChangedData.PGetDataInEtity)^;
 end;
@@ -769,7 +769,7 @@ begin
   PVD:=PTOneVarData(pdata).VDAddr.Instance;
      if @ecp=nil then ProcessVariableAttributes(PVD.attrib,vda_RO,0);
      if fistrun then
-                    mp.MPType.CopyInstanceTo(ChangedData.PGetDataInEtity,PVD.data.Addr.Instance)
+                    mp.MPType.CopyValueToInstance(ChangedData.PGetDataInEtity,PVD.data.Addr.Instance)
                 else
                     PTArrayIndex(PVD.data.Addr.Instance)^:=PTArrayIndex(PVD.data.Addr.Instance)^+PTArrayIndex(ChangedData.PGetDataInEtity)^;
 end;

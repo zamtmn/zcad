@@ -16,7 +16,7 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
 
-unit uzcoiregister;
+unit uzcOIRegister;
 {$INCLUDE zengineconfig.inc}
 interface
 uses Laz2_DOM,Toolwin,Clipbrd,sysutils,uzccommandsabstract,uzcfcommandline,uzcutils,uzbpaths,TypeDescriptors,uzcTranslations,Forms,uzcinterface,uzeroot,
@@ -25,7 +25,9 @@ uses Laz2_DOM,Toolwin,Clipbrd,sysutils,uzccommandsabstract,uzcfcommandline,uzcut
      gzctnrVectorTypes,Types,Controls,uzcdrawings,Varman,UUnitManager,uzcsysvars,
      uzcsysparams,zcobjectinspectorui,uzcoimultiobjects,uzccommandsimpl,
      uzmenusmanager,uzcLog,menus,ComCtrls,uztoolbarsmanager,uzcimagesmanager,
-     uzedimensionaltypes,uzctreenode,uzcActionsManager,uzObjectInspectorManager;
+     uzedimensionaltypes,uzctreenode,uzcActionsManager,uzObjectInspectorManager,
+     zeundostack,uzcOI,
+     classes;
 const
     PEditorFocusPriority=550;
 type
@@ -44,6 +46,51 @@ var
 implementation
 var
   system_pas_path:string;
+procedure SetLastClientWidth(w:integer);
+begin
+       if assigned(GDBobjinsp)then
+                                  begin
+                                       GDBobjinsp.NameColumnWidthCorrector.LastClientWidth:=w;
+                                  end;
+end;
+
+function GetPeditor:TComponent;
+begin
+       if assigned(GDBobjinsp)then
+                                  begin
+                                       result:=GDBobjinsp.peditor;
+                                  end
+                               else
+                                   result:=nil;
+end;
+
+function GetNameColWidth:integer;
+begin
+       if assigned(GDBobjinsp)then
+                                  begin
+                                       result:=GDBobjinsp.NameColumnWidth;
+                                  end
+                               else
+                                   result:=0;
+end;
+function GetOIWidth:integer;
+begin
+       if assigned(GDBobjinsp)then
+                                  begin
+                                       result:=GDBobjinsp.ClientWidth;
+                                  end
+                               else
+                                   result:=0;
+end;
+function  GetCurrentObj:Pointer;
+begin
+       if assigned(GDBobjinsp)then
+                                  begin
+                                       result:=GDBobjinsp.CurrPObj;
+                                  end
+                              else
+                                  result:=nil;
+end;
 procedure SetCurrentObjDefault;
 begin
        if assigned(GDBobjinsp)then
@@ -58,6 +105,126 @@ begin
   //  if PGDBaseObject(_pcurrobj)^.IsEntity then
   //    result:=true;
 end;
+procedure _onGetOtherValues(var vsa:TZctnrVectorStrings;const valkey:string;const pcurcontext:pointer;const pcurrobj:pointer;const GDBobj:boolean;const f:TzeUnitsFormat);
+var
+  pentvarext:TVariablesExtender;
+  pobj:pGDBObjEntity;
+  ir:itrec;
+  pv:pvardesk;
+  vv:String;
+begin
+  if (valkey<>'')and(pcurcontext<>nil) then
+  begin
+       pobj:=PTSimpleDrawing(pcurcontext).GetCurrentROOT.ObjArray.beginiterate(ir);
+       if pobj<>nil then
+       repeat
+             if GDBobj then
+             begin
+             pentvarext:=pobj^.GetExtension<TVariablesExtender>;
+             if ((pobj^.GetObjType=pgdbobjentity(pcurrobj)^.GetObjType)or(pgdbobjentity(pcurrobj)^.GetObjType=0))and({pobj.ou.Instance}pentvarext<>nil) then
+             begin
+                  pv:={PTEntityUnit(pobj.ou.Instance)}pentvarext.entityunit.FindVariable(valkey);
+                  if pv<>nil then
+                  begin
+                       vv:=pv.data.PTD.GetEditableAsString(pv.data.Addr.Instance,f);
+                       if vv<>'' then
+
+                       vsa.PushBackIfNotPresent(vv);
+                  end;
+             end;
+             end;
+             pobj:=PTSimpleDrawing(pcurcontext).GetCurrentROOT.ObjArray.iterate(ir);
+       until pobj=nil;
+       vsa.sort;
+  end;
+end;
+procedure _onUpdateObjectInInsp(const EDContext:TEditorContext;const currobjgdbtype:PUserTypeDescriptor;const pcurcontext:pointer;const pcurrobj:pointer;const GDBobj:boolean);
+  function CurrObjIsEntity:boolean;
+  begin
+    result:=false;
+    //if GDBobj then
+    //  if PGDBaseObject(pcurrobj)^.IsEntity then
+    //    result:=true;
+  end;
+  function IsEntityInCurrentContext:boolean;
+  begin
+       if PGDBObjEntity(pcurrobj).bp.ListPos.Owner=PTDrawingDef(pcurcontext)^.GetCurrentRootSimple
+       then
+           result:=true
+      else
+           result:=false;
+  end;
+var
+   dc:TDrawContext;
+begin
+  if GDBobj then
+                begin
+                     dc:=PTDrawingDef(pcurcontext)^.CreateDrawingRC;
+                    if CurrObjIsEntity then
+                                           begin
+                                               PGDBObjEntity(pcurrobj)^.FormatEntity(PTDrawingDef(pcurcontext)^,dc);
+                                               if IsEntityInCurrentContext
+                                               then
+                                                   PGDBObjEntity(pcurrobj).YouChanged(PTDrawingDef(pcurcontext)^)
+                                               else
+                                                   PGDBObjRoot(PTDrawingDef(pcurcontext)^.GetCurrentRootSimple)^.FormatAfterEdit(PTDrawingDef(pcurcontext)^,dc);
+                                           end
+                                       else
+                                        begin
+                                           if assigned(EDContext.ppropcurrentedit) then
+                                             PGDBaseObject(pcurrobj)^.FormatAfterFielfmod(EDContext.ppropcurrentedit^.valueAddres,currobjgdbtype);
+                                        end;
+                end;
+  ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIResetOGLWNDProc);
+  zcRedrawCurrentDrawing;
+  ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIActionRedraw);
+
+  // убрано, потому что с этим не работают фильтры в инспекторе
+  //if GDBobj then
+  //  if typeof(PGDBaseObject(pcurrobj)^)=typeof(TMSEditor) then
+  //    PMSEditor(pcurrobj)^.CreateUnit(PMSEditor(pcurrobj)^.SavezeUnitsFormat);
+end;
+procedure _onNotify(const pcurcontext:pointer);
+begin
+  if pcurcontext<>nil then
+  begin
+       PTDrawingDef(pcurcontext).ChangeStampt(true);
+  end;
+end;
+procedure _onAfterFreeEditor(sender:tobject);
+begin
+  if assigned(uzcfcommandline.cmdedit) then
+    if uzcfcommandline.cmdedit.IsVisible then
+      if uzcfcommandline.cmdedit.CanFocus then
+        uzcfcommandline.cmdedit.SetFocus;
+end;
+
+procedure StoreAndSetGDBObjInsp(const UndoStack:PTZctnrVectorUndoCommands;const f:TzeUnitsFormat;exttype:PUserTypeDescriptor; addr,context:pointer;popoldpos:boolean=false);
+begin
+     if assigned(GDBobjinsp)then
+     begin
+     if popoldpos then
+     if (GDBobjinsp.PStoredObj=nil) then
+                             begin
+                                  GDBobjinsp.PStoredObj:=GDBobjinsp.CurrPObj;
+                                  GDBobjinsp.StoredObjGDBType:=GDBobjinsp.CurrObjGDBType;
+                                  GDBobjinsp.pStoredContext:=GDBobjinsp.CurrContext;
+                                  GDBobjinsp.StoredUndoStack:=GDBobjinsp.EDContext.UndoStack;
+                                  GDBobjinsp.StoredUnitsFormat:=GDBobjinsp.CurrUnitsFormat;
+                             end;
+     GDBobjinsp.setptr(UndoStack,f,exttype,addr,context);
+     end;
+end;
+
+procedure SetNameColWidth(w:integer);
+begin
+       if assigned(GDBobjinsp)then
+                                  begin
+                                       GDBobjinsp.NameColumnWidth:=w;
+                                       GDBobjinsp.NameColumnWidthCorrector.LastNameColumnWidth:=w;
+                                  end;
+end;
+
 procedure ZCADFormSetupProc(Form:TControl);
 var
   pint:PInteger;
@@ -69,9 +236,12 @@ begin
   GDBobjinsp:=TGDBObjInsp.Create(Application);
   GDBobjinsp._IsCurrObjInUndoContext:=IsCurrObjInUndoContext;
   GDBobjinsp.OnContextPopup:=dummyclass.ContextPopup;
+  GDBobjinsp.onGetOtherValues:=_onGetOtherValues;
+  GDBobjinsp.onUpdateObjectInInsp:=_onUpdateObjectInInsp;
+  GDBobjinsp.onNotify:=_onNotify;
+  GDBobjinsp.onAfterFreeEditor:=_onAfterFreeEditor;
 
   StoreAndSetGDBObjInsp(nil,drawings.GetUnitsFormat,SysUnit.TypeName2PTD('gdbsysvariable'),@sysvar,nil);
-  //StoreAndSetGDBObjInsp(nil,drawings.GetUnitsFormat,SysUnit.TypeName2PTD('PTLayerControl'),@sysvar.DSGN.DSGN_LayerControls.DSGN_LC_Cable,nil);
   SetCurrentObjDefault;
   //pint:=SavedUnit.FindValue('VIEW_ObjInspV');
   SetNameColWidth(Form.Width div 2);
@@ -109,100 +279,6 @@ begin
   GDBobjinsp.BorderStyle:=bsNone;
   GDBobjinsp.Parent:=tform(Form);
   ZCMsgCallBackInterface.RegisterHandler_KeyDown(GDBobjinsp.myKeyDown);
-end;
-procedure _onNotify(const pcurcontext:pointer);
-begin
-  if pcurcontext<>nil then
-  begin
-       PTDrawingDef(pcurcontext).ChangeStampt(true);
-  end;
-end;
-procedure _onUpdateObjectInInsp(const EDContext:TEditorContext;const currobjgdbtype:PUserTypeDescriptor;const pcurcontext:pointer;const pcurrobj:pointer;const GDBobj:boolean);
-function CurrObjIsEntity:boolean;
-begin
-  result:=false;
-  //if GDBobj then
-  //  if PGDBaseObject(pcurrobj)^.IsEntity then
-  //    result:=true;
-end;
-function IsEntityInCurrentContext:boolean;
-begin
-     if PGDBObjEntity(pcurrobj).bp.ListPos.Owner=PTDrawingDef(pcurcontext)^.GetCurrentRootSimple
-     then
-         result:=true
-    else
-         result:=false;
-end;
-var
-   dc:TDrawContext;
-begin
-  if GDBobj then
-                begin
-                     dc:=PTDrawingDef(pcurcontext)^.CreateDrawingRC;
-                    if CurrObjIsEntity then
-                                           begin
-                                               PGDBObjEntity(pcurrobj)^.FormatEntity(PTDrawingDef(pcurcontext)^,dc);
-                                               if IsEntityInCurrentContext
-                                               then
-                                                   PGDBObjEntity(pcurrobj).YouChanged(PTDrawingDef(pcurcontext)^)
-                                               else
-                                                   PGDBObjRoot(PTDrawingDef(pcurcontext)^.GetCurrentRootSimple)^.FormatAfterEdit(PTDrawingDef(pcurcontext)^,dc);
-                                           end
-                                       else
-                                        begin
-                                           if assigned(EDContext.ppropcurrentedit) then
-                                             PGDBaseObject(pcurrobj)^.FormatAfterFielfmod(EDContext.ppropcurrentedit^.valueAddres,currobjgdbtype);
-                                        end;
-                end;
-  ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIResetOGLWNDProc);
-  zcRedrawCurrentDrawing;
-  ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIActionRedraw);
-
-  // убрано, потому что с этим не работают фильтры в инспекторе
-  //if GDBobj then
-  //  if typeof(PGDBaseObject(pcurrobj)^)=typeof(TMSEditor) then
-  //    PMSEditor(pcurrobj)^.CreateUnit(PMSEditor(pcurrobj)^.SavezeUnitsFormat);
-end;
-
-procedure _onGetOtherValues(var vsa:TZctnrVectorStrings;const valkey:string;const pcurcontext:pointer;const pcurrobj:pointer;const GDBobj:boolean;const f:TzeUnitsFormat);
-var
-  pentvarext:TVariablesExtender;
-  pobj:pGDBObjEntity;
-  ir:itrec;
-  pv:pvardesk;
-  vv:String;
-begin
-  if (valkey<>'')and(pcurcontext<>nil) then
-  begin
-       pobj:=PTSimpleDrawing(pcurcontext).GetCurrentROOT.ObjArray.beginiterate(ir);
-       if pobj<>nil then
-       repeat
-             if GDBobj then
-             begin
-             pentvarext:=pobj^.GetExtension<TVariablesExtender>;
-             if ((pobj^.GetObjType=pgdbobjentity(pcurrobj)^.GetObjType)or(pgdbobjentity(pcurrobj)^.GetObjType=0))and({pobj.ou.Instance}pentvarext<>nil) then
-             begin
-                  pv:={PTEntityUnit(pobj.ou.Instance)}pentvarext.entityunit.FindVariable(valkey);
-                  if pv<>nil then
-                  begin
-                       vv:=pv.data.PTD.GetEditableAsString(pv.data.Addr.Instance,f);
-                       if vv<>'' then
-
-                       vsa.PushBackIfNotPresent(vv);
-                  end;
-             end;
-             end;
-             pobj:=PTSimpleDrawing(pcurcontext).GetCurrentROOT.ObjArray.iterate(ir);
-       until pobj=nil;
-       vsa.sort;
-  end;
-end;
-procedure _onAfterFreeEditor(sender:tobject);
-begin
-  if assigned(uzcfcommandline.cmdedit) then
-    if uzcfcommandline.cmdedit.IsVisible then
-      if uzcfcommandline.cmdedit.CanFocus then
-        uzcfcommandline.cmdedit.SetFocus;
 end;
 function CreateObjInspInstance(FormName:string):TForm;
 begin
@@ -373,16 +449,9 @@ initialization
   OIManager.PropertyRowName:=rsProperty;
   OIManager.ValueRowName:=rsValue;
   OIManager.DifferentName:=rsDifferent;
-  onGetOtherValues:=_onGetOtherValues;
-  onUpdateObjectInInsp:=_onUpdateObjectInInsp;
-  onNotify:=_onNotify;
-  onAfterFreeEditor:=_onAfterFreeEditor;
 
   //GDBobjinsp.currpd:=nil;
   ZCMsgCallBackInterface.RegisterHandler_PrepareObject(StoreAndSetGDBObjInsp());
-  //PrepareObject:={TSetGDBObjInsp}(StoreAndSetGDBObjInsp);
-  //StoreAndSetGDBObjInspProc:=TSetGDBObjInsp(StoreAndSetGDBObjInsp);
-  //ReStoreGDBObjInspProc:=ReStoreGDBObjInsp;
   dummyclass:=tdummyclass.create;
   ZCMsgCallBackInterface.RegisterHandler_GUIAction(dummyclass.UpdateObjInsp);
   //UpdateObjInspProc:=dummyclass.UpdateObjInsp;

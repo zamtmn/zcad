@@ -285,6 +285,7 @@ var
    accum:byte;
    pv,pm:pbyte;
    i:integer;
+   tempboolean:boolean;
 begin
   result:=true;
   pvd:=nil;
@@ -292,14 +293,13 @@ begin
   pvd:=DWGUnit^.InterfaceVariables.findvardesc(FVariable);
   if pvd=nil then
   pvd:=SysVarUnit^.InterfaceVariables.findvardesc(FVariable);
-     if pvd<>nil then
-     begin
-          if pvd^.data.PTD.getfacttypedef=@FundamentalBooleanDescriptorOdj then
-                                                        begin
-                                                             PBoolean(pvd^.data.Addr.Instance)^:=not PBoolean(pvd^.data.Addr.Instance)^;
-                                                             Checked:=PBoolean(pvd^.data.Addr.Instance)^;
-                                                        end
-          else if fmask<>0 then
+     if pvd<>nil then begin
+       if pvd^.data.PTD.getfacttypedef=@FundamentalBooleanDescriptorOdj then begin
+         pvd^.data.PTD.GetSuperOrSelfTypedef.CopyInstanceToValue(pvd^.data.Addr.Instance,@tempboolean);
+         tempboolean:=not tempboolean;
+         pvd^.data.PTD.GetSuperOrSelfTypedef.CopyValueToInstance(@tempboolean,pvd^.data.Addr.Instance);
+         Checked:=tempboolean;
+       end else if fmask<>0 then
                                begin
                                     pv:=pvd^.data.Addr.Instance;
                                     pm:=@Fmask;
@@ -348,29 +348,26 @@ end;
 
 procedure TmyVariableAction.AssignToVar(varname:string;mask:DWord);
 var
-   pvd:pvardesk;
-   accum:byte;
-   pv,pm:pbyte;
-   i:integer;
-   tBufer:DWord;
+  pvd:pvardesk;
+  accum:byte;
+  pv,pm:pbyte;
+  i:integer;
+  tBufer:DWord;
+  tempboolean:boolean;
 begin
-//     if varname='DWG_DrawMode' then
-//                                     varname:=varname;
-     FVariable:=varname;
-     Fmask:=mask;
-     pvd:=nil;
-     if DWGUnit<>nil then
-     pvd:=DWGUnit^.InterfaceVariables.findvardesc(FVariable);
-     if pvd=nil then
-     pvd:=SysVarUnit^.InterfaceVariables.findvardesc(FVariable);
-     if pvd<>nil then
-     begin
-          enabled:=true;
-          if pvd^.data.PTD=@FundamentalBooleanDescriptorOdj then
-                                                        begin
-                                                             Checked:=PBoolean(pvd^.data.Addr.Instance)^;
-                                                        end
-          else if fmask<>0 then
+  FVariable:=varname;
+  Fmask:=mask;
+  pvd:=nil;
+  if DWGUnit<>nil then
+  pvd:=DWGUnit^.InterfaceVariables.findvardesc(FVariable);
+  if pvd=nil then
+  pvd:=SysVarUnit^.InterfaceVariables.findvardesc(FVariable);
+  if pvd<>nil then begin
+    enabled:=true;
+    if pvd^.data.PTD.GetFactTypedef=@FundamentalBooleanDescriptorOdj then begin
+      pvd^.data.PTD.GetSuperOrSelfTypedef.CopyInstanceToValue(pvd^.data.Addr.Instance,@tempboolean);
+      Checked:=tempboolean;
+    end else if fmask<>0 then
                                begin
                                     pv:=pvd^.data.Addr.Instance;
                                     pm:=@Fmask;

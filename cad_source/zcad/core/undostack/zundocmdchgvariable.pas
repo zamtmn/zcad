@@ -131,7 +131,7 @@ begin
   TypedDataID:=ATypedDataID;
   PUnDoData:=PTD^.AllocAndInitInstance;
   if APValue<>nil then
-    PTD^.CopyInstanceTo(APValue,PUnDoData);
+    PTD^.CopyValueToInstance(APValue,PUnDoData);
 end;
 
 procedure GChangedTypedDataDesc.DestroyRec;
@@ -143,7 +143,7 @@ end;
 
 procedure GChangedTypedDataDesc.StoreUndoData(APUnDoData:Pointer);
 begin
-  PTD^.CopyInstanceTo(APUnDoData,PUnDoData);
+  PTD^.CopyValueToInstance(APUnDoData,PUnDoData);
 end;
 
 end.

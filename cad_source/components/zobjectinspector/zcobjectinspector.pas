@@ -41,13 +41,6 @@ const
   fastEditorOffset={$IFDEF LCLQT}2{$ELSE}2{$ENDIF} ;
   spliterhalfwidth=4;
   subtab=1;
-  PlusMinusDetailArray: array[Boolean,Boolean] of TThemedTreeview =
-  (
-    (ttGlyphClosed,
-    ttHotGlyphClosed),
-    (ttGlyphOpened,
-    ttHotGlyphOpened)
-  );
 type
   TIsCurrObjInUndoContext=function(_GDBobj:boolean;_pcurrobj:pointer):boolean;
   arrindop=record
@@ -104,6 +97,10 @@ type
 
     MResplit:boolean;
     _IsCurrObjInUndoContext:TIsCurrObjInUndoContext;
+    onGetOtherValues:TOnGetOtherValues;
+    onUpdateObjectInInsp:TOnUpdateObjectInInsp;
+    onNotify:TOnNotify;
+    onAfterFreeEditor:TMyNotifyEvent;
     property OnContextPopup;
 
     procedure draw; virtual;
@@ -112,7 +109,6 @@ type
     procedure InternalDrawprop(PPA:PTPropertyDeskriptorArray; var y,sub:integer;miny:integer;arect:trect;var LastPropAddFreespace:Boolean);
     procedure calctreeh(PPA:PTPropertyDeskriptorArray; var y:integer);
     function gettreeh:integer; virtual;
-    //procedure BeforeInit; virtual;
     procedure _onresize(sender:tobject);virtual;
     procedure updateeditorBounds;virtual;
     procedure buildproplist(const UndoStack:PTZctnrVectorUndoCommands;const f:TzeUnitsFormat;exttype:PUserTypeDescriptor; bmode:integer; var addr:pointer);
@@ -126,7 +122,6 @@ type
     procedure ScrollBy(DeltaX, DeltaY: Integer); override;
     procedure AfterConstruction; override;
     procedure CalcRowHeight;
-    procedure EraseBackground(DC: HDC); override;
 
     procedure FreeEditor;
     procedure StoreAndFreeEditor;
@@ -151,41 +146,10 @@ type
     procedure UpdateObjectInInsp;
     procedure setptr(const UndoStack:PTZctnrVectorUndoCommands;const f:TzeUnitsFormat;exttype:PUserTypeDescriptor; addr,context:pointer);
     procedure updateinsp;
-    private
-    protected
-    //procedure ScrollbarHandler(ScrollKind: TScrollBarKind; OldPosition: Integer);//override;
-    //procedure WMVScroll(var Message : TLMVScroll); message LM_VScroll;
-    public
-    procedure SetBounds(ALeft, ATop, AWidth, AHeight: integer); override;
-    procedure GetPreferredSize(var PreferredWidth, PreferredHeight: integer;
-                                   Raw: boolean = false;
-                                   WithThemeSpace: boolean = true); override;
-    procedure DoSendBoundsToInterface; override; // called by RealizeBounds
-    procedure DoAllAutoSize; override;
-
-    procedure FormHide(Sender: TObject);
-
     procedure myKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
   end;
 
-//procedure SetGDBObjInsp(const UndoStack:PTZctnrVectorUndoCommands;const f:TzeUnitsFormat;exttype:PUserTypeDescriptor; addr,context:pointer:);
-procedure StoreAndSetGDBObjInsp(const UndoStack:PTZctnrVectorUndoCommands;const f:TzeUnitsFormat;exttype:PUserTypeDescriptor; addr,context:pointer;popoldpos:boolean=false);
-//function ReStoreGDBObjInsp:boolean;
-function  GetCurrentObj:Pointer;
-//procedure ClrarIfItIs(addr:pointer);
-procedure SetNameColWidth(w:integer);
-procedure SetLastClientWidth(w:integer);
-function GetNameColWidth:integer;
-function GetOIWidth:integer;
-function GetPeditor:TComponent;
 procedure Register;
-var
-  GDBobjinsp:TGDBobjinsp;
-
-  onGetOtherValues:TOnGetOtherValues=nil;
-  onUpdateObjectInInsp:TOnUpdateObjectInInsp=nil;
-  onNotify:TOnNotify=nil;
-  onAfterFreeEditor:TMyNotifyEvent=nil;
 
 implementation
 procedure TGDBobjinsp.myKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
@@ -202,7 +166,7 @@ begin
   if PStoredObj<>nil then
     if key=VK_ESCAPE then
       begin
-        setptr(GDBobjinsp.StoredUndoStack,GDBobjinsp.StoredUnitsFormat,GDBobjinsp.StoredObjGDBType,GDBobjinsp.PStoredObj,GDBobjinsp.pStoredContext);
+        setptr(StoredUndoStack,StoredUnitsFormat,StoredObjGDBType,PStoredObj,pStoredContext);
         PStoredObj:=nil;
         StoredObjGDBType:=nil;
         pStoredContext:=nil;
@@ -213,35 +177,18 @@ begin
 end;
 
 function PlusMinusDetail(Collapsed,hot:boolean):TThemedTreeview;
+const
+  PlusMinusDetailArray:array[{isCollapsed}Boolean,{isHot}Boolean] of TThemedTreeview =
+  ((ttGlyphClosed,ttHotGlyphClosed),
+   (ttGlyphOpened,ttHotGlyphOpened));
 begin
-     {$IFDEF LCLWIN32}
-     if WindowsVersion < wvVista then
-                                    hot:=false;
-     {$endif}
-     result:=PlusMinusDetailArray[Collapsed,hot];
-end;
-procedure TGDBobjinsp.FormHide(Sender: TObject);
-begin
-     //proptreeptr:=proptreeptr;
+ {$IFDEF LCLWIN32}
+  if WindowsVersion<wvVista then
+    hot:=false;
+ {$endif}
+  result:=PlusMinusDetailArray[Collapsed,hot];
 end;
 
-procedure TGDBobjinsp.DoAllAutoSize;
-begin
-     inherited;
-end;
-procedure TGDBobjinsp.DoSendBoundsToInterface;
-begin
-     inherited;
-end;
-procedure TGDBobjinsp.GetPreferredSize(var PreferredWidth, PreferredHeight: integer;
-                               Raw: boolean = false;
-                               WithThemeSpace: boolean = true);
-begin
-     inherited;
-     //height
-     //PreferredWidth:=0;
-     //PreferredHeight:=1;
-end;
 function IsWgiteBackground:boolean;
 begin
      result:=OIManager.INTFObjInspWhiteBackground;
@@ -280,120 +227,6 @@ begin
      end
      else
          result:=false;
-end;
-
-procedure TGDBobjinsp.SetBounds(ALeft, ATop, AWidth, AHeight: integer);
-begin
-//     if aheight=41 then
-//                       aheight:=aheight;
-  inherited SetBounds(ALeft, ATop, AWidth, AHeight);
-end;
-{function ReStoreGDBObjInsp:boolean;
-begin
-     result:=false;
-     if assigned(GDBobjinsp)then
-     begin
-     if (GDBobjinsp.PStoredObj=nil) then
-                                    else
-                                    begin
-                                         GDBobjinsp.setptr(GDBobjinsp.StoredUndoStack,GDBobjinsp.StoredUnitsFormat,GDBobjinsp.StoredObjGDBType,GDBobjinsp.PStoredObj,GDBobjinsp.pStoredContext);
-                                         GDBobjinsp.PStoredObj:=nil;
-                                         GDBobjinsp.StoredObjGDBType:=nil;
-                                         GDBobjinsp.pStoredContext:=nil;
-                                         GDBobjinsp.StoredUndoStack:=nil;
-                                         result:=true;
-                                    end;
-     end;
-end;}
-procedure StoreAndSetGDBObjInsp(const UndoStack:PTZctnrVectorUndoCommands;const f:TzeUnitsFormat;exttype:PUserTypeDescriptor; addr,context:pointer;popoldpos:boolean=false);
-begin
-     if assigned(GDBobjinsp)then
-     begin
-     if popoldpos then
-     if (GDBobjinsp.PStoredObj=nil) then
-                             begin
-                                  GDBobjinsp.PStoredObj:=GDBobjinsp.CurrPObj;
-                                  GDBobjinsp.StoredObjGDBType:=GDBobjinsp.CurrObjGDBType;
-                                  GDBobjinsp.pStoredContext:=GDBobjinsp.CurrContext;
-                                  GDBobjinsp.StoredUndoStack:=GDBobjinsp.EDContext.UndoStack;
-                                  GDBobjinsp.StoredUnitsFormat:=GDBobjinsp.CurrUnitsFormat;
-                             end;
-     GDBobjinsp.setptr(UndoStack,f,exttype,addr,context);
-     end;
-end;
-
-{procedure SetGDBObjInsp(const UndoStack:PTZctnrVectorUndoCommands;const f:TzeUnitsFormat;exttype:PUserTypeDescriptor; addr,context:pointer);
-begin
-     if assigned(GDBobjinsp)then
-                                begin
-                                     GDBobjinsp.setptr(UndoStack,f,exttype,addr,context);
-                                end;
-end;}
-{procedure ClrarIfItIs(addr:pointer);
-begin
-       if assigned(GDBobjinsp)then
-                                  begin
-                                       if GDBobjinsp.CurrPObj=addr then
-                                       GDBobjinsp.ReturnToDefault;
-                                  end;
-end;}
-procedure SetNameColWidth(w:integer);
-begin
-       if assigned(GDBobjinsp)then
-                                  begin
-                                       GDBobjinsp.NameColumnWidth:=w;
-                                       GDBobjinsp.NameColumnWidthCorrector.LastNameColumnWidth:=w;
-                                  end;
-end;
-
-procedure SetLastClientWidth(w:integer);
-begin
-       if assigned(GDBobjinsp)then
-                                  begin
-                                       GDBobjinsp.NameColumnWidthCorrector.LastClientWidth:=w;
-                                  end;
-end;
-
-function GetPeditor:TComponent;
-begin
-       if assigned(GDBobjinsp)then
-                                  begin
-                                       result:=GDBobjinsp.peditor;
-                                  end
-                               else
-                                   result:=nil;
-end;
-
-function GetNameColWidth:integer;
-begin
-       if assigned(GDBobjinsp)then
-                                  begin
-                                       result:=GDBobjinsp.NameColumnWidth;
-                                  end
-                               else
-                                   result:=0;
-end;
-function GetOIWidth:integer;
-begin
-       if assigned(GDBobjinsp)then
-                                  begin
-                                       result:=GDBobjinsp.ClientWidth;
-                                  end
-                               else
-                                   result:=0;
-end;
-function  GetCurrentObj:Pointer;
-begin
-       if assigned(GDBobjinsp)then
-                                  begin
-                                       result:=GDBobjinsp.CurrPObj;
-                                  end
-                              else
-                                  result:=nil;
-end;
-procedure TGDBobjinsp.EraseBackground(DC: HDC);
-begin
-     inherited;
 end;
 procedure TGDBobjinsp.CalcRowHeight;
 begin
@@ -1506,7 +1339,7 @@ begin
     if peditor<>nil then
     begin
       tp:=CurrPObj;
-      GDBobjinsp.buildproplist(EDContext.UndoStack,CurrUnitsFormat,CurrObjGDBType,property_correct,tp);
+      buildproplist(EDContext.UndoStack,CurrUnitsFormat,CurrObjGDBType,property_correct,tp);
       //peditor^.done;
       //Freemem(pointer(peditor));
       EDContext.ppropcurrentedit:=pp;
@@ -1881,7 +1714,7 @@ begin
     else
       GDBobj:=false;
     tp:=CurrPObj;
-    GDBobjinsp.buildproplist(GDBobjinsp.EDContext.UndoStack,CurrUnitsFormat,CurrObjGDBType,property_build,tp);
+    buildproplist(EDContext.UndoStack,CurrUnitsFormat,CurrObjGDBType,property_build,tp);
     contentheigth:=gettreeh;
     if CurrObjGDBType^.OIP.ci=self.Height then
                                                 begin

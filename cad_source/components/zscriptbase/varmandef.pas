@@ -183,7 +183,8 @@ UserTypeDescriptor=object
                          procedure SetFormattedValueFromString(PInstance:Pointer;const f:TzeUnitsFormat; const Value:TInternalScriptString);virtual;
                          function GetUserValueAsString(pinstance:Pointer):TInternalScriptString;virtual;
                          function GetDecoratedValueAsString(pinstance:Pointer; const f:TzeUnitsFormat):TInternalScriptString;virtual;
-                         procedure CopyInstanceTo(source,dest:pointer);virtual;
+                         procedure CopyValueToInstance(PValue,PInstance:pointer);virtual;
+                         procedure CopyInstanceToValue(PInstance,PValue:pointer);virtual;
                          function Compare(pleft,pright:pointer):TCompareResult;virtual;
                          procedure SetEditableFromString(PInstance:Pointer;const f:TzeUnitsFormat; const Value:TInternalScriptString);virtual;
                          procedure SetValueFromString(PInstance:Pointer; const _Value:TInternalScriptString);virtual;abstract;
@@ -198,6 +199,7 @@ UserTypeDescriptor=object
                          procedure IncAddr(var addr:Pointer);virtual;
                          function GetFactTypedef:PUserTypeDescriptor;virtual;
                          function GetDescribedTypedef:PUserTypeDescriptor;virtual;
+                         function GetSuperOrSelfTypedef:PUserTypeDescriptor;virtual;
                          procedure Format;virtual;
                          procedure RegisterTypeinfo(ti:PTypeInfo);virtual;
                    end;
@@ -466,7 +468,7 @@ begin
                       begin
                            i:=tcombobox(sender).ItemIndex;
                            p:=tcombobox(sender).Items.Objects[i];
-                           ptd^.CopyInstanceTo(@p,PInstance)
+                           ptd^.CopyValueToInstance(@p,PInstance)
                       end
                   else
                       ptd^.SetEditableFromString(PInstance,f,tedit(sender).text);
@@ -510,7 +512,7 @@ begin
                                                              if pointer(RunFastEditorValue)=p then
                                                                                          rfs:=true;
                                                              if not rfs then
-                                                                            ptd^.CopyInstanceTo(@p,PInstance);
+                                                                            ptd^.CopyValueToInstance(@p,PInstance);
                                                         end
                                                     else
                                                         ptd^.SetValueFromString(PInstance,tedit(sender).text);
@@ -551,6 +553,13 @@ end;
 function UserTypeDescriptor.GetDescribedTypedef:PUserTypeDescriptor;
 begin
   result:=nil;
+end;
+function UserTypeDescriptor.GetSuperOrSelfTypedef:PUserTypeDescriptor;
+begin
+  if pSuperTypeDeskriptor<>nil then
+    result:=pSuperTypeDeskriptor
+  else
+    result:=@self;
 end;
 procedure UserTypeDescriptor.Format;
 begin
@@ -594,11 +603,17 @@ begin
   InitInstance(result);
 end;
 
-procedure UserTypeDescriptor.CopyInstanceTo(source,dest:pointer);
+procedure UserTypeDescriptor.CopyValueToInstance(PValue,PInstance:pointer);
 begin
-     Move(source^, dest^,SizeInBytes);
-     MagicAfterCopyInstance(dest);
+     Move(PValue^, PInstance^,SizeInBytes);
+     MagicAfterCopyInstance(PInstance);
 end;
+procedure UserTypeDescriptor.CopyInstanceToValue(PInstance,PValue:pointer);
+begin
+  Move(PInstance^, PValue^,SizeInBytes);
+  MagicAfterCopyInstance(PValue);
+end;
+
 function UserTypeDescriptor.Compare(pleft,pright:pointer):TCompareResult;
 begin
      if CompareByte(pleft^,pright^,SizeInBytes)=0 then

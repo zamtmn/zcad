@@ -16,7 +16,7 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
 
-unit uzcoidecorations;
+unit uzcOIDecorations;
 {$INCLUDE zengineconfig.inc}
 
 interface
@@ -31,7 +31,8 @@ uses
   StdCtrls,uzcdrawings,uzcstrconsts,Controls,Classes,uzbstrproc,uzcsysvars,uzccommandsmanager,
   uzcsysparams,gzctnrVectorTypes,uzegeometrytypes,uzcinterface,uzcoimultiobjects,
   uzcgui2color,uzcgui2linewidth,uzcgui2linetypes,
-  uzccommand_layer,uzcuitypes,uzeNamedObject,uzccommandsimpl,uzedimensionaltypes;
+  uzccommand_layer,uzcuitypes,uzeNamedObject,uzccommandsimpl,uzedimensionaltypes,
+  uzcOI;
 type
     AsyncCommHelper=class
                          class procedure GetVertex(Pinstance:PtrInt);

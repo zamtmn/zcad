@@ -162,6 +162,7 @@ type
              DWG_AdditionalGrips:PBoolean;(*'Additional grips'*)
              DWG_HelpGeometryDraw:PBoolean;(*'Help geometry'*)
              DWG_SelectedObjToInsp:PBoolean;(*'Selected object to inspector'*)
+             DWG_AlwaysUseMultiSelectWrapper:PBoolean;(*'Always use multiselect wrapper'*)
        end;
   {REGISTERRECORDTYPE TLayerControls}
   TLayerControls=record
@@ -197,9 +198,8 @@ type
                 INTF_ObjInsp_ShowOnlyHotFastEditors:TGetterSetterBoolean;(*'Show only hot fast editors'*)
                 INTF_ObjInsp_RowHeight:TGetterSetterTUsableInteger;(*'Row height override'*)
                 INTF_ObjInsp_SpaceHeight:TGetterSetterInteger;(*'Space height'*)
-                INTF_ObjInsp_AlwaysUseMultiSelectWrapper:PBoolean;(*'Always use multiselect wrapper'*)
-                INTF_ObjInsp_ShowEmptySections:PBoolean;(*'Show empty sections'*)
-                INTF_ObjInsp_ButtonSizeReducing:PInteger;(*'Button size reducing'*)
+                INTF_ObjInsp_ShowEmptySections:TGetterSetterBoolean;(*'Show empty sections'*)
+                INTF_ObjInsp_ButtonSizeReducing:TGetterSetterInteger;(*'Button size reducing'*)
                end;
   {REGISTERRECORDTYPE tmessagesinterface}
   tmessagesinterface=record

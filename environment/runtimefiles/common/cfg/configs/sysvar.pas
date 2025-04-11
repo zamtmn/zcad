@@ -12,8 +12,8 @@ var
   INTF_ObjInsp_RowHeight_OverriderEnable:TGetterSetterBoolean;
   INTF_ObjInsp_RowHeight_OverriderValue:TGetterSetterInteger;
   INTF_ObjInsp_SpaceHeight:TGetterSetterInteger;
-  INTF_ObjInsp_ShowEmptySections:Boolean;
-  INTF_ObjInsp_ButtonSizeReducing:Integer;
+  INTF_ObjInsp_ShowEmptySections:TGetterSetterBoolean;
+  INTF_ObjInsp_ButtonSizeReducing:TGetterSetterInteger;
   DISP_CursorSize:Integer;
   DISP_OSSize:Double;
   DISP_CrosshairSize:Double;
@@ -76,7 +76,7 @@ var
   INTF_DwgTabsPosition:TAlign;
   INTF_ShowDwgTabCloseBurron:Boolean;
   INTF_DefaultControlHeight:Integer;
-  INTF_ObjInsp_AlwaysUseMultiSelectWrapper:Boolean;
+  DWG_AlwaysUseMultiSelectWrapper:Boolean;
   INTF_DefaultEditorFontHeight:Integer;
   INTF_ThemedUpToolbars:Boolean;
   INTF_ThemedRightToolbars:Boolean;
@@ -183,7 +183,7 @@ begin
   INTF_DwgTabsPosition:=TATop;
   INTF_ShowDwgTabCloseBurron:=True;
   INTF_DefaultControlHeight:=33;
-  INTF_ObjInsp_AlwaysUseMultiSelectWrapper:=True;
+  DWG_AlwaysUseMultiSelectWrapper:=True;
   INTF_DefaultEditorFontHeight:=0;
   INTF_ThemedUpToolbars:=False;
   INTF_ThemedRightToolbars:=False;

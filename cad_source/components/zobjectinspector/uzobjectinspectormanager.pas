@@ -44,6 +44,8 @@ type
       fRowHeightOverride:TUsableInteger;
       fLevel0HeaderColor:TColor;
       fBorderColor:TColor;
+      fButtonSizeReducing:integer;
+      fShowEmptySections:boolean;
     public
       function getOpenNodeIdent:integer;
       procedure setOpenNodeIdent(const AValue:integer);
@@ -86,6 +88,12 @@ type
       function getBorderZColor:TZColor;
       procedure setBorderZColor(const AValue:TZColor);
 
+      function getButtonSizeReducing:integer;
+      procedure setButtonSizeReducing(const AValue:integer);
+
+      function getShowEmptySections:boolean;
+      procedure setShowEmptySections(const AValue:boolean);
+
 
       constructor Init;
       destructor Done;virtual;
@@ -103,6 +111,8 @@ type
       property INTFObjInspShowOnlyHotFastEditors:boolean read getShowOnlyHotFastEditors write setShowOnlyHotFastEditors;
       property INTFObjInspLevel0HeaderColor:TColor read getLevel0HeaderColor write setLevel0HeaderColor;
       property INTFObjInspBorderColor:TColor read getBorderColor write setBorderColor;
+      property INTFObjInspButtonSizeReducing:Integer  read getButtonSizeReducing write setButtonSizeReducing;
+      property INTFObjInspShowEmptySections:boolean read getShowEmptySections write setShowEmptySections;
 
       property DefaultRowHeight:integer read getDefaultRowHeight write setDefaultRowHeight;
       property RowHeightOverride:TUsableInteger read getRowHeightOverride write setRowHeightOverride;
@@ -128,6 +138,15 @@ end;
 procedure TObjInspsManager.setDefaultRowHeight(const AValue:integer);
 begin
   fDefaultRowHeight:=AValue;
+end;
+
+function TObjInspsManager.getButtonSizeReducing:integer;
+begin
+  result:=fButtonSizeReducing;
+end;
+procedure TObjInspsManager.setButtonSizeReducing(const AValue:integer);
+begin
+  fButtonSizeReducing:=AValue;
 end;
 
 function TObjInspsManager.getWhiteBackground:boolean;
@@ -243,6 +262,17 @@ procedure TObjInspsManager.setBorderZColor(const AValue:TZColor);
 begin
   fBorderColor:=AValue;
 end;
+
+function TObjInspsManager.getShowEmptySections:boolean;
+begin
+  result:=fShowEmptySections;
+end;
+procedure TObjInspsManager.setShowEmptySections(const AValue:boolean);
+begin
+  fShowEmptySections:=AValue;
+end;
+
+
 constructor TObjInspsManager.Init;
 begin
   fPropertyRowName:='Property';
@@ -261,6 +291,8 @@ begin
   fLevel0HeaderColor:=clDefault;
   fBorderColor:=clDefault;
   fOpenNodeIdent:=0;
+  fButtonSizeReducing:=4;
+  fShowEmptySections:=false;
 end;
 destructor TObjInspsManager.Done;
 begin

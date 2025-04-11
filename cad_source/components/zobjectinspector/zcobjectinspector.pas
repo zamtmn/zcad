@@ -330,7 +330,7 @@ begin
   if ppd<>nil then
     repeat
       last:=false;
-      if (ppd^.IsVisible) then
+      if ppd^.IsVisible(OIManager.INTFObjInspShowEmptySections) then
       begin
         y:=y+rowh;
         if ppd^.SubNode<>nil then begin
@@ -648,7 +648,7 @@ begin
   if ppd<>nil then
     repeat
       LastPropAddFreespace:=false;
-      if (ppd^.IsVisible) then
+      if ppd^.IsVisible(OIManager.INTFObjInspShowEmptySections) then
       begin
         OnMouseProp:=(ppd=onmousepp);
         if assigned(ppd^.Collapsed)then
@@ -668,7 +668,7 @@ begin
         begin
         if ppd^.SubNode<>nil then
                                   begin
-                                     if (ppd^.SubNode^.Count>0)or INTFObjInspShowEmptySections then
+                                     if (ppd^.SubNode^.Count>0)or OIManager.INTFObjInspShowEmptySections then
                                      begin
                                      if visible then
                                      begin
@@ -931,7 +931,7 @@ begin
   curr:=psubtree^.beginiterate(ir);
   if curr<>nil then
     repeat
-      if curr^.IsVisible then
+      if curr^.IsVisible(OIManager.INTFObjInspShowEmptySections) then
       begin
         if curr=current then
         begin
@@ -959,8 +959,8 @@ begin
   if curr<>nil then
     repeat
       LastPropAddFreeSpace:=false;
-      if curr^.IsVisible then
-      if (not((curr^.SubNode<>nil)and(curr^.SubNode.count=0)))or INTFObjInspShowEmptySections then
+      if curr^.IsVisible(OIManager.INTFObjInspShowEmptySections) then
+      if (not((curr^.SubNode<>nil)and(curr^.SubNode.count=0)))or OIManager.INTFObjInspShowEmptySections then
       begin
         dy:=my-y;
         if (dy<rowh)and(dy>0) then

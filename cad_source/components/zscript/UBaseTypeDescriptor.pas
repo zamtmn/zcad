@@ -206,7 +206,7 @@ TGetterSetterTUsableIntegerDescriptor=object(BaseTypeDescriptor<TGetterSetterInt
   procedure SetValueFromPValue(const APInstance:Pointer;const APValue:Pointer);virtual;
 end;
 
-TGetterSetterTZColorDescriptor=object(BaseTypeDescriptor<TGetterSetterTZColor,TOTM_Integer>)
+TGetterSetterTZColorDescriptor=object(BaseTypeDescriptor<TGetterSetterTZColor,TOTM_LongWord>)
   constructor init;
   function GetEditableAsString(PInstance:Pointer; const f:TzeUnitsFormat):TInternalScriptString;virtual;
   function GetDecoratedValueAsString(pinstance:Pointer; const f:TzeUnitsFormat):TInternalScriptString;virtual;
@@ -816,15 +816,15 @@ begin
 end;
 function TGetterSetterTZColorDescriptor.GetValueAsString(pinstance:Pointer):TInternalScriptString;
 begin
-  result:=Manipulator.GetValueAsString(PTGetterSetterInteger(pinstance)^.Getter);
+  result:=Manipulator.GetValueAsString(PTGetterSetterTZColor(pinstance)^.Getter);
 end;
 procedure TGetterSetterTZColorDescriptor.SetValueFromPValue(const APInstance:Pointer;const APValue:Pointer);
 begin
-  PTGetterSetterInteger(APInstance)^.Setter(PInteger(APValue)^);
+  PTGetterSetterTZColor(APInstance)^.Setter(PInteger(APValue)^);
 end;
 function TGetterSetterTZColorDescriptor.GetEditableAsString(PInstance:Pointer; const f:TzeUnitsFormat):TInternalScriptString;
 begin
-  if @PTGetterSetterInteger(pinstance)^.Getter<>nil then
+  if @PTGetterSetterLongWord(pinstance)^.Getter<>nil then
     result:=ColorToString(PTGetterSetterTZColor(pinstance)^.Getter)
   else
     result:='Getter=nil';
@@ -839,22 +839,22 @@ begin
 end;
 procedure TGetterSetterTZColorDescriptor.SetValueFromString(PInstance:Pointer; const _Value:TInternalScriptString);
 var
-  d:Integer;
+  d:LongWord;
 begin
   if Manipulator.SetValueFromString(d,_Value) then
-    PTGetterSetterInteger(pinstance)^.Setter(d);
+    PTGetterSetterTZColor(pinstance)^.Setter(d);
 end;
 function TGetterSetterTZColorDescriptor.GetDescribedTypedef:PUserTypeDescriptor;
 begin
-  result:=AliasIntegerDescriptorOdj.GetFactTypedef;
+  result:=FundamentalLongWordDescriptorObj.GetFactTypedef;
 end;
 procedure TGetterSetterTZColorDescriptor.CopyValueToInstance(PValue,PInstance:pointer);
 begin
-  PTGetterSetterInteger(PInstance)^.Setter(PTZColor(PValue)^);
+  PTGetterSetterTZColor(PInstance)^.Setter(PTZColor(PValue)^);
 end;
 procedure TGetterSetterTZColorDescriptor.CopyInstanceToValue(PInstance,PValue:pointer);
 begin
-  PTZColor(PValue)^:=PTGetterSetterInteger(PInstance)^.Getter;
+  PTZColor(PValue)^:=PTGetterSetterTZColor(PInstance)^.Getter;
 end;
 
 begin

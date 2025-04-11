@@ -430,6 +430,11 @@ initialization
   PTGetterSetterInteger(vd.data.Addr.GetInstance)^.Setup(OIManager.getRowHeightOverrideValue,OIManager.setRowHeightOverrideValue);
   SysVar.INTF.INTF_OBJINSP_Properties.INTF_ObjInsp_RowHeight.Setup(OIManager.getRowHeightOverride,OIManager.setRowHeightOverride);
 
+
+  vd:=units.CreateInternalSystemVariable(SysVarUnit,SysVarN,GetSupportPaths,system_pas_path,InterfaceTranslate,'INTF_ObjInsp_ButtonSizeReducing','TGetterSetterInteger');
+  PTGetterSetterInteger(vd.data.Addr.GetInstance)^.Setup(OIManager.getButtonSizeReducing,OIManager.setButtonSizeReducing);
+  SysVar.INTF.INTF_OBJINSP_Properties.INTF_ObjInsp_ButtonSizeReducing.Setup(OIManager.getButtonSizeReducing,OIManager.setButtonSizeReducing);
+
   //INTFObjInspRowHeight.Enable:=OIManager.LocalRowHeightOverride;
   //INTFObjInspRowHeight.Value:=OIManager.LocalRowHeight;
   //OIManager.PRowHeight:=@INTFObjInspRowHeight.Value;
@@ -438,11 +443,12 @@ initialization
   vd:=units.CreateInternalSystemVariable(SysVarUnit,SysVarN,GetSupportPaths,system_pas_path,InterfaceTranslate,'INTF_ObjInsp_SpaceHeight','TGetterSetterInteger');
   PTGetterSetterInteger(vd.data.Addr.GetInstance)^.Setup(OIManager.getOpenNodeIdent,OIManager.setOpenNodeIdent);
   SysVar.INTF.INTF_OBJINSP_Properties.INTF_ObjInsp_SpaceHeight.Setup(OIManager.getOpenNodeIdent,OIManager.setOpenNodeIdent);
-  units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPaths,system_pas_path,InterfaceTranslate,'INTF_ObjInsp_ShowEmptySections','Boolean',@INTFObjInspShowEmptySections);
-  units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPaths,system_pas_path,InterfaceTranslate,'INTF_ObjInsp_ButtonSizeReducing','Integer',@INTFObjInspButtonSizeReducing);
-  //SysVar.INTF.INTF_OBJINSP_Properties.INTF_ObjInsp_RowHeight:=@INTFObjInspRowHeight;
-  //SysVar.INTF.INTF_OBJINSP_Properties.INTF_ObjInsp_Level0HeaderColor:=@OIManager.INTFObjInspLevel0HeaderColor;
-  //SysVar.INTF.INTF_OBJINSP_Properties.INTF_ObjInsp_BorderColor:=@OIManager.INTFObjInspBorderColor;
+
+  vd:=units.CreateInternalSystemVariable(SysVarUnit,SysVarN,GetSupportPaths,system_pas_path,InterfaceTranslate,'INTF_ObjInsp_ShowEmptySections','TGetterSetterBoolean');
+  PTGetterSetterBoolean(vd.data.Addr.GetInstance)^.Setup(OIManager.getShowEmptySections,OIManager.setShowEmptySections);
+  SysVar.INTF.INTF_OBJINSP_Properties.INTF_ObjInsp_ShowEmptySections.Setup(OIManager.getShowEmptySections,OIManager.setShowEmptySections);
+
+
 
   OIManager.DefaultRowHeight:=ZCSysParams.notsaved.defaultheight;
   ZCADGUIManager.RegisterZCADFormInfo('ObjectInspector',rsGDBObjinspWndName,TGDBobjinsp,rect(0,100,200,600),ZCADFormSetupProc,CreateObjInspInstance,@GDBobjinsp);

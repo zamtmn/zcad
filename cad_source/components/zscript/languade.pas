@@ -223,13 +223,17 @@ begin
 end;
 
 
-procedure createIntegervar(var vd: vardesk; s: String);
+procedure createDefaultIntegerVar(var vd: vardesk; s: String);
 var
-  rez: Integer;
+  rez: Int64;
 begin
   ClearVariable(vd);
-  rez := strtoint(s);
-  begin
+  rez := StrToInt64(s);
+  if (rez<low(Integer))or(rez>high(Integer)) then begin
+    vd.SetInstance(FundamentalInt64Descriptor.AllocAndInitInstance);
+    PInt64(vd.data.Addr.Instance)^ := rez;
+    vd.data.ptd:=@FundamentalInt64Descriptor;
+  end else begin
     vd.SetInstance(FundamentalLongIntDescriptorObj.AllocAndInitInstance);
     PInteger(vd.data.Addr.Instance)^ := rez;
     vd.data.ptd:=@FundamentalLongIntDescriptorObj;
@@ -316,7 +320,7 @@ begin
         else
           if ithex(s) or itint(s) then
           begin
-            createIntegervar(rez, s);
+            createDefaultIntegerVar(rez, s);
 //            s:=s;
           end
           else
@@ -376,7 +380,7 @@ begin
                   end
                   else
                     if ithex(s) or itint(s) then
-                      createIntegervar(hrez, s)
+                      createDefaultIntegerVar(hrez, s)
                     else
                       if itreal(s) then
                         createrealvar(hrez, s)

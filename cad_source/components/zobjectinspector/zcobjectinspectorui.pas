@@ -21,7 +21,7 @@ unit zcobjectinspectorui;
 {$MODE DELPHI}
 interface
 uses Classes,Types,Themes,Graphics,LCLIntf,LCLType,Forms,
-     varmandef,uzbtypes;
+     varmandef,uzbtypes,uzObjectInspectorManager;
 function OIUI_FE_ButtonGetPrefferedSize(PInstance:Pointer;ARect:TRect):TSize;
 function OIUI_FE_HalfButtonGetPrefferedSize(PInstance:Pointer;ARect:TRect):TSize;
 function OIUI_FE_BooleanGetPrefferedSize(PInstance:Pointer;ARect:TRect):TSize;
@@ -50,9 +50,6 @@ procedure OIUI_FE_GetterSetterUsableIntegerDec(PInstance:Pointer);
 procedure OIUI_FE_GetterSetterUsableIntegerUsableInverse(PInstance:Pointer);
 
 
-var
-  INTFObjInspButtonSizeReducing:Integer=4;
-
 implementation
 function OIUI_FE_ButtonGetPrefferedSize(PInstance:Pointer;ARect:TRect):TSize;
 //var
@@ -80,7 +77,7 @@ begin
                                                         result.cy:=15;
                                                    end}
 
-     result.cy:=ARect.Bottom-ARect.Top-INTFObjInspButtonSizeReducing;
+     result.cy:=ARect.Bottom-ARect.Top-OIManager.INTFObjInspButtonSizeReducing;
      result.cx:=result.cy{-INTFObjInspButtonSizeReducing};
 
      {if result.cx<15 then

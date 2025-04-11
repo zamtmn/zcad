@@ -691,6 +691,7 @@
       <Unit34>
         <Filename Value="zcad/gui/odjectinspector/uzcoiregister.pas"/>
         <IsPartOfProject Value="True"/>
+        <UnitName Value="uzcOIRegister"/>
       </Unit34>
       <Unit35>
         <Filename Value="zcad/register/uzcregzscript.pas"/>

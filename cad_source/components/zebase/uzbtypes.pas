@@ -204,7 +204,7 @@ TDCableMountingMethod={-}type {//}string;
 
 
 PTZColor=^TZColor;
-TZColor={-}type {//}Integer;
+TZColor={-}type {//}Longword;
 
 {REGISTERRECORDTYPE TDummyMethod}
 TDummyMethod=record
@@ -229,6 +229,10 @@ TGetterSetterString={-}GGetterSetter<string>{/TDummyGetterSetter/};
 
 PTGetterSetterInteger=^TGetterSetterInteger;
 TGetterSetterInteger={-}GGetterSetter<integer>{/TDummyGetterSetter/};
+
+PTGetterSetterLongWord=^TGetterSetterLongWord;
+TGetterSetterLongWord={-}GGetterSetter<LongWord>{/TDummyGetterSetter/};
+
 
 PTGetterSetterBoolean=^TGetterSetterBoolean;
 TGetterSetterBoolean={-}GGetterSetter<boolean>{/TDummyGetterSetter/};

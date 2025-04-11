@@ -1821,10 +1821,10 @@ begin
     sender_wa:=sender as TAbstractViewArea
   else
     exit;
-  if sysvar.INTF.INTF_OBJINSP_Properties.INTF_ObjInsp_AlwaysUseMultiSelectWrapper^then
-                                                                                      objcount:=0
-                                                                                  else
-                                                                                      objcount:=1;
+  if sysvar.DWG.DWG_AlwaysUseMultiSelectWrapper^then
+    objcount:=0
+  else
+    objcount:=1;
   if sender_wa.param.SelDesc.Selectedobjcount>objcount then begin
     if drawings.GetCurrentDWG.SelObjArray.Count>0 then begin
       //commandmanager.ExecuteCommandSilent('MultiSelect2ObjIbsp',sender_wa.pdwg,@sender_wa.param)

@@ -49,7 +49,7 @@ type
   PropertyDeskriptor=object(BasePropertyDeskriptor)
                            constructor initnul;
                            destructor done;virtual;
-                           function IsVisible:boolean;
+                           function IsVisible(AShowEmptySections:Boolean):boolean;
                      end;
 PTPropertyDeskriptorArray=^TPropertyDeskriptorArray;
 TPropertyDeskriptorArray=object(GZVectorP{-}<PPropertyDeskriptor>{//})
@@ -111,7 +111,6 @@ TUserTypeDescriptor=object(UserTypeDescriptor)
 var zcpmode:tzcpmode;
     //currpd:PPropertyDeskriptor;
     debugShowHiddenFieldInObjInsp:boolean=false;
-    INTFObjInspShowEmptySections:boolean=false;
 implementation
 uses strmy;
 function TUserTypeDescriptor.GetPPD(PPDA:PTPropertyDeskriptorArray;var bmode:Integer):PPropertyDeskriptor;
@@ -188,10 +187,10 @@ begin
     if assigned(FastEditors) then
                                  freeandnil(FastEditors);
 end;
-function PropertyDeskriptor.IsVisible;
+function PropertyDeskriptor.IsVisible(AShowEmptySections:Boolean):boolean;
 begin
   result:=(not(fldaHidden in Attr))or(debugShowHiddenFieldInObjInsp);
-  result:=result and ((not(fldaTmpHidden in Attr))or(INTFObjInspShowEmptySections));
+  result:=result and ((not(fldaTmpHidden in Attr))or(AShowEmptySections));
 end;
 procedure TPropertyDeskriptorArray.cleareraseobj;
 var curr:PPropertyDeskriptor;

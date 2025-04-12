@@ -67,46 +67,47 @@ type
 
   TGDBobjinsp=class(TObjInspCustom)
     protected
-      DefaultDetails: TThemedElementDetails;
-      rowh:integer;
+      DefaultUndoStack:PTZctnrVectorUndoCommands;
+      PDA:TPropertyDeskriptorArray;
+      contentheigth:integer;
+      OLDPP:PPropertyDeskriptor;
+      OnMousePP:PPropertyDeskriptor;
+      MResplit:boolean;
+
+      function getRowHeight:integer;
     public
-    currpd:PPropertyDeskriptor;
+
     GDBobj:boolean;
-    EDContext:TEditorContext;
+    CurrPObj,pdefaultobj:pointer;
+    NameColumnWidthCorrector:TNameColumnWidthCorrector;
+    NameColumnWidth:integer;
+    PEditor:TPropEditor;
 
     PStoredObj:pointer;
     StoredObjGDBType:PUserTypeDescriptor;
     StoredUndoStack:PTZctnrVectorUndoCommands;
     pStoredContext:pointer;
-
-    CurrUnitsFormat:TzeUnitsFormat;
-    StoredUnitsFormat:TzeUnitsFormat;
-    CurrPObj,pdefaultobj:pointer;
     CurrObjGDBType,defaultobjgdbtype:PUserTypeDescriptor;
-    DefaultUndoStack:PTZctnrVectorUndoCommands;
-
     CurrContext,pdefaultcontext:pointer;
-    PEditor:TPropEditor;
-    PDA:TPropertyDeskriptorArray;
-    NameColumnWidth:integer;
-    NameColumnWidthCorrector:TNameColumnWidthCorrector;
-
-    contentheigth:integer;
-    OLDPP:PPropertyDeskriptor;
-    OnMousePP:PPropertyDeskriptor;
-
-    MResplit:boolean;
+    EDContext:TEditorContext;
+    StoredUnitsFormat:TzeUnitsFormat;
+    CurrUnitsFormat:TzeUnitsFormat;
     _IsCurrObjInUndoContext:TIsCurrObjInUndoContext;
     onGetOtherValues:TOnGetOtherValues;
     onUpdateObjectInInsp:TOnUpdateObjectInInsp;
     onNotify:TOnNotify;
     onAfterFreeEditor:TMyNotifyEvent;
+
+    currpd:PPropertyDeskriptor;
+
+
     property OnContextPopup;
+
 
     procedure draw; virtual;
     procedure mypaint(sender:tobject);
-    procedure drawprop(PPA:PTPropertyDeskriptorArray;arect:trect);
-    procedure InternalDrawprop(PPA:PTPropertyDeskriptorArray; var y,sub:integer;miny:integer;arect:trect;var LastPropAddFreespace:Boolean);
+    procedure drawprop(DefaultDetails: TThemedElementDetails;PPA:PTPropertyDeskriptorArray;arect:trect);
+    procedure InternalDrawprop(DefaultDetails: TThemedElementDetails;PPA:PTPropertyDeskriptorArray; var y,sub:integer;miny:integer;arect:trect;var LastPropAddFreespace:Boolean);
     procedure calctreeh(PPA:PTPropertyDeskriptorArray; var y:integer);
     function gettreeh:integer; virtual;
     procedure _onresize(sender:tobject);virtual;
@@ -121,7 +122,7 @@ type
     procedure createscrollbars;virtual;
     procedure ScrollBy(DeltaX, DeltaY: Integer); override;
     procedure AfterConstruction; override;
-    procedure CalcRowHeight;
+    //procedure CalcRowHeight;
 
     procedure FreeEditor;
     procedure StoreAndFreeEditor;
@@ -152,6 +153,11 @@ type
 procedure Register;
 
 implementation
+function TGDBobjinsp.getRowHeight:integer;
+begin
+  result:=OIManager.RowHeightOverride.ValueOrDefault(OIManager.DefaultRowHeight);
+end;
+
 procedure TGDBobjinsp.myKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
 begin
   if Peditor<>nil then
@@ -201,7 +207,7 @@ end;
 function TGDBobjinsp.HeadersHeight:integer;
 begin
      if IsHeadersEnabled then
-                             result:=rowh
+                             result:=OIManager.RowHeightOverride.ValueOrDefault(OIManager.DefaultRowHeight)
                          else
                              result:=0;
 end;
@@ -228,21 +234,21 @@ begin
      else
          result:=false;
 end;
-procedure TGDBobjinsp.CalcRowHeight;
+(*procedure TGDBobjinsp.CalcRowHeight;
 begin
   rowh:=OIManager.RowHeightOverride.ValueOrDefault(OIManager.DefaultRowHeight);
   {rowh:=OIManager.DefaultRowHeight;
   if OIManager.RowHeightOverride.Usable then
     if OIManager.RowHeightOverride.Value>0 then
       rowh:=OIManager.RowHeightOverride.Value;}
-end;
+end;*)
 
 procedure TGDBobjinsp.AfterConstruction;
 begin
      inherited;
-     rowh:=21;
+     //rowh:=21;
      //spaceh:=5;
-     CalcRowHeight;
+     //CalcRowHeight;
 
      onresize:=_onresize;
      //onhide:=FormHide;
@@ -324,7 +330,9 @@ var
   ppd:PPropertyDeskriptor;
   ir:itrec;
   last:boolean;
+  rowh:integer;
 begin
+  rowh:=getRowHeight;
   if ppa^.Count=0 then exit;
   ppd:=ppa^.beginiterate(ir);
   if ppd<>nil then
@@ -618,7 +626,7 @@ end;
 
 
 end;
-procedure TGDBobjinsp.drawprop(PPA:PTPropertyDeskriptorArray;arect:trect);
+procedure TGDBobjinsp.drawprop(DefaultDetails: TThemedElementDetails;PPA:PTPropertyDeskriptorArray;arect:trect);
 var
    lpafs:boolean;
    y,sub:integer;
@@ -628,10 +636,10 @@ begin
      y:=HeadersHeight+BorderWidth;
      sub:=0;
      miny:=arect.Top+HeadersHeight+1;
-     InternalDrawprop(PPA,y,sub,miny,arect,lpafs);
+     InternalDrawprop(DefaultDetails,PPA,y,sub,miny,arect,lpafs);
 end;
 
-procedure TGDBobjinsp.InternalDrawprop(PPA:PTPropertyDeskriptorArray; var y,sub:integer;miny:integer;arect:TRect;var LastPropAddFreespace:Boolean);
+procedure TGDBobjinsp.InternalDrawprop(DefaultDetails:TThemedElementDetails;PPA:PTPropertyDeskriptorArray; var y,sub:integer;miny:integer;arect:TRect;var LastPropAddFreespace:Boolean);
 var
   s:String;
   ppd:PPropertyDeskriptor;
@@ -642,8 +650,9 @@ var
   OnMouseProp:boolean;
   TextDetails: TThemedElementDetails;
   TextStyle: TTextStyle;
-
+  rowh:integer;
 begin
+  rowh:=OIManager.RowHeightOverride.ValueOrDefault(OIManager.DefaultRowHeight);
   ppd:=ppa^.beginiterate(ir);
   if ppd<>nil then
     repeat
@@ -697,7 +706,7 @@ begin
                                     inc(sub);
                                     y:=y+rowh;
                                     if not ppd^.Collapsed^ then
-                                      InternalDrawprop(pointer(ppd.SubNode),y,sub,miny,arect,LastPropAddFreespace);
+                                      InternalDrawprop(DefaultDetails,pointer(ppd.SubNode),y,sub,miny,arect,LastPropAddFreespace);
                                     dec(sub);
                                      end;
                                   end
@@ -835,17 +844,18 @@ var
   arect,hrect:trect;
   tc:tcolor;
   {ts:TTextStyle;}
+  vDefaultDetails: TThemedElementDetails;
 begin
-CalcRowHeight;
+//CalcRowHeight;
 ARect := GetClientRect;
 InflateRect(ARect, -BorderWidth, -BorderWidth);
 ARect.Top:=ARect.Top+VertScrollBar.ScrollPos;
 ARect.Bottom:=ARect.Bottom+VertScrollBar.ScrollPos;
 {$IFDEF LCLWIN32}
 if WindowsVersion < wvVista then
-                                DefaultDetails := ThemeServices.GetElementDetails(tbPushButtonNormal)
+                                vDefaultDetails := ThemeServices.GetElementDetails(tbPushButtonNormal)
                             else
-                                DefaultDetails := ThemeServices.GetElementDetails(tmPopupCheckBackgroundDisabled){trChevronVertHot}{ttbThumbDisabled}{tlListViewRoot};
+                                vDefaultDetails := ThemeServices.GetElementDetails(tmPopupCheckBackgroundDisabled){trChevronVertHot}{ttbThumbDisabled}{tlListViewRoot};
 {$endif}
 {$IFDEF LCLGTK2}DefaultDetails := ThemeServices.GetElementDetails(ttbody){$endif}
 {$IFDEF LCLQT}DefaultDetails := ThemeServices.GetElementDetails({ttpane}thHeaderDontCare){$endif};
@@ -862,7 +872,7 @@ if IsWgiteBackground then
                                   Canvas.Brush.Color:=tc;
                               end
                               else
-                                  ThemeServices.DrawElement(Canvas.Handle, DefaultDetails, ARect, nil);
+                                  ThemeServices.DrawElement(Canvas.Handle, vDefaultDetails, ARect, nil);
                          end;
 
 {ts:=canvas.TextStyle;
@@ -876,7 +886,7 @@ if WindowsVersion>=wvVista then
 InflateRect(hrect, -1, -1);
 
 
-drawprop(@pda,{arect}hrect);
+drawprop(vDefaultDetails,@pda,{arect}hrect);
 
 hrect.Bottom:=hrect.Top+HeadersHeight-1{+1};
 {$IFDEF WINDOWS}hrect.Top:=hrect.Top;{$ENDIF}
@@ -885,16 +895,16 @@ hrect.Bottom:=hrect.Top+HeadersHeight-1{+1};
   if IsHeadersEnabled then begin
     hrect.Left:=hrect.Left+2;
     hrect.Right:=NameColumnWidth{$IFDEF WINDOWS}+1{$ENDIF};
-    DefaultDetails := ThemeServices.GetElementDetails(thHeaderItemNormal);
-    ThemeServices.DrawElement(Canvas.Handle, DefaultDetails, hrect, nil);
-    ThemeServices.DrawText(Canvas,DefaultDetails,OIManager.PropertyRowName,hrect,DT_END_ELLIPSIS or DT_CENTER or DT_VCENTER or DT_NOPREFIX,0);
+    vDefaultDetails := ThemeServices.GetElementDetails(thHeaderItemNormal);
+    ThemeServices.DrawElement(Canvas.Handle, vDefaultDetails, hrect, nil);
+    ThemeServices.DrawText(Canvas,vDefaultDetails,OIManager.PropertyRowName,hrect,DT_END_ELLIPSIS or DT_CENTER or DT_VCENTER or DT_NOPREFIX,0);
 
-    DefaultDetails := ThemeServices.GetElementDetails(thHeaderItemRightNormal);
+    vDefaultDetails := ThemeServices.GetElementDetails(thHeaderItemRightNormal);
     hrect.Left:=hrect.right;
     {$IFDEF WINDOWS}hrect.right:=ARect.Right-1;{$ENDIF}
     {$IFNDEF WINDOWS}hrect.right:=ARect.Right-2;{$ENDIF}
-    ThemeServices.DrawElement(Canvas.Handle, DefaultDetails, hrect, nil);
-    ThemeServices.DrawText(Canvas,DefaultDetails,OIManager.ValueRowName,hrect,DT_END_ELLIPSIS or DT_CENTER or DT_VCENTER or DT_NOPREFIX,0);
+    ThemeServices.DrawElement(Canvas.Handle, vDefaultDetails, hrect, nil);
+    ThemeServices.DrawText(Canvas,vDefaultDetails,OIManager.ValueRowName,hrect,DT_END_ELLIPSIS or DT_CENTER or DT_VCENTER or DT_NOPREFIX,0);
   end;
 
   if NeedShowSeparator then begin
@@ -908,11 +918,11 @@ hrect.Bottom:=hrect.Top+HeadersHeight-1{+1};
       {$IFNDEF LCLWIN32}DefaultDetails := ThemeServices.GetElementDetails(ttbSeparatorNormal);{$ENDIF}
       {$IFDEF LCLWIN32}
       if WindowsVersion < wvVista then
-        DefaultDetails := ThemeServices.GetElementDetails(ttbSeparatorNormal)
+        vDefaultDetails := ThemeServices.GetElementDetails(ttbSeparatorNormal)
       else
-        DefaultDetails := ThemeServices.GetElementDetails(tsPane);
+        vDefaultDetails := ThemeServices.GetElementDetails(tsPane);
       {$ENDIF}
-      ThemeServices.DrawElement(Canvas.Handle, DefaultDetails, hrect, nil);
+      ThemeServices.DrawElement(Canvas.Handle, vDefaultDetails, hrect, nil);
     end else begin
       hrect.Left:=(hrect.Left+hrect.Right)div 2;
       tc:=Canvas.Pen.Color;
@@ -1202,7 +1212,9 @@ var
   needredraw:boolean;
   i:integer;
   currstate:TFastEditorState;
+  rowh:integer;
 begin
+  rowh:=getRowHeight;
     needredraw:=false;
     if mresplit then
                   begin
@@ -1358,7 +1370,9 @@ var
   //FESize:TSize;
   i:integer;
   needexit:boolean;
+  //rowh:integer;
 begin
+  //rowh:=OIManager.RowHeightOverride.ValueOrDefault(OIManager.DefaultRowHeight);
      inherited;
      if (button=mbLeft)
     and (mresplit=true) then
@@ -1380,7 +1394,7 @@ begin
                             begin
                                  y:=y+VertScrollBar.scrollpos-self.BorderWidth;
                                  my:=HeadersHeight;
-                                 pp:=mousetoprop(rowh,@pda,x,y,my);
+                                 pp:=mousetoprop(getRowHeight,@pda,x,y,my);
                                  if pp=nil then
                                                exit;
                                  if assigned(pp.FastEditors)then
@@ -1530,7 +1544,7 @@ begin
        if assigned(pp^.Decorators.OnCreateEditor) then
                                                       TED:=pp^.Decorators.OnCreateEditor(self,tr,pp^.valueAddres,@vsa,false,pp^.PTypeManager,CurrUnitsFormat)
                                                   else
-                                                      TED:=pp^.PTypeManager^.CreateEditor(self,tr,pp^.valueAddres,@vsa,{false}true,initialvalue,rowh,CurrUnitsFormat);
+                                                      TED:=pp^.PTypeManager^.CreateEditor(self,tr,pp^.valueAddres,@vsa,{false}true,initialvalue,getRowHeight,CurrUnitsFormat);
      case ted.Mode of
                      TEM_Integrate:begin
                                        TED.Editor.SetEditorBounds(pp,OIManager.INTFObjInspShowOnlyHotFastEditors);
@@ -1541,7 +1555,7 @@ begin
                                          editorcontrol.Visible:=false;
                                          {$ENDIF}
                                          editorcontrol.Parent:=self;
-                                         SetComboSize(editorcontrol as TCombobox,rowh-6,CBDoNotTouch);
+                                         SetComboSize(editorcontrol as TCombobox,getRowHeight-6,CBDoNotTouch);
                                          //(editorcontrol as TCombobox).itemheight:=pp^.rect.Bottom-pp^.rect.Top-6;
                                          if (editorcontrol as TCombobox).Style in [csDropDownList,csOwnerDrawFixed,csOwnerDrawVariable] then
                                          (editorcontrol as TCombobox).droppeddown:=true;//автооткрытие комбика мещает вводу, открываем только те что без возможности ввода значений
@@ -1609,7 +1623,7 @@ begin
   y:=y+VertScrollBar.scrollpos-self.BorderWidth;
   //if proptreeptr=nil then exit;
   my:=HeadersHeight;
-  pp:=mousetoprop(rowh,@pda,x,y,my);
+  pp:=mousetoprop(getRowHeight,@pda,x,y,my);
 
   if (button=mbLeft)
   and (IsMouseOnSpliter(pp,X,Y)) then

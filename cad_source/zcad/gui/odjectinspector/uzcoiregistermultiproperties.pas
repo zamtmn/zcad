@@ -456,6 +456,7 @@ var
   ptype:PUserTypeDescriptor;
 begin
   if sysunit<>nil then begin
+    MultiPropertiesManager.RegisterBeforeProc(@ResetCachedVertex);
     MultiPropertiesManager.RestartMultipropertySortID;
     RegisterVarCategory('EXTDRLAYERCONTROL','Layer control',@InterfaceTranslate);
     MultiPropertiesManager.RegisterPhysMultiproperty('EXTDRLAYERCONTROL_GoodLayer','True layer',sysunit^.TypeName2PTD('String'),MPCExtenders,0,TLayerControlExtender,PtrInt(@LayerControlExtender.GoodLayer),PtrInt(@LayerControlExtender.GoodLayer),OneVarDataMIPD,OneVarDataEIPD);

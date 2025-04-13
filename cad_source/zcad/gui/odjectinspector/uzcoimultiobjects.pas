@@ -502,6 +502,9 @@ var
 begin
   SavezeUnitsFormat:=f;
   NeedObjID:=GetObjType;
+  for i:=0 to MultiPropertiesManager.BeforeProcVector.Size-1 do
+    MultiPropertiesManager.BeforeProcVector[i]();
+
   for i:=0 to MultiPropertiesManager.MultiPropertyVector.Size-1 do
     if MultiPropertiesManager.MultiPropertyVector[i].UseCounter<>0 then begin
       include(MultiPropertiesManager.MultiPropertyVector[i].Flags,MPFFirstPass);

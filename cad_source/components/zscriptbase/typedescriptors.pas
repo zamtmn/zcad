@@ -19,8 +19,8 @@ unit typedescriptors;
 
 {$MODE DELPHI}
 interface
-uses uzedimensionaltypes,{uzctnrVectorPointers,}LCLProc,
-     varmandef,//uzctnrvectorstrings,
+uses uzedimensionaltypes,LCLProc,
+     varmandef,
      gzctnrVectorTypes,gzctnrVectorP,uzbstrproc,sysutils,uzbLogIntf;
 const
      m_procedure=1;
@@ -30,12 +30,11 @@ const
      m_virtual=16;
      field_no_attrib=nil;
 
-     FA_HIDDEN_IN_OBJ_INSP=1;
-     FA_READONLY=2;
-     FA_DIFFERENT=4;
-     FA_APPROXIMATELY=8;
-     FA_COLORED1=16;
-     SA_SAVED_TO_SHD=1;
+     {fldaHidden=1;
+     fldaReadOnly=2;
+     fldaDifferent=4;
+     fldaApproximately=8;
+     fldaColored1=16;}
 
      property_correct=1;
      property_build=0;
@@ -43,13 +42,14 @@ const
      SM_Var=1;
      SM_Default=0;
 
-type tzcpmode=(zcptxt,zcpbin);
+type
+  tzcpmode=(zcptxt,zcpbin);
 
   PPropertyDeskriptor=^PropertyDeskriptor;
   PropertyDeskriptor=object(BasePropertyDeskriptor)
                            constructor initnul;
                            destructor done;virtual;
-                           function IsVisible:boolean;
+                           function IsVisible(AShowEmptySections:Boolean):boolean;
                      end;
 PTPropertyDeskriptorArray=^TPropertyDeskriptorArray;
 TPropertyDeskriptorArray=object(GZVectorP{-}<PPropertyDeskriptor>{//})
@@ -73,10 +73,10 @@ BaseDescriptor=record
                       {** Сделать строку только для чтения/редактр или скрыть/открыть итд.
                        Пример:
                        samplef:=sampleInternalRTTITypeDesk^.FindField('VNum'); находим описание поля VNum
-                       samplef^.base.Attributes:=samplef^.base.Attributes and (not FA_HIDDEN_IN_OBJ_INSP); сбрасываем ему флаг cкрытности
-                       samplef^.base.Attributes:=samplef^.base.Attributes or FA_HIDDEN_IN_OBJ_INSP; устанавливаем ему флаг cкрытности
+                       samplef^.base.Attributes:=samplef^.base.Attributes and (not fldaHidden); сбрасываем ему флаг cкрытности
+                       samplef^.base.Attributes:=samplef^.base.Attributes or fldaHidden; устанавливаем ему флаг cкрытности
                        }
-                      Attributes:Word;
+                      Attributes:TFieldAttrs;
 
                       Saved:Word;
                end;
@@ -102,7 +102,7 @@ PropertyDescriptor=record
                 end;
 PTUserTypeDescriptor=^TUserTypeDescriptor;
 TUserTypeDescriptor=object(UserTypeDescriptor)
-                          function CreateProperties(const f:TzeUnitsFormat;mode:PDMode;PPDA:PTPropertyDeskriptorArray;const Name:TInternalScriptString;PCollapsed:Pointer;ownerattrib:Word;var bmode:Integer;const addr:Pointer;const ValKey,ValType:TInternalScriptString):PTPropertyDeskriptorArray;virtual;abstract;
+                          function CreateProperties(const f:TzeUnitsFormat;mode:PDMode;PPDA:PTPropertyDeskriptorArray;const Name:TInternalScriptString;PCollapsed:Pointer;ownerattrib:TFieldAttrs;var bmode:Integer;const addr:Pointer;const ValKey,ValType:TInternalScriptString):PTPropertyDeskriptorArray;virtual;abstract;
                           //procedure IncAddr(var addr:Pointer);virtual;
                           function CreatePD:Pointer;
                           function GetPPD(PPDA:PTPropertyDeskriptorArray;var bmode:Integer):PPropertyDeskriptor;
@@ -155,7 +155,7 @@ begin
     Pointer(r):=nil;
     Pointer(w):=nil;
     PTypeManager:=nil;
-    Attr:=0;
+    Attr:=[];
     Collapsed:=nil;
     ValueOffsetInMem:=0;
     valueAddres:=nil;
@@ -187,9 +187,10 @@ begin
     if assigned(FastEditors) then
                                  freeandnil(FastEditors);
 end;
-function PropertyDeskriptor.IsVisible;
+function PropertyDeskriptor.IsVisible(AShowEmptySections:Boolean):boolean;
 begin
-     result:=((Attr and FA_HIDDEN_IN_OBJ_INSP)=0)or(debugShowHiddenFieldInObjInsp);
+  result:=(not(fldaHidden in Attr))or(debugShowHiddenFieldInObjInsp);
+  result:=result and ((not(fldaTmpHidden in Attr))or(AShowEmptySections));
 end;
 procedure TPropertyDeskriptorArray.cleareraseobj;
 var curr:PPropertyDeskriptor;

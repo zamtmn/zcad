@@ -30,7 +30,7 @@ const
 
   basicoperatorcount = 5;
   basicfunctioncount = 3;
-  basicoperatorparamcount = 28;
+  basicoperatorparamcount = 32;
   basicfunctionparamcount = 1;
   {foneBoolean = #7;
   foneByte = #8;
@@ -81,6 +81,7 @@ function TDouble_plus_TInteger(var rez, hrez: vardesk): vardesk;
 function TInteger_plus_TDouble(var rez, hrez: vardesk): vardesk;
 function TDouble_plus_TDouble(var rez, hrez: vardesk): vardesk;
 function Tnothing_minus_TInteger(var rez, hrez: vardesk): vardesk;
+function Tnothing_minus_TInt64(var rez, hrez: vardesk): vardesk;
 function Tnothing_minus_TDouble(var rez, hrez: vardesk): vardesk;
 function TInteger_mul_TInteger(var rez, hrez: vardesk): vardesk;
 function TInteger_div_TInteger(var rez, hrez: vardesk): vardesk;
@@ -89,6 +90,9 @@ function TDouble_div_TDouble(var rez, hrez: vardesk): vardesk;
 function TDouble_div_TInteger(var rez, hrez: vardesk): vardesk;
 function TDouble_let_TDouble(var rez, hrez: vardesk): vardesk;
 function TInteger_let_TInteger(var rez, hrez: vardesk): vardesk;
+function TInteger_let_TIn64(var rez, hrez: vardesk): vardesk;
+function TLongWord_let_TInteger(var rez, hrez: vardesk): vardesk;
+function TLongWord_let_TIn64(var rez, hrez: vardesk): vardesk;
 function TString_let_TString(var rez, hrez: vardesk): vardesk;
 function TAnsiString_let_TString(var rez, hrez: vardesk): vardesk;
 function TAnsiString_let_TAnsiString(var rez, hrez: vardesk): vardesk;
@@ -136,18 +140,22 @@ const
 
   basicoperatorparam: array[1..basicoperatorparamcount] of operatortype =
   (
-    (name: '+'; param: nil; hparam: @FundamentalLongIntDescriptorObj; addr: {$IFDEF FPC}@{$ENDIF}Tnothing_plus_TInteger)
+      (name: ':='; param: @GDBEnumDataDescriptorObj; hparam: @GDBEnumDataDescriptorObj; addr: {$IFDEF FPC}@{$ENDIF}TEnum_let_TIdentificator)//эта шняга захардкожена в findbasicoperator по номеру
+    , (name: '+'; param: nil; hparam: @FundamentalLongIntDescriptorObj; addr: {$IFDEF FPC}@{$ENDIF}Tnothing_plus_TInteger)
     , (name: '+'; param: @FundamentalLongIntDescriptorObj; hparam: @FundamentalLongIntDescriptorObj; addr: {$IFDEF FPC}@{$ENDIF}TInteger_plus_TInteger)
     , (name: '-'; param: nil; hparam: @FundamentalLongIntDescriptorObj; addr: {$IFDEF FPC}@{$ENDIF}Tnothing_minus_TInteger)
+    , (name: '-'; param: nil; hparam: @FundamentalInt64Descriptor; addr: {$IFDEF FPC}@{$ENDIF}Tnothing_minus_TInt64)
     , (name: '*'; param: @FundamentalLongIntDescriptorObj; hparam: @FundamentalLongIntDescriptorObj; addr: {$IFDEF FPC}@{$ENDIF}TInteger_mul_TInteger)
     , (name: ':='; param: @FundamentalDoubleDescriptorObj; hparam: @FundamentalDoubleDescriptorObj; addr: {$IFDEF FPC}@{$ENDIF}TDouble_let_TDouble)
     , (name: ':='; param: @FundamentalStringDescriptorObj; hparam: @FundamentalStringDescriptorObj; addr: {$IFDEF FPC}@{$ENDIF}TString_let_TString)
     , (name: ':='; param: @FundamentalAnsiStringDescriptorObj; hparam: @FundamentalStringDescriptorObj; addr: {$IFDEF FPC}@{$ENDIF}TAnsiString_let_TString)
     , (name: ':='; param: @FundamentalLongIntDescriptorObj; hparam: @FundamentalLongIntDescriptorObj; addr: {$IFDEF FPC}@{$ENDIF}TInteger_let_TInteger)
+    , (name: ':='; param: @FundamentalLongIntDescriptorObj; hparam: @FundamentalInt64Descriptor; addr: {$IFDEF FPC}@{$ENDIF}TInteger_let_TIn64)
+    , (name: ':='; param: @FundamentalLongWordDescriptorObj; hparam: @FundamentalLongIntDescriptorObj; addr: {$IFDEF FPC}@{$ENDIF}TLongWord_let_TInteger)
+    , (name: ':='; param: @FundamentalLongWordDescriptorObj; hparam: @FundamentalInt64Descriptor; addr: {$IFDEF FPC}@{$ENDIF}TLongWord_let_TIn64)
     , (name: ':='; param: @FundamentalByteDescriptorObj; hparam: @FundamentalLongIntDescriptorObj; addr: {$IFDEF FPC}@{$ENDIF}TByte_let_TInteger)
     , (name: '-'; param: nil; hparam: @FundamentalDoubleDescriptorObj; addr: {$IFDEF FPC}@{$ENDIF}Tnothing_minus_TDouble)
     , (name: ':='; param: @FundamentalBooleanDescriptorOdj; hparam: @FundamentalBooleanDescriptorOdj; addr: {$IFDEF FPC}@{$ENDIF}TBoolean_let_TBoolean)
-    , (name: ':='; param: @GDBEnumDataDescriptorObj; hparam: @GDBEnumDataDescriptorObj; addr: {$IFDEF FPC}@{$ENDIF}TEnum_let_TIdentificator)//эта шняга захардкожена в findbasicoperator по номеру
     , (name: ':='; param: @FundamentalDoubleDescriptorObj; hparam: @FundamentalLongIntDescriptorObj; addr: {$IFDEF FPC}@{$ENDIF}TDouble_let_TInteger)
     , (name: '/'; param: @FundamentalLongIntDescriptorObj; hparam: @FundamentalLongIntDescriptorObj; addr: {$IFDEF FPC}@{$ENDIF}TInteger_div_TInteger)
     , (name: '/'; param: @FundamentalDoubleDescriptorObj; hparam: @FundamentalLongIntDescriptorObj; addr: {$IFDEF FPC}@{$ENDIF}TDouble_div_TInteger)
@@ -304,12 +312,16 @@ end;
 function TBoolean_let_TBoolean(var rez, hrez: vardesk): vardesk;
 var
   r: vardesk;
+  pb:pboolean;
 begin
+  pb:=hrez.data.Addr.Instance;
   r.data.ptd:=@FundamentalBooleanDescriptorOdj;
   r.name := '';
   r.SetInstance(FundamentalBooleanDescriptorOdj.AllocAndInitInstance);
-  PBoolean(r.data.Addr.Instance)^ := PBoolean(hrez.data.Addr.Instance)^;
-  PBoolean(rez.data.Addr.Instance)^ := PBoolean(hrez.data.Addr.Instance)^;
+  //PBoolean(r.data.Addr.Instance)^ := PBoolean(hrez.data.Addr.Instance)^;
+  r.data.PTD^.SetValueFromPValue(r.data.Addr.Instance,hrez.data.Addr.Instance);
+  //PBoolean(rez.data.Addr.Instance)^ := PBoolean(hrez.data.Addr.Instance)^;
+  rez.data.PTD^.SetValueFromPValue(rez.data.Addr.Instance,hrez.data.Addr.Instance);
   result := r;
 end;
 
@@ -344,10 +356,48 @@ begin
   r.data.ptd:=@FundamentalLongIntDescriptorObj;
   r.name := '';
   r.SetInstance(FundamentalLongIntDescriptorObj.AllocAndInitInstance);
-  PInteger(r.data.Addr.Instance)^ := PInteger(hrez.data.Addr.Instance)^;
-  PInteger(rez.data.Addr.Instance)^ := PInteger(hrez.data.Addr.Instance)^;
+  r.data.PTD^.SetValueFromPValue(r.data.Addr.Instance,hrez.data.Addr.Instance);
+  //PInteger(r.data.Addr.Instance)^ := PInteger(hrez.data.Addr.Instance)^;
+  rez.data.PTD^.SetValueFromPValue(rez.data.Addr.Instance,hrez.data.Addr.Instance);
+  //PInteger(rez.data.Addr.Instance)^ := PInteger(hrez.data.Addr.Instance)^;
   result := r;
 end;
+function TInteger_let_TIn64(var rez, hrez: vardesk): vardesk;
+var
+  r: vardesk;
+begin
+  r.data.ptd:=@FundamentalLongIntDescriptorObj;
+  r.name := '';
+  r.SetInstance(FundamentalLongIntDescriptorObj.AllocAndInitInstance);
+  PInteger(r.data.Addr.Instance)^ := PInt64(hrez.data.Addr.Instance)^;
+  PInteger(rez.data.Addr.Instance)^ := PInt64(hrez.data.Addr.Instance)^;
+  result := r;
+end;
+function TLongWord_let_TInteger(var rez, hrez: vardesk): vardesk;
+var
+  r: vardesk;
+begin
+  r.data.ptd:=@FundamentalLongWordDescriptorObj;
+  r.name := '';
+  r.SetInstance(FundamentalLongWordDescriptorObj.AllocAndInitInstance);
+  PLongWord(r.data.Addr.Instance)^ := PInteger(hrez.data.Addr.Instance)^;
+  rez.data.PTD.SetValueFromPValue(rez.data.Addr.Instance,r.data.Addr.Instance);
+  //PLongWord(rez.data.Addr.Instance)^ := PInteger(hrez.data.Addr.Instance)^;
+  result := r;
+end;
+function TLongWord_let_TIn64(var rez, hrez: vardesk): vardesk;
+var
+  r: vardesk;
+begin
+  r.data.ptd:=@FundamentalLongWordDescriptorObj;
+  r.name := '';
+  r.SetInstance(FundamentalLongWordDescriptorObj.AllocAndInitInstance);
+  PLongWord(r.data.Addr.Instance)^ := PInt64(hrez.data.Addr.Instance)^;
+  rez.data.PTD.SetValueFromPValue(rez.data.Addr.Instance,r.data.Addr.Instance);
+  //PLongWord(rez.data.Addr.Instance)^ := PInt64(hrez.data.Addr.Instance)^;
+  result := r;
+end;
+
 function TByte_let_TInteger(var rez, hrez: vardesk): vardesk;
 var
   r: vardesk;
@@ -540,6 +590,16 @@ begin
   PInteger(r.data.Addr.Instance)^ := -(PInteger(hrez.data.Addr.Instance)^);
   result := r;
 end;
+function Tnothing_minus_TInt64(var rez, hrez: vardesk): vardesk;
+var
+  r: vardesk;
+begin
+  r.data.ptd:=@FundamentalInt64Descriptor;
+  r.name := '';
+  r.SetInstance(FundamentalInt64Descriptor.AllocAndInitInstance);
+  PInt64(r.data.Addr.Instance)^ := -(PInt64(hrez.data.Addr.Instance)^);
+  result := r;
+end;
 
 function TInteger_mul_TInteger(var rez, hrez: vardesk): vardesk;
 var
@@ -629,7 +689,7 @@ begin
        (hrez.data.ptd=nil) and
        (hrez.name<>'') then
                            begin
-                                result:=12;
+                                result:=1;
                                 exit;
                            end;
   begin

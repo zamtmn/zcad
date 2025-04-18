@@ -3444,6 +3444,10 @@ msgstr ""
 msgid "by width/height"
 msgstr ""
 
+#: zcadexternal.toolbar_caption~layouts
+msgid "Layouts"
+msgstr ""
+
 #: zcadexternal.toolpalette_blocklib_instrumentation_itemcaption~unsorted
 msgctxt "zcadexternal.toolpalette_blocklib_instrumentation_itemcaption~unsorted"
 msgid "Unsorted"

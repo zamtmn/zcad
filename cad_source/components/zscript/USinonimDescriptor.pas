@@ -29,7 +29,7 @@ GDBSinonimDescriptor=object(TUserTypeDescriptor)
                      SinonimName:String;
                      constructor init(SinonimTypeName,Tname:String;pu:pointer);
                      constructor init2(SinonimOf:PUserTypeDescriptor;const Tname:TInternalScriptString;pu:pointer);
-                     function CreateProperties(const f:TzeUnitsFormat;mode:PDMode;PPDA:PTPropertyDeskriptorArray;const Name:TInternalScriptString;PCollapsed:Pointer;ownerattrib:Word;var bmode:Integer;const addr:Pointer;const ValKey,ValType:TInternalScriptString):PTPropertyDeskriptorArray;virtual;
+                     function CreateProperties(const f:TzeUnitsFormat;mode:PDMode;PPDA:PTPropertyDeskriptorArray;const Name:TInternalScriptString;PCollapsed:Pointer;ownerattrib:TFieldAttrs;var bmode:Integer;const addr:Pointer;const ValKey,ValType:TInternalScriptString):PTPropertyDeskriptorArray;virtual;
                      procedure ApplyOperator(const oper,path:TInternalScriptString;var offset:Integer;out tc:PUserTypeDescriptor);virtual;
                      //function Serialize(PInstance:Pointer;SaveFlag:Word;var membuf:PTZctnrVectorBytes;var  linkbuf:PGDBOpenArrayOfTObjLinkRecord;var sub:integer):integer;virtual;
                      //function DeSerialize(PInstance:Pointer;SaveFlag:Word;var membuf:TZctnrVectorBytes;linkbuf:PGDBOpenArrayOfTObjLinkRecord):integer;virtual;
@@ -44,9 +44,18 @@ GDBSinonimDescriptor=object(TUserTypeDescriptor)
                      procedure MagicAfterCopyInstance(PInstance:Pointer);virtual;
                      procedure InitInstance(PInstance:Pointer);virtual;
                      procedure RegisterTypeinfo(ti:PTypeInfo);virtual;
+                     procedure SetValueFromPValue(const APInstance:Pointer;const APValue:Pointer);virtual;
                end;
 implementation
 uses UUnitManager;
+procedure GDBSinonimDescriptor.SetValueFromPValue(const APInstance:Pointer;const APValue:Pointer);
+begin
+  if pSuperTypeDeskriptor<>nil then
+    pSuperTypeDeskriptor^.SetValueFromPValue(APInstance,APValue)
+  else
+    PSinonimOf^.SetValueFromPValue(APInstance,APValue);
+end;
+
 procedure GDBSinonimDescriptor.RegisterTypeinfo(ti:PTypeInfo);
 begin
   GetFactTypedef^.RegisterTypeinfo(ti);
@@ -68,7 +77,10 @@ begin
 end;
 procedure GDBSinonimDescriptor.SavePasToMem(var membuf:TZctnrVectorBytes;PInstance:Pointer;const prefix:TInternalScriptString);
 begin
-     GetFactTypedef^.SavePasToMem(membuf,PInstance,prefix);
+  if pSuperTypeDeskriptor<>nil then
+    pSuperTypeDeskriptor^.SavePasToMem(membuf,PInstance,prefix)
+  else
+    GetFactTypedef^.SavePasToMem(membuf,PInstance,prefix);
 end;
 procedure GDBSinonimDescriptor.SetValueFromString(PInstance:Pointer; const Value:TInternalScriptString);
 begin
@@ -94,7 +106,11 @@ end;
 
 function GDBSinonimDescriptor.GetFactTypedef:PUserTypeDescriptor;
 begin
-     result:=PSinonimOf^.GetFactTypedef;
+  //   result:=PSinonimOf^.GetFactTypedef;
+  if pSuperTypeDeskriptor=nil then
+    result:=PSinonimOf^.GetFactTypedef
+  else
+    Result:=pSuperTypeDeskriptor^.GetDescribedTypedef;
 end;
 constructor GDBSinonimDescriptor.init;
 begin

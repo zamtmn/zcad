@@ -391,10 +391,6 @@ begin
 end;
 
 procedure TZCADMainWindow.setvisualprop(sender:TObject;GUIAction:TZMessageID);
-const IntEmpty=-1000;
-      IntDifferent=-10001;
-      PEmpty=pointer(0);
-      PDifferent=pointer(1);
 var lw:Integer;
     color:Integer;
     layer:pgdblayerprop;
@@ -406,22 +402,22 @@ var lw:Integer;
 begin
   if GUIAction<>ZMsgID_GUIActionRebuild then
     exit;
-  if drawings.GetCurrentDWG=nil then
+  if drawings.GetCurrentDWG=nil then begin
+    IVars.CColor:=IntEmpty;
+    IVars.CLWeight:=IntEmpty;
+    IVars.CLayer:=PEmpty;
+    IVars.CLType:=PEmpty;
+    IVars.CTStyle:=PEmpty;
+    IVars.CDimStyle:=PEmpty;
     exit;
-  if drawings.GetCurrentDWG.wa.param.seldesc.Selectedobjcount=0
-  then
-      begin
-           {if assigned(LinewBox) then
-           if sysvar.dwg.DWG_CLinew^<0 then LineWbox.ItemIndex:=(sysvar.dwg.DWG_CLinew^+3)
-                                       else LinewBox.ItemIndex:=((sysvar.dwg.DWG_CLinew^ div 10)+3);}
-           {if assigned(LayerBox) then
-           LayerBox.ItemIndex:=getsortedindex(SysVar.dwg.DWG_CLayer^);}
-           IVars.CColor:=sysvar.dwg.DWG_CColor^;
-           IVars.CLWeight:=sysvar.dwg.DWG_CLinew^;
-           ivars.CLayer:={drawings.GetCurrentDWG.LayerTable.getDataMutable}(sysvar.dwg.DWG_CLayer^);
-           ivars.CLType:={drawings.GetCurrentDWG.LTypeStyleTable.getDataMutable}(sysvar.dwg.DWG_CLType^);
-           ivars.CTStyle:=sysvar.dwg.DWG_CTStyle^;
-           ivars.CDimStyle:=sysvar.dwg.DWG_CDimStyle^;
+  end;
+  if drawings.GetCurrentDWG.wa.param.seldesc.Selectedobjcount=0 then begin
+    IVars.CColor:=sysvar.dwg.DWG_CColor^;
+    IVars.CLWeight:=sysvar.dwg.DWG_CLinew^;
+    IVars.CLayer:=sysvar.dwg.DWG_CLayer^;
+    IVars.CLType:=sysvar.dwg.DWG_CLType^;
+    IVars.CTStyle:=sysvar.dwg.DWG_CTStyle^;
+    IVars.CDimStyle:=sysvar.dwg.DWG_CDimStyle^;
       end
   else
       begin
@@ -1825,10 +1821,10 @@ begin
     sender_wa:=sender as TAbstractViewArea
   else
     exit;
-  if sysvar.INTF.INTF_OBJINSP_Properties.INTF_ObjInsp_AlwaysUseMultiSelectWrapper^then
-                                                                                      objcount:=0
-                                                                                  else
-                                                                                      objcount:=1;
+  if sysvar.DWG.DWG_AlwaysUseMultiSelectWrapper^then
+    objcount:=0
+  else
+    objcount:=1;
   if sender_wa.param.SelDesc.Selectedobjcount>objcount then begin
     if drawings.GetCurrentDWG.SelObjArray.Count>0 then begin
       //commandmanager.ExecuteCommandSilent('MultiSelect2ObjIbsp',sender_wa.pdwg,@sender_wa.param)

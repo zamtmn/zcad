@@ -63,28 +63,28 @@ begin
   PTypeManager:=PType;
   OldData:=PTypeManager^.AllocAndInitInstance;
   NewData:=PTypeManager^.AllocAndInitInstance;
-  PTypeManager^.CopyInstanceTo(Addr,OldData);
-  PTypeManager^.CopyInstanceTo(Addr,NewData);
+  PTypeManager^.CopyValueToInstance(Addr,OldData);
+  PTypeManager^.CopyValueToInstance(Addr,NewData);
   PDataOwner:=nil;
 end;
 procedure TTypedChangeCommand.UnDo;
 begin
   PTypeManager^.MagicFreeInstance(Addr);
-  PTypeManager^.CopyInstanceTo(OldData,Addr);
+  PTypeManager^.CopyValueToInstance(OldData,Addr);
   if assigned(onUndoRedoDataOwner)then
     onUndoRedoDataOwner(PDataOwner);
 end;
 procedure TTypedChangeCommand.Comit;
 begin
   PTypeManager^.MagicFreeInstance(Addr);
-  PTypeManager^.CopyInstanceTo(NewData,Addr);
+  PTypeManager^.CopyValueToInstance(NewData,Addr);
   if assigned(onUndoRedoDataOwner)then
     onUndoRedoDataOwner(PDataOwner);
 end;
 procedure TTypedChangeCommand.ComitFromObj;
 begin
   PTypeManager^.MagicFreeInstance(NewData);
-  PTypeManager^.CopyInstanceTo(Addr,NewData);
+  PTypeManager^.CopyValueToInstance(Addr,NewData);
 end;
 function TTypedChangeCommand.GetDataTypeSize:PtrInt;
 begin

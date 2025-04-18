@@ -75,7 +75,7 @@ begin
      l1:=Vertexlength(v1,v2);
      if @ecp=nil then pvd^.attrib:=pvd^.attrib or vda_RO;
      if fistrun then
-                    mp.MPType^.CopyInstanceTo(@l1,pvdata)
+                    mp.MPType^.CopyValueToInstance(@l1,pvdata)
                 else
                     pvdata^:=pvdata^+l1
 end;
@@ -263,7 +263,7 @@ begin
                                  TChangedFieldDesc.CreateRec(pvardesk(pdata)^.data.PTD,ChangedData.PSetDataInEtity,ChangedData.PSetDataInEtity),
                                  TSharedPEntityData.CreateRec(ChangedData.PEntity),
                                  TAfterChangePDrawing.CreateRec(drawings.GetCurrentDWG));
-  mp.MPType^.CopyInstanceTo(pvardesk(pdata)^.data.Addr.GetInstance,ChangedData.PSetDataInEtity);
+  mp.MPType^.CopyValueToInstance(pvardesk(pdata)^.data.Addr.GetInstance,ChangedData.PSetDataInEtity);
 end;
 procedure DoubleDiv2EntChangeProc(var UMPlaced:boolean;pu:PTEntityUnit;pdata:PVarDesk;ChangedData:TChangedData;mp:TMultiProperty);
 var
@@ -400,7 +400,7 @@ var
   cp:UCmdChgField;
 begin
   ProcessVariableAttributes(pvardesk(pdata)^.attrib,0,vda_approximately or vda_different);
-  mp.MPType^.CopyInstanceTo(pvardesk(pdata)^.data.Addr.Instance,@a);
+  mp.MPType^.CopyValueToInstance(pvardesk(pdata)^.data.Addr.Instance,@a);
 
   zcPlaceUndoStartMarkerIfNeed(UMPlaced,'Property changed');
   cp:=UCmdChgField.CreateAndPush(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,
@@ -456,6 +456,7 @@ var
   ptype:PUserTypeDescriptor;
 begin
   if sysunit<>nil then begin
+    MultiPropertiesManager.RegisterBeforeProc(@ResetCachedVertex);
     MultiPropertiesManager.RestartMultipropertySortID;
     RegisterVarCategory('EXTDRLAYERCONTROL','Layer control',@InterfaceTranslate);
     MultiPropertiesManager.RegisterPhysMultiproperty('EXTDRLAYERCONTROL_GoodLayer','True layer',sysunit^.TypeName2PTD('String'),MPCExtenders,0,TLayerControlExtender,PtrInt(@LayerControlExtender.GoodLayer),PtrInt(@LayerControlExtender.GoodLayer),OneVarDataMIPD,OneVarDataEIPD);

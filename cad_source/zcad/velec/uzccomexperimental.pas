@@ -439,13 +439,13 @@ begin
    PInternalRTTITypeDesk:=pointer(SysUnit^.TypeName2PTD( 'TRectangParam'));//находим описание типа TRectangParam, мы сразу знаем что это описание записи, поэтому нужно привести тип
 
    pf:=PInternalRTTITypeDesk^.FindField('ET'); //находим описание поля ET
-   pf^.base.Attributes:=pf^.base.Attributes and (not FA_READONLY);//сбрасываем ему флаг ридонли
+   pf^.base.Attributes:=pf^.base.Attributes and (not fldaReadOnly);//сбрасываем ему флаг ридонли
 
    pf:=PInternalRTTITypeDesk^.FindField('PolyWidth'); //находим описание поля ET
-   pf^.base.Attributes:=pf^.base.Attributes and (not FA_READONLY);//сбрасываем ему флаг ридонли
+   pf^.base.Attributes:=pf^.base.Attributes and (not fldaReadOnly);//сбрасываем ему флаг ридонли
 
    pf:=PInternalRTTITypeDesk^.FindField('VNum');//находим описание поля VNum
-   pf^.base.Attributes:=pf^.base.Attributes and (not FA_HIDDEN_IN_OBJ_INSP);//сбрасываем ему флаг cкрытности
+   pf^.base.Attributes:=pf^.base.Attributes and (not fldaHidden);//сбрасываем ему флаг cкрытности
 
    zcShowCommandParams(PInternalRTTITypeDesk,@RectangParam);
 
@@ -464,10 +464,10 @@ begin
 
 
       pf:=PInternalRTTITypeDesk^.FindField('VNum');//находим описание поля VNum
-      pf^.base.Attributes:=pf^.base.Attributes or FA_HIDDEN_IN_OBJ_INSP;//устанавливаем ему флаг cкрытности
+      pf^.base.Attributes:=pf^.base.Attributes or fldaHidden;//устанавливаем ему флаг cкрытности
 
       pf:=PInternalRTTITypeDesk^.FindField('ET');//находим описание поля ET
-      pf^.base.Attributes:=pf^.base.Attributes or FA_READONLY;//устанавливаем ему флаг ридонли
+      pf^.base.Attributes:=pf^.base.Attributes or fldaReadOnly;//устанавливаем ему флаг ридонли
 
         // pline := Pointer(drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.CreateInitObj(GDBLineID,drawings.GetCurrentROOT));
          //создаем только одну полилинию//GDBObjLWPolyline.CreateInstance;

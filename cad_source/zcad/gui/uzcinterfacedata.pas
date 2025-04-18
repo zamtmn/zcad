@@ -21,21 +21,26 @@ unit uzcinterfacedata;
 
 interface
 uses
-       uzestyleslayers,uzestyleslinetypes,uzestylestexts,uzestylesdim,
-       classes;
+  uzestyleslayers,uzestyleslinetypes,uzestylestexts,uzestylesdim,
+  classes;
+
 type
   TInterfaceVars=record
-                       CColor,CLWeight:Integer;
-                       CLayer:PGDBLayerProp;
-                       CLType:PGDBLTypeProp;
-                       CTStyle:PGDBTextStyle;
-                       CDimStyle:PGDBDimStyle;
-                 end;
+    CColor,CLWeight:Integer;
+    CLayer:PGDBLayerProp;
+    CLType:PGDBLTypeProp;
+    CTStyle:PGDBTextStyle;
+    CDimStyle:PGDBDimStyle;
+  end;
 var
   IVars:TInterfaceVars;
   updatesbytton,updatescontrols,enabledcontrols:tlist;
 const
-     LTEditor:pointer=@IVars;//пофиг что, используем только цифру
+  IntEmpty=-1000;
+  IntDifferent=-10001;
+  PEmpty=pointer(0);
+  PDifferent=pointer(1);
+  LTEditor:pointer=@IVars;//пофиг что, используем только цифру
 implementation
 end.
 

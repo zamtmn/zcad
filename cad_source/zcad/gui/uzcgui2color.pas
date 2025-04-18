@@ -90,18 +90,15 @@ end;
 class procedure TSupportColorCombo.ColorBoxDrawItem(Control: TWinControl; Index: Integer; ARect: TRect;
   State: StdCtrls.TOwnerDrawState);
 begin
-    if (drawings.GetCurrentDWG=nil)or(sysvar.DWG.DWG_CColor=nil) then
+  if (drawings.GetCurrentDWG=nil)or(sysvar.DWG.DWG_CColor=nil) then
     exit;
-    begin
-    ComboBoxDrawItem(Control,ARect,State);
-    if not TComboBox(Control).DroppedDown then
-                                      begin
-                                           index:=IVars.CColor;
-                                      end
-                                 else
-                                     index:=integer(tcombobox(Control).items.Objects[Index]);
+  ComboBoxDrawItem(Control,ARect,State);
+  if not TComboBox(Control).DroppedDown then
+    index:=IVars.CColor
+  else
+    index:=integer(tcombobox(Control).items.Objects[Index]);
+  if Index<>IntEmpty then
     DrawColor(TComboBox(Control).canvas,Index,ARect);
-    end;
 end;
 
 end.

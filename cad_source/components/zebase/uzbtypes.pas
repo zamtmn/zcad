@@ -17,7 +17,7 @@
 }
 unit uzbtypes;
 {$Mode delphi}
-{Mode advancedrecords}
+{$ModeSwitch ADVANCEDRECORDS}
 
 interface
 uses
@@ -201,6 +201,64 @@ TImageDegradation=record
                     end;
 PExtensionData=Pointer;
 TDCableMountingMethod={-}type {//}string;
+
+
+PTZColor=^TZColor;
+TZColor={-}type {//}Longword;
+
+{REGISTERRECORDTYPE TDummyMethod}
+TDummyMethod=record
+  Code:Pointer;
+  Data:Pointer;
+end;
+{REGISTERRECORDTYPE TDummyGetterSetter}
+TDummyGetterSetter=record
+  Getter:TDummyMethod;
+  Setter:TDummyMethod;
+end;
+{-}GGetterSetter<T>=record{//}
+{-}  type{//}
+{-}    TGetter=function:T of object;{//}
+{-}    TSetter=procedure(const AValue:T) of object;{//}
+{-}  var{//}
+{-}    Getter:TGetter;{//}
+{-}    Setter:TSetter;{//}
+{-}  procedure Setup(const AGetter:TGetter;const ASetter:TSetter);{//}
+{-}end;{//}
+TGetterSetterString={-}GGetterSetter<string>{/TDummyGetterSetter/};
+
+PTGetterSetterInteger=^TGetterSetterInteger;
+TGetterSetterInteger={-}GGetterSetter<integer>{/TDummyGetterSetter/};
+
+PTGetterSetterLongWord=^TGetterSetterLongWord;
+TGetterSetterLongWord={-}GGetterSetter<LongWord>{/TDummyGetterSetter/};
+
+
+PTGetterSetterBoolean=^TGetterSetterBoolean;
+TGetterSetterBoolean={-}GGetterSetter<boolean>{/TDummyGetterSetter/};
+
+PTGetterSetterTZColor=^TGetterSetterTZColor;
+TGetterSetterTZColor={-}GGetterSetter<TZColor>{/TDummyGetterSetter/};
+
+{-}GUsable<T>=record                                      {//}
+{-}  public type                                          {//}
+{-}    PT=^T;                                             {//}
+{-}    TSelfType=GUsable<T>;                              {//}
+{-}  private                                              {//}
+{-}    FValue:T;                                          {//}
+{-}    FUsable:Boolean;                                   {//}
+{-}  Public                                               {//}
+{-}    function ValueOrDefault(const ADefaultValue:T):T;  {//}
+{-}    Property Value:T  read FValue write FValue;        {//}
+{-}    Property Usable:Boolean read FUsable write FUsable;{//}
+{-}end;                                                   {//}
+
+PTUsableInteger=^TUsableInteger;
+TUsableInteger={-}GUsable<Integer>;{/record Value:integer; Usable:boolean; end;/}
+
+PTGetterSetterTUsableInteger=^TGetterSetterTUsableInteger;
+TGetterSetterTUsableInteger={-}GGetterSetter<TUsableInteger>{/TDummyGetterSetter/};
+
 PTCalculatedString=^TCalculatedString;
 {REGISTERRECORDTYPE TCalculatedString}
 TCalculatedString=record
@@ -223,9 +281,6 @@ TTextJustify=(jstl(*'TopLeft'*),
               jsbtl(*'Left'*),
               jsbtc(*'Center'*),
               jsbtr(*'Right'*));
-
-PTZColor=^TZColor;
-TZColor={-}type {//}Integer;
 {EXPORT-}
 TZHandleCreator=GTSimpleHandles<TActuality,GTHandleManipulator<TActuality>>;
 
@@ -238,6 +293,12 @@ function IsIt(PType,PChecedType:Pointer):Boolean;
 function StrToQWord(const sh:string):UInt64;
 {$ENDIF}
 implementation
+
+procedure GGetterSetter<T>.Setup(const AGetter:TGetter;const ASetter:TSetter);
+begin
+  Getter:=AGetter;
+  Setter:=ASetter;
+end;
 
 class function TTimeMeter.StartMeasure:TTimeMeter;static;
 begin
@@ -327,6 +388,13 @@ begin
       result:=strtoint(sh);
 end;
 {$ENDIF}
+function GUsable<T>.ValueOrDefault(const ADefaultValue:T):T;
+begin
+  if FUsable then
+    result:=FValue
+  else
+    result:=ADefaultValue
+end;
 initialization
   zeHandles.init;
 finalization

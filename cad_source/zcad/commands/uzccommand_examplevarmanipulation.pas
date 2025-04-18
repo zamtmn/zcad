@@ -90,7 +90,7 @@ begin
             pvd:=Varext.entityunit.FindVariable(VarName);//находим описатель созданой переменной
             pvd^.username:=pvd2^.username;//пользовательское имя устанавливаем отдлельно
 
-            pvd2^.data.PTD.CopyInstanceTo(pvd2^.data.Addr.Instance,pvd.data.Addr.Instance);//копируем значение из старой переменной в новую
+            pvd2^.data.PTD.CopyValueToInstance(pvd2^.data.Addr.Instance,pvd.data.Addr.Instance);//копируем значение из старой переменной в новую
 
             pvd2:=pu^.InterfaceVariables.vardescarray.iterate(ir); //следующая переменная
           until pvd2=nil;

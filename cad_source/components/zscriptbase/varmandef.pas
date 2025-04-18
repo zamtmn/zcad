@@ -55,6 +55,17 @@ const
   vda_approximately=4;
   vda_colored1=8;
 type
+  TFieldAttr=(fldaHidden,       //скрыто на постоянной основе
+              fldaTmpHidden,    //временно скрыто, например изза какогото особого
+                                //значения
+              fldaReadOnly,     //нельзя отредактировать
+              fldaDifferent,    //вместо значения отображается строка "Different"
+              fldaApproximately,//приближенное значение (текстовое не совпадает
+                                //с двоичным)
+              fldaColored1      //альтернативное оформление, чтоб поле бросалось
+                                //в глаза
+              );
+  TFieldAttrs=set of TFieldAttr;
 TInternalScriptString=Ansistring;
 TCompareResult=(CRLess,CREqual,CRGreater,CRNotEqual);
 TPropEditorOwner=TWinControl;
@@ -96,14 +107,14 @@ TFastEditorRunTimeData=record
 TFastEditorsVector=specialize TMyVector<TFastEditorProcs>;
 TFastEditorsRunTimeVector=specialize TMyVector<TFastEditorRunTimeData>;
   PBasePropertyDeskriptor=^BasePropertyDeskriptor;
-  BasePropertyDeskriptor=object({GDBaseObject}GDBBaseNode)
+  BasePropertyDeskriptor=object(GDBBaseNode)
     Name: String;
     Value: String;
     ValKey: String;
     ValType: String;
     Category: String;
     PTypeManager:PUserTypeDescriptor;
-    Attr:Word;
+    Attr:TFieldAttrs;
     Collapsed:PBoolean;
     ValueOffsetInMem:Word;
     valueAddres:Pointer;
@@ -156,6 +167,7 @@ UserTypeDescriptor=object
                          onGetValueAsString:TonGetValueAsString;
                          onGetEditableAsString:TonGetEditableAsString;
                          onSetEditableFromString:TonSetEditableFromString;
+                         pSuperTypeDeskriptor:PUserTypeDescriptor;
                          constructor init(size:Integer;tname:string;pu:pointer);
                          constructor baseinit(size:Integer;tname:string;pu:pointer);
                          procedure _init(size:Integer;tname:string;pu:pointer);
@@ -171,10 +183,12 @@ UserTypeDescriptor=object
                          procedure SetFormattedValueFromString(PInstance:Pointer;const f:TzeUnitsFormat; const Value:TInternalScriptString);virtual;
                          function GetUserValueAsString(pinstance:Pointer):TInternalScriptString;virtual;
                          function GetDecoratedValueAsString(pinstance:Pointer; const f:TzeUnitsFormat):TInternalScriptString;virtual;
-                         procedure CopyInstanceTo(source,dest:pointer);virtual;
+                         procedure CopyValueToInstance(PValue,PInstance:pointer);virtual;
+                         procedure CopyInstanceToValue(PInstance,PValue:pointer);virtual;
                          function Compare(pleft,pright:pointer):TCompareResult;virtual;
                          procedure SetEditableFromString(PInstance:Pointer;const f:TzeUnitsFormat; const Value:TInternalScriptString);virtual;
                          procedure SetValueFromString(PInstance:Pointer; const _Value:TInternalScriptString);virtual;abstract;
+                         procedure SetValueFromPValue(const APInstance:Pointer;const APValue:Pointer);virtual;
                          procedure InitInstance(PInstance:Pointer);virtual;
                          function AllocInstance:Pointer;virtual;
                          function AllocAndInitInstance:Pointer;virtual;
@@ -184,6 +198,8 @@ UserTypeDescriptor=object
                          procedure SavePasToMem(var membuf:TZctnrVectorBytes;PInstance:Pointer;const prefix:TInternalScriptString);virtual;
                          procedure IncAddr(var addr:Pointer);virtual;
                          function GetFactTypedef:PUserTypeDescriptor;virtual;
+                         function GetDescribedTypedef:PUserTypeDescriptor;virtual;
+                         function GetSuperOrSelfTypedef:PUserTypeDescriptor;virtual;
                          procedure Format;virtual;
                          procedure RegisterTypeinfo(ti:PTypeInfo);virtual;
                    end;
@@ -452,7 +468,7 @@ begin
                       begin
                            i:=tcombobox(sender).ItemIndex;
                            p:=tcombobox(sender).Items.Objects[i];
-                           ptd^.CopyInstanceTo(@p,PInstance)
+                           ptd^.CopyValueToInstance(@p,PInstance)
                       end
                   else
                       ptd^.SetEditableFromString(PInstance,f,tedit(sender).text);
@@ -496,7 +512,7 @@ begin
                                                              if pointer(RunFastEditorValue)=p then
                                                                                          rfs:=true;
                                                              if not rfs then
-                                                                            ptd^.CopyInstanceTo(@p,PInstance);
+                                                                            ptd^.CopyValueToInstance(@p,PInstance);
                                                         end
                                                     else
                                                         ptd^.SetValueFromString(PInstance,tedit(sender).text);
@@ -529,7 +545,21 @@ begin
 end;
 function UserTypeDescriptor.GetFactTypedef:PUserTypeDescriptor;
 begin
-     result:=@self;
+  if pSuperTypeDeskriptor=nil then
+    result:=@self
+  else
+    Result:=pSuperTypeDeskriptor^.GetDescribedTypedef;
+end;
+function UserTypeDescriptor.GetDescribedTypedef:PUserTypeDescriptor;
+begin
+  result:=nil;
+end;
+function UserTypeDescriptor.GetSuperOrSelfTypedef:PUserTypeDescriptor;
+begin
+  if pSuperTypeDeskriptor<>nil then
+    result:=pSuperTypeDeskriptor
+  else
+    result:=@self;
 end;
 procedure UserTypeDescriptor.Format;
 begin
@@ -539,7 +569,10 @@ begin
 end;
 procedure UserTypeDescriptor.SavePasToMem(var membuf:TZctnrVectorBytes;PInstance:Pointer;const prefix:TInternalScriptString);
 begin
-     membuf.TXTAddStringEOL(prefix+':='+{pvd.data.PTD.}GetValueAsString(PInstance)+';');
+  if pSuperTypeDeskriptor<>nil then
+    pSuperTypeDeskriptor^.SavePasToMem(membuf,PInstance,prefix)
+  else
+    membuf.TXTAddStringEOL(prefix+':='+GetValueAsString(PInstance)+';');
 end;
 procedure UserTypeDescriptor.MagicFreeInstance(PInstance:Pointer);
 begin
@@ -552,6 +585,14 @@ procedure UserTypeDescriptor.InitInstance(PInstance:Pointer);
 begin
      fillchar(pinstance^,SizeInBytes,0)
 end;
+procedure UserTypeDescriptor.SetValueFromPValue(const APInstance:Pointer;const APValue:Pointer);
+begin
+  if pSuperTypeDeskriptor<>nil then
+    pSuperTypeDeskriptor^.SetValueFromPValue(APInstance,APValue)
+  else
+    raise Exception.Create('UserTypeDescriptor.SetValue error');
+end;
+
 function UserTypeDescriptor.AllocInstance:Pointer;
 begin
   Getmem(result,SizeInBytes);
@@ -562,11 +603,17 @@ begin
   InitInstance(result);
 end;
 
-procedure UserTypeDescriptor.CopyInstanceTo(source,dest:pointer);
+procedure UserTypeDescriptor.CopyValueToInstance(PValue,PInstance:pointer);
 begin
-     Move(source^, dest^,SizeInBytes);
-     MagicAfterCopyInstance(dest);
+     Move(PValue^, PInstance^,SizeInBytes);
+     MagicAfterCopyInstance(PInstance);
 end;
+procedure UserTypeDescriptor.CopyInstanceToValue(PInstance,PValue:pointer);
+begin
+  Move(PInstance^, PValue^,SizeInBytes);
+  MagicAfterCopyInstance(PValue);
+end;
+
 function UserTypeDescriptor.Compare(pleft,pright:pointer):TCompareResult;
 begin
      if CompareByte(pleft^,pright^,SizeInBytes)=0 then
@@ -603,6 +650,7 @@ begin
      onGetValueAsString:=nil;
      onGetEditableAsString:=nil;
      onSetEditableFromString:=nil;
+     pSuperTypeDeskriptor:=nil;
 end;
 
 destructor UserTypeDescriptor.done;

@@ -1452,7 +1452,7 @@ begin
   result.mtr[1].v[3]:=0;
   result.mtr[2].v[3]:=0;
   result.mtr[3].v[3]:=1;
-  Result.t:=[MTIdentity,MTScale,MTTranslate];
+  Result.t:=CMTTransform;
 end;
 
 function CreateScaleMatrix(const V:GDBvertex): DMatrix4D;

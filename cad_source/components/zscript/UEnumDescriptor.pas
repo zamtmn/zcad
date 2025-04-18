@@ -37,7 +37,7 @@ EnumDescriptor=object(TUserTypeDescriptor)
                      UserValue:TZctnrVectorStrings;
                      Value:PTByteVector;
                      constructor init(size:Integer;tname:string;pu:pointer);
-                     function CreateProperties(const f:TzeUnitsFormat;mode:PDMode;PPDA:PTPropertyDeskriptorArray;const Name:TInternalScriptString;PCollapsed:Pointer;ownerattrib:Word;var bmode:Integer;const addr:Pointer;const ValKey,ValType:TInternalScriptString):PTPropertyDeskriptorArray;virtual;
+                     function CreateProperties(const f:TzeUnitsFormat;mode:PDMode;PPDA:PTPropertyDeskriptorArray;const Name:TInternalScriptString;PCollapsed:Pointer;ownerattrib:TFieldAttrs;var bmode:Integer;const addr:Pointer;const ValKey,ValType:TInternalScriptString):PTPropertyDeskriptorArray;virtual;
                      function CreateEditor(TheOwner:TPropEditorOwner;rect:trect;pinstance:pointer;psa:PTZctnrVectorStrings;FreeOnLostFocus:boolean;const InitialValue:TInternalScriptString;preferedHeight:integer;f:TzeUnitsFormat):TEditorDesc;virtual;
                      function GetNumberInArrays(addr:Pointer;out number:LongWord):Boolean;virtual;
                      //function Serialize(PInstance:Pointer;SaveFlag:Word;var membuf:PTZctnrVectorBytes;var  linkbuf:PGDBOpenArrayOfTObjLinkRecord;var sub:integer):integer;virtual;
@@ -91,14 +91,14 @@ begin
      ppd^.ValKey:=valkey;
      ppd^.ValType:=valtype;
      
-     if (ppd^.Attr and FA_DIFFERENT)=0 then
-                                           begin
-                                                 if GetNumberInArrays(Pointer(ppd^.valueAddres),currval)then ppd^.value:=UserValue.getData(currval)
-                                                                                                           else ppd^.value:='NotFound';
-                                           end
-                                       else
-                                           ppd^.value:=rsDifferent;
-     //IncAddr(addr);
+     if fldaDifferent in ppd^.Attr then
+       ppd^.value:=rsDifferent
+     else begin
+       if GetNumberInArrays(Pointer(ppd^.valueAddres),currval)then
+         ppd^.value:=UserValue.getData(currval)
+       else
+         ppd^.value:='NotFound';
+     end
 end;
 function EnumDescriptor.GetNumberInArrays;
 var currval:LongWord;

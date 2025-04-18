@@ -34,6 +34,8 @@ uses
   uzedrawingsimple,uzcdrawing,uzcuidialogs,uzbstrproc,
   uzestyleslayers,zUndoCmdChgBaseTypes,uzcutils,gzctnrVectorTypes,uzcCtrlFindEditBox,
   zUndoCmdChgTypes,uzcLog,uzcFileStructure;
+const
+  CToolBarCaptionTranslateFormat='toolbar_caption~%s';
 type
   TMyToolbar=class(TToolBar)
     public
@@ -54,7 +56,7 @@ type
     class procedure TBTStyleComboBoxCreateFunc(fmf:TForm;actlist:TActionList;aNode: TDomNode; TB:TToolBar);
     class procedure TBDimStyleComboBoxCreateFunc(fmf:TForm;actlist:TActionList;aNode: TDomNode; TB:TToolBar);
     class procedure TBVariableCreateFunc(fmf:TForm;actlist:TActionList;aNode: TDomNode; TB:TToolBar);
-    class function TBCreateZCADToolBar(fmf:TForm;aName,atype: string):TToolBar;
+    class function TBCreateZCADToolBar(fmf:TForm;aName,aCaption,atype: string):TToolBar;
     class procedure ZActionsReader(aName: string;aNode: TDomNode;CategoryOverrider:string;actlist:TActionList);
     class procedure ZAction2VariableReader(aName: string;aNode: TDomNode;CategoryOverrider:string;actlist:TActionList);
 
@@ -835,10 +837,11 @@ begin
   enabledcontrols.Add(DimStyleBox);
 end;
 
-class function TZTBZCADExtensions.TBCreateZCADToolBar(fmf:TForm;aName,atype: string):TToolBar;
+class function TZTBZCADExtensions.TBCreateZCADToolBar(fmf:TForm;aName,aCaption,atype: string):TToolBar;
 begin
-  result:=TmyToolBar.Create(fmf{Application});
-  ToolBarsManager.SetupDefaultToolBar(aName,atype, result);
+  result:=TmyToolBar.Create(fmf);
+  aCaption:=InterfaceTranslate(format(CToolBarCaptionTranslateFormat,[aName]),aCaption);
+  ToolBarsManager.SetupDefaultToolBar(aName,aCaption,atype,result);
 end;
 
 class procedure TZTBZCADExtensions.TBVariableCreateFunc(fmf:TForm;actlist:TActionList;aNode: TDomNode; TB:TToolBar);

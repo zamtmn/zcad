@@ -43,11 +43,7 @@ const
   subtab=1;
 type
   TIsCurrObjInUndoContext=function(_GDBobj:boolean;_pcurrobj:pointer):boolean;
-  arrindop=record
-    currnum,currcount,num,count:integer;
-  end;
-  arrayarrindop=array[0..10] of arrindop;
-  parrayarrindop=^arrayarrindop;
+
   TEditorContext=record
                        ppropcurrentedit:PPropertyDeskriptor;
                        UndoStack:PTZctnrVectorUndoCommands;
@@ -300,23 +296,6 @@ begin
   inherited;
   pda.cleareraseobj;
   pda.done;
-end;
-
-function addindex(pindex:parrayarrindop; n:integer):boolean;
-begin
-  inc(pindex[n].currnum);
-  dec(pindex[n].currcount);
-  if pindex[n].currcount=0 then
-  begin
-    pindex[n].currcount:=pindex[n].count;
-    pindex[n].currnum:=pindex[n].num;
-    if n>0 then
-      result:=addindex(pindex,n-1)
-    else
-      result:=true;
-  end
-  else
-    result:=false;
 end;
 
 procedure TGDBobjinsp.buildproplist;

@@ -98,14 +98,14 @@ begin
                                        GDBobjinsp.SetCurrentObjDefault;
                                   end;
 end;
-function IsCurrObjInUndoContext(_GDBobj:boolean;_pcurrobj:pointer):boolean;
+function IsCurrObjInUndoContext({_GDBobj:boolean;}_pcurrobj:pointer):boolean;
 begin
   result:=false;
   //if _GDBobj then
   //  if PGDBaseObject(_pcurrobj)^.IsEntity then
   //    result:=true;
 end;
-procedure _onGetOtherValues(var vsa:TZctnrVectorStrings;const valkey:string;const pcurcontext:pointer;const pcurrobj:pointer;const GDBobj:boolean;const f:TzeUnitsFormat);
+procedure _onGetOtherValues(var vsa:TZctnrVectorStrings;const valkey:string;const pcurcontext:pointer;const pcurrobj:pointer;{const GDBobj:boolean;}const f:TzeUnitsFormat);
 var
   pentvarext:TVariablesExtender;
   pobj:pGDBObjEntity;
@@ -118,7 +118,7 @@ begin
        pobj:=PTSimpleDrawing(pcurcontext).GetCurrentROOT.ObjArray.beginiterate(ir);
        if pobj<>nil then
        repeat
-             if GDBobj then
+             if {GDBobj}true then
              begin
              pentvarext:=pobj^.GetExtension<TVariablesExtender>;
              if ((pobj^.GetObjType=pgdbobjentity(pcurrobj)^.GetObjType)or(pgdbobjentity(pcurrobj)^.GetObjType=0))and({pobj.ou.Instance}pentvarext<>nil) then
@@ -138,7 +138,7 @@ begin
        vsa.sort;
   end;
 end;
-procedure _onUpdateObjectInInsp(const EDContext:TEditorContext;const currobjgdbtype:PUserTypeDescriptor;const pcurcontext:pointer;const pcurrobj:pointer;const GDBobj:boolean);
+procedure _onUpdateObjectInInsp(const EDContext:TEditorContext;const currobjgdbtype:PUserTypeDescriptor;const pcurcontext:pointer;const pcurrobj:pointer{;const GDBobj:boolean});
   function CurrObjIsEntity:boolean;
   begin
     result:=false;
@@ -157,7 +157,7 @@ procedure _onUpdateObjectInInsp(const EDContext:TEditorContext;const currobjgdbt
 var
    dc:TDrawContext;
 begin
-  if GDBobj then
+  if {GDBobj}true then
                 begin
                      dc:=PTDrawingDef(pcurcontext)^.CreateDrawingRC;
                     if CurrObjIsEntity then

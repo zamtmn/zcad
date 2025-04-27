@@ -33,7 +33,7 @@
       </Item4>
     </Files>
     <CompatibilityMode Value="True"/>
-    <RequiredPkgs Count="4">
+    <RequiredPkgs Count="3">
       <Item1>
         <PackageName Value="zscript"/>
       </Item1>
@@ -41,11 +41,8 @@
         <PackageName Value="zcontrols"/>
       </Item2>
       <Item3>
-        <PackageName Value="zundostack"/>
-      </Item3>
-      <Item4>
         <PackageName Value="FCL"/>
-      </Item4>
+      </Item3>
     </RequiredPkgs>
     <UsageOptions>
       <UnitPath Value="$(PkgOutDir)"/>

@@ -433,7 +433,7 @@ begin
                     begin
                          commandmanager.PushValue('','PGDBVertex',@PInstance);
                          if {GDBobjinsp.GDBobj}true then
-                                                  commandmanager.PushValue('','PGDBObjEntity',@GDBobjinsp.CurrPObj)
+                                                  commandmanager.PushValue('','PGDBObjEntity',@GDBobjinsp.CurrData.PObj)
                                               else
                                                   begin
                                                        p:=nil;
@@ -462,7 +462,7 @@ begin
                     begin
                          commandmanager.PushValue('','PGDBLength',@PInstance);
                          if {GDBobjinsp.GDBobj}true then
-                                                  commandmanager.PushValue('','PGDBObjEntity',@GDBobjinsp.CurrPObj)
+                                                  commandmanager.PushValue('','PGDBObjEntity',@GDBobjinsp.CurrData.PObj)
                                               else
                                                   begin
                                                        p:=nil;
@@ -485,7 +485,7 @@ begin
                     begin
                          commandmanager.PushValue('','PGDBXCoordinate',@PInstance);
                          if {GDBobjinsp.GDBobj}true then
-                                                  commandmanager.PushValue('','PGDBObjEntity',@GDBobjinsp.CurrPObj)
+                                                  commandmanager.PushValue('','PGDBObjEntity',@GDBobjinsp.CurrData.PObj)
                                               else
                                                   begin
                                                        p:=nil;
@@ -508,7 +508,7 @@ begin
                     begin
                          commandmanager.PushValue('','PGDBYCoordinate',@PInstance);
                          if {GDBobjinsp.GDBobj}true then
-                                                  commandmanager.PushValue('','PGDBObjEntity',@GDBobjinsp.CurrPObj)
+                                                  commandmanager.PushValue('','PGDBObjEntity',@GDBobjinsp.CurrData.PObj)
                                               else
                                                   begin
                                                        p:=nil;
@@ -531,7 +531,7 @@ begin
                     begin
                          commandmanager.PushValue('','PGDBZCoordinate',@PInstance);
                          if {GDBobjinsp.GDBobj}true then
-                                                  commandmanager.PushValue('','PGDBObjEntity',@GDBobjinsp.CurrPObj)
+                                                  commandmanager.PushValue('','PGDBObjEntity',@GDBobjinsp.CurrData.PObj)
                                               else
                                                   begin
                                                        p:=nil;

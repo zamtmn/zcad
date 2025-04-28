@@ -17,6 +17,7 @@
 }
 
 unit uzeentitiestypefilter;
+{$Mode delphi}
 {$INCLUDE zengineconfig.inc}
 
 

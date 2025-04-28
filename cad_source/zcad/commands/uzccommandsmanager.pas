@@ -17,6 +17,7 @@
 }
 
 unit uzccommandsmanager;
+{$Mode delphi}
 {$INCLUDE zengineconfig.inc}
 {$interfaces corba}
 interface

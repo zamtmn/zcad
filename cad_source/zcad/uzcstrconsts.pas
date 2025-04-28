@@ -18,7 +18,7 @@
 
 unit uzcstrconsts;
 {$INCLUDE zengineconfig.inc}
-{$INCLUDE buildmode.inc}
+{INCLUDE buildmode.inc}
 interface
 const
   {$IFDEF ELECTROTECH}

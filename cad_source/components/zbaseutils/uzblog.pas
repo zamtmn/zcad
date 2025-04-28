@@ -628,9 +628,9 @@ begin
     if ss[1]='{' then begin
       prefixlength:=2;
       while (ss[prefixlength]<>'}')and(prefixlength<=length(ss)) do begin
-        if LogLevelAliasDic.TryGetValue(ss[prefixlength],tdbgmode) then
+        if (LogLevelAliasDic<>nil)and(LogLevelAliasDic.TryGetValue(ss[prefixlength],tdbgmode)) then
           dbgmode:=tdbgmode
-        else if MsgOptAliasDic.TryGetValue(ss[prefixlength],TempMsgOptions) then
+        else if (MsgOptAliasDic<>nil)and(MsgOptAliasDic.TryGetValue(ss[prefixlength],TempMsgOptions)) then
           MsgOptions:=MsgOptions or TempMsgOptions;
         inc(prefixlength);
       end;

@@ -81,10 +81,10 @@ begin
 end;
 function GDBObjText.IsHaveObjXData:Boolean;
 begin
-     if  convertfromunicode(template)<>content then
-                              result:=true
-                          else
-                              result:=false;
+  if  {convertfromunicode}(template)<>content then
+    result:=true
+  else
+    result:=false;
 end;
 function GDBObjText.GetObjTypeName;
 begin
@@ -630,7 +630,7 @@ begin
   SaveToDXFObjPostfix(outhandle);
 
 
-    if  convertfromunicode(template)=content then
+    if  {convertfromunicode}(template)=content then
                                                s := Tria_Utf8ToAnsi(UTF8Encode(template))
                                            else
                                                s := Tria_Utf8ToAnsi(UTF8Encode(content));

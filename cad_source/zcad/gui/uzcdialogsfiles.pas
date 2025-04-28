@@ -17,6 +17,7 @@
 }
 
 unit uzcdialogsfiles;
+{$Mode delphi}
 {$INCLUDE zengineconfig.inc}
 interface
 uses sysutils,uzbstrproc,

@@ -16,6 +16,7 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
 unit uzcEnitiesVariablesExtender;
+{$Mode delphi}
 {$INCLUDE zengineconfig.inc}
 
 interface

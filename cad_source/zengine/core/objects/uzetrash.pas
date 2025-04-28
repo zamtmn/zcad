@@ -17,6 +17,7 @@
 }
 
 unit uzetrash;
+{$Mode delphi}
 {$INCLUDE zengineconfig.inc}
 interface
 uses

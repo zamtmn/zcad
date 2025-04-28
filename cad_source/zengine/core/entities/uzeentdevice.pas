@@ -17,6 +17,7 @@
 }
 
 unit uzeentdevice;
+{$Mode delphi}
 {$INCLUDE zengineconfig.inc}
 
 interface

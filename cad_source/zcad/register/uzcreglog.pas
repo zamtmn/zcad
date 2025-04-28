@@ -167,6 +167,7 @@ initialization
 
 finalization
   ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
+  RemoveLoger(programlog.ZDebugLN,nil,programlog.isTraceEnabled);
   ProgramLog.LogEnd;
   ProgramLog.removeBackend(FileLogBackendHandle);
   ProgramLog.removeBackend(LogerMBoxBackendHandle);

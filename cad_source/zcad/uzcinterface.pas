@@ -16,6 +16,7 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
 unit uzcinterface;
+{$Mode delphi}
 {$INCLUDE zengineconfig.inc}
 interface
 uses controls,uzcstrconsts,uzedimensionaltypes,gzctnrSTL,zeundostack,varmandef,

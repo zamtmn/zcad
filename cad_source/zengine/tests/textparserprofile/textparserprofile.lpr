@@ -52,9 +52,9 @@ var
 begin
   VTestData:=DupeString('йцукqwer',1000000);
   TestResult:='';
-  TestResult:=DoTest(@ZCADTextFormatTest,VTestData,'ZCADTextFormatTest(DupeString(''йцукqwer'',1000))');
+  TestResult:=DoTest(@ZCADTextFormatTest,VTestData,'ZCADTextFormatTest(DupeString(''йцукqwer'',1000000))');
   TestResult:='';
-  TestResult:=DoTest(@velecParseMText,VTestData,'velecParseMText(DupeString(''йцукqwer'',1000))');
+  TestResult:=DoTest(@velecParseMText,VTestData,'velecParseMText(DupeString(''йцукqwer'',1000000))');
   readln;
 end.
 

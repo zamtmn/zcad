@@ -5,7 +5,7 @@ uses
   SysUtils,StrUtils,Math,
   Interfaces,
   uzbtypes,
-  uzetextpreprocessor,uzctextpreprocessorimpl,
+  uzetextpreprocessor,uzctextpreprocessordxfimpl,
   velecparser;
 
 type
@@ -55,6 +55,12 @@ begin
   TestResult:=DoTest(@ZCADTextFormatTest,VTestData,'ZCADTextFormatTest(DupeString(''йцукqwer'',1000000))');
   TestResult:='';
   TestResult:=DoTest(@velecParseMText,VTestData,'velecParseMText(DupeString(''йцукqwer'',1000000))');
+
+  VTestData:=DupeString('\U+0428',10000);
+  TestResult:='';
+  TestResult:=DoTest(@ZCADTextFormatTest,VTestData,'ZCADTextFormatTest(DupeString(''\U+0428'',10000))');
+  TestResult:='';
+  TestResult:=DoTest(@velecParseMText,VTestData,'velecParseMText(DupeString(''\U+0428'',10000))');
   readln;
 end.
 

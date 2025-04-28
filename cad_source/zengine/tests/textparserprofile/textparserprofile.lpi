@@ -65,7 +65,7 @@
     </Target>
     <SearchPaths>
       <IncludeFiles Value="$(ProjOutDir);..\.."/>
-      <OtherUnitFiles Value="..\..;..\..\..\other;..\..\geomlib;..\..\fileformats;..\..\core;..\..\core\utils;..\..\core\objects;..\..\core\entities;..\..\core\drawings;..\..\misc;..\..\fonts;..\..\containers;..\..\..\zcad\core\undostack;..\..\styles;..\..\zgl\common;..\..\..\zcad;..\..\..\zcad\lclmod;..\..\..\zcad\misc;..\..\..\zcad\register;..\..\..\zcad\commands;..\..\..\zcad\core;..\..\..\zcad\core\utils;..\..\..\zcad\core\drawings;..\..\..\zcad\gui;..\..\..\zcad\gui\odjectinspector;..\..\..\zcad\entities"/>
+      <OtherUnitFiles Value="..\..\core;..\..\misc"/>
       <UnitOutputDirectory Value="lib\$(TargetCPU)-$(TargetOS)"/>
     </SearchPaths>
     <Linking>

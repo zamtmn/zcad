@@ -99,33 +99,6 @@ begin
      }
      result:=ps;
 end;
-{$if FPC_FULLVERSION<=30004}
-{ TODO : Need remove Pos_only_for_FPC304, it only for fpc3.0.4 }
-Function Pos_only_for_FPC304(Const Substr : ansistring; Const Source : ansistring; Offset : SizeInt = 1) : SizeInt;
-var
-  i,MaxLen : SizeInt;
-  pc : pwidechar;
-begin
-  result:=0;
-  if (Length(SubStr)>0) and (Offset>0) and (Offset<=Length(Source)) then
-   begin
-     MaxLen:=Length(source)-Length(SubStr)-(Offset-1);
-     i:=0;
-     pc:=@source[Offset];
-     while (i<=MaxLen) do
-      begin
-        inc(i);
-        if (SubStr[1]=pc^) and
-           (CompareWord(Substr[1],pc^,Length(SubStr))=0) then
-         begin
-           result:=Offset+i-1;
-           exit;
-         end;
-        inc(pc);
-      end;
-   end;
-end;
-{$endif}
 function textformat(const s:string;pobj:Pointer):string;overload;
 begin
   result:=string(textformat(TDXFEntsInternalStringType(s),pobj));
@@ -162,12 +135,12 @@ begin
        if assigned(pair.value.func)then
        begin
          repeat
-           FindedIdPos:={$if FPC_FULLVERSION<=30004}Pos_only_for_FPC304{$else}Pos{$endif}(pair.key,ps,startsearhpos);
+           FindedIdPos:=Pos(pair.key,ps,startsearhpos);
            if FindedIdPos>0 then
            begin
              ContinuePos:=FindedIdPos+length(pair.key);
              if pair.Value.CBracket<>#0 then begin
-               EndBracketPos:={$if FPC_FULLVERSION<=30004}Pos_only_for_FPC304{$else}Pos{$endif}(pair.Value.CBracket,ps,ContinuePos)+1;
+               EndBracketPos:=Pos(pair.Value.CBracket,ps,ContinuePos)+1;
                operands:=copy(ps,ContinuePos,EndBracketPos-ContinuePos-1);
              end else
                EndBracketPos:=ContinuePos;

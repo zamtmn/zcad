@@ -5,7 +5,8 @@ unit velecparser;
 interface
 
 uses
-  SysUtils, Classes,UTF8Process;
+  SysUtils, Classes;
+  //,UTF8Process;
 
 type
 
@@ -69,7 +70,7 @@ begin
   Fragments.Add(NewFragment);
 end;
 
-function UnicodeToText(const S: TDXFEntsInternalStringType): string;
+function UnicodeToText(const S: TDXFEntsInternalStringType): TDXFEntsInternalStringType;
 var
   i, j, Len: Integer;
   CharCode: Integer;
@@ -174,7 +175,7 @@ begin
       // \U+XXXX обработка юникода напрямую
       UnicodeBuffer := Copy(Input, i+3, 4);
       if TryStrToInt('$' + UnicodeBuffer, CharCode) then
-        Buffer := Buffer + UTF8Encode(WideChar(CharCode))
+        Buffer := Buffer + UnicodeToText(WideChar(CharCode))
       else
         Buffer := Buffer + '?';
       Inc(i, 6); // пропускаем \U+XXXX
@@ -225,7 +226,6 @@ function velecParseMText(const Input: TDXFEntsInternalStringType):TDXFEntsIntern
 var
   i: Integer;
   Frag: PTextFragment;
-  FullText: TDXFEntsInternalStringType;
 begin
   Fragments := TList.Create;
   FormatStack := TList.Create;

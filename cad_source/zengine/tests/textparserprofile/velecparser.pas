@@ -58,8 +58,8 @@ end;
 function velecParseMText(const Input: TDXFEntsInternalStringType):TDXFEntsInternalStringType;
 var
   i: Integer;
-  c: Char;
-  Buffer, Code, UnicodeBuffer: string;
+  c: UnicodeChar;
+  Buffer, Code, UnicodeBuffer: TDXFEntsInternalStringType;
   InControl: Boolean;
   InBraces: Integer;
   CharCode: Integer;
@@ -133,6 +133,7 @@ begin
   end;
   if Buffer <> '' then
     ;//AddFragment(Buffer);
+  result:=Buffer;
 end;
 
 

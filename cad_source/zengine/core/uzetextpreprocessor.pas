@@ -84,41 +84,77 @@ end;
 function textformat(const s:TDXFEntsInternalStringType;pobj:Pointer):TDXFEntsInternalStringType;
 var
   FindedIdPos,ContinuePos,EndBracketPos,counter:Integer;
-  res,operands:TDXFEntsInternalStringType;
+  res,operands,sss:TDXFEntsInternalStringType;
   pair:Prefix2ProcessFunc.TDictionaryPair;
   startsearhpos:integer;
   TCP:TCodePage;
+  firstloop:boolean;
+  sb:TUnicodeStringBuilder;
 const
-  maxitertations=10000;
+  maxitertations=2000000;
+
+procedure sbappend(const us:TDXFEntsInternalStringType);inline;
+begin
+  if not assigned(sb) then begin
+   sb:=TUnicodeStringBuilder.Create(length(s));
+  end;
+  sb.Append(us);
+end;
+
 begin
   counter:=0;
-  result:=s;
-  for pair in Prefix2ProcessFunc do begin
-    startsearhpos:=1;
-    if assigned(pair.value.func)then begin
-      repeat
-       FindedIdPos:=Pos(pair.key,result,startsearhpos);
-        if FindedIdPos>0 then begin
-          ContinuePos:=FindedIdPos+length(pair.key);
-          if pair.Value.CBracket<>#0 then begin
-            EndBracketPos:=Pos(pair.Value.CBracket,result,ContinuePos)+1;
-            operands:=copy(result,ContinuePos,EndBracketPos-ContinuePos-1);
-          end else
-            EndBracketPos:=ContinuePos;
-          ContinuePos:=EndBracketPos;
-          TCP:=CodePage;
-          CodePage:=CP_utf8;
-          res:=UTF8Decode(pair.value.func(result,operands,ContinuePos,pobj));
-          CodePage:=TCP;
-          result:=copy(result,1,FindedIdPos-1)+res+copy(result,ContinuePos,length(result)-ContinuePos+1);
-          startsearhpos:=FindedIdPos+length(res);
-          inc(counter);
-        end;
-     until (FindedIdPos<=0)or(counter>maxitertations);
+  result:='';
+  firstloop:=true;
+  sb:=nil;
+  //sb:=TUnicodeStringBuilder.Create;
+  //sb.Capacity:=length(s);
+  try
+    for pair in Prefix2ProcessFunc do begin
+      if not assigned(sb) then
+        sss:=s
+      else begin
+        sss:=sb.ToString;
+        sb.Clear;
+      end;
+      //result:='';
+      firstloop:=false;
+      startsearhpos:=1;
+      if assigned(pair.value.func)then begin
+        repeat
+         FindedIdPos:=Pos(pair.key,sss,startsearhpos);
+          if FindedIdPos>0 then begin
+            if FindedIdPos<>startsearhpos then
+              sbAppend(copy(sss,startsearhpos,FindedIdPos-startsearhpos));
+            ContinuePos:=FindedIdPos+length(pair.key);
+            if pair.Value.CBracket<>#0 then begin
+              EndBracketPos:=Pos(pair.Value.CBracket,sss,ContinuePos)+1;
+              operands:=copy(sss,ContinuePos,EndBracketPos-ContinuePos-1);
+            end else
+              EndBracketPos:=ContinuePos;
+            ContinuePos:=EndBracketPos;
+            TCP:=CodePage;
+            CodePage:=CP_utf8;
+            res:=UTF8Decode(pair.value.func(sss,operands,ContinuePos,pobj));
+            CodePage:=TCP;
+            sbAppend(res);
+            startsearhpos:=ContinuePos;
+            inc(counter);
+          end;
+       until (FindedIdPos<=0)or(counter>maxitertations);
+       if (startsearhpos<=length(sss))and assigned(sb) then
+         sbAppend(copy(sss,startsearhpos,length(sss)-startsearhpos+1));
+      end;
     end;
+    if counter>maxitertations then
+      result:='!!ERR(Loop detected)'+sb.ToString
+    else
+      if assigned(sb) then
+        result:=sb.ToString
+      else
+        result:=s;
+  finally
+    sb.Free;
   end;
-  if counter>maxitertations then
-    result:='!!ERR(Loop detected)'+result;
 end;
 initialization
   Prefix2ProcessFunc:=TPrefix2ProcessFunc.Create;

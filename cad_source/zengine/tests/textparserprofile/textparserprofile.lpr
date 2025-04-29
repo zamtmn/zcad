@@ -56,11 +56,17 @@ begin
   TestResult:='';
   TestResult:=DoTest(@velecParseMText,VTestData,'velecParseMText(DupeString(''йцукqwer'',1000000))');
 
-  VTestData:=DupeString('\U+0428',10000);
+  VTestData:=DupeString('йцукqwer\U+0428',1000000);
   TestResult:='';
-  TestResult:=DoTest(@ZCADTextFormatTest,VTestData,'ZCADTextFormatTest(DupeString(''\U+0428'',10000))');
+  TestResult:=DoTest(@ZCADTextFormatTest,VTestData,'ZCADTextFormatTest(DupeString(''йцукqwer\U+0428'',1000000))');
   TestResult:='';
-  TestResult:=DoTest(@velecParseMText,VTestData,'velecParseMText(DupeString(''\U+0428'',10000))');
+  TestResult:=DoTest(@velecParseMText,VTestData,'velecParseMText(DupeString(''йцукqwer\U+0428'',1000000))');
+
+  VTestData:=DupeString('\U+0428',1000000);
+  TestResult:='';
+  TestResult:=DoTest(@ZCADTextFormatTest,VTestData,'ZCADTextFormatTest(DupeString(''\U+0428'',1000000))');
+  TestResult:='';
+  TestResult:=DoTest(@velecParseMText,VTestData,'velecParseMText(DupeString(''\U+0428'',1000000))');
   readln;
 end.
 

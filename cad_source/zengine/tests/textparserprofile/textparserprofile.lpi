@@ -26,27 +26,6 @@
     </RunParams>
     <RequiredPackages>
       <Item>
-        <PackageName Value="LCLBase"/>
-      </Item>
-      <Item>
-        <PackageName Value="zcontrols"/>
-      </Item>
-      <Item>
-        <PackageName Value="fphunspell"/>
-      </Item>
-      <Item>
-        <PackageName Value="zreaders"/>
-      </Item>
-      <Item>
-        <PackageName Value="zundostack"/>
-      </Item>
-      <Item>
-        <PackageName Value="zscript"/>
-      </Item>
-      <Item>
-        <PackageName Value="zscriptbase"/>
-      </Item>
-      <Item>
         <PackageName Value="zebase"/>
       </Item>
     </RequiredPackages>

@@ -3,7 +3,6 @@ program textparserprofile;
 {$Mode delphi}
 uses
   SysUtils,StrUtils,Math,
-  Interfaces,
   uzbtypes,
   uzetextpreprocessor,uzctextpreprocessordxfimpl,
   velecparser;

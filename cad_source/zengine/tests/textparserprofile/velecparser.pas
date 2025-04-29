@@ -5,7 +5,7 @@ unit velecparser;
 interface
 
 uses
-  Classes, SysUtils, Forms, Controls,Dialogs, StdCtrls,
+  SysUtils, //Classes,
   uzbtypes;
 
 type
@@ -58,7 +58,7 @@ end;
 function velecParseMText(const Input: TDXFEntsInternalStringType):TDXFEntsInternalStringType;
 var
   i: Integer;
-  c: UnicodeChar;
+  c: TDXFEntsInternalCharType;
   Buffer, Code, UnicodeBuffer: TDXFEntsInternalStringType;
   InControl: Boolean;
   InBraces: Integer;

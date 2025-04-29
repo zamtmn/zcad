@@ -49,23 +49,30 @@ var
   VTestData:TDXFEntsInternalStringType;
   TestResult:TDXFEntsInternalStringType;
 begin
-  VTestData:=DupeString('йцукqwer',1000000);
+  VTestData:=DupeString('йцукqwer',1);
   TestResult:='';
   TestResult:=DoTest(@ZCADTextFormatTest,VTestData,'ZCADTextFormatTest(DupeString(''йцукqwer'',1000000))');
   TestResult:='';
   TestResult:=DoTest(@velecParseMText,VTestData,'velecParseMText(DupeString(''йцукqwer'',1000000))');
 
-  VTestData:=DupeString('йцукqwer\U+0428',1000000);
+  VTestData:=DupeString('йцукqwer\U+0428',1);
   TestResult:='';
   TestResult:=DoTest(@ZCADTextFormatTest,VTestData,'ZCADTextFormatTest(DupeString(''йцукqwer\U+0428'',1000000))');
   TestResult:='';
   TestResult:=DoTest(@velecParseMText,VTestData,'velecParseMText(DupeString(''йцукqwer\U+0428'',1000000))');
 
-  VTestData:=DupeString('\U+0428',1000000);
+  VTestData:=DupeString('\U+0428',1);
   TestResult:='';
   TestResult:=DoTest(@ZCADTextFormatTest,VTestData,'ZCADTextFormatTest(DupeString(''\U+0428'',1000000))');
   TestResult:='';
   TestResult:=DoTest(@velecParseMText,VTestData,'velecParseMText(DupeString(''\U+0428'',1000000))');
+
+  VTestData:=DupeString('{\fCalibri|b1|i0|c204|p34;Ко\fCascadia Code|b0|i0|c204|p49;мму}\U+0442\U+0430\U+0446{\U+0438}\U+043E\U+043D{\fCalibri|b0|i1|c204|p34;ная стойка }\U+0421\U+04421',1);
+  TestResult:='';
+  TestResult:=DoTest(@ZCADTextFormatTest,VTestData,'МТЕКСТ:');
+  TestResult:='';
+  TestResult:=DoTest(@velecParseMText,VTestData,'МТЕКСТ:');
+
   readln;
 end.
 

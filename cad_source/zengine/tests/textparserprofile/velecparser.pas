@@ -1,5 +1,5 @@
 unit velecparser;
-
+{$Codepage UTF8}
 {$mode objfpc}{$H+}
 
 interface
@@ -22,7 +22,7 @@ type
   PTextStyle = ^TTextStyle;
 
   TTextFragment = record
-    FragmentText: string;
+    FragmentText: TDXFEntsInternalStringType;
     Style: TTextStyle;
   end;
   PTextFragment = ^TTextFragment;

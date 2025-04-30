@@ -111,7 +111,7 @@ GDBBaseCamera=object(GDBaseObject)
                 procedure NextPosition;virtual; abstract;
           end;
 TDXFEntsInternalStringType=UnicodeString;
-TDXFEntsInternalCharType=UnicodeChar;
+{-}TDXFEntsInternalCharType=UnicodeChar;{//}
 PGDBStrWithPoint=^GDBStrWithPoint;
 {REGISTERRECORDTYPE GDBStrWithPoint}
 GDBStrWithPoint=record

@@ -66,12 +66,11 @@ begin
   TestResult:=DoTest(@ZCADTextFormatTest,VTestData,'ZCADTextFormatTest(DupeString(''\U+0428'',1000000))');
   TestResult:='';
   TestResult:=DoTest(@velecParseMText,VTestData,'velecParseMText(DupeString(''\U+0428'',1000000))');
-
   VTestData:=DupeString('{\fCalibri|b1|i0|c204|p34;Ко\fCascadia Code|b0|i0|c204|p49;мму}\U+0442\U+0430\U+0446{\U+0438}\U+043E\U+043D{\fCalibri|b0|i1|c204|p34;ная стойка }\U+0421\U+04421',1);
   TestResult:='';
-  TestResult:=DoTest(@ZCADTextFormatTest,VTestData,'МТЕКСТ:');
+  TestResult:=DoTest(@ZCADTextFormatTest,VTestData,'МТЕКСТ:Коммутационная стойка');
   TestResult:='';
-  TestResult:=DoTest(@velecParseMText,VTestData,'МТЕКСТ:');
+  TestResult:=DoTest(@velecParseMText,VTestData,'МТЕКСТ:Коммутационная стойка');
 
   readln;
 end.

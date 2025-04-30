@@ -45,12 +45,36 @@ begin
                 val(value,num,code);
                 result:=UnicodeToUtf8(num);
                 NextSymbolPos:=NextSymbolPos+5;
-              end
+              end;
+      'f','H','A':begin
+        while (NextSymbolPos<=length(str))and(str[NextSymbolPos]<>';') do
+           inc(NextSymbolPos);
+           result:='';
+        end
     else
       result:=sym;
     end;
     inc(NextSymbolPos);
   end;
+end;
+function BracesArea(const str:TDXFEntsInternalStringType;const operands:TDXFEntsInternalStringType;var NextSymbolPos:integer;pobj:Pointer):String;
+var
+  CloseBracetPos:integer;
+  code:integer;
+begin
+  code:=1;
+  CloseBracetPos:=NextSymbolPos;
+    while (CloseBracetPos<=length(str))and(code<>0) do begin
+       inc(CloseBracetPos);
+       if str[CloseBracetPos]='{'then
+         inc(code)
+       else if str[CloseBracetPos]='}'then
+         dec(code);
+    end;
+    if code=0 then begin
+      result:=copy(str,NextSymbolPos,CloseBracetPos-NextSymbolPos);
+      NextSymbolPos:=CloseBracetPos+1;
+    end;
 end;
 
 function date2value(const str:TDXFEntsInternalStringType;const operands:TDXFEntsInternalStringType;var NextSymbolPos:integer;pobj:Pointer):String;
@@ -60,5 +84,6 @@ end;
 
 initialization
   Prefix2ProcessFunc.RegisterProcessor('\',#0,#0,@EscapeSeq);
+  Prefix2ProcessFunc.RegisterProcessor('{',#0,#0,@BracesArea);
   Prefix2ProcessFunc.RegisterProcessor('%%DATE',#0,#0,@date2value,true);
 end.

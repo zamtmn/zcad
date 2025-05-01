@@ -536,7 +536,7 @@ begin
             pvNoteFormat:=nil;
           end;
           if (pvNote<>nil)and(pvNoteFormat<>nil) then
-            pstring(pvNote^.data.Addr.Instance)^:=textformat(pstring(pvNoteFormat^.data.Addr.Instance)^,pdev);
+            pstring(pvNote^.data.Addr.Instance)^:=textformat(pstring(pvNoteFormat^.data.Addr.Instance)^,SPFSources.GetFull,pdev);
           if (pvNote<>nil)and(pstring(pvNote^.data.Addr.Instance)^<>'') then
             s:={pstring(pvNote^.Instance)^}pvNote^.data.PTD.GetValueAsString(pvNote^.data.Addr.Instance)
           else begin

@@ -25,8 +25,16 @@ uses
   uzetextpreprocessor,uzbstrproc,
   uzbtypes,
   LazUTF8;
+function SPFSdxf:TSPFSourceEnum;
 implementation
-function EscapeSeq(const str:TDXFEntsInternalStringType;const operands:TDXFEntsInternalStringType;var NextSymbolPos:integer;pobj:Pointer):String;
+var
+  _SPFSdxf:TSPFSourceEnum;
+function SPFSdxf:TSPFSourceEnum;
+begin
+  Result:=_SPFSdxf;
+end;
+
+function EscapeSeq(const str:TDXFEntsInternalStringType;const operands:TDXFEntsInternalStringType;var NextSymbolPos:integer;var SPA:TStrProcessAttributes;pobj:Pointer):String;
 var
   sym:char;
   value:TDXFEntsInternalStringType;
@@ -46,7 +54,7 @@ begin
                 result:=UnicodeToUtf8(num);
                 NextSymbolPos:=NextSymbolPos+5;
               end;
-      'f','H','A':begin
+      'C','c','Q','q','F','f','H','h','A','a':begin
         while (NextSymbolPos<=length(str))and(str[NextSymbolPos]<>';') do
            inc(NextSymbolPos);
            result:='';
@@ -57,7 +65,7 @@ begin
     inc(NextSymbolPos);
   end;
 end;
-function BracesArea(const str:TDXFEntsInternalStringType;const operands:TDXFEntsInternalStringType;var NextSymbolPos:integer;pobj:Pointer):String;
+function BracesArea(const str:TDXFEntsInternalStringType;const operands:TDXFEntsInternalStringType;var NextSymbolPos:integer;var SPA:TStrProcessAttributes;pobj:Pointer):String;
 var
   CloseBracetPos:integer;
   code:integer;
@@ -77,13 +85,8 @@ begin
     end;
 end;
 
-function date2value(const str:TDXFEntsInternalStringType;const operands:TDXFEntsInternalStringType;var NextSymbolPos:integer;pobj:Pointer):String;
-begin
-  result:=datetostr(date);
-end;
-
 initialization
-  Prefix2ProcessFunc.RegisterProcessor('\',#0,#0,@EscapeSeq);
-  Prefix2ProcessFunc.RegisterProcessor('{',#0,#0,@BracesArea);
-  Prefix2ProcessFunc.RegisterProcessor('%%DATE',#0,#0,@date2value,true);
+  _SPFSdxf:=SPFSources.GetEnum;
+  Prefix2ProcessFunc.RegisterProcessor('\',#0,#0,@EscapeSeq,_SPFSdxf);
+  Prefix2ProcessFunc.RegisterProcessor('{',#0,#0,@BracesArea,_SPFSdxf);
 end.

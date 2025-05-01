@@ -21,7 +21,7 @@ end;
 
 function ZCADTextFormatTest(AData:TDXFEntsInternalStringType):TDXFEntsInternalStringType;
 begin
-  Result:=textformat(AData,nil);
+  Result:=textformat(AData,SPFSources.GetFull,nil);
 end;
 
 function DoTest(ATestFunc:TTestFunc;AData:TDXFEntsInternalStringType;ATestName:string):TDXFEntsInternalStringType;

@@ -22,20 +22,26 @@ unit uzetextpreprocessor;
 interface
 
 uses
-  uzbtypes,uzbstrproc,sysutils,gzctnrSTL,uzbLogIntf,uzeparser;
+  uzbSets,uzbtypes,uzbstrproc,sysutils,gzctnrSTL,uzbLogIntf,uzeparser;
 
 type
+  TSPFSourceEnum=LongWord;
+  TSPFSourceSet=LongWord;
+  TSPFSources=GTSet<TSPFSourceSet,TSPFSourceEnum>;
+  TStrProcessAttribute=({SPARecursive}test);
+  TStrProcessAttributes=set of TStrProcessAttribute;
   TInternalCharType=UnicodeChar;
   TInternalStringType=UnicodeString;
-  TStrProcessFunc=function(const str:TDXFEntsInternalStringType;const operands:TDXFEntsInternalStringType;var startpos:integer;pobj:pointer):String;
+  TStrProcessFunc=function(const str:TDXFEntsInternalStringType;const operands:TDXFEntsInternalStringType;var startpos:integer;var SPA:TStrProcessAttributes;pobj:pointer):String;
   TStrProcessorData=record
     Id:TInternalStringType;
     OBracket,CBracket:TInternalCharType;
     IsVariable:Boolean;
     Func:TStrProcessFunc;
+    Source:TSPFSourceEnum;
   end;
-  TPrefix2ProcessFunc=class (GKey2DataMap<TInternalStringType,TStrProcessorData(*{$IFNDEF DELPHI},LessUnicodeString{$ENDIF}*)>)
-    procedure RegisterProcessor(const Id:TInternalStringType;const OBracket,CBracket:TInternalCharType;const Func:TStrProcessFunc;IsVariable:Boolean=false);
+  TPrefix2ProcessFunc=class (GKey2DataMap<TInternalStringType,TStrProcessorData>)
+    procedure RegisterProcessor(const Id:TInternalStringType;const OBracket,CBracket:TInternalCharType;const Func:TStrProcessFunc;const ASource:TSPFSourceEnum;IsVariable:Boolean=false);
   end;
   TMyParser=TGZParser<TUnicodeStringManipulator,
                       TUnicodeStringManipulator.TStringType,
@@ -48,16 +54,17 @@ type
                       pointer,
                       TCharToOptChar<TUnicodeStringManipulator.TCharType>>;
 var
+  SPFSources:TSPFSources;
   Prefix2ProcessFunc:TPrefix2ProcessFunc;
   Parser:TMyParser;
   ZCADToken:TTokenDescription.TEnumItemType;
 
-function textformat(const s:TDXFEntsInternalStringType;pobj:Pointer):TDXFEntsInternalStringType;overload;
-function textformat(const s:string;pobj:Pointer):string;overload;
+function textformat(const s:TDXFEntsInternalStringType;const EnabledSources:TSPFSourceSet;pobj:Pointer):TDXFEntsInternalStringType;overload;
+function textformat(const s:string;const EnabledSources:TSPFSourceSet;pobj:Pointer):string;overload;
 implementation
 
 
-procedure TPrefix2ProcessFunc.RegisterProcessor(const Id:TInternalStringType;const OBracket,CBracket:TInternalCharType;const Func:TStrProcessFunc;IsVariable:Boolean=false);
+procedure TPrefix2ProcessFunc.RegisterProcessor(const Id:TInternalStringType;const OBracket,CBracket:TInternalCharType;const Func:TStrProcessFunc;const ASource:TSPFSourceEnum;IsVariable:Boolean=false);
 var
   key:TInternalStringType;
   data:TStrProcessorData;
@@ -72,16 +79,12 @@ begin
   data.CBracket:=CBracket;
   data.Func:=Func;
   data.IsVariable:=IsVariable;
+  data.Source:=ASource;
 
   RegisterKey(key,data);
 end;
 
-function textformat(const s:string;pobj:Pointer):string;overload;
-begin
-  result:=string(textformat(TDXFEntsInternalStringType(s),pobj));
-end;
-
-function textformat(const s:TDXFEntsInternalStringType;pobj:Pointer):TDXFEntsInternalStringType;
+function TxtFormatAndCountSrcs(const s:TDXFEntsInternalStringType;const EnabledSources:TSPFSourceSet;out ASourcesCounter:TSPFSourceSet;pobj:Pointer):TDXFEntsInternalStringType;
 var
   FindedIdPos,ContinuePos,EndBracketPos,counter:Integer;
   res,operands,sss:TDXFEntsInternalStringType;
@@ -90,18 +93,20 @@ var
   TCP:TCodePage;
   firstloop:boolean;
   sb:TUnicodeStringBuilder;
+  SPA:TStrProcessAttributes;
 const
   maxitertations=2000000;
 
-procedure sbappend(const us:TDXFEntsInternalStringType);inline;
-begin
-  if not assigned(sb) then begin
-   sb:=TUnicodeStringBuilder.Create(length(s));
+  procedure sbappend(const us:TDXFEntsInternalStringType);inline;
+  begin
+    if not assigned(sb) then begin
+     sb:=TUnicodeStringBuilder.Create(length(s));
+    end;
+    sb.Append(us);
   end;
-  sb.Append(us);
-end;
 
 begin
+  ASourcesCounter:=SPFSources.GetEmpty;
   counter:=0;
   result:='';
   firstloop:=true;
@@ -110,39 +115,43 @@ begin
   //sb.Capacity:=length(s);
   try
     for pair in Prefix2ProcessFunc do begin
-      if not assigned(sb) then
-        sss:=s
-      else begin
-        sss:=sb.ToString;
-        sb.Clear;
-      end;
-      //result:='';
-      firstloop:=false;
-      startsearhpos:=1;
-      if assigned(pair.value.func)then begin
-        repeat
-         FindedIdPos:=Pos(pair.key,sss,startsearhpos);
-          if FindedIdPos>0 then begin
-            if FindedIdPos<>startsearhpos then
-              sbAppend(copy(sss,startsearhpos,FindedIdPos-startsearhpos));
-            ContinuePos:=FindedIdPos+length(pair.key);
-            if pair.Value.CBracket<>#0 then begin
-              EndBracketPos:=Pos(pair.Value.CBracket,sss,ContinuePos)+1;
-              operands:=copy(sss,ContinuePos,EndBracketPos-ContinuePos-1);
-            end else
-              EndBracketPos:=ContinuePos;
-            ContinuePos:=EndBracketPos;
-            TCP:=CodePage;
-            CodePage:=CP_utf8;
-            res:=UTF8Decode(pair.value.func(sss,operands,ContinuePos,pobj));
-            CodePage:=TCP;
-            sbAppend(res);
-            startsearhpos:=ContinuePos;
-            inc(counter);
-          end;
-       until (FindedIdPos<=0)or(counter>maxitertations);
-       if (startsearhpos<=length(sss))and assigned(sb) then
-         sbAppend(copy(sss,startsearhpos,length(sss)-startsearhpos+1));
+      SPFSources.Include(ASourcesCounter,pair.Value.Source);
+      if SPFSources.IsAllPresent(EnabledSources,pair.Value.Source)then begin
+        if not assigned(sb) then
+          sss:=s
+        else begin
+          sss:=sb.ToString;
+          sb.Clear;
+        end;
+        //result:='';
+        firstloop:=false;
+        startsearhpos:=1;
+        if assigned(pair.value.func)then begin
+          repeat
+           FindedIdPos:=Pos(pair.key,sss,startsearhpos);
+            if FindedIdPos>0 then begin
+              if FindedIdPos<>startsearhpos then
+                sbAppend(copy(sss,startsearhpos,FindedIdPos-startsearhpos));
+              ContinuePos:=FindedIdPos+length(pair.key);
+              if pair.Value.CBracket<>#0 then begin
+                EndBracketPos:=Pos(pair.Value.CBracket,sss,ContinuePos)+1;
+                operands:=copy(sss,ContinuePos,EndBracketPos-ContinuePos-1);
+              end else
+                EndBracketPos:=ContinuePos;
+              ContinuePos:=EndBracketPos;
+              TCP:=CodePage;
+              CodePage:=CP_utf8;
+              SPA:=[];
+              res:=UTF8Decode(pair.value.func(sss,operands,ContinuePos,SPA,pobj));
+              CodePage:=TCP;
+              sbAppend(res);
+              startsearhpos:=ContinuePos;
+              inc(counter);
+            end;
+         until (FindedIdPos<=0)or(counter>maxitertations);
+         if (startsearhpos<=length(sss))and assigned(sb) then
+           sbAppend(copy(sss,startsearhpos,length(sss)-startsearhpos+1));
+        end;
       end;
     end;
     if counter>maxitertations then
@@ -156,7 +165,21 @@ begin
     sb.Free;
   end;
 end;
+
+function textformat(const s:string;const EnabledSources:TSPFSourceSet;pobj:Pointer):string;overload;
+begin
+  result:=string(textformat(TDXFEntsInternalStringType(s),EnabledSources,pobj));
+end;
+
+function textformat(const s:TDXFEntsInternalStringType;const EnabledSources:TSPFSourceSet;pobj:Pointer):TDXFEntsInternalStringType;overload;
+var
+  SourcesCounter:TSPFSourceSet;
+begin
+  result:=TxtFormatAndCountSrcs(TDXFEntsInternalStringType(s),EnabledSources,SourcesCounter,pobj);
+end;
+
 initialization
+  SPFSources.init;
   Prefix2ProcessFunc:=TPrefix2ProcessFunc.Create;
   Parser:=TMyParser.create;
   ZCADToken:=Parser.Tokenizer.Description.GetEnum;

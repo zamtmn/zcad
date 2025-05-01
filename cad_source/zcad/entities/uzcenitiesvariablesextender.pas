@@ -314,7 +314,7 @@ begin
     if pvn<>nil then repeat
       if pvn.data.PTD=p then begin
         ptcs:=pvn.data.Addr.Instance;
-        ptcs.value:=textformat(ptcs.format,pEntity)
+        ptcs.value:=textformat(ptcs.format,SPFSources.GetFull,pEntity)
       end;
       pvn:=entityunit.InterfaceVariables.vardescarray.iterate(ir);
     until pvn=nil;

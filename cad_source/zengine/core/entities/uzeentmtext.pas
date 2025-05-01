@@ -321,7 +321,7 @@ begin
   CodePage:=CP_win;
   if template='' then
                       template:=content;
-  content:=textformat(template,@self);
+  content:=textformat(template,SPFSources.GetFull,@self);
   CodePage:=TCP;
   linespace := textprop.size * linespacef * 5 / 3;
   if (content='')and(template='') then content:=str_empty;

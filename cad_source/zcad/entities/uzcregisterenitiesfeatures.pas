@@ -181,7 +181,7 @@ begin
      if (formatstr<>'') then
                                       begin
                                            if pEntity<>nil then
-                                                               pstring(pvn^.data.Addr.Instance)^:=textformat(formatstr,pEntity)
+                                                               pstring(pvn^.data.Addr.Instance)^:=textformat(formatstr,SPFSources.GetFull,pEntity)
                                                             else
                                                                pstring(pvn^.data.Addr.Instance)^:='!!ERR(pEnttity=nil)';
                                            pvn^.attrib:=pvn^.attrib or vda_RO;
@@ -238,7 +238,7 @@ begin
     if pvn<>nil then repeat
       if pvn.data.PTD=p then begin
         ptcs:=pvn.data.Addr.Instance;
-        ptcs.value:=textformat(ptcs.format,pEntity)
+        ptcs.value:=textformat(ptcs.format,SPFSources.GetFull,pEntity)
       end;
       pvn:=pentvarext.entityunit.InterfaceVariables.vardescarray.iterate(ir);
     until pvn=nil;

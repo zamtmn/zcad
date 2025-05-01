@@ -426,7 +426,7 @@ begin
     end else if cn<>'' then begin
       if cn[1]<>'-'then begin
        cn:=copy(cn,2,length(cn)-1);
-       Name:=textformat(cn,pent)
+       Name:=textformat(cn,SPFSources.GetFull,pent)
       end else
        Name:=pent^.GetObjTypeName;
     end;
@@ -1236,7 +1236,7 @@ begin
     end else
       celltext:='';
   end else
-    celltext:=textformat(ExtTreeParam.ExtColumnsParams[Column].Pattern,pnd^.Ident.pent);
+    celltext:=textformat(ExtTreeParam.ExtColumnsParams[Column].Pattern,SPFSources.GetFull,pnd^.Ident.pent);
   end;
 end;
 procedure TNavigatorDevices.SetDefaultImagesIndex;

@@ -60,6 +60,7 @@ var
   ZCADToken:TTokenDescription.TEnumItemType;
 
 function textformat(const s:TDXFEntsInternalStringType;const EnabledSources:TSPFSourceSet;pobj:Pointer):TDXFEntsInternalStringType;overload;
+function TxtFormatAndCountSrcs(const s:TDXFEntsInternalStringType;const EnabledSources:TSPFSourceSet;out ASourcesCounter:TSPFSourceSet;pobj:Pointer):TDXFEntsInternalStringType;
 function textformat(const s:string;const EnabledSources:TSPFSourceSet;pobj:Pointer):string;overload;
 implementation
 
@@ -115,7 +116,6 @@ begin
   //sb.Capacity:=length(s);
   try
     for pair in Prefix2ProcessFunc do begin
-      SPFSources.Include(ASourcesCounter,pair.Value.Source);
       if SPFSources.IsAllPresent(EnabledSources,pair.Value.Source)then begin
         if not assigned(sb) then
           sss:=s
@@ -138,6 +138,7 @@ begin
                 operands:=copy(sss,ContinuePos,EndBracketPos-ContinuePos-1);
               end else
                 EndBracketPos:=ContinuePos;
+              SPFSources.Include(ASourcesCounter,pair.Value.Source);
               ContinuePos:=EndBracketPos;
               TCP:=CodePage;
               CodePage:=CP_utf8;

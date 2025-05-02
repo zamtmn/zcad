@@ -124,10 +124,11 @@ begin
     PGDBObjText(pent)^.template:=TDXFEntsInternalStringType(_value);
      result:=true;
 end;
-procedure TextIOSave_TMPL1(var outhandle:TZctnrVectorBytes;PEnt:PGDBObjText);
+procedure TextIOSave_TMPL1(var outhandle:TZctnrVectorBytes;PEnt:PGDBObjText; var IODXFContext:TIODXFContext);
 begin
-     if UnicodeStringReplace(pent^.content,#10,'\P',[rfReplaceAll])<>pent^.template{convertfromunicode(pent^.template)} then
-       dxfStringout(outhandle,1000,'_TMPL1='+string(pent^.template));
+  //if UnicodeStringReplace(pent^.content,#10,'\P',[rfReplaceAll])<>pent^.template then
+  if (IODXFContext.LocalEntityFlags and CLEFNotNeedSaveTemplate)=0 then
+    dxfStringout(outhandle,1000,'_TMPL1='+string(pent^.template));
 end;
 
 class function TDummy.BlockDefIOLoad_TYPE(_Name,_Value:String;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;

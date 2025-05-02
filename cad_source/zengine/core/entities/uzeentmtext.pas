@@ -24,9 +24,10 @@ interface
 uses
     uzglgeometry,uzgldrawcontext,uzetextpreprocessor,uzeentityfactory,uzedrawingdef,
     uzbstrproc,uzefont,uzeentabstracttext,UGDBPoint3DArray,uzestyleslayers,SysUtils,
-    uzeentity,UGDBOutbound2DIArray,uzctnrVectorBytes,
+    uzeentity,uzctnrVectorBytes,
     uzbtypes,uzeenttext,uzeconsts,uzegeometry,uzeffdxfsupport,math,uzeentsubordinated,
-    gzctnrVectorTypes,uzegeometrytypes,uzestylestexts,StrUtils,gzctnrVector,uzMVReader;
+    gzctnrVectorTypes,uzegeometrytypes,uzestylestexts,StrUtils,gzctnrVector,uzMVReader,
+    uzcTextPreprocessorDXFImpl;
 const maxdxfmtextlen=250;
 type
 
@@ -1001,25 +1002,30 @@ begin
         ul:=not(ul);
     until count=0;
 end;
-procedure GDBObjMText.SaveToDXF(var outhandle:{Integer}TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);
+procedure GDBObjMText.SaveToDXF(var outhandle:TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);
 var
-//  i, j: Integer;
-  //bw: Byte;
   s: String;
   ul:boolean;
   quotedcontent:TDXFEntsInternalStringType;
+  ASourcesCounter:TSPFSourceSet;
 begin
   ul:=false;
   SaveToDXFObjPrefix(outhandle,'MTEXT','AcDbMText',IODXFContext);
   dxfvertexout(outhandle,10,Local.p_insert);
   dxfDoubleout(outhandle,40,textprop.size);
   dxfDoubleout(outhandle,41,width);
-  dxfIntegerout(outhandle,71,j2b[textprop.justify]{ord(textprop.justify)+1});
-  quotedcontent:=StringReplace(content,TDXFEntsInternalStringType(#10),TDXFEntsInternalStringType('\P'),[rfReplaceAll]);
-  if  {convertfromunicode}(template)=quotedcontent then
-    s := Tria_Utf8ToAnsi(UTF8Encode(template))
-  else
-    s := Tria_Utf8ToAnsi(UTF8Encode(quotedcontent));
+  dxfIntegerout(outhandle,71,j2b[textprop.justify]);
+  s:=TxtFormatAndCountSrcs(template,SPFSources.GetFull,ASourcesCounter,@Self);
+  if (ASourcesCounter and (not SPFSdxf))<>0 then begin
+    quotedcontent:=StringReplace(content,TDXFEntsInternalStringType(#10),TDXFEntsInternalStringType('\P'),[rfReplaceAll]);
+    if  {convertfromunicode}(template)=quotedcontent then
+      s := Tria_Utf8ToAnsi(UTF8Encode(template))
+    else
+      s := Tria_Utf8ToAnsi(UTF8Encode(quotedcontent));
+  end else begin
+    s:=Tria_Utf8ToAnsi(UTF8Encode(template));
+    IODXFContext.LocalEntityFlags:=IODXFContext.LocalEntityFlags or CLEFNotNeedSaveTemplate;
+  end;
   s:=StringReplace(s,#10,'\P',[rfReplaceAll]);
   //s := content;
   if length(s) < maxdxfmtextlen then
@@ -1037,7 +1043,7 @@ begin
     end;
     dxfStringout(outhandle,3,z2dxfmtext(s,ul));
   end;
-  dxfStringout(outhandle,7,PGDBTextStyle({gdb.GetCurrentDWG}(TXTStyleIndex))^.name);
+  dxfStringout(outhandle,7,TXTStyleIndex^.name);
   SaveToDXFObjPostfix(outhandle);
   dxfvertexout(outhandle,11,Local.basis.ox);
   dxfIntegerout(outhandle,73,2);

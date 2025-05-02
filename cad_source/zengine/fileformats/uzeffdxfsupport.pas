@@ -47,7 +47,10 @@ const
   dxfName_Style='STYLE';
   dxfName_LType='LTYPE';
 
+  DefaultLocalEntityFlags=0;
+
 type
+  TLocalEntityFlags=LongWord;
   EDXFReadException=class(Exception);
   PTIODXFContext=^TIODXFContext;
   TIODXFContext=record
@@ -55,6 +58,7 @@ type
     currentEntAddrOverrider:pointer;
     p2h:TMapPointerToHandle;
     VarsDict:TString2StringDictionary;
+    LocalEntityFlags:TLocalEntityFlags;
   end;
 
   TIODXFLoadContext=record

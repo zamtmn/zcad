@@ -28,6 +28,8 @@ uses
   uzctnrVectorBytes,uzbtypes,uzeconsts,uzglviewareadata,uzegeometry,
   uzeffdxfsupport,uzeentsubordinated,uzbLogIntf,uzegeometrytypes,uzestylestexts,
   uzeSnap,uzMVReader;
+const
+  CLEFNotNeedSaveTemplate=1;
 type
 PGDBObjText=^GDBObjText;
 GDBObjText= object(GDBObjAbstractText)

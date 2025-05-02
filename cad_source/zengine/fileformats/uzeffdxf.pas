@@ -1451,6 +1451,7 @@ begin
      if pv<>nil then
      repeat
           lps.ProgressLongProcess(lph,ir.itc);
+          IODXFContext.LocalEntityFlags:=DefaultLocalEntityFlags;
           pv^.DXFOut(outhandle,drawing,IODXFContext);
      pv:=pva^.iterate(ir);
      until pv=nil;

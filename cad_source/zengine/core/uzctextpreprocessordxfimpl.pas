@@ -54,7 +54,7 @@ begin
                 result:=UnicodeToUtf8(num);
                 NextSymbolPos:=NextSymbolPos+5;
               end;
-      'C','c','Q','q','F','f','H','h','A','a':begin
+      'C','c','Q','q','F','f','H','h','A','a','W','w':begin
         while (NextSymbolPos<=length(str))and(str[NextSymbolPos]<>';') do
            inc(NextSymbolPos);
            result:='';

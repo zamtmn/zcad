@@ -113,14 +113,14 @@ begin
       begin
         Code := Copy(S, i+3, 4);
         if TryStrToInt('$' + Code, CharCode) then
-          Buffer.Append(WideChar(CharCode))
+          Buffer.Append(string(WideChar(CharCode)))
         else
           Buffer.Append('?');
         Inc(i, 7);
       end
       else
       begin
-        Buffer.Append(S[i]);
+        Buffer.Append(string(S[i]));
         Inc(i);
       end;
     end;

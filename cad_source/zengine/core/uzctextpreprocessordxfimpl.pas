@@ -40,27 +40,34 @@ var
   value:TDXFEntsInternalStringType;
   num,code:integer;
 begin
+  //описание происходящего
+  //https://adndevblog.typepad.com/autocad/2017/09/dissecting-mtext-format-codes.html
   result:='';
   if NextSymbolPos>0 then
   if NextSymbolPos<=length(str) then
   begin
     sym:=str[NextSymbolPos];
     case sym of
-      'L','l':result:=Chr(1);
-      'P','p':result:=Chr(10);
-      'U','u':begin
+      'L','l':result:=Chr(1); //подчеркивание
+      'P','p':result:=Chr(10);//перевод строки
+      'U','u':begin           //символ юникода
                 value:='$'+copy(str,NextSymbolPos+2,4);
                 val(value,num,code);
                 result:=UnicodeToUtf8(num);
                 NextSymbolPos:=NextSymbolPos+5;
               end;
-      'C','c','Q','q','F','f','H','h','A','a','W','w':begin
-        while (NextSymbolPos<=length(str))and(str[NextSymbolPos]<>';') do
-           inc(NextSymbolPos);
-           result:='';
-        end
+      'C','c',//цвет
+      'Q','q',//наклон
+      'F','f',//имя фонта
+      'H','h',//высота
+      'A','a',//выравнивание
+      'W','w':begin//ширина текста
+                while (NextSymbolPos<=length(str))and(str[NextSymbolPos]<>';') do
+                  inc(NextSymbolPos);
+                result:='';
+              end
     else
-      result:=sym;
+      result:=sym;//экранирование
     end;
     inc(NextSymbolPos);
   end;

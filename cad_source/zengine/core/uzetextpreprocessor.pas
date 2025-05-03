@@ -28,7 +28,7 @@ type
   TSPFSourceEnum=LongWord;
   TSPFSourceSet=LongWord;
   TSPFSources=GTSet<TSPFSourceSet,TSPFSourceEnum>;
-  TStrProcessAttribute=({SPARecursive}test);
+  TStrProcessAttribute=(SPARecursive);
   TStrProcessAttributes=set of TStrProcessAttribute;
   TInternalCharType=UnicodeChar;
   TInternalStringType=UnicodeString;
@@ -95,6 +95,7 @@ var
   firstloop:boolean;
   sb:TUnicodeStringBuilder;
   SPA:TStrProcessAttributes;
+  RecursiveSourcesCounter:TSPFSourceSet;
 const
   maxitertations=2000000;
 
@@ -144,6 +145,10 @@ begin
               CodePage:=CP_utf8;
               SPA:=[];
               res:=UTF8Decode(pair.value.func(sss,operands,ContinuePos,SPA,pobj));
+              if SPARecursive in spa then begin
+                res:=TxtFormatAndCountSrcs(res,EnabledSources,RecursiveSourcesCounter,pobj);
+                ASourcesCounter:=RecursiveSourcesCounter or ASourcesCounter;
+              end;
               CodePage:=TCP;
               sbAppend(res);
               startsearhpos:=ContinuePos;

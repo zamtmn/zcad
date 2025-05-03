@@ -75,21 +75,24 @@ end;
 function BracesArea(const str:TDXFEntsInternalStringType;const operands:TDXFEntsInternalStringType;var NextSymbolPos:integer;var SPA:TStrProcessAttributes;pobj:Pointer):String;
 var
   CloseBracetPos:integer;
-  code:integer;
+  code,l:integer;
 begin
   code:=1;
   CloseBracetPos:=NextSymbolPos;
-    while (CloseBracetPos<=length(str))and(code<>0) do begin
-       inc(CloseBracetPos);
-       if str[CloseBracetPos]='{'then
-         inc(code)
-       else if str[CloseBracetPos]='}'then
-         dec(code);
-    end;
-    if code=0 then begin
-      result:=copy(str,NextSymbolPos,CloseBracetPos-NextSymbolPos);
-      NextSymbolPos:=CloseBracetPos+1;
-    end;
+  while (CloseBracetPos<=length(str))and(code<>0) do begin
+    if str[CloseBracetPos]='{'then
+      inc(code)
+    else if str[CloseBracetPos]='}'then
+      dec(code);
+    inc(CloseBracetPos);
+  end;
+  if code=0 then begin
+    l:=CloseBracetPos-NextSymbolPos-1;
+    result:=copy(str,NextSymbolPos,l);
+    if l>0 then
+      include(spa,SPARecursive);
+    NextSymbolPos:=CloseBracetPos;
+  end;
 end;
 
 initialization

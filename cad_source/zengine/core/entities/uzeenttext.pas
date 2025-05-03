@@ -31,51 +31,49 @@ uses
 const
   CLEFNotNeedSaveTemplate=1;
 type
-PGDBObjText=^GDBObjText;
-GDBObjText= object(GDBObjAbstractText)
-                 Content:TDXFEntsInternalStringType;
-                 Template:TDXFEntsInternalStringType;
-                 TXTStyle:PGDBTextStyle;
-                 obj_height:Double;
-                 obj_width:Double;
-                 obj_y:Double;
-                 constructor init(own:Pointer;layeraddres:PGDBLayerProp;LW:SmallInt;c:TDXFEntsInternalStringType;p:GDBvertex;s,o,w,a:Double;j:TTextJustify);
-                 constructor initnul(owner:PGDBObjGenericWithSubordinated);
-                 procedure LoadFromDXF(var rdr:TZMemReader;ptu:PExtensionData;var drawing:TDrawingDef);virtual;
-                 procedure SaveToDXF(var outStream:TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
-                 procedure CalcGabarit(const drawing:TDrawingDef);virtual;
-                 procedure getoutbound(var DC:TDrawContext);virtual;
-                 function IsStagedFormatEntity:boolean;virtual;
-                 procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext;Stage:TEFStages=EFAllStages);virtual;
-                 //procedure createpoint(const drawing:TDrawingDef);virtual;
-                 //procedure CreateSymbol(_symbol:Integer;matr:DMatrix4D;var minx,miny,maxx,maxy:Double;pfont:pgdbfont;ln:Integer);
-                 function Clone(own:Pointer):PGDBObjEntity;virtual;
-                 function GetObjTypeName:String;virtual;
-                 destructor done;virtual;
+  PGDBObjText=^GDBObjText;
+  GDBObjText=object(GDBObjAbstractText)
+    Content:TDXFEntsInternalStringType;
+    Template:TDXFEntsInternalStringType;
+    TXTStyle:PGDBTextStyle;
+    obj_height:Double;
+    obj_width:Double;
+    obj_y:Double;
+    constructor init(own:Pointer;layeraddres:PGDBLayerProp;LW:SmallInt;c:TDXFEntsInternalStringType;p:GDBvertex;s,o,w,a:Double;j:TTextJustify);
+    constructor initnul(owner:PGDBObjGenericWithSubordinated);
+    procedure LoadFromDXF(var rdr:TZMemReader;ptu:PExtensionData;var drawing:TDrawingDef);virtual;
+    procedure SaveToDXF(var outStream:TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
+    procedure CalcGabarit(const drawing:TDrawingDef);virtual;
+    procedure getoutbound(var DC:TDrawContext);virtual;
+    function IsStagedFormatEntity:boolean;virtual;
+    procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext;Stage:TEFStages=EFAllStages);virtual;
+    function Clone(own:Pointer):PGDBObjEntity;virtual;
+    function GetObjTypeName:String;virtual;
+    destructor done;virtual;
 
-                 function getsnap(var osp:os_record; var pdata:Pointer; const param:OGLWndtype; ProjectProc:GDBProjectProc;SnapMode:TGDBOSMode):Boolean;virtual;
-                 procedure rtmodifyonepoint(const rtmod:TRTModifyData);virtual;
-                 procedure rtsave(refp:Pointer);virtual;
-                 function IsHaveObjXData:Boolean;virtual;
-                 procedure SaveToDXFObjXData(var outStream:TZctnrVectorBytes;var IODXFContext:TIODXFContext);virtual;
-                 function ProcessFromDXFObjXData(const _Name,_Value:String;ptu:PExtensionData;const drawing:TDrawingDef):Boolean;virtual;
-                 class function GetDXFIOFeatures:TDXFEntIODataManager;static;
+    function getsnap(var osp:os_record; var pdata:Pointer; const param:OGLWndtype; ProjectProc:GDBProjectProc;SnapMode:TGDBOSMode):Boolean;virtual;
+    procedure rtmodifyonepoint(const rtmod:TRTModifyData);virtual;
+    procedure rtsave(refp:Pointer);virtual;
+    function IsHaveObjXData:Boolean;virtual;
+    procedure SaveToDXFObjXData(var outStream:TZctnrVectorBytes;var IODXFContext:TIODXFContext);virtual;
+    function ProcessFromDXFObjXData(const _Name,_Value:String;ptu:PExtensionData;const drawing:TDrawingDef):Boolean;virtual;
+    class function GetDXFIOFeatures:TDXFEntIODataManager;static;
 
-                 function CreateInstance:PGDBObjText;static;
-                 function GetObjType:TObjID;virtual;
-           end;
+    function CreateInstance:PGDBObjText;static;
+    function GetObjType:TObjID;virtual;
+  end;
+const
+  jt: array[0..3, 0..4] of TTextJustify = ((jsbl, jsbc, jsbr, jsbl, jsmc), (jsbtl, jsbtc, jsbtr, jsbl, jsbl), (jsml, jsmc, jsmr, jsbl, jsbl), (jstl, jstc, jstr, jsbl, jsbl));
+  j2b: array[TTextJustify] of byte=(1,2,3,4,5,6,7,8,9,10,11,12);
+  b2j: array[1..12] of TTextJustify=(jstl,jstc,jstr,jsml,jsmc,jsmr,jsbl,jsbc,jsbr,jsbtl,jsbtc,jsbtr);
 var
-jt: array[0..3, 0..4] of TTextJustify = ((jsbl, jsbc, jsbr, jsbl, jsmc), (jsbtl, jsbtc, jsbtr, jsbl, jsbl), (jsml, jsmc, jsmr, jsbl, jsbl), (jstl, jstc, jstr, jsbl, jsbl));
-j2b: array[TTextJustify] of byte=(1,2,3,4,5,6,7,8,9,10,11,12);
-b2j: array[1..12] of TTextJustify=(jstl,jstc,jstr,jsml,jsmc,jsmr,jsbl,jsbc,jsbr,jsbtl,jsbtc,jsbtr);
-GDBObjTextDXFFeatures:TDXFEntIODataManager;
-//function getsymbol(s:String; i:integer;out l:integer;const fontunicode:Boolean):word;
+  GDBObjTextDXFFeatures:TDXFEntIODataManager;
 implementation
 function acadvjustify(j:TTextJustify): Byte;
 var
   t: Byte;
 begin
-  t := 3 - (({ord(j)}j2b[j] - 1) div 3);
+  t := 3 - ((j2b[j] - 1) div 3);
   if t = 1 then
     result := 0
   else
@@ -83,7 +81,7 @@ begin
 end;
 function GDBObjText.IsHaveObjXData:Boolean;
 begin
-  if  {convertfromunicode}(template)<>content then
+  if template<>content then
     result:=true
   else
     result:=false;
@@ -95,21 +93,16 @@ end;
 constructor GDBObjText.initnul;
 begin
   inherited initnul(owner);
-  //vp.ID := GDBtextID;
   Pointer(content) := nil;
   Pointer(template) := nil;
   textprop.size := 1;
   textprop.oblique := 0;
   textprop.wfactor := 1;
   textprop.justify := jstl;
-  //Representation.SHX.init(100);
-  //Vertex2D_in_DCS_Array.init({100);
-  //PProjoutbound:=nil;
 end;
 constructor GDBObjText.init;
 begin
   inherited init(own,layeraddres, lw);
-  //vp.ID := GDBtextID;
   Pointer(content) := nil;
   Pointer(template) := nil;
   content := c;
@@ -118,14 +111,10 @@ begin
   textprop.oblique := o;
   textprop.wfactor := w;
   textprop.justify := j;
-  //Representation.SHX.init(1000);
-  //Vertex2D_in_DCS_Array.init(100);
-  //PProjoutbound:=nil;
-  //format;
 end;
 function GDBObjText.GetObjType;
 begin
-     result:=GDBtextID;
+  result:=GDBtextID;
 end;
 function GDBObjText.IsStagedFormatEntity:boolean;
 begin
@@ -133,7 +122,7 @@ begin
 end;
 procedure GDBObjText.FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext;Stage:TEFStages=EFAllStages);
 var
-      TCP:TCodePage;
+  TCP:TCodePage;
 begin
   if EFCalcEntityCS in stage then begin
   calcobjmatrix;//расширениям нужны матрицы в OnBeforeEntityFormat
@@ -235,18 +224,14 @@ var
   psyminfo:PGDBsymdolinfo;
   l:Integer;
   sym:word;
-  //-ttf-//TDInfo:TTrianglesDataInfo;
 begin
   obj_height:=1;
   obj_width:=0;
   obj_y:=0;
   i:=1;
-   while i<=length(content) do
-  //for i:=1 to length(content) do
-  begin
-    sym:=getsymbol_fromGDBText(content,i,l,PGDBTextStyle({gdb.GetCurrentDWG}(TXTStyle))^.pfont^.font.IsUnicode);
-    //psyminfo:=PGDBTextStyle(gdb.GetCurrentDWG.TextStyleTable.getDataMutable(TXTStyle))^.pfont^.GetOrReplaceSymbolInfo(ach2uch(Byte(content[i])));
-    psyminfo:=PGDBTextStyle({gdb.GetCurrentDWG}(TXTStyle))^.pfont^.GetOrReplaceSymbolInfo(sym{//-ttf-//,tdinfo});
+  while i<=length(content) do begin
+    sym:=getsymbol_fromGDBText(content,i,l,TXTStyle^.pfont^.font.IsUnicode);
+    psyminfo:=TXTStyle^.pfont^.GetOrReplaceSymbolInfo(sym);
     obj_width:=obj_width+psyminfo.NextSymX;
     if psyminfo.SymMaxY>obj_height then obj_height:=psyminfo.SymMaxY;
     if psyminfo.SymMinY<obj_y then obj_y:=psyminfo.SymMinY;
@@ -282,84 +267,13 @@ destructor GDBObjText.done;
 begin
   content:='';
   template:='';
-  //Representation.SHX.Done;
-  //Vertex2D_in_DCS_Array.Done;
   inherited done;
 end;
 procedure GDBObjText.getoutbound;
 var
-//  v:GDBvertex4D;
-    t,b,l,r,n,f:Double;
-    i:integer;
-
-//pm:DMatrix4D;
-//    tv:GDBvertex;
-//    tpv:GDBPolyVertex2D;
-//    ptpv:PGDBPolyVertex3D;
+  t,b,l,r,n,f:Double;
+  i:integer;
 begin
-
-                    (*ptpv:=Vertex3D_in_WCS_Array.parray;
-                      l:=ptpv^.coord.x;
-                      r:=ptpv^.coord.x;
-                      t:=ptpv^.coord.y;
-                      b:=ptpv^.coord.y;
-                      n:=ptpv^.coord.z;
-                      f:=ptpv^.coord.z;
-                    pm:=gdb.GetCurrentDWG.pcamera^.modelMatrix;
-                    for i:=0 to Vertex3D_in_WCS_Array.count-1 do
-                    begin
-                           if ptpv^.coord.x<l then
-                                                 l:=ptpv^.coord.x;
-                          if ptpv^.coord.x>r then
-                                                 r:=ptpv^.coord.x;
-                          if ptpv^.coord.y<b then
-                                                 b:=ptpv^.coord.y;
-                          if ptpv^.coord.y>t then
-                                                 t:=ptpv^.coord.y;
-                          if ptpv^.coord.z<n then
-                                                 n:=ptpv^.coord.z;
-                          if ptpv^.coord.z>f then
-                                                 f:=ptpv^.coord.z;
-                         inc(ptpv);
-                    end;
-
-                    {outbound[0]:=uzegeometry.CreateVertex(l,t,n);
-                    outbound[1]:=uzegeometry.CreateVertex(r,t,n);
-                    outbound[2]:=uzegeometry.CreateVertex(r,b,n);
-                    outbound[3]:=uzegeometry.CreateVertex(l,b,n);}*)
-
-
-  (*
-  v.x:=0;
-  v.y:=obj_y;
-  v.z:=0;
-  v.w:=1;
-  v:=VectorTransform(v,DrawMatrix);
-  v:=VectorTransform(v,objMatrix);
-  outbound[0]:=pgdbvertex(@v)^;
-  v.x:=0;
-  v.y:={obj_y}+obj_height;
-  v.z:=0;
-  v.w:=1;
-  v:=VectorTransform(v,DrawMatrix);
-  v:=VectorTransform(v,objMatrix);
-  outbound[1]:=pgdbvertex(@v)^;
-  v.x:=obj_width;
-  v.y:={obj_y}+obj_height;
-  v.z:=0;
-  v.w:=1;
-  v:=VectorTransform(v,DrawMatrix);
-  v:=VectorTransform(v,objMatrix);
-  outbound[2]:=pgdbvertex(@v)^;
-  v.x:=obj_width;
-  v.y:=obj_y;
-  v.z:=0;
-  v.w:=1;
-  v:=VectorTransform(v,DrawMatrix);
-  v:=VectorTransform(v,objMatrix);
-  outbound[3]:=pgdbvertex(@v)^;
-
-  *)
   l:=outbound[0].x;
   r:=outbound[0].x;
   t:=outbound[0].y;
@@ -382,194 +296,29 @@ begin
                          f:=outbound[i].z;
   end;
 
-
   vp.BoundingBox.LBN:=CreateVertex(l,B,n);
   vp.BoundingBox.RTF:=CreateVertex(r,T,f);
 end;
-(*procedure GDBObjText.CreateSymbol(_symbol:Integer;matr:DMatrix4D;var minx,miny,maxx,maxy:Double;pfont:pgdbfont;ln:Integer);
-var
-  psymbol: Pointer;
-  i, j, k: Integer;
-  len: Word;
-  //matr,m1: DMatrix4D;
-  v:GDBvertex4D;
-  pv:GDBPolyVertex2D;
-  pv3:GDBPolyVertex3D;
 
-  plp,plp2:pgdbvertex;
-  lp,tv:gdbvertex;
-  pl:GDBPoint3DArray;
-  ispl:Boolean;
-  ir:itrec;
-  psyminfo:PGDBsymdolinfo;
-  deb:GDBsymdolinfo;
-begin
-  if _symbol=100 then
-                      _symbol:=_symbol;
-  {if _symbol<256 then
-                    _symbol:=ach2uch(_symbol);}
-  if _symbol=32 then
-                      _symbol:=_symbol;
-
-  psyminfo:=pgdbfont(pfont)^.GetOrReplaceSymbolInfo(integer(_symbol));
-  deb:=psyminfo^;
-  psymbol := PGDBfont(pfont)^.SHXdata.getDataMutable({pgdbfont(pfont).symbo linfo[Byte(_symbol)]}psyminfo.addr);// Pointer(PtrInt(pfont)+ pgdbfont(pfont).symbo linfo[Byte(_symbol)].addr);
-  if {pgdbfont(pfont)^.symbo linfo[Byte(_symbol)]}psyminfo.size <> 0 then
-    for j := 1 to {pgdbfont(pfont)^.symbo linfo[Byte(_symbol)]}psyminfo.size do
-    begin
-      case Byte(psymbol^) of
-        2:
-          begin
-            inc(PByte(psymbol), sizeof(SHXLine));
-            PGDBvertex2D(@v)^.x:=pfontfloat(psymbol)^;
-            inc(pfontfloat(psymbol));
-            PGDBvertex2D(@v)^.y:=pfontfloat(psymbol)^;
-            inc(pfontfloat(psymbol));
-            v.z:=0;
-            v.w:=1;
-            v:=VectorTransform(v,matr);
-            pv.coord:=PGDBvertex2D(@v)^;
-            pv.count:=0;
-
-            if v.x<minx then minx:=v.x;
-            if v.y<miny then miny:=v.y;
-            if v.x>maxx then maxx:=v.x;
-            if v.y>maxy then maxy:=v.y;
-
-            v:=VectorTransform(v,objmatrix);
-
-            pv3.coord:=PGDBvertex(@v)^;
-
-            tv:=pv3.coord;
-            pv3.LineNumber:=ln;
-
-            pv3.count:=0;
-            Vertex3D_in_WCS_Array.add(@pv3);
-
-            //inc(PByte(psymbol), 2 * sizeof(Double));
-            PGDBvertex2D(@v)^.x:=pfontfloat(psymbol)^;
-            inc(pfontfloat(psymbol));
-            PGDBvertex2D(@v)^.y:=pfontfloat(psymbol)^;
-            inc(pfontfloat(psymbol));
-            v.z:=0;
-            v.w:=1;
-            v:=VectorTransform(v,matr);
-
-            if v.x<minx then minx:=v.x;
-            if v.y<miny then miny:=v.y;
-            if v.x>maxx then maxx:=v.x;
-            if v.y>maxy then maxy:=v.y;
-
-
-            v:=VectorTransform(v,objmatrix);
-            pv3.coord:=PGDBvertex(@v)^;
-            pv3.count:=0;
-
-            pv3.LineNumber:=ln;
-
-            Vertex3D_in_WCS_Array.add(@pv3);
-
-
-            pv.coord:=PGDBvertex2D(@v)^;
-            pv.count:=0;
-            //inc(PByte(psymbol), 2 * sizeof(Double));
-          end;
-        4:
-          begin
-            inc(PByte(psymbol), sizeof(GDBPolylineID));
-            len := Word(psymbol^);
-            inc(PByte(psymbol), sizeof(Word));
-            PGDBvertex2D(@v)^.x:=pfontfloat(psymbol)^;
-            inc(pfontfloat(psymbol));
-            PGDBvertex2D(@v)^.y:=pfontfloat(psymbol)^;
-            inc(pfontfloat(psymbol));
-            v.z:=0;
-            v.w:=1;
-            v:=VectorTransform(v,matr);
-            pv.coord:=PGDBvertex2D(@v)^;
-            pv.count:=len;
-
-            if v.x<minx then minx:=v.x;
-            if v.y<miny then miny:=v.y;
-            if v.x>maxx then maxx:=v.x;
-            if v.y>maxy then maxy:=v.y;
-
-
-            v:=VectorTransform(v,objmatrix);
-            pv3.coord:=PGDBvertex(@v)^;
-            pv3.count:=len;
-
-            tv:=pv3.coord;
-            pv3.LineNumber:=ln;
-
-            Vertex3D_in_WCS_Array.add(@pv3);
-
-
-            //inc(PByte(psymbol), 2 * sizeof(Double));
-            k := 1;
-            while k < len do //for k:=1 to len-1 do
-            begin
-            PGDBvertex2D(@v)^.x:=pfontfloat(psymbol)^;
-            inc(pfontfloat(psymbol));
-            PGDBvertex2D(@v)^.y:=pfontfloat(psymbol)^;
-            inc(pfontfloat(psymbol));
-            v.z:=0;
-            v.w:=1;
-
-            v:=VectorTransform(v,matr);
-
-            if v.x<minx then minx:=v.x;
-            if v.y<miny then miny:=v.y;
-            if v.x>maxx then maxx:=v.x;
-            if v.y>maxy then maxy:=v.y;
-
-
-            v:=VectorTransform(v,objmatrix);
-            pv.coord:=PGDBvertex2D(@v)^;
-            pv.count:=-1;
-
-            pv3.coord:=PGDBvertex(@v)^;
-            pv3.count:={-1}k-len+1;
-
-            pv3.LineNumber:=ln;
-            tv:=pv3.coord;
-
-            Vertex3D_in_WCS_Array.add(@pv3);
-
-
-            //inc(PByte(psymbol), 2 * sizeof(Double));
-            inc(k);
-            end;
-          end;
-      end;
-    end;
-  end;*)
-{procedure GDBObjText.createpoint;
-begin
-  Geom.DUMMYcreatepoint(content,TXTStyleIndex^.pfont,DrawMatrix,objmatrix,textprop.size,Outbound);
-end;}
 function GDBObjText.getsnap;
 begin
-     if onlygetsnapcount=1 then
-     begin
-          result:=false;
-          exit;
-     end;
-     result:=true;
-     case onlygetsnapcount of
-     0:begin
-            if (SnapMode and osm_inspoint)<>0
-            then
-            begin
-            osp.worldcoord:=P_insert_in_WCS;
-            ProjectProc(osp.worldcoord,osp.dispcoord);
-            //osp.dispcoord:=ProjP_insert;
-            osp.ostype:=os_textinsert;
-            end
-            else osp.ostype:=os_none;
-       end;
-     end;
-     inc(onlygetsnapcount);
+  if onlygetsnapcount=1 then begin
+      result:=false;
+      exit;
+  end;
+  result:=true;
+  case onlygetsnapcount of
+    0:begin
+      if (SnapMode and osm_inspoint)<>0 then begin
+        osp.worldcoord:=P_insert_in_WCS;
+        ProjectProc(osp.worldcoord,osp.dispcoord);
+        //osp.dispcoord:=ProjP_insert;
+        osp.ostype:=os_textinsert;
+      end else
+        osp.ostype:=os_none;
+    end;
+  end;
+  inc(onlygetsnapcount);
 end;
 procedure GDBObjText.rtmodifyonepoint(const rtmod:TRTModifyData);
 begin
@@ -578,8 +327,8 @@ begin
 end;
 procedure GDBObjText.SaveToDXFObjXData;
 begin
-     GetDXFIOFeatures.RunSaveFeatures(outStream,@self,IODXFContext);
-     inherited;
+  GetDXFIOFeatures.RunSaveFeatures(outStream,@self,IODXFContext);
+  inherited;
 end;
 function z2dxftext(s:String):String;
 var i:Integer;
@@ -643,14 +392,13 @@ begin
   dxfIntegerout(outStream,73,vv);
 end;
 procedure GDBObjText.LoadFromDXF;
-var //s{, layername}: String;
-  byt{, code}: Integer;
-  doublepoint,angleload: Boolean;
+var
+  byt:Integer;
+  doublepoint,angleload:Boolean;
   angle:double;
-  vv, gv, textbackward: Integer;
+  vv, gv,textbackward:Integer;
   style,tcontent:String;
 begin
-  //initnul;
   vv := 0;
   gv := 0;
   byt:=rdr.ParseInteger;
@@ -744,21 +492,19 @@ begin
 end;
 function GDBObjText.ProcessFromDXFObjXData;
 var
-   features:TDXFEntIODataManager;
-   FeatureLoadProc:TDXFEntLoadFeature;
+  features:TDXFEntIODataManager;
+  FeatureLoadProc:TDXFEntLoadFeature;
 begin
   result:=false;
   features:=GetDXFIOFeatures;
-  if assigned(features) then
-  begin
-       FeatureLoadProc:=features.GetLoadFeature(_Name);
-       if assigned(FeatureLoadProc)then
-       begin
-            result:=FeatureLoadProc(_Name,_Value,ptu,drawing,@self);
-       end;
+  if assigned(features) then begin
+    FeatureLoadProc:=features.GetLoadFeature(_Name);
+    if assigned(FeatureLoadProc)then begin
+     result:=FeatureLoadProc(_Name,_Value,ptu,drawing,@self);
+    end;
   end;
   if not(result) then
-  result:=inherited ProcessFromDXFObjXData(_Name,_Value,ptu,drawing);
+    result:=inherited ProcessFromDXFObjXData(_Name,_Value,ptu,drawing);
 end;
 initialization
   RegisterDXFEntity(GDBTextID,'TEXT','Text',@AllocText,@AllocAndInitText);

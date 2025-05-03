@@ -121,7 +121,7 @@ begin
   until ptn1=nil;
   end;
 end;
-procedure GDBObjCable.SaveToDXFObjXData(var outhandle:{Integer}TZctnrVectorBytes;var IODXFContext:TIODXFContext);
+procedure GDBObjCable.SaveToDXFObjXData(var outhandle:TZctnrVectorBytes;var IODXFContext:TIODXFContext);
 //var
    //s:String;
 begin

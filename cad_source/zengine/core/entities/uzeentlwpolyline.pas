@@ -52,9 +52,9 @@ GDBObjLWPolyline= object(GDBObjWithLocalCS)
                  Square:Double;
                  constructor init(own:Pointer;layeraddres:PGDBLayerProp;LW:SmallInt;c:Boolean);
                  constructor initnul;
-                 procedure LoadFromDXF(var f:TZMemReader;ptu:PExtensionData;var drawing:TDrawingDef);virtual;
+                 procedure LoadFromDXF(var rdr:TZMemReader;ptu:PExtensionData;var drawing:TDrawingDef);virtual;
 
-                 procedure SaveToDXF(var outhandle:{Integer}TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
+                 procedure SaveToDXF(var outhandle:TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
                  procedure DrawGeometry(lw:Integer;var DC:TDrawContext);virtual;
                  procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext;Stage:TEFStages=EFAllStages);virtual;
                  function CalcSquare:Double;virtual;
@@ -577,45 +577,45 @@ begin
   else
     local.P_insert:=nulvertex;
 
-  byt:=f.ParseInteger;
+  byt:=rdr.ParseInteger;
   while byt <> 0 do
   begin
-    if not LoadFromDXFObjShared(f,byt,ptu,drawing) then
+    if not LoadFromDXFObjShared(rdr,byt,ptu,drawing) then
       case byt of
-        8  :vp.Layer:=drawing.getlayertable.getAddres(f.ParseShortString);
-        62 :vp.color:=f.ParseInteger;
+        8  :vp.Layer:=drawing.getlayertable.getAddres(rdr.ParseShortString);
+        62 :vp.color:=rdr.ParseInteger;
         90 :begin
-          numv:=f.ParseInteger;
+          numv:=rdr.ParseInteger;
           Width2D_in_OCS_Array.SetSize(numv);
           hlGDBWord:=0;
         end;
-        10 :p.x:=f.ParseDouble;
+        10 :p.x:=rdr.ParseDouble;
         20 :begin
-          p.y:=f.ParseDouble;
+          p.y:=rdr.ParseDouble;
           lwtv.PushBackData(p);
           inc(hlGDBWord);
         end;
-        38 :local.p_insert.z:=f.ParseDouble;
+        38 :local.p_insert.z:=rdr.ParseDouble;
         40 :begin
           Width2D_in_OCS_Array.SetCount(numv);
-          PGLLWWidth(Width2D_in_OCS_Array.getDataMutable(hlGDBWord-1)).startw:=f.ParseDouble;
+          PGLLWWidth(Width2D_in_OCS_Array.getDataMutable(hlGDBWord-1)).startw:=rdr.ParseDouble;
           widthload:=true;
         end;
         41 :begin
           Width2D_in_OCS_Array.SetCount(numv);
-          PGLLWWidth(Width2D_in_OCS_Array.getDataMutable(hlGDBWord- 1)).endw:=f.ParseDouble;
+          PGLLWWidth(Width2D_in_OCS_Array.getDataMutable(hlGDBWord- 1)).endw:=rdr.ParseDouble;
           widthload:=true;
         end;
-        43 :globalwidth:=f.ParseDouble;
-        70 :closed:=(f.ParseInteger and 1)=1;
-        210:Local.basis.oz.x:=f.ParseDouble;
-        220:Local.basis.oz.y:=f.ParseDouble;
-        230:Local.basis.oz.z:=f.ParseDouble;
-        370:vp.lineweight:=f.ParseInteger;
+        43 :globalwidth:=rdr.ParseDouble;
+        70 :closed:=(rdr.ParseInteger and 1)=1;
+        210:Local.basis.oz.x:=rdr.ParseDouble;
+        220:Local.basis.oz.y:=rdr.ParseDouble;
+        230:Local.basis.oz.z:=rdr.ParseDouble;
+        370:vp.lineweight:=rdr.ParseInteger;
       else
-        f.SkipString;
+        rdr.SkipString;
     end;
-    byt:=f.ParseInteger;
+    byt:=rdr.ParseInteger;
   end;
   if not widthload then begin
     Width2D_in_OCS_Array.SetCount(numv);

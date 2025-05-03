@@ -32,7 +32,7 @@ GDBObjPolyline= object(GDBObjCurve)
                  Closed:Boolean;
                  constructor init(own:Pointer;layeraddres:PGDBLayerProp;LW:SmallInt;c:Boolean);
                  constructor initnul(owner:PGDBObjGenericWithSubordinated);
-                 procedure LoadFromDXF(var f:TZMemReader;ptu:PExtensionData;var drawing:TDrawingDef);virtual;
+                 procedure LoadFromDXF(var rdr:TZMemReader;ptu:PExtensionData;var drawing:TDrawingDef);virtual;
 
                  procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext;Stage:TEFStages=EFAllStages);virtual;
                  procedure startsnap(out osp:os_record; out pdata:Pointer);virtual;
@@ -192,28 +192,28 @@ begin
   tv:=NulVertex;
 
   //initnul(@gdb.ObjRoot);
-  byt:=f.ParseInteger;
+  byt:=rdr.ParseInteger;
   while true do
   begin
     s:='';
-    if not LoadFromDXFObjShared(f,byt,ptu,drawing) then
-       if dxfvertexload(f,10,byt,tv) then
+    if not LoadFromDXFObjShared(rdr,byt,ptu,drawing) then
+       if dxfvertexload(rdr,10,byt,tv) then
                                          begin
                                               if byt=30 then
                                                             if vertexgo then
                                                                             FastAddVertex(tv);
                                          end
-  else if dxfIntegerload(f,70,byt,hlGDBWord) then
+  else if dxfIntegerload(rdr,70,byt,hlGDBWord) then
                                                    begin
                                                         if (hlGDBWord and 1) = 1 then closed := true;
                                                    end
-   else if dxfStringload(f,0,byt,s)then
+   else if dxfStringload(rdr,0,byt,s)then
                                              begin
                                                   if s='VERTEX' then vertexgo := true;
                                                   if s='SEQEND' then system.Break;
                                              end
-                                      else s:= f.ParseString;
-    byt:=f.ParseInteger;
+                                      else s:= rdr.ParseString;
+    byt:=rdr.ParseInteger;
   end;
 
   vertexarrayinocs.SetSize(curveVertexArrayInWCS.Count);

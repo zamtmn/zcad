@@ -62,8 +62,8 @@ GDBObjDevice= object(GDBObjBlockInsert)
 
                    procedure postload(var context:TIODXFLoadContext);virtual;
 
-                   procedure SaveToDXFFollow(var outhandle:{Integer}TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
-                   procedure SaveToDXFObjXData(var outhandle:{Integer}TZctnrVectorBytes;var IODXFContext:TIODXFContext);virtual;
+                   procedure SaveToDXFFollow(var outhandle:TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
+                   procedure SaveToDXFObjXData(var outhandle:TZctnrVectorBytes;var IODXFContext:TIODXFContext);virtual;
                    procedure AddMi(pobj:PGDBObjSubordinated);virtual;
                    //procedure select;virtual;
                    procedure SetInFrustumFromTree(const frustum:ClipArray;const Actuality:TVisActuality;var Counters:TCameraCounters; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double);virtual;
@@ -299,7 +299,7 @@ begin
      //historyout('Device DXFOut end');
      //self.CalcObjMatrix;
 end;
-procedure GDBObjDevice.SaveToDXFObjXData(var outhandle:{Integer}TZctnrVectorBytes;var IODXFContext:TIODXFContext);
+procedure GDBObjDevice.SaveToDXFObjXData(var outhandle:TZctnrVectorBytes;var IODXFContext:TIODXFContext);
 //var
    //s:String;
 begin

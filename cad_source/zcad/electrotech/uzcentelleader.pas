@@ -46,13 +46,13 @@ GDBObjElLeader= object(GDBObjComplex)
 
             constructor initnul;
             function Clone(own:Pointer):PGDBObjEntity;virtual;
-            procedure SaveToDXF(var outhandle:{Integer}TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
-            procedure DXFOut(var outhandle:{Integer}TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
+            procedure SaveToDXF(var outhandle:TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
+            procedure DXFOut(var outhandle:TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
             function GetObjTypeName:String;virtual;
             function ReturnLastOnMouse(InSubEntry:Boolean):PGDBObjEntity;virtual;
             procedure ImSelected(pobj:PGDBObjSubordinated;pobjinarray:Integer);virtual;
             procedure DeSelect(var SelectedObjCount:Integer;ds2s:TDeSelect2Stage);virtual;
-            procedure SaveToDXFFollow(var outhandle:{Integer}TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
+            procedure SaveToDXFFollow(var outhandle:TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
             //function InRect:TInRect;virtual;
 
             destructor done;virtual;
@@ -64,7 +64,7 @@ GDBObjElLeader= object(GDBObjComplex)
             function calcvisible(const frustum:ClipArray;const Actuality:TVisActuality;var Counters:TCameraCounters; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double):Boolean;virtual;
             function GetObjType:TObjID;virtual;
             class function GetDXFIOFeatures:TDXFEntIODataManager;static;
-            procedure SaveToDXFObjXData(var outhandle:{Integer}TZctnrVectorBytes;var IODXFContext:TIODXFContext);virtual;
+            procedure SaveToDXFObjXData(var outhandle:TZctnrVectorBytes;var IODXFContext:TIODXFContext);virtual;
             end;
 implementation
 var

@@ -41,8 +41,8 @@ GDBObjText= object(GDBObjAbstractText)
                  obj_y:Double;
                  constructor init(own:Pointer;layeraddres:PGDBLayerProp;LW:SmallInt;c:TDXFEntsInternalStringType;p:GDBvertex;s,o,w,a:Double;j:TTextJustify);
                  constructor initnul(owner:PGDBObjGenericWithSubordinated);
-                 procedure LoadFromDXF(var f:TZMemReader;ptu:PExtensionData;var drawing:TDrawingDef);virtual;
-                 procedure SaveToDXF(var outhandle:{Integer}TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
+                 procedure LoadFromDXF(var rdr:TZMemReader;ptu:PExtensionData;var drawing:TDrawingDef);virtual;
+                 procedure SaveToDXF(var outhandle:TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
                  procedure CalcGabarit(const drawing:TDrawingDef);virtual;
                  procedure getoutbound(var DC:TDrawContext);virtual;
                  function IsStagedFormatEntity:boolean;virtual;
@@ -57,7 +57,7 @@ GDBObjText= object(GDBObjAbstractText)
                  procedure rtmodifyonepoint(const rtmod:TRTModifyData);virtual;
                  procedure rtsave(refp:Pointer);virtual;
                  function IsHaveObjXData:Boolean;virtual;
-                 procedure SaveToDXFObjXData(var outhandle:{Integer}TZctnrVectorBytes;var IODXFContext:TIODXFContext);virtual;
+                 procedure SaveToDXFObjXData(var outhandle:TZctnrVectorBytes;var IODXFContext:TIODXFContext);virtual;
                  function ProcessFromDXFObjXData(const _Name,_Value:String;ptu:PExtensionData;const drawing:TDrawingDef):Boolean;virtual;
                  class function GetDXFIOFeatures:TDXFEntIODataManager;static;
 
@@ -592,7 +592,7 @@ begin
     end;
   until i<=0;
 end;
-procedure GDBObjText.SaveToDXF(var outhandle:{Integer}TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);
+procedure GDBObjText.SaveToDXF(var outhandle:TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);
 var
   hv, vv,bw: Byte;
   tv:gdbvertex;
@@ -653,7 +653,7 @@ begin
   //initnul;
   vv := 0;
   gv := 0;
-  byt:=f.ParseInteger;
+  byt:=rdr.ParseInteger;
   angleload:=false;
   doublepoint:=false;
   style:='';
@@ -662,31 +662,31 @@ begin
   angle:=0;
   while byt <> 0 do
   begin
-    if not LoadFromDXFObjShared(f,byt,ptu,drawing) then
-       if not dxfvertexload(f,10,byt,Local.P_insert) then
-          if dxfvertexload(f,11,byt,P_drawInOCS) then
+    if not LoadFromDXFObjShared(rdr,byt,ptu,drawing) then
+       if not dxfvertexload(rdr,10,byt,Local.P_insert) then
+          if dxfvertexload(rdr,11,byt,P_drawInOCS) then
                                                      doublepoint := true
-else if not dxfDoubleload(f,40,byt,textprop.size) then
-     if not dxfDoubleload(f,41,byt,textprop.wfactor) then
-     if dxfDoubleload(f,50,byt,angle) then
+else if not dxfDoubleload(rdr,40,byt,textprop.size) then
+     if not dxfDoubleload(rdr,41,byt,textprop.wfactor) then
+     if dxfDoubleload(rdr,50,byt,angle) then
                                              begin
                                                angleload := true;
                                                angle:=angle*pi/180;
                                              end
-else if dxfDoubleload(f,51,byt,textprop.oblique) then
+else if dxfDoubleload(rdr,51,byt,textprop.oblique) then
                                                         textprop.oblique:=textprop.oblique*pi/180
-else if     dxfStringload(f,7,byt,style)then
+else if     dxfStringload(rdr,7,byt,style)then
                                              begin
                                                   TXTStyle :={drawing.GetTextStyleTable^.getDataMutable}(drawing.GetTextStyleTable^.FindStyle(Style,false));
                                                   if TXTStyle=nil then
                                                                       TXTStyle:=pointer(drawing.GetTextStyleTable^.getDataMutable(0));
                                              end
-else if not dxfIntegerload(f,72,byt,gv)then
-     if not dxfIntegerload(f,73,byt,vv)then
-     if not dxfIntegerload(f,71,byt,textbackward)then
-     if not dxfStringload(f,1,byt,tcontent)then
-                                               {s := }f.SkipString;
-    byt:=f.ParseInteger;
+else if not dxfIntegerload(rdr,72,byt,gv)then
+     if not dxfIntegerload(rdr,73,byt,vv)then
+     if not dxfIntegerload(rdr,71,byt,textbackward)then
+     if not dxfStringload(rdr,1,byt,tcontent)then
+                                               {s := }rdr.SkipString;
+    byt:=rdr.ParseInteger;
   end;
   if (textbackward and 4)<>0 then
                                  textprop.upsidedown:=true

@@ -40,7 +40,7 @@ GDBObjArc= object(GDBObjPlain)
                  q2:GDBvertex;
                  constructor init(own:Pointer;layeraddres:PGDBLayerProp;LW:SmallInt;p:GDBvertex;RR,S,E:Double);
                  constructor initnul;
-                 procedure LoadFromDXF(var f:TZMemReader;ptu:PExtensionData;var drawing:TDrawingDef);virtual;
+                 procedure LoadFromDXF(var rdr:TZMemReader;ptu:PExtensionData;var drawing:TDrawingDef);virtual;
 
                  procedure SaveToDXF(var outhandle:TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
                  procedure DrawGeometry(lw:Integer;var DC:TDrawContext);virtual;
@@ -532,15 +532,15 @@ var //s: String;
   dc:TDrawContext;
 begin
   //initnul;
-  byt:=f.ParseInteger;
+  byt:=rdr.ParseInteger;
   while byt <> 0 do
   begin
-    if not LoadFromDXFObjShared(f,byt,ptu,drawing) then
-    if not dxfvertexload(f,10,byt,Local.P_insert) then
-    if not dxfDoubleload(f,40,byt,r) then
-    if not dxfDoubleload(f,50,byt,startangle) then
-    if not dxfDoubleload(f,51,byt,endangle) then {s := }f.SkipString;
-    byt:=f.ParseInteger;
+    if not LoadFromDXFObjShared(rdr,byt,ptu,drawing) then
+    if not dxfvertexload(rdr,10,byt,Local.P_insert) then
+    if not dxfDoubleload(rdr,40,byt,r) then
+    if not dxfDoubleload(rdr,50,byt,startangle) then
+    if not dxfDoubleload(rdr,51,byt,endangle) then {s := }rdr.SkipString;
+    byt:=rdr.ParseInteger;
   end;
   startangle := startangle * pi / 180;
   endangle := endangle * pi / 180;

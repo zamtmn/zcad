@@ -64,8 +64,8 @@ TExtAttrib=record
                     destructor done;virtual;
                     constructor init(own:Pointer;layeraddres:PGDBLayerProp;LW:SmallInt);
                     constructor initnul(owner:PGDBObjGenericWithSubordinated);
-                    procedure SaveToDXFObjPrefix(var  outhandle:{Integer}TZctnrVectorBytes;entname,dbname:String;var IODXFContext:TIODXFContext;notprocessHandle:boolean=false);
-                    function LoadFromDXFObjShared(var f:TZMemReader;DXFCode:Integer;ptu:PExtensionData;var drawing:TDrawingDef):Boolean;
+                    procedure SaveToDXFObjPrefix(var  outhandle:TZctnrVectorBytes;entname,dbname:String;var IODXFContext:TIODXFContext;notprocessHandle:boolean=false);
+                    function LoadFromDXFObjShared(var rdr:TZMemReader;DXFCode:Integer;ptu:PExtensionData;var drawing:TDrawingDef):Boolean;
                     function ProcessFromDXFObjXData(const _Name,_Value:String;ptu:PExtensionData;const drawing:TDrawingDef):Boolean;virtual;
                     function FromDXFPostProcessBeforeAdd(ptu:PExtensionData;const drawing:TDrawingDef):PGDBObjSubordinated;virtual;
                     procedure FromDXFPostProcessAfterAdd;virtual;
@@ -76,10 +76,10 @@ TExtAttrib=record
                     procedure createfield;virtual;
                     function AddExtAttrib:PTExtAttrib;
                     function CopyExtAttrib:PTExtAttrib;
-                    procedure LoadFromDXF(var f:TZMemReader;ptu:PExtensionData;var drawing:TDrawingDef);virtual;abstract;
-                    procedure SaveToDXF(var outhandle:{Integer}TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
-                    procedure DXFOut(var outhandle:{Integer}TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
-                    procedure SaveToDXFfollow(var outhandle:{Integer}TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
+                    procedure LoadFromDXF(var rdr:TZMemReader;ptu:PExtensionData;var drawing:TDrawingDef);virtual;abstract;
+                    procedure SaveToDXF(var outhandle:TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
+                    procedure DXFOut(var outhandle:TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
+                    procedure SaveToDXFfollow(var outhandle:TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
                     procedure SaveToDXFPostProcess(var handle:TZctnrVectorBytes;var IODXFContext:TIODXFContext);
                     procedure SaveToDXFObjXData(var outhandle:TZctnrVectorBytes;var IODXFContext:TIODXFContext);virtual;
                     function IsStagedFormatEntity:boolean;virtual;
@@ -1118,46 +1118,46 @@ begin
   case DXFCode of
     5:begin
       if AddExtAttrib^.dwgHandle=0 then begin
-        PExtAttrib^.dwgHandle:=f.ParseHexQWord;
+        PExtAttrib^.dwgHandle:=rdr.ParseHexQWord;
       end else begin
         //при загрузке полилинии у вертексов есть хэндл
-        f.SkipString;
+        rdr.SkipString;
       end;
       result:=true;
     end;
     6:begin
-      vp.LineType:=drawing.GetLTypeTable.getAddres(f.ParseShortString);
+      vp.LineType:=drawing.GetLTypeTable.getAddres(rdr.ParseShortString);
       result:=true
     end;
     8:begin
       if vp.layer=@DefaultErrorLayer then begin
-        vp.Layer :=drawing.getlayertable.getAddres(f.ParseShortString);
+        vp.Layer :=drawing.getlayertable.getAddres(rdr.ParseShortString);
         if vp.Layer=nil then
           vp.Layer:=vp.Layer;
       end else
-        APP_NAME:=f.ParseString;
+        APP_NAME:=rdr.ParseString;
         result:=true
     end;
     48:begin
-      vp.LineTypeScale:=f.ParseDouble;
+      vp.LineTypeScale:=rdr.ParseDouble;
       result:=true
     end;
     62:begin
-      vp.color:=f.ParseInteger;
+      vp.color:=rdr.ParseInteger;
       result:=true
     end;
     370:begin
-      vp.lineweight:=f.ParseInteger;
+      vp.lineweight:=rdr.ParseInteger;
       result:=true
     end;
     1001:begin
-      APP_NAME:=f.ParseShortString;
+      APP_NAME:=rdr.ParseShortString;
       result:=true;
       if (Length(APP_NAME) = Length(ZCADAppNameInDXF)) and
          (StrLComp(@APP_NAME[1], @ZCADAppNameInDXF[1], Length(APP_NAME))=0) then begin
         repeat
-          XGroup:=f.ParseInteger;
-          XValue:=f.ParseString;
+          XGroup:=rdr.ParseInteger;
+          XValue:=rdr.ParseString;
           if XGroup=1000 then begin
             i:=pos('=',Xvalue);
             if i>1 then Name:=copy(Xvalue,1,i-1) else name:='empty';

@@ -38,9 +38,9 @@ GDBObjBlockInsert= object(GDBObjComplex)
                      BlockDesc:TBlockDesc;
                      constructor initnul;
                      constructor init(own:Pointer;layeraddres:PGDBLayerProp;LW:SmallInt);
-                     procedure LoadFromDXF(var f:TZMemReader;ptu:PExtensionData;var drawing:TDrawingDef);virtual;
+                     procedure LoadFromDXF(var rdr:TZMemReader;ptu:PExtensionData;var drawing:TDrawingDef);virtual;
 
-                     procedure SaveToDXF(var outhandle:{Integer}TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
+                     procedure SaveToDXF(var outhandle:TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
                      procedure CalcObjMatrix(pdrawing:PTDrawingDef=nil);virtual;
                      function Clone(own:Pointer):PGDBObjEntity;virtual;
                      //procedure rtmodifyonepoint(point:pcontrolpointdesc;tobj:PGDBObjEntity;dist,wc:gdbvertex;ptdata:Pointer);virtual;
@@ -522,17 +522,17 @@ var
 begin
   hlGDBWord:=0;
   attrcont := false;
-  byt:=f.ParseInteger;
+  byt:=rdr.ParseInteger;
   while byt <> 0 do
   begin
-     if not LoadFromDXFObjShared(f,byt,ptu,drawing) then
-     if not dxfvertexload(f,10,byt,Local.P_insert) then
-     if not dxfvertexload1(f,41,byt,scale) then
-     if dxfDoubleload(f,50,byt,rotate) then
+     if not LoadFromDXFObjShared(rdr,byt,ptu,drawing) then
+     if not dxfvertexload(rdr,10,byt,Local.P_insert) then
+     if not dxfvertexload1(rdr,41,byt,scale) then
+     if dxfDoubleload(rdr,50,byt,rotate) then
        rotate:=DegToRad(rotate)
-else if dxfIntegerload(f,71,byt,hlGDBWord)then begin if hlGDBWord = 1 then attrcont := true; end
-else if not dxfStringload(f,2,byt,name)then {s := }f.SkipString;
-    byt:=f.ParseInteger;
+else if dxfIntegerload(rdr,71,byt,hlGDBWord)then begin if hlGDBWord = 1 then attrcont := true; end
+else if not dxfStringload(rdr,2,byt,name)then {s := }rdr.SkipString;
+    byt:=rdr.ParseInteger;
   end;
   if attrcont then ;
       {begin
@@ -666,7 +666,7 @@ else if not dxfStringload(f,2,byt,name)then {s := }f.SkipString;
       index:=PGDBObjBlockdefArray(drawing.GetBlockDefArraySimple).getindex(name);
       //format;
 end;
-procedure GDBObjBlockInsert.SaveToDXF(var outhandle:{Integer}TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);
+procedure GDBObjBlockInsert.SaveToDXF(var outhandle:TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);
 //var
   //i, j: Integer;
   //hv, vv: Byte;

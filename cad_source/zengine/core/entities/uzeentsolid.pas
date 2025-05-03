@@ -40,7 +40,7 @@ GDBObjSolid= object(GDBObjWithLocalCS)
                  //ProjPoint:GDBvertex;
                  constructor init(own:Pointer;layeraddres:PGDBLayerProp;LW:SmallInt;p:GDBvertex);
                  constructor initnul(owner:PGDBObjGenericWithSubordinated);
-                 procedure LoadFromDXF(var f:TZMemReader;ptu:PExtensionData;var drawing:TDrawingDef);virtual;
+                 procedure LoadFromDXF(var rdr:TZMemReader;ptu:PExtensionData;var drawing:TDrawingDef);virtual;
                  procedure SaveToDXF(var outhandle:TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
                  procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext;Stage:TEFStages=EFAllStages);virtual;
                  procedure createpoint;virtual;
@@ -146,16 +146,16 @@ procedure GDBObjSolid.LoadFromDXF;
 var //s: String;
   byt: Integer;
 begin
-  byt:=f.ParseInteger;
+  byt:=rdr.ParseInteger;
   while byt <> 0 do
   begin
-    if not LoadFromDXFObjShared(f,byt,ptu,drawing) then
-       if not dxfvertexload(f,10,byt,PInOCS[0]) then
-          if not dxfvertexload(f,11,byt,PInOCS[1]) then
-          if not dxfvertexload(f,12,byt,PInOCS[2]) then
-          if not dxfvertexload(f,13,byt,PInOCS[3]) then
-          {s := }f.ParseString;
-    byt:=f.ParseInteger;
+    if not LoadFromDXFObjShared(rdr,byt,ptu,drawing) then
+       if not dxfvertexload(rdr,10,byt,PInOCS[0]) then
+          if not dxfvertexload(rdr,11,byt,PInOCS[1]) then
+          if not dxfvertexload(rdr,12,byt,PInOCS[2]) then
+          if not dxfvertexload(rdr,13,byt,PInOCS[3]) then
+          {s := }rdr.ParseString;
+    byt:=rdr.ParseInteger;
   end;
 end;
 procedure GDBObjSolid.SaveToDXF;

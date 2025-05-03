@@ -54,7 +54,7 @@ GDBObjHatch= object(GDBObjWithLocalCS)
                  Origin:GDBvertex2D;
                  constructor init(own:Pointer;layeraddres:PGDBLayerProp;LW:SmallInt;p:GDBvertex);
                  constructor initnul;
-                 procedure LoadFromDXF(var f:TZMemReader;ptu:PExtensionData;var drawing:TDrawingDef);virtual;
+                 procedure LoadFromDXF(var rdr:TZMemReader;ptu:PExtensionData;var drawing:TDrawingDef);virtual;
 
                  procedure SaveToDXF(var outhandle:TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
                  procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext;Stage:TEFStages=EFAllStages);virtual;
@@ -602,18 +602,18 @@ var
 begin
   hstyle:=100;
   Angle:=0;
-  byt:=f.ParseInteger;
+  byt:=rdr.ParseInteger;
   while byt <> 0 do
   begin
-    if not LoadFromDXFObjShared(f,byt,ptu,drawing) then
-    if not Path.LoadFromDXF (f,byt) then
-    if not LoadPatternFromDXF(PPattern,f,byt,Angle,Scale) then
-    if not dxfintegerload(f,75,byt,hstyle) then
-    if not dxfDoubleload(f,52,byt,Angle) then
-    if not dxfDoubleload(f,41,byt,Scale) then
-    if not dxfStringload(f,2,byt,PatternName) then
-      f.SkipString;
-    byt:=f.ParseInteger;
+    if not LoadFromDXFObjShared(rdr,byt,ptu,drawing) then
+    if not Path.LoadFromDXF (rdr,byt) then
+    if not LoadPatternFromDXF(PPattern,rdr,byt,Angle,Scale) then
+    if not dxfintegerload(rdr,75,byt,hstyle) then
+    if not dxfDoubleload(rdr,52,byt,Angle) then
+    if not dxfDoubleload(rdr,41,byt,Scale) then
+    if not dxfStringload(rdr,2,byt,PatternName) then
+      rdr.SkipString;
+    byt:=rdr.ParseInteger;
   end;
   case hstyle of
     1:IslandDetection:=HID_Outer;

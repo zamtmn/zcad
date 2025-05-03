@@ -40,7 +40,7 @@ type
     constructor init(own:Pointer;layeraddres:PGDBLayerProp;LW:SmallInt;c:Boolean);
     constructor initnul(owner:PGDBObjGenericWithSubordinated);
     destructor done;virtual;
-    procedure LoadFromDXF(var f:TZMemReader;ptu:PExtensionData;var drawing:TDrawingDef);virtual;
+    procedure LoadFromDXF(var rdr:TZMemReader;ptu:PExtensionData;var drawing:TDrawingDef);virtual;
 
     procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext;Stage:TEFStages=EFAllStages);virtual;
     procedure startsnap(out osp:os_record; out pdata:Pointer);virtual;
@@ -328,7 +328,7 @@ begin
   until ptv=nil;
 end;
 
-procedure GDBObjSpline.SaveToDXFfollow(var outhandle:{Integer}TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);
+procedure GDBObjSpline.SaveToDXFfollow(var outhandle:TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);
 begin
 end;
 
@@ -344,21 +344,21 @@ begin
   tmpKnot:=0;
   tmpFlag:=0;
 
-  DXFGroupCode:=f.ParseInteger;
+  DXFGroupCode:=rdr.ParseInteger;
   while DXFGroupCode <> 0 do begin
-    if not LoadFromDXFObjShared(f,DXFGroupCode,ptu,drawing) then
-       if dxfvertexload(f,10,DXFGroupCode,tmpVertex) then begin
+    if not LoadFromDXFObjShared(rdr,DXFGroupCode,ptu,drawing) then
+       if dxfvertexload(rdr,10,DXFGroupCode,tmpVertex) then begin
          if DXFGroupCode=30 then
            addvertex(tmpVertex);
-       end else if dxfFloatload(f,40,DXFGroupCode,tmpKnot) then
+       end else if dxfFloatload(rdr,40,DXFGroupCode,tmpKnot) then
          Knots.PushBackData(tmpKnot)
-       else if dxfIntegerload(f,70,DXFGroupCode,tmpFlag) then begin
+       else if dxfIntegerload(rdr,70,DXFGroupCode,tmpFlag) then begin
          if (tmpFlag and 1) = 1 then closed := true;
-       end else if dxfIntegerload(f,71,DXFGroupCode,Degree) then begin
+       end else if dxfIntegerload(rdr,71,DXFGroupCode,Degree) then begin
          Degree:=Degree;
        end else
-         f.SkipString;
-    DXFGroupCode:=f.ParseInteger;
+         rdr.SkipString;
+    DXFGroupCode:=rdr.ParseInteger;
   end;
 
   vertexarrayinocs.Shrink;

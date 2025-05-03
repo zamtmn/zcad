@@ -67,7 +67,7 @@ GDBObjAlignedDimension= object(GDBObjDimension)
                       function P14ChangeTo(const tv:GDBVertex):GDBVertex;virtual;
                       //function P15ChangeTo(tv:GDBVertex):GDBVertex;virtual;
                       //function P16ChangeTo(tv:GDBVertex):GDBVertex;virtual;
-                       procedure SaveToDXF(var outhandle:{Integer}TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
+                       procedure SaveToDXF(var outhandle:TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
                        function GetDimStr(var drawing:TDrawingDef):TDXFEntsInternalStringType;virtual;
                        function GetObjType:TObjID;virtual;
                    end;

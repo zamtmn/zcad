@@ -44,9 +44,9 @@ GDBObjNet= object(GDBObjConnected)
 
                  function GetNearestLine(const point:GDBVertex):PGDBObjEntity;
 
-                 procedure SaveToDXF(var outhandle:{Integer}TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
-                 procedure SaveToDXFObjXData(var outhandle:{Integer}TZctnrVectorBytes;var IODXFContext:TIODXFContext);virtual;
-                 procedure SaveToDXFfollow(var outhandle:{Integer}TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
+                 procedure SaveToDXF(var outhandle:TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
+                 procedure SaveToDXFObjXData(var outhandle:TZctnrVectorBytes;var IODXFContext:TIODXFContext);virtual;
+                 procedure SaveToDXFfollow(var outhandle:TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
 
                  destructor done;virtual;
                  procedure FormatAfterDXFLoad(var drawing:TDrawingDef;var DC:TDrawContext);virtual;
@@ -189,7 +189,7 @@ begin
           pobj^.vp:=tvp;
      end;
 end;
-procedure GDBObjNet.SaveToDXFObjXData(var outhandle:{Integer}TZctnrVectorBytes;var IODXFContext:TIODXFContext);
+procedure GDBObjNet.SaveToDXFObjXData(var outhandle:TZctnrVectorBytes;var IODXFContext:TIODXFContext);
 //var
    //s:String;
 begin
@@ -199,7 +199,7 @@ begin
      dxfStringout(outhandle,1000,'_HANDLE='+inttohex(GetHandle,10));
      dxfStringout(outhandle,1000,'_UPGRADE='+inttostr(UD_LineToNet));
 end;
-procedure GDBObjNet.SaveToDXFfollow(var outhandle:{Integer}TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);
+procedure GDBObjNet.SaveToDXFfollow(var outhandle:TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);
 var pobj:PGDBObjEntity;
     ir:itrec;
 begin

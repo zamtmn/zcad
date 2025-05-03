@@ -42,8 +42,8 @@ GDBObjMText= object(GDBObjText)
                  text:XYZWStringArray;(*oi_readonly*)(*hidden_in_objinsp*)
                  constructor init(own:Pointer;layeraddres:PGDBLayerProp;LW:SmallInt;c:TDXFEntsInternalStringType;p:GDBvertex;s,o,w,a:Double;j:TTextJustify;wi,l:Double);
                  constructor initnul(owner:PGDBObjGenericWithSubordinated);
-                 procedure LoadFromDXF(var f:TZMemReader;ptu:PExtensionData;var drawing:TDrawingDef);virtual;
-                 procedure SaveToDXF(var outhandle:{Integer}TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
+                 procedure LoadFromDXF(var rdr:TZMemReader;ptu:PExtensionData;var drawing:TDrawingDef);virtual;
+                 procedure SaveToDXF(var outhandle:TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
                  procedure CalcGabarit(const drawing:TDrawingDef);virtual;
                  //procedure getoutbound;virtual;
                  procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext;Stage:TEFStages=EFAllStages);virtual;
@@ -944,29 +944,29 @@ begin
   style:='';
   ttemplate:='';
   j:=0;
-  byt:=f.ParseInteger;
+  byt:=rdr.ParseInteger;
   while byt <> 0 do
   begin
-    if not LoadFromDXFObjShared(f,byt,ptu,drawing) then
-    if not dxfvertexload(f,10,byt,Local.P_insert) then
-    if not dxfvertexload(f,11,byt,ux) then
-    if not dxfDoubleload(f,40,byt,textprop.size) then
-    if not dxfDoubleload(f,41,byt,width) then
-    if not dxfDoubleload(f,44,byt,linespacef) then
-    if not dxfDoubleload(f,51,byt,textprop.oblique) then
-    if not dxfIntegerload(f,71,byt,j)then
-    if not dxfStringload(f,1,byt,ttemplate)then
-    if not dxfStringload(f,3,byt,ttemplate)then
-    if dxfDoubleload(f,50,byt,angle) then angleload := true
+    if not LoadFromDXFObjShared(rdr,byt,ptu,drawing) then
+    if not dxfvertexload(rdr,10,byt,Local.P_insert) then
+    if not dxfvertexload(rdr,11,byt,ux) then
+    if not dxfDoubleload(rdr,40,byt,textprop.size) then
+    if not dxfDoubleload(rdr,41,byt,width) then
+    if not dxfDoubleload(rdr,44,byt,linespacef) then
+    if not dxfDoubleload(rdr,51,byt,textprop.oblique) then
+    if not dxfIntegerload(rdr,71,byt,j)then
+    if not dxfStringload(rdr,1,byt,ttemplate)then
+    if not dxfStringload(rdr,3,byt,ttemplate)then
+    if dxfDoubleload(rdr,50,byt,angle) then angleload := true
 
-    else if     dxfStringload(f,7,byt,style)then
+    else if     dxfStringload(rdr,7,byt,style)then
                                                  begin
                                                  TXTStyle :={drawing.GetTextStyleTable^.getDataMutable}(drawing.GetTextStyleTable^.FindStyle(Style,false));
                                                  if TXTStyle=nil then
                                                                      TXTStyle:=pointer(drawing.GetTextStyleTable^.getDataMutable(0));
                                                  end
-    else {s := }f.SkipString;
-    byt:=f.ParseInteger;
+    else {s := }rdr.SkipString;
+    byt:=rdr.ParseInteger;
   end;
   if TXTStyle=nil then
                            begin

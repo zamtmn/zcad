@@ -36,9 +36,9 @@ GDBObjLine= object(GDBObj3d)
 
                  constructor init(own:Pointer;layeraddres:PGDBLayerProp;LW:SmallInt;p1,p2:GDBvertex);
                  constructor initnul(owner:PGDBObjGenericWithSubordinated);
-                 procedure LoadFromDXF(var f:TZMemReader;ptu:PExtensionData;var drawing:TDrawingDef);virtual;
+                 procedure LoadFromDXF(var rdr:TZMemReader;ptu:PExtensionData;var drawing:TDrawingDef);virtual;
 
-                 procedure SaveToDXF(var outhandle:{Integer}TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
+                 procedure SaveToDXF(var outhandle:TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
                  function IsStagedFormatEntity:boolean;virtual;
                  procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext;Stage:TEFStages=EFAllStages);virtual;
                  procedure CalcGeometry;virtual;
@@ -196,13 +196,13 @@ procedure GDBObjLine.LoadFromDXF;
 var //s: String;
   byt: Integer;
 begin
-  byt:=f.ParseInteger;
+  byt:=rdr.ParseInteger;
   while byt <> 0 do
   begin
-    if not LoadFromDXFObjShared(f,byt,ptu,drawing) then
-       if not dxfvertexload(f,10,byt,CoordInOCS.lBegin) then
-          if not dxfvertexload(f,11,byt,CoordInOCS.lEnd) then {s := }f.SkipString;
-    byt:=f.ParseInteger;
+    if not LoadFromDXFObjShared(rdr,byt,ptu,drawing) then
+       if not dxfvertexload(rdr,10,byt,CoordInOCS.lBegin) then
+          if not dxfvertexload(rdr,11,byt,CoordInOCS.lEnd) then {s := }rdr.SkipString;
+    byt:=rdr.ParseInteger;
   end;
 end;
 destructor GDBObjLine.done;

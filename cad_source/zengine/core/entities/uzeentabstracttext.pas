@@ -33,7 +33,6 @@ GDBTextProp=record
                   size:Double;
                   oblique:Double;
                   wfactor:Double;
-                  aaaangle:Double;
                   justify:TTextJustify;
                   upsidedown:Boolean;
                   backward:Boolean;
@@ -101,7 +100,7 @@ procedure GDBObjAbstractText.FormatAfterFielfmod(PField,PTypeDescriptor:Pointer)
    ox:gdbvertex;
    {m,}m2,m3:DMAtrix4D;*)
 begin
-     { TODO : removeing angle from text ents }
+     { fixedTODO : removeing angle from text ents }
      (*
      if PField=@textprop.angle then
                                    begin
@@ -150,7 +149,7 @@ begin
                                                                 else
                                                                     ox:=CrossVertex(ZWCS,Local.basis.oz);
      normalizevertex(ox);}
-     { TODO : removeing angle from text ents }
+     { fixedTODO : removeing angle from text ents }
      (*
      textprop.angle:=scalardot(Local.basis.ox,ox);
      textprop.angle:=arccos(textprop.angle);

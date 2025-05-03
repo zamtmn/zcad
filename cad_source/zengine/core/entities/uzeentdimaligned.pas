@@ -67,7 +67,7 @@ GDBObjAlignedDimension= object(GDBObjDimension)
                       function P14ChangeTo(const tv:GDBVertex):GDBVertex;virtual;
                       //function P15ChangeTo(tv:GDBVertex):GDBVertex;virtual;
                       //function P16ChangeTo(tv:GDBVertex):GDBVertex;virtual;
-                       procedure SaveToDXF(var outhandle:TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
+                       procedure SaveToDXF(var outStream:TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
                        function GetDimStr(var drawing:TDrawingDef):TDXFEntsInternalStringType;virtual;
                        function GetObjType:TObjID;virtual;
                    end;
@@ -133,17 +133,17 @@ begin
 end;
 procedure GDBObjAlignedDimension.SaveToDXF;
 begin
-  SaveToDXFObjPrefix(outhandle,'DIMENSION','AcDbDimension',IODXFContext);
-  dxfvertexout(outhandle,10,DimData.P10InWCS);
-  dxfvertexout(outhandle,11,DimData.P11InOCS);
+  SaveToDXFObjPrefix(outStream,'DIMENSION','AcDbDimension',IODXFContext);
+  dxfvertexout(outStream,10,DimData.P10InWCS);
+  dxfvertexout(outStream,11,DimData.P11InOCS);
   if DimData.TextMoved then
-                           dxfIntegerout(outhandle,70,1+128)
+                           dxfIntegerout(outStream,70,1+128)
                        else
-                           dxfIntegerout(outhandle,70,1);
-  dxfStringout(outhandle,3,PDimStyle^.Name);
-  dxfStringout(outhandle,100,'AcDbAlignedDimension');
-  dxfvertexout(outhandle,13,DimData.P13InWCS);
-  dxfvertexout(outhandle,14,DimData.P14InWCS);
+                           dxfIntegerout(outStream,70,1);
+  dxfStringout(outStream,3,PDimStyle^.Name);
+  dxfStringout(outStream,100,'AcDbAlignedDimension');
+  dxfvertexout(outStream,13,DimData.P13InWCS);
+  dxfvertexout(outStream,14,DimData.P14InWCS);
 end;
 procedure GDBObjAlignedDimension.CalcDefaultPlaceText(dlStart,dlEnd:Gdbvertex;var drawing:TDrawingDef);
 begin

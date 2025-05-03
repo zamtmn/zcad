@@ -44,9 +44,9 @@ GDBObjNet= object(GDBObjConnected)
 
                  function GetNearestLine(const point:GDBVertex):PGDBObjEntity;
 
-                 procedure SaveToDXF(var outhandle:TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
-                 procedure SaveToDXFObjXData(var outhandle:TZctnrVectorBytes;var IODXFContext:TIODXFContext);virtual;
-                 procedure SaveToDXFfollow(var outhandle:TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
+                 procedure SaveToDXF(var outStream:TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
+                 procedure SaveToDXFObjXData(var outStream:TZctnrVectorBytes;var IODXFContext:TIODXFContext);virtual;
+                 procedure SaveToDXFfollow(var outStream:TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
 
                  destructor done;virtual;
                  procedure FormatAfterDXFLoad(var drawing:TDrawingDef;var DC:TDrawContext);virtual;
@@ -184,31 +184,31 @@ begin
           pobj^.vp:=vp;
           pobj.bp.ListPos.Owner:=self.GetMainOwner;{ gdb.GetCurrentROOT;}
           IODXFContext.currentEntAddrOverrider:=@self;
-          pobj.SaveToDXF(outhandle,drawing,IODXFContext);
+          pobj.SaveToDXF(outStream,drawing,IODXFContext);
           pobj.bp.ListPos.Owner:=@self;
           pobj^.vp:=tvp;
      end;
 end;
-procedure GDBObjNet.SaveToDXFObjXData(var outhandle:TZctnrVectorBytes;var IODXFContext:TIODXFContext);
+procedure GDBObjNet.SaveToDXFObjXData(var outStream:TZctnrVectorBytes;var IODXFContext:TIODXFContext);
 //var
    //s:String;
 begin
      inherited;
      //s:=inttohex(GetHandle,10);
      //TMWOHistoryOut(@s[1]);
-     dxfStringout(outhandle,1000,'_HANDLE='+inttohex(GetHandle,10));
-     dxfStringout(outhandle,1000,'_UPGRADE='+inttostr(UD_LineToNet));
+     dxfStringout(outStream,1000,'_HANDLE='+inttohex(GetHandle,10));
+     dxfStringout(outStream,1000,'_UPGRADE='+inttostr(UD_LineToNet));
 end;
-procedure GDBObjNet.SaveToDXFfollow(var outhandle:TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);
+procedure GDBObjNet.SaveToDXFfollow(var outStream:TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);
 var pobj:PGDBObjEntity;
     ir:itrec;
 begin
      pobj:=self.ObjArray.beginiterate(ir);
      if pobj<>nil then
      repeat
-           pobj^.SaveToDXF(outhandle,drawing,IODXFContext);
-           pobj^.SaveToDXFPostProcess(outhandle,IODXFContext);
-           pobj^.SaveToDXFFollow(outhandle,drawing,IODXFContext);
+           pobj^.SaveToDXF(outStream,drawing,IODXFContext);
+           pobj^.SaveToDXFPostProcess(outStream,IODXFContext);
+           pobj^.SaveToDXFFollow(outStream,drawing,IODXFContext);
 
            pobj:=self.ObjArray.iterate(ir);
      until pobj=nil;

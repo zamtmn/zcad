@@ -40,7 +40,7 @@ GDBObjBlockInsert= object(GDBObjComplex)
                      constructor init(own:Pointer;layeraddres:PGDBLayerProp;LW:SmallInt);
                      procedure LoadFromDXF(var rdr:TZMemReader;ptu:PExtensionData;var drawing:TDrawingDef);virtual;
 
-                     procedure SaveToDXF(var outhandle:TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
+                     procedure SaveToDXF(var outStream:TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
                      procedure CalcObjMatrix(pdrawing:PTDrawingDef=nil);virtual;
                      function Clone(own:Pointer):PGDBObjEntity;virtual;
                      //procedure rtmodifyonepoint(point:pcontrolpointdesc;tobj:PGDBObjEntity;dist,wc:gdbvertex;ptdata:Pointer);virtual;
@@ -666,18 +666,18 @@ else if not dxfStringload(rdr,2,byt,name)then {s := }rdr.SkipString;
       index:=PGDBObjBlockdefArray(drawing.GetBlockDefArraySimple).getindex(name);
       //format;
 end;
-procedure GDBObjBlockInsert.SaveToDXF(var outhandle:TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);
+procedure GDBObjBlockInsert.SaveToDXF(var outStream:TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);
 //var
   //i, j: Integer;
   //hv, vv: Byte;
   //s: String;
 begin
-  SaveToDXFObjPrefix(outhandle,'INSERT','AcDbBlockReference',IODXFContext);
-  dxfStringout(outhandle,2,name);
-  dxfvertexout(outhandle,10,Local.p_insert);
-  dxfvertexout1(outhandle,41,scale);
-  dxfDoubleout(outhandle,50,rotate*180/pi);
-  SaveToDXFObjPostfix(outhandle);
+  SaveToDXFObjPrefix(outStream,'INSERT','AcDbBlockReference',IODXFContext);
+  dxfStringout(outStream,2,name);
+  dxfvertexout(outStream,10,Local.p_insert);
+  dxfvertexout1(outStream,41,scale);
+  dxfDoubleout(outStream,50,rotate*180/pi);
+  SaveToDXFObjPostfix(outStream);
 end;
 destructor GDBObjBlockInsert.done;
 begin

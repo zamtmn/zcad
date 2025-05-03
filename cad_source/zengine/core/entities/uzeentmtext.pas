@@ -43,7 +43,7 @@ GDBObjMText= object(GDBObjText)
                  constructor init(own:Pointer;layeraddres:PGDBLayerProp;LW:SmallInt;c:TDXFEntsInternalStringType;p:GDBvertex;s,o,w,a:Double;j:TTextJustify;wi,l:Double);
                  constructor initnul(owner:PGDBObjGenericWithSubordinated);
                  procedure LoadFromDXF(var rdr:TZMemReader;ptu:PExtensionData;var drawing:TDrawingDef);virtual;
-                 procedure SaveToDXF(var outhandle:TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
+                 procedure SaveToDXF(var outStream:TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
                  procedure CalcGabarit(const drawing:TDrawingDef);virtual;
                  //procedure getoutbound;virtual;
                  procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext;Stage:TEFStages=EFAllStages);virtual;
@@ -1002,7 +1002,7 @@ begin
         ul:=not(ul);
     until count=0;
 end;
-procedure GDBObjMText.SaveToDXF(var outhandle:TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);
+procedure GDBObjMText.SaveToDXF(var outStream:TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);
 var
   s: String;
   ul:boolean;
@@ -1010,11 +1010,11 @@ var
   ASourcesCounter:TSPFSourceSet;
 begin
   ul:=false;
-  SaveToDXFObjPrefix(outhandle,'MTEXT','AcDbMText',IODXFContext);
-  dxfvertexout(outhandle,10,Local.p_insert);
-  dxfDoubleout(outhandle,40,textprop.size);
-  dxfDoubleout(outhandle,41,width);
-  dxfIntegerout(outhandle,71,j2b[textprop.justify]);
+  SaveToDXFObjPrefix(outStream,'MTEXT','AcDbMText',IODXFContext);
+  dxfvertexout(outStream,10,Local.p_insert);
+  dxfDoubleout(outStream,40,textprop.size);
+  dxfDoubleout(outStream,41,width);
+  dxfIntegerout(outStream,71,j2b[textprop.justify]);
   s:=TxtFormatAndCountSrcs(template,SPFSources.GetFull,ASourcesCounter,@Self);
   if (ASourcesCounter and (not SPFSdxf))<>0 then begin
     quotedcontent:=StringReplace(content,TDXFEntsInternalStringType(#10),TDXFEntsInternalStringType('\P'),[rfReplaceAll]);
@@ -1030,24 +1030,24 @@ begin
   //s := content;
   if length(s) < maxdxfmtextlen then
   begin
-    dxfStringout(outhandle,1,z2dxfmtext(s,ul));
+    dxfStringout(outStream,1,z2dxfmtext(s,ul));
   end
   else
   begin
-    dxfStringout(outhandle,1,z2dxfmtext(copy(s, 1, maxdxfmtextlen),ul));
+    dxfStringout(outStream,1,z2dxfmtext(copy(s, 1, maxdxfmtextlen),ul));
     s := copy(s, maxdxfmtextlen+1, length(s) - maxdxfmtextlen);
     while length(s) > maxdxfmtextlen+1 do
     begin
-      dxfStringout(outhandle,3,z2dxfmtext(copy(s, 1, maxdxfmtextlen),ul));
+      dxfStringout(outStream,3,z2dxfmtext(copy(s, 1, maxdxfmtextlen),ul));
       s := copy(s, maxdxfmtextlen+1, length(s) - maxdxfmtextlen)
     end;
-    dxfStringout(outhandle,3,z2dxfmtext(s,ul));
+    dxfStringout(outStream,3,z2dxfmtext(s,ul));
   end;
-  dxfStringout(outhandle,7,TXTStyle^.name);
-  SaveToDXFObjPostfix(outhandle);
-  dxfvertexout(outhandle,11,Local.basis.ox);
-  dxfIntegerout(outhandle,73,2);
-  dxfDoubleout(outhandle,44,3 * linespace / (5 * textprop.size));
+  dxfStringout(outStream,7,TXTStyle^.name);
+  SaveToDXFObjPostfix(outStream);
+  dxfvertexout(outStream,11,Local.basis.ox);
+  dxfIntegerout(outStream,73,2);
+  dxfDoubleout(outStream,44,3 * linespace / (5 * textprop.size));
 end;
 function AllocMText:PGDBObjMText;
 begin

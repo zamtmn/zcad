@@ -64,7 +64,7 @@ TExtAttrib=record
                     destructor done;virtual;
                     constructor init(own:Pointer;layeraddres:PGDBLayerProp;LW:SmallInt);
                     constructor initnul(owner:PGDBObjGenericWithSubordinated);
-                    procedure SaveToDXFObjPrefix(var  outhandle:TZctnrVectorBytes;entname,dbname:String;var IODXFContext:TIODXFContext;notprocessHandle:boolean=false);
+                    procedure SaveToDXFObjPrefix(var  outStream:TZctnrVectorBytes;entname,dbname:String;var IODXFContext:TIODXFContext;notprocessHandle:boolean=false);
                     function LoadFromDXFObjShared(var rdr:TZMemReader;DXFCode:Integer;ptu:PExtensionData;var drawing:TDrawingDef):Boolean;
                     function ProcessFromDXFObjXData(const _Name,_Value:String;ptu:PExtensionData;const drawing:TDrawingDef):Boolean;virtual;
                     function FromDXFPostProcessBeforeAdd(ptu:PExtensionData;const drawing:TDrawingDef):PGDBObjSubordinated;virtual;
@@ -77,11 +77,11 @@ TExtAttrib=record
                     function AddExtAttrib:PTExtAttrib;
                     function CopyExtAttrib:PTExtAttrib;
                     procedure LoadFromDXF(var rdr:TZMemReader;ptu:PExtensionData;var drawing:TDrawingDef);virtual;abstract;
-                    procedure SaveToDXF(var outhandle:TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
-                    procedure DXFOut(var outhandle:TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
-                    procedure SaveToDXFfollow(var outhandle:TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
+                    procedure SaveToDXF(var outStream:TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
+                    procedure DXFOut(var outStream:TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
+                    procedure SaveToDXFfollow(var outStream:TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
                     procedure SaveToDXFPostProcess(var handle:TZctnrVectorBytes;var IODXFContext:TIODXFContext);
-                    procedure SaveToDXFObjXData(var outhandle:TZctnrVectorBytes;var IODXFContext:TIODXFContext);virtual;
+                    procedure SaveToDXFObjXData(var outStream:TZctnrVectorBytes;var IODXFContext:TIODXFContext);virtual;
                     function IsStagedFormatEntity:boolean;virtual;
                     procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext;Stage:TEFStages=EFAllStages);virtual;
                     procedure FormatFeatures(var drawing:TDrawingDef);virtual;
@@ -747,9 +747,9 @@ begin
 end;
 procedure GDBObjEntity.DXFOut;
 begin
-     SaveToDXF(outhandle,drawing,IODXFContext);
-     SaveToDXFPostProcess(outhandle,IODXFContext);
-     SaveToDXFFollow(outhandle,drawing,IODXFContext);
+     SaveToDXF(outStream,drawing,IODXFContext);
+     SaveToDXFPostProcess(outStream,IODXFContext);
+     SaveToDXFFollow(outStream,drawing,IODXFContext);
 end;
 procedure GDBObjEntity.SaveToDXF;
 begin
@@ -757,14 +757,14 @@ end;
 procedure GDBObjEntity.SaveToDXFfollow;
 begin
   if assigned(EntExtensions) then
-    EntExtensions.RunSaveToDXFfollow(@self,outhandle,drawing,IODXFContext);
+    EntExtensions.RunSaveToDXFfollow(@self,outStream,drawing,IODXFContext);
   inherited;
 end;
-procedure GDBObjEntity.SaveToDXFObjXData(var outhandle:TZctnrVectorBytes;var IODXFContext:TIODXFContext);
+procedure GDBObjEntity.SaveToDXFObjXData(var outStream:TZctnrVectorBytes;var IODXFContext:TIODXFContext);
 begin
-     GetDXFIOFeatures.RunSaveFeatures(outhandle,@self,IODXFContext);
+     GetDXFIOFeatures.RunSaveFeatures(outStream,@self,IODXFContext);
      if assigned(EntExtensions) then
-       EntExtensions.RunSaveToDxf(outhandle,@self,IODXFContext);
+       EntExtensions.RunSaveToDxf(outStream,@self,IODXFContext);
      inherited;
 end;
 
@@ -1072,7 +1072,7 @@ procedure GDBObjEntity.SaveToDXFObjPrefix;
 var
   tmpHandle:TDWGHandle;
 begin
-  dxfStringout(outhandle,0,entname);
+  dxfStringout(outStream,0,entname);
   //TODO: MyGetOrCreateValue можно желать не для всех примитивов, а только для главных функций
   //TODO: это чуток ускорит сохранение с ним 0.35сек, без 0.34~0.33 в тесте
   if notprocessHandle then begin
@@ -1091,16 +1091,16 @@ begin
 //  if $3d=tmpHandle then
 //    tmpHandle:=tmpHandle;
 
-  dxfStringout(outhandle,5,inttohex(tmpHandle{IODXFContext.handle}, 0));
-  dxfStringout(outhandle,100,dxfName_AcDbEntity);
-  dxfStringout(outhandle,8,vp.layer^.name);
+  dxfStringout(outStream,5,inttohex(tmpHandle{IODXFContext.handle}, 0));
+  dxfStringout(outStream,100,dxfName_AcDbEntity);
+  dxfStringout(outStream,8,vp.layer^.name);
   if vp.color<>ClByLayer then
-                             dxfStringout(outhandle,62,inttostr(vp.color));
-  if vp.lineweight<>-1 then dxfIntegerout(outhandle,370,vp.lineweight);
+                             dxfStringout(outStream,62,inttostr(vp.color));
+  if vp.lineweight<>-1 then dxfIntegerout(outStream,370,vp.lineweight);
   if dbname<>'' then
-                    dxfStringout(outhandle,100,dbname);
-  if vp.LineType<>{''}nil then dxfStringout(outhandle,6,vp.LineType^.Name);
-  if vp.LineTypeScale<>1 then dxfDoubleout(outhandle,48,vp.LineTypeScale);
+                    dxfStringout(outStream,100,dbname);
+  if vp.LineType<>{''}nil then dxfStringout(outStream,6,vp.LineType^.Name);
+  if vp.LineTypeScale<>1 then dxfDoubleout(outStream,48,vp.LineTypeScale);
 end;
 function GDBObjEntity.IsHaveObjXData:Boolean;
 begin

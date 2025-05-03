@@ -54,7 +54,7 @@ GDBObjLWPolyline= object(GDBObjWithLocalCS)
                  constructor initnul;
                  procedure LoadFromDXF(var rdr:TZMemReader;ptu:PExtensionData;var drawing:TDrawingDef);virtual;
 
-                 procedure SaveToDXF(var outhandle:TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
+                 procedure SaveToDXF(var outStream:TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
                  procedure DrawGeometry(lw:Integer;var DC:TDrawContext);virtual;
                  procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext;Stage:TEFStages=EFAllStages);virtual;
                  function CalcSquare:Double;virtual;
@@ -635,22 +635,22 @@ var j: Integer;
     tv:gdbvertex;
     //m:DMatrix4D;
 begin
-  SaveToDXFObjPrefix(outhandle,'LWPOLYLINE','AcDbPolyline',IODXFContext);
-  dxfStringout(outhandle,90,inttostr(Vertex2D_in_OCS_Array.Count));
-  //WriteString_EOL(outhandle, '90');
-  //WriteString_EOL(outhandle, inttostr(Vertex2D_in_OCS_Array.Count));
+  SaveToDXFObjPrefix(outStream,'LWPOLYLINE','AcDbPolyline',IODXFContext);
+  dxfStringout(outStream,90,inttostr(Vertex2D_in_OCS_Array.Count));
+  //WriteString_EOL(outStream, '90');
+  //WriteString_EOL(outStream, inttostr(Vertex2D_in_OCS_Array.Count));
 
 
-  //WriteString_EOL(outhandle, '70');
-  if closed then //WriteString_EOL(outhandle, '1')
-                 dxfStringout(outhandle,70,'1')
-            else //WriteString_EOL(outhandle, '0');
-                 dxfStringout(outhandle,70,'0');
+  //WriteString_EOL(outStream, '70');
+  if closed then //WriteString_EOL(outStream, '1')
+                 dxfStringout(outStream,70,'1')
+            else //WriteString_EOL(outStream, '0');
+                 dxfStringout(outStream,70,'0');
 
 
-  dxfDoubleout(outhandle,38,local.p_insert.z);
-  //WriteString_EOL(outhandle, '38');
-  //WriteString_EOL(outhandle, floattostr(local.p_insert.z));
+  dxfDoubleout(outStream,38,local.p_insert.z);
+  //WriteString_EOL(outStream, '38');
+  //WriteString_EOL(outStream, floattostr(local.p_insert.z));
 
   {m:=}CalcObjMatrixWithoutOwner;//наверно это ненужно. надо проверить
   //MatrixTranspose(m);
@@ -661,12 +661,12 @@ begin
        tv.y:=GDBPolyline2DArray.PTArr(Vertex2D_in_OCS_Array.PArray)^[j].y;
        tv.z:=0;
        //tv:=uzegeometry.VectorTransform3D(tv,m);
-    dxfvertex2dout(outhandle,10,PGDBVertex2D(@tv)^);
-    //dxfvertex2dout(outhandle,10,PGDBArrayVertex2D(Vertex2D_in_OCS_Array.PArray)^[j]);
-    dxfDoubleout(outhandle,40,PGLLWWidth(Width2D_in_OCS_Array.getDataMutable(j)).startw);
-    dxfDoubleout(outhandle,41,PGLLWWidth(Width2D_in_OCS_Array.getDataMutable(j)).endw);
+    dxfvertex2dout(outStream,10,PGDBVertex2D(@tv)^);
+    //dxfvertex2dout(outStream,10,PGDBArrayVertex2D(Vertex2D_in_OCS_Array.PArray)^[j]);
+    dxfDoubleout(outStream,40,PGLLWWidth(Width2D_in_OCS_Array.getDataMutable(j)).startw);
+    dxfDoubleout(outStream,41,PGLLWWidth(Width2D_in_OCS_Array.getDataMutable(j)).endw);
   end;
-  SaveToDXFObjPostfix(outhandle);
+  SaveToDXFObjPostfix(outStream);
 end;
 function GDBObjLWpolyline.isPointInside(const point:GDBVertex):Boolean;
 var m: DMatrix4D;

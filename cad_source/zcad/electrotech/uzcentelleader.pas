@@ -46,13 +46,13 @@ GDBObjElLeader= object(GDBObjComplex)
 
             constructor initnul;
             function Clone(own:Pointer):PGDBObjEntity;virtual;
-            procedure SaveToDXF(var outhandle:TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
-            procedure DXFOut(var outhandle:TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
+            procedure SaveToDXF(var outStream:TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
+            procedure DXFOut(var outStream:TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
             function GetObjTypeName:String;virtual;
             function ReturnLastOnMouse(InSubEntry:Boolean):PGDBObjEntity;virtual;
             procedure ImSelected(pobj:PGDBObjSubordinated;pobjinarray:Integer);virtual;
             procedure DeSelect(var SelectedObjCount:Integer;ds2s:TDeSelect2Stage);virtual;
-            procedure SaveToDXFFollow(var outhandle:TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
+            procedure SaveToDXFFollow(var outStream:TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
             //function InRect:TInRect;virtual;
 
             destructor done;virtual;
@@ -64,14 +64,14 @@ GDBObjElLeader= object(GDBObjComplex)
             function calcvisible(const frustum:ClipArray;const Actuality:TVisActuality;var Counters:TCameraCounters; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double):Boolean;virtual;
             function GetObjType:TObjID;virtual;
             class function GetDXFIOFeatures:TDXFEntIODataManager;static;
-            procedure SaveToDXFObjXData(var outhandle:TZctnrVectorBytes;var IODXFContext:TIODXFContext);virtual;
+            procedure SaveToDXFObjXData(var outStream:TZctnrVectorBytes;var IODXFContext:TIODXFContext);virtual;
             end;
 implementation
 var
   GDBObjElLeaderDXFFeatures:TDXFEntIODataManager;
 procedure GDBObjElLeader.SaveToDXFObjXData;
 begin
-     GetDXFIOFeatures.RunSaveFeatures(outhandle,@self,IODXFContext);
+     GetDXFIOFeatures.RunSaveFeatures(outStream,@self,IODXFContext);
      inherited;
 end;
 class function GDBObjElLeader.GetDXFIOFeatures:TDXFEntIODataManager;
@@ -179,31 +179,31 @@ begin
 end;
 procedure GDBObjElLeader.DXFOut;
 begin
-     SaveToDXF(outhandle,drawing,IODXFContext);
-     //SaveToDXFPostProcess(outhandle);
-     SaveToDXFFollow(outhandle,drawing,IODXFContext);
+     SaveToDXF(outStream,drawing,IODXFContext);
+     //SaveToDXFPostProcess(outStream);
+     SaveToDXFFollow(outStream,drawing,IODXFContext);
 end;
 procedure GDBObjElLeader.SaveToDXF;
 begin
   MainLine.bp.ListPos.Owner:={gdb.GetCurrentROOT}self.GetMainOwner;
-  MainLine.SaveToDXF(outhandle,drawing,IODXFContext);
-  (*dxfStringout(outhandle,1001,ZCADAppNameInDXF);
-  dxfStringout(outhandle,1002,'{');
-  dxfStringout(outhandle,1000,'_UPGRADE='+inttostr(UD_LineToLeader));
-  dxfStringout(outhandle,1000,'%1=size|Integer|'+inttostr(size)+'|');
-  dxfStringout(outhandle,1000,'%2=scale|Double|'+floattostr(scale)+'|');
-  dxfStringout(outhandle,1000,'%3=twidth|Double|'+floattostr(twidth)+'|');
-  dxfStringout(outhandle,1002,'}');*)
-  SaveToDXFPostProcess(outhandle,IODXFContext);
+  MainLine.SaveToDXF(outStream,drawing,IODXFContext);
+  (*dxfStringout(outStream,1001,ZCADAppNameInDXF);
+  dxfStringout(outStream,1002,'{');
+  dxfStringout(outStream,1000,'_UPGRADE='+inttostr(UD_LineToLeader));
+  dxfStringout(outStream,1000,'%1=size|Integer|'+inttostr(size)+'|');
+  dxfStringout(outStream,1000,'%2=scale|Double|'+floattostr(scale)+'|');
+  dxfStringout(outStream,1000,'%3=twidth|Double|'+floattostr(twidth)+'|');
+  dxfStringout(outStream,1002,'}');*)
+  SaveToDXFPostProcess(outStream,IODXFContext);
   MainLine.bp.ListPos.Owner:=@self;
 
   MarkLine.bp.ListPos.Owner:=@gdbtrash;
-  MarkLine.SaveToDXF(outhandle,drawing,IODXFContext);
-  MarkLine.SaveToDXFPostProcess(outhandle,IODXFContext);
+  MarkLine.SaveToDXF(outStream,drawing,IODXFContext);
+  MarkLine.SaveToDXFPostProcess(outStream,IODXFContext);
   MarkLine.bp.ListPos.Owner:=@self;
 
   tbl.bp.ListPos.Owner:=@gdbtrash;
-  tbl.SaveToDXFFollow(outhandle,drawing,IODXFContext);
+  tbl.SaveToDXFFollow(outStream,drawing,IODXFContext);
   tbl.bp.ListPos.Owner:=@self;
 end;
 procedure GDBObjElLeader.SaveToDXFFollow;
@@ -237,15 +237,15 @@ begin
          pvc^.transform(m4);
          pvc^.Formatentity(drawing,dc);
 
-              //pvc^.SaveToDXF(outhandle,drawing,IODXFContext);
-              //pvc^.SaveToDXFPostProcess(outhandle,IODXFContext);
-              //pvc^.SaveToDXFFollow(outhandle,drawing,IODXFContext);
+              //pvc^.SaveToDXF(outStream,drawing,IODXFContext);
+              //pvc^.SaveToDXFPostProcess(outStream,IODXFContext);
+              //pvc^.SaveToDXFFollow(outStream,drawing,IODXFContext);
 
               pv.rtsave(pvc2);
               pvc.rtsave(pv);
-              pv^.SaveToDXF(outhandle,drawing,IODXFContext);
-              pv^.SaveToDXFPostProcess(outhandle,IODXFContext);
-              pv^.SaveToDXFFollow(outhandle,drawing,IODXFContext);
+              pv^.SaveToDXF(outStream,drawing,IODXFContext);
+              pv^.SaveToDXFPostProcess(outStream,IODXFContext);
+              pv^.SaveToDXFFollow(outStream,drawing,IODXFContext);
               pvc2.rtsave(pv);
               pv^.bp.ListPos.Owner:=p;
 

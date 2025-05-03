@@ -34,7 +34,7 @@ TBoundaryPath=object
   constructor init(m:TArrayIndex);
   destructor done;virtual;
   function LoadFromDXF(var rdr:TZMemReader;DXFCode:Integer):Boolean; {todo: вынести это нафиг из простых типов}
-  procedure SaveToDXF(var outhandle:TZctnrVectorBytes);
+  procedure SaveToDXF(var outStream:TZctnrVectorBytes);
   procedure CloneTo(var Dest:TBoundaryPath);
   procedure Clear;virtual;
 
@@ -470,23 +470,23 @@ begin
     end;
   end;
 end;
-procedure TBoundaryPath.SaveToDXF(var outhandle:TZctnrVectorBytes);
+procedure TBoundaryPath.SaveToDXF(var outStream:TZctnrVectorBytes);
 var
    i,j: Integer;
    pv:PGDBvertex2D;
 begin
-  dxfIntegerout(outhandle,91,paths.Count);
+  dxfIntegerout(outStream,91,paths.Count);
   for i:=0 to paths.Count-1  do begin
-    dxfIntegerout(outhandle,92,7);
-    dxfIntegerout(outhandle,72,0);
-    dxfIntegerout(outhandle,73,1);
-    dxfIntegerout(outhandle,93,paths.getData(i).Count);
+    dxfIntegerout(outStream,92,7);
+    dxfIntegerout(outStream,72,0);
+    dxfIntegerout(outStream,73,1);
+    dxfIntegerout(outStream,93,paths.getData(i).Count);
     for j:=0 to paths.getData(i).Count-1 do begin
       pv:=paths.getData(i).getDataMutable(j);
-      dxfDoubleout(outhandle,10,pv.x);
-      dxfDoubleout(outhandle,20,pv.y);
+      dxfDoubleout(outStream,10,pv.x);
+      dxfDoubleout(outStream,20,pv.y);
     end;
-    dxfIntegerout(outhandle,97,0);
+    dxfIntegerout(outStream,97,0);
   end;
 end;
 procedure TBoundaryPath.CloneTo(var Dest:TBoundaryPath);

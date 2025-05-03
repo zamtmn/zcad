@@ -48,7 +48,7 @@ GDBObjCircle= object(GDBObjWithLocalCS)
                  function calcinfrustum(const frustum:ClipArray;const Actuality:TVisActuality;var Counters:TCameraCounters; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double):Boolean;virtual;
                  function CalcTrueInFrustum(const frustum:ClipArray):TInBoundingVolume;virtual;
                  procedure getoutbound(var DC:TDrawContext);virtual;
-                 procedure SaveToDXF(var outhandle:TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
+                 procedure SaveToDXF(var outStream:TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
                  procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext;Stage:TEFStages=EFAllStages);virtual;
                  procedure DrawGeometry(lw:Integer;var DC:TDrawContext);virtual;
                  function Clone(own:Pointer):PGDBObjEntity;virtual;
@@ -278,10 +278,10 @@ begin
 end;
 procedure GDBObjCircle.SaveToDXF;
 begin
-  SaveToDXFObjPrefix(outhandle,'CIRCLE','AcDbCircle',IODXFContext);
-  dxfvertexout(outhandle,10,Local.p_insert);
-  dxfDoubleout(outhandle,40,Radius);
-  SaveToDXFObjPostfix(outhandle);
+  SaveToDXFObjPrefix(outStream,'CIRCLE','AcDbCircle',IODXFContext);
+  dxfvertexout(outStream,10,Local.p_insert);
+  dxfDoubleout(outStream,40,Radius);
+  SaveToDXFObjPostfix(outStream);
 end;
 
 procedure GDBObjCircle.FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext;Stage:TEFStages=EFAllStages);

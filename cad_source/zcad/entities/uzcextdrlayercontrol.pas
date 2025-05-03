@@ -55,7 +55,7 @@ type
       procedure GetVariableValue(Var Result : TFPExpressionResult; ConstRef AName : ShortString);
       procedure onBeforeEntityFormat(pEntity:Pointer;const drawing:TDrawingDef;var DC:TDrawContext);override;
       procedure onAfterEntityFormat(pEntity:Pointer;const drawing:TDrawingDef;var DC:TDrawContext);override;
-      procedure SaveToDxfObjXData(var outhandle:TZctnrVectorBytes;pEntity:Pointer;var IODXFContext:TIODXFContext);override;
+      procedure SaveToDxfObjXData(var outStream:TZctnrVectorBytes;pEntity:Pointer;var IODXFContext:TIODXFContext);override;
       procedure ReorganizeEnts(OldEnts2NewEntsMap:TMapPointerToPointer);override;
       procedure PostLoad(var context:TIODXFLoadContext);override;
       class function EntIOLoadGoodLayer(_Name,_Value:String;ptu:PExtensionData;const drawing:TDrawingDef;pEntity:pointer):boolean;
@@ -295,11 +295,11 @@ begin
   result:=LayerControlExtenderName;
 end;
 
-procedure TLayerControlExtender.SaveToDxfObjXData(var outhandle:TZctnrVectorBytes;pEntity:Pointer;var IODXFContext:TIODXFContext);
+procedure TLayerControlExtender.SaveToDxfObjXData(var outStream:TZctnrVectorBytes;pEntity:Pointer;var IODXFContext:TIODXFContext);
 begin
-  dxfStringout(outhandle,1000,'LCGoodLayer='+GoodLayer);
-  dxfStringout(outhandle,1000,'LCBadLayer='+BadLayer);
-  dxfStringout(outhandle,1000,'LCExpression='+FExpression);
+  dxfStringout(outStream,1000,'LCGoodLayer='+GoodLayer);
+  dxfStringout(outStream,1000,'LCBadLayer='+BadLayer);
+  dxfStringout(outStream,1000,'LCExpression='+FExpression);
 end;
 
 procedure TLayerControlExtender.PostLoad(var context:TIODXFLoadContext);

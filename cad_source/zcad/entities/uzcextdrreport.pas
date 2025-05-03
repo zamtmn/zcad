@@ -59,7 +59,7 @@ type
 
     class function EntIOLoadReportExtender(_Name,_Value:String;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
 
-    procedure SaveToDxfObjXData(var outhandle:TZctnrVectorBytes;PEnt:Pointer;var IODXFContext:TIODXFContext);override;
+    procedure SaveToDxfObjXData(var outStream:TZctnrVectorBytes;PEnt:Pointer;var IODXFContext:TIODXFContext);override;
     procedure onRemoveFromArray(pEntity:Pointer;const drawing:TDrawingDef);override;
 
     procedure ScrContextSet(mode:TLapeScriptContextModes;ctx:TBaseScriptContext;cplr:TLapeCompiler);
@@ -141,9 +141,9 @@ begin
   result:=true;
 end;
 
-procedure TReportExtender.SaveToDxfObjXData(var outhandle:TZctnrVectorBytes;PEnt:Pointer;var IODXFContext:TIODXFContext);
+procedure TReportExtender.SaveToDxfObjXData(var outStream:TZctnrVectorBytes;PEnt:Pointer;var IODXFContext:TIODXFContext);
 begin
-   dxfStringout(outhandle,1000,'REPORTEXTENDER=');
+   dxfStringout(outStream,1000,'REPORTEXTENDER=');
 end;
 
 procedure TReportExtender.onRemoveFromArray(pEntity:Pointer;const drawing:TDrawingDef);

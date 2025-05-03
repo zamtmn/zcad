@@ -46,8 +46,8 @@ type
     procedure startsnap(out osp:os_record; out pdata:Pointer);virtual;
     function getsnap(var osp:os_record; var pdata:Pointer; const param:OGLWndtype; ProjectProc:GDBProjectProc;SnapMode:TGDBOSMode):Boolean;virtual;
 
-    procedure SaveToDXF(var outhandle:TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
-    procedure SaveToDXFfollow(var outhandle:TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
+    procedure SaveToDXF(var outStream:TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
+    procedure SaveToDXFfollow(var outStream:TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
     procedure DrawGeometry(lw:Integer;var DC:TDrawContext);virtual;
     function Clone(own:Pointer):PGDBObjEntity;virtual;
     function GetObjTypeName:String;virtual;
@@ -301,34 +301,34 @@ var
   fl:PSingle;
   ptv:pgdbvertex;
 begin
-  SaveToDXFObjPrefix(outhandle,'SPLINE','AcDbSpline',IODXFContext);
+  SaveToDXFObjPrefix(outStream,'SPLINE','AcDbSpline',IODXFContext);
   if closed then
-    dxfIntegerout(outhandle,70,9)
+    dxfIntegerout(outStream,70,9)
   else
-    dxfIntegerout(outhandle,70,8);
-  dxfIntegerout(outhandle,71,degree);
-  dxfIntegerout(outhandle,72,Knots.Count);
-  dxfIntegerout(outhandle,73,VertexArrayInOCS.Count);
+    dxfIntegerout(outStream,70,8);
+  dxfIntegerout(outStream,71,degree);
+  dxfIntegerout(outStream,72,Knots.Count);
+  dxfIntegerout(outStream,73,VertexArrayInOCS.Count);
 
-  dxfDoubleout(outhandle,42,0.0000000001);
-  dxfDoubleout(outhandle,43,0.0000000001);
+  dxfDoubleout(outStream,42,0.0000000001);
+  dxfDoubleout(outStream,43,0.0000000001);
 
   fl:=Knots.beginiterate(ir);
   if fl<>nil then
   repeat
-    dxfDoubleout(outhandle,40,fl^);
+    dxfDoubleout(outStream,40,fl^);
     fl:=Knots.iterate(ir);
   until fl=nil;
 
   ptv:=VertexArrayInOCS.beginiterate(ir);
   if ptv<>nil then
   repeat
-    dxfvertexout(outhandle,10,ptv^);
+    dxfvertexout(outStream,10,ptv^);
     ptv:=VertexArrayInOCS.iterate(ir);
   until ptv=nil;
 end;
 
-procedure GDBObjSpline.SaveToDXFfollow(var outhandle:TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);
+procedure GDBObjSpline.SaveToDXFfollow(var outStream:TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);
 begin
 end;
 

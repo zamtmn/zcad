@@ -56,7 +56,7 @@ GDBObjCurve= object(GDBObj3d)
 
                  procedure AddVertex(const Vertex:GDBVertex);virtual;
 
-                 procedure SaveToDXFfollow(var outhandle:TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
+                 procedure SaveToDXFfollow(var outStream:TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
                  procedure TransformAt(p:PGDBObjEntity;t_matrix:PDMatrix4D);virtual;
                  procedure transform(const t_matrix:DMatrix4D);virtual;
 
@@ -206,13 +206,13 @@ begin
   ptv:=vertexarrayinocs.beginiterate(ir);
   if ptv<>nil then
   repeat
-        SaveToDXFObjPrefix(outhandle,'VERTEX','AcDbVertex',IODXFContext,true);
-        dxfStringout(outhandle,100,'AcDb3dPolylineVertex');
-        dxfvertexout(outhandle,10,ptv^);
+        SaveToDXFObjPrefix(outStream,'VERTEX','AcDbVertex',IODXFContext,true);
+        dxfStringout(outStream,100,'AcDb3dPolylineVertex');
+        dxfvertexout(outStream,10,ptv^);
 
         ptv:=vertexarrayinocs.iterate(ir);
   until ptv=nil;
-  SaveToDXFObjPrefix(outhandle,'SEQEND','',IODXFContext,true);
+  SaveToDXFObjPrefix(outStream,'SEQEND','',IODXFContext,true);
 end;
 procedure GDBObjCurve.AddVertex(const Vertex:GDBVertex);
 begin

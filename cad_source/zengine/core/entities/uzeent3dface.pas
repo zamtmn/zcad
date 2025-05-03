@@ -38,7 +38,7 @@ GDBObj3DFace= object(GDBObj3d)
                  constructor init(own:Pointer;layeraddres:PGDBLayerProp;LW:SmallInt;p:GDBvertex);
                  constructor initnul(owner:PGDBObjGenericWithSubordinated);
                  procedure LoadFromDXF(var rdr:TZMemReader;ptu:PExtensionData;var drawing:TDrawingDef);virtual;
-                 procedure SaveToDXF(var outhandle:TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
+                 procedure SaveToDXF(var outStream:TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
                  procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext;Stage:TEFStages=EFAllStages);virtual;
 
                  procedure DrawGeometry(lw:Integer;var DC:TDrawContext);virtual;
@@ -182,11 +182,11 @@ begin
 end;
 procedure GDBObj3DFace.SaveToDXF;
 begin
-  SaveToDXFObjPrefix(outhandle,'3DFACE','AcDbFace',IODXFContext);
-  dxfvertexout(outhandle,10,PInOCS[0]);
-  dxfvertexout(outhandle,11,PInOCS[1]);
-  dxfvertexout(outhandle,12,PInOCS[2]);
-  dxfvertexout(outhandle,13,PInOCS[3]);
+  SaveToDXFObjPrefix(outStream,'3DFACE','AcDbFace',IODXFContext);
+  dxfvertexout(outStream,10,PInOCS[0]);
+  dxfvertexout(outStream,11,PInOCS[1]);
+  dxfvertexout(outStream,12,PInOCS[2]);
+  dxfvertexout(outStream,13,PInOCS[3]);
 end;
 
 procedure GDBObj3DFace.DrawGeometry;

@@ -41,7 +41,7 @@ GDBObjSolid= object(GDBObjWithLocalCS)
                  constructor init(own:Pointer;layeraddres:PGDBLayerProp;LW:SmallInt;p:GDBvertex);
                  constructor initnul(owner:PGDBObjGenericWithSubordinated);
                  procedure LoadFromDXF(var rdr:TZMemReader;ptu:PExtensionData;var drawing:TDrawingDef);virtual;
-                 procedure SaveToDXF(var outhandle:TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
+                 procedure SaveToDXF(var outStream:TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
                  procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext;Stage:TEFStages=EFAllStages);virtual;
                  procedure createpoint;virtual;
 
@@ -160,12 +160,12 @@ begin
 end;
 procedure GDBObjSolid.SaveToDXF;
 begin
-  SaveToDXFObjPrefix(outhandle,'SOLID','AcDbTrace',IODXFContext);
-  dxfvertexout(outhandle,10,PInOCS[0]);
-  dxfvertexout(outhandle,11,PInOCS[1]);
-  dxfvertexout(outhandle,12,PInOCS[2]);
-  dxfvertexout(outhandle,13,PInOCS[3]);
-  SaveToDXFObjPostfix(outhandle)
+  SaveToDXFObjPrefix(outStream,'SOLID','AcDbTrace',IODXFContext);
+  dxfvertexout(outStream,10,PInOCS[0]);
+  dxfvertexout(outStream,11,PInOCS[1]);
+  dxfvertexout(outStream,12,PInOCS[2]);
+  dxfvertexout(outStream,13,PInOCS[3]);
+  SaveToDXFObjPostfix(outStream)
 end;
 
 procedure GDBObjSolid.DrawGeometry;

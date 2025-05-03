@@ -45,7 +45,7 @@ GDBObjEllipse= object(GDBObjPlain)
                  constructor initnul;
                  procedure LoadFromDXF(var rdr:TZMemReader;ptu:PExtensionData;var drawing:TDrawingDef);virtual;
 
-                 procedure SaveToDXF(var outhandle:TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
+                 procedure SaveToDXF(var outStream:TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
                  procedure DrawGeometry(lw:Integer;var DC:TDrawContext);virtual;
                  procedure addcontrolpoints(tdesc:Pointer);virtual;
                  procedure remaponecontrolpoint(pdesc:pcontrolpointdesc;ProjectProc:GDBProjectProc);virtual;
@@ -385,17 +385,17 @@ begin
 end;
 procedure GDBObjEllipse.SaveToDXF;
 begin
-  SaveToDXFObjPrefix(outhandle,'ELLIPSE','AcDbEllipse',IODXFContext);
-  dxfvertexout(outhandle,10,Local.p_insert);
-  dxfvertexout(outhandle,11,majoraxis);
-    SaveToDXFObjPostfix(outhandle);
+  SaveToDXFObjPrefix(outStream,'ELLIPSE','AcDbEllipse',IODXFContext);
+  dxfvertexout(outStream,10,Local.p_insert);
+  dxfvertexout(outStream,11,majoraxis);
+    SaveToDXFObjPostfix(outStream);
 
-  //dxfStringout(outhandle,100,'AcDbEllipse');
-  //WriteString_EOL(outhandle, '100');
-  //WriteString_EOL(outhandle, 'AcDbArc');
-  dxfDoubleout(outhandle,40,ratio{ * 180 / pi});
-  dxfDoubleout(outhandle,41,startangle{ * 180 / pi});
-  dxfDoubleout(outhandle,42,endangle{ * 180 / pi});
+  //dxfStringout(outStream,100,'AcDbEllipse');
+  //WriteString_EOL(outStream, '100');
+  //WriteString_EOL(outStream, 'AcDbArc');
+  dxfDoubleout(outStream,40,ratio{ * 180 / pi});
+  dxfDoubleout(outStream,41,startangle{ * 180 / pi});
+  dxfDoubleout(outStream,42,endangle{ * 180 / pi});
 end;
 procedure GDBObjEllipse.LoadFromDXF;
 var //s: String;

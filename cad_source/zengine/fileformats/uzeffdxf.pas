@@ -1440,19 +1440,19 @@ begin
   MemReader.Free;
   zDebugLn('{D-}end; {AddFromDXF}');
 end;
-procedure saveentitiesdxf2000(pva: PGDBObjEntityOpenArray; var outhandle:TZctnrVectorBytes;var drawing:TSimpleDrawing;var IODXFContext:TIODXFContext);
+procedure saveentitiesdxf2000(pva: PGDBObjEntityOpenArray; var outStream:TZctnrVectorBytes;var drawing:TSimpleDrawing;var IODXFContext:TIODXFContext);
 var
   pv:pgdbobjEntity;
   ir:itrec;
   lph:TLPSHandle;
 begin
-     lph:=lps.StartLongProcess('saveentitiesdxf2000',@outhandle,pva^.Count);
+     lph:=lps.StartLongProcess('saveentitiesdxf2000',@outStream,pva^.Count);
      pv:=pva^.beginiterate(ir);
      if pv<>nil then
      repeat
           lps.ProgressLongProcess(lph,ir.itc);
           IODXFContext.LocalEntityFlags:=DefaultLocalEntityFlags;
-          pv^.DXFOut(outhandle,drawing,IODXFContext);
+          pv^.DXFOut(outStream,drawing,IODXFContext);
      pv:=pva^.iterate(ir);
      until pv=nil;
      lps.EndLongProcess(lph);

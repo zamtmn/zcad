@@ -38,7 +38,7 @@ GDBObjPolyline= object(GDBObjCurve)
                  procedure startsnap(out osp:os_record; out pdata:Pointer);virtual;
                  function getsnap(var osp:os_record; var pdata:Pointer; const param:OGLWndtype; ProjectProc:GDBProjectProc;SnapMode:TGDBOSMode):Boolean;virtual;
 
-                 procedure SaveToDXF(var outhandle:TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
+                 procedure SaveToDXF(var outStream:TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
                  procedure DrawGeometry(lw:Integer;var DC:TDrawContext);virtual;
                  function Clone(own:Pointer):PGDBObjEntity;virtual;
                  function GetObjTypeName:String;virtual;
@@ -170,13 +170,13 @@ procedure GDBObjPolyline.SaveToDXF;
 //    ptv:pgdbvertex;
 //    ir:itrec;
 begin
-  SaveToDXFObjPrefix(outhandle,'POLYLINE','AcDb3dPolyline',IODXFContext);
-  dxfIntegerout(outhandle,66,1);
-  dxfvertexout(outhandle,10,uzegeometry.NulVertex);
+  SaveToDXFObjPrefix(outStream,'POLYLINE','AcDb3dPolyline',IODXFContext);
+  dxfIntegerout(outStream,66,1);
+  dxfvertexout(outStream,10,uzegeometry.NulVertex);
   if closed then
-                dxfIntegerout(outhandle,70,9)
+                dxfIntegerout(outStream,70,9)
             else
-                dxfIntegerout(outhandle,70,8);
+                dxfIntegerout(outStream,70,8);
 end;
 procedure GDBObjPolyline.LoadFromDXF;
 var s{, layername}: String;

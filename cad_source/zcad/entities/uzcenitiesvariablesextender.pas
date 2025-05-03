@@ -86,7 +86,7 @@ TVariablesExtender=class(TBaseVariablesExtender)
     class function EntIOLoadMainFunction(_Name,_Value:String;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
     class function EntIOLoadEmptyVariablesExtender(_Name,_Value:String;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
 
-    procedure SaveToDxfObjXData(var outhandle:TZctnrVectorBytes;PEnt:Pointer;var IODXFContext:TIODXFContext);override;
+    procedure SaveToDxfObjXData(var outStream:TZctnrVectorBytes;PEnt:Pointer;var IODXFContext:TIODXFContext);override;
     class procedure DisableVariableContentReplace;
     class procedure EnableVariableContentReplace;
     class function isVariableContentReplaceEnabled:Boolean;
@@ -470,7 +470,7 @@ begin
   result:=true;
 end;
 
-procedure TVariablesExtender.SaveToDxfObjXData(var outhandle:TZctnrVectorBytes;PEnt:Pointer;var IODXFContext:TIODXFContext);
+procedure TVariablesExtender.SaveToDxfObjXData(var outStream:TZctnrVectorBytes;PEnt:Pointer;var IODXFContext:TIODXFContext);
 var
    ishavevars:boolean;
    pvd:pvardesk;
@@ -498,7 +498,7 @@ begin
        repeat
          if typeof(pvu^)<>typeof(TEntityUnit) then begin
            str:='USES='+pvu^.Name;
-           dxfStringout(outhandle,1000,str);
+           dxfStringout(outStream,1000,str);
            IsNothingWrite:=false;
          end;
         pvu:=vardata.entityunit.InterfaceUses.iterate(ir);
@@ -508,7 +508,7 @@ begin
      if vardata.pMainFuncEntity<>nil then begin
        IODXFContext.p2h.MyGetOrCreateValue(vardata.pMainFuncEntity,IODXFContext.handle,th);
        str:='MAINFUNCTION='+inttohex(th,0);
-       dxfStringout(outhandle,1000,str);
+       dxfStringout(outStream,1000,str);
        IsNothingWrite:=false;
      end;
 
@@ -524,11 +524,11 @@ begin
              sv:=StringReplace(sv,#13,'',[rfReplaceAll]);
              str:='#'+inttostr(i)+'='+pvd^.name+'|'+pvd^.data.ptd.TypeName;
              str:=str+'|'+sv+'|'+pvd^.username;
-             dxfStringout(outhandle,1000,str);
+             dxfStringout(outStream,1000,str);
              IsNothingWrite:=false;
            end else begin
              str:='&'+inttostr(i)+'='+pvd^.name+'|'+pvd^.data.ptd.TypeName+'|'+pvd^.username;
-             dxfStringout(outhandle,1000,str);
+             dxfStringout(outStream,1000,str);
              IsNothingWrite:=false;
              inc(i);
              tp:=pvd^.data.Addr.Instance;
@@ -536,7 +536,7 @@ begin
              if pfd<>nil then
              repeat
                str:='$'+inttostr(i)+'='+pvd^.name+'|'+pfd^.base.ProgramName+'|'+pfd^.base.PFT^.GetValueAsString(tp);
-               dxfStringout(outhandle,1000,str);
+               dxfStringout(outStream,1000,str);
                ptruint(tp):=ptruint(tp)+ptruint(pfd^.base.PFT^.SizeInBytes); { TODO : сделать на оффсете }
                inc(i);
                pfd:=PRecordDescriptor(pvd^.data.ptd).Fields.iterate(ir2);
@@ -549,7 +549,7 @@ begin
          until pvd=nil;
      end;
     if IsNothingWrite then
-      dxfStringout(outhandle,1000,'EMPTYVARIABLESEXTENDER=');
+      dxfStringout(outStream,1000,'EMPTYVARIABLESEXTENDER=');
   end;
 end;
 

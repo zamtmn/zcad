@@ -62,8 +62,8 @@ GDBObjDevice= object(GDBObjBlockInsert)
 
                    procedure postload(var context:TIODXFLoadContext);virtual;
 
-                   procedure SaveToDXFFollow(var outhandle:TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
-                   procedure SaveToDXFObjXData(var outhandle:TZctnrVectorBytes;var IODXFContext:TIODXFContext);virtual;
+                   procedure SaveToDXFFollow(var outStream:TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
+                   procedure SaveToDXFObjXData(var outStream:TZctnrVectorBytes;var IODXFContext:TIODXFContext);virtual;
                    procedure AddMi(pobj:PGDBObjSubordinated);virtual;
                    //procedure select;virtual;
                    procedure SetInFrustumFromTree(const frustum:ClipArray;const Actuality:TVisActuality;var Counters:TCameraCounters; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double);virtual;
@@ -271,16 +271,16 @@ begin
               pv.rtsave(pvc2);
               pvc.rtsave(pv);
               pv^.State:=pv^.State+[ESCalcWithoutOwner,ESTemp];
-              //pvc^.SaveToDXF(outhandle,drawing,IODXFContext);
+              //pvc^.SaveToDXF(outStream,drawing,IODXFContext);
 
               //if pv^.IsHaveLCS then
                                begin
                                pv^.FormatEntity(drawing,dc);
                                end;
 
-              pv^.SaveToDXF(outhandle,drawing,IODXFContext);
-              pv^.SaveToDXFPostProcess(outhandle,IODXFContext);
-              pv^.SaveToDXFFollow(outhandle,drawing,IODXFContext);
+              pv^.SaveToDXF(outStream,drawing,IODXFContext);
+              pv^.SaveToDXFPostProcess(outStream,IODXFContext);
+              pv^.SaveToDXFFollow(outStream,drawing,IODXFContext);
               pvc2.rtsave(pv);
 
          pvc2.rtsave(pv);
@@ -299,15 +299,15 @@ begin
      //historyout('Device DXFOut end');
      //self.CalcObjMatrix;
 end;
-procedure GDBObjDevice.SaveToDXFObjXData(var outhandle:TZctnrVectorBytes;var IODXFContext:TIODXFContext);
+procedure GDBObjDevice.SaveToDXFObjXData(var outStream:TZctnrVectorBytes;var IODXFContext:TIODXFContext);
 //var
    //s:String;
 begin
      inherited;
      //s:=inttohex(GetHandle,10);
      //historyout(@s[1]);
-     dxfStringout(outhandle,1000,'_HANDLE='+inttohex(GetHandle,10));
-     dxfStringout(outhandle,1000,'_UPGRADE=1');
+     dxfStringout(outStream,1000,'_HANDLE='+inttohex(GetHandle,10));
+     dxfStringout(outStream,1000,'_UPGRADE=1');
 end;
 (*function GDBObjDevice.GetDeviceType;
 begin

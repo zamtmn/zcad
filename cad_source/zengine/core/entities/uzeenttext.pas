@@ -42,7 +42,7 @@ GDBObjText= object(GDBObjAbstractText)
                  constructor init(own:Pointer;layeraddres:PGDBLayerProp;LW:SmallInt;c:TDXFEntsInternalStringType;p:GDBvertex;s,o,w,a:Double;j:TTextJustify);
                  constructor initnul(owner:PGDBObjGenericWithSubordinated);
                  procedure LoadFromDXF(var rdr:TZMemReader;ptu:PExtensionData;var drawing:TDrawingDef);virtual;
-                 procedure SaveToDXF(var outhandle:TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
+                 procedure SaveToDXF(var outStream:TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
                  procedure CalcGabarit(const drawing:TDrawingDef);virtual;
                  procedure getoutbound(var DC:TDrawContext);virtual;
                  function IsStagedFormatEntity:boolean;virtual;
@@ -57,7 +57,7 @@ GDBObjText= object(GDBObjAbstractText)
                  procedure rtmodifyonepoint(const rtmod:TRTModifyData);virtual;
                  procedure rtsave(refp:Pointer);virtual;
                  function IsHaveObjXData:Boolean;virtual;
-                 procedure SaveToDXFObjXData(var outhandle:TZctnrVectorBytes;var IODXFContext:TIODXFContext);virtual;
+                 procedure SaveToDXFObjXData(var outStream:TZctnrVectorBytes;var IODXFContext:TIODXFContext);virtual;
                  function ProcessFromDXFObjXData(const _Name,_Value:String;ptu:PExtensionData;const drawing:TDrawingDef):Boolean;virtual;
                  class function GetDXFIOFeatures:TDXFEntIODataManager;static;
 
@@ -578,7 +578,7 @@ begin
 end;
 procedure GDBObjText.SaveToDXFObjXData;
 begin
-     GetDXFIOFeatures.RunSaveFeatures(outhandle,@self,IODXFContext);
+     GetDXFIOFeatures.RunSaveFeatures(outStream,@self,IODXFContext);
      inherited;
 end;
 function z2dxftext(s:String):String;
@@ -592,7 +592,7 @@ begin
     end;
   until i<=0;
 end;
-procedure GDBObjText.SaveToDXF(var outhandle:TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);
+procedure GDBObjText.SaveToDXF(var outStream:TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);
 var
   hv, vv,bw: Byte;
   tv:gdbvertex;
@@ -600,36 +600,36 @@ var
 begin
   vv := acadvjustify(textprop.justify);
   hv := (j2b[textprop.justify]{ord(textprop.justify)} - 1) mod 3;
-  SaveToDXFObjPrefix(outhandle,'TEXT','AcDbText',IODXFContext);
+  SaveToDXFObjPrefix(outStream,'TEXT','AcDbText',IODXFContext);
   tv:=Local.p_insert;
   tv.x:=tv.x+P_drawInOCS.x;
   tv.y:=tv.y+P_drawInOCS.y;
   tv.z:=tv.z+P_drawInOCS.z;
   if hv + vv = 0 then
   begin
-    dxfvertexout(outhandle,10,Local.p_insert);
-    dxfvertexout(outhandle,11,tv);
+    dxfvertexout(outStream,10,Local.p_insert);
+    dxfvertexout(outStream,11,tv);
   end
   else
   begin
-    dxfvertexout(outhandle,11,Local.p_insert);
-    dxfvertexout(outhandle,10,tv);
+    dxfvertexout(outStream,11,Local.p_insert);
+    dxfvertexout(outStream,10,tv);
   end;
-  dxfDoubleout(outhandle,40,textprop.size);
-  dxfDoubleout(outhandle,50,CalcRotate*180/pi);
-  dxfDoubleout(outhandle,41,textprop.wfactor);
-  dxfDoubleout(outhandle,51,textprop.oblique*180/pi);
-  dxfIntegerout(outhandle,72,hv);
+  dxfDoubleout(outStream,40,textprop.size);
+  dxfDoubleout(outStream,50,CalcRotate*180/pi);
+  dxfDoubleout(outStream,41,textprop.wfactor);
+  dxfDoubleout(outStream,51,textprop.oblique*180/pi);
+  dxfIntegerout(outStream,72,hv);
   bw:=0;
   if textprop.upsidedown then
                              bw:=bw+4;
   if textprop.backward then
                              bw:=bw+2;
   if bw<>0 then
-               dxfIntegerout(outhandle,71,bw);
-  dxfStringout(outhandle,7,PGDBTextStyle({gdb.GetCurrentDWG}(TXTStyle))^.name);
+               dxfIntegerout(outStream,71,bw);
+  dxfStringout(outStream,7,PGDBTextStyle({gdb.GetCurrentDWG}(TXTStyle))^.name);
 
-  SaveToDXFObjPostfix(outhandle);
+  SaveToDXFObjPostfix(outStream);
 
 
     if  {convertfromunicode}(template)=content then
@@ -638,9 +638,9 @@ begin
                                                s := Tria_Utf8ToAnsi(UTF8Encode(content));
 
 
-  dxfStringout(outhandle,1,z2dxftext({content}s));
-  dxfStringout(outhandle,100,'AcDbText');
-  dxfIntegerout(outhandle,73,vv);
+  dxfStringout(outStream,1,z2dxftext({content}s));
+  dxfStringout(outStream,100,'AcDbText');
+  dxfIntegerout(outStream,73,vv);
 end;
 procedure GDBObjText.LoadFromDXF;
 var //s{, layername}: String;

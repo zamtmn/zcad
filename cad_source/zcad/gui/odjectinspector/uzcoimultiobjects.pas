@@ -937,7 +937,7 @@ begin
       if pv^.Selected then
         if (pv^.GetObjType=GDBtextID)or(pv^.GetObjType=GDBMTextID)then begin
           if selected<>0 then begin
-            if PGDBObjText(pv)^.TXTStyleIndex<>ptextstyle then
+            if PGDBObjText(pv)^.TXTStyle<>ptextstyle then
               inc(Count);
           end
         end else
@@ -952,7 +952,7 @@ begin
       if pv^.Selected then
         if (pv^.GetObjType=GDBtextID)or(pv^.GetObjType=GDBMTextID)then begin
           if selected<>0 then begin
-            if PGDBObjText(pv)^.TXTStyleIndex<>ptextstyle then
+            if PGDBObjText(pv)^.TXTStyle<>ptextstyle then
               ents.PushBackData(pv);
           end
         end else
@@ -1219,7 +1219,7 @@ begin
       if pv^.Selected then
         if (pv^.GetObjType=GDBtextID)or(pv^.GetObjType=GDBMTextID)then begin
           if (selected<>0) then begin
-            if PGDBObjText(pv)^.TXTStyleIndex=ptextstyle then
+            if PGDBObjText(pv)^.TXTStyle=ptextstyle then
               Inc(Count);
           end else
             Inc(Count);
@@ -1234,7 +1234,7 @@ begin
       if pv^.Selected then
         if (pv^.GetObjType=GDBtextID)or(pv^.GetObjType=GDBMTextID)then begin
           if (selected<>0) then begin
-            if PGDBObjText(pv)^.TXTStyleIndex=ptextstyle then
+            if PGDBObjText(pv)^.TXTStyle=ptextstyle then
               ents.PushBackData(pv);
           end else
             ents.PushBackData(pv);

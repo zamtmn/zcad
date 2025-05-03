@@ -313,9 +313,9 @@ begin
                                pswp^.x:= 0;
 end;
 begin
-  textprop.wfactor:=PGDBTextStyle((TXTStyleIndex))^.prop.wfactor;
-  textprop.oblique:=PGDBTextStyle((TXTStyleIndex))^.prop.oblique;
-  pfont:=TXTStyleIndex^.pfont;
+  textprop.wfactor:=PGDBTextStyle((TXTStyle))^.prop.wfactor;
+  textprop.oblique:=PGDBTextStyle((TXTStyle))^.prop.oblique;
+  pfont:=TXTStyle^.pfont;
   if pfont=nil then
     exit;
   TCP:=CodePage;
@@ -695,7 +695,7 @@ var
   //-ttf-//TDInfo:TTrianglesDataInfo;
 begin
   ln:=0;
-  pfont:=PGDBTextStyle({gdb.GetCurrentDWG}(TXTStyleIndex))^.pfont;
+  pfont:=PGDBTextStyle({gdb.GetCurrentDWG}(TXTStyle))^.pfont;
   pl.init(10);
   ispl:=false;
   //Representation.SHX.clear;
@@ -923,7 +923,7 @@ begin
   tvo^.linespace:=linespace;
   tvo^.linespacef:=linespacef;
   tvo^.bp.ListPos.Owner:=own;
-  tvo^.TXTStyleIndex:=TXTStyleIndex;
+  tvo^.TXTStyle:=TXTStyle;
   result := tvo;
 end;
 procedure GDBObjMText.LoadFromDXF;
@@ -961,18 +961,18 @@ begin
 
     else if     dxfStringload(f,7,byt,style)then
                                                  begin
-                                                 TXTStyleIndex :={drawing.GetTextStyleTable^.getDataMutable}(drawing.GetTextStyleTable^.FindStyle(Style,false));
-                                                 if TXTStyleIndex=nil then
-                                                                     TXTStyleIndex:=pointer(drawing.GetTextStyleTable^.getDataMutable(0));
+                                                 TXTStyle :={drawing.GetTextStyleTable^.getDataMutable}(drawing.GetTextStyleTable^.FindStyle(Style,false));
+                                                 if TXTStyle=nil then
+                                                                     TXTStyle:=pointer(drawing.GetTextStyleTable^.getDataMutable(0));
                                                  end
     else {s := }f.SkipString;
     byt:=f.ParseInteger;
   end;
-  if TXTStyleIndex=nil then
+  if TXTStyle=nil then
                            begin
-                               TXTStyleIndex:=drawing.GetTextStyleTable^.FindStyle('Standard',false);
-                               {if TXTStyleIndex=nil then
-                                                        TXTStyleIndex:=sysvar.DWG.DWG_CTStyle^;}
+                               TXTStyle:=drawing.GetTextStyleTable^.FindStyle('Standard',false);
+                               {if TXTStyle=nil then
+                                                        TXTStyle:=sysvar.DWG.DWG_CTStyle^;}
                            end;
   OldVersTextReplace(ttemplate);
   OldVersTextReplace(Content);
@@ -1043,7 +1043,7 @@ begin
     end;
     dxfStringout(outhandle,3,z2dxfmtext(s,ul));
   end;
-  dxfStringout(outhandle,7,TXTStyleIndex^.name);
+  dxfStringout(outhandle,7,TXTStyle^.name);
   SaveToDXFObjPostfix(outhandle);
   dxfvertexout(outhandle,11,Local.basis.ox);
   dxfIntegerout(outhandle,73,2);

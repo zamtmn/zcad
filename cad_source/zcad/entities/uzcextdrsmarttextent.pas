@@ -328,7 +328,7 @@ begin
   if typeof(PGDBObjEntity(pEntity)^)=TypeOf(GDBObjText) then
     result:=PGDBObjText(pEntity).textprop.wfactor
   else
-    result:=PGDBObjMText(pEntity).TXTStyleIndex^.prop.wfactor;
+    result:=PGDBObjMText(pEntity).TXTStyle^.prop.wfactor;
 end;
 
 procedure TSmartTextEntExtender.DrawGeom(var IODXFContext:TIODXFContext;var outhandle:TZctnrVectorBytes;pEntity:Pointer;const drawing:TDrawingDef;var DC:TDrawContext;tdd:TDummyDtawer);

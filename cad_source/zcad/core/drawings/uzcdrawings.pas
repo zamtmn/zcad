@@ -674,8 +674,8 @@ begin
                if (_source^.GetObjType=GDBTextID)
                or (_source^.GetObjType=GDBMtextID) then
                begin
-                    PGDBObjText(_dest)^.TXTStyleIndex:=createtstylebyindex(_from,_to,PGDBObjText(_source)^.TXTStyleIndex);
-                    {oldti:=PGDBObjText(_source)^.TXTStyleIndex;
+                    PGDBObjText(_dest)^.TXTStyle:=createtstylebyindex(_from,_to,PGDBObjText(_source)^.TXTStyle);
+                    {oldti:=PGDBObjText(_source)^.TXTStyle;
                     poldstyle:=PGDBTextStyle(_from.TextStyleTable.getDataMutable(oldti));
                     tsname:=poldstyle^.name;
                     newti:=_to.TextStyleTable.FindStyle(tsname);
@@ -687,7 +687,7 @@ begin
                                    end
                     createtstylebyindex
                     oldti:=_to.TextStyleTable.FindStyle(tsname);
-                    PGDBObjText(_dest)^.TXTStyleIndex:=newti;}
+                    PGDBObjText(_dest)^.TXTStyle:=newti;}
                end;
 end;
 procedure createblockifneed(_from,_to:PTSimpleDrawing;_source:PGDBObjEntity);

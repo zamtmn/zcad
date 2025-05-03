@@ -169,7 +169,7 @@ implementation
   begin
         ptext := GDBObjText.CreateInstance;
         zcSetEntPropFromCurrentDrawingProp(ptext); //добавляем дефаултные свойства
-        ptext^.TXTStyleIndex:=drawings.GetCurrentDWG^.GetCurrentTextStyle; //добавляет тип стиля текста, дефаултные свойства его не добавляют
+        ptext^.TXTStyle:=drawings.GetCurrentDWG^.GetCurrentTextStyle; //добавляет тип стиля текста, дефаултные свойства его не добавляют
         ptext^.Local.P_insert:=p1;  // координата
         ptext^.Template:=TDXFEntsInternalStringType(mText);     // сам текст
         ptext^.vp.Layer:=getTestLayer('systemTempuzvtestdraw');

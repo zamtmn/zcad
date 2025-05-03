@@ -564,7 +564,7 @@ begin
           ptext.Local.P_insert:=tbl.Local.P_insert;
           ptext.Local.P_insert.y:=ptext.Local.P_insert.y+1.5*scale;
           ptext.textprop.justify:=jsbl;
-          ptext.TXTStyleIndex:=pointer(drawing.GetTextStyleTable^.getDataMutable(0));
+          ptext.TXTStyle:=pointer(drawing.GetTextStyleTable^.getDataMutable(0));
           if VertexSub(mainline.CoordInWCS.lEnd,mainline.CoordInWCS.lBegin).x<=0 then begin
             ptext.Local.P_insert.x:= ptext.Local.P_insert.x+tbl.w;
             textpoint:=ptext.Local.P_insert;
@@ -590,9 +590,9 @@ begin
           pl.CoordInOCS.lBegin.y:=pl.CoordInOCS.lBegin.y-0.5*scale;
           pl.CoordInOCS.lEnd:=pl.CoordInOCS.lBegin;
           if VertexSub(mainline.CoordInWCS.lEnd,mainline.CoordInWCS.lBegin).x>0 then
-                                   pl.CoordInOCS.lEnd.x:=pl.CoordInOCS.lEnd.x+ptext.obj_width*ptext.textprop.size*ptext.TXTStyleIndex.prop.wfactor +2*textoffset
+                                   pl.CoordInOCS.lEnd.x:=pl.CoordInOCS.lEnd.x+ptext.obj_width*ptext.textprop.size*ptext.TXTStyle.prop.wfactor +2*textoffset
                                else
-                                   pl.CoordInOCS.lEnd.x:=pl.CoordInOCS.lEnd.x-ptext.obj_width*ptext.textprop.size*ptext.TXTStyleIndex.prop.wfactor-2*textoffset;
+                                   pl.CoordInOCS.lEnd.x:=pl.CoordInOCS.lEnd.x-ptext.obj_width*ptext.textprop.size*ptext.TXTStyle.prop.wfactor-2*textoffset;
           pl.FormatEntity(drawing,dc);
           end;
 

@@ -54,7 +54,7 @@ begin
     if pv^.Selected then
     if (pv^.GetObjType=GDBMTextID)or(pv^.GetObjType=GDBTextID) then
                         begin
-                             pv^.TXTStyleIndex:=prs;
+                             pv^.TXTStyle:=prs;
                              pv^.Formatentity(drawings.GetCurrentDWG^,dc);
                         end;
   pv:=drawings.GetCurrentROOT.ObjArray.iterate(ir);
@@ -66,7 +66,7 @@ begin
              if psv.objaddr^.Selected then
              if (psv.objaddr^.GetObjType=GDBMTextID)or(psv.objaddr^.GetObjType=GDBTextID) then
                                           begin
-                                               PGDBObjText(psv.objaddr)^.TXTStyleIndex:=prs;
+                                               PGDBObjText(psv.objaddr)^.TXTStyle:=prs;
                                                psv.objaddr^.Formatentity(drawings.GetCurrentDWG^,dc);
                                           end;
        psv:=drawings.GetCurrentDWG.SelObjArray.iterate(ir);

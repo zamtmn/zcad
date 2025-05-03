@@ -451,7 +451,7 @@ end;
 procedure TextStyleCounter(const PInstance,PCounted:Pointer;var Counter:Integer);
 begin
      if (PGDBObjEntity(PInstance)^.GetObjType=GDBMTextID)or(PGDBObjEntity(PInstance)^.GetObjType=GDBTextID) then
-     if PCounted=PGDBObjText(PInstance)^.TXTStyleIndex then
+     if PCounted=PGDBObjText(PInstance)^.TXTStyle then
                                                            inc(Counter);
 end;
 procedure TextStyleCounterInDimStyles(const PInstance,PCounted:Pointer;var Counter:Integer);

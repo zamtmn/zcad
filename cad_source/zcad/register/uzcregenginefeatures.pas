@@ -28,7 +28,7 @@ begin
      enttype:=PEnt^.GetObjType;
      if (enttype=GDBMTextID)or(enttype=GDBTextID)then
      begin
-       PGDBObjText(PEnt)^.TXTStyleIndex:=Drawing.CurrentTextStyle;
+       PGDBObjText(PEnt)^.TXTStyle:=Drawing.CurrentTextStyle;
      end;
 end;
 procedure zeSetDimStylePropFromDrawingProp(const PEnt: PGDBObjEntity; var Drawing:TSimpleDrawing);

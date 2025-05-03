@@ -35,7 +35,7 @@ PGDBObjText=^GDBObjText;
 GDBObjText= object(GDBObjAbstractText)
                  Content:TDXFEntsInternalStringType;
                  Template:TDXFEntsInternalStringType;
-                 TXTStyleIndex:PGDBTextStyle;
+                 TXTStyle:PGDBTextStyle;
                  obj_height:Double;
                  obj_width:Double;
                  obj_y:Double;
@@ -221,7 +221,7 @@ begin
     //getoutbound;
     //createpoint(drawing);
     if (not (ESTemp in State))and(DCODrawable in DC.Options) then
-      Representation.DrawTextContent(dc.drawer,content,TXTStyleIndex^.pfont,DrawMatrix,objmatrix,textprop.size,Outbound);
+      Representation.DrawTextContent(dc.drawer,content,TXTStyle^.pfont,DrawMatrix,objmatrix,textprop.size,Outbound);
     calcbb(dc);
 
     //P_InsertInWCS:=VectorTransform3D(local.P_insert,vp.owner^.GetMatrix^);
@@ -244,9 +244,9 @@ begin
    while i<=length(content) do
   //for i:=1 to length(content) do
   begin
-    sym:=getsymbol_fromGDBText(content,i,l,PGDBTextStyle({gdb.GetCurrentDWG}(TXTStyleIndex))^.pfont^.font.IsUnicode);
-    //psyminfo:=PGDBTextStyle(gdb.GetCurrentDWG.TextStyleTable.getDataMutable(TXTStyleIndex))^.pfont^.GetOrReplaceSymbolInfo(ach2uch(Byte(content[i])));
-    psyminfo:=PGDBTextStyle({gdb.GetCurrentDWG}(TXTStyleIndex))^.pfont^.GetOrReplaceSymbolInfo(sym{//-ttf-//,tdinfo});
+    sym:=getsymbol_fromGDBText(content,i,l,PGDBTextStyle({gdb.GetCurrentDWG}(TXTStyle))^.pfont^.font.IsUnicode);
+    //psyminfo:=PGDBTextStyle(gdb.GetCurrentDWG.TextStyleTable.getDataMutable(TXTStyle))^.pfont^.GetOrReplaceSymbolInfo(ach2uch(Byte(content[i])));
+    psyminfo:=PGDBTextStyle({gdb.GetCurrentDWG}(TXTStyle))^.pfont^.GetOrReplaceSymbolInfo(sym{//-ttf-//,tdinfo});
     obj_width:=obj_width+psyminfo.NextSymX;
     if psyminfo.SymMaxY>obj_height then obj_height:=psyminfo.SymMaxY;
     if psyminfo.SymMinY<obj_y then obj_y:=psyminfo.SymMinY;
@@ -267,7 +267,7 @@ begin
   tvo^.Textprop:=textprop;
   tvo^.content:=content;
   tvo^.template:=template;
-  tvo^.TXTStyleIndex:=TXTStyleIndex;
+  tvo^.TXTStyle:=TXTStyle;
   //tvo^.Format;
   result := tvo;
 end;
@@ -627,7 +627,7 @@ begin
                              bw:=bw+2;
   if bw<>0 then
                dxfIntegerout(outhandle,71,bw);
-  dxfStringout(outhandle,7,PGDBTextStyle({gdb.GetCurrentDWG}(TXTStyleIndex))^.name);
+  dxfStringout(outhandle,7,PGDBTextStyle({gdb.GetCurrentDWG}(TXTStyle))^.name);
 
   SaveToDXFObjPostfix(outhandle);
 
@@ -677,9 +677,9 @@ else if dxfDoubleload(f,51,byt,textprop.oblique) then
                                                         textprop.oblique:=textprop.oblique*pi/180
 else if     dxfStringload(f,7,byt,style)then
                                              begin
-                                                  TXTStyleIndex :={drawing.GetTextStyleTable^.getDataMutable}(drawing.GetTextStyleTable^.FindStyle(Style,false));
-                                                  if TXTStyleIndex=nil then
-                                                                      TXTStyleIndex:=pointer(drawing.GetTextStyleTable^.getDataMutable(0));
+                                                  TXTStyle :={drawing.GetTextStyleTable^.getDataMutable}(drawing.GetTextStyleTable^.FindStyle(Style,false));
+                                                  if TXTStyle=nil then
+                                                                      TXTStyle:=pointer(drawing.GetTextStyleTable^.getDataMutable(0));
                                              end
 else if not dxfIntegerload(f,72,byt,gv)then
      if not dxfIntegerload(f,73,byt,vv)then
@@ -696,11 +696,11 @@ else if not dxfIntegerload(f,72,byt,gv)then
                                  textprop.backward:=true
                              else
                                  textprop.backward:=false;
-  if TXTStyleIndex=nil then
+  if TXTStyle=nil then
                            begin
-                               TXTStyleIndex:=drawing.GetTextStyleTable^.FindStyle('Standard',false);
-                               {if TXTStyleIndex=nil then
-                                                        TXTStyleIndex:=sysvar.DWG.DWG_CTStyle^;}
+                               TXTStyle:=drawing.GetTextStyleTable^.FindStyle('Standard',false);
+                               {if TXTStyle=nil then
+                                                        TXTStyle:=sysvar.DWG.DWG_CTStyle^;}
                            end;
   OldVersTextReplace(Template);
   OldVersTextReplace(tcontent);

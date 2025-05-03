@@ -384,7 +384,7 @@ begin
      begin
      pt:=pointer(AllocEnt(GDBMtextID));
      pt^.init({drawings.GetCurrentROOT}@root,sysvar.dwg.DWG_CLayer^,sysvar.dwg.DWG_CLinew^,TDXFEntsInternalStringType(name),tv,2.5,0,0.65,RightAngle,jsbc,1,1);
-     pt^.TXTStyleIndex:=pointer(drawings.GetCurrentDWG^.GetTextStyleTable^.getDataMutable(0));
+     pt^.TXTStyle:=pointer(drawings.GetCurrentDWG^.GetTextStyleTable^.getDataMutable(0));
      root.ObjArray.AddPEntity(pt^);
      zcSetEntPropFromCurrentDrawingProp(pt);
      pt^.vp.Layer:=drawings.GetCurrentDWG^.LayerTable.getAddres('TEXT');

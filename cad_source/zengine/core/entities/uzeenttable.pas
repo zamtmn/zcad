@@ -198,7 +198,7 @@ ConstObjArray.free;
                            pgdbmtext.width:=pcf^.TextWidth*scale;
                            //pgdbmtext.vp.Layer:=vp.Layer;
                            CopyVPto(pgdbmtext^);
-                           pgdbmtext.TXTStyleIndex:=pointer(drawing.GetTextStyleTable^.getDataMutable(0));
+                           pgdbmtext.TXTStyle:=pointer(drawing.GetTextStyleTable^.getDataMutable(0));
 
                            pgdbmtext.Local.P_insert.y:=(-ccount*PTableStyle^.rowheight-PTableStyle^.rowheight/4)*scale;
                            case pcf^.CF of

@@ -218,6 +218,10 @@ function IsVectorNul(const p2:GDBvertex):boolean;inline;
 function IsDoubleNotEqual(const d1,d2:Double;const _eps:Double=eps):boolean;inline;
 function IsDoubleEqual(const d1,d2:Double;const _eps:Double=eps):boolean;inline;
 function IsFloatNotEqual(const d1,d2:Single;const _floateps:Single=floateps):boolean;inline;
+//проверка вектора на близость к оси Z (координаты x и y меньше 1/64
+//используется для Arbitrary Axis Algorithm (DXF)
+//TODO: заменить в коде все проверки на функцию
+function IsNearToZ(const v:GDBvertex):boolean;inline;
 
 procedure _myGluProject(const objx,objy,objz:Double;const modelMatrix,projMatrix:PDMatrix4D;const viewport:PIMatrix4; out winx,winy,winz:Double);inline;
 procedure _myGluProject2(const objcoord:GDBvertex;const modelMatrix,projMatrix:PDMatrix4D;const viewport:PIMatrix4; out wincoord:GDBvertex);inline;
@@ -415,6 +419,17 @@ begin
                            result:=false
                        else
                            result:=true;
+end;
+
+function IsNearToZ(const v:GDBvertex):boolean;
+const
+  tol=1/64;
+begin
+  result:=(abs(v.x)<tol)and(abs(v.y)<tol);
+  //if (abs(v.x)<tol)and(abs(v.y)<tol) then
+  //  result:=true
+  //else
+  //  result:=false;
 end;
 
 function IsFloatNotEqual(const d1,d2:Single;const _floateps:Single=floateps):boolean;

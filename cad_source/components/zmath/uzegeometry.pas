@@ -17,7 +17,7 @@
 }
 
 unit uzegeometry;
-{$Inline off}
+{Inline off}
 
 interface
 uses uzbLogIntf,uzegeometrytypes,math;

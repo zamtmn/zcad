@@ -22,59 +22,59 @@ unit uzeentmtext;
 
 interface
 uses
-    uzglgeometry,uzgldrawcontext,uzetextpreprocessor,uzeentityfactory,uzedrawingdef,
-    uzbstrproc,uzefont,uzeentabstracttext,UGDBPoint3DArray,uzestyleslayers,SysUtils,
-    uzeentity,uzctnrVectorBytes,
-    uzbtypes,uzeenttext,uzeconsts,uzegeometry,uzeffdxfsupport,math,uzeentsubordinated,
-    gzctnrVectorTypes,uzegeometrytypes,uzestylestexts,StrUtils,gzctnrVector,uzMVReader,
-    uzcTextPreprocessorDXFImpl;
+  uzglgeometry,uzgldrawcontext,uzetextpreprocessor,uzeentityfactory,uzedrawingdef,
+  uzbstrproc,uzefont,uzeentabstracttext,UGDBPoint3DArray,uzestyleslayers,SysUtils,
+  uzeentity,uzctnrVectorBytes,
+  uzbtypes,uzeenttext,uzeconsts,uzegeometry,uzeffdxfsupport,math,uzeentsubordinated,
+  gzctnrVectorTypes,uzegeometrytypes,uzestylestexts,StrUtils,gzctnrVector,uzMVReader,
+  uzcTextPreprocessorDXFImpl;
+
 const maxdxfmtextlen=250;
+
 type
+  PGDBXYZWStringArray=^XYZWStringArray;
+  XYZWStringArray=object(GZVector<GDBStrWithPoint>)
+  end;
+  PGDBObjMText=^GDBObjMText;
+  GDBObjMText= object(GDBObjText)
+    width:Double;
+    linespace:Double;
+    linespacef:Double;
+    text:XYZWStringArray;
+    constructor init(own:Pointer;layeraddres:PGDBLayerProp;LW:SmallInt;c:TDXFEntsInternalStringType;p:GDBvertex;s,o,w,a:Double;j:TTextJustify;wi,l:Double);
+    constructor initnul(owner:PGDBObjGenericWithSubordinated);
+    procedure LoadFromDXF(var rdr:TZMemReader;ptu:PExtensionData;var drawing:TDrawingDef);virtual;
+    procedure SaveToDXF(var outStream:TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
+    procedure CalcGabarit(const drawing:TDrawingDef);virtual;
+    //procedure getoutbound;virtual;
+    procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext;Stage:TEFStages=EFAllStages);virtual;
+    function IsStagedFormatEntity:boolean;virtual;
+    procedure FormatContent(var drawing:TDrawingDef);virtual;
+    procedure createpoint(const drawing:TDrawingDef;var DC:TDrawContext);virtual;
+    function Clone(own:Pointer):PGDBObjEntity;virtual;
+    function GetObjTypeName:String;virtual;
+    destructor done;virtual;
 
-PGDBXYZWStringArray=^XYZWStringArray;
-XYZWStringArray=object(GZVector<GDBStrWithPoint>)
-                end;
-PGDBObjMText=^GDBObjMText;
-GDBObjMText= object(GDBObjText)
-                 width:Double;
-                 linespace:Double;
-                 linespacef:Double;
-                 text:XYZWStringArray;(*oi_readonly*)(*hidden_in_objinsp*)
-                 constructor init(own:Pointer;layeraddres:PGDBLayerProp;LW:SmallInt;c:TDXFEntsInternalStringType;p:GDBvertex;s,o,w,a:Double;j:TTextJustify;wi,l:Double);
-                 constructor initnul(owner:PGDBObjGenericWithSubordinated);
-                 procedure LoadFromDXF(var rdr:TZMemReader;ptu:PExtensionData;var drawing:TDrawingDef);virtual;
-                 procedure SaveToDXF(var outStream:TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
-                 procedure CalcGabarit(const drawing:TDrawingDef);virtual;
-                 //procedure getoutbound;virtual;
-                 procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext;Stage:TEFStages=EFAllStages);virtual;
-                 function IsStagedFormatEntity:boolean;virtual;
-                 procedure FormatContent(var drawing:TDrawingDef);virtual;
-                 procedure createpoint(const drawing:TDrawingDef;var DC:TDrawContext);virtual;
-                 function Clone(own:Pointer):PGDBObjEntity;virtual;
-                 function GetObjTypeName:String;virtual;
-                 destructor done;virtual;
+    procedure SimpleDrawGeometry(var DC:TDrawContext);virtual;
+    procedure FormatAfterDXFLoad(var drawing:TDrawingDef;var DC:TDrawContext);virtual;
 
-                 procedure SimpleDrawGeometry(var DC:TDrawContext);virtual;
-                 procedure FormatAfterDXFLoad(var drawing:TDrawingDef;var DC:TDrawContext);virtual;
-
-                 function CreateInstance:PGDBObjMText;static;
-                 function GetObjType:TObjID;virtual;
-            end;
+    function CreateInstance:PGDBObjMText;static;
+    function GetObjType:TObjID;virtual;
+  end;
 
 procedure FormatMtext(pfont:pgdbfont;width,size,wfactor:Double;const content:TDXFEntsInternalStringType;var text:XYZWStringArray);
 function GetLinesH(linespace,size:Double;var lines:XYZWStringArray):Double;
 function GetLinesW(var lines:XYZWStringArray):Double;
 function GetLineSpaceFromLineSpaceF(linespacef,size:Double):Double;
+
 implementation
+
 procedure GDBObjMText.FormatAfterDXFLoad;
 begin
-     formatcontent(drawing);
-
-     calcobjmatrix;
-
-     CalcGabarit(drawing);
-
-     calcbb(dc);
+  formatcontent(drawing);
+  calcobjmatrix;
+  CalcGabarit(drawing);
+  calcbb(dc);
 end;
 procedure GDBObjMText.SimpleDrawGeometry;
 begin
@@ -85,7 +85,7 @@ begin
 end;
 function GDBObjMText.GetObjTypeName;
 begin
-     result:=ObjN_GDBObjMText;
+  result:=ObjN_GDBObjMText;
 end;
 destructor GDBObjMText.done;
 begin
@@ -95,37 +95,30 @@ end;
 constructor GDBObjMText.initnul;
 begin
   inherited initnul(owner);
-  //vp.ID := GDBMtextID;
-  width := 0;
-  linespace := 1;
+  width:=0;
+  linespace:=1;
   text.init(10);
 end;
 constructor GDBObjMText.init;
 begin
   inherited init(own,layeraddres, lw, c, p, s, o, w, a, j);
-  //vp.ID := GDBMtextID;
-  width := wi;
+  width:=wi;
   linespacef := l;
-
-//  if angleload then
-  begin
-     if (abs (Local.basis.oz.x) < 1/64) and (abs (Local.basis.oz.y) < 1/64) then
-                                                                    Local.basis.ox:=CrossVertex(YWCS,Local.basis.oz)
-                                                                else
-                                                                    Local.basis.ox:=CrossVertex(ZWCS,Local.basis.oz);
+  //if (abs (Local.basis.oz.x) < 1/64) and (abs (Local.basis.oz.y) < 1/64) then
+  if IsNearToZ(Local.basis.oz) then
+    Local.basis.ox:=CrossVertex(YWCS,Local.basis.oz)
+  else
+    Local.basis.ox:=CrossVertex(ZWCS,Local.basis.oz);
   local.basis.OX:=VectorTransform3D(local.basis.OX,uzegeometry.CreateAffineRotationMatrix(Local.basis.oz,{-textprop.angle}{ fixedTODO : removeing angle from text ents }-a));
-  end;
-
   text.init(10);
-  //format;
 end;
 function GDBObjMText.GetObjType;
 begin
-     result:=GDBMtextID;
+  result:=GDBMtextID;
 end;
 function GetLineSpaceFromLineSpaceF(linespacef,size:Double):Double;
 begin
-    result:=size*linespacef*5/3;
+  result:=size*linespacef*5/3;
 end;
 function GetLinesH(linespace,size:Double;var lines:XYZWStringArray):Double;
 begin
@@ -140,19 +133,17 @@ var
   ir:itrec;
 begin
   pswp:=lines.beginiterate(ir);
-  if pswp<>nil then
-                    begin
-                          result:=pswp^.w;
-                          pswp:=lines.iterate(ir);
-                          if pswp<>nil then
-                          repeat
-                                if result<pswp^.w then
-                                                      result:=pswp^.w;
-                            pswp:=lines.iterate(ir);
-                          until pswp=nil
-                    end
-               else
-                   result:=0;
+  if pswp<>nil then begin
+    result:=pswp^.w;
+    pswp:=lines.iterate(ir);
+    if pswp<>nil then
+    repeat
+          if result<pswp^.w then
+                                result:=pswp^.w;
+      pswp:=lines.iterate(ir);
+    until pswp=nil
+  end else
+    result:=0;
 end;
 procedure FormatMtext(pfont:pgdbfont;width,size,wfactor:Double;const content:TDXFEntsInternalStringType;var text:XYZWStringArray);
 var
@@ -165,81 +156,78 @@ var
   l:Integer;
   sym:word;
   newline:boolean;
-  //-ttf-//TDInfo:TTrianglesDataInfo;
-begin
-  swp.str:='';
-  canbreak := false;
-  currsymbol := 1;
-  //psyminfo:=pgdbfont(pfont)^.GetOrReplaceSymbolInfo(ach2uch(integer(content[currsymbol])));
-  lastbreak := 1;
-  lastcanbreak := 1;
-  linewidth := 0;
-  lastsymspace:=0;
+  _NeedSpaceWidthCalc:boolean;
+  _SpaceWidth:double;
 
-  //sym:=getsymbol(content,currsymbol,l);
-  //psyminfo:=pgdbfont(pfont)^.GetOrReplaceSymbolInfo({ach2uch(integer(content[currsymbol]))}sym);
-  newline:=true;
-
-  lastlinewidth := 0;
-  currline := '';
-  maxlinewidth := (width / size) / wfactor;
-  if content<>'' then
+  function SpaceWidth:double;inline;
   begin
+    if _NeedSpaceWidthCalc then begin
+      _NeedSpaceWidthCalc:=false;
+      _SpaceWidth:=pgdbfont(pbasefont)^.GetOrReplaceSymbolInfo(32).NextSymX;
+    end;
+    result:=_SpaceWidth;
+  end;
+
+begin
+  _NeedSpaceWidthCalc:=true;
+  _SpaceWidth:=1;
+  swp.str:='';
+  canbreak:=false;
+  currsymbol:=1;
+  lastbreak:=1;
+  lastcanbreak:=1;
+  linewidth:=0;
+  lastsymspace:=0;
+  newline:=true;
+  lastlinewidth := 0;
+  currline:='';
+  maxlinewidth:=width/(size*wfactor);
+  if content<>''then begin
   repeat
     sym:=getsymbol_fromGDBText(content,currsymbol,l,pgdbfont(pfont)^.font.IsUnicode);
-    psyminfo:=pgdbfont(pfont)^.GetOrReplaceSymbolInfo({ach2uch(integer(content[currsymbol]))}sym{//-ttf-//,tdinfo});
-    if newline then
-                   begin
-                        linewidth:=linewidth-psyminfo.SymMinX;
-                        newline:=false;
-                   end;
-    if ({content[currsymbol]}sym = {' '}32) and (maxlinewidth > 0) then
-    begin
+    psyminfo:=pgdbfont(pfont)^.GetOrReplaceSymbolInfo(sym);
+    if newline then begin
+      linewidth:=linewidth-psyminfo.SymMinX;
+      newline:=false;
+    end;
+    if (sym=32)and(maxlinewidth>0) then begin
       lastcanbreak := currsymbol;
       canbreak := true;
       lastlinewidth := linewidth;
-      linewidth := lastsymspace + linewidth + psyminfo.{NextSymX}SymMaxX;
+      linewidth := lastsymspace + linewidth + psyminfo.SymMaxX;
       lastsymspace:=psyminfo.NextSymX-psyminfo.SymMaxX;
-    end
-    else
-      if {(copy(content,currsymbol,2)='\P')or}(sym=10) then          {\P теперь уже тут не встретишь, оно заменено препроцессором на 10}
-      begin
-        currline := copy(content, lastbreak, currsymbol - lastbreak);
+    end else
+      if sym=10 then begin
+        {\P теперь уже тут не встретишь, оно заменено препроцессором на 10}
+        currline:=copy(content,lastbreak,currsymbol-lastbreak);
         if sym<>10 then begin
-          lastbreak := currsymbol + 2;
-          currsymbol := currsymbol + 1;
+          lastbreak:=currsymbol + 2;
+          currsymbol:=currsymbol + 1;
         end else begin
-          lastbreak := currsymbol + 1;
+          lastbreak:=currsymbol + 1;
         end;
-        psyminfo:=pgdbfont(pfont)^.GetOrReplaceSymbolInfo({ach2uch}({integer(content[currsymbol])}sym){//-ttf-//,tdinfo});
-        canbreak := false;
-
-        {Pointer(ptext.Stringarray[ptext.count].str) := nil;
-        ptext.Stringarray[ptext.count].str := currline;
-        ptext.Stringarray[ptext.count].w := linewidth;
-        inc(ptext.count);}
+        psyminfo:=pgdbfont(pfont)^.GetOrReplaceSymbolInfo(sym);
+        canbreak:=false;
         swp.Str:=currline;
         swp.w:=linewidth;
-        if (length(swp.str)>0)and(swp.str[length(swp.str)]=' ') then
-        begin
-             swp.str:=copy(swp.str,1,length(swp.str)-1);
-             swp.w := swp.w - pgdbfont(pbasefont)^.GetOrReplaceSymbolInfo({ach2uch}(Byte(' ')){,tdinfo//-ttf-//}).NextSymX;
+        if (length(swp.str)>0)and(swp.str[length(swp.str)]=' ') then begin
+          swp.str:=copy(swp.str,1,length(swp.str)-1);
+          //swp.w:=swp.w-pgdbfont(pbasefont)^.GetOrReplaceSymbolInfo(32).NextSymX;
+          //интересно почему тут pbasefont? теперь тут pfont!
+          swp.w:=swp.w-SpaceWidth;
         end;
         text.PushBackData(swp);
         newline:=true;
-        linewidth := 0;
+        linewidth:=0;
         lastsymspace:=0;
-        lastlinewidth := linewidth;
-      end
-      else
-      begin
-        //linewidth := linewidth + psyminfo.NextSymX;
-        linewidth := lastsymspace + linewidth + psyminfo.{NextSymX}SymMaxX;
+        lastlinewidth:=linewidth;
+      end else begin
+        //linewidth:=linewidth+psyminfo.NextSymX;
+        linewidth:=lastsymspace+linewidth+psyminfo.SymMaxX;
         lastsymspace:=psyminfo.NextSymX-psyminfo.SymMaxX;
       end;
     if canbreak then
-      if maxlinewidth <= linewidth then
-      begin
+      if maxlinewidth <= linewidth then begin
         currline := copy(content, lastbreak, lastcanbreak - lastbreak);
         linewidth := 0;
         lastsymspace:=0;
@@ -247,43 +235,30 @@ begin
         lastbreak := lastcanbreak + 1;
         currsymbol := lastcanbreak;
         psyminfo:=pgdbfont(pfont)^.GetOrReplaceSymbolInfo({ach2uch(integer(content[currsymbol]))}sym{//-ttf-//,tdinfo});
-
         canbreak := false;
-
-        {Pointer(ptext.Stringarray[ptext.count].str) := nil;
-        ptext.Stringarray[ptext.count].str := currline;
-        ptext.Stringarray[ptext.count].w := lastlinewidth;
-        inc(ptext.count);}
         swp.Str:=currline;
         swp.w:=lastlinewidth;
-        if (length(swp.str)>0)and(swp.str[length(swp.str)]=' ') then
-        begin
-             swp.str:=copy(swp.str,1,length(swp.str)-1);
-             swp.w := swp.w - pgdbfont(pfont)^.GetOrReplaceSymbolInfo({ach2uch(Byte(' '))}32{//-ttf-//,tdinfo}).NextSymX;//pgdbfont(pbasefont)^.symbo linfo[Byte(' ')].dx;
+        if (length(swp.str)>0)and(swp.str[length(swp.str)]=' ') then begin
+          swp.str:=copy(swp.str,1,length(swp.str)-1);
+          //swp.w:=swp.w-pgdbfont(pfont)^.GetOrReplaceSymbolInfo(32).NextSymX;
+          swp.w:=swp.w-SpaceWidth;
         end;
         text.PushBackData(swp);
-
       end;
     inc(currsymbol,l);
-    //psyminfo:=pgdbfont(pfont)^.GetOrReplaceSymbolInfo({ach2uch(integer(content[currsymbol]))}sym);
   until currsymbol > length(content);
   end;
   if linewidth=0 then
-                     linewidth:=1;
-  currline := copy(content, lastbreak, currsymbol - lastbreak);
-  {Pointer(ptext.Stringarray[ptext.count].str) := nil;
-  ptext.Stringarray[ptext.count].str := currline;
-  ptext.Stringarray[ptext.count].w := linewidth;
-  inc(ptext.count);}
-        swp.Str:=currline;
-        swp.w:=linewidth;
-        if (length(swp.str)>0)and(swp.str[length(swp.str)]=' ') then
-        begin
-             swp.str:=copy(swp.str,1,length(swp.str)-1);
-             swp.w := swp.w - pgdbfont(pfont)^.GetOrReplaceSymbolInfo({ach2uch(Byte(' '))}32{//-ttf-//,tdinfo}).NextSymX;//pgdbfont(pbasefont)^.symbo linfo[Byte(' ')].dx;
-        end;
-        text.PushBackData(swp);
-  //w := width;
+    linewidth:=1;
+  currline:=copy(content,lastbreak,currsymbol-lastbreak);
+  swp.Str:=currline;
+  swp.w:=linewidth;
+  if (length(swp.str)>0)and(swp.str[length(swp.str)]=' ') then begin
+    swp.str:=copy(swp.str,1,length(swp.str)-1);
+    //swp.w:=swp.w-pgdbfont(pfont)^.GetOrReplaceSymbolInfo(32).NextSymX;
+    swp.w:=swp.w-SpaceWidth;
+  end;
+  text.PushBackData(swp);
 end;
 
 procedure GDBObjMText.FormatContent(var drawing:TDrawingDef);
@@ -291,44 +266,42 @@ var
   i: Integer;
   h, angle: Double;
   pswp:pGDBStrWithPoint;
-    ir:itrec;
+  ir:itrec;
   psyminfo:PGDBsymdolinfo;
   TCP:TCodePage;
   pfont:pgdbfont;
-
   l:Integer;
   sym:word;
-  //-ttf-//TDInfo:TTrianglesDataInfo;
-procedure setstartx;
+
+  procedure setstartx;
+  begin
+    if length(pswp.str)>0 then begin
+      sym:=getsymbol_fromGDBText(pswp.str,1,l,pgdbfont(pfont)^.font.IsUnicode);
+      psyminfo:=pgdbfont(pfont)^.GetOrReplaceSymbolInfo(sym);
+      pswp^.x:=0-psyminfo.SymMinX;
+    end else
+      pswp^.x:=0;
+  end;
+
 begin
-     if length(pswp.str)>0 then
-                               begin
-                                 //if pswp.str[1]=' ' then
-                                 //                        l:=l;
-                               sym:=getsymbol_fromGDBText(pswp.str,1,l,pgdbfont(pfont)^.font.IsUnicode);
-                               psyminfo:=pgdbfont(pfont)^.GetOrReplaceSymbolInfo(sym{//-ttf-//,tdinfo});
-                               pswp^.x:= 0-psyminfo.SymMinX{*textprop.size};
-                               end
-                           else
-                               pswp^.x:= 0;
-end;
-begin
-  textprop.wfactor:=PGDBTextStyle((TXTStyle))^.prop.wfactor;
-  textprop.oblique:=PGDBTextStyle((TXTStyle))^.prop.oblique;
+  textprop.wfactor:=TXTStyle^.prop.wfactor;
+  textprop.oblique:=TXTStyle^.prop.oblique;
   pfont:=TXTStyle^.pfont;
   if pfont=nil then
     exit;
   TCP:=CodePage;
   CodePage:=CP_win;
   if template='' then
-                      template:=content;
+    template:=content;
   content:=textformat(template,SPFSources.GetFull,@self);
   CodePage:=TCP;
-  linespace := textprop.size * linespacef * 5 / 3;
-  if (content='')and(template='') then content:=str_empty;
-  text.free;
+  linespace:=textprop.size*linespacef*5 / 3;
+  if (content='')and(template='') then
+    content:=str_empty;
 
+  text.free;
   lod:=0;
+
   P_drawInOCS:=NulVertex;
 
   FormatMtext(pfont,width,textprop.size,textprop.wfactor,content,text);
@@ -397,8 +370,7 @@ begin
         until pswp=nil
       end;
     jsml:
-      begin
-                                //p_draw.y:=p_draw.y+h/2/size-size
+      begin//p_draw.y:=p_draw.y+h/2/size-size
         P_drawInOCS.y := P_drawInOCS.y - textprop.size + h / 2;
         i:=0;
         pswp:=text.beginiterate(ir);
@@ -412,7 +384,6 @@ begin
           pswp:=text.iterate(ir);
         until pswp=nil
       end;
-
     jsmc:
       begin
         P_drawInOCS.y := P_drawInOCS.y - textprop.size + h / 2;
@@ -528,293 +499,110 @@ begin
 end;
 procedure GDBObjMText.CalcGabarit;
 var
-//  i: Integer;
-//  j: Integer;
   pswp:pGDBStrWithPoint;
-      ir:itrec;
+  ir:itrec;
 begin
   obj_height:=0;
   obj_width:=0;
   obj_y:=0;
-        pswp:=text.beginiterate(ir);
-        if pswp<>nil then
-        repeat
-          if obj_width<pswp^.w then obj_width:=pswp^.w;
-          pswp:=text.iterate(ir);
-        until pswp=nil;
-        if text.count > 0 then
-                              obj_height := ((self.text.count-1) * linespace + textprop.size)/textprop.size
-                          else
-                              begin
-                              obj_height := 1;
-                              obj_width := 1;
-                              end;
-        {if text.count=1 then
-                        obj_height:=text.count * linespace / textprop.size
-                        else
-                        obj_height:=(text.count) * linespace / textprop.size;}
-  obj_width:=obj_width{-1/3};
-end;
-(*
-procedure GDBObjMText.getoutbound;
-var  v:GDBvertex4D;
-     dm:dmatrix4d;
-    t,b,l,r,n,f,xstart,ystart:Double;
-    i:integer;
-begin
-  //exit;
-  xstart:=0;
-  ystart:=-1;//obj_height-{linespace}3 / textprop.size;
-  case textprop.justify of
-    1:
-      begin
-           xstart:=xstart;
-      end;
-    2:
-      begin
-           xstart:=xstart-obj_width/2;
-      end;
-    3:
-      begin
-           xstart:=xstart-obj_width;
-      end;
-    4:
-      begin
-           xstart:=xstart;
-      end;
-    5:
-      begin
-           xstart:=xstart-obj_width/2;
-      end;
-    6:
-      begin
-           xstart:=xstart-obj_width;
-      end;
-    7:
-      begin
-           xstart:=xstart;
-      end;
-    8:
-      begin
-           xstart:=xstart-obj_width/2;
-      end;
-    9:
-      begin
-           xstart:=xstart-obj_width;
-      end;
-  end;
-
-  dm:=DrawMatrix;
-  dm[1, 0]:=0;
-  v.x:=xstart;
-  v.y:=-ystart;
-  v.z:=0;
-  v.w:=1;
-  v:=VectorTransform(v,dm);
-  v:=VectorTransform(v,objMatrix);
-  outbound[0]:=pgdbvertex(@v)^;
-  v.x:=xstart;
-  v.y:=-ystart-obj_height;
-  v.z:=0;
-  v.w:=1;
-  v:=VectorTransform(v,dm);
-  v:=VectorTransform(v,objMatrix);
-  outbound[1]:=pgdbvertex(@v)^;
-  v.x:=xstart+obj_width;
-  v.y:=-ystart-obj_height;
-  v.z:=0;
-  v.w:=1;
-  v:=VectorTransform(v,dm);
-  v:=VectorTransform(v,objMatrix);
-  outbound[2]:=pgdbvertex(@v)^;
-  v.x:=xstart+obj_width;
-  v.y:=-ystart;
-  v.z:=0;
-  v.w:=1;
-  v:=VectorTransform(v,dm);
-  v:=VectorTransform(v,objMatrix);
-  outbound[3]:=pgdbvertex(@v)^;
-
-  l:=outbound[0].x;
-  r:=outbound[0].x;
-  t:=outbound[0].y;
-  b:=outbound[0].y;
-  n:=outbound[0].z;
-  f:=outbound[0].z;
-  for i:=1 to 3 do
-  begin
-  if outbound[i].x<l then
-                         l:=outbound[i].x;
-  if outbound[i].x>r then
-                         r:=outbound[i].x;
-  if outbound[i].y<b then
-                         b:=outbound[i].y;
-  if outbound[i].y>t then
-                         t:=outbound[i].y;
-  if outbound[i].z<n then
-                         n:=outbound[i].z;
-  if outbound[i].z>f then
-                         f:=outbound[i].z;
-  end;
-
-  vp.BoundingBox.LBN:=CreateVertex(l,B,n);
-  vp.BoundingBox.RTF:=CreateVertex(r,T,f);
-
-
-
-
-  if PProjoutbound=nil then
-  begin
-       Getmem(Pointer(PProjoutbound),sizeof(GDBOOutbound2DIArray));
-       PProjoutbound^.init(4);
+  pswp:=text.beginiterate(ir);
+  if pswp<>nil then
+    repeat
+      if obj_width<pswp^.w then obj_width:=pswp^.w;
+      pswp:=text.iterate(ir);
+    until pswp=nil;
+  if text.count > 0 then
+    obj_height := ((self.text.count-1) * linespace + textprop.size)/textprop.size
+  else begin
+    obj_height := 1;
+    obj_width := 1;
   end;
 end;
-*)
+
 procedure GDBObjMText.createpoint;
 var
-  //psymbol: PByte;
-  {lin,}i{, j, k}{, l}: Integer;
-
-  //len: Word;
+  i:Integer;
   matr,m1: DMatrix4D;
   v:GDBvertex4D;
-  //pv:GDBPolyVertex2D;
-  //pv3:GDBPolyVertex3D;
   Bound:TBoundingRect;
-
-  lp{,tv}:gdbvertex;
-  //plp,plp2:pgdbvertex;
+  lp:gdbvertex;
   pswp:pGDBStrWithPoint;
-      ir:itrec;
+  ir:itrec;
   pl:GDBPoint3DArray;
   ispl:Boolean;
   pfont:pgdbfont;
   ln,l:Integer;
-
   sym:word;
-  //-ttf-//TDInfo:TTrianglesDataInfo;
 begin
   ln:=0;
-  pfont:=PGDBTextStyle({gdb.GetCurrentDWG}(TXTStyle))^.pfont;
+  pfont:=TXTStyle^.pfont;
   pl.init(10);
   ispl:=false;
-  //Representation.SHX.clear;
-  //Representation.Triangles.clear;
 
   Bound.LB.x:=+infinity;
   Bound.LB.y:=+infinity;
   Bound.RT.x:=NegInfinity;
   Bound.RT.y:=NegInfinity;
-  {minx:=+10000000;
-  miny:=+10000000;
-  maxx:=-10000000;
-  maxy:=-10000000;}
-  //lin:=0;
-  {for l:=0 to ptext.count-1 do
-  begin}
-        pswp:=text.beginiterate(ir);
+  pswp:=text.beginiterate(ir);
 
-  //objmatrix:=onematrix;
-        if pswp<>nil then
+  if pswp<>nil then
   repeat
-  ln:=-1;
-  matr:=DrawMatrix;
+    ln:=-1;
+    matr:=DrawMatrix;
 
-  //m1:=onematrix;
-  //m1.mtr[0].v[0] := 1;
-  //m1.mtr[1].v[1] := 1;
-  //m1.mtr[2].v[2] := 1;
-  //m1.mtr[3].v[3] := 1;
-  m1.CreateRec(OneMtr,CMTShear);
-  m1.mtr[3].v[0] := pswp^.x-(pswp^.y)*cotan(pi/2-textprop.oblique)/textprop.wfactor;
-  m1.mtr[3].v[1] := pswp^.y;
-  matr:=MatrixMultiply(m1,matr);
-  i := 1;
-                       if ispl then
+    m1.CreateRec(OneMtr,CMTShear);
+    m1.mtr[3].v[0] := pswp^.x-(pswp^.y)*cotan(pi/2-textprop.oblique)/textprop.wfactor;
+    m1.mtr[3].v[1] := pswp^.y;
+    matr:=MatrixMultiply(m1,matr);
 
-                     begin
-                             lp:=pgdbvertex(@matr.mtr[3].v[0])^;
-                             lp.y:=lp.y-0.2*textprop.size;
-                             lp:=VectorTransform3d(lp,objmatrix);
-                             pl.PushBackData(lp);
-                     end;
+    i := 1;
+    if ispl then begin
+      lp:=pgdbvertex(@matr.mtr[3].v[0])^;
+      lp.y:=lp.y-0.2*textprop.size;
+      lp:=VectorTransform3d(lp,objmatrix);
+      pl.PushBackData(lp);
+    end;
 
-  while i<=length(pswp^.str) do
-  begin
-    m1:=matr;
-    sym:=getsymbol_fromGDBText(pswp^.str{[i]},i,l,pgdbfont(pfont)^.font.IsUnicode);
-    if {pswp^.str[i]}sym={#}1 then
-    begin
-         ispl:=not(ispl);
-         if ispl then begin
-                             lp:=pgdbvertex(@matr.mtr[3].v[0])^;
-                             lp.y:=lp.y-0.2*textprop.size;
-                             lp:=VectorTransform3d(lp,objmatrix);
-                             pl.PushBackData(lp);
-                        end
-                    {оригинал}
-                    {begin
-                             lp:=pgdbvertex(@matr[3,0])^;
-                             lp.y:=lp.y-0.2*textprop.size;
-                             lp:=VectorTransform3d(lp,objmatrix);
-                             lin:=1;
-                             pl.Add(@lp);
-                        end}
-                            {else begin
-                             pv3.coord:=lp;
-                             pv3.count:=0;
-                             Vertex3D_in_WCS_Array.add(@pv3);
-                             lp:=pgdbvertex(@matr[3,0])^;
-                             lp.y:=lp.y-0.2*textprop.size;
-                             lp:=VectorTransform3d(lp,objmatrix);
-                             pv3.coord:=lp;
-                             pv3.count:=0;
-                             Vertex3D_in_WCS_Array.add(@pv3);
-                             pl.Add(@lp);
-                             lin:=0;
-                        end;}
-                   else begin
-                             lp:=pgdbvertex(@matr.mtr[3].v[0])^;
-                             lp.y:=lp.y-0.2*textprop.size;
-                             lp:=VectorTransform3d(lp,objmatrix);
-                             pl.PushBackData(lp);
-                        end;
-    end
-    else
-    begin
-    //matr:=matrixmultiply(matr,objmatrix);
+    while i<=length(pswp^.str) do begin
+      m1:=matr;
+      sym:=getsymbol_fromGDBText(pswp^.str{[i]},i,l,pgdbfont(pfont)^.font.IsUnicode);
+      if sym=1 then begin
+        ispl:=not(ispl);
+        if ispl then begin
+          lp:=pgdbvertex(@matr.mtr[3].v[0])^;
+          lp.y:=lp.y-0.2*textprop.size;
+          lp:=VectorTransform3d(lp,objmatrix);
+          pl.PushBackData(lp);
+        end else begin
+          lp:=pgdbvertex(@matr.mtr[3].v[0])^;
+          lp.y:=lp.y-0.2*textprop.size;
+          lp:=VectorTransform3d(lp,objmatrix);
+          pl.PushBackData(lp);
+        end;
+      end else begin
+        pfont.CreateSymbol(DC.drawer,Representation.GetGraphix^,sym,objmatrix,matr,Bound,ln);
+        {matr:=m1;
+        m1:=CreateTranslationMatrix(pgdbfont(pfont)^.GetOrReplaceSymbolInfo(sym).NextSymX,0,0);
+        matr:=MatrixMultiply(m1,matr);}
+        matr:=CreateTranslationMatrix(pgdbfont(pfont)^.GetOrReplaceSymbolInfo(sym).NextSymX,0,0);
+        matr:=MatrixMultiply(matr,m1);
+      end;
+      inc(i,l);
+    end;
 
-      pfont.CreateSymbol(DC.drawer,Representation.GetGraphix^,sym,objmatrix,matr,Bound,ln);
+    if ispl then begin
+      lp:=pgdbvertex(@matr.mtr[3].v[0])^;
+      lp.y:=lp.y-0.2*textprop.size;
+      lp:=VectorTransform3d(lp,objmatrix);
+      pl.PushBackData(lp);
+    end;
+    pswp:=text.iterate(ir);
+  until pswp=nil;
 
-      matr:=m1;
-      FillChar(m1, sizeof(DMatrix4D), 0);
-  m1.mtr[0].v[0] := 1;
-  m1.mtr[1].v[1] := 1;
-  m1.mtr[2].v[2] := 1;
-  m1.mtr[3].v[3] := 1;
-    {if sym<256 then
-                    sym:=ach2uch(sym);}
-  m1.mtr[3].v[0] := pgdbfont(pfont)^.GetOrReplaceSymbolInfo({ach2uch(ord(pswp^.str[i]))}sym{//-ttf-//,tdinfo}).NextSymX;
-  m1.mtr[3].v[1] := 0;
-  matr:=MatrixMultiply(m1,matr);
-  end;
-  inc(i,l);
-  end;
-                     if ispl then
-
-                     begin
-                             lp:=pgdbvertex(@matr.mtr[3].v[0])^;
-                             lp.y:=lp.y-0.2*textprop.size;
-                             lp:=VectorTransform3d(lp,objmatrix);
-                             pl.PushBackData(lp);
-                     end;
-            pswp:=text.iterate(ir);
-        until pswp=nil;
-
-       if Bound.LB.x=+infinity then Bound.LB.x:=0;
-       if Bound.LB.y=+infinity then Bound.LB.y:=0;
-       if Bound.RT.x=NegInfinity then Bound.RT.x:=1;
-       if Bound.RT.y=NegInfinity then Bound.RT.y:=1;
+  if Bound.LB.x=+infinity then Bound.LB.x:=0;
+  if Bound.LB.y=+infinity then Bound.LB.y:=0;
+  if Bound.RT.x=NegInfinity then Bound.RT.x:=1;
+  if Bound.RT.y=NegInfinity then Bound.RT.y:=1;
 
   v.x:=Bound.LB.x;
   v.y:=Bound.RT.y;
@@ -840,85 +628,22 @@ begin
   v.w:=1;
   v:=VectorTransform(v,objMatrix);
   outbound[3]:=pgdbvertex(@v)^;
-  {if PProjoutbound=nil then
-  begin
-       Getmem(Pointer(PProjoutbound),sizeof(GDBOOutbound2DIArray));
-       PProjoutbound^.init(4);
-  end;}
 
-  {plp:=pl.beginiterate(ir);
-  plp2:=pl.iterate(ir);
-  if plp2<>nil then
-  repeat
-
-                             //pv3.coord:=plp^;
-                             //pv3.count:=0;
-                             //Representation.SHX.add(@pv3);
-                             //pv3.coord:=plp2^;
-                             //pv3.count:=0;
-                             //Representation.SHX.add(@pv3);
-
-        plp:=pl.iterate(ir);
-        plp2:=pl.iterate(ir);
-  until plp2=nil;}
-
-
-
-
-
-  //Representation.SHX.Shrink;
   pl.done;
   Representation.Shrink;
 end;
-{procedure GDBObjMText.CalcObjMatrix;
-var rot_matr,oblique_matr,disp_self_matr,disp_matr,size_matr:DMatrix4D;
-begin
-     inherited;
-
-     Local.oy:=CrossVertex(Local.oz,Local.ox);
-     Local.ox:=NormalizeVertex(Local.ox);
-     Local.oy:=NormalizeVertex(Local.oy);
-     Local.oz:=NormalizeVertex(Local.oz);
-
-     rot_matr:=OneMatrix;
-     disp_self_matr:=OneMatrix;
-     disp_matr:=OneMatrix;
-     oblique_matr:= OneMatrix;
-     disp_self_matr:= OneMatrix;
-     size_matr:=OneMatrix;
-
-     PGDBVertex(@rot_matr[0])^:=Local.ox;
-     PGDBVertex(@rot_matr[1])^:=Local.oy;
-     PGDBVertex(@rot_matr[2])^:=Local.oz;
-
-     PGDBVertex(@disp_matr[3])^:=Local.p_insert;
-
-     objmatrix:=MatrixMultiply(rot_matr,disp_matr);
-     objmatrix:=MatrixMultiply(vp.owner^.GetMatrix^,objmatrix);
-
-     oblique_matr[1, 0] := cotan(pi / 2 - textprop.oblique * pi / 180);
-
-     Pgdbvertex(@disp_self_matr[3])^:=P_drawInOCS;
-     size_matr[0, 0] := textprop.wfactor*textprop.size;
-     size_matr[1, 1] := textprop.size;
-     size_matr[2, 2] := textprop.size;
-     DrawMatrix:=MatrixMultiply(oblique_matr,size_matr);
-     DrawMatrix:=MatrixMultiply(DrawMatrix,disp_self_matr);
-end;}
 
 function GDBObjMText.Clone;
 var tvo: PGDBObjMtext;
 begin
   Getmem(Pointer(tvo), sizeof(GDBObjMText));
   tvo^.initnul(own);
-  //tvo^.vp:=vp;
   CopyVPto(tvo^);
   CopyExtensionsTo(tvo^);
   tvo^.Local:=local;
   tvo^.Textprop:=textprop;
   tvo^.template:=template;
   tvo^.content:=content;
-  //tvo^.Format;
   tvo^.width:=width;
   tvo^.linespace:=linespace;
   tvo^.linespacef:=linespacef;
@@ -927,20 +652,19 @@ begin
   result := tvo;
 end;
 procedure GDBObjMText.LoadFromDXF;
-var //s{, layername}: String;
-  byt{, code}: Integer;
-  ux: gdbvertex;
-  angleload: Boolean;
-  angle:double;
+var
+  byt:Integer;
+  ux:gdbvertex;
+  //angleload: Boolean;
+  //angle:double;
   j:Integer;
   style,ttemplate:String;
 begin
-  //initnul;
-  angleload := false;
-  angle:=0;
-  ux.x := 1;
-  ux.y := 0;
-  ux.z := 0;
+  //angleload:=false;
+  //angle:=0;
+  ux.x:=1;
+  ux.y:=0;
+  ux.z:=0;
   style:='';
   ttemplate:='';
   j:=0;
@@ -957,38 +681,26 @@ begin
     if not dxfIntegerload(rdr,71,byt,j)then
     if not dxfStringload(rdr,1,byt,ttemplate)then
     if not dxfStringload(rdr,3,byt,ttemplate)then
-    if dxfDoubleload(rdr,50,byt,angle) then angleload := true
-
-    else if     dxfStringload(rdr,7,byt,style)then
-                                                 begin
-                                                 TXTStyle :={drawing.GetTextStyleTable^.getDataMutable}(drawing.GetTextStyleTable^.FindStyle(Style,false));
-                                                 if TXTStyle=nil then
-                                                                     TXTStyle:=pointer(drawing.GetTextStyleTable^.getDataMutable(0));
-                                                 end
-    else {s := }rdr.SkipString;
+    {if dxfDoubleload(rdr,50,byt,angle) then angleload := true
+    else }if dxfStringload(rdr,7,byt,style)then begin
+      TXTStyle:=drawing.GetTextStyleTable^.FindStyle(Style,false);
+      if TXTStyle=nil then
+        TXTStyle:=pointer(drawing.GetTextStyleTable^.getDataMutable(0));
+    end else
+      rdr.SkipString;
     byt:=rdr.ParseInteger;
   end;
   if TXTStyle=nil then
-                           begin
-                               TXTStyle:=drawing.GetTextStyleTable^.FindStyle('Standard',false);
-                               {if TXTStyle=nil then
-                                                        TXTStyle:=sysvar.DWG.DWG_CTStyle^;}
-                           end;
+    TXTStyle:=drawing.GetTextStyleTable^.FindStyle('Standard',false);
   OldVersTextReplace(ttemplate);
   OldVersTextReplace(Content);
   Content:=utf8tostring(Tria_AnsiToUtf8(ttemplate));
-  //template:=utf8tostring({Tria_AnsiToUtf8}(template));
   textprop.justify:=b2j[j];
   P_drawInOCS := Local.p_insert;
   linespace := textprop.size * linespacef * 5 / 3;
-  if not angleload then
-                       angle := vertexangle(NulVertex2D,pgdbvertex2d(@ux)^);
+  {if not angleload then
+    angle:=vertexangle(NulVertex2D,pgdbvertex2d(@ux)^);}
   Local.basis.ox:=ux;
-  //ptext := nil;
-  //text.init(10);
-  //Vertex2D_in_DCS_Array.init(100);
-  //PProjoutbound:=nil;
-  //format;
 end;
 function z2dxfmtext(s:String;var ul:boolean):String;
 var count:Integer;

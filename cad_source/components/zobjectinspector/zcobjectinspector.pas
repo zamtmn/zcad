@@ -876,9 +876,9 @@ if WindowsVersion < wvVista then
                             else
                                 vDefaultDetails := ThemeServices.GetElementDetails(tmPopupCheckBackgroundDisabled){trChevronVertHot}{ttbThumbDisabled}{tlListViewRoot};
 {$endif}
-{$IFDEF LCLGTK2}DefaultDetails := ThemeServices.GetElementDetails(ttbody){$endif}
-{$IFDEF LCLQT}DefaultDetails := ThemeServices.GetElementDetails({ttpane}thHeaderDontCare){$endif};
-{$IFDEF LCLQT5}DefaultDetails := ThemeServices.GetElementDetails(ttPane){$endif};
+{$IFDEF LCLGTK2}vDefaultDetails := ThemeServices.GetElementDetails(ttbody){$endif}
+{$IFDEF LCLQT}vDefaultDetails := ThemeServices.GetElementDetails({ttpane}thHeaderDontCare){$endif};
+{$IFDEF LCLQT5}vDefaultDetails := ThemeServices.GetElementDetails(ttPane){$endif};
 if IsWgiteBackground then
                          Canvas.FillRect(ARect)
                      else
@@ -934,7 +934,7 @@ hrect.Bottom:=hrect.Top+HeadersHeight-1{+1};
     if hrect.Bottom>ARect.Bottom then
       hrect.Bottom:=ARect.Bottom{height};
     if ThemeServices.ThemesEnabled then begin
-      {$IFNDEF LCLWIN32}DefaultDetails := ThemeServices.GetElementDetails(ttbSeparatorNormal);{$ENDIF}
+      {$IFNDEF LCLWIN32}vDefaultDetails := ThemeServices.GetElementDetails(ttbSeparatorNormal);{$ENDIF}
       {$IFDEF LCLWIN32}
       if WindowsVersion < wvVista then
         vDefaultDetails := ThemeServices.GetElementDetails(ttbSeparatorNormal)

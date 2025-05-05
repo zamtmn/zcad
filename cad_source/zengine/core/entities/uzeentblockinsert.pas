@@ -270,11 +270,11 @@ begin
      else
          scale.z:=1;
      }
-
-     if (abs (Local.basis.oz.x) < 1/64) and (abs (Local.basis.oz.y) < 1/64) then
-                                                                    ox:=CrossVertex(YWCS,Local.basis.oz)
-                                                                else
-                                                                    ox:=CrossVertex(ZWCS,Local.basis.oz);
+     ox:=GetXfFromZ(Local.basis.oz);
+     //if (abs (Local.basis.oz.x) < 1/64) and (abs (Local.basis.oz.y) < 1/64) then
+     //                                                               ox:=CrossVertex(YWCS,Local.basis.oz)
+     //                                                           else
+     //                                                               ox:=CrossVertex(ZWCS,Local.basis.oz);
      normalizevertex(ox);
      tv:=Local.basis.ox;
      if scale.x<-eps then

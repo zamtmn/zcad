@@ -458,10 +458,11 @@ else if not dxfIntegerload(rdr,72,byt,gv)then
   //assert(angleload, 'GDBText отсутствует dxf код 50 (угол поворота)');
   if angleload then
   begin
-     if (abs (Local.basis.oz.x) < 1/64) and (abs (Local.basis.oz.y) < 1/64) then
-                                                                    Local.basis.ox:=CrossVertex(YWCS,Local.basis.oz)
-                                                                else
-                                                                    Local.basis.ox:=CrossVertex(ZWCS,Local.basis.oz);
+     Local.basis.ox:=GetXfFromZ(Local.basis.oz);
+     //if (abs (Local.basis.oz.x) < 1/64) and (abs (Local.basis.oz.y) < 1/64) then
+     //                                                               Local.basis.ox:=CrossVertex(YWCS,Local.basis.oz)
+     //                                                           else
+     //                                                               Local.basis.ox:=CrossVertex(ZWCS,Local.basis.oz);
   local.basis.OX:=VectorTransform3D(local.basis.OX,CreateAffineRotationMatrix(Local.basis.oz,-angle));
   end;
   {if not angleload then

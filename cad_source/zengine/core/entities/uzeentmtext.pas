@@ -104,11 +104,9 @@ begin
   inherited init(own,layeraddres, lw, c, p, s, o, w, a, j);
   width:=wi;
   linespacef := l;
-  //if (abs (Local.basis.oz.x) < 1/64) and (abs (Local.basis.oz.y) < 1/64) then
-  if IsNearToZ(Local.basis.oz) then
-    Local.basis.ox:=CrossVertex(YWCS,Local.basis.oz)
-  else
-    Local.basis.ox:=CrossVertex(ZWCS,Local.basis.oz);
+  {TODO: тут расчет AAA ненужен}
+  Local.basis.ox:=GetXfFromZ(Local.basis.oz);
+
   local.basis.OX:=VectorTransform3D(local.basis.OX,uzegeometry.CreateAffineRotationMatrix(Local.basis.oz,{-textprop.angle}{ fixedTODO : removeing angle from text ents }-a));
   text.init(10);
 end;

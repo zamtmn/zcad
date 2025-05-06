@@ -54,7 +54,6 @@ type
     function getsnap(var osp:os_record; var pdata:Pointer; const param:OGLWndtype; ProjectProc:GDBProjectProc;SnapMode:TGDBOSMode):Boolean;virtual;
     procedure rtmodifyonepoint(const rtmod:TRTModifyData);virtual;
     procedure rtsave(refp:Pointer);virtual;
-    function IsHaveObjXData:Boolean;virtual;
     procedure SaveToDXFObjXData(var outStream:TZctnrVectorBytes;var IODXFContext:TIODXFContext);virtual;
     function ProcessFromDXFObjXData(const _Name,_Value:String;ptu:PExtensionData;const drawing:TDrawingDef):Boolean;virtual;
     class function GetDXFIOFeatures:TDXFEntIODataManager;static;
@@ -79,13 +78,7 @@ begin
   else
     result := t;
 end;
-function GDBObjText.IsHaveObjXData:Boolean;
-begin
-  if template<>content then
-    result:=true
-  else
-    result:=false;
-end;
+
 function GDBObjText.GetObjTypeName;
 begin
      result:=ObjN_GDBObjText;

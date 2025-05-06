@@ -70,8 +70,6 @@ TExtAttrib=record
                     function FromDXFPostProcessBeforeAdd(ptu:PExtensionData;const drawing:TDrawingDef):PGDBObjSubordinated;virtual;
                     procedure FromDXFPostProcessAfterAdd;virtual;
                     procedure postload(var context:TIODXFLoadContext);virtual;
-                    function IsHaveObjXData:Boolean;virtual;
-
 
                     procedure createfield;virtual;
                     function AddExtAttrib:PTExtAttrib;
@@ -1102,10 +1100,7 @@ begin
   if vp.LineType<>{''}nil then dxfStringout(outStream,6,vp.LineType^.Name);
   if vp.LineTypeScale<>1 then dxfDoubleout(outStream,48,vp.LineTypeScale);
 end;
-function GDBObjEntity.IsHaveObjXData:Boolean;
-begin
-     result:=false;
-end;
+
 function GDBObjEntity.LoadFromDXFObjShared;
 var
   APP_NAME:ShortString;

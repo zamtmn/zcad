@@ -32,7 +32,8 @@ uses
   uzccommandsabstract,uzccmdfloatinsert,uzeentabstracttext,uzeenttext,uzeentmtext,
   uzcinterface,uzcstrconsts,uzccommandsmanager,
   uzeentity,uzcLog,uzctnrvectorstrings,uzestylestexts,uzeconsts,uzcsysvars,uzctextenteditor,
-  varmandef;
+  varmandef,
+  uzeExtdrAbstractDrawingExtender,uzedrawingabstract,uzedrawingsimple;
 type
 {EXPORT+}
   {REGISTEROBJECTTYPE TextInsert_com}
@@ -67,9 +68,29 @@ TTextInsertParams=record
              end;
 
 implementation
+type
+  TDrwExtdrCmdText=class(TAbstractDrawingExtender)
+    txtStyle:string;
+    constructor Create(pEntity:TAbstractDrawing);override;
+  end;
 var
   TextInsertParams:TTextInsertParams;
   TextInsert:TextInsert_com;
+
+constructor TDrwExtdrCmdText.Create(pEntity:TAbstractDrawing);
+begin
+  txtStyle:='';
+end;
+
+function getTXTStyle:PGDBTextStyle;
+begin
+  if TextInsertParams.Style.Selected<TextInsertParams.Style.Enums.Count-1 then begin
+    result:=drawings.GetCurrentDWG^.TextStyleTable.FindStyle(pString(TextInsertParams.Style.Enums.getDataMutable(TextInsertParams.Style.Selected))^,false);
+  end else begin
+    result:=drawings.GetCurrentDWG^.CurrentTextStyle;
+  end;
+end;
+
 procedure TextInsert_com.BuildPrimitives;
 begin
      if drawings.GetCurrentDWG^.TextStyleTable.GetRealCount>0 then
@@ -103,68 +124,77 @@ begin
            end;
 
      end;
+     pt^.TXTStyle:=getTXTStyle;
      drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.AddPEntity(pt^);
      end;
 end;
 procedure TextInsert_com.CommandStart(const Context:TZCADCommandContext;Operands:TCommandOperands);
 begin
-     inherited;
-     if drawings.GetCurrentDWG^.TextStyleTable.GetRealCount<1 then
-     begin
-          ZCMsgCallBackInterface.TextMessage(rscmInDwgTxtStyleNotDeffined,TMWOShowError);
-          commandmanager.executecommandend;
-     end;
+  inherited;
+  if drawings.GetCurrentDWG^.TextStyleTable.GetRealCount<1 then begin
+    ZCMsgCallBackInterface.TextMessage(rscmInDwgTxtStyleNotDeffined,TMWOShowError);
+    commandmanager.executecommandend;
+  end;
 end;
 procedure TextInsert_com.CommandEnd(const Context:TZCADCommandContext);
 begin
   inherited;
 end;
 
-function GetStyleNames(var BDefNames:TZctnrVectorStrings;selname:String):Integer;
-var pb:PGDBTextStyle;
-    ir:itrec;
-    i:Integer;
+function GetStyleNames(var AStyleNamesVector:TZctnrVectorStrings;AFindName:String;AAddedLastName:string):Integer;
+var
+  pb:PGDBTextStyle;
+  ir:itrec;
+  i:Integer;
 begin
-     result:=-1;
-     i:=0;
-     selname:=uppercase(selname);
-     pb:=drawings.GetCurrentDWG^.TextStyleTable.beginiterate(ir);
-     if pb<>nil then
-     repeat
-           if uppercase(pb^.name)=selname then
-                                              result:=i;
+  result:=-1;
+  i:=0;
+  AFindName:=uppercase(AFindName);
+  pb:=drawings.GetCurrentDWG^.TextStyleTable.beginiterate(ir);
+  if pb<>nil then
+    repeat
+      if uppercase(pb^.name)=AFindName then
+        result:=i;
+      AStyleNamesVector.PushBackData(pb^.name);
+      pb:=drawings.GetCurrentDWG^.TextStyleTable.iterate(ir);
+      inc(i);
+    until pb=nil;
+  if AAddedLastName<>''then
+    AStyleNamesVector.PushBackData(AAddedLastName);
+end;
 
-           BDefNames.PushBackData(pb^.name);
-           pb:=drawings.GetCurrentDWG^.TextStyleTable.iterate(ir);
-           inc(i);
-     until pb=nil;
+function FindCmdTextDrawingExtender(var dwg:TSimpleDrawing;CreateIfnotFound:boolean=true):TDrwExtdrCmdText;
+begin
+  result:=dwg.DrawingExtensions.specialize GetExtension<TDrwExtdrCmdText>;
+  if (CreateIfnotFound)and(result=nil) then begin
+    result:=TDrwExtdrCmdText.Create(dwg);
+    dwg.DrawingExtensions.AddExtension(result);
+  end;
 end;
 
 procedure TextInsert_com.Command(Operands:TCommandOperands);
 var
-   s:string;
-   i:integer;
+  te:TDrwExtdrCmdText;
+  txtStyleName:string;
+  i:integer;
 begin
-       if drawings.GetCurrentDWG^.TextStyleTable.GetRealCount>0 then
-     begin
-     if TextInsertParams.Style.Selected>=TextInsertParams.Style.Enums.Count then
-                                                                                begin
-                                                                                     s:=drawings.GetCurrentDWG^.GetCurrentTextStyle^.Name;
-                                                                                end
-                                                                            else
-                                                                                begin
-                                                                                     s:=TextInsertParams.Style.Enums.getData(TextInsertParams.Style.Selected);
-                                                                                end;
-      //TextInsertParams.Style.Enums.Clear;
-      TextInsertParams.Style.Enums.free;
-      i:=GetStyleNames(TextInsertParams.Style.Enums,s);
-      if i<0 then
-                 TextInsertParams.Style.Selected:=0;
-      ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIActionRedraw);
-      BuildPrimitives;
-     drawings.GetCurrentDWG^.wa.SetMouseMode((MGet3DPoint) or (MMoveCamera) or (MRotateCamera));
-     format;
-     end;
+  if drawings.GetCurrentDWG^.TextStyleTable.GetRealCount>0 then begin
+    te:=FindCmdTextDrawingExtender(drawings.CurrentDWG^,false);
+    if Assigned(te) then
+      txtStyleName:=te.txtStyle
+    else
+      txtStyleName:='';
+    TextInsertParams.Style.Enums.free;
+    i:=GetStyleNames(TextInsertParams.Style.Enums,txtStyleName,'%%TEXTSTYLE');
+    if i<0 then
+      TextInsertParams.Style.Selected:=TextInsertParams.Style.Enums.Count-1
+    else
+      TextInsertParams.Style.Selected:=i;
+    ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIActionRedraw);
+    BuildPrimitives;
+    drawings.GetCurrentDWG^.wa.SetMouseMode((MGet3DPoint) or (MMoveCamera) or (MRotateCamera));
+    format;
+  end;
 end;
 function TextInsert_com.DoEnd(Context:TZCADCommandContext;pdata:Pointer):Boolean;
 begin
@@ -184,15 +214,25 @@ end;
 
 procedure TextInsert_com.Format;
 var
-   DC:TDrawContext;
+  DC:TDrawContext;
+  te:TDrwExtdrCmdText;
 begin
-     if ((pt^.GetObjType=GDBTextID)and(TextInsertParams.mode=TIM_MText))
-     or ((pt^.GetObjType=GDBMTextID)and(TextInsertParams.mode=TIM_Text)) then
-                                                                        BuildPrimitives;
-     pt^.vp.Layer:=drawings.GetCurrentDWG^.GetCurrentLayer;
-     pt^.vp.LineWeight:=sysvar.dwg.DWG_CLinew^;
-     //pt^.TXTStyle:=drawings.GetCurrentDWG^.TextStyleTable.getMutableData(TextInsertParams.Style.Selected);
-     pt^.TXTStyle:=drawings.GetCurrentDWG^.TextStyleTable.FindStyle(pString(TextInsertParams.Style.Enums.getDataMutable(TextInsertParams.Style.Selected))^,false);
+  if ((pt^.GetObjType=GDBTextID)and(TextInsertParams.mode=TIM_MText))
+  or ((pt^.GetObjType=GDBMTextID)and(TextInsertParams.mode=TIM_Text)) then
+    BuildPrimitives;
+    pt^.vp.Layer:=drawings.GetCurrentDWG^.GetCurrentLayer;
+    pt^.vp.LineWeight:=sysvar.dwg.DWG_CLinew^;
+    if TextInsertParams.Style.Selected<TextInsertParams.Style.Enums.Count-1 then begin
+      pt^.TXTStyle:=drawings.GetCurrentDWG^.TextStyleTable.FindStyle(pString(TextInsertParams.Style.Enums.getDataMutable(TextInsertParams.Style.Selected))^,false);
+      te:=FindCmdTextDrawingExtender(drawings.CurrentDWG^,true);
+      if assigned(te)then
+        te.txtStyle:=pt^.TXTStyle^.GetName;
+    end else begin
+      te:=FindCmdTextDrawingExtender(drawings.CurrentDWG^,false);
+      if assigned(te)then
+        pt^.TXTStyle:=drawings.GetCurrentDWG^.CurrentTextStyle;
+    end;
+
      pt^.textprop.size:=TextInsertParams.h;
      pt^.Content:='';
      pt^.Template:=(TextInsertParams.text);

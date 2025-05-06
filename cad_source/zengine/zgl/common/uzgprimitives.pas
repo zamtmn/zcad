@@ -41,6 +41,7 @@ ZGLOptimizerData=record
                                                      ignoretriangles:boolean;
                                                      ignorelines:boolean;
                                                      symplify:boolean;
+                                                     ignoretoprimitiveindex:TArrayIndex;
                                                end;
 {REGISTERRECORDTYPE TEntIndexesData}
 TEntIndexesData=record
@@ -145,6 +146,16 @@ TLLSymbolLine= object(TLLPrimitive)
               MaxSqrSymH:Single;
               SymbolsParam:TSymbolSParam;
               FirstOutBoundIndex,LastOutBoundIndex:TLLVertexIndex;
+              function draw(drawer:TZGLAbstractDrawer;var rc:TDrawContext;var GeomData:ZGLGeomData;var LLPArray:TLLPrimitivesArray;var OptData:ZGLOptimizerData):Integer;virtual;
+              constructor init;
+              function CalcTrueInFrustum(const frustum:ClipArray;var GeomData:ZGLGeomData;out InRect:TInBoundingVolume):Integer;virtual;
+        end;
+PTLLProxyLine=^TLLProxyLine;
+TLLProxyLine= object(TLLPrimitive)
+              SimplyDrawed:Boolean;
+              MaxDashLength:Single;
+              FirstIndex,LastIndex:TLLVertexIndex;
+              LastLinePrimitiveindex:TArrayIndex;
               function draw(drawer:TZGLAbstractDrawer;var rc:TDrawContext;var GeomData:ZGLGeomData;var LLPArray:TLLPrimitivesArray;var OptData:ZGLOptimizerData):Integer;virtual;
               constructor init;
               function CalcTrueInFrustum(const frustum:ClipArray;var GeomData:ZGLGeomData;out InRect:TInBoundingVolume):Integer;virtual;
@@ -486,6 +497,30 @@ begin
   result:=inherited;
 end;
 function TLLSymbolLine.CalcTrueInFrustum(const frustum:ClipArray;var GeomData:ZGLGeomData;out InRect:TInBoundingVolume):Integer;
+begin
+  result:=getPrimitiveSize;
+  InRect:=IRNotAplicable;
+end;
+
+function TLLProxyLine.draw(drawer:TZGLAbstractDrawer;var rc:TDrawContext;var GeomData:ZGLGeomData;var LLPArray:TLLPrimitivesArray;var OptData:ZGLOptimizerData):Integer;
+begin
+  if (rc.LOD=LODLowDetail)or(MaxDashLength/(rc.DrawingContext.zoom*rc.DrawingContext.zoom)<0.5)and(not rc.maxdetail) then begin
+    Drawer.DrawLine(@geomdata.Vertex3S,FirstIndex,LastIndex);
+    OptData.ignoretoprimitiveindex:=self.LastLinePrimitiveindex;
+    self.SimplyDrawed:=true;
+  end else
+    self.SimplyDrawed:=false;
+  result:=inherited;
+end;
+constructor TLLProxyLine.init;
+begin
+  SimplyDrawed:=false;
+  MaxDashLength:=0;
+  FirstIndex:=-1;
+  LastIndex:=-1;
+  inherited;
+end;
+function TLLProxyLine.CalcTrueInFrustum(const frustum:ClipArray;var GeomData:ZGLGeomData;out InRect:TInBoundingVolume):Integer;
 begin
   result:=getPrimitiveSize;
   InRect:=IRNotAplicable;

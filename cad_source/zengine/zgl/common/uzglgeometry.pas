@@ -23,7 +23,7 @@ interface
 uses uzgldrawergeneral,math,uzgldrawcontext,uzgldrawerabstract,uzgvertex3sarray,
      uzegeometrytypes,gzctnrVector,UGDBPoint3DArray,uzegeometry,uzeentitiesprop,
      gzctnrVectorTypes,uzestyleslinetypes,sysutils,uzbtypes,
-     uzbstrproc,uzefont,uzglvectorobject,uzgprimitivessarray;
+     uzbstrproc,uzefont,uzglvectorobject,uzgprimitivessarray,uzgprimitives;
 type
 {Export+}
 PZGLGraphix=^ZGLGraphix;
@@ -773,7 +773,10 @@ var
   lt:PGDBLtypeProp;
   Segmentator:ZSegmentator;
   supressfirstdash:boolean;
+  ppli:TArrayIndex;
+  ppl:PTLLProxyLine;
 begin
+  ppli:=-1;
   result:=CreateLLDrawResult(LLprimitives);
   LT:=getLTfromVP(vp);
   if (LT=nil) or (LT.dasharray.Count=0) then begin
@@ -788,6 +791,13 @@ begin
       DrawLineWithoutLT(rc,startpoint,endpoint,result,OnlyOne); //не рисуем шаблон при большом количестве повторений
       result.Appearance:=TAMatching;
     end else begin
+      if rc.drawer<>nil then begin
+        ppli:=rc.drawer.GetLLPrimitivesCreator.CreateLLProxyLine(LLprimitives);
+        ppl:=pointer(LLprimitives.getDataMutable(ppli));
+        ppl.MaxDashLength:=scale*LT.strokesarray.LengthFact;
+        ppl.FirstIndex:=GeomData.Vertex3S.PushBackData(startpoint);
+        ppl.LastIndex:=GeomData.Vertex3S.PushBackData(endpoint);
+      end;
       Segmentator.InitFromLine(startpoint,endpoint,length,@self);//длина линии
       Segmentator.startdraw;
       D:=(Length-(scale*LT.strokesarray.LengthFact)*trunc(num))/2; //длинна добавки для выравнивания
@@ -827,6 +837,10 @@ begin
       end;
       Segmentator.done;
     end;
+  end;
+  if ppli<>-1 then begin
+    ppl:=pointer(LLprimitives.getDataMutable(ppli));
+    ppl.LastLinePrimitiveindex:=LLprimitives.Count;
   end;
   FinishLLDrawResult(LLprimitives,result);
   Shrink;

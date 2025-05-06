@@ -32,6 +32,7 @@ TLLPrimitivesCreatorAbstract=class
                 function CreateLLSymbol(var pa:TLLPrimitivesArray):TArrayIndex;virtual;abstract;
                 function CreateLLSymbolLine(var pa:TLLPrimitivesArray):TArrayIndex;virtual;abstract;
                 function CreateLLSymbolEnd(var pa:TLLPrimitivesArray):TArrayIndex;virtual;abstract;
+                function CreateLLProxyLine(var pa:TLLPrimitivesArray):TArrayIndex;virtual;abstract;
                 function CreateLLPolyLine(var pa:TLLPrimitivesArray;const P1Index,_Count:TLLVertexIndex;_closed:Boolean=false):TArrayIndex;virtual;abstract;
              end;
 implementation

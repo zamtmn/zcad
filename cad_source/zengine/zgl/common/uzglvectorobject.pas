@@ -75,11 +75,18 @@ begin
      OptData.ignoretriangles:=false;
      OptData.ignorelines:=false;
      OptData.symplify:=false;
+     OptData.ignoretoprimitiveindex:=-1;
      ProcessedSize:=0;
      PPrimitive:=LLprimitives.GetParrayAsPointer;
      while ProcessedSize<LLprimitives.count do
      begin
-          CurrentSize:=LLprimitives.Align(PPrimitive.draw(Drawer,rc,GeomData,LLprimitives,OptData));
+          if OptData.ignoretoprimitiveindex=-1 then
+            CurrentSize:=LLprimitives.Align(PPrimitive.draw(Drawer,rc,GeomData,LLprimitives,OptData))
+          else begin
+            CurrentSize:=LLprimitives.Align(PPrimitive.getPrimitiveSize);
+            if CurrentSize>OptData.ignoretoprimitiveindex then
+              OptData.ignoretoprimitiveindex:=-1;
+          end;
           ProcessedSize:=ProcessedSize+CurrentSize;
           inc(pbyte(PPrimitive),CurrentSize);
      end;

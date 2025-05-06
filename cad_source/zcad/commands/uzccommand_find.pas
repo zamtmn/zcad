@@ -309,7 +309,7 @@ begin
   Selection.Done;
 end;
 
-function FindFindInDrawingExtender(dwg:TSimpleDrawing;CreateIfnotFound:boolean=true):TFindInDrawingExtender;
+function FindFindInDrawingExtender(var dwg:TSimpleDrawing;CreateIfnotFound:boolean=true):TFindInDrawingExtender;
 begin
   result:=dwg.DrawingExtensions.specialize GetExtension<TFindInDrawingExtender>;
   if (CreateIfnotFound)and(result=nil) then begin

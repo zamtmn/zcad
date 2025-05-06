@@ -44,6 +44,8 @@ resourcestring
   rsEntryAlreadyExist='Entry "%s" already exist';
   rsRenamedTo='%s "%s" renamed to "%s"';
 
+  rsErrorOperandN='Wrong operand %d';
+
 
 
 

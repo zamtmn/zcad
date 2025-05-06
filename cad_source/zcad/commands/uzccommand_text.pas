@@ -33,12 +33,25 @@ uses
   uzcinterface,uzcstrconsts,uzccommandsmanager,
   uzeentity,uzcLog,uzctnrvectorstrings,uzestylestexts,uzeconsts,uzcsysvars,uzctextenteditor,
   varmandef,
-  uzeExtdrAbstractDrawingExtender,uzedrawingabstract,uzedrawingsimple;
+  uzeExtdrAbstractDrawingExtender,uzedrawingabstract,uzedrawingsimple,uzbPaths,
+  UBaseTypeDescriptor,UPointerDescriptor;
 type
+  TIMode=(
+          TIM_Text,
+          TIM_MText
+         );
+  TTOMode=(
+          TO_Text,
+          TO_MText,
+          TO_NotDefined
+         );
 {EXPORT+}
   {REGISTEROBJECTTYPE TextInsert_com}
   TextInsert_com= object(FloatInsert_com)
                        pt:PGDBObjText;
+                       TOverrider:TTOMode;
+                       TXTOverrider:TDXFEntsInternalStringType;
+                       SaveOperands:TCommandOperands;
                        //procedure Build(Operands:pansichar); virtual;
                        procedure CommandStart(const Context:TZCADCommandContext;Operands:TCommandOperands); virtual;
                        procedure CommandEnd(const Context:TZCADCommandContext); virtual;
@@ -47,12 +60,11 @@ type
                        procedure Format;virtual;
                        procedure FormatAfterFielfmod(PField,PTypeDescriptor:Pointer);virtual;
                        function DoEnd(Context:TZCADCommandContext;pdata:Pointer):Boolean;virtual;
+
+                       function getNeedEntityType:TIMode;
+                       function getNeedText:TDXFEntsInternalStringType;
   end;
 {EXPORT-}
-TIMode=(
-        TIM_Text(*'Text'*),
-        TIM_MText(*'MText'*)
-       );
 PTTextInsertParams=^TTextInsertParams;
 TTextInsertParams=record
                    mode:TIMode;(*'Entity'*)
@@ -91,19 +103,55 @@ begin
   end;
 end;
 
+function TextInsert_com.getNeedText:TDXFEntsInternalStringType;
+begin
+  if TXTOverrider='' then
+    Exit(TextInsertParams.text)
+  else
+    Exit(TXTOverrider);
+end;
+
+function TextInsert_com.getNeedEntityType:TIMode;
+begin
+  case TOverrider of
+    TO_Text:
+      result:=TIM_Text;
+    TO_MText:
+      result:=TIM_MText;
+    TO_NotDefined:
+      result:=TextInsertParams.mode;
+  end;
+end;
+
 procedure TextInsert_com.BuildPrimitives;
+var
+  ppt:PRecordDescriptor;
 begin
      if drawings.GetCurrentDWG^.TextStyleTable.GetRealCount>0 then
      begin
      drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.free;
-     case TextInsertParams.mode of
+     pointer(ppt):=PGDBPointerDescriptor(TextInsert.commanddata.PTD)^.TypeOf;
+     case TOverrider of
+       TO_MText,TO_Text:
+         ppt^.SetAttrib('mode',[fldaHidden],[]);
+       TO_NotDefined:
+         ppt^.SetAttrib('mode',[],[fldaHidden]);
+     end;
+     if TXTOverrider<>''then begin
+       ppt^.SetAttrib('text',[fldaHidden],[]);
+       ppt^.SetAttrib('runtexteditor',[fldaHidden],[]);
+     end else begin
+       ppt^.SetAttrib('text',[],[fldaHidden]);
+       ppt^.SetAttrib('runtexteditor',[],[fldaHidden]);
+     end;
+     case getNeedEntityType of
            TIM_Text:
            begin
-             PRecordDescriptor(TextInsert.commanddata.PTD)^.SetAttrib('Oblique',[],[fldaReadOnly]);
-             PRecordDescriptor(TextInsert.commanddata.PTD)^.SetAttrib('WidthFactor',[],[fldaReadOnly]);
+             ppt^.SetAttrib('Oblique',[],[fldaReadOnly]);
+             ppt^.SetAttrib('WidthFactor',[],[fldaReadOnly]);
 
-             PRecordDescriptor(TextInsert.commanddata.PTD)^.SetAttrib('Width',[fldaReadOnly],[]);
-             PRecordDescriptor(TextInsert.commanddata.PTD)^.SetAttrib('LineSpace',[fldaReadOnly],[]);
+             ppt^.SetAttrib('Width',[fldaReadOnly],[]);
+             ppt^.SetAttrib('LineSpace',[fldaReadOnly],[]);
 
                 pt := Pointer(AllocEnt(GDBTextID));
                 pt^.init(@drawings.GetCurrentDWG^.ConstructObjRoot,drawings.GetCurrentDWG^.GetCurrentLayer,sysvar.dwg.DWG_CLinew^,'',nulvertex,2.5,0,1,0,jstl);
@@ -111,11 +159,11 @@ begin
            end;
            TIM_MText:
            begin
-                PRecordDescriptor(TextInsert.commanddata.PTD)^.SetAttrib('Oblique',[fldaReadOnly],[]);
-                PRecordDescriptor(TextInsert.commanddata.PTD)^.SetAttrib('WidthFactor',[fldaReadOnly],[]);
+                ppt^.SetAttrib('Oblique',[fldaReadOnly],[]);
+                ppt^.SetAttrib('WidthFactor',[fldaReadOnly],[]);
 
-                PRecordDescriptor(TextInsert.commanddata.PTD)^.SetAttrib('Width',[],[fldaReadOnly]);
-                PRecordDescriptor(TextInsert.commanddata.PTD)^.SetAttrib('LineSpace',[],[fldaReadOnly]);
+                ppt^.SetAttrib('Width',[],[fldaReadOnly]);
+                ppt^.SetAttrib('LineSpace',[],[fldaReadOnly]);
 
                 pt := Pointer(AllocEnt(GDBMTextID));
                 pgdbobjmtext(pt)^.init(@drawings.GetCurrentDWG^.ConstructObjRoot,drawings.GetCurrentDWG^.GetCurrentLayer,sysvar.dwg.DWG_CLinew^,
@@ -130,6 +178,7 @@ begin
 end;
 procedure TextInsert_com.CommandStart(const Context:TZCADCommandContext;Operands:TCommandOperands);
 begin
+  SaveOperands:=Operands;
   inherited;
   if drawings.GetCurrentDWG^.TextStyleTable.GetRealCount<1 then begin
     ZCMsgCallBackInterface.TextMessage(rscmInDwgTxtStyleNotDeffined,TMWOShowError);
@@ -177,7 +226,22 @@ var
   te:TDrwExtdrCmdText;
   txtStyleName:string;
   i:integer;
+  op1,op2:string;
 begin
+  TOverrider:=TO_NotDefined;
+  TXTOverrider:='';
+  if Operands<>'' then begin
+    op2:=Operands;
+    GetPartOfPath(op1,op2,',');
+    op1:=UpperCase(op1);
+    case op1 of
+       'TEXT','T':TOverrider:=TO_Text;
+       'MTEXT','M':TOverrider:=TO_MText;
+       else
+         ZCMsgCallBackInterface.TextMessage(sysutils.format(rsErrorOperandN,[1]),TMWOShowError);
+    end;
+      TXTOverrider:=op2;
+  end;
   if drawings.GetCurrentDWG^.TextStyleTable.GetRealCount>0 then begin
     te:=FindCmdTextDrawingExtender(drawings.CurrentDWG^,false);
     if Assigned(te) then
@@ -198,13 +262,13 @@ begin
 end;
 function TextInsert_com.DoEnd(Context:TZCADCommandContext;pdata:Pointer):Boolean;
 begin
-     result:=false;
-     dec(self.mouseclic);
-     zcRedrawCurrentDrawing;
-     if TextInsertParams.runtexteditor then
-                                           RunTextEditor(pdata,drawings.GetCurrentDWG^);
-     //redrawoglwnd;
-     build(context,'');
+  result:=false;
+  dec(self.mouseclic);
+  zcRedrawCurrentDrawing;
+  if (TextInsertParams.runtexteditor)and(TXTOverrider='') then
+    RunTextEditor(pdata,drawings.GetCurrentDWG^);
+  //redrawoglwnd;
+  build(context,SaveOperands);
 end;
 procedure TextInsert_com.FormatAfterFielfmod(PField,PTypeDescriptor:Pointer);
 begin
@@ -217,8 +281,8 @@ var
   DC:TDrawContext;
   te:TDrwExtdrCmdText;
 begin
-  if ((pt^.GetObjType=GDBTextID)and(TextInsertParams.mode=TIM_MText))
-  or ((pt^.GetObjType=GDBMTextID)and(TextInsertParams.mode=TIM_Text)) then
+  if ((pt^.GetObjType=GDBTextID)and(getNeedEntityType=TIM_MText))
+  or ((pt^.GetObjType=GDBMTextID)and(getNeedEntityType=TIM_Text)) then
     BuildPrimitives;
     pt^.vp.Layer:=drawings.GetCurrentDWG^.GetCurrentLayer;
     pt^.vp.LineWeight:=sysvar.dwg.DWG_CLinew^;
@@ -235,9 +299,9 @@ begin
 
      pt^.textprop.size:=TextInsertParams.h;
      pt^.Content:='';
-     pt^.Template:=(TextInsertParams.text);
+     pt^.Template:=getNeedText;
 
-     case TextInsertParams.mode of
+     case getNeedEntityType of
      TIM_Text:
               begin
                    pt^.textprop.oblique:=TextInsertParams.Oblique;

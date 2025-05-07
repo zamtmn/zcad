@@ -66,30 +66,29 @@ ZGLVectorObject= object(GDBaseObject)
 implementation
 procedure ZGLVectorObject.DrawLLPrimitives(var rc:TDrawContext;var drawer:TZGLAbstractDrawer);
 var
-   PPrimitive:PTLLPrimitive;
-   ProcessedSize:TArrayIndex;
-   CurrentSize:TArrayIndex;
-   OptData:ZGLOptimizerData;
+  PPrimitive:PTLLPrimitive;
+  ProcessedSize:TArrayIndex;
+  CurrentSize:TArrayIndex;
+  OptData:ZGLOptimizerData;
 begin
-     if LLprimitives.count=0 then exit;
-     OptData.ignoretriangles:=false;
-     OptData.ignorelines:=false;
-     OptData.symplify:=false;
-     OptData.ignoretoprimitiveindex:=-1;
-     ProcessedSize:=0;
-     PPrimitive:=LLprimitives.GetParrayAsPointer;
-     while ProcessedSize<LLprimitives.count do
-     begin
-          if OptData.ignoretoprimitiveindex=-1 then
-            CurrentSize:=LLprimitives.Align(PPrimitive.draw(Drawer,rc,GeomData,LLprimitives,OptData))
-          else begin
-            CurrentSize:=LLprimitives.Align(PPrimitive.getPrimitiveSize);
-            if CurrentSize>OptData.ignoretoprimitiveindex then
-              OptData.ignoretoprimitiveindex:=-1;
-          end;
-          ProcessedSize:=ProcessedSize+CurrentSize;
-          inc(pbyte(PPrimitive),CurrentSize);
-     end;
+  if LLprimitives.count=0 then exit;
+  OptData.ignoretriangles:=false;
+  OptData.ignorelines:=false;
+  OptData.symplify:=false;
+  OptData.ignoretoprimitiveindex:=-1;
+  ProcessedSize:=0;
+  PPrimitive:=LLprimitives.GetParrayAsPointer;
+  while ProcessedSize<LLprimitives.count do begin
+    CurrentSize:=LLprimitives.Align(PPrimitive.draw(Drawer,rc,GeomData,LLprimitives,OptData));
+    if OptData.ignoretoprimitiveindex<>-1 then begin
+      ProcessedSize:=OptData.ignoretoprimitiveindex;
+      pointer(PPrimitive):=LLprimitives.getDataMutable(ProcessedSize);
+      OptData.ignoretoprimitiveindex:=-1;
+    end else begin
+      ProcessedSize:=ProcessedSize+CurrentSize;
+      inc(pbyte(PPrimitive),CurrentSize);
+    end;
+  end;
 end;
 procedure ZGLVectorObject.DrawCountedLLPrimitives(var rc:TDrawContext;var drawer:TZGLAbstractDrawer;var OptData:ZGLOptimizerData;StartOffset,Count:Integer);
 var

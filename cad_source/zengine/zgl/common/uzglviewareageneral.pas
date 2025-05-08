@@ -1881,8 +1881,11 @@ begin
 end;
 function TGeneralViewArea.CreateRC(_maxdetail:Boolean=false):TDrawContext;
 begin
+  result.DrawingContext.ForeGroundColorIndex:=ForeGroundColorIndex;
   if PDWG<>nil then
-                   PDWG^.FillDrawingPartRC(result);
+    PDWG^.FillDrawingPartRC(result)
+  else
+    result.DrawingContext.GlobalLTScale:=1;
 
   if sysvarDISPLWDisplayScale<2 then sysvarDISPLWDisplayScale:=2;
   if sysvarDISPLWDisplayScale>sysvarDISPmaxLWDisplayScale then sysvarDISPLWDisplayScale:=sysvarDISPmaxLWDisplayScale;
@@ -1911,8 +1914,6 @@ begin
   result.drawer:=drawer;
   result.SystmGeometryDraw:=sysvarDISPSystmGeometryDraw;
   result.SystmGeometryColor:=sysvarDISPSystmGeometryColor;
-  result.DrawingContext.GlobalLTScale:=1;
-  result.DrawingContext.ForeGroundColorIndex:=ForeGroundColorIndex;
   result.Options:=result.Options+[DCODrawable];
 end;
 procedure TGeneralViewArea.CorrectMouseAfterOS;

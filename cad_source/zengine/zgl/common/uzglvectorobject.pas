@@ -59,12 +59,12 @@ ZGLVectorObject= object(GDBaseObject)
                                  procedure MulOnMatrix(GeomDataIndexMin,GeomDataIndexMax:Integer;const matrix:DMatrix4D);virtual;
                                  function GetBoundingBbox(GeomDataIndexMin,GeomDataIndexMax:Integer):TBoundingBox;virtual;
                                  function GetTransformedBoundingBbox(GeomDataIndexMin,GeomDataIndexMax:Integer;const matrix:DMatrix4D):TBoundingBox;virtual;
-                                 procedure DrawLLPrimitives(var rc:TDrawContext;var drawer:TZGLAbstractDrawer);virtual;
-                                 procedure DrawCountedLLPrimitives(var rc:TDrawContext;var drawer:TZGLAbstractDrawer;var OptData:ZGLOptimizerData;StartOffset,Count:Integer);virtual;
+                                 procedure DrawLLPrimitives(var rc:TDrawContext;var drawer:TZGLAbstractDrawer;const inFrustumState:TInBoundingVolume);virtual;
+                                 procedure DrawCountedLLPrimitives(var rc:TDrawContext;var drawer:TZGLAbstractDrawer;var OptData:ZGLOptimizerData;StartOffset,Count:Integer;const inFrustumState:TInBoundingVolume);virtual;
                                end;
 {Export-}
 implementation
-procedure ZGLVectorObject.DrawLLPrimitives(var rc:TDrawContext;var drawer:TZGLAbstractDrawer);
+procedure ZGLVectorObject.DrawLLPrimitives(var rc:TDrawContext;var drawer:TZGLAbstractDrawer;const inFrustumState:TInBoundingVolume);
 var
   PPrimitive:PTLLPrimitive;
   ProcessedSize:TArrayIndex;
@@ -75,22 +75,28 @@ begin
   OptData.ignoretriangles:=false;
   OptData.ignorelines:=false;
   OptData.symplify:=false;
-  OptData.ignoretoprimitiveindex:=-1;
+  OptData.ignoreTo:=-1;
+  OptData.ignoreFrom:=-1;
   ProcessedSize:=0;
   PPrimitive:=LLprimitives.GetParrayAsPointer;
   while ProcessedSize<LLprimitives.count do begin
-    CurrentSize:=LLprimitives.Align(PPrimitive.draw(Drawer,rc,GeomData,LLprimitives,OptData));
-    if OptData.ignoretoprimitiveindex<>-1 then begin
-      ProcessedSize:=OptData.ignoretoprimitiveindex;
-      pointer(PPrimitive):=LLprimitives.getDataMutable(ProcessedSize);
-      OptData.ignoretoprimitiveindex:=-1;
-    end else begin
-      ProcessedSize:=ProcessedSize+CurrentSize;
-      inc(pbyte(PPrimitive),CurrentSize);
+    CurrentSize:=LLprimitives.Align(PPrimitive.draw(Drawer,rc,GeomData,LLprimitives,OptData,inFrustumState));
+    inc(pbyte(PPrimitive),CurrentSize);
+    ProcessedSize:=ProcessedSize+CurrentSize;
+    if OptData.ignoreTo<>-1 then begin
+      if OptData.ignoreTo>ProcessedSize then begin
+        ProcessedSize:=OptData.ignoreTo;
+        pointer(PPrimitive):=LLprimitives.getDataMutable(ProcessedSize);
+      end;
+      OptData.ignoreTo:=-1;
+    end;
+    if OptData.ignoreFrom<>-1 then begin
+      if OptData.ignoreFrom<=ProcessedSize then
+        exit;
     end;
   end;
 end;
-procedure ZGLVectorObject.DrawCountedLLPrimitives(var rc:TDrawContext;var drawer:TZGLAbstractDrawer;var OptData:ZGLOptimizerData;StartOffset,Count:Integer);
+procedure ZGLVectorObject.DrawCountedLLPrimitives(var rc:TDrawContext;var drawer:TZGLAbstractDrawer;var OptData:ZGLOptimizerData;StartOffset,Count:Integer;const inFrustumState:TInBoundingVolume);
 var
    PPrimitive:PTLLPrimitive;
    ProcessedSize:TArrayIndex;
@@ -101,7 +107,7 @@ begin
      PPrimitive:=pointer(LLprimitives.getDataMutable(StartOffset));
      while count>0 do
      begin
-          CurrentSize:=LLprimitives.Align(PPrimitive.draw(Drawer,rc,GeomData,LLprimitives,OptData));
+          CurrentSize:=LLprimitives.Align(PPrimitive.draw(Drawer,rc,GeomData,LLprimitives,OptData,inFrustumState));
           ProcessedSize:=ProcessedSize+CurrentSize;
           inc(pbyte(PPrimitive),CurrentSize);
           dec(count);

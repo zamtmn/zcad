@@ -234,7 +234,8 @@ function LookAt(point,ex,ey,ez:GDBvertex;const matrix:PDMatrix4D):DMatrix4D;inli
 
 function calcfrustum(const clip:PDMatrix4D):cliparray;inline;
 function PointOf3PlaneIntersect(const P1,P2,P3:DVector4D):GDBvertex;inline;
-function PointOfLinePlaneIntersect(const p1,d:GDBvertex;const plane:DVector4D;out point :GDBvertex):Boolean;inline;
+function PointOfRayPlaneIntersect(const p1,d:GDBvertex;const plane:DVector4D;out point :GDBvertex):Boolean;overload;inline;
+function PointOfRayPlaneIntersect(const p1,d:GDBvertex;const plane:DVector4D;out t :double):Boolean;overload;inline;
 function PlaneFrom3Pont(const P1,P2,P3:GDBvertex):DVector4D;inline;
 procedure NormalizePlane(var plane:DVector4D);inline;
 
@@ -2337,7 +2338,7 @@ begin
   result:=VertexMulOnSc(a1,-a4);
 end;
 
-function PointOfLinePlaneIntersect(const p1,d:GDBvertex;const plane:DVector4D;out point :GDBvertex):Boolean;
+function PointOfRayPlaneIntersect(const p1,d:GDBvertex;const plane:DVector4D;out point :GDBvertex):Boolean;
 var
   td:Double;
 begin
@@ -2352,6 +2353,24 @@ begin
 
   point:=VertexDmorph(p1,d,td);
   result:=true;
+end;
+
+function PointOfRayPlaneIntersect(const p1,d:GDBvertex;const plane:DVector4D;out t :double):Boolean;
+var
+  td:Double;
+begin
+  with DVector4D((@plane)^) do
+     td:=-v[0]*d.x-v[1]*d.y-v[2]*d.z;
+
+  if abs(td)<eps then
+    exit(false);
+
+  with DVector4D((@plane)^) do
+    t:=(v[0]*p1.x+v[1]*p1.y+v[2]*p1.z+v[3])/td;
+  if (t>=0)and(t<=1)then
+    result:=true
+  else
+    result:=false;
 end;
 
 function ortho;

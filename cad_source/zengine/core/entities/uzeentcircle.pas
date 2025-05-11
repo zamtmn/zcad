@@ -50,7 +50,7 @@ GDBObjCircle= object(GDBObjWithLocalCS)
                  procedure getoutbound(var DC:TDrawContext);virtual;
                  procedure SaveToDXF(var outStream:TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
                  procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext;Stage:TEFStages=EFAllStages);virtual;
-                 procedure DrawGeometry(lw:Integer;var DC:TDrawContext);virtual;
+                 procedure DrawGeometry(lw:Integer;var DC:TDrawContext;const inFrustumState:TInBoundingVolume);virtual;
                  function Clone(own:Pointer):PGDBObjEntity;virtual;
                  procedure rtsave(refp:Pointer);virtual;
                  procedure createpoint(var DC:TDrawContext);virtual;
@@ -400,14 +400,14 @@ begin
            if dc.selected then
                               begin
                               //Vertex3D_in_WCS_Array.drawgeometry2
-                              Representation.DrawGeometry(DC);
+                              Representation.DrawGeometry(DC,inFrustumState);
                               end
                           else
                               begin
                                    if CanSimplyDrawInOCS(DC,{self.radius}1,6) then
                                                                                   begin
                                                                                        //Vertex3D_in_WCS_Array.drawgeometry
-                                                                                       Representation.DrawGeometry(DC);
+                                                                                       Representation.DrawGeometry(DC,inFrustumState);
                                                                                   end
                                                          else
                                                              begin
@@ -595,7 +595,7 @@ begin
             plane:=PlaneFrom3Pont(q0,q1,q2);
             Normalizeplane(plane);
             if
-            PointOfLinePlaneIntersect({GDB.GetCurrentDWG.OGLwindow1.}param.md.mouseraywithoutOS.lbegin,
+            PointOfRayPlaneIntersect({GDB.GetCurrentDWG.OGLwindow1.}param.md.mouseraywithoutOS.lbegin,
                                       {GDB.GetCurrentDWG.OGLwindow1.}param.md.mouseraywithoutOS.dir,
                                       plane,tv)
             then

@@ -30,8 +30,8 @@ GDBObjElLeader= object(GDBObjComplex)
             TextContent:string;
 
 
-            procedure DrawGeometry(lw:Integer;var DC:TDrawContext);virtual;
-            procedure DrawOnlyGeometry(lw:Integer;var DC:TDrawContext);virtual;
+            procedure DrawGeometry(lw:Integer;var DC:TDrawContext;const inFrustumState:TInBoundingVolume);virtual;
+            procedure DrawOnlyGeometry(lw:Integer;var DC:TDrawContext;const inFrustumState:TInBoundingVolume);virtual;
             procedure getoutbound(var DC:TDrawContext);virtual;
             function CalcInFrustum(const frustum:ClipArray;const Actuality:TVisActuality;var Counters:TCameraCounters; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double):Boolean;virtual;
             function CalcTrueInFrustum(const frustum:ClipArray):TInBoundingVolume;virtual;
@@ -753,9 +753,9 @@ end;
 procedure GDBObjElLeader.DrawGeometry;
 begin
   inc(dc.subrender);
-  MainLine.DrawGeometry(lw,dc{infrustumactualy,subrender});
-  MarkLine.DrawGeometry(lw,dc{infrustumactualy,subrender});
-  tbl.DrawGeometry(lw,dc{infrustumactualy,subrender});
+  MainLine.DrawGeometry(lw,dc,inFrustumState);
+  MarkLine.DrawGeometry(lw,dc,inFrustumState);
+  tbl.DrawGeometry(lw,dc,inFrustumState);
   dec(dc.subrender);
   inherited;
 end;
@@ -763,9 +763,9 @@ procedure GDBObjElLeader.DrawOnlyGeometry;
 begin
   inherited;
   inc(dc.subrender);
-  MainLine.DrawOnlyGeometry(lw,dc{infrustumactualy,subrender});
-  MarkLine.DrawOnlyGeometry(lw,dc{infrustumactualy,subrender});
-  tbl.DrawOnlyGeometry(lw,dc{infrustumactualy,subrender});
+  MainLine.DrawOnlyGeometry(lw,dc,inFrustumState);
+  MarkLine.DrawOnlyGeometry(lw,dc,inFrustumState);
+  tbl.DrawOnlyGeometry(lw,dc,inFrustumState);
   dec(dc.subrender);
 end;
 function GDBObjElLeader.Clone;

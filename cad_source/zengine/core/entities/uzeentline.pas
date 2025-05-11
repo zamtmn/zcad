@@ -42,7 +42,7 @@ GDBObjLine= object(GDBObj3d)
                  function IsStagedFormatEntity:boolean;virtual;
                  procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext;Stage:TEFStages=EFAllStages);virtual;
                  procedure CalcGeometry;virtual;
-                 procedure DrawGeometry(lw:Integer;var DC:TDrawContext);virtual;
+                 procedure DrawGeometry(lw:Integer;var DC:TDrawContext;const inFrustumState:TInBoundingVolume);virtual;
                   function Clone(own:Pointer):PGDBObjEntity;virtual;
                  procedure rtsave(refp:Pointer);virtual;
                  procedure TransformAt(p:PGDBObjEntity;t_matrix:PDMatrix4D);virtual;
@@ -324,9 +324,9 @@ end;
 procedure GDBObjLine.DrawGeometry;
 begin
   if (selected)or(dc.selected) then
-    Representation.DrawNiceGeometry(DC)
+    Representation.DrawNiceGeometry(DC,inFrustumState)
   else
-    Representation.DrawGeometry(DC);
+    Representation.DrawGeometry(DC,inFrustumState);
 end;
 
 function GDBObjLine.getsnap;

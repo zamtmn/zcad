@@ -27,7 +27,7 @@ type
 
   GDBObjPlain=object(GDBObjWithLocalCS)
     Outbound:OutBound4V;
-    procedure DrawGeometry(lw:Integer;var DC:TDrawContext);virtual;
+    procedure DrawGeometry(lw:Integer;var DC:TDrawContext;const inFrustumState:TInBoundingVolume);virtual;
   end;
 implementation
 //uses

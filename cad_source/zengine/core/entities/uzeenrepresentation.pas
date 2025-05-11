@@ -36,8 +36,8 @@ TZEntityRepresentation= object(GDBaseObject)
                        destructor done;virtual;
 
                        function CalcTrueInFrustum(const frustum:ClipArray; FullCheck:boolean):TInBoundingVolume;
-                       procedure DrawGeometry(var rc:TDrawContext);virtual;
-                       procedure DrawNiceGeometry(var rc:TDrawContext);virtual;
+                       procedure DrawGeometry(var rc:TDrawContext;const inFrustumState:TInBoundingVolume);virtual;
+                       procedure DrawNiceGeometry(var rc:TDrawContext;const inFrustumState:TInBoundingVolume);virtual;
                        procedure Clear;virtual;
                        procedure Shrink;virtual;
 
@@ -70,13 +70,13 @@ begin
   Geometry.done;
   inherited;
 end;
-procedure TZEntityRepresentation.DrawGeometry(var rc:TDrawContext);
+procedure TZEntityRepresentation.DrawGeometry(var rc:TDrawContext;const inFrustumState:TInBoundingVolume);
 begin
-  Graphix.DrawGeometry(rc);
+  Graphix.DrawGeometry(rc,inFrustumState);
 end;
-procedure TZEntityRepresentation.DrawNiceGeometry(var rc:TDrawContext);
+procedure TZEntityRepresentation.DrawNiceGeometry(var rc:TDrawContext;const inFrustumState:TInBoundingVolume);
 begin
-  Graphix.DrawNiceGeometry(rc);
+  Graphix.DrawNiceGeometry(rc,inFrustumState);
 end;
 function TZEntityRepresentation.CalcTrueInFrustum(const frustum:ClipArray; FullCheck:boolean):TInBoundingVolume;
 begin

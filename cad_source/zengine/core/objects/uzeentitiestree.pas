@@ -36,6 +36,7 @@ TFirstStageData=record
   TEntityArray=GZVectorPObects<PGDBObjEntity,GDBObjEntity>;
   TEntTreeNodeData=record
     infrustum:TActuality;
+    inFrustumState:TInBoundingVolume;
     nuldrawpos,minusdrawpos,plusdrawpos:TActuality;
     FulDraw:TDrawType;
     InFrustumBoundingBox:TBoundingBox;
@@ -84,6 +85,7 @@ implementation
 procedure TEntTreeNodeData.CreateDef;
 begin
   infrustum:=0;
+  inFrustumState:=TInBoundingVolume.IRNotAplicable;
   nuldrawpos:=0;
   FulDraw:=TDTFulDraw;
   InFrustumBoundingBox:=default(TBoundingBox);
@@ -133,7 +135,7 @@ begin
   repeat
        pobj:=TZEntsManipulator.IterateResult2PEntity(pobj);
        if pobj^.infrustum=dc.DrawingContext.VActuality.infrustumactualy then
-         pobj^.DrawWithAttrib(dc);
+         pobj^.DrawWithAttrib(dc,NodeData.inFrustumState);
        pobj:=nul.iterate(ir);
        if LODDeep>2 then
          pobj:=nul.iterate(ir);

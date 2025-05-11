@@ -63,7 +63,7 @@ GDBObjHatch= object(GDBObjWithLocalCS)
                  procedure ProcessStroke(var Strokes:TPatStrokesArray;var IV:TIntercept2dpropWithLICVector;var DC:TDrawContext);
                  procedure DrawStrokes(var Strokes:TPatStrokesArray;var st:Double;const p1,p2:GDBvertex2D;var DC:TDrawContext);
                  procedure FillPattern(var Strokes:TPatStrokesArray;var DC:TDrawContext);
-                 procedure DrawGeometry(lw:Integer;var DC:TDrawContext);virtual;
+                 procedure DrawGeometry(lw:Integer;var DC:TDrawContext;const inFrustumState:TInBoundingVolume);virtual;
                  function ObjToString(const prefix,sufix:String):String;virtual;
                  destructor done;virtual;
 
@@ -593,7 +593,7 @@ begin
 end;
 procedure GDBObjHatch.DrawGeometry;
 begin
-  Representation.DrawGeometry(DC);
+  Representation.DrawGeometry(DC,inFrustumState);
   inherited;
 end;
 procedure GDBObjHatch.LoadFromDXF;

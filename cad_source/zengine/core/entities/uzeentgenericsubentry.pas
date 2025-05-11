@@ -46,7 +46,7 @@ GDBObjGenericSubEntry= object(GDBObjWithMatrix)
                             //function AddObjectToNodeTree(pobj:PGDBObjEntity):Integer;virtual;
                             //function CorrectNodeTreeBB(pobj:PGDBObjEntity):Integer;virtual;
                             constructor initnul(owner:PGDBObjGenericWithSubordinated);
-                            procedure DrawGeometry(lw:Integer;var DC:TDrawContext);virtual;
+                            procedure DrawGeometry(lw:Integer;var DC:TDrawContext;const inFrustumState:TInBoundingVolume);virtual;
                             function CalcInFrustum(const frustum:ClipArray;const Actuality:TVisActuality;var Counters:TCameraCounters; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double):Boolean;virtual;
                             function CalcActualVisible(const Actuality:TVisActuality):Boolean;virtual;
                             function onmouse(var popa:TZctnrVectorPGDBaseEntity;const MF:ClipArray;InSubEntry:Boolean):Boolean;virtual;
@@ -72,7 +72,7 @@ GDBObjGenericSubEntry= object(GDBObjWithMatrix)
                             procedure DrawBB(var DC:TDrawContext);
 
                             procedure RemoveInArray(pobjinarray:Integer);virtual;
-                            procedure DrawWithAttrib(var DC:TDrawContext{visibleactualy:TActuality;subrender:Integer});virtual;
+                            procedure DrawWithAttrib(var DC:TDrawContext;const inFrustumState:TInBoundingVolume);virtual;
 
                             function CreatePreCalcData:PTDrawingPreCalcData;virtual;
                             procedure DestroyPreCalcData(PreCalcData:PTDrawingPreCalcData);virtual;
@@ -347,7 +347,7 @@ begin
      inc(dc.subrender);
      _selected:=dc.selected;
      if selected then dc.selected:=true;
-     self.ObjArray.DrawWithattrib({infrustumactualy,subrender}dc);
+     self.ObjArray.DrawWithattrib(dc,inFrustumState);
      dec(dc.subrender);
      dc.selected:=_selected;
 
@@ -514,7 +514,7 @@ begin
      inc(dc.subrender);
      _selected:=dc.selected;
      if selected then dc.selected:=true;
-  ObjArray.DrawGeometry(CalculateLineWeight(dc),dc{infrustumactualy,subrender});
+  ObjArray.DrawGeometry(CalculateLineWeight(dc),dc,infrustumstate);
      dc.selected:=_selected;
      dec(dc.subrender);
   DrawBB(dc);

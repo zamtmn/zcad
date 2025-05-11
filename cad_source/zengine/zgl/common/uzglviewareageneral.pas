@@ -345,7 +345,7 @@ begin
   sv1:=param.md.mouseray.lbegin;
   sv1:=vertexadd(sv1,PDWG.Getpcamera^.CamCSOffset);
 
-  PointOfLinePlaneIntersect(VertexAdd(param.md.mouseray.lbegin,PDWG.Getpcamera^.CamCSOffset),param.md.mouseray.dir,tempplane,mvertex);
+  PointOfRayPlaneIntersect(VertexAdd(param.md.mouseray.lbegin,PDWG.Getpcamera^.CamCSOffset),param.md.mouseray.dir,tempplane,mvertex);
   plx:=PlaneFrom3Pont(sv1,vertexadd(param.md.mouse3dcoord,PDWG.Getpcamera^.CamCSOffset),
                       vertexadd(VertexAdd(param.md.mouse3dcoord,xWCS{VertexMulOnSc(xWCS,oneVertexlength(wa.param.md.mouse3dcoord))}),PDWG.Getpcamera^.CamCSOffset));
   //if assigned(sysvar.DISP.DISP_ColorAxis)then
@@ -758,7 +758,7 @@ begin
   //pva^.DeSelect;
   //if pva^.Count>0 then
   //                       pva^.Count:=pva^.Count;
-  root.{ObjArray.}DrawWithattrib({gdb.GetCurrentDWG.pcamera.POSCOUNT,0}dc);
+  root.DrawWithattrib(dc,IRPartially);
 end;
 procedure TGeneralViewArea.finishdraw;
 begin
@@ -1882,6 +1882,7 @@ end;
 function TGeneralViewArea.CreateRC(_maxdetail:Boolean=false):TDrawContext;
 begin
   result.DrawingContext.ForeGroundColorIndex:=ForeGroundColorIndex;
+  result.DrawingContext.FrustumCenter.HasValue:=false;
   if PDWG<>nil then
     PDWG^.FillDrawingPartRC(result)
   else
@@ -1927,8 +1928,8 @@ begin
      if param.projtype = ProjParallel then
      begin
           d:=pdwg.getpcamera^.prop.look;
-          b1:=PointOfLinePlaneIntersect(param.ospoint.worldcoord,d,pdwg.getpcamera^.frustum[4],tv1);
-          b2:=PointOfLinePlaneIntersect(param.ospoint.worldcoord,d,pdwg.getpcamera^.frustum[5],tv2);
+          b1:=PointOfRayPlaneIntersect(param.ospoint.worldcoord,d,pdwg.getpcamera^.frustum[4],tv1);
+          b2:=PointOfRayPlaneIntersect(param.ospoint.worldcoord,d,pdwg.getpcamera^.frustum[5],tv2);
           if (b1 and b2) then
                              begin
                                   param.md.mouseray.lbegin:=tv1;
@@ -1940,8 +1941,8 @@ begin
      begin
          d:=VertexSub(param.ospoint.worldcoord,pdwg.getpcamera^.prop.point);
          //d:=gdb.GetCurrentDWG.pcamera^.prop.look;
-         b1:=PointOfLinePlaneIntersect(param.ospoint.worldcoord,d,pdwg.getpcamera^.frustum[4],tv1);
-         b2:=PointOfLinePlaneIntersect(param.ospoint.worldcoord,d,pdwg.getpcamera^.frustum[5],tv2);
+         b1:=PointOfRayPlaneIntersect(param.ospoint.worldcoord,d,pdwg.getpcamera^.frustum[4],tv1);
+         b2:=PointOfRayPlaneIntersect(param.ospoint.worldcoord,d,pdwg.getpcamera^.frustum[5],tv2);
          if (b1 and b2) then
                             begin
                                  param.md.mouseray.lbegin:=tv1;

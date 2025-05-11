@@ -39,7 +39,7 @@ GDBObjPolyline= object(GDBObjCurve)
                  function getsnap(var osp:os_record; var pdata:Pointer; const param:OGLWndtype; ProjectProc:GDBProjectProc;SnapMode:TGDBOSMode):Boolean;virtual;
 
                  procedure SaveToDXF(var outStream:TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
-                 procedure DrawGeometry(lw:Integer;var DC:TDrawContext);virtual;
+                 procedure DrawGeometry(lw:Integer;var DC:TDrawContext;const inFrustumState:TInBoundingVolume);virtual;
                  function Clone(own:Pointer):PGDBObjEntity;virtual;
                  function GetObjTypeName:String;virtual;
                  function onmouse(var popa:TZctnrVectorPGDBaseEntity;const MF:ClipArray;InSubEntry:Boolean):Boolean;virtual;
@@ -143,7 +143,7 @@ end;
 procedure GDBObjPolyline.DrawGeometry;
 begin
      //vertexarrayInWCS.DrawGeometryWClosed(closed);
-     self.Representation.DrawGeometry(DC);
+     self.Representation.DrawGeometry(DC,inFrustumState);
 {  if closed then oglsm.myglbegin(GL_line_loop)
             else oglsm.myglbegin(GL_line_strip);
   vertexarrayInWCS.iterategl(@myglVertex3dv);

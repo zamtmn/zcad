@@ -87,14 +87,14 @@ TExtAttrib=record
                     procedure FormatAfterEdit(var drawing:TDrawingDef;var DC:TDrawContext;Stage:TEFStages=EFAllStages);virtual;
                     procedure FormatAfterFielfmod(PField,PTypeDescriptor:Pointer);virtual;
 
-                    procedure DrawWithAttrib(var DC:TDrawContext);virtual;
-                    procedure DrawWithOutAttrib(var DC:TDrawContext);virtual;
+                    procedure DrawWithAttrib(var DC:TDrawContext;const inFrustumState:TInBoundingVolume);virtual;
+                    procedure DrawWithOutAttrib(var DC:TDrawContext;const inFrustumState:TInBoundingVolume);virtual;
 
-                    procedure DrawGeometry(lw:Integer;var DC:TDrawContext{visibleactualy:TActuality;subrender:Integer});virtual;
-                    procedure DrawOnlyGeometry(lw:Integer;var DC:TDrawContext{visibleactualy:TActuality;subrender:Integer});virtual;
+                    procedure DrawGeometry(lw:Integer;var DC:TDrawContext;const inFrustumState:TInBoundingVolume);virtual;
+                    procedure DrawOnlyGeometry(lw:Integer;var DC:TDrawContext;const inFrustumState:TInBoundingVolume);virtual;
 
-                    procedure Draw(lw:Integer;var DC:TDrawContext{visibleactualy:TActuality;subrender:Integer});virtual;
-                    procedure DrawG(lw:Integer;var DC:TDrawContext{visibleactualy:TActuality;subrender:Integer});virtual;
+                    procedure Draw(lw:Integer;var DC:TDrawContext;const inFrustumState:TInBoundingVolume);virtual;
+                    procedure DrawG(lw:Integer;var DC:TDrawContext;const inFrustumState:TInBoundingVolume);virtual;
 
                     function CalculateLineWeight(const DC:TDrawContext):Integer;//inline;
                     //function InRect:TInRect;virtual;
@@ -339,14 +339,14 @@ procedure GDBObjEntity.Draw;
 begin
   if visible=dc.DrawingContext.VActuality.visibleactualy then
   begin
-       DrawGeometry(lw,dc);
+       DrawGeometry(lw,dc,infrustumstate);
   end;
 end;
 procedure GDBObjEntity.Drawg;
 begin
   if visible=dc.DrawingContext.VActuality.visibleactualy then
   begin
-       DrawOnlyGeometry(lw,dc);
+       DrawOnlyGeometry(lw,dc,inFrustumState);
   end;
 end;
 
@@ -510,7 +510,7 @@ begin
 end;
 procedure GDBObjEntity.DrawOnlyGeometry;
 begin
-     DrawGeometry(lw,dc{visibleactualy,0});
+     DrawGeometry(lw,dc,inFrustumState);
 end;
 function GDBObjEntity.CalculateLineWeight;
 var lw: Integer;
@@ -582,7 +582,7 @@ var lw: Integer;
 //  sel: Boolean;
 begin
   lw := CalculateLineWeight(dc);
-  Drawg(lw,dc{visibleactualy,subrender});
+  Drawg(lw,dc,inFrustumState);
   if lw > 1 then
   begin
     dc.drawer.setlinewidth(1);
@@ -661,7 +661,7 @@ begin
 
                                                               end;
                                                     end;
-  Draw(lw,dc{visibleactualy,subrender});
+  Draw(lw,dc,inFrustumState);
   //if selected or ((bp.ListPos.owner <> nil) and (bp.ListPos.owner^.isselected)) then
   (*if {selected or dc.selected}sel then
                                                                     begin

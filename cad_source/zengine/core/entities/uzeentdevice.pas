@@ -44,8 +44,8 @@ GDBObjDevice= object(GDBObjBlockInsert)
                    procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext;Stage:TEFStages=EFAllStages);virtual;
                    function IsStagedFormatEntity:boolean;virtual;
                    procedure FormatFeatures(var drawing:TDrawingDef);virtual;
-                   procedure DrawGeometry(lw:Integer;var DC:TDrawContext);virtual;
-                   procedure DrawOnlyGeometry(lw:Integer;var DC:TDrawContext);virtual;
+                   procedure DrawGeometry(lw:Integer;var DC:TDrawContext;const inFrustumState:TInBoundingVolume);virtual;
+                   procedure DrawOnlyGeometry(lw:Integer;var DC:TDrawContext;const inFrustumState:TInBoundingVolume);virtual;
                    function onmouse(var popa:TZctnrVectorPGDBaseEntity;const MF:ClipArray;InSubEntry:Boolean):Boolean;virtual;
                    function ReturnLastOnMouse(InSubEntry:Boolean):PGDBObjEntity;virtual;
                    procedure ImEdited(pobj:PGDBObjSubordinated;pobjinarray:Integer;var drawing:TDrawingDef);virtual;
@@ -450,7 +450,7 @@ var p:pgdbobjEntity;
          ir:itrec;
 begin
   dc.subrender := dc.subrender + 1;
-  VarObjArray.DrawOnlyGeometry(CalculateLineWeight(dc),dc{infrustumactualy,subrender});
+  VarObjArray.DrawOnlyGeometry(CalculateLineWeight(dc),dc,inFrustumState);
   dc.subrender := dc.subrender - 1;
   p:=VarObjArray.beginiterate(ir);
   //oglsm.glcolor3ubv(palette[sysvar.SYS.SYS_SystmGeometryColor^].RGB);
@@ -480,7 +480,7 @@ begin
   oldlw:=dc.OwnerLineWeight;
   dc.OwnerLineWeight:=self.GetLineWeight;
   dc.subrender := dc.subrender + 1;
-  VarObjArray.DrawWithattrib(dc{infrustumactualy,subrender}){DrawGeometry(CalculateLineWeight)};
+  VarObjArray.DrawWithattrib(dc,inFrustumState);
   dc.subrender := dc.subrender - 1;
   p:=VarObjArray.beginiterate(ir);
   //oglsm.glcolor3ubv(palette[sysvar.SYS.SYS_SystmGeometryColor^].RGB);

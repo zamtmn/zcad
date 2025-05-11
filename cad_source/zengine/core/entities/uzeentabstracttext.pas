@@ -43,7 +43,7 @@ GDBObjAbstractText= object(GDBObjPlainWithOX)
                          P_drawInOCS:GDBvertex;
                          DrawMatrix:DMatrix4D;
                          procedure CalcObjMatrix(pdrawing:PTDrawingDef=nil);virtual;
-                         procedure DrawGeometry(lw:Integer;var DC:TDrawContext);virtual;
+                         procedure DrawGeometry(lw:Integer;var DC:TDrawContext;const inFrustumState:TInBoundingVolume);virtual;
                          procedure SimpleDrawGeometry(var DC:TDrawContext);virtual;
                          function CalcInFrustum(const frustum:ClipArray;const Actuality:TVisActuality;var Counters:TCameraCounters; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double):Boolean;virtual;
                          function CalcTrueInFrustum(const frustum:ClipArray):TInBoundingVolume;virtual;
@@ -400,7 +400,7 @@ begin
   dc.subrender := dc.subrender + 1;
   PanObjectDegradation:=SysVarRDPanObjectDegradation;
   if(not dc.scrollmode)or(not PanObjectDegradation)then
-    Representation.DrawGeometry(DC)
+    Representation.DrawGeometry(DC,inFrustumState)
   else begin
     DC.Drawer.DrawLine3DInModelSpace(outbound[0],outbound[1],DC.DrawingContext.matrixs);
     DC.Drawer.DrawLine3DInModelSpace(outbound[1],outbound[2],DC.DrawingContext.matrixs);

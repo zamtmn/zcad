@@ -49,8 +49,8 @@ type
   end;
   {REGISTEROBJECTTYPE ZGLGraphix}
   ZGLGraphix= object(ZGLVectorObject)
-    procedure DrawGeometry(var DC:TDrawContext);virtual;
-    procedure DrawNiceGeometry(var DC:TDrawContext);virtual;
+    procedure DrawGeometry(var DC:TDrawContext;const inFrustumState:TInBoundingVolume);virtual;
+    procedure DrawNiceGeometry(var DC:TDrawContext;const inFrustumState:TInBoundingVolume);virtual;
     constructor init();
     destructor done;virtual;
     function DrawLineWithLT(var DC:TDrawContext;const startpoint,endpoint:GDBVertex; const vp:GDBObjVisualProp;OnlyOne:Boolean=False):TLLDrawResult;virtual;
@@ -61,7 +61,7 @@ type
     procedure AddLine(var DC:TDrawContext;const p1,p2:GDBVertex;OnlyOne:Boolean=False);
     procedure AddPoint(var DC:TDrawContext;const p:GDBVertex);
     {Patterns func}
-    procedure PlaceNPatterns(var DC:TDrawContext;var Segmentator:ZSegmentator;num:integer; const vp:PGDBLtypeProp;TangentScale,NormalScale,length:Double;var dr:TLLDrawResult;SupressFirstDash:boolean=false);
+    procedure PlaceNPatterns(var DC:TDrawContext;var Segmentator:ZSegmentator;const pli:TArrayIndex;num:integer; const vp:PGDBLtypeProp;TangentScale,NormalScale,length:Double;var dr:TLLDrawResult;SupressFirstDash:boolean=false);
     procedure PlaceOnePattern(var DC:TDrawContext;var Segmentator:ZSegmentator;const vp:PGDBLtypeProp;TangentScale,NormalScale,length,scale_div_length:Double;var dr:TLLDrawResult;SupressFirstDash:boolean=false);
     procedure PlaceShape(drawer:TZGLAbstractDrawer;const StartPatternPoint:GDBVertex; PSP:PShapeProp;scale,angle:Double);
     procedure PlaceText(drawer:TZGLAbstractDrawer;const StartPatternPoint:GDBVertex;PTP:PTextProp;scale,angle:Double);
@@ -542,108 +542,113 @@ matr.mtr[3].v[0]:=matr.mtr[3].v[0]+PTP^.param.PStyle.pfont^.GetOrReplaceSymbolIn
 matr.t:=matr.t+CMTTranslate;
 end;
 end;
-procedure ZGLGraphix.PlaceOnePattern(var DC:TDrawContext;var Segmentator:ZSegmentator;//стартовая точка паттернов, стартовая точка линии (добавка в начало линии)
-                                     const vp:PGDBLtypeProp;                 //стиль и прочая лабуда
-                                     TangentScale,NormalScale,length,scale_div_length:Double;//направление, масштаб, длинна
-                                     var dr:TLLDrawResult;
-                                     SupressFirstDash:boolean=false);
+procedure ZGLGraphix.PlaceOnePattern(
+  var DC:TDrawContext;var Segmentator:ZSegmentator;//стартовая точка паттернов,
+                                                   //стартовая точка линии
+                                                   //(добавка в начало линии)
+  const vp:PGDBLtypeProp;//стиль и прочая лабуда
+  TangentScale,NormalScale,length,scale_div_length:Double;//направление, масштаб, длинна
+  var dr:TLLDrawResult;
+  SupressFirstDash:boolean=false);
 var
-    TDI:PTDashInfo;
-    PStroke:PDouble;
-    PSP:PShapeProp;
-    PTP:PTextProp;
-    ir2,ir3,ir4,ir5:itrec;
+  TDI:PTDashInfo;
+  PStroke:PDouble;
+  PSP:PShapeProp;
+  PTP:PTextProp;
+  irDashArray,irStrokesArray,irShapeArray,irTextArray:itrec;
 begin
-  begin
-    TDI:=vp.dasharray.beginiterate(ir2);
-    PStroke:=vp.strokesarray.beginiterate(ir3);
-    PSP:=vp.shapearray.beginiterate(ir4);
-    PTP:=vp.textarray.beginiterate(ir5);
-    if PStroke<>nil then
-    repeat
+  TDI:=vp.dasharray.beginiterate(irDashArray);
+  PStroke:=vp.strokesarray.beginiterate(irStrokesArray);
+  PSP:=vp.shapearray.beginiterate(irShapeArray);
+  PTP:=vp.textarray.beginiterate(irTextArray);
+  if PStroke<>nil then repeat
     case TDI^ of
-        TDIDash:begin
-                     if PStroke^<>0 then
-                     begin
-                          if PStroke^>0 then
-                                            Segmentator.draw(DC,abs(PStroke^)*scale_div_length,true,dr)
-                                        else
-                                            Segmentator.draw(DC,abs(PStroke^)*scale_div_length,false,dr);
-                     end
-                        else
-                            if not SupressFirstDash then
-                              DrawPointWithoutLT(DC,Segmentator.cp,dr);
-                     //self.DrawLineWithoutLT(nulvertex,Segmentator.cp);
-                     PStroke:=vp.strokesarray.iterate(ir3);
-                end;
-       TDIShape:begin
-                     PlaceShape(DC.drawer,Segmentator.cp,PSP,NormalScale,Segmentator.angle);
-                     PSP:=vp.shapearray.iterate(ir4);
-                end;
-        TDIText:begin
-                     PlaceText(DC.drawer,Segmentator.cp,PTP,NormalScale,Segmentator.angle);
-                     PTP:=vp.textarray.iterate(ir5);
-                 end;
-          end;
+      TDIDash:begin
+        if PStroke^<>0 then begin
+          if PStroke^>0 then
+            Segmentator.draw(DC,abs(PStroke^)*scale_div_length,true,dr)
+          else
+            Segmentator.draw(DC,abs(PStroke^)*scale_div_length,false,dr);
+        end else
+          if not SupressFirstDash then
+            DrawPointWithoutLT(DC,Segmentator.cp,dr);
+        PStroke:=vp.strokesarray.iterate(irStrokesArray);
+      end;
+      TDIShape:begin
+        PlaceShape(DC.drawer,Segmentator.cp,PSP,NormalScale,Segmentator.angle);
+        PSP:=vp.shapearray.iterate(irShapeArray);
+      end;
+      TDIText:begin
+        PlaceText(DC.drawer,Segmentator.cp,PTP,NormalScale,Segmentator.angle);
+        PTP:=vp.textarray.iterate(irTextArray);
+      end;
+    end;
     SupressFirstDash:=false;;
-          TDI:=vp.dasharray.iterate(ir2);
-    until TDI=nil;
-end;
+    TDI:=vp.dasharray.iterate(irDashArray);
+  until TDI=nil;
 end;
 
 procedure ZGLGraphix.PlaceNPatterns(var DC:TDrawContext;var Segmentator:ZSegmentator;//стартовая точка паттернов, стартовая точка линии (добавка в начало линии)
+                                     const pli:TArrayIndex;
                                      num:integer; //кол-во паттернов
                                      const vp:PGDBLtypeProp;                 //стиль и прочая лабуда
                                      TangentScale,NormalScale,length:Double;//направление, масштаб, длинна
                                      var dr:TLLDrawResult;
                                      SupressFirstDash:boolean=false);          //подавить пкрвый штрих (пока используется в случае если он точка)
-var i:integer;
-    scale_div_length:Double;
+var
+  i,nextSegmentOperations:integer;
+  ppl:PTLLProxyLine;
+  scale_div_length:Double;
 begin
-  if num<1 then exit;
-  scale_div_length:=TangentScale/length;
-  PlaceOnePattern(DC,Segmentator,vp,TangentScale,NormalScale,length,scale_div_length,dr,SupressFirstDash);//рисуем один паттерн
-  for i:=1 to num-1 do
-  PlaceOnePattern(DC,Segmentator,vp,TangentScale,NormalScale,length,scale_div_length,dr);//рисуем один паттерн
+  if num>0 then begin
+    scale_div_length:=TangentScale/length;
+    PlaceOnePattern(DC,Segmentator,vp,TangentScale,NormalScale,length,scale_div_length,dr,SupressFirstDash);//рисуем один паттерн
+    nextSegmentOperations:=-1;
+    if pli>-1 then begin
+      ppl:=pointer(LLprimitives.getDataMutable(pli));
+      nextSegmentOperations:=ppl^.NextPatternCountToStore(0);
+    end;
+    for i:=1 to num-1 do begin
+      PlaceOnePattern(DC,Segmentator,vp,TangentScale,NormalScale,length,scale_div_length,dr);//рисуем один паттерн
+      if i=nextSegmentOperations then
+        if pli>-1 then begin
+          ppl:=pointer(LLprimitives.getDataMutable(pli));
+          ppl.Process(GeomData,Segmentator.cp,LLprimitives.Count,Segmentator.cdp);
+          nextSegmentOperations:=ppl^.NextPatternCountToStore(i);
+        end;
+    end;
+  end;
 end;
 procedure ZSegmentator.draw(var rc:TDrawContext;length:Double;paint:boolean;var dr:TLLDrawResult);
 var
-    tcdp:Double;
-    oldcp,tv:gdbvertex;
+  tcdp:Double;
+  oldcp,tv:gdbvertex;
 begin
-     if cdp<1then
-     begin
-     tcdp:=length+cdp;
-     if (cdp<-eps)and(tcdp>eps)then
-                                   begin
-                                        length:=length+cdp;
-                                        cdp:=0;
-                                   end;
-     if (cdp>=-eps)and(tcdp>eps) then
-     begin
-     if tcdp<=(pcurrsegment.naccumlength+eps) then
-                                          begin
-                                               oldcp:=cp;
-                                               tv:=VertexMulOnSc(dir,length/pcurrsegment.nlength);
-                                               cp:=vertexadd(cp,tv);
-                                               if paint then
-                                                            self.PGeom.DrawLineWithoutLT(rc,oldcp,cp,dr);
-                                               cdp:=tcdp;
-                                          end
-                                      else
-                                          begin
-                                               if paint then
-                                                            self.PGeom.DrawLineWithoutLT(rc,cp,pcurrsegment^.endpoint,dr);
-                                               length:=tcdp-pcurrsegment^.naccumlength;
-                                               self.nextsegment;
-                                               if pcurrsegment<>nil then
-                                                 draw(rc,length,paint,dr);
-                                               //tcdp:=cdp;
-                                          end;
-     end
-     else
-         cdp:=tcdp;
-     end;
+  if cdp<1 then begin
+    tcdp:=length+cdp;
+    if (cdp<-eps)and(tcdp>eps)then begin
+      length:=length+cdp;
+      cdp:=0;
+    end;
+    if (cdp>=-eps)and(tcdp>eps) then begin
+      if tcdp<=(pcurrsegment.naccumlength+eps) then begin
+        oldcp:=cp;
+        tv:=VertexMulOnSc(dir,length/pcurrsegment.nlength);
+        cp:=vertexadd(cp,tv);
+        if paint then
+          self.PGeom.DrawLineWithoutLT(rc,oldcp,cp,dr);
+        cdp:=tcdp;
+      end else begin
+        if paint then
+          self.PGeom.DrawLineWithoutLT(rc,cp,pcurrsegment^.endpoint,dr);
+        length:=tcdp-pcurrsegment^.naccumlength;
+        self.nextsegment;
+        if pcurrsegment<>nil then
+         draw(rc,length,paint,dr);
+      end;
+    end else
+      cdp:=tcdp;
+  end;
 end;
 function CreateLLDrawResult(var LLPS:TLLPrimitivesArray):TLLDrawResult;
 begin
@@ -741,7 +746,7 @@ begin
                     end;
 
 
-                    PlaceNPatterns(DC,Segmentator,NumberOfPatterns,LT,TangentScale,NormalScale,polylength,result,supressfirstdash);//рисуем TrueNumberOfPatterns паттернов
+                    PlaceNPatterns(DC,Segmentator,-1,NumberOfPatterns,LT,TangentScale,NormalScale,polylength,result,supressfirstdash);//рисуем TrueNumberOfPatterns паттернов
                     dend:=1-Segmentator.cdp;
                     if (dend>eps) or (LT.WithoutLines) then
                                     begin
@@ -774,10 +779,10 @@ var
   lt:PGDBLtypeProp;
   Segmentator:ZSegmentator;
   supressfirstdash:boolean;
-  ppli:TArrayIndex;
+  pli,FirstLinePrimitiveindex:TArrayIndex;
   ppl:PTLLProxyLine;
 begin
-  ppli:=-1;
+  pli:=-1;
   result:=CreateLLDrawResult(LLprimitives);
   LT:=getLTfromVP(vp);
   if (LT=nil) or (LT.dasharray.Count=0) then begin
@@ -785,6 +790,7 @@ begin
     result.Appearance:=TAMatching;
   end else begin
     //LT:=getLTfromVP(vp);
+    FirstLinePrimitiveindex:=LLprimitives.Count;
     length:=Vertexlength(startpoint,endpoint);//длина линии
     scale:=DC.DrawingContext.GlobalLTScale*vp.LineTypeScale;//фактический масштаб линии
     num:=trunc(Length/(scale*LT.strokesarray.LengthFact));//количество повторений шаблона
@@ -793,11 +799,13 @@ begin
       result.Appearance:=TAMatching;
     end else begin
       if DC.drawer<>nil then begin
-        ppli:=DC.drawer.GetLLPrimitivesCreator.CreateLLProxyLine(LLprimitives);
-        ppl:=pointer(LLprimitives.getDataMutable(ppli));
+        pli:=DC.drawer.GetLLPrimitivesCreator.CreateLLProxyLine(LLprimitives);
+        ppl:=pointer(LLprimitives.getDataMutable(pli));
         ppl.MaxDashLength:=scale*LT.strokesarray.LengthFact;
         ppl.FirstIndex:=GeomData.Vertex3S.PushBackData(startpoint);
         ppl.LastIndex:=GeomData.Vertex3S.PushBackData(endpoint);
+        ppl.FirstLinePrimitiveindex:=FirstLinePrimitiveindex;
+        ppl.MakeReadyIndexsVector(num);
       end;
       Segmentator.InitFromLine(startpoint,endpoint,length,@self);//длина линии
       Segmentator.startdraw;
@@ -822,7 +830,7 @@ begin
           TODIBlank:;//заглушка на варнинг
       end;
 
-      PlaceNPatterns(DC,Segmentator,num,LT,scale,scale,length,result,supressfirstdash);//рисуем num паттернов
+      PlaceNPatterns(DC,Segmentator,pli,num,LT,scale,scale,length,result,supressfirstdash);//рисуем num паттернов
 
       dend:=1-Segmentator.cdp;
       if dend>eps then begin
@@ -842,8 +850,8 @@ begin
       Segmentator.done;
     end;
   end;
-  if ppli<>-1 then begin
-    ppl:=pointer(LLprimitives.getDataMutable(ppli));
+  if pli<>-1 then begin
+    ppl:=pointer(LLprimitives.getDataMutable(pli));
     ppl.LastLinePrimitiveindex:=LLprimitives.Count;
   end;
   FinishLLDrawResult(LLprimitives,result);
@@ -853,12 +861,12 @@ end;
 procedure ZGLGraphix.drawgeometry;
 begin
   //rc.drawer.PVertexBuffer:=@GeomData.Vertex3S;
-  DrawLLPrimitives(DC,DC.drawer);
+  DrawLLPrimitives(DC,DC.drawer,inFrustumState);
 end;
 procedure ZGLGraphix.drawNicegeometry;
 begin
   //rc.drawer.PVertexBuffer:=@GeomData.Vertex3S;
-  DrawLLPrimitives(DC,DC.drawer);
+  DrawLLPrimitives(DC,DC.drawer,inFrustumState);
 end;
 constructor ZGLGraphix.init;
 begin

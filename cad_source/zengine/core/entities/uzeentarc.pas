@@ -43,7 +43,7 @@ GDBObjArc= object(GDBObjPlain)
                  procedure LoadFromDXF(var rdr:TZMemReader;ptu:PExtensionData;var drawing:TDrawingDef);virtual;
 
                  procedure SaveToDXF(var outStream:TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
-                 procedure DrawGeometry(lw:Integer;var DC:TDrawContext);virtual;
+                 procedure DrawGeometry(lw:Integer;var DC:TDrawContext;const inFrustumState:TInBoundingVolume);virtual;
                  procedure addcontrolpoints(tdesc:Pointer);virtual;
                  procedure remaponecontrolpoint(pdesc:pcontrolpointdesc;ProjectProc:GDBProjectProc);virtual;
                  procedure CalcObjMatrix(pdrawing:PTDrawingDef=nil);virtual;
@@ -483,7 +483,7 @@ begin
   if dc.selected then
                      begin
                      //Vertex3D_in_WCS_Array.drawgeometry2
-                          Representation.DrawNiceGeometry(DC);
+                          Representation.DrawNiceGeometry(DC,inFrustumState);
                      end
                  else
                      begin
@@ -502,7 +502,7 @@ begin
                          if simply then
                                        begin
                                            //Vertex3D_in_WCS_Array.drawgeometry
-                                           Representation.DrawGeometry(DC);
+                                           Representation.DrawGeometry(DC,inFrustumState);
                                        end
                                                         else
                                                             begin

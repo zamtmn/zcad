@@ -25,7 +25,8 @@ uses
   uzgprimitivescreatorabstract,uzgindexsarray,uzgprimitives,
   sysutils,uzbtypes,uzgprimitivessarray,
   uzegeometry,uzbLogIntf,gzctnrVectorTypes,uzgprimitivescreator,
-  uzgldrawerabstract,uzgldrawcontext,uzglgeomdata,uzgvertex3sarray;
+  uzgldrawerabstract,uzgldrawcontext,uzglgeomdata,uzgvertex3sarray,
+  uzegeometrytypes;
 const
   WrongVBOID=0;
 type
@@ -44,7 +45,7 @@ type
     VBOIndex:TVBOAllocator.TIndexInRanges;
     constructor init;
     destructor done;virtual;
-    function draw(drawer:TZGLAbstractDrawer;var rc:TDrawContext;var GeomData:ZGLGeomData;var LLPArray:TLLPrimitivesArray;var OptData:ZGLOptimizerData):Integer;virtual;
+    function draw(drawer:TZGLAbstractDrawer;var rc:TDrawContext;var GeomData:ZGLGeomData;var LLPArray:TLLPrimitivesArray;var OptData:ZGLOptimizerData;inFrustumState:TInBoundingVolume):Integer;virtual;
   end;
 constructor TLLVBOLine.init;
 begin
@@ -57,7 +58,7 @@ begin
   //  glDeleteBuffers(1,@vboID);
   //vboID:=WrongVBOID;
 end;
-function TLLVBOLine.draw(drawer:TZGLAbstractDrawer;var rc:TDrawContext;var GeomData:ZGLGeomData;var LLPArray:TLLPrimitivesArray;var OptData:ZGLOptimizerData):Integer;
+function TLLVBOLine.draw(drawer:TZGLAbstractDrawer;var rc:TDrawContext;var GeomData:ZGLGeomData;var LLPArray:TLLPrimitivesArray;var OptData:ZGLOptimizerData;inFrustumState:TInBoundingVolume):Integer;
 var
   offs:integer;
 const

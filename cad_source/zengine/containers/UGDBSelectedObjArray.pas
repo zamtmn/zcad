@@ -197,7 +197,7 @@ begin
        begin
             if tdesc^.objaddr<>nil then
             begin
-                 tdesc^.objaddr^.DrawWithOutAttrib({infrustumactualy,}dc{subrender}); //DrawGeometry(tdesc^.objaddr^.CalculateLineWeight);
+                 tdesc^.objaddr^.DrawWithOutAttrib(dc,TInBoundingVolume.IRPartially); //DrawGeometry(tdesc^.objaddr^.CalculateLineWeight);
             end;
             inc(tdesc);
        end;
@@ -566,7 +566,7 @@ begin
     for i := 0 to count - 1 do
     begin
       if tdesc^.ptempobj<>nil then
-                                  tdesc^.ptempobj^.DrawWithAttrib({infrustumactualy,subrender}dc);
+        tdesc^.ptempobj^.DrawWithAttrib(dc,IRPartially);
       inc(tdesc);
     end;
   end;

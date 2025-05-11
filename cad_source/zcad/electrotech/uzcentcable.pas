@@ -46,7 +46,7 @@ GDBObjCable= object(GDBObjCurve)
                  str23:GDBVertex;
                  constructor init(own:Pointer;layeraddres:PGDBLayerProp;LW:SmallInt);
                  constructor initnul(owner:PGDBObjGenericWithSubordinated);
-                 procedure DrawGeometry(lw:Integer;var DC:TDrawContext);virtual;
+                 procedure DrawGeometry(lw:Integer;var DC:TDrawContext;const inFrustumState:TInBoundingVolume);virtual;
                  function GetObjTypeName:String;virtual;
                  procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext;Stage:TEFStages=EFAllStages);virtual;
                  procedure FormatFast(var drawing:TDrawingDef;var DC:TDrawContext);virtual;
@@ -500,9 +500,9 @@ procedure GDBObjCable.DrawGeometry;
 begin
 
   if (selected)or(dc.selected) then
-    Representation.DrawNiceGeometry(DC)
+    Representation.DrawNiceGeometry(DC,inFrustumState)
   else
-    Representation.DrawGeometry(DC);
+    Representation.DrawGeometry(DC,inFrustumState);
 
   if SysVar.DWG.DWG_HelpGeometryDraw^ then
     if CanSimplyDrawInWCS(DC,SysVar.DSGN.DSGN_HelpScale^,1) then begin

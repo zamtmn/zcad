@@ -46,7 +46,7 @@ type
       function GetHandle:PtrInt;virtual;
       procedure EraseMi(pobj:pGDBObjEntity;pobjinarray:Integer;var drawing:TDrawingDef);virtual;
       function GetMatrix:PDMatrix4D;virtual;
-      procedure DrawWithAttrib(var DC:TDrawContext);virtual;
+      procedure DrawWithAttrib(var DC:TDrawContext;const inFrustumState:TInBoundingVolume);virtual;
       function CalcInFrustum(const frustum:ClipArray;const Actuality:TVisActuality;var Counters:TCameraCounters; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double):Boolean;virtual;
       procedure CalcInFrustumByTree(const frustum:ClipArray;const Actuality:TVisActuality;var enttree:TEntTreeNode;var Counters:TCameraCounters; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double);virtual;
       procedure CalcVisibleBBByTree(const Actuality:TVisActuality;var enttree:TEntTreeNode);virtual;

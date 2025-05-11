@@ -48,7 +48,7 @@ type
 
     procedure SaveToDXF(var outStream:TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
     procedure SaveToDXFfollow(var outStream:TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
-    procedure DrawGeometry(lw:Integer;var DC:TDrawContext);virtual;
+    procedure DrawGeometry(lw:Integer;var DC:TDrawContext;const inFrustumState:TInBoundingVolume);virtual;
     function Clone(own:Pointer):PGDBObjEntity;virtual;
     function GetObjTypeName:String;virtual;
     function FromDXFPostProcessBeforeAdd(ptu:PExtensionData;const drawing:TDrawingDef):PGDBObjSubordinated;virtual;
@@ -265,7 +265,7 @@ end;
 procedure GDBObjSpline.DrawGeometry;
 begin
   //vertexarrayInWCS.DrawGeometryWClosed(closed);
-  self.Representation.DrawGeometry(DC);
+  self.Representation.DrawGeometry(DC,inFrustumState);
   {if closed then oglsm.myglbegin(GL_line_loop)
              else oglsm.myglbegin(GL_line_strip);
   vertexarrayInWCS.iterategl(@myglVertex3dv);

@@ -212,11 +212,11 @@ procedure TEntsTypeFilter.SetFilter;
 var
   EntPair:TObjID2Counter.TDictionaryPair;
   ExtdrPair:TMetaExtender2Counter.TDictionaryPair;
-  Count:SizeUInt;
+  Count,DummyCount:SizeUInt;
 begin
   count:=0;
   for EntPair in EntInclude do
-    if not EntExclude.TryGetValue(EntPair.Key,Count) then begin
+    if not EntExclude.TryGetValue(EntPair.Key,DummyCount) then begin
       EntFilter.CountKey(EntPair.Key,1);
       if count<High(FCachedEntsArray) then
         FCachedEntsArray[count]:=EntPair.Key;
@@ -224,7 +224,7 @@ begin
     end;
   count:=0;
   for ExtdrPair in ExtdrInclude do
-    if not  ExtdrExclude.TryGetValue(ExtdrPair.Key,Count) then begin
+    if not  ExtdrExclude.TryGetValue(ExtdrPair.Key,DummyCount) then begin
       ExtdrFilter.CountKey(ExtdrPair.Key,1);
       if count<High(FCachedExtdrsArray) then
         FCachedExtdrsArray[count]:=ExtdrPair.Key;
@@ -261,34 +261,23 @@ end;
 
 function TEntsTypeFilter.IsEntytyTypeAccepted(EntType:TObjID):boolean;
 var
-  count:SizeUInt;
+  DummyCount:SizeUInt;
 begin
-
-  if FCachedEntsCount<0 then begin
-    if EntFilter.TryGetValue(EntType,count) then
-      result:=true
-    else
-      result:=false;
-  end else
-    for count:=0 to FCachedEntsCount do
-      if FCachedEntsArray[count]=EntType then
+  if FCachedEntsCount>=0 then
+    for DummyCount:=0 to FCachedEntsCount do
+      if FCachedEntsArray[DummyCount]=EntType then
         exit(true);
-  result:=false;
+  result:=EntFilter.TryGetValue(EntType,DummyCount)
 end;
 function TEntsTypeFilter.IsExtdrTypeAccepted(ExtdrType:TMetaExtender):boolean;
 var
-  count:SizeUInt;
+  DummyCount:SizeUInt;
 begin
-  if FCachedExtdrsCount<0 then begin
-    if ExtdrFilter.TryGetValue(ExtdrType,count) then
-      result:=true
-    else
-      result:=false;
-  end else
-    for count:=0 to FCachedExtdrsCount do
-      if FCachedExtdrsArray[count]=ExtdrType then
+  if FCachedExtdrsCount>=0 then
+    for DummyCount:=0 to FCachedExtdrsCount do
+      if FCachedExtdrsArray[DummyCount]=ExtdrType then
         exit(true);
-  result:=false;
+  result:=ExtdrFilter.TryGetValue(ExtdrType,DummyCount);
 end;
 function TEntsTypeFilter.IsEntytyAccepted(pv:pGDBObjEntity):boolean;
 var

@@ -61,6 +61,7 @@ begin
       'F','f',//имя фонта
       'H','h',//высота
       'A','a',//выравнивание
+      'T','t',//Межсимвольное расстояние
       'W','w':begin//ширина текста
                 while (NextSymbolPos<=length(str))and(str[NextSymbolPos]<>';') do
                   inc(NextSymbolPos);

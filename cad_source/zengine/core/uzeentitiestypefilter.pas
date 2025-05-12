@@ -22,12 +22,16 @@ unit uzeentitiestypefilter;
 
 
 interface
-uses LCLProc,uzeentityfactory,uzeentity,
-     uzeBaseExtender,uzeExtdrAbstractEntityExtender,
-     sysutils,uzbtypes,
-     usimplegenerics,Masks;
+
+uses
+  SysUtils,LCLProc,Masks,
+  uzeentityfactory,uzeentity,
+  uzeBaseExtender,uzeExtdrAbstractEntityExtender,
+  uzbtypes,usimplegenerics;
+
 const
   CachedValuesCount=2;
+
 type
   TEntsTypeFilter=class
     protected
@@ -114,23 +118,13 @@ end;
 
 procedure TEntsTypeFilter.AddTypeNameMask(EntTypeNameMask:String);
 var
-  //iterator:ObjID2EntInfoData.TIterator;
   pair:ObjID2EntInfoData.TDictionaryPair;
-  s:string;
 begin
   for pair in ObjID2EntInfoData do begin
-  //iterator:=ObjID2EntInfoData.Min;
-  //if assigned(iterator) then
-  //repeat
-    s:=pair.Value.DXFName;
-    s:=pair.Value.UserName;
     if (MatchesMask(pair.Value.UserName,EntTypeNameMask,false))
     or (AnsiCompareText(pair.Value.UserName,EntTypeNameMask)=0) then
       EntInclude.CountKey(pair.Value.EntityID,1);
   end;
-  //until not iterator.Next;
-  //if assigned(iterator) then
-  //  iterator.destroy;
 end;
 
 procedure TEntsTypeFilter.SubType(EntType:TObjID);
@@ -147,32 +141,27 @@ end;
 
 procedure TEntsTypeFilter.SubTypeNameMask(EntTypeNameMask:String);
 var
-  //iterator:ObjID2EntInfoData.TIterator;
   pair:ObjID2EntInfoData.TDictionaryPair;
 begin
   for pair in ObjID2EntInfoData do begin
-  //iterator:=ObjID2EntInfoData.Min;
-  //if assigned(iterator) then
-  //repeat
     if MatchesMask(pair.Value.UserName,EntTypeNameMask,false)
     or (AnsiCompareText(pair.Value.UserName,EntTypeNameMask)=0) then
       EntExclude.CountKey(pair.Value.EntityID,1);
   end;
-  //until not iterator.Next;
-  //if assigned(iterator) then
-  //  iterator.destroy;
 end;
 
 procedure TEntsTypeFilter.AddExtdr(ExtdrType:TMetaExtender);
 begin
   ExtdrInclude.CountKey(ExtdrType,1);
 end;
+
 procedure TEntsTypeFilter.AddExtdrName(ExtdrTypeName:String);
 var Extdr:TMetaEntityExtender;
 begin
   if EntityExtenders.TryGetValue(UpperCase(ExtdrTypeName),Extdr) then
     ExtdrInclude.CountKey(Extdr,1);
 end;
+
 procedure TEntsTypeFilter.AddExtdrNameMask(ExtdrTypeNameMask:String);
 var
   pair:EntityExtenders.TDictionaryPair;
@@ -185,16 +174,19 @@ begin
       ExtdrInclude.CountKey(pair.Value,1);
   end;
 end;
+
 procedure TEntsTypeFilter.SubExtdr(ExtdrType:TMetaExtender);
 begin
   ExtdrExclude.CountKey(ExtdrType,1);
 end;
+
 procedure TEntsTypeFilter.SubExtdrName(ExtdrTypeName:String);
 var Extdr:TMetaEntityExtender;
 begin
   if EntityExtenders.TryGetValue(UpperCase(ExtdrTypeName),Extdr) then
     ExtdrExclude.CountKey(Extdr,1);
 end;
+
 procedure TEntsTypeFilter.SubExtdrNameMask(ExtdrTypeNameMask:String);
 var
   pair:EntityExtenders.TDictionaryPair;
@@ -294,7 +286,7 @@ end;
 
 function TEntsTypeFilter.IsEmpty:boolean;
 begin
-    result:=(EntFilter.Count=0)and(ExtdrFilter.Count=0);
+  result:=(EntFilter.Count=0)and(ExtdrFilter.Count=0);
 end;
 
 begin

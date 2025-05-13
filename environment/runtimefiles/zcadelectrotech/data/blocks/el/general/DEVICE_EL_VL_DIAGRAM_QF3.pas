@@ -11,8 +11,6 @@ var
 VL_Mark:String;(*'Обозначение'*)
 VL_Type:String;(*'Марка'*)
 VL_Data:String;(*'Параметры'*)
-VL_Term:String;(*'Терм.уставка'*)
-VL_ElMag:String;(*'Эл.маг.уставка'*)
 VL_Busbar:Integer;(*'123'*)
 
 implementation
@@ -31,8 +29,6 @@ NMO_Affix:='.1';
 VL_Mark:='??';
 VL_Type:='??';
 VL_Data:='??';
-VL_Term:='??';
-VL_ElMag:='??';
 VL_Busbar:=3;
 
 end.

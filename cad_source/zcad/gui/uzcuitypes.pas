@@ -19,6 +19,7 @@
 unit uzcuitypes;
 
 {$INCLUDE zengineconfig.inc}
+{$Mode delphi}
 
 interface
 

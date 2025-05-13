@@ -33,7 +33,7 @@ uses
   uzeBaseExtender,uzbtypes,uzegeometrytypes,uzeconsts;
 
 type
-  TDummyDtawer=procedure(var IODXFContext:TIODXFContext;var outhandle:TZctnrVectorBytes;pEntity:PGDBObjEntity;const p1,p2:GDBvertex;const drawing:TDrawingDef;var DC:TDrawContext);
+  TDummyDtawer=procedure(var IODXFContext:TIODXFContext;var outStream:TZctnrVectorBytes;pEntity:PGDBObjEntity;const p1,p2:GDBvertex;const drawing:TDrawingDef;var DC:TDrawContext);
   TSmartTextEntExtender=class(TBaseEntityExtender)
   public
     const
@@ -97,13 +97,13 @@ type
       procedure Assign(Source:TBaseExtender);override;
       procedure onBeforeEntityFormat(pEntity:Pointer;const drawing:TDrawingDef;var DC:TDrawContext);override;
       procedure onAfterEntityFormat(pEntity:Pointer;const drawing:TDrawingDef;var DC:TDrawContext);override;
-      procedure SaveToDxfObjXData(var outhandle:TZctnrVectorBytes;PEnt:Pointer;var IODXFContext:TIODXFContext);override;
-      procedure SaveToDXFfollow(PEnt:Pointer;var outhandle:TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext)override;
+      procedure SaveToDxfObjXData(var outStream:TZctnrVectorBytes;PEnt:Pointer;var IODXFContext:TIODXFContext);override;
+      procedure SaveToDXFfollow(PEnt:Pointer;var outStream:TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext)override;
       procedure PostLoad(var context:TIODXFLoadContext);override;
       procedure onEntitySupportOldVersions(pEntity:pointer;const drawing:TDrawingDef);override;
       procedure onRemoveFromArray(pEntity:Pointer;const drawing:TDrawingDef);override;
 
-      procedure DrawGeom(var IODXFContext:TIODXFContext;var outhandle:TZctnrVectorBytes;pEntity:Pointer;const drawing:TDrawingDef;var DC:TDrawContext;tdd:TDummyDtawer);
+      procedure DrawGeom(var IODXFContext:TIODXFContext;var outStream:TZctnrVectorBytes;pEntity:Pointer;const drawing:TDrawingDef;var DC:TDrawContext;tdd:TDummyDtawer);
 
       class function EntIOLoadExtensionLine(_Name,_Value:String;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
       class function EntIOLoadBaseLine(_Name,_Value:String;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
@@ -127,37 +127,37 @@ type
 
 implementation
 
-procedure DrawLine(var IODXFContext:TIODXFContext;var outhandle:TZctnrVectorBytes;pEntity:PGDBObjEntity;const p1,p2:GDBvertex;const drawing:TDrawingDef;var DC:TDrawContext);
+procedure DrawLine(var IODXFContext:TIODXFContext;var outStream:TZctnrVectorBytes;pEntity:PGDBObjEntity;const p1,p2:GDBvertex;const drawing:TDrawingDef;var DC:TDrawContext);
 begin
   pEntity.Representation.DrawLineWithLT(pEntity^,onematrix,DC,p1,p2,pEntity.vp);
 end;
 
-procedure SaveLine(var IODXFContext:TIODXFContext;var outhandle:TZctnrVectorBytes;pEntity:PGDBObjEntity;const p1,p2:GDBvertex;const drawing:TDrawingDef;var DC:TDrawContext);
+procedure SaveLine(var IODXFContext:TIODXFContext;var outStream:TZctnrVectorBytes;pEntity:PGDBObjEntity;const p1,p2:GDBvertex;const drawing:TDrawingDef;var DC:TDrawContext);
 begin
-  //SaveToDXFObjPrefix(outhandle,'LINE','AcDbLine',IODXFContext);
+  //SaveToDXFObjPrefix(outStream,'LINE','AcDbLine',IODXFContext);
 
-  dxfStringout(outhandle,0,dxfName_Line);
+  dxfStringout(outStream,0,dxfName_Line);
 
-  dxfStringout(outhandle,5,inttohex(IODXFContext.handle, 0));
+  dxfStringout(outStream,5,inttohex(IODXFContext.handle, 0));
   inc(IODXFContext.handle);
 
-  dxfStringout(outhandle,100,dxfName_AcDbEntity);
-  dxfStringout(outhandle,8,pEntity^.vp.layer^.name);
+  dxfStringout(outStream,100,dxfName_AcDbEntity);
+  dxfStringout(outStream,8,pEntity^.vp.layer^.name);
   if pEntity^.vp.color<>ClByLayer then
-                             dxfStringout(outhandle,62,inttostr(pEntity^.vp.color));
-  if pEntity^.vp.lineweight<>-1 then dxfIntegerout(outhandle,370,pEntity^.vp.lineweight);
+                             dxfStringout(outStream,62,inttostr(pEntity^.vp.color));
+  if pEntity^.vp.lineweight<>-1 then dxfIntegerout(outStream,370,pEntity^.vp.lineweight);
 
-  dxfStringout(outhandle,100,dxfName_AcDbLine);
-  if pEntity^.vp.LineType<>{''}nil then dxfStringout(outhandle,6,pEntity^.vp.LineType^.Name);
-  if pEntity^.vp.LineTypeScale<>1 then dxfDoubleout(outhandle,48,pEntity^.vp.LineTypeScale);
+  dxfStringout(outStream,100,dxfName_AcDbLine);
+  if pEntity^.vp.LineType<>{''}nil then dxfStringout(outStream,6,pEntity^.vp.LineType^.Name);
+  if pEntity^.vp.LineTypeScale<>1 then dxfDoubleout(outStream,48,pEntity^.vp.LineTypeScale);
 
-  dxfvertexout(outhandle,10,p1);
-  dxfvertexout(outhandle,11,p2);
+  dxfvertexout(outStream,10,p1);
+  dxfvertexout(outStream,11,p2);
 
-  dxfStringout(outhandle,1001,'DSTP_XDATA');
-  dxfStringout(outhandle,1002,'{');
-  dxfStringout(outhandle,1000,'_OWNERHANDLE=6E');
-  dxfStringout(outhandle,1002,'}');
+  dxfStringout(outStream,1001,'DSTP_XDATA');
+  dxfStringout(outStream,1002,'{');
+  dxfStringout(outStream,1000,'_OWNERHANDLE=6E');
+  dxfStringout(outStream,1002,'}');
 end;
 
 class function TSmartTextEntExtender.CanBeAddedTo(pEntity:Pointer):Boolean;
@@ -328,10 +328,10 @@ begin
   if typeof(PGDBObjEntity(pEntity)^)=TypeOf(GDBObjText) then
     result:=PGDBObjText(pEntity).textprop.wfactor
   else
-    result:=PGDBObjMText(pEntity).TXTStyleIndex^.prop.wfactor;
+    result:=PGDBObjMText(pEntity).TXTStyle^.prop.wfactor;
 end;
 
-procedure TSmartTextEntExtender.DrawGeom(var IODXFContext:TIODXFContext;var outhandle:TZctnrVectorBytes;pEntity:Pointer;const drawing:TDrawingDef;var DC:TDrawContext;tdd:TDummyDtawer);
+procedure TSmartTextEntExtender.DrawGeom(var IODXFContext:TIODXFContext;var outStream:TZctnrVectorBytes;pEntity:Pointer;const drawing:TDrawingDef;var DC:TDrawContext;tdd:TDummyDtawer);
 var
   dx:Double;
   p,pnew,dir,normal:GDBvertex;
@@ -346,7 +346,7 @@ begin
         if isNeedLeadert(pEntity) then begin
           p:=getBaseLineStartPoint(pEntity);
           if FExtensionLine then
-            tdd(IODXFContext,outhandle,pEntity,getExtensionLinetStartPoint(pEntity),p,drawing,DC);
+            tdd(IODXFContext,outStream,pEntity,getExtensionLinetStartPoint(pEntity),p,drawing,DC);
           if FBaseLine then begin
             dx:=PGDBObjText(pEntity).obj_width*getTextHeight(pEntity)*getTextWFactor(pEntity)*getOwnerScale(pEntity);
             offs:=getBaseLineOffset(pEntity);
@@ -360,14 +360,14 @@ begin
             else
               dx:=dx+2*offs.x;
             dir:=getTextTangent(pEntity)*dx;
-            tdd(IODXFContext,outhandle,pEntity,p,VertexAdd(p,{CreateVertex(dx,0,0)}dir),drawing,DC);
+            tdd(IODXFContext,outStream,pEntity,p,VertexAdd(p,{CreateVertex(dx,0,0)}dir),drawing,DC);
             if typeof(PGDBObjEntity(pEntity)^)=TypeOf(GDBObjMText) then
               if PGDBObjMText(pEntity).text.Count>2 then begin
                 normal:=getTextNormal(pEntity)*pGDBObjMText(pEntity).linespace*getOwnerScale(pEntity);
                 for i:=2 to PGDBObjMText(pEntity).text.Count do begin
                   pnew:=VertexAdd(p,normal);
-                  tdd(IODXFContext,outhandle,pEntity,p,pnew,drawing,DC);
-                  tdd(IODXFContext,outhandle,pEntity,pnew,VertexAdd(pnew,dir),drawing,DC);
+                  tdd(IODXFContext,outStream,pEntity,p,pnew,drawing,DC);
+                  tdd(IODXFContext,outStream,pEntity,pnew,VertexAdd(pnew,dir),drawing,DC);
                   p:=pnew;
                 end;
               end;
@@ -409,10 +409,11 @@ begin
           if v1.y<-eps then l0:=2*pi-l0;
         end else
           l0:=a;
-        if (abs(PGDBObjText(pEntity)^.Local.basis.oz.x) < 1/64)and(abs(PGDBObjText(pEntity)^.Local.basis.oz.y)<1/64) then
-          PGDBObjText(pEntity)^.Local.basis.ox:=CrossVertex(YWCS,PGDBObjText(pEntity)^.Local.basis.oz)
-        else
-          PGDBObjText(pEntity)^.Local.basis.ox:=CrossVertex(ZWCS,PGDBObjText(pEntity)^.Local.basis.oz);
+        PGDBObjText(pEntity)^.Local.basis.ox:=GetXfFromZ(PGDBObjText(pEntity)^.Local.basis.oz);
+        //if (abs(PGDBObjText(pEntity)^.Local.basis.oz.x) < 1/64)and(abs(PGDBObjText(pEntity)^.Local.basis.oz.y)<1/64) then
+        //  PGDBObjText(pEntity)^.Local.basis.ox:=CrossVertex(YWCS,PGDBObjText(pEntity)^.Local.basis.oz)
+        //else
+        //  PGDBObjText(pEntity)^.Local.basis.ox:=CrossVertex(ZWCS,PGDBObjText(pEntity)^.Local.basis.oz);
         PGDBObjText(pEntity)^.local.basis.OX:=VectorTransform3D(PGDBObjText(pEntity)^.local.basis.OX,uzegeometry.CreateAffineRotationMatrix(PGDBObjText(pEntity)^.Local.basis.oz,l0));
 
       end;
@@ -450,39 +451,39 @@ begin
   result:=SmartTextEntExtenderName;
 end;
 
-procedure TSmartTextEntExtender.SaveToDxfObjXData(var outhandle:TZctnrVectorBytes;PEnt:Pointer;var IODXFContext:TIODXFContext);
+procedure TSmartTextEntExtender.SaveToDxfObjXData(var outStream:TZctnrVectorBytes;PEnt:Pointer;var IODXFContext:TIODXFContext);
 begin
   if isDefault then
-    dxfStringout(outhandle,1000,'STEDefault=TRUE')
+    dxfStringout(outStream,1000,'STEDefault=TRUE')
   else
     begin
       if not FExtensionLine then
-        dxfStringout(outhandle,1000,'STEExtensionLine=FALSE');
+        dxfStringout(outStream,1000,'STEExtensionLine=FALSE');
       if not FBaseLine then
-        dxfStringout(outhandle,1000,'STEBaseLineLine=FALSE');
+        dxfStringout(outStream,1000,'STEBaseLineLine=FALSE');
       if not IsDoubleEqual(FExtensionLineStartShift,ExtensionLineStartShiftDef)then
-        dxfStringout(outhandle,1000,'STEExtensionLineStartShift='+FloatToStr(FExtensionLineStartShift));
+        dxfStringout(outStream,1000,'STEExtensionLineStartShift='+FloatToStr(FExtensionLineStartShift));
       if not IsDoubleEqual(FLeaderStartDrawDist,ExtensionLeaderStartDrawDist)then
-        dxfStringout(outhandle,1000,'STELeaderStartDrawDist='+FloatToStr(FLeaderStartDrawDist));
+        dxfStringout(outStream,1000,'STELeaderStartDrawDist='+FloatToStr(FLeaderStartDrawDist));
       if not IsDoubleEqual(FTextHeightOverride,ExtensionTextHeightOverrideDef)then
-        dxfStringout(outhandle,1000,'STETextHeightOverride='+FloatToStr(FTextHeightOverride));
+        dxfStringout(outStream,1000,'STETextHeightOverride='+FloatToStr(FTextHeightOverride));
       if not FHJOverride then
-        dxfStringout(outhandle,1000,'STEHJOverride=FALSE');
+        dxfStringout(outStream,1000,'STEHJOverride=FALSE');
       if not FVJOverride then
-        dxfStringout(outhandle,1000,'STEVJOverride=FALSE');
+        dxfStringout(outStream,1000,'STEVJOverride=FALSE');
       if not IsDoubleEqual(FBaseLineOffset.x,BaseLineOffsetDef.x)then
-        dxfStringout(outhandle,1000,'STEBaseLineOffsetX='+FloatToStr(FBaseLineOffset.x));
+        dxfStringout(outStream,1000,'STEBaseLineOffsetX='+FloatToStr(FBaseLineOffset.x));
       if not IsDoubleEqual(FBaseLineOffset.y,BaseLineOffsetDef.y)then
-        dxfStringout(outhandle,1000,'STEBaseLineOffsetY='+FloatToStr(FBaseLineOffset.y));
+        dxfStringout(outStream,1000,'STEBaseLineOffsetY='+FloatToStr(FBaseLineOffset.y));
       if not FRotateOverride then
-        dxfStringout(outhandle,1000,'STERotateOverride=FALSE');
+        dxfStringout(outStream,1000,'STERotateOverride=FALSE');
       if not IsDoubleEqual(FRotateOverrideValue,RotateOverrideValueDef)then
-        dxfStringout(outhandle,1000,'STERotateOverrideValue='+FloatToStr(FRotateOverrideValue));
+        dxfStringout(outStream,1000,'STERotateOverrideValue='+FloatToStr(FRotateOverrideValue));
     end;
 end;
-procedure TSmartTextEntExtender.SaveToDXFfollow(PEnt:Pointer;var outhandle:TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);
+procedure TSmartTextEntExtender.SaveToDXFfollow(PEnt:Pointer;var outStream:TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);
 begin
-  DrawGeom(IODXFContext,outhandle,PGDBObjEntity(PEnt),drawing,PTDrawContext(nil)^,SaveLine);
+  DrawGeom(IODXFContext,outStream,PGDBObjEntity(PEnt),drawing,PTDrawContext(nil)^,SaveLine);
 end;
 
 function AddSmartTextEntExtenderToEntity(PEnt:PGDBObjEntity):TSmartTextEntExtender;

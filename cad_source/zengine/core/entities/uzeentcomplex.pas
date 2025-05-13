@@ -30,8 +30,8 @@ type
 PGDBObjComplex=^GDBObjComplex;
 GDBObjComplex= object(GDBObjWithLocalCS)
                     ConstObjArray:GDBObjEntityTreeArray;
-                    procedure DrawGeometry(lw:Integer;var DC:TDrawContext);virtual;
-                    procedure DrawOnlyGeometry(lw:Integer;var DC:TDrawContext);virtual;
+                    procedure DrawGeometry(lw:Integer;var DC:TDrawContext;const inFrustumState:TInBoundingVolume);virtual;
+                    procedure DrawOnlyGeometry(lw:Integer;var DC:TDrawContext;const inFrustumState:TInBoundingVolume);virtual;
                     procedure getoutbound(var DC:TDrawContext);virtual;
                     procedure getonlyoutbound(var DC:TDrawContext);virtual;
                     function getonlyvisibleoutbound(var DC:TDrawContext):TBoundingBox;virtual;
@@ -141,7 +141,7 @@ end;
 procedure GDBObjComplex.DrawOnlyGeometry;
 begin
   inc(dc.subrender);
-  ConstObjArray.{DrawWithattrib}DrawOnlyGeometry(CalculateLineWeight(dc),dc{infrustumactualy,subrender});
+  ConstObjArray.DrawOnlyGeometry(CalculateLineWeight(dc),dc,inFrustumState);
   dec(dc.subrender);
   //inherited;
 end;

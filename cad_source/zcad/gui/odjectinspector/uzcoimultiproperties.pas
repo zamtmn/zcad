@@ -17,6 +17,7 @@
 }
 
 unit uzcoimultiproperties;
+{$Mode delphi}
 {$INCLUDE zengineconfig.inc}
 
 interface

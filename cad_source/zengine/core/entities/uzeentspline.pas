@@ -40,15 +40,15 @@ type
     constructor init(own:Pointer;layeraddres:PGDBLayerProp;LW:SmallInt;c:Boolean);
     constructor initnul(owner:PGDBObjGenericWithSubordinated);
     destructor done;virtual;
-    procedure LoadFromDXF(var f:TZMemReader;ptu:PExtensionData;var drawing:TDrawingDef);virtual;
+    procedure LoadFromDXF(var rdr:TZMemReader;ptu:PExtensionData;var drawing:TDrawingDef);virtual;
 
     procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext;Stage:TEFStages=EFAllStages);virtual;
     procedure startsnap(out osp:os_record; out pdata:Pointer);virtual;
     function getsnap(var osp:os_record; var pdata:Pointer; const param:OGLWndtype; ProjectProc:GDBProjectProc;SnapMode:TGDBOSMode):Boolean;virtual;
 
-    procedure SaveToDXF(var outhandle:TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
-    procedure SaveToDXFfollow(var outhandle:TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
-    procedure DrawGeometry(lw:Integer;var DC:TDrawContext);virtual;
+    procedure SaveToDXF(var outStream:TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
+    procedure SaveToDXFfollow(var outStream:TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
+    procedure DrawGeometry(lw:Integer;var DC:TDrawContext;const inFrustumState:TInBoundingVolume);virtual;
     function Clone(own:Pointer):PGDBObjEntity;virtual;
     function GetObjTypeName:String;virtual;
     function FromDXFPostProcessBeforeAdd(ptu:PExtensionData;const drawing:TDrawingDef):PGDBObjSubordinated;virtual;
@@ -265,7 +265,7 @@ end;
 procedure GDBObjSpline.DrawGeometry;
 begin
   //vertexarrayInWCS.DrawGeometryWClosed(closed);
-  self.Representation.DrawGeometry(DC);
+  self.Representation.DrawGeometry(DC,inFrustumState);
   {if closed then oglsm.myglbegin(GL_line_loop)
              else oglsm.myglbegin(GL_line_strip);
   vertexarrayInWCS.iterategl(@myglVertex3dv);
@@ -301,34 +301,34 @@ var
   fl:PSingle;
   ptv:pgdbvertex;
 begin
-  SaveToDXFObjPrefix(outhandle,'SPLINE','AcDbSpline',IODXFContext);
+  SaveToDXFObjPrefix(outStream,'SPLINE','AcDbSpline',IODXFContext);
   if closed then
-    dxfIntegerout(outhandle,70,9)
+    dxfIntegerout(outStream,70,9)
   else
-    dxfIntegerout(outhandle,70,8);
-  dxfIntegerout(outhandle,71,degree);
-  dxfIntegerout(outhandle,72,Knots.Count);
-  dxfIntegerout(outhandle,73,VertexArrayInOCS.Count);
+    dxfIntegerout(outStream,70,8);
+  dxfIntegerout(outStream,71,degree);
+  dxfIntegerout(outStream,72,Knots.Count);
+  dxfIntegerout(outStream,73,VertexArrayInOCS.Count);
 
-  dxfDoubleout(outhandle,42,0.0000000001);
-  dxfDoubleout(outhandle,43,0.0000000001);
+  dxfDoubleout(outStream,42,0.0000000001);
+  dxfDoubleout(outStream,43,0.0000000001);
 
   fl:=Knots.beginiterate(ir);
   if fl<>nil then
   repeat
-    dxfDoubleout(outhandle,40,fl^);
+    dxfDoubleout(outStream,40,fl^);
     fl:=Knots.iterate(ir);
   until fl=nil;
 
   ptv:=VertexArrayInOCS.beginiterate(ir);
   if ptv<>nil then
   repeat
-    dxfvertexout(outhandle,10,ptv^);
+    dxfvertexout(outStream,10,ptv^);
     ptv:=VertexArrayInOCS.iterate(ir);
   until ptv=nil;
 end;
 
-procedure GDBObjSpline.SaveToDXFfollow(var outhandle:{Integer}TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);
+procedure GDBObjSpline.SaveToDXFfollow(var outStream:TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);
 begin
 end;
 
@@ -344,21 +344,21 @@ begin
   tmpKnot:=0;
   tmpFlag:=0;
 
-  DXFGroupCode:=f.ParseInteger;
+  DXFGroupCode:=rdr.ParseInteger;
   while DXFGroupCode <> 0 do begin
-    if not LoadFromDXFObjShared(f,DXFGroupCode,ptu,drawing) then
-       if dxfvertexload(f,10,DXFGroupCode,tmpVertex) then begin
+    if not LoadFromDXFObjShared(rdr,DXFGroupCode,ptu,drawing) then
+       if dxfvertexload(rdr,10,DXFGroupCode,tmpVertex) then begin
          if DXFGroupCode=30 then
            addvertex(tmpVertex);
-       end else if dxfFloatload(f,40,DXFGroupCode,tmpKnot) then
+       end else if dxfFloatload(rdr,40,DXFGroupCode,tmpKnot) then
          Knots.PushBackData(tmpKnot)
-       else if dxfIntegerload(f,70,DXFGroupCode,tmpFlag) then begin
+       else if dxfIntegerload(rdr,70,DXFGroupCode,tmpFlag) then begin
          if (tmpFlag and 1) = 1 then closed := true;
-       end else if dxfIntegerload(f,71,DXFGroupCode,Degree) then begin
+       end else if dxfIntegerload(rdr,71,DXFGroupCode,Degree) then begin
          Degree:=Degree;
        end else
-         f.SkipString;
-    DXFGroupCode:=f.ParseInteger;
+         rdr.SkipString;
+    DXFGroupCode:=rdr.ParseInteger;
   end;
 
   vertexarrayinocs.Shrink;

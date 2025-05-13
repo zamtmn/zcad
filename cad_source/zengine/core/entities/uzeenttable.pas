@@ -45,7 +45,7 @@ GDBObjTable= object(GDBObjComplex)
             destructor done;virtual;
             function Clone(own:Pointer):PGDBObjEntity;virtual;
             procedure Build(var drawing:TDrawingDef);virtual;
-            procedure SaveToDXFFollow(var outhandle:{Integer}TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
+            procedure SaveToDXFFollow(var outStream:TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
             procedure ReCalcFromObjMatrix;virtual;
             function GetObjType:TObjID;virtual;
             end;
@@ -113,9 +113,9 @@ begin
               //pvc^.SaveToDXF(outhandle,drawing,IODXFContext);
               //pvc^.SaveToDXFPostProcess(outhandle,IODXFContext);
               //pvc^.SaveToDXFFollow(outhandle,drawing,IODXFContext);
-              pv^.SaveToDXF(outhandle,drawing,IODXFContext);
-              pv^.SaveToDXFPostProcess(outhandle,IODXFContext);
-              pv^.SaveToDXFFollow(outhandle,drawing,IODXFContext);
+              pv^.SaveToDXF(outStream,drawing,IODXFContext);
+              pv^.SaveToDXFPostProcess(outStream,IODXFContext);
+              pv^.SaveToDXFFollow(outStream,drawing,IODXFContext);
               pvc2.rtsave(pv);
               pv^.bp.ListPos.Owner:=p;
 
@@ -198,7 +198,7 @@ ConstObjArray.free;
                            pgdbmtext.width:=pcf^.TextWidth*scale;
                            //pgdbmtext.vp.Layer:=vp.Layer;
                            CopyVPto(pgdbmtext^);
-                           pgdbmtext.TXTStyleIndex:=pointer(drawing.GetTextStyleTable^.getDataMutable(0));
+                           pgdbmtext.TXTStyle:=pointer(drawing.GetTextStyleTable^.getDataMutable(0));
 
                            pgdbmtext.Local.P_insert.y:=(-ccount*PTableStyle^.rowheight-PTableStyle^.rowheight/4)*scale;
                            case pcf^.CF of

@@ -37,7 +37,7 @@ procedure zTraceLn(const S:String);
 procedure zTraceLn(const S:String; const Args: array of const);
 
 procedure InstallLoger(ADebugLnProc:TDebugLnProc;ADebugLnFormatProc:TDebugLnFormatedProc;AIsTraceEnabled:TIsTraceEnabled);
-//procedure RemoveLoger(DebugLnProc:TDebugLnStr;DebugLnFormatProc:TDebugLnFormatProc;IsTraceEnabled:TIsTraceEnabled);
+procedure RemoveLoger(ADebugLnProc:TDebugLnProc;ADebugLnFormatProc:TDebugLnFormatedProc;AIsTraceEnabled:TIsTraceEnabled);
 
 implementation
 
@@ -197,6 +197,29 @@ begin
   end;
 end;
 
+procedure RemoveLoger(ADebugLnProc:TDebugLnProc;ADebugLnFormatProc:TDebugLnFormatedProc;AIsTraceEnabled:TIsTraceEnabled);
+var
+  lr:TLoggerRec;
+  plr:^TLoggerRec;
+  i:integer;
+begin
+  if Loggers<>nil then
+    if Loggers.Size>0 then
+      if Assigned(ADebugLnProc)or Assigned(ADebugLnFormatProc) then begin
+        lr:=TLoggerRec.CreateRec(ADebugLnProc,ADebugLnFormatProc,AIsTraceEnabled);
+        i:=0;
+        repeat
+          plr:=Loggers.Mutable[i];
+          if ((plr^.DebugLnProc)=(lr.DebugLnProc))
+          and ((plr^.DebugLnFormatedProc)=(lr.DebugLnFormatedProc))
+          and ((plr^.IsTraceEnabled)=(lr.IsTraceEnabled))then
+            loggers.Erase(i)
+          else
+            inc(i);
+        until i>=Loggers.Size;
+      end;
+end;
+
 procedure zDebugLn(const S:String);
 var
   Logger:TLoggerRec;
@@ -260,7 +283,6 @@ end;
 initialization
   Loggers:=nil;
 finalization
-  if Loggers<>nil then
-    Loggers.Free;
+  FreeAndNil(Loggers);
 end.
 

@@ -33,9 +33,9 @@ GDBObjEntityArray=array [0..0] of PGDBObjEntity;}
 PGDBObjOpenArrayOfPV=^GDBObjOpenArrayOfPV;
 {REGISTEROBJECTTYPE GDBObjOpenArrayOfPV}
 GDBObjOpenArrayOfPV= object({TZctnrVectorPGDBaseObjects}TZctnrVectorPGDBaseEntity)
-                      procedure DrawWithattrib(var DC:TDrawContext);virtual;
-                      procedure DrawGeometry(lw:Integer;var DC:TDrawContext);virtual;
-                      procedure DrawOnlyGeometry(lw:Integer;var DC:TDrawContext);virtual;
+                      procedure DrawWithattrib(var DC:TDrawContext;const inFrustumState:TInBoundingVolume);virtual;
+                      procedure DrawGeometry(lw:Integer;var DC:TDrawContext;const inFrustumState:TInBoundingVolume);virtual;
+                      procedure DrawOnlyGeometry(lw:Integer;var DC:TDrawContext;const inFrustumState:TInBoundingVolume);virtual;
                       function calcvisible(const frustum:ClipArray;const Actuality:TVisActuality;var Counters:TCameraCounters;ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double):Boolean;virtual;
                       function CalcActualVisible(const Actuality:TVisActuality):Boolean;virtual;
                       function CalcTrueInFrustum(const frustum:ClipArray):TInBoundingVolume;virtual;
@@ -289,7 +289,7 @@ begin
   if p<>nil then
   repeat
        if p^.infrustum=dc.DrawingContext.VActuality.infrustumactualy then
-                           p^.DrawWithAttrib(dc);
+                           p^.DrawWithAttrib(dc,inFrustumState);
        p:=iterate(ir);
   until p=nil;
 end;
@@ -302,7 +302,7 @@ begin
   if p<>nil then
   repeat
     if p^.infrustum=dc.DrawingContext.VActuality.infrustumactualy then
-      p^.DrawGeometry(lw,dc);
+      p^.DrawGeometry(lw,dc,infrustumstate);
     p:=iterate(ir);
   until p=nil;
 end;
@@ -315,7 +315,7 @@ begin
   if p<>nil then
   repeat
     if p^.infrustum=dc.DrawingContext.VActuality.infrustumactualy then
-      p^.DrawOnlyGeometry(lw,dc);
+      p^.DrawOnlyGeometry(lw,dc,inFrustumState);
     p:=iterate(ir);
   until p=nil;
 end;

@@ -17,6 +17,7 @@
 }
 
 unit uzeentdevice;
+{$Mode delphi}
 {$INCLUDE zengineconfig.inc}
 
 interface
@@ -43,8 +44,8 @@ GDBObjDevice= object(GDBObjBlockInsert)
                    procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext;Stage:TEFStages=EFAllStages);virtual;
                    function IsStagedFormatEntity:boolean;virtual;
                    procedure FormatFeatures(var drawing:TDrawingDef);virtual;
-                   procedure DrawGeometry(lw:Integer;var DC:TDrawContext);virtual;
-                   procedure DrawOnlyGeometry(lw:Integer;var DC:TDrawContext);virtual;
+                   procedure DrawGeometry(lw:Integer;var DC:TDrawContext;const inFrustumState:TInBoundingVolume);virtual;
+                   procedure DrawOnlyGeometry(lw:Integer;var DC:TDrawContext;const inFrustumState:TInBoundingVolume);virtual;
                    function onmouse(var popa:TZctnrVectorPGDBaseEntity;const MF:ClipArray;InSubEntry:Boolean):Boolean;virtual;
                    function ReturnLastOnMouse(InSubEntry:Boolean):PGDBObjEntity;virtual;
                    procedure ImEdited(pobj:PGDBObjSubordinated;pobjinarray:Integer;var drawing:TDrawingDef);virtual;
@@ -61,8 +62,8 @@ GDBObjDevice= object(GDBObjBlockInsert)
 
                    procedure postload(var context:TIODXFLoadContext);virtual;
 
-                   procedure SaveToDXFFollow(var outhandle:{Integer}TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
-                   procedure SaveToDXFObjXData(var outhandle:{Integer}TZctnrVectorBytes;var IODXFContext:TIODXFContext);virtual;
+                   procedure SaveToDXFFollow(var outStream:TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
+                   procedure SaveToDXFObjXData(var outStream:TZctnrVectorBytes;var IODXFContext:TIODXFContext);virtual;
                    procedure AddMi(pobj:PGDBObjSubordinated);virtual;
                    //procedure select;virtual;
                    procedure SetInFrustumFromTree(const frustum:ClipArray;const Actuality:TVisActuality;var Counters:TCameraCounters; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double);virtual;
@@ -270,16 +271,16 @@ begin
               pv.rtsave(pvc2);
               pvc.rtsave(pv);
               pv^.State:=pv^.State+[ESCalcWithoutOwner,ESTemp];
-              //pvc^.SaveToDXF(outhandle,drawing,IODXFContext);
+              //pvc^.SaveToDXF(outStream,drawing,IODXFContext);
 
               //if pv^.IsHaveLCS then
                                begin
                                pv^.FormatEntity(drawing,dc);
                                end;
 
-              pv^.SaveToDXF(outhandle,drawing,IODXFContext);
-              pv^.SaveToDXFPostProcess(outhandle,IODXFContext);
-              pv^.SaveToDXFFollow(outhandle,drawing,IODXFContext);
+              pv^.SaveToDXF(outStream,drawing,IODXFContext);
+              pv^.SaveToDXFPostProcess(outStream,IODXFContext);
+              pv^.SaveToDXFFollow(outStream,drawing,IODXFContext);
               pvc2.rtsave(pv);
 
          pvc2.rtsave(pv);
@@ -298,15 +299,15 @@ begin
      //historyout('Device DXFOut end');
      //self.CalcObjMatrix;
 end;
-procedure GDBObjDevice.SaveToDXFObjXData(var outhandle:{Integer}TZctnrVectorBytes;var IODXFContext:TIODXFContext);
+procedure GDBObjDevice.SaveToDXFObjXData(var outStream:TZctnrVectorBytes;var IODXFContext:TIODXFContext);
 //var
    //s:String;
 begin
      inherited;
      //s:=inttohex(GetHandle,10);
      //historyout(@s[1]);
-     dxfStringout(outhandle,1000,'_HANDLE='+inttohex(GetHandle,10));
-     dxfStringout(outhandle,1000,'_UPGRADE=1');
+     dxfStringout(outStream,1000,'_HANDLE='+inttohex(GetHandle,10));
+     dxfStringout(outStream,1000,'_UPGRADE=1');
 end;
 (*function GDBObjDevice.GetDeviceType;
 begin
@@ -449,7 +450,7 @@ var p:pgdbobjEntity;
          ir:itrec;
 begin
   dc.subrender := dc.subrender + 1;
-  VarObjArray.DrawOnlyGeometry(CalculateLineWeight(dc),dc{infrustumactualy,subrender});
+  VarObjArray.DrawOnlyGeometry(CalculateLineWeight(dc),dc,inFrustumState);
   dc.subrender := dc.subrender - 1;
   p:=VarObjArray.beginiterate(ir);
   //oglsm.glcolor3ubv(palette[sysvar.SYS.SYS_SystmGeometryColor^].RGB);
@@ -479,7 +480,7 @@ begin
   oldlw:=dc.OwnerLineWeight;
   dc.OwnerLineWeight:=self.GetLineWeight;
   dc.subrender := dc.subrender + 1;
-  VarObjArray.DrawWithattrib(dc{infrustumactualy,subrender}){DrawGeometry(CalculateLineWeight)};
+  VarObjArray.DrawWithattrib(dc,inFrustumState);
   dc.subrender := dc.subrender - 1;
   p:=VarObjArray.beginiterate(ir);
   //oglsm.glcolor3ubv(palette[sysvar.SYS.SYS_SystmGeometryColor^].RGB);

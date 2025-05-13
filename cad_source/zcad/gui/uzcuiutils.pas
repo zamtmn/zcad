@@ -18,6 +18,7 @@
 
 unit uzcuiutils;
 {$INCLUDE zengineconfig.inc}
+{$Mode delphi}
 interface
 uses
     Controls,SysUtils,Forms,{$IFNDEF DELPHI}LCLtype,{$ELSE}windows,{$ENDIF}

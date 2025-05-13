@@ -369,21 +369,14 @@ begin
   ZCMsgCallBackInterface.Do_SetNormalFocus;
   removesplash;
 
-  {MainFormN.show;
-  CLine.Show;}
-
   TZGuiExceptionsHandler.EnableLCLCaptureExceptions;
   LPS.EndLongProcess(lpsh);
   Application.run;
 
   sysvar.SYS.SYS_RunTime:=nil;
 
-  createsplash(false);
-
-  //SplashWindow.TXTOut('GDBCommandsOPS.finalize;');GDBCommandsOPS.finalize;
-  //SplashWindow.TXTOut('GDBCommandsElectrical.finalize;');GDBCommandsElectrical.finalize;
-
-  SplashForm.TXTOut('ugdbdescriptor.finalize;',false);uzcdrawings.finalize;
+  //createsplash(false);
+  //SplashForm.TXTOut('ugdbdescriptor.finalize;',false);uzcdrawings.finalize;
 
   programlog.logoutstr('END.',0,LM_Necessarily);
   programlog.logoutstr('<<<<<<<<<<<<<<<Start units finalization',0,LM_Debug);

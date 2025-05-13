@@ -309,7 +309,7 @@ begin
   Selection.Done;
 end;
 
-function FindFindInDrawingExtender(dwg:TSimpleDrawing;CreateIfnotFound:boolean=true):TFindInDrawingExtender;
+function FindFindInDrawingExtender(var dwg:TSimpleDrawing;CreateIfnotFound:boolean=true):TFindInDrawingExtender;
 begin
   result:=dwg.DrawingExtensions.specialize GetExtension<TFindInDrawingExtender>;
   if (CreateIfnotFound)and(result=nil) then begin
@@ -357,7 +357,7 @@ begin
     if fe.Finded.Count>0 then begin
       dec(fe.Current);
       if (fe.Current<0)or(fe.Current>=fe.Finded.Count) then
-        fe.Current:=0;
+        fe.Current:=fe.Finded.Count-1;
       showentity(fe);
     end;
   result:=cmd_ok;

@@ -17,6 +17,7 @@
 }
 
 unit uzeMouseTimer;
+{$Mode delphi}
 {$INCLUDE zengineconfig.inc}
 
 interface

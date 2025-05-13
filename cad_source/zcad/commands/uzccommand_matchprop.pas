@@ -175,14 +175,14 @@ begin
               if (isSourceObjText)and(isTextEnt(pd^.GetObjType))then
               begin
                 if MatchPropParam.TextParams.ProcessTextStyle then
-                  if PGDBObjText(pd)^.TXTStyleIndex<>PGDBObjText(ps)^.TXTStyleIndex then
+                  if PGDBObjText(pd)^.TXTStyle<>PGDBObjText(ps)^.TXTStyle then
                     begin
                       zcPlaceUndoStartMarkerIfNeed(UndoStartMarkerPlaced,CommandName);
                       with TPoinerInEntChangeCommand.CreateAndPushIfNeed(drawing.UndoStack,
-                                                                       TChangedPointerInEnt.CreateRec(PGDBObjText(pd)^.TXTStyleIndex),
+                                                                       TChangedPointerInEnt.CreateRec(PGDBObjText(pd)^.TXTStyle),
                                                                        USharedEntity,USharedDrawing) do
                       begin
-                           PGDBObjText(pd)^.TXTStyleIndex:=PGDBObjText(ps)^.TXTStyleIndex;
+                           PGDBObjText(pd)^.TXTStyle:=PGDBObjText(ps)^.TXTStyle;
                            //ComitFromObj;
                       end;
                       EntChange:=true;

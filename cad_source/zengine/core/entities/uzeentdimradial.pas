@@ -49,23 +49,23 @@ GDBObjRadialDimension= object(GDBObjDiametricDimension)
                         function P11ChangeTo(const tv:GDBVertex):GDBVertex;virtual;
                         function GetRadius:Double;virtual;
 
-                        procedure SaveToDXF(var outhandle:TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
+                        procedure SaveToDXF(var outStream:TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
                         function GetObjType:TObjID;virtual;
                    end;
 implementation
 //uses log;
 procedure GDBObjRadialDimension.SaveToDXF;
 begin
-  SaveToDXFObjPrefix(outhandle,'DIMENSION','AcDbDimension',IODXFContext);
-  dxfvertexout(outhandle,10,DimData.P10InWCS);
-  dxfvertexout(outhandle,11,DimData.P11InOCS);
+  SaveToDXFObjPrefix(outStream,'DIMENSION','AcDbDimension',IODXFContext);
+  dxfvertexout(outStream,10,DimData.P10InWCS);
+  dxfvertexout(outStream,11,DimData.P11InOCS);
   {if DimData.TextMoved then}
-                           dxfIntegerout(outhandle,70,4+128)
+                           dxfIntegerout(outStream,70,4+128)
                        {else
-                           dxfIntegerout(outhandle,70,4);};
-  dxfStringout(outhandle,3,PDimStyle^.Name);
-  dxfStringout(outhandle,100,'AcDbRadialDimension');
-  dxfvertexout(outhandle,15,DimData.P15InWCS)
+                           dxfIntegerout(outStream,70,4);};
+  dxfStringout(outStream,3,PDimStyle^.Name);
+  dxfStringout(outStream,100,'AcDbRadialDimension');
+  dxfvertexout(outStream,15,DimData.P15InWCS)
 end;
 
 function GDBObjRadialDimension.GetRadius:Double;

@@ -46,13 +46,13 @@ GDBObjCable= object(GDBObjCurve)
                  str23:GDBVertex;
                  constructor init(own:Pointer;layeraddres:PGDBLayerProp;LW:SmallInt);
                  constructor initnul(owner:PGDBObjGenericWithSubordinated);
-                 procedure DrawGeometry(lw:Integer;var DC:TDrawContext);virtual;
+                 procedure DrawGeometry(lw:Integer;var DC:TDrawContext;const inFrustumState:TInBoundingVolume);virtual;
                  function GetObjTypeName:String;virtual;
                  procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext;Stage:TEFStages=EFAllStages);virtual;
                  procedure FormatFast(var drawing:TDrawingDef;var DC:TDrawContext);virtual;
-                 procedure SaveToDXFObjXData(var outhandle:TZctnrVectorBytes;var IODXFContext:TIODXFContext);virtual;
-                 procedure SaveToDXF(var outhandle:TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
-                 procedure SaveToDXFfollow(var outhandle:TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
+                 procedure SaveToDXFObjXData(var outStream:TZctnrVectorBytes;var IODXFContext:TIODXFContext);virtual;
+                 procedure SaveToDXF(var outStream:TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
+                 procedure SaveToDXFfollow(var outStream:TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
 
                  function Clone(own:Pointer):PGDBObjEntity;virtual;
 
@@ -105,15 +105,15 @@ begin
   if ptn1<>nil then
   begin
   repeat
-        SaveToDXFObjPrefix(outhandle,'LINE','AcDbLine',IODXFContext,true);
-        dxfvertexout(outhandle,10,ptn2^.Nextp);
-        dxfvertexout(outhandle,11,ptn1^.PrevP);
+        SaveToDXFObjPrefix(outStream,'LINE','AcDbLine',IODXFContext,true);
+        dxfvertexout(outStream,10,ptn2^.Nextp);
+        dxfvertexout(outStream,11,ptn1^.PrevP);
 
-         dxfStringout(outhandle,1001,ZCADAppNameInDXF);
-         dxfStringout(outhandle,1002,'{');
-         dxfStringout(outhandle,1000,'_OWNERHANDLE=6E');
+         dxfStringout(outStream,1001,ZCADAppNameInDXF);
+         dxfStringout(outStream,1002,'{');
+         dxfStringout(outStream,1000,'_OWNERHANDLE=6E');
          //self.SaveToDXFObjXData(handle);
-         dxfStringout(outhandle,1002,'}');
+         dxfStringout(outStream,1002,'}');
 
 
         ptn2:=ptn1;
@@ -121,14 +121,14 @@ begin
   until ptn1=nil;
   end;
 end;
-procedure GDBObjCable.SaveToDXFObjXData(var outhandle:{Integer}TZctnrVectorBytes;var IODXFContext:TIODXFContext);
+procedure GDBObjCable.SaveToDXFObjXData(var outStream:TZctnrVectorBytes;var IODXFContext:TIODXFContext);
 //var
    //s:String;
 begin
      inherited;
-     dxfStringout(outhandle,1000,'_HANDLE='+inttohex(GetHandle,10));
-     dxfStringout(outhandle,1000,'_UPGRADE=1');
-     dxfStringout(outhandle,1000,'_LAYER='+vp.Layer.name);
+     dxfStringout(outStream,1000,'_HANDLE='+inttohex(GetHandle,10));
+     dxfStringout(outStream,1000,'_UPGRADE=1');
+     dxfStringout(outStream,1000,'_LAYER='+vp.Layer.name);
 end;
 procedure GDBObjCable.SaveToDXF;
 var
@@ -139,10 +139,10 @@ begin
   pl:=vp.Layer;
   vp.Layer:=drawing.GetLayerTable^.{gdb.GetCurrentDWG.LayerTable.}getAddres('SYS_METRIC');
 
-  SaveToDXFObjPrefix(outhandle,'POLYLINE','AcDb3dPolyline',IODXFContext);
-  dxfIntegerout(outhandle,66,1);
-  dxfvertexout(outhandle,10,uzegeometry.NulVertex);
-  dxfIntegerout(outhandle,70,8);
+  SaveToDXFObjPrefix(outStream,'POLYLINE','AcDb3dPolyline',IODXFContext);
+  dxfIntegerout(outStream,66,1);
+  dxfvertexout(outStream,10,uzegeometry.NulVertex);
+  dxfIntegerout(outStream,70,8);
 
   vp.Layer:=pl;
 end;
@@ -500,9 +500,9 @@ procedure GDBObjCable.DrawGeometry;
 begin
 
   if (selected)or(dc.selected) then
-    Representation.DrawNiceGeometry(DC)
+    Representation.DrawNiceGeometry(DC,inFrustumState)
   else
-    Representation.DrawGeometry(DC);
+    Representation.DrawGeometry(DC,inFrustumState);
 
   if SysVar.DWG.DWG_HelpGeometryDraw^ then
     if CanSimplyDrawInWCS(DC,SysVar.DSGN.DSGN_HelpScale^,1) then begin

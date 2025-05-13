@@ -26,7 +26,7 @@ uses Laz2_DOM,Toolwin,Clipbrd,sysutils,uzccommandsabstract,uzcfcommandline,uzcut
      uzcsysparams,zcobjectinspectorui,uzcoimultiobjects,uzccommandsimpl,
      uzmenusmanager,uzcLog,menus,ComCtrls,uztoolbarsmanager,uzcimagesmanager,
      uzedimensionaltypes,uzctreenode,uzcActionsManager,uzObjectInspectorManager,
-     zeundostack,uzcOI,
+     zeundostack,uzcOI,UObjectDescriptor,
      classes;
 const
     PEditorFocusPriority=550;
@@ -40,6 +40,7 @@ type
     procedure ReturnToDefault(sender:TObject;GUIMode:TZMessageID);
     procedure ContextPopup(Sender: TObject; MousePos: TPoint;var Handled: Boolean);
     function GetPeditorFocusPriority:TControlWithPriority;
+    class procedure _onAfterFreeEditor(sender:tobject);
   end;
 var
   dummyclass:tdummyclass;
@@ -86,7 +87,7 @@ function  GetCurrentObj:Pointer;
 begin
        if assigned(GDBobjinsp)then
                                   begin
-                                       result:=GDBobjinsp.CurrPObj;
+                                       result:=GDBobjinsp.CurrData.PObj;
                                   end
                               else
                                   result:=nil;
@@ -98,14 +99,15 @@ begin
                                        GDBobjinsp.SetCurrentObjDefault;
                                   end;
 end;
-function IsCurrObjInUndoContext(_GDBobj:boolean;_pcurrobj:pointer):boolean;
+function isGDBObjInstance(const currobjgdbtype:PUserTypeDescriptor;const pcurcontext:pointer;const pcurrobj:pointer):boolean;
 begin
   result:=false;
-  //if _GDBobj then
-  //  if PGDBaseObject(_pcurrobj)^.IsEntity then
-  //    result:=true;
+  if (currobjgdbtype<>nil)and(pcurrobj<>nil) then
+    if IsIt(typeof(currobjgdbtype^),typeof(ObjectDescriptor)) then
+      if IsIt(typeof(PGDBaseObject(pcurrobj)^),typeof(GDBaseObject)) then
+        result:=True;
 end;
-procedure _onGetOtherValues(var vsa:TZctnrVectorStrings;const valkey:string;const pcurcontext:pointer;const pcurrobj:pointer;const GDBobj:boolean;const f:TzeUnitsFormat);
+procedure _onGetOtherValues(var vsa:TZctnrVectorStrings;const valkey:string;const currobjgdbtype:PUserTypeDescriptor;const pcurcontext:pointer;const pcurrobj:pointer;const f:TzeUnitsFormat);
 var
   pentvarext:TVariablesExtender;
   pobj:pGDBObjEntity;
@@ -118,7 +120,7 @@ begin
        pobj:=PTSimpleDrawing(pcurcontext).GetCurrentROOT.ObjArray.beginiterate(ir);
        if pobj<>nil then
        repeat
-             if GDBobj then
+             if isGDBObjInstance(currobjgdbtype,pcurcontext,pcurrobj) then
              begin
              pentvarext:=pobj^.GetExtension<TVariablesExtender>;
              if ((pobj^.GetObjType=pgdbobjentity(pcurrobj)^.GetObjType)or(pgdbobjentity(pcurrobj)^.GetObjType=0))and({pobj.ou.Instance}pentvarext<>nil) then
@@ -138,7 +140,7 @@ begin
        vsa.sort;
   end;
 end;
-procedure _onUpdateObjectInInsp(const EDContext:TEditorContext;const currobjgdbtype:PUserTypeDescriptor;const pcurcontext:pointer;const pcurrobj:pointer;const GDBobj:boolean);
+procedure _onUpdateObjectInInsp(const EDContext:TEditorContext;const currobjgdbtype:PUserTypeDescriptor;const pcurcontext:pointer;const pcurrobj:pointer{;const GDBobj:boolean});
   function CurrObjIsEntity:boolean;
   begin
     result:=false;
@@ -157,7 +159,7 @@ procedure _onUpdateObjectInInsp(const EDContext:TEditorContext;const currobjgdbt
 var
    dc:TDrawContext;
 begin
-  if GDBobj then
+  if isGDBObjInstance(currobjgdbtype,pcurcontext,pcurrobj) then
                 begin
                      dc:=PTDrawingDef(pcurcontext)^.CreateDrawingRC;
                     if CurrObjIsEntity then
@@ -191,7 +193,7 @@ begin
        PTDrawingDef(pcurcontext).ChangeStampt(true);
   end;
 end;
-procedure _onAfterFreeEditor(sender:tobject);
+class procedure tdummyclass._onAfterFreeEditor(sender:tobject);
 begin
   if assigned(uzcfcommandline.cmdedit) then
     if uzcfcommandline.cmdedit.IsVisible then
@@ -204,15 +206,16 @@ begin
      if assigned(GDBobjinsp)then
      begin
      if popoldpos then
-     if (GDBobjinsp.PStoredObj=nil) then
+     if (GDBobjinsp.StoredData.PObj=nil) then
                              begin
-                                  GDBobjinsp.PStoredObj:=GDBobjinsp.CurrPObj;
-                                  GDBobjinsp.StoredObjGDBType:=GDBobjinsp.CurrObjGDBType;
-                                  GDBobjinsp.pStoredContext:=GDBobjinsp.CurrContext;
-                                  GDBobjinsp.StoredUndoStack:=GDBobjinsp.EDContext.UndoStack;
-                                  GDBobjinsp.StoredUnitsFormat:=GDBobjinsp.CurrUnitsFormat;
+                               GDBobjinsp.StoredData:=GDBobjinsp.CurrData;
+                                  //GDBobjinsp.PStoredObj:=GDBobjinsp.CurrPObj;
+                                  //GDBobjinsp.StoredObjGDBType:=GDBobjinsp.CurrObjGDBType;
+                                  //GDBobjinsp.pStoredContext:=GDBobjinsp.CurrContext;
+                                  //GDBobjinsp.StoredUndoStack:=GDBobjinsp.EDContext.UndoStack;
+                                  //GDBobjinsp.StoredUnitsFormat:=GDBobjinsp.CurrUnitsFormat;
                              end;
-     GDBobjinsp.setptr(UndoStack,f,exttype,addr,context);
+     GDBobjinsp.setptr(TDisplayedData.CreateRec(addr,exttype,context,f));
      end;
 end;
 
@@ -234,12 +237,12 @@ var
 begin
 
   GDBobjinsp:=TGDBObjInsp.Create(Application);
-  GDBobjinsp._IsCurrObjInUndoContext:=IsCurrObjInUndoContext;
+  //GDBobjinsp._IsCurrObjInUndoContext:=IsCurrObjInUndoContext;
   GDBobjinsp.OnContextPopup:=dummyclass.ContextPopup;
   GDBobjinsp.onGetOtherValues:=_onGetOtherValues;
   GDBobjinsp.onUpdateObjectInInsp:=_onUpdateObjectInInsp;
   GDBobjinsp.onNotify:=_onNotify;
-  GDBobjinsp.onAfterFreeEditor:=_onAfterFreeEditor;
+  GDBobjinsp.onAfterFreeEditor:=tdummyclass._onAfterFreeEditor;
 
   StoreAndSetGDBObjInsp(nil,drawings.GetUnitsFormat,SysUnit.TypeName2PTD('gdbsysvariable'),@sysvar,nil);
   SetCurrentObjDefault;
@@ -347,8 +350,8 @@ begin
   if (GUIMode=ZMsgID_GUIReturnToDefaultObject) then
        if assigned(GDBobjinsp)then
                                   begin
-                                       GDBobjinsp.PStoredObj:=nil;
-                                       GDBobjinsp.StoredObjGDBType:=nil;
+                                       GDBobjinsp.StoredData.PObj:=nil;
+                                       GDBobjinsp.StoredData.PType:=nil;
                                        GDBobjinsp.ReturnToDefault;
                                   end;
 end;

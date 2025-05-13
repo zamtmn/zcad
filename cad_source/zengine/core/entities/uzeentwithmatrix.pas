@@ -112,6 +112,7 @@ begin
     //             end;
     IRFully:begin
       enttree.NodeData.infrustum:=Actuality.infrustumactualy;
+      enttree.NodeData.inFrustumState:=IRFully;
       enttree.NodeData.InFrustumBoundingBox:=enttree.BoundingBox;
       pobj:=enttree.NodeData.NeedToSeparated.beginiterate(ir);
       if pobj<>nil then
@@ -134,6 +135,7 @@ begin
     end;
     IRPartially:begin
       ImInFrustum:=CalcAABBInFrustum(enttree.BoundingBox,frustum);
+      enttree.NodeData.inFrustumState:=ImInFrustum;
       case ImInFrustum of
         //IREmpty:begin
         //  OwnerInFrustum:=OwnerInFrustum;

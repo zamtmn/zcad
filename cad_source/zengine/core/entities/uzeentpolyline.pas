@@ -32,14 +32,14 @@ GDBObjPolyline= object(GDBObjCurve)
                  Closed:Boolean;
                  constructor init(own:Pointer;layeraddres:PGDBLayerProp;LW:SmallInt;c:Boolean);
                  constructor initnul(owner:PGDBObjGenericWithSubordinated);
-                 procedure LoadFromDXF(var f:TZMemReader;ptu:PExtensionData;var drawing:TDrawingDef);virtual;
+                 procedure LoadFromDXF(var rdr:TZMemReader;ptu:PExtensionData;var drawing:TDrawingDef);virtual;
 
                  procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext;Stage:TEFStages=EFAllStages);virtual;
                  procedure startsnap(out osp:os_record; out pdata:Pointer);virtual;
                  function getsnap(var osp:os_record; var pdata:Pointer; const param:OGLWndtype; ProjectProc:GDBProjectProc;SnapMode:TGDBOSMode):Boolean;virtual;
 
-                 procedure SaveToDXF(var outhandle:TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
-                 procedure DrawGeometry(lw:Integer;var DC:TDrawContext);virtual;
+                 procedure SaveToDXF(var outStream:TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
+                 procedure DrawGeometry(lw:Integer;var DC:TDrawContext;const inFrustumState:TInBoundingVolume);virtual;
                  function Clone(own:Pointer):PGDBObjEntity;virtual;
                  function GetObjTypeName:String;virtual;
                  function onmouse(var popa:TZctnrVectorPGDBaseEntity;const MF:ClipArray;InSubEntry:Boolean):Boolean;virtual;
@@ -143,7 +143,7 @@ end;
 procedure GDBObjPolyline.DrawGeometry;
 begin
      //vertexarrayInWCS.DrawGeometryWClosed(closed);
-     self.Representation.DrawGeometry(DC);
+     self.Representation.DrawGeometry(DC,inFrustumState);
 {  if closed then oglsm.myglbegin(GL_line_loop)
             else oglsm.myglbegin(GL_line_strip);
   vertexarrayInWCS.iterategl(@myglVertex3dv);
@@ -170,13 +170,13 @@ procedure GDBObjPolyline.SaveToDXF;
 //    ptv:pgdbvertex;
 //    ir:itrec;
 begin
-  SaveToDXFObjPrefix(outhandle,'POLYLINE','AcDb3dPolyline',IODXFContext);
-  dxfIntegerout(outhandle,66,1);
-  dxfvertexout(outhandle,10,uzegeometry.NulVertex);
+  SaveToDXFObjPrefix(outStream,'POLYLINE','AcDb3dPolyline',IODXFContext);
+  dxfIntegerout(outStream,66,1);
+  dxfvertexout(outStream,10,uzegeometry.NulVertex);
   if closed then
-                dxfIntegerout(outhandle,70,9)
+                dxfIntegerout(outStream,70,9)
             else
-                dxfIntegerout(outhandle,70,8);
+                dxfIntegerout(outStream,70,8);
 end;
 procedure GDBObjPolyline.LoadFromDXF;
 var s{, layername}: String;
@@ -192,28 +192,28 @@ begin
   tv:=NulVertex;
 
   //initnul(@gdb.ObjRoot);
-  byt:=f.ParseInteger;
+  byt:=rdr.ParseInteger;
   while true do
   begin
     s:='';
-    if not LoadFromDXFObjShared(f,byt,ptu,drawing) then
-       if dxfvertexload(f,10,byt,tv) then
+    if not LoadFromDXFObjShared(rdr,byt,ptu,drawing) then
+       if dxfvertexload(rdr,10,byt,tv) then
                                          begin
                                               if byt=30 then
                                                             if vertexgo then
                                                                             FastAddVertex(tv);
                                          end
-  else if dxfIntegerload(f,70,byt,hlGDBWord) then
+  else if dxfIntegerload(rdr,70,byt,hlGDBWord) then
                                                    begin
                                                         if (hlGDBWord and 1) = 1 then closed := true;
                                                    end
-   else if dxfStringload(f,0,byt,s)then
+   else if dxfStringload(rdr,0,byt,s)then
                                              begin
                                                   if s='VERTEX' then vertexgo := true;
                                                   if s='SEQEND' then system.Break;
                                              end
-                                      else s:= f.ParseString;
-    byt:=f.ParseInteger;
+                                      else s:= rdr.ParseString;
+    byt:=rdr.ParseInteger;
   end;
 
   vertexarrayinocs.SetSize(curveVertexArrayInWCS.Count);

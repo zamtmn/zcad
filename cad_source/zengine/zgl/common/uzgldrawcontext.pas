@@ -16,10 +16,14 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>)
 }
 unit uzgldrawcontext;
+{$mode delphi}
 {$INCLUDE zengineconfig.inc}
 interface
-uses uzepalette,uzbtypes,uzgldrawerabstract,uzeconsts,uzegeometry,uzegeometrytypes;
+uses
+  SysUtils,Nullable,
+  uzepalette,uzbtypes,uzgldrawerabstract,uzeconsts,uzegeometry,uzegeometrytypes;
 type
+TNulableVetrex=TNullable<GDBvertex>;
 TDrawHeplGeometry=procedure  of object;
 TDrawingContext=record
                    VActuality:TVisActuality;
@@ -28,6 +32,7 @@ TDrawingContext=record
                    Zoom:Double;
                    matrixs:tmatrixs;
                    pcamera:PGDBBaseCamera;
+                   FrustumCenter:TNulableVetrex;
                    GlobalLTScale:Double;
                    DrawHeplGeometryProc:TDrawHeplGeometry;
                    ForeGroundColorIndex:Integer;
@@ -84,6 +89,7 @@ begin
       result.DrawingContext.GlobalLTScale:=1;
       result.DrawingContext.ForeGroundColorIndex:=ClWhite;
       result.Options:=[];
+      result.DrawingContext.FrustumCenter.HasValue:=false;
 end;
 begin
 end.

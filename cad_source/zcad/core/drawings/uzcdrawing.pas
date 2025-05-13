@@ -17,6 +17,7 @@
 }
 
 unit uzcdrawing;
+{$Mode delphi}
 {$INCLUDE zengineconfig.inc}
 interface
 uses
@@ -71,17 +72,11 @@ TZCADDrawing= object(TSimpleDrawing)
 implementation
  uses uzcdrawings,uzccommandsmanager;
 procedure TZCADDrawing.FillDrawingPartRC(var dc:TDrawContext);
-var
-  vd:pvardesk;
 begin
   inherited FillDrawingPartRC(dc);
-  vd:=nil;
-  if DWGUnit<>nil then
-    vd:=DWGUnit.InterfaceVariables.findvardesc('DWG_LTScale');
-  if vd<>nil then
-                 dc.DrawingContext.GlobalLTScale:=dc.DrawingContext.GlobalLTScale*PDouble(vd^.data.Addr.Instance)^;
+  dc.DrawingContext.GlobalLTScale:=LTScale;
   if commandmanager.CurrCmd.pcommandrunning<>nil then
-                                               dc.DrawingContext.DrawHeplGeometryProc:=commandmanager.CurrCmd.pcommandrunning^.DrawHeplGeometry;
+    dc.DrawingContext.DrawHeplGeometryProc:=commandmanager.CurrCmd.pcommandrunning^.DrawHeplGeometry;
 end;
 
 function TZCADDrawing.GetUnitsFormat:TzeUnitsFormat;

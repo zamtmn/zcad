@@ -37,11 +37,11 @@ GDBObj3DFace= object(GDBObj3d)
                  //ProjPoint:GDBvertex;
                  constructor init(own:Pointer;layeraddres:PGDBLayerProp;LW:SmallInt;p:GDBvertex);
                  constructor initnul(owner:PGDBObjGenericWithSubordinated);
-                 procedure LoadFromDXF(var f:TZMemReader;ptu:PExtensionData;var drawing:TDrawingDef);virtual;
-                 procedure SaveToDXF(var outhandle:{Integer}TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
+                 procedure LoadFromDXF(var rdr:TZMemReader;ptu:PExtensionData;var drawing:TDrawingDef);virtual;
+                 procedure SaveToDXF(var outStream:TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
                  procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext;Stage:TEFStages=EFAllStages);virtual;
 
-                 procedure DrawGeometry(lw:Integer;var DC:TDrawContext);virtual;
+                 procedure DrawGeometry(lw:Integer;var DC:TDrawContext;const inFrustumState:TInBoundingVolume);virtual;
                  function calcinfrustum(const frustum:ClipArray;const Actuality:TVisActuality;var Counters:TCameraCounters; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double):Boolean;virtual;
                  //function getsnap(var osp:os_record):Boolean;virtual;
                  function onmouse(var popa:TZctnrVectorPGDBaseEntity;const MF:ClipArray;InSubEntry:Boolean):Boolean;virtual;
@@ -168,25 +168,25 @@ procedure GDBObj3DFace.LoadFromDXF;
 var //s: String;
   byt: Integer;
 begin
-  byt:=f.ParseInteger;
+  byt:=rdr.ParseInteger;
   while byt <> 0 do
   begin
-    if not LoadFromDXFObjShared(f,byt,ptu,drawing) then
-       if not dxfvertexload(f,10,byt,PInOCS[0]) then
-          if not dxfvertexload(f,11,byt,PInOCS[1]) then
-          if not dxfvertexload(f,12,byt,PInOCS[2]) then
-          if not dxfvertexload(f,13,byt,PInOCS[3]) then
-          {s := }f.SkipString;
-    byt:=f.ParseInteger;
+    if not LoadFromDXFObjShared(rdr,byt,ptu,drawing) then
+       if not dxfvertexload(rdr,10,byt,PInOCS[0]) then
+          if not dxfvertexload(rdr,11,byt,PInOCS[1]) then
+          if not dxfvertexload(rdr,12,byt,PInOCS[2]) then
+          if not dxfvertexload(rdr,13,byt,PInOCS[3]) then
+          {s := }rdr.SkipString;
+    byt:=rdr.ParseInteger;
   end;
 end;
 procedure GDBObj3DFace.SaveToDXF;
 begin
-  SaveToDXFObjPrefix(outhandle,'3DFACE','AcDbFace',IODXFContext);
-  dxfvertexout(outhandle,10,PInOCS[0]);
-  dxfvertexout(outhandle,11,PInOCS[1]);
-  dxfvertexout(outhandle,12,PInOCS[2]);
-  dxfvertexout(outhandle,13,PInOCS[3]);
+  SaveToDXFObjPrefix(outStream,'3DFACE','AcDbFace',IODXFContext);
+  dxfvertexout(outStream,10,PInOCS[0]);
+  dxfvertexout(outStream,11,PInOCS[1]);
+  dxfvertexout(outStream,12,PInOCS[2]);
+  dxfvertexout(outStream,13,PInOCS[3]);
 end;
 
 procedure GDBObj3DFace.DrawGeometry;

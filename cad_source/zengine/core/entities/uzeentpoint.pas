@@ -33,11 +33,11 @@ GDBObjPoint= object(GDBObj3d)
                  P_insertInWCS:GDBvertex;
                  constructor init(own:Pointer;layeraddres:PGDBLayerProp;LW:SmallInt;p:GDBvertex);
                  constructor initnul(owner:PGDBObjGenericWithSubordinated);
-                 procedure LoadFromDXF(var f:TZMemReader;ptu:PExtensionData;var drawing:TDrawingDef);virtual;
-                 procedure SaveToDXF(var outhandle:{Integer}TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
+                 procedure LoadFromDXF(var rdr:TZMemReader;ptu:PExtensionData;var drawing:TDrawingDef);virtual;
+                 procedure SaveToDXF(var outStream:TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
                  procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext;Stage:TEFStages=EFAllStages);virtual;
 
-                 procedure DrawGeometry(lw:Integer;var DC:TDrawContext);virtual;
+                 procedure DrawGeometry(lw:Integer;var DC:TDrawContext;const inFrustumState:TInBoundingVolume);virtual;
                  function calcinfrustum(const frustum:ClipArray;const Actuality:TVisActuality;var Counters:TCameraCounters; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double):Boolean;virtual;
                  function getsnap(var osp:os_record; var pdata:Pointer; const param:OGLWndtype; ProjectProc:GDBProjectProc;SnapMode:TGDBOSMode):Boolean;virtual;
                  function onmouse(var popa:TZctnrVectorPGDBaseEntity;const MF:ClipArray;InSubEntry:Boolean):Boolean;virtual;
@@ -109,27 +109,27 @@ begin
 end;
 procedure GDBObjPoint.SaveToDXF;
 begin
-  SaveToDXFObjPrefix(outhandle,'POINT','AcDbPoint',IODXFContext);
-  dxfvertexout(outhandle,10,P_insertInOCS);
+  SaveToDXFObjPrefix(outStream,'POINT','AcDbPoint',IODXFContext);
+  dxfvertexout(outStream,10,P_insertInOCS);
 end;
 procedure GDBObjPoint.LoadFromDXF;
 var
   byt:Integer;
 begin
   P_insertInOCS:=NulVertex;
-  byt:=f.ParseInteger;
+  byt:=rdr.ParseInteger;
   while byt <> 0 do
   begin
     case byt of
-      8  :vp.Layer :=drawing.GetLayerTable.getaddres(f.ParseString);
-      10 :P_insertInOCS.x:=f.ParseDouble;
-      20 :P_insertInOCS.y:=f.ParseDouble;
-      30 :P_insertInOCS.z:=f.ParseDouble;
-      370:vp.lineweight:=f.ParseInteger;
+      8  :vp.Layer :=drawing.GetLayerTable.getaddres(rdr.ParseString);
+      10 :P_insertInOCS.x:=rdr.ParseDouble;
+      20 :P_insertInOCS.y:=rdr.ParseDouble;
+      30 :P_insertInOCS.z:=rdr.ParseDouble;
+      370:vp.lineweight:=rdr.ParseInteger;
     else
-      f.SkipString;
+      rdr.SkipString;
     end;
-    byt:=f.ParseInteger;
+    byt:=rdr.ParseInteger;
   end;
 end;
 

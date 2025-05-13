@@ -18,7 +18,7 @@
 
 unit uzcstrconsts;
 {$INCLUDE zengineconfig.inc}
-{$INCLUDE buildmode.inc}
+{INCLUDE buildmode.inc}
 interface
 const
   {$IFDEF ELECTROTECH}
@@ -43,6 +43,8 @@ resourcestring
   rsInvalidIdentificator='"%s" not valid identificator';
   rsEntryAlreadyExist='Entry "%s" already exist';
   rsRenamedTo='%s "%s" renamed to "%s"';
+
+  rsErrorOperandN='Wrong operand %d';
 
 
 

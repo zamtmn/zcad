@@ -447,8 +447,8 @@ begin
                                         else if ltype<> pv^.objaddr^.vp.LineType then ltype:=PDifferent;
                          if (pv^.objaddr^.GetObjType=GDBMTextID)or(pv^.objaddr^.GetObjType=GDBTextID) then
                          begin
-                         if tstyle=PEmpty then tstyle:=PGDBObjText(pv^.objaddr)^.TXTStyleIndex
-                                           else if tstyle<> PGDBObjText(pv^.objaddr)^.TXTStyleIndex then tstyle:=PDifferent;
+                         if tstyle=PEmpty then tstyle:=PGDBObjText(pv^.objaddr)^.TXTStyle
+                                           else if tstyle<> PGDBObjText(pv^.objaddr)^.TXTStyle then tstyle:=PDifferent;
                          end;
                          if (pv^.objaddr^.GetObjType=GDBAlignedDimensionID)or(pv^.objaddr^.GetObjType=GDBRotatedDimensionID)or(pv^.objaddr^.GetObjType=GDBDiametricDimensionID) then
                          begin

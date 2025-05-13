@@ -83,7 +83,7 @@ type
   TOSModeEditor= object(GDBaseObject)
               osm:TOSMode;(*'Snap'*)
               trace:TTraceMode;(*'Trace'*)
-              procedure Format;virtual;
+              procedure FormatAfterFielfmod(PField,PTypeDescriptor:Pointer);virtual;
               procedure GetState;
              end;
 {Export-}
@@ -92,7 +92,7 @@ var
 function CreateCommandRTEdObjectPlugin(ocs:comfuncwithoper;oce,occ,ocf:comproc;obc,oac:commousefunc;ohgd:comdrawfunc;occont:comproc;name:pansichar;SA,DA:TCStartAttr):pCommandRTEdObjectPlugin;export;
 function CreateZCADCommand(ACommandFunc:TZCADBaseCommand;ACommandName:string;SA,DA:TCStartAttr):pCommandFastObjectPlugin;export;
 implementation
-procedure  TOSModeEditor.Format;
+procedure  TOSModeEditor.FormatAfterFielfmod(PField,PTypeDescriptor:Pointer);
 var
    i,c:integer;
    v:gdbvertex;

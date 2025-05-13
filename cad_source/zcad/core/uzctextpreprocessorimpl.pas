@@ -22,7 +22,7 @@ unit uzctextpreprocessorimpl;
 interface
 uses uzeentity,uzcvariablesutils,uzetextpreprocessor,uzbstrproc,sysutils,
      varmandef,uzbtypes,uzcenitiesvariablesextender,languade,
-     uzcpropertiesutils,uzeparser,LazUTF8;
+     uzcpropertiesutils,uzeparser,LazUTF8,uzcTextPreprocessorDXFImpl;
 type
   TStr2VarProcessor=class(TMyParser.TParserTokenizer.TDynamicProcessor)
     function GetResult(const str:String;const operands:String;var NextSymbolPos:integer;pobj:Pointer):String;
@@ -55,13 +55,23 @@ type
                         var ResultParam:TUnicodeStringManipulator.TCharRange;
                         var data:pointer);override;
   end;
-
 var
   TokenTextInfo:TMyParser.TParserTokenizer.TTokenTextInfo;
   pt:TMyParser.TGeneralParsedText;
   s:UnicodeString;
   p:pointer;
+
+function SPFSzcad:TSPFSourceEnum;
+
 implementation
+var
+  _SPFSzcad:TSPFSourceEnum;
+
+function SPFSzcad:TSPFSourceEnum;
+begin
+  Result:=_SPFSzcad;
+end;
+
 function TStr2VarProcessor.GetResult(const str:String;const operands:String;var NextSymbolPos:integer;pobj:Pointer):String;
 var
   pv:pvardesk;
@@ -116,14 +126,14 @@ begin
   end;
 end;
 
-function prop2value(const str:TDXFEntsInternalStringType;const operands:TDXFEntsInternalStringType;var NextSymbolPos:integer;pobj:Pointer):String;
+function prop2value(const str:TDXFEntsInternalStringType;const operands:TDXFEntsInternalStringType;var NextSymbolPos:integer;var SPA:TStrProcessAttributes;pobj:Pointer):String;
 begin
   if GetProperty(pobj,operands,result) then
     else
       result:='!!ERRprop('+operands+')!!';
 end;
 
-function var2value(const str:TDXFEntsInternalStringType;const operands:TDXFEntsInternalStringType;var NextSymbolPos:integer;pobj:Pointer):String;
+function var2value(const str:TDXFEntsInternalStringType;const operands:TDXFEntsInternalStringType;var NextSymbolPos:integer;var SPA:TStrProcessAttributes;pobj:Pointer):String;
 var
   pv:pvardesk;
 begin
@@ -135,7 +145,7 @@ begin
   else
     result:='!!ERR('+operands+')!!';
 end;
-function evaluatesubstr(const str:TDXFEntsInternalStringType;const operands:TDXFEntsInternalStringType;var NextSymbolPos:integer;pobj:Pointer):String;
+function evaluatesubstr(const str:TDXFEntsInternalStringType;const operands:TDXFEntsInternalStringType;var NextSymbolPos:integer;var SPA:TStrProcessAttributes;pobj:Pointer):String;
 var
   vd:vardesk;
   pentvarext:TVariablesExtender;
@@ -154,44 +164,17 @@ begin
   end;
 end;
 
-function EscapeSeq(const str:TDXFEntsInternalStringType;const operands:TDXFEntsInternalStringType;var NextSymbolPos:integer;pobj:Pointer):String;
-var
-  sym:char;
-  value:TDXFEntsInternalStringType;
-  num,code:integer;
-begin
-  result:='';
-  if NextSymbolPos>0 then
-  if NextSymbolPos<=length(str) then
-  begin
-    sym:=str[NextSymbolPos];
-    case sym of
-      'L','l':result:=Chr(1);
-      'P','p':result:=Chr(10);
-      'U','u':begin
-                value:='$'+copy(str,NextSymbolPos+2,4);
-                val(value,num,code);
-                result:={Chr(uch2ach(num))}{Tria_Utf8ToAnsi}(UnicodeToUtf8(num));
-                NextSymbolPos:=NextSymbolPos+5;
-              end
-    else
-      result:=sym;
-    end;
-    inc(NextSymbolPos);
-  end;
-end;
-
-function date2value(const str:TDXFEntsInternalStringType;const operands:TDXFEntsInternalStringType;var NextSymbolPos:integer;pobj:Pointer):String;
+function date2value(const str:TDXFEntsInternalStringType;const operands:TDXFEntsInternalStringType;var NextSymbolPos:integer;var SPA:TStrProcessAttributes;pobj:Pointer):String;
 begin
   result:=datetostr(date);
 end;
 
 initialization
-  Prefix2ProcessFunc.RegisterProcessor('@@','[',']',@var2value,true);
-  Prefix2ProcessFunc.RegisterProcessor('%%','[',']',@prop2value,true);
-  Prefix2ProcessFunc.RegisterProcessor('#calc','[',']',@evaluatesubstr);
-  Prefix2ProcessFunc.RegisterProcessor('\',#0,#0,@EscapeSeq);
-  Prefix2ProcessFunc.RegisterProcessor('%%DATE',#0,#0,@date2value,true);
+  _SPFSzcad:=SPFSources.GetEnum;
+  Prefix2ProcessFunc.RegisterProcessor('%%DATE',#0,#0,@date2value,_SPFSzcad,true);
+  Prefix2ProcessFunc.RegisterProcessor('@@','[',']',@var2value,_SPFSzcad,true);
+  Prefix2ProcessFunc.RegisterProcessor('%%','[',']',@prop2value,_SPFSzcad,true);
+  Prefix2ProcessFunc.RegisterProcessor('#calc','[',']',@evaluatesubstr,_SPFSzcad);
 
   Parser.RegisterToken('@@[','[',']',{@var2value}TStr2VarProcessor,nil,TGOIncludeBrackeOpen,ZCADToken);
   Parser.RegisterToken('NUM',#0,#0,TNum2StrProcessor,nil,0,ZCADToken);

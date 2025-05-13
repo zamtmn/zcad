@@ -42,10 +42,10 @@ type
 
   PTHatchPattern=^THatchPattern;
   THatchPattern=object(GZVectorObjects<TPatStrokesArray>)
-    procedure SaveToDXF(var outhandle:TZctnrVectorBytes;const MainAngle,MainScale:Double);
+    procedure SaveToDXF(var outStream:TZctnrVectorBytes;const MainAngle,MainScale:Double);
   end;
 
-function LoadPatternFromDXF(var PPattern:PTHatchPattern;var f:TZMemReader;DXFCode:Integer;const MainAngle,MainScale:Double):Boolean;
+function LoadPatternFromDXF(var PPattern:PTHatchPattern;var rdr:TZMemReader;DXFCode:Integer;const MainAngle,MainScale:Double):Boolean;
 
 implementation
 
@@ -77,7 +77,7 @@ begin
 
 end;
 
-procedure THatchPattern.SaveToDXF(var outhandle:TZctnrVectorBytes;const MainAngle,MainScale:Double);
+procedure THatchPattern.SaveToDXF(var outStream:TZctnrVectorBytes;const MainAngle,MainScale:Double);
 var
    i,j: Integer;
    //pv:PGDBvertex2D;
@@ -85,27 +85,27 @@ var
    angle:Double;
    sinA,cosA:Double;
 begin
-  dxfIntegerout(outhandle,78,Count);
+  dxfIntegerout(outStream,78,Count);
   for i:=0 to Count-1 do begin
     psa:=getDataMutable(i);
-    dxfDoubleout(outhandle,53,psa^.Angle+MainAngle);
-    dxfDoubleout(outhandle,43,psa^.Base.x*MainScale);
-    dxfDoubleout(outhandle,44,psa^.Base.y*MainScale);
+    dxfDoubleout(outStream,53,psa^.Angle+MainAngle);
+    dxfDoubleout(outStream,43,psa^.Base.x*MainScale);
+    dxfDoubleout(outStream,44,psa^.Base.y*MainScale);
 
     angle:=DegToRad(MainAngle);
     SinCos(angle,sinA,cosA);
 
-    dxfDoubleout(outhandle,45,(psa^.offset.x*cosA-psa^.offset.y*sinA)*MainScale);
-    dxfDoubleout(outhandle,46,(psa^.offset.y*cosA+psa^.offset.x*sinA)*MainScale);
-    dxfIntegerout(outhandle,79,psa^.Count);
+    dxfDoubleout(outStream,45,(psa^.offset.x*cosA-psa^.offset.y*sinA)*MainScale);
+    dxfDoubleout(outStream,46,(psa^.offset.y*cosA+psa^.offset.x*sinA)*MainScale);
+    dxfIntegerout(outStream,79,psa^.Count);
     for j:=0 to psa^.Count-1 do begin
-      dxfDoubleout(outhandle,49,psa^.getData(j)*MainScale);
+      dxfDoubleout(outStream,49,psa^.getData(j)*MainScale);
     end;
   end;
 end;
 
 
-function LoadPatternFromDXF(var PPattern:PTHatchPattern;var f:TZMemReader;DXFCode:Integer;const MainAngle,MainScale:Double):Boolean;
+function LoadPatternFromDXF(var PPattern:PTHatchPattern;var rdr:TZMemReader;DXFCode:Integer;const MainAngle,MainScale:Double):Boolean;
 var
   i,j,patternscount,dashcount:Integer;
   angle,dash:Double;
@@ -113,22 +113,22 @@ var
   base,offset:GDBvertex2D;
   psa:PTPatStrokesArray;
 begin
-  result:=dxfIntegerload(f,78,DXFCode,patternscount);
+  result:=dxfIntegerload(rdr,78,DXFCode,patternscount);
   if result then begin
-    DXFCode:=f.ParseInteger;
+    DXFCode:=rdr.ParseInteger;
     for i:=1 to patternscount do begin
-      if dxfdoubleload(f,53,DXFCode,angle) then DXFCode:=f.ParseInteger;
-      if dxfdoubleload(f,43,DXFCode,base.x) then DXFCode:=f.ParseInteger;
-      if dxfdoubleload(f,44,DXFCode,base.y) then DXFCode:=f.ParseInteger;
-      if dxfdoubleload(f,45,DXFCode,offset.x) then DXFCode:=f.ParseInteger;
-      if dxfdoubleload(f,46,DXFCode,offset.y) then DXFCode:=f.ParseInteger;
+      if dxfdoubleload(rdr,53,DXFCode,angle) then DXFCode:=rdr.ParseInteger;
+      if dxfdoubleload(rdr,43,DXFCode,base.x) then DXFCode:=rdr.ParseInteger;
+      if dxfdoubleload(rdr,44,DXFCode,base.y) then DXFCode:=rdr.ParseInteger;
+      if dxfdoubleload(rdr,45,DXFCode,offset.x) then DXFCode:=rdr.ParseInteger;
+      if dxfdoubleload(rdr,46,DXFCode,offset.y) then DXFCode:=rdr.ParseInteger;
 
       if PPattern=nil then begin
         PPattern:=GetMem(sizeof(THatchPattern));
         PPattern^.init(patternscount);
       end;
 
-      if dxfintegerload(f,79,DXFCode,dashcount) then DXFCode:=f.ParseInteger;
+      if dxfintegerload(rdr,79,DXFCode,dashcount) then DXFCode:=rdr.ParseInteger;
       psa:=PPattern^.CreateObject;
       psa^.init(dashcount);
       psa^.Angle:=angle-MainAngle;
@@ -143,9 +143,9 @@ begin
       //psa^.Offset:=offset;
 
       for j:=1 to dashcount do begin
-        if dxfdoubleload(f,49,DXFCode,dash) then begin
+        if dxfdoubleload(rdr,49,DXFCode,dash) then begin
           psa^.PushBackData(dash/MainScale);
-          DXFCode:=f.ParseInteger;
+          DXFCode:=rdr.ParseInteger;
         end;
       end;
       psa^.format;

@@ -35,6 +35,7 @@ TLLPrimitivesCreator=class(TLLPrimitivesCreatorAbstract)
                 function CreateLLSymbol(var pa:TLLPrimitivesArray):TArrayIndex;override;
                 function CreateLLSymbolLine(var pa:TLLPrimitivesArray):TArrayIndex;override;
                 function CreateLLSymbolEnd(var pa:TLLPrimitivesArray):TArrayIndex;override;
+                function CreateLLProxyLine(var pa:TLLPrimitivesArray):TArrayIndex;override;
                 function CreateLLPolyLine(var pa:TLLPrimitivesArray;const P1Index,_Count:TLLVertexIndex;_closed:Boolean=false):TArrayIndex;override;
              end;
 var
@@ -128,6 +129,15 @@ begin
      result:=pa.count;
      pointer(ptsl):=pa.getDataMutable(pa.AllocData(sizeof(TLLSymbolLine)));
      ptsl.init;
+end;
+function TLLPrimitivesCreator.CreateLLProxyLine(var pa:TLLPrimitivesArray):TArrayIndex;
+var
+  ptpl:PTLLProxyLine;
+begin
+  pa.AlignDataSize;
+  result:=pa.count;
+  pointer(ptpl):=pa.getDataMutable(pa.AllocData(sizeof(TLLProxyLine)));
+  ptpl.init;
 end;
 function TLLPrimitivesCreator.CreateLLSymbol(var pa:TLLPrimitivesArray):TArrayIndex;
 var

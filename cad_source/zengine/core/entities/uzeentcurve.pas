@@ -38,7 +38,7 @@ GDBObjCurve= object(GDBObj3d)
                  constructor initnul(owner:PGDBObjGenericWithSubordinated);
                  procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext;Stage:TEFStages=EFAllStages);virtual;
                  procedure FormatWithoutSnapArray;virtual;
-                 procedure DrawGeometry(lw:Integer;var DC:TDrawContext);virtual;
+                 procedure DrawGeometry(lw:Integer;var DC:TDrawContext;const inFrustumState:TInBoundingVolume);virtual;
                  function Clone(own:Pointer):PGDBObjEntity;virtual;
                  procedure rtsave(refp:Pointer);virtual;
                  function onmouse(var popa:TZctnrVectorPGDBaseEntity;const MF:ClipArray;InSubEntry:Boolean):Boolean;virtual;
@@ -56,7 +56,7 @@ GDBObjCurve= object(GDBObj3d)
 
                  procedure AddVertex(const Vertex:GDBVertex);virtual;
 
-                 procedure SaveToDXFfollow(var outhandle:{Integer}TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
+                 procedure SaveToDXFfollow(var outStream:TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
                  procedure TransformAt(p:PGDBObjEntity;t_matrix:PDMatrix4D);virtual;
                  procedure transform(const t_matrix:DMatrix4D);virtual;
 
@@ -206,13 +206,13 @@ begin
   ptv:=vertexarrayinocs.beginiterate(ir);
   if ptv<>nil then
   repeat
-        SaveToDXFObjPrefix(outhandle,'VERTEX','AcDbVertex',IODXFContext,true);
-        dxfStringout(outhandle,100,'AcDb3dPolylineVertex');
-        dxfvertexout(outhandle,10,ptv^);
+        SaveToDXFObjPrefix(outStream,'VERTEX','AcDbVertex',IODXFContext,true);
+        dxfStringout(outStream,100,'AcDb3dPolylineVertex');
+        dxfvertexout(outStream,10,ptv^);
 
         ptv:=vertexarrayinocs.iterate(ir);
   until ptv=nil;
-  SaveToDXFObjPrefix(outhandle,'SEQEND','',IODXFContext,true);
+  SaveToDXFObjPrefix(outStream,'SEQEND','',IODXFContext,true);
 end;
 procedure GDBObjCurve.AddVertex(const Vertex:GDBVertex);
 begin

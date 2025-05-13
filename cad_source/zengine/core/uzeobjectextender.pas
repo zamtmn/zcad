@@ -30,7 +30,7 @@ TCreateEntFeatureData=record
                 constr:TConstructorFeature;
                 destr:TDestructorFeature;
               end;
-TDXFEntSaveFeature=procedure(var outhandle:TZctnrVectorBytes;PEnt:Pointer;var IODXFContext:TIODXFContext);
+TDXFEntSaveFeature=procedure(var outStream:TZctnrVectorBytes;PEnt:Pointer;var IODXFContext:TIODXFContext);
 TDXFEntLoadFeature=function(_Name,_Value:String;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:Pointer):boolean of object;
 TDXFEntAfterLoadFeature=procedure(pEntity:Pointer);
 TDXFEntFormatFeature=procedure (pEntity:Pointer;const drawing:TDrawingDef);
@@ -59,7 +59,7 @@ TDXFEntIODataManager=class
                       procedure RegisterPrefixLoadFeature(prefix:String;PLoadProc:TDXFEntLoadFeature);
                       procedure RegisterSaveFeature(PSaveProc:TDXFEntSaveFeature);
                       procedure RegisterFormatFeature(PFormatProc:TDXFEntFormatFeature);
-                      procedure RunSaveFeatures(var outhandle:TZctnrVectorBytes;PEnt:Pointer;var IODXFContext:TIODXFContext);
+                      procedure RunSaveFeatures(var outStream:TZctnrVectorBytes;PEnt:Pointer;var IODXFContext:TIODXFContext);
                       procedure RunFormatProcs(const drawing:TDrawingDef;pEntity:Pointer);
                       procedure RunAfterLoadFeature(pEntity:Pointer);
                       function GetLoadFeature(name:String):TDXFEntLoadFeature;
@@ -150,13 +150,13 @@ begin
      data.destr:=_destr;
      fCreateEntFeatureVector.PushBack(data);
 end;
-procedure TDXFEntIODataManager.RunSaveFeatures(var outhandle:TZctnrVectorBytes;PEnt:Pointer;var IODXFContext:TIODXFContext);
+procedure TDXFEntIODataManager.RunSaveFeatures(var outStream:TZctnrVectorBytes;PEnt:Pointer;var IODXFContext:TIODXFContext);
 var
   i:SizeUInt;
 begin
      if fDXFEntSaveDataVector.Size>0 then
        for i:=fDXFEntSaveDataVector.Size-1 downto 0  do
-        fDXFEntSaveDataVector[i].DXFEntSaveFeature(outhandle,PEnt,IODXFContext);
+        fDXFEntSaveDataVector[i].DXFEntSaveFeature(outStream,PEnt,IODXFContext);
 end;
 procedure TDXFEntIODataManager.RunFormatProcs(const drawing:TDrawingDef;pEntity:Pointer);
 var

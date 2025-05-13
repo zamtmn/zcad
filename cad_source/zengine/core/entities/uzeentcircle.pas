@@ -42,15 +42,15 @@ GDBObjCircle= object(GDBObjWithLocalCS)
                  Vertex3D_in_WCS_Array:GDBPoint3DArray;
                  constructor init(own:Pointer;layeraddres:PGDBLayerProp;LW:SmallInt;p:GDBvertex;RR:Double);
                  constructor initnul;
-                 procedure LoadFromDXF(var f:TZMemReader;ptu:PExtensionData;var drawing:TDrawingDef);virtual;
+                 procedure LoadFromDXF(var rdr:TZMemReader;ptu:PExtensionData;var drawing:TDrawingDef);virtual;
 
                  procedure CalcObjMatrix(pdrawing:PTDrawingDef=nil);virtual;
                  function calcinfrustum(const frustum:ClipArray;const Actuality:TVisActuality;var Counters:TCameraCounters; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double):Boolean;virtual;
                  function CalcTrueInFrustum(const frustum:ClipArray):TInBoundingVolume;virtual;
                  procedure getoutbound(var DC:TDrawContext);virtual;
-                 procedure SaveToDXF(var outhandle:{Integer}TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
+                 procedure SaveToDXF(var outStream:TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
                  procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext;Stage:TEFStages=EFAllStages);virtual;
-                 procedure DrawGeometry(lw:Integer;var DC:TDrawContext);virtual;
+                 procedure DrawGeometry(lw:Integer;var DC:TDrawContext;const inFrustumState:TInBoundingVolume);virtual;
                  function Clone(own:Pointer):PGDBObjEntity;virtual;
                  procedure rtsave(refp:Pointer);virtual;
                  procedure createpoint(var DC:TDrawContext);virtual;
@@ -278,10 +278,10 @@ begin
 end;
 procedure GDBObjCircle.SaveToDXF;
 begin
-  SaveToDXFObjPrefix(outhandle,'CIRCLE','AcDbCircle',IODXFContext);
-  dxfvertexout(outhandle,10,Local.p_insert);
-  dxfDoubleout(outhandle,40,Radius);
-  SaveToDXFObjPostfix(outhandle);
+  SaveToDXFObjPrefix(outStream,'CIRCLE','AcDbCircle',IODXFContext);
+  dxfvertexout(outStream,10,Local.p_insert);
+  dxfDoubleout(outStream,40,Radius);
+  SaveToDXFObjPostfix(outStream);
 end;
 
 procedure GDBObjCircle.FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext;Stage:TEFStages=EFAllStages);
@@ -400,14 +400,14 @@ begin
            if dc.selected then
                               begin
                               //Vertex3D_in_WCS_Array.drawgeometry2
-                              Representation.DrawGeometry(DC);
+                              Representation.DrawGeometry(DC,inFrustumState);
                               end
                           else
                               begin
                                    if CanSimplyDrawInOCS(DC,{self.radius}1,6) then
                                                                                   begin
                                                                                        //Vertex3D_in_WCS_Array.drawgeometry
-                                                                                       Representation.DrawGeometry(DC);
+                                                                                       Representation.DrawGeometry(DC,inFrustumState);
                                                                                   end
                                                          else
                                                              begin
@@ -446,13 +446,13 @@ var //s: String;
   byt{, code}: Integer;
 begin
   //initnul;
-  byt:=f.ParseInteger;
+  byt:=rdr.ParseInteger;
   while byt <> 0 do
   begin
-    if not LoadFromDXFObjShared(f,byt,ptu,drawing) then
-    if not dxfvertexload(f,10,byt,Local.P_insert) then
-    if not dxfDoubleload(f,40,byt,Radius) then {s := }f.SkipString;
-    byt:=f.ParseInteger;
+    if not LoadFromDXFObjShared(rdr,byt,ptu,drawing) then
+    if not dxfvertexload(rdr,10,byt,Local.P_insert) then
+    if not dxfDoubleload(rdr,40,byt,Radius) then {s := }rdr.SkipString;
+    byt:=rdr.ParseInteger;
   end;
   //PProjoutbound:=nil;
   //pprojpoint:=nil;
@@ -595,7 +595,7 @@ begin
             plane:=PlaneFrom3Pont(q0,q1,q2);
             Normalizeplane(plane);
             if
-            PointOfLinePlaneIntersect({GDB.GetCurrentDWG.OGLwindow1.}param.md.mouseraywithoutOS.lbegin,
+            PointOfRayPlaneIntersect({GDB.GetCurrentDWG.OGLwindow1.}param.md.mouseraywithoutOS.lbegin,
                                       {GDB.GetCurrentDWG.OGLwindow1.}param.md.mouseraywithoutOS.dir,
                                       plane,tv)
             then

@@ -84,7 +84,7 @@ type
 
     class function EntIOLoadNetExtender(_Name,_Value:String;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
 
-    procedure SaveToDxfObjXData(var outhandle:TZctnrVectorBytes;PEnt:Pointer;var IODXFContext:TIODXFContext);override;
+    procedure SaveToDxfObjXData(var outStream:TZctnrVectorBytes;PEnt:Pointer;var IODXFContext:TIODXFContext);override;
 
     procedure TryConnectToEnts(const p1,p2:GDBVertex;var Objects:GDBObjOpenArrayOfPV;const drawing:TDrawingDef;var DC:TDrawContext);
     procedure TryConnectToDeviceConnectors(const p1,p2:GDBVertex;var Device:GDBObjDevice;const drawing:TDrawingDef;var DC:TDrawContext);
@@ -310,9 +310,9 @@ begin
   result:=true;
 end;
 
-procedure TSCHConnectionExtender.SaveToDxfObjXData(var outhandle:TZctnrVectorBytes;PEnt:Pointer;var IODXFContext:TIODXFContext);
+procedure TSCHConnectionExtender.SaveToDxfObjXData(var outStream:TZctnrVectorBytes;PEnt:Pointer;var IODXFContext:TIODXFContext);
 begin
-   dxfStringout(outhandle,1000,'SCHConnection=');
+   dxfStringout(outStream,1000,'SCHConnection=');
 end;
 
 procedure drawArrow(l1,l2:GDBVertex;pThisEntity:PGDBObjEntity;var DC:TDrawContext);

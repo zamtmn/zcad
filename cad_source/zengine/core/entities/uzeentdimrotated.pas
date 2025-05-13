@@ -34,7 +34,7 @@ GDBObjRotatedDimension= object(GDBObjAlignedDimension)
                         function P14ChangeTo(const tv:GDBVertex):GDBVertex;virtual;
                         procedure transform(const t_matrix:DMatrix4D);virtual;
                         procedure TransformAt(p:PGDBObjEntity;t_matrix:PDMatrix4D);virtual;
-                        procedure SaveToDXF(var outhandle:{Integer}TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
+                        procedure SaveToDXF(var outStream:TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
                         constructor init(own:Pointer;layeraddres:PGDBLayerProp;LW:SmallInt);
                         constructor initnul(owner:PGDBObjGenericWithSubordinated);
                         function GetObjType:TObjID;virtual;
@@ -61,19 +61,19 @@ begin
 end;
 procedure GDBObjRotatedDimension.SaveToDXF;
 begin
-  SaveToDXFObjPrefix(outhandle,'DIMENSION','AcDbDimension',IODXFContext);
-  dxfvertexout(outhandle,10,DimData.P10InWCS);
-  dxfvertexout(outhandle,11,DimData.P11InOCS);
+  SaveToDXFObjPrefix(outStream,'DIMENSION','AcDbDimension',IODXFContext);
+  dxfvertexout(outStream,10,DimData.P10InWCS);
+  dxfvertexout(outStream,11,DimData.P11InOCS);
   if DimData.TextMoved then
-                           dxfIntegerout(outhandle,70,0+128)
+                           dxfIntegerout(outStream,70,0+128)
                        else
-                           dxfIntegerout(outhandle,70,0);
-  dxfStringout(outhandle,3,PDimStyle^.Name);
-  dxfStringout(outhandle,100,'AcDbAlignedDimension');
-  dxfvertexout(outhandle,13,DimData.P13InWCS);
-  dxfvertexout(outhandle,14,DimData.P14InWCS);
-  dxfDoubleout(outhandle,50,vertexangle(createvertex2d(0,0),createvertex2d(vectorD.x,vectorD.y))*180/pi);
-  dxfStringout(outhandle,100,'AcDbRotatedDimension');
+                           dxfIntegerout(outStream,70,0);
+  dxfStringout(outStream,3,PDimStyle^.Name);
+  dxfStringout(outStream,100,'AcDbAlignedDimension');
+  dxfvertexout(outStream,13,DimData.P13InWCS);
+  dxfvertexout(outStream,14,DimData.P14InWCS);
+  dxfDoubleout(outStream,50,vertexangle(createvertex2d(0,0),createvertex2d(vectorD.x,vectorD.y))*180/pi);
+  dxfStringout(outStream,100,'AcDbRotatedDimension');
 end;
 procedure GDBObjRotatedDimension.transform;
 var

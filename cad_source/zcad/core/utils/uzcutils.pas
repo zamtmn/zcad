@@ -18,6 +18,7 @@
 
 {**Модуль утилит зкада}
 unit uzcutils;
+{$Mode delphi}
 {$INCLUDE zengineconfig.inc}
 
 

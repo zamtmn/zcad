@@ -36,13 +36,13 @@ GDBObjLine= object(GDBObj3d)
 
                  constructor init(own:Pointer;layeraddres:PGDBLayerProp;LW:SmallInt;p1,p2:GDBvertex);
                  constructor initnul(owner:PGDBObjGenericWithSubordinated);
-                 procedure LoadFromDXF(var f:TZMemReader;ptu:PExtensionData;var drawing:TDrawingDef);virtual;
+                 procedure LoadFromDXF(var rdr:TZMemReader;ptu:PExtensionData;var drawing:TDrawingDef);virtual;
 
-                 procedure SaveToDXF(var outhandle:{Integer}TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
+                 procedure SaveToDXF(var outStream:TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
                  function IsStagedFormatEntity:boolean;virtual;
                  procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext;Stage:TEFStages=EFAllStages);virtual;
                  procedure CalcGeometry;virtual;
-                 procedure DrawGeometry(lw:Integer;var DC:TDrawContext);virtual;
+                 procedure DrawGeometry(lw:Integer;var DC:TDrawContext;const inFrustumState:TInBoundingVolume);virtual;
                   function Clone(own:Pointer):PGDBObjEntity;virtual;
                  procedure rtsave(refp:Pointer);virtual;
                  procedure TransformAt(p:PGDBObjEntity;t_matrix:PDMatrix4D);virtual;
@@ -196,13 +196,13 @@ procedure GDBObjLine.LoadFromDXF;
 var //s: String;
   byt: Integer;
 begin
-  byt:=f.ParseInteger;
+  byt:=rdr.ParseInteger;
   while byt <> 0 do
   begin
-    if not LoadFromDXFObjShared(f,byt,ptu,drawing) then
-       if not dxfvertexload(f,10,byt,CoordInOCS.lBegin) then
-          if not dxfvertexload(f,11,byt,CoordInOCS.lEnd) then {s := }f.SkipString;
-    byt:=f.ParseInteger;
+    if not LoadFromDXFObjShared(rdr,byt,ptu,drawing) then
+       if not dxfvertexload(rdr,10,byt,CoordInOCS.lBegin) then
+          if not dxfvertexload(rdr,11,byt,CoordInOCS.lEnd) then {s := }rdr.SkipString;
+    byt:=rdr.ParseInteger;
   end;
 end;
 destructor GDBObjLine.done;
@@ -324,9 +324,9 @@ end;
 procedure GDBObjLine.DrawGeometry;
 begin
   if (selected)or(dc.selected) then
-    Representation.DrawNiceGeometry(DC)
+    Representation.DrawNiceGeometry(DC,inFrustumState)
   else
-    Representation.DrawGeometry(DC);
+    Representation.DrawGeometry(DC,inFrustumState);
 end;
 
 function GDBObjLine.getsnap;
@@ -565,9 +565,9 @@ begin
 end;
 procedure GDBObjLine.SaveToDXF;
 begin
-  SaveToDXFObjPrefix(outhandle,dxfName_Line,dxfName_AcDbLine,IODXFContext);
-  dxfvertexout(outhandle,10,CoordInOCS.lbegin);
-  dxfvertexout(outhandle,11,CoordInOCS.lend);
+  SaveToDXFObjPrefix(outStream,dxfName_Line,dxfName_AcDbLine,IODXFContext);
+  dxfvertexout(outStream,10,CoordInOCS.lbegin);
+  dxfvertexout(outStream,11,CoordInOCS.lend);
 end;
 
 procedure GDBObjLine.rtsave;

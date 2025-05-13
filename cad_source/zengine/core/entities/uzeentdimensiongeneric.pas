@@ -35,7 +35,7 @@ GDBObjGenericDimension= object(GDBObjWithLocalCS)
                       a50,a52:Double;
                       constructor init(own:Pointer;layeraddres:PGDBLayerProp;LW:SmallInt);
                       constructor initnul(owner:PGDBObjGenericWithSubordinated);
-                      procedure LoadFromDXF(var f:TZMemReader;ptu:PExtensionData;var drawing:TDrawingDef);virtual;
+                      procedure LoadFromDXF(var rdr:TZMemReader;ptu:PExtensionData;var drawing:TDrawingDef);virtual;
                       function FromDXFPostProcessBeforeAdd(ptu:PExtensionData;const drawing:TDrawingDef):PGDBObjSubordinated;virtual;
                       function GetObjType:TObjID;virtual;
                    end;
@@ -106,31 +106,31 @@ var
   byt,dtype:Integer;
   style:String;
 begin
-  byt:=f.ParseInteger;
+  byt:=rdr.ParseInteger;
   dtype:=-1;
   style:='';
   while byt <> 0 do
   begin
-    if not LoadFromDXFObjShared(f,byt,ptu,drawing) then
-       if not dxfvertexload(f,10,byt,DimData.P10InWCS) then
-          if not dxfvertexload(f,11,byt,DimData.P11InOCS) then
-             if not dxfvertexload(f,12,byt,DimData.P12InOCS) then
-                if not dxfvertexload(f,13,byt,DimData.P13InWCS) then
-                   if not dxfvertexload(f,14,byt,DimData.P14InWCS) then
-                      if not dxfvertexload(f,15,byt,DimData.P15InWCS) then
-                         if not dxfvertexload(f,16,byt,DimData.P16InOCS) then
-                            if not dxfIntegerload(f,70,byt,dtype) then
-                               if not dxfDoubleload(f,50,byt,a50) then
-                                  if not dxfDoubleload(f,52,byt,a52) then
-                            if dxfStringload(f,3,byt,style)then
+    if not LoadFromDXFObjShared(rdr,byt,ptu,drawing) then
+       if not dxfvertexload(rdr,10,byt,DimData.P10InWCS) then
+          if not dxfvertexload(rdr,11,byt,DimData.P11InOCS) then
+             if not dxfvertexload(rdr,12,byt,DimData.P12InOCS) then
+                if not dxfvertexload(rdr,13,byt,DimData.P13InWCS) then
+                   if not dxfvertexload(rdr,14,byt,DimData.P14InWCS) then
+                      if not dxfvertexload(rdr,15,byt,DimData.P15InWCS) then
+                         if not dxfvertexload(rdr,16,byt,DimData.P16InOCS) then
+                            if not dxfIntegerload(rdr,70,byt,dtype) then
+                               if not dxfDoubleload(rdr,50,byt,a50) then
+                                  if not dxfDoubleload(rdr,52,byt,a52) then
+                            if dxfStringload(rdr,3,byt,style)then
                                                                   begin
                                                                        PDimStyle:=drawing.GetDimStyleTable^.getAddres(Style);
                                                                        if PDimStyle=nil then
                                                                                             PDimStyle:=pointer(drawing.GetDimStyleTable^.getDataMutable(0));
                                                                   end
                             else
-                                f.SkipString;
-    byt:=f.ParseInteger;
+                                rdr.SkipString;
+    byt:=rdr.ParseInteger;
   end;
   if dtype<>-1 then
   begin

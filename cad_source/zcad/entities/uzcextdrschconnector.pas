@@ -102,7 +102,7 @@ type
     class function EntIOLoadNetConnectorRadius(_Name,_Value:String;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
     class function EntIOLoadNetConnectorSetter(_Name,_Value:String;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
 
-    procedure SaveToDxfObjXData(var outhandle:TZctnrVectorBytes;PEnt:Pointer;var IODXFContext:TIODXFContext);override;
+    procedure SaveToDxfObjXData(var outStream:TZctnrVectorBytes;PEnt:Pointer;var IODXFContext:TIODXFContext);override;
 
     procedure AddToDWGPostProcs(pEntity:Pointer;const drawing:TDrawingDef);
 
@@ -470,14 +470,14 @@ begin
 end;
 
 
-procedure TSCHConnectorExtender.SaveToDxfObjXData(var outhandle:TZctnrVectorBytes;PEnt:Pointer;var IODXFContext:TIODXFContext);
+procedure TSCHConnectorExtender.SaveToDxfObjXData(var outStream:TZctnrVectorBytes;PEnt:Pointer;var IODXFContext:TIODXFContext);
 begin
-  dxfStringout(outhandle,1000,'SCHConnectorRadius=',FloatToStr(FConnectorRadius));
+  dxfStringout(outStream,1000,'SCHConnectorRadius=',FloatToStr(FConnectorRadius));
   if FConnectorType<>DefaultConnectorType then
     case FConnectorType of
-      CTInfo:dxfStringout(outhandle,1000,'SCHConnectorType=CTInfo');
-      CTPin:dxfStringout(outhandle,1000,'SCHConnectorType=CTPin');
-      CTSetter:dxfStringout(outhandle,1000,'SCHConnectorType=CTSetter');
+      CTInfo:dxfStringout(outStream,1000,'SCHConnectorType=CTInfo');
+      CTPin:dxfStringout(outStream,1000,'SCHConnectorType=CTPin');
+      CTSetter:dxfStringout(outStream,1000,'SCHConnectorType=CTSetter');
   end;
 end;
 

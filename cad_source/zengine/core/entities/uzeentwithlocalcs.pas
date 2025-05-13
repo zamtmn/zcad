@@ -44,8 +44,8 @@ GDBObjWithLocalCS= object(GDBObjWithMatrix)
                constructor init(own:Pointer;layeraddres:PGDBLayerProp;LW:SmallInt);
                constructor initnul(owner:PGDBObjGenericWithSubordinated);
                destructor done;virtual;
-               procedure SaveToDXFObjPostfix(var outhandle:{Integer}TZctnrVectorBytes);{todo: проверить использование, выкинуть нах}
-               function LoadFromDXFObjShared(var f:TZMemReader;DXFCode:Integer;ptu:PExtensionData;var drawing:TDrawingDef):Boolean;
+               procedure SaveToDXFObjPostfix(var outStream:TZctnrVectorBytes);{todo: проверить использование, выкинуть нах}
+               function LoadFromDXFObjShared(var rdr:TZMemReader;DXFCode:Integer;ptu:PExtensionData;var drawing:TDrawingDef):Boolean;
 
                procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext;Stage:TEFStages=EFAllStages);virtual;
                procedure CalcObjMatrix(pdrawing:PTDrawingDef=nil);virtual;
@@ -285,7 +285,7 @@ procedure GDBObjWithLocalCS.SaveToDXFObjPostfix;
 begin
   if (abs(local.basis.oz.x)>eps)or(abs(local.basis.oz.y)>eps)or(abs(local.basis.oz.z-1)>eps) then
   begin
-  dxfvertexout(outhandle,210,local.basis.oz);
+  dxfvertexout(outStream,210,local.basis.oz);
   {WriteString_EOL(outhandle, '210');
   WriteString_EOL(outhandle, floattostr(local.oz.x));
   WriteString_EOL(outhandle, '220');
@@ -297,8 +297,8 @@ end;
 function GDBObjWithLocalCS.LoadFromDXFObjShared;
 //var s:String;
 begin
-     result:=inherited LoadFromDXFObjShared(f,DXFCode,ptu,drawing);
-     if not result then result:=dxfvertexload(f,210,DXFCode,Local.basis.oz);
+     result:=inherited LoadFromDXFObjShared(rdr,DXFCode,ptu,drawing);
+     if not result then result:=dxfvertexload(rdr,210,DXFCode,Local.basis.oz);
 end;
 destructor GDBObjWithLocalCS.done;
 begin

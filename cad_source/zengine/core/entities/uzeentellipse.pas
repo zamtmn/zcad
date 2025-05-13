@@ -43,10 +43,10 @@ GDBObjEllipse= object(GDBObjPlain)
                  q0,q1,q2:GDBvertex;
                  constructor init(own:Pointer;layeraddres:PGDBLayerProp;LW:SmallInt;p:GDBvertex;{RR,}S,E:Double;majaxis:GDBVertex);
                  constructor initnul;
-                 procedure LoadFromDXF(var f:TZMemReader;ptu:PExtensionData;var drawing:TDrawingDef);virtual;
+                 procedure LoadFromDXF(var rdr:TZMemReader;ptu:PExtensionData;var drawing:TDrawingDef);virtual;
 
-                 procedure SaveToDXF(var outhandle:{Integer}TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
-                 procedure DrawGeometry(lw:Integer;var DC:TDrawContext);virtual;
+                 procedure SaveToDXF(var outStream:TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
+                 procedure DrawGeometry(lw:Integer;var DC:TDrawContext;const inFrustumState:TInBoundingVolume);virtual;
                  procedure addcontrolpoints(tdesc:Pointer);virtual;
                  procedure remaponecontrolpoint(pdesc:pcontrolpointdesc;ProjectProc:GDBProjectProc);virtual;
                  procedure CalcObjMatrix(pdrawing:PTDrawingDef=nil);virtual;
@@ -385,33 +385,33 @@ begin
 end;
 procedure GDBObjEllipse.SaveToDXF;
 begin
-  SaveToDXFObjPrefix(outhandle,'ELLIPSE','AcDbEllipse',IODXFContext);
-  dxfvertexout(outhandle,10,Local.p_insert);
-  dxfvertexout(outhandle,11,majoraxis);
-    SaveToDXFObjPostfix(outhandle);
+  SaveToDXFObjPrefix(outStream,'ELLIPSE','AcDbEllipse',IODXFContext);
+  dxfvertexout(outStream,10,Local.p_insert);
+  dxfvertexout(outStream,11,majoraxis);
+    SaveToDXFObjPostfix(outStream);
 
-  //dxfStringout(outhandle,100,'AcDbEllipse');
-  //WriteString_EOL(outhandle, '100');
-  //WriteString_EOL(outhandle, 'AcDbArc');
-  dxfDoubleout(outhandle,40,ratio{ * 180 / pi});
-  dxfDoubleout(outhandle,41,startangle{ * 180 / pi});
-  dxfDoubleout(outhandle,42,endangle{ * 180 / pi});
+  //dxfStringout(outStream,100,'AcDbEllipse');
+  //WriteString_EOL(outStream, '100');
+  //WriteString_EOL(outStream, 'AcDbArc');
+  dxfDoubleout(outStream,40,ratio{ * 180 / pi});
+  dxfDoubleout(outStream,41,startangle{ * 180 / pi});
+  dxfDoubleout(outStream,42,endangle{ * 180 / pi});
 end;
 procedure GDBObjEllipse.LoadFromDXF;
 var //s: String;
   byt{, code}: Integer;
 begin
   //initnul;
-  byt:=f.ParseInteger;
+  byt:=rdr.ParseInteger;
   while byt <> 0 do
   begin
-    if not LoadFromDXFObjShared(f,byt,ptu,drawing) then
-    if not dxfvertexload(f,10,byt,Local.P_insert) then
-    if not dxfvertexload(f,11,byt,MajorAxis) then
-    if not dxfDoubleload(f,40,byt,ratio) then
-    if not dxfDoubleload(f,41,byt,startangle) then
-    if not dxfDoubleload(f,42,byt,endangle) then {s := }f.SkipString;
-    byt:=f.ParseInteger;
+    if not LoadFromDXFObjShared(rdr,byt,ptu,drawing) then
+    if not dxfvertexload(rdr,10,byt,Local.P_insert) then
+    if not dxfvertexload(rdr,11,byt,MajorAxis) then
+    if not dxfDoubleload(rdr,40,byt,ratio) then
+    if not dxfDoubleload(rdr,41,byt,startangle) then
+    if not dxfDoubleload(rdr,42,byt,endangle) then {s := }rdr.SkipString;
+    byt:=rdr.ParseInteger;
   end;
   startangle := startangle{ * pi / 180};
   endangle := endangle{ * pi / 180};

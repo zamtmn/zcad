@@ -97,20 +97,20 @@ begin
      result:=true;
 end;
 
-procedure ElLeaderSave(var outhandle:TZctnrVectorBytes;PEnt:PGDBObjEntity;var IODXFContext:TIODXFContext);
+procedure ElLeaderSave(var outStream:TZctnrVectorBytes;PEnt:PGDBObjEntity;var IODXFContext:TIODXFContext);
 begin
-  dxfStringout(outhandle,1000,'_UPGRADE='+inttostr(UD_LineToLeader));
-  dxfStringout(outhandle,1000,'%1=size|Integer|'+inttostr(PGDBObjElLeader(PEnt)^.size)+'|');
-  dxfStringout(outhandle,1000,'%2=scale|Double|'+floattostr(PGDBObjElLeader(PEnt)^.scale)+'|');
-  dxfStringout(outhandle,1000,'%3=twidth|Double|'+floattostr(PGDBObjElLeader(PEnt)^.twidth)+'|');
+  dxfStringout(outStream,1000,'_UPGRADE='+inttostr(UD_LineToLeader));
+  dxfStringout(outStream,1000,'%1=size|Integer|'+inttostr(PGDBObjElLeader(PEnt)^.size)+'|');
+  dxfStringout(outStream,1000,'%2=scale|Double|'+floattostr(PGDBObjElLeader(PEnt)^.scale)+'|');
+  dxfStringout(outStream,1000,'%3=twidth|Double|'+floattostr(PGDBObjElLeader(PEnt)^.twidth)+'|');
 end;
 
-procedure EntityIOSave_all(var outhandle:TZctnrVectorBytes;PEnt:PGDBObjEntity;var IODXFContext:TIODXFContext);
+procedure EntityIOSave_all(var outStream:TZctnrVectorBytes;PEnt:PGDBObjEntity;var IODXFContext:TIODXFContext);
 begin
-  dxfStringout(outhandle,1000,'_OWNERHANDLE='+inttohex(PEnt^.bp.ListPos.owner.GetHandle,10));
+  dxfStringout(outStream,1000,'_OWNERHANDLE='+inttohex(PEnt^.bp.ListPos.owner.GetHandle,10));
   case PEnt^.OSnapModeControl of
-    off    :dxfStringout(outhandle,1000,'_OSNAPMODECONTROL=OFF');
-    on     :dxfStringout(outhandle,1000,'_OSNAPMODECONTROL=ON');
+    off    :dxfStringout(outStream,1000,'_OSNAPMODECONTROL=OFF');
+    on     :dxfStringout(outStream,1000,'_OSNAPMODECONTROL=ON');
     AsOwner:;//заглушка
   end;
 end;
@@ -124,10 +124,11 @@ begin
     PGDBObjText(pent)^.template:=TDXFEntsInternalStringType(_value);
      result:=true;
 end;
-procedure TextIOSave_TMPL1(var outhandle:TZctnrVectorBytes;PEnt:PGDBObjText);
+procedure TextIOSave_TMPL1(var outStream:TZctnrVectorBytes;PEnt:PGDBObjText; var IODXFContext:TIODXFContext);
 begin
-     if UnicodeStringReplace(pent^.content,#10,'\P',[rfReplaceAll])<>pent^.template{convertfromunicode(pent^.template)} then
-       dxfStringout(outhandle,1000,'_TMPL1='+string(pent^.template));
+  //if UnicodeStringReplace(pent^.content,#10,'\P',[rfReplaceAll])<>pent^.template then
+  if (IODXFContext.LocalEntityFlags and CLEFNotNeedSaveTemplate)=0 then
+    dxfStringout(outStream,1000,'_TMPL1='+string(pent^.template));
 end;
 
 class function TDummy.BlockDefIOLoad_TYPE(_Name,_Value:String;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
@@ -181,7 +182,7 @@ begin
      if (formatstr<>'') then
                                       begin
                                            if pEntity<>nil then
-                                                               pstring(pvn^.data.Addr.Instance)^:=textformat(formatstr,pEntity)
+                                                               pstring(pvn^.data.Addr.Instance)^:=textformat(formatstr,SPFSources.GetFull,pEntity)
                                                             else
                                                                pstring(pvn^.data.Addr.Instance)^:='!!ERR(pEnttity=nil)';
                                            pvn^.attrib:=pvn^.attrib or vda_RO;
@@ -238,7 +239,7 @@ begin
     if pvn<>nil then repeat
       if pvn.data.PTD=p then begin
         ptcs:=pvn.data.Addr.Instance;
-        ptcs.value:=textformat(ptcs.format,pEntity)
+        ptcs.value:=textformat(ptcs.format,SPFSources.GetFull,pEntity)
       end;
       pvn:=pentvarext.entityunit.InterfaceVariables.vardescarray.iterate(ir);
     until pvn=nil;

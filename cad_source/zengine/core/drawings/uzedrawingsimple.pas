@@ -324,6 +324,7 @@ begin
   dc.DrawingContext.DrawHeplGeometryProc:=nil;
   dc.DrawMode:=LWDisplay;
   dc.DrawingContext.GlobalLTScale:=LTScale;
+  dc.DrawingContext.FrustumCenter.HasValue:=false;
 end;
 
 function TSimpleDrawing.GetChangeStampt:Boolean;

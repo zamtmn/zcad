@@ -33,7 +33,6 @@ GDBTextProp=record
                   size:Double;
                   oblique:Double;
                   wfactor:Double;
-                  aaaangle:Double;
                   justify:TTextJustify;
                   upsidedown:Boolean;
                   backward:Boolean;
@@ -44,7 +43,7 @@ GDBObjAbstractText= object(GDBObjPlainWithOX)
                          P_drawInOCS:GDBvertex;
                          DrawMatrix:DMatrix4D;
                          procedure CalcObjMatrix(pdrawing:PTDrawingDef=nil);virtual;
-                         procedure DrawGeometry(lw:Integer;var DC:TDrawContext);virtual;
+                         procedure DrawGeometry(lw:Integer;var DC:TDrawContext;const inFrustumState:TInBoundingVolume);virtual;
                          procedure SimpleDrawGeometry(var DC:TDrawContext);virtual;
                          function CalcInFrustum(const frustum:ClipArray;const Actuality:TVisActuality;var Counters:TCameraCounters; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double):Boolean;virtual;
                          function CalcTrueInFrustum(const frustum:ClipArray):TInBoundingVolume;virtual;
@@ -101,7 +100,7 @@ procedure GDBObjAbstractText.FormatAfterFielfmod(PField,PTypeDescriptor:Pointer)
    ox:gdbvertex;
    {m,}m2,m3:DMAtrix4D;*)
 begin
-     { TODO : removeing angle from text ents }
+     { fixedTODO : removeing angle from text ents }
      (*
      if PField=@textprop.angle then
                                    begin
@@ -150,7 +149,7 @@ begin
                                                                 else
                                                                     ox:=CrossVertex(ZWCS,Local.basis.oz);
      normalizevertex(ox);}
-     { TODO : removeing angle from text ents }
+     { fixedTODO : removeing angle from text ents }
      (*
      textprop.angle:=scalardot(Local.basis.ox,ox);
      textprop.angle:=arccos(textprop.angle);
@@ -401,7 +400,7 @@ begin
   dc.subrender := dc.subrender + 1;
   PanObjectDegradation:=SysVarRDPanObjectDegradation;
   if(not dc.scrollmode)or(not PanObjectDegradation)then
-    Representation.DrawGeometry(DC)
+    Representation.DrawGeometry(DC,inFrustumState)
   else begin
     DC.Drawer.DrawLine3DInModelSpace(outbound[0],outbound[1],DC.DrawingContext.matrixs);
     DC.Drawer.DrawLine3DInModelSpace(outbound[1],outbound[2],DC.DrawingContext.matrixs);

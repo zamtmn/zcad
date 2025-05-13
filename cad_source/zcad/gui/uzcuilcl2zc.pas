@@ -17,6 +17,7 @@
 }
 
 unit uzcuilcl2zc;
+{$Mode delphi}
 {$INCLUDE zengineconfig.inc}
 interface
 uses

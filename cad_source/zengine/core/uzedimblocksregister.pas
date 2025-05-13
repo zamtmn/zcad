@@ -17,6 +17,7 @@
 }
 
 unit uzedimblocksregister;
+{$Mode delphi}
 {$INCLUDE zengineconfig.inc}
 
 interface

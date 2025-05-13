@@ -54,16 +54,16 @@ GDBObjHatch= object(GDBObjWithLocalCS)
                  Origin:GDBvertex2D;
                  constructor init(own:Pointer;layeraddres:PGDBLayerProp;LW:SmallInt;p:GDBvertex);
                  constructor initnul;
-                 procedure LoadFromDXF(var f:TZMemReader;ptu:PExtensionData;var drawing:TDrawingDef);virtual;
+                 procedure LoadFromDXF(var rdr:TZMemReader;ptu:PExtensionData;var drawing:TDrawingDef);virtual;
 
-                 procedure SaveToDXF(var outhandle:TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
+                 procedure SaveToDXF(var outStream:TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
                  procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext;Stage:TEFStages=EFAllStages);virtual;
                  procedure ProcessLine(const c:integer;const l1,l2,c1,c2:GDBvertex2D;var IV:TIntercept2dpropWithLICVector);
                  procedure ProcessLines(const p1,p2:GDBvertex2D;var IV:TIntercept2dpropWithLICVector);
                  procedure ProcessStroke(var Strokes:TPatStrokesArray;var IV:TIntercept2dpropWithLICVector;var DC:TDrawContext);
                  procedure DrawStrokes(var Strokes:TPatStrokesArray;var st:Double;const p1,p2:GDBvertex2D;var DC:TDrawContext);
                  procedure FillPattern(var Strokes:TPatStrokesArray;var DC:TDrawContext);
-                 procedure DrawGeometry(lw:Integer;var DC:TDrawContext);virtual;
+                 procedure DrawGeometry(lw:Integer;var DC:TDrawContext;const inFrustumState:TInBoundingVolume);virtual;
                  function ObjToString(const prefix,sufix:String):String;virtual;
                  destructor done;virtual;
 
@@ -182,33 +182,33 @@ begin
 end;
 procedure GDBObjHatch.SaveToDXF;
 begin
-  SaveToDXFObjPrefix(outhandle,'HATCH','AcDbHatch',IODXFContext);
-  dxfvertexout(outhandle,10,Local.p_insert);
-  dxfvertexout(outhandle,210,local.basis.oz);
-  dxfStringout(outhandle,2,PatternName);
+  SaveToDXFObjPrefix(outStream,'HATCH','AcDbHatch',IODXFContext);
+  dxfvertexout(outStream,10,Local.p_insert);
+  dxfvertexout(outStream,210,local.basis.oz);
+  dxfStringout(outStream,2,PatternName);
   if PPattern=nil then
-    dxfIntegerout(outhandle,70,1)
+    dxfIntegerout(outStream,70,1)
   else
-    dxfIntegerout(outhandle,70,0);
-  dxfIntegerout(outhandle,71,0);
-  Path.SaveToDXF(outhandle);
-  dxfIntegerout(outhandle,75,HID2DXF[IslandDetection]);
-  dxfIntegerout(outhandle,76,1);
+    dxfIntegerout(outStream,70,0);
+  dxfIntegerout(outStream,71,0);
+  Path.SaveToDXF(outStream);
+  dxfIntegerout(outStream,75,HID2DXF[IslandDetection]);
+  dxfIntegerout(outStream,76,1);
 
   if PPattern<>nil then begin
-    dxfDoubleout(outhandle,52,Angle);
-    dxfDoubleout(outhandle,41,Scale);
-    dxfIntegerout(outhandle,77,0);
+    dxfDoubleout(outStream,52,Angle);
+    dxfDoubleout(outStream,41,Scale);
+    dxfIntegerout(outStream,77,0);
   end;
 
   if PPattern<>nil then
-    PPattern^.SaveToDXF(outhandle,Angle,Scale);
+    PPattern^.SaveToDXF(outStream,Angle,Scale);
 
-  dxfDoubleout(outhandle,47,1.25);
-  dxfIntegerout(outhandle,98,0);
+  dxfDoubleout(outStream,47,1.25);
+  dxfIntegerout(outStream,98,0);
   //убрал потому что повторная запись нормали
   //если она не 0,0,1
-  //SaveToDXFObjPostfix(outhandle);
+  //SaveToDXFObjPostfix(outStream);
 end;
 procedure GDBObjHatch.ProcessLine(const c:integer;const l1,l2,c1,c2:GDBvertex2D;var IV:TIntercept2dpropWithLICVector);
 var
@@ -593,7 +593,7 @@ begin
 end;
 procedure GDBObjHatch.DrawGeometry;
 begin
-  Representation.DrawGeometry(DC);
+  Representation.DrawGeometry(DC,inFrustumState);
   inherited;
 end;
 procedure GDBObjHatch.LoadFromDXF;
@@ -602,18 +602,18 @@ var
 begin
   hstyle:=100;
   Angle:=0;
-  byt:=f.ParseInteger;
+  byt:=rdr.ParseInteger;
   while byt <> 0 do
   begin
-    if not LoadFromDXFObjShared(f,byt,ptu,drawing) then
-    if not Path.LoadFromDXF (f,byt) then
-    if not LoadPatternFromDXF(PPattern,f,byt,Angle,Scale) then
-    if not dxfintegerload(f,75,byt,hstyle) then
-    if not dxfDoubleload(f,52,byt,Angle) then
-    if not dxfDoubleload(f,41,byt,Scale) then
-    if not dxfStringload(f,2,byt,PatternName) then
-      f.SkipString;
-    byt:=f.ParseInteger;
+    if not LoadFromDXFObjShared(rdr,byt,ptu,drawing) then
+    if not Path.LoadFromDXF (rdr,byt) then
+    if not LoadPatternFromDXF(PPattern,rdr,byt,Angle,Scale) then
+    if not dxfintegerload(rdr,75,byt,hstyle) then
+    if not dxfDoubleload(rdr,52,byt,Angle) then
+    if not dxfDoubleload(rdr,41,byt,Scale) then
+    if not dxfStringload(rdr,2,byt,PatternName) then
+      rdr.SkipString;
+    byt:=rdr.ParseInteger;
   end;
   case hstyle of
     1:IslandDetection:=HID_Outer;

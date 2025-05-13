@@ -4,6 +4,8 @@
     <BlockLib Type="Tree" Caption='Blocks' ImagesWidth='24'>
       <ZTreeNode Caption='Schemes'>
         <ZTreeNode Caption='Unsorted'>
+          <ZTreeCommand Command="Insert(DEVICE_SCH_PID_SOURCE)"/>
+          <ZTreeCommand Command="Insert(DEVICE_SCH_PID_DESTINATION)"/>
           <ZTreeCommand Command="Insert(DEVICE_SCH_CONTACT_NOC)"/>
           <ZTreeCommand Command="Insert(DEVICE_SCH_CONTACT_NOC_CC)"/>
           <ZTreeCommand Command="Insert(DEVICE_SCH_BUTTON_NOC_CC)"/>

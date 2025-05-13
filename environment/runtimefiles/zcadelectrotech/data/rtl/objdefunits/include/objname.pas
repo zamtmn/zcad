@@ -1,14 +1,12 @@
 unit objname;
 interface
 uses system;
+usescopy objnamebase;
 
 var
-   NMO_Name:String;(*'Обозначение'*)
-   NMO_BaseName:String;(*'Короткое Имя'*)
    NMO_Prefix:String;(*'Префикс'*)
    NMO_Suffix:String;(*'Суффикс'*)
    NMO_Affix:String;(*'Аффикс'*)
-   NMO_Template:String;(*'Шаблон Обозначения'*) 
 implementation
 begin
    NMO_Name:='??';

@@ -197,8 +197,8 @@ end;
 
 procedure TMSEditor.SetRelatedVariables(var UMPlaced:boolean;PSourceVD:pvardesk;NeededObjType:TObjID);
 var
-  pentvarext,pmainentvarext: TVariablesExtender;
-  EntIterator: itrec;
+  pentvarext,pconnectedentvarext,pmainentvarext: TVariablesExtender;
+  EntIterator,ir2: itrec;
   pentity,pmainentity: pGDBObjEntity;
   psd:PSelectedObjDesc;
 begin
@@ -214,6 +214,16 @@ begin
         pmainentvarext:=pmainentity^.GetExtension<TVariablesExtender>;
         SetVariable(UMPlaced,pmainentity,pmainentvarext,PSourceVD);
       end;
+
+      pconnectedentvarext:=pentvarext.ConnectedVariablesExtenders.beginiterate(ir2);
+      if pconnectedentvarext<>nil then
+        repeat
+          pmainentity:=pconnectedentvarext.pThisEntity;
+          SetVariable(UMPlaced,pmainentity,pconnectedentvarext,PSourceVD);
+          processunit(pconnectedentvarext.entityunit,true);
+          pconnectedentvarext:=pentvarext.ConnectedVariablesExtenders.iterate(ir2);
+        until pconnectedentvarext=nil;
+
     end;
     psd:=drawings.GetCurrentDWG.SelObjArray.iterate(EntIterator);
   until psd=nil;
@@ -739,7 +749,7 @@ var
   psd:PSelectedObjDesc;
   pu:pointer;
   ir,ir2:itrec;
-  pentvarext:TVariablesExtender;
+  pentvarext,pconnectedentvarext:TVariablesExtender;
   entscount:integer;
   TrueSel:Boolean;
 begin
@@ -812,6 +822,13 @@ begin
                       processunit(PTEntityUnit(pu)^,true);
                     pu:=pentvarext.entityunit.InterfaceUses.iterate(ir2)
                   until pu=nil;
+
+                pconnectedentvarext:=pentvarext.ConnectedVariablesExtenders.beginiterate(ir2);
+                if pconnectedentvarext<>nil then
+                  repeat
+                    processunit(pconnectedentvarext.entityunit,true);
+                    pconnectedentvarext:=pentvarext.ConnectedVariablesExtenders.iterate(ir2);
+                  until pconnectedentvarext=nil;
               end;
             end;
           end;

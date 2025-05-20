@@ -52,7 +52,7 @@ build_script:
   - cmd: C:\lazarus\fpc\3.2.2\bin\x86_64-win64\make.exe documentation
   - cmd: 7z a ZCAD-%APPVEYOR_REPO_COMMIT%.zip "cad"
   - cmd: C:\lazarus\fpc\3.2.2\bin\x86_64-win64\make.exe cleanzcadelectrotech
-  - cmd: C:\lazarus\fpc\3.2.2\bin\x86_64-win64\make.exe afterzcadelectrotechbuild LAZBUILD=C:/lazarus/lazbuild.exe PCP=C:/Users/appveyor/AppData/Local/lazarus LP=C:/lazarus ZP=C:/projects/zcad/cad/bin/x86_64-win64/zcad.exe
+  - cmd: C:\lazarus\fpc\3.2.2\bin\x86_64-win64\make.exe afterzcadelectrotechbuild LAZBUILD=C:/lazarus/lazbuild.exe PCP=C:/Users/appveyor/AppData/Local/lazarus LP=C:/lazarus ZP=C:/projects/zcad/cad/bin/x86_64-win64
   - cmd: C:\lazarus\fpc\3.2.2\bin\x86_64-win64\make.exe documentation
   - cmd: C:\lazarus\fpc\3.2.2\bin\x86_64-win64\make.exe tests
 

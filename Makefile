@@ -91,7 +91,7 @@ endif
 
 LP:=
 ifeq ($(OSDETECT),WIN32)
-	LP:=C:\\lazarus
+	LP:=C:\lazarus
 else
 	ifeq ($(OSDETECT),LINUX)
 		LP:=/usr/bin

@@ -104,9 +104,13 @@ else
 	endif
 endif
 
-LAZBUILD:=$(LP)$(PATHDELIM)lazbuild
+ifeq ($(OSDETECT),WIN32)
+	LAZBUILD:=$(LP)$(PATHDELIM)lazbuild.exe
+else
+	LAZBUILD:=$(LP)$(PATHDELIM)lazbuild
+endif
 
-ZP:=$(if $(wildcard $(LAZBUILD)),$(shell $(LAZBUILD) --pcp=$(PCP) cad_source$(PATHDELIM)zcad.lpi --get-expand-text=$$\(ProjPath\)..$(PATHDELIM)$(BUILDPREFIX)$(PATHDELIM)bin$(PATHDELIM)$$\(TargetCPU\)-$$\(TargetOS\)),$())
+ZP:=$(if $(wildcard $(LAZBUILD)),$(shell $(LAZBUILD) cad_source/zcad.lpi --quiet --pcp=$(PCP) --get-expand-text=$$\(ProjPath\)..$(PATHDELIM)$(BUILDPREFIX)$(PATHDELIM)bin$(PATHDELIM)$$\(TargetCPU\)-$$\(TargetOS\)),$())
 
 checkallvars: checkvars 
 	@echo OSDETECT=$(OSDETECT)
@@ -115,6 +119,7 @@ checkallvars: checkvars
 checkvars:              
 	@echo PCP=$(PCP)
 	@echo LP=$(LP)
+	@echo LAZBUILD=$(LAZBUILD)
 	@echo ZP=$(ZP)
 	@echo INSTALLPREFIX=$(INSTALLPREFIX)
 

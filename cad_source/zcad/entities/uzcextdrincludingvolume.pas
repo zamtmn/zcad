@@ -295,7 +295,7 @@ begin
           testp:=PGDBObjText(p)^.P_insert_in_WCS;
         end;
         else begin
-          {TODO: пока работает только с устройствами, надо расширять на все остальное}
+          {TODO: пока работает только с устройствами и текстами, надо расширять на все остальное}
           exit;
           testp:=NulVertex;
         end;

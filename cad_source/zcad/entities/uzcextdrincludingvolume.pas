@@ -292,6 +292,8 @@ begin
           testp:=PGDBObjDevice(p)^.P_insert_in_WCS;
         end;
         else begin
+          {TODO: пока работает только с устройствами, надо расширять на все остальное}
+          exit;
           testp:=NulVertex;
         end;
       end;
@@ -304,7 +306,7 @@ begin
           if PGDBObjLWPolyline(pThisEntity)^.Vertex2D_in_OCS_Array.ispointinside(testp2d)then
             ConnectToEnt(p,VolumeVExtdr,drawing,DC);
         end;
-      end else
+      end else {//это неправильно в p^ не только устройства}
         if IsPointInBB(PGDBObjDevice(p)^.P_insert_in_WCS,PGDBObjEntity(pThisEntity)^.vp.BoundingBox)then
           ConnectToEnt(p,VolumeVExtdr,drawing,DC);
 

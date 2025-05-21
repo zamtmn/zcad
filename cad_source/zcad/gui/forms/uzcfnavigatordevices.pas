@@ -488,7 +488,7 @@ var
   s:string;
   pdwg:PTSimpleDrawing;
 begin
-  if Sender.Focused then begin
+  {if Sender.Focused then} begin
     pnd := Sender.GetNodeData(Node);
     if assigned(pnd) then begin
       if pnd^.Ident.pent<>nil then
@@ -505,11 +505,12 @@ begin
                pdwg.GetSelObjArray.Free;
              end;
            end;
-
-           s:='SelectObjectByAddres('+inttostr(PtrUInt(pnd^.Ident.pent))+')';
-           //commandmanager.executecommandsilent(@s[1],drawings.GetCurrentDWG,drawings.GetCurrentOGLWParam);
-           Application.QueueAsyncCall(AsyncRunCommand,PtrInt(@s[1]));
-           pointer(s):=nil;
+           if Sender.Focused then begin
+             s:='SelectObjectByAddres('+inttostr(PtrUInt(pnd^.Ident.pent))+')';
+             //commandmanager.executecommandsilent(@s[1],drawings.GetCurrentDWG,drawings.GetCurrentOGLWParam);
+             Application.QueueAsyncCall(AsyncRunCommand,PtrInt(@s[1]));
+             pointer(s):=nil;
+           end;
            LastAutoselectedEnt:=pnd^.Ident.pent;
          end else begin
            //if not LastAutoselectedEnt^.Selected then
@@ -936,6 +937,7 @@ begin
         NDMsgCtx.clear;
 
     if assigned(StandaloneNodeStates) then begin
+      CurrentSel:=StandaloneNodeStates.SelectedNode;
       StandaloneNode.RestoreState(StandaloneNodeStates,Dist);
       NavTree.OffsetXY:=StandaloneNodeStates.SaveOffset;
       FreeAndNil(StandaloneNodeStates);

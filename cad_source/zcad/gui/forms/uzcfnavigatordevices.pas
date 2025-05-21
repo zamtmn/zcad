@@ -1021,12 +1021,14 @@ begin
       sender_wa:=sender as TAbstractViewArea;
       if sender_wa.param.SelDesc.LastSelectedObject<>nil then begin
         if (pGDBObjEntity(sender_wa.param.SelDesc.LastSelectedObject)^.GetObjType=GDBDeviceID)and(assigned(Ent2NodeMap)) then begin
-          if Ent2NodeMap.TryGetValue(sender_wa.param.SelDesc.LastSelectedObject,devnode) then begin
-            NavTree.Selected[devnode]:=true;
-            NavTree.FocusedNode:=devnode;
-            NavTree.VisiblePath[devnode]:=true;
-            NavTree.ScrollIntoView(devnode,false);
-          end;
+          if LastAutoselectedEnt<>sender_wa.param.SelDesc.LastSelectedObject then
+            if Ent2NodeMap.TryGetValue(sender_wa.param.SelDesc.LastSelectedObject,devnode) then begin
+              NavTree.Selected[devnode]:=true;
+              NavTree.FocusedNode:=devnode;
+              NavTree.VisiblePath[devnode]:=true;
+              NavTree.ScrollIntoView(devnode,false);
+              LastAutoselectedEnt:=sender_wa.param.SelDesc.LastSelectedObject;
+            end;
         end
       end else begin
         LastAutoselectedEnt:=nil;

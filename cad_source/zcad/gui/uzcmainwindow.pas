@@ -58,7 +58,7 @@ uses
   uzgldrawcontext,uzglviewareaabstract,uzcguimanager,uzcinterfacedata,
   uzcenitiesvariablesextender,uzglviewareageneral,UniqueInstanceRaw,
   uzmacros,uzcviewareacxmenu,uzccommand_quit,uzeMouseTimer,
-  uzccommand_multiselect2objinsp;
+  uzccommand_multiselect2objinsp{$IfDef LINUX},BaseUnix{$EndIf};
 
 resourcestring
   rsClosed='Closed';
@@ -2125,9 +2125,31 @@ begin
     exit;
   Application.QueueAsyncCall(AsyncUpdateVisible,PtrInt(Sender));
 end;
+
+{$IfDef LINUX}
+procedure DoShutdown(Sig: Longint; Info: PSigInfo; Context: PSigContext); cdecl;
+begin
+  ProgramLog.LogOutFormatStr('Got signal: "%d"',[Sig],LM_Necessarily);
+  CloseApp;
+end;
+procedure RegisterSignalHandler;
+var
+  RecNew, RecOld: sigactionrec;
+begin
+  RecOld:= Default(sigactionrec);
+  RecNew:= Default(sigactionrec);
+  RecNew.sa_handler:= @DoShutdown;
+  FPSigaction(SIGTERM, @RecNew, @RecOld);
+  FPSigaction(SIGINT, @RecNew, @RecOld);
+end;
+{$EndIf}
+
 initialization
 begin
   LMD:=programlog.RegisterModule('zcad\gui\uzcmainwindow-gui');
+{$IfDef LINUX}
+  RegisterSignalHandler;
+{$EndIf}
 end
 finalization
   ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);

@@ -62,22 +62,16 @@ var
 implementation
 
 procedure GDBObjAbstractText.transform;
-var tv{,tv2}:GDBVertex;
-   m:DMatrix4D;
+var
+  tv:GDBVertex;
+  m:DMatrix4D;
 begin
-
-  {m:=onematrix;
-  m[0,0]:=textprop.size;
-  m:=uzegeometry.MatrixMultiply(m,t_matrix);}
-  tv:=NulVertex;
-  tv.x:=textprop.size;
+  tv:=CreateVertex(0,textprop.size,0);
   m:=t_matrix;
   PGDBVertex(@m.mtr[3])^:=NulVertex;
 
   tv:=VectorTransform3d(tv,m);
   textprop.size:=oneVertexlength(tv);
-  {textprop.size:=m[0,0];}
-
   inherited;
 end;
 procedure GDBObjAbstractText.setrot(r:Double);

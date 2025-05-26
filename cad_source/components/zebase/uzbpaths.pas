@@ -420,9 +420,9 @@ end;
 
 initialization
   BinaryPath:=ExcludeTrailingPathDelimiter(ExtractFilePath(paramstr(0)));
-  DistribPath:=ExpandFileName(ConcatPaths([BinaryPath,'..','..','data']));
+  DistribPath:=ExpandFileName(ConcatPaths([BinaryPath,'..','data']));
   DistribPathOverride:=false;
-  RoCfgsPath:=ExpandFileName(ConcatPaths([BinaryPath,'..','..','cfg']));
+  RoCfgsPath:=ExpandFileName(ConcatPaths([BinaryPath,'..','cfg']));
   WrCfgsPath:=ExcludeTrailingPathDelimiter(GetAppConfigDir(false));
   TempPath:=ExcludeTrailingPathDelimiter(GetTempDir);
 end.

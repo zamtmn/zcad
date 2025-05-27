@@ -219,12 +219,12 @@ else
 endif
 endif
 
-zcad: checkvars version       
+zcad: checkvars version installpkgstolaz       
 	$(LAZBUILD) --pcp=$(PCP) cad_source/utils/typeexporter.lpi
 	environment/typeexporter/typeexporter pathprefix=cad_source/ outputfile=$(BUILDPREFIX)/data/rtl/system.pas processfiles=environment/typeexporter/zcad.files
 	$(LAZBUILD) --pcp=$(PCP) --bm=$(BUILDMODE) cad_source/zcad.lpi
 
-zcadelectrotech: checkvars version
+zcadelectrotech: checkvars version installpkgstolaz
 	$(LAZBUILD) --pcp=$(PCP) cad_source/utils/typeexporter.lpi
 	environment/typeexporter/typeexporter pathprefix=cad_source/ outputfile=$(BUILDPREFIX)/data/rtl/system.pas processfiles=environment/typeexporter/zcad.files+environment/typeexporter/zcadelectrotech.files define=ELECTROTECH
 	$(LAZBUILD) --pcp=$(PCP) --bm=$(BUILDMODE) cad_source/zcad.lpi
@@ -300,29 +300,64 @@ cad_source/components/fphunspell/fphunspell.lpk:
 checksubmodules: cad_source/components/fpdwg/fpdwg.lpk cad_source/other/agraphlaz/lazarus/ag_graph.lpk cad_source/components/metadarkstyle/metadarkstyle.lpk cad_source/components/zmacros/zmacros.lpk cad_source/components/ztoolbars/ztoolbars.lpk cad_source/components/fpspreadsheet/laz_fpspreadsheet.lpk cad_source/components/lape/package/lape.lpk cad_source/components/zreaders/zreaders.lpk cad_source/components/callstack_memprofiler/source/callstack_memprofiler.pas cad_source/components/fphunspell/fphunspell.lpk
 	@echo All submodules found!
 
+checkandinstallpckgifneed:
+ifeq ($(OSDETECT),WIN32)
+ifneq ($(findstring $(notdir $(LPK)),$(shell type $(PCP)\packagefiles.xml)),)
+	@echo Package $(notdir $(LPK)) already installed
+else
+	@echo Install package $(notdir $(LPK))
+	$(LAZBUILD) --pcp=$(PCP) --add-package $(LPK)
+endif
+else
+ifneq ($(findstring $(notdir $(LPK)),$(shell cat $(PCP)/packagefiles.xml)),)
+	@echo Package $(notdir $(LPK)) already installed
+else
+	@echo Install package $(notdir $(LPK))
+	$(LAZBUILD) --pcp=$(PCP) --add-package $(LPK)
+endif
+endif
+
+checkandcompilepckgifneed:
+ifeq ($(OSDETECT),WIN32)
+ifneq ($(findstring $(notdir $(LPK)),$(shell type $(PCP)\packagefiles.xml)),)
+	@echo Package $(notdir $(LPK)) already installed
+else
+	@echo Install package $(notdir $(LPK))
+	$(LAZBUILD) --pcp=$(PCP) $(LPK)
+endif
+else
+ifneq ($(findstring $(notdir $(LPK)),$(shell cat $(PCP)/packagefiles.xml)),)
+	@echo Package $(notdir $(LPK)) already installed
+else
+	@echo Install package $(notdir $(LPK))
+	$(LAZBUILD) --pcp=$(PCP) $(LPK)
+endif
+endif
+
 installpkgstolaz: checkvars checksubmodules rmpkgslibs
 ifneq ($(OSDETECT),OSX)
-	$(LAZBUILD) --pcp=$(PCP) --add-package cad_source$(PATHDELIM)other$(PATHDELIM)agraphlaz$(PATHDELIM)lazarus$(PATHDELIM)ag_graph.lpk
-	$(LAZBUILD) --pcp=$(PCP) --add-package cad_source$(PATHDELIM)other$(PATHDELIM)agraphlaz$(PATHDELIM)lazarus$(PATHDELIM)ag_math.lpk
-	$(LAZBUILD) --pcp=$(PCP) --add-package cad_source$(PATHDELIM)other$(PATHDELIM)agraphlaz$(PATHDELIM)lazarus$(PATHDELIM)ag_vectors.lpk
+	${MAKE} checkandinstallpckgifneed LPK=cad_source$(PATHDELIM)other$(PATHDELIM)agraphlaz$(PATHDELIM)lazarus$(PATHDELIM)ag_graph.lpk
+	${MAKE} checkandinstallpckgifneed LPK=cad_source$(PATHDELIM)other$(PATHDELIM)agraphlaz$(PATHDELIM)lazarus$(PATHDELIM)ag_graph.lpk
+	${MAKE} checkandinstallpckgifneed LPK=cad_source$(PATHDELIM)other$(PATHDELIM)agraphlaz$(PATHDELIM)lazarus$(PATHDELIM)ag_math.lpk
+	${MAKE} checkandinstallpckgifneed LPK=cad_source$(PATHDELIM)other$(PATHDELIM)agraphlaz$(PATHDELIM)lazarus$(PATHDELIM)ag_vectors.lpk
 endif
-	$(LAZBUILD) --pcp=$(PCP) --add-package cad_source$(PATHDELIM)other$(PATHDELIM)uniqueinstance$(PATHDELIM)uniqueinstance_package.lpk
-	$(LAZBUILD) --pcp=$(PCP) --add-package cad_source$(PATHDELIM)components$(PATHDELIM)metadarkstyle$(PATHDELIM)metadarkstyle.lpk
-	$(LAZBUILD) --pcp=$(PCP) --add-package cad_source$(PATHDELIM)components$(PATHDELIM)zcontainers$(PATHDELIM)zcontainers.lpk
-	$(LAZBUILD) --pcp=$(PCP) --add-package cad_source$(PATHDELIM)components$(PATHDELIM)zbaseutils$(PATHDELIM)zbaseutils.lpk
-	$(LAZBUILD) --pcp=$(PCP) --add-package cad_source$(PATHDELIM)components$(PATHDELIM)zbaseutilsgui$(PATHDELIM)zbaseutilsgui.lpk
-	$(LAZBUILD) --pcp=$(PCP) --add-package cad_source$(PATHDELIM)components$(PATHDELIM)zebase$(PATHDELIM)zebase.lpk
-	$(LAZBUILD) --pcp=$(PCP) --add-package cad_source$(PATHDELIM)components$(PATHDELIM)zcontrols$(PATHDELIM)zcontrols.lpk
-	$(LAZBUILD) --pcp=$(PCP) --add-package cad_source$(PATHDELIM)components$(PATHDELIM)zmacros$(PATHDELIM)zmacros.lpk
-	$(LAZBUILD) --pcp=$(PCP) --add-package cad_source$(PATHDELIM)components$(PATHDELIM)zmath$(PATHDELIM)zmath.lpk
-	$(LAZBUILD) --pcp=$(PCP) --add-package cad_source$(PATHDELIM)components$(PATHDELIM)zobjectinspector$(PATHDELIM)zobjectinspector.lpk
-	$(LAZBUILD) --pcp=$(PCP) --add-package cad_source$(PATHDELIM)components$(PATHDELIM)zscriptbase$(PATHDELIM)zscriptbase.lpk
-	$(LAZBUILD) --pcp=$(PCP) --add-package cad_source$(PATHDELIM)components$(PATHDELIM)zscript$(PATHDELIM)zscript.lpk
-	$(LAZBUILD) --pcp=$(PCP) --add-package cad_source$(PATHDELIM)components$(PATHDELIM)ztoolbars$(PATHDELIM)ztoolbars.lpk
-	$(LAZBUILD) --pcp=$(PCP) --add-package cad_source$(PATHDELIM)components$(PATHDELIM)zundostack$(PATHDELIM)zundostack.lpk
-	$(LAZBUILD) --pcp=$(PCP) --add-package cad_source$(PATHDELIM)components$(PATHDELIM)fpdwg$(PATHDELIM)fpdwg.lpk
-	$(LAZBUILD) --pcp=$(PCP) --add-package cad_source$(PATHDELIM)components$(PATHDELIM)fpspreadsheet$(PATHDELIM)laz_fpspreadsheet_visual_dsgn.lpk
-	$(LAZBUILD) --pcp=$(PCP) cad_source$(PATHDELIM)components$(PATHDELIM)lape$(PATHDELIM)package$(PATHDELIM)lape.lpk
-	$(LAZBUILD) --pcp=$(PCP) --add-package cad_source$(PATHDELIM)components$(PATHDELIM)zreaders$(PATHDELIM)zreaders.lpk
-	$(LAZBUILD) --pcp=$(PCP) --add-package cad_source$(PATHDELIM)components$(PATHDELIM)fphunspell$(PATHDELIM)fphunspell.lpk
+	${MAKE} checkandinstallpckgifneed LPK=cad_source$(PATHDELIM)other$(PATHDELIM)uniqueinstance$(PATHDELIM)uniqueinstance_package.lpk
+	${MAKE} checkandinstallpckgifneed LPK=cad_source$(PATHDELIM)components$(PATHDELIM)metadarkstyle$(PATHDELIM)metadarkstyle.lpk
+	${MAKE} checkandinstallpckgifneed LPK=cad_source$(PATHDELIM)components$(PATHDELIM)zcontainers$(PATHDELIM)zcontainers.lpk
+	${MAKE} checkandinstallpckgifneed LPK=cad_source$(PATHDELIM)components$(PATHDELIM)zbaseutils$(PATHDELIM)zbaseutils.lpk
+	${MAKE} checkandinstallpckgifneed LPK=cad_source$(PATHDELIM)components$(PATHDELIM)zbaseutilsgui$(PATHDELIM)zbaseutilsgui.lpk
+	${MAKE} checkandinstallpckgifneed LPK=cad_source$(PATHDELIM)components$(PATHDELIM)zebase$(PATHDELIM)zebase.lpk
+	${MAKE} checkandinstallpckgifneed LPK=cad_source$(PATHDELIM)components$(PATHDELIM)zcontrols$(PATHDELIM)zcontrols.lpk
+	${MAKE} checkandinstallpckgifneed LPK=cad_source$(PATHDELIM)components$(PATHDELIM)zmacros$(PATHDELIM)zmacros.lpk
+	${MAKE} checkandinstallpckgifneed LPK=cad_source$(PATHDELIM)components$(PATHDELIM)zmath$(PATHDELIM)zmath.lpk
+	${MAKE} checkandinstallpckgifneed LPK=cad_source$(PATHDELIM)components$(PATHDELIM)zobjectinspector$(PATHDELIM)zobjectinspector.lpk
+	${MAKE} checkandinstallpckgifneed LPK=cad_source$(PATHDELIM)components$(PATHDELIM)zscriptbase$(PATHDELIM)zscriptbase.lpk
+	${MAKE} checkandinstallpckgifneed LPK=cad_source$(PATHDELIM)components$(PATHDELIM)zscript$(PATHDELIM)zscript.lpk
+	${MAKE} checkandinstallpckgifneed LPK=cad_source$(PATHDELIM)components$(PATHDELIM)ztoolbars$(PATHDELIM)ztoolbars.lpk
+	${MAKE} checkandinstallpckgifneed LPK=cad_source$(PATHDELIM)components$(PATHDELIM)zundostack$(PATHDELIM)zundostack.lpk
+	${MAKE} checkandinstallpckgifneed LPK=cad_source$(PATHDELIM)components$(PATHDELIM)fpdwg$(PATHDELIM)fpdwg.lpk
+	${MAKE} checkandinstallpckgifneed LPK=cad_source$(PATHDELIM)components$(PATHDELIM)fpspreadsheet$(PATHDELIM)laz_fpspreadsheet_visual_dsgn.lpk
+	${MAKE} checkandcompilepckgifneed LPK=cad_source$(PATHDELIM)components$(PATHDELIM)lape$(PATHDELIM)package$(PATHDELIM)lape.lpk
+	${MAKE} checkandinstallpckgifneed LPK=cad_source$(PATHDELIM)components$(PATHDELIM)zreaders$(PATHDELIM)zreaders.lpk
+	${MAKE} checkandinstallpckgifneed LPK=cad_source$(PATHDELIM)components$(PATHDELIM)fphunspell$(PATHDELIM)fphunspell.lpk
 #	$(LAZBUILD) --pcp=$(PCP) --build-ide=""

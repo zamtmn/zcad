@@ -134,7 +134,7 @@ type
     StandaloneNode:TBaseRootNodeDesk;
     StandaloneNodeStates:TNodesStates;
     NavMX,NavMy:integer;
-    umf:TmyVariableAction;
+    umf,fts:TmyVariableAction;
     MainFunctionIconIndex:integer;
     BuggyIconIndex:integer;
     SaveCellRectLeft:integer;
@@ -187,6 +187,7 @@ var
   NDMsgCtx:TMessagesContext=nil;
 
   UseMainFunction:Boolean=false;
+  FollowToSelection:Boolean=True;
   //DevicesTreeBuildMap:string='+NMO_Prefix|+NMO_BaseName|+@@[NMO_Name]';
 
 implementation
@@ -639,6 +640,11 @@ begin
    umf.AssignToVar('DSGN_NavigatorsUseMainFunction',0);
    umf.Caption:='Use main functions';
 
+   fts:=TmyVariableAction.Create(self);
+   fts.ActionList:=StandartActions;
+   fts.AssignToVar('DSGN_NavigatorsFollowToSelection',0);
+   fts.Caption:='Follow to selection';
+
    ActionList1.Images:=ImagesManager.IconList;
    Refresh.ImageIndex:=ImagesManager.GetImageIndex('Refresh');
    CoolBar1.AutoSize:=true;
@@ -660,7 +666,7 @@ begin
    TreeEnabler:=TStringPartEnabler.Create(self);
    TreeEnabler.EdgeBorders:=[{ebLeft,ebTop,ebRight,ebBottom}];
    TreeEnabler.AutoSize:=true;
-   TreeEnabler.actns:=[PEMenuSubMenu,PEMenuSeparator,umf,PEMenuSeparator,IncludeEnts,IncludeProps,TreeProps,Refresh,nil,LoadFromFile,SaveToFile];
+   TreeEnabler.actns:=[PEMenuSubMenu,PEMenuSeparator,umf,fts,PEMenuSeparator,IncludeEnts,IncludeProps,TreeProps,Refresh,nil,LoadFromFile,SaveToFile];
 
    TreeEnabler.OnMenuPopup:=TEMenuPopUp;
    TreeEnabler.OnPartChanged:=SimilarRefreshTree;
@@ -1023,7 +1029,7 @@ begin
   if (sender is (TAbstractViewArea))and(GUIAction=ZMsgID_GUIActionSelectionChanged) then begin
     if (NavTree.Parent<>nil)and(NavTree.Parent.isVisible) then begin
       sender_wa:=sender as TAbstractViewArea;
-      if (sender_wa.param.SelDesc.LastSelectedObject<>nil)and((sender_wa.param.SelDesc.Selectedobjcount-LastSelectedObjCount)=1) then begin
+      if FolloWToSelection and(sender_wa.param.SelDesc.LastSelectedObject<>nil)and((sender_wa.param.SelDesc.Selectedobjcount-LastSelectedObjCount)=1) then begin
         if (pGDBObjEntity(sender_wa.param.SelDesc.LastSelectedObject)^.GetObjType=GDBDeviceID)and(assigned(Ent2NodeMap)) then begin
           if LastAutoselectedEnt<>sender_wa.param.SelDesc.LastSelectedObject then
             if Ent2NodeMap.TryGetValue(sender_wa.param.SelDesc.LastSelectedObject,devnode) then begin

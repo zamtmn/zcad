@@ -24,7 +24,7 @@ uses uzcfnavigatordevices,uzcfcommandline,uzbpaths,TypeDescriptors,uzctranslatio
      varmandef,uzeentdevice,uzcnavigatorsnodedesk,
      uzeentity,zcobjectinspector,uzcguimanager,uzcenitiesvariablesextender,uzbstrproc,
      Types,Controls,Varman,UUnitManager,uzcsysvars,uzcLog,laz.VirtualTrees,
-     uzcfnavigatordevicescxmenu,uzcmainwindow,MacroDefIntf,sysutils,uzcActionsManager;
+     uzcfnavigatordevicescxmenu,{uzcmainwindow,}MacroDefIntf,sysutils,uzcActionsManager;
 resourcestring
   rsDevices='Devices';
   rsRisers='Risers';
@@ -99,7 +99,17 @@ end;
 
 procedure ZCADFormSetupProc(Form:TControl);
 begin
-  InitializeNavigatorDevicesCXMenu(ZCADMainWindow,StandartActions);
+  InitializeNavigatorDevicesCXMenu({ZCADMainWindow}
+                                   Application.MainForm//сюда попадает нил
+                                                       //а вроде как нужна главная форма
+                                                       //но если добавить зависимость
+                                                       //то переменные будут грузиться раньше
+                                                       //чем создадутся переменные навигаторов
+                                                       //и переменные навигаторов
+                                                       //DSGN_NavigatorsUseMainFunction
+                                                       //DSGN_NavigatorsFollowToSelection
+                                                       //задвоятся
+                                  ,StandartActions);
 
   NavigatorDevicesMenuManager.RegisterContextCheckFunc('HaveSubNodes',NDMCCFHaveSubNodes);
   NavigatorDevicesMenuManager.RegisterContextCheckFunc('HaveEntity',NDMCCFNodeHaveEntity);
@@ -144,6 +154,7 @@ end;
 
 initialization
   units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPaths,expandpath('$(DistribPath)/rtl/system.pas'),InterfaceTranslate,'DSGN_NavigatorsUseMainFunction','Boolean',@UseMainFunction);
+  units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPaths,expandpath('$(DistribPath)/rtl/system.pas'),InterfaceTranslate,'DSGN_NavigatorsFollowToSelection','Boolean',@FollowToSelection);
   ZCADGUIManager.RegisterZCADFormInfo('NavigatorDevices',rsDevices,TNavigatorDevices,rect(0,100,200,600),ZCADFormSetupProc,CreateNavigatorDevices,@NavigatorDevices,true);
   ZCADGUIManager.RegisterZCADFormInfo('NavigatorRisers',rsRisers,TNavigatorRisers,rect(0,100,200,600),ZCADFormSetupProc,CreateNavigatorRisers,@NavigatorRisers,true);
   ZCADGUIManager.RegisterZCADFormInfo('NavigatorCables',rsCables,TNavigatorCables,rect(0,100,200,600),ZCADFormSetupProc,CreateNavigatorCables,@NavigatorCables,true);

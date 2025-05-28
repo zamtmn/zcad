@@ -145,6 +145,7 @@ type
   public
     CurrentSel:TNodeData;
     LastAutoselectedEnt:PGDBObjEntity;
+    LastSelectedObjCount:integer;
     BP:TBuildParam;
     ExtTreeParam:TExtTreeParam;
     FileExt:String;
@@ -630,6 +631,7 @@ var
   po:TVTPaintOptions;
   //i:integer;
 begin
+  LastSelectedObjCount:=0;
   if FileExt='' then
     FileExt:='xml';
    umf:=TmyVariableAction.Create(self);
@@ -1021,7 +1023,7 @@ begin
   if (sender is (TAbstractViewArea))and(GUIAction=ZMsgID_GUIActionSelectionChanged) then begin
     if (NavTree.Parent<>nil)and(NavTree.Parent.isVisible) then begin
       sender_wa:=sender as TAbstractViewArea;
-      if sender_wa.param.SelDesc.LastSelectedObject<>nil then begin
+      if (sender_wa.param.SelDesc.LastSelectedObject<>nil)and((sender_wa.param.SelDesc.Selectedobjcount-LastSelectedObjCount)=1) then begin
         if (pGDBObjEntity(sender_wa.param.SelDesc.LastSelectedObject)^.GetObjType=GDBDeviceID)and(assigned(Ent2NodeMap)) then begin
           if LastAutoselectedEnt<>sender_wa.param.SelDesc.LastSelectedObject then
             if Ent2NodeMap.TryGetValue(sender_wa.param.SelDesc.LastSelectedObject,devnode) then begin
@@ -1041,6 +1043,7 @@ begin
         if assigned (StandaloneNode) then
         StandaloneNodeStates:=StandaloneNode.SaveState(CurrentSel);
       end;
+      LastSelectedObjCount:=sender_wa.param.SelDesc.Selectedobjcount;
     end;
   end;
 end;

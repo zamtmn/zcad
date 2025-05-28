@@ -486,7 +486,7 @@ var
   i:Integer;
   r:Double;
 begin
-  r:=abs(ObjMatrix.mtr[0].v[0]);
+  r:=sqrt(ObjMatrix.mtr[0].v[0]*ObjMatrix.mtr[0].v[0]+ObjMatrix.mtr[0].v[1]*ObjMatrix.mtr[0].v[1]+ObjMatrix.mtr[0].v[2]*ObjMatrix.mtr[0].v[2]);
   for i:=0 to 5 do begin
     if(mf[i].v[0] * P_insert_in_WCS.x + mf[i].v[1] * P_insert_in_WCS.y + mf[i].v[2] * P_insert_in_WCS.z + mf[i].v[3]+r < 0 ) then
     exit(false);
@@ -508,7 +508,7 @@ var
   i:Integer;
   r:Double;
 begin
-  r:=abs(ObjMatrix.mtr[0].v[0]);
+  r:=sqrt(ObjMatrix.mtr[0].v[0]*ObjMatrix.mtr[0].v[0]+ObjMatrix.mtr[0].v[1]*ObjMatrix.mtr[0].v[1]+ObjMatrix.mtr[0].v[2]*ObjMatrix.mtr[0].v[2]);
   for i:=0 to 5 do
     if(frustum[i].v[0] * P_insert_in_WCS.x + frustum[i].v[1] * P_insert_in_WCS.y + frustum[i].v[2] * P_insert_in_WCS.z + frustum[i].v[3]+r{+GetLTCorrectH} < 0 ) then
        exit(false);
@@ -519,7 +519,7 @@ var
   i:Integer;
   r:Double;
 begin
-  r:=abs(ObjMatrix.mtr[0].v[0]);
+  r:=sqrt(ObjMatrix.mtr[0].v[0]*ObjMatrix.mtr[0].v[0]+ObjMatrix.mtr[0].v[1]*ObjMatrix.mtr[0].v[1]+ObjMatrix.mtr[0].v[2]*ObjMatrix.mtr[0].v[2]);
   for i:=0 to 5 do
     if(frustum[i].v[0] * P_insert_in_WCS.x + frustum[i].v[1] * P_insert_in_WCS.y + frustum[i].v[2] * P_insert_in_WCS.z + frustum[i].v[3]+r{+GetLTCorrectH} < 0 ) then
       exit(IREmpty);

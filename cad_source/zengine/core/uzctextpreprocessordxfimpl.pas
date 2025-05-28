@@ -36,7 +36,7 @@ end;
 
 function EscapeSeq(const str:TDXFEntsInternalStringType;const operands:TDXFEntsInternalStringType;var NextSymbolPos:integer;var SPA:TStrProcessAttributes;pobj:Pointer):String;
 var
-  sym:char;
+  ch,lcch:TDXFEntsInternalCharType;
   value:TDXFEntsInternalStringType;
   num,code:integer;
 begin
@@ -46,28 +46,31 @@ begin
   if NextSymbolPos>0 then
   if NextSymbolPos<=length(str) then
   begin
-    sym:=str[NextSymbolPos];
-    case sym of
-      'L','l':result:=Chr(1); //подчеркивание
-      'P','p':result:=Chr(10);//перевод строки
-      'U','u':begin           //символ юникода
-                value:='$'+copy(str,NextSymbolPos+2,4);
-                val(value,num,code);
-                result:=UnicodeToUtf8(num);
-                NextSymbolPos:=NextSymbolPos+5;
-              end;
-      'C','c',//цвет
-      'Q','q',//наклон
-      'F','f',//имя фонта
-      'H','h',//высота
-      'A','a',//выравнивание
-      'W','w':begin//ширина текста
-                while (NextSymbolPos<=length(str))and(str[NextSymbolPos]<>';') do
-                  inc(NextSymbolPos);
-                result:='';
-              end
+    ch:=str[NextSymbolPos];
+    lcch:=TDXFEntsInternalCharType(ord(ch) or 32);//lowercase
+    case lcch of
+      'l':result:=Chr(1); //подчеркивание
+      'p':result:=Chr(10);//перевод строки
+      'u':begin           //символ юникода
+        value:='$'+copy(str,NextSymbolPos+2,4);
+        val(value,num,code);
+        result:=UnicodeToUtf8(num);
+        NextSymbolPos:=NextSymbolPos+5;
+      end;
+      'o':result:='';//надчеркивание
+      'c',//цвет
+      'q',//наклон
+      'f',//имя фонта
+      'h',//высота
+      'a',//выравнивание
+      't',//Межсимвольное расстояние
+      'w':begin//ширина текста
+        while (NextSymbolPos<=length(str))and(str[NextSymbolPos]<>';') do
+          inc(NextSymbolPos);
+        result:='';
+      end
     else
-      result:=sym;//экранирование
+      result:=ch;//экранирование
     end;
     inc(NextSymbolPos);
   end;

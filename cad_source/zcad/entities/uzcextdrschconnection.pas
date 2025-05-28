@@ -545,7 +545,7 @@ begin
         else begin
           dist:=distance2ray(PGDBObjDevice(p).P_insert_in_WCS,p1,p2);
           if (abs(dist.d)<bigeps)and((dist.t>-bigeps)and((dist.t<1+bigeps))) then begin
-            knot.Create(dist.t,abs(ConnectorExtender.FConnectorRadius)/2,KTNormal);
+            knot.Create(dist.t,abs(ConnectorExtender.FConnectorRadius){/2},KTNormal);
             if ConnectorExtender.FConnectorRadius<>0 then
               knot.&Type:=KTEmpty;
             Knots.PushBackData(knot);
@@ -600,7 +600,7 @@ begin
         else
           isConnected:=false;
         if isConnected then begin
-          knot.Create(t,abs(ConnectorExtender.FConnectorRadius)/2,KTNormal);
+          knot.Create(t,abs(ConnectorExtender.FConnectorRadius){/2},KTNormal);
           if ConnectorExtender.FConnectorRadius<>0 then
             knot.&Type:=KTEmpty;
           Knots.PushBackData(knot);

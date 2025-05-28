@@ -29,7 +29,7 @@ uses
   gzctnrVectorTypes,uzeBaseExtender,uzeconsts,uzgldrawcontext,
   UGDBOpenArrayOfPV,uzeentgenericsubentry,uzegeometry,
   uzcEnitiesVariablesExtender,gzctnrVectorc,uzegeometrytypes,
-  uzeentwithmatrix,uzeentlwpolyline;
+  uzeentwithmatrix,uzeentlwpolyline,uzeenttext;
 const
   IncludingVolumeExtenderName='extdrIncludingVolume';
 type
@@ -291,7 +291,12 @@ begin
         GDBDeviceID:begin
           testp:=PGDBObjDevice(p)^.P_insert_in_WCS;
         end;
+        GDBtextID,GDBMTextID:begin
+          testp:=PGDBObjText(p)^.P_insert_in_WCS;
+        end;
         else begin
+          {TODO: пока работает только с устройствами и текстами, надо расширять на все остальное}
+          exit;
           testp:=NulVertex;
         end;
       end;
@@ -305,7 +310,7 @@ begin
             ConnectToEnt(p,VolumeVExtdr,drawing,DC);
         end;
       end else
-        if IsPointInBB(PGDBObjDevice(p)^.P_insert_in_WCS,PGDBObjEntity(pThisEntity)^.vp.BoundingBox)then
+        if IsPointInBB(testp,PGDBObjEntity(pThisEntity)^.vp.BoundingBox)then
           ConnectToEnt(p,VolumeVExtdr,drawing,DC);
 
     end;

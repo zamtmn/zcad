@@ -21,14 +21,20 @@
           <Motor Desc="Motor"/>
         </Drives>
       </Power_consumer>
+      <Technological_device Desc="Technological device">
+        <Valve Desc="Valve">
+          <Solenoid Desc="Solenoid"/>
+          <Valve Desc="Valve"/>
+        </Valve>
+      </Technological_device>
       <Measuring_equipment Desc="Measuring equipment">
         <Pressure Desc="Pressure">
-          <Gauge Desc="Pressure gauge"/>
+          <Manometer Desc="Manometer"/>
           <Switch Desc="Pressure switch"/>
           <Sensor Desc="Pressure sensor"/>
         </Pressure>
         <Temperature Desc="Temperature">
-          <Gauge Desc="Temperature gauge"/>
+          <Thermometer Desc="Thermometer"/>
           <Switch Desc="Temperature switch"/>
           <Sensor Desc="Temperature sensor"/>
         </Temperature>
@@ -37,6 +43,11 @@
           <Switch Desc="Level switch"/>
           <Sensor Desc="Level sensor"/>
         </Level>
+        <Flow Desc="Flow">
+          <Gauge Desc="Flow gauge"/>
+          <Switch Desc="Flow switch"/>
+          <Sensor Desc="Flow sensor"/>
+        </Flow>
       </Measuring_equipment>
       <Alarm Desc="Alarm">
         <Fire Desc="Fire">

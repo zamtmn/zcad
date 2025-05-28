@@ -60,6 +60,7 @@ type
 
     function CreateInstance:PGDBObjMText;static;
     function GetObjType:TObjID;virtual;
+    procedure transform(const t_matrix:DMatrix4D);virtual;
   end;
 
 procedure FormatMtext(pfont:pgdbfont;width,size,wfactor:Double;const content:TDXFEntsInternalStringType;var text:XYZWStringArray);
@@ -68,6 +69,21 @@ function GetLinesW(var lines:XYZWStringArray):Double;
 function GetLineSpaceFromLineSpaceF(linespacef,size:Double):Double;
 
 implementation
+
+procedure GDBObjMText.transform;
+var
+  tv:GDBVertex;
+  m:DMatrix4D;
+begin
+  tv:=CreateVertex(width,0,0);
+  m:=t_matrix;
+  PGDBVertex(@m.mtr[3])^:=NulVertex;
+
+  tv:=VectorTransform3d(tv,m);
+  width:=oneVertexlength(tv);
+  inherited;
+end;
+
 
 procedure GDBObjMText.FormatAfterDXFLoad;
 begin

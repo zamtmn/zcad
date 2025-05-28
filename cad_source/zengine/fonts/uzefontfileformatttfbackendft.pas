@@ -24,7 +24,7 @@ uses
   uzeFontFileFormatTTFBackend,
   uzegeometrytypes,
   {todo: убрать после выхода нового fpc}
- {$IF FPC_FULLVERSION > 30202}
+ {$IF FPC_FULLVERSION > 30203}
   freetypehdyn,ftfont
  {$ELSE}
   tmp322_freetypehdyn,tmp322_ftfont

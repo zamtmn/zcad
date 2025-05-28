@@ -297,7 +297,10 @@ begin
   ischild:=child;
   if pnd<>nil then
   begin
-    if child<>nil then begin
+    if (child<>nil)or
+       ((pnd.Ident.pent=NodesStates.SelectedNode.Ident.pent)
+        and(pnd.Ident.name=NodesStates.SelectedNode.Ident.name)
+        and(pnd.Ident.id=NodesStates.SelectedNode.Ident.id)) then begin
       CurrPath.PushBack(pnd^.Ident);
       if Tree.Expanded[Node]=true then begin
         ThisNodeExpanded:=True;
@@ -369,29 +372,28 @@ begin
   pnd:=Tree.GetNodeData(Node);
   child:=Node^.FirstChild;
   ischild:=child;
-  if (pnd<>nil)and(child<>nil) then
-  begin
-    Path.PushBack(pnd.Ident);
-    if findin(Path,StartInNodestates,NodesStates.TrueOpenedNodes,Dist) then begin
-      Tree.Expanded[Node]:=true;
-      vparent:=Node.Parent;
-      while vparent<>RootNode do begin
-        Tree.Expanded[vparent]:=true;
-        vparent:=vparent.Parent;
-      end;
-    end else if findin(Path,StartInNodestates,NodesStates.OpenedNodes,Dist) then
-      Tree.Expanded[Node]:=true;
-    if
-       (pnd.Ident.pent=NodesStates.SelectedNode.Ident.pent)
-    and(pnd.Ident.name=NodesStates.SelectedNode.Ident.name)
-    and(pnd.Ident.id=NodesStates.SelectedNode.Ident.id) then
-    begin
-      Tree.FocusedNode:=Node;
-      //Tree.AddToSelection(Node);
+  if pnd<>nil then begin
+    if child<>nil then begin
+      Path.PushBack(pnd.Ident);
+      if findin(Path,StartInNodestates,NodesStates.TrueOpenedNodes,Dist) then begin
+        Tree.Expanded[Node]:=true;
+        vparent:=Node.Parent;
+        while vparent<>RootNode do begin
+          Tree.Expanded[vparent]:=true;
+          vparent:=vparent.Parent;
+        end;
+      end else if findin(Path,StartInNodestates,NodesStates.OpenedNodes,Dist) then
+        Tree.Expanded[Node]:=true;
+    end;
+    {if StartInNodestates=NodesStates.OpenedNodes.VArray.Size then
+      exit;}
+    if(pnd.Ident.pent=NodesStates.SelectedNode.Ident.pent)
+       and(pnd.Ident.name=NodesStates.SelectedNode.Ident.name)
+       and(pnd.Ident.id=NodesStates.SelectedNode.Ident.id) then begin
+        Tree.FocusedNode:=Node;
+        //Tree.AddToSelection(Node);
     end;
   end;
-  {if StartInNodestates=NodesStates.OpenedNodes.VArray.Size then
-                                                        exit;}
   while child<>nil do
   begin
    RecursiveRestoreState(child,Path,StartInNodestates,NodesStates,Dist);

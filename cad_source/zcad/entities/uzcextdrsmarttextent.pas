@@ -30,7 +30,7 @@ uses
   uzeentdevice,uzeentsubordinated,uzeentity,uzeentabstracttext,uzeenttext,
   uzeblockdef,uzeentmtext,uzeentwithlocalcs,uzeentblockinsert,
   uzeExtdrAbstractEntityExtender,uzeExtdrBaseEntityExtender,
-  uzeBaseExtender,uzbtypes,uzegeometrytypes,uzeconsts;
+  uzeBaseExtender,uzbtypes,uzegeometrytypes,uzeconsts,usimplegenerics;
 
 type
   TDummyDtawer=procedure(var IODXFContext:TIODXFContext;var outStream:TZctnrVectorBytes;pEntity:PGDBObjEntity;const p1,p2:GDBvertex;const drawing:TDrawingDef;var DC:TDrawContext);
@@ -105,6 +105,8 @@ type
 
       procedure DrawGeom(var IODXFContext:TIODXFContext;var outStream:TZctnrVectorBytes;pEntity:Pointer;const drawing:TDrawingDef;var DC:TDrawContext;tdd:TDummyDtawer);
 
+      procedure ReorganizeEnts(OldEnts2NewEntsMap:TMapPointerToPointer);override;
+
       class function EntIOLoadExtensionLine(_Name,_Value:String;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
       class function EntIOLoadBaseLine(_Name,_Value:String;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
       class function EntIOLoadExtensionLineOffset(_Name,_Value:String;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
@@ -158,6 +160,10 @@ begin
   dxfStringout(outStream,1002,'{');
   dxfStringout(outStream,1000,'_OWNERHANDLE=6E');
   dxfStringout(outStream,1002,'}');
+end;
+
+procedure TSmartTextEntExtender.ReorganizeEnts(OldEnts2NewEntsMap:TMapPointerToPointer);
+begin
 end;
 
 class function TSmartTextEntExtender.CanBeAddedTo(pEntity:Pointer):Boolean;

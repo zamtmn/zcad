@@ -58,7 +58,7 @@ uses
   uzgldrawcontext,uzglviewareaabstract,uzcguimanager,uzcinterfacedata,
   uzcenitiesvariablesextender,uzglviewareageneral,UniqueInstanceRaw,
   uzmacros,uzcviewareacxmenu,uzccommand_quit,uzeMouseTimer,
-  uzccommand_multiselect2objinsp;
+  uzccommand_multiselect2objinsp{$IfDef LINUX},BaseUnix{$EndIf};
 
 resourcestring
   rsClosed='Closed';
@@ -1414,7 +1414,7 @@ begin
      //if GetCurrentObjProc=@sysvar then
      {If assigned(UpdateObjInspProc)then
                                       UpdateObjInspProc;}
-     ZCMsgCallBackInterface.Do_GUIaction(self,ZMsgID_GUIActionRedraw);
+     //ZCMsgCallBackInterface.Do_GUIaction(self,ZMsgID_GUIActionRedraw);
      ZCMsgCallBackInterface.Do_SetNormalFocus;
 end;
 procedure TZCADMainWindow.ShowCXMenu;
@@ -1648,7 +1648,7 @@ begin
       if ((MZW_LBUTTON and zc)<>0)and((MZW_SHIFT and zc)=0) then
         MouseTimer.&Set(mp,sysvarDSGNEntityMoveStartOffset,[RMDown,RMUp,RReSet,RLeave],StartEntityDrag,sysvarDSGNEntityMoveStartTimerInterval);
 
-  ZCMsgCallBackInterface.Do_GUIaction(self,ZMsgID_GUIActionRedraw);
+  //ZCMsgCallBackInterface.Do_GUIaction(self,ZMsgID_GUIActionRedraw);
 
   result:=false;
 end;
@@ -2125,9 +2125,31 @@ begin
     exit;
   Application.QueueAsyncCall(AsyncUpdateVisible,PtrInt(Sender));
 end;
+
+{$IfDef LINUX}
+procedure DoShutdown(Sig: Longint; Info: PSigInfo; Context: PSigContext); cdecl;
+begin
+  ProgramLog.LogOutFormatStr('Got signal: "%d"',[Sig],LM_Necessarily);
+  CloseApp;
+end;
+procedure RegisterSignalHandler;
+var
+  RecNew, RecOld: sigactionrec;
+begin
+  RecOld:= Default(sigactionrec);
+  RecNew:= Default(sigactionrec);
+  RecNew.sa_handler:= @DoShutdown;
+  FPSigaction(SIGTERM, @RecNew, @RecOld);
+  FPSigaction(SIGINT, @RecNew, @RecOld);
+end;
+{$EndIf}
+
 initialization
 begin
   LMD:=programlog.RegisterModule('zcad\gui\uzcmainwindow-gui');
+{$IfDef LINUX}
+  RegisterSignalHandler;
+{$EndIf}
 end
 finalization
   ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);

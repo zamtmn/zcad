@@ -56,14 +56,22 @@ BUILDPREFIX:=cad
 INSTALLPREFIX:=NeedReplaceToDistribPath
 ifeq ($(OSDETECT),WIN32)
 	INSTALLPREFIX:=C:\Program Files\zcad
+	BINPREFIX:=$(INSTALLPREFIX)
+	CFGPREFIX:=C:\ProgramData\zcad
 else
 	ifeq ($(OSDETECT),LINUX)
 		INSTALLPREFIX:=/var/lib/zcad
+		BINPREFIX:=/bin
+		CFGPREFIX:=/etc/zcad
 	else
 		ifeq ($(OSDETECT),OSX)
 			INSTALLPREFIX:=/var/lib/zcad
+			BINPREFIX:=/bin
+			CFGPREFIX:=/etc/zcad
 		else
 			INSTALLPREFIX:=/var/lib/zcad
+			BINPREFIX:=/bin
+			CFGPREFIX:=/etc/zcad
 		endif
 	endif
 endif
@@ -369,3 +377,30 @@ endif
 	${MAKE} checkandinstallpckgifneed LPK=cad_source$(PATHDELIM)components$(PATHDELIM)zreaders$(PATHDELIM)zreaders.lpk
 	${MAKE} checkandinstallpckgifneed LPK=cad_source$(PATHDELIM)components$(PATHDELIM)fphunspell$(PATHDELIM)fphunspell.lpk
 #	$(LAZBUILD) --pcp=$(PCP) --build-ide=""
+
+install: installdata installcfg installbinary
+
+uninstall: uninstalldata uninstallcfg uninstallbinary
+
+installdata:
+	mkdir $(INSTALLPREFIX)
+	cp -r $(BUILDPREFIX)/data/* $(INSTALLPREFIX)
+	chmod -R 655 $(INSTALLPREFIX)
+
+uninstalldata:
+	rm -rf $(INSTALLPREFIX)
+
+installcfg:
+	mkdir $(CFGPREFIX)
+	cp -r $(BUILDPREFIX)/cfg/* $(CFGPREFIX)
+	chmod -R 655 $(CFGPREFIX)
+
+uninstallcfg:
+	rm -rf $(CFGPREFIX)
+
+installbinary: checkallvars
+	cp $(BUILDPREFIX)/bin/zcad $(BINPREFIX)/zcad
+	chmod -R 755 $(BINPREFIX)/zcad
+
+uninstallbinary:
+	rm $(BINPREFIX)/zcad

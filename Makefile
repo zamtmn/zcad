@@ -55,9 +55,9 @@ BUILDPREFIX:=cad
 
 INSTALLPREFIX:=NeedReplaceToDistribPath
 ifeq ($(OSDETECT),WIN32)
-	INSTALLPREFIX:=C:\Program Files\zcad
+	INSTALLPREFIX:=c:/Program\ Files/zcad
 	BINPREFIX:=$(INSTALLPREFIX)
-	CFGPREFIX:=C:\ProgramData\zcad
+	CFGPREFIX:=c:/ProgramData/zcad
 else
 	ifeq ($(OSDETECT),LINUX)
 		INSTALLPREFIX:=/var/lib/zcad
@@ -380,27 +380,48 @@ endif
 
 install: installdata installcfg installbinary
 
-uninstall: uninstalldata uninstallcfg uninstallbinary
+uninstall: uninstallbinary uninstallcfg uninstalldata
 
 installdata:
-	mkdir $(INSTALLPREFIX)
-	cp -r $(BUILDPREFIX)/data/* $(INSTALLPREFIX)
+ifeq ($(wildcard $(INSTALLPREFIX)),)
+	mkdir "$(subst \ , ,$(INSTALLPREFIX))"
+endif
+	cp -r $(BUILDPREFIX)/data/* "$(subst \ , ,$(INSTALLPREFIX))"
+ifneq ($(OSDETECT),WIN32)
 	chmod -R 655 $(INSTALLPREFIX)
+endif
 
 uninstalldata:
-	rm -rf $(INSTALLPREFIX)
+ifneq ($(wildcard $(INSTALLPREFIX)),)
+	rm -rf "$(subst \ , ,$(INSTALLPREFIX))"
+endif
 
 installcfg:
-	mkdir $(CFGPREFIX)
-	cp -r $(BUILDPREFIX)/cfg/* $(CFGPREFIX)
-	chmod -R 655 $(CFGPREFIX)
+ifeq ($(wildcard $(CFGPREFIX)),)
+	mkdir "$(CFGPREFIX)"
+endif
+	cp -r "$(BUILDPREFIX)/cfg/*" "$(CFGPREFIX)"
+ifneq ($(OSDETECT),WIN32)
+	chmod -R 655 "$(CFGPREFIX)"
+endif
 
 uninstallcfg:
-	rm -rf $(CFGPREFIX)
+	rm -rf "$(CFGPREFIX)"
 
 installbinary: checkallvars
-	cp $(BUILDPREFIX)/bin/zcad $(BINPREFIX)/zcad
-	chmod -R 755 $(BINPREFIX)/zcad
+ifneq ($(OSDETECT),WIN32)
+	cp $(BUILDPREFIX)/bin/zcad "$(BINPREFIX)/zcad"
+	chmod -R 755 "$(BINPREFIX)/zcad"
+else
+ifeq ($(wildcard $(BINPREFIX)/bin),)
+	mkdir "$(subst \ , ,$(INSTALLPREFIX))/bin"
+endif
+	cp -r $(BUILDPREFIX)/bin/* "$(subst \ , ,$(BINPREFIX))/bin"
+endif
 
 uninstallbinary:
-	rm $(BINPREFIX)/zcad
+ifneq ($(OSDETECT),WIN32)
+	rm "$(BINPREFIX)/zcad"
+else
+	rm -rf "$(subst \ , ,$(BINPREFIX))/bin"
+endif

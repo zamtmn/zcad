@@ -609,8 +609,8 @@ begin
      //** Получаем список кабельных групп в виде списка деревьев
     listGraph:=TListGraph.Create;
     listGraph:=getListGroupGraph();
-    for i:=0 to listGraph.Size-1 do
-        ZCMsgCallBackInterface.TextMessage('количество вершин' + inttostr(listGraph[i].VertexCount) + 'количество ребер' + inttostr(listGraph[i].edgeCount),TMWOHistoryOut);
+    //for i:=0 to listGraph.Size-1 do
+    //    ZCMsgCallBackInterface.TextMessage('количество вершин' + inttostr(listGraph[i].VertexCount) + 'количество ребер' + inttostr(listGraph[i].edgeCount),TMWOHistoryOut);
          //визуализация графа
 //     gg:=uzegeometry.CreateVertex(0,0,0);
 
@@ -737,13 +737,13 @@ begin
                      pvd:=FindVariableInEnt(TVertexTree(oGraph[i].Vertices[j].AsPointer[vpTVertexTree]^).dev,velec_NameDevice);
                      if pvd<>nil then
                         nameDev:=pString(pvd^.data.Addr.Instance)^;
-                   end
-                   else
-                      ZCMsgCallBackInterface.TextMessage('index - ' + inttostr(oGraph[i].Vertices[j].Index)+'   children - '+inttostr(oGraph[i].Vertices[j].ChildCount),TMWOHistoryOut);
+                   end;
+                   //else
+                   //   ZCMsgCallBackInterface.TextMessage('index - ' + inttostr(oGraph[i].Vertices[j].Index)+'   children - '+inttostr(oGraph[i].Vertices[j].ChildCount),TMWOHistoryOut);
 
 
 
-                   ZCMsgCallBackInterface.TextMessage('nameDev -' + nameDev +'  ----   nameRootDev-'+nameRootDev,TMWOHistoryOut);
+                   //ZCMsgCallBackInterface.TextMessage('nameDev -' + nameDev +'  ----   nameRootDev-'+nameRootDev,TMWOHistoryOut);
                    if TVertexTree(oGraph[n].Root.AsPointer[vpTVertexTree]^).dev <> nil then begin
                      pvd:=FindVariableInEnt(TVertexTree(oGraph[n].Root.AsPointer[vpTVertexTree]^).dev,velec_NameDevice);
                      if pvd<>nil then
@@ -2378,7 +2378,7 @@ begin
 
                   if segmCable<>nil then
                   repeat
-                        ZCMsgCallBackInterface.TextMessage('segmCable:=pcabledesk^.Segments.beginiterate(irSegment) repeat ',TMWOHistoryOut);
+                        //ZCMsgCallBackInterface.TextMessage('segmCable:=pcabledesk^.Segments.beginiterate(irSegment) repeat ',TMWOHistoryOut);
 
                         // создаем новое ребро
                         new(edgeGraph);
@@ -2431,7 +2431,7 @@ begin
                         else
                         begin
 
-                          ZCMsgCallBackInterface.TextMessage('номер ноде --- ' + floattostr(node^.PrevP.x),TMWOHistoryOut);
+                          //ZCMsgCallBackInterface.TextMessage('номер ноде --- ' + floattostr(node^.PrevP.x),TMWOHistoryOut);
                           ///**** создания связи между разрывами
                           if node^.DevLink <> nil then
                           begin
@@ -2452,20 +2452,20 @@ begin
 
                                 oGraphStartVertex.AsPointer[vpTVertexTree]:=vertexGraph;
 
-                                ZCMsgCallBackInterface.TextMessage('Устройство --- РАЗРЫВ',TMWOHistoryOut);
+                                //ZCMsgCallBackInterface.TextMessage('Устройство --- РАЗРЫВ',TMWOHistoryOut);
 
                                 //createRiserEdgeGraph(oGraph,node^.DevLink);
                             end;
                           end;
 
-                          ZCMsgCallBackInterface.TextMessage('1',TMWOHistoryOut);
-                          ZCMsgCallBackInterface.TextMessage('getVertexGraphIndexCoo --- node^.PrevP.x=' + floattostr(node^.PrevP.x),TMWOHistoryOut);
+                          //ZCMsgCallBackInterface.TextMessage('1',TMWOHistoryOut);
+                          //ZCMsgCallBackInterface.TextMessage('getVertexGraphIndexCoo --- node^.PrevP.x=' + floattostr(node^.PrevP.x),TMWOHistoryOut);
                           stVertexIndex:=getVertexGraphIndexCoo(oGraph,node^.PrevP); //получает вершину графа путем перебора всех вершин добавленых и вычитания из них первой вершины сегмента если ноль то найдена
-                          ZCMsgCallBackInterface.TextMessage('1-1= stVertexIndex=' + inttostr(stVertexIndex),TMWOHistoryOut);
+                          //ZCMsgCallBackInterface.TextMessage('1-1= stVertexIndex=' + inttostr(stVertexIndex),TMWOHistoryOut);
                           if stVertexIndex >= 0 then begin
                              oGraphStartVertex:= oGraph.Vertices[stVertexIndex];
                              node:=segmCable^.NodePropArray.iterate(ir_inNodeArray);
-                             ZCMsgCallBackInterface.TextMessage('нашел',TMWOHistoryOut);
+                             //ZCMsgCallBackInterface.TextMessage('нашел',TMWOHistoryOut);
                           end;
                           //Если кабель прокладывается от вершины которая уже добавлена и начинается с нуля, когда начерчено на разных планах с одной группой
                           //или когда группа имеет начало из одного фидера.
@@ -2475,12 +2475,12 @@ begin
                             if startVertexDevIndex >= 0 then begin
                                oGraphStartVertex:= oGraph.Vertices[startVertexDevIndex];
                                node:=segmCable^.NodePropArray.iterate(ir_inNodeArray);
-                               ZCMsgCallBackInterface.TextMessage('нашел',TMWOHistoryOut);
+                               //ZCMsgCallBackInterface.TextMessage('нашел',TMWOHistoryOut);
                              end
                             else
                                 ZCMsgCallBackInterface.TextMessage('АВАРИЯ АВАРИЯ так не должно быть!',TMWOHistoryOut);
                           end;
-                          ZCMsgCallBackInterface.TextMessage('2',TMWOHistoryOut);
+                          //ZCMsgCallBackInterface.TextMessage('2',TMWOHistoryOut);
                         end;
 
                         new(vertexGraph);
@@ -2492,7 +2492,7 @@ begin
 
                               if node^.DevLink <> nil then begin
 
-                                  ZCMsgCallBackInterface.TextMessage('Устройство --- ' + floattostr(node^.DevLink^.GetCenterPoint.x),TMWOHistoryOut);
+                                  //ZCMsgCallBackInterface.TextMessage('Устройство --- ' + floattostr(node^.DevLink^.GetCenterPoint.x),TMWOHistoryOut);
                                   //ZCMsgCallBackInterface.TextMessage('Устройство111 --- ' + PGDBObjDevice(node^.DevLink^.bp.ListPos.Owner)^.Name,TMWOHistoryOut);
                                   //vertexGraph^.dev:=node^.DevLink;
                                   vertexGraph^.dev:=PGDBObjDevice(node^.DevLink^.bp.ListPos.Owner);
@@ -2505,7 +2505,7 @@ begin
                                   pvd:=pnodeendvarext.entityunit.FindVariable('RiserName');
                                   if pvd <> nil then
                                   begin
-                                     ZCMsgCallBackInterface.TextMessage('Устройство --- РАЗРЫВ',TMWOHistoryOut);
+                                     //ZCMsgCallBackInterface.TextMessage('Устройство --- РАЗРЫВ',TMWOHistoryOut);
                                      vertexGraph^.isRiser:=true;
                                      //ZCMsgCallBackInterface.TextMessage('Устройство --- РАЗРЫВ',TMWOHistoryOut);
                                   end;
@@ -2545,10 +2545,10 @@ begin
                         //ZCMsgCallBackInterface.TextMessage('oGraphStartVertex х=' + floattostr(PTVertexTree(oGraphStartVertex.AsPointer[vpTVertexTree])^.vertex.x),TMWOHistoryOut);
                         //ZCMsgCallBackInterface.TextMessage('oGraphEndVertex х=' + floattostr(PTVertexTree(oGraphEndVertex.AsPointer[vpTVertexTree])^.vertex.x),TMWOHistoryOut);
                         oGraphEdge:= oGraph.AddEdge(oGraphStartVertex,oGraphEndVertex);
-                        ZCMsgCallBackInterface.TextMessage('44444',TMWOHistoryOut);
+                        //ZCMsgCallBackInterface.TextMessage('44444',TMWOHistoryOut);
                         //oGraphEdge.Weight:=edgeGraph^.length;
                         oGraphEdge.AsPointer[vpTEdgeTree]:=edgeGraph;
-                        ZCMsgCallBackInterface.TextMessage('55555',TMWOHistoryOut);
+                        //ZCMsgCallBackInterface.TextMessage('55555',TMWOHistoryOut);
                         //pvmc:=nodestart^.entityunit.FindVariable('CableName');
                         //ZCMsgCallBackInterface.TextMessage('Сегмент --- ' + inttostr(segmCable^.index),TMWOHistoryOut);
                         segmCable:=pcabledesk^.Segments.iterate(irSegment);

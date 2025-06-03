@@ -30,7 +30,8 @@ uses
   uzeentitiestypefilter,
   uzcdrawings,uzedrawingsimple,uzgldrawcontext,
   varmandef,uzcenitiesvariablesextender,
-  CsvDocument{,uzctnrvectorpgdbaseobjects},uzCtnrVectorpBaseEntity;
+  CsvDocument,uzCtnrVectorpBaseEntity,
+  uzeentsubordinated,UBaseTypeDescriptor;
 
 implementation
 
@@ -63,15 +64,24 @@ var
   ir:itrec;
   pvd:pvardesk;
   pentvarext:TVariablesExtender;
+  vn,vt,vv,vun:String;
+  vd:vardesk;
 begin
   pvisible:=source.beginiterate(ir);
   if pvisible<>nil then
   repeat
     pentvarext:=pvisible^.GetExtension<TVariablesExtender>;
-    pvd:=pentvarext.entityunit.FindVariable(prop);
-    if pvd<>nil then begin
-      pvd.data.PTD.SetValueFromString(pvd.data.Addr.Instance,value);
-      pvisible.FormatEntity(drawing,DC);
+    if pentvarext<>nil then begin
+      extractvarfromdxfstring(prop,vn,vt,vv,vun);
+      pvd:=pentvarext.entityunit.FindVariable(vn);
+      if pvd<>nil then begin
+        pvd.data.PTD.SetValueFromString(pvd.data.Addr.Instance,value);
+        pvisible.FormatEntity(drawing,DC);
+      end else begin
+        pentvarext.entityunit.setvardesc(vd,vn,vun,vt);
+        pentvarext.entityunit.InterfaceVariables.createvariable(vd.name,vd);
+        PBaseTypeDescriptor(vd.data.PTD)^.SetValueFromString(vd.data.Addr.Instance,value);
+      end;
     end;
   pvisible:=source.iterate(ir);
   until pvisible=nil;
@@ -111,6 +121,11 @@ begin
     ZCMsgCallBackInterface.TextMessage(format('In row %d wrong number of parameters',[row+1]),TMWOHistoryOut);
     exit;
   end;
+  if Length(FDoc.Cells[0,Row])>1 then
+    if copy(FDoc.Cells[0,Row],1,2)='##' then begin
+      ZCMsgCallBackInterface.TextMessage(format('Row %d commented out',[row+1]),TMWOHistoryOut);
+      exit;
+    end;
   Filter:=TEntsTypeFilter.Create;
   Filter.AddTypeName(FDoc.Cells[0,Row]);
   Filter.SetFilter;
@@ -154,12 +169,15 @@ begin
   end;
 
   if a1^.Count<>1 then
-    ZCMsgCallBackInterface.TextMessage(format('In row %d found %d candidats (%s)',[row+1,a1^.Count,RowValue(FDoc,row)]),TMWOHistoryOut);
+    //ZCMsgCallBackInterface.TextMessage(format('In row %d found %d candidats (%s)',[row+1,a1^.Count,RowValue(FDoc,row)]),TMWOHistoryOut);
+    ZCMsgCallBackInterface.TextMessage(format('In row %d found %d candidats (%s)',[row+1,a1^.Count,FDoc.Cells[2,Row]]),TMWOHistoryOut);
   if a1^.Count<>0 then begin
     while setvarfrom<FactColCount do begin
       VarName:=FDoc.Cells[setvarfrom,Row];
       VarValue:=FDoc.Cells[setvarfrom+1,Row];
-      SetArray(a1,VarName,VarValue,drawing,DC);
+      if (VarValue<>'')and(VarName<>'') then
+        if VarName[1]<>'#'then
+          SetArray(a1,VarName,VarValue,drawing,DC);
       inc(setvarfrom,2);
     end;
   end;

@@ -17,8 +17,10 @@ var
    _pressuremanometer:String;
    _thermometer:String;
    _pressuresensor:String;
+   _levelswitches:String;
 implementation
 begin
+     _levelswitches:='Датчикиуровня_реле_';
      _thermoswitches:='Датчикитемпературы_реле_';
      _thermosensor:='Датчикитемпературы_преобразователи_';
      _thermoresistance:='Датчикитемпературы_термосопротивления_';

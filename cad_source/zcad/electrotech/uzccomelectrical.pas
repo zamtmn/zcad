@@ -2282,7 +2282,7 @@ begin
                         pvm:=pcablevarext.entityunit.FindVariable('NMO_Name');
                         if (pvm<>nil) then
                                            if pbomitem.Names<>'' then
-                                                                     pbomitem.Names:=pbomitem.Names+','+pstring(pvm^.data.Addr.Instance)^
+                                                                     pbomitem.Names:=pbomitem.Names+', '+pstring(pvm^.data.Addr.Instance)^
                                                                  else
                                                                      pbomitem.Names:=pstring(pvm^.data.Addr.Instance)^;
 
@@ -2410,6 +2410,7 @@ begin
 
                    s:='';
                    psl.PushBackData(Tria_Utf8ToAnsi(s));
+                   s:=PBOMITEM.Names;
                    psl.PushBackData(Tria_Utf8ToAnsi(s));
                    end;
 

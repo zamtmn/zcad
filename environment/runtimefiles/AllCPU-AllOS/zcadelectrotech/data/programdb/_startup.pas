@@ -10,6 +10,8 @@ var
    _puop:String;
    _ibpops:String;
    _am:String;
+   _thermosensor:String;
+   _thermoswitches:String;
    _thermoresistance:String;
    _pressureswitches:String;
    _pressuremanometer:String;
@@ -17,6 +19,7 @@ var
    _pressuresensor:String;
 implementation
 begin
+     _thermoswitches:='Датчикитемпературы_реле_';
      _thermosensor:='Датчикитемпературы_преобразователи_';
      _thermoresistance:='Датчикитемпературы_термосопротивления_';
      _thermometer:='Датчикитемпературы_термометры_';

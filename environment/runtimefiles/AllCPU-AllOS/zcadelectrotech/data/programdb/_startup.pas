@@ -17,6 +17,7 @@ var
    _pressuresensor:String;
 implementation
 begin
+     _thermosensor:='Датчикитемпературы_преобразователи_';
      _thermoresistance:='Датчикитемпературы_термосопротивления_';
      _thermometer:='Датчикитемпературы_термометры_';
      _pressureswitches:='Датчикидавления_реледавления_';

@@ -2263,7 +2263,7 @@ begin
     pcablevarext:=pv^.GetExtension<TVariablesExtender>;
     if pcablevarext<>nil then
     begin
-         pvm:=pcablevarext.entityunit.FindVariable('DB_link');
+         pvm:=pcablevarext.entityunit.FindVariable('DB_link',true);
          if pvm<>nil then
          begin
               pvad:=pcablevarext.entityunit.FindVariable('AmountD');

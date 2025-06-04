@@ -14,12 +14,14 @@ var
    _pressureswitches:String;
    _pressuremanometer:String;
    _thermometer:String;
+   _pressuresensor:String;
 implementation
 begin
      _thermoresistance:='Датчикитемпературы_термосопротивления_';
      _thermometer:='Датчикитемпературы_термометры_';
      _pressureswitches:='Датчикидавления_реледавления_';
      _pressuremanometer:='Датчикидавления_манометры_';
+     _pressuresensor:='Датчикидавления_преобразователи_';
      _cables:='Кабели_';
      _cables_sv:='Кабели_связь';
      _detsmokesl:='Извещатели_пожарные_дымовые_шлейфовые_';

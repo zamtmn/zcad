@@ -10,7 +10,7 @@ type
     _M27x1_5(*'M27х1,5'*)
   );
   TOWETN_DS_PVT1=packed object(ElDeviceBaseObject);
-    Rzb:TOWETN_DS_PVT1RZB;(*''*)
+    Rzb:TOWETN_DS_PVT1RZB;(*'Резьба присоединения'*)
     L:string;(*'Длина электрода (м)'*)
   end;
 var

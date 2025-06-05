@@ -27,14 +27,13 @@ var
 implementation
 begin
    _EQ_RIZUR_200.initnul;
-   _EQ_RIZUR_200.Group:=_levelswitches;
    _EQ_RIZUR_200.L:='50';
    _EQ_RIZUR_200.Tproc:=_100t;
    _EQ_RIZUR_200.Pproc:=_010;
    _EQ_RIZUR_200.T:='100';
    _EQ_RIZUR_200.P:='1';
    _EQ_RIZUR_200.Ro:='1000';
-   _EQ_RIZUR_200.Group:=_pressuresensor;
+   _EQ_RIZUR_200.Group:=_levelswitches;
    _EQ_RIZUR_200.EdIzm:=_sht;
    _EQ_RIZUR_200.ID:='RIZUR_200';
    _EQ_RIZUR_200.Standard:='ТУ-26.51.52-001-12189681-2018';

@@ -20,8 +20,6 @@ begin
    _EQ_RIZUR_500.T:='100';
    _EQ_RIZUR_500.P:='1';
    _EQ_RIZUR_500.Ro:='1000';
-   _EQ_RIZUR_500.Group:=_pressuresensor;
-   _EQ_RIZUR_500.EdIzm:=_sht;
    _EQ_RIZUR_500.ID:='RIZUR_500';
    _EQ_RIZUR_500.Standard:='ТУ 26.51.52-001-12189681-2018';
    _EQ_RIZUR_500.OKP:='';

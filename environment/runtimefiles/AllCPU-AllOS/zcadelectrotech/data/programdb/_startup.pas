@@ -18,12 +18,13 @@ var
    _thermometer:String;
    _pressuresensor:String;
    _levelswitches:String;
+   _seismicswitches:String;
 implementation
 begin
+     _seismicswitches:='Датчикисейсмо_реле_';
      _levelswitches:='Датчикиуровня_реле_';
      _thermoswitches:='Датчикитемпературы_реле_';
      _thermosensor:='Датчикитемпературы_преобразователи_';
-     _gasdetector:='Датчикизагазованности_детекторы_';
      _thermoresistance:='Датчикитемпературы_термосопротивления_';
      _thermometer:='Датчикитемпературы_термометры_';
      _pressureswitches:='Датчикидавления_реледавления_';

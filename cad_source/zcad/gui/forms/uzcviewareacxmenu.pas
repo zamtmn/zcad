@@ -64,6 +64,8 @@ var
   PSelDesk:PSelectedObjDesc;
   count:integer;
 begin
+  //возвращаем true если выбрано только одно устройство
+  //todo: сделать по нормальному
   result:=(vac.VA.param.SelDesc.Selectedobjcount=1)and(vac.VA.PDWG<>nil);
   if result then begin
     if IsIt(typeof(vac.VA.PDWG^),typeof(TSimpleDrawing)) then begin

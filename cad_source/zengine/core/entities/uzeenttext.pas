@@ -27,7 +27,7 @@ uses
   uzestyleslayers,uzeentabstracttext,uzeentity,UGDBOutbound2DIArray,
   uzctnrVectorBytes,uzbtypes,uzeconsts,uzglviewareadata,uzegeometry,
   uzeffdxfsupport,uzeentsubordinated,uzbLogIntf,uzegeometrytypes,uzestylestexts,
-  uzeSnap,uzMVReader;
+  uzeSnap,uzMVReader,uzcTextPreprocessorDXFImpl;
 const
   CLEFNotNeedSaveTemplate=1;
 type
@@ -339,6 +339,7 @@ var
   hv, vv,bw: Byte;
   tv:gdbvertex;
   s:String;
+  ASourcesCounter:TSPFSourceSet;
 begin
   vv := acadvjustify(textprop.justify);
   hv := (j2b[textprop.justify]{ord(textprop.justify)} - 1) mod 3;
@@ -373,14 +374,16 @@ begin
 
   SaveToDXFObjPostfix(outStream);
 
+  s := Tria_Utf8ToAnsi(UTF8Encode(content));
+  dxfStringout(outStream,1,z2dxftext(s));
 
-    if  {convertfromunicode}(template)=content then
-                                               s := Tria_Utf8ToAnsi(UTF8Encode(template))
-                                           else
-                                               s := Tria_Utf8ToAnsi(UTF8Encode(content));
+  s:=TxtFormatAndCountSrcs(template,SPFSources.GetFull,ASourcesCounter,@Self);
+  if (ASourcesCounter and (not SPFSdxf))<>0 then begin
+  end else begin
+    IODXFContext.LocalEntityFlags:=IODXFContext.LocalEntityFlags or CLEFNotNeedSaveTemplate;
+  end;
 
 
-  dxfStringout(outStream,1,z2dxftext({content}s));
   dxfStringout(outStream,100,'AcDbText');
   dxfIntegerout(outStream,73,vv);
 end;

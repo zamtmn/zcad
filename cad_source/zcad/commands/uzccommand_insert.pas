@@ -30,7 +30,8 @@ uses
   uzctnrVectorStrings,uzegeometrytypes,
   uzccomdraw,uzcstrconsts,uzccommandsmanager,Varman,uzeconsts,uzglviewareadata,
   uzeentsubordinated,uzeentity,uzgldrawcontext,uzeentblockinsert,uzcutils,
-  zcmultiobjectcreateundocommand,uzeentityfactory,uzegeometry;
+  zcmultiobjectcreateundocommand,uzeentityfactory,uzegeometry,
+  URecordDescriptor,typedescriptors,varmandef;
 
 type
 
@@ -46,68 +47,68 @@ var
 implementation
 
 function Insert_com_CommandStart(const Context:TZCADCommandContext;operands:TCommandOperands):Integer;
-var pb:PGDBObjBlockdef;
-    //ir:itrec;
-    i:integer;
+var
+  pb:PGDBObjBlockdef;
+  i:integer;
+  PInternalRTTITypeDesk:PRecordDescriptor;
+  pf:PfieldDescriptor;
 begin
-     if operands<>'' then
-     begin
-          pb:=drawings.GetCurrentDWG^.BlockDefArray.getblockdef(operands);
-          if pb=nil then
-                        begin
-                             drawings.AddBlockFromDBIfNeed(drawings.GetCurrentDWG,operands);
-                             (*pb:=BlockBaseDWG^.BlockDefArray.getblockdef(operands);
-                             if pb<>nil then
-                             begin
-                                  drawings.CopyBlock(BlockBaseDWG,drawings.GetCurrentDWG,pb);
-                                  //pb^.CloneToGDB({@drawings.GetCurrentDWG^.BlockDefArray});
-                             end;*)
-                        end;
-     end;
 
+  PInternalRTTITypeDesk:=pointer(SysUnit^.TypeName2PTD('TBlockInsert'));
+  if PInternalRTTITypeDesk<>nil then
+    pf:=PInternalRTTITypeDesk^.FindField('Block')
+  else
+    pf:=nil;
 
+  if operands<>'' then begin
+    pb:=drawings.GetCurrentDWG^.BlockDefArray.getblockdef(operands);
+    if pb=nil then
+      drawings.AddBlockFromDBIfNeed(drawings.GetCurrentDWG,operands);
+    if pf<>nil then
+      pf^.base.Attributes:=pf^.base.Attributes+[fldaReadOnly];
+  end else begin
+    if pf<>nil then
+      pf^.base.Attributes:=pf^.base.Attributes-[fldaReadOnly];
+  end;
 
-     BIProp.Blocks.Enums.free;
-     i:=GetBlockDefNames(BIProp.Blocks.Enums,operands);
-     if BIProp.Blocks.Enums.Count>0 then
-     begin
-          if i>=0 then
-                     BIProp.Blocks.Selected:=i
-                 else
-                     if length(operands)<>0 then
-                                         begin
-                                               ZCMsgCallBackInterface.TextMessage('Insert:'+sysutils.format(rscmNoBlockDefInDWG,[operands]),TMWOHistoryOut);
-                                               commandmanager.executecommandend;
-                                               exit;
-                                         end;
-          ZCMsgCallBackInterface.Do_PrepareObject(nil,drawings.GetUnitsFormat,SysUnit^.TypeName2PTD('TBlockInsert'),@BIProp,drawings.GetCurrentDWG);
-          drawings.GetCurrentDWG^.wa.SetMouseMode((MGet3DPoint) or (MMoveCamera) or (MRotateCamera));
-          ZCMsgCallBackInterface.TextMessage(rscmInsertPoint,TMWOHistoryOut);
-     end
-        else
-            begin
-                 ZCMsgCallBackInterface.TextMessage('Insert:'+rscmInDwgBlockDefNotDeffined,TMWOHistoryOut);
-                 commandmanager.executecommandend;
-            end;
+  BIProp.Blocks.Enums.free;
+  i:=GetBlockDefNames(BIProp.Blocks.Enums,operands);
+  if BIProp.Blocks.Enums.Count>0 then begin
+    if i>=0 then
+      BIProp.Blocks.Selected:=i
+    else
+      if length(operands)<>0 then begin
+        ZCMsgCallBackInterface.TextMessage('Insert:'+sysutils.format(rscmNoBlockDefInDWG,[operands]),TMWOHistoryOut);
+        commandmanager.executecommandend;
+        exit;
+      end;
+    ZCMsgCallBackInterface.Do_PrepareObject(nil,drawings.GetUnitsFormat,SysUnit^.TypeName2PTD('TBlockInsert'),@BIProp,drawings.GetCurrentDWG);
+    drawings.GetCurrentDWG^.wa.SetMouseMode((MGet3DPoint) or (MMoveCamera) or (MRotateCamera));
+    ZCMsgCallBackInterface.TextMessage(rscmInsertPoint,TMWOHistoryOut);
+  end else begin
+    ZCMsgCallBackInterface.TextMessage('Insert:'+rscmInDwgBlockDefNotDeffined,TMWOHistoryOut);
+    commandmanager.executecommandend;
+  end;
+
   result:=cmd_ok;
 end;
 function Insert_com_BeforeClick(const Context:TZCADCommandContext;wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record;mclick:Integer): Integer;
-var tb:PGDBObjSubordinated;
-    domethod,undomethod:tmethod;
-    DC:TDrawContext;
-    pbd:PGDBObjBlockdef;
+var
+  tb:PGDBObjSubordinated;
+  domethod,undomethod:tmethod;
+  DC:TDrawContext;
+  pbd:PGDBObjBlockdef;
 begin
   result:=mclick;
   dc:=drawings.GetCurrentDWG^.CreateDrawingRC;
-  if (button and MZW_LBUTTON)<>0 then
-  begin
+  if (button and MZW_LBUTTON)<>0 then begin
     if pb<>nil then begin
-                         //pb^.done;
-                         //Freemem(pointer(pb));
-                         pb:=nil;
-                         drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.free;
-                         //drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.Count := 0;
-                    end;
+      //pb^.done;
+      //Freemem(pointer(pb));
+      pb:=nil;
+      drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.free;
+      //drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.Count := 0;
+    end;
     pb := Pointer(drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.CreateObj(GDBBlockInsertID{,drawings.GetCurrentROOT}));
     //PGDBObjBlockInsert(pb)^.initnul;//(@drawings.GetCurrentDWG^.ObjRoot,drawings.LayerTable.GetSystemLayer,0);
     PGDBObjBlockInsert(pb)^.init(drawings.GetCurrentROOT,drawings.GetCurrentDWG^.GetCurrentLayer,0);
@@ -125,10 +126,10 @@ begin
     //pc^.lod:=4;
     tb:=pb^.FromDXFPostProcessBeforeAdd(nil,drawings.GetCurrentDWG^);
     if tb<>nil then begin
-                         tb^.bp:=pb^.bp;
-                         pb^.done;
-                         Freemem(pointer(pb));
-                         pb:=pointer(tb);
+      tb^.bp:=pb^.bp;
+      pb^.done;
+      Freemem(pointer(pb));
+      pb:=pointer(tb);
     end;
 
     pbd^.CopyExtensionsTo(pb^);
@@ -156,16 +157,14 @@ begin
     zcRedrawCurrentDrawing;
 
     result:=0;
-  end
-  else
-  begin
+  end else begin
     if pb<>nil then begin
-                         //pb^.done;
-                         //Freemem(pointer(pb));
-                         pb:=nil;
-                         drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.free;
-                         //drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.Count := 0;
-                    end;
+      //pb^.done;
+      //Freemem(pointer(pb));
+      pb:=nil;
+      drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.free;
+      //drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.Count := 0;
+    end;
     pointer(pb) :=AllocEnt(GDBBlockInsertID);
     //pointer(pb) :=drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.CreateObj(GDBBlockInsertID,drawings.GetCurrentROOT);
     //pb := Pointer(drawings.GetCurrentDWG^.ConstructObjRoot.CreateObj(GDBBlockInsertID,@drawings.GetCurrentDWG^.ObjRoot));
@@ -185,12 +184,12 @@ begin
 
     tb:=pb^.FromDXFPostProcessBeforeAdd(nil,drawings.GetCurrentDWG^);
     if tb<>nil then begin
-                         tb^.bp:=pb^.bp;
-                         PGDBObjEntity(tb)^.State:=PGDBObjEntity(tb)^.State+[ESConstructProxy];
-                         //drawings.GetCurrentDWG^.ConstructObjRoot.deliteminarray(pb^.bp.PSelfInOwnerArray);
-                         pb^.done;
-                         Freemem(pointer(pb));
-                         pb:=pointer(tb);
+      tb^.bp:=pb^.bp;
+      PGDBObjEntity(tb)^.State:=PGDBObjEntity(tb)^.State+[ESConstructProxy];
+      //drawings.GetCurrentDWG^.ConstructObjRoot.deliteminarray(pb^.bp.PSelfInOwnerArray);
+      pb^.done;
+      Freemem(pointer(pb));
+      pb:=pointer(tb);
     end;
     //PGDBObjEntity(pb)^.FromDXFPostProcessAfterAdd;
     pb^.CalcObjMatrix;
@@ -203,12 +202,11 @@ begin
 end;
 procedure Insert_com_CommandEnd(const Context:TZCADCommandContext;_self:pointer);
 begin
-     if pb<>nil then
-                    begin
-                         //pb^.done;
-                         //Freemem(pointer(pb));
-                         pb:=nil;
-                    end;
+  if pb<>nil then begin
+    //pb^.done;
+    //Freemem(pointer(pb));
+    pb:=nil;
+  end;
 end;
 
 

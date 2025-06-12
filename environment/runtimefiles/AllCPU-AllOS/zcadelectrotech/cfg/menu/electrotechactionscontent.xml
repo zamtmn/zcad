@@ -10,7 +10,7 @@
       <ZAction Name="ACN_CABLESELECT" Command="El_Cable_Select" Img="csel" Caption="Select connected devices"/>
       <ZAction Name="ACN_CABLEINVERT" Command="El_Cable_Invert" Img="#inv" Caption="Reverse cable direction"/>
       <ZAction Name="ACN_CABLELEGEND" Command="El_Cable_Legend" Img="reportcable.png" Caption="Export cables legend"/>
-	  <ZAction Name="ACN_OPSSPBUILD" Command="OPS_SPBuild" Img="reportconnectiondiagram.png" Caption="Connection diagram"/>
+      <ZAction Name="ACN_OPSSPBUILD" Command="OPS_SPBuild" Img="reportconnectiondiagram.png" Caption="Connection diagram"/>
       <ZAction Name="ACN_MATERIALLEGEND" Command="El_Material_Legend" Img="#ВМ" Caption="Export materials legend,Export materials legend"/>
       <ZAction Name="ACN_PLACESMOKEDETECTORORTO" Command="PlaceSmokeDetectorOrto" Img="ps" Caption="Automatic placement of fire detectors"/>
       <ZAction Name="ACN_SENSORMARK" Command="OPS_Sensor_Mark" Img="#++" Caption="Numbering sensors on the plan"/>
@@ -22,7 +22,8 @@
       <ZAction Name="ACN_REGENZENTS" Command="RegenZEnts" Img="regenz" Caption="Regenerate zcad entities"/>
       <ZAction Name="ACN_DATAIMPORT" Command="DataImport" Img="dataimportcsv.png" Caption="Import data to entities"/>
       <ZAction Name="ACN_DATAEXPORT" Command="DataExport" Img="dataexportcsv.png" Caption="Export entities data"/>
-	  <ZAction Name="ACN_DEVDEFSYNC" Caption="Synchronize layer visibility in device" Command="DevDefSync" Img="#SL"/>
+      <ZAction Name="ACN_DEVDEFSYNC" Caption="Synchronize layer visibility in device" Command="DevDefSync" Img="#SL"/>
+      <ZAction Name="ACN_PLACEDELEGATE" Caption="Place delegate on plan" Command="PlaceDelegate(DEVICE_KIP_SENSOR|DevOnPlan)" Img="#PDoP"/>
     </Group>
   </ActionsContent>
 </CONFIG>

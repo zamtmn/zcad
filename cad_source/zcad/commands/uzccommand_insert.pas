@@ -140,13 +140,14 @@ begin
          comit;
     end;
 
-    if @aip<>nil then
-      aip(pb);
-
     PGDBObjEntity(pb)^.FromDXFPostProcessAfterAdd;
     pb^.CalcObjMatrix;
     pb^.BuildGeometry(drawings.GetCurrentDWG^);
     pb^.BuildVarGeometry(drawings.GetCurrentDWG^);
+
+    if @aip<>nil then
+      aip(pb);
+
     pb^.FormatEntity(drawings.GetCurrentDWG^,dc);
     drawings.GetCurrentROOT^.ObjArray.ObjTree.CorrectNodeBoundingBox(pb^);
     pb^.Visible:=0;

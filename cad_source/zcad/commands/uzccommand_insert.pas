@@ -155,7 +155,7 @@ begin
     pb:=nil;
     zcRedrawCurrentDrawing;
 
-    result:=0;
+    result:=cmd_ok;
   end else begin
     if pb<>nil then begin
       pb:=nil;

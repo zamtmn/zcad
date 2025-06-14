@@ -2983,10 +2983,28 @@ var
     DC:TDrawContext;
     priservarext,priser2varext,psupernetvarext,pnetvarext,plinevarext:TVariablesExtender;
     lph:TLPSHandle;
+    entarray:TZctnrVectorPGDBaseEntity;
 procedure GetStartEndPin(startdevname,enddevname:String);
 begin
-  PGDBObjEntity(startdev):=drawings.FindEntityByVar(GDBDeviceID,'NMO_Name',startdevname);
-  PGDBObjEntity(enddev):=drawings.FindEntityByVar(GDBDeviceID,'NMO_Name',enddevname);
+  startdev:=nil;
+  enddev:=nil;
+
+  entarray.Clear;
+  drawings.FindMultiEntityByVar(GDBDeviceID,'NMO_Name',startdevname,entarray);
+  if entarray.Count>0 then begin
+    PGDBObjEntity(startdev):=FindEntityByVarInArray(GDBDeviceID,'ENTID_Representation','GraphSymbol~onPlan',entarray,true);
+    if startdev=nil then
+      pointer(startdev):=entarray.getData(0);
+  end;
+
+  entarray.Clear;
+  drawings.FindMultiEntityByVar(GDBDeviceID,'NMO_Name',enddevname,entarray);
+  if entarray.Count>0 then begin
+    PGDBObjEntity(enddev):=FindEntityByVarInArray(GDBDeviceID,'ENTID_Representation','GraphSymbol~onPlan',entarray,true);
+    if enddev=nil then
+      pointer(enddev):=entarray.getData(0);
+  end;
+
   if startdev=nil then
                       //ZCMsgCallBackInterface.TextMessage('В строке '+inttostr(row)+' не найдено стартовое устройство '+startdevname,TMWOHistoryOut)
                       ZCMsgCallBackInterface.TextMessage(format('In row %d startdevice "%s" not found',[row,startdevname]),TMWOHistoryOut)
@@ -3034,6 +3052,7 @@ end;
 
 begin
   linesarray.init(10);
+  entarray.init(10);
   dc:=drawings.GetCurrentDWG^.CreateDrawingRC;
   if length(operands)=0 then
                      begin
@@ -3265,6 +3284,8 @@ begin
        until net=nil;
        supernetsarray.done;
        linesarray.done;
+       entarray.Clear;
+       entarray.done;
 
 
        lps.EndLongProcess(lph)

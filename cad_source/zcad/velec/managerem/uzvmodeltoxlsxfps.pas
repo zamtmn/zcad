@@ -205,14 +205,47 @@ const
     //lph:TLPSHandle;
 
     //парсим ключи внутри специфальной команды
-    function getkeysCell(textCell,namekey:string):String;
+    //function getkeysCell(textCell,namekey:string):String;
+    //var
+    //  strArray,strArray2  : Array of String;
+    //begin
+    //  result:='';
+    //  try
+    //    strArray:= textCell.Split(namekey+ '=[');
+    //    strArray2:= strArray[1].Split(']');
+    //    result:=strArray2[0];
+    //  except
+    //    result:='';
+    //    //ZCMsgCallBackInterface.TextMessage('   textCell= ' + textCell + '   namekey= ' + namekey,TMWOHistoryOut);
+    //  end;
+    //end;
+    function getkeysCell(textCell, namekey: string): string;
     var
-      strArray,strArray2  : Array of String;
+      startPos, endPos: Integer;
+      startMarker: string;
     begin
-      result:='';
-      strArray:= textCell.Split(namekey+ '=[');
-      strArray2:= strArray[1].Split(']');
-      result:=strArray2[0];
+      Result := '';
+
+      if (textCell = '') or (namekey = '') then
+        Exit;
+
+      startMarker := namekey + '=[';
+      startPos := Pos(startMarker, textCell);
+
+      if startPos = 0 then
+        Exit;
+
+      // Смещаем позицию на длину стартового маркера
+      startPos := startPos + Length(startMarker);
+
+      // Ищем закрывающую скобку после стартовой позиции
+      endPos := PosEx(']', textCell, startPos);
+
+      if endPos = 0 then
+        Exit;
+
+      // Извлекаем подстроку между позициями
+      Result := Copy(textCell, startPos, endPos - startPos);
     end;
 
     function getMainFuncDev(devNowvarext:TVariablesExtender):PGDBObjDevice;
@@ -332,7 +365,9 @@ const
       textCell,calcVal:string;
     begin
       result:=false;
+      //ZCMsgCallBackInterface.TextMessage('   strCell= ' + strCell + '   calcKey= ' + calcKey,TMWOHistoryOut);
       calcVal:=getkeysCell(strCell,calcKey);
+      //ZCMsgCallBackInterface.TextMessage('   zcabdevfinish=   ----- ' + calcVal,TMWOHistoryOut);
 
       if (calcVal = 'before') or (calcVal = 'both') then
         uzvzcadxlsxfps.nowCalcFormulas; //расчитать формулы
@@ -1041,14 +1076,48 @@ const
       //stInfoDevCell:TVXLSXCELL;
 
       //парсим ключи спецключи
-      function getkeysCell(textCell,namekey:string):String;
-      var
-        strArray,strArray2  : Array of String;
-      begin
-        strArray:= textCell.Split(namekey+ '=[');
-        strArray2:= strArray[1].Split(']');
-        getkeysCell:=strArray2[0];
-      end;
+      //function getkeysCell(textCell,namekey:string):String;
+      //var
+      //  strArray,strArray2  : Array of String;
+      //begin
+      //  result:='';
+      //  try
+      //  strArray:= textCell.Split(namekey+ '=[');
+      //  strArray2:= strArray[1].Split(']');
+      //  result:=strArray2[0];
+      //  except
+      //    result:='';
+      //    //ZCMsgCallBackInterface.TextMessage('   textCell= ' + textCell + '   namekey= ' + namekey,TMWOHistoryOut);
+      //  end;
+      //end;
+    function getkeysCell(textCell, namekey: string): string;
+    var
+      startPos, endPos: Integer;
+      startMarker: string;
+    begin
+      Result := '';
+
+      if (textCell = '') or (namekey = '') then
+        Exit;
+
+      startMarker := namekey + '=[';
+      startPos := Pos(startMarker, textCell);
+
+      if startPos = 0 then
+        Exit;
+
+      // Смещаем позицию на длину стартового маркера
+      startPos := startPos + Length(startMarker);
+
+      // Ищем закрывающую скобку после стартовой позиции
+      endPos := PosEx(']', textCell, startPos);
+
+      if endPos = 0 then
+        Exit;
+
+      // Извлекаем подстроку между позициями
+      Result := Copy(textCell, startPos, endPos - startPos);
+    end;
 
       //парсим имя листа
       function getcodenameSheet(textCell,splitname:string;part:integer):String;

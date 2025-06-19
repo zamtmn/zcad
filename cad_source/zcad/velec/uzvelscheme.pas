@@ -2052,7 +2052,7 @@ var
 
     oGraphEdge:TEdge;
     stVertexIndex:integer;
-
+    count:integer;
     //isStartVertex:boolean;
     startVertexDevIndex:integer;
 
@@ -2375,7 +2375,7 @@ begin
 
                   // Перебираем сегменты кабеля
                   segmCable:=pcabledesk^.Segments.beginiterate(irSegment);
-
+                  count:=0;
                   if segmCable<>nil then
                   repeat
                         //ZCMsgCallBackInterface.TextMessage('segmCable:=pcabledesk^.Segments.beginiterate(irSegment) repeat ',TMWOHistoryOut);
@@ -2397,8 +2397,8 @@ begin
                         //Добавляем длину кабеля из сегмента
                         pvSegmLength:=pSegmCablevarext.entityunit.FindVariable('AmountD');
                         edgeGraph^.length:=pdouble(pvSegmLength^.data.Addr.Instance)^;
-
-                        ZCMsgCallBackInterface.TextMessage('Сегмент № ' + inttostr(pinteger(pvSegm^.data.Addr.Instance)^),TMWOHistoryOut);
+                        inc(count);
+                        //ZCMsgCallBackInterface.TextMessage('Сегмент № ' + inttostr(pinteger(pvSegm^.data.Addr.Instance)^),TMWOHistoryOut);
 
                         //перебераем вершины сегмента
                         node:=segmCable^.NodePropArray.beginiterate(ir_inNodeArray);
@@ -2554,6 +2554,7 @@ begin
                         segmCable:=pcabledesk^.Segments.iterate(irSegment);
                   until segmCable=nil;
 
+                  ZCMsgCallBackInterface.TextMessage('   - кол-во сегментов № ' + inttostr(count),TMWOHistoryOut);
              end;
         //
         end;

@@ -8,7 +8,6 @@ type
                         _1_0(*'1'*),
                         _1_6(*'1.6'*),
                         _2_4(*'2.4'*),
-                        _2_4(*'2.4'*),
                         _3_0(*'3'*));
      TROSMA_RD_2R_MODEL35=packed object(ElDeviceBaseObject);
                     Predel:TROSMA_RD_2Predel;

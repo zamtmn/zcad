@@ -254,6 +254,7 @@ uses
   uzcenitiesvariablesextender,uzcExtdrLayerControl,uzcExtdrSmartTextEnt,
   uzcExtdrIncludingVolume,uzcExtdrSCHConnection,uzcExtdrSCHConnector,
   uzcExtdrReport,
+  uzcfhistorywindow,
 
   {$IFNDEF DARWIN}
   {$IFDEF ELECTROTECH}

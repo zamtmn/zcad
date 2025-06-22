@@ -394,7 +394,7 @@ begin
   dc.subrender := dc.subrender + 1;
   PanObjectDegradation:=SysVarRDPanObjectDegradation;
   if(not dc.scrollmode)or(not PanObjectDegradation)then
-    Representation.DrawGeometry(DC,inFrustumState)
+    Representation.DrawGeometry(DC,VP.BoundingBox,inFrustumState)
   else begin
     DC.Drawer.DrawLine3DInModelSpace(outbound[0],outbound[1],DC.DrawingContext.matrixs);
     DC.Drawer.DrawLine3DInModelSpace(outbound[1],outbound[2],DC.DrawingContext.matrixs);

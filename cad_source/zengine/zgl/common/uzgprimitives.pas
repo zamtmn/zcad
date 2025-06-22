@@ -236,10 +236,19 @@ begin
      result:=getPrimitiveSize;
 end;
 function TLLLine.draw(drawer:TZGLAbstractDrawer;var rc:TDrawContext;var GeomData:ZGLGeomData;var LLPArray:TLLPrimitivesArray;var OptData:ZGLOptimizerData;inFrustumState:TInBoundingVolume):Integer;
+var
+  pp1,pp2:ZGLVertex3Sarray.PT;
+  l:Double;
 begin
-     if not OptData.ignorelines then
-                                    Drawer.DrawLine(@geomdata.Vertex3S,P1Index,P1Index+1);
-     result:=inherited;
+  if not OptData.ignorelines then begin
+    pp1:=geomdata.Vertex3S.getDataMutable(P1Index);
+    pp2:=geomdata.Vertex3S.getDataMutable(P1Index+1);
+    l:=abs(pp2^.x-pp1^.x)+abs(pp2^.y-pp1^.y)+abs(pp2^.z-pp1^.z);
+    l:=l/rc.DrawingContext.zoom;
+    if l>0.09 then
+      Drawer.DrawLine(@geomdata.Vertex3S,P1Index,P1Index+1);
+  end;
+  result:=inherited;
 end;
 function TLLLine.CalcTrueInFrustum(const frustum:ClipArray;var GeomData:ZGLGeomData;out InRect:TInBoundingVolume):Integer;
 begin
@@ -402,7 +411,10 @@ end;
 
 function TLLPolyLine.draw(drawer:TZGLAbstractDrawer;var rc:TDrawContext;var GeomData:ZGLGeomData;var LLPArray:TLLPrimitivesArray;var OptData:ZGLOptimizerData;inFrustumState:TInBoundingVolume):Integer;
 var
-   i,index,oldindex,sindex:integer;
+   indexDrawed,i,index,oldindex,sindex:integer;
+   l:Double;
+   pp1,pp2:ZGLVertex3Sarray.PT;
+   sstep:integer;
 begin
   if not OptData.ignorelines then
   begin
@@ -424,18 +436,54 @@ begin
     begin
        index:=P1Index+1;
        oldindex:=P1Index;
-         for i:=1 to Count-1 do
-         begin
-            Drawer.DrawLine(@geomdata.Vertex3S,oldindex,index);
-            oldindex:=index;
-            inc(index);
+       indexDrawed:=oldindex;
+       pp1:=geomdata.Vertex3S.getDataMutable(oldindex);
+       pp2:=geomdata.Vertex3S.getDataMutable(index);
+       l:=0;
+       if OptData.symplify then
+         sstep:=max(5,count div 30)
+       else
+         sstep:=1;
+       i:=1;
+       while i<count do begin
+       //for i:=1 to Count-1 do begin
+         l:=l+abs(pp2^.x-pp1^.x)+abs(pp2^.y-pp1^.y)+abs(pp2^.z-pp1^.z);
+         if (l/rc.DrawingContext.zoom>3)or(i=(count-1)) then begin
+            l:=0;
+            Drawer.DrawLine(@geomdata.Vertex3S,indexDrawed,index);
+            indexDrawed:=index;
          end;
+         i:=i+sstep;
+         oldindex:=index;
+         pp1:=pp2;
+         inc(index,sstep);
+         //index:=i;
+         pp2:=geomdata.Vertex3S.getDataMutable(index);
+       end;
     end;
   if closed then
-                       Drawer.DrawLine(@geomdata.Vertex3S,oldindex,P1Index);
+    Drawer.DrawLine(@geomdata.Vertex3S,oldindex,P1Index);
   end;
   result:=inherited;
 end;
+
+{var
+  pp1,pp2:ZGLVertex3Sarray.PT;
+  l:Double;
+begin
+  if not OptData.ignorelines then begin
+    pp1:=geomdata.Vertex3S.getDataMutable(P1Index);
+    pp2:=geomdata.Vertex3S.getDataMutable(P1Index+1);
+    l:=abs(pp2^.x-pp1^.x)+abs(pp2^.y-pp1^.y)+abs(pp2^.z-pp1^.z);
+    l:=l/rc.DrawingContext.zoom;
+    if l>0.09 then
+      Drawer.DrawLine(@geomdata.Vertex3S,P1Index,P1Index+1);
+  end;
+  result:=inherited;
+end;}
+
+
+
 procedure TLLPolyLine.getEntIndexs(var GeomData:ZGLGeomData;out eid:TEntIndexesData);
 begin
      eid.GeomIndexMin:=P1Index;

@@ -683,7 +683,7 @@ end;
 
 function TGeneralViewArea.treerender;
 const
-  MaxLODDeepDrtaw=5;
+  MaxLODDeepDrtaw=3;
 var
   currtime:TDateTime;
   Hour,Minute,Second,MilliSecond:word;

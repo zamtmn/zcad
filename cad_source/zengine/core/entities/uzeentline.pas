@@ -324,9 +324,9 @@ end;
 procedure GDBObjLine.DrawGeometry;
 begin
   if (selected)or(dc.selected) then
-    Representation.DrawNiceGeometry(DC,inFrustumState)
+    Representation.DrawNiceGeometry(DC,VP.BoundingBox,inFrustumState)
   else
-    Representation.DrawGeometry(DC,inFrustumState);
+    Representation.DrawGeometry(DC,VP.BoundingBox,inFrustumState);
 end;
 
 function GDBObjLine.getsnap;

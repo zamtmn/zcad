@@ -230,7 +230,7 @@ begin
     end
     else
     begin
-      pfont^.CreateSymbol(drawer,self,sym,objmatrix,matr,Bound,LLSymbolLineIndex);
+      pfont^.CreateSymbol(drawer,textprop_size,self,sym,objmatrix,matr,Bound,LLSymbolLineIndex);
 
     end;
     if sym<>1 then
@@ -536,7 +536,7 @@ Bound.LB:=NulVertex2D;
 Bound.RT:=NulVertex2D;
 sli:=-1;
 if PSP.Psymbol<> nil then
-                    PSP^.param.PStyle.pfont.CreateSymbol(drawer,self,PSP.Psymbol.Number,objmatrix,matr,Bound,sli);
+                    PSP^.param.PStyle.pfont.CreateSymbol(drawer,1,self,PSP.Psymbol.Number,objmatrix,matr,Bound,sli);
 end;
 procedure ZGLGraphix.PlaceText(drawer:TZGLAbstractDrawer;const StartPatternPoint:GDBVertex;PTP:PTextProp;scale,angle:Double);
 var
@@ -558,7 +558,7 @@ begin
      sym:=byte(PTP^.Text[j]);
           if ptp.param.PStyle.pfont.font.IsUnicode then
                                                      sym:=ach2uch(sym);
-PTP^.param.PStyle.pfont.CreateSymbol(drawer,self,sym,objmatrix,matr,Bound,sli);
+PTP^.param.PStyle.pfont.CreateSymbol(drawer,PTP.txtH,self,sym,objmatrix,matr,Bound,sli);
 matr.mtr[3].v[0]:=matr.mtr[3].v[0]+PTP^.param.PStyle.pfont^.GetOrReplaceSymbolInfo(byte(PTP^.Text[j]){//-ttf-//,tdinfo}).NextSymX;
 matr.t:=matr.t+CMTTranslate;
 end;

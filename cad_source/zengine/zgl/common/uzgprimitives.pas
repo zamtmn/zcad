@@ -26,6 +26,7 @@ uses
   uzgldrawerabstract,uzbtypes,gzctnrVectorTypes,gzctnrVector,uzegeometrytypes,
   uzegeometry,Generics.Collections,Generics.Defaults;
 const
+
      LLAttrNothing=0;
      LLAttrNeedSolid=1;
      LLAttrNeedSimtlify=2;
@@ -157,6 +158,7 @@ PTLLSymbolLine=^TLLSymbolLine;
 TLLSymbolLine= object(TLLPrimitive)
               SimplyDrawed:Boolean;
               MaxSqrSymH:Single;
+              txtHeight:Single;
               SymbolsParam:TSymbolSParam;
               FirstOutBoundIndex,LastOutBoundIndex:TLLVertexIndex;
               function draw(drawer:TZGLAbstractDrawer;var rc:TDrawContext;var GeomData:ZGLGeomData;var LLPArray:TLLPrimitivesArray;var OptData:ZGLOptimizerData;inFrustumState:TInBoundingVolume):Integer;virtual;
@@ -557,6 +559,7 @@ end;
 constructor TLLSymbolLine.init;
 begin
      MaxSqrSymH:=0;
+     txtHeight:=0;
      inherited;
 end;
 
@@ -872,6 +875,7 @@ var
    sqrparamsize:Double;
    PLLSymbolLine:PTLLSymbolLine;
    PSymbolsParam:PTSymbolSParam;
+   savezoom:double;
 begin
   result:=0;
   if self.LineIndex<>-1 then
@@ -939,12 +943,18 @@ else if (Attrib and LLAttrNeedSimtlify)>0 then
     //if result<>SymSize then
     begin
       result:=SymSize;
+      savezoom:=rc.DrawingContext.Zoom;
+      rc.DrawingContext.Zoom:=rc.DrawingContext.Zoom/PLLSymbolLine^.txtHeight;
       drawSymbol(drawer,rc,GeomData,LLPArray,OptData,PSymbolSParam,inFrustumState);
+      rc.DrawingContext.Zoom:=savezoom;
     end;
   end
    else
      begin
+       savezoom:=rc.DrawingContext.Zoom;
+       rc.DrawingContext.Zoom:=rc.DrawingContext.Zoom/PLLSymbolLine^.txtHeight;
        drawSymbol(drawer,rc,GeomData,LLPArray,OptData,PSymbolSParam,inFrustumState);
+       rc.DrawingContext.Zoom:=savezoom;
      end;
 
 end;

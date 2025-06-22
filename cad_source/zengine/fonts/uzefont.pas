@@ -40,7 +40,7 @@ GDBfont= object(GDBNamedObject)
     destructor done;virtual;
     function GetOrCreateSymbolInfo(symbol:Integer):PGDBsymdolinfo;
     function GetOrReplaceSymbolInfo(symbol:Integer):PGDBsymdolinfo;
-    procedure CreateSymbol(drawer:TZGLAbstractDrawer;var geom:ZGLVectorObject;_symbol:Integer;const objmatrix:DMatrix4D;matr:DMatrix4D;var Bound:TBoundingRect;var LLSymbolLineIndex:TArrayIndex);
+    procedure CreateSymbol(drawer:TZGLAbstractDrawer;TxtHeight:double;var geom:ZGLVectorObject;_symbol:Integer;const objmatrix:DMatrix4D;matr:DMatrix4D;var Bound:TBoundingRect;var LLSymbolLineIndex:TArrayIndex);
   end;
 {EXPORT-}
 var
@@ -54,7 +54,7 @@ begin
   pf^.init(name);
 end;
 
-procedure GDBfont.CreateSymbol(drawer:TZGLAbstractDrawer;var geom:ZGLVectorObject;_symbol:Integer;const objmatrix:DMatrix4D;matr:DMatrix4D;var Bound:TBoundingRect;var LLSymbolLineIndex:TArrayIndex);
+procedure GDBfont.CreateSymbol(drawer:TZGLAbstractDrawer;TxtHeight:double;var geom:ZGLVectorObject;_symbol:Integer;const objmatrix:DMatrix4D;matr:DMatrix4D;var Bound:TBoundingRect;var LLSymbolLineIndex:TArrayIndex);
 var
   v,v0,true0Y,fact0y:GDBvertex;
   sqrsymh:Double;
@@ -155,6 +155,7 @@ begin
       PLLSymbolLine^.LastOutBoundIndex:=PLLPsymbol^.OutBoundIndex;
       if sqrsymh>PLLSymbolLine.MaxSqrSymH then
         PLLSymbolLine.MaxSqrSymH:=sqrsymh;
+      PLLSymbolLine.txtHeight:=TxtHeight;
     end;
     DefaultLLPCreator.CreateLLSymbolEnd(geom.LLprimitives);
   end;

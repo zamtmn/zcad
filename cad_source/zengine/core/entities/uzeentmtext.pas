@@ -594,7 +594,7 @@ begin
           pl.PushBackData(lp);
         end;
       end else begin
-        pfont.CreateSymbol(DC.drawer,Representation.GetGraphix^,sym,objmatrix,matr,Bound,ln);
+        pfont.CreateSymbol(DC.drawer,textprop.size,Representation.GetGraphix^,sym,objmatrix,matr,Bound,ln);
         {matr:=m1;
         m1:=CreateTranslationMatrix(pgdbfont(pfont)^.GetOrReplaceSymbolInfo(sym).NextSymX,0,0);
         matr:=MatrixMultiply(m1,matr);}

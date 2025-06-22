@@ -27,7 +27,7 @@ uses
   uzeentity,
   uzcdrawings,
   uzcinterface,uzcutils,
-  gzctnrVectorTypes;
+  gzctnrVectorTypes,uzCtnrVectorPBaseEntity;
 
 implementation
 
@@ -39,28 +39,37 @@ var
   pv:pGDBObjEntity;
   ir:itrec;
   count:integer;
+  Ents:TZctnrVectorPGDBaseEntity;
 begin
 
   count:=0;
   pv:=drawings.GetCurrentROOT^.ObjArray.beginiterate(ir);
   if pv<>nil then
   repeat
-    if pv^.Selected then
-      pv^.deselect(drawings.GetCurrentDWG^.wa.param.SelDesc.Selectedobjcount,drawings.CurrentDWG^.DeSelector)
-    else begin
-      pv^.select(drawings.GetCurrentDWG^.wa.param.SelDesc.Selectedobjcount,drawings.CurrentDWG^.selector);
+    if not pv^.Selected then
       inc(count);
-    end;
-
     pv:=drawings.GetCurrentROOT^.ObjArray.iterate(ir);
   until pv=nil;
-  drawings.GetCurrentDWG^.wa.param.seldesc.Selectedobjcount:=count;
-  drawings.GetCurrentDWG^.wa.param.seldesc.OnMouseObject:=nil;
-  drawings.GetCurrentDWG^.wa.param.seldesc.LastSelectedObject:=nil;
-  drawings.GetCurrentDWG^.wa.param.lastonmouseobject:=nil;
-  //{objinsp.GDBobjinsp.}ReturnToDefault;
-  //clearcp;
-  zcRedrawCurrentDrawing;
+
+  if count>0 then begin
+    Ents.init(count);
+    pv:=drawings.GetCurrentROOT^.ObjArray.beginiterate(ir);
+    if pv<>nil then
+    repeat
+      if not pv^.Selected then
+        Ents.PushBackData(pv);
+      pv:=drawings.GetCurrentROOT^.ObjArray.iterate(ir);
+    until pv=nil;
+    drawings.GetCurrentDWG.DeSelectAll;
+    drawings.GetCurrentDWG.SelectEnts(Ents);
+    Ents.Clear;
+    Ents.done;
+    drawings.GetCurrentDWG^.wa.param.seldesc.Selectedobjcount:=count;
+    drawings.GetCurrentDWG^.wa.param.seldesc.OnMouseObject:=nil;
+    drawings.GetCurrentDWG^.wa.param.seldesc.LastSelectedObject:=nil;
+    drawings.GetCurrentDWG^.wa.param.lastonmouseobject:=nil;
+    zcRedrawCurrentDrawing;
+  end;
   result:=cmd_ok;
 end;
 

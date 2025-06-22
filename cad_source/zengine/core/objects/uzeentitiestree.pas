@@ -73,7 +73,7 @@ TZEntsManipulator=class
                    class procedure SetSizeInArray(ns:integer;var arr:TEntityArray);
 
                    {not used in generic, for external use}
-                   class procedure treerender(var Node:GZBInarySeparatedGeometry<TBoundingBox,DVector4D,TEntTreeNodeData,TZEntsManipulator,GDBObjEntity,PGDBObjEntity,TEntityArray>;var DC:TDrawContext);
+                   class procedure treerender(var Node:GZBInarySeparatedGeometry<TBoundingBox,DVector4D,TEntTreeNodeData,TZEntsManipulator,GDBObjEntity,PGDBObjEntity,TEntityArray>;var DC:TDrawContext;LODDeep:integer=0);
                   end;
 TTestTreeArray=array [0..2] of TEntTreeNode.TTestNode;
 var
@@ -160,37 +160,61 @@ begin
                        PTEntTreeNode(pminusnode)^.DrawVolume(dc);
      DrawNodeVolume(dc);
 end;
-class procedure TZEntsManipulator.treerender(var Node:GZBInarySeparatedGeometry<TBoundingBox,DVector4D,TEntTreeNodeData,TZEntsManipulator,GDBObjEntity,PGDBObjEntity,TEntityArray>;var DC:TDrawContext);
+
+function SqrCanSimplyDrawInWCS(const DC:TDrawContext;const ParamSize,TargetSize:Double):Boolean;
+var
+   templod:Double;
 begin
-     begin
-       if (Node.NodeData.infrustum=dc.DrawingContext.VActuality.InfrustumActualy) then
-       begin
-            if Node.NodeData.FulDraw=TDTFulDraw then
-            if (Node.NodeData.FulDraw=TDTFulDraw)or(Node.nul.count=0) then
-            begin
-            if assigned(Node.pminusnode)then
-                                            if (Node.NodeData.minusdrawpos<>dc.DrawingContext.DRAWCOUNT)or(dc.MaxDetail) then
-                                            begin
-                                                 treerender(Node.pminusnode^,dc);
-                                                 //PTEntTreeNode(Node.pminusnode)^.treerender(dc);
-                                                 Node.NodeData.minusdrawpos:=dc.DrawingContext.DRAWCOUNT
-                                            end;
-            if assigned(Node.pplusnode)then
-                                           if (Node.NodeData.plusdrawpos<>dc.DrawingContext.DRAWCOUNT)or(dc.MaxDetail) then
-                                           begin
-                                                treerender(Node.pplusnode^,dc);
-                                                //PTEntTreeNode(Node.pplusnode)^.treerender(dc);
-                                                Node.NodeData.plusdrawpos:=dc.DrawingContext.DRAWCOUNT
-                                           end;
-            end;
-            begin
-                 if (Node.NodeData.FulDraw=TDTFulDraw)or(dc.MaxDetail) then
-                                                                      TEntTreeNode(Node).DrawWithAttribExternalArray(dc);
-                                                                      //GDBObjEntityOpenArray(Node.nul).DrawWithattrib(dc);
-                 Node.NodeData.nuldrawpos:=dc.DrawingContext.DRAWCOUNT;
-            end;
-       end;
-     end;
+     if dc.maxdetail then
+                         exit(true);
+  templod:=(ParamSize)/(dc.DrawingContext.zoom*dc.DrawingContext.zoom);
+  if templod>TargetSize then
+                            exit(true)
+                        else
+                            exit(false);
+end;
+
+class procedure TZEntsManipulator.treerender(var Node:GZBInarySeparatedGeometry<TBoundingBox,DVector4D,TEntTreeNodeData,TZEntsManipulator,GDBObjEntity,PGDBObjEntity,TEntityArray>;var DC:TDrawContext;LODDeep:integer=0);
+const
+  MaxLODDeepDrtaw=2;
+var
+  v:gdbvertex;
+  LODSave:TLOD;
+begin
+  if (Node.NodeData.infrustum=dc.DrawingContext.VActuality.InfrustumActualy) then begin
+
+    LODSave:=DC.LOD;
+    if DC.LOD=LODCalculatedDetail then begin
+      if LODDeep=0 then begin
+        v:=Node.BoundingBox.RTF-Node.BoundingBox.LBN;
+        if not SqrCanSimplyDrawInWCS(DC,uzegeometry.SqrOneVertexlength(v),300) then begin
+          DC.LOD:=LODLowDetail;
+          inc(LODDeep);
+        end;
+      end else
+        inc(LODDeep);
+      end else if LODDeep>0 then
+        inc(loddeep);
+
+    if Node.NodeData.FulDraw=TDTFulDraw then
+    if (Node.NodeData.FulDraw=TDTFulDraw)or(Node.nul.count=0) then begin
+      if assigned(Node.pminusnode)and(LODDeep<MaxLODDeepDrtaw)then
+        if (Node.NodeData.minusdrawpos<>dc.DrawingContext.DRAWCOUNT)or(dc.MaxDetail) then begin
+          treerender(Node.pminusnode^,dc,loddeep);
+          Node.NodeData.minusdrawpos:=dc.DrawingContext.DRAWCOUNT
+        end;
+      if assigned(Node.pplusnode)and(LODDeep<MaxLODDeepDrtaw)then
+        if (Node.NodeData.plusdrawpos<>dc.DrawingContext.DRAWCOUNT)or(dc.MaxDetail) then begin
+          treerender(Node.pplusnode^,dc,loddeep);
+          Node.NodeData.plusdrawpos:=dc.DrawingContext.DRAWCOUNT
+        end;
+    end;
+    if (Node.NodeData.FulDraw=TDTFulDraw)or(dc.MaxDetail) then
+      TEntTreeNode(Node).DrawWithAttribExternalArray(dc);
+    Node.NodeData.nuldrawpos:=dc.DrawingContext.DRAWCOUNT;
+
+    DC.LOD:=LODSave;
+  end;
 end;
 class procedure TZEntsManipulator.SetSizeInArray(ns:integer;var arr:TEntityArray);
 begin

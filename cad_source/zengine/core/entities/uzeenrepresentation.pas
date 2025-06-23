@@ -37,7 +37,6 @@ TZEntityRepresentation= object(GDBaseObject)
 
                        function CalcTrueInFrustum(const frustum:ClipArray; FullCheck:boolean):TInBoundingVolume;
                        procedure DrawGeometry(var rc:TDrawContext;const aabb:TBoundingBox;const inFrustumState:TInBoundingVolume);virtual;
-                       procedure DrawNiceGeometry(var rc:TDrawContext;const aabb:TBoundingBox;const inFrustumState:TInBoundingVolume);virtual;
                        procedure Clear;virtual;
                        procedure Shrink;virtual;
 
@@ -94,18 +93,6 @@ begin
   end else
     simplydraw:=rc.lod=LODLowDetail;
   Graphix.DrawGeometry(rc,inFrustumState,simplydraw);
-end;
-procedure TZEntityRepresentation.DrawNiceGeometry(var rc:TDrawContext;const aabb:TBoundingBox;const inFrustumState:TInBoundingVolume);
-var
-  v:gdbvertex;
-  simplydraw:Boolean;
-begin
-  if rc.lod=LODCalculatedDetail then begin
-    v:=uzegeometry.VertexSub(aabb.RTF,aabb.LBN);
-    simplydraw:=not SqrCanSimplyDrawInWCS(rc,uzegeometry.SqrOneVertexlength(v),49);
-  end else
-    simplydraw:=rc.lod=LODLowDetail;
-  Graphix.DrawNiceGeometry(rc,inFrustumState,simplydraw);
 end;
 function TZEntityRepresentation.CalcTrueInFrustum(const frustum:ClipArray; FullCheck:boolean):TInBoundingVolume;
 begin

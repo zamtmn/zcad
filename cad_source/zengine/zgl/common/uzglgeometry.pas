@@ -50,7 +50,6 @@ type
   {REGISTEROBJECTTYPE ZGLGraphix}
   ZGLGraphix= object(ZGLVectorObject)
     procedure DrawGeometry(var DC:TDrawContext;const inFrustumState:TInBoundingVolume;simplydraw:boolean);virtual;
-    procedure DrawNiceGeometry(var DC:TDrawContext;const inFrustumState:TInBoundingVolume;simplydraw:boolean);virtual;
     constructor init();
     destructor done;virtual;
     function DrawLineWithLT(var DC:TDrawContext;const startpoint,endpoint:GDBVertex; const vp:GDBObjVisualProp;OnlyOne:Boolean=False):TLLDrawResult;virtual;
@@ -881,11 +880,6 @@ begin
 end;
 
 procedure ZGLGraphix.drawgeometry;
-begin
-  //rc.drawer.PVertexBuffer:=@GeomData.Vertex3S;
-  DrawLLPrimitives(DC,DC.drawer,inFrustumState,simplydraw);
-end;
-procedure ZGLGraphix.drawNicegeometry;
 begin
   //rc.drawer.PVertexBuffer:=@GeomData.Vertex3S;
   DrawLLPrimitives(DC,DC.drawer,inFrustumState,simplydraw);

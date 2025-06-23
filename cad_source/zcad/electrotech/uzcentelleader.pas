@@ -31,8 +31,7 @@ GDBObjElLeader= object(GDBObjComplex)
 
 
             procedure DrawGeometry(lw:Integer;var DC:TDrawContext;const inFrustumState:TInBoundingVolume);virtual;
-            procedure DrawOnlyGeometry(lw:Integer;var DC:TDrawContext;const inFrustumState:TInBoundingVolume);virtual;
-            procedure getoutbound(var DC:TDrawContext);virtual;
+             procedure getoutbound(var DC:TDrawContext);virtual;
             function CalcInFrustum(const frustum:ClipArray;const Actuality:TVisActuality;var Counters:TCameraCounters; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double):Boolean;virtual;
             function CalcTrueInFrustum(const frustum:ClipArray):TInBoundingVolume;virtual;
             function onmouse(var popa:TZctnrVectorPGDBaseEntity;const MF:ClipArray;InSubEntry:Boolean):Boolean;virtual;
@@ -758,15 +757,6 @@ begin
   tbl.DrawGeometry(lw,dc,inFrustumState);
   dec(dc.subrender);
   inherited;
-end;
-procedure GDBObjElLeader.DrawOnlyGeometry;
-begin
-  inherited;
-  inc(dc.subrender);
-  MainLine.DrawOnlyGeometry(lw,dc,inFrustumState);
-  MarkLine.DrawOnlyGeometry(lw,dc,inFrustumState);
-  tbl.DrawOnlyGeometry(lw,dc,inFrustumState);
-  dec(dc.subrender);
 end;
 function GDBObjElLeader.Clone;
 var tvo: PGDBObjElLeader;

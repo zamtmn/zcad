@@ -35,7 +35,6 @@ PGDBObjOpenArrayOfPV=^GDBObjOpenArrayOfPV;
 GDBObjOpenArrayOfPV= object({TZctnrVectorPGDBaseObjects}TZctnrVectorPGDBaseEntity)
                       procedure DrawWithattrib(var DC:TDrawContext;const inFrustumState:TInBoundingVolume);virtual;
                       procedure DrawGeometry(lw:Integer;var DC:TDrawContext;const inFrustumState:TInBoundingVolume);virtual;
-                      procedure DrawOnlyGeometry(lw:Integer;var DC:TDrawContext;const inFrustumState:TInBoundingVolume);virtual;
                       function calcvisible(const frustum:ClipArray;const Actuality:TVisActuality;var Counters:TCameraCounters;ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double):Boolean;virtual;
                       function CalcActualVisible(const Actuality:TVisActuality):Boolean;virtual;
                       function CalcTrueInFrustum(const frustum:ClipArray):TInBoundingVolume;virtual;
@@ -303,19 +302,6 @@ begin
   repeat
     if p^.infrustum=dc.DrawingContext.VActuality.infrustumactualy then
       p^.DrawGeometry(lw,dc,infrustumstate);
-    p:=iterate(ir);
-  until p=nil;
-end;
-procedure GDBObjOpenArrayOfPV.DrawOnlyGeometry;
-var
-  p:pGDBObjEntity;
-  ir:itrec;
-begin
-  p:=beginiterate(ir);
-  if p<>nil then
-  repeat
-    if p^.infrustum=dc.DrawingContext.VActuality.infrustumactualy then
-      p^.DrawOnlyGeometry(lw,dc,inFrustumState);
     p:=iterate(ir);
   until p=nil;
 end;

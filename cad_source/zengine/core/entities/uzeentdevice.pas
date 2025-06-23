@@ -45,7 +45,6 @@ GDBObjDevice= object(GDBObjBlockInsert)
                    function IsStagedFormatEntity:boolean;virtual;
                    procedure FormatFeatures(var drawing:TDrawingDef);virtual;
                    procedure DrawGeometry(lw:Integer;var DC:TDrawContext;const inFrustumState:TInBoundingVolume);virtual;
-                   procedure DrawOnlyGeometry(lw:Integer;var DC:TDrawContext;const inFrustumState:TInBoundingVolume);virtual;
                    function onmouse(var popa:TZctnrVectorPGDBaseEntity;const MF:ClipArray;InSubEntry:Boolean):Boolean;virtual;
                    function ReturnLastOnMouse(InSubEntry:Boolean):PGDBObjEntity;virtual;
                    procedure ImEdited(pobj:PGDBObjSubordinated;pobjinarray:Integer;var drawing:TDrawingDef);virtual;
@@ -443,33 +442,6 @@ begin
        p:=VarObjArray.iterate(ir);
   until p=nil;
   if not result then lstonmouse:=nil;
-end;
-procedure GDBObjDevice.DrawOnlyGeometry;
-var p:pgdbobjEntity;
-     v:gdbvertex;
-         ir:itrec;
-begin
-  dc.subrender := dc.subrender + 1;
-  VarObjArray.DrawOnlyGeometry(CalculateLineWeight(dc),dc,inFrustumState);
-  dc.subrender := dc.subrender - 1;
-  p:=VarObjArray.beginiterate(ir);
-  //oglsm.glcolor3ubv(palette[sysvar.SYS.SYS_SystmGeometryColor^].RGB);
-  dc.drawer.SetColor(palette[dc.SystmGeometryColor].RGB);
-  if DC.SystmGeometryDraw then
-  begin
-  if p<>nil then
-  repeat
-        v:=p^.getcenterpoint;
-        {oglsm.myglbegin(GL_lines);
-        oglsm.myglVertex3dV(@self.P_insert_in_WCS);
-        oglsm.myglVertex3dV(@v);
-        oglsm.myglend;}
-        dc.drawer.DrawLine3DInModelSpace(self.P_insert_in_WCS,v,dc.DrawingContext.matrixs);
-       p:=VarObjArray.iterate(ir);
-  until p=nil;
-  end;
-
-  inherited;
 end;
 procedure GDBObjDevice.DrawGeometry;
 var p:pgdbobjEntity;

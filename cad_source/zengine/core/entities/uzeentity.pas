@@ -91,10 +91,8 @@ TExtAttrib=record
                     procedure DrawWithOutAttrib(var DC:TDrawContext;const inFrustumState:TInBoundingVolume);virtual;
 
                     procedure DrawGeometry(lw:Integer;var DC:TDrawContext;const inFrustumState:TInBoundingVolume);virtual;
-                    procedure DrawOnlyGeometry(lw:Integer;var DC:TDrawContext;const inFrustumState:TInBoundingVolume);virtual;
 
                     procedure Draw(lw:Integer;var DC:TDrawContext;const inFrustumState:TInBoundingVolume);virtual;
-                    procedure DrawG(lw:Integer;var DC:TDrawContext;const inFrustumState:TInBoundingVolume);virtual;
 
                     function CalculateLineWeight(const DC:TDrawContext):Integer;//inline;
                     //function InRect:TInRect;virtual;
@@ -342,13 +340,6 @@ begin
        DrawGeometry(lw,dc,infrustumstate);
   end;
 end;
-procedure GDBObjEntity.Drawg;
-begin
-  if visible=dc.DrawingContext.VActuality.visibleactualy then
-  begin
-       DrawOnlyGeometry(lw,dc,inFrustumState);
-  end;
-end;
 
 procedure GDBObjEntity.createfield;
 begin
@@ -508,10 +499,6 @@ procedure GDBObjEntity.DrawGeometry;
 begin
      drawbb(dc);
 end;
-procedure GDBObjEntity.DrawOnlyGeometry;
-begin
-     DrawGeometry(lw,dc,inFrustumState);
-end;
 function GDBObjEntity.CalculateLineWeight;
 var lw: Integer;
     minlw: Integer;
@@ -582,7 +569,8 @@ var lw: Integer;
 //  sel: Boolean;
 begin
   lw := CalculateLineWeight(dc);
-  Drawg(lw,dc,inFrustumState);
+  if visible=dc.DrawingContext.VActuality.visibleactualy then
+    DrawGeometry(lw,dc,infrustumstate);
   if lw > 1 then
   begin
     dc.drawer.setlinewidth(1);

@@ -92,8 +92,6 @@ TExtAttrib=record
 
                     procedure DrawGeometry(lw:Integer;var DC:TDrawContext;const inFrustumState:TInBoundingVolume);virtual;
 
-                    procedure Draw(lw:Integer;var DC:TDrawContext;const inFrustumState:TInBoundingVolume);virtual;
-
                     function CalculateLineWeight(const DC:TDrawContext):Integer;//inline;
                     //function InRect:TInRect;virtual;
                     function Clone(own:Pointer):PGDBObjEntity;virtual;
@@ -333,14 +331,6 @@ function GDBObjEntity.IsIntersect_Line(lbegin,lend:gdbvertex):Intercept3DProp;
 begin
      result.isintercept:=false;
 end;
-procedure GDBObjEntity.Draw;
-begin
-  if visible=dc.DrawingContext.VActuality.visibleactualy then
-  begin
-       DrawGeometry(lw,dc,infrustumstate);
-  end;
-end;
-
 procedure GDBObjEntity.createfield;
 begin
      inherited;
@@ -649,7 +639,9 @@ begin
 
                                                               end;
                                                     end;
-  Draw(lw,dc,inFrustumState);
+    if visible=dc.DrawingContext.VActuality.visibleactualy then
+         DrawGeometry(lw,dc,infrustumstate);
+
   //if selected or ((bp.ListPos.owner <> nil) and (bp.ListPos.owner^.isselected)) then
   (*if {selected or dc.selected}sel then
                                                                     begin

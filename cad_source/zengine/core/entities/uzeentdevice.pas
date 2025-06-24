@@ -294,7 +294,7 @@ begin
          pv:=VarObjArray.iterate(ir);
      until pv=nil;
      objmatrix:=m4;
-     FormatEntity(drawing,dc);
+     //FormatEntity(drawing,dc);
      //historyout('Device DXFOut end');
      //self.CalcObjMatrix;
 end;

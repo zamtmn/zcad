@@ -124,8 +124,6 @@ begin
   end;
   CalcActualVisible(dc.DrawingContext.VActuality);
   if EFDraw in stage then begin
-  Representation.Clear;
-
   TCP:=CodePage;
   CodePage:=CP_win;
      if template='' then
@@ -202,8 +200,10 @@ begin
     calcobjmatrix;
     //getoutbound;
     //createpoint(drawing);
-    if (not (ESTemp in State))and(DCODrawable in DC.Options) then
+    if (not (ESTemp in State))and(DCODrawable in DC.Options) then begin
+      Representation.Clear;
       Representation.DrawTextContent(dc.drawer,content,TXTStyle^.pfont,DrawMatrix,objmatrix,textprop.size,Outbound);
+    end;
     calcbb(dc);
 
     //P_InsertInWCS:=VectorTransform3D(local.P_insert,vp.owner^.GetMatrix^);
@@ -253,7 +253,12 @@ end;
 procedure GDBObjText.rtsave(refp:Pointer);
 begin
   inherited;
-  PGDBObjText(refp)^.textprop := textprop;
+  PGDBObjText(refp)^.Content:=Content;
+  PGDBObjText(refp)^.Template:=Template;
+  PGDBObjText(refp)^.TXTStyle:=TXTStyle;
+  PGDBObjText(refp)^.obj_height:=obj_height;
+  PGDBObjText(refp)^.obj_width:=obj_width;
+  PGDBObjText(refp)^.obj_y:=obj_y;
 end;
 
 destructor GDBObjText.done;

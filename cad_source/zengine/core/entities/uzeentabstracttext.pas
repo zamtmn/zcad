@@ -55,11 +55,19 @@ GDBObjAbstractText= object(GDBObjPlainWithOX)
                          procedure FormatAfterFielfmod(PField,PTypeDescriptor:Pointer);virtual;
                          procedure setrot(r:Double);
                          procedure transform(const t_matrix:DMatrix4D);virtual;
+                         procedure rtsave(refp:Pointer);virtual;
                    end;
 var
    SysVarRDPanObjectDegradation:Boolean=false;
 
 implementation
+
+procedure GDBObjAbstractText.rtsave(refp:Pointer);
+begin
+  inherited;
+  PGDBObjAbstractText(refp)^.textprop:=textprop;
+end;
+
 
 procedure GDBObjAbstractText.transform;
 var

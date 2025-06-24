@@ -493,14 +493,15 @@ begin
   end;
   CalcActualVisible(dc.DrawingContext.VActuality);
   if EFDraw in stage then begin
-    Representation.Clear;
 
     formatcontent(drawing);
     calcobjmatrix;
     CalcGabarit(drawing);
     //getoutbound;
-    if (not (ESTemp in State))and(DCODrawable in DC.Options) then
+    if (not (ESTemp in State))and(DCODrawable in DC.Options) then begin
+      Representation.Clear;
       createpoint(drawing,dc);
+    end;
     calcbb(dc);
 
     if assigned(EntExtensions)then

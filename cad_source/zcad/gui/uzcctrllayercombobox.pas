@@ -413,8 +413,8 @@ begin
                               sLV.DefaultItemHeight:=-1;
                               hh:=sLV.Height-sLV.ClientHeight;
                               hh:=screen.WorkAreaHeight-a.y-1;
-                              {$IFNDEF LCLWIN32}h:=sLV.Items.Count*(sLV.DefaultItemHeight+1)+10;
-                              {$ELSE}h:=sLV.Items.Count*(sLV.DefaultItemHeight-1)+4;{$ENDIF}
+                              {$IFNDEF LCLWIN32}h:=sLV.Items.Count*(((sLV.DefaultItemHeight*screen.PixelsPerInch)div 96)+1)+10;
+                              {$ELSE}h:=sLV.Items.Count*(((sLV.DefaultItemHeight*screen.PixelsPerInch)div 96)-1)+4;{$ENDIF}
                               if h>hh then h:=hh;
                               PoleLista.ClientHeight:=h;
                          end;

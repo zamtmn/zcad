@@ -44,7 +44,6 @@ GDBObjAbstractText= object(GDBObjPlainWithOX)
                          DrawMatrix:DMatrix4D;
                          procedure CalcObjMatrix(pdrawing:PTDrawingDef=nil);virtual;
                          procedure DrawGeometry(lw:Integer;var DC:TDrawContext;const inFrustumState:TInBoundingVolume);virtual;
-                         procedure SimpleDrawGeometry(var DC:TDrawContext);virtual;
                          function CalcInFrustum(const frustum:ClipArray;const Actuality:TVisActuality;var Counters:TCameraCounters; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double):Boolean;virtual;
                          function CalcTrueInFrustum(const frustum:ClipArray):TInBoundingVolume;virtual;
                          function onmouse(var popa:TZctnrVectorPGDBaseEntity;const MF:ClipArray;InSubEntry:Boolean):Boolean;virtual;
@@ -389,10 +388,6 @@ begin
 
   DrawMatrix:=MatrixMultiply(m3,m1);
   DrawMatrix:=MatrixMultiply(DrawMatrix,m2);
-end;
-procedure GDBObjAbstractText.SimpleDrawGeometry;
-begin
-     //Representation.SHX.simpledrawgeometry(dc,1);
 end;
 
 procedure GDBObjAbstractText.DrawGeometry;

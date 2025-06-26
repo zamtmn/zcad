@@ -55,7 +55,6 @@ type
     function GetObjTypeName:String;virtual;
     destructor done;virtual;
 
-    procedure SimpleDrawGeometry(var DC:TDrawContext);virtual;
     procedure FormatAfterDXFLoad(var drawing:TDrawingDef;var DC:TDrawContext);virtual;
 
     function CreateInstance:PGDBObjMText;static;
@@ -92,13 +91,7 @@ begin
   CalcGabarit(drawing);
   calcbb(dc);
 end;
-procedure GDBObjMText.SimpleDrawGeometry;
-begin
-     {if self.text.count=1 then
-                              Representation.SHX.simpledrawgeometry(dc,1)
-                          else
-                              Representation.SHX.simpledrawgeometry(dc,2);}
-end;
+
 function GDBObjMText.GetObjTypeName;
 begin
   result:=ObjN_GDBObjMText;

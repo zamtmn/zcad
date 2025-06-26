@@ -29,8 +29,6 @@ uses
   gzctnrVectorTypes,uzegeometrytypes,uzestylestexts,StrUtils,gzctnrVector,uzMVReader,
   uzcTextPreprocessorDXFImpl;
 
-const maxdxfmtextlen=250;
-
 type
   PGDBXYZWStringArray=^XYZWStringArray;
   XYZWStringArray=object(GZVector<GDBStrWithPoint>)
@@ -723,6 +721,8 @@ begin
     until count=0;
 end;
 procedure GDBObjMText.SaveToDXF(var outStream:TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);
+const
+  maxdxfmtextlen=250;
 var
   s: String;
   ul:boolean;

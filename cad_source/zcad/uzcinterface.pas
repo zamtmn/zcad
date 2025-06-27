@@ -20,7 +20,8 @@ unit uzcinterface;
 {$INCLUDE zengineconfig.inc}
 interface
 uses controls,uzcstrconsts,uzedimensionaltypes,gzctnrSTL,zeundostack,varmandef,
-     uzcuilcl2zc,uzcuitypes,forms,classes,LCLType,SysUtils,uzbHandles,uzbSets;
+     uzcuilcl2zc,uzcuitypes,forms,classes,LCLType,LCLProc,SysUtils,uzbHandles,
+     uzbSets;
 
 const
     CLinePriority=500;
@@ -628,11 +629,13 @@ var
   ctrl:TWinControl;
   aform:TCustomForm;
 begin
-  ctrl:=GetPriorityFocus;
-  if assigned(ctrl) then begin
-    aform:=GetParentForm(ctrl);
-    aform.SetFocus;
-    ctrl.SetFocus;
+  if GetCaptureControl=nil then begin
+    ctrl:=GetPriorityFocus;
+    if assigned(ctrl) then begin
+      aform:=GetParentForm(ctrl);
+      aform.SetFocus;
+      ctrl.SetFocus;
+    end;
   end;
 end;
 function TZCMsgCallBackInterface.DoShowModal(MForm:TForm): Integer;

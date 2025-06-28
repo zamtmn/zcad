@@ -16,8 +16,9 @@ uses uzcenitiesvariablesextender,uzeentityfactory,Varman,uzgldrawcontext,
      gzctnrVectorTypes,uzeentity,varmandef,uzbtypes,uzeconsts,uzeffdxfsupport,
      uzegeometrytypes,uzeentsubordinated,uzestylestables,uzclog,
      UGDBOpenArrayOfPV,uzeentcurve,uzeobjectextender,uzetextpreprocessor,
-     uzglviewareadata,uzCtnrVectorpBaseEntity;
+     uzglviewareadata,uzCtnrVectorpBaseEntity,gzctnrSTL;
 type
+TStringCounter=TMyMapCounter<string>;
 PGDBObjElLeader=^GDBObjElLeader;
 GDBObjElLeader= object(GDBObjComplex)
             MainLine:GDBObjLine;
@@ -28,6 +29,7 @@ GDBObjElLeader= object(GDBObjComplex)
             scale:Double;
             twidth:Double;
             TextContent:string;
+            MaterialContent:string;
 
 
             procedure DrawGeometry(lw:Integer;var DC:TDrawContext;const inFrustumState:TInBoundingVolume);virtual;
@@ -267,6 +269,32 @@ begin
      //bp.owner^.ImEdited(@self,bp.PSelfInOwnerArray);
      //ObjCasheArray.addnodouble(@pobj);
 end;
+function getDigitsCount(ANumber:SizeUInt):integer;
+begin
+   case ANumber of
+     0                   ..9:result:=1;
+     10                  ..99:result:=2;
+     100                 ..999:result:=3;
+     1000                ..9999:result:=4;
+     10000               ..99999:result:=5;
+     100000              ..999999:result:=6;
+     1000000             ..9999999:result:=7;
+     10000000            ..99999999:result:=8;
+     100000000           ..999999999:result:=9;
+     1000000000          ..9999999999:result:=10;
+     10000000000         ..99999999999:result:=11;
+     100000000000        ..999999999999:result:=12;
+     1000000000000       ..9999999999999:result:=13;
+     10000000000000      ..99999999999999:result:=14;
+     100000000000000     ..999999999999999:result:=15;
+     1000000000000000    ..9999999999999999:result:=16;
+     10000000000000000   ..99999999999999999:result:=17;
+     100000000000000000  ..999999999999999999:result:=18;
+     1000000000000000000 ..9999999999999999999:result:=19;
+     10000000000000000000..18446744073709551615:result:=20;
+   end;
+end;
+
 procedure GDBObjElLeader.FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext;Stage:TEFStages=EFAllStages);
 const
   textoffset=0.5;
@@ -279,6 +307,8 @@ var
    psl:PTZctnrVectorStrings;
    pvn,pvNote,pvNoteFormat:pvardesk;
    sta:TZctnrVectorStrings;
+   stcnt:TStringCounter;
+   stcntpair:TStringCounter.TDictionaryPair;
    ps:pString;
    bb:TBoundingBox;
    pdev:PGDBObjDevice;
@@ -289,6 +319,7 @@ var
 
    Objects:GDBObjOpenArrayOfPV;
    pentvarext:TVariablesExtender;
+   ss:shortstring;
 begin
      if assigned(EntExtensions)then
        EntExtensions.RunOnBeforeEntityFormat(@self,drawing,DC);
@@ -298,6 +329,7 @@ begin
      pdev:=nil;
      //pobj:=nil;
      sta.init(10);
+     stcnt:=TStringCounter.Create(10);
      CopyVPto(mainline);
      //mainline.vp.Layer:=vp.Layer;
      mainline.FormatEntity(drawing,dc);
@@ -351,6 +383,14 @@ begin
                                s:=pvn^.data.PTD.GetValueAsString(pvn^.data.Addr.Instance);
                                //s:=pstring(pvn^.Instance)^;
                                sta.PushBackData(s);
+                               S:='';
+                          end;
+
+                          pvn:=pentvarext.entityunit.FindVariable('DB_link');
+                          if pvn<>nil then
+                          begin
+                               s:=pvn^.data.PTD.GetValueAsString(pvn^.data.Addr.Instance);
+                               stcnt.CountKey(s);
                                S:='';
                           end;
                      end;
@@ -428,7 +468,7 @@ begin
      if ps<>nil then
      repeat
        for l:=1 to length(ps^) do begin
-         self.textcontent[sl]:=ps^[l];
+         textcontent[sl]:=ps^[l];
          inc(sl);
        end;
        ps:=sta.iterate(ir);
@@ -437,6 +477,36 @@ begin
          inc(sl);
        end;
      until ps=nil;
+
+
+     sl:=0;
+     MaterialContent:='';
+     for stcntpair in stcnt do begin
+     //MaterialContent:=MaterialContent+stcntpair.Key+'*'+inttostr(stcntpair.Value)+';';
+     sl:=sl+length(stcntpair.Key)+getDigitsCount(stcntpair.Value)+2;
+     end;
+
+     SetLength(MaterialContent,sl);
+     sl:=1;
+     for stcntpair in stcnt do begin
+       for l:=1 to length(stcntpair.Key) do begin
+         MaterialContent[sl]:=stcntpair.Key[l];
+         inc(sl);
+       end;
+       MaterialContent[sl]:='*';
+       inc(sl);
+       ss:=inttostr(stcntpair.Value);
+       for l:=1 to length(ss) do begin
+         MaterialContent[sl]:=ss[l];
+         inc(sl);
+       end;
+       MaterialContent[sl]:=';';
+       inc(sl);
+     end;
+     stcnt.free;
+
+
+
 
      //textcontent:=Tria_AnsiToUtf8(textcontent);
 
@@ -818,6 +888,7 @@ begin
      MarkLine.done;
      tbl.done;
      TextContent:='';
+     MaterialContent:='';
 end;
 function AllocElLeader:PGDBObjElLeader;
 begin

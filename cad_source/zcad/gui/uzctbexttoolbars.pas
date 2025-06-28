@@ -74,6 +74,7 @@ type
     class function GetLayerProp(PLayer:Pointer;out lp:TLayerPropRecord):boolean;
     class function GetLayersArray(out la:TLayerArray):boolean;
     class function ClickOnLayerProp(PLayer:Pointer;NumProp:integer;out newlp:TLayerPropRecord):boolean;
+    class procedure CloseLayerDropDown;
 
     class function CreateLayoutbox(tb:TToolBar):TComboBox;
   end;
@@ -108,6 +109,17 @@ begin
   lp.PLayer:=player;
 end;
 
+class procedure TZTBZCADExtensions.CloseLayerDropDown;
+var
+  cdwg:PTSimpleDrawing;
+begin
+  CDWG:=drawings.GetCurrentDWG;
+  if cdwg<>nil then
+    if not cdwg^.GetCurrentLayer^._on then
+      ZCMsgCallBackInterface.TextMessage(rsCurrentLayerOff,TMWOMessageBox);
+      //zcMsgDlg(rsCurrentLayerOff,zcdiWarning,[],false,nil,rsWarningCaption);
+end;
+
 class function TZTBZCADExtensions.ClickOnLayerProp(PLayer:Pointer;NumProp:integer;out newlp:TLayerPropRecord):boolean;
 var
   cdwg:PTSimpleDrawing;
@@ -126,7 +138,7 @@ begin
         end;
         if PLayer=cdwg^.GetCurrentLayer then
           if not PGDBLayerProp(PLayer)^._on then
-            zcMsgDlg(rsCurrentLayerOff,zcdiWarning,[],false,nil,rsWarningCaption);
+            ZCMsgCallBackInterface.TextMessage(rsCurrentLayerOff,TMWOHistoryOut);
         end;
       {1:;}
       2:begin
@@ -151,16 +163,15 @@ begin
               end;
             end;
           if not PGDBLayerProp(PLayer)^._on then
-            zcMsgDlg(rsCurrentLayerOff,zcdiWarning,[],false,nil,rsWarningCaption);
-          ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIActionRebuild);
+            ZCMsgCallBackInterface.TextMessage(rsCurrentLayerOff,TMWOHistoryOut);
         end else begin
           tcl:=SysVar.dwg.DWG_CLayer^;
           SysVar.dwg.DWG_CLayer^:=Player;
           commandmanager.ExecuteCommand('SelObjChangeLayerToCurrent',CDWG,drawings.GetCurrentOGLWParam);
           SysVar.dwg.DWG_CLayer^:=tcl;
-          ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIActionRebuild);
         end;
-          result:=true;
+        ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIActionRebuild);
+        result:=true;
       end;
     end;
     setlayerstate(PLayer,newlp);
@@ -450,6 +461,7 @@ begin
   LayerBox.fGetLayerProp:=TZTBZCADExtensions.GetLayerProp;
   LayerBox.fGetLayersArray:=TZTBZCADExtensions.GetLayersArray;
   LayerBox.fClickOnLayerProp:=TZTBZCADExtensions.ClickOnLayerProp;
+  LayerBox.fonCloseDropDown:=TZTBZCADExtensions.CloseLayerDropDown;
 
   LayerBox.Width:=_Width;
 

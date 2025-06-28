@@ -22,7 +22,7 @@ unit uzcctrllayercombobox;
 interface
 
 uses
-  StdCtrls,GraphType,{types,}{$IFDEF LCLWIN32}win32proc,windows,{$endif}LCLIntf,LCLType,
+  StdCtrls,GraphType,{$IFDEF LCLWIN32}win32proc,windows,{$endif}LCLIntf,LCLType,
   Controls,Classes,Graphics,Buttons,ExtCtrls,ComCtrls,Forms,Themes;
 const
   RightButtonWidth=20;// Ширина правой кнопки-стрелки при "темной" отрисовке
@@ -40,6 +40,7 @@ type
   TGetLayerPropFunc=function(PLayer:Pointer;out lp:TLayerPropRecord):boolean of object;
   TGetLayersArrayFunc=function(out la:TLayerArray):boolean of object;
   TClickOnLayerPropFunc=function(PLayer:Pointer;NumProp:integer;out newlp:TLayerPropRecord):boolean of object;
+  TonCloseDropDown=procedure of object;
 
   TMyListView=class(TListView)
   public
@@ -87,6 +88,7 @@ end;
     fGetLayerProp:TGetLayerPropFunc;
     fGetLayersArray:TGetLayersArrayFunc;
     fClickOnLayerProp:TClickOnLayerPropFunc;
+    fonCloseDropDown:TonCloseDropDown;
     constructor Create(AOwner:TComponent);override;
     procedure ObnovitItem(li:TListItem;lp:TLayerPropRecord);
     procedure CompareEvent(Sender: TObject; Item1, Item2: TListItem;Data: Integer; var Compare: Integer);
@@ -436,6 +438,8 @@ end;
 procedure TZCADLayerComboBox.asyncfree(Data:PtrInt);
 begin
   Tobject(Data).Free;
+  if Assigned(fonCloseDropDown) then
+    fonCloseDropDown();
 end;
 
 procedure TZCADLayerComboBox.PLDeActivate(Sender:TObject);                      // Закрытие списка
@@ -470,6 +474,8 @@ begin
     PoleLista.Free;
     PoleLista:=nil;
     M1:=false;
+    if Assigned(fonCloseDropDown) then
+      fonCloseDropDown();
   end;
 end;
 

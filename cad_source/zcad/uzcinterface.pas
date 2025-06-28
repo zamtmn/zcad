@@ -236,6 +236,7 @@ type
     //TSetCurrentDrawing=function(PDWG:Pointer):Pointer;//нужно завязать на UGDBDrawingdef
 
 var
+  ModalShowsCount:integer;
    //Objinsp
    {**Позволяет в инспектор вывести то что тебе нужно
     Пример:
@@ -577,11 +578,13 @@ begin
 end;
 procedure TZCMsgCallBackInterface.Do_BeforeShowModal(ShowedForm:TForm);
 begin
+   inc(ModalShowsCount);
    Do_TMethod_TForm_HandlersVector(BeforeShowModalHandlers,ShowedForm);
 end;
 procedure TZCMsgCallBackInterface.Do_AfterShowModal(ShowedForm:TForm);
 begin
    Do_TMethod_TForm_HandlersVector(AfterShowModalHandlers,ShowedForm);
+   dec(ModalShowsCount);
 end;
 procedure TZCMsgCallBackInterface.Do_GUIMode(GUIMode:TZMessageID);
 begin
@@ -629,14 +632,15 @@ var
   ctrl:TWinControl;
   aform:TCustomForm;
 begin
-  if GetCaptureControl=nil then begin
-    ctrl:=GetPriorityFocus;
-    if assigned(ctrl) then begin
-      aform:=GetParentForm(ctrl);
-      aform.SetFocus;
-      ctrl.SetFocus;
+  if ModalShowsCount=0 then
+    if GetCaptureControl=nil then begin
+      ctrl:=GetPriorityFocus;
+      if assigned(ctrl) then begin
+        aform:=GetParentForm(ctrl);
+        aform.SetFocus;
+        ctrl.SetFocus;
+      end;
     end;
-  end;
 end;
 function TZCMsgCallBackInterface.DoShowModal(MForm:TForm): Integer;
 begin
@@ -680,6 +684,7 @@ initialization
   ZMsgID_GUIFreEditorProc:=ZCMsgCallBackInterface.GetUniqueZMessageID;
   ZMsgID_GUIStoreAndFreeEditorProc:=ZCMsgCallBackInterface.GetUniqueZMessageID;
   ZMsgID_GUIBeforeCloseApp:=ZCMsgCallBackInterface.GetUniqueZMessageID;
+  ModalShowsCount:=0;
 finalization
   ZCMsgCallBackInterface.free;
   ZCStatekInterface.Free;

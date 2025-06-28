@@ -101,98 +101,82 @@ end;
 
 procedure setlayerstate(PLayer:PGDBLayerProp;out lp:TLayerPropRecord);
 begin
-     lp._On:=player^._on;
-     lp.Freze:=false;
-     lp.Lock:=player^._lock;
-     lp.Name:=Tria_AnsiToUtf8(player.Name);
-     lp.PLayer:=player;
+  lp._On:=player^._on;
+  lp.Freze:=false;
+  lp.Lock:=player^._lock;
+  lp.Name:=Tria_AnsiToUtf8(player.Name);
+  lp.PLayer:=player;
 end;
 
 class function TZTBZCADExtensions.ClickOnLayerProp(PLayer:Pointer;NumProp:integer;out newlp:TLayerPropRecord):boolean;
 var
-   cdwg:PTSimpleDrawing;
-   tcl:PGDBLayerProp;
+  cdwg:PTSimpleDrawing;
+  tcl:PGDBLayerProp;
 begin
-     CDWG:=drawings.GetCurrentDWG;
-     result:=false;
-     case numprop of
-                    0:begin
-                        with TBooleanChangeCommand.CreateAndPushIfNeed(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,
-                                                                       TChangedBoolean.CreateRec(PGDBLayerProp(PLayer)^._on),
-                                                                       TSharedEmpty(Default(TEmpty)),
-                                                                       TAfterChangeEmpty(Default(TEmpty)))do
-                        begin
-                          PGDBLayerProp(PLayer)^._on:=not(PGDBLayerProp(PLayer)^._on);
-                          //ComitFromObj;
-                        end;
-                        if PLayer=cdwg^.GetCurrentLayer then
-                          if not PGDBLayerProp(PLayer)^._on then
-                            zcMsgDlg(rsCurrentLayerOff,zcdiWarning,[],false,nil,rsWarningCaption);
-                            //MessageBox(@rsCurrentLayerOff[1],@rsWarningCaption[1],MB_OK or MB_ICONWARNING);
-                      end;
-                    {1:;}
-                    2:begin
-                        with TBooleanChangeCommand.CreateAndPushIfNeed(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,
-                                                                       TChangedBoolean.CreateRec(PGDBLayerProp(PLayer)^._lock),
-                                                                       TSharedEmpty(Default(TEmpty)),
-                                                                       TAfterChangeEmpty(Default(TEmpty)))do
-                        begin
-                          PGDBLayerProp(PLayer)^._lock:=not(PGDBLayerProp(PLayer)^._lock);
-                          //ComitFromObj;
-                        end;
-                      end;
-                    3:begin
-                           cdwg:=drawings.GetCurrentDWG;
-                           if cdwg<>nil then
-                           begin
-                                if drawings.GetCurrentDWG.wa.param.seldesc.Selectedobjcount=0 then
-                                begin
-                                          if assigned(sysvar.dwg.DWG_CLayer) then
-                                          if sysvar.dwg.DWG_CLayer^<>Player then
-                                          begin
-                                               with TPoinerChangeCommand.CreateAndPushIfNeed(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,
-                                                                                             TChangedPointer.CreateRec(sysvar.dwg.DWG_CLayer^),
-                                                                                             TSharedEmpty.CreateRec(Default(TEmpty)),
-                                                                                             TAfterChangeEmpty.CreateRec(Default(TEmpty))) do
-                                               begin
-                                                    sysvar.dwg.DWG_CLayer^:=Player;
-                                                    //ComitFromObj;
-                                               end;
-                                          end;
-                                          if not PGDBLayerProp(PLayer)^._on then
-                                            zcMsgDlg(rsCurrentLayerOff,zcdiWarning,[],false,nil,rsWarningCaption);
-                                            //MessageBox(@rsCurrentLayerOff[1],@rsWarningCaption[1],MB_OK or MB_ICONWARNING);
-                                          //setvisualprop;
-                                          ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIActionRebuild);
-                                end
-                                else
-                                begin
-                                       tcl:=SysVar.dwg.DWG_CLayer^;
-                                       SysVar.dwg.DWG_CLayer^:=Player;
-                                       commandmanager.ExecuteCommand('SelObjChangeLayerToCurrent',drawings.GetCurrentDWG,drawings.GetCurrentOGLWParam);
-                                       SysVar.dwg.DWG_CLayer^:=tcl;
-                                       //setvisualprop;
-                                       ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIActionRebuild);
-                                end;
-                           result:=true;
-                           end;
-                      end;
-     end;
-     setlayerstate(PLayer,newlp);
-     if not result then
-                       begin
-                         ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIActionRedraw);
-                         //if assigned(UpdateVisibleProc) then UpdateVisibleProc(ZMsgID_GUIActionRedraw);
-                         zcRedrawCurrentDrawing;
-                       end;
+  CDWG:=drawings.GetCurrentDWG;
+  result:=false;
+  if cdwg<>nil then begin
+    case numprop of
+      0:begin
+        with TBooleanChangeCommand.CreateAndPushIfNeed(PTZCADDrawing(CDWG)^.UndoStack,
+                                                       TChangedBoolean.CreateRec(PGDBLayerProp(PLayer)^._on),
+                                                       TSharedEmpty(Default(TEmpty)),
+                                                       TAfterChangeEmpty(Default(TEmpty)))do begin
+          PGDBLayerProp(PLayer)^._on:=not(PGDBLayerProp(PLayer)^._on);
+        end;
+        if PLayer=cdwg^.GetCurrentLayer then
+          if not PGDBLayerProp(PLayer)^._on then
+            zcMsgDlg(rsCurrentLayerOff,zcdiWarning,[],false,nil,rsWarningCaption);
+        end;
+      {1:;}
+      2:begin
+        with TBooleanChangeCommand.CreateAndPushIfNeed(PTZCADDrawing(CDWG)^.UndoStack,
+                                                       TChangedBoolean.CreateRec(PGDBLayerProp(PLayer)^._lock),
+                                                       TSharedEmpty(Default(TEmpty)),
+                                                       TAfterChangeEmpty(Default(TEmpty)))do
+        begin
+          PGDBLayerProp(PLayer)^._lock:=not(PGDBLayerProp(PLayer)^._lock);
+        end;
+        end;
+      3:begin
+        if CDWG.wa.param.seldesc.Selectedobjcount=0 then begin
+          if assigned(sysvar.dwg.DWG_CLayer) then
+            if sysvar.dwg.DWG_CLayer^<>Player then begin
+              with TPoinerChangeCommand.CreateAndPushIfNeed(PTZCADDrawing(CDWG)^.UndoStack,
+                                                            TChangedPointer.CreateRec(sysvar.dwg.DWG_CLayer^),
+                                                            TSharedEmpty.CreateRec(Default(TEmpty)),
+                                                            TAfterChangeEmpty.CreateRec(Default(TEmpty))) do
+              begin
+                  sysvar.dwg.DWG_CLayer^:=Player;
+              end;
+            end;
+          if not PGDBLayerProp(PLayer)^._on then
+            zcMsgDlg(rsCurrentLayerOff,zcdiWarning,[],false,nil,rsWarningCaption);
+          ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIActionRebuild);
+        end else begin
+          tcl:=SysVar.dwg.DWG_CLayer^;
+          SysVar.dwg.DWG_CLayer^:=Player;
+          commandmanager.ExecuteCommand('SelObjChangeLayerToCurrent',CDWG,drawings.GetCurrentOGLWParam);
+          SysVar.dwg.DWG_CLayer^:=tcl;
+          ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIActionRebuild);
+        end;
+          result:=true;
+      end;
+    end;
+    setlayerstate(PLayer,newlp);
+    if not result then begin
+      ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIActionRedraw);
+      zcRedrawCurrentDrawing;
+    end;
+  end;
 end;
 
 class function TZTBZCADExtensions.GetLayersArray(out la:TLayerArray):boolean;
 var
-   cdwg:PTSimpleDrawing;
-   pcl:PGDBLayerProp;
-   ir:itrec;
-   counter:integer;
+  cdwg:PTSimpleDrawing;
+  pcl:PGDBLayerProp;
+  ir:itrec;
+  counter:integer;
 begin
   result:=false;
   cdwg:=drawings.GetCurrentDWG;
@@ -216,33 +200,24 @@ begin
 end;
 class function TZTBZCADExtensions.GetLayerProp(PLayer:Pointer;out lp:TLayerPropRecord):boolean;
 var
-   cdwg:PTSimpleDrawing;
+  cdwg:PTSimpleDrawing;
 begin
-     if player=nil then
-                       begin
-                            result:=false;
-                            cdwg:=drawings.GetCurrentDWG;
-                            if cdwg<>nil then
-                            begin
-                                 if assigned(cdwg^.wa) then
-                                 begin
-                                      if IVars.CLayer<>nil then
-                                      begin
-                                           setlayerstate(IVars.CLayer,lp);
-                                           result:=true;
-                                      end
-                                      else
-                                          lp.Name:=rsDifferent;
-                                end;
-                            end;
-
-                       end
-                   else
-                       begin
-                            result:=true;
-                            setlayerstate(PLayer,lp);
-                       end;
-
+  if player=nil then begin
+    result:=false;
+    cdwg:=drawings.GetCurrentDWG;
+    if cdwg<>nil then begin
+      if assigned(cdwg^.wa) then begin
+        if IVars.CLayer<>nil then begin
+          setlayerstate(IVars.CLayer,lp);
+          result:=true;
+        end else
+          lp.Name:=rsDifferent;
+      end;
+    end;
+  end else begin
+    result:=true;
+    setlayerstate(PLayer,lp);
+  end;
 end;
 
 class procedure TZTBZCADExtensions.TBActionCreateFunc(fmf:TForm;actlist:TActionList;aNode: TDomNode; TB:TToolBar);

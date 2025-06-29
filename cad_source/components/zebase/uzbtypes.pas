@@ -167,6 +167,10 @@ GDBUNISymbolInfo=record
     symbol:Integer;
     symbolinfo:GDBsymdolinfo;
   end;
+PTHAlign=^THAlign;
+THAlign=(HALeft,HAMidle,HARight);
+PTVAlign=^TVAlign;
+TVAlign=(VATop,VAMidle,VABottom);
 PTAlign=^TAlign;
 TAlign=(TATop,TABottom,TALeft,TARight);
 PTAppMode=^TAppMode;

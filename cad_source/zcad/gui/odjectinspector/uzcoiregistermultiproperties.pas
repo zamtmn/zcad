@@ -33,8 +33,13 @@ uses
   uzeentcircle,uzeentarc,uzeentline,uzeentblockinsert,uzeenttext,uzeentmtext,uzeentpolyline,uzcentelleader,uzeentdimension,uzeentellipse,
   uzegeometry,uzcoimultiproperties,uzcLog,
   uzcExtdrLayerControl,uzcExtdrSmartTextEnt,uzcExtdrSCHConnector,
-  uzcutils,uzcdrawing,uzcdrawings,zUndoCmdChgTypes,zUndoCmdChgVariable;
+  uzcutils,uzcdrawing,uzcdrawings,zUndoCmdChgTypes,zUndoCmdChgVariable,
+  uzctnrVectorStrings,uzbtypes;
 implementation
+var
+  ptdTHAlign:PUserTypeDescriptor;
+  ptdTVAlign:PUserTypeDescriptor;
+  ptdboolean:PUserTypeDescriptor;
 procedure DoubleDeltaEntIterateProc(pdata:Pointer;ChangedData:TChangedData;mp:TMultiProperty;fistrun:boolean;ecp:TEntChangeProc; const f:TzeUnitsFormat);
 var
     l1,l2:Double;
@@ -257,7 +262,7 @@ procedure GeneralFromPtrEntChangeProc(var UMPlaced:boolean;pu:PTEntityUnit;pdata
 var
   cp:UCmdChgField;
 begin
-  zcPlaceUndoStartMarkerIfNeed(UMPlaced,'Property changed');
+  PlaceUndoStartMarkerPropertyChangedIfNeed(UMPlaced);
 
   cp:=UCmdChgField.CreateAndPush(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,
                                  TChangedFieldDesc.CreateRec(pvardesk(pdata)^.data.PTD,ChangedData.PSetDataInEtity,ChangedData.PSetDataInEtity),
@@ -335,7 +340,7 @@ begin
   V2:=VertexMulOnSc(V2,l1);
   ProcessVariableAttributes(pvardesk(pdata)^.attrib,0,vda_approximately or vda_different);
 
-  zcPlaceUndoStartMarkerIfNeed(UMPlaced,'Property changed');
+  PlaceUndoStartMarkerPropertyChangedIfNeed(UMPlaced);
   cp:=UCmdChgField.CreateAndPush(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,
                                  TChangedFieldDesc.CreateRec(SysUnit^.TypeName2PTD('GDBvertex'),ChangedData.PSetDataInEtity,ChangedData.PSetDataInEtity),
                                  TSharedPEntityData.CreateRec(ChangedData.PEntity),
@@ -360,7 +365,7 @@ begin
   V2:=VertexMulOnSc(V2,d);
   ProcessVariableAttributes(pvardesk(pdata)^.attrib,0,vda_approximately or vda_different);
 
-  zcPlaceUndoStartMarkerIfNeed(UMPlaced,'Property changed');
+  PlaceUndoStartMarkerPropertyChangedIfNeed(UMPlaced);
   cp:=UCmdChgField.CreateAndPush(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,
                                  TChangedFieldDesc.CreateRec(SysUnit^.TypeName2PTD('GDBvertex'),ChangedData.PSetDataInEtity,ChangedData.PSetDataInEtity),
                                  TSharedPEntityData.CreateRec(ChangedData.PEntity),
@@ -394,6 +399,109 @@ begin
   GeneralFromPtrEntChangeProc(UMPlaced,pu,pdata,ChangedData,mp);
   PDouble(pvardesk(pdata)^.data.Addr.Instance)^:=R;
 end;
+
+function EnumIndex2ElLeaderHAlignAuto(index:integer):boolean;
+begin
+  result:=index=0;
+end;
+function EnumIndex2ElLeaderHAlign(index:integer):THAlign;
+begin
+  result:=THAlign(index-1);
+end;
+
+function EnumIndex2ElLeaderVAlignAuto(index:integer):boolean;
+begin
+  result:=index=0;
+end;
+function EnumIndex2ElLeaderVAlign(index:integer):TVAlign;
+begin
+  result:=TVAlign(index-1);
+end;
+
+procedure ElLeaderHAlignEntChangeProc(var UMPlaced:boolean;pu:PTEntityUnit;pdata:PVarDesk;ChangedData:TChangedData;mp:TMultiProperty);
+var
+  cp:UCmdChgField;
+  enumindex:integer;
+  AutoAlaign:boolean;
+  HAlign:THAlign;
+begin
+  enumindex:=ElLeaderHAlignToEnumIndex(PGDBObjElLeader(ChangedData.PEntity)^);
+  if enumindex<>PTEnumData(pvardesk(pdata)^.data.Addr.Instance)^.Selected then begin
+    AutoAlaign:=EnumIndex2ElLeaderHAlignAuto(PTEnumData(pvardesk(pdata)^.data.Addr.Instance)^.Selected);
+    if PGDBObjElLeader(ChangedData.PEntity)^.AutoHAlaign<>AutoAlaign then
+    begin
+      if ptdboolean=nil then
+        ptdboolean:=SysUnit^.TypeName2PTD('boolean');
+      if ptdboolean<>nil then begin
+        PlaceUndoStartMarkerPropertyChangedIfNeed(UMPlaced);
+        cp:=UCmdChgField.CreateAndPush(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,
+                                       TChangedFieldDesc.CreateRec(ptdboolean,@PGDBObjElLeader(ChangedData.PEntity)^.AutoHAlaign,@PGDBObjElLeader(ChangedData.PEntity)^.AutoHAlaign),
+                                       TSharedPEntityData.CreateRec(ChangedData.PEntity),
+                                       TAfterChangePDrawing.CreateRec(drawings.GetCurrentDWG));
+        ptdboolean^.CopyValueToInstance(@AutoAlaign,@PGDBObjElLeader(ChangedData.PEntity)^.AutoHAlaign);
+      end;
+    end;
+    if not AutoAlaign then begin
+      if ptdTHAlign=nil then
+        ptdTHAlign:=SysUnit^.TypeName2PTD('THAlign');
+      if ptdTHAlign<>nil then begin
+        HAlign:=EnumIndex2ElLeaderHAlign(PTEnumData(pvardesk(pdata)^.data.Addr.Instance)^.Selected);
+        if PGDBObjElLeader(ChangedData.PEntity)^.HorizontalAlign<>HAlign then begin
+          PlaceUndoStartMarkerPropertyChangedIfNeed(UMPlaced);
+          cp:=UCmdChgField.CreateAndPush(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,
+                                         TChangedFieldDesc.CreateRec(ptdTHAlign,@PGDBObjElLeader(ChangedData.PEntity)^.HorizontalAlign,@PGDBObjElLeader(ChangedData.PEntity)^.HorizontalAlign),
+                                         TSharedPEntityData.CreateRec(ChangedData.PEntity),
+                                         TAfterChangePDrawing.CreateRec(drawings.GetCurrentDWG));
+          ptdTHAlign^.CopyValueToInstance(@HAlign,@PGDBObjElLeader(ChangedData.PEntity)^.HorizontalAlign);
+        end;
+      end;
+    end;
+  end;
+end;
+
+procedure ElLeaderVAlignEntChangeProc(var UMPlaced:boolean;pu:PTEntityUnit;pdata:PVarDesk;ChangedData:TChangedData;mp:TMultiProperty);
+var
+  cp:UCmdChgField;
+  enumindex:integer;
+  AutoAlaign:boolean;
+  VAlign:TVAlign;
+begin
+  enumindex:=ElLeaderVAlignToEnumIndex(PGDBObjElLeader(ChangedData.PEntity)^);
+  if enumindex<>PTEnumData(pvardesk(pdata)^.data.Addr.Instance)^.Selected then begin
+    AutoAlaign:=EnumIndex2ElLeaderVAlignAuto(PTEnumData(pvardesk(pdata)^.data.Addr.Instance)^.Selected);
+    if PGDBObjElLeader(ChangedData.PEntity)^.AutoVAlaign<>AutoAlaign then
+    begin
+      if ptdboolean=nil then
+        ptdboolean:=SysUnit^.TypeName2PTD('boolean');
+      if ptdboolean<>nil then begin
+        PlaceUndoStartMarkerPropertyChangedIfNeed(UMPlaced);
+        cp:=UCmdChgField.CreateAndPush(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,
+                                       TChangedFieldDesc.CreateRec(ptdboolean,@PGDBObjElLeader(ChangedData.PEntity)^.AutoVAlaign,@PGDBObjElLeader(ChangedData.PEntity)^.AutoVAlaign),
+                                       TSharedPEntityData.CreateRec(ChangedData.PEntity),
+                                       TAfterChangePDrawing.CreateRec(drawings.GetCurrentDWG));
+        ptdboolean^.CopyValueToInstance(@AutoAlaign,@PGDBObjElLeader(ChangedData.PEntity)^.AutoVAlaign);
+      end;
+    end;
+    if not AutoAlaign then begin
+      if ptdTVAlign=nil then
+        ptdTVAlign:=SysUnit^.TypeName2PTD('TVAlign');
+      if ptdTVAlign<>nil then begin
+        VAlign:=EnumIndex2ElLeaderVAlign(PTEnumData(pvardesk(pdata)^.data.Addr.Instance)^.Selected);
+        if PGDBObjElLeader(ChangedData.PEntity)^.VerticalAlign<>VAlign then begin
+          PlaceUndoStartMarkerPropertyChangedIfNeed(UMPlaced);
+          cp:=UCmdChgField.CreateAndPush(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,
+                                         TChangedFieldDesc.CreateRec(ptdTVAlign,@PGDBObjElLeader(ChangedData.PEntity)^.VerticalAlign,@PGDBObjElLeader(ChangedData.PEntity)^.VerticalAlign),
+                                         TSharedPEntityData.CreateRec(ChangedData.PEntity),
+                                         TAfterChangePDrawing.CreateRec(drawings.GetCurrentDWG));
+          ptdTVAlign^.CopyValueToInstance(@VAlign,@PGDBObjElLeader(ChangedData.PEntity)^.VerticalAlign);
+        end;
+      end;
+    end;
+  end;
+end;
+
+
+
 procedure GeneralTextRotateEntChangeProc(var UMPlaced:boolean;pu:PTEntityUnit;pdata:PVarDesk;ChangedData:TChangedData;mp:TMultiProperty);
 var
   a:Double;
@@ -402,7 +510,7 @@ begin
   ProcessVariableAttributes(pvardesk(pdata)^.attrib,0,vda_approximately or vda_different);
   mp.MPType^.CopyValueToInstance(pvardesk(pdata)^.data.Addr.Instance,@a);
 
-  zcPlaceUndoStartMarkerIfNeed(UMPlaced,'Property changed');
+  PlaceUndoStartMarkerPropertyChangedIfNeed(UMPlaced);
   cp:=UCmdChgField.CreateAndPush(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,
                                  TChangedFieldDesc.CreateRec(SysUnit^.TypeName2PTD('GDBvertex'),@PGDBObjText(ChangedData.PEntity)^.local.basis.OX,@PGDBObjText(ChangedData.PEntity)^.local.basis.OX),
                                  TSharedPEntityData.CreateRec(ChangedData.PEntity),
@@ -702,6 +810,8 @@ begin
     {ElLeader misc}
     MultiPropertiesManager.RegisterPhysMultiproperty('TextContent','TextContent',sysunit^.TypeName2PTD('String'),MPCMisc,GDBElLeaderID,nil,PtrInt(@pelleader^.TextContent),PtrInt(@pelleader^.TextContent),OneVarDataMIPD,OneVarRODataEIPD);
     MultiPropertiesManager.RegisterPhysMultiproperty('MaterialContent','MaterialContent',sysunit^.TypeName2PTD('String'),MPCMisc,GDBElLeaderID,nil,PtrInt(@pelleader^.MaterialContent),PtrInt(@pelleader^.MaterialContent),OneVarDataMIPD,OneVarRODataEIPD);
+    MultiPropertiesManager.RegisterPhysMultiproperty('HAlign','Horizontal alignment',sysunit^.TypeName2PTD('TEnumData'),MPCMisc,GDBElLeaderID,nil,0,0,TMainIterateProcsData.Create(@GetTEnumDataForHAlign,@FreeTEnumData),TEntIterateProcsData.Create(nil,@HAlignEntIterateProc,@ElLeaderHAlignEntChangeProc),MPUM_AtLeastOneEntMatched);
+    MultiPropertiesManager.RegisterPhysMultiproperty('VAlign','Vertical alignment',sysunit^.TypeName2PTD('TEnumData'),MPCMisc,GDBElLeaderID,nil,0,0,TMainIterateProcsData.Create(@GetTEnumDataForVAlign,@FreeTEnumData),TEntIterateProcsData.Create(nil,@VAlignEntIterateProc,@ElLeaderVAlignEntChangeProc),MPUM_AtLeastOneEntMatched);
 
     MultiPropertiesManager.RegisterPhysMultiproperty('LeaderSize','Size',sysunit^.TypeName2PTD('Integer'),MPCMisc,GDBElLeaderID,nil,PtrInt(@pelleader^.size),PtrInt(@pelleader^.size),OneVarDataMIPD,OneVarDataEIPD);
     MultiPropertiesManager.RegisterPhysMultiproperty('Leaderscale','Scale',sysunit^.TypeName2PTD('Double'),MPCMisc,GDBElLeaderID,nil,PtrInt(@pelleader^.scale),PtrInt(@pelleader^.scale),OneVarDataMIPD,OneVarDataEIPD);

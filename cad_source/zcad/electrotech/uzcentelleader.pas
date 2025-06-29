@@ -19,6 +19,7 @@ uses uzcenitiesvariablesextender,uzeentityfactory,Varman,uzgldrawcontext,
      uzglviewareadata,uzCtnrVectorpBaseEntity,gzctnrSTL;
 type
 TStringCounter=TMyMapCounter<string>;
+
 PGDBObjElLeader=^GDBObjElLeader;
 GDBObjElLeader= object(GDBObjComplex)
             MainLine:GDBObjLine;
@@ -28,6 +29,13 @@ GDBObjElLeader= object(GDBObjComplex)
             size:Integer;
             scale:Double;
             twidth:Double;
+
+            AutoHAlaign:Boolean;
+            HorizontalAlign:THAlign;
+
+            AutoVAlaign:Boolean;
+            VerticalAlign:TVAlign;
+
             TextContent:string;
             MaterialContent:string;
 
@@ -588,10 +596,26 @@ begin
      MarkLine.FormatEntity(drawing,dc);
 
      tbl.Local.P_insert:=mainline.CoordInOCS.lEnd;
-     if VertexSub(mainline.CoordInWCS.lEnd,mainline.CoordInWCS.lBegin).x<=0 then
-                            tbl.Local.P_insert.x:=mainline.CoordInOCS.lEnd.x-tbl.w;
-     if VertexSub(mainline.CoordInWCS.lEnd,mainline.CoordInWCS.lBegin).y>=0 then
-                            tbl.Local.P_insert.y:=mainline.CoordInOCS.lEnd.y+tbl.h;
+     if AutoHAlaign then begin
+       if VertexSub(mainline.CoordInWCS.lEnd,mainline.CoordInWCS.lBegin).x<=0 then
+         tbl.Local.P_insert.x:=mainline.CoordInOCS.lEnd.x-tbl.w;
+     end else begin
+       case HorizontalAlign of
+         THAlign.HALeft:;
+         THAlign.HAMidle:tbl.Local.P_insert.x:=mainline.CoordInOCS.lEnd.x-tbl.w/2;
+         THAlign.HARight:tbl.Local.P_insert.x:=mainline.CoordInOCS.lEnd.x-tbl.w;
+       end
+     end;
+     if AutoVAlaign then begin
+       if VertexSub(mainline.CoordInWCS.lEnd,mainline.CoordInWCS.lBegin).y>=0 then
+         tbl.Local.P_insert.y:=mainline.CoordInOCS.lEnd.y+tbl.h;
+     end else begin
+       case VerticalAlign of
+         TVAlign.VATop:;
+         TVAlign.VAMidle:tbl.Local.P_insert.y:=mainline.CoordInOCS.lEnd.y+tbl.h/2;
+         TVAlign.VABottom:tbl.Local.P_insert.y:=mainline.CoordInOCS.lEnd.y+tbl.h;
+       end
+     end;
      tbl.FormatEntity(drawing,dc);
      ConstObjArray.free;
      if pdev<>nil then
@@ -846,6 +870,11 @@ begin
   tvo^.size:=size;
   tvo^.scale:=scale;
   tvo^.twidth:=twidth;
+  tvo^.AutoHAlaign:=AutoHAlaign;
+  tvo^.HorizontalAlign:=HorizontalAlign;
+  tvo^.AutoVAlaign:=AutoVAlaign;
+  tvo^.VerticalAlign:=VerticalAlign;
+
   result := tvo;
 end;
 constructor GDBObjElLeader.initnul;
@@ -859,6 +888,10 @@ begin
      size:=0;
      scale:=1;
      twidth:=0;
+     AutoHAlaign:=true;
+     HorizontalAlign:=THAlign.HALeft;
+     AutoVAlaign:=true;
+     VerticalAlign:=TVAlign.VATop;
      //vp.ID:=GDBElLeaderID;
      MainLine.init(@self,vp.Layer,vp.LineWeight,uzegeometry.VertexMulOnSc(onevertex,-10),nulvertex);
      //MainLine.Format;
@@ -927,6 +960,26 @@ begin
    if pvi<>nil then
                    begin
                         result^.twidth:=pDouble(pvi^.data.Addr.Instance)^;
+                   end;
+   pvi:=PTUnit(ptu).FindVariable('AutoHAlaign');
+   if pvi<>nil then
+                   begin
+                        result^.AutoHAlaign:=PBoolean(pvi^.data.Addr.Instance)^;
+                   end;
+   pvi:=PTUnit(ptu).FindVariable('HorizontalAlign');
+   if pvi<>nil then
+                   begin
+                        result^.HorizontalAlign:=PTHAlign(pvi^.data.Addr.Instance)^;
+                   end;
+   pvi:=PTUnit(ptu).FindVariable('AutoVAlaign');
+   if pvi<>nil then
+                   begin
+                        result^.AutoVAlaign:=PBoolean(pvi^.data.Addr.Instance)^;
+                   end;
+   pvi:=PTUnit(ptu).FindVariable('VerticalAlign');
+   if pvi<>nil then
+                   begin
+                        result^.VerticalAlign:=PTVAlign(pvi^.data.Addr.Instance)^;
                    end;
    end;
 end;

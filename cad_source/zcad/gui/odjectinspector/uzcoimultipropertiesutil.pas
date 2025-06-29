@@ -30,7 +30,8 @@ uses
   Varman,UGDBPoint3DArray,
   uzedimensionaltypes,
   uzeentcircle,uzeentarc,uzeentline,uzeentblockinsert,
-  uzeenttext,uzeentmtext,uzeentpolyline,uzegeometry,uzcoimultiproperties,uzcLog,
+  uzeenttext,uzeentmtext,uzeentpolyline,uzcentelleader,
+  uzegeometry,uzcoimultiproperties,uzcLog,
   uzcstrconsts,
   gzctnrSTL,gzctnrVectorTypes,uzeNamedObject,zUndoCmdChgVariable,
   uzcutils,uzcdrawing,uzcdrawings,zUndoCmdChgTypes,uzeExtdrAbstractEntityExtender;
@@ -98,12 +99,17 @@ function GetStringCounterData(mp:TMultiProperty;pu:PTEntityUnit):Pointer;
 function GetPointerCounterData(mp:TMultiProperty;pu:PTEntityUnit):Pointer;
 function GetExtenderCounterData(mp:TMultiProperty;pu:PTEntityUnit):Pointer;
 function GetVertex3DControlData(mp:TMultiProperty;pu:PTEntityUnit):Pointer;
+function GetTEnumDataForHAlign(mp:TMultiProperty;pu:PTEntityUnit):Pointer;
+function GetTEnumDataForVAlign(mp:TMultiProperty;pu:PTEntityUnit):Pointer;
+
 procedure FreeOneVarData(piteratedata:Pointer;mp:TMultiProperty);
 procedure FreeStringCounterData(piteratedata:Pointer;mp:TMultiProperty);
 procedure FreePNamedObjectCounterData(piteratedata:Pointer;mp:TMultiProperty);
 procedure FreeExtendersCounterData(piteratedata:Pointer;mp:TMultiProperty);
 procedure FreePNamedObjectCounterDataUTF8(piteratedata:Pointer;mp:TMultiProperty);
 procedure FreeVertex3DControlData(piteratedata:Pointer;mp:TMultiProperty);
+procedure FreeTEnumData(piteratedata:Pointer;mp:TMultiProperty);
+
 procedure GeneralEntIterateProc(pdata:Pointer;ChangedData:TChangedData;mp:TMultiProperty;fistrun:boolean;ecp:TEntChangeProc; const f:TzeUnitsFormat);
 procedure EntityNameEntIterateProc(pdata:Pointer;ChangedData:TChangedData;mp:TMultiProperty;fistrun:boolean;ecp:TEntChangeProc; const f:TzeUnitsFormat);
 procedure EntityAddressEntIterateProc(pdata:Pointer;ChangedData:TChangedData;mp:TMultiProperty;fistrun:boolean;ecp:TEntChangeProc; const f:TzeUnitsFormat);
@@ -114,6 +120,9 @@ procedure TArrayIndex2SumEntIterateProc(pdata:Pointer;ChangedData:TChangedData;m
 procedure Blockname2BlockNameCounterIterateProc(pdata:Pointer;ChangedData:TChangedData;mp:TMultiProperty;fistrun:boolean;ecp:TEntChangeProc; const f:TzeUnitsFormat);
 procedure PStyle2PStyleCounterIterateProc(pdata:Pointer;ChangedData:TChangedData;mp:TMultiProperty;fistrun:boolean;ecp:TEntChangeProc; const f:TzeUnitsFormat);
 procedure Extendrs2ExtendersCounterIterateProc(pdata:Pointer;ChangedData:TChangedData;mp:TMultiProperty;fistrun:boolean;ecp:TEntChangeProc; const f:TzeUnitsFormat);
+procedure HAlignEntIterateProc(pdata:Pointer;ChangedData:TChangedData;mp:TMultiProperty;fistrun:boolean;ecp:TEntChangeProc; const f:TzeUnitsFormat);
+procedure VAlignEntIterateProc(pdata:Pointer;ChangedData:TChangedData;mp:TMultiProperty;fistrun:boolean;ecp:TEntChangeProc; const f:TzeUnitsFormat);
+
 procedure PolylineVertex3DControlBeforeEntIterateProc(pdata:Pointer;ChangedData:TChangedData);
 function CreateChangedData(pentity:pointer;GSData:TGetSetData):TChangedData;
 procedure GeneralFromVarEntChangeProc(var UMPlaced:boolean;pu:PTEntityUnit;pdata:PVarDesk;ChangedData:TChangedData;mp:TMultiProperty);
@@ -121,6 +130,10 @@ procedure GeneralFromVarEntChangeProc(var UMPlaced:boolean;pu:PTEntityUnit;pdata
 procedure VertexXOCSEntIterateProc(pdata:Pointer;ChangedData:TChangedData;mp:TMultiProperty;fistrun:boolean;ecp:TEntChangeProc; const f:TzeUnitsFormat);
 procedure VertexYOCSEntIterateProc(pdata:Pointer;ChangedData:TChangedData;mp:TMultiProperty;fistrun:boolean;ecp:TEntChangeProc; const f:TzeUnitsFormat);
 procedure VertexZOCSEntIterateProc(pdata:Pointer;ChangedData:TChangedData;mp:TMultiProperty;fistrun:boolean;ecp:TEntChangeProc; const f:TzeUnitsFormat);
+
+function ElLeaderHAlignToEnumIndex(var leader:GDBObjElLeader):integer;
+function ElLeaderVAlignToEnumIndex(var leader:GDBObjElLeader):integer;
+procedure PlaceUndoStartMarkerPropertyChangedIfNeed(var UMPlaced:boolean);
 
 procedure ResetCachedVertex;
 
@@ -165,11 +178,17 @@ procedure GCacheCalculatedValue<GT,PGT>.ResetCache;inline;
 begin
   PValue:=nil;
 end;
+
+procedure PlaceUndoStartMarkerPropertyChangedIfNeed(var UMPlaced:boolean);
+begin
+  zcPlaceUndoStartMarkerIfNeed(UMPlaced,'Property changed')
+end;
+
 procedure GeneralFromVarEntChangeProc(var UMPlaced:boolean;pu:PTEntityUnit;pdata:PVarDesk;ChangedData:TChangedData;mp:TMultiProperty);
 var
   cp:UCmdChgField;
 begin
-  zcPlaceUndoStartMarkerIfNeed(UMPlaced,'Property changed');
+  PlaceUndoStartMarkerPropertyChangedIfNeed(UMPlaced);
 
   cp:=UCmdChgField.CreateAndPush(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,
                                  TChangedFieldDesc.CreateRec(pvardesk(pdata)^.data.PTD,ChangedData.PSetDataInEtity,ChangedData.PSetDataInEtity),
@@ -302,6 +321,62 @@ begin
     FindOrCreateVar(pu,mp.MPName+'z','z','Double',PTVertex3DControlVarData(result).ZVarDescAddr);
     PTVertex3DControlVarData(result).PGDBDTypeDesc:=SysUnit.TypeName2PTD('Double');
 end;
+
+function GetTEnumData(mp:TMultiProperty;pu:PTEntityUnit):Pointer;
+{
+создает структуру с описанием переменной осуществляющей подсчет расширений примитивов
+mp - описание мультипроперти
+pu - модуль в котором будет создана переменная для мультипроперти
+возвращает указатель на созданную структуру
+}
+var
+  PVD:pvardesk;
+  t:PTEnumData;
+begin
+    Getmem(result,sizeof(TOneVarData));
+    pointer(PTOneVarData(result)^.StrValue):=nil;
+    if FindOrCreateVar(pu,mp.MPName,mp.MPUserName,mp.MPType^.TypeName,PTOneVarData(result).VDAddr) then begin
+      PVD:=PTOneVarData(result).VDAddr.Instance;
+      t:=PVD^.data.Addr.Instance;
+      t^.Enums.init(10);
+      t^.Selected:=0;
+    end;
+end;
+
+function GetTEnumDataForHAlign(mp:TMultiProperty;pu:PTEntityUnit):Pointer;
+var
+  PVD:pvardesk;
+  t:PTEnumData;
+begin
+  result:=GetTEnumData(mp,pu);
+  PVD:=PTOneVarData(result).VDAddr.Instance;
+  if PVD<>nil then begin
+    t:=PVD^.data.Addr.Instance;
+    t^.Enums.PushBackData('Auto');
+    t^.Enums.PushBackData('Left');
+    t^.Enums.PushBackData('Midle');
+    t^.Enums.PushBackData('Right');
+    t^.Selected:=0;
+  end;
+end;
+function GetTEnumDataForVAlign(mp:TMultiProperty;pu:PTEntityUnit):Pointer;
+var
+  PVD:pvardesk;
+  t:PTEnumData;
+begin
+  result:=GetTEnumData(mp,pu);
+  PVD:=PTOneVarData(result).VDAddr.Instance;
+  if PVD<>nil then begin
+    t:=PVD^.data.Addr.Instance;
+    t^.Enums.PushBackData('Auto');
+    t^.Enums.PushBackData('Top');
+    t^.Enums.PushBackData('Midle');
+    t^.Enums.PushBackData('Bottom');
+    t^.Selected:=0;
+  end;
+end;
+
+
 
 procedure FreeOneVarData(piteratedata:Pointer;mp:TMultiProperty);
 {уничтожает созданную GetOneVarData структуру}
@@ -437,6 +512,12 @@ begin
   Freemem(piteratedata);
 end;
 
+procedure FreeTEnumData(piteratedata:Pointer;mp:TMultiProperty);
+{уничтожает созданную GetTEnumData структуру}
+begin
+  PTOneVarData(piteratedata)^.StrValue:='';
+  Freemem(piteratedata);
+end;
 
 procedure FreeVertex3DControlData(piteratedata:Pointer;mp:TMultiProperty);
 {уничтожает созданную GetVertex3DControlData структуру}
@@ -818,6 +899,49 @@ begin
         end;
   end;
 end;
+
+function ElLeaderHAlignToEnumIndex(var leader:GDBObjElLeader):integer;
+begin
+  if leader.AutoHAlaign then
+    exit(0);
+  result:=ord(leader.HorizontalAlign)+1;
+end;
+function ElLeaderVAlignToEnumIndex(var leader:GDBObjElLeader):integer;
+begin
+  if leader.AutoVAlaign then
+    exit(0);
+  result:=ord(leader.VerticalAlign)+1;
+end;
+
+
+procedure HAlignEntIterateProc(pdata:Pointer;ChangedData:TChangedData;mp:TMultiProperty;fistrun:boolean;ecp:TEntChangeProc; const f:TzeUnitsFormat);
+var
+  PVD:pvardesk;
+begin
+  PVD:=PTOneVarData(pdata).VDAddr.Instance;
+  if @ecp=nil then ProcessVariableAttributes(PVD.attrib,vda_RO,0);
+  if fistrun then begin
+    PTEnumData(PVD.data.Addr.Instance)^.Selected:=ElLeaderHAlignToEnumIndex(PGDBObjElLeader(ChangedData.PEntity)^)
+  end else begin
+    if PTEnumData(PVD.data.Addr.Instance)^.Selected<>ElLeaderHAlignToEnumIndex(PGDBObjElLeader(ChangedData.PEntity)^)then
+      ProcessVariableAttributes(PVD.attrib,vda_different,0);
+  end;
+end;
+procedure VAlignEntIterateProc(pdata:Pointer;ChangedData:TChangedData;mp:TMultiProperty;fistrun:boolean;ecp:TEntChangeProc; const f:TzeUnitsFormat);
+var
+  PVD:pvardesk;
+begin
+  PVD:=PTOneVarData(pdata).VDAddr.Instance;
+  if @ecp=nil then ProcessVariableAttributes(PVD.attrib,vda_RO,0);
+  if fistrun then begin
+    PTEnumData(PVD.data.Addr.Instance)^.Selected:=ElLeaderVAlignToEnumIndex(PGDBObjElLeader(ChangedData.PEntity)^)
+  end else begin
+    if PTEnumData(PVD.data.Addr.Instance)^.Selected<>ElLeaderVAlignToEnumIndex(PGDBObjElLeader(ChangedData.PEntity)^)then
+      ProcessVariableAttributes(PVD.attrib,vda_different,0);
+  end;
+end;
+
+
 function CreateChangedData(pentity:pointer;GSData:TGetSetData):TChangedData;
 begin
   result.pentity:=pentity;

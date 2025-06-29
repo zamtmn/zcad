@@ -2,7 +2,7 @@
 <CONFIG>
   <ToolBarsContent>
     <Layouts Type="ToolBar" Caption="Layouts">
-      <LayoutComboBox Width="200" Hint="Layout selection"/>
+      <LayoutComboBox Width="400" Hint="Layout selection"/>
       <Action Name="ACN_DOCKOPT"/>
       <Action Name="ACN_SAVELAYOUT"/>
     </Layouts>
@@ -33,21 +33,21 @@
     </Standard>
     <ObjProp Type="ToolBar">
       <Action Name="ACN_LAYER"/>
-      <LayerComboBox Width="200" Hint="Layer selection"/>
+      <LayerComboBox Width="400" Hint="Layer selection"/>
       <Separator/>
       <Action Name="ACN_COLORS"/>
-      <ColorComboBox Width="100" Hint="Color selection"/>
+      <ColorComboBox Width="200" Hint="Color selection"/>
       <Separator/>
       <Action Name="ACN_LTYPES"/>
-      <LTypeComboBox Width="250" Hint="Line type selection"/>
+      <LTypeComboBox Width="200" Hint="Line type selection"/>
       <Separator/>
-      <LineWComboBox Width="100" Hint="Line weight selection"/>
+      <LineWComboBox Width="200" Hint="Line weight selection"/>
       <Separator/>
       <Action Name="ACN_TSTYLES"/>
-      <TStyleComboBox Width="100" Hint="Text style selection"/>
+      <TStyleComboBox Width="200" Hint="Text style selection"/>
       <Separator/>
       <Action Name="ACN_DSTYLES"/>
-      <DimStyleComboBox Width="100" Hint="Dim style selection"/>
+      <DimStyleComboBox Width="200" Hint="Dim style selection"/>
     </ObjProp>	
     <Find Type="ToolBar">
       <FindEditBox Width="200" Hint="Find"/>

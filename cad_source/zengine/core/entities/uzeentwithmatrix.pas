@@ -166,6 +166,24 @@ begin
         IRPartially:begin
           enttree.NodeData.infrustum:=Actuality.infrustumactualy;
           inFrustomEnts:=0;
+          pobj:=enttree.nul.beginiterate(ir);
+          if pobj<>nil then
+            repeat
+              {if pobj^.CalcInFrustum(
+                frustum,Actuality,Counters,
+                ProjectProc,zoom,currentdegradationfactor) then} begin
+                {pobj^.SetInFrustumFromTree(
+                  frustum,Actuality,Counters,
+                  ProjectProc,zoom,currentdegradationfactor);}
+                if inFrustomEnts=0 then
+                  enttree.NodeData.InFrustumBoundingBox:=pobj^.vp.BoundingBox
+                else
+                  ConcatBB(enttree.NodeData.InFrustumBoundingBox,pobj^.vp.BoundingBox);
+                Inc(inFrustomEnts);
+              end;
+              pobj:=enttree.nul.iterate(ir);
+          until pobj=nil;
+
           pobj:=enttree.NodeData.NeedToSeparated.beginiterate(ir);
           if pobj<>nil then
             repeat
@@ -175,10 +193,10 @@ begin
                 pobj^.SetInFrustumFromTree(
                   frustum,Actuality,Counters,
                   ProjectProc,zoom,currentdegradationfactor);
-                {if inFrustomEnts=0 then
+                if inFrustomEnts=0 then
                   enttree.NodeData.InFrustumBoundingBox:=pobj^.vp.BoundingBox
                 else
-                  ConcatBB(enttree.NodeData.InFrustumBoundingBox,pobj^.vp.BoundingBox);}
+                  ConcatBB(enttree.NodeData.InFrustumBoundingBox,pobj^.vp.BoundingBox);
                 Inc(inFrustomEnts);
               end;
               pobj:=enttree.NodeData.NeedToSeparated.iterate(ir);

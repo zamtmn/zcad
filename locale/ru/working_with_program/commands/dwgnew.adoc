@@ -1,0 +1,13 @@
+
+#### DWGNew
+
+:cmdcommand: DWGNew
+:cmdshortcuts: kbd:[Ctrl+N]
+:cmdicon: ../../../../images/actions/new.png
+:cmdmenu: Файл > Новый чертеж
+
+include::../../_elements/commandsummary.adoc[]
+
+Создать новый чертеж. !!NEEDDETAILS!!
+
+include::commandsummaryfree.adoc[]

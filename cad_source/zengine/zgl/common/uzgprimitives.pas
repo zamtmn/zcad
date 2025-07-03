@@ -55,7 +55,7 @@ ZGLOptimizerData=record
                                                      ignoretriangles:boolean;
                                                      ignorelines:boolean;
                                                      symplify:boolean;
-                                                     ignoreTo,ignoreFrom:TArrayIndex;
+                                                     ignoreTo,ignoreFrom,nextprimitive:TArrayIndex;
                                                end;
 {REGISTERRECORDTYPE TEntIndexesData}
 TEntIndexesData=record
@@ -580,33 +580,45 @@ end;
 
 function TLLProxyLine.draw(drawer:TZGLAbstractDrawer;var rc:TDrawContext;var GeomData:ZGLGeomData;var LLPArray:TLLPrimitivesArray;var OptData:ZGLOptimizerData;inFrustumState:TInBoundingVolume):Integer;
 
-  function getI1(i1,i2:TArrayIndex):TArrayIndex;
+  function getI1(const i1,i2:TArrayIndex; var LastInVisibleI1:TArrayIndex):TArrayIndex;
   var
     testedI:TArrayIndex;
   begin
-    if i2-i1<=1 then
-      exit(IndexsVector.getDataMutable(i1)^.PIndex)
+    if i2-i1<1 then
+       exit({IndexsVector.getDataMutable(i1)^.PIndex}LastInVisibleI1)
     else begin
-      testedI:=(i1+i2)div 2;
-      if CalcPointTrueInFrustum(geomdata.Vertex3S.getData(IndexsVector.getDataMutable(testedI)^.GIndex),rc.DrawingContext.pcamera.frustum)=IRFully then
-        result:=getI1(i1,testedI)
-      else
-        result:=getI1(testedI,i2);
+      testedI:=(i1+i2+1)div 2;
+      if CalcPointTrueInFrustum(geomdata.Vertex3S.getData(IndexsVector.getDataMutable(testedI)^.GIndex),rc.DrawingContext.pcamera.frustum)=IRFully then begin
+        if testedI=i2 then
+          exit(LastInVisibleI1);
+        result:=getI1(i1,testedI,LastInVisibleI1)
+      end else begin
+        LastInVisibleI1:=IndexsVector.getDataMutable(testedI)^.PIndex;
+         if testedI=i1 then
+           exit(LastInVisibleI1);
+        result:=getI1(testedI,i2,LastInVisibleI1);
+      end;
     end;
   end;
 
-  function getI2(i1,i2:TArrayIndex):TArrayIndex;
+  function getI2(const i1,i2:TArrayIndex; var LastInVisibleI2:TArrayIndex):TArrayIndex;
   var
     testedI:TArrayIndex;
   begin
-    if i2-i1<=1 then
-      exit(IndexsVector.getDataMutable(i2)^.PIndex)
+    if i2-i1<1 then
+      exit({IndexsVector.getDataMutable(i2)^.PIndex}LastInVisibleI2)
     else begin
-      testedI:=(i1+i2)div 2;
-      if CalcPointTrueInFrustum(geomdata.Vertex3S.getData(IndexsVector.getDataMutable(testedI)^.GIndex),rc.DrawingContext.pcamera.frustum)=IRFully then
-        result:=getI2(testedI,i2)
-      else
-        result:=getI2(i1,testedI);
+      testedI:=(i1+i2+1)div 2;
+      if CalcPointTrueInFrustum(geomdata.Vertex3S.getData(IndexsVector.getDataMutable(testedI)^.GIndex),rc.DrawingContext.pcamera.frustum)=IRFully then begin
+        if testedI=i1 then
+          exit(LastInVisibleI2);
+        result:=getI2(testedI,i2,LastInVisibleI2)
+      end else begin
+        LastInVisibleI2:=IndexsVector.getDataMutable(testedI)^.PIndex;
+        if testedI=i2 then
+          exit(LastInVisibleI2);
+        result:=getI2(i1,testedI,LastInVisibleI2);
+      end;
     end;
   end;
 
@@ -712,6 +724,7 @@ function TLLProxyLine.draw(drawer:TZGLAbstractDrawer;var rc:TDrawContext;var Geo
   function getIntersect(out i1,i2:TArrayIndex):boolean;
   var
     p1ibv,p2ibv:TInBoundingVolume;
+    tpi:TArrayIndex;
   begin
     result:=false;
     p1ibv:=CalcPointTrueInFrustum(geomdata.Vertex3S.getData(FirstIndex),rc.DrawingContext.pcamera.frustum);
@@ -723,14 +736,16 @@ function TLLProxyLine.draw(drawer:TZGLAbstractDrawer;var rc:TDrawContext;var Geo
     end else if p1ibv=IRFully then begin
       result:=true;
       i1:=FirstLinePrimitiveindex;
+      tpi:=LastLinePrimitiveindex;
       if self.IndexsVector.Count>2 then
-        i2:=getI2(0,IndexsVector.Count-1)
+        i2:=getI2(0,IndexsVector.Count-1,tpi)
       else
         i2:=LastLinePrimitiveindex;
     end else if p2ibv=IRFully then begin
       result:=true;
+      tpi:=FirstLinePrimitiveindex;
       if self.IndexsVector.Count>2 then
-        i1:=getI1(0,IndexsVector.Count-1)
+        i1:=getI1(0,IndexsVector.Count-1,tpi)
       else
         i1:=FirstLinePrimitiveindex;
       i2:=LastLinePrimitiveindex;
@@ -755,29 +770,32 @@ begin
       end;
     IRPartially,IRNotAplicable:begin//линия возможно видна частично
        //проверяем, если всетаки не видна - пропускаем паттерны
-       if uzegeometry.CalcTrueInFrustum(geomdata.Vertex3S.getData(FirstIndex),
-          geomdata.Vertex3S.getData(LastIndex),rc.DrawingContext.pcamera.frustum)
-          <>IREmpty then begin
-         //опять если размер паттерна мал, деградируем ее
-         //до сплошной линнии, паттерны пропускаем, независимо какая часть
-         //линии видна, сплошную линию нарисовать быстрее
-         if (rc.LOD=LODLowDetail)or(MaxDashLength/(rc.DrawingContext.zoom*rc.DrawingContext.zoom)<0.5)and(not rc.maxdetail) then begin
-           Drawer.DrawLine(@geomdata.Vertex3S,FirstIndex,LastIndex);
-           OptData.ignoreTo:=self.LastLinePrimitiveindex;
-         end else begin
-           //пытаемся выяснить какие сегменты разбитой линии видны
-           //i1 - индекс первого видимого сегмента
-           //i2 - индекс последнего видимого сегмента
-           if getIntersect(i1,i2) then begin
-             //рисуем только ввдимую часть линии
-             OptData.ignoreTo:=i1;
-             OptData.ignoreFrom:=i2;
-           end else
-             //видимые сегменты линии не обнаружены, не рисуем ее
-             OptData.ignoreTo:=self.LastLinePrimitiveindex;//паттерны пропускаем
-         end;
-       end else
-         OptData.ignoreTo:=self.LastLinePrimitiveindex;
+      OptData.nextprimitive:=-1;
+      if uzegeometry.CalcTrueInFrustum(geomdata.Vertex3S.getData(FirstIndex),geomdata.Vertex3S.getData(LastIndex),rc.DrawingContext.pcamera.frustum)
+         <>IREmpty then begin
+        //опять если размер паттерна мал, деградируем линию
+        //до сплошной линнии, паттерны пропускаем, независимо какая часть
+        //линии видна, сплошную линию нарисовать быстрее
+        if (rc.LOD=LODLowDetail)or(MaxDashLength/(rc.DrawingContext.zoom*rc.DrawingContext.zoom)<0.5)and(not rc.maxdetail) then begin
+          Drawer.DrawLine(@geomdata.Vertex3S,FirstIndex,LastIndex);
+          OptData.ignoreTo:=self.LastLinePrimitiveindex;
+        end else begin
+          //пытаемся выяснить какие сегменты разбитой линии видны
+          //i1 - индекс первого видимого сегмента
+          //i2 - индекс последнего видимого сегмента
+          if getIntersect(i1,i2) then begin
+            //рисуем только ввдимую часть линии
+            OptData.ignoreTo:=i1;
+            OptData.ignoreFrom:=i2;
+            OptData.nextprimitive:=LastLinePrimitiveindex;
+          end else begin
+            //видимые сегменты линии не обнаружены, не рисуем ее
+            OptData.ignoreTo:=LastLinePrimitiveindex;//паттерны пропускаем
+          end;
+        end
+      end else begin
+        OptData.ignoreTo:=LastLinePrimitiveindex;
+      end;
     end;
   end;
   result:=inherited;

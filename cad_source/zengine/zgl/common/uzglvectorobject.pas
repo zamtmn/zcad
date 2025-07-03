@@ -91,8 +91,18 @@ begin
       OptData.ignoreTo:=-1;
     end;
     if OptData.ignoreFrom<>-1 then begin
-      if OptData.ignoreFrom<=ProcessedSize then
-        exit;
+      if OptData.ignoreFrom<=ProcessedSize then begin
+        if OptData.nextprimitive=-1 then
+          exit
+        else begin
+          if OptData.nextprimitive>ProcessedSize then begin
+            ProcessedSize:=OptData.nextprimitive;
+            pointer(PPrimitive):=LLprimitives.getDataMutable(ProcessedSize);
+          end;
+          OptData.ignoreFrom:=-1;
+          OptData.nextprimitive:=-1;
+        end;
+      end;
     end;
   end;
 end;

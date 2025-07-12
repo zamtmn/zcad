@@ -417,6 +417,7 @@ var
    l:Double;
    pp1,pp2:ZGLVertex3Sarray.PT;
    sstep:integer;
+   drawedsegscount:integer;
 begin
   if not OptData.ignorelines then
   begin
@@ -447,12 +448,14 @@ begin
        else
          sstep:=1;
        i:=1;
+       drawedsegscount:=0;
        while i<count do begin
        //for i:=1 to Count-1 do begin
          l:=l+abs(pp2^.x-pp1^.x)+abs(pp2^.y-pp1^.y)+abs(pp2^.z-pp1^.z);
          if (l/rc.DrawingContext.zoom>3)or(i=(count-1)) then begin
             l:=0;
             Drawer.DrawLine(@geomdata.Vertex3S,indexDrawed,index);
+            inc(drawedsegscount);
             indexDrawed:=index;
          end;
          i:=i+sstep;
@@ -462,6 +465,8 @@ begin
          //index:=i;
          pp2:=geomdata.Vertex3S.getDataMutable(index);
        end;
+       if drawedsegscount=0 then
+         Drawer.DrawLine(@geomdata.Vertex3S,P1Index,P1Index+count-1);
     end;
   if closed then
     Drawer.DrawLine(@geomdata.Vertex3S,oldindex,P1Index);

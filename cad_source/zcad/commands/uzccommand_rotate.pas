@@ -34,19 +34,28 @@ uses
   uzegeometrytypes,uzeentity,uzcLog;
 
 type
-  rotate_com =  object(move_com)
+  TRotate_com=object(move_com)
     function AfterClick(const Context:TZCADCommandContext;wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record): Integer; virtual;
+    function CreateRotmatr(AAngle:Double):DMatrix4D;virtual;
     procedure CommandContinue(const Context:TZCADCommandContext); virtual;
-    procedure rot(a:Double; button: Byte);
+    procedure rotate(const rotmatr:DMatrix4D; button: Byte);
     procedure showprompt(mklick:integer);virtual;
+  end;
+  TRotateX_com=object(TRotate_com)
+    function CreateRotmatr(AAngle:Double):DMatrix4D;virtual;
+  end;
+  TRotateY_com=object(TRotate_com)
+    function CreateRotmatr(AAngle:Double):DMatrix4D;virtual;
   end;
 
 var
-  rotate:rotate_com;
+  Rotate_com:TRotate_com;
+  RotateX_com:TRotateX_com;
+  RotateY_com:TRotateY_com;
 
 implementation
 
-procedure rotate_com.CommandContinue(const Context:TZCADCommandContext);
+procedure TRotate_com.CommandContinue(const Context:TZCADCommandContext);
 var
   v1:vardesk;
   td:Double;
@@ -54,19 +63,19 @@ begin
   if (commandmanager.GetValueHeap{-vs})>0 then begin
     v1:=commandmanager.PopValue;
     td:=DegToRad(PDouble(v1.data.Addr.Instance)^);
-    rot(td,MZW_LBUTTON);
+    rotate(CreateRotmatr(td),MZW_LBUTTON);
   end;
 end;
-procedure rotate_com.showprompt(mklick:integer);
+procedure TRotate_com.showprompt(mklick:integer);
 begin
   case mklick of
     0:inherited;
     1:ZCMsgCallBackInterface.TextMessage(rscmPickOrEnterAngle,TMWOHistoryOut);
   end;
 end;
-procedure rotate_com.rot(a:Double; button: Byte);
+procedure TRotate_com.rotate(const rotmatr:DMatrix4D; button: Byte);
 var
-  dispmatr,tempmatr,rotmatr:DMatrix4D;
+  tmatr,dispmatr,tempmatr:DMatrix4D;
   ir:itrec;
   pcd:PTCopyObjectDesc;
   m:tmethod;
@@ -75,7 +84,7 @@ var
   RC:TDrawContext;
   FrPos:GDBvertex;
 begin
-  rotmatr:=uzegeometry.CreateRotationMatrixZ(a);
+  //rotmatr:=uzegeometry.CreateRotationMatrixZ(a);
   if (button and MZW_LBUTTON)=0 then begin
     if (drawings.GetCurrentDWG^.GetPcamera^.notuseLCS) then
       tr:=t3dp
@@ -89,9 +98,9 @@ begin
     FrPos.z:=t3dp.z+tempmatr.mtr[3].z;
 
     dispmatr:=uzegeometry.CreateTranslationMatrix(-tr);
-    rotmatr:=uzegeometry.MatrixMultiply(dispmatr,rotmatr);
+    tmatr:=uzegeometry.MatrixMultiply(dispmatr,rotmatr);
     dispmatr:=uzegeometry.CreateTranslationMatrix(tr);
-    dispmatr:=uzegeometry.MatrixMultiply(rotmatr,dispmatr);
+    dispmatr:=uzegeometry.MatrixMultiply(tmatr,dispmatr);
 
     drawings.GetCurrentDWG^.ConstructObjRoot.ObjMatrix:=dispmatr;
     drawings.GetCurrentDWG^.ConstructObjRoot.FrustumPosition:=FrPos;
@@ -100,9 +109,9 @@ begin
     drawings.GetCurrentDWG^.ConstructObjRoot.FormatEntity(drawings.GetCurrentDWG^,RC);
   end else begin
     dispmatr:=uzegeometry.CreateTranslationMatrix(-t3dp);
-    rotmatr:=uzegeometry.MatrixMultiply(dispmatr,rotmatr);
+    tmatr:=uzegeometry.MatrixMultiply(dispmatr,rotmatr);
     dispmatr:=uzegeometry.CreateTranslationMatrix(t3dp);
-    dispmatr:=uzegeometry.MatrixMultiply(rotmatr,dispmatr);
+    dispmatr:=uzegeometry.MatrixMultiply(tmatr,dispmatr);
     tempmatr:=dispmatr;
     uzegeometry.MatrixInvert(tempmatr);
     PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack.PushStartMarker('Rotate');
@@ -126,7 +135,12 @@ begin
   end;
 end;
 
-function rotate_com.AfterClick(const Context:TZCADCommandContext;wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record): Integer;
+function TRotate_com.CreateRotmatr(AAngle:Double):DMatrix4D;
+begin
+  result:=uzegeometry.CreateRotationMatrixZ(AAngle);
+end;
+
+function TRotate_com.AfterClick(const Context:TZCADCommandContext;wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record): Integer;
 var
   a:double;
   v1,v2:GDBVertex2d;
@@ -137,15 +151,32 @@ begin
   v1.y:=t3dp.y;
   a:=uzegeometry.Vertexangle(v1,v2);
 
-  rot(a,button);
+  rotate(CreateRotmatr(a),button);
 
   result:=cmd_ok;
 end;
 
+function TRotateX_com.CreateRotmatr(AAngle:Double):DMatrix4D;
+begin
+  result:=uzegeometry.CreateRotationMatrixX(AAngle);
+end;
+
+function TRotateY_com.CreateRotmatr(AAngle:Double):DMatrix4D;
+begin
+  result:=uzegeometry.CreateRotationMatrixY(AAngle);
+end;
+
+
 initialization
   programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
-  rotate.init('Rotate',0,0);
-  rotate.NotUseCommandLine:=false;
+  Rotate_com.init('Rotate',0,0);
+  Rotate_com.NotUseCommandLine:=false;
+
+  RotateX_com.init('RotateX',0,0);
+  RotateX_com.NotUseCommandLine:=false;
+
+  RotateY_com.init('RotateY',0,0);
+  RotateY_com.NotUseCommandLine:=false;
 finalization
   ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
 end.

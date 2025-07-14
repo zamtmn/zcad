@@ -393,44 +393,8 @@ begin
 end;
 
 procedure GDBObjCircle.DrawGeometry;
-//var
-  //angle: Double;
-  //i: Integer;
 begin
-           if dc.selected then
-                              begin
-                              //Vertex3D_in_WCS_Array.drawgeometry2
-                              Representation.DrawGeometry(DC,inFrustumState);
-                              end
-                          else
-                              begin
-                                   if CanSimplyDrawInOCS(DC,{self.radius}1,6) then
-                                                                                  begin
-                                                                                       //Vertex3D_in_WCS_Array.drawgeometry
-                                                                                       Representation.DrawGeometry(DC,inFrustumState);
-                                                                                  end
-                                                         else
-                                                             begin
-                                                                  DC.Drawer.DrawLine3DInModelSpace(q0,q1,DC.DrawingContext.matrixs);
-                                                                  DC.Drawer.DrawLine3DInModelSpace(q1,q2,DC.DrawingContext.matrixs);
-                                                                  DC.Drawer.DrawLine3DInModelSpace(q2,q3,DC.DrawingContext.matrixs);
-                                                                  DC.Drawer.DrawLine3DInModelSpace(q3,q0,DC.DrawingContext.matrixs);
-                                                             end;
-                              end;
-  //Vertex3D_in_WCS_Array.DrawGeometry;
-
-  {
-  oglsm.myglpushmatrix;
-  glmultmatrixd(@objmatrix);
-  if (((not poglwnd.scrollmode)or(not sysvar.RD.RD_PanObjectDegradation^)) and (lod>8)) then begin
-                                                                                          circlepointoflod[lod].drawgeometry;
-                                                                                          myglbegin(gl_points);
-                                                                                          circlepointoflod[lod].iterategl(@glvertex2dv);
-                                                                                          myglend;
-                                                                                     end
-                                                                                else circlepointoflod[8].drawgeometry;
-  oglsm.myglpopmatrix;
-  }
+  Representation.DrawGeometry(DC,VP.BoundingBox,inFrustumState);
   inherited;
 end;
 procedure GDBObjCircle.projectpoint;

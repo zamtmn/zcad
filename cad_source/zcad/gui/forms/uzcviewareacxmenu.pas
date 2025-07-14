@@ -7,7 +7,8 @@ interface
 uses
   sysutils,
   uzglviewareaabstract,uzmenusmanager,uzmacros,TransferMacros,MacroDefIntf,Forms,
-  ActnList,uzccommandsmanager;
+  ActnList,uzccommandsmanager,uzedrawingsimple,
+  uzbtypes,gzctnrVectorTypes,uzeentity,uzeentdevice,UGDBSelectedObjArray;
 
 type
   PTViewAreaContext=^TViewAreaContext;
@@ -56,6 +57,35 @@ begin
   result:=vac.VA.param.SelDesc.Selectedobjcount>0;
 end;
 
+function OneDevSelectedCCF(const vac:TViewAreaContext):boolean;
+var
+  psd:PTSimpleDrawing;
+  ir:itrec;
+  PSelDesk:PSelectedObjDesc;
+  count:integer;
+begin
+  //возвращаем true если выбрано только одно устройство
+  //todo: сделать по нормальному
+  result:=(vac.VA.param.SelDesc.Selectedobjcount=1)and(vac.VA.PDWG<>nil);
+  if result then begin
+    if IsIt(typeof(vac.VA.PDWG^),typeof(TSimpleDrawing)) then begin
+      psd:=pointer(vac.VA.PDWG);
+      count:=0;
+      PSelDesk:=psd^.SelObjArray.beginiterate(ir);
+      if PSelDesk<>nil then
+      repeat
+        if IsIt(typeof(PSelDesk^.objaddr^),typeof(GDBObjDevice))then
+          Inc(count);
+        if count>1 then
+          exit(false);
+      PSelDesk:=psd^.SelObjArray.iterate(ir);
+      until PSelDesk=nil;
+    end;
+    if count<>1 then
+      result:=false;
+  end;
+end;
+
 function CommandRunningCCF(const vac:TViewAreaContext):boolean;
 begin
   result:=commandmanager.CurrCmd.pcommandrunning<>nil;
@@ -71,6 +101,7 @@ begin
     ViewAreaMacros:=TViewAreaMacros.Create;
   ViewAreaContextMenuManager.RegisterContextCheckFunc('EntsSelected',@EntsSelectedCCF);
   ViewAreaContextMenuManager.RegisterContextCheckFunc('CommandRunning',@CommandRunningCCF);
+  ViewAreaContextMenuManager.RegisterContextCheckFunc('OneDevSelected',@OneDevSelectedCCF);
 end;
 
 procedure FinalizeViewAreaCXMenu;

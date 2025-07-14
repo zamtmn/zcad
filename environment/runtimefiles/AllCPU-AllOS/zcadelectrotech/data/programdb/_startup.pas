@@ -10,16 +10,26 @@ var
    _puop:String;
    _ibpops:String;
    _am:String;
+   _thermosensor:String;
+   _thermoswitches:String;
    _thermoresistance:String;
    _pressureswitches:String;
    _pressuremanometer:String;
    _thermometer:String;
+   _pressuresensor:String;
+   _levelswitches:String;
+   _seismicswitches:String;
 implementation
 begin
+     _seismicswitches:='Датчикисейсмо_реле_';
+     _levelswitches:='Датчикиуровня_реле_';
+     _thermoswitches:='Датчикитемпературы_реле_';
+     _thermosensor:='Датчикитемпературы_преобразователи_';
      _thermoresistance:='Датчикитемпературы_термосопротивления_';
      _thermometer:='Датчикитемпературы_термометры_';
      _pressureswitches:='Датчикидавления_реледавления_';
      _pressuremanometer:='Датчикидавления_манометры_';
+     _pressuresensor:='Датчикидавления_преобразователи_';
      _cables:='Кабели_';
      _cables_sv:='Кабели_связь';
      _detsmokesl:='Извещатели_пожарные_дымовые_шлейфовые_';

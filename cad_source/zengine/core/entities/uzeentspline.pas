@@ -265,7 +265,7 @@ end;
 procedure GDBObjSpline.DrawGeometry;
 begin
   //vertexarrayInWCS.DrawGeometryWClosed(closed);
-  self.Representation.DrawGeometry(DC,inFrustumState);
+  self.Representation.DrawGeometry(DC,VP.BoundingBox,inFrustumState);
   {if closed then oglsm.myglbegin(GL_line_loop)
              else oglsm.myglbegin(GL_line_strip);
   vertexarrayInWCS.iterategl(@myglVertex3dv);

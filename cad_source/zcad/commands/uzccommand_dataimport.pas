@@ -66,18 +66,22 @@ var
   pentvarext:TVariablesExtender;
   vn,vt,vv,vun:String;
   vd:vardesk;
+  cancreatevar:boolean;
 begin
   pvisible:=source.beginiterate(ir);
   if pvisible<>nil then
   repeat
     pentvarext:=pvisible^.GetExtension<TVariablesExtender>;
     if pentvarext<>nil then begin
-      extractvarfromdxfstring(prop,vn,vt,vv,vun);
-      pvd:=pentvarext.entityunit.FindVariable(vn);
+      cancreatevar:=extractvarfromdxfstring(prop,vn,vt,vv,vun);
+      if cancreatevar then
+        pvd:=pentvarext.entityunit.FindVariable(vn)
+      else
+        pvd:=pentvarext.entityunit.FindVariable(prop);
       if pvd<>nil then begin
         pvd.data.PTD.SetValueFromString(pvd.data.Addr.Instance,value);
         pvisible.FormatEntity(drawing,DC);
-      end else begin
+      end else if cancreatevar then begin
         pentvarext.entityunit.setvardesc(vd,vn,vun,vt);
         pentvarext.entityunit.InterfaceVariables.createvariable(vd.name,vd);
         PBaseTypeDescriptor(vd.data.PTD)^.SetValueFromString(vd.data.Addr.Instance,value);

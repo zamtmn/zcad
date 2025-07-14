@@ -498,11 +498,7 @@ procedure GDBObjCable.DrawGeometry;
    //ptn1,ptn2:PTNodeProp;
    //ir_inNodeArray:itrec;
 begin
-
-  if (selected)or(dc.selected) then
-    Representation.DrawNiceGeometry(DC,inFrustumState)
-  else
-    Representation.DrawGeometry(DC,inFrustumState);
+  Representation.DrawGeometry(DC,VP.BoundingBox,inFrustumState);
 
   if SysVar.DWG.DWG_HelpGeometryDraw^ then
     if CanSimplyDrawInWCS(DC,SysVar.DSGN.DSGN_HelpScale^,1) then begin

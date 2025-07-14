@@ -98,11 +98,33 @@ begin
 end;
 
 procedure ElLeaderSave(var outStream:TZctnrVectorBytes;PEnt:PGDBObjEntity;var IODXFContext:TIODXFContext);
+var
+  al:string;
 begin
   dxfStringout(outStream,1000,'_UPGRADE='+inttostr(UD_LineToLeader));
   dxfStringout(outStream,1000,'%1=size|Integer|'+inttostr(PGDBObjElLeader(PEnt)^.size)+'|');
   dxfStringout(outStream,1000,'%2=scale|Double|'+floattostr(PGDBObjElLeader(PEnt)^.scale)+'|');
   dxfStringout(outStream,1000,'%3=twidth|Double|'+floattostr(PGDBObjElLeader(PEnt)^.twidth)+'|');
+  if not PGDBObjElLeader(PEnt)^.AutoHAlaign then
+    dxfStringout(outStream,1000,'%4=AutoHAlaign|Boolean|'+booltostr(PGDBObjElLeader(PEnt)^.AutoHAlaign,true)+'|');
+  if PGDBObjElLeader(PEnt)^.HorizontalAlign<>THAlign.HALeft then begin
+    case PGDBObjElLeader(PEnt)^.HorizontalAlign of
+      THAlign.HALeft:al:='HALeft';
+      THAlign.HAMidle:al:='HAMidle';
+      THAlign.HARight:al:='HARight';
+    end;
+    dxfStringout(outStream,1000,'%5=HorizontalAlign|THAlign|'+al+'|');
+  end;
+  if not PGDBObjElLeader(PEnt)^.AutoVAlaign then
+    dxfStringout(outStream,1000,'%6=AutoVAlaign|Boolean|'+booltostr(PGDBObjElLeader(PEnt)^.AutoVAlaign,true)+'|');
+  if PGDBObjElLeader(PEnt)^.VerticalAlign<>TVAlign.VATop then begin
+    case PGDBObjElLeader(PEnt)^.VerticalAlign of
+      TVAlign.VATop:al:='VATop';
+      TVAlign.VAMidle:al:='VAMidle';
+      TVAlign.VABottom:al:='VABottom';
+    end;
+    dxfStringout(outStream,1000,'%7=VerticalAlign|TVAlign|'+al+'|');
+  end;
 end;
 
 procedure EntityIOSave_all(var outStream:TZctnrVectorBytes;PEnt:PGDBObjEntity;var IODXFContext:TIODXFContext);

@@ -2247,6 +2247,7 @@ var //i: Integer;
     pcd:PTCableDesctiptor;
     DC:TDrawContext;
     pcablevarext,pstartsegmentvarext:TVariablesExtender;
+    counter:integer;
 begin
   filename:='';
   if SaveFileDialog(filename,'CSV',CSVFileFilter,'','Сохранить данные...') then
@@ -2263,7 +2264,7 @@ begin
     pcablevarext:=pv^.GetExtension<TVariablesExtender>;
     if pcablevarext<>nil then
     begin
-         pvm:=pcablevarext.entityunit.FindVariable('DB_link');
+         pvm:=pcablevarext.entityunit.FindVariable('DB_link',true);
          if pvm<>nil then
          begin
               pvad:=pcablevarext.entityunit.FindVariable('AmountD');
@@ -2282,7 +2283,7 @@ begin
                         pvm:=pcablevarext.entityunit.FindVariable('NMO_Name');
                         if (pvm<>nil) then
                                            if pbomitem.Names<>'' then
-                                                                     pbomitem.Names:=pbomitem.Names+','+pstring(pvm^.data.Addr.Instance)^
+                                                                     pbomitem.Names:=pbomitem.Names+', '+pstring(pvm^.data.Addr.Instance)^
                                                                  else
                                                                      pbomitem.Names:=pstring(pvm^.data.Addr.Instance)^;
 
@@ -2347,6 +2348,7 @@ begin
 
   pdbu:=PTZCADDrawing(drawings.GetCurrentDWG).DWGUnits.findunit(GetSupportPaths,InterfaceTranslate,DrawingDeviceBaseUnitName);
   currentgroup:=MainSpecContentFormat.beginiterate(ir_inscf);
+  counter:=1;
   if currentgroup<>nil then
   if length(currentgroup^)>1 then
   repeat
@@ -2383,6 +2385,9 @@ begin
                    psl:=pt^.tbl.CreateObject;
                    psl.init(9);
 
+                   pdbi^.Position:=IntToStr(counter);
+                   inc(counter);
+
                    s:=pdbi^.Position;
                    psl.PushBackData(Tria_Utf8ToAnsi(s));
 
@@ -2410,6 +2415,7 @@ begin
 
                    s:='';
                    psl.PushBackData(Tria_Utf8ToAnsi(s));
+                   s:=PBOMITEM.Names;
                    psl.PushBackData(Tria_Utf8ToAnsi(s));
                    end;
 
@@ -2977,10 +2983,28 @@ var
     DC:TDrawContext;
     priservarext,priser2varext,psupernetvarext,pnetvarext,plinevarext:TVariablesExtender;
     lph:TLPSHandle;
+    entarray:TZctnrVectorPGDBaseEntity;
 procedure GetStartEndPin(startdevname,enddevname:String);
 begin
-  PGDBObjEntity(startdev):=drawings.FindEntityByVar(GDBDeviceID,'NMO_Name',startdevname);
-  PGDBObjEntity(enddev):=drawings.FindEntityByVar(GDBDeviceID,'NMO_Name',enddevname);
+  startdev:=nil;
+  enddev:=nil;
+
+  entarray.Clear;
+  drawings.FindMultiEntityByVar(GDBDeviceID,'NMO_Name',startdevname,entarray);
+  if entarray.Count>0 then begin
+    PGDBObjEntity(startdev):=FindEntityByVarInArray(GDBDeviceID,'ENTID_Representation','GraphSymbol~onPlan',entarray,true);
+    if startdev=nil then
+      pointer(startdev):=entarray.getData(0);
+  end;
+
+  entarray.Clear;
+  drawings.FindMultiEntityByVar(GDBDeviceID,'NMO_Name',enddevname,entarray);
+  if entarray.Count>0 then begin
+    PGDBObjEntity(enddev):=FindEntityByVarInArray(GDBDeviceID,'ENTID_Representation','GraphSymbol~onPlan',entarray,true);
+    if enddev=nil then
+      pointer(enddev):=entarray.getData(0);
+  end;
+
   if startdev=nil then
                       //ZCMsgCallBackInterface.TextMessage('В строке '+inttostr(row)+' не найдено стартовое устройство '+startdevname,TMWOHistoryOut)
                       ZCMsgCallBackInterface.TextMessage(format('In row %d startdevice "%s" not found',[row,startdevname]),TMWOHistoryOut)
@@ -3028,6 +3052,7 @@ end;
 
 begin
   linesarray.init(10);
+  entarray.init(10);
   dc:=drawings.GetCurrentDWG^.CreateDrawingRC;
   if length(operands)=0 then
                      begin
@@ -3259,6 +3284,8 @@ begin
        until net=nil;
        supernetsarray.done;
        linesarray.done;
+       entarray.Clear;
+       entarray.done;
 
 
        lps.EndLongProcess(lph)

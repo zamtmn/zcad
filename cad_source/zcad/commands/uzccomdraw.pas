@@ -172,8 +172,6 @@ function GetSelectedBlockNames(var BDefNames:TZctnrVectorStrings;selname:String;
 
 var
    pworkvertex:pgdbvertex;
-   pb:PGDBObjBlockInsert;
-
    pold:PGDBObjEntity;
    p3dpl:pgdbobjpolyline;
    p3dplold:PGDBObjEntity;

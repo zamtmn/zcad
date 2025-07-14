@@ -44,7 +44,6 @@ GDBObjAbstractText= object(GDBObjPlainWithOX)
                          DrawMatrix:DMatrix4D;
                          procedure CalcObjMatrix(pdrawing:PTDrawingDef=nil);virtual;
                          procedure DrawGeometry(lw:Integer;var DC:TDrawContext;const inFrustumState:TInBoundingVolume);virtual;
-                         procedure SimpleDrawGeometry(var DC:TDrawContext);virtual;
                          function CalcInFrustum(const frustum:ClipArray;const Actuality:TVisActuality;var Counters:TCameraCounters; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double):Boolean;virtual;
                          function CalcTrueInFrustum(const frustum:ClipArray):TInBoundingVolume;virtual;
                          function onmouse(var popa:TZctnrVectorPGDBaseEntity;const MF:ClipArray;InSubEntry:Boolean):Boolean;virtual;
@@ -55,11 +54,19 @@ GDBObjAbstractText= object(GDBObjPlainWithOX)
                          procedure FormatAfterFielfmod(PField,PTypeDescriptor:Pointer);virtual;
                          procedure setrot(r:Double);
                          procedure transform(const t_matrix:DMatrix4D);virtual;
+                         procedure rtsave(refp:Pointer);virtual;
                    end;
 var
    SysVarRDPanObjectDegradation:Boolean=false;
 
 implementation
+
+procedure GDBObjAbstractText.rtsave(refp:Pointer);
+begin
+  inherited;
+  PGDBObjAbstractText(refp)^.textprop:=textprop;
+end;
+
 
 procedure GDBObjAbstractText.transform;
 var
@@ -382,10 +389,6 @@ begin
   DrawMatrix:=MatrixMultiply(m3,m1);
   DrawMatrix:=MatrixMultiply(DrawMatrix,m2);
 end;
-procedure GDBObjAbstractText.SimpleDrawGeometry;
-begin
-     //Representation.SHX.simpledrawgeometry(dc,1);
-end;
 
 procedure GDBObjAbstractText.DrawGeometry;
 var
@@ -394,7 +397,7 @@ begin
   dc.subrender := dc.subrender + 1;
   PanObjectDegradation:=SysVarRDPanObjectDegradation;
   if(not dc.scrollmode)or(not PanObjectDegradation)then
-    Representation.DrawGeometry(DC,inFrustumState)
+    Representation.DrawGeometry(DC,VP.BoundingBox,inFrustumState)
   else begin
     DC.Drawer.DrawLine3DInModelSpace(outbound[0],outbound[1],DC.DrawingContext.matrixs);
     DC.Drawer.DrawLine3DInModelSpace(outbound[1],outbound[2],DC.DrawingContext.matrixs);

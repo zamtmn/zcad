@@ -16,8 +16,10 @@ uses uzcenitiesvariablesextender,uzeentityfactory,Varman,uzgldrawcontext,
      gzctnrVectorTypes,uzeentity,varmandef,uzbtypes,uzeconsts,uzeffdxfsupport,
      uzegeometrytypes,uzeentsubordinated,uzestylestables,uzclog,
      UGDBOpenArrayOfPV,uzeentcurve,uzeobjectextender,uzetextpreprocessor,
-     uzglviewareadata,uzCtnrVectorpBaseEntity;
+     uzglviewareadata,uzCtnrVectorpBaseEntity,gzctnrSTL;
 type
+TStringCounter=TMyMapCounter<string>;
+
 PGDBObjElLeader=^GDBObjElLeader;
 GDBObjElLeader= object(GDBObjComplex)
             MainLine:GDBObjLine;
@@ -27,12 +29,19 @@ GDBObjElLeader= object(GDBObjComplex)
             size:Integer;
             scale:Double;
             twidth:Double;
+
+            AutoHAlaign:Boolean;
+            HorizontalAlign:THAlign;
+
+            AutoVAlaign:Boolean;
+            VerticalAlign:TVAlign;
+
             TextContent:string;
+            MaterialContent:string;
 
 
             procedure DrawGeometry(lw:Integer;var DC:TDrawContext;const inFrustumState:TInBoundingVolume);virtual;
-            procedure DrawOnlyGeometry(lw:Integer;var DC:TDrawContext;const inFrustumState:TInBoundingVolume);virtual;
-            procedure getoutbound(var DC:TDrawContext);virtual;
+             procedure getoutbound(var DC:TDrawContext);virtual;
             function CalcInFrustum(const frustum:ClipArray;const Actuality:TVisActuality;var Counters:TCameraCounters; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double):Boolean;virtual;
             function CalcTrueInFrustum(const frustum:ClipArray):TInBoundingVolume;virtual;
             function onmouse(var popa:TZctnrVectorPGDBaseEntity;const MF:ClipArray;InSubEntry:Boolean):Boolean;virtual;
@@ -268,6 +277,32 @@ begin
      //bp.owner^.ImEdited(@self,bp.PSelfInOwnerArray);
      //ObjCasheArray.addnodouble(@pobj);
 end;
+function getDigitsCount(ANumber:SizeUInt):integer;
+begin
+   case ANumber of
+     0                   ..9:result:=1;
+     10                  ..99:result:=2;
+     100                 ..999:result:=3;
+     1000                ..9999:result:=4;
+     10000               ..99999:result:=5;
+     100000              ..999999:result:=6;
+     1000000             ..9999999:result:=7;
+     10000000            ..99999999:result:=8;
+     100000000           ..999999999:result:=9;
+     1000000000          ..9999999999:result:=10;
+     10000000000         ..99999999999:result:=11;
+     100000000000        ..999999999999:result:=12;
+     1000000000000       ..9999999999999:result:=13;
+     10000000000000      ..99999999999999:result:=14;
+     100000000000000     ..999999999999999:result:=15;
+     1000000000000000    ..9999999999999999:result:=16;
+     10000000000000000   ..99999999999999999:result:=17;
+     100000000000000000  ..999999999999999999:result:=18;
+     1000000000000000000 ..9999999999999999999:result:=19;
+     10000000000000000000..18446744073709551615:result:=20;
+   end;
+end;
+
 procedure GDBObjElLeader.FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext;Stage:TEFStages=EFAllStages);
 const
   textoffset=0.5;
@@ -280,6 +315,8 @@ var
    psl:PTZctnrVectorStrings;
    pvn,pvNote,pvNoteFormat:pvardesk;
    sta:TZctnrVectorStrings;
+   stcnt:TStringCounter;
+   stcntpair:TStringCounter.TDictionaryPair;
    ps:pString;
    bb:TBoundingBox;
    pdev:PGDBObjDevice;
@@ -290,6 +327,7 @@ var
 
    Objects:GDBObjOpenArrayOfPV;
    pentvarext:TVariablesExtender;
+   ss:shortstring;
 begin
      if assigned(EntExtensions)then
        EntExtensions.RunOnBeforeEntityFormat(@self,drawing,DC);
@@ -299,6 +337,7 @@ begin
      pdev:=nil;
      //pobj:=nil;
      sta.init(10);
+     stcnt:=TStringCounter.Create(10);
      CopyVPto(mainline);
      //mainline.vp.Layer:=vp.Layer;
      mainline.FormatEntity(drawing,dc);
@@ -352,6 +391,14 @@ begin
                                s:=pvn^.data.PTD.GetValueAsString(pvn^.data.Addr.Instance);
                                //s:=pstring(pvn^.Instance)^;
                                sta.PushBackData(s);
+                               S:='';
+                          end;
+
+                          pvn:=pentvarext.entityunit.FindVariable('DB_link');
+                          if pvn<>nil then
+                          begin
+                               s:=pvn^.data.PTD.GetValueAsString(pvn^.data.Addr.Instance);
+                               stcnt.CountKey(s);
                                S:='';
                           end;
                      end;
@@ -429,7 +476,7 @@ begin
      if ps<>nil then
      repeat
        for l:=1 to length(ps^) do begin
-         self.textcontent[sl]:=ps^[l];
+         textcontent[sl]:=ps^[l];
          inc(sl);
        end;
        ps:=sta.iterate(ir);
@@ -438,6 +485,36 @@ begin
          inc(sl);
        end;
      until ps=nil;
+
+
+     sl:=0;
+     MaterialContent:='';
+     for stcntpair in stcnt do begin
+     //MaterialContent:=MaterialContent+stcntpair.Key+'*'+inttostr(stcntpair.Value)+';';
+     sl:=sl+length(stcntpair.Key)+getDigitsCount(stcntpair.Value)+2;
+     end;
+
+     SetLength(MaterialContent,sl);
+     sl:=1;
+     for stcntpair in stcnt do begin
+       for l:=1 to length(stcntpair.Key) do begin
+         MaterialContent[sl]:=stcntpair.Key[l];
+         inc(sl);
+       end;
+       MaterialContent[sl]:='*';
+       inc(sl);
+       ss:=inttostr(stcntpair.Value);
+       for l:=1 to length(ss) do begin
+         MaterialContent[sl]:=ss[l];
+         inc(sl);
+       end;
+       MaterialContent[sl]:=';';
+       inc(sl);
+     end;
+     stcnt.free;
+
+
+
 
      //textcontent:=Tria_AnsiToUtf8(textcontent);
 
@@ -519,10 +596,26 @@ begin
      MarkLine.FormatEntity(drawing,dc);
 
      tbl.Local.P_insert:=mainline.CoordInOCS.lEnd;
-     if VertexSub(mainline.CoordInWCS.lEnd,mainline.CoordInWCS.lBegin).x<=0 then
-                            tbl.Local.P_insert.x:=mainline.CoordInOCS.lEnd.x-tbl.w;
-     if VertexSub(mainline.CoordInWCS.lEnd,mainline.CoordInWCS.lBegin).y>=0 then
-                            tbl.Local.P_insert.y:=mainline.CoordInOCS.lEnd.y+tbl.h;
+     if AutoHAlaign then begin
+       if VertexSub(mainline.CoordInWCS.lEnd,mainline.CoordInWCS.lBegin).x<=0 then
+         tbl.Local.P_insert.x:=mainline.CoordInOCS.lEnd.x-tbl.w;
+     end else begin
+       case HorizontalAlign of
+         THAlign.HALeft:;
+         THAlign.HAMidle:tbl.Local.P_insert.x:=mainline.CoordInOCS.lEnd.x-tbl.w/2;
+         THAlign.HARight:tbl.Local.P_insert.x:=mainline.CoordInOCS.lEnd.x-tbl.w;
+       end
+     end;
+     if AutoVAlaign then begin
+       if VertexSub(mainline.CoordInWCS.lEnd,mainline.CoordInWCS.lBegin).y>=0 then
+         tbl.Local.P_insert.y:=mainline.CoordInOCS.lEnd.y+tbl.h;
+     end else begin
+       case VerticalAlign of
+         TVAlign.VATop:;
+         TVAlign.VAMidle:tbl.Local.P_insert.y:=mainline.CoordInOCS.lEnd.y+tbl.h/2;
+         TVAlign.VABottom:tbl.Local.P_insert.y:=mainline.CoordInOCS.lEnd.y+tbl.h;
+       end
+     end;
      tbl.FormatEntity(drawing,dc);
      ConstObjArray.free;
      if pdev<>nil then
@@ -759,15 +852,6 @@ begin
   dec(dc.subrender);
   inherited;
 end;
-procedure GDBObjElLeader.DrawOnlyGeometry;
-begin
-  inherited;
-  inc(dc.subrender);
-  MainLine.DrawOnlyGeometry(lw,dc,inFrustumState);
-  MarkLine.DrawOnlyGeometry(lw,dc,inFrustumState);
-  tbl.DrawOnlyGeometry(lw,dc,inFrustumState);
-  dec(dc.subrender);
-end;
 function GDBObjElLeader.Clone;
 var tvo: PGDBObjElLeader;
 begin
@@ -786,6 +870,11 @@ begin
   tvo^.size:=size;
   tvo^.scale:=scale;
   tvo^.twidth:=twidth;
+  tvo^.AutoHAlaign:=AutoHAlaign;
+  tvo^.HorizontalAlign:=HorizontalAlign;
+  tvo^.AutoVAlaign:=AutoVAlaign;
+  tvo^.VerticalAlign:=VerticalAlign;
+
   result := tvo;
 end;
 constructor GDBObjElLeader.initnul;
@@ -799,6 +888,10 @@ begin
      size:=0;
      scale:=1;
      twidth:=0;
+     AutoHAlaign:=true;
+     HorizontalAlign:=THAlign.HALeft;
+     AutoVAlaign:=true;
+     VerticalAlign:=TVAlign.VATop;
      //vp.ID:=GDBElLeaderID;
      MainLine.init(@self,vp.Layer,vp.LineWeight,uzegeometry.VertexMulOnSc(onevertex,-10),nulvertex);
      //MainLine.Format;
@@ -828,6 +921,7 @@ begin
      MarkLine.done;
      tbl.done;
      TextContent:='';
+     MaterialContent:='';
 end;
 function AllocElLeader:PGDBObjElLeader;
 begin
@@ -866,6 +960,26 @@ begin
    if pvi<>nil then
                    begin
                         result^.twidth:=pDouble(pvi^.data.Addr.Instance)^;
+                   end;
+   pvi:=PTUnit(ptu).FindVariable('AutoHAlaign');
+   if pvi<>nil then
+                   begin
+                        result^.AutoHAlaign:=PBoolean(pvi^.data.Addr.Instance)^;
+                   end;
+   pvi:=PTUnit(ptu).FindVariable('HorizontalAlign');
+   if pvi<>nil then
+                   begin
+                        result^.HorizontalAlign:=PTHAlign(pvi^.data.Addr.Instance)^;
+                   end;
+   pvi:=PTUnit(ptu).FindVariable('AutoVAlaign');
+   if pvi<>nil then
+                   begin
+                        result^.AutoVAlaign:=PBoolean(pvi^.data.Addr.Instance)^;
+                   end;
+   pvi:=PTUnit(ptu).FindVariable('VerticalAlign');
+   if pvi<>nil then
+                   begin
+                        result^.VerticalAlign:=PTVAlign(pvi^.data.Addr.Instance)^;
                    end;
    end;
 end;

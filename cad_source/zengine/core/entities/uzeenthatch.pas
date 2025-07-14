@@ -593,7 +593,7 @@ begin
 end;
 procedure GDBObjHatch.DrawGeometry;
 begin
-  Representation.DrawGeometry(DC,inFrustumState);
+  Representation.DrawGeometry(DC,VP.BoundingBox,inFrustumState);
   inherited;
 end;
 procedure GDBObjHatch.LoadFromDXF;

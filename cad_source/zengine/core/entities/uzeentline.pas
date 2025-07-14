@@ -323,10 +323,7 @@ begin
 end;
 procedure GDBObjLine.DrawGeometry;
 begin
-  if (selected)or(dc.selected) then
-    Representation.DrawNiceGeometry(DC,inFrustumState)
-  else
-    Representation.DrawGeometry(DC,inFrustumState);
+  Representation.DrawGeometry(DC,VP.BoundingBox,inFrustumState);
 end;
 
 function GDBObjLine.getsnap;

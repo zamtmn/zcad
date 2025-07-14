@@ -134,7 +134,7 @@ type
     StandaloneNode:TBaseRootNodeDesk;
     StandaloneNodeStates:TNodesStates;
     NavMX,NavMy:integer;
-    umf,fts:TmyVariableAction;
+    umf,fts,ifo:TmyVariableAction;
     MainFunctionIconIndex:integer;
     BuggyIconIndex:integer;
     SaveCellRectLeft:integer;
@@ -645,6 +645,11 @@ begin
    fts.AssignToVar('DSGN_NavigatorsFollowToSelection',0);
    fts.Caption:='Follow to selection';
 
+   ifo:=TmyVariableAction.Create(self);
+   ifo.ActionList:=StandartActions;
+   ifo.AssignToVar('DSGN_NavigatorsInterfaceOnly',0);
+   ifo.Caption:='Interface only';
+
    ActionList1.Images:=ImagesManager.IconList;
    Refresh.ImageIndex:=ImagesManager.GetImageIndex('Refresh');
    CoolBar1.AutoSize:=true;
@@ -666,7 +671,7 @@ begin
    TreeEnabler:=TStringPartEnabler.Create(self);
    TreeEnabler.EdgeBorders:=[{ebLeft,ebTop,ebRight,ebBottom}];
    TreeEnabler.AutoSize:=true;
-   TreeEnabler.actns:=[PEMenuSubMenu,PEMenuSeparator,umf,fts,PEMenuSeparator,IncludeEnts,IncludeProps,TreeProps,Refresh,nil,LoadFromFile,SaveToFile];
+   TreeEnabler.actns:=[PEMenuSubMenu,PEMenuSeparator,umf,fts,ifo,PEMenuSeparator,IncludeEnts,IncludeProps,TreeProps,Refresh,nil,LoadFromFile,SaveToFile];
 
    TreeEnabler.OnMenuPopup:=TEMenuPopUp;
    TreeEnabler.OnPartChanged:=SimilarRefreshTree;

@@ -90,7 +90,7 @@ GDBObjSubordinated= object(GDBObjGenericWithSubordinated)
          end;
 
 procedure extractvarfromdxfstring2(_Value:String;out vn,vt,vun:String);
-procedure extractvarfromdxfstring(_Value:String;out vn,vt,vv,vun:String);
+function extractvarfromdxfstring(_Value:String;out vn,vt,vv,vun:String):boolean;
 procedure OldVersVarRename(var vn,vt,vv,vun:String);
 procedure OldVersTextReplace(var vv:String);overload;
 procedure OldVersTextReplace(var vv:TDXFEntsInternalStringType);overload;
@@ -209,22 +209,25 @@ begin
 
 end;
 
-procedure extractvarfromdxfstring(_Value:String;out vn,vt,vv,vun:String);
+function extractvarfromdxfstring(_Value:String;out vn,vt,vv,vun:String):boolean;
 var
   i_beg:integer;
   i_end:integer=0;
 begin
-    i_beg:=i_end+1;
-    i_end:=pos('|',_value,i_beg);
-    vn:=copy(_value,i_beg,i_end-i_beg);
-    i_beg:=i_end+1;
-    i_end:=pos('|',_value,i_beg);
-    vt:=copy(_value,i_beg,i_end-i_beg);
-    i_beg:=i_end+1;
-    i_end:=pos('|',_value,i_beg);
-    vv:=copy(_value,i_beg,i_end-i_beg);
-    i_beg:=i_end+1;
-    vun:=copy(_value,i_beg,length(_value)-i_end);
+  i_beg:=i_end+1;
+  i_end:=pos('|',_value,i_beg);
+  if i_end=0 then
+    exit(false);
+  result:=true;
+  vn:=copy(_value,i_beg,i_end-i_beg);
+  i_beg:=i_end+1;
+  i_end:=pos('|',_value,i_beg);
+  vt:=copy(_value,i_beg,i_end-i_beg);
+  i_beg:=i_end+1;
+  i_end:=pos('|',_value,i_beg);
+  vv:=copy(_value,i_beg,i_end-i_beg);
+  i_beg:=i_end+1;
+  vun:=copy(_value,i_beg,length(_value)-i_end);
 end;
 procedure extractvarfromdxfstring2(_Value:String;out vn,vt,vun:String);
 var

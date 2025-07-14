@@ -29,8 +29,6 @@ uses
   gzctnrVectorTypes,uzegeometrytypes,uzestylestexts,StrUtils,gzctnrVector,uzMVReader,
   uzcTextPreprocessorDXFImpl;
 
-const maxdxfmtextlen=250;
-
 type
   PGDBXYZWStringArray=^XYZWStringArray;
   XYZWStringArray=object(GZVector<GDBStrWithPoint>)
@@ -55,7 +53,6 @@ type
     function GetObjTypeName:String;virtual;
     destructor done;virtual;
 
-    procedure SimpleDrawGeometry(var DC:TDrawContext);virtual;
     procedure FormatAfterDXFLoad(var drawing:TDrawingDef;var DC:TDrawContext);virtual;
 
     function CreateInstance:PGDBObjMText;static;
@@ -92,13 +89,7 @@ begin
   CalcGabarit(drawing);
   calcbb(dc);
 end;
-procedure GDBObjMText.SimpleDrawGeometry;
-begin
-     {if self.text.count=1 then
-                              Representation.SHX.simpledrawgeometry(dc,1)
-                          else
-                              Representation.SHX.simpledrawgeometry(dc,2);}
-end;
+
 function GDBObjMText.GetObjTypeName;
 begin
   result:=ObjN_GDBObjMText;
@@ -493,14 +484,15 @@ begin
   end;
   CalcActualVisible(dc.DrawingContext.VActuality);
   if EFDraw in stage then begin
-    Representation.Clear;
 
     formatcontent(drawing);
     calcobjmatrix;
     CalcGabarit(drawing);
     //getoutbound;
-    if (not (ESTemp in State))and(DCODrawable in DC.Options) then
+    if (not (ESTemp in State))and(DCODrawable in DC.Options) then begin
+      Representation.Clear;
       createpoint(drawing,dc);
+    end;
     calcbb(dc);
 
     if assigned(EntExtensions)then
@@ -594,7 +586,7 @@ begin
           pl.PushBackData(lp);
         end;
       end else begin
-        pfont.CreateSymbol(DC.drawer,Representation.GetGraphix^,sym,objmatrix,matr,Bound,ln);
+        pfont.CreateSymbol(DC.drawer,textprop.size,Representation.GetGraphix^,sym,objmatrix,matr,Bound,ln);
         {matr:=m1;
         m1:=CreateTranslationMatrix(pgdbfont(pfont)^.GetOrReplaceSymbolInfo(sym).NextSymX,0,0);
         matr:=MatrixMultiply(m1,matr);}
@@ -729,6 +721,8 @@ begin
     until count=0;
 end;
 procedure GDBObjMText.SaveToDXF(var outStream:TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);
+const
+  maxdxfmtextlen=250;
 var
   s: String;
   ul:boolean;

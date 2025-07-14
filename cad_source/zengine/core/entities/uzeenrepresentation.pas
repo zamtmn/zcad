@@ -36,8 +36,7 @@ TZEntityRepresentation= object(GDBaseObject)
                        destructor done;virtual;
 
                        function CalcTrueInFrustum(const frustum:ClipArray; FullCheck:boolean):TInBoundingVolume;
-                       procedure DrawGeometry(var rc:TDrawContext;const inFrustumState:TInBoundingVolume);virtual;
-                       procedure DrawNiceGeometry(var rc:TDrawContext;const inFrustumState:TInBoundingVolume);virtual;
+                       procedure DrawGeometry(var rc:TDrawContext;const aabb:TBoundingBox;const inFrustumState:TInBoundingVolume);virtual;
                        procedure Clear;virtual;
                        procedure Shrink;virtual;
 
@@ -70,13 +69,30 @@ begin
   Geometry.done;
   inherited;
 end;
-procedure TZEntityRepresentation.DrawGeometry(var rc:TDrawContext;const inFrustumState:TInBoundingVolume);
+function SqrCanSimplyDrawInWCS(const DC:TDrawContext;const ParamSize,TargetSize:Double):Boolean;
+var
+   templod:Double;
 begin
-  Graphix.DrawGeometry(rc,inFrustumState);
+     if dc.maxdetail then
+                         exit(true);
+  templod:=(ParamSize)/(dc.DrawingContext.zoom*dc.DrawingContext.zoom);
+  if templod>TargetSize then
+                            exit(true)
+                        else
+                            exit(false);
 end;
-procedure TZEntityRepresentation.DrawNiceGeometry(var rc:TDrawContext;const inFrustumState:TInBoundingVolume);
+
+procedure TZEntityRepresentation.DrawGeometry(var rc:TDrawContext;const aabb:TBoundingBox;const inFrustumState:TInBoundingVolume);
+var
+  v:gdbvertex;
+  simplydraw:Boolean;
 begin
-  Graphix.DrawNiceGeometry(rc,inFrustumState);
+  if rc.lod=LODCalculatedDetail then begin
+    v:=uzegeometry.VertexSub(aabb.RTF,aabb.LBN);
+    simplydraw:=not SqrCanSimplyDrawInWCS(rc,uzegeometry.SqrOneVertexlength(v),49);
+  end else
+    simplydraw:=rc.lod=LODLowDetail;
+  Graphix.DrawGeometry(rc,inFrustumState,simplydraw);
 end;
 function TZEntityRepresentation.CalcTrueInFrustum(const frustum:ClipArray; FullCheck:boolean):TInBoundingVolume;
 begin

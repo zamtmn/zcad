@@ -34,7 +34,9 @@ uses
   uzcinterface,
   uzcdrawings,
   uzcsysvars,
-  gzctnrSTL;
+  gzctnrSTL,
+  uzeentgenericsubentry,
+  uzeentcomplex;
 
 function PointerToNodeName(node:pointer):string;
 
@@ -104,7 +106,7 @@ var
    nodename:string;
 begin
   nodename:=PointerToNodeName(node);
-  ZCMsgCallBackInterface.TextMessage(format(' %s [label="None with %d ents"]',[nodename,node.nul.count]),TMWOHistoryOut);
+  ZCMsgCallBackInterface.TextMessage(format(' %s [label="None with %d ents, %fx%fx%f"]',[nodename,node.nul.count,node.BoundingBox.RTF.x-node.BoundingBox.LBN.x,node.BoundingBox.RTF.y-node.BoundingBox.LBN.y,node.BoundingBox.RTF.z-node.BoundingBox.LBN.z]),TMWOHistoryOut);
   if node^.NodeData.infrustum=infrustum then
     ZCMsgCallBackInterface.TextMessage(format(' %s [fillcolor=red, style=filled]',[nodename,node.nul.count]),TMWOHistoryOut);
   ZCMsgCallBackInterface.TextMessage(format('rank=same; level_%d;',[nodedepth]),TMWOHistoryOut);
@@ -151,45 +153,54 @@ begin
   tr:=TTreeStatistik.CreateRec({SysVar.RD.RD_SpatialNodesDepth^}64);
   if drawings.GetCurrentDWG.wa.param.seldesc.LastSelectedObject=nil then
     rootnode:=@drawings.GetCurrentDWG^.pObjRoot.ObjArray.ObjTree
-  else
-    rootnode:=@PGDBObjEntity(drawings.GetCurrentDWG.wa.param.seldesc.LastSelectedObject)^.Representation.Geometry;
-  GetTreeStat(rootnode,depth,tr);
-  ZCMsgCallBackInterface.TextMessage('Total entities in drawing: '+inttostr(drawings.GetCurrentROOT.ObjArray.count),TMWOHistoryOut);
-  ZCMsgCallBackInterface.TextMessage('Max tree depth: '+inttostr(SysVar.RD.RD_SpatialNodesDepth^),TMWOHistoryOut);
-  ZCMsgCallBackInterface.TextMessage('Max in node entities: '+inttostr(GetInNodeCount(SysVar.RD.RD_SpatialNodeCount^)),TMWOHistoryOut);
-  ZCMsgCallBackInterface.TextMessage('Current drawing spatial index Info:',TMWOHistoryOut);
-  ZCMsgCallBackInterface.TextMessage('Total entities: '+inttostr(tr.EntCount),TMWOHistoryOut);
-  ZCMsgCallBackInterface.TextMessage('Memory usage (bytes): '+inttostr(tr.MemCount),TMWOHistoryOut);
-  ZCMsgCallBackInterface.TextMessage('Total nodes: '+inttostr(tr.NodesCount),TMWOHistoryOut);
-  ZCMsgCallBackInterface.TextMessage('Total overflow nodes: '+inttostr(tr.OverflowCount),TMWOHistoryOut);
-  ZCMsgCallBackInterface.TextMessage('Fact tree depth: '+inttostr(tr.MaxDepth),TMWOHistoryOut);
-  ZCMsgCallBackInterface.TextMessage('By levels:',TMWOHistoryOut);
-  ap:=0;
-  for i:=0 to tr.MaxDepth do
-  begin
-       ZCMsgCallBackInterface.TextMessage('level '+inttostr(i),TMWOHistoryOut);
-       ZCMsgCallBackInterface.TextMessage('  Entities: '+inttostr(tr.PLevelStat^[i].EntCount),TMWOHistoryOut);
-       if tr.EntCount<>0 then
-                             cp:=tr.PLevelStat^[i].EntCount/tr.EntCount*100
-                         else
-                             cp:=0;
-       ap:=ap+cp;
-       str(cp:2:2,percent);
-       str(ap:2:2,apercent);
-       ZCMsgCallBackInterface.TextMessage('  Entities(%)[summary]: '+percent+'['+apercent+']',TMWOHistoryOut);
-       ZCMsgCallBackInterface.TextMessage('  Nodes: '+inttostr(tr.PLevelStat^[i].NodesCount),TMWOHistoryOut);
-       ZCMsgCallBackInterface.TextMessage('  Overflow nodes: '+inttostr(tr.PLevelStat^[i].OverflowCount),TMWOHistoryOut);
+  else begin
+    if IsIt(typeof(PGDBObjEntity(drawings.GetCurrentDWG.wa.param.seldesc.LastSelectedObject)^),typeof(GDBObjGenericSubEntry))then
+      rootnode:=@PGDBObjGenericSubEntry(drawings.GetCurrentDWG.wa.param.seldesc.LastSelectedObject)^.ObjArray.ObjTree
+    else if IsIt(typeof(PGDBObjEntity(drawings.GetCurrentDWG.wa.param.seldesc.LastSelectedObject)^),typeof(GDBObjComplex))then
+      rootnode:=@PGDBObjComplex(drawings.GetCurrentDWG.wa.param.seldesc.LastSelectedObject)^.ConstObjArray.ObjTree
+    else
+      rootnode:=nil;//@PGDBObjEntity(drawings.GetCurrentDWG.wa.param.seldesc.LastSelectedObject)^.Representation.Geometry;
   end;
-  for pair in tr.pc do begin
-    //iter:=tr.pc.min;
-    //if assigned(iter)then
-    //repeat
-      ZCMsgCallBackInterface.TextMessage('  Nodes with population '+inttostr(pair.Key)+': '+inttostr(pair.Value),TMWOHistoryOut);
-    //until not iter.next;
-    //if assigned(iter)then iter.destroy;
-  end;
-  WriteDot(rootnode,tr);
-  tr.FreeRec;
+  if rootnode<>nil then begin
+    GetTreeStat(rootnode,depth,tr);
+    ZCMsgCallBackInterface.TextMessage('Total entities in drawing: '+inttostr(drawings.GetCurrentROOT.ObjArray.count),TMWOHistoryOut);
+    ZCMsgCallBackInterface.TextMessage('Max tree depth: '+inttostr(SysVar.RD.RD_SpatialNodesDepth^),TMWOHistoryOut);
+    ZCMsgCallBackInterface.TextMessage('Max in node entities: '+inttostr(GetInNodeCount(SysVar.RD.RD_SpatialNodeCount^)),TMWOHistoryOut);
+    ZCMsgCallBackInterface.TextMessage('Current drawing spatial index Info:',TMWOHistoryOut);
+    ZCMsgCallBackInterface.TextMessage('Total entities: '+inttostr(tr.EntCount),TMWOHistoryOut);
+    ZCMsgCallBackInterface.TextMessage('Memory usage (bytes): '+inttostr(tr.MemCount),TMWOHistoryOut);
+    ZCMsgCallBackInterface.TextMessage('Total nodes: '+inttostr(tr.NodesCount),TMWOHistoryOut);
+    ZCMsgCallBackInterface.TextMessage('Total overflow nodes: '+inttostr(tr.OverflowCount),TMWOHistoryOut);
+    ZCMsgCallBackInterface.TextMessage('Fact tree depth: '+inttostr(tr.MaxDepth),TMWOHistoryOut);
+    ZCMsgCallBackInterface.TextMessage('By levels:',TMWOHistoryOut);
+    ap:=0;
+    for i:=0 to tr.MaxDepth do
+    begin
+         ZCMsgCallBackInterface.TextMessage('level '+inttostr(i),TMWOHistoryOut);
+         ZCMsgCallBackInterface.TextMessage('  Entities: '+inttostr(tr.PLevelStat^[i].EntCount),TMWOHistoryOut);
+         if tr.EntCount<>0 then
+                               cp:=tr.PLevelStat^[i].EntCount/tr.EntCount*100
+                           else
+                               cp:=0;
+         ap:=ap+cp;
+         str(cp:2:2,percent);
+         str(ap:2:2,apercent);
+         ZCMsgCallBackInterface.TextMessage('  Entities(%)[summary]: '+percent+'['+apercent+']',TMWOHistoryOut);
+         ZCMsgCallBackInterface.TextMessage('  Nodes: '+inttostr(tr.PLevelStat^[i].NodesCount),TMWOHistoryOut);
+         ZCMsgCallBackInterface.TextMessage('  Overflow nodes: '+inttostr(tr.PLevelStat^[i].OverflowCount),TMWOHistoryOut);
+    end;
+    for pair in tr.pc do begin
+      //iter:=tr.pc.min;
+      //if assigned(iter)then
+      //repeat
+        ZCMsgCallBackInterface.TextMessage('  Nodes with population '+inttostr(pair.Key)+': '+inttostr(pair.Value),TMWOHistoryOut);
+      //until not iter.next;
+      //if assigned(iter)then iter.destroy;
+    end;
+    WriteDot(rootnode,tr);
+    tr.FreeRec;
+  end else
+    ZCMsgCallBackInterface.TextMessage('Сan''t find tree in selected entity',TMWOMessageBox);
   result:=cmd_ok;
 end;
 

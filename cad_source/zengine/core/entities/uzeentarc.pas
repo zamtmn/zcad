@@ -459,63 +459,9 @@ begin
 end;
 
 procedure GDBObjARC.DrawGeometry;
-var
-//  i: Integer;
-    simply:Boolean;
 begin
-  {oglsm.myglpushmatrix;
-  glscaledf(r, r, 1);
-  gltranslatef(p_insert.x / r, p_insert.y / r, p_insert.z);
-  angle := endangle - startangle;
-  if angle < 0 then angle := 2 * pi + angle;
-  myglbegin(GL_line_strip);
-  glVertex3d(cos(startangle), sin(startangle), 0);
-  for i := 1 to arccount do
-  begin
-    glVertex3d(cos(startangle + i / arccount * angle), sin(startangle + i / arccount * angle), 0);
-  end;
-  myglend;
-  oglsm.myglpopmatrix;}
-
-
-  //oglsm.myglpushmatrix;
-  //glmultmatrixd(@objmatrix);
-  if dc.selected then
-                     begin
-                     //Vertex3D_in_WCS_Array.drawgeometry2
-                          Representation.DrawNiceGeometry(DC,inFrustumState);
-                     end
-                 else
-                     begin
-                           {if endangle>startangle then
-                                                      angle:=endangle-startangle
-                                                  else
-                                                      angle:=2*pi-(startangle-endangle);}
-                           {if angle>pi then
-                                           begin
-                                               simply:=CanSimplyDrawInOCS(DC,r,20)
-                                            end
-                                       else begin
-                                               simply:=CanSimplyDrawInOCS(DC,sin(angle/2)*tan(angle/4)*r,20)
-                                            end;}
-                         simply:=CanSimplyDrawInOCS(DC,angle,10);
-                         if simply then
-                                       begin
-                                           //Vertex3D_in_WCS_Array.drawgeometry
-                                           Representation.DrawGeometry(DC,inFrustumState);
-                                       end
-                                                        else
-                                                            begin
-                                                                 DC.Drawer.DrawLine3DInModelSpace(q0,q1,DC.DrawingContext.matrixs);
-                                                                 DC.Drawer.DrawLine3DInModelSpace(q1,q2,DC.DrawingContext.matrixs);
-                                                            end;
-                     end;
-  //myglbegin(gl_points);
-  //ppoint.iterategl(@glvertex2dv);
-  //myglend;
-  //oglsm.myglpopmatrix;
+  Representation.DrawGeometry(DC,VP.BoundingBox,inFrustumState);
   inherited;
-
 end;
 procedure GDBObjARC.projectpoint;
 //var pm:DMatrix4D;

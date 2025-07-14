@@ -104,12 +104,14 @@ var
    ptpl:PTLLPolyLine;
 begin
   pa.AlignDataSize;
-     result:=pa.count;
-     pointer(ptpl):=pa.getDataMutable(pa.AllocData(sizeof(TLLPolyLine)));
-     ptpl.init;
-     ptpl.P1Index:=P1Index;
-     ptpl.Count:=_Count;
-     ptpl.Closed:=_closed;
+  result:=pa.count;
+  pointer(ptpl):=pa.getDataMutable(pa.AllocData(sizeof(TLLPolyLine)));
+  ptpl.init;
+  ptpl.P1Index:=P1Index;
+  ptpl.Count:=_Count;
+  ptpl.SimplifiedContourIndex:=-1;
+  ptpl.SimplifiedContourSize:=-1;
+  ptpl.Closed:=_closed;
 end;
 function TLLPrimitivesCreator.CreateLLPoint(var pa:TLLPrimitivesArray;const PIndex:TLLVertexIndex):TArrayIndex;
 var

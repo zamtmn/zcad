@@ -138,7 +138,7 @@ begin
   RD_DrawInsidePaintMessage:=T3SB_Default;
   DWG_PolarMode:=True;
   RD_LineSmooth:=False;
-  RD_UseStencil:=True;
+  RD_UseStencil:=False;
   RD_LastRenderTime:=0;
   RD_LastUpdateTime:=0;
   RD_ID_Enabled:=False;

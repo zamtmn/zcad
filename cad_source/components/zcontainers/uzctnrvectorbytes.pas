@@ -243,7 +243,7 @@ begin
 end;
 function TZctnrVectorBytes.notEOF:Boolean;
 begin
-     result:=(readpos<(count-1))and(parray<>nil)
+     result:=(readpos<(count))and(parray<>nil)
 end;
 function TZctnrVectorBytes.Jump;
 var

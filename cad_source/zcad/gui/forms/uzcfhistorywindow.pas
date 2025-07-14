@@ -50,7 +50,7 @@ end;
 initialization
  CWindow:=TCWindow.Create(nil);
  ZCMsgCallBackInterface.RegisterHandler_HistoryOut(HistoryOut);
- CreateCommandFastObjectPlugin(@TW_com,'TextWindow',0,0).overlay:=true;
+ CreateZCADCommand(@TW_com,'TextWindow',0,0).overlay:=true;
 finalization;
  CWindow.Free;
 end.

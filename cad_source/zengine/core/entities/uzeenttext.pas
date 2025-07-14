@@ -27,7 +27,7 @@ uses
   uzestyleslayers,uzeentabstracttext,uzeentity,UGDBOutbound2DIArray,
   uzctnrVectorBytes,uzbtypes,uzeconsts,uzglviewareadata,uzegeometry,
   uzeffdxfsupport,uzeentsubordinated,uzbLogIntf,uzegeometrytypes,uzestylestexts,
-  uzeSnap,uzMVReader;
+  uzeSnap,uzMVReader,uzcTextPreprocessorDXFImpl;
 const
   CLEFNotNeedSaveTemplate=1;
 type
@@ -124,8 +124,6 @@ begin
   end;
   CalcActualVisible(dc.DrawingContext.VActuality);
   if EFDraw in stage then begin
-  Representation.Clear;
-
   TCP:=CodePage;
   CodePage:=CP_win;
      if template='' then
@@ -202,8 +200,10 @@ begin
     calcobjmatrix;
     //getoutbound;
     //createpoint(drawing);
-    if (not (ESTemp in State))and(DCODrawable in DC.Options) then
+    if (not (ESTemp in State))and(DCODrawable in DC.Options) then begin
+      Representation.Clear;
       Representation.DrawTextContent(dc.drawer,content,TXTStyle^.pfont,DrawMatrix,objmatrix,textprop.size,Outbound);
+    end;
     calcbb(dc);
 
     //P_InsertInWCS:=VectorTransform3D(local.P_insert,vp.owner^.GetMatrix^);
@@ -253,7 +253,12 @@ end;
 procedure GDBObjText.rtsave(refp:Pointer);
 begin
   inherited;
-  PGDBObjText(refp)^.textprop := textprop;
+  PGDBObjText(refp)^.Content:=Content;
+  PGDBObjText(refp)^.Template:=Template;
+  PGDBObjText(refp)^.TXTStyle:=TXTStyle;
+  PGDBObjText(refp)^.obj_height:=obj_height;
+  PGDBObjText(refp)^.obj_width:=obj_width;
+  PGDBObjText(refp)^.obj_y:=obj_y;
 end;
 
 destructor GDBObjText.done;
@@ -339,6 +344,7 @@ var
   hv, vv,bw: Byte;
   tv:gdbvertex;
   s:String;
+  ASourcesCounter:TSPFSourceSet;
 begin
   vv := acadvjustify(textprop.justify);
   hv := (j2b[textprop.justify]{ord(textprop.justify)} - 1) mod 3;
@@ -373,14 +379,16 @@ begin
 
   SaveToDXFObjPostfix(outStream);
 
+  s := Tria_Utf8ToAnsi(UTF8Encode(content));
+  dxfStringout(outStream,1,z2dxftext(s));
 
-    if  {convertfromunicode}(template)=content then
-                                               s := Tria_Utf8ToAnsi(UTF8Encode(template))
-                                           else
-                                               s := Tria_Utf8ToAnsi(UTF8Encode(content));
+  s:=TxtFormatAndCountSrcs(template,SPFSources.GetFull,ASourcesCounter,@Self);
+  if (ASourcesCounter and (not SPFSdxf))<>0 then begin
+  end else begin
+    IODXFContext.LocalEntityFlags:=IODXFContext.LocalEntityFlags or CLEFNotNeedSaveTemplate;
+  end;
 
 
-  dxfStringout(outStream,1,z2dxftext({content}s));
   dxfStringout(outStream,100,'AcDbText');
   dxfIntegerout(outStream,73,vv);
 end;

@@ -308,6 +308,10 @@
       <Action Name="ACN_OS_PARALLEL"/>
     </Menu>
     <Menu Name="VIEWAREACXMENU">
+      <IFONE Conditions="OneDevSelected">
+        <Action Name="ACN_PLACEDELEGATE"/>
+      </IFONE>
+      <Separator/>
       <IFONE Conditions="EntsSelected">
         <Action Name="ACN_COPY"/>
         <Action Name="ACN_MOVE"/>

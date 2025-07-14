@@ -249,9 +249,12 @@ uses
   uzcCommand_SpellCheck,
   uzcCommand_Duplicate,
 
+  uzcCommand_PlaceDelegate,
+
   uzcenitiesvariablesextender,uzcExtdrLayerControl,uzcExtdrSmartTextEnt,
   uzcExtdrIncludingVolume,uzcExtdrSCHConnection,uzcExtdrSCHConnector,
   uzcExtdrReport,
+  uzcfhistorywindow,
 
   {$IFNDEF DARWIN}
   {$IFDEF ELECTROTECH}

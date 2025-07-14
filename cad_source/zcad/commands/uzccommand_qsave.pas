@@ -33,7 +33,8 @@ uses
   uzcstrconsts,
   uzcdrawings,
   uzcinterface,
-  uzccommand_saveas;
+  uzccommand_saveas,
+  uzccommand_rebuildtree;
 
 implementation
 
@@ -68,6 +69,7 @@ begin
   if (not itAutoSave)and(Result=cmd_ok) then
     drawings.GetCurrentDWG.ChangeStampt(False);
   SysVar.SAVE.SAVE_Auto_Current_Interval^:=SysVar.SAVE.SAVE_Auto_Interval^;
+  RebuildTree_com(Context,'');
 end;
 
 initialization

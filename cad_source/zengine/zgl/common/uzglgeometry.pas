@@ -49,15 +49,18 @@ type
   end;
   {REGISTEROBJECTTYPE ZGLGraphix}
   ZGLGraphix= object(ZGLVectorObject)
-    procedure DrawGeometry(var DC:TDrawContext;const inFrustumState:TInBoundingVolume);virtual;
-    procedure DrawNiceGeometry(var DC:TDrawContext;const inFrustumState:TInBoundingVolume);virtual;
+    procedure DrawGeometry(var DC:TDrawContext;const inFrustumState:TInBoundingVolume;simplydraw:boolean);virtual;
     constructor init();
     destructor done;virtual;
     function DrawLineWithLT(var DC:TDrawContext;const startpoint,endpoint:GDBVertex; const vp:GDBObjVisualProp;OnlyOne:Boolean=False):TLLDrawResult;virtual;
     function DrawPolyLineWithLT(var DC:TDrawContext;const points:GDBPoint3dArray; const vp:GDBObjVisualProp; const closed,ltgen:Boolean):TLLDrawResult;virtual;
+
+
+    procedure DrawPolyLineWithoutLT(var DC:TDrawContext;const points:GDBPoint3dArray; const vp:GDBObjVisualProp;const closed:Boolean;var dr:TLLDrawResult);virtual;
     procedure DrawLineWithoutLT(var DC:TDrawContext;const p1,p2:GDBVertex;var dr:TLLDrawResult;OnlyOne:Boolean=False);virtual;
     procedure DrawPointWithoutLT(var DC:TDrawContext;const p:GDBVertex;var dr:TLLDrawResult);virtual;
     {}
+    procedure AddPolyLine(var DC:TDrawContext;const closed:boolean;const pts:array of GDBVertex);
     procedure AddLine(var DC:TDrawContext;const p1,p2:GDBVertex;OnlyOne:Boolean=False);
     procedure AddPoint(var DC:TDrawContext;const p:GDBVertex);
     {Patterns func}
@@ -226,7 +229,7 @@ begin
     end
     else
     begin
-      pfont^.CreateSymbol(drawer,self,sym,objmatrix,matr,Bound,LLSymbolLineIndex);
+      pfont^.CreateSymbol(drawer,textprop_size,self,sym,objmatrix,matr,Bound,LLSymbolLineIndex);
 
     end;
     if sym<>1 then
@@ -285,12 +288,9 @@ begin
 end;
 
 procedure ZGLGraphix.AddPoint(var DC:TDrawContext;const p:GDBVertex);
-//var
-//    tv:ZGLVertex3Sarray.TDataType;
 begin
-     //tv:=VertexD2S(p);
-     if DC.drawer<>nil then
-     DC.drawer.GetLLPrimitivesCreator.CreateLLPoint(LLprimitives,GeomData.Vertex3S.AddGDBVertex{PushBackData}({tv}p));
+  if DC.drawer<>nil then
+    DC.drawer.GetLLPrimitivesCreator.CreateLLPoint(LLprimitives,GeomData.Vertex3S.AddGDBVertex{PushBackData}({tv}p));
 end;
 
 procedure ZGLGraphix.AddLine(var DC:TDrawContext;const p1,p2:GDBVertex;OnlyOne:Boolean=False);
@@ -301,6 +301,17 @@ begin
     DC.drawer.GetLLPrimitivesCreator.CreateLLLine(LLprimitives,GeomData.Vertex3S.AddGDBVertex(p1),OnlyOne);
   GeomData.Vertex3S.AddGDBVertex(p2);
 end;
+
+procedure ZGLGraphix.AddPolyLine(var DC:TDrawContext;const closed:boolean;const pts:array of GDBVertex);
+var
+  i:integer;
+begin
+  if DC.drawer<>nil then
+    DC.drawer.GetLLPrimitivesCreator.CreateLLPolyLine(LLprimitives,GeomData.Vertex3S.Count,Length(pts),closed);
+  for i:=low(pts)to High(pts) do
+    GeomData.Vertex3S.AddGDBVertex(pts[i]);
+end;
+
 function CalcSegment(const startpoint,endpoint:GDBVertex;out segment:ZPolySegmentData;prevlength:Double):Double;
 begin
      segment.startpoint:=startpoint;
@@ -411,21 +422,31 @@ begin
      cp:=pcurrsegment^.startpoint;
 end;
 procedure ZGLGraphix.DrawLineWithoutLT(var DC:TDrawContext;const p1,p2:GDBVertex;var dr:TLLDrawResult;OnlyOne:Boolean=False);
-{var
-   d,a:Double;
-   tv:GDBVertex;
-   i:integer;}
 begin
-     if dr.LLPCount=0 then
-                          dr.BB:=CreateBBFrom2Point(p1,p2)
-                      else
-                          begin
-                            concatBBandPoint(dr.BB,p1);
-                            concatBBandPoint(dr.BB,p2);
-                          end;
-     inc(dr.LLPCount);
-     self.AddLine(DC,p1,p2,OnlyOne);
+  if dr.LLPCount=0 then
+    dr.BB:=CreateBBFrom2Point(p1,p2)
+  else begin
+      concatBBandPoint(dr.BB,p1);
+      concatBBandPoint(dr.BB,p2);
+  end;
+  inc(dr.LLPCount);
+  self.AddLine(DC,p1,p2,OnlyOne);
 end;
+procedure ZGLGraphix.DrawPolyLineWithoutLT(var DC:TDrawContext;const points:GDBPoint3dArray; const vp:GDBObjVisualProp;const closed:Boolean;var dr:TLLDrawResult);
+var
+  i:integer;
+begin
+  if dr.LLPCount=0 then begin
+    dr.BB:=CreateBBFrom2Point(points.getDataMutable(0)^,points.getDataMutable(1)^);
+    for i:=2 to points.Count-1 do
+      concatBBandPoint(dr.BB,points.getDataMutable(i)^);
+  end else
+    for i:=0 to points.Count-1 do
+      concatBBandPoint(dr.BB,points.getDataMutable(i)^);
+  inc(dr.LLPCount);
+  AddPolyLine(DC,closed,GDBPoint3dArray.PTArr(points.getDataMutable(0))^[0..points.Count-1]);
+end;
+
 procedure ZGLGraphix.DrawPointWithoutLT(var DC:TDrawContext;const p:GDBVertex;var dr:TLLDrawResult);
 begin
      if dr.LLPCount=0 then
@@ -434,7 +455,6 @@ begin
                           concatBBandPoint(dr.BB,p);
      inc(dr.LLPCount);
      AddPoint(DC,p);
-     //points.Add(@p);
 end;
 function creatematrix(const PInsert:GDBVertex; //Точка вставки
                       param:shxprop;     //Параметры текста
@@ -515,7 +535,7 @@ Bound.LB:=NulVertex2D;
 Bound.RT:=NulVertex2D;
 sli:=-1;
 if PSP.Psymbol<> nil then
-                    PSP^.param.PStyle.pfont.CreateSymbol(drawer,self,PSP.Psymbol.Number,objmatrix,matr,Bound,sli);
+                    PSP^.param.PStyle.pfont.CreateSymbol(drawer,1,self,PSP.Psymbol.Number,objmatrix,matr,Bound,sli);
 end;
 procedure ZGLGraphix.PlaceText(drawer:TZGLAbstractDrawer;const StartPatternPoint:GDBVertex;PTP:PTextProp;scale,angle:Double);
 var
@@ -537,7 +557,7 @@ begin
      sym:=byte(PTP^.Text[j]);
           if ptp.param.PStyle.pfont.font.IsUnicode then
                                                      sym:=ach2uch(sym);
-PTP^.param.PStyle.pfont.CreateSymbol(drawer,self,sym,objmatrix,matr,Bound,sli);
+PTP^.param.PStyle.pfont.CreateSymbol(drawer,PTP.txtH,self,sym,objmatrix,matr,Bound,sli);
 matr.mtr[3].v[0]:=matr.mtr[3].v[0]+PTP^.param.PStyle.pfont^.GetOrReplaceSymbolInfo(byte(PTP^.Text[j]){//-ttf-//,tdinfo}).NextSymX;
 matr.t:=matr.t+CMTTranslate;
 end;
@@ -663,8 +683,8 @@ begin
 end;
 function ZGLGraphix.DrawPolyLineWithLT(var DC:TDrawContext;const points:GDBPoint3dArray; const vp:GDBObjVisualProp; const closed,ltgen:Boolean):TLLDrawResult;
 var
-    ptv,ptvprev,ptvfisrt: pgdbvertex;
-    ir:itrec;
+    //ptv,ptvprev,ptvfisrt: pgdbvertex;
+    //ir:itrec;
     TangentScale,NormalScale,polylength,TrueNumberOfPatterns,normalizedD,d,halfStroke,dend:Double;
     Segmentator:ZSegmentator;
     lt:PGDBLtypeProp;
@@ -674,7 +694,8 @@ var
     supressfirstdash:boolean;
 procedure SetPolyUnLTyped;
 begin
-      ptv:=Points.beginiterate(ir);
+  DrawPolyLineWithoutLT(dc,points,vp,closed,result);
+  {    ptv:=Points.beginiterate(ir);
       ptvfisrt:=ptv;
       if ptv<>nil then
       repeat
@@ -684,7 +705,7 @@ begin
                             DrawLineWithoutLT(DC,ptv^,ptvprev^,result);
       until ptv=nil;
       if closed then
-                    DrawLineWithoutLT(DC,ptvprev^,ptvfisrt^,result);
+                    DrawLineWithoutLT(DC,ptvprev^,ptvfisrt^,result);}
 end;
 begin
   result:=CreateLLDrawResult(LLprimitives);
@@ -861,12 +882,7 @@ end;
 procedure ZGLGraphix.drawgeometry;
 begin
   //rc.drawer.PVertexBuffer:=@GeomData.Vertex3S;
-  DrawLLPrimitives(DC,DC.drawer,inFrustumState);
-end;
-procedure ZGLGraphix.drawNicegeometry;
-begin
-  //rc.drawer.PVertexBuffer:=@GeomData.Vertex3S;
-  DrawLLPrimitives(DC,DC.drawer,inFrustumState);
+  DrawLLPrimitives(DC,DC.drawer,inFrustumState,simplydraw);
 end;
 constructor ZGLGraphix.init;
 begin

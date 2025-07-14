@@ -90,6 +90,8 @@ var drawings: TZCADDrawingsManager;
     ClipboardDWG:{PTZCADDrawing}PTSimpleDrawing=nil;
     //GDBTrash:GDBObjTrash;
     LtypeManager:GDBLtypeArray;
+
+    function FindEntityByVarInArray(objID:Word;vname,vvalue:String;var ea:TZctnrVectorPGDBaseEntity;InInterfaceOnly:Boolean=False):PGDBObjEntity;
 procedure CalcZ(z:Double);
 procedure RemapAll(_from,_to:PTSimpleDrawing;_source,_dest:PGDBObjEntity);
 procedure startup(preloadedfile1,preloadedfile2:String);
@@ -601,13 +603,18 @@ var
   ir:itrec;
   psp:PShapeProp;
   ptp:PTextProp;
+  fn:AnsiString;
 begin
   if _source=nil then
     exit(nil);
   psp:=_source.shapearray.beginiterate(ir);
   if psp<>nil then
   repeat
-        _to.TextStyleTable.addstyle(psp^.param.PStyle.name,psp^.param.PStyle.pfont.Name,psp^.param.PStyle.FontFamily,psp^.param.PStyle.prop,psp^.param.PStyle.UsedInLTYPE);
+        if psp^.param.PStyle.pfont<>nil then
+          fn:=psp^.param.PStyle.pfont.Name
+        else
+          fn:='';
+        _to.TextStyleTable.addstyle(psp^.param.PStyle.name,fn,psp^.param.PStyle.FontFamily,psp^.param.PStyle.prop,psp^.param.PStyle.UsedInLTYPE);
         psp:=_source.shapearray.iterate(ir);
   until psp=nil;
   ptp:=_source.textarray.beginiterate(ir);
@@ -892,25 +899,21 @@ begin
      end;
 end;
 
-function TZCADDrawingsManager.FindEntityByVar(objID:Word;vname,vvalue:String):PGDBObjEntity;
+function FindEntityByVarInArray(objID:Word;vname,vvalue:String;var ea:TZctnrVectorPGDBaseEntity;InInterfaceOnly:Boolean=False):PGDBObjEntity;
 var
-   croot:PGDBObjGenericSubEntry;
    pvisible{,pvisible2,pv}:PGDBObjEntity;
    ir:itrec;
    pvd:pvardesk;
    pentvarext:TVariablesExtender;
 begin
      result:=nil;
-     croot:=self.GetCurrentROOT;
-     if croot<>nil then
-     begin
-         pvisible:=croot.ObjArray.beginiterate(ir);
+         pvisible:=ea.beginiterate(ir);
          if pvisible<>nil then
          repeat
                if pvisible.GetObjType=objID then
                begin
                     pentvarext:=pvisible^.GetExtension<TVariablesExtender>;
-                    pvd:=pentvarext.entityunit.FindVariable(vname);
+                    pvd:=pentvarext.entityunit.FindVariable(vname,InInterfaceOnly);
                     if pvd<>nil then
                     begin
                          if pvd.data.PTD.GetValueAsString(pvd.data.Addr.Instance)=vvalue then
@@ -920,9 +923,19 @@ begin
                          end;
                     end;
                end;
-              pvisible:=croot.ObjArray.iterate(ir);
+              pvisible:=ea.iterate(ir);
          until pvisible=nil;
-     end;
+end;
+
+
+function TZCADDrawingsManager.FindEntityByVar(objID:Word;vname,vvalue:String):PGDBObjEntity;
+var
+  croot:PGDBObjGenericSubEntry;
+begin
+  result:=nil;
+  croot:=self.GetCurrentROOT;
+  if croot<>nil then
+    result:=FindEntityByVarInArray(objID,vname,vvalue,croot.ObjArray);
 end;
 
 procedure TZCADDrawingsManager.CopyBlock(_from,_to:PTSimpleDrawing;_source:PGDBObjBlockdef);

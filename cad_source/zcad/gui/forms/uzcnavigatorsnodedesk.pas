@@ -106,6 +106,7 @@ function GetMainFunction(const pent:pGDBObjEntity):pGDBObjEntity;
 
 var
  LeveMetric:TLeveMetric;
+ InterfaceOnly:Boolean=False;
 
 implementation
 
@@ -206,17 +207,19 @@ var
   i:integer;
   pvd:pvardesk;
 begin
-  EntConnectionExt:=pent^.GetExtension<TSCHConnectionExtender>;
-  if (EntConnectionExt<>nil)and(EntConnectionExt.Net<>nil) then begin
-    for i:=0 to EntConnectionExt.Net.Setters.Count-1 do begin
-      EntVarExt:=EntConnectionExt.Net.Setters.getDataMutable(i)^.pThisEntity^.GetExtension<TVariablesExtender>;
-      if EntVarExt<>nil then begin
-        pvd:=EntVarExt.EntityUnit.FindVariable(varname);
-        if pvd<>nil then
-          exit(pvd^.GetValueAsString);
+  if not InterfaceOnly then begin
+    EntConnectionExt:=pent^.GetExtension<TSCHConnectionExtender>;
+    if (EntConnectionExt<>nil)and(EntConnectionExt.Net<>nil) then begin
+      for i:=0 to EntConnectionExt.Net.Setters.Count-1 do begin
+        EntVarExt:=EntConnectionExt.Net.Setters.getDataMutable(i)^.pThisEntity^.GetExtension<TVariablesExtender>;
+        if EntVarExt<>nil then begin
+          pvd:=EntVarExt.EntityUnit.FindVariable(varname);
+          if pvd<>nil then
+            exit(pvd^.GetValueAsString);
+        end;
       end;
+      exit('0x'+inttohex(PtrUInt(EntConnectionExt.Net)));
     end;
-    exit('0x'+inttohex(PtrUInt(EntConnectionExt.Net)));
   end;
 
   EntVarExt:=pent^.GetExtension<TVariablesExtender>;
@@ -239,7 +242,7 @@ end;
 
 function GetPVD(const EntVarExt:TVariablesExtender;varname:string):pvardesk;
 begin
-  result:=EntVarExt.entityunit.FindVariable(varname);
+  result:=EntVarExt.entityunit.FindVariable(varname,InterfaceOnly);
 end;
 
 

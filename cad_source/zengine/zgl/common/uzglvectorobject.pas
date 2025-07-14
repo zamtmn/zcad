@@ -59,12 +59,12 @@ ZGLVectorObject= object(GDBaseObject)
                                  procedure MulOnMatrix(GeomDataIndexMin,GeomDataIndexMax:Integer;const matrix:DMatrix4D);virtual;
                                  function GetBoundingBbox(GeomDataIndexMin,GeomDataIndexMax:Integer):TBoundingBox;virtual;
                                  function GetTransformedBoundingBbox(GeomDataIndexMin,GeomDataIndexMax:Integer;const matrix:DMatrix4D):TBoundingBox;virtual;
-                                 procedure DrawLLPrimitives(var rc:TDrawContext;var drawer:TZGLAbstractDrawer;const inFrustumState:TInBoundingVolume);virtual;
+                                 procedure DrawLLPrimitives(var rc:TDrawContext;var drawer:TZGLAbstractDrawer;const inFrustumState:TInBoundingVolume;simplydraw:boolean);virtual;
                                  procedure DrawCountedLLPrimitives(var rc:TDrawContext;var drawer:TZGLAbstractDrawer;var OptData:ZGLOptimizerData;StartOffset,Count:Integer;const inFrustumState:TInBoundingVolume);virtual;
                                end;
 {Export-}
 implementation
-procedure ZGLVectorObject.DrawLLPrimitives(var rc:TDrawContext;var drawer:TZGLAbstractDrawer;const inFrustumState:TInBoundingVolume);
+procedure ZGLVectorObject.DrawLLPrimitives(var rc:TDrawContext;var drawer:TZGLAbstractDrawer;const inFrustumState:TInBoundingVolume;simplydraw:boolean);
 var
   PPrimitive:PTLLPrimitive;
   ProcessedSize:TArrayIndex;
@@ -74,7 +74,7 @@ begin
   if LLprimitives.count=0 then exit;
   OptData.ignoretriangles:=false;
   OptData.ignorelines:=false;
-  OptData.symplify:=false;
+  OptData.symplify:=simplydraw;
   OptData.ignoreTo:=-1;
   OptData.ignoreFrom:=-1;
   ProcessedSize:=0;
@@ -91,8 +91,18 @@ begin
       OptData.ignoreTo:=-1;
     end;
     if OptData.ignoreFrom<>-1 then begin
-      if OptData.ignoreFrom<=ProcessedSize then
-        exit;
+      if OptData.ignoreFrom<=ProcessedSize then begin
+        if OptData.nextprimitive=-1 then
+          exit
+        else begin
+          if OptData.nextprimitive>ProcessedSize then begin
+            ProcessedSize:=OptData.nextprimitive;
+            pointer(PPrimitive):=LLprimitives.getDataMutable(ProcessedSize);
+          end;
+          OptData.ignoreFrom:=-1;
+          OptData.nextprimitive:=-1;
+        end;
+      end;
     end;
   end;
 end;

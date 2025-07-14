@@ -26,6 +26,7 @@ uses
   uzgldrawerabstract,uzbtypes,gzctnrVectorTypes,gzctnrVector,uzegeometrytypes,
   uzegeometry,Generics.Collections,Generics.Defaults;
 const
+
      LLAttrNothing=0;
      LLAttrNeedSolid=1;
      LLAttrNeedSimtlify=2;
@@ -54,7 +55,7 @@ ZGLOptimizerData=record
                                                      ignoretriangles:boolean;
                                                      ignorelines:boolean;
                                                      symplify:boolean;
-                                                     ignoreTo,ignoreFrom:TArrayIndex;
+                                                     ignoreTo,ignoreFrom,nextprimitive:TArrayIndex;
                                                end;
 {REGISTERRECORDTYPE TEntIndexesData}
 TEntIndexesData=record
@@ -157,6 +158,7 @@ PTLLSymbolLine=^TLLSymbolLine;
 TLLSymbolLine= object(TLLPrimitive)
               SimplyDrawed:Boolean;
               MaxSqrSymH:Single;
+              txtHeight:Single;
               SymbolsParam:TSymbolSParam;
               FirstOutBoundIndex,LastOutBoundIndex:TLLVertexIndex;
               function draw(drawer:TZGLAbstractDrawer;var rc:TDrawContext;var GeomData:ZGLGeomData;var LLPArray:TLLPrimitivesArray;var OptData:ZGLOptimizerData;inFrustumState:TInBoundingVolume):Integer;virtual;
@@ -236,10 +238,19 @@ begin
      result:=getPrimitiveSize;
 end;
 function TLLLine.draw(drawer:TZGLAbstractDrawer;var rc:TDrawContext;var GeomData:ZGLGeomData;var LLPArray:TLLPrimitivesArray;var OptData:ZGLOptimizerData;inFrustumState:TInBoundingVolume):Integer;
+var
+  pp1,pp2:ZGLVertex3Sarray.PT;
+  l:Double;
 begin
-     if not OptData.ignorelines then
-                                    Drawer.DrawLine(@geomdata.Vertex3S,P1Index,P1Index+1);
-     result:=inherited;
+  if not OptData.ignorelines then begin
+    pp1:=geomdata.Vertex3S.getDataMutable(P1Index);
+    pp2:=geomdata.Vertex3S.getDataMutable(P1Index+1);
+    l:=abs(pp2^.x-pp1^.x)+abs(pp2^.y-pp1^.y)+abs(pp2^.z-pp1^.z);
+    l:=l/rc.DrawingContext.zoom;
+    if l>0.09 then
+      Drawer.DrawLine(@geomdata.Vertex3S,P1Index,P1Index+1);
+  end;
+  result:=inherited;
 end;
 function TLLLine.CalcTrueInFrustum(const frustum:ClipArray;var GeomData:ZGLGeomData;out InRect:TInBoundingVolume):Integer;
 begin
@@ -402,7 +413,11 @@ end;
 
 function TLLPolyLine.draw(drawer:TZGLAbstractDrawer;var rc:TDrawContext;var GeomData:ZGLGeomData;var LLPArray:TLLPrimitivesArray;var OptData:ZGLOptimizerData;inFrustumState:TInBoundingVolume):Integer;
 var
-   i,index,oldindex,sindex:integer;
+   indexDrawed,i,index,oldindex,sindex:integer;
+   l:Double;
+   pp1,pp2:ZGLVertex3Sarray.PT;
+   sstep:integer;
+   drawedsegscount:integer;
 begin
   if not OptData.ignorelines then
   begin
@@ -424,18 +439,58 @@ begin
     begin
        index:=P1Index+1;
        oldindex:=P1Index;
-         for i:=1 to Count-1 do
-         begin
-            Drawer.DrawLine(@geomdata.Vertex3S,oldindex,index);
-            oldindex:=index;
-            inc(index);
+       indexDrawed:=oldindex;
+       pp1:=geomdata.Vertex3S.getDataMutable(oldindex);
+       pp2:=geomdata.Vertex3S.getDataMutable(index);
+       l:=0;
+       if OptData.symplify then
+         sstep:=max(5,count div 30)
+       else
+         sstep:=1;
+       i:=1;
+       drawedsegscount:=0;
+       while i<count do begin
+       //for i:=1 to Count-1 do begin
+         l:=l+abs(pp2^.x-pp1^.x)+abs(pp2^.y-pp1^.y)+abs(pp2^.z-pp1^.z);
+         if (l/rc.DrawingContext.zoom>3)or(i=(count-1)) then begin
+            l:=0;
+            Drawer.DrawLine(@geomdata.Vertex3S,indexDrawed,index);
+            inc(drawedsegscount);
+            indexDrawed:=index;
          end;
+         i:=i+sstep;
+         oldindex:=index;
+         pp1:=pp2;
+         inc(index,sstep);
+         //index:=i;
+         pp2:=geomdata.Vertex3S.getDataMutable(index);
+       end;
+       if drawedsegscount=0 then
+         Drawer.DrawLine(@geomdata.Vertex3S,P1Index,P1Index+count-1);
     end;
   if closed then
-                       Drawer.DrawLine(@geomdata.Vertex3S,oldindex,P1Index);
+    Drawer.DrawLine(@geomdata.Vertex3S,oldindex,P1Index);
   end;
   result:=inherited;
 end;
+
+{var
+  pp1,pp2:ZGLVertex3Sarray.PT;
+  l:Double;
+begin
+  if not OptData.ignorelines then begin
+    pp1:=geomdata.Vertex3S.getDataMutable(P1Index);
+    pp2:=geomdata.Vertex3S.getDataMutable(P1Index+1);
+    l:=abs(pp2^.x-pp1^.x)+abs(pp2^.y-pp1^.y)+abs(pp2^.z-pp1^.z);
+    l:=l/rc.DrawingContext.zoom;
+    if l>0.09 then
+      Drawer.DrawLine(@geomdata.Vertex3S,P1Index,P1Index+1);
+  end;
+  result:=inherited;
+end;}
+
+
+
 procedure TLLPolyLine.getEntIndexs(var GeomData:ZGLGeomData;out eid:TEntIndexesData);
 begin
      eid.GeomIndexMin:=P1Index;
@@ -509,6 +564,7 @@ end;
 constructor TLLSymbolLine.init;
 begin
      MaxSqrSymH:=0;
+     txtHeight:=0;
      inherited;
 end;
 
@@ -529,33 +585,45 @@ end;
 
 function TLLProxyLine.draw(drawer:TZGLAbstractDrawer;var rc:TDrawContext;var GeomData:ZGLGeomData;var LLPArray:TLLPrimitivesArray;var OptData:ZGLOptimizerData;inFrustumState:TInBoundingVolume):Integer;
 
-  function getI1(i1,i2:TArrayIndex):TArrayIndex;
+  function getI1(const i1,i2:TArrayIndex; var LastInVisibleI1:TArrayIndex):TArrayIndex;
   var
     testedI:TArrayIndex;
   begin
-    if i2-i1<=1 then
-      exit(IndexsVector.getDataMutable(i1)^.PIndex)
+    if i2-i1<1 then
+       exit({IndexsVector.getDataMutable(i1)^.PIndex}LastInVisibleI1)
     else begin
-      testedI:=(i1+i2)div 2;
-      if CalcPointTrueInFrustum(geomdata.Vertex3S.getData(IndexsVector.getDataMutable(testedI)^.GIndex),rc.DrawingContext.pcamera.frustum)=IRFully then
-        result:=getI1(i1,testedI)
-      else
-        result:=getI1(testedI,i2);
+      testedI:=(i1+i2+1)div 2;
+      if CalcPointTrueInFrustum(geomdata.Vertex3S.getData(IndexsVector.getDataMutable(testedI)^.GIndex),rc.DrawingContext.pcamera.frustum)=IRFully then begin
+        if testedI=i2 then
+          exit(LastInVisibleI1);
+        result:=getI1(i1,testedI,LastInVisibleI1)
+      end else begin
+        LastInVisibleI1:=IndexsVector.getDataMutable(testedI)^.PIndex;
+         if testedI=i1 then
+           exit(LastInVisibleI1);
+        result:=getI1(testedI,i2,LastInVisibleI1);
+      end;
     end;
   end;
 
-  function getI2(i1,i2:TArrayIndex):TArrayIndex;
+  function getI2(const i1,i2:TArrayIndex; var LastInVisibleI2:TArrayIndex):TArrayIndex;
   var
     testedI:TArrayIndex;
   begin
-    if i2-i1<=1 then
-      exit(IndexsVector.getDataMutable(i2)^.PIndex)
+    if i2-i1<1 then
+      exit({IndexsVector.getDataMutable(i2)^.PIndex}LastInVisibleI2)
     else begin
-      testedI:=(i1+i2)div 2;
-      if CalcPointTrueInFrustum(geomdata.Vertex3S.getData(IndexsVector.getDataMutable(testedI)^.GIndex),rc.DrawingContext.pcamera.frustum)=IRFully then
-        result:=getI2(testedI,i2)
-      else
-        result:=getI2(i1,testedI);
+      testedI:=(i1+i2+1)div 2;
+      if CalcPointTrueInFrustum(geomdata.Vertex3S.getData(IndexsVector.getDataMutable(testedI)^.GIndex),rc.DrawingContext.pcamera.frustum)=IRFully then begin
+        if testedI=i1 then
+          exit(LastInVisibleI2);
+        result:=getI2(testedI,i2,LastInVisibleI2)
+      end else begin
+        LastInVisibleI2:=IndexsVector.getDataMutable(testedI)^.PIndex;
+        if testedI=i2 then
+          exit(LastInVisibleI2);
+        result:=getI2(i1,testedI,LastInVisibleI2);
+      end;
     end;
   end;
 
@@ -661,6 +729,7 @@ function TLLProxyLine.draw(drawer:TZGLAbstractDrawer;var rc:TDrawContext;var Geo
   function getIntersect(out i1,i2:TArrayIndex):boolean;
   var
     p1ibv,p2ibv:TInBoundingVolume;
+    tpi:TArrayIndex;
   begin
     result:=false;
     p1ibv:=CalcPointTrueInFrustum(geomdata.Vertex3S.getData(FirstIndex),rc.DrawingContext.pcamera.frustum);
@@ -672,14 +741,16 @@ function TLLProxyLine.draw(drawer:TZGLAbstractDrawer;var rc:TDrawContext;var Geo
     end else if p1ibv=IRFully then begin
       result:=true;
       i1:=FirstLinePrimitiveindex;
+      tpi:=LastLinePrimitiveindex;
       if self.IndexsVector.Count>2 then
-        i2:=getI2(0,IndexsVector.Count-1)
+        i2:=getI2(0,IndexsVector.Count-1,tpi)
       else
         i2:=LastLinePrimitiveindex;
     end else if p2ibv=IRFully then begin
       result:=true;
+      tpi:=FirstLinePrimitiveindex;
       if self.IndexsVector.Count>2 then
-        i1:=getI1(0,IndexsVector.Count-1)
+        i1:=getI1(0,IndexsVector.Count-1,tpi)
       else
         i1:=FirstLinePrimitiveindex;
       i2:=LastLinePrimitiveindex;
@@ -704,29 +775,32 @@ begin
       end;
     IRPartially,IRNotAplicable:begin//линия возможно видна частично
        //проверяем, если всетаки не видна - пропускаем паттерны
-       if uzegeometry.CalcTrueInFrustum(geomdata.Vertex3S.getData(FirstIndex),
-          geomdata.Vertex3S.getData(LastIndex),rc.DrawingContext.pcamera.frustum)
-          <>IREmpty then begin
-         //опять если размер паттерна мал, деградируем ее
-         //до сплошной линнии, паттерны пропускаем, независимо какая часть
-         //линии видна, сплошную линию нарисовать быстрее
-         if (rc.LOD=LODLowDetail)or(MaxDashLength/(rc.DrawingContext.zoom*rc.DrawingContext.zoom)<0.5)and(not rc.maxdetail) then begin
-           Drawer.DrawLine(@geomdata.Vertex3S,FirstIndex,LastIndex);
-           OptData.ignoreTo:=self.LastLinePrimitiveindex;
-         end else begin
-           //пытаемся выяснить какие сегменты разбитой линии видны
-           //i1 - индекс первого видимого сегмента
-           //i2 - индекс последнего видимого сегмента
-           if getIntersect(i1,i2) then begin
-             //рисуем только ввдимую часть линии
-             OptData.ignoreTo:=i1;
-             OptData.ignoreFrom:=i2;
-           end else
-             //видимые сегменты линии не обнаружены, не рисуем ее
-             OptData.ignoreTo:=self.LastLinePrimitiveindex;//паттерны пропускаем
-         end;
-       end else
-         OptData.ignoreTo:=self.LastLinePrimitiveindex;
+      OptData.nextprimitive:=-1;
+      if uzegeometry.CalcTrueInFrustum(geomdata.Vertex3S.getData(FirstIndex),geomdata.Vertex3S.getData(LastIndex),rc.DrawingContext.pcamera.frustum)
+         <>IREmpty then begin
+        //опять если размер паттерна мал, деградируем линию
+        //до сплошной линнии, паттерны пропускаем, независимо какая часть
+        //линии видна, сплошную линию нарисовать быстрее
+        if (rc.LOD=LODLowDetail)or(MaxDashLength/(rc.DrawingContext.zoom*rc.DrawingContext.zoom)<0.5)and(not rc.maxdetail) then begin
+          Drawer.DrawLine(@geomdata.Vertex3S,FirstIndex,LastIndex);
+          OptData.ignoreTo:=self.LastLinePrimitiveindex;
+        end else begin
+          //пытаемся выяснить какие сегменты разбитой линии видны
+          //i1 - индекс первого видимого сегмента
+          //i2 - индекс последнего видимого сегмента
+          if getIntersect(i1,i2) then begin
+            //рисуем только ввдимую часть линии
+            OptData.ignoreTo:=i1;
+            OptData.ignoreFrom:=i2;
+            OptData.nextprimitive:=LastLinePrimitiveindex;
+          end else begin
+            //видимые сегменты линии не обнаружены, не рисуем ее
+            OptData.ignoreTo:=LastLinePrimitiveindex;//паттерны пропускаем
+          end;
+        end
+      end else begin
+        OptData.ignoreTo:=LastLinePrimitiveindex;
+      end;
     end;
   end;
   result:=inherited;
@@ -824,6 +898,7 @@ var
    sqrparamsize:Double;
    PLLSymbolLine:PTLLSymbolLine;
    PSymbolsParam:PTSymbolSParam;
+   savezoom:double;
 begin
   result:=0;
   if self.LineIndex<>-1 then
@@ -891,12 +966,18 @@ else if (Attrib and LLAttrNeedSimtlify)>0 then
     //if result<>SymSize then
     begin
       result:=SymSize;
+      savezoom:=rc.DrawingContext.Zoom;
+      rc.DrawingContext.Zoom:=rc.DrawingContext.Zoom/PLLSymbolLine^.txtHeight;
       drawSymbol(drawer,rc,GeomData,LLPArray,OptData,PSymbolSParam,inFrustumState);
+      rc.DrawingContext.Zoom:=savezoom;
     end;
   end
    else
      begin
+       savezoom:=rc.DrawingContext.Zoom;
+       rc.DrawingContext.Zoom:=rc.DrawingContext.Zoom/PLLSymbolLine^.txtHeight;
        drawSymbol(drawer,rc,GeomData,LLPArray,OptData,PSymbolSParam,inFrustumState);
+       rc.DrawingContext.Zoom:=savezoom;
      end;
 
 end;

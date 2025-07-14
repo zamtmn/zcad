@@ -22,7 +22,7 @@ unit uzcctrllayercombobox;
 interface
 
 uses
-  StdCtrls,GraphType,{types,}{$IFDEF LCLWIN32}win32proc,windows,{$endif}LCLIntf,LCLType,
+  StdCtrls,GraphType,{$IFDEF LCLWIN32}win32proc,windows,{$endif}LCLIntf,LCLType,
   Controls,Classes,Graphics,Buttons,ExtCtrls,ComCtrls,Forms,Themes;
 const
   RightButtonWidth=20;// Ширина правой кнопки-стрелки при "темной" отрисовке
@@ -40,6 +40,7 @@ type
   TGetLayerPropFunc=function(PLayer:Pointer;out lp:TLayerPropRecord):boolean of object;
   TGetLayersArrayFunc=function(out la:TLayerArray):boolean of object;
   TClickOnLayerPropFunc=function(PLayer:Pointer;NumProp:integer;out newlp:TLayerPropRecord):boolean of object;
+  TonCloseDropDown=procedure of object;
 
   TMyListView=class(TListView)
   public
@@ -78,6 +79,8 @@ end;
     procedure PLDeActivate3(Data:PtrInt);
     procedure LVKlac(Sender:TObject);
     procedure _onKeyDown(Sender:TObject;var Key:Word;Shift:TShiftState);
+    procedure _onMouseDown(Sender:TObject;Button:TMouseButton;
+                         Shift:TShiftState;X,Y:Integer);
     procedure ObnovitSpisok;
   protected
     procedure Paint;override;
@@ -85,6 +88,7 @@ end;
     fGetLayerProp:TGetLayerPropFunc;
     fGetLayersArray:TGetLayersArrayFunc;
     fClickOnLayerProp:TClickOnLayerPropFunc;
+    fonCloseDropDown:TonCloseDropDown;
     constructor Create(AOwner:TComponent);override;
     procedure ObnovitItem(li:TListItem;lp:TLayerPropRecord);
     procedure CompareEvent(Sender: TObject; Item1, Item2: TListItem;Data: Integer; var Compare: Integer);
@@ -404,6 +408,7 @@ begin
     sLV.Columns.Items[3].Width:=PoleLista.Width-18*3-30;
     sLV.OnClick:=@LVKlac;
     sLV.OnKeyDown:=@_onKeyDown;
+    sLV.OnMouseDown:=@_onMouseDown;
     sLV.OnCompare:=@Compareevent;
     ObnovitSpisok;
     if sListHeight>0 then
@@ -413,8 +418,8 @@ begin
                               sLV.DefaultItemHeight:=-1;
                               hh:=sLV.Height-sLV.ClientHeight;
                               hh:=screen.WorkAreaHeight-a.y-1;
-                              {$IFNDEF LCLWIN32}h:=sLV.Items.Count*(sLV.DefaultItemHeight+1)+10;
-                              {$ELSE}h:=sLV.Items.Count*(sLV.DefaultItemHeight-1)+4;{$ENDIF}
+                              {$IFNDEF LCLWIN32}h:=sLV.Items.Count*(((sLV.DefaultItemHeight*screen.PixelsPerInch)div 96)+1)+10;
+                              {$ELSE}h:=sLV.Items.Count*(((sLV.DefaultItemHeight*screen.PixelsPerInch)div 96)-1)+4;{$ENDIF}
                               if h>hh then h:=hh;
                               PoleLista.ClientHeight:=h;
                          end;
@@ -425,6 +430,7 @@ begin
     SetWindowPos(PoleLista.Handle,0, 0, 0, 0, 0, SWP_NOMOVE or SWP_NOSIZE or SWP_NOZORDER or SWP_FRAMECHANGED);
     {$endif}
     PoleLista.Show;
+    sLV.MouseCapture:=true;
   end;
   if (PoleLista=nil) and (M1=true) then M1:=false;
 end;
@@ -432,6 +438,8 @@ end;
 procedure TZCADLayerComboBox.asyncfree(Data:PtrInt);
 begin
   Tobject(Data).Free;
+  if Assigned(fonCloseDropDown) then
+    fonCloseDropDown();
 end;
 
 procedure TZCADLayerComboBox.PLDeActivate(Sender:TObject);                      // Закрытие списка
@@ -466,6 +474,8 @@ begin
     PoleLista.Free;
     PoleLista:=nil;
     M1:=false;
+    if Assigned(fonCloseDropDown) then
+      fonCloseDropDown();
   end;
 end;
 
@@ -512,7 +522,9 @@ procedure TZCADLayerComboBox.LVKlac(Sender:TObject);                            
     NumProp,colwidth,i:integer;
     collapsed:boolean;
     newlp:TLayerPropRecord;
+    cc:TControl;
 begin
+  cc:=GetCaptureControl;
   if sLV.Items.Count>0 then
   begin
     FNotClose:=true;
@@ -546,9 +558,29 @@ begin
 end;
 
 procedure TZCADLayerComboBox._onKeyDown(Sender:TObject;var Key:Word;Shift:TShiftState); // Отлавливаем эскей
+var
+  cc:TControl;
 begin
+  cc:=GetCaptureControl;
   if Key=27 then Application.QueueAsyncCall(@PLDeActivate3,0);
 end;
+
+procedure TZCADLayerComboBox._onMouseDown(Sender:TObject;Button:TMouseButton;Shift:TShiftState;X,Y:Integer);
+var
+  cc:TControl;
+begin
+  cc:=GetCaptureControl;
+  if (x<0)or(y<0)or(x>PoleLista.ClientWidth)or(y>PoleLista.ClientHeight)then
+    Application.QueueAsyncCall(@PLDeActivate3,0)
+  else begin
+    //гдето слетает capture
+    //проблема в Controls.CaptureControl оно еще содержит старый капчурный контрол
+    //но GetCaptureControl уже возвращает nil
+    sLV.MouseCapture:=false;
+    sLV.MouseCapture:=true;
+  end;
+end;
+
 
 procedure TZCADLayerComboBox.MouseEnter;                                        // Курсор мышки зашёл на кнопку
 begin

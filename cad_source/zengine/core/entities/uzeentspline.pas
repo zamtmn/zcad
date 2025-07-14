@@ -27,8 +27,10 @@ uses
   uzestyleslayers,uzeentsubordinated,uzeentcurve,
   uzeentity,uzctnrVectorBytes,uzbtypes,uzeconsts,uzglviewareadata,
   gzctnrVectorTypes,uzegeometrytypes,uzegeometry,uzeffdxfsupport,sysutils,
-  uzMVReader,uzCtnrVectorpBaseEntity,uzeSplineUtils,uzbLogIntf;
+  uzMVReader,uzCtnrVectorpBaseEntity,uzeSplineUtils,uzbLogIntf,math;
 type
+  TSplineOpt=(SOClosed,SOPeriodic,SORational,SOPlanar,SOLinear);
+  TSplineOpts=set of TSplineOpt;
   PGDBObjSpline=^GDBObjSpline;
   GDBObjSpline=object(GDBObjCurve)
     ControlArrayInOCS:GDBPoint3dArray;
@@ -37,6 +39,7 @@ type
     AproxPointInWCS:GDBPoint3dArray;
     Closed:Boolean;
     Degree:Integer;
+    Opts:TSplineOpts;
     constructor init(own:Pointer;layeraddres:PGDBLayerProp;LW:SmallInt;c:Boolean);
     constructor initnul(owner:PGDBObjGenericWithSubordinated);
     destructor done;virtual;
@@ -135,88 +138,67 @@ var
   ptv: pgdbvertex;
   ir:itrec;
   nurbsobj:GLUnurbsObj;
-  CP:{GDBOpenArrayOfData}TCPVector;
-  tfv{,tfvsprev}:GDBvertex4D;
+  CP:TCPVector;
+  tfv:GDBvertex4D;
   tfvs:GDBvertex4S;
-  m:DMatrix4D;
-  //notfirst:boolean;
+  //m:DMatrix4D;
   TSD:TTempSplineData;
   tv:GDBvertex;
 begin
   if assigned(EntExtensions)then
     EntExtensions.RunOnBeforeEntityFormat(@self,drawing,DC);
   FormatWithoutSnapArray;
-  CP.init(VertexArrayInOCS.count);
-  ptv:=VertexArrayInOCS.beginiterate(ir);
-  TSD.tv0:=ptv^;
-  if bp.ListPos.owner<>nil then
-    if bp.ListPos.owner^.GetHandle=H_Root then
-      m:=onematrix
-    else
-      m:=bp.ListPos.owner^.GetMatrix^;
+  if (not(SOLinear in Opts))and(not (ESTemp in State))and(DCODrawable in DC.Options) then begin
+    CP.init(VertexArrayInWCS.count);
+    ptv:=VertexArrayInWCS.beginiterate(ir);
+    TSD.tv0:=ptv^;
 
-  TSD.tv0:=uzegeometry.VectorTransform3d(TSD.tv0,m);
-  //notfirst:=false;
-  if ptv<>nil then
-  repeat
-    tfv.x:=ptv^.x{-ptv0^.x};
-    tfv.y:=ptv^.y{-ptv0^.y};
-    tfv.z:=ptv^.z{-ptv0^.z};
-    tfv.w:=1;
-    tfv:=uzegeometry.VectorTransform(tfv,m);
+    if ptv<>nil then
+    repeat
 
-    tfv.x:=tfv.x-TSD.tv0.x;
-    tfv.y:=tfv.y-TSD.tv0.y;
-    tfv.z:=tfv.z-TSD.tv0.z;
+      tfvs.x:=ptv.x-TSD.tv0.x;
+      tfvs.y:=ptv.y-TSD.tv0.y;
+      tfvs.z:=ptv.z-TSD.tv0.z;
+      tfvs.w:=1;
 
-    tfvs.x:=tfv.x;
-    tfvs.y:=tfv.y;
-    tfvs.z:=tfv.z;
-    tfvs.w:=tfv.w;
-    CP.PushBackData(tfvs);
-    {if notfirst then begin
-      L:=vertexlen2df(tfvs.x,tfvs.y,tfvsprev.x,tfvsprev.y);
-      if L>maxL then
-        maxL:=L;
-      if L<minL then
-        minL:=L;
-    end else begin
-      maxL:=-Infinity;
-      minL:=Infinity;
-    end;
-    tfvsprev:=tfvs;
-    notfirst:=true;}
-    ptv:=VertexArrayInOCS.iterate(ir);
-  until ptv=nil;
+      CP.PushBackData(tfvs);
 
-  AproxPointInWCS.Clear;
-  TSD.PAproxPointInWCS:=@AproxPointInWCS;
+      ptv:=VertexArrayInWCS.iterate(ir);
+    until ptv=nil;
 
-  //попытка расчета масштаба при невыставленых матрицах вида, при загрузке dxf
-  //по идее наверно надо матрицы выставлять, а не тут заниматься херней
-  tv:=VectorTransform3D(OneVertex,m);
-  tv:=VectorTransform3D(tv,DC.DrawingContext.matrixs.pmodelMatrix^);
-  tv:=VectorTransform3D(tv,DC.DrawingContext.matrixs.pprojMatrix^);
+    AproxPointInWCS.Clear;
+    TSD.PAproxPointInWCS:=@AproxPointInWCS;
 
-  nurbsobj:=GLUIntrf.NewNurbsRenderer;
+    //попытка расчета масштаба при невыставленых матрицах вида, при загрузке dxf
+    //по идее наверно надо матрицы выставлять, а не тут заниматься херней
+    tv:=VectorTransform3D(OneVertex,{m}getmatrix^);
+    tv:=VectorTransform3D(tv,DC.DrawingContext.matrixs.pmodelMatrix^);
+    tv:=VectorTransform3D(tv,DC.DrawingContext.matrixs.pprojMatrix^);
 
-  GLUIntrf.SetupNurbsRenderer(nurbsobj,{max(maxL/100,minL/5)}50/tv.Length,
-                              DC.DrawingContext.matrixs.pmodelMatrix^,DC.DrawingContext.matrixs.pprojMatrix^,DC.DrawingContext.matrixs.pviewport^,
-                              nil,nil,@NurbsVertexCallBack,@NurbsErrorCallBack,
-                              @TSD);
-  GLUIntrf.BeginCurve(nurbsobj);
-  GLUIntrf.NurbsCurve(nurbsobj,Knots.Count,Knots.GetParrayAsPointer,{CP.Count}4,CP.GetParrayAsPointer,degree+1,GL_MAP1_VERTEX_4);
-  GLUIntrf.EndCurve(nurbsobj);
+    nurbsobj:=GLUIntrf.NewNurbsRenderer;
+
+    GLUIntrf.SetupNurbsRenderer(nurbsobj,max(1,50/tv.Length),
+                                DC.DrawingContext.matrixs.pmodelMatrix^,DC.DrawingContext.matrixs.pprojMatrix^,DC.DrawingContext.matrixs.pviewport^,
+                                nil,nil,@NurbsVertexCallBack,@NurbsErrorCallBack,
+                                @TSD);
+    GLUIntrf.BeginCurve(nurbsobj);
+    GLUIntrf.NurbsCurve(nurbsobj,Knots.Count,Knots.GetParrayAsPointer,{CP.Count}4,CP.GetParrayAsPointer,degree+1,GL_MAP1_VERTEX_4);
+    GLUIntrf.EndCurve(nurbsobj);
 
 
-  GLUIntrf.DeleteNurbsRenderer(nurbsobj);
+    GLUIntrf.DeleteNurbsRenderer(nurbsobj);
 
-  CP.done;
+    CP.done;
+  end;
   AproxPointInWCS.Shrink;
   CalcActualVisible(dc.DrawingContext.VActuality);
   Representation.Clear;
-  if (not (ESTemp in State))and(DCODrawable in DC.Options) then
-    Representation.DrawPolyLineWithLT(dc,AproxPointInWCS,vp,false,false);
+  if (not (ESTemp in State))and(DCODrawable in DC.Options) then begin
+    if SOLinear in Opts then
+      Representation.DrawLineWithLT(self,getmatrix^,dc,VertexArrayInOCS.getFirst,VertexArrayInOCS.getLast,vp)
+    else
+      Representation.DrawPolyLineWithLT(dc,AproxPointInWCS,vp,false,false)
+  end;
   calcbb(dc);
   if assigned(EntExtensions)then
     EntExtensions.RunOnAfterEntityFormat(@self,drawing,DC);
@@ -239,6 +221,7 @@ begin
   ControlArrayInOCS.init(1000);
   Knots.init(1000{,sizeof(Single)});
   AproxPointInWCS.init(1000);
+  Opts:=[];
   //vp.ID := GDBSplineID;
 end;
 constructor GDBObjSpline.initnul;
@@ -248,6 +231,7 @@ begin
   ControlArrayInOCS.init(1000);
   Knots.init(1000{,sizeof(Single)});
   AproxPointInWCS.init(1000);
+  Opts:=[];
   //vp.ID := GDBSplineID;
 end;
 function GDBObjSpline.GetObjType;
@@ -295,6 +279,40 @@ begin
   //tpo^.format;
   result := tpo;
 end;
+
+//SplineOpt=(SOClosed,SOPeriodic,SORational,SOPlanar,SOLinear);
+function DXFFlag2SplineOpts(AFlag:Integer):TSplineOpts;
+begin
+  if (AFlag and 1)<>0 then
+    result:=[SOClosed]
+  else
+    result:=[];
+  if (AFlag and 2)<>0 then
+    result:=result+[SOPeriodic];
+  if (AFlag and 4)<>0 then
+    result:=result+[SORational];
+  if (AFlag and 8)<>0 then
+    result:=result+[SOPlanar];
+  if (AFlag and 16)<>0 then
+    result:=result+[SOLinear];
+end;
+
+function SplineOpts2DXFFlag(AOpts:TSplineOpts):Integer;
+begin
+  if SOClosed in AOpts then
+    result:=1
+  else
+    result:=0;
+  if SOPeriodic in AOpts then
+    result:=result+2;
+  if SORational in AOpts then
+    result:=result+4;
+  if SOPlanar in AOpts then
+    result:=result+8;
+  if SOLinear in AOpts then
+    result:=result+16;
+end;
+
 procedure GDBObjSpline.SaveToDXF;
 var
   ir:itrec;
@@ -302,10 +320,11 @@ var
   ptv:pgdbvertex;
 begin
   SaveToDXFObjPrefix(outStream,'SPLINE','AcDbSpline',IODXFContext);
-  if closed then
+  dxfIntegerout(outStream,70,SplineOpts2DXFFlag(Opts));
+  {if closed then
     dxfIntegerout(outStream,70,9)
   else
-    dxfIntegerout(outStream,70,8);
+    dxfIntegerout(outStream,70,8);}
   dxfIntegerout(outStream,71,degree);
   dxfIntegerout(outStream,72,Knots.Count);
   dxfIntegerout(outStream,73,VertexArrayInOCS.Count);
@@ -353,7 +372,9 @@ begin
        end else if dxfFloatload(rdr,40,DXFGroupCode,tmpKnot) then
          Knots.PushBackData(tmpKnot)
        else if dxfIntegerload(rdr,70,DXFGroupCode,tmpFlag) then begin
-         if (tmpFlag and 1) = 1 then closed := true;
+         Opts:=DXFFlag2SplineOpts(tmpFlag);
+         Closed:=SOClosed in Opts;
+         //if (tmpFlag and 1) = 1 then Closed := true;
        end else if dxfIntegerload(rdr,71,DXFGroupCode,Degree) then begin
          Degree:=Degree;
        end else

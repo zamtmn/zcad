@@ -403,6 +403,7 @@ begin
     result:=CrossVertex(YWCS,oz)
   else
     result:=CrossVertex(ZWCS,oz);
+  result:=NormalizeVertex(result);
 end;
 
 function IsFloatNotEqual(const d1,d2:Single;const _floateps:Single=floateps):boolean;

@@ -52,6 +52,7 @@ GDBObjBlockInsert= object(GDBObjComplex)
 
                      procedure TransformAt(p:PGDBObjEntity;t_matrix:PDMatrix4D);virtual;
                      procedure ReCalcFromObjMatrix;virtual;
+                     procedure decomposite;
                      procedure rtsave(refp:Pointer);virtual;
 
                      procedure AddOnTrackAxis(var posr:os_record;const processaxis:taddotrac);virtual;
@@ -193,6 +194,54 @@ begin
   end;
   result:=inherited;
 end;
+procedure GDBObjBlockInsert.decomposite;
+var
+  BX,BY,BZ,T:GDBvertex;
+  tznam,tr:Double;
+begin
+  BX:=PGDBVertex(@objmatrix.mtr[0])^;
+  BY:=PGDBVertex(@objmatrix.mtr[1])^;
+  BZ:=PGDBVertex(@objmatrix.mtr[2])^;
+  T:=PGDBVertex(@objmatrix.mtr[3])^;
+  scale.x:=oneVertexlength(BX);
+  scale.y:=oneVertexlength(BY);
+  scale.z:=oneVertexlength(BZ);
+  if (abs(scale.x)>eps)and(abs(scale.y)>eps)and(abs(scale.z)>eps)then begin
+    BX:=BX/scale.x;
+    BY:=BY/scale.y;
+    BZ:=BZ/scale.z;
+    Local.Basis.ox:=BX;
+    Local.Basis.oy:=BY;
+    Local.Basis.oz:=BZ;
+
+    BX:=NormalizeVertex(GetXfFromZ(BZ));
+    BY:=NormalizeVertex(CrossVertex(BZ,Bx));
+
+
+    //  -((-BY.z*BZ.y*T.x+BY.y*BZ.z*T.x+BY.z*BZ.x*T.y-BY.x*BZ.z*T.y-BY.y*BZ.x*T.z+BY.x*BZ.y*T.z)
+    //X=--------------------------------------------------------------------------------------------
+    //  (BX.z*BY.y*BZ.x-BX.y*BY.z*BZ.x-BX.z*BY.x*BZ.y+BX.x*BY.z*BZ.y+BX.y*BY.x*BZ.z-BX.x*BY.y*BZ.z))
+
+    //  -((BX.z*BZ.y*T.x-BX.y*BZ.z*T.x-BX.z*BZ.x*T.y+BX.x*BZ.z*T.y+BX.y*BZ.x*T.z-BX.x*BZ.y*T.z)
+    //Y=--------------------------------------------------------------------------------------------
+    //  (BX.z*BY.y*BZ.x-BX.y*BY.z*BZ.x-BX.z*BY.x*BZ.y+BX.x*BY.z*BZ.y+BX.y*BY.x*BZ.z-BX.x*BY.y*BZ.z))
+
+    //  -((-BX.z*BY.y*T.x+BX.y*BY.z*T.x+BX.z*BY.x*T.y-BX.x*BY.z*T.y-BX.y*BY.x*T.z+BX.x*BY.y*T.z)
+    //Z=--------------------------------------------------------------------------------------------
+    //  (BX.z*BY.y*BZ.x-BX.y*BY.z*BZ.x-BX.z*BY.x*BZ.y+BX.x*BY.z*BZ.y+BX.y*BY.x*BZ.z-BX.x*BY.y*BZ.z))
+
+    tznam:=BX.z*BY.y*BZ.x-BX.y*BY.z*BZ.x-BX.z*BY.x*BZ.y+BX.x*BY.z*BZ.y+BX.y*BY.x*BZ.z-BX.x*BY.y*BZ.z;
+    if abs(tznam)>eps then begin
+      tr:=-BY.z*BZ.y*T.x+BY.y*BZ.z*T.x+BY.z*BZ.x*T.y-BY.x*BZ.z*T.y-BY.y*BZ.x*T.z+BY.x*BZ.y*T.z;
+      Local.P_insert.x:=-tr/tznam;
+      tr:=BX.z*BZ.y*T.x-BX.y*BZ.z*T.x-BX.z*BZ.x*T.y+BX.x*BZ.z*T.y+BX.y*BZ.x*T.z-BX.x*BZ.y*T.z;
+      Local.P_insert.y:=-tr/tznam;
+      tr:=-BX.z*BY.y*T.x+BX.y*BY.z*T.x+BX.z*BY.x*T.y-BX.x*BY.z*T.y-BX.y*BY.x*T.z+BX.x*BY.y*T.z;
+      Local.P_insert.z:=-tr/tznam;
+    end;
+  end;
+end;
+
 procedure GDBObjBlockInsert.ReCalcFromObjMatrix;
 var
     ox:gdbvertex;
@@ -205,18 +254,13 @@ var
     //mmm:TMatrix;
 begin
      inherited;
-     Local.basis.ox:=PGDBVertex(@objmatrix.mtr[0])^;
-     Local.basis.oy:=PGDBVertex(@objmatrix.mtr[1])^;
+     decomposite;
 
-     Local.basis.ox:=normalizevertex(Local.basis.ox);
-     Local.basis.oy:=normalizevertex(Local.basis.oy);
-     Local.basis.oz:=normalizevertex(Local.basis.oz);
-
-     Local.P_insert:=PGDBVertex(@objmatrix.mtr[3])^;
+     {Local.P_insert:=PGDBVertex(@objmatrix.mtr[3])^;
 
      scale.x:=oneVertexlength(PGDBVertex(@objmatrix.mtr[0])^)*sign(scale.x);
      scale.y:=oneVertexlength(PGDBVertex(@objmatrix.mtr[1])^)*sign(scale.y);
-     scale.z:=oneVertexlength(PGDBVertex(@objmatrix.mtr[2])^)*sign(scale.z);
+     scale.z:=oneVertexlength(PGDBVertex(@objmatrix.mtr[2])^)*sign(scale.z);}
 
      {m1:=objmatrix;
      PGDBVertex(@m1[0])^.x:=(PGDBVertex(@m1[0])^.x/scale.x);
@@ -275,7 +319,7 @@ begin
      //                                                               ox:=CrossVertex(YWCS,Local.basis.oz)
      //                                                           else
      //                                                               ox:=CrossVertex(ZWCS,Local.basis.oz);
-     normalizevertex(ox);
+
      tv:=Local.basis.ox;
      if scale.x<-eps then
                       tv:=VertexMulOnSc(tv,-1);

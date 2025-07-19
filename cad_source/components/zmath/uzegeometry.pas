@@ -288,9 +288,14 @@ begin
   scale.y:=oneVertexlength(ScaledBY);
   scale.z:=oneVertexlength(ScaledBZ);
   if (abs(scale.x)>eps)and(abs(scale.y)>eps)and(abs(scale.z)>eps)then begin
+
     BX:=ScaledBX/scale.x;
     BY:=ScaledBY/scale.y;
     BZ:=ScaledBZ/scale.z;
+
+
+    if scalardot(BX,CrossVertex(BY,Bz))<0 then
+      scale.x:=-scale.x;
 
     result.Basis.ox:=BX;
     result.Basis.oy:=BY;

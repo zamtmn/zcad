@@ -215,6 +215,7 @@ type
   PGDBLength=^GDBLength;
   GDBLength=Double;
   PGDBQuaternion=^GDBQuaternion;
+
   {REGISTERRECORDTYPE GDBQuaternion}
   GDBQuaternion=record
      ImagPart: GDBvertex;
@@ -226,6 +227,14 @@ type
                   oy:GDBvertex;(*'OY Axis'*)
                   oz:GDBvertex;(*'OZ Axis'*)
             end;
+
+  PGDBObj2dprop=^GDBObj2dprop;
+  {REGISTERRECORDTYPE GDBObj2dprop}
+  GDBObj2dprop=record
+    Basis:GDBBasis;(*'Basis'*)
+    P_insert:GDBCoordinates3D;(*'Insertion point OCS'*)
+  end;
+
   PGDBvertex4S=^GDBvertex4S;
   {REGISTERRECORDTYPE GDBvertex4S}
   GDBvertex4S=record

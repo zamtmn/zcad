@@ -25,7 +25,7 @@ uses uzeentity,uzgldrawcontext,uzeentityfactory,uzedrawingdef,uzestyleslayers,ma
      uzeentcomplex,sysutils,UGDBObjBlockdefArray,uzeblockdef,uzbtypes,
      uzeconsts,uzglviewareadata,uzegeometry,uzeffdxfsupport,uzeentsubordinated,
      gzctnrVectorTypes,uzegeometrytypes,uzctnrVectorBytes,uzestrconsts,LCLProc,
-     uzbLogIntf,uzMVReader;
+     uzbLogIntf,uzMVReader,uzeentwithlocalcs,uzeSnap;
 const zcadmetric='!!ZMODIFIER:';
 type
 PGDBObjBlockInsert=^GDBObjBlockInsert;
@@ -43,7 +43,7 @@ GDBObjBlockInsert= object(GDBObjComplex)
                      procedure SaveToDXF(var outStream:TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
                      procedure CalcObjMatrix(pdrawing:PTDrawingDef=nil);virtual;
                      function Clone(own:Pointer):PGDBObjEntity;virtual;
-                     //procedure rtmodifyonepoint(point:pcontrolpointdesc;tobj:PGDBObjEntity;dist,wc:gdbvertex;ptdata:Pointer);virtual;
+                     procedure rtmodifyonepoint(const rtmod:TRTModifyData);virtual;
                      destructor done;virtual;
                      function GetObjTypeName:String;virtual;
                      procedure correctobjects(powner:PGDBObjEntity;pinownerarray:Integer);virtual;
@@ -194,6 +194,23 @@ begin
   end;
   result:=inherited;
 end;
+
+procedure GDBObjBlockInsert.rtmodifyonepoint(const rtmod:TRTModifyData);
+var
+  m:DMatrix4D;
+begin
+  m:=onematrix;
+  if rtmod.point.pointtype=os_point then begin
+    if rtmod.point.PDrawable=nil then
+      Local:=GetPointInOCS(PGDBVertex(@objmatrix.mtr[0])^,PGDBVertex(@objmatrix.mtr[1])^,PGDBVertex(@objmatrix.mtr[2])^,VertexAdd(rtmod.point.worldcoord, rtmod.dist),scale)
+      //Local.p_insert:=vectortransform3d(VertexAdd(rtmod.point.worldcoord, rtmod.dist),m)
+    else
+      Local:=GetPointInOCS(PGDBVertex(@objmatrix.mtr[0])^,PGDBVertex(@objmatrix.mtr[1])^,PGDBVertex(@objmatrix.mtr[2])^,VertexSub(VertexAdd(rtmod.point.worldcoord, rtmod.dist),rtmod.point.dcoord),scale);
+      //Local.p_insert:=vectortransform3d(VertexSub(VertexAdd(rtmod.point.worldcoord, rtmod.dist),rtmod.point.dcoord),m);
+  end;
+end;
+
+
 procedure GDBObjBlockInsert.decomposite;
 var
   BX,BY,BZ,T:GDBvertex;
@@ -203,7 +220,8 @@ begin
   BY:=PGDBVertex(@objmatrix.mtr[1])^;
   BZ:=PGDBVertex(@objmatrix.mtr[2])^;
   T:=PGDBVertex(@objmatrix.mtr[3])^;
-  scale.x:=oneVertexlength(BX);
+  Local:=GetPointInOCS(BX,BY,BZ,T,scale);
+  (*scale.x:=oneVertexlength(BX);
   scale.y:=oneVertexlength(BY);
   scale.z:=oneVertexlength(BZ);
   if (abs(scale.x)>eps)and(abs(scale.y)>eps)and(abs(scale.z)>eps)then begin
@@ -239,7 +257,7 @@ begin
       tr:=-BX.z*BY.y*T.x+BX.y*BY.z*T.x+BX.z*BY.x*T.y-BX.x*BY.z*T.y-BX.y*BY.x*T.z+BX.x*BY.y*T.z;
       Local.P_insert.z:=-tr/tznam;
     end;
-  end;
+  end;*)
 end;
 
 procedure GDBObjBlockInsert.ReCalcFromObjMatrix;
@@ -325,7 +343,8 @@ begin
                       tv:=VertexMulOnSc(tv,-1);
      rotate:=scalardot(tv,ox);
      rotate:=arccos(rotate);
-     if tv.y<-eps then rotate:=2*pi-rotate;
+     if scalardot(tv,CrossVertex(Local.basis.oz,GetXfFromZ(Local.basis.oz)))<-eps then
+       rotate:=2*pi-rotate;
 end;
 procedure GDBObjBlockInsert.setrot(r:Double);
 var m1:DMatrix4D;

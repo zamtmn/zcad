@@ -26,12 +26,6 @@ uses uzepalette,uzgldrawcontext,uzedrawingdef,uzecamera,uzeentity,
      uzegeometry,uzeffdxfsupport,sysutils,uzeentsubordinated,uzestyleslayers,
      uzMVReader;
 type
-
-PGDBObj2dprop=^GDBObj2dprop;
-GDBObj2dprop=record
-                   Basis:GDBBasis;(*'Basis'*)
-                   P_insert:GDBCoordinates3D;(*'Insertion point OCS'*)
-             end;
 PGDBObjWithLocalCS=^GDBObjWithLocalCS;
 GDBObjWithLocalCS= object(GDBObjWithMatrix)
                Local:GDBObj2dprop;

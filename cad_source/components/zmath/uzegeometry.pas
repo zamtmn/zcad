@@ -265,6 +265,8 @@ function GetCSDirFrom0x0y2D(const ox,oy:GDBvertex):TCSDir;
 function CalcDisplaySubFrustum(const x,y,w,h:Double;const mm,pm:DMatrix4D;const vp:IMatrix4):ClipArray;
 function myPickMatrix(const x,y,deltax,deltay:Double;const vp:IMatrix4): DMatrix4D;
 
+function GetPointInOCS(const ScaledBX,ScaledBY,ScaledBZ:GDBvertex; const PointInWCS:GDBvertex; out scale:GDBvertex):GDBObj2dprop;
+
 var
   WorldMatrix{,CurrentCS}:DMatrix4D;
   wx:PGDBVertex;
@@ -276,6 +278,50 @@ type
   TLineClipArray=array[0..5]of Double;
 
 implementation
+
+function GetPointInOCS(const ScaledBX,ScaledBY,ScaledBZ:GDBvertex; const PointInWCS:GDBvertex; out scale:GDBvertex):GDBObj2dprop;
+var
+  tznam,tr:Double;
+  BX,BY,BZ:GDBvertex;
+begin
+  scale.x:=oneVertexlength(ScaledBX);
+  scale.y:=oneVertexlength(ScaledBY);
+  scale.z:=oneVertexlength(ScaledBZ);
+  if (abs(scale.x)>eps)and(abs(scale.y)>eps)and(abs(scale.z)>eps)then begin
+    BX:=ScaledBX/scale.x;
+    BY:=ScaledBY/scale.y;
+    BZ:=ScaledBZ/scale.z;
+
+    result.Basis.ox:=BX;
+    result.Basis.oy:=BY;
+    result.Basis.oz:=BZ;
+
+    BX:=NormalizeVertex(GetXfFromZ(BZ));
+    BY:=NormalizeVertex(CrossVertex(BZ,Bx));
+
+    //  -((-BY.z*BZ.y*PointInWCS.x+BY.y*BZ.z*PointInWCS.x+BY.z*BZ.x*PointInWCS.y-BY.x*BZ.z*PointInWCS.y-BY.y*BZ.x*PointInWCS.z+BY.x*BZ.y*PointInWCS.z)
+    //X=--------------------------------------------------------------------------------------------
+    //  (BX.z*BY.y*BZ.x-BX.y*BY.z*BZ.x-BX.z*BY.x*BZ.y+BX.x*BY.z*BZ.y+BX.y*BY.x*BZ.z-BX.x*BY.y*BZ.z))
+
+    //  -((BX.z*BZ.y*PointInWCS.x-BX.y*BZ.z*PointInWCS.x-BX.z*BZ.x*PointInWCS.y+BX.x*BZ.z*PointInWCS.y+BX.y*BZ.x*PointInWCS.z-BX.x*BZ.y*PointInWCS.z)
+    //Y=--------------------------------------------------------------------------------------------
+    //  (BX.z*BY.y*BZ.x-BX.y*BY.z*BZ.x-BX.z*BY.x*BZ.y+BX.x*BY.z*BZ.y+BX.y*BY.x*BZ.z-BX.x*BY.y*BZ.z))
+
+    //  -((-BX.z*BY.y*PointInWCS.x+BX.y*BY.z*PointInWCS.x+BX.z*BY.x*PointInWCS.y-BX.x*BY.z*PointInWCS.y-BX.y*BY.x*PointInWCS.z+BX.x*BY.y*PointInWCS.z)
+    //Z=--------------------------------------------------------------------------------------------
+    //  (BX.z*BY.y*BZ.x-BX.y*BY.z*BZ.x-BX.z*BY.x*BZ.y+BX.x*BY.z*BZ.y+BX.y*BY.x*BZ.z-BX.x*BY.y*BZ.z))
+
+    tznam:=BX.z*BY.y*BZ.x-BX.y*BY.z*BZ.x-BX.z*BY.x*BZ.y+BX.x*BY.z*BZ.y+BX.y*BY.x*BZ.z-BX.x*BY.y*BZ.z;
+    if abs(tznam)>eps then begin
+      tr:=-BY.z*BZ.y*PointInWCS.x+BY.y*BZ.z*PointInWCS.x+BY.z*BZ.x*PointInWCS.y-BY.x*BZ.z*PointInWCS.y-BY.y*BZ.x*PointInWCS.z+BY.x*BZ.y*PointInWCS.z;
+      result.P_insert.x:=-tr/tznam;
+      tr:=BX.z*BZ.y*PointInWCS.x-BX.y*BZ.z*PointInWCS.x-BX.z*BZ.x*PointInWCS.y+BX.x*BZ.z*PointInWCS.y+BX.y*BZ.x*PointInWCS.z-BX.x*BZ.y*PointInWCS.z;
+      result.P_insert.y:=-tr/tznam;
+      tr:=-BX.z*BY.y*PointInWCS.x+BX.y*BY.z*PointInWCS.x+BX.z*BY.x*PointInWCS.y-BX.x*BY.z*PointInWCS.y-BX.y*BY.x*PointInWCS.z+BX.x*BY.y*PointInWCS.z;
+      result.P_insert.z:=-tr/tznam;
+    end;
+  end;
+end;
 
 function VertexSub(const Vector1, Vector2: GDBvertex): GDBvertex;
 begin

@@ -325,7 +325,7 @@ begin
   if onel.SqrLength>sqreps then begin
     onel:=onel.NormalizeVertex;
     tp2:=GetXfFromZ(onel);
-    tp3:=CrossVertex(tp2,onel);
+    tp3:=VectorDot(tp2,onel);
     tp3:=NormalizeVertex(tp3);
     tp2:=NormalizeVertex(tp2);
     //rotmatr:=onematrix;
@@ -432,7 +432,7 @@ begin
   if l>bigeps then begin
     onel:=v;
     tp2:=GetXfFromZ(onel);
-    tp3:=CrossVertex(tp2,onel);
+    tp3:=VectorDot(tp2,onel);
     tp3:=NormalizeVertex(tp3);
     tp2:=NormalizeVertex(tp2);
     //rotmatr:=onematrix;

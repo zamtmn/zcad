@@ -126,7 +126,7 @@ begin
      inherited;
 
      ox:=GetXfFromZ(Local.basis.oz);
-     oy:=NormalizeVertex(CrossVertex(Local.basis.oz,Local.basis.ox));
+     oy:=NormalizeVertex(VectorDot(Local.basis.oz,Local.basis.ox));
      m:=CreateMatrixFromBasis(ox,oy,Local.basis.oz);
 
      Local.P_insert:=VectorTransform3D(PGDBVertex(@objmatrix.mtr[3])^,m);
@@ -135,9 +135,9 @@ begin
      scale.z:=PGDBVertex(@objmatrix[2])^.z/local.Oz.z;}
 
      {if (abs (Local.oz.x) < 1/64) and (abs (Local.oz.y) < 1/64) then
-                                                                    ox:=CrossVertex(YWCS,Local.oz)
+                                                                    ox:=VectorDot(YWCS,Local.oz)
                                                                 else
-                                                                    ox:=CrossVertex(ZWCS,Local.oz);
+                                                                    ox:=VectorDot(ZWCS,Local.oz);
      normalizevertex(ox);
      rotate:=uzegeometry.scalardot(Local.ox,ox);
      rotate:=arccos(rotate)*180/pi;

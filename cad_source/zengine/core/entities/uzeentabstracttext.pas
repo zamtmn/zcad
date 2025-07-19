@@ -111,9 +111,9 @@ begin
                                         matrixinvert(m3);
                                         objMatrix:=MatrixMultiply(m3,objMatrix);
                                         if (abs (Local.basis.oz.x) < 1/64) and (abs (Local.basis.oz.y) < 1/64) then
-                                                                                                       ox:=CrossVertex(YWCS,{PGDBVertex(@m[2])^}Local.basis.oz)
+                                                                                                       ox:=VectorDot(YWCS,{PGDBVertex(@m[2])^}Local.basis.oz)
                                                                                                    else
-                                                                                                       ox:=CrossVertex(ZWCS,{PGDBVertex(@m[2])^}Local.basis.oz);
+                                                                                                       ox:=VectorDot(ZWCS,{PGDBVertex(@m[2])^}Local.basis.oz);
                                         r:=scalardot({PGDBVertex(@m[0])^}Local.basis.ox,ox);
                                         r:=arccos(r);
                                         setrot(-r);
@@ -146,9 +146,9 @@ begin
      scale.z:=PGDBVertex(@objmatrix[2])^.z/local.Oz.z;}
 
      {if (abs (Local.basis.oz.x) < 1/64) and (abs (Local.basis.oz.y) < 1/64) then
-                                                                    ox:=CrossVertex(YWCS,Local.basis.oz)
+                                                                    ox:=VectorDot(YWCS,Local.basis.oz)
                                                                 else
-                                                                    ox:=CrossVertex(ZWCS,Local.basis.oz);
+                                                                    ox:=VectorDot(ZWCS,Local.basis.oz);
      normalizevertex(ox);}
      { fixedTODO : removeing angle from text ents }
      (*
@@ -177,9 +177,9 @@ begin
      scale.z:=PGDBVertex(@objmatrix[2])^.z/local.Oz.z;}
 
      if (abs (Local.basis.oz.x) < 1/64) and (abs (Local.basis.oz.y) < 1/64) then
-                                                                    ox:=CrossVertex(YWCS,Local.basis.oz)
+                                                                    ox:=VectorDot(YWCS,Local.basis.oz)
                                                                 else
-                                                                    ox:=CrossVertex(ZWCS,Local.basis.oz);
+                                                                    ox:=VectorDot(ZWCS,Local.basis.oz);
      normalizevertex(ox);
      result:=scalardot(Local.basis.ox,ox);
      result:=arccos(result);

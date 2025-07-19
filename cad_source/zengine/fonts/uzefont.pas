@@ -140,7 +140,7 @@ begin
         PLLSymbolLine^.SymbolsParam.FirstSymMatr:=uzegeometry.MatrixMultiply(matr,objmatrix);
         PLLSymbolLine^.SymbolsParam.Rotate:=Vertexangle(CreateVertex2D(0,0),CreateVertex2D(PLLSymbolLine^.SymbolsParam.FirstSymMatr.mtr[0].v[0],PLLSymbolLine^.SymbolsParam.FirstSymMatr.mtr[0].v[1]));
         PLLSymbolLine^.SymbolsParam.sx:=oneVertexlength(PGDBVertex(@PLLSymbolLine^.SymbolsParam.FirstSymMatr.mtr[0])^)/oneVertexlength(PGDBVertex(@PLLSymbolLine^.SymbolsParam.FirstSymMatr.mtr[1])^);
-        true0Y:=CrossVertex(PGDBVertex(@PLLSymbolLine^.SymbolsParam.FirstSymMatr.mtr[2])^,PGDBVertex(@PLLSymbolLine^.SymbolsParam.FirstSymMatr.mtr[0])^);
+        true0Y:=VectorDot(PGDBVertex(@PLLSymbolLine^.SymbolsParam.FirstSymMatr.mtr[2])^,PGDBVertex(@PLLSymbolLine^.SymbolsParam.FirstSymMatr.mtr[0])^);
         if not IsVectorNul(true0Y) then
           true0Y:=NormalizeVertex(true0Y);
         fact0y:=PGDBVertex(@PLLSymbolLine^.SymbolsParam.FirstSymMatr.mtr[1])^;

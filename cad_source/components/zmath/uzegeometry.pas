@@ -94,7 +94,6 @@ type
 function ToDVector4F(const m:DVector4D):DVector4F; inline;
 function ToDMatrix4F(const m:DMatrix4D):DMatrix4F; inline;
 function ToVertex2DI(const _V:GDBvertex):GDBVertex2DI; inline;
-function CrossVertex(const Vector1, Vector2: GDBvertex): GDBvertex;inline;
 function VertexD2S(const Vector1:GDBvertex): GDBVertex3S;inline;
 function intercept2d(const x1, y1, x2, y2, x3, y3, x4, y4: Double): Boolean;inline;
 function intercept2d2(const x11, y11, x12, y12, x21, y21, x22, y22: Single): Boolean;inline;
@@ -208,7 +207,7 @@ function IsBBNul(const bb:TBoundingBox):boolean; overload; inline;
 function boundingintersect(const bb1,bb2:TBoundingBox):Boolean;inline;
 function ScaleBB(const bb:TBoundingBox;const k:Double):TBoundingBox;
 procedure MatrixInvert(var M: DMatrix4D);inline;
-function vectordot(const v1,v2:GDBvertex):GDBvertex;inline;
+function VectorDot(const v1,v2:GDBvertex):GDBvertex;inline;
 function scalardot(const v1,v2:GDBvertex):Double;inline;
 function vertexeq(const v1,v2:GDBvertex):Boolean;inline;
 function SQRdist_Point_to_Segment(const p:GDBvertex;const s0,s1:GDBvertex):Double;inline;
@@ -294,7 +293,7 @@ begin
     BZ:=ScaledBZ/scale.z;
 
 
-    if scalardot(BX,CrossVertex(BY,Bz))<0 then
+    if scalardot(BX,VectorDot(BY,Bz))<0 then
       scale.x:=-scale.x;
 
     result.Basis.ox:=BX;
@@ -302,7 +301,7 @@ begin
     result.Basis.oz:=BZ;
 
     BX:=NormalizeVertex(GetXfFromZ(BZ));
-    BY:=NormalizeVertex(CrossVertex(BZ,Bx));
+    BY:=NormalizeVertex(VectorDot(BZ,Bx));
 
     //  -((-BY.z*BZ.y*PointInWCS.x+BY.y*BZ.z*PointInWCS.x+BY.z*BZ.x*PointInWCS.y-BY.x*BZ.z*PointInWCS.y-BY.y*BZ.x*PointInWCS.z+BY.x*BZ.y*PointInWCS.z)
     //X=--------------------------------------------------------------------------------------------
@@ -436,24 +435,13 @@ begin
   //  result:=false;
 end;
 
-function CrossVertex(const Vector1, Vector2: GDBvertex): GDBvertex;
-begin
-  with GDBvertex((@Vector1)^) do
-  begin
-    Result.X := (Y * Vector2.Z) - (Z * Vector2.Y);
-    Result.Y := (Z * Vector2.X) - (X * Vector2.Z);
-    Result.Z := (X * Vector2.Y) - (Y * Vector2.X);
-  end;
-end;
-
-
 function GetXfFromZ(const oz:GDBvertex):GDBvertex;
 begin
   //if (abs (oz.x) < 1/64) and (abs (oz.y) < 1/64) then
   if IsNearToZ(oz)then
-    result:=CrossVertex(YWCS,oz)
+    result:=VectorDot(YWCS,oz)
   else
-    result:=CrossVertex(ZWCS,oz);
+    result:=VectorDot(ZWCS,oz);
   result:=NormalizeVertex(result);
 end;
 
@@ -1736,7 +1724,7 @@ begin
     end;
   end;
 end;
-function vectordot(const v1,v2:GDBvertex):GDBvertex;
+function VectorDot(const v1,v2:GDBvertex):GDBvertex;
 begin
   with GDBvertex((@v1)^) do begin
      result.x:=y * v2.z - z * v2.y;
@@ -1744,6 +1732,7 @@ begin
      result.z:=x * v2.y - y * v2.x;
   end;
 end;
+
 function scalardot(const v1,v2:GDBvertex):Double;
 begin
   with GDBvertex((@v1)^) do result:=x * v2.x + y * v2.y +z*v2.z;

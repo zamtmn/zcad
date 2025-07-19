@@ -40,7 +40,7 @@ begin
   s:=uppercase(operands);
   ox:=createvertex(-1,0,0);
   oy:=createvertex(0,1,0);
-  oz:=uzegeometry.CrossVertex(ox,oy);
+  oz:=uzegeometry.VectorDot(ox,oy);
   recognized:=true;
   if s='TOP' then begin
     //drawings.GetCurrentDWG.OGLwindow1.RotTo(createvertex(-1,0,0),createvertex(0,1,0),createvertex(0,0,-1))
@@ -116,7 +116,7 @@ begin
   end else
     recognized:=false;
   if recognized then begin
-    oz:=uzegeometry.CrossVertex(ox,oy);
+    oz:=uzegeometry.VectorDot(ox,oy);
     drawings.GetCurrentDWG.wa.RotTo(ox,oy,oz);
   end;
   result:=cmd_ok;

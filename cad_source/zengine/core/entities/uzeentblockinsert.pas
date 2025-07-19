@@ -233,7 +233,7 @@ begin
     Local.Basis.oz:=BZ;
 
     BX:=NormalizeVertex(GetXfFromZ(BZ));
-    BY:=NormalizeVertex(CrossVertex(BZ,Bx));
+    BY:=NormalizeVertex(VectorDot(BZ,Bx));
 
 
     //  -((-BY.z*BZ.y*T.x+BY.y*BZ.z*T.x+BY.z*BZ.x*T.y-BY.x*BZ.z*T.y-BY.y*BZ.x*T.z+BY.x*BZ.y*T.z)
@@ -334,16 +334,16 @@ begin
      }
      ox:=GetXfFromZ(Local.basis.oz);
      //if (abs (Local.basis.oz.x) < 1/64) and (abs (Local.basis.oz.y) < 1/64) then
-     //                                                               ox:=CrossVertex(YWCS,Local.basis.oz)
+     //                                                               ox:=VectorDot(YWCS,Local.basis.oz)
      //                                                           else
-     //                                                               ox:=CrossVertex(ZWCS,Local.basis.oz);
+     //                                                               ox:=VectorDot(ZWCS,Local.basis.oz);
 
      tv:=Local.basis.ox;
      if scale.x<-eps then
                       tv:=VertexMulOnSc(tv,-1);
      rotate:=scalardot(tv,ox);
      rotate:=arccos(rotate);
-     if scalardot(tv,CrossVertex(Local.basis.oz,GetXfFromZ(Local.basis.oz)))<-eps then
+     if scalardot(tv,VectorDot(Local.basis.oz,GetXfFromZ(Local.basis.oz)))<-eps then
        rotate:=2*pi-rotate;
 end;
 procedure GDBObjBlockInsert.setrot(r:Double);

@@ -518,9 +518,9 @@ begin
 
   PGDBObjText(ChangedData.PEntity)^.Local.basis.ox:=GetXfFromZ(PGDBObjText(ChangedData.PEntity)^.Local.basis.oz);
   //if (abs (PGDBObjText(ChangedData.PEntity)^.Local.basis.oz.x) < 1/64) and (abs (PGDBObjText(ChangedData.PEntity)^.Local.basis.oz.y) < 1/64) then
-  //  PGDBObjText(ChangedData.PEntity)^.Local.basis.ox:=CrossVertex(YWCS,PGDBObjText(ChangedData.PEntity)^.Local.basis.oz)
+  //  PGDBObjText(ChangedData.PEntity)^.Local.basis.ox:=VectorDot(YWCS,PGDBObjText(ChangedData.PEntity)^.Local.basis.oz)
   //else
-  //  PGDBObjText(ChangedData.PEntity)^.Local.basis.ox:=CrossVertex(ZWCS,PGDBObjText(ChangedData.PEntity)^.Local.basis.oz);
+  //  PGDBObjText(ChangedData.PEntity)^.Local.basis.ox:=VectorDot(ZWCS,PGDBObjText(ChangedData.PEntity)^.Local.basis.oz);
   PGDBObjText(ChangedData.PEntity)^.local.basis.OX:=VectorTransform3D(PGDBObjText(ChangedData.PEntity)^.local.basis.OX,uzegeometry.CreateAffineRotationMatrix(PGDBObjText(ChangedData.PEntity)^.Local.basis.oz,-a));
 end;
 

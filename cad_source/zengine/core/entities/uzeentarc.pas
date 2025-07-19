@@ -168,7 +168,7 @@ begin
      inherited;
 
      ox:=GetXfFromZ(Local.basis.oz);
-     oy:=NormalizeVertex(CrossVertex(Local.basis.oz,Local.basis.ox));
+     oy:=NormalizeVertex(VectorDot(Local.basis.oz,Local.basis.ox));
      m:=CreateMatrixFromBasis(ox,oy,Local.basis.oz);
 
      Local.P_insert:=VectorTransform3D(PGDBVertex(@objmatrix.mtr[3])^,m);

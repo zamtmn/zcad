@@ -410,10 +410,10 @@ begin
   _ZWCS:=ZWCS;//gdb.GetCurrentDWG.pcamera.look;
 
   if (abs (tp.x) < 1/64) and (abs (tp.y) < 1/64) then
-                                                     tp2:=CrossVertex(_YWCS,tp)
+                                                     tp2:=VectorDot(_YWCS,tp)
                                                  else
-                                                     tp2:=CrossVertex(_ZWCS,tp);
-  tp3:=CrossVertex(tp2,tp);
+                                                     tp2:=VectorDot(_ZWCS,tp);
+  tp3:=VectorDot(tp2,tp);
   //tp3:=uzegeometry.VertexMulOnSc(tp3,-1);
   tp3:=NormalizeVertex(tp3);
   tp2:=NormalizeVertex(tp2);

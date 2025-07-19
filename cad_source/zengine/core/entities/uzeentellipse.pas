@@ -122,9 +122,9 @@ begin
      //scale.z:=uzegeometry.oneVertexlength(PGDBVertex(@objmatrix[2])^);
 
      {if (abs (Local.basis.oz.x) < 1/64) and (abs (Local.basis.oz.y) < 1/64) then
-                                                                    ox:=CrossVertex(YWCS,Local.basis.oz)
+                                                                    ox:=VectorDot(YWCS,Local.basis.oz)
                                                                 else
-                                                                    ox:=CrossVertex(ZWCS,Local.basis.oz);}
+                                                                    ox:=VectorDot(ZWCS,Local.basis.oz);}
      //normalizevertex(ox);
      //rotate:=uzegeometry.scalardot(Local.basis.ox,ox);
     // rotate:=arccos(rotate)*180/pi;
@@ -136,7 +136,7 @@ var rotmatr,dispmatr{,m1}:DMatrix4D;
 begin
      //Local.oz:=NormalizeVertex(Local.oz);
      Local.basis.ox:=MajorAxis;
-     Local.basis.oy:=CrossVertex(Local.basis.oz,Local.basis.ox);
+     Local.basis.oy:=VectorDot(Local.basis.oz,Local.basis.ox);
 
      Local.basis.ox:=NormalizeVertex(Local.basis.ox);
      Local.basis.oy:=NormalizeVertex(Local.basis.oy);

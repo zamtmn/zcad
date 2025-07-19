@@ -291,9 +291,9 @@ begin
           v:=vertexsub(p1,p2);
           v:=normalizevertex(v);
           if (abs (v.x) < 1/64) and (abs (v.y) < 1/64) then
-                                                                    v:=CrossVertex(YWCS,v)
+                                                                    v:=VectorDot(YWCS,v)
                                                                 else
-                                                                    v:=CrossVertex(ZWCS,v);
+                                                                    v:=VectorDot(ZWCS,v);
           if {v.x*}v.y<0 then
                           begin
                                {a:=v.x;

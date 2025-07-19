@@ -65,9 +65,9 @@ begin
      Local.P_insert:=PGDBVertex(@objmatrix.mtr[3])^;
 
      {if (abs (Local.basis.oz.x) < 1/64) and (abs (Local.basis.oz.y) < 1/64) then
-                                                                    ox:=CrossVertex(YWCS,Local.basis.oz)
+                                                                    ox:=VectorDot(YWCS,Local.basis.oz)
                                                                 else
-                                                                    ox:=CrossVertex(ZWCS,Local.basis.oz);}
+                                                                    ox:=VectorDot(ZWCS,Local.basis.oz);}
 end;
 procedure GDBObjTable.SaveToDXFFollow;
 var

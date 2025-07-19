@@ -133,7 +133,7 @@ begin
                             result:=uzegeometry.NormalizeVertex(result);
                             exit;
                             //processaxis(posr,result);
-                            //result:=uzegeometry.CrossVertex(tv,zwcs);
+                            //result:=uzegeometry.VectorDot(tv,zwcs);
                             //processaxis(posr,result);
                             dec(found);
                        end;

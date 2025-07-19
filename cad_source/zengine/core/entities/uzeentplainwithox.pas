@@ -35,15 +35,15 @@ procedure GDBObjPlainWithOX.CalcObjMatrix;
 var rotmatr,dispmatr:DMatrix4D;
 begin
      {if (abs (Local.oz.x) < 1/64) and (abs (Local.oz.y) < 1/64) then
-                                                                    Local.ox:=CrossVertex(YWCS,Local.oz)
+                                                                    Local.ox:=VectorDot(YWCS,Local.oz)
                                                                 else
-                                                                    Local.ox:=CrossVertex(ZWCS,Local.oz);
+                                                                    Local.ox:=VectorDot(ZWCS,Local.oz);
      Local.ox.x:=1;
      Local.ox.y:=0;
      Local.ox.z:=0;}
 
      Local.basis.ox:=NormalizeVertex(Local.basis.ox);
-     Local.basis.oy:=CrossVertex(Local.basis.oz,Local.basis.ox);
+     Local.basis.oy:=VectorDot(Local.basis.oz,Local.basis.ox);
      Local.basis.oy:=NormalizeVertex(Local.basis.oy);
      Local.basis.oz:=NormalizeVertex(Local.basis.oz);
 

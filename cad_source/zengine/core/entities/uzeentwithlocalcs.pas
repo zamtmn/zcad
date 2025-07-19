@@ -92,9 +92,9 @@ begin
      scale.z:=PGDBVertex(@objmatrix[2])^.z/local.Oz.z;
 
      if (abs (Local.oz.x) < 1/64) and (abs (Local.oz.y) < 1/64) then
-                                                                    ox:=CrossVertex(YWCS,Local.oz)
+                                                                    ox:=VectorDot(YWCS,Local.oz)
                                                                 else
-                                                                    ox:=CrossVertex(ZWCS,Local.oz);
+                                                                    ox:=VectorDot(ZWCS,Local.oz);
      normalizevertex(ox);
      rotate:=uzegeometry.scalardot(Local.ox,ox);
      rotate:=arccos(rotate)*180/pi;
@@ -191,10 +191,10 @@ begin
      //Local.oz:=NormalizeVertex(Local.oz);
      Local.basis.ox:=GetXfFromZ(Local.basis.oz);
      {if (abs (Local.oz.x) < 1/64) and (abs (Local.oz.y) < 1/64) then
-                                                                    Local.ox:=CrossVertex(YWCS,Local.oz)
+                                                                    Local.ox:=VectorDot(YWCS,Local.oz)
                                                                 else
-                                                                    Local.ox:=CrossVertex(ZWCS,Local.oz);}
-     Local.basis.oy:=CrossVertex(Local.basis.oz,Local.basis.ox);
+                                                                    Local.ox:=VectorDot(ZWCS,Local.oz);}
+     Local.basis.oy:=VectorDot(Local.basis.oz,Local.basis.ox);
 
      Local.basis.oy:=NormalizeVertex(Local.basis.oy);
      Local.basis.oz:=NormalizeVertex(Local.basis.oz);
@@ -215,15 +215,15 @@ procedure GDBObjWithLocalCS.CalcObjMatrix;
 //var rotmatr,dispmatr:DMatrix4D;
 begin
      (*if (abs (Local.oz.x) < 1/64) and (abs (Local.oz.y) < 1/64) then
-                                                                    Local.ox:=CrossVertex(YWCS,Local.oz)
+                                                                    Local.ox:=VectorDot(YWCS,Local.oz)
                                                                 else
-                                                                    Local.ox:=CrossVertex(ZWCS,Local.oz);
+                                                                    Local.ox:=VectorDot(ZWCS,Local.oz);
      {Local.ox.x:=1;
      Local.ox.y:=0;
      Local.ox.z:=0;}
 
      Local.ox:=NormalizeVertex(Local.ox);
-     Local.oy:=CrossVertex(Local.oz,Local.ox);
+     Local.oy:=VectorDot(Local.oz,Local.ox);
      Local.oy:=NormalizeVertex(Local.oy);
      Local.oz:=NormalizeVertex(Local.oz);
 

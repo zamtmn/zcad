@@ -80,9 +80,9 @@ begin
   prop.look:=pgdbvertex(@tempmatr.mtr[2])^;
 
   prop.look:=NormalizeVertex(prop.look);
-  prop.xdir := CrossVertex(prop.ydir,prop.look);
+  prop.xdir := VectorDot(prop.ydir,prop.look);
   prop.xdir:=NormalizeVertex(prop.xdir);
-  prop.ydir := CrossVertex(prop.look,prop.xdir);
+  prop.ydir := VectorDot(prop.look,prop.xdir);
 end;
 procedure GDBObjCamera.MoveInLocalCSXY(oldx,oldy:Double;ax:gdbvertex);
 var

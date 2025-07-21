@@ -264,7 +264,8 @@ function GetCSDirFrom0x0y2D(const ox,oy:GDBvertex):TCSDir;
 function CalcDisplaySubFrustum(const x,y,w,h:Double;const mm,pm:DMatrix4D;const vp:IMatrix4):ClipArray;
 function myPickMatrix(const x,y,deltax,deltay:Double;const vp:IMatrix4): DMatrix4D;
 
-function GetPointInOCS(const ScaledBX,ScaledBY,ScaledBZ:GDBvertex; const PointInWCS:GDBvertex; out scale:GDBvertex):GDBObj2dprop;
+function GetPointInOCSByBasis(const ScaledBX,ScaledBY,ScaledBZ:GDBvertex; const PointInWCS:GDBvertex; out scale:GDBvertex):GDBObj2dprop;
+function GetPInsertInOCSBymatrix(constref matrix:DMatrix4D;out scale:GDBvertex):GDBObj2dprop;
 
 var
   WorldMatrix{,CurrentCS}:DMatrix4D;
@@ -278,7 +279,7 @@ type
 
 implementation
 
-function GetPointInOCS(const ScaledBX,ScaledBY,ScaledBZ:GDBvertex; const PointInWCS:GDBvertex; out scale:GDBvertex):GDBObj2dprop;
+function GetPointInOCSByBasis(const ScaledBX,ScaledBY,ScaledBZ:GDBvertex; const PointInWCS:GDBvertex; out scale:GDBvertex):GDBObj2dprop;
 var
   //tznam,tr:Double;
   BX,BY,BZ:GDBvertex;
@@ -333,6 +334,17 @@ begin
     end;
     *)
   end;
+end;
+
+function GetPInsertInOCSBymatrix(constref matrix:DMatrix4D;out scale:GDBvertex):GDBObj2dprop;
+var
+  BX,BY,BZ,T:GDBvertex;
+begin
+  BX:=PGDBVertex(@matrix.mtr[0])^;
+  BY:=PGDBVertex(@matrix.mtr[1])^;
+  BZ:=PGDBVertex(@matrix.mtr[2])^;
+  T:=PGDBVertex(@matrix.mtr[3])^;
+  result:=GetPointInOCSByBasis(BX,BY,BZ,T,scale);
 end;
 
 function VertexSub(const Vector1, Vector2: GDBvertex): GDBvertex;

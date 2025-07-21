@@ -203,10 +203,10 @@ begin
   m:=onematrix;
   if rtmod.point.pointtype=os_point then begin
     if rtmod.point.PDrawable=nil then
-      Local:=GetPointInOCS(PGDBVertex(@objmatrix.mtr[0])^,PGDBVertex(@objmatrix.mtr[1])^,PGDBVertex(@objmatrix.mtr[2])^,VertexAdd(rtmod.point.worldcoord, rtmod.dist),scl)
+      Local:=GetPointInOCSByBasis(PGDBVertex(@objmatrix.mtr[0])^,PGDBVertex(@objmatrix.mtr[1])^,PGDBVertex(@objmatrix.mtr[2])^,VertexAdd(rtmod.point.worldcoord, rtmod.dist),scl)
       //Local.p_insert:=vectortransform3d(VertexAdd(rtmod.point.worldcoord, rtmod.dist),m)
     else
-      Local:=GetPointInOCS(PGDBVertex(@objmatrix.mtr[0])^,PGDBVertex(@objmatrix.mtr[1])^,PGDBVertex(@objmatrix.mtr[2])^,VertexSub(VertexAdd(rtmod.point.worldcoord, rtmod.dist),rtmod.point.dcoord),scl);
+      Local:=GetPointInOCSByBasis(PGDBVertex(@objmatrix.mtr[0])^,PGDBVertex(@objmatrix.mtr[1])^,PGDBVertex(@objmatrix.mtr[2])^,VertexSub(VertexAdd(rtmod.point.worldcoord, rtmod.dist),rtmod.point.dcoord),scl);
       //Local.p_insert:=vectortransform3d(VertexSub(VertexAdd(rtmod.point.worldcoord, rtmod.dist),rtmod.point.dcoord),m);
   end;
 end;
@@ -215,13 +215,12 @@ end;
 procedure GDBObjBlockInsert.decomposite;
 var
   BX,BY,BZ,T:GDBvertex;
-  tznam,tr:Double;
 begin
   BX:=PGDBVertex(@objmatrix.mtr[0])^;
   BY:=PGDBVertex(@objmatrix.mtr[1])^;
   BZ:=PGDBVertex(@objmatrix.mtr[2])^;
   T:=PGDBVertex(@objmatrix.mtr[3])^;
-  Local:=GetPointInOCS(BX,BY,BZ,T,scale);
+  Local:=GetPointInOCSByBasis(BX,BY,BZ,T,scale);
 end;
 
 procedure GDBObjBlockInsert.ReCalcFromObjMatrix;

@@ -15,20 +15,20 @@ TEdIzm=(_sht(*'**шт.'*),
 PDbBaseObject=^DbBaseObject;
 {REGISTEROBJECTTYPE DbBaseObject}
 DbBaseObject= object(GDBaseObject)
-                       Category:TOborudCategory;(*'**Категория'*)(*oi_readonly*)
+                       Category:TOborudCategory;(*'**Категория'*)
                        Group:String;(*'**Группа'*)
-                       Position:String;(*'**Позиция'*)(*oi_readonly*)
-                       NameShort:String;(*'**Короткое название'*)(*oi_readonly*)
-                       Name:String;(*'**Название'*)(*oi_readonly*)
-                       NameFull:String;(*'**Полное название'*)(*oi_readonly*)
-                       Description:String;(*'**Описание'*)(*oi_readonly*)
-                       ID:String;(*'**Идентификатор'*)(*oi_readonly*)
-                       Standard:String;(*'**Технический документ'*)(*oi_readonly*)
-                       OKP:String;(*'**Код ОКП'*)(*oi_readonly*)
-                       EdIzm:TEdIzm;(*'**Ед. изм.'*)(*oi_readonly*)
-                       Manufacturer:String;(*'**Производитель'*)(*oi_readonly*)
-                       TreeCoord:String;(*'**Позиция в дереве БД'*)(*oi_readonly*)
-                       PartNumber:String;(*'**Каталожный номер'*)(*oi_readonly*)
+                       Position:String;(*'**Позиция'*)
+                       NameShort:String;(*'**Короткое название'*)
+                       Name:String;(*'**Название'*)
+                       NameFull:String;(*'**Полное название'*)
+                       Description:String;(*'**Описание'*)
+                       ID:String;(*'**Идентификатор'*)
+                       Standard:String;(*'**Технический документ'*)
+                       OKP:String;(*'**Код ОКП'*)
+                       EdIzm:TEdIzm;(*'**Ед. изм.'*)
+                       Manufacturer:String;(*'**Производитель'*)
+                       TreeCoord:String;(*'**Позиция в дереве БД'*)
+                       PartNumber:String;(*'**Каталожный номер'*)
                        constructor initnul;
                  end;
 {EXPORT-}

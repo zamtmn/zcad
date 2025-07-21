@@ -17,13 +17,13 @@ type
 PDeviceDbBaseObject=^DeviceDbBaseObject;
 {REGISTEROBJECTTYPE DeviceDbBaseObject}
 DeviceDbBaseObject= object(DbBaseObject)
-                       UID:String;(*'**Уникальный идентификатор'*)(*oi_readonly*)
+                       UID:String;(*'**Уникальный идентификатор'*)
 
-                       NameShortTemplate:String;(*'**Формат короткого названия'*)(*oi_readonly*)
-                       NameTemplate:String;(*'**Формат названия'*)(*oi_readonly*)
-                       NameFullTemplate:String;(*'**Формат полного названия'*)(*oi_readonly*)
-                       UIDTemplate:String;(*'**Формат уникального идентификатора'*)(*oi_readonly*)
-                       Variants:{-}TCSVDocument{/Pointer/};(*'Варианты'*)(*oi_readonly*)
+                       NameShortTemplate:String;(*'**Формат короткого названия'*)
+                       NameTemplate:String;(*'**Формат названия'*)
+                       NameFullTemplate:String;(*'**Формат полного названия'*)
+                       UIDTemplate:String;(*'**Формат уникального идентификатора'*)
+                       Variants:{-}TCSVDocument{/Pointer/};(*'Варианты'*)
                        constructor initnul;
                        procedure FormatAfterFielfmod(PField,PTypeDescriptor:Pointer);virtual;
                        procedure Format;virtual;

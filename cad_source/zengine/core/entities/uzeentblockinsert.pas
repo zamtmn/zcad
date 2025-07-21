@@ -222,43 +222,6 @@ begin
   BZ:=PGDBVertex(@objmatrix.mtr[2])^;
   T:=PGDBVertex(@objmatrix.mtr[3])^;
   Local:=GetPointInOCS(BX,BY,BZ,T,scale);
-  (*scale.x:=oneVertexlength(BX);
-  scale.y:=oneVertexlength(BY);
-  scale.z:=oneVertexlength(BZ);
-  if (abs(scale.x)>eps)and(abs(scale.y)>eps)and(abs(scale.z)>eps)then begin
-    BX:=BX/scale.x;
-    BY:=BY/scale.y;
-    BZ:=BZ/scale.z;
-    Local.Basis.ox:=BX;
-    Local.Basis.oy:=BY;
-    Local.Basis.oz:=BZ;
-
-    BX:=NormalizeVertex(GetXfFromZ(BZ));
-    BY:=NormalizeVertex(VectorDot(BZ,Bx));
-
-
-    //  -((-BY.z*BZ.y*T.x+BY.y*BZ.z*T.x+BY.z*BZ.x*T.y-BY.x*BZ.z*T.y-BY.y*BZ.x*T.z+BY.x*BZ.y*T.z)
-    //X=--------------------------------------------------------------------------------------------
-    //  (BX.z*BY.y*BZ.x-BX.y*BY.z*BZ.x-BX.z*BY.x*BZ.y+BX.x*BY.z*BZ.y+BX.y*BY.x*BZ.z-BX.x*BY.y*BZ.z))
-
-    //  -((BX.z*BZ.y*T.x-BX.y*BZ.z*T.x-BX.z*BZ.x*T.y+BX.x*BZ.z*T.y+BX.y*BZ.x*T.z-BX.x*BZ.y*T.z)
-    //Y=--------------------------------------------------------------------------------------------
-    //  (BX.z*BY.y*BZ.x-BX.y*BY.z*BZ.x-BX.z*BY.x*BZ.y+BX.x*BY.z*BZ.y+BX.y*BY.x*BZ.z-BX.x*BY.y*BZ.z))
-
-    //  -((-BX.z*BY.y*T.x+BX.y*BY.z*T.x+BX.z*BY.x*T.y-BX.x*BY.z*T.y-BX.y*BY.x*T.z+BX.x*BY.y*T.z)
-    //Z=--------------------------------------------------------------------------------------------
-    //  (BX.z*BY.y*BZ.x-BX.y*BY.z*BZ.x-BX.z*BY.x*BZ.y+BX.x*BY.z*BZ.y+BX.y*BY.x*BZ.z-BX.x*BY.y*BZ.z))
-
-    tznam:=BX.z*BY.y*BZ.x-BX.y*BY.z*BZ.x-BX.z*BY.x*BZ.y+BX.x*BY.z*BZ.y+BX.y*BY.x*BZ.z-BX.x*BY.y*BZ.z;
-    if abs(tznam)>eps then begin
-      tr:=-BY.z*BZ.y*T.x+BY.y*BZ.z*T.x+BY.z*BZ.x*T.y-BY.x*BZ.z*T.y-BY.y*BZ.x*T.z+BY.x*BZ.y*T.z;
-      Local.P_insert.x:=-tr/tznam;
-      tr:=BX.z*BZ.y*T.x-BX.y*BZ.z*T.x-BX.z*BZ.x*T.y+BX.x*BZ.z*T.y+BX.y*BZ.x*T.z-BX.x*BZ.y*T.z;
-      Local.P_insert.y:=-tr/tznam;
-      tr:=-BX.z*BY.y*T.x+BX.y*BY.z*T.x+BX.z*BY.x*T.y-BX.x*BY.z*T.y-BX.y*BY.x*T.z+BX.x*BY.y*T.z;
-      Local.P_insert.z:=-tr/tznam;
-    end;
-  end;*)
 end;
 
 procedure GDBObjBlockInsert.ReCalcFromObjMatrix;

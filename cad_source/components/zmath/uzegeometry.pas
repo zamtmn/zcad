@@ -280,7 +280,7 @@ implementation
 
 function GetPointInOCS(const ScaledBX,ScaledBY,ScaledBZ:GDBvertex; const PointInWCS:GDBvertex; out scale:GDBvertex):GDBObj2dprop;
 var
-  tznam,tr:Double;
+  //tznam,tr:Double;
   BX,BY,BZ:GDBvertex;
 begin
   scale.x:=oneVertexlength(ScaledBX);
@@ -303,6 +303,13 @@ begin
     BX:=NormalizeVertex(GetXfFromZ(BZ));
     BY:=NormalizeVertex(VectorDot(BZ,Bx));
 
+    //вариант из https://ezdxf.readthedocs.io/en/stable/concepts/ocs.html#arbitrary-axis-algorithm
+    result.P_insert.x:=PointInWCS.x*BX.x+PointInWCS.y*BX.y+PointInWCS.z*BX.z;
+    result.P_insert.y:=PointInWCS.x*BY.x+PointInWCS.y*BY.y+PointInWCS.z*BY.z;
+    result.P_insert.z:=PointInWCS.x*BZ.x+PointInWCS.y*BZ.y+PointInWCS.z*BZ.z;
+
+    //вариант расчета без учета что базисные векторы ортогональны
+    (*
     //  -((-BY.z*BZ.y*PointInWCS.x+BY.y*BZ.z*PointInWCS.x+BY.z*BZ.x*PointInWCS.y-BY.x*BZ.z*PointInWCS.y-BY.y*BZ.x*PointInWCS.z+BY.x*BZ.y*PointInWCS.z)
     //X=--------------------------------------------------------------------------------------------
     //  (BX.z*BY.y*BZ.x-BX.y*BY.z*BZ.x-BX.z*BY.x*BZ.y+BX.x*BY.z*BZ.y+BX.y*BY.x*BZ.z-BX.x*BY.y*BZ.z))
@@ -324,6 +331,7 @@ begin
       tr:=-BX.z*BY.y*PointInWCS.x+BX.y*BY.z*PointInWCS.x+BX.z*BY.x*PointInWCS.y-BX.x*BY.z*PointInWCS.y-BX.y*BY.x*PointInWCS.z+BX.x*BY.y*PointInWCS.z;
       result.P_insert.z:=-tr/tznam;
     end;
+    *)
   end;
 end;
 

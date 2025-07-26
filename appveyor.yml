@@ -31,7 +31,7 @@ install:
   - cmd: git submodule update --init --recursive
   - cmd: echo %PATH%
   - cmd: echo Download lazarus-4.0-fpc-3.2.2-win64.exe
-  - cmd: curl -fsSL -o lazarus-4.0-fpc-3.2.2-win64.exe "https://fossies.org/windows/misc/lazarus-4.0-fpc-3.2.2-win64.exe"
+  - cmd: curl -fsSL -o lazarus-4.0-fpc-3.2.2-win64.exe "https://fossies.org/windows/misc/lazarus-4.2-fpc-3.2.2-win64.exe"
   - cmd: echo Installing lazarus-4.0-fpc-3.2.2-win64.exe
   - cmd: lazarus-4.0-fpc-3.2.2-win64.exe /verysilent /supressmsgboxes
   - cmd: rmdir /S /Q c:\lazarus\docs

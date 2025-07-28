@@ -17,7 +17,7 @@
 }
 
 unit uzegeometry;
-{Inline off}
+{$Inline off}
 
 interface
 uses uzbLogIntf,uzegeometrytypes,math;
@@ -1499,23 +1499,23 @@ begin
 end;
 
 function NormalizeVertex(const Vector1: GDBvertex): GDBvertex;
+  procedure dbz;
+  begin
+    zDebugLn('{EH}'+rsDivByZero);
+  end;
 var len:Double;
 begin
   len:=oneVertexlength(Vector1);
-  if abs(len)>eps then
-                 begin
-                     with GDBvertex((@Result)^) do
-                     begin
-                          X := Vector1.x / len;
-                          Y := Vector1.y / len;
-                          Z := Vector1.z / len;
-                     end;
-                 end
-             else
-                 begin
-                 zDebugLn('{EH}'+rsDivByZero);
-                 len:=len+2;
-                 end;
+  if abs(len)>eps then begin
+    with GDBvertex((@Result)^) do begin
+      X := Vector1.x / len;
+      Y := Vector1.y / len;
+      Z := Vector1.z / len;
+    end;
+  end else begin
+    dbz;
+    Result:=NulVertex;
+  end;
 end;
 function NormalizeVertex2D(const Vector1: GDBVertex2D): GDBVertex2D;
 var len:Double;

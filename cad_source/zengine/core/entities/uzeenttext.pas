@@ -345,6 +345,7 @@ var
   tv:gdbvertex;
   s:String;
   ASourcesCounter:TSPFSourceSet;
+  quotedcontent:TDXFEntsInternalStringType;
 begin
   vv := acadvjustify(textprop.justify);
   hv := (j2b[textprop.justify]{ord(textprop.justify)} - 1) mod 3;
@@ -379,15 +380,20 @@ begin
 
   SaveToDXFObjPostfix(outStream);
 
-  s := Tria_Utf8ToAnsi(UTF8Encode(content));
-  dxfStringout(outStream,1,z2dxftext(s));
-
+  //проверяем есть ли в шаблоне управляющие последовательности отсутствующие в dxf
   s:=TxtFormatAndCountSrcs(template,SPFSources.GetFull,ASourcesCounter,@Self);
   if (ASourcesCounter and (not SPFSdxf))<>0 then begin
+    //шаблон dxf НЕсовместим, разворачиваем всё кроме dxf последовательностей
+    //пишем dxf совместимое содержимое, шаблом сохраним отдельно
+    quotedcontent:=TxtFormatAndCountSrcs(template,SPFSources.GetFull and (not SPFSdxf),ASourcesCounter,@Self);
+    s:=Tria_Utf8ToAnsi(UTF8Encode(quotedcontent));
   end else begin
+    //шаблон dxf совместим, пишем сразу его, отдельно его дописывать в расширенные данные ненадо
+    s:=Tria_Utf8ToAnsi(UTF8Encode(template));
     IODXFContext.LocalEntityFlags:=IODXFContext.LocalEntityFlags or CLEFNotNeedSaveTemplate;
   end;
-
+  s:=StringReplace(s,#10,'\P',[rfReplaceAll]);
+  dxfStringout(outStream,1,z2dxftext(s));
 
   dxfStringout(outStream,100,'AcDbText');
   dxfIntegerout(outStream,73,vv);

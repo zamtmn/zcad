@@ -24,7 +24,7 @@ interface
 uses uzepalette,uzgldrawcontext,uzedrawingdef,uzecamera,uzeentity,
      uzegeometrytypes,UGDBOutbound2DIArray,uzctnrVectorBytes,uzeentwithmatrix,uzbtypes,
      uzegeometry,uzeffdxfsupport,sysutils,uzeentsubordinated,uzestyleslayers,
-     uzMVReader;
+     uzMVReader,uzbLogIntf,uzestrconsts;
 type
 PGDBObjWithLocalCS=^GDBObjWithLocalCS;
 GDBObjWithLocalCS= object(GDBObjWithMatrix)
@@ -186,30 +186,25 @@ begin
      CalcActualVisible(dc.DrawingContext.VActuality);
 end;
 function GDBObjWithLocalCS.CalcObjMatrixWithoutOwner;
+  procedure ReportLocalOZIsNul;
+  begin
+    zDebugLn('{EH}'+Format(rsFoundBrokenEntity,[self.GetObjTypeName,'$'+IntToHex(PtrUInt(@self)),'Local.basis.oz=(0,0,0)']));
+  end;
 var rotmatr,dispmatr:DMatrix4D;
 begin
-     //Local.oz:=NormalizeVertex(Local.oz);
-     Local.basis.ox:=GetXfFromZ(Local.basis.oz);
-     {if (abs (Local.oz.x) < 1/64) and (abs (Local.oz.y) < 1/64) then
-                                                                    Local.ox:=VectorDot(YWCS,Local.oz)
-                                                                else
-                                                                    Local.ox:=VectorDot(ZWCS,Local.oz);}
-     Local.basis.oy:=VectorDot(Local.basis.oz,Local.basis.ox);
+  if IsVectorNul(Local.basis.oz) then begin
+    ReportLocalOZIsNul;
+    exit(EmptyMatrix);
+  end;
+  Local.basis.ox:=GetXfFromZ(Local.basis.oz);
+  Local.basis.oy:=VectorDot(Local.basis.oz,Local.basis.ox);
 
-     Local.basis.oy:=NormalizeVertex(Local.basis.oy);
-     Local.basis.oz:=NormalizeVertex(Local.basis.oz);
+  Local.basis.oy:=NormalizeVertex(Local.basis.oy);
+  Local.basis.oz:=NormalizeVertex(Local.basis.oz);
 
-     //rotmatr:=onematrix;
-     //PGDBVertex(@rotmatr.mtr[0])^:=Local.basis.ox;
-     //PGDBVertex(@rotmatr.mtr[1])^:=Local.basis.oy;
-     //PGDBVertex(@rotmatr.mtr[2])^:=Local.basis.oz;
-     rotmatr:=CreateMatrixFromBasis(Local.basis.ox,Local.basis.oy,Local.basis.oz);
-
-     //dispmatr:=onematrix;
-     //PGDBVertex(@dispmatr.mtr[3])^:=Local.p_insert;
-     dispmatr:=CreateTranslationMatrix(Local.p_insert);
-
-     result:=MatrixMultiply(dispmatr,rotmatr);
+  rotmatr:=CreateMatrixFromBasis(Local.basis.ox,Local.basis.oy,Local.basis.oz);
+  dispmatr:=CreateTranslationMatrix(Local.p_insert);
+  result:=MatrixMultiply(dispmatr,rotmatr);
 end;
 procedure GDBObjWithLocalCS.CalcObjMatrix;
 //var rotmatr,dispmatr:DMatrix4D;

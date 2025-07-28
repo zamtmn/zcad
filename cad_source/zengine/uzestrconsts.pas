@@ -43,6 +43,8 @@ resourcestring
   rsUnableRenameFileToBak='Could not rename file "%s" into "*.bak"';
   rsUnableToWriteFile='Unable to write file "%s"';
   rsLoadingFontFile='Loading font file "%S"';
+  {errors}
+  rsFoundBrokenEntity='Found broken entity (type:%s addr:%s wtf:%s)';
 
 implementation
 end.

@@ -276,6 +276,7 @@ uses
   //uzvelectricalexcelcom,
   //**//
   {$ENDIF}
+  uzcregconnectmanager,
   {$ENDIF}
 
   //uzccomexample2,

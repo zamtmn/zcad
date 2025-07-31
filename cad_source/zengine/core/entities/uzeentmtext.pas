@@ -735,19 +735,20 @@ begin
   dxfDoubleout(outStream,40,textprop.size);
   dxfDoubleout(outStream,41,width);
   dxfIntegerout(outStream,71,j2b[textprop.justify]);
+  //проверяем есть ли в шаблоне управляющие последовательности отсутствующие в dxf
   s:=TxtFormatAndCountSrcs(template,SPFSources.GetFull,ASourcesCounter,@Self);
   if (ASourcesCounter and (not SPFSdxf))<>0 then begin
-    quotedcontent:=StringReplace(content,TDXFEntsInternalStringType(#10),TDXFEntsInternalStringType('\P'),[rfReplaceAll]);
-    if  {convertfromunicode}(template)=quotedcontent then
-      s := Tria_Utf8ToAnsi(UTF8Encode(template))
-    else
-      s := Tria_Utf8ToAnsi(UTF8Encode(quotedcontent));
+    //шаблон dxf НЕсовместим, разворачиваем всё кроме dxf последовательностей
+    //пишем dxf совместимое содержимое, шаблом сохраним отдельно
+    quotedcontent:=TxtFormatAndCountSrcs(template,SPFSources.GetFull and (not SPFSdxf),ASourcesCounter,@Self);
+    s := Tria_Utf8ToAnsi(UTF8Encode(quotedcontent));
   end else begin
+    //шаблон dxf совместим, пишем сразу его, отдельно его дописывать в расширенные данные ненадо
     s:=Tria_Utf8ToAnsi(UTF8Encode(template));
     IODXFContext.LocalEntityFlags:=IODXFContext.LocalEntityFlags or CLEFNotNeedSaveTemplate;
   end;
+  //убираем переносы строки, они портят dxf
   s:=StringReplace(s,#10,'\P',[rfReplaceAll]);
-  //s := content;
   if length(s) < maxdxfmtextlen then
   begin
     dxfStringout(outStream,1,z2dxfmtext(s,ul));

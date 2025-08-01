@@ -630,7 +630,7 @@ begin
     pobj:=GDBObjText.CreateInstance;
     v1:=CreateRandomVertex(1000,500,Form1.ChkBox3D.Checked);
     pobj^.Local.P_insert:=v1;
-    pobj^.TXTStyleIndex:=ts;
+    pobj^.TXTStyle:=ts;
     pobj^.Template:='Hello word!';
     pobj^.textprop.size:=1+random(10);
     pobj^.textprop.justify:=b2j[1+random(11)];

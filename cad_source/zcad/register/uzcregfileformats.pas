@@ -22,7 +22,9 @@ interface
 
 uses
   SysUtils,
-  uzbtypes,uzeffdxfsupport,uzeffmanager,uzeffdxf,uzeLogIntf;
+  uzbtypes,uzeffdxfsupport,uzeffmanager,uzeLogIntf,
+  uzeffdxf,
+  uzeffLibreDWG,uzeffLibreDWG2Ents;
 implementation
 function DWGCodePage2DXFCodePage(ADWGCP:TDXF_DWGCodePage):TDXFCodePage;
 begin
@@ -55,12 +57,7 @@ end;
 begin
   Ext2LoadProcMap.RegisterExt('dxf','AutoCAD DXF files via zengine (*.dxf)',@LoadDXFviaZEnfine,true);
   Ext2LoadProcMap.DefaultExt:='dxf';
+
+  Ext2LoadProcMap.RegisterExt('dwg','AutoCAD DWG files via LibreDWG (*.dwg)',@uzeffLibreDWG.addfromdwg);
+  Ext2LoadProcMap.RegisterExt('dxf','AutoCAD DXF files via LibreDWG (*.dxf)',@uzeffLibreDWG.addfromdxf);
 end.
-TDXF_DWGCodePage=(CP_INVALID,ANSI_874,ANSI_932,ANSI_936,ANSI_949,ANSI_950,
-                  ANSI_1250,ANSI_1251,ANSI_1252,ANSI_1253,ANSI_1254,ANSI_1255,
-                  ANSI_1256,ANSI_1257,ANSI_1258);
-
-TDXFCodePage=(DXFCPINVALID,DXFCP874,DXFCP932,DXFCP936,DXFCP949,DXFCP950,
-  DXFCP1250,DXFCP1251,DXFCP1252,DXFCP1253,DXFCP1254,DXFCP1255,DXFCP1256,
-  DXFCP1257,DXFCP1258);
-

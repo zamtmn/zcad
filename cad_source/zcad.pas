@@ -79,7 +79,7 @@ uses
   uzefontmanager,
   uzeFontFileFormatSHX,
   uzeFontFileFormatTTFBackendFTTest,uzeffttf,
-  uzeffLibreDWG,uzeffLibreDWG2Ents,
+
   uzcregfileformats,
 
 

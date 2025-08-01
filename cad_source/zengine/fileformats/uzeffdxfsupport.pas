@@ -84,6 +84,14 @@ type
                     ANSI_1256,ANSI_1257,ANSI_1258);
 
 
+  TDXFHeaderInfo=record
+    Version:TDXF_ACVer;
+    iVersion:Integer;
+    DWGCodePage:TDXF_DWGCodePage;
+    iDWGCodePage:Integer;
+    procedure InitRec;
+  end;
+
   TLocalEntityFlags=LongWord;
   EDXFReadException=class(Exception);
   PTIODXFSaveContext=^TIODXFSaveContext;
@@ -92,15 +100,11 @@ type
     currentEntAddrOverrider:pointer;
     p2h:TMapPointerToHandle;
     VarsDict:TString2StringDictionary;
+    Header:TDXFHeaderInfo;
     LocalEntityFlags:TLocalEntityFlags;
-  end;
 
-  TDXFHeaderInfo=record
-    Version:TDXF_ACVer;
-    iVersion:Integer;
-    DWGCodePage:TDXF_DWGCodePage;
-    iDWGCodePage:Integer;
     procedure InitRec;
+    procedure Done;
   end;
 
   TIODXFLoadContext=record
@@ -119,6 +123,8 @@ procedure dxfvertex2dout(var f:TZctnrVectorBytes;dxfcode:Integer;const v:gdbvert
 procedure dxfDoubleout(var f:TZctnrVectorBytes;dxfcode:Integer;const v:Double);
 procedure dxfIntegerout(var f:TZctnrVectorBytes;dxfcode:Integer;const v:Integer);
 procedure dxfStringout(var f:TZctnrVectorBytes;dxfcode:Integer;const v:String);overload;
+procedure dxfStringout(var f:TZctnrVectorBytes;dxfcode:Integer;const v:String; const FileHdrInfo:TDXFHeaderInfo);overload;
+
 procedure dxfStringout(var f:TZctnrVectorBytes;dxfcode:Integer;const v1,v2:String);overload;
 function dxfVertexLoad(var rdr:TZMemReader;const DXFCode,CurrentDXFCode:Integer; var v:GDBvertex):Boolean;
 function dxfVertexLoad1(var rdr:TZMemReader;const DXFCode,CurrentDXFCode:Integer; var v:GDBvertex):Boolean;
@@ -137,10 +143,11 @@ function dxfRequiredInteger(var rdr:TZMemReader;const RequiredDXFGroupCode:Integ
 
 function ACVer2ACVerStr(ACVer:integer):string;
 function ACVer2DXFVerStr(ACVer:integer):string;
+
 function ACVer2DXF_ACVer(ACVer:integer):TDXF_ACVer;
 
 function DWGCodePage2DXF_DWGCodePage(DWGCodePage:integer):TDXF_DWGCodePage;
-
+function DWGCodePage2Str(DWGCodePage:TDXFCodePage):string;
 implementation
 
 function ACVer2ACVerStr(ACVer:integer):string;
@@ -204,6 +211,42 @@ begin
     1258:result:=ANSI_1258;
     else result:=CP_INVALID;
   end;
+end;
+
+function DWGCodePage2Str(DWGCodePage:TDXFCodePage):string;
+begin
+  case DWGCodePage of
+    DXFCP874:result:='ANSI_874';
+    DXFCP932:result:='ANSI_932';
+    DXFCP936:result:='ANSI_936';
+    DXFCP949:result:='ANSI_949';
+    DXFCP950:result:='ANSI_950';
+    DXFCP1250:result:='ANSI_1250';
+    DXFCP1251:result:='ANSI_1251';
+    DXFCP1252:result:='ANSI_1252';
+    DXFCP1253:result:='ANSI_1253';
+    DXFCP1254:result:='ANSI_1254';
+    DXFCP1255:result:='ANSI_1255';
+    DXFCP1256:result:='ANSI_1256';
+    DXFCP1257:result:='ANSI_1257';
+    DXFCP1258:result:='ANSI_1258';
+    DXFCPINVALID:result:='ANSI_1251';
+  end;
+end;
+
+procedure TIODXFSaveContext.InitRec;
+begin
+  p2h:=TMapPointerToHandle.Create;
+  currentEntAddrOverrider:=nil;
+  VarsDict:=TString2StringDictionary.create;
+  handle := $2;
+
+  Header.InitRec;
+end;
+procedure TIODXFSaveContext.Done;
+begin
+  p2h.Free;
+  VarsDict.Free;
 end;
 
 procedure TIODXFLoadContext.InitRec;
@@ -321,12 +364,25 @@ begin
      //WriteString_EOL(outfile,inttostr(v));
 end;
 procedure dxfStringout(var f:TZctnrVectorBytes;dxfcode:Integer;const v:String);
-//var s:String;
 begin
-     f.TXTAddStringEOL(inttostr(dxfcode));
-     //WriteString_EOL(outfile,inttostr(dxfcode));
-     f.TXTAddStringEOL(v);
-     //WriteString_EOL(outfile,v);
+  f.TXTAddStringEOL(inttostr(dxfcode));
+  f.TXTAddStringEOL(v);
+end;
+procedure dxfStringout(var f:TZctnrVectorBytes;dxfcode:Integer;const v:String; const FileHdrInfo:TDXFHeaderInfo);
+var
+  ts:RawByteString;
+begin
+  f.TXTAddStringEOL(inttostr(dxfcode));
+  if FileHdrInfo.iVersion<1021 then begin
+    //младше версии DXF R2007 (AC1021)
+    //нужно перекодировать в соответствии с DWGCodepage
+    //начиная с DXF R2007 в dxf тексты уже хранятся в utf8
+    ts:=v;
+    SetCodePage(ts,CP_UTF8,false);
+    SetCodePage(ts,FileHdrInfo.iDWGCodePage,true);
+    f.TXTAddStringEOL(ts);
+  end else
+    f.TXTAddStringEOL(v);
 end;
 procedure dxfStringout(var f:TZctnrVectorBytes;dxfcode:Integer;const v1,v2:String);
 begin

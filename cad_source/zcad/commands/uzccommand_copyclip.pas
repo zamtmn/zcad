@@ -59,7 +59,7 @@ begin
   //s:=GetTempPath+'Z$C'+inttohex(random(15),1)+inttohex(random(15),1)+inttohex(random(15),1)+inttohex(random(15),1)
   //   +inttohex(random(15),1)+inttohex(random(15),1)+inttohex(random(15),1)+inttohex(random(15),1)+'.dxf';
   CopyClipFile:=s;
-  savedxf2000(s,ConcatPaths([GetRoCfgsPath,CFScomponentsDir,CFSemptydxfFile]),ClipboardDWG^);
+  savedxf2000(s,ConcatPaths([GetRoCfgsPath,CFScomponentsDir,CFSemptydxfFile]),ClipboardDWG^,DWGCodePage2DXFCodePage(drawings.GetCurrentDwg^.DXFCodePage));
   s:=s+#0;
   suni:=unicodestring(s);
   Clipboard.Open;

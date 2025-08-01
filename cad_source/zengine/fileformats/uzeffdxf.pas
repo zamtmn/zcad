@@ -57,9 +57,33 @@ var
   FreeExtLoadData:TProcessExtLoadData=nil;
 
 function addfromdxf(const AFileName: String;var dwgCtx:TZDrawingContext;const LogIntf:TZELogProc=nil):TDXFHeaderInfo;
-function savedxf2000(const SavedFileName:String; const TemplateFileName:String;var drawing:TSimpleDrawing):boolean;
+function savedxf2000(const SavedFileName:String; const TemplateFileName:String;var drawing:TSimpleDrawing;codepage:integer):boolean;
+function DWGCodePage2DXFCodePage(ADXFCP:TDXFCodePage):integer;
+
 implementation
 var FOC:Integer;
+
+function DWGCodePage2DXFCodePage(ADXFCP:TDXFCodePage):integer;
+begin
+  case ADXFCP of
+    DXFCP874:result:=874;
+    DXFCP932:result:=932;
+    DXFCP936:result:=936;
+    DXFCP949:result:=949;
+    DXFCP950:result:=950;
+    DXFCP1250:result:=1250;
+    DXFCP1251:result:=1251;
+    DXFCP1252:result:=1252;
+    DXFCP1253:result:=1253;
+    DXFCP1254:result:=1254;
+    DXFCP1255:result:=1255;
+    DXFCP1256:result:=1256;
+    DXFCP1257:result:=1257;
+    DXFCP1258:result:=1258;
+    DXFCPINVALID:result:=1252;
+  end;
+end;
+
 function IsIgnoredEntity(const name:String):Integer;
 var
   i:Integer;
@@ -1478,6 +1502,7 @@ var
 begin
     VarsDict.Add('$CLAYER',drawing.GetCurrentLayer^.Name);
     VarsDict.Add('$CELTYPE',drawing.GetCurrentLType^.Name);
+    VarsDict.Add('$DWGCODEPAGE',DWGCodePage2Str(drawing.DXFCodePage));
 
     pcurrtextstyle:=drawing.GetCurrentTextStyle;
     if pcurrtextstyle<>nil then
@@ -1542,23 +1567,23 @@ begin
                                            VarsDict.Add('$TEXTSIZE',floattostr({sysvar.DWG.DWG_TextSize^}drawing.TextSize));
 end;
 
-function savedxf2000(const SavedFileName:String; const TemplateFileName:String;var drawing:TSimpleDrawing):boolean;
+function savedxf2000(const SavedFileName:String; const TemplateFileName:String;var drawing:TSimpleDrawing;codepage:integer):boolean;
 var
   sysfilename:RawByteString;
   templatefile: TZctnrVectorBytes;
-  outstream: {Integer}TZctnrVectorBytes;
-  groups, values, {ucvalues,}ts: String;
-  groupi, valuei, intable,attr: Integer;
-  temphandle,temphandle2,{temphandle3,temphandle4,}{handle,}lasthandle,vporttablehandle,plottablefansdle,dimtablehandle: TDWGHandle;
+  outstream:TZctnrVectorBytes;
+  groups,values,ts: String;
+  groupi,valuei,intable,attr: Integer;
+  temphandle,temphandle2,lasthandle,vporttablehandle,plottablefansdle,dimtablehandle: TDWGHandle;
   i: integer;
   OldHandele2NewHandle:TMapHandleToHandle;
-  //phandlea: pdxfhandlerecopenarray;
+
   inlayertable, inblocksec, inblocktable, inlttypetable, indimstyletable, inappidtable: Boolean;
   handlepos:integer;
   ignoredsource:boolean;
   instyletable:boolean;
   invporttable:boolean;
-  //olddwg:{PTDrawing}PTSimpleDrawing;
+
   pltp:PGDBLtypeProp;
   plp:PGDBLayerProp;
   pdsp:PGDBDimStyle;
@@ -1569,9 +1594,6 @@ var
   PTP:PTextProp;
   p:pointer;
   IODXFContext:TIODXFSaveContext;
-  //p2h:TMapPointerToHandle;
-  //VarsDict:TString2StringDictionary;
-  //DWGHandle:TDWGHandle;
   laststrokewrited:boolean;
   pcurrtextstyle:PGDBTextStyle;
   variablenotprocessed:boolean;
@@ -1579,28 +1601,19 @@ var
   lph:TLPSHandle;
 begin
   intable:=0;
-  IODXFContext.p2h:=TMapPointerToHandle.Create;
-  IODXFContext.currentEntAddrOverrider:=nil;
-  IODXFContext.VarsDict:=TString2StringDictionary.create;
+  IODXFContext.InitRec;
+  IODXFContext.Header.Version:=AC1015;
+  IODXFContext.Header.iVersion:=1015;
+
+  IODXFContext.Header.DWGCodePage:=DWGCodePage2DXF_DWGCodePage(codepage);
+  IODXFContext.Header.iDWGCodePage:=codepage;
+
   DefaultFormatSettings.DecimalSeparator := '.';
-  //standartstylehandle:=0;
-  //olddwg:=nil;//@drawing;
-  (*!!!if assigned(SetCurrentDWGProc)
-                            then olddwg:=SetCurrentDWGProc(@drawing);*)
-  //gdb.SetCurrentDWG(pdrawing);
-  //--------------------------outstream := FileCreate(name);
   outstream.init(10*1024*1024);
-  //--------------------------if outstream>0 then
   begin
     lph:=lps.StartLongProcess('Save DXF file',@outstream,drawing.pObjRoot^.ObjArray.Count);
-    {if assigned(StartLongProcessProc)then
-       StartLongProcessProc(drawing.pObjRoot^.ObjArray.Count,'Save DXF file');}
   OldHandele2NewHandle:=TMapHandleToHandle.Create;
-  //OldHandele2NewHandle.{$IFDEF DELPHI}Add{$ENDIF}{$IFNDEF DELPHI}Add{$ENDIF}(0,0);
-  //phandlea := dxfhandlearraycreate(10000);
-  //pushhandle(phandlea,0,0);
   templatefile.InitFromFile(TemplateFileName);
-  IODXFContext.handle := $2;
   inlayertable := false;
   inblocksec := false;
   inblocktable := false;
@@ -2675,11 +2688,7 @@ ENDTAB}
                            then
                                if olddwg<>nil then
                                                   SetCurrentDWGProc(olddwg);*)
-  {$IFNDEF DELPHI}
-  IODXFContext.p2h.Destroy;
-  IODXFContext.VarsDict.destroy;
-  {$ENDIF}
-  //gdb.SetCurrentDWG(olddwg);
+  IODXFContext.done;
 end;
 begin
   FOC:=0;//убрать нахер

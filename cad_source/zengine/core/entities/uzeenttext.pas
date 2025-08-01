@@ -386,14 +386,14 @@ begin
     //шаблон dxf НЕсовместим, разворачиваем всё кроме dxf последовательностей
     //пишем dxf совместимое содержимое, шаблом сохраним отдельно
     quotedcontent:=TxtFormatAndCountSrcs(template,SPFSources.GetFull and (not SPFSdxf),ASourcesCounter,@Self);
-    s:=Tria_Utf8ToAnsi(UTF8Encode(quotedcontent));
+    s:={Tria_Utf8ToAnsi}(UTF8Encode(quotedcontent));
   end else begin
     //шаблон dxf совместим, пишем сразу его, отдельно его дописывать в расширенные данные ненадо
-    s:=Tria_Utf8ToAnsi(UTF8Encode(template));
+    s:={Tria_Utf8ToAnsi}(UTF8Encode(template));
     IODXFContext.LocalEntityFlags:=IODXFContext.LocalEntityFlags or CLEFNotNeedSaveTemplate;
   end;
   s:=StringReplace(s,#10,'\P',[rfReplaceAll]);
-  dxfStringout(outStream,1,z2dxftext(s));
+  dxfStringout(outStream,1,z2dxftext(s),IODXFContext.Header);
 
   dxfStringout(outStream,100,'AcDbText');
   dxfIntegerout(outStream,73,vv);

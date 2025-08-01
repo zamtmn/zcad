@@ -741,28 +741,28 @@ begin
     //шаблон dxf НЕсовместим, разворачиваем всё кроме dxf последовательностей
     //пишем dxf совместимое содержимое, шаблом сохраним отдельно
     quotedcontent:=TxtFormatAndCountSrcs(template,SPFSources.GetFull and (not SPFSdxf),ASourcesCounter,@Self);
-    s := Tria_Utf8ToAnsi(UTF8Encode(quotedcontent));
+    s := {Tria_Utf8ToAnsi}(UTF8Encode(quotedcontent));
   end else begin
     //шаблон dxf совместим, пишем сразу его, отдельно его дописывать в расширенные данные ненадо
-    s:=Tria_Utf8ToAnsi(UTF8Encode(template));
+    s:={Tria_Utf8ToAnsi}(UTF8Encode(template));
     IODXFContext.LocalEntityFlags:=IODXFContext.LocalEntityFlags or CLEFNotNeedSaveTemplate;
   end;
   //убираем переносы строки, они портят dxf
   s:=StringReplace(s,#10,'\P',[rfReplaceAll]);
   if length(s) < maxdxfmtextlen then
   begin
-    dxfStringout(outStream,1,z2dxfmtext(s,ul));
+    dxfStringout(outStream,1,z2dxfmtext(s,ul),IODXFContext.Header);
   end
   else
   begin
-    dxfStringout(outStream,1,z2dxfmtext(copy(s, 1, maxdxfmtextlen),ul));
+    dxfStringout(outStream,1,z2dxfmtext(copy(s, 1, maxdxfmtextlen),ul),IODXFContext.Header);
     s := copy(s, maxdxfmtextlen+1, length(s) - maxdxfmtextlen);
     while length(s) > maxdxfmtextlen+1 do
     begin
-      dxfStringout(outStream,3,z2dxfmtext(copy(s, 1, maxdxfmtextlen),ul));
+      dxfStringout(outStream,3,z2dxfmtext(copy(s, 1, maxdxfmtextlen),ul),IODXFContext.Header);
       s := copy(s, maxdxfmtextlen+1, length(s) - maxdxfmtextlen)
     end;
-    dxfStringout(outStream,3,z2dxfmtext(s,ul));
+    dxfStringout(outStream,3,z2dxfmtext(s,ul),IODXFContext.Header);
   end;
   dxfStringout(outStream,7,TXTStyle^.name);
   SaveToDXFObjPostfix(outStream);

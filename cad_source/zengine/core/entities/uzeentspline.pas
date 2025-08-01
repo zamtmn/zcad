@@ -43,7 +43,7 @@ type
     constructor init(own:Pointer;layeraddres:PGDBLayerProp;LW:SmallInt;c:Boolean);
     constructor initnul(owner:PGDBObjGenericWithSubordinated);
     destructor done;virtual;
-    procedure LoadFromDXF(var rdr:TZMemReader;ptu:PExtensionData;var drawing:TDrawingDef);virtual;
+    procedure LoadFromDXF(var rdr:TZMemReader;ptu:PExtensionData;var drawing:TDrawingDef;var context:TIODXFLoadContext);virtual;
 
     procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext;Stage:TEFStages=EFAllStages);virtual;
     procedure startsnap(out osp:os_record; out pdata:Pointer);virtual;

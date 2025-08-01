@@ -32,17 +32,17 @@ uses
 resourcestring
   rsLoadDXFFile='Load DXF file';
 type
-   TCreateExtLoadData=function:pointer;
-   TProcessExtLoadData=procedure(peld:pointer);
-   DXFEntDesc=record
-     UCASEEntName:String;
-   end;
-   TLongProcessIndicator=Procedure(a:integer) of object;
+  TCreateExtLoadData=function:pointer;
+  TProcessExtLoadData=procedure(peld:pointer);
+  DXFEntDesc=record
+    UCASEEntName:String;
+  end;
+  TLongProcessIndicator=Procedure(a:integer) of object;
 const
-     IgnoredDXFEntsArray:array [0..1] of DXFEntDesc=(
-       (UCASEEntName:'HATCH'),
-       (UCASEEntName:'ACAD_PROXY_ENTITY')
-     );
+  IgnoredDXFEntsArray:array [0..1] of DXFEntDesc=(
+    (UCASEEntName:'HATCH'),
+    (UCASEEntName:'ACAD_PROXY_ENTITY')
+  );
 
 { todo: вернуть как было после https://gitlab.com/freepascal.org/fpc/source/-/issues/40073
 -     IgnoredDXFEntsArray:array of DXFEntDesc=[
@@ -202,6 +202,26 @@ var
       valuesarray[i]:='';
   end;
 
+  function VarStr2Int(APrefiX,AValue:string):integer;
+  var
+    i,d:integer;
+  begin
+    Result:=VarValueWrong;
+    if length(APrefiX)>=length(AValue)then
+      exit;
+    for i:=1 to length(APrefiX) do
+      if APrefiX[i]<>uppercase(AValue[i])then
+        exit;
+    d:=1;
+    for i:=length(AValue) downto length(APrefiX)+1 do begin
+      if (AValue[i]>='0')and(AValue[i]<='9')then begin
+        Result:=Result+(ord(s[i])-ord('0'))*d;
+        d:=d*10;
+      end else
+        exit(VarValueWrong);
+    end;
+  end;
+
 begin
   ParseMode:=TDXFHMWaitSection;
   varcount:=0;
@@ -244,32 +264,19 @@ begin
       end;
   finally
     freearrays;
-    fileCtx.DXFVersionStr:='';
-    if fileCtx.DWGVarsDict.mygetvalue(dxfVar_ACADVER,fileCtx.DXFVersionStr) then
-      if length(fileCtx.DXFVersionStr)>2 then
-        if (uppercase(fileCtx.DXFVersionStr[1])='A')and((uppercase(fileCtx.DXFVersionStr[2])='C')) then begin
-          group:=1;
-          vers:=0;
-          for i:=length(fileCtx.DXFVersionStr) downto 3 do begin
-            if (fileCtx.DXFVersionStr[i]>='0')and(fileCtx.DXFVersionStr[i]<='9')then begin
-              vers:=vers+(ord(fileCtx.DXFVersionStr[i])-ord('0'))*group;
-              group:=group*10;
-            end else begin
-              vers:=-1;
-              break;
-            end;
-          end;
-          case vers of
-            1009:fileCtx.DXFVersion:=AC1009;
-            1015:fileCtx.DXFVersion:=AC1015;
-            1018:fileCtx.DXFVersion:=AC1018;
-            1021:fileCtx.DXFVersion:=AC1021;
-            1024:fileCtx.DXFVersion:=AC1024;
-            1027:fileCtx.DXFVersion:=AC1027;
-            1032:fileCtx.DXFVersion:=AC1032;
-            else fileCtx.DXFVersion:=AC_INVALID;
-          end;
-        end;
+    fileCtx.Header.iVersion:=VarValueNotSet;
+    if fileCtx.DWGVarsDict.mygetvalue(dxfVar_ACADVER,s) then begin
+      fileCtx.Header.iVersion:=VarStr2Int('AC',s);
+      fileCtx.Header.Version:=ACVer2DXF_ACVer(fileCtx.Header.iVersion);
+    end else
+      fileCtx.Header.Version:=AC1009;
+
+    fileCtx.Header.iDWGCodePage:=VarValueNotSet;
+    if fileCtx.DWGVarsDict.mygetvalue(dxfVar_DWGCODEPAGE,s) then begin
+      fileCtx.Header.iDWGCodePage:=VarStr2Int('ANSI_',s);
+      fileCtx.Header.DWGCodePage:=DWGCodePage2DXF_DWGCodePage(fileCtx.Header.iDWGCodePage);
+    end else
+      fileCtx.Header.DWGCodePage:=ANSI_1252;
   end;
 end;
 
@@ -343,7 +350,7 @@ begin
         zTraceLn('{D+}[DXF_CONTENTS]AddEntitiesFromDXF.Found primitive %s',[s]);
         pobj := EntInfoData.AllocAndInitEntity(nil);
         //pobj := {po^.CreateInitObj(objid,owner)}CreateInitObjFree(objid,nil);
-        PGDBObjEntity(pobj)^.LoadFromDXF(rdr,{@additionalunit}PExtLoadData,drawing);
+        PGDBObjEntity(pobj)^.LoadFromDXF(rdr,{@additionalunit}PExtLoadData,drawing,context);
         if (PGDBObjEntity(pobj)^.vp.Layer=@DefaultErrorLayer)or(PGDBObjEntity(pobj)^.vp.Layer=nil) then
                                                                  PGDBObjEntity(pobj)^.vp.Layer:=drawing.LayerTable.GetSystemLayer;
         if (PGDBObjEntity(pobj)^.vp.LineType=nil) then
@@ -1345,7 +1352,7 @@ begin
                 dec(foc);
                 if tp^.name='TX' then
                                                            tp^.name:=tp^.name;
-                tp^.LoadFromDXF(rdr,nil,ZCDCtx.pdrawing^);
+                tp^.LoadFromDXF(rdr,nil,ZCDCtx.pdrawing^,context);
                 blockload:=true;
                 zDebugLn('{D-}[DXF_CONTENTS]end block;');
                 sname:='##'
@@ -1398,39 +1405,19 @@ begin
       fileCtx.InitRec;
       ReadDXFHeader(rdr,fileCtx);
       lph:=lps.StartLongProcess(rsLoadDXFFile,@rdr,rdr.Size,LPSOSilent);
-      case fileCtx.DXFVersion of
+      case fileCtx.Header.Version of
         AC1009:begin
-          Log(LogIntf,ZESGeneral,ZEMsgInfo,format(rsFileFormat,[format(ffs,['DXF12',fileCtx.DXFVersionStr])]));
+          Log(LogIntf,ZESGeneral,ZEMsgInfo,format(rsFileFormat,[format(ffs,[ACVer2DXFVerStr(fileCtx.Header.iVersion),ACVer2ACVerStr(fileCtx.Header.iVersion)])]));
           gotodxf(rdr, 0, dxfName_ENDSEC);
           addfromdxf12(rdr,dxf_EOF,dwgCtx,LogIntf);
         end;
-        AC1015:begin
-          Log(LogIntf,ZESGeneral,ZEMsgInfo,format(rsFileFormat,[format(ffs,['DXF2000',fileCtx.DXFVersionStr])]));
-          addfromdxf2000(rdr,dxf_EOF,dwgCtx,fileCtx,LogIntf)
-        end;
-        AC1018:begin
-          Log(LogIntf,ZESGeneral,ZEMsgInfo,format(rsFileFormat,[format(ffs,['DXF2004',fileCtx.DXFVersionStr])]));
-          addfromdxf2000(rdr,dxf_EOF,dwgCtx,fileCtx,LogIntf)
-        end;
-        AC1021:begin
-          Log(LogIntf,ZESGeneral,ZEMsgInfo,format(rsFileFormat,[format(ffs,['DXF2007',fileCtx.DXFVersionStr])]));
-          addfromdxf2000(rdr,dxf_EOF,dwgCtx,fileCtx,LogIntf)
-        end;
-        AC1024:begin
-          Log(LogIntf,ZESGeneral,ZEMsgInfo,format(rsFileFormat,[format(ffs,['DXF2010',fileCtx.DXFVersionStr])]));
-          addfromdxf2000(rdr,dxf_EOF,dwgCtx,fileCtx,LogIntf)
-        end;
-        AC1027:begin
-          Log(LogIntf,ZESGeneral,ZEMsgInfo,format(rsFileFormat,[format(ffs,['DXF2013',fileCtx.DXFVersionStr])]));
-          addfromdxf2000(rdr,dxf_EOF,dwgCtx,fileCtx,LogIntf)
-        end;
-        AC1032:begin
-          Log(LogIntf,ZESGeneral,ZEMsgInfo,format(rsFileFormat,[format(ffs,['DXF2018',fileCtx.DXFVersionStr])]));
+        AC1015,AC1018,AC1021,AC1024,AC1027,AC1032:begin
+          Log(LogIntf,ZESGeneral,ZEMsgInfo,format(rsFileFormat,[format(ffs,[ACVer2DXFVerStr(fileCtx.Header.iVersion),ACVer2ACVerStr(fileCtx.Header.iVersion)])]));
           addfromdxf2000(rdr,dxf_EOF,dwgCtx,fileCtx,LogIntf)
         end;
         else
-          if fileCtx.DWGVarsDict.mygetvalue(dxfVar_ACADVER,fileCtx.DXFVersionStr) then
-            zDebugLn('{EM}'+rsUnknownFileFormat+' $ACADVER='+fileCtx.DXFVersionStr)
+          if fileCtx.Header.iVersion<>VarValueNotSet then
+            zDebugLn('{EM}'+rsUnknownFileFormat+' $ACADVER='+fileCtx.DWGVarsDict[dxfVar_ACADVER])
           else
             zDebugLn('{EM}'+rsUnknownFileFormat);
       end;

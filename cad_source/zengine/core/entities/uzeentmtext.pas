@@ -41,7 +41,7 @@ type
     text:XYZWStringArray;
     constructor init(own:Pointer;layeraddres:PGDBLayerProp;LW:SmallInt;c:TDXFEntsInternalStringType;p:GDBvertex;s,o,w,a:Double;j:TTextJustify;wi,l:Double);
     constructor initnul(owner:PGDBObjGenericWithSubordinated);
-    procedure LoadFromDXF(var rdr:TZMemReader;ptu:PExtensionData;var drawing:TDrawingDef);virtual;
+    procedure LoadFromDXF(var rdr:TZMemReader;ptu:PExtensionData;var drawing:TDrawingDef;var context:TIODXFLoadContext);virtual;
     procedure SaveToDXF(var outStream:TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFSaveContext);virtual;
     procedure CalcGabarit(const drawing:TDrawingDef);virtual;
     //procedure getoutbound;virtual;
@@ -685,8 +685,8 @@ begin
     if not dxfDoubleload(rdr,44,byt,linespacef) then
     if not dxfDoubleload(rdr,51,byt,textprop.oblique) then
     if not dxfIntegerload(rdr,71,byt,j)then
-    if not dxfStringload(rdr,1,byt,ttemplate)then
-    if not dxfStringload(rdr,3,byt,ttemplate)then
+    if not dxfStringload(rdr,1,byt,ttemplate,context.Header)then
+    if not dxfStringload(rdr,3,byt,ttemplate,context.Header)then
     {if dxfDoubleload(rdr,50,byt,angle) then angleload := true
     else }if dxfStringload(rdr,7,byt,style)then begin
       TXTStyle:=drawing.GetTextStyleTable^.FindStyle(Style,false);
@@ -700,7 +700,7 @@ begin
     TXTStyle:=drawing.GetTextStyleTable^.FindStyle('Standard',false);
   OldVersTextReplace(ttemplate);
   OldVersTextReplace(Content);
-  Content:=utf8tostring(Tria_AnsiToUtf8(ttemplate));
+  Content:=utf8tostring(ttemplate);
   textprop.justify:=b2j[j];
   P_drawInOCS := Local.p_insert;
   linespace := textprop.size * linespacef * 5 / 3;

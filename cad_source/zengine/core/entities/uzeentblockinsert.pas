@@ -38,7 +38,7 @@ GDBObjBlockInsert= object(GDBObjComplex)
                      BlockDesc:TBlockDesc;
                      constructor initnul;
                      constructor init(own:Pointer;layeraddres:PGDBLayerProp;LW:SmallInt);
-                     procedure LoadFromDXF(var rdr:TZMemReader;ptu:PExtensionData;var drawing:TDrawingDef);virtual;
+                     procedure LoadFromDXF(var rdr:TZMemReader;ptu:PExtensionData;var drawing:TDrawingDef;var context:TIODXFLoadContext);virtual;
 
                      procedure SaveToDXF(var outStream:TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFSaveContext);virtual;
                      procedure CalcObjMatrix(pdrawing:PTDrawingDef=nil);virtual;

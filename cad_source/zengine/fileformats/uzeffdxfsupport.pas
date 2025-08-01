@@ -29,6 +29,7 @@ const
   cDXFError_WrogGroupCode='DXF group code "%d" expected but "%d" found';
 
   dxfVar_ACADVER='$ACADVER';
+  dxfVar_DWGCODEPAGE='$DWGCODEPAGE';
 
   dxf_EOF='EOF';
   dxfName_AcDbEntity='AcDbEntity';
@@ -50,12 +51,38 @@ const
   dxfName_Style='STYLE';
   dxfName_LType='LTYPE';
 
+  cAC1009='AC1009';{12}
+  cAC1015='AC1015';{2000}
+  cAC1018='AC1018';{2004}
+  cAC1021='AC1021';{2007}
+  cAC1024='AC1024';{2010}
+  cAC1027='AC1027';{2013}
+  cAC1032='AC1032';{2018}
+  cACINVALID='ACINVALID';
+
+  cDXF12  ='DXF12';
+  cDXF2000='DXF2000';
+  cDXF2004='DXF2004';
+  cDXF2007='DXF2007';
+  cDXF2010='DXF2010';
+  cDXF2013='DXF2013';
+  cDXF2018='DXF2018';
+  cDXFUNKNOWN='DXFUNKNOWN';
+
   DefaultLocalEntityFlags=0;
+
+  VarValueNotSet=-1;
+  VarValueWrong=0;
 
 type
 
   TDXF_ACVer=(AC_INVALID,AC1009{12},AC1015{2000},AC1018{2004},AC1021{2007},
               AC1024{2010},AC1027{2013},AC1032{2018});
+
+  TDXF_DWGCodePage=(CP_INVALID,ANSI_874,ANSI_932,ANSI_936,ANSI_949,ANSI_950,
+                    ANSI_1250,ANSI_1251,ANSI_1252,ANSI_1253,ANSI_1254,ANSI_1255,
+                    ANSI_1256,ANSI_1257,ANSI_1258);
+
 
   TLocalEntityFlags=LongWord;
   EDXFReadException=class(Exception);
@@ -68,11 +95,20 @@ type
     LocalEntityFlags:TLocalEntityFlags;
   end;
 
+  TDXFHeaderInfo=record
+    Version:TDXF_ACVer;
+    iVersion:Integer;
+    DWGCodePage:TDXF_DWGCodePage;
+    iDWGCodePage:Integer;
+    procedure InitRec;
+  end;
+
   TIODXFLoadContext=record
     h2p:TMapHandleToPointer;
     DWGVarsDict:TString2StringDictionary;
-    DXFVersion:TDXF_ACVer;
-    DXFVersionStr:string;
+
+    Header:TDXFHeaderInfo;
+
     procedure InitRec;
     procedure Done;
   end;
@@ -91,6 +127,7 @@ function dxfFloatload(var rdr:TZMemReader;DXFCode,CurrentDXFCode:Integer; var v:
 function dxfIntegerload(var rdr:TZMemReader;DXFCode,CurrentDXFCode:Integer; var v:Integer):Boolean;
 function dxfStringload(var rdr:TZMemReader;DXFCode,CurrentDXFCode:Integer; var v:String):Boolean;overload;
 function dxfStringload(var rdr:TZMemReader;DXFCode,CurrentDXFCode:Integer; var v:TDXFEntsInternalStringType):Boolean;overload;
+function dxfStringload(var rdr:TZMemReader;DXFCode,CurrentDXFCode:Integer; var v:String; const FileHdrInfo:TDXFHeaderInfo):Boolean;overload;
 function dxfGroupCode(const DXFCode:Integer):String;
 function DXFHandle(const sh:string):TDWGHandle;
 
@@ -98,13 +135,91 @@ function dxfRequiredVertex2D(var rdr:TZMemReader;const RequiredDXFGroupCode:Inte
 function dxfRequiredDouble(var rdr:TZMemReader;const RequiredDXFGroupCode:Integer;var CurrentDXFGroupCode:Integer):Double;
 function dxfRequiredInteger(var rdr:TZMemReader;const RequiredDXFGroupCode:Integer;var CurrentDXFGroupCode:Integer):Integer;
 
+function ACVer2ACVerStr(ACVer:integer):string;
+function ACVer2DXFVerStr(ACVer:integer):string;
+function ACVer2DXF_ACVer(ACVer:integer):TDXF_ACVer;
+
+function DWGCodePage2DXF_DWGCodePage(DWGCodePage:integer):TDXF_DWGCodePage;
+
 implementation
+
+function ACVer2ACVerStr(ACVer:integer):string;
+begin
+  case ACVer of
+    1009:result:=cAC1009;{12}
+    1015:result:=cAC1015;{2000}
+    1018:result:=cAC1018;{2004}
+    1021:result:=cAC1021;{2007}
+    1024:result:=cAC1024;{2010}
+    1027:result:=cAC1027;{2013}
+    1032:result:=cAC1032;{2018}
+    else result:=cACINVALID;
+  end;
+end;
+
+function ACVer2DXFVerStr(ACVer:integer):string;
+begin
+  case ACVer of
+    1009:result:=cDXF12;
+    1015:result:=cDXF2000;
+    1018:result:=cDXF2004;
+    1021:result:=cDXF2007;
+    1024:result:=cDXF2010;
+    1027:result:=cDXF2013;
+    1032:result:=cDXF2018;
+    else result:=cDXFUNKNOWN;
+  end;
+end;
+
+function ACVer2DXF_ACVer(ACVer:integer):TDXF_ACVer;
+begin
+  case ACVer of
+    1009:result:=AC1009;{12}
+    1015:result:=AC1015;{2000}
+    1018:result:=AC1018;{2004}
+    1021:result:=AC1021;{2007}
+    1024:result:=AC1024;{2010}
+    1027:result:=AC1027;{2013}
+    1032:result:=AC1032;{2018}
+    else result:=AC_INVALID;
+  end;
+end;
+
+function DWGCodePage2DXF_DWGCodePage(DWGCodePage:integer):TDXF_DWGCodePage;
+begin
+  case DWGCodePage of
+    874:result:=ANSI_874;
+    932:result:=ANSI_932;
+    936:result:=ANSI_936;
+    949:result:=ANSI_949;
+    950:result:=ANSI_950;
+    1250:result:=ANSI_1250;
+    1251:result:=ANSI_1251;
+    1252:result:=ANSI_1252;
+    1253:result:=ANSI_1253;
+    1254:result:=ANSI_1254;
+    1255:result:=ANSI_1255;
+    1256:result:=ANSI_1256;
+    1257:result:=ANSI_1257;
+    1258:result:=ANSI_1258;
+    else result:=CP_INVALID;
+  end;
+end;
 
 procedure TIODXFLoadContext.InitRec;
 begin
   h2p:=TMapHandleToPointer.Create;
   DWGVarsDict:=TString2StringDictionary.Create;
-  DXFVersion:=AC_INVALID;
+
+  Header.InitRec;
+end;
+
+procedure TDXFHeaderInfo.InitRec;
+begin
+  Version:=AC_INVALID;
+  iVersion:=VarValueNotSet;
+  DWGCodePage:=CP_INVALID;
+  iDWGCodePage:=VarValueNotSet;
 end;
 
 procedure TIODXFLoadContext.Done;
@@ -298,6 +413,24 @@ begin
        v:=v+TDXFEntsInternalStringType(rdr.ParseString);
        result:=true;
      end;
+end;
+function dxfStringload(var rdr:TZMemReader;DXFCode,CurrentDXFCode:Integer; var v:String; const FileHdrInfo:TDXFHeaderInfo):Boolean;
+var
+  s:RawByteString;
+begin
+  result:=false;
+  if CurrentDXFCode=DXFCode then begin
+    s:=rdr.ParseString;
+    if FileHdrInfo.iVersion<1021 then begin
+      //младше версии DXF R2007 (AC1021)
+      //нужно перекодировать в соответствии с DWGCodepage
+      //начиная с DXF R2007 в dxf тексты уже хранятся в utf8
+      SetCodePage(s,FileHdrInfo.iDWGCodePage,false);
+      SetCodePage(s,CP_UTF8,true);
+    end;
+    v:=v+s;
+    result:=true;
+  end;
 end;
 begin
 end.

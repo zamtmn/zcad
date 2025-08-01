@@ -41,7 +41,7 @@ type
     obj_y:Double;
     constructor init(own:Pointer;layeraddres:PGDBLayerProp;LW:SmallInt;c:TDXFEntsInternalStringType;p:GDBvertex;s,o,w,a:Double;j:TTextJustify);
     constructor initnul(owner:PGDBObjGenericWithSubordinated);
-    procedure LoadFromDXF(var rdr:TZMemReader;ptu:PExtensionData;var drawing:TDrawingDef);virtual;
+    procedure LoadFromDXF(var rdr:TZMemReader;ptu:PExtensionData;var drawing:TDrawingDef;var context:TIODXFLoadContext);virtual;
     procedure SaveToDXF(var outStream:TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFSaveContext);virtual;
     procedure CalcGabarit(const drawing:TDrawingDef);virtual;
     procedure getoutbound(var DC:TDrawContext);virtual;
@@ -439,7 +439,7 @@ else if     dxfStringload(rdr,7,byt,style)then
 else if not dxfIntegerload(rdr,72,byt,gv)then
      if not dxfIntegerload(rdr,73,byt,vv)then
      if not dxfIntegerload(rdr,71,byt,textbackward)then
-     if not dxfStringload(rdr,1,byt,tcontent)then
+     if not dxfStringload(rdr,1,byt,tcontent,context.Header)then
                                                {s := }rdr.SkipString;
     byt:=rdr.ParseInteger;
   end;
@@ -459,7 +459,7 @@ else if not dxfIntegerload(rdr,72,byt,gv)then
                            end;
   OldVersTextReplace(Template);
   OldVersTextReplace(tcontent);
-  content:=utf8tostring(Tria_AnsiToUtf8(tcontent));
+  content:=utf8tostring(tcontent);
   textprop.justify := jt[vv, gv];
   if doublepoint then Local.p_Insert := P_drawInOCS;
   //assert(angleload, 'GDBText отсутствует dxf код 50 (угол поворота)');

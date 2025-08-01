@@ -86,7 +86,7 @@ TVariablesExtender=class(TBaseVariablesExtender)
     class function EntIOLoadMainFunction(_Name,_Value:String;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
     class function EntIOLoadEmptyVariablesExtender(_Name,_Value:String;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
 
-    procedure SaveToDxfObjXData(var outStream:TZctnrVectorBytes;PEnt:Pointer;var IODXFContext:TIODXFContext);override;
+    procedure SaveToDxfObjXData(var outStream:TZctnrVectorBytes;PEnt:Pointer;var IODXFContext:TIODXFSaveContext);override;
     class procedure DisableVariableContentReplace;
     class procedure EnableVariableContentReplace;
     class function isVariableContentReplaceEnabled:Boolean;
@@ -470,7 +470,7 @@ begin
   result:=true;
 end;
 
-procedure TVariablesExtender.SaveToDxfObjXData(var outStream:TZctnrVectorBytes;PEnt:Pointer;var IODXFContext:TIODXFContext);
+procedure TVariablesExtender.SaveToDxfObjXData(var outStream:TZctnrVectorBytes;PEnt:Pointer;var IODXFContext:TIODXFSaveContext);
 var
    ishavevars:boolean;
    pvd:pvardesk;

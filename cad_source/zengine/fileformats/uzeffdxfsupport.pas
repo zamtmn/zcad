@@ -18,6 +18,7 @@
 
 unit uzeffdxfsupport;
 {$Mode delphi}{$H+}
+{$ModeSwitch advancedrecords}
 {$Include zengineconfig.inc}
 
 interface
@@ -27,7 +28,9 @@ uses uzegeometrytypes,uzbtypes,sysutils,uzctnrVectorBytes,usimplegenerics,
 const
   cDXFError_WrogGroupCode='DXF group code "%d" expected but "%d" found';
 
+  dxfVar_ACADVER='$ACADVER';
 
+  dxf_EOF='EOF';
   dxfName_AcDbEntity='AcDbEntity';
   dxfName_AcDbLine='AcDbLine';
   dxfName_Line='LINE';
@@ -50,10 +53,14 @@ const
   DefaultLocalEntityFlags=0;
 
 type
+
+  TDXF_ACVer=(AC_INVALID,AC1009{12},AC1015{2000},AC1018{2004},AC1021{2007},
+              AC1024{2010},AC1027{2013},AC1032{2018});
+
   TLocalEntityFlags=LongWord;
   EDXFReadException=class(Exception);
-  PTIODXFContext=^TIODXFContext;
-  TIODXFContext=record
+  PTIODXFSaveContext=^TIODXFSaveContext;
+  TIODXFSaveContext=record
     handle: TDWGHandle;
     currentEntAddrOverrider:pointer;
     p2h:TMapPointerToHandle;
@@ -62,7 +69,12 @@ type
   end;
 
   TIODXFLoadContext=record
-    h2p:TMapHandleToPointer
+    h2p:TMapHandleToPointer;
+    DWGVarsDict:TString2StringDictionary;
+    DXFVersion:TDXF_ACVer;
+    DXFVersionStr:string;
+    procedure InitRec;
+    procedure Done;
   end;
 
 procedure dxfvertexout(var f:TZctnrVectorBytes;dxfcode:Integer;const v:GDBvertex);
@@ -87,6 +99,19 @@ function dxfRequiredDouble(var rdr:TZMemReader;const RequiredDXFGroupCode:Intege
 function dxfRequiredInteger(var rdr:TZMemReader;const RequiredDXFGroupCode:Integer;var CurrentDXFGroupCode:Integer):Integer;
 
 implementation
+
+procedure TIODXFLoadContext.InitRec;
+begin
+  h2p:=TMapHandleToPointer.Create;
+  DWGVarsDict:=TString2StringDictionary.Create;
+  DXFVersion:=AC_INVALID;
+end;
+
+procedure TIODXFLoadContext.Done;
+begin
+  h2p.Free;
+  DWGVarsDict.Free;
+end;
 
 function DXFHandle(const sh:string):TDWGHandle;
 begin

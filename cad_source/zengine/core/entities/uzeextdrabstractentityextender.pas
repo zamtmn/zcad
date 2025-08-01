@@ -38,8 +38,8 @@ type
 
     procedure ReorganizeEnts(OldEnts2NewEntsMap:TMapPointerToPointer);virtual;abstract;
     procedure PostLoad(var context:TIODXFLoadContext);virtual;
-    procedure SaveToDxfObjXData(var outStream:TZctnrVectorBytes;PEnt:Pointer;var IODXFContext:TIODXFContext);virtual;abstract;
-    procedure SaveToDXFfollow(PEnt:Pointer;var outStream:TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext)virtual;
+    procedure SaveToDxfObjXData(var outStream:TZctnrVectorBytes;PEnt:Pointer;var IODXFContext:TIODXFSaveContext);virtual;abstract;
+    procedure SaveToDXFfollow(PEnt:Pointer;var outStream:TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFSaveContext)virtual;
     procedure onEntityConnect(pEntity:Pointer;const drawing:TDrawingDef;var DC:TDrawContext);virtual;
     procedure onConnectFormattedEntsToRoot(pRootEntity,pFormattedEntity:Pointer;const drawing:TDrawingDef;var DC:TDrawContext);virtual;
     procedure onEntityAfterConnect(pEntity:Pointer;const drawing:TDrawingDef;var DC:TDrawContext);virtual;
@@ -66,8 +66,8 @@ type
     procedure RunSupportOldVersions(pEntity:pointer;const drawing:TDrawingDef);
     procedure RunReorganizeEnts(OldEnts2NewEntsMap:TMapPointerToPointer);
     procedure RunPostload(var context:TIODXFLoadContext);
-    procedure RunSaveToDxf(var outStream:TZctnrVectorBytes;PEnt:Pointer;var IODXFContext:TIODXFContext);
-    procedure RunSaveToDXFfollow(PEnt:Pointer;var outStream:TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);
+    procedure RunSaveToDxf(var outStream:TZctnrVectorBytes;PEnt:Pointer;var IODXFContext:TIODXFSaveContext);
+    procedure RunSaveToDXFfollow(PEnt:Pointer;var outStream:TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFSaveContext);
     procedure RunOnConnect(pEntity:Pointer;const drawing:TDrawingDef;var DC:TDrawContext);
     procedure RunConnectFormattedEntsToRoot(pRootEntity,pFormattedEntity:Pointer;const drawing:TDrawingDef;var DC:TDrawContext);
     procedure RunOnAfterConnect(pEntity:Pointer;const drawing:TDrawingDef;var DC:TDrawContext);
@@ -94,7 +94,7 @@ procedure TAbstractEntityExtender.PostLoad(var context:TIODXFLoadContext);
 begin
 end;
 
-procedure TAbstractEntityExtender.SaveToDXFfollow(PEnt:Pointer;var outStream:TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);
+procedure TAbstractEntityExtender.SaveToDXFfollow(PEnt:Pointer;var outStream:TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFSaveContext);
 begin
 end;
 
@@ -225,7 +225,7 @@ begin
        if fEntityExtensions[i]<>nil then
          fEntityExtensions[i].PostLoad(context);
 end;
-procedure TEntityExtensions.RunSaveToDxf(var outStream:TZctnrVectorBytes;PEnt:Pointer;var IODXFContext:TIODXFContext);
+procedure TEntityExtensions.RunSaveToDxf(var outStream:TZctnrVectorBytes;PEnt:Pointer;var IODXFContext:TIODXFSaveContext);
 var
   i:integer;
 begin
@@ -234,7 +234,7 @@ begin
        if fEntityExtensions[i]<>nil then
          fEntityExtensions[i].SaveToDxfObjXData(outStream,PEnt,IODXFContext);
 end;
-procedure TEntityExtensions.RunSaveToDXFfollow(PEnt:Pointer;var outStream:TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);
+procedure TEntityExtensions.RunSaveToDXFfollow(PEnt:Pointer;var outStream:TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFSaveContext);
 var
   i:integer;
 begin

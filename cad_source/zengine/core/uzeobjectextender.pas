@@ -30,7 +30,7 @@ TCreateEntFeatureData=record
                 constr:TConstructorFeature;
                 destr:TDestructorFeature;
               end;
-TDXFEntSaveFeature=procedure(var outStream:TZctnrVectorBytes;PEnt:Pointer;var IODXFContext:TIODXFContext);
+TDXFEntSaveFeature=procedure(var outStream:TZctnrVectorBytes;PEnt:Pointer;var IODXFContext:TIODXFSaveContext);
 TDXFEntLoadFeature=function(_Name,_Value:String;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:Pointer):boolean of object;
 TDXFEntAfterLoadFeature=procedure(pEntity:Pointer);
 TDXFEntFormatFeature=procedure (pEntity:Pointer;const drawing:TDrawingDef);
@@ -59,7 +59,7 @@ TDXFEntIODataManager=class
                       procedure RegisterPrefixLoadFeature(prefix:String;PLoadProc:TDXFEntLoadFeature);
                       procedure RegisterSaveFeature(PSaveProc:TDXFEntSaveFeature);
                       procedure RegisterFormatFeature(PFormatProc:TDXFEntFormatFeature);
-                      procedure RunSaveFeatures(var outStream:TZctnrVectorBytes;PEnt:Pointer;var IODXFContext:TIODXFContext);
+                      procedure RunSaveFeatures(var outStream:TZctnrVectorBytes;PEnt:Pointer;var IODXFContext:TIODXFSaveContext);
                       procedure RunFormatProcs(const drawing:TDrawingDef;pEntity:Pointer);
                       procedure RunAfterLoadFeature(pEntity:Pointer);
                       function GetLoadFeature(name:String):TDXFEntLoadFeature;
@@ -150,7 +150,7 @@ begin
      data.destr:=_destr;
      fCreateEntFeatureVector.PushBack(data);
 end;
-procedure TDXFEntIODataManager.RunSaveFeatures(var outStream:TZctnrVectorBytes;PEnt:Pointer;var IODXFContext:TIODXFContext);
+procedure TDXFEntIODataManager.RunSaveFeatures(var outStream:TZctnrVectorBytes;PEnt:Pointer;var IODXFContext:TIODXFSaveContext);
 var
   i:SizeUInt;
 begin

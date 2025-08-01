@@ -40,7 +40,7 @@ GDBObjBlockInsert= object(GDBObjComplex)
                      constructor init(own:Pointer;layeraddres:PGDBLayerProp;LW:SmallInt);
                      procedure LoadFromDXF(var rdr:TZMemReader;ptu:PExtensionData;var drawing:TDrawingDef);virtual;
 
-                     procedure SaveToDXF(var outStream:TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
+                     procedure SaveToDXF(var outStream:TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFSaveContext);virtual;
                      procedure CalcObjMatrix(pdrawing:PTDrawingDef=nil);virtual;
                      function Clone(own:Pointer):PGDBObjEntity;virtual;
                      procedure rtmodifyonepoint(const rtmod:TRTModifyData);virtual;
@@ -692,7 +692,7 @@ else if not dxfStringload(rdr,2,byt,name)then {s := }rdr.SkipString;
       index:=PGDBObjBlockdefArray(drawing.GetBlockDefArraySimple).getindex(name);
       //format;
 end;
-procedure GDBObjBlockInsert.SaveToDXF(var outStream:TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);
+procedure GDBObjBlockInsert.SaveToDXF(var outStream:TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFSaveContext);
 //var
   //i, j: Integer;
   //hv, vv: Byte;

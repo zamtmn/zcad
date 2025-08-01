@@ -59,7 +59,7 @@ GDBObjDiametricDimension= object(GDBObjDimension)
                         function GetRadius:Double;virtual;
                         function GetDIMTMOVE:TDimTextMove;virtual;
 
-                        procedure SaveToDXF(var outStream:TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
+                        procedure SaveToDXF(var outStream:TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFSaveContext);virtual;
                         function GetObjType:TObjID;virtual;
                    end;
 implementation

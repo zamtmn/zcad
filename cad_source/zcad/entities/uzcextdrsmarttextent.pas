@@ -33,7 +33,7 @@ uses
   uzeBaseExtender,uzbtypes,uzegeometrytypes,uzeconsts,usimplegenerics;
 
 type
-  TDummyDtawer=procedure(var IODXFContext:TIODXFContext;var outStream:TZctnrVectorBytes;pEntity:PGDBObjEntity;const p1,p2:GDBvertex;const drawing:TDrawingDef;var DC:TDrawContext);
+  TDummyDtawer=procedure(var IODXFContext:TIODXFSaveContext;var outStream:TZctnrVectorBytes;pEntity:PGDBObjEntity;const p1,p2:GDBvertex;const drawing:TDrawingDef;var DC:TDrawContext);
   TSmartTextEntExtender=class(TBaseEntityExtender)
   public
     const
@@ -97,13 +97,13 @@ type
       procedure Assign(Source:TBaseExtender);override;
       procedure onBeforeEntityFormat(pEntity:Pointer;const drawing:TDrawingDef;var DC:TDrawContext);override;
       procedure onAfterEntityFormat(pEntity:Pointer;const drawing:TDrawingDef;var DC:TDrawContext);override;
-      procedure SaveToDxfObjXData(var outStream:TZctnrVectorBytes;PEnt:Pointer;var IODXFContext:TIODXFContext);override;
-      procedure SaveToDXFfollow(PEnt:Pointer;var outStream:TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext)override;
+      procedure SaveToDxfObjXData(var outStream:TZctnrVectorBytes;PEnt:Pointer;var IODXFContext:TIODXFSaveContext);override;
+      procedure SaveToDXFfollow(PEnt:Pointer;var outStream:TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFSaveContext)override;
       procedure PostLoad(var context:TIODXFLoadContext);override;
       procedure onEntitySupportOldVersions(pEntity:pointer;const drawing:TDrawingDef);override;
       procedure onRemoveFromArray(pEntity:Pointer;const drawing:TDrawingDef);override;
 
-      procedure DrawGeom(var IODXFContext:TIODXFContext;var outStream:TZctnrVectorBytes;pEntity:Pointer;const drawing:TDrawingDef;var DC:TDrawContext;tdd:TDummyDtawer);
+      procedure DrawGeom(var IODXFContext:TIODXFSaveContext;var outStream:TZctnrVectorBytes;pEntity:Pointer;const drawing:TDrawingDef;var DC:TDrawContext;tdd:TDummyDtawer);
 
       procedure ReorganizeEnts(OldEnts2NewEntsMap:TMapPointerToPointer);override;
 
@@ -129,12 +129,12 @@ type
 
 implementation
 
-procedure DrawLine(var IODXFContext:TIODXFContext;var outStream:TZctnrVectorBytes;pEntity:PGDBObjEntity;const p1,p2:GDBvertex;const drawing:TDrawingDef;var DC:TDrawContext);
+procedure DrawLine(var IODXFContext:TIODXFSaveContext;var outStream:TZctnrVectorBytes;pEntity:PGDBObjEntity;const p1,p2:GDBvertex;const drawing:TDrawingDef;var DC:TDrawContext);
 begin
   pEntity.Representation.DrawLineWithLT(pEntity^,onematrix,DC,p1,p2,pEntity.vp);
 end;
 
-procedure SaveLine(var IODXFContext:TIODXFContext;var outStream:TZctnrVectorBytes;pEntity:PGDBObjEntity;const p1,p2:GDBvertex;const drawing:TDrawingDef;var DC:TDrawContext);
+procedure SaveLine(var IODXFContext:TIODXFSaveContext;var outStream:TZctnrVectorBytes;pEntity:PGDBObjEntity;const p1,p2:GDBvertex;const drawing:TDrawingDef;var DC:TDrawContext);
 begin
   //SaveToDXFObjPrefix(outStream,'LINE','AcDbLine',IODXFContext);
 
@@ -337,7 +337,7 @@ begin
     result:=PGDBObjMText(pEntity).TXTStyle^.prop.wfactor;
 end;
 
-procedure TSmartTextEntExtender.DrawGeom(var IODXFContext:TIODXFContext;var outStream:TZctnrVectorBytes;pEntity:Pointer;const drawing:TDrawingDef;var DC:TDrawContext;tdd:TDummyDtawer);
+procedure TSmartTextEntExtender.DrawGeom(var IODXFContext:TIODXFSaveContext;var outStream:TZctnrVectorBytes;pEntity:Pointer;const drawing:TDrawingDef;var DC:TDrawContext;tdd:TDummyDtawer);
 var
   dx:Double;
   p,pnew,dir,normal:GDBvertex;
@@ -388,7 +388,7 @@ procedure TSmartTextEntExtender.onAfterEntityFormat(pEntity:Pointer;const drawin
 begin
   if ESCalcWithoutOwner in PGDBObjEntity(pEntity)^.State then
     exit;
-  DrawGeom(PTIODXFContext(nil)^,PTZctnrVectorBytes(nil)^,pEntity,drawing,DC,DrawLine);
+  DrawGeom(PTIODXFSaveContext(nil)^,PTZctnrVectorBytes(nil)^,pEntity,drawing,DC,DrawLine);
 end;
 
 procedure TSmartTextEntExtender.onBeforeEntityFormat(pEntity:Pointer;const drawing:TDrawingDef;var DC:TDrawContext);
@@ -457,7 +457,7 @@ begin
   result:=SmartTextEntExtenderName;
 end;
 
-procedure TSmartTextEntExtender.SaveToDxfObjXData(var outStream:TZctnrVectorBytes;PEnt:Pointer;var IODXFContext:TIODXFContext);
+procedure TSmartTextEntExtender.SaveToDxfObjXData(var outStream:TZctnrVectorBytes;PEnt:Pointer;var IODXFContext:TIODXFSaveContext);
 begin
   if isDefault then
     dxfStringout(outStream,1000,'STEDefault=TRUE')
@@ -487,7 +487,7 @@ begin
         dxfStringout(outStream,1000,'STERotateOverrideValue='+FloatToStr(FRotateOverrideValue));
     end;
 end;
-procedure TSmartTextEntExtender.SaveToDXFfollow(PEnt:Pointer;var outStream:TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);
+procedure TSmartTextEntExtender.SaveToDXFfollow(PEnt:Pointer;var outStream:TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFSaveContext);
 begin
   DrawGeom(IODXFContext,outStream,PGDBObjEntity(PEnt),drawing,PTDrawContext(nil)^,SaveLine);
 end;

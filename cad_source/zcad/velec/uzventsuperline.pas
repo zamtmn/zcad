@@ -35,7 +35,7 @@ GDBObjSuperLine= object(GDBObjLine)
                   class function CreateInstance:PGDBObjLine;static;
                   function GetObjType:TObjID;virtual;
                   function Clone(own:Pointer):PGDBObjEntity;virtual;
-                  procedure SaveToDXFObjXData(var outStream:TZctnrVectorBytes;var IODXFContext:TIODXFContext);virtual;
+                  procedure SaveToDXFObjXData(var outStream:TZctnrVectorBytes;var IODXFContext:TIODXFSaveContext);virtual;
                   class function GetDXFIOFeatures:TDXFEntIODataManager;static;
            end;
 {Export-}
@@ -53,7 +53,7 @@ begin
      inherited;
      GetDXFIOFeatures.AddExtendersToEntity(@self);
 end;
-procedure GDBObjSuperLine.SaveToDXFObjXData(var outStream:TZctnrVectorBytes;var IODXFContext:TIODXFContext);
+procedure GDBObjSuperLine.SaveToDXFObjXData(var outStream:TZctnrVectorBytes;var IODXFContext:TIODXFSaveContext);
 begin
      inherited;
      dxfStringout(outStream,1000,'_UPGRADE=10');

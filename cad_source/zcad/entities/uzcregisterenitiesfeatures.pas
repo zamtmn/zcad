@@ -97,7 +97,7 @@ begin
      result:=true;
 end;
 
-procedure ElLeaderSave(var outStream:TZctnrVectorBytes;PEnt:PGDBObjEntity;var IODXFContext:TIODXFContext);
+procedure ElLeaderSave(var outStream:TZctnrVectorBytes;PEnt:PGDBObjEntity;var IODXFContext:TIODXFSaveContext);
 var
   al:string;
 begin
@@ -127,7 +127,7 @@ begin
   end;
 end;
 
-procedure EntityIOSave_all(var outStream:TZctnrVectorBytes;PEnt:PGDBObjEntity;var IODXFContext:TIODXFContext);
+procedure EntityIOSave_all(var outStream:TZctnrVectorBytes;PEnt:PGDBObjEntity;var IODXFContext:TIODXFSaveContext);
 begin
   dxfStringout(outStream,1000,'_OWNERHANDLE='+inttohex(PEnt^.bp.ListPos.owner.GetHandle,10));
   case PEnt^.OSnapModeControl of
@@ -146,7 +146,7 @@ begin
     PGDBObjText(pent)^.template:=TDXFEntsInternalStringType(_value);
      result:=true;
 end;
-procedure TextIOSave_TMPL1(var outStream:TZctnrVectorBytes;PEnt:PGDBObjText; var IODXFContext:TIODXFContext);
+procedure TextIOSave_TMPL1(var outStream:TZctnrVectorBytes;PEnt:PGDBObjText; var IODXFContext:TIODXFSaveContext);
 begin
   //if UnicodeStringReplace(pent^.content,#10,'\P',[rfReplaceAll])<>pent^.template then
   if (IODXFContext.LocalEntityFlags and CLEFNotNeedSaveTemplate)=0 then

@@ -131,6 +131,7 @@ type
        end;
   {REGISTERRECORDTYPE tdwg}
   tdwg=record
+    DWG_DXFCodePage:PTDXFCodePage;(*'DWGCODEPAGE for saving'*)
              DWG_DrawMode:PBoolean;(*'Display line weights'*)
              DWG_OSMode:PTGDBOSMode;(*'Snap mode'*)
              DWG_PolarMode:PBoolean;(*'Polar tracking mode'*)

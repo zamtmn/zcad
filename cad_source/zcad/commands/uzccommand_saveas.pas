@@ -108,9 +108,7 @@ begin
         exit(cmd_ok);
     end;
     fileext:=uppercase(ExtractFileEXT(s));
-    if fileext='.ZCP' then
-      saveZCP(s, drawings.GetCurrentDWG^)
-    else if fileext='.DXF' then begin
+    if fileext='.DXF' then begin
       SaveDXFDPAS(s);
       drawings.GetCurrentDWG.SetFileName(s);
       drawings.GetCurrentDWG.ChangeStampt(false);

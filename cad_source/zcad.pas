@@ -80,6 +80,7 @@ uses
   uzeFontFileFormatSHX,
   uzeFontFileFormatTTFBackendFTTest,uzeffttf,
   uzeffLibreDWG,uzeffLibreDWG2Ents,
+  uzcregfileformats,
 
 
   uzcdrawings,

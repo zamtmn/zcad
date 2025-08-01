@@ -428,6 +428,8 @@ begin
    //DWGUnit.AssignToSymbol(SysVar.dwg.DWG_TextSize,'DWG_TextSize');
    SysVar.dwg.DWG_TextSize:=@CurrentDWG.TextSize;
 
+   SysVar.dwg.DWG_DXFCodePage:=@CurrentDWG.DXFCodePage;
+
    if assigned(CurrentDWG.wa)then
    begin
        sysvar.RD.RD_CurrentWAParam.Instance:=CurrentDWG.wa.getParam;
@@ -467,6 +469,7 @@ begin
    SysVar.dwg.DWG_InsUnits:=nil;
 
    SysVar.dwg.DWG_TextSize:=nil;
+   SysVar.dwg.DWG_DXFCodePage:=nil;
 
    sysvar.RD.RD_CurrentWAParam.Instance:=nil;
    sysvar.RD.RD_CurrentWAParam.PTD:=nil;

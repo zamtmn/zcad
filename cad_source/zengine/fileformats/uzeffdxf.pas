@@ -51,16 +51,15 @@ const
         (UCASEEntName:'ACAD_PROXY_ENTITY')
 -     ];
 +     );}
-var FOC:Integer;
-    CreateExtLoadData:TCreateExtLoadData=nil;
-    ClearExtLoadData:TProcessExtLoadData=nil;
-    FreeExtLoadData:TProcessExtLoadData=nil;
-procedure addfromdxf(const AFileName: String;var dwgCtx:TZDrawingContext;const LogIntf:TZELogProc=nil);
-function savedxf2000(const SavedFileName:String; const TemplateFileName:String;var drawing:TSimpleDrawing):boolean;
-procedure saveZCP(const name: String;var drawing:TSimpleDrawing);
-procedure LoadZCP(const name: String;var drawing:TSimpleDrawing);
-implementation
+var
+  CreateExtLoadData:TCreateExtLoadData=nil;
+  ClearExtLoadData:TProcessExtLoadData=nil;
+  FreeExtLoadData:TProcessExtLoadData=nil;
 
+function addfromdxf(const AFileName: String;var dwgCtx:TZDrawingContext;const LogIntf:TZELogProc=nil):TDXFHeaderInfo;
+function savedxf2000(const SavedFileName:String; const TemplateFileName:String;var drawing:TSimpleDrawing):boolean;
+implementation
+var FOC:Integer;
 function IsIgnoredEntity(const name:String):Integer;
 var
   i:Integer;
@@ -466,16 +465,6 @@ begin
                                 end
                                    else
                                        begin
-//                                       newowner:=newowner;
-                                       {//добавляем потеряный примитив
-                                       owner^.AddMi(@postobj);
-                                           if foc=0 then
-                                                        begin
-                                                        PGDBObjEntity(postobj)^.BuildGeometry(drawing);
-                                                        PGDBObjEntity(postobj)^.FormatAfterDXFLoad(drawing);
-                                                        PGDBObjEntity(postobj)^.FromDXFPostProcessAfterAdd;
-                                                        end;}
-                                       //вытираем потеряный примитив
                                        postobj^.done;
                                        Freemem(pointer(postobj));
                                        end;
@@ -1281,14 +1270,10 @@ begin
       if s = 'ENTITIES' then
       begin
         zDebugLn('{D+}[DXF_CONTENTS]Found entities section');
-        //programlog.LogOutStr('Found entities section',lp_IncPos,LM_Debug);
-        //inc(foc);
-        {addfromdxf12}addentitiesfromdxf(rdr, dxfName_ENDSEC,ZCDCtx.powner,ZCDCtx.pdrawing^,ZCDCtx.dc,context);
+        addentitiesfromdxf(rdr, dxfName_ENDSEC,ZCDCtx.powner,ZCDCtx.pdrawing^,ZCDCtx.dc,context);
         ZCDCtx.powner^.ObjArray.pack;
         ZCDCtx.powner^.correctobjects(nil,0);
-        //inc(foc);
         zDebugLn('{D-}[DXF_CONTENTS]end; {entities section}');
-        //programlog.LogOutStr('end; {entities section}',lp_DecPos,LM_Debug);
       end
       else
         if s = 'BLOCKS' then
@@ -1384,7 +1369,7 @@ begin
   lps.EndLongProcess(lph);
 end;
 
-procedure addfromdxf(const AFileName: String;var dwgCtx:TZDrawingContext;const LogIntf:TZELogProc=nil);
+function addfromdxf(const AFileName: String;var dwgCtx:TZDrawingContext;const LogIntf:TZELogProc=nil):TDXFHeaderInfo;
 var
   fileCtx:TIODXFLoadContext;
   lph:TLPSHandle;
@@ -1394,6 +1379,7 @@ const
    ffs='%s (%s)';
 begin
   DefaultFormatSettings.DecimalSeparator:='.';
+  result.InitRec;
   zDebugLn('{D+}AddFromDXF("%s")',[AFileName]);
   Log(LogIntf,ZESGeneral,ZEMsgCriticalInfo,format(rsLoadingFile,[AFileName]));
 
@@ -1422,7 +1408,8 @@ begin
             zDebugLn('{EM}'+rsUnknownFileFormat);
       end;
       lps.EndLongProcess(lph);
-      dwgCtx.POwner^.calcbb(dwgCtx.DC{ dc});
+      dwgCtx.POwner^.calcbb(dwgCtx.DC);
+      result:=fileCtx.Header;
       fileCtx.Done;
     end else
       zDebugLn('{EM}'+'IODXF.ADDFromDXF: Не могу открыть файл: '+AFileName);
@@ -2694,113 +2681,6 @@ ENDTAB}
   {$ENDIF}
   //gdb.SetCurrentDWG(olddwg);
 end;
-procedure SaveZCP(const name: String; {gdb: PGDBDescriptor}var drawing:TSimpleDrawing);
-(*var
-//  memsize:longint;
-//  objcount:Integer;
-//  pmem,tmem:Pointer;
-  outfile:Integer;
-  memorybuf:PTZctnrVectorBytes;
-  //s:ZCPHeader;
-  //linkbyf:PGDBOpenArrayOfTObjLinkRecord;
-//  test:gdbvertex;
-  sub:integer;  *)
 begin
-(*
-     memorybuf:=nil;
-     linkbyf:=nil;
-     //s:=NULZCPHeader;
-     zcpmode:=zcptxt;  lkj
-     sub:=0;
-     sysunit^.TypeName2PTD('ZCPHeader')^.Serialize(@ZCPHead,SA_SAVED_TO_SHD,memorybuf,linkbyf,sub);
-
-     PTZCPOffsetTable(memorybuf^.getelement(ZCPHeadOffsetTableOffset))^.GDB:=memorybuf^.Count;
-
-     linkbyf^.SetGenMode(EnableGen);
-     //sysunit.TypeName2PTD('GDBDescriptor')^.Serialize(gdb,SA_SAVED_TO_SHD,memorybuf,linkbyf); убратькомент!!!!
-
-     PTZCPOffsetTable(memorybuf^.getelement(ZCPHeadOffsetTableOffset))^.GDBRT:=memorybuf^.Count;
-
-     linkbyf^.SetGenMode(DisableGen);
-
-     {test.x:=1;
-     test.y:=2;
-     test.z:=3;
-     systype.TypeName2PTD('GDBvertex')^.Serialize(@test,SA_SAVED_TO_SHD,memorybuf,linkbyf);}
-
-     linkbyf^.Minimize;
-     //sysunit.TypeName2PTD('GDBOpenArrayOfTObjLinkRecord')^.Serialize(linkbyf,SA_SAVED_TO_SHD,memorybuf,linkbyf);убратькомент!!!!
-
-     {systype.TypeName2PTD('ZCPHeader')^.DeSerialize(@s,SA_SAVED_TO_SHD,memorybuf);
-     fillchar(gdb^,sizeof(GDBDescriptor),0);
-     systype.TypeName2PTD('GDBDescriptor')^.DeSerialize(gdb,SA_SAVED_TO_SHD,memorybuf);}
-
-     outfile:=FileCreate({$IFNDEF DELPHI}UTF8ToSys{$ENDIF}(name));
-     FileWrite(outfile,memorybuf^.parray^,memorybuf^.Count);
-     fileclose(outfile);
-     outfile:=FileCreate({$IFNDEF DELPHI}UTF8ToSys{$ENDIF}(name+'remap'));
-     FileWrite(outfile,linkbyf^.parray^,linkbyf^.Count*linkbyf^.Size);
-     fileclose(outfile);
-     memorybuf^.done;
-     linkbyf^.done;
-*)
-end;
-procedure LoadZCP(const name: String; {gdb: PGDBDescriptor}var drawing:TSimpleDrawing);
-//var
-//  objcount:Integer;
-//  pmem,tmem:Pointer;
-//  infile:Integer;
-//  head:ZCPheader;
-  //memorybuf:TZctnrVectorBytes;
-  //FileHeader:ZCPHeader;
-//  test:gdbvertex;
-  //linkbyf:PGDBOpenArrayOfTObjLinkRecord;
-begin
-     (*
-     FileHeader:=NULZCPHeader;
-     memorybuf.InitFromFile(name);
-     sysunit.TypeName2PTD('ZCPHeader')^.DeSerialize(@FileHeader,SA_SAVED_TO_SHD,memorybuf,nil);
-     HistoryOutStr('Loading file: '+name);
-     HistoryOutStr('ZCad project file v'+inttostr(FileHeader.HiVersion)+'.'+inttostr(FileHeader.LoVersion));
-     HistoryOutStr('File coment: '+FileHeader.Coment);
-     memorybuf.Seek(FileHeader.OffsetTable.GDBRT);
-     Getmem(pointer(linkbyf),sizeof(GDBOpenArrayOfTObjLinkRecord));
-     sysunit.TypeName2PTD('GDBOpenArrayOfTObjLinkRecord')^.DeSerialize(linkbyf,SA_SAVED_TO_SHD,memorybuf,nil);
-     memorybuf.Seek(FileHeader.OffsetTable.GDB);
-     fillchar(gdb^,sizeof(GDBDescriptor),0);
-     sysunit.TypeName2PTD('GDBDescriptor')^.DeSerialize(gdb,SA_SAVED_TO_SHD,memorybuf,linkbyf);
-     gdb.GetCurrentDWG.SetFileName(name);
-     gdb.GetCurrentROOT.correctobjects(nil,-1);
-     //fillchar(FileHeader,sizeof(FileHeader),0);
-     {systype.TypeName2PTD('GDBVertex')^.DeSerialize(@test,SA_SAVED_TO_SHD,memorybuf);}
-     FileRead(infile,header,sizeof(shdblockheader));
-     while header.blocktype<>shd_block_eof do
-     begin
-          case header.blocktype of
-                                  shd_block_head:begin
-                                                      FileRead(infile,head,sizeof(ZCPheader));
-                                                 end;
-                              shd_block_primitiv:begin
-                                                      FileRead(infile,objcount,sizeof(objcount));
-                                                      header.blocksize:=header.blocksize-sizeof(objcount);
-                                                      Getmem(pmem,header.blocksize);
-                                                      FileRead(infile,pmem^,header.blocksize);
-                                                      tmem:=pmem;
-                                                      //gdb.ObjRoot.ObjArray.LoadCompactMemSize2(tmem,objcount);
-                                                      Freemem(pmem);
-                                                 end;
-                                            else begin
-                                                      FileSeek(infile,header.blocksize,1)
-                                                 end;
-          end;
-          FileRead(infile,header,sizeof(shdblockheader));
-     end;
-     fileclose(infile);*)
-end;
-begin
-     //i2:=0;
-     FOC:=0;
-     Ext2LoadProcMap.RegisterExt('dxf','AutoCAD DXF files via zengine (*.dxf)',@addfromdxf,true);
-     Ext2LoadProcMap.DefaultExt:='dxf';
-     DefaultFormatSettings.DecimalSeparator:='.';
+  FOC:=0;//убрать нахер
 end.

@@ -286,6 +286,12 @@ TTextJustify=(jstl(*'TopLeft'*),
               jsbtl(*'Left'*),
               jsbtc(*'Center'*),
               jsbtr(*'Right'*));
+
+PTDXFCodePage=^TDXFCodePage;
+TDXFCodePage=(DXFCPINVALID,DXFCP874,DXFCP932,DXFCP936,DXFCP949,DXFCP950,
+  DXFCP1250,DXFCP1251,DXFCP1252,DXFCP1253,DXFCP1254,DXFCP1255,DXFCP1256,
+  DXFCP1257,DXFCP1258);
+
 {EXPORT-}
 TZHandleCreator=GTSimpleHandles<TActuality,GTHandleManipulator<TActuality>>;
 

@@ -129,62 +129,45 @@ begin
 end;
 procedure readvariables(var drawing:TSimpleDrawing;var rdr:TZMemReader;var ctstyle:String; var clayer:String;var cltype:String;var cdimstyle:String;LoadMode:TLoadOpt;DWGVarsDict:TString2StringDictionary);
 var
-  {byt: Byte;}
   s: String;
-  {error: Integer;}
 begin
-     if LoadMode=TLOLoad then
-     begin
-     DWGVarsDict.mygetvalue('$CLAYER',clayer);
-     DWGVarsDict.mygetvalue('$TEXTSTYLE',ctstyle);
-     DWGVarsDict.mygetvalue('$DIMSTYLE',cdimstyle);
-     DWGVarsDict.mygetvalue('$CELTYPE',cltype);
-     //if sysvar.DWG.DWG_CLinew<>nil then
-       if DWGVarsDict.mygetvalue('$CELWEIGHT',s) then
-         drawing.CurrentLineW:=strtoint(s);//sysvar.DWG.DWG_CLinew^:=strtoint(s);
-     //if sysvar.DWG.DWG_DrawMode<>nil then
-       if DWGVarsDict.mygetvalue('$LWDISPLAY',s) then
-         case strtoint(s) of
-             1:drawing.LWDisplay:=true;//sysvar.DWG.DWG_DrawMode^ := true;
-             0:drawing.LWDisplay:=false;//sysvar.DWG.DWG_DrawMode^ := false;
-         end;
-     //if sysvar.DWG.DWG_LTScale<>nil then
-       if DWGVarsDict.mygetvalue('$LTSCALE',s) then
-         drawing.LTScale:=strtofloat(s);//sysvar.DWG.DWG_LTScale^ := strtofloat(s);
-     //if sysvar.DWG.DWG_CLTScale<>nil then
-       if DWGVarsDict.mygetvalue('$CELTSCALE',s) then
-         drawing.CLTScale:=strtofloat(s);//sysvar.DWG.DWG_CLTScale^ := strtofloat(s);
-     //if sysvar.DWG.DWG_CColor<>nil then
-       if DWGVarsDict.mygetvalue('$CECOLOR',s) then
-         drawing.CColor:=strtoint(s);//sysvar.DWG.DWG_CColor^ := strtoint(s);
-     //if sysvar.DWG.DWG_LUnits<>nil then
-       if DWGVarsDict.mygetvalue('$LUNITS',s) then
-         drawing.LUnits:=TLUnits(strtoint(s)-1);//sysvar.DWG.DWG_LUnits^ := TLUnits(strtoint(s)-1);
-     //if sysvar.DWG.DWG_LUPrec<>nil then
-       if DWGVarsDict.mygetvalue('$LUPREC',s) then
-         drawing.LUPrec:=TUPrec(strtoint(s));//sysvar.DWG.DWG_LUPrec^ := TUPrec(strtoint(s));
-     //if sysvar.DWG.DWG_AUnits<>nil then
-       if DWGVarsDict.mygetvalue('$AUNITS',s) then
-         drawing.AUnits:=TAUnits(strtoint(s));//sysvar.DWG.DWG_AUnits^ := TAUnits(strtoint(s));
-     //if sysvar.DWG.DWG_AUPrec<>nil then
-       if DWGVarsDict.mygetvalue('$AUPREC',s) then
-         drawing.AUPrec:=TUPrec(strtoint(s));//sysvar.DWG.DWG_AUPrec^ := TUPrec(strtoint(s));
-     //if sysvar.DWG.DWG_AngDir<>nil then
-       if DWGVarsDict.mygetvalue('$ANGDIR',s) then
-         drawing.AngDir:=TAngDir(strtoint(s));//sysvar.DWG.DWG_AngDir^ := TAngDir(strtoint(s));
-     //if sysvar.DWG.DWG_AngBase<>nil then
-       if DWGVarsDict.mygetvalue('$ANGBASE',s) then
-         drawing.AngBase:=strtofloat(s);//sysvar.DWG.DWG_AngBase^ := strtofloat(s);
-     //if sysvar.DWG.DWG_UnitMode<>nil then
-       if DWGVarsDict.mygetvalue('$UNITMODE',s) then
-         drawing.UnitMode:=TUnitMode(strtoint(s));//sysvar.DWG.DWG_UnitMode^ := TUnitMode(strtoint(s));
-     //if sysvar.DWG.DWG_InsUnits<>nil then
-       if DWGVarsDict.mygetvalue('$INSUNITS',s) then
-         drawing.InsUnits:=TInsUnits(strtoint(s));//sysvar.DWG.DWG_InsUnits^ := TInsUnits(strtoint(s));
-     //if sysvar.DWG.DWG_TextSize<>nil then
-       if DWGVarsDict.mygetvalue('$TEXTSIZE',s) then
-         drawing.TextSize:=strtofloat(s);//sysvar.DWG.DWG_TextSize^ := strtofloat(s);
-     end;
+  if LoadMode=TLOLoad then  begin
+    DWGVarsDict.mygetvalue('$CLAYER',clayer);
+    DWGVarsDict.mygetvalue('$TEXTSTYLE',ctstyle);
+    DWGVarsDict.mygetvalue('$DIMSTYLE',cdimstyle);
+    DWGVarsDict.mygetvalue('$CELTYPE',cltype);
+    if DWGVarsDict.mygetvalue('$CELWEIGHT',s) then
+      drawing.CurrentLineW:=strtoint(s);
+    if DWGVarsDict.mygetvalue('$LWDISPLAY',s) then
+      case strtoint(s) of
+        1:drawing.LWDisplay:=true;
+        0:drawing.LWDisplay:=false;
+      end;
+    if DWGVarsDict.mygetvalue('$LTSCALE',s) then
+      drawing.LTScale:=strtofloat(s);
+    if DWGVarsDict.mygetvalue('$CELTSCALE',s) then
+      drawing.CLTScale:=strtofloat(s);
+    if DWGVarsDict.mygetvalue('$CECOLOR',s) then
+      drawing.CColor:=strtoint(s);
+    if DWGVarsDict.mygetvalue('$LUNITS',s) then
+      drawing.LUnits:=TLUnits(strtoint(s)-1);
+    if DWGVarsDict.mygetvalue('$LUPREC',s) then
+      drawing.LUPrec:=TUPrec(strtoint(s));
+    if DWGVarsDict.mygetvalue('$AUNITS',s) then
+      drawing.AUnits:=TAUnits(strtoint(s));
+    if DWGVarsDict.mygetvalue('$AUPREC',s) then
+      drawing.AUPrec:=TUPrec(strtoint(s));
+    if DWGVarsDict.mygetvalue('$ANGDIR',s) then
+      drawing.AngDir:=TAngDir(strtoint(s));
+    if DWGVarsDict.mygetvalue('$ANGBASE',s) then
+      drawing.AngBase:=strtofloat(s);
+    if DWGVarsDict.mygetvalue('$UNITMODE',s) then
+      drawing.UnitMode:=TUnitMode(strtoint(s));
+    if DWGVarsDict.mygetvalue('$INSUNITS',s) then
+      drawing.InsUnits:=TInsUnits(strtoint(s));
+    if DWGVarsDict.mygetvalue('$TEXTSIZE',s) then
+      drawing.TextSize:=strtofloat(s);
+  end;
 end;
 procedure ReadDXFHeader(var rdr:TZMemReader;var fileCtx:TIODXFLoadContext);
 type
@@ -305,220 +288,144 @@ end;
 
 function GoToDXForENDTAB(var rdr:TZMemReader; fcode: Integer; const fname: String):boolean;
 var
-  byt: Byte;
-  s: String;
-  //error: Integer;
+  byt:Byte;
+  s:String;
 begin
   result:=false;
-  while not rdr.EOF do
-  begin
+  while not rdr.EOF do begin
     byt:=rdr.ParseInteger;
-    //s := rdr.ParseString;
-    //val(s, byt, error);
-    //if error <> 0 then
-    //  s := s{чето тут не так};
-    s := rdr.ParseString;
-    if (byt = fcode) and (s = fname) then
-                                         begin
-                                              result:=true;
-                                              exit;
-                                         end;
-    if (byt = 0) and (uppercase(s) = dxfName_ENDTAB) then
-                                         begin
-                                              exit;
-                                         end;
+    s:=rdr.ParseString;
+    if(byt=fcode)and(s=fname)then
+      exit(true);
+    if(byt=0)and(uppercase(s)=dxfName_ENDTAB) then
+      exit;
   end;
 end;
 procedure addentitiesfromdxf(var rdr:TZMemReader; const exitString: String;owner:PGDBObjSubordinated;var drawing:TSimpleDrawing;DC:TDrawContext;var context:TIODXFLoadContext);
 var
-//  byt,LayerColor: Integer;
-  s{, sname, sx1, sy1, sz1,scode,LayerName}: String;
-//  ErrorCode,GroupCode: Integer;
-group:integer;
-objid: Integer;
+  s: String;
+  group:integer;
+  objid: Integer;
   pobj,postobj: PGDBObjEntity;
-//  tp: PGDBObjBlockdef;
   newowner:PGDBObjSubordinated;
   m4:DMatrix4D;
   trash:boolean;
-  //additionalunit:TUnit;
   PExtLoadData:Pointer;
   EntInfoData:TEntInfoData;
-  //pentvarext,ppostentvarext:TVariablesExtender;
   bylayerlt:Pointer;
   lph:TLPSHandle;
 begin
   s:='';
   lph:=lps.StartLongProcess('addentitiesfromdxf',@rdr,rdr.Size);
   if Assigned(CreateExtLoadData) then
-                                     PExtLoadData:=CreateExtLoadData()
-                                 else
-                                     PExtLoadData:=nil;
-  {additionalunit.init('temparraryunit');
-  additionalunit.InterfaceUses.addnodouble(@SysUnit);}
+    PExtLoadData:=CreateExtLoadData()
+  else
+    PExtLoadData:=nil;
   group:=-1;
   bylayerlt:=drawing.LTypeStyleTable.getAddres('ByLayer');
-  while (not rdr.EOF) and (s <> exitString) do
-  begin
+  while (not rdr.EOF) and (s <> exitString) do begin
     lps.ProgressLongProcess(lph,rdr.CurrentPos);
-    //if assigned(ProcessLongProcessProc) then
-    //                                        ProcessLongProcessProc(rdr.ReadPos);
     s := rdr.ParseString;
-    if (group=0)and(DXFName2EntInfoData.MyGetValue(s,EntInfoData)) then
-    //objid:=entname2GDBID(s);
-    //if (objid>0)and(group=0) then
-    begin
-    if owner <> nil then
-      begin
-        zTraceLn('{D+}[DXF_CONTENTS]AddEntitiesFromDXF.Found primitive %s',[s]);
-        pobj := EntInfoData.AllocAndInitEntity(nil);
-        //pobj := {po^.CreateInitObj(objid,owner)}CreateInitObjFree(objid,nil);
-        PGDBObjEntity(pobj)^.LoadFromDXF(rdr,{@additionalunit}PExtLoadData,drawing,context);
-        if (PGDBObjEntity(pobj)^.vp.Layer=@DefaultErrorLayer)or(PGDBObjEntity(pobj)^.vp.Layer=nil) then
-                                                                 PGDBObjEntity(pobj)^.vp.Layer:=drawing.LayerTable.GetSystemLayer;
-        if (PGDBObjEntity(pobj)^.vp.LineType=nil) then
-                                                      PGDBObjEntity(pobj)^.vp.LineType:={drawing.LTypeStyleTable.getAddres('ByLayer')}bylayerlt;
-        if assigned(PGDBObjEntity(pobj)^.EntExtensions) then
-                                                            PGDBObjEntity(pobj)^.EntExtensions.RunSupportOldVersions(pobj,drawing);
-        pointer(postobj):=PGDBObjEntity(pobj)^.FromDXFPostProcessBeforeAdd({@additionalunit}PExtLoadData,drawing);
-        trash:=false;
-        if postobj=nil  then
-                            begin
-                                newowner:=owner;
-                                if PGDBObjEntity(pobj)^.PExtAttrib<>nil then
-                                begin
-                                     if PGDBObjEntity(pobj)^.PExtAttrib^.Handle>200 then
-                                                                                      begin
-                                                                                      context.h2p.Add(PGDBObjEntity(pobj)^.PExtAttrib^.Handle,pobj);
-                                                                                      context.h2p.Add(PGDBObjEntity(pobj)^.PExtAttrib^.dwgHandle,pobj);
-                                                                                      end;
-                                                                                      //pushhandle(phandlearray,PGDBObjEntity(pobj)^.PExtAttrib^.Handle,PtrInt(pobj));
-                                     if PGDBObjEntity(pobj)^.PExtAttrib^.OwnerHandle>200 then
-                                                                                      newowner:=context.h2p.MyGetValue(PGDBObjEntity(pobj)^.PExtAttrib^.OwnerHandle);
-                                                                                      //newowner:=pointer(getnevhandleWithNil(phandlearray,PGDBObjEntity(pobj)^.PExtAttrib^.OwnerHandle));
-                                     if PGDBObjEntity(pobj)^.PExtAttrib^.OwnerHandle=h_trash then
-                                                                                      trash:=true;
-
-
-                                end;
-                                if newowner=nil then
-                                                    begin
-                                                         zDebugLn('{EH}Warning! OwnerHandle $'+inttohex(PGDBObjEntity(pobj)^.PExtAttrib^.OwnerHandle,8)+' not found');
-                                                         //historyoutstr('Warning! OwnerHandle $'+inttohex(PGDBObjEntity(pobj)^.PExtAttrib^.OwnerHandle,8)+' not found');
-                                                         newowner:=owner;
-                                                    end;
-
-                                 if not trash then
-                                begin
-                                if (newowner<>owner) then
-                                begin
-                                     PGDBObjEntity(newowner)^.CalcObjMatrix(@drawing);
-                                     m4:=PGDBObjEntity(newowner)^.getmatrix^;
-                                     MatrixInvert(m4);
-                                     //pobj^.Format;
-                                     pobj^.CalcObjMatrix(@drawing);
-                                     pobj^.transform(m4);
-                                end
-                                else
-                                    pobj^.CalcObjMatrix(@drawing);
-                                end;
-                                if not trash then
-                                begin
-                                 newowner^.AddMi(@pobj);
-                                    if foc=0 then
-                                                 begin
-                                                      PGDBObjEntity(pobj)^.BuildGeometry(drawing);
-                                                      //PGDBObjEntity(pobj)^.Format;
-                                                      PGDBObjEntity(pobj)^.FormatAfterDXFLoad(drawing,dc);
-                                                      PGDBObjEntity(pobj)^.FromDXFPostProcessAfterAdd;
-                                                 end;
-                                end
-                                   else
-                                       begin
-                                 pobj^.done;
-                                 Freemem(pointer(pobj));
-
-                                       end;
-
-                            end
-                        else
-                            begin
-                                newowner:=owner;
-                                if PGDBObjEntity(pobj)^.PExtAttrib<>nil then
-                                begin
-                                     if PGDBObjEntity(pobj)^.PExtAttrib^.OwnerHandle>200 then
-                                                                                      newowner:=context.h2p.MyGetValue(PGDBObjEntity(pobj)^.PExtAttrib^.OwnerHandle);
-                                                                                      //newowner:=pointer(getnevhandleWithNil(phandlearray,PGDBObjEntity(pobj)^.PExtAttrib^.OwnerHandle));
-                                end;
-                                if newowner<>nil then
-                                begin
-                                if PGDBObjEntity(pobj)^.PExtAttrib<>nil then
-                                begin
-                                     if PGDBObjEntity(pobj)^.PExtAttrib^.Handle>200 then
-                                                                                      begin
-                                                                                      context.h2p.AddOrSetValue(PGDBObjEntity(pobj)^.PExtAttrib^.Handle,postobj);
-                                                                                      end;
-                                     context.h2p.Add(PGDBObjEntity(pobj)^.PExtAttrib^.dwgHandle,postobj);
-                                                                                      //pushhandle(phandlearray,PGDBObjEntity(pobj)^.PExtAttrib^.Handle,PtrInt(postobj));
-                                end;
-//                                if newowner=pointer($ffffffff) then
-//                                                           newowner:=newowner;
-                                if newowner<>owner then
-                                begin
-                                     m4:=PGDBObjEntity(newowner)^.getmatrix^;
-                                     MatrixInvert(m4);
-                                     postobj^.FormatEntity(drawing,dc);
-                                     postobj^.transform(m4);
-                                end;
-
-                                 newowner^.AddMi(@postobj);
-                                 if assigned(pobj^.EntExtensions)then
-                                                                     pobj^.EntExtensions.CopyAllExtToEnt(pobj,postobj);
-                                 {pentvarext:=pobj^.GetExtension(TVariablesExtender);
-                                 ppostentvarext:=postobj^.GetExtension(TVariablesExtender);
-                                 if (pentvarext<>nil)and(ppostentvarext<>nil) then
-                                 pentvarext.entityunit.CopyTo(@ppostentvarext^.entityunit);}
-
-                                 if foc=0 then
-                                              begin
-                                                   PGDBObjEntity(postobj)^.BuildGeometry(drawing);
-                                                   //PGDBObjEntity(postobj)^.Format;
-                                                   PGDBObjEntity(postobj)^.FormatAfterDXFLoad(drawing,dc);
-                                                   PGDBObjEntity(postobj)^.FromDXFPostProcessAfterAdd;
-                                              end;
-                                end
-                                   else
-                                       begin
-                                       postobj^.done;
-                                       Freemem(pointer(postobj));
-                                       end;
-                                   pobj^.done;
-                                   Freemem(pointer(pobj));
-                            end;
+    if (group=0)and(DXFName2EntInfoData.MyGetValue(s,EntInfoData)) then begin
+    if owner <> nil then begin
+      zTraceLn('{D+}[DXF_CONTENTS]AddEntitiesFromDXF.Found primitive %s',[s]);
+      pobj := EntInfoData.AllocAndInitEntity(nil);
+      PGDBObjEntity(pobj)^.LoadFromDXF(rdr,PExtLoadData,drawing,context);
+      if (PGDBObjEntity(pobj)^.vp.Layer=@DefaultErrorLayer)or(PGDBObjEntity(pobj)^.vp.Layer=nil) then
+        PGDBObjEntity(pobj)^.vp.Layer:=drawing.LayerTable.GetSystemLayer;
+      if (PGDBObjEntity(pobj)^.vp.LineType=nil) then
+        PGDBObjEntity(pobj)^.vp.LineType:=bylayerlt;
+      if assigned(PGDBObjEntity(pobj)^.EntExtensions) then
+        PGDBObjEntity(pobj)^.EntExtensions.RunSupportOldVersions(pobj,drawing);
+      pointer(postobj):=PGDBObjEntity(pobj)^.FromDXFPostProcessBeforeAdd(PExtLoadData,drawing);
+      trash:=false;
+      if postobj=nil  then begin
+        newowner:=owner;
+        if PGDBObjEntity(pobj)^.PExtAttrib<>nil then begin
+          if PGDBObjEntity(pobj)^.PExtAttrib^.Handle>200 then begin
+            context.h2p.Add(PGDBObjEntity(pobj)^.PExtAttrib^.Handle,pobj);
+            context.h2p.Add(PGDBObjEntity(pobj)^.PExtAttrib^.dwgHandle,pobj);
+          end;
+          if PGDBObjEntity(pobj)^.PExtAttrib^.OwnerHandle>200 then
+            newowner:=context.h2p.MyGetValue(PGDBObjEntity(pobj)^.PExtAttrib^.OwnerHandle);
+          if PGDBObjEntity(pobj)^.PExtAttrib^.OwnerHandle=h_trash then
+            trash:=true;
+        end;
+        if newowner=nil then begin
+          zDebugLn('{EH}Warning! OwnerHandle $'+inttohex(PGDBObjEntity(pobj)^.PExtAttrib^.OwnerHandle,8)+' not found');
+          newowner:=owner;
+        end;
+        if not trash then begin
+          if (newowner<>owner) then begin
+            PGDBObjEntity(newowner)^.CalcObjMatrix(@drawing);
+            m4:=PGDBObjEntity(newowner)^.getmatrix^;
+            MatrixInvert(m4);
+            pobj^.CalcObjMatrix(@drawing);
+            pobj^.transform(m4);
+          end else
+            pobj^.CalcObjMatrix(@drawing);
+        end;
+        if not trash then begin
+          newowner^.AddMi(@pobj);
+        if foc=0 then begin
+          PGDBObjEntity(pobj)^.BuildGeometry(drawing);
+          PGDBObjEntity(pobj)^.FormatAfterDXFLoad(drawing,dc);
+          PGDBObjEntity(pobj)^.FromDXFPostProcessAfterAdd;
+        end;
+        end else begin
+          pobj^.done;
+          Freemem(pointer(pobj));
+        end;
+      end else begin
+        newowner:=owner;
+        if PGDBObjEntity(pobj)^.PExtAttrib<>nil then begin
+        if PGDBObjEntity(pobj)^.PExtAttrib^.OwnerHandle>200 then
+          newowner:=context.h2p.MyGetValue(PGDBObjEntity(pobj)^.PExtAttrib^.OwnerHandle);
+        end;
+        if newowner<>nil then begin
+          if PGDBObjEntity(pobj)^.PExtAttrib<>nil then begin
+            if PGDBObjEntity(pobj)^.PExtAttrib^.Handle>200 then
+              context.h2p.AddOrSetValue(PGDBObjEntity(pobj)^.PExtAttrib^.Handle,postobj);
+            context.h2p.Add(PGDBObjEntity(pobj)^.PExtAttrib^.dwgHandle,postobj);
+          end;
+          if newowner<>owner then begin
+            m4:=PGDBObjEntity(newowner)^.getmatrix^;
+            MatrixInvert(m4);
+            postobj^.FormatEntity(drawing,dc);
+            postobj^.transform(m4);
+          end;
+          newowner^.AddMi(@postobj);
+          if assigned(pobj^.EntExtensions)then
+            pobj^.EntExtensions.CopyAllExtToEnt(pobj,postobj);
+          if foc=0 then begin
+            PGDBObjEntity(postobj)^.BuildGeometry(drawing);
+            PGDBObjEntity(postobj)^.FormatAfterDXFLoad(drawing,dc);
+            PGDBObjEntity(postobj)^.FromDXFPostProcessAfterAdd;
+          end;
+        end else begin
+          postobj^.done;
+          Freemem(pointer(postobj));
+        end;
+        pobj^.done;
+        Freemem(pointer(pobj));
+      end;
         zTraceLn('{D-}[DXF_CONTENTS]End primitive %s',[s]);
       end;
-      //additionalunit.free;
-        if Assigned(ClearExtLoadData) then
-                                         ClearExtLoadData(PExtLoadData);
-    end
-    else
-    begin
-         if group=0 then
-         begin
+      if Assigned(ClearExtLoadData) then
+        ClearExtLoadData(PExtLoadData);
+    end else begin
+      if group=0 then begin
          objid:=IsIgnoredEntity(s);
          if objid>0 then
          gotodxf(rdr, 0, '');
-         end
-         else
-             if trystrtoint(s,group)then
-                                    else
-                                        group:=-1;
+      end else
+        if trystrtoint(s,group)then else
+          group:=-1;
     end;
   end;
   if Assigned(FreeExtLoadData) then
-                                   FreeExtLoadData(PExtLoadData);
+    FreeExtLoadData(PExtLoadData);
   owner.postload(context);
-  //additionalunit.done;
   lps.EndLongProcess(lph);
 end;
 procedure addfromdxf12(var rdr:TZMemReader; const exitString: String;var ZCDCtx:TZDrawingContext;const LogProc:TZELogProc=nil);

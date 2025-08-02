@@ -580,7 +580,7 @@ begin
   byt:=rdr.ParseInteger;
   while byt <> 0 do
   begin
-    if not LoadFromDXFObjShared(rdr,byt,ptu,drawing) then
+    if not LoadFromDXFObjShared(rdr,byt,ptu,drawing,context) then
       case byt of
         8  :vp.Layer:=drawing.getlayertable.getAddres(rdr.ParseShortString);
         62 :vp.color:=rdr.ParseInteger;

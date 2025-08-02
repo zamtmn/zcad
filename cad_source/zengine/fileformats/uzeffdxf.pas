@@ -561,6 +561,7 @@ begin
        2:
          begin
            len:=0;
+           s:=dxfDeCodeString(s,context.Header);
            case ZCDCtx.PDrawing^.LTypeStyleTable.AddItem(s,pointer(pltypeprop)) of
                         IsFounded:
                                   begin
@@ -589,6 +590,7 @@ begin
          end;
        3:
          begin
+           s:=dxfDeCodeString(s,context.Header);
               if pltypeprop<>nil then
                                 pltypeprop^.desk:=s;
          end;
@@ -713,6 +715,7 @@ begin
       case byt of
         2:begin
           zDebugLn('{D}[DXF_CONTENTS]Found layer  '+s);
+          s:=dxfDeCodeString(s,context.Header);
           lname:=s;
           player:=ZCDCtx.PDrawing^.LayerTable.MergeItem(s,ZCDCtx.LoadMode);
           if player<>nil then
@@ -729,7 +732,8 @@ begin
               s := rdr.ParseString;
               byt:=strtoint(s);
               if byt<>0 then begin
-                desk := rdr.ParseString;
+                dxfLoadString(rdr,desk,context.Header);
+                //desk := rdr.ParseString;
                 if player<>nil then
                   player^.desk:=desk;
               end else begin
@@ -783,7 +787,7 @@ begin
       while byt <> 0 do begin
         byt:=rdr.ParseInteger;
         case byt of
-              2:tstyle.name:=rdr.ParseString;
+              2:dxfLoadString(rdr,tstyle.name,context.Header);//tstyle.name:=rdr.ParseString;
               5:DWGHandle:=rdr.ParseHexQWord;//strtoint64('$'+rdr.ParseString);
              40:tstyle.prop.size:=rdr.ParseDouble;
              41:tstyle.prop.wfactor:=rdr.ParseDouble;
@@ -1033,27 +1037,30 @@ begin
   psimstyleprop:=nil;
   ReadDimStylesMode:=TDSRM_ACAD;
   byt := 2;
-  while byt <> 0 do
-  begin
+  while byt <> 0 do begin
   {s := rdr.ParseString;
   byt := strtoint(s);}
   byt:=rdr.ParseInteger;
-  s := rdr.ParseString;
-  if psimstyleprop=nil then begin
-    if byt=2 then begin
-      psimstyleprop:=ZCDCtx.PDrawing^.DimStyleTable.MergeItem(s,ZCDCtx.LoadMode);
-      if psimstyleprop<>nil then begin
-        psimstyleprop^.init(s);
-        psimstyleprop^.Name:=s;
-      end;
-      if ZCDCtx.PDrawing^.CurrentDimStyle=nil then
-        ZCDCtx.PDrawing^.CurrentDimStyle:=psimstyleprop
-      else if uppercase(s)=uppercase(cdimstyle)then
-      if (ZCDCtx.LoadMode=TLOLoad) then
-        ZCDCtx.PDrawing^.CurrentDimStyle:=psimstyleprop;
-    end;
-  end else
-     psimstyleprop^.SetValueFromDxf(ReadDimStylesMode,byt,s,context);
+  //s := rdr.ParseString;
+    if psimstyleprop=nil then begin
+      if byt=2 then begin
+        dxfLoadString(rdr,s,context.Header);
+        psimstyleprop:=ZCDCtx.PDrawing^.DimStyleTable.MergeItem(s,ZCDCtx.LoadMode);
+        if psimstyleprop<>nil then begin
+          psimstyleprop^.init(s);
+          psimstyleprop^.Name:=s;
+        end;
+        if ZCDCtx.PDrawing^.CurrentDimStyle=nil then
+          ZCDCtx.PDrawing^.CurrentDimStyle:=psimstyleprop
+        else if uppercase(s)=uppercase(cdimstyle)then
+        if (ZCDCtx.LoadMode=TLOLoad) then
+          ZCDCtx.PDrawing^.CurrentDimStyle:=psimstyleprop;
+      end else
+        s:=rdr.ParseString;
+    end else begin
+      s:=rdr.ParseString;
+      psimstyleprop^.SetValueFromDxf(ReadDimStylesMode,byt,s,context);
+    end
   end;
 end;
 end;
@@ -1210,7 +1217,7 @@ begin
                                begin
                                     //programlog.logoutstr('Ignored double definition block '+s+';',lp_OldPos);
                                     //HistoryOutStr(format(rsDoubleBlockIgnored,[Tria_AnsiToUtf8(s)]));
-                                    zDebugLn('{I}'+rsDoubleBlockIgnored,[Tria_AnsiToUtf8(s)]);
+                                    zDebugLn('{I}'+rsDoubleBlockIgnored,[{Tria_AnsiToUtf8}(s)]);
 //                                    if s='DEVICE_PS_UK-VK'then
 //                                               s:=s;
                                     while (s <> 'ENDBLK') do
@@ -1890,7 +1897,7 @@ begin
                     outstream.TXTAddStringEOL(dxfGroupCode(100));
                     outstream.TXTAddStringEOL('AcDbLayerTableRecord');
                     outstream.TXTAddStringEOL(dxfGroupCode(2));
-                    outstream.TXTAddStringEOL(plp^.name);
+                    outstream.TXTAddStringEOL(dxfEnCodeString(plp^.name,IODXFContext.Header));
                     attr:=0;
                     if plp^._lock then
                                      attr:=attr + 4;
@@ -1927,7 +1934,7 @@ begin
                          outstream.TXTAddStringEOL(dxfGroupCode(1000));
                          outstream.TXTAddStringEOL('');
                          outstream.TXTAddStringEOL(dxfGroupCode(1000));
-                         outstream.TXTAddStringEOL(plp^.desk);
+                         outstream.TXTAddStringEOL(dxfEnCodeString(plp^.desk,IODXFContext.Header));
                     end;
                   end;
                 end;
@@ -1963,11 +1970,11 @@ begin
                          outstream.TXTAddStringEOL(dxfGroupCode(100));
                          outstream.TXTAddStringEOL('AcDbLinetypeTableRecord');
                          outstream.TXTAddStringEOL(dxfGroupCode(2));
-                         outstream.TXTAddStringEOL(pltp^.Name);
+                         outstream.TXTAddStringEOL(dxfEnCodeString(pltp^.Name,IODXFContext.Header));
                          outstream.TXTAddStringEOL(dxfGroupCode(70));
                          outstream.TXTAddStringEOL('0');
                          outstream.TXTAddStringEOL(dxfGroupCode(3));
-                         outstream.TXTAddStringEOL(pltp^.desk);
+                         outstream.TXTAddStringEOL(dxfEnCodeString(pltp^.desk,IODXFContext.Header));
                          outstream.TXTAddStringEOL(dxfGroupCode(72));
                          outstream.TXTAddStringEOL('65');
                          i:=pltp^.strokesarray.GetRealCount;
@@ -2090,7 +2097,7 @@ begin
                       outstream.TXTAddStringEOL(dxfGroupCode(100));
                       outstream.TXTAddStringEOL('AcDbDimStyleTableRecord');
                       outstream.TXTAddStringEOL(dxfGroupCode(2));
-                      outstream.TXTAddStringEOL(pdsp^.Name);
+                      outstream.TXTAddStringEOL({pdsp^.Name}dxfEncodeString(pdsp^.Name,IODXFContext.Header));
                       outstream.TXTAddStringEOL(dxfGroupCode(3));
                       outstream.TXTAddStringEOL(pdsp^.Units.DIMPOST);
                       outstream.TXTAddStringEOL(dxfGroupCode(70));
@@ -2425,7 +2432,7 @@ ENDTAB}
                     outstream.TXTAddStringEOL(dxfGroupCode(100));
                     outstream.TXTAddStringEOL('AcDbTextStyleTableRecord');
                     outstream.TXTAddStringEOL(dxfGroupCode(2));
-                    outstream.TXTAddStringEOL({drawing.TextStyleTable.getelement(i))}pcurrtextstyle^.name);
+                    outstream.TXTAddStringEOL({pcurrtextstyle^.name}dxfEncodeString(pcurrtextstyle^.name,IODXFContext.Header));
                     outstream.TXTAddStringEOL(dxfGroupCode(70));
                     outstream.TXTAddStringEOL('0');
 

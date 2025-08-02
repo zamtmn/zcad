@@ -196,18 +196,18 @@ begin
   while true do
   begin
     s:='';
-    if not LoadFromDXFObjShared(rdr,byt,ptu,drawing) then
-       if dxfvertexload(rdr,10,byt,tv) then
+    if not LoadFromDXFObjShared(rdr,byt,ptu,drawing,context) then
+       if dxfLoadGroupCodeVertex(rdr,10,byt,tv) then
                                          begin
                                               if byt=30 then
                                                             if vertexgo then
                                                                             FastAddVertex(tv);
                                          end
-  else if dxfIntegerload(rdr,70,byt,hlGDBWord) then
+  else if dxfLoadGroupCodeInteger(rdr,70,byt,hlGDBWord) then
                                                    begin
                                                         if (hlGDBWord and 1) = 1 then closed := true;
                                                    end
-   else if dxfStringload(rdr,0,byt,s)then
+   else if dxfLoadGroupCodeString(rdr,0,byt,s)then
                                              begin
                                                   if s='VERTEX' then vertexgo := true;
                                                   if s='SEQEND' then system.Break;

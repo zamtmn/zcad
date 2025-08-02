@@ -395,9 +395,9 @@ begin
   byt:=rdr.ParseInteger;
   while byt <> 0 do
   begin
-    if not LoadFromDXFObjShared(rdr,byt,ptu,drawing) then
-    if not dxfvertexload(rdr,10,byt,Local.P_insert) then
-    if not dxfDoubleload(rdr,40,byt,Radius) then {s := }rdr.SkipString;
+    if not LoadFromDXFObjShared(rdr,byt,ptu,drawing,Context) then
+    if not dxfLoadGroupCodeVertex(rdr,10,byt,Local.P_insert) then
+    if not dxfLoadGroupCodeDouble(rdr,40,byt,Radius) then {s := }rdr.SkipString;
     byt:=rdr.ParseInteger;
   end;
   //PProjoutbound:=nil;

@@ -50,9 +50,9 @@ begin
      CurrentLine:=1;
      repeat
      pdwg^.GetLTypeTable.ParseStrings(ltd,CurrentLine,LTName,LTDesk,LTImpl);
-     LTName:=Tria_AnsiToUtf8(LTName);
-     LTDesk:=Tria_AnsiToUtf8(LTDesk);
-     LTImpl:=Tria_AnsiToUtf8(LTImpl);
+     LTName:={Tria_AnsiToUtf8}(LTName);
+     LTDesk:={Tria_AnsiToUtf8}(LTDesk);
+     LTImpl:={Tria_AnsiToUtf8}(LTImpl);
      if (LTName<>'')and(LTImpl<>'')then
      if (length(LTName)<200)and(length(LTImpl)<200)then
      begin

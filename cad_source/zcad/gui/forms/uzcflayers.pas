@@ -158,7 +158,7 @@ begin
 end;
 function TLayersForm.GetLayerName(Item: TListItem):string;
 begin
-  result:=Tria_AnsiToUtf8(PGDBLayerProp(Item.Data)^.Name);
+  result:={Tria_AnsiToUtf8}(PGDBLayerProp(Item.Data)^.Name);
 end;
 {layer lock handle procedures}
 function TLayersForm.IsLayerLock(Item: TListItem):boolean;
@@ -316,7 +316,7 @@ var
 begin
 ARect:=ListViewDrawSubItem(state,aCanvas,Item,SubItem);
 ARect := Item.DisplayRectSubItem( SubItem,drLabel);
-s:=Tria_AnsiToUtf8(GetLTName(PGDBLayerProp(Item.Data)^.LT));
+s:={Tria_AnsiToUtf8}(GetLTName(PGDBLayerProp(Item.Data)^.LT));
 drawLT(aCanvas,ARect,s,PGDBLayerProp(Item.Data)^.LT);
 end;
 procedure FillSelector(SelectorWindow: TSelectorForm);
@@ -333,7 +333,7 @@ begin
        if pltp<>nil then
        repeat
             if (pltp^.Mode<>TLTByBlock)and(pltp^.Mode<>TLTByLayer)then
-                SelectorWindow.AddItem(Tria_AnsiToUtf8(pltp^.Name),Tria_AnsiToUtf8(pltp^.desk),pltp);
+                SelectorWindow.AddItem({Tria_AnsiToUtf8}(pltp^.Name),Tria_AnsiToUtf8(pltp^.desk),pltp);
 
             pltp:=pdwg^.LTypeStyleTable.iterate(ir);
        until pltp=nil;
@@ -342,7 +342,7 @@ begin
 end;
 function TLayersForm.GetLineTypeName(Item: TListItem):string;
 begin
-     result:=Tria_AnsiToUtf8(GetLTName(PGDBLayerProp(Item.Data)^.LT));
+     result:={Tria_AnsiToUtf8}(GetLTName(PGDBLayerProp(Item.Data)^.LT));
 end;
 
 function TLayersForm.LayerLTClick(Item: TListItem;r: TRect):boolean;
@@ -576,7 +576,7 @@ begin
           //pdwg:=drawings.GetCurrentDWG;
           player:=(Item.Data);
           countlayer(player,inent,inblock);
-          LayerDescLabel.Caption:=Format(rsLayerUsedIn,[Tria_AnsiToUtf8(player^.Name),inent,inblock]);
+          LayerDescLabel.Caption:=Format(rsLayerUsedIn,[{Tria_AnsiToUtf8}(player^.Name),inent,inblock]);
      end;
 end;
 

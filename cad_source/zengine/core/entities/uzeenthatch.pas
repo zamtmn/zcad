@@ -605,13 +605,13 @@ begin
   byt:=rdr.ParseInteger;
   while byt <> 0 do
   begin
-    if not LoadFromDXFObjShared(rdr,byt,ptu,drawing) then
+    if not LoadFromDXFObjShared(rdr,byt,ptu,drawing,context) then
     if not Path.LoadFromDXF (rdr,byt) then
     if not LoadPatternFromDXF(PPattern,rdr,byt,Angle,Scale) then
-    if not dxfintegerload(rdr,75,byt,hstyle) then
-    if not dxfDoubleload(rdr,52,byt,Angle) then
-    if not dxfDoubleload(rdr,41,byt,Scale) then
-    if not dxfStringload(rdr,2,byt,PatternName) then
+    if not dxfLoadGroupCodeInteger(rdr,75,byt,hstyle) then
+    if not dxfLoadGroupCodeDouble(rdr,52,byt,Angle) then
+    if not dxfLoadGroupCodeDouble(rdr,41,byt,Scale) then
+    if not dxfLoadGroupCodeString(rdr,2,byt,PatternName) then
       rdr.SkipString;
     byt:=rdr.ParseInteger;
   end;

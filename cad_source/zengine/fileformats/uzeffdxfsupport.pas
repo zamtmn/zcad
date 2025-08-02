@@ -124,16 +124,24 @@ procedure dxfDoubleout(var f:TZctnrVectorBytes;dxfcode:Integer;const v:Double);
 procedure dxfIntegerout(var f:TZctnrVectorBytes;dxfcode:Integer;const v:Integer);
 procedure dxfStringout(var f:TZctnrVectorBytes;dxfcode:Integer;const v:String);overload;
 procedure dxfStringout(var f:TZctnrVectorBytes;dxfcode:Integer;const v:String; const FileHdrInfo:TDXFHeaderInfo);overload;
-
 procedure dxfStringout(var f:TZctnrVectorBytes;dxfcode:Integer;const v1,v2:String);overload;
-function dxfVertexLoad(var rdr:TZMemReader;const DXFCode,CurrentDXFCode:Integer; var v:GDBvertex):Boolean;
-function dxfVertexLoad1(var rdr:TZMemReader;const DXFCode,CurrentDXFCode:Integer; var v:GDBvertex):Boolean;
-function dxfDoubleload(var rdr:TZMemReader;DXFCode,CurrentDXFCode:Integer; var v:Double):Boolean;
-function dxfFloatload(var rdr:TZMemReader;DXFCode,CurrentDXFCode:Integer; var v:Single):Boolean;
-function dxfIntegerload(var rdr:TZMemReader;DXFCode,CurrentDXFCode:Integer; var v:Integer):Boolean;
-function dxfStringload(var rdr:TZMemReader;DXFCode,CurrentDXFCode:Integer; var v:String):Boolean;overload;
-function dxfStringload(var rdr:TZMemReader;DXFCode,CurrentDXFCode:Integer; var v:TDXFEntsInternalStringType):Boolean;overload;
-function dxfStringload(var rdr:TZMemReader;DXFCode,CurrentDXFCode:Integer; var v:String; const FileHdrInfo:TDXFHeaderInfo):Boolean;overload;
+
+function dxfEnCodeString(const v:String; const FileHdrInfo:TDXFHeaderInfo):string;
+
+function dxfLoadGroupCodeVertex(var rdr:TZMemReader;const DXFCode,CurrentDXFCode:Integer; var v:GDBvertex):Boolean;
+function dxfLoadGroupCodeVertex1(var rdr:TZMemReader;const DXFCode,CurrentDXFCode:Integer; var v:GDBvertex):Boolean;
+function dxfLoadGroupCodeDouble(var rdr:TZMemReader;DXFCode,CurrentDXFCode:Integer; var v:Double):Boolean;
+function dxfLoadGroupCodeFloat(var rdr:TZMemReader;DXFCode,CurrentDXFCode:Integer; var v:Single):Boolean;
+function dxfLoadGroupCodeInteger(var rdr:TZMemReader;DXFCode,CurrentDXFCode:Integer; var v:Integer):Boolean;
+function dxfLoadGroupCodeString(var rdr:TZMemReader;DXFCode,CurrentDXFCode:Integer; var v:String):Boolean;overload;
+function dxfLoadGroupCodeString(var rdr:TZMemReader;DXFCode,CurrentDXFCode:Integer; var v:TDXFEntsInternalStringType):Boolean;overload;
+function dxfLoadGroupCodeString(var rdr:TZMemReader;DXFCode,CurrentDXFCode:Integer; var v:String; const FileHdrInfo:TDXFHeaderInfo):Boolean;overload;
+
+function dxfDeCodeString(const v:String; const FileHdrInfo:TDXFHeaderInfo):string;
+
+procedure dxfLoadString(var rdr:TZMemReader;out v:String;const FileHdrInfo:TDXFHeaderInfo);
+procedure dxfLoadAddString(var rdr:TZMemReader;var v:String;const FileHdrInfo:TDXFHeaderInfo);
+
 function dxfGroupCode(const DXFCode:Integer):String;
 function DXFHandle(const sh:string):TDWGHandle;
 
@@ -368,6 +376,21 @@ begin
   f.TXTAddStringEOL(inttostr(dxfcode));
   f.TXTAddStringEOL(v);
 end;
+function dxfEncodeString(const v:String; const FileHdrInfo:TDXFHeaderInfo):string;
+var
+  ts:RawByteString;
+begin
+  if FileHdrInfo.iVersion<1021 then begin
+    //младше версии DXF R2007 (AC1021)
+    //нужно перекодировать в соответствии с DWGCodepage
+    //начиная с DXF R2007 в dxf тексты уже хранятся в utf8
+    ts:=v;
+    SetCodePage(ts,CP_UTF8,false);
+    SetCodePage(ts,FileHdrInfo.iDWGCodePage,true);
+    result:=ts;
+  end else
+    result:=v;
+end;
 procedure dxfStringout(var f:TZctnrVectorBytes;dxfcode:Integer;const v:String; const FileHdrInfo:TDXFHeaderInfo);
 var
   ts:RawByteString;
@@ -377,10 +400,7 @@ begin
     //младше версии DXF R2007 (AC1021)
     //нужно перекодировать в соответствии с DWGCodepage
     //начиная с DXF R2007 в dxf тексты уже хранятся в utf8
-    ts:=v;
-    SetCodePage(ts,CP_UTF8,false);
-    SetCodePage(ts,FileHdrInfo.iDWGCodePage,true);
-    f.TXTAddStringEOL(ts);
+    f.TXTAddStringEOL(dxfEncodeString(v,FileHdrInfo));
   end else
     f.TXTAddStringEOL(v);
 end;
@@ -391,7 +411,7 @@ begin
      f.TXTAddStringEOL(v2);
 end;
 
-function dxfVertexLoad(var rdr:TZMemReader;const DXFCode,CurrentDXFCode:Integer; var v:GDBvertex):Boolean;
+function dxfLoadGroupCodeVertex(var rdr:TZMemReader;const DXFCode,CurrentDXFCode:Integer; var v:GDBvertex):Boolean;
 begin
      result:=false;
      if CurrentDXFCode=DXFCode then begin v.x:=rdr.ParseDouble; result:=true end
@@ -427,7 +447,7 @@ begin
   end else
     raise EDXFReadException.CreateFmt(cDXFError_WrogGroupCode,[RequiredDXFGroupCode,CurrentDXFGroupCode]);
 end;
-function dxfVertexLoad1(var rdr:TZMemReader;const DXFCode,CurrentDXFCode:Integer; var v:GDBvertex):Boolean;
+function dxfLoadGroupCodeVertex1(var rdr:TZMemReader;const DXFCode,CurrentDXFCode:Integer; var v:GDBvertex):Boolean;
 //var s:String;
 begin
      result:=false;
@@ -435,24 +455,24 @@ begin
 else if CurrentDXFCode=DXFCode+1 then begin v.y:=rdr.ParseDouble; result:=true end
 else if CurrentDXFCode=DXFCode+2 then begin v.z:=rdr.ParseDouble; result:=true end;
 end;
-function dxfDoubleload(var rdr:TZMemReader;DXFCode,CurrentDXFCode:Integer; var v:Double):Boolean;
+function dxfLoadGroupCodeDouble(var rdr:TZMemReader;DXFCode,CurrentDXFCode:Integer; var v:Double):Boolean;
 //var s:String;
 begin
      result:=false;
      if CurrentDXFCode=DXFCode then begin v:=rdr.ParseDouble; result:=true end
 end;
-function dxfFloatload(var rdr:TZMemReader;DXFCode,CurrentDXFCode:Integer; var v:Single):Boolean;
+function dxfLoadGroupCodeFloat(var rdr:TZMemReader;DXFCode,CurrentDXFCode:Integer; var v:Single):Boolean;
 begin
      result:=false;
      if CurrentDXFCode=DXFCode then begin v:=rdr.ParseDouble; result:=true end
 end;
-function dxfIntegerload(var rdr:TZMemReader;DXFCode,CurrentDXFCode:Integer; var v:Integer):Boolean;
+function dxfLoadGroupCodeInteger(var rdr:TZMemReader;DXFCode,CurrentDXFCode:Integer; var v:Integer):Boolean;
 //var s:String;
 begin
      result:=false;
      if CurrentDXFCode=DXFCode then begin v:=rdr.ParseInteger; result:=true end
 end;
-function dxfStringload(var rdr:TZMemReader;DXFCode,CurrentDXFCode:Integer;var v:String):Boolean;
+function dxfLoadGroupCodeString(var rdr:TZMemReader;DXFCode,CurrentDXFCode:Integer;var v:String):Boolean;
 //var s:String;
 begin
      result:=false;
@@ -461,7 +481,7 @@ begin
        result:=true;
      end;
 end;
-function dxfStringload(var rdr:TZMemReader;DXFCode,CurrentDXFCode:Integer; var v:TDXFEntsInternalStringType):Boolean;
+function dxfLoadGroupCodeString(var rdr:TZMemReader;DXFCode,CurrentDXFCode:Integer; var v:TDXFEntsInternalStringType):Boolean;
 begin
      { #todo : Нужно убрать уникодный вариант. читать утф8 потом за 1 раз присваивать }
      result:=false;
@@ -470,23 +490,54 @@ begin
        result:=true;
      end;
 end;
-function dxfStringload(var rdr:TZMemReader;DXFCode,CurrentDXFCode:Integer; var v:String; const FileHdrInfo:TDXFHeaderInfo):Boolean;
+
+function dxfDeCodeString(const v:String; const FileHdrInfo:TDXFHeaderInfo):string;
 var
   s:RawByteString;
 begin
+  if FileHdrInfo.iVersion<1021 then begin
+    s:=v;
+    //младше версии DXF R2007 (AC1021)
+    //нужно перекодировать в соответствии с DWGCodepage
+    //начиная с DXF R2007 в dxf тексты уже хранятся в utf8
+    SetCodePage(s,FileHdrInfo.iDWGCodePage,false);
+    SetCodePage(s,CP_UTF8,true);
+    Result:=s;
+  end else
+    Result:=v;
+end;
+
+procedure dxfLoadString(var rdr:TZMemReader;out v:String;const FileHdrInfo:TDXFHeaderInfo);
+var
+  s:RawByteString;
+begin
+  s:=rdr.ParseString;
+  if FileHdrInfo.iVersion<1021 then begin
+    //младше версии DXF R2007 (AC1021)
+    //нужно перекодировать в соответствии с DWGCodepage
+    //начиная с DXF R2007 в dxf тексты уже хранятся в utf8
+    SetCodePage(s,FileHdrInfo.iDWGCodePage,false);
+    SetCodePage(s,CP_UTF8,true);
+  end;
+  v:=s;
+end;
+
+procedure dxfLoadAddString(var rdr:TZMemReader;var v:String;const FileHdrInfo:TDXFHeaderInfo);
+var
+  s:String;
+begin
+  dxfLoadString(rdr,s,FileHdrInfo);
+  v:=v+s;
+end;
+
+function dxfLoadGroupCodeString(var rdr:TZMemReader;DXFCode,CurrentDXFCode:Integer; var v:String; const FileHdrInfo:TDXFHeaderInfo):Boolean;
+begin
   result:=false;
   if CurrentDXFCode=DXFCode then begin
-    s:=rdr.ParseString;
-    if FileHdrInfo.iVersion<1021 then begin
-      //младше версии DXF R2007 (AC1021)
-      //нужно перекодировать в соответствии с DWGCodepage
-      //начиная с DXF R2007 в dxf тексты уже хранятся в utf8
-      SetCodePage(s,FileHdrInfo.iDWGCodePage,false);
-      SetCodePage(s,CP_UTF8,true);
-    end;
-    v:=v+s;
+    dxfLoadAddString(rdr,v,FileHdrInfo);
     result:=true;
   end;
 end;
+
 begin
 end.

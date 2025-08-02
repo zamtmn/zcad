@@ -65,7 +65,7 @@ TExtAttrib=record
                     constructor init(own:Pointer;layeraddres:PGDBLayerProp;LW:SmallInt);
                     constructor initnul(owner:PGDBObjGenericWithSubordinated);
                     procedure SaveToDXFObjPrefix(var  outStream:TZctnrVectorBytes;entname,dbname:String;var IODXFContext:TIODXFSaveContext;notprocessHandle:boolean=false);
-                    function LoadFromDXFObjShared(var rdr:TZMemReader;DXFCode:Integer;ptu:PExtensionData;var drawing:TDrawingDef):Boolean;
+                    function LoadFromDXFObjShared(var rdr:TZMemReader;DXFCode:Integer;ptu:PExtensionData;var drawing:TDrawingDef;var context:TIODXFLoadContext):Boolean;
                     function ProcessFromDXFObjXData(const _Name,_Value:String;ptu:PExtensionData;const drawing:TDrawingDef):Boolean;virtual;
                     function FromDXFPostProcessBeforeAdd(ptu:PExtensionData;const drawing:TDrawingDef):PGDBObjSubordinated;virtual;
                     procedure FromDXFPostProcessAfterAdd;virtual;
@@ -1071,13 +1071,13 @@ begin
 
   dxfStringout(outStream,5,inttohex(tmpHandle{IODXFContext.handle}, 0));
   dxfStringout(outStream,100,dxfName_AcDbEntity);
-  dxfStringout(outStream,8,vp.layer^.name);
+  dxfStringout(outStream,8,dxfEnCodeString(vp.layer^.name,IODXFContext.header));
   if vp.color<>ClByLayer then
                              dxfStringout(outStream,62,inttostr(vp.color));
   if vp.lineweight<>-1 then dxfIntegerout(outStream,370,vp.lineweight);
   if dbname<>'' then
                     dxfStringout(outStream,100,dbname);
-  if vp.LineType<>{''}nil then dxfStringout(outStream,6,vp.LineType^.Name);
+  if vp.LineType<>{''}nil then dxfStringout(outStream,6,dxfEnCodeString(vp.LineType^.Name,IODXFContext.header));
   if vp.LineTypeScale<>1 then dxfDoubleout(outStream,48,vp.LineTypeScale);
 end;
 
@@ -1101,12 +1101,12 @@ begin
       result:=true;
     end;
     6:begin
-      vp.LineType:=drawing.GetLTypeTable.getAddres(rdr.ParseShortString);
+      vp.LineType:=drawing.GetLTypeTable.getAddres(dxfDeCodeString(rdr.ParseShortString,Context.header));
       result:=true
     end;
     8:begin
       if vp.layer=@DefaultErrorLayer then begin
-        vp.Layer :=drawing.getlayertable.getAddres(rdr.ParseShortString);
+        vp.Layer :=drawing.getlayertable.getAddres(dxfDeCodeString(rdr.ParseShortString,Context.header));
         if vp.Layer=nil then
           vp.Layer:=vp.Layer;
       end else

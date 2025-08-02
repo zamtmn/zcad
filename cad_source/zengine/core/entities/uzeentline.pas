@@ -199,9 +199,9 @@ begin
   byt:=rdr.ParseInteger;
   while byt <> 0 do
   begin
-    if not LoadFromDXFObjShared(rdr,byt,ptu,drawing) then
-       if not dxfvertexload(rdr,10,byt,CoordInOCS.lBegin) then
-          if not dxfvertexload(rdr,11,byt,CoordInOCS.lEnd) then {s := }rdr.SkipString;
+    if not LoadFromDXFObjShared(rdr,byt,ptu,drawing,context) then
+       if not dxfLoadGroupCodeVertex(rdr,10,byt,CoordInOCS.lBegin) then
+          if not dxfLoadGroupCodeVertex(rdr,11,byt,CoordInOCS.lEnd) then {s := }rdr.SkipString;
     byt:=rdr.ParseInteger;
   end;
 end;

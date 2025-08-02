@@ -677,18 +677,18 @@ begin
   byt:=rdr.ParseInteger;
   while byt <> 0 do
   begin
-    if not LoadFromDXFObjShared(rdr,byt,ptu,drawing) then
-    if not dxfvertexload(rdr,10,byt,Local.P_insert) then
-    if not dxfvertexload(rdr,11,byt,ux) then
-    if not dxfDoubleload(rdr,40,byt,textprop.size) then
-    if not dxfDoubleload(rdr,41,byt,width) then
-    if not dxfDoubleload(rdr,44,byt,linespacef) then
-    if not dxfDoubleload(rdr,51,byt,textprop.oblique) then
-    if not dxfIntegerload(rdr,71,byt,j)then
-    if not dxfStringload(rdr,1,byt,ttemplate,context.Header)then
-    if not dxfStringload(rdr,3,byt,ttemplate,context.Header)then
+    if not LoadFromDXFObjShared(rdr,byt,ptu,drawing,context) then
+    if not dxfLoadGroupCodeVertex(rdr,10,byt,Local.P_insert) then
+    if not dxfLoadGroupCodeVertex(rdr,11,byt,ux) then
+    if not dxfLoadGroupCodeDouble(rdr,40,byt,textprop.size) then
+    if not dxfLoadGroupCodeDouble(rdr,41,byt,width) then
+    if not dxfLoadGroupCodeDouble(rdr,44,byt,linespacef) then
+    if not dxfLoadGroupCodeDouble(rdr,51,byt,textprop.oblique) then
+    if not dxfLoadGroupCodeInteger(rdr,71,byt,j)then
+    if not dxfLoadGroupCodeString(rdr,1,byt,ttemplate,context.Header)then
+    if not dxfLoadGroupCodeString(rdr,3,byt,ttemplate,context.Header)then
     {if dxfDoubleload(rdr,50,byt,angle) then angleload := true
-    else }if dxfStringload(rdr,7,byt,style)then begin
+    else }if dxfLoadGroupCodeString(rdr,7,byt,style)then begin
       TXTStyle:=drawing.GetTextStyleTable^.FindStyle(Style,false);
       if TXTStyle=nil then
         TXTStyle:=pointer(drawing.GetTextStyleTable^.getDataMutable(0));

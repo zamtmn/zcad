@@ -61,7 +61,7 @@ begin
                        end
 else if plt<>nil then
                    begin
-                        s:=Tria_AnsiToUtf8(plt^.Name);
+                        s:={Tria_AnsiToUtf8}(plt^.Name);
                         //ll:=30;
                    end
                else

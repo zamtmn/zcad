@@ -171,11 +171,11 @@ begin
   byt:=rdr.ParseInteger;
   while byt <> 0 do
   begin
-    if not LoadFromDXFObjShared(rdr,byt,ptu,drawing) then
-       if not dxfvertexload(rdr,10,byt,PInOCS[0]) then
-          if not dxfvertexload(rdr,11,byt,PInOCS[1]) then
-          if not dxfvertexload(rdr,12,byt,PInOCS[2]) then
-          if not dxfvertexload(rdr,13,byt,PInOCS[3]) then
+    if not LoadFromDXFObjShared(rdr,byt,ptu,drawing,context) then
+       if not dxfLoadGroupCodeVertex(rdr,10,byt,PInOCS[0]) then
+          if not dxfLoadGroupCodeVertex(rdr,11,byt,PInOCS[1]) then
+          if not dxfLoadGroupCodeVertex(rdr,12,byt,PInOCS[2]) then
+          if not dxfLoadGroupCodeVertex(rdr,13,byt,PInOCS[3]) then
           {s := }rdr.SkipString;
     byt:=rdr.ParseInteger;
   end;

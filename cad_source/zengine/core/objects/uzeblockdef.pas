@@ -83,7 +83,7 @@ begin
   byt:=f.ParseInteger;
   while byt <> 0 do
   begin
-    if not LoadFromDXFObjShared(f,byt,ptu,drawing) then
+    if not LoadFromDXFObjShared(f,byt,ptu,drawing,context) then
                                            f.SkipString;
     byt:=f.ParseInteger;
   end;

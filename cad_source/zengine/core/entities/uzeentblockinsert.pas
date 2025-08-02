@@ -551,13 +551,13 @@ begin
   byt:=rdr.ParseInteger;
   while byt <> 0 do
   begin
-     if not LoadFromDXFObjShared(rdr,byt,ptu,drawing) then
-     if not dxfvertexload(rdr,10,byt,Local.P_insert) then
-     if not dxfvertexload1(rdr,41,byt,scale) then
-     if dxfDoubleload(rdr,50,byt,rotate) then
+     if not LoadFromDXFObjShared(rdr,byt,ptu,drawing,context) then
+     if not dxfLoadGroupCodeVertex(rdr,10,byt,Local.P_insert) then
+     if not dxfLoadGroupCodeVertex1(rdr,41,byt,scale) then
+     if dxfLoadGroupCodeDouble(rdr,50,byt,rotate) then
        rotate:=DegToRad(rotate)
-else if dxfIntegerload(rdr,71,byt,hlGDBWord)then begin if hlGDBWord = 1 then attrcont := true; end
-else if not dxfStringload(rdr,2,byt,name)then {s := }rdr.SkipString;
+else if dxfLoadGroupCodeInteger(rdr,71,byt,hlGDBWord)then begin if hlGDBWord = 1 then attrcont := true; end
+else if not dxfLoadGroupCodeString(rdr,2,byt,name)then {s := }rdr.SkipString;
     byt:=rdr.ParseInteger;
   end;
   if attrcont then ;

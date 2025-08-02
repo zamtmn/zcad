@@ -365,17 +365,17 @@ begin
 
   DXFGroupCode:=rdr.ParseInteger;
   while DXFGroupCode <> 0 do begin
-    if not LoadFromDXFObjShared(rdr,DXFGroupCode,ptu,drawing) then
-       if dxfvertexload(rdr,10,DXFGroupCode,tmpVertex) then begin
+    if not LoadFromDXFObjShared(rdr,DXFGroupCode,ptu,drawing,context) then
+       if dxfLoadGroupCodeVertex(rdr,10,DXFGroupCode,tmpVertex) then begin
          if DXFGroupCode=30 then
            addvertex(tmpVertex);
-       end else if dxfFloatload(rdr,40,DXFGroupCode,tmpKnot) then
+       end else if dxfLoadGroupCodeFloat(rdr,40,DXFGroupCode,tmpKnot) then
          Knots.PushBackData(tmpKnot)
-       else if dxfIntegerload(rdr,70,DXFGroupCode,tmpFlag) then begin
+       else if dxfLoadGroupCodeInteger(rdr,70,DXFGroupCode,tmpFlag) then begin
          Opts:=DXFFlag2SplineOpts(tmpFlag);
          Closed:=SOClosed in Opts;
          //if (tmpFlag and 1) = 1 then Closed := true;
-       end else if dxfIntegerload(rdr,71,DXFGroupCode,Degree) then begin
+       end else if dxfLoadGroupCodeInteger(rdr,71,DXFGroupCode,Degree) then begin
          Degree:=Degree;
        end else
          rdr.SkipString;

@@ -405,12 +405,12 @@ begin
   byt:=rdr.ParseInteger;
   while byt <> 0 do
   begin
-    if not LoadFromDXFObjShared(rdr,byt,ptu,drawing) then
-    if not dxfvertexload(rdr,10,byt,Local.P_insert) then
-    if not dxfvertexload(rdr,11,byt,MajorAxis) then
-    if not dxfDoubleload(rdr,40,byt,ratio) then
-    if not dxfDoubleload(rdr,41,byt,startangle) then
-    if not dxfDoubleload(rdr,42,byt,endangle) then {s := }rdr.SkipString;
+    if not LoadFromDXFObjShared(rdr,byt,ptu,drawing,context) then
+    if not dxfLoadGroupCodeVertex(rdr,10,byt,Local.P_insert) then
+    if not dxfLoadGroupCodeVertex(rdr,11,byt,MajorAxis) then
+    if not dxfLoadGroupCodeDouble(rdr,40,byt,ratio) then
+    if not dxfLoadGroupCodeDouble(rdr,41,byt,startangle) then
+    if not dxfLoadGroupCodeDouble(rdr,42,byt,endangle) then {s := }rdr.SkipString;
     byt:=rdr.ParseInteger;
   end;
   startangle := startangle{ * pi / 180};

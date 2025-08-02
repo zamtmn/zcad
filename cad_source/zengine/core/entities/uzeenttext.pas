@@ -417,29 +417,29 @@ begin
   angle:=0;
   while byt <> 0 do
   begin
-    if not LoadFromDXFObjShared(rdr,byt,ptu,drawing) then
-       if not dxfvertexload(rdr,10,byt,Local.P_insert) then
-          if dxfvertexload(rdr,11,byt,P_drawInOCS) then
+    if not LoadFromDXFObjShared(rdr,byt,ptu,drawing,context) then
+       if not dxfLoadGroupCodeVertex(rdr,10,byt,Local.P_insert) then
+          if dxfLoadGroupCodeVertex(rdr,11,byt,P_drawInOCS) then
                                                      doublepoint := true
-else if not dxfDoubleload(rdr,40,byt,textprop.size) then
-     if not dxfDoubleload(rdr,41,byt,textprop.wfactor) then
-     if dxfDoubleload(rdr,50,byt,angle) then
+else if not dxfLoadGroupCodeDouble(rdr,40,byt,textprop.size) then
+     if not dxfLoadGroupCodeDouble(rdr,41,byt,textprop.wfactor) then
+     if dxfLoadGroupCodeDouble(rdr,50,byt,angle) then
                                              begin
                                                angleload := true;
                                                angle:=angle*pi/180;
                                              end
-else if dxfDoubleload(rdr,51,byt,textprop.oblique) then
+else if dxfLoadGroupCodeDouble(rdr,51,byt,textprop.oblique) then
                                                         textprop.oblique:=textprop.oblique*pi/180
-else if     dxfStringload(rdr,7,byt,style)then
+else if     dxfLoadGroupCodeString(rdr,7,byt,style)then
                                              begin
                                                   TXTStyle :={drawing.GetTextStyleTable^.getDataMutable}(drawing.GetTextStyleTable^.FindStyle(Style,false));
                                                   if TXTStyle=nil then
                                                                       TXTStyle:=pointer(drawing.GetTextStyleTable^.getDataMutable(0));
                                              end
-else if not dxfIntegerload(rdr,72,byt,gv)then
-     if not dxfIntegerload(rdr,73,byt,vv)then
-     if not dxfIntegerload(rdr,71,byt,textbackward)then
-     if not dxfStringload(rdr,1,byt,tcontent,context.Header)then
+else if not dxfLoadGroupCodeInteger(rdr,72,byt,gv)then
+     if not dxfLoadGroupCodeInteger(rdr,73,byt,vv)then
+     if not dxfLoadGroupCodeInteger(rdr,71,byt,textbackward)then
+     if not dxfLoadGroupCodeString(rdr,1,byt,tcontent,context.Header)then
                                                {s := }rdr.SkipString;
     byt:=rdr.ParseInteger;
   end;

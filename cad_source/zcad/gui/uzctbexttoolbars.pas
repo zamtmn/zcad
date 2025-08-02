@@ -105,7 +105,7 @@ begin
   lp._On:=player^._on;
   lp.Freze:=false;
   lp.Lock:=player^._lock;
-  lp.Name:=Tria_AnsiToUtf8(player.Name);
+  lp.Name:={Tria_AnsiToUtf8}(player.Name);
   lp.PLayer:=player;
 end;
 

@@ -111,18 +111,18 @@ begin
   style:='';
   while byt <> 0 do
   begin
-    if not LoadFromDXFObjShared(rdr,byt,ptu,drawing) then
-       if not dxfvertexload(rdr,10,byt,DimData.P10InWCS) then
-          if not dxfvertexload(rdr,11,byt,DimData.P11InOCS) then
-             if not dxfvertexload(rdr,12,byt,DimData.P12InOCS) then
-                if not dxfvertexload(rdr,13,byt,DimData.P13InWCS) then
-                   if not dxfvertexload(rdr,14,byt,DimData.P14InWCS) then
-                      if not dxfvertexload(rdr,15,byt,DimData.P15InWCS) then
-                         if not dxfvertexload(rdr,16,byt,DimData.P16InOCS) then
-                            if not dxfIntegerload(rdr,70,byt,dtype) then
-                               if not dxfDoubleload(rdr,50,byt,a50) then
-                                  if not dxfDoubleload(rdr,52,byt,a52) then
-                            if dxfStringload(rdr,3,byt,style)then
+    if not LoadFromDXFObjShared(rdr,byt,ptu,drawing,context) then
+       if not dxfLoadGroupCodeVertex(rdr,10,byt,DimData.P10InWCS) then
+          if not dxfLoadGroupCodeVertex(rdr,11,byt,DimData.P11InOCS) then
+             if not dxfLoadGroupCodeVertex(rdr,12,byt,DimData.P12InOCS) then
+                if not dxfLoadGroupCodeVertex(rdr,13,byt,DimData.P13InWCS) then
+                   if not dxfLoadGroupCodeVertex(rdr,14,byt,DimData.P14InWCS) then
+                      if not dxfLoadGroupCodeVertex(rdr,15,byt,DimData.P15InWCS) then
+                         if not dxfLoadGroupCodeVertex(rdr,16,byt,DimData.P16InOCS) then
+                            if not dxfLoadGroupCodeInteger(rdr,70,byt,dtype) then
+                               if not dxfLoadGroupCodeDouble(rdr,50,byt,a50) then
+                                  if not dxfLoadGroupCodeDouble(rdr,52,byt,a52) then
+                            if dxfLoadGroupCodeString(rdr,3,byt,style)then
                                                                   begin
                                                                        PDimStyle:=drawing.GetDimStyleTable^.getAddres(Style);
                                                                        if PDimStyle=nil then

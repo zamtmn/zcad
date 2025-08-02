@@ -523,7 +523,7 @@ begin
   zDebugLn('{D-}end; {AddFromDXF12}');
   //programlog.LogOutStr('end; {AddFromDXF12}',lp_DecPos,LM_Debug);
 end;
-procedure ReadLTStyles(var s:ansiString; const cltype:string;var rdr:TZMemReader; const exitString: String;owner:PGDBObjGenericSubEntry;LoadMode:TLoadOpt;var drawing:TSimpleDrawing;var context:TIODXFLoadContext);
+procedure ReadLTStyles(var s:ansiString; const cltype:string;var rdr:TZMemReader; const exitString: String;var ZCDCtx:TZDrawingContext;var context:TIODXFLoadContext);
 var
    pltypeprop:PGDBLtypeProp;
    byt: Integer;
@@ -561,11 +561,11 @@ begin
        2:
          begin
            len:=0;
-           case drawing.LTypeStyleTable.AddItem(s,pointer(pltypeprop)) of
+           case ZCDCtx.PDrawing^.LTypeStyleTable.AddItem(s,pointer(pltypeprop)) of
                         IsFounded:
                                   begin
                                        context.h2p.Add(DWGHandle,pltypeprop);
-                                       if LoadMode=TLOLoad then
+                                       if ZCDCtx.LoadMode=TLOLoad then
                                        begin
                                        end
                                        else
@@ -581,10 +581,10 @@ begin
                                   begin
                                   end;
                 end;
-           if drawing.CurrentLType=nil then
-             drawing.CurrentLType:=pltypeprop
+           if ZCDCtx.PDrawing^.CurrentLType=nil then
+             ZCDCtx.PDrawing^.CurrentLType:=pltypeprop
            else if uppercase(s)=uppercase(cltype)then
-             drawing.CurrentLType:=pltypeprop;
+             ZCDCtx.PDrawing^.CurrentLType:=pltypeprop;
 
          end;
        3:
@@ -690,7 +690,7 @@ begin
   end;
   BShapeProp.Done;
 end;
-procedure ReadLayers(var s:ansistring; const clayer:string;var rdr:TZMemReader; const exitString: String;owner:PGDBObjGenericSubEntry;LoadMode:TLoadOpt;var drawing:TSimpleDrawing);
+procedure ReadLayers(var s:ansistring; const clayer:string;var rdr:TZMemReader; const exitString: String;var ZCDCtx:TZDrawingContext;var context:TIODXFLoadContext);
 var
 byt: Integer;
 lname,desk: String;
@@ -714,12 +714,12 @@ begin
         2:begin
           zDebugLn('{D}[DXF_CONTENTS]Found layer  '+s);
           lname:=s;
-          player:=drawing.LayerTable.MergeItem(s,LoadMode);
+          player:=ZCDCtx.PDrawing^.LayerTable.MergeItem(s,ZCDCtx.LoadMode);
           if player<>nil then
             player^.init(s);
         end;
         6:if player<>nil then
-          player^.LT:=drawing.LTypeStyleTable.getAddres(s);
+          player^.LT:=ZCDCtx.PDrawing^.LTypeStyleTable.getAddres(s);
         1001:begin
           if s='AcAecLayerStandard' then begin
             s := rdr.ParseString;
@@ -748,118 +748,110 @@ begin
         end;
       end;
     end;
-    if drawing.CurrentLayer=nil then
-      drawing.CurrentLayer:=player
+    if ZCDCtx.PDrawing^.CurrentLayer=nil then
+      ZCDCtx.PDrawing^.CurrentLayer:=player
     else if uppercase(lname)=uppercase(clayer)then
-      drawing.CurrentLayer:=player;
+      ZCDCtx.PDrawing^.CurrentLayer:=player;
   end;
 end;
-procedure ReadTextstyles(var s:ansistring; const ctstyle:string;var rdr:TZMemReader; const exitString: String;owner:PGDBObjGenericSubEntry;LoadMode:TLoadOpt;var drawing:TSimpleDrawing;var context:TIODXFLoadContext;const LogProc:TZELogProc=nil);
+procedure ReadTextstyles(var s:ansistring; const ctstyle:string;var rdr:TZMemReader; const exitString: String;var ZCDCtx:TZDrawingContext;var context:TIODXFLoadContext;const LogProc:TZELogProc=nil);
 var
-   tstyle:GDBTextStyle;
-   ptstyle:PGDBTextStyle;
-   DWGHandle:TDWGHandle;
-   byt: Integer;
-   flags: Integer;
-   FontFile,FontFamily: String;
-   ti:PGDBTextStyle;
-   pltypeprop:PGDBLtypeProp;
-   ir,ir2:itrec;
-   PSP:PShapeProp;
-   PTP:PTextProp;
+  tstyle:GDBTextStyle;
+  ptstyle:PGDBTextStyle;
+  DWGHandle:TDWGHandle;
+  byt: Integer;
+  flags: Integer;
+  FontFile,FontFamily: String;
+  ti:PGDBTextStyle;
+  pltypeprop:PGDBLtypeProp;
+  ir,ir2:itrec;
+  PSP:PShapeProp;
+  PTP:PTextProp;
 begin
   if GoToDXForENDTAB(rdr, 0, dxfName_Style) then
-  while s = dxfName_Style do
-  begin
-    FontFile:='';
-    FontFamily:='';
-    tstyle.name:='';
-    tstyle.pfont:=nil;
-    tstyle.prop.oblique:=0;
-    tstyle.prop.size:=1;
-    DWGHandle:=0;
+    while s = dxfName_Style do begin
+      FontFile:='';
+      FontFamily:='';
+      tstyle.name:='';
+      tstyle.pfont:=nil;
+      tstyle.prop.oblique:=0;
+      tstyle.prop.size:=1;
+      DWGHandle:=0;
 
-    byt := 2;
+      byt := 2;
 
-    while byt <> 0 do
-    begin
-      {s := rdr.ParseString;
-      byt := strtoint(s);}
-      byt:=rdr.ParseInteger;
-      //s := rdr.ParseString;
-      case byt of
-            2:tstyle.name:=rdr.ParseString;
-            5:DWGHandle:=strtoint64('$'+rdr.ParseString);
-           40:tstyle.prop.size:=rdr.ParseDouble;
-           41:tstyle.prop.wfactor:=rdr.ParseDouble;
-           50:tstyle.prop.oblique:=rdr.ParseDouble*pi/180;
-           70:flags:=rdr.ParseInteger;
-            3:FontFile:=rdr.ParseString;
-         1000:FontFamily:=rdr.ParseString;
-         else
-           s := rdr.ParseString;
+      while byt <> 0 do begin
+        byt:=rdr.ParseInteger;
+        case byt of
+              2:tstyle.name:=rdr.ParseString;
+              5:DWGHandle:=rdr.ParseHexQWord;//strtoint64('$'+rdr.ParseString);
+             40:tstyle.prop.size:=rdr.ParseDouble;
+             41:tstyle.prop.wfactor:=rdr.ParseDouble;
+             50:tstyle.prop.oblique:=rdr.ParseDouble*pi/180;
+             70:flags:=rdr.ParseInteger;
+              3:FontFile:=rdr.ParseString;
+           1000:FontFamily:=rdr.ParseString;
+           else
+             s := rdr.ParseString;
+        end;
       end;
-    end;
-    ti:=nil;
-    if (flags and 1)=0 then begin
-      ti:=drawing.TextStyleTable.FindStyle(tstyle.Name,false);
+      ti:=nil;
+      if (flags and 1)=0 then begin
+        ti:=ZCDCtx.PDrawing^.TextStyleTable.FindStyle(tstyle.Name,false);
+        if ti<>nil then begin
+          if ZCDCtx.LoadMode=TLOLoad then
+            ti:=ZCDCtx.PDrawing^.TextStyleTable.setstyle(tstyle.Name,FontFile,FontFamily,tstyle.prop,false);
+        end else
+          ti:=ZCDCtx.PDrawing^.TextStyleTable.addstyle(tstyle.Name,FontFile,FontFamily,tstyle.prop,false,LogProc);
+      end else begin
+        if ZCDCtx.PDrawing^.TextStyleTable.FindStyle(FontFile,true)<>nil then begin
+          if ZCDCtx.LoadMode=TLOLoad then
+            ti:=ZCDCtx.PDrawing^.TextStyleTable.setstyle(FontFile,FontFile,FontFamily,tstyle.prop,true);
+        end else
+          ti:=ZCDCtx.PDrawing^.TextStyleTable.addstyle(FontFile,FontFile,FontFamily,tstyle.prop,true);
+      end;
       if ti<>nil then begin
-        if LoadMode=TLOLoad then
-          ti:=drawing.TextStyleTable.setstyle(tstyle.Name,FontFile,FontFamily,tstyle.prop,false);
-      end else
-        ti:=drawing.TextStyleTable.addstyle(tstyle.Name,FontFile,FontFamily,tstyle.prop,false,LogProc);
-    end else begin
-      if drawing.TextStyleTable.FindStyle(FontFile,true)<>nil then begin
-        if LoadMode=TLOLoad then
-          ti:=drawing.TextStyleTable.setstyle(FontFile,FontFile,FontFamily,tstyle.prop,true);
-      end else
-        ti:=drawing.TextStyleTable.addstyle(FontFile,FontFile,FontFamily,tstyle.prop,true);
-    end;
-    if ti<>nil then begin
-      context.h2p.Add(DWGHandle,ti);
-      ptstyle:={drawing.TextStyleTable.getelement}(ti);
-      pltypeprop:=drawing.LTypeStyleTable.beginiterate(ir);
-      if pltypeprop<>nil then
-      repeat
-        PSP:=pltypeprop^.shapearray.beginiterate(ir2);
-        if PSP<>nil then
+        context.h2p.Add(DWGHandle,ti);
+        ptstyle:={drawing.TextStyleTable.getelement}(ti);
+        pltypeprop:=ZCDCtx.PDrawing^.LTypeStyleTable.beginiterate(ir);
+        if pltypeprop<>nil then
         repeat
-          if psp^.param.PstyleIsHandle then
-            if psp^.param.PStyle=pointer(DWGHandle) then begin
-              psp^.param.PStyle:=ptstyle;
-              psp^.FontName:=ptstyle^.FontFile;
-              if assigned(ptstyle^.pfont) then begin
-                psp^.Psymbol:=ptstyle^.pfont^.GetOrReplaceSymbolInfo(integer(psp^.ShapeNum){//-ttf-//,tdinfo});
-                psp^.SymbolName:=psp^.Psymbol^.Name;
+          PSP:=pltypeprop^.shapearray.beginiterate(ir2);
+          if PSP<>nil then
+          repeat
+            if psp^.param.PstyleIsHandle then
+              if psp^.param.PStyle=pointer(DWGHandle) then begin
+                psp^.param.PStyle:=ptstyle;
+                psp^.FontName:=ptstyle^.FontFile;
+                if assigned(ptstyle^.pfont) then begin
+                  psp^.Psymbol:=ptstyle^.pfont^.GetOrReplaceSymbolInfo(integer(psp^.ShapeNum){//-ttf-//,tdinfo});
+                  psp^.SymbolName:=psp^.Psymbol^.Name;
+                end;
               end;
-            end;
-          PSP:=pltypeprop^.shapearray.iterate(ir2);
-        until PSP=nil;
+            PSP:=pltypeprop^.shapearray.iterate(ir2);
+          until PSP=nil;
 
-        PTP:=pltypeprop^.Textarray.beginiterate(ir2);
-        if PTP<>nil then
-        repeat
-          if pTp^.param.PStyle=pointer(DWGHandle) then begin
-            pTp^.param.PStyle:=ptstyle;
-            {pTp^.FontName:=ptstyle^.FontFile;
-            pTp^.Psymbol:=ptstyle^.pfont^.GetOrReplaceSymbolInfo(integer(pTp^.Psymbol));
-            pTp^.SymbolName:=pTp^.Psymbol^.Name;}
-          end;
-          PTP:=pltypeprop^.Textarray.iterate(ir2);
-        until PTP=nil;
-       pltypeprop:=drawing.LTypeStyleTable.iterate(ir);
-      until pltypeprop=nil;
+          PTP:=pltypeprop^.Textarray.beginiterate(ir2);
+          if PTP<>nil then
+          repeat
+            if pTp^.param.PStyle=pointer(DWGHandle) then begin
+              pTp^.param.PStyle:=ptstyle;
+            end;
+            PTP:=pltypeprop^.Textarray.iterate(ir2);
+          until PTP=nil;
+         pltypeprop:=ZCDCtx.PDrawing^.LTypeStyleTable.iterate(ir);
+        until pltypeprop=nil;
     end;
     zDebugLn('{D}[DXF_CONTENTS]Found style  '+tstyle.Name);
-    if drawing.CurrentTextStyle=nil then
-      drawing.CurrentTextStyle:=drawing.TextStyleTable.FindStyle(tstyle.Name,false)
+    if ZCDCtx.PDrawing^.CurrentTextStyle=nil then
+      ZCDCtx.PDrawing^.CurrentTextStyle:=ZCDCtx.PDrawing^.TextStyleTable.FindStyle(tstyle.Name,false)
     else if uppercase(tstyle.Name)=uppercase(ctstyle)then
-      drawing.CurrentTextStyle:=drawing.TextStyleTable.FindStyle(tstyle.Name,false);
+      ZCDCtx.PDrawing^.CurrentTextStyle:=ZCDCtx.PDrawing^.TextStyleTable.FindStyle(tstyle.Name,false);
     tstyle.Name:='';
   end;
-  drawing.LTypeStyleTable.format;
+  ZCDCtx.PDrawing^.LTypeStyleTable.format;
 end;
-procedure ReadVport(var s:ansistring;var rdr:TZMemReader; const exitString: String;owner:PGDBObjGenericSubEntry;LoadMode:TLoadOpt;var drawing:TSimpleDrawing);
+procedure ReadVport(var s:ansistring;var rdr:TZMemReader; const exitString: String;var ZCDCtx:TZDrawingContext;var context:TIODXFLoadContext);
 var
    byt: Integer;
    active:boolean;
@@ -892,135 +884,135 @@ begin
              end;
            12:
              begin
-                  if LoadMode=TLOLoad then
+                  if ZCDCtx.LoadMode=TLOLoad then
                   if active then
-                  if @drawing<>nil then
-                  if drawing.pcamera<>nil then
+                  if ZCDCtx.PDrawing<>nil then
+                  if ZCDCtx.PDrawing^.pcamera<>nil then
                   begin
-                       drawing.pcamera^.prop.point.x:=-strtofloat(s);
+                       ZCDCtx.PDrawing^.pcamera^.prop.point.x:=-strtofloat(s);
                   end;
               end;
            22:
              begin
-                  if LoadMode=TLOLoad then
+                  if ZCDCtx.LoadMode=TLOLoad then
                   if active then
-                  if @drawing<>nil then
-                  if drawing.pcamera<>nil then
+                  if ZCDCtx.PDrawing<>nil then
+                  if ZCDCtx.PDrawing^.pcamera<>nil then
                   begin
-                       drawing.pcamera^.prop.point.y:=-strtofloat(s);
+                       ZCDCtx.PDrawing^.pcamera^.prop.point.y:=-strtofloat(s);
                   end;
               end;
            13:
              begin
-                  if LoadMode=TLOLoad then
+                  if ZCDCtx.LoadMode=TLOLoad then
                   if active then
                   //if sysvar.DWG.DWG_Snap<>nil then
                   begin
-                       drawing.Snap.Base.x{sysvar.DWG.DWG_Snap^.Base.x}:=strtofloat(s);
+                       ZCDCtx.PDrawing^.Snap.Base.x{sysvar.DWG.DWG_Snap^.Base.x}:=strtofloat(s);
                   end;
               end;
            23:
              begin
-                  if LoadMode=TLOLoad then
+                  if ZCDCtx.LoadMode=TLOLoad then
                   if active then
                   //if sysvar.DWG.DWG_Snap<>nil then
                   begin
-                       drawing.Snap.Base.y{sysvar.DWG.DWG_Snap^.Base.y}:=strtofloat(s);
+                       ZCDCtx.PDrawing^.Snap.Base.y{sysvar.DWG.DWG_Snap^.Base.y}:=strtofloat(s);
                   end;
               end;
            14:
              begin
-                  if LoadMode=TLOLoad then
+                  if ZCDCtx.LoadMode=TLOLoad then
                   if active then
                   //if sysvar.DWG.DWG_Snap<>nil then
                   begin
-                       drawing.Snap.Spacing.x{sysvar.DWG.DWG_Snap^.Spacing.x}:=strtofloat(s);
+                       ZCDCtx.PDrawing^.Snap.Spacing.x{sysvar.DWG.DWG_Snap^.Spacing.x}:=strtofloat(s);
                   end;
               end;
            24:
              begin
-                  if LoadMode=TLOLoad then
+                  if ZCDCtx.LoadMode=TLOLoad then
                   if active then
                   //if sysvar.DWG.DWG_Snap<>nil then
                   begin
-                       drawing.Snap.Spacing.y{sysvar.DWG.DWG_Snap^.Spacing.y}:=strtofloat(s);
+                       ZCDCtx.PDrawing^.Snap.Spacing.y{sysvar.DWG.DWG_Snap^.Spacing.y}:=strtofloat(s);
                   end;
               end;
            15:
              begin
-                  if LoadMode=TLOLoad then
+                  if ZCDCtx.LoadMode=TLOLoad then
                   if active then
                   //if sysvar.DWG.DWG_GridSpacing<>nil then
                   begin
-                       drawing.GridSpacing.x{sysvar.DWG.DWG_GridSpacing^.x}:=strtofloat(s);
+                       ZCDCtx.PDrawing^.GridSpacing.x{sysvar.DWG.DWG_GridSpacing^.x}:=strtofloat(s);
                   end;
               end;
            25:
              begin
-                  if LoadMode=TLOLoad then
+                  if ZCDCtx.LoadMode=TLOLoad then
                   if active then
                   //if sysvar.DWG.DWG_GridSpacing<>nil then
                   begin
-                       drawing.GridSpacing.y{sysvar.DWG.DWG_GridSpacing^.y}:=strtofloat(s);
+                       ZCDCtx.PDrawing^.GridSpacing.y{sysvar.DWG.DWG_GridSpacing^.y}:=strtofloat(s);
                   end;
               end;
            40:
              begin
-               if LoadMode=TLOLoad then
+               if ZCDCtx.LoadMode=TLOLoad then
                  if active then
-                   if @drawing<>nil then
-                     if drawing.pcamera<>nil then
-                       if drawing.wa<>nil then
-                         if drawing.wa.getviewcontrol<>nil then
-                           drawing.pcamera^.prop.zoom:=(strtofloat(s)/drawing.wa.getviewcontrol.ClientHeight);
+                   if ZCDCtx.PDrawing<>nil then
+                     if ZCDCtx.PDrawing^.pcamera<>nil then
+                       if ZCDCtx.PDrawing^.wa<>nil then
+                         if ZCDCtx.PDrawing^.wa.getviewcontrol<>nil then
+                           ZCDCtx.PDrawing^.pcamera^.prop.zoom:=(strtofloat(s)/ZCDCtx.PDrawing^.wa.getviewcontrol.ClientHeight);
               end;
            41:
              begin
-               if LoadMode=TLOLoad then
+               if ZCDCtx.LoadMode=TLOLoad then
                  if active then
-                   if @drawing<>nil then
-                     if drawing.pcamera<>nil then
-                       if drawing.wa<>nil then
-                         if drawing.wa.getviewcontrol<>nil then
-                           if drawing.wa.getviewcontrol.ClientHeight*strtofloat(s)>drawing.wa.getviewcontrol.ClientWidth then
-                             drawing.pcamera^.prop.zoom:=drawing.pcamera^.prop.zoom*strtofloat(s)*drawing.wa.getviewcontrol.ClientHeight/drawing.wa.getviewcontrol.ClientWidth;
+                   if ZCDCtx.PDrawing<>nil then
+                     if ZCDCtx.PDrawing^.pcamera<>nil then
+                       if ZCDCtx.PDrawing^.wa<>nil then
+                         if ZCDCtx.PDrawing^.wa.getviewcontrol<>nil then
+                           if ZCDCtx.PDrawing^.wa.getviewcontrol.ClientHeight*strtofloat(s)>ZCDCtx.PDrawing^.wa.getviewcontrol.ClientWidth then
+                             ZCDCtx.PDrawing^.pcamera^.prop.zoom:=ZCDCtx.PDrawing^.pcamera^.prop.zoom*strtofloat(s)*ZCDCtx.PDrawing^.wa.getviewcontrol.ClientHeight/ZCDCtx.PDrawing^.wa.getviewcontrol.ClientWidth;
               end;
            71:
              begin
-               if LoadMode=TLOLoad then
+               if ZCDCtx.LoadMode=TLOLoad then
                  if active then
-                   if @drawing<>nil then
-                     if drawing.wa<>nil then
-                       if drawing.wa.getviewcontrol<>nil then begin
+                   if ZCDCtx.PDrawing<>nil then
+                     if ZCDCtx.PDrawing^.wa<>nil then
+                       if ZCDCtx.PDrawing^.wa.getviewcontrol<>nil then begin
                          flags:=strtoint(s);
                          if (flags and 1)<>0 then
-                           drawing.wa.param.projtype:=PROJPerspective
+                           ZCDCtx.PDrawing^.wa.param.projtype:=PROJPerspective
                          else
-                           drawing.wa.param.projtype:=PROJParallel;
+                           ZCDCtx.PDrawing^.wa.param.projtype:=PROJParallel;
                        end;
              end;
            75:
              begin
-                  if LoadMode=TLOLoad then
+                  if ZCDCtx.LoadMode=TLOLoad then
                   if active then
                   //if sysvar.DWG.DWG_SnapGrid<>nil then
                   begin
                        if s<>'0' then
-                                     drawing.SnapGrid{sysvar.DWG.DWG_SnapGrid^}:=true
+                                     ZCDCtx.PDrawing^.SnapGrid{sysvar.DWG.DWG_SnapGrid^}:=true
                                  else
-                                     drawing.SnapGrid{sysvar.DWG.DWG_SnapGrid^}:=false;
+                                     ZCDCtx.PDrawing^.SnapGrid{sysvar.DWG.DWG_SnapGrid^}:=false;
                   end;
              end;
          76:
            begin
-                if LoadMode=TLOLoad then
+                if ZCDCtx.LoadMode=TLOLoad then
                 if active then
                 //if sysvar.DWG.DWG_DrawGrid<>nil then
                 begin
                      if s<>'0' then
-                                   drawing.DrawGrid{sysvar.DWG.DWG_DrawGrid^}:=true
+                                   ZCDCtx.PDrawing^.DrawGrid{sysvar.DWG.DWG_DrawGrid^}:=true
                                else
-                                   drawing.DrawGrid{sysvar.DWG.DWG_DrawGrid^}:=false;
+                                   ZCDCtx.PDrawing^.DrawGrid{sysvar.DWG.DWG_DrawGrid^}:=false;
                 end;
             end;
        end;
@@ -1029,7 +1021,7 @@ begin
      end;
      zDebugLn('{D-}[DXF_CONTENTS]end;{ReadVport}');
 end;
-procedure ReadDimStyles(var s:ansistring; const cdimstyle:string;var rdr:TZMemReader; const exitString: String;owner:PGDBObjGenericSubEntry;LoadMode:TLoadOpt;var drawing:TSimpleDrawing;var context:TIODXFLoadContext);
+procedure ReadDimStyles(var s:ansistring; const cdimstyle:string;var rdr:TZMemReader; const exitString: String;var ZCDCtx:TZDrawingContext;var context:TIODXFLoadContext);
 var
    psimstyleprop:PGDBDimStyle;
    byt:integer;
@@ -1049,23 +1041,23 @@ begin
   s := rdr.ParseString;
   if psimstyleprop=nil then begin
     if byt=2 then begin
-      psimstyleprop:=drawing.DimStyleTable.MergeItem(s,LoadMode);
+      psimstyleprop:=ZCDCtx.PDrawing^.DimStyleTable.MergeItem(s,ZCDCtx.LoadMode);
       if psimstyleprop<>nil then begin
         psimstyleprop^.init(s);
         psimstyleprop^.Name:=s;
       end;
-      if drawing.CurrentDimStyle=nil then
-        drawing.CurrentDimStyle:=psimstyleprop
+      if ZCDCtx.PDrawing^.CurrentDimStyle=nil then
+        ZCDCtx.PDrawing^.CurrentDimStyle:=psimstyleprop
       else if uppercase(s)=uppercase(cdimstyle)then
-      if (LoadMode=TLOLoad) then
-        drawing.CurrentDimStyle:=psimstyleprop;
+      if (ZCDCtx.LoadMode=TLOLoad) then
+        ZCDCtx.PDrawing^.CurrentDimStyle:=psimstyleprop;
     end;
   end else
      psimstyleprop^.SetValueFromDxf(ReadDimStylesMode,byt,s,context);
   end;
 end;
 end;
-procedure ReadBlockRecird(const Handle2BlockName:TMapBlockHandle_BlockNames;var s:ansistring;var rdr:TZMemReader; const exitString: String;owner:PGDBObjGenericSubEntry;LoadMode:TLoadOpt;var drawing:TSimpleDrawing);
+procedure ReadBlockRecird(const Handle2BlockName:TMapBlockHandle_BlockNames;var s:ansistring;var rdr:TZMemReader; const exitString: String;var ZCDCtx:TZDrawingContext;var context:TIODXFLoadContext);
 var
    byt:integer;
    bname:string;
@@ -1145,38 +1137,31 @@ begin
                else if s = dxfName_BLOCK_RECORD{:}then
                                     begin
                                     zDebugLn('{D+}[DXF_CONTENTS]Found BLOCK_RECORD table');
-                                    //programlog.LogOutStr('Found BLOCK_RECORD table',lp_IncPos,LM_Debug);
-                                    ReadBlockRecird(Handle2BlockName,s,rdr,exitString,ZCDCtx.POwner,ZCDCtx.LoadMode,ZCDCtx.pdrawing^);
+                                    ReadBlockRecird(Handle2BlockName,s,rdr,exitString,ZCDCtx,context);
                                     zDebugLn('{D-}[DXF_CONTENTS]end; {BLOCK_RECORD table}');
-                                    //programlog.LogOutStr('end; {BLOCK_RECORD table}',lp_DecPos,LM_Debug);
                                     end
                    else if s = dxfName_DIMSTYLE{:}then
                                     begin
                                       zDebugLn('{D+}[DXF_CONTENTS]Found dimstyles table');
-                                      //programlog.LogOutStr('Found dimstyles table',lp_IncPos,LM_Debug);
-                                      ReadDimStyles(s,cdimstyle,rdr,exitString,ZCDCtx.Powner,ZCDCtx.LoadMode,ZCDCtx.pdrawing^,context);
+                                      ReadDimStyles(s,cdimstyle,rdr,exitString,ZCDCtx,context);
                                       zDebugLn('{D-}[DXF_CONTENTS]end; {dimstyles table}');
-                                      //programlog.LogOutStr('end; {dimstyles table}',lp_DecPos,LM_Debug);
                                     end
                       else if s = dxfName_Layer{:}then
                                     begin
                                       zDebugLn('{D+}[DXF_CONTENTS]Found layer table');
-                                      ReadLayers(s,clayer,rdr,exitString,ZCDCtx.powner,ZCDCtx.LoadMode,ZCDCtx.pdrawing^);
+                                      ReadLayers(s,clayer,rdr,exitString,ZCDCtx,context);
                                       zDebugLn('{D-}[DXF_CONTENTS]end; {layer table}');
-                                      //programlog.LogOutStr('end; {layer table}',lp_DecPos,LM_Debug);
                                     end
                       else if s = dxfName_LType{:}then
                                     begin
                                       zDebugLn('{D+}[DXF_CONTENTS]Found line types table');
-                                      //programlog.LogOutStr('Found line types table',lp_IncPos,LM_Debug);
-                                      ReadLTStyles(s,cltype,rdr,exitString,ZCDCtx.powner,ZCDCtx.LoadMode,ZCDCtx.pdrawing^,context);
+                                      ReadLTStyles(s,cltype,rdr,exitString,ZCDCtx,context);
                                       zDebugLn('{D-}[DXF_CONTENTS]end; (line types table)');
-                                      //programlog.LogOutStr('end; (line types table)',lp_DecPos,LM_Debug);
                                     end
                       else if s = dxfName_Style{:}then
                                     begin
                                       zDebugLn('{D+}[DXF_CONTENTS]Found style table');
-                                      ReadTextstyles(s,ctstyle,rdr,exitString,ZCDCtx.powner,ZCDCtx.LoadMode,ZCDCtx.pdrawing^,context,LogProc);
+                                      ReadTextstyles(s,ctstyle,rdr,exitString,ZCDCtx,context,LogProc);
                                       zDebugLn('{D-}[DXF_CONTENTS]end; {style table}');
                                     end
                               else if s = 'UCS'{:}then
@@ -1186,10 +1171,8 @@ begin
                             else if s = 'VPORT'{:}then
                                     begin
                                     zDebugLn('{D+}[DXF_CONTENTS]Found vports table');
-                                    //programlog.LogOutStr('Found vports table',lp_IncPos,LM_Debug);
-                                    ReadVport(s,rdr,exitString,ZCDCtx.powner,ZCDCtx.LoadMode,ZCDCtx.pdrawing^);
+                                    ReadVport(s,rdr,exitString,ZCDCtx,context);
                                     zDebugLn('{D-}[DXF_CONTENTS]end; {vports table}');
-                                    //programlog.LogOutStr('end; {vports table}',lp_DecPos,LM_Debug);
                                     end;
         //end;{case}
         s := rdr.ParseString;

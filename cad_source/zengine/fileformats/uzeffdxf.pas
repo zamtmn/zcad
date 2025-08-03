@@ -169,7 +169,7 @@ begin
       drawing.TextSize:=strtofloat(s);
   end;
 end;
-procedure ReadDXFHeader(var rdr:TZMemReader;var fileCtx:TIODXFLoadContext);
+function ReadDXFHeader(var rdr:TZMemReader;var fileCtx:TIODXFLoadContext):boolean;
 type
   TDXFHeaderMode=(TDXFHMWaitSection,TDXFHMSection,TDXFHMHeader);
 const
@@ -181,32 +181,7 @@ var
   ParseMode:TDXFHeaderMode;
   valuesarray:array[0..maxlines]of string;
   currentindex,maxindex:integer;
-
-  procedure storevariable;
-  begin
-    case currentindex of
-      0:fileCtx.DWGVarsDict.Add(varname,valuesarray[0]);
-      1:fileCtx.DWGVarsDict.Add(varname,valuesarray[0]+'|'+valuesarray[1]);
-      else fileCtx.DWGVarsDict.Add(varname,valuesarray[0]+'|'+valuesarray[1]+'|'+valuesarray[2]);
-    end;
-    currentindex:=-1;
-  end;
-
-  procedure processvalue(const group:integer;const value:String);
-  begin
-    inc(currentindex);
-    if currentindex>maxindex then
-      maxindex:=currentindex;
-    valuesarray[currentindex]:=value;
-  end;
-
-  procedure freearrays;
-  var
-    i:integer;
-  begin
-    for i:=0 to maxindex do
-      valuesarray[i]:='';
-  end;
+  ACVERSION,DWGCODEPAGE:boolean;
 
   function VarStr2Int(APrefiX,AValue:string):integer;
   var
@@ -221,14 +196,63 @@ var
     d:=1;
     for i:=length(AValue) downto length(APrefiX)+1 do begin
       if (AValue[i]>='0')and(AValue[i]<='9')then begin
-        Result:=Result+(ord(s[i])-ord('0'))*d;
+        Result:=Result+(ord(AValue[i])-ord('0'))*d;
         d:=d*10;
       end else
         exit(VarValueWrong);
     end;
   end;
 
+  procedure storevariable;
+  begin
+    case currentindex of
+      0:fileCtx.DWGVarsDict.Add(varname,valuesarray[0]);
+      1:fileCtx.DWGVarsDict.Add(varname,valuesarray[0]+'|'+valuesarray[1]);
+      else fileCtx.DWGVarsDict.Add(varname,valuesarray[0]+'|'+valuesarray[1]+'|'+valuesarray[2]);
+    end;
+
+    if not ACVERSION then
+      if varname=dxfVar_ACADVER then begin
+        fileCtx.Header.iVersion:=VarStr2Int('AC',valuesarray[0]);
+        fileCtx.Header.Version:=ACVer2DXF_ACVer(fileCtx.Header.iVersion);
+        ACVERSION:=true;
+      end;
+
+    if not DWGCODEPAGE then
+      if varname=dxfVar_DWGCODEPAGE then begin
+        fileCtx.Header.iDWGCodePage:=VarStr2Int('ANSI_',valuesarray[0]);
+        fileCtx.Header.DWGCodePage:=DWGCodePage2DXF_DWGCodePage(fileCtx.Header.iDWGCodePage);
+        DWGCODEPAGE:=true;
+      end;
+
+    currentindex:=-1;
+  end;
+
+  procedure processvalue(const group:integer;const value:String);
+  begin
+    inc(currentindex);
+    if currentindex>maxindex then
+      maxindex:=currentindex;
+    valuesarray[currentindex]:=dxfEnCodeString(value,fileCtx.Header);
+  end;
+
+  procedure freearrays;
+  var
+    i:integer;
+  begin
+    for i:=0 to maxindex do
+      valuesarray[i]:='';
+  end;
+
 begin
+  result:=false;
+  ACVERSION:=false;
+  DWGCODEPAGE:=false;
+  fileCtx.Header.DWGCodePage:=ANSI_1252;
+  fileCtx.Header.iDWGCodePage:=1252;
+  fileCtx.Header.Version:=AC1009;
+  fileCtx.Header.iVersion:=1009;
+
   ParseMode:=TDXFHMWaitSection;
   varcount:=0;
   currentindex:=-1;
@@ -237,19 +261,25 @@ begin
     while not rdr.EOF do begin
       group:=rdr.ParseInteger;
       s:=rdr.ParseString;
+      s:=dxfDeCodeString(s,fileCtx.Header);
       if group<>999 then begin
         case ParseMode of
           TDXFHMWaitSection:begin
             if uppercase(s)=dxfName_SECTION then begin
               ParseMode:=TDXFHMSection;
-            end else
-              zDebugLn('{EM}ReadDXFHeader error');
+            end else begin
+              zDebugLn('{W}ReadDXFHeader:No header found');
+              exit;
+            end;
           end;
           TDXFHMSection:begin
             if uppercase(s)=dxfName_HEADER then begin
               ParseMode:=TDXFHMHeader;
-            end else
-              zDebugLn('{EM}ReadDXFHeader error');
+              result:=true;
+            end else begin
+              zDebugLn('{W}ReadDXFHeader:No header found');
+              exit;
+            end;
           end;
           TDXFHMHeader:begin
             if group=0 then
@@ -270,20 +300,11 @@ begin
       end;
   finally
     freearrays;
-    fileCtx.Header.iVersion:=VarValueNotSet;
-    if fileCtx.DWGVarsDict.mygetvalue(dxfVar_ACADVER,s) then begin
-      fileCtx.Header.iVersion:=VarStr2Int('AC',s);
-      fileCtx.Header.Version:=ACVer2DXF_ACVer(fileCtx.Header.iVersion);
-    end else
-      fileCtx.Header.Version:=AC1009;
-
-    fileCtx.Header.iDWGCodePage:=VarValueNotSet;
-    if fileCtx.DWGVarsDict.mygetvalue(dxfVar_DWGCODEPAGE,s) then begin
-      fileCtx.Header.iDWGCodePage:=VarStr2Int('ANSI_',s);
-      fileCtx.Header.DWGCodePage:=DWGCodePage2DXF_DWGCodePage(fileCtx.Header.iDWGCodePage);
-    end else
-      fileCtx.Header.DWGCodePage:=ANSI_1252;
-  end;
+    if not ACVERSION then
+      fileCtx.Header.iVersion:=VarValueNotSet;
+    if not DWGCODEPAGE then
+      fileCtx.Header.iDWGCodePage:=VarValueNotSet;
+   end;
 end;
 
 function GoToDXForENDTAB(var rdr:TZMemReader; fcode: Integer; const fname: String):boolean;
@@ -428,63 +449,47 @@ begin
   owner.postload(context);
   lps.EndLongProcess(lph);
 end;
-procedure addfromdxf12(var rdr:TZMemReader; const exitString: String;var ZCDCtx:TZDrawingContext;const LogProc:TZELogProc=nil);
+procedure AddFromDXF12(var rdr:TZMemReader; const exitString: String;var ZCDCtx:TZDrawingContext;const LogProc:TZELogProc=nil);
 var
-  {byt,}LayerColor: Integer;
-  s, sname{, sx1, sy1, sz1},scode,LayerName: String;
+  LayerColor: Integer;
+  s, sname,scode,LayerName: String;
   ErrorCode,GroupCode: Integer;
-
-//objid: Integer;
-//  pobj,postobj: PGDBObjEntity;
   tp: PGDBObjBlockdef;
-  //phandlearray: pdxfhandlerecopenarray;
   context:TIODXFLoadContext;
   lph:TLPSHandle;
 begin
   s:='';
   lph:=lps.StartLongProcess('addfromdxf12',@rdr,rdr.CurrentPos);
   zDebugLn('{D+}AddFromDXF12');
-  //programlog.LogOutStr('AddFromDXF12',lp_IncPos,LM_Debug);
-  //phandlearray := dxfhandlearraycreate(10000);
   context.h2p:=TMapHandleToPointer.Create;
-  while (not rdr.EOF) and (s <> exitString) do
-  begin
-  lps.ProgressLongProcess(lph,rdr.CurrentPos);
-  //if assigned(ProcessLongProcessProc)then
-  //ProcessLongProcessProc(rdr.ReadPos);
-
+  while (not rdr.EOF) and (s <> exitString) do begin
+    lps.ProgressLongProcess(lph,rdr.CurrentPos);
     s := rdr.ParseString;
-    if s = dxfName_Layer then
-    begin
+    if s = dxfName_Layer then begin
       zDebugLn('{D+}[DXF_CONTENTS]Found layer table');
       repeat
-            scode := rdr.ParseString;
-            sname := rdr.ParseString;
-            val(scode,GroupCode,ErrorCode);
+        scode := rdr.ParseString;
+        sname := rdr.ParseString;
+        val(scode,GroupCode,ErrorCode);
       until GroupCode=0;
       repeat
         if sname=dxfName_ENDTAB then system.break;
         if sname<>dxfName_Layer then zDebugLn('{FM}''LAYER'' expected but '''+sname+''' found');
-        //FatalError('''LAYER'' expected but '''+sname+''' found');
         repeat
-              scode := rdr.ParseString;
-              sname := rdr.ParseString;
-              val(scode,GroupCode,ErrorCode);
-              case GroupCode of
-                               2:LayerName:=sname;
-                               62:val(sname,LayerColor,ErrorCode);
-              end;{case}
+          scode := rdr.ParseString;
+          sname := rdr.ParseString;
+          val(scode,GroupCode,ErrorCode);
+          case GroupCode of
+            2:LayerName:=sname;
+            62:val(sname,LayerColor,ErrorCode);
+          end;{case}
         until GroupCode=0;
         zDebugLn('{D}[DXF_CONTENTS]Found layer '+LayerName);
         ZCDCtx.pdrawing^.LayerTable.addlayer(LayerName,LayerColor,-3,true,false,true,'',TLOLoad);
       until sname=dxfName_ENDTAB;
       zDebugLn('{D-}[DXF_CONTENTS]end; {layer table}');
-      //programlog.LogOutStr('end; {layer table}',lp_DecPos,LM_Debug);
-    end
-    else if s = 'BLOCKS' then
-    begin
+    end else if s = 'BLOCKS' then begin
       zDebugLn('{D+}[DXF_CONTENTS]Found block table');
-      //programlog.LogOutStr('Found block table',lp_IncPos,LM_Debug);
       sname := '';
       repeat
         if sname = '  2' then
@@ -497,46 +502,37 @@ begin
           begin
             tp := ZCDCtx.pdrawing^.BlockDefArray.create(s);
             zDebugLn('{D+}[DXF_CONTENTS]Found block '+s);
-            //programlog.LogOutFormatStr('Found block "%s"',[s],lp_IncPos,LM_Debug);
-            {addfromdxf12}addentitiesfromdxf(rdr, 'ENDBLK',tp,ZCDCtx.pdrawing^,ZCDCtx.dc,context);
+            addentitiesfromdxf(rdr, 'ENDBLK',tp,ZCDCtx.pdrawing^,ZCDCtx.dc,context);
             zDebugLn('{D-}[DXF_CONTENTS]end; {block}');
-            //programlog.LogOutFormatStr('end; {block "%s"}',[s],lp_DecPos,LM_Debug);
           end;
         sname := rdr.ParseString;
         s := rdr.ParseString;
       until (s = dxfName_ENDSEC);
       zDebugLn('{D-}end; {block table}');
-      //programlog.LogOutStr('end; {block table}',lp_DecPos,LM_Debug);
-    end
-    else if s = 'ENTITIES' then
-    begin
-         zDebugLn('{D+}[DXF_CONTENTS]Found entities section');
-         //programlog.LogOutStr('Found entities section',lp_IncPos,LM_Debug);
-         addentitiesfromdxf(rdr,dxf_EOF,ZCDCtx.powner,ZCDCtx.pdrawing^,ZCDCtx.dc,context);
-         zDebugLn('{D-}[DXF_CONTENTS]end {entities section}');
-         //programlog.LogOutStr('end {entities section}',lp_DecPos,LM_Debug);
+    end else if s='ENTITIES' then begin
+      zDebugLn('{D+}[DXF_CONTENTS]Found entities section');
+      addentitiesfromdxf(rdr,dxf_EOF,ZCDCtx.powner,ZCDCtx.pdrawing^,ZCDCtx.dc,context);
+      zDebugLn('{D-}[DXF_CONTENTS]end {entities section}');
     end;
   end;
-  //Freemem(Pointer(phandlearray));
   context.h2p.Destroy;
   lps.EndLongProcess(lph);
   zDebugLn('{D-}end; {AddFromDXF12}');
-  //programlog.LogOutStr('end; {AddFromDXF12}',lp_DecPos,LM_Debug);
 end;
 procedure ReadLTStyles(var s:ansiString; const cltype:string;var rdr:TZMemReader; const exitString: String;var ZCDCtx:TZDrawingContext;var context:TIODXFLoadContext);
 var
-   pltypeprop:PGDBLtypeProp;
-   byt: Integer;
-   dashinfo:TDashInfo;
-   shapenumber,stylehandle:TDWGHandle;
-   PSP:PShapeProp;
-   PTP:PTextProp;
-   BShapeProp:BasicSHXDashProp;
-   txtstr:string;
-   TempDouble:Double;
-   flags: Integer;
-   DWGHandle:TDWGHandle;
-   len:double;
+  pltypeprop:PGDBLtypeProp;
+  byt: Integer;
+  dashinfo:TDashInfo;
+  shapenumber,stylehandle:TDWGHandle;
+  PSP:PShapeProp;
+  PTP:PTextProp;
+  BShapeProp:BasicSHXDashProp;
+  txtstr:string;
+  TempDouble:Double;
+  flags: Integer;
+  DWGHandle:TDWGHandle;
+  len:double;
 begin
   DWGHandle:=0;
   dashinfo:=TDIDash;
@@ -547,149 +543,131 @@ begin
   shapenumber:=0;
 
   if GoToDXForENDTAB(rdr, 0, dxfName_LType) then
-  while s = dxfName_LType do
-  begin
-       pltypeprop:=nil;
-       byt := 2;
-       while byt <> 0 do
-       begin
-       byt:=rdr.ParseInteger;
-       {s := rdr.ParseString;
-       byt := strtoint(s);}
-       s := rdr.ParseString;
-       case byt of
-       2:
-         begin
-           len:=0;
-           s:=dxfDeCodeString(s,context.Header);
-           case ZCDCtx.PDrawing^.LTypeStyleTable.AddItem(s,pointer(pltypeprop)) of
-                        IsFounded:
-                                  begin
-                                       context.h2p.Add(DWGHandle,pltypeprop);
-                                       if ZCDCtx.LoadMode=TLOLoad then
-                                       begin
-                                       end
-                                       else
-                                           pltypeprop:=nil;
-                                  end;
-                        IsCreated:
-                                  begin
-                                       pltypeprop^.init(s);
-                                       dashinfo:=TDIDash;
-                                       context.h2p.Add(DWGHandle,pltypeprop);
-                                  end;
-                        IsError:
-                                  begin
-                                  end;
-                end;
-           if ZCDCtx.PDrawing^.CurrentLType=nil then
-             ZCDCtx.PDrawing^.CurrentLType:=pltypeprop
-           else if uppercase(s)=uppercase(cltype)then
-             ZCDCtx.PDrawing^.CurrentLType:=pltypeprop;
-
+    while s = dxfName_LType do begin
+      pltypeprop:=nil;
+      byt := 2;
+      while byt <> 0 do
+      begin
+      byt:=rdr.ParseInteger;
+      s:=rdr.ParseString;
+      case byt of
+        2:begin
+          len:=0;
+          s:=dxfDeCodeString(s,context.Header);
+          case ZCDCtx.PDrawing^.LTypeStyleTable.AddItem(s,pointer(pltypeprop)) of
+            IsFounded:begin
+              context.h2p.Add(DWGHandle,pltypeprop);
+              if ZCDCtx.LoadMode=TLOLoad then begin
+              end else
+                pltypeprop:=nil;
+            end;
+            IsCreated:begin
+              pltypeprop^.init(s);
+              dashinfo:=TDIDash;
+              context.h2p.Add(DWGHandle,pltypeprop);
+            end;
+            IsError:begin
+            end;
+          end;
+          if ZCDCtx.PDrawing^.CurrentLType=nil then
+            ZCDCtx.PDrawing^.CurrentLType:=pltypeprop
+          else if uppercase(s)=uppercase(cltype)then
+            ZCDCtx.PDrawing^.CurrentLType:=pltypeprop;
          end;
-       3:
-         begin
+        3:begin
            s:=dxfDeCodeString(s,context.Header);
               if pltypeprop<>nil then
                                 pltypeprop^.desk:=s;
-         end;
-       5:begin
+        end;
+        5:begin
               DWGHandle:=strtoint64('$'+s)
-         end;
-       40:
-         begin
+        end;
+        40:begin
               if pltypeprop<>nil then
               pltypeprop^.LengthDXF:=strtofloat(s);
-         end;
-       49:
-          begin
-               if pltypeprop<>nil then
-               begin
-               case dashinfo of
-               TDIShape:begin
-                             if stylehandle<>0 then
-                             begin
-                                 pointer(psp):=pltypeprop^.shapearray.CreateObject;
-                                 psp^.initnul;
-                                 psp^.param:=BShapeProp.param;
-                                 psp^.Psymbol:=nil;
-                                 psp^.ShapeNum:=shapenumber;
-                                 psp^.param.PStyle:=pointer(stylehandle);
-                                 psp^.param.PstyleIsHandle:=true;
-                                 pltypeprop^.dasharray.PushBackData(dashinfo);
-                             end;
-                        end;
-               TDIText:begin
-                             pointer(ptp):=pltypeprop^.Textarray.CreateObject;
-                             ptp^.initnul;
-                             ptp^.param:=BShapeProp.param;
-                             ptp^.Text:=txtstr;
-                             //ptp^.Style:=;
-                             ptp^.param.PStyle:=pointer(stylehandle);
-                             ptp^.param.PstyleIsHandle:=true;
-                             pltypeprop^.dasharray.PushBackData(dashinfo);
-                        end;
-               { #todo : сменить case на if }
-               TDIDash:;//заглушка на варнинг
-               end;
-                    dashinfo:=TDIDash;
-                    TempDouble:=strtofloat(s);
-                    pltypeprop^.dasharray.PushBackData(dashinfo);
-                    pltypeprop^.strokesarray.PushBackData(TempDouble);
-                    len:=len+abs(TempDouble);
-               if TempDouble>eps then
-                                     begin
-                                          pltypeprop^.LastStroke:=TODILine;
-                                          pltypeprop^.WithoutLines:=false;
-                                     end
-               else if TempDouble<-eps then
-                                 pltypeprop^.LastStroke:=TODIBlank
-               else pltypeprop^.LastStroke:=TODIPoint;
-               if pltypeprop^.FirstStroke=TODIUnknown then
-                                              pltypeprop^.FirstStroke:=pltypeprop^.LastStroke;
-               end;
+        end;
+        49:begin
+          if pltypeprop<>nil then begin
+            case dashinfo of
+              TDIShape:begin
+                if stylehandle<>0 then begin
+                  pointer(psp):=pltypeprop^.shapearray.CreateObject;
+                  psp^.initnul;
+                  psp^.param:=BShapeProp.param;
+                  psp^.Psymbol:=nil;
+                  psp^.ShapeNum:=shapenumber;
+                  psp^.param.PStyle:=pointer(stylehandle);
+                  psp^.param.PstyleIsHandle:=true;
+                  pltypeprop^.dasharray.PushBackData(dashinfo);
+                end;
+              end;
+              TDIText:begin
+                pointer(ptp):=pltypeprop^.Textarray.CreateObject;
+                ptp^.initnul;
+                ptp^.param:=BShapeProp.param;
+                ptp^.Text:=txtstr;
+                ptp^.param.PStyle:=pointer(stylehandle);
+                ptp^.param.PstyleIsHandle:=true;
+                pltypeprop^.dasharray.PushBackData(dashinfo);
+              end;
+              { #todo : сменить case на if }
+              TDIDash:;//заглушка на варнинг
+            end;
+            dashinfo:=TDIDash;
+            TempDouble:=strtofloat(s);
+            pltypeprop^.dasharray.PushBackData(dashinfo);
+            pltypeprop^.strokesarray.PushBackData(TempDouble);
+            len:=len+abs(TempDouble);
+            if TempDouble>eps then begin
+              pltypeprop^.LastStroke:=TODILine;
+              pltypeprop^.WithoutLines:=false;
+            end else if TempDouble<-eps then
+              pltypeprop^.LastStroke:=TODIBlank
+            else pltypeprop^.LastStroke:=TODIPoint;
+            if pltypeprop^.FirstStroke=TODIUnknown then
+              pltypeprop^.FirstStroke:=pltypeprop^.LastStroke;
           end;
-       74:if pltypeprop<>nil then
-          begin
-               flags:=strtoint(s);
-               if (flags and 1)>0 then
-                                      BShapeProp.param.AD:={BShapeProp.param.AD.}TACAbs
-                                  else
-                                      BShapeProp.param.AD:={BShapeProp.param.AD.}TACRel;
-               if (flags and 2)>0 then
-                                      dashinfo:=TDIText;
-               if (flags and 4)>0 then
-                                      dashinfo:=TDIShape;
-
-          end;
-       75:begin
-               shapenumber:=strtoint(s);//
-          end;
-      340:begin
-               if pltypeprop<>nil then
-                                      stylehandle:=strtoint64('$'+s);
-          end;
-      46:begin
-              BShapeProp.param.Height:=strtofloat(s);
-         end;
+        end;
+        74:
+           if pltypeprop<>nil then begin
+             flags:=strtoint(s);
+             if (flags and 1)>0 then
+               BShapeProp.param.AD:={BShapeProp.param.AD.}TACAbs
+             else
+               BShapeProp.param.AD:={BShapeProp.param.AD.}TACRel;
+             if (flags and 2)>0 then
+               dashinfo:=TDIText;
+             if (flags and 4)>0 then
+               dashinfo:=TDIShape;
+           end;
+        75:begin
+          shapenumber:=strtoint(s);//
+        end;
+        340:begin
+          if pltypeprop<>nil then
+            stylehandle:=strtoint64('$'+s);
+        end;
+        46:begin
+          BShapeProp.param.Height:=strtofloat(s);
+        end;
       50:begin
-              BShapeProp.param.Angle:=strtofloat(s);
-         end;
+        BShapeProp.param.Angle:=strtofloat(s);
+      end;
       44:begin
-              BShapeProp.param.X:=strtofloat(s);
-         end;
+        BShapeProp.param.X:=strtofloat(s);
+      end;
       45:begin
-              BShapeProp.param.Y:=strtofloat(s);
-         end;
-      9:begin if pltypeprop<>nil then
-              txtstr:=s;
-         end;
+        BShapeProp.param.Y:=strtofloat(s);
+      end;
+      9:begin
+          if pltypeprop<>nil then
+            txtstr:=s;
+      end;
        end;
        end;
       if assigned(pltypeprop) then
         pltypeprop^.strokesarray.LengthFact:=len;
-  end;
+    end;
   BShapeProp.Done;
 end;
 procedure ReadLayers(var s:ansistring; const clayer:string;var rdr:TZMemReader; const exitString: String;var ZCDCtx:TZDrawingContext;var context:TIODXFLoadContext);
@@ -1093,7 +1071,7 @@ begin
 end;
 end;
 
-procedure addfromdxf2000(var rdr:TZMemReader; const exitString: String;var ZCDCtx:TZDrawingContext;var context:TIODXFLoadContext;const LogProc:TZELogProc=nil);
+procedure AddFromDXF20XX(var rdr:TZMemReader; const exitString: String;var ZCDCtx:TZDrawingContext;var context:TIODXFLoadContext;const LogProc:TZELogProc=nil);
 var
   byt: Integer;
   error: Integer;
@@ -1229,7 +1207,7 @@ begin
 
                 tp := ZCDCtx.pdrawing^.BlockDefArray.create(s);
                 zDebugLn('{D+}[DXF_CONTENTS]Found blockdef '+s);
-                   //addfromdxf12(rdr, Pointer(GDB.pgdbblock^.blockarray[GDB.pgdbblock^.count].ppa),@tp^.Entities, 'ENDBLK');
+                   //AddFromDXF12(rdr, Pointer(GDB.pgdbblock^.blockarray[GDB.pgdbblock^.count].ppa),@tp^.Entities, 'ENDBLK');
                 while (s <> ' 30') and (s <> '30') do
                 begin
                   s := rdr.ParseString;
@@ -1310,17 +1288,21 @@ begin
     if rdr.HaveData then
     begin
       fileCtx.InitRec;
-      ReadDXFHeader(rdr,fileCtx);
+      if not ReadDXFHeader(rdr,fileCtx) then begin
+        rdr.setPosition(0);
+        fileCtx.Header.iDWGCodePage:=1252;
+        fileCtx.Header.iVersion:=1009;
+      end;
       lph:=lps.StartLongProcess(rsLoadDXFFile,@rdr,rdr.Size,LPSOSilent);
       case fileCtx.Header.Version of
         AC1009:begin
           Log(LogIntf,ZESGeneral,ZEMsgInfo,format(rsFileFormat,[format(ffs,[ACVer2DXFVerStr(fileCtx.Header.iVersion),ACVer2ACVerStr(fileCtx.Header.iVersion)])]));
-          gotodxf(rdr, 0, dxfName_ENDSEC);
-          addfromdxf12(rdr,dxf_EOF,dwgCtx,LogIntf);
+          //gotodxf(rdr, 0, dxfName_ENDSEC);
+          AddFromDXF12(rdr,dxf_EOF,dwgCtx,LogIntf);
         end;
         AC1015,AC1018,AC1021,AC1024,AC1027,AC1032:begin
           Log(LogIntf,ZESGeneral,ZEMsgInfo,format(rsFileFormat,[format(ffs,[ACVer2DXFVerStr(fileCtx.Header.iVersion),ACVer2ACVerStr(fileCtx.Header.iVersion)])]));
-          addfromdxf2000(rdr,dxf_EOF,dwgCtx,fileCtx,LogIntf)
+          AddFromDXF20XX(rdr,dxf_EOF,dwgCtx,fileCtx,LogIntf)
         end;
         else
           if fileCtx.Header.iVersion<>VarValueNotSet then

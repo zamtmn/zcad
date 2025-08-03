@@ -45,6 +45,7 @@ resourcestring
   rsLoadingFontFile='Loading font file "%S"';
   {errors}
   rsFoundBrokenEntity='Found broken entity (type:%s addr:%s wtf:%s)';
+  rsWhenOpeningFileAnErrorOccupedWithMsg='When opening file "%s" an error (%s) occurred with  message: %s';
 
 implementation
 end.

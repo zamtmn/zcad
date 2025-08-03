@@ -52,7 +52,10 @@ var
   hdr:TDXFHeaderInfo;
 begin
   hdr:=uzeffdxf.addfromdxf(AFileName,dwgCtx,LogIntf);
-  dwgCtx.PDrawing^.DXFCodePage:=DWGCodePage2DXFCodePage(hdr.DWGCodePage);
+  if hdr.DWGCodePage<>CP_INVALID then
+    dwgCtx.PDrawing^.DXFCodePage:=DWGCodePage2DXFCodePage(hdr.DWGCodePage)
+  else
+    dwgCtx.PDrawing^.DXFCodePage:=sysvarSysDWG_CodePage;
 end;
 begin
   Ext2LoadProcMap.RegisterExt('dxf','AutoCAD DXF files via zengine (*.dxf)',@LoadDXFviaZEnfine,true);

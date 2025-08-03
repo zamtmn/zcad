@@ -1258,47 +1258,55 @@ begin
   DefaultFormatSettings.DecimalSeparator:='.';
   result.InitRec;
   zDebugLn('{D+}AddFromDXF("%s")',[AFileName]);
-  Log(LogIntf,ZESGeneral,ZEMsgCriticalInfo,format(rsLoadingFile,[AFileName]));
-
-  DxfStream:=TZMVSMemoryMappedFile.Create(AFileName,fmOpenRead);
-  rdr:=TZMemReader.Create(DxfStream);
   try
-    if rdr.HaveData then
-    begin
-      fileCtx.InitRec;
-      if not ReadDXFHeader(rdr,fileCtx) then begin
-        rdr.setPosition(0);
-        fileCtx.Header.iDWGCodePage:=1252;
-        fileCtx.Header.iVersion:=1009;
+    Log(LogIntf,ZESGeneral,ZEMsgCriticalInfo,format(rsLoadingFile,[AFileName]));
+    try
+      DxfStream:=TZMVSMemoryMappedFile.Create(AFileName,fmOpenRead);
+    except
+      on E: Exception do begin
+        Log(LogIntf,ZESGeneral,ZEMsgError,format(rsWhenOpeningFileAnErrorOccupedWithMsg,[AFileName,E.ClassName,E.Message]));
+        exit;
       end;
-      lph:=lps.StartLongProcess(rsLoadDXFFile,@rdr,rdr.Size,LPSOSilent);
-      case fileCtx.Header.Version of
-        AC1009:begin
-          Log(LogIntf,ZESGeneral,ZEMsgInfo,format(rsFileFormat,[format(ffs,[ACVer2DXFVerStr(fileCtx.Header.iVersion),ACVer2ACVerStr(fileCtx.Header.iVersion)])]));
-          //gotodxf(rdr, 0, dxfName_ENDSEC);
-          AddFromDXF12(rdr,dxf_EOF,dwgCtx,LogIntf);
+    end;
+    rdr:=TZMemReader.Create(DxfStream);
+    try
+      if rdr.HaveData then
+      begin
+        fileCtx.InitRec;
+        if not ReadDXFHeader(rdr,fileCtx) then begin
+          rdr.setPosition(0);
+          fileCtx.Header.iDWGCodePage:=1252;
+          fileCtx.Header.iVersion:=1009;
         end;
-        AC1015,AC1018,AC1021,AC1024,AC1027,AC1032:begin
-          Log(LogIntf,ZESGeneral,ZEMsgInfo,format(rsFileFormat,[format(ffs,[ACVer2DXFVerStr(fileCtx.Header.iVersion),ACVer2ACVerStr(fileCtx.Header.iVersion)])]));
-          AddFromDXF20XX(rdr,dxf_EOF,dwgCtx,fileCtx,LogIntf)
-        end;
-        else
-          if fileCtx.Header.iVersion<>VarValueWrong then
-            Log(LogIntf,ZESGeneral,ZEMsgError,'{EM}'+rsUnknownFileFormat+' $ACADVER='+fileCtx.DWGVarsDict[dxfVar_ACADVER])
+        lph:=lps.StartLongProcess(rsLoadDXFFile,@rdr,rdr.Size,LPSOSilent);
+        case fileCtx.Header.Version of
+          AC1009:begin
+            Log(LogIntf,ZESGeneral,ZEMsgInfo,format(rsFileFormat,[format(ffs,[ACVer2DXFVerStr(fileCtx.Header.iVersion),ACVer2ACVerStr(fileCtx.Header.iVersion)])]));
+            AddFromDXF12(rdr,dxf_EOF,dwgCtx,LogIntf);
+          end;
+          AC1015,AC1018,AC1021,AC1024,AC1027,AC1032:begin
+            Log(LogIntf,ZESGeneral,ZEMsgInfo,format(rsFileFormat,[format(ffs,[ACVer2DXFVerStr(fileCtx.Header.iVersion),ACVer2ACVerStr(fileCtx.Header.iVersion)])]));
+            AddFromDXF20XX(rdr,dxf_EOF,dwgCtx,fileCtx,LogIntf)
+          end;
           else
-            Log(LogIntf,ZESGeneral,ZEMsgError,rsUnknownFileFormat);
-      end;
-      lps.EndLongProcess(lph);
-      dwgCtx.POwner^.calcbb(dwgCtx.DC);
-      result:=fileCtx.Header;
-      fileCtx.Done;
-    end else
-      Log(LogIntf,ZESGeneral,ZEMsgError,'Can not open file: '+AFileName);
+            if fileCtx.Header.iVersion<>VarValueWrong then
+              Log(LogIntf,ZESGeneral,ZEMsgError,'{EM}'+rsUnknownFileFormat+' $ACADVER='+fileCtx.DWGVarsDict[dxfVar_ACADVER])
+            else
+              Log(LogIntf,ZESGeneral,ZEMsgError,rsUnknownFileFormat);
+        end;
+        lps.EndLongProcess(lph);
+        dwgCtx.POwner^.calcbb(dwgCtx.DC);
+        result:=fileCtx.Header;
+        fileCtx.Done;
+      end else
+        Log(LogIntf,ZESGeneral,ZEMsgError,'Can not open file: '+AFileName);
+    finally
+      DxfStream.Free;
+      rdr.Free;
+    end;
   finally
-    DxfStream.Free;
-    rdr.Free;
+      zDebugLn('{D-}end; {AddFromDXF}');
   end;
-  zDebugLn('{D-}end; {AddFromDXF}');
 end;
 procedure saveentitiesdxf2000(pva: PGDBObjEntityOpenArray; var outStream:TZctnrVectorBytes;var drawing:TSimpleDrawing;var IODXFContext:TIODXFSaveContext);
 var

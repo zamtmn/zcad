@@ -29,7 +29,7 @@ type
 PTAbstractDrawing=^TAbstractDrawing;
 {REGISTEROBJECTTYPE TAbstractDrawing}
 TAbstractDrawing= object(TDrawingDef)
-                       DXFCodePage:TDXFCodePage;
+                       DXFCodePage:TZCCodePage;
                        LWDisplay:Boolean;
                        SnapGrid:Boolean;
                        DrawGrid:Boolean;

@@ -71,24 +71,23 @@ const
 
   DefaultLocalEntityFlags=0;
 
-  VarValueNotSet=-1;
   VarValueWrong=0;
 
 type
+  TACDWGVerInt=Integer;
+  TACDWGVer=(AC_INVALID,AC1009{12},AC1015{2000},AC1018{2004},AC1021{2007},
+             AC1024{2010},AC1027{2013},AC1032{2018});
 
-  TDXF_ACVer=(AC_INVALID,AC1009{12},AC1015{2000},AC1018{2004},AC1021{2007},
-              AC1024{2010},AC1027{2013},AC1032{2018});
-
-  TDXF_DWGCodePage=(CP_INVALID,ANSI_874,ANSI_932,ANSI_936,ANSI_949,ANSI_950,
-                    ANSI_1250,ANSI_1251,ANSI_1252,ANSI_1253,ANSI_1254,ANSI_1255,
-                    ANSI_1256,ANSI_1257,ANSI_1258);
+  TACDWGCodePage=(CP_INVALID,ANSI_874,ANSI_932,ANSI_936,ANSI_949,ANSI_950,
+                  ANSI_1250,ANSI_1251,ANSI_1252,ANSI_1253,ANSI_1254,ANSI_1255,
+                  ANSI_1256,ANSI_1257,ANSI_1258);
 
 
   TDXFHeaderInfo=record
-    Version:TDXF_ACVer;
-    iVersion:Integer;
-    DWGCodePage:TDXF_DWGCodePage;
-    iDWGCodePage:Integer;
+    Version:TACDWGVer;
+    iVersion:TACDWGVerInt;
+    DWGCodePage:TACDWGCodePage;
+    iDWGCodePage:TSystemCodePage;
     procedure InitRec;
   end;
 
@@ -118,7 +117,7 @@ type
   end;
 
 var
-  sysvarSysDWG_CodePage:TDXFCodePage=DXFCP1252;
+  sysvarSysDWG_CodePage:TZCCodePage=ZCCP1252;
 
 procedure dxfvertexout(var f:TZctnrVectorBytes;dxfcode:Integer;const v:GDBvertex);
 procedure dxfvertexout1(var f:TZctnrVectorBytes;dxfcode:Integer;const v:GDBvertex);
@@ -155,13 +154,15 @@ function dxfRequiredInteger(var rdr:TZMemReader;const RequiredDXFGroupCode:Integ
 function ACVer2ACVerStr(ACVer:integer):string;
 function ACVer2DXFVerStr(ACVer:integer):string;
 
-function ACVer2DXF_ACVer(ACVer:integer):TDXF_ACVer;
+function ACVer2DXF_ACVer(ACVer:integer):TACDWGVer;
 
-function DWGCodePage2DXF_DWGCodePage(DWGCodePage:integer):TDXF_DWGCodePage;
-function DXFCodePage2Str(DXFCodePage:TDXFCodePage):string;
-function DXFCodePage2DXF_DWGCodePage(DXFCodePage:TDXFCodePage):TDXF_DWGCodePage;
-function DXFCodePage2int(DXFCodePage:TDXFCodePage):integer;
+function SysCP2ACCP(SCP:TSystemCodePage):TACDWGCodePage;
+function ZCCP2Str(ZCCP:TZCCodePage):string;
+function ZCCodePage2ACDWGCodePage(ZCCP:TZCCodePage):TACDWGCodePage;
+function ZCCodePage2SysCP(ZCCP:TZCCodePage):TSystemCodePage;
+
 implementation
+
 
 function ACVer2ACVerStr(ACVer:integer):string;
 begin
@@ -191,7 +192,7 @@ begin
   end;
 end;
 
-function ACVer2DXF_ACVer(ACVer:integer):TDXF_ACVer;
+function ACVer2DXF_ACVer(ACVer:integer):TACDWGVer;
 begin
   case ACVer of
     1009:result:=AC1009;{12}
@@ -205,9 +206,9 @@ begin
   end;
 end;
 
-function DWGCodePage2DXF_DWGCodePage(DWGCodePage:integer):TDXF_DWGCodePage;
+function SysCP2ACCP(SCP:TSystemCodePage):TACDWGCodePage;
 begin
-  case DWGCodePage of
+  case SCP of
     874:result:=ANSI_874;
     932:result:=ANSI_932;
     936:result:=ANSI_936;
@@ -226,66 +227,66 @@ begin
   end;
 end;
 
-function DXFCodePage2Str(DXFCodePage:TDXFCodePage):string;
+function ZCCP2Str(ZCCP:TZCCodePage):string;
 begin
-  case DXFCodePage of
-    DXFCP874:result:='ANSI_874';
-    DXFCP932:result:='ANSI_932';
-    DXFCP936:result:='ANSI_936';
-    DXFCP949:result:='ANSI_949';
-    DXFCP950:result:='ANSI_950';
-    DXFCP1250:result:='ANSI_1250';
-    DXFCP1251:result:='ANSI_1251';
-    DXFCP1252:result:='ANSI_1252';
-    DXFCP1253:result:='ANSI_1253';
-    DXFCP1254:result:='ANSI_1254';
-    DXFCP1255:result:='ANSI_1255';
-    DXFCP1256:result:='ANSI_1256';
-    DXFCP1257:result:='ANSI_1257';
-    DXFCP1258:result:='ANSI_1258';
-    DXFCPINVALID:result:='ANSI_1251';
+  case ZCCP of
+    ZCCP874:result:='ANSI_874';
+    ZCCP932:result:='ANSI_932';
+    ZCCP936:result:='ANSI_936';
+    ZCCP949:result:='ANSI_949';
+    ZCCP950:result:='ANSI_950';
+    ZCCP1250:result:='ANSI_1250';
+    ZCCP1251:result:='ANSI_1251';
+    ZCCP1252:result:='ANSI_1252';
+    ZCCP1253:result:='ANSI_1253';
+    ZCCP1254:result:='ANSI_1254';
+    ZCCP1255:result:='ANSI_1255';
+    ZCCP1256:result:='ANSI_1256';
+    ZCCP1257:result:='ANSI_1257';
+    ZCCP1258:result:='ANSI_1258';
+    ZCCPINVALID:result:='ANSI_1251';
   end;
 end;
 
-function DXFCodePage2DXF_DWGCodePage(DXFCodePage:TDXFCodePage):TDXF_DWGCodePage;
+function ZCCodePage2ACDWGCodePage(ZCCP:TZCCodePage):TACDWGCodePage;
 begin
-  case DXFCodePage of
-    DXFCP874:result:=ANSI_874;
-    DXFCP932:result:=ANSI_932;
-    DXFCP936:result:=ANSI_936;
-    DXFCP949:result:=ANSI_949;
-    DXFCP950:result:=ANSI_950;
-    DXFCP1250:result:=ANSI_1250;
-    DXFCP1251:result:=ANSI_1251;
-    DXFCP1252:result:=ANSI_1252;
-    DXFCP1253:result:=ANSI_1253;
-    DXFCP1254:result:=ANSI_1254;
-    DXFCP1255:result:=ANSI_1255;
-    DXFCP1256:result:=ANSI_1256;
-    DXFCP1257:result:=ANSI_1257;
-    DXFCP1258:result:=ANSI_1258;
-    DXFCPINVALID:result:=ANSI_1252;
+  case ZCCP of
+    ZCCP874:result:=ANSI_874;
+    ZCCP932:result:=ANSI_932;
+    ZCCP936:result:=ANSI_936;
+    ZCCP949:result:=ANSI_949;
+    ZCCP950:result:=ANSI_950;
+    ZCCP1250:result:=ANSI_1250;
+    ZCCP1251:result:=ANSI_1251;
+    ZCCP1252:result:=ANSI_1252;
+    ZCCP1253:result:=ANSI_1253;
+    ZCCP1254:result:=ANSI_1254;
+    ZCCP1255:result:=ANSI_1255;
+    ZCCP1256:result:=ANSI_1256;
+    ZCCP1257:result:=ANSI_1257;
+    ZCCP1258:result:=ANSI_1258;
+    ZCCPINVALID:result:=ANSI_1252;
   end;
 end;
 
-function DXFCodePage2int(DXFCodePage:TDXFCodePage):integer;
+function ZCCodePage2SysCP(ZCCP:TZCCodePage):TSystemCodePage;
 begin
-  case DXFCodePage of
-    DXFCP874:result:=874;
-    DXFCP932:result:=932;
-    DXFCP936:result:=936;
-    DXFCP949:result:=949;
-    DXFCP950:result:=950;
-    DXFCP1250:result:=1250;
-    DXFCP1251:result:=1251;
-    DXFCP1252:result:=1252;
-    DXFCP1253:result:=1253;
-    DXFCP1254:result:=1254;
-    DXFCP1255:result:=1255;
-    DXFCP1256:result:=1256;
-    DXFCP1257:result:=1257;
-    DXFCP1258:result:=1258;
-    DXFCPINVALID:result:=1252;
+  case ZCCP of
+    ZCCP874:result:=874;
+    ZCCP932:result:=932;
+    ZCCP936:result:=936;
+    ZCCP949:result:=949;
+    ZCCP950:result:=950;
+    ZCCP1250:result:=1250;
+    ZCCP1251:result:=1251;
+    ZCCP1252:result:=1252;
+    ZCCP1253:result:=1253;
+    ZCCP1254:result:=1254;
+    ZCCP1255:result:=1255;
+    ZCCP1256:result:=1256;
+    ZCCP1257:result:=1257;
+    ZCCP1258:result:=1258;
+    ZCCPINVALID:result:=1252;
   end;
 end;
 
@@ -316,9 +317,9 @@ end;
 procedure TDXFHeaderInfo.InitRec;
 begin
   Version:=AC_INVALID;
-  iVersion:=VarValueNotSet;
+  iVersion:=VarValueWrong;
   DWGCodePage:=CP_INVALID;
-  iDWGCodePage:=VarValueNotSet;
+  iDWGCodePage:=VarValueWrong;
 end;
 
 procedure TIODXFLoadContext.Done;

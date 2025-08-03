@@ -766,7 +766,7 @@ var {tp:GDBTextStyleProp;}
     ts:PTGDBTableStyle;
     cs:TGDBTableCellStyle;
 begin
-  DXFCodePage:=TDXFCodePage.DXFCPINVALID;
+  DXFCodePage:=TZCCodePage.ZCCPINVALID;
   LastActl.CreateDef;
   LWDisplay:=false;
   SnapGrid:=false;

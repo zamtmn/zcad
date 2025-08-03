@@ -95,7 +95,7 @@ initialization
   units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPaths,system_pas_path,InterfaceTranslate,'DISP_LWDisplayScale','Integer',@sysvarDISPLWDisplayScale);
   units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPaths,system_pas_path,InterfaceTranslate,'RD_Light','Boolean',@sysvarRDLight);
 
-  units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPaths,system_pas_path,InterfaceTranslate,'SysDWG_CodePage','TDXFCodePage',@sysvarSysDWG_CodePage);
+  units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPaths,system_pas_path,InterfaceTranslate,'SysDWG_CodePage','TZCCodePage',@sysvarSysDWG_CodePage);
   SysVar.DWG.System.SysDWG_CodePage:=@sysvarSysDWG_CodePage;
 
   sysvar.DISP.DISP_CursorSize:=@sysvarDISPCursorSize;

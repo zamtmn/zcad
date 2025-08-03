@@ -35,7 +35,8 @@ uses
   uzcdrawings,
   uzcinterface,
   uzcFileStructure,
-  uzeffdxf,uzedrawingsimple,Varman,uzctnrVectorBytes,uzcdrawing,uzcTranslations,uzeconsts;
+  uzeffdxf,uzeffdxfsupport,
+  uzedrawingsimple,Varman,uzctnrVectorBytes,uzcdrawing,uzcTranslations,uzeconsts;
 
 function SaveAs_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 function SaveDXFDPAS(AFileName:String;AProcessFileHistory:Boolean=True):Integer;
@@ -49,7 +50,7 @@ var
    pu:ptunit;
    allok:boolean;
 begin
-  allok:=savedxf2000(s,ConcatPaths([GetRoCfgsPath,CFScomponentsDir,CFSemptydxfFile]),dwg^,DWGCodePage2DXFCodePage(DWG.DXFCodePage));
+  allok:=savedxf2000(s,ConcatPaths([GetRoCfgsPath,CFScomponentsDir,CFSemptydxfFile]),dwg^,ZCCodePage2SysCP(DWG.DXFCodePage));
   pu:=PTZCADDrawing(dwg).DWGUnits.findunit(GetSupportPaths,InterfaceTranslate,DrawingDeviceBaseUnitName);
   if pu<>nil then begin
     mem.init(1024);

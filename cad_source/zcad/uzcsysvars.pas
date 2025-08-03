@@ -131,12 +131,12 @@ type
        end;
   {REGISTERRECORDTYPE TSystemDWG}
   TSystemDWG=record
-    SysDWG_CodePage:PTDXFCodePage;(*'DWGCODEPAGE for new drawings'*)
+    SysDWG_CodePage:PTZCCodePage;(*'DWGCODEPAGE for new drawings'*)
   end;
   {REGISTERRECORDTYPE tdwg}
   tdwg=record
     System:TSystemDWG;(*'System drawing settings'*)
-    DWG_DXFCodePage:PTDXFCodePage;(*'DWGCODEPAGE for saving'*)
+    DWG_DXFCodePage:PTZCCodePage;(*'DWGCODEPAGE for saving'*)
              DWG_DrawMode:PBoolean;(*'Display line weights'*)
              DWG_OSMode:PTGDBOSMode;(*'Snap mode'*)
              DWG_PolarMode:PBoolean;(*'Polar tracking mode'*)

@@ -56,33 +56,11 @@ var
   ClearExtLoadData:TProcessExtLoadData=nil;
   FreeExtLoadData:TProcessExtLoadData=nil;
 
-function addfromdxf(const AFileName: String;var dwgCtx:TZDrawingContext;const LogIntf:TZELogProc=nil):TDXFHeaderInfo;
+function AddFromDXF(const AFileName: String;var dwgCtx:TZDrawingContext;const LogIntf:TZELogProc=nil):TDXFHeaderInfo;
 function savedxf2000(const SavedFileName:String; const TemplateFileName:String;var drawing:TSimpleDrawing;codepage:integer):boolean;
-function DWGCodePage2DXFCodePage(ADXFCP:TDXFCodePage):integer;
 
 implementation
 var FOC:Integer;
-
-function DWGCodePage2DXFCodePage(ADXFCP:TDXFCodePage):integer;
-begin
-  case ADXFCP of
-    DXFCP874:result:=874;
-    DXFCP932:result:=932;
-    DXFCP936:result:=936;
-    DXFCP949:result:=949;
-    DXFCP950:result:=950;
-    DXFCP1250:result:=1250;
-    DXFCP1251:result:=1251;
-    DXFCP1252:result:=1252;
-    DXFCP1253:result:=1253;
-    DXFCP1254:result:=1254;
-    DXFCP1255:result:=1255;
-    DXFCP1256:result:=1256;
-    DXFCP1257:result:=1257;
-    DXFCP1258:result:=1258;
-    DXFCPINVALID:result:=1252;
-  end;
-end;
 
 function IsIgnoredEntity(const name:String):Integer;
 var
@@ -221,7 +199,7 @@ var
     if not DWGCODEPAGE then
       if varname=dxfVar_DWGCODEPAGE then begin
         fileCtx.Header.iDWGCodePage:=VarStr2Int('ANSI_',valuesarray[0]);
-        fileCtx.Header.DWGCodePage:=DWGCodePage2DXF_DWGCodePage(fileCtx.Header.iDWGCodePage);
+        fileCtx.Header.DWGCodePage:=SysCP2ACCP(fileCtx.Header.iDWGCodePage);
         DWGCODEPAGE:=true;
       end;
 
@@ -248,8 +226,8 @@ begin
   result:=false;
   ACVERSION:=false;
   DWGCODEPAGE:=false;
-  fileCtx.Header.DWGCodePage:=DXFCodePage2DXF_DWGCodePage(sysvarSysDWG_CodePage);
-  fileCtx.Header.iDWGCodePage:=DXFCodePage2int(sysvarSysDWG_CodePage);
+  fileCtx.Header.DWGCodePage:=ZCCodePage2ACDWGCodePage(sysvarSysDWG_CodePage);
+  fileCtx.Header.iDWGCodePage:=ZCCodePage2SysCP(sysvarSysDWG_CodePage);
   fileCtx.Header.Version:=AC1009;
   fileCtx.Header.iVersion:=1009;
 
@@ -301,9 +279,9 @@ begin
   finally
     freearrays;
     if not ACVERSION then
-      fileCtx.Header.iVersion:=VarValueNotSet;
+      fileCtx.Header.iVersion:=VarValueWrong;
     if not DWGCODEPAGE then
-      fileCtx.Header.iDWGCodePage:=VarValueNotSet;
+      fileCtx.Header.iDWGCodePage:=VarValueWrong;
    end;
 end;
 
@@ -1268,7 +1246,7 @@ begin
   lps.EndLongProcess(lph);
 end;
 
-function addfromdxf(const AFileName: String;var dwgCtx:TZDrawingContext;const LogIntf:TZELogProc=nil):TDXFHeaderInfo;
+function AddFromDXF(const AFileName: String;var dwgCtx:TZDrawingContext;const LogIntf:TZELogProc=nil):TDXFHeaderInfo;
 var
   fileCtx:TIODXFLoadContext;
   lph:TLPSHandle;
@@ -1305,17 +1283,17 @@ begin
           AddFromDXF20XX(rdr,dxf_EOF,dwgCtx,fileCtx,LogIntf)
         end;
         else
-          if fileCtx.Header.iVersion<>VarValueNotSet then
-            zDebugLn('{EM}'+rsUnknownFileFormat+' $ACADVER='+fileCtx.DWGVarsDict[dxfVar_ACADVER])
+          if fileCtx.Header.iVersion<>VarValueWrong then
+            Log(LogIntf,ZESGeneral,ZEMsgError,'{EM}'+rsUnknownFileFormat+' $ACADVER='+fileCtx.DWGVarsDict[dxfVar_ACADVER])
           else
-            zDebugLn('{EM}'+rsUnknownFileFormat);
+            Log(LogIntf,ZESGeneral,ZEMsgError,rsUnknownFileFormat);
       end;
       lps.EndLongProcess(lph);
       dwgCtx.POwner^.calcbb(dwgCtx.DC);
       result:=fileCtx.Header;
       fileCtx.Done;
     end else
-      zDebugLn('{EM}'+'IODXF.ADDFromDXF: Не могу открыть файл: '+AFileName);
+      Log(LogIntf,ZESGeneral,ZEMsgError,'Can not open file: '+AFileName);
   finally
     DxfStream.Free;
     rdr.Free;
@@ -1381,7 +1359,7 @@ var
 begin
     VarsDict.Add('$CLAYER',drawing.GetCurrentLayer^.Name);
     VarsDict.Add('$CELTYPE',drawing.GetCurrentLType^.Name);
-    VarsDict.Add('$DWGCODEPAGE',DXFCodePage2Str(drawing.DXFCodePage));
+    VarsDict.Add('$DWGCODEPAGE',ZCCP2Str(drawing.DXFCodePage));
 
     pcurrtextstyle:=drawing.GetCurrentTextStyle;
     if pcurrtextstyle<>nil then
@@ -1484,7 +1462,7 @@ begin
   IODXFContext.Header.Version:=AC1015;
   IODXFContext.Header.iVersion:=1015;
 
-  IODXFContext.Header.DWGCodePage:=DWGCodePage2DXF_DWGCodePage(codepage);
+  IODXFContext.Header.DWGCodePage:=SysCP2ACCP(codepage);
   IODXFContext.Header.iDWGCodePage:=codepage;
 
   DefaultFormatSettings.DecimalSeparator := '.';

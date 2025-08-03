@@ -26,24 +26,24 @@ uses
   uzeffdxf,
   uzeffLibreDWG,uzeffLibreDWG2Ents;
 implementation
-function DWGCodePage2DXFCodePage(ADWGCP:TDXF_DWGCodePage):TDXFCodePage;
+function DWGCodePage2DXFCodePage(ADWGCP:TACDWGCodePage):TZCCodePage;
 begin
   case ADWGCP of
-    ANSI_874:result:=DXFCP874;
-    ANSI_932:result:=DXFCP932;
-    ANSI_936:result:=DXFCP936;
-    ANSI_949:result:=DXFCP949;
-    ANSI_950:result:=DXFCP950;
-    ANSI_1250:result:=DXFCP1250;
-    ANSI_1251:result:=DXFCP1251;
-    ANSI_1252:result:=DXFCP1252;
-    ANSI_1253:result:=DXFCP1253;
-    ANSI_1254:result:=DXFCP1254;
-    ANSI_1255:result:=DXFCP1255;
-    ANSI_1256:result:=DXFCP1256;
-    ANSI_1257:result:=DXFCP1257;
-    ANSI_1258:result:=DXFCP1258;
-    CP_INVALID:result:=DXFCPINVALID;
+    ANSI_874:result:=ZCCP874;
+    ANSI_932:result:=ZCCP932;
+    ANSI_936:result:=ZCCP936;
+    ANSI_949:result:=ZCCP949;
+    ANSI_950:result:=ZCCP950;
+    ANSI_1250:result:=ZCCP1250;
+    ANSI_1251:result:=ZCCP1251;
+    ANSI_1252:result:=ZCCP1252;
+    ANSI_1253:result:=ZCCP1253;
+    ANSI_1254:result:=ZCCP1254;
+    ANSI_1255:result:=ZCCP1255;
+    ANSI_1256:result:=ZCCP1256;
+    ANSI_1257:result:=ZCCP1257;
+    ANSI_1258:result:=ZCCP1258;
+    CP_INVALID:result:=ZCCPINVALID;
   end;
 end;
 

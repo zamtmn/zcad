@@ -213,7 +213,7 @@ begin
   selname:=uppercase(selname);
   pb:=drawings.GetCurrentDWG^.BlockDefArray.beginiterate(ir);
   if pb<>nil then repeat
-    s:=Tria_AnsiToUtf8(pb^.name);
+    s:={Tria_AnsiToUtf8}(pb^.name);
     if (filter='') or MatchesMask(s,filter) then begin
       if uppercase(pb^.name)=selname then
         result:=i;

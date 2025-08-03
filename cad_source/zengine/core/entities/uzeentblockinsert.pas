@@ -557,7 +557,7 @@ begin
      if dxfLoadGroupCodeDouble(rdr,50,byt,rotate) then
        rotate:=DegToRad(rotate)
 else if dxfLoadGroupCodeInteger(rdr,71,byt,hlGDBWord)then begin if hlGDBWord = 1 then attrcont := true; end
-else if not dxfLoadGroupCodeString(rdr,2,byt,name)then {s := }rdr.SkipString;
+else if not dxfLoadGroupCodeString(rdr,2,byt,name,context.header)then {s := }rdr.SkipString;
     byt:=rdr.ParseInteger;
   end;
   if attrcont then ;
@@ -699,7 +699,7 @@ procedure GDBObjBlockInsert.SaveToDXF(var outStream:TZctnrVectorBytes;var drawin
   //s: String;
 begin
   SaveToDXFObjPrefix(outStream,'INSERT','AcDbBlockReference',IODXFContext);
-  dxfStringout(outStream,2,name);
+  dxfStringout(outStream,2,name,IODXFContext.Header);
   dxfvertexout(outStream,10,Local.p_insert);
   dxfvertexout1(outStream,41,scale);
   dxfDoubleout(outStream,50,rotate*180/pi);

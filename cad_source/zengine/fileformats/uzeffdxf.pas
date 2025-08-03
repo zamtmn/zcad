@@ -1020,7 +1020,7 @@ begin
   end;
 end;
 end;
-procedure ReadBlockRecird(const Handle2BlockName:TMapBlockHandle_BlockNames;var s:ansistring;var rdr:TZMemReader; const exitString: String;var ZCDCtx:TZDrawingContext;var context:TIODXFLoadContext);
+procedure ReadBlockRecord(const Handle2BlockName:TMapBlockHandle_BlockNames;var s:ansistring;var rdr:TZMemReader; const exitString: String;var ZCDCtx:TZDrawingContext;var context:TIODXFLoadContext);
 var
    byt:integer;
    bname:string;
@@ -1038,7 +1038,7 @@ begin
      s := rdr.ParseString;
      if byt=2 then
                   begin
-                       bname:=s;
+                       bname:= dxfDeCodeString(s,context.Header);
                        Handle2BlockName.{$IFDEF DELPHI}Add{$ENDIF}{$IFNDEF DELPHI}insert{$ENDIF}(bhandle,bname);
                   end;
      if byt=5 then
@@ -1100,7 +1100,7 @@ begin
                else if s = dxfName_BLOCK_RECORD{:}then
                                     begin
                                     zDebugLn('{D+}[DXF_CONTENTS]Found BLOCK_RECORD table');
-                                    ReadBlockRecird(Handle2BlockName,s,rdr,exitString,ZCDCtx,context);
+                                    ReadBlockRecord(Handle2BlockName,s,rdr,exitString,ZCDCtx,context);
                                     zDebugLn('{D-}[DXF_CONTENTS]end; {BLOCK_RECORD table}');
                                     end
                    else if s = dxfName_DIMSTYLE{:}then
@@ -1222,7 +1222,7 @@ begin
             if not blockload then
                                  sname := rdr.ParseString;
             blockload:=false;
-            s := rdr.ParseString;
+            s:=dxfDeCodeString(rdr.ParseString,context.Header);
           until (s = dxfName_ENDSEC);
           zDebugLn('{D-}[DXF_CONTENTS]end; {block table}');
           //programlog.LogOutStr('end; {block table}',lp_DecPos,LM_Debug);
@@ -1597,7 +1597,7 @@ begin
                 outstream.TXTAddStringEOL(dxfGroupCode(100));
                 outstream.TXTAddStringEOL('AcDbBlockBegin');
                 outstream.TXTAddStringEOL(dxfGroupCode(2));
-                outstream.TXTAddStringEOL(PBlockdefArray({p}drawing.BlockDefArray.parray)^[i].name);
+                outstream.TXTAddStringEOL(dxfEnCodeString(PBlockdefArray(drawing.BlockDefArray.parray)^[i].name,IODXFContext.Header));
                 outstream.TXTAddStringEOL(dxfGroupCode(70));
                 outstream.TXTAddStringEOL('2');
                 outstream.TXTAddStringEOL(dxfGroupCode(10));
@@ -1821,14 +1821,13 @@ begin
                 //GetOrCreateHandle(@(PBlockdefArray(drawing.BlockDefArray.parray)^[i]),handle,temphandle);
 
                 outstream.TXTAddStringEOL(dxfGroupCode(5));
-                outstream.TXTAddStringEOL(inttohex({handle}temphandle, 0));
-                //inc(handle);
+                outstream.TXTAddStringEOL(inttohex(temphandle, 0));
                 outstream.TXTAddStringEOL(dxfGroupCode(100));
                 outstream.TXTAddStringEOL(dxfName_AcDbSymbolTableRecord);
                 outstream.TXTAddStringEOL(dxfGroupCode(100));
                 outstream.TXTAddStringEOL('AcDbBlockTableRecord');
                 outstream.TXTAddStringEOL(dxfGroupCode(2));
-                outstream.TXTAddStringEOL(PBlockdefArray({p}drawing.BlockDefArray.parray)^[i].name);
+                outstream.TXTAddStringEOL(dxfEnCodeString(PBlockdefArray(drawing.BlockDefArray.parray)^[i].name,IODXFContext.Header));
 
               end;
               outstream.TXTAddStringEOL(dxfGroupCode(0));

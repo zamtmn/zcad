@@ -28,6 +28,7 @@ var
   DISP_UnSelectedGripColor:TGDBPaletteColor;
   DWG_OSMode:TGDBOSMode;
   DWG_OSModeControl:Boolean;
+  SysDWG_CodePage:TDXFCodePage;
   DISP_GripSize:Integer;
   DISP_ColorAxis:Boolean;
   DISP_DrawZAxis:Boolean;
@@ -132,6 +133,7 @@ begin
   DISP_UnSelectedGripColor:=150;
   DWG_OSMode:=14311;
   DWG_OSModeControl:=True;
+  SysDWG_CodePage:=DXFCP1251;
   DISP_GripSize:=10;
   DISP_ColorAxis:=False;
   DISP_DrawZAxis:=False;

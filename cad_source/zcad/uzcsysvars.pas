@@ -129,8 +129,13 @@ type
              SYS_MemProfiling:PBoolean;(*'Memory profiling'*)(*oi_readonly*)
              SYS_UseExperimentalFeatures:PBoolean;(*'Use experimental features'*)(*oi_readonly*)
        end;
+  {REGISTERRECORDTYPE TSystemDWG}
+  TSystemDWG=record
+    SysDWG_CodePage:PTDXFCodePage;(*'DWGCODEPAGE for new drawings'*)
+  end;
   {REGISTERRECORDTYPE tdwg}
   tdwg=record
+    System:TSystemDWG;(*'System drawing settings'*)
     DWG_DXFCodePage:PTDXFCodePage;(*'DWGCODEPAGE for saving'*)
              DWG_DrawMode:PBoolean;(*'Display line weights'*)
              DWG_OSMode:PTGDBOSMode;(*'Snap mode'*)

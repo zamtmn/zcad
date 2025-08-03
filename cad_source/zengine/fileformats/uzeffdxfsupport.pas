@@ -117,6 +117,9 @@ type
     procedure Done;
   end;
 
+var
+  sysvarSysDWG_CodePage:TDXFCodePage=DXFCP1252;
+
 procedure dxfvertexout(var f:TZctnrVectorBytes;dxfcode:Integer;const v:GDBvertex);
 procedure dxfvertexout1(var f:TZctnrVectorBytes;dxfcode:Integer;const v:GDBvertex);
 procedure dxfvertex2dout(var f:TZctnrVectorBytes;dxfcode:Integer;const v:gdbvertex2d);
@@ -155,7 +158,9 @@ function ACVer2DXFVerStr(ACVer:integer):string;
 function ACVer2DXF_ACVer(ACVer:integer):TDXF_ACVer;
 
 function DWGCodePage2DXF_DWGCodePage(DWGCodePage:integer):TDXF_DWGCodePage;
-function DWGCodePage2Str(DWGCodePage:TDXFCodePage):string;
+function DXFCodePage2Str(DXFCodePage:TDXFCodePage):string;
+function DXFCodePage2DXF_DWGCodePage(DXFCodePage:TDXFCodePage):TDXF_DWGCodePage;
+function DXFCodePage2int(DXFCodePage:TDXFCodePage):integer;
 implementation
 
 function ACVer2ACVerStr(ACVer:integer):string;
@@ -221,9 +226,9 @@ begin
   end;
 end;
 
-function DWGCodePage2Str(DWGCodePage:TDXFCodePage):string;
+function DXFCodePage2Str(DXFCodePage:TDXFCodePage):string;
 begin
-  case DWGCodePage of
+  case DXFCodePage of
     DXFCP874:result:='ANSI_874';
     DXFCP932:result:='ANSI_932';
     DXFCP936:result:='ANSI_936';
@@ -241,6 +246,49 @@ begin
     DXFCPINVALID:result:='ANSI_1251';
   end;
 end;
+
+function DXFCodePage2DXF_DWGCodePage(DXFCodePage:TDXFCodePage):TDXF_DWGCodePage;
+begin
+  case DXFCodePage of
+    DXFCP874:result:=ANSI_874;
+    DXFCP932:result:=ANSI_932;
+    DXFCP936:result:=ANSI_936;
+    DXFCP949:result:=ANSI_949;
+    DXFCP950:result:=ANSI_950;
+    DXFCP1250:result:=ANSI_1250;
+    DXFCP1251:result:=ANSI_1251;
+    DXFCP1252:result:=ANSI_1252;
+    DXFCP1253:result:=ANSI_1253;
+    DXFCP1254:result:=ANSI_1254;
+    DXFCP1255:result:=ANSI_1255;
+    DXFCP1256:result:=ANSI_1256;
+    DXFCP1257:result:=ANSI_1257;
+    DXFCP1258:result:=ANSI_1258;
+    DXFCPINVALID:result:=ANSI_1252;
+  end;
+end;
+
+function DXFCodePage2int(DXFCodePage:TDXFCodePage):integer;
+begin
+  case DXFCodePage of
+    DXFCP874:result:=874;
+    DXFCP932:result:=932;
+    DXFCP936:result:=936;
+    DXFCP949:result:=949;
+    DXFCP950:result:=950;
+    DXFCP1250:result:=1250;
+    DXFCP1251:result:=1251;
+    DXFCP1252:result:=1252;
+    DXFCP1253:result:=1253;
+    DXFCP1254:result:=1254;
+    DXFCP1255:result:=1255;
+    DXFCP1256:result:=1256;
+    DXFCP1257:result:=1257;
+    DXFCP1258:result:=1258;
+    DXFCPINVALID:result:=1252;
+  end;
+end;
+
 
 procedure TIODXFSaveContext.InitRec;
 begin

@@ -248,8 +248,8 @@ begin
   result:=false;
   ACVERSION:=false;
   DWGCODEPAGE:=false;
-  fileCtx.Header.DWGCodePage:=ANSI_1252;
-  fileCtx.Header.iDWGCodePage:=1252;
+  fileCtx.Header.DWGCodePage:=DXFCodePage2DXF_DWGCodePage(sysvarSysDWG_CodePage);
+  fileCtx.Header.iDWGCodePage:=DXFCodePage2int(sysvarSysDWG_CodePage);
   fileCtx.Header.Version:=AC1009;
   fileCtx.Header.iVersion:=1009;
 
@@ -1381,7 +1381,7 @@ var
 begin
     VarsDict.Add('$CLAYER',drawing.GetCurrentLayer^.Name);
     VarsDict.Add('$CELTYPE',drawing.GetCurrentLType^.Name);
-    VarsDict.Add('$DWGCODEPAGE',DWGCodePage2Str(drawing.DXFCodePage));
+    VarsDict.Add('$DWGCODEPAGE',DXFCodePage2Str(drawing.DXFCodePage));
 
     pcurrtextstyle:=drawing.GetCurrentTextStyle;
     if pcurrtextstyle<>nil then

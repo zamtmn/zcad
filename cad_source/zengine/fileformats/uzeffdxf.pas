@@ -211,7 +211,7 @@ var
     inc(currentindex);
     if currentindex>maxindex then
       maxindex:=currentindex;
-    valuesarray[currentindex]:=dxfEnCodeString(value,fileCtx.Header);
+    valuesarray[currentindex]:={dxfDeCodeString}(value{,fileCtx.Header});
   end;
 
   procedure freearrays;
@@ -710,7 +710,7 @@ begin
     end;
     if ZCDCtx.PDrawing^.CurrentLayer=nil then
       ZCDCtx.PDrawing^.CurrentLayer:=player
-    else if uppercase(lname)=uppercase(clayer)then
+    else if lname=clayer then
       ZCDCtx.PDrawing^.CurrentLayer:=player;
   end;
 end;
@@ -805,7 +805,7 @@ begin
     zDebugLn('{D}[DXF_CONTENTS]Found style  '+tstyle.Name);
     if ZCDCtx.PDrawing^.CurrentTextStyle=nil then
       ZCDCtx.PDrawing^.CurrentTextStyle:=ZCDCtx.PDrawing^.TextStyleTable.FindStyle(tstyle.Name,false)
-    else if uppercase(tstyle.Name)=uppercase(ctstyle)then
+    else if tstyle.Name=ctstyle then
       ZCDCtx.PDrawing^.CurrentTextStyle:=ZCDCtx.PDrawing^.TextStyleTable.FindStyle(tstyle.Name,false);
     tstyle.Name:='';
   end;
@@ -1501,7 +1501,7 @@ begin
              outstream.TXTAddStringEOL(groups);
              if values='$HANDSEED' then
                                        handlepos:=outstream.Count;
-             outstream.TXTAddStringEOL(ts);
+             outstream.TXTAddStringEOL(dxfEnCodeString(ts,IODXFContext.Header));
              dec(processedvarscount);
         end
       else variablenotprocessed:=true;

@@ -1263,7 +1263,7 @@ begin
             Log(LogIntf,ZESGeneral,ZEMsgInfo,format(rsFileFormat,[format(ffs,[ACVer2DXFVerStr(fileCtx.Header.iVersion),ACVer2ACVerStr(fileCtx.Header.iVersion)])]));
             AddFromDXF12(rdr,dxf_EOF,dwgCtx,LogIntf);
           end;
-          AC1015,AC1018,AC1021,AC1024,AC1027,AC1032:begin
+          AC1014,AC1015,AC1018,AC1021,AC1024,AC1027,AC1032:begin
             Log(LogIntf,ZESGeneral,ZEMsgInfo,format(rsFileFormat,[format(ffs,[ACVer2DXFVerStr(fileCtx.Header.iVersion),ACVer2ACVerStr(fileCtx.Header.iVersion)])]));
             AddFromDXF20XX(rdr,dxf_EOF,dwgCtx,fileCtx,LogIntf)
           end;

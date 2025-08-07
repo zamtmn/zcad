@@ -52,6 +52,7 @@ const
   dxfName_LType='LTYPE';
 
   cAC1009='AC1009';{12}
+  cAC1014='AC1014';{14}
   cAC1015='AC1015';{2000}
   cAC1018='AC1018';{2004}
   cAC1021='AC1021';{2007}
@@ -61,6 +62,7 @@ const
   cACINVALID='ACINVALID';
 
   cDXF12  ='DXF12';
+  cDXF14  ='DXF14';
   cDXF2000='DXF2000';
   cDXF2004='DXF2004';
   cDXF2007='DXF2007';
@@ -75,7 +77,7 @@ const
 
 type
   TACDWGVerInt=Integer;
-  TACDWGVer=(AC_INVALID,AC1009{12},AC1015{2000},AC1018{2004},AC1021{2007},
+  TACDWGVer=(AC_INVALID,AC1009{12},AC1014{14},AC1015{2000},AC1018{2004},AC1021{2007},
              AC1024{2010},AC1027{2013},AC1032{2018});
 
   TACDWGCodePage=(CP_INVALID,ANSI_874,ANSI_932,ANSI_936,ANSI_949,ANSI_950,
@@ -168,6 +170,7 @@ function ACVer2ACVerStr(ACVer:integer):string;
 begin
   case ACVer of
     1009:result:=cAC1009;{12}
+    1014:result:=cAC1014;{2000}
     1015:result:=cAC1015;{2000}
     1018:result:=cAC1018;{2004}
     1021:result:=cAC1021;{2007}
@@ -182,6 +185,7 @@ function ACVer2DXFVerStr(ACVer:integer):string;
 begin
   case ACVer of
     1009:result:=cDXF12;
+    1014:result:=cDXF14;
     1015:result:=cDXF2000;
     1018:result:=cDXF2004;
     1021:result:=cDXF2007;
@@ -196,6 +200,7 @@ function ACVer2DXF_ACVer(ACVer:integer):TACDWGVer;
 begin
   case ACVer of
     1009:result:=AC1009;{12}
+    1014:result:=AC1014;{2000}
     1015:result:=AC1015;{2000}
     1018:result:=AC1018;{2004}
     1021:result:=AC1021;{2007}

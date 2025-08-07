@@ -1051,7 +1051,7 @@ end;
 
 procedure AddFromDXF20XX(var rdr:TZMemReader; const exitString: String;var ZCDCtx:TZDrawingContext;var context:TIODXFLoadContext;const LogProc:TZELogProc=nil);
 var
-  byt: Integer;
+  byt,flag: Integer;
   error: Integer;
   US, sname: String;
   s:ansistring;
@@ -1169,51 +1169,30 @@ begin
                 while (s <> 'ENDBLK') do
                   s := rdr.ParseString;
               end
-              else if ZCDCtx.pdrawing^.BlockDefArray.getindex(s)>=0 then
-                               begin
-                                    //programlog.logoutstr('Ignored double definition block '+s+';',lp_OldPos);
-                                    //HistoryOutStr(format(rsDoubleBlockIgnored,[Tria_AnsiToUtf8(s)]));
-                                    zDebugLn('{I}'+rsDoubleBlockIgnored,[{Tria_AnsiToUtf8}(s)]);
-//                                    if s='DEVICE_PS_UK-VK'then
-//                                               s:=s;
-                                    while (s <> 'ENDBLK') do
-                                    s := rdr.ParseString;
-                               end
-              else begin
-//                   if s='polyline' then
-//                                  s:=s;
-
+              else if ZCDCtx.pdrawing^.BlockDefArray.getindex(s)>=0 then begin
+                zDebugLn('{I}'+rsDoubleBlockIgnored,[{Tria_AnsiToUtf8}(s)]);
+                while (s <> 'ENDBLK') do
+                s := rdr.ParseString;
+              end else begin
                 tp := ZCDCtx.pdrawing^.BlockDefArray.create(s);
                 zDebugLn('{D+}[DXF_CONTENTS]Found blockdef '+s);
-                   //AddFromDXF12(rdr, Pointer(GDB.pgdbblock^.blockarray[GDB.pgdbblock^.count].ppa),@tp^.Entities, 'ENDBLK');
-                while (s <> ' 30') and (s <> '30') do
-                begin
-                  s := rdr.ParseString;
-                  val(s, byt, error);
-                  case byt of
-                    10:
-                      begin
-                        s := rdr.ParseString;
-                        tp^.Base.x := strtofloat(s);
-                      end;
-                    20:
-                      begin
-                        s := rdr.ParseString;
-                        tp^.Base.y := strtofloat(s);
-                      end;
-                  end;
+                byt:=rdr.ParseInteger;
+                if byt=70 then
+                  flag:=rdr.ParseInteger;
+                byt:=rdr.ParseInteger;
+                if byt=10 then begin
+                  while dxfLoadGroupCodeDouble(rdr,10,byt,tp^.Base.x)
+                     or dxfLoadGroupCodeDouble(rdr,20,byt,tp^.Base.y)
+                     or dxfLoadGroupCodeDouble(rdr,30,byt,tp^.Base.z) do
+                    byt:=rdr.ParseInteger;
                 end;
-                s := rdr.ParseString;
-                tp^.Base.z := strtofloat(s);
-                //programlog.LogOutFormatStr('Base x:%g y:%g z:%g',[tp^.Base.x,tp^.Base.y,tp^.Base.z],lp_OldPos,LM_Info);
+                zDebugLn(format('{D+}[DXF_CONTENTS]Base x:%g y:%g z:%g',[tp^.Base.x,tp^.Base.y,tp^.Base.z]));
                 inc(foc);
                 SaveOptions:=ZCDCtx.dc.Options;
                 exclude(ZCDCtx.dc.Options,DCODrawable);
                 AddEntitiesFromDXF(rdr,'ENDBLK',tp,ZCDCtx.pdrawing^,ZCDCtx.dc,context);
                 ZCDCtx.dc.Options:=SaveOptions;
                 dec(foc);
-                if tp^.name='TX' then
-                                                           tp^.name:=tp^.name;
                 tp^.LoadFromDXF(rdr,nil,ZCDCtx.pdrawing^,context);
                 blockload:=true;
                 zDebugLn('{D-}[DXF_CONTENTS]end block;');

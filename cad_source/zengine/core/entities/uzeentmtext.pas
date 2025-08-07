@@ -749,20 +749,21 @@ begin
   end;
   //убираем переносы строки, они портят dxf
   s:=StringReplace(s,#10,'\P',[rfReplaceAll]);
+  s:=dxfEnCodeString(s,IODXFContext.Header);
   if length(s) < maxdxfmtextlen then
   begin
-    dxfStringout(outStream,1,z2dxfmtext(s,ul),IODXFContext.Header);
+    dxfStringout(outStream,1,z2dxfmtext(s,ul));
   end
   else
   begin
-    dxfStringout(outStream,1,z2dxfmtext(copy(s, 1, maxdxfmtextlen),ul),IODXFContext.Header);
+    dxfStringout(outStream,1,z2dxfmtext(copy(s, 1, maxdxfmtextlen),ul));
     s := copy(s, maxdxfmtextlen+1, length(s) - maxdxfmtextlen);
     while length(s) > maxdxfmtextlen+1 do
     begin
-      dxfStringout(outStream,3,z2dxfmtext(copy(s, 1, maxdxfmtextlen),ul),IODXFContext.Header);
+      dxfStringout(outStream,3,z2dxfmtext(copy(s, 1, maxdxfmtextlen),ul));
       s := copy(s, maxdxfmtextlen+1, length(s) - maxdxfmtextlen)
     end;
-    dxfStringout(outStream,3,z2dxfmtext(s,ul),IODXFContext.Header);
+    dxfStringout(outStream,3,z2dxfmtext(s,ul));
   end;
   dxfStringout(outStream,7,TXTStyle^.name);
   SaveToDXFObjPostfix(outStream);

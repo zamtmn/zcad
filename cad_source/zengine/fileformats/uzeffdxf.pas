@@ -274,7 +274,7 @@ begin
           end;
         end;{case}
       end else
-        zDebugLn('{IH}Found dxf comment "%s",[s]');
+        zDebugLn('{IH}Found dxf comment "%s"',[s]);
       end;
   finally
     freearrays;

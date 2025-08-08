@@ -36,6 +36,7 @@ GDBObjBlockInsert= object(GDBObjComplex)
                      Name:AnsiString;
                      pattrib:Pointer;
                      BlockDesc:TBlockDesc;
+                     PDef:PGDBObjBlockdef;
                      constructor initnul;
                      constructor init(own:Pointer;layeraddres:PGDBLayerProp;LW:SmallInt);
                      procedure LoadFromDXF(var rdr:TZMemReader;ptu:PExtensionData;var drawing:TDrawingDef;var context:TIODXFLoadContext);virtual;
@@ -215,11 +216,17 @@ end;
 procedure GDBObjBlockInsert.decomposite;
 var
   BX,BY,BZ,T:GDBvertex;
+  mtr:DMatrix4D;
 begin
-  BX:=PGDBVertex(@objmatrix.mtr[0])^;
-  BY:=PGDBVertex(@objmatrix.mtr[1])^;
-  BZ:=PGDBVertex(@objmatrix.mtr[2])^;
-  T:=PGDBVertex(@objmatrix.mtr[3])^;
+  if PDef<>nil then begin
+    Mtr:=MatrixMultiply(CreateTranslationMatrix(PDef.Base),objMatrix);
+  end else
+    Mtr:=objMatrix;
+
+  BX:=PGDBVertex(@Mtr.mtr[0])^;
+  BY:=PGDBVertex(@Mtr.mtr[1])^;
+  BZ:=PGDBVertex(@Mtr.mtr[2])^;
+  T:=PGDBVertex(@Mtr.mtr[3])^;
   Local:=GetPointInOCSByBasis(BX,BY,BZ,T,scale);
 end;
 
@@ -357,7 +364,7 @@ end;
 procedure GDBObjBlockInsert.CalcObjMatrix;
 var
   m1:DMatrix4D;
-  pblockdef:PGDBObjBlockdef;
+  //pblockdef:PGDBObjBlockdef;
 begin
   inherited CalcObjMatrix;
 
@@ -366,19 +373,20 @@ begin
   m1:=CreateScaleMatrix(scale);
   objMatrix:=MatrixMultiply(m1,objMatrix);
 
+  PDef:=nil;
+
   if pdrawing<>nil then begin
     if index=-1 then
       index:=PGDBObjBlockdefArray(pdrawing^.GetBlockDefArraySimple).getindex(name);
-    pblockdef:=PGDBObjBlockdefArray(pdrawing^.GetBlockDefArraySimple).getDataMutable(index);
-    if pblockdef<>nil then begin
-      m1:=CreateTranslationMatrix(VertexMulOnSc(pblockdef.Base,-1));
+    PDef:=PGDBObjBlockdefArray(pdrawing^.GetBlockDefArraySimple).getDataMutable(index);
+    //pblockdef:=PGDBObjBlockdefArray(pdrawing^.GetBlockDefArraySimple).getDataMutable(index);
+    if PDef<>nil then begin
+      m1:=CreateTranslationMatrix(VertexMulOnSc(PDef.Base,-1));
       objMatrix:=MatrixMultiply(m1,objMatrix);
     end;
   end;
 end;
 procedure GDBObjBlockInsert.TransformAt;
-//var
-    //ox:gdbvertex;
 begin
      inherited;
      ReCalcFromObjMatrix;
@@ -452,7 +460,8 @@ begin
   tvo^.Local := Local;
   tvo^.scale := scale;
   tvo^.rotate := rotate;
-  tvo.index := index;
+  tvo^.index := index;
+  tvo^.PDef:=PDef;
   tvo^.bp.ListPos.Owner:=own;
   if ConstObjArray.count>0 then
                                tvo.ConstObjArray.init(ConstObjArray.count)
@@ -551,15 +560,21 @@ begin
   byt:=rdr.ParseInteger;
   while byt <> 0 do
   begin
-     if not LoadFromDXFObjShared(rdr,byt,ptu,drawing,context) then
-     if not dxfLoadGroupCodeVertex(rdr,10,byt,Local.P_insert) then
-     if not dxfLoadGroupCodeVertex1(rdr,41,byt,scale) then
-     if dxfLoadGroupCodeDouble(rdr,50,byt,rotate) then
-       rotate:=DegToRad(rotate)
-else if dxfLoadGroupCodeInteger(rdr,71,byt,hlGDBWord)then begin if hlGDBWord = 1 then attrcont := true; end
-else if not dxfLoadGroupCodeString(rdr,2,byt,name,context.header)then {s := }rdr.SkipString;
+    if not LoadFromDXFObjShared(rdr,byt,ptu,drawing,context) then
+    if not dxfLoadGroupCodeVertex(rdr,10,byt,Local.P_insert) then
+    if not dxfLoadGroupCodeVertex1(rdr,41,byt,scale) then
+    if dxfLoadGroupCodeDouble(rdr,50,byt,rotate) then
+      rotate:=DegToRad(rotate)
+    else if dxfLoadGroupCodeInteger(rdr,71,byt,hlGDBWord)then begin if hlGDBWord = 1 then attrcont := true; end
+    else if not dxfLoadGroupCodeString(rdr,2,byt,name,context.header)then {s := }rdr.SkipString;
     byt:=rdr.ParseInteger;
   end;
+  if IsZero(scale.x) then
+    scale.x:=1;
+  if IsZero(scale.y) then
+    scale.y:=1;
+  if IsZero(scale.z) then
+    scale.z:=1;
   if attrcont then ;
       {begin
         Getmem(PGDBBlockInsert(temp)^.pattrib, attrmemsize);

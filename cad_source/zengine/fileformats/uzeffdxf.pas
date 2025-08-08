@@ -261,8 +261,11 @@ begin
           end;
           TDXFHMHeader:begin
             if group=0 then
-              if uppercase(s)=dxfName_ENDSEC then
+              if uppercase(s)=dxfName_ENDSEC then begin
+                if varcount>0 then
+                  storevariable;
                 exit;
+              end;
             if group=9 then begin
               if varcount>0 then
                 storevariable;

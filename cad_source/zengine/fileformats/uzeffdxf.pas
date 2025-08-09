@@ -345,11 +345,11 @@ begin
         newowner:=owner;
         if PGDBObjEntity(pobj)^.PExtAttrib<>nil then begin
           if PGDBObjEntity(pobj)^.PExtAttrib^.Handle>200 then begin
-            context.h2p.Add(PGDBObjEntity(pobj)^.PExtAttrib^.Handle,pobj);
-            context.h2p.Add(PGDBObjEntity(pobj)^.PExtAttrib^.dwgHandle,pobj);
+            context.h2p.Add(PGDBObjEntity(pobj)^.PExtAttrib^.Handle,TDXFHandle2ZCObject.TPointerWithType.CreateRec(pobj,OT_Entity));
+            context.h2p.Add(PGDBObjEntity(pobj)^.PExtAttrib^.dwgHandle,TDXFHandle2ZCObject.TPointerWithType.CreateRec(pobj,OT_Entity));
           end;
           if PGDBObjEntity(pobj)^.PExtAttrib^.OwnerHandle>200 then
-            newowner:=context.h2p.MyGetValue(PGDBObjEntity(pobj)^.PExtAttrib^.OwnerHandle);
+            newowner:=context.h2p.MyGetValue(PGDBObjEntity(pobj)^.PExtAttrib^.OwnerHandle).p;
           if PGDBObjEntity(pobj)^.PExtAttrib^.OwnerHandle=h_trash then
             trash:=true;
         end;
@@ -382,13 +382,13 @@ begin
         newowner:=owner;
         if PGDBObjEntity(pobj)^.PExtAttrib<>nil then begin
         if PGDBObjEntity(pobj)^.PExtAttrib^.OwnerHandle>200 then
-          newowner:=context.h2p.MyGetValue(PGDBObjEntity(pobj)^.PExtAttrib^.OwnerHandle);
+          newowner:=context.h2p.MyGetValue(PGDBObjEntity(pobj)^.PExtAttrib^.OwnerHandle).p;
         end;
         if newowner<>nil then begin
           if PGDBObjEntity(pobj)^.PExtAttrib<>nil then begin
             if PGDBObjEntity(pobj)^.PExtAttrib^.Handle>200 then
-              context.h2p.AddOrSetValue(PGDBObjEntity(pobj)^.PExtAttrib^.Handle,postobj);
-            context.h2p.Add(PGDBObjEntity(pobj)^.PExtAttrib^.dwgHandle,postobj);
+              context.h2p.AddOrSetValue(PGDBObjEntity(pobj)^.PExtAttrib^.Handle,TDXFHandle2ZCObject.TPointerWithType.CreateRec(postobj,OT_Entity));
+            context.h2p.Add(PGDBObjEntity(pobj)^.PExtAttrib^.dwgHandle,TDXFHandle2ZCObject.TPointerWithType.CreateRec(postobj,OT_Entity));
           end;
           if newowner<>owner then begin
             m4:=PGDBObjEntity(newowner)^.getmatrix^;
@@ -442,7 +442,7 @@ begin
   s:='';
   lph:=lps.StartLongProcess('addfromdxf12',@rdr,rdr.CurrentPos);
   zDebugLn('{D+}AddFromDXF12');
-  context.h2p:=TMapHandleToPointer.Create;
+  context.InitRec;
   while (not rdr.EOF) and (s <> exitString) do begin
     lps.ProgressLongProcess(lph,rdr.CurrentPos);
     s := rdr.ParseString;
@@ -496,7 +496,7 @@ begin
       zDebugLn('{D-}[DXF_CONTENTS]end {entities section}');
     end;
   end;
-  context.h2p.Destroy;
+  context.Done;
   lps.EndLongProcess(lph);
   zDebugLn('{D-}end; {AddFromDXF12}');
 end;
@@ -537,7 +537,7 @@ begin
           s:=dxfDeCodeString(s,context.Header);
           case ZCDCtx.PDrawing^.LTypeStyleTable.AddItem(s,pointer(pltypeprop)) of
             IsFounded:begin
-              context.h2p.Add(DWGHandle,pltypeprop);
+              context.h2p.Add(DWGHandle,TDXFHandle2ZCObject.TPointerWithType.CreateRec(pltypeprop,OT_LineType));
               if ZCDCtx.LoadMode=TLOLoad then begin
               end else
                 pltypeprop:=nil;
@@ -545,7 +545,7 @@ begin
             IsCreated:begin
               pltypeprop^.init(s);
               dashinfo:=TDIDash;
-              context.h2p.Add(DWGHandle,pltypeprop);
+              context.h2p.Add(DWGHandle,TDXFHandle2ZCObject.TPointerWithType.CreateRec(pltypeprop,OT_LineType));
             end;
             IsError:begin
             end;
@@ -774,7 +774,7 @@ begin
           ti:=ZCDCtx.PDrawing^.TextStyleTable.addstyle(FontFile,FontFile,FontFamily,tstyle.prop,true);
       end;
       if ti<>nil then begin
-        context.h2p.Add(DWGHandle,ti);
+        context.h2p.Add(DWGHandle,TDXFHandle2ZCObject.TPointerWithType.CreateRec(ti,OT_TextStyle));
         ptstyle:={drawing.TextStyleTable.getelement}(ti);
         pltypeprop:=ZCDCtx.PDrawing^.LTypeStyleTable.beginiterate(ir);
         if pltypeprop<>nil then
@@ -986,42 +986,45 @@ begin
 end;
 procedure ReadDimStyles(var s:ansistring; const cdimstyle:string;var rdr:TZMemReader; const exitString: String;var ZCDCtx:TZDrawingContext;var context:TIODXFLoadContext);
 var
-   psimstyleprop:PGDBDimStyle;
-   byt:integer;
-   ReadDimStylesMode:TDimStyleReadMode;
+  psimstyleprop:PGDBDimStyle;
+  byt:integer;
+  ReadDimStylesMode:TDimStyleReadMode;
 begin
-if GoToDXForENDTAB(rdr, 0, dxfName_DIMSTYLE) then
-while s = dxfName_DIMSTYLE do
-begin
-  psimstyleprop:=nil;
-  ReadDimStylesMode:=TDSRM_ACAD;
-  byt := 2;
-  while byt <> 0 do begin
-  {s := rdr.ParseString;
-  byt := strtoint(s);}
-  byt:=rdr.ParseInteger;
-  //s := rdr.ParseString;
-    if psimstyleprop=nil then begin
-      if byt=2 then begin
-        dxfLoadString(rdr,s,context.Header);
-        psimstyleprop:=ZCDCtx.PDrawing^.DimStyleTable.MergeItem(s,ZCDCtx.LoadMode);
-        if psimstyleprop<>nil then begin
-          psimstyleprop^.init(s);
-          psimstyleprop^.Name:=s;
-        end;
-        if ZCDCtx.PDrawing^.CurrentDimStyle=nil then
-          ZCDCtx.PDrawing^.CurrentDimStyle:=psimstyleprop
-        else if uppercase(s)=uppercase(cdimstyle)then
-        if (ZCDCtx.LoadMode=TLOLoad) then
-          ZCDCtx.PDrawing^.CurrentDimStyle:=psimstyleprop;
-      end else
-        s:=rdr.ParseString;
-    end else begin
-      s:=rdr.ParseString;
-      psimstyleprop^.SetValueFromDxf(ReadDimStylesMode,byt,s,context);
-    end
+  if GoToDXForENDTAB(rdr, 0, dxfName_DIMSTYLE) then begin
+    while s = dxfName_DIMSTYLE do begin
+      psimstyleprop:=nil;
+      ReadDimStylesMode:=TDSRM_ACAD;
+      byt := 2;
+      while byt <> 0 do begin
+      {s := rdr.ParseString;
+      byt := strtoint(s);}
+      byt:=rdr.ParseInteger;
+      //s := rdr.ParseString;
+        if psimstyleprop=nil then begin
+          if byt=2 then begin
+            dxfLoadString(rdr,s,context.Header);
+            psimstyleprop:=ZCDCtx.PDrawing^.DimStyleTable.MergeItem(s,ZCDCtx.LoadMode);
+            if psimstyleprop<>nil then begin
+              psimstyleprop^.init(s);
+              psimstyleprop^.Name:=s;
+            end;
+            if ZCDCtx.PDrawing^.CurrentDimStyle=nil then
+              ZCDCtx.PDrawing^.CurrentDimStyle:=psimstyleprop
+            else if uppercase(s)=uppercase(cdimstyle)then
+            if (ZCDCtx.LoadMode=TLOLoad) then
+              ZCDCtx.PDrawing^.CurrentDimStyle:=psimstyleprop;
+          end else
+            s:=rdr.ParseString;
+        end else begin
+          s:=rdr.ParseString;
+          psimstyleprop^.SetValueFromDxf(ReadDimStylesMode,byt,s,context);
+        end
+      end;
+    end;
+    if psimstyleprop<>nil then
+      if psimstyleprop^.Text.DIMTXSTY=nil then
+        psimstyleprop^.Text.DIMTXSTY:=ZCDCtx.PDrawing^.GetTextStyleTable^.FindStyle(TSNStandardStyleName,false);
   end;
-end;
 end;
 procedure ReadBlockRecord(const Handle2BlockName:TMapBlockHandle_BlockNames;var s:ansistring;var rdr:TZMemReader; const exitString: String;var ZCDCtx:TZDrawingContext;var context:TIODXFLoadContext);
 var

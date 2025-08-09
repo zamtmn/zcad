@@ -53,6 +53,19 @@ TMapPointerToHandle=TMyMap<pointer,TDWGHandle(*{$IFNDEF DELPHI}, LessPointer{$EN
 TMapPointerToPointer=TMyMap<pointer,pointer(*{$IFNDEF DELPHI}, LessPointer{$ENDIF}*)>;
 
 TMapHandleToHandle=TMyMap<TDWGHandle,TDWGHandle(*{$IFNDEF DELPHI}, LessDWGHandle{$ENDIF}*)>;
+GPointerWithType<GPointer,GTypeEnum>=record
+  p:GPointer;
+  &type:GTypeEnum;
+  constructor CreateRec(APointer:GPointer;AType:GTypeEnum);
+end;
+GMapHandle2Pointer<GHandle,GPointer,GTypeEnum>=class(TMyMapGen<TDWGHandle,GPointerWithType<GPointer,GTypeEnum>>)
+  public
+    type
+      TPointerWithType=GPointerWithType<GPointer,GTypeEnum>;
+      TPointer=GPointer;
+      THandle=GHandle;
+end;
+
 TMapHandleToPointer=TMyMap<TDWGHandle,pointer(*{$IFNDEF DELPHI}, LessDWGHandle{$ENDIF}*)>;
 
 TMapBlockHandle_BlockNames={$IFNDEF DELPHI}TMap{$ENDIF}{$IFDEF DELPHI}TMapForDelphi{$ENDIF}<TDWGHandle,string{$IFNDEF DELPHI},LessDWGHandle{$ENDIF}>;
@@ -66,6 +79,13 @@ LessEntUpgradeKey=class
 end;
 {$ENDIF}
 implementation
+
+constructor GPointerWithType<GPointer,GTypeEnum>.CreateRec(APointer:GPointer;AType:GTypeEnum);
+begin
+  p:=APointer;
+  &type:=AType;
+end;
+
 
 {$IFNDEF DELPHI}
 class function StringHash.hash(const s:String; n:longint):SizeUInt;

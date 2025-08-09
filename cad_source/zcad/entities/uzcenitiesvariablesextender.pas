@@ -343,10 +343,11 @@ end;
 
 procedure TVariablesExtender.PostLoad(var context:TIODXFLoadContext);
 var
- PMF:PGDBObjEntity;
- pbdunit:TVariablesExtender;
- pvd:pvardesk;
- uou:PTEntityUnit;
+  PMF:TDXFHandle2ZCObject.TPointerWithType;
+  pbdunit:TVariablesExtender;
+  pvd:pvardesk;
+  uou:PTEntityUnit;
+
 begin
   if pThisEntity<>nil then begin
     if isVariableContentReplaceEnabled then begin
@@ -363,7 +364,7 @@ begin
     if pThisEntity.PExtAttrib<>nil then
       if pThisEntity.PExtAttrib^.MainFunctionHandle<>0 then begin
         if context.h2p.TryGetValue(pThisEntity.PExtAttrib^.MainFunctionHandle,pmf)then begin
-          pbdunit:=pmf^.EntExtensions.GetExtensionOf<TVariablesExtender>;
+          pbdunit:=PGDBObjEntity(pmf.p)^.EntExtensions.GetExtensionOf<TVariablesExtender>;
           if pbdunit<>nil then
             pbdunit.addDelegate(pThisEntity,self);
         end;

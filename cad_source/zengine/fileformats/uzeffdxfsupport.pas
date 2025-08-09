@@ -108,8 +108,12 @@ type
     procedure Done;
   end;
 
+  TObjectTypes=(OT_Unknown,OT_TextStyle,OT_LineType,OT_Layer,OT_Entity);
+
+  TDXFHandle2ZCObject=GMapHandle2Pointer<TDWGHandle,Pointer,TObjectTypes>;
+
   TIODXFLoadContext=record
-    h2p:TMapHandleToPointer;
+    h2p:TDXFHandle2ZCObject;
     DWGVarsDict:TString2StringDictionary;
 
     Header:TDXFHeaderInfo;
@@ -313,7 +317,7 @@ end;
 
 procedure TIODXFLoadContext.InitRec;
 begin
-  h2p:=TMapHandleToPointer.Create;
+  h2p:=TDXFHandle2ZCObject.Create;
   DWGVarsDict:=TString2StringDictionary.Create;
 
   Header.InitRec;

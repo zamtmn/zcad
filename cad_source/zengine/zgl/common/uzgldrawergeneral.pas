@@ -63,7 +63,7 @@ TZGLGeneralDrawer=class(TZGLAbstractDrawer)
                         procedure DrawQuad3DInModelSpace(const normal,p1,p2,p3,p4:gdbvertex;var matrixs:tmatrixs);override;
                         procedure DrawQuad3DInModelSpace(const p1,p2,p3,p4:gdbvertex;var matrixs:tmatrixs);override;
                         procedure DrawAABB3DInModelSpace(const BoundingBox:TBoundingBox;var matrixs:tmatrixs);override;
-                        procedure DrawClosedContour3DInModelSpace(const pa:GDBPoint3dArray;var matrixs:tmatrixs);override;
+                        procedure DrawContour3DInModelSpace(const pa:GDBPoint3dArray;var matrixs:tmatrixs;Closed:boolean=true);override;
                         procedure WorkAreaResize(rect:trect);override;
                         procedure SaveBuffers;override;
                         procedure RestoreBuffers;override;
@@ -254,7 +254,7 @@ begin
         DrawLine3DInModelSpace(createvertex(BoundingBox.LBN.x,BoundingBox.RTF.y,BoundingBox.LBN.Z),
                                createvertex(BoundingBox.LBN.x,BoundingBox.RTF.y,BoundingBox.RTF.Z),matrixs);
 end;
-procedure TZGLGeneralDrawer.DrawClosedContour3DInModelSpace(const pa:GDBPoint3dArray;var matrixs:tmatrixs);
+procedure TZGLGeneralDrawer.DrawContour3DInModelSpace(const pa:GDBPoint3dArray;var matrixs:tmatrixs;Closed:boolean=true);
 var p,pold,pstart:PGDBVertex;
     i:Integer;
 begin
@@ -263,13 +263,14 @@ begin
   pold:=p;
   pstart:=p;
   inc(p);
-  for i:=0 to pa.count-3 do
+  for i:=0 to pa.count-2 do
   begin
      DrawLine3DInModelSpace(pold^,p^,matrixs);
      inc(p);
      inc(pold);
   end;
-  DrawLine3DInModelSpace(pold^,pstart^,matrixs);
+  if closed then
+    DrawLine3DInModelSpace(pold^,pstart^,matrixs);
 end;
 procedure TZGLGeneralDrawer.WorkAreaResize;
 begin

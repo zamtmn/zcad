@@ -368,7 +368,7 @@ procedure GDBObjEllipse.DrawGeometry;
 //  i: Integer;
 begin
 
-  DC.drawer.DrawClosedContour3DInModelSpace(Vertex3D_in_WCS_Array,DC.DrawingContext.matrixs);
+  DC.drawer.DrawContour3DInModelSpace(Vertex3D_in_WCS_Array,DC.DrawingContext.matrixs,false);
   //Vertex3D_in_WCS_Array.drawgeometry;
 
   inherited;

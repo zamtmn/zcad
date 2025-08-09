@@ -261,7 +261,7 @@ begin
 end;
 procedure GDBObjCurve.DrawGeometry;
 begin
-  DC.drawer.DrawClosedContour3DInModelSpace(VertexArrayInWCS,DC.DrawingContext.matrixs);
+  DC.drawer.DrawContour3DInModelSpace(VertexArrayInWCS,DC.DrawingContext.matrixs);
   //VertexArrayInWCS.DrawGeometry;
   {myglbegin(GL_line_strip);
   VertexArrayInWCS.iterategl(@glVertex3dv);

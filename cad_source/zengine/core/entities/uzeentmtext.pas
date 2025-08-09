@@ -698,6 +698,8 @@ begin
   end;
   if TXTStyle=nil then
     TXTStyle:=drawing.GetTextStyleTable^.FindStyle('Standard',false);
+  if IsZero(linespacef) then
+    linespacef:=1;
   OldVersTextReplace(ttemplate);
   OldVersTextReplace(Content);
   Content:=utf8tostring(ttemplate);

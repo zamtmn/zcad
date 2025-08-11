@@ -145,6 +145,40 @@ begin
   else
     result:='!!ERR('+operands+')!!';
 end;
+function IfVarPresent2value(const str:TDXFEntsInternalStringType;const operands:TDXFEntsInternalStringType;var NextSymbolPos:integer;var SPA:TStrProcessAttributes;pobj:Pointer):String;
+var
+  pv:pvardesk;
+  value,prefix,variable,suffix:string;
+  oldi,i:integer;
+begin
+  prefix:='';
+  variable:='';
+  suffix:='';
+  i:=Pos('|',operands);
+  if i>0 then begin
+    oldi:=i;
+    prefix:=copy(operands,1,i-1);
+    i:=Pos('|',operands,i+1);
+    if i>0 then begin
+      variable:=copy(operands,oldi+1,i-oldi-1);
+    end;
+    suffix:=copy(operands,i+1,Length(operands)-i);
+  end else
+    variable:=operands;
+  pv:=nil;
+  if pobj<>nil then
+    pv:=FindVariableInEnt(PGDBObjEntity(pobj),variable);
+  if pv<>nil then begin
+    value:=pv^.data.ptd^.GetValueAsString(pv^.data.Addr.Instance);
+    if value<>'' then begin
+      result:=prefix+pv^.data.ptd^.GetValueAsString(pv^.data.Addr.Instance)+suffix;
+      include(spa,SPARecursive);
+    end else
+      result:='';
+  end else
+    result:='';
+end;
+
 function evaluatesubstr(const str:TDXFEntsInternalStringType;const operands:TDXFEntsInternalStringType;var NextSymbolPos:integer;var SPA:TStrProcessAttributes;pobj:Pointer):String;
 var
   vd:vardesk;
@@ -173,6 +207,7 @@ initialization
   _SPFSzcad:=SPFSources.GetEnum;
   Prefix2ProcessFunc.RegisterProcessor('%%DATE',#0,#0,@date2value,_SPFSzcad,true);
   Prefix2ProcessFunc.RegisterProcessor('@@','[',']',@var2value,_SPFSzcad,true);
+  Prefix2ProcessFunc.RegisterProcessor('@@if','<','>',@IfVarPresent2value,_SPFSzcad,true);
   Prefix2ProcessFunc.RegisterProcessor('%%','[',']',@prop2value,_SPFSzcad,true);
   Prefix2ProcessFunc.RegisterProcessor('#calc','[',']',@evaluatesubstr,_SPFSzcad);
 

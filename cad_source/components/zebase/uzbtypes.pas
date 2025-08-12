@@ -52,6 +52,7 @@ end;
 (*varcategoryforoi DB='Data base'*)
 (*varcategoryforoi GC='Group connection'*)
 (*varcategoryforoi LENGTH='Length params'*)
+(*varcategoryforoi OTHER='Other'*)
 (*varcategoryforoi BTY='Blockdef params'*)
 (*varcategoryforoi EL='El(deprecated)'*)
 (*varcategoryforoi UNITPARAM='Measured parameter'*)

@@ -5,50 +5,50 @@
       <Item1 Name="DockPanel" Type="CustomSite" Monitor="0" ChildCount="1" PixelsPerInch="0">
         <Bounds Top="50" Left="50" Width="1366" Height="768"/>
         <Anchors Align="Client"/>
-        <Item1 Name="AnchorDockSite4" Type="Layout" Monitor="0" ChildCount="7" PixelsPerInch="192">
-          <Bounds Width="1199" Height="582"/>
+        <Item1 Name="AnchorDockSite8" Type="Layout" Monitor="0" ChildCount="7" PixelsPerInch="192">
+          <Bounds Width="1199" Height="490"/>
           <Anchors Align="Client"/>
           <Item1 Name="CommandLine" Type="Control" Monitor="0" PixelsPerInch="192">
-            <Bounds Top="504" Left="304" Width="895" Height="78"/>
+            <Bounds Top="425" Left="304" Width="895" Height="65"/>
             <Anchors Top="AnchorDockSplitter1" Left="AnchorDockSplitter2"/>
           </Item1>
           <Item2 Name="AnchorDockSplitter1" Type="SplitterHorizontal" Monitor="0" PixelsPerInch="192">
-            <Bounds Top="500" Left="304" Width="895" Height="4"/>
+            <Bounds Top="421" Left="304" Width="895" Height="4"/>
             <Anchors Left="AnchorDockSplitter2"/>
           </Item2>
           <Item3 Name="PageControl" Type="Control" Monitor="0" PixelsPerInch="192">
-            <Bounds Left="304" Width="638" Height="500"/>
+            <Bounds Left="304" Width="638" Height="421"/>
             <Anchors Left="AnchorDockSplitter2" Right="AnchorDockSplitter3" Bottom="AnchorDockSplitter1"/>
           </Item3>
           <Item4 Name="AnchorDockSplitter2" Type="SplitterVertical" Monitor="0" PixelsPerInch="192">
-            <Bounds Left="300" Width="4" Height="582"/>
+            <Bounds Left="300" Width="4" Height="490"/>
           </Item4>
           <Item5 Name="ObjectInspector" Type="Control" Monitor="0" PixelsPerInch="192">
-            <Bounds Width="300" Height="582"/>
+            <Bounds Width="300" Height="490"/>
             <Anchors Right="AnchorDockSplitter2"/>
           </Item5>
           <Item6 Name="AnchorDockSplitter3" Type="SplitterVertical" Monitor="0" PixelsPerInch="192">
-            <Bounds Left="942" Width="4" Height="500"/>
+            <Bounds Left="942" Width="4" Height="421"/>
             <Anchors Bottom="AnchorDockSplitter1"/>
           </Item6>
-          <Item7 Name="AnchorDockSite6" Type="Pages" Monitor="0" ChildCount="4" PixelsPerInch="192">
-            <Bounds Left="946" Width="253" Height="500"/>
+          <Item7 Name="AnchorDockSite9" Type="Pages" Monitor="0" ChildCount="4" PixelsPerInch="192">
+            <Bounds Left="946" Width="253" Height="421"/>
             <Anchors Left="AnchorDockSplitter3" Bottom="AnchorDockSplitter1"/>
             <Header PageIndex="3"/>
             <Item1 Name="NavigatorDevices" Type="Control" Monitor="0" PixelsPerInch="192">
-              <Bounds Width="237" Height="406"/>
+              <Bounds Width="237" Height="327"/>
               <Anchors Align="Client"/>
             </Item1>
             <Item2 Name="NavigatorCables" Type="Control" Monitor="0" PixelsPerInch="192">
-              <Bounds Width="237" Height="406"/>
+              <Bounds Width="237" Height="327"/>
               <Anchors Align="Client"/>
             </Item2>
             <Item3 Name="NavigatorRisers" Type="Control" Monitor="0" PixelsPerInch="192">
-              <Bounds Width="237" Height="406"/>
+              <Bounds Width="237" Height="327"/>
               <Anchors Align="Client"/>
             </Item3>
             <Item4 Name="TOOLPALETTE_BlockLib" Type="Control" Monitor="0" PixelsPerInch="192">
-              <Bounds Width="237" Height="406"/>
+              <Bounds Width="237" Height="327"/>
               <Anchors Align="Client"/>
             </Item4>
           </Item7>
@@ -56,13 +56,13 @@
       </Item1>
     </Nodes>
   </MainConfig>
-  <Settings HeaderStyle="Lines" FlatHeadersButtons="True" FloatingWindowsOnTop="True" SplitterResizeStyle="rsLine" DockSitesCanBeMinimized="True"/>
+  <Settings HeaderStyle="Lines" FlatHeadersButtons="True" SplitterResizeStyle="rsLine" FloatingWindowsOnTop="True" DockSitesCanBeMinimized="True"/>
   <ToolBarsConfig ItemCount="4">
     <Item0 Name="CoolBarU" Type="CoolBar" ItemCount="4">
       <Item0 Name="Standard" Type="ToolBar" Width="713"/>
       <Item1 Name="Find" Type="ToolBar" Break="False" Width="363"/>
-      <Item2 Name="ObjProp" Type="ToolBar" Width="1130"/>
-      <Item3 Name="ObjectSnap" Type="ToolBar" Break="False" Width="351"/>
+      <Item2 Name="ObjProp" Type="ToolBar" Break="False" Width="1680"/>
+      <Item3 Name="ElModelReports" Type="ToolBar" Break="False" Width="214"/>
     </Item0>
     <Item1 Name="CoolBarL" Type="CoolBar" ItemCount="0"/>
     <Item2 Name="CoolBarR" Type="CoolBar" ItemCount="3">
@@ -70,6 +70,11 @@
       <Item1 Name="Modify" Type="ToolBar" Break="False" Width="484"/>
       <Item2 Name="Draw" Type="ToolBar" Break="False" Width="319"/>
     </Item2>
-    <Item3 Name="CoolBarD" Type="CoolBar" ItemCount="0"/>
+    <Item3 Name="CoolBarD" Type="CoolBar" ItemCount="4">
+      <Item0 Name="ElectrotechEnts" Type="ToolBar" Width="209"/>
+      <Item1 Name="ElectrotechPlacing" Type="ToolBar" Break="False" Width="117"/>
+      <Item2 Name="ElectrotechVelec" Type="ToolBar" Break="False" Width="914"/>
+      <Item3 Name="ElectrotechActions" Type="ToolBar" Break="False" Width="581"/>
+    </Item3>
   </ToolBarsConfig>
 </CONFIG>

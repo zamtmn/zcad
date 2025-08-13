@@ -633,7 +633,7 @@ var
   aform:TCustomForm;
 begin
   if ModalShowsCount=0 then
-    if GetCaptureControl=nil then begin
+    {if GetCaptureControl=nil then} begin
       ctrl:=GetPriorityFocus;
       if assigned(ctrl) then begin
         aform:=GetParentForm(ctrl);

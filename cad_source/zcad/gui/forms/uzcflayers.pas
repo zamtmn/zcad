@@ -154,11 +154,12 @@ end;
 function TLayersForm.createnameeditor(Item: TListItem;r: TRect):boolean;
 begin
   //createeditor(Item,r,@PGDBLayerProp(Item.Data)^.Name);
-  result:=SupportTypedEditors.createeditor(ListView1,Item,r,PGDBLayerProp(Item.Data)^.Name,'AnsiString1251',@CreateUndoStartMarkerNeeded,r.Bottom-r.Top,drawings.GetUnitsFormat);
+  result:=SupportTypedEditors.createeditor(ListView1,Item,r,PGDBLayerProp(Item.Data)^.Name,'AnsiString',@CreateUndoStartMarkerNeeded,r.Bottom-r.Top,drawings.GetUnitsFormat);
+  //'AnsiString1251'
 end;
 function TLayersForm.GetLayerName(Item: TListItem):string;
 begin
-  result:={Tria_AnsiToUtf8}(PGDBLayerProp(Item.Data)^.Name);
+  result:=PGDBLayerProp(Item.Data)^.Name;
 end;
 {layer lock handle procedures}
 function TLayersForm.IsLayerLock(Item: TListItem):boolean;
@@ -594,7 +595,7 @@ begin
                                     else
                                         player:=pdwg^.GetCurrentLayer;
 
-     layername:=pdwg^.LayerTable.GetFreeName(Tria_Utf8ToAnsi(rsNewLayerNameFormat),1);
+     layername:=pdwg^.LayerTable.GetFreeName(rsNewLayerNameFormat,1);
      if layername='' then
      begin
        ZCMsgCallBackInterface.TextMessage(rsUnableSelectFreeLayerName,TMWOShowError);

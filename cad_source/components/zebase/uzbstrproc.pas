@@ -128,8 +128,7 @@ end;
 
 function ConvertToDxfString(const str:String):TDXFEntsInternalStringType;
 begin
-     //{$IFNDEF DELPHI}result:=StringsReplace(str, [LineEnding],['\P'],[rfReplaceAll,rfIgnoreCase]);{$ENDIF}
-     result:={Tria_Utf8ToAnsi}UTF8ToString(StringsReplace(str, [LineEnding],['\P'],[rfReplaceAll,rfIgnoreCase]));
+  result:=UTF8ToString(StringsReplace(str, [LineEnding],['\P'],[rfReplaceAll,rfIgnoreCase]));
 end;
 function uch2ach(uch:word):byte;
 var s:String;
@@ -140,7 +139,7 @@ begin
 //     if uch=44064 then
 //                     uch:=uch;
      s:=UnicodeToUtf8(uch);
-     s:={UTF8toANSI}Tria_Utf8ToAnsi(s);
+     s:=Tria_Utf8ToAnsi(s);
      //if length(s)=1 then
                         result:=ord(s[1]);
      //               else

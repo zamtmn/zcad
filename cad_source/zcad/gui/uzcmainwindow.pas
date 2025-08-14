@@ -2077,7 +2077,7 @@ begin
             if @PTZCADDrawing(GVA.PDWG).mainObjRoot=(PTZCADDrawing(GVA.PDWG).pObjRoot) then
               ZCADMainWindow.PageControl.Pages[i].caption:=(name)
             else
-              ZCADMainWindow.PageControl.Pages[i].caption:='BEdit('+name+':'+Tria_AnsiToUtf8(PGDBObjBlockdef(PTZCADDrawing(GVA.PDWG).pObjRoot).Name)+')';
+              ZCADMainWindow.PageControl.Pages[i].caption:=format(rsOtherInsideDrawing,[name,'BlockDefs',PGDBObjBlockdef(PTZCADDrawing(GVA.PDWG).pObjRoot).Name]);
             if k<=high(OpenedDrawings) then begin
               OpenedDrawings[k].Caption:=ZCADMainWindow.PageControl.Pages[i].caption;
               OpenedDrawings[k].visible:=true;

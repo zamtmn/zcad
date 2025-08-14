@@ -210,6 +210,7 @@ resourcestring
   rsUnableSelectFreeDimStylerName='Unable select free dimension style name';
 
   {window names}
+  rsOtherInsideDrawing='%s::%s::%s';
   rsOpenFile='Open file...';
   rsSaveFile='Save file...';
   rsAutoSave='Autosave "%s"';

@@ -844,7 +844,7 @@ begin
     ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIReturnToDefaultObject);
     BEditParam.CurrentEditBlock:=nname;
     if nname<>modelspacename then
-      drawings.GetCurrentDWG^.pObjRoot:=drawings.GetCurrentDWG^.BlockDefArray.getblockdef(Tria_Utf8ToAnsi(nname))
+      drawings.GetCurrentDWG^.pObjRoot:=drawings.GetCurrentDWG^.BlockDefArray.getblockdef(nname)
     else
       drawings.GetCurrentDWG^.pObjRoot:=@drawings.GetCurrentDWG^.mainObjRoot;
     Regen_com(Context,EmptyCommandOperands);
@@ -910,8 +910,8 @@ begin
     tn:=modelspacename;
     BEditParam.Blocks.Selected:=BEditParam.Blocks.Enums.Count-1;
   end;
-
-  if BEditParam.Blocks.Enums.Count>1 then begin
+  if {BEditParam.Blocks.Enums.Count>1}
+     drawings.GetCurrentDWG^.BlockDefArray.GetRealCount>0 then begin
     if i>-1 then
       BEditParam.Blocks.Selected:=i
     else

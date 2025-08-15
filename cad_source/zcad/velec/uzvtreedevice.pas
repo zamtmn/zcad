@@ -1466,13 +1466,13 @@ begin
     //Чистим все суперлинии списки кабелей
 
     pobjsl:=drawings.GetCurrentROOT^.ObjArray.beginiterate(itsl); //зона уже выбрана в перспективе застовлять пользователя ее выбирать
-    ZCMsgCallBackInterface.TextMessage('1',TMWOHistoryOut);
+    //ZCMsgCallBackInterface.TextMessage('1',TMWOHistoryOut);
     if pobjsl<>nil then
       repeat
          // Определяем что это устройство
          if pobjsl^.GetObjType=GDBSuperlineID then
            begin
-           ZCMsgCallBackInterface.TextMessage('2',TMWOHistoryOut);
+           //ZCMsgCallBackInterface.TextMessage('2',TMWOHistoryOut);
             superlineclean:=PGDBObjSuperline(pobjsl);
             pvdslcablelist:=FindVariableInEnt(superlineclean,velec_SLcablelist);
              if pvdslcablelist<>nil then

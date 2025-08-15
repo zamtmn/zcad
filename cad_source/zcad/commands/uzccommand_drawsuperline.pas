@@ -15,11 +15,11 @@
 {**
 @author(Andrey Zubarev <zamtmn@yandex.ru>)
 }
-{$mode delphi}//need delphi mode for disable type checking in interactive manipulators
-
 {**Примерный модуль реализации чертежных команд (линия, круг, размеры и т.д.)
    Ничего не экспортирует, содержит некоторые команды доступные в зкаде}
 unit uzccommand_drawsuperline;
+{$mode delphi}//need delphi mode for disable type checking in interactive manipulators
+{$Codepage UTF8}
 
 { file def.inc is necessary to include at the beginning of each module zcad
   it contains a centralized compilation parameters settings }
@@ -277,7 +277,7 @@ begin
         layername:=DrawSuperlineParams.LayerNamePrefix+pvd.data.PTD^.GetValueAsString(pvd.data.Addr.Instance);
         //ищем описание слоя по имени
 
-        player:=drawings.GetCurrentDWG.LayerTable.getAddres(Tria_Utf8ToAnsi(layername));
+        player:=drawings.GetCurrentDWG.LayerTable.getAddres(layername);
         //если найден - присваиваем, иначе ругаемя
         if player<>nil then
                            psuperline.vp.Layer:=player

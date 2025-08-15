@@ -197,7 +197,7 @@ begin
         //pvd.data.PTD^.GetValueAsString(pvd.Instance);
         //ищем описание слоя по имени
 
-        player:=drawings.GetCurrentDWG.LayerTable.getAddres(Tria_Utf8ToAnsi(layername));
+        player:=drawings.GetCurrentDWG.LayerTable.getAddres(layername);
         //если найден - присваиваем, иначе ругаемя
         if player<>nil then
                            psuperline.vp.Layer:=player

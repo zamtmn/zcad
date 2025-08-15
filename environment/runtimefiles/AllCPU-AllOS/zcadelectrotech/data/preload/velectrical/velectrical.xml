@@ -40,6 +40,9 @@
 			  <ZTreeCommand Command="Insert(DEVICE_VEL_SOCKET_1P40BUS)" Caption='Розетка BUS40 1Р' />
 			  <ZTreeCommand Command="Insert(DEVICE_VEL_SOCKET_2P40BUS)" Caption='Розетка BUS40 2Р' />
 			  <ZTreeCommand Command="Insert(DEVICE_VEL_SOCKET_3P40BUS)" Caption='Розетка BUS40 3Р' />			  
+			  <ZTreeCommand Command="Insert(DEVICE_VEL_SOCKET_BOXJUNCTION)" Caption='Коробка вводная/проходная' />	
+			  <ZTreeCommand Command="Insert(DEVICE_VEL_SOCKET_CABLETERMINATION)" Caption='Концевая кабельная муфта' />	
+			  <ZTreeCommand Command="Insert(DEVICE_VEL_SOCKET_ELFUNNELDRAIN)" Caption='Электрическая воронка с гр кабелем' />	
 			</ZTreeNode>	
 		    <ZTreeNode Caption='Lighting'>
 			  <ZTreeCommand Command="Insert(DEVICE_VEL_LIGHT_YTR)" Caption='Ящик ЯТПР' />

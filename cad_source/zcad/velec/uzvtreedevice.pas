@@ -1441,7 +1441,7 @@ var
     begin
       Groups := TStringList.Create;
       try
-        Groups.Delimiter := ';';
+        Groups.Delimiter := '~';
         Groups.StrictDelimiter := True; // чтобы игнорировать пробелы
         Groups.DelimitedText := GroupList;
 
@@ -1451,7 +1451,7 @@ var
           if GroupList = '' then
             Result := NewGroup
           else
-            Result := GroupList + ';' + NewGroup;
+            Result := GroupList + '~' + NewGroup;
         end
         else
           Result := GroupList; // группа уже есть
@@ -1466,12 +1466,13 @@ begin
     //Чистим все суперлинии списки кабелей
 
     pobjsl:=drawings.GetCurrentROOT^.ObjArray.beginiterate(itsl); //зона уже выбрана в перспективе застовлять пользователя ее выбирать
-    //ZCMsgCallBackInterface.TextMessage('1',TMWOHistoryOut);
+    ZCMsgCallBackInterface.TextMessage('1',TMWOHistoryOut);
     if pobjsl<>nil then
       repeat
          // Определяем что это устройство
          if pobjsl^.GetObjType=GDBSuperlineID then
            begin
+           ZCMsgCallBackInterface.TextMessage('2',TMWOHistoryOut);
             superlineclean:=PGDBObjSuperline(pobjsl);
             pvdslcablelist:=FindVariableInEnt(superlineclean,velec_SLcablelist);
              if pvdslcablelist<>nil then
@@ -1620,9 +1621,19 @@ begin
                            //ZCMsgCallBackInterface.TextMessage('superlinedev<>nil CabellingMountigName=' + CabellingMountigName,TMWOHistoryOut);
                          end;
 
+                         //pvdslcablelist:=FindVariableInEnt(superlinedev,velec_SLcablelist);
+                         //if pvdslcablelist<>nil then
+                         //  pString(pvdslcablelist^.data.Addr.Instance)^:= AddGroupToList(pString(pvdslcablelist^.data.Addr.Instance)^,listMasterDevice[i].name + '.'+listMasterDevice[i].LGroup[j].name);
+                         //
+                         cableNameinGraph:= string(listMasterDevice[i].LGroup[j].AllTreeDev.GetEdge(tvertex(VPath[l]).parent,tvertex(VPath[l])).AsString[vGCableName]);
+                         //ZCMsgCallBackInterface.TextMessage('        cableNameinGraphcableNameinGraphcableNameinGraph=' + cableNameinGraph,TMWOHistoryOut);
                          pvdslcablelist:=FindVariableInEnt(superlinedev,velec_SLcablelist);
                          if pvdslcablelist<>nil then
-                           pString(pvdslcablelist^.data.Addr.Instance)^:= AddGroupToList(pString(pvdslcablelist^.data.Addr.Instance)^,listMasterDevice[i].name + '.'+listMasterDevice[i].LGroup[j].name);
+                            if cableNameinGraph = vGCableNameDefault then
+                               pString(pvdslcablelist^.data.Addr.Instance)^:= AddGroupToList(pString(pvdslcablelist^.data.Addr.Instance)^,listMasterDevice[i].name + '.'+listMasterDevice[i].LGroup[j].name)
+                            else
+                               pString(pvdslcablelist^.data.Addr.Instance)^:= AddGroupToList(pString(pvdslcablelist^.data.Addr.Instance)^,cableNameinGraph);
+
                        end;
 
                   // //Создаем список точек кабеля который передадим в отрисовку кабельной линии
@@ -1640,9 +1651,25 @@ begin
                            //ZCMsgCallBackInterface.TextMessage('superlinedev<>nil CabellingMountigName=' + CabellingMountigName,TMWOHistoryOut);
                          end;
 
+                         //правка шаблона что бы выводилось короткое имя плюс точка плюс номер группы
+                         //pvd:=FindVariableInEnt(cableLine,'NMO_Template');
+                         //if pvd<>nil then
+                         //  if cableNameinGraph = vGCableNameDefault then
+                         //    pString(pvd^.data.Addr.Instance)^:='@@[GC_HDShortName].@@[GC_HDGroup]'
+                         //  else
+                         //    pString(pvd^.data.Addr.Instance)^:=cableNameinGraph;
+                         
+                                 //pvdslcablelist:=FindVariableInEnt(superlinedev,velec_SLcablelist);
+                                 //if pvdslcablelist<>nil then
+                                 //  pString(pvdslcablelist^.data.Addr.Instance)^:= AddGroupToList(pString(pvdslcablelist^.data.Addr.Instance)^,listMasterDevice[i].name + '.'+listMasterDevice[i].LGroup[j].name) ;
+                         cableNameinGraph:= string(listMasterDevice[i].LGroup[j].AllTreeDev.GetEdge(tvertex(VPath[l]).parent,tvertex(VPath[l])).AsString[vGCableName]);
+                         //ZCMsgCallBackInterface.TextMessage('        cableNameinGraphcableNameinGraphcableNameinGraph=' + cableNameinGraph,TMWOHistoryOut);
                          pvdslcablelist:=FindVariableInEnt(superlinedev,velec_SLcablelist);
                          if pvdslcablelist<>nil then
-                           pString(pvdslcablelist^.data.Addr.Instance)^:= AddGroupToList(pString(pvdslcablelist^.data.Addr.Instance)^,listMasterDevice[i].name + '.'+listMasterDevice[i].LGroup[j].name);
+                            if cableNameinGraph = vGCableNameDefault then
+                               pString(pvdslcablelist^.data.Addr.Instance)^:= AddGroupToList(pString(pvdslcablelist^.data.Addr.Instance)^,listMasterDevice[i].name + '.'+listMasterDevice[i].LGroup[j].name)
+                            else
+                               pString(pvdslcablelist^.data.Addr.Instance)^:= AddGroupToList(pString(pvdslcablelist^.data.Addr.Instance)^,cableNameinGraph);
 
                        end
                        else
@@ -1667,7 +1694,7 @@ begin
                    if l <> 0 then
                    begin
                      numConnectCabDev:= integer(listMasterDevice[i].LGroup[j].AllTreeDev.GetEdge(tvertex(VPath[l]).parent,tvertex(VPath[l])).AsInt32[velecNumConnectDev]);
-                     cableNameinGraph:= string(listMasterDevice[i].LGroup[j].AllTreeDev.GetEdge(tvertex(VPath[l]).parent,tvertex(VPath[l])).AsString[vGCableName]);
+                     //cableNameinGraph:= string(listMasterDevice[i].LGroup[j].AllTreeDev.GetEdge(tvertex(VPath[l]).parent,tvertex(VPath[l])).AsString[vGCableName]);
 
                      //if not superlinedevoneDO then
                      //begin
@@ -1695,17 +1722,25 @@ begin
                               if CabellingMountigNamePVD<>nil then begin
                                  CabellingMountigName:=pString(CabellingMountigNamePVD^.data.Addr.Instance)^;
                                  //ZCMsgCallBackInterface.TextMessage('Кабель укладки принят = ' + CabellingMountigName,TMWOHistoryOut);
-                                 end;
-
-                                 pvdslcablelist:=FindVariableInEnt(superlinedev,velec_SLcablelist);
-                                 if pvdslcablelist<>nil then
-                                   pString(pvdslcablelist^.data.Addr.Instance)^:= AddGroupToList(pString(pvdslcablelist^.data.Addr.Instance)^,listMasterDevice[i].name + '.'+listMasterDevice[i].LGroup[j].name)
-
-                              else
+                                end
+                                else
                                  begin
                                    ZCMsgCallBackInterface.TextMessage('ОШИБКА ОШИБКА!!! Старый примитив суперлинии, на определен метод укладки кабеля. Кабель укладки принят = ' + velec_cableMountingNon,TMWOHistoryOut);
                                    CabellingMountigName:=velec_cableMountingNon;
                                  end;
+
+                                //pvdslcablelist:=FindVariableInEnt(superlinedev,velec_SLcablelist);
+                                //if pvdslcablelist<>nil then
+                                //  pString(pvdslcablelist^.data.Addr.Instance)^:= AddGroupToList(pString(pvdslcablelist^.data.Addr.Instance)^,listMasterDevice[i].name + '.'+listMasterDevice[i].LGroup[j].name)
+
+                                cableNameinGraph:= string(listMasterDevice[i].LGroup[j].AllTreeDev.GetEdge(tvertex(VPath[l]).parent,tvertex(VPath[l])).AsString[vGCableName]);
+                                //ZCMsgCallBackInterface.TextMessage('        cableNameinGraphcableNameinGraphcableNameinGraph=' + cableNameinGraph,TMWOHistoryOut);
+                                pvdslcablelist:=FindVariableInEnt(superlinedev,velec_SLcablelist);
+                                if pvdslcablelist<>nil then
+                                   if cableNameinGraph = vGCableNameDefault then
+                                      pString(pvdslcablelist^.data.Addr.Instance)^:= AddGroupToList(pString(pvdslcablelist^.data.Addr.Instance)^,listMasterDevice[i].name + '.'+listMasterDevice[i].LGroup[j].name)
+                                   else
+                                      pString(pvdslcablelist^.data.Addr.Instance)^:= AddGroupToList(pString(pvdslcablelist^.data.Addr.Instance)^,cableNameinGraph);
                             end
                           else
                           begin
@@ -3862,6 +3897,7 @@ function getListMasterDevNew(listVertexEdge:TGraphBuilder;globalGraph: TGraph;li
                                                                    ' ИМЯ УСТРОЙСТВА= ОТСУТСТВУЕТ',TMWOHistoryOut);
 
                     cableNameinGraph:=vGCableNameDefault;
+
                     //ZCMsgCallBackInterface.TextMessage('Название переменной = '+velec_VarNameForConnectBefore+inttostr(listMasterDevice[i].LGroup[j].LNumSubDevice[k].devConnectInfo.numConnect)+'_'+velec_VarNameForConnectAfter_CableName,TMWOHistoryOut);
                     pvd:=FindVariableInEnt(listVertexEdge.listVertex[listMasterDevice[i].LGroup[j].LNumSubDevice[k].indexSub].deviceEnt,velec_VarNameForConnectBefore+inttostr(listMasterDevice[i].LGroup[j].LNumSubDevice[k].devConnectInfo.numConnect)+'_'+velec_VarNameForConnectAfter_CableName);
                     if pvd<>nil then

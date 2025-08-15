@@ -71,7 +71,7 @@ const
 
 
   velec_cableMounting='CABLE_MountingMethod';
-  velec_SLcablelist='VSListCable';
+  velec_SLcablelist='CABLE_VSListCable';
 //  velec_cableMounting='SLCABAGEN_CableMounting';
   velec_CableRoutNodes = '-';//индивидуальная прокладка кабеля от этого устройства и до Узла управления, далее как и все
   velec_cabControlUnits = 'GC_velecSubGroupControlUnit'; //прописывается для кабеля что чего подключает. Нужно для Велек и организации однолинейной схемы

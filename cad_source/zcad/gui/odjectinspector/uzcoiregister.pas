@@ -195,10 +195,7 @@ begin
 end;
 class procedure tdummyclass._onAfterFreeEditor(sender:tobject);
 begin
-  if assigned(uzcfcommandline.cmdedit) then
-    if uzcfcommandline.cmdedit.IsVisible then
-      if uzcfcommandline.cmdedit.CanFocus then
-        uzcfcommandline.cmdedit.SetFocus;
+  ZCMsgCallBackInterface.Do_SetNormalFocus;
 end;
 
 procedure StoreAndSetGDBObjInsp(const UndoStack:PTZctnrVectorUndoCommands;const f:TzeUnitsFormat;exttype:PUserTypeDescriptor; addr,context:pointer;popoldpos:boolean=false);

@@ -43,6 +43,12 @@ type
   end;
   TComboFiller=procedure(cb:TCustomComboBox) of object;
 
+  TLayerComboBoxPopupFocusPriorityControl=class(TComponent)
+    constructor Create(AOwner:TComponent);override;
+    destructor Destroy; override;
+    function GetLayerComboBoxPopupFocusPriority:TControlWithPriority;
+  end;
+
   TZTBZCADExtensions=class
     class procedure TBActionCreateFunc(fmf:TForm;actlist:TActionList;aNode: TDomNode; TB:TToolBar);
     class procedure TBGroupActionCreateFunc(fmf:TForm;actlist:TActionList;aNode: TDomNode; TB:TToolBar);
@@ -439,6 +445,31 @@ begin
   enabledcontrols.Add(FindEditBox);
 end;
 
+constructor TLayerComboBoxPopupFocusPriorityControl.Create(AOwner:TComponent);
+begin
+  inherited;
+   ZCMsgCallBackInterface.RegisterHandler_GetFocusedControl(GetLayerComboBoxPopupFocusPriority);
+end;
+
+destructor TLayerComboBoxPopupFocusPriorityControl.Destroy;
+begin
+  inherited;
+end;
+
+function TLayerComboBoxPopupFocusPriorityControl.GetLayerComboBoxPopupFocusPriority:TControlWithPriority;
+var
+  dd:TZCADDropDownForm;
+begin
+  dd:=TZCADLayerComboBox(Owner).GetDropDown;
+  if assigned(dd) then
+    if dd.Enabled then
+      if dd.IsVisible then
+        if dd.CanFocus then
+          exit(TControlWithPriority.CreateRec(dd,PopupPriority));
+
+  result:=TControlWithPriority.CreateRec(nil,UnPriority);
+end;
+
 class procedure TZTBZCADExtensions.TBLayerComboBoxCreateFunc(fmf:TForm;actlist:TActionList;aNode: TDomNode; TB:TToolBar);
 var
   _hint:string;
@@ -476,6 +507,7 @@ begin
   LayerBox.Height:=10;
   updatescontrols.Add(LayerBox);
   enabledcontrols.Add(LayerBox);
+  TLayerComboBoxPopupFocusPriorityControl.Create(LayerBox);
 end;
 procedure AddToBar(tb:TToolBar;b:TControl);
 begin

@@ -110,16 +110,13 @@ begin
 end;
 function TCLine.GetCLineFocusPriority:TControlWithPriority;
 begin
-      result.priority:=UnPriority;
-      result.control:=nil;
-
-      if assigned(cmdedit) then
-      if cmdedit.Enabled then
+  if assigned(cmdedit) then
+    if cmdedit.Enabled then
       if cmdedit.IsVisible then
-      if cmdedit.CanFocus then begin
-        result.priority:=CLinePriority;
-        result.control:=cmdedit;
-      end;
+        if cmdedit.CanFocus then
+          exit(TControlWithPriority.CreateRec(cmdedit,CLinePriority));
+
+  result:=TControlWithPriority.CreateRec(nil,UnPriority);
 end;
 procedure DisableCmdLine;
 begin

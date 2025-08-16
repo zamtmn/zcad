@@ -96,6 +96,7 @@ end;
     procedure MouseLeave;override;
     procedure MouseDown(Button:TMouseButton;Shift:TShiftState;X,Y:Integer);override;
     procedure MouseUp(Button:TMouseButton;Shift:TShiftState;X,Y:Integer);override;
+    function GetDropDown:TZCADDropDownForm;virtual;
   published
     property Align;
     property Anchors;
@@ -614,6 +615,11 @@ begin
     if ((X>=0)and(X<Width))and((Y>=0)and(Y<=Height)) then sSostoyanie:=2 else sSostoyanie:=1;
     Invalidate;
   end;
+end;
+
+function TZCADLayerComboBox.GetDropDown:TZCADDropDownForm;
+begin
+  Result:=PoleLista;
 end;
 
 //============================================================================//

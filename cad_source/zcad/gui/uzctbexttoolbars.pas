@@ -67,6 +67,7 @@ type
     class procedure ZAction2VariableReader(aName: string;aNode: TDomNode;CategoryOverrider:string;actlist:TActionList);
 
     class procedure DropDownColor(Sender:Tobject);
+    class procedure DropUp(Sender:Tobject);
     class procedure DropUpColor(Sender:Tobject);
     class procedure DropUpLType(Sender:Tobject);
     class procedure DropDownLType(Sender:Tobject);
@@ -618,10 +619,16 @@ begin
      OldColor:=tcombobox(Sender).ItemIndex;
      tcombobox(Sender).ItemIndex:=-1;
 end;
+class procedure TZTBZCADExtensions.DropUp(Sender:Tobject);
+begin
+   ZCMsgCallBackInterface.Do_SetNormalFocus;
+end;
+
 class procedure TZTBZCADExtensions.DropUpColor(Sender:Tobject);
 begin
-     if tcombobox(Sender).ItemIndex=-1 then
-                                           tcombobox(Sender).ItemIndex:=OldColor;
+  if tcombobox(Sender).ItemIndex=-1 then
+    tcombobox(Sender).ItemIndex:=OldColor;
+  DropUp(Sender);
 end;
 
 class procedure TZTBZCADExtensions.FillColorCombo(cb:TCustomComboBox);
@@ -671,6 +678,7 @@ begin
   result.Sorted:=true;
   FromDirsIterator(GetPathsInCfgsPaths(CFScomponentsDir),'*.xml','',addfiletoLayoutbox,nil,pointer(result));
   result.OnChange:=ChangeLayout;
+  result.OnCloseUp:=DropUp;
 
   s:=extractfilename(sysvar.PATH.LayoutFile^);
   result.ItemIndex:=result.Items.IndexOf(copy(s,1,length(s)-4));
@@ -748,7 +756,8 @@ end;
 
 class procedure TZTBZCADExtensions.DropUpLType(Sender:Tobject);
 begin
-     tcombobox(Sender).ItemIndex:=0;
+  TComboBox(Sender).ItemIndex:=0;
+  DropUp(Sender);
 end;
 
 class procedure TZTBZCADExtensions.DropDownLType(Sender:Tobject);
@@ -841,7 +850,7 @@ var
 begin
   _hint:=getAttrValue(aNode,'Hint','');
   _Width:=getAttrValue(aNode,'Width',100);
-  TStyleBox:=CreateCBox('TStyleComboBox',tb,TSupportTStyleCombo.DrawItemTStyle,TSupportTStyleCombo.ChangeLType,TSupportTStyleCombo.DropDownTStyle,TSupportTStyleCombo.CloseUpTStyle,TSupportTStyleCombo.FillLTStyle,_Width,_hint);
+  TStyleBox:=CreateCBox('TStyleComboBox',tb,TSupportTStyleCombo.DrawItemTStyle,TSupportTStyleCombo.ChangeLType,TSupportTStyleCombo.DropDownTStyle,TZTBZCADExtensions.DropUpLType,TSupportTStyleCombo.FillLTStyle,_Width,_hint);
   enabledcontrols.Add(TStyleBox);
 end;
 class procedure TZTBZCADExtensions.TBDimStyleComboBoxCreateFunc(fmf:TForm;actlist:TActionList;aNode: TDomNode; TB:TToolBar);
@@ -852,7 +861,7 @@ var
 begin
   _hint:=getAttrValue(aNode,'Hint','');
   _Width:=getAttrValue(aNode,'Width',100);
-  DimStyleBox:=CreateCBox('DimStyleComboBox',tb,TSupportDimStyleCombo.DrawItemTStyle,TSupportDimStyleCombo.ChangeLType,TSupportDimStyleCombo.DropDownTStyle,TSupportDimStyleCombo.CloseUpTStyle,TSupportDimStyleCombo.FillLTStyle,_Width,_hint);
+  DimStyleBox:=CreateCBox('DimStyleComboBox',tb,TSupportDimStyleCombo.DrawItemTStyle,TSupportDimStyleCombo.ChangeLType,TSupportDimStyleCombo.DropDownTStyle,TZTBZCADExtensions.DropUpLType,TSupportDimStyleCombo.FillLTStyle,_Width,_hint);
   enabledcontrols.Add(DimStyleBox);
 end;
 

@@ -1862,7 +1862,7 @@ begin
                      else
                          outstream.TXTAddStringEOL(inttostr(-plp^.color));
                     outstream.TXTAddStringEOL(dxfGroupCode(6));
-                    outstream.TXTAddStringEOL(GetLTName(plp^.LT));
+                    outstream.TXTAddStringEOL(dxfEnCodeString(GetLTName(plp^.LT),IODXFContext.Header));
                     {if assigned(plp^.LT) then
                                              outstream.TXTAddStringEOL(PGDBLtypeProp(plp^.LT)^.Name)
                                          else

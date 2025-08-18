@@ -38,7 +38,17 @@ object DispatcherConnectionFrame: TDispatcherConnectionFrame
     Width = 646
     Align = alTop
     Caption = 'PanelButton'
+    ClientHeight = 50
+    ClientWidth = 646
     TabOrder = 1
+    object ToolBar1: TToolBar
+      Left = 1
+      Height = 47
+      Top = 1
+      Width = 644
+      Caption = 'ToolBar1'
+      TabOrder = 0
+    end
   end
   object PanelData: TPanel
     Left = 255
@@ -88,5 +98,9 @@ object DispatcherConnectionFrame: TDispatcherConnectionFrame
   object dsGridDev: TDataSource
     Left = 472
     Top = 161
+  end
+  object ActionList1: TActionList
+    Left = 416
+    Top = 8
   end
 end

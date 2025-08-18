@@ -5,7 +5,7 @@ unit synchMain;
 interface
 
 uses
-  Classes, SysUtils, Forms, Controls, Graphics, Dialogs, Menus, ExtCtrls,
+  Classes, SysUtils, Forms, Controls, Graphics, Dialogs, Menus, ExtCtrls,uzvmcdbconsts,
   DispatcherConnectionManager;
 
 type

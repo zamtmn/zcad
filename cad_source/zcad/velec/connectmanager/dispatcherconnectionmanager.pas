@@ -5,8 +5,9 @@ unit DispatcherConnectionManager;
 interface
 
 uses
-  Classes, SysUtils, Forms, Controls,Graphics,  laz.VirtualTrees, SQLite3Conn, SQLDB, DB,
-  Dialogs, ExtCtrls, BufDataset,  DBGrids, Grids, Windows;
+  Classes, SysUtils, Forms, Controls,Graphics,  laz.VirtualTrees, SQLite3Conn, SQLDB, DB,uzcdrawing,uzcdrawings,uzvmcdbconsts,uzcinterface,
+  Dialogs, ExtCtrls, BufDataset,  DBGrids, Grids, ActnList, ComCtrls, Windows,
+  uzvmanagerconnect;
 
 type
 
@@ -21,6 +22,7 @@ type
   { TDispatcherConnectionFrame }
 
   TDispatcherConnectionFrame = class(TFrame)
+    ActionList1: TActionList;
     bufGridDev: TBufDataset;
     dsGridDev: TDataSource;
     gridDev: TDBGrid;
@@ -33,6 +35,7 @@ type
 
     SQLTransaction: TSQLTransaction;
     FDeviceTree: TLazVirtualStringTree;
+    ToolBar1: TToolBar;
     procedure FrameResize(Sender: TObject);
     procedure panelSplitterMoved(Sender: TObject);
     procedure gridDevDrawColumnCell(Sender: TObject; const Rect: TRect; DataCol: Integer; Column: TColumn; State: TGridDrawState);
@@ -47,6 +50,7 @@ type
     procedure InitializeGridDev;
     procedure recordingGridDev(qry:string);
     procedure BuildDeviceHierarchy;
+    procedure InitializeActionAndButton;
     procedure TreeGetText(Sender: TBaseVirtualTree; Node: PVirtualNode;
       Column: TColumnIndex; TextType: TVSTTextType; var CellText: String);
     procedure TreeGetNodeDataSize(Sender: TBaseVirtualTree; var NodeDataSize: Integer);
@@ -57,6 +61,13 @@ type
     function HasChildren(const DeviceName: string): Boolean;
     procedure AddChildDevices(ParentNode: PVirtualNode; const ParentDeviceName: string);
     function GetDatabasePath: String;
+    procedure AddAction(AName, ACaption: string; AImageIndex: string;
+  AHint, AShortCut: string; AEvent: TNotifyEvent);
+
+    procedure CurrentSelActionExecute(Sender: TObject);
+    procedure AllSelActionExecute(Sender: TObject);
+    procedure SaveActionExecute(Sender: TObject);
+
   public
 
     constructor Create(TheOwner: TComponent); override;
@@ -77,14 +88,28 @@ begin
   inherited Create(TheOwner);
   Name := 'DispatcherConnectionFrame';
   Caption := 'Диспетчер подключений';
+    //Добавляем кнопки
+
+    //ShowMessage('Ошибка');
+  InitializeActionAndButton;
+
+    try
+    //filepath:=;
+    //if AnsiPos(':\', ExtractFilePath(PTZCADDrawing(drawings.GetCurrentDwg)^.FileName)) = 0 then begin
+    //   ShowMessage('Ошибка подключен');
+    //   ZCMsgCallBackInterface.TextMessage('Команда отменена. Выполните сохранение чертежа в ZCAD!!!!!',TMWOHistoryOut);
+    //   //result:=cmd_cancel;
+    //   exit;
+    //end;
+
 
   //Для работы разделителя
+
     // Подписываемся на событие изменения размера фрейма
   OnResize := @FrameResize;
 
     // первый контейнер (левая половина)
   PanelNav.Align := alLeft;
-  //PanelNav.Width := Self.ClientWidth div 2;
   PanelNav.BevelOuter := bvNone;
   PanelNav.BorderSpacing.Around := 2;
 
@@ -101,31 +126,31 @@ begin
   panelData.BevelOuter := bvNone;
   panelData.BorderSpacing.Around := 2;
 
-    // Сохраняем начальную пропорцию
-    FProportion := 0.25; // Начальная пропорция 25%/75%
-    PanelNav.Width := Round(ClientWidth * FProportion);
-    FIsResizing := False;
+  // Сохраняем начальную пропорцию
+  FProportion := 0.25; // Начальная пропорция 25%/75%
+  PanelNav.Width := Round(ClientWidth * FProportion);
+  FIsResizing := False;
 
-  // Инициализация компонентов базы данных
-  SQLite3Connection := TSQLite3Connection.Create(Self);
-  SQLTransaction := TSQLTransaction.Create(Self);
-  SQLQuery := TSQLQuery.Create(Self);
-
-  SQLite3Connection.Transaction := SQLTransaction;
-  SQLTransaction.Database := SQLite3Connection;
-  SQLQuery.Database := SQLite3Connection;
+  //// Инициализация компонентов базы данных
+  //SQLite3Connection := TSQLite3Connection.Create(Self);
+  //SQLTransaction := TSQLTransaction.Create(Self);
+  //SQLQuery := TSQLQuery.Create(Self);
+  //
+  //SQLite3Connection.Transaction := SQLTransaction;
+  //SQLTransaction.Database := SQLite3Connection;
+  //SQLQuery.Database := SQLite3Connection;
 
   // Настраиваем дерево устройств
   FDeviceTree.Parent := PanelNav;
   FDeviceTree.Align := alClient;
   FDeviceTree.NodeDataSize := SizeOf(Pointer);
-
-  // Настройка событий дерева
-  FDeviceTree.OnGetText := @TreeGetText;
-  FDeviceTree.OnGetNodeDataSize := @TreeGetNodeDataSize;
-  FDeviceTree.OnInitNode := @TreeInitNode;
-  FDeviceTree.OnFreeNode := @TreeFreeNode;
-  FDeviceTree.OnClick := @TreeClick;
+  //
+  //// Настройка событий дерева
+  //FDeviceTree.OnGetText := @TreeGetText;
+  //FDeviceTree.OnGetNodeDataSize := @TreeGetNodeDataSize;
+  //FDeviceTree.OnInitNode := @TreeInitNode;
+  //FDeviceTree.OnFreeNode := @TreeFreeNode;
+  //FDeviceTree.OnClick := @TreeClick;
 
 
 
@@ -139,7 +164,101 @@ begin
 
 
   // Инициализация базы данных
+  //InitializeDatabase;
+  //
+  //// Построение дерева
+  //InitializeDeviceTree;
+  //BuildDeviceHierarchy;
+
+  // Заполнение gridDev
+
+  //flagEditBufBeforePost:=false;
+  //// 2. Настройка BufDataset
+  //InitializeBufDataset;
+  //
+  //Привязываем к источнику данных
+  //dsGridDev.DataSet := bufGridDev;
+  //gridDev.DataSource := dsGridDev;
+
+  ////Настраиваем колонки DBGrid
+  //gridDev.Columns.Clear;
+  //
+  //// 3. Настройка DBGRID gridDev
+  //InitializeGridDev;
+  //
+  //recordingGridDev('SELECT * FROM dev');
+
+
+  //qryA.Open;
+  // Копируем данные из qryA в bufA
+
+
+  //gridDev.OnColEnter:=@gridAColExit;
+  //gridDev.OnKeyDown:=@gridAKeyDown;
+  //gridDev.OnDrawColumnCell := @gridDevDrawColumnCell;
+  //gridDev.OnCellClick := @gridDevCellClick;
+
+
+
+    except
+      //SQLTransaction.Free;
+      //SQLite3Connection.Free;
+      on E: Exception do
+        ShowMessage('Ошибка подключения TFRAME: ' + E.Message);
+
+    end;
+
+end;
+procedure TDispatcherConnectionFrame.AddAction(AName, ACaption: string; AImageIndex: string;
+  AHint, AShortCut: string; AEvent: TNotifyEvent);
+var
+  act: TAction;
+begin
+  act := TAction.Create(self); // или ActionList1
+  act.ActionList := ActionList1;
+  act.Name := AName;
+  act.Caption := ACaption;
+  act.Hint := AHint;
+  act.OnExecute := AEvent;
+
+  //if AShortCut <> '' then
+  //  act.ShortCut := TextToShortCut(AShortCut);
+
+  //act.ActionList := ActionList1;
+  //ActionList1.AddAction(act);
+end;
+
+
+procedure TDispatcherConnectionFrame.CurrentSelActionExecute(Sender: TObject);
+begin
+  ShowMessage('Выбрать только');
+end;
+procedure TDispatcherConnectionFrame.AllSelActionExecute(Sender: TObject);
+begin
+  uzvmanagerconnect.managerconnectexecute;
+     // Инициализация компонентов базы данных
+  SQLite3Connection := TSQLite3Connection.Create(Self);
+  SQLTransaction := TSQLTransaction.Create(Self);
+  SQLQuery := TSQLQuery.Create(Self);
+
+  SQLite3Connection.Transaction := SQLTransaction;
+  SQLTransaction.Database := SQLite3Connection;
+  SQLQuery.Database := SQLite3Connection;
+
+    // Инициализация базы данных
   InitializeDatabase;
+
+  // Настраиваем дерево устройств
+  FDeviceTree.Parent := PanelNav;
+  FDeviceTree.Align := alClient;
+  FDeviceTree.NodeDataSize := SizeOf(Pointer);
+
+  // Настройка событий дерева
+  FDeviceTree.OnGetText := @TreeGetText;
+  FDeviceTree.OnGetNodeDataSize := @TreeGetNodeDataSize;
+  FDeviceTree.OnInitNode := @TreeInitNode;
+  FDeviceTree.OnFreeNode := @TreeFreeNode;
+  FDeviceTree.OnClick := @TreeClick;
 
   // Построение дерева
   InitializeDeviceTree;
@@ -149,32 +268,76 @@ begin
 
   flagEditBufBeforePost:=false;
   // 2. Настройка BufDataset
-  InitializeBufDataset;
 
+  InitializeBufDataset;
   //Привязываем к источнику данных
   dsGridDev.DataSet := bufGridDev;
   gridDev.DataSource := dsGridDev;
-
+  //ShowMessage('открыть файл...');
   ////Настраиваем колонки DBGrid
   gridDev.Columns.Clear;
+                                    //ShowMessage('открыть файл...');
+
 
   // 3. Настройка DBGRID gridDev
   InitializeGridDev;
-
+                                    //ShowMessage('открыть файл...');
   recordingGridDev('SELECT * FROM dev');
 
-
-  //qryA.Open;
-  // Копируем данные из qryA в bufA
-
-
-  //gridDev.OnColEnter:=@gridAColExit;
-  //gridDev.OnKeyDown:=@gridAKeyDown;
   gridDev.OnDrawColumnCell := @gridDevDrawColumnCell;
   gridDev.OnCellClick := @gridDevCellClick;
 
+  //ShowMessage('открыть файл...');
 end;
+procedure TDispatcherConnectionFrame.SaveActionExecute(Sender: TObject);
+begin
+  ShowMessage('сохранить файл...');
+end;
+procedure TDispatcherConnectionFrame.InitializeActionAndButton;
+var
+  i:integer;
+  btn: TToolButton;
+begin
+  try
+    // Настройка ToolBar перед созданием кнопок
+    ToolBar1.Parent := PanelButton; // Добавьте эту строку в начало InitializeActionAndButton
+    //ToolBar1.Align := alClient;   // Или другой вариант выравнивания
+    ToolBar1.Height := 50;    // Явное задание высоты
+    ToolBar1.AutoSize := false;  // Автоматически подстраивать размер
+    ToolBar1.ShowCaptions := True;  // Показывать текст на кнопках
+    ToolBar1.ButtonWidth := 40;  // Ширина кнопок
+    ToolBar1.ButtonHeight := 40; // Высота кнопок
+    ToolBar1.Images := nil; // Если не используете изображения
 
+
+    // Создаем действия
+    AddAction('actNew', '1', '0', 'Создать новый документ', 'Ctrl+N', @CurrentSelActionExecute);
+    AddAction('actOpen', '*', '1', 'Открыть документ', 'Ctrl+O', @AllSelActionExecute);
+    AddAction('actSave', 'Cl', '2', 'Сохранить документ', 'Ctrl+S', @SaveActionExecute);
+    //ShowMessage('Создание кнопки: ');
+    //ShowMessage('Всего действий: ' + IntToStr(ActionList1.ActionCount));
+
+    // Создаем кнопки на ToolBar
+    for i := 0 to ActionList1.ActionCount - 1 do
+    begin
+      //ShowMessage('Создание кнопки: ' + ActionList1.Actions[i].Name);
+      btn := TToolButton.Create(ToolBar1);
+      btn.Parent := ToolBar1;
+      btn.Action := ActionList1.Actions[i];
+      btn.ShowHint := True;
+      btn.AutoSize := False;  // Фиксированный размер
+      btn.Width := 40;  // Явное задание ширины
+      btn.Height := 40; // Явное задание высоты
+    end;
+
+    //Обновляем размеры панели и ToolBar
+    ToolBar1.Realign;
+    ToolBar1.Invalidate;
+  except
+    on E: Exception do
+      ShowMessage('Ошибка создание активности: ' + E.Message);
+  end;
+end;
 procedure TDispatcherConnectionFrame.InitializeBufDataset;
 begin
   try
@@ -346,17 +509,18 @@ end;
 
 
 function TDispatcherConnectionFrame.GetDatabasePath: String;
-var
-  TempPath: array[0..MAX_PATH] of Char;
+//var
+//  TempPath: array[0..MAX_PATH] of Char;
 begin
-  GetTempPath(MAX_PATH, TempPath);
-  Result := IncludeTrailingPathDelimiter(TempPath) + 'mydatabase.db3';
+  //GetTempPath(MAX_PATH, TempPath);
+  Result := ExtractFilePath(PTZCADDrawing(drawings.GetCurrentDwg)^.FileName) + vcalctempdbfilename;
 end;
 
 procedure TDispatcherConnectionFrame.InitializeDatabase;
 begin
   try
     // Подключаемся к базе данных в папке TEMP
+    //ShowMessage('GetDatabasePath: ' + GetDatabasePath);
     SQLite3Connection.DatabaseName := GetDatabasePath;
     SQLite3Connection.Open;
 
@@ -376,6 +540,9 @@ procedure TDispatcherConnectionFrame.InitializeDeviceTree;
 begin
   FDeviceTree.BeginUpdate;
   try
+    // Очистка всех предыдущих столбцов
+    FDeviceTree.Header.Columns.Clear;
+
     FDeviceTree.Clear;
     FDeviceTree.TreeOptions.PaintOptions :=
       FDeviceTree.TreeOptions.PaintOptions + [toShowRoot, toShowTreeLines, toShowButtons];
@@ -420,12 +587,14 @@ begin
 
       while not TempQuery.EOF do
       begin
+        ZCMsgCallBackInterface.TextMessage('112121',TMWOHistoryOut);
         if TempQuery.FieldByName('icanhd').AsInteger = 1 then
         begin
           // Создаем узел устройства
           DeviceNode := FDeviceTree.AddChild(RootNode);
           NodeData := FDeviceTree.GetNodeData(DeviceNode);
           NodeData^.DeviceName := TempQuery.FieldByName('devname').AsString;
+          ZCMsgCallBackInterface.TextMessage('NodeData^.DeviceName=' + NodeData^.DeviceName,TMWOHistoryOut);
           NodeData^.ConnectedTo := TempQuery.FieldByName('hdname').AsString;
           NodeData^.Group := TempQuery.FieldByName('hdgroup').AsString;
           NodeData^.CanBeNode := TempQuery.FieldByName('icanhd').AsBoolean;

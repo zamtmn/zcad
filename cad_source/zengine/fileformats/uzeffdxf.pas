@@ -681,7 +681,7 @@ begin
             player^.init(s);
         end;
         6:if player<>nil then
-          player^.LT:=ZCDCtx.PDrawing^.LTypeStyleTable.getAddres(s);
+          player^.LT:=ZCDCtx.PDrawing^.LTypeStyleTable.getAddres(dxfDeCodeString(s,context.Header));
         1001:begin
           if s='AcAecLayerStandard' then begin
             s := rdr.ParseString;

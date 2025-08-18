@@ -250,7 +250,7 @@ begin
     _action.ActionList:=actlist;
     _action.Name:=ActionName;
   end;
-  with TToolButton.Create(tb) do
+  with TZToolButton.Create(tb) do
   begin
     Action:=_action;
     ShowCaption:=false;

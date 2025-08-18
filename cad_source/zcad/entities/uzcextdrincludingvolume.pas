@@ -77,7 +77,7 @@ TIncludingVolumeExtender=class(TBaseEntityExtender)
 
     class function EntIOLoadIncludingVolumeExtender(_Name,_Value:String;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
 
-    procedure SaveToDxfObjXData(var outStream:TZctnrVectorBytes;PEnt:Pointer;var IODXFContext:TIODXFContext);override;
+    procedure SaveToDxfObjXData(var outStream:TZctnrVectorBytes;PEnt:Pointer;var IODXFContext:TIODXFSaveContext);override;
 
     procedure SetRoot(pEntity:Pointer;pNewRoot:Pointer);override;
   end;
@@ -364,7 +364,7 @@ begin
   result:=true;
 end;
 
-procedure TIncludingVolumeExtender.SaveToDxfObjXData(var outStream:TZctnrVectorBytes;PEnt:Pointer;var IODXFContext:TIODXFContext);
+procedure TIncludingVolumeExtender.SaveToDxfObjXData(var outStream:TZctnrVectorBytes;PEnt:Pointer;var IODXFContext:TIODXFSaveContext);
 begin
    dxfStringout(outStream,1000,'INCLUDINGVOLUMEEXTENDER=');
 end;

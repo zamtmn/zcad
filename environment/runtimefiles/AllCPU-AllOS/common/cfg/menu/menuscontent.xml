@@ -372,5 +372,13 @@
       <InsertMenu Name="Debug"/>
      </IFONE>
     </Menu>
+    <Menu Name="TOOLBUTTONCONTEXTMENU">
+      <SubMenu Name="ToolBars">
+        <ToolBars/>
+      </SubMenu>
+      <SubMenu Name="ToolPalettes">
+        <ToolPalettes/>
+      </SubMenu>
+    </Menu>
   </MenusContent>
 </CONFIG>

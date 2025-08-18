@@ -18,12 +18,14 @@
 unit uzcinterface;
 {$Mode delphi}
 {$INCLUDE zengineconfig.inc}
+{$ModeSwitch advancedrecords}
 interface
 uses controls,uzcstrconsts,uzedimensionaltypes,gzctnrSTL,zeundostack,varmandef,
      uzcuilcl2zc,uzcuitypes,forms,classes,LCLType,LCLProc,SysUtils,uzbHandles,
      uzbSets;
 
 const
+    PopupPriority=1000;
     CLinePriority=500;
     DrawingsFocusPriority=400;
     UnPriority=-1;
@@ -79,6 +81,7 @@ type
     TControlWithPriority=record
       control:TWinControl;
       priority:integer;
+      constructor CreateRec(ACtrl:TWinControl;APrrt:integer);
     end;
     TGetControlWithPriority_TZMessageID__TControlWithPriority=function:TControlWithPriority of object;
     TGetControlWithPriority_TZMessageID__TControlWithPriority_HandlersVector=TMyVector<TGetControlWithPriority_TZMessageID__TControlWithPriority>;
@@ -271,6 +274,12 @@ var
    ZCMsgCallBackInterface:TZCMsgCallBackInterface;
    ZCStatekInterface:TZCStatekInterface;
 implementation
+
+constructor TControlWithPriority.CreateRec(ACtrl:TWinControl;APrrt:integer);
+begin
+  control:=ACtrl;
+  priority:=APrrt;
+end;
 constructor TZCStatekInterface.Create;
 begin
    state:=[];
@@ -632,15 +641,14 @@ var
   ctrl:TWinControl;
   aform:TCustomForm;
 begin
-  if ModalShowsCount=0 then
-    if GetCaptureControl=nil then begin
-      ctrl:=GetPriorityFocus;
-      if assigned(ctrl) then begin
-        aform:=GetParentForm(ctrl);
-        aform.SetFocus;
-        ctrl.SetFocus;
-      end;
+  if ModalShowsCount=0 then begin
+    ctrl:=GetPriorityFocus;
+    if assigned(ctrl) then begin
+      aform:=GetParentForm(ctrl);
+      aform.SetFocus;
+      ctrl.SetFocus;
     end;
+  end;
 end;
 function TZCMsgCallBackInterface.DoShowModal(MForm:TForm): Integer;
 begin

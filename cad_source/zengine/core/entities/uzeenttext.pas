@@ -41,8 +41,8 @@ type
     obj_y:Double;
     constructor init(own:Pointer;layeraddres:PGDBLayerProp;LW:SmallInt;c:TDXFEntsInternalStringType;p:GDBvertex;s,o,w,a:Double;j:TTextJustify);
     constructor initnul(owner:PGDBObjGenericWithSubordinated);
-    procedure LoadFromDXF(var rdr:TZMemReader;ptu:PExtensionData;var drawing:TDrawingDef);virtual;
-    procedure SaveToDXF(var outStream:TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
+    procedure LoadFromDXF(var rdr:TZMemReader;ptu:PExtensionData;var drawing:TDrawingDef;var context:TIODXFLoadContext);virtual;
+    procedure SaveToDXF(var outStream:TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFSaveContext);virtual;
     procedure CalcGabarit(const drawing:TDrawingDef);virtual;
     procedure getoutbound(var DC:TDrawContext);virtual;
     function IsStagedFormatEntity:boolean;virtual;
@@ -54,7 +54,7 @@ type
     function getsnap(var osp:os_record; var pdata:Pointer; const param:OGLWndtype; ProjectProc:GDBProjectProc;SnapMode:TGDBOSMode):Boolean;virtual;
     procedure rtmodifyonepoint(const rtmod:TRTModifyData);virtual;
     procedure rtsave(refp:Pointer);virtual;
-    procedure SaveToDXFObjXData(var outStream:TZctnrVectorBytes;var IODXFContext:TIODXFContext);virtual;
+    procedure SaveToDXFObjXData(var outStream:TZctnrVectorBytes;var IODXFContext:TIODXFSaveContext);virtual;
     function ProcessFromDXFObjXData(const _Name,_Value:String;ptu:PExtensionData;const drawing:TDrawingDef):Boolean;virtual;
     class function GetDXFIOFeatures:TDXFEntIODataManager;static;
 
@@ -339,7 +339,7 @@ begin
     end;
   until i<=0;
 end;
-procedure GDBObjText.SaveToDXF(var outStream:TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);
+procedure GDBObjText.SaveToDXF(var outStream:TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFSaveContext);
 var
   hv, vv,bw: Byte;
   tv:gdbvertex;
@@ -386,14 +386,14 @@ begin
     //шаблон dxf НЕсовместим, разворачиваем всё кроме dxf последовательностей
     //пишем dxf совместимое содержимое, шаблом сохраним отдельно
     quotedcontent:=TxtFormatAndCountSrcs(template,SPFSources.GetFull and (not SPFSdxf),ASourcesCounter,@Self);
-    s:=Tria_Utf8ToAnsi(UTF8Encode(quotedcontent));
+    s:={Tria_Utf8ToAnsi}(UTF8Encode(quotedcontent));
   end else begin
     //шаблон dxf совместим, пишем сразу его, отдельно его дописывать в расширенные данные ненадо
-    s:=Tria_Utf8ToAnsi(UTF8Encode(template));
+    s:={Tria_Utf8ToAnsi}(UTF8Encode(template));
     IODXFContext.LocalEntityFlags:=IODXFContext.LocalEntityFlags or CLEFNotNeedSaveTemplate;
   end;
   s:=StringReplace(s,#10,'\P',[rfReplaceAll]);
-  dxfStringout(outStream,1,z2dxftext(s));
+  dxfStringout(outStream,1,z2dxftext(s),IODXFContext.Header);
 
   dxfStringout(outStream,100,'AcDbText');
   dxfIntegerout(outStream,73,vv);
@@ -417,29 +417,29 @@ begin
   angle:=0;
   while byt <> 0 do
   begin
-    if not LoadFromDXFObjShared(rdr,byt,ptu,drawing) then
-       if not dxfvertexload(rdr,10,byt,Local.P_insert) then
-          if dxfvertexload(rdr,11,byt,P_drawInOCS) then
+    if not LoadFromDXFObjShared(rdr,byt,ptu,drawing,context) then
+       if not dxfLoadGroupCodeVertex(rdr,10,byt,Local.P_insert) then
+          if dxfLoadGroupCodeVertex(rdr,11,byt,P_drawInOCS) then
                                                      doublepoint := true
-else if not dxfDoubleload(rdr,40,byt,textprop.size) then
-     if not dxfDoubleload(rdr,41,byt,textprop.wfactor) then
-     if dxfDoubleload(rdr,50,byt,angle) then
+else if not dxfLoadGroupCodeDouble(rdr,40,byt,textprop.size) then
+     if not dxfLoadGroupCodeDouble(rdr,41,byt,textprop.wfactor) then
+     if dxfLoadGroupCodeDouble(rdr,50,byt,angle) then
                                              begin
                                                angleload := true;
                                                angle:=angle*pi/180;
                                              end
-else if dxfDoubleload(rdr,51,byt,textprop.oblique) then
+else if dxfLoadGroupCodeDouble(rdr,51,byt,textprop.oblique) then
                                                         textprop.oblique:=textprop.oblique*pi/180
-else if     dxfStringload(rdr,7,byt,style)then
+else if     dxfLoadGroupCodeString(rdr,7,byt,style)then
                                              begin
                                                   TXTStyle :={drawing.GetTextStyleTable^.getDataMutable}(drawing.GetTextStyleTable^.FindStyle(Style,false));
                                                   if TXTStyle=nil then
                                                                       TXTStyle:=pointer(drawing.GetTextStyleTable^.getDataMutable(0));
                                              end
-else if not dxfIntegerload(rdr,72,byt,gv)then
-     if not dxfIntegerload(rdr,73,byt,vv)then
-     if not dxfIntegerload(rdr,71,byt,textbackward)then
-     if not dxfStringload(rdr,1,byt,tcontent)then
+else if not dxfLoadGroupCodeInteger(rdr,72,byt,gv)then
+     if not dxfLoadGroupCodeInteger(rdr,73,byt,vv)then
+     if not dxfLoadGroupCodeInteger(rdr,71,byt,textbackward)then
+     if not dxfLoadGroupCodeString(rdr,1,byt,tcontent,context.Header)then
                                                {s := }rdr.SkipString;
     byt:=rdr.ParseInteger;
   end;
@@ -459,7 +459,7 @@ else if not dxfIntegerload(rdr,72,byt,gv)then
                            end;
   OldVersTextReplace(Template);
   OldVersTextReplace(tcontent);
-  content:=utf8tostring(Tria_AnsiToUtf8(tcontent));
+  content:=utf8tostring(tcontent);
   textprop.justify := jt[vv, gv];
   if doublepoint then Local.p_Insert := P_drawInOCS;
   //assert(angleload, 'GDBText отсутствует dxf код 50 (угол поворота)');

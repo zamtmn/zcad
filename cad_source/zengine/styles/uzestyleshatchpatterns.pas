@@ -113,22 +113,22 @@ var
   base,offset:GDBvertex2D;
   psa:PTPatStrokesArray;
 begin
-  result:=dxfIntegerload(rdr,78,DXFCode,patternscount);
+  result:=dxfLoadGroupCodeInteger(rdr,78,DXFCode,patternscount);
   if result then begin
     DXFCode:=rdr.ParseInteger;
     for i:=1 to patternscount do begin
-      if dxfdoubleload(rdr,53,DXFCode,angle) then DXFCode:=rdr.ParseInteger;
-      if dxfdoubleload(rdr,43,DXFCode,base.x) then DXFCode:=rdr.ParseInteger;
-      if dxfdoubleload(rdr,44,DXFCode,base.y) then DXFCode:=rdr.ParseInteger;
-      if dxfdoubleload(rdr,45,DXFCode,offset.x) then DXFCode:=rdr.ParseInteger;
-      if dxfdoubleload(rdr,46,DXFCode,offset.y) then DXFCode:=rdr.ParseInteger;
+      if dxfLoadGroupCodeDouble(rdr,53,DXFCode,angle) then DXFCode:=rdr.ParseInteger;
+      if dxfLoadGroupCodeDouble(rdr,43,DXFCode,base.x) then DXFCode:=rdr.ParseInteger;
+      if dxfLoadGroupCodeDouble(rdr,44,DXFCode,base.y) then DXFCode:=rdr.ParseInteger;
+      if dxfLoadGroupCodeDouble(rdr,45,DXFCode,offset.x) then DXFCode:=rdr.ParseInteger;
+      if dxfLoadGroupCodeDouble(rdr,46,DXFCode,offset.y) then DXFCode:=rdr.ParseInteger;
 
       if PPattern=nil then begin
         PPattern:=GetMem(sizeof(THatchPattern));
         PPattern^.init(patternscount);
       end;
 
-      if dxfintegerload(rdr,79,DXFCode,dashcount) then DXFCode:=rdr.ParseInteger;
+      if dxfLoadGroupCodeInteger(rdr,79,DXFCode,dashcount) then DXFCode:=rdr.ParseInteger;
       psa:=PPattern^.CreateObject;
       psa^.init(dashcount);
       psa^.Angle:=angle-MainAngle;
@@ -143,7 +143,7 @@ begin
       //psa^.Offset:=offset;
 
       for j:=1 to dashcount do begin
-        if dxfdoubleload(rdr,49,DXFCode,dash) then begin
+        if dxfLoadGroupCodeDouble(rdr,49,DXFCode,dash) then begin
           psa^.PushBackData(dash/MainScale);
           DXFCode:=rdr.ParseInteger;
         end;

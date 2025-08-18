@@ -431,8 +431,8 @@ begin
     rez.SetInstance(FundamentalStringDescriptorObj.AllocAndInitInstance);
   end else
     AnsiString(rez.data.Addr.Instance^):='';
-  AnsiString(result.data.Addr.Instance^) := {Tria_Utf8ToAnsi}(String(hrez.data.Addr.Instance^));
-  AnsiString(rez.data.Addr.Instance^) := {Tria_Utf8ToAnsi}(String(hrez.data.Addr.Instance^));
+  AnsiString(result.data.Addr.Instance^):=(String(hrez.data.Addr.Instance^));
+  AnsiString(rez.data.Addr.Instance^):=(String(hrez.data.Addr.Instance^));
 end;
 function TAnsiString_let_TAnsiString(var rez, hrez: vardesk): vardesk;
 begin
@@ -445,8 +445,8 @@ begin
                                end
                           else
                               AnsiString(rez.data.Addr.Instance^):='';
-  AnsiString(result.data.Addr.Instance^) := {Tria_Utf8ToAnsi}(AnsiString(hrez.data.Addr.Instance^));
-  AnsiString(rez.data.Addr.Instance^) := {Tria_Utf8ToAnsi}(AnsiString(hrez.data.Addr.Instance^));
+  AnsiString(result.data.Addr.Instance^):=(AnsiString(hrez.data.Addr.Instance^));
+  AnsiString(rez.data.Addr.Instance^):=(AnsiString(hrez.data.Addr.Instance^));
 end;
 function TInteger_minus_TInteger(var rez, hrez: vardesk): vardesk;
 var

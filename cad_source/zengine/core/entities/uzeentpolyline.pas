@@ -32,13 +32,13 @@ GDBObjPolyline= object(GDBObjCurve)
                  Closed:Boolean;
                  constructor init(own:Pointer;layeraddres:PGDBLayerProp;LW:SmallInt;c:Boolean);
                  constructor initnul(owner:PGDBObjGenericWithSubordinated);
-                 procedure LoadFromDXF(var rdr:TZMemReader;ptu:PExtensionData;var drawing:TDrawingDef);virtual;
+                 procedure LoadFromDXF(var rdr:TZMemReader;ptu:PExtensionData;var drawing:TDrawingDef;var context:TIODXFLoadContext);virtual;
 
                  procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext;Stage:TEFStages=EFAllStages);virtual;
                  procedure startsnap(out osp:os_record; out pdata:Pointer);virtual;
                  function getsnap(var osp:os_record; var pdata:Pointer; const param:OGLWndtype; ProjectProc:GDBProjectProc;SnapMode:TGDBOSMode):Boolean;virtual;
 
-                 procedure SaveToDXF(var outStream:TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
+                 procedure SaveToDXF(var outStream:TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFSaveContext);virtual;
                  procedure DrawGeometry(lw:Integer;var DC:TDrawContext;const inFrustumState:TInBoundingVolume);virtual;
                  function Clone(own:Pointer):PGDBObjEntity;virtual;
                  function GetObjTypeName:String;virtual;
@@ -196,18 +196,18 @@ begin
   while true do
   begin
     s:='';
-    if not LoadFromDXFObjShared(rdr,byt,ptu,drawing) then
-       if dxfvertexload(rdr,10,byt,tv) then
+    if not LoadFromDXFObjShared(rdr,byt,ptu,drawing,context) then
+       if dxfLoadGroupCodeVertex(rdr,10,byt,tv) then
                                          begin
                                               if byt=30 then
                                                             if vertexgo then
                                                                             FastAddVertex(tv);
                                          end
-  else if dxfIntegerload(rdr,70,byt,hlGDBWord) then
+  else if dxfLoadGroupCodeInteger(rdr,70,byt,hlGDBWord) then
                                                    begin
                                                         if (hlGDBWord and 1) = 1 then closed := true;
                                                    end
-   else if dxfStringload(rdr,0,byt,s)then
+   else if dxfLoadGroupCodeString(rdr,0,byt,s)then
                                              begin
                                                   if s='VERTEX' then vertexgo := true;
                                                   if s='SEQEND' then system.Break;

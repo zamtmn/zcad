@@ -147,6 +147,7 @@ AnsiStringDescriptor=object(StringGeneralDescriptor<string,{TAnsiStringTypeManip
                           procedure SavePasToMem(var membuf:TZctnrVectorBytes;PInstance:Pointer;const prefix:TInternalScriptString);virtual;
                     end;
 TAS1251TM_String=TTempAnsiStringStoredIn1251TypeManipulator<String>;
+//todo: убрать нахер, мы теперь за utf8 везде))
 TempAnsiString1251Descriptor=object(StringGeneralDescriptor<string,TAS1251TM_String>)
                        //procedure SavePasToMem(var membuf:TZctnrVectorBytes;PInstance:Pointer;prefix:TInternalScriptString);virtual;
                      end;

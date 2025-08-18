@@ -2247,7 +2247,8 @@ var //i: Integer;
     pcd:PTCableDesctiptor;
     DC:TDrawContext;
     pcablevarext,pstartsegmentvarext:TVariablesExtender;
-    counter:integer;
+    gcounter,counter:integer;
+    notempty:boolean;
 begin
   filename:='';
   if SaveFileDialog(filename,'CSV',CSVFileFilter,'','Сохранить данные...') then
@@ -2349,6 +2350,8 @@ begin
   pdbu:=PTZCADDrawing(drawings.GetCurrentDWG).DWGUnits.findunit(GetSupportPaths,InterfaceTranslate,DrawingDeviceBaseUnitName);
   currentgroup:=MainSpecContentFormat.beginiterate(ir_inscf);
   counter:=1;
+  gcounter:=1;
+  notempty:=false;
   if currentgroup<>nil then
   if length(currentgroup^)>1 then
   repeat
@@ -2365,6 +2368,11 @@ begin
                    s:='  '+system.copy(s,2,length(s)-1);
                    //s:='  '+system.copy(currentgroup^,2,length(currentgroup^)-1);
                    psl.PushBackData(s);
+                   counter:=1;
+                   if notempty then begin
+                     inc(gcounter);
+                     notempty:=false;
+                   end;
             end
 
   else
@@ -2385,8 +2393,9 @@ begin
                    psl:=pt^.tbl.CreateObject;
                    psl.init(9);
 
-                   pdbi^.Position:=IntToStr(counter);
+                   pdbi^.Position:=IntToStr(gcounter)+'.'+IntToStr(counter);
                    inc(counter);
+                   notempty:=true;
 
                    s:=pdbi^.Position;
                    psl.PushBackData(Tria_Utf8ToAnsi(s));

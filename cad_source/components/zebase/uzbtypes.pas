@@ -52,6 +52,7 @@ end;
 (*varcategoryforoi DB='Data base'*)
 (*varcategoryforoi GC='Group connection'*)
 (*varcategoryforoi LENGTH='Length params'*)
+(*varcategoryforoi OTHER='Other'*)
 (*varcategoryforoi BTY='Blockdef params'*)
 (*varcategoryforoi EL='El(deprecated)'*)
 (*varcategoryforoi UNITPARAM='Measured parameter'*)
@@ -286,6 +287,12 @@ TTextJustify=(jstl(*'TopLeft'*),
               jsbtl(*'Left'*),
               jsbtc(*'Center'*),
               jsbtr(*'Right'*));
+
+PTZCCodePage=^TZCCodePage;
+TZCCodePage=(ZCCPINVALID,ZCCP874,ZCCP932,ZCCP936,ZCCP949,ZCCP950,
+  ZCCP1250,ZCCP1251,ZCCP1252,ZCCP1253,ZCCP1254,ZCCP1255,ZCCP1256,
+  ZCCP1257,ZCCP1258);
+
 {EXPORT-}
 TZHandleCreator=GTSimpleHandles<TActuality,GTHandleManipulator<TActuality>>;
 

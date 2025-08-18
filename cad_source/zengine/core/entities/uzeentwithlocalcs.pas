@@ -39,7 +39,7 @@ GDBObjWithLocalCS= object(GDBObjWithMatrix)
                constructor initnul(owner:PGDBObjGenericWithSubordinated);
                destructor done;virtual;
                procedure SaveToDXFObjPostfix(var outStream:TZctnrVectorBytes);{todo: проверить использование, выкинуть нах}
-               function LoadFromDXFObjShared(var rdr:TZMemReader;DXFCode:Integer;ptu:PExtensionData;var drawing:TDrawingDef):Boolean;
+               function LoadFromDXFObjShared(var rdr:TZMemReader;DXFCode:Integer;ptu:PExtensionData;var drawing:TDrawingDef;var context:TIODXFLoadContext):Boolean;
 
                procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext;Stage:TEFStages=EFAllStages);virtual;
                procedure CalcObjMatrix(pdrawing:PTDrawingDef=nil);virtual;
@@ -286,8 +286,8 @@ end;
 function GDBObjWithLocalCS.LoadFromDXFObjShared;
 //var s:String;
 begin
-     result:=inherited LoadFromDXFObjShared(rdr,DXFCode,ptu,drawing);
-     if not result then result:=dxfvertexload(rdr,210,DXFCode,Local.basis.oz);
+     result:=inherited LoadFromDXFObjShared(rdr,DXFCode,ptu,drawing,context);
+     if not result then result:=dxfLoadGroupCodeVertex(rdr,210,DXFCode,Local.basis.oz);
 end;
 destructor GDBObjWithLocalCS.done;
 begin

@@ -85,9 +85,9 @@ begin
     Item.ImageIndex:=ImagesManager.GetImageIndex('ok');;
     CurrentLType:=Item;
   end;
-    Item.SubItems.Add(uzbstrproc.Tria_AnsiToUtf8(pltp^.Name));
+    Item.SubItems.Add({uzbstrproc.Tria_AnsiToUtf8}(pltp^.Name));
     Item.SubItems.Add('');
-    Item.SubItems.Add(uzbstrproc.Tria_AnsiToUtf8(pltp^.desk));
+    Item.SubItems.Add({uzbstrproc.Tria_AnsiToUtf8}(pltp^.desk));
 end;
 procedure TLineTypesForm._UpDateLV(LV:TListView;SLT:PGDBLtypeProp);
 var
@@ -214,9 +214,9 @@ begin
   if selected then begin
     pltp:=(Item.Data);
     countlt(pltp,inent,inblock);
-    LTDescLabel.Caption:=Format(rsLineTypeUsedIn,[Tria_AnsiToUtf8(pltp^.Name),inent,inblock]);
+    LTDescLabel.Caption:=Format(rsLineTypeUsedIn,[{Tria_AnsiToUtf8}(pltp^.Name),inent,inblock]);
     if pltp^.Mode=TLTLineType then
-      Memo1.Text:=Format(rsLineTypeDesk,[pltp^.LengthDXF,pltp^.strokesarray.LengthFact,Tria_AnsiToUtf8(pltp^.getastext)])
+      Memo1.Text:=Format(rsLineTypeDesk,[pltp^.LengthDXF,pltp^.strokesarray.LengthFact,{Tria_AnsiToUtf8}(pltp^.getastext)])
     else
       Memo1.Text:=rsSysLineTypeWarning;
   end;

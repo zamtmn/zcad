@@ -49,7 +49,7 @@ GDBObjRadialDimension= object(GDBObjDiametricDimension)
                         function P11ChangeTo(const tv:GDBVertex):GDBVertex;virtual;
                         function GetRadius:Double;virtual;
 
-                        procedure SaveToDXF(var outStream:TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
+                        procedure SaveToDXF(var outStream:TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFSaveContext);virtual;
                         function GetObjType:TObjID;virtual;
                    end;
 implementation

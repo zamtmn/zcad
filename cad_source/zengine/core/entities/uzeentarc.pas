@@ -40,9 +40,9 @@ GDBObjArc= object(GDBObjPlain)
                  q2:GDBvertex;
                  constructor init(own:Pointer;layeraddres:PGDBLayerProp;LW:SmallInt;p:GDBvertex;RR,S,E:Double);
                  constructor initnul;
-                 procedure LoadFromDXF(var rdr:TZMemReader;ptu:PExtensionData;var drawing:TDrawingDef);virtual;
+                 procedure LoadFromDXF(var rdr:TZMemReader;ptu:PExtensionData;var drawing:TDrawingDef;var context:TIODXFLoadContext);virtual;
 
-                 procedure SaveToDXF(var outStream:TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
+                 procedure SaveToDXF(var outStream:TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFSaveContext);virtual;
                  procedure DrawGeometry(lw:Integer;var DC:TDrawContext;const inFrustumState:TInBoundingVolume);virtual;
                  procedure addcontrolpoints(tdesc:Pointer);virtual;
                  procedure remaponecontrolpoint(pdesc:pcontrolpointdesc;ProjectProc:GDBProjectProc);virtual;
@@ -481,11 +481,11 @@ begin
   byt:=rdr.ParseInteger;
   while byt <> 0 do
   begin
-    if not LoadFromDXFObjShared(rdr,byt,ptu,drawing) then
-    if not dxfvertexload(rdr,10,byt,Local.P_insert) then
-    if not dxfDoubleload(rdr,40,byt,r) then
-    if not dxfDoubleload(rdr,50,byt,startangle) then
-    if not dxfDoubleload(rdr,51,byt,endangle) then {s := }rdr.SkipString;
+    if not LoadFromDXFObjShared(rdr,byt,ptu,drawing,context) then
+    if not dxfLoadGroupCodeVertex(rdr,10,byt,Local.P_insert) then
+    if not dxfLoadGroupCodeDouble(rdr,40,byt,r) then
+    if not dxfLoadGroupCodeDouble(rdr,50,byt,startangle) then
+    if not dxfLoadGroupCodeDouble(rdr,51,byt,endangle) then {s := }rdr.SkipString;
     byt:=rdr.ParseInteger;
   end;
   startangle := startangle * pi / 180;

@@ -25,9 +25,11 @@ uses
     uzegeometrytypes,UGDBSelectedObjArray,uzestyleslayers,UGDBOpenArrayOfPV;
 type
 {EXPORT+}
+
 PTAbstractDrawing=^TAbstractDrawing;
 {REGISTEROBJECTTYPE TAbstractDrawing}
 TAbstractDrawing= object(TDrawingDef)
+                       DXFCodePage:TZCCodePage;
                        LWDisplay:Boolean;
                        SnapGrid:Boolean;
                        DrawGrid:Boolean;

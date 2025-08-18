@@ -195,7 +195,7 @@ end;
 {Style name handle procedures}
 function TDimStylesForm.GetStyleName(Item: TListItem):string;
 begin
-  result:=Tria_AnsiToUtf8(PGDBDimStyle(Item.Data)^.Name);
+  result:={Tria_AnsiToUtf8}(PGDBDimStyle(Item.Data)^.Name);
 end;
 function TDimStylesForm.CreateNameEditor(Item: TListItem;r: TRect):boolean;
 begin

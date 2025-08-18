@@ -258,21 +258,27 @@ begin
   if group=1001 then
                     mode:=TDSRM_ACAD;
   case mode of
-  TDSRM_ACAD_DSTYLE_DIM_LINETYPE:
-              begin
-                   if group=1005 then
-                                     Lines.DIMLTYPE:=context.h2p.MyGetValue(StrToQWord('$'+value));
-              end;
-  TDSRM_ACAD_DSTYLE_DIM_EXT1_LINETYPE:
-              begin
-                   if group=1005 then
-                                     Lines.DIMLTEX1:=context.h2p.MyGetValue(StrToQWord('$'+value));
-              end;
-  TDSRM_ACAD_DSTYLE_DIM_EXT2_LINETYPE:
-              begin
-                   if group=1005 then
-                                     Lines.DIMLTEX2:=context.h2p.MyGetValue(StrToQWord('$'+value));
-              end;
+    TDSRM_ACAD_DSTYLE_DIM_LINETYPE:begin
+      if group=1005 then
+        with context.h2p.MyGetValue(StrToQWord('$'+value)) do begin
+          if &type=OT_LineType then
+            Lines.DIMLTYPE:=p;
+        end;
+    end;
+    TDSRM_ACAD_DSTYLE_DIM_EXT1_LINETYPE:begin
+      if group=1005 then
+        with context.h2p.MyGetValue(StrToQWord('$'+value)) do begin
+          Lines.DIMLTEX1:=p;
+
+        end;
+    end;
+    TDSRM_ACAD_DSTYLE_DIM_EXT2_LINETYPE:begin
+      if group=1005 then
+        with context.h2p.MyGetValue(StrToQWord('$'+value)) do begin
+          if &type=OT_LineType then
+            Lines.DIMLTEX2:=p;
+        end;
+    end;
   TDSRM_ACAD:
               begin
                 case group of
@@ -402,8 +408,12 @@ begin
                 end;
                 340:
                 begin
-                     if TryStrToQWord('$'+value,temp) then
-                       Text.DIMTXSTY:=context.h2p.MyGetValue(temp)
+                     if TryStrToQWord('$'+value,temp) then begin
+                       with context.h2p.MyGetValue(temp) do begin
+                         if &type=OT_TextStyle then
+                          Text.DIMTXSTY:=p;
+                       end;
+                     end
                      else
                        begin
                          CreateLDIfNeed;

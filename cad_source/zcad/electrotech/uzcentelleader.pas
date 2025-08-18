@@ -55,13 +55,13 @@ GDBObjElLeader= object(GDBObjComplex)
 
             constructor initnul;
             function Clone(own:Pointer):PGDBObjEntity;virtual;
-            procedure SaveToDXF(var outStream:TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
-            procedure DXFOut(var outStream:TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
+            procedure SaveToDXF(var outStream:TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFSaveContext);virtual;
+            procedure DXFOut(var outStream:TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFSaveContext);virtual;
             function GetObjTypeName:String;virtual;
             function ReturnLastOnMouse(InSubEntry:Boolean):PGDBObjEntity;virtual;
             procedure ImSelected(pobj:PGDBObjSubordinated;pobjinarray:Integer);virtual;
             procedure DeSelect(var SelectedObjCount:Integer;ds2s:TDeSelect2Stage);virtual;
-            procedure SaveToDXFFollow(var outStream:TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
+            procedure SaveToDXFFollow(var outStream:TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFSaveContext);virtual;
             //function InRect:TInRect;virtual;
 
             destructor done;virtual;
@@ -73,7 +73,7 @@ GDBObjElLeader= object(GDBObjComplex)
             function calcvisible(const frustum:ClipArray;const Actuality:TVisActuality;var Counters:TCameraCounters; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double):Boolean;virtual;
             function GetObjType:TObjID;virtual;
             class function GetDXFIOFeatures:TDXFEntIODataManager;static;
-            procedure SaveToDXFObjXData(var outStream:TZctnrVectorBytes;var IODXFContext:TIODXFContext);virtual;
+            procedure SaveToDXFObjXData(var outStream:TZctnrVectorBytes;var IODXFContext:TIODXFSaveContext);virtual;
             end;
 implementation
 var
@@ -307,397 +307,372 @@ procedure GDBObjElLeader.FormatEntity(var drawing:TDrawingDef;var DC:TDrawContex
 const
   textoffset=0.5;
 var
-   pl:pgdbobjline;
-   tv,tv2,textpoint:gdbvertex;
-   pobj,pcable:PGDBObjCable;
-   ir,ir2:itrec;
-   s:String;
-   psl:PTZctnrVectorStrings;
-   pvn,pvNote,pvNoteFormat:pvardesk;
-   sta:TZctnrVectorStrings;
-   stcnt:TStringCounter;
-   stcntpair:TStringCounter.TDictionaryPair;
-   ps:pString;
-   bb:TBoundingBox;
-   pdev:PGDBObjDevice;
-   ptn:PTNodeProp;
-   ptext:PGDBObjText;
-   width,sl,l:Integer;
-   TCP:TCodePage;
+  pl:pgdbobjline;
+  tv,tv2,textpoint:gdbvertex;
+  pobj,pcable:PGDBObjCable;
+  ir,ir2:itrec;
+  s:String;
+  psl:PTZctnrVectorStrings;
+  pvn,pvNote,pvNoteFormat:pvardesk;
+  sta:TZctnrVectorStrings;
+  stcnt:TStringCounter;
+  stcntpair:TStringCounter.TDictionaryPair;
+  ps:pString;
+  bb:TBoundingBox;
+  pdev:PGDBObjEntity;
+  pdevvarext:TVariablesExtender;
+  ptn:PTNodeProp;
+  ptext:PGDBObjText;
+  width,sl,l:Integer;
+  TCP:TCodePage;
 
-   Objects:GDBObjOpenArrayOfPV;
-   pentvarext:TVariablesExtender;
-   ss:shortstring;
+  Objects:GDBObjOpenArrayOfPV;
+  pentvarext:TVariablesExtender;
+  ss:shortstring;
 begin
-     if assigned(EntExtensions)then
-       EntExtensions.RunOnBeforeEntityFormat(@self,drawing,DC);
-     tbl.ptablestyle:=drawing.GetTableStyleTable^.getAddres('Temp');
-     TCP:=CodePage;
-     CodePage:=CP_utf8;
-     pdev:=nil;
-     //pobj:=nil;
-     sta.init(10);
-     stcnt:=TStringCounter.Create(10);
-     CopyVPto(mainline);
-     //mainline.vp.Layer:=vp.Layer;
-     mainline.FormatEntity(drawing,dc);
+  if assigned(EntExtensions)then
+  EntExtensions.RunOnBeforeEntityFormat(@self,drawing,DC);
+  tbl.ptablestyle:=drawing.GetTableStyleTable^.getAddres('Temp');
+  TCP:=CodePage;
+  CodePage:=CP_utf8;
+  pdev:=nil;
+  sta.init(10);
+  stcnt:=TStringCounter.Create(10);
+  CopyVPto(mainline);
+  mainline.FormatEntity(drawing,dc);
 
-     pcable:=nil;
+  pcable:=nil;
 
-     objects.init(100);
+  objects.init(100);
 
-     if PGDBObjGenericSubEntry(drawing.GetCurrentRootSimple)^.{gdb.GetCurrentROOT.}FindObjectsInPoint(mainline.CoordInWCS.lBegin,Objects) then
-     begin
-          pobj:=objects.beginiterate(ir);
-          if pobj<>nil then
-          repeat
-                pobj:=pointer(pobj.bp.ListPos.Owner);
-                if pobj^.GetObjType=GDBDeviceID then
-                begin
-                begin
-                     if PGDBObjDevice(pobj).BlockDesc.BGroup=BG_El_Device then
-                     if IsPointInBB(mainline.CoordInWCS.lBegin,pobj^.vp.BoundingBox) then
-                     //if PGDBObjDevice(pobj).BlockDesc.BBorder=BB_Self then
-                     begin
-                     bb:=PGDBObjDevice(pobj)^.ConstObjArray.getoutbound(dc);
-                     if IsPointInBB(mainline.CoordInWCS.lBegin,bb) then
-                     begin
-                               pdev:=pointer(pobj);
-                               system.break;
-                     end;
-                     end;
-                end;
-                end;
-                pobj:=objects.iterate(ir);
-          until pobj=nil;
-     end;
-     if pdev=nil then
-     begin
-     pobj:=PGDBObjGenericSubEntry(drawing.GetCurrentRootSimple)^.{gdb.GetCurrentROOT.}ObjArray{objects}.beginiterate(ir);
-     if pobj<>nil then
-     repeat
-           if pobj^.GetObjType=GDBCableID then
-           begin
-                if IsPointInBB(mainline.CoordInWCS.lBegin,pobj^.vp.BoundingBox) then
-                begin
-                     if pobj^.VertexArrayInWCS.onpoint(mainline.CoordInWCS.lBegin,false) then
-                     begin
-                          pcable:=pobj;
-                          pentvarext:=pobj^.GetExtension<TVariablesExtender>;
-                          //pvn:=PTEntityUnit(pobj^.ou.Instance)^.FindVariable('NMO_Name');
-                          pvn:=pentvarext.entityunit.FindVariable('NMO_Name');
-                          if pvn<>nil then
-                          begin
-                               s:=pvn^.data.PTD.GetValueAsString(pvn^.data.Addr.Instance);
-                               //s:=pstring(pvn^.Instance)^;
-                               sta.PushBackData(s);
-                               S:='';
-                          end;
-
-                          pvn:=pentvarext.entityunit.FindVariable('DB_link');
-                          if pvn<>nil then
-                          begin
-                               s:=pvn^.data.PTD.GetValueAsString(pvn^.data.Addr.Instance);
-                               stcnt.CountKey(s);
-                               S:='';
-                          end;
-                     end;
-
-                end;
-           end
-      else if pobj^.GetObjType=GDBDeviceID then
-           begin
-                if PGDBObjDevice(pobj).BlockDesc.BGroup=BG_El_Device then
-                if IsPointInBB(mainline.CoordInWCS.lBegin,pobj^.vp.BoundingBox) then
-                //if PGDBObjDevice(pobj).BlockDesc.BBorder=BB_Self then
-                begin
-                bb:=PGDBObjDevice(pobj)^.ConstObjArray.getoutbound(dc);
-                if IsPointInBB(mainline.CoordInWCS.lBegin,bb) then
-                begin
-                          pdev:=pointer(pobj);
-                          system.break;
-                end;
-                end;
-           end;
-           pobj:=PGDBObjGenericSubEntry(drawing.GetCurrentRootSimple)^.{gdb.GetCurrentROOT.}ObjArray{objects}.iterate(ir);
-           until pobj=nil;
-     end;
-           if pdev<>nil then
-           begin
-                sta.free;
-                //sta.clear;
-           pobj:=PGDBObjGenericSubEntry(drawing.GetCurrentRootSimple)^.{gdb.GetCurrentROOT.}ObjArray.beginiterate(ir);
-           if pobj<>nil then
-           repeat
-                 if pobj^.GetObjType=GDBCableID then
-                 begin
-                      ptn:=pobj^.NodePropArray.beginiterate(ir2);
-                      if ptn<>nil then
-                      begin
-                      repeat
-                            if ptn.DevLink<>nil then
-                            if pdev=pointer(ptn.DevLink.bp.ListPos.owner) then
-                            begin
-                                 pentvarext:=pobj^.GetExtension<TVariablesExtender>;
-                                 //pvn:=PTEntityUnit(pobj^.ou.Instance)^.FindVariable('NMO_Name');
-                                 pvn:=pentvarext.entityunit.FindVariable('NMO_Name');
-                                  if pvn<>nil then
-                                  begin
-                                       s:=pvn^.data.PTD.GetValueAsString(pvn^.data.Addr.Instance);
-                                       //s:=pstring(pvn^.Instance)^;
-                                       sta.PushBackData(s);
-                                  end;
-                                  system.break;
-
-                            end;
-                            ptn:=pobj.NodePropArray.iterate(ir2);
-                      until ptn=nil;
-                      end;
-                 end;
-                 pobj:=PGDBObjGenericSubEntry(drawing.GetCurrentRootSimple)^.{gdb.GetCurrentROOT.}ObjArray.iterate(ir);
-           until pobj=nil;
-           end;
-
-     sta.sort;
-
-     sl:=0;
-     ps:=sta.beginiterate(ir);
-     if ps<>nil then
-     repeat
-       sl:=sl+length(ps^);
-       ps:=sta.iterate(ir);
-       if ps<>nil then
-         inc(sl);
-     until ps=nil;
-
-     SetLength(self.textcontent,sl);
-     sl:=1;
-     ps:=sta.beginiterate(ir);
-     if ps<>nil then
-     repeat
-       for l:=1 to length(ps^) do begin
-         textcontent[sl]:=ps^[l];
-         inc(sl);
-       end;
-       ps:=sta.iterate(ir);
-       if ps<>nil then begin
-         self.textcontent[sl]:=',';
-         inc(sl);
-       end;
-     until ps=nil;
-
-
-     sl:=0;
-     MaterialContent:='';
-     for stcntpair in stcnt do begin
-     //MaterialContent:=MaterialContent+stcntpair.Key+'*'+inttostr(stcntpair.Value)+';';
-     sl:=sl+length(stcntpair.Key)+getDigitsCount(stcntpair.Value)+2;
-     end;
-
-     SetLength(MaterialContent,sl);
-     sl:=1;
-     for stcntpair in stcnt do begin
-       for l:=1 to length(stcntpair.Key) do begin
-         MaterialContent[sl]:=stcntpair.Key[l];
-         inc(sl);
-       end;
-       MaterialContent[sl]:='*';
-       inc(sl);
-       ss:=inttostr(stcntpair.Value);
-       for l:=1 to length(ss) do begin
-         MaterialContent[sl]:=ss[l];
-         inc(sl);
-       end;
-       MaterialContent[sl]:=';';
-       inc(sl);
-     end;
-     stcnt.free;
-
-
-
-
-     //textcontent:=Tria_AnsiToUtf8(textcontent);
-
-     if sta.Count=0 then begin
-       s:='??';
-       sta.PushBackData(s);
-     end;
-
-     CopyVPto(tbl);
-     tbl.tbl.free{clear};
-     psl:=tbl.tbl.CreateObject;
-     psl.init(10);
-
-     if size>=0 then
-                    if size<>0 then width:=size
-                              else width:=floor(sqrt(sta.Count))
-               else
-                   width:=ceil(abs(sta.Count/size));
-     ps:=sta.beginiterate(ir);
-     if ps<>nil then
-     repeat
-           if width<=psl.Count then
-                                  begin
-                                       psl:=tbl.tbl.CreateObject;
-                                       psl.init(10);
-                                  end;
-          s:=ps^;
-          psl.PushBackData(Tria_Utf8ToAnsi(s));
-          S:='';
-          ps:=sta.iterate(ir);
-     until ps=nil;
-
-     sta.Done;
-     //sta.done;
-     tbl.scale:=scale;
-     if twidth>0 then
-                     PTGDBTableCellStyle(tbl.ptablestyle.tblformat.parray)^.Width:=twidth
-                 else
-                     PTGDBTableCellStyle(tbl.ptablestyle.tblformat.parray)^.Width:=SysVar.DSGN.DSGN_LeaderDefaultWidth^;
-     tbl.vp.Layer:=vp.Layer;
-     tbl.Build(drawing);
-
-
-     if pdev=nil then
-     begin
-     tv:=uzegeometry.vectordot(VertexSub(mainline.CoordInWCS.lEnd,mainline.CoordInWCS.lBegin),Local.basis.OZ);
-     tv:=uzegeometry.NormalizeVertex(tv);
-     tv:=uzegeometry.VertexMulOnSc(tv,scale);
-
-     if pcable<>nil then
-                        begin
-                             tv2:=GetDirInPoint(pcable^.VertexArrayInWCS,mainline.CoordInWCS.lBegin,false);
-                             //tv3:=uzegeometry.vectordot(tv2,VertexSub(mainline.CoordInWCS.lEnd,mainline.CoordInWCS.lBegin));
-                             if {tv3.z}scalardot(tv2,VertexSub(mainline.CoordInWCS.lEnd,mainline.CoordInWCS.lBegin))>0 then
-                                            tv2:=uzegeometry.vectordot(tv2,Local.basis.OZ)
-                                        else
-                                            tv2:=uzegeometry.vectordot(Local.basis.OZ,tv2);
-                             //tv2:=uzegeometry.vectordot(tv2,Local.OZ);
-                             tv2:=uzegeometry.NormalizeVertex(tv2);
-                             tv2:=uzegeometry.VertexMulOnSc(tv2,scale);
-
-                             tv:=vertexadd(tv2,tv);
-                             tv:=uzegeometry.NormalizeVertex(tv);
-                             tv:=uzegeometry.VertexMulOnSc(tv,scale);
-
-                             //tv:=tv2;
-                        end;
-
-     end
-     else tv:=nulvertex;
-     //MarkLine.done;
-     //MarkLine.init(@self,vp.Layer,vp.LineWeight,VertexSub(MainLine.CoordInOCS.lBegin,tv),VertexAdd(MainLine.CoordInOCS.lBegin,tv));
-     CopyVPto(MarkLine);
-     //MarkLine.vp.Layer:=vp.Layer;
-     //MarkLine.vp.LineWeight:=vp.LineWeight;
-     MarkLine.CoordInOCS.lBegin:=VertexSub(MainLine.CoordInOCS.lBegin,tv);
-     MarkLine.CoordInOCS.lEnd:=VertexAdd(MainLine.CoordInOCS.lBegin,tv);
-
-     MarkLine.FormatEntity(drawing,dc);
-
-     tbl.Local.P_insert:=mainline.CoordInOCS.lEnd;
-     if AutoHAlaign then begin
-       if VertexSub(mainline.CoordInWCS.lEnd,mainline.CoordInWCS.lBegin).x<=0 then
-         tbl.Local.P_insert.x:=mainline.CoordInOCS.lEnd.x-tbl.w;
-     end else begin
-       case HorizontalAlign of
-         THAlign.HALeft:;
-         THAlign.HAMidle:tbl.Local.P_insert.x:=mainline.CoordInOCS.lEnd.x-tbl.w/2;
-         THAlign.HARight:tbl.Local.P_insert.x:=mainline.CoordInOCS.lEnd.x-tbl.w;
-       end
-     end;
-     if AutoVAlaign then begin
-       if VertexSub(mainline.CoordInWCS.lEnd,mainline.CoordInWCS.lBegin).y>=0 then
-         tbl.Local.P_insert.y:=mainline.CoordInOCS.lEnd.y+tbl.h;
-     end else begin
-       case VerticalAlign of
-         TVAlign.VATop:;
-         TVAlign.VAMidle:tbl.Local.P_insert.y:=mainline.CoordInOCS.lEnd.y+tbl.h/2;
-         TVAlign.VABottom:tbl.Local.P_insert.y:=mainline.CoordInOCS.lEnd.y+tbl.h;
-       end
-     end;
-     tbl.FormatEntity(drawing,dc);
-     ConstObjArray.free;
-     if pdev<>nil then
-     begin
-          pentvarext:=self.GetExtension<TVariablesExtender>;
-          if pentvarext<>nil then begin
-            pvNote:=pentvarext.entityunit.FindVariable('NOTE_Note');
-            pvNoteFormat:=pentvarext.entityunit.FindVariable('NOTE_NoteFormat');
-          end else begin
-            pvNote:=nil;
-            pvNoteFormat:=nil;
+  if PGDBObjGenericSubEntry(drawing.GetCurrentRootSimple)^.FindObjectsInPoint(mainline.CoordInWCS.lBegin,Objects) then begin
+    pobj:=objects.beginiterate(ir);
+    if pobj<>nil then
+    repeat
+      pdevvarext:=pobj^.GetExtension<TVariablesExtender>;
+      if (pdevvarext<>nil)and(pobj^.GetObjType<>GDBCableID)then begin
+        pdev:=pointer(pobj);
+        system.break;
+      end;
+      pobj:=pointer(pobj.bp.ListPos.Owner);
+      if pobj^.GetObjType=GDBDeviceID then begin
+        if PGDBObjDevice(pobj).BlockDesc.BGroup=BG_El_Device then
+          if IsPointInBB(mainline.CoordInWCS.lBegin,pobj^.vp.BoundingBox) then begin
+            bb:=PGDBObjDevice(pobj)^.ConstObjArray.getoutbound(dc);
+            if IsPointInBB(mainline.CoordInWCS.lBegin,bb) then begin
+              pdev:=pointer(pobj);
+              system.break;
+             end;
           end;
-          if (pvNote<>nil)and(pvNoteFormat<>nil) then
-            pstring(pvNote^.data.Addr.Instance)^:=textformat(pstring(pvNoteFormat^.data.Addr.Instance)^,SPFSources.GetFull,pdev);
-          if (pvNote<>nil)and(pstring(pvNote^.data.Addr.Instance)^<>'') then
-            s:={pstring(pvNote^.Instance)^}pvNote^.data.PTD.GetValueAsString(pvNote^.data.Addr.Instance)
-          else begin
-            s:='';
-            pentvarext:=pdev^.GetExtension<TVariablesExtender>;
-            //pvn:=PTEntityUnit(pdev^.ou.Instance)^.FindVariable('NMO_Name');
+      end;
+      pobj:=objects.iterate(ir);
+    until pobj=nil;
+  end;
+
+  if (pdev=nil)or((pdev<>nil)and(pdev^.GetObjType<>GDBDeviceID)) then begin
+    pobj:=PGDBObjGenericSubEntry(drawing.GetCurrentRootSimple)^.ObjArray.beginiterate(ir);
+    if pobj<>nil then
+    repeat
+      if pobj^.GetObjType=GDBCableID then begin
+        if IsPointInBB(mainline.CoordInWCS.lBegin,pobj^.vp.BoundingBox) then begin
+          if pobj^.VertexArrayInWCS.onpoint(mainline.CoordInWCS.lBegin,false) then begin
+            pcable:=pobj;
+            pentvarext:=pobj^.GetExtension<TVariablesExtender>;
             pvn:=pentvarext.entityunit.FindVariable('NMO_Name');
-            if pvn<>nil then
-            begin
-                 s:=pvn^.data.PTD.GetValueAsString(pvn^.data.Addr.Instance);
-                 //s:=pstring(pvn^.Instance)^;
+            if pvn<>nil then begin
+              s:=pvn^.data.PTD.GetValueAsString(pvn^.data.Addr.Instance);
+              sta.PushBackData(s);
+              S:='';
             end;
-            //pvn:=PTEntityUnit(pdev^.ou.Instance)^.FindVariable('Text');
-            pvn:=pentvarext.entityunit.FindVariable('Text');
-            if pvn<>nil then
-            begin
-                 s:=s+{pstring(pvn^.Instance)^}pvn^.data.PTD.GetValueAsString(pvn^.data.Addr.Instance);;
+            pvn:=pentvarext.entityunit.FindVariable('DB_link');
+            if pvn<>nil then begin
+              s:=pvn^.data.PTD.GetValueAsString(pvn^.data.Addr.Instance);
+              stcnt.CountKey(s);
+              S:='';
             end;
           end;
-          if s<>'' then
-          begin
-          ptext:=pointer(self.ConstObjArray.CreateInitObj(GDBMTextID,@self));
-          ptext.vp.Layer:=vp.Layer;
-          ptext.Template:=UTF8ToString({Tria_AnsiToUtf8}(s));
-          ptext.Local.P_insert:=tbl.Local.P_insert;
-          ptext.Local.P_insert.y:=ptext.Local.P_insert.y+1.5*scale;
-          ptext.textprop.justify:=jsbl;
-          ptext.TXTStyle:=pointer(drawing.GetTextStyleTable^.getDataMutable(0));
-          if VertexSub(mainline.CoordInWCS.lEnd,mainline.CoordInWCS.lBegin).x<=0 then begin
-            ptext.Local.P_insert.x:= ptext.Local.P_insert.x+tbl.w;
-            textpoint:=ptext.Local.P_insert;
-            ptext.Local.P_insert.x:= ptext.Local.P_insert.x-textoffset;
-            ptext.textprop.justify:=jsbr;
-          end else begin
-            textpoint:=ptext.Local.P_insert;
-            ptext.Local.P_insert.x:=ptext.Local.P_insert.x+textoffset;
+        end;
+      end else if pobj^.GetObjType=GDBDeviceID then begin
+        if PGDBObjDevice(pobj).BlockDesc.BGroup=BG_El_Device then
+          if IsPointInBB(mainline.CoordInWCS.lBegin,pobj^.vp.BoundingBox) then begin
+            bb:=PGDBObjDevice(pobj)^.ConstObjArray.getoutbound(dc);
+            if IsPointInBB(mainline.CoordInWCS.lBegin,bb) then begin
+              pdev:=pointer(pobj);
+              system.break;
+            end;
           end;
-          ptext.textprop.size:=2.5*scale;
-          ptext.FormatEntity(drawing,dc);
+      end;
+      pobj:=PGDBObjGenericSubEntry(drawing.GetCurrentRootSimple)^.ObjArray.iterate(ir);
+    until pobj=nil;
+  end;
 
-          pl:=pointer(self.ConstObjArray.CreateInitObj(GDBlineID,@self));
-          pl.vp.Layer:=vp.Layer;
-          pl.CoordInOCS.lBegin:=textpoint;
-          pl.CoordInOCS.lBegin.y:=pl.CoordInOCS.lBegin.y-0.5*scale;
-          pl.CoordInOCS.lEnd:=pl.CoordInOCS.lBegin;
-          pl.CoordInOCS.lEnd.y:=pl.CoordInOCS.lEnd.y-1*scale;
-          pl.FormatEntity(drawing,dc);
-          pl:=pointer(self.ConstObjArray.CreateInitObj(GDBlineID,@self));
-          pl.vp.Layer:=vp.Layer;
-          pl.CoordInOCS.lBegin:=textpoint;
-          pl.CoordInOCS.lBegin.y:=pl.CoordInOCS.lBegin.y-0.5*scale;
-          pl.CoordInOCS.lEnd:=pl.CoordInOCS.lBegin;
-          if VertexSub(mainline.CoordInWCS.lEnd,mainline.CoordInWCS.lBegin).x>0 then
-                                   pl.CoordInOCS.lEnd.x:=pl.CoordInOCS.lEnd.x+ptext.obj_width*ptext.textprop.size*ptext.TXTStyle.prop.wfactor +2*textoffset
-                               else
-                                   pl.CoordInOCS.lEnd.x:=pl.CoordInOCS.lEnd.x-ptext.obj_width*ptext.textprop.size*ptext.TXTStyle.prop.wfactor-2*textoffset;
-          pl.FormatEntity(drawing,dc);
-          end;
+  if (pdev<>nil)and(pdev^.GetObjType=GDBDeviceID) then begin
+    sta.free;
+    pobj:=PGDBObjGenericSubEntry(drawing.GetCurrentRootSimple)^.objArray.beginiterate(ir);
+    if pobj<>nil then
+    repeat
+      if pobj^.GetObjType=GDBCableID then begin
+        ptn:=pobj^.NodePropArray.beginiterate(ir2);
+        if ptn<>nil then begin
+          repeat
+            if ptn.DevLink<>nil then
+              if pdev=pointer(ptn.DevLink.bp.ListPos.owner) then begin
+                pentvarext:=pobj^.GetExtension<TVariablesExtender>;
+                pvn:=pentvarext.entityunit.FindVariable('NMO_Name');
+                if pvn<>nil then  begin
+                  s:=pvn^.data.PTD.GetValueAsString(pvn^.data.Addr.Instance);
+                  sta.PushBackData(s);
+                end;
+                system.break;
+              end;
+            ptn:=pobj.NodePropArray.iterate(ir2);
+          until ptn=nil;
+        end;
+      end;
+      pobj:=PGDBObjGenericSubEntry(drawing.GetCurrentRootSimple)^.ObjArray.iterate(ir);
+    until pobj=nil;
+   end;
 
-     end;
-     inherited;
+  sta.sort;
 
-     CodePage:=TCP;
-     objects.Clear;
-     objects.Done;
-     buildgeometry(drawing);
-     if assigned(EntExtensions)then
-       EntExtensions.RunOnAfterEntityFormat(@self,drawing,DC);
+  sl:=0;
+  ps:=sta.beginiterate(ir);
+  if ps<>nil then
+  repeat
+  sl:=sl+length(ps^);
+  ps:=sta.iterate(ir);
+  if ps<>nil then
+  inc(sl);
+  until ps=nil;
+
+  SetLength(self.textcontent,sl);
+  sl:=1;
+  ps:=sta.beginiterate(ir);
+  if ps<>nil then
+  repeat
+  for l:=1 to length(ps^) do begin
+  textcontent[sl]:=ps^[l];
+  inc(sl);
+  end;
+  ps:=sta.iterate(ir);
+  if ps<>nil then begin
+  self.textcontent[sl]:=',';
+  inc(sl);
+  end;
+  until ps=nil;
+
+
+  sl:=0;
+  MaterialContent:='';
+  for stcntpair in stcnt do begin
+  //MaterialContent:=MaterialContent+stcntpair.Key+'*'+inttostr(stcntpair.Value)+';';
+  sl:=sl+length(stcntpair.Key)+getDigitsCount(stcntpair.Value)+2;
+  end;
+
+  SetLength(MaterialContent,sl);
+  sl:=1;
+  for stcntpair in stcnt do begin
+  for l:=1 to length(stcntpair.Key) do begin
+  MaterialContent[sl]:=stcntpair.Key[l];
+  inc(sl);
+  end;
+  MaterialContent[sl]:='*';
+  inc(sl);
+  ss:=inttostr(stcntpair.Value);
+  for l:=1 to length(ss) do begin
+  MaterialContent[sl]:=ss[l];
+  inc(sl);
+  end;
+  MaterialContent[sl]:=';';
+  inc(sl);
+  end;
+  stcnt.free;
+
+
+
+
+  //textcontent:=Tria_AnsiToUtf8(textcontent);
+
+  if sta.Count=0 then begin
+  s:='??';
+  sta.PushBackData(s);
+  end;
+
+  CopyVPto(tbl);
+  tbl.tbl.free{clear};
+  psl:=tbl.tbl.CreateObject;
+  psl.init(10);
+
+  if size>=0 then
+            if size<>0 then width:=size
+                      else width:=floor(sqrt(sta.Count))
+       else
+           width:=ceil(abs(sta.Count/size));
+  ps:=sta.beginiterate(ir);
+  if ps<>nil then
+  repeat
+   if width<=psl.Count then
+                          begin
+                               psl:=tbl.tbl.CreateObject;
+                               psl.init(10);
+                          end;
+  s:=ps^;
+  psl.PushBackData(Tria_Utf8ToAnsi(s));
+  S:='';
+  ps:=sta.iterate(ir);
+  until ps=nil;
+
+  sta.Done;
+  //sta.done;
+  tbl.scale:=scale;
+  if twidth>0 then
+             PTGDBTableCellStyle(tbl.ptablestyle.tblformat.parray)^.Width:=twidth
+         else
+             PTGDBTableCellStyle(tbl.ptablestyle.tblformat.parray)^.Width:=SysVar.DSGN.DSGN_LeaderDefaultWidth^;
+  tbl.vp.Layer:=vp.Layer;
+  tbl.Build(drawing);
+
+
+  if pdev=nil then
+  begin
+  tv:=uzegeometry.vectordot(VertexSub(mainline.CoordInWCS.lEnd,mainline.CoordInWCS.lBegin),Local.basis.OZ);
+  tv:=uzegeometry.NormalizeVertex(tv);
+  tv:=uzegeometry.VertexMulOnSc(tv,scale);
+
+  if pcable<>nil then
+                begin
+                     tv2:=GetDirInPoint(pcable^.VertexArrayInWCS,mainline.CoordInWCS.lBegin,false);
+                     //tv3:=uzegeometry.vectordot(tv2,VertexSub(mainline.CoordInWCS.lEnd,mainline.CoordInWCS.lBegin));
+                     if {tv3.z}scalardot(tv2,VertexSub(mainline.CoordInWCS.lEnd,mainline.CoordInWCS.lBegin))>0 then
+                                    tv2:=uzegeometry.vectordot(tv2,Local.basis.OZ)
+                                else
+                                    tv2:=uzegeometry.vectordot(Local.basis.OZ,tv2);
+                     //tv2:=uzegeometry.vectordot(tv2,Local.OZ);
+                     tv2:=uzegeometry.NormalizeVertex(tv2);
+                     tv2:=uzegeometry.VertexMulOnSc(tv2,scale);
+
+                     tv:=vertexadd(tv2,tv);
+                     tv:=uzegeometry.NormalizeVertex(tv);
+                     tv:=uzegeometry.VertexMulOnSc(tv,scale);
+
+                     //tv:=tv2;
+                end;
+
+  end
+  else tv:=nulvertex;
+  //MarkLine.done;
+  //MarkLine.init(@self,vp.Layer,vp.LineWeight,VertexSub(MainLine.CoordInOCS.lBegin,tv),VertexAdd(MainLine.CoordInOCS.lBegin,tv));
+  CopyVPto(MarkLine);
+  //MarkLine.vp.Layer:=vp.Layer;
+  //MarkLine.vp.LineWeight:=vp.LineWeight;
+  MarkLine.CoordInOCS.lBegin:=VertexSub(MainLine.CoordInOCS.lBegin,tv);
+  MarkLine.CoordInOCS.lEnd:=VertexAdd(MainLine.CoordInOCS.lBegin,tv);
+
+  MarkLine.FormatEntity(drawing,dc);
+
+  tbl.Local.P_insert:=mainline.CoordInOCS.lEnd;
+  if AutoHAlaign then begin
+  if VertexSub(mainline.CoordInWCS.lEnd,mainline.CoordInWCS.lBegin).x<=0 then
+  tbl.Local.P_insert.x:=mainline.CoordInOCS.lEnd.x-tbl.w;
+  end else begin
+  case HorizontalAlign of
+  THAlign.HALeft:;
+  THAlign.HAMidle:tbl.Local.P_insert.x:=mainline.CoordInOCS.lEnd.x-tbl.w/2;
+  THAlign.HARight:tbl.Local.P_insert.x:=mainline.CoordInOCS.lEnd.x-tbl.w;
+  end
+  end;
+  if AutoVAlaign then begin
+  if VertexSub(mainline.CoordInWCS.lEnd,mainline.CoordInWCS.lBegin).y>=0 then
+  tbl.Local.P_insert.y:=mainline.CoordInOCS.lEnd.y+tbl.h;
+  end else begin
+  case VerticalAlign of
+  TVAlign.VATop:;
+  TVAlign.VAMidle:tbl.Local.P_insert.y:=mainline.CoordInOCS.lEnd.y+tbl.h/2;
+  TVAlign.VABottom:tbl.Local.P_insert.y:=mainline.CoordInOCS.lEnd.y+tbl.h;
+  end
+  end;
+  tbl.FormatEntity(drawing,dc);
+  ConstObjArray.free;
+  if pdev<>nil then
+  begin
+  pentvarext:=self.GetExtension<TVariablesExtender>;
+  if pentvarext<>nil then begin
+    pvNote:=pentvarext.entityunit.FindVariable('NOTE_Note');
+    pvNoteFormat:=pentvarext.entityunit.FindVariable('NOTE_NoteFormat');
+  end else begin
+    pvNote:=nil;
+    pvNoteFormat:=nil;
+  end;
+  if (pvNote<>nil)and(pvNoteFormat<>nil) then
+    pstring(pvNote^.data.Addr.Instance)^:=textformat(pstring(pvNoteFormat^.data.Addr.Instance)^,SPFSources.GetFull,pdev);
+  if (pvNote<>nil)and(pstring(pvNote^.data.Addr.Instance)^<>'') then
+    s:={pstring(pvNote^.Instance)^}pvNote^.data.PTD.GetValueAsString(pvNote^.data.Addr.Instance)
+  else begin
+    s:='';
+    pentvarext:=pdev^.GetExtension<TVariablesExtender>;
+    //pvn:=PTEntityUnit(pdev^.ou.Instance)^.FindVariable('NMO_Name');
+    pvn:=pentvarext.entityunit.FindVariable('NMO_Name');
+    if pvn<>nil then
+    begin
+         s:=pvn^.data.PTD.GetValueAsString(pvn^.data.Addr.Instance);
+         //s:=pstring(pvn^.Instance)^;
+    end;
+    //pvn:=PTEntityUnit(pdev^.ou.Instance)^.FindVariable('Text');
+    pvn:=pentvarext.entityunit.FindVariable('Text');
+    if pvn<>nil then
+    begin
+         s:=s+{pstring(pvn^.Instance)^}pvn^.data.PTD.GetValueAsString(pvn^.data.Addr.Instance);;
+    end;
+  end;
+  if s<>'' then
+  begin
+  ptext:=pointer(self.ConstObjArray.CreateInitObj(GDBMTextID,@self));
+  ptext.vp.Layer:=vp.Layer;
+  ptext.Template:=UTF8ToString({Tria_AnsiToUtf8}(s));
+  ptext.Local.P_insert:=tbl.Local.P_insert;
+  ptext.Local.P_insert.y:=ptext.Local.P_insert.y+1.5*scale;
+  ptext.textprop.justify:=jsbl;
+  ptext.TXTStyle:=pointer(drawing.GetTextStyleTable^.getDataMutable(0));
+  if VertexSub(mainline.CoordInWCS.lEnd,mainline.CoordInWCS.lBegin).x<=0 then begin
+    ptext.Local.P_insert.x:= ptext.Local.P_insert.x+tbl.w;
+    textpoint:=ptext.Local.P_insert;
+    ptext.Local.P_insert.x:= ptext.Local.P_insert.x-textoffset;
+    ptext.textprop.justify:=jsbr;
+  end else begin
+    textpoint:=ptext.Local.P_insert;
+    ptext.Local.P_insert.x:=ptext.Local.P_insert.x+textoffset;
+  end;
+  ptext.textprop.size:=2.5*scale;
+  ptext.FormatEntity(drawing,dc);
+
+  pl:=pointer(self.ConstObjArray.CreateInitObj(GDBlineID,@self));
+  pl.vp.Layer:=vp.Layer;
+  pl.CoordInOCS.lBegin:=textpoint;
+  pl.CoordInOCS.lBegin.y:=pl.CoordInOCS.lBegin.y-0.5*scale;
+  pl.CoordInOCS.lEnd:=pl.CoordInOCS.lBegin;
+  pl.CoordInOCS.lEnd.y:=pl.CoordInOCS.lEnd.y-1*scale;
+  pl.FormatEntity(drawing,dc);
+  pl:=pointer(self.ConstObjArray.CreateInitObj(GDBlineID,@self));
+  pl.vp.Layer:=vp.Layer;
+  pl.CoordInOCS.lBegin:=textpoint;
+  pl.CoordInOCS.lBegin.y:=pl.CoordInOCS.lBegin.y-0.5*scale;
+  pl.CoordInOCS.lEnd:=pl.CoordInOCS.lBegin;
+  if VertexSub(mainline.CoordInWCS.lEnd,mainline.CoordInWCS.lBegin).x>0 then
+                           pl.CoordInOCS.lEnd.x:=pl.CoordInOCS.lEnd.x+ptext.obj_width*ptext.textprop.size*ptext.TXTStyle.prop.wfactor +2*textoffset
+                       else
+                           pl.CoordInOCS.lEnd.x:=pl.CoordInOCS.lEnd.x-ptext.obj_width*ptext.textprop.size*ptext.TXTStyle.prop.wfactor-2*textoffset;
+  pl.FormatEntity(drawing,dc);
+  end;
+
+  end;
+  inherited;
+
+  CodePage:=TCP;
+  objects.Clear;
+  objects.Done;
+  buildgeometry(drawing);
+  if assigned(EntExtensions)then
+  EntExtensions.RunOnAfterEntityFormat(@self,drawing,DC);
 end;
 function GDBObjElLeader.select(var SelectedObjCount:Integer;s2s:TSelect2Stage):Boolean;
 //var tdesc:pselectedobjdesc;

@@ -32,17 +32,17 @@ uses
 resourcestring
   rsLoadDXFFile='Load DXF file';
 type
-   TCreateExtLoadData=function:pointer;
-   TProcessExtLoadData=procedure(peld:pointer);
-   DXFEntDesc=record
-     UCASEEntName:String;
-   end;
-   TLongProcessIndicator=Procedure(a:integer) of object;
+  TCreateExtLoadData=function:pointer;
+  TProcessExtLoadData=procedure(peld:pointer);
+  DXFEntDesc=record
+    UCASEEntName:String;
+  end;
+  TLongProcessIndicator=Procedure(a:integer) of object;
 const
-     IgnoredDXFEntsArray:array [0..1] of DXFEntDesc=(
-       (UCASEEntName:'HATCH'),
-       (UCASEEntName:'ACAD_PROXY_ENTITY')
-     );
+  IgnoredDXFEntsArray:array [0..1] of DXFEntDesc=(
+    (UCASEEntName:'HATCH'),
+    (UCASEEntName:'ACAD_PROXY_ENTITY')
+  );
 
 { todo: вернуть как было после https://gitlab.com/freepascal.org/fpc/source/-/issues/40073
 -     IgnoredDXFEntsArray:array of DXFEntDesc=[
@@ -51,15 +51,16 @@ const
         (UCASEEntName:'ACAD_PROXY_ENTITY')
 -     ];
 +     );}
-var FOC:Integer;
-    CreateExtLoadData:TCreateExtLoadData=nil;
-    ClearExtLoadData:TProcessExtLoadData=nil;
-    FreeExtLoadData:TProcessExtLoadData=nil;
-procedure addfromdxf(const AFileName: String;var ZCDCtx:TZDrawingContext;const LogIntf:TZELogProc=nil);
-function savedxf2000(const SavedFileName:String; const TemplateFileName:String;var drawing:TSimpleDrawing):boolean;
-procedure saveZCP(const name: String;var drawing:TSimpleDrawing);
-procedure LoadZCP(const name: String;var drawing:TSimpleDrawing);
+var
+  CreateExtLoadData:TCreateExtLoadData=nil;
+  ClearExtLoadData:TProcessExtLoadData=nil;
+  FreeExtLoadData:TProcessExtLoadData=nil;
+
+function AddFromDXF(const AFileName: String;var dwgCtx:TZDrawingContext;const LogIntf:TZELogProc=nil):TDXFHeaderInfo;
+function savedxf2000(const SavedFileName:String; const TemplateFileName:String;var drawing:TSimpleDrawing;codepage:integer):boolean;
+
 implementation
+var FOC:Integer;
 
 function IsIgnoredEntity(const name:String):Integer;
 var
@@ -106,446 +107,370 @@ begin
 end;
 procedure readvariables(var drawing:TSimpleDrawing;var rdr:TZMemReader;var ctstyle:String; var clayer:String;var cltype:String;var cdimstyle:String;LoadMode:TLoadOpt;DWGVarsDict:TString2StringDictionary);
 var
-  {byt: Byte;}
   s: String;
-  {error: Integer;}
 begin
-     if LoadMode=TLOLoad then
-     begin
-     DWGVarsDict.mygetvalue('$CLAYER',clayer);
-     DWGVarsDict.mygetvalue('$TEXTSTYLE',ctstyle);
-     DWGVarsDict.mygetvalue('$DIMSTYLE',cdimstyle);
-     DWGVarsDict.mygetvalue('$CELTYPE',cltype);
-     //if sysvar.DWG.DWG_CLinew<>nil then
-       if DWGVarsDict.mygetvalue('$CELWEIGHT',s) then
-         drawing.CurrentLineW:=strtoint(s);//sysvar.DWG.DWG_CLinew^:=strtoint(s);
-     //if sysvar.DWG.DWG_DrawMode<>nil then
-       if DWGVarsDict.mygetvalue('$LWDISPLAY',s) then
-         case strtoint(s) of
-             1:drawing.LWDisplay:=true;//sysvar.DWG.DWG_DrawMode^ := true;
-             0:drawing.LWDisplay:=false;//sysvar.DWG.DWG_DrawMode^ := false;
-         end;
-     //if sysvar.DWG.DWG_LTScale<>nil then
-       if DWGVarsDict.mygetvalue('$LTSCALE',s) then
-         drawing.LTScale:=strtofloat(s);//sysvar.DWG.DWG_LTScale^ := strtofloat(s);
-     //if sysvar.DWG.DWG_CLTScale<>nil then
-       if DWGVarsDict.mygetvalue('$CELTSCALE',s) then
-         drawing.CLTScale:=strtofloat(s);//sysvar.DWG.DWG_CLTScale^ := strtofloat(s);
-     //if sysvar.DWG.DWG_CColor<>nil then
-       if DWGVarsDict.mygetvalue('$CECOLOR',s) then
-         drawing.CColor:=strtoint(s);//sysvar.DWG.DWG_CColor^ := strtoint(s);
-     //if sysvar.DWG.DWG_LUnits<>nil then
-       if DWGVarsDict.mygetvalue('$LUNITS',s) then
-         drawing.LUnits:=TLUnits(strtoint(s)-1);//sysvar.DWG.DWG_LUnits^ := TLUnits(strtoint(s)-1);
-     //if sysvar.DWG.DWG_LUPrec<>nil then
-       if DWGVarsDict.mygetvalue('$LUPREC',s) then
-         drawing.LUPrec:=TUPrec(strtoint(s));//sysvar.DWG.DWG_LUPrec^ := TUPrec(strtoint(s));
-     //if sysvar.DWG.DWG_AUnits<>nil then
-       if DWGVarsDict.mygetvalue('$AUNITS',s) then
-         drawing.AUnits:=TAUnits(strtoint(s));//sysvar.DWG.DWG_AUnits^ := TAUnits(strtoint(s));
-     //if sysvar.DWG.DWG_AUPrec<>nil then
-       if DWGVarsDict.mygetvalue('$AUPREC',s) then
-         drawing.AUPrec:=TUPrec(strtoint(s));//sysvar.DWG.DWG_AUPrec^ := TUPrec(strtoint(s));
-     //if sysvar.DWG.DWG_AngDir<>nil then
-       if DWGVarsDict.mygetvalue('$ANGDIR',s) then
-         drawing.AngDir:=TAngDir(strtoint(s));//sysvar.DWG.DWG_AngDir^ := TAngDir(strtoint(s));
-     //if sysvar.DWG.DWG_AngBase<>nil then
-       if DWGVarsDict.mygetvalue('$ANGBASE',s) then
-         drawing.AngBase:=strtofloat(s);//sysvar.DWG.DWG_AngBase^ := strtofloat(s);
-     //if sysvar.DWG.DWG_UnitMode<>nil then
-       if DWGVarsDict.mygetvalue('$UNITMODE',s) then
-         drawing.UnitMode:=TUnitMode(strtoint(s));//sysvar.DWG.DWG_UnitMode^ := TUnitMode(strtoint(s));
-     //if sysvar.DWG.DWG_InsUnits<>nil then
-       if DWGVarsDict.mygetvalue('$INSUNITS',s) then
-         drawing.InsUnits:=TInsUnits(strtoint(s));//sysvar.DWG.DWG_InsUnits^ := TInsUnits(strtoint(s));
-     //if sysvar.DWG.DWG_TextSize<>nil then
-       if DWGVarsDict.mygetvalue('$TEXTSIZE',s) then
-         drawing.TextSize:=strtofloat(s);//sysvar.DWG.DWG_TextSize^ := strtofloat(s);
-     end;
+  if LoadMode=TLOLoad then  begin
+    DWGVarsDict.mygetvalue('$CLAYER',clayer);
+    DWGVarsDict.mygetvalue('$TEXTSTYLE',ctstyle);
+    DWGVarsDict.mygetvalue('$DIMSTYLE',cdimstyle);
+    DWGVarsDict.mygetvalue('$CELTYPE',cltype);
+    if DWGVarsDict.mygetvalue('$CELWEIGHT',s) then
+      drawing.CurrentLineW:=strtoint(s);
+    if DWGVarsDict.mygetvalue('$LWDISPLAY',s) then
+      case strtoint(s) of
+        1:drawing.LWDisplay:=true;
+        0:drawing.LWDisplay:=false;
+      end;
+    if DWGVarsDict.mygetvalue('$LTSCALE',s) then
+      drawing.LTScale:=strtofloat(s);
+    if DWGVarsDict.mygetvalue('$CELTSCALE',s) then
+      drawing.CLTScale:=strtofloat(s);
+    if DWGVarsDict.mygetvalue('$CECOLOR',s) then
+      drawing.CColor:=strtoint(s);
+    if DWGVarsDict.mygetvalue('$LUNITS',s) then
+      drawing.LUnits:=TLUnits(strtoint(s)-1);
+    if DWGVarsDict.mygetvalue('$LUPREC',s) then
+      drawing.LUPrec:=TUPrec(strtoint(s));
+    if DWGVarsDict.mygetvalue('$AUNITS',s) then
+      drawing.AUnits:=TAUnits(strtoint(s));
+    if DWGVarsDict.mygetvalue('$AUPREC',s) then
+      drawing.AUPrec:=TUPrec(strtoint(s));
+    if DWGVarsDict.mygetvalue('$ANGDIR',s) then
+      drawing.AngDir:=TAngDir(strtoint(s));
+    if DWGVarsDict.mygetvalue('$ANGBASE',s) then
+      drawing.AngBase:=strtofloat(s);
+    if DWGVarsDict.mygetvalue('$UNITMODE',s) then
+      drawing.UnitMode:=TUnitMode(strtoint(s));
+    if DWGVarsDict.mygetvalue('$INSUNITS',s) then
+      drawing.InsUnits:=TInsUnits(strtoint(s));
+    if DWGVarsDict.mygetvalue('$TEXTSIZE',s) then
+      drawing.TextSize:=strtofloat(s);
+  end;
 end;
-procedure ReadDXFHeader(var rdr:TZMemReader;DWGVarsDict:TString2StringDictionary);
+function ReadDXFHeader(var rdr:TZMemReader;var fileCtx:TIODXFLoadContext):boolean;
 type
-   TDXFHeaderMode=(TDXFHMWaitSection,TDXFHMSection,TDXFHMHeader);
+  TDXFHeaderMode=(TDXFHMWaitSection,TDXFHMSection,TDXFHMHeader);
 const
-   maxlines=9;
+  maxlines=9;
 var
-  group: integer;
+  group,i,vers: integer;
   s,varname: String;
-  {error,}varcount: Integer;
+  varcount: Integer;
   ParseMode:TDXFHeaderMode;
-  //grouppsarray:array[0..maxlines]of integer;
   valuesarray:array[0..maxlines]of string;
   currentindex,maxindex:integer;
-procedure storevariable;
+  ACVERSION,DWGCODEPAGE:boolean;
+
+  function VarStr2Int(APrefiX,AValue:string):integer;
+  var
+    i,d:integer;
+  begin
+    Result:=VarValueWrong;
+    if length(APrefiX)>=length(AValue)then
+      exit;
+    for i:=1 to length(APrefiX) do
+      if APrefiX[i]<>uppercase(AValue[i])then
+        exit;
+    d:=1;
+    for i:=length(AValue) downto length(APrefiX)+1 do begin
+      if (AValue[i]>='0')and(AValue[i]<='9')then begin
+        Result:=Result+(ord(AValue[i])-ord('0'))*d;
+        d:=d*10;
+      end else
+        exit(VarValueWrong);
+    end;
+  end;
+
+  procedure storevariable;
+  begin
+    case currentindex of
+      0:fileCtx.DWGVarsDict.Add(varname,valuesarray[0]);
+      1:fileCtx.DWGVarsDict.Add(varname,valuesarray[0]+'|'+valuesarray[1]);
+      else fileCtx.DWGVarsDict.Add(varname,valuesarray[0]+'|'+valuesarray[1]+'|'+valuesarray[2]);
+    end;
+
+    if not ACVERSION then
+      if varname=dxfVar_ACADVER then begin
+        fileCtx.Header.iVersion:=VarStr2Int('AC',valuesarray[0]);
+        fileCtx.Header.Version:=ACVer2DXF_ACVer(fileCtx.Header.iVersion);
+        ACVERSION:=true;
+      end;
+
+    if not DWGCODEPAGE then
+      if varname=dxfVar_DWGCODEPAGE then begin
+        fileCtx.Header.iDWGCodePage:=VarStr2Int('ANSI_',valuesarray[0]);
+        fileCtx.Header.DWGCodePage:=SysCP2ACCP(fileCtx.Header.iDWGCodePage);
+        DWGCODEPAGE:=true;
+      end;
+
+    currentindex:=-1;
+  end;
+
+  procedure processvalue(const group:integer;const value:String);
+  begin
+    inc(currentindex);
+    if currentindex>maxindex then
+      maxindex:=currentindex;
+    valuesarray[currentindex]:={dxfDeCodeString}(value{,fileCtx.Header});
+  end;
+
+  procedure freearrays;
+  var
+    i:integer;
+  begin
+    for i:=0 to maxindex do
+      valuesarray[i]:='';
+  end;
+
 begin
-     case currentindex of
-     0:DWGVarsDict.Add(varname,valuesarray[0]);
-     1:DWGVarsDict.Add(varname,valuesarray[0]+'|'+valuesarray[1]);
-     else DWGVarsDict.Add(varname,valuesarray[0]+'|'+valuesarray[1]+'|'+valuesarray[2]);
-     end;
-     currentindex:=-1;
-end;
-procedure processvalue(const group:integer;const value:String);
-begin
-     inc(currentindex);
-     if currentindex>maxindex then
-                                  maxindex:=currentindex;
-     //grouppsarray[currentindex]:=group;
-     valuesarray[currentindex]:=value;
-end;
-procedure freearrays;
-var
-   i:integer;
-begin
-     for i:=0 to maxindex do
-                            valuesarray[i]:='';
-end;
-begin
+  result:=false;
+  ACVERSION:=false;
+  DWGCODEPAGE:=false;
+  fileCtx.Header.DWGCodePage:=ZCCodePage2ACDWGCodePage(sysvarSysDWG_CodePage);
+  fileCtx.Header.iDWGCodePage:=ZCCodePage2SysCP(sysvarSysDWG_CodePage);
+  fileCtx.Header.Version:=AC1009;
+  fileCtx.Header.iVersion:=1009;
+
   ParseMode:=TDXFHMWaitSection;
   varcount:=0;
   currentindex:=-1;
   maxindex:=currentindex;
   try
-  while not rdr.EOF do
-  begin
-    group:=rdr.ParseInteger;
-    (*s := rdr.ParseString;
-    val(s, group, error);
-    if error <> 0 then
-      zDebugLn('{EM}ReadDXFHeader wrong group code');*)
-    s := rdr.ParseString;
-    if group<>999 then
-    begin
-    case ParseMode of
-    TDXFHMWaitSection:begin
-                           if uppercase(s)=dxfName_SECTION then
-                                                             begin
-                                                                  ParseMode:=TDXFHMSection;
-                                                             end
-                                                            else
-                                                                zDebugLn('{EM}ReadDXFHeader error');
-                      end;
-        TDXFHMSection:begin
-                           if uppercase(s)=dxfName_HEADER then
-                                                            begin
-                                                              ParseMode:=TDXFHMHeader;
-                                                            end
-                                                          else
-                                                            zDebugLn('{EM}ReadDXFHeader error');
-                      end;
-         TDXFHMHeader:begin
-                           if group=0 then
-                           if uppercase(s)=dxfName_ENDSEC then
-                                                              exit;
-                           if group=9 then
-                                          begin
-                                               if varcount>0 then
-                                                                 storevariable;
-                                               varname:=s;
-                                               inc(varcount);
-                                          end
-                                      else
-                                          begin
-                                               processvalue(group,s);
-                                          end
-                              end;
-    end;{case}
-    end
-       else
-           begin
-                zDebugLn('{IH}Found dxf comment "%s",[s]');
-           end;
-    end;
-    finally
+    while not rdr.EOF do begin
+      group:=rdr.ParseInteger;
+      s:=rdr.ParseString;
+      s:=dxfDeCodeString(s,fileCtx.Header);
+      if group<>999 then begin
+        case ParseMode of
+          TDXFHMWaitSection:begin
+            if uppercase(s)=dxfName_SECTION then begin
+              ParseMode:=TDXFHMSection;
+            end else begin
+              zDebugLn('{W}ReadDXFHeader:No header found');
+              exit;
+            end;
+          end;
+          TDXFHMSection:begin
+            if uppercase(s)=dxfName_HEADER then begin
+              ParseMode:=TDXFHMHeader;
+              result:=true;
+            end else begin
+              zDebugLn('{W}ReadDXFHeader:No header found');
+              exit;
+            end;
+          end;
+          TDXFHMHeader:begin
+            if group=0 then
+              if uppercase(s)=dxfName_ENDSEC then begin
+                if varcount>0 then
+                  storevariable;
+                exit;
+              end;
+            if group=9 then begin
+              if varcount>0 then
+                storevariable;
+              varname:=s;
+              inc(varcount);
+            end else begin
+              processvalue(group,s);
+            end
+          end;
+        end;{case}
+      end else
+        zDebugLn('{IH}Found dxf comment "%s"',[s]);
+      end;
+  finally
     freearrays;
-  end;
+    if not ACVERSION then
+      fileCtx.Header.iVersion:=VarValueWrong;
+    if not DWGCODEPAGE then
+      fileCtx.Header.iDWGCodePage:=VarValueWrong;
+   end;
 end;
 
 function GoToDXForENDTAB(var rdr:TZMemReader; fcode: Integer; const fname: String):boolean;
 var
-  byt: Byte;
-  s: String;
-  //error: Integer;
+  byt:Byte;
+  s:String;
 begin
   result:=false;
-  while not rdr.EOF do
-  begin
+  while not rdr.EOF do begin
     byt:=rdr.ParseInteger;
-    //s := rdr.ParseString;
-    //val(s, byt, error);
-    //if error <> 0 then
-    //  s := s{чето тут не так};
-    s := rdr.ParseString;
-    if (byt = fcode) and (s = fname) then
-                                         begin
-                                              result:=true;
-                                              exit;
-                                         end;
-    if (byt = 0) and (uppercase(s) = dxfName_ENDTAB) then
-                                         begin
-                                              exit;
-                                         end;
+    s:=rdr.ParseString;
+    if(byt=fcode)and(s=fname)then
+      exit(true);
+    if(byt=0)and(uppercase(s)=dxfName_ENDTAB) then
+      exit;
   end;
 end;
 procedure addentitiesfromdxf(var rdr:TZMemReader; const exitString: String;owner:PGDBObjSubordinated;var drawing:TSimpleDrawing;DC:TDrawContext;var context:TIODXFLoadContext);
 var
-//  byt,LayerColor: Integer;
-  s{, sname, sx1, sy1, sz1,scode,LayerName}: String;
-//  ErrorCode,GroupCode: Integer;
-group:integer;
-objid: Integer;
+  s: String;
+  group:integer;
+  objid: Integer;
   pobj,postobj: PGDBObjEntity;
-//  tp: PGDBObjBlockdef;
   newowner:PGDBObjSubordinated;
   m4:DMatrix4D;
   trash:boolean;
-  //additionalunit:TUnit;
   PExtLoadData:Pointer;
   EntInfoData:TEntInfoData;
-  //pentvarext,ppostentvarext:TVariablesExtender;
   bylayerlt:Pointer;
   lph:TLPSHandle;
 begin
   s:='';
   lph:=lps.StartLongProcess('addentitiesfromdxf',@rdr,rdr.Size);
   if Assigned(CreateExtLoadData) then
-                                     PExtLoadData:=CreateExtLoadData()
-                                 else
-                                     PExtLoadData:=nil;
-  {additionalunit.init('temparraryunit');
-  additionalunit.InterfaceUses.addnodouble(@SysUnit);}
+    PExtLoadData:=CreateExtLoadData()
+  else
+    PExtLoadData:=nil;
   group:=-1;
   bylayerlt:=drawing.LTypeStyleTable.getAddres('ByLayer');
-  while (not rdr.EOF) and (s <> exitString) do
-  begin
+  while (not rdr.EOF) and (s <> exitString) do begin
     lps.ProgressLongProcess(lph,rdr.CurrentPos);
-    //if assigned(ProcessLongProcessProc) then
-    //                                        ProcessLongProcessProc(rdr.ReadPos);
     s := rdr.ParseString;
-    if (group=0)and(DXFName2EntInfoData.MyGetValue(s,EntInfoData)) then
-    //objid:=entname2GDBID(s);
-    //if (objid>0)and(group=0) then
-    begin
-    if owner <> nil then
-      begin
-        zTraceLn('{D+}[DXF_CONTENTS]AddEntitiesFromDXF.Found primitive %s',[s]);
-        pobj := EntInfoData.AllocAndInitEntity(nil);
-        //pobj := {po^.CreateInitObj(objid,owner)}CreateInitObjFree(objid,nil);
-        PGDBObjEntity(pobj)^.LoadFromDXF(rdr,{@additionalunit}PExtLoadData,drawing);
-        if (PGDBObjEntity(pobj)^.vp.Layer=@DefaultErrorLayer)or(PGDBObjEntity(pobj)^.vp.Layer=nil) then
-                                                                 PGDBObjEntity(pobj)^.vp.Layer:=drawing.LayerTable.GetSystemLayer;
-        if (PGDBObjEntity(pobj)^.vp.LineType=nil) then
-                                                      PGDBObjEntity(pobj)^.vp.LineType:={drawing.LTypeStyleTable.getAddres('ByLayer')}bylayerlt;
-        if assigned(PGDBObjEntity(pobj)^.EntExtensions) then
-                                                            PGDBObjEntity(pobj)^.EntExtensions.RunSupportOldVersions(pobj,drawing);
-        pointer(postobj):=PGDBObjEntity(pobj)^.FromDXFPostProcessBeforeAdd({@additionalunit}PExtLoadData,drawing);
-        trash:=false;
-        if postobj=nil  then
-                            begin
-                                newowner:=owner;
-                                if PGDBObjEntity(pobj)^.PExtAttrib<>nil then
-                                begin
-                                     if PGDBObjEntity(pobj)^.PExtAttrib^.Handle>200 then
-                                                                                      begin
-                                                                                      context.h2p.Add(PGDBObjEntity(pobj)^.PExtAttrib^.Handle,pobj);
-                                                                                      context.h2p.Add(PGDBObjEntity(pobj)^.PExtAttrib^.dwgHandle,pobj);
-                                                                                      end;
-                                                                                      //pushhandle(phandlearray,PGDBObjEntity(pobj)^.PExtAttrib^.Handle,PtrInt(pobj));
-                                     if PGDBObjEntity(pobj)^.PExtAttrib^.OwnerHandle>200 then
-                                                                                      newowner:=context.h2p.MyGetValue(PGDBObjEntity(pobj)^.PExtAttrib^.OwnerHandle);
-                                                                                      //newowner:=pointer(getnevhandleWithNil(phandlearray,PGDBObjEntity(pobj)^.PExtAttrib^.OwnerHandle));
-                                     if PGDBObjEntity(pobj)^.PExtAttrib^.OwnerHandle=h_trash then
-                                                                                      trash:=true;
-
-
-                                end;
-                                if newowner=nil then
-                                                    begin
-                                                         zDebugLn('{EH}Warning! OwnerHandle $'+inttohex(PGDBObjEntity(pobj)^.PExtAttrib^.OwnerHandle,8)+' not found');
-                                                         //historyoutstr('Warning! OwnerHandle $'+inttohex(PGDBObjEntity(pobj)^.PExtAttrib^.OwnerHandle,8)+' not found');
-                                                         newowner:=owner;
-                                                    end;
-
-                                 if not trash then
-                                begin
-                                if (newowner<>owner) then
-                                begin
-                                     PGDBObjEntity(newowner)^.CalcObjMatrix(@drawing);
-                                     m4:=PGDBObjEntity(newowner)^.getmatrix^;
-                                     MatrixInvert(m4);
-                                     //pobj^.Format;
-                                     pobj^.CalcObjMatrix(@drawing);
-                                     pobj^.transform(m4);
-                                end
-                                else
-                                    pobj^.CalcObjMatrix(@drawing);
-                                end;
-                                if not trash then
-                                begin
-                                 newowner^.AddMi(@pobj);
-                                    if foc=0 then
-                                                 begin
-                                                      PGDBObjEntity(pobj)^.BuildGeometry(drawing);
-                                                      //PGDBObjEntity(pobj)^.Format;
-                                                      PGDBObjEntity(pobj)^.FormatAfterDXFLoad(drawing,dc);
-                                                      PGDBObjEntity(pobj)^.FromDXFPostProcessAfterAdd;
-                                                 end;
-                                end
-                                   else
-                                       begin
-                                 pobj^.done;
-                                 Freemem(pointer(pobj));
-
-                                       end;
-
-                            end
-                        else
-                            begin
-                                newowner:=owner;
-                                if PGDBObjEntity(pobj)^.PExtAttrib<>nil then
-                                begin
-                                     if PGDBObjEntity(pobj)^.PExtAttrib^.OwnerHandle>200 then
-                                                                                      newowner:=context.h2p.MyGetValue(PGDBObjEntity(pobj)^.PExtAttrib^.OwnerHandle);
-                                                                                      //newowner:=pointer(getnevhandleWithNil(phandlearray,PGDBObjEntity(pobj)^.PExtAttrib^.OwnerHandle));
-                                end;
-                                if newowner<>nil then
-                                begin
-                                if PGDBObjEntity(pobj)^.PExtAttrib<>nil then
-                                begin
-                                     if PGDBObjEntity(pobj)^.PExtAttrib^.Handle>200 then
-                                                                                      begin
-                                                                                      context.h2p.AddOrSetValue(PGDBObjEntity(pobj)^.PExtAttrib^.Handle,postobj);
-                                                                                      end;
-                                     context.h2p.Add(PGDBObjEntity(pobj)^.PExtAttrib^.dwgHandle,postobj);
-                                                                                      //pushhandle(phandlearray,PGDBObjEntity(pobj)^.PExtAttrib^.Handle,PtrInt(postobj));
-                                end;
-//                                if newowner=pointer($ffffffff) then
-//                                                           newowner:=newowner;
-                                if newowner<>owner then
-                                begin
-                                     m4:=PGDBObjEntity(newowner)^.getmatrix^;
-                                     MatrixInvert(m4);
-                                     postobj^.FormatEntity(drawing,dc);
-                                     postobj^.transform(m4);
-                                end;
-
-                                 newowner^.AddMi(@postobj);
-                                 if assigned(pobj^.EntExtensions)then
-                                                                     pobj^.EntExtensions.CopyAllExtToEnt(pobj,postobj);
-                                 {pentvarext:=pobj^.GetExtension(TVariablesExtender);
-                                 ppostentvarext:=postobj^.GetExtension(TVariablesExtender);
-                                 if (pentvarext<>nil)and(ppostentvarext<>nil) then
-                                 pentvarext.entityunit.CopyTo(@ppostentvarext^.entityunit);}
-
-                                 if foc=0 then
-                                              begin
-                                                   PGDBObjEntity(postobj)^.BuildGeometry(drawing);
-                                                   //PGDBObjEntity(postobj)^.Format;
-                                                   PGDBObjEntity(postobj)^.FormatAfterDXFLoad(drawing,dc);
-                                                   PGDBObjEntity(postobj)^.FromDXFPostProcessAfterAdd;
-                                              end;
-                                end
-                                   else
-                                       begin
-//                                       newowner:=newowner;
-                                       {//добавляем потеряный примитив
-                                       owner^.AddMi(@postobj);
-                                           if foc=0 then
-                                                        begin
-                                                        PGDBObjEntity(postobj)^.BuildGeometry(drawing);
-                                                        PGDBObjEntity(postobj)^.FormatAfterDXFLoad(drawing);
-                                                        PGDBObjEntity(postobj)^.FromDXFPostProcessAfterAdd;
-                                                        end;}
-                                       //вытираем потеряный примитив
-                                       postobj^.done;
-                                       Freemem(pointer(postobj));
-                                       end;
-                                   pobj^.done;
-                                   Freemem(pointer(pobj));
-                            end;
+    if (group=0)and(DXFName2EntInfoData.MyGetValue(s,EntInfoData)) then begin
+    if owner <> nil then begin
+      zTraceLn('{D+}[DXF_CONTENTS]AddEntitiesFromDXF.Found primitive %s',[s]);
+      pobj := EntInfoData.AllocAndInitEntity(nil);
+      PGDBObjEntity(pobj)^.LoadFromDXF(rdr,PExtLoadData,drawing,context);
+      if (PGDBObjEntity(pobj)^.vp.Layer=@DefaultErrorLayer)or(PGDBObjEntity(pobj)^.vp.Layer=nil) then
+        PGDBObjEntity(pobj)^.vp.Layer:=drawing.LayerTable.GetSystemLayer;
+      if (PGDBObjEntity(pobj)^.vp.LineType=nil) then
+        PGDBObjEntity(pobj)^.vp.LineType:=bylayerlt;
+      if assigned(PGDBObjEntity(pobj)^.EntExtensions) then
+        PGDBObjEntity(pobj)^.EntExtensions.RunSupportOldVersions(pobj,drawing);
+      pointer(postobj):=PGDBObjEntity(pobj)^.FromDXFPostProcessBeforeAdd(PExtLoadData,drawing);
+      trash:=false;
+      if postobj=nil  then begin
+        newowner:=owner;
+        if PGDBObjEntity(pobj)^.PExtAttrib<>nil then begin
+          if PGDBObjEntity(pobj)^.PExtAttrib^.Handle>200 then begin
+            context.h2p.Add(PGDBObjEntity(pobj)^.PExtAttrib^.Handle,TDXFHandle2ZCObject.TPointerWithType.CreateRec(pobj,OT_Entity));
+            context.h2p.Add(PGDBObjEntity(pobj)^.PExtAttrib^.dwgHandle,TDXFHandle2ZCObject.TPointerWithType.CreateRec(pobj,OT_Entity));
+          end;
+          if PGDBObjEntity(pobj)^.PExtAttrib^.OwnerHandle>200 then
+            newowner:=context.h2p.MyGetValue(PGDBObjEntity(pobj)^.PExtAttrib^.OwnerHandle).p;
+          if PGDBObjEntity(pobj)^.PExtAttrib^.OwnerHandle=h_trash then
+            trash:=true;
+        end;
+        if newowner=nil then begin
+          zDebugLn('{EH}Warning! OwnerHandle $'+inttohex(PGDBObjEntity(pobj)^.PExtAttrib^.OwnerHandle,8)+' not found');
+          newowner:=owner;
+        end;
+        if not trash then begin
+          if (newowner<>owner) then begin
+            PGDBObjEntity(newowner)^.CalcObjMatrix(@drawing);
+            m4:=PGDBObjEntity(newowner)^.getmatrix^;
+            MatrixInvert(m4);
+            pobj^.CalcObjMatrix(@drawing);
+            pobj^.transform(m4);
+          end else
+            pobj^.CalcObjMatrix(@drawing);
+        end;
+        if not trash then begin
+          newowner^.AddMi(@pobj);
+        if foc=0 then begin
+          PGDBObjEntity(pobj)^.BuildGeometry(drawing);
+          PGDBObjEntity(pobj)^.FormatAfterDXFLoad(drawing,dc);
+          PGDBObjEntity(pobj)^.FromDXFPostProcessAfterAdd;
+        end;
+        end else begin
+          pobj^.done;
+          Freemem(pointer(pobj));
+        end;
+      end else begin
+        newowner:=owner;
+        if PGDBObjEntity(pobj)^.PExtAttrib<>nil then begin
+        if PGDBObjEntity(pobj)^.PExtAttrib^.OwnerHandle>200 then
+          newowner:=context.h2p.MyGetValue(PGDBObjEntity(pobj)^.PExtAttrib^.OwnerHandle).p;
+        end;
+        if newowner<>nil then begin
+          if PGDBObjEntity(pobj)^.PExtAttrib<>nil then begin
+            if PGDBObjEntity(pobj)^.PExtAttrib^.Handle>200 then
+              context.h2p.AddOrSetValue(PGDBObjEntity(pobj)^.PExtAttrib^.Handle,TDXFHandle2ZCObject.TPointerWithType.CreateRec(postobj,OT_Entity));
+            context.h2p.Add(PGDBObjEntity(pobj)^.PExtAttrib^.dwgHandle,TDXFHandle2ZCObject.TPointerWithType.CreateRec(postobj,OT_Entity));
+          end;
+          if newowner<>owner then begin
+            m4:=PGDBObjEntity(newowner)^.getmatrix^;
+            MatrixInvert(m4);
+            postobj^.FormatEntity(drawing,dc);
+            postobj^.transform(m4);
+          end;
+          newowner^.AddMi(@postobj);
+          if assigned(pobj^.EntExtensions)then
+            pobj^.EntExtensions.CopyAllExtToEnt(pobj,postobj);
+          if foc=0 then begin
+            PGDBObjEntity(postobj)^.BuildGeometry(drawing);
+            PGDBObjEntity(postobj)^.FormatAfterDXFLoad(drawing,dc);
+            PGDBObjEntity(postobj)^.FromDXFPostProcessAfterAdd;
+          end;
+        end else begin
+          postobj^.done;
+          Freemem(pointer(postobj));
+        end;
+        pobj^.done;
+        Freemem(pointer(pobj));
+      end;
         zTraceLn('{D-}[DXF_CONTENTS]End primitive %s',[s]);
       end;
-      //additionalunit.free;
-        if Assigned(ClearExtLoadData) then
-                                         ClearExtLoadData(PExtLoadData);
-    end
-    else
-    begin
-         if group=0 then
-         begin
+      if Assigned(ClearExtLoadData) then
+        ClearExtLoadData(PExtLoadData);
+    end else begin
+      if group=0 then begin
          objid:=IsIgnoredEntity(s);
          if objid>0 then
          gotodxf(rdr, 0, '');
-         end
-         else
-             if trystrtoint(s,group)then
-                                    else
-                                        group:=-1;
+      end else
+        if trystrtoint(s,group)then else
+          group:=-1;
     end;
   end;
   if Assigned(FreeExtLoadData) then
-                                   FreeExtLoadData(PExtLoadData);
+    FreeExtLoadData(PExtLoadData);
   owner.postload(context);
-  //additionalunit.done;
   lps.EndLongProcess(lph);
 end;
-procedure addfromdxf12(var rdr:TZMemReader; const exitString: String;owner:PGDBObjSubordinated;LoadMode:TLoadOpt;var drawing:TSimpleDrawing;var DC:TDrawContext;const LogProc:TZELogProc=nil);
+procedure AddFromDXF12(var rdr:TZMemReader; const exitString: String;var ZCDCtx:TZDrawingContext;const LogProc:TZELogProc=nil);
 var
-  {byt,}LayerColor: Integer;
-  s, sname{, sx1, sy1, sz1},scode,LayerName: String;
+  LayerColor: Integer;
+  s, sname,scode,LayerName: String;
   ErrorCode,GroupCode: Integer;
-
-//objid: Integer;
-//  pobj,postobj: PGDBObjEntity;
   tp: PGDBObjBlockdef;
-  //phandlearray: pdxfhandlerecopenarray;
   context:TIODXFLoadContext;
   lph:TLPSHandle;
 begin
   s:='';
   lph:=lps.StartLongProcess('addfromdxf12',@rdr,rdr.CurrentPos);
   zDebugLn('{D+}AddFromDXF12');
-  //programlog.LogOutStr('AddFromDXF12',lp_IncPos,LM_Debug);
-  //phandlearray := dxfhandlearraycreate(10000);
-  context.h2p:=TMapHandleToPointer.Create;
-  while (not rdr.EOF) and (s <> exitString) do
-  begin
-  lps.ProgressLongProcess(lph,rdr.CurrentPos);
-  //if assigned(ProcessLongProcessProc)then
-  //ProcessLongProcessProc(rdr.ReadPos);
-
+  context.InitRec;
+  while (not rdr.EOF) and (s <> exitString) do begin
+    lps.ProgressLongProcess(lph,rdr.CurrentPos);
     s := rdr.ParseString;
-    if s = dxfName_Layer then
-    begin
+    if s = dxfName_Layer then begin
       zDebugLn('{D+}[DXF_CONTENTS]Found layer table');
       repeat
-            scode := rdr.ParseString;
-            sname := rdr.ParseString;
-            val(scode,GroupCode,ErrorCode);
+        scode := rdr.ParseString;
+        sname := rdr.ParseString;
+        val(scode,GroupCode,ErrorCode);
       until GroupCode=0;
       repeat
         if sname=dxfName_ENDTAB then system.break;
         if sname<>dxfName_Layer then zDebugLn('{FM}''LAYER'' expected but '''+sname+''' found');
-        //FatalError('''LAYER'' expected but '''+sname+''' found');
         repeat
-              scode := rdr.ParseString;
-              sname := rdr.ParseString;
-              val(scode,GroupCode,ErrorCode);
-              case GroupCode of
-                               2:LayerName:=sname;
-                               62:val(sname,LayerColor,ErrorCode);
-              end;{case}
+          scode := rdr.ParseString;
+          sname := rdr.ParseString;
+          val(scode,GroupCode,ErrorCode);
+          case GroupCode of
+            2:LayerName:=sname;
+            62:val(sname,LayerColor,ErrorCode);
+          end;{case}
         until GroupCode=0;
         zDebugLn('{D}[DXF_CONTENTS]Found layer '+LayerName);
-        drawing.LayerTable.addlayer(LayerName,LayerColor,-3,true,false,true,'',TLOLoad);
+        ZCDCtx.pdrawing^.LayerTable.addlayer(LayerName,LayerColor,-3,true,false,true,'',TLOLoad);
       until sname=dxfName_ENDTAB;
       zDebugLn('{D-}[DXF_CONTENTS]end; {layer table}');
-      //programlog.LogOutStr('end; {layer table}',lp_DecPos,LM_Debug);
-    end
-    else if s = 'BLOCKS' then
-    begin
+    end else if s = 'BLOCKS' then begin
       zDebugLn('{D+}[DXF_CONTENTS]Found block table');
-      //programlog.LogOutStr('Found block table',lp_IncPos,LM_Debug);
       sname := '';
       repeat
         if sname = '  2' then
@@ -556,48 +481,39 @@ begin
           end
           else
           begin
-            tp := drawing.BlockDefArray.create(s);
+            tp := ZCDCtx.pdrawing^.BlockDefArray.create(s);
             zDebugLn('{D+}[DXF_CONTENTS]Found block '+s);
-            //programlog.LogOutFormatStr('Found block "%s"',[s],lp_IncPos,LM_Debug);
-            {addfromdxf12}addentitiesfromdxf(rdr, 'ENDBLK',tp,drawing,dc,context);
+            addentitiesfromdxf(rdr, 'ENDBLK',tp,ZCDCtx.pdrawing^,ZCDCtx.dc,context);
             zDebugLn('{D-}[DXF_CONTENTS]end; {block}');
-            //programlog.LogOutFormatStr('end; {block "%s"}',[s],lp_DecPos,LM_Debug);
           end;
         sname := rdr.ParseString;
         s := rdr.ParseString;
       until (s = dxfName_ENDSEC);
       zDebugLn('{D-}end; {block table}');
-      //programlog.LogOutStr('end; {block table}',lp_DecPos,LM_Debug);
-    end
-    else if s = 'ENTITIES' then
-    begin
-         zDebugLn('{D+}[DXF_CONTENTS]Found entities section');
-         //programlog.LogOutStr('Found entities section',lp_IncPos,LM_Debug);
-         addentitiesfromdxf(rdr, 'EOF',owner,drawing,dc,context);
-         zDebugLn('{D-}[DXF_CONTENTS]end {entities section}');
-         //programlog.LogOutStr('end {entities section}',lp_DecPos,LM_Debug);
+    end else if s='ENTITIES' then begin
+      zDebugLn('{D+}[DXF_CONTENTS]Found entities section');
+      addentitiesfromdxf(rdr,dxf_EOF,ZCDCtx.powner,ZCDCtx.pdrawing^,ZCDCtx.dc,context);
+      zDebugLn('{D-}[DXF_CONTENTS]end {entities section}');
     end;
   end;
-  //Freemem(Pointer(phandlearray));
-  context.h2p.Destroy;
+  context.Done;
   lps.EndLongProcess(lph);
   zDebugLn('{D-}end; {AddFromDXF12}');
-  //programlog.LogOutStr('end; {AddFromDXF12}',lp_DecPos,LM_Debug);
 end;
-procedure ReadLTStyles(var s:ansiString; const cltype:string;var rdr:TZMemReader; const exitString: String;owner:PGDBObjGenericSubEntry;LoadMode:TLoadOpt;var drawing:TSimpleDrawing;var context:TIODXFLoadContext);
+procedure ReadLTStyles(var s:ansiString; const cltype:string;var rdr:TZMemReader; const exitString: String;var ZCDCtx:TZDrawingContext;var context:TIODXFLoadContext);
 var
-   pltypeprop:PGDBLtypeProp;
-   byt: Integer;
-   dashinfo:TDashInfo;
-   shapenumber,stylehandle:TDWGHandle;
-   PSP:PShapeProp;
-   PTP:PTextProp;
-   BShapeProp:BasicSHXDashProp;
-   txtstr:string;
-   TempDouble:Double;
-   flags: Integer;
-   DWGHandle:TDWGHandle;
-   len:double;
+  pltypeprop:PGDBLtypeProp;
+  byt: Integer;
+  dashinfo:TDashInfo;
+  shapenumber,stylehandle:TDWGHandle;
+  PSP:PShapeProp;
+  PTP:PTextProp;
+  BShapeProp:BasicSHXDashProp;
+  txtstr:string;
+  TempDouble:Double;
+  flags: Integer;
+  DWGHandle:TDWGHandle;
+  len:double;
 begin
   DWGHandle:=0;
   dashinfo:=TDIDash;
@@ -608,150 +524,134 @@ begin
   shapenumber:=0;
 
   if GoToDXForENDTAB(rdr, 0, dxfName_LType) then
-  while s = dxfName_LType do
-  begin
-       pltypeprop:=nil;
-       byt := 2;
-       while byt <> 0 do
-       begin
-       byt:=rdr.ParseInteger;
-       {s := rdr.ParseString;
-       byt := strtoint(s);}
-       s := rdr.ParseString;
-       case byt of
-       2:
-         begin
-           len:=0;
-           case drawing.LTypeStyleTable.AddItem(s,pointer(pltypeprop)) of
-                        IsFounded:
-                                  begin
-                                       context.h2p.Add(DWGHandle,pltypeprop);
-                                       if LoadMode=TLOLoad then
-                                       begin
-                                       end
-                                       else
-                                           pltypeprop:=nil;
-                                  end;
-                        IsCreated:
-                                  begin
-                                       pltypeprop^.init(s);
-                                       dashinfo:=TDIDash;
-                                       context.h2p.Add(DWGHandle,pltypeprop);
-                                  end;
-                        IsError:
-                                  begin
-                                  end;
-                end;
-           if drawing.CurrentLType=nil then
-             drawing.CurrentLType:=pltypeprop
-           else if uppercase(s)=uppercase(cltype)then
-             drawing.CurrentLType:=pltypeprop;
-
+    while s = dxfName_LType do begin
+      pltypeprop:=nil;
+      byt := 2;
+      while byt <> 0 do
+      begin
+      byt:=rdr.ParseInteger;
+      s:=rdr.ParseString;
+      case byt of
+        2:begin
+          len:=0;
+          s:=dxfDeCodeString(s,context.Header);
+          case ZCDCtx.PDrawing^.LTypeStyleTable.AddItem(s,pointer(pltypeprop)) of
+            IsFounded:begin
+              context.h2p.Add(DWGHandle,TDXFHandle2ZCObject.TPointerWithType.CreateRec(pltypeprop,OT_LineType));
+              if ZCDCtx.LoadMode=TLOLoad then begin
+              end else
+                pltypeprop:=nil;
+            end;
+            IsCreated:begin
+              pltypeprop^.init(s);
+              dashinfo:=TDIDash;
+              context.h2p.Add(DWGHandle,TDXFHandle2ZCObject.TPointerWithType.CreateRec(pltypeprop,OT_LineType));
+            end;
+            IsError:begin
+            end;
+          end;
+          if ZCDCtx.PDrawing^.CurrentLType=nil then
+            ZCDCtx.PDrawing^.CurrentLType:=pltypeprop
+          else if uppercase(s)=uppercase(cltype)then
+            ZCDCtx.PDrawing^.CurrentLType:=pltypeprop;
          end;
-       3:
-         begin
+        3:begin
+           s:=dxfDeCodeString(s,context.Header);
               if pltypeprop<>nil then
                                 pltypeprop^.desk:=s;
-         end;
-       5:begin
+        end;
+        5:begin
               DWGHandle:=strtoint64('$'+s)
-         end;
-       40:
-         begin
+        end;
+        40:begin
               if pltypeprop<>nil then
               pltypeprop^.LengthDXF:=strtofloat(s);
-         end;
-       49:
-          begin
-               if pltypeprop<>nil then
-               begin
-               case dashinfo of
-               TDIShape:begin
-                             if stylehandle<>0 then
-                             begin
-                                 pointer(psp):=pltypeprop^.shapearray.CreateObject;
-                                 psp^.initnul;
-                                 psp^.param:=BShapeProp.param;
-                                 psp^.Psymbol:=nil;
-                                 psp^.ShapeNum:=shapenumber;
-                                 psp^.param.PStyle:=pointer(stylehandle);
-                                 psp^.param.PstyleIsHandle:=true;
-                                 pltypeprop^.dasharray.PushBackData(dashinfo);
-                             end;
-                        end;
-               TDIText:begin
-                             pointer(ptp):=pltypeprop^.Textarray.CreateObject;
-                             ptp^.initnul;
-                             ptp^.param:=BShapeProp.param;
-                             ptp^.Text:=txtstr;
-                             //ptp^.Style:=;
-                             ptp^.param.PStyle:=pointer(stylehandle);
-                             ptp^.param.PstyleIsHandle:=true;
-                             pltypeprop^.dasharray.PushBackData(dashinfo);
-                        end;
-               { #todo : сменить case на if }
-               TDIDash:;//заглушка на варнинг
-               end;
-                    dashinfo:=TDIDash;
-                    TempDouble:=strtofloat(s);
-                    pltypeprop^.dasharray.PushBackData(dashinfo);
-                    pltypeprop^.strokesarray.PushBackData(TempDouble);
-                    len:=len+abs(TempDouble);
-               if TempDouble>eps then
-                                     begin
-                                          pltypeprop^.LastStroke:=TODILine;
-                                          pltypeprop^.WithoutLines:=false;
-                                     end
-               else if TempDouble<-eps then
-                                 pltypeprop^.LastStroke:=TODIBlank
-               else pltypeprop^.LastStroke:=TODIPoint;
-               if pltypeprop^.FirstStroke=TODIUnknown then
-                                              pltypeprop^.FirstStroke:=pltypeprop^.LastStroke;
-               end;
+        end;
+        49:begin
+          if pltypeprop<>nil then begin
+            case dashinfo of
+              TDIShape:begin
+                if stylehandle<>0 then begin
+                  pointer(psp):=pltypeprop^.shapearray.CreateObject;
+                  psp^.initnul;
+                  psp^.param:=BShapeProp.param;
+                  psp^.Psymbol:=nil;
+                  psp^.ShapeNum:=shapenumber;
+                  psp^.param.PStyle:=pointer(stylehandle);
+                  psp^.param.PstyleIsHandle:=true;
+                  pltypeprop^.dasharray.PushBackData(dashinfo);
+                end;
+              end;
+              TDIText:begin
+                pointer(ptp):=pltypeprop^.Textarray.CreateObject;
+                ptp^.initnul;
+                ptp^.param:=BShapeProp.param;
+                ptp^.Text:=txtstr;
+                ptp^.param.PStyle:=pointer(stylehandle);
+                ptp^.param.PstyleIsHandle:=true;
+                pltypeprop^.dasharray.PushBackData(dashinfo);
+              end;
+              { #todo : сменить case на if }
+              TDIDash:;//заглушка на варнинг
+            end;
+            dashinfo:=TDIDash;
+            TempDouble:=strtofloat(s);
+            pltypeprop^.dasharray.PushBackData(dashinfo);
+            pltypeprop^.strokesarray.PushBackData(TempDouble);
+            len:=len+abs(TempDouble);
+            if TempDouble>eps then begin
+              pltypeprop^.LastStroke:=TODILine;
+              pltypeprop^.WithoutLines:=false;
+            end else if TempDouble<-eps then
+              pltypeprop^.LastStroke:=TODIBlank
+            else pltypeprop^.LastStroke:=TODIPoint;
+            if pltypeprop^.FirstStroke=TODIUnknown then
+              pltypeprop^.FirstStroke:=pltypeprop^.LastStroke;
           end;
-       74:if pltypeprop<>nil then
-          begin
-               flags:=strtoint(s);
-               if (flags and 1)>0 then
-                                      BShapeProp.param.AD:={BShapeProp.param.AD.}TACAbs
-                                  else
-                                      BShapeProp.param.AD:={BShapeProp.param.AD.}TACRel;
-               if (flags and 2)>0 then
-                                      dashinfo:=TDIText;
-               if (flags and 4)>0 then
-                                      dashinfo:=TDIShape;
-
-          end;
-       75:begin
-               shapenumber:=strtoint(s);//
-          end;
-      340:begin
-               if pltypeprop<>nil then
-                                      stylehandle:=strtoint64('$'+s);
-          end;
-      46:begin
-              BShapeProp.param.Height:=strtofloat(s);
-         end;
+        end;
+        74:
+           if pltypeprop<>nil then begin
+             flags:=strtoint(s);
+             if (flags and 1)>0 then
+               BShapeProp.param.AD:={BShapeProp.param.AD.}TACAbs
+             else
+               BShapeProp.param.AD:={BShapeProp.param.AD.}TACRel;
+             if (flags and 2)>0 then
+               dashinfo:=TDIText;
+             if (flags and 4)>0 then
+               dashinfo:=TDIShape;
+           end;
+        75:begin
+          shapenumber:=strtoint(s);//
+        end;
+        340:begin
+          if pltypeprop<>nil then
+            stylehandle:=strtoint64('$'+s);
+        end;
+        46:begin
+          BShapeProp.param.Height:=strtofloat(s);
+        end;
       50:begin
-              BShapeProp.param.Angle:=strtofloat(s);
-         end;
+        BShapeProp.param.Angle:=strtofloat(s);
+      end;
       44:begin
-              BShapeProp.param.X:=strtofloat(s);
-         end;
+        BShapeProp.param.X:=strtofloat(s);
+      end;
       45:begin
-              BShapeProp.param.Y:=strtofloat(s);
-         end;
-      9:begin if pltypeprop<>nil then
-              txtstr:=s;
-         end;
+        BShapeProp.param.Y:=strtofloat(s);
+      end;
+      9:begin
+          if pltypeprop<>nil then
+            txtstr:=s;
+      end;
        end;
        end;
       if assigned(pltypeprop) then
         pltypeprop^.strokesarray.LengthFact:=len;
-  end;
+    end;
   BShapeProp.Done;
 end;
-procedure ReadLayers(var s:ansistring; const clayer:string;var rdr:TZMemReader; const exitString: String;owner:PGDBObjGenericSubEntry;LoadMode:TLoadOpt;var drawing:TSimpleDrawing);
+procedure ReadLayers(var s:ansistring; const clayer:string;var rdr:TZMemReader; const exitString: String;var ZCDCtx:TZDrawingContext;var context:TIODXFLoadContext);
 var
 byt: Integer;
 lname,desk: String;
@@ -774,13 +674,14 @@ begin
       case byt of
         2:begin
           zDebugLn('{D}[DXF_CONTENTS]Found layer  '+s);
+          s:=dxfDeCodeString(s,context.Header);
           lname:=s;
-          player:=drawing.LayerTable.MergeItem(s,LoadMode);
+          player:=ZCDCtx.PDrawing^.LayerTable.MergeItem(s,ZCDCtx.LoadMode);
           if player<>nil then
             player^.init(s);
         end;
         6:if player<>nil then
-          player^.LT:=drawing.LTypeStyleTable.getAddres(s);
+          player^.LT:=ZCDCtx.PDrawing^.LTypeStyleTable.getAddres(dxfDeCodeString(s,context.Header));
         1001:begin
           if s='AcAecLayerStandard' then begin
             s := rdr.ParseString;
@@ -790,7 +691,8 @@ begin
               s := rdr.ParseString;
               byt:=strtoint(s);
               if byt<>0 then begin
-                desk := rdr.ParseString;
+                dxfLoadString(rdr,desk,context.Header);
+                //desk := rdr.ParseString;
                 if player<>nil then
                   player^.desk:=desk;
               end else begin
@@ -809,118 +711,110 @@ begin
         end;
       end;
     end;
-    if drawing.CurrentLayer=nil then
-      drawing.CurrentLayer:=player
-    else if uppercase(lname)=uppercase(clayer)then
-      drawing.CurrentLayer:=player;
+    if ZCDCtx.PDrawing^.CurrentLayer=nil then
+      ZCDCtx.PDrawing^.CurrentLayer:=player
+    else if lname=clayer then
+      ZCDCtx.PDrawing^.CurrentLayer:=player;
   end;
 end;
-procedure ReadTextstyles(var s:ansistring; const ctstyle:string;var rdr:TZMemReader; const exitString: String;owner:PGDBObjGenericSubEntry;LoadMode:TLoadOpt;var drawing:TSimpleDrawing;var context:TIODXFLoadContext;const LogProc:TZELogProc=nil);
+procedure ReadTextstyles(var s:ansistring; const ctstyle:string;var rdr:TZMemReader; const exitString: String;var ZCDCtx:TZDrawingContext;var context:TIODXFLoadContext;const LogProc:TZELogProc=nil);
 var
-   tstyle:GDBTextStyle;
-   ptstyle:PGDBTextStyle;
-   DWGHandle:TDWGHandle;
-   byt: Integer;
-   flags: Integer;
-   FontFile,FontFamily: String;
-   ti:PGDBTextStyle;
-   pltypeprop:PGDBLtypeProp;
-   ir,ir2:itrec;
-   PSP:PShapeProp;
-   PTP:PTextProp;
+  tstyle:GDBTextStyle;
+  ptstyle:PGDBTextStyle;
+  DWGHandle:TDWGHandle;
+  byt: Integer;
+  flags: Integer;
+  FontFile,FontFamily: String;
+  ti:PGDBTextStyle;
+  pltypeprop:PGDBLtypeProp;
+  ir,ir2:itrec;
+  PSP:PShapeProp;
+  PTP:PTextProp;
 begin
   if GoToDXForENDTAB(rdr, 0, dxfName_Style) then
-  while s = dxfName_Style do
-  begin
-    FontFile:='';
-    FontFamily:='';
-    tstyle.name:='';
-    tstyle.pfont:=nil;
-    tstyle.prop.oblique:=0;
-    tstyle.prop.size:=1;
-    DWGHandle:=0;
+    while s = dxfName_Style do begin
+      FontFile:='';
+      FontFamily:='';
+      tstyle.name:='';
+      tstyle.pfont:=nil;
+      tstyle.prop.oblique:=0;
+      tstyle.prop.size:=1;
+      DWGHandle:=0;
 
-    byt := 2;
+      byt := 2;
 
-    while byt <> 0 do
-    begin
-      {s := rdr.ParseString;
-      byt := strtoint(s);}
-      byt:=rdr.ParseInteger;
-      //s := rdr.ParseString;
-      case byt of
-            2:tstyle.name:=rdr.ParseString;
-            5:DWGHandle:=strtoint64('$'+rdr.ParseString);
-           40:tstyle.prop.size:=rdr.ParseDouble;
-           41:tstyle.prop.wfactor:=rdr.ParseDouble;
-           50:tstyle.prop.oblique:=rdr.ParseDouble*pi/180;
-           70:flags:=rdr.ParseInteger;
-            3:FontFile:=rdr.ParseString;
-         1000:FontFamily:=rdr.ParseString;
-         else
-           s := rdr.ParseString;
+      while byt <> 0 do begin
+        byt:=rdr.ParseInteger;
+        case byt of
+              2:dxfLoadString(rdr,tstyle.name,context.Header);//tstyle.name:=rdr.ParseString;
+              5:DWGHandle:=rdr.ParseHexQWord;//strtoint64('$'+rdr.ParseString);
+             40:tstyle.prop.size:=rdr.ParseDouble;
+             41:tstyle.prop.wfactor:=rdr.ParseDouble;
+             50:tstyle.prop.oblique:=rdr.ParseDouble*pi/180;
+             70:flags:=rdr.ParseInteger;
+              3:FontFile:=rdr.ParseString;
+           1000:FontFamily:=rdr.ParseString;
+           else
+             s := rdr.ParseString;
+        end;
       end;
-    end;
-    ti:=nil;
-    if (flags and 1)=0 then begin
-      ti:=drawing.TextStyleTable.FindStyle(tstyle.Name,false);
+      ti:=nil;
+      if (flags and 1)=0 then begin
+        ti:=ZCDCtx.PDrawing^.TextStyleTable.FindStyle(tstyle.Name,false);
+        if ti<>nil then begin
+          if ZCDCtx.LoadMode=TLOLoad then
+            ti:=ZCDCtx.PDrawing^.TextStyleTable.setstyle(tstyle.Name,FontFile,FontFamily,tstyle.prop,false);
+        end else
+          ti:=ZCDCtx.PDrawing^.TextStyleTable.addstyle(tstyle.Name,FontFile,FontFamily,tstyle.prop,false,LogProc);
+      end else begin
+        if ZCDCtx.PDrawing^.TextStyleTable.FindStyle(FontFile,true)<>nil then begin
+          if ZCDCtx.LoadMode=TLOLoad then
+            ti:=ZCDCtx.PDrawing^.TextStyleTable.setstyle(FontFile,FontFile,FontFamily,tstyle.prop,true);
+        end else
+          ti:=ZCDCtx.PDrawing^.TextStyleTable.addstyle(FontFile,FontFile,FontFamily,tstyle.prop,true);
+      end;
       if ti<>nil then begin
-        if LoadMode=TLOLoad then
-          ti:=drawing.TextStyleTable.setstyle(tstyle.Name,FontFile,FontFamily,tstyle.prop,false);
-      end else
-        ti:=drawing.TextStyleTable.addstyle(tstyle.Name,FontFile,FontFamily,tstyle.prop,false,LogProc);
-    end else begin
-      if drawing.TextStyleTable.FindStyle(FontFile,true)<>nil then begin
-        if LoadMode=TLOLoad then
-          ti:=drawing.TextStyleTable.setstyle(FontFile,FontFile,FontFamily,tstyle.prop,true);
-      end else
-        ti:=drawing.TextStyleTable.addstyle(FontFile,FontFile,FontFamily,tstyle.prop,true);
-    end;
-    if ti<>nil then begin
-      context.h2p.Add(DWGHandle,ti);
-      ptstyle:={drawing.TextStyleTable.getelement}(ti);
-      pltypeprop:=drawing.LTypeStyleTable.beginiterate(ir);
-      if pltypeprop<>nil then
-      repeat
-        PSP:=pltypeprop^.shapearray.beginiterate(ir2);
-        if PSP<>nil then
+        context.h2p.Add(DWGHandle,TDXFHandle2ZCObject.TPointerWithType.CreateRec(ti,OT_TextStyle));
+        ptstyle:={drawing.TextStyleTable.getelement}(ti);
+        pltypeprop:=ZCDCtx.PDrawing^.LTypeStyleTable.beginiterate(ir);
+        if pltypeprop<>nil then
         repeat
-          if psp^.param.PstyleIsHandle then
-            if psp^.param.PStyle=pointer(DWGHandle) then begin
-              psp^.param.PStyle:=ptstyle;
-              psp^.FontName:=ptstyle^.FontFile;
-              if assigned(ptstyle^.pfont) then begin
-                psp^.Psymbol:=ptstyle^.pfont^.GetOrReplaceSymbolInfo(integer(psp^.ShapeNum){//-ttf-//,tdinfo});
-                psp^.SymbolName:=psp^.Psymbol^.Name;
+          PSP:=pltypeprop^.shapearray.beginiterate(ir2);
+          if PSP<>nil then
+          repeat
+            if psp^.param.PstyleIsHandle then
+              if psp^.param.PStyle=pointer(DWGHandle) then begin
+                psp^.param.PStyle:=ptstyle;
+                psp^.FontName:=ptstyle^.FontFile;
+                if assigned(ptstyle^.pfont) then begin
+                  psp^.Psymbol:=ptstyle^.pfont^.GetOrReplaceSymbolInfo(integer(psp^.ShapeNum){//-ttf-//,tdinfo});
+                  psp^.SymbolName:=psp^.Psymbol^.Name;
+                end;
               end;
-            end;
-          PSP:=pltypeprop^.shapearray.iterate(ir2);
-        until PSP=nil;
+            PSP:=pltypeprop^.shapearray.iterate(ir2);
+          until PSP=nil;
 
-        PTP:=pltypeprop^.Textarray.beginiterate(ir2);
-        if PTP<>nil then
-        repeat
-          if pTp^.param.PStyle=pointer(DWGHandle) then begin
-            pTp^.param.PStyle:=ptstyle;
-            {pTp^.FontName:=ptstyle^.FontFile;
-            pTp^.Psymbol:=ptstyle^.pfont^.GetOrReplaceSymbolInfo(integer(pTp^.Psymbol));
-            pTp^.SymbolName:=pTp^.Psymbol^.Name;}
-          end;
-          PTP:=pltypeprop^.Textarray.iterate(ir2);
-        until PTP=nil;
-       pltypeprop:=drawing.LTypeStyleTable.iterate(ir);
-      until pltypeprop=nil;
+          PTP:=pltypeprop^.Textarray.beginiterate(ir2);
+          if PTP<>nil then
+          repeat
+            if pTp^.param.PStyle=pointer(DWGHandle) then begin
+              pTp^.param.PStyle:=ptstyle;
+            end;
+            PTP:=pltypeprop^.Textarray.iterate(ir2);
+          until PTP=nil;
+         pltypeprop:=ZCDCtx.PDrawing^.LTypeStyleTable.iterate(ir);
+        until pltypeprop=nil;
     end;
     zDebugLn('{D}[DXF_CONTENTS]Found style  '+tstyle.Name);
-    if drawing.CurrentTextStyle=nil then
-      drawing.CurrentTextStyle:=drawing.TextStyleTable.FindStyle(tstyle.Name,false)
-    else if uppercase(tstyle.Name)=uppercase(ctstyle)then
-      drawing.CurrentTextStyle:=drawing.TextStyleTable.FindStyle(tstyle.Name,false);
+    if ZCDCtx.PDrawing^.CurrentTextStyle=nil then
+      ZCDCtx.PDrawing^.CurrentTextStyle:=ZCDCtx.PDrawing^.TextStyleTable.FindStyle(tstyle.Name,false)
+    else if tstyle.Name=ctstyle then
+      ZCDCtx.PDrawing^.CurrentTextStyle:=ZCDCtx.PDrawing^.TextStyleTable.FindStyle(tstyle.Name,false);
     tstyle.Name:='';
   end;
-  drawing.LTypeStyleTable.format;
+  ZCDCtx.PDrawing^.LTypeStyleTable.format;
 end;
-procedure ReadVport(var s:ansistring;var rdr:TZMemReader; const exitString: String;owner:PGDBObjGenericSubEntry;LoadMode:TLoadOpt;var drawing:TSimpleDrawing);
+procedure ReadVport(var s:ansistring;var rdr:TZMemReader; const exitString: String;var ZCDCtx:TZDrawingContext;var context:TIODXFLoadContext);
 var
    byt: Integer;
    active:boolean;
@@ -953,135 +847,135 @@ begin
              end;
            12:
              begin
-                  if LoadMode=TLOLoad then
+                  if ZCDCtx.LoadMode=TLOLoad then
                   if active then
-                  if @drawing<>nil then
-                  if drawing.pcamera<>nil then
+                  if ZCDCtx.PDrawing<>nil then
+                  if ZCDCtx.PDrawing^.pcamera<>nil then
                   begin
-                       drawing.pcamera^.prop.point.x:=-strtofloat(s);
+                       ZCDCtx.PDrawing^.pcamera^.prop.point.x:=-strtofloat(s);
                   end;
               end;
            22:
              begin
-                  if LoadMode=TLOLoad then
+                  if ZCDCtx.LoadMode=TLOLoad then
                   if active then
-                  if @drawing<>nil then
-                  if drawing.pcamera<>nil then
+                  if ZCDCtx.PDrawing<>nil then
+                  if ZCDCtx.PDrawing^.pcamera<>nil then
                   begin
-                       drawing.pcamera^.prop.point.y:=-strtofloat(s);
+                       ZCDCtx.PDrawing^.pcamera^.prop.point.y:=-strtofloat(s);
                   end;
               end;
            13:
              begin
-                  if LoadMode=TLOLoad then
+                  if ZCDCtx.LoadMode=TLOLoad then
                   if active then
                   //if sysvar.DWG.DWG_Snap<>nil then
                   begin
-                       drawing.Snap.Base.x{sysvar.DWG.DWG_Snap^.Base.x}:=strtofloat(s);
+                       ZCDCtx.PDrawing^.Snap.Base.x{sysvar.DWG.DWG_Snap^.Base.x}:=strtofloat(s);
                   end;
               end;
            23:
              begin
-                  if LoadMode=TLOLoad then
+                  if ZCDCtx.LoadMode=TLOLoad then
                   if active then
                   //if sysvar.DWG.DWG_Snap<>nil then
                   begin
-                       drawing.Snap.Base.y{sysvar.DWG.DWG_Snap^.Base.y}:=strtofloat(s);
+                       ZCDCtx.PDrawing^.Snap.Base.y{sysvar.DWG.DWG_Snap^.Base.y}:=strtofloat(s);
                   end;
               end;
            14:
              begin
-                  if LoadMode=TLOLoad then
+                  if ZCDCtx.LoadMode=TLOLoad then
                   if active then
                   //if sysvar.DWG.DWG_Snap<>nil then
                   begin
-                       drawing.Snap.Spacing.x{sysvar.DWG.DWG_Snap^.Spacing.x}:=strtofloat(s);
+                       ZCDCtx.PDrawing^.Snap.Spacing.x{sysvar.DWG.DWG_Snap^.Spacing.x}:=strtofloat(s);
                   end;
               end;
            24:
              begin
-                  if LoadMode=TLOLoad then
+                  if ZCDCtx.LoadMode=TLOLoad then
                   if active then
                   //if sysvar.DWG.DWG_Snap<>nil then
                   begin
-                       drawing.Snap.Spacing.y{sysvar.DWG.DWG_Snap^.Spacing.y}:=strtofloat(s);
+                       ZCDCtx.PDrawing^.Snap.Spacing.y{sysvar.DWG.DWG_Snap^.Spacing.y}:=strtofloat(s);
                   end;
               end;
            15:
              begin
-                  if LoadMode=TLOLoad then
+                  if ZCDCtx.LoadMode=TLOLoad then
                   if active then
                   //if sysvar.DWG.DWG_GridSpacing<>nil then
                   begin
-                       drawing.GridSpacing.x{sysvar.DWG.DWG_GridSpacing^.x}:=strtofloat(s);
+                       ZCDCtx.PDrawing^.GridSpacing.x{sysvar.DWG.DWG_GridSpacing^.x}:=strtofloat(s);
                   end;
               end;
            25:
              begin
-                  if LoadMode=TLOLoad then
+                  if ZCDCtx.LoadMode=TLOLoad then
                   if active then
                   //if sysvar.DWG.DWG_GridSpacing<>nil then
                   begin
-                       drawing.GridSpacing.y{sysvar.DWG.DWG_GridSpacing^.y}:=strtofloat(s);
+                       ZCDCtx.PDrawing^.GridSpacing.y{sysvar.DWG.DWG_GridSpacing^.y}:=strtofloat(s);
                   end;
               end;
            40:
              begin
-               if LoadMode=TLOLoad then
+               if ZCDCtx.LoadMode=TLOLoad then
                  if active then
-                   if @drawing<>nil then
-                     if drawing.pcamera<>nil then
-                       if drawing.wa<>nil then
-                         if drawing.wa.getviewcontrol<>nil then
-                           drawing.pcamera^.prop.zoom:=(strtofloat(s)/drawing.wa.getviewcontrol.ClientHeight);
+                   if ZCDCtx.PDrawing<>nil then
+                     if ZCDCtx.PDrawing^.pcamera<>nil then
+                       if ZCDCtx.PDrawing^.wa<>nil then
+                         if ZCDCtx.PDrawing^.wa.getviewcontrol<>nil then
+                           ZCDCtx.PDrawing^.pcamera^.prop.zoom:=(strtofloat(s)/ZCDCtx.PDrawing^.wa.getviewcontrol.ClientHeight);
               end;
            41:
              begin
-               if LoadMode=TLOLoad then
+               if ZCDCtx.LoadMode=TLOLoad then
                  if active then
-                   if @drawing<>nil then
-                     if drawing.pcamera<>nil then
-                       if drawing.wa<>nil then
-                         if drawing.wa.getviewcontrol<>nil then
-                           if drawing.wa.getviewcontrol.ClientHeight*strtofloat(s)>drawing.wa.getviewcontrol.ClientWidth then
-                             drawing.pcamera^.prop.zoom:=drawing.pcamera^.prop.zoom*strtofloat(s)*drawing.wa.getviewcontrol.ClientHeight/drawing.wa.getviewcontrol.ClientWidth;
+                   if ZCDCtx.PDrawing<>nil then
+                     if ZCDCtx.PDrawing^.pcamera<>nil then
+                       if ZCDCtx.PDrawing^.wa<>nil then
+                         if ZCDCtx.PDrawing^.wa.getviewcontrol<>nil then
+                           if ZCDCtx.PDrawing^.wa.getviewcontrol.ClientHeight*strtofloat(s)>ZCDCtx.PDrawing^.wa.getviewcontrol.ClientWidth then
+                             ZCDCtx.PDrawing^.pcamera^.prop.zoom:=ZCDCtx.PDrawing^.pcamera^.prop.zoom*strtofloat(s)*ZCDCtx.PDrawing^.wa.getviewcontrol.ClientHeight/ZCDCtx.PDrawing^.wa.getviewcontrol.ClientWidth;
               end;
            71:
              begin
-               if LoadMode=TLOLoad then
+               if ZCDCtx.LoadMode=TLOLoad then
                  if active then
-                   if @drawing<>nil then
-                     if drawing.wa<>nil then
-                       if drawing.wa.getviewcontrol<>nil then begin
+                   if ZCDCtx.PDrawing<>nil then
+                     if ZCDCtx.PDrawing^.wa<>nil then
+                       if ZCDCtx.PDrawing^.wa.getviewcontrol<>nil then begin
                          flags:=strtoint(s);
                          if (flags and 1)<>0 then
-                           drawing.wa.param.projtype:=PROJPerspective
+                           ZCDCtx.PDrawing^.wa.param.projtype:=PROJPerspective
                          else
-                           drawing.wa.param.projtype:=PROJParallel;
+                           ZCDCtx.PDrawing^.wa.param.projtype:=PROJParallel;
                        end;
              end;
            75:
              begin
-                  if LoadMode=TLOLoad then
+                  if ZCDCtx.LoadMode=TLOLoad then
                   if active then
                   //if sysvar.DWG.DWG_SnapGrid<>nil then
                   begin
                        if s<>'0' then
-                                     drawing.SnapGrid{sysvar.DWG.DWG_SnapGrid^}:=true
+                                     ZCDCtx.PDrawing^.SnapGrid{sysvar.DWG.DWG_SnapGrid^}:=true
                                  else
-                                     drawing.SnapGrid{sysvar.DWG.DWG_SnapGrid^}:=false;
+                                     ZCDCtx.PDrawing^.SnapGrid{sysvar.DWG.DWG_SnapGrid^}:=false;
                   end;
              end;
          76:
            begin
-                if LoadMode=TLOLoad then
+                if ZCDCtx.LoadMode=TLOLoad then
                 if active then
                 //if sysvar.DWG.DWG_DrawGrid<>nil then
                 begin
                      if s<>'0' then
-                                   drawing.DrawGrid{sysvar.DWG.DWG_DrawGrid^}:=true
+                                   ZCDCtx.PDrawing^.DrawGrid{sysvar.DWG.DWG_DrawGrid^}:=true
                                else
-                                   drawing.DrawGrid{sysvar.DWG.DWG_DrawGrid^}:=false;
+                                   ZCDCtx.PDrawing^.DrawGrid{sysvar.DWG.DWG_DrawGrid^}:=false;
                 end;
             end;
        end;
@@ -1090,43 +984,49 @@ begin
      end;
      zDebugLn('{D-}[DXF_CONTENTS]end;{ReadVport}');
 end;
-procedure ReadDimStyles(var s:ansistring; const cdimstyle:string;var rdr:TZMemReader; const exitString: String;owner:PGDBObjGenericSubEntry;LoadMode:TLoadOpt;var drawing:TSimpleDrawing;var context:TIODXFLoadContext);
+procedure ReadDimStyles(var s:ansistring; const cdimstyle:string;var rdr:TZMemReader; const exitString: String;var ZCDCtx:TZDrawingContext;var context:TIODXFLoadContext);
 var
-   psimstyleprop:PGDBDimStyle;
-   byt:integer;
-   ReadDimStylesMode:TDimStyleReadMode;
+  psimstyleprop:PGDBDimStyle;
+  byt:integer;
+  ReadDimStylesMode:TDimStyleReadMode;
 begin
-if GoToDXForENDTAB(rdr, 0, dxfName_DIMSTYLE) then
-while s = dxfName_DIMSTYLE do
-begin
-  psimstyleprop:=nil;
-  ReadDimStylesMode:=TDSRM_ACAD;
-  byt := 2;
-  while byt <> 0 do
-  begin
-  {s := rdr.ParseString;
-  byt := strtoint(s);}
-  byt:=rdr.ParseInteger;
-  s := rdr.ParseString;
-  if psimstyleprop=nil then begin
-    if byt=2 then begin
-      psimstyleprop:=drawing.DimStyleTable.MergeItem(s,LoadMode);
-      if psimstyleprop<>nil then begin
-        psimstyleprop^.init(s);
-        psimstyleprop^.Name:=s;
+  if GoToDXForENDTAB(rdr, 0, dxfName_DIMSTYLE) then begin
+    while s = dxfName_DIMSTYLE do begin
+      psimstyleprop:=nil;
+      ReadDimStylesMode:=TDSRM_ACAD;
+      byt := 2;
+      while byt <> 0 do begin
+      {s := rdr.ParseString;
+      byt := strtoint(s);}
+      byt:=rdr.ParseInteger;
+      //s := rdr.ParseString;
+        if psimstyleprop=nil then begin
+          if byt=2 then begin
+            dxfLoadString(rdr,s,context.Header);
+            psimstyleprop:=ZCDCtx.PDrawing^.DimStyleTable.MergeItem(s,ZCDCtx.LoadMode);
+            if psimstyleprop<>nil then begin
+              psimstyleprop^.init(s);
+              psimstyleprop^.Name:=s;
+            end;
+            if ZCDCtx.PDrawing^.CurrentDimStyle=nil then
+              ZCDCtx.PDrawing^.CurrentDimStyle:=psimstyleprop
+            else if uppercase(s)=uppercase(cdimstyle)then
+            if (ZCDCtx.LoadMode=TLOLoad) then
+              ZCDCtx.PDrawing^.CurrentDimStyle:=psimstyleprop;
+          end else
+            s:=rdr.ParseString;
+        end else begin
+          s:=rdr.ParseString;
+          psimstyleprop^.SetValueFromDxf(ReadDimStylesMode,byt,s,context);
+        end
       end;
-      if drawing.CurrentDimStyle=nil then
-        drawing.CurrentDimStyle:=psimstyleprop
-      else if uppercase(s)=uppercase(cdimstyle)then
-      if (LoadMode=TLOLoad) then
-        drawing.CurrentDimStyle:=psimstyleprop;
     end;
-  end else
-     psimstyleprop^.SetValueFromDxf(ReadDimStylesMode,byt,s,context);
+    if psimstyleprop<>nil then
+      if psimstyleprop^.Text.DIMTXSTY=nil then
+        psimstyleprop^.Text.DIMTXSTY:=ZCDCtx.PDrawing^.GetTextStyleTable^.FindStyle(TSNStandardStyleName,false);
   end;
 end;
-end;
-procedure ReadBlockRecird(const Handle2BlockName:TMapBlockHandle_BlockNames;var s:ansistring;var rdr:TZMemReader; const exitString: String;owner:PGDBObjGenericSubEntry;LoadMode:TLoadOpt;var drawing:TSimpleDrawing);
+procedure ReadBlockRecord(const Handle2BlockName:TMapBlockHandle_BlockNames;var s:ansistring;var rdr:TZMemReader; const exitString: String;var ZCDCtx:TZDrawingContext;var context:TIODXFLoadContext);
 var
    byt:integer;
    bname:string;
@@ -1144,7 +1044,7 @@ begin
      s := rdr.ParseString;
      if byt=2 then
                   begin
-                       bname:=s;
+                       bname:= dxfDeCodeString(s,context.Header);
                        Handle2BlockName.{$IFDEF DELPHI}Add{$ENDIF}{$IFNDEF DELPHI}insert{$ENDIF}(bhandle,bname);
                   end;
      if byt=5 then
@@ -1155,9 +1055,9 @@ begin
 end;
 end;
 
-procedure addfromdxf2000(var rdr:TZMemReader; const exitString: String;owner:PGDBObjGenericSubEntry;LoadMode:TLoadOpt;var drawing:TSimpleDrawing;var context:TIODXFLoadContext;var DC:TDrawContext;DWGVarsDict:TString2StringDictionary;const LogProc:TZELogProc=nil);
+procedure AddFromDXF20XX(var rdr:TZMemReader; const exitString: String;var ZCDCtx:TZDrawingContext;var context:TIODXFLoadContext;const LogProc:TZELogProc=nil);
 var
-  byt: Integer;
+  byt,flag: Integer;
   error: Integer;
   US, sname: String;
   s:ansistring;
@@ -1178,7 +1078,7 @@ begin
   blockload:=false;
   zDebugLn('{D+}[DXF_CONTENTS]AddFromDXF2000');
   //programlog.LogOutStr('AddFromDXF2000',lp_IncPos,LM_Debug);
-  readvariables(drawing,rdr,ctstyle,clayer,cltype,cdimstyle,LoadMode,DWGVarsDict);
+  readvariables(ZCDCtx.PDrawing^,rdr,ctstyle,clayer,cltype,cdimstyle,ZCDCtx.LoadMode,context.DWGVarsDict);
   repeat
     gotodxf(rdr, 0, dxfName_SECTION);
     if rdr.EOF then
@@ -1206,38 +1106,31 @@ begin
                else if s = dxfName_BLOCK_RECORD{:}then
                                     begin
                                     zDebugLn('{D+}[DXF_CONTENTS]Found BLOCK_RECORD table');
-                                    //programlog.LogOutStr('Found BLOCK_RECORD table',lp_IncPos,LM_Debug);
-                                    ReadBlockRecird(Handle2BlockName,s,rdr,exitString,owner,LoadMode,drawing);
+                                    ReadBlockRecord(Handle2BlockName,s,rdr,exitString,ZCDCtx,context);
                                     zDebugLn('{D-}[DXF_CONTENTS]end; {BLOCK_RECORD table}');
-                                    //programlog.LogOutStr('end; {BLOCK_RECORD table}',lp_DecPos,LM_Debug);
                                     end
                    else if s = dxfName_DIMSTYLE{:}then
                                     begin
                                       zDebugLn('{D+}[DXF_CONTENTS]Found dimstyles table');
-                                      //programlog.LogOutStr('Found dimstyles table',lp_IncPos,LM_Debug);
-                                      ReadDimStyles(s,cdimstyle,rdr,exitString,owner,LoadMode,drawing,context);
+                                      ReadDimStyles(s,cdimstyle,rdr,exitString,ZCDCtx,context);
                                       zDebugLn('{D-}[DXF_CONTENTS]end; {dimstyles table}');
-                                      //programlog.LogOutStr('end; {dimstyles table}',lp_DecPos,LM_Debug);
                                     end
                       else if s = dxfName_Layer{:}then
                                     begin
                                       zDebugLn('{D+}[DXF_CONTENTS]Found layer table');
-                                      ReadLayers(s,clayer,rdr,exitString,owner,LoadMode,drawing);
+                                      ReadLayers(s,clayer,rdr,exitString,ZCDCtx,context);
                                       zDebugLn('{D-}[DXF_CONTENTS]end; {layer table}');
-                                      //programlog.LogOutStr('end; {layer table}',lp_DecPos,LM_Debug);
                                     end
                       else if s = dxfName_LType{:}then
                                     begin
                                       zDebugLn('{D+}[DXF_CONTENTS]Found line types table');
-                                      //programlog.LogOutStr('Found line types table',lp_IncPos,LM_Debug);
-                                      ReadLTStyles(s,cltype,rdr,exitString,owner,LoadMode,drawing,context);
+                                      ReadLTStyles(s,cltype,rdr,exitString,ZCDCtx,context);
                                       zDebugLn('{D-}[DXF_CONTENTS]end; (line types table)');
-                                      //programlog.LogOutStr('end; (line types table)',lp_DecPos,LM_Debug);
                                     end
                       else if s = dxfName_Style{:}then
                                     begin
                                       zDebugLn('{D+}[DXF_CONTENTS]Found style table');
-                                      ReadTextstyles(s,ctstyle,rdr,exitString,owner,LoadMode,drawing,context,LogProc);
+                                      ReadTextstyles(s,ctstyle,rdr,exitString,ZCDCtx,context,LogProc);
                                       zDebugLn('{D-}[DXF_CONTENTS]end; {style table}');
                                     end
                               else if s = 'UCS'{:}then
@@ -1247,10 +1140,8 @@ begin
                             else if s = 'VPORT'{:}then
                                     begin
                                     zDebugLn('{D+}[DXF_CONTENTS]Found vports table');
-                                    //programlog.LogOutStr('Found vports table',lp_IncPos,LM_Debug);
-                                    ReadVport(s,rdr,exitString,owner,LoadMode,drawing);
+                                    ReadVport(s,rdr,exitString,ZCDCtx,context);
                                     zDebugLn('{D-}[DXF_CONTENTS]end; {vports table}');
-                                    //programlog.LogOutStr('end; {vports table}',lp_DecPos,LM_Debug);
                                     end;
         //end;{case}
         s := rdr.ParseString;
@@ -1262,14 +1153,10 @@ begin
       if s = 'ENTITIES' then
       begin
         zDebugLn('{D+}[DXF_CONTENTS]Found entities section');
-        //programlog.LogOutStr('Found entities section',lp_IncPos,LM_Debug);
-        //inc(foc);
-        {addfromdxf12}addentitiesfromdxf(rdr, dxfName_ENDSEC,owner,drawing,dc,context);
-        owner^.ObjArray.pack;
-        owner^.correctobjects(nil,0);
-        //inc(foc);
+        addentitiesfromdxf(rdr, dxfName_ENDSEC,ZCDCtx.powner,ZCDCtx.pdrawing^,ZCDCtx.dc,context);
+        ZCDCtx.powner^.ObjArray.pack;
+        ZCDCtx.powner^.correctobjects(nil,0);
         zDebugLn('{D-}[DXF_CONTENTS]end; {entities section}');
-        //programlog.LogOutStr('end; {entities section}',lp_DecPos,LM_Debug);
       end
       else
         if s = 'BLOCKS' then
@@ -1288,52 +1175,31 @@ begin
                 while (s <> 'ENDBLK') do
                   s := rdr.ParseString;
               end
-              else if drawing.BlockDefArray.getindex(s)>=0 then
-                               begin
-                                    //programlog.logoutstr('Ignored double definition block '+s+';',lp_OldPos);
-                                    //HistoryOutStr(format(rsDoubleBlockIgnored,[Tria_AnsiToUtf8(s)]));
-                                    zDebugLn('{I}'+rsDoubleBlockIgnored,[Tria_AnsiToUtf8(s)]);
-//                                    if s='DEVICE_PS_UK-VK'then
-//                                               s:=s;
-                                    while (s <> 'ENDBLK') do
-                                    s := rdr.ParseString;
-                               end
-              else begin
-//                   if s='polyline' then
-//                                  s:=s;
-
-                tp := drawing.BlockDefArray.create(s);
-                zDebugLn('{D+}[DXF_CONTENTS]Found blockdef '+s);
-                   //addfromdxf12(rdr, Pointer(GDB.pgdbblock^.blockarray[GDB.pgdbblock^.count].ppa),@tp^.Entities, 'ENDBLK');
-                while (s <> ' 30') and (s <> '30') do
-                begin
-                  s := rdr.ParseString;
-                  val(s, byt, error);
-                  case byt of
-                    10:
-                      begin
-                        s := rdr.ParseString;
-                        tp^.Base.x := strtofloat(s);
-                      end;
-                    20:
-                      begin
-                        s := rdr.ParseString;
-                        tp^.Base.y := strtofloat(s);
-                      end;
-                  end;
-                end;
+              else if ZCDCtx.pdrawing^.BlockDefArray.getindex(s)>=0 then begin
+                zDebugLn('{I}'+rsDoubleBlockIgnored,[{Tria_AnsiToUtf8}(s)]);
+                while (s <> 'ENDBLK') do
                 s := rdr.ParseString;
-                tp^.Base.z := strtofloat(s);
-                //programlog.LogOutFormatStr('Base x:%g y:%g z:%g',[tp^.Base.x,tp^.Base.y,tp^.Base.z],lp_OldPos,LM_Info);
+              end else begin
+                tp := ZCDCtx.pdrawing^.BlockDefArray.create(s);
+                zDebugLn('{D+}[DXF_CONTENTS]Found blockdef '+s);
+                byt:=rdr.ParseInteger;
+                if byt=70 then
+                  flag:=rdr.ParseInteger;
+                byt:=rdr.ParseInteger;
+                if byt=10 then begin
+                  while dxfLoadGroupCodeDouble(rdr,10,byt,tp^.Base.x)
+                     or dxfLoadGroupCodeDouble(rdr,20,byt,tp^.Base.y)
+                     or dxfLoadGroupCodeDouble(rdr,30,byt,tp^.Base.z) do
+                    byt:=rdr.ParseInteger;
+                end;
+                zDebugLn(format('{D+}[DXF_CONTENTS]Base x:%g y:%g z:%g',[tp^.Base.x,tp^.Base.y,tp^.Base.z]));
                 inc(foc);
-                SaveOptions:=dc.Options;
-                exclude(dc.Options,DCODrawable);
-                AddEntitiesFromDXF(rdr,'ENDBLK',tp,drawing,dc,context);
-                dc.Options:=SaveOptions;
+                SaveOptions:=ZCDCtx.dc.Options;
+                exclude(ZCDCtx.dc.Options,DCODrawable);
+                AddEntitiesFromDXF(rdr,'ENDBLK',tp,ZCDCtx.pdrawing^,ZCDCtx.dc,context);
+                ZCDCtx.dc.Options:=SaveOptions;
                 dec(foc);
-                if tp^.name='TX' then
-                                                           tp^.name:=tp^.name;
-                tp^.LoadFromDXF(rdr,nil,drawing);
+                tp^.LoadFromDXF(rdr,nil,ZCDCtx.pdrawing^,context);
                 blockload:=true;
                 zDebugLn('{D-}[DXF_CONTENTS]end block;');
                 sname:='##'
@@ -1341,14 +1207,14 @@ begin
             if not blockload then
                                  sname := rdr.ParseString;
             blockload:=false;
-            s := rdr.ParseString;
+            s:=dxfDeCodeString(rdr.ParseString,context.Header);
           until (s = dxfName_ENDSEC);
           zDebugLn('{D-}[DXF_CONTENTS]end; {block table}');
           //programlog.LogOutStr('end; {block table}',lp_DecPos,LM_Debug);
           //drawing.BlockDefArray.Format;
-          drawing.DimStyleTable.ResolveTextstyles(TGenericNamedObjectsArray(drawing.TextStyleTable));
-          drawing.DimStyleTable.ResolveDXFHandles(Handle2BlockName);
-          drawing.DimStyleTable.ResolveLineTypes(drawing.LTypeStyleTable);
+          ZCDCtx.pdrawing^.DimStyleTable.ResolveTextstyles(TGenericNamedObjectsArray(ZCDCtx.pdrawing^.TextStyleTable));
+          ZCDCtx.pdrawing^.DimStyleTable.ResolveDXFHandles(Handle2BlockName);
+          ZCDCtx.pdrawing^.DimStyleTable.ResolveLineTypes(ZCDCtx.pdrawing^.LTypeStyleTable);
         end;
 
 //    s := s;
@@ -1365,82 +1231,69 @@ begin
   lps.EndLongProcess(lph);
 end;
 
-procedure addfromdxf(const AFileName: String;var ZCDCtx:TZDrawingContext;const LogIntf:TZELogProc=nil);
+function AddFromDXF(const AFileName: String;var dwgCtx:TZDrawingContext;const LogIntf:TZELogProc=nil):TDXFHeaderInfo;
 var
-  //f: TZctnrVectorBytes;
-  s,s1,s2: String;
-  dxfversion,code:integer;
-  Context:TIODXFLoadContext;
-  DWGVarsDict:TString2StringDictionary;
-  dc:TDrawContext;
+  fileCtx:TIODXFLoadContext;
   lph:TLPSHandle;
-
   DxfStream:TZMVSMemoryMappedFile;
-  MemReader:TZMemReader;
+  rdr:TZMemReader;
 const
    ffs='%s (%s)';
 begin
   DefaultFormatSettings.DecimalSeparator:='.';
+  result.InitRec;
   zDebugLn('{D+}AddFromDXF("%s")',[AFileName]);
-  Log(LogIntf,ZESGeneral,ZEMsgCriticalInfo,format(rsLoadingFile,[AFileName]));
-  dc:=ZCDCtx.PDrawing^.CreateDrawingRC;
-  //f.InitFromFile(AFileName);
-
-  DxfStream:=TZMVSMemoryMappedFile.Create({$IFDEF WINDOWS}UTF8ToWinCP{$ENDIF}(AFileName),fmOpenRead);
-  MemReader:=TZMemReader.Create;
-  MemReader.setSource(DxfStream);
-
-  if MemReader.Size<>0 then
-  begin
-    DWGVarsDict:=TString2StringDictionary.create;
-    ReadDXFHeader(MemReader,DWGVarsDict);
-    Context.h2p:=TMapHandleToPointer.create;
-    lph:=lps.StartLongProcess(rsLoadDXFFile,@MemReader,MemReader.Size,LPSOSilent);
-    if DWGVarsDict.mygetvalue('$ACADVER',s) then begin
-      s1:=copy(s,3,length(s)-2);
-      s2:=copy(s,1,2);
-      val(s1,dxfversion,code);
-      if (uppercase(s2)='AC')and(code=0)then begin
-        case dxfversion of
-          1009:begin
-            Log(LogIntf,ZESGeneral,ZEMsgInfo,format(rsFileFormat,[format(ffs,['DXF12',s])]));
-            gotodxf(MemReader, 0, dxfName_ENDSEC);
-            addfromdxf12(MemReader,'EOF',ZCDCtx.POwner,ZCDCtx.LoadMode,ZCDCtx.PDrawing^,dc,LogIntf);
+  try
+    Log(LogIntf,ZESGeneral,ZEMsgCriticalInfo,format(rsLoadingFile,[AFileName]));
+    try
+      DxfStream:=TZMVSMemoryMappedFile.Create(AFileName,fmOpenRead);
+    except
+      on E: Exception do begin
+        Log(LogIntf,ZESGeneral,ZEMsgError,format(rsWhenOpeningFileAnErrorOccupedWithMsg,[AFileName,E.ClassName,E.Message]));
+        exit;
+      end;
+    end;
+    rdr:=TZMemReader.Create(DxfStream);
+    try
+      if rdr.HaveData then
+      begin
+        fileCtx.InitRec;
+        if not ReadDXFHeader(rdr,fileCtx) then begin
+          rdr.setPosition(0);
+          fileCtx.Header.iDWGCodePage:=1252;
+          fileCtx.Header.iVersion:=1009;
+        end;
+        lph:=lps.StartLongProcess(rsLoadDXFFile,@rdr,rdr.Size,LPSOSilent);
+        case fileCtx.Header.Version of
+          AC1009:begin
+            Log(LogIntf,ZESGeneral,ZEMsgInfo,format(rsFileFormat,[format(ffs,[ACVer2DXFVerStr(fileCtx.Header.iVersion),ACVer2ACVerStr(fileCtx.Header.iVersion)])]));
+            AddFromDXF12(rdr,dxf_EOF,dwgCtx,LogIntf);
           end;
-          1015:begin
-            Log(LogIntf,ZESGeneral,ZEMsgInfo,format(rsFileFormat,[format(ffs,['DXF2000',s])]));
-            addfromdxf2000(MemReader,'EOF',ZCDCtx.POwner,ZCDCtx.LoadMode,ZCDCtx.PDrawing^,context,dc,DWGVarsDict,LogIntf)
-          end;
-          1018:begin
-            Log(LogIntf,ZESGeneral,ZEMsgInfo,format(rsFileFormat,[format(ffs,['DXF2004',s])]));
-            addfromdxf2000(MemReader,'EOF',ZCDCtx.POwner,ZCDCtx.LoadMode,ZCDCtx.PDrawing^,context,dc,DWGVarsDict,LogIntf)
-          end;
-          1021:begin
-            Log(LogIntf,ZESGeneral,ZEMsgInfo,format(rsFileFormat,[format(ffs,['DXF2007',s])]));
-            addfromdxf2000(MemReader,'EOF',ZCDCtx.POwner,ZCDCtx.LoadMode,ZCDCtx.PDrawing^,context,dc,DWGVarsDict,LogIntf)
-          end;
-          1024:begin
-            Log(LogIntf,ZESGeneral,ZEMsgInfo,format(rsFileFormat,[format(ffs,['DXF2010',s])]));
-            addfromdxf2000(MemReader,'EOF',ZCDCtx.POwner,ZCDCtx.LoadMode,ZCDCtx.PDrawing^,context,dc,DWGVarsDict,LogIntf)
+          AC1014,AC1015,AC1018,AC1021,AC1024,AC1027,AC1032:begin
+            Log(LogIntf,ZESGeneral,ZEMsgInfo,format(rsFileFormat,[format(ffs,[ACVer2DXFVerStr(fileCtx.Header.iVersion),ACVer2ACVerStr(fileCtx.Header.iVersion)])]));
+            AddFromDXF20XX(rdr,dxf_EOF,dwgCtx,fileCtx,LogIntf)
           end;
           else
-            zDebugLn('{EM}'+rsUnknownFileFormat+' $ACADVER='+s);
+            if fileCtx.Header.iVersion<>VarValueWrong then
+              Log(LogIntf,ZESGeneral,ZEMsgError,'{EM}'+rsUnknownFileFormat+' $ACADVER='+fileCtx.DWGVarsDict[dxfVar_ACADVER])
+            else
+              Log(LogIntf,ZESGeneral,ZEMsgError,rsUnknownFileFormat);
         end;
-      end
-        else zDebugLn('{EM}'+rsUnknownFileFormat+' $ACADVER='+s);
+        lps.EndLongProcess(lph);
+        dwgCtx.POwner^.calcbb(dwgCtx.DC);
+        result:=fileCtx.Header;
+        fileCtx.Done;
+      end else
+        Log(LogIntf,ZESGeneral,ZEMsgError,'Can not open file: '+AFileName);
+    finally
+      DxfStream.Free;
+      rdr.Free;
     end;
-    lps.EndLongProcess(lph);
-    ZCDCtx.POwner^.calcbb(ZCDCtx.DC{ dc});
-    context.h2p.Destroy;
-    DWGVarsDict.destroy;
-  end else
-    zDebugLn('{EM}'+'IODXF.ADDFromDXF: Не могу открыть файл: '+AFileName);
-  //f.done;
-  DxfStream.Free;
-  MemReader.Free;
-  zDebugLn('{D-}end; {AddFromDXF}');
+  finally
+      zDebugLn('{D-}end; {AddFromDXF}');
+  end;
 end;
-procedure saveentitiesdxf2000(pva: PGDBObjEntityOpenArray; var outStream:TZctnrVectorBytes;var drawing:TSimpleDrawing;var IODXFContext:TIODXFContext);
+procedure saveentitiesdxf2000(pva: PGDBObjEntityOpenArray; var outStream:TZctnrVectorBytes;var drawing:TSimpleDrawing;var IODXFContext:TIODXFSaveContext);
 var
   pv:pgdbobjEntity;
   ir:itrec;
@@ -1499,6 +1352,7 @@ var
 begin
     VarsDict.Add('$CLAYER',drawing.GetCurrentLayer^.Name);
     VarsDict.Add('$CELTYPE',drawing.GetCurrentLType^.Name);
+    VarsDict.Add('$DWGCODEPAGE',ZCCP2Str(drawing.DXFCodePage));
 
     pcurrtextstyle:=drawing.GetCurrentTextStyle;
     if pcurrtextstyle<>nil then
@@ -1563,23 +1417,23 @@ begin
                                            VarsDict.Add('$TEXTSIZE',floattostr({sysvar.DWG.DWG_TextSize^}drawing.TextSize));
 end;
 
-function savedxf2000(const SavedFileName:String; const TemplateFileName:String;var drawing:TSimpleDrawing):boolean;
+function savedxf2000(const SavedFileName:String; const TemplateFileName:String;var drawing:TSimpleDrawing;codepage:integer):boolean;
 var
   sysfilename:RawByteString;
   templatefile: TZctnrVectorBytes;
-  outstream: {Integer}TZctnrVectorBytes;
-  groups, values, {ucvalues,}ts: String;
-  groupi, valuei, intable,attr: Integer;
-  temphandle,temphandle2,{temphandle3,temphandle4,}{handle,}lasthandle,vporttablehandle,plottablefansdle,dimtablehandle: TDWGHandle;
+  outstream:TZctnrVectorBytes;
+  groups,values,ts: String;
+  groupi,valuei,intable,attr: Integer;
+  temphandle,temphandle2,lasthandle,vporttablehandle,plottablefansdle,dimtablehandle: TDWGHandle;
   i: integer;
   OldHandele2NewHandle:TMapHandleToHandle;
-  //phandlea: pdxfhandlerecopenarray;
+
   inlayertable, inblocksec, inblocktable, inlttypetable, indimstyletable, inappidtable: Boolean;
   handlepos:integer;
   ignoredsource:boolean;
   instyletable:boolean;
   invporttable:boolean;
-  //olddwg:{PTDrawing}PTSimpleDrawing;
+
   pltp:PGDBLtypeProp;
   plp:PGDBLayerProp;
   pdsp:PGDBDimStyle;
@@ -1589,10 +1443,7 @@ var
   PSP:PShapeProp;
   PTP:PTextProp;
   p:pointer;
-  IODXFContext:TIODXFContext;
-  //p2h:TMapPointerToHandle;
-  //VarsDict:TString2StringDictionary;
-  //DWGHandle:TDWGHandle;
+  IODXFContext:TIODXFSaveContext;
   laststrokewrited:boolean;
   pcurrtextstyle:PGDBTextStyle;
   variablenotprocessed:boolean;
@@ -1600,28 +1451,19 @@ var
   lph:TLPSHandle;
 begin
   intable:=0;
-  IODXFContext.p2h:=TMapPointerToHandle.Create;
-  IODXFContext.currentEntAddrOverrider:=nil;
-  IODXFContext.VarsDict:=TString2StringDictionary.create;
+  IODXFContext.InitRec;
+  IODXFContext.Header.Version:=AC1015;
+  IODXFContext.Header.iVersion:=1015;
+
+  IODXFContext.Header.DWGCodePage:=SysCP2ACCP(codepage);
+  IODXFContext.Header.iDWGCodePage:=codepage;
+
   DefaultFormatSettings.DecimalSeparator := '.';
-  //standartstylehandle:=0;
-  //olddwg:=nil;//@drawing;
-  (*!!!if assigned(SetCurrentDWGProc)
-                            then olddwg:=SetCurrentDWGProc(@drawing);*)
-  //gdb.SetCurrentDWG(pdrawing);
-  //--------------------------outstream := FileCreate(name);
   outstream.init(10*1024*1024);
-  //--------------------------if outstream>0 then
   begin
     lph:=lps.StartLongProcess('Save DXF file',@outstream,drawing.pObjRoot^.ObjArray.Count);
-    {if assigned(StartLongProcessProc)then
-       StartLongProcessProc(drawing.pObjRoot^.ObjArray.Count,'Save DXF file');}
   OldHandele2NewHandle:=TMapHandleToHandle.Create;
-  //OldHandele2NewHandle.{$IFDEF DELPHI}Add{$ENDIF}{$IFNDEF DELPHI}Add{$ENDIF}(0,0);
-  //phandlea := dxfhandlearraycreate(10000);
-  //pushhandle(phandlea,0,0);
   templatefile.InitFromFile(TemplateFileName);
-  IODXFContext.handle := $2;
   inlayertable := false;
   inblocksec := false;
   inblocktable := false;
@@ -1652,7 +1494,7 @@ begin
              outstream.TXTAddStringEOL(groups);
              if values='$HANDSEED' then
                                        handlepos:=outstream.Count;
-             outstream.TXTAddStringEOL(ts);
+             outstream.TXTAddStringEOL(dxfEnCodeString(ts,IODXFContext.Header));
              dec(processedvarscount);
         end
       else variablenotprocessed:=true;
@@ -1748,7 +1590,7 @@ begin
                 outstream.TXTAddStringEOL(dxfGroupCode(100));
                 outstream.TXTAddStringEOL('AcDbBlockBegin');
                 outstream.TXTAddStringEOL(dxfGroupCode(2));
-                outstream.TXTAddStringEOL(PBlockdefArray({p}drawing.BlockDefArray.parray)^[i].name);
+                outstream.TXTAddStringEOL(dxfEnCodeString(PBlockdefArray(drawing.BlockDefArray.parray)^[i].name,IODXFContext.Header));
                 outstream.TXTAddStringEOL(dxfGroupCode(70));
                 outstream.TXTAddStringEOL('2');
                 outstream.TXTAddStringEOL(dxfGroupCode(10));
@@ -1972,14 +1814,13 @@ begin
                 //GetOrCreateHandle(@(PBlockdefArray(drawing.BlockDefArray.parray)^[i]),handle,temphandle);
 
                 outstream.TXTAddStringEOL(dxfGroupCode(5));
-                outstream.TXTAddStringEOL(inttohex({handle}temphandle, 0));
-                //inc(handle);
+                outstream.TXTAddStringEOL(inttohex(temphandle, 0));
                 outstream.TXTAddStringEOL(dxfGroupCode(100));
                 outstream.TXTAddStringEOL(dxfName_AcDbSymbolTableRecord);
                 outstream.TXTAddStringEOL(dxfGroupCode(100));
                 outstream.TXTAddStringEOL('AcDbBlockTableRecord');
                 outstream.TXTAddStringEOL(dxfGroupCode(2));
-                outstream.TXTAddStringEOL(PBlockdefArray({p}drawing.BlockDefArray.parray)^[i].name);
+                outstream.TXTAddStringEOL(dxfEnCodeString(PBlockdefArray(drawing.BlockDefArray.parray)^[i].name,IODXFContext.Header));
 
               end;
               outstream.TXTAddStringEOL(dxfGroupCode(0));
@@ -2008,7 +1849,7 @@ begin
                     outstream.TXTAddStringEOL(dxfGroupCode(100));
                     outstream.TXTAddStringEOL('AcDbLayerTableRecord');
                     outstream.TXTAddStringEOL(dxfGroupCode(2));
-                    outstream.TXTAddStringEOL(plp^.name);
+                    outstream.TXTAddStringEOL(dxfEnCodeString(plp^.name,IODXFContext.Header));
                     attr:=0;
                     if plp^._lock then
                                      attr:=attr + 4;
@@ -2021,7 +1862,7 @@ begin
                      else
                          outstream.TXTAddStringEOL(inttostr(-plp^.color));
                     outstream.TXTAddStringEOL(dxfGroupCode(6));
-                    outstream.TXTAddStringEOL(GetLTName(plp^.LT));
+                    outstream.TXTAddStringEOL(dxfEnCodeString(GetLTName(plp^.LT),IODXFContext.Header));
                     {if assigned(plp^.LT) then
                                              outstream.TXTAddStringEOL(PGDBLtypeProp(plp^.LT)^.Name)
                                          else
@@ -2045,7 +1886,7 @@ begin
                          outstream.TXTAddStringEOL(dxfGroupCode(1000));
                          outstream.TXTAddStringEOL('');
                          outstream.TXTAddStringEOL(dxfGroupCode(1000));
-                         outstream.TXTAddStringEOL(plp^.desk);
+                         outstream.TXTAddStringEOL(dxfEnCodeString(plp^.desk,IODXFContext.Header));
                     end;
                   end;
                 end;
@@ -2081,11 +1922,11 @@ begin
                          outstream.TXTAddStringEOL(dxfGroupCode(100));
                          outstream.TXTAddStringEOL('AcDbLinetypeTableRecord');
                          outstream.TXTAddStringEOL(dxfGroupCode(2));
-                         outstream.TXTAddStringEOL(pltp^.Name);
+                         outstream.TXTAddStringEOL(dxfEnCodeString(pltp^.Name,IODXFContext.Header));
                          outstream.TXTAddStringEOL(dxfGroupCode(70));
                          outstream.TXTAddStringEOL('0');
                          outstream.TXTAddStringEOL(dxfGroupCode(3));
-                         outstream.TXTAddStringEOL(pltp^.desk);
+                         outstream.TXTAddStringEOL(dxfEnCodeString(pltp^.desk,IODXFContext.Header));
                          outstream.TXTAddStringEOL(dxfGroupCode(72));
                          outstream.TXTAddStringEOL('65');
                          i:=pltp^.strokesarray.GetRealCount;
@@ -2208,7 +2049,7 @@ begin
                       outstream.TXTAddStringEOL(dxfGroupCode(100));
                       outstream.TXTAddStringEOL('AcDbDimStyleTableRecord');
                       outstream.TXTAddStringEOL(dxfGroupCode(2));
-                      outstream.TXTAddStringEOL(pdsp^.Name);
+                      outstream.TXTAddStringEOL({pdsp^.Name}dxfEncodeString(pdsp^.Name,IODXFContext.Header));
                       outstream.TXTAddStringEOL(dxfGroupCode(3));
                       outstream.TXTAddStringEOL(pdsp^.Units.DIMPOST);
                       outstream.TXTAddStringEOL(dxfGroupCode(70));
@@ -2543,7 +2384,7 @@ ENDTAB}
                     outstream.TXTAddStringEOL(dxfGroupCode(100));
                     outstream.TXTAddStringEOL('AcDbTextStyleTableRecord');
                     outstream.TXTAddStringEOL(dxfGroupCode(2));
-                    outstream.TXTAddStringEOL({drawing.TextStyleTable.getelement(i))}pcurrtextstyle^.name);
+                    outstream.TXTAddStringEOL({pcurrtextstyle^.name}dxfEncodeString(pcurrtextstyle^.name,IODXFContext.Header));
                     outstream.TXTAddStringEOL(dxfGroupCode(70));
                     outstream.TXTAddStringEOL('0');
 
@@ -2696,119 +2537,8 @@ ENDTAB}
                            then
                                if olddwg<>nil then
                                                   SetCurrentDWGProc(olddwg);*)
-  {$IFNDEF DELPHI}
-  IODXFContext.p2h.Destroy;
-  IODXFContext.VarsDict.destroy;
-  {$ENDIF}
-  //gdb.SetCurrentDWG(olddwg);
-end;
-procedure SaveZCP(const name: String; {gdb: PGDBDescriptor}var drawing:TSimpleDrawing);
-(*var
-//  memsize:longint;
-//  objcount:Integer;
-//  pmem,tmem:Pointer;
-  outfile:Integer;
-  memorybuf:PTZctnrVectorBytes;
-  //s:ZCPHeader;
-  //linkbyf:PGDBOpenArrayOfTObjLinkRecord;
-//  test:gdbvertex;
-  sub:integer;  *)
-begin
-(*
-     memorybuf:=nil;
-     linkbyf:=nil;
-     //s:=NULZCPHeader;
-     zcpmode:=zcptxt;  lkj
-     sub:=0;
-     sysunit^.TypeName2PTD('ZCPHeader')^.Serialize(@ZCPHead,SA_SAVED_TO_SHD,memorybuf,linkbyf,sub);
-
-     PTZCPOffsetTable(memorybuf^.getelement(ZCPHeadOffsetTableOffset))^.GDB:=memorybuf^.Count;
-
-     linkbyf^.SetGenMode(EnableGen);
-     //sysunit.TypeName2PTD('GDBDescriptor')^.Serialize(gdb,SA_SAVED_TO_SHD,memorybuf,linkbyf); убратькомент!!!!
-
-     PTZCPOffsetTable(memorybuf^.getelement(ZCPHeadOffsetTableOffset))^.GDBRT:=memorybuf^.Count;
-
-     linkbyf^.SetGenMode(DisableGen);
-
-     {test.x:=1;
-     test.y:=2;
-     test.z:=3;
-     systype.TypeName2PTD('GDBvertex')^.Serialize(@test,SA_SAVED_TO_SHD,memorybuf,linkbyf);}
-
-     linkbyf^.Minimize;
-     //sysunit.TypeName2PTD('GDBOpenArrayOfTObjLinkRecord')^.Serialize(linkbyf,SA_SAVED_TO_SHD,memorybuf,linkbyf);убратькомент!!!!
-
-     {systype.TypeName2PTD('ZCPHeader')^.DeSerialize(@s,SA_SAVED_TO_SHD,memorybuf);
-     fillchar(gdb^,sizeof(GDBDescriptor),0);
-     systype.TypeName2PTD('GDBDescriptor')^.DeSerialize(gdb,SA_SAVED_TO_SHD,memorybuf);}
-
-     outfile:=FileCreate({$IFNDEF DELPHI}UTF8ToSys{$ENDIF}(name));
-     FileWrite(outfile,memorybuf^.parray^,memorybuf^.Count);
-     fileclose(outfile);
-     outfile:=FileCreate({$IFNDEF DELPHI}UTF8ToSys{$ENDIF}(name+'remap'));
-     FileWrite(outfile,linkbyf^.parray^,linkbyf^.Count*linkbyf^.Size);
-     fileclose(outfile);
-     memorybuf^.done;
-     linkbyf^.done;
-*)
-end;
-procedure LoadZCP(const name: String; {gdb: PGDBDescriptor}var drawing:TSimpleDrawing);
-//var
-//  objcount:Integer;
-//  pmem,tmem:Pointer;
-//  infile:Integer;
-//  head:ZCPheader;
-  //memorybuf:TZctnrVectorBytes;
-  //FileHeader:ZCPHeader;
-//  test:gdbvertex;
-  //linkbyf:PGDBOpenArrayOfTObjLinkRecord;
-begin
-     (*
-     FileHeader:=NULZCPHeader;
-     memorybuf.InitFromFile(name);
-     sysunit.TypeName2PTD('ZCPHeader')^.DeSerialize(@FileHeader,SA_SAVED_TO_SHD,memorybuf,nil);
-     HistoryOutStr('Loading file: '+name);
-     HistoryOutStr('ZCad project file v'+inttostr(FileHeader.HiVersion)+'.'+inttostr(FileHeader.LoVersion));
-     HistoryOutStr('File coment: '+FileHeader.Coment);
-     memorybuf.Seek(FileHeader.OffsetTable.GDBRT);
-     Getmem(pointer(linkbyf),sizeof(GDBOpenArrayOfTObjLinkRecord));
-     sysunit.TypeName2PTD('GDBOpenArrayOfTObjLinkRecord')^.DeSerialize(linkbyf,SA_SAVED_TO_SHD,memorybuf,nil);
-     memorybuf.Seek(FileHeader.OffsetTable.GDB);
-     fillchar(gdb^,sizeof(GDBDescriptor),0);
-     sysunit.TypeName2PTD('GDBDescriptor')^.DeSerialize(gdb,SA_SAVED_TO_SHD,memorybuf,linkbyf);
-     gdb.GetCurrentDWG.SetFileName(name);
-     gdb.GetCurrentROOT.correctobjects(nil,-1);
-     //fillchar(FileHeader,sizeof(FileHeader),0);
-     {systype.TypeName2PTD('GDBVertex')^.DeSerialize(@test,SA_SAVED_TO_SHD,memorybuf);}
-     FileRead(infile,header,sizeof(shdblockheader));
-     while header.blocktype<>shd_block_eof do
-     begin
-          case header.blocktype of
-                                  shd_block_head:begin
-                                                      FileRead(infile,head,sizeof(ZCPheader));
-                                                 end;
-                              shd_block_primitiv:begin
-                                                      FileRead(infile,objcount,sizeof(objcount));
-                                                      header.blocksize:=header.blocksize-sizeof(objcount);
-                                                      Getmem(pmem,header.blocksize);
-                                                      FileRead(infile,pmem^,header.blocksize);
-                                                      tmem:=pmem;
-                                                      //gdb.ObjRoot.ObjArray.LoadCompactMemSize2(tmem,objcount);
-                                                      Freemem(pmem);
-                                                 end;
-                                            else begin
-                                                      FileSeek(infile,header.blocksize,1)
-                                                 end;
-          end;
-          FileRead(infile,header,sizeof(shdblockheader));
-     end;
-     fileclose(infile);*)
+  IODXFContext.done;
 end;
 begin
-     //i2:=0;
-     FOC:=0;
-     Ext2LoadProcMap.RegisterExt('dxf','AutoCAD DXF files via zengine (*.dxf)',@addfromdxf,true);
-     Ext2LoadProcMap.DefaultExt:='dxf';
-     DefaultFormatSettings.DecimalSeparator:='.';
+  FOC:=0;//убрать нахер
 end.

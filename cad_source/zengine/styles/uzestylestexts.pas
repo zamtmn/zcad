@@ -114,10 +114,10 @@ begin
   if not assigned(style.pfont) then
     if USedInLT then begin
       if @LogProc<>nil then
-        LogProc(ZESGeneral,ZEMsgWarning,format(fontnotfound,[Tria_AnsiToUtf8(style.Name),AFontFile,AFontFamily]))
+        LogProc(ZESGeneral,ZEMsgWarning,format(fontnotfound,[{Tria_AnsiToUtf8}(style.Name),AFontFile,AFontFamily]))
     end else begin
       if @LogProc<>nil then
-        LogProc(ZESGeneral,ZEMsgWarning,format(fontnotfoundandreplace,[Tria_AnsiToUtf8(style.Name),AFontFile,AFontFamily]));
+        LogProc(ZESGeneral,ZEMsgWarning,format(fontnotfoundandreplace,[{Tria_AnsiToUtf8}(style.Name),AFontFile,AFontFamily]));
       style.pfont:=pbasefont;
     end;
   style.prop:=tp;

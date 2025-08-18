@@ -78,6 +78,7 @@ var
   ts,s:ansistring;
   lpsh:TLPSHandle;
   l:double;
+  emptyrow:boolean;
 
 function isTextEnt(ObjType:TObjID):boolean;inline;
 begin
@@ -150,6 +151,18 @@ begin
         end;
       pv:=drawings.GetCurrentROOT^.ObjArray.iterate(ir);
       until pv=nil;
+
+      for y:=FDoc.RowCount-1 downto 0 do begin
+        emptyrow:=true;
+        for x:=FDoc.ColCount[y]-1 downto 0 do
+          if FDoc.Cells[x,y]<>'' then begin
+            emptyrow:=false;
+            Break;
+          end;
+        if emptyrow then
+          FDoc.RemoveRow(y);
+      end;
+
       FDoc.SaveToFile(ExportTextToCSVParam.FileName);
       FDoc.Free;
     end else

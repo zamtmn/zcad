@@ -54,9 +54,9 @@ GDBObjHatch= object(GDBObjWithLocalCS)
                  Origin:GDBvertex2D;
                  constructor init(own:Pointer;layeraddres:PGDBLayerProp;LW:SmallInt;p:GDBvertex);
                  constructor initnul;
-                 procedure LoadFromDXF(var rdr:TZMemReader;ptu:PExtensionData;var drawing:TDrawingDef);virtual;
+                 procedure LoadFromDXF(var rdr:TZMemReader;ptu:PExtensionData;var drawing:TDrawingDef;var context:TIODXFLoadContext);virtual;
 
-                 procedure SaveToDXF(var outStream:TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
+                 procedure SaveToDXF(var outStream:TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFSaveContext);virtual;
                  procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext;Stage:TEFStages=EFAllStages);virtual;
                  procedure ProcessLine(const c:integer;const l1,l2,c1,c2:GDBvertex2D;var IV:TIntercept2dpropWithLICVector);
                  procedure ProcessLines(const p1,p2:GDBvertex2D;var IV:TIntercept2dpropWithLICVector);
@@ -605,13 +605,13 @@ begin
   byt:=rdr.ParseInteger;
   while byt <> 0 do
   begin
-    if not LoadFromDXFObjShared(rdr,byt,ptu,drawing) then
+    if not LoadFromDXFObjShared(rdr,byt,ptu,drawing,context) then
     if not Path.LoadFromDXF (rdr,byt) then
     if not LoadPatternFromDXF(PPattern,rdr,byt,Angle,Scale) then
-    if not dxfintegerload(rdr,75,byt,hstyle) then
-    if not dxfDoubleload(rdr,52,byt,Angle) then
-    if not dxfDoubleload(rdr,41,byt,Scale) then
-    if not dxfStringload(rdr,2,byt,PatternName) then
+    if not dxfLoadGroupCodeInteger(rdr,75,byt,hstyle) then
+    if not dxfLoadGroupCodeDouble(rdr,52,byt,Angle) then
+    if not dxfLoadGroupCodeDouble(rdr,41,byt,Scale) then
+    if not dxfLoadGroupCodeString(rdr,2,byt,PatternName) then
       rdr.SkipString;
     byt:=rdr.ParseInteger;
   end;

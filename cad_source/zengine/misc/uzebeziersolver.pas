@@ -99,6 +99,7 @@ procedure TBezierSolver2D.AddPoint(const p:GDBvertex2D;pa:TPointAttr);
     if not truesconturAdded then begin
       truesconturAdded:=true;
       truescontur:=p;
+      truessegment:=p;
     end;
   end;
 begin

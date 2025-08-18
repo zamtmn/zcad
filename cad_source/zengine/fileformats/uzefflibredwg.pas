@@ -37,6 +37,9 @@ type
 var
   ZCDWGParser:TZCADDWGParser=nil;
 
+procedure addfromdwg(const filename:String;var ZCDCtx:TZDrawingContext;const LogProc:TZELogProc=nil);
+procedure addfromdxf(const filename:String;var ZCDCtx:TZDrawingContext;const LogProc:TZELogProc=nil);
+
 implementation
 
 procedure DebugDWG(dwg:PDwg_Data);
@@ -134,11 +137,7 @@ begin
 end;
 
 initialization
-  ZCDWGParser:=TZCADDWGParser.Create;
-
-  Ext2LoadProcMap.RegisterExt('dwg','AutoCAD DWG files via LibreDWG (*.dwg)',@addfromdwg);
-  Ext2LoadProcMap.RegisterExt('dxf','AutoCAD DXF files via LibreDWG (*.dxf)',@addfromdxf);
+ ZCDWGParser:=TZCADDWGParser.Create;
 finalization
-  if assigned(ZCDWGParser)then
-    FreeAndNil(ZCDWGParser);
+ FreeAndNil(ZCDWGParser);
 end.

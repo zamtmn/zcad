@@ -22,7 +22,7 @@ interface
 uses uzglbackendmanager,uzglgeometry,uzeentitiestree,uzcsysvars,uzglviewareageneral,
      uzeentabstracttext,uzbpaths,uzctranslations,UUnitManager,TypeDescriptors,uzcLog,
      Varman,
-     uzgldrawcontext,uzccommandsmanager,uzepalette;
+     uzgldrawcontext,uzccommandsmanager,uzepalette,uzeffdxfsupport;
 type
   TShowCursorHelper=class
     class procedure ShowCursorHandlerDrawLine(var DC:TDrawContext);
@@ -53,8 +53,8 @@ initialization
   units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPaths,system_pas_path,InterfaceTranslate,'RD_MaxRenderTime','Integer',@sysvarRDMaxRenderTime);
   units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPaths,system_pas_path,InterfaceTranslate,'DISP_ZoomFactor','Double',@sysvarDISPZoomFactor);
   units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPaths,system_pas_path,InterfaceTranslate,'DISP_SystmGeometryDraw','Boolean',@sysvarDISPSystmGeometryDraw);
-  units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPaths,system_pas_path,InterfaceTranslate,'DISP_SystmGeometryDraw','Boolean',@sysvarDISPSystmGeometryDraw);
   units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPaths,system_pas_path,InterfaceTranslate,'DISP_SystmGeometryColor','TGDBPaletteColor',@sysvarDISPSystmGeometryColor);
+  units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPaths,system_pas_path,InterfaceTranslate,'DISP_ShowCSAxis','Boolean',@sysvarDISPShowCSAxis);
   units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPaths,system_pas_path,InterfaceTranslate,'DISP_HotGripColor','TGDBPaletteColor',@sysvarDISPHotGripColor);
   units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPaths,system_pas_path,InterfaceTranslate,'DISP_SelectedGripColor','TGDBPaletteColor',@sysvarDISPSelGripColor);
   units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPaths,system_pas_path,InterfaceTranslate,'DISP_UnSelectedGripColor','TGDBPaletteColor',@sysvarDISPUnSelGripColor);
@@ -94,6 +94,9 @@ initialization
 
   units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPaths,system_pas_path,InterfaceTranslate,'DISP_LWDisplayScale','Integer',@sysvarDISPLWDisplayScale);
   units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPaths,system_pas_path,InterfaceTranslate,'RD_Light','Boolean',@sysvarRDLight);
+
+  units.CreateExtenalSystemVariable(SysVarUnit,SysVarN,GetSupportPaths,system_pas_path,InterfaceTranslate,'SysDWG_CodePage','TZCCodePage',@sysvarSysDWG_CodePage);
+  SysVar.DWG.System.SysDWG_CodePage:=@sysvarSysDWG_CodePage;
 
   sysvar.DISP.DISP_CursorSize:=@sysvarDISPCursorSize;
   sysvar.DISP.DISP_OSSize:=@sysvarDISPOSSize;

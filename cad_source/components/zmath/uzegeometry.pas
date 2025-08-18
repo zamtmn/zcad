@@ -218,6 +218,8 @@ function IsVectorNul(const p2:GDBvertex):boolean;inline;
 function IsDoubleNotEqual(const d1,d2:Double;const _eps:Double=eps):boolean;inline;
 function IsDoubleEqual(const d1,d2:Double;const _eps:Double=eps):boolean;inline;
 function IsFloatNotEqual(const d1,d2:Single;const _floateps:Single=floateps):boolean;inline;
+function IsZero(const d:Double;const _eps:Double=eps):boolean;inline;
+function IsNotZero(const d:Double;const _eps:Double=eps):boolean;inline;
 //проверка вектора на близость к оси Z (координаты x и y меньше 1/64
 //используется для Arbitrary Axis Algorithm (DXF)
 //TODO: заменить в коде все проверки на функцию
@@ -443,6 +445,15 @@ begin
                        else
                            result:=true;
 end;
+function IsZero(const d:Double;const _eps:Double=eps):boolean;inline;
+begin
+  result:=abs(d)<_eps
+end;
+function IsNotZero(const d:Double;const _eps:Double=eps):boolean;inline;
+begin
+  result:=abs(d)>=_eps
+end;
+
 
 function IsNearToZ(const v:GDBvertex):boolean;
 const

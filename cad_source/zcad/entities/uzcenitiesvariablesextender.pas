@@ -86,7 +86,7 @@ TVariablesExtender=class(TBaseVariablesExtender)
     class function EntIOLoadMainFunction(_Name,_Value:String;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
     class function EntIOLoadEmptyVariablesExtender(_Name,_Value:String;ptu:PExtensionData;const drawing:TDrawingDef;PEnt:pointer):boolean;
 
-    procedure SaveToDxfObjXData(var outStream:TZctnrVectorBytes;PEnt:Pointer;var IODXFContext:TIODXFContext);override;
+    procedure SaveToDxfObjXData(var outStream:TZctnrVectorBytes;PEnt:Pointer;var IODXFContext:TIODXFSaveContext);override;
     class procedure DisableVariableContentReplace;
     class procedure EnableVariableContentReplace;
     class function isVariableContentReplaceEnabled:Boolean;
@@ -343,10 +343,11 @@ end;
 
 procedure TVariablesExtender.PostLoad(var context:TIODXFLoadContext);
 var
- PMF:PGDBObjEntity;
- pbdunit:TVariablesExtender;
- pvd:pvardesk;
- uou:PTEntityUnit;
+  PMF:TDXFHandle2ZCObject.TPointerWithType;
+  pbdunit:TVariablesExtender;
+  pvd:pvardesk;
+  uou:PTEntityUnit;
+
 begin
   if pThisEntity<>nil then begin
     if isVariableContentReplaceEnabled then begin
@@ -363,7 +364,7 @@ begin
     if pThisEntity.PExtAttrib<>nil then
       if pThisEntity.PExtAttrib^.MainFunctionHandle<>0 then begin
         if context.h2p.TryGetValue(pThisEntity.PExtAttrib^.MainFunctionHandle,pmf)then begin
-          pbdunit:=pmf^.EntExtensions.GetExtensionOf<TVariablesExtender>;
+          pbdunit:=PGDBObjEntity(pmf.p)^.EntExtensions.GetExtensionOf<TVariablesExtender>;
           if pbdunit<>nil then
             pbdunit.addDelegate(pThisEntity,self);
         end;
@@ -470,7 +471,7 @@ begin
   result:=true;
 end;
 
-procedure TVariablesExtender.SaveToDxfObjXData(var outStream:TZctnrVectorBytes;PEnt:Pointer;var IODXFContext:TIODXFContext);
+procedure TVariablesExtender.SaveToDxfObjXData(var outStream:TZctnrVectorBytes;PEnt:Pointer;var IODXFContext:TIODXFSaveContext);
 var
    ishavevars:boolean;
    pvd:pvardesk;

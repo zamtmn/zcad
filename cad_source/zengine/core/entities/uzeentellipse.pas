@@ -43,9 +43,9 @@ GDBObjEllipse= object(GDBObjPlain)
                  q0,q1,q2:GDBvertex;
                  constructor init(own:Pointer;layeraddres:PGDBLayerProp;LW:SmallInt;p:GDBvertex;{RR,}S,E:Double;majaxis:GDBVertex);
                  constructor initnul;
-                 procedure LoadFromDXF(var rdr:TZMemReader;ptu:PExtensionData;var drawing:TDrawingDef);virtual;
+                 procedure LoadFromDXF(var rdr:TZMemReader;ptu:PExtensionData;var drawing:TDrawingDef;var context:TIODXFLoadContext);virtual;
 
-                 procedure SaveToDXF(var outStream:TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
+                 procedure SaveToDXF(var outStream:TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFSaveContext);virtual;
                  procedure DrawGeometry(lw:Integer;var DC:TDrawContext;const inFrustumState:TInBoundingVolume);virtual;
                  procedure addcontrolpoints(tdesc:Pointer);virtual;
                  procedure remaponecontrolpoint(pdesc:pcontrolpointdesc;ProjectProc:GDBProjectProc);virtual;
@@ -368,7 +368,7 @@ procedure GDBObjEllipse.DrawGeometry;
 //  i: Integer;
 begin
 
-  DC.drawer.DrawClosedContour3DInModelSpace(Vertex3D_in_WCS_Array,DC.DrawingContext.matrixs);
+  DC.drawer.DrawContour3DInModelSpace(Vertex3D_in_WCS_Array,DC.DrawingContext.matrixs,false);
   //Vertex3D_in_WCS_Array.drawgeometry;
 
   inherited;
@@ -405,12 +405,12 @@ begin
   byt:=rdr.ParseInteger;
   while byt <> 0 do
   begin
-    if not LoadFromDXFObjShared(rdr,byt,ptu,drawing) then
-    if not dxfvertexload(rdr,10,byt,Local.P_insert) then
-    if not dxfvertexload(rdr,11,byt,MajorAxis) then
-    if not dxfDoubleload(rdr,40,byt,ratio) then
-    if not dxfDoubleload(rdr,41,byt,startangle) then
-    if not dxfDoubleload(rdr,42,byt,endangle) then {s := }rdr.SkipString;
+    if not LoadFromDXFObjShared(rdr,byt,ptu,drawing,context) then
+    if not dxfLoadGroupCodeVertex(rdr,10,byt,Local.P_insert) then
+    if not dxfLoadGroupCodeVertex(rdr,11,byt,MajorAxis) then
+    if not dxfLoadGroupCodeDouble(rdr,40,byt,ratio) then
+    if not dxfLoadGroupCodeDouble(rdr,41,byt,startangle) then
+    if not dxfLoadGroupCodeDouble(rdr,42,byt,endangle) then {s := }rdr.SkipString;
     byt:=rdr.ParseInteger;
   end;
   startangle := startangle{ * pi / 180};

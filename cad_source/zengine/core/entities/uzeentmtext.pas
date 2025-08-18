@@ -41,8 +41,8 @@ type
     text:XYZWStringArray;
     constructor init(own:Pointer;layeraddres:PGDBLayerProp;LW:SmallInt;c:TDXFEntsInternalStringType;p:GDBvertex;s,o,w,a:Double;j:TTextJustify;wi,l:Double);
     constructor initnul(owner:PGDBObjGenericWithSubordinated);
-    procedure LoadFromDXF(var rdr:TZMemReader;ptu:PExtensionData;var drawing:TDrawingDef);virtual;
-    procedure SaveToDXF(var outStream:TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);virtual;
+    procedure LoadFromDXF(var rdr:TZMemReader;ptu:PExtensionData;var drawing:TDrawingDef;var context:TIODXFLoadContext);virtual;
+    procedure SaveToDXF(var outStream:TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFSaveContext);virtual;
     procedure CalcGabarit(const drawing:TDrawingDef);virtual;
     //procedure getoutbound;virtual;
     procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext;Stage:TEFStages=EFAllStages);virtual;
@@ -677,18 +677,18 @@ begin
   byt:=rdr.ParseInteger;
   while byt <> 0 do
   begin
-    if not LoadFromDXFObjShared(rdr,byt,ptu,drawing) then
-    if not dxfvertexload(rdr,10,byt,Local.P_insert) then
-    if not dxfvertexload(rdr,11,byt,ux) then
-    if not dxfDoubleload(rdr,40,byt,textprop.size) then
-    if not dxfDoubleload(rdr,41,byt,width) then
-    if not dxfDoubleload(rdr,44,byt,linespacef) then
-    if not dxfDoubleload(rdr,51,byt,textprop.oblique) then
-    if not dxfIntegerload(rdr,71,byt,j)then
-    if not dxfStringload(rdr,1,byt,ttemplate)then
-    if not dxfStringload(rdr,3,byt,ttemplate)then
+    if not LoadFromDXFObjShared(rdr,byt,ptu,drawing,context) then
+    if not dxfLoadGroupCodeVertex(rdr,10,byt,Local.P_insert) then
+    if not dxfLoadGroupCodeVertex(rdr,11,byt,ux) then
+    if not dxfLoadGroupCodeDouble(rdr,40,byt,textprop.size) then
+    if not dxfLoadGroupCodeDouble(rdr,41,byt,width) then
+    if not dxfLoadGroupCodeDouble(rdr,44,byt,linespacef) then
+    if not dxfLoadGroupCodeDouble(rdr,51,byt,textprop.oblique) then
+    if not dxfLoadGroupCodeInteger(rdr,71,byt,j)then
+    if not dxfLoadGroupCodeString(rdr,1,byt,ttemplate,context.Header)then
+    if not dxfLoadGroupCodeString(rdr,3,byt,ttemplate,context.Header)then
     {if dxfDoubleload(rdr,50,byt,angle) then angleload := true
-    else }if dxfStringload(rdr,7,byt,style)then begin
+    else }if dxfLoadGroupCodeString(rdr,7,byt,style)then begin
       TXTStyle:=drawing.GetTextStyleTable^.FindStyle(Style,false);
       if TXTStyle=nil then
         TXTStyle:=pointer(drawing.GetTextStyleTable^.getDataMutable(0));
@@ -698,9 +698,11 @@ begin
   end;
   if TXTStyle=nil then
     TXTStyle:=drawing.GetTextStyleTable^.FindStyle('Standard',false);
+  if IsZero(linespacef) then
+    linespacef:=1;
   OldVersTextReplace(ttemplate);
   OldVersTextReplace(Content);
-  Content:=utf8tostring(Tria_AnsiToUtf8(ttemplate));
+  Content:=utf8tostring(ttemplate);
   textprop.justify:=b2j[j];
   P_drawInOCS := Local.p_insert;
   linespace := textprop.size * linespacef * 5 / 3;
@@ -720,7 +722,7 @@ begin
         ul:=not(ul);
     until count=0;
 end;
-procedure GDBObjMText.SaveToDXF(var outStream:TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFContext);
+procedure GDBObjMText.SaveToDXF(var outStream:TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFSaveContext);
 const
   maxdxfmtextlen=250;
 var
@@ -741,14 +743,15 @@ begin
     //шаблон dxf НЕсовместим, разворачиваем всё кроме dxf последовательностей
     //пишем dxf совместимое содержимое, шаблом сохраним отдельно
     quotedcontent:=TxtFormatAndCountSrcs(template,SPFSources.GetFull and (not SPFSdxf),ASourcesCounter,@Self);
-    s := Tria_Utf8ToAnsi(UTF8Encode(quotedcontent));
+    s := {Tria_Utf8ToAnsi}(UTF8Encode(quotedcontent));
   end else begin
     //шаблон dxf совместим, пишем сразу его, отдельно его дописывать в расширенные данные ненадо
-    s:=Tria_Utf8ToAnsi(UTF8Encode(template));
+    s:={Tria_Utf8ToAnsi}(UTF8Encode(template));
     IODXFContext.LocalEntityFlags:=IODXFContext.LocalEntityFlags or CLEFNotNeedSaveTemplate;
   end;
   //убираем переносы строки, они портят dxf
   s:=StringReplace(s,#10,'\P',[rfReplaceAll]);
+  s:=dxfEnCodeString(s,IODXFContext.Header);
   if length(s) < maxdxfmtextlen then
   begin
     dxfStringout(outStream,1,z2dxfmtext(s,ul));

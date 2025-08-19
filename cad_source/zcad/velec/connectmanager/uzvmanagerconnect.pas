@@ -112,8 +112,22 @@ uses
    SQLite3Conn,
    sqlite3dyn,
    uzcdrawing,
-   uzvmcdbconsts, Dialogs,
+   uzvmcdbconsts, Classes,Dialogs,
    math;
+
+   type
+  TDevice = record
+    ID: Integer;
+    DevName: string;
+    HdName: string;
+    HdGroup: string;
+    ICanHD: Integer;
+    Level: Integer;
+  end;
+
+var
+  Devices: array of TDevice;
+  DevParent: TStringList;
 
    procedure managerconnectexecute;
 
@@ -325,7 +339,75 @@ begin
   SQLite3Connection.Free;
 end;
 
+function GetParent(DevName: string): string;
+var
+  idx: Integer;
+begin
+  idx := DevParent.IndexOfName(DevName);
+  if idx >= 0 then
+    Result := DevParent.ValueFromIndex[idx]
+  else
+    Result := '???';
+end;
 
+function GetDepth(DevName: string): Integer;
+var
+  Parent: string;
+begin
+  Parent := GetParent(DevName);
+  if (Parent = '') or (Parent = '???') then
+    Exit(0)
+  else
+    Result := GetDepth(Parent) + 1;
+end;
+
+procedure CalculateLevels;
+var
+  i: Integer;
+begin
+  for i := 0 to High(Devices) do
+    Devices[i].Level := GetDepth(Devices[i].DevName);
+end;
+
+procedure PrintTable;
+var
+  i: Integer;
+begin
+  ZCMsgCallBackInterface.TextMessage('ID | DevName        | HdName    | Level',TMWOHistoryOut);
+  ZCMsgCallBackInterface.TextMessage('---+---------------+-----------+-------',TMWOHistoryOut);
+  WriteLn('ID | DevName        | HdName    | Level');
+  WriteLn('---+---------------+-----------+-------');
+  for i := 0 to High(Devices) do
+    ZCMsgCallBackInterface.TextMessage('---+---------------+-----------+-------' + inttostr(Devices[i].Level),TMWOHistoryOut);
+    //WriteLn(Format('%3d | %-13s | %-9s | %d',
+    //  [Devices[i].ID, Devices[i].DevName, Devices[i].HdName, Devices[i].Level]));
+end;
+
+procedure LoadData;
+begin
+  // Пример: добавляем несколько устройств вручную
+  SetLength(Devices, 7);
+
+  Devices[0].ID := 1;  Devices[0].DevName := 'ВРУ1';  Devices[0].HdName := '???';
+  Devices[1].ID := 7;  Devices[1].DevName := 'ЩР1';   Devices[1].HdName := 'ВРУ1';
+  Devices[2].ID := 17; Devices[2].DevName := 'ШУ1';   Devices[2].HdName := 'ЩР1';
+  Devices[3].ID := 18; Devices[3].DevName := 'ЯУ1';   Devices[3].HdName := 'ШУ1';
+  Devices[4].ID := 19; Devices[4].DevName := 'Дв1(??)¶1'; Devices[4].HdName := 'ЯУ1';
+  Devices[5].ID := 21; Devices[5].DevName := 'ШУ2';   Devices[5].HdName := 'ЩР1';
+  Devices[6].ID := 22; Devices[6].DevName := 'ЯУ2';   Devices[6].HdName := 'ШУ2';
+end;
+
+procedure BuildParentMap;
+var
+  i: Integer;
+begin
+  DevParent := TStringList.Create;
+  DevParent.Sorted := False;
+  DevParent.Duplicates := dupIgnore;
+
+  for i := 0 to High(Devices) do
+    DevParent.Values[Devices[i].DevName] := Devices[i].HdName;
+end;
 function managerconnect_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 var
   filepath:string;
@@ -379,6 +461,11 @@ var
     ShowData;
     ZCMsgCallBackInterface.TextMessage('Database successfully created and populated!',TMWOHistoryOut);
     FreeComponents;
+
+      LoadData;           // Загружаем тестовую таблицу
+  BuildParentMap;     // Создаём словарь родительских связей
+  CalculateLevels;    // Считаем глубину для всех устройств
+  PrintTable;         // Выводим итоговую таблицу
   except
     on E: Exception do begin
       FreeComponents;

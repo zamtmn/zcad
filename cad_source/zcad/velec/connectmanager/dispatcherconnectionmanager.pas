@@ -44,13 +44,15 @@ type
     //для работы разделителя
     FProportion: Double; // Пропорция ширины PanelSynchDraw / (ClientWidth - Splitter)
     FIsResizing: Boolean; // Флаг для предотвращения рекурсии
+    procedure InitializeActionAndButton; //инициализация и настройка кнопок
+    procedure InitializePanels;          //инициализация и настройка панелей
+
     procedure InitializeDatabase;
     procedure InitializeDeviceTree;
     procedure InitializeBufDataset;
     procedure InitializeGridDev;
     procedure recordingGridDev(qry:string);
     procedure BuildDeviceHierarchy;
-    procedure InitializeActionAndButton;
     procedure TreeGetText(Sender: TBaseVirtualTree; Node: PVirtualNode;
       Column: TColumnIndex; TextType: TVSTTextType; var CellText: String);
     procedure TreeGetNodeDataSize(Sender: TBaseVirtualTree; var NodeDataSize: Integer);
@@ -76,6 +78,7 @@ type
 
   var
       flagEditBufBeforePost:boolean;
+      flagConnectDB:boolean;
 
 implementation
 
@@ -86,12 +89,12 @@ implementation
 constructor TDispatcherConnectionFrame.Create(TheOwner: TComponent);
 begin
   inherited Create(TheOwner);
+  ShowMessage('Активировался TFRAME: ');
+
   Name := 'DispatcherConnectionFrame';
   Caption := 'Диспетчер подключений';
-    //Добавляем кнопки
 
-    //ShowMessage('Ошибка');
-  InitializeActionAndButton;
+
 
     try
     //filepath:=;
@@ -102,50 +105,25 @@ begin
     //   exit;
     //end;
 
-
-  //Для работы разделителя
-
     // Подписываемся на событие изменения размера фрейма
-  OnResize := @FrameResize;
+    OnResize := @FrameResize;
+    //Добавляем кнопки
+    InitializeActionAndButton;
+    //Настравиваем панели
+    InitializePanels;
 
-    // первый контейнер (левая половина)
-  PanelNav.Align := alLeft;
-  PanelNav.BevelOuter := bvNone;
-  PanelNav.BorderSpacing.Around := 2;
+    // Сохраняем начальную пропорцию
+    FProportion := 0.25; // Начальная пропорция 25%/75%
+    PanelNav.Width := Round(ClientWidth * FProportion);
+    FIsResizing := False;
 
-  // Настройка разделителя
-  panelSplitter.Align := alLeft;
-  panelSplitter.Width := 8;
-  panelSplitter.ResizeStyle := rsUpdate;
-  panelSplitter.Color := clBtnFace;
-  panelSplitter.MinSize := 100; // Минимальный размер панелей
-  panelSplitter.OnMoved:=@panelSplitterMoved;
+    // Настраиваем дерево устройств
+    FDeviceTree.Parent := PanelNav;
+    FDeviceTree.Align := alClient;
+    FDeviceTree.NodeDataSize := SizeOf(Pointer);
 
-  // второй контейнер (правая половина)
-  panelData.Align := alClient; // Займет оставшееся пространство
-  panelData.BevelOuter := bvNone;
-  panelData.BorderSpacing.Around := 2;
-
-  // Сохраняем начальную пропорцию
-  FProportion := 0.25; // Начальная пропорция 25%/75%
-  PanelNav.Width := Round(ClientWidth * FProportion);
-  FIsResizing := False;
-
-  //// Инициализация компонентов базы данных
-  //SQLite3Connection := TSQLite3Connection.Create(Self);
-  //SQLTransaction := TSQLTransaction.Create(Self);
-  //SQLQuery := TSQLQuery.Create(Self);
-  //
-  //SQLite3Connection.Transaction := SQLTransaction;
-  //SQLTransaction.Database := SQLite3Connection;
-  //SQLQuery.Database := SQLite3Connection;
-
-  // Настраиваем дерево устройств
-  FDeviceTree.Parent := PanelNav;
-  FDeviceTree.Align := alClient;
-  FDeviceTree.NodeDataSize := SizeOf(Pointer);
-  //
-  //// Настройка событий дерева
+    flagConnectDB:=false;
+  // Настройка событий дерева
   //FDeviceTree.OnGetText := @TreeGetText;
   //FDeviceTree.OnGetNodeDataSize := @TreeGetNodeDataSize;
   //FDeviceTree.OnInitNode := @TreeInitNode;
@@ -161,44 +139,6 @@ begin
   // Можно также настроить другие параметры:
   gridDev.DefaultDrawing := True;  // Включить стандартное рисование
   gridDev.Flat := False;          // Не использовать плоский стиль (лучше для изменения размеров)
-
-
-  // Инициализация базы данных
-  //InitializeDatabase;
-  //
-  //// Построение дерева
-  //InitializeDeviceTree;
-  //BuildDeviceHierarchy;
-
-  // Заполнение gridDev
-
-  //flagEditBufBeforePost:=false;
-  //// 2. Настройка BufDataset
-  //InitializeBufDataset;
-  //
-  //Привязываем к источнику данных
-  //dsGridDev.DataSet := bufGridDev;
-  //gridDev.DataSource := dsGridDev;
-
-  ////Настраиваем колонки DBGrid
-  //gridDev.Columns.Clear;
-  //
-  //// 3. Настройка DBGRID gridDev
-  //InitializeGridDev;
-  //
-  //recordingGridDev('SELECT * FROM dev');
-
-
-  //qryA.Open;
-  // Копируем данные из qryA в bufA
-
-
-  //gridDev.OnColEnter:=@gridAColExit;
-  //gridDev.OnKeyDown:=@gridAKeyDown;
-  //gridDev.OnDrawColumnCell := @gridDevDrawColumnCell;
-  //gridDev.OnCellClick := @gridDevCellClick;
-
-
 
     except
       //SQLTransaction.Free;
@@ -228,6 +168,29 @@ begin
   //ActionList1.AddAction(act);
 end;
 
+function IsDatabaseLocked(const DatabaseName: string): Boolean;
+var
+  FileHandle: THandle;
+begin
+  Result := False;
+  try
+    // Пытаемся открыть файл для записи (это проверяет блокировку)
+    FileHandle := FileOpen(DatabaseName, fmOpenWrite or fmShareExclusive);
+    if FileHandle <> THandle(-1) then
+    begin
+      FileClose(FileHandle);
+      // Файл не заблокирован
+      Result := False;
+    end
+    else
+    begin
+      // Файл заблокирован
+      Result := True;
+    end;
+  except
+    Result := True;
+  end;
+end;
 
 procedure TDispatcherConnectionFrame.CurrentSelActionExecute(Sender: TObject);
 begin
@@ -235,11 +198,21 @@ begin
 end;
 procedure TDispatcherConnectionFrame.AllSelActionExecute(Sender: TObject);
 begin
+  //Destroy;
+  if flagConnectDB then
+    SQLite3Connection.Close;
+
   uzvmanagerconnect.managerconnectexecute;
+
      // Инициализация компонентов базы данных
-  SQLite3Connection := TSQLite3Connection.Create(Self);
-  SQLTransaction := TSQLTransaction.Create(Self);
-  SQLQuery := TSQLQuery.Create(Self);
+     ShowMessage('1 ');
+  if not flagConnectDB then
+  begin
+      SQLite3Connection := TSQLite3Connection.Create(Self);
+      SQLTransaction := TSQLTransaction.Create(Self);
+      SQLQuery := TSQLQuery.Create(Self);
+  end;
+   ShowMessage('2 ');
 
   SQLite3Connection.Transaction := SQLTransaction;
   SQLTransaction.Database := SQLite3Connection;
@@ -247,6 +220,7 @@ begin
 
     // Инициализация базы данных
   InitializeDatabase;
+  flagConnectDB:=true;
 
   // Настраиваем дерево устройств
   FDeviceTree.Parent := PanelNav;
@@ -314,13 +288,10 @@ begin
     AddAction('actNew', '1', '0', 'Создать новый документ', 'Ctrl+N', @CurrentSelActionExecute);
     AddAction('actOpen', '*', '1', 'Открыть документ', 'Ctrl+O', @AllSelActionExecute);
     AddAction('actSave', 'Cl', '2', 'Сохранить документ', 'Ctrl+S', @SaveActionExecute);
-    //ShowMessage('Создание кнопки: ');
-    //ShowMessage('Всего действий: ' + IntToStr(ActionList1.ActionCount));
 
     // Создаем кнопки на ToolBar
     for i := 0 to ActionList1.ActionCount - 1 do
     begin
-      //ShowMessage('Создание кнопки: ' + ActionList1.Actions[i].Name);
       btn := TToolButton.Create(ToolBar1);
       btn.Parent := ToolBar1;
       btn.Action := ActionList1.Actions[i];
@@ -338,6 +309,32 @@ begin
       ShowMessage('Ошибка создание активности: ' + E.Message);
   end;
 end;
+procedure TDispatcherConnectionFrame.InitializePanels;
+begin
+  try
+      // первый контейнер (левая половина)
+      PanelNav.Align := alLeft;
+      PanelNav.BevelOuter := bvNone;
+      PanelNav.BorderSpacing.Around := 2;
+
+      // Настройка разделителя
+      panelSplitter.Align := alLeft;
+      panelSplitter.Width := 8;
+      panelSplitter.ResizeStyle := rsUpdate;
+      panelSplitter.Color := clBtnFace;
+      panelSplitter.MinSize := 100; // Минимальный размер панелей
+      panelSplitter.OnMoved:=@panelSplitterMoved;
+
+      // второй контейнер (правая половина)
+      panelData.Align := alClient; // Займет оставшееся пространство
+      panelData.BevelOuter := bvNone;
+      panelData.BorderSpacing.Around := 2;
+  except
+    on E: Exception do
+      ShowMessage('Ошибка создание инициализации панелей: ' + E.Message);
+  end;
+end;
+
 procedure TDispatcherConnectionFrame.InitializeBufDataset;
 begin
   try

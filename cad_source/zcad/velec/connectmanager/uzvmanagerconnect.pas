@@ -112,7 +112,7 @@ uses
    SQLite3Conn,
    sqlite3dyn,
    uzcdrawing,
-   uzvmcdbconsts,
+   uzvmcdbconsts, Dialogs,
    math;
 
    procedure managerconnectexecute;
@@ -160,19 +160,47 @@ begin
 
   SQLite3Connection := TSQLite3Connection.Create(nil);
 
-   SQLite3Connection.DatabaseName := filepath + vcalctempdbfilename;
+  SQLite3Connection.DatabaseName := filepath + vcalctempdbfilename;
   //SQLite3Connection.DatabaseName := IncludeTrailingPathDelimiter(GetTempDir) + 'mydatabase.db3';
 
   SQLTransaction := TSQLTransaction.Create(nil);
   SQLTransaction.Database := SQLite3Connection;
   SQLite3Connection.Transaction := SQLTransaction;
 end;
-
+function IsDatabaseLocked(const DatabaseName: string): Boolean;
+var
+  FileHandle: THandle;
+begin
+  Result := False;
+  try
+    // Пытаемся открыть файл для записи (это проверяет блокировку)
+    FileHandle := FileOpen(DatabaseName, fmOpenWrite or fmShareExclusive);
+    if FileHandle <> THandle(-1) then
+    begin
+      FileClose(FileHandle);
+      // Файл не заблокирован
+      Result := False;
+    end
+    else
+    begin
+      // Файл заблокирован
+      Result := True;
+    end;
+  except
+    Result := True;
+  end;
+end;
 procedure CreateDatabase;
 begin
   // If file exists, delete it
-  if FileExists(SQLite3Connection.DatabaseName) then
-    DeleteFile(SQLite3Connection.DatabaseName);
+  // Использование
+  if not IsDatabaseLocked(SQLite3Connection.DatabaseName) then
+  begin
+    if FileExists(SQLite3Connection.DatabaseName) then
+      DeleteFile(SQLite3Connection.DatabaseName);
+  end
+  else
+    ShowMessage('База данных заблокирована!');
 
   // Create new database
   SQLite3Connection.Open;
@@ -212,7 +240,7 @@ begin
   Query := TSQLQuery.Create(nil);
   try
     Query.Database := SQLite3Connection;
-
+    //ZCMsgCallBackInterface.TextMessage(' 1',TMWOHistoryOut);
     // Insert records
     Query.SQL.Text := 'INSERT INTO dev (devname, hdname, hdgroup, icanhd) VALUES (:devname, :hdname, :hdgroup, :icanhd)';
 
@@ -251,7 +279,7 @@ begin
                Query.Params.ParamByName('icanhd').AsInteger := 0;
 
             //ZCMsgCallBackInterface.TextMessage(' pvd=' + pstring(pvd^.data.Addr.Instance)^,TMWOHistoryOut);
-                Query.ExecSQL;
+            Query.ExecSQL;
            end;
         pobj:=drawings.GetCurrentROOT^.ObjArray.iterate(ir); //переход к следующем примитиву в списке выбраных примитивов
       until pobj=nil;
@@ -319,13 +347,14 @@ var
     InsertData;
     ShowData;
     ZCMsgCallBackInterface.TextMessage('Database successfully created and populated!',TMWOHistoryOut);
+    FreeComponents;
   except
-    on E: Exception do
+    on E: Exception do begin
+      FreeComponents;
       ZCMsgCallBackInterface.TextMessage('Error: ' + E.Message,TMWOHistoryOut);
+    end;
   end;
-  FreeComponents;
-
-    result:=cmd_ok;
+  result:=cmd_ok;
  end;
 
 procedure managerconnectexecute;
@@ -349,13 +378,13 @@ var
     InsertData;
     ShowData;
     ZCMsgCallBackInterface.TextMessage('Database successfully created and populated!',TMWOHistoryOut);
+    FreeComponents;
   except
-    on E: Exception do
+    on E: Exception do begin
+      FreeComponents;
       ZCMsgCallBackInterface.TextMessage('Error: ' + E.Message,TMWOHistoryOut);
+    end;
   end;
-  FreeComponents;
-
-    //result:=cmd_ok;
  end;
 
 

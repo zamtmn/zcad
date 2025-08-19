@@ -681,7 +681,7 @@ begin
             player^.init(s);
         end;
         6:if player<>nil then
-          player^.LT:=ZCDCtx.PDrawing^.LTypeStyleTable.getAddres(s);
+          player^.LT:=ZCDCtx.PDrawing^.LTypeStyleTable.getAddres(dxfDeCodeString(s,context.Header));
         1001:begin
           if s='AcAecLayerStandard' then begin
             s := rdr.ParseString;
@@ -1862,7 +1862,7 @@ begin
                      else
                          outstream.TXTAddStringEOL(inttostr(-plp^.color));
                     outstream.TXTAddStringEOL(dxfGroupCode(6));
-                    outstream.TXTAddStringEOL(GetLTName(plp^.LT));
+                    outstream.TXTAddStringEOL(dxfEnCodeString(GetLTName(plp^.LT),IODXFContext.Header));
                     {if assigned(plp^.LT) then
                                              outstream.TXTAddStringEOL(PGDBLtypeProp(plp^.LT)^.Name)
                                          else

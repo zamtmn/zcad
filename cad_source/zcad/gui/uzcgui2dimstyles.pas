@@ -28,7 +28,6 @@ uses
 type
   TSupportDimStyleCombo = class
                              class procedure DropDownTStyle(Sender:Tobject);
-                             class procedure CloseUpTStyle(Sender:Tobject);
                              class procedure FillLTStyle(cb:TCustomComboBox);
                              class procedure DrawItemTStyle(Control: TWinControl; Index: Integer; ARect: TRect;
                                                               State: TOwnerDrawState);
@@ -54,10 +53,6 @@ begin
        tcombobox(Sender).Items.Objects[i]:=tobject(PDimStyle);
   end;
   tcombobox(Sender).ItemIndex:=-1;
-end;
-class procedure TSupportDimStyleCombo.CloseUpTStyle(Sender:Tobject);
-begin
-     tcombobox(Sender).ItemIndex:=0;
 end;
 class procedure TSupportDimStyleCombo.FillLTStyle(cb:TCustomComboBox);
 begin

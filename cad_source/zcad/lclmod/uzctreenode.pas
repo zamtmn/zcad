@@ -26,7 +26,8 @@ uses
   Controls,Classes,menus,Forms,lcltype,LazUTF8,Buttons,
   uzcinterface,uzccommandsabstract,
   uzcutils,uzbpaths,uzctranslations,varmandef,
-  uzccommandsmanager,uzclog,uzcdrawings,Varman,UBaseTypeDescriptor;
+  uzccommandsmanager,uzclog,uzcdrawings,Varman,UBaseTypeDescriptor,
+  uzmenusmanager;
 type
     TZAction=class(TAction)
                    public
@@ -100,14 +101,19 @@ type
                protected procedure DoContextPopup(MousePos: TPoint; var Handled: Boolean); override;
     end;
     TZToolButton=class(TToolButton)
-     protected
-      procedure Paint; override;
-      procedure MouseDown(Button: TMouseButton; Shift: TShiftState; X, Y: Integer);override;
-      procedure MouseLeave;override;
-      procedure MouseMove(Shift: TShiftState; X, Y: Integer); override;
-      procedure KillPopupTimer(Sender: TObject);
-      procedure SetPopupTimer(Sender: TObject);
-      procedure ShowPopUp(Sender: TObject);
+      protected
+        FPressedButtons:TCaptureMouseButtons;
+
+        procedure Paint; override;
+        procedure MouseDown(Button: TMouseButton; Shift: TShiftState; X, Y: Integer);override;
+        procedure MouseUp(Button: TMouseButton; Shift: TShiftState; X, Y: Integer);override;
+        procedure MouseLeave;override;
+        procedure MouseMove(Shift: TShiftState; X, Y: Integer); override;
+        procedure KillPopupTimer(Sender: TObject);
+        procedure SetPopupTimer(Sender: TObject);
+        procedure ShowPopUp(Sender: TObject);
+      public
+        constructor Create(AnOwner: TComponent); override;
     end;
 
   PTFreedForm=^TFreedForm;
@@ -188,7 +194,23 @@ begin
   if assigned(PopupMenu) then begin
     SetPopupTimer(self);
   end;
+  FPressedButtons:=FPressedButtons+[Button];
 end;
+procedure TZToolButton.MouseUp(Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
+var
+  menu:TPopupMenu;
+begin
+  inherited;
+  if(Button=TMouseButton.mbRight)and(TMouseButton.mbRight in FPressedButtons)then begin
+    menu:=MenusManager.GetPopupMenu('TOOLBUTTONCONTEXTMENU',nil);
+    if menu<>nil then
+    begin
+     menu.PopUp;
+    end;
+  end;
+  FPressedButtons:=FPressedButtons-[Button];
+end;
+
 procedure TZToolButton.MouseMove(Shift: TShiftState; X, Y: Integer);
 begin
   inherited;
@@ -200,6 +222,7 @@ procedure TZToolButton.MouseLeave;
 begin
   inherited;
   KillPopupTimer(self);
+  FPressedButtons:=[];
 end;
 procedure TZToolButton.KillPopupTimer(Sender: TObject);
 begin
@@ -223,6 +246,12 @@ begin
     KillPopupTimer(nil);
     PopupMenu.PopUp;
   end;
+end;
+
+constructor TZToolButton.Create(AnOwner: TComponent);
+begin
+  FPressedButtons:=[];
+  inherited;
 end;
 
 function TMySpeedButton.GetDrawDetails: TThemedElementDetails;

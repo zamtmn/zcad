@@ -400,5 +400,13 @@
       <InsertMenu Name="Debug"/>
      </IFONE>
     </Menu2>
+    <Menu Name="TOOLBUTTONCONTEXTMENU">
+      <SubMenu Name="ToolBars">
+        <ToolBars/>
+      </SubMenu>
+      <SubMenu Name="ToolPalettes">
+        <ToolPalettes/>
+      </SubMenu>
+    </Menu>
   </MenusContent>
 </CONFIG>

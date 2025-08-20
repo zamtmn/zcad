@@ -19,6 +19,7 @@ type
     CanBeNode: Boolean;
   end;
 
+
   { TDispatcherConnectionFrame }
 
   TDispatcherConnectionFrame = class(TFrame)

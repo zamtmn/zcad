@@ -112,7 +112,7 @@ uses
    SQLite3Conn,
    sqlite3dyn,
    uzcdrawing,
-   uzvmcdbconsts, Classes,Dialogs,
+   uzvmcdbconsts, Classes,Dialogs, gvector,
    math;
 
    type
@@ -125,6 +125,20 @@ uses
     Level: Integer;
   end;
 
+    //** Совмещение головного устройства с подчинеными для построения иерархии
+    PTDevLevel=^TDevLevel;
+    TDevLevel=record
+                       pobj:PGDBObjDevice;
+                       parentName:string;   //имя головного устройства которое имеет головное устройтсво
+                       headdev:string;      //имя головного устройства
+                       wayHD:string;        //путь только головных устройств
+                       fullWayHD:string;    //путь всех головных устройств c учетом то они не могут быть головными
+                       icanhd:integer;
+    end;
+
+    TListDevLevel=specialize TVector<TDevLevel>;
+
+
 var
   Devices: array of TDevice;
   DevParent: TStringList;
@@ -135,6 +149,7 @@ implementation
 var
   SQLite3Connection: TSQLite3Connection;
   SQLTransaction: TSQLTransaction;
+  listDevLevel:TListDevLevel;
   //Memo: TStringList;
 
   // Функция для поиска и загрузки sqlite3.dll
@@ -231,10 +246,14 @@ begin
     Query.Database := SQLite3Connection;
     Query.SQL.Text := 'CREATE TABLE IF NOT EXISTS dev (' +
                       'id INTEGER PRIMARY KEY AUTOINCREMENT, ' +
+                      'zcadid INTEGER, ' +
                       'devname TEXT NOT NULL, ' +
                       'hdname TEXT, ' +
                       'hdgroup TEXT, ' +
-                      'icanhd INTEGER)';
+                      'icanhd INTEGER,' +
+                      'hdway TEXT, ' +
+                      'hdfullway TEXT' +
+                      ')';
     Query.ExecSQL;
     SQLTransaction.Commit;
     ZCMsgCallBackInterface.TextMessage('Table "dev" created',TMWOHistoryOut);
@@ -250,21 +269,25 @@ var
   pdev: PGDBObjBlockInsert;   //выделеные объекты в пространстве листа
   ir:itrec;  // применяется для обработки списка выделений, но что это понятия не имею :)
   pvd:pvardesk;
+  i,count:integer;
 begin
   Query := TSQLQuery.Create(nil);
   try
     Query.Database := SQLite3Connection;
     //ZCMsgCallBackInterface.TextMessage(' 1',TMWOHistoryOut);
     // Insert records
-    Query.SQL.Text := 'INSERT INTO dev (devname, hdname, hdgroup, icanhd) VALUES (:devname, :hdname, :hdgroup, :icanhd)';
-
+    Query.SQL.Text := 'INSERT INTO dev (zcadid, devname, hdname, hdgroup, icanhd, hdway, hdfullway) VALUES (:zcadid, :devname, :hdname, :hdgroup, :icanhd, :hdway, :hdfullway)';
+    count:=0;
     pobj:=drawings.GetCurrentROOT^.ObjArray.beginiterate(ir); //зона уже выбрана в перспективе застовлять пользователя ее выбирать
     if pobj<>nil then
       repeat
+         inc(count);
          // Определяем что это устройство
          if pobj^.GetObjType=GDBDeviceID then
            begin
             pdev:=PGDBObjDevice(pobj);
+
+            Query.Params.ParamByName('zcadid').AsInteger:=count;
             pvd:=FindVariableInEnt(pdev,'NMO_Name');
             if (pvd<>nil) then
                Query.Params.ParamByName('devname').AsString := pstring(pvd^.data.Addr.Instance)^
@@ -272,8 +295,16 @@ begin
                Query.Params.ParamByName('devname').AsString := 'ERROR';
 
             pvd:=FindVariableInEnt(pdev,'SLCABAGEN1_HeadDeviceName');
-            if (pvd<>nil) then
-               Query.Params.ParamByName('hdname').AsString := pstring(pvd^.data.Addr.Instance)^
+            if (pvd<>nil) then begin
+               Query.Params.ParamByName('hdname').AsString := pstring(pvd^.data.Addr.Instance)^;
+                for i:= 0 to listDevLevel.Size-1 do
+                begin
+                    if listDevLevel[i].headdev = pstring(pvd^.data.Addr.Instance)^ then begin
+                       Query.Params.ParamByName('hdway').AsString := listDevLevel[i].wayHD;
+                       Query.Params.ParamByName('hdfullway').AsString := listDevLevel[i].fullWayHD;
+                    end;
+                end;
+            end
             else
                Query.Params.ParamByName('hdname').AsString := 'ERROR';
 
@@ -292,7 +323,14 @@ begin
              else
                Query.Params.ParamByName('icanhd').AsInteger := 0;
 
+
+
+
             //ZCMsgCallBackInterface.TextMessage(' pvd=' + pstring(pvd^.data.Addr.Instance)^,TMWOHistoryOut);
+            if (Query.Params.ParamByName('hdname').AsString<>'') and
+               (Query.Params.ParamByName('hdname').AsString<>'???') and
+               (Query.Params.ParamByName('hdname').AsString<>'-') and
+               (Query.Params.ParamByName('hdname').AsString<>'ERROR') then
             Query.ExecSQL;
            end;
         pobj:=drawings.GetCurrentROOT^.ObjArray.iterate(ir); //переход к следующем примитиву в списке выбраных примитивов
@@ -333,81 +371,223 @@ begin
     Query.Free;
   end;
 end;
+procedure CreateListHD;
+var
+  devLevel: TDevLevel;
+  pobj: pGDBObjEntity;   //выделеные объекты в пространстве листа
+  pdev: PGDBObjDevice;   //выделеные объекты в пространстве листа
+  ir:itrec;  // применяется для обработки списка выделений, но что это понятия не имею :)
+  pvd:pvardesk;
+  i:integer;
+  notAdd:boolean;
+begin
+    listDevLevel:=TListDevLevel.Create;
+
+    pobj:=drawings.GetCurrentROOT^.ObjArray.beginiterate(ir); //зона уже выбрана в перспективе застовлять пользователя ее выбирать
+    if pobj<>nil then
+      repeat
+         // Определяем что это устройство
+         if pobj^.GetObjType=GDBDeviceID then
+           begin
+            pdev:=PGDBObjDevice(pobj);
+            pvd:=FindVariableInEnt(pdev,'SLCABAGEN1_HeadDeviceName');
+            if (pvd<>nil) then
+               devLevel.headdev := pstring(pvd^.data.Addr.Instance)^;
+
+            pvd:=FindVariableInEnt(pdev,'ANALYSISEM_icanbeheadunit');
+            if (pvd<>nil) then
+               if (pboolean(pvd^.data.Addr.Instance)^ = True) then
+                  devLevel.icanhd := 1
+               else
+                  devLevel.icanhd := 0
+             else
+               devLevel.icanhd := 0;
+
+            devLevel.parentName := 'root';
+            notAdd:=false;
+            if listDevLevel.IsEmpty then begin
+              if (devLevel.headdev<>'') and (devLevel.headdev<>'-') and (devLevel.headdev<>'???') then
+                 listDevLevel.PushBack(devLevel); end
+            else
+            begin
+               for i:= 0 to listDevLevel.Size-1 do
+                 if listDevLevel[i].headdev = devLevel.headdev then
+                    notAdd:=true;
+
+               if notAdd=false then
+                 if (devLevel.headdev<>'') and (devLevel.headdev<>'-') and (devLevel.headdev<>'???') then
+                   listDevLevel.PushBack(devLevel);
+            end;
+
+            //ZCMsgCallBackInterface.TextMessage(' pvd=' + pstring(pvd^.data.Addr.Instance)^,TMWOHistoryOut);
+           end;
+        pobj:=drawings.GetCurrentROOT^.ObjArray.iterate(ir); //переход к следующем примитиву в списке выбраных примитивов
+      until pobj=nil;
+
+    //for i:= 0 to listDevLevel.Size-1 do
+    //     ZCMsgCallBackInterface.TextMessage(' headdev=' + listDevLevel[i].headdev,TMWOHistoryOut);
+end;
+procedure CorrectListHD;
+var
+  devLevel: TDevLevel;
+  pobj: pGDBObjEntity;   //выделеные объекты в пространстве листа
+  pdev: PGDBObjDevice;   //выделеные объекты в пространстве листа
+  ir:itrec;  // применяется для обработки списка выделений, но что это понятия не имею :)
+  pvd, pvd2:pvardesk;
+  i:integer;
+  notAdd:boolean;
+begin
+    pobj:=drawings.GetCurrentROOT^.ObjArray.beginiterate(ir); //зона уже выбрана в перспективе застовлять пользователя ее выбирать
+    if pobj<>nil then
+      repeat
+         // Определяем что это устройство
+         if pobj^.GetObjType=GDBDeviceID then
+           begin
+            pdev:=PGDBObjDevice(pobj);
+            pvd:=FindVariableInEnt(pdev,'NMO_Name');
+            if (pvd<>nil) then
+              begin
+               for i:= 0 to listDevLevel.Size-1 do
+                 begin
+                    if listDevLevel[i].headdev = pstring(pvd^.data.Addr.Instance)^ then
+                      begin
+                        listDevLevel.Mutable[i]^.pobj:=PGDBObjDevice(pobj);
+
+                        pvd2:=FindVariableInEnt(pdev,'ANALYSISEM_icanbeheadunit');
+                        if (pvd2<>nil) then
+                           if (pboolean(pvd2^.data.Addr.Instance)^ = True) then
+                              listDevLevel.Mutable[i]^.icanhd := 1
+                           else
+                              listDevLevel.Mutable[i]^.icanhd := 0
+                         else
+                           listDevLevel.Mutable[i]^.icanhd := 0;
+
+                        pvd2:=FindVariableInEnt(pdev,'SLCABAGEN1_HeadDeviceName');
+                          if (pvd2<>nil) then
+                             if (pstring(pvd2^.data.Addr.Instance)^<>'') and (pstring(pvd2^.data.Addr.Instance)^<>'-') and (pstring(pvd2^.data.Addr.Instance)^<>'???') then
+                                listDevLevel.Mutable[i]^.parentName := pstring(pvd2^.data.Addr.Instance)^;
+                          //   else
+                          //      listDevLevel.Mutable[i]^.parentName:='root'
+                          //else
+                          //    listDevLevel.Mutable[i]^.parentName:='root';
+                      end;
+                 end;
+              end;
+           end;
+        pobj:=drawings.GetCurrentROOT^.ObjArray.iterate(ir); //переход к следующем примитиву в списке выбраных примитивов
+      until pobj=nil;
+
+    //for i:= 0 to listDevLevel.Size-1 do
+    //     ZCMsgCallBackInterface.TextMessage(' headdev=' + listDevLevel[i].headdev + ' parentName=' + listDevLevel[i].parentName,TMWOHistoryOut);
+end;
+
+function FindFullHierarchy(const nodeName: string; var hierarchy: string): Boolean;
+var
+  i: Integer;
+  parentNode: string;
+begin
+  Result := False;
+
+  // Ищем узел по имени
+  for i := 0 to listDevLevel.Size-1 do
+  begin
+    if listDevLevel[i].headdev = nodeName then
+    begin
+      parentNode := listDevLevel[i].parentName;
+
+      // Если это корневой узел
+      if parentNode = 'root' then
+      begin
+        hierarchy := nodeName;
+        Result := True;
+        Exit;
+      end;
+
+      // Рекурсивно ищем родителя
+      if FindFullHierarchy(parentNode, hierarchy) then
+      begin
+        hierarchy := hierarchy + '~' + nodeName;
+        Result := True;
+        Exit;
+      end;
+    end;
+  end;
+end;
+
+procedure BuildHierarchyFullWay;
+var
+  i: Integer;
+  hierarchy: string;
+begin
+  for i := 0 to listDevLevel.Size-1 do
+  begin
+    if FindFullHierarchy(listDevLevel[i].headdev, hierarchy) then begin
+       listDevLevel.Mutable[i]^.fullWayHD:=hierarchy;
+       //ZCMsgCallBackInterface.TextMessage(listDevLevel[i].headdev+'~' + listDevLevel[i].parentName + ' -> ' + hierarchy,TMWOHistoryOut)
+      //Writeln(Nodes[i].Name, '~', Nodes[i].Parent, ' -> ', hierarchy)
+      end
+    else
+       ZCMsgCallBackInterface.TextMessage(listDevLevel[i].headdev+'~' + listDevLevel[i].parentName + ' -> Иерархия не найдена',TMWOHistoryOut)
+      //Writeln(Nodes[i].Name, '~', Nodes[i].Parent, ' -> Иерархия не найдена');
+  end;
+end;
+ function FindOnlyHDHierarchy(const nodeName: string; var hierarchy: string): Boolean;
+var
+  i: Integer;
+  parentNode: string;
+begin
+  Result := False;
+
+  // Ищем узел по имени
+  for i := 0 to listDevLevel.Size-1 do
+  begin
+    if listDevLevel[i].headdev = nodeName then
+    begin
+      parentNode := listDevLevel[i].parentName;
+
+      // Если это корневой узел
+      if parentNode = 'root' then
+      begin
+        hierarchy := nodeName;
+        Result := True;
+        Exit;
+      end;
+
+      // Рекурсивно ищем родителя
+      if FindOnlyHDHierarchy(parentNode, hierarchy) then
+      begin
+       if listDevLevel[i].icanhd = 1 then
+          hierarchy := hierarchy + '~' + nodeName;
+        Result := True;
+        Exit;
+      end;
+    end;
+  end;
+end;
+
+procedure BuildHierarchyOnlyHD;
+var
+  i: Integer;
+  hierarchy: string;
+begin
+  for i := 0 to listDevLevel.Size-1 do
+  begin
+    if FindOnlyHDHierarchy(listDevLevel[i].headdev, hierarchy) then begin
+       listDevLevel.Mutable[i]^.wayHD:=hierarchy;
+       //ZCMsgCallBackInterface.TextMessage(listDevLevel[i].headdev+'~' + listDevLevel[i].parentName + ' -> ' + hierarchy,TMWOHistoryOut)
+      //Writeln(Nodes[i].Name, '~', Nodes[i].Parent, ' -> ', hierarchy)
+      end
+    else
+       ZCMsgCallBackInterface.TextMessage(listDevLevel[i].headdev+'~' + listDevLevel[i].parentName + ' -> Иерархия не найдена',TMWOHistoryOut)
+      //Writeln(Nodes[i].Name, '~', Nodes[i].Parent, ' -> Иерархия не найдена');
+  end;
+end;
 procedure FreeComponents;
 begin
   SQLTransaction.Free;
   SQLite3Connection.Free;
 end;
 
-function GetParent(DevName: string): string;
-var
-  idx: Integer;
-begin
-  idx := DevParent.IndexOfName(DevName);
-  if idx >= 0 then
-    Result := DevParent.ValueFromIndex[idx]
-  else
-    Result := '???';
-end;
-
-function GetDepth(DevName: string): Integer;
-var
-  Parent: string;
-begin
-  Parent := GetParent(DevName);
-  if (Parent = '') or (Parent = '???') then
-    Exit(0)
-  else
-    Result := GetDepth(Parent) + 1;
-end;
-
-procedure CalculateLevels;
-var
-  i: Integer;
-begin
-  for i := 0 to High(Devices) do
-    Devices[i].Level := GetDepth(Devices[i].DevName);
-end;
-
-procedure PrintTable;
-var
-  i: Integer;
-begin
-  ZCMsgCallBackInterface.TextMessage('ID | DevName        | HdName    | Level',TMWOHistoryOut);
-  ZCMsgCallBackInterface.TextMessage('---+---------------+-----------+-------',TMWOHistoryOut);
-  WriteLn('ID | DevName        | HdName    | Level');
-  WriteLn('---+---------------+-----------+-------');
-  for i := 0 to High(Devices) do
-    ZCMsgCallBackInterface.TextMessage('---+---------------+-----------+-------' + inttostr(Devices[i].Level),TMWOHistoryOut);
-    //WriteLn(Format('%3d | %-13s | %-9s | %d',
-    //  [Devices[i].ID, Devices[i].DevName, Devices[i].HdName, Devices[i].Level]));
-end;
-
-procedure LoadData;
-begin
-  // Пример: добавляем несколько устройств вручную
-  SetLength(Devices, 7);
-
-  Devices[0].ID := 1;  Devices[0].DevName := 'ВРУ1';  Devices[0].HdName := '???';
-  Devices[1].ID := 7;  Devices[1].DevName := 'ЩР1';   Devices[1].HdName := 'ВРУ1';
-  Devices[2].ID := 17; Devices[2].DevName := 'ШУ1';   Devices[2].HdName := 'ЩР1';
-  Devices[3].ID := 18; Devices[3].DevName := 'ЯУ1';   Devices[3].HdName := 'ШУ1';
-  Devices[4].ID := 19; Devices[4].DevName := 'Дв1(??)¶1'; Devices[4].HdName := 'ЯУ1';
-  Devices[5].ID := 21; Devices[5].DevName := 'ШУ2';   Devices[5].HdName := 'ЩР1';
-  Devices[6].ID := 22; Devices[6].DevName := 'ЯУ2';   Devices[6].HdName := 'ШУ2';
-end;
-
-procedure BuildParentMap;
-var
-  i: Integer;
-begin
-  DevParent := TStringList.Create;
-  DevParent.Sorted := False;
-  DevParent.Duplicates := dupIgnore;
-
-  for i := 0 to High(Devices) do
-    DevParent.Values[Devices[i].DevName] := Devices[i].HdName;
-end;
 function managerconnect_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 var
   filepath:string;
@@ -455,6 +635,11 @@ var
 
 
   try
+    CreateListHD;
+    CorrectListHD;
+    BuildHierarchyFullWay;
+    BuildHierarchyOnlyHD;
+
     CreateDatabase;
     CreateTable;
     InsertData;
@@ -462,10 +647,10 @@ var
     ZCMsgCallBackInterface.TextMessage('Database successfully created and populated!',TMWOHistoryOut);
     FreeComponents;
 
-      LoadData;           // Загружаем тестовую таблицу
-  BuildParentMap;     // Создаём словарь родительских связей
-  CalculateLevels;    // Считаем глубину для всех устройств
-  PrintTable;         // Выводим итоговую таблицу
+  //    LoadData;           // Загружаем тестовую таблицу
+  //BuildParentMap;     // Создаём словарь родительских связей
+  //CalculateLevels;    // Считаем глубину для всех устройств
+  //PrintTable;         // Выводим итоговую таблицу
   except
     on E: Exception do begin
       FreeComponents;

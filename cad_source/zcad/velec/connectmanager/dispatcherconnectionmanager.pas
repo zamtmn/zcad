@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, Forms, Controls,Graphics,  laz.VirtualTrees, SQLite3Conn, SQLDB, DB,uzcdrawing,uzcdrawings,uzvmcdbconsts,uzcinterface,
-  Dialogs, ExtCtrls, BufDataset,  DBGrids, Grids, ActnList, ComCtrls, Windows,
+  Dialogs, ExtCtrls, BufDataset,  DBGrids, Grids, ActnList, ComCtrls, Windows,fgl,
   uzvmanagerconnect;
 
 type
@@ -15,6 +15,7 @@ type
   TNodeData = record
     DeviceName: string;
     ConnectedTo: string;
+    fullpath: string;
     Group: string;
     CanBeNode: Boolean;
   end;
@@ -62,10 +63,11 @@ type
     procedure TreeFreeNode(Sender: TBaseVirtualTree; Node: PVirtualNode);
     procedure TreeClick(Sender: TObject);
     function HasChildren(const DeviceName: string): Boolean;
-    procedure AddChildDevices(ParentNode: PVirtualNode; const ParentDeviceName: string);
     function GetDatabasePath: String;
     procedure AddAction(AName, ACaption: string; AImageIndex: string;
   AHint, AShortCut: string; AEvent: TNotifyEvent);
+    procedure AddPathToTree(ParentNode: PVirtualNode; const Path: string);
+    function FindOrCreateChild(ParentNode: PVirtualNode; const HDWay,NodeName: string): PVirtualNode;
 
     procedure CurrentSelActionExecute(Sender: TObject);
     procedure AllSelActionExecute(Sender: TObject);
@@ -344,11 +346,11 @@ begin
       Close;
       FieldDefs.Clear;
       FieldDefs.Add('ActionShow', ftString, 10);
-      FieldDefs.Add('ID', ftInteger);
+      //FieldDefs.Add('ID', ftInteger);
       FieldDefs.Add('devname', ftString, 20);
       FieldDefs.Add('hdname', ftString, 20);
       FieldDefs.Add('hdgroup', ftString, 20);
-      FieldDefs.Add('icanhd', ftString, 20);
+      //FieldDefs.Add('icanhd', ftString, 20);
       FieldDefs.Add('ActionEdit', ftString, 10);
       CreateDataset;
     end;
@@ -369,11 +371,11 @@ begin
     end;
 
     // Обычные поля
-    with gridDev.Columns.Add do FieldName := 'ID';
+    //with gridDev.Columns.Add do FieldName := 'ID';
     with gridDev.Columns.Add do FieldName := 'devname';
     with gridDev.Columns.Add do FieldName := 'hdname';
     with gridDev.Columns.Add do FieldName := 'hdgroup';
-    with gridDev.Columns.Add do FieldName := 'icanhd';
+    //with gridDev.Columns.Add do FieldName := 'icanhd';
 
 
     // Кнопка "Ред."
@@ -407,8 +409,9 @@ begin
       bufGridDev.Append;
       bufGridDev.FieldByName('ActionShow').AsString := '';
       bufGridDev.FieldByName('ActionEdit').AsString := '';
-      for i := 0 to writeQuery.Fields.Count - 1 do
-        bufGridDev.Fields[i+1].Assign(writeQuery.Fields[i]);
+      for i := 2 to writeQuery.Fields.Count - 3 do begin
+        bufGridDev.Fields[i-1].Assign(writeQuery.Fields[i]);
+      end;
       bufGridDev.Post;
       writeQuery.Next;
     end;
@@ -562,44 +565,33 @@ end;
 
 procedure TDispatcherConnectionFrame.BuildDeviceHierarchy;
 var
-  RootNode, DeviceNode: PVirtualNode;
+  RootNode: PVirtualNode;
+  RootData: PNodeData;
   TempQuery: TSQLQuery;
-  NodeData: PNodeData;
 begin
   FDeviceTree.BeginUpdate;
   try
+    // Очищаем дерево
     FDeviceTree.Clear;
     FDeviceTree.NodeDataSize := SizeOf(TNodeData);
 
-    // Добавляем корневой узел "Все устройства"
+    // Создаём корневой узел "Все устройства"
     RootNode := FDeviceTree.AddChild(nil);
     RootNode^.CheckType := ctTriStateCheckBox;
-    NodeData := FDeviceTree.GetNodeData(RootNode);
-    NodeData^.DeviceName := 'Все устройства';
+    RootData := FDeviceTree.GetNodeData(RootNode);
+    RootData^.DeviceName := 'Все устройства';
+    RootData^.fullpath := '';
 
+    // Загружаем все пути устройств
     TempQuery := TSQLQuery.Create(nil);
     try
       TempQuery.Database := SQLite3Connection;
-      TempQuery.SQL.Text := 'SELECT devname, hdname, hdgroup, icanhd FROM dev WHERE hdname = '''' OR hdname = ''???''';
+      TempQuery.SQL.Text := 'SELECT hdway FROM dev WHERE TRIM(hdway) <> ""';
       TempQuery.Open;
 
       while not TempQuery.EOF do
       begin
-        ZCMsgCallBackInterface.TextMessage('112121',TMWOHistoryOut);
-        if TempQuery.FieldByName('icanhd').AsInteger = 1 then
-        begin
-          // Создаем узел устройства
-          DeviceNode := FDeviceTree.AddChild(RootNode);
-          NodeData := FDeviceTree.GetNodeData(DeviceNode);
-          NodeData^.DeviceName := TempQuery.FieldByName('devname').AsString;
-          ZCMsgCallBackInterface.TextMessage('NodeData^.DeviceName=' + NodeData^.DeviceName,TMWOHistoryOut);
-          NodeData^.ConnectedTo := TempQuery.FieldByName('hdname').AsString;
-          NodeData^.Group := TempQuery.FieldByName('hdgroup').AsString;
-          NodeData^.CanBeNode := TempQuery.FieldByName('icanhd').AsBoolean;
-
-          // Добавляем дочерние устройства
-          AddChildDevices(DeviceNode, NodeData^.DeviceName);
-        end;
+        AddPathToTree(RootNode, TempQuery.FieldByName('hdway').AsString);
         TempQuery.Next;
       end;
     finally
@@ -612,40 +604,60 @@ begin
   end;
 end;
 
-procedure TDispatcherConnectionFrame.AddChildDevices(ParentNode: PVirtualNode;
-  const ParentDeviceName: string);
+// ===============================================================
+//  Рекурсивное добавление пути в дерево
+// ===============================================================
+procedure TDispatcherConnectionFrame.AddPathToTree(ParentNode: PVirtualNode; const Path: string);
 var
-  ChildQuery: TSQLQuery;
+  Parts: TStringList;
+  i: Integer;
+  CurrentNode: PVirtualNode;
   NodeData: PNodeData;
-  ChildNode: PVirtualNode;
 begin
-  ChildQuery := TSQLQuery.Create(nil);
+  Parts := TStringList.Create;
   try
-    ChildQuery.Database := SQLite3Connection;
-    ChildQuery.SQL.Text := 'SELECT devname, hdname, hdgroup, icanhd FROM dev WHERE hdname = :parent_name';
-    ChildQuery.ParamByName('parent_name').AsString := ParentDeviceName;
-    ChildQuery.Open;
+    Parts.Delimiter := '~';
+    Parts.StrictDelimiter := True;
+    Parts.DelimitedText := Path;
 
-    while not ChildQuery.EOF do
+    CurrentNode := ParentNode;
+
+    for i := 0 to Parts.Count - 1 do
     begin
-      // Создаем дочерний узел
-      ChildNode := FDeviceTree.AddChild(ParentNode);
-      NodeData := FDeviceTree.GetNodeData(ChildNode);
-      NodeData^.DeviceName := ChildQuery.FieldByName('devname').AsString;
-      NodeData^.ConnectedTo := ChildQuery.FieldByName('hdname').AsString;
-      NodeData^.Group := ChildQuery.FieldByName('hdgroup').AsString;
-      NodeData^.CanBeNode := ChildQuery.FieldByName('icanhd').AsBoolean;
-
-      // Если устройство может быть узлом, добавляем его детей
-      if NodeData^.CanBeNode then
-        AddChildDevices(ChildNode, NodeData^.DeviceName);
-
-      ChildQuery.Next;
+      // Проверяем, есть ли уже узел с таким именем
+      CurrentNode := FindOrCreateChild(CurrentNode,Path, Parts[i]);
     end;
   finally
-    ChildQuery.Free;
+    Parts.Free;
   end;
 end;
+
+// ===============================================================
+//  Поиск существующего узла или его создание
+// ===============================================================
+function TDispatcherConnectionFrame.FindOrCreateChild(ParentNode: PVirtualNode; const HDWay,NodeName: string): PVirtualNode;
+var
+  ChildNode: PVirtualNode;
+  NodeData: PNodeData;
+begin
+  // Ищем среди уже созданных детей
+  ChildNode := FDeviceTree.GetFirstChild(ParentNode);
+  while Assigned(ChildNode) do
+  begin
+    NodeData := FDeviceTree.GetNodeData(ChildNode);
+    if Assigned(NodeData) and (NodeData^.DeviceName = NodeName) then
+      Exit(ChildNode);
+
+    ChildNode := FDeviceTree.GetNextSibling(ChildNode);
+  end;
+
+  // Если не нашли — создаём новый узел
+  Result := FDeviceTree.AddChild(ParentNode);
+  NodeData := FDeviceTree.GetNodeData(Result);
+  NodeData^.DeviceName := NodeName;
+  NodeData^.fullpath := HDWay;
+end;
+
 
 procedure TDispatcherConnectionFrame.TreeClick(Sender: TObject);
 var
@@ -658,13 +670,12 @@ begin
     Data := FDeviceTree.GetNodeData(Node);
     if Assigned(Data) then
     begin
-      //ShowMessage(
-      //  'Устройство: ' + Data^.DeviceName + #13#10 +
-      //  'Подключено к: ' + Data^.ConnectedTo + #13#10 +
-      //  'Группа подключения: ' + Data^.Group + #13#10 +
-      //  'Может быть узлом: ' + BoolToStr(Data^.CanBeNode, True));
+      ShowMessage(
+        'Устройство: ' + Data^.DeviceName + #13#10 +
+        'Подключено к: ' + Data^.fullpath + #13#10
+        );
       if Data^.DeviceName <> 'Все устройства' then
-        recordingGridDev('SELECT * FROM dev WHERE hdname = '''+ Data^.DeviceName + '''')
+        recordingGridDev('SELECT * FROM dev WHERE hdway = '''+ Data^.fullpath + '''')
       else
        recordingGridDev('SELECT * FROM dev')
     end

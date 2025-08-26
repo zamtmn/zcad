@@ -90,7 +90,7 @@ implementation
 constructor TDispatcherConnectionFrame.Create(TheOwner: TComponent);
 begin
   inherited Create(TheOwner);
-  ShowMessage('Активировался TFRAME: ');
+  //ShowMessage('Активировался TFRAME: ');
 
   Name := 'DispatcherConnectionFrame';
   Caption := 'Диспетчер подключений';

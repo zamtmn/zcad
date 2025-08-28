@@ -68,6 +68,7 @@ type
   AHint, AShortCut: string; AEvent: TNotifyEvent);
     procedure AddPathToTree(ParentNode: PVirtualNode; const Path: string);
     function FindOrCreateChild(ParentNode: PVirtualNode; const HDWay,NodeName: string): PVirtualNode;
+    function GetNodePhysicalPath(Node: PVirtualNode): string;
 
     procedure CurrentSelActionExecute(Sender: TObject);
     procedure AllSelActionExecute(Sender: TObject);
@@ -208,14 +209,14 @@ begin
   uzvmanagerconnect.managerconnectexecute;
 
      // Инициализация компонентов базы данных
-     ShowMessage('1 ');
+     //ShowMessage('1 ');
   if not flagConnectDB then
   begin
       SQLite3Connection := TSQLite3Connection.Create(Self);
       SQLTransaction := TSQLTransaction.Create(Self);
       SQLQuery := TSQLQuery.Create(Self);
   end;
-   ShowMessage('2 ');
+   //ShowMessage('2 ');
 
   SQLite3Connection.Transaction := SQLTransaction;
   SQLTransaction.Database := SQLite3Connection;
@@ -347,9 +348,9 @@ begin
       FieldDefs.Clear;
       FieldDefs.Add('ActionShow', ftString, 10);
       //FieldDefs.Add('ID', ftInteger);
-      FieldDefs.Add('devname', ftString, 20);
-      FieldDefs.Add('hdname', ftString, 20);
-      FieldDefs.Add('hdgroup', ftString, 20);
+      FieldDefs.Add('devname', ftString, 10);
+      FieldDefs.Add('hdname', ftString, 10);
+      FieldDefs.Add('hdgroup', ftString, 10);
       //FieldDefs.Add('icanhd', ftString, 20);
       FieldDefs.Add('ActionEdit', ftString, 10);
       CreateDataset;
@@ -658,6 +659,48 @@ begin
   NodeData^.fullpath := HDWay;
 end;
 
+function TDispatcherConnectionFrame.GetNodePhysicalPath(Node: PVirtualNode): string;
+var
+  Cur: PVirtualNode;
+  NodeData: PNodeData;
+  Parts: TStringList;
+  tempName: String;
+begin
+  Result := '';
+  if not Assigned(Node) then Exit;
+
+  Parts := TStringList.Create;
+  try
+    Cur := Node;
+    while Assigned(Cur) do
+    begin
+      NodeData := FDeviceTree.GetNodeData(Cur);
+      if Assigned(NodeData) then
+      begin
+        tempName := Trim(NodeData^.DeviceName);
+        if tempName <> '' then
+          Parts.Insert(0, tempName); // ключевой момент: добавляем в начало
+      end;
+
+      // дошли до верхнего уровня — выходим
+      if FDeviceTree.GetNodeLevel(Cur) = 0 then
+        Break;
+
+      Cur := Cur^.Parent;
+    end;
+
+    // убираем корневую "шапку"
+    if (Parts.Count > 0) and (Parts[0] = 'Все устройства') then
+      Parts.Delete(0);
+
+    Parts.StrictDelimiter := True;
+    Parts.Delimiter := '~';
+    Result := Parts.DelimitedText;
+  finally
+    Parts.Free;
+  end;
+end;
+
 
 procedure TDispatcherConnectionFrame.TreeClick(Sender: TObject);
 var
@@ -665,17 +708,23 @@ var
   Data: PNodeData;
 begin
   Node := FDeviceTree.GetFirstSelected;
+  //if not Assigned(Node) then
+  //begin
+  //  ShowMessage('Нет выбранной ноды!');
+  //  Exit;
+  //end;
+
   if Assigned(Node) then
   begin
     Data := FDeviceTree.GetNodeData(Node);
     if Assigned(Data) then
     begin
-      ShowMessage(
-        'Устройство: ' + Data^.DeviceName + #13#10 +
-        'Подключено к: ' + Data^.fullpath + #13#10
-        );
+      //ShowMessage(
+      //  'Устройство: ' + Data^.DeviceName + #13#10 +
+      //  'Подключено к: '+ GetNodePhysicalPath(Node) + #13#10
+      //  );
       if Data^.DeviceName <> 'Все устройства' then
-        recordingGridDev('SELECT * FROM dev WHERE hdway = '''+ Data^.fullpath + '''')
+        recordingGridDev('SELECT * FROM dev WHERE hdway = '''+ GetNodePhysicalPath(Node) + '''')
       else
        recordingGridDev('SELECT * FROM dev')
     end

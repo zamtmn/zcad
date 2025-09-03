@@ -408,6 +408,7 @@ begin
   //    listError.Destroy;
   // end;
   //
+   uzvtreedevice.cleanSuperlineCablelist;
 
    for graphBuilderInfo in listAllGraph do
      begin

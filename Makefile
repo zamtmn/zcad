@@ -134,7 +134,7 @@ checkvars:
 #	@echo ZP=$(ZP)
 	@echo INSTALLPREFIX=$(INSTALLPREFIX)
 
-checkzpvars:
+checkzpvar:
 	@echo ZP=$(ZP)
 
 clean:

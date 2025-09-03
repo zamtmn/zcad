@@ -1097,7 +1097,7 @@ var
     pObjDevice:PGDBObjDevice;
     //pSuperLine:PGDBObjSuperLine;
     ir:itrec;  // применяется для обработки списка выделений, но что это понятия не имею :)
-    NearObjects:GDBObjOpenArrayOfPV;//список примитивов рядом с точкой
+    NearObjects:GDBObjOpenArrayOfPV;//списlistVertexок примитивов рядом с точкой
     templength:double;
     listDev:TGDBDevice;
 begin
@@ -1190,6 +1190,7 @@ begin
               //uzvtestdraw.testDrawCircle(pObjDevice^.P_insert_in_WCS,2,4);
 
               //**поиск номера вершины устройства которого мы обноружили кабелем
+               numVertDevice:=-1;
                for k:=0 to graph.listVertex.Size-1 do
                begin
                   if (uzvslagcabComParams.settingVizCab.vizFullTreeCab = true) then begin
@@ -1205,7 +1206,7 @@ begin
                end;
                //****//
                //** создаем вершину в точки линии в котором обноружилось устройство и прокладываем ребро от этой точки до коннектора устройства
-               if dublicateVertex({listDevice}graph.listVertex,vertexLine,accuracy) = false then begin
+               if (dublicateVertex({listDevice}graph.listVertex,vertexLine,accuracy) = false)and(numVertDevice<>-1) then begin
                   if (uzvslagcabComParams.settingVizCab.vizFullTreeCab = true) then
                      ZCMsgCallBackInterface.TextMessage('**РАБОТАЕТ!!!!!!!' + inttostr(numVertDevice),TMWOHistoryOut);
                   infoDevice.deviceEnt:=nil;
@@ -1230,6 +1231,13 @@ begin
                      ZCMsgCallBackInterface.TextMessage('**infoEdge.VPoint2.X ='+floattostr(infoEdge.VPoint2.x) + '** infoEdge.VPoint2.Y ='+floattostr(infoEdge.VPoint2.y),TMWOHistoryOut);
 
                   graph.listEdge.PushBack(infoEdge);
+                end;
+
+                if numVertDevice=-1 then begin
+                  ZCMsgCallBackInterface.TextMessage('**чтото пошло не так',TMWOHistoryOut);
+                  for k:=0 to graph.listVertex.Size-1 do
+                    if (graph.listVertex[k].deviceEnt <> nil) and (pObjDevice <> nil) then
+                      ZCMsgCallBackInterface.TextMessage('**graph.listVertex[k].deviceEnt NMO_Name='+pString(FindVariableInEnt(graph.listVertex[k].deviceEnt,'NMO_Name')^.data.Addr.Instance)^ + '**pObjDevice NMO_Name='+pString(FindVariableInEnt(pObjDevice,'NMO_Name')^.data.Addr.Instance)^,TMWOHistoryOut);
                 end;
                //****//
             end;

@@ -1234,13 +1234,13 @@ begin
                 end;
 
                 if numVertDevice=-1 then begin
-                  ZCMsgCallBackInterface.TextMessage('**чтото пошло не так',TMWOHistoryOut);
+                  zcUI.TextMessage('**чтото пошло не так',TMWOHistoryOut);
                   for k:=0 to graph.listVertex.Size-1 do begin
                     if (graph.listVertex[k].deviceEnt <> nil) then
-                      ZCMsgCallBackInterface.TextMessage('**graph.listVertex[k].deviceEnt NMO_Name='+pString(FindVariableInEnt(graph.listVertex[k].deviceEnt,'NMO_Name')^.data.Addr.Instance)^,TMWOHistoryOut);
+                      zcUI.TextMessage('**graph.listVertex[k].deviceEnt NMO_Name='+pString(FindVariableInEnt(graph.listVertex[k].deviceEnt,'NMO_Name')^.data.Addr.Instance)^,TMWOHistoryOut);
                   end;
                   if (pObjDevice <> nil) then
-                      ZCMsgCallBackInterface.TextMessage('**pObjDevice NMO_Name='+pString(FindVariableInEnt(pObjDevice,'NMO_Name')^.data.Addr.Instance)^,TMWOHistoryOut);
+                      zcUI.TextMessage('**pObjDevice NMO_Name='+pString(FindVariableInEnt(pObjDevice,'NMO_Name')^.data.Addr.Instance)^,TMWOHistoryOut);
                 end;
                //****//
             end;

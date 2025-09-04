@@ -123,7 +123,7 @@ begin
   CDWG:=drawings.GetCurrentDWG;
   if cdwg<>nil then
     if not cdwg^.GetCurrentLayer^._on then
-      ZCMsgCallBackInterface.TextMessage(rsCurrentLayerOff,TMWOMessageBox);
+      zcUI.TextMessage(rsCurrentLayerOff,TMWOMessageBox);
       //zcMsgDlg(rsCurrentLayerOff,zcdiWarning,[],false,nil,rsWarningCaption);
 end;
 
@@ -145,7 +145,7 @@ begin
         end;
         if PLayer=cdwg^.GetCurrentLayer then
           if not PGDBLayerProp(PLayer)^._on then
-            ZCMsgCallBackInterface.TextMessage(rsCurrentLayerOff,TMWOHistoryOut);
+            zcUI.TextMessage(rsCurrentLayerOff,TMWOHistoryOut);
         end;
       {1:;}
       2:begin
@@ -170,20 +170,20 @@ begin
               end;
             end;
           if not PGDBLayerProp(PLayer)^._on then
-            ZCMsgCallBackInterface.TextMessage(rsCurrentLayerOff,TMWOHistoryOut);
+            zcUI.TextMessage(rsCurrentLayerOff,TMWOHistoryOut);
         end else begin
           tcl:=SysVar.dwg.DWG_CLayer^;
           SysVar.dwg.DWG_CLayer^:=Player;
           commandmanager.ExecuteCommand('SelObjChangeLayerToCurrent',CDWG,drawings.GetCurrentOGLWParam);
           SysVar.dwg.DWG_CLayer^:=tcl;
         end;
-        ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIActionRebuild);
+        zcUI.Do_GUIaction(nil,zcMsgUIActionRebuild);
         result:=true;
       end;
     end;
     setlayerstate(PLayer,newlp);
     if not result then begin
-      ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIActionRedraw);
+      zcUI.Do_GUIaction(nil,zcMsgUIActionRedraw);
       zcRedrawCurrentDrawing;
     end;
   end;
@@ -449,7 +449,7 @@ end;
 constructor TLayerComboBoxPopupFocusPriorityControl.Create(AOwner:TComponent);
 begin
   inherited;
-   ZCMsgCallBackInterface.RegisterHandler_GetFocusedControl(GetLayerComboBoxPopupFocusPriority);
+   zcUI.RegisterHandler_GetFocusedControl(GetLayerComboBoxPopupFocusPriority);
 end;
 
 destructor TLayerComboBoxPopupFocusPriorityControl.Destroy;
@@ -575,7 +575,7 @@ begin
                                if not assigned(ColorSelectForm)then
                                Application.CreateForm(TColorSelectForm, ColorSelectForm);
                                //ZCADMainWindow.ShowAllCursors(ColorSelectForm);
-                               ZCMsgCallBackInterface.Do_BeforeShowModal(nil);
+                               zcUI.Do_BeforeShowModal(nil);
                                mr:=ColorSelectForm.run(SysVar.dwg.DWG_CColor^,true){showmodal};
                                if mr=ZCmrOK then
                                               begin
@@ -591,7 +591,7 @@ begin
                                                    tcombobox(Sender).ItemIndex:=OldColor;
                                                    ColorIndex:=-1;
                                               end;
-                               ZCMsgCallBackInterface.Do_AfterShowModal(nil);
+                               zcUI.Do_AfterShowModal(nil);
                                //ZCADMainWindow.RestoreCursors(ColorSelectForm);
                                freeandnil(ColorSelectForm);
                            end;
@@ -610,9 +610,9 @@ begin
           SysVar.dwg.DWG_CColor^:=CColorSave;
      end;
      //setvisualprop;
-     ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIActionRebuild);
+     zcUI.Do_GUIaction(nil,zcMsgUIActionRebuild);
      //setnormalfocus(nil);
-     ZCMsgCallBackInterface.Do_SetNormalFocus;
+     zcUI.Do_SetNormalFocus;
 end;
 class procedure TZTBZCADExtensions.DropDownColor(Sender:Tobject);
 begin
@@ -621,7 +621,7 @@ begin
 end;
 class procedure TZTBZCADExtensions.CloseUp(Sender:Tobject);
 begin
-   ZCMsgCallBackInterface.Do_SetNormalFocus;
+   zcUI.Do_SetNormalFocus;
 end;
 
 class procedure TZTBZCADExtensions.CloseUpColor(Sender:Tobject);
@@ -705,7 +705,7 @@ begin
   _Width:=getAttrValue(aNode,'Width',100);
   //ColorBox:=CreateCBox('ColorComboBox',tb,TSupportColorCombo.ColorBoxDrawItem,ChangeCColor,DropDownColor,DropUpColor,FillColorCombo,_Width,_hint);
   {  if assigned(LayoutBox) then
-    ZCMsgCallBackInterface.TextMessage(format(rsReCreating,['LAYOUTBOX']),TMWOShowError);}
+    zcUI.TextMessage(format(rsReCreating,['LAYOUTBOX']),TMWOShowError);}
   LayoutBox:=CreateLayoutbox(TB);
   LayoutBox.Parent:=TB;
   LayoutBox.AutoSize:=false;
@@ -749,9 +749,9 @@ begin
      end;
      end;
      //setvisualprop;
-     ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIActionRebuild);
+     zcUI.Do_GUIaction(nil,zcMsgUIActionRebuild);
      //setnormalfocus(nil);
-     ZCMsgCallBackInterface.Do_SetNormalFocus;
+     zcUI.Do_SetNormalFocus;
 end;
 
 class procedure TZTBZCADExtensions.CloseUpLType(Sender:Tobject);
@@ -810,9 +810,9 @@ begin
            end;
   end;
   //setvisualprop;
-  ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIActionRebuild);
+  zcUI.Do_GUIaction(nil,zcMsgUIActionRebuild);
   //setnormalfocus(nil);
-  ZCMsgCallBackInterface.Do_SetNormalFocus;
+  zcUI.Do_SetNormalFocus;
 end;
 
 class procedure TZTBZCADExtensions.FillLWCombo(cb:TCustomComboBox);

@@ -292,9 +292,9 @@ begin
                                                                                            entname:=rsNotRegistred;
                                if PMultiPropertyDataForObjects.SetValueErrorRange
                                then
-                                ZCMsgCallBackInterface.TextMessage(sysutils.format(rsInvalidInputForPropery,[mp.MPUserName,entname,msg]),TMWOShowError)
+                                zcUI.TextMessage(sysutils.format(rsInvalidInputForPropery,[mp.MPUserName,entname,msg]),TMWOShowError)
                                else
-                                ZCMsgCallBackInterface.TextMessage(sysutils.format(rsInvalidInputForPropery,[mp.MPUserName,entname,msg]),TMWOSilentShowError);
+                                zcUI.TextMessage(sysutils.format(rsInvalidInputForPropery,[mp.MPUserName,entname,msg]),TMWOSilentShowError);
                              end;
      end
 
@@ -859,11 +859,11 @@ begin
       end;
       pv:=drawings.GetCurrentROOT.ObjArray.iterate(ir);
     until pv=nil;
-    ZCMsgCallBackInterface.TextMessage(sysutils.Format(rscmNEntitiesDeselected,[count]),TMWOHistoryOut);
+    zcUI.TextMessage(sysutils.Format(rscmNEntitiesDeselected,[count]),TMWOHistoryOut);
     if count>0 then
                    //ZCADMainWindow.waSetObjInsp(drawings.GetCurrentDWG.wa);
                    //waSetObjInspProc(drawings.GetCurrentDWG.wa);
-                   ZCMsgCallBackInterface.Do_GUIaction(drawings.GetCurrentDWG.wa,ZMsgID_GUIActionSelectionChanged);
+                   zcUI.Do_GUIaction(drawings.GetCurrentDWG.wa,zcMsgUIActionSelectionChanged);
 
     {pv:=drawings.GetCurrentROOT.ObjArray.beginiterate(ir);
     if pv<>nil then
@@ -931,11 +931,11 @@ begin
   ents.Clear;
   ents.Free;
 
-  ZCMsgCallBackInterface.TextMessage(Format(rscmNEntitiesDeselected,[Count]),
+  zcUI.TextMessage(Format(rscmNEntitiesDeselected,[Count]),
                                      TMWOHistoryOut);
   if Count>0 then
-    ZCMsgCallBackInterface.Do_GUIaction(drawings.GetCurrentDWG.wa,
-                                        ZMsgID_GUIActionSelectionChanged);
+    zcUI.Do_GUIaction(drawings.GetCurrentDWG.wa,
+                                        zcMsgUIActionSelectionChanged);
 end;
 procedure DeselectTextsByStyle(PInstance:Pointer);
 var
@@ -984,11 +984,11 @@ begin
   ents.Free;
 
 
-  ZCMsgCallBackInterface.TextMessage(Format(rscmNEntitiesDeselected,[Count]),
+  zcUI.TextMessage(Format(rscmNEntitiesDeselected,[Count]),
                                      TMWOHistoryOut);
   if Count>0 then
-    ZCMsgCallBackInterface.Do_GUIaction(drawings.GetCurrentDWG.wa,
-                                        ZMsgID_GUIActionSelectionChanged);
+    zcUI.Do_GUIaction(drawings.GetCurrentDWG.wa,
+                                        zcMsgUIActionSelectionChanged);
 end;
 
 procedure DeselectEntsByLayer(PInstance:Pointer);
@@ -1032,11 +1032,11 @@ begin
     ents.Free;
   end;
 
-  ZCMsgCallBackInterface.TextMessage(Format(rscmNEntitiesDeselected,[Count]),
+  zcUI.TextMessage(Format(rscmNEntitiesDeselected,[Count]),
                                      TMWOHistoryOut);
   if Count>0 then
-    ZCMsgCallBackInterface.Do_GUIaction(drawings.GetCurrentDWG.wa,
-      ZMsgID_GUIActionSelectionChanged);
+    zcUI.Do_GUIaction(drawings.GetCurrentDWG.wa,
+      zcMsgUIActionSelectionChanged);
 end;
 
 procedure DeselectEntsByLinetype(PInstance:Pointer);
@@ -1082,11 +1082,11 @@ begin
     ents.Free;
   end;
 
-  ZCMsgCallBackInterface.TextMessage(Format(rscmNEntitiesDeselected,[Count]),
+  zcUI.TextMessage(Format(rscmNEntitiesDeselected,[Count]),
                                      TMWOHistoryOut);
   if Count>0 then
-    ZCMsgCallBackInterface.Do_GUIaction(drawings.GetCurrentDWG.wa,
-                                        ZMsgID_GUIActionSelectionChanged);
+    zcUI.Do_GUIaction(drawings.GetCurrentDWG.wa,
+                                        zcMsgUIActionSelectionChanged);
 end;
 
 procedure DeselectEntsByExtender(PInstance:Pointer);
@@ -1138,11 +1138,11 @@ begin
   ents.Clear;
   ents.Free;
 
-  ZCMsgCallBackInterface.TextMessage(Format(rscmNEntitiesDeselected,[Count]),
+  zcUI.TextMessage(Format(rscmNEntitiesDeselected,[Count]),
                                      TMWOHistoryOut);
   if Count>0 then
-    ZCMsgCallBackInterface.Do_GUIaction(drawings.GetCurrentDWG.wa,
-      ZMsgID_GUIActionSelectionChanged);
+    zcUI.Do_GUIaction(drawings.GetCurrentDWG.wa,
+      zcMsgUIActionSelectionChanged);
 end;
 
 procedure Extendrs2ExtendersCounterIterateProc(pdata:Pointer;ChangedData:TChangedData;mp:TMultiProperty;fistrun:boolean;ecp:TEntChangeProc; const f:TzeUnitsFormat);
@@ -1211,11 +1211,11 @@ begin
   ents.Clear;
   ents.free;
 
-  ZCMsgCallBackInterface.TextMessage(Format(rscmNEntitiesDeselected,[Count]),
+  zcUI.TextMessage(Format(rscmNEntitiesDeselected,[Count]),
                                      TMWOHistoryOut);
   if Count>0 then
-    ZCMsgCallBackInterface.Do_GUIaction(drawings.GetCurrentDWG.wa,
-      ZMsgID_GUIActionSelectionChanged);
+    zcUI.Do_GUIaction(drawings.GetCurrentDWG.wa,
+      zcMsgUIActionSelectionChanged);
 end;
 
 procedure SelectOnlyThisTextsByStyle(PInstance:Pointer);
@@ -1265,11 +1265,11 @@ begin
   ents.Clear;
   ents.free;
 
-  ZCMsgCallBackInterface.TextMessage(Format(rscmNEntitiesDeselected,[Count]),
+  zcUI.TextMessage(Format(rscmNEntitiesDeselected,[Count]),
                                      TMWOHistoryOut);
   if Count>0 then
-    ZCMsgCallBackInterface.Do_GUIaction(drawings.GetCurrentDWG.wa,
-      ZMsgID_GUIActionSelectionChanged);
+    zcUI.Do_GUIaction(drawings.GetCurrentDWG.wa,
+      zcMsgUIActionSelectionChanged);
 end;
 
 procedure SelectOnlyThisEntsByLayer(PInstance:Pointer);
@@ -1311,11 +1311,11 @@ begin
   ents.Clear;
   ents.free;
 
-  ZCMsgCallBackInterface.TextMessage(Format(rscmNEntitiesDeselected,[Count]),
+  zcUI.TextMessage(Format(rscmNEntitiesDeselected,[Count]),
                                      TMWOHistoryOut);
   if Count>0 then
-    ZCMsgCallBackInterface.Do_GUIaction(drawings.GetCurrentDWG.wa,
-      ZMsgID_GUIActionSelectionChanged);
+    zcUI.Do_GUIaction(drawings.GetCurrentDWG.wa,
+      zcMsgUIActionSelectionChanged);
 end;
 
 procedure SelectOnlyThisEntsByLinetype(PInstance:Pointer);
@@ -1356,11 +1356,11 @@ begin
   ents.Clear;
   ents.free;
 
-  ZCMsgCallBackInterface.TextMessage(Format(rscmNEntitiesDeselected,[Count]),
+  zcUI.TextMessage(Format(rscmNEntitiesDeselected,[Count]),
                                      TMWOHistoryOut);
   if Count>0 then
-    ZCMsgCallBackInterface.Do_GUIaction(drawings.GetCurrentDWG.wa,
-      ZMsgID_GUIActionSelectionChanged);
+    zcUI.Do_GUIaction(drawings.GetCurrentDWG.wa,
+      zcMsgUIActionSelectionChanged);
 end;
 
 procedure SelectOnlyThisEntsByExtender(PInstance:Pointer);
@@ -1410,11 +1410,11 @@ begin
   ents.Clear;
   ents.free;
 
-  ZCMsgCallBackInterface.TextMessage(Format(rscmNEntitiesDeselected,[Count]),
+  zcUI.TextMessage(Format(rscmNEntitiesDeselected,[Count]),
                                      TMWOHistoryOut);
   if Count>0 then
-    ZCMsgCallBackInterface.Do_GUIaction(drawings.GetCurrentDWG.wa,
-      ZMsgID_GUIActionSelectionChanged);
+    zcUI.Do_GUIaction(drawings.GetCurrentDWG.wa,
+      zcMsgUIActionSelectionChanged);
 end;
 
 procedure SelectOnlyThisEnts(PInstance:Pointer);
@@ -1454,11 +1454,11 @@ begin
     ents.Clear;
     ents.free;
 
-    ZCMsgCallBackInterface.TextMessage(Format(rscmNEntitiesDeselected,[Count]),
+    zcUI.TextMessage(Format(rscmNEntitiesDeselected,[Count]),
                                        TMWOHistoryOut);
     if Count>0 then
-      ZCMsgCallBackInterface.Do_GUIaction(drawings.GetCurrentDWG.wa,
-                                          ZMsgID_GUIActionSelectionChanged);
+      zcUI.Do_GUIaction(drawings.GetCurrentDWG.wa,
+                                          zcMsgUIActionSelectionChanged);
   end;
 end;
 

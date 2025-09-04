@@ -137,7 +137,7 @@ begin
                  polygonDrawModePentity.pentity^.VertexArrayInOCS.PushBackData(vertexObj);
              end;
 
-             //ZCMsgCallBackInterface.TextMessage('---' + inttostr(polygonDrawModePentity.pentity^.VertexArrayInOCS.GetRealCount) + ' - ошибка: ',TMWOHistoryOut);
+             //zcUI.TextMessage('---' + inttostr(polygonDrawModePentity.pentity^.VertexArrayInOCS.GetRealCount) + ' - ошибка: ',TMWOHistoryOut);
              InteractivePolygonManipulator(polygonDrawModePentity,pe.p1,false);
              if commandmanager.Get3DPointInteractive(rscmSpecifySecondPoint,pe.p2,@InteractivePolygonManipulator,@polygonDrawModePentity)=GRNormal then
              begin

@@ -433,24 +433,24 @@ var
         commandmanager.ChangeInputMode([IPEmpty],[]);
       end;
       CMOptions1:begin
-        ZCMsgCallBackInterface.TextMessage(RSCLPDataExportEntsFilterCurrentValue,TMWOHistoryOut);
-        ZCMsgCallBackInterface.TextMessage(DataExportParam.EntFilter^,TMWOHistoryOut);
+        zcUI.TextMessage(RSCLPDataExportEntsFilterCurrentValue,TMWOHistoryOut);
+        zcUI.TextMessage(DataExportParam.EntFilter^,TMWOHistoryOut);
         if clOptionsPrompt1=nil then
           clOptionsPrompt1:=CMDLinePromptParser.GetTokens(RSCLPDataExportEntsFilterNewValue);
         commandmanager.SetPrompt(clOptionsPrompt1);
         commandmanager.ChangeInputMode([IPEmpty],[]);
       end;
       CMOptions2:begin
-        ZCMsgCallBackInterface.TextMessage(RSCLPDataExportPropsFilterCurrentValue,TMWOHistoryOut);
-        ZCMsgCallBackInterface.TextMessage(DataExportParam.PropFilter^,TMWOHistoryOut);
+        zcUI.TextMessage(RSCLPDataExportPropsFilterCurrentValue,TMWOHistoryOut);
+        zcUI.TextMessage(DataExportParam.PropFilter^,TMWOHistoryOut);
         if clOptionsPrompt2=nil then
           clOptionsPrompt2:=CMDLinePromptParser.GetTokens(RSCLPDataExportPropsFilterNewValue);
         commandmanager.SetPrompt(clOptionsPrompt2);
         commandmanager.ChangeInputMode([IPEmpty],[]);
       end;
       CMOptions3:begin
-        ZCMsgCallBackInterface.TextMessage(RSCLPDataExportExportScriptCurrentValue,TMWOHistoryOut);
-        ZCMsgCallBackInterface.TextMessage(DataExportParam.Exporter^,TMWOHistoryOut);
+        zcUI.TextMessage(RSCLPDataExportExportScriptCurrentValue,TMWOHistoryOut);
+        zcUI.TextMessage(DataExportParam.Exporter^,TMWOHistoryOut);
         if clOptionsPrompt3=nil then
           clOptionsPrompt3:=CMDLinePromptParser.GetTokens(RSCLPDataExportExportScriptNewValue);
         commandmanager.SetPrompt(clOptionsPrompt3);
@@ -515,7 +515,7 @@ begin
             SetCmdMode(CMOptions);
           end;
           CMOptions:begin
-            ZCMsgCallBackInterface.TextMessage(format('You enter "%s", but you need select a option',[inpt]),TMWOMessageBox);
+            zcUI.TextMessage(format('You enter "%s", but you need select a option',[inpt]),TMWOMessageBox);
           end;
           CMExport:;//заглушка на варнинг
         end;

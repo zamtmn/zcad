@@ -39,7 +39,7 @@ begin
   plp:=drawings.GetCurrentDWG^.LayerTable.getAddres(operands);
   if plp<>nil then begin
     if not plp^._on then begin
-      ZCMsgCallBackInterface.TextMessage(format(rsLayerAlreadyOff,[operands]),TMWOHistoryOut);
+      zcUI.TextMessage(format(rsLayerAlreadyOff,[operands]),TMWOHistoryOut);
       result:=cmd_error;
     end else begin
       zcPlaceUndoStartMarkerIfNeed(UndoStartMarkerPlaced,LayerOnCommandName,true);
@@ -55,7 +55,7 @@ begin
       result:=cmd_ok;
     end;
   end else begin
-    ZCMsgCallBackInterface.TextMessage(format(rsLayerNotFound,[operands]),TMWOShowError);
+    zcUI.TextMessage(format(rsLayerNotFound,[operands]),TMWOShowError);
     result:=cmd_error;
   end;
 end;

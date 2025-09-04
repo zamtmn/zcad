@@ -130,9 +130,9 @@ implementation
         result^.BuildGeometry(drawings.GetCurrentDWG^);
         //"форматируем"
         rc:=drawings.GetCurrentDWG^.CreateDrawingRC;
-        //ZCMsgCallBackInterface.TextMessage('1',TMWOHistoryOut);
+        //zcUI.TextMessage('1',TMWOHistoryOut);
         result^.FormatEntity(drawings.GetCurrentDWG^,rc);
-        //ZCMsgCallBackInterface.TextMessage('2',TMWOHistoryOut);
+        //zcUI.TextMessage('2',TMWOHistoryOut);
 
         //добавляем свойства
         if itDevice then begin
@@ -146,7 +146,7 @@ implementation
         end;
         //дальше как обычно
         zcAddEntToCurrentDrawingConstructRoot(result);
-        //ZCMsgCallBackInterface.TextMessage('3',TMWOHistoryOut);
+        //zcUI.TextMessage('3',TMWOHistoryOut);
 
       //result:=cmd_ok;
   end;
@@ -168,12 +168,12 @@ implementation
       isSpecName:boolean;
 
     begin
-          ZCMsgCallBackInterface.TextMessage('creatorBlockXLSX = ' + inttostr(stRow) + ' , ' + inttostr(stCol),TMWOHistoryOut);
+          zcUI.TextMessage('creatorBlockXLSX = ' + inttostr(stRow) + ' , ' + inttostr(stCol),TMWOHistoryOut);
       stColNew:=stCol;
       // получаем стартовые условия
       inc(stColNew);
       insertBlockName:=uzvzcadxlsxole.getCellValue(nameSheet,stRow,stColNew);
-      ZCMsgCallBackInterface.TextMessage('insertBlockName = ' + insertBlockName,TMWOHistoryOut);
+      zcUI.TextMessage('insertBlockName = ' + insertBlockName,TMWOHistoryOut);
       // координата смещения относительно нуля по X
       inc(stColNew);
       try
@@ -197,7 +197,7 @@ implementation
       if ourDevOrInsert <> nil then begin
       inc(stColNew);
       cellValueVar:=uzvzcadxlsxole.getCellValue(nameSheet,stRow,stColNew);
-      //ZCMsgCallBackInterface.TextMessage('cellValueVar значение ячейки = ' + inttostr(stRow) + ' - ' + inttostr(stColNew)+ ' = ' + cellValueVar,TMWOHistoryOut);
+      //zcUI.TextMessage('cellValueVar значение ячейки = ' + inttostr(stRow) + ' - ' + inttostr(stColNew)+ ' = ' + cellValueVar,TMWOHistoryOut);
       while cellValueVar <> xlsxInsertBlockFT do begin
         try
            if cellValueVar <> '' then begin
@@ -230,14 +230,14 @@ implementation
                end;
            end;
          except
-           ZCMsgCallBackInterface.TextMessage('ОШИБКА. Неправильно значение ячейки. Координаты ячейки: Строка=' + inttostr(stRow) + ' - столбец=' + inttostr(stColNew) ,TMWOHistoryOut);
+           zcUI.TextMessage('ОШИБКА. Неправильно значение ячейки. Координаты ячейки: Строка=' + inttostr(stRow) + ' - столбец=' + inttostr(stColNew) ,TMWOHistoryOut);
          end;
          inc(stColNew);
          cellValueVar:=uzvzcadxlsxole.getCellValue(nameSheet,stRow,stColNew);
-         //ZCMsgCallBackInterface.TextMessage('cellValueVar while значение ячейки = ' + inttostr(stRow) + ' - ' + inttostr(stColNew)+ ' = ' + cellValueVar,TMWOHistoryOut);
+         //zcUI.TextMessage('cellValueVar while значение ячейки = ' + inttostr(stRow) + ' - ' + inttostr(stColNew)+ ' = ' + cellValueVar,TMWOHistoryOut);
 
       end;
-    end else ZCMsgCallBackInterface.TextMessage('ОШИБКА. Неправильно задано имя блока или неправильн заданы смещения',TMWOHistoryOut);
+    end else zcUI.TextMessage('ОШИБКА. Неправильно задано имя блока или неправильн заданы смещения',TMWOHistoryOut);
   end;
 
 function vImportXLSXToCAD_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
@@ -302,7 +302,7 @@ begin
        stCol:=ourCell.vCol;
      end;
 
-     ZCMsgCallBackInterface.TextMessage('Количество добавленных блоков = ' + xlsxInsertBlockST + ' = ' + inttostr(i),TMWOHistoryOut);
+     zcUI.TextMessage('Количество добавленных блоков = ' + xlsxInsertBlockST + ' = ' + inttostr(i),TMWOHistoryOut);
 
      if commandmanager.MoveConstructRootTo(rscmSpecifyFirstPoint)=GRNormal then //двигаем их
        zcMoveEntsFromConstructRootToCurrentDrawingWithUndo('ExampleConstructToModalSpace'); //если все ок, копируем в чертеж
@@ -366,7 +366,7 @@ begin
         stCol:=ourCell.vCol;
      end;
 
-     ZCMsgCallBackInterface.TextMessage('Количество добавленных блоков = ' + xlsxInsertBlockST + ' = ' + inttostr(i),TMWOHistoryOut);
+     zcUI.TextMessage('Количество добавленных блоков = ' + xlsxInsertBlockST + ' = ' + inttostr(i),TMWOHistoryOut);
 
      if commandmanager.MoveConstructRootTo(rscmSpecifyFirstPoint)=GRNormal then //двигаем их
        zcMoveEntsFromConstructRootToCurrentDrawingWithUndo('ExampleConstructToModalSpace'); //если все ок, копируем в чертеж

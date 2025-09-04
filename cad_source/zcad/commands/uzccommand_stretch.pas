@@ -98,7 +98,7 @@ begin
         drawings.GetCurrentDWG.wa.SetMouseMode(MGet3DPoint or {MGet3DPointWoOP or }MMoveCamera or MRotateCamera);
         StretchComMode:=SM_FirstPoint;
         selectpoints;
-        ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIActionRedrawContent);
+        zcUI.Do_GUIaction(nil,zcMsgUIActionRedrawContent);
         //drawings.GetCurrentDWG.wa.Clear0Ontrackpoint;
         button:=0;//убираем нулевую точку трассировки, которая будет создана после выхода отсюда
       end;

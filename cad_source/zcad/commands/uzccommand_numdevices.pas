@@ -146,7 +146,7 @@ begin
   end
   else
   begin
-    ZCMsgCallBackInterface.TextMessage(rscmSelEntBeforeComm,TMWOHistoryOut);
+    zcUI.TextMessage(rscmSelEntBeforeComm,TMWOHistoryOut);
     Commandmanager.executecommandend;
   end;
 end;
@@ -194,12 +194,12 @@ begin
                 process:=true
               else begin
                 process:=false;
-                ZCMsgCallBackInterface.TextMessage('Device with basename "'+pvd^.data.PTD^.GetUserValueAsString(pvd^.data.Addr.Instance)+'" filtred out',TMWOHistoryOut);
+                zcUI.TextMessage('Device with basename "'+pvd^.data.PTD^.GetUserValueAsString(pvd^.data.Addr.Instance)+'" filtred out',TMWOHistoryOut);
               end;
             end
               else begin
                 process:=true;
-                ZCMsgCallBackInterface.TextMessage('In device not found BaseName variable. Processed',TMWOHistoryOut);
+                zcUI.TextMessage('In device not found BaseName variable. Processed',TMWOHistoryOut);
               end;
           end else
             process:=true;
@@ -221,10 +221,10 @@ begin
                 md.Add(metric,mpd);
               end;
             end else
-              ZCMsgCallBackInterface.TextMessage('In device not found numbering variable, filtred out',TMWOHistoryOut);
+              zcUI.TextMessage('In device not found numbering variable, filtred out',TMWOHistoryOut);
           end;
         end else
-          ZCMsgCallBackInterface.TextMessage('In device not found VariablesExtender, filtred out',TMWOHistoryOut);
+          zcUI.TextMessage('In device not found VariablesExtender, filtred out',TMWOHistoryOut);
       end;
     psd:=drawings.GetCurrentDWG^.SelObjArray.iterate(ir);
   until psd=nil;
@@ -320,7 +320,7 @@ begin
   UndoStartMarkerPlaced:=false;
 
   if md.Count=0 then begin
-    ZCMsgCallBackInterface.TextMessage('In selection not found devices',TMWOHistoryOut);
+    zcUI.TextMessage('In selection not found devices',TMWOHistoryOut);
     md.Destroy;
     Commandmanager.executecommandend;
     exit;
@@ -377,7 +377,7 @@ begin
   end;
   zcPlaceUndoEndMarkerIfNeed(UndoStartMarkerPlaced);
 
-  ZCMsgCallBackInterface.TextMessage(sysutils.format(rscmNEntitiesProcessed,[count]),TMWOHistoryOut);
+  zcUI.TextMessage(sysutils.format(rscmNEntitiesProcessed,[count]),TMWOHistoryOut);
   for pair in md do begin
     pair.Value.Destroy;
   end;

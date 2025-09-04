@@ -47,7 +47,7 @@ begin
      xcoord:=0;
      if pb<>nil then
      repeat
-           ZCMsgCallBackInterface.TextMessage(pb^.name,TMWOHistoryOut);
+           zcUI.TextMessage(pb^.name,TMWOHistoryOut);
 
 
     BLINSERT := Pointer(drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.CreateObj(GDBBlockInsertID{,drawings.GetCurrentROOT}));

@@ -226,7 +226,7 @@ end;
 //  if uzvslagcabComParams.settingVizCab.sErrors then begin
 //    for errorInfo in listError do
 //      begin
-//        ZCMsgCallBackInterface.TextMessage(errorInfo.name + ' - ошибка: ' + errorInfo.text,TMWOHistoryOut);
+//        zcUI.TextMessage(errorInfo.name + ' - ошибка: ' + errorInfo.text,TMWOHistoryOut);
 //        if getPointConnector(errorInfo.device,pConnect) then
 //              uzvcom.visualGraphError(pConnect,4,6,vSystemVisualLayerName);
 //      end;
@@ -235,18 +235,18 @@ end;
 //
 //    if uzvslagcabComParams.settingVizCab.vizFullTreeCab then
 //       if commandmanager.get3dpoint('Input tree visualization coordinates',fTreeVertex)= GRNormal then begin
-//         ZCMsgCallBackInterface.TextMessage('Ok',TMWOHistoryOut);
+//         zcUI.TextMessage('Ok',TMWOHistoryOut);
 //       end
 //       else
-//         ZCMsgCallBackInterface.TextMessage('Coordinate entry canceled!!!',TMWOHistoryOut);
+//         zcUI.TextMessage('Coordinate entry canceled!!!',TMWOHistoryOut);
 //
 //
 //   if uzvslagcabComParams.settingVizCab.vizEasyTreeCab then
 //         if commandmanager.get3dpoint('Input easy tree visualization coordinates',eTreeVertex)= GRNormal then begin
-//           ZCMsgCallBackInterface.TextMessage('Ok',TMWOHistoryOut);
+//           zcUI.TextMessage('Ok',TMWOHistoryOut);
 //         end
 //         else
-//           ZCMsgCallBackInterface.TextMessage('Coordinate entry canceled!!!',TMWOHistoryOut);
+//           zcUI.TextMessage('Coordinate entry canceled!!!',TMWOHistoryOut);
 //
 //        fTreeVertex:=uzegeometry.CreateVertex(0,0,0);
 //        eTreeVertex:=uzegeometry.CreateVertex(0,10000,0);
@@ -316,7 +316,7 @@ end;
 //  if uzvslagcabComParams.settingVizCab.sErrors then begin
 //    for errorInfo in listError do
 //      begin
-//        ZCMsgCallBackInterface.TextMessage(errorInfo.name + ' - ошибка: ' + errorInfo.text,TMWOHistoryOut);
+//        zcUI.TextMessage(errorInfo.name + ' - ошибка: ' + errorInfo.text,TMWOHistoryOut);
 //        if getPointConnector(errorInfo.device,pConnect) then
 //              uzvcom.visualGraphError(pConnect,4,6,vSystemVisualLayerName);
 //      end;
@@ -376,15 +376,15 @@ begin
 
 
     //Строим граф зная имя суперлиний
-    ZCMsgCallBackInterface.TextMessage('***Список обрабатываемых суперлиний:',TMWOHistoryOut);
+    zcUI.TextMessage('***Список обрабатываемых суперлиний:',TMWOHistoryOut);
   for nameSL in listSLname do
-     ZCMsgCallBackInterface.TextMessage(' - ' + nameSL,TMWOHistoryOut);
-    ZCMsgCallBackInterface.TextMessage('***Список суперлиний закончен!',TMWOHistoryOut);
+     zcUI.TextMessage(' - ' + nameSL,TMWOHistoryOut);
+    zcUI.TextMessage('***Список суперлиний закончен!',TMWOHistoryOut);
 
   //Строим граф зная имя суперлиний
   for nameSL in listSLname do
    begin
-     //ZCMsgCallBackInterface.TextMessage('Обрабатывается суперлиния:' + nameSL,TMWOHistoryOut);
+     //zcUI.TextMessage('Обрабатывается суперлиния:' + nameSL,TMWOHistoryOut);
      graphBuilderInfo.graph:=uzvcom.graphBulderFunc(uzvslagcabComParams.accuracy,nameSL);
      graphBuilderInfo.nameSuperLine:=nameSL;
      listAllGraph.PushBack(graphBuilderInfo);
@@ -401,14 +401,13 @@ begin
   //if uzvslagcabComParams.settingVizCab.sErrors then begin
   //  for errorInfo in listError do
   //    begin
-  //      ZCMsgCallBackInterface.TextMessage(errorInfo.name + ' - ошибка: ' + errorInfo.text,TMWOHistoryOut);
+  //      zcUI.TextMessage(errorInfo.name + ' - ошибка: ' + errorInfo.text,TMWOHistoryOut);
   //      if getPointConnector(errorInfo.device,pConnect) then
   //            uzvcom.visualGraphError(pConnect,4,6,vSystemVisualLayerName);
   //    end;
   //    listError.Destroy;
   // end;
   //
-   uzvtreedevice.cleanSuperlineCablelist;
 
    for graphBuilderInfo in listAllGraph do
      begin
@@ -416,14 +415,14 @@ begin
 
        //uzvtreedevice.visualMasterGroupLine(graphBuilderInfo.graph,listMasterDevice,uzvslagcabComParams.metricDev,uzvslagcabComParams.accuracy*7,uzvslagcabComParams.settingVizCab.vizNumMetric);
 
-       ZCMsgCallBackInterface.TextMessage('ПРОКЛАДЫВАЕМ КАБЕЛИ!',TMWOHistoryOut);
+       zcUI.TextMessage('ПРОКЛАДЫВАЕМ КАБЕЛИ!',TMWOHistoryOut);
 
        //Когда много суперлиний, это пропуск когда идет прокладка не той суперлинии, удобнее пропуск организвать не получилось(
        //if listMasterDevice.Size-1 <> -1 then // Range check error
        if listMasterDevice.Size <> 0 then
           uzvtreedevice.cabelingMasterGroupLineNew(graphBuilderInfo.graph,listMasterDevice,uzvslagcabComParams.metricDev);
 
-       ZCMsgCallBackInterface.TextMessage('КАБЕЛИ УСПЕШНО ПРОЛОЖЕНЫ!',TMWOHistoryOut);
+       zcUI.TextMessage('КАБЕЛИ УСПЕШНО ПРОЛОЖЕНЫ!',TMWOHistoryOut);
      end;
 
   zcPlaceUndoEndMarkerIfNeed(UndoMarcerIsPlazed);

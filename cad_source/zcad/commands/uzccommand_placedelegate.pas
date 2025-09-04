@@ -48,14 +48,14 @@ begin
   if (drawings.GetCurrentDWG^.wa.param.SelDesc.Selectedobjcount<>1)
   or (drawings.GetCurrentDWG^.wa.param.SelDesc.LastSelectedObject=nil)
   or not (IsIt(typeof(PGDBObjEntity(drawings.GetCurrentDWG^.wa.param.SelDesc.LastSelectedObject)^),typeof(GDBObjDevice)))then begin
-    ZCMsgCallBackInterface.TextMessage('PlaceDelegate:'+sysutils.format(rscmSelDevBeforeComm,[]),TMWOHistoryOut);
+    zcUI.TextMessage('PlaceDelegate:'+sysutils.format(rscmSelDevBeforeComm,[]),TMWOHistoryOut);
     commandmanager.executecommandend;
     exit;
   end;
   pmf:=drawings.GetCurrentDWG^.wa.param.SelDesc.LastSelectedObject;
   pCentralVarext:=pmf^.GetExtension<TVariablesExtender>;
   if pCentralVarext=nil then begin
-    ZCMsgCallBackInterface.TextMessage('PlaceDelegate:'+sysutils.format('Selected entity has no extension "%s"',[TVariablesExtender.getExtenderName]),TMWOHistoryOut);
+    zcUI.TextMessage('PlaceDelegate:'+sysutils.format('Selected entity has no extension "%s"',[TVariablesExtender.getExtenderName]),TMWOHistoryOut);
     commandmanager.executecommandend;
     exit;
   end;
@@ -65,7 +65,7 @@ begin
   unitname:=operands;
   pdu:=units.findunit(GetSupportPaths,InterfaceTranslate,unitname);
   if pdu=nil then begin
-    ZCMsgCallBackInterface.TextMessage('PlaceDelegate:'+sysutils.format(rsUnableToFindUnit,[unitname]),TMWOHistoryOut);
+    zcUI.TextMessage('PlaceDelegate:'+sysutils.format(rsUnableToFindUnit,[unitname]),TMWOHistoryOut);
     commandmanager.executecommandend;
     exit;
   end;
@@ -87,7 +87,7 @@ begin
       pCentralVarext.addDelegate(PInsert,pVarext);
     end;
   end else
-    ZCMsgCallBackInterface.TextMessage('PlaceDelegate:'+sysutils.format('Inserted entity has no extension "%s"',[TVariablesExtender.getExtenderName]),TMWOHistoryOut);
+    zcUI.TextMessage('PlaceDelegate:'+sysutils.format('Inserted entity has no extension "%s"',[TVariablesExtender.getExtenderName]),TMWOHistoryOut);
 end;
 
 function PlaceDelegate_com_BeforeClick(const Context:TZCADCommandContext;wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record;mclick:Integer): Integer;

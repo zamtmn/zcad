@@ -79,12 +79,12 @@ begin
     end
     else
       drawings.freedwgvars;
-    ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIFreEditorProc);
-    ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIReturnToDefaultObject);
-    ZCMsgCallBackInterface.TextMessage(rsClosed,TMWOQuickly);
-    ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIActionRebuild);
-    ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIActionRedraw);
-    //if assigned(UpdateVisibleProc) then UpdateVisibleProc(ZMsgID_GUIActionRedraw);
+    zcUI.Do_GUIaction(nil,zcMsgUIFreEditorProc);
+    zcUI.Do_GUIaction(nil,zcMsgUIReturnToDefaultObject);
+    zcUI.TextMessage(rsClosed,TMWOQuickly);
+    zcUI.Do_GUIaction(nil,zcMsgUIActionRebuild);
+    zcUI.Do_GUIaction(nil,zcMsgUIActionRedraw);
+    //if assigned(UpdateVisibleProc) then UpdateVisibleProc(zcMsgUIActionRedraw);
   end;
 end;
 
@@ -131,7 +131,7 @@ begin
     begin
       if (GetChangedDrawingsCount>1)or(CommandManager.isBusy) then
         MCtx:=CreateMessagesContext(rsCloseDrawings);
-      if (ZCMsgCallBackInterface.GetState and ZState_Busy)>0 then begin
+      if (zcUI.GetState and ZState_Busy)>0 then begin
       //if CommandManager.isBusy then begin
         MCtx.add(getMsgID(rsQuitQuery),TZCMsgDialogResult.CreateMR(ZCmrYes));
         MCtx.add(getMsgID(rsCloseDWGQuery),TZCMsgDialogResult.CreateMR(ZCmrNo));
@@ -145,9 +145,9 @@ begin
       end;
       FreeMessagesContext(MCtx);
     end;
-    ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIFreEditorProc);
-    ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIReturnToDefaultObject);
-    ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIBeforeCloseApp);
+    zcUI.Do_GUIaction(nil,zcMsgUIFreEditorProc);
+    zcUI.Do_GUIaction(nil,zcMsgUIReturnToDefaultObject);
+    zcUI.Do_GUIaction(nil,zcMsgUIBeforeCloseApp);
     application.terminate;
   end;
 end;

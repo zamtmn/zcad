@@ -46,7 +46,7 @@ implementation
 
 procedure TmyProcToolButton.Click;
 begin
-  ZCMsgCallBackInterface.Do_GUIaction(self,ZMsgID_GUIStoreAndFreeEditorProc);
+  zcUI.Do_GUIaction(self,zcMsgUIStoreAndFreeEditorProc);
   if assigned(FMethod) then
     Application.QueueAsyncCall(FMethod,PtrInt(PData));
 end;

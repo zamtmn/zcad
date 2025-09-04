@@ -79,8 +79,8 @@ end;}
 procedure Move_com.showprompt(mklick:integer);
 begin
      case mklick of
-     0:ZCMsgCallBackInterface.TextMessage(rscmBasePoint,TMWOHistoryOut);
-     1:ZCMsgCallBackInterface.TextMessage(rscmNewBasePoint,TMWOHistoryOut);
+     0:zcUI.TextMessage(rscmBasePoint,TMWOHistoryOut);
+     1:zcUI.TextMessage(rscmNewBasePoint,TMWOHistoryOut);
      end;
 end;
 
@@ -143,7 +143,7 @@ procedure Move_com.CommandStart(const Context:TZCADCommandContext;Operands:TComm
 begin
   Inherited;
   if not InternalCommandStart(Context,Operands) then begin
-    ZCMsgCallBackInterface.TextMessage(rscmSelEntBeforeComm,TMWOHistoryOut);
+    zcUI.TextMessage(rscmSelEntBeforeComm,TMWOHistoryOut);
     Commandmanager.executecommandend;
   end;
 end;

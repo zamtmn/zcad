@@ -30,7 +30,7 @@ var
   pair:TEntityExtendersMap.TDictionaryPair;
 begin
   for pair in EntityExtenders do
-    ZCMsgCallBackInterface.TextMessage(pair.value.getExtenderName,TMWOHistoryOut);
+    zcUI.TextMessage(pair.value.getExtenderName,TMWOHistoryOut);
   result:=cmd_ok;
 end;
 

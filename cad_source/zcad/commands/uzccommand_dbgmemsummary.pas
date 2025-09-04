@@ -177,7 +177,7 @@ begin
   InfoForm.Memo.lines.Add('You need use {$DEFINE REPORTMMEMORYLEAKS} when compiling ZCAD');
 {$ENDIF}
 
-  ZCMsgCallBackInterface.DOShowModal(InfoForm);
+  zcUI.DOShowModal(InfoForm);
   InfoForm.Free;
   result:=cmd_ok;
 end;

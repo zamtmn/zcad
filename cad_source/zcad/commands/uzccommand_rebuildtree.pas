@@ -43,7 +43,7 @@ begin
   drawings.GetCurrentDWG.wa.param.seldesc.Selectedobjcount:=0;
   drawings.GetCurrentDWG.wa.param.seldesc.OnMouseObject:=nil;
   drawings.GetCurrentDWG.wa.param.seldesc.LastSelectedObject:=nil;
-  ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIReturnToDefaultObject);
+  zcUI.Do_GUIaction(nil,zcMsgUIReturnToDefaultObject);
   clearcp;
   zcRedrawCurrentDrawing;
   result:=cmd_ok;

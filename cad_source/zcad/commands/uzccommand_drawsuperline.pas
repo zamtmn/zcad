@@ -202,7 +202,7 @@ begin
         if player<>nil then
                            psuperline.vp.Layer:=player
                        else
-                           ZCMsgCallBackInterface.TextMessage(format('Layer "%s" not found',[layername]),TMWOHistoryOut);
+                           zcUI.TextMessage(format('Layer "%s" not found',[layername]),TMWOHistoryOut);
       end;
     end;
     //zcPlaceUndoStartMarkerIfNeed(UndoMarcerIsPlazed,'DrawSuperLine');
@@ -251,7 +251,7 @@ begin
       CommandScriptsManager.RunScript(method2lt);
       //выводим из контекста скрипта выходное значение из переменной Output
       ltname:=(method2lt.Ctx as TMethod2ltContext).FOutput;
-      ZCMsgCallBackInterface.TextMessage('ltname:'+ltname,TMWOHistoryOut);
+      zcUI.TextMessage('ltname:'+ltname,TMWOHistoryOut);
       //копируем при необходимости и возможности тип линий из базы загруженых dxf
       drawings.AddLTStyleFromDBIfNeed(drawings.GetCurrentDWG,ltname);
 
@@ -282,7 +282,7 @@ begin
         if player<>nil then
                            psuperline.vp.Layer:=player
                        else
-                           ZCMsgCallBackInterface.TextMessage(format('Layer "%s" not found',[layername]),TMWOHistoryOut);
+                           zcUI.TextMessage(format('Layer "%s" not found',[layername]),TMWOHistoryOut);
       end;
     end;
     zcPlaceUndoStartMarkerIfNeed(UndoMarcerIsPlazed,'DrawSuperLine');
@@ -291,7 +291,7 @@ begin
 end;
 
 begin
-    //ZCMsgCallBackInterface.TextMessage('operands:'+operands,TMWOHistoryOut);
+    //zcUI.TextMessage('operands:'+operands,TMWOHistoryOut);
     //psu:=units.findunit(SupportPaths,InterfaceTranslate,'superline');
 
     //пытаемся найти или загрузить модуль
@@ -315,7 +315,7 @@ begin
        hotkeytypeline:={Tria_AnsiToUtf8}(DrawSuperlineParams.SLSettingTypeLine3);
     end;
 
-     //ZCMsgCallBackInterface.TextMessage('hotkeyname:'+hotkeyname,TMWOHistoryOut);
+     //zcUI.TextMessage('hotkeyname:'+hotkeyname,TMWOHistoryOut);
     //hotkeyname:='';
     if operands <> '' then
       if psu<>nil then begin //если нашли

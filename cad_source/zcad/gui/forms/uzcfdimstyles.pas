@@ -175,7 +175,7 @@ begin
        until plp=nil;
           if  currentextstyle<>PGDBDimStyle(TListItem(Item).Data)^.Text.DIMTXSTY then
           begin
-                 ZCMsgCallBackInterface.TextMessage(pstring(FontsSelector.Enums.getDataMutable(FontsSelector.Selected))^,TMWOHistoryOut);
+                 zcUI.TextMessage(pstring(FontsSelector.Enums.getDataMutable(FontsSelector.Selected))^,TMWOHistoryOut);
 
                CreateUndoStartMarkerNeeded;
                with TPoinerChangeCommand.CreateAndPushIfNeed(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,
@@ -423,7 +423,7 @@ begin
                                        end;
                                      end
                                  else
-                                     ZCMsgCallBackInterface.TextMessage(rsStyleMustBeSelected,TMWOMessageBox);
+                                     zcUI.TextMessage(rsStyleMustBeSelected,TMWOMessageBox);
 end;
 procedure TDimStylesForm.FormShow(Sender: TObject);
 begin
@@ -515,7 +515,7 @@ begin
   stylename:=pdwg^.DimStyleTable.GetFreeName(Tria_Utf8ToAnsi(rsNewDimStyleNameFormat),1);
   if stylename='' then
   begin
-    ZCMsgCallBackInterface.TextMessage(rsUnableSelectFreeDimStylerName,TMWOShowError);
+    zcUI.TextMessage(rsUnableSelectFreeDimStylerName,TMWOShowError);
     exit;
   end;
   //////////////////////
@@ -550,7 +550,7 @@ begin
     editForm.ShowModal;
     //editForm.Free;
   end else
-    ZCMsgCallBackInterface.TextMessage(rsStyleMustBeSelected,TMWOShowError);
+    zcUI.TextMessage(rsStyleMustBeSelected,TMWOShowError);
 end;
 
 procedure TDimStylesForm.doTStyleDelete(ProcessedItem:TListItem);
@@ -587,12 +587,12 @@ begin
                                      countstyle(pstyle,inEntities,inBlockTable,indimstyles);
                                      if ListView1.Selected.Data=pdwg^.GetCurrentDimStyle then
                                      begin
-                                       ZCMsgCallBackInterface.TextMessage(rsCurrentDimStyleCannotBeDeleted,TMWOShowError);
+                                       zcUI.TextMessage(rsCurrentDimStyleCannotBeDeleted,TMWOShowError);
                                        exit;
                                      end;
                                      if (inEntities+inBlockTable+indimstyles)>0 then
                                                   begin
-                                                       ZCMsgCallBackInterface.TextMessage(rsUnableDelUsedStyle,TMWOShowError);
+                                                       zcUI.TextMessage(rsUnableDelUsedStyle,TMWOShowError);
                                                        exit;
                                                   end;
 
@@ -601,7 +601,7 @@ begin
                                      DescLabel.Caption:='';
                                      end
                                  else
-                                     ZCMsgCallBackInterface.TextMessage(rsStyleMustBeSelected,TMWOShowError);
+                                     zcUI.TextMessage(rsStyleMustBeSelected,TMWOShowError);
 end;
 
 procedure TDimStylesForm.AplyClose(Sender: TObject);
@@ -647,7 +647,7 @@ procedure TDimStylesForm.Aply(Sender: TObject);
 begin
      if changedstamp then
      begin
-       ZCMsgCallBackInterface.Do_GUIaction(self,ZMsgID_GUIActionRedraw);//это новая замена следующей закоментированой строки
+       zcUI.Do_GUIaction(self,zcMsgUIActionRedraw);//это новая замена следующей закоментированой строки
        //if assigned(UpdateVisibleProc) then UpdateVisibleProc;
        zcRedrawCurrentDrawing;
      end;

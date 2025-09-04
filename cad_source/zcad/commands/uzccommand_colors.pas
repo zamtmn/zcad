@@ -41,11 +41,11 @@ begin
   if not assigned(ColorSelectForm)then
     ColorSelectForm:=TColorSelectForm.Create(nil);
   SetHeightControl(ColorSelectForm,sysvar.INTF.INTF_DefaultControlHeight^);
-  ZCMsgCallBackInterface.Do_BeforeShowModal(ColorSelectForm);
+  zcUI.Do_BeforeShowModal(ColorSelectForm);
   mr:=ColorSelectForm.run(SysVar.dwg.DWG_CColor^,true){showmodal};
   if mr=ZCmrOK then
     SysVar.dwg.DWG_CColor^:=ColorSelectForm.ColorInfex;
-  ZCMsgCallBackInterface.Do_AfterShowModal(ColorSelectForm);
+  zcUI.Do_AfterShowModal(ColorSelectForm);
   freeandnil(ColorSelectForm);
   result:=cmd_ok;
 end;

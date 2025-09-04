@@ -68,7 +68,7 @@ implementation
 
 procedure dbg;
 begin
-  ZCMsgCallBackInterface.TextMessage(Format('Printer "%s", paper "%s"(%dx%d)',[Printer.PrinterName,Printer.PaperSize.PaperName,Printer.PageWidth,Printer.PageHeight]),TMWOHistoryOut);
+  zcUI.TextMessage(Format('Printer "%s", paper "%s"(%dx%d)',[Printer.PrinterName,Printer.PaperSize.PaperName,Printer.PageWidth,Printer.PageHeight]),TMWOHistoryOut);
 end;
 
 procedure Print_com.CommandContinue(const Context:TZCADCommandContext);
@@ -116,10 +116,10 @@ begin
 end;
 procedure Print_com.SelectPrinter(pdata:PtrInt);
 begin
-  ZCMsgCallBackInterface.TextMessage(rsNotYetImplemented,TMWOHistoryOut);
-  ZCMsgCallBackInterface.Do_BeforeShowModal(nil);
+  zcUI.TextMessage(rsNotYetImplemented,TMWOHistoryOut);
+  zcUI.Do_BeforeShowModal(nil);
   if PSD.Execute then;
-  ZCMsgCallBackInterface.Do_AfterShowModal(nil);
+  zcUI.Do_AfterShowModal(nil);
   dbg;
 end;
 procedure Print_com.SetWindow(pdata:PtrInt);
@@ -130,10 +130,10 @@ end;
 procedure Print_com.SelectPaper(pdata:PtrInt);
 
 begin
-  ZCMsgCallBackInterface.TextMessage(rsNotYetImplemented,TMWOHistoryOut);
-  ZCMsgCallBackInterface.Do_BeforeShowModal(nil);
+  zcUI.TextMessage(rsNotYetImplemented,TMWOHistoryOut);
+  zcUI.Do_BeforeShowModal(nil);
   if Paged.Execute then;
-  ZCMsgCallBackInterface.Do_AfterShowModal(nil);
+  zcUI.Do_AfterShowModal(nil);
   dbg;
 end;
 function Inch(AValue: Double; VertRes:boolean=true): Integer;
@@ -165,7 +165,7 @@ begin
     on E:Exception do
     begin
       Printer.Abort;
-      ZCMsgCallBackInterface.TextMessage(e.message,TMWOShowError);
+      zcUI.TextMessage(e.message,TMWOShowError);
     end;
   end;
   zcRedrawCurrentDrawing;

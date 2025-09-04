@@ -189,7 +189,7 @@ begin
     if pltp^.Mode<>TLTLineType then
       pltp:=nil;
   if (pltp=nil) then begin
-    ZCMsgCallBackInterface.TextMessage('Please select non system layer!!!',TMWOShowError);
+    zcUI.TextMessage('Please select non system layer!!!',TMWOShowError);
     exit;
   end;
   CurrentLine:=1;
@@ -240,7 +240,7 @@ begin
   LTImpl:=uzbstrproc.Tria_Utf8ToAnsi(LTImpl);
 
   if (pdwg^.GetLTypeTable.AddItem(LTName,pltp)<>IsCreated) then begin
-    ZCMsgCallBackInterface.TextMessage('Line type name already exist!!!',TMWOShowError);
+    zcUI.TextMessage('Line type name already exist!!!',TMWOShowError);
     exit;
   end;
 

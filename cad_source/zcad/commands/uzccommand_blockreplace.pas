@@ -228,7 +228,7 @@ begin
       psdesc:=drawings.GetCurrentDWG^.SelObjArray.iterate(ir);
     until psdesc=nil;
     Regen_com(context,EmptyCommandOperands);
-    ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIActionRebuild);
+    zcUI.Do_GUIaction(nil,zcMsgUIActionRebuild);
     Prompt(sysutils.format(rscmNEntitiesProcessed,[rslt]));
     commandmanager.executecommandend;
   end;

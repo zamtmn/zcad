@@ -72,14 +72,14 @@ begin
       end;
       pv:=drawings.GetCurrentROOT^.ObjArray.iterate(ir);
     until pv=nil;
-    ZCMsgCallBackInterface.TextMessage(format(rscmNEntitiesProcessed,[count]),TMWOHistoryOut);
+    zcUI.TextMessage(format(rscmNEntitiesProcessed,[count]),TMWOHistoryOut);
     count:=0;
     for pair in extcounter do begin
-      ZCMsgCallBackInterface.TextMessage(format('Extender "%s" found %d times',[pair.Key.getExtenderName,pair.Value]),TMWOHistoryOut);
+      zcUI.TextMessage(format('Extender "%s" found %d times',[pair.Key.getExtenderName,pair.Value]),TMWOHistoryOut);
       inc(count);
     end;
     if count=0 then
-      ZCMsgCallBackInterface.TextMessage(format('No extenders found',[]),TMWOHistoryOut);
+      zcUI.TextMessage(format('No extenders found',[]),TMWOHistoryOut);
   finally
     extcounter.Free;
     result:=cmd_ok;

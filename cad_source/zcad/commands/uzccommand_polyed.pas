@@ -104,12 +104,12 @@ begin
    until pobj=nil;
    if p3dpl=nil then
                    begin
-                        ZCMsgCallBackInterface.TextMessage(rscmPolyNotSel,TMWOHistoryOut);
+                        zcUI.TextMessage(rscmPolyNotSel,TMWOHistoryOut);
                         commandmanager.executecommandend;
                    end
                else
                    begin
-                        ZCMsgCallBackInterface.Do_PrepareObject(nil,drawings.GetUnitsFormat,SysUnit^.TypeName2PTD('TPolyEdit'),@PEProp,drawings.GetCurrentDWG);
+                        zcUI.Do_PrepareObject(nil,drawings.GetUnitsFormat,SysUnit^.TypeName2PTD('TPolyEdit'),@PEProp,drawings.GetCurrentDWG);
                         drawings.GetCurrentDWG^.wa.SetMouseMode((MGet3DPoint) or (MMoveCamera) or (MRotateCamera));
                         drawings.GetCurrentDWG^.SelObjArray.Free;
                    end;
@@ -318,7 +318,7 @@ begin
                                                   zcRedrawCurrentDrawing;
                                              end
                                              else
-                                                 ZCMsgCallBackInterface.TextMessage(rscm2VNotRemove,TMWOHistoryOut);
+                                                 zcUI.TextMessage(rscm2VNotRemove,TMWOHistoryOut);
                                         end;
        if (PEProp.Action=TSPE_Insert)and(PEProp.nearestline<>-1)and(PEProp.dir<>0) then
                                         begin
@@ -384,7 +384,7 @@ begin
                                     begin
                                          if (PEProp.nearestvertex=0)or(PEProp.nearestvertex=p3dpl^.VertexArrayInOCS.Count-1) then
                                          begin
-                                              ZCMsgCallBackInterface.TextMessage(rscmNotCutHere,TMWOShowError);
+                                              zcUI.TextMessage(rscmNotCutHere,TMWOShowError);
                                               exit;
                                          end;
                                          p3dpl2 := pointer(p3dpl^.Clone(p3dpl^.bp.ListPos.Owner));

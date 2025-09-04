@@ -34,8 +34,8 @@ implementation
 
 function Options_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 begin
-  ZCMsgCallBackInterface.Do_PrepareObject(nil,drawings.GetUnitsFormat,SysUnit.TypeName2PTD('gdbsysvariable'),@sysvar,drawings.GetCurrentDWG);
-  ZCMsgCallBackInterface.TextMessage(rscmOptions2OI,TMWOMessageBox);
+  zcUI.Do_PrepareObject(nil,drawings.GetUnitsFormat,SysUnit.TypeName2PTD('gdbsysvariable'),@sysvar,drawings.GetCurrentDWG);
+  zcUI.TextMessage(rscmOptions2OI,TMWOMessageBox);
   result:=cmd_ok;
 end;
 

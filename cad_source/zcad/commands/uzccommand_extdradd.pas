@@ -94,11 +94,11 @@ begin
           end;
         psd:=drawings.GetCurrentDWG.SelObjArray.iterate(ir);
       until psd=nil;
-      ZCMsgCallBackInterface.TextMessage(format(rscmNEntitiesProcessed,[count]),TMWOHistoryOut);
+      zcUI.TextMessage(format(rscmNEntitiesProcessed,[count]),TMWOHistoryOut);
       if count>0 then
         PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack.PushEndMarker;
     end else
-      ZCMsgCallBackInterface.TextMessage(format(rscmExtenderNotFound,[operands]),TMWOHistoryOut);
+      zcUI.TextMessage(format(rscmExtenderNotFound,[operands]),TMWOHistoryOut);
   finally
     result:=cmd_ok;
   end;

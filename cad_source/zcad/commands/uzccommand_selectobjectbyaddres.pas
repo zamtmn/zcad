@@ -39,8 +39,8 @@ begin
   val(Operands,PtrUInt(pp),code);
   if (code=0)and(assigned(pp))then
     zcSelectEntity(pp);
-  ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIActionRedraw);
-  ZCMsgCallBackInterface.Do_GUIaction(drawings.CurrentDWG.wa,ZMsgID_GUIActionSelectionChanged);
+  zcUI.Do_GUIaction(nil,zcMsgUIActionRedraw);
+  zcUI.Do_GUIaction(drawings.CurrentDWG.wa,zcMsgUIActionSelectionChanged);
   result:=cmd_ok;
 end;
 

@@ -53,10 +53,10 @@ begin
     pentvarext:=pobj^.GetExtension<TVariablesExtender>;
     if pentvarext<>nil then begin
       if EditUnit(pentvarext.entityunit) then
-        ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIRePrepareObject);
+        zcUI.Do_GUIaction(nil,zcMsgUIRePrepareObject);
     end;
    end else
-     ZCMsgCallBackInterface.TextMessage(rscmSelEntBeforeComm,TMWOHistoryOut);
+     zcUI.TextMessage(rscmSelEntBeforeComm,TMWOHistoryOut);
   result:=cmd_ok;
 end;
 

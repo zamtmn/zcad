@@ -230,15 +230,15 @@ function TDimStyleEditForm.ColorComboBoxChange(Sender: TObject;colorBox:TComboBo
 begin
     if colorBox.Items[coloritemindex] = 'Other...' then
       begin
-         ZCMsgCallBackInterface.TextMessage(rsNotYetImplemented,TMWOHistoryOut);
+         zcUI.TextMessage(rsNotYetImplemented,TMWOHistoryOut);
       end
     else
       case coloritemindex of
         0:
-        //ZCMsgCallBackInterface.TextMessage('0',TMWOHistoryOut);
+        //zcUI.TextMessage('0',TMWOHistoryOut);
           result:= 256;
         1..8:
-          //ZCMsgCallBackInterface.TextMessage('1-8',TMWOHistoryOut);
+          //zcUI.TextMessage('1-8',TMWOHistoryOut);
           result:= coloritemindex - 1;
       else
           result:= strtoint(string(colorBox.Items[coloritemindex]));
@@ -286,7 +286,7 @@ begin
        repeat
             if {Tria_AnsiToUtf8}(pltp^.Name) = lineTypeComboBox.Items[index] then begin
                result := pltp;
-               //ZCMsgCallBackInterface.TextMessage(dimStyle^.Lines.DIMLTYPE^.Name,TMWOHistoryOut);
+               //zcUI.TextMessage(dimStyle^.Lines.DIMLTYPE^.Name,TMWOHistoryOut);
             end;
             pltp:=pdwg^.LTypeStyleTable.iterate(ir);
        until pltp=nil;
@@ -751,7 +751,7 @@ end;
 
 procedure TDimStyleEditForm.RefreshClick(Sender: TObject);
 begin
-     //ZCMsgCallBackInterface.TextMessage(dimStyle^.Text.DIMTXSTY^.GetFullName,TMWOHistoryOut);
+     //zcUI.TextMessage(dimStyle^.Text.DIMTXSTY^.GetFullName,TMWOHistoryOut);
      dlineColorLabel.Caption:=rsColor;
      dlineTypeLabel.Caption:=rsLineType;
      dlineColorComboBox(Sender);

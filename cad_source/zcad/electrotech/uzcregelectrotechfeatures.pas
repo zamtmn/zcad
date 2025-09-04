@@ -64,7 +64,7 @@ begin
      StringsTreeSelector.setValue(PStringTreeType(PInstance)^);
      StringsTreeSelector.caption:=('EentityRepresentationEditor');
      StringsTreeSelector.ActiveControl:=StringsTreeSelector.StringsTree;
-     modalresult:=ZCMsgCallBackInterface.DOShowModal(StringsTreeSelector);
+     modalresult:=zcUI.DOShowModal(StringsTreeSelector);
      if modalresult=ZCMrOk then
        PStringTreeType(PInstance)^:=StringsTreeSelector.TreeResult;
 end;
@@ -83,7 +83,7 @@ begin
      StringsTreeSelector.setValue(PStringTreeType(PInstance)^);
      StringsTreeSelector.caption:=('EentityFunctionEditor');
      StringsTreeSelector.ActiveControl:=StringsTreeSelector.StringsTree;
-     modalresult:=ZCMsgCallBackInterface.DOShowModal(StringsTreeSelector);
+     modalresult:=zcUI.DOShowModal(StringsTreeSelector);
      if modalresult=ZCMrOk then
        PStringTreeType(PInstance)^:=StringsTreeSelector.TreeResult;
 end;

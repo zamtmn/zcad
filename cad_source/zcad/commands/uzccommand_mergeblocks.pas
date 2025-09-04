@@ -51,7 +51,7 @@ begin
     drawings.CurrentDWG:=pdwg;
   end else begin
     result:=cmd_error;
-    ZCMsgCallBackInterface.TextMessage('MergeBlocks:'+format(rsUnableToOpenFile,[ExpandPath(operands)]),TMWOShowError);
+    zcUI.TextMessage('MergeBlocks:'+format(rsUnableToOpenFile,[ExpandPath(operands)]),TMWOShowError);
   end;
 end;
 

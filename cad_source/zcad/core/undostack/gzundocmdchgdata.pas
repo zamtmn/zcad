@@ -95,7 +95,7 @@ begin
     AfterUndoProc(HelpData);
   {if assigned(HelpData)then
     HelpData^.YouChanged(drawings.GetCurrentDWG^);
-  ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIActionRebuild);}
+  zcUI.Do_GUIaction(nil,zcMsgUIActionRebuild);}
 end;
 
 

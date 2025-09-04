@@ -85,15 +85,15 @@ begin
       BIProp.Blocks.Selected:=i
     else
       if length(operands)<>0 then begin
-        ZCMsgCallBackInterface.TextMessage('Insert:'+sysutils.format(rscmNoBlockDefInDWG,[operands]),TMWOHistoryOut);
+        zcUI.TextMessage('Insert:'+sysutils.format(rscmNoBlockDefInDWG,[operands]),TMWOHistoryOut);
         commandmanager.executecommandend;
         exit;
       end;
-    ZCMsgCallBackInterface.Do_PrepareObject(nil,drawings.GetUnitsFormat,SysUnit^.TypeName2PTD('TBlockInsert'),@BIProp,drawings.GetCurrentDWG);
+    zcUI.Do_PrepareObject(nil,drawings.GetUnitsFormat,SysUnit^.TypeName2PTD('TBlockInsert'),@BIProp,drawings.GetCurrentDWG);
     drawings.GetCurrentDWG^.wa.SetMouseMode((MGet3DPoint) or (MMoveCamera) or (MRotateCamera));
-    ZCMsgCallBackInterface.TextMessage(rscmInsertPoint,TMWOHistoryOut);
+    zcUI.TextMessage(rscmInsertPoint,TMWOHistoryOut);
   end else begin
-    ZCMsgCallBackInterface.TextMessage('Insert:'+rscmInDwgBlockDefNotDeffined,TMWOHistoryOut);
+    zcUI.TextMessage('Insert:'+rscmInDwgBlockDefNotDeffined,TMWOHistoryOut);
     commandmanager.executecommandend;
   end;
 

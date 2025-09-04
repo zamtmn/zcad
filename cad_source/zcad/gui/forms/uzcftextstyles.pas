@@ -411,7 +411,7 @@ begin
                                        end;
                                      end
                                  else
-                                     ZCMsgCallBackInterface.TextMessage(rsStyleMustBeSelected,TMWOMessageBox);
+                                     zcUI.TextMessage(rsStyleMustBeSelected,TMWOMessageBox);
 end;
 procedure TTextStylesForm.FormShow(Sender: TObject);
 begin
@@ -504,7 +504,7 @@ begin
   stylename:=pdwg^.TextStyleTable.GetFreeName(Tria_Utf8ToAnsi(rsNewTextStyleNameFormat),1);
   if stylename='' then
   begin
-    ZCMsgCallBackInterface.TextMessage(rsUnableSelectFreeTextStylerName,TMWOShowError);
+    zcUI.TextMessage(rsUnableSelectFreeTextStylerName,TMWOShowError);
     exit;
   end;
 
@@ -556,12 +556,12 @@ begin
                                      countstyle(pstyle,inEntities,inBlockTable,indimstyles);
                                      if ListView1.Selected.Data=pdwg^.GetCurrentTextStyle then
                                      begin
-                                       ZCMsgCallBackInterface.TextMessage(rsCurrentStyleCannotBeDeleted,TMWOShowError);
+                                       zcUI.TextMessage(rsCurrentStyleCannotBeDeleted,TMWOShowError);
                                        exit;
                                      end;
                                      if (inEntities+inBlockTable+indimstyles)>0 then
                                                   begin
-                                                       ZCMsgCallBackInterface.TextMessage(rsUnableDelUsedStyle,TMWOShowError);
+                                                       zcUI.TextMessage(rsUnableDelUsedStyle,TMWOShowError);
                                                        exit;
                                                   end;
 
@@ -570,7 +570,7 @@ begin
                                      DescLabel.Caption:='';
                                      end
                                  else
-                                     ZCMsgCallBackInterface.TextMessage(rsStyleMustBeSelected,TMWOShowError);
+                                     zcUI.TextMessage(rsStyleMustBeSelected,TMWOShowError);
 end;
 
 procedure TTextStylesForm.AplyClose(Sender: TObject);
@@ -613,8 +613,8 @@ procedure TTextStylesForm.Aply(Sender: TObject);
 begin
      if changedstamp then
      begin
-       ZCMsgCallBackInterface.Do_GUIaction(self,ZMsgID_GUIActionRedraw);
-       //if assigned(UpdateVisibleProc) then UpdateVisibleProc(ZMsgID_GUIActionRedraw);
+       zcUI.Do_GUIaction(self,zcMsgUIActionRedraw);
+       //if assigned(UpdateVisibleProc) then UpdateVisibleProc(zcMsgUIActionRedraw);
        zcRedrawCurrentDrawing;
      end;
 end;

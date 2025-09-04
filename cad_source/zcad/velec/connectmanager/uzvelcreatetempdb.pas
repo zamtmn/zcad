@@ -134,7 +134,7 @@ begin
   if not FileExists(LibPath) then
   begin
     LibPath := ExtractFilePath(ParamStr(0)) + 'sqlite3.dll'; // Директория с exe
-    ZCMsgCallBackInterface.TextMessage('Найдена sqlite3.dll по пути: ' + LibPath, TMWOHistoryOut);
+    zcUI.TextMessage('Найдена sqlite3.dll по пути: ' + LibPath, TMWOHistoryOut);
   end;
 
   if not FileExists(LibPath) then
@@ -144,7 +144,7 @@ begin
   Result := FileExists(LibPath);
 
   if not Result then
-    ZCMsgCallBackInterface.TextMessage('Не удалось найти sqlite3.dll по пути: ' + LibPath, TMWOHistoryOut);
+    zcUI.TextMessage('Не удалось найти sqlite3.dll по пути: ' + LibPath, TMWOHistoryOut);
 end;
 
 procedure InitializeComponents(filepath:string);
@@ -198,7 +198,7 @@ begin
   // Create new database
   SQLite3Connection.Open;
   SQLTransaction.Active := True;
-  ZCMsgCallBackInterface.TextMessage('Database created: ' + SQLite3Connection.DatabaseName,TMWOHistoryOut);
+  zcUI.TextMessage('Database created: ' + SQLite3Connection.DatabaseName,TMWOHistoryOut);
 end;
 
 procedure CreateTable;
@@ -218,7 +218,7 @@ begin
                       ')';
     Query.ExecSQL;
     SQLTransaction.Commit;
-    ZCMsgCallBackInterface.TextMessage('Table "dev" created',TMWOHistoryOut);
+    zcUI.TextMessage('Table "dev" created',TMWOHistoryOut);
   finally
     Query.Free;
   end;
@@ -296,7 +296,7 @@ begin
       until pobj=nil;
 
     SQLTransaction.Commit;
-    ZCMsgCallBackInterface.TextMessage('Test data added to "dev" table',TMWOHistoryOut);
+    zcUI.TextMessage('Test data added to "dev" table',TMWOHistoryOut);
   finally
     Query.Free;
   end;
@@ -311,10 +311,10 @@ begin
     Query.SQL.Text := 'SELECT * FROM dev';
     Query.Open;
 
-    ZCMsgCallBackInterface.TextMessage('',TMWOHistoryOut);
-    ZCMsgCallBackInterface.TextMessage('Contents of "dev" table:',TMWOHistoryOut);
-    ZCMsgCallBackInterface.TextMessage('ID | Name           | Age | Email',TMWOHistoryOut);
-    ZCMsgCallBackInterface.TextMessage('----------------------------------',TMWOHistoryOut);
+    zcUI.TextMessage('',TMWOHistoryOut);
+    zcUI.TextMessage('Contents of "dev" table:',TMWOHistoryOut);
+    zcUI.TextMessage('ID | Name           | Age | Email',TMWOHistoryOut);
+    zcUI.TextMessage('----------------------------------',TMWOHistoryOut);
 
   finally
     Query.Free;
@@ -331,11 +331,11 @@ procedure createElectricalTempDB;
 var
   filepath:string;
  begin
-  ZCMsgCallBackInterface.TextMessage('Запущен диспетчер подключений',TMWOHistoryOut);
+  zcUI.TextMessage('Запущен диспетчер подключений',TMWOHistoryOut);
     //получаем имя файла для проверки на его сохранение
   filepath:=ExtractFilePath(PTZCADDrawing(drawings.GetCurrentDwg)^.FileName);
   if AnsiPos(':\', filepath) = 0 then begin
-     ZCMsgCallBackInterface.TextMessage('Команда отменена. Выполните сохранение чертежа в ZCAD!!!!!',TMWOHistoryOut);
+     zcUI.TextMessage('Команда отменена. Выполните сохранение чертежа в ZCAD!!!!!',TMWOHistoryOut);
      //result:=cmd_cancel;
      exit;
   end;
@@ -346,13 +346,13 @@ var
     CreateTable;
     InsertData;
     ShowData;
-    ZCMsgCallBackInterface.TextMessage('Database successfully created and populated!',TMWOHistoryOut);
+    zcUI.TextMessage('Database successfully created and populated!',TMWOHistoryOut);
     FreeComponents;
 
   except
     on E: Exception do begin
       FreeComponents;
-      ZCMsgCallBackInterface.TextMessage('Error: ' + E.Message,TMWOHistoryOut);
+      zcUI.TextMessage('Error: ' + E.Message,TMWOHistoryOut);
     end;
   end;
  end;

@@ -89,7 +89,7 @@ begin
                               FinalCreateDDim;
                           end;
                      else begin
-                              ZCMsgCallBackInterface.TextMessage('Please select Arc or Circle',TMWOShowError);
+                              zcUI.TextMessage('Please select Arc or Circle',TMWOShowError);
                           end;
               end;
          end;

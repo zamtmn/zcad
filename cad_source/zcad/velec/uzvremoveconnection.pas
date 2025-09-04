@@ -84,17 +84,17 @@ begin
                     inc(numConnect);
                     pvd:=Varext.entityunit.FindVariable(velec_VarNameForConnectBefore+IntToStr(numConnect)+'_'+velec_VarNameForConnectAfter_SLTypeagen);
                   until pvd=nil;
-                  //ZCMsgCallBackInterface.TextMessage('numConnect = ' + inttostr(numConnect),TMWOHistoryOut);
+                  //zcUI.TextMessage('numConnect = ' + inttostr(numConnect),TMWOHistoryOut);
                   //удаляем подключение
-                  //ZCMsgCallBackInterface.TextMessage('numConnect = ' + inttostr(numConnect),TMWOHistoryOut);
+                  //zcUI.TextMessage('numConnect = ' + inttostr(numConnect),TMWOHistoryOut);
                   if (numConnect-1 > 0) then begin
                     pvdadd:=pu^.InterfaceVariables.vardescarray.beginiterate(iradd); //пробуем перебрать все определения переменных в интерфейсной части
                     if pvdadd<>nil then //переменные есть
                       repeat
                         varName:=pvdadd^.name; //имя переменной
-                        //ZCMsgCallBackInterface.TextMessage('numConnect = ' + inttostr(numConnect),TMWOHistoryOut);
+                        //zcUI.TextMessage('numConnect = ' + inttostr(numConnect),TMWOHistoryOut);
                         varName:=StringReplace(varName,velec_VarNameForConnectBefore+'1',velec_VarNameForConnectBefore+inttostr(numConnect-1),[rfReplaceAll, rfIgnoreCase]);
-                        //ZCMsgCallBackInterface.TextMessage('varName = ' + varName,TMWOHistoryOut);
+                        //zcUI.TextMessage('varName = ' + varName,TMWOHistoryOut);
                         pvd:=Varext.entityunit.FindVariable(varName);//а тут уже указатель на настоящий описатель переменной
                         if pvd<>nil then
                           //переменная у примитива найдена, будем удалять
@@ -109,8 +109,8 @@ begin
         pobj:=drawings.GetCurrentROOT^.ObjArray.iterate(ir); //переход к следующем примитиву в списке выбраных примитивов
       until pobj=nil;
 
-    ZCMsgCallBackInterface.TextMessage('Кол-во ввыбранных элементов = ' + IntToStr(countEnt),TMWOHistoryOut);
-    ZCMsgCallBackInterface.TextMessage('Устройство. Удалено подключение = ' + IntToStr(countDev) + 'шт',TMWOHistoryOut);
+    zcUI.TextMessage('Кол-во ввыбранных элементов = ' + IntToStr(countEnt),TMWOHistoryOut);
+    zcUI.TextMessage('Устройство. Удалено подключение = ' + IntToStr(countDev) + 'шт',TMWOHistoryOut);
 
   end;
   result:=cmd_ok;

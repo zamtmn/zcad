@@ -583,7 +583,7 @@ begin
           //     zcEndUndoCommand;
           //
       end;
-      ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIReturnToDefaultObject);
+      zcUI.Do_GUIaction(nil,zcMsgUIReturnToDefaultObject);
       //ReturnToDefaultProc(drawings.GetUnitsFormat);
     end;
     result:=cmd_ok;

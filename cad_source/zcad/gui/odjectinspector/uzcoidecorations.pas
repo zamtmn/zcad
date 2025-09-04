@@ -249,13 +249,13 @@ begin
      if not assigned(ColorSelectForm)then
      Application.CreateForm(TColorSelectForm, ColorSelectForm);
      SetHeightControl(ColorSelectForm,sysvar.INTF.INTF_DefaultControlHeight^);
-     ZCMsgCallBackInterface.Do_BeforeShowModal(ColorSelectForm);
+     zcUI.Do_BeforeShowModal(ColorSelectForm);
      mr:=ColorSelectForm.run(PTGDBPaletteColor(PInstance)^,true){showmodal};
      if mr=ZCmrOk then
                     begin
                     PTGDBPaletteColor(PInstance)^:=ColorSelectForm.ColorInfex;
                     end;
-     ZCMsgCallBackInterface.Do_AfterShowModal(ColorSelectForm);
+     zcUI.Do_AfterShowModal(ColorSelectForm);
      freeandnil(ColorSelectForm);
 end;
 procedure drawLWProp(canvas:TCanvas;ARect:TRect;PInstance:Pointer);
@@ -290,7 +290,7 @@ procedure runOSwnd(PInstance:Pointer);
 begin
   SnapEditorForm:=TSnapEditorForm.Create(nil);
   SetHeightControl(SnapEditorForm,sysvar.INTF.INTF_DefaultControlHeight^);
-  ZCMsgCallBackInterface.DOShowModal(SnapEditorForm);
+  zcUI.DOShowModal(SnapEditorForm);
   Freeandnil(SnapEditorForm);
 end;
 function ColorDecoratorCreateEditor(TheOwner:TPropEditorOwner;rect:trect;pinstance:pointer;psa:PTZctnrVectorStrings;FreeOnLostFocus:boolean;PTD:PUserTypeDescriptor;f:TzeUnitsFormat):TEditorDesc;
@@ -391,7 +391,7 @@ begin
         InfoForm.memo.Font.Height:=SysVar.INTF.INTF_DefaultEditorFontHeight^;
 
      InfoForm.memo.text:=pString(PInstance)^;
-     modalresult:=ZCMsgCallBackInterface.DOShowModal(InfoForm);
+     modalresult:=zcUI.DOShowModal(InfoForm);
      if modalresult=ZCMrOk then
                          begin
                               pString(PInstance)^:=InfoForm.memo.text;
@@ -413,7 +413,7 @@ begin
         InfoForm.memo.Font.Height:=SysVar.INTF.INTF_DefaultEditorFontHeight^;
 
      InfoForm.memo.text:=ConvertFromDxfString(UnicodeString(pString(PInstance)^));
-     modalresult:=ZCMsgCallBackInterface.DOShowModal(InfoForm);
+     modalresult:=zcUI.DOShowModal(InfoForm);
      if modalresult=ZCMrOk then
                          begin
                               pString(PInstance)^:=String(ConvertToDxfString(InfoForm.memo.text));

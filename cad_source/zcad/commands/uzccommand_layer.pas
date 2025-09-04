@@ -39,7 +39,7 @@ function layer_cmd(const Context:TZCADCommandContext;operands:TCommandOperands):
 begin
   LayersForm:=TLayersForm.Create(nil);
   SetHeightControl(LayersForm,sysvar.INTF.INTF_DefaultControlHeight^);
-  ZCMsgCallBackInterface.DOShowModal(LayersForm);
+  zcUI.DOShowModal(LayersForm);
   Freeandnil(LayersForm);
   result:=cmd_ok;
 end;

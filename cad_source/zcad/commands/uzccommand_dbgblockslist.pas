@@ -37,7 +37,7 @@ var pb:PGDBObjBlockdef;
 begin
   pb:=drawings.GetCurrentDWG^.BlockDefArray.beginiterate(ir);
   if pb<>nil then repeat
-    ZCMsgCallBackInterface.TextMessage(format('Found block "%s", contains %d entities',[Tria_AnsiToUtf8(pb^.name),pb^.ObjArray.Count]),TMWOHistoryOut);
+    zcUI.TextMessage(format('Found block "%s", contains %d entities',[Tria_AnsiToUtf8(pb^.name),pb^.ObjArray.Count]),TMWOHistoryOut);
     pb:=drawings.GetCurrentDWG^.BlockDefArray.iterate(ir);
   until pb=nil;
   result:=cmd_ok;

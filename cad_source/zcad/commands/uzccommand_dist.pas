@@ -63,7 +63,7 @@ begin
                    begin
                         len:=uzegeometry.Vertexlength(point,oldpoint);
                         distlen:=distlen+len;
-                        ZCMsgCallBackInterface.TextMessage(format(rscmSegmentLengthTotalLength,[floattostr(len),floattostr(distlen)]),TMWOHistoryOut)
+                        zcUI.TextMessage(format(rscmSegmentLengthTotalLength,[floattostr(len),floattostr(distlen)]),TMWOHistoryOut)
                    end;
      c2:=cs;
      oldpoint:=point;

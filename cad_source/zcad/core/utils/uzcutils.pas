@@ -251,19 +251,19 @@ begin
 end;
 procedure zcShowCommandParams(const PDataTypeDesk:PUserTypeDescriptor;const PInstance:Pointer);
 begin
-  ZCMsgCallBackInterface.Do_PrepareObject(nil,drawings.GetUnitsFormat,
+  zcUI.Do_PrepareObject(nil,drawings.GetUnitsFormat,
                         PDataTypeDesk,PInstance,
                         drawings.GetCurrentDWG);
 end;
 procedure zcHideCommandParams();
 begin
-  ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIReturnToDefaultObject);
+  zcUI.Do_GUIaction(nil,zcMsgUIReturnToDefaultObject);
   {if assigned(ReturnToDefaultProc)then
       ReturnToDefaultProc;}
 end;
 procedure zcRedrawCurrentDrawing();
 begin
-  ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIActionRedrawContent);
+  zcUI.Do_GUIaction(nil,zcMsgUIActionRedrawContent);
 end;
 procedure zcSelectEntity(pp:PGDBObjEntity);
 begin

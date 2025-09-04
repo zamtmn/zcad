@@ -29,14 +29,18 @@ uses
   uzbpaths,uzcinterface,
   uzeentitiestypefilter,
   uzcdrawings,uzedrawingsimple,uzgldrawcontext,
-  varmandef,uzcenitiesvariablesextender,
+  varmandef,Varman,uzcenitiesvariablesextender,
   CsvDocument,uzCtnrVectorpBaseEntity,
-  uzeentsubordinated,UBaseTypeDescriptor;
+  uzeentsubordinated,UBaseTypeDescriptor,
+  uzcoimultiproperties,uzcoimultipropertiesutil;
 
 implementation
 
 const
   IdentEnd='<<<';
+
+var
+  VU:TEntityUnit;
 
 procedure FilterArray(source,dest:PZctnrVectorPGDBaseEntity;prop,value:string);
 var
@@ -44,18 +48,65 @@ var
    ir:itrec;
    pvd:pvardesk;
    pentvarext:TVariablesExtender;
+   tmp:TMultiProperty;
+   mp:TMultiProperty;
+   mpd:TMultiPropertyDataForObjects;
+   ChangedData:TChangedData;
+   tempresult:String;
+   added:boolean;
 begin
+  if MultiPropertiesManager.MultiPropertyDictionary.MyGetValue(prop,tmp) then begin
+    mp:=TMultiProperty.CreateAndCloneFrom(tmp);
+    mp.PIiterateData:=mp.MIPD.BeforeIterateProc(mp,@VU);
+  end else
+    mp:=nil;
   pvisible:=source.beginiterate(ir);
   if pvisible<>nil then
   repeat
+    added:=false;
     pentvarext:=pvisible^.GetExtension<TVariablesExtender>;
     pvd:=pentvarext.entityunit.FindVariable(prop);
     if pvd<>nil then begin
-      if pvd.data.PTD.GetValueAsString(pvd.data.Addr.Instance)=value then
+      if pvd.data.PTD.GetValueAsString(pvd.data.Addr.Instance)=value then begin
         dest.PushBackData(pvisible);
+        added:=true;
+      end;
     end;
+    if (mp<>nil)and(not added) then begin
+
+      if mp<>nil then begin
+        if mp.MPObjectsData.tryGetValue(TObjIDWithExtender.Create(0,nil),mpd) then begin
+          ChangedData:=CreateChangedData(pvisible,mpd.GSData);
+          if @mpd.EntBeforeIterateProc<>nil then
+            mpd.EntBeforeIterateProc(mp.PIiterateData,ChangedData);
+          mpd.EntIterateProc(mp.PIiterateData,ChangedData,mp,true,mpd.EntChangeProc,drawings.GetUnitsFormat);
+          tempresult:=mp.MPType.GetDecoratedValueAsString(PVarDesk(PTOneVarData(mp.PIiterateData)^.VDAddr.Instance).data.Addr.Instance,drawings.GetUnitsFormat);
+          added:=true;
+        end else if mp.MPObjectsData.tryGetValue(TObjIDWithExtender.Create(PGDBObjEntity(pvisible)^.GetObjType,nil),mpd) then begin
+          ChangedData:=CreateChangedData(pvisible,mpd.GSData);
+          if @mpd.EntBeforeIterateProc<>nil then
+            mpd.EntBeforeIterateProc(mp.PIiterateData,ChangedData);
+          mpd.EntIterateProc(mp.PIiterateData,ChangedData,mp,true,mpd.EntChangeProc,drawings.GetUnitsFormat);
+          tempresult:=mp.MPType.GetDecoratedValueAsString(PVarDesk(PTOneVarData(mp.PIiterateData)^.VDAddr.Instance).data.Addr.Instance,drawings.GetUnitsFormat);
+          added:=true;
+        end else
+          tempresult:='';
+      end else
+        tempresult:='';
+
+      if (tempresult=value)and added then
+        dest.PushBackData(pvisible);
+
+    end;
+
   pvisible:=source.iterate(ir);
   until pvisible=nil;
+
+  if mp<>nil then begin
+    if @mp.MIPD.AfterIterateProc<>nil then
+      mp.MIPD.AfterIterateProc(mp.PIiterateData,mp);
+    mp.destroy;
+  end;
 end;
 
 procedure SetArray(source:PZctnrVectorPGDBaseEntity;prop,value:string;var drawing:TSimpleDrawing;var DC:TDrawContext);
@@ -116,7 +167,7 @@ var
   entarray,filtredentarray:TZctnrVectorPGDBaseEntity;
   fltcounter,fltcount,FactColCount,setvarfrom:integer;
   a1,a2,atemp:PZctnrVectorPGDBaseEntity;
-  VarName,VarValue:string;
+  VarOrPropertyName,VarOrPropertyValue:string;
 begin
   FactColCount:=GetFactColCount(FDoc,row);
   if (FactColCount mod 2)=0 then
@@ -157,13 +208,13 @@ begin
   fltcount:=(FactColCount-1) div 2;
   setvarfrom:=1;
   while fltcount>fltcounter do begin
-    VarName:=FDoc.Cells[fltcounter*2-1,Row];
-    if VarName=IdentEnd then begin
+    VarOrPropertyName:=FDoc.Cells[fltcounter*2-1,Row];
+    if VarOrPropertyName=IdentEnd then begin
       inc(setvarfrom);
       Break;
     end;
-    VarValue:=FDoc.Cells[fltcounter*2,Row];
-    FilterArray(a1,a2,VarName,VarValue);
+    VarOrPropertyValue:=FDoc.Cells[fltcounter*2,Row];
+    FilterArray(a1,a2,VarOrPropertyName,VarOrPropertyValue);
     a1.Clear;
     atemp:=a2;
     a2:=a1;
@@ -177,11 +228,11 @@ begin
     ZCMsgCallBackInterface.TextMessage(format('In row %d found %d candidats (%s)',[row+1,a1^.Count,FDoc.Cells[2,Row]]),TMWOHistoryOut);
   if a1^.Count<>0 then begin
     while setvarfrom<FactColCount do begin
-      VarName:=FDoc.Cells[setvarfrom,Row];
-      VarValue:=FDoc.Cells[setvarfrom+1,Row];
-      if (VarValue<>'')and(VarName<>'') then
-        if VarName[1]<>'#'then
-          SetArray(a1,VarName,VarValue,drawing,DC);
+      VarOrPropertyName:=FDoc.Cells[setvarfrom,Row];
+      VarOrPropertyValue:=FDoc.Cells[setvarfrom+1,Row];
+      if (VarOrPropertyValue<>'')and(VarOrPropertyName<>'') then
+        if VarOrPropertyName[1]<>'#'then
+          SetArray(a1,VarOrPropertyName,VarOrPropertyValue,drawing,DC);
       inc(setvarfrom,2);
     end;
   end;
@@ -236,6 +287,9 @@ end;
 initialization
   programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
   CreateZCADCommand(@DataImport_com,'DataImport',  CADWG,0);
+  VU.init('test');
+  VU.InterfaceUses.PushBackIfNotPresent(sysunit);
 finalization
   ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
+  VU.done;
 end.

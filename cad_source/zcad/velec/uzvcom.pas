@@ -391,7 +391,10 @@ begin
             ZCMsgCallBackInterface.TextMessage('**dublicateVertexdublicateVertexdublicateVertexdublicateVertex',TMWOHistoryOut);
             ZCMsgCallBackInterface.TextMessage('**addVertex.x = ' + floattostr(addVertex.x) + '**addVertex.y = ' + floattostr(addVertex.y) + '**listVertex[i].centerPoint.x = ' + floattostr(listVertex[i].centerPoint.x) + '**listVertex[i].centerPoint.y = ' + floattostr(listVertex[i].centerPoint.y) + '**inaccuracy = ' + floattostr(inaccuracy),TMWOHistoryOut);
         end;
-        if ((addVertex.x >= listVertex[i].centerPoint.x-inaccuracy) and (addVertex.x <= listVertex[i].centerPoint.x+inaccuracy) and (addVertex.y >= listVertex[i].centerPoint.y-inaccuracy) and (addVertex.y <= listVertex[i].centerPoint.y+inaccuracy)) then begin
+        if ((addVertex.x >= listVertex[i].centerPoint.x-inaccuracy) and
+           (addVertex.x <= listVertex[i].centerPoint.x+inaccuracy) and
+           (addVertex.y >= listVertex[i].centerPoint.y-inaccuracy) and
+           (addVertex.y <= listVertex[i].centerPoint.y+inaccuracy)) then begin
            result:=true;
            if (uzvslagcabComParams.settingVizCab.vizFullTreeCab = true) then
            ZCMsgCallBackInterface.TextMessage('**result=trueresult=trueresult=trueresult=trueresult=trueresult=trueresult=trueresult=true',TMWOHistoryOut);
@@ -1235,12 +1238,12 @@ begin
 
                 if numVertDevice=-1 then begin
                   ZCMsgCallBackInterface.TextMessage('**чтото пошло не так',TMWOHistoryOut);
-                  for k:=0 to graph.listVertex.Size-1 do begin
-                    if (graph.listVertex[k].deviceEnt <> nil) then
-                      ZCMsgCallBackInterface.TextMessage('**graph.listVertex[k].deviceEnt NMO_Name='+pString(FindVariableInEnt(graph.listVertex[k].deviceEnt,'NMO_Name')^.data.Addr.Instance)^,TMWOHistoryOut);
-                  end;
-                  if (pObjDevice <> nil) then
-                      ZCMsgCallBackInterface.TextMessage('**pObjDevice NMO_Name='+pString(FindVariableInEnt(pObjDevice,'NMO_Name')^.data.Addr.Instance)^,TMWOHistoryOut);
+                  //for k:=0 to graph.listVertex.Size-1 do begin
+                  //  if (graph.listVertex[k].deviceEnt <> nil) then
+                  //    ZCMsgCallBackInterface.TextMessage('**graph.listVertex[k].deviceEnt NMO_Name='+pString(FindVariableInEnt(graph.listVertex[k].deviceEnt,'NMO_Name')^.data.Addr.Instance)^,TMWOHistoryOut);
+                  //end;
+                  //if (pObjDevice <> nil) then
+                  //    ZCMsgCallBackInterface.TextMessage('**pObjDevice NMO_Name='+pString(FindVariableInEnt(pObjDevice,'NMO_Name')^.data.Addr.Instance)^,TMWOHistoryOut);
                 end;
                //****//
             end;
@@ -1631,37 +1634,23 @@ begin
           // Заполняем список всех GDBDeviceID
           if pobj^.GetObjType=GDBDeviceID then
                begin
-                 //if getPointConnector(pobj,pConnect) then
-                   //ZCMsgCallBackInterface.TextMessage('pobeda= ');
-                  //pObjDevice:= PGDBObjDevice(pobj); // передача объекта в девайсы
-                  //currentSubObj:=pObjDevice^.VarObjArray.beginiterate(ir_inDevice); //иследование содержимого девайса
-                  //if (currentSubObj<>nil) then
-                  //  repeat
+                   if getPointConnector(pobj,pConnect) then
+                     begin
+                       //devpoint:=CurrentSubObj^.P_insert_in_WCS;
+                       if dublicateVertex({listDevice}result.listVertex,pConnect,Epsilon) = false then begin
+                         pObjDevice:= PGDBObjDevice(pobj);
+                         infoDevice.deviceEnt:=pObjDevice;
+                         infoDevice.centerPoint:=pConnect;
+                         infoDevice.centerPoint.z:=0;
+                         infoDevice.break:=false;
+                         infoDevice.breakName:='not_break';
+                         result.listVertex{listDevice}.PushBack(infoDevice);
+                         inc(counter2);
+                       end;
+                      // ZCMsgCallBackInterface.TextMessage('x= ' + FloatToStr(devpoint.x) + ' y=' + FloatToStr(devpoint.y));
+                     end;
+              end;
 
-                    //if (CurrentSubObj^.GetObjType=GDBDeviceID) then       //поиск внутри устройства устройства
-                    //  if CurrentSubObj^.BlockDesc.BType=BT_Connector then //если это устройство коннектор тогда
-                       if getPointConnector(pobj,pConnect) then
-                         begin
-                           //devpoint:=CurrentSubObj^.P_insert_in_WCS;
-                           if dublicateVertex({listDevice}result.listVertex,pConnect,Epsilon) = false then begin
-                             pObjDevice:= PGDBObjDevice(pobj);
-                             infoDevice.deviceEnt:=pObjDevice;
-                             infoDevice.centerPoint:=pConnect;
-                             infoDevice.centerPoint.z:=0;
-                             infoDevice.break:=false;
-                             infoDevice.breakName:='not_break';
-                             result.listVertex{listDevice}.PushBack(infoDevice);
-                             inc(counter2);
-
-                             //testTempDrawCircle(infoDevice.centerPoint,2.5);
-
-                           end;
-                          // ZCMsgCallBackInterface.TextMessage('x= ' + FloatToStr(devpoint.x) + ' y=' + FloatToStr(devpoint.y));
-                         end;
-                     //currentSubObj:=pObjDevice^.VarObjArray.iterate(ir_inDevice);
-                    //until currentSubObj=nil;
-                  end;
-             //GDBObjDevice
         inc(counter);
         end;
       pobj:=drawings.GetCurrentROOT^.ObjArray.iterate(ir); //переход к следующем примитиву в списке выбраных примитивов

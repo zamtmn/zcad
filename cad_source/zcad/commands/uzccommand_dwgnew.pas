@@ -97,11 +97,11 @@ begin
     if fileExists(UTF8ToSys(FileName)) then
       Load_merge(FileName,TLOLoad)
     else
-      ZCMsgCallBackInterface.TextMessage(format(rsTemplateNotFound,[FileName]),TMWOShowError);
+      zcUI.TextMessage(format(rsTemplateNotFound,[FileName]),TMWOShowError);
   end;
   ViewArea.Drawer.delmyscrbuf;//буфер чистить, потому что он может оказаться невалидным в случае отрисовки во время
                               //создания или загрузки
-  ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIActionRedrawContent);
+  zcUI.Do_GUIaction(nil,zcMsgUIActionRedrawContent);
   result:=cmd_ok;
 end;
 initialization

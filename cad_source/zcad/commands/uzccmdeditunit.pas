@@ -53,7 +53,7 @@ begin
   StrLCopy(@astring[1],mem.GetParrayAsPointer,mem.Count);
   createInfoFormVar;
   InfoFormVar.memo.text:=astring;
-  if ZCMsgCallBackInterface.DOShowModal(InfoFormVar)=ZCmrOK then begin
+  if zcUI.DOShowModal(InfoFormVar)=ZCmrOK then begin
     astring:=InfoFormVar.memo.text;
     mem.Clear;
     mem.AddData(@astring[1],length(astring));

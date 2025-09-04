@@ -58,7 +58,7 @@ procedure scale_com.showprompt(mklick:integer);
 begin
      case mklick of
      0:inherited;
-     1:ZCMsgCallBackInterface.TextMessage(rscmPickOrEnterScale,TMWOHistoryOut);
+     1:zcUI.TextMessage(rscmPickOrEnterScale,TMWOHistoryOut);
      end;
 end;
 procedure scale_com.scale(a:Double; button: Byte);

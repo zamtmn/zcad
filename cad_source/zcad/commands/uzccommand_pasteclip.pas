@@ -77,9 +77,9 @@ begin
       addfromdxf(tmpStr,zdctx,@DXFLoadCallBack);
     end;
     drawings.GetCurrentDWG^.wa.SetMouseMode((MGet3DPoint) or (MMoveCamera) or (MRotateCamera));
-    ZCMsgCallBackInterface.TextMessage(rscmNewBasePoint,TMWOHistoryOut);
+    zcUI.TextMessage(rscmNewBasePoint,TMWOHistoryOut);
   end else
-    ZCMsgCallBackInterface.TextMessage(rsClipboardIsEmpty,TMWOHistoryOut);
+    zcUI.TextMessage(rsClipboardIsEmpty,TMWOHistoryOut);
 end;
 
 initialization

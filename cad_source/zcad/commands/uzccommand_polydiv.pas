@@ -270,7 +270,7 @@ begin
   end;
   //else
   begin
-       ZCMsgCallBackInterface.TextMessage(rsBeforeRunPoly,TMWOHistoryOut);
+       zcUI.TextMessage(rsBeforeRunPoly,TMWOHistoryOut);
        commandmanager.executecommandend;
   end;
 end;

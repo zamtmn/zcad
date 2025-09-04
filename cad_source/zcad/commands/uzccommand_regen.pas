@@ -59,7 +59,7 @@ begin
   drawings.GetCurrentDWG.wa.param.seldesc.LastSelectedObject:=nil;
   drawings.GetCurrentDWG.wa.param.lastonmouseobject:=nil;
   {objinsp.GDBobjinsp.}
-  ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIReturnToDefaultObject);
+  zcUI.Do_GUIaction(nil,zcMsgUIReturnToDefaultObject);
   clearcp;
   //redrawoglwnd;
   result:=cmd_ok;

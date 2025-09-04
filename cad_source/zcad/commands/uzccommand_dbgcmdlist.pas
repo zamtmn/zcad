@@ -44,7 +44,7 @@ begin
          p:=commandmanager.iterate(ir);
    until p=nil;
    clist.sort;
-   ZCMsgCallBackInterface.TextMessage(clist.GetTextWithEOL,TMWOHistoryOut);
+   zcUI.TextMessage(clist.GetTextWithEOL,TMWOHistoryOut);
    clist.done;
    result:=cmd_ok;
 end;

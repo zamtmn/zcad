@@ -59,7 +59,7 @@ begin
            inc(Integer(pvd.data.Addr.Instance^));
      end
         else
-            ZCMsgCallBackInterface.TextMessage(rscmCommandOnlyCTXMenu,TMWOHistoryOut);
+            zcUI.TextMessage(rscmCommandOnlyCTXMenu,TMWOHistoryOut);
      result:=cmd_ok;
 end;
 function DBaseRename_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
@@ -84,14 +84,14 @@ begin
                  SingleLineTextEditorForm.EditField.Caption:=copy(pdbv.name,4,length(pdbv.name)-3);
                  renamed:=false;
                  repeat
-                 if ZCMsgCallBackInterface.DoShowModal(SingleLineTextEditorForm)=ZCmrok then
+                 if zcUI.DoShowModal(SingleLineTextEditorForm)=ZCmrok then
                  begin
                       s:='_EQ'+SingleLineTextEditorForm.EditField.Caption;
                       s1:=s;
 
                       if pu^.FindVariable(s)<>nil then
                                                  begin
-                                                      ZCMsgCallBackInterface.TextMessage(format(rsEntryAlreadyExist,[s]),TMWOShowError);
+                                                      zcUI.TextMessage(format(rsEntryAlreadyExist,[s]),TMWOShowError);
                                                  end
                       else
                       begin
@@ -99,19 +99,19 @@ begin
                       if parseresult<>nil then begin parseresult^.Done;Freemem(Pointer(parseresult));end;
                       if parseerror and (s1='') then
                                         begin
-                                             ZCMsgCallBackInterface.TextMessage(format(rsRenamedTo,['Entry',pdbv.name,s]),TMWOHistoryOut);
+                                             zcUI.TextMessage(format(rsRenamedTo,['Entry',pdbv.name,s]),TMWOHistoryOut);
                                              pdbv.name:=s;
                                              renamed:=true;
                                         end
                                            else
-                                               ZCMsgCallBackInterface.TextMessage(format(rsInvalidIdentificator,[s]),TMWOShowError);
+                                               zcUI.TextMessage(format(rsInvalidIdentificator,[s]),TMWOShowError);
                       end;
                  end;
                  until renamed or (SingleLineTextEditorForm.ModalResult<>mrok);
            end;
      end
         else
-            ZCMsgCallBackInterface.TextMessage(rscmCommandOnlyCTXMenu,TMWOHistoryOut);
+            zcUI.TextMessage(rscmCommandOnlyCTXMenu,TMWOHistoryOut);
      result:=cmd_ok;
 end;
 procedure DBLinkProcess(pEntity:PGDBObjEntity;const drawing:TDrawingDef);
@@ -184,11 +184,11 @@ begin
                                           end;
                  pv:=drawings.GetCurrentROOT.ObjArray.iterate(ir);
                  until pv=nil;
-                 ZCMsgCallBackInterface.TextMessage(format(rscmNEntitiesProcessed,[c]),TMWOHistoryOut);
+                 zcUI.TextMessage(format(rscmNEntitiesProcessed,[c]),TMWOHistoryOut);
            end;
      end
         else
-            ZCMsgCallBackInterface.TextMessage(rscmCommandOnlyCTXMenu,TMWOHistoryOut);
+            zcUI.TextMessage(rscmCommandOnlyCTXMenu,TMWOHistoryOut);
     result:=cmd_ok;
 end;
 procedure startup;

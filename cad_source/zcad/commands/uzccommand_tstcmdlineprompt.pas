@@ -55,18 +55,18 @@ begin
     gr:=commandmanager.Get3DPoint('',p);
     case gr of
       GRId:case commandmanager.GetLastId of
-             CLPIdUser1:ZCMsgCallBackInterface.TextMessage('GRId: CLPIdUser1',TMWOHistoryOut);
+             CLPIdUser1:zcUI.TextMessage('GRId: CLPIdUser1',TMWOHistoryOut);
              CLPIdFileDialog:begin
-               ZCMsgCallBackInterface.TextMessage('GRId: CLPIdFileDialog',TMWOHistoryOut);
+               zcUI.TextMessage('GRId: CLPIdFileDialog',TMWOHistoryOut);
                if SaveFileDialog(filename,'CSV',CSVFileFilter,'','Export data...') then begin
                  system.break;
                end;
              end;
-             else ZCMsgCallBackInterface.TextMessage(format('GRId: %d',[commandmanager.GetLastId]),TMWOHistoryOut);
+             else zcUI.TextMessage(format('GRId: %d',[commandmanager.GetLastId]),TMWOHistoryOut);
           end;
-      GRNormal:ZCMsgCallBackInterface.TextMessage(format('GRNormal: %g,%g,%g',[p.x,p.y,p.z]),TMWOHistoryOut);
-      GRInput:ZCMsgCallBackInterface.TextMessage(format('You enter: %s',[commandmanager.GetLastInput]),TMWOHistoryOut);
-      GRCancel:ZCMsgCallBackInterface.TextMessage('You cancel',TMWOHistoryOut);
+      GRNormal:zcUI.TextMessage(format('GRNormal: %g,%g,%g',[p.x,p.y,p.z]),TMWOHistoryOut);
+      GRInput:zcUI.TextMessage(format('You enter: %s',[commandmanager.GetLastInput]),TMWOHistoryOut);
+      GRCancel:zcUI.TextMessage('You cancel',TMWOHistoryOut);
     end;
   until gr=GRCancel;
   result:=cmd_ok;

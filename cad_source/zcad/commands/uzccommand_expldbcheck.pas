@@ -65,16 +65,16 @@ begin
             if pvnDB<>nil then begin
               //если нашли, то доступ как к базовому объекту БД можно получить так
               PBaseObject:=pvnDB.data.Addr.Instance;
-              ZCMsgCallBackInterface.TextMessage(format('DbBaseObject.Name=%s',[PDeviceDbBaseObject(PBaseObject)^.Name]),TMWOHistoryOut);
+              zcUI.TextMessage(format('DbBaseObject.Name=%s',[PDeviceDbBaseObject(PBaseObject)^.Name]),TMWOHistoryOut);
               //проверяем явлляется ли то что нашли наследником от DeviceDbBaseObject, если является, получаем доступ как к кабелю
               if IsIt(TypeOf(PBaseObject^),typeof(DeviceDbBaseObject)) then begin
-                ZCMsgCallBackInterface.TextMessage(format('DeviceDbBaseObject.UID=%s',[PDeviceDbBaseObject(PBaseObject)^.UID]),TMWOHistoryOut);
-                ZCMsgCallBackInterface.TextMessage(format('DeviceDbBaseObject.NameShortTemplate=%s',[PDeviceDbBaseObject(PBaseObject)^.NameShortTemplate]),TMWOHistoryOut);
+                zcUI.TextMessage(format('DeviceDbBaseObject.UID=%s',[PDeviceDbBaseObject(PBaseObject)^.UID]),TMWOHistoryOut);
+                zcUI.TextMessage(format('DeviceDbBaseObject.NameShortTemplate=%s',[PDeviceDbBaseObject(PBaseObject)^.NameShortTemplate]),TMWOHistoryOut);
               end;
               //проверяем явлляется ли то что нашли наследником от кабеля, если является, получаем доступ как к кабелю
               if IsIt(TypeOf(PBaseObject^),typeof(CableDeviceBaseObject)) then begin
-                ZCMsgCallBackInterface.TextMessage(format('CableDeviceBaseObject.CoreCrossSection=%g',[PCableDeviceBaseObject(PBaseObject)^.CoreCrossSection]),TMWOHistoryOut);
-                ZCMsgCallBackInterface.TextMessage(format('CableDeviceBaseObject.NumberOfCores=%g',[PCableDeviceBaseObject(PBaseObject)^.NumberOfCores]),TMWOHistoryOut);
+                zcUI.TextMessage(format('CableDeviceBaseObject.CoreCrossSection=%g',[PCableDeviceBaseObject(PBaseObject)^.CoreCrossSection]),TMWOHistoryOut);
+                zcUI.TextMessage(format('CableDeviceBaseObject.NumberOfCores=%g',[PCableDeviceBaseObject(PBaseObject)^.NumberOfCores]),TMWOHistoryOut);
               end;
             end;
           end;

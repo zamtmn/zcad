@@ -232,7 +232,7 @@ begin
     end;
   except
     on E: Exception do
-      ZCMsgCallBackInterface.TextMessage('Error loading navigator params from file '+Filename+':'#13+E.Message,TMWOShowError);
+      zcUI.TextMessage('Error loading navigator params from file '+Filename+':'#13+E.Message,TMWOShowError);
   end;
 end;
 
@@ -468,7 +468,7 @@ begin
         params.Doit(data);
     except
       on E: Exception do
-        ZCMsgCallBackInterface.TextMessage(format(rseGeneralEroror,['TNavigatorDevices.SetTreeProp',E.Message]),TMWOShowError);
+        zcUI.TextMessage(format(rseGeneralEroror,['TNavigatorDevices.SetTreeProp',E.Message]),TMWOShowError);
     end;
   finally
     params.free;
@@ -610,7 +610,7 @@ begin
   InfoForm.memo.text:=AText;
   if assigned(SysVar.INTF.INTF_DefaultEditorFontHeight) then
     InfoForm.memo.Font.Height:=SysVar.INTF.INTF_DefaultEditorFontHeight^;
-  modalresult:=ZCMsgCallBackInterface.DOShowModal(InfoForm);
+  modalresult:=zcUI.DOShowModal(InfoForm);
   if modalresult=ZCMrOk then begin
     AText:=InfoForm.memo.text;
     StoreBoundsToSavedUnit(BoundsSaveName,InfoForm.BoundsRect);
@@ -720,8 +720,8 @@ begin
 
    NavTree.EndUpdate;
 
-   ZCMsgCallBackInterface.RegisterHandler_GUIAction(AutoRefreshTree);
-   ZCMsgCallBackInterface.RegisterHandler_KeyDown(AutoKeyDown);
+   zcUI.RegisterHandler_GUIAction(AutoRefreshTree);
+   zcUI.RegisterHandler_KeyDown(AutoKeyDown);
 end;
 procedure TNavigatorDevices.AfterCellPaint(Sender: TBaseVirtualTree; TargetCanvas: TCanvas; Node: PVirtualNode;
     Column: TColumnIndex; const CellRect: TRect);
@@ -1029,9 +1029,9 @@ var
   sender_wa:TAbstractViewArea;
   devnode:PVirtualNode;
 begin
-  if GUIAction=ZMsgID_GUIActionRebuild then
+  if GUIAction=zcMsgUIActionRebuild then
     InternalRefreshTree(RefreshEqualy);
-  if (sender is (TAbstractViewArea))and(GUIAction=ZMsgID_GUIActionSelectionChanged) then begin
+  if (sender is (TAbstractViewArea))and(GUIAction=zcMsgUIActionSelectionChanged) then begin
     if (NavTree.Parent<>nil)and(NavTree.Parent.isVisible) then begin
       sender_wa:=sender as TAbstractViewArea;
       if FolloWToSelection and(sender_wa.param.SelDesc.LastSelectedObject<>nil)and((sender_wa.param.SelDesc.Selectedobjcount-LastSelectedObjCount)=1) then begin
@@ -1389,10 +1389,10 @@ begin
        nav:=commandmanager.ContextCommandParams;
        pnode:=nav.GetFirstSelected;
        SelectSubNodes(nav,pnode);
-       ZCMsgCallBackInterface.Do_GUIaction(drawings.GetCurrentDWG.wa,ZMsgID_GUIActionSelectionChanged);
+       zcUI.Do_GUIaction(drawings.GetCurrentDWG.wa,zcMsgUIActionSelectionChanged);
        result:=cmd_ok;
      end else
-       ZCMsgCallBackInterface.TextMessage(rscmCommandOnlyCTXMenu,TMWOHistoryOut);
+       zcUI.TextMessage(rscmCommandOnlyCTXMenu,TMWOHistoryOut);
 end;
 
 initialization

@@ -37,7 +37,7 @@ begin
   if Operands<>'' then begin
     ToolBarsManager.ShowFloatToolbar(operands,rect(0,0,300,50));
   end else
-    ZCMsgCallBackInterface.TextMessage(rscmCmdMustHaveOperand,TMWOShowError);
+    zcUI.TextMessage(rscmCmdMustHaveOperand,TMWOShowError);
   result:=cmd_ok;
 end;
 

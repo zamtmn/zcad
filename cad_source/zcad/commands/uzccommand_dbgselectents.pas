@@ -89,12 +89,12 @@ begin
         ents.Clear;
         ents.free;
       end;
-      ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIActionRedraw);
-      ZCMsgCallBackInterface.TextMessage(Format(rscmNEntitiesSelected,[Count]),
+      zcUI.Do_GUIaction(nil,zcMsgUIActionRedraw);
+      zcUI.TextMessage(Format(rscmNEntitiesSelected,[Count]),
                                          TMWOHistoryOut);
     end;
   end else
-    ZCMsgCallBackInterface.TextMessage(rsThereIsNothingToSelect,TMWOHistoryOut);
+    zcUI.TextMessage(rsThereIsNothingToSelect,TMWOHistoryOut);
   result:=cmd_ok;
 end;
 

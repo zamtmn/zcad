@@ -181,7 +181,7 @@ begin
   SaveOperands:=Operands;
   inherited;
   if drawings.GetCurrentDWG^.TextStyleTable.GetRealCount<1 then begin
-    ZCMsgCallBackInterface.TextMessage(rscmInDwgTxtStyleNotDeffined,TMWOShowError);
+    zcUI.TextMessage(rscmInDwgTxtStyleNotDeffined,TMWOShowError);
     commandmanager.executecommandend;
   end;
 end;
@@ -238,7 +238,7 @@ begin
        'TEXT','T':TOverrider:=TO_Text;
        'MTEXT','M':TOverrider:=TO_MText;
        else
-         ZCMsgCallBackInterface.TextMessage(sysutils.format(rsErrorOperandN,[1]),TMWOShowError);
+         zcUI.TextMessage(sysutils.format(rsErrorOperandN,[1]),TMWOShowError);
     end;
       TXTOverrider:=op2;
   end;
@@ -254,7 +254,7 @@ begin
       TextInsertParams.Style.Selected:=TextInsertParams.Style.Enums.Count-1
     else
       TextInsertParams.Style.Selected:=i;
-    ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIActionRedraw);
+    zcUI.Do_GUIaction(nil,zcMsgUIActionRedraw);
     BuildPrimitives;
     drawings.GetCurrentDWG^.wa.SetMouseMode((MGet3DPoint) or (MMoveCamera) or (MRotateCamera));
     format;

@@ -400,7 +400,7 @@ var lw:Integer;
     pv:PSelectedObjDesc;
     ir:itrec;
 begin
-  if GUIAction<>ZMsgID_GUIActionRebuild then
+  if GUIAction<>zcMsgUIActionRebuild then
     exit;
   if drawings.GetCurrentDWG=nil then begin
     IVars.CColor:=IntEmpty;
@@ -731,19 +731,19 @@ begin
   lps.AddOnLPEndHandler(EndLongProcess);
   //messageboxproc:=self.MessageBox;
 
-  ZCMsgCallBackInterface.RegisterHandler_StatusLineTextOut(StatusLineTextOut);
+  zcUI.RegisterHandler_StatusLineTextOut(StatusLineTextOut);
 
-  ZCMsgCallBackInterface.RegisterHandler_GUIAction(self.setvisualprop);
+  zcUI.RegisterHandler_GUIAction(self.setvisualprop);
   //SetVisuaProplProc:=self.setvisualprop;
-  ZCMsgCallBackInterface.RegisterHandler_GUIAction(self.UpdateVisible);
+  zcUI.RegisterHandler_GUIAction(self.UpdateVisible);
   //UpdateVisibleProc:=UpdateVisible;
   ProcessFilehistoryProc:=self.processfilehistory;
-  ZCMsgCallBackInterface.RegisterHandler_BeforeShowModal(ShowAllCursors);
-  ZCMsgCallBackInterface.RegisterHandler_AfterShowModal(RestoreCursors);
+  zcUI.RegisterHandler_BeforeShowModal(ShowAllCursors);
+  zcUI.RegisterHandler_AfterShowModal(RestoreCursors);
   commandmanager.OnCommandRun:=processcommandhistory;
   AppCloseProc:=asynccloseapp;
-  ZCMsgCallBackInterface.RegisterHandler_GUIAction(self.waSetObjInsp);
-  ZCMsgCallBackInterface.RegisterHandler_GetFocusedControl(self.GetFocusPriority);
+  zcUI.RegisterHandler_GUIAction(self.waSetObjInsp);
+  zcUI.RegisterHandler_GetFocusedControl(self.GetFocusPriority);
   {tm.Code:=pointer(self.waSetObjInsp);
   tm.Data:=@self;;
   tmethod(waSetObjInspProc):=tm;}
@@ -809,7 +809,7 @@ begin
 
   {Создаем на ToolBarD переключатель рабочих пространств}
   {if assigned(LayoutBox) then
-    ZCMsgCallBackInterface.TextMessage(format(rsReCreating,['LAYOUTBOX']),TMWOShowError);
+    zcUI.TextMessage(format(rsReCreating,['LAYOUTBOX']),TMWOShowError);
   CreateLayoutbox(ToolBarD);
   LayoutBox.Parent:=ToolBarD;
   LayoutBox.AutoSize:=false;
@@ -890,7 +890,7 @@ begin
    end else begin
      //tbdesk:=self.findtoolbatdesk(aName);
      //if tbdesk=''then
-     ZCMsgCallBackInterface.TextMessage(format(rsFormNotFound,[aName]),TMWOShowError);
+     zcUI.TextMessage(format(rsFormNotFound,[aName]),TMWOShowError);
      result:=nil;
    end;
 end;
@@ -1063,7 +1063,7 @@ begin
   FromDirsIterator(sysvar.PATH.Preload_Paths^,'*.cmd0','stage0.cmd0',RunCmdFile,nil);
 
   CreateAnchorDockingInterface;
-  ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIActionRedraw);
+  zcUI.Do_GUIaction(nil,zcMsgUIActionRedraw);
   MouseTimer:=TMouseTimer.Create;
   SetupFIPCServer;
   fNeedUpdateMainMenu:=True;
@@ -1105,7 +1105,7 @@ begin
     OGL.GDBActivate;
   OGL.param.firstdraw:=true;
   OGL.draworinvalidate;
-  ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIReturnToDefaultObject);
+  zcUI.Do_GUIaction(nil,zcMsgUIReturnToDefaultObject);
 end;
 procedure TZCADMainWindow.ChangedDWGTabByClick(Sender: TObject);
 begin
@@ -1195,7 +1195,7 @@ begin
     TMethod(OldFunction).Data:=self;
     result:=CommandManager.ProcessCommandShortcuts(LMKey2ShortCut(Message));
     if not result then
-      result:=IsZShortcut(Message,Screen.ActiveControl,ZCMsgCallBackInterface.GetPriorityFocus,OldFunction,SuppressedShortcuts);
+      result:=IsZShortcut(Message,Screen.ActiveControl,zcUI.GetPriorityFocus,OldFunction,SuppressedShortcuts);
   programlog.leave(IfEntered);end;
 end;
 
@@ -1206,7 +1206,7 @@ var
   needinput:boolean;
 begin
   with programlog.Enter('TZCADMainWindow.myKeyDown',LM_Debug,LMD) do begin try
-    ZCMsgCallBackInterface.Do_KeyDown(Sender,Key,Shift);
+    zcUI.Do_KeyDown(Sender,Key,Shift);
     if key=0 then begin
       //programlog.leave(IfEntered);
       exit;
@@ -1224,7 +1224,7 @@ begin
     end;
     { if ((ActiveControl=LayerBox)or(ActiveControl=LineWBox))then
                                                                  begin
-                                                                 ZCMsgCallBackInterface.Do_SetNormalFocus;
+                                                                 zcUI.Do_SetNormalFocus;
                                                                  end;}
     tempkey:=key;
 
@@ -1318,13 +1318,13 @@ begin
         end;
     date:=sysutils.date;
     if RunTime<>SysVar.SYS.SYS_RunTime^ then begin
-      ZCMsgCallBackInterface.Do_GUIaction(self,ZMsgID_GUITimerTick);
+      zcUI.Do_GUIaction(self,zcMsgUITimerTick);
       {if assigned(UpdateObjInspProc)then
          UpdateObjInspProc;}
     end;
     RunTime:=SysVar.SYS.SYS_RunTime^;
     if ZCStatekInterface.CheckAndResetState(ZCSGUIChanged) then
-      ZCMsgCallBackInterface.Do_SetNormalFocus;
+      zcUI.Do_SetNormalFocus;
     {if historychanged then begin
       historychanged:=false;
       HistoryLine.SelStart:=utflen;
@@ -1389,9 +1389,9 @@ begin
 
   if (not lps.hasOptions(LPHandle,LPSOSilent))and(not CommandManager.isBusy)and((Options and LPSOSilent)=0) then begin
     if (LPName='') then
-      ZCMsgCallBackInterface.TextMessage(format(rscompiledtimemsg,[TimeStr]),[TMWOToConsole])
+      zcUI.TextMessage(format(rscompiledtimemsg,[TimeStr]),[TMWOToConsole])
     else
-      ZCMsgCallBackInterface.TextMessage(format(rsprocesstimemsg,[LPName,TimeStr]),[TMWOToConsole]);
+      zcUI.TextMessage(format(rsprocesstimemsg,[LPName,TimeStr]),[TMWOToConsole]);
   end;
 end;
 procedure TZCADMainWindow.MainMouseMove;
@@ -1400,7 +1400,7 @@ begin
 end;
 function TZCADMainWindow.MainMouseDown(Sender:TAbstractViewArea):Boolean;
 begin
-     ZCMsgCallBackInterface.Do_SetNormalFocus;
+     zcUI.Do_SetNormalFocus;
      //if @SetCurrentDWGProc<>nil then
      SetCurrentDWG{Proc}(Sender.PDWG);
      if (cxmenumgr.ismenupopup)or(ActivePopupMenu<>nil) then
@@ -1414,8 +1414,8 @@ begin
      //if GetCurrentObjProc=@sysvar then
      {If assigned(UpdateObjInspProc)then
                                       UpdateObjInspProc;}
-     //ZCMsgCallBackInterface.Do_GUIaction(self,ZMsgID_GUIActionRedraw);
-     ZCMsgCallBackInterface.Do_SetNormalFocus;
+     //zcUI.Do_GUIaction(self,zcMsgUIActionRedraw);
+     zcUI.Do_SetNormalFocus;
 end;
 procedure TZCADMainWindow.ShowCXMenu;
 var
@@ -1505,7 +1505,7 @@ begin
 
             Application.ActivateHint(Sender.getviewcontrol.ClientToScreen(classes.Point(Sender.param.md.mouse.x,Sender.param.md.mouse.y)));
        end;
-       ZCMsgCallBackInterface.TextMessage(htext,TMWOQuickly);
+       zcUI.TextMessage(htext,TMWOQuickly);
 end;
 
 function TZCADMainWindow.wamu(Sender:TAbstractViewArea;ZC:TZKeys;X,Y:Integer;onmouseobject:Pointer;var NeedRedraw:Boolean):boolean;
@@ -1587,8 +1587,8 @@ begin
       end else begin
         PGDBObjEntity(sender.param.SelDesc.OnMouseObject)^.DeSelect(sender.param.SelDesc.Selectedobjcount,drawings.CurrentDWG^.DeSelector);
         sender.param.SelDesc.LastSelectedObject:=nil;
-        ZCMsgCallBackInterface.Do_GUIaction(sender,ZMsgID_GUIActionSelectionChanged);
-        ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIActionRedraw);
+        zcUI.Do_GUIaction(sender,zcMsgUIActionSelectionChanged);
+        zcUI.Do_GUIaction(nil,zcMsgUIActionRedraw);
       end;
       if commandmanager.CurrCmd.pcommandrunning<>nil then
         if commandmanager.CurrCmd.pcommandrunning.IData.GetPointMode=TGPMWaitEnt then
@@ -1608,7 +1608,7 @@ end;
 begin
   mp:=Point(X,Y);
   MouseTimer.Touch(mp,[TMouseTimer.TReason.RMDown]);
-  ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIStoreAndFreeEditorProc);
+  zcUI.Do_GUIaction(nil,zcMsgUIStoreAndFreeEditorProc);
   //key := MouseBS2ZKey(shift);
   if (MZW_DOUBLE and zc)<>0 {ssDouble in shift} then begin
     if (MZW_MBUTTON and zc)<>0{mbMiddle=button} then begin
@@ -1648,7 +1648,7 @@ begin
       if ((MZW_LBUTTON and zc)<>0)and((MZW_SHIFT and zc)=0) then
         MouseTimer.&Set(mp,sysvarDSGNEntityMoveStartOffset,[RMDown,RMUp,RReSet,RLeave],StartEntityDrag,sysvarDSGNEntityMoveStartTimerInterval);
 
-  //ZCMsgCallBackInterface.Do_GUIaction(self,ZMsgID_GUIActionRedraw);
+  //zcUI.Do_GUIaction(self,zcMsgUIActionRedraw);
 
   result:=false;
 end;
@@ -1721,8 +1721,8 @@ begin
          Sender.CalcOptimalMatrix;
          Sender.paint;
          //if assigned(SetVisuaProplProc) then SetVisuaProplProc;
-         ZCMsgCallBackInterface.Do_GUIaction(self,ZMsgID_GUIActionRebuild);
-         ZCMsgCallBackInterface.Do_GUIaction(Sender,ZMsgID_GUIActionSelectionChanged);
+         zcUI.Do_GUIaction(self,zcMsgUIActionRebuild);
+         zcUI.Do_GUIaction(Sender,zcMsgUIActionSelectionChanged);
          //Sender.setobjinsp;
          end
        else
@@ -1751,14 +1751,14 @@ var
 begin
   RelSelectedObjects:=SelectRelatedObjects(Sender.PDWG,@Sender.param,Sender.param.SelDesc.LastSelectedObject);
   if RelSelectedObjects>0 then
-                              ZCMsgCallBackInterface.TextMessage(format(rsAdditionalSelected,[RelSelectedObjects]),TMWOHistoryOut);
+                              zcUI.TextMessage(format(rsAdditionalSelected,[RelSelectedObjects]),TMWOHistoryOut);
   if (commandmanager.CurrCmd.pcommandrunning=nil)or(commandmanager.CurrCmd.pcommandrunning^.IData.GetPointMode<>TGPMWaitEnt) then
   begin
   if PGDBObjEntity(Sender.param.SelDesc.OnMouseObject)^.select(Sender.param.SelDesc.Selectedobjcount,drawings.CurrentDWG^.Selector) then
     begin
-          ZCMsgCallBackInterface.Do_GUIaction(sender,ZMsgID_GUIActionSelectionChanged);
-          ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIActionRedraw);
-          //if assigned(updatevisibleproc) then updatevisibleproc(ZMsgID_GUIActionRedraw);
+          zcUI.Do_GUIaction(sender,zcMsgUIActionSelectionChanged);
+          zcUI.Do_GUIaction(nil,zcMsgUIActionRedraw);
+          //if assigned(updatevisibleproc) then updatevisibleproc(zcMsgUIActionRedraw);
     end;
   end;
 end;
@@ -1817,7 +1817,7 @@ var
     objcount:integer;
     sender_wa:TAbstractViewArea;
 begin
-  if (sender is (TAbstractViewArea))and(ZMsgID_GUIActionSelectionChanged=GUIAction) then
+  if (sender is (TAbstractViewArea))and(zcMsgUIActionSelectionChanged=GUIAction) then
     sender_wa:=sender as TAbstractViewArea
   else
     exit;
@@ -1830,7 +1830,7 @@ begin
       //commandmanager.ExecuteCommandSilent('MultiSelect2ObjIbsp',sender_wa.pdwg,@sender_wa.param)
       MultiSelect2ObjIbsp_com(TZCADCommandContext.CreateRec,'');
     end else
-      ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIReturnToDefaultObject);
+      zcUI.Do_GUIaction(nil,zcMsgUIReturnToDefaultObject);
   end else begin
   if assigned(SysVar.DWG.DWG_SelectedObjToInsp)then
   if (sender_wa.param.SelDesc.LastSelectedObject <> nil)and(SysVar.DWG.DWG_SelectedObjToInsp^)and(sender_wa.param.SelDesc.Selectedobjcount>0) then
@@ -1839,12 +1839,12 @@ begin
        ptype:=SysUnit.TypeName2PTD(tn);
        if ptype<>nil then
        begin
-         ZCMsgCallBackInterface.Do_PrepareObject(drawings.GetUndoStack,drawings.GetUnitsFormat,ptype,sender_wa.param.SelDesc.LastSelectedObject,sender_wa.pdwg);
+         zcUI.Do_PrepareObject(drawings.GetUndoStack,drawings.GetUnitsFormat,ptype,sender_wa.param.SelDesc.LastSelectedObject,sender_wa.pdwg);
        end;
   end
   else
   begin
-    ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIReturnToDefaultObject);
+    zcUI.Do_GUIaction(nil,zcMsgUIReturnToDefaultObject);
   end;
   end
 end;
@@ -1857,7 +1857,7 @@ var
 begin
   if (ZCADMainWindow.HScrollBar<>nil)and(ZCADMainWindow.VScrollBar<>nil) then
   if (ZCADMainWindow.HScrollBar.Focused)or(ZCADMainWindow.VScrollBar.Focused)then
-    ZCMsgCallBackInterface.Do_SetNormalFocus;
+    zcUI.Do_SetNormalFocus;
   pdwg:=drawings.GetCurrentDWG;
   if pdwg<>nil then
   if pdwg.wa<>nil then
@@ -2006,13 +2006,13 @@ begin
        true:begin
               if CreateOrRunFIPCServer then begin
                 ZCSysParams.saved.UniqueInstance:=false;
-                ZCMsgCallBackInterface.TextMessage('Other unique instance found',TMWOShowError);
+                zcUI.TextMessage('Other unique instance found',TMWOShowError);
               end;
             end;
     end;
 
   if commandmanager.SilentCounter=0 then
-    ZCMsgCallBackInterface.Do_GUIMode(ZMsgID_GUICMDLineCheck);
+    zcUI.Do_GUIMode(zcMsgUICMDLineCheck);
 
   pdwg:=drawings.GetCurrentDWG;
   if assigned(ZCADMainWindow)then begin
@@ -2020,7 +2020,7 @@ begin
     ZCADMainWindow.correctscrollbars;
     k:=0;
     if (pdwg<>nil)and(pdwg<>PTSimpleDrawing(BlockBaseDWG)) then begin
-      ZCMsgCallBackInterface.Do_GUIaction(self,ZMsgID_GUIActionRebuild);
+      zcUI.Do_GUIaction(self,zcMsgUIActionRebuild);
       ZCADMainWindow.Caption:=programname+' v'+sysvar.SYS.SYS_Version^+' - ['+drawings.GetCurrentDWG.GetFileName+']';
       EnableControls(true);
       if assigned(ZCADMainWindow.PageControl) then
@@ -2121,7 +2121,7 @@ end;
 
 procedure TZCADMainWindow.updatevisible(Sender:TObject;GUIMode:TZMessageID);
 begin
-  if GUIMode<>ZMsgID_GUIActionRedraw then
+  if GUIMode<>zcMsgUIActionRedraw then
     exit;
   Application.QueueAsyncCall(AsyncUpdateVisible,PtrInt(Sender));
 end;

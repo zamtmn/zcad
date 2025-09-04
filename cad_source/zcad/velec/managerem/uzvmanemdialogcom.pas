@@ -146,7 +146,7 @@ var
       repeat
         if pobj^.selected then
           begin
-            //ZCMsgCallBackInterface.TextMessage('02',TMWOHistoryOut);
+            //zcUI.TextMessage('02',TMWOHistoryOut);
             pobj^.DeSelect(drawings.GetCurrentDWG^.wa.param.SelDesc.Selectedobjcount,drawings.CurrentDWG^.deselector); //Убрать выделение
             inc(count);
             myobj:=pobj;
@@ -154,7 +154,7 @@ var
         pobj:=drawings.GetCurrentROOT^.ObjArray.iterate(ir); //переход к следующем примитиву в списке выбраных примитивов
       until pobj=nil;
 
-      //ZCMsgCallBackInterface.TextMessage('Количество выбранных примитивов: ' + inttostr(count) + ' шт.',TMWOHistoryOut);
+      //zcUI.TextMessage('Количество выбранных примитивов: ' + inttostr(count) + ' шт.',TMWOHistoryOut);
 
       if count = 1 then
         result:=myobj;
@@ -171,50 +171,50 @@ var
            // Если выделенный устройство GDBDeviceID тогда
            if selEnt^.GetObjType=GDBDeviceID then
            begin
-             //ZCMsgCallBackInterface.TextMessage('1',TMWOHistoryOut);
+             //zcUI.TextMessage('1',TMWOHistoryOut);
              selDevVarExt:=PGDBObjDevice(selEnt)^.GetExtension<TVariablesExtender>;
-             //ZCMsgCallBackInterface.TextMessage('2',TMWOHistoryOut);
+             //zcUI.TextMessage('2',TMWOHistoryOut);
              selEntMF:=selDevVarExt.getMainFuncEntity;
-             //ZCMsgCallBackInterface.TextMessage('3',TMWOHistoryOut);
+             //zcUI.TextMessage('3',TMWOHistoryOut);
 
              if selEntMF^.GetObjType=GDBDeviceID then
-               //ZCMsgCallBackInterface.TextMessage('selEntMF = ' + PGDBObjDevice(selEntMF)^.Name,TMWOHistoryOut);
+               //zcUI.TextMessage('selEntMF = ' + PGDBObjDevice(selEntMF)^.Name,TMWOHistoryOut);
                for devlistMF in listDev do
                begin
-                 //ZCMsgCallBackInterface.TextMessage('4 + '+ devlistMF^.Name,TMWOHistoryOut);
+                 //zcUI.TextMessage('4 + '+ devlistMF^.Name,TMWOHistoryOut);
                  if devlistMF = PGDBObjDevice(selEntMF) then
                  begin
-                   //ZCMsgCallBackInterface.TextMessage('5',TMWOHistoryOut);
+                   //zcUI.TextMessage('5',TMWOHistoryOut);
                    result:=PGDBObjDevice(selEntMF);
                    system.break;
                  end;
                end;
            end;
          end;
-       //ZCMsgCallBackInterface.TextMessage('05000000000000',TMWOHistoryOut);
+       //zcUI.TextMessage('05000000000000',TMWOHistoryOut);
 
        if result = nil then
        begin
-          ZCMsgCallBackInterface.TextMessage(RSCLPuzvmanemDedicatedPrimitiveNotHost,TMWOHistoryOut);
+          zcUI.TextMessage(RSCLPuzvmanemDedicatedPrimitiveNotHost,TMWOHistoryOut);
             if commandmanager.getentity(RSCLPuzvmanemChooseYourHeadUnit,selEnt) then
             begin
              //Если выделенный устройство GDBDeviceID тогда
             if selEnt^.GetObjType=GDBDeviceID then
             begin
-              //ZCMsgCallBackInterface.TextMessage('1',TMWOHistoryOut);
+              //zcUI.TextMessage('1',TMWOHistoryOut);
               selDevVarExt:=PGDBObjDevice(selEnt)^.GetExtension<TVariablesExtender>;
-              //ZCMsgCallBackInterface.TextMessage('2',TMWOHistoryOut);
+              //zcUI.TextMessage('2',TMWOHistoryOut);
               selEntMF:=selDevVarExt.getMainFuncEntity;
-              //ZCMsgCallBackInterface.TextMessage('3',TMWOHistoryOut);
+              //zcUI.TextMessage('3',TMWOHistoryOut);
 
               if selEntMF^.GetObjType=GDBDeviceID then
-                //ZCMsgCallBackInterface.TextMessage('selEntMF = ' + PGDBObjDevice(selEntMF)^.Name,TMWOHistoryOut);
+                //zcUI.TextMessage('selEntMF = ' + PGDBObjDevice(selEntMF)^.Name,TMWOHistoryOut);
                 for devlistMF in listDev do
                 begin
-                  //ZCMsgCallBackInterface.TextMessage('4 + '+ devlistMF^.Name,TMWOHistoryOut);
+                  //zcUI.TextMessage('4 + '+ devlistMF^.Name,TMWOHistoryOut);
                   if devlistMF = PGDBObjDevice(selEntMF) then
                   begin
-                    //ZCMsgCallBackInterface.TextMessage('5',TMWOHistoryOut);
+                    //zcUI.TextMessage('5',TMWOHistoryOut);
                     result:=PGDBObjDevice(selEntMF);
                     //system.break;
                   end;
@@ -223,7 +223,7 @@ var
           end;
        end;
        if result = nil then
-         ZCMsgCallBackInterface.TextMessage(RSCLPuzvmanemDedicatedPrimitiveNotHost,TMWOHistoryOut);
+         zcUI.TextMessage(RSCLPuzvmanemDedicatedPrimitiveNotHost,TMWOHistoryOut);
   end;
 
 
@@ -259,7 +259,7 @@ begin
     pvd:=FindVariableInEnt(headDev,velec_nameDevice);
       if pvd<>nil then
          CmdProp.nameShield:=pstring(pvd^.data.Addr.Instance)^;
-         //ZCMsgCallBackInterface.TextMessage('Выбрано головное утройтсво = ' + pstring(pvd^.data.Addr.Instance)^,TMWOHistoryOut);
+         //zcUI.TextMessage('Выбрано головное утройтсво = ' + pstring(pvd^.data.Addr.Instance)^,TMWOHistoryOut);
 
     zcShowCommandParams(SysUnit^.TypeName2PTD('TuzvmanemSGparams'),@CmdProp);
     //Получаем граф для его изучени
@@ -285,16 +285,16 @@ begin
 //      gr:=commandmanager.Get3DPoint('',p);
 //      case gr of
 //        GRId:case commandmanager.GetLastId of
-//               CLPIdUser1:ZCMsgCallBackInterface.TextMessage('GRId: CLPIdUser1',TMWOHistoryOut);
+//               CLPIdUser1:zcUI.TextMessage('GRId: CLPIdUser1',TMWOHistoryOut);
 //               CLPIdFileDialog:begin
-//                 ZCMsgCallBackInterface.TextMessage('GRId: CLPIdFileDialog',TMWOHistoryOut);
+//                 zcUI.TextMessage('GRId: CLPIdFileDialog',TMWOHistoryOut);
 //                 //if SaveFileDialog(filename,'CSV',CSVFileFilter,'','Export data...') then begin
 //                 //  system.break;
 //                 //end;
 //               end;
-//               else ZCMsgCallBackInterface.TextMessage(format('GRId: %d',[commandmanager.GetLastId]),TMWOHistoryOut);
+//               else zcUI.TextMessage(format('GRId: %d',[commandmanager.GetLastId]),TMWOHistoryOut);
 //            end;
-//    GRNormal:ZCMsgCallBackInterface.TextMessage(format('GRNormal: %g,%g,%g',[p.x,p.y,p.z]),TMWOHistoryOut);
+//    GRNormal:zcUI.TextMessage(format('GRNormal: %g,%g,%g',[p.x,p.y,p.z]),TMWOHistoryOut);
 //      end;
 //    until gr=GRCancel;
 

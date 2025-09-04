@@ -393,7 +393,7 @@ begin
   drawings.AddBlockFromDBIfNeed(drawings.GetCurrentDWG,'DEVICE_PS_DAT_SMOKE');
   drawings.AddBlockFromDBIfNeed(drawings.GetCurrentDWG,'DEVICE_PS_DAT_TERMO');
   drawings.GetCurrentDWG.wa.SetMouseMode((MGet3DPoint) or (MMoveCamera));
-  ZCMsgCallBackInterface.TextMessage(rscmFirstCorner,TMWOHistoryOut);
+  zcUI.TextMessage(rscmFirstCorner,TMWOHistoryOut);
   zcShowCommandParams(SysUnit.TypeName2PTD('CommandRTEdObject'),pco);
   result:=cmd_ok;
 end;
@@ -403,7 +403,7 @@ begin
   if (button and MZW_LBUTTON)<>0 then
     //if pco^.mouseclic = 1 then
     begin
-      ZCMsgCallBackInterface.TextMessage(rscmSecondCorner,TMWOHistoryOut);
+      zcUI.TextMessage(rscmSecondCorner,TMWOHistoryOut);
       t3dp:=wc;
     end;
 end;
@@ -454,7 +454,7 @@ begin
 
        drawings.GetCurrentROOT.calcbb(dc);
        zcRedrawCurrentDrawing;
-       ZCMsgCallBackInterface.TextMessage(rscmFirstCorner,TMWOHistoryOut);
+       zcUI.TextMessage(rscmFirstCorner,TMWOHistoryOut);
        //commandend;
        //pcommandmanager^.executecommandend;
   end;
@@ -840,7 +840,7 @@ begin
                                         begin
                                              name:='"без имени"';
                                         end;
-                            ZCMsgCallBackInterface.TextMessage(format('Попытка повторной нумерации устройства %s кабелем (сегментом кабеля) %s',[name,'"'+pcabledesk^.Name+'"']),TMWOHistoryOut);
+                            zcUI.TextMessage(format('Попытка повторной нумерации устройства %s кабелем (сегментом кабеля) %s',[name,'"'+pcabledesk^.Name+'"']),TMWOHistoryOut);
                             end;
                         end;
 
@@ -1018,7 +1018,7 @@ begin
              //if PTCableType(pvd^.Instance)^=TCT_ShleifOPS then
              if (pcabledesk.StartDevice<>nil){and(pcabledesk.EndDevice<>nil)} then
              begin
-                  ZCMsgCallBackInterface.TextMessage(pcabledesk.Name,TMWOHistoryOut);
+                  zcUI.TextMessage(pcabledesk.Name,TMWOHistoryOut);
                   //programlog.logoutstr(pcabledesk.Name,0);
                   currentcoord:=coord;
                   PTCableType(pvd^.data.Addr.Instance)^:=TCT_ShleifOPS;
@@ -1182,7 +1182,7 @@ else if (sd.PFirstSelectedEnt^.GetObjType=GDBDeviceID) then
 
   if (OrtoDevPlaceParam.Name='')or(sd.SelectedEntsCount=0)or(sd.SelectedEntsCount>1) then
                                    begin
-                                        ZCMsgCallBackInterface.TextMessage('Должен быть выбран только один блок или устройство!',TMWOHistoryOut);
+                                        zcUI.TextMessage('Должен быть выбран только один блок или устройство!',TMWOHistoryOut);
                                         commandmanager.executecommandend;
                                         exit;
                                    end;
@@ -1190,7 +1190,7 @@ else if (sd.PFirstSelectedEnt^.GetObjType=GDBDeviceID) then
   zcRedrawCurrentDrawing;
   result:=cmd_ok;
   drawings.GetCurrentDWG.wa.SetMouseMode((MGet3DPoint) or (MMoveCamera));
-  ZCMsgCallBackInterface.TextMessage(rscmFirstCorner,TMWOHistoryOut);
+  zcUI.TextMessage(rscmFirstCorner,TMWOHistoryOut);
   zcShowCommandParams(SysUnit.TypeName2PTD('CommandRTEdObject'),pco2);
   OPSPlaceSmokeDetectorOrtoParam.DMC:=TOPSMDC_1_2;
 end;
@@ -1199,7 +1199,7 @@ begin
   result:=mclick;
   if (button and MZW_LBUTTON)<>0 then
     begin
-      ZCMsgCallBackInterface.TextMessage('Второй угол',TMWOHistoryOut);
+      zcUI.TextMessage('Второй угол',TMWOHistoryOut);
       t3dp:=wc;
     end
 end;
@@ -1407,7 +1407,7 @@ begin
 
        drawings.GetCurrentROOT.calcbb(dc);
        zcRedrawCurrentDrawing;
-       ZCMsgCallBackInterface.TextMessage(rscmFirstCorner,TMWOHistoryOut);
+       zcUI.TextMessage(rscmFirstCorner,TMWOHistoryOut);
        //commandend;
        //pcommandmanager^.executecommandend;
   end;

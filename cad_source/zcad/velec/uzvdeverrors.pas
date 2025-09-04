@@ -48,7 +48,7 @@ procedure addDevErrors(pObjDevice:PGDBObjDevice;textError:string);
 var
   pvd:pvardesk;
 begin
-  //ZCMsgCallBackInterface.TextMessage('Добавляем ошибкку = ' + textError,TMWOHistoryOut);
+  //zcUI.TextMessage('Добавляем ошибкку = ' + textError,TMWOHistoryOut);
   pvd:=FindVariableInEnt(pObjDevice,vCADihaveError);
   if pvd<>nil then
     begin
@@ -69,7 +69,7 @@ var
   pObjDevice:PGDBObjDevice;
 
 begin
-    ZCMsgCallBackInterface.TextMessage('Запущена функция очистки ошибок в устройствах!',TMWOHistoryOut);
+    zcUI.TextMessage('Запущена функция очистки ошибок в устройствах!',TMWOHistoryOut);
 
     countDevError:=0;
     countDev:=0;
@@ -97,8 +97,8 @@ begin
         pobj:=drawings.GetCurrentROOT^.ObjArray.iterate(ir); //переход к следующем примитиву в списке выбраных примитивов
       until pobj=nil;
 
-    ZCMsgCallBackInterface.TextMessage('Кол-во обработанных устройств (device) = ' + IntToStr(countDev) + 'шт',TMWOHistoryOut);
-    ZCMsgCallBackInterface.TextMessage('Кол-во очищенных устройств, у которых есть поле ошибки = ' + IntToStr(countDevError) + 'шт',TMWOHistoryOut);
+    zcUI.TextMessage('Кол-во обработанных устройств (device) = ' + IntToStr(countDev) + 'шт',TMWOHistoryOut);
+    zcUI.TextMessage('Кол-во очищенных устройств, у которых есть поле ошибки = ' + IntToStr(countDevError) + 'шт',TMWOHistoryOut);
 
   //result:=cmd_ok;
 end;
@@ -112,7 +112,7 @@ var
   pObjDevice:PGDBObjDevice;
 
 begin
-    ZCMsgCallBackInterface.TextMessage('Запущена функция очистки ошибок в устройствах!',TMWOHistoryOut);
+    zcUI.TextMessage('Запущена функция очистки ошибок в устройствах!',TMWOHistoryOut);
 
     countDevError:=0;
     countDev:=0;
@@ -140,8 +140,8 @@ begin
         pobj:=drawings.GetCurrentROOT^.ObjArray.iterate(ir); //переход к следующем примитиву в списке выбраных примитивов
       until pobj=nil;
 
-    ZCMsgCallBackInterface.TextMessage('Кол-во обработанных устройств (device) = ' + IntToStr(countDev) + 'шт',TMWOHistoryOut);
-    ZCMsgCallBackInterface.TextMessage('Кол-во очищенных устройств, у которых есть поле ошибки = ' + IntToStr(countDevError) + 'шт',TMWOHistoryOut);
+    zcUI.TextMessage('Кол-во обработанных устройств (device) = ' + IntToStr(countDev) + 'шт',TMWOHistoryOut);
+    zcUI.TextMessage('Кол-во очищенных устройств, у которых есть поле ошибки = ' + IntToStr(countDevError) + 'шт',TMWOHistoryOut);
 
   result:=cmd_ok;
 end;

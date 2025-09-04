@@ -226,7 +226,7 @@ begin
                           end;
                      end
                  else
-                     ZCMsgCallBackInterface.TextMessage('',TMWOShowError);
+                     zcUI.TextMessage('',TMWOShowError);
 end;
 procedure DeviceManager.loadfromdir(path: String);
 //var sr: TSearchRec;

@@ -411,7 +411,7 @@ begin
                                       system.break;
                                       end
                                          else
-                                         ZCMsgCallBackInterface.TextMessage(rscannotbeconnected,TMWOShowError);
+                                         zcUI.TextMessage(rscannotbeconnected,TMWOShowError);
                                  end;
 
                            ptestline:=currentnet^.objarray.iterate(ir3);

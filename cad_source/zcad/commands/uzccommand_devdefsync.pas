@@ -67,11 +67,11 @@ begin
   if DevDef<>nil then begin
     if BlockDefCounter.CountKey(DevDef,intialcounter)=intialcounter then begin
       process2(pdev,DevDef);
-      ZCMsgCallBackInterface.TextMessage(format(RSDeviceSynhronized,[pdev.Name]),TMWOHistoryOut);
+      zcUI.TextMessage(format(RSDeviceSynhronized,[pdev.Name]),TMWOHistoryOut);
     end else
-      ZCMsgCallBackInterface.TextMessage(format(RSAlreadySynhronized,[pdev.Name]),TMWOHistoryOut);
+      zcUI.TextMessage(format(RSAlreadySynhronized,[pdev.Name]),TMWOHistoryOut);
   end else
-    ZCMsgCallBackInterface.TextMessage(format(rscmNoBlockDefInDWG,[DevName]),TMWOHistoryOut);
+    zcUI.TextMessage(format(rscmNoBlockDefInDWG,[DevName]),TMWOHistoryOut);
 end;
 
 
@@ -94,7 +94,7 @@ begin
         process(pv,BlockDefCounter);
       pv:=drawings.GetCurrentROOT^.ObjArray.iterate(ir);
     until pv=nil;
-    ZCMsgCallBackInterface.TextMessage(format(rscmNEntitiesProcessed,[BlockDefCounter.count]),TMWOHistoryOut);
+    zcUI.TextMessage(format(rscmNEntitiesProcessed,[BlockDefCounter.count]),TMWOHistoryOut);
   finally
     result:=cmd_ok;
     BlockDefCounter.Free;

@@ -266,18 +266,18 @@ begin
 
   ParseMText(Input);
 
-  ZCMsgCallBackInterface.TextMessage('Fragments: ',TMWOHistoryOut);
+  zcUI.TextMessage('Fragments: ',TMWOHistoryOut);
   //writeln('Fragments:');
   for i := 0 to Fragments.Count - 1 do
   begin
     Frag := PTextFragment(Fragments[i]);
-    ZCMsgCallBackInterface.TextMessage('Text: '+ Frag^.FragmentText,TMWOHistoryOut);
-    ZCMsgCallBackInterface.TextMessage('   Font: '+ Frag^.Style.FontName,TMWOHistoryOut);
-    ZCMsgCallBackInterface.TextMessage('   Bold: '+ BoolToStr(Frag^.Style.Bold, True),TMWOHistoryOut);
-    ZCMsgCallBackInterface.TextMessage('   Italic: '+ BoolToStr(Frag^.Style.Italic, True),TMWOHistoryOut);
-    ZCMsgCallBackInterface.TextMessage('   CharSet: '+ IntToStr(Frag^.Style.CharSet),TMWOHistoryOut);
-    ZCMsgCallBackInterface.TextMessage('   Pitch: '+ IntToStr(Frag^.Style.Pitch),TMWOHistoryOut);
-    ZCMsgCallBackInterface.TextMessage('   ---: ',TMWOHistoryOut);
+    zcUI.TextMessage('Text: '+ Frag^.FragmentText,TMWOHistoryOut);
+    zcUI.TextMessage('   Font: '+ Frag^.Style.FontName,TMWOHistoryOut);
+    zcUI.TextMessage('   Bold: '+ BoolToStr(Frag^.Style.Bold, True),TMWOHistoryOut);
+    zcUI.TextMessage('   Italic: '+ BoolToStr(Frag^.Style.Italic, True),TMWOHistoryOut);
+    zcUI.TextMessage('   CharSet: '+ IntToStr(Frag^.Style.CharSet),TMWOHistoryOut);
+    zcUI.TextMessage('   Pitch: '+ IntToStr(Frag^.Style.Pitch),TMWOHistoryOut);
+    zcUI.TextMessage('   ---: ',TMWOHistoryOut);
     //writeln('Text: ' + Frag^.FragmentText);
     //writeln('  Font: ' + Frag^.Style.FontName);
     //writeln('  Bold: ' + BoolToStr(Frag^.Style.Bold, True));
@@ -293,7 +293,7 @@ begin
     Frag := PTextFragment(Fragments[i]);
     result := result + Frag^.FragmentText;
   end;
-  ZCMsgCallBackInterface.TextMessage('   result: '+ result,TMWOHistoryOut);
+  zcUI.TextMessage('   result: '+ result,TMWOHistoryOut);
 
   //writeln('  result: ' + IntToStr(Frag^.Style.Pitch));
 
@@ -373,9 +373,9 @@ begin
            if pobj^.GetObjType=GDBMTextID then                //работа только с кабелями
            begin
             pmtext:=PGDBObjMText(pobj);
-            ZCMsgCallBackInterface.TextMessage('Do : ' + pmtext^.Template,TMWOHistoryOut);
+            zcUI.TextMessage('Do : ' + pmtext^.Template,TMWOHistoryOut);
             //newText:=clearText(pmtext^.Template);
-            ZCMsgCallBackInterface.TextMessage('After : ' + velecParseMText(pmtext^.Template),TMWOHistoryOut);
+            zcUI.TextMessage('After : ' + velecParseMText(pmtext^.Template),TMWOHistoryOut);
             //pmtext^.Template:=velecParseMText(pmtext^.Template);
             //pmtext^.Content:=velecParseMText(pmtext^.Template);
             //pmtext^.Content:=TDXFEntsInternalStringType(newText);
@@ -392,8 +392,8 @@ begin
          if pobj^.selected then
            begin
                pmtext:=PGDBObjMText(pobj);
-               ZCMsgCallBackInterface.TextMessage('Do : ' + pmtext^.Template,TMWOHistoryOut);
-               ZCMsgCallBackInterface.TextMessage('After : ' + velecParseMText(pmtext^.Template),TMWOHistoryOut);
+               zcUI.TextMessage('Do : ' + pmtext^.Template,TMWOHistoryOut);
+               zcUI.TextMessage('After : ' + velecParseMText(pmtext^.Template),TMWOHistoryOut);
                //pmtext^.Template:=velecParseMText(pmtext^.Template);
                //pmtext^.Content:=velecParseMText(pmtext^.Template)
               //pobj^.DeSelect(drawings.GetCurrentDWG^.wa.param.SelDesc.Selectedobjcount,@drawings.CurrentDWG^.deselector);

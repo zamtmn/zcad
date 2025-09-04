@@ -154,51 +154,51 @@ var
     ExcelWorkbook: OleVariant;
     pathFile:string;
 begin
-    ZCMsgCallBackInterface.TextMessage('         калькуляция книги - начато',TMWOHistoryOut);
+    zcUI.TextMessage('         калькуляция книги - начато',TMWOHistoryOut);
      //GetEnvironmentVariableUTF8();
      //sysutils.gettempdir();
     //pathFile:=GetEnvironmentVariableUTF8('USERPROFILE') + '\zcadcalctemp.xlsx';
     pathFile:=sysutils.gettempdir() + 'zcadcalctemp.xlsx';
 
-    //ZCMsgCallBackInterface.TextMessage('pathFile='+pathFile,TMWOHistoryOut);
+    //zcUI.TextMessage('pathFile='+pathFile,TMWOHistoryOut);
     BasicWorkbook.WriteToFile(pathFile, sfOOXML,true);
     BasicWorkbook.Free;
-    //ZCMsgCallBackInterface.TextMessage('pathFile='+pathFile,TMWOHistoryOut);
+    //zcUI.TextMessage('pathFile='+pathFile,TMWOHistoryOut);
     Excel := CreateOleObject('Excel.Application');
     Excel.ScreenUpdating:=False;
     Excel.DisplayStatusBar:=False;
     Excel.DisplayAlerts := False;
     Excel.EnableEvents:=False;
-    //ZCMsgCallBackInterface.TextMessage('2',TMWOHistoryOut);
+    //zcUI.TextMessage('2',TMWOHistoryOut);
     ExcelWorkbook:=Excel.Workbooks.Open(WideString(pathFile));
 
     Excel.Calculate;
     //Excel.Calculation := xlAutomatic; //Вновь включаем автоматический пересчёт.
 
-    //ZCMsgCallBackInterface.TextMessage('3',TMWOHistoryOut);
+    //zcUI.TextMessage('3',TMWOHistoryOut);
     //fullFilePath, AccessMode:=xlExclusive,ConflictResolution:=Excel.XlSaveConflictResolution.xlLocalSessionChanges
     ExcelWorkbook.SaveAs(FileName:=WideString(pathFile), AccessMode:=3 ,ConflictResolution:=2);
-    //ZCMsgCallBackInterface.TextMessage('4',TMWOHistoryOut);
+    //zcUI.TextMessage('4',TMWOHistoryOut);
     Excel.ScreenUpdating:=True;
     Excel.DisplayStatusBar:=True;
     Excel.EnableEvents:=True;
-    //ZCMsgCallBackInterface.TextMessage('5',TMWOHistoryOut);
+    //zcUI.TextMessage('5',TMWOHistoryOut);
     ExcelWorkbook.Close(Savechanges:=false);
     ExcelWorkbook:=Unassigned;
     Excel.Quit;
     Excel := Unassigned;
-    //ZCMsgCallBackInterface.TextMessage('6',TMWOHistoryOut);
+    //zcUI.TextMessage('6',TMWOHistoryOut);
 //
     //openXLSXFile(pathFile);
     BasicWorkbook := TsWorkbook.Create;
     BasicWorkbook.Options := BasicWorkbook.Options + [boReadFormulas];
-    //ZCMsgCallBackInterface.TextMessage('openXLSXFile='+pathFile,TMWOHistoryOut);
+    //zcUI.TextMessage('openXLSXFile='+pathFile,TMWOHistoryOut);
     BasicWorkbook.ReadFromFile(pathFile, sfOOXML);
 
 
     //result:=true;
   //BasicWorkbook.CalcFormulas;
-    ZCMsgCallBackInterface.TextMessage('         калькуляция книги - закончена',TMWOHistoryOut);
+    zcUI.TextMessage('         калькуляция книги - закончена',TMWOHistoryOut);
 end;
 
 function openXLSXFile(pathFile:string):boolean;
@@ -208,11 +208,11 @@ begin
   try
     BasicWorkbook := TsWorkbook.Create;
     BasicWorkbook.Options := BasicWorkbook.Options + [boReadFormulas];
-    ZCMsgCallBackInterface.TextMessage('openXLSXFile='+pathFile,TMWOHistoryOut);
+    zcUI.TextMessage('openXLSXFile='+pathFile,TMWOHistoryOut);
     BasicWorkbook.ReadFromFile(pathFile, sfOOXML);
     result:=true;
   except
-    ZCMsgCallBackInterface.TextMessage('ОШИБКА. ПРОГРАММА EXCEL НЕ УСТАНОВЛЕНА',TMWOHistoryOut);
+    zcUI.TextMessage('ОШИБКА. ПРОГРАММА EXCEL НЕ УСТАНОВЛЕНА',TMWOHistoryOut);
   end;
 end;
 function activeXLSXWorkbook:boolean;
@@ -235,10 +235,10 @@ begin
     Excel.Quit;
     Excel := Unassigned;
 
-    ZCMsgCallBackInterface.TextMessage('Доступ получен к книге = ' + BasicWorkbook.FileName,TMWOHistoryOut);
+    zcUI.TextMessage('Доступ получен к книге = ' + BasicWorkbook.FileName,TMWOHistoryOut);
     result:=true;
   except
-    ZCMsgCallBackInterface.TextMessage('ОШИБКА. НЕТ АКТИВНОЙ ОТКРЫТОЙ КНИГИ В EXCEL!!!',TMWOHistoryOut);
+    zcUI.TextMessage('ОШИБКА. НЕТ АКТИВНОЙ ОТКРЫТОЙ КНИГИ В EXCEL!!!',TMWOHistoryOut);
   end;
 end;
 
@@ -261,10 +261,10 @@ begin
     Excel.Quit;
     Excel := Unassigned;
 
-    ZCMsgCallBackInterface.TextMessage('Открыт лист = ' + ActiveWorkSheet.Name,TMWOHistoryOut);
+    zcUI.TextMessage('Открыт лист = ' + ActiveWorkSheet.Name,TMWOHistoryOut);
     result:=true;
   except
-    ZCMsgCallBackInterface.TextMessage('ОШИБКА. НЕТ АКТИВНОЙ ОТКРЫТОЙ КНИГИ В EXCEL!!!',TMWOHistoryOut);
+    zcUI.TextMessage('ОШИБКА. НЕТ АКТИВНОЙ ОТКРЫТОЙ КНИГИ В EXCEL!!!',TMWOHistoryOut);
   end;
 end;
 
@@ -283,9 +283,9 @@ begin
     Excel.Quit;
     Excel := Unassigned;
     //ActiveWorkSheet:=BasicWorkbook.ActiveWorksheet;
-    ZCMsgCallBackInterface.TextMessage('Открыт лист = ' + result,TMWOHistoryOut);
+    zcUI.TextMessage('Открыт лист = ' + result,TMWOHistoryOut);
   except
-    ZCMsgCallBackInterface.TextMessage('ОШИБКА. НЕТ АКТИВНОЙ ОТКРЫТОЙ КНИГИ В EXCEL!!!',TMWOHistoryOut);
+    zcUI.TextMessage('ОШИБКА. НЕТ АКТИВНОЙ ОТКРЫТОЙ КНИГИ В EXCEL!!!',TMWOHistoryOut);
   end;
 end;
 
@@ -298,7 +298,7 @@ begin
   try
     result:=BasicWorkbook.GetWorksheetByName(nameSheet).Index;
   except
-    ZCMsgCallBackInterface.TextMessage('ОШИБКА! Лист с именем ='+nameSheet + ' - ОТСУТСТВУЕТ',TMWOHistoryOut);
+    zcUI.TextMessage('ОШИБКА! Лист с именем ='+nameSheet + ' - ОТСУТСТВУЕТ',TMWOHistoryOut);
   end;
 end;
 
@@ -310,7 +310,7 @@ begin
     BasicWorkbook.WriteToFile(pathFile, sfOOXML,true);
     result:=true;
   except
-    ZCMsgCallBackInterface.TextMessage('ОШИБКА! СОХРАНЕНИЕ ОТМЕНЕНО ИЛИ ФАЙЛ НЕ ДОСТУПЕН!',TMWOHistoryOut);
+    zcUI.TextMessage('ОШИБКА! СОХРАНЕНИЕ ОТМЕНЕНО ИЛИ ФАЙЛ НЕ ДОСТУПЕН!',TMWOHistoryOut);
   end;
 end;
 
@@ -358,7 +358,7 @@ begin
     new_worksheet := BasicWorkbook.CopyWorksheetFrom(BasicWorkbook.GetWorksheetByName(codeSheet), true);
     new_worksheet.Name:=nameSheet;
   except
-   ZCMsgCallBackInterface.TextMessage('ОШИБКА! procedure copyWorksheetName(codeSheet:string;nameSheet:string);',TMWOHistoryOut);
+   zcUI.TextMessage('ОШИБКА! procedure copyWorksheetName(codeSheet:string;nameSheet:string);',TMWOHistoryOut);
   end;
 end;
 
@@ -385,7 +385,7 @@ var
 begin
   now_worksheet:=BasicWorkbook.GetWorksheetByName(nameSheet);
   result:=now_worksheet.ReadAsText(iRow,iCol);
-  //ZCMsgCallBackInterface.TextMessage('getCellValue='+ result,TMWOHistoryOut);
+  //zcUI.TextMessage('getCellValue='+ result,TMWOHistoryOut);
 end;
 function getCellValOrFomula(nameSheet:string;iRow,iCol:Cardinal):string;
 var
@@ -395,7 +395,7 @@ begin
   result:=now_worksheet.ReadFormulaAsString(now_worksheet.GetCell(iRow,iCol));
   if result = '' then
       result:=getCellValue(nameSheet,iRow,iCol);
-  //ZCMsgCallBackInterface.TextMessage('getCellFormula='+ result,TMWOHistoryOut);
+  //zcUI.TextMessage('getCellFormula='+ result,TMWOHistoryOut);
   //result:=BasicWorkbook.WorkSheets(nameSheet).Cells(iRow,iCol).Formula;
   //result:=sheets_cache.get(nameSheet).Cells(iRow,iCol).Formula;
   //result:=rows_cache.get(nameSheet,iRow,iCol);
@@ -417,10 +417,10 @@ begin
   now_worksheet:=BasicWorkbook.GetWorksheetByName(nameSheet);
   //now_worksheet.DeleteCell(now_worksheet.GetCell(iRow,iCol));
   now_worksheet.WriteCellValueAsString(iRow,iCol,iText);
-  //ZCMsgCallBackInterface.TextMessage('setCellValue='+ getCellValue(nameSheet,iRow,iCol),TMWOHistoryOut);
+  //zcUI.TextMessage('setCellValue='+ getCellValue(nameSheet,iRow,iCol),TMWOHistoryOut);
   //
   //now_worksheet.CalcFormulas;
-  //ZCMsgCallBackInterface.TextMessage('setCellValue='+ getCellValue(nameSheet,iRow,iCol),TMWOHistoryOut);
+  //zcUI.TextMessage('setCellValue='+ getCellValue(nameSheet,iRow,iCol),TMWOHistoryOut);
 end;
 function getCellFormula(nameSheet:string;iRow,iCol:Cardinal):string;
 var
@@ -430,7 +430,7 @@ begin
   result:=now_worksheet.ReadFormulaAsString(now_worksheet.GetCell(iRow,iCol));
   //if result = '' then
   //    result:=getCellValue(nameSheet,iRow,iCol);
-  //ZCMsgCallBackInterface.TextMessage('getCellFormula='+ result,TMWOHistoryOut);
+  //zcUI.TextMessage('getCellFormula='+ result,TMWOHistoryOut);
   //result:=BasicWorkbook.WorkSheets(nameSheet).Cells(iRow,iCol).Formula;
   //result:=sheets_cache.get(nameSheet).Cells(iRow,iCol).Formula;
   //result:=rows_cache.get(nameSheet,iRow,iCol);
@@ -443,14 +443,14 @@ begin
   //now_worksheet.DeleteCell(now_worksheet.GetCell(iRow,iCol));
   now_worksheet.WriteFormula(iRow,iCol,iText);
   //now_worksheet.CalcFormulas;
-  //ZCMsgCallBackInterface.TextMessage('nameSheet='+ nameSheet ,TMWOHistoryOut);
-  //ZCMsgCallBackInterface.TextMessage('setCellFormula='+ iText + '  ---  ' + getCellValue(nameSheet,iRow,iCol),TMWOHistoryOut);
-  //ZCMsgCallBackInterface.TextMessage('setCellFormula='+ iText + '  ---  ' + getCellFormula(nameSheet,iRow,iCol),TMWOHistoryOut);
+  //zcUI.TextMessage('nameSheet='+ nameSheet ,TMWOHistoryOut);
+  //zcUI.TextMessage('setCellFormula='+ iText + '  ---  ' + getCellValue(nameSheet,iRow,iCol),TMWOHistoryOut);
+  //zcUI.TextMessage('setCellFormula='+ iText + '  ---  ' + getCellFormula(nameSheet,iRow,iCol),TMWOHistoryOut);
   //now_worksheet.CalcFormula(now_worksheet.getFormula(now_worksheet.GetCell(iRow,iCol)));
   //setCellValue(nameSheet,iRow,iCol,now_worksheet.);
-  //ZCMsgCallBackInterface.TextMessage('setCellFormula='+ iText + '  ---  ' + getCellValue(nameSheet,iRow,iCol),TMWOHistoryOut);
-  //ZCMsgCallBackInterface.TextMessage('setCellFormula='+ iText + '  ---  ' + getCellFormula(nameSheet,iRow,iCol),TMWOHistoryOut);
-  //ZCMsgCallBackInterface.TextMessage('setCellFormula='+ getCellValue(nameSheet,iRow,iCol),TMWOHistoryOut);
+  //zcUI.TextMessage('setCellFormula='+ iText + '  ---  ' + getCellValue(nameSheet,iRow,iCol),TMWOHistoryOut);
+  //zcUI.TextMessage('setCellFormula='+ iText + '  ---  ' + getCellFormula(nameSheet,iRow,iCol),TMWOHistoryOut);
+  //zcUI.TextMessage('setCellFormula='+ getCellValue(nameSheet,iRow,iCol),TMWOHistoryOut);
   //now_worksheet.writefor
 
   //BasicWorkbook.WorkSheets(nameSheet).Cells(iRow,iCol).Formula:=iText;
@@ -465,7 +465,7 @@ begin
   now_worksheet:=BasicWorkbook.GetWorksheetByName(nameSheet);
   now_worksheet.CalcFormula(now_worksheet.GetFormula(now_worksheet.GetCell(iRow,iCol)));
 
-  ZCMsgCallBackInterface.TextMessage('******специальный расчет формулы внутри ячейки. Лист = '  + nameSheet + ' ключ=(' + inttostr(iRow) + ',' + inttostr(iCol)+ ') значение = '+uzvzcadxlsxfps.getCellValue(nameSheet,iRow,iCol) + ' формула = ' + uzvzcadxlsxfps.getCellFormula(nameSheet,iRow,iCol),TMWOHistoryOut);
+  zcUI.TextMessage('******специальный расчет формулы внутри ячейки. Лист = '  + nameSheet + ' ключ=(' + inttostr(iRow) + ',' + inttostr(iCol)+ ') значение = '+uzvzcadxlsxfps.getCellValue(nameSheet,iRow,iCol) + ' формула = ' + uzvzcadxlsxfps.getCellFormula(nameSheet,iRow,iCol),TMWOHistoryOut);
 
 end;
 procedure setCellAddressFormula(nameSheet:string;AddressStr:string;iText:string);
@@ -483,10 +483,10 @@ procedure calcFormulas(nameSheet:string);
 //var
 //  now_worksheet: TsWorksheet;
 begin
-  //ZCMsgCallBackInterface.TextMessage('КАЛЬКУЛЯТОР КАЛЬКУЛЯТОР КАЛЬКУЛЯТОР КАЛЬКУЛЯТОР КАЛЬКУЛЯТОР КАЛЬКУЛЯТОР СТАРТ'+ nameSheet ,TMWOHistoryOut);
+  //zcUI.TextMessage('КАЛЬКУЛЯТОР КАЛЬКУЛЯТОР КАЛЬКУЛЯТОР КАЛЬКУЛЯТОР КАЛЬКУЛЯТОР КАЛЬКУЛЯТОР СТАРТ'+ nameSheet ,TMWOHistoryOut);
   //now_worksheet:=BasicWorkbook.GetWorksheetByName(nameSheet);
   //now_worksheet.CalcFormulas;
-    ZCMsgCallBackInterface.TextMessage('ОТМЕНА ОТМЕНА calcFormulas nameSheet='+ nameSheet ,TMWOHistoryOut);
+    zcUI.TextMessage('ОТМЕНА ОТМЕНА calcFormulas nameSheet='+ nameSheet ,TMWOHistoryOut);
 end;
 function iHaveFormula(nameSheet:string;iRow,iCol:Cardinal):boolean;
 var
@@ -495,12 +495,12 @@ begin
   now_worksheet:=BasicWorkbook.GetWorksheetByName(nameSheet);
   result:=false;
   if now_worksheet.getFormula(now_worksheet.GetCell(iRow,iCol)) <> nil then begin
-     //ZCMsgCallBackInterface.TextMessage('Я формула',TMWOHistoryOut);
+     //zcUI.TextMessage('Я формула',TMWOHistoryOut);
      result:=true;
   end;
   //if result = '' then
   //    result:=getCellValue(nameSheet,iRow,iCol);
-  //ZCMsgCallBackInterface.TextMessage('getCellFormula='+ result,TMWOHistoryOut);
+  //zcUI.TextMessage('getCellFormula='+ result,TMWOHistoryOut);
   //result:=BasicWorkbook.WorkSheets(nameSheet).Cells(iRow,iCol).Formula;
   //result:=sheets_cache.get(nameSheet).Cells(iRow,iCol).Formula;
   //result:=rows_cache.get(nameSheet,iRow,iCol);
@@ -517,7 +517,7 @@ begin
 
   //GetCellString
   //if now_worksheet.getFormula(now_worksheet.GetCell(iRow,iCol)) <> nil then begin
-     //ZCMsgCallBackInterface.TextMessage('Ячейка с именем = '+result,TMWOHistoryOut);
+     //zcUI.TextMessage('Ячейка с именем = '+result,TMWOHistoryOut);
   //   result:=true;
   //end;
 end;
@@ -559,21 +559,21 @@ begin
     MySearchParams.Options := [soEntireDocument];
     MySearchParams.Within := swWorksheet;
     isFind:=false;
-    //ZCMsgCallBackInterface.TextMessage('BasicWorkbook.ActiveWorksheet = '+BasicWorkbook.ActiveWorksheet.Name,TMWOHistoryOut);
-    //  ZCMsgCallBackInterface.TextMessage('searchCellRowCol nameSheet = '+nameSheet,TMWOHistoryOut);
+    //zcUI.TextMessage('BasicWorkbook.ActiveWorksheet = '+BasicWorkbook.ActiveWorksheet.Name,TMWOHistoryOut);
+    //  zcUI.TextMessage('searchCellRowCol nameSheet = '+nameSheet,TMWOHistoryOut);
     ////if remotemode then
-    //  ZCMsgCallBackInterface.TextMessage('searchCellRowCol nameValueCell = '+nameValueCell,TMWOHistoryOut);
+    //  zcUI.TextMessage('searchCellRowCol nameValueCell = '+nameValueCell,TMWOHistoryOut);
     ////if remotemode then
-    //  ZCMsgCallBackInterface.TextMessage('searchCellRowCol iRow = '+inttostr(iRow),TMWOHistoryOut);
+    //  zcUI.TextMessage('searchCellRowCol iRow = '+inttostr(iRow),TMWOHistoryOut);
     ////if remotemode then
-    //  ZCMsgCallBackInterface.TextMessage('searchCellRowCol iCol = '+ inttostr(iCol),TMWOHistoryOut);
+    //  zcUI.TextMessage('searchCellRowCol iCol = '+ inttostr(iCol),TMWOHistoryOut);
 
     //searchEngine:=TsSearchEngine.Create(BasicWorkbook);
     // Создать поисковую систему и выполнить поиск
     with TsSearchEngine.Create(BasicWorkbook) do begin
-      //ZCMsgCallBackInterface.TextMessage('1',TMWOHistoryOut);
+      //zcUI.TextMessage('1',TMWOHistoryOut);
       isFind:=FindFirst(MySearchParams, now_worksheet, iRow, iCol);
-      //ZCMsgCallBackInterface.TextMessage('3',TMWOHistoryOut);
+      //zcUI.TextMessage('3',TMWOHistoryOut);
       Free;
     end;
 
@@ -582,22 +582,22 @@ begin
 
       if (not isFind) then
        begin
-         //ZCMsgCallBackInterface.TextMessage('не найдено',TMWOHistoryOut);
+         //zcUI.TextMessage('не найдено',TMWOHistoryOut);
          iRow:=0;
          iCol:=0;
        end;
        //else
-       //  ZCMsgCallBackInterface.TextMessage('найдено =' + nameValueCell,TMWOHistoryOut)
+       //  zcUI.TextMessage('найдено =' + nameValueCell,TMWOHistoryOut)
 
 
     //if remotemode then
-    //  ZCMsgCallBackInterface.TextMessage('searchCellRowCol nameSheet = '+nameSheet,TMWOHistoryOut);
+    //  zcUI.TextMessage('searchCellRowCol nameSheet = '+nameSheet,TMWOHistoryOut);
     ////if remotemode then
-    //  ZCMsgCallBackInterface.TextMessage('searchCellRowCol nameValueCell = '+nameValueCell,TMWOHistoryOut);
+    //  zcUI.TextMessage('searchCellRowCol nameValueCell = '+nameValueCell,TMWOHistoryOut);
     ////if remotemode then
-    //  ZCMsgCallBackInterface.TextMessage('searchCellRowCol iRow = '+inttostr(iRow),TMWOHistoryOut);
+    //  zcUI.TextMessage('searchCellRowCol iRow = '+inttostr(iRow),TMWOHistoryOut);
     ////if remotemode then
-    //  ZCMsgCallBackInterface.TextMessage('searchCellRowCol iCol = '+ inttostr(iCol),TMWOHistoryOut);
+    //  zcUI.TextMessage('searchCellRowCol iCol = '+ inttostr(iCol),TMWOHistoryOut);
 end;
 
 procedure searchNextCellRowCol(nameSheet:string;nameValueCell:string;var iRow,iCol:Cardinal);
@@ -620,13 +620,13 @@ begin
     //end;
     //
     ////if remotemode then
-    //  ZCMsgCallBackInterface.TextMessage('searchNextCellRowCol nameSheet = '+nameSheet,TMWOHistoryOut);
+    //  zcUI.TextMessage('searchNextCellRowCol nameSheet = '+nameSheet,TMWOHistoryOut);
     ////if remotemode then
-    //  ZCMsgCallBackInterface.TextMessage('searchNextCellRowCol nameValueCell = '+nameValueCell,TMWOHistoryOut);
+    //  zcUI.TextMessage('searchNextCellRowCol nameValueCell = '+nameValueCell,TMWOHistoryOut);
     ////if remotemode then
-    //  ZCMsgCallBackInterface.TextMessage('searchNextCellRowCol iRow = '+inttostr(iRow),TMWOHistoryOut);
+    //  zcUI.TextMessage('searchNextCellRowCol iRow = '+inttostr(iRow),TMWOHistoryOut);
     ////if remotemode then
-    //  ZCMsgCallBackInterface.TextMessage('searchNextCellRowCol iCol = '+ inttostr(iCol),TMWOHistoryOut);
+    //  zcUI.TextMessage('searchNextCellRowCol iCol = '+ inttostr(iCol),TMWOHistoryOut);
 end;
 procedure copyRow(fromSheet:string;stRow:Cardinal;ToSheet:string;edRow:Cardinal);
 //var
@@ -634,8 +634,8 @@ procedure copyRow(fromSheet:string;stRow:Cardinal;ToSheet:string;edRow:Cardinal)
   //cl:PCell;
 begin
   //edWorksheet:=BasicWorkbook.GetWorksheetByName(ToSheet);
-  //ZCMsgCallBackInterface.TextMessage('copyRow fromSheet = '+fromSheet + '---- ToSheet = '+ToSheet,TMWOHistoryOut);
-  //ZCMsgCallBackInterface.TextMessage('copyRow stRow = '+ inttostr(stRow) + '---- edRow = '+ inttostr(edRow),TMWOHistoryOut);
+  //zcUI.TextMessage('copyRow fromSheet = '+fromSheet + '---- ToSheet = '+ToSheet,TMWOHistoryOut);
+  //zcUI.TextMessage('copyRow stRow = '+ inttostr(stRow) + '---- edRow = '+ inttostr(edRow),TMWOHistoryOut);
   BasicWorkbook.GetWorksheetByName(ToSheet).CopyRow(stRow,edRow);
   //edWorksheet.CopyCell(stRow,stCol,edRow,edCol,BasicWorkbook.GetWorksheetByName(nameStSheet));
   // BasicWorkbook.GetWorksheetByName(fromSheet)
@@ -665,15 +665,15 @@ begin
     searchParams.Within := swWorksheet;
     isFind:=false;
 
-    //ZCMsgCallBackInterface.TextMessage('BasicWorkbook.ActiveWorksheet = '+BasicWorkbook.ActiveWorksheet.Name,TMWOHistoryOut);
-      //ZCMsgCallBackInterface.TextMessage('searchCellRowCol nameSheet = '+nameSheet,TMWOHistoryOut);
+    //zcUI.TextMessage('BasicWorkbook.ActiveWorksheet = '+BasicWorkbook.ActiveWorksheet.Name,TMWOHistoryOut);
+      //zcUI.TextMessage('searchCellRowCol nameSheet = '+nameSheet,TMWOHistoryOut);
     ////if remotemode then
-      //ZCMsgCallBackInterface.TextMessage('fromtext = '+fromText,TMWOHistoryOut);
-      //ZCMsgCallBackInterface.TextMessage('toText = '+toText,TMWOHistoryOut);
+      //zcUI.TextMessage('fromtext = '+fromText,TMWOHistoryOut);
+      //zcUI.TextMessage('toText = '+toText,TMWOHistoryOut);
     ////if remotemode then
-    //  ZCMsgCallBackInterface.TextMessage('searchCellRowCol iRow = '+inttostr(iRow),TMWOHistoryOut);
+    //  zcUI.TextMessage('searchCellRowCol iRow = '+inttostr(iRow),TMWOHistoryOut);
     ////if remotemode then
-    //  ZCMsgCallBackInterface.TextMessage('searchCellRowCol iCol = '+ inttostr(iCol),TMWOHistoryOut);
+    //  zcUI.TextMessage('searchCellRowCol iCol = '+ inttostr(iCol),TMWOHistoryOut);
 
     //searchEngine:=TsSearchEngine.Create(BasicWorkbook);
     //temptextcellnew:=StringReplace(temptextcell, codeNameEtalonSheet, codeNameNewSheet, [rfReplaceAll, rfIgnoreCase]);
@@ -682,11 +682,11 @@ begin
       if FindFirst(searchParams, now_worksheet, MyRow, MyCol) then begin
         setCellValOrFomula(nameSheet, MyRow, MyCol,StringReplace(getCellValOrFomula(nameSheet, MyRow, MyCol), fromText, toText, [rfReplaceAll, rfIgnoreCase]));
         //temptextcellnew:=StringReplace(temptextcell, codeNameEtalonSheet, codeNameNewSheet, [rfReplaceAll, rfIgnoreCase]);
-        //ZCMsgCallBackInterface.TextMessage('Первый [искомый текст] "' + searchParams.SearchText + '" найден в ячейке ' + GetCellString(MyRow, MyCol),TMWOHistoryOut);
+        //zcUI.TextMessage('Первый [искомый текст] "' + searchParams.SearchText + '" найден в ячейке ' + GetCellString(MyRow, MyCol),TMWOHistoryOut);
         //WriteLn('Первый [искомый текст] "', searchParams.SearchText, '" найден в ячейке ', GetCellString(MyRow, MyCol));
         while FindNext(searchParams, now_worksheet, myRow, MyCol) do begin
                   setCellValOrFomula(nameSheet, MyRow, MyCol,StringReplace(getCellValOrFomula(nameSheet, MyRow, MyCol), fromText, toText, [rfReplaceAll, rfIgnoreCase]));
-                  //ZCMsgCallBackInterface.TextMessage('Следующий [искомый текст] "' + searchParams.SearchText + '" найден в ячейке ' + GetCellString(MyRow, MyCol),TMWOHistoryOut);
+                  //zcUI.TextMessage('Следующий [искомый текст] "' + searchParams.SearchText + '" найден в ячейке ' + GetCellString(MyRow, MyCol),TMWOHistoryOut);
                   end;
           //WriteLn('Следующий [искомый текст] "', searchParams.SearchText, '" найден в ячейке ', GetCellString(MyRow, MyCol));
       end;
@@ -694,9 +694,9 @@ begin
     end;
 
     //with TsSearchEngine.Create(BasicWorkbook) do begin
-    //  //ZCMsgCallBackInterface.TextMessage('1',TMWOHistoryOut);
+    //  //zcUI.TextMessage('1',TMWOHistoryOut);
     //  isFind:=FindFirst(MySearchParams, now_worksheet, iRow, iCol);
-    //  //ZCMsgCallBackInterface.TextMessage('3',TMWOHistoryOut);
+    //  //zcUI.TextMessage('3',TMWOHistoryOut);
     //  Free;
     //end;
 
@@ -705,22 +705,22 @@ begin
 //
 //      if (not isFind) then
 //       begin
-//         //ZCMsgCallBackInterface.TextMessage('не найдено',TMWOHistoryOut);
+//         //zcUI.TextMessage('не найдено',TMWOHistoryOut);
 //         iRow:=0;
 //         iCol:=0;
 //       end;
        //else
-       //  ZCMsgCallBackInterface.TextMessage('найдено =' + nameValueCell,TMWOHistoryOut)
+       //  zcUI.TextMessage('найдено =' + nameValueCell,TMWOHistoryOut)
 
 
     //if remotemode then
-    //  ZCMsgCallBackInterface.TextMessage('searchCellRowCol nameSheet = '+nameSheet,TMWOHistoryOut);
+    //  zcUI.TextMessage('searchCellRowCol nameSheet = '+nameSheet,TMWOHistoryOut);
     ////if remotemode then
-    //  ZCMsgCallBackInterface.TextMessage('searchCellRowCol nameValueCell = '+nameValueCell,TMWOHistoryOut);
+    //  zcUI.TextMessage('searchCellRowCol nameValueCell = '+nameValueCell,TMWOHistoryOut);
     ////if remotemode then
-    //  ZCMsgCallBackInterface.TextMessage('searchCellRowCol iRow = '+inttostr(iRow),TMWOHistoryOut);
+    //  zcUI.TextMessage('searchCellRowCol iRow = '+inttostr(iRow),TMWOHistoryOut);
     ////if remotemode then
-    //  ZCMsgCallBackInterface.TextMessage('searchCellRowCol iCol = '+ inttostr(iCol),TMWOHistoryOut);
+    //  zcUI.TextMessage('searchCellRowCol iCol = '+ inttostr(iCol),TMWOHistoryOut);
 end;
 
 function getListCellContainText(nameSheet:string;iText:string):TListCellContainText;
@@ -750,7 +750,7 @@ begin
         result.PushBack(iCellContaint);
         //setCellValOrFomula(nameSheet, MyRow, MyCol,StringReplace(getCellValOrFomula(nameSheet, MyRow, MyCol), fromText, toText, [rfReplaceAll, rfIgnoreCase]));
         //temptextcellnew:=StringReplace(temptextcell, codeNameEtalonSheet, codeNameNewSheet, [rfReplaceAll, rfIgnoreCase]);
-        //ZCMsgCallBackInterface.TextMessage('Первый [искомый текст] "' + searchParams.SearchText + '" найден в ячейке ' + GetCellString(MyRow, MyCol),TMWOHistoryOut);
+        //zcUI.TextMessage('Первый [искомый текст] "' + searchParams.SearchText + '" найден в ячейке ' + GetCellString(MyRow, MyCol),TMWOHistoryOut);
         //WriteLn('Первый [искомый текст] "', searchParams.SearchText, '" найден в ячейке ', GetCellString(MyRow, MyCol));
         while FindNext(searchParams, now_worksheet, myRow, MyCol) do begin
           iCellContaint.iRow:=MyRow;

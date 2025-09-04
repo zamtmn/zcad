@@ -137,7 +137,7 @@ begin
     end;
   lps.EndLongProcess(lph2);
   lps.EndLongProcess(lph);
-  ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIActionRedraw);
+  zcUI.Do_GUIaction(nil,zcMsgUIActionRedraw);
   result:=cmd_ok;
 end;
 
@@ -149,7 +149,7 @@ var
 begin
   if drawings.currentdwg<>PTSimpleDrawing(BlockBaseDWG) then
     if drawings.GetCurrentROOT.ObjArray.Count>0 then begin
-      if ZCMsgCallBackInterface.TextQuestion(rsDWGAlreadyContainsData,'QLOAD')=zccbNo then
+      if zcUI.TextQuestion(rsDWGAlreadyContainsData,'QLOAD')=zccbNo then
         exit;
     end;
   s:=operands;
@@ -158,6 +158,6 @@ begin
   if isload then begin
     result:=Internal_Load_Merge(s,loadproc,LoadMode);
   end else
-    ZCMsgCallBackInterface.TextMessage('MERGE:'+format(rsUnableToOpenFile,[s]),TMWOShowError);
+    zcUI.TextMessage('MERGE:'+format(rsUnableToOpenFile,[s]),TMWOShowError);
 end;
 end.

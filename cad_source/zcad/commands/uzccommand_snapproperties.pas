@@ -32,7 +32,7 @@ implementation
 
 function SnapProp_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 begin
-  ZCMsgCallBackInterface.Do_PrepareObject(nil,drawings.GetUnitsFormat,dbunit.TypeName2PTD('TOSModeEditor'),@OSModeEditor,drawings.GetCurrentDWG,true);
+  zcUI.Do_PrepareObject(nil,drawings.GetUnitsFormat,dbunit.TypeName2PTD('TOSModeEditor'),@OSModeEditor,drawings.GetCurrentDWG,true);
   result:=cmd_ok;
 end;
 

@@ -50,14 +50,14 @@ begin
 
    _UnitsFormat:=drawings.GetUnitsFormat;
 
-   ZCMsgCallBackInterface.Do_BeforeShowModal(UnitsForm);
+   zcUI.Do_BeforeShowModal(UnitsForm);
    result:=UnitsForm.runmodal(_UnitsFormat,sysvar.DWG.DWG_InsUnits^);
    if result=ZCmrOK then
                       begin
                         drawings.SetUnitsFormat(_UnitsFormat);
-                        ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIReturnToDefaultObject);
+                        zcUI.Do_GUIaction(nil,zcMsgUIReturnToDefaultObject);
                       end;
-   ZCMsgCallBackInterface.Do_AfterShowModal(UnitsForm);
+   zcUI.Do_AfterShowModal(UnitsForm);
    StoreBoundsToSavedUnit('UnitsWND',UnitsForm.BoundsRect);
    Freeandnil(UnitsForm);
    result:=cmd_ok;

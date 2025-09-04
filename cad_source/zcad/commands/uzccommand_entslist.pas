@@ -50,7 +50,7 @@ begin
    //  iterator.destroy;
    end;
    clist.sort;
-   ZCMsgCallBackInterface.TextMessage(clist.GetTextWithEOL,TMWOHistoryOut);
+   zcUI.TextMessage(clist.GetTextWithEOL,TMWOHistoryOut);
    clist.done;
    result:=cmd_ok;
 end;

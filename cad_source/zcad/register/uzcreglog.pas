@@ -86,7 +86,7 @@ end;
 
 procedure TLogerMBoxBackend.doLog(const msg:TLogMsg;MsgOptions:TMsgOpt;LogMode:TLogLevel;LMDI:TModuleDesk);
 begin
-  if ((MO_SM and MsgOptions)<>0)and((ZCMsgCallBackInterface.GetState and ZState_Busy)=0) then begin
+  if ((MO_SM and MsgOptions)<>0)and((zcUI.GetState and ZState_Busy)=0) then begin
        case ProgramLog.GetMutableLogLevelData(LogMode)^.LogLevelType of
          LLTWarning:ShowWarningForLog(msg);
            LLTError:ShowErrorForLog(msg);
@@ -94,7 +94,7 @@ begin
       end;
   end;
   if (MO_SH and MsgOptions)<>0 then
-    ZCMsgCallBackInterface.Do_HistoryOut(msg);
+    zcUI.Do_HistoryOut(msg);
 end;
 
 var

@@ -351,7 +351,7 @@ begin
   ZCADMainWindow.show;
   {if sysvar.SYS.SYS_IsHistoryLineCreated<>nil then
                                                   sysvar.SYS.SYS_IsHistoryLineCreated^:=true;}
-  ZCMsgCallBackInterface.TextMessage(format(rsZCADStarted,[programname,sysvar.SYS.SYS_Version^]),TMWOHistoryOut);
+  zcUI.TextMessage(format(rsZCADStarted,[programname,sysvar.SYS.SYS_Version^]),TMWOHistoryOut);
   application.ProcessMessages;
 
   ZCADMainWindow.SwithToProcessBar;
@@ -370,7 +370,7 @@ begin
 
   ZCADMainWindow.SwithToHintText;
   //убираем сплэш
-  ZCMsgCallBackInterface.Do_SetNormalFocus;
+  zcUI.Do_SetNormalFocus;
   removesplash;
 
   TZGuiExceptionsHandler.EnableLCLCaptureExceptions;

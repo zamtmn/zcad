@@ -210,7 +210,7 @@ type
       var
           pmtext:PGDBObjMText;
       begin
-          ZCMsgCallBackInterface.TextMessage('21',TMWOHistoryOut);
+          zcUI.TextMessage('21',TMWOHistoryOut);
           pmtext := GDBObjMText.CreateInstance;
           zcSetEntPropFromCurrentDrawingProp(pmtext); //добавляем дефаултные свойства
           pmtext^.TXTStyle:=drawings.GetCurrentDWG^.GetCurrentTextStyle; //добавляет тип стиля текста, дефаултные свойства его не добавляют
@@ -383,12 +383,12 @@ var
 
 
 begin
-      //ZCMsgCallBackInterface.TextMessage('индекс рут - ' + inttostr(G.Root.Index) + ' - кол дет - ' + inttostr(G.Root.ChildCount),TMWOHistoryOut);
-      //ZCMsgCallBackInterface.TextMessage(G.Root.AsString[vGInfoVertex],TMWOHistoryOut);
+      //zcUI.TextMessage('индекс рут - ' + inttostr(G.Root.Index) + ' - кол дет - ' + inttostr(G.Root.ChildCount),TMWOHistoryOut);
+      //zcUI.TextMessage(G.Root.AsString[vGInfoVertex],TMWOHistoryOut);
 
     x:=0;
     y:=0;
-     //ZCMsgCallBackInterface.TextMessage('VСТАРТ визуал',TMWOHistoryOut);
+     //zcUI.TextMessage('VСТАРТ визуал',TMWOHistoryOut);
     VertexPath:=TClassList.Create;
     listVertex:=TListVertex.Create;
 
@@ -397,8 +397,8 @@ begin
     infoVertex.poz:=uzegeometry.CreateVertex2D(x,0);
     infoVertex.kol:=0;
     infoVertex.childs:=G.Root.ChildCount;
-    //ZCMsgCallBackInterface.TextMessage('1',TMWOHistoryOut);
-    //ZCMsgCallBackInterface.TextMessage('индекс рут - ' + inttostr(G.Root.Index) + ' - кол дет - ' + inttostr(G.Root.ChildCount),TMWOHistoryOut);
+    //zcUI.TextMessage('1',TMWOHistoryOut);
+    //zcUI.TextMessage('индекс рут - ' + inttostr(G.Root.Index) + ' - кол дет - ' + inttostr(G.Root.ChildCount),TMWOHistoryOut);
     listVertex.PushBack(infoVertex);
     pt1:=uzegeometry.CreateVertex(startPt.x + x*indent,startPt.y + y*indent,0) ;
     drawVertex(pt1,3,height);
@@ -406,23 +406,23 @@ begin
     //ptext:=uzegeometry.CreateVertex(pt1.x,pt1.y + indent/10,0) ;
     //pt1.y+=indent/10;
      //G.Root.
-    //ZCMsgCallBackInterface.TextMessage('2 + ' + vGInfoVertex,TMWOHistoryOut);
-    //ZCMsgCallBackInterface.TextMessage(G.Root.AsString[vGInfoVertex],TMWOHistoryOut);
+    //zcUI.TextMessage('2 + ' + vGInfoVertex,TMWOHistoryOut);
+    //zcUI.TextMessage(G.Root.AsString[vGInfoVertex],TMWOHistoryOut);
     drawMText(pt1,G.Root.AsString[vGInfoVertex],4,0,height);
            //PGDBObjDevice(G.Root.AsPointer[vGPGDBObjDevice])^.P_insert_in_WCS;
-    //ZCMsgCallBackInterface.TextMessage('3',TMWOHistoryOut);
+    //zcUI.TextMessage('3',TMWOHistoryOut);
 
     drawMText(PTStructDeviceLine(G.Root.AsPointer[vGPGDBObjVertex])^.centerPoint,inttostr(G.Root.AsInt32[vGGIndex]),4,0,height);
 
-    //ZCMsgCallBackInterface.TextMessage('4',TMWOHistoryOut);
+    //zcUI.TextMessage('4',TMWOHistoryOut);
     //drawMText(GGraph.listVertex[G.Root.AsInt32[vGGIndex]].centerPoint,inttostr(G.Root.AsInt32[vGGIndex]),4,0,height);
     //drawMText(GGraph.pt1,G.Root.AsString['infoVertex'],4,0,height);
 
     G.TreeTraversal(G.Root, VertexPath); //получаем путь обхода графа
-    //ZCMsgCallBackInterface.TextMessage('5',TMWOHistoryOut);
+    //zcUI.TextMessage('5',TMWOHistoryOut);
 
     for i:=1 to VertexPath.Count - 1 do begin
-        //ZCMsgCallBackInterface.TextMessage('VertexPath i -'+ inttostr(TVertex(VertexPath[i]).Parent.Index),TMWOHistoryOut);
+        //zcUI.TextMessage('VertexPath i -'+ inttostr(TVertex(VertexPath[i]).Parent.Index),TMWOHistoryOut);
         tParent:=howParent(listVertex,TVertex(VertexPath[i]).Parent.Index);
         if tParent>=0 then
         begin
@@ -525,7 +525,7 @@ begin
 
     G.TreeTraversal(G.Root, VertexPath); //получаем путь обхода графа
     for i:=1 to VertexPath.Count - 1 do begin
-        //ZCMsgCallBackInterface.TextMessage('VertexPath i -'+ inttostr(TVertex(VertexPath[i]).Parent.Index),TMWOHistoryOut);
+        //zcUI.TextMessage('VertexPath i -'+ inttostr(TVertex(VertexPath[i]).Parent.Index),TMWOHistoryOut);
         tParent:=howParent(listVertex,TVertex(VertexPath[i]).Parent.Index);
         if tParent>=0 then
         begin
@@ -765,19 +765,19 @@ begin
     listVertex.PushBack(infoVertex);
     ptSt:=uzegeometry.CreateVertex(startPt.x + x*indent,startPt.y + y*indent,0);
 
-    //ZCMsgCallBackInterface.TextMessage('ptSt.x -' + floattostr(ptSt.x) + ' ptSt.Y -' + floattostr(ptSt.Y),TMWOHistoryOut);
+    //zcUI.TextMessage('ptSt.x -' + floattostr(ptSt.x) + ' ptSt.Y -' + floattostr(ptSt.Y),TMWOHistoryOut);
     //*********
-    //ZCMsgCallBackInterface.TextMessage('root i -'+ inttostr(G.Root.Index),TMWOHistoryOut);
+    //zcUI.TextMessage('root i -'+ inttostr(G.Root.Index),TMWOHistoryOut);
     //pvarv:=TVertexTree(G.Root.AsPointer[vpTVertexTree]^).dev^.specialize GetExtension<TVariablesExtender>;
-    //ZCMsgCallBackInterface.TextMessage(string(TVertexTree(G.Root.AsPointer[vpTVertexTree]^).dev^.Name) + ' - '+ inttostr(G.Root.Index),TMWOHistoryOut);
+    //zcUI.TextMessage(string(TVertexTree(G.Root.AsPointer[vpTVertexTree]^).dev^.Name) + ' - '+ inttostr(G.Root.Index),TMWOHistoryOut);
     //pvv:=pvarv.entityunit.FindVariable('Name');
-    //ZCMsgCallBackInterface.TextMessage('3'+ inttostr(G.Root.Index),TMWOHistoryOut);
+    //zcUI.TextMessage('3'+ inttostr(G.Root.Index),TMWOHistoryOut);
     //if pvv<>nil then  begin
-    //    ZCMsgCallBackInterface.TextMessage(pstring(pvv^.data.Addr.Instance)^ + ' - '+ inttostr(G.Root.Index),TMWOHistoryOut);
+    //    zcUI.TextMessage(pstring(pvv^.data.Addr.Instance)^ + ' - '+ inttostr(G.Root.Index),TMWOHistoryOut);
         //addBlockonDraw(TVertexTree(G.Root.AsPointer[vpTVertexTree]^).dev^);
         addBlockonDraw(TStructDeviceLine(listVertex.Back.vertex.AsPointer[vGPGDBObjVertex]^).deviceEnt,ptSt,drawings.GetCurrentDWG^.mainObjRoot);
     //end;
-    //ZCMsgCallBackInterface.TextMessage('фин'+ inttostr(G.Root.Index),TMWOHistoryOut);
+    //zcUI.TextMessage('фин'+ inttostr(G.Root.Index),TMWOHistoryOut);
     //drawVertex(pt1,3,height);
     //*********
 
@@ -799,7 +799,7 @@ begin
 
     G.TreeTraversal(G.Root, VertexPath); //получаем путь обхода графа
     for i:=1 to VertexPath.Count - 1 do begin
-        //ZCMsgCallBackInterface.TextMessage('VertexPath i -'+ inttostr(TVertex(VertexPath[i]).Parent.Index),TMWOHistoryOut);
+        //zcUI.TextMessage('VertexPath i -'+ inttostr(TVertex(VertexPath[i]).Parent.Index),TMWOHistoryOut);
         tParent:=howParent(listVertex,TVertex(VertexPath[i]).Parent.Index);
         if tParent>=0 then
         begin
@@ -823,7 +823,7 @@ begin
         ptEd:=uzegeometry.CreateVertex(startPt.x + listVertex.Back.poz.x*indent,startPt.y - listVertex.Back.poz.y*indent,0) ;
 
         if TStructDeviceLine(listVertex.Back.vertex.AsPointer[vGPGDBObjVertex]^).deviceEnt<>nil then
-           ZCMsgCallBackInterface.TextMessage('VertexPath i -'+ string(TStructDeviceLine(listVertex.Back.vertex.AsPointer[vGPGDBObjVertex]^).deviceEnt^.Name),TMWOHistoryOut);
+           zcUI.TextMessage('VertexPath i -'+ string(TStructDeviceLine(listVertex.Back.vertex.AsPointer[vGPGDBObjVertex]^).deviceEnt^.Name),TMWOHistoryOut);
 
         //*********
         if TStructDeviceLine(listVertex.Back.vertex.AsPointer[vGPGDBObjVertex]^).deviceEnt<>nil then
@@ -1151,7 +1151,7 @@ end;
   //  //user:TCompareEvent;
   //begin
   //
-  //    ZCMsgCallBackInterface.TextMessage('*** tree Path ***',TMWOHistoryOut);
+  //    zcUI.TextMessage('*** tree Path ***',TMWOHistoryOut);
   //  G:=TGraph.Create;
   //  G.Features:=[Tree];
   //  EdgePath:=TClassList.Create;
@@ -1273,26 +1273,26 @@ end;
   //    G.Root:=G.Vertices[2];
   //
   //    if G.IsTree then
-  //       ZCMsgCallBackInterface.TextMessage('граф дерево',TMWOHistoryOut)
+  //       zcUI.TextMessage('граф дерево',TMWOHistoryOut)
   //    else
-  //       ZCMsgCallBackInterface.TextMessage('граф не дерево',TMWOHistoryOut) ;
+  //       zcUI.TextMessage('граф не дерево',TMWOHistoryOut) ;
   //
   //    G.CorrectTree;
   //
   //    //for i:=0 to G.VertexCount - 1 do
-  //    //ZCMsgCallBackInterface.TextMessage('*кол потомков для ' + inttostr(i) + ' = ' + inttostr(G.Vertices[i].ChildCount),TMWOHistoryOut);
+  //    //zcUI.TextMessage('*кол потомков для ' + inttostr(i) + ' = ' + inttostr(G.Vertices[i].ChildCount),TMWOHistoryOut);
   //
   //    {
-  //    ZCMsgCallBackInterface.TextMessage('***',TMWOHistoryOut);
+  //    zcUI.TextMessage('***',TMWOHistoryOut);
   //
   //    G.TreeTraversal(G.Root, VertexPath);
   //    for i:=0 to VertexPath.Count - 1 do
-  //      ZCMsgCallBackInterface.TextMessage(inttostr(TVertex(VertexPath[i]).Index) + ' ',TMWOHistoryOut);
+  //      zcUI.TextMessage(inttostr(TVertex(VertexPath[i]).Index) + ' ',TMWOHistoryOut);
   //    }
   //
   //    for i:=0 to VertexPath.Count - 1 do begin
-  //      ZCMsgCallBackInterface.TextMessage(inttostr(TVertex(VertexPath[i]).Index) + '+',TMWOHistoryOut);
-  //      //ZCMsgCallBackInterface.TextMessage('tt = ' + floattostr(TVertex(VertexPath[i]).AsFloat32['tt']) + ' ',TMWOHistoryOut);
+  //      zcUI.TextMessage(inttostr(TVertex(VertexPath[i]).Index) + '+',TMWOHistoryOut);
+  //      //zcUI.TextMessage('tt = ' + floattostr(TVertex(VertexPath[i]).AsFloat32['tt']) + ' ',TMWOHistoryOut);
   //      end;
   //
   //    G.TreeTraversal(G.Root, VertexPath);
@@ -1303,7 +1303,7 @@ end;
   //
   //
   //
-  //    ZCMsgCallBackInterface.TextMessage('-кол верш lkz 2-q -' + inttostr(G.BFSFromVertex(G.Root) ),TMWOHistoryOut);
+  //    zcUI.TextMessage('-кол верш lkz 2-q -' + inttostr(G.BFSFromVertex(G.Root) ),TMWOHistoryOut);
   //
   //    G.TreeTraversal(G.Root, VertexPath);
   //
@@ -1316,13 +1316,13 @@ end;
   //    //visualGraph(G,gg,1);
   //
   //    for i:=1 to VertexPath.Count - 1 do begin
-  //      ZCMsgCallBackInterface.TextMessage(inttostr(TVertex(VertexPath[i]).Index) + '- батя ' + inttostr(TVertex(VertexPath[i]).Parent.Index),TMWOHistoryOut);
+  //      zcUI.TextMessage(inttostr(TVertex(VertexPath[i]).Index) + '- батя ' + inttostr(TVertex(VertexPath[i]).Parent.Index),TMWOHistoryOut);
   //
-  //      ZCMsgCallBackInterface.TextMessage('-кол верш-' + inttostr(TVertex(VertexPath[i]).temp.AsPtrInt),TMWOHistoryOut);
-  //      //ZCMsgCallBackInterface.TextMessage('tt = ' + floattostr(TVertex(VertexPath[i]).AsFloat32['tt']) + ' ',TMWOHistoryOut);
+  //      zcUI.TextMessage('-кол верш-' + inttostr(TVertex(VertexPath[i]).temp.AsPtrInt),TMWOHistoryOut);
+  //      //zcUI.TextMessage('tt = ' + floattostr(TVertex(VertexPath[i]).AsFloat32['tt']) + ' ',TMWOHistoryOut);
   //      end;
   //    //end;
-  //    ZCMsgCallBackInterface.TextMessage('All good ',TMWOHistoryOut);
+  //    zcUI.TextMessage('All good ',TMWOHistoryOut);
   //  finally
   //    G.Free;
   //    EdgePath.Free;

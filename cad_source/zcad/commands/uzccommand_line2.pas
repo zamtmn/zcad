@@ -49,7 +49,7 @@ function Line_com_CommandStart(const Context:TZCADCommandContext;operands:TComma
 begin
   pold:=nil;
   drawings.GetCurrentDWG^.wa.SetMouseMode((MGet3DPoint) or (MMoveCamera) or (MRotateCamera));
-  ZCMsgCallBackInterface.TextMessage(rscmFirstPoint,TMWOHistoryOut);
+  zcUI.TextMessage(rscmFirstPoint,TMWOHistoryOut);
   result:=cmd_ok;
 end;
 
@@ -93,7 +93,7 @@ begin
        begin
             PGDBObjEntity(osp^.PGDBObject)^.formatentity(drawings.GetCurrentDWG^,dc);
             //PGDBObjEntity(osp^.PGDBObject)^.ObjToString('Found: ','');
-            ZCMsgCallBackInterface.TextMessage(PGDBObjline(osp^.PGDBObject)^.ObjToString('Found: ',''),TMWOHistoryOut);
+            zcUI.TextMessage(PGDBObjline(osp^.PGDBObject)^.ObjToString('Found: ',''),TMWOHistoryOut);
             po:=PGDBObjEntity(osp^.PGDBObject)^.getowner;
             pold:=osp^.PGDBObject;
        end

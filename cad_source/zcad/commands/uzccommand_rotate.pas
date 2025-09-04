@@ -70,7 +70,7 @@ procedure TRotate_com.showprompt(mklick:integer);
 begin
   case mklick of
     0:inherited;
-    1:ZCMsgCallBackInterface.TextMessage(rscmPickOrEnterAngle,TMWOHistoryOut);
+    1:zcUI.TextMessage(rscmPickOrEnterAngle,TMWOHistoryOut);
   end;
 end;
 procedure TRotate_com.rotate(const rotmatr:DMatrix4D; button: Byte);

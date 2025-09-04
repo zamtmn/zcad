@@ -50,7 +50,7 @@ implementation
 procedure FrameEdit_com_CommandStart(const Context:TZCADCommandContext;Operands:pansichar);
 begin
   drawings.GetCurrentDWG.wa.SetMouseMode((MGet3DPointWOOP) or (MMoveCamera));
-  ZCMsgCallBackInterface.TextMessage(rscmFirstPoint,TMWOHistoryOut);
+  zcUI.TextMessage(rscmFirstPoint,TMWOHistoryOut);
 end;
 procedure FrameEdit_com_Command_End;
 begin
@@ -63,7 +63,7 @@ begin
   if (button and MZW_LBUTTON)<>0 then
   begin
     drawings.GetCurrentDWG.wa.param.seldesc.MouseFrameON := true;
-    ZCMsgCallBackInterface.TextMessage(rscmSecondPoint,TMWOHistoryOut);
+    zcUI.TextMessage(rscmSecondPoint,TMWOHistoryOut);
     drawings.GetCurrentDWG.wa.param.seldesc.Frame1 := mc;
     drawings.GetCurrentDWG.wa.param.seldesc.Frame2 := mc;
     drawings.GetCurrentDWG.wa.param.seldesc.Frame13d := wc;
@@ -211,9 +211,9 @@ begin
         until pv=nil;
 
       if (button and MZW_SHIFT)=0 then
-        ZCMsgCallBackInterface.TextMessage(format(rscmNEntitiesSelected,[drawings.GetCurrentDWG.wa.param.SelDesc.Selectedobjcount-oldSelCount]),TMWOHistoryOut)
+        zcUI.TextMessage(format(rscmNEntitiesSelected,[drawings.GetCurrentDWG.wa.param.SelDesc.Selectedobjcount-oldSelCount]),TMWOHistoryOut)
       else
-        ZCMsgCallBackInterface.TextMessage(format(rscmNEntitiesDeSelected,[oldSelCount-drawings.GetCurrentDWG.wa.param.SelDesc.Selectedobjcount]),TMWOHistoryOut);
+        zcUI.TextMessage(format(rscmNEntitiesDeSelected,[oldSelCount-drawings.GetCurrentDWG.wa.param.SelDesc.Selectedobjcount]),TMWOHistoryOut);
 
       Ents.Clear;
       Ents.done;
@@ -239,8 +239,8 @@ begin
       commandmanager.executecommandend;
       //OGLwindow1.SetObjInsp;
       //redrawoglwnd;
-      ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIActionRedraw);
-      //if assigned(updatevisibleProc) then updatevisibleProc(ZMsgID_GUIActionRedraw);
+      zcUI.Do_GUIaction(nil,zcMsgUIActionRedraw);
+      //if assigned(updatevisibleProc) then updatevisibleProc(zcMsgUIActionRedraw);
     end;
   end
   else

@@ -363,7 +363,7 @@ begin
                                                                       MGetControlpoint or MGetSelectionFrame or MGetSelectObject);//reset selection entities  mode
                                                                                                               //сбрасываем режим выбора примитивов мышью
   if prompt<>'' then
-    ZCMsgCallBackInterface.TextMessage(prompt,TMWOHistoryOut);
+    zcUI.TextMessage(prompt,TMWOHistoryOut);
   CurrCmd.pcommandrunning^.IData.GetPointMode:=TGPMWait;
   CurrCmd.pcommandrunning^.IData.PInteractiveData:=PInteractiveData;
   CurrCmd.pcommandrunning^.IData.PInteractiveProc:=InteractiveProc;
@@ -479,7 +479,7 @@ begin
                                                                       MGetControlpoint or MGetSelectionFrame or MGetSelectObject);//reset selection entities  mode
                                                                                                               //сбрасываем режим выбора примитивов мышью
   if prompt<>'' then
-    ZCMsgCallBackInterface.TextMessage(prompt,TMWOHistoryOut);
+    zcUI.TextMessage(prompt,TMWOHistoryOut);
   CurrCmd.pcommandrunning^.IData.GetPointMode:=TGPMWaitInput;
   CurrCmd.pcommandrunning^.IData.PInteractiveData:=nil;
   CurrCmd.pcommandrunning^.IData.PInteractiveProc:=nil;
@@ -523,7 +523,7 @@ var
 begin
   savemode:=PTSimpleDrawing(CurrCmd.pcommandrunning.pdwg)^.DefMouseEditorMode(MGetSelectObject,
                                                                       MGet3DPoint or MGet3DPointWoOP or MGetSelectionFrame or MGetControlpoint);
-  ZCMsgCallBackInterface.TextMessage(prompt,TMWOHistoryOut);
+  zcUI.TextMessage(prompt,TMWOHistoryOut);
   CurrCmd.pcommandrunning^.IData.GetPointMode:=TGPMWaitEnt;
   CurrCmd.pcommandrunning^.IData.PInteractiveData:=nil;
   CurrCmd.pcommandrunning^.IData.PInteractiveProc:=nil;
@@ -651,11 +651,11 @@ var
    MacrosFile:String;
 begin
      MacrosFile:=ExpandPath(fn);
-     ZCMsgCallBackInterface.TextMessage(sysutils.format(rsRunScript,[MacrosFile]),TMWOHistoryOut);
+     zcUI.TextMessage(sysutils.format(rsRunScript,[MacrosFile]),TMWOHistoryOut);
      inc(busy);
 
      //DisableCmdLine;
-     ZCMsgCallBackInterface.Do_GUIMode({ZMsgID_GUIDisableCMDLine}ZMsgID_GUIDisable);
+     zcUI.Do_GUIMode({zcMsgUIDisableCMDLine}zcMsgUIDisable);
 
      oldlastcomm:=lastcommand;
      currMacros:=MacrosFile;
@@ -680,8 +680,8 @@ begin
 
     currMacros:='';
      //EnableCmdLine;
-     ZCMsgCallBackInterface.Do_GUIMode({ZMsgID_GUIEnableCMDLine}ZMsgID_GUIEnable);
-     ZCMsgCallBackInterface.Do_GUIMode(ZMsgID_GUICMDLineCheck);
+     zcUI.Do_GUIMode({zcMsgUIEnableCMDLine}zcMsgUIEnable);
+     zcUI.Do_GUIMode(zcMsgUICMDLineCheck);
      dec(busy);
 end;
 procedure GDBcommandmanager.sendpoint2command;
@@ -865,9 +865,9 @@ begin
             inc(SilentCounter);
           end else begin
              if isBusy then
-               ZCMsgCallBackInterface.TextMessage(rsRunCommand+':'+pfoundcommand^.CommandName,[TMWOToLog])
+               zcUI.TextMessage(rsRunCommand+':'+pfoundcommand^.CommandName,[TMWOToLog])
              else
-               ZCMsgCallBackInterface.TextMessage(rsRunCommand+':'+pfoundcommand^.CommandName,TMWOHistoryOut);
+               zcUI.TextMessage(rsRunCommand+':'+pfoundcommand^.CommandName,TMWOHistoryOut);
              lastcommand := command;
              if not (isBusy) then
                if assigned(OnCommandRun) then
@@ -876,17 +876,17 @@ begin
 
           run(pfoundcommand,operands,pdrawing);
           if CurrCmd.pcommandrunning<>nil then
-                                      ZCMsgCallBackInterface.Do_GUIMode(ZMsgID_GUICMDLineRunMode);
+                                      zcUI.Do_GUIMode(zcMsgUICMDLineRunMode);
                                       {if assigned(SetCommandLineMode) then
                                       SetCommandLineMode(CLCOMMANDRUN);}
           end
      else
          begin
-              ZCMsgCallBackInterface.TextMessage(format(rsCommandNRInC,[comm]),TMWOHistoryOut);
+              zcUI.TextMessage(format(rsCommandNRInC,[comm]),TMWOHistoryOut);
          end;
     end;
   end
-  else ZCMsgCallBackInterface.TextMessage(rsUnknownCommand+':"'+command+'"',TMWOHistoryOut);
+  else zcUI.TextMessage(rsUnknownCommand+':"'+command+'"',TMWOHistoryOut);
   end;
   command:='';
   operands:='';
@@ -898,7 +898,7 @@ begin
      if not isBusy then
                      execute(comm,false,pdrawing,POGLWndParam)
                  else
-                     ZCMsgCallBackInterface.TextMessage(format(rsCommandNRInC,[comm]),TMWOShowError);
+                     zcUI.TextMessage(format(rsCommandNRInC,[comm]),TMWOShowError);
 end;
 procedure GDBcommandmanager.executecommandsilent{(const comm:pansichar): Integer};
 begin
@@ -913,12 +913,12 @@ var
 begin
      if self.varstack.vardescarray.Count<>0 then
      begin
-     ZCMsgCallBackInterface.TextMessage(rscmInStackData,TMWOHistoryOut);
+     zcUI.TextMessage(rscmInStackData,TMWOHistoryOut);
      pvd:=self.varstack.vardescarray.beginiterate(ir);
      if pvd<>nil then
      repeat
            value:=pvd.data.PTD.GetValueAsString(pvd.data.Addr.Instance);
-           ZCMsgCallBackInterface.TextMessage(pvd.data.PTD.TypeName+':'+value,TMWOHistoryOut);
+           zcUI.TextMessage(pvd.data.PTD.TypeName+':'+value,TMWOHistoryOut);
 
      pvd:=self.varstack.vardescarray.iterate(ir);
      until pvd=nil;
@@ -970,7 +970,7 @@ begin
   if CurrCmd.pcommandrunning=nil then
   //if assigned(cline) then
   //                 CLine.SetMode(CLCOMMANDREDY);
-  ZCMsgCallBackInterface.Do_GUIMode(ZMsgID_GUICMDLineReadyMode);
+  zcUI.Do_GUIMode(zcMsgUICMDLineReadyMode);
   {if assigned(SetCommandLineMode) then
                    SetCommandLineMode(CLCOMMANDREDY);}
   if self.CommandsStack.Count>0 then
@@ -1009,7 +1009,7 @@ begin
   if temp<>nil then
                    temp^.CommandEnd(CurrCmd.Context);
   if CurrCmd.pcommandrunning=nil then
-                             ZCMsgCallBackInterface.Do_GUIMode(ZMsgID_GUICMDLineReadyMode);
+                             zcUI.Do_GUIMode(zcMsgUICMDLineReadyMode);
                              {if assigned(SetCommandLineMode) then
                              SetCommandLineMode(CLCOMMANDREDY);}
   CommandsStack.Clear;
@@ -1047,7 +1047,7 @@ begin
   SilentCounter:=0;
   CommandLinePrompts:=nil;
   busy:=0;
-  ZCMsgCallBackInterface.RegisterGetStateFunc(GetState);
+  zcUI.RegisterGetStateFunc(GetState);
 end;
 function GDBcommandmanager.isBusy:Boolean;
 begin
@@ -1058,7 +1058,7 @@ begin
   if isBusy then
     Result:=ZState_Busy
   else
-    Result:=ZCMsgCallBackInterface.GetEmptyZState;
+    Result:=zcUI.GetEmptyZState;
 end;
 
 procedure GDBcommandmanager.CommandRegister(pc:PCommandObjectDef);

@@ -79,9 +79,9 @@ begin
      s:='FATALERROR: '+errstr;
      programlog.logoutstr(s,0,LM_Fatal);
      s:=(s);
-     ZCMsgCallBackInterface.Do_BeforeShowModal(nil);
+     zcUI.Do_BeforeShowModal(nil);
      Application.MessageBox(@s[1],'',MB_OK or MB_ICONSTOP);
-     ZCMsgCallBackInterface.Do_AfterShowModal(nil);
+     zcUI.Do_AfterShowModal(nil);
 
      halt(0);
 end;
@@ -142,7 +142,7 @@ begin
       end;
     end else
       MsgID:='';
-    ZCMsgCallBackInterface.Do_BeforeShowModal(nil);
+    zcUI.Do_BeforeShowModal(nil);
 
     CorrectButtons(buttons);
 
@@ -206,7 +206,7 @@ begin
     end;
 
 
-    ZCMsgCallBackInterface.Do_AfterShowModal(nil);
+    zcUI.Do_AfterShowModal(nil);
 
     if {Task.VerifyChecked}tfVerificationFlagChecked in Task.Flags then begin
       if MsgID='' then
@@ -221,15 +221,15 @@ begin
 end;
 function zcQuestion(Caption,Question:TZCMsgStr;buttons:TZCMsgCommonButtons;icon:TZCMsgDlgIcon):TZCMsgCommonButton;
 begin
-  ZCMsgCallBackInterface.Do_BeforeShowModal(nil);
+  zcUI.Do_BeforeShowModal(nil);
   result:=TZCMsgModalResult2TZCMsgCommonButton(zcMsgDlg(Question,icon,buttons,False,nil,Caption).ModalResult);
-  ZCMsgCallBackInterface.Do_AfterShowModal(nil);
+  zcUI.Do_AfterShowModal(nil);
 end;
 
 initialization
   lps.AddOnLPEndHandler(TLPSSupporthelper.EndLongProcessHandler);
   lps.AddOnLPStartHandler(TLPSSupporthelper.StartLongProcessHandler);
-  ZCMsgCallBackInterface.TextQuestionFunc:=@zcQuestion;
+  zcUI.TextQuestionFunc:=@zcQuestion;
 finalization
   if assigned(SuppressedMessages)then
     freeandnil(SuppressedMessages);

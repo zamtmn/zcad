@@ -33,7 +33,7 @@ function About_com(const Context:TZCADCommandContext;operands:TCommandOperands):
 begin
   if not assigned(AboutForm) then
     AboutForm:=TAboutForm.mycreate(nil,@AboutForm);
-  ZCMsgCallBackInterface.DOShowModal(AboutForm);
+  zcUI.DOShowModal(AboutForm);
   result:=cmd_ok;
 end;
 

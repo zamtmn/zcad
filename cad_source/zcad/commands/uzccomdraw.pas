@@ -503,7 +503,7 @@ begin
   end
   else
   begin
-    ZCMsgCallBackInterface.TextMessage(rscmSelEntBeforeComm,TMWOHistoryOut);
+    zcUI.TextMessage(rscmSelEntBeforeComm,TMWOHistoryOut);
     Commandmanager.executecommandend;
   end;
 end;
@@ -603,7 +603,7 @@ begin
   axisdevname:=uppercase(ExportDevWithAxisParams.AxisDeviceName);
   ALLayer:=drawings.GetCurrentDWG^.LayerTable.getAddres('EL_AXIS');
   Vertex0:=drawings.GetCurrentROOT^.vp.BoundingBox.LBN;
-  ZCMsgCallBackInterface.TextMessage('Searh axis.....',TMWOHistoryOut);
+  zcUI.TextMessage('Searh axis.....',TMWOHistoryOut);
   pdev:=drawings.GetCurrentROOT^.ObjArray.beginiterate(ir);
   if pdev<>nil then
   repeat
@@ -648,12 +648,12 @@ begin
                   end;
                   if isVertical then
                                     begin
-                                      ZCMsgCallBackInterface.TextMessage(sysutils.format('  Found vertical axis "%s"',[pString(pvd^.data.Addr.Instance)^]),TMWOHistoryOut);
+                                      zcUI.TextMessage(sysutils.format('  Found vertical axis "%s"',[pString(pvd^.data.Addr.Instance)^]),TMWOHistoryOut);
                                       vaxis.PushBack(axisdesc);
                                     end
                                 else
                                     begin
-                                      ZCMsgCallBackInterface.TextMessage(sysutils.format('  Found horisontal axis "%s"',[pString(pvd^.data.Addr.Instance)^]),TMWOHistoryOut);
+                                      zcUI.TextMessage(sysutils.format('  Found horisontal axis "%s"',[pString(pvd^.data.Addr.Instance)^]),TMWOHistoryOut);
                                       haxis.PushBack(axisdesc);
                                     end
 
@@ -663,17 +663,17 @@ begin
   until pdev=nil;
   if haxis.size>0 then
   begin
-    ZCMsgCallBackInterface.TextMessage('Sorting horisontal axis...',TMWOHistoryOut);
+    zcUI.TextMessage('Sorting horisontal axis...',TMWOHistoryOut);
     taxisdescdsort.Sort(haxis,haxis.size);
     for i:=0 to haxis.size-1 do
-    ZCMsgCallBackInterface.TextMessage(sysutils.format('  Horisontal axis "%s", d0=%f',[haxis[i].Name,haxis[i].d0]),TMWOHistoryOut);
+    zcUI.TextMessage(sysutils.format('  Horisontal axis "%s", d0=%f',[haxis[i].Name,haxis[i].d0]),TMWOHistoryOut);
   end;
   if vaxis.size>0 then
   begin
-    ZCMsgCallBackInterface.TextMessage('Sorting vertical axis...',TMWOHistoryOut);
+    zcUI.TextMessage('Sorting vertical axis...',TMWOHistoryOut);
     taxisdescdsort.Sort(vaxis,vaxis.size);
     for i:=0 to vaxis.size-1 do
-    ZCMsgCallBackInterface.TextMessage(sysutils.format('  Vertical axis "%s", d0=%f',[vaxis[i].Name,vaxis[i].d0]),TMWOHistoryOut);
+    zcUI.TextMessage(sysutils.format('  Vertical axis "%s", d0=%f',[vaxis[i].Name,vaxis[i].d0]),TMWOHistoryOut);
   end;
   psd:=drawings.GetCurrentDWG^.SelObjArray.beginiterate(ir);
   if psd<>nil then
@@ -695,11 +695,11 @@ begin
                   GetNearestAxis(vaxis,pdev^.P_insert_in_WCS,vi,vi2);
                   vname:=GetAxisName(vaxis,vi,vi2);
                   if (hname<>'')and(vname<>'')then
-                                          ZCMsgCallBackInterface.TextMessage(sysutils.format('%s;%s/%s',[pString(pvd^.data.Addr.Instance)^,vname,hname]),TMWOHistoryOut)
+                                          zcUI.TextMessage(sysutils.format('%s;%s/%s',[pString(pvd^.data.Addr.Instance)^,vname,hname]),TMWOHistoryOut)
              else if (hname<>'')then
-                                ZCMsgCallBackInterface.TextMessage(sysutils.format('%s;%s',[pString(pvd^.data.Addr.Instance)^,hname]),TMWOHistoryOut)
+                                zcUI.TextMessage(sysutils.format('%s;%s',[pString(pvd^.data.Addr.Instance)^,hname]),TMWOHistoryOut)
              else if (vname<>'')then
-                                ZCMsgCallBackInterface.TextMessage(sysutils.format('%s;%s',[pString(pvd^.data.Addr.Instance)^,vname]),TMWOHistoryOut);
+                                zcUI.TextMessage(sysutils.format('%s;%s',[pString(pvd^.data.Addr.Instance)^,vname]),TMWOHistoryOut);
 
              end;
 
@@ -734,7 +734,7 @@ begin
   end
   else
   begin
-    ZCMsgCallBackInterface.TextMessage(rscmSelDevBeforeComm,TMWOHistoryOut);
+    zcUI.TextMessage(rscmSelDevBeforeComm,TMWOHistoryOut);
     Commandmanager.executecommandend;
   end;
 end;
@@ -792,7 +792,7 @@ begin
      end;
      end
         else
-            ZCMsgCallBackInterface.TextMessage(rscmCommandOnlyCTXMenu,TMWOHistoryOut);
+            zcUI.TextMessage(rscmCommandOnlyCTXMenu,TMWOHistoryOut);
 end;
 procedure ITT_com.Command(Operands:TCommandOperands);
 var //pv:pGDBObjEntity;
@@ -840,8 +840,8 @@ var
 begin
   nname:=(BEditParam.Blocks.Enums.getData(BEditParam.Blocks.Selected));
   if nname<>BEditParam.CurrentEditBlock then begin
-    ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIFreEditorProc);
-    ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIReturnToDefaultObject);
+    zcUI.Do_GUIaction(nil,zcMsgUIFreEditorProc);
+    zcUI.Do_GUIaction(nil,zcMsgUIReturnToDefaultObject);
     BEditParam.CurrentEditBlock:=nname;
     if nname<>modelspacename then
       drawings.GetCurrentDWG^.pObjRoot:=drawings.GetCurrentDWG^.BlockDefArray.getblockdef(nname)
@@ -849,7 +849,7 @@ begin
       drawings.GetCurrentDWG^.pObjRoot:=@drawings.GetCurrentDWG^.mainObjRoot;
     Regen_com(Context,EmptyCommandOperands);
     RebuildTree_com(Context,EmptyCommandOperands);
-    ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIActionRedraw);
+    zcUI.Do_GUIaction(nil,zcMsgUIActionRedraw);
     zcRedrawCurrentDrawing;
   end;
 end;
@@ -916,12 +916,12 @@ begin
       BEditParam.Blocks.Selected:=i
     else
       if length(operands)<>0 then begin
-        ZCMsgCallBackInterface.TextMessage('BEdit:'+format(rscmNoBlockDefInDWG,[operands]),TMWOHistoryOut);
+        zcUI.TextMessage('BEdit:'+format(rscmNoBlockDefInDWG,[operands]),TMWOHistoryOut);
         commandmanager.executecommandend;
         exit;
       end;
     if tn='' then
-      ZCMsgCallBackInterface.Do_PrepareObject(nil,drawings.GetUnitsFormat,SysUnit^.TypeName2PTD('CommandRTEdObject'),pbeditcom,drawings.GetCurrentDWG);
+      zcUI.Do_PrepareObject(nil,drawings.GetUnitsFormat,SysUnit^.TypeName2PTD('CommandRTEdObject'),pbeditcom,drawings.GetCurrentDWG);
     drawings.GetCurrentDWG^.SelObjArray.Free;
     drawings.GetCurrentROOT^.ObjArray.DeSelect(drawings.GetCurrentDWG^.wa.param.SelDesc.Selectedobjcount,@drawings.GetCurrentDWG^.DeSelector);
     //result:=cmd_ok;
@@ -929,13 +929,13 @@ begin
     if tn<>'' then
        DummyClass.RunBEdit(context);//bedit_format(nil);
   end else begin
-    ZCMsgCallBackInterface.TextMessage('BEdit:'+rscmInDwgBlockDefNotDeffined,TMWOHistoryOut);
+    zcUI.TextMessage('BEdit:'+rscmInDwgBlockDefNotDeffined,TMWOHistoryOut);
     commandmanager.executecommandend;
   end;
   result:=cmd_ok;
 
   {exit;
-  ZCMsgCallBackInterface.Do_PrepareObject(nil,drawings.GetUnitsFormat,SysUnit^.TypeName2PTD('CommandRTEdObject'),pbeditcom,drawings.GetCurrentDWG);
+  zcUI.Do_PrepareObject(nil,drawings.GetUnitsFormat,SysUnit^.TypeName2PTD('CommandRTEdObject'),pbeditcom,drawings.GetCurrentDWG);
   drawings.GetCurrentDWG^.SelObjArray.Free;
   drawings.GetCurrentROOT^.ObjArray.DeSelect(drawings.GetCurrentDWG^.wa.param.SelDesc.Selectedobjcount,@drawings.GetCurrentDWG^.deselector);
   result:=cmd_ok;
@@ -1127,8 +1127,8 @@ begin
      lph:=lps.StartLongProcess('Cutting lines',nil);
       PlaceLines(LinesMap,lm,lc);
      lps.EndLongProcess(lph);
-     ZCMsgCallBackInterface.TextMessage('Lines modified: '+inttostr(lm),TMWOHistoryOut);
-     ZCMsgCallBackInterface.TextMessage('Lines created: '+inttostr(lc),TMWOHistoryOut);
+     zcUI.TextMessage('Lines modified: '+inttostr(lm),TMWOHistoryOut);
+     zcUI.TextMessage('Lines created: '+inttostr(lc),TMWOHistoryOut);
 
 
 
@@ -1136,9 +1136,9 @@ begin
      parray.done;
      LinesMap.Free;
      lps.EndLongProcess(lph);
-     ZCMsgCallBackInterface.TextMessage('Line-AABB tests count: '+inttostr(lineAABBtests),TMWOHistoryOut);
-     ZCMsgCallBackInterface.TextMessage('Line-Line tests count: '+inttostr(linelinetests),TMWOHistoryOut);
-     ZCMsgCallBackInterface.TextMessage('Intersections count: '+inttostr(intersectcount),TMWOHistoryOut);
+     zcUI.TextMessage('Line-AABB tests count: '+inttostr(lineAABBtests),TMWOHistoryOut);
+     zcUI.TextMessage('Line-Line tests count: '+inttostr(linelinetests),TMWOHistoryOut);
+     zcUI.TextMessage('Intersections count: '+inttostr(intersectcount),TMWOHistoryOut);
      result:=cmd_ok;
 end;
 class function TGDBNameLess.c(a,b:tdevname):boolean;

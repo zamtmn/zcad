@@ -87,7 +87,7 @@ begin
     inc(mouseclic);
     SimulateMouseMove(Context);
   end else begin
-    ZCMsgCallBackInterface.TextMessage(rscmSelEntBeforeComm,TMWOHistoryOut);
+    zcUI.TextMessage(rscmSelEntBeforeComm,TMWOHistoryOut);
     Commandmanager.executecommandend;
   end;
 end;

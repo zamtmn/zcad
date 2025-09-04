@@ -34,8 +34,8 @@ var
 
 function DeSelectAll_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 begin
-  ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIActionRedraw);
-  //if assigned(updatevisibleproc) then updatevisibleproc(ZMsgID_GUIActionRedraw);
+  zcUI.Do_GUIaction(nil,zcMsgUIActionRedraw);
+  //if assigned(updatevisibleproc) then updatevisibleproc(zcMsgUIActionRedraw);
   result:=cmd_ok;
 end;
 

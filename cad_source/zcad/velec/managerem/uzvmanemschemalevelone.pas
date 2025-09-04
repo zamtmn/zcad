@@ -186,12 +186,12 @@ begin
       result^.BuildGeometry(drawings.GetCurrentDWG^);
       //"форматируем"
       rc:=drawings.GetCurrentDWG^.CreateDrawingRC;
-      ZCMsgCallBackInterface.TextMessage('1',TMWOHistoryOut);
+      zcUI.TextMessage('1',TMWOHistoryOut);
       result^.FormatEntity(drawings.GetCurrentDWG^,rc);
-      ZCMsgCallBackInterface.TextMessage('2',TMWOHistoryOut);
+      zcUI.TextMessage('2',TMWOHistoryOut);
       //дальше как обычно
       zcAddEntToCurrentDrawingConstructRoot(result);
-      ZCMsgCallBackInterface.TextMessage('3',TMWOHistoryOut);
+      zcUI.TextMessage('3',TMWOHistoryOut);
     //end;
     //result:=cmd_ok;
 end;
@@ -227,7 +227,7 @@ begin
         result:=i;
 
    if result = -1 then
-     ZCMsgCallBackInterface.TextMessage('ОШИБКА! function getNumColumn(dev:PGDBObjDevice):integer;',TMWOHistoryOut);
+     zcUI.TextMessage('ОШИБКА! function getNumColumn(dev:PGDBObjDevice):integer;',TMWOHistoryOut);
 end;
 
 //Получить номер колонки
@@ -244,7 +244,7 @@ begin
     begin
       //номер пути
        numWay:=lColumnSchemaOneLevel[i].countCablesGone-lColumnSchemaOneLevel[i].usedCablesGone;
-       ZCMsgCallBackInterface.TextMessage('lColumnSchemaOneLevel[i].countCablesGone=' + inttostr(lColumnSchemaOneLevel[i].countCablesGone) + '  lColumnSchemaOneLevel[i].usedCablesGone=' + inttostr(lColumnSchemaOneLevel[i].usedCablesGone)+ '  numWay=' + inttostr(numWay),TMWOHistoryOut);
+       zcUI.TextMessage('lColumnSchemaOneLevel[i].countCablesGone=' + inttostr(lColumnSchemaOneLevel[i].countCablesGone) + '  lColumnSchemaOneLevel[i].usedCablesGone=' + inttostr(lColumnSchemaOneLevel[i].usedCablesGone)+ '  numWay=' + inttostr(numWay),TMWOHistoryOut);
        ptX:=(zonaWidthColumn/2)+(zonaWidthColumn*i);
        ptY:=-zonaHeightHead - (zonaHeightConnect*numWay)/(lColumnSchemaOneLevel[i].countCablesGone+1);
        result.PushBack(uzegeometry.CreateVertex(ptX,ptY,0));
@@ -268,7 +268,7 @@ begin
    pt1:=uzegeometry.CreateVertex(10,10,0);
    pt2:=uzegeometry.CreateVertex(20,20,0);
    newPt:=((pt1-pt2).NormalizeVertex)/2;
-   ZCMsgCallBackInterface.TextMessage('newPt.x = ' + floattostr(newPt.x) + '  newPt.y = ' + floattostr(newPt.y),TMWOHistoryOut);
+   zcUI.TextMessage('newPt.x = ' + floattostr(newPt.x) + '  newPt.y = ' + floattostr(newPt.y),TMWOHistoryOut);
 
 end;
 
@@ -333,7 +333,7 @@ begin
 ////
 ////      begin
 ////        if
-////        ZCMsgCallBackInterface.TextMessage('количество устройств='+inttostr(columnShemaOneLevel.listDev.Size)+ '   количество выходов из колонки' + inttostr(columnShemaOneLevel.countCablesGone),TMWOHistoryOut);
+////        zcUI.TextMessage('количество устройств='+inttostr(columnShemaOneLevel.listDev.Size)+ '   количество выходов из колонки' + inttostr(columnShemaOneLevel.countCablesGone),TMWOHistoryOut);
 ////      end;
 ////      if newGroup then
 ////         vertexPoint:=uzegeometry.CreateVertex(childVertexPoint.x,0,0);
@@ -399,7 +399,7 @@ function createSchemaLevelOne_com(const Context:TZCADCommandContext;operands:TCo
      else
        countColumn:=0;
 
-       //ZCMsgCallBackInterface.TextMessage('countColumn1 - ' + inttostr(countColumn),TMWOHistoryOut);
+       //zcUI.TextMessage('countColumn1 - ' + inttostr(countColumn),TMWOHistoryOut);
      for i:=0 to vertexDev.ChildCount-1 do
      begin
         getListColumnSchemaOneLevel(vertexDev.Childs[i],lColumnSchemaOneLevel,columnShemaOneLevel,countColumn,mainVertexDev)
@@ -431,8 +431,8 @@ function createSchemaLevelOne_com(const Context:TZCADCommandContext;operands:TCo
          result:=lColumnSchemaOneLevel[countColumn].countCablesGone;
          for i:=lColumnSchemaOneLevel[countColumn].listDevVertex.size-1 downto 0 do
          begin
-            ZCMsgCallBackInterface.TextMessage(' numIWay = ' + inttostr(numIWay) + '  i = ' + inttostr(i),TMWOHistoryOut);
-            ZCMsgCallBackInterface.TextMessage(' result = ' + inttostr(result) + ' ---   lColumnSchemaOneLevel[countColumn].listDevVertex[i].ChildCount =  ' + inttostr(lColumnSchemaOneLevel[countColumn].listDevVertex[i].ChildCount),TMWOHistoryOut);
+            zcUI.TextMessage(' numIWay = ' + inttostr(numIWay) + '  i = ' + inttostr(i),TMWOHistoryOut);
+            zcUI.TextMessage(' result = ' + inttostr(result) + ' ---   lColumnSchemaOneLevel[countColumn].listDevVertex[i].ChildCount =  ' + inttostr(lColumnSchemaOneLevel[countColumn].listDevVertex[i].ChildCount),TMWOHistoryOut);
             if numIWay <> i then
               if i = lColumnSchemaOneLevel[countColumn].listDevVertex.size-1 then
                  result:= result - lColumnSchemaOneLevel[countColumn].listDevVertex[i].ChildCount
@@ -441,7 +441,7 @@ function createSchemaLevelOne_com(const Context:TZCADCommandContext;operands:TCo
             else
                system.break;
          end;
-         ZCMsgCallBackInterface.TextMessage(' getNumWay( ' + inttostr(numIWay) + ' )    =  ' + inttostr(result),TMWOHistoryOut);
+         zcUI.TextMessage(' getNumWay( ' + inttostr(numIWay) + ' )    =  ' + inttostr(result),TMWOHistoryOut);
      end;
 
    begin
@@ -462,8 +462,8 @@ function createSchemaLevelOne_com(const Context:TZCADCommandContext;operands:TCo
            y:= -(zonaHeightConnect/(lColumnSchemaOneLevel[countColumn].countCablesGone+1))*(getNumWay(i))-zonaHeightHead;
            result:=uzegeometry.CreateVertex(countColumn*zonaWidthColumn,y,0)
          end;
-       //ZCMsgCallBackInterface.TextMessage(' for columnShemaOneLevel.listDev - ' + inttostr(columnShemaOneLevel.listDev.Size),TMWOHistoryOut);
-       //ZCMsgCallBackInterface.TextMessage(' for countColumn - ' + inttostr(countColumn),TMWOHistoryOut);
+       //zcUI.TextMessage(' for columnShemaOneLevel.listDev - ' + inttostr(columnShemaOneLevel.listDev.Size),TMWOHistoryOut);
+       //zcUI.TextMessage(' for countColumn - ' + inttostr(countColumn),TMWOHistoryOut);
        //if lColumnSchemaOneLevel.Size > countColumn then
        //  inc(lColumnSchemaOneLevel.Mutable[countColumn]^.countCablesGone);
        // getListColumnSchemaOneLevel(vertexDev.Childs[i],lColumnSchemaOneLevel,columnShemaOneLevel,countColumn)
@@ -481,12 +481,12 @@ function createSchemaLevelOne_com(const Context:TZCADCommandContext;operands:TCo
        begin
           if vertexDev.parent <> nil then
             begin
-             ZCMsgCallBackInterface.TextMessage('рисуем стартовую точку - ' + vertexDev.Parent.getNMONameDevice,TMWOHistoryOut);
+             zcUI.TextMessage('рисуем стартовую точку - ' + vertexDev.Parent.getNMONameDevice,TMWOHistoryOut);
              drawStartGroupSchema(uzegeometry.CreateVertex(vertexPoint.x,0,0));
             end
            else
             begin
-             ZCMsgCallBackInterface.TextMessage('рисуем стартовую точку - ' + vertexDev.getNMONameDevice,TMWOHistoryOut);
+             zcUI.TextMessage('рисуем стартовую точку - ' + vertexDev.getNMONameDevice,TMWOHistoryOut);
              drawStartGroupSchema(vertexPoint);
             end;
           startNewGroup:=false;
@@ -495,21 +495,21 @@ function createSchemaLevelOne_com(const Context:TZCADCommandContext;operands:TCo
        begin
           if vertexDev.getDevice^.Name <> 'EL_EMSPLITTERBOX' then
             begin
-               ZCMsgCallBackInterface.TextMessage('рисуем устройство - ' + vertexDev.getNMONameDevice,TMWOHistoryOut);
+               zcUI.TextMessage('рисуем устройство - ' + vertexDev.getNMONameDevice,TMWOHistoryOut);
                drawCloneDevice(vertexDev.getDevice,vertexPoint);
 
-               ZCMsgCallBackInterface.TextMessage('рисуем нижнюю плашку - ' + vertexDev.getNMONameDevice,TMWOHistoryOut);
+               zcUI.TextMessage('рисуем нижнюю плашку - ' + vertexDev.getNMONameDevice,TMWOHistoryOut);
                inc(countColumn);
 
             end
           else
             begin
-                 ZCMsgCallBackInterface.TextMessage('рисуем ответвительное - ' + vertexDev.getNMONameDevice,TMWOHistoryOut);
+                 zcUI.TextMessage('рисуем ответвительное - ' + vertexDev.getNMONameDevice,TMWOHistoryOut);
                  drawCloneDevice(vertexDev.getDevice,vertexPoint);
             end;
 
        end;
-     ZCMsgCallBackInterface.TextMessage('4',TMWOHistoryOut);
+     zcUI.TextMessage('4',TMWOHistoryOut);
      for i:=0 to vertexDev.ChildCount-1 do
      begin
 
@@ -517,11 +517,11 @@ function createSchemaLevelOne_com(const Context:TZCADCommandContext;operands:TCo
        if i <> 0 then
          if vertexDev.Childs[i].getNumGroupConnectDevice <> vertexDev.Childs[i-1].getNumGroupConnectDevice then
            begin
-              //ZCMsgCallBackInterface.TextMessage('рисуем стартовую точку - ' + vertexDev.getNMONameDevice,TMWOHistoryOut);
+              //zcUI.TextMessage('рисуем стартовую точку - ' + vertexDev.getNMONameDevice,TMWOHistoryOut);
               startNewGroup:=true;
               vertexPoint:=uzegeometry.CreateVertex(vertexPoint.x,0,0);
            end;
-       ZCMsgCallBackInterface.TextMessage('5',TMWOHistoryOut);
+       zcUI.TextMessage('5',TMWOHistoryOut);
        childVertexPoint:=getchildVertexPoint(vertexDev.Childs[i],i,lColumnSchemaOneLevel,countColumn);
 
        //function drawConnectDevice(stDev,edDev:TVertex;stPoint,edPoint:GDBVertex;lColumnSchemaOneLevel:TVectorOfColumnSchemaOneLevel;countColumn:integer;newGroup:boolean):PGDBObjPolyLine;
@@ -530,12 +530,12 @@ function createSchemaLevelOne_com(const Context:TZCADCommandContext;operands:TCo
 
 
 
-       ZCMsgCallBackInterface.TextMessage('координата=' + floattostr(childVertexPoint.x),TMWOHistoryOut);
-       //ZCMsgCallBackInterface.TextMessage('рисуем соединение - ' + vertexDev.getNMONameDevice + ' c ' + vertexDev.parent.getNMONameDevice,TMWOHistoryOut);
+       zcUI.TextMessage('координата=' + floattostr(childVertexPoint.x),TMWOHistoryOut);
+       //zcUI.TextMessage('рисуем соединение - ' + vertexDev.getNMONameDevice + ' c ' + vertexDev.parent.getNMONameDevice,TMWOHistoryOut);
        drawSchemaOneLevel(vertexDev.Childs[i],childVertexPoint,lColumnSchemaOneLevel,countColumn,startNewGroup);
 
-       //ZCMsgCallBackInterface.TextMessage(' for columnShemaOneLevel.listDev - ' + inttostr(columnShemaOneLevel.listDev.Size),TMWOHistoryOut);
-       ////ZCMsgCallBackInterface.TextMessage(' for countColumn - ' + inttostr(countColumn),TMWOHistoryOut);
+       //zcUI.TextMessage(' for columnShemaOneLevel.listDev - ' + inttostr(columnShemaOneLevel.listDev.Size),TMWOHistoryOut);
+       ////zcUI.TextMessage(' for countColumn - ' + inttostr(countColumn),TMWOHistoryOut);
        //if lColumnSchemaOneLevel.Size > countColumn then
        //  inc(lColumnSchemaOneLevel.Mutable[countColumn]^.countCablesGone);
        // getListColumnSchemaOneLevel(vertexDev.Childs[i],lColumnSchemaOneLevel,columnShemaOneLevel,countColumn)
@@ -562,17 +562,17 @@ function createSchemaLevelOne_com(const Context:TZCADCommandContext;operands:TCo
                     inc(listColumnSchemaOneLevel.Mutable[j]^.countCablesGone);
                  end;
            end;
-         ZCMsgCallBackInterface.TextMessage('Номер колонки = '+ inttostr(i),TMWOHistoryOut);
+         zcUI.TextMessage('Номер колонки = '+ inttostr(i),TMWOHistoryOut);
           for j:=0 to listColumnSchemaOneLevel[i].listDevVertex.Size-1 do
            begin
-              ZCMsgCallBackInterface.TextMessage('Имя устройства = '+ listColumnSchemaOneLevel[i].listDevVertex[j].getNMONameDevice+ ' ; Количество детей = ' + inttostr(listColumnSchemaOneLevel[i].listDevVertex[j].ChildCount),TMWOHistoryOut);
+              zcUI.TextMessage('Имя устройства = '+ listColumnSchemaOneLevel[i].listDevVertex[j].getNMONameDevice+ ' ; Количество детей = ' + inttostr(listColumnSchemaOneLevel[i].listDevVertex[j].ChildCount),TMWOHistoryOut);
               if j = listColumnSchemaOneLevel[i].listDevVertex.Size-1 then
                 countChild:=countChild + listColumnSchemaOneLevel[i].listDevVertex[j].ChildCount
               else
                 countChild:=countChild + listColumnSchemaOneLevel[i].listDevVertex[j].ChildCount-1;
            end;
           listColumnSchemaOneLevel.Mutable[i]^.countCablesGone:=countChild;
-          //ZCMsgCallBackInterface.TextMessage('количество устройств='+inttostr(columnShemaOneLevel.listDev.Size)+ '   количество выходов из колонки' + inttostr(columnShemaOneLevel.countCablesGone),TMWOHistoryOut);
+          //zcUI.TextMessage('количество устройств='+inttostr(columnShemaOneLevel.listDev.Size)+ '   количество выходов из колонки' + inttostr(columnShemaOneLevel.countCablesGone),TMWOHistoryOut);
 
        end;
    end;
@@ -584,7 +584,7 @@ function createSchemaLevelOne_com(const Context:TZCADCommandContext;operands:TCo
      //получаем структурированный граф (граф без разрывов, переходов методов прокладки. Только устройства подключения и разветвительные коробки)
      listStructurGraphEM:=uzvmanemgetgem.getListStructurGraphEM(listFullGraphEM);
 
-     ZCMsgCallBackInterface.TextMessage('createSchemaLevelOne_com - СТАРТ! ',TMWOHistoryOut);
+     zcUI.TextMessage('createSchemaLevelOne_com - СТАРТ! ',TMWOHistoryOut);
      listColumnSchemaOneLevel:=TVectorOfColumnSchemaOneLevel.Create;
      columnShemaOneLevel:=TColumnSchemaOneLevel.Create;
      columnShemaOneLevel.countCablesGone:=0;
@@ -596,10 +596,10 @@ function createSchemaLevelOne_com(const Context:TZCADCommandContext;operands:TCo
      getCountCablesGone(listColumnSchemaOneLevel,listStructurGraphEM[0].Root);
 
             
-     ZCMsgCallBackInterface.TextMessage('количество listColumnSchemaOneLevel='+inttostr(listColumnSchemaOneLevel.Size),TMWOHistoryOut);
+     zcUI.TextMessage('количество listColumnSchemaOneLevel='+inttostr(listColumnSchemaOneLevel.Size),TMWOHistoryOut);
      for columnShemaOneLevel in listColumnSchemaOneLevel do
        begin
-          ZCMsgCallBackInterface.TextMessage('количество устройств = '+inttostr(columnShemaOneLevel.listDevVertex.Size)+ ' *** количество выходов из колонки = ' + inttostr(columnShemaOneLevel.countCablesGone),TMWOHistoryOut);
+          zcUI.TextMessage('количество устройств = '+inttostr(columnShemaOneLevel.listDevVertex.Size)+ ' *** количество выходов из колонки = ' + inttostr(columnShemaOneLevel.countCablesGone),TMWOHistoryOut);
        end;
 
      columnShema:=0;
@@ -610,8 +610,8 @@ function createSchemaLevelOne_com(const Context:TZCADCommandContext;operands:TCo
         result:=cmd_ok;
      //for i:=0 to vertexDev.ChildCount-1 do
      //begin
-     //  //ZCMsgCallBackInterface.TextMessage(' for columnShemaOneLevel.listDev - ' + inttostr(columnShemaOneLevel.listDev.Size),TMWOHistoryOut);
-     //  //ZCMsgCallBackInterface.TextMessage(' for countColumn - ' + inttostr(countColumn),TMWOHistoryOut);
+     //  //zcUI.TextMessage(' for columnShemaOneLevel.listDev - ' + inttostr(columnShemaOneLevel.listDev.Size),TMWOHistoryOut);
+     //  //zcUI.TextMessage(' for countColumn - ' + inttostr(countColumn),TMWOHistoryOut);
      //  if lColumnSchemaOneLevel.Size > countColumn then
      //    inc(lColumnSchemaOneLevel.Mutable[countColumn]^.countCablesGone);
      //   getListColumnSchemaOneLevel(vertexDev.Childs[i],lColumnSchemaOneLevel,columnShemaOneLevel,countColumn)
@@ -622,7 +622,7 @@ function createSchemaLevelOne_com(const Context:TZCADCommandContext;operands:TCo
      //  begin
      //     graphStrDev.Vertices[intVertex].de
      //  end;
-    ZCMsgCallBackInterface.TextMessage('createSchemaLevelOne_com - ФИНИШ! ',TMWOHistoryOut);
+    zcUI.TextMessage('createSchemaLevelOne_com - ФИНИШ! ',TMWOHistoryOut);
   end;
 
 initialization

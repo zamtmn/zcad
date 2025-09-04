@@ -39,8 +39,8 @@ var
 begin
   drawings.GetCurrentROOT.ObjArray.DeSelect(drawings.GetCurrentDWG.wa.param.SelDesc.Selectedobjcount,drawings.GetCurrentDWG^.deselector);
   if PTZCADDrawing(drawings.GetCurrentDWG).UndoStack.redo(msg)=URRNoCommandsToUndo then
-    ZCMsgCallBackInterface.TextMessage(rscmNoCTR,TMWOShowError);
-  if msg<>'' then ZCMsgCallBackInterface.TextMessage(msg,TMWOHistoryOut);
+    zcUI.TextMessage(rscmNoCTR,TMWOShowError);
+  if msg<>'' then zcUI.TextMessage(msg,TMWOHistoryOut);
   zcRedrawCurrentDrawing;
   result:=cmd_ok;
 end;

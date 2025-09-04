@@ -55,21 +55,21 @@ var
   DC:TDrawContext;
 begin
   if operands='' then begin
-    ZCMsgCallBackInterface.TextMessage('Command must have arguments',TMWOHistoryOut);
+    zcUI.TextMessage('Command must have arguments',TMWOHistoryOut);
     exit(cmd_ok);
   end;
   if drawings.GetCurrentDWG.SelObjArray.Count=0 then begin
-    ZCMsgCallBackInterface.TextMessage(rscmSelEntBeforeComm,TMWOHistoryOut);
+    zcUI.TextMessage(rscmSelEntBeforeComm,TMWOHistoryOut);
     exit(cmd_ok);
   end;
   VarTo:=operands;
   GetPartOfPath(VarFrom,VarTo,',');
   if VarFrom='' then begin
-    ZCMsgCallBackInterface.TextMessage('VarFrom=""',TMWOHistoryOut);
+    zcUI.TextMessage('VarFrom=""',TMWOHistoryOut);
     exit(cmd_ok);
   end;
   if VarTo='' then begin
-    ZCMsgCallBackInterface.TextMessage('VarTo=""',TMWOHistoryOut);
+    zcUI.TextMessage('VarTo=""',TMWOHistoryOut);
     exit(cmd_ok);
   end;
 
@@ -95,7 +95,7 @@ begin
       end;
       psd:=drawings.GetCurrentDWG.SelObjArray.iterate(ir);
     until psd=nil;
-    ZCMsgCallBackInterface.TextMessage(format(rscmNEntitiesProcessed,[count]),TMWOHistoryOut);
+    zcUI.TextMessage(format(rscmNEntitiesProcessed,[count]),TMWOHistoryOut);
     if count>0 then begin
       dc:=drawings.GetCurrentDwg^.CreateDrawingRC;
       DoFormat(drawings.GetCurrentROOT^,ents,drawings.GetCurrentROOT.ObjToConnectedArray,drawings.GetCurrentDwg^,DC,LPSHEmpty,[]);

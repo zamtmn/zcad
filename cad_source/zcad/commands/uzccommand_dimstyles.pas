@@ -37,7 +37,7 @@ function DimStyles_cmd(const Context:TZCADCommandContext;operands:TCommandOperan
 begin
   DimStylesForm:=TDimStylesForm.Create(nil);
   SetHeightControl(DimStylesForm,sysvar.INTF.INTF_DefaultControlHeight^);
-  ZCMsgCallBackInterface.DOShowModal(DimStylesForm);
+  zcUI.DOShowModal(DimStylesForm);
   Freeandnil(DimStylesForm);
   result:=cmd_ok;
 end;

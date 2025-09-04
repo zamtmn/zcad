@@ -195,7 +195,7 @@ begin
     on E:Exception do
     begin
       Printer.Abort;
-      ZCMsgCallBackInterface.TextMessage(e.message,TMWOShowError);
+      zcUI.TextMessage(e.message,TMWOShowError);
     end;
   end;}
   zcRedrawCurrentDrawing;

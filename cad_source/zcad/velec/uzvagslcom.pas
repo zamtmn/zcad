@@ -109,16 +109,16 @@ var
 begin
   //stPoint:=uzegeometry.CreateVertex(0,0,0);
   //if commandmanager.get3dpoint('Specify insert point:',stPoint)= GRNormal then
-  //     ZCMsgCallBackInterface.TextMessage('координата введена',TMWOHistoryOut)
+  //     zcUI.TextMessage('координата введена',TMWOHistoryOut)
   //   else
-  //     ZCMsgCallBackInterface.TextMessage('координаты НЕТ',TMWOHistoryOut);
+  //     zcUI.TextMessage('координаты НЕТ',TMWOHistoryOut);
 
    if uzvagsl.getContourRoom(contourRoom) then                  // получить контур помещения
       if uzvagsl.isRectangelRoom(contourRoom) then begin        //это прямоугольная комната?
-         ZCMsgCallBackInterface.TextMessage('проверки пройдены',TMWOHistoryOut);
+         zcUI.TextMessage('проверки пройдены',TMWOHistoryOut);
          // if mainElementAutoEmbedSL(contourRoom,contourRoomEmbedSL) then  begin
          //  listDeviceinRoom:=uzvagsl.getListDeviceinRoom(contourRoom);  //получен список извещателей внутри помещения
-         //  ZCMsgCallBackInterface.TextMessage('Количество выделяных извещателей = ' + inttostr(listDeviceinRoom.Size));
+         //  zcUI.TextMessage('Количество выделяных извещателей = ' + inttostr(listDeviceinRoom.Size));
          //end;
          //uzvagsl.autoNumberDevice(uzvagslComParams);
    end;

@@ -49,14 +49,14 @@ begin
                s:='Cleaned items: '+inttostr(cleaned)
            +#13#10'Added items: '+inttostr(_UpdatePO)
            +#13#10'File zcadrt.po must be rewriten. Confirm?';
-               if ZCMsgCallBackInterface.TextQuestion('UpdatePO',s)=zccbNo then
+               if zcUI.TextQuestion('UpdatePO',s)=zccbNo then
                  exit;
                RunTimePO.SaveToFile(expandpath(ConcatPaths([PODirectory,ZCADRTBackupPOFileName])));
                actualypo.SaveToFile(expandpath(ConcatPaths([PODirectory,ZCADRTPOFileName])));
                ZCSysParams.saved.updatepo:=false
           end;
      end
-        else ZCMsgCallBackInterface.TextMessage(rsAboutCLSwithUpdatePO,TMWOShowError);
+        else zcUI.TextMessage(rsAboutCLSwithUpdatePO,TMWOShowError);
      result:=cmd_ok;
 end;
 

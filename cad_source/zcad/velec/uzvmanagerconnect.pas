@@ -137,7 +137,7 @@ begin
   Result := FileExists(LibPath);
 
   if not Result then
-    ZCMsgCallBackInterface.TextMessage('Не удалось найти sqlite3.dll по пути: ' + LibPath, TMWOHistoryOut);
+    zcUI.TextMessage('Не удалось найти sqlite3.dll по пути: ' + LibPath, TMWOHistoryOut);
 end;
 
 procedure InitializeComponents;
@@ -166,7 +166,7 @@ begin
   // Create new database
   SQLite3Connection.Open;
   SQLTransaction.Active := True;
-  ZCMsgCallBackInterface.TextMessage('Database created: ' + SQLite3Connection.DatabaseName,TMWOHistoryOut);
+  zcUI.TextMessage('Database created: ' + SQLite3Connection.DatabaseName,TMWOHistoryOut);
 end;
 
 procedure CreateTable;
@@ -184,7 +184,7 @@ begin
                       'icanhd INTEGER)';
     Query.ExecSQL;
     SQLTransaction.Commit;
-    ZCMsgCallBackInterface.TextMessage('Table "dev" created',TMWOHistoryOut);
+    zcUI.TextMessage('Table "dev" created',TMWOHistoryOut);
   finally
     Query.Free;
   end;
@@ -239,14 +239,14 @@ begin
              else
                Query.Params.ParamByName('icanhd').AsInteger := 0;
 
-            //ZCMsgCallBackInterface.TextMessage(' pvd=' + pstring(pvd^.data.Addr.Instance)^,TMWOHistoryOut);
+            //zcUI.TextMessage(' pvd=' + pstring(pvd^.data.Addr.Instance)^,TMWOHistoryOut);
                 Query.ExecSQL;
            end;
         pobj:=drawings.GetCurrentROOT^.ObjArray.iterate(ir); //переход к следующем примитиву в списке выбраных примитивов
       until pobj=nil;
 
     SQLTransaction.Commit;
-    ZCMsgCallBackInterface.TextMessage('Test data added to "dev" table',TMWOHistoryOut);
+    zcUI.TextMessage('Test data added to "dev" table',TMWOHistoryOut);
   finally
     Query.Free;
   end;
@@ -261,14 +261,14 @@ begin
     Query.SQL.Text := 'SELECT * FROM dev';
     Query.Open;
 
-    ZCMsgCallBackInterface.TextMessage('',TMWOHistoryOut);
-    ZCMsgCallBackInterface.TextMessage('Contents of "dev" table:',TMWOHistoryOut);
-    ZCMsgCallBackInterface.TextMessage('ID | Name           | Age | Email',TMWOHistoryOut);
-    ZCMsgCallBackInterface.TextMessage('----------------------------------',TMWOHistoryOut);
+    zcUI.TextMessage('',TMWOHistoryOut);
+    zcUI.TextMessage('Contents of "dev" table:',TMWOHistoryOut);
+    zcUI.TextMessage('ID | Name           | Age | Email',TMWOHistoryOut);
+    zcUI.TextMessage('----------------------------------',TMWOHistoryOut);
 
     //while not Query.EOF do
     //begin
-    //  ZCMsgCallBackInterface.TextMessage(Format('%2d | %-14s | %3d | %s', [
+    //  zcUI.TextMessage(Format('%2d | %-14s | %3d | %s', [
     //    Query.FieldByName('id').AsInteger,
     //    Query.FieldByName('name').AsString,
     //    Query.FieldByName('age').AsInteger,
@@ -289,17 +289,17 @@ end;
 
 function managerconnect_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
  begin
-    ZCMsgCallBackInterface.TextMessage('Запущен диспетчер подключений',TMWOHistoryOut);
+    zcUI.TextMessage('Запущен диспетчер подключений',TMWOHistoryOut);
       InitializeComponents;
   try
     CreateDatabase;
     CreateTable;
     InsertData;
     ShowData;
-    ZCMsgCallBackInterface.TextMessage('Database successfully created and populated!',TMWOHistoryOut);
+    zcUI.TextMessage('Database successfully created and populated!',TMWOHistoryOut);
   except
     on E: Exception do
-      ZCMsgCallBackInterface.TextMessage('Error: ' + E.Message,TMWOHistoryOut);
+      zcUI.TextMessage('Error: ' + E.Message,TMWOHistoryOut);
   end;
   FreeComponents;
 

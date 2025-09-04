@@ -56,7 +56,7 @@ begin
     InfoForm.memo.text:=AString;
     if assigned(SysVar.INTF.INTF_DefaultEditorFontHeight) then
       InfoForm.memo.Font.Height:=SysVar.INTF.INTF_DefaultEditorFontHeight^;
-    ModalResult:=ZCMsgCallBackInterface.DOShowModal(InfoForm);
+    ModalResult:=zcUI.DOShowModal(InfoForm);
 
     if ModalResult=ZCMrOk then begin
       UString:=ConvertToDxfString(InfoForm.memo.text);
@@ -73,7 +73,7 @@ begin
     if assigned(SysVar.INTF.INTF_DefaultEditorFontHeight) then
       SingleLineTextEditorForm.EditField.Font.Height:=SysVar.INTF.INTF_DefaultEditorFontHeight^;
 
-    ModalResult:=ZCMsgCallBackInterface.DOShowModal(SingleLineTextEditorForm);
+    ModalResult:=zcUI.DOShowModal(SingleLineTextEditorForm);
 
     if ModalResult=ZCMrOk then begin
       UString:=ConvertToDxfString(SingleLineTextEditorForm.EditField.text);

@@ -44,10 +44,10 @@ begin
       If IsValidIdent(Operands) then
         DockMaster.ShowControl(Operands,true)
       else
-        ZCMsgCallBackInterface.TextMessage('Show: invalid identificator!',TMWOShowError);
+        zcUI.TextMessage('Show: invalid identificator!',TMWOShowError);
     end;
   end else
-    ZCMsgCallBackInterface.TextMessage(rscmCmdMustHaveOperand,TMWOShowError);
+    zcUI.TextMessage(rscmCmdMustHaveOperand,TMWOShowError);
   result:=cmd_ok;
 end;
 

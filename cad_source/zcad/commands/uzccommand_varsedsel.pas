@@ -57,7 +57,7 @@ begin
   counter:=0;
 
   InfoFormVar.memo.text:='';
-  modalresult:=ZCMsgCallBackInterface.DOShowModal(InfoFormVar);
+  modalresult:=zcUI.DOShowModal(InfoFormVar);
   if modalresult=ZCMrOk then begin
     u8s:=InfoFormVar.memo.text;
     astring:={utf8tosys}(u8s);
@@ -78,11 +78,11 @@ begin
     end;
     pobj:=drawings.GetCurrentROOT.ObjArray.iterate(ir);
     until pobj=nil;
-    ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIRePrepareObject);
+    zcUI.Do_GUIaction(nil,zcMsgUIRePrepareObject);
   end;
 
   mem.done;
-  ZCMsgCallBackInterface.TextMessage(format(rscmNEntitiesProcessed,[counter]),TMWOHistoryOut);
+  zcUI.TextMessage(format(rscmNEntitiesProcessed,[counter]),TMWOHistoryOut);
   result:=cmd_ok;
 end;
 

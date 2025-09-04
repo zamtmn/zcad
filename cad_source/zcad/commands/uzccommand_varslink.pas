@@ -49,7 +49,7 @@ begin
     pCentralVarext:=pmainobj^.GetExtension<TVariablesExtender>;
     if pCentralVarext=nil then begin
       pmainobj:=nil;
-      ZCMsgCallBackInterface.TextMessage('Please select device with variables',TMWOSilentShowError);
+      zcUI.TextMessage('Please select device with variables',TMWOSilentShowError);
     end;
   until pCentralVarext<>nil;
 
@@ -58,7 +58,7 @@ begin
       exit(cmd_ok);
     pVarext:=pobj^.GetExtension<TVariablesExtender>;
     if pVarext=nil then begin
-      ZCMsgCallBackInterface.TextMessage('Please select device with variables',TMWOSilentShowError);
+      zcUI.TextMessage('Please select device with variables',TMWOSilentShowError);
     end else begin
       pCentralVarext.addDelegate({pmainobj,}pobj,pVarext);
     end;

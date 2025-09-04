@@ -173,26 +173,26 @@ begin
   if (FactColCount mod 2)=0 then
     inc(FactColCount);
   if (FactColCount<3){or((FactColCount mod 2)<>1)} then begin
-    ZCMsgCallBackInterface.TextMessage(format('In row %d wrong number of parameters',[row+1]),TMWOHistoryOut);
+    zcUI.TextMessage(format('In row %d wrong number of parameters',[row+1]),TMWOHistoryOut);
     exit;
   end;
   if Length(FDoc.Cells[0,Row])>1 then
     if copy(FDoc.Cells[0,Row],1,2)='##' then begin
-      ZCMsgCallBackInterface.TextMessage(format('Row %d commented out',[row+1]),TMWOHistoryOut);
+      zcUI.TextMessage(format('Row %d commented out',[row+1]),TMWOHistoryOut);
       exit;
     end;
   Filter:=TEntsTypeFilter.Create;
   Filter.AddTypeName(FDoc.Cells[0,Row]);
   Filter.SetFilter;
   if Filter.IsEmpty then begin
-    ZCMsgCallBackInterface.TextMessage(format('In row %d not found entity type %s',[row+1,FDoc.Cells[0,Row]]),TMWOHistoryOut);
+    zcUI.TextMessage(format('In row %d not found entity type %s',[row+1,FDoc.Cells[0,Row]]),TMWOHistoryOut);
     Filter.Destroy;
     exit;
   end;
   entarray.init(100);
   drawings.FindMultiEntityByType(Filter,entarray);
   if entarray.Count=0 then begin
-    ZCMsgCallBackInterface.TextMessage(format('In row %d entity type %s not found in drawing',[row+1,FDoc.Cells[0,Row]]),TMWOHistoryOut);
+    zcUI.TextMessage(format('In row %d entity type %s not found in drawing',[row+1,FDoc.Cells[0,Row]]),TMWOHistoryOut);
     Filter.Destroy;
     entarray.Clear;
     entarray.done;
@@ -224,8 +224,8 @@ begin
   end;
 
   if a1^.Count<>1 then
-    //ZCMsgCallBackInterface.TextMessage(format('In row %d found %d candidats (%s)',[row+1,a1^.Count,RowValue(FDoc,row)]),TMWOHistoryOut);
-    ZCMsgCallBackInterface.TextMessage(format('In row %d found %d candidats (%s)',[row+1,a1^.Count,FDoc.Cells[2,Row]]),TMWOHistoryOut);
+    //zcUI.TextMessage(format('In row %d found %d candidats (%s)',[row+1,a1^.Count,RowValue(FDoc,row)]),TMWOHistoryOut);
+    zcUI.TextMessage(format('In row %d found %d candidats (%s)',[row+1,a1^.Count,FDoc.Cells[2,Row]]),TMWOHistoryOut);
   if a1^.Count<>0 then begin
     while setvarfrom<FactColCount do begin
       VarOrPropertyName:=FDoc.Cells[setvarfrom,Row];

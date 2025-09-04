@@ -327,9 +327,9 @@ begin
   Details:='';
   CheckEntity(pv,fe.fd,'','',Details,true);
   if Details='' then
-    ZCMsgCallBackInterface.TextMessage(format(rscmNEntityFrom,[fe.Current+1,fe.Finded.Count]),TMWOHistoryOut)
+    zcUI.TextMessage(format(rscmNEntityFrom,[fe.Current+1,fe.Finded.Count]),TMWOHistoryOut)
   else
-    ZCMsgCallBackInterface.TextMessage(format(rscmNEntityFromWithDetails,[fe.Current+1,fe.Finded.Count,Details]),TMWOHistoryOut);
+    zcUI.TextMessage(format(rscmNEntityFromWithDetails,[fe.Current+1,fe.Finded.Count,Details]),TMWOHistoryOut);
   drawings.GetCurrentDWG^.wa.ZoomToVolume(ScaleBB(pv^.vp.BoundingBox,10));
 end;
 
@@ -396,7 +396,7 @@ begin
       FindInSelection(fd,text,PSelArr,Finded)
     else
       FindInArray(fd,text,drawings.GetCurrentDWG^.GetCurrentROOT^.ObjArray,Finded);
-    ZCMsgCallBackInterface.TextMessage(format(rscmNEntitiesFounded,[Finded.Count]),TMWOHistoryOut);
+    zcUI.TextMessage(format(rscmNEntitiesFounded,[Finded.Count]),TMWOHistoryOut);
 
     if FindCommandParam.Action.SelectResult<>SR_Nohhing then begin
       if FindCommandParam.Action.SelectResult=SR_Select then begin

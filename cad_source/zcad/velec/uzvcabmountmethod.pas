@@ -84,7 +84,7 @@ begin
      MountingMethodsTreeSelector.setValue(PStringTreeType(PInstance)^);//присваивсем  начальное значение ближайшее к данному
      MountingMethodsTreeSelector.caption:=('MountingMethodsFastEditor');//называем окно
      MountingMethodsTreeSelector.ActiveControl:=MountingMethodsTreeSelector.StringsTree;//назначаем  активный  контрол
-     modalresult:=ZCMsgCallBackInterface.DOShowModal(MountingMethodsTreeSelector);//показываем форму модально
+     modalresult:=zcUI.DOShowModal(MountingMethodsTreeSelector);//показываем форму модально
      if modalresult=ZCMrOk then//если нажали окей
        PStringTreeType(PInstance)^:=MountingMethodsTreeSelector.TreeResult; //сохраняем выбранное значение
      StoreBoundsToSavedUnit('MountingMethodsTreeSelectorWND',MountingMethodsTreeSelector.BoundsRect);//сохраняем размеры формы

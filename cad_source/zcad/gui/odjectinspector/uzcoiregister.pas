@@ -177,9 +177,9 @@ begin
                                              PGDBaseObject(pcurrobj)^.FormatAfterFielfmod(EDContext.ppropcurrentedit^.valueAddres,currobjgdbtype);
                                         end;
                 end;
-  ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIResetOGLWNDProc);
+  zcUI.Do_GUIaction(nil,zcMsgUIResetOGLWNDProc);
   zcRedrawCurrentDrawing;
-  ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIActionRedraw);
+  zcUI.Do_GUIaction(nil,zcMsgUIActionRedraw);
 
   // убрано, потому что с этим не работают фильтры в инспекторе
   //if GDBobj then
@@ -195,7 +195,7 @@ begin
 end;
 class procedure tdummyclass._onAfterFreeEditor(sender:tobject);
 begin
-  ZCMsgCallBackInterface.Do_SetNormalFocus;
+  zcUI.Do_SetNormalFocus;
 end;
 
 procedure StoreAndSetGDBObjInsp(const UndoStack:PTZctnrVectorUndoCommands;const f:TzeUnitsFormat;exttype:PUserTypeDescriptor; addr,context:pointer;popoldpos:boolean=false);
@@ -278,7 +278,7 @@ begin
   GDBobjinsp.Align:=alClient;
   GDBobjinsp.BorderStyle:=bsNone;
   GDBobjinsp.Parent:=tform(Form);
-  ZCMsgCallBackInterface.RegisterHandler_KeyDown(GDBobjinsp.myKeyDown);
+  zcUI.RegisterHandler_KeyDown(GDBobjinsp.myKeyDown);
 end;
 function CreateObjInspInstance(FormName:string):TForm;
 begin
@@ -288,7 +288,7 @@ end;
 function ObjInspCopyToClip_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 begin
    if GetCurrentObj=nil then
-                             ZCMsgCallBackInterface.TextMessage(rscmCommandOnlyCTXMenu,TMWOHistoryOut)
+                             zcUI.TextMessage(rscmCommandOnlyCTXMenu,TMWOHistoryOut)
                          else
                              begin
                                   if uppercase(Operands)='VAR' then
@@ -303,7 +303,7 @@ begin
 end;
 procedure tdummyclass.ReBuild(sender:TObject;GUIMode:TZMessageID);
 begin
-       if (GUIMode=ZMsgID_GUIRePrepareObject)then
+       if (GUIMode=zcMsgUIRePrepareObject)then
        begin
          if GetCurrentObj=@MSEditor then  MSEditor.CreateUnit(drawings.GetUnitsFormat);
        if assigned(GDBobjinsp)then
@@ -314,8 +314,8 @@ begin
 end;
 procedure tdummyclass.UpdateObjInsp(sender:TObject;GUIMode:TZMessageID);
 begin
-   if (GUIMode=ZMsgID_GUIActionRedraw)
-   or (GUIMode=ZMsgID_GUITimerTick) then
+   if (GUIMode=zcMsgUIActionRedraw)
+   or (GUIMode=zcMsgUITimerTick) then
      if assigned(GDBobjinsp)then
                                 begin
                                      GDBobjinsp.updateinsp;
@@ -323,12 +323,12 @@ begin
 end;
 procedure tdummyclass.SetCurrentObjDefault;
 begin
-  if (GUIMode=ZMsgID_GUISetDefaultObject) then
+  if (GUIMode=zcMsgUISetDefaultObject) then
     uzcoiregister.SetCurrentObjDefault
 end;
 procedure tdummyclass.FreEditor;
 begin
-       if (GUIMode=ZMsgID_GUIFreEditorProc) then
+       if (GUIMode=zcMsgUIFreEditorProc) then
        if assigned(GDBobjinsp)then
                                   begin
                                        GDBobjinsp.freeeditor;
@@ -336,7 +336,7 @@ begin
 end;
 procedure tdummyclass.StoreAndFreeEditor;
 begin
-       if (GUIMode=ZMsgID_GUIStoreAndFreeEditorProc) then
+       if (GUIMode=zcMsgUIStoreAndFreeEditorProc) then
        if assigned(GDBobjinsp)then
                                   begin
                                        GDBobjinsp.StoreAndFreeEditor;
@@ -344,7 +344,7 @@ begin
 end;
 procedure tdummyclass.ReturnToDefault;
 begin
-  if (GUIMode=ZMsgID_GUIReturnToDefaultObject) then
+  if (GUIMode=zcMsgUIReturnToDefaultObject) then
        if assigned(GDBobjinsp)then
                                   begin
                                        GDBobjinsp.StoredData.PObj:=nil;
@@ -457,25 +457,25 @@ initialization
   OIManager.DifferentName:=rsDifferent;
 
   //GDBobjinsp.currpd:=nil;
-  ZCMsgCallBackInterface.RegisterHandler_PrepareObject(StoreAndSetGDBObjInsp());
+  zcUI.RegisterHandler_PrepareObject(StoreAndSetGDBObjInsp());
   dummyclass:=tdummyclass.create;
-  ZCMsgCallBackInterface.RegisterHandler_GUIAction(dummyclass.UpdateObjInsp);
+  zcUI.RegisterHandler_GUIAction(dummyclass.UpdateObjInsp);
   //UpdateObjInspProc:=dummyclass.UpdateObjInsp;
-  ZCMsgCallBackInterface.RegisterHandler_GUIAction(dummyclass.ReturnToDefault());
+  zcUI.RegisterHandler_GUIAction(dummyclass.ReturnToDefault());
   //ReturnToDefaultProc:=ReturnToDefault;
   //ClrarIfItIsProc:=ClrarIfItIs;
-  ZCMsgCallBackInterface.RegisterHandler_GUIAction(dummyclass.ReBuild);
+  zcUI.RegisterHandler_GUIAction(dummyclass.ReBuild);
   //ReBuildProc:=ReBuild;
-  ZCMsgCallBackInterface.RegisterHandler_GUIAction(dummyclass.SetCurrentObjDefault);
+  zcUI.RegisterHandler_GUIAction(dummyclass.SetCurrentObjDefault);
   //SetCurrentObjDefaultProc:=SetCurrentObjDefault;
   //GetCurrentObjProc:=GetCurrentObj;
   GetNameColWidthProc:=GetNameColWidth;
   GetOIWidthProc:=GetOIWidth;
   //GetPeditorProc:=GetPeditor;
-  ZCMsgCallBackInterface.RegisterHandler_GUIAction(dummyclass.FreEditor);
+  zcUI.RegisterHandler_GUIAction(dummyclass.FreEditor);
   //FreEditorProc:=FreEditor;
-  ZCMsgCallBackInterface.RegisterHandler_GUIAction(dummyclass.StoreAndFreeEditor);
-  ZCMsgCallBackInterface.RegisterHandler_GetFocusedControl(dummyclass.GetPeditorFocusPriority);
+  zcUI.RegisterHandler_GUIAction(dummyclass.StoreAndFreeEditor);
+  zcUI.RegisterHandler_GetFocusedControl(dummyclass.GetPeditorFocusPriority);
   //StoreAndFreeEditorProc:=StoreAndFreeEditor;
   CreateZCADCommand(@ObjInspCopyToClip_com,'ObjInspCopyToClip',0,0).overlay:=true;
 

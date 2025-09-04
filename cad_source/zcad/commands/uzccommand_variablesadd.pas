@@ -108,7 +108,7 @@ begin
 end;
 procedure TEntsProcessedReport.Report;
 begin
-  ZCMsgCallBackInterface.TextMessage(sysutils.format(rscmEntitiesCounter,[Processed,Total,Selected,Filtred]),TMWOHistoryOut);
+  zcUI.TextMessage(sysutils.format(rscmEntitiesCounter,[Processed,Total,Selected,Filtred]),TMWOHistoryOut);
 end;
 
 procedure VariablesAdd_com.CommandStart(const Context:TZCADCommandContext;Operands:TCommandOperands);
@@ -123,7 +123,7 @@ begin
   end
   else
   begin
-    ZCMsgCallBackInterface.TextMessage(rscmSelEntBeforeComm,TMWOHistoryOut);
+    zcUI.TextMessage(rscmSelEntBeforeComm,TMWOHistoryOut);
     Commandmanager.executecommandend;
   end;
 end;
@@ -183,7 +183,7 @@ begin
   end
   else
   begin
-    ZCMsgCallBackInterface.TextMessage(rscmSelEntBeforeComm,TMWOHistoryOut);
+    zcUI.TextMessage(rscmSelEntBeforeComm,TMWOHistoryOut);
     Commandmanager.executecommandend;
   end;
 end;

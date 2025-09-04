@@ -55,7 +55,7 @@ function _3DPoly_com_CommandStart(const Context:TZCADCommandContext;operands:TCo
 begin
   p3dpl:=nil;
   drawings.GetCurrentDWG^.wa.SetMouseMode((MGet3DPoint) or (MMoveCamera) or (MRotateCamera));
-  ZCMsgCallBackInterface.TextMessage(rscmFirstPoint,TMWOHistoryOut);
+  zcUI.TextMessage(rscmFirstPoint,TMWOHistoryOut);
   drawings.GetCurrentDWG^.wa.param.processObjConstruct:=true;
   result:=cmd_ok;
 end;
@@ -69,7 +69,7 @@ begin
   if p3dpl<>nil then
   if p3dpl^.VertexArrayInOCS.Count<2 then
                                          begin
-                                              ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIReturnToDefaultObject);
+                                              zcUI.Do_GUIaction(nil,zcMsgUIReturnToDefaultObject);
                                               //p3dpl^.YouDeleted;
                                               cc:=pCommandRTEdObject(_self)^.UndoTop;
                                               PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack.ClearFrom(cc);

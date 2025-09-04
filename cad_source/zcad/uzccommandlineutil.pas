@@ -143,7 +143,7 @@ begin
             s:=v.data.ptd^.GetValueAsString(v.data.Addr.Instance);
             v.data.ptd^.MagicFreeInstance(v.data.Addr.Instance);
             //v.Instance:=v.Instance;
-            ZCMsgCallBackInterface.TextMessage(Format(rsExprOutText,[expr,s]),TMWOHistoryOut);
+            zcUI.TextMessage(Format(rsExprOutText,[expr,s]),TMWOHistoryOut);
           end;
         end else
           if commandmanager.FindCommand(uppercase({cmd}command))<>nil then begin
@@ -175,7 +175,7 @@ begin
               until (cmd='')or(not parsed);
 
               if parsed then begin
-                ZCMsgCallBackInterface.TextMessage(Format(rsExprOutText,[input,superexpr]),TMWOHistoryOut);
+                zcUI.TextMessage(Format(rsExprOutText,[input,superexpr]),TMWOHistoryOut);
                 if IsParsed('_realnumber'#0'_softspace'#0'=,_realnumber'#0'_softspace'#0'=,_realnumber'#0,superexpr,parseresult)then begin
                   if drawings.GetCurrentDWG<>nil then
                   if drawings.GetCurrentDWG.wa.getviewcontrol<>nil then begin
@@ -228,7 +228,7 @@ begin
                 if MakeInput(input) then
                   exit
                 else
-                  ZCMsgCallBackInterface.TextMessage('Unable to parse line "'+subexpr+'"',TMWOShowError);
+                  zcUI.TextMessage('Unable to parse line "'+subexpr+'"',TMWOShowError);
               end;
             end;
           end;

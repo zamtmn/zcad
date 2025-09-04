@@ -88,11 +88,11 @@ begin
 end;
 procedure HandleCommandLineMode(GUIMode:TZMessageID);
 begin
-     if GUIMode=ZMsgID_GUICMDLineReadyMode then begin
+     if GUIMode=zcMsgUICMDLineReadyMode then begin
        if assigned(CLine) then
          CLine.SetMode(CLCOMMANDREDY)
      end
-else if GUIMode=ZMsgID_GUICMDLineRunMode then begin
+else if GUIMode=zcMsgUICMDLineRunMode then begin
      if assigned(CLine) then
        CLine.SetMode(CLCOMMANDRUN)
      end;
@@ -153,22 +153,22 @@ begin
 end;
 procedure HandleCmdLine(GUIMode:TZMessageID);
 begin
-  if GUIMode in [ZMsgID_GUICMDLineCheck] then begin
+  if GUIMode in [zcMsgUICMDLineCheck] then begin
     if INTFCommandLineEnabled or (prompt.Highlight.Count>0) then
       ShowCmdLine
     else
       HideCmdLine;
   end;
-  if GUIMode in [ZMsgID_GUIDisable] then
+  if GUIMode in [zcMsgUIDisable] then
     DisableCmdLine
-  else if (GUIMode in [ZMsgID_GUIEnable])then
+  else if (GUIMode in [zcMsgUIEnable])then
     EnableCmdLine;
 end;
 
 procedure TCLine.SetPrompt(APrompt:String{;ATPromptResults:TCommandLinePrompt.TPromptResults});
 begin
   prompt.SetHighLightedText(APrompt,[]{,-1});
-  HandleCmdLine(ZMsgID_GUICMDLineCheck);
+  HandleCmdLine(zcMsgUICMDLineCheck);
 end;
 
 procedure TCLine.SetPrompt(APrompt:TParserCommandLinePrompt.TGeneralParsedText);
@@ -180,7 +180,7 @@ begin
   ts:=APrompt.GetResult(pt);
   prompt.SetHighLightedText(ts,pt.Parts.Mutable[0][0..pt.Parts.Size-1]);
   pt.Free;
-  HandleCmdLine(ZMsgID_GUICMDLineCheck);
+  HandleCmdLine(zcMsgUICMDLineCheck);
 end;
 
 procedure TCLine.FormCreate(Sender: TObject);
@@ -309,8 +309,8 @@ begin
                          DMenu.Top:=pint^;}
     //CWindow:=TCWindow.CreateNew(application);
     //CWindow.Show;
-    ZCMsgCallBackInterface.RegisterHandler_GUIMode(HandleCommandLineMode);
-    HandleCmdLine(ZMsgID_GUICMDLineCheck);
+    zcUI.RegisterHandler_GUIMode(HandleCommandLineMode);
+    HandleCmdLine(zcMsgUICMDLineCheck);
     commandmanager.AddClPrompt(self);
 end;
 destructor TCLine.Destroy;
@@ -412,12 +412,12 @@ begin
   //historychanged:=false;
   ZCADGUIManager.RegisterZCADFormInfo('CommandLine',rsCommandLineWndName,TCLine,rect(200,100,600,100),nil,nil,@CLine);
 
-  ZCMsgCallBackInterface.RegisterHandler_HistoryOut(HistoryOut);
+  zcUI.RegisterHandler_HistoryOut(HistoryOut);
   //uzcinterface.HistoryOutStr:=HistoryOutStr;
 
-  ZCMsgCallBackInterface.RegisterHandler_GUIMode(HandleCmdLine);
+  zcUI.RegisterHandler_GUIMode(HandleCmdLine);
   //uzcinterface.StatusLineTextOut:=StatusLineTextOut;
-  ZCMsgCallBackInterface.RegisterHandler_LogError(LogError);
-  ZCMsgCallBackInterface.RegisterHandler_GetFocusedControl(CLine.GetCLineFocusPriority);
+  zcUI.RegisterHandler_LogError(LogError);
+  zcUI.RegisterHandler_GetFocusedControl(CLine.GetCLineFocusPriority);
   //uzcinterface.TMWOSilentShowError:=LogError;
 end.

@@ -297,7 +297,7 @@ begin
                                         drawings.GetCurrentDWG^.GetCurrentROOT^.FormatAfterEdit(drawings.GetCurrentDWG^,dc);
                                    end;
                           end;
-  ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIActionRebuild);
+  zcUI.Do_GUIaction(nil,zcMsgUIActionRebuild);
   //if assigned(SetVisuaProplProc)then
   //                                  SetVisuaProplProc;
 end;

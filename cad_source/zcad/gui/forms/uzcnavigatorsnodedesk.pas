@@ -286,7 +286,7 @@ begin
   s:='';
   for ni in path do
     s:=format('%s(%s|%s|%p)',[s,ni.name,ni.id,ni.pent]);
-  ZCMsgCallBackInterface.TextMessage(pref+s,TMWOHistoryOut);
+  zcUI.TextMessage(pref+s,TMWOHistoryOut);
 end;}
 
 procedure TBaseRootNodeDesk.RecursiveSaveState(PrevNodeExpanded:Boolean;var Node:PVirtualNode;CurrPath:TNodePath;NodesStates:TNodesStates);
@@ -359,12 +359,12 @@ begin
           IsEqual:=False;
      end;
      if IsEqual then begin
-       //ZCMsgCallBackInterface.TextMessage('yes!',TMWOHistoryOut);
+       //zcUI.TextMessage('yes!',TMWOHistoryOut);
        exit(true);
      end;
     end;
       result:=false;
-    //ZCMsgCallBackInterface.TextMessage('end((',TMWOHistoryOut);
+    //zcUI.TextMessage('end((',TMWOHistoryOut);
 end;
 
 procedure TBaseRootNodeDesk.RecursiveRestoreState(Node:PVirtualNode;Path:TNodePath;var StartInNodestates:integer;NodesStates:TNodesStates;Dist:Integer);

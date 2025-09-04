@@ -42,12 +42,12 @@ begin
   begin
   drawings.GetCurrentDWG.wa.SetMouseMode((MGet3DPointWOOP) or (MMoveCamera) or (MRotateCamera) or (MGet3DPoint));
   //drawings.GetCurrentDWG.OGLwindow1.param.seldesc.MouseFrameON := true;
-  ZCMsgCallBackInterface.TextMessage('Click and test inside/outside of a 2D polyline:',TMWOHistoryOut);
+  zcUI.TextMessage('Click and test inside/outside of a 2D polyline:',TMWOHistoryOut);
   exit;
   end;
   //else
   begin
-       ZCMsgCallBackInterface.TextMessage('Before run 2DPolyline must be selected',TMWOHistoryOut);
+       zcUI.TextMessage('Before run 2DPolyline must be selected',TMWOHistoryOut);
        commandmanager.executecommandend;
   end;
 end;
@@ -58,9 +58,9 @@ begin
   if (button and MZW_LBUTTON)<>0 then
   begin
        if pgdbobjlwpolyline(drawings.GetCurrentDWG.GetLastSelected).isPointInside(wc) then
-       ZCMsgCallBackInterface.TextMessage('Inside!',TMWOHistoryOut)
+       zcUI.TextMessage('Inside!',TMWOHistoryOut)
        else
-       ZCMsgCallBackInterface.TextMessage('Outside!',TMWOHistoryOut)
+       zcUI.TextMessage('Outside!',TMWOHistoryOut)
   end;
 end;
 

@@ -108,7 +108,7 @@ procedure TZCADDrawingsManager.AfterEnt(const pent:PGDBObjEntity);
 begin
   if assigned(pent)then
     pent^.YouChanged(GetCurrentDWG^);
-  ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIActionRebuild);
+  zcUI.Do_GUIaction(nil,zcMsgUIActionRebuild);
 end;
 
 procedure TZCADDrawingsManager.AfterAutoProcessGDB(const AUndoMethod:TMethod);
@@ -129,7 +129,7 @@ var
   DC:TDrawContext;
   Actlt:TVisActuality;
 begin
-  if GUIAction=ZMsgID_GUIActionRedrawContent then
+  if GUIAction=zcMsgUIActionRedrawContent then
   begin
     pdwg:=drawings.GetCurrentDWG;
     if pdwg<>nil then begin
@@ -242,7 +242,7 @@ procedure TZCADDrawingsManager.resetoglwnd;
 var
    pdwg:PTSimpleDrawing;
 begin
-  if GUIAction<>ZMsgID_GUIResetOGLWNDProc then
+  if GUIAction<>zcMsgUIResetOGLWNDProc then
     exit;
   pdwg:=drawings.GetCurrentDWG;
   if pdwg<>nil then
@@ -545,7 +545,7 @@ begin
        //addfromdxf(sysvar.path.Program_Data^+'sample\test_dxf\shema_Poly_Line_Text_Circle_Arc.dxf',@CurrentDWG.ObjRoot);
   end;
   MainBlockCreateProc:=AddBlockFromDBIfNeed;
-  ZCMsgCallBackInterface.RegisterHandler_GUIAction(redrawoglwnd);
+  zcUI.RegisterHandler_GUIAction(redrawoglwnd);
 end;
 constructor TZCADDrawingsManager.initnul;
 //var tp:GDBTextStyleProp;
@@ -1022,7 +1022,7 @@ begin
   //pbasefont:=FontManager.{FindFonf}getAddres('amgdt.shx');
   //pbasefont:=FontManager.getAddres('gothice.shx');
   drawings.init;
-  ZCMsgCallBackInterface.RegisterHandler_GUIAction(drawings.ResetOGLWND);
+  zcUI.RegisterHandler_GUIAction(drawings.ResetOGLWND);
   //SetCurrentDWGProc:=SetCurrentDWG;
   BlockBaseDWG:=drawings.CreateDWG('','');
   _GetUndoStack:=drawings.GetUndoStack;

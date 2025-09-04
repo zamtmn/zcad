@@ -49,7 +49,7 @@ end;
 
 initialization
  CWindow:=TCWindow.Create(nil);
- ZCMsgCallBackInterface.RegisterHandler_HistoryOut(HistoryOut);
+ zcUI.RegisterHandler_HistoryOut(HistoryOut);
  CreateZCADCommand(@TW_com,'TextWindow',0,0).overlay:=true;
 finalization;
  CWindow.Free;

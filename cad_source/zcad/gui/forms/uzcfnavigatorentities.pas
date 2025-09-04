@@ -96,7 +96,7 @@ begin
 
    OnShow:=RefreshTree;
 
-   ZCMsgCallBackInterface.RegisterHandler_GUIAction(AutoRefreshTree);
+   zcUI.RegisterHandler_GUIAction(AutoRefreshTree);
 end;
 procedure TNavigatorEntities.RefreshTree(Sender: TObject);
 var
@@ -128,7 +128,7 @@ begin
 end;
 procedure TNavigatorEntities.AutoRefreshTree(sender:TObject;GUIAction:TZMessageID);
 begin
-  if GUIAction=ZMsgID_GUIActionRebuild then
+  if GUIAction=zcMsgUIActionRebuild then
     RefreshTree(sender);
 end;
 

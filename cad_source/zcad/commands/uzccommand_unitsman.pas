@@ -43,9 +43,9 @@ begin
     if PUnit<>nil then
       EditUnit(PUnit^)
     else
-      ZCMsgCallBackInterface.TextMessage('unit not found!',TMWOHistoryOut);
+      zcUI.TextMessage('unit not found!',TMWOHistoryOut);
   end else
-    ZCMsgCallBackInterface.TextMessage('Specify unit name!',TMWOHistoryOut);
+    zcUI.TextMessage('Specify unit name!',TMWOHistoryOut);
   result:=cmd_ok;
 end;
 

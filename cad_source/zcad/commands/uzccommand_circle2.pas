@@ -40,7 +40,7 @@ implementation
 function Circle_com_CommandStart(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 begin
   drawings.GetCurrentDWG^.wa.SetMouseMode((MGet3DPoint) or (MMoveCamera) or (MRotateCamera));
-  ZCMsgCallBackInterface.TextMessage(rscmCenterPointCircle,TMWOHistoryOut);
+  zcUI.TextMessage(rscmCenterPointCircle,TMWOHistoryOut);
   result:=cmd_ok;
 end;
 
@@ -55,7 +55,7 @@ begin
   if (button and MZW_LBUTTON)<>0 then
   begin
     dc:=drawings.GetCurrentDWG^.CreateDrawingRC;
-    ZCMsgCallBackInterface.TextMessage(rscmPointOnCircle,TMWOHistoryOut);
+    zcUI.TextMessage(rscmPointOnCircle,TMWOHistoryOut);
 
     pc := PGDBObjCircle(ENTF_CreateCircle(@drawings.GetCurrentDWG^.ConstructObjRoot,@drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray,
                         drawings.GetCurrentDWG^.GetCurrentLayer,drawings.GetCurrentDWG^.GetCurrentLType,lwgdbdefault,ClByLayer,

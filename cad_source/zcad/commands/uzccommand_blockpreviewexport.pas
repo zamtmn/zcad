@@ -168,7 +168,7 @@ begin
       result:=cmd_ok;
     end;
   end else begin
-    ZCMsgCallBackInterface.TextMessage('No current drawing???',TMWOSilentShowError);
+    zcUI.TextMessage('No current drawing???',TMWOSilentShowError);
     result:=cmd_error;
   end;
 end;

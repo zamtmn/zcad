@@ -68,11 +68,11 @@ begin
   if counter>0 then
   begin
   drawings.GetCurrentDWG^.wa.SetMouseMode((MGet3DPoint) or (MMoveCamera) or (MRotateCamera));
-  ZCMsgCallBackInterface.TextMessage(rscmBasePoint,TMWOHistoryOut);
+  zcUI.TextMessage(rscmBasePoint,TMWOHistoryOut);
   end
   else
   begin
-    ZCMsgCallBackInterface.TextMessage(rscmSelEntBeforeComm,TMWOHistoryOut);
+    zcUI.TextMessage(rscmSelEntBeforeComm,TMWOHistoryOut);
     Commandmanager.executecommandend;
   end;
 end;

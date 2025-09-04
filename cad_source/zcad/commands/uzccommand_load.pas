@@ -113,9 +113,9 @@ begin
   if length(operands)=0 then begin
     if LastFileHandle=-1 then
       LastFileHandle:=Ext2LoadProcMap.GetDefaultFileFormatHandle(Ext2LoadProcMap.DefaultExt);
-    ZCMsgCallBackInterface.Do_BeforeShowModal(nil);
+    zcUI.Do_BeforeShowModal(nil);
     isload:=OpenFileDialog(s,LastFileHandle,'',Ext2LoadProcMap.GetCurrentFileFilter,'',rsOpenFile);
-    ZCMsgCallBackInterface.Do_AfterShowModal(nil);
+    zcUI.Do_AfterShowModal(nil);
     if not isload then begin
       result:=cmd_cancel;
       exit;
@@ -137,13 +137,13 @@ begin
       internal_load_merge(s,loadproc,tloload);
     drawings.GetCurrentDWG.wa.Drawer.delmyscrbuf;//буфер чистить, потому что он может оказаться невалидным в случае отрисовки во время
                                                  //создания или загрузки
-    ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIActionRedrawContent);
+    zcUI.Do_GUIaction(nil,zcMsgUIActionRedrawContent);
     if assigned(ProcessFilehistoryProc) then
       ProcessFilehistoryProc(s);
     drawings.GetCurrentDWG^.LostActuality;
     result:=cmd_ok;
   end else begin
-    ZCMsgCallBackInterface.TextMessage('LOAD:'+format(rsUnableToOpenFile,[s+'('+Operands+')']),TMWOShowError);
+    zcUI.TextMessage('LOAD:'+format(rsUnableToOpenFile,[s+'('+Operands+')']),TMWOShowError);
     result:=cmd_error;
   end;
 end;

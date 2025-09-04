@@ -49,7 +49,7 @@ begin
   if operands='QS' then begin
     s1:=ExpandPath(sysvar.SAVE.SAVE_Auto_FileName^);
     s:=format(rsAutoSave,[s1]);
-    ZCMsgCallBackInterface.TextMessage(s,TMWOHistoryOut);
+    zcUI.TextMessage(s,TMWOHistoryOut);
     itAutoSave:=True;
   end else begin
     if extractfilepath(drawings.GetCurrentDWG.GetFileName)='' then begin

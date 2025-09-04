@@ -49,9 +49,9 @@ begin
     if u<>nil then
       EditUnit(u^)
     else
-      ZCMsgCallBackInterface.TextMessage(format(rsUnableToFindUnit,[op]),TMWOHistoryOut);
+      zcUI.TextMessage(format(rsUnableToFindUnit,[op]),TMWOHistoryOut);
   end else
-    ZCMsgCallBackInterface.TextMessage(rscmCmdMustHaveOperand,TMWOHistoryOut);
+    zcUI.TextMessage(rscmCmdMustHaveOperand,TMWOHistoryOut);
   result:=cmd_ok;
 end;
 

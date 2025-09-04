@@ -98,7 +98,7 @@ var
   fileext:AnsiString;
   dr:TZCMsgDialogResult;
 begin
-  ZCMsgCallBackInterface.Do_BeforeShowModal(nil);
+  zcUI.Do_BeforeShowModal(nil);
   s:=drawings.GetCurrentDWG.GetFileName;
   if SaveFileDialog(s,'dxf',ProjectFileFilter,'',rsSaveFile) then begin
     if FileExists(s) then begin
@@ -113,13 +113,13 @@ begin
       SaveDXFDPAS(s);
       drawings.GetCurrentDWG.SetFileName(s);
       drawings.GetCurrentDWG.ChangeStampt(false);
-      ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIActionRedraw);
+      zcUI.Do_GUIaction(nil,zcMsgUIActionRedraw);
     end else begin
-      ZCMsgCallBackInterface.TextMessage(Format(rsunknownFileExt, [fileext]),TMWOShowError);
+      zcUI.TextMessage(Format(rsunknownFileExt, [fileext]),TMWOShowError);
     end;
   end;
   result:=cmd_ok;
-  ZCMsgCallBackInterface.Do_AfterShowModal(nil);
+  zcUI.Do_AfterShowModal(nil);
 end;
 
 initialization

@@ -249,12 +249,12 @@ begin
     end;
     if CEGUIRePrepare in self.CEndActionAttr then begin
       if drawings.GetCurrentDWG.wa.param.seldesc.Selectedobjcount=0 then
-        ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIReturnToDefaultObject)
+        zcUI.Do_GUIaction(nil,zcMsgUIReturnToDefaultObject)
       else
-        ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIRePrepareObject)
+        zcUI.Do_GUIaction(nil,zcMsgUIRePrepareObject)
     end;
     if CEGUIReturnToDefaultObject in self.CEndActionAttr then
-      ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIReturnToDefaultObject);
+      zcUI.Do_GUIaction(nil,zcMsgUIReturnToDefaultObject);
     if drawings.GetCurrentDWG.wa<>nil then
     if not overlay then
     drawings.GetCurrentDWG.wa.Clear0Ontrackpoint;
@@ -270,9 +270,9 @@ begin
     drawings.GetCurrentDWG.OnMouseObj.Clear;
     OSModeEditor.GetState;
     zcRedrawCurrentDrawing;
-    ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIActionRedraw);
+    zcUI.Do_GUIaction(nil,zcMsgUIActionRedraw);
     if (uzccommandsmanager.commandmanager.CommandsStack.Count=0)and(CEDeSelect in self.CEndActionAttr) then
-      ZCMsgCallBackInterface.Do_GUIaction(drawings.GetCurrentDWG.wa,ZMsgID_GUIActionSelectionChanged);
+      zcUI.Do_GUIaction(drawings.GetCurrentDWG.wa,zcMsgUIActionSelectionChanged);
   end;
 end;
 procedure CommandRTEdObject.CommandEnd;
@@ -288,12 +288,12 @@ begin
   end;
   if CEGUIRePrepare in self.CEndActionAttr then begin
     if drawings.GetCurrentDWG.wa.param.seldesc.Selectedobjcount=0 then
-      ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIReturnToDefaultObject)
+      zcUI.Do_GUIaction(nil,zcMsgUIReturnToDefaultObject)
     else
-      ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIRePrepareObject)
+      zcUI.Do_GUIaction(nil,zcMsgUIRePrepareObject)
   end;
   if CEGUIReturnToDefaultObject in self.CEndActionAttr then
-    ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIReturnToDefaultObject);
+    zcUI.Do_GUIaction(nil,zcMsgUIReturnToDefaultObject);
   drawings.GetCurrentDWG.wa.param.lastonmouseobject:=nil;
   drawings.GetCurrentDWG.OnMouseObj.Clear;
   if uzccommandsmanager.commandmanager.CommandsStack.Count=0 then
@@ -308,7 +308,7 @@ begin
   sysvarDWGOSMode := saveosmode;
 
   if uzccommandsmanager.commandmanager.CommandsStack.Count=0 then
-    ZCMsgCallBackInterface.Do_GUIaction(drawings.GetCurrentDWG.wa,ZMsgID_GUIActionSelectionChanged);
+    zcUI.Do_GUIaction(drawings.GetCurrentDWG.wa,zcMsgUIActionSelectionChanged);
   //-------------------------------drawings.GetCurrentDWG.OGLwindow1.param.lastonmouseobject:=nil;
   OSModeEditor.GetState;
   zcRedrawCurrentDrawing;
@@ -437,7 +437,7 @@ begin
 
   if ShowParams then
     if (commanddata.Instance<>nil)and(commanddata.PTD<>nil) then
-      ZCMsgCallBackInterface.Do_PrepareObject(nil,drawings.GetUnitsFormat,SysUnit.TypeName2PTD('CommandRTEdObject'),@self,drawings.GetCurrentDWG);
+      zcUI.Do_PrepareObject(nil,drawings.GetUnitsFormat,SysUnit.TypeName2PTD('CommandRTEdObject'),@self,drawings.GetCurrentDWG);
 
 end;
 
@@ -457,11 +457,11 @@ begin
 end;
 procedure CommandRTEdObject.Prompt(msg:String);
 begin
-     ZCMsgCallBackInterface.TextMessage(self.CommandName+':'+msg,TMWOHistoryOut);
+     zcUI.TextMessage(self.CommandName+':'+msg,TMWOHistoryOut);
 end;
 procedure CommandRTEdObject.Error(msg:String);
 begin
-     ZCMsgCallBackInterface.TextMessage(self.CommandName+':'+msg,TMWOShowError);
+     zcUI.TextMessage(self.CommandName+':'+msg,TMWOShowError);
 end;
 procedure CommandRTEdObject.SetCommandParam(PTypedTata:pointer;TypeName:string;AShowParams:Boolean=true);
 begin

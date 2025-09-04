@@ -39,7 +39,7 @@ var
 function MultiSelect2ObjIbsp_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 begin
   MSEditor.CreateUnit(drawings.GetUnitsFormat);
-  ZCMsgCallBackInterface.Do_PrepareObject(drawings.GetUndoStack,drawings.GetUnitsFormat,SysUnit.TypeName2PTD('TMSEditor'),@MSEditor,drawings.GetCurrentDWG);
+  zcUI.Do_PrepareObject(drawings.GetUndoStack,drawings.GetUnitsFormat,SysUnit.TypeName2PTD('TMSEditor'),@MSEditor,drawings.GetCurrentDWG);
   result:=cmd_ok;
 end;
 

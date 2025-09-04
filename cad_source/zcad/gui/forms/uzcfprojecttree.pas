@@ -88,16 +88,16 @@ begin
      Instance:=drawings.GetCurrentDWG.BlockDefArray.getblockdef(FBlockName);
      if instance<>nil then
                           begin
-                            ZCMsgCallBackInterface.Do_PrepareObject(nil,drawings.GetUnitsFormat,TypeDesk,Instance,drawings.GetCurrentDWG)
+                            zcUI.Do_PrepareObject(nil,drawings.GetUnitsFormat,TypeDesk,Instance,drawings.GetCurrentDWG)
                           end
                       else
-                          ZCMsgCallBackInterface.TextMessage(format(rscmNoBlockDefInDWGCXMenu,[FBlockName]),TMWOShowError);
+                          zcUI.TextMessage(format(rscmNoBlockDefInDWGCXMenu,[FBlockName]),TMWOShowError);
 end;
 
 
 procedure TEqTreeNode.Select;
 begin
-     ZCMsgCallBackInterface.Do_PrepareObject(nil,drawings.GetUnitsFormat,ptd.PTD,ptd.Instance,drawings.GetCurrentDWG);
+     zcUI.Do_PrepareObject(nil,drawings.GetUnitsFormat,ptd.PTD,ptd.Instance,drawings.GetCurrentDWG);
 end;
 function TEqTreeNode.GetParams;
 begin

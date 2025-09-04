@@ -217,7 +217,7 @@ begin
     rows_cache.setSheetsCache(@sheets_cache);
     result:=true;
   except
-    ZCMsgCallBackInterface.TextMessage('ОШИБКА. ПРОГРАММА EXCEL НЕ УСТАНОВЛЕНА',TMWOHistoryOut);
+    zcUI.TextMessage('ОШИБКА. ПРОГРАММА EXCEL НЕ УСТАНОВЛЕНА',TMWOHistoryOut);
   end;
 end;
 function activeXLSXWorkbook:boolean;
@@ -230,10 +230,10 @@ begin
     BasicWorkbook:=Excel.ActiveWorkbook;
     sheets_cache.setBook(BasicWorkbook);
     rows_cache.setSheetsCache(@sheets_cache);
-    ZCMsgCallBackInterface.TextMessage('Доступ получен к книге = ' + BasicWorkbook.Name,TMWOHistoryOut);
+    zcUI.TextMessage('Доступ получен к книге = ' + BasicWorkbook.Name,TMWOHistoryOut);
     result:=true;
   except
-    ZCMsgCallBackInterface.TextMessage('ОШИБКА. НЕТ АКТИВНОЙ ОТКРЫТОЙ КНИГИ В EXCEL!!!',TMWOHistoryOut);
+    zcUI.TextMessage('ОШИБКА. НЕТ АКТИВНОЙ ОТКРЫТОЙ КНИГИ В EXCEL!!!',TMWOHistoryOut);
   end;
 end;
 function activeWorkSheetXLSX:boolean;
@@ -243,10 +243,10 @@ begin
   try
     ActiveWorkSheet:=Excel.ActiveSheet;
     //ActiveWorkSheet:=BasicWorkbook.ActiveWorksheet;
-    ZCMsgCallBackInterface.TextMessage('Открыт лист = ' + ActiveWorkSheet.Name,TMWOHistoryOut);
+    zcUI.TextMessage('Открыт лист = ' + ActiveWorkSheet.Name,TMWOHistoryOut);
     result:=true;
   except
-    ZCMsgCallBackInterface.TextMessage('ОШИБКА. НЕТ АКТИВНОЙ ОТКРЫТОЙ КНИГИ В EXCEL!!!',TMWOHistoryOut);
+    zcUI.TextMessage('ОШИБКА. НЕТ АКТИВНОЙ ОТКРЫТОЙ КНИГИ В EXCEL!!!',TMWOHistoryOut);
   end;
 end;
 function getActiveWorkSheetName:string;
@@ -257,9 +257,9 @@ begin
     ActiveWorkSheet:=Excel.ActiveSheet;
     result:=ActiveWorkSheet.Name;
     //ActiveWorkSheet:=BasicWorkbook.ActiveWorksheet;
-    ZCMsgCallBackInterface.TextMessage('Открыт лист = ' + result,TMWOHistoryOut);
+    zcUI.TextMessage('Открыт лист = ' + result,TMWOHistoryOut);
   except
-    ZCMsgCallBackInterface.TextMessage('ОШИБКА. НЕТ АКТИВНОЙ ОТКРЫТОЙ КНИГИ В EXCEL!!!',TMWOHistoryOut);
+    zcUI.TextMessage('ОШИБКА. НЕТ АКТИВНОЙ ОТКРЫТОЙ КНИГИ В EXCEL!!!',TMWOHistoryOut);
   end;
 end;
 
@@ -274,11 +274,11 @@ begin
       if BasicWorkbook.WorkSheets[i].Name = nameSheet then
       begin
         result:=i;
-        //ZCMsgCallBackInterface.TextMessage('Лист = ' + BasicWorkbook.WorkSheets[i].Name + ' спрятан!',TMWOHistoryOut);
+        //zcUI.TextMessage('Лист = ' + BasicWorkbook.WorkSheets[i].Name + ' спрятан!',TMWOHistoryOut);
         //BasicWorkbook.WorkSheets[i].Visible:=false;
       end;
   except
-    ZCMsgCallBackInterface.TextMessage('ОШИБКА! Лист с именем ='+nameSheet + ' - ОТСУТСТВУЕТ',TMWOHistoryOut);
+    zcUI.TextMessage('ОШИБКА! Лист с именем ='+nameSheet + ' - ОТСУТСТВУЕТ',TMWOHistoryOut);
   end;
 end;
 
@@ -293,7 +293,7 @@ begin
     result:=true;
     //Excel.DisplayAlerts := True;
   except
-    ZCMsgCallBackInterface.TextMessage('ОШИБКА! СОХРАНЕНИЕ ОТМЕНЕНО ИЛИ ФАЙЛ НЕ ДОСТУПЕН!',TMWOHistoryOut);
+    zcUI.TextMessage('ОШИБКА! СОХРАНЕНИЕ ОТМЕНЕНО ИЛИ ФАЙЛ НЕ ДОСТУПЕН!',TMWOHistoryOut);
   end;
 end;
 procedure destroyWorkbook();
@@ -326,7 +326,7 @@ begin
   for i:= 1 to BasicWorkbook.WorkSheets.count do
     if ContainsText(BasicWorkbook.WorkSheets[i].Name, partNameSheet) then
     begin
-      //ZCMsgCallBackInterface.TextMessage('Лист = ' + BasicWorkbook.WorkSheets[i].Name + ' спрятан!',TMWOHistoryOut);
+      //zcUI.TextMessage('Лист = ' + BasicWorkbook.WorkSheets[i].Name + ' спрятан!',TMWOHistoryOut);
       BasicWorkbook.WorkSheets[i].Visible:=false;
     end;
 end;
@@ -339,18 +339,18 @@ procedure copyWorksheetName(codeSheet:string;nameSheet:string);
 //var
 //  i,numsheet:integer;
 begin
-  //ZCMsgCallBackInterface.TextMessage('имя лист = ' + nameSheet,TMWOHistoryOut);
+  //zcUI.TextMessage('имя лист = ' + nameSheet,TMWOHistoryOut);
   try
     //BasicWorkbook.WorkSheets(codeSheet).Copy(EmptyParam,BasicWorkbook.WorkSheets[BasicWorkbook.WorkSheets.Count]);
     sheets_cache.get(codeSheet).Copy(EmptyParam,BasicWorkbook.WorkSheets[BasicWorkbook.WorkSheets.Count]);
     BasicWorkbook.WorkSheets[BasicWorkbook.WorkSheets.Count].Name:=nameSheet;
   except
-   ZCMsgCallBackInterface.TextMessage('ОШИБКА! procedure copyWorksheetName(codeSheet:string;nameSheet:string);',TMWOHistoryOut);
+   zcUI.TextMessage('ОШИБКА! procedure copyWorksheetName(codeSheet:string;nameSheet:string);',TMWOHistoryOut);
   end;
   //numsheet:=-1;
   //for i:= 1 to BasicWorkbook.WorkSheets.count do
   //begin
-  //  ZCMsgCallBackInterface.TextMessage('имя лист = ' + BasicWorkbook.WorkSheets[i].Name,TMWOHistoryOut);
+  //  zcUI.TextMessage('имя лист = ' + BasicWorkbook.WorkSheets[i].Name,TMWOHistoryOut);
   //  //BasicWorkbook.WorkSheets[i].Visible:=true;
   //  if BasicWorkbook.WorkSheets[i].Name = codeSheet then
   //     numsheet:=i;
@@ -362,7 +362,7 @@ begin
   //numsheet:=-1;
   //for i:= 1 to BasicWorkbook.WorkSheets.count do
   //begin
-  //  ZCMsgCallBackInterface.TextMessage('имя лист = ' + BasicWorkbook.WorkSheets[i].Name,TMWOHistoryOut);
+  //  zcUI.TextMessage('имя лист = ' + BasicWorkbook.WorkSheets[i].Name,TMWOHistoryOut);
   //  //BasicWorkbook.WorkSheets[i].Visible:=true;
   //  if BasicWorkbook.WorkSheets[i].Name = codeSheet then
   //     numsheet:=i;
@@ -396,8 +396,8 @@ begin
 end;
 procedure copyCell(nameStSheet:string;stRow,stCol:Cardinal;nameEdSheet:string;edRow,edCol:Cardinal);
 begin
-  //ZCMsgCallBackInterface.TextMessage('имя лист старта = ' + nameStSheet + '*** row=' + inttostr(stRow) + '*** col=' + inttostr(stCol),TMWOHistoryOut);
-  //ZCMsgCallBackInterface.TextMessage('имя лист финиша = ' + nameEdSheet + '*** row=' + inttostr(edRow) + '*** col=' + inttostr(edCol),TMWOHistoryOut);
+  //zcUI.TextMessage('имя лист старта = ' + nameStSheet + '*** row=' + inttostr(stRow) + '*** col=' + inttostr(stCol),TMWOHistoryOut);
+  //zcUI.TextMessage('имя лист финиша = ' + nameEdSheet + '*** row=' + inttostr(edRow) + '*** col=' + inttostr(edCol),TMWOHistoryOut);
 
     //  Books2.WorkSheets[1].Cells[2,2].Copy;
     //Books2.WorkSheets[2].Cells[5,5].PasteSpecial();
@@ -425,10 +425,10 @@ begin
 
   //iRangeFind := BasicWorkbook.WorkSheets(nameSheet).UsedRange.Find(nameValueCell, MatchCase:=False);
   iRangeFind := sheets_cache.get(nameSheet).UsedRange.Find(nameValueCell, MatchCase:=False, LookIn:='-4163' {xlValues});
-  //ZCMsgCallBackInterface.TextMessage('поиск',TMWOHistoryOut);
+  //zcUI.TextMessage('поиск',TMWOHistoryOut);
   if VarIsNothing(iRangeFind) then
   begin
-     //ZCMsgCallBackInterface.TextMessage('Not found',TMWOHistoryOut);
+     //zcUI.TextMessage('Not found',TMWOHistoryOut);
      vRow:=0;
      vCol:=0;
   end
@@ -454,11 +454,11 @@ begin
 
   //iRangeFind := BasicWorkbook.WorkSheets(nameSheet).UsedRange.FindNext(iRangeFind);
   iRangeFind := sheets_cache.get(nameSheet).UsedRange.FindNext(iRangeFind);
-  //ZCMsgCallBackInterface.TextMessage('поиск next',TMWOHistoryOut);
-  //ZCMsgCallBackInterface.TextMessage('значение адресс = ' + inttostr(iRangeFind.Row) + ' - ' + inttostr(iRangeFind.Column)+ ' = ',TMWOHistoryOut);
+  //zcUI.TextMessage('поиск next',TMWOHistoryOut);
+  //zcUI.TextMessage('значение адресс = ' + inttostr(iRangeFind.Row) + ' - ' + inttostr(iRangeFind.Column)+ ' = ',TMWOHistoryOut);
   if VarIsNothing(iRangeFind) then
   begin
-     //ZCMsgCallBackInterface.TextMessage('Not found',TMWOHistoryOut);
+     //zcUI.TextMessage('Not found',TMWOHistoryOut);
      vRow:=0;
      vCol:=0;
   end
@@ -483,33 +483,33 @@ end;
 
 //
 //    //S := '77';
-//    ZCMsgCallBackInterface.TextMessage('начало поиска в книге = ' + nameSheet + ' ищем слово: ' + nameValueCell,TMWOHistoryOut);
+//    zcUI.TextMessage('начало поиска в книге = ' + nameSheet + ' ищем слово: ' + nameValueCell,TMWOHistoryOut);
 //    numSheet:=-1;
 //    for i:= 1 to BasicWorkbook.WorkSheets.count do
 //    begin
-//      ZCMsgCallBackInterface.TextMessage('имя лист = ' + BasicWorkbook.WorkSheets[i].Name,TMWOHistoryOut);
+//      zcUI.TextMessage('имя лист = ' + BasicWorkbook.WorkSheets[i].Name,TMWOHistoryOut);
 //      //BasicWorkbook.WorkSheets[i].Visible:=true;
 //      if BasicWorkbook.WorkSheets[i].Name = nameSheet then
 //        numSheet:=i;
 //      //   BasicWorkbook.WorkSheets[i].Copy(Before:=BasicWorkbook.WorkSheets[1]);
 //    end;
 //    if numSheet<0 then
-//        ZCMsgCallBackInterface.TextMessage('Ошибка лист не найден',TMWOHistoryOut)
+//        zcUI.TextMessage('Ошибка лист не найден',TMWOHistoryOut)
 //    else
 //    begin
-//      //ZCMsgCallBackInterface.TextMessage('имя лист поиска= ' + BasicWorkbook.WorkSheets(nameSheet).Name,TMWOHistoryOut);
-//      //ZCMsgCallBackInterface.TextMessage('имя поиска= ' + nameValueCell,TMWOHistoryOut);
+//      //zcUI.TextMessage('имя лист поиска= ' + BasicWorkbook.WorkSheets(nameSheet).Name,TMWOHistoryOut);
+//      //zcUI.TextMessage('имя поиска= ' + nameValueCell,TMWOHistoryOut);
 //      iRangeFind := BasicWorkbook.WorkSheets(nameSheet).UsedRange.Find(nameValueCell, MatchCase:=False);
-//      //ZCMsgCallBackInterface.TextMessage('имя лист поиска= ' + BasicWorkbook.WorkSheets[numSheet].Name,TMWOHistoryOut);
-//      //ZCMsgCallBackInterface.TextMessage('имя лист поиска= ' + iRangeFind,TMWOHistoryOut);
-//      //ZCMsgCallBackInterface.TextMessage('Found at [R' + IntToStr(iRangeFind.Row) + ':C' + IntToStr(iRangeFind.Column) + ']',TMWOHistoryOut);
+//      //zcUI.TextMessage('имя лист поиска= ' + BasicWorkbook.WorkSheets[numSheet].Name,TMWOHistoryOut);
+//      //zcUI.TextMessage('имя лист поиска= ' + iRangeFind,TMWOHistoryOut);
+//      //zcUI.TextMessage('Found at [R' + IntToStr(iRangeFind.Row) + ':C' + IntToStr(iRangeFind.Column) + ']',TMWOHistoryOut);
 //      //if VarIsEmpty(iRangeFind) then
-//      // ZCMsgCallBackInterface.TextMessage('Not found',TMWOHistoryOut)
+//      // zcUI.TextMessage('Not found',TMWOHistoryOut)
 //      //else
-//      // ZCMsgCallBackInterface.TextMessage('Found at [R' + IntToStr(iRangeFind.Row) + ':C' + IntToStr(iRangeFind.Column) + ']',TMWOHistoryOut);
+//      // zcUI.TextMessage('Found at [R' + IntToStr(iRangeFind.Row) + ':C' + IntToStr(iRangeFind.Column) + ']',TMWOHistoryOut);
 //
 //      if VarIsEmpty(iRangeFind) then
-//         ZCMsgCallBackInterface.TextMessage('Not found',TMWOHistoryOut)
+//         zcUI.TextMessage('Not found',TMWOHistoryOut)
 //      else
 //      begin
 //        iRow:=iRangeFind.Row;
@@ -531,18 +531,18 @@ end;
 
     // поиск был завершен удачно, если определен объект R
     //// поиск следующих ячеек с искомым текстом
-    //ZCMsgCallBackInterface.TextMessage('1',TMWOHistoryOut);
-    ////ZCMsgCallBackInterface.TextMessage(,TMWOHistoryOut);
+    //zcUI.TextMessage('1',TMWOHistoryOut);
+    ////zcUI.TextMessage(,TMWOHistoryOut);
     //if VarIsEmpty(iRangeFind) then
-    //   ZCMsgCallBackInterface.TextMessage('Not found',TMWOHistoryOut)
+    //   zcUI.TextMessage('Not found',TMWOHistoryOut)
     //else
-    //   ZCMsgCallBackInterface.TextMessage('Found at [R' + IntToStr(iRangeFind.Row) + ':C' + IntToStr(iRangeFind.Column) + ']',TMWOHistoryOut);
+    //   zcUI.TextMessage('Found at [R' + IntToStr(iRangeFind.Row) + ':C' + IntToStr(iRangeFind.Column) + ']',TMWOHistoryOut);
     //
     //if iRangeFind <> nil then begin
-    //  ZCMsgCallBackInterface.TextMessage('2',TMWOHistoryOut);
+    //  zcUI.TextMessage('2',TMWOHistoryOut);
     //  Addr := iRangeFind.Address;
     //  //Addr := R.Address[True, True, xlA1, EmptyParam, EmptyParam];
-    //  ZCMsgCallBackInterface.TextMessage('Адресс ячейки' + Addr,TMWOHistoryOut);
+    //  zcUI.TextMessage('Адресс ячейки' + Addr,TMWOHistoryOut);
     //  //repeat
     //  //  // зальем красным цветом найденные ячейки
     //  //  R.Interior.Color := RGB(255, 0, 0);

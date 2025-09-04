@@ -106,19 +106,19 @@ var
    nodename:string;
 begin
   nodename:=PointerToNodeName(node);
-  ZCMsgCallBackInterface.TextMessage(format(' %s [label="None with %d ents, %fx%fx%f"]',[nodename,node.nul.count,node.BoundingBox.RTF.x-node.BoundingBox.LBN.x,node.BoundingBox.RTF.y-node.BoundingBox.LBN.y,node.BoundingBox.RTF.z-node.BoundingBox.LBN.z]),TMWOHistoryOut);
+  zcUI.TextMessage(format(' %s [label="None with %d ents, %fx%fx%f"]',[nodename,node.nul.count,node.BoundingBox.RTF.x-node.BoundingBox.LBN.x,node.BoundingBox.RTF.y-node.BoundingBox.LBN.y,node.BoundingBox.RTF.z-node.BoundingBox.LBN.z]),TMWOHistoryOut);
   if node^.NodeData.infrustum=infrustum then
-    ZCMsgCallBackInterface.TextMessage(format(' %s [fillcolor=red, style=filled]',[nodename,node.nul.count]),TMWOHistoryOut);
-  ZCMsgCallBackInterface.TextMessage(format('rank=same; level_%d;',[nodedepth]),TMWOHistoryOut);
+    zcUI.TextMessage(format(' %s [fillcolor=red, style=filled]',[nodename,node.nul.count]),TMWOHistoryOut);
+  zcUI.TextMessage(format('rank=same; level_%d;',[nodedepth]),TMWOHistoryOut);
   //{ rank = same; "past"
   if assigned(node.pplusnode)then
   begin
-    ZCMsgCallBackInterface.TextMessage(format(' %s->%s [label="+"]',[nodename,PointerToNodeName(PTEntTreeNode(node.pplusnode))]),TMWOHistoryOut);
+    zcUI.TextMessage(format(' %s->%s [label="+"]',[nodename,PointerToNodeName(PTEntTreeNode(node.pplusnode))]),TMWOHistoryOut);
     WriteNode(PTEntTreeNode(node.pplusnode),infrustum,nodedepth+1);
   end;
   if assigned(node.pminusnode)then
   begin
-    ZCMsgCallBackInterface.TextMessage(format(' %s->%s [label="-"]',[nodename,PointerToNodeName(PTEntTreeNode(node.pminusnode))]),TMWOHistoryOut);
+    zcUI.TextMessage(format(' %s->%s [label="-"]',[nodename,PointerToNodeName(PTEntTreeNode(node.pminusnode))]),TMWOHistoryOut);
     WriteNode(PTEntTreeNode(node.pminusnode),infrustum,nodedepth+1);
   end;
 end;
@@ -128,15 +128,15 @@ var
   i:integer;
   DC:TDrawContext;
 begin
-  ZCMsgCallBackInterface.TextMessage('DiGraph Classes {',TMWOHistoryOut);
+  zcUI.TextMessage('DiGraph Classes {',TMWOHistoryOut);
   for i:=0 to tr.MaxDepth do
    if i<>tr.MaxDepth then
-     ZCMsgCallBackInterface.TextMessage('level_'+inttostr(i)+'->',TMWOHistoryOut)
+     zcUI.TextMessage('level_'+inttostr(i)+'->',TMWOHistoryOut)
    else
-     ZCMsgCallBackInterface.TextMessage('level_'+inttostr(i),TMWOHistoryOut);
+     zcUI.TextMessage('level_'+inttostr(i),TMWOHistoryOut);
   dc:=drawings.GetCurrentDWG.CreateDrawingRC;
   WriteNode(node,dc.DrawingContext.VActuality.InfrustumActualy,0);
-  ZCMsgCallBackInterface.TextMessage('}',TMWOHistoryOut);
+  zcUI.TextMessage('}',TMWOHistoryOut);
 end;
 
 function TreeStat_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
@@ -163,21 +163,21 @@ begin
   end;
   if rootnode<>nil then begin
     GetTreeStat(rootnode,depth,tr);
-    ZCMsgCallBackInterface.TextMessage('Total entities in drawing: '+inttostr(drawings.GetCurrentROOT.ObjArray.count),TMWOHistoryOut);
-    ZCMsgCallBackInterface.TextMessage('Max tree depth: '+inttostr(SysVar.RD.RD_SpatialNodesDepth^),TMWOHistoryOut);
-    ZCMsgCallBackInterface.TextMessage('Max in node entities: '+inttostr(GetInNodeCount(SysVar.RD.RD_SpatialNodeCount^)),TMWOHistoryOut);
-    ZCMsgCallBackInterface.TextMessage('Current drawing spatial index Info:',TMWOHistoryOut);
-    ZCMsgCallBackInterface.TextMessage('Total entities: '+inttostr(tr.EntCount),TMWOHistoryOut);
-    ZCMsgCallBackInterface.TextMessage('Memory usage (bytes): '+inttostr(tr.MemCount),TMWOHistoryOut);
-    ZCMsgCallBackInterface.TextMessage('Total nodes: '+inttostr(tr.NodesCount),TMWOHistoryOut);
-    ZCMsgCallBackInterface.TextMessage('Total overflow nodes: '+inttostr(tr.OverflowCount),TMWOHistoryOut);
-    ZCMsgCallBackInterface.TextMessage('Fact tree depth: '+inttostr(tr.MaxDepth),TMWOHistoryOut);
-    ZCMsgCallBackInterface.TextMessage('By levels:',TMWOHistoryOut);
+    zcUI.TextMessage('Total entities in drawing: '+inttostr(drawings.GetCurrentROOT.ObjArray.count),TMWOHistoryOut);
+    zcUI.TextMessage('Max tree depth: '+inttostr(SysVar.RD.RD_SpatialNodesDepth^),TMWOHistoryOut);
+    zcUI.TextMessage('Max in node entities: '+inttostr(GetInNodeCount(SysVar.RD.RD_SpatialNodeCount^)),TMWOHistoryOut);
+    zcUI.TextMessage('Current drawing spatial index Info:',TMWOHistoryOut);
+    zcUI.TextMessage('Total entities: '+inttostr(tr.EntCount),TMWOHistoryOut);
+    zcUI.TextMessage('Memory usage (bytes): '+inttostr(tr.MemCount),TMWOHistoryOut);
+    zcUI.TextMessage('Total nodes: '+inttostr(tr.NodesCount),TMWOHistoryOut);
+    zcUI.TextMessage('Total overflow nodes: '+inttostr(tr.OverflowCount),TMWOHistoryOut);
+    zcUI.TextMessage('Fact tree depth: '+inttostr(tr.MaxDepth),TMWOHistoryOut);
+    zcUI.TextMessage('By levels:',TMWOHistoryOut);
     ap:=0;
     for i:=0 to tr.MaxDepth do
     begin
-         ZCMsgCallBackInterface.TextMessage('level '+inttostr(i),TMWOHistoryOut);
-         ZCMsgCallBackInterface.TextMessage('  Entities: '+inttostr(tr.PLevelStat^[i].EntCount),TMWOHistoryOut);
+         zcUI.TextMessage('level '+inttostr(i),TMWOHistoryOut);
+         zcUI.TextMessage('  Entities: '+inttostr(tr.PLevelStat^[i].EntCount),TMWOHistoryOut);
          if tr.EntCount<>0 then
                                cp:=tr.PLevelStat^[i].EntCount/tr.EntCount*100
                            else
@@ -185,22 +185,22 @@ begin
          ap:=ap+cp;
          str(cp:2:2,percent);
          str(ap:2:2,apercent);
-         ZCMsgCallBackInterface.TextMessage('  Entities(%)[summary]: '+percent+'['+apercent+']',TMWOHistoryOut);
-         ZCMsgCallBackInterface.TextMessage('  Nodes: '+inttostr(tr.PLevelStat^[i].NodesCount),TMWOHistoryOut);
-         ZCMsgCallBackInterface.TextMessage('  Overflow nodes: '+inttostr(tr.PLevelStat^[i].OverflowCount),TMWOHistoryOut);
+         zcUI.TextMessage('  Entities(%)[summary]: '+percent+'['+apercent+']',TMWOHistoryOut);
+         zcUI.TextMessage('  Nodes: '+inttostr(tr.PLevelStat^[i].NodesCount),TMWOHistoryOut);
+         zcUI.TextMessage('  Overflow nodes: '+inttostr(tr.PLevelStat^[i].OverflowCount),TMWOHistoryOut);
     end;
     for pair in tr.pc do begin
       //iter:=tr.pc.min;
       //if assigned(iter)then
       //repeat
-        ZCMsgCallBackInterface.TextMessage('  Nodes with population '+inttostr(pair.Key)+': '+inttostr(pair.Value),TMWOHistoryOut);
+        zcUI.TextMessage('  Nodes with population '+inttostr(pair.Key)+': '+inttostr(pair.Value),TMWOHistoryOut);
       //until not iter.next;
       //if assigned(iter)then iter.destroy;
     end;
     WriteDot(rootnode,tr);
     tr.FreeRec;
   end else
-    ZCMsgCallBackInterface.TextMessage('Сan''t find tree in selected entity',TMWOMessageBox);
+    zcUI.TextMessage('Сan''t find tree in selected entity',TMWOMessageBox);
   result:=cmd_ok;
 end;
 

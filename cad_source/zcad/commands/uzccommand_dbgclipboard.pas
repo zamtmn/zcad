@@ -63,7 +63,7 @@ begin
      end;
      memsubstr.Free;
 
-     ZCMsgCallBackInterface.DOShowModal(InfoForm);
+     zcUI.DOShowModal(InfoForm);
      InfoForm.Free;
 
      result:=cmd_ok;

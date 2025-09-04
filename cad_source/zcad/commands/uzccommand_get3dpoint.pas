@@ -34,9 +34,9 @@ function Line_com_CommandStart(const Context:TZCADCommandContext;operands:TComma
 begin
   drawings.GetCurrentDWG.wa.SetMouseMode((MGet3DPoint) or (MMoveCamera) or (MRotateCamera));
   if operands='' then
-                     ZCMsgCallBackInterface.TextMessage(rscmPoint,TMWOHistoryOut)
+                     zcUI.TextMessage(rscmPoint,TMWOHistoryOut)
                  else
-                     ZCMsgCallBackInterface.TextMessage(operands,TMWOHistoryOut);
+                     zcUI.TextMessage(operands,TMWOHistoryOut);
   result:=cmd_ok;
 end;
 function Line_com_BeforeClick(const Context:TZCADCommandContext;wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record;mclick:Integer): Integer;

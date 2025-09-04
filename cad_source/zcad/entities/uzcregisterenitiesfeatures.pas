@@ -444,9 +444,9 @@ begin
     pentvarext.entityunit.CopyFrom(uou);
   end else begin
     if commandmanager.isBusy then
-      ZCMsgCallBackInterface.TextMessage(sysutils.format(rsfardeffilenotfounf,[pEntity^.Name]),[TMWOToLog])
+      zcUI.TextMessage(sysutils.format(rsfardeffilenotfounf,[pEntity^.Name]),[TMWOToLog])
     else
-      ZCMsgCallBackInterface.TextMessage(sysutils.format(rsfardeffilenotfounf,[pEntity^.Name]),TMWOHistoryOut);
+      zcUI.TextMessage(sysutils.format(rsfardeffilenotfounf,[pEntity^.Name]),TMWOHistoryOut);
   end;
   end;
 end;

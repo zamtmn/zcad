@@ -49,7 +49,7 @@ begin
     BtnPanel.OKButton.OnClick:=OptsFrame.OkClick;
     BtnPanel.Parent:=Dlg;
     Dlg.EnableAutoSizing;
-    Result:=ZCMsgCallBackInterface.DOShowModal(Dlg);
+    Result:=zcUI.DOShowModal(Dlg);
   finally
     Dlg.Free;
   end;

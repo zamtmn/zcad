@@ -155,9 +155,9 @@ implementation
   begin
         new(pVertex);
         pVertex^.dev:=dev;
-        //ZCMsgCallBackInterface.TextMessage('TGraphDev.addVertexDevFunc pVertex^.dev = ' + pVertex^.dev^.Name,TMWOHistoryOut);
+        //zcUI.TextMessage('TGraphDev.addVertexDevFunc pVertex^.dev = ' + pVertex^.dev^.Name,TMWOHistoryOut);
         result:=self.AddVertex;
-        //ZCMsgCallBackInterface.TextMessage('result = ' + inttostr(result.Index),TMWOHistoryOut);
+        //zcUI.TextMessage('result = ' + inttostr(result.Index),TMWOHistoryOut);
         result.AsPointer[vPTVertexEMTree]:=pVertex;
 
   end;
@@ -171,10 +171,10 @@ implementation
         if dev<>nil then
           begin
             if not uzvagraphsdev.getDevVertexConnector(dev,result) then       // Получаем координату коннектора
-               ZCMsgCallBackInterface.TextMessage('ОШИБКА! устройство без коннектора',TMWOHistoryOut);
+               zcUI.TextMessage('ОШИБКА! устройство без коннектора',TMWOHistoryOut);
           end
         else
-          ZCMsgCallBackInterface.TextMessage('ОШИБКА!!! TVertexDev.getVertexDevWCS. Устройство отсутствует.',TMWOHistoryOut);
+          zcUI.TextMessage('ОШИБКА!!! TVertexDev.getVertexDevWCS. Устройство отсутствует.',TMWOHistoryOut);
   end;
   procedure TVertexDev.attachDevice(dev:pGDBObjDevice);
   var

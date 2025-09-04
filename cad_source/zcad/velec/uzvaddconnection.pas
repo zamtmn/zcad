@@ -84,15 +84,15 @@ begin
                     inc(numConnect);
                     pvd:=Varext.entityunit.FindVariable(velec_VarNameForConnectBefore+IntToStr(numConnect)+'_'+velec_VarNameForConnectAfter_SLTypeagen);
                   until pvd=nil;
-                  //ZCMsgCallBackInterface.TextMessage('numConnect = ' + inttostr(numConnect),TMWOHistoryOut);
+                  //zcUI.TextMessage('numConnect = ' + inttostr(numConnect),TMWOHistoryOut);
                   //Добавляем подключение
                   pvdadd:=pu^.InterfaceVariables.vardescarray.beginiterate(iradd); //пробуем перебрать все определения переменных в интерфейсной части
                   if pvdadd<>nil then //переменные есть
                     repeat
                       varName:=pvdadd^.name; //имя переменной
-                      //ZCMsgCallBackInterface.TextMessage('1 = ' + varName,TMWOHistoryOut);
+                      //zcUI.TextMessage('1 = ' + varName,TMWOHistoryOut);
                       varName:=StringReplace(varName,velec_VarNameForConnectBefore+'1',velec_VarNameForConnectBefore+inttostr(numConnect),[rfReplaceAll, rfIgnoreCase]);
-                      //ZCMsgCallBackInterface.TextMessage('3 = ' + varName,TMWOHistoryOut);
+                      //zcUI.TextMessage('3 = ' + varName,TMWOHistoryOut);
                       vd:=Varext.entityunit.CreateVariable(varName,pvdadd^.data.PTD.TypeName);//в vd вернется копия созданного описателя переменной
                       //pstring(vd.data.Addr.GetInstance)^:='тест';//можно работать с ним, помня что он всеголишь копия
                       pvd:=Varext.entityunit.FindVariable(varName);//а тут уже указатель на настоящий описатель переменной
@@ -105,11 +105,11 @@ begin
 
                       ////работаем с очередной переменной
                       //test:=pvdadd^.name; //имя переменной
-                      //ZCMsgCallBackInterface.TextMessage('1-' + test,TMWOHistoryOut);
+                      //zcUI.TextMessage('1-' + test,TMWOHistoryOut);
                       //test:=pvdadd^.username; //пользовательское имя переменной
-                      //ZCMsgCallBackInterface.TextMessage('2-' + test,TMWOHistoryOut);
+                      //zcUI.TextMessage('2-' + test,TMWOHistoryOut);
                       //test:=pvdadd^.data.PTD.TypeName; //имя имя типа; pvd^.data.PTD - указатель на тип
-                      //ZCMsgCallBackInterface.TextMessage('3-' + test,TMWOHistoryOut);
+                      //zcUI.TextMessage('3-' + test,TMWOHistoryOut);
 
                       pvdadd:=pu^.InterfaceVariables.vardescarray.iterate(iradd); //следующая переменная
                     until pvdadd=nil;
@@ -120,8 +120,8 @@ begin
         pobj:=drawings.GetCurrentROOT^.ObjArray.iterate(ir); //переход к следующем примитиву в списке выбраных примитивов
       until pobj=nil;
 
-    ZCMsgCallBackInterface.TextMessage('Кол-во ввыбранных элементов = ' + IntToStr(countEnt),TMWOHistoryOut);
-    ZCMsgCallBackInterface.TextMessage('Устройство. Добавлено подключение = ' + IntToStr(countDev) + 'шт',TMWOHistoryOut);
+    zcUI.TextMessage('Кол-во ввыбранных элементов = ' + IntToStr(countEnt),TMWOHistoryOut);
+    zcUI.TextMessage('Устройство. Добавлено подключение = ' + IntToStr(countDev) + 'шт',TMWOHistoryOut);
 
   end;
   result:=cmd_ok;

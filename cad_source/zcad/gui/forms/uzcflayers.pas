@@ -283,9 +283,9 @@ var
 begin
   if not assigned(ColorSelectForm)then
     Application.CreateForm(TColorSelectForm, ColorSelectForm);
-  ZCMsgCallBackInterface.Do_BeforeShowModal(ColorSelectForm);
+  zcUI.Do_BeforeShowModal(ColorSelectForm);
   mr:=ColorSelectForm.run(PGDBLayerProp(Item.Data)^.color,false);
-  ZCMsgCallBackInterface.Do_AfterShowModal(ColorSelectForm);
+  zcUI.Do_AfterShowModal(ColorSelectForm);
   if mr=ZCmrOK then
     begin
       if PGDBLayerProp(Item.Data)^.color<>ColorSelectForm.ColorInfex then
@@ -353,9 +353,9 @@ begin
   if not assigned(SelectorForm)then
   Application.CreateForm(TSelectorForm, SelectorForm);
   FillSelector(SelectorForm);
-  ZCMsgCallBackInterface.Do_BeforeShowModal(SelectorForm);
+  zcUI.Do_BeforeShowModal(SelectorForm);
   mr:=SelectorForm.run;
-  ZCMsgCallBackInterface.Do_AfterShowModal(SelectorForm);
+  zcUI.Do_AfterShowModal(SelectorForm);
   if mr=ZCmrOk then
                  begin
                       PGDBLayerProp(Item.Data)^.LT:=SelectorForm.data;
@@ -393,9 +393,9 @@ var
 begin
   if not assigned(LineWeightSelectForm)then
   Application.CreateForm(TLineWeightSelectForm, LineWeightSelectForm);
-  ZCMsgCallBackInterface.Do_BeforeShowModal(LineWeightSelectForm);
+  zcUI.Do_BeforeShowModal(LineWeightSelectForm);
   mr:=LineWeightSelectForm.run(PGDBLayerProp(Item.Data)^.lineweight,false);
-  ZCMsgCallBackInterface.Do_AfterShowModal(LineWeightSelectForm);
+  zcUI.Do_AfterShowModal(LineWeightSelectForm);
   if mr=ZCmrOk then
                  begin
                       PGDBLayerProp(Item.Data)^.lineweight:=LineWeightSelectForm.SelectedLW;
@@ -509,7 +509,7 @@ begin
      //ListView1.CurrentItem.ImageIndex:=-1;
      //ListView1.CurrentItem:=ListItem;
      if not PGDBLayerProp(ListItem.Data)^._on then
-                                                   ZCMsgCallBackInterface.TextMessage(rsCurrentLayerOff,TMWOMessageBox);
+                                                   zcUI.TextMessage(rsCurrentLayerOff,TMWOMessageBox);
      //invalidate;
      end;
 end;
@@ -525,7 +525,7 @@ begin
                                      end;
                                      end
                                  else
-                                     ZCMsgCallBackInterface.TextMessage(rsLayerMustBeSelected,TMWOMessageBox);
+                                     zcUI.TextMessage(rsLayerMustBeSelected,TMWOMessageBox);
 end;
 procedure TLayersForm.RefreshListItems(Sender: TObject);
 var
@@ -598,7 +598,7 @@ begin
      layername:=pdwg^.LayerTable.GetFreeName(rsNewLayerNameFormat,1);
      if layername='' then
      begin
-       ZCMsgCallBackInterface.TextMessage(rsUnableSelectFreeLayerName,TMWOShowError);
+       zcUI.TextMessage(rsUnableSelectFreeLayerName,TMWOShowError);
        exit;
      end;
      if pdwg^.LayerTable.AddItem(layername,pcreatedlayer)=IsCreated then
@@ -676,7 +676,7 @@ begin
                                      countlayer(player,e,b);
                                      if (e+b)>0 then
                                                   begin
-                                                       ZCMsgCallBackInterface.TextMessage(rsUnableDelUsedLayer,TMWOShowError);
+                                                       zcUI.TextMessage(rsUnableDelUsedLayer,TMWOShowError);
                                                        exit;
                                                   end;
 
@@ -685,7 +685,7 @@ begin
                                      LayerDescLabel.Caption:='';
                                      end
                                  else
-                                     ZCMsgCallBackInterface.TextMessage(rsLayerMustBeSelected,TMWOShowError);
+                                     zcUI.TextMessage(rsLayerMustBeSelected,TMWOShowError);
 end;
 
 procedure TLayersForm.AplyClose(Sender: TObject);
@@ -697,8 +697,8 @@ procedure TLayersForm.Aply(Sender: TObject) ;
 begin
      if fChangeStamp then
      begin
-       ZCMsgCallBackInterface.Do_GUIaction(nil,ZMsgID_GUIActionRedraw);
-       //if assigned(UpdateVisibleProc) then UpdateVisibleProc(ZMsgID_GUIActionRedraw);
+       zcUI.Do_GUIaction(nil,zcMsgUIActionRedraw);
+       //if assigned(UpdateVisibleProc) then UpdateVisibleProc(zcMsgUIActionRedraw);
        zcRedrawCurrentDrawing;
      end;
 end;

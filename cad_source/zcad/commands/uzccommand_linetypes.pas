@@ -37,7 +37,7 @@ function LineTypes_cmd(const Context:TZCADCommandContext;operands:TCommandOperan
 begin
   LineTypesForm:=TLineTypesForm.Create(nil);
   SetHeightControl(LineTypesForm,sysvar.INTF.INTF_DefaultControlHeight^);
-  ZCMsgCallBackInterface.DOShowModal(LineTypesForm);
+  zcUI.DOShowModal(LineTypesForm);
   Freeandnil(LineTypesForm);
   result:=cmd_ok;
 end;

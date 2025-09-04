@@ -498,8 +498,8 @@ begin
    end;
    ptextent:=drawings.GetCurrentROOT^.ObjArray.iterate(ir);
   until ptextent=nil;
-  if not p1h then ZCMsgCallBackInterface.TextMessage('Start h not deffined',TMWOHistoryOut);
-  if not p2h then ZCMsgCallBackInterface.TextMessage('End h not deffined',TMWOHistoryOut);
+  if not p1h then zcUI.TextMessage('Start h not deffined',TMWOHistoryOut);
+  if not p2h then zcUI.TextMessage('End h not deffined',TMWOHistoryOut);
   DrawProfile(p1,p2,Intersections);
   Intersections.Free;
 end;
@@ -516,7 +516,7 @@ begin
 end;
 
 begin
-  ZCMsgCallBackInterface.TextMessage(format('ProfileBuild: process "%s" command',[cmd]),TMWOHistoryOut);
+  zcUI.TextMessage(format('ProfileBuild: process "%s" command',[cmd]),TMWOHistoryOut);
   i:=pos(':=',cmd);
   if i<>0 then begin
     getoperand(i,2);
@@ -530,11 +530,11 @@ else if cmd='HORSCALE' then TryStrToFloat(operand,HorScale);
   if i<>0 then begin
     getoperand(i,2);
     if not PointMap.MyGetValue(cmd,p1) then begin
-      ZCMsgCallBackInterface.TextMessage(format('ProfileBuild: point "%s" not found',[cmd]),TMWOHistoryOut);
+      zcUI.TextMessage(format('ProfileBuild: point "%s" not found',[cmd]),TMWOHistoryOut);
       exit;
     end;
     if not PointMap.MyGetValue(operand,p2) then begin
-      ZCMsgCallBackInterface.TextMessage(format('ProfileBuild: point "%s" not found',[operand]),TMWOHistoryOut);
+      zcUI.TextMessage(format('ProfileBuild: point "%s" not found',[operand]),TMWOHistoryOut);
       exit;
     end;
     BuildProfile(p1,p2);
@@ -563,12 +563,12 @@ begin
         if ptextent^.Content[1]='*' then begin
           pointname:=string(system.copy(ptextent^.Content,2,length(ptextent^.Content)-1));
           if PointMap.MyContans(pointname) then
-            ZCMsgCallBackInterface.TextMessage(format('ProfileBuild: point "%s" already exists',[pointname]),TMWOHistoryOut)
+            zcUI.TextMessage(format('ProfileBuild: point "%s" already exists',[pointname]),TMWOHistoryOut)
           else begin
             p.Name:=pointname;
             p.coord:=ptextent^.P_insert_in_WCS;
             PointMap.RegisterKey(pointname,p);
-            ZCMsgCallBackInterface.TextMessage(format('ProfileBuild: point "%s" found',[pointname]),TMWOHistoryOut)
+            zcUI.TextMessage(format('ProfileBuild: point "%s" found',[pointname]),TMWOHistoryOut)
           end;
         end;
     end;

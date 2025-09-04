@@ -220,7 +220,7 @@ var
       repeat
         if pobj^.selected then
           begin
-            //ZCMsgCallBackInterface.TextMessage('02',TMWOHistoryOut);
+            //zcUI.TextMessage('02',TMWOHistoryOut);
             pobj^.DeSelect(drawings.GetCurrentDWG^.wa.param.SelDesc.Selectedobjcount,drawings.CurrentDWG^.deselector); //Убрать выделение
             inc(count);
             myobj:=pobj;
@@ -228,7 +228,7 @@ var
         pobj:=drawings.GetCurrentROOT^.ObjArray.iterate(ir); //переход к следующем примитиву в списке выбраных примитивов
       until pobj=nil;
 
-      //ZCMsgCallBackInterface.TextMessage('Количество выбранных примитивов: ' + inttostr(count) + ' шт.',TMWOHistoryOut);
+      //zcUI.TextMessage('Количество выбранных примитивов: ' + inttostr(count) + ' шт.',TMWOHistoryOut);
 
       if count = 1 then
         result:=myobj;
@@ -245,50 +245,50 @@ var
            // Если выделенный устройство GDBDeviceID тогда
            if selEnt^.GetObjType=GDBDeviceID then
            begin
-             //ZCMsgCallBackInterface.TextMessage('1',TMWOHistoryOut);
+             //zcUI.TextMessage('1',TMWOHistoryOut);
              selDevVarExt:=PGDBObjDevice(selEnt)^.GetExtension<TVariablesExtender>;
-             //ZCMsgCallBackInterface.TextMessage('2',TMWOHistoryOut);
+             //zcUI.TextMessage('2',TMWOHistoryOut);
              selEntMF:=selDevVarExt.getMainFuncEntity;
-             //ZCMsgCallBackInterface.TextMessage('3',TMWOHistoryOut);
+             //zcUI.TextMessage('3',TMWOHistoryOut);
 
              if selEntMF^.GetObjType=GDBDeviceID then
-               //ZCMsgCallBackInterface.TextMessage('selEntMF = ' + PGDBObjDevice(selEntMF)^.Name,TMWOHistoryOut);
+               //zcUI.TextMessage('selEntMF = ' + PGDBObjDevice(selEntMF)^.Name,TMWOHistoryOut);
                for devlistMF in listDev do
                begin
-                 //ZCMsgCallBackInterface.TextMessage('4 + '+ devlistMF^.Name,TMWOHistoryOut);
+                 //zcUI.TextMessage('4 + '+ devlistMF^.Name,TMWOHistoryOut);
                  if devlistMF = PGDBObjDevice(selEntMF) then
                  begin
-                   //ZCMsgCallBackInterface.TextMessage('5',TMWOHistoryOut);
+                   //zcUI.TextMessage('5',TMWOHistoryOut);
                    result:=PGDBObjDevice(selEntMF);
                    system.break;
                  end;
                end;
            end;
          end;
-       //ZCMsgCallBackInterface.TextMessage('05000000000000',TMWOHistoryOut);
+       //zcUI.TextMessage('05000000000000',TMWOHistoryOut);
 
        if result = nil then
        begin
-          ZCMsgCallBackInterface.TextMessage(RSCLPuzvmanemDedicatedPrimitiveNotHost,TMWOHistoryOut);
+          zcUI.TextMessage(RSCLPuzvmanemDedicatedPrimitiveNotHost,TMWOHistoryOut);
             if commandmanager.getentity(RSCLPuzvmanemChooseYourHeadUnit,selEnt) then
             begin
              //Если выделенный устройство GDBDeviceID тогда
             if selEnt^.GetObjType=GDBDeviceID then
             begin
-              //ZCMsgCallBackInterface.TextMessage('1',TMWOHistoryOut);
+              //zcUI.TextMessage('1',TMWOHistoryOut);
               selDevVarExt:=PGDBObjDevice(selEnt)^.GetExtension<TVariablesExtender>;
-              //ZCMsgCallBackInterface.TextMessage('2',TMWOHistoryOut);
+              //zcUI.TextMessage('2',TMWOHistoryOut);
               selEntMF:=selDevVarExt.getMainFuncEntity;
-              //ZCMsgCallBackInterface.TextMessage('3',TMWOHistoryOut);
+              //zcUI.TextMessage('3',TMWOHistoryOut);
 
               if selEntMF^.GetObjType=GDBDeviceID then
-                //ZCMsgCallBackInterface.TextMessage('selEntMF = ' + PGDBObjDevice(selEntMF)^.Name,TMWOHistoryOut);
+                //zcUI.TextMessage('selEntMF = ' + PGDBObjDevice(selEntMF)^.Name,TMWOHistoryOut);
                 for devlistMF in listDev do
                 begin
-                  //ZCMsgCallBackInterface.TextMessage('4 + '+ devlistMF^.Name,TMWOHistoryOut);
+                  //zcUI.TextMessage('4 + '+ devlistMF^.Name,TMWOHistoryOut);
                   if devlistMF = PGDBObjDevice(selEntMF) then
                   begin
-                    //ZCMsgCallBackInterface.TextMessage('5',TMWOHistoryOut);
+                    //zcUI.TextMessage('5',TMWOHistoryOut);
                     result:=PGDBObjDevice(selEntMF);
                     //system.break;
                   end;
@@ -297,7 +297,7 @@ var
           end;
        end;
        if result = nil then
-         ZCMsgCallBackInterface.TextMessage(RSCLPuzvmanemDedicatedPrimitiveNotHost,TMWOHistoryOut);
+         zcUI.TextMessage(RSCLPuzvmanemDedicatedPrimitiveNotHost,TMWOHistoryOut);
   end;
     //Если кодовое имя zimportdev
     procedure zimportdevcommand(graphDev:TGraphDev;nameEtalon,nameSheet:string;stRow,stCol:Cardinal);
@@ -331,18 +331,18 @@ var
 
               pvd2:=FindVariableInEnt(ourDev,velec_nameDevice);
                 if pvd2<>nil then
-                   ZCMsgCallBackInterface.TextMessage('   - устройство с именем = '+pstring(pvd2^.data.Addr.Instance)^,TMWOHistoryOut);
+                   zcUI.TextMessage('   - устройство с именем = '+pstring(pvd2^.data.Addr.Instance)^,TMWOHistoryOut);
               pvd2:=FindVariableInEnt(ourDev,velec_ANALYSISEM_exporttoxlsx);
                 if pvd2<>nil then
                 begin
                   if pboolean(pvd2^.data.Addr.Instance)^ = false then begin
-                    ZCMsgCallBackInterface.TextMessage(' - Анализ данного устройства отменен',TMWOHistoryOut);
+                    zcUI.TextMessage(' - Анализ данного устройства отменен',TMWOHistoryOut);
                     continue;
                   end;
                 end;
 
               // Заполняем всю информацию по устройству
-              //ZCMsgCallBackInterface.TextMessage('1',TMWOHistoryOut);
+              //zcUI.TextMessage('1',TMWOHistoryOut);
 
               if (stRowNew <> stRow) then
               begin
@@ -353,14 +353,14 @@ var
               inc(stColNew);      // отходим от кодового имени
               cellValueVar:=uzvzcadxlsxole.getCellFormula(nameEtalon,stRow,stColNew);
 
-              //ZCMsgCallBackInterface.TextMessage('значение ячейки = ' + inttostr(stRow) + ' - ' + inttostr(stColNew)+ ' = ' + cellValueVar,TMWOHistoryOut);
+              //zcUI.TextMessage('значение ячейки = ' + inttostr(stRow) + ' - ' + inttostr(stColNew)+ ' = ' + cellValueVar,TMWOHistoryOut);
               while cellValueVar <> zimportdevFT do begin
                if (cellValueVar <> '') and (cellValueVar[1]<>'=') then
                begin
                    pvd2:=FindVariableInEnt(ourDev,cellValueVar);
                    if pvd2<>nil then begin
                      textCell:=pvd2^.data.ptd^.GetValueAsString(pvd2^.data.Addr.Instance);
-                     //ZCMsgCallBackInterface.TextMessage('записываю в ячейку = ' + textCell,TMWOHistoryOut);
+                     //zcUI.TextMessage('записываю в ячейку = ' + textCell,TMWOHistoryOut);
                      uzvzcadxlsxole.setCellValue(nameSheet,stRowNew,stColNew,textCell);
                    end;// else uzvzcadxlsxole.copyCell(nameEtalon,stRow,stColNew,nameSheet,stRowNew,stColNew);
 
@@ -372,7 +372,7 @@ var
 
                  inc(stColNew);
                  cellValueVar:=uzvzcadxlsxole.getCellFormula(nameEtalon,stRow,stColNew);
-                 //ZCMsgCallBackInterface.TextMessage('значение ячейки = ' + inttostr(stRow) + ' - ' + inttostr(stColNew)+ ' = ' + cellValueVar,TMWOHistoryOut);
+                 //zcUI.TextMessage('значение ячейки = ' + inttostr(stRow) + ' - ' + inttostr(stColNew)+ ' = ' + cellValueVar,TMWOHistoryOut);
 
 
               end;
@@ -397,7 +397,7 @@ var
       textCell:string;
     begin
 
-      ZCMsgCallBackInterface.TextMessage('   zimportrootdevcommand(graphDev:TGraphDev;nameEtalon,nameSheet:string;stRow,stCol:Cardinal) ',TMWOHistoryOut);
+      zcUI.TextMessage('   zimportrootdevcommand(graphDev:TGraphDev;nameEtalon,nameSheet:string;stRow,stCol:Cardinal) ',TMWOHistoryOut);
        //Получаем список групп для данного щита
        //listGroupHeadDev:=uzvmanemgetgem.getListNameGroupHD(graphDev);
        stRowNew:=stRow;
@@ -417,10 +417,10 @@ var
 
               pvd2:=FindVariableInEnt(ourDev,velec_nameDevice);
                 if pvd2<>nil then
-                   ZCMsgCallBackInterface.TextMessage('   - устройство с именем = '+pstring(pvd2^.data.Addr.Instance)^,TMWOHistoryOut);
+                   zcUI.TextMessage('   - устройство с именем = '+pstring(pvd2^.data.Addr.Instance)^,TMWOHistoryOut);
 
               // Заполняем всю информацию по устройству
-              //ZCMsgCallBackInterface.TextMessage('1',TMWOHistoryOut);
+              //zcUI.TextMessage('1',TMWOHistoryOut);
 
               if (stRowNew <> stRow) then
               begin
@@ -431,14 +431,14 @@ var
               inc(stColNew);      // отходим от кодового имени
               cellValueVar:=uzvzcadxlsxole.getCellFormula(nameEtalon,stRow,stColNew);
 
-              //ZCMsgCallBackInterface.TextMessage('значение ячейки = ' + inttostr(stRow) + ' - ' + inttostr(stColNew)+ ' = ' + cellValueVar,TMWOHistoryOut);
+              //zcUI.TextMessage('значение ячейки = ' + inttostr(stRow) + ' - ' + inttostr(stColNew)+ ' = ' + cellValueVar,TMWOHistoryOut);
               while cellValueVar <> zimportrootdevFT do begin
                if (cellValueVar <> '') and (cellValueVar[1]<>'=') then
                begin
                    pvd2:=FindVariableInEnt(ourDev,cellValueVar);
                    if pvd2<>nil then begin
                      textCell:=pvd2^.data.ptd^.GetValueAsString(pvd2^.data.Addr.Instance);
-                     //ZCMsgCallBackInterface.TextMessage('записываю в ячейку = ' + textCell,TMWOHistoryOut);
+                     //zcUI.TextMessage('записываю в ячейку = ' + textCell,TMWOHistoryOut);
                      uzvzcadxlsxole.setCellValue(nameSheet,stRowNew,stColNew,textCell);
                    end;// else uzvzcadxlsxole.copyCell(nameEtalon,stRow,stColNew,nameSheet,stRowNew,stColNew);
 
@@ -450,7 +450,7 @@ var
 
                  inc(stColNew);
                  cellValueVar:=uzvzcadxlsxole.getCellFormula(nameEtalon,stRow,stColNew);
-                 //ZCMsgCallBackInterface.TextMessage('значение ячейки = ' + inttostr(stRow) + ' - ' + inttostr(stColNew)+ ' = ' + cellValueVar,TMWOHistoryOut);
+                 //zcUI.TextMessage('значение ячейки = ' + inttostr(stRow) + ' - ' + inttostr(stColNew)+ ' = ' + cellValueVar,TMWOHistoryOut);
 
 
               end;
@@ -495,7 +495,7 @@ var
        stRowNew:=stRow;
        stColNew:=stCol;
 
-       //ZCMsgCallBackInterface.TextMessage('Выполняем выгрузку кабелей для данного щита' + inttostr(j),TMWOHistoryOut);
+       //zcUI.TextMessage('Выполняем выгрузку кабелей для данного щита' + inttostr(j),TMWOHistoryOut);
        for nameGroup in listGroupHeadDev do
          begin
           //Получаем список кабелей для данной группы
@@ -504,10 +504,10 @@ var
           j:=1;
           for ourCab in listCab do
             begin
-                 ZCMsgCallBackInterface.TextMessage('     - сегмент №' + inttostr(j),TMWOHistoryOut);
+                 zcUI.TextMessage('     - сегмент №' + inttostr(j),TMWOHistoryOut);
                  inc(j);
                  // Заполняем всю информацию по устройству
-                 //ZCMsgCallBackInterface.TextMessage('ЗАПОЛНЯЕМ КАБЕЛИ',TMWOHistoryOut);
+                 //zcUI.TextMessage('ЗАПОЛНЯЕМ КАБЕЛИ',TMWOHistoryOut);
 
                  polyext:=ourCab^.GetExtension<TVariablesExtender>;
                  //Получаем ссылку на кабель или полилинию которая заменяет стояк
@@ -522,7 +522,7 @@ var
                   cellValueVar:=uzvzcadxlsxole.getCellFormula(nameEtalon,stRow,stColNew);
 
                  if remotemode then
-                     ZCMsgCallBackInterface.TextMessage('значение ячейки = ' + inttostr(stRow) + ' - ' + inttostr(stColNew)+ ' = ' + cellValueVar,TMWOHistoryOut);
+                     zcUI.TextMessage('значение ячейки = ' + inttostr(stRow) + ' - ' + inttostr(stColNew)+ ' = ' + cellValueVar,TMWOHistoryOut);
 
                   while cellValueVar <> zimportcabFT do begin
                    if (cellValueVar <> '') and (cellValueVar[1]<>'=') then
@@ -543,7 +543,7 @@ var
                      else
                      begin   //полилиния
                        // Проверяем совпадает имя группы подключения внутри устройства с группой которую мы сейчас заполняем
-                      //ZCMsgCallBackInterface.TextMessage('   я полилиния = ',TMWOHistoryOut);
+                      //zcUI.TextMessage('   я полилиния = ',TMWOHistoryOut);
                        pvd:=FindVariableInEnt(ourCab,cellValueVar);
                        if pvd<>nil then begin
                            iHaveParam:=true;
@@ -567,7 +567,7 @@ var
                      inc(stColNew);
                      cellValueVar:=uzvzcadxlsxole.getCellFormula(nameEtalon,stRow,stColNew);
                      if remotemode then
-                       ZCMsgCallBackInterface.TextMessage('значение ячейки = ' + inttostr(stRow) + ' - ' + inttostr(stColNew)+ ' = ' + cellValueVar,TMWOHistoryOut);
+                       zcUI.TextMessage('значение ячейки = ' + inttostr(stRow) + ' - ' + inttostr(stColNew)+ ' = ' + cellValueVar,TMWOHistoryOut);
                   end;
                   inc(stRowNew);
                   stColNew:=stCol;
@@ -625,26 +625,26 @@ var
       end;
     begin
 
-       ZCMsgCallBackInterface.TextMessage('  Запуск построчное копирования с условиями',TMWOHistoryOut);
+       zcUI.TextMessage('  Запуск построчное копирования с условиями',TMWOHistoryOut);
        //Получаем кодовое имя листа
        codeNameEtalonSheet:=getcodenameSheet(nameEtalon,'>',0) + '>'; //<light>
        codeNameEtalonSheetRect:=getcodenameSheet(nameEtalon,'>',1);   //DEVEXPORT
        codeNameNewSheet:=getcodenameSheet(nameSheet,codeNameEtalonSheetRect,0);
        if remotemode then begin
-         ZCMsgCallBackInterface.TextMessage('codeNameEtalonSheet ======= '+codeNameEtalonSheet,TMWOHistoryOut);
-         ZCMsgCallBackInterface.TextMessage('codeNameEtalonSheetRect ======= '+codeNameEtalonSheetRect,TMWOHistoryOut);
-         ZCMsgCallBackInterface.TextMessage('codeNameNewSheet ======= '+codeNameNewSheet,TMWOHistoryOut);
+         zcUI.TextMessage('codeNameEtalonSheet ======= '+codeNameEtalonSheet,TMWOHistoryOut);
+         zcUI.TextMessage('codeNameEtalonSheetRect ======= '+codeNameEtalonSheetRect,TMWOHistoryOut);
+         zcUI.TextMessage('codeNameNewSheet ======= '+codeNameNewSheet,TMWOHistoryOut);
        end;
        //Получаем значение спецключей
        spectargetSheet:=getkeysCell(uzvzcadxlsxole.getCellValue(nameEtalon,stRowEtalon,stColEtalon),targetSheet);
        if remotemode then
-         ZCMsgCallBackInterface.TextMessage('targetSheet ======= '+spectargetSheet,TMWOHistoryOut);
+         zcUI.TextMessage('targetSheet ======= '+spectargetSheet,TMWOHistoryOut);
        spectargetcodename:=getkeysCell(uzvzcadxlsxole.getCellValue(nameEtalon,stRowEtalon,stColEtalon),targetcodename);
        if remotemode then
-         ZCMsgCallBackInterface.TextMessage('targetcodename ======= '+spectargetcodename,TMWOHistoryOut);
+         zcUI.TextMessage('targetcodename ======= '+spectargetcodename,TMWOHistoryOut);
        speckeynumcol:=strtoint(getkeysCell(uzvzcadxlsxole.getCellValue(nameEtalon,stRowEtalon,stColEtalon),keynumcol));
        if remotemode then
-         ZCMsgCallBackInterface.TextMessage('keynumcol ======= '+inttostr(speckeynumcol),TMWOHistoryOut);
+         zcUI.TextMessage('keynumcol ======= '+inttostr(speckeynumcol),TMWOHistoryOut);
 
        //найти строку и столбец ячейки кода для копирования
        try
@@ -654,10 +654,10 @@ var
        textTargetSheet := StringReplace(spectargetSheet, codeNameEtalonSheet, codeNameNewSheet, [rfReplaceAll, rfIgnoreCase]);
        textTargetSheet := StringReplace(textTargetSheet, zallcabcodeNameEtalon, zallcabcodeNameNew, [rfReplaceAll, rfIgnoreCase]);
        if remotemode then
-         ZCMsgCallBackInterface.TextMessage('textTargetSheet ======= '+textTargetSheet,TMWOHistoryOut);
+         zcUI.TextMessage('textTargetSheet ======= '+textTargetSheet,TMWOHistoryOut);
        uzvzcadxlsxole.searchCellRowCol(textTargetSheet,'<'+spectargetcodename,stRow,stCol);  //Получаем строку и столбец хранения спец символа новой строки
        if remotemode then
-         ZCMsgCallBackInterface.TextMessage('значение ячейки = ' + inttostr(stRow) + ' - ' + inttostr(stCol)+ ' = ',TMWOHistoryOut);
+         zcUI.TextMessage('значение ячейки = ' + inttostr(stRow) + ' - ' + inttostr(stCol)+ ' = ',TMWOHistoryOut);
 
 
        stRowNew:=stRow;
@@ -671,7 +671,7 @@ var
        while cellValueVar <> '' do
          begin
               ////cellValueVar:=uzvzcadxlsxole.getCellValue(textTargetSheet,stRowNew,stCol);  //Получаем значение ключа, для первой строки
-              ZCMsgCallBackInterface.TextMessage('    - скопирована строка №' + inttostr(j),TMWOHistoryOut);
+              zcUI.TextMessage('    - скопирована строка №' + inttostr(j),TMWOHistoryOut);
               inc(j);
               //
               inc(stColEtalonNew);
@@ -685,10 +685,10 @@ var
               //while cellValueVar <> zcopyrowFT do begin
               //    uzvzcadxlsxole.copyCell(nameEtalon,stRowEtalon,stColEtalonNew,nameSheet,stRowEtalonNew,stColEtalonNew);
               //    temptextcell:=uzvzcadxlsxole.getCellFormula(nameSheet,stRowEtalonNew,stColEtalonNew);
-              //    //ZCMsgCallBackInterface.TextMessage('temptextcell = ' + temptextcell,TMWOHistoryOut);
+              //    //zcUI.TextMessage('temptextcell = ' + temptextcell,TMWOHistoryOut);
               //    temptextcellnew:=StringReplace(temptextcell, codeNameEtalonSheet, codeNameNewSheet, [rfReplaceAll, rfIgnoreCase]);
               //    temptextcellnew:=StringReplace(temptextcellnew, zallcabcodeNameEtalon, zallcabcodeNameNew, [rfReplaceAll, rfIgnoreCase]);
-              //    //ZCMsgCallBackInterface.TextMessage('temptextcellnew = ' + temptextcellnew,TMWOHistoryOut);
+              //    //zcUI.TextMessage('temptextcellnew = ' + temptextcellnew,TMWOHistoryOut);
               //    uzvzcadxlsxole.setCellFormula(nameSheet,stRowEtalonNew,stColEtalonNew,temptextcellnew);
               //    inc(stColEtalonNew);
               //    cellValueVar:=uzvzcadxlsxole.getCellFormula(nameEtalon,stRowEtalon,stColEtalonNew);
@@ -709,12 +709,12 @@ var
        stRowEtalonNew:=stRowEtalonNew-1;
        cellValueVar:=uzvzcadxlsxole.getCellValue(textTargetSheet,stRowNew,stCol);  //Получаем значение ключа, для первой строки
        if remotemode then
-         ZCMsgCallBackInterface.TextMessage('удаляем удаляем удаляем= ' + inttostr(stRowNew) + ' - ' + inttostr(stCol)+ ' = '+cellValueVar,TMWOHistoryOut);
+         zcUI.TextMessage('удаляем удаляем удаляем= ' + inttostr(stRowNew) + ' - ' + inttostr(stCol)+ ' = '+cellValueVar,TMWOHistoryOut);
 
        while cellValueVar = '1' do
          begin
               cellValueVar:=uzvzcadxlsxole.getCellValue(textTargetSheet,stRowNew,speckeynumcol);  //Получаем значение ключа, для первой строки
-              ZCMsgCallBackInterface.TextMessage('значение ячейки которое удаляем 111111111111111111 = ' + inttostr(stRowNew) + ' - ' + inttostr(speckeynumcol)+ ' = '+cellValueVar,TMWOHistoryOut);
+              zcUI.TextMessage('значение ячейки которое удаляем 111111111111111111 = ' + inttostr(stRowNew) + ' - ' + inttostr(speckeynumcol)+ ' = '+cellValueVar,TMWOHistoryOut);
               if cellValueVar <> '1' then
                  uzvzcadxlsxole.deleteRow(nameSheet,stRowEtalonNew);
 
@@ -724,7 +724,7 @@ var
          end;
        //uzvzcadxlsxole.setCellValue(nameSheet,1,1,'1'); //переводим фокус
        except
-        ZCMsgCallBackInterface.TextMessage('ОШИБКА КОПИРОВАНИЯ СТРОКИ!!!! КОПИРОВАНИЕ ОМЕНЕНО! ПРОВЕРЯЙТЕ КЛЮЧИВЫЕ НАСТРОЙКИ ПАРАМЕТРОВ КОМПИРОВАНИЯ!',TMWOHistoryOut);
+        zcUI.TextMessage('ОШИБКА КОПИРОВАНИЯ СТРОКИ!!!! КОПИРОВАНИЕ ОМЕНЕНО! ПРОВЕРЯЙТЕ КЛЮЧИВЫЕ НАСТРОЙКИ ПАРАМЕТРОВ КОМПИРОВАНИЯ!',TMWOHistoryOut);
        end;
     end;
 
@@ -762,7 +762,7 @@ var
       //end;
     begin
 
-       ZCMsgCallBackInterface.TextMessage('НАЧИНАЕМ ИМПОРТИРОВАТЬ ВЕСЬ Кабель',TMWOHistoryOut);
+       zcUI.TextMessage('НАЧИНАЕМ ИМПОРТИРОВАТЬ ВЕСЬ Кабель',TMWOHistoryOut);
 
        // Получаем место входа спецкода имени. поиск в экселле
        uzvzcadxlsxole.searchCellRowCol(nameEtalon,zallcabCodeST,stInfoDevCell.vRow,stInfoDevCell.vCol);
@@ -772,7 +772,7 @@ var
          stCol:=stInfoDevCell.vCol;
          stRowNew:=stInfoDevCell.vRow;
          stColNew:=stInfoDevCell.vCol;
-         //ZCMsgCallBackInterface.TextMessage('значение ячейки = ' + inttostr(stRow) + ' - ' + inttostr(stColNew)+ ' = ' + cellValueVar,TMWOHistoryOut);
+         //zcUI.TextMessage('значение ячейки = ' + inttostr(stRow) + ' - ' + inttostr(stColNew)+ ' = ' + cellValueVar,TMWOHistoryOut);
 
          //начинаем сбор всех всех кабелей
          for ourgraphDev in listGraphEM do
@@ -782,10 +782,10 @@ var
             j:=1;
             for ourCab in listCab do
               begin
-                   ZCMsgCallBackInterface.TextMessage('     - сегмент №' + inttostr(j),TMWOHistoryOut);
+                   zcUI.TextMessage('     - сегмент №' + inttostr(j),TMWOHistoryOut);
                    inc(j);
                    // Заполняем всю информацию по устройству
-                   //ZCMsgCallBackInterface.TextMessage('ЗАПОЛНЯЕМ КАБЕЛИ',TMWOHistoryOut);
+                   //zcUI.TextMessage('ЗАПОЛНЯЕМ КАБЕЛИ',TMWOHistoryOut);
 
                    polyext:=ourCab^.GetExtension<TVariablesExtender>;
                    //Получаем ссылку на кабель или полилинию которая заменяет стояк
@@ -800,7 +800,7 @@ var
                     cellValueVar:=uzvzcadxlsxole.getCellFormula(nameEtalon,stRow,stColNew);
 
                    if remotemode then
-                       ZCMsgCallBackInterface.TextMessage('значение ячейки = ' + inttostr(stRow) + ' - ' + inttostr(stColNew)+ ' = ' + cellValueVar,TMWOHistoryOut);
+                       zcUI.TextMessage('значение ячейки = ' + inttostr(stRow) + ' - ' + inttostr(stColNew)+ ' = ' + cellValueVar,TMWOHistoryOut);
 
                     while cellValueVar <> zallcabCodeFT do begin
                      if (cellValueVar <> '') and (cellValueVar[1]<>'=') then
@@ -826,7 +826,7 @@ var
                                  end;
                              end;
                             end;
-                         //ZCMsgCallBackInterface.TextMessage('значение ячейки zdevstart = ' + textCell,TMWOHistoryOut);
+                         //zcUI.TextMessage('значение ячейки zdevstart = ' + textCell,TMWOHistoryOut);
                            if cellValueVar = 'zdevfinish' then
                               begin
                                //node:= cableNowMF^.NodePropArray[cableNowMF^.NodePropArray.count-1];
@@ -839,19 +839,19 @@ var
                                    end;
                                end;
                               end;
-                         //ZCMsgCallBackInterface.TextMessage('значение ячейки zdevfinish = ' + textCell,TMWOHistoryOut);
+                         //zcUI.TextMessage('значение ячейки zdevfinish = ' + textCell,TMWOHistoryOut);
 
                          pvd:=FindVariableInEnt(cableNowMF,cellValueVar);
                          if pvd<>nil then begin
                             iHaveParam:=true;
                             textCell:=pvd^.data.ptd^.GetValueAsString(pvd^.data.Addr.Instance);
                          end;
-                         //ZCMsgCallBackInterface.TextMessage('значение ячейки zdevfinish2 = ' + textCell,TMWOHistoryOut);
+                         //zcUI.TextMessage('значение ячейки zdevfinish2 = ' + textCell,TMWOHistoryOut);
                        end
                        else
                        begin   //полилиния
                          // Проверяем совпадает имя группы подключения внутри устройства с группой которую мы сейчас заполняем
-                        //ZCMsgCallBackInterface.TextMessage('   я полилиния = ',TMWOHistoryOut);
+                        //zcUI.TextMessage('   я полилиния = ',TMWOHistoryOut);
                          pvd:=FindVariableInEnt(ourCab,cellValueVar);
                          if pvd<>nil then begin
                              iHaveParam:=true;
@@ -876,7 +876,7 @@ var
                        inc(stColNew);
                        cellValueVar:=uzvzcadxlsxole.getCellFormula(nameEtalon,stRow,stColNew);
                        if remotemode then
-                         ZCMsgCallBackInterface.TextMessage('значение ячейки = ' + inttostr(stRow) + ' - ' + inttostr(stColNew)+ ' = ' + cellValueVar,TMWOHistoryOut);
+                         zcUI.TextMessage('значение ячейки = ' + inttostr(stRow) + ' - ' + inttostr(stColNew)+ ' = ' + cellValueVar,TMWOHistoryOut);
                     end;
                     inc(stRowNew);
                     stColNew:=stCol;
@@ -894,7 +894,7 @@ var
 //       stRowNew:=stRow;
 //       stColNew:=stCol;
 
-       ////ZCMsgCallBackInterface.TextMessage('Выполняем выгрузку кабелей для данного щита' + inttostr(j),TMWOHistoryOut);
+       ////zcUI.TextMessage('Выполняем выгрузку кабелей для данного щита' + inttostr(j),TMWOHistoryOut);
        //for nameGroup in listGroupHeadDev do
        //
        //   //Получаем список кабелей для данной группы
@@ -936,7 +936,7 @@ var
   //end;
 begin
 
-   ZCMsgCallBackInterface.TextMessage('НАЧИНАЕМ ИМПОРТИРОВАТЬ ВСЕ УСТРОЙСТВА!',TMWOHistoryOut);
+   zcUI.TextMessage('НАЧИНАЕМ ИМПОРТИРОВАТЬ ВСЕ УСТРОЙСТВА!',TMWOHistoryOut);
 
    // Получаем место входа спецкода имени. поиск в экселле
    uzvzcadxlsxole.searchCellRowCol(nameEtalon,zalldevCodeST,stInfoDevCell.vRow,stInfoDevCell.vCol);
@@ -946,7 +946,7 @@ begin
      stCol:=stInfoDevCell.vCol;
      stRowNew:=stInfoDevCell.vRow;
      stColNew:=stInfoDevCell.vCol;
-     ZCMsgCallBackInterface.TextMessage('значение ячейки = ' + inttostr(stRow) + ' - ' + inttostr(stColNew)+ ' = ' + cellValueVar,TMWOHistoryOut);
+     zcUI.TextMessage('значение ячейки = ' + inttostr(stRow) + ' - ' + inttostr(stColNew)+ ' = ' + cellValueVar,TMWOHistoryOut);
 
      //начинаем сбор всех всех кабелей
      for ourgraphDev in listGraphEM do
@@ -956,10 +956,10 @@ begin
         j:=1;
         for ourDev in listDev do
           begin
-               ZCMsgCallBackInterface.TextMessage('     - устр №' + inttostr(j),TMWOHistoryOut);
+               zcUI.TextMessage('     - устр №' + inttostr(j),TMWOHistoryOut);
                inc(j);
                // Заполняем всю информацию по устройству
-               //ZCMsgCallBackInterface.TextMessage('ЗАПОЛНЯЕМ КАБЕЛИ',TMWOHistoryOut);
+               //zcUI.TextMessage('ЗАПОЛНЯЕМ КАБЕЛИ',TMWOHistoryOut);
 
                devext:=ourDev^.GetExtension<TVariablesExtender>;
                //Получаем ссылку на кабель или полилинию которая заменяет стояк
@@ -974,7 +974,7 @@ begin
                 cellValueVar:=uzvzcadxlsxole.getCellFormula(nameEtalon,stRow,stColNew);
 
                if remotemode then
-                   ZCMsgCallBackInterface.TextMessage('значение ячейки = ' + inttostr(stRow) + ' - ' + inttostr(stColNew)+ ' = ' + cellValueVar,TMWOHistoryOut);
+                   zcUI.TextMessage('значение ячейки = ' + inttostr(stRow) + ' - ' + inttostr(stColNew)+ ' = ' + cellValueVar,TMWOHistoryOut);
 
                 while cellValueVar <> zalldevCodeFT do begin
                  if (cellValueVar <> '') and (cellValueVar[1]<>'=') then
@@ -991,12 +991,12 @@ begin
                         iHaveParam:=true;
                         textCell:=pvd^.data.ptd^.GetValueAsString(pvd^.data.Addr.Instance);
                      end;
-                     //ZCMsgCallBackInterface.TextMessage('значение ячейки zdevfinish2 = ' + textCell,TMWOHistoryOut);
+                     //zcUI.TextMessage('значение ячейки zdevfinish2 = ' + textCell,TMWOHistoryOut);
                    end
                    else
                    begin   //полилиния
                      // Проверяем совпадает имя группы подключения внутри устройства с группой которую мы сейчас заполняем
-                    //ZCMsgCallBackInterface.TextMessage('   я полилиния = ',TMWOHistoryOut);
+                    //zcUI.TextMessage('   я полилиния = ',TMWOHistoryOut);
                      pvd:=FindVariableInEnt(ourDev,cellValueVar);
                      if pvd<>nil then begin
                          iHaveParam:=true;
@@ -1021,7 +1021,7 @@ begin
                    inc(stColNew);
                    cellValueVar:=uzvzcadxlsxole.getCellFormula(nameEtalon,stRow,stColNew);
                    if remotemode then
-                     ZCMsgCallBackInterface.TextMessage('значение ячейки = ' + inttostr(stRow) + ' - ' + inttostr(stColNew)+ ' = ' + cellValueVar,TMWOHistoryOut);
+                     zcUI.TextMessage('значение ячейки = ' + inttostr(stRow) + ' - ' + inttostr(stColNew)+ ' = ' + cellValueVar,TMWOHistoryOut);
                 end;
                 inc(stRowNew);
                 stColNew:=stCol;
@@ -1054,20 +1054,20 @@ procedure generatorSheet(graphDev:TGraphDev;nameEtalon,nameSheet:string;listGrap
 
       for i:=0 to Length(arrayCodeName)-1 do
         begin
-           //ZCMsgCallBackInterface.TextMessage('имя = '+ arrayCodeName[i],TMWOHistoryOut);
+           //zcUI.TextMessage('имя = '+ arrayCodeName[i],TMWOHistoryOut);
            uzvzcadxlsxole.searchCellRowCol(nameEtalon,arrayCodeName[i],stInfoDevCell.vRow,stInfoDevCell.vCol);
            if stInfoDevCell.vRow > 0 then
            begin
              Case i of
-             0: zimportrootdevcommand(graphDev,nameEtalon,nameSheet,stInfoDevCell.vRow,stInfoDevCell.vCol);//ZCMsgCallBackInterface.TextMessage('<zimportrootdev запускаем! ',TMWOHistoryOut);//'<zcopycol'
-             1: zimportdevcommand(graphDev,nameEtalon,nameSheet,stInfoDevCell.vRow,stInfoDevCell.vCol);//ZCMsgCallBackInterface.TextMessage('<zimportdev запускаем! ',TMWOHistoryOut);//<zimportdev
-             2: zimportcabcommand(graphDev,nameEtalon,nameSheet,stInfoDevCell.vRow,stInfoDevCell.vCol);//ZCMsgCallBackInterface.TextMessage('<zimportcab запускаем! ',TMWOHistoryOut);//<zimportcab
+             0: zimportrootdevcommand(graphDev,nameEtalon,nameSheet,stInfoDevCell.vRow,stInfoDevCell.vCol);//zcUI.TextMessage('<zimportrootdev запускаем! ',TMWOHistoryOut);//'<zcopycol'
+             1: zimportdevcommand(graphDev,nameEtalon,nameSheet,stInfoDevCell.vRow,stInfoDevCell.vCol);//zcUI.TextMessage('<zimportdev запускаем! ',TMWOHistoryOut);//<zimportdev
+             2: zimportcabcommand(graphDev,nameEtalon,nameSheet,stInfoDevCell.vRow,stInfoDevCell.vCol);//zcUI.TextMessage('<zimportcab запускаем! ',TMWOHistoryOut);//<zimportcab
              3: zcopyrowcommand(nameEtalon,nameSheet,stInfoDevCell.vRow,stInfoDevCell.vCol);   //<zcopyrow
-             4: ZCMsgCallBackInterface.TextMessage('<zcopycol запускаем! ',TMWOHistoryOut);//'<zcopycol'
+             4: zcUI.TextMessage('<zcopycol запускаем! ',TMWOHistoryOut);//'<zcopycol'
              5: zallimportcabcommand(listGraphEM,nameEtalon,nameSheet);
              6: zallimportdevcommand(listGraphEM,nameEtalon,nameSheet);
              else
-               ZCMsgCallBackInterface.TextMessage('ОШИБКА в КАСЕ!!! ',TMWOHistoryOut);
+               zcUI.TextMessage('ОШИБКА в КАСЕ!!! ',TMWOHistoryOut);
              end;
            end;
         end;
@@ -1083,7 +1083,7 @@ procedure zallimportcabsetcommand(listGraphEM:TListGraphDev;nameEtalon,nameNewSh
         valueCell:=uzvzcadxlsxole.getCellValue(nameEtalon+'SET',numRow,1);
 
         if remotemode then
-           ZCMsgCallBackInterface.TextMessage('Значение ячейки = '+valueCell,TMWOHistoryOut);
+           zcUI.TextMessage('Значение ячейки = '+valueCell,TMWOHistoryOut);
 
         While AnsiPos(nameEtalon, valueCell) > 0 do
         begin
@@ -1093,27 +1093,27 @@ procedure zallimportcabsetcommand(listGraphEM:TListGraphDev;nameEtalon,nameNewSh
                //Создаем копию листа эталона
                newNameSheet:=StringReplace(valueCell, nameEtalon, nameNewSheet,[rfReplaceAll, rfIgnoreCase]);
                uzvzcadxlsxole.copyWorksheetName(valueCell,newNameSheet);
-               ZCMsgCallBackInterface.TextMessage('Создаем новый лист ='+newNameSheet,TMWOHistoryOut);
+               zcUI.TextMessage('Создаем новый лист ='+newNameSheet,TMWOHistoryOut);
 
               //Передаем имя эталона и имя нового листа в генерацию листа
               if remotemode then
-                ZCMsgCallBackInterface.TextMessage('generatorSheet(graphDev,valueCell,newNameSheet)',TMWOHistoryOut);
+                zcUI.TextMessage('generatorSheet(graphDev,valueCell,newNameSheet)',TMWOHistoryOut);
 
               //for i:=0 to Length(arrayCodeName)-1 do
               //begin
-              //   //ZCMsgCallBackInterface.TextMessage('имя = '+ arrayCodeName[i],TMWOHistoryOut);
+              //   //zcUI.TextMessage('имя = '+ arrayCodeName[i],TMWOHistoryOut);
               //   uzvzcadxlsxole.searchCellRowCol(nameEtalon,arrayCodeName[i],stInfoDevCell.vRow,stInfoDevCell.vCol);
               //   if stInfoDevCell.vRow > 0 then
               //   begin
               //     Case i of
-              //     0: zimportrootdevcommand(graphDev,nameEtalon,nameSheet,stInfoDevCell.vRow,stInfoDevCell.vCol);//ZCMsgCallBackInterface.TextMessage('<zimportrootdev запускаем! ',TMWOHistoryOut);//'<zcopycol'
-              //     1: zimportdevcommand(graphDev,nameEtalon,nameSheet,stInfoDevCell.vRow,stInfoDevCell.vCol);//ZCMsgCallBackInterface.TextMessage('<zimportdev запускаем! ',TMWOHistoryOut);//<zimportdev
-              //     2: zimportcabcommand(graphDev,nameEtalon,nameSheet,stInfoDevCell.vRow,stInfoDevCell.vCol);//ZCMsgCallBackInterface.TextMessage('<zimportcab запускаем! ',TMWOHistoryOut);//<zimportcab
+              //     0: zimportrootdevcommand(graphDev,nameEtalon,nameSheet,stInfoDevCell.vRow,stInfoDevCell.vCol);//zcUI.TextMessage('<zimportrootdev запускаем! ',TMWOHistoryOut);//'<zcopycol'
+              //     1: zimportdevcommand(graphDev,nameEtalon,nameSheet,stInfoDevCell.vRow,stInfoDevCell.vCol);//zcUI.TextMessage('<zimportdev запускаем! ',TMWOHistoryOut);//<zimportdev
+              //     2: zimportcabcommand(graphDev,nameEtalon,nameSheet,stInfoDevCell.vRow,stInfoDevCell.vCol);//zcUI.TextMessage('<zimportcab запускаем! ',TMWOHistoryOut);//<zimportcab
               //     3: zcopyrowcommand(nameEtalon,nameSheet,stInfoDevCell.vRow,stInfoDevCell.vCol);   //<zcopyrow
-              //     4: ZCMsgCallBackInterface.TextMessage('<zcopycol запускаем! ',TMWOHistoryOut);//'<zcopycol'
+              //     4: zcUI.TextMessage('<zcopycol запускаем! ',TMWOHistoryOut);//'<zcopycol'
               //     5: zallimportcabcommand(listGraphEM,nameEtalon,nameSheet);
               //     else
-              //       ZCMsgCallBackInterface.TextMessage('ОШИБКА в КАСЕ!!! ',TMWOHistoryOut);
+              //       zcUI.TextMessage('ОШИБКА в КАСЕ!!! ',TMWOHistoryOut);
               //     end;
               //   end;
               //end;
@@ -1121,7 +1121,7 @@ procedure zallimportcabsetcommand(listGraphEM:TListGraphDev;nameEtalon,nameNewSh
               generatorSheet(nil,valueCell,newNameSheet,listGraphEM);     //здесь запускается самое главное, ищутся спец коды и заполняются
 
              end else begin
-                ZCMsgCallBackInterface.TextMessage('Эталонный лист = '+valueCell + ' - ОТСУТСТВУЕТ!!!',TMWOHistoryOut);
+                zcUI.TextMessage('Эталонный лист = '+valueCell + ' - ОТСУТСТВУЕТ!!!',TMWOHistoryOut);
              end;
 
             //делаем следующий шаг
@@ -1129,7 +1129,7 @@ procedure zallimportcabsetcommand(listGraphEM:TListGraphDev;nameEtalon,nameNewSh
             valueCell:=uzvzcadxlsxole.getCellValue(nameEtalon+'SET',numRow,1);
 
             if remotemode then
-              ZCMsgCallBackInterface.TextMessage('Значение ячейки = '+valueCell + ', номер позиции = ' +inttostr(AnsiPos(nameEtalon, valueCell)),TMWOHistoryOut);
+              zcUI.TextMessage('Значение ячейки = '+valueCell + ', номер позиции = ' +inttostr(AnsiPos(nameEtalon, valueCell)),TMWOHistoryOut);
         end;
             //until AnsiPos(nameSET, valueCell) > 0;
         //valueCell:=uzvzcadxlsxole.getCellValue(nameEtalon+'SET',numRow,1);
@@ -1148,7 +1148,7 @@ procedure zallimportdevsetcommand(listGraphEM:TListGraphDev;nameEtalon,nameNewSh
         valueCell:=uzvzcadxlsxole.getCellValue(nameEtalon+'SET',numRow,1);
 
         if remotemode then
-           ZCMsgCallBackInterface.TextMessage('Значение ячейки = '+valueCell,TMWOHistoryOut);
+           zcUI.TextMessage('Значение ячейки = '+valueCell,TMWOHistoryOut);
 
         While AnsiPos(nameEtalon, valueCell) > 0 do
         begin
@@ -1158,16 +1158,16 @@ procedure zallimportdevsetcommand(listGraphEM:TListGraphDev;nameEtalon,nameNewSh
                //Создаем копию листа эталона
                newNameSheet:=StringReplace(valueCell, nameEtalon, nameNewSheet,[rfReplaceAll, rfIgnoreCase]);
                uzvzcadxlsxole.copyWorksheetName(valueCell,newNameSheet);
-               ZCMsgCallBackInterface.TextMessage('Создаем новый лист ='+newNameSheet,TMWOHistoryOut);
+               zcUI.TextMessage('Создаем новый лист ='+newNameSheet,TMWOHistoryOut);
 
               //Передаем имя эталона и имя нового листа в генерацию листа
               if remotemode then
-                ZCMsgCallBackInterface.TextMessage('generatorSheet(graphDev,valueCell,newNameSheet)',TMWOHistoryOut);
+                zcUI.TextMessage('generatorSheet(graphDev,valueCell,newNameSheet)',TMWOHistoryOut);
 
               generatorSheet(nil,valueCell,newNameSheet,listGraphEM);     //здесь запускается самое главное, ищутся спец коды и заполняются
 
              end else begin
-                ZCMsgCallBackInterface.TextMessage('Эталонный лист = '+valueCell + ' - ОТСУТСТВУЕТ!!!',TMWOHistoryOut);
+                zcUI.TextMessage('Эталонный лист = '+valueCell + ' - ОТСУТСТВУЕТ!!!',TMWOHistoryOut);
              end;
 
             //делаем следующий шаг
@@ -1175,7 +1175,7 @@ procedure zallimportdevsetcommand(listGraphEM:TListGraphDev;nameEtalon,nameNewSh
             valueCell:=uzvzcadxlsxole.getCellValue(nameEtalon+'SET',numRow,1);
 
             if remotemode then
-              ZCMsgCallBackInterface.TextMessage('Значение ячейки = '+valueCell + ', номер позиции = ' +inttostr(AnsiPos(nameEtalon, valueCell)),TMWOHistoryOut);
+              zcUI.TextMessage('Значение ячейки = '+valueCell + ', номер позиции = ' +inttostr(AnsiPos(nameEtalon, valueCell)),TMWOHistoryOut);
         end;
             //until AnsiPos(nameSET, valueCell) > 0;
         //valueCell:=uzvzcadxlsxole.getCellValue(nameEtalon+'SET',numRow,1);
@@ -1260,26 +1260,26 @@ procedure zallimportdevsetcommand(listGraphEM:TListGraphDev;nameEtalon,nameNewSh
             begin
             pvd2:=FindVariableInEnt(ourDev,velec_nameDevice);
               if pvd2<>nil then
-                 ZCMsgCallBackInterface.TextMessage('   Имя устройства = '+pstring(pvd2^.data.Addr.Instance)^,TMWOHistoryOut);
+                 zcUI.TextMessage('   Имя устройства = '+pstring(pvd2^.data.Addr.Instance)^,TMWOHistoryOut);
             nowCell:=stInfoDevCell; //метонахождение изменяемая место ячейка
             inc(nowCell.vCol);      // отходим от кодового имени
 
             // Заполняем всю информацию по устройству
-            //ZCMsgCallBackInterface.TextMessage('1',TMWOHistoryOut);
+            //zcUI.TextMessage('1',TMWOHistoryOut);
             cellValueVar:=uzvzcadxlsxole.getCellValue(namePanel+uzvXLSXSheetIMPORT,nowCell.vRow,nowCell.vCol);
-            //ZCMsgCallBackInterface.TextMessage('значение ячейки = ' + inttostr(nowCell.vRow) + ' - ' + inttostr(nowCell.vCol)+ ' = ' + cellValueVar,TMWOHistoryOut);
+            //zcUI.TextMessage('значение ячейки = ' + inttostr(nowCell.vRow) + ' - ' + inttostr(nowCell.vCol)+ ' = ' + cellValueVar,TMWOHistoryOut);
             while cellValueVar <> zcadImportIndoDevFT do begin
                pvd2:=FindVariableInEnt(ourDev,cellValueVar);
                if pvd2<>nil then begin
                  textCell:=pvd2^.data.ptd^.GetValueAsString(pvd2^.data.Addr.Instance);
-                 //ZCMsgCallBackInterface.TextMessage('записываю в ячейку = ' + textCell,TMWOHistoryOut);
+                 //zcUI.TextMessage('записываю в ячейку = ' + textCell,TMWOHistoryOut);
                  uzvzcadxlsxole.setCellValue(namePanel+uzvXLSXSheetIMPORT,stInfoDevCell.vRow+coldev,nowCell.vCol,textCell);
                end;
                inc(nowCell.vCol);
                cellValueVar:=uzvzcadxlsxole.getCellValue(namePanel+uzvXLSXSheetIMPORT,nowCell.vRow,nowCell.vCol);
-               //ZCMsgCallBackInterface.TextMessage('значение ячейки внутри while = ' + inttostr(nowCell.vRow) + ' - ' + inttostr(nowCell.vCol)+ ' = ' + cellValueVar,TMWOHistoryOut);
+               //zcUI.TextMessage('значение ячейки внутри while = ' + inttostr(nowCell.vRow) + ' - ' + inttostr(nowCell.vCol)+ ' = ' + cellValueVar,TMWOHistoryOut);
 
-               //ZCMsgCallBackInterface.TextMessage('222',TMWOHistoryOut);
+               //zcUI.TextMessage('222',TMWOHistoryOut);
             end;
             //**Информация по устройству закочена
 //
@@ -1288,14 +1288,14 @@ procedure zallimportdevsetcommand(listGraphEM:TListGraphDev;nameEtalon,nameNewSh
             while cellValueVar <> zcadGroupColDevFT do
             begin
               //**начинаем получать есть ли формула в ячейки тогда сложное копирование, если нет формулы просто копирование
-              //ZCMsgCallBackInterface.TextMessage('getCellValue at [stRow' + IntToStr(stRow) + ':nowCell.vCol' + IntToStr(nowCell.vCol) + ']',TMWOHistoryOut);
+              //zcUI.TextMessage('getCellValue at [stRow' + IntToStr(stRow) + ':nowCell.vCol' + IntToStr(nowCell.vCol) + ']',TMWOHistoryOut);
 
               cellValueVar:=uzvzcadxlsxole.getCellValue(codePanel+uzvXLSXSheetIMPORT,stRow,nowCell.vCol);
-              //ZCMsgCallBackInterface.TextMessage('Получили ячейку = ' + cellValueVar,TMWOHistoryOut);
-              //ZCMsgCallBackInterface.TextMessage('адрес ввиди строки = ' + ExCell(111,222),TMWOHistoryOut);
+              //zcUI.TextMessage('Получили ячейку = ' + cellValueVar,TMWOHistoryOut);
+              //zcUI.TextMessage('адрес ввиди строки = ' + ExCell(111,222),TMWOHistoryOut);
               if ContainsText(cellValueVar, uzvXLSXCellFormula) then begin
-                 ZCMsgCallBackInterface.TextMessage('формула такая = ' + cellValueVar,TMWOHistoryOut);
-                 ZCMsgCallBackInterface.TextMessage('формула стала такой = ' + parserZVFormula(cellValueVar),TMWOHistoryOut);
+                 zcUI.TextMessage('формула такая = ' + cellValueVar,TMWOHistoryOut);
+                 zcUI.TextMessage('формула стала такой = ' + parserZVFormula(cellValueVar),TMWOHistoryOut);
                  uzvzcadxlsxole.setCellValue(namePanel+uzvXLSXSheetIMPORT,stInfoDevCell.vRow+coldev,nowCell.vCol,parserZVFormula(cellValueVar));
               end
               else
@@ -1315,22 +1315,22 @@ procedure zallimportdevsetcommand(listGraphEM:TListGraphDev;nameEtalon,nameNewSh
   var lph:TLPSHandle;
   begin
        ////открываем эталонную книгу     generatorSheet
-       // ZCMsgCallBackInterface.Do_BeforeShowModal(nil);
+       // zcUI.Do_BeforeShowModal(nil);
        // isload:=OpenFileDialog(s,LastFileHandle,'',Ext2LoadProcMap.GetCurrentFileFilter,'',rsOpenFile);
-       // ZCMsgCallBackInterface.Do_AfterShowModal(nil);
+       // zcUI.Do_AfterShowModal(nil);
        // if not isload then begin
        //   result:=cmd_cancel;
        //   exit;
        // end;
        lph:=lps.StartLongProcess('Выполнение экспорта модели соединений в EXCEL',nil);
-       ZCMsgCallBackInterface.TextMessage('Алгоритм экспорта модели соединений в EXCEL - НАЧАТ',TMWOHistoryOut);
+       zcUI.TextMessage('Алгоритм экспорта модели соединений в EXCEL - НАЧАТ',TMWOHistoryOut);
 
        //uzvzcadxlsxole.openXLSXFile('d:\YandexDisk\zcad-test\ETALON\etalon.xlsx');
        //uzvzcadxlsxole.openXLSXFile(fileTemplate);
        try
        //fileTemplate
        if remotemode then
-          ZCMsgCallBackInterface.TextMessage('Длина списка головных устройств = '+inttostr(listAllHeadDev.Size-1),TMWOHistoryOut);
+          zcUI.TextMessage('Длина списка головных устройств = '+inttostr(listAllHeadDev.Size-1),TMWOHistoryOut);
 
        //Обрабатываем листы которые производят вынос всех устройств или всех кабелей в один общий список
        //if uzvzcadxlsxole.getNumWorkSheetName(zalldevexportetalon)>0 then begin
@@ -1352,7 +1352,7 @@ procedure zallimportdevsetcommand(listGraphEM:TListGraphDev;nameEtalon,nameNewSh
             if pvd<>nil then
               namePanel:=pstring(pvd^.data.Addr.Instance)^; // Имя устройства
 
-            ZCMsgCallBackInterface.TextMessage('Имя ГУ = '+pstring(pvd^.data.Addr.Instance)^,TMWOHistoryOut);
+            zcUI.TextMessage('Имя ГУ = '+pstring(pvd^.data.Addr.Instance)^,TMWOHistoryOut);
 
             //Получаем досутп к переменной с именим заполняемого листа
             pvd:=FindVariableInEnt(graphDev.Root.getDevice,uzvconsts.velec_nametemplatesxlsx);
@@ -1361,7 +1361,7 @@ procedure zallimportdevsetcommand(listGraphEM:TListGraphDev;nameEtalon,nameNewSh
 
             //nameSET:='<zlight>';
 
-            ZCMsgCallBackInterface.TextMessage('Имя заполняемого листа = '+nameSET,TMWOHistoryOut);
+            zcUI.TextMessage('Имя заполняемого листа = '+nameSET,TMWOHistoryOut);
 
             //Здесь будет место где я буду получать какие настройки будут подключаться
             //nameSET:='<zlight>'; //Данное имя всегда будет менятся на имя щита
@@ -1371,7 +1371,7 @@ procedure zallimportdevsetcommand(listGraphEM:TListGraphDev;nameEtalon,nameNewSh
             valueCell:=uzvzcadxlsxole.getCellValue(nameSET+'SET',numRow,1);
 
             if remotemode then
-               ZCMsgCallBackInterface.TextMessage('Значение ячейки = '+valueCell,TMWOHistoryOut);
+               zcUI.TextMessage('Значение ячейки = '+valueCell,TMWOHistoryOut);
 
             While AnsiPos(nameSET, valueCell) > 0 do
             begin
@@ -1380,17 +1380,17 @@ procedure zallimportdevsetcommand(listGraphEM:TListGraphDev;nameEtalon,nameNewSh
                   //Создаем копию листа эталона
                   newNameSheet:=StringReplace(valueCell, nameSET, namePanel,[rfReplaceAll, rfIgnoreCase]);
                   uzvzcadxlsxole.copyWorksheetName(valueCell,newNameSheet);
-                  ZCMsgCallBackInterface.TextMessage('Создаем новый лист ='+newNameSheet,TMWOHistoryOut);
+                  zcUI.TextMessage('Создаем новый лист ='+newNameSheet,TMWOHistoryOut);
                   //Передаем имя эталона и имя нового листа в генерацию листа
                   if remotemode then
-                    ZCMsgCallBackInterface.TextMessage('generatorSheet(graphDev,valueCell,newNameSheet)',TMWOHistoryOut);
+                    zcUI.TextMessage('generatorSheet(graphDev,valueCell,newNameSheet)',TMWOHistoryOut);
                   generatorSheet(graphDev,valueCell,newNameSheet,nil);     //здесь запускается самое главное, ищутся спец коды и заполняются
                 //end;
                 inc(numRow);
                 valueCell:=uzvzcadxlsxole.getCellValue(nameSET+'SET',numRow,1);
 
                 if remotemode then
-                  ZCMsgCallBackInterface.TextMessage('Значение ячейки = '+valueCell + ', номер позиции = ' +inttostr(AnsiPos(nameSET, valueCell)),TMWOHistoryOut);
+                  zcUI.TextMessage('Значение ячейки = '+valueCell + ', номер позиции = ' +inttostr(AnsiPos(nameSET, valueCell)),TMWOHistoryOut);
             end;
                 //until AnsiPos(nameSET, valueCell) > 0;
             valueCell:=uzvzcadxlsxole.getCellValue(nameSET+'SET',numRow,1);
@@ -1404,7 +1404,7 @@ procedure zallimportdevsetcommand(listGraphEM:TListGraphDev;nameEtalon,nameNewSh
 
 
      except
-       ZCMsgCallBackInterface.TextMessage('ОШИБКА. НЕ правильно выбран шаблон, не те имена заполнены в ГУ и они не соответствуют листам в книге, проверяйте!!!',TMWOHistoryOut);
+       zcUI.TextMessage('ОШИБКА. НЕ правильно выбран шаблон, не те имена заполнены в ГУ и они не соответствуют листам в книге, проверяйте!!!',TMWOHistoryOut);
        //uzvzcadxlsxole.destroyWorkbook;
      end;
   end;
@@ -1444,34 +1444,34 @@ begin
   //получаем имя файла для проверки на его сохранение
   newfilexlsx:=PTZCADDrawing(drawings.GetCurrentDwg)^.FileName;
    if AnsiPos(':\', newfilexlsx) = 0 then begin
-     ZCMsgCallBackInterface.TextMessage('Команда отменена. Выполните сохранение чертежа в ZCAD!!!!!',TMWOHistoryOut);
+     zcUI.TextMessage('Команда отменена. Выполните сохранение чертежа в ZCAD!!!!!',TMWOHistoryOut);
      result:=cmd_cancel;
      exit;
    end;
 
    //открываем шаблон для его заполнения
   fileTemplate:='Не работает!!!!!!!!!!!!!';
-  ZCMsgCallBackInterface.Do_BeforeShowModal(nil);
+  zcUI.Do_BeforeShowModal(nil);
   isload:=OpenFileDialog(fileTemplate,LastFileHandle,'','Книга XLSX с поддержкой макросов|*.xlsm|Книга Excel 97-2003|*.xls|Книга Excel|*.xlsx',sysvar.PATH.Program_Run^+'preload\xlsxtemplates\modelinxlsx\','Open Excel pattern file...');
-  ZCMsgCallBackInterface.Do_AfterShowModal(nil);
+  zcUI.Do_AfterShowModal(nil);
   if not isload then begin
     result:=cmd_cancel;
     exit;
   end;
-  ZCMsgCallBackInterface.TextMessage('Выбранный шаблон =' + fileTemplate,TMWOHistoryOut);
+  zcUI.TextMessage('Выбранный шаблон =' + fileTemplate,TMWOHistoryOut);
 
   //Получить список всех древовидно ориентированных графов из которых состоит модель
   //listFullGraphEM:=TListGraphDev.Create;
   listFullGraphEM:=uzvmanemgetgem.getListGrapghEM;       //ВСЕ ХОРоШо
 
-  ////ZCMsgCallBackInterface.TextMessage('listFullGraphEM сайз =  ' + inttostr(listFullGraphEM.Size),TMWOHistoryOut);
+  ////zcUI.TextMessage('listFullGraphEM сайз =  ' + inttostr(listFullGraphEM.Size),TMWOHistoryOut);
   //for i:=0 to listFullGraphEM.Size-1 do begin
-  //  ZCMsgCallBackInterface.TextMessage('   ===граф№ - ' + inttostr(i),TMWOHistoryOut);
+  //  zcUI.TextMessage('   ===граф№ - ' + inttostr(i),TMWOHistoryOut);
   //  for j:=0 to listFullGraphEM[i].VertexCount-1 do
   //    begin
   //      pvd:=FindVariableInEnt(listFullGraphEM[i].Vertices[j].getDevice,'NMO_Name');
   //      if pvd<>nil then
-  //         ZCMsgCallBackInterface.TextMessage('   ===Устройства в графе - ' + pstring(pvd^.data.Addr.Instance)^,TMWOHistoryOut);
+  //         zcUI.TextMessage('   ===Устройства в графе - ' + pstring(pvd^.data.Addr.Instance)^,TMWOHistoryOut);
   //    end;
   //end;
 
@@ -1492,26 +1492,26 @@ begin
   //**получить список всех головных устройств (устройств централей)
   listAllHeadDev:=TListDev.Create;
   listAllHeadDev:=uzvmanemgetgem.getListMainFuncHeadDev(listFullGraphEM);
-  //ZCMsgCallBackInterface.TextMessage('listAllHeadDev сайз =  ' + inttostr(listAllHeadDev.Size),TMWOHistoryOut);
+  //zcUI.TextMessage('listAllHeadDev сайз =  ' + inttostr(listAllHeadDev.Size),TMWOHistoryOut);
   if remotemode then
     for devMaincFunc in listAllHeadDev do
       begin
         pvd:=FindVariableInEnt(devMaincFunc,velec_nameDevice);
         if pvd<>nil then
           begin
-            ZCMsgCallBackInterface.TextMessage('Имя ГУ с учетом особенностей = '+pstring(pvd^.data.Addr.Instance)^,TMWOHistoryOut);
+            zcUI.TextMessage('Имя ГУ с учетом особенностей = '+pstring(pvd^.data.Addr.Instance)^,TMWOHistoryOut);
           end;
-        //ZCMsgCallBackInterface.TextMessage('рисуем граф exportGraphModelToXLSX = СТАРТ ',TMWOHistoryOut);
+        //zcUI.TextMessage('рисуем граф exportGraphModelToXLSX = СТАРТ ',TMWOHistoryOut);
         graphView:=uzvmanemgetgem.getGraphHeadDev(listFullGraphEM,devMaincFunc,listAllHeadDev);
         visualGraphTree(graphView,insertCoordination,3,depthVisual);
         graphView.Free;
-        //ZCMsgCallBackInterface.TextMessage('рисуем граф exportGraphModelToXLSX = ФИНИШ ',TMWOHistoryOut);
+        //zcUI.TextMessage('рисуем граф exportGraphModelToXLSX = ФИНИШ ',TMWOHistoryOut);
       end;
 
-  //ZCMsgCallBackInterface.TextMessage('exportGraphModelToXLSX = СТАРТ ',TMWOHistoryOut);
+  //zcUI.TextMessage('exportGraphModelToXLSX = СТАРТ ',TMWOHistoryOut);
   if not listAllHeadDev.IsEmpty then
      exportGraphModelToXLSX(listAllHeadDev,fileTemplate,newfilexlsx);
-  //ZCMsgCallBackInterface.TextMessage('exportGraphModelToXLSX = ФИНИШ ',TMWOHistoryOut);
+  //zcUI.TextMessage('exportGraphModelToXLSX = ФИНИШ ',TMWOHistoryOut);
 
 
    //Обрабатываем специфические настройки для того, что бы потушить все листы которые нам не нужны в проекте и дать главному файлу имя
@@ -1528,7 +1528,7 @@ begin
         inc(numRow);
         valueCell:=uzvzcadxlsxole.getCellValue(woorkBookSET,numRow,1);
         valueCell:= trim(valueCell);
-        //ZCMsgCallBackInterface.TextMessage('Значение ячейки = '+valueCell + ', номер позиции = ' +inttostr(AnsiPos(nameSET, valueCell)),TMWOHistoryOut);
+        //zcUI.TextMessage('Значение ячейки = '+valueCell + ', номер позиции = ' +inttostr(AnsiPos(nameSET, valueCell)),TMWOHistoryOut);
     end;
           //Сохранить или перезаписать книгу с моделью
 
@@ -1536,16 +1536,16 @@ begin
    isfileSave:=false;
    isfileSave:=uzvzcadxlsxole.saveXLSXFile(newfilexlsx + suffixFilename + '.xlsx');
    //isfileSave:=uzvzcadxlsxole.saveXLSXFile('d:\YandexDisk\zcad-test\ETALON\etalon121212.xlsx');
-   //ZCMsgCallBackInterface.TextMessage('Книга сохранена с именем ='+newFile + suffixFilename + '.xlsx',TMWOHistoryOut);
+   //zcUI.TextMessage('Книга сохранена с именем ='+newFile + suffixFilename + '.xlsx',TMWOHistoryOut);
 
    uzvzcadxlsxole.destroyWorkbook;
-   //ZCMsgCallBackInterface.TextMessage('Память очищена',TMWOHistoryOut);
+   //zcUI.TextMessage('Память очищена',TMWOHistoryOut);
    if isfileSave then begin
-     ZCMsgCallBackInterface.TextMessage('Алгоритм экспорта модели соединений в EXCEL - ЗАВЕРШЕН УСПЕШНО!',TMWOHistoryOut);
-     ZCMsgCallBackInterface.TextMessage('Книга сохранена с именем ='+newfilexlsx + suffixFilename + '.xlsx',TMWOHistoryOut);
+     zcUI.TextMessage('Алгоритм экспорта модели соединений в EXCEL - ЗАВЕРШЕН УСПЕШНО!',TMWOHistoryOut);
+     zcUI.TextMessage('Книга сохранена с именем ='+newfilexlsx + suffixFilename + '.xlsx',TMWOHistoryOut);
    end
    else
-     ZCMsgCallBackInterface.TextMessage('Алгоритм экспорта модели соединений в EXCEL - ОТМЕНЕН. ФАЙЛ НЕ ДОСТУПЕН ИЛИ СОХРАНЕНИЕ ОТМЕНЕНО!',TMWOHistoryOut);
+     zcUI.TextMessage('Алгоритм экспорта модели соединений в EXCEL - ОТМЕНЕН. ФАЙЛ НЕ ДОСТУПЕН ИЛИ СОХРАНЕНИЕ ОТМЕНЕНО!',TMWOHistoryOut);
 
   result:=cmd_ok;
   listFullGraphEM.Free;

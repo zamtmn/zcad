@@ -37,7 +37,7 @@ function TextStyles_cmd(const Context:TZCADCommandContext;operands:TCommandOpera
 begin
   TextStylesForm:=TTextStylesForm.Create(nil);
   SetHeightControl(TextStylesForm,sysvar.INTF.INTF_DefaultControlHeight^);
-  ZCMsgCallBackInterface.DOShowModal(TextStylesForm);
+  zcUI.DOShowModal(TextStylesForm);
   Freeandnil(TextStylesForm);
   result:=cmd_ok;
 end;

@@ -30,32 +30,33 @@ const
     DrawingsFocusPriority=400;
     UnPriority=-1;
 type
-  TZMessageID=type Integer;
-  TZState=type LongWord;
-  TZMessageIDCreater=GTSimpleHandles<TZMessageID,GTHandleManipulator<TZMessageID>>;
-  TZStateCreater=GTSet<TZState,TZState>;
-var
-  ZState_Busy:TZState=0;
+  TzcMessageID=type Integer;
+  TzcMessageIDCreater=GTSimpleHandles<TzcMessageID,GTHandleManipulator<TzcMessageID>>;
 
-  zcMsgUIEnable:TZMessageID=-1;
-  zcMsgUIDisable:TZMessageID=-1;
-  zcMsgUICMDLineCheck:TZMessageID=-1;
-  zcMsgUICMDLineReadyMode:TZMessageID=-1;
-  zcMsgUICMDLineRunMode:TZMessageID=-1;
-  zcMsgUIActionSelectionChanged:TZMessageID=-1;
-  zcMsgUIActionRedrawContent:TZMessageID=-1;
-  zcMsgUIActionRedraw:TZMessageID=-1;
-  zcMsgUIActionRebuild:TZMessageID=-1;
-  zcMsgUIResetOGLWNDProc:TZMessageID=-1;//надо убрать это чудо
-  zcMsgUITimerTick:TZMessageID=-1;
-  zcMsgUIRePrepareObject:TZMessageID=-1;
-  zcMsgUISetDefaultObject:TZMessageID=-1;
-  zcMsgUIReturnToDefaultObject:TZMessageID=-1;
-  zcMsgUIFreEditorProc:TZMessageID=-1;
-  zcMsgUIStoreAndFreeEditorProc:TZMessageID=-1;
-  zcMsgUIBeforeCloseApp:TZMessageID=-1;
+  TzcUIState=type LongWord;
+  TzcUIStateCreater=GTSet<TzcUIState,TzcUIState>;
+var
+  ZState_Busy:TzcUIState=0;
+
+  zcMsgUIEnable:TzcMessageID=-1;
+  zcMsgUIDisable:TzcMessageID=-1;
+  zcMsgUICMDLineCheck:TzcMessageID=-1;
+  zcMsgUICMDLineReadyMode:TzcMessageID=-1;
+  zcMsgUICMDLineRunMode:TzcMessageID=-1;
+  zcMsgUIActionSelectionChanged:TzcMessageID=-1;
+  zcMsgUIActionRedrawContent:TzcMessageID=-1;
+  zcMsgUIActionRedraw:TzcMessageID=-1;
+  zcMsgUIActionRebuild:TzcMessageID=-1;
+  //zcMsgUIResetOGLWNDProc:TzcMessageID=-1;//надо убрать это чудо
+  zcMsgUITimerTick:TzcMessageID=-1;
+  zcMsgUIRePrepareObject:TzcMessageID=-1;
+  zcMsgUISetDefaultObject:TzcMessageID=-1;
+  zcMsgUIReturnToDefaultObject:TzcMessageID=-1;
+  zcMsgUIFreEditorProc:TzcMessageID=-1;
+  zcMsgUIStoreAndFreeEditorProc:TzcMessageID=-1;
+  zcMsgUIBeforeCloseApp:TzcMessageID=-1;
 type
-  TGetStateFunc=function:TZState of object;
+  TGetStateFunc=function:TzcUIState of object;
   TGetStateFuncsVector=TMyVector<TGetStateFunc>;
 
     TProcedure_String_=procedure(s:String);
@@ -64,10 +65,10 @@ type
     TMethod_TForm_=procedure (ShowedForm:TForm) of object;
     TMethod_TForm_HandlersVector=TMyVector<TMethod_TForm_>;
 
-    TProcedure_TZMessageID=procedure(GUIMode:TZMessageID);
+    TProcedure_TZMessageID=procedure(GUIMode:TzcMessageID);
     TProcedure_TZMessageID_HandlersVector=TMyVector<TProcedure_TZMessageID>;
 
-    TSimpleProcedure_TZMessageID=Procedure(GUIAction:TZMessageID);
+    TSimpleProcedure_TZMessageID=Procedure(GUIAction:TzcMessageID);
     TSimpleProcedure=Procedure;
     TSimpleProcedure_TZMessageID_HandlersVector=TMyVector<TSimpleProcedure_TZMessageID>;
 
@@ -79,7 +80,7 @@ type
     TGetControlWithPriority_TZMessageID__TControlWithPriority=function:TControlWithPriority of object;
     TGetControlWithPriority_TZMessageID__TControlWithPriority_HandlersVector=TMyVector<TGetControlWithPriority_TZMessageID__TControlWithPriority>;
 
-    TSimpleLCLMethod_TZMessageID=Procedure (sender:TObject;GUIAction:TZMessageID) of object;
+    TSimpleLCLMethod_TZMessageID=Procedure (sender:TObject;GUIAction:TzcMessageID) of object;
     TSimpleLCLMethod_HandlersVector=TMyVector<TSimpleLCLMethod_TZMessageID>;
 
     //ObjInsp
@@ -107,21 +108,22 @@ const
     TMWOMessageBox=[TMWOToConsole,TMWOToLog,TMWOToModal];
     TMWOQuickly=[TMWOToQuicklyReplaceable];
 type
-    TZCStates=(ZCSGUIChanged);
-    TZCState=set of TZCStates;
-    TZCStatekInterface=class
-      public
-      state:TZCState;
+  TzcState=(ZCSGUIChanged);
+  TzcStates=set of TzcState;
+  TzcStateManager=class
+    protected
+      state:TzcStates;
+    public
       constructor Create;
-      procedure SetState(st:TZCStates);
-      function CheckState(st:TZCStates):boolean;
-      function CheckAndResetState(st:TZCStates):boolean;
-    end;
+      procedure SetState(st:TzcState);
+      function CheckState(st:TzcState):boolean;
+      function CheckAndResetState(st:TzcState):boolean;
+  end;
 
     TZCUIManager=class
-      private
-        ZMessageIDCreater:TZMessageIDCreater;
-        ZStateCreater:TZStateCreater;
+      protected
+        ZMessageIDCreater:TzcMessageIDCreater;
+        ZStateCreater:TzcUIStateCreater;
 
         GetStateFuncsVector:TGetStateFuncsVector;
 
@@ -145,9 +147,9 @@ type
       public
         constructor Create;
         destructor Destroy;override;
-        function GetUniqueZState:TZState;
-        function GetEmptyZState:TZState;
-        function GetUniqueZMessageID:TZMessageID;
+        function GetUniqueZState:TzcUIState;
+        function GetEmptyZState:TzcUIState;
+        function GetUniqueZMessageID:TzcMessageID;
         procedure RegisterHandler_HistoryOut(Handler:TProcedure_String_);
         procedure RegisterHandler_LogError(Handler:TProcedure_String_);
         procedure RegisterHandler_StatusLineTextOut(Handler:TProcedure_String_);
@@ -166,7 +168,7 @@ type
 
         procedure RegisterGetStateFunc(fnc:TGetStateFunc);
 
-        function GetState:TZState;
+        function GetState:TzcUIState;
         procedure Do_HistoryOut(s:String);
         procedure Do_LogError(s:String);
         procedure Do_StatusLineTextOut(s:String);
@@ -174,8 +176,8 @@ type
         procedure Do_BeforeShowModal(ShowedForm:TForm);
         procedure Do_AfterShowModal(ShowedForm:TForm);
 
-        procedure Do_GUIMode(GUIMode:TZMessageID);
-        procedure Do_GUIaction(Sender:TObject;GUIaction:TZMessageID);
+        procedure Do_GUIMode(GUIMode:TzcMessageID);
+        procedure Do_GUIaction(Sender:TObject;GUIaction:TzcMessageID);
 
         procedure Do_PrepareObject(const UndoStack:PTZctnrVectorUndoCommands;const f:TzeUnitsFormat;exttype:PUserTypeDescriptor; addr,context:Pointer;popoldpos:boolean=false);
 
@@ -199,10 +201,10 @@ type
         procedure Do_TMethod_TForm_HandlersVector(var MFHV:TMethod_TForm_HandlersVector;ShowedForm:TForm);
 
         procedure RegisterTProcedure_TGUIMode_HandlersVector(var PGUIMHV:TProcedure_TZMessageID_HandlersVector;Handler:TProcedure_TZMessageID);
-        procedure Do_TProcedure_TZMessageID_HandlersVector(var PGUIMHV:TProcedure_TZMessageID_HandlersVector;GUIMode:TZMessageID);
+        procedure Do_TProcedure_TZMessageID_HandlersVector(var PGUIMHV:TProcedure_TZMessageID_HandlersVector;GUIMode:TzcMessageID);
 
         procedure RegisterTProcedure_TSimpleLCLMethod_HandlersVector(var SMHV:TSimpleLCLMethod_HandlersVector;Handler:TSimpleLCLMethod_TZMessageID);
-        procedure Do_TSimpleLCLMethod_HandlersVector(var SMHV:TSimpleLCLMethod_HandlersVector;Sender:TObject;GUIAction:TZMessageID);
+        procedure Do_TSimpleLCLMethod_HandlersVector(var SMHV:TSimpleLCLMethod_HandlersVector;Sender:TObject;GUIAction:TzcMessageID);
 
         procedure RegisterSetGDBObjInsp_HandlersVector(var SOIHV:TSetGDBObjInsp_HandlersVector;Handler:TSetGDBObjInsp);
         procedure Do_SetGDBObjInsp_HandlersVector(var SOIHV:TSetGDBObjInsp_HandlersVector;const UndoStack:PTZctnrVectorUndoCommands;const f:TzeUnitsFormat;exttype:PUserTypeDescriptor; addr,context:Pointer;popoldpos:boolean=false);
@@ -257,7 +259,7 @@ var
 function GetUndoStack:pointer;
 var
    zcUI:TZCUIManager;
-   ZCStatekInterface:TZCStatekInterface;
+   ZCStatekInterface:TzcStateManager;
 implementation
 
 constructor TControlWithPriority.CreateRec(ACtrl:TWinControl;APrrt:integer);
@@ -265,19 +267,19 @@ begin
   control:=ACtrl;
   priority:=APrrt;
 end;
-constructor TZCStatekInterface.Create;
+constructor TzcStateManager.Create;
 begin
    state:=[];
 end;
-procedure TZCStatekInterface.SetState(st:TZCStates);
+procedure TzcStateManager.SetState(st:TzcState);
 begin
    include(state,st);
 end;
-function TZCStatekInterface.CheckState(st:TZCStates):boolean;
+function TzcStateManager.CheckState(st:TzcState):boolean;
 begin
    result:=st in state;
 end;
-function TZCStatekInterface.CheckAndResetState(st:TZCStates):boolean;
+function TzcStateManager.CheckAndResetState(st:TzcState):boolean;
 begin
    result:=st in state;
    if result then
@@ -314,15 +316,15 @@ begin
     FreeAndNil(GetStateFuncsVector);
 end;
 
-function TZCUIManager.GetUniqueZMessageID:TZMessageID;
+function TZCUIManager.GetUniqueZMessageID:TzcMessageID;
 begin
   result:=ZMessageIDCreater.CreateHandle;
 end;
-function TZCUIManager.GetUniqueZState:TZState;
+function TZCUIManager.GetUniqueZState:TzcUIState;
 begin
   result:=ZStateCreater.GetEnum;
 end;
-function TZCUIManager.GetEmptyZState:TZState;
+function TZCUIManager.GetEmptyZState:TzcUIState;
 begin
   result:=ZStateCreater.GetEmpty;
 end;
@@ -437,7 +439,7 @@ begin
      PGUIMHV:=TProcedure_TZMessageID_HandlersVector.Create;
    PGUIMHV.PushBack(Handler);
 end;
-procedure TZCUIManager.Do_TProcedure_TZMessageID_HandlersVector(var PGUIMHV:TProcedure_TZMessageID_HandlersVector;GUIMode:{TGUIMode}TZMessageID);
+procedure TZCUIManager.Do_TProcedure_TZMessageID_HandlersVector(var PGUIMHV:TProcedure_TZMessageID_HandlersVector;GUIMode:{TGUIMode}TzcMessageID);
 var
    i:integer;
 begin
@@ -453,7 +455,7 @@ begin
      SMHV:=TSimpleLCLMethod_HandlersVector.Create;
    SMHV.PushBack(Handler);
 end;
-procedure TZCUIManager.Do_TSimpleLCLMethod_HandlersVector(var SMHV:TSimpleLCLMethod_HandlersVector;Sender:TObject;GUIAction:TZMessageID);
+procedure TZCUIManager.Do_TSimpleLCLMethod_HandlersVector(var SMHV:TSimpleLCLMethod_HandlersVector;Sender:TObject;GUIAction:TzcMessageID);
 var
    i:integer;
 begin
@@ -581,11 +583,11 @@ begin
    Do_TMethod_TForm_HandlersVector(AfterShowModalHandlers,ShowedForm);
    dec(ModalShowsCount);
 end;
-procedure TZCUIManager.Do_GUIMode(GUIMode:TZMessageID);
+procedure TZCUIManager.Do_GUIMode(GUIMode:TzcMessageID);
 begin
    Do_TProcedure_TZMessageID_HandlersVector(GUIModeHandlers,GUIMode);
 end;
-procedure TZCUIManager.Do_GUIaction(Sender:TObject;GUIaction:TZMessageID);
+procedure TZCUIManager.Do_GUIaction(Sender:TObject;GUIaction:TzcMessageID);
 begin
    Do_TSimpleLCLMethod_HandlersVector(GUIActionsHandlers,Sender,GUIaction);
 end;
@@ -609,7 +611,7 @@ begin
    GetStateFuncsVector.PushBack(fnc);
 end;
 
-function TZCUIManager.GetState:TZState;
+function TZCUIManager.GetState:TzcUIState;
 var
   fnc:TGetStateFunc;
   v:TGetStateFuncsVector;
@@ -654,7 +656,7 @@ end;
 
 initialization
   zcUI:=TZCUIManager.create;
-  ZCStatekInterface:=TZCStatekInterface.create;
+  ZCStatekInterface:=TzcStateManager.create;
   ZState_Busy:=zcUI.GetUniqueZState;
   zcMsgUIEnable:=zcUI.GetUniqueZMessageID;
   zcMsgUIDisable:=zcUI.GetUniqueZMessageID;
@@ -670,7 +672,7 @@ initialization
   zcMsgUIActionRedrawContent:=zcUI.GetUniqueZMessageID;
   zcMsgUIActionRedraw:=zcUI.GetUniqueZMessageID;
   zcMsgUIActionRebuild:=zcUI.GetUniqueZMessageID;
-  zcMsgUIResetOGLWNDProc:=zcUI.GetUniqueZMessageID;
+  //zcMsgUIResetOGLWNDProc:=zcUI.GetUniqueZMessageID;
   zcMsgUITimerTick:=zcUI.GetUniqueZMessageID;
   zcMsgUIRePrepareObject:=zcUI.GetUniqueZMessageID;
   zcMsgUISetDefaultObject:=zcUI.GetUniqueZMessageID;

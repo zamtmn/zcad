@@ -106,7 +106,7 @@ type
     procedure EditIncludeEnts(Sender: TObject);
     procedure EditIncludeProperties(Sender: TObject);
     procedure EditTreeProperties(Sender: TObject);
-    procedure AutoRefreshTree(sender:TObject;GUIAction:TZMessageID);
+    procedure AutoRefreshTree(sender:TObject;GUIAction:TzcMessageID);
     procedure AutoKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
     procedure SaveToFileProc(Sender: TObject);
     procedure TVDblClick(Sender: TObject);
@@ -1024,7 +1024,7 @@ begin
     ProcessChild(StandaloneNode.RootNode);
 end;
 
-procedure TNavigatorDevices.AutoRefreshTree(sender:TObject;GUIAction:TZMessageID);
+procedure TNavigatorDevices.AutoRefreshTree(sender:TObject;GUIAction:TzcMessageID);
 var
   sender_wa:TAbstractViewArea;
   devnode:PVirtualNode;

@@ -132,7 +132,7 @@ type
       procedure wams(Sender:TAbstractViewArea;SelectedEntity:Pointer);
       procedure wakp(Sender:TAbstractViewArea;var Key: Word; Shift: TShiftState);
       function GetEntsDesc(ents:PGDBObjOpenArrayOfPV):String;
-      procedure waSetObjInsp(Sender:{TAbstractViewArea}tobject;GUIAction:TZMessageID);
+      procedure waSetObjInsp(Sender:{TAbstractViewArea}tobject;GUIAction:TzcMessageID);
       procedure WaShowCursor(Sender:TAbstractViewArea;var DC:TDrawContext);
 
       //Long process support - draw progressbar. See uzelongprocesssupport unit
@@ -165,7 +165,7 @@ type
 
       function IsShortcut(var Message: TLMKey): boolean; override;
 
-      procedure setvisualprop(sender:TObject;GUIAction:TZMessageID);
+      procedure setvisualprop(sender:TObject;GUIAction:TzcMessageID);
 
       procedure _scroll(Sender: TObject; ScrollCode: TScrollCode;
                         var ScrollPos: Integer);
@@ -177,7 +177,7 @@ type
       procedure IPCMessage(Sender: TObject);
       {$ifdef windows}procedure SetTop;{$endif}
       procedure AsyncFree(Data:PtrInt);
-      procedure UpdateVisible(Sender:TObject;GUIMode:TZMessageID);
+      procedure UpdateVisible(Sender:TObject;GUIMode:TzcMessageID);
       procedure AsyncUpdateVisible(Sender:PtrInt);
       procedure DoUpdateMainMenu;
       procedure NeedUpdateMainMenu;
@@ -390,7 +390,7 @@ begin
   until msgstring='';
 end;
 
-procedure TZCADMainWindow.setvisualprop(sender:TObject;GUIAction:TZMessageID);
+procedure TZCADMainWindow.setvisualprop(sender:TObject;GUIAction:TzcMessageID);
 var lw:Integer;
     color:Integer;
     layer:pgdblayerprop;
@@ -2021,7 +2021,7 @@ begin
     k:=0;
     if (pdwg<>nil)and(pdwg<>PTSimpleDrawing(BlockBaseDWG)) then begin
       zcUI.Do_GUIaction(self,zcMsgUIActionRebuild);
-      ZCADMainWindow.Caption:=programname+' v'+sysvar.SYS.SYS_Version^+' - ['+drawings.GetCurrentDWG.GetFileName+']';
+      ZCADMainWindow.Caption:=programname+' v'+ZCSysParams.notsaved.ver.ShortVersionString+' - ['+drawings.GetCurrentDWG.GetFileName+']';
       EnableControls(true);
       if assigned(ZCADMainWindow.PageControl) then
         if assigned(SysVar.INTF.INTF_ShowDwgTabs) then
@@ -2096,7 +2096,7 @@ begin
         OpenedDrawings[i].visible:=false;
         OpenedDrawings[i].command:='';
       end;
-      ZCADMainWindow.Caption:=(programname+' v'+sysvar.SYS.SYS_Version^);
+      ZCADMainWindow.Caption:=(programname+' v'+ZCSysParams.notsaved.ver.ShortVersionString);
       EnableControls(false);
       if assigned(ZCADMainWindow.HScrollBar) then begin
         ZCADMainWindow.HScrollBar.enabled:=false;
@@ -2119,7 +2119,7 @@ begin
   end;
 end;
 
-procedure TZCADMainWindow.updatevisible(Sender:TObject;GUIMode:TZMessageID);
+procedure TZCADMainWindow.updatevisible(Sender:TObject;GUIMode:TzcMessageID);
 begin
   if GUIMode<>zcMsgUIActionRedraw then
     exit;

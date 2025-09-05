@@ -50,7 +50,7 @@ resourcestring
 
 
   rsInitialization='Initialization:';
-  rsVInfoText='Unstable version';
+  rsVInfoText='Beta version';
   rsCommEntEeport='Registered commands - %d; registered entities - %d; registered DXF entities - %d';
   rsReleaseNotes='';
   rsAuthor='Writeln by Andrey M. Zubarev';

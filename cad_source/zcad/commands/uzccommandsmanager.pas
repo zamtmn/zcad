@@ -75,7 +75,7 @@ type
                           CommandLinePrompts:TICommandLinePromptVector;
                           CurrentPrompt:TParserCommandLinePrompt.TGeneralParsedText;
                           currMacros:string;
-                          function GetState:TZState;
+                          function GetState:TzcUIState;
                           function isBusy:Boolean;
                           constructor init(m:Integer);
                           procedure execute(const comm:string;silent:Boolean;pdrawing:PTDrawingDef;POGLWndParam:POGLWndtype);virtual;
@@ -1053,7 +1053,7 @@ function GDBcommandmanager.isBusy:Boolean;
 begin
   result:=busy>0;
 end;
-function GDBcommandmanager.GetState:TZState;
+function GDBcommandmanager.GetState:TzcUIState;
 begin
   if isBusy then
     Result:=ZState_Busy

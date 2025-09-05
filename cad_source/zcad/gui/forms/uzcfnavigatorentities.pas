@@ -24,7 +24,7 @@ type
     ActionList1:TActionList;
     Refresh:TAction;
     procedure RefreshTree(Sender: TObject);
-    procedure AutoRefreshTree(sender:TObject;GUIAction:TZMessageID);
+    procedure AutoRefreshTree(sender:TObject;GUIAction:TzcMessageID);
     procedure TVDblClick(Sender: TObject);
     procedure TVOnMouseMove(Sender: TObject; Shift: TShiftState; X, Y: Integer);
     procedure VTCompareNodes(Sender: TBaseVirtualTree; Node1,
@@ -126,7 +126,7 @@ begin
    end;
    NavTree.EndUpdate;
 end;
-procedure TNavigatorEntities.AutoRefreshTree(sender:TObject;GUIAction:TZMessageID);
+procedure TNavigatorEntities.AutoRefreshTree(sender:TObject;GUIAction:TzcMessageID);
 begin
   if GUIAction=zcMsgUIActionRebuild then
     RefreshTree(sender);

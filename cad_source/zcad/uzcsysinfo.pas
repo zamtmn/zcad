@@ -69,7 +69,8 @@ begin
   if AbbreviatedName<>'' then
     result.AbbreviatedName:=AbbreviatedName;
 
-  result.versionstring:=inttostr(result.Major)+'.'+inttostr(result.Minor)+'.'+inttostr(result.Micro)+'.'+inttostr(result.Release)+'-'+inttostr(result.CommitsAfter)+'-'+result.AbbreviatedName;
+  result.ShortVersionString:=inttostr(result.Major)+'.'+inttostr(result.Minor)+'.'+inttostr(result.Micro)+'.'+inttostr(result.Release);
+  result.versionstring:=result.ShortVersionString+'-'+inttostr(result.CommitsAfter)+'-'+result.AbbreviatedName;
 end;
 
 procedure ProcessParamStr;

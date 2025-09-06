@@ -47,6 +47,7 @@ GDBObjOpenArrayOfPV= object({TZctnrVectorPGDBaseObjects}TZctnrVectorPGDBaseEntit
                       function getonlyoutbound(var DC:TDrawContext):TBoundingBox;
                       function getonlyvisibleoutbound(var DC:TDrawContext):TBoundingBox;
                       procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext;Stage:TEFStages=EFAllStages);virtual;
+                      procedure CalcObjMatrix(pdrawing:PTDrawingDef=nil);virtual;
                       procedure FormatAfterEdit(var drawing:TDrawingDef;var DC:TDrawContext);virtual;
                       //function InRect:TInRect;virtual;
                       function onpoint(var objects:TZctnrVectorPGDBaseEntity;const point:GDBVertex):Boolean;virtual;
@@ -264,6 +265,18 @@ begin
        p^.FormatEntity(drawing,dc,Stage);
        p:=iterate(ir);
   until p=nil;
+end;
+procedure GDBObjOpenArrayOfPV.CalcObjMatrix(pdrawing:PTDrawingDef=nil);
+var
+  p:pGDBObjEntity;
+  ir:itrec;
+begin
+  p:=beginiterate(ir);
+  if p<>nil then
+    repeat
+      p^.CalcObjMatrix(pdrawing);
+      p:=iterate(ir);
+    until p=nil;
 end;
 procedure GDBObjOpenArrayOfPV.formatafteredit;
 var

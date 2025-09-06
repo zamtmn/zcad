@@ -76,8 +76,8 @@ TZCADDrawingsManager= object(TZctnrVectorPGDBaseObjects)
                     function FindDrawingByName(DWGName:String):PTSimpleDrawing;
                     function GetUnitsFormat:TzeUnitsFormat;
                     procedure SetUnitsFormat(f:TzeUnitsFormat);
-                    procedure redrawoglwnd(Sender:TObject;GUIAction:TZMessageID);
-                    procedure resetoglwnd(Sender:TObject;GUIAction:TZMessageID);
+                    procedure redrawoglwnd(Sender:TObject;GUIAction:TzcMessageID);
+                    //procedure resetoglwnd(Sender:TObject;GUIAction:TzcMessageID);
 
                     {todo: переименовать по человечьи}
                     procedure AfterAutoProcessGDB(const AUndoMethod:TMethod);
@@ -123,7 +123,7 @@ begin
   PGDBObjEntity(AUndoMethod.Data)^.formatEntity(GetCurrentDWG^,dc);
 end;
 
-procedure TZCADDrawingsManager.redrawoglwnd(Sender:TObject;GUIAction:TZMessageID);
+procedure TZCADDrawingsManager.redrawoglwnd(Sender:TObject;GUIAction:TzcMessageID);
 var
   pdwg:PTSimpleDrawing;
   DC:TDrawContext;
@@ -218,7 +218,7 @@ begin
                          drawings.SetCurrentDWG(pdwg);
 end;
 
-{procedure redrawoglwnd(GUIAction:TZMessageID);
+{procedure redrawoglwnd(GUIAction:TzcMessageID);
 var
    pdwg:PTSimpleDrawing;
    DC:TDrawContext;
@@ -238,7 +238,7 @@ begin
   end;
 end;}
 
-procedure TZCADDrawingsManager.resetoglwnd;
+{procedure TZCADDrawingsManager.resetoglwnd;
 var
    pdwg:PTSimpleDrawing;
 begin
@@ -249,7 +249,7 @@ begin
   begin
        pdwg.wa.param.lastonmouseobject:=nil;
   end;
-end;
+end;}
 
 
 procedure clearotrack;
@@ -1022,7 +1022,7 @@ begin
   //pbasefont:=FontManager.{FindFonf}getAddres('amgdt.shx');
   //pbasefont:=FontManager.getAddres('gothice.shx');
   drawings.init;
-  zcUI.RegisterHandler_GUIAction(drawings.ResetOGLWND);
+  //zcUI.RegisterHandler_GUIAction(drawings.ResetOGLWND);
   //SetCurrentDWGProc:=SetCurrentDWG;
   BlockBaseDWG:=drawings.CreateDWG('','');
   _GetUndoStack:=drawings.GetUndoStack;

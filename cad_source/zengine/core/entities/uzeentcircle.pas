@@ -268,23 +268,27 @@ end;
 
 procedure GDBObjCircle.FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext;Stage:TEFStages=EFAllStages);
 begin
-  if assigned(EntExtensions)then
-    EntExtensions.RunOnBeforeEntityFormat(@self,drawing,DC);
+  if EFCalcEntityCS in stage then begin
+    if assigned(EntExtensions)then
+      EntExtensions.RunOnBeforeEntityFormat(@self,drawing,DC);
 
-  calcObjMatrix;
-  createpoint(dc);
-  q0:=VectorTransform3d(CreateVertex(1,0,0),objMatrix);
-  q1:=VectorTransform3d(CreateVertex(0,-1,0),objMatrix);
-  q2:=VectorTransform3d(CreateVertex(-1,0,0),objMatrix);
-  q3:=VectorTransform3d(CreateVertex(0,1,0),objMatrix);
-  //getoutbound;
-  calcbb(dc);
+    calcObjMatrix;
+    createpoint(dc);
+    q0:=VectorTransform3d(CreateVertex(1,0,0),objMatrix);
+    q1:=VectorTransform3d(CreateVertex(0,-1,0),objMatrix);
+    q2:=VectorTransform3d(CreateVertex(-1,0,0),objMatrix);
+    q3:=VectorTransform3d(CreateVertex(0,1,0),objMatrix);
+    //getoutbound;
+    calcbb(dc);
+  end;
   CalcActualVisible(dc.DrawingContext.VActuality);
-  Representation.Clear;
-  if not (ESTemp in State)and(DCODrawable in DC.Options) then
-    Representation.DrawPolyLineWithLT(dc,Vertex3D_in_WCS_Array,vp,true,true);
-  if assigned(EntExtensions)then
-    EntExtensions.RunOnAfterEntityFormat(@self,drawing,DC);
+  if EFDraw in stage then begin
+    Representation.Clear;
+    if not (ESTemp in State)and(DCODrawable in DC.Options) then
+      Representation.DrawPolyLineWithLT(dc,Vertex3D_in_WCS_Array,vp,true,true);
+    if assigned(EntExtensions)then
+      EntExtensions.RunOnAfterEntityFormat(@self,drawing,DC);
+    end;
 end;
 procedure GDBObjCircle.getoutbound;
 var //tv,tv2:GDBVertex4D;

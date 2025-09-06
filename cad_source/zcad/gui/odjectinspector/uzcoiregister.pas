@@ -32,12 +32,12 @@ const
     PEditorFocusPriority=550;
 type
   tdummyclass=class
-    procedure UpdateObjInsp(sender:TObject;GUIMode:TZMessageID);
-    procedure ReBuild(sender:TObject;GUIMode:TZMessageID);
-    procedure SetCurrentObjDefault(sender:TObject;GUIMode:TZMessageID);
-    procedure FreEditor(sender:TObject;GUIMode:TZMessageID);
-    procedure StoreAndFreeEditor(sender:TObject;GUIMode:TZMessageID);
-    procedure ReturnToDefault(sender:TObject;GUIMode:TZMessageID);
+    procedure UpdateObjInsp(sender:TObject;GUIMode:TzcMessageID);
+    procedure ReBuild(sender:TObject;GUIMode:TzcMessageID);
+    procedure SetCurrentObjDefault(sender:TObject;GUIMode:TzcMessageID);
+    procedure FreEditor(sender:TObject;GUIMode:TzcMessageID);
+    procedure StoreAndFreeEditor(sender:TObject;GUIMode:TzcMessageID);
+    procedure ReturnToDefault(sender:TObject;GUIMode:TzcMessageID);
     procedure ContextPopup(Sender: TObject; MousePos: TPoint;var Handled: Boolean);
     function GetPeditorFocusPriority:TControlWithPriority;
     class procedure _onAfterFreeEditor(sender:tobject);
@@ -158,6 +158,7 @@ procedure _onUpdateObjectInInsp(const EDContext:TEditorContext;const currobjgdbt
   end;
 var
    dc:TDrawContext;
+   pdwg:PTSimpleDrawing;
 begin
   if isGDBObjInstance(currobjgdbtype,pcurcontext,pcurrobj) then
                 begin
@@ -177,7 +178,11 @@ begin
                                              PGDBaseObject(pcurrobj)^.FormatAfterFielfmod(EDContext.ppropcurrentedit^.valueAddres,currobjgdbtype);
                                         end;
                 end;
-  zcUI.Do_GUIaction(nil,zcMsgUIResetOGLWNDProc);
+  //zcUI.Do_GUIaction(nil,zcMsgUIResetOGLWNDProc);
+  pdwg:=drawings.GetCurrentDWG;
+  if pdwg<>nil then
+    pdwg.wa.param.lastonmouseobject:=nil;
+
   zcRedrawCurrentDrawing;
   zcUI.Do_GUIaction(nil,zcMsgUIActionRedraw);
 
@@ -301,7 +306,7 @@ begin
                              end;
    result:=cmd_ok;
 end;
-procedure tdummyclass.ReBuild(sender:TObject;GUIMode:TZMessageID);
+procedure tdummyclass.ReBuild(sender:TObject;GUIMode:TzcMessageID);
 begin
        if (GUIMode=zcMsgUIRePrepareObject)then
        begin
@@ -312,7 +317,7 @@ begin
                                   end;
        end;
 end;
-procedure tdummyclass.UpdateObjInsp(sender:TObject;GUIMode:TZMessageID);
+procedure tdummyclass.UpdateObjInsp(sender:TObject;GUIMode:TzcMessageID);
 begin
    if (GUIMode=zcMsgUIActionRedraw)
    or (GUIMode=zcMsgUITimerTick) then

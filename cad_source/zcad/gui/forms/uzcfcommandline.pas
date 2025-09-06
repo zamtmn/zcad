@@ -86,7 +86,7 @@ begin
      end;
      mode:=m;
 end;
-procedure HandleCommandLineMode(GUIMode:TZMessageID);
+procedure HandleCommandLineMode(GUIMode:TzcMessageID);
 begin
      if GUIMode=zcMsgUICMDLineReadyMode then begin
        if assigned(CLine) then
@@ -151,7 +151,7 @@ begin
     panel.visible:=true;
   ZCStatekInterface.SetState(ZCSGUIChanged);
 end;
-procedure HandleCmdLine(GUIMode:TZMessageID);
+procedure HandleCmdLine(GUIMode:TzcMessageID);
 begin
   if GUIMode in [zcMsgUICMDLineCheck] then begin
     if INTFCommandLineEnabled or (prompt.Highlight.Count>0) then

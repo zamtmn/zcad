@@ -32,6 +32,7 @@ type
     Major,Minor,Micro,Release,CommitsAfter:Integer;
     AbbreviatedName:AnsiString;
     VersionString:AnsiString;
+    ShortVersionString:AnsiString;
   end;
   {REGISTERRECORDTYPE TZCSavedParams}
   TZCSavedParams=record

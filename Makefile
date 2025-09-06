@@ -51,6 +51,8 @@ endif
 
 BUILDMODE:=default
 
+ZCBUILDOPTIONS:=
+
 BUILDPREFIX:=cad
 
 INSTALLPREFIX:=NeedReplaceToDistribPath
@@ -243,12 +245,20 @@ endif
 zcad: checkvars version installpkgstolaz
 	$(LAZBUILD) --pcp=$(PCP) cad_source/utils/typeexporter.lpi
 	environment/typeexporter/typeexporter pathprefix=cad_source/ outputfile=$(BUILDPREFIX)/data/rtl/system.pas processfiles=environment/typeexporter/zcad.files
+ifeq ($(ZCBUILDOPTIONS),)
 	$(LAZBUILD) --pcp=$(PCP) --bm=$(BUILDMODE) cad_source/zcad.lpi
+else
+	$(LAZBUILD) --pcp=$(PCP) --bm=$(BUILDMODE) $(ZCBUILDOPTIONS) cad_source/zcad.lpi
+endif
 
 zcadelectrotech: checkvars version installpkgstolaz
 	$(LAZBUILD) --pcp=$(PCP) cad_source/utils/typeexporter.lpi
 	environment/typeexporter/typeexporter pathprefix=cad_source/ outputfile=$(BUILDPREFIX)/data/rtl/system.pas processfiles=environment/typeexporter/zcad.files+environment/typeexporter/zcadelectrotech.files define=ELECTROTECH
+ifeq ($(ZCBUILDOPTIONS),)
 	$(LAZBUILD) --pcp=$(PCP) --bm=$(BUILDMODE) cad_source/zcad.lpi
+else
+	$(LAZBUILD) --pcp=$(PCP) --bm=$(BUILDMODE) $(ZCBUILDOPTIONS) cad_source/zcad.lpi
+endif
 
 afterzcadelectrotechbuild: checkallvars checkzpvar version
 	$(ZP)/zcad nosplash runscript $(BUILDPREFIX)/cfg/components/afterbuild.cmd

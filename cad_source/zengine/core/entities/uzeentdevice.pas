@@ -274,7 +274,7 @@ begin
 
               //if pv^.IsHaveLCS then
                                begin
-                               pv^.FormatEntity(drawing,dc);
+                               pv^.FormatEntity(drawing,dc,EFAllStages-[EFDraw]);
                                end;
 
               pv^.SaveToDXF(outStream,drawing,IODXFContext);
@@ -294,9 +294,7 @@ begin
          pv:=VarObjArray.iterate(ir);
      until pv=nil;
      objmatrix:=m4;
-     //FormatEntity(drawing,dc);
-     //historyout('Device DXFOut end');
-     //self.CalcObjMatrix;
+     VarObjArray.CalcObjMatrix(@drawing);
 end;
 procedure GDBObjDevice.SaveToDXFObjXData(var outStream:TZctnrVectorBytes;var IODXFContext:TIODXFSaveContext);
 //var

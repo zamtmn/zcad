@@ -295,20 +295,24 @@ end;
 
 procedure GDBObjARC.FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext;Stage:TEFStages=EFAllStages);
 begin
-  if assigned(EntExtensions)then
-    EntExtensions.RunOnBeforeEntityFormat(@self,drawing,DC);
+  if EFCalcEntityCS in stage then begin
+    if assigned(EntExtensions)then
+      EntExtensions.RunOnBeforeEntityFormat(@self,drawing,DC);
 
-  calcObjMatrix;
-  precalc;
+    calcObjMatrix;
+    precalc;
 
-  calcbb(dc);
-  createpoints(dc);
+    calcbb(dc);
+    createpoints(dc);
+  end;
   CalcActualVisible(dc.DrawingContext.VActuality);
-  Representation.Clear;
-  if not (ESTemp in State)and(DCODrawable in DC.Options) then
-    Representation.DrawPolyLineWithLT(dc,Vertex3D_in_WCS_Array,vp,false,false);
-  if assigned(EntExtensions)then
-    EntExtensions.RunOnAfterEntityFormat(@self,drawing,DC);
+  if EFDraw in stage then begin
+    Representation.Clear;
+    if not (ESTemp in State)and(DCODrawable in DC.Options) then
+      Representation.DrawPolyLineWithLT(dc,Vertex3D_in_WCS_Array,vp,false,false);
+    if assigned(EntExtensions)then
+      EntExtensions.RunOnAfterEntityFormat(@self,drawing,DC);
+  end;
 end;
 procedure GDBObjARC.getoutbound;
 function getQuadrant(a:Double):integer;

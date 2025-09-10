@@ -1234,20 +1234,10 @@ begin
                 end;
                //****//
                if numVertDevice=-1 then begin
-
-
                   zcUI.TextMessage('**чтото пошло не так',TMWOHistoryOut);
-
-
                   //for k:=0 to graph.listVertex.Size-1 do
-                  //
-                  //
                   //  if (graph.listVertex[k].deviceEnt <> nil) and (pObjDevice <> nil) then
-                  //
-                  //
                   //    zcUI.TextMessage('**graph.listVertex[k].deviceEnt NMO_Name='+pString(FindVariableInEnt(graph.listVertex[k].deviceEnt,'NMO_Name')^.data.Addr.Instance)^ + '**pObjDevice NMO_Name='+pString(FindVariableInEnt(pObjDevice,'NMO_Name')^.data.Addr.Instance)^,TMWOHistoryOut);
-
-
                 end;
 
             end;

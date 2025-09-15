@@ -7,7 +7,7 @@ interface
 uses
   Classes, SysUtils, Forms, Controls,Graphics,  laz.VirtualTrees, SQLite3Conn, SQLDB, DB,uzcdrawing,uzcdrawings,uzvmcdbconsts,uzcinterface,
   Dialogs, ExtCtrls, BufDataset,  DBGrids, Grids, ActnList, ComCtrls, Windows,fgl,
-  uzvmanagerconnect,uzvelcreatetempdb;
+  uzvmanagerconnect,uzvelcreatetempdb,uzvelcontroltempdb;
 
 type
 
@@ -207,7 +207,8 @@ begin
     SQLite3Connection.Close;
 
   uzvelcreatetempdb.createElectricalTempDB;
-  uzvmanagerconnect.managerconnectexecute;
+  uzvelcontroltempdb.addOnlyWayHDandFullWay;
+  //uzvmanagerconnect.managerconnectexecute;
 
      // Инициализация компонентов базы данных
      //ShowMessage('1 ');

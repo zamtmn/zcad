@@ -73,6 +73,7 @@ GDBObjArc= object(GDBObjPlain)
 
                  class function CreateInstance:PGDBObjArc;static;
                  function GetObjType:TObjID;virtual;
+                 function IsStagedFormatEntity:boolean;virtual;
            end;
 
 implementation
@@ -88,6 +89,11 @@ begin
      result:=VectorTransform3D(point,m1);
      result:=normalizevertex(result);
 end;}
+
+function GDBObjARC.IsStagedFormatEntity:boolean;
+begin
+  result:=true;
+end;
 
 procedure GDBObjARC.TransformAt;
 var

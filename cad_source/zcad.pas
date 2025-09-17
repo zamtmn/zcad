@@ -22,7 +22,8 @@ program zcad;
   {$APPTYPE GUI}
 {$ENDIF}
 
-//файл с объявлениями директив компилятора - должен быть подключен во все файлы проекта
+//файл с объявлениями директив компилятора - должен быть подключен
+//во все файлы проекта
 {$INCLUDE zengineconfig.inc}
 
 //zcad/zcadelectrotech compile mode
@@ -310,9 +311,6 @@ uses
   uzccommand_dbgappexplorer,
   uzelongprocesssupport;
 
-//resourcestring
-// rsStartAutorun='Execute *components\autorun.cmd';
-
 var
   lpsh:TLPSHandle;
   i:integer;
@@ -322,67 +320,87 @@ var
 
 begin
   programlog.logoutstr('<<<<<<<<<<<<<<<End units initialization',0,LM_Debug);
-     if ZCSysParams.notsaved.otherinstancerun then
-                                      exit;
-  lpsh:=LPS.StartLongProcess('Start program',@lpsh,0);
-{$IFDEF REPORTMMEMORYLEAKS}printleakedblock:=true;{$ENDIF}
-{$IFDEF REPORTMMEMORYLEAKS}
-       SetHeapTraceOutput(ConcatPaths([GetTempPath,'memory-heaptrace.txt']));
-       keepreleased:=true;
-{$ENDIF}
-  //Application_Initialize перемещен в инициализацию uzcfsplash чтоб показать сплэш пораньше
-  //Application.Initialize;
 
-  //инициализация drawings
-  FontManager.EnumerateFontFiles;
-  uzcdrawings.startup('$(DistribPath)/rtl/dwg/DrawingVars.pas','');
-  uzcdevicebase.startup;
-  {$IF lcl_fullversion>2001200}
-  {$ELSE}
-    Application.MainFormOnTaskBar:=true;
+  {$IFDEF REPORTMMEMORYLEAKS}
+  printleakedblock:=true;
+  SetHeapTraceOutput(ConcatPaths([GetTempPath,'memory-heaptrace.txt']));
+  keepreleased:=true;
   {$ENDIF}
-  //создание окна программы
-  {$IF DEFINED(MSWINDOWS)}
-  LoadLResources;
-  if SysVar.INTF.INTF_ColorScheme<>nil then
-    ApplyMetaDarkStyle(GetScheme(SysVar.INTF.INTF_ColorScheme^));
-  {$ENDIF}
-  Application.CreateForm(TZCADMainWindow,ZCADMainWindow);
-  ZCADMainWindow.show;
-  {if sysvar.SYS.SYS_IsHistoryLineCreated<>nil then
-                                                  sysvar.SYS.SYS_IsHistoryLineCreated^:=true;}
-  zcUI.TextMessage(format(rsZCADStarted,[programname,sysvar.SYS.SYS_Version^]),TMWOHistoryOut);
-  application.ProcessMessages;
 
-  ZCADMainWindow.SwithToProcessBar;
+  if not ZCSysParams.notsaved.otherinstancerun then begin
+    //оформляем "процесс" процесс запуска приложения, дря замера времени
+    //хотя он не учтет время потраченое в секции инициализации
+    lpsh:=LPS.StartLongProcess('Start program',@lpsh,0);
 
-  FromDirsIterator(sysvar.PATH.Preload_Paths^,'*.cmd','autorun.cmd',RunCmdFile,nil);
-  if CommandLineParser.HasOption(RunScript)then
-    for i:=0 to CommandLineParser.OptionOperandsCount(RunScript)-1 do begin
-      scrfile:=CommandLineParser.OptionOperand(RunScript,i);
-      commandmanager.executefile(scrfile,drawings.GetCurrentDWG,nil);
+    //смотрим доступные шрифты
+    FontManager.EnumerateFontFiles;
+
+    //инициализация drawings
+    uzcdrawings.startup('$(DistribPath)/rtl/dwg/DrawingVars.pas', '');
+    uzcdevicebase.startup;
+
+    {$IF DEFINED(MSWINDOWS)}
+    //применение цветоыой схемы
+    LoadLResources;
+    if SysVar.INTF.INTF_ColorScheme<>nil then
+      ApplyMetaDarkStyle(GetScheme(SysVar.INTF.INTF_ColorScheme^));
+    {$ENDIF}
+
+    //создание окна программы
+    //Application.Initialize;//перемещен в инициализацию uzcfsplash
+                             //чтоб показать сплэш пораньше
+    Application.MainFormOnTaskBar:=True;
+    Application.CreateForm(TZCADMainWindow,ZCADMainWindow);
+    ZCADMainWindow.Show;
+    ZCADMainWindow.Repaint;
+    zcUI.TextMessage(format(rsZCADStarted,
+      [programname,sysvar.SYS.SYS_Version^]),TMWOHistoryOut);
+
+    //показываем процессбар в статусбаре,
+    //чтоб небыло лишних переключений на текст
+    ZCADMainWindow.SwithToProcessBar;
+
+    //шаримся в preload и выполняем скрипты оттуда
+    FromDirsIterator(sysvar.PATH.Preload_Paths^,'*.cmd','autorun.cmd',
+      RunCmdFile,nil);
+
+    //выполняем скрипты переданые в командной строке
+    if CommandLineParser.HasOption(RunScript)then
+      for i:=0 to CommandLineParser.OptionOperandsCount(RunScript)-1 do begin
+        scrfile:=CommandLineParser.OptionOperand(RunScript,i);
+        commandmanager.executefile(scrfile,drawings.GetCurrentDWG,nil);
+      end;
+
+    //загружаем файлы переданые в командной строке
+    if ZCSysParams.notsaved.preloadedfile<>'' then begin
+      commandmanager.executecommand('Load('+ZCSysParams.notsaved.preloadedfile+
+        ')',drawings.GetCurrentDWG,drawings.GetCurrentOGLWParam);
+      ZCSysParams.notsaved.preloadedfile:='';
     end;
 
-  if ZCSysParams.notsaved.preloadedfile<>'' then begin
-    commandmanager.executecommand('Load('+ZCSysParams.notsaved.preloadedfile+')',drawings.GetCurrentDWG,drawings.GetCurrentOGLWParam);
-    ZCSysParams.notsaved.preloadedfile:='';
+    //возвращаем текст в статусбаре,
+    ZCADMainWindow.SwithToHintText;
+
+    //убираем сплэш
+    removesplash;
+
+    //ставим фокус куда надо
+    zcUI.Do_SetNormalFocus;
+
+    //в uzbexceptionsgui обработка исключений в Application запрещена,
+    //разрешаем
+    TZGuiExceptionsHandler.EnableLCLCaptureExceptions;
+
+    //"процесс" запуска приложения закончен
+    LPS.EndLongProcess(lpsh);
+
+    //работаем
+    Application.run;
+
+    //отработали))
+    sysvar.SYS.SYS_RunTime:=nil;
+    programlog.logoutstr('END.',0,LM_Necessarily);
   end;
-
-  ZCADMainWindow.SwithToHintText;
-  //убираем сплэш
-  zcUI.Do_SetNormalFocus;
-  removesplash;
-
-  TZGuiExceptionsHandler.EnableLCLCaptureExceptions;
-  LPS.EndLongProcess(lpsh);
-  Application.run;
-
-  sysvar.SYS.SYS_RunTime:=nil;
-
-  //createsplash(false);
-  //SplashForm.TXTOut('ugdbdescriptor.finalize;',false);uzcdrawings.finalize;
-
-  programlog.logoutstr('END.',0,LM_Necessarily);
   programlog.logoutstr('<<<<<<<<<<<<<<<Start units finalization',0,LM_Debug);
 end.
 

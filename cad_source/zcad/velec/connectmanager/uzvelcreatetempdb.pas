@@ -231,7 +231,8 @@ var
   pdev: PGDBObjBlockInsert;   //выделеные объекты в пространстве листа
   ir:itrec;  // применяется для обработки списка выделений, но что это понятия не имею :)
   pvd:pvardesk;
-  i,count:integer;
+  i,count, count2:integer;
+  errorData:boolean;
 begin
   Query := TSQLQuery.Create(nil);
   try
@@ -243,6 +244,7 @@ begin
     pobj:=drawings.GetCurrentROOT^.ObjArray.beginiterate(ir); //зона уже выбрана в перспективе застовлять пользователя ее выбирать
     if pobj<>nil then
       repeat
+         errorData:=true;
          inc(count);
          // Определяем что это устройство
          if pobj^.GetObjType=GDBDeviceID then
@@ -253,28 +255,11 @@ begin
             pvd:=FindVariableInEnt(pdev,'NMO_Name');
             if (pvd<>nil) then
                Query.Params.ParamByName('devname').AsString := pstring(pvd^.data.Addr.Instance)^
-            else
+            else begin
+               errorData:=false;
                Query.Params.ParamByName('devname').AsString := 'ERROR';
-
-            pvd:=FindVariableInEnt(pdev,'SLCABAGEN1_HeadDeviceName');
-            if (pvd<>nil) then begin
-               Query.Params.ParamByName('hdname').AsString := pstring(pvd^.data.Addr.Instance)^;
-                //for i:= 0 to listDevLevel.Size-1 do
-                //begin
-                //    if listDevLevel[i].headdev = pstring(pvd^.data.Addr.Instance)^ then begin
-                //       Query.Params.ParamByName('hdway').AsString := listDevLevel[i].wayHD;
-                //       Query.Params.ParamByName('hdfullway').AsString := listDevLevel[i].fullWayHD;
-                //    end;
-                //end;
-            end
-            else
-               Query.Params.ParamByName('hdname').AsString := 'ERROR';
-
-            pvd:=FindVariableInEnt(pdev,'SLCABAGEN1_NGHeadDevice');
-            if (pvd<>nil) then
-               Query.Params.ParamByName('hdgroup').AsString := pstring(pvd^.data.Addr.Instance)^
-            else
-               Query.Params.ParamByName('hdgroup').AsString := 'ERROR';
+            end;
+            count2:=1;
 
             pvd:=FindVariableInEnt(pdev,'ANALYSISEM_icanbeheadunit');
             if (pvd<>nil) then
@@ -283,14 +268,51 @@ begin
                else
                Query.Params.ParamByName('icanhd').AsInteger := 0
              else
+               begin
+               errorData:=false;
                Query.Params.ParamByName('icanhd').AsInteger := 0;
+               end;
+
+            pvd:=FindVariableInEnt(pdev,'SLCABAGEN1_HeadDeviceName');
+            //if (pvd=nil) then
+            //   errorData:=false;
+
+            while (pvd<>nil) do begin
+              pvd:=FindVariableInEnt(pdev,'SLCABAGEN'+inttostr(count2)+'_HeadDeviceName');
+              if (pvd<>nil) then begin
+                 Query.Params.ParamByName('hdname').AsString := pstring(pvd^.data.Addr.Instance)^;
+              end
+              else
+                 begin
+                 errorData:=false;
+                 Query.Params.ParamByName('hdname').AsString := 'ERROR';
+                 end;
+
+              pvd:=FindVariableInEnt(pdev,'SLCABAGEN'+inttostr(count2)+'_NGHeadDevice');
+              if (pvd<>nil) then
+                 Query.Params.ParamByName('hdgroup').AsString := pstring(pvd^.data.Addr.Instance)^
+              else
+              begin
+                 errorData:=false;
+                 Query.Params.ParamByName('hdgroup').AsString := 'ERROR';
+              end;
+              if errorData then
+                Query.ExecSQL;
+              inc(count2);
+              pvd:=FindVariableInEnt(pdev,'SLCABAGEN'+inttostr(count2)+'_HeadDeviceName');
+              end;
+              //until (pvd=nil);
 
 
-            if (Query.Params.ParamByName('hdname').AsString<>'') and
-               (Query.Params.ParamByName('hdname').AsString<>'???') and
-               (Query.Params.ParamByName('hdname').AsString<>'-') and
-               (Query.Params.ParamByName('hdname').AsString<>'ERROR') then
-            Query.ExecSQL;
+
+
+
+            //if (Query.Params.ParamByName('hdname').AsString<>'') and
+            //   (Query.Params.ParamByName('hdname').AsString<>'???') and
+            //   (Query.Params.ParamByName('hdname').AsString<>'-') and
+            //   (Query.Params.ParamByName('hdname').AsString<>'ERROR') then
+
+
            end;
         pobj:=drawings.GetCurrentROOT^.ObjArray.iterate(ir); //переход к следующем примитиву в списке выбраных примитивов
       until pobj=nil;

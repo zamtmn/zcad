@@ -128,7 +128,7 @@ uses
     //** Совмещение головного устройства с подчинеными для построения иерархии
     PTDevLevel=^TDevLevel;
     TDevLevel=record
-                       pobj:PGDBObjDevice;
+                       //pobj:PGDBObjDevice;
                        parentName:string;   //имя головного устройства которое имеет головное устройтсво
                        headdev:string;      //имя головного устройства
                        wayHD:string;        //путь только головных устройств
@@ -259,91 +259,77 @@ begin
     Query.Free;
   end;
 end;
-
-procedure InsertData;
-var
-  SelQ, UpdQ: TSQLQuery;
-  i: Integer;
-  hdname: string;
-begin
-  SelQ := TSQLQuery.Create(nil);
-  UpdQ := TSQLQuery.Create(nil);
-  try
-    SelQ.Database := SQLite3Connection;
-    SelQ.SQL.Text := 'SELECT id, hdname FROM dev';
-    SelQ.Open;
-
-    UpdQ.Database := SQLite3Connection;
-    UpdQ.SQL.Text := 'UPDATE dev SET hdway = :hdway, hdfullway = :hdfullway WHERE id = :id';
-    UpdQ.Prepare;
-
-    while not SelQ.EOF do
-    begin
-      hdname := SelQ.FieldByName('hdname').AsString;
-      for i := 0 to listDevLevel.Size - 1 do
-      begin
-        if listDevLevel[i].headdev = hdname then
-        begin
-          UpdQ.Params.ParamByName('hdway').AsString := listDevLevel[i].wayHD;
-          UpdQ.Params.ParamByName('hdfullway').AsString := listDevLevel[i].fullWayHD;
-          UpdQ.Params.ParamByName('id').AsInteger := SelQ.FieldByName('id').AsInteger;
-          UpdQ.ExecSQL;
-          Break; // если предполагается единственное совпадение
-        end;
-      end;
-      SelQ.Next;
-    end;
-  finally
-    SelQ.Free;
-    UpdQ.Free;
-  end;
-end;
-
-//
 //procedure InsertData;
 //var
-//  Query: TSQLQuery;
-//  pobj: pGDBObjEntity;   //выделеные объекты в пространстве листа
-//  pdev: PGDBObjBlockInsert;   //выделеные объекты в пространстве листа
-//  ir:itrec;  // применяется для обработки списка выделений, но что это понятия не имею :)
-//  pvd:pvardesk;
-//  i,count:integer;
+//  SelQ, UpdQ: TSQLQuery;
+//  i: Integer;
+//  hdname: string;
 //begin
+//  SelQ := TSQLQuery.Create(nil);
+//  UpdQ := TSQLQuery.Create(nil);
+//  try
+//    SelQ.Database := SQLite3Connection;
+//    SelQ.Transaction := SQLTransaction;
+//    SelQ.SQL.Text := 'SELECT id, hdname FROM dev';
+//    SelQ.Open;
 //
-//    // Insert records
-//    try
-//      Query := TSQLQuery.Create(nil);
-//      Query.Database := SQLite3Connection;
-//      Query.SQL.Text := 'UPDATE dev SET hdway = :hdway, hdfullway = :hdfullway WHERE hdname = :hdname';
-//      Query.Prepare;
-//      //Query.Open;
-//      //Query.First;
+//    UpdQ.Database := SQLite3Connection;
+//    UpdQ.Transaction := SQLTransaction;
+//    UpdQ.SQL.Text := 'UPDATE dev SET hdway = :hdway, hdfullway = :hdfullway WHERE id = :id';
+//    UpdQ.Prepare;
 //
-//      //while not Query.EOF do
-//      //begin
-//        for i:= 0 to listDevLevel.Size-1 do
-//          begin
-//                    Query.Params.ParamByName('hdname').AsString := listDevLevel[i].headdev;
-//        Query.Params.ParamByName('hdway').AsString := listDevLevel[i].wayHD;
-//        Query.Params.ParamByName('hdfullway').AsString := listDevLevel[i].fullWayHD;
-//        Query.ExecSQL; // выполняем UPDATE для каждой записи
-//
-//              //if listDevLevel[i].headdev = Query.FieldByName('hdname').AsString then
-//              //begin
-//              //  zcUI.TextMessage('hdname:' + Query.FieldByName('hdname').AsString,TMWOHistoryOut);
-//              //   Query.Params.ParamByName('hdway').AsString := listDevLevel[i].wayHD;
-//              //   Query.Params.ParamByName('hdfullway').AsString := listDevLevel[i].fullWayHD;
-//              //end;
-//          end;
-//        //Query.Next;
-//      //end;
-//      Query.ExecSQL;
-//      //Query.Close;
-//    except
-//      on E: Exception do
-//        ShowMessage('Ошибка создания списка уровней listDevLevel: ' + E.Message);
+//    while not SelQ.EOF do
+//    begin
+//      hdname := SelQ.FieldByName('hdname').AsString;
+//      for i := 0 to listDevLevel.Size - 1 do
+//      begin
+//        if listDevLevel[i].headdev = hdname then
+//        begin
+//          UpdQ.Params.ParamByName('hdway').AsString := listDevLevel[i].wayHD;
+//          UpdQ.Params.ParamByName('hdfullway').AsString := listDevLevel[i].fullWayHD;
+//          UpdQ.Params.ParamByName('id').AsInteger := SelQ.FieldByName('id').AsInteger;
+//          UpdQ.ExecSQL;
+//          Break;
+//        end;
+//      end;
+//      SelQ.Next;
 //    end;
-// end;
+//
+//    // фиксация изменений
+//    SQLTransaction.Commit;
+//
+//  finally
+//    SelQ.Free;
+//    UpdQ.Free;
+//  end;
+//end;
+
+//
+procedure InsertData;
+var
+  Query: TSQLQuery;
+  i:integer;
+begin
+    try
+      Query := TSQLQuery.Create(nil);
+      Query.Database := SQLite3Connection;
+      Query.Transaction := SQLTransaction;
+      Query.SQL.Text := 'UPDATE dev SET hdway = :hdway, hdfullway = :hdfullway WHERE hdname = :hdname';
+      Query.Prepare;
+      for i:= 0 to listDevLevel.Size-1 do
+        begin
+          Query.Params.ParamByName('hdname').AsString := listDevLevel[i].headdev;
+          //If
+          Query.Params.ParamByName('hdway').AsString := listDevLevel[i].wayHD;
+          Query.Params.ParamByName('hdfullway').AsString := listDevLevel[i].fullWayHD;
+          Query.ExecSQL; // выполняем UPDATE для каждой записи
+        end;
+      SQLTransaction.Commit;
+    except
+      on E: Exception do
+        ShowMessage('Ошибка создания списка уровней listDevLevel: ' + E.Message);
+    end;
+end;
   //  try
   //  //count:=0;
   //  pobj:=drawings.GetCurrentROOT^.ObjArray.beginiterate(ir); //зона уже выбрана в перспективе застовлять пользователя ее выбирать
@@ -466,6 +452,32 @@ begin
   end;
 end;
 
+function GeticanhdByhdname(Ahdname: string):integer;
+var
+  Q: TSQLQuery;
+  //hdname: string;
+begin
+  Q := TSQLQuery.Create(nil);
+  try
+    Q.Database := SQLite3Connection;
+    Q.Transaction := SQLTransaction;
+    Q.SQL.Text := 'SELECT icanhd FROM dev WHERE devname = :devname';
+    Q.Params.ParamByName('devname').AsString := Ahdname;
+    Q.Open;
+    result:=0;
+    while not Q.EOF do
+    begin
+      if Q.FieldByName('icanhd').AsInteger = 1 then
+      begin
+        result := 1;
+        break;
+      end;
+      Q.Next;
+    end;
+  finally
+    Q.Free;
+  end;
+end;
 procedure CreateListHD;
 var
   devLevel: TDevLevel;
@@ -486,28 +498,15 @@ begin
     Query.Open;
     Query.First;
 
+
     while not Query.EOF do
     begin
-      //pdev:=PGDBObjDevice(pobj);
-      //pvd:=FindVariableInEnt(pdev,'SLCABAGEN1_HeadDeviceName');
-      //if (pvd<>nil) then
-         devLevel.headdev := Query.FieldByName('hdname').AsString;
-
-      //pvd:=FindVariableInEnt(pdev,'ANALYSISEM_icanbeheadunit');
-      //if (pvd<>nil) then
-      //   if (pboolean(pvd^.data.Addr.Instance)^ = True) then
-      //      devLevel.icanhd := 1
-      //   else
-      //      devLevel.icanhd := 0
-      // else
-      //   devLevel.icanhd := 0;
-      devLevel.icanhd:=Query.FieldByName('icanhd').AsInteger;
-
-
+      devLevel.headdev := Query.FieldByName('hdname').AsString;
+      devLevel.icanhd:=1;
       devLevel.parentName := 'root';
       notAdd:=false;
       if listDevLevel.IsEmpty then begin
-        if (devLevel.headdev<>'') and (devLevel.headdev<>'-') and (devLevel.headdev<>'???') then
+        //if (devLevel.headdev<>'') and (devLevel.headdev<>'-') and (devLevel.headdev<>'???') then
            listDevLevel.PushBack(devLevel); end
       else
       begin
@@ -516,8 +515,11 @@ begin
               notAdd:=true;
 
          if notAdd=false then
-           if (devLevel.headdev<>'') and (devLevel.headdev<>'-') and (devLevel.headdev<>'???') then
+           //if (devLevel.headdev<>'') and (devLevel.headdev<>'-') and (devLevel.headdev<>'???') then
+             begin
+             devLevel.icanhd:=GeticanhdByhdname(Query.FieldByName('hdname').Asstring);
              listDevLevel.PushBack(devLevel);
+             end;
       end;
       Query.Next;
     end;
@@ -550,27 +552,7 @@ begin
       for i:= 0 to listDevLevel.Size-1 do
        begin
           if listDevLevel[i].headdev = Query.FieldByName('devname').AsString then
-            begin
-              listDevLevel.Mutable[i]^.pobj:=nil;
-              //listDevLevel.Mutable[i]^.icanhd := Query.FieldByName('icanhd').AsInteger;
-              //pvd2:=FindVariableInEnt(pdev,'ANALYSISEM_icanbeheadunit');
-              //if (pvd2<>nil) then
-              //   if (pboolean(pvd2^.data.Addr.Instance)^ = True) then
-              //      listDevLevel.Mutable[i]^.icanhd := 1
-              //   else
-              //      listDevLevel.Mutable[i]^.icanhd := 0
-              // else
-              //   listDevLevel.Mutable[i]^.icanhd := 0;
-
-              //pvd2:=FindVariableInEnt(pdev,'SLCABAGEN1_HeadDeviceName');
-              //  if (pvd2<>nil) then
-              //     if (Query.FieldByName('hdname').AsString<>'') and (pstring(pvd2^.data.Addr.Instance)^<>'-') and (pstring(pvd2^.data.Addr.Instance)^<>'???') then
-                      listDevLevel.Mutable[i]^.parentName := Query.FieldByName('hdname').AsString;
-                //   else
-                //      listDevLevel.Mutable[i]^.parentName:='root'
-                //else
-                //    listDevLevel.Mutable[i]^.parentName:='root';
-            end;
+             listDevLevel.Mutable[i]^.parentName := Query.FieldByName('hdname').AsString;
        end;
       Query.Next;
     end;
@@ -580,48 +562,6 @@ begin
       ShowMessage('Ошибка создания списка уровней listDevLevel: ' + E.Message);
   end;
 
-    //pobj:=drawings.GetCurrentROOT^.ObjArray.beginiterate(ir); //зона уже выбрана в перспективе застовлять пользователя ее выбирать
-    //if pobj<>nil then
-    //  repeat
-    //     // Определяем что это устройство
-    //     if pobj^.GetObjType=GDBDeviceID then
-    //       begin
-    //        pdev:=PGDBObjDevice(pobj);
-    //        pvd:=FindVariableInEnt(pdev,'NMO_Name');
-    //        if (pvd<>nil) then
-    //          begin
-    //           for i:= 0 to listDevLevel.Size-1 do
-    //             begin
-    //                if listDevLevel[i].headdev = pstring(pvd^.data.Addr.Instance)^ then
-    //                  begin
-    //                    listDevLevel.Mutable[i]^.pobj:=PGDBObjDevice(pobj);
-    //
-    //                    pvd2:=FindVariableInEnt(pdev,'ANALYSISEM_icanbeheadunit');
-    //                    if (pvd2<>nil) then
-    //                       if (pboolean(pvd2^.data.Addr.Instance)^ = True) then
-    //                          listDevLevel.Mutable[i]^.icanhd := 1
-    //                       else
-    //                          listDevLevel.Mutable[i]^.icanhd := 0
-    //                     else
-    //                       listDevLevel.Mutable[i]^.icanhd := 0;
-    //
-    //                    pvd2:=FindVariableInEnt(pdev,'SLCABAGEN1_HeadDeviceName');
-    //                      if (pvd2<>nil) then
-    //                         if (pstring(pvd2^.data.Addr.Instance)^<>'') and (pstring(pvd2^.data.Addr.Instance)^<>'-') and (pstring(pvd2^.data.Addr.Instance)^<>'???') then
-    //                            listDevLevel.Mutable[i]^.parentName := pstring(pvd2^.data.Addr.Instance)^;
-    //                      //   else
-    //                      //      listDevLevel.Mutable[i]^.parentName:='root'
-    //                      //else
-    //                      //    listDevLevel.Mutable[i]^.parentName:='root';
-    //                  end;
-    //             end;
-    //          end;
-    //       end;
-    //    pobj:=drawings.GetCurrentROOT^.ObjArray.iterate(ir); //переход к следующем примитиву в списке выбраных примитивов
-    //  until pobj=nil;
-
-    //for i:= 0 to listDevLevel.Size-1 do
-    //     zcUI.TextMessage(' headdev=' + listDevLevel[i].headdev + ' parentName=' + listDevLevel[i].parentName,TMWOHistoryOut);
 end;
 
 function FindFullHierarchy(const nodeName: string; var hierarchy: string): Boolean;
@@ -667,11 +607,9 @@ begin
     if FindFullHierarchy(listDevLevel[i].headdev, hierarchy) then begin
        listDevLevel.Mutable[i]^.fullWayHD:=hierarchy;
        //zcUI.TextMessage(listDevLevel[i].headdev+'~' + listDevLevel[i].parentName + ' -> ' + hierarchy,TMWOHistoryOut)
-      //Writeln(Nodes[i].Name, '~', Nodes[i].Parent, ' -> ', hierarchy)
       end
     else
-       zcUI.TextMessage(listDevLevel[i].headdev+'~' + listDevLevel[i].parentName + ' -> Иерархия не найдена',TMWOHistoryOut)
-      //Writeln(Nodes[i].Name, '~', Nodes[i].Parent, ' -> Иерархия не найдена');
+       zcUI.TextMessage(listDevLevel[i].headdev + '~' + listDevLevel[i].parentName + ' -> Иерархия не найдена',TMWOHistoryOut)
   end;
 end;
  function FindOnlyHDHierarchy(const nodeName: string; var hierarchy: string): Boolean;
@@ -695,12 +633,16 @@ begin
         Result := True;
         Exit;
       end;
-
+      //zcUI.TextMessage(hierarchy + '~sdfsdfsdfsdf' + nodeName,TMWOHistoryOut);
       // Рекурсивно ищем родителя
       if FindOnlyHDHierarchy(parentNode, hierarchy) then
       begin
-       if listDevLevel[i].icanhd = 1 then
+       //zcUI.TextMessage('~parentNode=' + parentNode +'-----'+ hierarchy + '~' + nodeName,TMWOHistoryOut);
+       //zcUI.TextMessage('~i=' + inttostr(i) + '~listDevLevel[i].icanhd=' + inttostr(listDevLevel[i].icanhd),TMWOHistoryOut);
+       if listDevLevel[i].icanhd = 1 then begin
           hierarchy := hierarchy + '~' + nodeName;
+          //zcUI.TextMessage('Зашел =' + hierarchy + '~i=' + inttostr(i),TMWOHistoryOut);
+        end;
         Result := True;
         Exit;
       end;
@@ -713,18 +655,18 @@ var
   i: Integer;
   hierarchy: string;
 begin
+
   for i := 0 to listDevLevel.Size-1 do
   begin
     if FindOnlyHDHierarchy(listDevLevel[i].headdev, hierarchy) then begin
        listDevLevel.Mutable[i]^.wayHD:=hierarchy;
        //zcUI.TextMessage(listDevLevel[i].headdev+'~' + listDevLevel[i].parentName + ' -> ' + hierarchy,TMWOHistoryOut)
-      //Writeln(Nodes[i].Name, '~', Nodes[i].Parent, ' -> ', hierarchy)
       end
     else
        zcUI.TextMessage(listDevLevel[i].headdev+'~' + listDevLevel[i].parentName + ' -> Иерархия не найдена',TMWOHistoryOut)
-      //Writeln(Nodes[i].Name, '~', Nodes[i].Parent, ' -> Иерархия не найдена');
   end;
 end;
+
 procedure FreeComponents;
 begin
   SQLTransaction.Free;
@@ -771,7 +713,7 @@ var
       zcUI.TextMessage('listDevLevel[i].headdev:' + listDevLevel[i].headdev,TMWOHistoryOut);
     end;
 
-    //InsertData;
+    InsertData;
     //ShowData;
     zcUI.TextMessage('Database successfully created and populated!',TMWOHistoryOut);
     FreeComponents;

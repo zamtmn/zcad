@@ -635,12 +635,12 @@
         <ResourceBaseClass Value="Form"/>
       </Unit21>
       <Unit22>
-        <Filename Value="zcad/gui/uzcmainwindow.pas"/>
+        <Filename Value="zcad/gui/uzcmainform.pas"/>
         <IsPartOfProject Value="True"/>
-        <ComponentName Value="ZCADMainWindow"/>
+        <ComponentName Value="zcMainForm"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <UnitName Value="uzcMainWindow"/>
+        <UnitName Value="uzcMainForm"/>
       </Unit22>
       <Unit23>
         <Filename Value="zcad/entities/uzcenitiesvariablesextender.pas"/>

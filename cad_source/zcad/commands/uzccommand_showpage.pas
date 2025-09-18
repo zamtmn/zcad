@@ -25,15 +25,15 @@ uses
   SysUtils,
   uzcLog,
   uzccommandsabstract,uzccommandsimpl,
-  uzcmainwindow;
+  uzcMainForm;
 
 implementation
 
 function ShowPage_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 begin
-  if assigned(ZCADMainWindow)then
-  if assigned(ZCADMainWindow.PageControl)then
-  ZCADMainWindow.PageControl.ActivePageIndex:=strtoint(Operands);
+  if assigned(zcMainForm)then
+  if assigned(zcMainForm.PageControl)then
+  zcMainForm.PageControl.ActivePageIndex:=strtoint(Operands);
   result:=cmd_ok;
 end;
 

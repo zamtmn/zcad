@@ -292,7 +292,7 @@ uses
   //uzccommaps,
   uzceCommand_SCHConnection,
   {$ENDIF}
-  uzcmainwindow,
+  uzcMainForm,
   uzcuidialogs,
   uzcstrconsts,
   uzeiopalette,
@@ -350,15 +350,15 @@ begin
     //Application.Initialize;//перемещен в инициализацию uzcfsplash
                              //чтоб показать сплэш пораньше
     Application.MainFormOnTaskBar:=True;
-    Application.CreateForm(TZCADMainWindow,ZCADMainWindow);
-    ZCADMainWindow.Show;
-    ZCADMainWindow.Repaint;
+    Application.CreateForm(TzcMainForm,zcMainForm);
+    zcMainForm.Show;
+    zcMainForm.Repaint;
     zcUI.TextMessage(format(rsZCADStarted,
       [programname,sysvar.SYS.SYS_Version^]),TMWOHistoryOut);
 
     //показываем процессбар в статусбаре,
     //чтоб небыло лишних переключений на текст
-    ZCADMainWindow.SwithToProcessBar;
+    zcMainForm.SwithToProcessBar;
 
     //шаримся в preload и выполняем скрипты оттуда
     FromDirsIterator(sysvar.PATH.Preload_Paths^,'*.cmd','autorun.cmd',
@@ -379,7 +379,7 @@ begin
     end;
 
     //возвращаем текст в статусбаре,
-    ZCADMainWindow.SwithToHintText;
+    zcMainForm.SwithToHintText;
 
     //убираем сплэш
     removesplash;

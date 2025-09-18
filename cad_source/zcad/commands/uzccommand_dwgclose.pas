@@ -24,7 +24,7 @@ uses
   uzcLog,Forms,
   uzccommandsabstract,uzccommandsimpl,
   uzcdrawing,uzcdrawings,uzccommand_quit,
-  uzcmainwindow;
+  uzcMainForm;
 
 implementation
 
@@ -34,7 +34,7 @@ var
 begin
   application.ProcessMessages;
   CurrentDWG:=PTZCADDrawing(drawings.GetCurrentDWG);
-  _CloseDWGPage(CurrentDWG,ZCADMainWindow.PageControl.ActivePage,false,nil);
+  _CloseDWGPage(CurrentDWG,zcMainForm.PageControl.ActivePage,false,nil);
   result:=cmd_ok;
 end;
 

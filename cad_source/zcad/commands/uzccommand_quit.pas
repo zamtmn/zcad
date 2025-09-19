@@ -32,7 +32,7 @@ function _CloseDWGPage(ClosedDWG:PTZCADDrawing;lincedcontrol:TObject;NeedAskDonS
 
 implementation
 
-uses uzcmainwindow,uzccommand_saveas;
+uses uzcMainForm,uzccommand_saveas;
 
 { #todo : Убрать зависимость от главной формы }
 
@@ -51,7 +51,7 @@ begin
         s:=format(rsCloseDWGQuery,[StringReplace(ClosedDWG.FileName,'\','\\',[rfReplaceAll])]);
         dr:=zcMsgDlg(s,zcdiQuestion,[zccbYes,zccbNo,zccbCancel],NeedAskDonShow,MCTx);
         result:=dr.ModalResult;
-        //result:=ZCADMainWindow.MessageBox(@s[1],@rsWarningCaption[1],MB_YESNOCANCEL);
+        //result:=zcMainForm.MessageBox(@s[1],@rsWarningCaption[1],MB_YESNOCANCEL);
         if result=ZCmrCancel then exit;
         if result=ZCmrNo then system.break;
         if result=ZCmrYes then
@@ -69,7 +69,7 @@ begin
     viewcontrol.free;
 
     lincedcontrol.Free;
-    tobject(viewcontrol):=ZCADMainWindow.PageControl.ActivePage;
+    tobject(viewcontrol):=zcMainForm.PageControl.ActivePage;
 
     if viewcontrol<>nil then
     begin
@@ -113,8 +113,8 @@ var
     i:integer;
   begin
     result:=0;
-    for i:=0 to ZCADMainWindow.PageControl.PageCount-1 do begin
-      wa:=TGeneralViewArea(FindComponentByType(ZCADMainWindow.PageControl.Pages[i],TGeneralViewArea));
+    for i:=0 to zcMainForm.PageControl.PageCount-1 do begin
+      wa:=TGeneralViewArea(FindComponentByType(zcMainForm.PageControl.Pages[i],TGeneralViewArea));
       if wa<>nil then begin
         Closeddwg:=PTZCADDrawing(wa.PDWG);
         if ClosedDWG<>nil then
@@ -127,7 +127,7 @@ var
 begin
   if IsRealyQuit then
   begin
-    if ZCADMainWindow.PageControl<>nil then
+    if zcMainForm.PageControl<>nil then
     begin
       if (GetChangedDrawingsCount>1)or(CommandManager.isBusy) then
         MCtx:=CreateMessagesContext(rsCloseDrawings);
@@ -136,9 +136,9 @@ begin
         MCtx.add(getMsgID(rsQuitQuery),TZCMsgDialogResult.CreateMR(ZCmrYes));
         MCtx.add(getMsgID(rsCloseDWGQuery),TZCMsgDialogResult.CreateMR(ZCmrNo));
       end;
-      while ZCADMainWindow.PageControl.ActivePage<>nil do
+      while zcMainForm.PageControl.ActivePage<>nil do
       begin
-        if CloseDWGPage(ZCADMainWindow.PageControl.ActivePage,GetChangedDrawingsCount>1,MCtx)=IDCANCEL then begin
+        if CloseDWGPage(zcMainForm.PageControl.ActivePage,GetChangedDrawingsCount>1,MCtx)=IDCANCEL then begin
           FreeMessagesContext(MCtx);
           exit;
         end;

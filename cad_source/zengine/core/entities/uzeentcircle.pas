@@ -80,10 +80,15 @@ GDBObjCircle= object(GDBObjWithLocalCS)
 
                  class function CreateInstance:PGDBObjCircle;static;
                  function GetObjType:TObjID;virtual;
+                 function IsStagedFormatEntity:boolean;virtual;
            end;
 implementation
 //uses
 //    log;
+function GDBObjCircle.IsStagedFormatEntity:boolean;
+begin
+  result:=true;
+end;
 function GDBObjCircle.onpoint(var objects:TZctnrVectorPGDBaseEntity;const point:GDBVertex):Boolean;
 var
    m1:DMatrix4D;

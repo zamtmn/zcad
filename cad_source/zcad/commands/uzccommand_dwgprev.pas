@@ -23,7 +23,7 @@ interface
 uses
   uzcLog,
   uzccommandsabstract,uzccommandsimpl,
-  uzcmainwindow;
+  uzcMainForm;
 
 implementation
 
@@ -31,13 +31,13 @@ function DWGPrev_com(const Context:TZCADCommandContext;operands:TCommandOperands
 var
    i:integer;
 begin
-  if assigned(ZCADMainWindow.PageControl)then
-    if ZCADMainWindow.PageControl.PageCount>1 then begin
-      i:=ZCADMainWindow.PageControl.ActivePageIndex-1;
+  if assigned(zcMainForm.PageControl)then
+    if zcMainForm.PageControl.PageCount>1 then begin
+      i:=zcMainForm.PageControl.ActivePageIndex-1;
       if i<0 then
-        i:=ZCADMainWindow.PageControl.PageCount-1;
-      ZCADMainWindow.PageControl.ActivePageIndex:=i;
-      ZCADMainWindow.ChangedDWGTab(ZCADMainWindow.PageControl);
+        i:=zcMainForm.PageControl.PageCount-1;
+      zcMainForm.PageControl.ActivePageIndex:=i;
+      zcMainForm.ChangedDWGTab(zcMainForm.PageControl);
     end;
   result:=cmd_ok;
 end;

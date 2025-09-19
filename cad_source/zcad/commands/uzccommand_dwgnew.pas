@@ -31,7 +31,7 @@ uses
   uzcsysvars,
   uzcstrconsts,
   uzcdrawing,uzcdrawings,
-  uzcinterface,uzcmainwindow;
+  uzcinterface,uzcMainForm;
 
 function DWGNew_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 
@@ -58,27 +58,27 @@ begin
 
   PDrawing^.FileName:=operands;
 
-  if not assigned(ZCADMainWindow.PageControl)then
+  if not assigned(zcMainForm.PageControl)then
     DockMaster.ShowControl('PageControl',true);
 
 
-  TabSheet:=TTabSheet.create(ZCADMainWindow.PageControl);
+  TabSheet:=TTabSheet.create(zcMainForm.PageControl);
   TabSheet.Caption:=(Operands);
-  TabSheet.Parent:=ZCADMainWindow.PageControl;
+  TabSheet.Parent:=zcMainForm.PageControl;
 
   ViewArea:=GetCurrentBackEnd.Create(TabSheet);
-  ViewArea.onCameraChanged:=ZCADMainWindow.correctscrollbars;
-  ViewArea.OnWaMouseUp:=ZCADMainWindow.wamu;
-  ViewArea.OnWaMouseDown:=ZCADMainWindow.wamd;
-  ViewArea.OnWaMouseMove:=ZCADMainWindow.wamm;
-  ViewArea.OnWaKeyPress:=ZCADMainWindow.wakp;
-  ViewArea.OnWaMouseSelect:=ZCADMainWindow.wams;
-  ViewArea.OnGetEntsDesc:=ZCADMainWindow.GetEntsDesc;
-  ViewArea.ShowCXMenu:=ZCADMainWindow.ShowCXMenu;
-  ViewArea.MainMouseMove:=ZCADMainWindow.MainMouseMove;
-  ViewArea.MainMouseDown:=ZCADMainWindow.MainMouseDown;
-  ViewArea.MainMouseUp:=ZCADMainWindow.MainMouseUp;
-  ViewArea.OnWaShowCursor:=ZCADMainWindow.WaShowCursor;
+  ViewArea.onCameraChanged:=zcMainForm.correctscrollbars;
+  ViewArea.OnWaMouseUp:=zcMainForm.wamu;
+  ViewArea.OnWaMouseDown:=zcMainForm.wamd;
+  ViewArea.OnWaMouseMove:=zcMainForm.wamm;
+  ViewArea.OnWaKeyPress:=zcMainForm.wakp;
+  ViewArea.OnWaMouseSelect:=zcMainForm.wams;
+  ViewArea.OnGetEntsDesc:=zcMainForm.GetEntsDesc;
+  ViewArea.ShowCXMenu:=zcMainForm.ShowCXMenu;
+  ViewArea.MainMouseMove:=zcMainForm.MainMouseMove;
+  ViewArea.MainMouseDown:=zcMainForm.MainMouseDown;
+  ViewArea.MainMouseUp:=zcMainForm.MainMouseUp;
+  ViewArea.OnWaShowCursor:=zcMainForm.WaShowCursor;
   PDrawing.wa:=ViewArea;
 
   drawings.SetCurrentDWG(PDrawing);
@@ -90,7 +90,7 @@ begin
   ViewArea.getareacaps;
   ViewArea.WaResize(nil);
   ViewControl.show;
-  ZCADMainWindow.PageControl.ActivePage:=TabSheet;
+  zcMainForm.PageControl.ActivePage:=TabSheet;
 
   if not fileexists(FileName) then begin
     FileName:=ConcatPaths([ExpandPath(sysvar.PATH.Template_Path^),ExpandPath(sysvar.PATH.Template_File^)]);

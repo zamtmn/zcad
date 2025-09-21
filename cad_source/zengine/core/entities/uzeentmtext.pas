@@ -36,7 +36,6 @@ type
   PGDBObjMText=^GDBObjMText;
   GDBObjMText= object(GDBObjText)
     width:Double;
-    linespace:Double;
     linespacef:Double;
     text:XYZWStringArray;
     constructor init(own:Pointer;layeraddres:PGDBLayerProp;LW:SmallInt;c:TDXFEntsInternalStringType;p:GDBvertex;s,o,w,a:Double;j:TTextJustify;wi,l:Double);
@@ -58,6 +57,11 @@ type
     function CreateInstance:PGDBObjMText;static;
     function GetObjType:TObjID;virtual;
     procedure transform(const t_matrix:DMatrix4D);virtual;
+
+    function GetLineSpace:Double;
+    procedure rtsave(refp:Pointer);virtual;
+
+    property LineSpace:Double read GetLineSpace;
   end;
 
 procedure FormatMtext(pfont:pgdbfont;width,size,wfactor:Double;const content:TDXFEntsInternalStringType;var text:XYZWStringArray);
@@ -66,6 +70,19 @@ function GetLinesW(var lines:XYZWStringArray):Double;
 function GetLineSpaceFromLineSpaceF(linespacef,size:Double):Double;
 
 implementation
+
+procedure GDBObjMText.rtsave(refp:Pointer);
+begin
+  inherited;
+  PGDBObjMText(refp)^.width:=width;
+  PGDBObjMText(refp)^.linespacef:=linespacef;
+end;
+
+
+function GDBObjMText.GetLineSpace:Double;
+begin
+  result:=GetLineSpaceFromLineSpaceF(linespacef,textprop.size);
+end;
 
 procedure GDBObjMText.transform;
 var
@@ -103,7 +120,7 @@ constructor GDBObjMText.initnul;
 begin
   inherited initnul(owner);
   width:=0;
-  linespace:=1;
+  //linespace:=1;
   text.init(10);
 end;
 constructor GDBObjMText.init;
@@ -277,6 +294,7 @@ var
   pfont:pgdbfont;
   l:Integer;
   sym:word;
+  LdivideS:double;
 
   procedure setstartx;
   begin
@@ -300,7 +318,8 @@ begin
     template:=content;
   content:=textformat(template,SPFSources.GetFull,@self);
   CodePage:=TCP;
-  linespace:=textprop.size*linespacef*5 / 3;
+  //linespace:=textprop.size*linespacef*5 / 3;
+  LdivideS:=linespace/textprop.size;
   if (content='')and(template='') then
     content:=str_empty;
 
@@ -335,7 +354,7 @@ begin
         if pswp<>nil then
         repeat
               setstartx;
-          pswp^.y := -(i) * linespace / textprop.size;
+          pswp^.y := -(i) * LdivideS;
 
           pswp^.x:=pswp^.x-pswp^.y*angle;
           inc(i);
@@ -351,7 +370,7 @@ begin
         repeat
           setstartx;
           pswp^.x:= pswp^.x-pswp^.w * textprop.size / 2 / textprop.size;;
-          pswp^.y := -(i) * linespace / textprop.size;
+          pswp^.y := -(i) * LdivideS;
 
           pswp^.x:=pswp^.x-pswp^.y*angle;
           inc(i);
@@ -367,7 +386,7 @@ begin
         repeat
           setstartx;
           pswp^.x:= pswp^.x -pswp^.w * textprop.size  / textprop.size;
-          pswp^.y := -(i) * linespace / textprop.size;
+          pswp^.y := -(i) * LdivideS;
 
           pswp^.x:=pswp^.x-pswp^.y*angle;
           inc(i);
@@ -382,7 +401,7 @@ begin
         if pswp<>nil then
         repeat
           setstartx;
-          pswp^.y := -(i) * linespace / textprop.size;
+          pswp^.y := -(i) * LdivideS;
 
           pswp^.x:=pswp^.x-pswp^.y*angle;
           inc(i);
@@ -398,7 +417,7 @@ begin
         repeat
           setstartx;
           pswp^.x:= pswp^.x -pswp^.w * textprop.size / 2 / textprop.size;
-          pswp^.y := -(i) * linespace / textprop.size;
+          pswp^.y := -(i) * LdivideS;
 
           pswp^.x:=pswp^.x-pswp^.y*angle;
           inc(i);
@@ -414,7 +433,7 @@ begin
         repeat
           setstartx;
           pswp^.x:= pswp^.x -pswp^.w * textprop.size  / textprop.size;
-          pswp^.y := -(i) * linespace / textprop.size;
+          pswp^.y := -(i) * LdivideS;
 
           pswp^.x:=pswp^.x-pswp^.y*angle;
           inc(i);
@@ -429,7 +448,7 @@ begin
         if pswp<>nil then
         repeat
           setstartx;
-          pswp^.y := -(i) * linespace / textprop.size;
+          pswp^.y := -(i) * LdivideS;
 
           pswp^.x:=pswp^.x-pswp^.y*angle;
           inc(i);
@@ -445,7 +464,7 @@ begin
         repeat
           setstartx;
           pswp^.x:= pswp^.x -pswp^.w * textprop.size  / 2 / textprop.size;
-          pswp^.y := -(i) * linespace / textprop.size;
+          pswp^.y := -(i) * LdivideS;
 
           pswp^.x:=pswp^.x-pswp^.y*angle;
           inc(i);
@@ -461,7 +480,7 @@ begin
         repeat
           setstartx;
           pswp^.x:= pswp^.x -pswp^.w * textprop.size  / textprop.size;
-          pswp^.y := -(i) * linespace / textprop.size;
+          pswp^.y := -(i) * LdivideS;
 
           pswp^.x:=pswp^.x-pswp^.y*angle;
           inc(i);
@@ -651,7 +670,7 @@ begin
   tvo^.template:=template;
   tvo^.content:=content;
   tvo^.width:=width;
-  tvo^.linespace:=linespace;
+  //tvo^.linespace:=linespace;
   tvo^.linespacef:=linespacef;
   tvo^.bp.ListPos.Owner:=own;
   tvo^.TXTStyle:=TXTStyle;
@@ -705,7 +724,7 @@ begin
   Content:=utf8tostring(ttemplate);
   textprop.justify:=b2j[j];
   P_drawInOCS := Local.p_insert;
-  linespace := textprop.size * linespacef * 5 / 3;
+  //linespace := textprop.size * linespacef * 5 / 3;
   {if not angleload then
     angle:=vertexangle(NulVertex2D,pgdbvertex2d(@ux)^);}
   Local.basis.ox:=ux;

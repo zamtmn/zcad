@@ -311,7 +311,7 @@ begin
      TIM_MText:
               begin
                    pgdbobjmtext(pt)^.width:=TextInsertParams.Width;
-                   pgdbobjmtext(pt)^.linespace:=TextInsertParams.LineSpace;
+                   //pgdbobjmtext(pt)^.linespace:=TextInsertParams.LineSpace;
 
                    if TextInsertParams.LineSpace<0 then
                                                pgdbobjmtext(pt)^.linespacef:=(-TextInsertParams.LineSpace*3/5)/TextInsertParams.h

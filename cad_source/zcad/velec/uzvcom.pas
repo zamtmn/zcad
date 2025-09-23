@@ -2065,6 +2065,7 @@ function Testcablemanager_com(const Context:TZCADCommandContext;operands:TComman
   cman:TCableManager;
   pcabledesk:PTCableDesctiptor;
   pobj{,pobj2}:PGDBObjCable;
+  pdev:PGDBOBJDevice;
   pnp:PTNodeProp;
   ir,ir2,ir3:itrec;
   begin
@@ -2084,7 +2085,9 @@ function Testcablemanager_com(const Context:TZCADCommandContext;operands:TComman
             repeat
              zcUI.TextMessage('1',TMWOHistoryOut);
              testTempDrawLine(pnp^.PrevP,pnp^.NextP);
-             zcUI.TextMessage('  имя устройства подключенного - '+pnp^.DevLink^.GetObjTypeName,TMWOHistoryOut);
+             pdev:=pnp^.DevLink;
+             if pdev<>nil then
+                zcUI.TextMessage('  имя устройства подключенного - '+pString(FindVariableInEnt(pnp^.DevLink,'NMO_Name')^.data.Addr.Instance)^,TMWOHistoryOut);
              pnp:=pobj^.NodePropArray.iterate(ir3);
             until pnp=nil;
            //zcUI.TextMessage('  Найдена групповая линия "'+pcabledesk^.Name+'"');

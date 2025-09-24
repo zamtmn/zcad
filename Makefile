@@ -120,7 +120,7 @@ else
 	LAZBUILD:=$(LP)$(PATHDELIM)lazbuild
 endif
 
-ZP:=$(if $(wildcard $(LAZBUILD)),$(shell $(LAZBUILD) cad_source/zcad.lpi --quiet --pcp=$(PCP) --get-expand-text=$$\(ProjPath\)..$(PATHDELIM)$(BUILDPREFIX)$(PATHDELIM)bin$(PATHDELIM)$$\(TargetCPU\)-$$\(TargetOS\)),$())
+ZP:=$(if $(wildcard $(LAZBUILD)),$(shell $(LAZBUILD) cad_source/zcad.lpi --quiet --pcp=$(PCP) --get-expand-text=$$\(ProjPath\)..$(PATHDELIM)$(BUILDPREFIX)$(PATHDELIM)bin),$())
 ZPLATFORM:=$(if $(wildcard $(LAZBUILD)),$(shell $(LAZBUILD) cad_source/zcad.lpi --quiet --pcp=$(PCP) --get-expand-text=$$\(TargetCPU\)-$$\(TargetOS\)),$())
 
 checkallvars: checkvars 

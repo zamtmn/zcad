@@ -65,7 +65,8 @@ begin
     tmpStream:=TMemoryStream.create;
     try
       clipboard.GetFormat(zcformat,tmpStream);
-      tmpSize:=tmpStream.Seek(0,soFromEnd);
+      //учет #0 на конце
+      tmpSize:=tmpStream.Seek(0,soFromEnd)-1;
       setlength(tmpStr,tmpSize);
       tmpStream.Seek(0,soFromBeginning);
       tmpStream.ReadBuffer(tmpStr[1],tmpSize);

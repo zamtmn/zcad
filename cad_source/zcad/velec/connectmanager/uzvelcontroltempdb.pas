@@ -259,56 +259,302 @@ begin
     Query.Free;
   end;
 end;
-//procedure InsertData;
-//var
-//  SelQ, UpdQ: TSQLQuery;
-//  i: Integer;
-//  hdname: string;
+procedure InsertDataSort;
+type
+  TSortDev = record
+    res: Integer;
+    LastWord: string;
+    NextWord1: string;
+    NextWord2: string;
+  end;
+var
+  SelQ, UpdQ: TSQLQuery;
+  sortWord: TSortDev;
+  hdway,hdfullway: string;
+
+  function ProcessStrings(const Str1, Str2: string): TSortDev;
+    var
+      Parts1, Parts2: TStringList;
+      LastWordFromStr1: string;
+      IndexInStr2, WordsAfter,i: Integer;
+//      // Примеры функций (заглушки)
+//procedure CallFunction1(const Str1, Str2, LastWord: string);
 //begin
-//  SelQ := TSQLQuery.Create(nil);
-//  UpdQ := TSQLQuery.Create(nil);
+//  // Реализация первой функции
+//  ShowMessage('Вызов функции 1: ' + LastWord + ' - последнее слово');
+//end;
+//
+//procedure CallFunction2(const Str1, Str2, LastWord, NextWord: string);
+//begin
+//  // Реализация второй функции
+//  ShowMessage('Вызов функции 2: ' + LastWord + ' → ' + NextWord);
+//end;
+//
+//procedure CallFunction3(const Str1, Str2, LastWord, NextWord1, NextWord2: string);
+//begin
+//  // Реализация третьей функции
+//  ShowMessage('Вызов функции 3: ' + LastWord + ' → ' + NextWord1 + ' → ' + NextWord2);
+//end;
+    begin
+      Result.res := -1; // По умолчанию
+      Result.LastWord := '-1'; // По умолчанию
+      Result.NextWord1 := '-1';// По умолчанию
+      Result.NextWord2 := '-1';// По умолчанию
+
+      Parts1 := TStringList.Create;
+      Parts2 := TStringList.Create;
+      try
+        // Разбиваем первую строку на части
+        ExtractStrings(['~'], [], PChar(Str1), Parts1);
+        if Parts1.Count = 0 then Exit;
+
+        // Получаем последнее слово из первой строки
+        LastWordFromStr1 := Parts1[Parts1.Count - 1];
+
+        // Разбиваем вторую строку на части
+        ExtractStrings(['~'], [], PChar(Str2), Parts2);
+        if Parts2.Count = 0 then Exit;
+
+        // Ищем последнее слово из первой строки во второй строке
+        IndexInStr2 := -1;
+        for i := 0 to Parts2.Count - 1 do
+        begin
+          if Parts2[i] = LastWordFromStr1 then
+          begin
+            IndexInStr2 := i;
+            Break;
+          end;
+        end;
+
+        if IndexInStr2 = -1 then Exit; // Не нашли слово
+
+        // Определяем сколько слов осталось после найденного слова
+        WordsAfter := Parts2.Count - IndexInStr2 - 1;
+
+        // Выбираем функцию в зависимости от количества слов после
+        if WordsAfter = 0 then
+        begin
+          // Последнее слово во второй строке
+          Result.res := 1; // По умолчанию
+          Result.LastWord := LastWordFromStr1; // По умолчанию
+          Result.NextWord1 := '';// По умолчанию
+          Result.NextWord2 := '';// По умолчанию
+          //Result := 1;
+          //CallFunction1(Str1, Str2, LastWordFromStr1);
+        end
+        else if WordsAfter = 1 then
+        begin
+          // После слова есть одно слово
+          Result.res := 2;
+          Result.LastWord := LastWordFromStr1;
+          Result.NextWord1 := Parts2[IndexInStr2 + 1];
+          Result.NextWord2 := '';
+          //Result := 2;
+          //CallFunction2(Str1, Str2, LastWordFromStr1, Parts2[IndexInStr2 + 1]);
+        end
+        else if WordsAfter >= 2 then
+        begin
+          // После слова есть два или более слов
+         Result.res := 3;
+         Result.LastWord := LastWordFromStr1;
+         Result.NextWord1 := Parts2[IndexInStr2 + 1];
+         Result.NextWord2 := Parts2[IndexInStr2 + 2];
+          //Result := 3;
+          //CallFunction3(Str1, Str2, LastWordFromStr1,
+          //             Parts2[IndexInStr2 + 1], Parts2[IndexInStr2 + 2]);
+        end;
+
+      finally
+        Parts1.Free;
+        Parts2.Free;
+      end;
+    end;
+
+    function GetGroupByhdname(Ahdname: string):string;
+    var
+      Q: TSQLQuery;
+      //hdname: string;
+    begin
+      Q := TSQLQuery.Create(nil);
+      try
+        Q.Database := SQLite3Connection;
+        Q.Transaction := SQLTransaction;
+        Q.SQL.Text := 'SELECT hdgroup FROM dev WHERE devname = :devname';
+        Q.Params.ParamByName('devname').AsString := Ahdname;
+        Q.Open;
+        result:='----11111';
+        while not Q.EOF do
+        begin
+          result:=Q.FieldByName('hdgroup').AsString;
+          Q.Next;
+        end;
+      finally
+        Q.Free;
+      end;
+    end;
+
+
+begin
+  SelQ := TSQLQuery.Create(nil);
+  UpdQ := TSQLQuery.Create(nil);
+  try
+    SelQ.Database := SQLite3Connection;
+    SelQ.Transaction := SQLTransaction;
+    SelQ.SQL.Text := 'SELECT * FROM dev';
+    SelQ.Open;
+
+    UpdQ.Database := SQLite3Connection;
+    UpdQ.Transaction := SQLTransaction;
+    UpdQ.SQL.Text := 'UPDATE dev SET S1 = :S1, S2 = :S2, S3 = :S3 WHERE id = :id';
+    UpdQ.Prepare;
+
+    while not SelQ.EOF do
+    begin
+      sortWord:=ProcessStrings(SelQ.FieldByName('hdway').AsString,SelQ.FieldByName('hdfullway').AsString);
+      //zcUI.TextMessage(sortWord.LastWord+ '====' + inttostr(sortWord.res),TMWOHistoryOut);
+      if sortWord.res = 1 then
+      begin
+          UpdQ.Params.ParamByName('S1').AsString := SelQ.FieldByName('hdgroup').AsString;
+          UpdQ.Params.ParamByName('S2').AsString := '';
+          UpdQ.Params.ParamByName('S3').AsString := '';
+          UpdQ.Params.ParamByName('id').AsInteger := SelQ.FieldByName('id').AsInteger;
+          UpdQ.ExecSQL;
+      end
+      else if sortWord.res = 2 then
+      begin
+        // После слова есть одно слово
+       UpdQ.Params.ParamByName('S1').AsString := GetGroupByhdname(sortWord.NextWord1);
+       UpdQ.Params.ParamByName('S2').AsString := SelQ.FieldByName('hdgroup').AsString;
+       UpdQ.Params.ParamByName('S3').AsString := '';
+       UpdQ.Params.ParamByName('id').AsInteger := SelQ.FieldByName('id').AsInteger;
+       UpdQ.ExecSQL;
+      end
+      else if sortWord.res >= 3 then
+      begin
+        // После слова есть два или более слов
+       UpdQ.Params.ParamByName('S1').AsString := GetGroupByhdname(sortWord.NextWord2);
+       UpdQ.Params.ParamByName('S2').AsString := GetGroupByhdname(sortWord.NextWord1);
+       UpdQ.Params.ParamByName('S3').AsString := SelQ.FieldByName('hdgroup').AsString;
+       UpdQ.Params.ParamByName('id').AsInteger := SelQ.FieldByName('id').AsInteger;
+       UpdQ.ExecSQL;
+
+        //Result := 3;
+        //CallFunction3(Str1, Str2, LastWordFromStr1,
+        //             Parts2[IndexInStr2 + 1], Parts2[IndexInStr2 + 2]);
+      end;
+      //for i := 0 to listDevLevel.Size - 1 do
+      //begin
+      //  if listDevLevel[i].headdev = hdname then
+      //  begin
+      //    UpdQ.Params.ParamByName('hdway').AsString := listDevLevel[i].wayHD;
+      //    UpdQ.Params.ParamByName('hdfullway').AsString := listDevLevel[i].fullWayHD;
+      //    UpdQ.Params.ParamByName('id').AsInteger := SelQ.FieldByName('id').AsInteger;
+      //    UpdQ.ExecSQL;
+      //    Break;
+      //  end;
+      //end;
+      SelQ.Next;
+    end;
+
+    // фиксация изменений
+    SQLTransaction.Commit;
+
+  finally
+    SelQ.Free;
+    UpdQ.Free;
+  end;
+end;
+
+//
+//function ProcessStrings(const Str1, Str2: string): Integer;
+//var
+//  Parts1, Parts2: TStringList;
+//  LastWordFromStr1: string;
+//  IndexInStr2, WordsAfter: Integer;
+//begin
+//  Result := 0; // По умолчанию
+//
+//  Parts1 := TStringList.Create;
+//  Parts2 := TStringList.Create;
 //  try
-//    SelQ.Database := SQLite3Connection;
-//    SelQ.Transaction := SQLTransaction;
-//    SelQ.SQL.Text := 'SELECT id, hdname FROM dev';
-//    SelQ.Open;
+//    // Разбиваем первую строку на части
+//    ExtractStrings(['~'], [], PChar(Str1), Parts1);
+//    if Parts1.Count = 0 then Exit;
 //
-//    UpdQ.Database := SQLite3Connection;
-//    UpdQ.Transaction := SQLTransaction;
-//    UpdQ.SQL.Text := 'UPDATE dev SET hdway = :hdway, hdfullway = :hdfullway WHERE id = :id';
-//    UpdQ.Prepare;
+//    // Получаем последнее слово из первой строки
+//    LastWordFromStr1 := Parts1[Parts1.Count - 1];
 //
-//    while not SelQ.EOF do
+//    // Разбиваем вторую строку на части
+//    ExtractStrings(['~'], [], PChar(Str2), Parts2);
+//    if Parts2.Count = 0 then Exit;
+//
+//    // Ищем последнее слово из первой строки во второй строке
+//    IndexInStr2 := -1;
+//    for var i := 0 to Parts2.Count - 1 do
 //    begin
-//      hdname := SelQ.FieldByName('hdname').AsString;
-//      for i := 0 to listDevLevel.Size - 1 do
+//      if Parts2[i] = LastWordFromStr1 then
 //      begin
-//        if listDevLevel[i].headdev = hdname then
-//        begin
-//          UpdQ.Params.ParamByName('hdway').AsString := listDevLevel[i].wayHD;
-//          UpdQ.Params.ParamByName('hdfullway').AsString := listDevLevel[i].fullWayHD;
-//          UpdQ.Params.ParamByName('id').AsInteger := SelQ.FieldByName('id').AsInteger;
-//          UpdQ.ExecSQL;
-//          Break;
-//        end;
+//        IndexInStr2 := i;
+//        Break;
 //      end;
-//      SelQ.Next;
 //    end;
 //
-//    // фиксация изменений
-//    SQLTransaction.Commit;
+//    if IndexInStr2 = -1 then Exit; // Не нашли слово
+//
+//    // Определяем сколько слов осталось после найденного слова
+//    WordsAfter := Parts2.Count - IndexInStr2 - 1;
+//
+//    // Выбираем функцию в зависимости от количества слов после
+//    if WordsAfter = 0 then
+//    begin
+//      // Последнее слово во второй строке
+//      Result := 1;
+//      //CallFunction1(Str1, Str2, LastWordFromStr1);
+//    end
+//    else if WordsAfter = 1 then
+//    begin
+//      // После слова есть одно слово
+//      Result := 2;
+//      //CallFunction2(Str1, Str2, LastWordFromStr1, Parts2[IndexInStr2 + 1]);
+//    end
+//    else if WordsAfter >= 2 then
+//    begin
+//      // После слова есть два или более слов
+//      Result := 3;
+//      //CallFunction3(Str1, Str2, LastWordFromStr1,
+//                   //Parts2[IndexInStr2 + 1], Parts2[IndexInStr2 + 2]);
+//    end;
 //
 //  finally
-//    SelQ.Free;
-//    UpdQ.Free;
+//    Parts1.Free;
+//    Parts2.Free;
 //  end;
 //end;
 
+//// Примеры функций (заглушки)
+//procedure CallFunction1(const Str1, Str2, LastWord: string);
+//begin
+//  // Реализация первой функции
+//  ShowMessage('Вызов функции 1: ' + LastWord + ' - последнее слово');
+//end;
 //
-procedure InsertData;
+//procedure CallFunction2(const Str1, Str2, LastWord, NextWord: string);
+//begin
+//  // Реализация второй функции
+//  ShowMessage('Вызов функции 2: ' + LastWord + ' → ' + NextWord);
+//end;
+//
+//procedure CallFunction3(const Str1, Str2, LastWord, NextWord1, NextWord2: string);
+//begin
+//  // Реализация третьей функции
+//  ShowMessage('Вызов функции 3: ' + LastWord + ' → ' + NextWord1 + ' → ' + NextWord2);
+//end;
+
+procedure InsertDatahdfullway;
 var
   Query: TSQLQuery;
   i:integer;
+
 begin
     try
       Query := TSQLQuery.Create(nil);
@@ -713,10 +959,17 @@ var
       zcUI.TextMessage('listDevLevel[i].headdev:' + listDevLevel[i].headdev,TMWOHistoryOut);
     end;
 
-    InsertData;
+    InsertDatahdfullway;
+
+    AddColumnIfNotExists(SQLTransaction, 'dev', 'S1', 'TEXT');
+    AddColumnIfNotExists(SQLTransaction, 'dev', 'S2', 'TEXT');
+    AddColumnIfNotExists(SQLTransaction, 'dev', 'S3', 'TEXT');
+    InsertDataSort;
+
     //ShowData;
     zcUI.TextMessage('Database successfully created and populated!',TMWOHistoryOut);
     FreeComponents;
+
 
   //    LoadData;           // Загружаем тестовую таблицу
   //BuildParentMap;     // Создаём словарь родительских связей

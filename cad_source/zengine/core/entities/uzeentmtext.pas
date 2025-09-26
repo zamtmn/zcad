@@ -220,7 +220,6 @@ begin
       lastsymspace:=psyminfo.NextSymX-psyminfo.SymMaxX;
     end else
       if sym=10 then begin
-        {\P теперь уже тут не встретишь, оно заменено препроцессором на 10}
         currline:=copy(content,lastbreak,currsymbol-lastbreak);
         if sym<>10 then begin
           lastbreak:=currsymbol + 2;
@@ -234,8 +233,6 @@ begin
         swp.w:=linewidth;
         if (length(swp.str)>0)and(swp.str[length(swp.str)]=' ') then begin
           swp.str:=copy(swp.str,1,length(swp.str)-1);
-          //swp.w:=swp.w-pgdbfont(pbasefont)^.GetOrReplaceSymbolInfo(32).NextSymX;
-          //интересно почему тут pbasefont? теперь тут pfont!
           swp.w:=swp.w-SpaceWidth;
         end;
         text.PushBackData(swp);
@@ -244,7 +241,6 @@ begin
         lastsymspace:=0;
         lastlinewidth:=linewidth;
       end else begin
-        //linewidth:=linewidth+psyminfo.NextSymX;
         linewidth:=lastsymspace+linewidth+psyminfo.SymMaxX;
         lastsymspace:=psyminfo.NextSymX-psyminfo.SymMaxX;
       end;
@@ -256,13 +252,12 @@ begin
         newline:=true;
         lastbreak := lastcanbreak + 1;
         currsymbol := lastcanbreak;
-        psyminfo:=pgdbfont(pfont)^.GetOrReplaceSymbolInfo({ach2uch(integer(content[currsymbol]))}sym{//-ttf-//,tdinfo});
+        psyminfo:=pgdbfont(pfont)^.GetOrReplaceSymbolInfo(sym);
         canbreak := false;
         swp.Str:=currline;
         swp.w:=lastlinewidth;
         if (length(swp.str)>0)and(swp.str[length(swp.str)]=' ') then begin
           swp.str:=copy(swp.str,1,length(swp.str)-1);
-          //swp.w:=swp.w-pgdbfont(pfont)^.GetOrReplaceSymbolInfo(32).NextSymX;
           swp.w:=swp.w-SpaceWidth;
         end;
         text.PushBackData(swp);
@@ -277,7 +272,6 @@ begin
   swp.w:=linewidth;
   if (length(swp.str)>0)and(swp.str[length(swp.str)]=' ') then begin
     swp.str:=copy(swp.str,1,length(swp.str)-1);
-    //swp.w:=swp.w-pgdbfont(pfont)^.GetOrReplaceSymbolInfo(32).NextSymX;
     swp.w:=swp.w-SpaceWidth;
   end;
   text.PushBackData(swp);
@@ -319,7 +313,6 @@ begin
     template:=content;
   content:=textformat(template,SPFSources.GetFull,@self);
   CodePage:=TCP;
-  //linespace:=textprop.size*linespacef*5 / 3;
   LdivideS:=linespace/textprop.size;
   if (content='')and(template='') then
     content:=str_empty;
@@ -329,7 +322,7 @@ begin
 
   P_drawInOCS:=NulVertex;
 
-  //обрезание перевода строки в еонце строки
+  //обрезание перевода строки в конце строки
   //странно что в автокаде он обрезается только один
   //https://github.com/zamtmn/zcad/issues/188
   if Length(Content)>0 then begin
@@ -406,7 +399,7 @@ begin
         until pswp=nil
       end;
     jsml:
-      begin//p_draw.y:=p_draw.y+h/2/size-size
+      begin
         P_drawInOCS.y := P_drawInOCS.y - textprop.size + h / 2;
         i:=0;
         pswp:=text.beginiterate(ir);
@@ -500,11 +493,6 @@ begin
         until pswp=nil
       end;
   end;
-    {calcobjmatrix;
-    CalcGabarit(drawing);
-    //getoutbound;
-    calcbb;
-    createpoint(drawing);}
 end;
 procedure GDBObjMText.FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext;Stage:TEFStages=EFAllStages);
 begin
@@ -519,7 +507,6 @@ begin
     formatcontent(drawing);
     calcobjmatrix;
     CalcGabarit(drawing);
-    //getoutbound;
     if (not (ESTemp in State))and(DCODrawable in DC.Options) then begin
       Representation.Clear;
       createpoint(drawing,dc);
@@ -618,9 +605,6 @@ begin
         end;
       end else begin
         pfont.CreateSymbol(DC.drawer,textprop.size,Representation.GetGraphix^,sym,objmatrix,matr,Bound,ln);
-        {matr:=m1;
-        m1:=CreateTranslationMatrix(pgdbfont(pfont)^.GetOrReplaceSymbolInfo(sym).NextSymX,0,0);
-        matr:=MatrixMultiply(m1,matr);}
         matr:=CreateTranslationMatrix(pgdbfont(pfont)^.GetOrReplaceSymbolInfo(sym).NextSymX,0,0);
         matr:=MatrixMultiply(matr,m1);
       end;
@@ -682,7 +666,6 @@ begin
   tvo^.template:=template;
   tvo^.content:=content;
   tvo^.width:=width;
-  //tvo^.linespace:=linespace;
   tvo^.linespacef:=linespacef;
   tvo^.bp.ListPos.Owner:=own;
   tvo^.TXTStyle:=TXTStyle;
@@ -692,13 +675,9 @@ procedure GDBObjMText.LoadFromDXF;
 var
   byt:Integer;
   ux:gdbvertex;
-  //angleload: Boolean;
-  //angle:double;
   j:Integer;
   style,ttemplate:String;
 begin
-  //angleload:=false;
-  //angle:=0;
   ux.x:=1;
   ux.y:=0;
   ux.z:=0;
@@ -718,8 +697,7 @@ begin
     if not dxfLoadGroupCodeInteger(rdr,71,byt,j)then
     if not dxfLoadGroupCodeString(rdr,1,byt,ttemplate,context.Header)then
     if not dxfLoadGroupCodeString(rdr,3,byt,ttemplate,context.Header)then
-    {if dxfDoubleload(rdr,50,byt,angle) then angleload := true
-    else }if dxfLoadGroupCodeString(rdr,7,byt,style)then begin
+    if dxfLoadGroupCodeString(rdr,7,byt,style)then begin
       TXTStyle:=drawing.GetTextStyleTable^.FindStyle(Style,false);
       if TXTStyle=nil then
         TXTStyle:=pointer(drawing.GetTextStyleTable^.getDataMutable(0));
@@ -736,9 +714,6 @@ begin
   Content:=utf8tostring(ttemplate);
   textprop.justify:=b2j[j];
   P_drawInOCS := Local.p_insert;
-  //linespace := textprop.size * linespacef * 5 / 3;
-  {if not angleload then
-    angle:=vertexangle(NulVertex2D,pgdbvertex2d(@ux)^);}
   Local.basis.ox:=ux;
 end;
 function z2dxfmtext(s:String;var ul:boolean):String;
@@ -774,10 +749,10 @@ begin
     //шаблон dxf НЕсовместим, разворачиваем всё кроме dxf последовательностей
     //пишем dxf совместимое содержимое, шаблом сохраним отдельно
     quotedcontent:=TxtFormatAndCountSrcs(template,SPFSources.GetFull and (not SPFSdxf),ASourcesCounter,@Self);
-    s := {Tria_Utf8ToAnsi}(UTF8Encode(quotedcontent));
+    s := UTF8Encode(quotedcontent);
   end else begin
     //шаблон dxf совместим, пишем сразу его, отдельно его дописывать в расширенные данные ненадо
-    s:={Tria_Utf8ToAnsi}(UTF8Encode(template));
+    s:=UTF8Encode(template);
     IODXFContext.LocalEntityFlags:=IODXFContext.LocalEntityFlags or CLEFNotNeedSaveTemplate;
   end;
   //убираем переносы строки, они портят dxf

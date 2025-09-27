@@ -295,6 +295,7 @@ var
   l:Integer;
   sym:word;
   LdivideS:double;
+  ActualContent:TDXFEntsInternalStringType;
 
   procedure setstartx;
   begin
@@ -328,7 +329,18 @@ begin
 
   P_drawInOCS:=NulVertex;
 
-  FormatMtext(pfont,width,textprop.size,textprop.wfactor,content,text);
+  //обрезание перевода строки в еонце строки
+  //странно что в автокаде он обрезается только один
+  //https://github.com/zamtmn/zcad/issues/188
+  if Length(Content)>0 then begin
+    if Content[Length(Content)]=#10 then
+      ActualContent:=Content[1..Length(Content)-1]
+    else
+      ActualContent:=Content;
+  end else
+    ActualContent:=Content;
+
+  FormatMtext(pfont,width,textprop.size,textprop.wfactor,ActualContent,text);
 
   h:=GetLinesH(linespace,textprop.size,text);
 

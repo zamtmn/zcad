@@ -15,17 +15,23 @@
 {
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
-
 unit uzeentconnected;
+{$Mode objfpc}{$H+}
 {$INCLUDE zengineconfig.inc}
 interface
-Uses uzeentity,uzeentgenericsubentry,{UGDBOpenArrayOfPV,}uzedrawingdef;
+
+uses
+  uzeentity,uzeentgenericsubentry,uzedrawingdef;
+
 type
-PGDBObjConnected=^GDBObjConnected;
-GDBObjConnected= object(GDBObjGenericSubEntry)
-                      procedure connectedtogdb(ConnectedArea:PGDBObjGenericSubEntry;var drawing:TDrawingDef);virtual;abstract;
-                end;
+  PGDBObjConnected=^GDBObjConnected;
+
+  GDBObjConnected=object(GDBObjGenericSubEntry)
+    procedure connectedtogdb(ConnectedArea:PGDBObjGenericSubEntry;
+      var drawing:TDrawingDef);virtual;abstract;
+  end;
+
 implementation
-//uses {UGDBDescriptor,}log;
+
 begin
 end.

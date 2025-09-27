@@ -15,77 +15,100 @@
 {
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
-
 unit uzeenrepresentation;
+{$MODE OBJFPC}{$H+}
 {$INCLUDE zengineconfig.inc}
 interface
-uses uzgldrawcontext,uzgldrawerabstract,uzglvectorobject,
-     sysutils,
-     uzegeometrytypes,uzegeometry,uzglgeometry,uzefont,uzeentitiesprop,UGDBPoint3DArray,
-     uzeentsubordinated,
-     uzegeomentitiestree,uzbtypes,
-     gzctnrVectorTypes,uzgeomline3d,uzgeomproxy;
+
+uses
+  uzgldrawcontext,uzgldrawerabstract,uzglvectorobject,SysUtils,uzegeometrytypes,
+  uzegeometry,uzglgeometry,uzefont,uzeentitiesprop,UGDBPoint3DArray,
+  uzeentsubordinated,uzegeomentitiestree,uzbtypes,gzctnrVectorTypes,
+  uzgeomline3d,uzgeomproxy;
+
 type
-PTZEntityRepresentation=^TZEntityRepresentation;
-TZEntityRepresentation= object(GDBaseObject)
-                       {-}//private{//}
-                       Graphix:ZGLGraphix;
-                       Geometry:TGeomEntTreeNode;
-                       {-}public{//}
-                       constructor init();
-                       destructor done;virtual;
+  PTZEntityRepresentation=^TZEntityRepresentation;
 
-                       function CalcTrueInFrustum(const frustum:ClipArray; FullCheck:boolean):TInBoundingVolume;
-                       procedure DrawGeometry(var rc:TDrawContext;const aabb:TBoundingBox;const inFrustumState:TInBoundingVolume);virtual;
-                       procedure Clear;virtual;
-                       procedure Shrink;virtual;
+  TZEntityRepresentation=object(GDBaseObject)
+    {-}//private{//}
+    Graphix:ZGLGraphix;
+    Geometry:TGeomEntTreeNode;
+    {-}public{//}
+    constructor init();
+    destructor done;virtual;
 
-                       function GetGraphix:PZGLGraphix;
+    function CalcTrueInFrustum(const frustum:ClipArray;
+      FullCheck:boolean):TInBoundingVolume;
+    procedure DrawGeometry(var rc:TDrawContext;
+      const aabb:TBoundingBox;const inFrustumState:TInBoundingVolume);virtual;
+    procedure Clear;virtual;
+    procedure Shrink;virtual;
 
-                       {Команды которыми примитив рисует сам себя}
-                       procedure DrawTextContent(drawer:TZGLAbstractDrawer;content:TDXFEntsInternalStringType;_pfont: PGDBfont;const DrawMatrix,objmatrix:DMatrix4D;const textprop_size:Double;var Outbound:OutBound4V);
-                       procedure DrawLineWithLT(var Entity:GDBObjDrawable;var ObjMatrix:DMatrix4D; var rc:TDrawContext;const StartPointOCS,EndPointOCS:GDBVertex; const vp:GDBObjVisualProp;OnlyOne:Boolean=False);
-                       procedure DrawLineByConstRefLinePropWithLT(var Entity:GDBObjDrawable;var ObjMatrix:DMatrix4D; var rc:TDrawContext;constref LP:GDBLineProp; const vp:GDBObjVisualProp;OnlyOne:Boolean=False);
-                       procedure DrawLineWithoutLT(var rc:TDrawContext;const startpoint,endpoint:GDBVertex);
-                       procedure DrawPolyLineWithLT(var rc:TDrawContext;const points:GDBPoint3dArray; const vp:GDBObjVisualProp; const closed,ltgen:Boolean);virtual;
-                       procedure DrawPoint(var rc:TDrawContext;const point:GDBVertex; const vp:GDBObjVisualProp);
-                       procedure StartSurface;
-                       procedure EndSurface;
-                       end;
+    function GetGraphix:PZGLGraphix;
+
+    {Команды которыми примитив рисует сам себя}
+    procedure DrawTextContent(drawer:TZGLAbstractDrawer;
+      content:TDXFEntsInternalStringType;_pfont:PGDBfont;
+      const DrawMatrix,objmatrix:DMatrix4D;const textprop_size:double;var Outbound:OutBound4V);
+    procedure DrawLineWithLT(var Entity:GDBObjDrawable;
+      var ObjMatrix:DMatrix4D;var rc:TDrawContext;
+      const StartPointOCS,EndPointOCS:GDBVertex;const vp:GDBObjVisualProp;
+      OnlyOne:boolean=False);
+    procedure DrawLineByConstRefLinePropWithLT(
+      var Entity:GDBObjDrawable;var ObjMatrix:DMatrix4D;
+      var rc:TDrawContext;constref LP:GDBLineProp;
+      const vp:GDBObjVisualProp;OnlyOne:boolean=False);
+    procedure DrawLineWithoutLT(var rc:TDrawContext;
+      const startpoint,endpoint:GDBVertex);
+    procedure DrawPolyLineWithLT(var rc:TDrawContext;
+      const points:GDBPoint3dArray;const vp:GDBObjVisualProp;
+      const closed,ltgen:boolean);virtual;
+    procedure DrawPoint(var rc:TDrawContext;
+      const point:GDBVertex;const vp:GDBObjVisualProp);
+    procedure StartSurface;
+    procedure EndSurface;
+  end;
+
 implementation
+
 function TZEntityRepresentation.GetGraphix:PZGLGraphix;
 begin
-  result:=@Graphix;
+  Result:=@Graphix;
 end;
+
 constructor TZEntityRepresentation.init;
 begin
   inherited;
   Graphix.init();
   Geometry.initnul;
 end;
+
 destructor TZEntityRepresentation.done;
 begin
   Graphix.done;
   Geometry.done;
   inherited;
 end;
-function SqrCanSimplyDrawInWCS(const DC:TDrawContext;const ParamSize,TargetSize:Double):Boolean;
+
+function SqrCanSimplyDrawInWCS(const DC:TDrawContext;
+  const ParamSize,TargetSize:double):boolean;
 var
-   templod:Double;
+  templod:double;
 begin
-     if dc.maxdetail then
-                         exit(true);
+  if dc.maxdetail then
+    exit(True);
   templod:=(ParamSize)/(dc.DrawingContext.zoom*dc.DrawingContext.zoom);
   if templod>TargetSize then
-                            exit(true)
-                        else
-                            exit(false);
+    exit(True)
+  else
+    exit(False);
 end;
 
-procedure TZEntityRepresentation.DrawGeometry(var rc:TDrawContext;const aabb:TBoundingBox;const inFrustumState:TInBoundingVolume);
+procedure TZEntityRepresentation.DrawGeometry(var rc:TDrawContext;
+  const aabb:TBoundingBox;const inFrustumState:TInBoundingVolume);
 var
   v:gdbvertex;
-  simplydraw:Boolean;
+  simplydraw:boolean;
 begin
   if rc.lod=LODCalculatedDetail then begin
     v:=uzegeometry.VertexSub(aabb.RTF,aabb.LBN);
@@ -94,25 +117,37 @@ begin
     simplydraw:=rc.lod=LODLowDetail;
   Graphix.DrawGeometry(rc,inFrustumState,simplydraw);
 end;
-function TZEntityRepresentation.CalcTrueInFrustum(const frustum:ClipArray; FullCheck:boolean):TInBoundingVolume;
+
+function TZEntityRepresentation.CalcTrueInFrustum(const frustum:ClipArray;
+  FullCheck:boolean):TInBoundingVolume;
 begin
-  result:=Graphix.CalcTrueInFrustum(frustum,FullCheck);
+  Result:=Graphix.CalcTrueInFrustum(frustum,FullCheck);
 end;
+
 procedure TZEntityRepresentation.Clear;
 begin
   Graphix.Clear;
   Geometry.ClearSub;
 end;
+
 procedure TZEntityRepresentation.Shrink;
 begin
   Graphix.Shrink;
   Geometry.Shrink;
 end;
-procedure TZEntityRepresentation.DrawTextContent(drawer:TZGLAbstractDrawer;content:TDXFEntsInternalStringType;_pfont: PGDBfont;const DrawMatrix,objmatrix:DMatrix4D;const textprop_size:Double;var Outbound:OutBound4V);
+
+procedure TZEntityRepresentation.DrawTextContent(drawer:TZGLAbstractDrawer;
+  content:TDXFEntsInternalStringType;_pfont:PGDBfont;
+  const DrawMatrix,objmatrix:DMatrix4D;const textprop_size:double;var Outbound:OutBound4V);
 begin
-  Graphix.DrawTextContent(drawer,content,_pfont,DrawMatrix,objmatrix,textprop_size,Outbound);
+  Graphix.DrawTextContent(drawer,content,_pfont,DrawMatrix,objmatrix,
+    textprop_size,Outbound);
 end;
-procedure TZEntityRepresentation.DrawLineWithLT(var Entity:GDBObjDrawable;var ObjMatrix:DMatrix4D;var rc:TDrawContext;const StartPointOCS,EndPointOCS:GDBVertex; const vp:GDBObjVisualProp;OnlyOne:Boolean=False);
+
+procedure TZEntityRepresentation.DrawLineWithLT(var Entity:GDBObjDrawable;
+  var ObjMatrix:DMatrix4D;var rc:TDrawContext;
+  const StartPointOCS,EndPointOCS:GDBVertex;const vp:GDBObjVisualProp;
+  OnlyOne:boolean=False);
 var
   gl:TGeomLine3D;
   gp:TGeomProxy;
@@ -123,8 +158,7 @@ begin
   EndPointWCS:=VectorTransform3D(EndPointOCS,ObjMatrix);
   dr:=Graphix.DrawLineWithLT(rc,StartPointWCS,EndPointWCS,vp);
   Geometry.Lock;
-  if dr.Appearance<>TAMatching then
-  begin
+  if dr.Appearance<>TAMatching then begin
     gp.init(dr.LLPStart,dr.LLPEndi-1,dr.BB);
     Geometry.AddObjectToNodeTree(gp);
   end;
@@ -132,7 +166,11 @@ begin
   Geometry.AddObjectToNodeTree(gl);
   Geometry.UnLock;
 end;
-procedure TZEntityRepresentation.DrawLineByConstRefLinePropWithLT(var Entity:GDBObjDrawable;var ObjMatrix:DMatrix4D; var rc:TDrawContext;constref LP:GDBLineProp; const vp:GDBObjVisualProp;OnlyOne:Boolean=False);
+
+procedure TZEntityRepresentation.DrawLineByConstRefLinePropWithLT(
+  var Entity:GDBObjDrawable;var ObjMatrix:DMatrix4D;
+  var rc:TDrawContext;constref LP:GDBLineProp;
+  const vp:GDBObjVisualProp;OnlyOne:boolean=False);
 var
   gpl:TGeomPLine3D;
   gp:TGeomProxy;
@@ -141,8 +179,7 @@ begin
   if ObjMatrix.IsIdentity then begin
     dr:=Graphix.DrawLineWithLT(rc,LP.lBegin,LP.lEnd,vp,OnlyOne);
     Geometry.Lock;
-    if dr.Appearance<>TAMatching then
-    begin
+    if dr.Appearance<>TAMatching then begin
       gp.init(dr.LLPStart,dr.LLPEndi-1,dr.BB);
       Geometry.AddObjectToNodeTree(gp);
     end;
@@ -153,7 +190,8 @@ begin
     DrawLineWithLT(Entity,ObjMatrix,rc,LP.lBegin,LP.lEnd,vp,OnlyOne);
 end;
 
-procedure TZEntityRepresentation.DrawLineWithoutLT(var rc:TDrawContext;const startpoint,endpoint:GDBVertex);
+procedure TZEntityRepresentation.DrawLineWithoutLT(var rc:TDrawContext;
+  const startpoint,endpoint:GDBVertex);
 var
   gl:TGeomLine3D;
   gp:TGeomProxy;
@@ -161,8 +199,7 @@ var
 begin
   Graphix.DrawLineWithoutLT(rc,startpoint,endpoint,dr);
   Geometry.Lock;
-  if dr.Appearance<>TAMatching then
-  begin
+  if dr.Appearance<>TAMatching then begin
     gp.init(dr.LLPStart,dr.LLPEndi-1,dr.BB);
     Geometry.AddObjectToNodeTree(gp);
   end;
@@ -170,7 +207,9 @@ begin
   Geometry.AddObjectToNodeTree(gl);
   Geometry.UnLock;
 end;
-procedure TZEntityRepresentation.DrawPoint(var rc:TDrawContext;const point:GDBVertex; const vp:GDBObjVisualProp);
+
+procedure TZEntityRepresentation.DrawPoint(var rc:TDrawContext;
+  const point:GDBVertex;const vp:GDBObjVisualProp);
 var
   //gl:TGeomLine3D;
   gp:TGeomProxy;
@@ -178,8 +217,7 @@ var
 begin
   Graphix.DrawPointWithoutLT(rc,point,{vp}dr);
   Geometry.Lock;
-  if dr.Appearance<>TAMatching then
-  begin
+  if dr.Appearance<>TAMatching then begin
     gp.init(dr.LLPStart,dr.LLPEndi-1,dr.BB);
     Geometry.AddObjectToNodeTree(gp);
   end;
@@ -187,9 +225,11 @@ begin
   //Geometry.AddObjectToNodeTree(gl);
   Geometry.UnLock;
 end;
-procedure TZEntityRepresentation.DrawPolyLineWithLT(var rc:TDrawContext;const points:GDBPoint3dArray; const vp:GDBObjVisualProp; const closed,ltgen:Boolean);
+
+procedure TZEntityRepresentation.DrawPolyLineWithLT(var rc:TDrawContext;
+  const points:GDBPoint3dArray;const vp:GDBObjVisualProp;const closed,ltgen:boolean);
 var
-  ptv,ptvprev,ptvfisrt: pgdbvertex;
+  ptv,ptvprev,ptvfisrt:pgdbvertex;
   ir:itrec;
   gl:TGeomLine3D;
   segcounter:integer;
@@ -201,23 +241,22 @@ begin
   ptvfisrt:=ptv;
   segcounter:=0;
   if ptv<>nil then
-  repeat
-        ptvprev:=ptv;
-        ptv:=Points.iterate(ir);
-        if ptv<>nil then
-        begin
-          gl.init(ptv^,ptvprev^,segcounter);
-          Geometry.AddObjectToNodeTree(gl);
-          inc(segcounter);
-        end;
-  until ptv=nil;
-  if closed then
-  begin
+    repeat
+      ptvprev:=ptv;
+      ptv:=Points.iterate(ir);
+      if ptv<>nil then begin
+        gl.init(ptv^,ptvprev^,segcounter);
+        Geometry.AddObjectToNodeTree(gl);
+        Inc(segcounter);
+      end;
+    until ptv=nil;
+  if closed then begin
     gl.init(ptvprev^,ptvfisrt^,segcounter);
     Geometry.AddObjectToNodeTree(gl);
   end;
   Geometry.UnLock;
 end;
+
 procedure TZEntityRepresentation.StartSurface;
 begin
 end;
@@ -228,4 +267,3 @@ end;
 
 begin
 end.
-

@@ -15,67 +15,46 @@
 {
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
-
 unit uzeentplain;
 {$Mode delphi}{$H+}
 {$INCLUDE zengineconfig.inc}
 
 interface
+
 uses
- uzegeometrytypes,uzgldrawcontext,uzegeometry,uzeentwithlocalcs;
+  uzegeometrytypes,uzgldrawcontext,uzegeometry,uzeentwithlocalcs;
+
 type
 
   GDBObjPlain=object(GDBObjWithLocalCS)
     Outbound:OutBound4V;
-    procedure DrawGeometry(lw:Integer;var DC:TDrawContext;const inFrustumState:TInBoundingVolume);virtual;
+    procedure DrawGeometry(lw:integer;
+      var DC:TDrawContext;const inFrustumState:TInBoundingVolume);virtual;
   end;
+
 implementation
-//uses
-//    log;
+
 procedure GDBObjPlain.DrawGeometry;
 var
-  p: GDBVertex;
+  p:GDBVertex;
 begin
-  if DC.SystmGeometryDraw{and(POGLWnd.subrender=0)} then
-  begin
-       {oglsm.myglbegin(GL_LINES);
-       oglsm.myglvertex3dv(@outbound[0]);
-       oglsm.myglvertex3dv(@outbound[1]);
-       oglsm.myglvertex3dv(@outbound[1]);
-       oglsm.myglvertex3dv(@outbound[2]);
-       oglsm.myglvertex3dv(@outbound[2]);
-       oglsm.myglvertex3dv(@outbound[3]);
-       oglsm.myglvertex3dv(@outbound[3]);
-       oglsm.myglvertex3dv(@outbound[0]);
-       oglsm.myglend;}
+  if DC.SystmGeometryDraw then begin
+    dc.drawer.SetColor(255,0,0,0);
 
-       //oglsm.myglbegin(GL_LINES);
-       //oglsm.glcolor3ub(255,0,0);
-       dc.drawer.SetColor(255,0,0,0);
+    p:=VertexAdd(Local.P_insert,Local.Basis.ox);
+    dc.drawer.DrawLine3DInModelSpace(Local.P_insert,p,dc.DrawingContext.matrixs);
 
-       p:=VertexAdd(Local.P_insert,Local.Basis.ox);
-       //oglsm.myglvertex3dv(@Local.P_insert);
-       //oglsm.myglvertex3dv(@p);
-       dc.drawer.DrawLine3DInModelSpace(Local.P_insert,p,dc.DrawingContext.matrixs);
+    dc.drawer.SetColor(0,255,0,0);
+    p:=VertexAdd(Local.P_insert,Local.Basis.oy);
+    dc.drawer.DrawLine3DInModelSpace(Local.P_insert,p,dc.DrawingContext.matrixs);
 
-       //oglsm.glcolor3ub(0,255,0);
-       dc.drawer.SetColor(0,255,0,0);
-       p:=VertexAdd(Local.P_insert,Local.Basis.oy);
-       //oglsm.myglvertex3dv(@Local.P_insert);
-       //oglsm.myglvertex3dv(@p);
-       dc.drawer.DrawLine3DInModelSpace(Local.P_insert,p,dc.DrawingContext.matrixs);
-
-       //oglsm.glcolor3ub(0,0,255);
-       dc.drawer.SetColor(0,0,255,0);
-       p:=VertexAdd(Local.P_insert,Local.Basis.oz);
-       //oglsm.myglvertex3dv(@Local.P_insert);
-       //oglsm.myglvertex3dv(@p);
-       dc.drawer.DrawLine3DInModelSpace(Local.P_insert,p,dc.DrawingContext.matrixs);
-
-       //oglsm.myglend;
+    dc.drawer.SetColor(0,0,255,0);
+    p:=VertexAdd(Local.P_insert,Local.Basis.oz);
+    dc.drawer.DrawLine3DInModelSpace(Local.P_insert,p,dc.DrawingContext.matrixs);
   end;
   inherited;
 
 end;
+
 begin
 end.

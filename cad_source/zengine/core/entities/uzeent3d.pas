@@ -14,8 +14,9 @@
 }
 {
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
-} 
+}
 unit uzeent3d;
+{$MODE OBJFPC}{$H+}
 {$INCLUDE zengineconfig.inc}
 
 interface

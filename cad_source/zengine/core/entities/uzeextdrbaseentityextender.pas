@@ -15,28 +15,32 @@
 {
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
-{MODE OBJFPC}{H+}
+{$MODE OBJFPC}{$H+}
 unit uzeExtdrBaseEntityExtender;
 {$INCLUDE zengineconfig.inc}
 
 interface
+
 uses
   uzeExtdrAbstractEntityExtender,uzeentity;
 
 type
   TBaseEntityExtender=class(TAbstractEntityExtender)
-    protected
-      fpThisEntity:PGDBObjEntity;
-    public
-      constructor Create(pEntity:Pointer);override;
-      property pThisEntity:PGDBObjEntity read fpThisEntity{ write fpThisEntity};
+  protected
+    fpThisEntity:PGDBObjEntity;
+  public
+    constructor Create(pEntity:Pointer);override;
+    property pThisEntity:PGDBObjEntity read fpThisEntity;
   end;
+
 implementation
+
 constructor TBaseEntityExtender.Create(pEntity:Pointer);
 begin
   fpThisEntity:=pEntity;
 end;
+
 initialization
+
 finalization
 end.
-

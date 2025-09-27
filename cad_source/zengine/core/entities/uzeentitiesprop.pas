@@ -20,27 +20,35 @@ unit uzeentitiesprop;
 {$Mode delphi}{$H+}
 {$INCLUDE zengineconfig.inc}
 interface
-uses uzedimensionaltypes,uzepalette,uzestyleslinetypes,uzegeometrytypes,uzbtypes,uzegeometry,sysutils,
-     uzctnrVectorBytes,uzestyleslayers;
+
+uses uzedimensionaltypes,uzepalette,uzestyleslinetypes,uzegeometrytypes,
+  uzbtypes,uzegeometry,SysUtils,
+  uzctnrVectorBytes,uzestyleslayers;
+
 type
-PGDBObjVisualProp=^GDBObjVisualProp;
-GDBObjVisualProp=record
-                      Layer:PGDBLayerProp;
-                      LineWeight:TGDBLineWeight;
-                      LineType:PGDBLtypeProp;
-                      LineTypeScale:GDBNonDimensionDouble;
-                      BoundingBox:TBoundingBox;
-                      LastCameraPos:TActuality;
-                      Color:TGDBPaletteColor;
-                 end;
+  PGDBObjVisualProp=^GDBObjVisualProp;
+
+  GDBObjVisualProp=record
+    Layer:PGDBLayerProp;
+    LineWeight:TGDBLineWeight;
+    LineType:PGDBLtypeProp;
+    LineTypeScale:GDBNonDimensionDouble;
+    BoundingBox:TBoundingBox;
+    LastCameraPos:TActuality;
+    Color:TGDBPaletteColor;
+  end;
+
 function getLTfromVP(const vp:GDBObjVisualProp):PGDBLtypeProp;
+
 implementation
+
 function getLTfromVP(const vp:GDBObjVisualProp):PGDBLtypeProp;
 begin
-      result:=vp.LineType;
-      if assigned(result) then
-      if result.Mode=TLTByLayer then
-                                result:=vp.Layer.LT;
+  Result:=vp.LineType;
+  if assigned(Result) then
+    if Result.Mode=TLTByLayer then
+      Result:=vp.Layer.LT;
 end;
+
 begin
 end.

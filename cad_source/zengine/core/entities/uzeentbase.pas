@@ -21,19 +21,25 @@ unit uzeEntBase;
 {$INCLUDE zengineconfig.inc}
 
 interface
+
 uses
   uzbtypes,
-  sysutils;
+  SysUtils;
+
 type
-PGDBObjBaseEntity=^GDBObjBaseEntity;
-GDBObjBaseEntity=object//(GDBaseObject)
-  destructor Done;virtual;abstract;
-  function GetObjType:TObjID;virtual;abstract;
-  constructor initnul;
-end;
+  PGDBObjBaseEntity=^GDBObjBaseEntity;
+
+  GDBObjBaseEntity=object
+    destructor Done;virtual;abstract;
+    function GetObjType:TObjID;virtual;abstract;
+    constructor initnul;
+  end;
+
 implementation
+
 constructor GDBObjBaseEntity.initnul;
 begin
 end;
+
 begin
 end.

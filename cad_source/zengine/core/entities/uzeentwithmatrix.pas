@@ -15,101 +15,134 @@
 {
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
-
 unit uzeentwithmatrix;
 {$Mode delphi}{$H+}
 {$INCLUDE zengineconfig.inc}
 
 interface
-uses uzgldrawcontext,uzedrawingdef,uzecamera,uzeentity,uzbtypes,
-     gzctnrVectorTypes,uzegeometrytypes,uzegeometry,uzeentsubordinated,uzeentitiestree;
+
+uses
+  uzgldrawcontext,uzedrawingdef,uzecamera,uzeentity,uzbtypes,gzctnrVectorTypes,
+  uzegeometrytypes,uzegeometry,uzeentsubordinated,uzeentitiestree;
+
 type
   PGDBObjWithMatrix=^GDBObjWithMatrix;
-  GDBObjWithMatrix= object(GDBObjEntity)
-    {-}protected{//}
-       fObjMatrix:DMatrix4D;
-       procedure SetObjMatrix(const AObjMatrix:DMatrix4D);virtual;
-    {-}public{//}
-       constructor initnul(owner:PGDBObjGenericWithSubordinated);
-       function GetMatrix:PDMatrix4D;virtual;
-       procedure CalcObjMatrix(pdrawing:PTDrawingDef=nil);virtual;
-       procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext;Stage:TEFStages=EFAllStages);virtual;
-       procedure createfield;virtual;
-       procedure transform(const t_matrix:DMatrix4D);virtual;
-       procedure ReCalcFromObjMatrix;virtual;abstract;
-       procedure CalcInFrustumByTree(const frustum:ClipArray;const Actuality:TVisActuality;var enttree:TEntTreeNode;var Counters:TCameraCounters; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double);virtual;
-       procedure ProcessTree(const frustum:ClipArray;const Actuality:TVisActuality;var enttree:TEntTreeNode;OwnerInFrustum:TInBoundingVolume;OwnerFuldraw:TDrawType;var Counters:TCameraCounters; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double);virtual;
 
-       {-}property ObjMatrix:DMatrix4D read fObjMatrix write SetObjMatrix;{//}
+  GDBObjWithMatrix=object(GDBObjEntity)
+    {-}protected{//}
+    fObjMatrix:DMatrix4D;
+    procedure SetObjMatrix(const AObjMatrix:DMatrix4D);virtual;
+    {-}public{//}
+    constructor initnul(owner:PGDBObjGenericWithSubordinated);
+    function GetMatrix:PDMatrix4D;virtual;
+    procedure FormatEntity(var drawing:TDrawingDef;
+      var DC:TDrawContext;Stage:TEFStages=EFAllStages);virtual;
+    procedure createfield;virtual;
+    procedure transform(const t_matrix:DMatrix4D);virtual;
+    procedure ReCalcFromObjMatrix;virtual;abstract;
+    procedure CalcInFrustumByTree(const frustum:ClipArray;
+      const Actuality:TVisActuality;
+      var enttree:TEntTreeNode;var Counters:TCameraCounters;ProjectProc:GDBProjectProc;
+      const zoom,currentdegradationfactor:double);virtual;
+    procedure ProcessTree(const frustum:ClipArray;
+      const Actuality:TVisActuality;var enttree:TEntTreeNode;
+      OwnerInFrustum:TInBoundingVolume;OwnerFuldraw:TDrawType;
+      var Counters:TCameraCounters;ProjectProc:GDBProjectProc;
+      const zoom,currentdegradationfactor:double);virtual;
+
+    {-} property ObjMatrix:DMatrix4D read fObjMatrix write SetObjMatrix;{//}
   end;
+
 implementation
+
 procedure GDBObjWithMatrix.SetObjMatrix(const AObjMatrix:DMatrix4D);
 begin
   fObjMatrix:=AObjMatrix;
 end;
-procedure GDBObjWithMatrix.ProcessTree(const frustum:ClipArray;const Actuality:TVisActuality;var enttree:TEntTreeNode;OwnerInFrustum:TInBoundingVolume;OwnerFuldraw:TDrawType;var Counters:TCameraCounters; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double);
+
+procedure GDBObjWithMatrix.ProcessTree(const frustum:ClipArray;
+  const Actuality:TVisActuality;var enttree:TEntTreeNode;
+  OwnerInFrustum:TInBoundingVolume;OwnerFuldraw:TDrawType;
+  var Counters:TCameraCounters;ProjectProc:GDBProjectProc;
+  const zoom,currentdegradationfactor:double);
 var
   ImInFrustum:TInBoundingVolume;
   pobj:PGDBObjEntity;
   ir:itrec;
-  v1{,v2,v3}:gdbvertex;
+  v1:gdbvertex;
   tx:double;
   inFrustomEnts:integer;
 begin
   if OwnerFuldraw=TDTFulDraw then begin
-     {вариант с точным расчетом - медленный((
-     gdb.GetCurrentDWG^.myGluProject2(createvertex(enttree.BoundingBox.LBN.x,enttree.BoundingBox.LBN.y,enttree.BoundingBox.LBN.Z),v1);
-     bb.LBN:=v1;
-     bb.RTF:=v1;
-     gdb.GetCurrentDWG^.myGluProject2(createvertex(enttree.BoundingBox.RTF.x,enttree.BoundingBox.LBN.y,enttree.BoundingBox.LBN.Z),v1);
-     concatBBandPoint(bb, v1);
-     gdb.GetCurrentDWG^.myGluProject2(createvertex(enttree.BoundingBox.RTF.x,enttree.BoundingBox.RTF.y,enttree.BoundingBox.LBN.Z),v1);
-     concatBBandPoint(bb, v1);
-     gdb.GetCurrentDWG^.myGluProject2(createvertex(enttree.BoundingBox.LBN.x,enttree.BoundingBox.RTF.y,enttree.BoundingBox.LBN.Z),v1);
-     concatBBandPoint(bb, v1);
+    {вариант с точным расчетом - медленный((}
+    {gdb.GetCurrentDWG^.myGluProject2(
+      createvertex(enttree.BoundingBox.LBN.x,enttree.BoundingBox.LBN.y,
+      enttree.BoundingBox.LBN.Z),v1);
+    bb.LBN:=v1;
+    bb.RTF:=v1;
+    gdb.GetCurrentDWG^.myGluProject2(
+      createvertex(enttree.BoundingBox.RTF.x,enttree.BoundingBox.LBN.y,
+      enttree.BoundingBox.LBN.Z),v1);
+    concatBBandPoint(bb,v1);
+    gdb.GetCurrentDWG^.myGluProject2(
+      createvertex(enttree.BoundingBox.RTF.x,enttree.BoundingBox.RTF.y,
+      enttree.BoundingBox.LBN.Z),v1);
+    concatBBandPoint(bb,v1);
+    gdb.GetCurrentDWG^.myGluProject2(
+      createvertex(enttree.BoundingBox.LBN.x,enttree.BoundingBox.RTF.y,
+      enttree.BoundingBox.LBN.Z),v1);
+    concatBBandPoint(bb,v1);
 
-     gdb.GetCurrentDWG^.myGluProject2(createvertex(enttree.BoundingBox.LBN.x,enttree.BoundingBox.LBN.y,enttree.BoundingBox.RTF.Z),v1);
-     concatBBandPoint(bb, v1);
-     gdb.GetCurrentDWG^.myGluProject2(createvertex(enttree.BoundingBox.RTF.x,enttree.BoundingBox.LBN.y,enttree.BoundingBox.RTF.Z),v1);
-     concatBBandPoint(bb, v1);
-     gdb.GetCurrentDWG^.myGluProject2(createvertex(enttree.BoundingBox.RTF.x,enttree.BoundingBox.RTF.y,enttree.BoundingBox.RTF.Z),v1);
-     concatBBandPoint(bb, v1);
-     gdb.GetCurrentDWG^.myGluProject2(createvertex(enttree.BoundingBox.LBN.x,enttree.BoundingBox.RTF.y,enttree.BoundingBox.RTF.Z),v1);
-     concatBBandPoint(bb, v1);
-     v1:=bb.RTF;
-     v2:=bb.LBN;}
+    gdb.GetCurrentDWG^.myGluProject2(
+      createvertex(enttree.BoundingBox.LBN.x,enttree.BoundingBox.LBN.y,
+      enttree.BoundingBox.RTF.Z),v1);
+    concatBBandPoint(bb,v1);
+    gdb.GetCurrentDWG^.myGluProject2(
+      createvertex(enttree.BoundingBox.RTF.x,enttree.BoundingBox.LBN.y,
+      enttree.BoundingBox.RTF.Z),v1);
+    concatBBandPoint(bb,v1);
+    gdb.GetCurrentDWG^.myGluProject2(
+      createvertex(enttree.BoundingBox.RTF.x,enttree.BoundingBox.RTF.y,
+      enttree.BoundingBox.RTF.Z),v1);
+    concatBBandPoint(bb,v1);
+    gdb.GetCurrentDWG^.myGluProject2(
+      createvertex(enttree.BoundingBox.LBN.x,enttree.BoundingBox.RTF.y,
+      enttree.BoundingBox.RTF.Z),v1);
+    concatBBandPoint(bb,v1);
+    v1:=bb.RTF;
+    v2:=bb.LBN;}
 
     {вариант с  неточным расчетом - неточный}
-     {ProjectProc(enttree.BoundingBox.LBN,v1);
-     ProjectProc(enttree.BoundingBox.RTF,v2);
+    {ProjectProc(enttree.BoundingBox.LBN,v1);
+    ProjectProc(enttree.BoundingBox.RTF,v2);
+    if abs((v2.x-v1.x)*(v2.y-v1.y))<10 then begin
+      ProjectProc(
+        createvertex(enttree.BoundingBox.LBN.x,enttree.BoundingBox.RTF.y,
+        enttree.BoundingBox.LBN.Z),v1);
+      ProjectProc(
+        createvertex(enttree.BoundingBox.RTF.x,enttree.BoundingBox.LBN.y,
+        enttree.BoundingBox.RTF.Z),v2);
+      if abs((v2.x-v1.x)*(v2.y-v1.y))<10 then
+        enttree.
+          FulDraw:=False
+      else
+        enttree.
+          FulDraw:=True;
+    end else
+      enttree.FulDraw:=True;}
 
-     if abs((v2.x-v1.x)*(v2.y-v1.y))<10 then
-                                            begin
-                                                 ProjectProc(createvertex(enttree.BoundingBox.LBN.x,enttree.BoundingBox.RTF.y,enttree.BoundingBox.LBN.Z),v1);
-                                                 ProjectProc(createvertex(enttree.BoundingBox.RTF.x,enttree.BoundingBox.LBN.y,enttree.BoundingBox.RTF.Z),v2);
-                                                 if abs((v2.x-v1.x)*(v2.y-v1.y))<10 then
-                                                                                        enttree.FulDraw:=false
-                                                                                    else
-                                                                                        enttree.FulDraw:=true;
-                                            end
-                                         else
-                                             enttree.FulDraw:=true;}
     v1:=uzegeometry.VertexSub(enttree.BoundingBox.RTF,enttree.BoundingBox.LBN);
     tx:=uzegeometry.oneVertexlength(v1);
     if tx/zoom<currentdegradationfactor then
-      enttree
-        .
-        NodeData.FulDraw:=TDTSimpleDraw
+      enttree.NodeData.FulDraw:=TDTSimpleDraw
     else
-      enttree
-        .
-        NodeData.FulDraw:=TDTFulDraw;
+      enttree.NodeData.FulDraw:=TDTFulDraw;
   end else
     enttree.NodeData.FulDraw:=TDTSimpleDraw;
   case OwnerInFrustum of
-    //     IREmpty:begin
-    //                   OwnerInFrustum:=OwnerInFrustum;
-    //             end;
+    //IREmpty:begin
+    //  OwnerInFrustum:=OwnerInFrustum;
+    //end;
     IRFully:begin
       enttree.NodeData.infrustum:=Actuality.infrustumactualy;
       enttree.NodeData.inFrustumState:=IRFully;
@@ -158,9 +191,9 @@ begin
               zoom,currentdegradationfactor);
           if assigned(enttree.pplusnode) then
             ProcessTree(frustum,Actuality,
-                        PTEntTreeNode(enttree.pplusnode)^,ImInFrustum,
-                        enttree.NodeData.FulDraw,Counters,
-                        ProjectProc,zoom,currentdegradationfactor);
+              PTEntTreeNode(enttree.pplusnode)^,ImInFrustum,
+              enttree.NodeData.FulDraw,Counters,
+              ProjectProc,zoom,currentdegradationfactor);
 
         end;
         IRPartially:begin
@@ -182,7 +215,7 @@ begin
                 Inc(inFrustomEnts);
               end;
               pobj:=enttree.nul.iterate(ir);
-          until pobj=nil;
+            until pobj=nil;
 
           pobj:=enttree.NodeData.NeedToSeparated.beginiterate(ir);
           if pobj<>nil then
@@ -207,13 +240,14 @@ begin
               frustum,Actuality,PTEntTreeNode(enttree.pminusnode)^,
               IRPartially,enttree.NodeData.FulDraw,Counters,ProjectProc,
               zoom,currentdegradationfactor);
-            if PTEntTreeNode(
-              enttree.pminusnode)^.NodeData.infrustum=Actuality.infrustumactualy then begin
+            if PTEntTreeNode(enttree.pminusnode)^.NodeData.infrustum=
+              Actuality.infrustumactualy then begin
               if inFrustomEnts=0 then
-                enttree.NodeData.InFrustumBoundingBox:=PTEntTreeNode(enttree.pminusnode)^.BoundingBox
+                enttree.NodeData.InFrustumBoundingBox:=
+                  PTEntTreeNode(enttree.pminusnode)^.BoundingBox
               else
                 ConcatBB(enttree.NodeData.InFrustumBoundingBox,
-                         PTEntTreeNode(enttree.pminusnode)^.BoundingBox);
+                  PTEntTreeNode(enttree.pminusnode)^.BoundingBox);
               Inc(inFrustomEnts);
             end;
 
@@ -223,12 +257,14 @@ begin
               frustum,Actuality,PTEntTreeNode(enttree.pplusnode)^,
               IRPartially,enttree.NodeData.FulDraw,Counters,ProjectProc,
               zoom,currentdegradationfactor);
-            if PTEntTreeNode(
-              enttree.pplusnode)^.NodeData.infrustum=Actuality.infrustumactualy then begin
+            if PTEntTreeNode(enttree.pplusnode)^.NodeData.infrustum=
+              Actuality.infrustumactualy then begin
               if inFrustomEnts=0 then
-                enttree.NodeData.InFrustumBoundingBox:=PTEntTreeNode(enttree.pplusnode)^.BoundingBox
+                enttree.NodeData.InFrustumBoundingBox:=
+                  PTEntTreeNode(enttree.pplusnode)^.BoundingBox
               else
-                ConcatBB(enttree.NodeData.InFrustumBoundingBox,PTEntTreeNode(enttree.pplusnode)^.BoundingBox);
+                ConcatBB(enttree.NodeData.InFrustumBoundingBox,
+                  PTEntTreeNode(enttree.pplusnode)^.BoundingBox);
               Inc(inFrustomEnts);
             end;
           end;
@@ -246,38 +282,44 @@ begin
   end;
 end;
 
-procedure GDBObjWithMatrix.CalcInFrustumByTree(const frustum:ClipArray;const Actuality:TVisActuality;var enttree:TEntTreeNode;var Counters:TCameraCounters; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double);
+procedure GDBObjWithMatrix.CalcInFrustumByTree(const frustum:ClipArray;
+  const Actuality:TVisActuality;
+  var enttree:TEntTreeNode;var Counters:TCameraCounters;ProjectProc:GDBProjectProc;
+  const zoom,currentdegradationfactor:double);
 begin
-     ProcessTree(frustum,Actuality,enttree,IRPartially,TDTFulDraw,Counters,ProjectProc,zoom,currentdegradationfactor)
+  ProcessTree(frustum,Actuality,enttree,IRPartially,TDTFulDraw,
+    Counters,ProjectProc,zoom,currentdegradationfactor);
 end;
 
 procedure GDBObjWithMatrix.transform(const t_matrix:DMatrix4D);
 begin
-     ObjMatrix:=uzegeometry.MatrixMultiply(ObjMatrix,t_matrix);
+  ObjMatrix:=uzegeometry.MatrixMultiply(ObjMatrix,t_matrix);
 end;
+
 procedure GDBObjWithMatrix.createfield;
 begin
-     inherited;
-     objmatrix:=onematrix;
+  inherited;
+  objmatrix:=onematrix;
 end;
+
 function GDBObjWithMatrix.GetMatrix;
 begin
-  result:=@ObjMatrix;
+  Result:=@ObjMatrix;
 end;
-procedure GDBObjWithMatrix.CalcObjMatrix;
-begin
-     //ObjMatrix:=OneMatrix;
-end;
-procedure GDBObjWithMatrix.FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext;Stage:TEFStages=EFAllStages);
+
+procedure GDBObjWithMatrix.FormatEntity(var drawing:TDrawingDef;
+  var DC:TDrawContext;Stage:TEFStages=EFAllStages);
 begin
   CalcObjMatrix;
   CalcActualVisible(dc.DrawingContext.VActuality);
 end;
+
 constructor GDBObjWithMatrix.initnul;
 begin
-     inherited initnul(owner);
-     objmatrix:=onematrix;
-     CalcObjMatrix;
+  inherited initnul(owner);
+  objmatrix:=onematrix;
+  CalcObjMatrix;
 end;
+
 begin
 end.

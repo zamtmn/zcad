@@ -7,7 +7,7 @@ interface
 uses
   Classes, SysUtils, Forms, Controls,Graphics,  laz.VirtualTrees, SQLite3Conn, SQLDB, DB,uzcdrawing,uzcdrawings,uzvmcdbconsts,uzcinterface,
   Dialogs, ExtCtrls, BufDataset,  DBGrids, Grids, ActnList, ComCtrls, Windows,fgl,odbcconn,
-  uzvmanagerconnect,uzvelcreatetempdb,gvector,uzccablemanager,uzcentcable,uzeentdevice,gzctnrVectorTypes,uzcvariablesutils,uzccommandsabstract,uzeentity,uzeentblockinsert,varmandef,uzeconsts,uzvelcontroltempdb;
+  uzvelaccessdbcontrol,uzvmanagerconnect,uzvelcreatetempdb,gvector,uzccablemanager,uzcentcable,uzeentdevice,gzctnrVectorTypes,uzcvariablesutils,uzccommandsabstract,uzeentity,uzeentblockinsert,varmandef,uzeconsts,uzvelcontroltempdb;
 
 type
 
@@ -343,74 +343,74 @@ var
      //result:=cmd_ok;
     end;
 begin
-  ShowMessage('Выбрать только');
-
-  ODBCConnection := TODBCConnection.Create(nil);
-  Query := TSQLQuery.Create(nil);
-  Trans := TSQLTransaction.Create(nil);
-  listSructCab:=TListStructCab.Create();
-
-
-  try
-    // Подключение к Access через ODBC
-    ODBCConnection.Driver := 'Microsoft Access Driver (*.mdb, *.accdb)';
-    ODBCConnection.Params.Clear;
-    ODBCConnection.Params.Add('Dbq=D:\mytest.accdb');
-
-    ODBCConnection.LoginPrompt := False;
-    ODBCConnection.Connected := True;
-
-    // Транзакция
-    Trans.DataBase := ODBCConnection;
-    Query.DataBase := ODBCConnection;
-    Query.Transaction := Trans;
-
-    // 1. Создать таблицу fider
-    Query.SQL.Text :=
-      'CREATE TABLE fider (' +
-      'ID AUTOINCREMENT PRIMARY KEY, ' +
-      'nameFid TEXT(50), ' +
-      'secID INTEGER, ' +
-      'nameHead TEXT(50)) ';
-    try
-      Query.ExecSQL;
-    except
-      on E: Exception do
-        ShowMessage('Пропуск создания таблицы: ' + E.Message);
-    end;
-    getliststructconnect;
-    for i:=0 to listSructCab.Size-1 do
-    begin
-      zcUI.TextMessage('  имя устройства подключенного - '+listSructCab[i].nameCab,TMWOHistoryOut);
-      Query.SQL.Text := 'INSERT INTO fider (nameFid, secID, nameHead) VALUES (:pName, :pSecID, :pnameHead)';
-      Query.Params.ParamByName('pName').AsString := listSructCab[i].nameCab;
-      Query.Params.ParamByName('pSecID').AsInteger := listSructCab[i].numHeadCab;
-      Query.Params.ParamByName('pnameHead').AsString := listSructCab[i].nameHeadCab;
-      Query.ExecSQL;
-    end;
-    // 2. Вставка строк
-
+  //ShowMessage('Выбрать только');
+  uzvelaccessdbcontrol.AddStructureinAccessDB;
+//  ODBCConnection := TODBCConnection.Create(nil);
+//  Query := TSQLQuery.Create(nil);
+//  Trans := TSQLTransaction.Create(nil);
+//  listSructCab:=TListStructCab.Create();
 //
-//    Query.Params.ParamByName('pName').AsString := 'ВРУ2.3';
-//    Query.Params.ParamByName('pSecID').AsInteger := 23;
-//    Query.ExecSQL;
 //
-//    // 3. Обновление второй строки
-//    Query.SQL.Text := 'UPDATE fider SET nameFid = :newName WHERE nameFid = :oldName';
-//    Query.Params.ParamByName('newName').AsString := 'ЩР2.2';
-//    Query.Params.ParamByName('oldName').AsString := 'ВРУ2.3';
-//    Query.ExecSQL;
-
-
-    // Коммитим транзакцию
-    Trans.Commit;
-
-    ShowMessage('Операция выполнена успешно!');
-  finally
-    Query.Free;
-    Trans.Free;
-    ODBCConnection.Free;
-  end;
+//  try
+//    // Подключение к Access через ODBC
+//    ODBCConnection.Driver := 'Microsoft Access Driver (*.mdb, *.accdb)';
+//    ODBCConnection.Params.Clear;
+//    ODBCConnection.Params.Add('Dbq=D:\mytest.accdb');
+//
+//    ODBCConnection.LoginPrompt := False;
+//    ODBCConnection.Connected := True;
+//
+//    // Транзакция
+//    Trans.DataBase := ODBCConnection;
+//    Query.DataBase := ODBCConnection;
+//    Query.Transaction := Trans;
+//
+//    // 1. Создать таблицу fider
+//    Query.SQL.Text :=
+//      'CREATE TABLE fider (' +
+//      'ID AUTOINCREMENT PRIMARY KEY, ' +
+//      'nameFid TEXT(50), ' +
+//      'secID INTEGER, ' +
+//      'nameHead TEXT(50)) ';
+//    try
+//      Query.ExecSQL;
+//    except
+//      on E: Exception do
+//        ShowMessage('Пропуск создания таблицы: ' + E.Message);
+//    end;
+//    getliststructconnect;
+//    for i:=0 to listSructCab.Size-1 do
+//    begin
+//      zcUI.TextMessage('  имя устройства подключенного - '+listSructCab[i].nameCab,TMWOHistoryOut);
+//      Query.SQL.Text := 'INSERT INTO fider (nameFid, secID, nameHead) VALUES (:pName, :pSecID, :pnameHead)';
+//      Query.Params.ParamByName('pName').AsString := listSructCab[i].nameCab;
+//      Query.Params.ParamByName('pSecID').AsInteger := listSructCab[i].numHeadCab;
+//      Query.Params.ParamByName('pnameHead').AsString := listSructCab[i].nameHeadCab;
+//      Query.ExecSQL;
+//    end;
+//    // 2. Вставка строк
+//
+////
+////    Query.Params.ParamByName('pName').AsString := 'ВРУ2.3';
+////    Query.Params.ParamByName('pSecID').AsInteger := 23;
+////    Query.ExecSQL;
+////
+////    // 3. Обновление второй строки
+////    Query.SQL.Text := 'UPDATE fider SET nameFid = :newName WHERE nameFid = :oldName';
+////    Query.Params.ParamByName('newName').AsString := 'ЩР2.2';
+////    Query.Params.ParamByName('oldName').AsString := 'ВРУ2.3';
+////    Query.ExecSQL;
+//
+//
+//    // Коммитим транзакцию
+//    Trans.Commit;
+//
+    //ShowMessage('Операция выполнена успешно!');
+//  finally
+//    Query.Free;
+//    Trans.Free;
+//    ODBCConnection.Free;
+//  end;
 end;
 
 

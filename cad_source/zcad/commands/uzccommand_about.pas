@@ -21,6 +21,7 @@ unit uzccommand_about;
 {$INCLUDE zengineconfig.inc}
 
 interface
+
 uses
   uzcLog,
   uzccommandsabstract,uzccommandsimpl,
@@ -29,17 +30,21 @@ uses
 
 implementation
 
-function About_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
+function About_com(const Context:TZCADCommandContext;
+  operands:TCommandOperands):TCommandResult;
 begin
   if not assigned(AboutForm) then
     AboutForm:=TAboutForm.mycreate(nil,@AboutForm);
   zcUI.DOShowModal(AboutForm);
-  result:=cmd_ok;
+  Result:=cmd_ok;
 end;
 
 initialization
-  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
+  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],
+    LM_Info,UnitsInitializeLMId);
   CreateZCADCommand(@About_com,'About',0,0);
+
 finalization
-  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
+  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],
+    LM_Info,UnitsFinalizeLMId);
 end.

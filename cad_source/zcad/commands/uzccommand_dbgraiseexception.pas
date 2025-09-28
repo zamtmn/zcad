@@ -21,6 +21,7 @@ unit uzccommand_dbgRaiseException;
 {$INCLUDE zengineconfig.inc}
 
 interface
+
 uses
   SysUtils,
   uzcLog,
@@ -28,15 +29,19 @@ uses
 
 implementation
 
-function RaiseException_com(const Context:TZCADCommandContext;Operands:pansichar):Integer;
+function RaiseException_com(const Context:TZCADCommandContext;
+  Operands:pansichar):integer;
 begin
   raise EExternal.Create('Exception test');
-  result:=cmd_ok;
+  Result:=cmd_ok;
 end;
 
 initialization
-  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
+  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],
+    LM_Info,UnitsInitializeLMId);
   CreateZCADCommand(@RaiseException_com,'dbgRaiseException',0,0);
+
 finalization
-  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
+  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],
+    LM_Info,UnitsFinalizeLMId);
 end.

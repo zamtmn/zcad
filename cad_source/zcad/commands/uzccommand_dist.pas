@@ -21,6 +21,7 @@ unit uzccommand_dist;
 {$INCLUDE zengineconfig.inc}
 
 interface
+
 uses
   uzcLog,
   SysUtils,
@@ -31,48 +32,59 @@ uses
   varmandef,uzegeometry;
 
 implementation
+
 var
-   c1,c2:integer;
-   distlen:Double;
-   oldpoint,point:gdbvertex;
-function Dist_com_CommandStart(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
+  c1,c2:integer;
+  distlen:double;
+  oldpoint,point:gdbvertex;
+
+function Dist_com_CommandStart(const Context:TZCADCommandContext;
+  operands:TCommandOperands):TCommandResult;
 begin
-     c1:=commandmanager.GetValueHeap;
-     c2:=-1;
-     commandmanager.executecommandsilent('Get3DPoint(Первая точка:)',drawings.GetCurrentDWG,drawings.GetCurrentOGLWParam);
-     distlen:=0;
-     result:=cmd_ok;
+  c1:=commandmanager.GetValueHeap;
+  c2:=-1;
+  commandmanager.executecommandsilent('Get3DPoint(Первая точка:)',
+    drawings.GetCurrentDWG,drawings.GetCurrentOGLWParam);
+  distlen:=0;
+  Result:=cmd_ok;
 end;
+
 procedure Dist_com_CommandCont(const Context:TZCADCommandContext);
 var
-   cs:integer;
-   vd:vardesk;
-   len:Double;
+  cs:integer;
+  vd:vardesk;
+  len:double;
 begin
-     cs:=commandmanager.GetValueHeap;
-     if cs=c1 then
-     begin
-          commandmanager.executecommandend;
-          exit;
-     end;
-     vd:=commandmanager.PopValue;
-     point:=pgdbvertex(vd.data.Addr.Instance)^;
-     //c1:=cs;
-     c1:=commandmanager.GetValueHeap;
-     if c2<>-1 then
-                   begin
-                        len:=uzegeometry.Vertexlength(point,oldpoint);
-                        distlen:=distlen+len;
-                        zcUI.TextMessage(format(rscmSegmentLengthTotalLength,[floattostr(len),floattostr(distlen)]),TMWOHistoryOut)
-                   end;
-     c2:=cs;
-     oldpoint:=point;
-     commandmanager.executecommandsilent('Get3DPoint(Следующая точка:)',drawings.GetCurrentDWG,drawings.GetCurrentOGLWParam);
+  cs:=commandmanager.GetValueHeap;
+  if cs=c1 then begin
+    commandmanager.executecommandend;
+    exit;
+  end;
+  vd:=commandmanager.PopValue;
+  point:=pgdbvertex(vd.Data.Addr.Instance)^;
+  //c1:=cs;
+  c1:=commandmanager.GetValueHeap;
+  if c2<>-1 then begin
+    len:=uzegeometry.Vertexlength(point,oldpoint);
+    distlen:=distlen+len;
+    zcUI.TextMessage(
+      format(rscmSegmentLengthTotalLength,[floattostr(len),floattostr(distlen)]),
+      TMWOHistoryOut);
+  end;
+  c2:=cs;
+  oldpoint:=point;
+  commandmanager.executecommandsilent(
+    'Get3DPoint(Следующая точка:)',drawings.GetCurrentDWG,
+    drawings.GetCurrentOGLWParam);
 end;
 
 initialization
-  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
-  CreateCommandRTEdObjectPlugin(@Dist_com_CommandStart,nil,nil,nil,nil,nil,nil,@Dist_com_CommandCont,'Dist',0,0){.overlay:=true};
+  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],
+    LM_Info,UnitsInitializeLMId);
+  CreateCommandRTEdObjectPlugin(@Dist_com_CommandStart,nil,nil,nil,
+    nil,nil,nil,@Dist_com_CommandCont,'Dist',0,0){.overlay:=true};
+
 finalization
-  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
+  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],
+    LM_Info,UnitsFinalizeLMId);
 end.

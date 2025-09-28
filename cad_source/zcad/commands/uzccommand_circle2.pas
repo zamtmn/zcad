@@ -21,6 +21,7 @@ unit uzccommand_circle2;
 {$INCLUDE zengineconfig.inc}
 
 interface
+
 uses
   uzcLog,
   SysUtils,
@@ -29,7 +30,8 @@ uses
   uzegeometrytypes,
   uzccommandsmanager,
   uzeentcircle,uzeentityfactory,
-  uzcdrawings,uzcinterface,uzglviewareadata,uzgldrawcontext,uzeentitiesmanager,uzegeometry,zcmultiobjectcreateundocommand,uzcdrawing,
+  uzcdrawings,uzcinterface,uzglviewareadata,uzgldrawcontext,
+  uzeentitiesmanager,uzegeometry,zcmultiobjectcreateundocommand,uzcdrawing,
   uzcutils;
 
 var
@@ -37,29 +39,32 @@ var
 
 implementation
 
-function Circle_com_CommandStart(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
+function Circle_com_CommandStart(const Context:TZCADCommandContext;
+  operands:TCommandOperands):TCommandResult;
 begin
-  drawings.GetCurrentDWG^.wa.SetMouseMode((MGet3DPoint) or (MMoveCamera) or (MRotateCamera));
+  drawings.GetCurrentDWG^.wa.SetMouseMode((MGet3DPoint) or (MMoveCamera) or
+    (MRotateCamera));
   zcUI.TextMessage(rscmCenterPointCircle,TMWOHistoryOut);
-  result:=cmd_ok;
+  Result:=cmd_ok;
 end;
 
 procedure Circle_com_CommandEnd(_self:pointer);
 begin
 end;
 
-function Circle_com_BeforeClick(const Context:TZCADCommandContext;wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record;mclick:Integer): Integer;
+function Circle_com_BeforeClick(const Context:TZCADCommandContext;wc:GDBvertex;
+  mc:GDBvertex2DI;var button:byte;osp:pos_record;mclick:integer):integer;
 var
   dc:TDrawContext;
 begin
-  if (button and MZW_LBUTTON)<>0 then
-  begin
+  if (button and MZW_LBUTTON)<>0 then begin
     dc:=drawings.GetCurrentDWG^.CreateDrawingRC;
     zcUI.TextMessage(rscmPointOnCircle,TMWOHistoryOut);
 
-    pc := PGDBObjCircle(ENTF_CreateCircle(@drawings.GetCurrentDWG^.ConstructObjRoot,@drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray,
-                        drawings.GetCurrentDWG^.GetCurrentLayer,drawings.GetCurrentDWG^.GetCurrentLType,lwgdbdefault,ClByLayer,
-                        wc,0));
+    pc:=PGDBObjCircle(ENTF_CreateCircle(@drawings.GetCurrentDWG^.ConstructObjRoot,@drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray,
+      drawings.GetCurrentDWG^.GetCurrentLayer,
+      drawings.GetCurrentDWG^.GetCurrentLType,lwgdbdefault,ClByLayer,
+      wc,0));
     zcSetEntPropFromCurrentDrawingProp(pc);
     //pc := Pointer(drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.CreateInitObj(GDBCircleID,drawings.GetCurrentROOT));
     //GDBObjSetCircleProp(pc,drawings.GetCurrentDWG^.LayerTable.GetCurrentLayer,sysvar.dwg.DWG_CLType^,sysvar.dwg.DWG_CColor^, sysvar.dwg.DWG_CLinew^, wc, 0);
@@ -68,38 +73,43 @@ begin
     pc^.Formatentity(drawings.GetCurrentDWG^,dc);
     //pc^.RenderFeedback(drawings.GetCurrentDWG^.pcamera^.POSCOUNT,drawings.GetCurrentDWG^.pcamera^,drawings.GetCurrentDWG^.myGluProject2,dc);
   end;
-  result:=0;
+  Result:=0;
 end;
 
-function Circle_com_AfterClick(const Context:TZCADCommandContext;wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record;mclick:Integer): Integer;
+function Circle_com_AfterClick(const Context:TZCADCommandContext;wc:GDBvertex;
+  mc:GDBvertex2DI;var button:byte;osp:pos_record;mclick:integer):integer;
 var
-    domethod,undomethod:tmethod;
-    dc:TDrawContext;
+  domethod,undomethod:tmethod;
+  dc:TDrawContext;
 begin
-  result:=mclick;
+  Result:=mclick;
   dc:=drawings.GetCurrentDWG^.CreateDrawingRC;
   zcSetEntPropFromCurrentDrawingProp(pc);
-  pc^.Radius := Vertexlength(pc^.local.P_insert, wc);
+  pc^.Radius:=Vertexlength(pc^.local.P_insert,wc);
   pc^.Formatentity(drawings.GetCurrentDWG^,dc);
   //pc^.RenderFeedback(drawings.GetCurrentDWG^.pcamera^.POSCOUNT,drawings.GetCurrentDWG^.pcamera^,drawings.GetCurrentDWG^.myGluProject2,dc);
-  if (button and MZW_LBUTTON)<>0 then
-  begin
+  if (button and MZW_LBUTTON)<>0 then begin
 
-         SetObjCreateManipulator(domethod,undomethod);
-         with PushMultiObjectCreateCommand(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,tmethod(domethod),tmethod(undomethod),1) do
-         begin
-              AddObject(pc);
-              comit;
-         end;
+    SetObjCreateManipulator(domethod,undomethod);
+    with PushMultiObjectCreateCommand(
+        PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,tmethod(domethod),
+        tmethod(undomethod),1) do begin
+      AddObject(pc);
+      comit;
+    end;
 
-    drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.Count := 0;
+    drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.Count:=0;
     commandmanager.executecommandend;
   end;
 end;
 
 initialization
-  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
-  CreateCommandRTEdObjectPlugin(@Circle_com_CommandStart,@Circle_com_CommandEnd,nil,nil,@Circle_com_BeforeClick,@Circle_com_AfterClick,nil,nil,'Circle2',0,0);
+  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],
+    LM_Info,UnitsInitializeLMId);
+  CreateCommandRTEdObjectPlugin(@Circle_com_CommandStart,@Circle_com_CommandEnd,
+    nil,nil,@Circle_com_BeforeClick,@Circle_com_AfterClick,nil,nil,'Circle2',0,0);
+
 finalization
-  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
+  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],
+    LM_Info,UnitsFinalizeLMId);
 end.

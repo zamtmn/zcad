@@ -21,6 +21,7 @@ unit uzccommand_dimradius;
 {$INCLUDE zengineconfig.inc}
 
 interface
+
 uses
   uzcLog,
   uzccommandsabstract,uzccommandsimpl,
@@ -33,74 +34,77 @@ uses
 
 implementation
 
-function DrawRadialDim_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
+function DrawRadialDim_com(const Context:TZCADCommandContext;
+  operands:TCommandOperands):TCommandResult;
 var
-    pd:PGDBObjRadialDimension;
-    pcircle:PGDBObjCircle;
-    p1,p2,p3:gdbvertex;
-    dc:TDrawContext;
+  pd:PGDBObjRadialDimension;
+  pcircle:PGDBObjCircle;
+  p1,p2,p3:gdbvertex;
+  dc:TDrawContext;
+
   procedure FinalCreateRDim;
   begin
-         pd := Pointer(drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.CreateInitObj(GDBRadialDimensionID,drawings.GetCurrentROOT));
-         pd^.DimData.P10InWCS:=p1;
-         pd^.DimData.P15InWCS:=p2;
-         InteractiveDDimManipulator(pd,p2,false);
-    if commandmanager.Get3DPointInteractive(rscmSpecifyThirdPoint,p3,@InteractiveDDimManipulator,pd)=GRNormal then
-    begin
-         drawings.GetCurrentDWG^.FreeConstructionObjects;
-         pd := AllocEnt(GDBRadialDimensionID);
-         pd^.initnul(drawings.GetCurrentROOT);
+    pd:=Pointer(drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.CreateInitObj(
+      GDBRadialDimensionID,drawings.GetCurrentROOT));
+    pd^.DimData.P10InWCS:=p1;
+    pd^.DimData.P15InWCS:=p2;
+    InteractiveDDimManipulator(pd,p2,False);
+    if commandmanager.Get3DPointInteractive(rscmSpecifyThirdPoint,
+      p3,@InteractiveDDimManipulator,pd)=GRNormal then begin
+      drawings.GetCurrentDWG^.FreeConstructionObjects;
+      pd:=AllocEnt(GDBRadialDimensionID);
+      pd^.initnul(drawings.GetCurrentROOT);
 
-         pd^.DimData.P10InWCS:=p1;
-         pd^.DimData.P15InWCS:=p2;
-         pd^.DimData.P11InOCS:=p3;
+      pd^.DimData.P10InWCS:=p1;
+      pd^.DimData.P15InWCS:=p2;
+      pd^.DimData.P11InOCS:=p3;
 
-         InteractiveDDimManipulator(pd,p3,false);
-         dc:=drawings.GetCurrentDWG^.CreateDrawingRC;
+      InteractiveDDimManipulator(pd,p3,False);
+      dc:=drawings.GetCurrentDWG^.CreateDrawingRC;
 
-         pd^.FormatEntity(drawings.GetCurrentDWG^,dc);
-         {drawings.}zcAddEntToCurrentDrawingWithUndo(pd);
+      pd^.FormatEntity(drawings.GetCurrentDWG^,dc);
+      {drawings.}zcAddEntToCurrentDrawingWithUndo(pd);
     end;
   end;
 
 begin
-    if operands<>'' then
-    begin
-    if GetInteractiveLine(rscmSpecifyfirstPoint,rscmSpecifySecondPoint,p1,p2) then
-    begin
-         FinalCreateRDim;
+  if operands<>'' then begin
+    if GetInteractiveLine(rscmSpecifyfirstPoint,rscmSpecifySecondPoint,p1,p2) then begin
+      FinalCreateRDim;
     end;
-    end
-    else
-    begin
-         if commandmanager.GetEntity('Select circle or arc',pcircle) then
-         begin
-              case pcircle^.GetObjType of
-              GDBCircleID:begin
-                              p1:=pcircle^.Local.P_insert;
-                              p2:=pcircle^.q1;
-                              FinalCreateRDim;
-                          end;
-                 GDBArcID:begin
-                              p1:=pcircle^.Local.P_insert;
-                              p2:=PGDBObjArc(pcircle)^.q1;
-                              FinalCreateRDim;
-                          end;
-                     else begin
-                              zcUI.TextMessage('Please select Arc or Circle',TMWOShowError);
-                          end;
-              end;
-         end;
+  end else begin
+    if commandmanager.GetEntity('Select circle or arc',pcircle) then begin
+      case pcircle^.GetObjType of
+        GDBCircleID:begin
+          p1:=pcircle^.Local.P_insert;
+          p2:=pcircle^.q1;
+          FinalCreateRDim;
+        end;
+        GDBArcID:begin
+          p1:=pcircle^.Local.P_insert;
+          p2:=PGDBObjArc(pcircle)^.q1;
+          FinalCreateRDim;
+        end;
+        else
+        begin
+          zcUI.TextMessage(
+            'Please select Arc or Circle',TMWOShowError);
+        end;
+      end;
     end;
-    result:=cmd_ok;
+  end;
+  Result:=cmd_ok;
 end;
 
 
 
 
 initialization
-  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
-  CreateZCADCommand(@DrawRadialDim_com,'DimRadius',  CADWG,0);
+  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],
+    LM_Info,UnitsInitializeLMId);
+  CreateZCADCommand(@DrawRadialDim_com,'DimRadius',CADWG,0);
+
 finalization
-  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
+  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],
+    LM_Info,UnitsFinalizeLMId);
 end.

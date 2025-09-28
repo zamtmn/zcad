@@ -20,6 +20,7 @@ unit uzccommand_Mirror;
 {$INCLUDE zengineconfig.inc}
 
 interface
+
 uses
   Varman,
   uzcdrawings,
@@ -31,25 +32,31 @@ uses
   uzccommandsmanager,
   uzegeometrytypes,uzeentity,uzcLog,
   uzcstrconsts;
+
 type
   TEntityProcess=(TEP_Erase,TEP_leave);
   PTMirrorParam=^TMirrorParam;
+
   TMirrorParam=record
     SourceEnts:TEntityProcess;
   end;
-  mirror_com =  object(copy_com)
-    function CalcTransformMatrix(p1,p2: GDBvertex):DMatrix4D; virtual;
-    function AfterClick(const Context:TZCADCommandContext;wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record): Integer; virtual;
+
+  mirror_com=object(copy_com)
+    function CalcTransformMatrix(p1,p2:GDBvertex):DMatrix4D;virtual;
+    function AfterClick(const Context:TZCADCommandContext;wc:GDBvertex;
+      mc:GDBvertex2DI;var button:byte;osp:pos_record):integer;virtual;
   end;
+
 var
   MirrorParam:TMirrorParam;
   mirror:mirror_com;
+
 implementation
 
-function Mirror_com.CalcTransformMatrix(p1,p2: GDBvertex):DMatrix4D;
+function Mirror_com.CalcTransformMatrix(p1,p2:GDBvertex):DMatrix4D;
 var
   dist,p3:gdbvertex;
-  d:Double;
+  d:double;
   plane:DVector4D;
 begin
   dist:=uzegeometry.VertexSub(p2,p1);
@@ -59,10 +66,11 @@ begin
 
   plane:=PlaneFrom3Pont(p1,p2,p3);
   normalizeplane(plane);
-  result:=CreateReflectionMatrix(plane);
+  Result:=CreateReflectionMatrix(plane);
 end;
 
-function Mirror_com.AfterClick(const Context:TZCADCommandContext;wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record): Integer;
+function Mirror_com.AfterClick(const Context:TZCADCommandContext;wc:GDBvertex;
+  mc:GDBvertex2DI;var button:byte;osp:pos_record):integer;
 var
   tempmatr,MirrMatr:DMatrix4D;
   FrPos:GDBvertex;
@@ -87,16 +95,18 @@ begin
 
         ObjMatrix:=uzegeometry.CreateTranslationMatrix(-drawings.GetCurrentDWG^.GetPcamera^.CamCSOffset);
         ObjMatrix:=uzegeometry.MatrixMultiply(ObjMatrix,MirrMatr);
-        ObjMatrix:=uzegeometry.MatrixMultiply(ObjMatrix,CreateTranslationMatrix(drawings.GetCurrentDWG^.GetPcamera^.CamCSOffset));
+        ObjMatrix:=uzegeometry.MatrixMultiply(
+          ObjMatrix,CreateTranslationMatrix(drawings.GetCurrentDWG^.GetPcamera^.CamCSOffset));
         FrustumPosition:=FrPos;
       end;
     end;
   end;
-  result:=cmd_ok;
+  Result:=cmd_ok;
 end;
 
 initialization
-  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
+  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],
+    LM_Info,UnitsInitializeLMId);
   if SysUnit<>nil then begin
     SysUnit^.RegisterType(TypeInfo(TMirrorParam));
     SysUnit^.RegisterType(TypeInfo(PTMirrorParam));
@@ -107,7 +117,9 @@ initialization
   MirrorParam.SourceEnts:=TEP_Erase;
   mirror.init('Mirror',0,0);
   mirror.SetCommandParam(@MirrorParam,'PTMirrorParam');
+
 finalization
-  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
+  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],
+    LM_Info,UnitsFinalizeLMId);
 
 end.

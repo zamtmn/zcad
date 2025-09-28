@@ -21,6 +21,7 @@ unit uzccommand_rebuildtree;
 {$INCLUDE zengineconfig.inc}
 
 interface
+
 uses
   uzcLog,
   uzccommandsabstract,uzccommandsimpl,
@@ -29,16 +30,21 @@ uses
   uzcinterface,
   uzcutils;
 
-function RebuildTree_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
+function RebuildTree_com(const Context:TZCADCommandContext;
+  operands:TCommandOperands):TCommandResult;
 
 implementation
 
-function RebuildTree_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
+function RebuildTree_com(const Context:TZCADCommandContext;
+  operands:TCommandOperands):TCommandResult;
 var
   lpsh:TLPSHandle;
 begin
-  lpsh:=LPS.StartLongProcess('Rebuild drawing spatial',nil,drawings.GetCurrentROOT.ObjArray.count);
-  drawings.GetCurrentDWG^.pObjRoot.ObjArray.ObjTree.maketreefrom(drawings.GetCurrentDWG^.pObjRoot.ObjArray,drawings.GetCurrentDWG^.pObjRoot.vp.BoundingBox,nil);
+  lpsh:=LPS.StartLongProcess('Rebuild drawing spatial',nil,
+    drawings.GetCurrentROOT.ObjArray.Count);
+  drawings.GetCurrentDWG^.pObjRoot.ObjArray.ObjTree.maketreefrom(
+    drawings.GetCurrentDWG^.pObjRoot.ObjArray,
+    drawings.GetCurrentDWG^.pObjRoot.vp.BoundingBox,nil);
   LPS.EndLongProcess(lpsh);
   drawings.GetCurrentDWG.wa.param.seldesc.Selectedobjcount:=0;
   drawings.GetCurrentDWG.wa.param.seldesc.OnMouseObject:=nil;
@@ -46,12 +52,15 @@ begin
   zcUI.Do_GUIaction(nil,zcMsgUIReturnToDefaultObject);
   clearcp;
   zcRedrawCurrentDrawing;
-  result:=cmd_ok;
+  Result:=cmd_ok;
 end;
 
 initialization
-  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
+  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],
+    LM_Info,UnitsInitializeLMId);
   CreateZCADCommand(@RebuildTree_com,'RebuildTree',CADWG,0);
+
 finalization
-  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
+  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],
+    LM_Info,UnitsFinalizeLMId);
 end.

@@ -21,6 +21,7 @@ unit uzcCommand_CutClip;
 {$INCLUDE zengineconfig.inc}
 
 interface
+
 uses
   uzcLog,
   uzccommandsabstract,uzccommandsimpl,
@@ -28,16 +29,20 @@ uses
 
 implementation
 
-function CutClip_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
+function CutClip_com(const Context:TZCADCommandContext;
+  operands:TCommandOperands):TCommandResult;
 begin
-   copyclip_com(Context,EmptyCommandOperands);
-   Erase_com(Context,EmptyCommandOperands);
-   result:=cmd_ok;
+  copyclip_com(Context,EmptyCommandOperands);
+  Erase_com(Context,EmptyCommandOperands);
+  Result:=cmd_ok;
 end;
 
 initialization
-  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
+  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],
+    LM_Info,UnitsInitializeLMId);
   CreateZCADCommand(@CutClip_com,'CutClip',CADWG or CASelEnts,0);
+
 finalization
-  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
+  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],
+    LM_Info,UnitsFinalizeLMId);
 end.

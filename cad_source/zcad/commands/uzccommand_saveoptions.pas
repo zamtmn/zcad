@@ -21,6 +21,7 @@ unit uzccommand_saveoptions;
 {$INCLUDE zengineconfig.inc}
 
 interface
+
 uses
   uzcLog,
   uzccommandsabstract,uzccommandsimpl,
@@ -31,21 +32,25 @@ uses
 
 implementation
 
-function SaveOptions_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
+function SaveOptions_com(const Context:TZCADCommandContext;
+  operands:TCommandOperands):TCommandResult;
 var
-   mem:TZctnrVectorBytes;
+  mem:TZctnrVectorBytes;
 begin
   mem.init(1024);
   SysVarUnit^.SavePasToMem(mem);
   mem.SaveToFile(GetWritableFilePath(CFSconfigsDir,CFSsysvarpasFile));
   mem.done;
   SaveParams(GetWritableFilePath(CFSRtlDir,CFSconfigxmlFile),ZCSysParams.saved);
-  result:=cmd_ok;
+  Result:=cmd_ok;
 end;
 
 initialization
-  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
+  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],
+    LM_Info,UnitsInitializeLMId);
   CreateZCADCommand(@SaveOptions_com,'SaveOptions',0,0);
+
 finalization
-  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
+  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],
+    LM_Info,UnitsFinalizeLMId);
 end.

@@ -21,6 +21,7 @@ unit uzccommand_savelayout;
 {$INCLUDE zengineconfig.inc}
 
 interface
+
 uses
   SysUtils,
   uzcLog,Forms,
@@ -35,14 +36,14 @@ uses
 
 implementation
 
-procedure SaveLayoutToFile(Filename: string);
+procedure SaveLayoutToFile(Filename:string);
 var
-  XMLConfig: TXMLConfig;
-  Config: TXMLConfigStorage;
+  XMLConfig:TXMLConfig;
+  Config:TXMLConfigStorage;
 begin
   XMLConfig:=TXMLConfig.Create(nil);
   try
-    XMLConfig.StartEmpty:=true;
+    XMLConfig.StartEmpty:=True;
     XMLConfig.Filename:=Filename;
     Config:=TXMLConfigStorage.Create(XMLConfig);
     try
@@ -58,9 +59,11 @@ begin
     XMLConfig.Free;
   end;
 end;
-function SaveLayout_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
+
+function SaveLayout_com(const Context:TZCADCommandContext;
+  operands:TCommandOperands):TCommandResult;
 var
-  XMLConfig: TXMLConfigStorage;
+  XMLConfig:TXMLConfigStorage;
   filename:string;
 begin
   try
@@ -68,7 +71,7 @@ begin
     filename:=GetWritableFilePath(CFScomponentsDir,CFSdefaultlayoutxmlFile);
     SaveLayoutToFile(filename);
     exit;
-    XMLConfig:=TXMLConfigStorage.Create(filename,false);
+    XMLConfig:=TXMLConfigStorage.Create(filename,False);
     try
       // save the current layout of all forms
       DockMaster.SaveLayoutToConfig(XMLConfig);
@@ -77,18 +80,21 @@ begin
       XMLConfig.Free;
     end;
   except
-    on E: Exception do begin
+    on E:Exception do begin
       MessageDlg('Error',
         'Error saving layout to file '+Filename+':'#13+E.Message,mtError,
         [mbCancel],0);
     end;
   end;
-  result:=cmd_ok;
+  Result:=cmd_ok;
 end;
 
 initialization
-  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
+  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],
+    LM_Info,UnitsInitializeLMId);
   CreateZCADCommand(@SaveLayout_com,'SaveLayout',0,0);
+
 finalization
-  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
+  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],
+    LM_Info,UnitsFinalizeLMId);
 end.

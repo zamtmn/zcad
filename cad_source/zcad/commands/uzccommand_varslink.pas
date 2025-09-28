@@ -21,6 +21,7 @@ unit uzccommand_VarsLink;
 {$INCLUDE zengineconfig.inc}
 
 interface
+
 uses
   uzcLog,
   uzccommandsabstract,uzccommandsimpl,
@@ -34,12 +35,13 @@ resourcestring
 
 implementation
 
-function VarsLink_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
+function VarsLink_com(const Context:TZCADCommandContext;
+  operands:TCommandOperands):TCommandResult;
 var
-    pobj: pGDBObjEntity;
-    pmainobj: pGDBObjEntity;
+  pobj:pGDBObjEntity;
+  pmainobj:pGDBObjEntity;
 
-    pCentralVarext,pVarext:TVariablesExtender;
+  pCentralVarext,pVarext:TVariablesExtender;
 begin
   pmainobj:=nil;
   repeat
@@ -62,16 +64,19 @@ begin
     end else begin
       pCentralVarext.addDelegate({pmainobj,}pobj,pVarext);
     end;
-  until false;
+  until False;
 
-  result:=cmd_ok;
+  Result:=cmd_ok;
 end;
 
 
 
 initialization
-  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
-  CreateZCADCommand(@VarsLink_com,'VarsLink',   CADWG,0);
+  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],
+    LM_Info,UnitsInitializeLMId);
+  CreateZCADCommand(@VarsLink_com,'VarsLink',CADWG,0);
+
 finalization
-  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
+  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],
+    LM_Info,UnitsFinalizeLMId);
 end.

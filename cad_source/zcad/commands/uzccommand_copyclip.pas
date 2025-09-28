@@ -21,6 +21,7 @@ unit uzcCommand_CopyClip;
 {$INCLUDE zengineconfig.inc}
 
 interface
+
 uses
   uzcLog,
   SysUtils,
@@ -40,12 +41,13 @@ const
 
 procedure ReCreateClipboardDWG;
 procedure CopyToClipboard;
-function CopyClip_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
+function CopyClip_com(const Context:TZCADCommandContext;
+  operands:TCommandOperands):TCommandResult;
 
 implementation
 
 var
-  CopyClipFile:AnsiString;
+  CopyClipFile:ansistring;
 
 procedure CopyToClipboard;
 var
@@ -59,7 +61,8 @@ begin
   //s:=GetTempPath+'Z$C'+inttohex(random(15),1)+inttohex(random(15),1)+inttohex(random(15),1)+inttohex(random(15),1)
   //   +inttohex(random(15),1)+inttohex(random(15),1)+inttohex(random(15),1)+inttohex(random(15),1)+'.dxf';
   CopyClipFile:=s;
-  savedxf2000(s,ConcatPaths([GetRoCfgsPath,CFScomponentsDir,CFSemptydxfFile]),ClipboardDWG^,ZCCodePage2SysCP(drawings.GetCurrentDwg^.DXFCodePage));
+  savedxf2000(s,ConcatPaths([GetRoCfgsPath,CFScomponentsDir,CFSemptydxfFile]),
+    ClipboardDWG^,ZCCodePage2SysCP(drawings.GetCurrentDwg^.DXFCodePage));
   s:=s+#0;
   suni:=unicodestring(s);
   Clipboard.Open;
@@ -85,7 +88,8 @@ begin
   //ClipboardDWG.DimStyleTable.AddItem('Standart',pds);
 end;
 
-function CopyClip_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
+function CopyClip_com(const Context:TZCADCommandContext;
+  operands:TCommandOperands):TCommandResult;
 var
   pobj,pobjcopy:pGDBObjEntity;
   ir:itrec;
@@ -93,32 +97,35 @@ var
   SelectedAABB:TBoundingBox;
   m:DMatrix4D;
 begin
-  ClipboardDWG.pObjRoot.ObjArray.free;
-  dc:=drawings.GetCurrentDwg^.CreateDrawingRC(false,[DCODrawable]);
+  ClipboardDWG.pObjRoot.ObjArray.Free;
+  dc:=drawings.GetCurrentDwg^.CreateDrawingRC(False,[DCODrawable]);
 
   if GetSelectedEntsAABB(drawings.GetCurrentROOT.ObjArray,SelectedAABB) then begin
     ReCreateClipboardDWG;
     m:=CreateTranslationMatrix(-SelectedAABB.LBN{-(SelectedAABB.RTF+SelectedAABB.LBN)/2});
     pobj:=drawings.GetCurrentROOT.ObjArray.beginiterate(ir);
     if pobj<>nil then
-    repeat
-      if pobj.selected then begin
-        pobjcopy:=drawings.CopyEnt(drawings.GetCurrentDWG,ClipboardDWG,pobj);
-        pobjcopy^.Formatentity(drawings.GetCurrentDWG^,dc);
-        pobjcopy^.transform(m);
-        //pobjcopy^.Formatentity(drawings.GetCurrentDWG^,dc);
-      end;
-      pobj:=drawings.GetCurrentROOT.ObjArray.iterate(ir);
-    until pobj=nil;
+      repeat
+        if pobj.selected then begin
+          pobjcopy:=drawings.CopyEnt(drawings.GetCurrentDWG,ClipboardDWG,pobj);
+          pobjcopy^.Formatentity(drawings.GetCurrentDWG^,dc);
+          pobjcopy^.transform(m);
+          //pobjcopy^.Formatentity(drawings.GetCurrentDWG^,dc);
+        end;
+        pobj:=drawings.GetCurrentROOT.ObjArray.iterate(ir);
+      until pobj=nil;
     copytoclipboard;
   end;
-  result:=cmd_ok;
+  Result:=cmd_ok;
 end;
 
 initialization
-  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
+  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],
+    LM_Info,UnitsInitializeLMId);
   CopyClipFile:='Empty';
   CreateZCADCommand(@Copyclip_com,'CopyClip',CADWG or CASelEnts,0);
+
 finalization
-  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
+  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],
+    LM_Info,UnitsFinalizeLMId);
 end.

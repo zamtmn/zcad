@@ -20,29 +20,36 @@ unit uzccommand_loadactions;
 {$INCLUDE zengineconfig.inc}
 
 interface
+
 uses
- uzcLog,ComCtrls,Controls,
- uzctreenode,uzbpaths,uzccommandsabstract,uzccommandsimpl,uztoolbarsmanager;
+  uzcLog,ComCtrls,Controls,
+  uzctreenode,uzbpaths,uzccommandsabstract,uzccommandsimpl,uztoolbarsmanager;
 
 implementation
+
 procedure FixButtonCaption(_tb:TToolBar;_control:tcontrol);
 begin
   if _control is TToolButton then
     if assigned((_control as TToolButton).action) then
-       if ((_control as TToolButton).action)is TmyAction then
-         (_control as TToolButton).Caption:=(((_control as TToolButton).action)as TmyAction).imgstr;
+      if ((_control as TToolButton).action)is TmyAction then
+        (_control as TToolButton).Caption:=
+          (((_control as TToolButton).action)as TmyAction).imgstr;
 end;
 
-function LoadActions_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
+function LoadActions_com(const Context:TZCADCommandContext;
+  operands:TCommandOperands):TCommandResult;
 begin
   ToolBarsManager.LoadActions(ExpandPath(operands));
   ToolBarsManager.IterateToolBarsContent(FixButtonCaption);
-  result:=cmd_ok;
+  Result:=cmd_ok;
 end;
 
 initialization
-  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
+  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],
+    LM_Info,UnitsInitializeLMId);
   CreateZCADCommand(@LoadActions_com,'LoadActions',0,0);
+
 finalization
-  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
+  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],
+    LM_Info,UnitsFinalizeLMId);
 end.

@@ -21,6 +21,7 @@ unit uzccommand_ExampleVarManipulation;
 {$INCLUDE zengineconfig.inc}
 
 interface
+
 uses
   uzcLog,
   uzccommandsabstract,uzccommandsimpl,uzccommandsmanager,
@@ -33,7 +34,8 @@ uses
 
 implementation
 
-function ExampleVarManipulation_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
+function ExampleVarManipulation_com(const Context:TZCADCommandContext;
+  operands:TCommandOperands):TCommandResult;
 var
   Varext:TVariablesExtender;
   pe:PGDBObjEntity;
@@ -51,7 +53,8 @@ begin
     //получаем расширение с переменными у выбранного примитива
     Varext:=pe^.GetExtension<TVariablesExtender>;
     //ищем в нем переменную
-    if Varext=nil then //незабываем что самого расширения у примитива может неоказаться
+    if Varext=nil then
+      //незабываем что самого расширения у примитива может неоказаться
       pvd:=nil
     else
       pvd:=Varext.entityunit.FindVariable(VarName);
@@ -66,45 +69,63 @@ begin
         Varext:=TVariablesExtender.Create(pe);//создаем расширение
         pe^.AddExtension(Varext);//добавляем его к примитиву
       end;
-      vd:=Varext.entityunit.CreateVariable(VarName,VarType);//в vd вернется копия созданного описателя переменной
-      pstring(vd.data.Addr.GetInstance)^:='тест';//можно работать с ним, помня что он всеголишь копия
-      pvd:=Varext.entityunit.FindVariable(VarName);//а тут уже указатель на настоящий описатель переменной
+      vd:=Varext.entityunit.CreateVariable(VarName,VarType);
+      //в vd вернется копия созданного описателя переменной
+      pstring(vd.Data.Addr.GetInstance)^:='тест';
+      //можно работать с ним, помня что он всеголишь копия
+      pvd:=Varext.entityunit.FindVariable(VarName);
+      //а тут уже указатель на настоящий описатель переменной
       pvd^.username:='страшноеИмя';
-      ProcessVariableAttributes(pvd^.attrib,vda_RO,0);//ставим ридонли для инспектора
+      ProcessVariableAttributes(pvd^.attrib,vda_RO,0);
+      //ставим ридонли для инспектора
 
       //пытаемся найти или загрузить модуль
-      pu:=units.findunit(GetSupportPaths,//пути по которым будет искаться юнит если он еще небыл загружен
-                         InterfaceTranslate,//процедура локализации которая будет пытаться перевести на русский все что можно при загрузке
-                         'uentrepresentation');//имя модуля
+      pu:=units.findunit(GetSupportPaths,
+        //пути по которым будет искаться юнит если он еще небыл загружен
+        InterfaceTranslate,
+        //процедура локализации которая будет пытаться перевести на русский все что можно при загрузке
+        'uentrepresentation');//имя модуля
       if pu<>nil then begin //если нашли
-        pvd2:=pu^.InterfaceVariables.vardescarray.beginiterate(ir); //пробуем перебрать все определения переменных в интерфейсной части
+        pvd2:=pu^.InterfaceVariables.vardescarray.beginiterate(ir);
+        //пробуем перебрать все определения переменных в интерфейсной части
         if pvd2<>nil then //переменные есть
           repeat
             //работаем с очередной переменной
-            test:=pvd2^.name; //имя переменной
-            test:=pvd2^.username; //пользовательское имя переменной
-            test:=pvd2^.data.PTD.TypeName; //имя имя типа; pvd2^.data.PTD - указатель на тип
+            test:=pvd2^.Name; //имя переменной
+            test:=pvd2^.username;
+            //пользовательское имя переменной
+            test:=pvd2^.Data.PTD.TypeName;
+            //имя имя типа; pvd2^.data.PTD - указатель на тип
 
 
-            vd:=Varext.entityunit.CreateVariable(pvd2^.name,pvd2^.data.PTD.TypeName);//создаем такуюже переменную
-            pvd:=Varext.entityunit.FindVariable(VarName);//находим описатель созданой переменной
-            pvd^.username:=pvd2^.username;//пользовательское имя устанавливаем отдлельно
+            vd:=Varext.entityunit.CreateVariable(pvd2^.Name,pvd2^.Data.PTD.TypeName);
+            //создаем такуюже переменную
+            pvd:=Varext.entityunit.FindVariable(VarName);
+            //находим описатель созданой переменной
+            pvd^.username:=pvd2^.username;
+            //пользовательское имя устанавливаем отдлельно
 
-            pvd2^.data.PTD.CopyValueToInstance(pvd2^.data.Addr.Instance,pvd.data.Addr.Instance);//копируем значение из старой переменной в новую
+            pvd2^.Data.PTD.CopyValueToInstance(
+              pvd2^.Data.Addr.Instance,pvd.Data.Addr.Instance);
+            //копируем значение из старой переменной в новую
 
-            pvd2:=pu^.InterfaceVariables.vardescarray.iterate(ir); //следующая переменная
+            pvd2:=pu^.InterfaceVariables.vardescarray.iterate(ir);
+            //следующая переменная
           until pvd2=nil;
       end;
 
     end;
   end;
-    result:=cmd_ok;
+  Result:=cmd_ok;
 end;
 
 
 initialization
-  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
+  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],
+    LM_Info,UnitsInitializeLMId);
   CreateZCADCommand(@ExampleVarManipulation_com,'ExampleVarManipulation',CADWG,0);
+
 finalization
-  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
+  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],
+    LM_Info,UnitsFinalizeLMId);
 end.

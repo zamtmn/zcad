@@ -20,22 +20,28 @@ unit uzcCommand_LoadLibrary;
 {$INCLUDE zengineconfig.inc}
 
 interface
+
 uses
- uzcLog,
- uzbpaths,uzccommandsabstract,uzccommandsimpl,uzccommand_load,
- uzcEnitiesVariablesExtender;
+  uzcLog,
+  uzbpaths,uzccommandsabstract,uzccommandsimpl,uzccommand_load,
+  uzcEnitiesVariablesExtender;
 
 implementation
-function LoadLibrary_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
+
+function LoadLibrary_com(const Context:TZCADCommandContext;
+  operands:TCommandOperands):TCommandResult;
 begin
   TVariablesExtender.DisableVariableContentReplace;
-  result:=Load_com(Context,operands);
+  Result:=Load_com(Context,operands);
 end;
 
 
 initialization
-  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
+  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],
+    LM_Info,UnitsInitializeLMId);
   CreateZCADCommand(@LoadLibrary_com,'LoadLibrary',0,0);
+
 finalization
-  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
+  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],
+    LM_Info,UnitsFinalizeLMId);
 end.

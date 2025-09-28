@@ -21,6 +21,7 @@ unit uzccommand_undo;
 {$INCLUDE zengineconfig.inc}
 
 interface
+
 uses
   uzcLog,
   uzccommandsabstract,uzccommandsimpl,
@@ -33,20 +34,25 @@ uses
 
 implementation
 
-function Undo_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
+function Undo_com(const Context:TZCADCommandContext;
+  operands:TCommandOperands):TCommandResult;
 var
-   prevundo:integer;
-   overlay:Boolean;
-   msg:string;
+  prevundo:integer;
+  overlay:boolean;
+  msg:string;
 begin
-  drawings.GetCurrentROOT.ObjArray.DeSelect(drawings.GetCurrentDWG.wa.param.SelDesc.Selectedobjcount,drawings.GetCurrentDWG^.deselector);
+  drawings.GetCurrentROOT.ObjArray.DeSelect(
+    drawings.GetCurrentDWG.wa.param.SelDesc.Selectedobjcount,
+    drawings.GetCurrentDWG^.deselector);
   drawings.GetCurrentDWG.GetSelObjArray.Free;
   if commandmanager.CommandsStack.Count>0 then begin
-    prevundo:=pCommandRTEdObject(ppointer(commandmanager.CommandsStack.getDataMutable(commandmanager.CommandsStack.Count-1))^)^.UndoTop;
-    overlay:=true;
+    prevundo:=pCommandRTEdObject(
+      ppointer(commandmanager.CommandsStack.getDataMutable(
+      commandmanager.CommandsStack.Count-1))^)^.UndoTop;
+    overlay:=True;
   end else begin
     prevundo:=0;
-    overlay:=false;
+    overlay:=False;
     zcUI.Do_GUIaction(nil,zcMsgUIReturnToDefaultObject);
   end;
   case PTZCADDrawing(drawings.GetCurrentDWG).UndoStack.undo(msg,prevundo,overlay) of
@@ -54,14 +60,18 @@ begin
     URRNoCommandsToUndo:zcUI.TextMessage(rscmNoCTU,TMWOShowError);
     URROk,URRNoCommandsToRedo:;//заглушка от варнинга
   end;
-  if msg<>'' then zcUI.TextMessage(msg,TMWOHistoryOut);
+  if msg<>'' then
+    zcUI.TextMessage(msg,TMWOHistoryOut);
   zcRedrawCurrentDrawing;
-  result:=cmd_ok;
+  Result:=cmd_ok;
 end;
 
 initialization
-  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
-  CreateZCADCommand(@undo_com,'Undo',CADWG or CACanUndo,0).overlay:=true;
+  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],
+    LM_Info,UnitsInitializeLMId);
+  CreateZCADCommand(@undo_com,'Undo',CADWG or CACanUndo,0).overlay:=True;
+
 finalization
-  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
+  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],
+    LM_Info,UnitsFinalizeLMId);
 end.

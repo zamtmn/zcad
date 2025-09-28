@@ -21,6 +21,7 @@ unit uzccommand_loadlayout;
 {$INCLUDE zengineconfig.inc}
 
 interface
+
 uses
   SysUtils,
   uzcLog,Forms,
@@ -34,14 +35,15 @@ uses
   uzcstrconsts,
   uzccommandsabstract,uzccommandsimpl;
 
-procedure LoadLayoutFromFile(Filename: string);
-function LoadLayout_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
+procedure LoadLayoutFromFile(Filename:string);
+function LoadLayout_com(const Context:TZCADCommandContext;
+  operands:TCommandOperands):TCommandResult;
 
 implementation
 
-procedure LoadLayoutFromFile(Filename: string);
+procedure LoadLayoutFromFile(Filename:string);
 var
-  XMLConfig: TXMLConfigStorage;
+  XMLConfig:TXMLConfigStorage;
 begin
   try
     // load the xml config file
@@ -56,14 +58,14 @@ begin
         ZCADMainWindow.updatescontrols.Clear;}
 
       ToolBarsManager.RestoreToolBarsFromConfig(XMLConfig);
-      Application.Processmessages;
+      Application.ProcessMessages;
       DockMaster.LoadSettingsFromConfig(XMLConfig);
-      DockMaster.LoadLayoutFromConfig(XMLConfig,false);
+      DockMaster.LoadLayoutFromConfig(XMLConfig,False);
     finally
       XMLConfig.Free;
     end;
   except
-    on E: Exception do begin
+    on E:Exception do begin
       MessageDlg('Error',
         'Error loading layout from file '+Filename+':'#13+E.Message,mtError,
         [mbCancel],0);
@@ -71,7 +73,8 @@ begin
   end;
 end;
 
-function LoadLayout_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
+function LoadLayout_com(const Context:TZCADCommandContext;
+  operands:TCommandOperands):TCommandResult;
 var
   filename:string;
   s:string;
@@ -85,12 +88,15 @@ begin
   if filename='' then
     filename:=FindFileInCfgsPaths(CFScomponentsDir,CFSdefaultlayoutxmlFile);
   LoadLayoutFromFile(Filename);
-  result:=cmd_ok;
+  Result:=cmd_ok;
 end;
 
 initialization
-  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
+  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],
+    LM_Info,UnitsInitializeLMId);
   CreateZCADCommand(@LoadLayout_com,'LoadLayout',0,0);
+
 finalization
-  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
+  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],
+    LM_Info,UnitsFinalizeLMId);
 end.

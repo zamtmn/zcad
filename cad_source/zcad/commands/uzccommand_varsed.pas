@@ -21,10 +21,11 @@ unit uzccommand_VarsED;
 {$INCLUDE zengineconfig.inc}
 
 interface
+
 uses
   uzcLog,
   Controls,
-  sysutils,
+  SysUtils,
   uzbpaths,
   uzccmdinfoform,
   uzccommandsabstract,uzccommandsimpl,
@@ -40,7 +41,8 @@ uses
 
 implementation
 
-function VarsEd_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
+function VarsEd_com(const Context:TZCADCommandContext;
+  operands:TCommandOperands):TCommandResult;
 var
   pobj:PGDBObjEntity;
   pentvarext:TVariablesExtender;
@@ -55,14 +57,17 @@ begin
       if EditUnit(pentvarext.entityunit) then
         zcUI.Do_GUIaction(nil,zcMsgUIRePrepareObject);
     end;
-   end else
-     zcUI.TextMessage(rscmSelEntBeforeComm,TMWOHistoryOut);
-  result:=cmd_ok;
+  end else
+    zcUI.TextMessage(rscmSelEntBeforeComm,TMWOHistoryOut);
+  Result:=cmd_ok;
 end;
 
 initialization
-  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
+  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],
+    LM_Info,UnitsInitializeLMId);
   CreateZCADCommand(@VarsEd_com,'VarsEd',CADWG or CASelEnt,0);
+
 finalization
-  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
+  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],
+    LM_Info,UnitsFinalizeLMId);
 end.

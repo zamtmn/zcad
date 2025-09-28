@@ -21,9 +21,10 @@ unit uzccommand_help;
 {$INCLUDE zengineconfig.inc}
 
 interface
+
 uses
   SysUtils,
-  {$ifdef unix}Process,{$else}windows,Forms,{$endif}
+  {$ifdef unix}Process,{$else}Windows,Forms,{$endif}
   uzcLog,LCLIntf,
   uzccommandsabstract,uzccommandsimpl,uzccommandsmanager,uzcFileStructure,
   uzbpaths;
@@ -54,42 +55,50 @@ end;
 
 procedure OpenDocumentWithAnchor(AFile,AAnchor:string);
 var
-  Browser, Params, FullParams: String;
+  Browser,Params,FullParams:string;
   {$ifdef unix}AProcess: TProcess;{$endif}
 begin
-  if {$ifdef unix}MyFindDefaultBrowser{$else}FindDefaultBrowser{$endif}(Browser, Params) then begin
+  if {$ifdef unix}MyFindDefaultBrowser{$else}FindDefaultBrowser{$endif}(Browser,Params) then begin
     if AAnchor<>'' then
-      FullParams:={$ifndef unix}'"'+{$endif}'file:///'+AFile+AAnchor{$ifndef unix}+'"'{$endif}
+      FullParams:={$ifndef unix}'"'+{$endif}'file:///'+AFile+
+        AAnchor{$ifndef unix}+'"'{$endif}
     else
       FullParams:='';
-  {$ifdef unix}
+    {$ifdef unix}
     AProcess := TProcess.Create(nil);
     AProcess.Executable := Browser;
     AProcess.Parameters.Add(FullParams);
     AProcess.Execute;
     AProcess.Free;
-  {$else}
-    ShellExecute(Application.MainForm.Handle,'open',PChar(Browser),PChar(FullParams),nil, SW_SHOWNORMAL);
-  {$endif}
+    {$else}
+    ShellExecute(Application.MainForm.Handle,'open',PChar(Browser),PChar(FullParams),nil,
+      SW_SHOWNORMAL);
+    {$endif}
   end else
     OpenDocument(AFile);
 end;
 
-function Help_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
+function Help_com(const Context:TZCADCommandContext;
+  operands:TCommandOperands):TCommandResult;
 var
   htmlDoc:string;
 begin
-  htmlDoc:=ConcatPaths([GetRoCfgsPath,CFShelpDir,format(CFSuserguide_shtmlFile,['ru'])]);//todo: расхардкодить
+  htmlDoc:=ConcatPaths([GetRoCfgsPath,CFShelpDir,format(CFSuserguide_shtmlFile,['ru'])]);
+  //todo: расхардкодить
   if CommandManager.CommandsStack.isEmpty then
     OpenDocument(htmlDoc)
   else
-    OpenDocumentWithAnchor(htmlDoc,format('#_%s',[lowercase(CommandManager.CommandsStack.getLast^.CommandName)]));
-  result:=cmd_ok;
+    OpenDocumentWithAnchor(htmlDoc,format(
+      '#_%s',[lowercase(CommandManager.CommandsStack.getLast^.CommandName)]));
+  Result:=cmd_ok;
 end;
 
 initialization
-  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
+  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],
+    LM_Info,UnitsInitializeLMId);
   CreateZCADCommand(@Help_com,'Help',0,0).overlay:=True;
+
 finalization
-  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
+  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],
+    LM_Info,UnitsFinalizeLMId);
 end.

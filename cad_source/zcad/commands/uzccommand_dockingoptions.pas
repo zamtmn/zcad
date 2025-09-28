@@ -20,23 +20,25 @@ unit uzccommand_DockingOptions;
 {$INCLUDE zengineconfig.inc}
 
 interface
+
 uses
- uzcLog,uzccommandsimpl,uzccommandsabstract,uzcinterface,
- AnchorDocking,AnchorDockOptionsDlg,AnchorDockStr,
- Forms,ButtonPanel,Controls;
+  uzcLog,uzccommandsimpl,uzccommandsabstract,uzcinterface,
+  AnchorDocking,AnchorDockOptionsDlg,AnchorDockStr,
+  Forms,ButtonPanel,Controls;
+
 implementation
 
-function ShowAnchorDockOptions(ADockMaster: TAnchorDockMaster): TModalResult;
+function ShowAnchorDockOptions(ADockMaster:TAnchorDockMaster):TModalResult;
 var
-  Dlg: TForm;
-  OptsFrame: TAnchorDockOptionsFrame;
-  BtnPanel: TButtonPanel;
+  Dlg:TForm;
+  OptsFrame:TAnchorDockOptionsFrame;
+  BtnPanel:TButtonPanel;
 begin
   Dlg:=TForm.Create(nil);
   try
     Dlg.DisableAutoSizing;
     Dlg.Position:=poScreenCenter;
-    Dlg.AutoSize:=true;
+    Dlg.AutoSize:=True;
     Dlg.Caption:=adrsGeneralDockingOptions;
 
     OptsFrame:=TAnchorDockOptionsFrame.Create(Dlg);
@@ -45,7 +47,7 @@ begin
     OptsFrame.Master:=ADockMaster;
 
     BtnPanel:=TButtonPanel.Create(Dlg);
-    BtnPanel.ShowButtons:=[pbOK, pbCancel];
+    BtnPanel.ShowButtons:=[pbOK,pbCancel];
     BtnPanel.OKButton.OnClick:=OptsFrame.OkClick;
     BtnPanel.Parent:=Dlg;
     Dlg.EnableAutoSizing;
@@ -55,16 +57,20 @@ begin
   end;
 end;
 
-function DockingOptions_com(const Context:TZCADCommandContext;Operands:pansichar):Integer;
+function DockingOptions_com(const Context:TZCADCommandContext;
+  Operands:pansichar):integer;
 begin
-     ShowAnchorDockOptions(DockMaster);
-     result:=cmd_ok;
+  ShowAnchorDockOptions(DockMaster);
+  Result:=cmd_ok;
 end;
 
 initialization
-  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
+  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],
+    LM_Info,UnitsInitializeLMId);
   CreateZCADCommand(@DockingOptions_com,'DockingOptions',0,0);
   DockMaster.OnShowOptions:=ShowAnchorDockOptions;
+
 finalization
-  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
+  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],
+    LM_Info,UnitsFinalizeLMId);
 end.

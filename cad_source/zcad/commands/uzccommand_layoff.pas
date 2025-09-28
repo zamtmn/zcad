@@ -21,41 +21,49 @@ unit uzccommand_layoff;
 {$INCLUDE zengineconfig.inc}
 
 interface
+
 uses
   uzcLog,
   uzccommandsabstract,uzeentity,uzcdrawing,uzcdrawings,uzccommandsmanager,
   uzcstrconsts,uzcutils,zUndoCmdChgBaseTypes,zUndoCmdChgTypes,uzccommandsimpl;
 
 implementation
+
 const
   LayOffCommandName='LayOff';
-function LayOff_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
+
+function LayOff_com(const Context:TZCADCommandContext;
+  operands:TCommandOperands):TCommandResult;
 var
   _PEntity:PGDBObjEntity;
   UndoStartMarkerPlaced:boolean;
 begin
-  UndoStartMarkerPlaced:=false;
-  while commandmanager.getentity(rscmSelectEntity,_PEntity) do
-  begin
-   if _PEntity^.vp.Layer._on then begin
-     zcPlaceUndoStartMarkerIfNeed(UndoStartMarkerPlaced,LayOffCommandName,true);
-     with TBooleanChangeCommand.CreateAndPushIfNeed(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,
-                                                    TChangedBoolean.CreateRec(_PEntity^.vp.Layer._on),
-                                                    TSharedEmpty(Default(TEmpty)),
-                                                    TAfterChangeEmpty(Default(TEmpty)))do
-     begin
-       _PEntity^.vp.Layer._on:=not _PEntity^.vp.Layer._on;
-       //ComitFromObj;
-     end;
-     zcRedrawCurrentDrawing;
-   end;
+  UndoStartMarkerPlaced:=False;
+  while commandmanager.getentity(rscmSelectEntity,_PEntity) do begin
+    if _PEntity^.vp.Layer._on then begin
+      zcPlaceUndoStartMarkerIfNeed(UndoStartMarkerPlaced,LayOffCommandName,True);
+      with TBooleanChangeCommand.CreateAndPushIfNeed(
+          PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,
+          TChangedBoolean.CreateRec(
+          _PEntity^.vp.Layer._on),TSharedEmpty(
+          Default(TEmpty)),TAfterChangeEmpty(
+          Default(TEmpty))) do begin
+        _PEntity^.vp.Layer._on:=not _PEntity^.vp.Layer._on;
+        //ComitFromObj;
+      end;
+      zcRedrawCurrentDrawing;
+    end;
   end;
   zcPlaceUndoEndMarkerIfNeed(UndoStartMarkerPlaced);
-  result:=cmd_ok;
+  Result:=cmd_ok;
 end;
+
 initialization
-  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
+  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],
+    LM_Info,UnitsInitializeLMId);
   CreateZCADCommand(@LayOff_com,LayOffCommandName,CADWG,0);
+
 finalization
-  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
+  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],
+    LM_Info,UnitsFinalizeLMId);
 end.

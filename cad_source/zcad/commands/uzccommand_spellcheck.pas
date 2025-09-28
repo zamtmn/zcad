@@ -21,6 +21,7 @@ unit uzcCommand_SpellCheck;
 {$INCLUDE zengineconfig.inc}
 
 interface
+
 uses
   SysUtils,
   uzcLog,
@@ -35,48 +36,53 @@ const
   CSpellCheckFN='{SpellCheck}';
 
 var
-  IsAllInited:Boolean;
+  IsAllInited:boolean;
 
-function SpellCheckString(FindIn:AnsiString;const TextA:AnsiString;const TextU:unicodestring;var Details:String;const NeedDetails:Boolean):boolean;
+function SpellCheckString(FindIn:ansistring;const TextA:ansistring;
+  const TextU:unicodestring;var Details:string;const NeedDetails:boolean):boolean;
 var
   Opt:TSpeller.TSpellOpts;
-//  errW:string;
+  //  errW:string;
 begin
   if NeedDetails then
     Opt:=TSpeller.CSpellOptDetail
   else
     Opt:=TSpeller.CSpellOptFast;
   //Opt:=Opt-[SOCheckOneLetterWords];
-  result:=SpellChecker.SpellTextSimple(FindIn,{errW}Details,Opt)=TSpeller.WrongLang;
+  Result:=SpellChecker.SpellTextSimple(FindIn,{errW}Details,Opt)=TSpeller.WrongLang;
 end;
 
 procedure doInit;
 begin
   if not IsAllInited then begin
-    IsAllInited:=true;
+    IsAllInited:=True;
     RegisterCheckStrProc(CSpellCheckFN,SpellCheckString);
   end;
 end;
 
-function SpellCheck_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
+function SpellCheck_com(const Context:TZCADCommandContext;
+  operands:TCommandOperands):TCommandResult;
 begin
   if uppercase(operands)='RESET' then begin
     DestroySpellChecker;
     CreateSpellChecker;
-    result:=cmd_ok;
+    Result:=cmd_ok;
   end else begin
     if drawings.GetCurrentDWG<>nil then begin
       doInit;
-      result:=Find_com(Context,CSpellCheckFN);
+      Result:=Find_com(Context,CSpellCheckFN);
     end else
-      result:=cmd_error;
+      Result:=cmd_error;
   end;
 end;
 
 initialization
-  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
-  IsAllInited:=false;
+  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],
+    LM_Info,UnitsInitializeLMId);
+  IsAllInited:=False;
   CreateZCADCommand(@SpellCheck_com,'SpellCheck',0,0);
+
 finalization
-  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
+  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],
+    LM_Info,UnitsFinalizeLMId);
 end.

@@ -21,27 +21,29 @@ unit uzccommand_view;
 {$INCLUDE zengineconfig.inc}
 
 interface
+
 uses
   uzcLog,
-  sysutils,
+  SysUtils,
   uzegeometrytypes,uzegeometry,
   uzccommandsabstract,uzccommandsimpl,
   uzcdrawings;
 
 implementation
 
-function view_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
+function view_com(const Context:TZCADCommandContext;
+  operands:TCommandOperands):TCommandResult;
 var
-   s:string;
-   ox,oy,oz:gdbvertex;
-   m:DMatrix4D;
-   recognized:boolean;
+  s:string;
+  ox,oy,oz:gdbvertex;
+  m:DMatrix4D;
+  recognized:boolean;
 begin
   s:=uppercase(operands);
   ox:=createvertex(-1,0,0);
   oy:=createvertex(0,1,0);
   oz:=uzegeometry.VectorDot(ox,oy);
-  recognized:=true;
+  recognized:=True;
   if s='TOP' then begin
     //drawings.GetCurrentDWG.OGLwindow1.RotTo(createvertex(-1,0,0),createvertex(0,1,0),createvertex(0,0,-1))
     ox:=createvertex(-1,0,0);
@@ -62,7 +64,7 @@ begin
     ox:=createvertex(1,0,0);
     oy:=createvertex(0,1,0);
     m:=uzegeometry.MatrixMultiply(CreateRotationMatrixX(pi/2+pi/6),
-                                  CreateRotationMatrixZ(-pi/4));
+      CreateRotationMatrixZ(-pi/4));
     ox:=VectorTransform3D(ox,m);
     oy:=VectorTransform3D(oy,m);
   end else if s='SEISO' then begin
@@ -70,7 +72,7 @@ begin
     oy:=createvertex(0,1,0);
 
     m:=uzegeometry.MatrixMultiply(CreateRotationMatrixX(pi/2+pi/6),
-                                  CreateRotationMatrixZ(pi+pi/4));
+      CreateRotationMatrixZ(pi+pi/4));
     ox:=VectorTransform3D(ox,m);
     oy:=VectorTransform3D(oy,m);
   end else if s='NWISO' then begin
@@ -78,7 +80,7 @@ begin
     oy:=createvertex(0,1,0);
 
     m:=uzegeometry.MatrixMultiply(CreateRotationMatrixX(pi/2+pi/6),
-                                  CreateRotationMatrixZ({pi+}pi/4));
+      CreateRotationMatrixZ({pi+}pi/4));
     ox:=VectorTransform3D(ox,m);
     oy:=VectorTransform3D(oy,m);
   end else if s='SWISO' then begin
@@ -86,7 +88,7 @@ begin
     oy:=createvertex(0,1,0);
 
     m:=uzegeometry.MatrixMultiply(CreateRotationMatrixX(pi/2+pi/6),
-                                  CreateRotationMatrixZ(pi-pi/4));
+      CreateRotationMatrixZ(pi-pi/4));
     ox:=VectorTransform3D(ox,m);
     oy:=VectorTransform3D(oy,m);
   end else if s='RL' then begin
@@ -96,7 +98,8 @@ begin
     ox:=VectorTransform3D(ox,m);
     oy:=VectorTransform3D(oy,m);
   end else if s='RR' then begin
-    m:=CreateAffineRotationMatrix(drawings.GetCurrentDWG.GetPcamera^.prop.look,45*pi/180);
+    m:=CreateAffineRotationMatrix(
+      drawings.GetCurrentDWG.GetPcamera^.prop.look,45*pi/180);
     ox:=drawings.GetCurrentDWG.GetPcamera^.prop.xdir;
     oy:=drawings.GetCurrentDWG.GetPcamera^.prop.ydir;
     ox:=VectorTransform3D(ox,m);
@@ -108,23 +111,27 @@ begin
     ox:=VectorTransform3D(ox,m);
     oy:=VectorTransform3D(oy,m);
   end else if s='RD' then begin
-    m:=CreateAffineRotationMatrix(drawings.GetCurrentDWG.GetPcamera^.prop.xdir,45*pi/180);
+    m:=CreateAffineRotationMatrix(
+      drawings.GetCurrentDWG.GetPcamera^.prop.xdir,45*pi/180);
     ox:=drawings.GetCurrentDWG.GetPcamera^.prop.xdir;
     oy:=drawings.GetCurrentDWG.GetPcamera^.prop.ydir;
     ox:=VectorTransform3D(ox,m);
     oy:=VectorTransform3D(oy,m);
   end else
-    recognized:=false;
+    recognized:=False;
   if recognized then begin
     oz:=uzegeometry.VectorDot(ox,oy);
     drawings.GetCurrentDWG.wa.RotTo(ox,oy,oz);
   end;
-  result:=cmd_ok;
+  Result:=cmd_ok;
 end;
 
 initialization
-  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
-  CreateZCADCommand(@view_com,'View',CADWG,0).overlay:=true;
+  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],
+    LM_Info,UnitsInitializeLMId);
+  CreateZCADCommand(@view_com,'View',CADWG,0).overlay:=True;
+
 finalization
-  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
+  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],
+    LM_Info,UnitsFinalizeLMId);
 end.

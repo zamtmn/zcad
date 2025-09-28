@@ -21,6 +21,7 @@ unit uzccommand_get3dpoint_drawrect;
 {$INCLUDE zengineconfig.inc}
 
 interface
+
 uses
   uzcLog,
   uzccommandsabstract,uzccommandsimpl,
@@ -34,51 +35,58 @@ implementation
 var
   point:gdbvertex;
 
-function Line_com_CommandStart(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
+function Line_com_CommandStart(const Context:TZCADCommandContext;
+  operands:TCommandOperands):TCommandResult;
 begin
-  drawings.GetCurrentDWG.wa.SetMouseMode((MGet3DPoint) or (MMoveCamera) or (MRotateCamera));
+  drawings.GetCurrentDWG.wa.SetMouseMode((MGet3DPoint) or (MMoveCamera) or
+    (MRotateCamera));
   if operands='' then
-                     zcUI.TextMessage(rscmPoint,TMWOHistoryOut)
-                 else
-                     zcUI.TextMessage(operands,TMWOHistoryOut);
-  result:=cmd_ok;
+    zcUI.TextMessage(rscmPoint,TMWOHistoryOut)
+  else
+    zcUI.TextMessage(operands,TMWOHistoryOut);
+  Result:=cmd_ok;
 end;
-function Line_com_BeforeClick(const Context:TZCADCommandContext;wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record;mclick:Integer): Integer;
+
+function Line_com_BeforeClick(const Context:TZCADCommandContext;wc:GDBvertex;
+  mc:GDBvertex2DI;var button:byte;osp:pos_record;mclick:integer):integer;
 begin
   point:=wc;
-  if (button and MZW_LBUTTON)<>0 then
-  begin
-       commandmanager.PushValue('','GDBVertex',@wc);
-       commandmanager.executecommandend;
-       result:=1;
-  end
+  if (button and MZW_LBUTTON)<>0 then begin
+    commandmanager.PushValue('','GDBVertex',@wc);
+    commandmanager.executecommandend;
+    Result:=1;
+  end;
 end;
-function DrawRect(mclick:Integer):Integer;
+
+function DrawRect(mclick:integer):integer;
 var
-   vd:vardesk;
-   p1,p2,p4:gdbvertex;
-   matrixs:tmatrixs;
+  vd:vardesk;
+  p1,p2,p4:gdbvertex;
+  matrixs:tmatrixs;
 begin
-     vd:=commandmanager.GetValue;
-     p1:=pgdbvertex(vd.data.Addr.Instance)^;
+  vd:=commandmanager.GetValue;
+  p1:=pgdbvertex(vd.Data.Addr.Instance)^;
 
-     p2:=createvertex(p1.x,point.y,p1.z);
-     p4:=createvertex(point.x,p1.y,point.z);
+  p2:=createvertex(p1.x,point.y,p1.z);
+  p4:=createvertex(point.x,p1.y,point.z);
 
-     matrixs.pmodelMatrix:=@drawings.GetCurrentDWG.GetPcamera.modelMatrix;
-     matrixs.pprojMatrix:=@drawings.GetCurrentDWG.GetPcamera.projMatrix;
-     matrixs.pviewport:=@drawings.GetCurrentDWG.GetPcamera.viewport;
+  matrixs.pmodelMatrix:=@drawings.GetCurrentDWG.GetPcamera.modelMatrix;
+  matrixs.pprojMatrix:=@drawings.GetCurrentDWG.GetPcamera.projMatrix;
+  matrixs.pviewport:=@drawings.GetCurrentDWG.GetPcamera.viewport;
 
-     drawings.GetCurrentDWG.wa.Drawer.DrawLine3DInModelSpace(p1,p2,matrixs);
-     drawings.GetCurrentDWG.wa.Drawer.DrawLine3DInModelSpace(p2,point,matrixs);
-     drawings.GetCurrentDWG.wa.Drawer.DrawLine3DInModelSpace(point,p4,matrixs);
-     drawings.GetCurrentDWG.wa.Drawer.DrawLine3DInModelSpace(p4,p1,matrixs);
-     result:=cmd_ok;
+  drawings.GetCurrentDWG.wa.Drawer.DrawLine3DInModelSpace(p1,p2,matrixs);
+  drawings.GetCurrentDWG.wa.Drawer.DrawLine3DInModelSpace(p2,point,matrixs);
+  drawings.GetCurrentDWG.wa.Drawer.DrawLine3DInModelSpace(point,p4,matrixs);
+  drawings.GetCurrentDWG.wa.Drawer.DrawLine3DInModelSpace(p4,p1,matrixs);
+  Result:=cmd_ok;
 end;
 
 initialization
-  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
-  CreateCommandRTEdObjectPlugin(@Line_com_CommandStart,nil,nil,nil,@Line_com_BeforeClick,nil,@DrawRect,nil,'Get3DPoint_DrawRect',0,0).overlay:=true;
+  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],
+    LM_Info,UnitsInitializeLMId);
+  CreateCommandRTEdObjectPlugin(@Line_com_CommandStart,nil,nil,nil,@Line_com_BeforeClick,nil,@DrawRect,nil,'Get3DPoint_DrawRect',0,0).overlay:=True;
+
 finalization
-  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
+  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],
+    LM_Info,UnitsFinalizeLMId);
 end.

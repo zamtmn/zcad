@@ -21,63 +21,68 @@ unit uzccommand_quit;
 {$INCLUDE zengineconfig.inc}
 
 interface
+
 uses
-  uzcLog,Controls,SysUtils,
-  uzccommandsmanager,uzcdrawings,uzccommandsabstract,uzccommandsimpl,uzcuitypes,uzglviewareageneral,uzglviewareaabstract,
-  uzcdrawing,uzctreenode,uzcuidialogs,uzcstrconsts,LCLType,uzcinterface,uzcuiutils,Forms;
+  uzcLog,Controls,SysUtils,uzccommandsmanager,uzcdrawings,uzccommandsabstract,
+  uzccommandsimpl,uzcuitypes,uzglviewareageneral,uzglviewareaabstract,
+  uzcdrawing,uzctreenode,uzcuidialogs,uzcstrconsts,LCLType,uzcinterface,
+  uzcuiutils,Forms;
 
 procedure CloseApp;
-function CloseDWGPage(Sender: TObject;NeedAskDonShow:boolean;MCtx:TMessagesContext):integer;
-function _CloseDWGPage(ClosedDWG:PTZCADDrawing;lincedcontrol:TObject;NeedAskDonShow:boolean;MCtx:TMessagesContext):Integer;
+function CloseDWGPage(Sender:TObject;NeedAskDonShow:boolean;
+  MCtx:TMessagesContext):integer;
+function _CloseDWGPage(ClosedDWG:PTZCADDrawing;lincedcontrol:TObject;
+  NeedAskDonShow:boolean;MCtx:TMessagesContext):integer;
 
 implementation
 
 uses uzcMainForm,uzccommand_saveas;
 
-{ #todo : Убрать зависимость от главной формы }
+  { #todo : Убрать зависимость от главной формы }
 
-function _CloseDWGPage(ClosedDWG:PTZCADDrawing;lincedcontrol:TObject;NeedAskDonShow:boolean;MCtx:TMessagesContext):Integer;
+function _CloseDWGPage(ClosedDWG:PTZCADDrawing;lincedcontrol:TObject;
+  NeedAskDonShow:boolean;MCtx:TMessagesContext):integer;
 var
-   viewcontrol:TCADControl;
-   s:string;
-   TAWA:TAbstractViewArea;
-   dr:TZCMsgDialogResult;
+  viewcontrol:TCADControl;
+  s:string;
+  TAWA:TAbstractViewArea;
+  dr:TZCMsgDialogResult;
 begin
-  if ClosedDWG<>nil then
-  begin
-    result:=ZCmrYes;
+  if ClosedDWG<>nil then begin
+    Result:=ZCmrYes;
     if ClosedDWG.Changed then begin
       repeat
-        s:=format(rsCloseDWGQuery,[StringReplace(ClosedDWG.FileName,'\','\\',[rfReplaceAll])]);
+        s:=format(rsCloseDWGQuery,
+          [StringReplace(ClosedDWG.FileName,'\','\\',[rfReplaceAll])]);
         dr:=zcMsgDlg(s,zcdiQuestion,[zccbYes,zccbNo,zccbCancel],NeedAskDonShow,MCTx);
-        result:=dr.ModalResult;
+        Result:=dr.ModalResult;
         //result:=zcMainForm.MessageBox(@s[1],@rsWarningCaption[1],MB_YESNOCANCEL);
-        if result=ZCmrCancel then exit;
-        if result=ZCmrNo then system.break;
-        if result=ZCmrYes then
-          result:=dwgQSave_com(ClosedDWG);
-      until result<>cmd_error;
-      result:=ZCmrYes;
+        if Result=ZCmrCancel then
+          exit;
+        if Result=ZCmrNo then
+          system.break;
+        if Result=ZCmrYes then
+          Result:=dwgQSave_com(ClosedDWG);
+      until Result<>cmd_error;
+      Result:=ZCmrYes;
     end;
     commandmanager.ChangeModeAndEnd(TGPMCloseDWG);
     viewcontrol:=ClosedDWG.wa.getviewcontrol;
     if drawings.GetCurrentDWG=pointer(ClosedDwg) then
-                                               drawings.freedwgvars;
+      drawings.freedwgvars;
     drawings.RemoveData(ClosedDWG);
     drawings.pack;
 
-    viewcontrol.free;
+    viewcontrol.Free;
 
     lincedcontrol.Free;
-    tobject(viewcontrol):=zcMainForm.PageControl.ActivePage;
+    TObject(viewcontrol):=zcMainForm.PageControl.ActivePage;
 
-    if viewcontrol<>nil then
-    begin
+    if viewcontrol<>nil then begin
       TAWA:=TAbstractViewArea(FindComponentByType(viewcontrol,TAbstractViewArea));
       drawings.CurrentDWG:=pointer(TAWA.PDWG);
       TAWA.GDBActivate;
-    end
-    else
+    end else
       drawings.freedwgvars;
     zcUI.Do_GUIaction(nil,zcMsgUIFreEditorProc);
     zcUI.Do_GUIaction(nil,zcMsgUIReturnToDefaultObject);
@@ -88,17 +93,18 @@ begin
   end;
 end;
 
-function CloseDWGPage(Sender: TObject;NeedAskDonShow:boolean;MCtx:TMessagesContext):integer;
+function CloseDWGPage(Sender:TObject;NeedAskDonShow:boolean;
+  MCtx:TMessagesContext):integer;
 var
-   wa:TGeneralViewArea;
-   ClosedDWG:PTZCADDrawing;
-   //i:integer;
+  wa:TGeneralViewArea;
+  ClosedDWG:PTZCADDrawing;
+  //i:integer;
 begin
   Closeddwg:=nil;
-  wa:=TGeneralViewArea(FindComponentByType(TControl(sender),TGeneralViewArea));
+  wa:=TGeneralViewArea(FindComponentByType(TControl(Sender),TGeneralViewArea));
   if wa<>nil then
     Closeddwg:=PTZCADDrawing(wa.PDWG);
-  result:=_CloseDWGPage(ClosedDWG,Sender,NeedAskDonShow,mctx);
+  Result:=_CloseDWGPage(ClosedDWG,Sender,NeedAskDonShow,mctx);
 end;
 
 
@@ -112,33 +118,32 @@ var
   var
     i:integer;
   begin
-    result:=0;
+    Result:=0;
     for i:=0 to zcMainForm.PageControl.PageCount-1 do begin
-      wa:=TGeneralViewArea(FindComponentByType(zcMainForm.PageControl.Pages[i],TGeneralViewArea));
+      wa:=TGeneralViewArea(FindComponentByType(
+        zcMainForm.PageControl.Pages[i],TGeneralViewArea));
       if wa<>nil then begin
         Closeddwg:=PTZCADDrawing(wa.PDWG);
         if ClosedDWG<>nil then
           if ClosedDWG.Changed then
-            inc(result);
-       end;
+            Inc(Result);
+      end;
     end;
   end;
 
 begin
-  if IsRealyQuit then
-  begin
-    if zcMainForm.PageControl<>nil then
-    begin
+  if IsRealyQuit then begin
+    if zcMainForm.PageControl<>nil then begin
       if (GetChangedDrawingsCount>1)or(CommandManager.isBusy) then
         MCtx:=CreateMessagesContext(rsCloseDrawings);
       if (zcUI.GetState and ZState_Busy)>0 then begin
-      //if CommandManager.isBusy then begin
+        //if CommandManager.isBusy then begin
         MCtx.add(getMsgID(rsQuitQuery),TZCMsgDialogResult.CreateMR(ZCmrYes));
         MCtx.add(getMsgID(rsCloseDWGQuery),TZCMsgDialogResult.CreateMR(ZCmrNo));
       end;
-      while zcMainForm.PageControl.ActivePage<>nil do
-      begin
-        if CloseDWGPage(zcMainForm.PageControl.ActivePage,GetChangedDrawingsCount>1,MCtx)=IDCANCEL then begin
+      while zcMainForm.PageControl.ActivePage<>nil do begin
+        if CloseDWGPage(zcMainForm.PageControl.ActivePage,GetChangedDrawingsCount>
+          1,MCtx)=idCancel then begin
           FreeMessagesContext(MCtx);
           exit;
         end;
@@ -153,15 +158,19 @@ begin
 end;
 
 
-function quit_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
+function quit_com(const Context:TZCADCommandContext;
+  operands:TCommandOperands):TCommandResult;
 begin
   CloseApp;
-  result:=cmd_ok;
+  Result:=cmd_ok;
 end;
 
 initialization
-  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
+  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],
+    LM_Info,UnitsInitializeLMId);
   CreateZCADCommand(@quit_com,'Quit',0,0);
+
 finalization
-  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
+  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],
+    LM_Info,UnitsFinalizeLMId);
 end.

@@ -20,6 +20,7 @@ unit uzcCommand_PasteClip;
 {$INCLUDE zengineconfig.inc}
 
 interface
+
 uses
   uzcdrawings,
   uzccommandsabstract,uzccommandsimpl,
@@ -42,8 +43,8 @@ uses
   ;
 
 type
-  PasteClip_com =  object(FloatInsert_com)
-    procedure Command(Operands:TCommandOperands); virtual;
+  PasteClip_com=object(FloatInsert_com)
+    procedure Command(Operands:TCommandOperands);virtual;
   end;
 
 var
@@ -54,15 +55,15 @@ implementation
 procedure pasteclip_com.Command(Operands:TCommandOperands);
 var
   zcformat:TClipboardFormat;
-  tmpStr:AnsiString;
+  tmpStr:ansistring;
   tmpStream:TMemoryStream;
-  tmpSize:LongInt;
+  tmpSize:longint;
   zdctx:TZDrawingContext;
 begin
   zcformat:=RegisterClipboardFormat(ZCAD_DXF_CLIPBOARD_NAME);
   if clipboard.HasFormat(zcformat) then begin
     tmpStr:='';
-    tmpStream:=TMemoryStream.create;
+    tmpStream:=TMemoryStream.Create;
     try
       clipboard.GetFormat(zcformat,tmpStream);
       //учет #0 на конце
@@ -71,21 +72,26 @@ begin
       tmpStream.Seek(0,soFromBeginning);
       tmpStream.ReadBuffer(tmpStr[1],tmpSize);
     finally
-      tmpStream.free;
+      tmpStream.Free;
     end;
     if fileexists(utf8tosys(tmpStr)) then begin
-      zdctx.CreateRec(drawings.GetCurrentDWG^,drawings.GetCurrentDWG^.ConstructObjRoot,TLOMerge,drawings.GetCurrentDWG^.CreateDrawingRC);
+      zdctx.CreateRec(drawings.GetCurrentDWG^,drawings.GetCurrentDWG^.ConstructObjRoot,
+        TLOMerge,drawings.GetCurrentDWG^.CreateDrawingRC);
       addfromdxf(tmpStr,zdctx,@DXFLoadCallBack);
     end;
-    drawings.GetCurrentDWG^.wa.SetMouseMode((MGet3DPoint) or (MMoveCamera) or (MRotateCamera));
+    drawings.GetCurrentDWG^.wa.SetMouseMode((MGet3DPoint) or (MMoveCamera) or
+      (MRotateCamera));
     zcUI.TextMessage(rscmNewBasePoint,TMWOHistoryOut);
   end else
     zcUI.TextMessage(rsClipboardIsEmpty,TMWOHistoryOut);
 end;
 
 initialization
-  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
-  PasteClip.init('PasteClip',0,0,true);
+  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],
+    LM_Info,UnitsInitializeLMId);
+  PasteClip.init('PasteClip',0,0,True);
+
 finalization
-  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
+  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],
+    LM_Info,UnitsFinalizeLMId);
 end.

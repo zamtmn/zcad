@@ -21,6 +21,7 @@ unit uzccommand_dimstyles;
 {$INCLUDE zengineconfig.inc}
 
 interface
+
 uses
   SysUtils,
   uzcLog,
@@ -33,18 +34,22 @@ uses
 
 implementation
 
-function DimStyles_cmd(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
+function DimStyles_cmd(const Context:TZCADCommandContext;
+  operands:TCommandOperands):TCommandResult;
 begin
   DimStylesForm:=TDimStylesForm.Create(nil);
   SetHeightControl(DimStylesForm,sysvar.INTF.INTF_DefaultControlHeight^);
   zcUI.DOShowModal(DimStylesForm);
-  Freeandnil(DimStylesForm);
-  result:=cmd_ok;
+  FreeAndNil(DimStylesForm);
+  Result:=cmd_ok;
 end;
 
 initialization
-  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
+  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],
+    LM_Info,UnitsInitializeLMId);
   CreateZCADCommand(@DimStyles_cmd,'DimStyles',CADWG,0);
+
 finalization
-  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
+  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],
+    LM_Info,UnitsFinalizeLMId);
 end.

@@ -21,6 +21,7 @@ unit uzccommand_options;
 {$INCLUDE zengineconfig.inc}
 
 interface
+
 uses
   uzcLog,
   uzccommandsabstract,uzccommandsimpl,
@@ -32,16 +33,21 @@ uses
 
 implementation
 
-function Options_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
+function Options_com(const Context:TZCADCommandContext;
+  operands:TCommandOperands):TCommandResult;
 begin
-  zcUI.Do_PrepareObject(nil,drawings.GetUnitsFormat,SysUnit.TypeName2PTD('gdbsysvariable'),@sysvar,drawings.GetCurrentDWG);
+  zcUI.Do_PrepareObject(nil,drawings.GetUnitsFormat,SysUnit.TypeName2PTD(
+    'gdbsysvariable'),@sysvar,drawings.GetCurrentDWG);
   zcUI.TextMessage(rscmOptions2OI,TMWOMessageBox);
-  result:=cmd_ok;
+  Result:=cmd_ok;
 end;
 
 initialization
-  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
+  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],
+    LM_Info,UnitsInitializeLMId);
   CreateZCADCommand(@Options_com,'Options',0,0);
+
 finalization
-  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
+  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],
+    LM_Info,UnitsFinalizeLMId);
 end.

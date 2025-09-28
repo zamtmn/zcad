@@ -21,6 +21,7 @@ unit uzccommand_multiselect2objinsp;
 {$INCLUDE zengineconfig.inc}
 
 interface
+
 uses
   uzcLog,
   uzccommandsabstract,uzccommandsimpl,
@@ -29,25 +30,31 @@ uses
   uzcinterface,
   Varman;
 
-function MultiSelect2ObjIbsp_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
+function MultiSelect2ObjIbsp_com(const Context:TZCADCommandContext;
+  operands:TCommandOperands):TCommandResult;
 
 implementation
 
 var
   ms2objinsp:PCommandObjectDef;
 
-function MultiSelect2ObjIbsp_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
+function MultiSelect2ObjIbsp_com(const Context:TZCADCommandContext;
+  operands:TCommandOperands):TCommandResult;
 begin
   MSEditor.CreateUnit(drawings.GetUnitsFormat);
-  zcUI.Do_PrepareObject(drawings.GetUndoStack,drawings.GetUnitsFormat,SysUnit.TypeName2PTD('TMSEditor'),@MSEditor,drawings.GetCurrentDWG);
-  result:=cmd_ok;
+  zcUI.Do_PrepareObject(drawings.GetUndoStack,drawings.GetUnitsFormat,
+    SysUnit.TypeName2PTD('TMSEditor'),@MSEditor,drawings.GetCurrentDWG);
+  Result:=cmd_ok;
 end;
 
 initialization
-  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
+  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],
+    LM_Info,UnitsInitializeLMId);
   ms2objinsp:=CreateZCADCommand(@MultiSelect2ObjIbsp_com,'MultiSelect2ObjIbsp',CADWG,0);
-  ms2objinsp.overlay:=true;
+  ms2objinsp.overlay:=True;
   ms2objinsp.CEndActionAttr:=[];
+
 finalization
-  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
+  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],
+    LM_Info,UnitsFinalizeLMId);
 end.

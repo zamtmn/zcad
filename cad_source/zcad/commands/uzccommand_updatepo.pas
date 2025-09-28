@@ -21,9 +21,10 @@ unit uzccommand_updatepo;
 {$INCLUDE zengineconfig.inc}
 
 interface
+
 uses
   uzcLog,
-  sysutils,
+  SysUtils,
   LCLType,
   uzbpaths,
   uzcuitypes,
@@ -33,37 +34,43 @@ uses
   uzctranslations;
 
 resourcestring
-  rsAboutCLSwithUpdatePO='Command line swith "UpdatePO" must be set. (or not the first time running this command)';
+  rsAboutCLSwithUpdatePO=
+    'Command line swith "UpdatePO" must be set. (or not the first time running this command)';
 
 implementation
 
-function UpdatePO_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
+function UpdatePO_com(const Context:TZCADCommandContext;
+  operands:TCommandOperands):TCommandResult;
 var
-   cleaned:integer;
-   s:string;
+  cleaned:integer;
+  s:string;
 begin
-     if ZCSysParams.saved.updatepo then
-     begin
-          begin
-               cleaned:=RunTimePO.exportcompileritems(actualypo);
-               s:='Cleaned items: '+inttostr(cleaned)
-           +#13#10'Added items: '+inttostr(_UpdatePO)
-           +#13#10'File zcadrt.po must be rewriten. Confirm?';
-               if zcUI.TextQuestion('UpdatePO',s)=zccbNo then
-                 exit;
-               RunTimePO.SaveToFile(expandpath(ConcatPaths([PODirectory,ZCADRTBackupPOFileName])));
-               actualypo.SaveToFile(expandpath(ConcatPaths([PODirectory,ZCADRTPOFileName])));
-               ZCSysParams.saved.updatepo:=false
-          end;
-     end
-        else zcUI.TextMessage(rsAboutCLSwithUpdatePO,TMWOShowError);
-     result:=cmd_ok;
+  if ZCSysParams.saved.updatepo then begin
+    begin
+      cleaned:=RunTimePO.exportcompileritems(actualypo);
+      s:='Cleaned items: '+IntToStr(cleaned)+
+        #13#10'Added items: '+IntToStr(_UpdatePO)+
+        #13#10'File zcadrt.po must be rewriten. Confirm?';
+      if zcUI.TextQuestion('UpdatePO',s)=zccbNo then
+        exit;
+      RunTimePO.SaveToFile(
+        expandpath(ConcatPaths([PODirectory,ZCADRTBackupPOFileName])));
+      actualypo.SaveToFile(
+        expandpath(ConcatPaths([PODirectory,ZCADRTPOFileName])));
+      ZCSysParams.saved.updatepo:=False;
+    end;
+  end else
+    zcUI.TextMessage(rsAboutCLSwithUpdatePO,TMWOShowError);
+  Result:=cmd_ok;
 end;
 
 
 initialization
-  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
+  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],
+    LM_Info,UnitsInitializeLMId);
   CreateZCADCommand(@UpdatePO_com,'UpdatePO',0,0);
+
 finalization
-  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
+  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],
+    LM_Info,UnitsFinalizeLMId);
 end.

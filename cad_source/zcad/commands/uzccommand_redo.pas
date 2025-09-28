@@ -21,6 +21,7 @@ unit uzccommand_redo;
 {$INCLUDE zengineconfig.inc}
 
 interface
+
 uses
   uzcLog,
   uzccommandsabstract,uzccommandsimpl,
@@ -33,21 +34,28 @@ uses
 
 implementation
 
-function Redo_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
+function Redo_com(const Context:TZCADCommandContext;
+  operands:TCommandOperands):TCommandResult;
 var
-   msg:string;
+  msg:string;
 begin
-  drawings.GetCurrentROOT.ObjArray.DeSelect(drawings.GetCurrentDWG.wa.param.SelDesc.Selectedobjcount,drawings.GetCurrentDWG^.deselector);
+  drawings.GetCurrentROOT.ObjArray.DeSelect(
+    drawings.GetCurrentDWG.wa.param.SelDesc.Selectedobjcount,
+    drawings.GetCurrentDWG^.deselector);
   if PTZCADDrawing(drawings.GetCurrentDWG).UndoStack.redo(msg)=URRNoCommandsToUndo then
     zcUI.TextMessage(rscmNoCTR,TMWOShowError);
-  if msg<>'' then zcUI.TextMessage(msg,TMWOHistoryOut);
+  if msg<>'' then
+    zcUI.TextMessage(msg,TMWOHistoryOut);
   zcRedrawCurrentDrawing;
-  result:=cmd_ok;
+  Result:=cmd_ok;
 end;
 
 initialization
-  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
-  CreateZCADCommand(@redo_com,'Redo',CADWG or CACanRedo,0).overlay:=true;
+  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],
+    LM_Info,UnitsInitializeLMId);
+  CreateZCADCommand(@redo_com,'Redo',CADWG or CACanRedo,0).overlay:=True;
+
 finalization
-  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
+  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],
+    LM_Info,UnitsFinalizeLMId);
 end.

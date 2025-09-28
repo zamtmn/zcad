@@ -20,6 +20,7 @@ unit uzccommand_DWGClose;
 {$INCLUDE zengineconfig.inc}
 
 interface
+
 uses
   uzcLog,Forms,
   uzccommandsabstract,uzccommandsimpl,
@@ -28,19 +29,23 @@ uses
 
 implementation
 
-function DWGClose_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
+function DWGClose_com(const Context:TZCADCommandContext;
+  operands:TCommandOperands):TCommandResult;
 var
-   CurrentDWG:PTZCADDrawing;
+  CurrentDWG:PTZCADDrawing;
 begin
   application.ProcessMessages;
   CurrentDWG:=PTZCADDrawing(drawings.GetCurrentDWG);
-  _CloseDWGPage(CurrentDWG,zcMainForm.PageControl.ActivePage,false,nil);
-  result:=cmd_ok;
+  _CloseDWGPage(CurrentDWG,zcMainForm.PageControl.ActivePage,False,nil);
+  Result:=cmd_ok;
 end;
 
 initialization
-  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
+  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],
+    LM_Info,UnitsInitializeLMId);
   CreateZCADCommand(@DWGClose_com,'DWGClose',CADWG,0).CEndActionAttr:=[CEDWGNChanged];
+
 finalization
-  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
+  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],
+    LM_Info,UnitsFinalizeLMId);
 end.

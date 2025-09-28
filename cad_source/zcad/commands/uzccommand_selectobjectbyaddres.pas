@@ -21,6 +21,7 @@ unit uzccommand_selectobjectbyaddres;
 {$INCLUDE zengineconfig.inc}
 
 interface
+
 uses
   uzcLog,
   uzccommandsabstract,uzccommandsimpl,
@@ -31,24 +32,26 @@ uses
 
 implementation
 
-function SelectObjectByAddres_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
+function SelectObjectByAddres_com(const Context:TZCADCommandContext;
+  operands:TCommandOperands):TCommandResult;
 var
   pp:PGDBObjEntity;
   code:integer;
 begin
   val(Operands,PtrUInt(pp),code);
-  if (code=0)and(assigned(pp))then
+  if (code=0)and(assigned(pp)) then
     zcSelectEntity(pp);
   zcUI.Do_GUIaction(nil,zcMsgUIActionRedraw);
   zcUI.Do_GUIaction(drawings.CurrentDWG.wa,zcMsgUIActionSelectionChanged);
-  result:=cmd_ok;
+  Result:=cmd_ok;
 end;
 
 initialization
-  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
+  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],
+    LM_Info,UnitsInitializeLMId);
   CreateZCADCommand(@SelectObjectByAddres_com,'SelectObjectByAddres',CADWG,0);
+
 finalization
-  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
+  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],
+    LM_Info,UnitsFinalizeLMId);
 end.
-
-

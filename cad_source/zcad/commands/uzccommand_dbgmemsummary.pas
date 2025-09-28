@@ -21,6 +21,7 @@ unit uzccommand_dbgmemsummary;
 {$INCLUDE zengineconfig.inc}
 
 interface
+
 uses
   {$IFDEF REPORTMMEMORYLEAKS}heaptrc,{$ENDIF}
   SysUtils,
@@ -34,6 +35,7 @@ uses
   ;
 
 implementation
+
 {$IFDEF REPORTMMEMORYLEAKS}
 type
   TCodePointerArrayCompare=class
@@ -93,14 +95,15 @@ begin
 end;
 {$ENDIF}
 
-function dbgMemSummary_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
-{$IFDEF REPORTMMEMORYLEAKS}
+function dbgMemSummary_com(const Context:TZCADCommandContext;
+  operands:TCommandOperands):TCommandResult;
+  {$IFDEF REPORTMMEMORYLEAKS}
 const
   DefaultArrSize=1000000;
-{$ENDIF}
+  {$ENDIF}
 var
   InfoForm:TInfoForm;
-{$IFDEF REPORTMMEMORYLEAKS}
+  {$IFDEF REPORTMMEMORYLEAKS}
   MemAllocInfoArray:tmemallocinfoarray;
   Size,i,j,UniqueCount:Integer;
   StackCounter:TStackCounter;
@@ -110,15 +113,15 @@ var
   pmemallocinfo:^tmemallocinfo;
   s:string;
   BTDic:TBTDic;
-{$ENDIF}
+  {$ENDIF}
 begin
-  InfoForm:=TInfoForm.create(nil);
+  InfoForm:=TInfoForm.Create(nil);
   InfoForm.DialogPanel.HelpButton.Hide;
   InfoForm.DialogPanel.CancelButton.Hide;
   InfoForm.DialogPanel.CloseButton.Hide;
-  InfoForm.caption:=('Memory is used to:');
+  InfoForm.Caption:=('Memory is used to:');
 
-{$IFDEF REPORTMMEMORYLEAKS}
+  {$IFDEF REPORTMMEMORYLEAKS}
   if not TryStrToInt(operands,Size) then
     Size:=DefaultArrSize;
   if Size<=0 then
@@ -173,18 +176,21 @@ begin
   BTDic.Free;
   SizeSorter.Free;
   StackCounter.Free;
-{$ELSE}
-  InfoForm.Memo.lines.Add('You need use {$DEFINE REPORTMMEMORYLEAKS} when compiling ZCAD');
-{$ENDIF}
+  {$ELSE}
+  InfoForm.Memo.Lines.Add('You need use {$DEFINE REPORTMMEMORYLEAKS} when compiling ZCAD');
+  {$ENDIF}
 
   zcUI.DOShowModal(InfoForm);
   InfoForm.Free;
-  result:=cmd_ok;
+  Result:=cmd_ok;
 end;
 
 initialization
-  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
+  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],
+    LM_Info,UnitsInitializeLMId);
   CreateZCADCommand(@dbgMemSummary_com,'dbgMemSummary',0,0);
+
 finalization
-  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
+  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],
+    LM_Info,UnitsFinalizeLMId);
 end.

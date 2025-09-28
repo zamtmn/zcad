@@ -20,12 +20,12 @@ unit uzccommand_saveas;
 {$INCLUDE zengineconfig.inc}
 
 interface
+
 uses
   LazUTF8,uzcLog,
   uzcdialogsfiles,
-  sysutils,
+  SysUtils,
   uzbpaths,
-
   uzcuitypes,uzcuidialogs,
   uzeffmanager,
   uzccommand_DWGNew,
@@ -38,20 +38,23 @@ uses
   uzeffdxf,uzeffdxfsupport,
   uzedrawingsimple,Varman,uzctnrVectorBytes,uzcdrawing,uzcTranslations,uzeconsts;
 
-function SaveAs_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
-function SaveDXFDPAS(AFileName:String;AProcessFileHistory:Boolean=True):Integer;
-function dwgQSave_com(dwg:PTSimpleDrawing):Integer;
+function SaveAs_com(const Context:TZCADCommandContext;
+  operands:TCommandOperands):TCommandResult;
+function SaveDXFDPAS(AFileName:string;AProcessFileHistory:boolean=True):integer;
+function dwgQSave_com(dwg:PTSimpleDrawing):integer;
 
 implementation
 
-function dwgSaveDXFDPAS(s:String;dwg:PTSimpleDrawing):Integer;
+function dwgSaveDXFDPAS(s:string;dwg:PTSimpleDrawing):integer;
 var
-   mem:TZctnrVectorBytes;
-   pu:ptunit;
-   allok:boolean;
+  mem:TZctnrVectorBytes;
+  pu:ptunit;
+  allok:boolean;
 begin
-  allok:=savedxf2000(s,ConcatPaths([GetRoCfgsPath,CFScomponentsDir,CFSemptydxfFile]),dwg^,ZCCodePage2SysCP(DWG.DXFCodePage));
-  pu:=PTZCADDrawing(dwg).DWGUnits.findunit(GetSupportPaths,InterfaceTranslate,DrawingDeviceBaseUnitName);
+  allok:=savedxf2000(s,ConcatPaths([GetRoCfgsPath,CFScomponentsDir,CFSemptydxfFile]),
+    dwg^,ZCCodePage2SysCP(DWG.DXFCodePage));
+  pu:=PTZCADDrawing(dwg).DWGUnits.findunit(GetSupportPaths,InterfaceTranslate,
+    DrawingDeviceBaseUnitName);
   if pu<>nil then begin
     mem.init(1024);
     pu^.SavePasToMem(mem);
@@ -59,14 +62,14 @@ begin
     mem.done;
   end;
   if allok then
-    result:=cmd_ok
+    Result:=cmd_ok
   else
-    result:=cmd_error;
+    Result:=cmd_error;
 end;
 
-function dwgQSave_com(dwg:PTSimpleDrawing):Integer;
+function dwgQSave_com(dwg:PTSimpleDrawing):integer;
 var
-  s:String;
+  s:string;
   dr:TZCMsgDialogResult;
 begin
   s:=dwg.GetFileName;
@@ -74,35 +77,38 @@ begin
     if not(SaveFileDialog(s,'dxf',ProjectFileFilter,'',rsSaveFile)) then
       exit(cmd_error);
     if FileExists(s) then begin
-      dr:=zcMsgDlg(format(rsOverwriteFileQuery,[s]),zcdiQuestion,[zccbYes,zccbNo,zccbCancel],false,nil,rsQuitCaption);
+      dr:=zcMsgDlg(format(rsOverwriteFileQuery,[s]),zcdiQuestion,
+        [zccbYes,zccbNo,zccbCancel],False,nil,rsQuitCaption);
       if dr.ModalResult=ZCmrCancel then
         exit(cmd_error)
       else if dr.ModalResult=ZCmrNo then
         exit(cmd_ok);
     end;
   end;
-  result:=dwgSaveDXFDPAS(s,dwg);
+  Result:=dwgSaveDXFDPAS(s,dwg);
 end;
 
 
 function SaveDXFDPAS(AFileName:string;AProcessFileHistory:boolean=True):integer;
 begin
-  Result:=dwgSaveDXFDPAS(AFileName, drawings.GetCurrentDWG);
+  Result:=dwgSaveDXFDPAS(AFileName,drawings.GetCurrentDWG);
   if AProcessFileHistory and assigned(ProcessFilehistoryProc) then
     ProcessFilehistoryProc(AFileName);
 end;
 
-function SaveAs_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
+function SaveAs_com(const Context:TZCADCommandContext;
+  operands:TCommandOperands):TCommandResult;
 var
-  s:AnsiString;
-  fileext:AnsiString;
+  s:ansistring;
+  fileext:ansistring;
   dr:TZCMsgDialogResult;
 begin
   zcUI.Do_BeforeShowModal(nil);
   s:=drawings.GetCurrentDWG.GetFileName;
   if SaveFileDialog(s,'dxf',ProjectFileFilter,'',rsSaveFile) then begin
     if FileExists(s) then begin
-      dr:=zcMsgDlg(format(rsOverwriteFileQuery,[s]),zcdiQuestion,[zccbYes,zccbNo,zccbCancel],false,nil,rsQuitCaption);
+      dr:=zcMsgDlg(format(rsOverwriteFileQuery,[s]),zcdiQuestion,
+        [zccbYes,zccbNo,zccbCancel],False,nil,rsQuitCaption);
       if dr.ModalResult=ZCmrCancel then
         exit(cmd_cancel)
       else if dr.ModalResult=ZCmrNo then
@@ -112,19 +118,22 @@ begin
     if fileext='.DXF' then begin
       SaveDXFDPAS(s);
       drawings.GetCurrentDWG.SetFileName(s);
-      drawings.GetCurrentDWG.ChangeStampt(false);
+      drawings.GetCurrentDWG.ChangeStampt(False);
       zcUI.Do_GUIaction(nil,zcMsgUIActionRedraw);
     end else begin
-      zcUI.TextMessage(Format(rsunknownFileExt, [fileext]),TMWOShowError);
+      zcUI.TextMessage(Format(rsunknownFileExt,[fileext]),TMWOShowError);
     end;
   end;
-  result:=cmd_ok;
+  Result:=cmd_ok;
   zcUI.Do_AfterShowModal(nil);
 end;
 
 initialization
-  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
+  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],
+    LM_Info,UnitsInitializeLMId);
   CreateZCADCommand(@SaveAs_com,'SaveAs',CADWG,0);
+
 finalization
-  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
+  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],
+    LM_Info,UnitsFinalizeLMId);
 end.

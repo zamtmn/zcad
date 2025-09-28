@@ -21,6 +21,7 @@ unit uzccommand_line;
 {$INCLUDE zengineconfig.inc}
 
 interface
+
 uses
   uzcLog,
   uzccommandsabstract,uzccommandsimpl,
@@ -33,54 +34,60 @@ uses
 type
   TEntitySetupProc=procedure(const PEnt:PGDBObjEntity);
 
-function InteractiveDrawLines(const Context:TZCADCommandContext;APrompt1,APromptNext:String;ESP:TEntitySetupProc):TCommandResult;
+function InteractiveDrawLines(const Context:TZCADCommandContext;
+  APrompt1,APromptNext:string;ESP:TEntitySetupProc):TCommandResult;
 
 implementation
 
-function InteractiveDrawLines(const Context:TZCADCommandContext;APrompt1,APromptNext:String;ESP:TEntitySetupProc):TCommandResult;
+function InteractiveDrawLines(const Context:TZCADCommandContext;
+  APrompt1,APromptNext:string;ESP:TEntitySetupProc):TCommandResult;
 var
   pline:PGDBObjLine;
   p1,p2:gdbvertex;
 begin
- {запрос первой координаты}
- if commandmanager.get3dpoint(APrompt1,p1)=GRNormal then
-   while true do
+  {запрос первой координаты}
+  if commandmanager.get3dpoint(APrompt1,p1)=GRNormal then
+    while True do
      {запрос следующей координаты
       с рисованием резиновой линии от базовой точки p1}
-     if commandmanager.Get3DPointWithLineFromBase(APromptNext,p1,p2)=GRNormal then begin
+      if commandmanager.Get3DPointWithLineFromBase(APromptNext,p1,p2)=GRNormal then begin
 
-       //создаем и инициализируем примитив
-       pline:=AllocEnt(GDBLineID);
-       pline^.init(nil,nil,LnWtByLayer,p1,p2);
+        //создаем и инициализируем примитив
+        pline:=AllocEnt(GDBLineID);
+        pline^.init(nil,nil,LnWtByLayer,p1,p2);
 
-       //присваиваем текущие цвет, толщину, и т.д. от настроек чертежа
-       zcSetEntPropFromCurrentDrawingProp(pline);
+        //присваиваем текущие цвет, толщину, и т.д. от настроек чертежа
+        zcSetEntPropFromCurrentDrawingProp(pline);
 
-       //дополнительная настройка
-       if assigned(ESP) then
-         ESP(pline);
+        //дополнительная настройка
+        if assigned(ESP) then
+          ESP(pline);
 
-       //добавляем в чертеж
-       zcAddEntToCurrentDrawingWithUndo(pline);
+        //добавляем в чертеж
+        zcAddEntToCurrentDrawingWithUndo(pline);
 
-       //перерисовываем
-       zcRedrawCurrentDrawing;
+        //перерисовываем
+        zcRedrawCurrentDrawing;
 
-       p1:=p2;
-     end else
-       break;
- result:=cmd_ok;
+        p1:=p2;
+      end else
+        break;
+  Result:=cmd_ok;
 end;
 
 
-function DrawLine_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
+function DrawLine_com(const Context:TZCADCommandContext;
+  operands:TCommandOperands):TCommandResult;
 begin
- Result:=InteractiveDrawLines(Context,rscmSpecifyFirstPoint,rscmSpecifyNextPoint,nil);
+  Result:=InteractiveDrawLines(Context,rscmSpecifyFirstPoint,rscmSpecifyNextPoint,nil);
 end;
 
 initialization
-  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
-  CreateZCADCommand(@DrawLine_com,'Line',   CADWG,0);
+  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],
+    LM_Info,UnitsInitializeLMId);
+  CreateZCADCommand(@DrawLine_com,'Line',CADWG,0);
+
 finalization
-  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
+  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],
+    LM_Info,UnitsFinalizeLMId);
 end.

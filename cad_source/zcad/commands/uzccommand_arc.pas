@@ -21,6 +21,7 @@ unit uzccommand_arc;
 {$INCLUDE zengineconfig.inc}
 
 interface
+
 uses
   uzcLog,
   SysUtils,
@@ -35,43 +36,50 @@ uses
 
 implementation
 
-function DrawArc_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
+function DrawArc_com(const Context:TZCADCommandContext;
+  operands:TCommandOperands):TCommandResult;
 var
-    pa:PGDBObjArc;
-    pline:PGDBObjLine;
-    pe:T3PointPentity;
-    dc:TDrawContext;
+  pa:PGDBObjArc;
+  pline:PGDBObjLine;
+  pe:T3PointPentity;
+  dc:TDrawContext;
 begin
-    if commandmanager.get3dpoint(rscmSpecifyFirstPoint,pe.p1)=GRNormal then
-    begin
-         pline := Pointer(drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.CreateInitObj(GDBLineID,drawings.GetCurrentROOT));
-         pline^.CoordInOCS.lBegin:=pe.p1;
-         InteractiveLineEndManipulator(pline,pe.p1,false);
-      if commandmanager.Get3DPointInteractive(rscmSpecifySecondPoint,pe.p2,@InteractiveLineEndManipulator,pline)=GRNormal then
-      begin
-           drawings.GetCurrentDWG^.FreeConstructionObjects;
-           pe.pentity:= Pointer(drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.CreateInitObj(GDBArcID,drawings.GetCurrentROOT));
-        if commandmanager.Get3DPointInteractive(rscmSpecifyThirdPoint,pe.p3,@InteractiveArcManipulator,@pe)=GRNormal then
-          begin
-               drawings.GetCurrentDWG^.FreeConstructionObjects;
-               pa := AllocEnt(GDBArcID);
-               pe.pentity:=pa;
-               pa^.initnul;
+  if commandmanager.get3dpoint(rscmSpecifyFirstPoint,pe.p1)=GRNormal then begin
+    pline:=Pointer(drawings.GetCurrentDWG^.ConstructObjRoot.
+      ObjArray.CreateInitObj(
+      GDBLineID,drawings.GetCurrentROOT));
+    pline^.CoordInOCS.lBegin:=pe.p1;
+    InteractiveLineEndManipulator(pline,pe.p1,False);
+    if commandmanager.Get3DPointInteractive(rscmSpecifySecondPoint,
+      pe.p2,@InteractiveLineEndManipulator,pline)=GRNormal then begin
+      drawings.GetCurrentDWG^.FreeConstructionObjects;
+      pe.pentity:=Pointer(
+        drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.CreateInitObj(
+        GDBArcID,drawings.GetCurrentROOT));
+      if commandmanager.Get3DPointInteractive(rscmSpecifyThirdPoint,
+        pe.p3,@InteractiveArcManipulator,@pe)=GRNormal then begin
+        drawings.GetCurrentDWG^.FreeConstructionObjects;
+        pa:=AllocEnt(GDBArcID);
+        pe.pentity:=pa;
+        pa^.initnul;
 
-               InteractiveArcManipulator(@pe,pe.p3,false);
-               dc:=drawings.GetCurrentDWG^.CreateDrawingRC;
-               pa^.FormatEntity(drawings.GetCurrentDWG^,dc);
+        InteractiveArcManipulator(@pe,pe.p3,False);
+        dc:=drawings.GetCurrentDWG^.CreateDrawingRC;
+        pa^.FormatEntity(drawings.GetCurrentDWG^,dc);
 
-               {drawings.}zcAddEntToCurrentDrawingWithUndo(pa);
-          end;
+        {drawings.}zcAddEntToCurrentDrawingWithUndo(pa);
       end;
     end;
-    result:=cmd_ok;
+  end;
+  Result:=cmd_ok;
 end;
 
 initialization
-  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
+  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],
+    LM_Info,UnitsInitializeLMId);
   CreateZCADCommand(@DrawArc_com,'Arc',CADWG,0);
+
 finalization
-  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
+  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],
+    LM_Info,UnitsFinalizeLMId);
 end.

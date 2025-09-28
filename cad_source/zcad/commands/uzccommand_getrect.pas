@@ -21,6 +21,7 @@ unit uzccommand_getrect;
 {$INCLUDE zengineconfig.inc}
 
 interface
+
 uses
   uzcLog,
   uzccommandsabstract,uzccommandsimpl,
@@ -30,34 +31,41 @@ uses
 implementation
 
 var
-   c1,c2:integer;
+  c1,c2:integer;
 
-function Rect_com_CommandStart(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
+function Rect_com_CommandStart(const Context:TZCADCommandContext;
+  operands:TCommandOperands):TCommandResult;
 begin
-     c1:=commandmanager.GetValueHeap;
-     c2:=-1;
-     commandmanager.executecommandsilent('Get3DPoint(Первая точка:)',drawings.GetCurrentDWG,drawings.GetCurrentOGLWParam);
-     result:=cmd_ok;
+  c1:=commandmanager.GetValueHeap;
+  c2:=-1;
+  commandmanager.executecommandsilent('Get3DPoint(Первая точка:)',
+    drawings.GetCurrentDWG,drawings.GetCurrentOGLWParam);
+  Result:=cmd_ok;
 end;
 
 procedure Rect_com_CommandCont(const Context:TZCADCommandContext);
 begin
-     if c2=-1 then
-                  c2:=commandmanager.GetValueHeap
-              else
-                  begin
-                       commandmanager.executecommandend;
-                       exit;
-                  end;
-     if c1=c2 then
-                  commandmanager.executecommandend
-              else
-                  commandmanager.executecommandsilent('Get3DPoint_DrawRect(Вторая точка:)',drawings.GetCurrentDWG,drawings.GetCurrentOGLWParam);
+  if c2=-1 then
+    c2:=commandmanager.GetValueHeap
+  else begin
+    commandmanager.executecommandend;
+    exit;
+  end;
+  if c1=c2 then
+    commandmanager.executecommandend
+  else
+    commandmanager.executecommandsilent(
+      'Get3DPoint_DrawRect(Вторая точка:)',drawings.GetCurrentDWG,
+      drawings.GetCurrentOGLWParam);
 end;
 
 initialization
-  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
-  CreateCommandRTEdObjectPlugin(@Rect_com_CommandStart,nil,nil,nil,nil,nil,nil,@Rect_com_CommandCont,'GetRect',0,0).overlay:=true;
+  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],
+    LM_Info,UnitsInitializeLMId);
+  CreateCommandRTEdObjectPlugin(@Rect_com_CommandStart,nil,nil,nil,
+    nil,nil,nil,@Rect_com_CommandCont,'GetRect',0,0).overlay:=True;
+
 finalization
-  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
+  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],
+    LM_Info,UnitsFinalizeLMId);
 end.

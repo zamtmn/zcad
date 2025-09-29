@@ -140,6 +140,26 @@ end;
 procedure GDBObjARC.transform;
 var
   sav,eav,pins:gdbvertex;
+
+  function CalcAngleFromVector(const v:gdbvertex):double;
+  var
+    temp:double;
+  begin
+    if v.x <> 0 then
+      temp := arctan(abs(v.y / v.x))
+    else
+      temp := pi/2;
+
+    if (v.x >= 0) and (v.y >= 0) then
+      result := temp
+    else if (v.x < 0) and (v.y >= 0) then
+      result := pi - temp
+    else if (v.x <= 0) and (v.y <= 0) then
+      result := pi + temp
+    else if (v.x > 0) and (v.y < 0) then
+      result := 2 * pi - temp;
+  end;
+
 begin
   precalc;
   if t_matrix.mtr[0].v[0]*t_matrix.mtr[1].v[1]*t_matrix.mtr[2].v[2]<eps then begin
@@ -157,13 +177,8 @@ begin
   sav:=NormalizeVertex(VertexSub(sav,pins));
   eav:=NormalizeVertex(VertexSub(eav,pins));
 
-  StartAngle:=TwoVectorAngle(_X_yzVertex,sav);
-  if sav.y<eps then
-    StartAngle:=2*pi-StartAngle;
-
-  EndAngle:=TwoVectorAngle(_X_yzVertex,eav);
-  if eav.y<eps then
-    EndAngle:=2*pi-EndAngle;
+  StartAngle:=CalcAngleFromVector(sav);
+  EndAngle:=CalcAngleFromVector(eav);
 end;
 
 procedure GDBObjARC.ReCalcFromObjMatrix;

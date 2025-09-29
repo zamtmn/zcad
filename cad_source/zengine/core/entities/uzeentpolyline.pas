@@ -23,7 +23,7 @@ interface
 
 uses
   uzeentityfactory,uzgldrawcontext,uzedrawingdef,uzecamera,UGDBVectorSnapArray,
-  uzestyleslayers,uzeentsubordinated,uzeentcurve,
+  uzestyleslayers,uzeentsubordinated,uzeentcurve,UGDBSelectedObjArray,
   uzeentity,uzctnrVectorBytes,uzbtypes,uzeconsts,uzglviewareadata,
   uzegeometrytypes,uzegeometry,uzeffdxfsupport,SysUtils,
   uzMVReader,uzCtnrVectorpBaseEntity;
@@ -56,6 +56,7 @@ type
       const point:GDBVertex):boolean;virtual;
     procedure AddOnTrackAxis(var posr:os_record;
       const processaxis:taddotrac);virtual;
+    procedure addcontrolpoints(tdesc:Pointer);virtual;
     function GetLength:double;virtual;
     class function CreateInstance:PGDBObjPolyline;static;
     function GetObjType:TObjID;virtual;
@@ -85,6 +86,70 @@ end;
 procedure GDBObjPolyline.AddOnTrackAxis(var posr:os_record;const processaxis:taddotrac);
 begin
   GDBPoint3dArrayAddOnTrackAxis(VertexArrayInWCS,posr,processaxis,closed);
+end;
+
+procedure GDBObjPolyline.addcontrolpoints(tdesc:Pointer);
+var
+  pdesc:controlpointdesc;
+  i,segmentcount:integer;
+  pv,pv2:pGDBvertex;
+  midpoint:GDBVertex;
+begin
+  // Calculate total number of control points (vertices + midpoints for segments)
+  segmentcount:=VertexArrayInWCS.Count;
+  if closed and (VertexArrayInWCS.Count>2) then
+    segmentcount:=segmentcount+VertexArrayInWCS.Count  // For closed: each vertex + each segment midpoint
+  else if VertexArrayInWCS.Count>1 then
+    segmentcount:=segmentcount+VertexArrayInWCS.Count-1;  // For open: each vertex + each segment midpoint
+
+  PSelectedObjDesc(tdesc)^.pcontrolpoint^.init(segmentcount);
+  pdesc.selected:=False;
+  pdesc.PDrawable:=nil;
+
+  // Add vertex control points
+  pv:=VertexArrayInWCS.GetParrayAsPointer;
+  for i:=0 to VertexArrayInWCS.Count-1 do begin
+    pdesc.vertexnum:=i;
+    pdesc.attr:=[CPA_Strech];
+    pdesc.worldcoord:=pv^;
+    PSelectedObjDesc(tdesc)^.pcontrolpoint^.PushBackData(pdesc);
+    Inc(pv);
+  end;
+
+  // Add midpoint control points for each segment
+  if VertexArrayInWCS.Count>1 then begin
+    pv:=VertexArrayInWCS.GetParrayAsPointer;
+    for i:=0 to VertexArrayInWCS.Count-2 do begin
+      pv2:=pv;
+      Inc(pv2);
+      // Calculate midpoint
+      midpoint.x:=(pv^.x+pv2^.x)/2;
+      midpoint.y:=(pv^.y+pv2^.y)/2;
+      midpoint.z:=(pv^.z+pv2^.z)/2;
+
+      // Store segment index in vertexnum (using negative to distinguish from vertex grips)
+      pdesc.vertexnum:=-1000-i;  // Negative offset to distinguish midpoint grips
+      pdesc.attr:=[CPA_Strech];
+      pdesc.worldcoord:=midpoint;
+      PSelectedObjDesc(tdesc)^.pcontrolpoint^.PushBackData(pdesc);
+      Inc(pv);
+    end;
+
+    // Add midpoint for closing segment if closed
+    if closed and (VertexArrayInWCS.Count>2) then begin
+      pv:=VertexArrayInWCS.GetDataMutable(VertexArrayInWCS.Count-1);
+      pv2:=VertexArrayInWCS.GetParrayAsPointer;
+      // Calculate midpoint of closing segment
+      midpoint.x:=(pv^.x+pv2^.x)/2;
+      midpoint.y:=(pv^.y+pv2^.y)/2;
+      midpoint.z:=(pv^.z+pv2^.z)/2;
+
+      pdesc.vertexnum:=-1000-(VertexArrayInWCS.Count-1);  // Negative offset for last segment
+      pdesc.attr:=[CPA_Strech];
+      pdesc.worldcoord:=midpoint;
+      PSelectedObjDesc(tdesc)^.pcontrolpoint^.PushBackData(pdesc);
+    end;
+  end;
 end;
 
 function GDBObjPolyline.onmouse;

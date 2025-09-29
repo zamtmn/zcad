@@ -421,21 +421,55 @@ end;
 
 procedure GDBObjCurve.rtmodifyonepoint(const rtmod:TRTModifyData);
 var
-  vertexnumber:integer;
+  vertexnumber,segmentindex:integer;
+  newvertex:GDBVertex;
 begin
   vertexnumber:=rtmod.point.vertexnum;
-  GDBPoint3dArray.PTArr(vertexarrayinocs.parray)^[vertexnumber]:=
-    VertexAdd(rtmod.point.worldcoord,rtmod.dist);
+
+  // Check if this is a midpoint grip (negative vertexnum)
+  if vertexnumber<-999 then begin
+    // This is a midpoint grip - insert a new vertex
+    segmentindex:=-(vertexnumber+1000);  // Extract segment index
+
+    // Calculate new vertex position
+    newvertex:=VertexAdd(rtmod.point.worldcoord,rtmod.dist);
+
+    // Insert vertex after the segment start vertex
+    vertexarrayinocs.InsertElement(segmentindex+1,newvertex);
+  end else begin
+    // This is a regular vertex grip - modify existing vertex
+    GDBPoint3dArray.PTArr(vertexarrayinocs.parray)^[vertexnumber]:=
+      VertexAdd(rtmod.point.worldcoord,rtmod.dist);
+  end;
 end;
 
 procedure GDBObjCurve.remaponecontrolpoint(pdesc:pcontrolpointdesc;
   ProjectProc:GDBProjectProc);
 var
-  vertexnumber:integer;
+  vertexnumber,segmentindex:integer;
+  pv,pv2:pGDBvertex;
   tv:GDBvertex;
 begin
   vertexnumber:=pdesc^.vertexnum;
-  pdesc.worldcoord:=GDBPoint3dArray.PTArr(VertexArrayInWCS.parray)^[vertexnumber];
+
+  // Check if this is a midpoint grip (negative vertexnum)
+  if vertexnumber<-999 then begin
+    // This is a midpoint grip - calculate midpoint position
+    segmentindex:=-(vertexnumber+1000);  // Extract segment index
+
+    // Get the two vertices of the segment
+    pv:=VertexArrayInWCS.GetDataMutable(segmentindex);
+    pv2:=VertexArrayInWCS.GetDataMutable(segmentindex+1);
+
+    // Calculate midpoint
+    pdesc.worldcoord.x:=(pv^.x+pv2^.x)/2;
+    pdesc.worldcoord.y:=(pv^.y+pv2^.y)/2;
+    pdesc.worldcoord.z:=(pv^.z+pv2^.z)/2;
+  end else begin
+    // This is a regular vertex grip
+    pdesc.worldcoord:=GDBPoint3dArray.PTArr(VertexArrayInWCS.parray)^[vertexnumber];
+  end;
+
   ProjectProc(pdesc.worldcoord,tv);
   pdesc.dispcoord:=ToVertex2DI(tv);
 end;
@@ -443,20 +477,47 @@ end;
 procedure GDBObjCurve.addcontrolpoints;
 var
   pdesc:controlpointdesc;
-  i:integer;
-  pv:pGDBvertex;
+  i,segmentcount:integer;
+  pv,pv2:pGDBvertex;
+  midpoint:GDBVertex;
 begin
-  PSelectedObjDesc(tdesc)^.pcontrolpoint^.init(VertexArrayInWCS.Count);
-  pv:=VertexArrayInWCS.GetParrayAsPointer;
+  // Calculate total number of control points (vertices + midpoints for segments)
+  segmentcount:=VertexArrayInWCS.Count;
+  if VertexArrayInWCS.Count>1 then
+    segmentcount:=segmentcount+VertexArrayInWCS.Count-1;  // Add midpoints for segments
+
+  PSelectedObjDesc(tdesc)^.pcontrolpoint^.init(segmentcount);
   pdesc.selected:=False;
   pdesc.PDrawable:=nil;
 
+  // Add vertex control points
+  pv:=VertexArrayInWCS.GetParrayAsPointer;
   for i:=0 to VertexArrayInWCS.Count-1 do begin
     pdesc.vertexnum:=i;
     pdesc.attr:=[CPA_Strech];
     pdesc.worldcoord:=pv^;
     PSelectedObjDesc(tdesc)^.pcontrolpoint^.PushBackData(pdesc);
     Inc(pv);
+  end;
+
+  // Add midpoint control points for each segment
+  if VertexArrayInWCS.Count>1 then begin
+    pv:=VertexArrayInWCS.GetParrayAsPointer;
+    for i:=0 to VertexArrayInWCS.Count-2 do begin
+      pv2:=pv;
+      Inc(pv2);
+      // Calculate midpoint
+      midpoint.x:=(pv^.x+pv2^.x)/2;
+      midpoint.y:=(pv^.y+pv2^.y)/2;
+      midpoint.z:=(pv^.z+pv2^.z)/2;
+
+      // Store segment index in vertexnum (using negative to distinguish from vertex grips)
+      pdesc.vertexnum:=-1000-i;  // Negative offset to distinguish midpoint grips
+      pdesc.attr:=[CPA_Strech];
+      pdesc.worldcoord:=midpoint;
+      PSelectedObjDesc(tdesc)^.pcontrolpoint^.PushBackData(pdesc);
+      Inc(pv);
+    end;
   end;
 end;
 

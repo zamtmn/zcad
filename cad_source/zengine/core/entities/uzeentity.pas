@@ -375,8 +375,7 @@ var
   oldValue:TActuality;
 begin
   oldValue:=Visible;
-  if (self.vp.Layer._on) or
-     (uppercase(self.vp.Layer.Name) = LNSysDefpoints) then
+  if (self.vp.Layer._on) then
     Visible:=Actuality.visibleactualy
   else
     Visible:=0;

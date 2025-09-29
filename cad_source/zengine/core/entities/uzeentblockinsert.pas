@@ -190,17 +190,35 @@ function GDBObjBlockInsert.CalcActualVisible(const Actuality:TVisActuality):bool
 var
   oldValue:TActuality;
   q:boolean;
+  pobj:PGDBObjEntity;
+  ir:itrec;
+  hasVisibleChildren:boolean;
 begin
-  // Blocks themselves are always considered visible regardless of their layer
-  // This matches AutoCAD behavior where blocks on disabled layers still show
-  // their contents if the contents are on visible layers
-  oldValue:=Visible;
-  Visible:=Actuality.visibleactualy;  // Always set block as visible
-  Result:=oldValue<>Visible;
-
-  // Now check child entities - they will check their own layer visibility normally
+  // First update child entity visibility
   q:=ConstObjArray.CalcActualVisible(Actuality);
-  Result:=Result or q;
+
+  // Check if any child entities are visible
+  hasVisibleChildren:=false;
+  pobj:=ConstObjArray.beginiterate(ir);
+  if pobj<>nil then
+    repeat
+      if pobj^.Visible<>0 then begin
+        hasVisibleChildren:=true;
+        break;
+      end;
+      pobj:=ConstObjArray.iterate(ir);
+    until pobj=nil;
+
+  // Block visibility depends on whether it has visible children
+  // This matches AutoCAD behavior: blocks on disabled layers show their
+  // contents if those contents are on visible layers
+  oldValue:=Visible;
+  if hasVisibleChildren then
+    Visible:=Actuality.visibleactualy  // Block is visible if it has visible children
+  else
+    Visible:=0;  // Block is not visible if no children are visible
+
+  Result:=(oldValue<>Visible) or q;
 end;
 
 procedure GDBObjBlockInsert.AddOnTrackAxis(var posr:os_record;

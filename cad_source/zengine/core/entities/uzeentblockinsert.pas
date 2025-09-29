@@ -69,6 +69,8 @@ type
       const processaxis:taddotrac);virtual;
     procedure FormatEntity(var drawing:TDrawingDef;
       var DC:TDrawContext;Stage:TEFStages=EFAllStages);virtual;
+    function CalcActualVisible(
+      const Actuality:TVisActuality):boolean;virtual;
 
     function getrot:double;virtual;
     procedure setrot(r:double);virtual;
@@ -182,6 +184,14 @@ begin
   //self.BuildGeometry(drawing); //fix https://github.com/zamtmn/zcad/issues/17
   if assigned(EntExtensions) then
     EntExtensions.RunOnAfterEntityFormat(@self,drawing,DC);
+end;
+
+function GDBObjBlockInsert.CalcActualVisible(const Actuality:TVisActuality):boolean;
+begin
+  // Blocks don't check their own layer visibility - only their child entities matter
+  // This matches AutoCAD behavior where blocks on disabled layers still show
+  // their contents if the contents are on visible layers
+  Result:=ConstObjArray.CalcActualVisible(Actuality);
 end;
 
 procedure GDBObjBlockInsert.AddOnTrackAxis(var posr:os_record;

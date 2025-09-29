@@ -47,6 +47,8 @@ type
 var
   StretchComMode:TStretchComMode;
 
+procedure selectpoints; forward;
+
 procedure Stretch_com_CommandStart(const Context:TZCADCommandContext;Operands:pansichar);
 begin
   // Check if entities are already selected

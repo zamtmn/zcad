@@ -206,7 +206,7 @@ begin
   pobj:=ConstObjArray.beginiterate(ir);
   if pobj<>nil then
     repeat
-      if pobj^.Visible<>0 then begin
+      if pobj^.Visible=Actuality.visibleactualy then begin
         hasVisibleChildren:=true;
         break;
       end;

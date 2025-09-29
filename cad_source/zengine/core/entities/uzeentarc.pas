@@ -139,31 +139,54 @@ end;
 
 procedure GDBObjARC.transform;
 var
-  sav,eav,pins:gdbvertex;
+  rotAngle:double;
+  determinant:double;
+  tempAngle:double;
 begin
-  precalc;
-  if t_matrix.mtr[0].v[0]*t_matrix.mtr[1].v[1]*t_matrix.mtr[2].v[2]<eps then begin
-    sav:=q2;
-    eav:=q0;
-  end else begin
-    sav:=q0;
-    eav:=q2;
-  end;
-  pins:=P_insert_in_WCS;
-  sav:=VectorTransform3D(sav,t_matrix);
-  eav:=VectorTransform3D(eav,t_matrix);
-  pins:=VectorTransform3D(pins,t_matrix);
+  // Call inherited to transform the object matrix
   inherited;
-  sav:=NormalizeVertex(VertexSub(sav,pins));
-  eav:=NormalizeVertex(VertexSub(eav,pins));
 
-  StartAngle:=TwoVectorAngle(_X_yzVertex,sav);
-  if sav.y<eps then
-    StartAngle:=2*pi-StartAngle;
+  // For 2D rotation around Z-axis, extract rotation angle from the transformation matrix
+  // The rotation angle can be extracted from the upper-left 2x2 submatrix
+  // For a rotation matrix: [cos(θ) -sin(θ)]
+  //                        [sin(θ)  cos(θ)]
+  // We can get θ using atan2(sin(θ), cos(θ))
 
-  EndAngle:=TwoVectorAngle(_X_yzVertex,eav);
-  if eav.y<eps then
-    EndAngle:=2*pi-EndAngle;
+  // Check if this is a 2D transformation in the XY plane (Z components should be unchanged)
+  if (abs(t_matrix.mtr[2].v[0]) < eps) and (abs(t_matrix.mtr[2].v[1]) < eps) and
+     (abs(t_matrix.mtr[2].v[2] - 1) < eps) then begin
+
+    // Extract the rotation angle from the transformation matrix
+    rotAngle := arctan2(t_matrix.mtr[1].v[0], t_matrix.mtr[0].v[0]);
+
+    // Check for reflection by computing the determinant of the 2x2 upper-left submatrix
+    determinant := t_matrix.mtr[0].v[0] * t_matrix.mtr[1].v[1] -
+                   t_matrix.mtr[0].v[1] * t_matrix.mtr[1].v[0];
+
+    if determinant > 0 then begin
+      // Pure rotation, no reflection
+      StartAngle := StartAngle + rotAngle;
+      EndAngle := EndAngle + rotAngle;
+    end else begin
+      // Reflection detected, need to handle angles differently
+      // For reflection, angles are reversed
+      tempAngle := StartAngle;
+      StartAngle := -EndAngle + 2 * rotAngle;
+      EndAngle := -tempAngle + 2 * rotAngle;
+    end;
+
+    // Normalize angles to [0, 2π] range
+    while StartAngle < 0 do
+      StartAngle := StartAngle + 2 * pi;
+    while StartAngle >= 2 * pi do
+      StartAngle := StartAngle - 2 * pi;
+
+    while EndAngle < 0 do
+      EndAngle := EndAngle + 2 * pi;
+    while EndAngle >= 2 * pi do
+      EndAngle := EndAngle - 2 * pi;
+  end;
+  // For 3D transformations, we keep the angles unchanged as the arc is transformed in 3D space
 end;
 
 procedure GDBObjARC.ReCalcFromObjMatrix;

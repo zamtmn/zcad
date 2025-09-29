@@ -327,9 +327,9 @@ end;
 
 procedure GDBObjLWpolyline.rtmodifyonepoint(const rtmod:TRTModifyData);
 var
-  vertexnumber:integer;
+  vertexnumber,segmentindex:integer;
   tv,wwc:gdbvertex;
-
+  newvertex2d:GDBVertex2D;
   M:DMatrix4D;
 begin
   vertexnumber:=rtmod.point.vertexnum;
@@ -337,26 +337,63 @@ begin
   m:=self.ObjMatrix;
   uzegeometry.MatrixInvert(m);
 
-
   tv:=rtmod.dist;
   wwc:=rtmod.point.worldcoord;
   wwc:=VertexAdd(wwc,tv);
   wwc:=uzegeometry.VectorTransform3D(wwc,m);
 
+  // Check if this is a midpoint grip (negative vertexnum)
+  if vertexnumber<-999 then begin
+    // This is a midpoint grip - insert a new vertex
+    segmentindex:=-(vertexnumber+1000);  // Extract segment index
 
-  GDBPolyline2DArray.PTArr(Vertex2D_in_OCS_Array.parray)^[vertexnumber].x:=wwc.x;
-  GDBPolyline2DArray.PTArr(Vertex2D_in_OCS_Array.parray)^[vertexnumber].y:=wwc.y;
+    // Create new 2D vertex
+    newvertex2d.x:=wwc.x;
+    newvertex2d.y:=wwc.y;
+
+    // Insert vertex after the segment start vertex
+    Vertex2D_in_OCS_Array.InsertElement(segmentindex+1,newvertex2d);
+  end else begin
+    // This is a regular vertex grip - modify existing vertex
+    GDBPolyline2DArray.PTArr(Vertex2D_in_OCS_Array.parray)^[vertexnumber].x:=wwc.x;
+    GDBPolyline2DArray.PTArr(Vertex2D_in_OCS_Array.parray)^[vertexnumber].y:=wwc.y;
+  end;
 end;
 
 procedure GDBObjLWpolyline.remaponecontrolpoint(pdesc:pcontrolpointdesc;
   ProjectProc:GDBProjectProc);
 var
-  vertexnumber:integer;
+  vertexnumber,segmentindex:integer;
+  pv,pv2:pGDBvertex;
   tv:GDBvertex;
 begin
   vertexnumber:=pdesc^.vertexnum;
-  pdesc.worldcoord:=GDBPoint3dArray.PTArr(Vertex3D_in_WCS_Array.parray)^
-    [vertexnumber];
+
+  // Check if this is a midpoint grip (negative vertexnum)
+  if vertexnumber<-999 then begin
+    // This is a midpoint grip - calculate midpoint position
+    segmentindex:=-(vertexnumber+1000);  // Extract segment index
+
+    // Get the two vertices of the segment
+    if segmentindex<Vertex3D_in_WCS_Array.Count-1 then begin
+      pv:=Vertex3D_in_WCS_Array.GetDataMutable(segmentindex);
+      pv2:=Vertex3D_in_WCS_Array.GetDataMutable(segmentindex+1);
+    end else begin
+      // This is the closing segment
+      pv:=Vertex3D_in_WCS_Array.GetDataMutable(Vertex3D_in_WCS_Array.Count-1);
+      pv2:=Vertex3D_in_WCS_Array.GetDataMutable(0);
+    end;
+
+    // Calculate midpoint
+    pdesc.worldcoord.x:=(pv^.x+pv2^.x)/2;
+    pdesc.worldcoord.y:=(pv^.y+pv2^.y)/2;
+    pdesc.worldcoord.z:=(pv^.z+pv2^.z)/2;
+  end else begin
+    // This is a regular vertex grip
+    pdesc.worldcoord:=GDBPoint3dArray.PTArr(Vertex3D_in_WCS_Array.parray)^
+      [vertexnumber];
+  end;
+
   ProjectProc(pdesc.worldcoord,tv);
   pdesc.dispcoord:=ToVertex2DI(tv);
 end;
@@ -364,20 +401,62 @@ end;
 procedure GDBObjLWpolyline.AddControlpoints;
 var
   pdesc:controlpointdesc;
-  i:integer;
-  pv:pGDBvertex;
+  i,segmentcount:integer;
+  pv,pv2:pGDBvertex;
+  midpoint:GDBVertex;
 begin
-  PSelectedObjDesc(tdesc)^.pcontrolpoint^.init(Vertex3D_in_WCS_Array.Count);
-  pv:=Vertex3D_in_WCS_Array.GetParrayAsPointer;
+  // Calculate total number of control points (vertices + midpoints)
+  segmentcount:=Vertex3D_in_WCS_Array.Count;
+  if closed and (Vertex3D_in_WCS_Array.Count>2) then
+    segmentcount:=segmentcount+Vertex3D_in_WCS_Array.Count  // For closed: each vertex + each segment midpoint
+  else if Vertex3D_in_WCS_Array.Count>1 then
+    segmentcount:=segmentcount+Vertex3D_in_WCS_Array.Count-1;  // For open: each vertex + each segment midpoint
+
+  PSelectedObjDesc(tdesc)^.pcontrolpoint^.init(segmentcount);
   pdesc.selected:=False;
   pdesc.PDrawable:=nil;
 
+  // Add vertex control points
+  pv:=Vertex3D_in_WCS_Array.GetParrayAsPointer;
   for i:=0 to Vertex3D_in_WCS_Array.Count-1 do begin
     pdesc.vertexnum:=i;
     pdesc.attr:=[CPA_Strech];
     pdesc.worldcoord:=pv^;
     PSelectedObjDesc(tdesc)^.pcontrolpoint^.PushBackData(pdesc);
     Inc(pv);
+  end;
+
+  // Add midpoint control points for each segment
+  pv:=Vertex3D_in_WCS_Array.GetParrayAsPointer;
+  for i:=0 to Vertex3D_in_WCS_Array.Count-2 do begin
+    pv2:=pv;
+    Inc(pv2);
+    // Calculate midpoint
+    midpoint.x:=(pv^.x+pv2^.x)/2;
+    midpoint.y:=(pv^.y+pv2^.y)/2;
+    midpoint.z:=(pv^.z+pv2^.z)/2;
+
+    // Store segment index in vertexnum (using negative to distinguish from vertex grips)
+    pdesc.vertexnum:=-1000-i;  // Negative offset to distinguish midpoint grips
+    pdesc.attr:=[CPA_Strech];
+    pdesc.worldcoord:=midpoint;
+    PSelectedObjDesc(tdesc)^.pcontrolpoint^.PushBackData(pdesc);
+    Inc(pv);
+  end;
+
+  // Add midpoint for closing segment if closed
+  if closed and (Vertex3D_in_WCS_Array.Count>2) then begin
+    pv:=Vertex3D_in_WCS_Array.GetDataMutable(Vertex3D_in_WCS_Array.Count-1);
+    pv2:=Vertex3D_in_WCS_Array.GetParrayAsPointer;
+    // Calculate midpoint of closing segment
+    midpoint.x:=(pv^.x+pv2^.x)/2;
+    midpoint.y:=(pv^.y+pv2^.y)/2;
+    midpoint.z:=(pv^.z+pv2^.z)/2;
+
+    pdesc.vertexnum:=-1000-(Vertex3D_in_WCS_Array.Count-1);  // Negative offset for last segment
+    pdesc.attr:=[CPA_Strech];
+    pdesc.worldcoord:=midpoint;
+    PSelectedObjDesc(tdesc)^.pcontrolpoint^.PushBackData(pdesc);
   end;
 end;
 

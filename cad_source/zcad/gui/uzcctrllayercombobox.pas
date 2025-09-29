@@ -509,8 +509,8 @@ begin
       sLV.Items.Item[n].SubItems.Add('');
       ObnovitItem(sLV.Items.Item[n],LayerArray[n]);
     end;
-    sLV.SortType:=stBoth;
     sLV.EndUpdate;
+    sLV.SortType:=stBoth;
   end;
 end;
 

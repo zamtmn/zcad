@@ -20,10 +20,10 @@ unit uzglviewareaabstract;
 {$INCLUDE zengineconfig.inc}
 interface
 uses
-     UGDBOpenArrayOfPV,uzgldrawerabstract,uzeentgenericsubentry,//uzbtypes,
+     UGDBOpenArrayOfPV,uzgldrawerabstract,uzeentgenericsubentry,uzbtypes,
      uzglviewareadata,uzgldrawcontext,UGDBPoint3DArray,uzeentitiestree,uzegeometry,uzedrawingabstract,
      uzegeometrytypes,sysutils,
-     ExtCtrls,Controls,Classes,{$IFDEF DELPHI}Types,Messages,Graphics,{$ENDIF}{$IFNDEF DELPHI}LCLType,{$ENDIF}Forms,uzeentity;
+     ExtCtrls,Controls,Classes,{$IFDEF DELPHI}Types,Messages,Graphics,{$ENDIF}{$IFNDEF DELPHI}LCLType,{$ENDIF}uzeentity;
 
 type
 {NEEDFIXFORDELPHI}
@@ -157,9 +157,9 @@ function CreateFaceRC:TDrawContext;
 begin
   result.Subrender:=0;
   result.Selected:=false;
-  result.DrawingContext.VActuality.VisibleActualy:=-1;
-  result.DrawingContext.VActuality.InfrustumActualy:=-1;
-  result.DrawingContext.DRAWCOUNT:=-1;
+  result.DrawingContext.VActuality.VisibleActualy:=NotActual;
+  result.DrawingContext.VActuality.InfrustumActualy:=NotActual;
+  result.DrawingContext.DRAWCOUNT:=NotActual;
   result.DrawingContext.SysLayer:=nil;
   result.MaxDetail:=false;
   result.LOD:=LODCalculatedDetail;

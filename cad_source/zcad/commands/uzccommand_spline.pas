@@ -49,43 +49,43 @@ procedure InteractiveSplineManipulator(
 var
   i:integer;
   knotValue:single;
-  data:TSplineInteractiveData absolute PInteractiveData;
+  //data:TSplineInteractiveData absolute PInteractiveData;
 begin
-  if data.pspline=nil then
+  if PInteractiveData^.pspline=nil then
     exit;
 
   // Очищаем старые контрольные точки и узлы
-  data.pspline^.ControlPoints.clear;
-  data.pspline^.Knots.Clear;
+  PInteractiveData^.pspline^.ControlArrayInOCS.clear;
+  PInteractiveData^.pspline^.Knots.Clear;
 
   // Добавляем все сохраненные точки
-  for i:=0 to data.points.Count-1 do
-    data.pspline^.AddVertex(data.points.getData(i)^);
+  for i:=0 to PInteractiveData^.points.Count-1 do
+    PInteractiveData^.pspline^.AddVertex(PInteractiveData^.points.getData(i));
 
   // Добавляем текущую точку (preview)
   if not Click then
-    data.pspline^.AddVertex(Point);
+    PInteractiveData^.pspline^.AddVertex(Point);
 
   // Генерируем узловой вектор для текущего количества точек
-  if data.pspline^.ControlPoints.Count >= 2 then begin
+  if PInteractiveData^.pspline^.ControlArrayInOCS.Count >= 2 then begin
     // Добавляем начальные узлы (повторяем degree+1 раз)
-    for i:=0 to data.pspline^.Degree do
-      data.pspline^.Knots.PushBackData(0.0);
+    for i:=0 to PInteractiveData^.pspline^.Degree do
+      PInteractiveData^.pspline^.Knots.PushBackData(0.0);
 
     // Добавляем внутренние узлы
-    for i:=1 to data.pspline^.ControlPoints.Count-data.pspline^.Degree-1 do begin
-      knotValue:=i/(data.pspline^.ControlPoints.Count-data.pspline^.Degree);
-      data.pspline^.Knots.PushBackData(knotValue);
+    for i:=1 to PInteractiveData^.pspline^.ControlArrayInOCS.Count-PInteractiveData^.pspline^.Degree-1 do begin
+      knotValue:=i/(PInteractiveData^.pspline^.ControlArrayInOCS.Count-PInteractiveData^.pspline^.Degree);
+      PInteractiveData^.pspline^.Knots.PushBackData(knotValue);
     end;
 
     // Добавляем конечные узлы (повторяем degree+1 раз)
-    for i:=0 to data.pspline^.Degree do
-      data.pspline^.Knots.PushBackData(1.0);
+    for i:=0 to PInteractiveData^.pspline^.Degree do
+      PInteractiveData^.pspline^.Knots.PushBackData(1.0);
   end;
 
   // Обновляем примитив
-  zcSetEntPropFromCurrentDrawingProp(data.pspline);
-  data.pspline^.YouChanged(drawings.GetCurrentDWG^);
+  zcSetEntPropFromCurrentDrawingProp(PInteractiveData^.pspline);
+  PInteractiveData^.pspline^.YouChanged(drawings.GetCurrentDWG^);
 end;
 
 function InteractiveDrawSpline(const Context:TZCADCommandContext):TCommandResult;
@@ -127,12 +127,12 @@ begin
     // Создаем финальный сплайн если есть минимум 2 точки
     if interactiveData.points.Count >= 2 then begin
       // Очищаем временный сплайн и заполняем финальными данными
-      interactiveData.pspline^.ControlPoints.clear;
+      interactiveData.pspline^.ControlArrayInOCS.clear;
       interactiveData.pspline^.Knots.Clear;
 
       // Добавляем контрольные точки
       for i:=0 to interactiveData.points.Count-1 do
-        interactiveData.pspline^.AddVertex(interactiveData.points.getData(i)^);
+        interactiveData.pspline^.AddVertex(interactiveData.points.getData(i));
 
       // Создаем узловой вектор (uniform knot vector)
       for i:=0 to interactiveData.pspline^.Degree do

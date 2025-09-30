@@ -36,6 +36,7 @@ uses
   uzclog,
   uzegeometrytypes,
   uzegeometry,
+  uzcstrconsts,
   uzccommand_selectframe,uzccommand_ondrawinged;
 
 implementation
@@ -46,10 +47,23 @@ type
 var
   StretchComMode:TStretchComMode;
 
+procedure selectpoints; forward;
+
 procedure Stretch_com_CommandStart(const Context:TZCADCommandContext;Operands:pansichar);
 begin
-  StretchComMode:=SM_GetEnts;
-  FrameEdit_com_CommandStart(Context,Operands);
+  // Check if entities are already selected
+  if drawings.GetCurrentDWG.wa.param.seldesc.Selectedobjcount > 0 then begin
+    // If entities are already selected, skip entity selection and go directly to stretching
+    StretchComMode:=SM_FirstPoint;
+    drawings.GetCurrentDWG.wa.SetMouseMode(MGet3DPoint or MMoveCamera or MRotateCamera);
+    selectpoints;  // Highlight control points of selected entities
+    zcUI.Do_GUIaction(nil,zcMsgUIActionRedrawContent);
+    zcUI.TextMessage(rscmFirstPoint,TMWOHistoryOut);
+  end else begin
+    // No entities selected, proceed with normal entity selection
+    StretchComMode:=SM_GetEnts;
+    FrameEdit_com_CommandStart(Context,Operands);
+  end;
 end;
 
 function Stretch_com_BeforeClick(const Context:TZCADCommandContext;wc:GDBvertex;

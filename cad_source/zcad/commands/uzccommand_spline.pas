@@ -30,72 +30,137 @@ uses
   uzccommandsmanager,
   uzeentspline,uzeentity,uzeentityfactory,
   uzcutils,
+  uzcdrawings,
   UGDBPoint3DArray;
+
+type
+  PSplineInteractiveData=^TSplineInteractiveData;
+  TSplineInteractiveData=record
+    pspline:PGDBObjSpline;
+    points:GDBPoint3dArray;
+  end;
 
 implementation
 
+procedure InteractiveSplineManipulator(
+  const PInteractiveData:PSplineInteractiveData;
+  Point:GDBVertex;
+  Click:boolean);
+var
+  i:integer;
+  knotValue:single;
+  data:TSplineInteractiveData absolute PInteractiveData;
+begin
+  if data.pspline=nil then
+    exit;
+
+  // Очищаем старые контрольные точки и узлы
+  data.pspline^.ControlPoints.clear;
+  data.pspline^.Knots.Clear;
+
+  // Добавляем все сохраненные точки
+  for i:=0 to data.points.Count-1 do
+    data.pspline^.AddVertex(data.points.getData(i)^);
+
+  // Добавляем текущую точку (preview)
+  if not Click then
+    data.pspline^.AddVertex(Point);
+
+  // Генерируем узловой вектор для текущего количества точек
+  if data.pspline^.ControlPoints.Count >= 2 then begin
+    // Добавляем начальные узлы (повторяем degree+1 раз)
+    for i:=0 to data.pspline^.Degree do
+      data.pspline^.Knots.PushBackData(0.0);
+
+    // Добавляем внутренние узлы
+    for i:=1 to data.pspline^.ControlPoints.Count-data.pspline^.Degree-1 do begin
+      knotValue:=i/(data.pspline^.ControlPoints.Count-data.pspline^.Degree);
+      data.pspline^.Knots.PushBackData(knotValue);
+    end;
+
+    // Добавляем конечные узлы (повторяем degree+1 раз)
+    for i:=0 to data.pspline^.Degree do
+      data.pspline^.Knots.PushBackData(1.0);
+  end;
+
+  // Обновляем примитив
+  zcSetEntPropFromCurrentDrawingProp(data.pspline);
+  data.pspline^.YouChanged(drawings.GetCurrentDWG^);
+end;
+
 function InteractiveDrawSpline(const Context:TZCADCommandContext):TCommandResult;
 var
-  pspline:PGDBObjSpline;
-  points:GDBPoint3dArray;
-  p1:gdbvertex;
+  interactiveData:TSplineInteractiveData;
+  p1,p2:gdbvertex;
   i:integer;
   knotValue:single;
 begin
   Result:=cmd_ok;
-  points.init(100);
+  interactiveData.points.init(100);
+  interactiveData.pspline:=nil;
 
   // Запрос первой контрольной точки
   if commandmanager.get3dpoint(rscmSpecifyFirstPoint,p1)=GRNormal then begin
-    points.PushBackData(p1);
+    interactiveData.points.PushBackData(p1);
 
-    // Запрос следующих контрольных точек
+    // Создаем и инициализируем примитив сплайна для предварительного просмотра
+    interactiveData.pspline:=AllocEnt(GDBSplineID);
+    interactiveData.pspline^.init(nil,nil,LnWtByLayer,false);
+    interactiveData.pspline^.Degree:=3;
+
+    // Добавляем сплайн в конструкторскую область для визуализации
+    zcAddEntToCurrentDrawingConstructRoot(interactiveData.pspline);
+
+    // Запрос следующих контрольных точек с интерактивным отображением
     while True do begin
-      if commandmanager.Get3DPointWithLineFromBase(rscmSpecifyNextPoint,p1,p1)=GRNormal then begin
-        points.PushBackData(p1);
+      // Обновляем сплайн перед запросом следующей точки
+      InteractiveSplineManipulator(@interactiveData,p1,False);
+
+      if commandmanager.Get3DPointInteractive(rscmSpecifyNextPoint,p2,
+         @InteractiveSplineManipulator,@interactiveData)=GRNormal then begin
+        interactiveData.points.PushBackData(p2);
+        p1:=p2;
       end else
         break;
     end;
 
-    // Создаем сплайн только если есть минимум 2 точки
-    if points.Count >= 2 then begin
-      // Создаем и инициализируем примитив сплайна
-      pspline:=AllocEnt(GDBSplineID);
-      pspline^.init(nil,nil,LnWtByLayer,false);
-
-      // Устанавливаем степень сплайна (кубический сплайн)
-      pspline^.Degree:=3;
+    // Создаем финальный сплайн если есть минимум 2 точки
+    if interactiveData.points.Count >= 2 then begin
+      // Очищаем временный сплайн и заполняем финальными данными
+      interactiveData.pspline^.ControlPoints.clear;
+      interactiveData.pspline^.Knots.Clear;
 
       // Добавляем контрольные точки
-      for i:=0 to points.Count-1 do
-        pspline^.AddVertex(points.getData(i)^);
+      for i:=0 to interactiveData.points.Count-1 do
+        interactiveData.pspline^.AddVertex(interactiveData.points.getData(i)^);
 
       // Создаем узловой вектор (uniform knot vector)
-      // Для кубического сплайна (degree=3) с n контрольными точками
-      // нужно n+degree+1 узлов
-      for i:=0 to pspline^.Degree do
-        pspline^.Knots.PushBackData(0.0);
+      for i:=0 to interactiveData.pspline^.Degree do
+        interactiveData.pspline^.Knots.PushBackData(0.0);
 
-      for i:=1 to points.Count-pspline^.Degree-1 do begin
-        knotValue:=i/(points.Count-pspline^.Degree);
-        pspline^.Knots.PushBackData(knotValue);
+      for i:=1 to interactiveData.points.Count-interactiveData.pspline^.Degree-1 do begin
+        knotValue:=i/(interactiveData.points.Count-interactiveData.pspline^.Degree);
+        interactiveData.pspline^.Knots.PushBackData(knotValue);
       end;
 
-      for i:=0 to pspline^.Degree do
-        pspline^.Knots.PushBackData(1.0);
+      for i:=0 to interactiveData.pspline^.Degree do
+        interactiveData.pspline^.Knots.PushBackData(1.0);
 
-      // Присваиваем текущие цвет, толщину, и т.д. от настроек чертежа
-      zcSetEntPropFromCurrentDrawingProp(pspline);
+      // Присваиваем текущие свойства
+      zcSetEntPropFromCurrentDrawingProp(interactiveData.pspline);
 
-      // Добавляем в чертеж
-      zcAddEntToCurrentDrawingWithUndo(pspline);
-
-      // Перерисовываем
-      zcRedrawCurrentDrawing;
+      // Переносим из конструкторской области в чертеж
+      zcAddEntToCurrentDrawingWithUndo(interactiveData.pspline);
     end;
+
+    // Очищаем конструкторскую область
+    zcClearCurrentDrawingConstructRoot;
+
+    // Перерисовываем
+    zcRedrawCurrentDrawing;
   end;
 
-  points.done;
+  interactiveData.points.done;
 end;
 
 function DrawSpline_com(const Context:TZCADCommandContext;

@@ -4,7 +4,7 @@ program testzengine;
 
 uses
   //MemCheck,
-  Classes, consoletestrunner,Interfaces,
+  Classes, consoletestrunner,
   Logtest,BoundaryPathSimpletest,
   uzctEntityArc;
 

@@ -10,17 +10,12 @@ uses
   uzeentarc,
   uzedrawingsimple,
   uzgldrawcontext,
-  //uzcdrawings,
   uzegeometry,
   uzegeometrytypes,
-  uzeconsts,
-  uzestyleslayers;
-  //uzcutils;
-
-const
-  MaxVectorLength=10000000;
-  InitVectorLength=1;
-  NeedSum=49994984640401;
+  uzestyleslayers,
+  //todo: убрать зависимость от lcl
+  Interfaces//нужен, потому что uzedrawingsimple->uzglviewareaabstract->lcl
+  ;
 
 type
   TArcTest=class(TTestCase)
@@ -58,10 +53,10 @@ begin
   // Форматирование сущности
   arc^.formatEntity(drawing,dc);
 
-  WriteLn('Чертёж с дугой успешно создан!');
-  WriteLn('Центр дуги: (100, 100, 0)');
-  WriteLn('Радиус: 50');
-  WriteLn('Углы: от 0 до π радиан');
+  //WriteLn('Чертёж с дугой успешно создан!');
+  //WriteLn('Центр дуги: (100, 100, 0)');
+  //WriteLn('Радиус: 50');
+  //WriteLn('Углы: от 0 до π радиан');
 
   // Освобождение ресурсов
   drawing.done;

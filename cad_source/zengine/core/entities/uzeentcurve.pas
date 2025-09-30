@@ -439,53 +439,379 @@ begin
                                                 result:=false;
 end;
 
+//procedure GDBObjCurve.rtmodifyonepoint(const rtmod:TRTModifyData);
+//var vertexnumber:Integer;
+//begin
+//     vertexnumber:=rtmod.point.vertexnum;
+//     //pdesc.worldcoord:=PGDBArrayVertex(vertexarray.parray)^[vertexnumber];
+//     //pdesc.dispcoord.x:=round(PGDBArrayVertex2D(PProjPoint.parray)^[vertexnumber].x);
+//     //pdesc.dispcoord.y:=round(poglwnd^.height-PGDBArrayVertex2D(PProjPoint.parray)^[vertexnumber].y);
+//
+//     GDBPoint3dArray.PTArr(vertexarrayinocs.parray)^[vertexnumber]:=VertexAdd(rtmod.point.worldcoord, rtmod.dist);
+//end;
 procedure GDBObjCurve.rtmodifyonepoint(const rtmod:TRTModifyData);
-var vertexnumber:Integer;
+var
+    vertexnumber:Integer;
+    offset:gdbvertex;
+    closed: Boolean;
 begin
-     vertexnumber:=rtmod.point.vertexnum;
-     //pdesc.worldcoord:=PGDBArrayVertex(vertexarray.parray)^[vertexnumber];
-     //pdesc.dispcoord.x:=round(PGDBArrayVertex2D(PProjPoint.parray)^[vertexnumber].x);
-     //pdesc.dispcoord.y:=round(poglwnd^.height-PGDBArrayVertex2D(PProjPoint.parray)^[vertexnumber].y);
+    vertexnumber:=rtmod.point.vertexnum;
 
-     GDBPoint3dArray.PTArr(vertexarrayinocs.parray)^[vertexnumber]:=VertexAdd(rtmod.point.worldcoord, rtmod.dist);
+    // Определяем, замкнута ли полилиния
+    closed := false;
+    //if self is GDBObjPolyline then
+    //    closed := PGDBObjPolyline(@self)^.Closed;
+
+    if rtmod.point.pointtype = os_midle then
+    begin
+        // Для центральных точек смещаем обе соседние вершины
+        offset:=rtmod.dist;
+
+        // Смещаем обе вершины сегмента
+        if vertexnumber < VertexArrayInWCS.count-1 then
+        begin
+            GDBPoint3dArray.PTArr(vertexarrayinocs.parray)^[vertexnumber]:=
+                VertexAdd(GDBPoint3dArray.PTArr(vertexarrayinocs.parray)^[vertexnumber], offset);
+            GDBPoint3dArray.PTArr(vertexarrayinocs.parray)^[vertexnumber+1]:=
+                VertexAdd(GDBPoint3dArray.PTArr(vertexarrayinocs.parray)^[vertexnumber+1], offset);
+        end
+        else if closed then
+        begin
+            GDBPoint3dArray.PTArr(vertexarrayinocs.parray)^[vertexnumber]:=
+                VertexAdd(GDBPoint3dArray.PTArr(vertexarrayinocs.parray)^[vertexnumber], offset);
+            GDBPoint3dArray.PTArr(vertexarrayinocs.parray)^[0]:=
+                VertexAdd(GDBPoint3dArray.PTArr(vertexarrayinocs.parray)^[0], offset);
+        end;
+    end
+    else
+    begin
+        // Для обычных вершин - существующая логика
+        GDBPoint3dArray.PTArr(vertexarrayinocs.parray)^[vertexnumber]:=VertexAdd(rtmod.point.worldcoord, rtmod.dist);
+    end;
 end;
+//procedure GDBObjCurve.remaponecontrolpoint(pdesc:pcontrolpointdesc;ProjectProc:GDBProjectProc);
+//var
+//  vertexnumber:Integer;
+//  tv:GDBvertex;
+//begin
+//     vertexnumber:=pdesc^.vertexnum;
+//     pdesc.worldcoord:=GDBPoint3dArray.PTArr(VertexArrayInWCS.parray)^[vertexnumber];
+//     ProjectProc(pdesc.worldcoord,tv);
+//     pdesc.dispcoord:=ToVertex2DI(tv);
+//     //pdesc.dispcoord.x:=round(GDBPolyline2DArray.PTArr(PProjPoint.parray)^[vertexnumber].x);
+//     //pdesc.dispcoord.y:=round(GDBPolyline2DArray.PTArr(PProjPoint.parray)^[vertexnumber].y);
+//end;
 procedure GDBObjCurve.remaponecontrolpoint(pdesc:pcontrolpointdesc;ProjectProc:GDBProjectProc);
 var
   vertexnumber:Integer;
   tv:GDBvertex;
+  closed: Boolean;
 begin
-     vertexnumber:=pdesc^.vertexnum;
-     pdesc.worldcoord:=GDBPoint3dArray.PTArr(VertexArrayInWCS.parray)^[vertexnumber];
-     ProjectProc(pdesc.worldcoord,tv);
-     pdesc.dispcoord:=ToVertex2DI(tv);
-     //pdesc.dispcoord.x:=round(GDBPolyline2DArray.PTArr(PProjPoint.parray)^[vertexnumber].x);
-     //pdesc.dispcoord.y:=round(GDBPolyline2DArray.PTArr(PProjPoint.parray)^[vertexnumber].y);
+    vertexnumber:=pdesc^.vertexnum;
+
+    // Определяем, замкнута ли полилиния
+    closed := false;
+    //if self is GDBObjPolyline then
+    //    closed := PGDBObjPolyline(@self)^.Closed;
+
+    if pdesc^.pointtype = os_midle then
+    begin
+        // Для центральных точек вычисляем координаты между вершинами
+        if vertexnumber < VertexArrayInWCS.count-1 then
+            pdesc.worldcoord:=Vertexmorph(
+                GDBPoint3dArray.PTArr(VertexArrayInWCS.parray)^[vertexnumber],
+                GDBPoint3dArray.PTArr(VertexArrayInWCS.parray)^[vertexnumber+1], 0.5)
+        else if closed then
+            pdesc.worldcoord:=Vertexmorph(
+                GDBPoint3dArray.PTArr(VertexArrayInWCS.parray)^[vertexnumber],
+                GDBPoint3dArray.PTArr(VertexArrayInWCS.parray)^[0], 0.5);
+    end
+    else
+    begin
+        // Для обычных вершин
+        pdesc.worldcoord:=GDBPoint3dArray.PTArr(VertexArrayInWCS.parray)^[vertexnumber];
+    end;
+
+    ProjectProc(pdesc.worldcoord,tv);
+    pdesc.dispcoord:=ToVertex2DI(tv);
 end;
 procedure GDBObjCurve.addcontrolpoints;
 var pdesc:controlpointdesc;
     i:Integer;
-    //pv2d:pGDBvertex2d;
     pv:pGDBvertex;
+    totalPoints: Integer;
+    closed: Boolean;
+    nextVertex: GDBvertex;
+    firstVertex: GDBvertex;
 begin
-          PSelectedObjDesc(tdesc)^.pcontrolpoint^.init(VertexArrayInWCS.count);
-          {pv2d:=pprojpoint^.parray;}
-          pv:=VertexArrayInWCS.GetParrayAsPointer;
-          pdesc.selected:=false;
-          pdesc.PDrawable:=nil;
+    // Определяем, замкнута ли полилиния
+    closed := false;
+    //if GetObjTypeName = 'GDBObjPolyLine' then
+    //    closed := true;
 
-          for i:=0 to {pprojpoint}VertexArrayInWCS.count-1 do
-          begin
-               pdesc.vertexnum:=i;
-               pdesc.attr:=[CPA_Strech];
-               pdesc.worldcoord:=pv^;
-               (*pdesc.dispcoord.x:=round(pv2d^.x);
-               pdesc.dispcoord.y:=round({GDB.GetCurrentDWG.OGLwindow1.height-}pv2d.y);*)
-               PSelectedObjDesc(tdesc)^.pcontrolpoint^.PushBackData(pdesc);
-               inc(pv);
-               {inc(pv2d);}
-          end;
+    // Вычисляем общее количество точек
+    if closed then
+        totalPoints := VertexArrayInWCS.count * 2
+    else
+        totalPoints := VertexArrayInWCS.count + (VertexArrayInWCS.count - 1);
+
+    PSelectedObjDesc(tdesc)^.pcontrolpoint^.init(totalPoints);
+    pv:=VertexArrayInWCS.GetParrayAsPointer;
+    pdesc.selected:=false;
+    pdesc.PDrawable:=nil;
+
+    // Добавляем управляющие точки для вершин
+    for i:=0 to VertexArrayInWCS.count-1 do
+    begin
+        pdesc.vertexnum:=i;
+        pdesc.attr:=[CPA_Strech];
+        pdesc.pointtype:=os_vertex;
+        pdesc.worldcoord:=pv^;
+        PSelectedObjDesc(tdesc)^.pcontrolpoint^.PushBackData(pdesc);
+        inc(pv);
+    end;
+
+    // Добавляем центральные точки между вершинами
+    for i:=0 to VertexArrayInWCS.count-1 do
+    begin
+        if (not closed and (i < VertexArrayInWCS.count-1)) or
+           (closed) then
+        begin
+            pdesc.vertexnum:=i;
+            pdesc.attr:=[];
+            pdesc.pointtype:=os_midle;
+
+            // Вычисляем центр между текущей и следующей вершиной
+            if i < VertexArrayInWCS.count-1 then
+            begin
+                // Используем метод getData для безопасного доступа к элементам
+                pdesc.worldcoord:=Vertexmorph(
+                    VertexArrayInWCS.getData(i),
+                    VertexArrayInWCS.getData(i+1), 0.5);
+            end
+            else if closed then
+            begin
+                // Для замкнутой полилинии - между последней и первой вершиной
+                pdesc.worldcoord:=Vertexmorph(
+                    VertexArrayInWCS.getData(i),
+                    VertexArrayInWCS.getData(0), 0.5);
+            end;
+
+            PSelectedObjDesc(tdesc)^.pcontrolpoint^.PushBackData(pdesc);
+        end;
+    end;
 end;
+//procedure GDBObjCurve.addcontrolpoints;
+//var pdesc:controlpointdesc;
+//    i:Integer;
+//    pv:pGDBvertex;
+//    totalPoints: Integer;
+//    closed: Boolean;
+//    nextVertex: GDBvertex;
+//    firstVertex: GDBvertex;
+//begin
+//    // Определяем, замкнута ли полилиния
+//    closed := false;
+//    //if GetObjTypeName = 'GDBObjPolyLine' then
+//    //    closed := true; // Упрощенная проверка
+//
+//    // Вычисляем общее количество точек
+//    if closed then
+//        totalPoints := VertexArrayInWCS.count * 2
+//    else
+//        totalPoints := VertexArrayInWCS.count + (VertexArrayInWCS.count - 1);
+//
+//    PSelectedObjDesc(tdesc)^.pcontrolpoint^.init(totalPoints);
+//    pv:=VertexArrayInWCS.GetParrayAsPointer;
+//    pdesc.selected:=false;
+//    pdesc.PDrawable:=nil;
+//
+//    // Добавляем управляющие точки для вершин
+//    for i:=0 to VertexArrayInWCS.count-1 do
+//    begin
+//        pdesc.vertexnum:=i;
+//        pdesc.attr:=[CPA_Strech];
+//        pdesc.pointtype:=os_vertex;
+//        pdesc.worldcoord:=pv^;
+//        PSelectedObjDesc(tdesc)^.pcontrolpoint^.PushBackData(pdesc);
+//        inc(pv);
+//    end;
+//
+//    // Добавляем центральные точки между вершинами
+//    for i:=0 to VertexArrayInWCS.count-1 do
+//    begin
+//        if (not closed and (i < VertexArrayInWCS.count-1)) or
+//           (closed) then
+//        begin
+//            pdesc.vertexnum:=i;
+//            pdesc.attr:=[];
+//            pdesc.pointtype:=os_midle;
+//
+//            // Получаем текущую вершину
+//            pv := VertexArrayInWCS.GetParrayAsPointer;
+//            inc(pv, i);
+//
+//            // Вычисляем центр между текущей и следующей вершиной
+//            if i < VertexArrayInWCS.count-1 then
+//            begin
+//                // Следующая вершина
+//                inc(pv);
+//                nextVertex := pv^;
+//                dec(pv);
+//                pdesc.worldcoord:=Vertexmorph(pv^, nextVertex, 0.5);
+//            end
+//            else if closed then
+//            begin
+//                // Первая вершина для замкнутой полилинии
+//                firstVertex := VertexArrayInWCS.GetParrayAsPointer^;
+//                pdesc.worldcoord:=Vertexmorph(pv^, firstVertex, 0.5);
+//            end;
+//
+//            PSelectedObjDesc(tdesc)^.pcontrolpoint^.PushBackData(pdesc);
+//        end;
+//    end;
+//end;
 
+//procedure GDBObjCurve.addcontrolpoints;
+//var pdesc:controlpointdesc;
+//    i:Integer;
+//    pv:pGDBvertex;
+//    totalPoints: Integer;
+//    closed: Boolean;
+//begin
+//    // Определяем, замкнута ли полилиния (для GDBObjPolyline)
+//    closed := false;
+//    //if self is GDBObjPolyline then
+//    //    closed := PGDBObjPolyline(@self)^.Closed;
+//
+//    // Вычисляем общее количество точек: вершины + центральные точки
+//    if closed then
+//        totalPoints := VertexArrayInWCS.count * 2  // Для замкнутых: каждая вершина + центр каждого сегмента
+//    else
+//        totalPoints := VertexArrayInWCS.count + (VertexArrayInWCS.count - 1); // Для незамкнутых: вершины + центры сегментов
+//
+//    PSelectedObjDesc(tdesc)^.pcontrolpoint^.init(totalPoints);
+//    pv:=VertexArrayInWCS.GetParrayAsPointer;
+//    pdesc.selected:=false;
+//    pdesc.PDrawable:=nil;
+//
+//    // Добавляем управляющие точки для вершин
+//    for i:=0 to VertexArrayInWCS.count-1 do
+//    begin
+//        pdesc.vertexnum:=i;
+//        pdesc.attr:=[CPA_Strech];
+//        pdesc.pointtype:=os_vertex;
+//        pdesc.worldcoord:=pv^;
+//        PSelectedObjDesc(tdesc)^.pcontrolpoint^.PushBackData(pdesc);
+//        inc(pv);
+//    end;
+//
+//    // Добавляем центральные точки между вершинами
+//    for i:=0 to VertexArrayInWCS.count-1 do
+//    begin
+//        if (not closed and (i < VertexArrayInWCS.count-1)) or
+//           (closed) then
+//        begin
+//            pdesc.vertexnum:=i;
+//            pdesc.attr:=[];
+//            pdesc.pointtype:=os_midle;
+//
+//            // Получаем текущую вершину
+//            pv := VertexArrayInWCS.GetParrayAsPointer;
+//            inc(pv, i);
+//
+//            // Вычисляем центр между текущей и следующей вершиной
+//            if i < VertexArrayInWCS.count-1 then
+//            begin
+//                // Следующая вершина
+//                inc(pv);
+//                nextVertex := pv^;
+//                dec(pv);
+//                pdesc.worldcoord:=Vertexmorph(pv^, nextVertex, 0.5);
+//            end
+//            else if closed then
+//            begin
+//                // Первая вершина для замкнутой полилинии
+//                firstVertex := VertexArrayInWCS.GetParrayAsPointer^;
+//                pdesc.worldcoord:=Vertexmorph(pv^, firstVertex, 0.5);
+//            end;
+//
+//            PSelectedObjDesc(tdesc)^.pcontrolpoint^.PushBackData(pdesc);
+//        end;
+//    end;
+//end;
+//
+////procedure GDBObjCurve.addcontrolpoints;
+////var pdesc:controlpointdesc;
+////    i:Integer;
+////    //pv2d:pGDBvertex2d;
+////    pv:pGDBvertex;
+////begin
+////          PSelectedObjDesc(tdesc)^.pcontrolpoint^.init(VertexArrayInWCS.count);
+////          {pv2d:=pprojpoint^.parray;}
+////          pv:=VertexArrayInWCS.GetParrayAsPointer;
+////          pdesc.selected:=false;
+////          pdesc.PDrawable:=nil;
+////
+////          for i:=0 to {pprojpoint}VertexArrayInWCS.count-1 do
+////          begin
+////               pdesc.vertexnum:=i;
+////               pdesc.attr:=[CPA_Strech];
+////               pdesc.worldcoord:=pv^;
+////               (*pdesc.dispcoord.x:=round(pv2d^.x);
+////               pdesc.dispcoord.y:=round({GDB.GetCurrentDWG.OGLwindow1.height-}pv2d.y);*)
+////               PSelectedObjDesc(tdesc)^.pcontrolpoint^.PushBackData(pdesc);
+////               inc(pv);
+////               {inc(pv2d);}
+////          end;
+////end;
+//
+//procedure GDBObjCurve.addcontrolpoints;
+//
+//var pdesc:controlpointdesc;
+//
+//    i:Integer;
+//
+//    //pv2d:pGDBvertex2d;
+//
+//    pv:pGDBvertex;
+//
+//begin
+//
+//          PSelectedObjDesc(tdesc)^.pcontrolpoint^.init(VertexArrayInWCS.count);
+//
+//          {pv2d:=pprojpoint^.parray;}
+//
+//          pv:=VertexArrayInWCS.GetParrayAsPointer;
+//
+//          pdesc.selected:=false;
+//
+//          pdesc.PDrawable:=nil;
+//
+//
+//          for i:=0 to {pprojpoint}VertexArrayInWCS.count-1 do
+//
+//          begin
+//
+//               pdesc.vertexnum:=i;
+//
+//               pdesc.attr:=[CPA_Strech];
+//
+//               pdesc.worldcoord:=pv^;
+//
+//               (*pdesc.dispcoord.x:=round(pv2d^.x);
+//
+//               pdesc.dispcoord.y:=round({GDB.GetCurrentDWG.OGLwindow1.height-}pv2d.y);*)
+//
+//               PSelectedObjDesc(tdesc)^.pcontrolpoint^.PushBackData(pdesc);
+//
+//               inc(pv);
+//
+//               {inc(pv2d);}
+//
+//          end;
+//
+//end;
 function GDBPoint3dArraygetsnapWOPProjPoint(const VertexArrayInWCS:GDBPoint3dArray; const snaparray:GDBVectorSnapArray; var osp:os_record;const closed:Boolean; const param:OGLWndtype; ProjectProc:GDBProjectProc;SnapMode:TGDBOSMode):Boolean;
 const pnum=8;
 var t,d,e:Double;

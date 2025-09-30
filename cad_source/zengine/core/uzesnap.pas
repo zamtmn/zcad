@@ -214,7 +214,8 @@ var
     os_intersection,
     os_apparentintersection,
     os_trace,
-    os_polymin:TSnapType;
+    os_polymin,
+    os_vertex:TSnapType;
 
 var
   SnapHandles:TTSnapType;

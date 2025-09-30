@@ -27,7 +27,7 @@ uses gzctnrVector,uzeentityfactory,uzeentsubordinated,
      UGDBPoint3DArray,UGDBPolyLine2DArray,
      uzctnrVectorBytes,uzbtypes,uzeentwithlocalcs,uzeconsts,math,
      gzctnrVectorTypes,uzegeometrytypes,uzeffdxfsupport,sysutils,
-     UGDBSelectedObjArray,uzMVReader,
+     UGDBSelectedObjArray,uzMVReader,uzeSnap,
      uzCtnrVectorpBaseEntity;
 type
 
@@ -382,6 +382,82 @@ begin
   GDBPolyline2DArray.PTArr(Vertex2D_in_OCS_Array.parray)^[vertexnumber].x:=wwc.x{VertexAdd(wwc,tv)};
   GDBPolyline2DArray.PTArr(Vertex2D_in_OCS_Array.parray)^[vertexnumber].y:=wwc.y;
 end;
+//procedure GDBObjLWpolyline.rtmodifyonepoint(const rtmod:TRTModifyData);
+//var
+//    vertexnumber:Integer;
+//    tv,wwc,offset:gdbvertex;
+//    M: DMatrix4D;
+//begin
+//    vertexnumber:=rtmod.point.vertexnum;
+//    m:=self.ObjMatrix;
+//    uzegeometry.MatrixInvert(m);
+//
+//    if rtmod.point.pointtype = os_midle then
+//    begin
+//        // Для центральных точек смещаем обе соседние вершины
+//        tv:=rtmod.dist;
+//        wwc:=rtmod.point.worldcoord;
+//        wwc:=VertexAdd(wwc,tv);
+//        wwc:=uzegeometry.VectorTransform3D(wwc,m);
+//
+//        // Вычисляем смещение для обеих вершин
+//        if vertexnumber < Vertex3D_in_WCS_Array.count-1 then
+//        begin
+//            offset:=VertexSub(wwc, Vertexmorph(
+//                GDBPolyline2DArray.PTArr(Vertex2D_in_OCS_Array.parray)^[vertexnumber],
+//                GDBPolyline2DArray.PTArr(Vertex2D_in_OCS_Array.parray)^[vertexnumber+1], 0.5));
+//
+//            GDBPolyline2DArray.PTArr(Vertex2D_in_OCS_Array.parray)^[vertexnumber].x:=
+//                GDBPolyline2DArray.PTArr(Vertex2D_in_OCS_Array.parray)^[vertexnumber].x + offset.x;
+//            GDBPolyline2DArray.PTArr(Vertex2D_in_OCS_Array.parray)^[vertexnumber].y:=
+//                GDBPolyline2DArray.PTArr(Vertex2D_in_OCS_Array.parray)^[vertexnumber].y + offset.y;
+//
+//            GDBPolyline2DArray.PTArr(Vertex2D_in_OCS_Array.parray)^[vertexnumber+1].x:=
+//                GDBPolyline2DArray.PTArr(Vertex2D_in_OCS_Array.parray)^[vertexnumber+1].x + offset.x;
+//            GDBPolyline2DArray.PTArr(Vertex2D_in_OCS_Array.parray)^[vertexnumber+1].y:=
+//                GDBPolyline2DArray.PTArr(Vertex2D_in_OCS_Array.parray)^[vertexnumber+1].y + offset.y;
+//        end;
+//    end
+//    else
+//    begin
+//        // Для обычных вершин - существующая логика
+//        tv:=rtmod.dist;
+//        wwc:=rtmod.point.worldcoord;
+//        wwc:=VertexAdd(wwc,tv);
+//        wwc:=uzegeometry.VectorTransform3D(wwc,m);
+//
+//        GDBPolyline2DArray.PTArr(Vertex2D_in_OCS_Array.parray)^[vertexnumber].x:=wwc.x;
+//        GDBPolyline2DArray.PTArr(Vertex2D_in_OCS_Array.parray)^[vertexnumber].y:=wwc.y;
+//    end;
+//end;
+//procedure GDBObjLWpolyline.remaponecontrolpoint(pdesc:pcontrolpointdesc;ProjectProc:GDBProjectProc);
+//var
+//  vertexnumber:Integer;
+//  tv:GDBvertex;
+//begin
+//    vertexnumber:=pdesc^.vertexnum;
+//
+//    if pdesc^.pointtype = os_midle then
+//    begin
+//        // Для центральных точек вычисляем координаты между вершинами
+//        if vertexnumber < Vertex3D_in_WCS_Array.count-1 then
+//            pdesc.worldcoord:=Vertexmorph(
+//                GDBPoint3dArray.PTArr(Vertex3D_in_WCS_Array.parray)^[vertexnumber],
+//                GDBPoint3dArray.PTArr(Vertex3D_in_WCS_Array.parray)^[vertexnumber+1], 0.5)
+//        else if Closed then
+//            pdesc.worldcoord:=Vertexmorph(
+//                GDBPoint3dArray.PTArr(Vertex3D_in_WCS_Array.parray)^[vertexnumber],
+//                GDBPoint3dArray.PTArr(Vertex3D_in_WCS_Array.parray)^[0], 0.5);
+//    end
+//    else
+//    begin
+//        // Для обычных вершин
+//        pdesc.worldcoord:=GDBPoint3dArray.PTArr(Vertex3D_in_WCS_Array.parray)^[vertexnumber];
+//    end;
+//
+//    ProjectProc(pdesc.worldcoord,tv);
+//    pdesc.dispcoord:=ToVertex2DI(tv);
+//end;
 procedure GDBObjLWpolyline.remaponecontrolpoint(pdesc:pcontrolpointdesc;ProjectProc:GDBProjectProc);
 var
   vertexnumber:Integer;
@@ -418,6 +494,56 @@ begin
                //inc(pv2d);
           end;
 end;
+//procedure GDBObjLWpolyline.AddControlpoints;
+//var pdesc:controlpointdesc;
+//    i:Integer;
+//    pv:pGDBvertex;
+//    totalPoints: Integer;
+//begin
+//    // Вычисляем общее количество точек: вершины + центральные точки
+//    if Closed then
+//        totalPoints := Vertex3D_in_WCS_Array.count * 2  // Для замкнутых: каждая вершина + центр каждого сегмента
+//    else
+//        totalPoints := Vertex3D_in_WCS_Array.count + (Vertex3D_in_WCS_Array.count - 1); // Для незамкнутых: вершины + центры сегментов
+//
+//    PSelectedObjDesc(tdesc)^.pcontrolpoint^.init(totalPoints);
+//    pv:=Vertex3D_in_WCS_Array.GetParrayAsPointer;
+//    pdesc.selected:=false;
+//    pdesc.PDrawable:=nil;
+//
+//    // Добавляем управляющие точки для вершин
+//    for i:=0 to Vertex3D_in_WCS_Array.count-1 do
+//    begin
+//        pdesc.vertexnum:=i;
+//        pdesc.attr:=[CPA_Strech];
+//        pdesc.pointtype:=os_vertex;
+//        pdesc.worldcoord:=pv^;
+//        PSelectedObjDesc(tdesc)^.pcontrolpoint^.PushBackData(pdesc);
+//        inc(pv);
+//    end;
+//
+//    // Добавляем центральные точки между вершинами
+//    pv:=Vertex3D_in_WCS_Array.GetParrayAsPointer;
+//    for i:=0 to Vertex3D_in_WCS_Array.count-1 do
+//    begin
+//        if (not Closed and (i < Vertex3D_in_WCS_Array.count-1)) or
+//           (Closed) then
+//        begin
+//            pdesc.vertexnum:=i; // Индекс первой вершины сегмента
+//            pdesc.attr:=[]; // Без CPA_Strech - это центральная точка
+//            pdesc.pointtype:=os_midle;
+//
+//            // Вычисляем центр между текущей и следующей вершиной
+//            if i < Vertex3D_in_WCS_Array.count-1 then
+//                pdesc.worldcoord:=Vertexmorph(pv^, (pv+1)^, 0.5)
+//            else if Closed then
+//                pdesc.worldcoord:=Vertexmorph(pv^, Vertex3D_in_WCS_Array.GetParrayAsPointer^, 0.5);
+//
+//            PSelectedObjDesc(tdesc)^.pcontrolpoint^.PushBackData(pdesc);
+//        end;
+//        inc(pv);
+//    end;
+//end;
 function GDBObjLWpolyline.Clone;
 var
   tpo: PGDBObjLWPolyline;

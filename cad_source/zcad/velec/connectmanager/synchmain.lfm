@@ -1,0 +1,46 @@
+object formSynch: TformSynch
+  Left = 437
+  Height = 661
+  Top = 250
+  Width = 781
+  Caption = 'formSynch'
+  ClientHeight = 661
+  ClientWidth = 781
+  Menu = MainMenu1
+  LCLVersion = '4.99.0.0'
+  OnCreate = FormCreate
+  OnResize = FormResize
+  OnShow = FormShow
+  object PanelSynch: TPanel
+    Left = 0
+    Height = 603
+    Top = 58
+    Width = 781
+    Align = alClient
+    Anchors = [akTop]
+    BevelInner = bvSpace
+    Caption = 'PanelSynch'
+    TabOrder = 0
+  end
+  object PanelSynchConrolMenu: TPanel
+    Left = 0
+    Height = 58
+    Top = 0
+    Width = 781
+    Align = alTop
+    Caption = 'PanelSynchConrolMenu'
+    TabOrder = 1
+  end
+  object MainMenu1: TMainMenu
+    Left = 624
+    Top = 8
+    object MenuItem1: TMenuItem
+      Caption = 'MenuItem1'
+      OnClick = MenuItem1Click
+    end
+    object MenuItem2: TMenuItem
+      Caption = 'MenuItem2'
+      OnClick = MenuItem2Click
+    end
+  end
+end

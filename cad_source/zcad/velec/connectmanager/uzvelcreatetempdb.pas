@@ -17,7 +17,7 @@
 }
 {$mode objfpc}{$H+}
 
-unit uzvmanagerconnect;
+unit uzvelcreatetempdb;
 {$INCLUDE zengineconfig.inc}
 
 interface
@@ -110,14 +110,18 @@ uses
    uzcvariablesutils,
    SQLDB,
    SQLite3Conn,
+   sqlite3dyn,
+   uzcdrawing,
+   uzvmcdbconsts, Classes,Dialogs, gvector,
    math;
 
+
+procedure createElectricalTempDB;
 
 implementation
 var
   SQLite3Connection: TSQLite3Connection;
   SQLTransaction: TSQLTransaction;
-  //Memo: TStringList;
 
   // Функция для поиска и загрузки sqlite3.dll
 function LoadSQLiteLibrary: Boolean;
@@ -128,40 +132,68 @@ begin
   LibPath := 'sqlite3.dll'; // Текущая директория
 
   if not FileExists(LibPath) then
+  begin
     LibPath := ExtractFilePath(ParamStr(0)) + 'sqlite3.dll'; // Директория с exe
+    zcUI.TextMessage('Найдена sqlite3.dll по пути: ' + LibPath, TMWOHistoryOut);
+  end;
 
   if not FileExists(LibPath) then
     LibPath := 'C:\zcad\zcad\sqlite3.dll'; // System32
 
-  SQLiteLibraryName := LibPath; // Указываем путь к DLL
+  sqlite3dyn.SQLiteDefaultLibrary := LibPath; // Указываем путь к DLL
   Result := FileExists(LibPath);
 
   if not Result then
     zcUI.TextMessage('Не удалось найти sqlite3.dll по пути: ' + LibPath, TMWOHistoryOut);
 end;
 
-procedure InitializeComponents;
-//var
-//  TempPath: array[0..MAX_PATH] of Char;
+procedure InitializeComponents(filepath:string);
 begin
   if not LoadSQLiteLibrary then
     raise Exception.Create('SQLite3.dll not found!');
-  // Получаем путь к папке Temp
-  //GetTempPath(MAX_PATH, TempPath);
 
   SQLite3Connection := TSQLite3Connection.Create(nil);
-  SQLite3Connection.DatabaseName := IncludeTrailingPathDelimiter(GetTempDir) + 'mydatabase.db3';
+
+  SQLite3Connection.DatabaseName := filepath + vcalctempdbfilename;
 
   SQLTransaction := TSQLTransaction.Create(nil);
   SQLTransaction.Database := SQLite3Connection;
   SQLite3Connection.Transaction := SQLTransaction;
 end;
 
+function IsDatabaseLocked(const DatabaseName: string): Boolean;
+var
+  FileHandle: THandle;
+begin
+  Result := False;
+  try
+    // Пытаемся открыть файл для записи (это проверяет блокировку)
+    FileHandle := FileOpen(DatabaseName, fmOpenWrite or fmShareExclusive);
+    if FileHandle <> THandle(-1) then
+    begin
+      FileClose(FileHandle);
+      // Файл не заблокирован
+      Result := False;
+    end
+    else
+    begin
+      // Файл заблокирован
+      Result := True;
+    end;
+  except
+    Result := True;
+  end;
+end;
 procedure CreateDatabase;
 begin
-  // If file exists, delete it
-  if FileExists(SQLite3Connection.DatabaseName) then
-    DeleteFile(SQLite3Connection.DatabaseName);
+  // Использование
+  if not IsDatabaseLocked(SQLite3Connection.DatabaseName) then
+  begin
+    if FileExists(SQLite3Connection.DatabaseName) then
+      DeleteFile(SQLite3Connection.DatabaseName);
+  end
+  else
+    ShowMessage('База данных заблокирована!');
 
   // Create new database
   SQLite3Connection.Open;
@@ -178,10 +210,12 @@ begin
     Query.Database := SQLite3Connection;
     Query.SQL.Text := 'CREATE TABLE IF NOT EXISTS dev (' +
                       'id INTEGER PRIMARY KEY AUTOINCREMENT, ' +
+                      'zcadid INTEGER, ' +
                       'devname TEXT NOT NULL, ' +
                       'hdname TEXT, ' +
                       'hdgroup TEXT, ' +
-                      'icanhd INTEGER)';
+                      'icanhd INTEGER' +
+                      ')';
     Query.ExecSQL;
     SQLTransaction.Commit;
     zcUI.TextMessage('Table "dev" created',TMWOHistoryOut);
@@ -197,38 +231,35 @@ var
   pdev: PGDBObjBlockInsert;   //выделеные объекты в пространстве листа
   ir:itrec;  // применяется для обработки списка выделений, но что это понятия не имею :)
   pvd:pvardesk;
+  i,count, count2:integer;
+  errorData:boolean;
 begin
   Query := TSQLQuery.Create(nil);
   try
     Query.Database := SQLite3Connection;
-
+    //ZCMsgCallBackInterface.TextMessage(' 1',TMWOHistoryOut);
     // Insert records
-    Query.SQL.Text := 'INSERT INTO dev (devname, hdname, hdgroup, icanhd) VALUES (:devname, :hdname, :hdgroup, :icanhd)';
-
+    Query.SQL.Text := 'INSERT INTO dev (zcadid, devname, hdname, hdgroup, icanhd) VALUES (:zcadid, :devname, :hdname, :hdgroup, :icanhd)';
+    count:=0;
     pobj:=drawings.GetCurrentROOT^.ObjArray.beginiterate(ir); //зона уже выбрана в перспективе застовлять пользователя ее выбирать
     if pobj<>nil then
       repeat
+         errorData:=true;
+         inc(count);
          // Определяем что это устройство
          if pobj^.GetObjType=GDBDeviceID then
            begin
             pdev:=PGDBObjDevice(pobj);
+
+            Query.Params.ParamByName('zcadid').AsInteger:=count;
             pvd:=FindVariableInEnt(pdev,'NMO_Name');
             if (pvd<>nil) then
                Query.Params.ParamByName('devname').AsString := pstring(pvd^.data.Addr.Instance)^
-            else
+            else begin
+               errorData:=false;
                Query.Params.ParamByName('devname').AsString := 'ERROR';
-
-            pvd:=FindVariableInEnt(pdev,'SLCABAGEN1_HeadDeviceName');
-            if (pvd<>nil) then
-               Query.Params.ParamByName('hdname').AsString := pstring(pvd^.data.Addr.Instance)^
-            else
-               Query.Params.ParamByName('hdname').AsString := 'ERROR';
-
-            pvd:=FindVariableInEnt(pdev,'SLCABAGEN1_NGHeadDevice');
-            if (pvd<>nil) then
-               Query.Params.ParamByName('hdgroup').AsString := pstring(pvd^.data.Addr.Instance)^
-            else
-               Query.Params.ParamByName('hdgroup').AsString := 'ERROR';
+            end;
+            count2:=1;
 
             pvd:=FindVariableInEnt(pdev,'ANALYSISEM_icanbeheadunit');
             if (pvd<>nil) then
@@ -237,10 +268,51 @@ begin
                else
                Query.Params.ParamByName('icanhd').AsInteger := 0
              else
+               begin
+               errorData:=false;
                Query.Params.ParamByName('icanhd').AsInteger := 0;
+               end;
 
-            //zcUI.TextMessage(' pvd=' + pstring(pvd^.data.Addr.Instance)^,TMWOHistoryOut);
+            pvd:=FindVariableInEnt(pdev,'SLCABAGEN1_HeadDeviceName');
+            //if (pvd=nil) then
+            //   errorData:=false;
+
+            while (pvd<>nil) do begin
+              pvd:=FindVariableInEnt(pdev,'SLCABAGEN'+inttostr(count2)+'_HeadDeviceName');
+              if (pvd<>nil) then begin
+                 Query.Params.ParamByName('hdname').AsString := pstring(pvd^.data.Addr.Instance)^;
+              end
+              else
+                 begin
+                 errorData:=false;
+                 Query.Params.ParamByName('hdname').AsString := 'ERROR';
+                 end;
+
+              pvd:=FindVariableInEnt(pdev,'SLCABAGEN'+inttostr(count2)+'_NGHeadDevice');
+              if (pvd<>nil) then
+                 Query.Params.ParamByName('hdgroup').AsString := pstring(pvd^.data.Addr.Instance)^
+              else
+              begin
+                 errorData:=false;
+                 Query.Params.ParamByName('hdgroup').AsString := 'ERROR';
+              end;
+              if errorData then
                 Query.ExecSQL;
+              inc(count2);
+              pvd:=FindVariableInEnt(pdev,'SLCABAGEN'+inttostr(count2)+'_HeadDeviceName');
+              end;
+              //until (pvd=nil);
+
+
+
+
+
+            //if (Query.Params.ParamByName('hdname').AsString<>'') and
+            //   (Query.Params.ParamByName('hdname').AsString<>'???') and
+            //   (Query.Params.ParamByName('hdname').AsString<>'-') and
+            //   (Query.Params.ParamByName('hdname').AsString<>'ERROR') then
+
+
            end;
         pobj:=drawings.GetCurrentROOT^.ObjArray.iterate(ir); //переход к следующем примитиву в списке выбраных примитивов
       until pobj=nil;
@@ -266,48 +338,47 @@ begin
     zcUI.TextMessage('ID | Name           | Age | Email',TMWOHistoryOut);
     zcUI.TextMessage('----------------------------------',TMWOHistoryOut);
 
-    //while not Query.EOF do
-    //begin
-    //  zcUI.TextMessage(Format('%2d | %-14s | %3d | %s', [
-    //    Query.FieldByName('id').AsInteger,
-    //    Query.FieldByName('name').AsString,
-    //    Query.FieldByName('age').AsInteger,
-    //    Query.FieldByName('email').AsString
-    //  ]),TMWOHistoryOut);
-    //  Query.Next;
-    //end;
   finally
     Query.Free;
   end;
 end;
+
 procedure FreeComponents;
 begin
   SQLTransaction.Free;
   SQLite3Connection.Free;
 end;
 
-
-function managerconnect_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
+procedure createElectricalTempDB;
+var
+  filepath:string;
  begin
-    zcUI.TextMessage('Запущен диспетчер подключений',TMWOHistoryOut);
-      InitializeComponents;
+  zcUI.TextMessage('Запущен диспетчер подключений',TMWOHistoryOut);
+    //получаем имя файла для проверки на его сохранение
+  filepath:=ExtractFilePath(PTZCADDrawing(drawings.GetCurrentDwg)^.FileName);
+  if AnsiPos(':\', filepath) = 0 then begin
+     zcUI.TextMessage('Команда отменена. Выполните сохранение чертежа в ZCAD!!!!!',TMWOHistoryOut);
+     //result:=cmd_cancel;
+     exit;
+  end;
+  InitializeComponents(filepath);
+
   try
     CreateDatabase;
     CreateTable;
     InsertData;
     ShowData;
     zcUI.TextMessage('Database successfully created and populated!',TMWOHistoryOut);
-  except
-    on E: Exception do
-      zcUI.TextMessage('Error: ' + E.Message,TMWOHistoryOut);
-  end;
-  FreeComponents;
+    FreeComponents;
 
-    result:=cmd_ok;
+  except
+    on E: Exception do begin
+      FreeComponents;
+      zcUI.TextMessage('Error: ' + E.Message,TMWOHistoryOut);
+    end;
+  end;
  end;
 
-initialization
- CreateZCADCommand(@managerconnect_com,'managerconnect',CADWG,0);
 end.
 
 

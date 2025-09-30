@@ -69,6 +69,8 @@ type
       const processaxis:taddotrac);virtual;
     procedure FormatEntity(var drawing:TDrawingDef;
       var DC:TDrawContext;Stage:TEFStages=EFAllStages);virtual;
+    function CalcActualVisible(
+      const Actuality:TVisActuality):boolean;virtual;
 
     function getrot:double;virtual;
     procedure setrot(r:double);virtual;
@@ -182,6 +184,43 @@ begin
   //self.BuildGeometry(drawing); //fix https://github.com/zamtmn/zcad/issues/17
   if assigned(EntExtensions) then
     EntExtensions.RunOnAfterEntityFormat(@self,drawing,DC);
+end;
+
+function GDBObjBlockInsert.CalcActualVisible(const Actuality:TVisActuality):boolean;
+var
+  oldValue:TActuality;
+  q:boolean;
+  pobj:PGDBObjEntity;
+  ir:itrec;
+  hasVisibleChildren:boolean;
+begin
+  // IMPORTANT: Do NOT call inherited - blocks don't check their own layer visibility
+  // This matches AutoCAD behavior where blocks on disabled layers still show
+  // their contents if the contents are on visible layers
+
+  // First, update child entity visibility (they check their own layers normally)
+  q:=ConstObjArray.CalcActualVisible(Actuality);
+
+  // Now check if any child entities are visible after their layer checks
+  hasVisibleChildren:=false;
+  pobj:=ConstObjArray.beginiterate(ir);
+  if pobj<>nil then
+    repeat
+      if pobj^.Visible=Actuality.visibleactualy then begin
+        hasVisibleChildren:=true;
+        break;
+      end;
+      pobj:=ConstObjArray.iterate(ir);
+    until pobj=nil;
+
+  // Block visibility depends ONLY on whether it has visible children
+  oldValue:=Visible;
+  if hasVisibleChildren then
+    Visible:=Actuality.visibleactualy
+  else
+    Visible:=0;
+
+  Result:=(oldValue<>Visible) or q;
 end;
 
 procedure GDBObjBlockInsert.AddOnTrackAxis(var posr:os_record;

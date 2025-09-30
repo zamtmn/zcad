@@ -21,7 +21,7 @@ unit uzcdrawings;
 {$INCLUDE zengineconfig.inc}
 interface
 uses
-    uzglviewareageneral,uzcTranslations,uzedimblocksregister,uzeblockdefsfactory,
+    uzglviewareaabstract,uzglviewareageneral,uzcTranslations,uzedimblocksregister,uzeblockdefsfactory,
     uzemathutils,uzgldrawcontext,uzcdrawing,uzedrawingdef,uzbpaths,uzestylesdim,
     uzedrawingabstract,uzcdialogsfiles,LResources,uzcsysvars,uzcinterface,
     uzcstrconsts,uzbstrproc,uzeblockdef,UGDBObjBlockdefArray,UUnitManager,

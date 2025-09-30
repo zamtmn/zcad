@@ -23,7 +23,7 @@ interface
 
 uses
   SysUtils,
-  uzglviewareageneral,
+  uzglviewareageneral,uzglviewareaabstract,
   uzgldrawcontext,
   uzccommandsmanager,
   uzcstrconsts,

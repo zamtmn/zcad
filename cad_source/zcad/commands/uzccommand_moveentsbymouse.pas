@@ -37,7 +37,7 @@ uses
   uzcutils,
   //uzeentabstracttext,
   uzeentpolyline,//uzeconsts,
-  uzglviewareageneral,
+  uzglviewareageneral,uzglviewareaabstract,
   Varman;
 
 resourcestring

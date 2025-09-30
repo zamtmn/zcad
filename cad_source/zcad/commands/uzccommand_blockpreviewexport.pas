@@ -24,7 +24,7 @@ interface
 uses
   SysUtils,
   LCLType,LCLIntf,uzcLog,Graphics,
-  uzgldrawercanvas,uzerasterizer,uzglviewareageneral,
+  uzgldrawercanvas,uzerasterizer,uzglviewareageneral,uzglviewareaabstract,
   uzgldrawcontext,
   uzedrawingsimple,uzcdrawings,
   uzcsysvars,

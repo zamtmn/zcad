@@ -23,9 +23,9 @@ const
   NeedSum=49994984640401;
 
 type
-  TArcTest = class(TTestCase)
-  Published
-    Procedure Transform;
+  TArcTest=class(TTestCase)
+  published
+    procedure Transform;
   end;
 
 
@@ -33,42 +33,30 @@ implementation
 
 procedure TArcTest.Transform;
 var
-  drawing: PTSimpleDrawing;
-  arc: PGDBObjArc;
-  dc: TDrawContext;
-  center: GDBVertex;
-
+  drawing:TSimpleDrawing;
+  arc:PGDBObjArc;
+  dc:TDrawContext;
+  center:GDBVertex;
 begin
-  // 1. Создание нового чертежа
-  drawing := CreateSimpleDWG; //[1](#1-0)
-
-  // Установка текущего чертежа
-  //drawings.SetCurrentDWG(drawing); //[2](#1-1)
-
-  // 2. Создание дуги
-  arc := GDBObjArc.CreateInstance; //[3](#1-2)
-
-  // 3. Настройка параметров дуги
-  center := CreateVertex(100, 100, 0);  // Центр дуги
-  arc^.Local.P_insert := center;
-  arc^.R := 50.0;                       // Радиус 50 единиц
-  arc^.StartAngle := 0.0;               // Начальный угол 0 радиан
-  arc^.EndAngle := Pi;                  // Конечный угол π радиан (полукруг) [4](#1-3)
-
-  // 4. Добавление дуги в чертёж
-  drawing^.GetCurrentRoot^.AddMi(@arc); //[5](#1-4)
-
-  // 5. Настройка слоя и финализация
-  //SetEntityLayer(arc, drawing); //[6](#1-5)
-
+  //Создание нового чертежа
+  drawing.init(nil);
+  //Создание дуги
+  arc:=GDBObjArc.CreateInstance;
+  //Настройка параметров дуги
+  center:=CreateVertex(100,100,0);  // Центр дуги
+  arc^.Local.P_insert:=center;
+  arc^.R:=50.0;                       // Радиус 50 единиц
+  arc^.StartAngle:=0.0;               // Начальный угол 0 радиан
+  arc^.EndAngle:=Pi;
+  // Конечный угол π радиан (полукруг)
+  //Добавление дуги в чертёж
+  drawing.GetCurrentRoot^.AddMi(@arc);
   // Создание контекста рисования
-  dc := drawing^.CreateDrawingRC; //[7](#1-6)
-
+  dc:=drawing.CreateDrawingRC;
   // Построение геометрии
-  arc^.BuildGeometry(drawing^); //[8](#1-7)
-
+  arc^.BuildGeometry(drawing);
   // Форматирование сущности
-  arc^.formatEntity(drawing^, dc); //[9](#1-8)
+  arc^.formatEntity(drawing,dc);
 
   WriteLn('Чертёж с дугой успешно создан!');
   WriteLn('Центр дуги: (100, 100, 0)');
@@ -76,10 +64,9 @@ begin
   WriteLn('Углы: от 0 до π радиан');
 
   // Освобождение ресурсов
-  drawing^.done;
+  drawing.done;
 end;
 
 begin
   RegisterTests([TArcTest]);
 end.
-

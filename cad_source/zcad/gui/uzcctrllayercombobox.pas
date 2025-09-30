@@ -22,7 +22,7 @@ unit uzcctrllayercombobox;
 interface
 
 uses
-  StdCtrls,GraphType,{$IFDEF LCLWIN32}win32proc,windows,{$endif}LCLIntf,LCLType,
+  SysUtils,StdCtrls,GraphType,{$IFDEF LCLWIN32}win32proc,windows,{$endif}LCLIntf,LCLType,
   Controls,Classes,Graphics,Buttons,ExtCtrls,ComCtrls,Forms,Themes;
 const
   RightButtonWidth=20;// Ширина правой кнопки-стрелки при "темной" отрисовке
@@ -329,10 +329,8 @@ end;
 
 procedure TZCADLayerComboBox.CompareEvent(Sender: TObject; Item1, Item2: TListItem; Data: Integer; var Compare: Integer);
 begin
-  if Item1.SubItems[2]>Item2.SubItems[2] then compare:=1 else
-  begin
-    if Item1.SubItems[2]=Item2.SubItems[2] then compare:=0 else compare:=-1;
-  end;
+  // Use AnsiCompareText for case-insensitive alphabetical sorting
+  Compare := AnsiCompareText(Item1.SubItems[2], Item2.SubItems[2]);
 end;
 
 procedure TZCADLayerComboBox.SetListHeight(AValue:integer);                     // Изменение свойства высоты разворачиваемого списка
@@ -511,8 +509,8 @@ begin
       sLV.Items.Item[n].SubItems.Add('');
       ObnovitItem(sLV.Items.Item[n],LayerArray[n]);
     end;
-    sLV.SortType:=stBoth;
     sLV.EndUpdate;
+    sLV.SortType:=stBoth;
   end;
 end;
 

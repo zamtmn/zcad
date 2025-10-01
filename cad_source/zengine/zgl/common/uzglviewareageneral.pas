@@ -154,55 +154,9 @@ function MouseBS2ZKey(Button:TMouseButton;Shift:TShiftState):TZKeys;
 function MouseS2ZKey(Shift:TShiftState):TZKeys;
 procedure RemoveCursorIfNeed(acontrol:TControl;RemoveCursor:boolean);
 var
-   sysvarDISPOSSize:double=10;
-   sysvarDISPCursorSize:integer=10;
-   SysVarDISPCrosshairSize:double=0.05;
-   sysvarDISPBackGroundColor:TRGB=(r:0;g:0;b:0;a:255);
-   sysvarRDMaxRenderTime:integer=0;
-   sysvarDISPZoomFactor:double=1.624;
-   sysvarDISPSystmGeometryDraw:boolean=false;
-   sysvarDISPShowCSAxis:boolean=true;
-   sysvarDISPSystmGeometryColor:TGDBPaletteColor=1;
-   sysvarDISPHotGripColor:TGDBPaletteColor=2;
-   sysvarDISPSelGripColor:TGDBPaletteColor=3;
-   sysvarDISPUnSelGripColor:TGDBPaletteColor=4;
-   sysvarDWGOSMode:TGDBOSMode=0;
-   sysvarDWGOSModeControl:Boolean=True;
-   sysvarDISPGripSize:Integer=5;
-   sysvarDISPColorAxis:boolean=true;
-   sysvarDISPDrawZAxis:boolean=true;
-   sysvarDrawInsidePaintMessage:TGDB3StateBool=T3SB_Default;
-   sysvarDWGPolarMode:Boolean=false;
-   SysVarRDLineSmooth:Boolean=false;
-   sysvarRDUseStencil:Boolean=false;
-   sysvarRDLastRenderTime:integer=0;
-   sysvarRDLastUpdateTime:integer=0;
-   sysvarRDEnableAnimation:boolean=true;
-   SysVarRDImageDegradationEnabled:boolean=false;
-   SysVarRDImageDegradationPrefferedRenderTime:integer=0;
-   SysVarRDImageDegradationCurrentDegradationFactor:Double=0;
-   SysVarRDImageDegradationMaxDegradationFactor:Double=0;
-   SysVarDISPRemoveSystemCursorFromWorkArea:Boolean=true;
-   sysvarDSGNSelNew:Boolean=false;
-   sysvarDWGEditInSubEntry:Boolean=false;
-   sysvarDSGNOTrackTimerInterval:Integer=500;
-   sysvarRDLastCalcVisible:Integer=0;
-   sysvarRDLight:boolean=false;
-
    OnActivateProc:TOnActivateProc=nil;
    ForeGroundColorIndex:Integer;
-
-   sysvarDISPLWDisplayScale:Integer=10;
-   sysvarDISPmaxLWDisplayScale:Integer=20;
-   sysvarDISPDefaultLW:TGDBLineWeight=LnWt025;
-
    InverseMouseClick:Boolean;
-
-   sysvarDSGNEntityMoveStartTimerInterval:Integer=300;
-   sysvarDSGNEntityMoveStartOffset:Integer=-30;
-   sysvarDSGNEntityMoveByMouseUp:Boolean=True;
-   sysvarDSGNMaxSelectEntsCountWithObjInsp:Integer=25000;
-   sysvarDSGNMaxSelectEntsCountWithGrips:Integer=100;
 
 implementation
 

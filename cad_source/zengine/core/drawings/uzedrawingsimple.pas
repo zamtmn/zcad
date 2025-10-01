@@ -25,7 +25,7 @@ uses uzedrawingdef,uzeblockdefsfactory,uzestylesdim,
      UGDBNumerator,uzbtypes,sysutils,uzegeometry,uzeentgenericsubentry,
      uzestyleslayers,uzestyleslinetypes,uzeentity,UGDBSelectedObjArray,uzestylestexts,
      uzedimensionaltypes,uzegeometrytypes,uzecamera,UGDBOpenArrayOfPV,uzeroot,uzefont,
-     uzglviewareaabstract,uzglviewareageneral,uzgldrawcontext,UGDBControlPointArray,
+     uzglviewareaabstract,uzgldrawcontext,UGDBControlPointArray,
      uzglviewareadata,uzeExtdrAbstractDrawingExtender,uzCtnrVectorPBaseEntity;
 type
   TMainBlockCreateProc=procedure (_to:PTDrawingDef;name:String) of object;
@@ -122,7 +122,7 @@ type
 {EXPORT-}
 function CreateSimpleDWG:PTSimpleDrawing;
 var
-    MainBlockCreateProc:TMainBlockCreateProc=nil;
+  MainBlockCreateProc:TMainBlockCreateProc=nil;
 implementation
 procedure TDrawingActualy.CreateDef;
 begin;

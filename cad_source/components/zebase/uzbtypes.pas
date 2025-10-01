@@ -27,6 +27,7 @@ uses
 const
      GDBBaseObjectID = 30000;
      ObjN_NotRecognized='NotRecognized';
+     NotActual = 0;
 type
 TProcCounter=procedure(const PInstance,PCounted:Pointer;var Counter:Integer);
 TControlPointAttr=(CPA_Strech);

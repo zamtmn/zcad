@@ -19,7 +19,9 @@
 unit uzcreggeneralwiewarea;
 {$INCLUDE zengineconfig.inc}
 interface
-uses uzglbackendmanager,uzglgeometry,uzeentitiestree,uzcsysvars,uzglviewareageneral,
+uses
+  uzglbackendmanager,uzglgeometry,uzeentitiestree,uzcsysvars,
+  uzglviewareageneral,uzglviewareaabstract,
      uzeentabstracttext,uzbpaths,uzctranslations,UUnitManager,TypeDescriptors,uzcLog,
      Varman,
      uzgldrawcontext,uzccommandsmanager,uzepalette,uzeffdxfsupport;

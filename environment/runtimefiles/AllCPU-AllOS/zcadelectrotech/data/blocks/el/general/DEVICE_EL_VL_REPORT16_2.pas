@@ -15,6 +15,7 @@ VL_Kc:String;(*'Коэффициент'*)
 VL_Pp:String;(*'Мощность акт., кВт'*)
 VL_Qp:String;(*'Мощность реак., кВАр'*)
 VL_Sp:String;(*'Мощность полн., кВА'*)
+VL_Cos:String;(*'Cos Ф'*)
 
 implementation
 
@@ -35,5 +36,6 @@ Kc:='??';
 VL_Pp:='??';
 VL_Qp:='??';
 VL_Sp:='??';
+VL_Cos:='??';
 
 end.

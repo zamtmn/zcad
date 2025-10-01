@@ -412,7 +412,7 @@ begin
                                    vp.layer:=nil;}
   vp.layer:=@DefaultErrorLayer;
   self.PExtAttrib:=nil;
-  vp.LastCameraPos:=-1;
+  vp.LastCameraPos:=NotActual;
   vp.color:=ClByLayer;
   State:=[];
 end;

@@ -140,30 +140,46 @@ end;
 procedure GDBObjARC.transform;
 var
   sav,eav,pins:gdbvertex;
+  local_sav,local_eav:gdbvertex;
+  m:DMatrix4D;
+  det:double;
 begin
   precalc;
-  if t_matrix.mtr[0].v[0]*t_matrix.mtr[1].v[1]*t_matrix.mtr[2].v[2]<eps then begin
+  det:=t_matrix.mtr[0].v[0]*(t_matrix.mtr[1].v[1]*t_matrix.mtr[2].v[2]-t_matrix.mtr[1].v[2]*t_matrix.mtr[2].v[1])-
+       t_matrix.mtr[0].v[1]*(t_matrix.mtr[1].v[0]*t_matrix.mtr[2].v[2]-t_matrix.mtr[1].v[2]*t_matrix.mtr[2].v[0])+
+       t_matrix.mtr[0].v[2]*(t_matrix.mtr[1].v[0]*t_matrix.mtr[2].v[1]-t_matrix.mtr[1].v[1]*t_matrix.mtr[2].v[0]);
+
+  if det<0 then begin
     sav:=q2;
     eav:=q0;
   end else begin
     sav:=q0;
     eav:=q2;
   end;
+
   pins:=P_insert_in_WCS;
   sav:=VectorTransform3D(sav,t_matrix);
   eav:=VectorTransform3D(eav,t_matrix);
   pins:=VectorTransform3D(pins,t_matrix);
   inherited;
-  sav:=NormalizeVertex(VertexSub(sav,pins));
-  eav:=NormalizeVertex(VertexSub(eav,pins));
 
-  StartAngle:=TwoVectorAngle(_X_yzVertex,sav);
-  if sav.y<eps then
-    StartAngle:=2*pi-StartAngle;
+  sav:=VertexSub(sav,pins);
+  eav:=VertexSub(eav,pins);
 
-  EndAngle:=TwoVectorAngle(_X_yzVertex,eav);
-  if eav.y<eps then
-    EndAngle:=2*pi-EndAngle;
+  m:=objMatrix;
+  MatrixInvert(m);
+  m.mtr[3]:=NulVector4D;
+
+  local_sav:=VectorTransform3D(sav,m);
+  local_eav:=VectorTransform3D(eav,m);
+
+  StartAngle:=ArcTan2(local_sav.y,local_sav.x);
+  if StartAngle<0 then
+    StartAngle:=StartAngle+2*pi;
+
+  EndAngle:=ArcTan2(local_eav.y,local_eav.x);
+  if EndAngle<0 then
+    EndAngle:=EndAngle+2*pi;
 end;
 
 procedure GDBObjARC.ReCalcFromObjMatrix;

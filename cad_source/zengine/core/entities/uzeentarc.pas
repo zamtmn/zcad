@@ -166,9 +166,9 @@ begin
   sav:=VertexSub(sav,pins);
   eav:=VertexSub(eav,pins);
 
-  m:=objMatrix;
+  // Use canonical local basis for angle calculation
+  m:=CreateMatrixFromBasis(Local.basis.ox,Local.basis.oy,Local.basis.oz);
   MatrixInvert(m);
-  m.mtr[3]:=NulVector4D;
 
   local_sav:=VectorTransform3D(sav,m);
   local_eav:=VectorTransform3D(eav,m);
@@ -191,6 +191,11 @@ begin
 
   ox:=GetXfFromZ(Local.basis.oz);
   oy:=NormalizeVertex(VectorDot(Local.basis.oz,Local.basis.ox));
+
+  // Update Local.basis with canonical values
+  Local.basis.ox:=ox;
+  Local.basis.oy:=oy;
+
   m:=CreateMatrixFromBasis(ox,oy,Local.basis.oz);
 
   Local.P_insert:=VectorTransform3D(PGDBVertex(@objmatrix.mtr[3])^,m);

@@ -86,6 +86,9 @@ end;
 procedure AddLineEntity(var ZContext:TZDrawingContext;var DWGContext:TDWGCtx;var DWGObject:Dwg_Object;PLine:PDwg_Entity_LINE);
 var
   pobj:PGDBObjEntity;
+  PDWGLayer:PDwg_Object_LAYER;
+  layerName:string;
+  player:PGDBLayerProp;
 begin
   pobj := AllocAndInitLine(ZContext.PDrawing^.pObjRoot);
   PGDBObjLine(pobj)^.CoordInOCS.lBegin.x:=PLine^.start.x;
@@ -94,6 +97,20 @@ begin
   PGDBObjLine(pobj)^.CoordInOCS.lEnd.x:=PLine^.&end.x;
   PGDBObjLine(pobj)^.CoordInOCS.lEnd.y:=PLine^.&end.y;
   PGDBObjLine(pobj)^.CoordInOCS.lEnd.z:=PLine^.&end.z;
+
+  PDWGLayer:=dwg_get_entity_layer(PLine^.parent);
+  if PDWGLayer<>nil then begin
+    BITCODE_T2Text(PDWGLayer^.name,DWGContext,layerName);
+    if DWGContext.DWGVer>R_2006 then
+      layerName:=Tria_Utf8ToAnsi(layerName);
+    player:=ZContext.PDrawing^.LayerTable.getAddres(layerName);
+    if player<>nil then
+      PGDBObjEntity(pobj)^.vp.Layer:=player
+    else
+      PGDBObjEntity(pobj)^.vp.Layer:=ZContext.PDrawing^.LayerTable.GetSystemLayer;
+  end else
+    PGDBObjEntity(pobj)^.vp.Layer:=ZContext.PDrawing^.LayerTable.GetSystemLayer;
+
   ZContext.PDrawing^.pObjRoot^.AddMi(@pobj);
   //PGDBObjEntity(pobj)^.BuildGeometry(drawing);
   //PGDBObjEntity(pobj)^.formatEntity(drawing,dc);
@@ -102,6 +119,9 @@ end;
 procedure AddCircleEntity(var ZContext:TZDrawingContext;var DWGContext:TDWGCtx;var DWGObject:Dwg_Object;PCircle:PDwg_Entity_CIRCLE);
 var
   pobj:PGDBObjEntity;
+  PDWGLayer:PDwg_Object_LAYER;
+  layerName:string;
+  player:PGDBLayerProp;
 begin
   pobj := AllocAndInitCircle(ZContext.PDrawing^.pObjRoot);
   PGDBObjCircle(pobj)^.Local.p_insert.x:=PCircle^.center.x;
@@ -111,6 +131,20 @@ begin
   PGDBObjCircle(pobj)^.Local.basis.oz.x:=PCircle^.extrusion.x;
   PGDBObjCircle(pobj)^.Local.basis.oz.y:=PCircle^.extrusion.y;
   PGDBObjCircle(pobj)^.Local.basis.oz.z:=PCircle^.extrusion.z;
+
+  PDWGLayer:=dwg_get_entity_layer(PCircle^.parent);
+  if PDWGLayer<>nil then begin
+    BITCODE_T2Text(PDWGLayer^.name,DWGContext,layerName);
+    if DWGContext.DWGVer>R_2006 then
+      layerName:=Tria_Utf8ToAnsi(layerName);
+    player:=ZContext.PDrawing^.LayerTable.getAddres(layerName);
+    if player<>nil then
+      PGDBObjEntity(pobj)^.vp.Layer:=player
+    else
+      PGDBObjEntity(pobj)^.vp.Layer:=ZContext.PDrawing^.LayerTable.GetSystemLayer;
+  end else
+    PGDBObjEntity(pobj)^.vp.Layer:=ZContext.PDrawing^.LayerTable.GetSystemLayer;
+
   ZContext.PDrawing^.pObjRoot^.AddMi(@pobj);
 end;
 

@@ -1190,6 +1190,7 @@ begin
               //uzvtestdraw.testDrawCircle(pObjDevice^.P_insert_in_WCS,2,4);
 
               //**поиск номера вершины устройства которого мы обноружили кабелем
+             numVertDevice:=-1;
                for k:=0 to graph.listVertex.Size-1 do
                begin
                   if (uzvslagcabComParams.settingVizCab.vizFullTreeCab = true) then begin
@@ -1205,7 +1206,7 @@ begin
                end;
                //****//
                //** создаем вершину в точки линии в котором обноружилось устройство и прокладываем ребро от этой точки до коннектора устройства
-               if dublicateVertex({listDevice}graph.listVertex,vertexLine,accuracy) = false then begin
+               if (dublicateVertex({listDevice}graph.listVertex,vertexLine,accuracy) = false)and(numVertDevice<>-1) then begin
                   if (uzvslagcabComParams.settingVizCab.vizFullTreeCab = true) then
                      zcUI.TextMessage('**РАБОТАЕТ!!!!!!!' + inttostr(numVertDevice),TMWOHistoryOut);
                   infoDevice.deviceEnt:=nil;
@@ -1232,6 +1233,13 @@ begin
                   graph.listEdge.PushBack(infoEdge);
                 end;
                //****//
+               if numVertDevice=-1 then begin
+                  zcUI.TextMessage('**чтото пошло не так',TMWOHistoryOut);
+                  //for k:=0 to graph.listVertex.Size-1 do
+                  //  if (graph.listVertex[k].deviceEnt <> nil) and (pObjDevice <> nil) then
+                  //    zcUI.TextMessage('**graph.listVertex[k].deviceEnt NMO_Name='+pString(FindVariableInEnt(graph.listVertex[k].deviceEnt,'NMO_Name')^.data.Addr.Instance)^ + '**pObjDevice NMO_Name='+pString(FindVariableInEnt(pObjDevice,'NMO_Name')^.data.Addr.Instance)^,TMWOHistoryOut);
+                end;
+
             end;
         end;
         NearObjects.Done;//убиваем список
@@ -2057,6 +2065,7 @@ function Testcablemanager_com(const Context:TZCADCommandContext;operands:TComman
   cman:TCableManager;
   pcabledesk:PTCableDesctiptor;
   pobj{,pobj2}:PGDBObjCable;
+  pdev:PGDBOBJDevice;
   pnp:PTNodeProp;
   ir,ir2,ir3:itrec;
   begin
@@ -2076,7 +2085,9 @@ function Testcablemanager_com(const Context:TZCADCommandContext;operands:TComman
             repeat
              zcUI.TextMessage('1',TMWOHistoryOut);
              testTempDrawLine(pnp^.PrevP,pnp^.NextP);
-             zcUI.TextMessage('  имя устройства подключенного - '+pnp^.DevLink^.GetObjTypeName,TMWOHistoryOut);
+             pdev:=pnp^.DevLink;
+             if pdev<>nil then
+                zcUI.TextMessage('  имя устройства подключенного - '+pString(FindVariableInEnt(pnp^.DevLink,'NMO_Name')^.data.Addr.Instance)^,TMWOHistoryOut);
              pnp:=pobj^.NodePropArray.iterate(ir3);
             until pnp=nil;
            //zcUI.TextMessage('  Найдена групповая линия "'+pcabledesk^.Name+'"');

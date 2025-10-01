@@ -23,9 +23,9 @@ interface
 
 uses
   uzeentityfactory,uzgldrawcontext,uzedrawingdef,uzecamera,UGDBVectorSnapArray,
-  uzestyleslayers,uzeentsubordinated,uzeentcurve,
+  uzestyleslayers,uzeentsubordinated,uzeentcurve,UGDBSelectedObjArray,
   uzeentity,uzctnrVectorBytes,uzbtypes,uzeconsts,uzglviewareadata,
-  uzegeometrytypes,uzegeometry,uzeffdxfsupport,SysUtils,
+  uzegeometrytypes,uzegeometry,uzeffdxfsupport,SysUtils,uzesnap,
   uzMVReader,uzCtnrVectorpBaseEntity;
 
 type
@@ -61,8 +61,13 @@ type
     function GetObjType:TObjID;virtual;
     function CalcTrueInFrustum(
       const frustum:ClipArray):TInBoundingVolume;virtual;
+    procedure addcontrolpoints(tdesc:Pointer);virtual;
+    procedure rtmodifyonepoint(const rtmod:TRTModifyData);virtual;
+    procedure remaponecontrolpoint(pdesc:pcontrolpointdesc;
+      ProjectProc:GDBProjectProc);virtual;
   end;
 
+  function AllocAndInitPolyline(owner:PGDBObjGenericWithSubordinated):PGDBObjPolyline;
 implementation
 
 function GDBObjPolyline.CalcTrueInFrustum;
@@ -239,6 +244,103 @@ end;
 class function GDBObjPolyline.CreateInstance:PGDBObjPolyline;
 begin
   Result:=AllocAndInitPolyline(nil);
+end;
+
+procedure GDBObjPolyline.addcontrolpoints(tdesc:Pointer);
+var
+  pdesc:controlpointdesc;
+  i:integer;
+  pv,pvnext:pGDBvertex;
+  segmentCount:integer;
+begin
+  if closed then
+    segmentCount:=VertexArrayInWCS.Count
+  else
+    segmentCount:=VertexArrayInWCS.Count-1;
+
+  PSelectedObjDesc(tdesc)^.pcontrolpoint^.init(VertexArrayInWCS.Count+segmentCount);
+
+  pdesc.selected:=False;
+  pdesc.PDrawable:=nil;
+
+  for i:=0 to VertexArrayInWCS.Count-1 do begin
+    pv:=VertexArrayInWCS.getDataMutable(i);
+    pdesc.vertexnum:=i;
+    pdesc.attr:=[CPA_Strech];
+    pdesc.worldcoord:=pv^;
+    PSelectedObjDesc(tdesc)^.pcontrolpoint^.PushBackData(pdesc);
+  end;
+
+  pdesc.attr:=[];
+  for i:=0 to segmentCount-1 do begin
+    pv:=VertexArrayInWCS.getDataMutable(i);
+    if i<VertexArrayInWCS.Count-1 then
+      pvnext:=VertexArrayInWCS.getDataMutable(i+1)
+    else
+      pvnext:=VertexArrayInWCS.getDataMutable(0);
+
+    pdesc.vertexnum:=-(i+1);
+    pdesc.pointtype:=os_midle;
+    pdesc.worldcoord:=Vertexmorph(pv^,pvnext^,0.5);
+        // Store segment direction in dcoord for oriented grip drawing
+    pdesc.dcoord:=VertexSub(pvnext^,pv^);
+    PSelectedObjDesc(tdesc)^.pcontrolpoint^.PushBackData(pdesc);
+  end;
+end;
+
+procedure GDBObjPolyline.rtmodifyonepoint(const rtmod:TRTModifyData);
+var
+  segmentIndex:integer;
+  v1,v2:PGDBVertex;
+  offset:GDBVertex;
+  halfVector,newCenter:GDBVertex;
+begin
+  if rtmod.point.vertexnum>=0 then begin
+    inherited rtmodifyonepoint(rtmod);
+  end else begin
+    segmentIndex:=-(rtmod.point.vertexnum+1);
+    v1:=vertexarrayinocs.getDataMutable(segmentIndex);
+    if segmentIndex<VertexArrayInWCS.Count-1 then
+      v2:=vertexarrayinocs.getDataMutable(segmentIndex+1)
+    else
+      v2:=vertexarrayinocs.getDataMutable(0);
+       // Calculate half-vector (from center to each endpoint)
+    halfVector:=uzegeometry.VertexSub(v2^,v1^);
+    halfVector:=uzegeometry.VertexMulOnSc(halfVector,0.5);
+
+    // Calculate new center position
+    newCenter:=VertexAdd(rtmod.point.worldcoord,rtmod.dist);
+
+    // Set both vertices relative to new center
+    v1^:=VertexSub(newCenter,halfVector);
+    v2^:=VertexAdd(newCenter,halfVector);
+    //offset:=rtmod.dist;
+    //v1^:=VertexAdd(v1^,offset);
+    //v2^:=VertexAdd(v2^,offset);
+  end;
+end;
+
+procedure GDBObjPolyline.remaponecontrolpoint(pdesc:pcontrolpointdesc;
+  ProjectProc:GDBProjectProc);
+var
+  segmentIndex:integer;
+  v1,v2:PGDBVertex;
+  tv:GDBvertex;
+begin
+  if pdesc^.vertexnum>=0 then begin
+    inherited remaponecontrolpoint(pdesc,ProjectProc);
+  end else begin
+    segmentIndex:=-(pdesc^.vertexnum+1);
+    v1:=VertexArrayInWCS.getDataMutable(segmentIndex);
+    if segmentIndex<VertexArrayInWCS.Count-1 then
+      v2:=VertexArrayInWCS.getDataMutable(segmentIndex+1)
+    else
+      v2:=VertexArrayInWCS.getDataMutable(0);
+
+    pdesc.worldcoord:=Vertexmorph(v1^,v2^,0.5);
+    ProjectProc(pdesc.worldcoord,tv);
+    pdesc.dispcoord:=ToVertex2DI(tv);
+  end;
 end;
 
 begin

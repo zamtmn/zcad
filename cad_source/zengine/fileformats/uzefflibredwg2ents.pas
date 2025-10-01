@@ -28,7 +28,7 @@ uses
   uzeentgenericsubentry,{uzbtypes,}uzedrawingsimple,
   uzbstrproc,
   uzestyleslayers,
-  uzeentline,uzeentity,//uzgldrawcontext,
+  uzeentline,uzeentcircle,uzeentity,//uzgldrawcontext,
   uzeffLibreDWG,
   uzeffmanager;
 implementation
@@ -99,12 +99,25 @@ begin
   //PGDBObjEntity(pobj)^.formatEntity(drawing,dc);
 end;
 
+procedure AddCircleEntity(var ZContext:TZDrawingContext;var DWGContext:TDWGCtx;var DWGObject:Dwg_Object;PCircle:PDwg_Entity_CIRCLE);
+var
+  pobj:PGDBObjEntity;
+begin
+  pobj := AllocAndInitCircle(ZContext.PDrawing^.pObjRoot);
+  PGDBObjCircle(pobj)^.Local.p_insert.x:=PCircle^.center.x;
+  PGDBObjCircle(pobj)^.Local.p_insert.y:=PCircle^.center.y;
+  PGDBObjCircle(pobj)^.Local.p_insert.z:=PCircle^.center.z;
+  PGDBObjCircle(pobj)^.Radius:=PCircle^.radius;
+  ZContext.PDrawing^.pObjRoot^.AddMi(@pobj);
+end;
+
 initialization
   ZCDWGParser.RegisterDWGObjectLoadProc(DWG_TYPE_LAYER,@AddLayer);
   ZCDWGParser.RegisterDWGObjectLoadProc(DWG_TYPE_LTYPE,@AddLineType);
   ZCDWGParser.RegisterDWGObjectLoadProc(DWG_TYPE_BLOCK_HEADER,@AddBlockHeader);
 
   ZCDWGParser.RegisterDWGEntityLoadProc(DWG_TYPE_LINE,@AddLineEntity);
+  ZCDWGParser.RegisterDWGEntityLoadProc(DWG_TYPE_CIRCLE,@AddCircleEntity);
   ZCDWGParser.RegisterDWGEntityLoadProc(DWG_TYPE_BLOCK,@AddBlock);
 finalization
 end.

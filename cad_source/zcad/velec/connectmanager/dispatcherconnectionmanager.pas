@@ -20,6 +20,13 @@ type
     CanBeNode: Boolean;
   end;
 
+  PGridNodeData = ^TGridNodeData;
+  TGridNodeData = record
+    DevName: string;
+    HDName: string;
+    HDGroup: string;
+  end;
+
 
   { TDispatcherConnectionFrame }
 
@@ -27,7 +34,7 @@ type
     ActionList1: TActionList;
     bufGridDev: TBufDataset;
     dsGridDev: TDataSource;
-    gridDev: TDBGrid;
+    vstDev: TLazVirtualStringTree;
     PanelData: TPanel;
     PanelNav: TPanel;
     PanelButton: TPanel;
@@ -40,8 +47,12 @@ type
     ToolBar1: TToolBar;
     procedure FrameResize(Sender: TObject);
     procedure panelSplitterMoved(Sender: TObject);
-    procedure gridDevDrawColumnCell(Sender: TObject; const Rect: TRect; DataCol: Integer; Column: TColumn; State: TGridDrawState);
-    procedure gridDevCellClick(Column: TColumn);
+    procedure vstDevGetText(Sender: TBaseVirtualTree; Node: PVirtualNode;
+      Column: TColumnIndex; TextType: TVSTTextType; var CellText: String);
+    procedure vstDevPaintText(Sender: TBaseVirtualTree;
+      const TargetCanvas: TCanvas; Node: PVirtualNode; Column: TColumnIndex;
+      TextType: TVSTTextType);
+    procedure vstDevClick(Sender: TObject);
   private
     //для работы разделителя
     FProportion: Double; // Пропорция ширины PanelSynchDraw / (ClientWidth - Splitter)
@@ -52,8 +63,8 @@ type
     procedure InitializeDatabase;
     procedure InitializeDeviceTree;
     procedure InitializeBufDataset;
-    procedure InitializeGridDev;
-    procedure recordingGridDev(qry:string);
+    procedure InitializeVstDev;
+    procedure recordingVstDev(qry:string);
     procedure BuildDeviceHierarchy;
     procedure TreeGetText(Sender: TBaseVirtualTree; Node: PVirtualNode;
       Column: TColumnIndex; TextType: TVSTTextType; var CellText: String);
@@ -136,13 +147,9 @@ begin
 
 
 
-  gridDev.Options := gridDev.Options + [dgColumnResize, dgHeaderPushedLook];
-  // Разрешить изменение ширины колонок
-  gridDev.Options := gridDev.Options + [dgColumnResize];
-
-  // Можно также настроить другие параметры:
-  gridDev.DefaultDrawing := True;  // Включить стандартное рисование
-  gridDev.Flat := False;          // Не использовать плоский стиль (лучше для изменения размеров)
+  vstDev.Parent := PanelData;
+  vstDev.Align := alClient;
+  vstDev.NodeDataSize := SizeOf(TGridNodeData);
 
     except
       //SQLTransaction.Free;
@@ -458,7 +465,7 @@ begin
   InitializeDeviceTree;
   BuildDeviceHierarchy;
 
-  // Заполнение gridDev
+  // Заполнение vstDev
 
   flagEditBufBeforePost:=false;
   // 2. Настройка BufDataset
@@ -466,20 +473,16 @@ begin
   InitializeBufDataset;
   //Привязываем к источнику данных
   dsGridDev.DataSet := bufGridDev;
-  gridDev.DataSource := dsGridDev;
   //ShowMessage('открыть файл...');
-  ////Настраиваем колонки DBGrid
-  gridDev.Columns.Clear;
+
+  // 3. Настройка vstDev
+  InitializeVstDev;
                                     //ShowMessage('открыть файл...');
+  recordingVstDev('SELECT * FROM dev');
 
-
-  // 3. Настройка DBGRID gridDev
-  InitializeGridDev;
-                                    //ShowMessage('открыть файл...');
-  recordingGridDev('SELECT * FROM dev');
-
-  gridDev.OnDrawColumnCell := @gridDevDrawColumnCell;
-  gridDev.OnCellClick := @gridDevCellClick;
+  vstDev.OnGetText := @vstDevGetText;
+  vstDev.OnPaintText := @vstDevPaintText;
+  vstDev.OnClick := @vstDevClick;
 
   //ShowMessage('открыть файл...');
 end;
@@ -576,31 +579,55 @@ begin
       ShowMessage('Ошибка подключения создания BufDataset: ' + E.Message);
   end;
 end;
-procedure TDispatcherConnectionFrame.InitializeGridDev;
+procedure TDispatcherConnectionFrame.InitializeVstDev;
 begin
   try
-    // Кнопка "Показать"
-    with gridDev.Columns.Add do
-    begin
-      Title.Caption := 'show';
-      Width := 70;
-      FieldName := 'ActionShow'; // Без привязки
-    end;
+    vstDev.BeginUpdate;
+    try
+      vstDev.Header.Columns.Clear;
+      vstDev.Clear;
 
-    // Обычные поля
-    //with gridDev.Columns.Add do FieldName := 'ID';
-    with gridDev.Columns.Add do FieldName := 'devname';
-    with gridDev.Columns.Add do FieldName := 'hdname';
-    with gridDev.Columns.Add do FieldName := 'hdgroup';
-    //with gridDev.Columns.Add do FieldName := 'icanhd';
+      vstDev.TreeOptions.PaintOptions :=
+        vstDev.TreeOptions.PaintOptions - [toShowRoot, toShowTreeLines, toShowButtons];
+      vstDev.TreeOptions.SelectionOptions :=
+        vstDev.TreeOptions.SelectionOptions + [toFullRowSelect];
+      vstDev.Header.Options :=
+        vstDev.Header.Options + [hoVisible, hoColumnResize, hoAutoResize];
 
+      // Кнопка "Показать"
+      with vstDev.Header.Columns.Add do
+      begin
+        Text := 'show';
+        Width := 70;
+      end;
 
-    // Кнопка "Ред."
-    with gridDev.Columns.Add do
-    begin
-      Title.Caption := 'edit';
-      Width := 60;
-      FieldName := 'ActionEdit'; // Без привязки
+      // Обычные поля
+      with vstDev.Header.Columns.Add do
+      begin
+        Text := 'devname';
+        Width := 100;
+      end;
+
+      with vstDev.Header.Columns.Add do
+      begin
+        Text := 'hdname';
+        Width := 100;
+      end;
+
+      with vstDev.Header.Columns.Add do
+      begin
+        Text := 'hdgroup';
+        Width := 100;
+      end;
+
+      // Кнопка "Ред."
+      with vstDev.Header.Columns.Add do
+      begin
+        Text := 'edit';
+        Width := 60;
+      end;
+    finally
+      vstDev.EndUpdate;
     end;
   except
     on E: Exception do
@@ -608,10 +635,12 @@ begin
   end;
 end;
 
-procedure TDispatcherConnectionFrame.recordingGridDev(qry:string);
+procedure TDispatcherConnectionFrame.recordingVstDev(qry:string);
 var
     i:integer;
     writeQuery: TSQLQuery;
+    Node: PVirtualNode;
+    NodeData: PGridNodeData;
 begin
   try
     writeQuery := TSQLQuery.Create(nil);
@@ -619,74 +648,84 @@ begin
     writeQuery.SQL.Text := qry;
     writeQuery.Open;
     writeQuery.First;
-    bufGridDev.Close;
-    bufGridDev.Open;
-    while not writeQuery.EOF do
-    begin
-      bufGridDev.Append;
-      bufGridDev.FieldByName('ActionShow').AsString := '';
-      bufGridDev.FieldByName('ActionEdit').AsString := '';
-      for i := 2 to writeQuery.Fields.Count - 3 do begin
-        bufGridDev.Fields[i-1].Assign(writeQuery.Fields[i]);
+
+    vstDev.BeginUpdate;
+    try
+      vstDev.Clear;
+
+      while not writeQuery.EOF do
+      begin
+        Node := vstDev.AddChild(nil);
+        NodeData := vstDev.GetNodeData(Node);
+
+        NodeData^.DevName := writeQuery.FieldByName('devname').AsString;
+        NodeData^.HDName := writeQuery.FieldByName('hdname').AsString;
+        NodeData^.HDGroup := writeQuery.FieldByName('hdgroup').AsString;
+
+        writeQuery.Next;
       end;
-      bufGridDev.Post;
-      writeQuery.Next;
+    finally
+      vstDev.EndUpdate;
     end;
+
     writeQuery.Close;
+    writeQuery.Free;
   except
     on E: Exception do
-      ShowMessage('Ошибка создания колонок: ' + E.Message);
+      ShowMessage('Ошибка загрузки данных: ' + E.Message);
   end;
 end;
 
 
-procedure TDispatcherConnectionFrame.gridDevDrawColumnCell(Sender: TObject; const Rect: TRect;
-  DataCol: Integer; Column: TColumn; State: TGridDrawState);
+procedure TDispatcherConnectionFrame.vstDevGetText(Sender: TBaseVirtualTree;
+  Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType;
+  var CellText: String);
 var
-  BtnRect: TRect;
-  BtnText:string;
+  NodeData: PGridNodeData;
 begin
-  if (Column.Index = 0) or (Column.Index = gridDev.Columns.Count - 1) then
-  begin
-    // Очищаем область
-    gridDev.Canvas.FillRect(Rect);
-    // Рисуем кнопку
-    BtnRect := Rect;
-    InflateRect(BtnRect, -2, -2);
+  NodeData := Sender.GetNodeData(Node);
+  if not Assigned(NodeData) then Exit;
 
-    gridDev.Canvas.Brush.Color := clBtnFace;
-    gridDev.Canvas.Rectangle(BtnRect);
-    gridDev.Canvas.Font.Color := clBlack;
-    if Column.Index = 0 then
-      BtnText:='Показать'
-    else
-      BtnText:='Ред.';
-
-    gridDev.Canvas.TextOut(
-      BtnRect.Left + (BtnRect.Width - gridDev.Canvas.TextWidth(BtnText)) div 2,
-      BtnRect.Top + (BtnRect.Height - gridDev.Canvas.TextHeight(BtnText)) div 2,
-      BtnText
-    );
-  end
-  else
-    gridDev.DefaultDrawColumnCell(Rect, DataCol, Column, State);
+  case Column of
+    0: CellText := 'Показать';
+    1: CellText := NodeData^.DevName;
+    2: CellText := NodeData^.HDName;
+    3: CellText := NodeData^.HDGroup;
+    4: CellText := 'Ред.';
+  end;
 end;
 
-procedure TDispatcherConnectionFrame.gridDevCellClick(Column: TColumn);
-var
-  idVal, t1Val: String;
+procedure TDispatcherConnectionFrame.vstDevPaintText(Sender: TBaseVirtualTree;
+  const TargetCanvas: TCanvas; Node: PVirtualNode; Column: TColumnIndex;
+  TextType: TVSTTextType);
 begin
-  //ApplyUpdates;
+  if (Column = 0) or (Column = 4) then
+  begin
+    TargetCanvas.Font.Color := clBlue;
+    TargetCanvas.Font.Style := [fsUnderline];
+  end;
+end;
 
-  if not Assigned(bufGridDev) or bufGridDev.IsEmpty then Exit;
+procedure TDispatcherConnectionFrame.vstDevClick(Sender: TObject);
+var
+  Node: PVirtualNode;
+  NodeData: PGridNodeData;
+  HitInfo: THitInfo;
+  P: TPoint;
+begin
+  P := vstDev.ScreenToClient(Mouse.CursorPos);
+  vstDev.GetHitTestInfoAt(P.X, P.Y, True, HitInfo);
 
-  idVal := bufGridDev.FieldByName('devname').AsString;
-  t1Val := bufGridDev.FieldByName('hdname').AsString;
+  if not Assigned(HitInfo.HitNode) then Exit;
 
-  if Column.Index = 0 then
-    ShowMessage('devname: ' + idVal)
-  else if Column.Index = gridDev.Columns.Count - 1 then
-    ShowMessage('Редактировать: ' + t1Val);
+  Node := HitInfo.HitNode;
+  NodeData := vstDev.GetNodeData(Node);
+  if not Assigned(NodeData) then Exit;
+
+  if HitInfo.HitColumn = 0 then
+    ShowMessage('devname: ' + NodeData^.DevName)
+  else if HitInfo.HitColumn = 4 then
+    ShowMessage('Редактировать: ' + NodeData^.HDName);
 end;
 
 destructor TDispatcherConnectionFrame.Destroy;
@@ -940,14 +979,14 @@ begin
       //  'Подключено к: '+ GetNodePhysicalPath(Node) + #13#10
       //  );
       if Data^.DeviceName <> 'Все устройства' then
-        recordingGridDev('SELECT * FROM dev WHERE hdway = '''+ GetNodePhysicalPath(Node) + '''')
+        recordingVstDev('SELECT * FROM dev WHERE hdway = '''+ GetNodePhysicalPath(Node) + '''')
       else
-       recordingGridDev('SELECT * FROM dev')
+       recordingVstDev('SELECT * FROM dev')
     end
     else
     begin
       ShowMessage('Все устройства');
-      recordingGridDev('SELECT * FROM dev');
+      recordingVstDev('SELECT * FROM dev');
     end;
   end;
 end;

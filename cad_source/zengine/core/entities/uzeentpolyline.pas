@@ -267,7 +267,6 @@ begin
     pv:=VertexArrayInWCS.getDataMutable(i);
     pdesc.vertexnum:=i;
     pdesc.attr:=[CPA_Strech];
-    pdesc.pointtype:=i;
     pdesc.worldcoord:=pv^;
     PSelectedObjDesc(tdesc)^.pcontrolpoint^.PushBackData(pdesc);
   end;

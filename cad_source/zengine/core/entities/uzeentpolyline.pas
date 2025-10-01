@@ -252,11 +252,10 @@ var
   pv,pvnext:pGDBvertex;
   segmentCount:integer;
 begin
-  segmentCount:=VertexArrayInWCS.Count;
   if closed then
-    segmentCount:=segmentCount+1
+    segmentCount:=VertexArrayInWCS.Count
   else
-    segmentCount:=segmentCount-1;
+    segmentCount:=VertexArrayInWCS.Count-1;
 
   PSelectedObjDesc(tdesc)^.pcontrolpoint^.init(VertexArrayInWCS.Count+segmentCount);
 

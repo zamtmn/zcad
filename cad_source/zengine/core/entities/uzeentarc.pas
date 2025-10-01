@@ -157,11 +157,16 @@ begin
     eav:=q2;
   end;
 
-  pins:=P_insert_in_WCS;
+  Local.p_insert:=VectorTransform3D(Local.p_insert,t_matrix);
+  Local.basis.ox:=VectorTransform3D(Local.basis.ox,t_matrix);
+  Local.basis.oy:=VectorTransform3D(Local.basis.oy,t_matrix);
+  Local.basis.oz:=VectorTransform3D(Local.basis.oz,t_matrix);
+
   sav:=VectorTransform3D(sav,t_matrix);
   eav:=VectorTransform3D(eav,t_matrix);
-  pins:=VectorTransform3D(pins,t_matrix);
-  inherited;
+  pins:=Local.p_insert;
+
+  CalcObjMatrix;
 
   sav:=VertexSub(sav,pins);
   eav:=VertexSub(eav,pins);

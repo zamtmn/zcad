@@ -90,10 +90,10 @@ begin
   pobj := AllocAndInitLine(ZContext.PDrawing^.pObjRoot);
   PGDBObjLine(pobj)^.CoordInOCS.lBegin.x:=PLine^.start.x;
   PGDBObjLine(pobj)^.CoordInOCS.lBegin.y:=PLine^.start.y;
-  PGDBObjLine(pobj)^.CoordInOCS.lBegin.z:=PLine^.start.x;
+  PGDBObjLine(pobj)^.CoordInOCS.lBegin.z:=PLine^.start.z;
   PGDBObjLine(pobj)^.CoordInOCS.lEnd.x:=PLine^.&end.x;
   PGDBObjLine(pobj)^.CoordInOCS.lEnd.y:=PLine^.&end.y;
-  PGDBObjLine(pobj)^.CoordInOCS.lEnd.z:=PLine^.&end.x;
+  PGDBObjLine(pobj)^.CoordInOCS.lEnd.z:=PLine^.&end.z;
   ZContext.PDrawing^.pObjRoot^.AddMi(@pobj);
   //PGDBObjEntity(pobj)^.BuildGeometry(drawing);
   //PGDBObjEntity(pobj)^.formatEntity(drawing,dc);
@@ -108,6 +108,9 @@ begin
   PGDBObjCircle(pobj)^.Local.p_insert.y:=PCircle^.center.y;
   PGDBObjCircle(pobj)^.Local.p_insert.z:=PCircle^.center.z;
   PGDBObjCircle(pobj)^.Radius:=PCircle^.radius;
+  PGDBObjCircle(pobj)^.Local.basis.oz.x:=PCircle^.extrusion.x;
+  PGDBObjCircle(pobj)^.Local.basis.oz.y:=PCircle^.extrusion.y;
+  PGDBObjCircle(pobj)^.Local.basis.oz.z:=PCircle^.extrusion.z;
   ZContext.PDrawing^.pObjRoot^.AddMi(@pobj);
 end;
 

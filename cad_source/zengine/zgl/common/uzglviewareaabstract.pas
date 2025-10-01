@@ -20,10 +20,11 @@ unit uzglviewareaabstract;
 {$INCLUDE zengineconfig.inc}
 interface
 uses
-     UGDBOpenArrayOfPV,uzgldrawerabstract,uzeentgenericsubentry,//uzbtypes,
+     UGDBOpenArrayOfPV,uzgldrawerabstract,uzeentgenericsubentry,uzbtypes,
      uzglviewareadata,uzgldrawcontext,UGDBPoint3DArray,uzeentitiestree,uzegeometry,uzedrawingabstract,
      uzegeometrytypes,sysutils,
-     ExtCtrls,Controls,Classes,{$IFDEF DELPHI}Types,Messages,Graphics,{$ENDIF}{$IFNDEF DELPHI}LCLType,{$ENDIF}Forms,uzeentity;
+     ExtCtrls,Controls,Classes,{$IFDEF DELPHI}Types,Messages,Graphics,{$ENDIF}{$IFNDEF DELPHI}LCLType,{$ENDIF}uzeentity,
+     uzepalette,uzeconsts;
 
 type
 {NEEDFIXFORDELPHI}
@@ -152,14 +153,57 @@ type
 procedure copyospoint(var dest:os_record; source:os_record);
 function correcttogrid(const point:GDBVertex;const grid:GDBSnap2D):GDBVertex;
 function CreateFaceRC:TDrawContext;
+var
+  sysvarDISPOSSize:double=10;
+  sysvarDISPCursorSize:integer=10;
+  SysVarDISPCrosshairSize:double=0.05;
+  sysvarDISPBackGroundColor:TRGB=(r:0;g:0;b:0;a:255);
+  sysvarRDMaxRenderTime:integer=0;
+  sysvarDISPZoomFactor:double=1.624;
+  sysvarDISPSystmGeometryDraw:boolean=false;
+  sysvarDISPShowCSAxis:boolean=true;
+  sysvarDISPSystmGeometryColor:TGDBPaletteColor=1;
+  sysvarDISPHotGripColor:TGDBPaletteColor=2;
+  sysvarDISPSelGripColor:TGDBPaletteColor=3;
+  sysvarDISPUnSelGripColor:TGDBPaletteColor=4;
+  sysvarDWGOSMode:TGDBOSMode=0;
+  sysvarDWGOSModeControl:Boolean=True;
+  sysvarDISPGripSize:Integer=5;
+  sysvarDISPColorAxis:boolean=true;
+  sysvarDISPDrawZAxis:boolean=true;
+  sysvarDrawInsidePaintMessage:TGDB3StateBool=T3SB_Default;
+  sysvarDWGPolarMode:Boolean=false;
+  SysVarRDLineSmooth:Boolean=false;
+  sysvarRDUseStencil:Boolean=false;
+  sysvarRDLastRenderTime:integer=0;
+  sysvarRDLastUpdateTime:integer=0;
+  sysvarRDEnableAnimation:boolean=true;
+  SysVarRDImageDegradationEnabled:boolean=false;
+  SysVarRDImageDegradationPrefferedRenderTime:integer=0;
+  SysVarRDImageDegradationCurrentDegradationFactor:Double=0;
+  SysVarRDImageDegradationMaxDegradationFactor:Double=0;
+  SysVarDISPRemoveSystemCursorFromWorkArea:Boolean=true;
+  sysvarDSGNSelNew:Boolean=false;
+  sysvarDWGEditInSubEntry:Boolean=false;
+  sysvarDSGNOTrackTimerInterval:Integer=500;
+  sysvarRDLastCalcVisible:Integer=0;
+  sysvarRDLight:boolean=false;
+  sysvarDISPLWDisplayScale:Integer=10;
+  sysvarDISPmaxLWDisplayScale:Integer=20;
+  sysvarDISPDefaultLW:TGDBLineWeight=LnWt025;
+  sysvarDSGNEntityMoveStartTimerInterval:Integer=300;
+  sysvarDSGNEntityMoveStartOffset:Integer=-30;
+  sysvarDSGNEntityMoveByMouseUp:Boolean=True;
+  sysvarDSGNMaxSelectEntsCountWithObjInsp:Integer=25000;
+  sysvarDSGNMaxSelectEntsCountWithGrips:Integer=100;
 implementation
 function CreateFaceRC:TDrawContext;
 begin
   result.Subrender:=0;
   result.Selected:=false;
-  result.DrawingContext.VActuality.VisibleActualy:=-1;
-  result.DrawingContext.VActuality.InfrustumActualy:=-1;
-  result.DrawingContext.DRAWCOUNT:=-1;
+  result.DrawingContext.VActuality.VisibleActualy:=NotActual;
+  result.DrawingContext.VActuality.InfrustumActualy:=NotActual;
+  result.DrawingContext.DRAWCOUNT:=NotActual;
   result.DrawingContext.SysLayer:=nil;
   result.MaxDetail:=false;
   result.LOD:=LODCalculatedDetail;

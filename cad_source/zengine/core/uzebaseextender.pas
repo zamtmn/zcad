@@ -102,6 +102,7 @@ var
   i:integer;
   p:GExtender;
 begin
+     if fEntityExtensions.Size>0 then
      for i:=0 to fEntityExtensions.Size-1 do
      begin
        p:=fEntityExtensions[i];

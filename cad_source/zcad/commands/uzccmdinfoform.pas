@@ -20,6 +20,7 @@ unit uzccmdinfoform;
 {$INCLUDE zengineconfig.inc}
 
 interface
+
 uses
   uzcLog,Forms,
   uzcSynForm,
@@ -34,16 +35,17 @@ implementation
 
 procedure createInfoFormVar;
 begin
-  if not assigned(InfoFormVar) then
-  begin
-  InfoFormVar:=TSynForm.create(application.MainForm);
-  InfoFormVar.DialogPanel.HelpButton.Hide;
-  InfoFormVar.DialogPanel.CancelButton.Hide;
-  InfoFormVar.caption:=(rsCAUTIONnoSyntaxCheckYet);
+  if not assigned(InfoFormVar) then begin
+    InfoFormVar:=TSynForm.Create(application.MainForm);
+    InfoFormVar.DialogPanel.HelpButton.Hide;
+    InfoFormVar.DialogPanel.CancelButton.Hide;
+    InfoFormVar.Caption:=(rsCAUTIONnoSyntaxCheckYet);
   end;
 end;
 
 initialization
+
 finalization
-  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
+  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],
+    LM_Info,UnitsFinalizeLMId);
 end.

@@ -20,21 +20,27 @@ unit uzccommand_loadpalettes;
 {$INCLUDE zengineconfig.inc}
 
 interface
+
 uses
- uzcLog,
- uzbpaths,uzccommandsabstract,uzccommandsimpl,uztoolbarsmanager;
+  uzcLog,
+  uzbpaths,uzccommandsabstract,uzccommandsimpl,uztoolbarsmanager;
 
 implementation
-function LoadPalettes_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
+
+function LoadPalettes_com(const Context:TZCADCommandContext;
+  operands:TCommandOperands):TCommandResult;
 begin
   ToolBarsManager.LoadPalettes(ExpandPath(operands));
-  result:=cmd_ok;
+  Result:=cmd_ok;
 end;
 
 
 initialization
-  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
+  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],
+    LM_Info,UnitsInitializeLMId);
   CreateZCADCommand(@LoadPalettes_com,'LoadPalettes',0,0);
+
 finalization
-  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
+  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],
+    LM_Info,UnitsFinalizeLMId);
 end.

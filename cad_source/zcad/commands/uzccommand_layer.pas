@@ -21,6 +21,7 @@ unit uzccommand_layer;
 {$INCLUDE zengineconfig.inc}
 
 interface
+
 uses
   SysUtils,
   uzcLog,
@@ -31,22 +32,27 @@ uses
   Varman,
   uzccommandsabstract,uzccommandsimpl;
 
-function layer_cmd(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
+function layer_cmd(const Context:TZCADCommandContext;
+  operands:TCommandOperands):TCommandResult;
 
 implementation
 
-function layer_cmd(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
+function layer_cmd(const Context:TZCADCommandContext;
+  operands:TCommandOperands):TCommandResult;
 begin
   LayersForm:=TLayersForm.Create(nil);
   SetHeightControl(LayersForm,sysvar.INTF.INTF_DefaultControlHeight^);
   zcUI.DOShowModal(LayersForm);
-  Freeandnil(LayersForm);
-  result:=cmd_ok;
+  FreeAndNil(LayersForm);
+  Result:=cmd_ok;
 end;
 
 initialization
-  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
+  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],
+    LM_Info,UnitsInitializeLMId);
   CreateZCADCommand(@layer_cmd,'Layer',CADWG,0);
+
 finalization
-  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
+  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],
+    LM_Info,UnitsFinalizeLMId);
 end.

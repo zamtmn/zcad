@@ -21,6 +21,7 @@ unit uzccommand_unitsman;
 {$INCLUDE zengineconfig.inc}
 
 interface
+
 uses
   uzcLog,
   Controls,
@@ -34,7 +35,8 @@ uses
 
 implementation
 
-function UnitsMan_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
+function UnitsMan_com(const Context:TZCADCommandContext;
+  operands:TCommandOperands):TCommandResult;
 var
   PUnit:ptunit;
 begin
@@ -46,13 +48,16 @@ begin
       zcUI.TextMessage('unit not found!',TMWOHistoryOut);
   end else
     zcUI.TextMessage('Specify unit name!',TMWOHistoryOut);
-  result:=cmd_ok;
+  Result:=cmd_ok;
 end;
 
 
 initialization
-  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
+  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],
+    LM_Info,UnitsInitializeLMId);
   CreateZCADCommand(@UnitsMan_com,'UnitsMan',0,0);
+
 finalization
-  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
+  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],
+    LM_Info,UnitsFinalizeLMId);
 end.

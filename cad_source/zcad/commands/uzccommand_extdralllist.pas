@@ -18,6 +18,7 @@
 unit uzccommand_extdralllist;
 
 interface
+
 uses
   uzcLog,SysUtils,
   uzccommandsabstract,uzccommandsimpl,
@@ -25,18 +26,22 @@ uses
 
 implementation
 
-function extdrAllList_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
+function extdrAllList_com(const Context:TZCADCommandContext;
+  operands:TCommandOperands):TCommandResult;
 var
   pair:TEntityExtendersMap.TDictionaryPair;
 begin
   for pair in EntityExtenders do
-    zcUI.TextMessage(pair.value.getExtenderName,TMWOHistoryOut);
-  result:=cmd_ok;
+    zcUI.TextMessage(pair.Value.getExtenderName,TMWOHistoryOut);
+  Result:=cmd_ok;
 end;
 
 initialization
-  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
+  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],
+    LM_Info,UnitsInitializeLMId);
   CreateZCADCommand(@extdrAllList_com,'extdrAllList',0,0);
+
 finalization
-  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
+  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],
+    LM_Info,UnitsFinalizeLMId);
 end.

@@ -21,6 +21,7 @@ unit uzccommand_dbgCmdList;
 {$INCLUDE zengineconfig.inc}
 
 interface
+
 uses
   uzcLog,
   uzccommandsabstract,uzccommandsimpl,
@@ -30,29 +31,34 @@ uses
 
 implementation
 
-function dbgCmdList_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
+function dbgCmdList_com(const Context:TZCADCommandContext;
+  operands:TCommandOperands):TCommandResult;
 var
-   p:PCommandObjectDef;
-   ir:itrec;
-   clist:TZctnrVectorStrings;
+  p:PCommandObjectDef;
+  ir:itrec;
+  clist:TZctnrVectorStrings;
 begin
-   clist.init(200);
-   p:=commandmanager.beginiterate(ir);
-   if p<>nil then
-   repeat
-         clist.PushBackData(p^.CommandName);
-         p:=commandmanager.iterate(ir);
-   until p=nil;
-   clist.sort;
-   zcUI.TextMessage(clist.GetTextWithEOL,TMWOHistoryOut);
-   clist.done;
-   result:=cmd_ok;
+  clist.init(200);
+  p:=commandmanager.beginiterate(ir);
+  if p<>nil then
+    repeat
+      clist.PushBackData(p^.CommandName);
+      p:=commandmanager.iterate(ir);
+    until p=nil;
+  clist.sort;
+  zcUI.TextMessage(clist.GetTextWithEOL,TMWOHistoryOut);
+  clist.done;
+  Result:=cmd_ok;
 end;
 
 initialization
-  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
+  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],
+    LM_Info,UnitsInitializeLMId);
   CreateZCADCommand(@dbgCmdList_com,'dbgCmdList',0,0);
+
 finalization
-  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
-  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
+  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],
+    LM_Info,UnitsFinalizeLMId);
+  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],
+    LM_Info,UnitsFinalizeLMId);
 end.

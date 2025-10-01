@@ -20,11 +20,11 @@ unit uzccommand_blockpreviewexport;
 {$INCLUDE zengineconfig.inc}
 
 interface
+
 uses
   SysUtils,
   LCLType,LCLIntf,uzcLog,Graphics,
-
-  uzgldrawercanvas,uzerasterizer,uzglviewareageneral,
+  uzgldrawercanvas,uzerasterizer,uzglviewareageneral,uzglviewareaabstract,
   uzgldrawcontext,
   uzedrawingsimple,uzcdrawings,
   uzcsysvars,
@@ -38,28 +38,32 @@ uses
   uzeentdevice,uzeentblockinsert,uzeblockdef,uzeentsubordinated,
   //uzestyleslayers,
   uzeconsts;
-function BlockPreViewExport_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
+
+function BlockPreViewExport_com(const Context:TZCADCommandContext;
+  operands:TCommandOperands):TCommandResult;
+
 implementation
-function BlockPreViewExport_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
+
+function BlockPreViewExport_com(const Context:TZCADCommandContext;
+  operands:TCommandOperands):TCommandResult;
 const
   scl=3;
 var
-   cdwg:PTSimpleDrawing;
-   pb:PGDBObjBlockInsert;
-   tb:PGDBObjSubordinated;
-   DC:TDrawContext;
-   BMP:TBitmap;
-   PNG:TPortableNetworkGraphic;
-   PrinterDrawer:TZGLCanvasDrawer;
-   PrintParam:TRasterizeParams;
-   BlockName,imgsize:AnsiString;
-   sx,bmpw:integer;
-   tv:GDBvertex;
-   SAVEsysvarDISPLWDisplayScale,
-   SAVEsysvarDISPmaxLWDisplayScale:integer;
-   SAVELWDisplay:boolean;
-   //plp:PGDBLayerProp;
-   bb{,bb2}:TBoundingBox;
+  cdwg:PTSimpleDrawing;
+  pb:PGDBObjBlockInsert;
+  tb:PGDBObjSubordinated;
+  DC:TDrawContext;
+  BMP:TBitmap;
+  PNG:TPortableNetworkGraphic;
+  PrinterDrawer:TZGLCanvasDrawer;
+  PrintParam:TRasterizeParams;
+  BlockName,imgsize:ansistring;
+  sx,bmpw:integer;
+  tv:GDBvertex;
+  SAVEsysvarDISPLWDisplayScale,SAVEsysvarDISPmaxLWDisplayScale:integer;
+  SAVELWDisplay:boolean;
+  //plp:PGDBLayerProp;
+  bb{,bb2}:TBoundingBox;
 begin
   //пример вызова(РазмерИзображекния|ИмяБлока|Путь)
   //BlockPreViewExport(128|DEVICE_PS_DAT_HAND|*images\palettes)
@@ -84,10 +88,11 @@ begin
     plp:=cdwg^.LayerTable.getAddres('EL_DEVICE_NAME');
     if plp<>nil then
       plp^._on:=false;}
-    cdwg^.LWDisplay:=true;
+    cdwg^.LWDisplay:=True;
     dc:=cdwg^.CreateDrawingRC;
     drawings.AddBlockFromDBIfNeed(drawings.GetCurrentDWG,BlockName);
-    pb := Pointer(drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.CreateObj(GDBBlockInsertID));
+    pb:=Pointer(drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.CreateObj(
+      GDBBlockInsertID));
     pb^.init(drawings.GetCurrentROOT,drawings.GetCurrentDWG^.GetCurrentLayer,0);
     pb^.Name:=BlockName;
     zcSetEntPropFromCurrentDrawingProp(pb);
@@ -111,12 +116,12 @@ begin
     pb^.BuildVarGeometry(cdwg^);
     pb^.FormatEntity(cdwg^,dc);
     drawings.GetCurrentROOT^.ObjArray.ObjTree.CorrectNodeBoundingBox(pb^);
-    cdwg^.ConstructObjRoot.ObjArray.Count := 0;
+    cdwg^.ConstructObjRoot.ObjArray.Count:=0;
     //pb^.RenderFeedback(cdwg^.pcamera^.POSCOUNT,cdwg^.pcamera^,@cdwg^.myGluProject2,dc);
 
 
-    PrintParam.FitToPage:=true;
-    PrintParam.Center:=false;
+    PrintParam.FitToPage:=True;
+    PrintParam.Center:=False;
     PrintParam.Scale:=1;
     PrintParam.Palette:=PC_Color;
 
@@ -133,7 +138,7 @@ begin
     BMP.Canvas.Brush.Style:=bsSolid;
     BMP.Canvas.FillRect(0,0,bmpw,bmpw);
 
-    PrinterDrawer:=TZGLCanvasDrawer.create;
+    PrinterDrawer:=TZGLCanvasDrawer.Create;
     try
       //bb:=pb^.vp.BoundingBox;
       bb:=pb^.getonlyvisibleoutbound(dc);
@@ -145,13 +150,14 @@ begin
       end;}
       tv:=VertexSub(bb.RTF,bb.LBN);
       tv:=VertexMulOnSc(tv,0.15);
-      rasterize(cdwg,bmpw,bmpw,VertexSub(bb.LBN,tv),VertexAdd(bb.RTF,tv),PrintParam,bmp.Canvas,PrinterDrawer);
+      rasterize(cdwg,bmpw,bmpw,VertexSub(bb.LBN,tv),VertexAdd(bb.RTF,tv),
+        PrintParam,bmp.Canvas,PrinterDrawer);
 
       //PNG.Canvas.StretchDraw(Rect(0,0,bmpw,bmpw),bmp);
 
-      SetStretchBltMode(PNG.Canvas.Handle, HALFTONE);
-      StretchBlt(PNG.Canvas.Handle, 0, 0, PNG.Width, PNG.Height,
-                 bmp.Canvas.Handle, 0, 0, bmp.Width, bmp.Height, SRCCOPY);
+      SetStretchBltMode(PNG.Canvas.Handle,HALFTONE);
+      StretchBlt(PNG.Canvas.Handle,0,0,PNG.Width,PNG.Height,
+        bmp.Canvas.Handle,0,0,bmp.Width,bmp.Height,SRCCOPY);
 
       cdwg^.GetCurrentROOT^.GoodRemoveMiFromArray(pb,cdwg^);
       ForceDirectories(ExtractFileDir(ExpandPath(operands)));
@@ -165,16 +171,20 @@ begin
       BMP.Free;
       PrinterDrawer.Free;
       zcRedrawCurrentDrawing;
-      result:=cmd_ok;
+      Result:=cmd_ok;
     end;
   end else begin
     zcUI.TextMessage('No current drawing???',TMWOSilentShowError);
-    result:=cmd_error;
+    Result:=cmd_error;
   end;
 end;
+
 initialization
-  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
+  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],
+    LM_Info,UnitsInitializeLMId);
   CreateZCADCommand(@BlockPreViewExport_com,'BlockPreViewExport',0,0);
+
 finalization
-  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
+  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],
+    LM_Info,UnitsFinalizeLMId);
 end.

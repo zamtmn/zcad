@@ -15,18 +15,21 @@
 {
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
-
 unit uzeSplineUtils;
 {$Mode delphi}{$H+}
 {$Include zengineconfig.inc}
 
 interface
+
 uses
   gzctnrVector,uzegeometrytypes;
+
 type
-  TKnotsVector=object(GZVector<Single>)
+  TKnotsVector=object(GZVector<single>)
   end;
+
   TCPVector=object(GZVector<GDBvertex4S>)
   end;
+
 implementation
 end.

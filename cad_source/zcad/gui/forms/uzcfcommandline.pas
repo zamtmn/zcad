@@ -154,7 +154,7 @@ end;
 procedure HandleCmdLine(GUIMode:TzcMessageID);
 begin
   if GUIMode in [zcMsgUICMDLineCheck] then begin
-    if INTFCommandLineEnabled or (prompt.Highlight.Count>0) then
+    if INTFCommandLineEnabled or ((prompt<>nil)and(prompt.Highlight.Count>0)) then
       ShowCmdLine
     else
       HideCmdLine;

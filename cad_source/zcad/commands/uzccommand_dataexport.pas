@@ -23,6 +23,7 @@ unit uzccommand_dataexport;
 {$INCLUDE zengineconfig.inc}
 
 interface
+
 uses
   CsvDocument,
   uzcLog,
@@ -42,14 +43,19 @@ uses
   uzeparsercmdprompt,uzcinterface,uzcdialogsfiles;
 
 resourcestring
-  RSCLPDataExportWaitFile                ='Configure export ${"&[p]arams",Keys[p],StrId[CLPIdOptions]}, run ${"&[f]ile dialog",Keys[f],StrId[CLPIdFileDialog]} or enter file name (empty for default):';
-  RSCLPDataExportOptions                 ='${"&[<]<<",Keys[<],StrId[CLPIdBack]} Set ${"&[e]ntities",Keys[o],StrId[CLPIdUser1]}/${"&[p]roperties",Keys[o],StrId[CLPIdUser2]} filter or export ${"&[s]cript",Keys[o],StrId[CLPIdUser3]}';
-  RSCLPDataExportEntsFilterCurrentValue  ='Entities filter current value:';
-  RSCLPDataExportEntsFilterNewValue      ='${"&[<]<<",Keys[<],StrId[CLPIdBack]} Enter new entities filter:';
-  RSCLPDataExportPropsFilterCurrentValue ='Properties filter current value:';
-  RSCLPDataExportPropsFilterNewValue     ='${"&[<]<<",Keys[<],StrId[CLPIdBack]} Enter new properties filter:';
+  RSCLPDataExportWaitFile=
+    'Configure export ${"&[p]arams",Keys[p],StrId[CLPIdOptions]}, run ${"&[f]ile dialog",Keys[f],StrId[CLPIdFileDialog]} or enter file name (empty for default):';
+  RSCLPDataExportOptions=
+    '${"&[<]<<",Keys[<],StrId[CLPIdBack]} Set ${"&[e]ntities",Keys[o],StrId[CLPIdUser1]}/${"&[p]roperties",Keys[o],StrId[CLPIdUser2]} filter or export ${"&[s]cript",Keys[o],StrId[CLPIdUser3]}';
+  RSCLPDataExportEntsFilterCurrentValue='Entities filter current value:';
+  RSCLPDataExportEntsFilterNewValue=
+    '${"&[<]<<",Keys[<],StrId[CLPIdBack]} Enter new entities filter:';
+  RSCLPDataExportPropsFilterCurrentValue='Properties filter current value:';
+  RSCLPDataExportPropsFilterNewValue=
+    '${"&[<]<<",Keys[<],StrId[CLPIdBack]} Enter new properties filter:';
   RSCLPDataExportExportScriptCurrentValue='Properties export script current value:';
-  RSCLPDataExportExportScriptNewValue    ='${"&[<]<<",Keys[<],StrId[CLPIdBack]} Enter new export script:';
+  RSCLPDataExportExportScriptNewValue=
+    '${"&[<]<<",Keys[<],StrId[CLPIdBack]} Enter new export script:';
 
 type
   //** Тип данных для отображения в инспекторе опций
@@ -61,7 +67,8 @@ type
   end;
 
 var
-  DataExportParam:TDataExportParam; //**< Переменная содержащая опции команды ExportTextToCSVParam
+  DataExportParam:TDataExportParam;
+  //**< Переменная содержащая опции команды ExportTextToCSVParam
 
 implementation
 
@@ -76,81 +83,91 @@ type
   //TParserExporterChar=AnsiChar;
   //TExporterParser=TGZParser<TRawByteStringManipulator,TParserExporterString,TParserExporterChar,TRawByteStringManipulator.TCharIndex,TRawByteStringManipulator.TCharLength,TRawByteStringManipulator.TCharRange,TDataExport,TCharToOptChar<TParserExporterChar>>;
   TExporterParser=TGZParser<TRawByteStringManipulator,
-                                    TRawByteStringManipulator.TStringType,
-                                    TRawByteStringManipulator.TCharType,
-                                    TCodeUnitPosition,
-                                    TRawByteStringManipulator.TCharPosition,
-                                    TRawByteStringManipulator.TCharLength,
-                                    TRawByteStringManipulator.TCharInterval,
-                                    TRawByteStringManipulator.TCharRange,
-                                    TDataExport,
-                                    TCharToOptChar<TRawByteStringManipulator.TCharType>>;
+    TRawByteStringManipulator.TStringType,
+    TRawByteStringManipulator.TCharType,
+    TCodeUnitPosition,
+    TRawByteStringManipulator.TCharPosition,
+    TRawByteStringManipulator.TCharLength,
+    TRawByteStringManipulator.TCharInterval,
+    TRawByteStringManipulator.TCharRange,
+    TDataExport,
+    TCharToOptChar<TRawByteStringManipulator.TCharType>>;
 
   TExport=class(TExporterParser.TParserTokenizer.TStaticProcessor)
     class procedure StaticDoit(const Source:TRawByteStringManipulator.TStringType;
-                               const Token :TRawByteStringManipulator.TCharRange;
-                               const Operands :TRawByteStringManipulator.TCharRange;
-                               const ParsedOperands :TAbstractParsedText<TRawByteStringManipulator.TStringType,TDataExport>;
-                               InsideBracketParser:TObject;
-                               var Data:TDataExport);override;
+      const Token:TRawByteStringManipulator.TCharRange;
+      const Operands:TRawByteStringManipulator.TCharRange;
+      const ParsedOperands:TAbstractParsedText<
+      TRawByteStringManipulator.TStringType,TDataExport>;
+      InsideBracketParser:TObject;
+      var Data:TDataExport);override;
   end;
+
   TGetEntParam=class(TExporterParser.TParserTokenizer.TDynamicProcessor)
     mp:TMultiProperty;
     tempresult:TRawByteStringManipulator.TStringType;
     constructor vcreate(const Source:TRawByteStringManipulator.TStringType;
-                            const Token :TRawByteStringManipulator.TCharRange;
-                            const Operands :TRawByteStringManipulator.TCharRange;
-                            const ParsedOperands:TAbstractParsedText<TRawByteStringManipulator.TStringType,TDataExport>;
-                            InsideBracketParser:TObject;
-                            var Data:TDataExport);override;
+      const Token:TRawByteStringManipulator.TCharRange;
+      const Operands:TRawByteStringManipulator.TCharRange;
+      const ParsedOperands:TAbstractParsedText<
+      TRawByteStringManipulator.TStringType,TDataExport>;
+      InsideBracketParser:TObject;
+      var Data:TDataExport);override;
     destructor Destroy;override;
     procedure GetResult(const Source:TRawByteStringManipulator.TStringType;
-                        const Token :TRawByteStringManipulator.TCharRange;
-                        const Operands :TRawByteStringManipulator.TCharRange;
-                        const ParsedOperands:TAbstractParsedText<TRawByteStringManipulator.TStringType,TDataExport>;
-                        InsideBracketParser:TObject;
-                        var Result:TRawByteStringManipulator.TStringType;
-                        var ResultParam:TRawByteStringManipulator.TCharRange;
-                        var data:TDataExport);override;
+      const Token:TRawByteStringManipulator.TCharRange;
+      const Operands:TRawByteStringManipulator.TCharRange;
+      const ParsedOperands:TAbstractParsedText<
+      TRawByteStringManipulator.TStringType,TDataExport>;
+      InsideBracketParser:TObject;
+      var Result:TRawByteStringManipulator.TStringType;
+      var ResultParam:TRawByteStringManipulator.TCharRange;
+      var Data:TDataExport);override;
   end;
+
   TGetEntVariable=class(TExporterParser.TParserTokenizer.TDynamicProcessor)
     tempresult:TRawByteStringManipulator.TStringType;
     variablename:string;
     constructor vcreate(const Source:TRawByteStringManipulator.TStringType;
-                            const Token :TRawByteStringManipulator.TCharRange;
-                            const Operands :TRawByteStringManipulator.TCharRange;
-                            const ParsedOperands:TAbstractParsedText<TRawByteStringManipulator.TStringType,TDataExport>;
-                            InsideBracketParser:TObject;
-                            var Data:TDataExport);override;
+      const Token:TRawByteStringManipulator.TCharRange;
+      const Operands:TRawByteStringManipulator.TCharRange;
+      const ParsedOperands:TAbstractParsedText<
+      TRawByteStringManipulator.TStringType,TDataExport>;
+      InsideBracketParser:TObject;
+      var Data:TDataExport);override;
     destructor Destroy;override;
     procedure GetResult(const Source:TRawByteStringManipulator.TStringType;
-                        const Token :TRawByteStringManipulator.TCharRange;
-                        const Operands :TRawByteStringManipulator.TCharRange;
-                        const ParsedOperands:TAbstractParsedText<TRawByteStringManipulator.TStringType,TDataExport>;
-                        InsideBracketParser:TObject;
-                        var Result:TRawByteStringManipulator.TStringType;
-                        var ResultParam:TRawByteStringManipulator.TCharRange;
-                        var data:TDataExport);override;
+      const Token:TRawByteStringManipulator.TCharRange;
+      const Operands:TRawByteStringManipulator.TCharRange;
+      const ParsedOperands:TAbstractParsedText<
+      TRawByteStringManipulator.TStringType,TDataExport>;
+      InsideBracketParser:TObject;
+      var Result:TRawByteStringManipulator.TStringType;
+      var ResultParam:TRawByteStringManipulator.TCharRange;
+      var Data:TDataExport);override;
   end;
+
   TSameMask=class(TExporterParser.TParserTokenizer.TStaticProcessor)
     class procedure StaticGetResult(const Source:TRawByteStringManipulator.TStringType;
-                                    const Token :TRawByteStringManipulator.TCharRange;
-                                    const Operands :TRawByteStringManipulator.TCharRange;
-                                    const ParsedOperands:TAbstractParsedText<TRawByteStringManipulator.TStringType,TDataExport>;
-                                    InsideBracketParser:TObject;
-                                    var Result:TRawByteStringManipulator.TStringType;
-                                    var ResultParam:TRawByteStringManipulator.TCharRange;
-                                    //var NextSymbolPos:integer;
-                                    var data:TDataExport);override;
+      const Token:TRawByteStringManipulator.TCharRange;
+      const Operands:TRawByteStringManipulator.TCharRange;
+      const ParsedOperands:TAbstractParsedText<
+      TRawByteStringManipulator.TStringType,TDataExport>;
+      InsideBracketParser:TObject;
+      var Result:TRawByteStringManipulator.TStringType;
+      var ResultParam:TRawByteStringManipulator.TCharRange;
+    //var NextSymbolPos:integer;
+      var Data:TDataExport);override;
   end;
 
   TDoIf=class(TExporterParser.TParserTokenizer.TStaticProcessor)
     class procedure StaticDoit(const Source:TRawByteStringManipulator.TStringType;
-                               const Token :TRawByteStringManipulator.TCharRange;
-                               const Operands :TRawByteStringManipulator.TCharRange;
-                               const ParsedOperands :TAbstractParsedText<TRawByteStringManipulator.TStringType,TDataExport>;
-                               InsideBracketParser:TObject;
-                               var Data:TDataExport);override;
+      const Token:TRawByteStringManipulator.TCharRange;
+      const Operands:TRawByteStringManipulator.TCharRange;
+      const ParsedOperands:TAbstractParsedText<
+      TRawByteStringManipulator.TStringType,TDataExport>;
+      InsideBracketParser:TObject;
+      var Data:TDataExport);override;
   end;
 
 
@@ -166,87 +183,107 @@ var
   clOptionsPrompt3:CMDLinePromptParser.TGeneralParsedText=nil;
 
 class procedure TDoIf.StaticDoit(const Source:TRawByteStringManipulator.TStringType;
-                             const Token :TRawByteStringManipulator.TCharRange;
-                             const Operands :TRawByteStringManipulator.TCharRange;
-                             const ParsedOperands :TAbstractParsedText<TRawByteStringManipulator.TStringType,TDataExport>;
-                             InsideBracketParser:TObject;
-                             var Data:TDataExport);
+  const Token:TRawByteStringManipulator.TCharRange;
+  const Operands:TRawByteStringManipulator.TCharRange;
+  const ParsedOperands:TAbstractParsedText<
+  TRawByteStringManipulator.TStringType,TDataExport>;
+  InsideBracketParser:TObject;
+  var Data:TDataExport);
 var
   op1:TRawByteStringManipulator.TStringType;
   opResultParam:TRawByteStringManipulator.TCharRange;
 begin
-  if (ParsedOperands<>nil)
-      and(ParsedOperands is TExporterParser.TParsedText)
-      and((ParsedOperands as TExporterParser.TParsedText).Parts.size=3)then begin
-        op1:='';
-        opResultParam.P.CodeUnitPos:=OnlyGetLength;
-        opResultParam.L.CodeUnits:=0;
-        TExporterParser.TGeneralParsedText.GetResultWithPart(Source,(ParsedOperands as TExporterParser.TParsedText).Parts.Mutable[0]^,data,op1,opResultParam);
-        SetLength(op1,opResultParam.L.CodeUnits);
-        opResultParam.P.CodeUnitPos:=InitialStartPos;
-        TExporterParser.TGeneralParsedText.GetResultWithPart(Source,(ParsedOperands as TExporterParser.TParsedText).Parts.Mutable[0]^,data,op1,opResultParam);
-         //op1:=(ParsedOperands as TExporterParser.TParsedText).Parts[0].GetResult(data);
-         if op1='+' then
-           TExporterParser.TGeneralParsedText.DoItWithPart(Source,(ParsedOperands as TExporterParser.TParsedText).Parts.Mutable[2]^,data);
-     end
-  else
-    Raise Exception.CreateFmt(rsRunTimeError,[Operands.P.CodeUnitPos]);
+  if (ParsedOperands<>nil)  and(ParsedOperands is
+    TExporterParser.TParsedText)  and
+    ((ParsedOperands as TExporterParser.TParsedText).Parts.size=3) then begin
+    op1:='';
+    opResultParam.P.CodeUnitPos:=OnlyGetLength;
+    opResultParam.L.CodeUnits:=0;
+    TExporterParser.TGeneralParsedText.GetResultWithPart(Source,
+      (ParsedOperands as TExporterParser.TParsedText).Parts.Mutable[0]^,
+      Data,op1,opResultParam);
+    SetLength(op1,opResultParam.L.CodeUnits);
+    opResultParam.P.CodeUnitPos:=InitialStartPos;
+    TExporterParser.TGeneralParsedText.GetResultWithPart(Source,
+      (ParsedOperands as TExporterParser.TParsedText).Parts.Mutable[0]^,
+      Data,op1,opResultParam);
+    //op1:=(ParsedOperands as TExporterParser.TParsedText).Parts[0].GetResult(data);
+    if op1='+' then
+      TExporterParser.TGeneralParsedText.DoItWithPart(Source,
+        (ParsedOperands as TExporterParser.TParsedText).Parts.Mutable[2]^,Data);
+  end else
+    raise Exception.CreateFmt(rsRunTimeError,[Operands.P.CodeUnitPos]);
 end;
 
 
-class procedure TSameMask.StaticGetResult(const Source:TRawByteStringManipulator.TStringType;
-                                          const Token :TRawByteStringManipulator.TCharRange;
-                                          const Operands :TRawByteStringManipulator.TCharRange;
-                                          const ParsedOperands:TAbstractParsedText<TRawByteStringManipulator.TStringType,TDataExport>;
-                                          InsideBracketParser:TObject;
-                                          var Result:TRawByteStringManipulator.TStringType;
-                                          var ResultParam:TRawByteStringManipulator.TCharRange;
-                                          //var NextSymbolPos:integer;
-                                          var data:TDataExport);
+class procedure TSameMask.StaticGetResult(
+  const Source:TRawByteStringManipulator.TStringType;
+  const Token
+  :TRawByteStringManipulator.TCharRange;
+  const Operands
+  :TRawByteStringManipulator.TCharRange;
+  const ParsedOperands:TAbstractParsedText<
+  TRawByteStringManipulator.TStringType,TDataExport>;
+  InsideBracketParser:TObject;
+  var Result:
+  TRawByteStringManipulator.TStringType;
+  var ResultParam:
+  TRawByteStringManipulator.TCharRange;
+  //var NextSymbolPos:integer;
+  var Data:TDataExport);
 var
   op1,op2:TRawByteStringManipulator.TStringType;
   opResultParam:TRawByteStringManipulator.TCharRange;
 begin
-  if (ParsedOperands<>nil)
-     and(ParsedOperands is TExporterParser.TParsedText)
-     and((ParsedOperands as TExporterParser.TParsedText).Parts.size=3)
-     {and((ParsedOperands as TEntityFilterParser.TParsedTextWithOneToken).Part.TextInfo.TokenId=StringId)} then begin
-         op1:=inttostr((ParsedOperands as TExporterParser.TParsedText).Parts.size);
-         op2:='';
-         opResultParam.P.CodeUnitPos:=OnlyGetLength;
-         opResultParam.L.CodeUnits:=0;
-         TExporterParser.TGeneralParsedText.GetResultWithPart(Source,(ParsedOperands as TExporterParser.TParsedText).Parts.Mutable[0]^,data,op1,opResultParam);
-         SetLength(op1,opResultParam.L.CodeUnits);
-         opResultParam.P.CodeUnitPos:=InitialStartPos;
-         TExporterParser.TGeneralParsedText.GetResultWithPart(Source,(ParsedOperands as TExporterParser.TParsedText).Parts.Mutable[0]^,data,op1,opResultParam);
+  if (ParsedOperands<>nil)  and(ParsedOperands is TExporterParser.TParsedText)  and
+    ((ParsedOperands as TExporterParser.TParsedText).Parts.size=3)
+  {and((ParsedOperands as TEntityFilterParser.TParsedTextWithOneToken).Part.TextInfo.TokenId=StringId)}
+  then
+  begin
+    op1:=IntToStr((ParsedOperands as TExporterParser.TParsedText).Parts.size);
+    op2:='';
+    opResultParam.P.CodeUnitPos:=OnlyGetLength;
+    opResultParam.L.CodeUnits:=0;
+    TExporterParser.TGeneralParsedText.GetResultWithPart(Source,
+      (ParsedOperands as TExporterParser.TParsedText).Parts.Mutable[0]^,
+      Data,op1,opResultParam);
+    SetLength(op1,opResultParam.L.CodeUnits);
+    opResultParam.P.CodeUnitPos:=InitialStartPos;
+    TExporterParser.TGeneralParsedText.GetResultWithPart(Source,
+      (ParsedOperands as TExporterParser.TParsedText).Parts.Mutable[0]^,
+      Data,op1,opResultParam);
 
-         opResultParam.P.CodeUnitPos:=OnlyGetLength;
-         opResultParam.L.CodeUnits:=0;
-         TExporterParser.TGeneralParsedText.GetResultWithPart(Source,(ParsedOperands as TExporterParser.TParsedText).Parts.Mutable[2]^,data,op2,opResultParam);
-         SetLength(op2,opResultParam.L.CodeUnits);
-         opResultParam.P.CodeUnitPos:=InitialStartPos;
-         TExporterParser.TGeneralParsedText.GetResultWithPart(Source,(ParsedOperands as TExporterParser.TParsedText).Parts.Mutable[2]^,data,op2,opResultParam);
-         ResultParam.L.CodeUnits:=1;
-         if ResultParam.P.CodeUnitPos<>OnlyGetLength then begin
-           if MatchesMask(op1,op2,false,AllMaskOpCodes)
-               or (AnsiCompareText(op1,op2)=0) then
-             Result[ResultParam.P.CodeUnitPos]:='+'
-           else
-             Result[ResultParam.P.CodeUnitPos]:='-'
-         end;
-       //TEntsTypeFilter(Data).AddTypeNameMask(op1)
-     end
-  else
-    Raise Exception.CreateFmt(rsRunTimeError,[Operands.P.CodeUnitPos]);
+    opResultParam.P.CodeUnitPos:=OnlyGetLength;
+    opResultParam.L.CodeUnits:=0;
+    TExporterParser.TGeneralParsedText.GetResultWithPart(Source,
+      (ParsedOperands as TExporterParser.TParsedText).Parts.Mutable[2]^,
+      Data,op2,opResultParam);
+    SetLength(op2,opResultParam.L.CodeUnits);
+    opResultParam.P.CodeUnitPos:=InitialStartPos;
+    TExporterParser.TGeneralParsedText.GetResultWithPart(Source,
+      (ParsedOperands as TExporterParser.TParsedText).Parts.Mutable[2]^,
+      Data,op2,opResultParam);
+    ResultParam.L.CodeUnits:=1;
+    if ResultParam.P.CodeUnitPos<>OnlyGetLength then begin
+      if MatchesMask(op1,op2,False,AllMaskOpCodes)  or
+        (AnsiCompareText(op1,op2)=0) then
+        Result[ResultParam.P.CodeUnitPos]:='+'
+      else
+        Result[ResultParam.P.CodeUnitPos]:='-';
+    end;
+    //TEntsTypeFilter(Data).AddTypeNameMask(op1)
+  end else
+    raise Exception.CreateFmt(rsRunTimeError,[Operands.P.CodeUnitPos]);
 end;
 
 
 class procedure TExport.StaticDoit(const Source:TRawByteStringManipulator.TStringType;
-                               const Token :TRawByteStringManipulator.TCharRange;
-                               const Operands :TRawByteStringManipulator.TCharRange;
-                               const ParsedOperands :TAbstractParsedText<TRawByteStringManipulator.TStringType,TDataExport>;
-                               InsideBracketParser:TObject;
-                               var Data:TDataExport);
+  const Token:TRawByteStringManipulator.TCharRange;
+  const Operands:TRawByteStringManipulator.TCharRange;
+  const ParsedOperands:TAbstractParsedText<
+  TRawByteStringManipulator.TStringType,TDataExport>;
+  InsideBracketParser:TObject;
+  var Data:TDataExport);
 var
   op1{,op2}:TRawByteStringManipulator.TStringType;
   ResultParam:TRawByteStringManipulator.TCharRange;
@@ -254,48 +291,54 @@ var
 begin
   r:=-1;
   c:=1;
-  if (ParsedOperands<>nil)and(not(ParsedOperands is TExporterParser.TParsedTextWithoutTokens)) then begin
+  if (ParsedOperands<>nil)and(not(ParsedOperands is
+    TExporterParser.TParsedTextWithoutTokens)) then begin
     if ParsedOperands is TExporterParser.TParsedTextWithOneToken then begin
       op1:='';
       ResultParam.P.CodeUnitPos:=OnlyGetLength;
       ResultParam.L.CodeUnits:=0;
-      TExporterParser.TGeneralParsedText.GetResultWithPart(Source,(ParsedOperands as TExporterParser.TParsedTextwithOnetoken).Part,data,op1,ResultParam);
+      TExporterParser.TGeneralParsedText.GetResultWithPart(Source,
+        (ParsedOperands as TExporterParser.TParsedTextwithOnetoken).Part,Data,op1,ResultParam);
       SetLength(op1,ResultParam.L.CodeUnits);
       ResultParam.P.CodeUnitPos:=InitialStartPos;
-      TExporterParser.TGeneralParsedText.GetResultWithPart(Source,(ParsedOperands as TExporterParser.TParsedTextwithOnetoken).Part,data,op1,ResultParam);
+      TExporterParser.TGeneralParsedText.GetResultWithPart(Source,
+        (ParsedOperands as TExporterParser.TParsedTextwithOnetoken).Part,Data,op1,ResultParam);
       Data.FDoc.AddRow(op1);
       r:=Data.FDoc.RowCount;
     end else
       for i:=0 to (ParsedOperands as TExporterParser.TParsedText).Parts.size-1 do
-        if not(TTokenOptions.IsAllPresent((ParsedOperands as TExporterParser.TParsedText).Parts.Mutable[i]^.tokeninfo.Options,TGOSeparator))then
-        begin
+        if not(TTokenOptions.IsAllPresent(
+          (ParsedOperands as TExporterParser.TParsedText).Parts.Mutable[i]^.tokeninfo.Options,
+          TGOSeparator)) then begin
           ResultParam.P.CodeUnitPos:=OnlyGetLength;
           ResultParam.L.CodeUnits:=0;
-          TExporterParser.TGeneralParsedText.GetResultWithPart(Source,(ParsedOperands as TExporterParser.TParsedText).Parts.Mutable[i]^,data,op1,ResultParam);
+          TExporterParser.TGeneralParsedText.GetResultWithPart(Source,
+            (ParsedOperands as TExporterParser.TParsedText).Parts.Mutable[i]^,Data,op1,ResultParam);
           SetLength(op1,ResultParam.L.CodeUnits);
           ResultParam.P.CodeUnitPos:=InitialStartPos;
-          TExporterParser.TGeneralParsedText.GetResultWithPart(Source,(ParsedOperands as TExporterParser.TParsedText).Parts.Mutable[i]^,data,op1,ResultParam);
+          TExporterParser.TGeneralParsedText.GetResultWithPart(Source,
+            (ParsedOperands as TExporterParser.TParsedText).Parts.Mutable[i]^,Data,op1,ResultParam);
           if r=-1 then begin
             Data.FDoc.AddRow(op1);
             r:=Data.FDoc.RowCount-1;
           end else begin
             Data.FDoc.Cells[c,r]:=op1;
-            inc(c);
+            Inc(c);
           end;
         end;
-    end
-  else
-    Raise Exception.CreateFmt(rsRunTimeError,[Operands.P.CodeUnitPos]);
+  end else
+    raise Exception.CreateFmt(rsRunTimeError,[Operands.P.CodeUnitPos]);
 end;
 
 procedure TGetEntParam.GetResult(const Source:TRawByteStringManipulator.TStringType;
-                    const Token :TRawByteStringManipulator.TCharRange;
-                    const Operands :TRawByteStringManipulator.TCharRange;
-                    const ParsedOperands:TAbstractParsedText<TRawByteStringManipulator.TStringType,TDataExport>;
-                    InsideBracketParser:TObject;
-                    var Result:TRawByteStringManipulator.TStringType;
-                    var ResultParam:TRawByteStringManipulator.TCharRange;
-                    var data:TDataExport);
+  const Token:TRawByteStringManipulator.TCharRange;
+  const Operands:TRawByteStringManipulator.TCharRange;
+  const ParsedOperands:TAbstractParsedText<
+  TRawByteStringManipulator.TStringType,TDataExport>;
+  InsideBracketParser:TObject;
+  var Result:TRawByteStringManipulator.TStringType;
+  var ResultParam:TRawByteStringManipulator.TCharRange;
+  var Data:TDataExport);
 var
   i:integer;
   mpd:TMultiPropertyDataForObjects;
@@ -305,17 +348,23 @@ begin
   if ResultParam.P.CodeUnitPos=OnlyGetLength then begin
     if mp<>nil then begin
       if mp.MPObjectsData.tryGetValue(TObjIDWithExtender.Create(0,nil),mpd) then begin
-        ChangedData:=CreateChangedData(data.CurrentEntity,mpd.GSData);
+        ChangedData:=CreateChangedData(Data.CurrentEntity,mpd.GSData);
         if @mpd.EntBeforeIterateProc<>nil then
           mpd.EntBeforeIterateProc({bip}mp.PIiterateData,ChangedData);
-        mpd.EntIterateProc({bip}mp.PIiterateData,ChangedData,mp,true,mpd.EntChangeProc,data.f);
-        tempresult:=mp.MPType.GetDecoratedValueAsString(PVarDesk(PTOneVarData(mp.PIiterateData)^.VDAddr.Instance).data.Addr.Instance,data.f);
-      end else if mp.MPObjectsData.tryGetValue(TObjIDWithExtender.Create(PGDBObjEntity(data.CurrentEntity)^.GetObjType,nil),mpd) then begin
-        ChangedData:=CreateChangedData(data.CurrentEntity,mpd.GSData);
+        mpd.EntIterateProc({bip}mp.PIiterateData,ChangedData,mp,True,
+          mpd.EntChangeProc,Data.f);
+        tempresult:=mp.MPType.GetDecoratedValueAsString(
+          PVarDesk(PTOneVarData(mp.PIiterateData)^.VDAddr.Instance).Data.Addr.Instance,Data.f);
+      end else if mp.MPObjectsData.tryGetValue(
+        TObjIDWithExtender.Create(PGDBObjEntity(Data.CurrentEntity)^.GetObjType,nil),mpd) then
+      begin
+        ChangedData:=CreateChangedData(Data.CurrentEntity,mpd.GSData);
         if @mpd.EntBeforeIterateProc<>nil then
           mpd.EntBeforeIterateProc({bip}mp.PIiterateData,ChangedData);
-        mpd.EntIterateProc({bip}mp.PIiterateData,ChangedData,mp,true,mpd.EntChangeProc,data.f);
-        tempresult:=mp.MPType.GetDecoratedValueAsString(PVarDesk(PTOneVarData(mp.PIiterateData)^.VDAddr.Instance).data.Addr.Instance,data.f);
+        mpd.EntIterateProc({bip}mp.PIiterateData,ChangedData,mp,True,
+          mpd.EntChangeProc,Data.f);
+        tempresult:=mp.MPType.GetDecoratedValueAsString(
+          PVarDesk(PTOneVarData(mp.PIiterateData)^.VDAddr.Instance).Data.Addr.Instance,Data.f);
       end else
         tempresult:='';
     end else
@@ -328,16 +377,18 @@ begin
 end;
 
 constructor TGetEntParam.vcreate(const Source:TRawByteStringManipulator.TStringType;
-                        const Token :TRawByteStringManipulator.TCharRange;
-                        const Operands :TRawByteStringManipulator.TCharRange;
-                        const ParsedOperands:TAbstractParsedText<TRawByteStringManipulator.TStringType,TDataExport>;
-                        InsideBracketParser:TObject;
-                        var Data:TDataExport);
+  const Token:TRawByteStringManipulator.TCharRange;
+  const Operands:TRawByteStringManipulator.TCharRange;
+  const ParsedOperands:TAbstractParsedText<
+  TRawByteStringManipulator.TStringType,TDataExport>;
+  InsideBracketParser:TObject;
+  var Data:TDataExport);
 var
   propertyname:string;
 begin
   propertyname:=ParsedOperands.GetResult(Data);
-  if MultiPropertiesManager.MultiPropertyDictionary.MyGetValue(propertyname,mp) then begin
+  if MultiPropertiesManager.MultiPropertyDictionary.MyGetValue(propertyname,mp) then
+  begin
     {bip}mp.PIiterateData:=mp.MIPD.BeforeIterateProc(mp,@VU);
     { #todo : нужно делать копию mp, но пока пусть так }
   end else
@@ -355,22 +406,23 @@ begin
 end;
 
 procedure TGetEntVariable.GetResult(const Source:TRawByteStringManipulator.TStringType;
-                    const Token :TRawByteStringManipulator.TCharRange;
-                    const Operands :TRawByteStringManipulator.TCharRange;
-                    const ParsedOperands:TAbstractParsedText<TRawByteStringManipulator.TStringType,TDataExport>;
-                    InsideBracketParser:TObject;
-                    var Result:TRawByteStringManipulator.TStringType;
-                    var ResultParam:TRawByteStringManipulator.TCharRange;
-                    var data:TDataExport);
+  const Token:TRawByteStringManipulator.TCharRange;
+  const Operands:TRawByteStringManipulator.TCharRange;
+  const ParsedOperands:TAbstractParsedText<
+  TRawByteStringManipulator.TStringType,TDataExport>;
+  InsideBracketParser:TObject;
+  var Result:TRawByteStringManipulator.TStringType;
+  var ResultParam:TRawByteStringManipulator.TCharRange;
+  var Data:TDataExport);
 var
   pv:pvardesk;
   i:integer;
 begin
   pv:=nil;
-  if data.CurrentEntity<>nil then
-    pv:=FindVariableInEnt(data.CurrentEntity,variablename);
+  if Data.CurrentEntity<>nil then
+    pv:=FindVariableInEnt(Data.CurrentEntity,variablename);
   if pv<>nil then
-    tempresult:=pv^.data.ptd^.GetValueAsString(pv^.data.Addr.Instance)
+    tempresult:=pv^.Data.ptd^.GetValueAsString(pv^.Data.Addr.Instance)
   else
     tempresult:='!!ERR('+variablename+')!!';
   ResultParam.L.CodeUnits:=Length(tempresult);
@@ -380,11 +432,12 @@ begin
 end;
 
 constructor TGetEntVariable.vcreate(const Source:TRawByteStringManipulator.TStringType;
-                        const Token :TRawByteStringManipulator.TCharRange;
-                        const Operands :TRawByteStringManipulator.TCharRange;
-                        const ParsedOperands:TAbstractParsedText<TRawByteStringManipulator.TStringType,TDataExport>;
-                        InsideBracketParser:TObject;
-                        var Data:TDataExport);
+  const Token:TRawByteStringManipulator.TCharRange;
+  const Operands:TRawByteStringManipulator.TCharRange;
+  const ParsedOperands:TAbstractParsedText<
+  TRawByteStringManipulator.TStringType,TDataExport>;
+  InsideBracketParser:TObject;
+  var Data:TDataExport);
 begin
   variablename:=ParsedOperands.GetResult(Data);
 end;
@@ -396,7 +449,8 @@ begin
 end;
 
 
-function DataExport_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
+function DataExport_com(const Context:TZCADCommandContext;
+  operands:TCommandOperands):TCommandResult;
 type
   TCmdMode=(CMWaitFile,CMOptions,CMOptions1,CMOptions2,CMOptions3,CMExport);
 var
@@ -411,10 +465,11 @@ var
   ir:itrec;
   lpsh:TLPSHandle;
   Data:TDataExport;
-  inpt:String;
+  inpt:string;
   gr:TGetResult;
   CmdMode:TCmdMode;
   filename:string;
+
   procedure SetCmdMode(Mode:TCmdMode);
   begin
     if CmdMode=Mode then
@@ -423,7 +478,8 @@ var
       CMWaitFile:begin
         if clFilePrompt=nil then
           clFilePrompt:=CMDLinePromptParser.GetTokens(RSCLPDataExportWaitFile);
-        commandmanager.SetPrompt(clFilePrompt);               //выставляет результат парсинга в командную строчку
+        commandmanager.SetPrompt(clFilePrompt);
+        //выставляет результат парсинга в командную строчку
         commandmanager.ChangeInputMode([IPEmpty],[]);
       end;
       CMOptions:begin
@@ -436,7 +492,8 @@ var
         zcUI.TextMessage(RSCLPDataExportEntsFilterCurrentValue,TMWOHistoryOut);
         zcUI.TextMessage(DataExportParam.EntFilter^,TMWOHistoryOut);
         if clOptionsPrompt1=nil then
-          clOptionsPrompt1:=CMDLinePromptParser.GetTokens(RSCLPDataExportEntsFilterNewValue);
+          clOptionsPrompt1:=CMDLinePromptParser.GetTokens(
+            RSCLPDataExportEntsFilterNewValue);
         commandmanager.SetPrompt(clOptionsPrompt1);
         commandmanager.ChangeInputMode([IPEmpty],[]);
       end;
@@ -444,7 +501,8 @@ var
         zcUI.TextMessage(RSCLPDataExportPropsFilterCurrentValue,TMWOHistoryOut);
         zcUI.TextMessage(DataExportParam.PropFilter^,TMWOHistoryOut);
         if clOptionsPrompt2=nil then
-          clOptionsPrompt2:=CMDLinePromptParser.GetTokens(RSCLPDataExportPropsFilterNewValue);
+          clOptionsPrompt2:=CMDLinePromptParser.GetTokens(
+            RSCLPDataExportPropsFilterNewValue);
         commandmanager.SetPrompt(clOptionsPrompt2);
         commandmanager.ChangeInputMode([IPEmpty],[]);
       end;
@@ -452,7 +510,8 @@ var
         zcUI.TextMessage(RSCLPDataExportExportScriptCurrentValue,TMWOHistoryOut);
         zcUI.TextMessage(DataExportParam.Exporter^,TMWOHistoryOut);
         if clOptionsPrompt3=nil then
-          clOptionsPrompt3:=CMDLinePromptParser.GetTokens(RSCLPDataExportExportScriptNewValue);
+          clOptionsPrompt3:=CMDLinePromptParser.GetTokens(
+            RSCLPDataExportExportScriptNewValue);
         commandmanager.SetPrompt(clOptionsPrompt3);
         commandmanager.ChangeInputMode([IPEmpty],[]);
       end;
@@ -484,7 +543,8 @@ begin
             SetCmdMode(CMOptions3);
           CLPIdFileDialog:begin
             filename:='';
-            if SaveFileDialog(filename,'CSV',CSVFileFilter,'','Export data...') then begin
+            if SaveFileDialog(filename,'CSV',CSVFileFilter,'','Export data...') then
+            begin
               DataExportParam.FileName^:=filename;
               CmdMode:=CMExport;
               break;
@@ -515,7 +575,8 @@ begin
             SetCmdMode(CMOptions);
           end;
           CMOptions:begin
-            zcUI.TextMessage(format('You enter "%s", but you need select a option',[inpt]),TMWOMessageBox);
+            zcUI.TextMessage(format('You enter "%s", but you need select a option',
+              [inpt]),TMWOMessageBox);
           end;
           CMExport:;//заглушка на варнинг
         end;
@@ -535,34 +596,34 @@ begin
     EntityIncluder:=ParserEntityPropFilter.GetTokens(DataExportParam.PropFilter^);
     lpsh:=LPSHEmpty;
 
-     Data.f:=drawings.GetUnitsFormat;
-     propdata.f:=Data.f;
-     Data.FDoc:=TCSVDocument.Create;
-       if drawings.GetCurrentDWG<>nil then
-       begin
-         lpsh:=LPS.StartLongProcess('DataExport',@DataExport_com,drawings.GetCurrentROOT^.ObjArray.Count);
-         pv:=drawings.GetCurrentROOT^.ObjArray.beginiterate(ir);
-         if pv<>nil then
-         repeat
-           if EntsTypeFilter.IsEntytyAccepted(pv) then begin
-             if assigned(EntityIncluder) then begin
-               propdata.CurrentEntity:=pv;
-               propdata.IncludeEntity:=T3SB_Default;
-               EntityIncluder.Doit(PropData);
-             end else
-               propdata.IncludeEntity:=T3SB_True;
+    Data.f:=drawings.GetUnitsFormat;
+    propdata.f:=Data.f;
+    Data.FDoc:=TCSVDocument.Create;
+    if drawings.GetCurrentDWG<>nil then begin
+      lpsh:=LPS.StartLongProcess('DataExport',@DataExport_com,
+        drawings.GetCurrentROOT^.ObjArray.Count);
+      pv:=drawings.GetCurrentROOT^.ObjArray.beginiterate(ir);
+      if pv<>nil then
+        repeat
+          if EntsTypeFilter.IsEntytyAccepted(pv) then begin
+            if assigned(EntityIncluder) then begin
+              propdata.CurrentEntity:=pv;
+              propdata.IncludeEntity:=T3SB_Default;
+              EntityIncluder.Doit(PropData);
+            end else
+              propdata.IncludeEntity:=T3SB_True;
 
-             if propdata.IncludeEntity=T3SB_True then begin
-               Data.CurrentEntity:=pv;
-               if assigned(pet) then
-                 pet.Doit(data);
-             end;
-           end;
+            if propdata.IncludeEntity=T3SB_True then begin
+              Data.CurrentEntity:=pv;
+              if assigned(pet) then
+                pet.Doit(Data);
+            end;
+          end;
 
-           pv:=drawings.GetCurrentROOT^.ObjArray.iterate(ir);
-           LPS.ProgressLongProcess(lpsh,ir.itc);
-         until pv=nil;
-       end;
+          pv:=drawings.GetCurrentROOT^.ObjArray.iterate(ir);
+          LPS.ProgressLongProcess(lpsh,ir.itc);
+        until pv=nil;
+    end;
     if lpsh<>LPSHEmpty then
       LPS.EndLongProcess(lpsh);
     Data.FDoc.Delimiter:=';';
@@ -571,11 +632,12 @@ begin
     EntsTypeFilter.Free;
     EntityIncluder.Free;
   end;
-  result:=cmd_ok;
+  Result:=cmd_ok;
 end;
 
 initialization
-  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
+  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],
+    LM_Info,UnitsInitializeLMId);
 
   VU.init('test');
   VU.InterfaceUses.PushBackIfNotPresent(sysunit);
@@ -583,43 +645,67 @@ initialization
   DataExportParam.PropFilter:=nil;
   DataExportParam.Exporter:=nil;
   if savedunit<>nil then
-    DataExportParam.EntFilter:=savedunit.FindOrCreateValue('tmpCmdParamSave_DataExportParam_EntFilter','AnsiString').data.Addr.Instance;
+    DataExportParam.EntFilter:=
+      savedunit.FindOrCreateValue('tmpCmdParamSave_DataExportParam_EntFilter',
+      'AnsiString').Data.Addr.Instance;
   if DataExportParam.EntFilter<>nil then
     if DataExportParam.EntFilter^='' then
-      DataExportParam.EntFilter^:='IncludeEntityName(''Cable'');'#13#10'IncludeEntityName(''Device'')';
+      DataExportParam.EntFilter^:=
+        'IncludeEntityName(''Cable'');'#13#10'IncludeEntityName(''Device'')';
   if savedunit<>nil then
-  DataExportParam.PropFilter:=savedunit.FindOrCreateValue('tmpCmdParamSave_DataExportParam_PropFilter','AnsiString').data.Addr.Instance;
+    DataExportParam.PropFilter:=
+      savedunit.FindOrCreateValue('tmpCmdParamSave_DataExportParam_PropFilter',
+      'AnsiString').Data.Addr.Instance;
   //if DataExportParam.PropFilter^='' then
   //  DataExportParam.PropFilter:='';
   if savedunit<>nil then
-    DataExportParam.Exporter:=savedunit.FindOrCreateValue('tmpCmdParamSave_DataExportParam_Exporter','AnsiString').data.Addr.Instance;
+    DataExportParam.Exporter:=
+      savedunit.FindOrCreateValue('tmpCmdParamSave_DataExportParam_Exporter',
+      'AnsiString').Data.Addr.Instance;
   if DataExportParam.Exporter<>nil then
     if DataExportParam.Exporter^='' then
-      DataExportParam.Exporter^:='DoIf(SameMask(%%(''EntityName''),''Device''),Export(%%(''EntityName''),''NMO_Name'',@@(''NMO_Name''),''Position'',@@(''Position'')))'+
-                             #10+'DoIf(SameMask(%%(''EntityName''),''Device''),Export(%%(''EntityName''),''NMO_Name'',@@(''NMO_Name''),''Power'',@@(''Power'')))'+
-                             #10+'DoIf(SameMask(%%(''EntityName''),''Cable''),Export(%%(''EntityName''),''NMO_Name'',@@(''NMO_Name''),''AmountD'',@@(''AmountD'')))'+
-                             #10+'DoIf(SameMask(%%(''EntityName''),''Cable''),Export(%%(''EntityName''),''NMO_Name'',@@(''NMO_Name''),''CABLE_Segment'',@@(''CABLE_Segment'')))';
+      DataExportParam.Exporter^:=
+        'DoIf(SameMask(%%(''EntityName''),''Device''),Export(%%(''EntityName''),''NMO_Name'',@@(''NMO_Name''),''Position'',@@(''Position'')))'+
+        #10+
+        'DoIf(SameMask(%%(''EntityName''),''Device''),Export(%%(''EntityName''),''NMO_Name'',@@(''NMO_Name''),''Power'',@@(''Power'')))'+
+        #10+
+        'DoIf(SameMask(%%(''EntityName''),''Cable''),Export(%%(''EntityName''),''NMO_Name'',@@(''NMO_Name''),''AmountD'',@@(''AmountD'')))'+
+        #10+
+        'DoIf(SameMask(%%(''EntityName''),''Cable''),Export(%%(''EntityName''),''NMO_Name'',@@(''NMO_Name''),''CABLE_Segment'',@@(''CABLE_Segment'')))';
   if savedunit<>nil then
-    DataExportParam.FileName:=savedunit.FindOrCreateValue('tmpCmdParamSave_DataExportParam_FileName','AnsiString').data.Addr.Instance;
+    DataExportParam.FileName:=
+      savedunit.FindOrCreateValue('tmpCmdParamSave_DataExportParam_FileName',
+      'AnsiString').Data.Addr.Instance;
   if DataExportParam.FileName<>nil then
     if DataExportParam.FileName^='' then
       DataExportParam.FileName^:='d:\test.csv';
   if SysUnit<>nil then begin
-    SysUnit^.RegisterType(TypeInfo(TDataExportParam));//регистрируем тип данных в зкадном RTTI
-    SysUnit^.SetTypeDesk(TypeInfo(TDataExportParam),['EntFilter','PropFilter','Exporter','FileName'],[FNProgram]);//Даем програмные имена параметрам, по идее это должно быть в ртти, но ненашел
+    SysUnit^.RegisterType(TypeInfo(TDataExportParam));
+    //регистрируем тип данных в зкадном RTTI
+    SysUnit^.SetTypeDesk(TypeInfo(TDataExportParam),
+      ['EntFilter','PropFilter','Exporter','FileName'],[FNProgram]);
+    //Даем програмные имена параметрам, по идее это должно быть в ртти, но ненашел
   end;
 
-  CreateZCADCommand(@DataExport_com,'DataExport',  CADWG,0);
+  CreateZCADCommand(@DataExport_com,'DataExport',CADWG,0);
 
 
-  ExporterParser:=TExporterParser.create;
-  BracketTockenId:=ExporterParser.RegisterToken('(','(',')',nil,ExporterParser,TGONestedBracke or TGOIncludeBrackeOpen or TGOSeparator);
-  ExporterParser.RegisterToken('Export',#0,#0,TExport,nil,TGOWholeWordOnly,BracketTockenId);
-  ExporterParser.RegisterToken('DoIf',#0,#0,TDoIf,ExporterParser,TGOWholeWordOnly,BracketTockenId);
-  ExporterParser.RegisterToken('SameMask',#0,#0,TSameMask,ExporterParser,TGOWholeWordOnly,BracketTockenId);
-  ExporterParser.RegisterToken('%%',#0,#0,TGetEntParam,ExporterParser,TGOWholeWordOnly,BracketTockenId);
-  ExporterParser.RegisterToken('@@',#0,#0,TGetEntVariable,ExporterParser,TGOWholeWordOnly,BracketTockenId);
-  ExporterParser.RegisterToken('''','''','''',ExporterParser.TParserTokenizer.TStringProcessor,nil,TGOIncludeBrackeOpen);
+  ExporterParser:=TExporterParser.Create;
+  BracketTockenId:=ExporterParser.RegisterToken('(','(',')',nil,
+    ExporterParser,TGONestedBracke or TGOIncludeBrackeOpen or TGOSeparator);
+  ExporterParser.RegisterToken('Export',#0,#0,TExport,nil,TGOWholeWordOnly,
+    BracketTockenId);
+  ExporterParser.RegisterToken('DoIf',#0,#0,TDoIf,ExporterParser,
+    TGOWholeWordOnly,BracketTockenId);
+  ExporterParser.RegisterToken('SameMask',#0,#0,TSameMask,ExporterParser,
+    TGOWholeWordOnly,BracketTockenId);
+  ExporterParser.RegisterToken('%%',#0,#0,TGetEntParam,ExporterParser,
+    TGOWholeWordOnly,BracketTockenId);
+  ExporterParser.RegisterToken('@@',#0,#0,TGetEntVariable,ExporterParser,
+    TGOWholeWordOnly,BracketTockenId);
+  ExporterParser.RegisterToken(
+    '''','''','''',ExporterParser.TParserTokenizer.TStringProcessor,nil,
+    TGOIncludeBrackeOpen);
   ExporterParser.RegisterToken(',',#0,#0,nil,nil,TGOSeparator);
   ExporterParser.RegisterToken(';',#0,#0,nil,nil,TGOSeparator);
   ExporterParser.RegisterToken('\P',#0,#0,nil,nil,TGOSeparator);
@@ -628,7 +714,8 @@ initialization
   ExporterParser.RegisterToken(#13,#0,#0,nil,nil,TGOSeparator or TGOCanBeOmitted);
 
 finalization
-  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
+  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],
+    LM_Info,UnitsFinalizeLMId);
   ExporterParser.Free;
   VU.done;
   if clFilePrompt<>nil then

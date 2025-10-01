@@ -21,6 +21,7 @@ unit uzcCommand_Duplicate;
 {$INCLUDE zengineconfig.inc}
 
 interface
+
 uses
   uzcLog,
   SysUtils,
@@ -36,20 +37,25 @@ uses
   uzcCommand_Copy,uzglviewareadata;
 
 type
-  duplicade_com= object(copy_com)
-    procedure CommandStart(const Context:TZCADCommandContext;Operands:TCommandOperands);virtual;
+  duplicade_com=object(copy_com)
+    procedure CommandStart(const Context:TZCADCommandContext;
+      Operands:TCommandOperands);virtual;
     //function CalcTransformMatrix(p1,p2: GDBvertex):DMatrix4D; virtual;
-    function AfterClick(const Context:TZCADCommandContext;wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record): Integer; virtual;
-    constructor init(cn:String;SA,DA:TCStartAttr);
+    function AfterClick(const Context:TZCADCommandContext;wc:GDBvertex;
+      mc:GDBvertex2DI;var button:byte;osp:pos_record):integer;virtual;
+    constructor init(cn:string;SA,DA:TCStartAttr);
   end;
+
 var
   duplicade:duplicade_com;
 
-function GetSelectedEntsAABB(constref ObjArray:GDBObjEntityOpenArray;out SelectedAABB:TBoundingBox):boolean;
+function GetSelectedEntsAABB(constref ObjArray:GDBObjEntityOpenArray;
+  out SelectedAABB:TBoundingBox):boolean;
 
 implementation
 
-function GetSelectedEntsAABB(constref ObjArray:GDBObjEntityOpenArray;out SelectedAABB:TBoundingBox):boolean;
+function GetSelectedEntsAABB(constref ObjArray:GDBObjEntityOpenArray;
+  out SelectedAABB:TBoundingBox):boolean;
 var
   pobj:pGDBObjEntity;
   ir:itrec;
@@ -58,33 +64,35 @@ begin
   SelectedAABB:=default(TBoundingBox);
 
   pobj:=ObjArray.beginiterate(ir);
-  if pobj<>nil then repeat
-    if pobj.selected then begin
-      if Result then
-        ConcatBB(SelectedAABB,pobj.vp.BoundingBox)
-      else
-        SelectedAABB:=pobj.vp.BoundingBox;
-      Result:=true;
-    end;
-    pobj:=ObjArray.iterate(ir);
-  until pobj=nil;
+  if pobj<>nil then
+    repeat
+      if pobj.selected then begin
+        if Result then
+          ConcatBB(SelectedAABB,pobj.vp.BoundingBox)
+        else
+          SelectedAABB:=pobj.vp.BoundingBox;
+        Result:=True;
+      end;
+      pobj:=ObjArray.iterate(ir);
+    until pobj=nil;
 end;
 
-constructor duplicade_com.init(cn:String;SA,DA:TCStartAttr);
+constructor duplicade_com.init(cn:string;SA,DA:TCStartAttr);
 begin
   inherited;
   CEndActionAttr:=CEndActionAttr-[CEDeSelect];
 end;
 
-procedure duplicade_com.CommandStart(const Context:TZCADCommandContext;Operands:TCommandOperands);
+procedure duplicade_com.CommandStart(const Context:TZCADCommandContext;
+  Operands:TCommandOperands);
 var
   SelectedAABB:TBoundingBox;
 begin
-  Inherited;
+  inherited;
   if drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.GetRealCount>0 then begin
     GetSelectedEntsAABB(drawings.GetCurrentROOT.ObjArray,SelectedAABB);
     t3dp:=SelectedAABB.LBN;
-    inc(mouseclic);
+    Inc(mouseclic);
     SimulateMouseMove(Context);
   end else begin
     zcUI.TextMessage(rscmSelEntBeforeComm,TMWOHistoryOut);
@@ -92,16 +100,20 @@ begin
   end;
 end;
 
-function duplicade_com.AfterClick(const Context:TZCADCommandContext;wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record): Integer;
+function duplicade_com.AfterClick(const Context:TZCADCommandContext;wc:GDBvertex;
+  mc:GDBvertex2DI;var button:byte;osp:pos_record):integer;
 begin
-  result:=inherited;
+  Result:=inherited;
   if (button and MZW_LBUTTON)<>0 then
     Commandmanager.executecommandend;
 end;
 
 initialization
-  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
+  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],
+    LM_Info,UnitsInitializeLMId);
   duplicade.init('Duplicate',0,0);
+
 finalization
-  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
+  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],
+    LM_Info,UnitsFinalizeLMId);
 end.

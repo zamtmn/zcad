@@ -20,30 +20,34 @@ unit uzcCommand_Copy;
 {$INCLUDE zengineconfig.inc}
 
 interface
+
 uses
   gzctnrVectorTypes,zcmultiobjectcreateundocommand,
   usimplegenerics,
   uzcdrawing,
   uzgldrawcontext,
-  
   uzcdrawings,
   uzeutils,uzcutils,
   uzglviewareadata,
   uzccommand_move,
   uzccommandsabstract,
   uzegeometrytypes,uzeentity,uzcLog;
+
 type
-{EXPORT+}
+  {EXPORT+}
   {REGISTEROBJECTTYPE copy_com}
-  copy_com =  object(move_com)
-    function AfterClick(const Context:TZCADCommandContext;wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record): Integer; virtual;
-    function Copy(const dispmatr:DMatrix4D;UndoMaker:String): Integer;
+  copy_com=object(move_com)
+    function AfterClick(const Context:TZCADCommandContext;wc:GDBvertex;
+      mc:GDBvertex2DI;var button:byte;osp:pos_record):integer;virtual;
+    function Copy(const dispmatr:DMatrix4D;UndoMaker:string):integer;
   end;
-{EXPORT-}
+  {EXPORT-}
 var
-   Copy:copy_com;
+  Copy:copy_com;
+
 implementation
-function Copy_com.Copy(const dispmatr:DMatrix4D;UndoMaker:String): Integer;
+
+function Copy_com.Copy(const dispmatr:DMatrix4D;UndoMaker:string):integer;
 var
   ir:itrec;
   pcd:PTCopyObjectDesc;
@@ -55,43 +59,45 @@ begin
   SetObjCreateManipulator(domethod,undomethod);
   dc:=drawings.GetCurrentDWG^.CreateDrawingRC;
   OldEnts2NewEntsMap:=TMapPointerToPointer.Create;
-  with PushMultiObjectCreateCommand(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,tmethod(domethod),tmethod(undomethod),1) do
-  begin
+  with PushMultiObjectCreateCommand(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,
+      tmethod(domethod),tmethod(undomethod),1) do begin
 
     pcd:=pcoa^.beginiterate(ir);
     if pcd<>nil then
-    repeat
-      pcd^.copyEnt:=pcd^.sourceEnt^.Clone(pcd^.sourceEnt^.bp.ListPos.Owner);
-      pcd^.copyEnt^.TransformAt(pcd^.sourceEnt,@dispmatr);
-      OldEnts2NewEntsMap.Add(pcd^.sourceEnt,pcd^.copyEnt);
-      pcd:=pcoa^.iterate(ir);
-    until pcd=nil;
+      repeat
+        pcd^.copyEnt:=pcd^.sourceEnt^.Clone(pcd^.sourceEnt^.bp.ListPos.Owner);
+        pcd^.copyEnt^.TransformAt(pcd^.sourceEnt,@dispmatr);
+        OldEnts2NewEntsMap.Add(pcd^.sourceEnt,pcd^.copyEnt);
+        pcd:=pcoa^.iterate(ir);
+      until pcd=nil;
 
     pcd:=pcoa^.beginiterate(ir);
     if pcd<>nil then
-    repeat
-      if assigned(pcd^.copyEnt^.EntExtensions)then
-        pcd^.copyEnt^.EntExtensions.RunReorganizeEnts(OldEnts2NewEntsMap);
-      pcd:=pcoa^.iterate(ir);
-    until pcd=nil;
+      repeat
+        if assigned(pcd^.copyEnt^.EntExtensions) then
+          pcd^.copyEnt^.EntExtensions.RunReorganizeEnts(OldEnts2NewEntsMap);
+        pcd:=pcoa^.iterate(ir);
+      until pcd=nil;
 
 
     pcd:=pcoa^.beginiterate(ir);
     if pcd<>nil then
-    repeat
-      pcd^.copyEnt^.formatentity(drawings.GetCurrentDWG^,dc);
-      AddObject(pcd^.copyEnt);
-      pcd:=pcoa^.iterate(ir);
-    until pcd=nil;
+      repeat
+        pcd^.copyEnt^.formatentity(drawings.GetCurrentDWG^,dc);
+        AddObject(pcd^.copyEnt);
+        pcd:=pcoa^.iterate(ir);
+      until pcd=nil;
 
 
     comit;
   end;
   OldEnts2NewEntsMap.Free;
   PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack.PushEndMarker;
-  result:=cmd_ok;
+  Result:=cmd_ok;
 end;
-function Copy_com.AfterClick(const Context:TZCADCommandContext;wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record): Integer;
+
+function Copy_com.AfterClick(const Context:TZCADCommandContext;wc:GDBvertex;
+  mc:GDBvertex2DI;var button:byte;osp:pos_record):integer;
 var
   dispmatr:DMatrix4D;
 begin
@@ -101,11 +107,15 @@ begin
     copy(dispmatr,self.CommandName);
     zcRedrawCurrentDrawing;
   end;
-  result:=cmd_ok;
+  Result:=cmd_ok;
 end;
+
 initialization
-  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
+  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],
+    LM_Info,UnitsInitializeLMId);
   copy.init('Copy',0,0);
+
 finalization
-  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
+  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],
+    LM_Info,UnitsFinalizeLMId);
 end.

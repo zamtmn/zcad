@@ -21,6 +21,7 @@ unit uzccommand_selobjchangelwtocurrent;
 {$INCLUDE zengineconfig.inc}
 
 interface
+
 uses
   uzcLog,
   uzccommandsabstract,uzccommandsimpl,
@@ -32,24 +33,32 @@ uses
 
 implementation
 
-function SelObjChangeLWToCurrent_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
-var pv:pGDBObjEntity;
-    ir:itrec;
+function SelObjChangeLWToCurrent_com(const Context:TZCADCommandContext;
+  operands:TCommandOperands):TCommandResult;
+var
+  pv:pGDBObjEntity;
+  ir:itrec;
 begin
-  if (drawings.GetCurrentROOT.ObjArray.count = 0)or(drawings.GetCurrentDWG.wa.param.seldesc.Selectedobjcount=0) then exit;
+  if (drawings.GetCurrentROOT.ObjArray.Count=0)or
+    (drawings.GetCurrentDWG.wa.param.seldesc.Selectedobjcount=0) then
+    exit;
   pv:=drawings.GetCurrentROOT.ObjArray.beginiterate(ir);
   if pv<>nil then
-  repeat
-    if pv^.Selected then pv^.vp.LineWeight:=sysvar.dwg.DWG_CLinew^ ;
-  pv:=drawings.GetCurrentROOT.ObjArray.iterate(ir);
-  until pv=nil;
+    repeat
+      if pv^.Selected then
+        pv^.vp.LineWeight:=sysvar.dwg.DWG_CLinew^;
+      pv:=drawings.GetCurrentROOT.ObjArray.iterate(ir);
+    until pv=nil;
   zcRedrawCurrentDrawing;
-  result:=cmd_ok;
+  Result:=cmd_ok;
 end;
 
 initialization
-  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
+  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],
+    LM_Info,UnitsInitializeLMId);
   CreateZCADCommand(@SelObjChangeLWToCurrent_com,'SelObjChangeLWToCurrent',CADWG,0);
+
 finalization
-  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
+  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],
+    LM_Info,UnitsFinalizeLMId);
 end.

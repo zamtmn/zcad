@@ -20,21 +20,27 @@ unit uzccommand_cfgSetRendererBackEnd;
 {$INCLUDE zengineconfig.inc}
 
 interface
+
 uses
- uzcLog,
- uzbpaths,uzccommandsabstract,uzccommandsimpl,uzglbackendmanager;
+  uzcLog,
+  uzbpaths,uzccommandsabstract,uzccommandsimpl,uzglbackendmanager;
 
 implementation
-function cfgSetRendererBackEnd_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
+
+function cfgSetRendererBackEnd_com(const Context:TZCADCommandContext;
+  operands:TCommandOperands):TCommandResult;
 begin
   SetCurrentBackEnd(operands);
-  result:=cmd_ok;
+  Result:=cmd_ok;
 end;
 
 
 initialization
-  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
+  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],
+    LM_Info,UnitsInitializeLMId);
   CreateZCADCommand(@cfgSetRendererBackEnd_com,'cfgSetRendererBackEnd',0,0);
+
 finalization
-  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
+  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],
+    LM_Info,UnitsFinalizeLMId);
 end.

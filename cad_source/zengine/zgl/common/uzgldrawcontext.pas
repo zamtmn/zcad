@@ -65,9 +65,9 @@ function CreateAbstractRC:TDrawContext;
 begin
       result.Subrender:=0;
       result.Selected:=false;
-      result.DrawingContext.VActuality.VisibleActualy:=0;
-      result.DrawingContext.VActuality.InfrustumActualy:=0;
-      result.DrawingContext.DRAWCOUNT:=0;
+      result.DrawingContext.VActuality.VisibleActualy:=NotActual;
+      result.DrawingContext.VActuality.InfrustumActualy:=NotActual;
+      result.DrawingContext.DRAWCOUNT:=NotActual;
       result.DrawingContext.SysLayer:=nil;
       result.MaxDetail:=true;
       result.LOD:=LODMaxDetail;

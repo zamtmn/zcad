@@ -20,33 +20,36 @@ unit uzccommand_DWGNew;
 {$INCLUDE zengineconfig.inc}
 
 interface
+
 uses
   ComCtrls,Controls,LazUTF8,uzcLog,AnchorDocking,
-  sysutils,
+  SysUtils,
   uzbtypes,uzbpaths,
   uzglbackendmanager,uzglviewareaabstract,
-
   uzccmdload,
   uzccommandsimpl,uzccommandsabstract,
   uzcsysvars,
   uzcstrconsts,
   uzcdrawing,uzcdrawings,
-  uzcinterface,uzcmainwindow;
+  uzcinterface,uzcMainForm;
 
-function DWGNew_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
+function DWGNew_com(const Context:TZCADCommandContext;
+  operands:TCommandOperands):TCommandResult;
 
 implementation
 
-function DWGNew_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
+function DWGNew_com(const Context:TZCADCommandContext;
+  operands:TCommandOperands):TCommandResult;
 var
-   PDrawing:PTZCADDrawing;
-   TabSheet:TTabSheet;
-   ViewControl:TCADControl;
-   ViewArea:TAbstractViewArea;
-   FileName:ansistring;
-   dwgname:ansistring;
+  PDrawing:PTZCADDrawing;
+  TabSheet:TTabSheet;
+  ViewControl:TCADControl;
+  ViewArea:TAbstractViewArea;
+  FileName:ansistring;
+  dwgname:ansistring;
 begin
-  PDrawing:=drawings.CreateDWG('$(DistribPath)/rtl/dwg/DrawingDeviceBase.pas','$(DistribPath)/rtl/dwg/DrawingVars.pas');
+  PDrawing:=drawings.CreateDWG('$(DistribPath)/rtl/dwg/DrawingDeviceBase.pas',
+    '$(DistribPath)/rtl/dwg/DrawingVars.pas');
   drawings.PushBackData(PDrawing);
   FileName:=operands;
 
@@ -56,29 +59,29 @@ begin
     PDrawing^.FileName:=dwgname;
   end else
 
-  PDrawing^.FileName:=operands;
+    PDrawing^.FileName:=operands;
 
-  if not assigned(ZCADMainWindow.PageControl)then
-    DockMaster.ShowControl('PageControl',true);
+  if not assigned(zcMainForm.PageControl) then
+    DockMaster.ShowControl('PageControl',True);
 
 
-  TabSheet:=TTabSheet.create(ZCADMainWindow.PageControl);
+  TabSheet:=TTabSheet.Create(zcMainForm.PageControl);
   TabSheet.Caption:=(Operands);
-  TabSheet.Parent:=ZCADMainWindow.PageControl;
+  TabSheet.Parent:=zcMainForm.PageControl;
 
   ViewArea:=GetCurrentBackEnd.Create(TabSheet);
-  ViewArea.onCameraChanged:=ZCADMainWindow.correctscrollbars;
-  ViewArea.OnWaMouseUp:=ZCADMainWindow.wamu;
-  ViewArea.OnWaMouseDown:=ZCADMainWindow.wamd;
-  ViewArea.OnWaMouseMove:=ZCADMainWindow.wamm;
-  ViewArea.OnWaKeyPress:=ZCADMainWindow.wakp;
-  ViewArea.OnWaMouseSelect:=ZCADMainWindow.wams;
-  ViewArea.OnGetEntsDesc:=ZCADMainWindow.GetEntsDesc;
-  ViewArea.ShowCXMenu:=ZCADMainWindow.ShowCXMenu;
-  ViewArea.MainMouseMove:=ZCADMainWindow.MainMouseMove;
-  ViewArea.MainMouseDown:=ZCADMainWindow.MainMouseDown;
-  ViewArea.MainMouseUp:=ZCADMainWindow.MainMouseUp;
-  ViewArea.OnWaShowCursor:=ZCADMainWindow.WaShowCursor;
+  ViewArea.onCameraChanged:=zcMainForm.correctscrollbars;
+  ViewArea.OnWaMouseUp:=zcMainForm.wamu;
+  ViewArea.OnWaMouseDown:=zcMainForm.wamd;
+  ViewArea.OnWaMouseMove:=zcMainForm.wamm;
+  ViewArea.OnWaKeyPress:=zcMainForm.wakp;
+  ViewArea.OnWaMouseSelect:=zcMainForm.wams;
+  ViewArea.OnGetEntsDesc:=zcMainForm.GetEntsDesc;
+  ViewArea.ShowCXMenu:=zcMainForm.ShowCXMenu;
+  ViewArea.MainMouseMove:=zcMainForm.MainMouseMove;
+  ViewArea.MainMouseDown:=zcMainForm.MainMouseDown;
+  ViewArea.MainMouseUp:=zcMainForm.MainMouseUp;
+  ViewArea.OnWaShowCursor:=zcMainForm.WaShowCursor;
   PDrawing.wa:=ViewArea;
 
   drawings.SetCurrentDWG(PDrawing);
@@ -86,27 +89,33 @@ begin
   ViewControl:=ViewArea.getviewcontrol;
   ViewControl.align:=alClient;
   ViewControl.Parent:=TabSheet;
-  ViewControl.Visible:=true;
+  ViewControl.Visible:=True;
   ViewArea.getareacaps;
   ViewArea.WaResize(nil);
-  ViewControl.show;
-  ZCADMainWindow.PageControl.ActivePage:=TabSheet;
+  ViewControl.Show;
+  zcMainForm.PageControl.ActivePage:=TabSheet;
 
   if not fileexists(FileName) then begin
-    FileName:=ConcatPaths([ExpandPath(sysvar.PATH.Template_Path^),ExpandPath(sysvar.PATH.Template_File^)]);
+    FileName:=ConcatPaths([ExpandPath(sysvar.PATH.Template_Path^),
+      ExpandPath(sysvar.PATH.Template_File^)]);
     if fileExists(UTF8ToSys(FileName)) then
       Load_merge(FileName,TLOLoad)
     else
       zcUI.TextMessage(format(rsTemplateNotFound,[FileName]),TMWOShowError);
   end;
-  ViewArea.Drawer.delmyscrbuf;//буфер чистить, потому что он может оказаться невалидным в случае отрисовки во время
-                              //создания или загрузки
+  ViewArea.Drawer.delmyscrbuf;
+  //буфер чистить, потому что он может оказаться невалидным в случае отрисовки во время
+  //создания или загрузки
   zcUI.Do_GUIaction(nil,zcMsgUIActionRedrawContent);
-  result:=cmd_ok;
+  Result:=cmd_ok;
 end;
+
 initialization
-  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
+  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],
+    LM_Info,UnitsInitializeLMId);
   CreateZCADCommand(@DWGNew_com,'DWGNew',0,0).CEndActionAttr:=[CEDWGNChanged];
+
 finalization
-  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
+  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],
+    LM_Info,UnitsFinalizeLMId);
 end.

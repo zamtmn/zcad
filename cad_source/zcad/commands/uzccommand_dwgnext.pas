@@ -20,31 +20,36 @@ unit uzccommand_DWGNext;
 {$INCLUDE zengineconfig.inc}
 
 interface
+
 uses
   uzcLog,
   uzccommandsabstract,uzccommandsimpl,
-  uzcmainwindow;
+  uzcMainForm;
 
 implementation
 
-function DWGNext_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
+function DWGNext_com(const Context:TZCADCommandContext;
+  operands:TCommandOperands):TCommandResult;
 var
-   i:integer;
+  i:integer;
 begin
-  if assigned(ZCADMainWindow.PageControl)then
-    if ZCADMainWindow.PageControl.PageCount>1 then begin
-      i:=ZCADMainWindow.PageControl.ActivePageIndex+1;
-      if i=ZCADMainWindow.PageControl.PageCount then
+  if assigned(zcMainForm.PageControl) then
+    if zcMainForm.PageControl.PageCount>1 then begin
+      i:=zcMainForm.PageControl.ActivePageIndex+1;
+      if i=zcMainForm.PageControl.PageCount then
         i:=0;
-      ZCADMainWindow.PageControl.ActivePageIndex:=i;
-      ZCADMainWindow.ChangedDWGTab(ZCADMainWindow.PageControl);
+      zcMainForm.PageControl.ActivePageIndex:=i;
+      zcMainForm.ChangedDWGTab(zcMainForm.PageControl);
     end;
-  result:=cmd_ok;
+  Result:=cmd_ok;
 end;
 
 initialization
-  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
+  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],
+    LM_Info,UnitsInitializeLMId);
   CreateZCADCommand(@DWGNext_com,'DWGNext',0,0);
+
 finalization
-  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
+  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],
+    LM_Info,UnitsFinalizeLMId);
 end.

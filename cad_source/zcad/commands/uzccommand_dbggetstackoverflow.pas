@@ -21,6 +21,7 @@ unit uzccommand_dbgGetStackOverflow;
 {$INCLUDE zengineconfig.inc}
 
 interface
+
 uses
   SysUtils,
   uzcLog,
@@ -28,15 +29,19 @@ uses
 
 implementation
 
-function dbgGetStackOverflow_com(const Context:TZCADCommandContext;Operands:pansichar):Integer;
+function dbgGetStackOverflow_com(const Context:TZCADCommandContext;
+  Operands:pansichar):integer;
 begin
   dbgGetStackOverflow_com(Context,nil);
-  result:=cmd_ok;
+  Result:=cmd_ok;
 end;
 
 initialization
-  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
+  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],
+    LM_Info,UnitsInitializeLMId);
   CreateZCADCommand(@dbgGetStackOverflow_com,'dbgGetStackOverflow',0,0);
+
 finalization
-  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
+  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],
+    LM_Info,UnitsFinalizeLMId);
 end.

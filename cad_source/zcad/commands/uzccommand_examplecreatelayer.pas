@@ -21,6 +21,7 @@ unit uzccommand_examplecreatelayer;
 {$INCLUDE zengineconfig.inc}
 
 interface
+
 uses
   uzcLog,
   uzccommandsabstract,uzccommandsimpl,
@@ -29,33 +30,43 @@ uses
 
 implementation
 
-function ExampleCreateLayer_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
+function ExampleCreateLayer_com(const Context:TZCADCommandContext;
+  operands:TCommandOperands):TCommandResult;
 var
-    pproglayer:PGDBLayerProp;
-    pnevlayer:PGDBLayerProp;
-    pe:PGDBObjEntity;
+  pproglayer:PGDBLayerProp;
+  pnevlayer:PGDBLayerProp;
+  pe:PGDBObjEntity;
 const
-    createdlayername='hohoho';
+  createdlayername='hohoho';
 begin
-    if commandmanager.getentity(rscmSelectSourceEntity,pe) then
-    begin
-      pproglayer:=BlockBaseDWG.LayerTable.getAddres(createdlayername);//ищем описание слоя в библиотеке
-                                                                      //возможно оно найдется, а возможно вернется nil
-      pnevlayer:=drawings.GetCurrentDWG.LayerTable.createlayerifneedbyname(createdlayername,pproglayer);//эта процедура сначала ищет описание слоя в чертеже
-                                                                                                        //если нашла - возвращает его
-                                                                                                        //не нашла, если pproglayer не nil - создает такойде слой в чертеже
-                                                                                                        //и только если слой в чертеже не найден pproglayer=nil то возвращает nil
-      if pnevlayer=nil then //предидущие попытки обламались. в чертеже и в библиотеке слоя нет, тогда создаем новый
-        pnevlayer:=drawings.GetCurrentDWG.LayerTable.addlayer(createdlayername{имя},ClWhite{цвет},-1{вес},true{on},false{lock},true{print},'???'{описание},TLOLoad{режим создания - в данном случае неважен});
-      pe^.vp.Layer:=pnevlayer;
-    end;
-    result:=cmd_ok;
+  if commandmanager.getentity(rscmSelectSourceEntity,pe) then begin
+    pproglayer:=BlockBaseDWG.LayerTable.getAddres(createdlayername);
+    //ищем описание слоя в библиотеке
+    //возможно оно найдется, а возможно вернется nil
+    pnevlayer:=drawings.GetCurrentDWG.LayerTable.createlayerifneedbyname(
+      createdlayername,pproglayer);
+    //эта процедура сначала ищет описание слоя в чертеже
+    //если нашла - возвращает его
+    //не нашла, если pproglayer не nil - создает такойде слой в чертеже
+    //и только если слой в чертеже не найден pproglayer=nil то возвращает nil
+    if pnevlayer=nil then
+      //предидущие попытки обламались. в чертеже и в библиотеке слоя нет, тогда создаем новый
+      pnevlayer:=drawings.GetCurrentDWG.LayerTable.addlayer(
+        createdlayername{имя},ClWhite{цвет},-1{вес},True{on},False{lock},
+        True{print},'???'{описание},
+        TLOLoad{режим создания - в данном случае неважен});
+    pe^.vp.Layer:=pnevlayer;
+  end;
+  Result:=cmd_ok;
 end;
 
 
 initialization
-  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
+  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],
+    LM_Info,UnitsInitializeLMId);
   CreateZCADCommand(@ExampleCreateLayer_com,'ExampleCreateLayer',CADWG,0);
+
 finalization
-  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
+  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],
+    LM_Info,UnitsFinalizeLMId);
 end.

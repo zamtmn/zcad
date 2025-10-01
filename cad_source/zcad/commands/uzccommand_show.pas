@@ -21,6 +21,7 @@ unit uzccommand_show;
 {$INCLUDE zengineconfig.inc}
 
 interface
+
 uses
   SysUtils,
   Controls,AnchorDocking,
@@ -31,9 +32,10 @@ uses
 
 implementation
 
-function Show_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
+function Show_com(const Context:TZCADCommandContext;
+  operands:TCommandOperands):TCommandResult;
 var
-   ctrl:TControl;
+  ctrl:TControl;
 begin
   if Operands<>'' then begin
     ctrl:=DockMaster.FindControl(Operands);
@@ -41,19 +43,22 @@ begin
       DockMaster.ManualFloat(ctrl);
       DockMaster.GetAnchorSite(ctrl).Close;
     end else begin
-      If IsValidIdent(Operands) then
-        DockMaster.ShowControl(Operands,true)
+      if IsValidIdent(Operands) then
+        DockMaster.ShowControl(Operands,True)
       else
         zcUI.TextMessage('Show: invalid identificator!',TMWOShowError);
     end;
   end else
     zcUI.TextMessage(rscmCmdMustHaveOperand,TMWOShowError);
-  result:=cmd_ok;
+  Result:=cmd_ok;
 end;
 
 initialization
-  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
+  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],
+    LM_Info,UnitsInitializeLMId);
   CreateZCADCommand(@Show_com,'Show',0,0);
+
 finalization
-  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
+  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],
+    LM_Info,UnitsFinalizeLMId);
 end.

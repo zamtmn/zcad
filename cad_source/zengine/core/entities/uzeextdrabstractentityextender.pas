@@ -20,15 +20,14 @@ unit uzeExtdrAbstractEntityExtender;
 {$INCLUDE zengineconfig.inc}
 
 interface
-uses uzedrawingdef,usimplegenerics,
-     uzctnrVectorBytes,gzctnrSTL,uzeffdxfsupport,uzeBaseExtender,
-     uzgldrawcontext;
+
+uses
+  uzedrawingdef,usimplegenerics,uzctnrVectorBytes,gzctnrSTL,uzeffdxfsupport,
+  uzeBaseExtender,uzgldrawcontext;
 
 type
   TAbstractEntityExtender=class(specialize TExtender<pointer>)
-
     class function CanBeAddedTo(pEntity:Pointer):Boolean;override;
-
     procedure onRemoveFromArray(pEntity:Pointer;const drawing:TDrawingDef);virtual;abstract;
     procedure onBeforeEntityFormat(pEntity:Pointer;const drawing:TDrawingDef;var DC:TDrawContext);virtual;abstract;
     procedure onAfterEntityFormat(pEntity:Pointer;const drawing:TDrawingDef;var DC:TDrawContext);virtual;abstract;
@@ -51,12 +50,8 @@ type
   TMetaEntityExtender=class of TAbstractEntityExtender;
 
   TEntityExtensions=class(specialize TExtensions<TAbstractEntityExtender,TMetaEntityExtender,Pointer>)
-
     generic function GetExtensionOf<GEntityExtenderType>:GEntityExtenderType;
-
     procedure CopyAllExtToEnt(pSourceEntity,pDestEntity:pointer);
-
-
     procedure RunOnCloneProcedures(source,dest:pointer);
     procedure RunRemoveFromArray(pEntity:Pointer;const drawing:TDrawingDef);
     procedure RunOnBeforeEntityFormat(pEntity:Pointer;const drawing:TDrawingDef;var DC:TDrawContext);
@@ -74,10 +69,14 @@ type
     procedure RunOnBeforeConnect(pEntity:Pointer;const drawing:TDrawingDef;var DC:TDrawContext);
     procedure RunSetRoot(pEntity:Pointer;pNewRoot:Pointer);
   end;
+
   TEntityExtendersMap=specialize GKey2DataMap<string,TMetaEntityExtender>;
+
 var
   EntityExtenders:TEntityExtendersMap;
+
 implementation
+
 class function TAbstractEntityExtender.CanBeAddedTo(pEntity:Pointer):Boolean;
 begin
   result:=true;
@@ -118,53 +117,51 @@ generic function TEntityExtensions.GetExtensionOf<GEntityExtenderType>:GEntityEx
 var
   index:SizeUInt;
 begin
-     if assigned(fEntityExtensions)then
-     begin
-     if fEntityExtenderToIndex.MyGetValue(GEntityExtenderType,index) then
-       result:=GEntityExtenderType(fEntityExtensions[index])
-     else
-       result:=nil;
-     end
-     else
-       result:=nil;
+  if assigned(fEntityExtensions)then begin
+    if fEntityExtenderToIndex.MyGetValue(GEntityExtenderType,index) then
+      result:=GEntityExtenderType(fEntityExtensions[index])
+    else
+      result:=nil;
+  end else
+    result:=nil;
 end;
 procedure TEntityExtensions.RunOnCloneProcedures(source,dest:pointer);
 var
   i:integer;
 begin
-     if assigned(fEntityExtensions)then
-     for i:=0 to fEntityExtensions.Size-1 do
-       if fEntityExtensions[i]<>nil then
-         fEntityExtensions[i].onEntityClone(source,dest);
+  if assigned(fEntityExtensions)then
+    for i:=0 to fEntityExtensions.Size-1 do
+      if fEntityExtensions[i]<>nil then
+        fEntityExtensions[i].onEntityClone(source,dest);
 end;
 
 procedure TEntityExtensions.RunRemoveFromArray(pEntity:Pointer;const drawing:TDrawingDef);
 var
   i:integer;
 begin
-     if assigned(fEntityExtensions)then
-     for i:=0 to fEntityExtensions.Size-1 do
-       if fEntityExtensions[i]<>nil then
-         fEntityExtensions[i].onRemoveFromArray(pEntity,drawing);
+  if assigned(fEntityExtensions)then
+    for i:=0 to fEntityExtensions.Size-1 do
+      if fEntityExtensions[i]<>nil then
+        fEntityExtensions[i].onRemoveFromArray(pEntity,drawing);
 end;
 
 procedure TEntityExtensions.RunOnBuildVarGeometryProcedures(pEntity:pointer;const drawing:TDrawingDef);
 var
   i:integer;
 begin
-     if assigned(fEntityExtensions)then
-     for i:=0 to fEntityExtensions.Size-1 do
-       if fEntityExtensions[i]<>nil then
-         fEntityExtensions[i].onEntityBuildVarGeometry(pEntity,drawing);
+  if assigned(fEntityExtensions)then
+    for i:=0 to fEntityExtensions.Size-1 do
+      if fEntityExtensions[i]<>nil then
+        fEntityExtensions[i].onEntityBuildVarGeometry(pEntity,drawing);
 end;
 procedure TEntityExtensions.RunOnBeforeEntityFormat(pEntity:Pointer;const drawing:TDrawingDef;var DC:TDrawContext);
 var
   i:integer;
 begin
-     if assigned(fEntityExtensions)then
-     for i:=0 to fEntityExtensions.Size-1 do
-       if fEntityExtensions[i]<>nil then
-         fEntityExtensions[i].OnBeforeEntityFormat(pEntity,drawing,DC);
+  if assigned(fEntityExtensions)then
+    for i:=0 to fEntityExtensions.Size-1 do
+      if fEntityExtensions[i]<>nil then
+        fEntityExtensions[i].OnBeforeEntityFormat(pEntity,drawing,DC);
 end;
 function TEntityExtensions.NeedStandardDraw(pEntity:Pointer;const drawing:TDrawingDef;var DC:TDrawContext):Boolean;
 var
@@ -180,116 +177,113 @@ procedure TEntityExtensions.RunOnAfterEntityFormat(pEntity:Pointer;const drawing
 var
   i:integer;
 begin
-     if assigned(fEntityExtensions)then
-     for i:=0 to fEntityExtensions.Size-1 do
-       if fEntityExtensions[i]<>nil then
-         fEntityExtensions[i].OnAfterEntityFormat(pEntity,drawing,DC);
+  if assigned(fEntityExtensions)then
+    for i:=0 to fEntityExtensions.Size-1 do
+      if fEntityExtensions[i]<>nil then
+        fEntityExtensions[i].OnAfterEntityFormat(pEntity,drawing,DC);
 end;
 
 procedure TEntityExtensions.RunSupportOldVersions(pEntity:pointer;const drawing:TDrawingDef);
 var
   i:integer;
 begin
-     if assigned(fEntityExtensions)then
-     for i:=0 to fEntityExtensions.Size-1 do
-       if fEntityExtensions[i]<>nil then
-         fEntityExtensions[i].onEntitySupportOldVersions(pEntity,drawing);
+  if assigned(fEntityExtensions)then
+    for i:=0 to fEntityExtensions.Size-1 do
+      if fEntityExtensions[i]<>nil then
+        fEntityExtensions[i].onEntitySupportOldVersions(pEntity,drawing);
 end;
 procedure TEntityExtensions.CopyAllExtToEnt(pSourceEntity,pDestEntity:pointer);
 var
   i:integer;
-  //s:string;
 begin
-     if assigned(fEntityExtensions)then
-     for i:=0 to fEntityExtensions.Size-1 do begin
-       if fEntityExtensions[i]<>nil then
-       //s:=fEntityExtensions[i].getExtenderName;
-         fEntityExtensions[i].CopyExt2Ent(pSourceEntity,pDestEntity);
-     end;
+  if assigned(fEntityExtensions)then
+    for i:=0 to fEntityExtensions.Size-1 do
+      if fEntityExtensions[i]<>nil then
+        fEntityExtensions[i].CopyExt2Ent(pSourceEntity,pDestEntity);
 end;
 procedure TEntityExtensions.RunReorganizeEnts(OldEnts2NewEntsMap:TMapPointerToPointer);
 var
   i:integer;
 begin
-     if assigned(fEntityExtensions)then
-     for i:=0 to fEntityExtensions.Size-1 do
-       if fEntityExtensions[i]<>nil then
-         fEntityExtensions[i].ReorganizeEnts(OldEnts2NewEntsMap);
+  if assigned(fEntityExtensions)then
+    for i:=0 to fEntityExtensions.Size-1 do
+      if fEntityExtensions[i]<>nil then
+        fEntityExtensions[i].ReorganizeEnts(OldEnts2NewEntsMap);
 end;
 procedure TEntityExtensions.RunPostLoad(var context:TIODXFLoadContext);
 var
   i:integer;
 begin
-     if assigned(fEntityExtensions)then
-     for i:=0 to fEntityExtensions.Size-1 do
-       if fEntityExtensions[i]<>nil then
-         fEntityExtensions[i].PostLoad(context);
+  if assigned(fEntityExtensions)then
+    for i:=0 to fEntityExtensions.Size-1 do
+      if fEntityExtensions[i]<>nil then
+        fEntityExtensions[i].PostLoad(context);
 end;
 procedure TEntityExtensions.RunSaveToDxf(var outStream:TZctnrVectorBytes;PEnt:Pointer;var IODXFContext:TIODXFSaveContext);
 var
   i:integer;
 begin
-     if assigned(fEntityExtensions)then
-     for i:=0 to fEntityExtensions.Size-1 do
-       if fEntityExtensions[i]<>nil then
-         fEntityExtensions[i].SaveToDxfObjXData(outStream,PEnt,IODXFContext);
+  if assigned(fEntityExtensions)then
+    for i:=0 to fEntityExtensions.Size-1 do
+      if fEntityExtensions[i]<>nil then
+        fEntityExtensions[i].SaveToDxfObjXData(outStream,PEnt,IODXFContext);
 end;
 procedure TEntityExtensions.RunSaveToDXFfollow(PEnt:Pointer;var outStream:TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFSaveContext);
 var
   i:integer;
 begin
-     if assigned(fEntityExtensions)then
-     for i:=0 to fEntityExtensions.Size-1 do
-       if fEntityExtensions[i]<>nil then
-         fEntityExtensions[i].SaveToDXFfollow(PEnt,outStream,drawing,IODXFContext);
+  if assigned(fEntityExtensions)then
+    for i:=0 to fEntityExtensions.Size-1 do
+      if fEntityExtensions[i]<>nil then
+        fEntityExtensions[i].SaveToDXFfollow(PEnt,outStream,drawing,IODXFContext);
 end;
 procedure TEntityExtensions.RunOnConnect(pEntity:Pointer;const drawing:TDrawingDef;var DC:TDrawContext);
 var
   i:integer;
 begin
-     if assigned(fEntityExtensions)then
-     for i:=0 to fEntityExtensions.Size-1 do
-       if fEntityExtensions[i]<>nil then
-         fEntityExtensions[i].onEntityConnect(pEntity,drawing,DC);
+  if assigned(fEntityExtensions)then
+    for i:=0 to fEntityExtensions.Size-1 do
+      if fEntityExtensions[i]<>nil then
+        fEntityExtensions[i].onEntityConnect(pEntity,drawing,DC);
 end;
 
 procedure TEntityExtensions.RunConnectFormattedEntsToRoot(pRootEntity,pFormattedEntity:Pointer;const drawing:TDrawingDef;var DC:TDrawContext);
 var
   i:integer;
 begin
-     if assigned(fEntityExtensions)then
-     for i:=0 to fEntityExtensions.Size-1 do
-       if fEntityExtensions[i]<>nil then
-         fEntityExtensions[i].onConnectFormattedEntsToRoot(pRootEntity,pFormattedEntity,drawing,DC);
+  if assigned(fEntityExtensions)then
+    for i:=0 to fEntityExtensions.Size-1 do
+      if fEntityExtensions[i]<>nil then
+        fEntityExtensions[i].onConnectFormattedEntsToRoot(pRootEntity,pFormattedEntity,drawing,DC);
 end;
 
 procedure TEntityExtensions.RunOnAfterConnect(pEntity:Pointer;const drawing:TDrawingDef;var DC:TDrawContext);
 var
   i:integer;
 begin
-     if assigned(fEntityExtensions)then
-     for i:=0 to fEntityExtensions.Size-1 do
-       if fEntityExtensions[i]<>nil then
-         fEntityExtensions[i].onEntityAfterConnect(pEntity,drawing,DC);
+  if assigned(fEntityExtensions)then
+    for i:=0 to fEntityExtensions.Size-1 do
+      if fEntityExtensions[i]<>nil then
+        fEntityExtensions[i].onEntityAfterConnect(pEntity,drawing,DC);
 end;
 
 procedure TEntityExtensions.RunOnBeforeConnect(pEntity:Pointer;const drawing:TDrawingDef;var DC:TDrawContext);
 var
   i:integer;
 begin
-     if assigned(fEntityExtensions)then
-     for i:=0 to fEntityExtensions.Size-1 do
-       if fEntityExtensions[i]<>nil then
-         fEntityExtensions[i].onEntityBeforeConnect(pEntity,drawing,DC);
+  if assigned(fEntityExtensions)then
+    for i:=0 to fEntityExtensions.Size-1 do
+      if fEntityExtensions[i]<>nil then
+        fEntityExtensions[i].onEntityBeforeConnect(pEntity,drawing,DC);
 end;
 procedure TEntityExtensions.RunSetRoot(pEntity:Pointer;pNewRoot:Pointer);
 var
   i:integer;
 begin
-     if assigned(fEntityExtensions)then
-     for i:=0 to fEntityExtensions.Size-1 do
-       if fEntityExtensions[i]<>nil then
-         fEntityExtensions[i].SetRoot(pEntity,pNewRoot);
+  if assigned(fEntityExtensions)then
+    for i:=0 to fEntityExtensions.Size-1 do
+      if fEntityExtensions[i]<>nil then
+        fEntityExtensions[i].SetRoot(pEntity,pNewRoot);
 end;
 
 initialization

@@ -21,6 +21,7 @@ unit uzccommand_DevDefSync;
 {$INCLUDE zengineconfig.inc}
 
 interface
+
 uses
   uzcLog,SysUtils,
   uzccommandsabstract,uzccommandsimpl,
@@ -31,7 +32,8 @@ resourcestring
   rsDeviceSynhronized='Device "%s" synhronized';
   rsAlreadySynhronized='Device "%s" already synhronized';
 
-function DevDefSync_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
+function DevDefSync_com(const Context:TZCADCommandContext;
+  operands:TCommandOperands):TCommandResult;
 
 implementation
 
@@ -43,15 +45,15 @@ var
   pv:PGDBObjEntity;
   ir:itrec;
 begin
-  DevDef.ObjArray.free;
+  DevDef.ObjArray.Free;
   pv:=pdev^.VarObjArray.beginiterate(ir);
   if pv<>nil then
-  repeat
-    DevDef^.ObjArray.AddPEntity((pv.Clone(DevDef))^);
-    pv:=pdev^.VarObjArray.iterate(ir);
-  until pv=nil;
+    repeat
+      DevDef^.ObjArray.AddPEntity((pv.Clone(DevDef))^);
+      pv:=pdev^.VarObjArray.iterate(ir);
+    until pv=nil;
   if assigned(DevDef^.EntExtensions) then
-    freeandnil(DevDef^.EntExtensions);
+    FreeAndNil(DevDef^.EntExtensions);
   pdev^.CopyExtensionsTo(DevDef^);
 end;
 
@@ -59,7 +61,7 @@ procedure Process(pdev:PGDBObjDevice;BlockDefCounter:TBlockDefCounter);
 const
   intialcounter=1;
 var
-  DevName:AnsiString;
+  DevName:ansistring;
   DevDef:PGDBObjBlockdef;
 begin
   DevName:=DevicePrefix+pdev.Name;
@@ -75,7 +77,8 @@ begin
 end;
 
 
-function DevDefSync_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
+function DevDefSync_com(const Context:TZCADCommandContext;
+  operands:TCommandOperands):TCommandResult;
 var
   pv,pls:PGDBObjDevice;
   ir:itrec;
@@ -89,21 +92,25 @@ begin
         process(pls,BlockDefCounter);
     pv:=drawings.GetCurrentROOT^.ObjArray.beginiterate(ir);
     if pv<>nil then
-    repeat
-      if (pv^.Selected)and(pv<>pls)and(pv^.GetObjType=GDBDeviceID) then
-        process(pv,BlockDefCounter);
-      pv:=drawings.GetCurrentROOT^.ObjArray.iterate(ir);
-    until pv=nil;
-    zcUI.TextMessage(format(rscmNEntitiesProcessed,[BlockDefCounter.count]),TMWOHistoryOut);
+      repeat
+        if (pv^.Selected)and(pv<>pls)and(pv^.GetObjType=GDBDeviceID) then
+          process(pv,BlockDefCounter);
+        pv:=drawings.GetCurrentROOT^.ObjArray.iterate(ir);
+      until pv=nil;
+    zcUI.TextMessage(format(rscmNEntitiesProcessed,[BlockDefCounter.Count]),
+      TMWOHistoryOut);
   finally
-    result:=cmd_ok;
+    Result:=cmd_ok;
     BlockDefCounter.Free;
   end;
 end;
 
 initialization
-  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
+  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],
+    LM_Info,UnitsInitializeLMId);
   CreateZCADCommand(@DevDefSync_com,'DevDefSync',CADWG or CASelEnts,0);
+
 finalization
-  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
+  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],
+    LM_Info,UnitsFinalizeLMId);
 end.

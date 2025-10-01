@@ -21,10 +21,11 @@ unit uzccommand_VarsEdSel;
 {$INCLUDE zengineconfig.inc}
 
 interface
+
 uses
   uzcLog,
   Controls,
-  sysutils,
+  SysUtils,
   uzbpaths,
   uzccmdinfoform,
   uzccommandsabstract,uzccommandsimpl,
@@ -40,12 +41,13 @@ uses
 
 implementation
 
-function VarsEdSel_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
+function VarsEdSel_com(const Context:TZCADCommandContext;
+  operands:TCommandOperands):TCommandResult;
 var
   mem:TZctnrVectorBytes;
   pobj:PGDBObjEntity;
   modalresult:integer;
-  u8s:UTF8String;
+  u8s:utf8string;
   astring:ansistring;
   counter:integer;
   ir:itrec;
@@ -56,39 +58,42 @@ begin
   createInfoFormVar;
   counter:=0;
 
-  InfoFormVar.memo.text:='';
+  InfoFormVar.memo.Text:='';
   modalresult:=zcUI.DOShowModal(InfoFormVar);
   if modalresult=ZCMrOk then begin
-    u8s:=InfoFormVar.memo.text;
+    u8s:=InfoFormVar.memo.Text;
     astring:={utf8tosys}(u8s);
     mem.Clear;
     mem.AddData(@astring[1],length(astring));
 
     pobj:=drawings.GetCurrentROOT.ObjArray.beginiterate(ir);
     if pobj<>nil then
-    repeat
-    if pobj^.Selected then begin
-      pentvarext:=pobj^.GetExtension<TVariablesExtender>;
-      if pentvarext<>nil then begin
-        pentvarext.entityunit.free;
-        units.parseunit(GetSupportPaths,InterfaceTranslate,mem,@pentvarext.entityunit);
-        mem.Seek(0);
-        inc(counter);
-      end;
-    end;
-    pobj:=drawings.GetCurrentROOT.ObjArray.iterate(ir);
-    until pobj=nil;
+      repeat
+        if pobj^.Selected then begin
+          pentvarext:=pobj^.GetExtension<TVariablesExtender>;
+          if pentvarext<>nil then begin
+            pentvarext.entityunit.Free;
+            units.parseunit(GetSupportPaths,InterfaceTranslate,mem,@pentvarext.entityunit);
+            mem.Seek(0);
+            Inc(counter);
+          end;
+        end;
+        pobj:=drawings.GetCurrentROOT.ObjArray.iterate(ir);
+      until pobj=nil;
     zcUI.Do_GUIaction(nil,zcMsgUIRePrepareObject);
   end;
 
   mem.done;
   zcUI.TextMessage(format(rscmNEntitiesProcessed,[counter]),TMWOHistoryOut);
-  result:=cmd_ok;
+  Result:=cmd_ok;
 end;
 
 initialization
-  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
+  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],
+    LM_Info,UnitsInitializeLMId);
   CreateZCADCommand(@VarsEdSel_com,'VarsEdSel',CADWG or CASelEnts,0);
+
 finalization
-  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
+  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],
+    LM_Info,UnitsFinalizeLMId);
 end.

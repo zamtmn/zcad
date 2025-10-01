@@ -21,10 +21,11 @@ unit uzccommand_VarsEdUnit;
 {$INCLUDE zengineconfig.inc}
 
 interface
+
 uses
   uzcLog,
   Controls,
-  sysutils,
+  SysUtils,
   uzbpaths,
   Varman,
   uzccmdinfoform,
@@ -38,7 +39,8 @@ uses
 
 implementation
 
-function VarsEdUnit_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
+function VarsEdUnit_com(const Context:TZCADCommandContext;
+  operands:TCommandOperands):TCommandResult;
 var
   u:PTSimpleUnit;
   op:ansistring;
@@ -52,12 +54,15 @@ begin
       zcUI.TextMessage(format(rsUnableToFindUnit,[op]),TMWOHistoryOut);
   end else
     zcUI.TextMessage(rscmCmdMustHaveOperand,TMWOHistoryOut);
-  result:=cmd_ok;
+  Result:=cmd_ok;
 end;
 
 initialization
-  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
+  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],
+    LM_Info,UnitsInitializeLMId);
   CreateZCADCommand(@VarsEdUnit_com,'VarsEdUnit',0,0);
+
 finalization
-  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
+  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],
+    LM_Info,UnitsFinalizeLMId);
 end.

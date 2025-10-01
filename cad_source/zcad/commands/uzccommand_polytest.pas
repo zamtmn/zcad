@@ -21,10 +21,10 @@ unit uzccommand_polytest;
 {$INCLUDE zengineconfig.inc}
 
 interface
+
 uses
   uzcLog,
   uzccommandsimpl,
-  
   uzglviewareadata,
   uzegeometrytypes,
   uzeentlwpolyline,
@@ -35,38 +35,45 @@ uses
 
 implementation
 
-procedure polytest_com_CommandStart(const Context:TZCADCommandContext;Operands:pansichar);
+procedure polytest_com_CommandStart(const Context:TZCADCommandContext;
+  Operands:pansichar);
 begin
   if drawings.GetCurrentDWG.GetLastSelected<>nil then
-  if drawings.GetCurrentDWG.GetLastSelected.GetObjType=GDBlwPolylineID then
-  begin
-  drawings.GetCurrentDWG.wa.SetMouseMode((MGet3DPointWOOP) or (MMoveCamera) or (MRotateCamera) or (MGet3DPoint));
-  //drawings.GetCurrentDWG.OGLwindow1.param.seldesc.MouseFrameON := true;
-  zcUI.TextMessage('Click and test inside/outside of a 2D polyline:',TMWOHistoryOut);
-  exit;
-  end;
+    if drawings.GetCurrentDWG.GetLastSelected.GetObjType=GDBlwPolylineID then begin
+      drawings.GetCurrentDWG.wa.SetMouseMode((MGet3DPointWOOP) or
+        (MMoveCamera) or (MRotateCamera) or (MGet3DPoint));
+      //drawings.GetCurrentDWG.OGLwindow1.param.seldesc.MouseFrameON := true;
+      zcUI.TextMessage('Click and test inside/outside of a 2D polyline:',TMWOHistoryOut);
+      exit;
+    end;
   //else
   begin
-       zcUI.TextMessage('Before run 2DPolyline must be selected',TMWOHistoryOut);
-       commandmanager.executecommandend;
+    zcUI.TextMessage('Before run 2DPolyline must be selected',TMWOHistoryOut);
+    commandmanager.executecommandend;
   end;
 end;
-function polytest_com_BeforeClick(const Context:TZCADCommandContext;wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record;mclick:Integer): Integer;
-//var tb:PGDBObjSubordinated;
+
+function polytest_com_BeforeClick(const Context:TZCADCommandContext;wc:GDBvertex;
+  mc:GDBvertex2DI;var button:byte;osp:pos_record;mclick:integer):integer;
+  //var tb:PGDBObjSubordinated;
 begin
-  result:=mclick+1;
-  if (button and MZW_LBUTTON)<>0 then
-  begin
-       if pgdbobjlwpolyline(drawings.GetCurrentDWG.GetLastSelected).isPointInside(wc) then
-       zcUI.TextMessage('Inside!',TMWOHistoryOut)
-       else
-       zcUI.TextMessage('Outside!',TMWOHistoryOut)
+  Result:=mclick+1;
+  if (button and MZW_LBUTTON)<>0 then begin
+    if pgdbobjlwpolyline(drawings.GetCurrentDWG.GetLastSelected).
+      isPointInside(wc) then
+      zcUI.TextMessage('Inside!',TMWOHistoryOut)
+    else
+      zcUI.TextMessage('Outside!',TMWOHistoryOut);
   end;
 end;
 
 initialization
-  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
-  CreateCommandRTEdObjectPlugin(@polytest_com_CommandStart,nil,nil,nil,@polytest_com_BeforeClick,@polytest_com_BeforeClick,nil,nil,'PolyTest',0,0);
+  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],
+    LM_Info,UnitsInitializeLMId);
+  CreateCommandRTEdObjectPlugin(@polytest_com_CommandStart,nil,nil,
+    nil,@polytest_com_BeforeClick,@polytest_com_BeforeClick,nil,nil,'PolyTest',0,0);
+
 finalization
-  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
+  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],
+    LM_Info,UnitsFinalizeLMId);
 end.

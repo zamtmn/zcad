@@ -21,6 +21,7 @@ unit uzccommand_showtoolbar;
 {$INCLUDE zengineconfig.inc}
 
 interface
+
 uses
   SysUtils,
   Classes,Controls,AnchorDocking,
@@ -32,19 +33,23 @@ uses
 
 implementation
 
-function ShowToolBar_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
+function ShowToolBar_com(const Context:TZCADCommandContext;
+  operands:TCommandOperands):TCommandResult;
 begin
   if Operands<>'' then begin
     ToolBarsManager.ShowFloatToolbar(operands,rect(0,0,300,50));
   end else
     zcUI.TextMessage(rscmCmdMustHaveOperand,TMWOShowError);
-  result:=cmd_ok;
+  Result:=cmd_ok;
 end;
 
 
 initialization
-  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
+  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],
+    LM_Info,UnitsInitializeLMId);
   CreateZCADCommand(@ShowToolBar_com,'ShowToolBar',0,0);
+
 finalization
-  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
+  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],
+    LM_Info,UnitsFinalizeLMId);
 end.

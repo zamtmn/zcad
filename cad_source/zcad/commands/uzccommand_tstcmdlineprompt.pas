@@ -23,6 +23,7 @@ unit uzccommand_tstCmdLinePrompt;
 {$INCLUDE zengineconfig.inc}
 
 interface
+
 uses
   SysUtils,
   uzcLog,
@@ -30,16 +31,18 @@ uses
   uzeparsercmdprompt,uzegeometrytypes,
   uzcinterface,uzcdialogsfiles;
 
-{resourcestring}//чтоб не засирать локализацию просто const
+  {resourcestring}//чтоб не засирать локализацию просто const
 const
-  RSCLParam='Нажми ${"э&[т]у",Keys[n],StrId[CLPIdUser1]} кнопку, ${"эт&[у]",Keys[e],100} или запусти ${"&[ф]айловый",Keys[a],StrId[CLPIdFileDialog]} диалог';
+  RSCLParam=
+    'Нажми ${"э&[т]у",Keys[n],StrId[CLPIdUser1]} кнопку, ${"эт&[у]",Keys[e],100} или запусти ${"&[ф]айловый",Keys[a],StrId[CLPIdFileDialog]} диалог';
 
 implementation
 
 var
   clFileParam:CMDLinePromptParser.TGeneralParsedText=nil;
 
-function CmdLinePrompt_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
+function CmdLinePrompt_com(const Context:TZCADCommandContext;
+  operands:TCommandOperands):TCommandResult;
 var
   //inpt:String;
   gr:TGetResult;
@@ -55,28 +58,35 @@ begin
     gr:=commandmanager.Get3DPoint('',p);
     case gr of
       GRId:case commandmanager.GetLastId of
-             CLPIdUser1:zcUI.TextMessage('GRId: CLPIdUser1',TMWOHistoryOut);
-             CLPIdFileDialog:begin
-               zcUI.TextMessage('GRId: CLPIdFileDialog',TMWOHistoryOut);
-               if SaveFileDialog(filename,'CSV',CSVFileFilter,'','Export data...') then begin
-                 system.break;
-               end;
-             end;
-             else zcUI.TextMessage(format('GRId: %d',[commandmanager.GetLastId]),TMWOHistoryOut);
+          CLPIdUser1:zcUI.TextMessage('GRId: CLPIdUser1',TMWOHistoryOut);
+          CLPIdFileDialog:begin
+            zcUI.TextMessage('GRId: CLPIdFileDialog',TMWOHistoryOut);
+            if SaveFileDialog(filename,'CSV',CSVFileFilter,'','Export data...') then
+            begin
+              system.break;
+            end;
           end;
-      GRNormal:zcUI.TextMessage(format('GRNormal: %g,%g,%g',[p.x,p.y,p.z]),TMWOHistoryOut);
-      GRInput:zcUI.TextMessage(format('You enter: %s',[commandmanager.GetLastInput]),TMWOHistoryOut);
+          else
+            zcUI.TextMessage(format('GRId: %d',[commandmanager.GetLastId]),TMWOHistoryOut);
+        end;
+      GRNormal:zcUI.TextMessage(format('GRNormal: %g,%g,%g',[p.x,p.y,p.z]),
+          TMWOHistoryOut);
+      GRInput:zcUI.TextMessage(format('You enter: %s',[commandmanager.GetLastInput]),
+          TMWOHistoryOut);
       GRCancel:zcUI.TextMessage('You cancel',TMWOHistoryOut);
     end;
   until gr=GRCancel;
-  result:=cmd_ok;
+  Result:=cmd_ok;
 end;
 
 initialization
-  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
+  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],
+    LM_Info,UnitsInitializeLMId);
   CreateZCADCommand(@CmdLinePrompt_com,'tstCmdLinePrompt',CADWG,0);
+
 finalization
-  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
+  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],
+    LM_Info,UnitsFinalizeLMId);
   if clFileParam<>nil then
     clFileParam.Free;
 end.

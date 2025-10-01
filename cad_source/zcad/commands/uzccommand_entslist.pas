@@ -21,6 +21,7 @@ unit uzccommand_entslist;
 {$INCLUDE zengineconfig.inc}
 
 interface
+
 uses
   uzcLog,SysUtils,
   uzccommandsabstract,uzccommandsimpl,
@@ -31,33 +32,37 @@ uses
 
 implementation
 
-function EntsList_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
+function EntsList_com(const Context:TZCADCommandContext;
+  operands:TCommandOperands):TCommandResult;
 var
-   //p:PCommandObjectDef;
-   //ir:itrec;
-   clist:TZctnrVectorStrings;
-   pair:ObjID2EntInfoData.TDictionaryPair;
-   //iterator:ObjID2EntInfoData.TIterator;
+  //p:PCommandObjectDef;
+  //ir:itrec;
+  clist:TZctnrVectorStrings;
+  pair:ObjID2EntInfoData.TDictionaryPair;
+  //iterator:ObjID2EntInfoData.TIterator;
 begin
-   clist.init(200);
-   for pair in ObjID2EntInfoData do begin
-   //iterator:=ObjID2EntInfoData.Min;
-   //if assigned(iterator) then
-   //repeat
-         clist.PushBackData(format('%s | %s',[pair.Value.UserName,pair.Value.DXFName]));
-   //until not iterator.Next;
-   //if assigned(iterator) then
-   //  iterator.destroy;
-   end;
-   clist.sort;
-   zcUI.TextMessage(clist.GetTextWithEOL,TMWOHistoryOut);
-   clist.done;
-   result:=cmd_ok;
+  clist.init(200);
+  for pair in ObjID2EntInfoData do begin
+    //iterator:=ObjID2EntInfoData.Min;
+    //if assigned(iterator) then
+    //repeat
+    clist.PushBackData(format('%s | %s',[pair.Value.UserName,pair.Value.DXFName]));
+    //until not iterator.Next;
+    //if assigned(iterator) then
+    //  iterator.destroy;
+  end;
+  clist.sort;
+  zcUI.TextMessage(clist.GetTextWithEOL,TMWOHistoryOut);
+  clist.done;
+  Result:=cmd_ok;
 end;
 
 initialization
-  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
+  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],
+    LM_Info,UnitsInitializeLMId);
   CreateZCADCommand(@EntsList_com,'EntsList',0,0);
+
 finalization
-  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
+  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],
+    LM_Info,UnitsFinalizeLMId);
 end.

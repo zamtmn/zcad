@@ -21,6 +21,7 @@ unit uzccommand_selobjchangetstyletocurrent;
 {$INCLUDE zengineconfig.inc}
 
 interface
+
 uses
   uzcLog,
   uzccommandsabstract,uzccommandsimpl,
@@ -36,49 +37,56 @@ uses
 
 implementation
 
-function SelObjChangeTStyleToCurrent_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
-var pv:PGDBObjText;
-    psv:PSelectedObjDesc;
-    prs:PGDBTextStyle;
-    ir:itrec;
-    DC:TDrawContext;
+function SelObjChangeTStyleToCurrent_com(const Context:TZCADCommandContext;
+  operands:TCommandOperands):TCommandResult;
+var
+  pv:PGDBObjText;
+  psv:PSelectedObjDesc;
+  prs:PGDBTextStyle;
+  ir:itrec;
+  DC:TDrawContext;
 begin
-  if (drawings.GetCurrentROOT.ObjArray.count = 0)or(drawings.GetCurrentDWG.wa.param.seldesc.Selectedobjcount=0) then exit;
+  if (drawings.GetCurrentROOT.ObjArray.Count=0)or
+    (drawings.GetCurrentDWG.wa.param.seldesc.Selectedobjcount=0) then
+    exit;
   prs:=(SysVar.dwg.DWG_CTStyle^);
   if prs=nil then
-                 exit;
+    exit;
   dc:=drawings.GetCurrentDWG^.CreateDrawingRC;
   pv:=drawings.GetCurrentROOT.ObjArray.beginiterate(ir);
   if pv<>nil then
-  repeat
-    if pv^.Selected then
-    if (pv^.GetObjType=GDBMTextID)or(pv^.GetObjType=GDBTextID) then
-                        begin
-                             pv^.TXTStyle:=prs;
-                             pv^.Formatentity(drawings.GetCurrentDWG^,dc);
-                        end;
-  pv:=drawings.GetCurrentROOT.ObjArray.iterate(ir);
-  until pv=nil;
+    repeat
+      if pv^.Selected then
+        if (pv^.GetObjType=GDBMTextID)or(pv^.GetObjType=GDBTextID) then begin
+          pv^.TXTStyle:=prs;
+          pv^.Formatentity(drawings.GetCurrentDWG^,dc);
+        end;
+      pv:=drawings.GetCurrentROOT.ObjArray.iterate(ir);
+    until pv=nil;
   psv:=drawings.GetCurrentDWG.SelObjArray.beginiterate(ir);
-  if psv<>nil then
-  begin
-       repeat
-             if psv.objaddr^.Selected then
-             if (psv.objaddr^.GetObjType=GDBMTextID)or(psv.objaddr^.GetObjType=GDBTextID) then
-                                          begin
-                                               PGDBObjText(psv.objaddr)^.TXTStyle:=prs;
-                                               psv.objaddr^.Formatentity(drawings.GetCurrentDWG^,dc);
-                                          end;
-       psv:=drawings.GetCurrentDWG.SelObjArray.iterate(ir);
-       until psv=nil;
+  if psv<>nil then begin
+    repeat
+      if psv.objaddr^.Selected then
+        if (psv.objaddr^.GetObjType=GDBMTextID)or
+          (psv.objaddr^.GetObjType=GDBTextID) then begin
+          PGDBObjText(psv.objaddr)^.TXTStyle:=prs;
+          psv.objaddr^.Formatentity(
+            drawings.GetCurrentDWG^,dc);
+        end;
+      psv:=drawings.GetCurrentDWG.SelObjArray.iterate(ir);
+    until psv=nil;
   end;
   zcRedrawCurrentDrawing;
-  result:=cmd_ok;
+  Result:=cmd_ok;
 end;
 
 initialization
-  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
-  CreateZCADCommand(@SelObjChangeTStyleToCurrent_com,'SelObjChangeTStyleToCurrent',CADWG,0);
+  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],
+    LM_Info,UnitsInitializeLMId);
+  CreateZCADCommand(@SelObjChangeTStyleToCurrent_com,
+    'SelObjChangeTStyleToCurrent',CADWG,0);
+
 finalization
-  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
+  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],
+    LM_Info,UnitsFinalizeLMId);
 end.

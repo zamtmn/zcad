@@ -21,6 +21,7 @@ unit uzcCommand_dbgSelectEnts;
 {$INCLUDE zengineconfig.inc}
 
 interface
+
 uses
   SysUtils,
   uzcstrconsts,
@@ -35,23 +36,23 @@ uses
 implementation
 
 type
-  TCheckEntitiVisible=function(pentity:PGDBObjEntity):Boolean;
+  TCheckEntitiVisible=function(pentity:PGDBObjEntity):boolean;
 
 var
   SelectEnts:pCommandFastObjectPlugin;
 
-function CheckEntitiVisible(pentity:PGDBObjEntity):Boolean;
+function CheckEntitiVisible(pentity:PGDBObjEntity):boolean;
 begin
-  result:=pentity^.infrustum=drawings.GetCurrentDWG^.pcamera^.POSCOUNT;
+  Result:=pentity^.infrustum=drawings.GetCurrentDWG^.pcamera^.POSCOUNT;
 end;
 
 function dbgSelectEnts_com(const Context:TZCADCommandContext;
-                           Operands:TCommandOperands):TCommandResult;
+  Operands:TCommandOperands):TCommandResult;
 var
   cef:TCheckEntitiVisible;
   pv:pGDBObjEntity;
   ir:itrec;
-  count:integer;
+  Count:integer;
   s:string;
   ents:TZctnrVectorPGDBaseEntity;
 begin
@@ -63,49 +64,50 @@ begin
   if cef<>nil then begin
     drawings.GetCurrentDWG^.DeSelectAll;
     drawings.GetCurrentDWG^.wa.param.SelDesc.Selectedobjcount:=0;
-    count:=0;
+    Count:=0;
 
     if drawings.GetCurrentROOT^.ObjArray.Count<>0 then begin
 
       pv:=drawings.GetCurrentROOT^.ObjArray.beginiterate(ir);
       if pv<>nil then
-      repeat
-        if cef(pv)then
-          inc(count);
-      pv:=drawings.GetCurrentROOT^.ObjArray.iterate(ir);
-      until pv=nil;
+        repeat
+          if cef(pv) then
+            Inc(Count);
+          pv:=drawings.GetCurrentROOT^.ObjArray.iterate(ir);
+        until pv=nil;
 
-      if count>0 then begin
-        ents.init(count);
+      if Count>0 then begin
+        ents.init(Count);
         pv:=drawings.GetCurrentROOT^.ObjArray.beginiterate(ir);
         if pv<>nil then
-        repeat
-          if cef(pv)then
-            ents.PushBackData(pv);
-        pv:=drawings.GetCurrentROOT^.ObjArray.iterate(ir);
-        until pv=nil;
+          repeat
+            if cef(pv) then
+              ents.PushBackData(pv);
+            pv:=drawings.GetCurrentROOT^.ObjArray.iterate(ir);
+          until pv=nil;
 
         drawings.GetCurrentDWG^.SelectEnts(ents);
         ents.Clear;
-        ents.free;
+        ents.Free;
       end;
       zcUI.Do_GUIaction(nil,zcMsgUIActionRedraw);
       zcUI.TextMessage(Format(rscmNEntitiesSelected,[Count]),
-                                         TMWOHistoryOut);
+        TMWOHistoryOut);
     end;
   end else
     zcUI.TextMessage(rsThereIsNothingToSelect,TMWOHistoryOut);
-  result:=cmd_ok;
+  Result:=cmd_ok;
 end;
 
 initialization
   //dbgSelectEnts(INFRUSTUM)
   programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],
-                             LM_Info,UnitsInitializeLMId);
+    LM_Info,UnitsInitializeLMId);
   SelectEnts:=CreateZCADCommand(@dbgSelectEnts_com,'dbgSelectEnts',CADWG,0);
-  SelectEnts^.overlay:=true;
+  SelectEnts^.overlay:=True;
   SelectEnts^.CEndActionAttr:=[];
+
 finalization
   ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],
-                             LM_Info,UnitsFinalizeLMId);
+    LM_Info,UnitsFinalizeLMId);
 end.

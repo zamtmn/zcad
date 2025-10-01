@@ -20,21 +20,27 @@ unit uzccommand_cfgAddSupportPath;
 {$INCLUDE zengineconfig.inc}
 
 interface
+
 uses
- uzcLog,
- uzbpaths,uzccommandsabstract,uzccommandsimpl,uzmenusmanager;
+  uzcLog,
+  uzbpaths,uzccommandsabstract,uzccommandsimpl,uzmenusmanager;
 
 implementation
-function cfgAddSupportPath_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
+
+function cfgAddSupportPath_com(const Context:TZCADCommandContext;
+  operands:TCommandOperands):TCommandResult;
 begin
   AddToAdditionalSupportPaths(ExpandPath(operands));
-  result:=cmd_ok;
+  Result:=cmd_ok;
 end;
 
 
 initialization
-  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
+  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],
+    LM_Info,UnitsInitializeLMId);
   CreateZCADCommand(@cfgAddSupportPath_com,'cfgAddSupportPath',0,0);
+
 finalization
-  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
+  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],
+    LM_Info,UnitsFinalizeLMId);
 end.

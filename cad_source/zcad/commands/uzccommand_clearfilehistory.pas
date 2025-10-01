@@ -21,6 +21,7 @@ unit uzccommand_clearfilehistory;
 {$INCLUDE zengineconfig.inc}
 
 interface
+
 uses
   SysUtils,
   uzcLog,
@@ -30,29 +31,32 @@ uses
 
 implementation
 
-function ClearFileHistory_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
-var i:integer;
-    pstr:PAnsiString;
+function ClearFileHistory_com(const Context:TZCADCommandContext;
+  operands:TCommandOperands):TCommandResult;
+var
+  i:integer;
+  pstr:PAnsiString;
 begin
-     for i:=0 to 9 do
-     begin
-          pstr:=SavedUnit.FindValue('PATH_File'+inttostr(i)).data.Addr.Instance;
-          if assigned(pstr) then
-          pstr^:='';
-          if assigned(FileHistory[i]) then
-          begin
-              FileHistory[i].Caption:='';
-              FileHistory[i].command:='';
-              FileHistory[i].Visible:=false;
-          end;
-     end;
-     result:=cmd_ok;
+  for i:=0 to 9 do begin
+    pstr:=SavedUnit.FindValue('PATH_File'+IntToStr(i)).Data.Addr.Instance;
+    if assigned(pstr) then
+      pstr^:='';
+    if assigned(FileHistory[i]) then begin
+      FileHistory[i].Caption:='';
+      FileHistory[i].command:='';
+      FileHistory[i].Visible:=False;
+    end;
+  end;
+  Result:=cmd_ok;
 end;
 
 
 initialization
-  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
+  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],
+    LM_Info,UnitsInitializeLMId);
   CreateZCADCommand(@ClearFileHistory_com,'ClearFileHistory',0,0);
+
 finalization
-  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
+  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],
+    LM_Info,UnitsFinalizeLMId);
 end.

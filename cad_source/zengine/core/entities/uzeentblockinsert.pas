@@ -14,186 +14,91 @@
 }
 {
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
-} 
+}
 unit uzeentblockinsert;
 {$Mode delphi}{$H+}
 {$INCLUDE zengineconfig.inc}
 {$PointerMath ON}
 
 interface
-uses uzeentity,uzgldrawcontext,uzeentityfactory,uzedrawingdef,uzestyleslayers,math,
-     uzeentcomplex,sysutils,UGDBObjBlockdefArray,uzeblockdef,uzbtypes,
-     uzeconsts,uzglviewareadata,uzegeometry,uzeffdxfsupport,uzeentsubordinated,
-     gzctnrVectorTypes,uzegeometrytypes,uzctnrVectorBytes,uzestrconsts,LCLProc,
-     uzbLogIntf,uzMVReader,uzeentwithlocalcs,uzeSnap;
-const zcadmetric='!!ZMODIFIER:';
+
+uses
+  uzeentity,uzgldrawcontext,uzeentityfactory,uzedrawingdef,uzestyleslayers,Math,
+  uzeentcomplex,SysUtils,UGDBObjBlockdefArray,uzeblockdef,uzbtypes,uzeconsts,
+  uzglviewareadata,uzegeometry,uzeffdxfsupport,uzeentsubordinated,
+  gzctnrVectorTypes,uzegeometrytypes,uzctnrVectorBytes,uzestrconsts,LCLProc,
+  uzbLogIntf,uzMVReader,uzeentwithlocalcs,uzeSnap;
+
+const
+  zcadmetric='!!ZMODIFIER:';
+
 type
-PGDBObjBlockInsert=^GDBObjBlockInsert;
-GDBObjBlockInsert= object(GDBObjComplex)
-                     scale:GDBvertex;
-                     rotate:Double;
-                     index:Integer;
-                     Name:AnsiString;
-                     pattrib:Pointer;
-                     BlockDesc:TBlockDesc;
-                     PDef:PGDBObjBlockdef;
-                     constructor initnul;
-                     constructor init(own:Pointer;layeraddres:PGDBLayerProp;LW:SmallInt);
-                     procedure LoadFromDXF(var rdr:TZMemReader;ptu:PExtensionData;var drawing:TDrawingDef;var context:TIODXFLoadContext);virtual;
+  PGDBObjBlockInsert=^GDBObjBlockInsert;
 
-                     procedure SaveToDXF(var outStream:TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFSaveContext);virtual;
-                     procedure CalcObjMatrix(pdrawing:PTDrawingDef=nil);virtual;
-                     function Clone(own:Pointer):PGDBObjEntity;virtual;
-                     procedure rtmodifyonepoint(const rtmod:TRTModifyData);virtual;
-                     destructor done;virtual;
-                     function GetObjTypeName:String;virtual;
-                     procedure correctobjects(powner:PGDBObjEntity;pinownerarray:Integer);virtual;
-                     procedure BuildGeometry(var drawing:TDrawingDef);virtual;
-                     procedure BuildVarGeometry(var drawing:TDrawingDef);virtual;
+  GDBObjBlockInsert=object(GDBObjComplex)
+    scale:GDBvertex;
+    rotate:double;
+    index:integer;
+    Name:ansistring;
+    pattrib:Pointer;
+    BlockDesc:TBlockDesc;
+    PDef:PGDBObjBlockdef;
+    constructor initnul;
+    constructor init(own:Pointer;layeraddres:PGDBLayerProp;LW:smallint);
+    procedure LoadFromDXF(var rdr:TZMemReader;ptu:PExtensionData;
+      var drawing:TDrawingDef;var context:TIODXFLoadContext);virtual;
 
-                     procedure TransformAt(p:PGDBObjEntity;t_matrix:PDMatrix4D);virtual;
-                     procedure ReCalcFromObjMatrix;virtual;
-                     procedure decomposite;
-                     procedure rtsave(refp:Pointer);virtual;
+    procedure SaveToDXF(var outStream:TZctnrVectorBytes;
+      var drawing:TDrawingDef;var IODXFContext:TIODXFSaveContext);virtual;
+    procedure CalcObjMatrix(pdrawing:PTDrawingDef=nil);virtual;
+    function Clone(own:Pointer):PGDBObjEntity;virtual;
+    procedure rtmodifyonepoint(const rtmod:TRTModifyData);virtual;
+    destructor done;virtual;
+    function GetObjTypeName:string;virtual;
+    procedure correctobjects(powner:PGDBObjEntity;
+      pinownerarray:integer);virtual;
+    procedure BuildGeometry(var drawing:TDrawingDef);virtual;
+    procedure BuildVarGeometry(var drawing:TDrawingDef);virtual;
 
-                     procedure AddOnTrackAxis(var posr:os_record;const processaxis:taddotrac);virtual;
-                     procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext;Stage:TEFStages=EFAllStages);virtual;
+    procedure TransformAt(p:PGDBObjEntity;t_matrix:PDMatrix4D);virtual;
+    procedure ReCalcFromObjMatrix;virtual;
+    procedure decomposite;
+    procedure rtsave(refp:Pointer);virtual;
 
-                     function getrot:Double;virtual;
-                     procedure setrot(r:Double);virtual;
+    procedure AddOnTrackAxis(var posr:os_record;
+      const processaxis:taddotrac);virtual;
+    procedure FormatEntity(var drawing:TDrawingDef;
+      var DC:TDrawContext;Stage:TEFStages=EFAllStages);virtual;
 
-                     property testrotate:Double read getrot write setrot;(*'Rotate'*)
-                     function FromDXFPostProcessBeforeAdd(ptu:PExtensionData;const drawing:TDrawingDef):PGDBObjSubordinated;virtual;
+    function getrot:double;virtual;
+    procedure setrot(r:double);virtual;
 
-                     class function CreateInstance:PGDBObjBlockInsert;static;
-                     function GetNameInBlockTable:String;virtual;
-                     function GetObjType:TObjID;virtual;
-                  end;
-procedure SetBlockInsertGeomProps(PBlockInsert:PGDBObjBlockInsert; const args:array of const);
+    property testrotate:double read getrot write setrot;(*'Rotate'*)
+    function FromDXFPostProcessBeforeAdd(ptu:PExtensionData;
+      const drawing:TDrawingDef):PGDBObjSubordinated;virtual;
+    class function CreateInstance:PGDBObjBlockInsert;static;
+    function GetNameInBlockTable:string;virtual;
+    function GetObjType:TObjID;virtual;
+  end;
+
+procedure SetBlockInsertGeomProps(PBlockInsert:PGDBObjBlockInsert;
+  const args:array of const);
+
 implementation
-//uses log;
-(*Procedure QDUDecomposition (const m:DMatrix4D; out kQ:DMatrix3D;out kD,kU:DVector3D);
-var
-   fInvLength,fDot,fDet,fInvD0:Double;
-   kR:DMatrix3D;
-   iRow,iCol:integer;
-        // Factor M = QR = QDU where Q is orthogonal, D is diagonal,
-        // and U is upper triangular with ones on its diagonal.  Algorithm uses
-        // Gram-Schmidt orthogonalization (the QR algorithm).
-        //
-        // If M = [ m0 | m1 | m2 ] and Q = [ q0 | q1 | q2 ], then
-        //
-        //   q0 = m0/|m0|
-        //   q1 = (m1-(q0*m1)q0)/|m1-(q0*m1)q0|
-        //   q2 = (m2-(q0*m2)q0-(q1*m2)q1)/|m2-(q0*m2)q0-(q1*m2)q1|
-        //
-        // where |V| indicates length of vector V and A*B indicates dot
-        // product of vectors A and B.  The matrix R has entries
-        //
-        //   r00 = q0*m0  r01 = q0*m1  r02 = q0*m2
-        //   r10 = 0      r11 = q1*m1  r12 = q1*m2
-        //   r20 = 0      r21 = 0      r22 = q2*m2
-        //
-        // so D = diag(r00,r11,r22) and U has entries u01 = r01/r00,
-        // u02 = r02/r00, and u12 = r12/r11.
 
-        // Q = rotation
-        // D = scaling
-        // U = shear
-
-        // D stores the three diagonal entries r00, r11, r22
-        // U stores the entries U[0] = u01, U[1] = u02, U[2] = u12
-
-        // build orthogonal matrix Q
+function GDBObjBlockInsert.GetNameInBlockTable:string;
 begin
-        fInvLength:= m[0][0]*m[0][0] + m[1][0]*m[1][0] + m[2][0]*m[2][0];
-    if  abs(fInvLength)>eps then fInvLength := 1/sqrt(fInvLength);
-
-        kQ[0][0]:= m[0][0]*fInvLength;
-        kQ[1][0]:= m[1][0]*fInvLength;
-        kQ[2][0]:= m[2][0]*fInvLength;
-
-        fDot:= kQ[0][0]*m[0][1] + kQ[1][0]*m[1][1] +
-            kQ[2][0]*m[2][1];
-        kQ[0][1] := m[0][1]-fDot*kQ[0][0];
-        kQ[1][1] := m[1][1]-fDot*kQ[1][0];
-        kQ[2][1] := m[2][1]-fDot*kQ[2][0];
-    fInvLength:= kQ[0][1]*kQ[0][1] + kQ[1][1]*kQ[1][1] + kQ[2][1]*kQ[2][1];
-
-    if  abs(fInvLength)>eps then fInvLength := 1/sqrt(fInvLength);
-
-        kQ[0][1] *= fInvLength;
-        kQ[1][1] *= fInvLength;
-        kQ[2][1] *= fInvLength;
-
-        fDot := kQ[0][0]*m[0][2] + kQ[1][0]*m[1][2] +
-            kQ[2][0]*m[2][2];
-        kQ[0][2] := m[0][2]-fDot*kQ[0][0];
-        kQ[1][2] := m[1][2]-fDot*kQ[1][0];
-        kQ[2][2] := m[2][2]-fDot*kQ[2][0];
-        fDot := kQ[0][1]*m[0][2] + kQ[1][1]*m[1][2] +
-            kQ[2][1]*m[2][2];
-        kQ[0][2] -= fDot*kQ[0][1];
-        kQ[1][2] -= fDot*kQ[1][1];
-        kQ[2][2] -= fDot*kQ[2][1];
-        fInvLength := kQ[0][2]*kQ[0][2] + kQ[1][2]*kQ[1][2] + kQ[2][2]*kQ[2][2];
-
-    if  abs(fInvLength)>eps then fInvLength := 1/sqrt(fInvLength);
-
-    kQ[0][2] *= fInvLength;
-        kQ[1][2] *= fInvLength;
-        kQ[2][2] *= fInvLength;
-
-        // guarantee that orthogonal matrix has determinant 1 (no reflections)
-        fDet := kQ[0][0]*kQ[1][1]*kQ[2][2] + kQ[0][1]*kQ[1][2]*kQ[2][0] +
-            kQ[0][2]*kQ[1][0]*kQ[2][1] - kQ[0][2]*kQ[1][1]*kQ[2][0] -
-            kQ[0][1]*kQ[1][0]*kQ[2][2] - kQ[0][0]*kQ[1][2]*kQ[2][1];
-
-        if ( fDet < 0.0 ) then
-        begin
-            for iRow:= 0 to 2 do
-                for iCol:= 0 to 2 do
-                    kQ[iRow][iCol] := -kQ[iRow][iCol];
-        end;
-
-        // build "right" matrix R
-        kR[0][0] := kQ[0][0]*m[0][0] + kQ[1][0]*m[1][0] +
-            kQ[2][0]*m[2][0];
-        kR[0][1] := kQ[0][0]*m[0][1] + kQ[1][0]*m[1][1] +
-            kQ[2][0]*m[2][1];
-        kR[1][1] := kQ[0][1]*m[0][1] + kQ[1][1]*m[1][1] +
-            kQ[2][1]*m[2][1];
-        kR[0][2] := kQ[0][0]*m[0][2] + kQ[1][0]*m[1][2] +
-            kQ[2][0]*m[2][2];
-        kR[1][2] := kQ[0][1]*m[0][2] + kQ[1][1]*m[1][2] +
-            kQ[2][1]*m[2][2];
-        kR[2][2] := kQ[0][2]*m[0][2] + kQ[1][2]*m[1][2] +
-            kQ[2][2]*m[2][2];
-
-        // the scaling component
-        kD[0] := kR[0][0];
-        kD[1] := kR[1][1];
-        kD[2] := kR[2][2];
-
-        // the shear component
-        fInvD0 := 1/kD[0];
-        kU[0] := kR[0][1]*fInvD0;
-        kU[1] := kR[0][2]*fInvD0;
-        kU[2] := kR[1][2]/kD[1];
-end;*)
-function GDBObjBlockInsert.GetNameInBlockTable:String;
-begin
-  result:=name;
+  Result:=Name;
 end;
 
-function GDBObjBlockInsert.FromDXFPostProcessBeforeAdd(ptu:PExtensionData;const drawing:TDrawingDef):PGDBObjSubordinated;
+function GDBObjBlockInsert.FromDXFPostProcessBeforeAdd(ptu:PExtensionData;
+  const drawing:TDrawingDef):PGDBObjSubordinated;
 begin
-  if pos(DevicePrefix,Name)=1 then
-  begin
+  if pos(DevicePrefix,Name)=1 then begin
     AddExtAttrib^.upgrade:=1;
     Name:=Copy(Name,Length(DevicePrefix)+1,length(Name)-Length(DevicePrefix));
   end;
-  result:=inherited;
+  Result:=inherited;
 end;
 
 procedure GDBObjBlockInsert.rtmodifyonepoint(const rtmod:TRTModifyData);
@@ -204,11 +109,13 @@ begin
   m:=onematrix;
   if rtmod.point.pointtype=os_point then begin
     if rtmod.point.PDrawable=nil then
-      Local:=GetPointInOCSByBasis(PGDBVertex(@objmatrix.mtr[0])^,PGDBVertex(@objmatrix.mtr[1])^,PGDBVertex(@objmatrix.mtr[2])^,VertexAdd(rtmod.point.worldcoord, rtmod.dist),scl)
-      //Local.p_insert:=vectortransform3d(VertexAdd(rtmod.point.worldcoord, rtmod.dist),m)
+      Local:=GetPointInOCSByBasis(PGDBVertex(@objmatrix.mtr[0])^,
+        PGDBVertex(@objmatrix.mtr[1])^,PGDBVertex(@objmatrix.mtr[2])^,VertexAdd(
+        rtmod.point.worldcoord,rtmod.dist),scl)
     else
-      Local:=GetPointInOCSByBasis(PGDBVertex(@objmatrix.mtr[0])^,PGDBVertex(@objmatrix.mtr[1])^,PGDBVertex(@objmatrix.mtr[2])^,VertexSub(VertexAdd(rtmod.point.worldcoord, rtmod.dist),rtmod.point.dcoord),scl);
-      //Local.p_insert:=vectortransform3d(VertexSub(VertexAdd(rtmod.point.worldcoord, rtmod.dist),rtmod.point.dcoord),m);
+      Local:=GetPointInOCSByBasis(PGDBVertex(@objmatrix.mtr[0])^,
+        PGDBVertex(@objmatrix.mtr[1])^,PGDBVertex(@objmatrix.mtr[2])^,VertexSub(
+        VertexAdd(rtmod.point.worldcoord,rtmod.dist),rtmod.point.dcoord),scl);
   end;
 end;
 
@@ -232,139 +139,68 @@ end;
 
 procedure GDBObjBlockInsert.ReCalcFromObjMatrix;
 var
-    ox:gdbvertex;
-    tv:gdbvertex;
-    //m1,m2:DMatrix4D;
-
-    //kQ:DMatrix3D;
-    //kD,kU:DVector3D;
-    //Tran: TTransformations;
-    //mmm:TMatrix;
+  ox:gdbvertex;
+  tv:gdbvertex;
 begin
-     inherited;
-     decomposite;
-
-     {Local.P_insert:=PGDBVertex(@objmatrix.mtr[3])^;
-
-     scale.x:=oneVertexlength(PGDBVertex(@objmatrix.mtr[0])^)*sign(scale.x);
-     scale.y:=oneVertexlength(PGDBVertex(@objmatrix.mtr[1])^)*sign(scale.y);
-     scale.z:=oneVertexlength(PGDBVertex(@objmatrix.mtr[2])^)*sign(scale.z);}
-
-     {m1:=objmatrix;
-     PGDBVertex(@m1[0])^.x:=(PGDBVertex(@m1[0])^.x/scale.x);
-     PGDBVertex(@m1[1])^.y:=(PGDBVertex(@m1[1])^.y/scale.y);
-     PGDBVertex(@m1[2])^.z:=(PGDBVertex(@m1[2])^.z/scale.z);
-     PGDBVertex(@m1[3])^:=nulvertex;
-     m2:=m1;
-     uzegeometry.MatrixTranspose(m2);
-     m1:=uzegeometry.MatrixMultiply(m1,m2);}
-
-     //mmm[0,0]:=objmatrix[0,0];mmm[0,1]:=objmatrix[0,1];mmm[0,2]:=objmatrix[0,2];mmm[0,3]:=objmatrix[0,3];
-     //mmm[1,0]:=objmatrix[1,0];mmm[1,1]:=objmatrix[1,1];mmm[1,2]:=objmatrix[1,2];mmm[1,3]:=objmatrix[1,3];
-     //mmm[2,0]:=objmatrix[2,0];mmm[2,1]:=objmatrix[2,1];mmm[2,2]:=objmatrix[2,2];mmm[2,3]:=objmatrix[2,3];
-     //mmm[3,0]:=objmatrix[3,0];mmm[3,1]:=objmatrix[3,1];mmm[3,2]:=objmatrix[3,2];mmm[3,3]:=objmatrix[3,3];
-     {
-     TTransType = (ttScaleX, ttScaleY, ttScaleZ,
-                   ttShearXY, ttShearXZ, ttShearYZ,
-                   ttRotateX, ttRotateY, ttRotateZ,
-                   ttTranslateX, ttTranslateY, ttTranslateZ,
-                   ttPerspectiveX, ttPerspectiveY, ttPerspectiveZ, ttPerspectiveW);
-     }
-     //MatrixDecompose(mmm,Tran);
-     //QDUDecomposition (objmatrix,kQ,kD,kU);
-
-     {tv:=uzegeometry.vectordot(PGDBVertex(@objmatrix[1])^,PGDBVertex(@objmatrix[2])^);
-     tv:=normalizevertex(tv);
-     if not IsPointEqual(tv,normalizevertex(PGDBVertex(@objmatrix[0])^)) then
-                                                                             scale.x:=-scale.x;
-
-     tv:=uzegeometry.vectordot(PGDBVertex(@objmatrix[2])^,PGDBVertex(@objmatrix[0])^);
-     tv:=normalizevertex(tv);
-     if IsPointEqual(tv,normalizevertex(PGDBVertex(@objmatrix[1])^)) then
-                                                                             scale.y:=-scale.y;
-
-     tv:=uzegeometry.vectordot(PGDBVertex(@objmatrix[0])^,PGDBVertex(@objmatrix[1])^);
-     tv:=normalizevertex(tv);
-     if IsPointEqual(tv,normalizevertex(PGDBVertex(@objmatrix[2])^)) then
-                                                                             scale.z:=-scale.z;}
-
-     {if abs(local.OX.x)>eps then
-                                scale.x:=PGDBVertex(@objmatrix[0])^.x/local.OX.x
-                            else
-                                scale.x:=1;
-     if abs(local.Oy.y)>eps then
-                                scale.y:=PGDBVertex(@objmatrix[1])^.y/local.Oy.y
-     else
-         scale.y:=1;
-
-     if abs(local.Oz.z)>eps then
-                                scale.z:=PGDBVertex(@objmatrix[2])^.z/local.Oz.z
-     else
-         scale.z:=1;
-     }
-     ox:=GetXfFromZ(Local.basis.oz);
-     //if (abs (Local.basis.oz.x) < 1/64) and (abs (Local.basis.oz.y) < 1/64) then
-     //                                                               ox:=VectorDot(YWCS,Local.basis.oz)
-     //                                                           else
-     //                                                               ox:=VectorDot(ZWCS,Local.basis.oz);
-
-     tv:=Local.basis.ox;
-     if scale.x<-eps then
-                      tv:=VertexMulOnSc(tv,-1);
-     rotate:=scalardot(tv,ox);
-     rotate:=arccos(rotate);
-     if scalardot(tv,VectorDot(Local.basis.oz,GetXfFromZ(Local.basis.oz)))<-eps then
-       rotate:=2*pi-rotate;
+  inherited;
+  decomposite;
+  ox:=GetXfFromZ(Local.basis.oz);
+  tv:=Local.basis.ox;
+  if scale.x<-eps then
+    tv:=VertexMulOnSc(tv,-1);
+  rotate:=scalardot(tv,ox);
+  rotate:=arccos(rotate);
+  if scalardot(tv,VectorDot(Local.basis.oz,GetXfFromZ(Local.basis.oz)))<-eps then
+    rotate:=2*pi-rotate;
 end;
-procedure GDBObjBlockInsert.setrot(r:Double);
-var m1:DMatrix4D;
-    sine,cosine:double;
+
+procedure GDBObjBlockInsert.setrot(r:double);
+var
+  m1:DMatrix4D;
+  sine,cosine:double;
 begin
-  //m1:=onematrix;
-  //SinCos(r,sine,cosine);
-  //m1.mtr[0].v[0]:=cosine;
-  //m1.mtr[1].v[1]:=cosine;
-  //m1.mtr[1].v[0]:=-sine;
-  //m1.mtr[0].v[1]:=sine;
   m1:=CreateRotationMatrixZ(r);
   objMatrix:=MatrixMultiply(m1,objMatrix);
 end;
-function GDBObjBlockInsert.getrot:Double;
+
+function GDBObjBlockInsert.getrot:double;
 begin
-     result:=arccos((objmatrix.mtr[0].v[0])/oneVertexlength(PGDBVertex(@objmatrix.mtr[0])^))
+  Result:=arccos((objmatrix.mtr[0].v[0])/oneVertexlength(
+    PGDBVertex(@objmatrix.mtr[0])^));
 end;
 
-procedure GDBObjBlockInsert.FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext;Stage:TEFStages=EFAllStages);
+procedure GDBObjBlockInsert.FormatEntity(var drawing:TDrawingDef;
+  var DC:TDrawContext;Stage:TEFStages=EFAllStages);
 begin
-  if assigned(EntExtensions)then
+  if assigned(EntExtensions) then
     EntExtensions.RunOnBeforeEntityFormat(@self,drawing,DC);
-
   //inferited; //fix https://github.com/zamtmn/zcad/issues/17
   calcobjmatrix(@drawing);
   ConstObjArray.FormatEntity(drawing,dc);
   calcbb(dc);
   CalcActualVisible(dc.DrawingContext.VActuality);
   //self.BuildGeometry(drawing); //fix https://github.com/zamtmn/zcad/issues/17
-  if assigned(EntExtensions)then
+  if assigned(EntExtensions) then
     EntExtensions.RunOnAfterEntityFormat(@self,drawing,DC);
 end;
-procedure GDBObjBlockInsert.AddOnTrackAxis(var posr:os_record;const processaxis:taddotrac);
-//var tv:gdbvertex;
+
+procedure GDBObjBlockInsert.AddOnTrackAxis(var posr:os_record;
+  const processaxis:taddotrac);
 begin
-     posr.arrayworldaxis.PushBackData(local.basis.OX);
-     posr.arrayworldaxis.PushBackData(local.basis.OY);
+  posr.arrayworldaxis.PushBackData(local.basis.OX);
+  posr.arrayworldaxis.PushBackData(local.basis.OY);
 end;
+
 procedure GDBObjBlockInsert.rtsave;
-//var m:DMatrix4D;
 begin
   inherited;
-  PGDBObjBlockInsert(refp)^.rotate := rotate;
-  PGDBObjBlockInsert(refp)^.scale := scale;
+  PGDBObjBlockInsert(refp)^.rotate:=rotate;
+  PGDBObjBlockInsert(refp)^.scale:=scale;
 end;
+
 procedure GDBObjBlockInsert.CalcObjMatrix;
 var
   m1:DMatrix4D;
-  //pblockdef:PGDBObjBlockdef;
 begin
   inherited CalcObjMatrix;
 
@@ -377,196 +213,181 @@ begin
 
   if pdrawing<>nil then begin
     if index=-1 then
-      index:=PGDBObjBlockdefArray(pdrawing^.GetBlockDefArraySimple).getindex(name);
+      index:=PGDBObjBlockdefArray(pdrawing^.GetBlockDefArraySimple).getindex(Name);
     PDef:=PGDBObjBlockdefArray(pdrawing^.GetBlockDefArraySimple).getDataMutable(index);
-    //pblockdef:=PGDBObjBlockdefArray(pdrawing^.GetBlockDefArraySimple).getDataMutable(index);
     if PDef<>nil then begin
       m1:=CreateTranslationMatrix(VertexMulOnSc(PDef.Base,-1));
       objMatrix:=MatrixMultiply(m1,objMatrix);
     end;
   end;
 end;
+
 procedure GDBObjBlockInsert.TransformAt;
 begin
-     inherited;
-     ReCalcFromObjMatrix;
+  inherited;
+  ReCalcFromObjMatrix;
 end;
+
 procedure GDBObjBlockInsert.correctobjects;
-var pobj:PGDBObjEntity;
-    ir:itrec;
+var
+  pobj:PGDBObjEntity;
+  ir:itrec;
 begin
-     bp.ListPos.Owner:=powner;
-     bp.ListPos.SelfIndex:=pinownerarray;
-     pobj:=self.ConstObjArray.beginiterate(ir);
-     if pobj<>nil then
-     repeat
-           pobj^.correctobjects(@self,{ir.itp}ir.itc);
-           pobj:=self.ConstObjArray.iterate(ir);
-     until pobj=nil;
+  bp.ListPos.Owner:=powner;
+  bp.ListPos.SelfIndex:=pinownerarray;
+  pobj:=self.ConstObjArray.beginiterate(ir);
+  if pobj<>nil then
+    repeat
+      pobj^.correctobjects(@self,{ir.itp}ir.itc);
+      pobj:=self.ConstObjArray.iterate(ir);
+    until pobj=nil;
 end;
+
 function GDBObjBlockInsert.GetObjTypeName;
 begin
-     result:=ObjN_GDBObjBlockInsert;
+  Result:=ObjN_GDBObjBlockInsert;
 end;
+
 constructor GDBObjBlockInsert.init;
 begin
   inherited init(own,layeraddres,LW);
-  POINTER(name):=nil;
-  //Getmem(self.varman,sizeof(varmanager));
+  POINTER(Name):=nil;
   bp.ListPos.Owner:=own;
-  //vp.ID:=GDBBlockInsertID;
   scale:=ScaleOne;
   rotate:=0;
   index:=-1;
   pattrib:=nil;
-  //pprojoutbound:=nil;
 end;
+
 constructor GDBObjBlockInsert.initnul;
 begin
   inherited initnul;
-  POINTER(name):=nil;
-  //Getmem(self.varman,sizeof(varmanager));
+  POINTER(Name):=nil;
   bp.ListPos.Owner:=nil;
-  //vp.ID:=GDBBlockInsertID;
   scale:=ScaleOne;
   rotate:=0;
   index:=-1;
   Pointer(Name):=nil;
   pattrib:=nil;
-  //ConstObjArray.init(100);
-  //varman.init('Block_Variable');
-  //varman.mergefromfile(programpath+'components\defaultblockvar.ini');
-  //pprojoutbound:=nil;
 end;
+
 function GDBObjBlockInsert.GetObjType;
 begin
-     result:=GDBBlockInsertID;
+  Result:=GDBBlockInsertID;
 end;
+
 function GDBObjBlockInsert.Clone;
-var tvo: PGDBObjBlockInsert;
+var
+  tvo:PGDBObjBlockInsert;
 begin
-  Getmem(Pointer(tvo), sizeof(GDBObjBlockInsert));
-  //tvo^.ObjMatrix:=objmatrix;;
-  tvo^.init({bp.owner}own,vp.Layer, vp.LineWeight);
+  Getmem(Pointer(tvo),sizeof(GDBObjBlockInsert));
+  tvo^.init(own,vp.Layer,vp.LineWeight);
   tvo^.scale:=scale;
-  //tvo^.vp.id := GDBBlockInsertID;
-  //tvo^.vp.layer :=vp.layer;
   CopyVPto(tvo^);
   CopyExtensionsTo(tvo^);
-  Pointer(tvo^.name) := nil;
-  tvo^.name := name;
-  tvo^.pattrib := nil;
-  tvo^.Local.p_insert := Local.p_insert;
-  tvo^.Local := Local;
-  tvo^.scale := scale;
-  tvo^.rotate := rotate;
-  tvo^.index := index;
+  Pointer(tvo^.Name):=nil;
+  tvo^.Name:=Name;
+  tvo^.pattrib:=nil;
+  tvo^.Local.p_insert:=Local.p_insert;
+  tvo^.Local:=Local;
+  tvo^.scale:=scale;
+  tvo^.rotate:=rotate;
+  tvo^.index:=index;
   tvo^.PDef:=PDef;
   tvo^.bp.ListPos.Owner:=own;
-  if ConstObjArray.count>0 then
-                               tvo.ConstObjArray.init(ConstObjArray.count)
-                           else
-                               tvo.ConstObjArray.init(100);
+  if ConstObjArray.Count>0 then
+    tvo.ConstObjArray.init(ConstObjArray.Count)
+  else
+    tvo.ConstObjArray.init(100);
   ConstObjArray.CloneEntityTo(@tvo.ConstObjArray,tvo);
-  //tvo^.format;
-  result := tvo;
+  Result:=tvo;
 end;
+
 procedure GDBObjBlockInsert.BuildVarGeometry;
-{var pblockdef:PGDBObjBlockdef;
-    //pvisible,pvisible2:PGDBObjEntity;
-    //freelayer:PGDBLayerProp;
-    //i:Integer;
-    //varobject:Boolean;}
 begin
-{
-     //index:=gdb.GetCurrentDWG.BlockDefArray.getindex(pansichar(name));
-     index:=PGDBObjBlockdefArray(drawing.GetBlockDefArraySimple).getindex(pansichar(name));
-     //pblockdef:=gdb.GetCurrentDWG.BlockDefArray.getDataMutable(index);
-     pblockdef:=PGDBObjBlockdefArray(drawing.GetBlockDefArraySimple).getDataMutable(index);
-     PTObjectUnit(pblockdef^.ou.Instance)^.copyto(PTObjectUnit(ou.Instance));
-}
 end;
+
 procedure GDBObjBlockInsert.BuildGeometry;
 var
-    pvisible,pvisible2:PGDBObjEntity;
-    pblockdef:PGDBObjBlockdef;
-    mainowner:PGDBObjSubordinated;
-    dc:TDrawContext;
-    ir:itrec;
+  pvisible,pvisible2:PGDBObjEntity;
+  pblockdef:PGDBObjBlockdef;
+  mainowner:PGDBObjSubordinated;
+  dc:TDrawContext;
+  ir:itrec;
 begin
-          if name='' then
-                         name:='_error_here';
-          //index:=gdb.GetCurrentDWG.BlockDefArray.getindex(pansichar(name));
-          index:=PGDBObjBlockdefArray(drawing.GetBlockDefArraySimple).getindex({pansichar(}name{)});
-//          if index<0 then
-//                         index:=index;
-          assert((index>=0) and (index<PGDBObjBlockdefArray(drawing.GetBlockDefArraySimple).count), rsWrongBlockDefIndex);
+  if Name='' then
+    Name:='_error_here';
+  index:=PGDBObjBlockdefArray(drawing.GetBlockDefArraySimple).getindex(Name);
+  assert((index>=0) and
+    (index<PGDBObjBlockdefArray(drawing.GetBlockDefArraySimple).Count),
+    rsWrongBlockDefIndex);
 
-          if not PGDBObjBlockdef(PGDBObjBlockdefArray(drawing.GetBlockDefArraySimple).parray)[index].Formated then
-                                                                               begin
-                                                                                dc:=drawing.CreateDrawingRC;
-                                                                                PGDBObjBlockdef(PGDBObjBlockdefArray(drawing.GetBlockDefArraySimple).parray)[index].FormatEntity(drawing,dc);
-                                                                               end;
-          mainowner:=getmainowner;
-          if mainowner<>nil then
-          if mainowner.gettype=1 then
-                                   exit;
-          pblockdef:=PGDBObjBlockdefArray(drawing.GetBlockDefArraySimple).getDataMutable(index);
+  if not PGDBObjBlockdef(PGDBObjBlockdefArray(
+    drawing.GetBlockDefArraySimple).parray)[index].Formated then begin
+    dc:=drawing.CreateDrawingRC;
+    PGDBObjBlockdef(
+      PGDBObjBlockdefArray(drawing.GetBlockDefArraySimple).parray)
+      [index].FormatEntity(drawing,dc);
+  end;
+  mainowner:=getmainowner;
+  if mainowner<>nil then
+    if mainowner.gettype=1 then
+      exit;
+  pblockdef:=PGDBObjBlockdefArray(
+    drawing.GetBlockDefArraySimple).getDataMutable(index);
 
-          ConstObjArray.free;
-          if pblockdef.ObjArray.count>0 then
-          begin
-          dc:=drawing.CreateDrawingRC;
+  ConstObjArray.Free;
+  if pblockdef.ObjArray.Count>0 then begin
+    dc:=drawing.CreateDrawingRC;
 
-          ConstObjArray.SetSize(pblockdef.ObjArray.Count);
-          pvisible:=pblockdef.ObjArray.beginiterate(ir);
-          if pvisible<>nil then
-          repeat
-               pvisible:=pvisible^.Clone(@self);
-               pvisible2:=pgdbobjEntity(pvisible.FromDXFPostProcessBeforeAdd(nil,drawing));
-               if pvisible2=nil then
-                                     begin
-                                          pvisible^.correctobjects(@self,ir.itc);
-                                          pvisible^.FormatEntity(drawing,dc);
-                                          pvisible.BuildGeometry(drawing);
-                                          ConstObjArray.AddPEntity(pvisible^);
-                                     end
-                                 else
-                                     begin
-                                          pvisible2^.correctobjects(@self,{i}ir.itc);
-                                          pvisible2^.FormatEntity(drawing,dc);
-                                          pvisible.BuildGeometry(drawing);
-                                          ConstObjArray.AddPEntity(pvisible2^);
-                                     end;
-          pvisible:=pblockdef.ObjArray.iterate(ir);
-          until pvisible=nil;
+    ConstObjArray.SetSize(pblockdef.ObjArray.Count);
+    pvisible:=pblockdef.ObjArray.beginiterate(ir);
+    if pvisible<>nil then
+      repeat
+        pvisible:=pvisible^.Clone(@self);
+        pvisible2:=pgdbobjEntity(pvisible.FromDXFPostProcessBeforeAdd(
+          nil,drawing));
+        if pvisible2=nil then begin
+          pvisible^.correctobjects(@self,ir.itc);
+          pvisible^.FormatEntity(drawing,dc);
+          pvisible.BuildGeometry(drawing);
+          ConstObjArray.AddPEntity(pvisible^);
+        end else begin
+          pvisible2^.correctobjects(@self,{i}ir.itc);
+          pvisible2^.FormatEntity(drawing,dc);
+          pvisible.BuildGeometry(drawing);
+          ConstObjArray.AddPEntity(pvisible2^);
+        end;
+        pvisible:=pblockdef.ObjArray.iterate(ir);
+      until pvisible=nil;
 
-
-
-          ConstObjArray.Shrink;
-          end;
-          self.BlockDesc:=pblockdef.BlockDesc;
-          self.getoutbound(dc);
-          inherited;
+    ConstObjArray.Shrink;
+  end;
+  self.BlockDesc:=pblockdef.BlockDesc;
+  self.getoutbound(dc);
+  inherited;
 end;
+
 procedure GDBObjBlockInsert.LoadFromDXF;
 var
-  byt:Integer;
-  hlGDBWord:Integer;
-  attrcont:Boolean;
+  byt:integer;
+  hlGDBWord:integer;
+  attrcont:boolean;
 begin
   hlGDBWord:=0;
-  attrcont := false;
+  attrcont:=False;
   byt:=rdr.ParseInteger;
-  while byt <> 0 do
-  begin
+  while byt<>0 do begin
     if not LoadFromDXFObjShared(rdr,byt,ptu,drawing,context) then
-    if not dxfLoadGroupCodeVertex(rdr,10,byt,Local.P_insert) then
-    if not dxfLoadGroupCodeVertex1(rdr,41,byt,scale) then
-    if dxfLoadGroupCodeDouble(rdr,50,byt,rotate) then
-      rotate:=DegToRad(rotate)
-    else if dxfLoadGroupCodeInteger(rdr,71,byt,hlGDBWord)then begin if hlGDBWord = 1 then attrcont := true; end
-    else if not dxfLoadGroupCodeString(rdr,2,byt,name,context.header)then {s := }rdr.SkipString;
+      if not dxfLoadGroupCodeVertex(rdr,10,byt,Local.P_insert) then
+        if not dxfLoadGroupCodeVertex1(rdr,41,byt,scale) then
+          if dxfLoadGroupCodeDouble(rdr,50,byt,rotate) then
+            rotate:=DegToRad(rotate)
+          else if dxfLoadGroupCodeInteger(rdr,71,byt,hlGDBWord) then begin
+            if hlGDBWord=1 then
+              attrcont:=True;
+          end else if not dxfLoadGroupCodeString(rdr,2,byt,Name,context.header) then
+            rdr.SkipString;
     byt:=rdr.ParseInteger;
   end;
   if IsZero(scale.x) then
@@ -575,170 +396,47 @@ begin
     scale.y:=1;
   if IsZero(scale.z) then
     scale.z:=1;
-  if attrcont then ;
-      {begin
-        Getmem(PGDBBlockInsert(temp)^.pattrib, attrmemsize);
-        PGDBBlockInsert(temp)^.pattrib^.count := 0;
-        s := f.readworld(#10, #13);
-        repeat
-          GDBMtext(PGDBBlockInsert(temp)^.pattrib^.attrarray[PGDBBlockInsert(temp)^.pattrib^.count].mt).angle := 0;
-          GDBMtext(PGDBBlockInsert(temp)^.pattrib^.attrarray[PGDBBlockInsert(temp)^.pattrib^.count].mt).oblique := 0;
-          GDBMtext(PGDBBlockInsert(temp)^.pattrib^.attrarray[PGDBBlockInsert(temp)^.pattrib^.count].mt).wfactor := 0.65;
-          GDBMtext(PGDBBlockInsert(temp)^.pattrib^.attrarray[PGDBBlockInsert(temp)^.pattrib^.count].mt).size := 10;
-          GDBMtext(PGDBBlockInsert(temp)^.pattrib^.attrarray[PGDBBlockInsert(temp)^.pattrib^.count].mt).linespace := 10 * 1.66;
-          GDBMtext(PGDBBlockInsert(temp)^.pattrib^.attrarray[PGDBBlockInsert(temp)^.pattrib^.count].mt).ptext := nil;
-          Pointer(GDBMtext(PGDBBlockInsert(temp)^.pattrib^.attrarray[PGDBBlockInsert(temp)^.pattrib^.count].mt).content) := nil;
-          GDBMtext(PGDBBlockInsert(temp)^.pattrib^.attrarray[PGDBBlockInsert(temp)^.pattrib^.count].mt).content := '';
-          ux.x := 1;
-          ux.y := 0;
-          ux.z := 0;
-          vv := 0;
-          gv := 0;
-          doublepoint := false;
-          Pointer(PGDBBlockInsert(temp)^.pattrib^.attrarray[PGDBBlockInsert(temp)^.pattrib^.count].tag) := nil;
-          Pointer(PGDBBlockInsert(temp)^.pattrib^.attrarray[PGDBBlockInsert(temp)^.pattrib^.count].value) := nil;
-          Pointer(PGDBBlockInsert(temp)^.pattrib^.attrarray[PGDBBlockInsert(temp)^.pattrib^.count].prompt) := nil;
+  if attrcont then;
 
-          s := f.readworld(#10, #13);
-          val(s, byt, code);
-          while byt <> 0 do
-          begin
-            case byt of
-              1:
-                begin
-                  s := f.readworld(#10, #13);
-                  PGDBBlockInsert(temp)^.pattrib^.attrarray[PGDBBlockInsert(temp)^.pattrib^.count].value := s;
-                end;
-              2:
-                begin
-                  s := f.readworld(#10, #13);
-                  PGDBBlockInsert(temp)^.pattrib^.attrarray[PGDBBlockInsert(temp)^.pattrib^.count].tag := s;
-                end;
-
-              10:
-                begin
-                  s := f.readworld(#10, #13);
-                  val(s, GDBMtext(PGDBBlockInsert(temp)^.pattrib^.attrarray[PGDBBlockInsert(temp)^.pattrib^.count].mt).p_insert.x, code);
-                end;
-              20:
-                begin
-                  s := f.readworld(#10, #13);
-                  val(s, GDBMtext(PGDBBlockInsert(temp)^.pattrib^.attrarray[PGDBBlockInsert(temp)^.pattrib^.count].mt).p_insert.y, code);
-                end;
-              30:
-                begin
-                  s := f.readworld(#10, #13);
-                  val(s, GDBMtext(PGDBBlockInsert(temp)^.pattrib^.attrarray[PGDBBlockInsert(temp)^.pattrib^.count].mt).p_insert.z, code);
-                end;
-              11:
-                begin
-                  doublepoint := true;
-                  s := f.readworld(#10, #13);
-                  val(s, GDBMtext(PGDBBlockInsert(temp)^.pattrib^.attrarray[PGDBBlockInsert(temp)^.pattrib^.count].mt).p_draw.x, code);
-                end;
-              21:
-                begin
-                  s := f.readworld(#10, #13);
-                  val(s, GDBMtext(PGDBBlockInsert(temp)^.pattrib^.attrarray[PGDBBlockInsert(temp)^.pattrib^.count].mt).p_draw.y, code);
-                end;
-              31:
-                begin
-                  s := f.readworld(#10, #13);
-                  val(s, GDBMtext(PGDBBlockInsert(temp)^.pattrib^.attrarray[PGDBBlockInsert(temp)^.pattrib^.count].mt).p_draw.z, code);
-                end;
-
-              40:
-                begin
-                  s := f.readworld(#10, #13);
-                  val(s, GDBMtext(PGDBBlockInsert(temp)^.pattrib^.attrarray[PGDBBlockInsert(temp)^.pattrib^.count].mt).size, code);
-                end;
-              44:
-                begin
-                  s := f.readworld(#10, #13);
-                  val(s, GDBMtext(PGDBBlockInsert(temp)^.pattrib^.attrarray[PGDBBlockInsert(temp)^.pattrib^.count].mt).linespace, code);
-                  GDBMtext(PGDBBlockInsert(temp)^.pattrib^.attrarray[PGDBBlockInsert(temp)^.pattrib^.count].mt).linespace :=
-                  GDBMtext(PGDBBlockInsert(temp)^.pattrib^.attrarray[PGDBBlockInsert(temp)^.pattrib^.count].mt).size * GDBMtext(PGDBBlockInsert(temp)^.pattrib^.attrarray[PGDBBlockInsert(temp)^.pattrib^.count].mt).linespace * 5 / 3
-                end;
-              50:
-                begin
-                  s := f.readworld(#10, #13);
-                  val(s, GDBMtext(PGDBBlockInsert(temp)^.pattrib^.attrarray[PGDBBlockInsert(temp)^.pattrib^.count].mt).angle, code);
-                end;
-              51:
-                begin
-                  s := f.readworld(#10, #13);
-                  val(s, GDBMtext(PGDBBlockInsert(temp)^.pattrib^.attrarray[PGDBBlockInsert(temp)^.pattrib^.count].mt).oblique, code);
-                end;
-              72:
-                begin
-                  s := f.readworld(#10, #13);
-                  val(s, gv, code);
-                end;
-              73:
-                begin
-                  s := f.readworld(#10, #13);
-                  val(s, vv, code);
-                end;
-              41:
-                begin
-                  s := f.readworld(#10, #13);
-                  val(s, GDBMtext(PGDBBlockInsert(temp)^.pattrib^.attrarray[PGDBBlockInsert(temp)^.pattrib^.count].mt).width, code);
-                end;
-            else
-              s := f.readworld(#10, #13);
-            end;
-            s := f.readworld(#10, #13);
-            val(s, byt, code);
-          end;
-          if doublepoint then
-            GDBMtext(PGDBBlockInsert(temp)^.pattrib^.attrarray[PGDBBlockInsert(temp)^.pattrib^.count].mt).p_insert := GDBMtext(PGDBBlockInsert(temp)^.pattrib^.attrarray[PGDBBlockInsert(temp)^.pattrib^.count].mt).p_draw;
-          GDBMtext(PGDBBlockInsert(temp)^.pattrib^.attrarray[PGDBBlockInsert(temp)^.pattrib^.count].mt).justify := jt[vv, gv];
-          GDBMtext(PGDBBlockInsert(temp)^.pattrib^.attrarray[PGDBBlockInsert(temp)^.pattrib^.count].mt).content := PGDBBlockInsert(temp)^.pattrib^.attrarray[PGDBBlockInsert(temp)^.pattrib^.count].value;
-          reformatmtext(@GDBMtext(PGDBBlockInsert(temp)^.pattrib^.attrarray[PGDBBlockInsert(temp)^.pattrib^.count].mt));
-          inc(PGDBBlockInsert(temp)^.pattrib^.count);
-          s := f.readworld(#10, #13);
-        until s = 'SEQEND'
-      end;}
-  zTraceLn('{D}[DXF_CONTENTS]Name=%s',[name]);
-//  if name='EL_LIGHT_SWIITH' then
-//    name:=name;
-      //programlog.LogOutFormatStr('BlockInsert name="%s" loaded',[name],lp_OldPos,LM_Debug);
-      //index:=gdb.GetCurrentDWG.BlockDefArray.getindex(pansichar(name));
-      index:=PGDBObjBlockdefArray(drawing.GetBlockDefArraySimple).getindex(name);
-      //format;
+  zTraceLn('{D}[DXF_CONTENTS]Name=%s',[Name]);
+  index:=PGDBObjBlockdefArray(drawing.GetBlockDefArraySimple).getindex(Name);
 end;
-procedure GDBObjBlockInsert.SaveToDXF(var outStream:TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFSaveContext);
-//var
-  //i, j: Integer;
-  //hv, vv: Byte;
-  //s: String;
+
+procedure GDBObjBlockInsert.SaveToDXF(var outStream:TZctnrVectorBytes;
+  var drawing:TDrawingDef;var IODXFContext:TIODXFSaveContext);
 begin
   SaveToDXFObjPrefix(outStream,'INSERT','AcDbBlockReference',IODXFContext);
-  dxfStringout(outStream,2,name,IODXFContext.Header);
+  dxfStringout(outStream,2,Name,IODXFContext.Header);
   dxfvertexout(outStream,10,Local.p_insert);
   dxfvertexout1(outStream,41,scale);
   dxfDoubleout(outStream,50,rotate*180/pi);
   SaveToDXFObjPostfix(outStream);
 end;
+
 destructor GDBObjBlockInsert.done;
 begin
-     name:='';
-     inherited done;
+  Name:='';
+  inherited done;
 end;
+
 function AllocBlockInsert:PGDBObjBlockInsert;
 begin
-  Getmem(pointer(result),sizeof(GDBObjBlockInsert));
+  Getmem(pointer(Result),sizeof(GDBObjBlockInsert));
 end;
-function AllocAndInitBlockInsert(owner:PGDBObjGenericWithSubordinated):PGDBObjBlockInsert;
+
+function AllocAndInitBlockInsert(owner:PGDBObjGenericWithSubordinated):
+PGDBObjBlockInsert;
 begin
-  result:=AllocBlockInsert;
-  result.initnul{(owner)};
-  result.bp.ListPos.Owner:=owner;
+  Result:=AllocBlockInsert;
+  Result.initnul;
+  Result.bp.ListPos.Owner:=owner;
 end;
-procedure SetBlockInsertGeomProps(PBlockInsert:PGDBObjBlockInsert; const args:array of const);
+
+procedure SetBlockInsertGeomProps(PBlockInsert:PGDBObjBlockInsert;
+  const args:array of const);
 var
-   counter:integer;
-   r:Double;
+  counter:integer;
+  r:double;
 begin
   counter:=low(args);
   PBlockInsert^.Local.P_insert:=CreateVertexFromArray(counter,args);
@@ -746,23 +444,26 @@ begin
   PBlockInsert^.scale.y:=PBlockInsert^.scale.x;
   PBlockInsert^.scale.z:=PBlockInsert^.scale.x;
   r:=CreateDoubleFromArray(counter,args);
-  PBlockInsert^.name:=CreateStringFromArray(counter,args);
+  PBlockInsert^.Name:=CreateStringFromArray(counter,args);
   PBlockInsert^.index:=-1;
 
   PBlockInsert^.CalcObjMatrix;
   PBlockInsert^.setrot(r);
   PBlockInsert^.rotate:=r;
 end;
-function AllocAndCreateBlockInsert(owner:PGDBObjGenericWithSubordinated; const args:array of const):PGDBObjBlockInsert;
+
+function AllocAndCreateBlockInsert(owner:PGDBObjGenericWithSubordinated;
+  const args:array of const):PGDBObjBlockInsert;
 begin
-  result:=AllocAndInitBlockInsert(owner);
-  //owner^.AddMi(@result);
-  SetBlockInsertGeomProps(result,args);
+  Result:=AllocAndInitBlockInsert(owner);
+  SetBlockInsertGeomProps(Result,args);
 end;
+
 class function GDBObjBlockInsert.CreateInstance:PGDBObjBlockInsert;
 begin
-  result:=AllocAndInitBlockInsert(nil);
+  Result:=AllocAndInitBlockInsert(nil);
 end;
+
 begin
   RegisterDXFEntity(GDBBlockInsertID,'INSERT','BlockInsert',@AllocBlockInsert,@AllocAndInitBlockInsert,@SetBlockInsertGeomProps,@AllocAndCreateBlockInsert);
 end.

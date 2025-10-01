@@ -21,35 +21,38 @@ unit uzccommand_regen;
 {$INCLUDE zengineconfig.inc}
 
 interface
+
 uses
-  uzcLog,//uzbtypes,
+  uzcLog,
   uzccommandsabstract,uzccommandsimpl,
-  uzeentity,//uzeentconnected,
-  //gzctnrVectorTypes,
+  uzeentity,
   uzedrawingsimple,uzcdrawings,
   uzcinterface,
   uzgldrawcontext,
   uzelongprocesssupport,
   uzeroot;
 
-function Regen_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
+function Regen_com(const Context:TZCADCommandContext;
+  operands:TCommandOperands):TCommandResult;
 
 implementation
 
-function Regen_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
+function Regen_com(const Context:TZCADCommandContext;
+  operands:TCommandOperands):TCommandResult;
 var
   drawing:PTSimpleDrawing;
   DC:TDrawContext;
   lpsh:TLPSHandle;
   c:integer;
 begin
-  c:=drawings.GetCurrentROOT.ObjArray.count;
+  c:=drawings.GetCurrentROOT.ObjArray.Count;
   lpsh:=lps.StartLongProcess('Regenerate drawing',nil,c*2);
   drawing:=drawings.GetCurrentDwg;
   drawing.wa.CalcOptimalMatrix;
   dc:=drawings.GetCurrentDwg^.CreateDrawingRC;
 
-  DoFormat(drawings.GetCurrentROOT^,drawings.GetCurrentROOT.ObjArray,drawings.GetCurrentROOT.ObjToConnectedArray,drawing^,DC,lpsh,[]);
+  DoFormat(drawings.GetCurrentROOT^,drawings.GetCurrentROOT.ObjArray,
+    drawings.GetCurrentROOT.ObjToConnectedArray,drawing^,DC,lpsh,[]);
   drawings.GetCurrentROOT.getoutbound(dc);
 
   lps.EndLongProcess(lpsh);
@@ -62,13 +65,16 @@ begin
   zcUI.Do_GUIaction(nil,zcMsgUIReturnToDefaultObject);
   clearcp;
   //redrawoglwnd;
-  result:=cmd_ok;
+  Result:=cmd_ok;
 end;
 
 
 initialization
-  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
+  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],
+    LM_Info,UnitsInitializeLMId);
   CreateZCADCommand(@Regen_com,'Regen',CADWG,0);
+
 finalization
-  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
+  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],
+    LM_Info,UnitsFinalizeLMId);
 end.

@@ -21,6 +21,7 @@ unit uzccommand_dbgMemProfiler;
 {$INCLUDE zengineconfig.inc}
 
 interface
+
 uses
   SysUtils,
   uzcLog,
@@ -30,7 +31,8 @@ uses
 
 implementation
 
-function dbgMemProfiler_com(const Context:TZCADCommandContext; Operands:TCommandOperands):TCommandResult;
+function dbgMemProfiler_com(const Context:TZCADCommandContext;
+  Operands:TCommandOperands):TCommandResult;
 begin
   Operands:=UpperCase(Operands);
   if operands='ON' then
@@ -39,12 +41,15 @@ begin
     RestoreMemoryManager
   else
     SaveProfileToFile;
-  result:=cmd_ok;
+  Result:=cmd_ok;
 end;
 
 initialization
-  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
+  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],
+    LM_Info,UnitsInitializeLMId);
   CreateZCADCommand(@dbgMemProfiler_com,'dbgMemProfiler',0,0);
+
 finalization
-  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
+  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],
+    LM_Info,UnitsFinalizeLMId);
 end.

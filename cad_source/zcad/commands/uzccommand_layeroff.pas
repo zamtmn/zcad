@@ -21,6 +21,7 @@ unit uzccommand_LayerOff;
 {$INCLUDE zengineconfig.inc}
 
 interface
+
 uses
   uzcLog,SysUtils,
   uzccommandsabstract,uzeentity,uzcdrawing,uzcdrawings,uzccommandsmanager,
@@ -28,40 +29,48 @@ uses
   uzestyleslayers,uzcinterface;
 
 implementation
+
 const
   LayerOnCommandName='LayerOff';
-function LayerOff_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
+
+function LayerOff_com(const Context:TZCADCommandContext;
+  operands:TCommandOperands):TCommandResult;
 var
   UndoStartMarkerPlaced:boolean;
   plp:PGDBLayerProp;
 begin
-  UndoStartMarkerPlaced:=false;
+  UndoStartMarkerPlaced:=False;
   plp:=drawings.GetCurrentDWG^.LayerTable.getAddres(operands);
   if plp<>nil then begin
     if not plp^._on then begin
       zcUI.TextMessage(format(rsLayerAlreadyOff,[operands]),TMWOHistoryOut);
-      result:=cmd_error;
+      Result:=cmd_error;
     end else begin
-      zcPlaceUndoStartMarkerIfNeed(UndoStartMarkerPlaced,LayerOnCommandName,true);
-      with TBooleanChangeCommand.CreateAndPushIfNeed(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,
-                                                    TChangedBoolean.CreateRec(plp^._on),
-                                                    TSharedEmpty(Default(TEmpty)),
-                                                    TAfterChangeEmpty(Default(TEmpty)))do
+      zcPlaceUndoStartMarkerIfNeed(UndoStartMarkerPlaced,LayerOnCommandName,True);
+      with TBooleanChangeCommand.CreateAndPushIfNeed(
+          PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,
+          TChangedBoolean.CreateRec(plp^._on),
+          TSharedEmpty(Default(TEmpty)),
+          TAfterChangeEmpty(Default(TEmpty))) do
       begin
         plp^._on:=not plp^._on;
         //ComitFromObj;
       end;
       zcPlaceUndoEndMarkerIfNeed(UndoStartMarkerPlaced);
-      result:=cmd_ok;
+      Result:=cmd_ok;
     end;
   end else begin
     zcUI.TextMessage(format(rsLayerNotFound,[operands]),TMWOShowError);
-    result:=cmd_error;
+    Result:=cmd_error;
   end;
 end;
+
 initialization
-  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
+  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],
+    LM_Info,UnitsInitializeLMId);
   CreateZCADCommand(@LayerOff_com,LayerOnCommandName,CADWG,0);
+
 finalization
-  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
+  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],
+    LM_Info,UnitsFinalizeLMId);
 end.

@@ -20,35 +20,43 @@ unit uzcCommand_LPCSRun;
 {$INCLUDE zengineconfig.inc}
 
 interface
+
 uses
- SysUtils,
- uzcLog,uzcreglog,
- uzbpaths,uzccommandsabstract,uzccommandsimpl,uzmenusmanager,
- uzcLapeScriptsManager,uzcLapeScriptsImplBase,
- uzcsysvars;
+  SysUtils,
+  uzcLog,uzcreglog,
+  uzbpaths,uzccommandsabstract,uzccommandsimpl,uzmenusmanager,
+  uzcLapeScriptsManager,uzcLapeScriptsImplBase,
+  uzcsysvars;
+
 var
   CommandScriptsManager:TScriptsManager;
+
 implementation
-function LPCSRun_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
+
+function LPCSRun_com(const Context:TZCADCommandContext;
+  operands:TCommandOperands):TCommandResult;
 begin
   try
     CommandScriptsManager.RunScript(operands);
   except
-    on E: Exception do
-    begin
+    on E:Exception do begin
       ProgramLog.LogOutFormatStr('LPCSRun: %s',[E.Message],LM_Error,LapeLMId,MO_SM);
     end;
   end;
-  result:=cmd_ok;
+  Result:=cmd_ok;
 end;
 
 
 initialization
-  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
-  CommandScriptsManager:=STManager.CreateType('lpcs','Command script',TCurrentDrawingContext,[ttest.testadder,ttest.setCurrentDrawing]);
+  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],
+    LM_Info,UnitsInitializeLMId);
+  CommandScriptsManager:=STManager.CreateType('lpcs','Command script',
+    TCurrentDrawingContext,[ttest.testadder,ttest.setCurrentDrawing]);
   if sysvar.PATH.Preload_Paths<>nil then
     CommandScriptsManager.ScanDirs(ExpandPath(sysvar.PATH.Preload_Paths^));
   CreateZCADCommand(@LPCSRun_com,'LPCSRun',0,0);
+
 finalization
-  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
+  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],
+    LM_Info,UnitsFinalizeLMId);
 end.

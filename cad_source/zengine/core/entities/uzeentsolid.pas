@@ -14,58 +14,65 @@
 }
 {
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
-} 
+}
 unit uzeentsolid;
 {$Mode delphi}{$H+}
 {$INCLUDE zengineconfig.inc}
 
 interface
+
 uses
-    uzeentityfactory,uzgldrawcontext,uzedrawingdef,uzecamera,uzeentwithlocalcs,
-    uzegeometry,uzeffdxfsupport,uzestyleslayers,
-    UGDBSelectedObjArray,uzeentsubordinated,uzeentity,sysutils,uzctnrVectorBytes,
-    uzegeometrytypes,uzbtypes,uzeconsts,uzglviewareadata,
-    uzMVReader,uzCtnrVectorpBaseEntity;
+  uzeentityfactory,uzgldrawcontext,uzedrawingdef,uzecamera,uzeentwithlocalcs,
+  uzegeometry,uzeffdxfsupport,uzestyleslayers,
+  UGDBSelectedObjArray,uzeentsubordinated,uzeentity,SysUtils,uzctnrVectorBytes,
+  uzegeometrytypes,uzbtypes,uzeconsts,uzglviewareadata,
+  uzMVReader,uzCtnrVectorpBaseEntity;
 
 type
 
-PGDBObjSolid=^GDBObjSolid;
-GDBObjSolid= object(GDBObjWithLocalCS)
-                 PInOCS:OutBound4V;
-                 PInWCS:OutBound4V;
-                 //PInDCS:OutBound4V;
-                 normal:GDBVertex;
-                 triangle:Boolean;
-                 n,p1,p2,p3:GDBVertex3S;
-                 //ProjPoint:GDBvertex;
-                 constructor init(own:Pointer;layeraddres:PGDBLayerProp;LW:SmallInt;p:GDBvertex);
-                 constructor initnul(owner:PGDBObjGenericWithSubordinated);
-                 procedure LoadFromDXF(var rdr:TZMemReader;ptu:PExtensionData;var drawing:TDrawingDef;var context:TIODXFLoadContext);virtual;
-                 procedure SaveToDXF(var outStream:TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFSaveContext);virtual;
-                 procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext;Stage:TEFStages=EFAllStages);virtual;
-                 procedure createpoint;virtual;
+  PGDBObjSolid=^GDBObjSolid;
 
-                 procedure DrawGeometry(lw:Integer;var DC:TDrawContext;const inFrustumState:TInBoundingVolume);virtual;
-                 function calcinfrustum(const frustum:ClipArray;const Actuality:TVisActuality;var Counters:TCameraCounters; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double):Boolean;virtual;
-                 //function getsnap(var osp:os_record):Boolean;virtual;
-                 function onmouse(var popa:TZctnrVectorPGDBaseEntity;const MF:ClipArray;InSubEntry:Boolean):Boolean;virtual;
-                 function CalcTrueInFrustum(const frustum:ClipArray):TInBoundingVolume;virtual;
-                 procedure addcontrolpoints(tdesc:Pointer);virtual;
-                 procedure remaponecontrolpoint(pdesc:pcontrolpointdesc;ProjectProc:GDBProjectProc);virtual;
-                 procedure rtmodifyonepoint(const rtmod:TRTModifyData);virtual;
-                 function Clone(own:Pointer):PGDBObjEntity;virtual;
-                 procedure rtsave(refp:Pointer);virtual;
-                 function GetObjTypeName:String;virtual;
-                 procedure getoutbound(var DC:TDrawContext);virtual;
-
-                 function CreateInstance:PGDBObjSolid;static;
-                 function GetObjType:TObjID;virtual;
-                 procedure TransformAt(p:PGDBObjEntity;t_matrix:PDMatrix4D);virtual;
-                 procedure transform(const t_matrix:DMatrix4D);virtual;
-           end;
+  GDBObjSolid=object(GDBObjWithLocalCS)
+    PInOCS:OutBound4V;
+    PInWCS:OutBound4V;
+    normal:GDBVertex;
+    triangle:boolean;
+    n,p1,p2,p3:GDBVertex3S;
+    constructor init(own:Pointer;layeraddres:PGDBLayerProp;
+      LW:smallint;p:GDBvertex);
+    constructor initnul(owner:PGDBObjGenericWithSubordinated);
+    procedure LoadFromDXF(var rdr:TZMemReader;ptu:PExtensionData;
+      var drawing:TDrawingDef;var context:TIODXFLoadContext);virtual;
+    procedure SaveToDXF(var outStream:TZctnrVectorBytes;
+      var drawing:TDrawingDef;var IODXFContext:TIODXFSaveContext);virtual;
+    procedure FormatEntity(var drawing:TDrawingDef;
+      var DC:TDrawContext;Stage:TEFStages=EFAllStages);virtual;
+    procedure createpoint;virtual;
+    procedure DrawGeometry(lw:integer;var DC:TDrawContext;
+      const inFrustumState:TInBoundingVolume);virtual;
+    function calcinfrustum(const frustum:ClipArray;
+      const Actuality:TVisActuality;var Counters:TCameraCounters;ProjectProc:GDBProjectProc;
+      const zoom,currentdegradationfactor:double):boolean;virtual;
+    function onmouse(var popa:TZctnrVectorPGDBaseEntity;
+      const MF:ClipArray;InSubEntry:boolean):boolean;virtual;
+    function CalcTrueInFrustum(
+      const frustum:ClipArray):TInBoundingVolume;virtual;
+    procedure addcontrolpoints(tdesc:Pointer);virtual;
+    procedure remaponecontrolpoint(pdesc:pcontrolpointdesc;
+      ProjectProc:GDBProjectProc);virtual;
+    procedure rtmodifyonepoint(const rtmod:TRTModifyData);virtual;
+    function Clone(own:Pointer):PGDBObjEntity;virtual;
+    procedure rtsave(refp:Pointer);virtual;
+    function GetObjTypeName:string;virtual;
+    procedure getoutbound(var DC:TDrawContext);virtual;
+    function CreateInstance:PGDBObjSolid;static;
+    function GetObjType:TObjID;virtual;
+    procedure TransformAt(p:PGDBObjEntity;t_matrix:PDMatrix4D);virtual;
+    procedure transform(const t_matrix:DMatrix4D);virtual;
+  end;
 
 implementation
-//uses log;
+
 procedure GDBObjSolid.TransformAt;
 begin
   PInOCS[0]:=uzegeometry.VectorTransform3D(PGDBObjSolid(p)^.PInOCS[0],t_matrix^);
@@ -73,6 +80,7 @@ begin
   PInOCS[2]:=uzegeometry.VectorTransform3D(PGDBObjSolid(p)^.PInOCS[2],t_matrix^);
   PInOCS[3]:=uzegeometry.VectorTransform3D(PGDBObjSolid(p)^.PInOCS[3],t_matrix^);
 end;
+
 procedure GDBObjSolid.transform;
 begin
   PInOCS[0]:=uzegeometry.VectorTransform3D(PInOCS[0],t_matrix);
@@ -80,39 +88,40 @@ begin
   PInOCS[2]:=uzegeometry.VectorTransform3D(PInOCS[2],t_matrix);
   PInOCS[3]:=uzegeometry.VectorTransform3D(PInOCS[3],t_matrix);
 end;
+
 procedure GDBObjSolid.getoutbound;
-var i:Integer;
+var
+  i:integer;
 begin
-     vp.BoundingBox.LBN:=PInWCS[0];
-     vp.BoundingBox.RTF:=PInWCS[0];
-      for i:=1 to 3 do
-      begin
-           concatBBandPoint(vp.BoundingBox,PInWCS[I]);
-      end;
+  vp.BoundingBox.LBN:=PInWCS[0];
+  vp.BoundingBox.RTF:=PInWCS[0];
+  for i:=1 to 3 do begin
+    concatBBandPoint(vp.BoundingBox,PInWCS[I]);
+  end;
 end;
-procedure GDBObjSolid.FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext;Stage:TEFStages=EFAllStages);
-//var i:Integer;
+
+procedure GDBObjSolid.FormatEntity(var drawing:TDrawingDef;
+  var DC:TDrawContext;Stage:TEFStages=EFAllStages);
 begin
-  if assigned(EntExtensions)then
+  if assigned(EntExtensions) then
     EntExtensions.RunOnBeforeEntityFormat(@self,drawing,DC);
   calcObjMatrix;
   createpoint;
-  normal:=normalizevertex(
-                          vectordot(
-                                    uzegeometry.VertexSub(PInWCS[0],PInWCS[1])
-                                    ,
-                                    uzegeometry.VertexSub(PInWCS[2],PInWCS[1])
-                                   )
-                         );
-   if uzegeometry.IsPointEqual(PInOCS[2],PInOCS[3],sqreps)then
-                                                    triangle:=true
-                                                else
-                                                    triangle:=false;
+  normal:=normalizevertex(vectordot(
+    uzegeometry.VertexSub(PInWCS[0],PInWCS[1])
+    ,
+    uzegeometry.VertexSub(
+    PInWCS[2],PInWCS[1])));
+  if uzegeometry.IsPointEqual(PInOCS[2],PInOCS[3],sqreps) then
+    triangle:=True
+  else
+    triangle:=False;
   calcbb(dc);
   CalcActualVisible(dc.DrawingContext.VActuality);
-   if assigned(EntExtensions)then
-     EntExtensions.RunOnAfterEntityFormat(@self,drawing,DC);
+  if assigned(EntExtensions) then
+    EntExtensions.RunOnAfterEntityFormat(@self,drawing,DC);
 end;
+
 procedure GDBObjSolid.createpoint;
 begin
   PInWCS[0]:=VectorTransform3D(PInOCS[0],objmatrix);
@@ -123,41 +132,43 @@ end;
 
 function GDBObjSolid.GetObjTypeName;
 begin
-     result:=ObjN_GDBObjSolid;
+  Result:=ObjN_GDBObjSolid;
 end;
+
 constructor GDBObjSolid.init;
 begin
-  inherited init(own,layeraddres, lw);
-  //vp.ID := GDBSolidID;
-  PInOCS[0]:= p;
+  inherited init(own,layeraddres,lw);
+  PInOCS[0]:=p;
 end;
+
 constructor GDBObjSolid.initnul;
 begin
   inherited initnul(owner);
   bp.ListPos.Owner:=owner;
-  //vp.ID := GDBSolidID;
-  PInOCS[1]:= NulVertex;
+  PInOCS[1]:=NulVertex;
 end;
+
 function GDBObjSolid.GetObjType;
 begin
-     result:=GDBSolidID;
+  Result:=GDBSolidID;
 end;
+
 procedure GDBObjSolid.LoadFromDXF;
-var //s: String;
-  byt: Integer;
+var
+  byt:integer;
 begin
   byt:=rdr.ParseInteger;
-  while byt <> 0 do
-  begin
+  while byt<>0 do begin
     if not LoadFromDXFObjShared(rdr,byt,ptu,drawing,context) then
-       if not dxfLoadGroupCodeVertex(rdr,10,byt,PInOCS[0]) then
-          if not dxfLoadGroupCodeVertex(rdr,11,byt,PInOCS[1]) then
+      if not dxfLoadGroupCodeVertex(rdr,10,byt,PInOCS[0]) then
+        if not dxfLoadGroupCodeVertex(rdr,11,byt,PInOCS[1]) then
           if not dxfLoadGroupCodeVertex(rdr,12,byt,PInOCS[2]) then
-          if not dxfLoadGroupCodeVertex(rdr,13,byt,PInOCS[3]) then
-          {s := }rdr.ParseString;
+            if not dxfLoadGroupCodeVertex(rdr,13,byt,PInOCS[3]) then
+              rdr.ParseString;
     byt:=rdr.ParseInteger;
   end;
 end;
+
 procedure GDBObjSolid.SaveToDXF;
 begin
   SaveToDXFObjPrefix(outStream,'SOLID','AcDbTrace',IODXFContext);
@@ -165,162 +176,65 @@ begin
   dxfvertexout(outStream,11,PInOCS[1]);
   dxfvertexout(outStream,12,PInOCS[2]);
   dxfvertexout(outStream,13,PInOCS[3]);
-  SaveToDXFObjPostfix(outStream)
+  SaveToDXFObjPostfix(outStream);
 end;
 
 procedure GDBObjSolid.DrawGeometry;
-//var
-   //p:GDBvertex4F;
 begin
-(*  oglsm.myglEnable(GL_LIGHTING);
-  oglsm.myglEnable(GL_LIGHT0);
-  oglsm.myglEnable (GL_COLOR_MATERIAL);
-
-  p.x:=gdb.GetCurrentDWG.pcamera^.prop.point.x;
-  p.y:=gdb.GetCurrentDWG.pcamera^.prop.point.y;
-  p.z:=gdb.GetCurrentDWG.pcamera^.prop.point.z;
-  p.w:=0;
-  glLightfv(GL_LIGHT0,
-            GL_POSITION,
-            @p) ;
-
-  {p.x:=gdb.GetCurrentDWG.pcamera^.look.x;
-  p.y:=gdb.GetCurrentDWG.pcamera^.look.y;
-  p.z:=gdb.GetCurrentDWG.pcamera^.look.z;
-  p.w:=0;
-  glLightfv(GL_LIGHT0,
-            GL_SPOT_DIRECTION,
-            @p) ;}
-glMaterialf(GL_FRONT_AND_BACK,GL_SHININESS,50.000000);
-  p.x:=0;
-  p.y:=0;
-  p.z:=0;
-  p.w:=1;
-glMaterialfv(GL_FRONT_AND_BACK,GL_SPECULAR,@p);
-glLightModeli(GL_LIGHT_MODEL_TWO_SIDE,1);
-glColorMaterial(GL_FRONT_AND_BACK,GL_AMBIENT_AND_DIFFUSE);
-oglsm.myglEnable(GL_COLOR_MATERIAL);
-*)
   if triangle then
-  begin
-       //oglsm.myglbegin(GL_TRIANGLES);
-       //oglsm.myglNormal3dV(@normal);
-       //oglsm.myglVertex3dV(@PInwCS[0]);
-       //oglsm.myglVertex3dV(@PInwCS[1]);
-       //oglsm.myglVertex3dV(@PInwCS[2]);
-       dc.drawer.DrawTriangle3DInModelSpace(normal,PInwCS[0],PInwCS[1],PInwCS[2],dc.DrawingContext.matrixs);
-       //oglsm.myglbegin(GL_LINES);
-       //oglsm.myglNormal3dV(@normal);
-       //oglsm.myglVertex3dV(@PInwCS[0]);
-       //oglsm.myglVertex3dV(@PInwCS[1]);
-       //oglsm.myglVertex3dV(@PInwCS[1]);
-       //oglsm.myglVertex3dV(@PInwCS[2]);
-       //oglsm.myglVertex3dV(@PInwCS[2]);
-       //oglsm.myglVertex3dV(@PInwCS[0]);
-       //oglsm.myglend;
-       (*
-       glNormal3fV(@n);
-       {my}glVertex3fV(@p1);
-       {my}glVertex3fV(@p2);
-       {my}glVertex3fV(@p3);
-        *)
-       //oglsm.myglend;
-  end
-     else
-  begin
-  {oglsm.myglbegin(GL_QUADS);
-  oglsm.myglNormal3dV(@normal);
-  oglsm.myglVertex3dV(@PInwCS[0]);
-  oglsm.myglVertex3dV(@PInwCS[1]);
-  oglsm.myglVertex3dV(@PInwCS[3]);
-  oglsm.myglVertex3dV(@PInwCS[2]);
-  oglsm.myglend;}
-  dc.drawer.DrawQuad3DInModelSpace(normal,PInwCS[0],PInwCS[1],PInwCS[2],PInwCS[3],dc.DrawingContext.matrixs);
-  {oglsm.myglbegin(GL_LINES);
-  oglsm.myglNormal3dV(@normal);
-  oglsm.myglVertex3dV(@PInwCS[0]);
-  oglsm.myglVertex3dV(@PInwCS[1]);
-  oglsm.myglVertex3dV(@PInwCS[1]);
-  oglsm.myglVertex3dV(@PInwCS[3]);
-  oglsm.myglVertex3dV(@PInwCS[3]);
-  oglsm.myglVertex3dV(@PInwCS[2]);
-  oglsm.myglVertex3dV(@PInwCS[2]);
-  oglsm.myglVertex3dV(@PInwCS[0]);
-  oglsm.myglend;}
-  end;
-
-  //oglsm.myglDisable(GL_LIGHTING);
-  //oglsm.myglDisable(GL_LIGHT0);
-  //oglsm.myglDisable(GL_COLOR_MATERIAL);
+    dc.drawer.DrawTriangle3DInModelSpace(normal,PInwCS[0],PInwCS[1],
+      PInwCS[2],dc.DrawingContext.matrixs)
+  else
+    dc.drawer.DrawQuad3DInModelSpace(normal,PInwCS[0],PInwCS[1],PInwCS[2],
+      PInwCS[3],dc.DrawingContext.matrixs);
   inherited;
-
 end;
+
 function GDBObjSolid.CalcInFrustum;
-var i:Integer;
+var
+  i:integer;
 begin
-      result:=true;
-      for i:=0 to 4 do
-      begin
-      if(frustum[i].v[0] * PInWCS[0].x + frustum[i].v[1] * PInWCS[0].y + frustum[i].v[2] * PInWCS[0].z + frustum[i].v[3] < 0 )
-      and(frustum[i].v[0] * PInWCS[1].x + frustum[i].v[1] * PInWCS[1].y + frustum[i].v[2] * PInWCS[1].z + frustum[i].v[3] < 0 )
-      and(frustum[i].v[0] * PInWCS[2].x + frustum[i].v[1] * PInWCS[2].y + frustum[i].v[2] * PInWCS[2].z + frustum[i].v[3] < 0 )
-      and(frustum[i].v[0] * PInWCS[3].x + frustum[i].v[1] * PInWCS[3].y + frustum[i].v[2] * PInWCS[3].z + frustum[i].v[3] < 0 )
-      then
-      begin
-           result:=false;
-           system.break;
-      end;
-      end;
+  Result:=True;
+  for i:=0 to 4 do begin
+    if (frustum[i].v[0]*PInWCS[0].x+frustum[i].v[1]*PInWCS[0].y+
+      frustum[i].v[2]*PInWCS[0].z+frustum[i].v[3]<0)  and
+      (frustum[i].v[0]*PInWCS[1].x+frustum[i].v[1]*PInWCS[1].y+
+      frustum[i].v[2]*PInWCS[1].z+frustum[i].v[3]<0)  and
+      (frustum[i].v[0]*PInWCS[2].x+frustum[i].v[1]*PInWCS[2].y+
+      frustum[i].v[2]*PInWCS[2].z+frustum[i].v[3]<0)  and
+      (frustum[i].v[0]*PInWCS[3].x+frustum[i].v[1]*PInWCS[3].y+
+      frustum[i].v[2]*PInWCS[3].z+frustum[i].v[3]<0) then begin
+      Result:=False;
+      system.break;
+    end;
+  end;
 end;
 
-{function GDBObjSolid.getsnap;
-
-begin
-     if onlygetsnapcount=1 then
-     begin
-          result:=false;
-          exit;
-     end;
-     result:=true;
-     case onlygetsnapcount of
-     0:begin
-            if (sysvar.dwg.DWG_OSMode^ and osm_point)<>0
-            then
-            begin
-            osp.worldcoord:=P_insertInWCS;
-            osp.dispcoord:=projpoint;
-            osp.ostype:=os_point;
-            end
-            else osp.ostype:=os_none;
-       end;
-     end;
-     inc(onlygetsnapcount);
-end;}
 function GDBObjSolid.onmouse;
 var
-   subresult:TInBoundingVolume;
+  subresult:TInBoundingVolume;
 begin
-  result:=false;
-    subresult:=CalcOutBound4VInFrustum(PInWCS,mf);
-    if subresult<>IRPartially then
-                               if subresult=irempty then
-                                                        exit
-                                                    else
-                                                        begin
-                                                             result:=true;
-                                                             exit;
-                                                        end;
-    result:=true;
+  Result:=False;
+  subresult:=CalcOutBound4VInFrustum(PInWCS,mf);
+  if subresult<>IRPartially then
+    if subresult=irempty then
+      exit
+    else begin
+      Result:=True;
+      exit;
+    end;
+  Result:=True;
 end;
+
 function GDBObjSolid.CalcTrueInFrustum;
-//var //d1:Double;
-    //i:integer;
 begin
-      result:=CalcOutBound4VInFrustum(PInWCS,frustum);
+  Result:=CalcOutBound4VInFrustum(PInWCS,frustum);
 end;
-procedure GDBObjSolid.remaponecontrolpoint(pdesc:pcontrolpointdesc;ProjectProc:GDBProjectProc);
+
+procedure GDBObjSolid.remaponecontrolpoint(pdesc:pcontrolpointdesc;
+  ProjectProc:GDBProjectProc);
 var
-  vertexnumber:Integer;
+  vertexnumber:integer;
   tv:GDBvertex;
 begin
   vertexnumber:=pdesc^.vertexnum;
@@ -330,102 +244,102 @@ begin
 end;
 
 procedure GDBObjSolid.addcontrolpoints(tdesc:Pointer);
-var pdesc:controlpointdesc;
-    i:Integer;
+var
+  pdesc:controlpointdesc;
+  i:integer;
 begin
-          PSelectedObjDesc(tdesc)^.pcontrolpoint^.init(1);
-          pdesc.selected:=false;
-          pdesc.PDrawable:=nil;
+  PSelectedObjDesc(tdesc)^.pcontrolpoint^.init(1);
+  pdesc.selected:=False;
+  pdesc.PDrawable:=nil;
 
-          for i := 0 to 3 do
-          begin
-          pdesc.vertexnum:=i;
-          pdesc.attr:=[CPA_Strech];
-          pdesc.worldcoord:=PInWCS[i];
-          {pdesc.dispcoord.x:=round(PInDCS[i].x);
-          pdesc.dispcoord.y:=round(PInDCS[i].y);}
-          PSelectedObjDesc(tdesc)^.pcontrolpoint^.PushBackData(pdesc);
-          end;
+  for i:=0 to 3 do begin
+    pdesc.vertexnum:=i;
+    pdesc.attr:=[CPA_Strech];
+    pdesc.worldcoord:=PInWCS[i];
+    PSelectedObjDesc(tdesc)^.pcontrolpoint^.PushBackData(pdesc);
+  end;
 end;
 
 procedure GDBObjSolid.rtmodifyonepoint(const rtmod:TRTModifyData);
-var vertexnumber:Integer;
-    tv,wwc:gdbvertex;
-    M: DMatrix4D;
+var
+  vertexnumber:integer;
+  tv,wwc:gdbvertex;
+  M:DMatrix4D;
 begin
-     vertexnumber:=rtmod.point.vertexnum;
+  vertexnumber:=rtmod.point.vertexnum;
 
-     m:=self.ObjMatrix;
-
-     {m[3][0]:=0;
-     m[3][1]:=0;
-     m[3][2]:=0;}
-
-     uzegeometry.MatrixInvert(m);
+  m:=self.ObjMatrix;
+  uzegeometry.MatrixInvert(m);
 
 
-     tv:=rtmod.dist;
-     wwc:=rtmod.point.worldcoord;
+  tv:=rtmod.dist;
+  wwc:=rtmod.point.worldcoord;
 
-     wwc:=VertexAdd(wwc,tv);
+  wwc:=VertexAdd(wwc,tv);
+  wwc:=uzegeometry.VectorTransform3D(wwc,m);
 
-     //tv:=uzegeometry.VectorTransform3D(tv,m);
-     wwc:=uzegeometry.VectorTransform3D(wwc,m);
-
-
-     PInOCS[vertexnumber]:=wwc{VertexAdd(wwc,tv)};
-     //PInOCS[vertexnumber].z:=0;
+  PInOCS[vertexnumber]:=wwc;
 end;
 
 function GDBObjSolid.Clone;
-var tvo: PGDBObjSolid;
+var
+  tvo:PGDBObjSolid;
 begin
-  Getmem(Pointer(tvo), sizeof(GDBObjSolid));
-  tvo^.init(bp.ListPos.owner,vp.Layer, vp.LineWeight, nulvertex);
+  Getmem(Pointer(tvo),sizeof(GDBObjSolid));
+  tvo^.init(bp.ListPos.owner,vp.Layer,vp.LineWeight,nulvertex);
   tvo^.Local:=local;
   CopyVPto(tvo^);
   CopyExtensionsTo(tvo^);
   tvo^.bp.ListPos.Owner:=own;
   tvo^.PInOCS:=PInOCS;
   tvo^.PInWCS:=PInWCS;
-  result := tvo;
+  Result:=tvo;
 end;
+
 procedure GDBObjSolid.rtsave;
 begin
   pGDBObjSolid(refp)^.PInOCS:=PInOCS;
 end;
+
 function AllocSolid:PGDBObjSolid;
 begin
-  Getmem(result,sizeof(GDBObjSolid));
+  Getmem(Result,sizeof(GDBObjSolid));
 end;
+
 function AllocAndInitSolid(owner:PGDBObjGenericWithSubordinated):PGDBObjSolid;
 begin
-  result:=AllocSolid;
-  result.initnul(owner);
-  result.bp.ListPos.Owner:=owner;
+  Result:=AllocSolid;
+  Result.initnul(owner);
+  Result.bp.ListPos.Owner:=owner;
 end;
-procedure SetSolidGeomProps(PSolid:PGDBObjSolid; const args:array of const);
+
+procedure SetSolidGeomProps(PSolid:PGDBObjSolid;const args:array of const);
 var
-   counter:integer;
+  counter:integer;
 begin
   counter:=low(args);
   PSolid^.PInOCS[0]:=CreateVertexFromArray(counter,args);
   PSolid^.PInOCS[1]:=CreateVertexFromArray(counter,args);
   PSolid^.PInOCS[2]:=CreateVertexFromArray(counter,args);
   if counter>=high(args) then
-                             PSolid^.PInOCS[3]:=PSolid^.PInOCS[2]
-                         else
-                             PSolid^.PInOCS[3]:=CreateVertexFromArray(counter,args)
+    PSolid^.PInOCS[3]:=PSolid^.PInOCS[2]
+  else
+    PSolid^.PInOCS[3]:=CreateVertexFromArray(counter,args);
 end;
-function AllocAndCreateSolid(owner:PGDBObjGenericWithSubordinated; const args:array of const):PGDBObjSolid;
+
+function AllocAndCreateSolid(owner:PGDBObjGenericWithSubordinated;
+  const args:array of const):PGDBObjSolid;
 begin
-  result:=AllocAndInitSolid(owner);
-  SetSolidGeomProps(result,args);
+  Result:=AllocAndInitSolid(owner);
+  SetSolidGeomProps(Result,args);
 end;
+
 function GDBObjSolid.CreateInstance:PGDBObjSolid;
 begin
-  result:=AllocAndInitSolid(nil);
+  Result:=AllocAndInitSolid(nil);
 end;
+
 begin
-  RegisterDXFEntity(GDBSolidID,'SOLID','Solid',@AllocSolid,@AllocAndInitSolid,@SetSolidGeomProps,@AllocAndCreateSolid);
+  RegisterDXFEntity(GDBSolidID,'SOLID','Solid',@AllocSolid,@AllocAndInitSolid,
+    @SetSolidGeomProps,@AllocAndCreateSolid);
 end.

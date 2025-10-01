@@ -21,6 +21,7 @@ unit uzccommand_colors;
 {$INCLUDE zengineconfig.inc}
 
 interface
+
 uses
   SysUtils,
   uzcLog,
@@ -34,25 +35,29 @@ uses
 
 implementation
 
-function Colors_cmd(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
+function Colors_cmd(const Context:TZCADCommandContext;
+  operands:TCommandOperands):TCommandResult;
 var
-   mr:integer;
+  mr:integer;
 begin
-  if not assigned(ColorSelectForm)then
+  if not assigned(ColorSelectForm) then
     ColorSelectForm:=TColorSelectForm.Create(nil);
   SetHeightControl(ColorSelectForm,sysvar.INTF.INTF_DefaultControlHeight^);
   zcUI.Do_BeforeShowModal(ColorSelectForm);
-  mr:=ColorSelectForm.run(SysVar.dwg.DWG_CColor^,true){showmodal};
+  mr:=ColorSelectForm.run(SysVar.dwg.DWG_CColor^,True){showmodal};
   if mr=ZCmrOK then
     SysVar.dwg.DWG_CColor^:=ColorSelectForm.ColorInfex;
   zcUI.Do_AfterShowModal(ColorSelectForm);
-  freeandnil(ColorSelectForm);
-  result:=cmd_ok;
+  FreeAndNil(ColorSelectForm);
+  Result:=cmd_ok;
 end;
 
 initialization
-  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
+  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],
+    LM_Info,UnitsInitializeLMId);
   CreateZCADCommand(@Colors_cmd,'Colors',CADWG,0);
+
 finalization
-  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
+  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],
+    LM_Info,UnitsFinalizeLMId);
 end.

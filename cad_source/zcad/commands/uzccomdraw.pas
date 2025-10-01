@@ -22,7 +22,7 @@ unit uzccomdraw;
 
 interface
 uses
-  gzctnrVector,uzglviewareageneral,
+  gzctnrVector,
   gzctnrVectorTypes,uzgldrawercanvas,
   uzcoimultiobjects,uzcenitiesvariablesextender,uzepalette,
   uzgldrawcontext,usimplegenerics,UGDBPoint3DArray,
@@ -38,7 +38,7 @@ uses
   uzeutils,uzcutils,
   sysutils,
   varmandef,
-  uzglviewareadata,
+  uzglviewareadata,uzglviewareaabstract,uzglviewareageneral,
   uzcinterface,
   uzegeometry,
   Forms,

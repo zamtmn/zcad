@@ -20,6 +20,7 @@ unit uzccommand_insertlayersfrombase;
 {$INCLUDE zengineconfig.inc}
 
 interface
+
 uses
   uzccommandsabstract,uzccommandsimpl,
   uzbpaths,gzctnrVectorTypes,
@@ -28,14 +29,16 @@ uses
   uzccommand_blockpreviewexport,
   uzcLog,Masks,
   SysUtils;
+
 implementation
 
 
-function InsertLayersFromBase_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
+function InsertLayersFromBase_com(const Context:TZCADCommandContext;
+  operands:TCommandOperands):TCommandResult;
 var
   pl:PGDBLayerProp;
   cdwg:PTSimpleDrawing;
-  LayerNameIncludeMask,LayerNameExcludeMask:AnsiString;
+  LayerNameIncludeMask,LayerNameExcludeMask:ansistring;
   ir:itrec;
 begin
   //InsertLayersFromBase(IncludeMask*|ExcludeMask*);
@@ -45,19 +48,23 @@ begin
   if (cdwg<>nil)and(BlockBaseDWG<>nil) then begin
     pl:=BlockBaseDWG^.LayerTable.beginiterate(ir);
     if pl<>nil then
-    repeat
-      if MatchesMask(pl^.name,LayerNameIncludeMask,false) then
-        if (LayerNameExcludeMask='')or(not MatchesMask(pl^.name,LayerNameExcludeMask,false)) then
-          cdwg^.LayerTable.createlayerifneed(pl);
-      pl:=BlockBaseDWG^.LayerTable.iterate(ir);
-    until pl=nil;
+      repeat
+        if MatchesMask(pl^.Name,LayerNameIncludeMask,False) then
+          if (LayerNameExcludeMask='')or
+            (not MatchesMask(pl^.Name,LayerNameExcludeMask,False)) then
+            cdwg^.LayerTable.createlayerifneed(pl);
+        pl:=BlockBaseDWG^.LayerTable.iterate(ir);
+      until pl=nil;
   end;
-  result:=cmd_ok;
+  Result:=cmd_ok;
 end;
 
 initialization
-  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
+  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],
+    LM_Info,UnitsInitializeLMId);
   CreateZCADCommand(@InsertLayersFromBase_com,'InsertLayersFromBase',CADWG,0);
+
 finalization
-  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
+  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],
+    LM_Info,UnitsFinalizeLMId);
 end.

@@ -15,217 +15,243 @@
 {
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
-
 unit uzeentline;
 {$Mode delphi}{$H+}
 {$INCLUDE zengineconfig.inc}
 
 interface
-uses uzbLogIntf,uzeentityfactory,uzgldrawcontext,uzedrawingdef,uzecamera,
-     uzestyleslayers,uzeentsubordinated,
-     UGDBSelectedObjArray,uzeent3d,uzeentity,uzctnrVectorBytes,uzbtypes,uzeconsts,
-     uzegeometrytypes,uzglviewareadata,uzegeometry,uzeffdxfsupport,
-     uzeSnap,uzMVReader,uzCtnrVectorpBaseEntity;
+
+uses
+  uzbLogIntf,uzeentityfactory,uzgldrawcontext,uzedrawingdef,uzecamera,
+  uzestyleslayers,uzeentsubordinated,UGDBSelectedObjArray,uzeent3d,uzeentity,
+  uzctnrVectorBytes,uzbtypes,uzeconsts,uzegeometrytypes,uzglviewareadata,
+  uzegeometry,uzeffdxfsupport,uzeSnap,uzMVReader,uzCtnrVectorpBaseEntity;
+
 type
-PGDBObjLine=^GDBObjLine;
-GDBObjLine= object(GDBObj3d)
-                 {-}private{//}
-                 fCoordInWCS:GDBLineProp;
-                 {-}public{//}
-                 CoordInOCS:GDBLineProp;
+  PGDBObjLine=^GDBObjLine;
 
-                 constructor init(own:Pointer;layeraddres:PGDBLayerProp;LW:SmallInt;p1,p2:GDBvertex);
-                 constructor initnul(owner:PGDBObjGenericWithSubordinated);
-                 procedure LoadFromDXF(var rdr:TZMemReader;ptu:PExtensionData;var drawing:TDrawingDef;var context:TIODXFLoadContext);virtual;
+  GDBObjLine=object(GDBObj3d)
+    {-}private{//}
+    fCoordInWCS:GDBLineProp;
+    {-}public{//}
+    CoordInOCS:GDBLineProp;
 
-                 procedure SaveToDXF(var outStream:TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFSaveContext);virtual;
-                 function IsStagedFormatEntity:boolean;virtual;
-                 procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext;Stage:TEFStages=EFAllStages);virtual;
-                 procedure CalcGeometry;virtual;
-                 procedure DrawGeometry(lw:Integer;var DC:TDrawContext;const inFrustumState:TInBoundingVolume);virtual;
-                  function Clone(own:Pointer):PGDBObjEntity;virtual;
-                 procedure rtsave(refp:Pointer);virtual;
-                 procedure TransformAt(p:PGDBObjEntity;t_matrix:PDMatrix4D);virtual;
-                  function onmouse(var popa:TZctnrVectorPGDBaseEntity;const MF:ClipArray;InSubEntry:Boolean):Boolean;virtual;
-                  function onpoint(var objects:TZctnrVectorPGDBaseEntity;const point:GDBVertex):Boolean;virtual;
-                 //procedure feedbackinrect;virtual;
-                 //function InRect:TInRect;virtual;
-                  function getsnap(var osp:os_record; var pdata:Pointer; const param:OGLWndtype; ProjectProc:GDBProjectProc;SnapMode:TGDBOSMode):Boolean;virtual;
-                  function getintersect(var osp:os_record;pobj:PGDBObjEntity; const param:OGLWndtype; ProjectProc:GDBProjectProc;SnapMode:TGDBOSMode):Boolean;virtual;
-                destructor done;virtual;
-                 procedure addcontrolpoints(tdesc:Pointer);virtual;
-                  function beforertmodify:Pointer;virtual;
-                  procedure clearrtmodify(p:Pointer);virtual;
-                 procedure rtmodifyonepoint(const rtmod:TRTModifyData);virtual;
-                 function IsRTNeedModify(const Point:PControlPointDesc; p:Pointer):Boolean;virtual;
-                 procedure remaponecontrolpoint(pdesc:pcontrolpointdesc;ProjectProc:GDBProjectProc);virtual;
-                 procedure transform(const t_matrix:DMatrix4D);virtual;
-                  function jointoline(pl:pgdbobjline;var drawing:TDrawingDef):Boolean;virtual;
+    constructor init(own:Pointer;layeraddres:PGDBLayerProp;
+      LW:smallint;p1,p2:GDBvertex);
+    constructor initnul(owner:PGDBObjGenericWithSubordinated);
+    procedure LoadFromDXF(var rdr:TZMemReader;ptu:PExtensionData;
+      var drawing:TDrawingDef;var context:TIODXFLoadContext);virtual;
 
-                  function ObjToString(const prefix,sufix:String):String;virtual;
-                  function GetObjTypeName:String;virtual;
-                  function GetCenterPoint:GDBVertex;virtual;
-                  procedure getoutbound(var DC:TDrawContext);virtual;
-                  function CalcInFrustum(const frustum:ClipArray;const Actuality:TVisActuality;var Counters:TCameraCounters; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double):Boolean;virtual;
-                  function CalcTrueInFrustum(const frustum:ClipArray):TInBoundingVolume;virtual;
+    procedure SaveToDXF(var outStream:TZctnrVectorBytes;
+      var drawing:TDrawingDef;var IODXFContext:TIODXFSaveContext);virtual;
+    function IsStagedFormatEntity:boolean;virtual;
+    procedure FormatEntity(var drawing:TDrawingDef;
+      var DC:TDrawContext;Stage:TEFStages=EFAllStages);virtual;
+    procedure CalcGeometry;virtual;
+    procedure DrawGeometry(lw:integer;var DC:TDrawContext;
+      const inFrustumState:TInBoundingVolume);virtual;
+    function Clone(own:Pointer):PGDBObjEntity;virtual;
+    procedure rtsave(refp:Pointer);virtual;
+    procedure TransformAt(p:PGDBObjEntity;t_matrix:PDMatrix4D);virtual;
+    function onmouse(var popa:TZctnrVectorPGDBaseEntity;
+      const MF:ClipArray;InSubEntry:boolean):boolean;virtual;
+    function onpoint(var objects:TZctnrVectorPGDBaseEntity;
+      const point:GDBVertex):boolean;virtual;
+    function getsnap(var osp:os_record;var pdata:Pointer;
+      const param:OGLWndtype;ProjectProc:GDBProjectProc;SnapMode:TGDBOSMode):boolean;virtual;
+    function getintersect(var osp:os_record;pobj:PGDBObjEntity;
+      const param:OGLWndtype;ProjectProc:GDBProjectProc;SnapMode:TGDBOSMode):boolean;virtual;
+    procedure addcontrolpoints(tdesc:Pointer);virtual;
+    function beforertmodify:Pointer;virtual;
+    procedure clearrtmodify(p:Pointer);virtual;
+    procedure rtmodifyonepoint(const rtmod:TRTModifyData);virtual;
+    function IsRTNeedModify(const Point:PControlPointDesc;
+      p:Pointer):boolean;virtual;
+    procedure remaponecontrolpoint(pdesc:pcontrolpointdesc;
+      ProjectProc:GDBProjectProc);virtual;
+    procedure transform(const t_matrix:DMatrix4D);virtual;
+    function jointoline(pl:pgdbobjline;
+      var drawing:TDrawingDef):boolean;virtual;
 
-                  function IsIntersect_Line(lbegin,lend:gdbvertex):Intercept3DProp;virtual;
-                  procedure AddOnTrackAxis(var posr:os_record;const processaxis:taddotrac);virtual;
-                  function GetTangentInPoint(const point:GDBVertex):GDBVertex;virtual;
+    function ObjToString(const prefix,sufix:string):string;virtual;
+    function GetObjTypeName:string;virtual;
+    function GetCenterPoint:GDBVertex;virtual;
+    procedure getoutbound(var DC:TDrawContext);virtual;
+    function CalcInFrustum(const frustum:ClipArray;
+      const Actuality:TVisActuality;var Counters:TCameraCounters;ProjectProc:GDBProjectProc;
+      const zoom,currentdegradationfactor:double):boolean;virtual;
+    function CalcTrueInFrustum(
+      const frustum:ClipArray):TInBoundingVolume;virtual;
 
-                  class function CreateInstance:PGDBObjLine;static;
-                  function GetObjType:TObjID;virtual;
+    function IsIntersect_Line(lbegin,lend:gdbvertex):Intercept3DProp;
+      virtual;
+    procedure AddOnTrackAxis(var posr:os_record;
+      const processaxis:taddotrac);virtual;
+    function GetTangentInPoint(const point:GDBVertex):GDBVertex;virtual;
 
-                  function getCoordInWCS:GDBLineProp;
+    class function CreateInstance:PGDBObjLine;static;
+    function GetObjType:TObjID;virtual;
 
-                  {-}property CoordInWCS:GDBLineProp read fCoordInWCS write fCoordInWCS;{//}
-           end;
-ptlinertmodify=^tlinertmodify;
-tlinertmodify=record
-                    lbegin,lmidle,lend:Boolean;
-                end;
+    function getCoordInWCS:GDBLineProp;
+
+    {-} property CoordInWCS:GDBLineProp
+      read fCoordInWCS write fCoordInWCS;{//}
+  end;
+  ptlinertmodify=^tlinertmodify;
+
+  tlinertmodify=record
+    lbegin,lmidle,lend:boolean;
+  end;
+
 function AllocAndInitLine(owner:PGDBObjGenericWithSubordinated):PGDBObjLine;
+
 implementation
-//uses log;
+
 function GDBObjLine.GetTangentInPoint(const point:GDBVertex):GDBVertex;
 begin
-     result:=normalizevertex(VertexSub(CoordInWCS.lEnd,CoordInWCS.lBegin));
+  Result:=normalizevertex(VertexSub(CoordInWCS.lEnd,CoordInWCS.lBegin));
 end;
+
 procedure GDBObjLine.AddOnTrackAxis(var posr:os_record;const processaxis:taddotrac);
-var tv,dir:gdbvertex;
+var
+  tv,dir:gdbvertex;
 begin
-     dir:=VertexSub(CoordInWCS.lEnd,CoordInWCS.lBegin);
-     processaxis(posr,dir);
-     //posr.arrayworldaxis.Add(@dir);
-     tv:=uzegeometry.vectordot(dir,zwcs);
-     processaxis(posr,tv);
-     //posr.arrayworldaxis.Add(@tv);
+  dir:=VertexSub(CoordInWCS.lEnd,CoordInWCS.lBegin);
+  processaxis(posr,dir);
+  tv:=uzegeometry.vectordot(dir,zwcs);
+  processaxis(posr,tv);
 end;
+
 function GDBObjLine.IsIntersect_Line(lbegin,lend:gdbvertex):Intercept3DProp;
 begin
-     result:=intercept3d(lbegin,lend,CoordInWCS.lBegin,CoordInWCS.lEnd);
+  Result:=intercept3d(lbegin,lend,CoordInWCS.lBegin,CoordInWCS.lEnd);
 end;
+
 procedure GDBObjLine.getoutbound;
-//var //tv,tv2:GDBVertex4D;
-    //t,b,l,r,n,f:Double;
 begin
-     vp.BoundingBox:=CreateBBFrom2Point(CoordInWCS.lBegin,CoordInWCS.lEnd);
+  vp.BoundingBox:=CreateBBFrom2Point(CoordInWCS.lBegin,CoordInWCS.lEnd);
 end;
+
 function GDBObjLine.GetCenterPoint;
 begin
-     result:=Vertexmorph(CoordInWCS.lbegin, CoordInWCS.lend, 0.5);
+  Result:=Vertexmorph(CoordInWCS.lbegin,CoordInWCS.lend,0.5);
 end;
+
 function GDBObjLine.GetObjTypeName;
 begin
-     result:=ObjN_GDBObjLine;
+  Result:=ObjN_GDBObjLine;
 end;
-function GDBObjLine.jointoline(pl:pgdbobjline;var drawing:TDrawingDef):Boolean;
-function online(w,u:gdbvertex):Boolean;
-var ww:Double;
-    l:Double;
+
+function GDBObjLine.jointoline(pl:pgdbobjline;var drawing:TDrawingDef):boolean;
+
+  function online(w,u:gdbvertex):boolean;
+  var
+    ww:double;
+    l:double;
+  begin
+    ww:=scalardot(w,u);
+    l:=SqrOneVertexlength(VertexSub(w,VertexMulOnSc(u,ww)));
+    if eps>l then
+      Result:=True
+    else
+      Result:=False;
+  end;
+
+var
+  t1,t2,a1,a2:double;
+  q:boolean;
+  w,u,dir:gdbvertex;
+  dc:TDrawContext;
 begin
-     ww:=scalardot(w,u);
-     l:=SqrOneVertexlength(VertexSub(w,VertexMulOnSc(u,ww)));
-     if eps>l then
-                  result:=true
-              else
-                  result:=false;
+  Result:=False;
+  if Vertexlength(CoordInWCS.lbegin,CoordInWCS.lend)<Vertexlength(
+    pl^.CoordInWCS.lbegin,pl^.CoordInWCS.lend) then begin
+    Result:=pl^.jointoline(@self,drawing);
+    exit;
+  end;
+  dir:=VertexSub(CoordInWCS.lEnd,CoordInWCS.lBegin);
+  u:=NormalizeVertex(dir);
+  w:=VertexSub(pl.CoordInWCS.lbegin,CoordInWCS.lbegin);
+  t1:=(scalardot(w,dir))/SqrOneVertexlength(dir);
+  q:=online(w,u);
+  w:=VertexSub(pl.CoordInWCS.lend,CoordInWCS.lbegin);
+  t2:=(scalardot(w,dir))/SqrOneVertexlength(dir);
+  q:=q and online(w,u);
+  if not q then
+    exit;
+  a1:=0;
+  a2:=1;
+  if t1<a1 then
+    a1:=t1;
+  if t2<a1 then
+    a1:=t2;
+  if t1>a2 then
+    a2:=t1;
+  if t2>a2 then
+    a2:=t2;
+  self.CoordInOCS.lend:=VertexDmorph(self.CoordInOCS.lbegin,dir,a2);
+  self.CoordInOCS.lbegin:=VertexDmorph(self.CoordInOCS.lbegin,dir,a1);
+  dc:=drawing.CreateDrawingRC;
+  FormatEntity(drawing,dc);
+  pl^.YouDeleted(drawing);
+  Result:=True;
 end;
-var t1,t2,a1,a2:Double;
-    q:Boolean;
-    w,u,dir:gdbvertex;
-    dc:TDrawContext;
+
+function GDBObjLine.ObjToString(const prefix,sufix:string):string;
 begin
-     result:=false;
-     if Vertexlength(CoordInWCS.lbegin, CoordInWCS.lend)<Vertexlength(pl^.CoordInWCS.lbegin,pl^.CoordInWCS.lend) then
-     begin
-          result:=pl^.jointoline(@self,drawing);
-          exit;
-     end;
-     dir:=VertexSub(CoordInWCS.lEnd,CoordInWCS.lBegin);
-     u:=NormalizeVertex(dir);
-     w:=VertexSub(pl.CoordInWCS.lbegin,CoordInWCS.lbegin);
-     t1:=(scalardot(w,dir))/SqrOneVertexlength(dir);
-     q:=online(w,u);
-     w:=VertexSub(pl.CoordInWCS.lend,CoordInWCS.lbegin);
-     t2:=(scalardot(w,dir))/SqrOneVertexlength(dir);
-     q:=q and online(w,u);
-     if not q then exit;
-     a1:=0;
-     a2:=1;
-     if t1<a1 then a1:=t1;
-     if t2<a1 then a1:=t2;
-     if t1>a2 then a2:=t1;
-     if t2>a2 then a2:=t2;
-     self.CoordInOCS.lend:=VertexDmorph(self.CoordInOCS.lbegin,dir,a2);
-     self.CoordInOCS.lbegin:=VertexDmorph(self.CoordInOCS.lbegin,dir,a1);
-     //self.CoordInWCS.lend:=VertexDmorph(self.CoordInWCS.lbegin,dir,a2);
-     //self.CoordInWCS.lbegin:=VertexDmorph(self.CoordInWCS.lbegin,dir,a1);
-     dc:=drawing.CreateDrawingRC;
-     FormatEntity(drawing,dc);
-     pl^.YouDeleted(drawing);
-     result:=true;
+  Result:=prefix+inherited ObjToString('GDBObjLine (addr:',')')+sufix;
 end;
-function GDBObjLine.ObjToString(const prefix,sufix:String):String;
-begin
-     result:=prefix+inherited ObjToString('GDBObjLine (addr:',')')+sufix;
-end;
+
 constructor GDBObjLine.initnul;
 begin
   inherited initnul(owner);
   bp.ListPos.Owner:=owner;
-  //vp.ID := GDBlineID;
-  CoordInOCS.lBegin := NulVertex;
-  CoordInOCS.lEnd := NulVertex;
-  //PProjPoint:=nil;
+  CoordInOCS.lBegin:=NulVertex;
+  CoordInOCS.lEnd:=NulVertex;
 end;
+
 constructor GDBObjLine.init;
 begin
-  inherited init(own,layeraddres, lw);
-  //vp.ID := GDBlineID;
-  CoordInOCS.lBegin := p1;
-  CoordInOCS.lEnd := p2;
-  //PProjPoint:=nil;
-  //format;
+  inherited init(own,layeraddres,lw);
+  CoordInOCS.lBegin:=p1;
+  CoordInOCS.lEnd:=p2;
 end;
+
 function GDBObjLine.GetObjType;
 begin
-     result:=GDBlineID;
+  Result:=GDBlineID;
 end;
+
 procedure GDBObjLine.LoadFromDXF;
-var //s: String;
-  byt: Integer;
+var
+  byt:integer;
 begin
   byt:=rdr.ParseInteger;
-  while byt <> 0 do
-  begin
+  while byt<>0 do begin
     if not LoadFromDXFObjShared(rdr,byt,ptu,drawing,context) then
-       if not dxfLoadGroupCodeVertex(rdr,10,byt,CoordInOCS.lBegin) then
-          if not dxfLoadGroupCodeVertex(rdr,11,byt,CoordInOCS.lEnd) then {s := }rdr.SkipString;
+      if not dxfLoadGroupCodeVertex(rdr,10,byt,CoordInOCS.lBegin) then
+        if not dxfLoadGroupCodeVertex(rdr,11,byt,CoordInOCS.lEnd) then
+          {s := }rdr.SkipString;
     byt:=rdr.ParseInteger;
   end;
 end;
-destructor GDBObjLine.done;
-begin
-     //if PProjPoint<>nil then
-     //                       Freemem(Pointer(PProjPoint));
-     inherited done;
-end;
+
 function GDBObjLine.getCoordInWCS:GDBLineProp;
-var m:DMatrix4D;
+var
+  m:DMatrix4D;
 begin
   if bp.ListPos.owner<>nil then begin
     if bp.ListPos.owner^.GetHandle=H_Root then begin
-      result.lbegin:=CoordInOCS.lbegin;
-      result.lend:=CoordInOCS.lend;
+      Result.lbegin:=CoordInOCS.lbegin;
+      Result.lend:=CoordInOCS.lend;
     end else begin
       m:=bp.ListPos.owner^.GetMatrix^;
-      result.lbegin:=VectorTransform3D(CoordInOCS.lbegin,m);
-      result.lend:=VectorTransform3D(CoordInOCS.lend,m);
+      Result.lbegin:=VectorTransform3D(CoordInOCS.lbegin,m);
+      Result.lend:=VectorTransform3D(CoordInOCS.lend,m);
     end;
   end else begin
-    result.lbegin:=CoordInOCS.lbegin;
-    result.lend:=CoordInOCS.lend;
+    Result.lbegin:=CoordInOCS.lbegin;
+    Result.lend:=CoordInOCS.lend;
   end;
 end;
 
@@ -251,13 +277,14 @@ end;
 
 function GDBObjLine.IsStagedFormatEntity:boolean;
 begin
-  result:=true;
+  Result:=True;
 end;
 
-procedure GDBObjLine.FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext;Stage:TEFStages=EFAllStages);
+procedure GDBObjLine.FormatEntity(var drawing:TDrawingDef;
+  var DC:TDrawContext;Stage:TEFStages=EFAllStages);
 begin
   if EFCalcEntityCS in stage then begin
-    if assigned(EntExtensions)then
+    if assigned(EntExtensions) then
       EntExtensions.RunOnBeforeEntityFormat(@self,drawing,DC);
 
     calcgeometry;
@@ -267,246 +294,234 @@ begin
   if EFDraw in stage then begin
     Representation.Clear;
     if (not (ESTemp in State))and(DCODrawable in DC.Options) then begin
-      if assigned(EntExtensions)then begin
+      if assigned(EntExtensions) then begin
         if EntExtensions.NeedStandardDraw(@self,drawing,DC) then
-          Representation.DrawLineByConstRefLinePropWithLT(self,getmatrix^,dc,CoordInOCS,vp,true);
+          Representation.DrawLineByConstRefLinePropWithLT(
+            self,getmatrix^,dc,CoordInOCS,vp,True);
       end else
-        Representation.DrawLineByConstRefLinePropWithLT(self,getmatrix^,dc,CoordInOCS,vp,true);
+        Representation.DrawLineByConstRefLinePropWithLT(
+          self,getmatrix^,dc,CoordInOCS,vp,True);
     end;
     Representation.Shrink;
-    if assigned(EntExtensions)then
+    if assigned(EntExtensions) then
       EntExtensions.RunOnAfterEntityFormat(@self,drawing,DC);
   end;
 end;
+
 function GDBObjLine.CalcInFrustum;
-var i:Integer;
+var
+  i:integer;
 begin
-      if CalcAABBInFrustum(vp.BoundingBox,frustum)<>IREmpty then
-                                                                                  result:=true
-                                                                              else
-                                                                                  result:=false;
-      exit;
-      result:=true;
-      for i:=0 to 5 do
-      begin
-      if(frustum[i].v[0] * CoordInWCS.lbegin.x + frustum[i].v[1] * CoordInWCS.lbegin.y + frustum[i].v[2] * CoordInWCS.lbegin.z + frustum[i].v[3] < 0 )
-     and(frustum[i].v[0] * CoordInWCS.lend.x +   frustum[i].v[1] * CoordInWCS.lend.y +   frustum[i].v[2] * CoordInWCS.lend.z +   frustum[i].v[3] < 0 )
-      then
-      begin
-           result:=false;
-           system.break;
-      end;
-      end;
+  if CalcAABBInFrustum(vp.BoundingBox,frustum)<>IREmpty then
+    Result:=
+      True
+  else
+    Result:=
+      False;
+  exit;
+  Result:=True;
+  for i:=0 to 5 do begin
+    if (frustum[i].v[0]*CoordInWCS.lbegin.x+frustum[i].v[1]*
+      CoordInWCS.lbegin.y+frustum[i].v[2]*CoordInWCS.lbegin.z+
+      frustum[i].v[3]<0)  and(frustum[i].v[0]*CoordInWCS.lend.x+
+      frustum[i].v[1]*CoordInWCS.lend.y+frustum[i].v[2]*
+      CoordInWCS.lend.z+frustum[i].v[3]<0) then begin
+      Result:=False;
+      system.break;
+    end;
+  end;
 end;
+
 function GDBObjLine.CalcTrueInFrustum;
 begin
-      result:=Representation.CalcTrueInFrustum(frustum,true);
+  Result:=Representation.CalcTrueInFrustum(frustum,True);
 end;
-function GDBObjLine.onpoint(var objects:TZctnrVectorPGDBaseEntity;const point:GDBVertex):Boolean;
+
+function GDBObjLine.onpoint(var objects:TZctnrVectorPGDBaseEntity;
+  const point:GDBVertex):boolean;
 begin
-     if {distance2piece}SQRdist_Point_to_Segment(point,self.CoordInWCS.lBegin,self.CoordInWCS.lEnd)<bigeps then
-                                                                                  begin
-                                                                                    result:=true;
-                                                                                    objects.PushBackData(@self);
-                                                                                  end
-                                                                                else
-                                                                                    result:=false;
+  if SQRdist_Point_to_Segment(point,self.CoordInWCS.lBegin,self.CoordInWCS.lEnd)<
+    bigeps then begin
+    Result:=
+      True;
+    objects.
+      PushBackData(@self);
+  end else
+    Result:=
+      False;
 end;
 
 function GDBObjLine.onmouse;
 begin
-     if Representation.CalcTrueInFrustum(mf,false)<>IREmpty
-                                                                          then
-                                                                              result:=true
-                                                                          else
-                                                                              result:=false;
+  if Representation.CalcTrueInFrustum(mf,False)<>IREmpty
+  then
+    Result:=True
+  else
+    Result:=False;
 end;
+
 procedure GDBObjLine.DrawGeometry;
 begin
   Representation.DrawGeometry(DC,VP.BoundingBox,inFrustumState);
 end;
 
 function GDBObjLine.getsnap;
-var t,d,e:Double;
-    tv,n,v,dir:gdbvertex;
-begin
-     if onlygetsnapcount=9 then
-     begin
-          result:=false;
-          exit;
-     end;
-     result:=true;
-     dir:=VertexSub(CoordInWCS.lEnd,CoordInWCS.lBegin);
-     case onlygetsnapcount of
-     0:begin
-            if (SnapMode and osm_endpoint)<>0
-            then
-            begin
-            osp.worldcoord:=CoordInWCS.lend;
-            ProjectProc(osp.worldcoord,osp.dispcoord);
-            //pgdbvertex2d(@osp.dispcoord)^:=pprojpoint^[1];
-            osp.ostype:=os_end;
-            end
-            else osp.ostype:=os_none;
-       end;
-     1:begin
-            if (SnapMode and osm_4)<>0
-            then
-            begin
-            osp.worldcoord:=Vertexmorph(CoordInWCS.lbegin, CoordInWCS.lend, 1 / 4);
-            ProjectProc(osp.worldcoord,osp.dispcoord);
-            //pgdbvertex2d(@osp.dispcoord)^:=pprojpoint^[2];
-            osp.ostype:=os_1_4;
-            end
-            else osp.ostype:=os_none;
-       end;
-     2:begin
-            if (SnapMode and osm_3)<>0
-            then
-            begin
-            osp.worldcoord:=Vertexmorph(CoordInWCS.lbegin, CoordInWCS.lend, 1 / 3);
-            ProjectProc(osp.worldcoord,osp.dispcoord);
-            //pgdbvertex2d(@osp.dispcoord)^:=pprojpoint^[3];
-            osp.ostype:=os_1_3;
-            end
-            else osp.ostype:=os_none;
-       end;
-     3:begin
-            if (SnapMode and osm_midpoint)<>0
-            then
-            begin
-            osp.worldcoord:=Vertexmorph(CoordInWCS.lbegin, CoordInWCS.lend, 1 / 2);
-            ProjectProc(osp.worldcoord,osp.dispcoord);
-            //pgdbvertex2d(@osp.dispcoord)^:=pprojpoint^[4];
-            osp.ostype:=os_midle;
-            end
-            else osp.ostype:=os_none;
-       end;
-     4:begin
-            if (SnapMode and osm_3)<>0
-            then
-            begin
-            osp.worldcoord:=Vertexmorph(CoordInWCS.lbegin, CoordInWCS.lend, 2 / 3);
-            ProjectProc(osp.worldcoord,osp.dispcoord);
-            //pgdbvertex2d(@osp.dispcoord)^:=pprojpoint^[5];
-            osp.ostype:=os_2_3;
-            end
-            else osp.ostype:=os_none;
-       end;
-     5:begin
-            if (SnapMode and osm_4)<>0
-            then
-            begin
-            osp.worldcoord:=Vertexmorph(CoordInWCS.lbegin, CoordInWCS.lend, 3 / 4);
-            ProjectProc(osp.worldcoord,osp.dispcoord);
-            //pgdbvertex2d(@osp.dispcoord)^:=pprojpoint^[6];
-            osp.ostype:=os_3_4;
-            end
-            else osp.ostype:=os_none;
-       end;
-     6:begin
-            if (SnapMode and osm_endpoint)<>0
-            then
-            begin
-            osp.worldcoord:=CoordInWCS.lbegin;
-            ProjectProc(osp.worldcoord,osp.dispcoord);
-            //pgdbvertex2d(@osp.dispcoord)^:=pprojpoint^[0];
-            osp.ostype:=os_begin;
-            end
-            else osp.ostype:=os_none;
-       end;
-     7:begin
-            if (SnapMode and osm_perpendicular)<>0
-            then
-            begin
-            tv:=vectordot(dir,{GDB.GetCurrentDWG.OGLwindow1.}param.md.mouseray.dir);
-            t:= -((CoordInWCS.lbegin.x-{GDB.GetCurrentDWG.OGLwindow1.}param.lastpoint.x)*dir.x+(CoordInWCS.lbegin.y-{GDB.GetCurrentDWG.OGLwindow1.}param.lastpoint.y)*dir.y+(CoordInWCS.lbegin.z-{GDB.GetCurrentDWG.OGLwindow1.}param.lastpoint.z)*dir.z)/
-                 ({sqr(dir.x)+sqr(dir.y)+sqr(dir.z)}SqrVertexlength(self.CoordInWCS.lBegin,self.CoordInWCS.lEnd){length_2});
-            if (t>=0) and (t<=1)
-            then
-            begin
-            osp.worldcoord.x:=CoordInWCS.lbegin.x+t*dir.x;
-            osp.worldcoord.y:=CoordInWCS.lbegin.y+t*dir.y;
-            osp.worldcoord.z:=CoordInWCS.lbegin.z+t*dir.z;
-            {gdb.GetCurrentDWG^.myGluProject2}ProjectProc(osp.worldcoord,tv);
-            osp.dispcoord:=tv;
-            osp.ostype:=os_perpendicular;
-            end
-            else osp.ostype:=os_none;
-            end
-            else osp.ostype:=os_none;
-       end;
-     8:begin
-            if (SnapMode and osm_nearest)<>0
-            then
-            begin
-            tv:=vectordot(dir,{GDB.GetCurrentDWG.OGLwindow1.}param.md.mouseray.dir);
-            n:=vectordot({GDB.GetCurrentDWG.OGLwindow1.}param.md.mouseray.dir,tv);
-            n:=NormalizeVertex(n);
-            v.x:={GDB.GetCurrentDWG.OGLwindow1.}param.md.mouseray.lbegin.x-CoordInWCS.lbegin.x;
-            v.y:={GDB.GetCurrentDWG.OGLwindow1.}param.md.mouseray.lbegin.y-CoordInWCS.lbegin.y;
-            v.z:={GDB.GetCurrentDWG.OGLwindow1.}param.md.mouseray.lbegin.z-CoordInWCS.lbegin.z;
-            d:=scalardot(n,v);
-            e:=scalardot(n,dir);
-            if e<eps then osp.ostype:=os_none
-                     else
-                         begin
-                              if d<eps then osp.ostype:=os_none
-                                       else
-                                           begin
-                                                t:=d/e;
-                                                if (t>1)or(t<0)then osp.ostype:=os_none
-                                                else
-                                                begin
-            osp.worldcoord.x:=CoordInWCS.lbegin.x+t*dir.x;
-            osp.worldcoord.y:=CoordInWCS.lbegin.y+t*dir.y;
-            osp.worldcoord.z:=CoordInWCS.lbegin.z+t*dir.z;
-            {gdb.GetCurrentDWG^.myGluProject2}ProjectProc(osp.worldcoord,tv);
-            osp.dispcoord:=tv;
-            osp.ostype:=os_nearest;
-                                               end;
-                                           end;
-
-                         end;
-            end
-            else osp.ostype:=os_none;
-       end;
-     end;
-     inc(onlygetsnapcount);
-end;
-function line2dintercep(var x11, y11, x12, y12, x21, y21, x22, y22: Double; out t1,t2: Double): Boolean;
 var
-  d, d1, d2, dx1,dy1,dx2,dy2: Double;
+  t,d,e:double;
+  tv,n,v,dir:gdbvertex;
 begin
-  t1 := 0;
-  t2 := 0;
-  result := false;
-  dy1:=(y12 - y11);
-  dx2:=(x21 - x22);
-  dy2:=(y21 - y22);
-  dx1:=(x12 - x11);
-  D := dy1{(y12 - y11)} * dx2{(x21 - x22)} - dy2{(y21 - y22)} * dx1{(x12 - x11)};
-  if {(D <> 0)}abs(d)>{bigeps}sqreps then
-  begin
-       D1 := (y12 - y11) * (x21 - x11) - (y21 - y11) * (x12 - x11);
-       D2 := (y21 - y11) * (x21 - x22) - (y21 - y22) * (x21 - x11);
-    t2 := D1 / D;
-    t1 := D2 / D;
-    if ((t1 <= 1) and (t1 >= 0) and (t2 >= 0) and (t2 <= 1)) then
-    begin
-      result := true;
+  if onlygetsnapcount=9 then begin
+    Result:=False;
+    exit;
+  end;
+  Result:=True;
+  dir:=VertexSub(CoordInWCS.lEnd,CoordInWCS.lBegin);
+  case onlygetsnapcount of
+    0:begin
+      if (SnapMode and osm_endpoint)<>0 then begin
+        osp.worldcoord:=CoordInWCS.lend;
+        ProjectProc(osp.worldcoord,osp.dispcoord);
+        osp.ostype:=os_end;
+      end else
+        osp.ostype:=os_none;
+    end;
+    1:begin
+      if (SnapMode and osm_4)<>0 then begin
+        osp.worldcoord:=Vertexmorph(CoordInWCS.lbegin,CoordInWCS.lend,1/4);
+        ProjectProc(osp.worldcoord,osp.dispcoord);
+        osp.ostype:=os_1_4;
+      end else
+        osp.ostype:=os_none;
+    end;
+    2:begin
+      if (SnapMode and osm_3)<>0 then begin
+        osp.worldcoord:=Vertexmorph(CoordInWCS.lbegin,CoordInWCS.lend,1/3);
+        ProjectProc(osp.worldcoord,osp.dispcoord);
+        osp.ostype:=os_1_3;
+      end else
+        osp.ostype:=os_none;
+    end;
+    3:begin
+      if (SnapMode and osm_midpoint)<>0 then begin
+        osp.worldcoord:=Vertexmorph(CoordInWCS.lbegin,CoordInWCS.lend,1/2);
+        ProjectProc(osp.worldcoord,osp.dispcoord);
+        osp.ostype:=os_midle;
+      end else
+        osp.ostype:=os_none;
+    end;
+    4:begin
+      if (SnapMode and osm_3)<>0 then begin
+        osp.worldcoord:=Vertexmorph(CoordInWCS.lbegin,CoordInWCS.lend,2/3);
+        ProjectProc(osp.worldcoord,osp.dispcoord);
+        osp.ostype:=os_2_3;
+      end else
+        osp.ostype:=os_none;
+    end;
+    5:begin
+      if (SnapMode and osm_4)<>0 then begin
+        osp.worldcoord:=Vertexmorph(CoordInWCS.lbegin,CoordInWCS.lend,3/4);
+        ProjectProc(osp.worldcoord,osp.dispcoord);
+        osp.ostype:=os_3_4;
+      end else
+        osp.ostype:=os_none;
+    end;
+    6:begin
+      if (SnapMode and osm_endpoint)<>0 then begin
+        osp.worldcoord:=CoordInWCS.lbegin;
+        ProjectProc(osp.worldcoord,osp.dispcoord);
+        osp.ostype:=os_begin;
+      end else
+        osp.ostype:=os_none;
+    end;
+    7:begin
+      if (SnapMode and osm_perpendicular)<>0 then begin
+        tv:=vectordot(dir,param.md.mouseray.dir);
+        t:=-((CoordInWCS.lbegin.x-param.lastpoint.x)*dir.x+
+          (CoordInWCS.lbegin.y-param.lastpoint.y)*dir.y+
+          (CoordInWCS.lbegin.z-param.lastpoint.z)*dir.z)/
+          (SqrVertexlength(self.CoordInWCS.lBegin,self.CoordInWCS.lEnd));
+        if (t>=0) and (t<=1) then begin
+          osp.worldcoord.x:=CoordInWCS.lbegin.x+t*dir.x;
+          osp.worldcoord.y:=CoordInWCS.lbegin.y+t*dir.y;
+          osp.worldcoord.z:=CoordInWCS.lbegin.z+t*dir.z;
+          ProjectProc(osp.worldcoord,tv);
+          osp.dispcoord:=tv;
+          osp.ostype:=os_perpendicular;
+        end else
+          osp.ostype:=os_none;
+      end else
+        osp.ostype:=os_none;
+    end;
+    8:begin
+      if (SnapMode and osm_nearest)<>0 then begin
+        tv:=vectordot(dir,param.md.mouseray.dir);
+        n:=vectordot(param.md.mouseray.dir,tv);
+        n:=NormalizeVertex(n);
+        v.x:=param.md.mouseray.lbegin.x-CoordInWCS.lbegin.x;
+        v.y:=param.md.mouseray.lbegin.y-CoordInWCS.lbegin.y;
+        v.z:=param.md.mouseray.lbegin.z-CoordInWCS.lbegin.z;
+        d:=scalardot(n,v);
+        e:=scalardot(n,dir);
+        if e<eps then
+          osp.ostype:=os_none
+        else begin
+          if d<eps then
+            osp.ostype:=os_none
+          else begin
+            t:=d/e;
+            if (t>1)or(t<0) then
+              osp.ostype:=os_none
+            else begin
+              osp.worldcoord.x:=CoordInWCS.lbegin.x+t*dir.x;
+              osp.worldcoord.y:=CoordInWCS.lbegin.y+t*dir.y;
+              osp.worldcoord.z:=CoordInWCS.lbegin.z+t*dir.z;
+              ProjectProc(osp.worldcoord,tv);
+              osp.dispcoord:=tv;
+              osp.ostype:=os_nearest;
+            end;
+          end;
+
+        end;
+      end else
+        osp.ostype:=os_none;
+    end;
+  end;
+  Inc(onlygetsnapcount);
+end;
+
+function line2dintercep(var x11,y11,x12,y12,x21,y21,x22,y22:double;
+  out t1,t2:double):boolean;
+var
+  d,d1,d2,dx1,dy1,dx2,dy2:double;
+begin
+  t1:=0;
+  t2:=0;
+  Result:=False;
+  dy1:=(y12-y11);
+  dx2:=(x21-x22);
+  dy2:=(y21-y22);
+  dx1:=(x12-x11);
+  D:=dy1*dx2-dy2*dx1;
+  if abs(d)>sqreps then begin
+    D1:=(y12-y11)*(x21-x11)-(y21-y11)*(x12-x11);
+    D2:=(y21-y11)*(x21-x22)-(y21-y22)*(x21-x11);
+    t2:=D1/D;
+    t1:=D2/D;
+    if ((t1<=1) and (t1>=0) and (t2>=0) and (t2<=1)) then begin
+      Result:=True;
     end;
   end;
 end;
+
 function GDBObjLine.getintersect;
 var
-  t1,t2,dist:Double;
+  t1,t2,dist:double;
   l1b,l1e,l2b,l2e,tv1,tv2,dir,dir2:gdbvertex;
 begin
   if (onlygetsnapcount=1)or(pobj^.getobjtype<>gdblineid) then
-    exit(false);
+    exit(False);
 
-  result:=true;
+  Result:=True;
   ProjectProc(CoordInWCS.lbegin,l1b);
   ProjectProc(CoordInWCS.lEnd,l1e);
   ProjectProc(pgdbobjline(pobj)^.CoordInWCS.lbegin,l2b);
@@ -514,10 +529,13 @@ begin
 
   case onlygetsnapcount of
     0:begin
-      if ((SnapMode and osm_apparentintersection)<>0)or((SnapMode and osm_intersection)<>0) then begin
-        if line2dintercep(l1b.x,l1b.y,l1e.x,l1e.y,l2b.x,l2b.y,l2e.x,l2e.y,t1,t2) then begin
+      if ((SnapMode and osm_apparentintersection)<>0)or
+        ((SnapMode and osm_intersection)<>0) then begin
+        if line2dintercep(l1b.x,l1b.y,l1e.x,l1e.y,l2b.x,l2b.y,l2e.x,l2e.y,t1,t2) then
+        begin
           dir:=VertexSub(CoordInWCS.lEnd,CoordInWCS.lBegin);
-          dir2:=VertexSub(pgdbobjline(pobj)^.CoordInWCS.lEnd,pgdbobjline(pobj)^.CoordInWCS.lBegin);
+          dir2:=VertexSub(pgdbobjline(pobj)^.CoordInWCS.lEnd,pgdbobjline(
+            pobj)^.CoordInWCS.lBegin);
           tv1.x:=CoordInWCS.lbegin.x+dir.x*t1;
           tv1.y:=CoordInWCS.lbegin.y+dir.y*t1;
           tv1.z:=CoordInWCS.lbegin.z+dir.z*t1;
@@ -528,7 +546,7 @@ begin
           if dist<bigeps then begin
             if (SnapMode and osm_intersection)<>0 then begin
               osp.worldcoord:=tv1;
-              {gdb.GetCurrentDWG^.myGluProject2}ProjectProc(osp.worldcoord,osp.dispcoord);
+              ProjectProc(osp.worldcoord,osp.dispcoord);
               osp.ostype:=os_intersection;
             end else
               osp.ostype:=os_none;
@@ -536,7 +554,7 @@ begin
             if (SnapMode and osm_apparentintersection)<>0 then begin
               osp.worldcoord:=tv1;
               line2dintercep(l1b.x,l1b.y,l1e.x,l1e.y,l2b.x,l2b.y,l2e.x,l2e.y,t1,t2);
-              {gdb.GetCurrentDWG^.myGluProject2}ProjectProc(osp.worldcoord,osp.dispcoord);
+              ProjectProc(osp.worldcoord,osp.dispcoord);
               osp.ostype:=os_apparentintersection;
             end else
               osp.ostype:=os_none;
@@ -546,20 +564,23 @@ begin
         osp.ostype:=os_none;
     end;
   end;
-  inc(onlygetsnapcount);
+  Inc(onlygetsnapcount);
 end;
+
 function GDBObjLine.Clone;
-var tvo: PGDBObjLine;
+var
+  tvo:PGDBObjLine;
 begin
-  Getmem(Pointer(tvo), sizeof(GDBObjLine));
-  tvo^.init(bp.ListPos.owner,vp.Layer, vp.LineWeight, CoordInOCS.lBegin, CoordInOCS.lEnd);
+  Getmem(Pointer(tvo),sizeof(GDBObjLine));
+  tvo^.init(bp.ListPos.owner,vp.Layer,vp.LineWeight,CoordInOCS.lBegin,
+    CoordInOCS.lEnd);
   CopyVPto(tvo^);
   CopyExtensionsTo(tvo^);
-  tvo^.CoordInOCS.lBegin.y := tvo^.CoordInOCS.lBegin.y;
+  tvo^.CoordInOCS.lBegin.y:=tvo^.CoordInOCS.lBegin.y;
   tvo^.bp.ListPos.Owner:=own;
-  //tvo^.format;
-  result := tvo;
+  Result:=tvo;
 end;
+
 procedure GDBObjLine.SaveToDXF;
 begin
   SaveToDXFObjPrefix(outStream,dxfName_Line,dxfName_AcDbLine,IODXFContext);
@@ -569,62 +590,67 @@ end;
 
 procedure GDBObjLine.rtsave;
 begin
-  pgdbobjline(refp)^.CoordInOCS.lBegin := CoordInOCS.lbegin;
-  pgdbobjline(refp)^.CoordInOCS.lEnd := CoordInOCS.lend;
-  //pgdbobjline(refp)^.format;
+  pgdbobjline(refp)^.CoordInOCS.lBegin:=CoordInOCS.lbegin;
+  pgdbobjline(refp)^.CoordInOCS.lEnd:=CoordInOCS.lend;
 end;
+
 procedure GDBObjLine.TransformAt;
 begin
-  CoordInOCS.lbegin:=uzegeometry.VectorTransform3D(pgdbobjline(p)^.CoordInOCS.lBegin,t_matrix^);
+  CoordInOCS.lbegin:=uzegeometry.VectorTransform3D(
+    pgdbobjline(p)^.CoordInOCS.lBegin,t_matrix^);
   CoordInOCS.lend:=VectorTransform3D(pgdbobjline(p)^.CoordInOCS.lend,t_matrix^);
 end;
+
 function GDBObjLine.beforertmodify;
 begin
-     Getmem(result,sizeof(tlinertmodify));
-     clearrtmodify(result);
+  Getmem(Result,sizeof(tlinertmodify));
+  clearrtmodify(Result);
 end;
+
 procedure GDBObjLine.clearrtmodify(p:Pointer);
 begin
-     fillchar(p^,sizeof(tlinertmodify),0);
+  fillchar(p^,sizeof(tlinertmodify),0);
 end;
-function GDBObjLine.IsRTNeedModify(const Point:PControlPointDesc; p:Pointer):Boolean;
+
+function GDBObjLine.IsRTNeedModify(const Point:PControlPointDesc;p:Pointer):boolean;
 begin
-  result:=false;
+  Result:=False;
   if point.pointtype=os_begin then begin
     if not ptlinertmodify(p)^.lbegin then
-      result:=true;
-    ptlinertmodify(p)^.lbegin:=true;
+      Result:=True;
+    ptlinertmodify(p)^.lbegin:=True;
   end else if point.pointtype=os_end then begin
     if not ptlinertmodify(p)^.lend then
-      result:=true;
-    ptlinertmodify(p)^.lend:=true;
+      Result:=True;
+    ptlinertmodify(p)^.lend:=True;
   end else if point.pointtype=os_midle then begin
-    if (not ptlinertmodify(p)^.lbegin)
-    and (not ptlinertmodify(p)^.lend) then
-      result:=true;
-    ptlinertmodify(p)^.lbegin:=true;
-    ptlinertmodify(p)^.lend:=true;
+    if (not ptlinertmodify(p)^.lbegin)  and (not ptlinertmodify(p)^.lend) then
+      Result:=True;
+    ptlinertmodify(p)^.lbegin:=True;
+    ptlinertmodify(p)^.lend:=True;
   end;
 
 end;
 
 procedure GDBObjLine.rtmodifyonepoint(const rtmod:TRTModifyData);
 var
-    tv,tv2:GDBVERTEX;
+  tv,tv2:GDBVERTEX;
 begin
   if rtmod.point.pointtype=os_begin then begin
-    CoordInOCS.lbegin:=VertexAdd(rtmod.point.worldcoord, rtmod.dist);
+    CoordInOCS.lbegin:=VertexAdd(rtmod.point.worldcoord,rtmod.dist);
   end else if rtmod.point.pointtype=os_end then begin
-    CoordInOCS.lend:=VertexAdd(rtmod.point.worldcoord, rtmod.dist);
+    CoordInOCS.lend:=VertexAdd(rtmod.point.worldcoord,rtmod.dist);
   end else if rtmod.point.pointtype=os_midle then begin
     tv:=uzegeometry.VertexSub(CoordInOCS.lend,CoordInOCS.lbegin);
     tv:=uzegeometry.VertexMulOnSc(tv,0.5);
-    tv2:=VertexAdd(rtmod.point.worldcoord, rtmod.dist);
-    CoordInOCS.lbegin:=VertexSub(tv2, tv);
+    tv2:=VertexAdd(rtmod.point.worldcoord,rtmod.dist);
+    CoordInOCS.lbegin:=VertexSub(tv2,tv);
     CoordInOCS.lend:=VertexAdd(tv2,tv);
   end;
 end;
-procedure GDBObjLine.remaponecontrolpoint(pdesc:pcontrolpointdesc;ProjectProc:GDBProjectProc);
+
+procedure GDBObjLine.remaponecontrolpoint(pdesc:pcontrolpointdesc;
+  ProjectProc:GDBProjectProc);
 var
   tv:GDBvertex;
 begin
@@ -637,43 +663,40 @@ begin
     ProjectProc(pdesc.worldcoord,tv);
     pdesc.dispcoord:=ToVertex2DI(tv);
   end else if pdesc^.pointtype=os_midle then begin
-    pdesc.worldcoord:=Vertexmorph(CoordInWCS.lbegin, CoordInWCS.lend, 1 / 2);
+    pdesc.worldcoord:=Vertexmorph(CoordInWCS.lbegin,CoordInWCS.lend,1/2);
     ProjectProc(pdesc.worldcoord,tv);
     pdesc.dispcoord:=ToVertex2DI(tv);
   end;
 end;
+
 procedure GDBObjLine.addcontrolpoints(tdesc:Pointer);
-var pdesc:controlpointdesc;
+var
+  pdesc:controlpointdesc;
 begin
-          PSelectedObjDesc(tdesc)^.pcontrolpoint^.init(3);
+  PSelectedObjDesc(tdesc)^.pcontrolpoint^.init(3);
 
-          pdesc.selected:=false;
-          pdesc.PDrawable:=nil;
+  pdesc.selected:=False;
+  pdesc.PDrawable:=nil;
 
-          pdesc.pointtype:=os_midle;
-          pdesc.attr:=[];
-          pdesc.worldcoord:=Vertexmorph(CoordInWCS.lbegin, CoordInWCS.lend, 1 / 2);
-          {pdesc.dispcoord.x:=round(PProjPoint[4].x);
-          pdesc.dispcoord.y:=round(PProjPoint[4].y);}
-          PSelectedObjDesc(tdesc)^.pcontrolpoint^.PushBackData(pdesc);
+  pdesc.pointtype:=os_midle;
+  pdesc.attr:=[];
+  pdesc.worldcoord:=Vertexmorph(CoordInWCS.lbegin,CoordInWCS.lend,1/2);
+  PSelectedObjDesc(tdesc)^.pcontrolpoint^.PushBackData(pdesc);
 
-          pdesc.pointtype:=os_begin;
-          pdesc.attr:=[CPA_Strech];
-          pdesc.worldcoord:=CoordInWCS.lbegin;
-          {pdesc.dispcoord.x:=round(PProjPoint[0].x);
-          pdesc.dispcoord.y:=round(PProjPoint[0].y);}
-          PSelectedObjDesc(tdesc)^.pcontrolpoint^.PushBackData(pdesc);
+  pdesc.pointtype:=os_begin;
+  pdesc.attr:=[CPA_Strech];
+  pdesc.worldcoord:=CoordInWCS.lbegin;
+  PSelectedObjDesc(tdesc)^.pcontrolpoint^.PushBackData(pdesc);
 
-          pdesc.pointtype:=os_end;
-          pdesc.attr:=[CPA_Strech];
-          pdesc.worldcoord:=CoordInWCS.lend;
-          {pdesc.dispcoord.x:=round(PProjPoint[1].x);
-          pdesc.dispcoord.y:=round(PProjPoint[1].y);}
-          PSelectedObjDesc(tdesc)^.pcontrolpoint^.PushBackData(pdesc);
+  pdesc.pointtype:=os_end;
+  pdesc.attr:=[CPA_Strech];
+  pdesc.worldcoord:=CoordInWCS.lend;
+  PSelectedObjDesc(tdesc)^.pcontrolpoint^.PushBackData(pdesc);
 end;
 
 procedure GDBObjLine.transform;
-var tv:GDBVertex4D;
+var
+  tv:GDBVertex4D;
 begin
   pgdbvertex(@tv)^:=CoordInOCS.lbegin;
   tv.w:=1;
@@ -685,34 +708,40 @@ begin
   tv:=vectortransform(tv,t_matrix);
   CoordInOCS.lend:=pgdbvertex(@tv)^;
 end;
+
 function AllocLine:PGDBObjLine;
 begin
-  Getmem(pointer(result),sizeof(GDBObjLine));
+  Getmem(pointer(Result),sizeof(GDBObjLine));
 end;
+
 function AllocAndInitLine(owner:PGDBObjGenericWithSubordinated):PGDBObjLine;
 begin
-  result:=AllocLine;
-  result.initnul(owner);
-  result.bp.ListPos.Owner:=owner;
+  Result:=AllocLine;
+  Result.initnul(owner);
+  Result.bp.ListPos.Owner:=owner;
 end;
-procedure SetLineGeomProps(Pline:PGDBObjLine; const args:array of const);
+
+procedure SetLineGeomProps(Pline:PGDBObjLine;const args:array of const);
 var
-   counter:integer;
+  counter:integer;
 begin
   counter:=low(args);
   Pline.CoordInOCS.lBegin:=CreateVertexFromArray(counter,args);
   Pline.CoordInOCS.lEnd:=CreateVertexFromArray(counter,args);
 end;
-function AllocAndCreateLine(owner:PGDBObjGenericWithSubordinated; const args:array of const):PGDBObjLine;
+
+function AllocAndCreateLine(owner:PGDBObjGenericWithSubordinated;
+  const args:array of const):PGDBObjLine;
 begin
-  result:=AllocAndInitLine(owner);
-  //owner^.AddMi(@result);
-  SetLineGeomProps(result,args);
+  Result:=AllocAndInitLine(owner);
+  SetLineGeomProps(Result,args);
 end;
+
 class function GDBObjLine.CreateInstance:PGDBObjLine;
 begin
-  result:=AllocAndInitLine(nil);
+  Result:=AllocAndInitLine(nil);
 end;
+
 begin
   RegisterDXFEntity(GDBlineID,'LINE','Line',@AllocLine,@AllocAndInitLine,@SetLineGeomProps,@AllocAndCreateLine);
 end.

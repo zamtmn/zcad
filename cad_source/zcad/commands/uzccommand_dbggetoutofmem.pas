@@ -21,6 +21,7 @@ unit uzccommand_dbgGetOutOfMem;
 {$INCLUDE zengineconfig.inc}
 
 interface
+
 uses
   SysUtils,
   uzcLog,
@@ -28,15 +29,20 @@ uses
 
 implementation
 
-function dbgGetOutOfMem_com(const Context:TZCADCommandContext;Operands:pansichar):Integer;
+function dbgGetOutOfMem_com(const Context:TZCADCommandContext;
+  Operands:pansichar):integer;
 begin
-  while true do getmem(4*1024);
-  result:=cmd_ok;
+  while True do
+    getmem(4*1024);
+  Result:=cmd_ok;
 end;
 
 initialization
-  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
+  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],
+    LM_Info,UnitsInitializeLMId);
   CreateZCADCommand(@dbgGetOutOfMem_com,'dbgGetOutOfMem',0,0);
+
 finalization
-  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
+  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],
+    LM_Info,UnitsFinalizeLMId);
 end.

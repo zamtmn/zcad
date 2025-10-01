@@ -21,6 +21,7 @@ unit uzccommand_snapproperties;
 {$INCLUDE zengineconfig.inc}
 
 interface
+
 uses
   uzcLog,
   uzccommandsabstract,uzccommandsimpl,
@@ -30,15 +31,20 @@ uses
 
 implementation
 
-function SnapProp_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
+function SnapProp_com(const Context:TZCADCommandContext;
+  operands:TCommandOperands):TCommandResult;
 begin
-  zcUI.Do_PrepareObject(nil,drawings.GetUnitsFormat,dbunit.TypeName2PTD('TOSModeEditor'),@OSModeEditor,drawings.GetCurrentDWG,true);
-  result:=cmd_ok;
+  zcUI.Do_PrepareObject(nil,drawings.GetUnitsFormat,dbunit.TypeName2PTD(
+    'TOSModeEditor'),@OSModeEditor,drawings.GetCurrentDWG,True);
+  Result:=cmd_ok;
 end;
 
 initialization
-  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
-  CreateZCADCommand(@SnapProp_com,'SnapProperties',CADWG,0).overlay:=true;
+  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],
+    LM_Info,UnitsInitializeLMId);
+  CreateZCADCommand(@SnapProp_com,'SnapProperties',CADWG,0).overlay:=True;
+
 finalization
-  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
+  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],
+    LM_Info,UnitsFinalizeLMId);
 end.

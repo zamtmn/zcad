@@ -20,8 +20,9 @@ unit uzccmdeditunit;
 {$INCLUDE zengineconfig.inc}
 
 interface
+
 uses
-  sysutils,
+  SysUtils,
   uzcLog,
   uzccmdinfoform,
   uzbpaths,
@@ -39,11 +40,11 @@ implementation
 
 function EditUnit(var entityunit:TSimpleUnit):boolean;
 var
-   mem:TZctnrVectorBytes;
-   entunits:TZctnrVectorPointer;
-   astring:ansistring;
-   pu:PTUnit;
-   ir:itrec;
+  mem:TZctnrVectorBytes;
+  entunits:TZctnrVectorPointer;
+  astring:ansistring;
+  pu:PTUnit;
+  ir:itrec;
 begin
   astring:='';
   mem.init(1024);
@@ -52,13 +53,13 @@ begin
   setlength(astring,mem.Count);
   StrLCopy(@astring[1],mem.GetParrayAsPointer,mem.Count);
   createInfoFormVar;
-  InfoFormVar.memo.text:=astring;
+  InfoFormVar.memo.Text:=astring;
   if zcUI.DOShowModal(InfoFormVar)=ZCmrOK then begin
-    astring:=InfoFormVar.memo.text;
+    astring:=InfoFormVar.memo.Text;
     mem.Clear;
     mem.AddData(@astring[1],length(astring));
 
-    entityunit.free;
+    entityunit.Free;
     units.parseunit(GetSupportPaths,InterfaceTranslate,mem,@entityunit);
 
     pu:=entunits.beginiterate(ir);
@@ -68,14 +69,16 @@ begin
         pu:=entunits.iterate(ir);
       until pu=nil;
 
-    result:=true;
+    Result:=True;
   end else
-    result:=false;
+    Result:=False;
   entunits.done;
   mem.done;
 end;
 
 initialization
+
 finalization
-  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
+  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],
+    LM_Info,UnitsFinalizeLMId);
 end.

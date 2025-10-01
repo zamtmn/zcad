@@ -29,7 +29,7 @@ uses
   Varman,uzctnrvectorstrings,UGDBSelectedObjArray,uzcoimultipropertiesutil,
   uzeExtdrAbstractEntityExtender,uzelongprocesssupport,uzbLogIntf,uzcutils,
   zUndoCmdChgVariable,uzcdrawing,zUndoCmdChgTypes,
-  uzCtnrVectorPBaseEntity,uzglviewareageneral;
+  uzCtnrVectorPBaseEntity,uzglviewareageneral,uzglviewareaabstract;
 type
   TObjIDWithExtender2Counter=TMyMapCounter<TObjIDWithExtender>;
 {Export+}

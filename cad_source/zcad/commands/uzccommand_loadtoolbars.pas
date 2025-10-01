@@ -20,15 +20,18 @@ unit uzccommand_loadtoolbars;
 {$INCLUDE zengineconfig.inc}
 
 interface
+
 uses
- SysUtils,
- uzcLog,
- Forms,ActnList,Laz2_DOM,
- uzbpaths,uzccommandsabstract,uzccommandsimpl,uztoolbarsmanager,uzctbextmenus,
- uzcTranslations,uzctreenode,uzctbexttoolbars;
+  SysUtils,
+  uzcLog,
+  Forms,ActnList,Laz2_DOM,
+  uzbpaths,uzccommandsabstract,uzccommandsimpl,uztoolbarsmanager,uzctbextmenus,
+  uzcTranslations,uzctreenode,uzctbexttoolbars;
 
 implementation
-function TBCheckFunc(fmf:TForm;AcnLst:TActionList;aTBNode:TDomNode;aName,aCaption,aType:string):boolean;
+
+function TBCheckFunc(fmf:TForm;AcnLst:TActionList;aTBNode:TDomNode;
+  aName,aCaption,aType:string):boolean;
 var
   AcnName:string;
   Action:tmyaction;
@@ -36,21 +39,25 @@ begin
   AcnName:=ToolBarNameToActionName(aName);
   Action:=tmyaction(AcnLst.ActionByName(AcnName));
   if Action<>nil then
-    exit(false);
+    exit(False);
   aCaption:=InterfaceTranslate(format(CToolBarCaptionTranslateFormat,[aName]),aCaption);
   CreateTBShowAction(AcnName,aName,aCaption,AcnLst);
-  result:=True;
+  Result:=True;
 end;
 
-function LoadToolbars_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
+function LoadToolbars_com(const Context:TZCADCommandContext;
+  operands:TCommandOperands):TCommandResult;
 begin
   ToolBarsManager.LoadToolBarsContent(ExpandPath(operands),@TBCheckFunc);
-  result:=cmd_ok;
+  Result:=cmd_ok;
 end;
 
 initialization
-  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
+  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],
+    LM_Info,UnitsInitializeLMId);
   CreateZCADCommand(@LoadToolbars_com,'LoadToolbars',0,0);
+
 finalization
-  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
+  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],
+    LM_Info,UnitsFinalizeLMId);
 end.

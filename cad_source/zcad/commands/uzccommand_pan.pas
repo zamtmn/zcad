@@ -21,15 +21,17 @@ unit uzccommand_pan;
 {$INCLUDE zengineconfig.inc}
 
 interface
+
 uses
   uzcLog,
-  sysutils,
+  SysUtils,
   uzccommandsabstract,uzccommandsimpl,
   uzcdrawings;
 
 implementation
 
-function Pan_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
+function Pan_com(const Context:TZCADCommandContext;
+  operands:TCommandOperands):TCommandResult;
 const
   pix=50;
 var
@@ -46,12 +48,15 @@ begin
   else if uppercase(operands)='DOWN' then
     drawings.GetCurrentDWG.wa.PanScreen(x,y,x,y-pix);
   drawings.GetCurrentDWG.wa.RestoreMouse;
-  result:=cmd_ok;
+  Result:=cmd_ok;
 end;
 
 initialization
-  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
-  CreateZCADCommand(@Pan_com,'Pan',CADWG,0).overlay:=true;
+  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],
+    LM_Info,UnitsInitializeLMId);
+  CreateZCADCommand(@Pan_com,'Pan',CADWG,0).overlay:=True;
+
 finalization
-  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
+  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],
+    LM_Info,UnitsFinalizeLMId);
 end.

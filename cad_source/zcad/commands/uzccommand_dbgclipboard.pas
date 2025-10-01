@@ -21,6 +21,7 @@ unit uzccommand_dbgClipboard;
 {$INCLUDE zengineconfig.inc}
 
 interface
+
 uses
   Classes,SysUtils,
   uzcLog,LCLType,LCLIntf,Clipbrd,
@@ -30,48 +31,51 @@ uses
 
 implementation
 
-function dbgClipboard_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
+function dbgClipboard_com(const Context:TZCADCommandContext;
+  operands:TCommandOperands):TCommandResult;
 var
-   pbuf:pansichar;
-   i:integer;
-   cf:TClipboardFormat;
-   ts:string;
+  pbuf:pansichar;
+  i:integer;
+  cf:TClipboardFormat;
+  ts:string;
 
-   memsubstr:TMemoryStream;
-   InfoForm:TInfoForm;
+  memsubstr:TMemoryStream;
+  InfoForm:TInfoForm;
 begin
-     InfoForm:=TInfoForm.create(nil);
-     InfoForm.DialogPanel.HelpButton.Hide;
-     InfoForm.DialogPanel.CancelButton.Hide;
-     InfoForm.DialogPanel.CloseButton.Hide;
-     InfoForm.caption:=('Clipboard:');
+  InfoForm:=TInfoForm.Create(nil);
+  InfoForm.DialogPanel.HelpButton.Hide;
+  InfoForm.DialogPanel.CancelButton.Hide;
+  InfoForm.DialogPanel.CloseButton.Hide;
+  InfoForm.Caption:=('Clipboard:');
 
-     memsubstr:=TMemoryStream.Create;
-     ts:=Clipboard.AsText;
-     i:=Clipboard.FormatCount;
-     for i:=0 to Clipboard.FormatCount-1 do
-     begin
-          cf:=Clipboard.Formats[i];
-          ts:=ClipboardFormatToMimeType(cf);
-          if ts='' then
-                       ts:=inttostr(cf);
-          InfoForm.Memo.lines.Add(ts);
-          Clipboard.GetFormat(cf,memsubstr);
-          pbuf:=memsubstr.Memory;
-          InfoForm.Memo.lines.Add('  ANSI: '+pbuf);
-          memsubstr.Clear;
-     end;
-     memsubstr.Free;
+  memsubstr:=TMemoryStream.Create;
+  ts:=Clipboard.AsText;
+  i:=Clipboard.FormatCount;
+  for i:=0 to Clipboard.FormatCount-1 do begin
+    cf:=Clipboard.Formats[i];
+    ts:=ClipboardFormatToMimeType(cf);
+    if ts='' then
+      ts:=IntToStr(cf);
+    InfoForm.Memo.Lines.Add(ts);
+    Clipboard.GetFormat(cf,memsubstr);
+    pbuf:=memsubstr.Memory;
+    InfoForm.Memo.Lines.Add('  ANSI: '+pbuf);
+    memsubstr.Clear;
+  end;
+  memsubstr.Free;
 
-     zcUI.DOShowModal(InfoForm);
-     InfoForm.Free;
+  zcUI.DOShowModal(InfoForm);
+  InfoForm.Free;
 
-     result:=cmd_ok;
+  Result:=cmd_ok;
 end;
 
 initialization
-  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
+  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],
+    LM_Info,UnitsInitializeLMId);
   CreateZCADCommand(@dbgClipboard_com,'dbgClipboard',0,0);
+
 finalization
-  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
+  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],
+    LM_Info,UnitsFinalizeLMId);
 end.

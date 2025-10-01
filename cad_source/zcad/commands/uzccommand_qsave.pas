@@ -20,12 +20,12 @@ unit uzccommand_qsave;
 {$INCLUDE zengineconfig.inc}
 
 interface
+
 uses
   LazUTF8,uzcLog,
   uzcdialogsfiles,
-  sysutils,
+  SysUtils,
   uzbpaths,
-
   uzeffmanager,
   uzccommand_DWGNew,
   uzccommandsimpl,uzccommandsabstract,
@@ -39,7 +39,7 @@ uses
 implementation
 
 function QSave_com(const Context:TZCADCommandContext;
-                   operands:TCommandOperands):TCommandResult;
+  operands:TCommandOperands):TCommandResult;
 var
   s,s1:ansistring;
   itAutoSave:boolean;
@@ -73,8 +73,12 @@ begin
 end;
 
 initialization
-  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
-  CreateZCADCommand(@QSave_com,'QSave',CADWG or CADWGChanged,0).CEndActionAttr:=[CEDWGNChanged];
+  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],
+    LM_Info,UnitsInitializeLMId);
+  CreateZCADCommand(@QSave_com,'QSave',CADWG or CADWGChanged,0).CEndActionAttr:=
+    [CEDWGNChanged];
+
 finalization
-  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
+  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],
+    LM_Info,UnitsFinalizeLMId);
 end.

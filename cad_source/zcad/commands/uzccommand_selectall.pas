@@ -21,6 +21,7 @@ unit uzccommand_selectall;
 {$INCLUDE zengineconfig.inc}
 
 interface
+
 uses
   uzcLog,
   uzccommandsabstract,uzccommandsimpl,
@@ -34,7 +35,8 @@ implementation
 var
   selall:pCommandFastObjectPlugin;
 
-function SelectAll_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
+function SelectAll_com(const Context:TZCADCommandContext;
+  operands:TCommandOperands):TCommandResult;
 {var
     pv:pGDBObjEntity;
     ir:itrec;
@@ -70,14 +72,17 @@ begin
 
   zcUI.Do_GUIaction(nil,zcMsgUIActionRedraw);
   //if assigned(updatevisibleproc) then updatevisibleproc(zcMsgUIActionRedraw);
-  result:=cmd_ok;
+  Result:=cmd_ok;
 end;
 
 initialization
-  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
+  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],
+    LM_Info,UnitsInitializeLMId);
   selall:=CreateZCADCommand(@SelectAll_com,'SelectAll',CADWG,0);
-  selall^.overlay:=true;
+  selall^.overlay:=True;
   selall^.CEndActionAttr:=[];
+
 finalization
-  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
+  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],
+    LM_Info,UnitsFinalizeLMId);
 end.

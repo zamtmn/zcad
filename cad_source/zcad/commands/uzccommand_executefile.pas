@@ -21,6 +21,7 @@ unit uzccommand_executefile;
 {$INCLUDE zengineconfig.inc}
 
 interface
+
 uses
   uzcLog,
   uzbpaths,
@@ -30,15 +31,19 @@ uses
 
 implementation
 
-function ExecuteFile_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
+function ExecuteFile_com(const Context:TZCADCommandContext;
+  operands:TCommandOperands):TCommandResult;
 begin
   commandmanager.executefile(ExpandPath(operands),drawings.GetCurrentDWG,nil);
-  result:=cmd_ok;
+  Result:=cmd_ok;
 end;
 
 initialization
-  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
+  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],
+    LM_Info,UnitsInitializeLMId);
   CreateZCADCommand(@ExecuteFile_com,'ExecuteFile',0,0);
+
 finalization
-  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
+  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],
+    LM_Info,UnitsFinalizeLMId);
 end.

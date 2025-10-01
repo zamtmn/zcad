@@ -21,6 +21,7 @@ unit uzccommand_textstyles;
 {$INCLUDE zengineconfig.inc}
 
 interface
+
 uses
   SysUtils,
   uzcLog,
@@ -33,18 +34,22 @@ uses
 
 implementation
 
-function TextStyles_cmd(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
+function TextStyles_cmd(const Context:TZCADCommandContext;
+  operands:TCommandOperands):TCommandResult;
 begin
   TextStylesForm:=TTextStylesForm.Create(nil);
   SetHeightControl(TextStylesForm,sysvar.INTF.INTF_DefaultControlHeight^);
   zcUI.DOShowModal(TextStylesForm);
-  Freeandnil(TextStylesForm);
-  result:=cmd_ok;
+  FreeAndNil(TextStylesForm);
+  Result:=cmd_ok;
 end;
 
 initialization
-  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
+  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],
+    LM_Info,UnitsInitializeLMId);
   CreateZCADCommand(@TextStyles_cmd,'TextStyles',CADWG,0);
+
 finalization
-  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
+  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],
+    LM_Info,UnitsFinalizeLMId);
 end.

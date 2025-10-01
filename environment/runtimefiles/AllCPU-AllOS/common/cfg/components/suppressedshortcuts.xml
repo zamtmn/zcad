@@ -23,13 +23,13 @@
       <IFONE ShortCut="UP" NotEmpty='1'/>
       <IFONE ShortCut="DOWN" NotEmpty='1'/>
       <IFONE ShortCut="DEL" NotEmpty='1'/>
-      <IFONE ShortCut="CTRL+INS" NotEmpty='1' NotControlNameMask='*commandline*'/>
-      <IFONE ShortCut="SHIFT+INS" NotEmpty='1' NotControlNameMask='*commandline*'/>
-      <IFONE ShortCut="CTRL+V" NotEmpty='1' NotControlNameMask='*commandline*'/>
-      <IFONE ShortCut="CTRL+C" NotEmpty='1' NotControlNameMask='*commandline*'/>
-      <IFONE ShortCut="CTRL+X" NotEmpty='1' NotControlNameMask='*commandline*'/>
-      <IFONE ShortCut="CTRL+Z" NotEmpty='1' NotControlNameMask='*commandline*'/>
-      <IFONE ShortCut="SHIFT+CTRL+Z" NotEmpty='1' NotControlNameMask='*commandline*'/>
+      <IFONE ShortCut="CTRL+INS" NotEmpty='1'/>
+      <IFONE ShortCut="SHIFT+INS" NotEmpty='1'/>
+      <IFONE ShortCut="CTRL+V" NotEmpty='1'/>
+      <IFONE ShortCut="CTRL+C" NotEmpty='1'/>
+      <IFONE ShortCut="CTRL+X" NotEmpty='1'/>
+      <IFONE ShortCut="CTRL+Z" NotEmpty='1'/>
+      <IFONE ShortCut="SHIFT+CTRL+Z" NotEmpty='1'/>
       <IFONE ShortCut="A" Editable='1'/>
       <IFONE ShortCut="B" Editable='1'/>
       <IFONE ShortCut="C" Editable='1'/>

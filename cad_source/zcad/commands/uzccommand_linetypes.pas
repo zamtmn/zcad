@@ -21,6 +21,7 @@ unit uzccommand_linetypes;
 {$INCLUDE zengineconfig.inc}
 
 interface
+
 uses
   SysUtils,
   uzcLog,
@@ -33,18 +34,22 @@ uses
 
 implementation
 
-function LineTypes_cmd(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
+function LineTypes_cmd(const Context:TZCADCommandContext;
+  operands:TCommandOperands):TCommandResult;
 begin
   LineTypesForm:=TLineTypesForm.Create(nil);
   SetHeightControl(LineTypesForm,sysvar.INTF.INTF_DefaultControlHeight^);
   zcUI.DOShowModal(LineTypesForm);
-  Freeandnil(LineTypesForm);
-  result:=cmd_ok;
+  FreeAndNil(LineTypesForm);
+  Result:=cmd_ok;
 end;
 
 initialization
-  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
+  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],
+    LM_Info,UnitsInitializeLMId);
   CreateZCADCommand(@LineTypes_cmd,'LineTypes',CADWG,0);
+
 finalization
-  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
+  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],
+    LM_Info,UnitsFinalizeLMId);
 end.

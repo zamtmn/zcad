@@ -20,10 +20,12 @@ unit uzeentdimradial;
 {$INCLUDE zengineconfig.inc}
 
 interface
-uses uzeentityfactory,uzeentdimdiametric,uzeentdimension,uzestylesdim,
-     uzestyleslayers,uzedrawingdef,uzbstrproc,uzctnrVectorBytes,
-     uzegeometry,sysutils,uzeentity,uzbtypes,uzeconsts,uzeffdxfsupport,
-     uzegeometrytypes,uzeentsubordinated;
+
+uses
+  uzeentityfactory,uzeentdimdiametric,uzeentdimension,uzestylesdim,
+  uzestyleslayers,uzedrawingdef,uzbstrproc,uzctnrVectorBytes,
+  uzegeometry,SysUtils,uzeentity,uzbtypes,uzeconsts,uzeffdxfsupport,
+  uzegeometrytypes,uzeentsubordinated;
 (*
 
 Diametric dimension structure in DXF
@@ -34,133 +36,130 @@ X<----X(text)----->X (10,20,30)
 
 *)
 type
-PGDBObjRadialDimension=^GDBObjRadialDimension;
-GDBObjRadialDimension= object(GDBObjDiametricDimension)
-                        constructor init(own:Pointer;layeraddres:PGDBLayerProp;LW:SmallInt);
-                        constructor initnul(owner:PGDBObjGenericWithSubordinated);
-                        function GetObjTypeName:String;virtual;
+  PGDBObjRadialDimension=^GDBObjRadialDimension;
 
-                        function GetDimStr(var drawing:TDrawingDef):TDXFEntsInternalStringType;virtual;
-                        function GetCenterPoint:GDBVertex;virtual;
-                        function Clone(own:Pointer):PGDBObjEntity;virtual;
+  GDBObjRadialDimension=object(GDBObjDiametricDimension)
+    function GetObjTypeName:string;virtual;
+    function GetDimStr(
+      var drawing:TDrawingDef):TDXFEntsInternalStringType;virtual;
+    function GetCenterPoint:GDBVertex;virtual;
+    function Clone(own:Pointer):PGDBObjEntity;virtual;
+    function P10ChangeTo(const tv:GDBVertex):GDBVertex;virtual;
+    function P15ChangeTo(const tv:GDBVertex):GDBVertex;virtual;
+    function P11ChangeTo(const tv:GDBVertex):GDBVertex;virtual;
+    function GetRadius:double;virtual;
+    procedure SaveToDXF(var outStream:TZctnrVectorBytes;
+      var drawing:TDrawingDef;var IODXFContext:TIODXFSaveContext);virtual;
+    function GetObjType:TObjID;virtual;
+  end;
 
-                        function P10ChangeTo(const tv:GDBVertex):GDBVertex;virtual;
-                        function P15ChangeTo(const tv:GDBVertex):GDBVertex;virtual;
-                        function P11ChangeTo(const tv:GDBVertex):GDBVertex;virtual;
-                        function GetRadius:Double;virtual;
-
-                        procedure SaveToDXF(var outStream:TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFSaveContext);virtual;
-                        function GetObjType:TObjID;virtual;
-                   end;
 implementation
-//uses log;
+
 procedure GDBObjRadialDimension.SaveToDXF;
 begin
   SaveToDXFObjPrefix(outStream,'DIMENSION','AcDbDimension',IODXFContext);
   dxfvertexout(outStream,10,DimData.P10InWCS);
   dxfvertexout(outStream,11,DimData.P11InOCS);
-  {if DimData.TextMoved then}
-                           dxfIntegerout(outStream,70,4+128)
-                       {else
-                           dxfIntegerout(outStream,70,4);};
+  dxfIntegerout(outStream,70,4+128);
   dxfStringout(outStream,3,PDimStyle^.Name);
   dxfStringout(outStream,100,'AcDbRadialDimension');
-  dxfvertexout(outStream,15,DimData.P15InWCS)
+  dxfvertexout(outStream,15,DimData.P15InWCS);
 end;
 
-function GDBObjRadialDimension.GetRadius:Double;
+function GDBObjRadialDimension.GetRadius:double;
 begin
-     result:=Vertexlength(DimData.P15InWCS,DimData.P10InWCS);
+  Result:=Vertexlength(DimData.P15InWCS,DimData.P10InWCS);
 end;
+
 function GDBObjRadialDimension.P10ChangeTo(const tv:GDBVertex):GDBVertex;
 var
   dirv:GDBVertex;
   d:double;
 begin
-     //center:=VertexMulOnSc(vertexadd(DimData.P15InWCS,DimData.P10InWCS),0.5);
-     d:=Vertexlength(DimData.P15InWCS,DimData.P11InOCS);
-     dirv:=vertexsub(DimData.P15InWCS,tv);
-     dirv:=normalizevertex(dirv);
+  d:=Vertexlength(DimData.P15InWCS,DimData.P11InOCS);
+  dirv:=vertexsub(DimData.P15InWCS,tv);
+  dirv:=normalizevertex(dirv);
 
-     result:=tv;
-     DimData.P11InOCS:=VertexDmorph(DimData.P15InWCS,dirv,d);
+  Result:=tv;
+  DimData.P11InOCS:=VertexDmorph(DimData.P15InWCS,dirv,d);
 end;
+
 function GDBObjRadialDimension.P15ChangeTo(const tv:GDBVertex):GDBVertex;
 var
   dirv:GDBVertex;
   r:double;
 begin
-     r:=Vertexlength(DimData.P15InWCS,DimData.P10InWCS);
-     dirv:=vertexsub(tv,DimData.P10InWCS);
-     dirv:=normalizevertex(dirv);
+  r:=Vertexlength(DimData.P15InWCS,DimData.P10InWCS);
+  dirv:=vertexsub(tv,DimData.P10InWCS);
+  dirv:=normalizevertex(dirv);
 
-     result:=VertexDmorph(DimData.P10InWCS,dirv,r);
-     r:=Vertexlength(DimData.P10InWCS,DimData.P11InOCS);
-     DimData.P11InOCS:=VertexDmorph(DimData.P10InWCS,dirv,r);
+  Result:=VertexDmorph(DimData.P10InWCS,dirv,r);
+  r:=Vertexlength(DimData.P10InWCS,DimData.P11InOCS);
+  DimData.P11InOCS:=VertexDmorph(DimData.P10InWCS,dirv,r);
 end;
+
 function GDBObjRadialDimension.P11ChangeTo(const tv:GDBVertex):GDBVertex;
 var
   dirv:GDBVertex;
   r:double;
 begin
-     r:=Vertexlength(DimData.P15InWCS,DimData.P10InWCS);
-     dirv:=vertexsub(tv,DimData.P10InWCS);
-     dirv:=normalizevertex(dirv);
+  r:=Vertexlength(DimData.P15InWCS,DimData.P10InWCS);
+  dirv:=vertexsub(tv,DimData.P10InWCS);
+  dirv:=normalizevertex(dirv);
 
-     DimData.P15InWCS:=VertexDmorph(DimData.P10InWCS,dirv,r);
-     result:=tv;
+  DimData.P15InWCS:=VertexDmorph(DimData.P10InWCS,dirv,r);
+  Result:=tv;
 end;
 
 function GDBObjRadialDimension.Clone;
-var tvo: PGDBObjRadialDimension;
+var
+  tvo:PGDBObjRadialDimension;
 begin
-  Getmem(Pointer(tvo), sizeof(GDBObjRadialDimension));
-  tvo^.init(bp.ListPos.owner,vp.Layer, vp.LineWeight);
+  Getmem(Pointer(tvo),sizeof(GDBObjRadialDimension));
+  tvo^.init(bp.ListPos.owner,vp.Layer,vp.LineWeight);
   CopyVPto(tvo^);
   CopyExtensionsTo(tvo^);
-  tvo^.DimData := DimData;
+  tvo^.DimData:=DimData;
   tvo^.bp.ListPos.Owner:=own;
   tvo^.PDimStyle:=PDimStyle;
-  result := tvo;
-end;
-function GDBObjRadialDimension.GetCenterPoint:GDBVertex;
-begin
-     result:=DimData.P10InWCS;
+  Result:=tvo;
 end;
 
-function GDBObjRadialDimension.GetDimStr(var drawing:TDrawingDef):TDXFEntsInternalStringType;
+function GDBObjRadialDimension.GetCenterPoint:GDBVertex;
 begin
-     result:='R'+GetLinearDimStr(Vertexlength(DimData.P10InWCS,DimData.P15InWCS),drawing);
+  Result:=DimData.P10InWCS;
 end;
-constructor GDBObjRadialDimension.initnul;
+
+function GDBObjRadialDimension.GetDimStr(
+  var drawing:TDrawingDef):TDXFEntsInternalStringType;
 begin
-  inherited initnul(owner);
-  //vp.ID := GDBRadialDimensionID;
+  Result:='R'+GetLinearDimStr(
+    Vertexlength(DimData.P10InWCS,DimData.P15InWCS),drawing);
 end;
-constructor GDBObjRadialDimension.init;
-begin
-  inherited init(own,layeraddres, lw);
-  //PProjPoint:=nil;
-  //vp.ID := GDBRadialDimensionID;
-end;
+
 function GDBObjRadialDimension.GetObjType;
 begin
-     result:=GDBRadialDimensionID;
+  Result:=GDBRadialDimensionID;
 end;
+
 function GDBObjRadialDimension.GetObjTypeName;
 begin
-     result:=ObjN_ObjRadialDimension;
+  Result:=ObjN_ObjRadialDimension;
 end;
+
 function AllocRadialDimension:PGDBObjRadialDimension;
 begin
-  Getmem(result,sizeof(GDBObjRadialDimension));
+  Getmem(Result,sizeof(GDBObjRadialDimension));
 end;
-function AllocAndInitRadialDimension(owner:PGDBObjGenericWithSubordinated):PGDBObjRadialDimension;
+
+function AllocAndInitRadialDimension(owner:PGDBObjGenericWithSubordinated):
+PGDBObjRadialDimension;
 begin
-  result:=AllocRadialDimension;
-  result.initnul(owner);
-  result.bp.ListPos.Owner:=owner;
+  Result:=AllocRadialDimension;
+  Result.initnul(owner);
+  Result.bp.ListPos.Owner:=owner;
 end;
+
 begin
   RegisterEntity(GDBRadialDimensionID,'RadialDimension',@AllocRadialDimension,@AllocAndInitRadialDimension);
 end.

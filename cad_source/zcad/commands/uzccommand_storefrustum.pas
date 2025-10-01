@@ -21,6 +21,7 @@ unit uzccommand_storefrustum;
 {$INCLUDE zengineconfig.inc}
 
 interface
+
 uses
   uzcLog,
   uzccommandsabstract,uzccommandsimpl,
@@ -28,16 +29,20 @@ uses
 
 implementation
 
-function StoreFrustum_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
+function StoreFrustum_com(const Context:TZCADCommandContext;
+  operands:TCommandOperands):TCommandResult;
 begin
-   drawings.GetCurrentDWG.wa.param.debugfrustum:=drawings.GetCurrentDWG.pcamera.frustum;
-   drawings.GetCurrentDWG.wa.param.ShowDebugFrustum:=true;
-   result:=cmd_ok;
+  drawings.GetCurrentDWG.wa.param.debugfrustum:=drawings.GetCurrentDWG.pcamera.frustum;
+  drawings.GetCurrentDWG.wa.param.ShowDebugFrustum:=True;
+  Result:=cmd_ok;
 end;
 
 initialization
-  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
-  CreateZCADCommand(@StoreFrustum_com,'StoreFrustum',CADWG,0).overlay:=true;
+  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],
+    LM_Info,UnitsInitializeLMId);
+  CreateZCADCommand(@StoreFrustum_com,'StoreFrustum',CADWG,0).overlay:=True;
+
 finalization
-  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
+  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],
+    LM_Info,UnitsFinalizeLMId);
 end.

@@ -21,6 +21,7 @@ unit uzccommand_deselectall;
 {$INCLUDE zengineconfig.inc}
 
 interface
+
 uses
   uzcLog,
   uzccommandsabstract,uzccommandsimpl,
@@ -32,18 +33,22 @@ implementation
 var
   deselall:pCommandFastObjectPlugin;
 
-function DeSelectAll_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
+function DeSelectAll_com(const Context:TZCADCommandContext;
+  operands:TCommandOperands):TCommandResult;
 begin
   zcUI.Do_GUIaction(nil,zcMsgUIActionRedraw);
   //if assigned(updatevisibleproc) then updatevisibleproc(zcMsgUIActionRedraw);
-  result:=cmd_ok;
+  Result:=cmd_ok;
 end;
 
 initialization
-  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
+  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],
+    LM_Info,UnitsInitializeLMId);
   deselall:=CreateZCADCommand(@DeSelectAll_com,'DeSelectAll',CADWG  or CASelEnts,0);
   deselall^.CEndActionAttr:=[CEGUIReturnToDefaultObject,CEDeSelect];
-  deselall^.overlay:=true;
+  deselall^.overlay:=True;
+
 finalization
-  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
+  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],
+    LM_Info,UnitsFinalizeLMId);
 end.

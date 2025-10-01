@@ -21,6 +21,7 @@ unit uzccommand_erase;
 {$INCLUDE zengineconfig.inc}
 
 interface
+
 uses
   uzcLog,
   uzccommandsabstract,uzccommandsimpl,
@@ -28,7 +29,8 @@ uses
   zcmultiobjectcreateundocommand,uzcinterface,uzcutils,
   UGDBSelectedObjArray,gzctnrSTL,uzeentsubordinated;
 
-function Erase_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
+function Erase_com(const Context:TZCADCommandContext;
+  operands:TCommandOperands):TCommandResult;
 
 implementation
 
@@ -86,16 +88,18 @@ begin
   result:=cmd_ok;
 end;*)
 
-procedure MySetObjCreateManipulator(Owner:PGDBObjGenericWithSubordinated;out domethod,undomethod:tmethod);
+procedure MySetObjCreateManipulator(Owner:PGDBObjGenericWithSubordinated;
+  out domethod,undomethod:tmethod);
 begin
-     domethod.Code:=pointer(Owner^.GoodAddObjectToObjArray);
-     domethod.Data:=Owner;
-     undomethod.Code:=pointer(Owner^.GoodRemoveMiFromArray);
-     undomethod.Data:=Owner;
+  domethod.Code:=pointer(Owner^.GoodAddObjectToObjArray);
+  domethod.Data:=Owner;
+  undomethod.Code:=pointer(Owner^.GoodRemoveMiFromArray);
+  undomethod.Data:=Owner;
 end;
 
 
-function Erase_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
+function Erase_com(const Context:TZCADCommandContext;
+  operands:TCommandOperands):TCommandResult;
 var
   pv:pGDBObjEntity;
   Pair:TMyMapCounter<PGDBObjGenericWithSubordinated>.TDictionaryPair;
@@ -105,32 +109,38 @@ var
   psd:PSelectedObjDesc;
   Counter:TMyMapCounter<PGDBObjGenericWithSubordinated>;
 begin
-  if (drawings.GetCurrentROOT^.ObjArray.count = 0)or(drawings.GetCurrentDWG^.wa.param.seldesc.Selectedobjcount=0) then exit;
+  if (drawings.GetCurrentROOT^.ObjArray.Count=0)or
+    (drawings.GetCurrentDWG^.wa.param.seldesc.Selectedobjcount=0) then
+    exit;
   Counter:=TMyMapCounter<PGDBObjGenericWithSubordinated>.Create;
   Count:=0;
   psd:=drawings.GetCurrentDWG.SelObjArray.beginiterate(ir);
-  if psd<>nil then repeat
-    pv:=psd^.objaddr;
-    Counter.CountKey(pv^.bp.ListPos.Owner);
-    inc(Count);
-    psd:=drawings.GetCurrentDWG.SelObjArray.iterate(ir);
-  until psd=nil;
+  if psd<>nil then
+    repeat
+      pv:=psd^.objaddr;
+      Counter.CountKey(pv^.bp.ListPos.Owner);
+      Inc(Count);
+      psd:=drawings.GetCurrentDWG.SelObjArray.iterate(ir);
+    until psd=nil;
   if Count>0 then begin
     PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack.PushStartMarker('Erase');
     for Pair in Counter do begin
       MySetObjCreateManipulator(Pair.key,undomethod,domethod);
-      with PushMultiObjectCreateCommand(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,tmethod(domethod),tmethod(undomethod),Pair.Value) do begin
+      with PushMultiObjectCreateCommand(
+          PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,tmethod(domethod),
+          tmethod(undomethod),Pair.Value) do begin
         psd:=drawings.GetCurrentDWG.SelObjArray.beginiterate(ir);
-        if psd<>nil then repeat
-          pv:=psd^.objaddr;
-          if pv^.bp.ListPos.Owner=Pair.key then begin
-            AddObject(pv);
-            pv^.Selected:=false;
-          end;
+        if psd<>nil then
+          repeat
+            pv:=psd^.objaddr;
+            if pv^.bp.ListPos.Owner=Pair.key then begin
+              AddObject(pv);
+              pv^.Selected:=False;
+            end;
 
-          psd:=drawings.GetCurrentDWG.SelObjArray.iterate(ir);
-        until psd=nil;
-        FreeArray:=false;
+            psd:=drawings.GetCurrentDWG.SelObjArray.iterate(ir);
+          until psd=nil;
+        FreeArray:=False;
         comit;
       end;
     end;
@@ -144,12 +154,15 @@ begin
     clearcp;
     zcRedrawCurrentDrawing;
   end;
-  result:=cmd_ok;
+  Result:=cmd_ok;
 end;
 
 initialization
-  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
+  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],
+    LM_Info,UnitsInitializeLMId);
   CreateZCADCommand(@Erase_com,'Erase',CADWG,0);
+
 finalization
-  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
+  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],
+    LM_Info,UnitsFinalizeLMId);
 end.

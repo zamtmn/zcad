@@ -21,15 +21,17 @@ unit uzccommand_zoom;
 {$INCLUDE zengineconfig.inc}
 
 interface
+
 uses
   uzcLog,
-  sysutils,
+  SysUtils,
   uzccommandsabstract,uzccommandsimpl,
   uzcdrawings;
 
 implementation
 
-function Zoom_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
+function Zoom_com(const Context:TZCADCommandContext;
+  operands:TCommandOperands):TCommandResult;
 begin
   if uppercase(operands)='ALL' then
     drawings.GetCurrentDWG.wa.ZoomAll
@@ -39,12 +41,15 @@ begin
     drawings.GetCurrentDWG.wa.ZoomIn
   else if uppercase(operands)='OUT' then
     drawings.GetCurrentDWG.wa.ZoomOut;
-  result:=cmd_ok;
+  Result:=cmd_ok;
 end;
 
 initialization
-  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
-  CreateZCADCommand(@Zoom_com,'Zoom',CADWG,0).overlay:=true;
+  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],
+    LM_Info,UnitsInitializeLMId);
+  CreateZCADCommand(@Zoom_com,'Zoom',CADWG,0).overlay:=True;
+
 finalization
-  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
+  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],
+    LM_Info,UnitsFinalizeLMId);
 end.

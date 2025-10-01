@@ -20,56 +20,56 @@ unit uzcCommand_Move;
 {$INCLUDE zengineconfig.inc}
 
 interface
+
 uses
-  sysutils,
-
+  SysUtils,
   gzctnrVectorTypes,gzctnrVector,
-
   zcmultiobjectchangeundocommand,
-
   uzcdrawings,uzcdrawing,
   uzeentity,uzeconsts,
-
-
   uzgldrawcontext,
   uzcinterface,uzcstrconsts,
   uzccommandsmanager,
   uzccommandsabstract,uzccommandsimpl,
-
   uzglviewareadata,
-
   uzegeometrytypes,uzegeometry,
-
   uzclog;
+
 type
-{EXPORT+}
+  {EXPORT+}
   PTCopyObjectDesc=^TCopyObjectDesc;
   {REGISTERRECORDTYPE TCopyObjectDesc}
   TCopyObjectDesc=record
-                 sourceEnt,tmpProxy,copyEnt:PGDBObjEntity;
-                 end;
+    sourceEnt,tmpProxy,copyEnt:PGDBObjEntity;
+  end;
   ptpcoavector=^tpcoavector;
   tpcoavector={-}specialize{//}
-              GZVector{-}<TCopyObjectDesc>{//};
+    GZVector{-}<TCopyObjectDesc>{//};
   {REGISTEROBJECTTYPE move_com}
-  move_com =  object(CommandRTEdObject)
-    t3dp: gdbvertex;
+  move_com=object(CommandRTEdObject)
+    t3dp:gdbvertex;
     pcoa:ptpcoavector;
     {-}protected{//}
-      function InternalCommandStart(const Context:TZCADCommandContext;Operands:TCommandOperands):Boolean;virtual;
+    function InternalCommandStart(const Context:TZCADCommandContext;
+      Operands:TCommandOperands):boolean;virtual;
     {-}public{//}
-    procedure CommandStart(const Context:TZCADCommandContext;Operands:TCommandOperands);virtual;
-    procedure CommandCancel(const Context:TZCADCommandContext); virtual;
-    function BeforeClick(const Context:TZCADCommandContext;wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record): Integer; virtual;
-    function AfterClick(const Context:TZCADCommandContext;wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record): Integer; virtual;
-    function CalcTransformMatrix(p1,p2: GDBvertex):DMatrix4D; virtual;
-    function Move(const dispmatr:DMatrix4D;UndoMaker:String): Integer;
+    procedure CommandStart(const Context:TZCADCommandContext;
+      Operands:TCommandOperands);virtual;
+    procedure CommandCancel(const Context:TZCADCommandContext);virtual;
+    function BeforeClick(const Context:TZCADCommandContext;wc:GDBvertex;
+      mc:GDBvertex2DI;var button:byte;osp:pos_record):integer;virtual;
+    function AfterClick(const Context:TZCADCommandContext;wc:GDBvertex;
+      mc:GDBvertex2DI;var button:byte;osp:pos_record):integer;virtual;
+    function CalcTransformMatrix(p1,p2:GDBvertex):DMatrix4D;virtual;
+    function Move(const dispmatr:DMatrix4D;UndoMaker:string):integer;
     procedure showprompt(mklick:integer);virtual;
   end;
-{EXPORT-}
+  {EXPORT-}
 var
-   move:move_com;
+  move:move_com;
+
 implementation
+
 {constructor Move_com.init;
 begin
   CommandInit;
@@ -78,15 +78,16 @@ begin
 end;}
 procedure Move_com.showprompt(mklick:integer);
 begin
-     case mklick of
-     0:zcUI.TextMessage(rscmBasePoint,TMWOHistoryOut);
-     1:zcUI.TextMessage(rscmNewBasePoint,TMWOHistoryOut);
-     end;
+  case mklick of
+    0:zcUI.TextMessage(rscmBasePoint,TMWOHistoryOut);
+    1:zcUI.TextMessage(rscmNewBasePoint,TMWOHistoryOut);
+  end;
 end;
 
-function Move_com.InternalCommandStart(const Context:TZCADCommandContext;Operands:TCommandOperands):Boolean;
+function Move_com.InternalCommandStart(const Context:TZCADCommandContext;
+  Operands:TCommandOperands):boolean;
 var
-  tv,pobj: pGDBObjEntity;
+  tv,pobj:pGDBObjEntity;
   ir:itrec;
   counter:integer;
   tcd:TCopyObjectDesc;
@@ -96,52 +97,54 @@ begin
 
   pobj:=drawings.GetCurrentROOT^.ObjArray.beginiterate(ir);
   if pobj<>nil then
-  repeat
-    if pobj^.selected then
-    inc(counter);
-  pobj:=drawings.GetCurrentROOT^.ObjArray.iterate(ir);
-  until pobj=nil;
+    repeat
+      if pobj^.selected then
+        Inc(counter);
+      pobj:=drawings.GetCurrentROOT^.ObjArray.iterate(ir);
+    until pobj=nil;
 
 
   if counter>0 then begin
-  inherited CommandStart(context,'');
-  drawings.GetCurrentDWG^.wa.SetMouseMode((MGet3DPoint) or (MMoveCamera) or (MRotateCamera));
-  showprompt(0);
+    inherited CommandStart(context,'');
+    drawings.GetCurrentDWG^.wa.SetMouseMode((MGet3DPoint) or (MMoveCamera) or
+      (MRotateCamera));
+    showprompt(0);
     dc:=drawings.GetCurrentDWG^.CreateDrawingRC;
     Getmem(Pointer(pcoa),sizeof(tpcoavector));
     pcoa^.init(counter);
     pobj:=drawings.GetCurrentROOT^.ObjArray.beginiterate(ir);
     drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.ObjTree.Lock;
     if pobj<>nil then
-    repeat
-      if pobj^.selected then begin
-        tv := pobj^.Clone(@drawings.GetCurrentDWG^.ConstructObjRoot);
-        if tv<>nil then
-        begin
-          tv^.State:=tv^.State+[ESConstructProxy];
-          drawings.GetCurrentDWG^.ConstructObjRoot.AddMi(@tv);
-          tcd.sourceEnt:=pobj;
-          tcd.tmpProxy:=tv;
-          tcd.copyEnt:=nil;
-          pcoa^.PushBackData(tcd);
-          tv^.formatentity(drawings.GetCurrentDWG^,dc);
+      repeat
+        if pobj^.selected then begin
+          tv:=pobj^.Clone(@drawings.GetCurrentDWG^.ConstructObjRoot);
+          if tv<>nil then begin
+            tv^.State:=tv^.State+[ESConstructProxy];
+            drawings.GetCurrentDWG^.ConstructObjRoot.AddMi(@tv);
+            tcd.sourceEnt:=pobj;
+            tcd.tmpProxy:=tv;
+            tcd.copyEnt:=nil;
+            pcoa^.PushBackData(tcd);
+            tv^.formatentity(drawings.GetCurrentDWG^,dc);
+          end;
         end;
-      end;
-      pobj:=drawings.GetCurrentROOT^.ObjArray.iterate(ir);
-    until pobj=nil;
+        pobj:=drawings.GetCurrentROOT^.ObjArray.iterate(ir);
+      until pobj=nil;
     drawings.GetCurrentDWG^.ConstructObjRoot.formatentity(drawings.GetCurrentDWG^,dc);
-    drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.ObjTree.BoundingBox:=drawings.GetCurrentDWG^.ConstructObjRoot.vp.BoundingBox;
+    drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.ObjTree.BoundingBox:=
+      drawings.GetCurrentDWG^.ConstructObjRoot.vp.BoundingBox;
     drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.ObjTree.UnLock;
-    result:=True;
+    Result:=True;
   end else begin
-    result:=False;
+    Result:=False;
   end;
 
 end;
 
-procedure Move_com.CommandStart(const Context:TZCADCommandContext;Operands:TCommandOperands);
+procedure Move_com.CommandStart(const Context:TZCADCommandContext;
+  Operands:TCommandOperands);
 begin
-  Inherited;
+  inherited;
   if not InternalCommandStart(Context,Operands) then begin
     zcUI.TextMessage(rscmSelEntBeforeComm,TMWOHistoryOut);
     Commandmanager.executecommandend;
@@ -150,66 +153,69 @@ end;
 
 procedure Move_com.CommandCancel(const Context:TZCADCommandContext);
 begin
-     if pcoa<>nil then
-     begin
-          pcoa^.done;
-          drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.free;
-          Freemem(pointer(pcoa));
-     end;
-     inherited;
+  if pcoa<>nil then begin
+    pcoa^.done;
+    drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.Free;
+    Freemem(pointer(pcoa));
+  end;
+  inherited;
 end;
 
-function Move_com.BeforeClick(const Context:TZCADCommandContext;wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record): Integer;
-//var i: Integer;
-//  tv,pobj: pGDBObjEntity;
- //     ir:itrec;
+function Move_com.BeforeClick(const Context:TZCADCommandContext;wc:GDBvertex;
+  mc:GDBvertex2DI;var button:byte;osp:pos_record):integer;
+  //var i: Integer;
+  //  tv,pobj: pGDBObjEntity;
+  //     ir:itrec;
 begin
   t3dp:=wc;
-  result:=0;
+  Result:=0;
   if (button and MZW_LBUTTON)<>0 then
     showprompt(1);
 end;
-function Move_com.CalcTransformMatrix(p1,p2: GDBvertex):DMatrix4D;
+
+function Move_com.CalcTransformMatrix(p1,p2:GDBvertex):DMatrix4D;
 var
   dist:gdbvertex;
 begin
   dist:=uzegeometry.VertexSub(p2,p1);
-  result:=uzegeometry.CreateTranslationMatrix(dist);
+  Result:=uzegeometry.CreateTranslationMatrix(dist);
 end;
-function Move_com.Move(const dispmatr:DMatrix4D;UndoMaker:String): Integer;
+
+function Move_com.Move(const dispmatr:DMatrix4D;UndoMaker:string):integer;
 var
-    //dist:gdbvertex;
-    im:DMatrix4D;
-    ir:itrec;
-    pcd:PTCopyObjectDesc;
-    m:tmethod;
-    dc:TDrawContext;
+  //dist:gdbvertex;
+  im:DMatrix4D;
+  ir:itrec;
+  pcd:PTCopyObjectDesc;
+  m:tmethod;
+  dc:TDrawContext;
 begin
-    im:=dispmatr;
-    uzegeometry.MatrixInvert(im);
-    PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack.PushStartMarker(UndoMaker);
-    dc:=drawings.GetCurrentDWG^.CreateDrawingRC;
-    with PushCreateTGMultiObjectChangeCommand(@PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,dispmatr,im,pcoa^.Count) do
-    begin
-     pcd:=pcoa^.beginiterate(ir);
-   if pcd<>nil then
-   repeat
+  im:=dispmatr;
+  uzegeometry.MatrixInvert(im);
+  PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack.PushStartMarker(UndoMaker);
+  dc:=drawings.GetCurrentDWG^.CreateDrawingRC;
+  with PushCreateTGMultiObjectChangeCommand(@PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,dispmatr,im,pcoa^.Count) do begin
+    pcd:=pcoa^.beginiterate(ir);
+    if pcd<>nil then
+      repeat
         m:=tmethod(@pcd^.sourceEnt^.Transform);
         (*m.Data:=pcd^.sourceEnt;
         m.Code:={pointer}(@pcd^.sourceEnt^.Transform);*)
         AddMethod(m);
 
-        dec(pcd^.sourceEnt^.vp.LastCameraPos);
+        Dec(pcd^.sourceEnt^.vp.LastCameraPos);
         pcd^.sourceEnt^.Formatentity(drawings.GetCurrentDWG^,dc);
 
         pcd:=pcoa^.iterate(ir);
-   until pcd=nil;
-   comit;
-   end;
-   PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack.PushEndMarker;
-   result:=cmd_ok;
+      until pcd=nil;
+    comit;
+  end;
+  PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack.PushEndMarker;
+  Result:=cmd_ok;
 end;
-function Move_com.AfterClick(const Context:TZCADCommandContext;wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record): Integer;
+
+function Move_com.AfterClick(const Context:TZCADCommandContext;wc:GDBvertex;
+  mc:GDBvertex2DI;var button:byte;osp:pos_record):integer;
 var
   dispmatr:DMatrix4D;
   dc:TDrawContext;
@@ -221,7 +227,7 @@ begin
     move(dispmatr,self.CommandName);
 
     drawings.GetCurrentDWG^.ConstructObjRoot.ObjMatrix:=onematrix;
-    drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.free;
+    drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.Free;
     drawings.GetCurrentROOT^.FormatAfterEdit(drawings.GetCurrentDWG^,dc);
 
     if pcoa<>nil then begin
@@ -231,12 +237,15 @@ begin
 
     commandmanager.executecommandend;
   end;
-  result:=cmd_ok;
+  Result:=cmd_ok;
 end;
 
 initialization
-  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
+  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],
+    LM_Info,UnitsInitializeLMId);
   move.init('Move',0,0);
+
 finalization
-  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
+  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],
+    LM_Info,UnitsFinalizeLMId);
 end.

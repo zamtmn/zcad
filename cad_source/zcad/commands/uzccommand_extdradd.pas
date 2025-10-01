@@ -21,6 +21,7 @@ unit uzccommand_extdrAdd;
 {$INCLUDE zengineconfig.inc}
 
 interface
+
 uses
   uzcLog,SysUtils,
   uzccommandsabstract,uzccommandsimpl,
@@ -28,26 +29,28 @@ uses
   gzUndoCmdChgMethods2,zUndoCmdSaveEntityState,uzcdrawing,
   uzcinterface,UGDBSelectedObjArray;
 
-function extdrAdd_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
+function extdrAdd_com(const Context:TZCADCommandContext;
+  operands:TCommandOperands):TCommandResult;
 
 implementation
 
 const
   cmdName='extdrAdd';
 
-function extdrAdd_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
+function extdrAdd_com(const Context:TZCADCommandContext;
+  operands:TCommandOperands):TCommandResult;
 var
   extdr:TMetaEntityExtender;
   pEntity{,pLastSelectedEntity}:PGDBObjEntity;
   ir:itrec;
-  count:Integer;
+  Count:integer;
   DoMethod,UndoMethod:TMethod;
   ext:TAbstractEntityExtender;
   psd:PSelectedObjDesc;
 begin
   try
     if EntityExtenders.tryGetValue(uppercase(operands),extdr) then begin
-      count:=0;
+      Count:=0;
 
       //обрабатываем последний выбраный примитив
       //на данный момент только так можно работать с примитивами в динамической части устройств
@@ -73,40 +76,46 @@ begin
 
       psd:=drawings.GetCurrentDWG.SelObjArray.beginiterate(ir);
       if psd<>nil then
-      repeat
-        pEntity:=psd^.objaddr;
-        if (pEntity^.Selected)and extdr.CanBeAddedTo(pEntity){and(pEntity<>pLastSelectedEntity)} then
-          if pEntity^.GetExtension(extdr)=nil then begin
-            PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack.PushStartMarker(cmdName);
-            domethod.Code:=pointer(pEntity^.AddExtension);
-            domethod.Data:=pEntity;
-            undomethod.Code:=pointer(pEntity^.RemoveExtension);
-            undomethod.Data:=pEntity;
-            ext:=extdr.Create(pEntity);
+        repeat
+          pEntity:=psd^.objaddr;
+          if (pEntity^.Selected)and extdr.CanBeAddedTo(pEntity)
+          {and(pEntity<>pLastSelectedEntity)} then
+            if pEntity^.GetExtension(extdr)=nil then begin
+              PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack.PushStartMarker(cmdName);
+              domethod.Code:=pointer(pEntity^.AddExtension);
+              domethod.Data:=pEntity;
+              undomethod.Code:=pointer(pEntity^.RemoveExtension);
+              undomethod.Data:=pEntity;
+              ext:=extdr.Create(pEntity);
 
-            TUndoCmdSaveEntityState.CreateAndPush(pEntity,PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack);
+              TUndoCmdSaveEntityState.CreateAndPush(
+                pEntity,PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack);
 
-            with GUCmdChgMethods2<TAbstractEntityExtender,Pointer>.CreateAndPush(ext,typeof(ext),domethod,undomethod,PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,drawings.AfterNotAutoProcessGDB) do
-            begin
-              comit;
+              with GUCmdChgMethods2<TAbstractEntityExtender,Pointer>.CreateAndPush(
+                  ext,typeof(ext),domethod,undomethod,PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,
+                  drawings.AfterNotAutoProcessGDB) do begin
+                comit;
+              end;
+              Inc(Count);
             end;
-            inc(count);
-          end;
-        psd:=drawings.GetCurrentDWG.SelObjArray.iterate(ir);
-      until psd=nil;
-      zcUI.TextMessage(format(rscmNEntitiesProcessed,[count]),TMWOHistoryOut);
-      if count>0 then
+          psd:=drawings.GetCurrentDWG.SelObjArray.iterate(ir);
+        until psd=nil;
+      zcUI.TextMessage(format(rscmNEntitiesProcessed,[Count]),TMWOHistoryOut);
+      if Count>0 then
         PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack.PushEndMarker;
     end else
       zcUI.TextMessage(format(rscmExtenderNotFound,[operands]),TMWOHistoryOut);
   finally
-    result:=cmd_ok;
+    Result:=cmd_ok;
   end;
 end;
 
 initialization
-  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],LM_Info,UnitsInitializeLMId);
+  programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],
+    LM_Info,UnitsInitializeLMId);
   CreateZCADCommand(@extdrAdd_com,cmdName,CADWG or CASelEnts,0);
+
 finalization
-  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],LM_Info,UnitsFinalizeLMId);
+  ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],
+    LM_Info,UnitsFinalizeLMId);
 end.

@@ -67,6 +67,7 @@ type
       ProjectProc:GDBProjectProc);virtual;
   end;
 
+  function AllocAndInitPolyline(owner:PGDBObjGenericWithSubordinated):PGDBObjPolyline;
 implementation
 
 function GDBObjPolyline.CalcTrueInFrustum;
@@ -281,6 +282,8 @@ begin
     pdesc.vertexnum:=-(i+1);
     pdesc.pointtype:=os_midle;
     pdesc.worldcoord:=Vertexmorph(pv^,pvnext^,0.5);
+        // Store segment direction in dcoord for oriented grip drawing
+    pdesc.dcoord:=VertexSub(pvnext^,pv^);
     PSelectedObjDesc(tdesc)^.pcontrolpoint^.PushBackData(pdesc);
   end;
 end;
@@ -290,6 +293,7 @@ var
   segmentIndex:integer;
   v1,v2:PGDBVertex;
   offset:GDBVertex;
+  halfVector,newCenter:GDBVertex;
 begin
   if rtmod.point.vertexnum>=0 then begin
     inherited rtmodifyonepoint(rtmod);
@@ -300,10 +304,19 @@ begin
       v2:=vertexarrayinocs.getDataMutable(segmentIndex+1)
     else
       v2:=vertexarrayinocs.getDataMutable(0);
+       // Calculate half-vector (from center to each endpoint)
+    halfVector:=uzegeometry.VertexSub(v2^,v1^);
+    halfVector:=uzegeometry.VertexMulOnSc(halfVector,0.5);
 
-    offset:=rtmod.dist;
-    v1^:=VertexAdd(v1^,offset);
-    v2^:=VertexAdd(v2^,offset);
+    // Calculate new center position
+    newCenter:=VertexAdd(rtmod.point.worldcoord,rtmod.dist);
+
+    // Set both vertices relative to new center
+    v1^:=VertexSub(newCenter,halfVector);
+    v2^:=VertexAdd(newCenter,halfVector);
+    //offset:=rtmod.dist;
+    //v1^:=VertexAdd(v1^,offset);
+    //v2^:=VertexAdd(v2^,offset);
   end;
 end;
 

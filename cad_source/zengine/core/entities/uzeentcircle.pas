@@ -98,7 +98,7 @@ type
     function GetObjType:TObjID;virtual;
     function IsStagedFormatEntity:boolean;virtual;
   end;
-
+ function AllocAndInitCircle(owner:PGDBObjGenericWithSubordinated):PGDBObjCircle;
 implementation
 
 function GDBObjCircle.IsStagedFormatEntity:boolean;

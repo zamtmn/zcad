@@ -28,7 +28,7 @@ uses
   uzeentgenericsubentry,{uzbtypes,}uzedrawingsimple,
   uzbstrproc,
   uzestyleslayers,
-  uzeentline,uzeentcircle,uzeentity,//uzgldrawcontext,
+  uzeentline,uzeentcircle,uzeentpolyline,uzeentlwpolyline,uzegeometry,uzeentity,//uzgldrawcontext,
   uzeffLibreDWG,
   uzeffmanager;
 implementation
@@ -111,6 +111,43 @@ begin
   ZContext.PDrawing^.pObjRoot^.AddMi(@pobj);
 end;
 
+procedure Add3DPolylineEntity(var ZContext:TZDrawingContext;var DWGContext:TDWGCtx;var DWGObject:Dwg_Object;PPolyline:PDwg_Entity_POLYLINE_3D);
+var
+  pobj:PGDBObjEntity;
+  i:integer;
+  v:GDBVertex;
+begin
+  pobj := AllocAndInitPolyline(ZContext.PDrawing^.pObjRoot);
+  if PPolyline^.num_owned>0 then begin
+    for i:=0 to PPolyline^.num_owned-1 do begin
+      v.x:=PPolyline^.vertices[i]^.point.x;
+      v.y:=PPolyline^.vertices[i]^.point.y;
+      v.z:=PPolyline^.vertices[i]^.point.z;
+      PGDBObjPolyline(pobj)^.VertexArrayInOCS.PushBack(v);
+    end;
+  end;
+  PGDBObjPolyline(pobj)^.Closed:=(PPolyline^.flag and 1)=1;
+  ZContext.PDrawing^.pObjRoot^.AddMi(@pobj);
+end;
+
+procedure AddLWPolylineEntity(var ZContext:TZDrawingContext;var DWGContext:TDWGCtx;var DWGObject:Dwg_Object;PLWPolyline:PDwg_Entity_LWPOLYLINE);
+var
+  pobj:PGDBObjEntity;
+  i:integer;
+  v2d:GDBvertex2D;
+begin
+  pobj := AllocAndInitLWpolyline(ZContext.PDrawing^.pObjRoot);
+  if PLWPolyline^.num_points>0 then begin
+    for i:=0 to PLWPolyline^.num_points-1 do begin
+      v2d.x:=PLWPolyline^.points[i].x;
+      v2d.y:=PLWPolyline^.points[i].y;
+      PGDBObjLWPolyline(pobj)^.Vertex2D_in_OCS_Array.PushBack(v2d);
+    end;
+  end;
+  PGDBObjLWPolyline(pobj)^.Closed:=(PLWPolyline^.flag and 1)=1;
+  ZContext.PDrawing^.pObjRoot^.AddMi(@pobj);
+end;
+
 initialization
   ZCDWGParser.RegisterDWGObjectLoadProc(DWG_TYPE_LAYER,@AddLayer);
   ZCDWGParser.RegisterDWGObjectLoadProc(DWG_TYPE_LTYPE,@AddLineType);
@@ -118,6 +155,8 @@ initialization
 
   ZCDWGParser.RegisterDWGEntityLoadProc(DWG_TYPE_LINE,@AddLineEntity);
   ZCDWGParser.RegisterDWGEntityLoadProc(DWG_TYPE_CIRCLE,@AddCircleEntity);
+  ZCDWGParser.RegisterDWGEntityLoadProc(DWG_TYPE_POLYLINE_3D,@Add3DPolylineEntity);
+  ZCDWGParser.RegisterDWGEntityLoadProc(DWG_TYPE_LWPLINE,@AddLWPolylineEntity);
   ZCDWGParser.RegisterDWGEntityLoadProc(DWG_TYPE_BLOCK,@AddBlock);
 finalization
 end.

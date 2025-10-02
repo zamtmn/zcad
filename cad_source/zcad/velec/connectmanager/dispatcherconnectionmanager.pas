@@ -596,9 +596,9 @@ begin
       vstDev.TreeOptions.PaintOptions :=
         vstDev.TreeOptions.PaintOptions - [toShowRoot, toShowTreeLines, toShowButtons];
       vstDev.TreeOptions.SelectionOptions :=
-        vstDev.TreeOptions.SelectionOptions + [toFullRowSelect];
+        vstDev.TreeOptions.SelectionOptions + [toFullRowSelect, toExtendedFocus];
       vstDev.TreeOptions.MiscOptions :=
-        vstDev.TreeOptions.MiscOptions + [toEditable, toEditOnDblClick];
+        vstDev.TreeOptions.MiscOptions + [toEditable, toEditOnDblClick, toGridExtensions];
       vstDev.Header.Options :=
         vstDev.Header.Options + [hoVisible, hoColumnResize] - [hoAutoResize];
       vstDev.Header.AutoSizeIndex := -1;

@@ -615,18 +615,21 @@ begin
       begin
         Text := 'devname';
         Width := 100;
+        Options := Options + [coAllowFocus, coEditable];
       end;
 
       with vstDev.Header.Columns.Add do
       begin
         Text := 'hdname';
         Width := 100;
+        Options := Options + [coAllowFocus, coEditable];
       end;
 
       with vstDev.Header.Columns.Add do
       begin
         Text := 'hdgroup';
         Width := 100;
+        Options := Options + [coAllowFocus, coEditable];
       end;
 
       // Кнопка "Ред."

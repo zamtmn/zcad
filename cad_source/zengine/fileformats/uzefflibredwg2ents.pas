@@ -166,7 +166,7 @@ begin
           v.x:=PVertex^.point.x;
           v.y:=PVertex^.point.y;
           v.z:=PVertex^.point.z;
-          PGDBObjPolyline(pobj)^.VertexArrayInOCS.PushBack(v);
+          PGDBObjPolyline(pobj)^.VertexArrayInOCS.PushBackData(v);
         end;
       end;
       Inc(PVertexHandle);
@@ -190,7 +190,7 @@ begin
       if PPoint<>nil then begin
         v2d.x:=PPoint^.x;
         v2d.y:=PPoint^.y;
-        PGDBObjLWPolyline(pobj)^.Vertex2D_in_OCS_Array.PushBack(v2d);
+        PGDBObjLWPolyline(pobj)^.Vertex2D_in_OCS_Array.PushBackData(v2d);
       end;
       Inc(PPoint);
     end;
@@ -207,7 +207,7 @@ initialization
   ZCDWGParser.RegisterDWGEntityLoadProc(DWG_TYPE_LINE,@AddLineEntity);
   ZCDWGParser.RegisterDWGEntityLoadProc(DWG_TYPE_CIRCLE,@AddCircleEntity);
   ZCDWGParser.RegisterDWGEntityLoadProc(DWG_TYPE_POLYLINE_3D,@Add3DPolylineEntity);
-  ZCDWGParser.RegisterDWGEntityLoadProc(DWG_TYPE_LWPOLYLINE,@AddLWPolylineEntity);
+  ZCDWGParser.RegisterDWGEntityLoadProc(DWG_TYPE_LWPLINE,@AddLWPolylineEntity);
   ZCDWGParser.RegisterDWGEntityLoadProc(DWG_TYPE_BLOCK,@AddBlock);
 finalization
 end.

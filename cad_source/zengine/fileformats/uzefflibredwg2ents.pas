@@ -30,7 +30,7 @@ uses
   uzestyleslayers,
   uzeentline,uzeentcircle,uzeentpolyline,uzeentlwpolyline,uzegeometry,uzeentity,uzegeometrytypes,//uzgldrawcontext,
   uzeffLibreDWG,
-  uzeffmanager;
+  uzeffmanager,uzeffdwg;
 implementation
 //type
   //PDwg_Entity_LINE=^Dwg_Entity_LINE;

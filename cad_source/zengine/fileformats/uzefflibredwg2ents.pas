@@ -28,7 +28,7 @@ uses
   uzeentgenericsubentry,{uzbtypes,}uzedrawingsimple,
   uzbstrproc,
   uzestyleslayers,
-  uzeentline,uzeentcircle,uzeentpolyline,uzeentlwpolyline,uzegeometry,uzeentity,//uzgldrawcontext,
+  uzeentline,uzeentcircle,uzeentpolyline,uzeentlwpolyline,uzegeometry,uzeentity,uzegeometrytypes,//uzgldrawcontext,
   uzeffLibreDWG,
   uzeffmanager;
 implementation

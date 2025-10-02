@@ -98,18 +98,18 @@ begin
   PGDBObjLine(pobj)^.CoordInOCS.lEnd.y:=PLine^.&end.y;
   PGDBObjLine(pobj)^.CoordInOCS.lEnd.z:=PLine^.&end.z;
 
-  //PDWGLayer:=dwg_get_entity_layer(PLine^.parent);
-  //if PDWGLayer<>nil then begin
-  //  BITCODE_T2Text(PDWGLayer^.name,DWGContext,layerName);
-  //  if DWGContext.DWGVer>R_2006 then
-  //    layerName:=Tria_Utf8ToAnsi(layerName);
-  //  player:=ZContext.PDrawing^.LayerTable.getAddres(layerName);
-  //  if player<>nil then
-  //    PGDBObjEntity(pobj)^.vp.Layer:=player
-  //  else
-  //    PGDBObjEntity(pobj)^.vp.Layer:=ZContext.PDrawing^.LayerTable.GetSystemLayer;
-  //end else
-  //  PGDBObjEntity(pobj)^.vp.Layer:=ZContext.PDrawing^.LayerTable.GetSystemLayer;
+  PDWGLayer:=dwg_get_entity_layer(PLine^.parent);
+  if PDWGLayer<>nil then begin
+    BITCODE_T2Text(PDWGLayer^.name,DWGContext,layerName);
+    if DWGContext.DWGVer>R_2006 then
+      layerName:=Tria_Utf8ToAnsi(layerName);
+    player:=ZContext.PDrawing^.LayerTable.getAddres(layerName);
+    if player<>nil then
+      PGDBObjEntity(pobj)^.vp.Layer:=player
+    else
+      PGDBObjEntity(pobj)^.vp.Layer:=ZContext.PDrawing^.LayerTable.GetSystemLayer;
+  end else
+    PGDBObjEntity(pobj)^.vp.Layer:=ZContext.PDrawing^.LayerTable.GetSystemLayer;
 
   ZContext.PDrawing^.pObjRoot^.AddMi(@pobj);
   //PGDBObjEntity(pobj)^.BuildGeometry(drawing);
@@ -132,18 +132,18 @@ begin
   PGDBObjCircle(pobj)^.Local.basis.oz.y:=PCircle^.extrusion.y;
   PGDBObjCircle(pobj)^.Local.basis.oz.z:=PCircle^.extrusion.z;
 
-  //PDWGLayer:=dwg_get_entity_layer(PCircle^.parent);
-  //if PDWGLayer<>nil then begin
-  //  BITCODE_T2Text(PDWGLayer^.name,DWGContext,layerName);
-  //  if DWGContext.DWGVer>R_2006 then
-  //    layerName:=Tria_Utf8ToAnsi(layerName);
-  //  player:=ZContext.PDrawing^.LayerTable.getAddres(layerName);
-  //  if player<>nil then
-  //    PGDBObjEntity(pobj)^.vp.Layer:=player
-  //  else
-  //    PGDBObjEntity(pobj)^.vp.Layer:=ZContext.PDrawing^.LayerTable.GetSystemLayer;
-  //end else
-  //  PGDBObjEntity(pobj)^.vp.Layer:=ZContext.PDrawing^.LayerTable.GetSystemLayer;
+  PDWGLayer:=dwg_get_entity_layer(PCircle^.parent);
+  if PDWGLayer<>nil then begin
+    BITCODE_T2Text(PDWGLayer^.name,DWGContext,layerName);
+    if DWGContext.DWGVer>R_2006 then
+      layerName:=Tria_Utf8ToAnsi(layerName);
+    player:=ZContext.PDrawing^.LayerTable.getAddres(layerName);
+    if player<>nil then
+      PGDBObjEntity(pobj)^.vp.Layer:=player
+    else
+      PGDBObjEntity(pobj)^.vp.Layer:=ZContext.PDrawing^.LayerTable.GetSystemLayer;
+  end else
+    PGDBObjEntity(pobj)^.vp.Layer:=ZContext.PDrawing^.LayerTable.GetSystemLayer;
 
   ZContext.PDrawing^.pObjRoot^.AddMi(@pobj);
 end;

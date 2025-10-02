@@ -136,51 +136,114 @@ begin
   tv:=uzegeometry.vectordot(dir,zwcs);
   processaxis(posr,tv);
 end;
-
 procedure GDBObjARC.transform;
 var
-  sav,eav,pins:gdbvertex;
-  local_sav,local_eav:gdbvertex;
-  m:DMatrix4D;
-  det:double;
+  sav, eav, pins: gdbvertex;
+  local_sav, local_eav: gdbvertex;
+  m: DMatrix4D;
+  det: double;
 begin
   precalc;
-  det:=t_matrix.mtr[0].v[0]*(t_matrix.mtr[1].v[1]*t_matrix.mtr[2].v[2]-t_matrix.mtr[1].v[2]*t_matrix.mtr[2].v[1])-
-       t_matrix.mtr[0].v[1]*(t_matrix.mtr[1].v[0]*t_matrix.mtr[2].v[2]-t_matrix.mtr[1].v[2]*t_matrix.mtr[2].v[0])+
-       t_matrix.mtr[0].v[2]*(t_matrix.mtr[1].v[0]*t_matrix.mtr[2].v[1]-t_matrix.mtr[1].v[1]*t_matrix.mtr[2].v[0]);
 
-  if det<0 then begin
-    sav:=q2;
-    eav:=q0;
+  det := t_matrix.mtr[0].v[0]*(t_matrix.mtr[1].v[1]*t_matrix.mtr[2].v[2]-t_matrix.mtr[1].v[2]*t_matrix.mtr[2].v[1]) -
+         t_matrix.mtr[0].v[1]*(t_matrix.mtr[1].v[0]*t_matrix.mtr[2].v[2]-t_matrix.mtr[1].v[2]*t_matrix.mtr[2].v[0]) +
+         t_matrix.mtr[0].v[2]*(t_matrix.mtr[1].v[0]*t_matrix.mtr[2].v[1]-t_matrix.mtr[1].v[1]*t_matrix.mtr[2].v[0]);
+
+  if det < 0 then begin
+    sav := q2;
+    eav := q0;
   end else begin
-    sav:=q0;
-    eav:=q2;
+    sav := q0;
+    eav := q2;
   end;
 
-  pins:=P_insert_in_WCS;
-  sav:=VectorTransform3D(sav,t_matrix);
-  eav:=VectorTransform3D(eav,t_matrix);
-  pins:=VectorTransform3D(pins,t_matrix);
+  pins := P_insert_in_WCS;
+
+  // трансформируем контрольные точки в WCS
+  sav := VectorTransform3D(sav, t_matrix);
+  eav := VectorTransform3D(eav, t_matrix);
+  pins := VectorTransform3D(pins, t_matrix);
+
+  // применяем базовый transform (обновляет objMatrix и т.п.)
   inherited;
 
-  sav:=VertexSub(sav,pins);
-  eav:=VertexSub(eav,pins);
+  // переводим точки в систему координат относительно новой вставки
+  sav := VertexSub(sav, pins);
+  eav := VertexSub(eav, pins);
 
-  m:=objMatrix;
+  // инвертируем матрицу объекта и убираем из неё перенос — оставляем только вращение/масштаб
+  m := objMatrix;
   MatrixInvert(m);
-  m.mtr[3]:=NulVector4D;
 
-  local_sav:=VectorTransform3D(sav,m);
-  local_eav:=VectorTransform3D(eav,m);
+  // ВАЖНО: не обнуляем всю 4-ю строку! надо обнулить только компоненту переноса
+  m.mtr[0].v[3] := 0.0;
+  m.mtr[1].v[3] := 0.0;
+  m.mtr[2].v[3] := 0.0;
+  // последняя строка должна быть [0,0,0,1]
+  m.mtr[3].v[0] := 0.0;
+  m.mtr[3].v[1] := 0.0;
+  m.mtr[3].v[2] := 0.0;
+  m.mtr[3].v[3] := 1.0;
 
-  StartAngle:=ArcTan2(local_sav.y,local_sav.x);
-  if StartAngle<0 then
-    StartAngle:=StartAngle+2*pi;
+  local_sav := VectorTransform3D(sav, m);
+  local_eav := VectorTransform3D(eav, m);
 
-  EndAngle:=ArcTan2(local_eav.y,local_eav.x);
-  if EndAngle<0 then
-    EndAngle:=EndAngle+2*pi;
+  StartAngle := ArcTan2(local_sav.y, local_sav.x);
+  if StartAngle < 0 then StartAngle := StartAngle + 2*pi;
+
+  EndAngle := ArcTan2(local_eav.y, local_eav.x);
+  if EndAngle < 0 then EndAngle := EndAngle + 2*pi;
+
+  // если нужно гарантировать непрерывность дуги (исправляет переход через 0)
+  if EndAngle <= StartAngle then
+    EndAngle := EndAngle + 2*pi;
 end;
+
+//
+//procedure GDBObjARC.transform;
+//var
+//  sav,eav,pins:gdbvertex;
+//  local_sav,local_eav:gdbvertex;
+//  m:DMatrix4D;
+//  det:double;
+//begin
+//  precalc;
+//  det:=t_matrix.mtr[0].v[0]*(t_matrix.mtr[1].v[1]*t_matrix.mtr[2].v[2]-t_matrix.mtr[1].v[2]*t_matrix.mtr[2].v[1])-
+//       t_matrix.mtr[0].v[1]*(t_matrix.mtr[1].v[0]*t_matrix.mtr[2].v[2]-t_matrix.mtr[1].v[2]*t_matrix.mtr[2].v[0])+
+//       t_matrix.mtr[0].v[2]*(t_matrix.mtr[1].v[0]*t_matrix.mtr[2].v[1]-t_matrix.mtr[1].v[1]*t_matrix.mtr[2].v[0]);
+//
+//  if det<0 then begin
+//    sav:=q2;
+//    eav:=q0;
+//  end else begin
+//    sav:=q0;
+//    eav:=q2;
+//  end;
+//
+//  pins:=P_insert_in_WCS;
+//  sav:=VectorTransform3D(sav,t_matrix);
+//  eav:=VectorTransform3D(eav,t_matrix);
+//  pins:=VectorTransform3D(pins,t_matrix);
+//  inherited;
+//
+//  sav:=VertexSub(sav,pins);
+//  eav:=VertexSub(eav,pins);
+//
+//  m:=objMatrix;
+//  MatrixInvert(m);
+//  m.mtr[3]:=NulVector4D;
+//
+//  local_sav:=VectorTransform3D(sav,m);
+//  local_eav:=VectorTransform3D(eav,m);
+//
+//  StartAngle:=ArcTan2(local_sav.y,local_sav.x);
+//  if StartAngle<0 then
+//    StartAngle:=StartAngle+2*pi;
+//
+//  EndAngle:=ArcTan2(local_eav.y,local_eav.x);
+//  if EndAngle<0 then
+//    EndAngle:=EndAngle+2*pi;
+//end;
 
 procedure GDBObjARC.ReCalcFromObjMatrix;
 var

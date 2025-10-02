@@ -30,7 +30,7 @@ uses
   uzestyleslayers,
   uzeentline,uzeentcircle,uzeentpolyline,uzeentlwpolyline,uzegeometry,uzeentity,uzegeometrytypes,//uzgldrawcontext,
   uzeffLibreDWG,
-  uzeffmanager,uzeffdwg;
+  uzeffmanager;
 implementation
 //type
   //PDwg_Entity_LINE=^Dwg_Entity_LINE;
@@ -207,7 +207,7 @@ initialization
   ZCDWGParser.RegisterDWGEntityLoadProc(DWG_TYPE_LINE,@AddLineEntity);
   ZCDWGParser.RegisterDWGEntityLoadProc(DWG_TYPE_CIRCLE,@AddCircleEntity);
   ZCDWGParser.RegisterDWGEntityLoadProc(DWG_TYPE_POLYLINE_3D,@Add3DPolylineEntity);
-  ZCDWGParser.RegisterDWGEntityLoadProc(DWG_TYPE_LWPLINE,@AddLWPolylineEntity);
+  ZCDWGParser.RegisterDWGEntityLoadProc(DWG_TYPE_LWPOLYLINE,@AddLWPolylineEntity);
   ZCDWGParser.RegisterDWGEntityLoadProc(DWG_TYPE_BLOCK,@AddBlock);
 finalization
 end.

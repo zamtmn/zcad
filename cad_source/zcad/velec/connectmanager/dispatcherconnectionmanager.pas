@@ -56,7 +56,7 @@ type
     procedure vstDevEditing(Sender: TBaseVirtualTree; Node: PVirtualNode;
       Column: TColumnIndex; var Allowed: Boolean);
     procedure vstDevNewText(Sender: TBaseVirtualTree; Node: PVirtualNode;
-      Column: TColumnIndex; NewText: String);
+      Column: TColumnIndex; const NewText: AnsiString);
   private
     //для работы разделителя
     FProportion: Double; // Пропорция ширины PanelSynchDraw / (ClientWidth - Splitter)
@@ -745,7 +745,7 @@ begin
 end;
 
 procedure TDispatcherConnectionFrame.vstDevNewText(Sender: TBaseVirtualTree;
-  Node: PVirtualNode; Column: TColumnIndex; NewText: String);
+  Node: PVirtualNode; Column: TColumnIndex; const NewText: AnsiString);
 var
   NodeData: PGridNodeData;
   UpdateQuery: TSQLQuery;

@@ -15,6 +15,15 @@
 {
 @author(Vladimir Bobrov)
 }
+
+{
+****************************************************************************
+* DEPRECATED - This file is deprecated and will be removed in the future  *
+* New implementation: core/uzvmcmanager.pas                                *
+* See ARCHITECTURE.md for migration guide                                 *
+****************************************************************************
+}
+
 {$mode objfpc}{$H+}
 
 unit uzvmanagerconnect;

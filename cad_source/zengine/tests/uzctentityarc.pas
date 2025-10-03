@@ -24,6 +24,8 @@ type
     procedure TestRotateAroundOrigin;
     procedure TestRotateAroundPoint;
     procedure TestMirrorArc;
+    procedure TestIssue73Rotation;
+    procedure TestIssue73Mirroring;
   end;
 
 
@@ -230,6 +232,90 @@ begin
     (Abs(arc^.EndAngle - originalEndAngle) > EPSILON));
 
   // Освобождение ресурсов
+  drawing.done;
+end;
+
+procedure TArcTest.TestIssue73Rotation;
+var
+  drawing: TSimpleDrawing;
+  arc: PGDBObjArc;
+  dc: TDrawContext;
+  rotationMatrix, translateToOrigin, translateBack, combinedMatrix: DMatrix4D;
+  rotationAngle: Double;
+  rotationCenter: GDBVertex;
+begin
+  drawing.init(nil);
+
+  arc := GDBObjArc.CreateInstance;
+  arc^.Local.P_insert := CreateVertex(152, 155, 0);
+  arc^.R := 10.0;
+  arc^.StartAngle := DegreesToRadians(8);
+  arc^.EndAngle := DegreesToRadians(94);
+
+  drawing.GetCurrentRoot^.AddMi(@arc);
+  dc := drawing.CreateDrawingRC;
+  arc^.BuildGeometry(drawing);
+  arc^.formatEntity(drawing, dc);
+
+  rotationCenter := CreateVertex(150, 150, 0);
+  rotationAngle := DegreesToRadians(25);
+
+  translateToOrigin := CreateTranslationMatrix(
+    -rotationCenter.x, -rotationCenter.y, -rotationCenter.z);
+  rotationMatrix := CreateRotationMatrixZ(rotationAngle);
+  translateBack := CreateTranslationMatrix(
+    rotationCenter.x, rotationCenter.y, rotationCenter.z);
+
+  combinedMatrix := MatrixMultiply(rotationMatrix, translateToOrigin);
+  combinedMatrix := MatrixMultiply(translateBack, combinedMatrix);
+
+  arc^.transform(combinedMatrix);
+  arc^.FormatEntity(drawing, dc);
+
+  CheckArcParameters('Issue #73: After rotation around (150,150,0) by 25 degrees', arc,
+    149.6995, 155.3768, 0, 10, 33, 119);
+
+  drawing.done;
+end;
+
+procedure TArcTest.TestIssue73Mirroring;
+var
+  drawing: TSimpleDrawing;
+  arc: PGDBObjArc;
+  dc: TDrawContext;
+  mirrorMatrix, translateToOrigin, translateBack, combinedMatrix: DMatrix4D;
+  plane: DVector4D;
+  mirrorCenter: GDBVertex;
+begin
+  drawing.init(nil);
+
+  arc := GDBObjArc.CreateInstance;
+  arc^.Local.P_insert := CreateVertex(152, 155, 0);
+  arc^.R := 10.0;
+  arc^.StartAngle := DegreesToRadians(8);
+  arc^.EndAngle := DegreesToRadians(94);
+
+  drawing.GetCurrentRoot^.AddMi(@arc);
+  dc := drawing.CreateDrawingRC;
+  arc^.BuildGeometry(drawing);
+  arc^.formatEntity(drawing, dc);
+
+  mirrorCenter := CreateVertex(150, 150, 0);
+
+  plane.v[0] := 1;
+  plane.v[1] := 0;
+  plane.v[2] := 0;
+  plane.v[3] := -mirrorCenter.x;
+
+  NormalizePlane(plane);
+  mirrorMatrix := CreateReflectionMatrix(plane);
+
+  arc^.transform(mirrorMatrix);
+  arc^.FormatEntity(drawing, dc);
+
+  CheckArcParameters('Issue #73: After mirroring relative to Y axis at x=150', arc,
+    148, 155, 0, 10, 86, 172);
+
   drawing.done;
 end;
 

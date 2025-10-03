@@ -263,6 +263,7 @@ begin
   Local.basis.oy:=oy;
 
   m:=CreateMatrixFromBasis(ox,oy,Local.basis.oz);
+  MatrixInvert(m);
 
   Local.P_insert:=VectorTransform3D(PGDBVertex(@objmatrix.mtr[3])^,m);
   self.R:=PGDBVertex(@objmatrix.mtr[0])^.x/local.basis.OX.x;

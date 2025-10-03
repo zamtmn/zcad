@@ -639,7 +639,7 @@ interface
     PDwg_Entity_HATCH  = ^Dwg_Entity_HATCH;
     PDwg_Entity_HELIX  = ^Dwg_Entity_HELIX;
     PDwg_Entity_IMAGE  = ^Dwg_Entity_IMAGE;
-
+    PDwg_Entity_INSERT  = ^Dwg_Entity_INSERT;
     PDwg_Entity_JUMP  = ^Dwg_Entity_JUMP;
 
     PDwg_Entity_LARGE_RADIAL_DIMENSION  = ^Dwg_Entity_LARGE_RADIAL_DIMENSION;
@@ -9524,7 +9524,7 @@ in declaration at line 7399 *)
                 69 : ( PLANESURFACE : PDwg_Entity_PLANESURFACE );
                 70 : ( POINTCLOUD : PDwg_Entity_POINTCLOUD );
                 71 : ( POINTCLOUDEX : PDwg_Entity_POINTCLOUDEX );
-                72 : ( REPEAT : PDwg_Entity_REPEAT );
+                72 : ( &REPEAT : PDwg_Entity_REPEAT );
                 73 : ( WIPEOUT : PDwg_Entity_WIPEOUT );
                 74 : ( ALIGNMENTPARAMETERENTITY : PDwg_Entity_ALIGNMENTPARAMETERENTITY );
                 75 : ( ARCALIGNEDTEXT : PDwg_Entity_ARCALIGNEDTEXT );

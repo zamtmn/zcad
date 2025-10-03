@@ -164,8 +164,9 @@ begin
   eav := VectorTransform3D(eav, t_matrix);
   pins := VectorTransform3D(pins, t_matrix);
 
-  // применяем базовый transform (обновляет objMatrix и т.п.)
-  inherited;
+  // Use canonical local basis for angle calculation
+  m:=CreateMatrixFromBasis(Local.basis.ox,Local.basis.oy,Local.basis.oz);
+  MatrixInvert(m);
 
   // переводим точки в систему координат относительно новой вставки
   sav := VertexSub(sav, pins);
@@ -254,6 +255,11 @@ begin
 
   ox:=GetXfFromZ(Local.basis.oz);
   oy:=NormalizeVertex(VectorDot(Local.basis.oz,Local.basis.ox));
+
+  // Update Local.basis with canonical values
+  Local.basis.ox:=ox;
+  Local.basis.oy:=oy;
+
   m:=CreateMatrixFromBasis(ox,oy,Local.basis.oz);
 
   Local.P_insert:=VectorTransform3D(PGDBVertex(@objmatrix.mtr[3])^,m);

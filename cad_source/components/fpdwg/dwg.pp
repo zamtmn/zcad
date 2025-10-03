@@ -1500,6 +1500,7 @@ in declaration at line 16 *)
           name : BITCODE_TV;
           book_name : BITCODE_TV;
           handle : BITCODE_H;
+          alpha_raw : BITCODE_BL;
           alpha_type : BITCODE_BB;
           alpha : BITCODE_RC;
         end;
@@ -9578,7 +9579,7 @@ in declaration at line 7399 *)
           linewt : BITCODE_RC;
           flag_r11 : BITCODE_RC;
           opts_r11 : BITCODE_RS;
-          extra_r11 : BITCODE_RC;
+          extra_r11 : BITCODE_RS;
           color_r11 : BITCODE_RCd;
           elevation_r11 : BITCODE_RD;
           thickness_r11 : BITCODE_RD;

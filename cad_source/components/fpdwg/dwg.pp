@@ -1466,7 +1466,7 @@ in declaration at line 16 *)
       _dwg_handle = record
           code : BITCODE_RC;
           size : BITCODE_RC;
-          value : dword;
+          value : BITCODE_RLL;
           is_global : BITCODE_B;
         end;
       Dwg_Handle = _dwg_handle;
@@ -1476,8 +1476,8 @@ in declaration at line 16 *)
       _dwg_object_ref = record
           obj : P_dwg_object;
           handleref : Dwg_Handle;
-          absolute_ref : dword;
-          r11_idx : BITCODE_RS;
+          absolute_ref : BITCODE_RLL;
+          r11_idx : BITCODE_RSd;
         end;
       Dwg_Object_Ref = _dwg_object_ref;
       //PDwg_Object_Ref = ^Dwg_Object_Ref;

@@ -100,6 +100,7 @@ type
     function GetObjType:TObjID;virtual;
   end;
 
+  function AllocAndInitLWpolyline(owner:PGDBObjGenericWithSubordinated):PGDBObjLWpolyline;
 implementation
 
 var
@@ -717,6 +718,8 @@ begin
     end;
 
     plw:=PGLlwwidth(Width2D_in_OCS_Array.getDataMutable(i));
+    if not assigned(plw) then
+      continue;
 
     if (plw^.startw=0) and (plw^.endw=0) then
       plw^.hw:=False
@@ -759,6 +762,8 @@ begin
         j:=0;
       plw:=PGLlwwidth(Width2D_in_OCS_Array.getDataMutable(i));
       plw2:=PGLlwwidth(Width2D_in_OCS_Array.getDataMutable(j));
+      if not assigned(plw) or not assigned(plw2) then
+        continue;
       if plw.hw and plw2.hw then begin
         if plw.endw>plw2.startw then
           l:=plw.endw

@@ -28,7 +28,7 @@ uses
   uzeentgenericsubentry,{uzbtypes,}uzedrawingsimple,
   uzbstrproc,
   uzestyleslayers,
-  uzeentline,uzeentcircle,uzeentpolyline,uzeentlwpolyline,uzegeometry,uzeentity,//uzgldrawcontext,
+  uzeentline,uzeentcircle,uzeentpolyline,uzeentlwpolyline,uzegeometry,uzeentity,uzegeometrytypes,//uzgldrawcontext,
   uzeffLibreDWG,
   uzeffmanager;
 implementation
@@ -152,15 +152,24 @@ procedure Add3DPolylineEntity(var ZContext:TZDrawingContext;var DWGContext:TDWGC
 var
   pobj:PGDBObjEntity;
   i:integer;
-  v:GDBVertex;
+  v:GDBvertex;
+  PVertexHandle:PBITCODE_H;
+  PVertex:PDwg_Entity_VERTEX_3D;
 begin
   pobj := AllocAndInitPolyline(ZContext.PDrawing^.pObjRoot);
   if PPolyline^.num_owned>0 then begin
+    PVertexHandle:=PPolyline^.vertex;
     for i:=0 to PPolyline^.num_owned-1 do begin
-      v.x:=PPolyline^.vertices[i]^.point.x;
-      v.y:=PPolyline^.vertices[i]^.point.y;
-      v.z:=PPolyline^.vertices[i]^.point.z;
-      PGDBObjPolyline(pobj)^.VertexArrayInOCS.PushBack(v);
+      if (PVertexHandle<>nil) and (PVertexHandle^<>nil) and (PVertexHandle^^.obj<>nil) then begin
+        PVertex:=PVertexHandle^^.obj^.tio.entity^.tio.VERTEX_3D;
+        if PVertex<>nil then begin
+          v.x:=PVertex^.point.x;
+          v.y:=PVertex^.point.y;
+          v.z:=PVertex^.point.z;
+          PGDBObjPolyline(pobj)^.VertexArrayInOCS.PushBackData(v);
+        end;
+      end;
+      Inc(PVertexHandle);
     end;
   end;
   PGDBObjPolyline(pobj)^.Closed:=(PPolyline^.flag and 1)=1;
@@ -172,13 +181,18 @@ var
   pobj:PGDBObjEntity;
   i:integer;
   v2d:GDBvertex2D;
+  PPoint:PBITCODE_2RD;
 begin
   pobj := AllocAndInitLWpolyline(ZContext.PDrawing^.pObjRoot);
   if PLWPolyline^.num_points>0 then begin
+    PPoint:=PLWPolyline^.points;
     for i:=0 to PLWPolyline^.num_points-1 do begin
-      v2d.x:=PLWPolyline^.points[i].x;
-      v2d.y:=PLWPolyline^.points[i].y;
-      PGDBObjLWPolyline(pobj)^.Vertex2D_in_OCS_Array.PushBack(v2d);
+      if PPoint<>nil then begin
+        v2d.x:=PPoint^.x;
+        v2d.y:=PPoint^.y;
+        PGDBObjLWPolyline(pobj)^.Vertex2D_in_OCS_Array.PushBackData(v2d);
+      end;
+      Inc(PPoint);
     end;
   end;
   PGDBObjLWPolyline(pobj)^.Closed:=(PLWPolyline^.flag and 1)=1;
@@ -193,7 +207,7 @@ initialization
   ZCDWGParser.RegisterDWGEntityLoadProc(DWG_TYPE_LINE,@AddLineEntity);
   ZCDWGParser.RegisterDWGEntityLoadProc(DWG_TYPE_CIRCLE,@AddCircleEntity);
   ZCDWGParser.RegisterDWGEntityLoadProc(DWG_TYPE_POLYLINE_3D,@Add3DPolylineEntity);
-  ZCDWGParser.RegisterDWGEntityLoadProc(DWG_TYPE_LWPLINE,@AddLWPolylineEntity);
+  ZCDWGParser.RegisterDWGEntityLoadProc(DWG_TYPE_LWPOLYLINE,@AddLWPolylineEntity);
   ZCDWGParser.RegisterDWGEntityLoadProc(DWG_TYPE_BLOCK,@AddBlock);
 finalization
 end.

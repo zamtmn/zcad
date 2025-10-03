@@ -53,6 +53,10 @@ type
       const TargetCanvas: TCanvas; Node: PVirtualNode; Column: TColumnIndex;
       TextType: TVSTTextType);
     procedure vstDevClick(Sender: TObject);
+    procedure vstDevEditing(Sender: TBaseVirtualTree; Node: PVirtualNode;
+      Column: TColumnIndex; var Allowed: Boolean);
+    procedure vstDevNewText(Sender: TBaseVirtualTree; Node: PVirtualNode;
+      Column: TColumnIndex; const NewText: AnsiString);
   private
     //для работы разделителя
     FProportion: Double; // Пропорция ширины PanelSynchDraw / (ClientWidth - Splitter)
@@ -483,6 +487,8 @@ begin
   vstDev.OnGetText := @vstDevGetText;
   vstDev.OnPaintText := @vstDevPaintText;
   vstDev.OnClick := @vstDevClick;
+  vstDev.OnEditing := @vstDevEditing;
+  vstDev.OnNewText := @vstDevNewText;
 
   //ShowMessage('открыть файл...');
 end;
@@ -590,15 +596,18 @@ begin
       vstDev.TreeOptions.PaintOptions :=
         vstDev.TreeOptions.PaintOptions - [toShowRoot, toShowTreeLines, toShowButtons];
       vstDev.TreeOptions.SelectionOptions :=
-        vstDev.TreeOptions.SelectionOptions + [toFullRowSelect];
+        vstDev.TreeOptions.SelectionOptions + [toFullRowSelect, toExtendedFocus];
+      vstDev.TreeOptions.MiscOptions :=
+        vstDev.TreeOptions.MiscOptions + [toEditable, toEditOnDblClick, toGridExtensions];
       vstDev.Header.Options :=
-        vstDev.Header.Options + [hoVisible, hoColumnResize, hoAutoResize];
+        vstDev.Header.Options + [hoVisible, hoColumnResize] - [hoAutoResize];
+      vstDev.Header.AutoSizeIndex := -1;
 
       // Кнопка "Показать"
       with vstDev.Header.Columns.Add do
       begin
         Text := 'show';
-        Width := 70;
+        Width := 80;
       end;
 
       // Обычные поля
@@ -606,25 +615,28 @@ begin
       begin
         Text := 'devname';
         Width := 100;
+        Options := Options + [coAllowFocus, coEditable];
       end;
 
       with vstDev.Header.Columns.Add do
       begin
         Text := 'hdname';
         Width := 100;
+        Options := Options + [coAllowFocus, coEditable];
       end;
 
       with vstDev.Header.Columns.Add do
       begin
         Text := 'hdgroup';
         Width := 100;
+        Options := Options + [coAllowFocus, coEditable];
       end;
 
       // Кнопка "Ред."
       with vstDev.Header.Columns.Add do
       begin
         Text := 'edit';
-        Width := 60;
+        Width := 80;
       end;
     finally
       vstDev.EndUpdate;
@@ -726,6 +738,77 @@ begin
     ShowMessage('devname: ' + NodeData^.DevName)
   else if HitInfo.HitColumn = 4 then
     ShowMessage('Редактировать: ' + NodeData^.HDName);
+end;
+
+procedure TDispatcherConnectionFrame.vstDevEditing(Sender: TBaseVirtualTree;
+  Node: PVirtualNode; Column: TColumnIndex; var Allowed: Boolean);
+begin
+  // Разрешаем редактирование только для колонок 1, 2, 3 (devname, hdname, hdgroup)
+  Allowed := (Column >= 1) and (Column <= 3);
+end;
+
+procedure TDispatcherConnectionFrame.vstDevNewText(Sender: TBaseVirtualTree;
+  Node: PVirtualNode; Column: TColumnIndex; const NewText: AnsiString);
+var
+  NodeData: PGridNodeData;
+  UpdateQuery: TSQLQuery;
+  FieldName: String;
+  OldDevName: String;
+begin
+  NodeData := Sender.GetNodeData(Node);
+  if not Assigned(NodeData) then Exit;
+
+  // Сохраняем старое значение devname для WHERE условия
+  OldDevName := NodeData^.DevName;
+
+  // Определяем какое поле обновляем
+  case Column of
+    1: begin
+         FieldName := 'devname';
+         NodeData^.DevName := NewText;
+       end;
+    2: begin
+         FieldName := 'hdname';
+         NodeData^.HDName := NewText;
+       end;
+    3: begin
+         FieldName := 'hdgroup';
+         NodeData^.HDGroup := NewText;
+       end;
+    else
+      Exit;
+  end;
+
+  // Обновляем данные в базе
+  try
+    UpdateQuery := TSQLQuery.Create(nil);
+    try
+      UpdateQuery.Database := SQLite3Connection;
+      UpdateQuery.Transaction := SQLTransaction;
+      UpdateQuery.SQL.Text := 'UPDATE dev SET ' + FieldName + ' = :newvalue WHERE devname = :devname';
+      UpdateQuery.ParamByName('newvalue').AsString := NewText;
+      UpdateQuery.ParamByName('devname').AsString := OldDevName;
+
+      if not SQLTransaction.Active then
+        SQLTransaction.StartTransaction;
+      UpdateQuery.ExecSQL;
+      SQLTransaction.Commit;
+    finally
+      UpdateQuery.Free;
+    end;
+  except
+    on E: Exception do
+    begin
+      if SQLTransaction.Active then
+        SQLTransaction.Rollback;
+      ShowMessage('Ошибка обновления данных: ' + E.Message);
+      // Восстанавливаем старое значение
+      case Column of
+        1: NodeData^.DevName := OldDevName;
+        // Для hdname и hdgroup нужно перечитать из базы
+      end;
+    end;
+  end;
 end;
 
 destructor TDispatcherConnectionFrame.Destroy;

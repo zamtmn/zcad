@@ -990,6 +990,7 @@ interface
     PDwg_POINTCLOUDEX_Croppings  = ^Dwg_POINTCLOUDEX_Croppings;
     PDwg_PROXY_LWPOLYLINE  = ^Dwg_PROXY_LWPOLYLINE;
     PDwg_R2004_Header  = ^Dwg_R2004_Header;
+    PDwg_R2007_Header  = ^Dwg_R2007_Header;
     PDwg_Resbuf  = ^Dwg_Resbuf;
     PDwg_Resbuf_Value_Type  = ^Dwg_Resbuf_Value_Type;
     PDwg_RevHistory  = ^Dwg_RevHistory;
@@ -10327,6 +10328,53 @@ in declaration at line 7399 *)
       //PDwg_R2004_Header = ^Dwg_R2004_Header;
 (** unsupported pragma#pragma pack()*)
 
+      //P_dwg_r2007_header = ^_dwg_r2007_header;
+      _dwg_r2007_header = record
+          header_size : int64;
+          file_size : int64;
+          pages_map_crc_compressed : int64;
+          pages_map_correction : int64;
+          pages_map_crc_seed : int64;
+          pages_map2_offset : int64;
+          pages_map2_id : int64;
+          pages_map_offset : int64;
+          pages_map_id : int64;
+          header2_offset : int64;
+          pages_map_size_comp : int64;
+          pages_map_size_uncomp : int64;
+          pages_amount : int64;
+          pages_maxid : int64;
+          unknown1 : int64;
+          unknown2 : int64;
+          pages_map_crc_uncomp : int64;
+          unknown3 : int64;
+          unknown4 : int64;
+          unknown5 : int64;
+          num_sections : int64;
+          sections_map_crc_uncomp : int64;
+          sections_map_size_comp : int64;
+          sections_map2_id : int64;
+          sections_map_id : int64;
+          sections_map_size_uncomp : int64;
+          sections_map_crc_comp : int64;
+          sections_map_correction : int64;
+          sections_map_crc_seed : int64;
+          stream_version : int64;
+          crc_seed : int64;
+          crc_seed_encoded : int64;
+          random_seed : int64;
+          header_crc : int64;
+        end;
+      Dwg_R2007_Header = _dwg_r2007_header;
+      //PDwg_R2007_Header = ^Dwg_R2007_Header;
+
+      _dwg_header_union = record
+          case integer of
+            0: (r2004_header : Dwg_R2004_Header);
+            1: (r2007_file_header : Dwg_R2007_Header);
+        end;
+      Dwg_Header_Union = _dwg_header_union;
+
 
       //P_dwg_auxheader = ^_dwg_auxheader;
       _dwg_auxheader = record
@@ -10520,7 +10568,7 @@ in declaration at line 7399 *)
           opts : dword;
           header_vars : Dwg_Header_Variables;
           thumbnail : Dwg_Chain;
-          r2004_header : Dwg_R2004_Header;
+          header_union : Dwg_Header_Union;
           mspace_block : PDwg_Object;
           pspace_block : PDwg_Object;
           block_control : Dwg_Object_BLOCK_CONTROL;

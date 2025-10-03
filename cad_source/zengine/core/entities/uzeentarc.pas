@@ -164,6 +164,8 @@ begin
   eav := VectorTransform3D(eav, t_matrix);
   pins := VectorTransform3D(pins, t_matrix);
 
+  inherited;
+
   // Use canonical local basis for angle calculation
   m:=CreateMatrixFromBasis(Local.basis.ox,Local.basis.oy,Local.basis.oz);
   MatrixInvert(m);

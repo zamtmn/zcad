@@ -168,6 +168,17 @@
       <ZAction2Variable Name="ACN_OVERRIDEROWHEIGHTINOBJINSP" Variable="INTF_ObjInsp_RowHeight_OverriderEnable" Img="#orh" Caption="Override row height in object inspector"/>
       <ZAction2Variable Name="ACN_ALWAYSUSEMULTISELECTWWRAPPER" Variable="INTF_ObjInsp_AlwaysUseMultiSelectWrapper" Img="#aumsw" Caption="Always use multi select wrapper in object inspector"/>
       <ZAction2Variable Name="ACN_SHOWEMPTYSECTIONS" Variable="INTF_ObjInsp_ShowEmptySections" Img="#ses" Caption="Show empty sections in object inspector"/>
+      <ZAction2Variable Name="VACN_SNAPGRID" Variable="DWG_SnapGrid" Img="snaptogrid" Caption="Snap" Hint="Snap" ShortCut="F9"/>
+      <ZAction2Variable Name="VACN_DRAWGRID" Variable="DWG_DrawGrid" Img="grid" Caption="Display grid" Hint="Display grid" ShortCut="F7"/>
+      <ZAction2Variable Name="VACN_EDITINSUBENTRY" Variable="DWG_EditInSubEntry" Img="sub" Caption="Selecting in dynamic part" Hint="On/Off Selecting parts of dynamic objects" ShortCut="F4"/>
+      <ZAction2Variable Name="VACN_ADDITIONALGRIPS" Variable="DWG_AdditionalGrips" Img="#+G" Caption="Additional grips" Hint="On/Off Additional grips"/>
+      <ZAction2Variable Name="VACN_DRAWMODE" Variable="DWG_DrawMode" Img="lwt" Caption="Lineweight" Hint="Show/Hide Lineweight"/>
+      <ZAction2Variable Name="VACN_OSMODE" Variable="DWG_OSMode" Img="osnap" Caption="Object snap" Hint="Object snap" ShortCut="F3"/>
+      <ZAction2Variable Name="VACN_OSMODECONTRIL" Variable="DWG_OSModeControl" Img="#OSC" Caption="Entity snap control" Hint="Ent object snap control"/>
+      <ZAction2Variable Name="VACN_POLARMODE" Variable="DWG_PolarMode" Img="polar" Caption="Polar tracking" Hint="Polar tracking" ShortCut="F10"/>
+      <ZAction2Variable Name="VACN_HELPGGEOMETRYDRAW" Variable="DWG_HelpGeometryDraw" Img="#AG" Caption="Auxiliary graphics" Hint="Auxiliary graphics (connectivity, direction, etc.)"/>
+      <ZAction2Variable Name="VACN_SYSTEMGEOMETRYDRAW" Variable="DISP_SystmGeometryDraw" Img="#SG" Caption="System graphics" Hint="System graphics (size, communication, etc. for debugging)"/>
+      <ZAction2Variable Name="VACN_COMMANDLINEENABLE" Variable="INTF_CommandLineEnabled" Img="#C>" Caption="Command line enable/disable"  Hint="Command line enable/disable" ShortCut="F12"/>
     </Group>
   </ActionsContent>
 </CONFIG>

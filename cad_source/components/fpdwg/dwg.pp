@@ -1230,11 +1230,9 @@ in declaration at line 16 *)
         R_2_6,R_9,R_9c1,R_10,R_11b1,R_11b2,R_11,
         R_12,R_13b1,R_13b2,R_13,R_13c3,R_14,
         R_2000b,R_2000,R_2000i,R_2002,R_2004a,
-        R_2004b,R_2004c,R_2004,R_2005,R_2006,R_2007b,
-        R_2007,R_2008,R_2009,R_2010b,R_2010,R_2011,
-        R_2012,R_2013b,R_2013,R_2014,R_2015,R_2016,
-        R_2017,R_2018b,R_2018,R_2019,R_2020,R_2021,
-        R_2022,R_AFTER);
+        R_2004b,R_2004c,R_2004,R_2007a,R_2007b,
+        R_2007,R_2010b,R_2010,R_2013b,R_2013,
+        R_2018b,R_2018,R_2022b,R_AFTER);
 (* Const before type ignored *)
 (* Const before declarator ignored *)
 (* Const before type ignored *)

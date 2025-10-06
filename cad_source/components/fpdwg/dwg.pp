@@ -9871,11 +9871,10 @@ in declaration at line 7399 *)
           name : Pchar;
           dxfname : Pchar;
           supertype : DWG_OBJECT_SUPERTYPE;
-          tio : record
-              case longint of
-                0 : ( entity : PDwg_Object_Entity );
-                1 : ( &object : PDwg_Object_Object );
-              end;
+           tio : record
+               entity : PDwg_Object_Entity;
+               &object : PDwg_Object_Object absolute entity;
+             end;
           handle : Dwg_Handle;
           parent : P_dwg_struct;
           klass : PDwg_Class;

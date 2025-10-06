@@ -28,9 +28,9 @@ type
   end;
 
 
-  { TDispatcherConnectionFrame }
+  { TVElectrNav }
 
-  TDispatcherConnectionFrame = class(TFrame)
+  TVElectrNav = class(TFrame)
     ActionList1: TActionList;
     bufGridDev: TBufDataset;
     dsGridDev: TDataSource;
@@ -103,14 +103,14 @@ implementation
 
 {$R *.lfm}
 
-{ TDispatcherConnectionFrame }
+{ TVElectrNav }
 
-constructor TDispatcherConnectionFrame.Create(TheOwner: TComponent);
+constructor TVElectrNav.Create(TheOwner: TComponent);
 begin
   inherited Create(TheOwner);
   //ShowMessage('Активировался TFRAME: ');
 
-  Name := 'DispatcherConnectionFrame';
+  Name := 'VElectrNav';
   Caption := 'Диспетчер подключений';
 
 
@@ -164,7 +164,7 @@ begin
     end;
 
 end;
-procedure TDispatcherConnectionFrame.AddAction(AName, ACaption: string; AImageIndex: string;
+procedure TVElectrNav.AddAction(AName, ACaption: string; AImageIndex: string;
   AHint, AShortCut: string; AEvent: TNotifyEvent);
 var
   act: TAction;
@@ -207,7 +207,7 @@ begin
   end;
 end;
 
-procedure TDispatcherConnectionFrame.CurrentSelActionExecute(Sender: TObject);
+procedure TVElectrNav.CurrentSelActionExecute(Sender: TObject);
 type
   //** Создания труктуры
   PTStructCab=^TStructCab;
@@ -425,7 +425,7 @@ begin
 end;
 
 
-procedure TDispatcherConnectionFrame.AllSelActionExecute(Sender: TObject);
+procedure TVElectrNav.AllSelActionExecute(Sender: TObject);
 begin
   //Destroy;
   if flagConnectDB then
@@ -492,11 +492,11 @@ begin
 
   //ShowMessage('открыть файл...');
 end;
-procedure TDispatcherConnectionFrame.SaveActionExecute(Sender: TObject);
+procedure TVElectrNav.SaveActionExecute(Sender: TObject);
 begin
   ShowMessage('сохранить файл...');
 end;
-procedure TDispatcherConnectionFrame.InitializeActionAndButton;
+procedure TVElectrNav.InitializeActionAndButton;
 var
   i:integer;
   btn: TToolButton;
@@ -538,7 +538,7 @@ begin
       ShowMessage('Ошибка создание активности: ' + E.Message);
   end;
 end;
-procedure TDispatcherConnectionFrame.InitializePanels;
+procedure TVElectrNav.InitializePanels;
 begin
   try
       // первый контейнер (левая половина)
@@ -564,7 +564,7 @@ begin
   end;
 end;
 
-procedure TDispatcherConnectionFrame.InitializeBufDataset;
+procedure TVElectrNav.InitializeBufDataset;
 begin
   try
     with bufGridDev do
@@ -585,7 +585,7 @@ begin
       ShowMessage('Ошибка подключения создания BufDataset: ' + E.Message);
   end;
 end;
-procedure TDispatcherConnectionFrame.InitializeVstDev;
+procedure TVElectrNav.InitializeVstDev;
 begin
   try
     vstDev.BeginUpdate;
@@ -647,7 +647,7 @@ begin
   end;
 end;
 
-procedure TDispatcherConnectionFrame.recordingVstDev(qry:string);
+procedure TVElectrNav.recordingVstDev(qry:string);
 var
     i:integer;
     writeQuery: TSQLQuery;
@@ -689,7 +689,7 @@ begin
 end;
 
 
-procedure TDispatcherConnectionFrame.vstDevGetText(Sender: TBaseVirtualTree;
+procedure TVElectrNav.vstDevGetText(Sender: TBaseVirtualTree;
   Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType;
   var CellText: String);
 var
@@ -707,7 +707,7 @@ begin
   end;
 end;
 
-procedure TDispatcherConnectionFrame.vstDevPaintText(Sender: TBaseVirtualTree;
+procedure TVElectrNav.vstDevPaintText(Sender: TBaseVirtualTree;
   const TargetCanvas: TCanvas; Node: PVirtualNode; Column: TColumnIndex;
   TextType: TVSTTextType);
 begin
@@ -718,7 +718,7 @@ begin
   end;
 end;
 
-procedure TDispatcherConnectionFrame.vstDevClick(Sender: TObject);
+procedure TVElectrNav.vstDevClick(Sender: TObject);
 var
   Node: PVirtualNode;
   NodeData: PGridNodeData;
@@ -740,14 +740,14 @@ begin
     ShowMessage('Редактировать: ' + NodeData^.HDName);
 end;
 
-procedure TDispatcherConnectionFrame.vstDevEditing(Sender: TBaseVirtualTree;
+procedure TVElectrNav.vstDevEditing(Sender: TBaseVirtualTree;
   Node: PVirtualNode; Column: TColumnIndex; var Allowed: Boolean);
 begin
   // Разрешаем редактирование только для колонок 1, 2, 3 (devname, hdname, hdgroup)
   Allowed := (Column >= 1) and (Column <= 3);
 end;
 
-procedure TDispatcherConnectionFrame.vstDevNewText(Sender: TBaseVirtualTree;
+procedure TVElectrNav.vstDevNewText(Sender: TBaseVirtualTree;
   Node: PVirtualNode; Column: TColumnIndex; const NewText: AnsiString);
 var
   NodeData: PGridNodeData;
@@ -811,7 +811,7 @@ begin
   end;
 end;
 
-destructor TDispatcherConnectionFrame.Destroy;
+destructor TVElectrNav.Destroy;
 begin
   // Освобождаем компоненты базы данных
   SQLQuery.Free;
@@ -822,7 +822,7 @@ begin
 end;
 
 //Для работы разделителя
-procedure TDispatcherConnectionFrame.FrameResize(Sender: TObject);
+procedure TVElectrNav.FrameResize(Sender: TObject);
 begin
   if FIsResizing then Exit;
 
@@ -839,7 +839,7 @@ begin
   end;
 end;
 
-procedure TDispatcherConnectionFrame.panelSplitterMoved(Sender: TObject);
+procedure TVElectrNav.panelSplitterMoved(Sender: TObject);
 begin
   // Просто обновляем пропорцию при перемещении разделителя
   FProportion := PanelNav.Width / (ClientWidth - panelSplitter.Width);
@@ -848,7 +848,7 @@ end;
 ////////////////////////////////
 
 
-function TDispatcherConnectionFrame.GetDatabasePath: String;
+function TVElectrNav.GetDatabasePath: String;
 //var
 //  TempPath: array[0..MAX_PATH] of Char;
 begin
@@ -856,7 +856,7 @@ begin
   Result := ExtractFilePath(PTZCADDrawing(drawings.GetCurrentDwg)^.FileName) + vcalctempdbfilename;
 end;
 
-procedure TDispatcherConnectionFrame.InitializeDatabase;
+procedure TVElectrNav.InitializeDatabase;
 begin
   try
     // Подключаемся к базе данных в папке TEMP
@@ -876,7 +876,7 @@ begin
   end;
 end;
 
-procedure TDispatcherConnectionFrame.InitializeDeviceTree;
+procedure TVElectrNav.InitializeDeviceTree;
 begin
   FDeviceTree.BeginUpdate;
   try
@@ -902,7 +902,7 @@ begin
   end;
 end;
 
-procedure TDispatcherConnectionFrame.BuildDeviceHierarchy;
+procedure TVElectrNav.BuildDeviceHierarchy;
 var
   RootNode: PVirtualNode;
   RootData: PNodeData;
@@ -946,7 +946,7 @@ end;
 // ===============================================================
 //  Рекурсивное добавление пути в дерево
 // ===============================================================
-procedure TDispatcherConnectionFrame.AddPathToTree(ParentNode: PVirtualNode; const Path: string);
+procedure TVElectrNav.AddPathToTree(ParentNode: PVirtualNode; const Path: string);
 var
   Parts: TStringList;
   i: Integer;
@@ -974,7 +974,7 @@ end;
 // ===============================================================
 //  Поиск существующего узла или его создание
 // ===============================================================
-function TDispatcherConnectionFrame.FindOrCreateChild(ParentNode: PVirtualNode; const HDWay,NodeName: string): PVirtualNode;
+function TVElectrNav.FindOrCreateChild(ParentNode: PVirtualNode; const HDWay,NodeName: string): PVirtualNode;
 var
   ChildNode: PVirtualNode;
   NodeData: PNodeData;
@@ -997,7 +997,7 @@ begin
   NodeData^.fullpath := HDWay;
 end;
 
-function TDispatcherConnectionFrame.GetNodePhysicalPath(Node: PVirtualNode): string;
+function TVElectrNav.GetNodePhysicalPath(Node: PVirtualNode): string;
 var
   Cur: PVirtualNode;
   NodeData: PNodeData;
@@ -1040,7 +1040,7 @@ begin
 end;
 
 
-procedure TDispatcherConnectionFrame.TreeClick(Sender: TObject);
+procedure TVElectrNav.TreeClick(Sender: TObject);
 var
   Node: PVirtualNode;
   Data: PNodeData;
@@ -1075,7 +1075,7 @@ begin
 end;
 
 
-function TDispatcherConnectionFrame.HasChildren(const DeviceName: string): Boolean;
+function TVElectrNav.HasChildren(const DeviceName: string): Boolean;
 begin
   SQLQuery.SQL.Text := 'SELECT COUNT(*) FROM dev WHERE hdname = :device_name';
   SQLQuery.ParamByName('device_name').AsString := DeviceName;
@@ -1087,7 +1087,7 @@ begin
   end;
 end;
 
-procedure TDispatcherConnectionFrame.TreeGetText(Sender: TBaseVirtualTree;
+procedure TVElectrNav.TreeGetText(Sender: TBaseVirtualTree;
   Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType;
   var CellText: String);
 var
@@ -1100,19 +1100,19 @@ begin
     CellText := Data^.DeviceName;
 end;
 
-procedure TDispatcherConnectionFrame.TreeGetNodeDataSize(Sender: TBaseVirtualTree;
+procedure TVElectrNav.TreeGetNodeDataSize(Sender: TBaseVirtualTree;
   var NodeDataSize: Integer);
 begin
   NodeDataSize := SizeOf(Pointer);
 end;
 
-procedure TDispatcherConnectionFrame.TreeInitNode(Sender: TBaseVirtualTree;
+procedure TVElectrNav.TreeInitNode(Sender: TBaseVirtualTree;
   ParentNode, Node: PVirtualNode; var InitialStates: TVirtualNodeInitStates);
 begin
   // Ничего не нужно делать
 end;
 
-procedure TDispatcherConnectionFrame.TreeFreeNode(Sender: TBaseVirtualTree;
+procedure TVElectrNav.TreeFreeNode(Sender: TBaseVirtualTree;
   Node: PVirtualNode);
 var
   Data: PPointer;
@@ -1122,7 +1122,7 @@ begin
 end;
 
 
-//procedure TDispatcherConnectionFrame.FrameResize(Sender: TObject);
+//procedure TVElectrNav.FrameResize(Sender: TObject);
 //begin
 //  if Assigned(FDeviceTree) then
 //    FDeviceTree.FullExpand;

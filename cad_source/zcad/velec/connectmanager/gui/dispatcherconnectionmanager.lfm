@@ -1,4 +1,4 @@
-object DispatcherConnectionFrame: TDispatcherConnectionFrame
+object VElectrNav: TVElectrNav
   Left = 0
   Height = 492
   Top = 0

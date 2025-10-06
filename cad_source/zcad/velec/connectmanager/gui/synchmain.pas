@@ -42,7 +42,7 @@ implementation
 
 procedure TformSynch.FormCreate(Sender: TObject);
 begin
-  ShowFrame(TDispatcherConnectionFrame);
+  ShowFrame(TVElectrNav);
   Constraints.MinWidth := 600;
   Constraints.MinHeight := 400;
 end;

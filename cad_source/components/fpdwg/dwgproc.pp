@@ -194,20 +194,26 @@ implementation
     DWGContext:TDWGCtx;
   begin
     DWGContext.CreateRec(dwg);
-    if DWGObj2LPDict<>nil then begin
-      i:=0;
-      while (i<dwg.num_objects) do begin
-        if DWGObj2LPDict.GetValue(dwg.&object[i].fixedtype,dod) then begin
-          if (dod.LoadEntityProc<>nil) and (dwg.&object[i].tio.entity<>nil) then
-            dod.LoadEntityProc(ZContext,DWGContext,dwg.&object[i],dwg.&object[i].tio.entity^.tio.UNUSED)
-          else if (dod.LoadObjectProc<>nil) and (dwg.&object[i].tio.&object<>nil) then
-            dod.LoadObjectProc(ZContext,DWGContext,dwg.&object[i],dwg.&object[i].tio.&object^.tio.DUMMY);
-        end;
-        if @lpp<>nil then
-          lpp(data,i);
-        inc(i);
-      end;
-    end;
+     if DWGObj2LPDict<>nil then begin
+       i:=0;
+       while (i<dwg.num_objects) do begin
+         if DWGObj2LPDict.GetValue(dwg.&object[i].fixedtype,dod) then begin
+           try
+             if (dod.LoadEntityProc<>nil) and (dwg.&object[i].tio.entity<>nil) then
+               dod.LoadEntityProc(ZContext,DWGContext,dwg.&object[i],dwg.&object[i].tio.entity^.tio.UNUSED)
+             else if (dod.LoadObjectProc<>nil) and (dwg.&object[i].tio.&object<>nil) then
+               dod.LoadObjectProc(ZContext,DWGContext,dwg.&object[i],dwg.&object[i].tio.&object^.tio.DUMMY);
+           except
+             on E: Exception do begin
+               // Skip corrupted objects to prevent crashes
+             end;
+           end;
+         end;
+         if @lpp<>nil then
+           lpp(data,i);
+         inc(i);
+       end;
+     end;
   end;
 
   //work in fpc3.2.2

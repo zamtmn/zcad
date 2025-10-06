@@ -43,8 +43,8 @@ var
 begin
   BITCODE_T2Text(PDWGLayer^.name,DWGContext,name);
   zDebugLn(['{WH}Layer: ',name]);
-  if DWGContext.DWGVer>R_2006 then
-    name:=Tria_Utf8ToAnsi(name);
+  //if DWGContext.DWGVer>R_2006 then
+  //  name:=Tria_Utf8ToAnsi(name);
   player:=ZContext.PDrawing^.LayerTable.MergeItem(name,ZContext.LoadMode);
   if player<>nil then begin
     player^.init(name);
@@ -101,8 +101,8 @@ begin
   PDWGLayer:=dwg_get_entity_layer(PLine^.parent);
   if PDWGLayer<>nil then begin
     BITCODE_T2Text(PDWGLayer^.name,DWGContext,layerName);
-    if DWGContext.DWGVer>R_2006 then
-      layerName:=Tria_Utf8ToAnsi(layerName);
+    //if DWGContext.DWGVer>R_2006 then
+    //  layerName:=Tria_Utf8ToAnsi(layerName);
     player:=ZContext.PDrawing^.LayerTable.getAddres(layerName);
     if player<>nil then
       PGDBObjEntity(pobj)^.vp.Layer:=player
@@ -135,8 +135,8 @@ begin
   PDWGLayer:=dwg_get_entity_layer(PCircle^.parent);
   if PDWGLayer<>nil then begin
     BITCODE_T2Text(PDWGLayer^.name,DWGContext,layerName);
-    if DWGContext.DWGVer>R_2006 then
-      layerName:=Tria_Utf8ToAnsi(layerName);
+    //if DWGContext.DWGVer>R_2006 then
+    //  layerName:=Tria_Utf8ToAnsi(layerName);
     player:=ZContext.PDrawing^.LayerTable.getAddres(layerName);
     if player<>nil then
       PGDBObjEntity(pobj)^.vp.Layer:=player

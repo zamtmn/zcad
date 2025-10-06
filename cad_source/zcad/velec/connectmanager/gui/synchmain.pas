@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, Menus, ExtCtrls,uzvmcdbconsts,
-  DispatcherConnectionManager;
+  velectrnav;
 
 type
   TFrameClass = class of TFrame;

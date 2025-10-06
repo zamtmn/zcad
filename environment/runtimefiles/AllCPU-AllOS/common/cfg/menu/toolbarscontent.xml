@@ -149,6 +149,7 @@
 	  <Action Name="ACN_TEXT"/>
 	  <Separator/>	  
       <Action Name="ACN_BInsert"/>
+      <Action Name="ACN_SPLINE"/>
     </Draw>
     <Status Type="ToolBar">
       <Separator/>

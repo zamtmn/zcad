@@ -66,6 +66,41 @@
         </Security>
       </Alarm>
     </Electrotechnics>
+    <Velectr Desc="VElectrotechnics">
+       <Workmode Desc="Different operating modes"> electronic equipment
+         <BackupELDev Desc="Backup electronic equipment"/>
+         <Control Desc="Electrical equipment for communication, accounting, and heating points"/>
+         <Summer Desc="Electrical installations (air conditioners) that were turned off in winter"/>
+         <Winter Desc="Electric appliances turned off in summer (electric heaters, heatveils)"/>
+       </Workmode>
+       <Fire Desc="Fire">
+         <NotWork Desc="Equipment that is turned off in the event of a fire"/>
+         <Work Desc="Equipment operating in case of fire"/>         
+         <Vent Desc="Fire-fighting ventilation"/>         
+         <Pump Desc="Fire-fighting pumping units"/>        
+         <Valves Desc="Fire safety valves"/>
+         <DevControl Desc="Fire alarm, fire-fighting equipment"/>
+       </Fire>
+       <PlumbingEquip Desc="Plumbing equipment ">
+         <Vent Desc="General exchange ventilation">
+           <Supply Desc="Fire safety valves"/>
+           <Exhaust Desc="Exhaust ventilation"/>
+           <Household Desc="Household ventilation"/>
+           <Heating Desc="Electric heating of ventilation"/>
+           <Valves Desc="Electric valves of ventilation"/>
+           <Pumps Desc="Ventilation pumps"/>
+         </Vent>
+         <Conditioners Desc="Air conditioners">
+           <Outdoor Desc="Air conditioners (outdoor units)"/>
+           <Indoor Desc="Air conditioners (indoor units)"/>
+         </Conditioners>
+         <Airheaters Desc="Electric heaters"/>         
+         <Waterheaters Desc="Electric water heaters"/>         
+         <Aircurtains Desc="Air curtains"/>        
+         <Pumps Desc="Pumps"/>
+         <Refrigerators Desc="Refrigerators"/>
+       </PlumbingEquip>
+    </Velectr>  
     <Not_classified Desc="Not classified"/>
   </STRINGTREE>
 </CONFIG>

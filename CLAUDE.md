@@ -1,7 +1,7 @@
-Issue to solve: https://github.com/veb86/zcadvelecAI/issues/99
-Your prepared branch: issue-99-39b1606c
-Your prepared working directory: /tmp/gh-issue-solver-1759780000770
+Issue to solve: https://github.com/zamtmn/zcad/issues/200
+Your prepared branch: issue-200-81c96aa1
+Your prepared working directory: /tmp/gh-issue-solver-1759815807798
 Your forked repository: konard/zcadvelecAI
-Original repository (upstream): veb86/zcadvelecAI
+Original repository (upstream): zamtmn/zcad
 
 Proceed.

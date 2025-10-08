@@ -67,7 +67,7 @@
       </Alarm>
     </Electrotechnics>
     <Velectr Desc="VElectrotechnics">
-       <Workmode Desc="Different operating modes"> electronic equipment
+       <Workmode Desc="Different operating modes">
          <BackupELDev Desc="Backup electronic equipment"/>
          <Control Desc="Electrical equipment for communication, accounting, and heating points"/>
          <Summer Desc="Electrical installations (air conditioners) that were turned off in winter"/>
@@ -81,7 +81,7 @@
          <Valves Desc="Fire safety valves"/>
          <DevControl Desc="Fire alarm, fire-fighting equipment"/>
        </Fire>
-       <PlumbingEquip Desc="Plumbing equipment ">
+       <PlumbingEquip Desc="Plumbing equipment">
          <Vent Desc="General exchange ventilation">
            <Supply Desc="Fire safety valves"/>
            <Exhaust Desc="Exhaust ventilation"/>

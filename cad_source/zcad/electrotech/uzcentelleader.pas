@@ -495,6 +495,7 @@ begin
 
 
 
+  if ShowTable then begin
   //textcontent:=Tria_AnsiToUtf8(textcontent);
   if sta.Count=0 then begin
   s:='??';
@@ -535,7 +536,10 @@ begin
   tbl.vp.Layer:=vp.Layer;
   tbl.Build(drawing);
 
-
+  end else begin
+    tbl.tbl.Clear;
+    tbl.Build(drawing);
+  end;
   if pdev=nil then
   begin
   tv:=uzegeometry.vectordot(VertexSub(mainline.CoordInWCS.lEnd,mainline.CoordInWCS.lBegin),Local.basis.OZ);

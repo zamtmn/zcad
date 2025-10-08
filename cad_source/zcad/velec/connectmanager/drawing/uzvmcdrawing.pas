@@ -43,6 +43,8 @@ type
   private
     function GetDeviceVariableString(ADevice: PGDBObjDevice; const AVarName: string): string;
     function GetDeviceVariableBoolean(ADevice: PGDBObjDevice; const AVarName: string): Boolean;
+    function GetDeviceVariableInteger(ADevice: PGDBObjDevice; const AVarName: string): Integer;
+    function GetDeviceVariableDouble(ADevice: PGDBObjDevice; const AVarName: string): Double;
   public
     function CollectAllDevices: specialize TVector<TDeviceData>;
     function GetDeviceByName(const ADevName: string): PGDBObjDevice;
@@ -68,6 +70,26 @@ begin
   pvd := FindVariableInEnt(ADevice, AVarName);
   if pvd <> nil then
     Result := pboolean(pvd^.data.Addr.Instance)^;
+end;
+
+function TDeviceDataCollector.GetDeviceVariableInteger(ADevice: PGDBObjDevice; const AVarName: string): Integer;
+var
+  pvd: pvardesk;
+begin
+  Result := 0;
+  pvd := FindVariableInEnt(ADevice, AVarName);
+  if pvd <> nil then
+    Result := pinteger(pvd^.data.Addr.Instance)^;
+end;
+
+function TDeviceDataCollector.GetDeviceVariableDouble(ADevice: PGDBObjDevice; const AVarName: string): Double;
+var
+  pvd: pvardesk;
+begin
+  Result := 0.0;
+  pvd := FindVariableInEnt(ADevice, AVarName);
+  if pvd <> nil then
+    Result := pdouble(pvd^.data.Addr.Instance)^;
 end;
 
 function TDeviceDataCollector.CollectAllDevices: specialize TVector<TDeviceData>;

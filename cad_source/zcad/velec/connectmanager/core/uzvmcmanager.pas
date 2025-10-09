@@ -25,7 +25,7 @@ uses
   sysutils, Classes, Dialogs, SQLDB, gvector,
   uzcdrawing, uzcdrawings,
   uzcinterface,
-  uzvmcsqlite, uzvmcdrawing, uzvmchierarchy, uzvmcaccess;
+  uzvmcsqlite, uzvmcdrawing, uzvmchierarchy, uzvmcaccess, uzvmcstruct;
 
 type
   TConnectionManager = class
@@ -46,6 +46,7 @@ type
     procedure CreateTemporaryDatabase;
     procedure AddHierarchyColumns;
     procedure ExportToAccessDatabase(const AAccessDBPath: string);
+    procedure CollectAndExportDevicesToAccess(const AAccessDBPath: string);
 
     property SQLiteManager: TSQLiteConnectionManager read FSQLiteManager;
     property DeviceCollector: TDeviceDataCollector read FDeviceCollector;
@@ -206,6 +207,47 @@ begin
   FAccessExporter.ClearTables;
 
   zcUI.TextMessage('Export to Access completed', TMWOHistoryOut);
+end;
+
+// Функция сбора всех устройств с чертежа и экспорта их в базу данных Access
+// На входе: путь к файлу базы данных Access
+// Функция выполняет следующие действия:
+// 1. Собирает список всех устройств с чертежа в виде TListVElectrDevStruct
+// 2. Подключается к базе данных Access
+// 3. Очищает таблицы базы данных
+// 4. Экспортирует каждое устройство из списка в базу данных
+// 5. Фиксирует изменения в базе данных
+procedure TConnectionManager.CollectAndExportDevicesToAccess(const AAccessDBPath: string);
+var
+  devicesList: TListVElectrDevStruct;
+  i: integer;
+begin
+  // Сбор всех устройств с чертежа в виде списка структур
+  devicesList := FDeviceCollector.GetAllDevicesAsStructList;
+
+  try
+    // Инициализация экспортера Access, если ещё не создан
+    if not Assigned(FAccessExporter) then
+      FAccessExporter := TAccessDBExporter.Create(AAccessDBPath);
+
+    FAccessExporter.DatabasePath := AAccessDBPath;
+    FAccessExporter.Connect;
+    FAccessExporter.ClearTables;
+
+    // Экспорт каждого устройства из списка в базу данных Access
+    for i := 0 to devicesList.Size - 1 do
+    begin
+      FAccessExporter.ExportDevice(devicesList[i]);
+    end;
+
+    // Фиксация изменений в базе данных
+    FAccessExporter.Commit;
+
+    zcUI.TextMessage('Collected and exported ' + IntToStr(devicesList.Size) + ' devices to Access database', TMWOHistoryOut);
+  finally
+    // Освобождение списка устройств
+    devicesList.Free;
+  end;
 end;
 
 end.

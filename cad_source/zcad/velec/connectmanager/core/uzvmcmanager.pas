@@ -83,7 +83,7 @@ var
   devices: specialize TVector<TDeviceData>;
   i: integer;
 begin
-  devices := FDeviceCollector.CollectAllDevices;
+  devices := FDeviceCollector.getAllCollectDevices;
 
   for i := 0 to devices.Size - 1 do
   begin
@@ -106,7 +106,7 @@ var
   i, j: integer;
   query: TSQLQuery;
 begin
-  devices := FDeviceCollector.CollectAllDevices;
+  devices := FDeviceCollector.getAllCollectDevices;
 
   query := TSQLQuery.Create(nil);
   try

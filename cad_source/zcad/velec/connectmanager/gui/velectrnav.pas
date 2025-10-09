@@ -88,6 +88,8 @@ type
     procedure CurrentSelActionExecute(Sender: TObject);
     procedure AllSelActionExecute(Sender: TObject);
     procedure SaveActionExecute(Sender: TObject);
+    procedure CollapseAllActionExecute(Sender: TObject);
+    procedure ExpandAllActionExecute(Sender: TObject);
 
   public
 
@@ -517,6 +519,8 @@ begin
     AddAction('actNew', '1', '0', 'Создать новый документ', 'Ctrl+N', @CurrentSelActionExecute);
     AddAction('actOpen', '*', '1', 'Открыть документ', 'Ctrl+O', @AllSelActionExecute);
     AddAction('actSave', 'Cl', '2', 'Сохранить документ', 'Ctrl+S', @SaveActionExecute);
+    AddAction('actCollapseAll', '+', '3', 'Свернуть все ноды', '', @CollapseAllActionExecute);
+    AddAction('actExpandAll', '-', '4', 'Развернуть все ноды', '', @ExpandAllActionExecute);
 
     // Создаем кнопки на ToolBar
     for i := 0 to ActionList1.ActionCount - 1 do
@@ -1121,6 +1125,17 @@ begin
   Data^ := nil;
 end;
 
+procedure TVElectrNav.CollapseAllActionExecute(Sender: TObject);
+begin
+  if Assigned(vstDev) then
+    vstDev.FullCollapse;
+end;
+
+procedure TVElectrNav.ExpandAllActionExecute(Sender: TObject);
+begin
+  if Assigned(vstDev) then
+    vstDev.FullExpand;
+end;
 
 //procedure TVElectrNav.FrameResize(Sender: TObject);
 //begin

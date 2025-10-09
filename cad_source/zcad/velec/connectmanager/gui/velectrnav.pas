@@ -7,7 +7,7 @@ interface
 uses
   Classes, SysUtils, Forms, Controls,Graphics,  laz.VirtualTrees, SQLite3Conn, SQLDB, DB,uzcdrawing,uzcdrawings,uzvmcdbconsts,uzcinterface,
   Dialogs, ExtCtrls, BufDataset,  DBGrids, Grids, ActnList, ComCtrls, Windows,fgl,odbcconn,
-  uzvelaccessdbcontrol,uzvmanagerconnect,uzvelcreatetempdb,gvector,uzccablemanager,uzcentcable,uzeentdevice,gzctnrVectorTypes,uzcvariablesutils,uzccommandsabstract,uzeentity,uzeentblockinsert,varmandef,uzeconsts,uzvelcontroltempdb;
+  uzvelaccessdbcontrol,uzvmcmanager,uzvmanagerconnect,uzvelcreatetempdb,gvector,uzccablemanager,uzcentcable,uzeentdevice,gzctnrVectorTypes,uzcvariablesutils,uzccommandsabstract,uzeentity,uzeentblockinsert,varmandef,uzeconsts,uzvelcontroltempdb;
 
 type
 
@@ -225,6 +225,7 @@ var
   Trans: TSQLTransaction;
   listSructCab:TListStructCab;
   i:integer;
+  accessexport:TConnectionManager;
 
   Function getinfoheadcab(iname:string):string;
   var
@@ -357,7 +358,8 @@ var
     end;
 begin
   //ShowMessage('Выбрать только');
-  uzvelaccessdbcontrol.AddStructureinAccessDB;
+  //uzvelaccessdbcontrol.AddStructureinAccessDB;
+  accessexport.CollectAndExportDevicesToAccess('D:\ZcadDB.accdb');
 //  ODBCConnection := TODBCConnection.Create(nil);
 //  Query := TSQLQuery.Create(nil);
 //  Trans := TSQLTransaction.Create(nil);

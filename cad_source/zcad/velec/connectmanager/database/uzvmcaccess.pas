@@ -73,11 +73,11 @@ end;
 
 procedure TAccessDBExporter.Connect;
 begin
+  FConnection.Params.Clear;
+  FConnection.Params.Add('Dbq=' + FDatabasePath);
   if FConnection.Connected then
     Exit;
 
-  FConnection.Params.Clear;
-  FConnection.Params.Add('Dbq=' + FDatabasePath);
   FConnection.Connected := True;
 
   FTransaction.DataBase := FConnection;

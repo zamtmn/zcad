@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, Menus, ExtCtrls, ActnList, uzvmcdbconsts,
-  velectrnav, lowvolt_nav, specification_nav, db_nav;
+  velectrnav, lowvoltnav, specificationnav, dbnav;
 
 type
   TFrameClass = class of TFrame;

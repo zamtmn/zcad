@@ -22,7 +22,7 @@ unit uzvmcstruct;
 
 interface
 uses
-  gzctnrVectorTypes;
+  gzctnrVectorTypes,gvector;
 
 type
   PTVElectrDevStruct=^TVElectrDevStruct;

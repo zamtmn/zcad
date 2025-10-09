@@ -40,57 +40,12 @@ type
   end;
 
   TDeviceDataCollector = class
-  private
-    function GetDeviceVariableString(ADevice: PGDBObjDevice; const AVarName: string): string;
-    function GetDeviceVariableBoolean(ADevice: PGDBObjDevice; const AVarName: string): Boolean;
-    function GetDeviceVariableInteger(ADevice: PGDBObjDevice; const AVarName: string): Integer;
-    function GetDeviceVariableDouble(ADevice: PGDBObjDevice; const AVarName: string): Double;
   public
     function CollectAllDevices: specialize TVector<TDeviceData>;
     function GetDeviceByName(const ADevName: string): PGDBObjDevice;
   end;
 
 implementation
-
-function TDeviceDataCollector.GetDeviceVariableString(ADevice: PGDBObjDevice; const AVarName: string): string;
-var
-  pvd: pvardesk;
-begin
-  Result := '';
-  pvd := FindVariableInEnt(ADevice, AVarName);
-  if pvd <> nil then
-    Result := pstring(pvd^.data.Addr.Instance)^;
-end;
-
-function TDeviceDataCollector.GetDeviceVariableBoolean(ADevice: PGDBObjDevice; const AVarName: string): Boolean;
-var
-  pvd: pvardesk;
-begin
-  Result := False;
-  pvd := FindVariableInEnt(ADevice, AVarName);
-  if pvd <> nil then
-    Result := pboolean(pvd^.data.Addr.Instance)^;
-end;
-
-function TDeviceDataCollector.GetDeviceVariableInteger(ADevice: PGDBObjDevice; const AVarName: string): Integer;
-var
-  pvd: pvardesk;
-begin
-  Result := 0;
-  pvd := FindVariableInEnt(ADevice, AVarName);
-  if pvd <> nil then
-    Result := pinteger(pvd^.data.Addr.Instance)^;
-end;
-
-function TDeviceDataCollector.GetDeviceVariableDouble(ADevice: PGDBObjDevice; const AVarName: string): Double;
-var
-  pvd: pvardesk;
-begin
-  Result := 0.0;
-  pvd := FindVariableInEnt(ADevice, AVarName);
-  if pvd <> nil then
-    Result := pdouble(pvd^.data.Addr.Instance)^;
-end;
 
 function TDeviceDataCollector.CollectAllDevices: specialize TVector<TDeviceData>;
 var
@@ -100,6 +55,7 @@ var
   deviceData: TDeviceData;
   count, i: integer;
   headDevName: string;
+  pvd: pvardesk;
 begin
   Result := specialize TVector<TDeviceData>.Create;
 
@@ -110,18 +66,27 @@ begin
     begin
       pdev := PGDBObjDevice(pobj);
 
-      deviceData.DevName := GetDeviceVariableString(pdev, 'NMO_Name');
+      pvd := FindVariableInEnt(pdev, 'NMO_Name');
+      if pvd <> nil then
+        deviceData.DevName := pstring(pvd^.data.Addr.Instance)^
+      else
+        deviceData.DevName := '';
       if deviceData.DevName = '' then
         deviceData.DevName := 'ERROR';
 
-      if GetDeviceVariableBoolean(pdev, 'ANALYSISEM_icanbeheadunit') then
+      pvd := FindVariableInEnt(pdev, 'ANALYSISEM_icanbeheadunit');
+      if (pvd <> nil) and (pboolean(pvd^.data.Addr.Instance)^) then
         deviceData.CanBeHead := 1
       else
         deviceData.CanBeHead := 0;
 
       SetLength(deviceData.Connections, 0);
       count := 1;
-      headDevName := GetDeviceVariableString(pdev, 'SLCABAGEN' + inttostr(count) + '_HeadDeviceName');
+      pvd := FindVariableInEnt(pdev, 'SLCABAGEN' + inttostr(count) + '_HeadDeviceName');
+      if pvd <> nil then
+        headDevName := pstring(pvd^.data.Addr.Instance)^
+      else
+        headDevName := '';
 
       while headDevName <> '' do
       begin
@@ -129,7 +94,11 @@ begin
         i := Length(deviceData.Connections) - 1;
 
         deviceData.Connections[i].HeadDeviceName := headDevName;
-        deviceData.Connections[i].NGHeadDevice := GetDeviceVariableString(pdev, 'SLCABAGEN' + inttostr(count) + '_NGHeadDevice');
+        pvd := FindVariableInEnt(pdev, 'SLCABAGEN' + inttostr(count) + '_NGHeadDevice');
+        if pvd <> nil then
+          deviceData.Connections[i].NGHeadDevice := pstring(pvd^.data.Addr.Instance)^
+        else
+          deviceData.Connections[i].NGHeadDevice := '';
 
         if i = 0 then
         begin
@@ -138,7 +107,11 @@ begin
         end;
 
         Inc(count);
-        headDevName := GetDeviceVariableString(pdev, 'SLCABAGEN' + inttostr(count) + '_HeadDeviceName');
+        pvd := FindVariableInEnt(pdev, 'SLCABAGEN' + inttostr(count) + '_HeadDeviceName');
+        if pvd <> nil then
+          headDevName := pstring(pvd^.data.Addr.Instance)^
+        else
+          headDevName := '';
       end;
 
       if (deviceData.HDName <> '') and
@@ -158,6 +131,7 @@ var
   pdev: PGDBObjDevice;
   ir: itrec;
   devName: string;
+  pvd: pvardesk;
 begin
   Result := nil;
 
@@ -167,7 +141,11 @@ begin
     if pobj^.GetObjType = GDBDeviceID then
     begin
       pdev := PGDBObjDevice(pobj);
-      devName := GetDeviceVariableString(pdev, 'NMO_Name');
+      pvd := FindVariableInEnt(pdev, 'NMO_Name');
+      if pvd <> nil then
+        devName := pstring(pvd^.data.Addr.Instance)^
+      else
+        devName := '';
 
       if devName = ADevName then
       begin

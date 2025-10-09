@@ -25,7 +25,8 @@ uses
   sysutils, Classes, gvector,
   uzeentdevice, uzeentblockinsert, uzeentity, uzeconsts,
   uzcdrawing, uzcdrawings, uzcvariablesutils,
-  varmandef, gzctnrVectorTypes;
+  varmandef, gzctnrVectorTypes,
+  uzvmcstruct;
 
 type
   // Тип для хранения списка устройств (указателей на устройства)
@@ -52,6 +53,9 @@ type
 
     // Получение списка выбранных устройств с чертежа
     function GetSelectedDevices: TListDev;
+
+    // Получение списка всех устройств с чертежа в виде TListVElectrDevStruct
+    function GetAllDevicesAsStructList: TListVElectrDevStruct;
 
     // Функции получения значений переменных устройства
     function GetDeviceZcadId(pdev: PGDBObjDevice): integer;
@@ -252,6 +256,52 @@ begin
     // Переход к следующему объекту
     pobj := drawings.GetCurrentROOT^.ObjArray.iterate(ir);
   until pobj = nil;
+end;
+
+// Получение списка всех устройств с чертежа в виде структуры TListVElectrDevStruct
+// Функция собирает список всех устройств с чертежа и преобразует их в TListVElectrDevStruct
+// На выходе список TListVElectrDevStruct, содержащий данные всех устройств типа GDBDeviceID
+function TDeviceDataCollector.GetAllDevicesAsStructList: TListVElectrDevStruct;
+var
+  devicesList: TListDev;
+  pdev: PGDBObjDevice;
+  deviceStruct: TVElectrDevStruct;
+  i: integer;
+begin
+  // Создание результирующего списка структур устройств
+  Result := TListVElectrDevStruct.Create;
+
+  // Получение списка всех устройств с чертежа
+  devicesList := GetAllGDBDevices;
+
+  try
+    // Преобразование каждого устройства в структуру TVElectrDevStruct
+    for i := 0 to devicesList.Size - 1 do
+    begin
+      pdev := devicesList[i];
+
+      // Заполнение структуры данными устройства
+      deviceStruct.zcadid := GetDeviceZcadId(pdev);
+      deviceStruct.fullname := GetDeviceFullName(pdev);
+      deviceStruct.basename := GetDeviceBaseName(pdev);
+      deviceStruct.realname := GetDeviceRealName(pdev);
+      deviceStruct.tracename := GetDeviceTraceName(pdev);
+      deviceStruct.headdev := GetDeviceHeadDev(pdev);
+      deviceStruct.feedernum := GetDeviceFeederNum(pdev);
+      deviceStruct.canbehead := GetDeviceCanBeHead(pdev);
+      deviceStruct.devtype := GetDeviceDevType(pdev);
+      deviceStruct.opmode := GetDeviceOpMode(pdev);
+      deviceStruct.power := GetDevicePower(pdev);
+      deviceStruct.voltage := GetDeviceVoltage(pdev);
+      deviceStruct.cosfi := GetDeviceCosFi(pdev);
+
+      // Добавление структуры в результирующий список
+      Result.PushBack(deviceStruct);
+    end;
+  finally
+    // Освобождение списка указателей на устройства
+    devicesList.Free;
+  end;
 end;
 
 // Получение ид устройства внутри zcad

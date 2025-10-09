@@ -23,6 +23,7 @@ unit uzvmcstruct;
 interface
 
 type
+  PTVElectrDevStruct=^TVElectrDevStruct;
   TVElectrDevStruct = record
     zcadid: integer; // ид устройства внутри zcad
     fullname: string; // полное имя устройства
@@ -38,6 +39,7 @@ type
     voltage: integer; // напряжение
     cosfi: double; // cosfi
   end;
+  TListVElectrDevStruct=specialize TVector<TVElectrDevStruct>;
 
 implementation
 

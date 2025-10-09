@@ -43,6 +43,21 @@ type
   public
     function CollectAllDevices: specialize TVector<TDeviceData>;
     function GetDeviceByName(const ADevName: string): PGDBObjDevice;
+
+    // Функции получения значений переменных устройства
+    function GetDeviceZcadId(pdev: PGDBObjDevice): integer;
+    function GetDeviceFullName(pdev: PGDBObjDevice): string;
+    function GetDeviceBaseName(pdev: PGDBObjDevice): string;
+    function GetDeviceRealName(pdev: PGDBObjDevice): string;
+    function GetDeviceTraceName(pdev: PGDBObjDevice): string;
+    function GetDeviceHeadDev(pdev: PGDBObjDevice): string;
+    function GetDeviceFeederNum(pdev: PGDBObjDevice): integer;
+    function GetDeviceCanBeHead(pdev: PGDBObjDevice): integer;
+    function GetDeviceDevType(pdev: PGDBObjDevice): string;
+    function GetDeviceOpMode(pdev: PGDBObjDevice): string;
+    function GetDevicePower(pdev: PGDBObjDevice): double;
+    function GetDeviceVoltage(pdev: PGDBObjDevice): integer;
+    function GetDeviceCosFi(pdev: PGDBObjDevice): double;
   end;
 
 implementation
@@ -156,6 +171,158 @@ begin
 
     pobj := drawings.GetCurrentROOT^.ObjArray.iterate(ir);
   until pobj = nil;
+end;
+
+// Получение ид устройства внутри zcad
+function TDeviceDataCollector.GetDeviceZcadId(pdev: PGDBObjDevice): integer;
+var
+  pvd: pvardesk;
+begin
+  Result := -1;
+  pvd := FindVariableInEnt(pdev, 'ZcadId');
+  if pvd <> nil then
+    Result := pinteger(pvd^.data.Addr.Instance)^;
+end;
+
+// Получение полного имени устройства
+function TDeviceDataCollector.GetDeviceFullName(pdev: PGDBObjDevice): string;
+var
+  pvd: pvardesk;
+begin
+  Result := 'ERROR';
+  pvd := FindVariableInEnt(pdev, 'NMO_Name');
+  if pvd <> nil then
+    Result := pstring(pvd^.data.Addr.Instance)^;
+end;
+
+// Получение базового имени устройства
+function TDeviceDataCollector.GetDeviceBaseName(pdev: PGDBObjDevice): string;
+var
+  pvd: pvardesk;
+begin
+  Result := 'ERROR';
+  pvd := FindVariableInEnt(pdev, 'NMO_BaseName');
+  if pvd <> nil then
+    Result := pstring(pvd^.data.Addr.Instance)^;
+end;
+
+// Получение реального имени устройства
+function TDeviceDataCollector.GetDeviceRealName(pdev: PGDBObjDevice): string;
+var
+  pvd: pvardesk;
+begin
+  Result := 'ERROR';
+  pvd := FindVariableInEnt(pdev, 'NMO_RealName');
+  if pvd <> nil then
+    Result := pstring(pvd^.data.Addr.Instance)^;
+end;
+
+// Получение имени трассы к которой принадлежит устройство
+function TDeviceDataCollector.GetDeviceTraceName(pdev: PGDBObjDevice): string;
+var
+  pvd: pvardesk;
+begin
+  Result := 'ERROR';
+  pvd := FindVariableInEnt(pdev, 'SLCABAGEN1_HeadDeviceName');
+  if pvd <> nil then
+    Result := pstring(pvd^.data.Addr.Instance)^;
+end;
+
+// Получение головного устройства
+function TDeviceDataCollector.GetDeviceHeadDev(pdev: PGDBObjDevice): string;
+var
+  pvd: pvardesk;
+begin
+  Result := 'ERROR';
+  pvd := FindVariableInEnt(pdev, 'SLCABAGEN1_HeadDeviceName');
+  if pvd <> nil then
+    Result := pstring(pvd^.data.Addr.Instance)^;
+end;
+
+// Получение номера фидера
+function TDeviceDataCollector.GetDeviceFeederNum(pdev: PGDBObjDevice): integer;
+var
+  pvd: pvardesk;
+begin
+  Result := -1;
+  pvd := FindVariableInEnt(pdev, 'FeederNum');
+  if pvd <> nil then
+    Result := pinteger(pvd^.data.Addr.Instance)^;
+end;
+
+// Получение признака "Я могу быть головным устройством"
+function TDeviceDataCollector.GetDeviceCanBeHead(pdev: PGDBObjDevice): integer;
+var
+  pvd: pvardesk;
+begin
+  Result := 0;
+  pvd := FindVariableInEnt(pdev, 'ANALYSISEM_icanbeheadunit');
+  if (pvd <> nil) and (pboolean(pvd^.data.Addr.Instance)^) then
+    Result := 1;
+end;
+
+// Получение типа устройства
+function TDeviceDataCollector.GetDeviceDevType(pdev: PGDBObjDevice): string;
+var
+  pvd: pvardesk;
+begin
+  Result := 'ERROR';
+  pvd := FindVariableInEnt(pdev, 'DevType');
+  if pvd <> nil then
+    Result := pstring(pvd^.data.Addr.Instance)^;
+end;
+
+// Получение режима работы
+function TDeviceDataCollector.GetDeviceOpMode(pdev: PGDBObjDevice): string;
+var
+  pvd: pvardesk;
+begin
+  Result := 'ERROR';
+  pvd := FindVariableInEnt(pdev, 'OpMode');
+  if pvd <> nil then
+    Result := pstring(pvd^.data.Addr.Instance)^;
+end;
+
+// Получение мощности устройства
+function TDeviceDataCollector.GetDevicePower(pdev: PGDBObjDevice): double;
+var
+  pvd: pvardesk;
+begin
+  Result := -1;
+  pvd := FindVariableInEnt(pdev, 'Power');
+  if pvd <> nil then
+    Result := pdouble(pvd^.data.Addr.Instance)^;
+end;
+
+// Получение напряжения устройства
+function TDeviceDataCollector.GetDeviceVoltage(pdev: PGDBObjDevice): integer;
+var
+  pvd: pvardesk;
+  strTemp: string;
+begin
+  Result := -110;
+  pvd := FindVariableInEnt(pdev, 'Voltage');
+  if pvd <> nil then
+  begin
+    strTemp := pvd^.data.ptd^.GetValueAsString(pvd^.data.Addr.Instance);
+    if strTemp = '_AC_380V_50Hz' then
+      Result := 380
+    else if strTemp = '_AC_220V_50Hz' then
+      Result := 220
+    else
+      Result := -110;
+  end;
+end;
+
+// Получение коэффициента мощности (cosfi)
+function TDeviceDataCollector.GetDeviceCosFi(pdev: PGDBObjDevice): double;
+var
+  pvd: pvardesk;
+begin
+  Result := -1;
+  pvd := FindVariableInEnt(pdev, 'CosPHI');
+  if pvd <> nil then
+    Result := pdouble(pvd^.data.Addr.Instance)^;
 end;
 
 end.

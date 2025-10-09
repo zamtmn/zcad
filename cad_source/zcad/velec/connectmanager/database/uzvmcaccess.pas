@@ -24,18 +24,9 @@ interface
 uses
   sysutils, Classes, Dialogs,
   SQLDB, odbcconn,
-  uzcinterface;
+  uzcinterface, uzvmcstruct;
 
 type
-  TDeviceInfoForExport = record
-    nameDev: string;
-    phase: string;
-    typeKc: string;
-    power: double;
-    volt: double;
-    cosPhi: double;
-  end;
-
   TAccessDBExporter = class
   private
     FConnection: TODBCConnection;
@@ -49,7 +40,7 @@ type
     procedure Connect;
     procedure Disconnect;
     procedure ClearTables;
-    procedure ExportDevice(const ADeviceInfo: TDeviceInfoForExport);
+    procedure ExportDevice(const ADeviceInfo: TVElectrDevStruct);
     procedure ExportConnection(const APrimID, ASecID, AFeeder: string);
     procedure Commit;
 
@@ -118,15 +109,15 @@ begin
   end;
 end;
 
-procedure TAccessDBExporter.ExportDevice(const ADeviceInfo: TDeviceInfoForExport);
+procedure TAccessDBExporter.ExportDevice(const ADeviceInfo: TVElectrDevStruct);
 begin
   try
     FQuery.SQL.Text := 'INSERT INTO Device (Prim_ID, Рower, Voltage, Phase, CosF) VALUES (:pPrimID, :pPower, :pVoltage, :pPhase, :pCosF)';
-    FQuery.Params.ParamByName('pPrimID').AsString := ADeviceInfo.nameDev;
+    FQuery.Params.ParamByName('pPrimID').AsString := ADeviceInfo.realname;
     FQuery.Params.ParamByName('pPower').AsFloat := ADeviceInfo.power;
-    FQuery.Params.ParamByName('pVoltage').AsFloat := ADeviceInfo.volt;
-    FQuery.Params.ParamByName('pPhase').AsString := ADeviceInfo.phase;
-    FQuery.Params.ParamByName('pCosF').AsFloat := ADeviceInfo.cosPhi;
+    FQuery.Params.ParamByName('pVoltage').AsInteger := ADeviceInfo.voltage;
+    FQuery.Params.ParamByName('pPhase').AsString := ADeviceInfo.opmode;
+    FQuery.Params.ParamByName('pCosF').AsFloat := ADeviceInfo.cosfi;
     FQuery.ExecSQL;
   except
     on E: Exception do

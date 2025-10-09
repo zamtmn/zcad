@@ -50,6 +50,9 @@ type
     // Получение списка всех устройств типа GDBDeviceID с чертежа
     function GetAllGDBDevices: TListDev;
 
+    // Получение списка выбранных устройств с чертежа
+    function GetSelectedDevices: TListDev;
+
     // Функции получения значений переменных устройства
     function GetDeviceZcadId(pdev: PGDBObjDevice): integer;
     function GetDeviceFullName(pdev: PGDBObjDevice): string;
@@ -206,6 +209,38 @@ begin
   repeat
     // Проверка, что объект является устройством типа GDBDeviceID
     if pobj^.GetObjType = GDBDeviceID then
+    begin
+      // Приведение типа к PGDBObjDevice
+      pdev := PGDBObjDevice(pobj);
+
+      // Добавление указателя на устройство в результирующий список
+      Result.PushBack(pdev);
+    end;
+
+    // Переход к следующему объекту
+    pobj := drawings.GetCurrentROOT^.ObjArray.iterate(ir);
+  until pobj = nil;
+end;
+
+// Получение списка выбранных пользователем устройств с чертежа
+// Функция запускает режим сбора устройств: пользователь по очереди выбирает устройства,
+// и эти устройства записываются в той же очереди в список устройств
+// На выходе список TListDev, содержащий указатели на выбранные устройства типа GDBDeviceID
+function TDeviceDataCollector.GetSelectedDevices: TListDev;
+var
+  pobj: pGDBObjEntity;
+  pdev: PGDBObjDevice;
+  ir: itrec;
+begin
+  // Создание результирующего списка устройств
+  Result := TListDev.Create;
+
+  // Начало итерации по всем объектам в текущем чертеже
+  pobj := drawings.GetCurrentROOT^.ObjArray.beginiterate(ir);
+  if pobj <> nil then
+  repeat
+    // Проверка, что объект выбран пользователем и является устройством типа GDBDeviceID
+    if pobj^.selected and (pobj^.GetObjType = GDBDeviceID) then
     begin
       // Приведение типа к PGDBObjDevice
       pdev := PGDBObjDevice(pobj);

@@ -57,6 +57,9 @@ type
     // Получение списка всех устройств с чертежа в виде TListVElectrDevStruct
     function GetAllDevicesAsStructList: TListVElectrDevStruct;
 
+    // Получение списка выбранных устройств с чертежа в виде TListVElectrDevStruct
+    function GetSelectedDevicesAsStructList: TListVElectrDevStruct;
+
     // Функции получения значений переменных устройства
     function GetDeviceZcadId(pdev: PGDBObjDevice): integer;
     function GetDeviceFullName(pdev: PGDBObjDevice): string;
@@ -273,6 +276,52 @@ begin
 
   // Получение списка всех устройств с чертежа
   devicesList := GetAllGDBDevices;
+
+  try
+    // Преобразование каждого устройства в структуру TVElectrDevStruct
+    for i := 0 to devicesList.Size - 1 do
+    begin
+      pdev := devicesList[i];
+
+      // Заполнение структуры данными устройства
+      deviceStruct.zcadid := GetDeviceZcadId(pdev);
+      deviceStruct.fullname := GetDeviceFullName(pdev);
+      deviceStruct.basename := GetDeviceBaseName(pdev);
+      deviceStruct.realname := GetDeviceRealName(pdev);
+      deviceStruct.tracename := GetDeviceTraceName(pdev);
+      deviceStruct.headdev := GetDeviceHeadDev(pdev);
+      deviceStruct.feedernum := GetDeviceFeederNum(pdev);
+      deviceStruct.canbehead := GetDeviceCanBeHead(pdev);
+      deviceStruct.devtype := GetDeviceDevType(pdev);
+      deviceStruct.opmode := GetDeviceOpMode(pdev);
+      deviceStruct.power := GetDevicePower(pdev);
+      deviceStruct.voltage := GetDeviceVoltage(pdev);
+      deviceStruct.cosfi := GetDeviceCosFi(pdev);
+
+      // Добавление структуры в результирующий список
+      Result.PushBack(deviceStruct);
+    end;
+  finally
+    // Освобождение списка указателей на устройства
+    devicesList.Free;
+  end;
+end;
+
+// Получение списка выбранных устройств с чертежа в виде структуры TListVElectrDevStruct
+// Функция собирает список выбранных пользователем устройств с чертежа и преобразует их в TListVElectrDevStruct
+// На выходе список TListVElectrDevStruct, содержащий данные выбранных устройств типа GDBDeviceID
+function TDeviceDataCollector.GetSelectedDevicesAsStructList: TListVElectrDevStruct;
+var
+  devicesList: TListDev;
+  pdev: PGDBObjDevice;
+  deviceStruct: TVElectrDevStruct;
+  i: integer;
+begin
+  // Создание результирующего списка структур устройств
+  Result := TListVElectrDevStruct.Create;
+
+  // Получение списка выбранных устройств с чертежа
+  devicesList := GetSelectedDevices;
 
   try
     // Преобразование каждого устройства в структуру TVElectrDevStruct

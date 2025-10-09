@@ -21,6 +21,8 @@ unit uzvmcstruct;
 {$INCLUDE zengineconfig.inc}
 
 interface
+uses
+  gzctnrVectorTypes;
 
 type
   PTVElectrDevStruct=^TVElectrDevStruct;

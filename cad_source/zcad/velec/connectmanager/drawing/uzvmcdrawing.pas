@@ -28,6 +28,9 @@ uses
   varmandef, gzctnrVectorTypes;
 
 type
+  // Тип для хранения списка устройств (указателей на устройства)
+  TListDev = specialize TVector<pGDBObjDevice>;
+
   TDeviceData = record
     DevName: string;
     HDName: string;
@@ -43,6 +46,9 @@ type
   public
     function getAllCollectDevices: specialize TVector<TDeviceData>;
     function GetDeviceByName(const ADevName: string): PGDBObjDevice;
+
+    // Получение списка всех устройств типа GDBDeviceID с чертежа
+    function GetAllGDBDevices: TListDev;
 
     // Функции получения значений переменных устройства
     function GetDeviceZcadId(pdev: PGDBObjDevice): integer;
@@ -179,6 +185,36 @@ begin
       end;
     end;
 
+    pobj := drawings.GetCurrentROOT^.ObjArray.iterate(ir);
+  until pobj = nil;
+end;
+
+// Получение списка всех устройств типа GDBDeviceID с текущего чертежа
+// На выходе список TListDev, содержащий указатели на все устройства типа GDBDeviceID
+function TDeviceDataCollector.GetAllGDBDevices: TListDev;
+var
+  pobj: pGDBObjEntity;
+  pdev: PGDBObjDevice;
+  ir: itrec;
+begin
+  // Создание результирующего списка устройств
+  Result := TListDev.Create;
+
+  // Начало итерации по всем объектам в текущем чертеже
+  pobj := drawings.GetCurrentROOT^.ObjArray.beginiterate(ir);
+  if pobj <> nil then
+  repeat
+    // Проверка, что объект является устройством типа GDBDeviceID
+    if pobj^.GetObjType = GDBDeviceID then
+    begin
+      // Приведение типа к PGDBObjDevice
+      pdev := PGDBObjDevice(pobj);
+
+      // Добавление указателя на устройство в результирующий список
+      Result.PushBack(pdev);
+    end;
+
+    // Переход к следующему объекту
     pobj := drawings.GetCurrentROOT^.ObjArray.iterate(ir);
   until pobj = nil;
 end;

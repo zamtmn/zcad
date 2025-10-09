@@ -26,7 +26,10 @@ uses
   uzeentdevice, uzeentblockinsert, uzeentity, uzeconsts,
   uzcdrawing, uzcdrawings, uzcvariablesutils,
   varmandef, gzctnrVectorTypes,
-  uzvmcstruct;
+  uzvmcstruct, uzccablemanager, uzcentcable, uzegeometry,
+  uzglviewareadata, uzcsysvars, uzeentityfactory, uzcutils,
+  uzeroot, uzcenitiesvariablesextender, uzccomelectrical,
+  uzgldrawcontext, uzcinterface;
 
 type
   // Тип для хранения списка устройств (указателей на устройства)
@@ -545,6 +548,150 @@ begin
 
   // Приведение типа к PGDBObjDevice и возврат результата
   Result := PGDBObjDevice(pobj);
+end;
+
+// Процедура для сбора длин и типов кабелей
+// Копия функции OPS_SPBuild из uzccomops.pas
+procedure CollectCablesLengthsAndTypes;
+var count: Integer;
+    pcabledesk:PTCableDesctiptor;
+    PCableSS:PGDBObjCable;
+    ir,ir_inNodeArray:itrec;
+    pvd:pvardesk;
+    cman:TCableManager;
+    pv:pGDBObjDevice;
+
+    coord,currentcoord:GDBVertex;
+    pvmc:pvardesk;
+
+    nodeend,nodestart:PGDBObjDevice;
+    isfirst:boolean;
+    startmat,endmat,startname,endname,prevname:String;
+
+    uy,dy:Double;
+    lsave:PPointer;
+    DC:TDrawContext;
+    pCableSSvarext,ppvvarext,pnodeendvarext:TVariablesExtender;
+begin
+  if drawings.GetCurrentROOT.ObjArray.Count = 0 then exit;
+  dc:=drawings.GetCurrentDWG^.CreateDrawingRC;
+  cman.init;
+  cman.build;
+
+         drawings.GetCurrentDWG.wa.SetMouseMode((MGet3DPoint) or (MMoveCamera) or (MRotateCamera));
+
+  coord:=uzegeometry.NulVertex;
+  coord.y:=0;
+  coord.x:=0;
+  prevname:='';
+  pcabledesk:=cman.beginiterate(ir);
+  if pcabledesk<>nil then
+  repeat
+        PCableSS:=pcabledesk^.StartSegment;
+        pCableSSvarext:=PCableSS^.GetExtension<TVariablesExtender>;
+        pvd:=pCableSSvarext.entityunit.FindVariable('CABLE_Type');
+
+        if pvd<>nil then
+        begin
+             if (pcabledesk.StartDevice<>nil) then
+             begin
+                  zcUI.TextMessage(pcabledesk.Name,TMWOHistoryOut);
+                  currentcoord:=coord;
+                  PTCableType(pvd^.data.Addr.Instance)^:=TCT_ShleifOPS;
+                  lsave:=SysVar.dwg.DWG_CLayer^;
+                  SysVar.dwg.DWG_CLayer^:=drawings.GetCurrentDWG.LayerTable.GetSystemLayer;
+
+                  drawings.AddBlockFromDBIfNeed(drawings.GetCurrentDWG,'DEVICE_CABLE_MARK');
+                  pointer(pv):=old_ENTF_CreateBlockInsert(@drawings.GetCurrentDWG.ConstructObjRoot,@drawings.GetCurrentDWG.ConstructObjRoot.ObjArray,
+                                                      drawings.GetCurrentDWG.GetCurrentLayer,drawings.GetCurrentDWG.GetCurrentLType,sysvar.DWG.DWG_CLinew^,sysvar.DWG.DWG_CColor^,
+                                                      currentcoord, 1, 0,'DEVICE_CABLE_MARK');
+                  zcSetEntPropFromCurrentDrawingProp(pv);
+
+                  SysVar.dwg.DWG_CLayer^:=lsave;
+                  ppvvarext:=pv^.GetExtension<TVariablesExtender>;
+                  pvmc:=ppvvarext.entityunit.FindVariable('CableName');
+                  if pvmc<>nil then
+                  begin
+                      pstring(pvmc^.data.Addr.Instance)^:=pcabledesk.Name;
+                  end;
+                  Cable2CableMark(pcabledesk,pv);
+                  pv^.formatentity(drawings.GetCurrentDWG^,dc);
+                  pv^.getoutbound(dc);
+
+                  dy:=pv.P_insert_in_WCS.y-pv.vp.BoundingBox.LBN.y;
+                  uy:=pv.vp.BoundingBox.RTF.y-pv.P_insert_in_WCS.y;
+
+                  pv^.Local.P_insert.y:=pv^.Local.P_insert.y+dy;
+                  pv^.Formatentity(drawings.GetCurrentDWG^,dc);
+                  currentcoord.y:=currentcoord.y+dy+uy;
+
+
+                  isfirst:=true;
+                  pcabledesk^.Devices.beginiterate(ir_inNodeArray);
+                  nodeend:=pcabledesk^.Devices.iterate(ir_inNodeArray);
+                  nodestart:=nil;
+                  count:=0;
+                  if nodeend<>nil then
+                  repeat
+                        if nodeend^.bp.ListPos.Owner<>pointer(drawings.GetCurrentROOT) then
+                                                                          nodeend:=pointer(nodeend^.bp.ListPos.Owner);
+                        pnodeendvarext:=nodeend^.GetExtension<TVariablesExtender>;
+                        pvd:=pnodeendvarext.entityunit.FindVariable('NMO_Name');
+                        if pvd<>nil then
+                        begin
+                             endname:=pvd^.data.PTD.GetValueAsString(pvd^.data.Addr.Instance);
+                        end
+                           else endname:='';
+                        pvd:=pnodeendvarext.entityunit.FindVariable('DB_link');
+                        if pvd<>nil then
+                        begin
+                            endmat:=nodeend^.Name+pvd^.data.PTD.GetValueAsString(pvd^.data.Addr.Instance);
+                            if isfirst then
+                                           begin
+                                                isfirst:=false;
+                                                nodestart:=nodeend;
+                                                startmat:=endmat;
+                                                startname:=endname;
+                                           end;
+                            if startmat<>endmat then
+                            begin
+                                 InsertDat(nodestart^.name,startname,prevname,count,currentcoord,drawings.GetCurrentDWG.ConstructObjRoot);
+                                 count:=0;
+                                 nodestart:=nodeend;
+                                 startmat:=endmat;
+                                 startname:=endname;
+                            end;
+                            inc(count);
+                        end;
+                        prevname:=endname;
+                        nodeend:=pcabledesk^.Devices.iterate(ir_inNodeArray);
+                  until nodeend=nil;
+                  if nodestart<>nil then
+                                        InsertDat(nodestart^.name,startname,endname,count,currentcoord,drawings.GetCurrentDWG.ConstructObjRoot).YouDeleted(drawings.GetCurrentDWG^)
+                                    else
+                                        InsertDat('_error_here',startname,endname,count,currentcoord,drawings.GetCurrentDWG.ConstructObjRoot).YouDeleted(drawings.GetCurrentDWG^);
+
+                  pvd:=pCableSSvarext.entityunit.FindVariable('CABLE_WireCount');
+                  if pvd=nil then
+                                 coord.x:=coord.x+12
+                             else
+                                 begin
+                                      if PInteger(pvd^.data.Addr.Instance)^<>0 then
+                                                                                  coord.x:=coord.x+6*PInteger(pvd^.data.Addr.Instance)^
+                                                                              else
+                                                                                  coord.x:=coord.x+12;
+                                 end;
+             end
+
+        end;
+
+
+  pcabledesk:=cman.iterate(ir);
+  until pcabledesk=nil;
+
+  cman.done;
+
+  zcRedrawCurrentDrawing;
 end;
 
 end.

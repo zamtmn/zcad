@@ -60,6 +60,9 @@ type
     // Получение списка выбранных устройств с чертежа в виде TListVElectrDevStruct
     function GetSelectedDevicesAsStructList: TListVElectrDevStruct;
 
+    // Получение устройства по номеру в списке примитивов
+    function GetDeviceByPrimitiveIndex(AIndex: Integer): PGDBObjDevice;
+
     // Функции получения значений переменных устройства
     function GetDeviceZcadId(pdev: PGDBObjDevice): integer;
     function GetDeviceFullName(pdev: PGDBObjDevice): string;
@@ -503,6 +506,45 @@ begin
   pvd := FindVariableInEnt(pdev, 'CosPHI');
   if pvd <> nil then
     Result := pdouble(pvd^.data.Addr.Instance)^;
+end;
+
+// Получение устройства по номеру в списке примитивов
+// На входе: AIndex - номер устройства в списке примитивов
+// На выходе: PGDBObjDevice - указатель на устройство, или nil если устройство не найдено или не является GDBDeviceID
+function TDeviceDataCollector.GetDeviceByPrimitiveIndex(AIndex: Integer): PGDBObjDevice;
+var
+  pobj: pGDBObjEntity;
+begin
+  Result := nil;
+
+  // Проверка корректности индекса
+  if (AIndex < 0) or (AIndex >= drawings.GetCurrentROOT^.ObjArray.Count) then
+  begin
+    // Вывод сообщения об ошибке - индекс выходит за границы массива
+    WriteLn('Ошибка: индекс ', AIndex, ' выходит за границы массива примитивов (0..',
+            drawings.GetCurrentROOT^.ObjArray.Count - 1, ')');
+    Exit;
+  end;
+
+  // Получение объекта по индексу
+  pobj := drawings.GetCurrentROOT^.ObjArray.getDataMutable(AIndex);
+
+  // Проверка, что объект существует
+  if pobj = nil then
+  begin
+    WriteLn('Ошибка: объект по индексу ', AIndex, ' не найден');
+    Exit;
+  end;
+
+  // Проверка, что объект является устройством типа GDBDeviceID
+  if pobj^.GetObjType <> GDBDeviceID then
+  begin
+    WriteLn('Ошибка: объект по индексу ', AIndex, ' не является устройством (GDBDeviceID)');
+    Exit;
+  end;
+
+  // Приведение типа к PGDBObjDevice и возврат результата
+  Result := PGDBObjDevice(pobj);
 end;
 
 end.

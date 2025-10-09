@@ -41,7 +41,7 @@ type
 
   TDeviceDataCollector = class
   public
-    function CollectAllDevices: specialize TVector<TDeviceData>;
+    function getAllCollectDevices: specialize TVector<TDeviceData>;
     function GetDeviceByName(const ADevName: string): PGDBObjDevice;
 
     // Функции получения значений переменных устройства
@@ -62,7 +62,10 @@ type
 
 implementation
 
-function TDeviceDataCollector.CollectAllDevices: specialize TVector<TDeviceData>;
+// Получение коллекции всех устройств с заполнением их данных
+// На вход подается список устройств для заполнения
+// На выходе коллекция TVector<TDeviceData>
+function TDeviceDataCollector.getAllCollectDevices: specialize TVector<TDeviceData>;
 var
   pobj: pGDBObjEntity;
   pdev: PGDBObjDevice;
@@ -72,42 +75,45 @@ var
   headDevName: string;
   pvd: pvardesk;
 begin
+  // Создание результирующей коллекции
   Result := specialize TVector<TDeviceData>.Create;
 
+  // Начало итерации по всем объектам в текущем чертеже
   pobj := drawings.GetCurrentROOT^.ObjArray.beginiterate(ir);
   if pobj <> nil then
   repeat
+    // Проверка, что объект является устройством
     if pobj^.GetObjType = GDBDeviceID then
     begin
       pdev := PGDBObjDevice(pobj);
 
-      pvd := FindVariableInEnt(pdev, 'NMO_Name');
-      if pvd <> nil then
-        deviceData.DevName := pstring(pvd^.data.Addr.Instance)^
-      else
-        deviceData.DevName := '';
+      // Получение имени устройства с использованием внутренней функции класса
+      deviceData.DevName := GetDeviceFullName(pdev);
       if deviceData.DevName = '' then
         deviceData.DevName := 'ERROR';
 
-      pvd := FindVariableInEnt(pdev, 'ANALYSISEM_icanbeheadunit');
-      if (pvd <> nil) and (pboolean(pvd^.data.Addr.Instance)^) then
-        deviceData.CanBeHead := 1
-      else
-        deviceData.CanBeHead := 0;
+      // Получение признака "может быть головным устройством" с использованием внутренней функции класса
+      deviceData.CanBeHead := GetDeviceCanBeHead(pdev);
 
+      // Инициализация массива подключений
       SetLength(deviceData.Connections, 0);
       count := 1;
+
+      // Получение имени головного устройства для первого подключения
       pvd := FindVariableInEnt(pdev, 'SLCABAGEN' + inttostr(count) + '_HeadDeviceName');
       if pvd <> nil then
         headDevName := pstring(pvd^.data.Addr.Instance)^
       else
         headDevName := '';
 
+      // Цикл обработки всех подключений устройства
       while headDevName <> '' do
       begin
+        // Добавление нового элемента в массив подключений
         SetLength(deviceData.Connections, Length(deviceData.Connections) + 1);
         i := Length(deviceData.Connections) - 1;
 
+        // Заполнение данных о подключении
         deviceData.Connections[i].HeadDeviceName := headDevName;
         pvd := FindVariableInEnt(pdev, 'SLCABAGEN' + inttostr(count) + '_NGHeadDevice');
         if pvd <> nil then
@@ -115,12 +121,14 @@ begin
         else
           deviceData.Connections[i].NGHeadDevice := '';
 
+        // Сохранение первого головного устройства и группы
         if i = 0 then
         begin
           deviceData.HDName := headDevName;
           deviceData.HDGroup := deviceData.Connections[i].NGHeadDevice;
         end;
 
+        // Переход к следующему подключению
         Inc(count);
         pvd := FindVariableInEnt(pdev, 'SLCABAGEN' + inttostr(count) + '_HeadDeviceName');
         if pvd <> nil then
@@ -129,6 +137,7 @@ begin
           headDevName := '';
       end;
 
+      // Добавление устройства в результирующую коллекцию, если оно имеет корректное головное устройство
       if (deviceData.HDName <> '') and
          (deviceData.HDName <> '???') and
          (deviceData.HDName <> '-') and
@@ -136,6 +145,7 @@ begin
         Result.PushBack(deviceData);
     end;
 
+    // Переход к следующему объекту
     pobj := drawings.GetCurrentROOT^.ObjArray.iterate(ir);
   until pobj = nil;
 end;

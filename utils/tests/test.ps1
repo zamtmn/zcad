@@ -1,0 +1,2 @@
+$XSLInputElement = New-Object System.Xml.Xsl.XslCompiledTransform;$XSLInputElement.Load("fpctest2junit.xsl");$XSLInputElement.Transform((Resolve-Path .\testzcontainers.xml),((Join-Path (Resolve-Path .) "junittestzcontainers.xml")))
+$XSLInputElement = New-Object System.Xml.Xsl.XslCompiledTransform;$XSLInputElement.Load("fpctest2junit.xsl");$XSLInputElement.Transform((Resolve-Path .\testzengine.xml),((Join-Path (Resolve-Path .) "junittestzengine.xml")))

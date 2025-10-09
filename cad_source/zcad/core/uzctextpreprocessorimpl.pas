@@ -207,7 +207,10 @@ initialization
   _SPFSzcad:=SPFSources.GetEnum;
   Prefix2ProcessFunc.RegisterProcessor('%%DATE',#0,#0,@date2value,_SPFSzcad,true);
   Prefix2ProcessFunc.RegisterProcessor('@@','[',']',@var2value,_SPFSzcad,true);
+  {$Message Need remove @@if macro, use @@ifvar}
+  {todo: Need remove @@if macro, use @@ifvar}
   Prefix2ProcessFunc.RegisterProcessor('@@if','<','>',@IfVarPresent2value,_SPFSzcad,true);
+  Prefix2ProcessFunc.RegisterProcessor('@@ifvar','<','>',@IfVarPresent2value,_SPFSzcad,true);
   Prefix2ProcessFunc.RegisterProcessor('%%','[',']',@prop2value,_SPFSzcad,true);
   Prefix2ProcessFunc.RegisterProcessor('#calc','[',']',@evaluatesubstr,_SPFSzcad);
 

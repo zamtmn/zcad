@@ -17,6 +17,7 @@
 }
 
 unit uzcregelectrotechfeatures;
+{$Codepage UTF8}
 {$INCLUDE zengineconfig.inc}
 interface
 uses uzbpaths,UUnitManager,uzcsysvars,uzctranslations,
@@ -88,7 +89,13 @@ begin
        PStringTreeType(PInstance)^:=StringsTreeSelector.TreeResult;
 end;
 
+function DecorateTEentityFunction(PInstance:Pointer):String;
+begin
+  result:=FunctionsTree.GetDecaratedPard(PStringTreeType(PInstance)^);
+end;
 
+var
+  pttd:PUserTypeDescriptor;
 
 initialization;
   FunctionsTree.LoadTree(expandpath('$(DistribPath)/rtl/functions.xml'),InterfaceTranslate);
@@ -100,9 +107,15 @@ initialization;
   //AddEditorToType(SysUnit.TypeName2PTD('TEentityRepresentation'),TBaseTypesEditors.BaseCreateEditor);
   //AddEditorToType(SysUnit.TypeName2PTD('TEentityFunction'),TBaseTypesEditors.BaseCreateEditor);
 
-  AddFastEditorToType(SysUnit.TypeName2PTD('TEentityRepresentation'),@OIUI_FE_ButtonGetPrefferedSize,@ButtonTxtDrawFastEditor,@RunEentityRepresentationEditor);
-  AddFastEditorToType(SysUnit.TypeName2PTD('TEentityFunction'),@OIUI_FE_ButtonGetPrefferedSize,@ButtonTxtDrawFastEditor,@RunEentityFunctionEditor);
-
+  pttd:=SysUnit.TypeName2PTD('TEentityRepresentation');
+  if pttd<>nil then begin
+    AddFastEditorToType(pttd,@OIUI_FE_ButtonGetPrefferedSize,@ButtonTxtDrawFastEditor,@RunEentityRepresentationEditor);
+  end;
+  pttd:=SysUnit.TypeName2PTD('TEentityFunction');
+  if pttd<>nil then begin
+    AddFastEditorToType(pttd,@OIUI_FE_ButtonGetPrefferedSize,@ButtonTxtDrawFastEditor,@RunEentityFunctionEditor);
+    DecorateType(pttd,DecorateTEentityFunction,nil,nil);
+  end;
   with SysUnit.TypeName2PTD('TCalculatedString')^ do begin
     onGetValueAsString:=CalculatedStringDescriptor.GetValueAsString;
     onGetEditableAsString:=CalculatedStringDescriptor.GetEditableAsString;

@@ -149,20 +149,21 @@
 	  <Action Name="ACN_TEXT"/>
 	  <Separator/>	  
       <Action Name="ACN_BInsert"/>
+      <Action Name="ACN_SPLINE"/>
     </Draw>
     <Status Type="ToolBar">
       <Separator/>
-      <Variable VarName="DWG_SnapGrid" Img="snaptogrid" Hint="Snap" ShortCut="F9"/>
-      <Variable VarName="DWG_DrawGrid" Img="grid" Hint="Display grid" ShortCut="F7"/>
-      <Variable VarName="DWG_EditInSubEntry" Img="sub" Hint="On/Off Selecting parts of dynamic objects" ShortCut="F4"/>
-      <Variable VarName="DWG_AdditionalGrips" Img="#+G" Hint="On/Off Additional grips"/>
-      <Variable VarName="DWG_DrawMode" Img="lwt" Hint="Show/Hide Lineweight"/>
-      <Variable VarName="DWG_OSMode" Img="osnap" Hint="Object snap" ShortCut="F3"/>
-      <Variable VarName="DWG_OSModeControl" Img="#OSC" Hint="Ent object snap control"/>
-      <Variable VarName="DWG_PolarMode" Img="polar" Hint="Polar tracking" ShortCut="F10"/>
-      <Variable VarName="DWG_HelpGeometryDraw" Img="#AG" Hint="Auxiliary graphics (connectivity, direction, etc.)"/>
-      <Variable VarName="DISP_SystmGeometryDraw" Img="#SG" Hint="System graphics (size, communication, etc. for debugging)"/>
-      <Variable VarName="INTF_CommandLineEnabled" Img="#C>" Hint="Command line enabled" ShortCut="F12"/>
+      <Action Name="VACN_SNAPGRID"/>
+      <Action Name="VACN_DRAWGRID"/>
+      <Action Name="VACN_EDITINSUBENTRY"/>
+      <Action Name="VACN_ADDITIONALGRIPS"/>
+      <Action Name="VACN_DRAWMODE"/>
+      <Action Name="VACN_OSMODE"/>
+      <Action Name="VACN_OSMODECONTRIL"/>
+      <Action Name="VACN_POLARMODE"/>
+      <Action Name="VACN_HELPGGEOMETRYDRAW"/>
+      <Action Name="VACN_SYSTEMGEOMETRYDRAW"/>
+      <Action Name="VACN_COMMANDLINEENABLE"/>
     </Status>
   </ToolBarsContent>
 </CONFIG>

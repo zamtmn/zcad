@@ -46,13 +46,9 @@ procedure DebugDWG(dwg:PDwg_Data);
 begin
   DebugLn(['{WH}header.version: '+DWG_V2Str(dwg^.header.version)]);
   zDebugLn(['{WH}header.from_version: ',DWG_V2Str(dwg^.header.from_version)]);
-  if (dwg^.header.zero_5[0]=0)and(dwg^.header.zero_5[1]=0)and(dwg^.header.zero_5[2]=0)and(dwg^.header.zero_5[3]=0)and(dwg^.header.zero_5[4]=0)then
-    zDebugLn(['{WH}header.zero_5: 0,0,0,0,0'])
-  else
-    zDebugLn(['{WHM}header.zero_5: ',dwg^.header.zero_5[0],',',dwg^.header.zero_5[1],',',dwg^.header.zero_5[2],',',dwg^.header.zero_5[3],',',dwg^.header.zero_5[4]]);
   zDebugLn(['{WH}header.is_maint: ',dwg^.header.is_maint]);
   zDebugLn(['{WH}header.zero_one_or_three: ',dwg^.header.zero_one_or_three]);
-  zDebugLn(['{WH}header.unknown_3: ',dwg^.header.unknown_3]);
+  zDebugLn(['{WH}header.numentity_sections: ',dwg^.header.numentity_sections]);
   zDebugLn(['{WH}header.numheader_vars: ',dwg^.header.numheader_vars]);
   zDebugLn(['{WH}header.thumbnail_address: ',dwg^.header.thumbnail_address]);
   zDebugLn(['{WH}header.dwg_version: ',dwg^.header.dwg_version]);

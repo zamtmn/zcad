@@ -48,6 +48,8 @@ type
     procedure ExportToAccessDatabase(const AAccessDBPath: string);
     procedure CollectAndExportDevicesToAccess(const AAccessDBPath: string);
 
+    function CheckFileExists(const AFilePath: string): Boolean;
+
     property SQLiteManager: TSQLiteConnectionManager read FSQLiteManager;
     property DeviceCollector: TDeviceDataCollector read FDeviceCollector;
     property HierarchyBuilder: THierarchyBuilder read FHierarchyBuilder;
@@ -250,6 +252,14 @@ begin
     // Освобождение списка устройств
     devicesList.Free;
   end;
+end;
+
+// Функция проверки существования файла по указанному пути
+// На входе: полный путь до файла
+// На выходе: значение булеан (True - файл существует, False - файл не существует)
+function TConnectionManager.CheckFileExists(const AFilePath: string): Boolean;
+begin
+  Result := FileExists(AFilePath);
 end;
 
 end.

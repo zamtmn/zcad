@@ -40,6 +40,7 @@ type
     power: double; // мощность
     voltage: integer; // напряжение
     cosfi: double; // cosfi
+    phase: string; // фаза
   end;
   TListVElectrDevStruct=specialize TVector<TVElectrDevStruct>;
 

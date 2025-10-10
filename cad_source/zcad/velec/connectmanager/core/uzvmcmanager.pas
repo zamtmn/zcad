@@ -58,14 +58,16 @@ implementation
 constructor TConnectionManager.Create(const ADrawingPath: string);
 begin
   inherited Create;
-  FDrawingPath := ADrawingPath;
+  //FDrawingPath := ADrawingPath;
 
   if AnsiPos(':\', FDrawingPath) = 0 then
-    raise Exception.Create('Чертеж не сохранен. Выполните сохранение в ZCAD!');
+  zcUI.TextMessage('Команда отменена. Выполните сохранение чертежа в ZCAD!!!!!',TMWOHistoryOut);
 
-  FSQLiteManager := TSQLiteConnectionManager.Create(FDrawingPath);
-  FDeviceCollector := TDeviceDataCollector.Create;
-  FHierarchyBuilder := THierarchyBuilder.Create;
+    //raise Exception.Create('Чертеж не сохранен. Выполните сохранение в ZCAD!');
+
+  //FSQLiteManager := TSQLiteConnectionManager.Create(FDrawingPath);
+  //FDeviceCollector := TDeviceDataCollector.Create;
+  //FHierarchyBuilder := THierarchyBuilder.Create;
   FAccessExporter := nil;
 end;
 

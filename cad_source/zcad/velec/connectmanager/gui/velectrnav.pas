@@ -359,6 +359,7 @@ var
 begin
   //ShowMessage('Выбрать только');
   //uzvelaccessdbcontrol.AddStructureinAccessDB;
+  accessexport.Create('');
   accessexport.CollectAndExportDevicesToAccess('D:\ZcadDB.accdb');
 //  ODBCConnection := TODBCConnection.Create(nil);
 //  Query := TSQLQuery.Create(nil);

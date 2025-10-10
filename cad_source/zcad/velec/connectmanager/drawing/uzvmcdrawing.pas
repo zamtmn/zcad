@@ -80,6 +80,7 @@ type
     function GetDevicePower(pdev: PGDBObjDevice): double;
     function GetDeviceVoltage(pdev: PGDBObjDevice): integer;
     function GetDeviceCosFi(pdev: PGDBObjDevice): double;
+    function GetDevicePhase(pdev: PGDBObjDevice): string;
   end;
 
 implementation
@@ -303,6 +304,7 @@ begin
       deviceStruct.power := GetDevicePower(pdev);
       deviceStruct.voltage := GetDeviceVoltage(pdev);
       deviceStruct.cosfi := GetDeviceCosFi(pdev);
+      deviceStruct.phase := GetDevicePhase(pdev);
 
       // Добавление структуры в результирующий список
       Result.PushBack(deviceStruct);
@@ -349,6 +351,7 @@ begin
       deviceStruct.power := GetDevicePower(pdev);
       deviceStruct.voltage := GetDeviceVoltage(pdev);
       deviceStruct.cosfi := GetDeviceCosFi(pdev);
+      deviceStruct.phase := GetDevicePhase(pdev);
 
       // Добавление структуры в результирующий список
       Result.PushBack(deviceStruct);
@@ -509,6 +512,30 @@ begin
   pvd := FindVariableInEnt(pdev, 'CosPHI');
   if pvd <> nil then
     Result := pdouble(pvd^.data.Addr.Instance)^;
+end;
+
+// Получение фазы
+function TDeviceDataCollector.GetDevicePhase(pdev: PGDBObjDevice): string;
+var
+  pvd: pvardesk;
+  strTemp: string;
+begin
+  Result := 'Error';
+  pvd := FindVariableInEnt(pdev, 'Phase');
+  if pvd <> nil then
+  begin
+    strTemp := pvd^.data.ptd^.GetValueAsString(pvd^.data.Addr.Instance);
+    if strTemp = '_ABC' then
+      Result := 'ABC'
+    else if strTemp = '_A' then
+      Result := 'A'
+    else if strTemp = '_B' then
+      Result := 'B'
+    else if strTemp = '_C' then
+      Result := 'C'
+    else
+      Result := 'Error';
+  end;
 end;
 
 // Получение устройства по номеру в списке примитивов

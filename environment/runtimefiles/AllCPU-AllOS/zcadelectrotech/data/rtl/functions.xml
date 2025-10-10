@@ -100,6 +100,24 @@
          <Pumps Desc="Pumps"/>
          <Refrigerators Desc="Refrigerators"/>
        </PlumbingEquip>
+       <Admbuild Desc="Plumbing equipment">
+         <Kitchenunits Desc="Electrical equipment for public catering establishments and kitchen units"/>         
+         <Colddishwash Desc="Dishwashers with cold water supply"/>         
+         <Hotdishwash Desc="Dishwashers with hot water supply"/>        
+         <Elevator12below Desc="Elevator installations below 12 floors"/>
+         <Elevator12above Desc="Elevator installations above 12 floors"/>
+         <Scenemechanisms Desc="Power receivers for stage machinery"/>
+         <Computers Desc="Computers"/>   
+         <Communicationdev Desc="Communication devices"/>
+         <Metalwoodmachines Desc="Metalworking and woodworking machines in workshops"/> 
+         <Photographylab Desc="Photography lab duplicating equipment"/>
+         <Educationlab Desc="Educational laboratory equipment"/> 
+         <Educationworkshops Desc="Electrical equipment for educational and production workshops of colleges and schools"/>
+         <Technologservtrademedical Desc="Technological equipment for consumer services, trade, and medical offices"/>     
+         <Technicaldrycleanlaundries Desc="Technical equipment for dry cleaning and laundries"/> 
+         <Handwarmers Desc="Hand and towel warmers"/>
+         <Householdstove Desc="Household electric stoves"/>          
+       </Admbuild>      
     </Velectr>  
     <Not_classified Desc="Not classified"/>
   </STRINGTREE>

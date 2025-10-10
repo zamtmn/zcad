@@ -230,6 +230,9 @@ begin
   devicesList := FDeviceCollector.GetAllDevicesAsStructList;
 
   try
+    if not CheckFileExists(AAccessDBPath) then
+      exit;
+
     // Инициализация экспортера Access, если ещё не создан
     if not Assigned(FAccessExporter) then
       FAccessExporter := TAccessDBExporter.Create(AAccessDBPath);

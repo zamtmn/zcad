@@ -113,7 +113,7 @@ procedure TAccessDBExporter.ExportDevice(const ADeviceInfo: TVElectrDevStruct);
 begin
   try
     FQuery.SQL.Text := 'INSERT INTO Device (Prim_ID, Рower, Voltage, Phase, CosF) VALUES (:pPrimID, :pPower, :pVoltage, :pPhase, :pCosF)';
-    FQuery.Params.ParamByName('pPrimID').AsString := ADeviceInfo.realname;
+    FQuery.Params.ParamByName('pPrimID').AsString := ADeviceInfo.fullname;
     FQuery.Params.ParamByName('pPower').AsFloat := ADeviceInfo.power;
     FQuery.Params.ParamByName('pVoltage').AsInteger := ADeviceInfo.voltage;
     FQuery.Params.ParamByName('pPhase').AsString := ADeviceInfo.opmode;

@@ -139,7 +139,7 @@ type
 
  procedure visualMasterGroupLine(listVertexEdge:TGraphBuilder;listMasterDevice:TVectorOfMasterDevice;isMetricNumeric:boolean;heightText:double;numDevice:boolean);
  procedure visualGraphConnection(GGraph:TGraphBuilder;listMasterDevice:TVectorOfMasterDevice;graphFull,graphEasy:boolean;var fTreeVertex:GDBVertex;var eTreeVertex:GDBVertex);
-
+ procedure cleanSuperlineCablelist;
  //procedure cabelingMasterGroupLine(listVertexEdge:TGraphBuilder;listMasterDevice:TVectorOfMasterDevice;isMetricNumeric:boolean);
  procedure cabelingMasterGroupLineNew(listVertexEdge:TGraphBuilder;listMasterDevice:TVectorOfMasterDevice;isMetricNumeric:boolean);
 
@@ -1041,6 +1041,34 @@ end;
 //         end;
 //end;
 
+procedure cleanSuperlineCablelist;
+var
+  pobjsl:pGDBObjEntity;
+  superlineclean:PGDBObjSuperLine;
+  itsl:itrec;
+  pvdslcablelist:pvardesk;
+begin
+  //zcUI.TextMessage('1',TMWOHistoryOut);
+//Чистим все суперлинии списки кабелей
+
+pobjsl:=drawings.GetCurrentROOT^.ObjArray.beginiterate(itsl); //зона уже выбрана в перспективе застовлять пользователя ее выбирать
+//zcUI.TextMessage('1',TMWOHistoryOut);
+if pobjsl<>nil then
+  repeat
+     // Определяем что это устройство
+     if pobjsl^.GetObjType=GDBSuperlineID then
+       begin
+       //zcUI.TextMessage('2',TMWOHistoryOut);
+        superlineclean:=PGDBObjSuperline(pobjsl);
+        pvdslcablelist:=FindVariableInEnt(superlineclean,velec_SLcablelist);
+         if pvdslcablelist<>nil then
+           pString(pvdslcablelist^.data.Addr.Instance)^:='';
+       end;
+    pobjsl:=drawings.GetCurrentROOT^.ObjArray.iterate(itsl); //переход к следующем примитиву в списке выбраных примитивов
+  until pobjsl=nil;
+end;
+
+
 
 
 procedure cabelingMasterGroupLineNew(listVertexEdge:TGraphBuilder;listMasterDevice:TVectorOfMasterDevice;isMetricNumeric:boolean);
@@ -1089,9 +1117,8 @@ var
     listAllDeviceMainAndDelegate:TListDevice; //список главной функции и делегатов
     iRootTree:boolean;
     pvdsl:pvardesk;
-    pobjsl:pGDBObjEntity;
-    superlineclean:PGDBObjSuperLine;
-    itsl:itrec;
+
+
     //isDevTogether:boolean
 
     //Метрирование датчиков
@@ -1448,6 +1475,7 @@ var
         // проверка на наличие
         if Groups.IndexOf(NewGroup) = -1 then
         begin
+          //zcUI.TextMessage('GroupList='+GroupList+'NewGroup='+NewGroup,TMWOHistoryOut);
           if GroupList = '' then
             Result := NewGroup
           else
@@ -1465,21 +1493,21 @@ begin
     //zcUI.TextMessage('1',TMWOHistoryOut);
     //Чистим все суперлинии списки кабелей
 
-    pobjsl:=drawings.GetCurrentROOT^.ObjArray.beginiterate(itsl); //зона уже выбрана в перспективе застовлять пользователя ее выбирать
-    //zcUI.TextMessage('1',TMWOHistoryOut);
-    if pobjsl<>nil then
-      repeat
-         // Определяем что это устройство
-         if pobjsl^.GetObjType=GDBSuperlineID then
-           begin
-           //zcUI.TextMessage('2',TMWOHistoryOut);
-            superlineclean:=PGDBObjSuperline(pobjsl);
-            pvdslcablelist:=FindVariableInEnt(superlineclean,velec_SLcablelist);
-             if pvdslcablelist<>nil then
-               pString(pvdslcablelist^.data.Addr.Instance)^:='';
-           end;
-        pobjsl:=drawings.GetCurrentROOT^.ObjArray.iterate(itsl); //переход к следующем примитиву в списке выбраных примитивов
-      until pobjsl=nil;
+    //pobjsl:=drawings.GetCurrentROOT^.ObjArray.beginiterate(itsl); //зона уже выбрана в перспективе застовлять пользователя ее выбирать
+    ////zcUI.TextMessage('1',TMWOHistoryOut);
+    //if pobjsl<>nil then
+    //  repeat
+    //     // Определяем что это устройство
+    //     if pobjsl^.GetObjType=GDBSuperlineID then
+    //       begin
+    //       //zcUI.TextMessage('2',TMWOHistoryOut);
+    //        superlineclean:=PGDBObjSuperline(pobjsl);
+    //        pvdslcablelist:=FindVariableInEnt(superlineclean,velec_SLcablelist);
+    //         if pvdslcablelist<>nil then
+    //           pString(pvdslcablelist^.data.Addr.Instance)^:='';
+    //       end;
+    //    pobjsl:=drawings.GetCurrentROOT^.ObjArray.iterate(itsl); //переход к следующем примитиву в списке выбраных примитивов
+    //  until pobjsl=nil;
 
 
 

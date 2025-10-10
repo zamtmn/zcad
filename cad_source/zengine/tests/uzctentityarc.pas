@@ -179,60 +179,49 @@ end;
 
 procedure TArcTest.TestMirrorArc;
 var
-  drawing: TSimpleDrawing;
-  arc: PGDBObjArc;
-  dc: TDrawContext;
-  mirrorMatrix: DMatrix4D;
-  plane: DVector4D;
-  originalStartAngle, originalEndAngle: Double;
+  drawing:TSimpleDrawing;
+  arc:PGDBObjArc;
+  dc:TDrawContext;
+  center:GDBVertex;
+  verror:string;
 begin
   // Создание чертежа
   drawing.init(nil);
-
-  // Создание дуги с начальными параметрами
-  arc := GDBObjArc.CreateInstance;
-  arc^.Local.P_insert := CreateVertex(5, 5, 0);
-  arc^.R := 10.0;
-  arc^.StartAngle := DegreesToRadians(30);
-  arc^.EndAngle := DegreesToRadians(120);
-
+  //Создание дуги
+  arc:=GDBObjArc.CreateInstance;
+  //Настройка параметров дуги
+  center:=CreateVertex(10,10,0);  // Центр дуги
+  arc^.Local.P_insert:=center;
+  arc^.R:=10.0;                       // Радиус 50 единиц
+  arc^.StartAngle:=pi;               // Начальный угол 0 радиан
+  arc^.EndAngle:=3*Pi/2;
+  // Конечный угол π радиан (полукруг)
+  //Добавление дуги в чертёж
   drawing.GetCurrentRoot^.AddMi(@arc);
   dc := drawing.CreateDrawingRC;
   arc^.BuildGeometry(drawing);
-  arc^.formatEntity(drawing, dc);
+  // Форматирование сущности
+  arc^.formatEntity(drawing,dc);
+  arc^.transform(CreateReflectionMatrix(PlaneFrom3Pont(NulVertex,x_Y_zVertex,xy_Z_Vertex)));
+  arc^.formatEntity(drawing,dc);
 
-  originalStartAngle := arc^.StartAngle;
-  originalEndAngle := arc^.EndAngle;
+  verror:='';
+  if not IsPointEqual(arc^.P_insert_in_WCS,CreateVertex(-10,10,0)) then
+    verror:=verror+format('arc^.P_insert_in_WCS (%g,%g,%g)<>(-10,10,0); ',
+      [arc^.P_insert_in_WCS.x,arc^.P_insert_in_WCS.y,arc^.P_insert_in_WCS.z]);
+  if IsDoubleNotEqual(arc^.StartAngle,10) then
+    verror:=verror+format('arc^.StartAngle %g<>3*Pi/2; ',[arc^.StartAngle]);
+  if IsDoubleNotEqual(arc^.EndAngle,0) then
+    verror:=verror+format('arc^.EndAngle %g<>0; ',[arc^.EndAngle]);
+  if IsDoubleNotEqual(arc^.R,10) then
+    verror:=verror+format('arc^.R %g<>10; ',[arc^.R]);
+  try
+  if verror<>''then
+    raise Exception.Create('arc^.transform failed! '+verror);
 
-  // Зеркалирование относительно плоскости YZ (плоскость x=0)
-  // Плоскость определяется как (1, 0, 0, 0) - нормаль вдоль оси X
-  plane.v[0] := 1;  // A
-  plane.v[1] := 0;  // B
-  plane.v[2] := 0;  // C
-  plane.v[3] := 0;  // D (расстояние от начала координат)
-
-  NormalizePlane(plane);
-  mirrorMatrix := CreateReflectionMatrix(plane);
-
-  arc^.transform(mirrorMatrix);
-  arc^.FormatEntity(drawing, dc);
-
-  // После зеркалирования по оси X:
-  // - X координата меняет знак
-  // - Углы должны поменяться местами и быть скорректированы
-  AssertEquals('Mirror: Center X should be negated', -5, arc^.Local.P_insert.x, EPSILON);
-  AssertEquals('Mirror: Center Y should stay same', 5, arc^.Local.P_insert.y, EPSILON);
-  AssertEquals('Mirror: Center Z should stay same', 0, arc^.Local.P_insert.z, EPSILON);
-  AssertEquals('Mirror: Radius should stay same', 10, arc^.R, EPSILON);
-
-  // Проверка, что углы изменились (из-за зеркалирования)
-  // При зеркалировании начальный и конечный углы меняются местами
-  AssertTrue('Mirror: Angles should be different after mirroring',
-    (Abs(arc^.StartAngle - originalStartAngle) > EPSILON) or
-    (Abs(arc^.EndAngle - originalEndAngle) > EPSILON));
-
-  // Освобождение ресурсов
-  drawing.done;
+  finally
+    drawing.done;
+  end;
 end;
 
 procedure TArcTest.TestIssue73Rotation;

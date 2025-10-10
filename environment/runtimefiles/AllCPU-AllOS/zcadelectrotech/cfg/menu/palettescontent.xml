@@ -35,7 +35,11 @@
 	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_VEDOMOSTI5_2)" Img='DEVICE_EL_VL_VEDOMOSTI5_2_300' Caption='Лист ИУЛ'/>
 	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_STAMP6)" Img='DEVICE_EL_VL_STAMP6_300' Caption='Записка ГИПа'/>
 	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_STAMP5)" Img='DEVICE_EL_VL_STAMP5_300' Caption='Скозная нумерация'/>
-	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_DEVICE_EXPLICATION)" Img='DEVICE_EL_VL_DEVICE_EXPLICATION_300' Caption='Экспликация'/>
+      	</ZTreeNode>
+      	<ZTreeNode Caption='Plans'>
+	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_PLANS_EXPLICATION)" Img='DEVICE_EL_VL_PLANS_EXPLICATION_300' Caption='Экспликация'/>
+	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_PLANS_HOLES_HRZ)" Img='DEVICE_EL_VL_PLANS_HOLES_HRZ_300' Caption='Отверстие в полу'/>
+	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_PLANS_HOLES_VRT)" Img='DEVICE_EL_VL_PLANS_HOLES_VRT_300' Caption='Отверстие в стене'/>
       	</ZTreeNode>
       	<ZTreeNode Caption='Risers'>
       	   <ZTreeCommand Command="Insert(DEVICE_EL_VL_CABLE_BREAK)" Img='DEVICE_EL_VL_CABLE_BREAK_300' Caption='Обрыв'/>

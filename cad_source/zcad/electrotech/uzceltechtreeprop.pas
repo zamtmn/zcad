@@ -27,6 +27,8 @@ type
     function FindOrCreateChildrenNode(var CurrentBlobNode:TBlobTree.TTreeNodeType;SubXMLNode:TDomNode;TranslateFunc:TTranslateFunction):TBlobTree.TTreeNodeType;
     procedure ProcessNode(CurrentXmlNode:TDomNode;var CurrentBlobNode:TBlobTree.TTreeNodeType;TranslateFunc:TTranslateFunction);
     function FindChildrenNode(var CurrentBlobNode:TBlobTree.TTreeNodeType;NodeName:ansistring):TBlobTree.TTreeNodeType;
+    function FindChildrenNodeBy(var CurrentBlobNode:TBlobTree.TTreeNodeType;NodeName:ansistring):TBlobTree.TTreeNodeType;
+    function GetDecaratedPard(AFullName:TStringTreeType):TStringTreeType;
   end;
 
 var
@@ -53,6 +55,19 @@ begin
   BlobTree.Destroy;
 end;
 
+function TTreePropManager.FindChildrenNodeBy(var CurrentBlobNode:TBlobTree.TTreeNodeType;NodeName:ansistring):TBlobTree.TTreeNodeType;
+var
+  i:integer;
+begin
+  if Assigned(CurrentBlobNode) then begin
+    for i:=0 to CurrentBlobNode.Children.Size-1 do
+      if CurrentBlobNode.Children.Mutable[i]^.data.Name=NodeName then
+        exit(CurrentBlobNode.Children[i])
+  end;
+  result:=nil;
+end;
+
+
 function TTreePropManager.FindChildrenNode(var CurrentBlobNode:TBlobTree.TTreeNodeType;NodeName:ansistring):TBlobTree.TTreeNodeType;
 var
   i:integer;
@@ -64,6 +79,7 @@ begin
   end;
   result:=nil;
 end;
+
 function getAttrValue(const aNode:TDomNode;const AttrName,DefValue:string):string;
 var
   aNodeAttr:TDomNode;
@@ -158,6 +174,30 @@ begin
 
   //BlobTree.Root:=root;
   XMLFile.Free;
+end;
+
+function TTreePropManager.GetDecaratedPard(AFullName:TStringTreeType):TStringTreeType;
+var
+  NodeName:TStringTreeType;
+  StartPos,SeparatorPos:Integer;
+  CurrNode:TBlobTree.TTreeNodeType;
+begin
+  StartPos:=1;
+  SeparatorPos:=Pos(NameSeparator,AFullName);
+  if SeparatorPos=0 then
+    SeparatorPos:=Length(AFullName)+1;
+  CurrNode:=BlobTree.Root;
+  while SeparatorPos>StartPos do begin
+  CurrNode:=FindChildrenNodeBy(CurrNode,AFullName[StartPos..SeparatorPos-1]);
+  StartPos:=SeparatorPos+length(NameSeparator);
+  SeparatorPos:=Pos(NameSeparator,AFullName,StartPos);
+  if SeparatorPos=0 then
+    SeparatorPos:=length(AFullName)+1;
+  end;
+  if CurrNode<>Nil then
+    result:=CurrNode.Data.LocalizedName
+  else
+    result:=AFullName;
 end;
 
 initialization

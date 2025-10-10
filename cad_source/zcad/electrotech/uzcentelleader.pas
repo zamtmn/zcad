@@ -35,6 +35,7 @@ GDBObjElLeader= object(GDBObjComplex)
 
             AutoVAlaign:Boolean;
             VerticalAlign:TVAlign;
+            ShowTable:boolean;
 
             TextContent:string;
             MaterialContent:string;
@@ -211,9 +212,11 @@ begin
   MarkLine.SaveToDXFPostProcess(outStream,IODXFContext);
   MarkLine.bp.ListPos.Owner:=@self;
 
+  if ShowTable then begin
   tbl.bp.ListPos.Owner:=@gdbtrash;
   tbl.SaveToDXFFollow(outStream,drawing,IODXFContext);
   tbl.bp.ListPos.Owner:=@self;
+  end;
 end;
 procedure GDBObjElLeader.SaveToDXFFollow;
 var
@@ -325,6 +328,7 @@ var
   ptext:PGDBObjText;
   width,sl,l:Integer;
   TCP:TCodePage;
+  textyoffset:double;
 
   Objects:GDBObjOpenArrayOfPV;
   pentvarext:TVariablesExtender;
@@ -491,8 +495,8 @@ begin
 
 
 
+  if ShowTable then begin
   //textcontent:=Tria_AnsiToUtf8(textcontent);
-
   if sta.Count=0 then begin
   s:='??';
   sta.PushBackData(s);
@@ -532,7 +536,10 @@ begin
   tbl.vp.Layer:=vp.Layer;
   tbl.Build(drawing);
 
-
+  end else begin
+    tbl.tbl.Clear;
+    tbl.Build(drawing);
+  end;
   if pdev=nil then
   begin
   tv:=uzegeometry.vectordot(VertexSub(mainline.CoordInWCS.lEnd,mainline.CoordInWCS.lBegin),Local.basis.OZ);
@@ -624,13 +631,17 @@ begin
          s:=s+{pstring(pvn^.Instance)^}pvn^.data.PTD.GetValueAsString(pvn^.data.Addr.Instance);;
     end;
   end;
+  if ShowTable then
+    textyoffset:=1.5
+  else
+    textyoffset:=0.5;
   if s<>'' then
   begin
   ptext:=pointer(self.ConstObjArray.CreateInitObj(GDBMTextID,@self));
   ptext.vp.Layer:=vp.Layer;
   ptext.Template:=UTF8ToString({Tria_AnsiToUtf8}(s));
   ptext.Local.P_insert:=tbl.Local.P_insert;
-  ptext.Local.P_insert.y:=ptext.Local.P_insert.y+1.5*scale;
+  ptext.Local.P_insert.y:=ptext.Local.P_insert.y+textyoffset*scale;
   ptext.textprop.justify:=jsbl;
   ptext.TXTStyle:=pointer(drawing.GetTextStyleTable^.getDataMutable(0));
   if VertexSub(mainline.CoordInWCS.lEnd,mainline.CoordInWCS.lBegin).x<=0 then begin
@@ -645,6 +656,7 @@ begin
   ptext.textprop.size:=2.5*scale;
   ptext.FormatEntity(drawing,dc);
 
+  if ShowTable then begin
   pl:=pointer(self.ConstObjArray.CreateInitObj(GDBlineID,@self));
   pl.vp.Layer:=vp.Layer;
   pl.CoordInOCS.lBegin:=textpoint;
@@ -652,6 +664,7 @@ begin
   pl.CoordInOCS.lEnd:=pl.CoordInOCS.lBegin;
   pl.CoordInOCS.lEnd.y:=pl.CoordInOCS.lEnd.y-1*scale;
   pl.FormatEntity(drawing,dc);
+  end;
   pl:=pointer(self.ConstObjArray.CreateInitObj(GDBlineID,@self));
   pl.vp.Layer:=vp.Layer;
   pl.CoordInOCS.lBegin:=textpoint;
@@ -823,7 +836,8 @@ begin
   inc(dc.subrender);
   MainLine.DrawGeometry(lw,dc,inFrustumState);
   MarkLine.DrawGeometry(lw,dc,inFrustumState);
-  tbl.DrawGeometry(lw,dc,inFrustumState);
+  if ShowTable then
+    tbl.DrawGeometry(lw,dc,inFrustumState);
   dec(dc.subrender);
   inherited;
 end;
@@ -849,6 +863,7 @@ begin
   tvo^.HorizontalAlign:=HorizontalAlign;
   tvo^.AutoVAlaign:=AutoVAlaign;
   tvo^.VerticalAlign:=VerticalAlign;
+  tvo^.ShowTable:=ShowTable;
 
   result := tvo;
 end;
@@ -867,6 +882,7 @@ begin
      HorizontalAlign:=THAlign.HALeft;
      AutoVAlaign:=true;
      VerticalAlign:=TVAlign.VATop;
+     ShowTable:=true;
      //vp.ID:=GDBElLeaderID;
      MainLine.init(@self,vp.Layer,vp.LineWeight,uzegeometry.VertexMulOnSc(onevertex,-10),nulvertex);
      //MainLine.Format;
@@ -956,6 +972,9 @@ begin
                    begin
                         result^.VerticalAlign:=PTVAlign(pvi^.data.Addr.Instance)^;
                    end;
+   pvi:=PTUnit(ptu).FindVariable('ShowTable');
+    if pvi<>nil then
+      result^.ShowTable:=PBoolean(pvi^.data.Addr.Instance)^;
    end;
 end;
 initialization

@@ -100,7 +100,7 @@
          <Pumps Desc="Pumps"/>
          <Refrigerators Desc="Refrigerators"/>
        </PlumbingEquip>
-       <Admbuild Desc="Plumbing equipment">
+       <Admbuild Desc="Administrative buildings">
          <Kitchenunits Desc="Electrical equipment for public catering establishments and kitchen units"/>         
          <Colddishwash Desc="Dishwashers with cold water supply"/>         
          <Hotdishwash Desc="Dishwashers with hot water supply"/>        
@@ -118,6 +118,17 @@
          <Handwarmers Desc="Hand and towel warmers"/>
          <Householdstove Desc="Household electric stoves"/>          
        </Admbuild>      
+       <Livinghouse Desc="Residential Buildings">
+         <Apartmentselectric Desc="Apartments with electric stoves (8.5 kW)"/>         
+         <Apartmentsnaturalgas Desc="Apartments with natural gas stoves (4.5 kW)"/>                  
+       </Livinghouse>  
+       <Lighting Desc="Lighting">
+         <Work Desc="Work Lighting"/>         
+         <Emergency Desc="Emergency Lighting"/>                                   
+         <Exterior Desc="Exterior Lighting"/>                  
+         <Facade Desc="Facade Lighting"/>                  
+         <Outlet Desc="Outlet Network"/>          
+       </Lighting>      
     </Velectr>  
     <Not_classified Desc="Not classified"/>
   </STRINGTREE>

@@ -41,7 +41,7 @@ type
     procedure Disconnect;
     procedure ClearTables;
     procedure ExportDevice(const ADeviceInfo: TVElectrDevStruct);
-    procedure ExportConnection(const APrimID, ASecID, AFeeder: string);
+    procedure ExportConnection(const ADeviceInfo: TVElectrDevStruct);
     procedure Commit;
 
     property DatabasePath: string read FDatabasePath write FDatabasePath;
@@ -112,12 +112,14 @@ end;
 procedure TAccessDBExporter.ExportDevice(const ADeviceInfo: TVElectrDevStruct);
 begin
   try
-    FQuery.SQL.Text := 'INSERT INTO Device (Prim_ID, Рower, Voltage, Phase, CosF) VALUES (:pPrimID, :pPower, :pVoltage, :pPhase, :pCosF)';
+    //zcUI.TextMessage('pPrimID: ' + pPrimID+' - pPower: ' + pPower, TMWOHistoryOut);
+    FQuery.SQL.Text := 'INSERT INTO Device (Prim_ID, Рower, Voltage, Phase, CosF, Type) VALUES (:pPrimID, :pPower, :pVoltage, :pPhase, :pCosF, :pType)';
     FQuery.Params.ParamByName('pPrimID').AsString := ADeviceInfo.fullname;
     FQuery.Params.ParamByName('pPower').AsFloat := ADeviceInfo.power;
     FQuery.Params.ParamByName('pVoltage').AsInteger := ADeviceInfo.voltage;
-    FQuery.Params.ParamByName('pPhase').AsString := ADeviceInfo.opmode;
+    FQuery.Params.ParamByName('pPhase').AsString := ADeviceInfo.phase;
     FQuery.Params.ParamByName('pCosF').AsFloat := ADeviceInfo.cosfi;
+    FQuery.Params.ParamByName('pType').AsString := ADeviceInfo.devtype;
     FQuery.ExecSQL;
   except
     on E: Exception do
@@ -125,13 +127,13 @@ begin
   end;
 end;
 
-procedure TAccessDBExporter.ExportConnection(const APrimID, ASecID, AFeeder: string);
+procedure TAccessDBExporter.ExportConnection(const ADeviceInfo: TVElectrDevStruct);
 begin
   try
     FQuery.SQL.Text := 'INSERT INTO Connect (Prim_ID, Sec_ID, Feeder) VALUES (:pPrimID, :pSecID, :pFeeder)';
-    FQuery.Params.ParamByName('pPrimID').AsString := APrimID;
-    FQuery.Params.ParamByName('pSecID').AsString := ASecID;
-    FQuery.Params.ParamByName('pFeeder').AsString := AFeeder;
+    FQuery.Params.ParamByName('pPrimID').AsString := ADeviceInfo.fullname;
+    FQuery.Params.ParamByName('pSecID').AsString := ADeviceInfo.headdev;
+    FQuery.Params.ParamByName('pFeeder').AsInteger := ADeviceInfo.feedernum;
     FQuery.ExecSQL;
   except
     on E: Exception do

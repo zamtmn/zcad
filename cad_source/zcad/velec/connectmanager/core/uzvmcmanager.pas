@@ -244,7 +244,14 @@ begin
     // Экспорт каждого устройства из списка в базу данных Access
     for i := 0 to devicesList.Size - 1 do
     begin
-      FAccessExporter.ExportDevice(devicesList[i]);
+      if i>0 then begin
+        if devicesList[i].fullname <> devicesList[i-1].fullname then
+          FAccessExporter.ExportDevice(devicesList[i]);
+      end
+      else
+        FAccessExporter.ExportDevice(devicesList[i]);
+
+      FAccessExporter.ExportConnection(devicesList[i]);
     end;
 
     // Фиксация изменений в базе данных

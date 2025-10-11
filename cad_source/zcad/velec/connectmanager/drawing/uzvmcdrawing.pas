@@ -71,9 +71,9 @@ type
     function GetDeviceFullName(pdev: PGDBObjDevice): string;
     function GetDeviceBaseName(pdev: PGDBObjDevice): string;
     function GetDeviceRealName(pdev: PGDBObjDevice): string;
-    function GetDeviceTraceName(pdev: PGDBObjDevice): string;
-    function GetDeviceHeadDev(pdev: PGDBObjDevice): string;
-    function GetDeviceFeederNum(pdev: PGDBObjDevice): integer;
+    function GetDeviceTraceName(pdev: PGDBObjDevice;key:integer): string;
+    function GetDeviceHeadDev(pdev: PGDBObjDevice;key:integer): string;
+    function GetDeviceFeederNum(pdev: PGDBObjDevice;key:integer): integer;
     function GetDeviceCanBeHead(pdev: PGDBObjDevice): integer;
     function GetDeviceDevType(pdev: PGDBObjDevice): string;
     function GetDeviceOpMode(pdev: PGDBObjDevice): string;
@@ -276,7 +276,7 @@ var
   devicesList: TListDev;
   pdev: PGDBObjDevice;
   deviceStruct: TVElectrDevStruct;
-  i: integer;
+  i,count: integer;
 begin
   // Создание результирующего списка структур устройств
   Result := TListVElectrDevStruct.Create;
@@ -295,9 +295,6 @@ begin
       deviceStruct.fullname := GetDeviceFullName(pdev);
       deviceStruct.basename := GetDeviceBaseName(pdev);
       deviceStruct.realname := GetDeviceRealName(pdev);
-      deviceStruct.tracename := GetDeviceTraceName(pdev);
-      deviceStruct.headdev := GetDeviceHeadDev(pdev);
-      deviceStruct.feedernum := GetDeviceFeederNum(pdev);
       deviceStruct.canbehead := GetDeviceCanBeHead(pdev);
       deviceStruct.devtype := GetDeviceDevType(pdev);
       deviceStruct.opmode := GetDeviceOpMode(pdev);
@@ -306,8 +303,21 @@ begin
       deviceStruct.cosfi := GetDeviceCosFi(pdev);
       deviceStruct.phase := GetDevicePhase(pdev);
 
-      // Добавление структуры в результирующий список
-      Result.PushBack(deviceStruct);
+      count:=1;
+
+      deviceStruct.headdev := GetDeviceHeadDev(pdev,count);
+      while (deviceStruct.headdev<>'ERROR') do
+        begin
+          deviceStruct.tracename := GetDeviceTraceName(pdev,count);
+          deviceStruct.feedernum := GetDeviceFeederNum(pdev,count);
+
+          // Добавление структуры в результирующий список
+          Result.PushBack(deviceStruct);
+
+          //zcUI.TextMessage('Количество выбранных примитивов: ' + inttostr(count) + ' шт.',TMWOHistoryOut);
+          inc(count);
+          deviceStruct.headdev := GetDeviceHeadDev(pdev,count);
+        end;
     end;
   finally
     // Освобождение списка указателей на устройства
@@ -323,7 +333,7 @@ var
   devicesList: TListDev;
   pdev: PGDBObjDevice;
   deviceStruct: TVElectrDevStruct;
-  i: integer;
+  i,count: integer;
 begin
   // Создание результирующего списка структур устройств
   Result := TListVElectrDevStruct.Create;
@@ -342,9 +352,6 @@ begin
       deviceStruct.fullname := GetDeviceFullName(pdev);
       deviceStruct.basename := GetDeviceBaseName(pdev);
       deviceStruct.realname := GetDeviceRealName(pdev);
-      deviceStruct.tracename := GetDeviceTraceName(pdev);
-      deviceStruct.headdev := GetDeviceHeadDev(pdev);
-      deviceStruct.feedernum := GetDeviceFeederNum(pdev);
       deviceStruct.canbehead := GetDeviceCanBeHead(pdev);
       deviceStruct.devtype := GetDeviceDevType(pdev);
       deviceStruct.opmode := GetDeviceOpMode(pdev);
@@ -353,6 +360,34 @@ begin
       deviceStruct.cosfi := GetDeviceCosFi(pdev);
       deviceStruct.phase := GetDevicePhase(pdev);
 
+      count:=1;
+      //while (pvd<>nil) do begin
+      //  pvd:=FindVariableInEnt(pdev,'SLCABAGEN'+inttostr(count2)+'_HeadDeviceName');
+      //  if (pvd<>nil) then begin
+      //     Query.Params.ParamByName('hdname').AsString := pstring(pvd^.data.Addr.Instance)^;
+      //  end
+      //  else
+      //     begin
+      //     errorData:=false;
+      //     Query.Params.ParamByName('hdname').AsString := 'ERROR';
+      //     end;
+      //
+      //  pvd:=FindVariableInEnt(pdev,'SLCABAGEN'+inttostr(count2)+'_NGHeadDevice');
+      //  if (pvd<>nil) then
+      //     Query.Params.ParamByName('hdgroup').AsString := pstring(pvd^.data.Addr.Instance)^
+      //  else
+      //  begin
+      //     errorData:=false;
+      //     Query.Params.ParamByName('hdgroup').AsString := 'ERROR';
+      //  end;
+      //  if errorData then
+      //    Query.ExecSQL;
+      //  inc(count2);
+      //  pvd:=FindVariableInEnt(pdev,'SLCABAGEN'+inttostr(count2)+'_HeadDeviceName');
+      //end;
+      //deviceStruct.tracename := GetDeviceTraceName(pdev);
+      //deviceStruct.headdev := GetDeviceHeadDev(pdev);
+      //deviceStruct.feedernum := GetDeviceFeederNum(pdev);
       // Добавление структуры в результирующий список
       Result.PushBack(deviceStruct);
     end;
@@ -407,36 +442,40 @@ begin
 end;
 
 // Получение имени трассы к которой принадлежит устройство
-function TDeviceDataCollector.GetDeviceTraceName(pdev: PGDBObjDevice): string;
+function TDeviceDataCollector.GetDeviceTraceName(pdev: PGDBObjDevice;key:integer): string;
 var
   pvd: pvardesk;
 begin
   Result := 'ERROR';
-  pvd := FindVariableInEnt(pdev, 'SLCABAGEN1_SLTypeagen');
+  pvd := FindVariableInEnt(pdev, 'SLCABAGEN'+inttostr(key)+'_SLTypeagen');
   if pvd <> nil then
     Result := pstring(pvd^.data.Addr.Instance)^;
 end;
 
 // Получение головного устройства
-function TDeviceDataCollector.GetDeviceHeadDev(pdev: PGDBObjDevice): string;
+function TDeviceDataCollector.GetDeviceHeadDev(pdev: PGDBObjDevice;key:integer): string;
 var
   pvd: pvardesk;
 begin
   Result := 'ERROR';
-  pvd := FindVariableInEnt(pdev, 'SLCABAGEN1_HeadDeviceName');
+  pvd := FindVariableInEnt(pdev, 'SLCABAGEN'+inttostr(key)+'_HeadDeviceName');
   if pvd <> nil then
     Result := pstring(pvd^.data.Addr.Instance)^;
 end;
 
 // Получение номера фидера
-function TDeviceDataCollector.GetDeviceFeederNum(pdev: PGDBObjDevice): integer;
+function TDeviceDataCollector.GetDeviceFeederNum(pdev: PGDBObjDevice;key:integer): integer;
 var
   pvd: pvardesk;
 begin
   Result := -1;
-  pvd := FindVariableInEnt(pdev, 'SLCABAGEN1_NGHeadDevice');
+  pvd := FindVariableInEnt(pdev, 'SLCABAGEN'+inttostr(key)+'_NGHeadDevice');
+  try
   if pvd <> nil then
-    Result := pinteger(pvd^.data.Addr.Instance)^;
+    Result := strtoint(pstring(pvd^.data.Addr.Instance)^);
+  except
+    Result := -22;
+  end;
 end;
 
 // Получение признака "Я могу быть головным устройством"

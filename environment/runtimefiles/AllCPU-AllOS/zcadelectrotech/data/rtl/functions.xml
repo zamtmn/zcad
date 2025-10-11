@@ -83,16 +83,16 @@
        </Fire>
        <PlumbingEquip Desc="Plumbing equipment">
          <Vent Desc="General exchange ventilation">
-           <Supply Desc="Fire safety valves"/>
+           <Supply Desc="Supply ventilation"/>
            <Exhaust Desc="Exhaust ventilation"/>
            <Household Desc="Household ventilation"/>
            <Heating Desc="Electric heating of ventilation"/>
            <Valves Desc="Electric valves of ventilation"/>
-           <Pumps Desc="Ventilation pumps"/>
+           <Pumps Desc="Pumps ventilation"/>
          </Vent>
          <Conditioners Desc="Air conditioners">
-           <Outdoor Desc="Air conditioners (outdoor units)"/>
-           <Indoor Desc="Air conditioners (indoor units)"/>
+           <Outdoor Desc="Outdoor units"/>
+           <Indoor Desc="Indoor units"/>
          </Conditioners>
          <Airheaters Desc="Electric heaters"/>         
          <Waterheaters Desc="Electric water heaters"/>         

@@ -82,7 +82,8 @@ begin
   end;
 end;
 
-function ConvertControlArrayToFitArray(const Degree:integer;const AControlPoints:array of GDBVertex):TControlPointsArray;
+function ConvertOnCurvePointsToControlPointsArray(const ADegree:integer;
+  const AOnCurvePoints:array of GDBVertex):TControlPointsArray;
 begin
 end;
 
@@ -101,7 +102,7 @@ begin
       Click,PInteractiveData^.UserPoints.PTArr(PInteractiveData^.UserPoints.getPFirst)^
       [0..PInteractiveData^.UserPoints.Count-1])
   else begin
-    vcp:=ConvertControlArrayToFitArray(PInteractiveData^.PSpline^.Degree,PInteractiveData^.UserPoints.PTArr(PInteractiveData^.UserPoints.getPFirst)^[0..PInteractiveData^.UserPoints.Count-1]);
+    vcp:=ConvertOnCurvePointsToControlPointsArray(PInteractiveData^.PSpline^.Degree,PInteractiveData^.UserPoints.PTArr(PInteractiveData^.UserPoints.getPFirst)^[0..PInteractiveData^.UserPoints.Count-1]);
     UpdateSplineFromControlpoints(PInteractiveData^.PSpline^,Point,
       Click,vcp)
   end;

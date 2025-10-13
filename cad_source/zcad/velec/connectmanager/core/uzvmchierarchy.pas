@@ -29,13 +29,24 @@ uses
 type
   THierarchyBuilder = class
   private
+    type
+      TSortDev = record
+        res: Integer;
+        LastWord: string;
+        NextWord1: string;
+        NextWord2: string;
+      end;
+
     function FindFullHierarchy(const deviceList: TListVElectrDevStruct; const nodeName: string; var hierarchy: string): Boolean;
     function FindOnlyHDHierarchy(const deviceList: TListVElectrDevStruct; const nodeName: string; var hierarchy: string): Boolean;
+    function ProcessStrings(const Str1, Str2: string): TSortDev;
+    function GetDeviceIndexByName(const deviceList: TListVElectrDevStruct; const ADevName: string): Integer;
   public
     constructor Create;
     destructor Destroy; override;
 
     procedure BuildHierarchyPaths(var deviceList: TListVElectrDevStruct);
+    procedure FillSortFields(var deviceList: TListVElectrDevStruct);
   end;
 
 implementation
@@ -146,6 +157,140 @@ begin
       device^.pathHD := hierarchy
     else
       device^.pathHD := '';
+  end;
+end;
+
+function THierarchyBuilder.ProcessStrings(const Str1, Str2: string): TSortDev;
+var
+  Parts1, Parts2: TStringList;
+  LastWordFromStr1: string;
+  IndexInStr2, WordsAfter, i: Integer;
+begin
+  Result.res := -1;
+  Result.LastWord := '-1';
+  Result.NextWord1 := '-1';
+  Result.NextWord2 := '-1';
+
+  Parts1 := TStringList.Create;
+  Parts2 := TStringList.Create;
+  try
+    // Разбиваем первую строку на части
+    ExtractStrings(['~'], [], PChar(Str1), Parts1);
+    if Parts1.Count = 0 then Exit;
+
+    // Получаем последнее слово из первой строки
+    LastWordFromStr1 := Parts1[Parts1.Count - 1];
+
+    // Разбиваем вторую строку на части
+    ExtractStrings(['~'], [], PChar(Str2), Parts2);
+    if Parts2.Count = 0 then Exit;
+
+    // Ищем последнее слово из первой строки во второй строке
+    IndexInStr2 := -1;
+    for i := 0 to Parts2.Count - 1 do
+    begin
+      if Parts2[i] = LastWordFromStr1 then
+      begin
+        IndexInStr2 := i;
+        Break;
+      end;
+    end;
+
+    if IndexInStr2 = -1 then Exit;
+
+    // Определяем сколько слов осталось после найденного слова
+    WordsAfter := Parts2.Count - IndexInStr2 - 1;
+
+    // Выбираем вариант в зависимости от количества слов после
+    if WordsAfter = 0 then
+    begin
+      Result.res := 1;
+      Result.LastWord := LastWordFromStr1;
+      Result.NextWord1 := '';
+      Result.NextWord2 := '';
+    end
+    else if WordsAfter = 1 then
+    begin
+      Result.res := 2;
+      Result.LastWord := LastWordFromStr1;
+      Result.NextWord1 := Parts2[IndexInStr2 + 1];
+      Result.NextWord2 := '';
+    end
+    else if WordsAfter >= 2 then
+    begin
+      Result.res := 3;
+      Result.LastWord := LastWordFromStr1;
+      Result.NextWord1 := Parts2[IndexInStr2 + 1];
+      Result.NextWord2 := Parts2[IndexInStr2 + 2];
+    end;
+
+  finally
+    Parts1.Free;
+    Parts2.Free;
+  end;
+end;
+
+function THierarchyBuilder.GetDeviceIndexByName(const deviceList: TListVElectrDevStruct; const ADevName: string): Integer;
+var
+  i: Integer;
+begin
+  Result := -1;
+  for i := 0 to deviceList.Size - 1 do
+  begin
+    if deviceList[i].fullname = ADevName then
+    begin
+      Result := i;
+      Exit;
+    end;
+  end;
+end;
+
+procedure THierarchyBuilder.FillSortFields(var deviceList: TListVElectrDevStruct);
+var
+  i: Integer;
+  sortWord: TSortDev;
+  device: PTVElectrDevStruct;
+  idx1, idx2: Integer;
+begin
+  // Заполнение полей Sort1, Sort2, Sort3 на основе анализа иерархии
+  for i := 0 to deviceList.Size - 1 do
+  begin
+    device := deviceList.Mutable[i];
+
+    // Анализируем пути иерархии
+    sortWord := ProcessStrings(device^.pathHD, device^.fullpathHD);
+
+    if sortWord.res = 1 then
+    begin
+      // Устройство находится на верхнем уровне иерархии
+      device^.Sort1 := i;
+      device^.Sort2 := 0;
+      device^.Sort3 := 0;
+    end
+    else if sortWord.res = 2 then
+    begin
+      // Устройство на втором уровне - одно устройство выше в иерархии
+      idx1 := GetDeviceIndexByName(deviceList, sortWord.NextWord1);
+      device^.Sort1 := idx1;
+      device^.Sort2 := i;
+      device^.Sort3 := 0;
+    end
+    else if sortWord.res >= 3 then
+    begin
+      // Устройство на третьем или более глубоком уровне
+      idx1 := GetDeviceIndexByName(deviceList, sortWord.NextWord2);
+      idx2 := GetDeviceIndexByName(deviceList, sortWord.NextWord1);
+      device^.Sort1 := idx1;
+      device^.Sort2 := idx2;
+      device^.Sort3 := i;
+    end
+    else
+    begin
+      // Не удалось определить уровень
+      device^.Sort1 := 0;
+      device^.Sort2 := 0;
+      device^.Sort3 := 0;
+    end;
   end;
 end;
 

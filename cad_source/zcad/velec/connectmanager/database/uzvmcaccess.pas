@@ -113,7 +113,7 @@ procedure TAccessDBExporter.ExportDevice(const ADeviceInfo: TVElectrDevStruct);
 begin
   try
     //zcUI.TextMessage('pPrimID: ' + pPrimID+' - pPower: ' + pPower, TMWOHistoryOut);
-    FQuery.SQL.Text := 'INSERT INTO Device (Prim_ID, Рower, Voltage, Phase, CosF, Type, pathHD, fullpathHD) VALUES (:pPrimID, :pPower, :pVoltage, :pPhase, :pCosF, :pType, :ppathHD, :pfullpathHD)';
+    FQuery.SQL.Text := 'INSERT INTO Device (Prim_ID, Рower, Voltage, Phase, CosF, Type, pathHD, fullpathHD,S1,S2,S3) VALUES (:pPrimID, :pPower, :pVoltage, :pPhase, :pCosF, :pType, :ppathHD, :pfullpathHD, :pS1, :pS2, :pS3)';
     FQuery.Params.ParamByName('pPrimID').AsString := ADeviceInfo.fullname;
     FQuery.Params.ParamByName('pPower').AsFloat := ADeviceInfo.power;
     FQuery.Params.ParamByName('pVoltage').AsInteger := ADeviceInfo.voltage;
@@ -122,6 +122,9 @@ begin
     FQuery.Params.ParamByName('pType').AsString := ADeviceInfo.devtype;
     FQuery.Params.ParamByName('ppathHD').AsString := ADeviceInfo.pathHD;
     FQuery.Params.ParamByName('pfullpathHD').AsString := ADeviceInfo.fullpathHD;
+    FQuery.Params.ParamByName('pS1').AsInteger := ADeviceInfo.Sort1;
+    FQuery.Params.ParamByName('pS2').AsInteger := ADeviceInfo.Sort2;
+    FQuery.Params.ParamByName('pS3').AsInteger := ADeviceInfo.Sort3;
     FQuery.ExecSQL;
   except
     on E: Exception do

@@ -156,8 +156,11 @@ begin
     // Построение иерархических путей для всех устройств
     FHierarchyBuilder.BuildHierarchyPaths(devicesList);
 
+    // Затем заполнить поля сортировки
+    FHierarchyBuilder.FillSortFields(devicesList);
+
     for i := 0 to devicesList.Size - 1 do
-        zcUI.TextMessage('FindOnlyHDHierarchy ' + devicesList[i].pathHD, TMWOHistoryOut);
+        zcUI.TextMessage('FindOnlyHDHierarchy ' + devicesList[i].pathHD + ' - sort1= ' + inttostr(devicesList[i].Sort1) + ' - sort2= ' + inttostr(devicesList[i].Sort2) + ' - sort3= ' + inttostr(devicesList[i].Sort3), TMWOHistoryOut);
 
     if not CheckFileExists(AAccessDBPath) then
       exit;

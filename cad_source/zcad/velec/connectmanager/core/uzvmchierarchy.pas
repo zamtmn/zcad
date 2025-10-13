@@ -240,7 +240,7 @@ begin
   Result := -1;
   for i := 0 to deviceList.Size - 1 do
   begin
-    if deviceList[i].fullname = ADevName then
+    if deviceList[i].basename = ADevName then
     begin
       Result := i;
       Exit;

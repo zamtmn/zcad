@@ -57,10 +57,10 @@ implementation
 constructor TConnectionManager.Create(const ADrawingPath: string);
 begin
   inherited Create;
-  //FDrawingPath := ADrawingPath;
-
-  if AnsiPos(':\', FDrawingPath) = 0 then
-  zcUI.TextMessage('Команда отменена. Выполните сохранение чертежа в ZCAD!!!!!',TMWOHistoryOut);
+  ////FDrawingPath := ADrawingPath;
+  //
+  ////if AnsiPos(':\', FDrawingPath) = 0 then
+  ////zcUI.TextMessage('Команда отменена. Выполните сохранение чертежа в ZCAD!!!!!',TMWOHistoryOut);
 
     //raise Exception.Create('Чертеж не сохранен. Выполните сохранение в ZCAD!');
 
@@ -155,6 +155,9 @@ begin
   try
     // Построение иерархических путей для всех устройств
     FHierarchyBuilder.BuildHierarchyPaths(devicesList);
+
+    for i := 0 to devicesList.Size - 1 do
+        zcUI.TextMessage('FindOnlyHDHierarchy ' + devicesList[i].pathHD, TMWOHistoryOut);
 
     if not CheckFileExists(AAccessDBPath) then
       exit;

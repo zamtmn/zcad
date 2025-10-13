@@ -62,7 +62,7 @@ begin
   for i := 0 to deviceList.Size - 1 do
   begin
     device := deviceList[i];
-    if device.fullname = nodeName then
+    if device.basename = nodeName then
     begin
       parentNode := device.headdev;
 
@@ -97,7 +97,7 @@ begin
   for i := 0 to deviceList.Size - 1 do
   begin
     device := deviceList[i];
-    if device.fullname = nodeName then
+    if device.basename = nodeName then
     begin
       parentNode := device.headdev;
 
@@ -106,8 +106,11 @@ begin
       begin
         hierarchy := nodeName;
         Result := True;
+              //zcUI.TextMessage('FindOnlyHDHierarchy ' + hierarchy, TMWOHistoryOut);
         Exit;
       end;
+
+
 
       // Рекурсивно ищем иерархию для родительского узла
       if FindOnlyHDHierarchy(deviceList, parentNode, hierarchy) then
@@ -133,16 +136,16 @@ begin
   begin
     device := deviceList.Mutable[i];
 
-    // Построение полного пути иерархии
+    // Построение полного пути иерархии       fullname
     hierarchy := '';
-    if FindFullHierarchy(deviceList, device^.fullname, hierarchy) then
+    if FindFullHierarchy(deviceList, device^.basename, hierarchy) then
       device^.fullpathHD := hierarchy
     else
       device^.fullpathHD := '';
 
     // Построение пути только для головных устройств
     hierarchy := '';
-    if FindOnlyHDHierarchy(deviceList, device^.fullname, hierarchy) then
+    if FindOnlyHDHierarchy(deviceList, device^.basename, hierarchy) then
       device^.pathHD := hierarchy
     else
       device^.pathHD := '';

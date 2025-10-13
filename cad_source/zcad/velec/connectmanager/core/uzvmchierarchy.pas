@@ -24,37 +24,18 @@ interface
 uses
   sysutils, Classes, gvector,
   uzeentdevice, gzctnrVectorTypes,
-  uzcinterface;
+  uzcinterface, uzvmcstruct;
 
 type
-  TDeviceLevel = record
-    pobj: PGDBObjDevice;
-    parentName: string;
-    headdev: string;
-    wayHD: string;
-    fullWayHD: string;
-    icanhd: integer;
-  end;
-
-  TListDevLevel = specialize TVector<TDeviceLevel>;
-
   THierarchyBuilder = class
   private
-    FDeviceList: TListDevLevel;
-    function FindFullHierarchy(const nodeName: string; var hierarchy: string): Boolean;
-    function FindOnlyHDHierarchy(const nodeName: string; var hierarchy: string): Boolean;
+    function FindFullHierarchy(const deviceList: TListVElectrDevStruct; const nodeName: string; var hierarchy: string): Boolean;
+    function FindOnlyHDHierarchy(const deviceList: TListVElectrDevStruct; const nodeName: string; var hierarchy: string): Boolean;
   public
     constructor Create;
     destructor Destroy; override;
 
-    procedure AddDevice(const ADeviceName, AParentName: string; ACanBeHead: integer);
-    procedure BuildFullHierarchy;
-    procedure BuildOnlyHDHierarchy;
-
-    function GetDeviceWay(const ADeviceName: string): string;
-    function GetDeviceFullWay(const ADeviceName: string): string;
-
-    property DeviceList: TListDevLevel read FDeviceList;
+    procedure BuildHierarchyPaths(var deviceList: TListVElectrDevStruct);
   end;
 
 implementation
@@ -62,68 +43,39 @@ implementation
 constructor THierarchyBuilder.Create;
 begin
   inherited Create;
-  FDeviceList := TListDevLevel.Create;
 end;
 
 destructor THierarchyBuilder.Destroy;
 begin
-  FDeviceList.Free;
   inherited Destroy;
 end;
 
-procedure THierarchyBuilder.AddDevice(const ADeviceName, AParentName: string; ACanBeHead: integer);
-var
-  devLevel: TDeviceLevel;
-  i: integer;
-  exists: boolean;
-begin
-  exists := False;
-
-  for i := 0 to FDeviceList.Size - 1 do
-  begin
-    if FDeviceList[i].headdev = ADeviceName then
-    begin
-      exists := True;
-      FDeviceList.Mutable[i]^.parentName := AParentName;
-      FDeviceList.Mutable[i]^.icanhd := ACanBeHead;
-      Break;
-    end;
-  end;
-
-  if not exists then
-  begin
-    devLevel.headdev := ADeviceName;
-    devLevel.parentName := AParentName;
-    devLevel.icanhd := ACanBeHead;
-    devLevel.wayHD := '';
-    devLevel.fullWayHD := '';
-    devLevel.pobj := nil;
-
-    FDeviceList.PushBack(devLevel);
-  end;
-end;
-
-function THierarchyBuilder.FindFullHierarchy(const nodeName: string; var hierarchy: string): Boolean;
+function THierarchyBuilder.FindFullHierarchy(const deviceList: TListVElectrDevStruct; const nodeName: string; var hierarchy: string): Boolean;
 var
   i: Integer;
   parentNode: string;
+  device: TVElectrDevStruct;
 begin
   Result := False;
 
-  for i := 0 to FDeviceList.Size - 1 do
+  // Ищем устройство с заданным полным именем
+  for i := 0 to deviceList.Size - 1 do
   begin
-    if FDeviceList[i].headdev = nodeName then
+    device := deviceList[i];
+    if device.fullname = nodeName then
     begin
-      parentNode := FDeviceList[i].parentName;
+      parentNode := device.headdev;
 
-      if parentNode = 'root' then
+      // Если головное устройство пустое или является корневым, начинаем иерархию
+      if (parentNode = '') or (parentNode = 'root') or (parentNode = '???') or (parentNode = '-') then
       begin
         hierarchy := nodeName;
         Result := True;
         Exit;
       end;
 
-      if FindFullHierarchy(parentNode, hierarchy) then
+      // Рекурсивно ищем иерархию для родительского узла
+      if FindFullHierarchy(deviceList, parentNode, hierarchy) then
       begin
         hierarchy := hierarchy + '~' + nodeName;
         Result := True;
@@ -133,29 +85,35 @@ begin
   end;
 end;
 
-function THierarchyBuilder.FindOnlyHDHierarchy(const nodeName: string; var hierarchy: string): Boolean;
+function THierarchyBuilder.FindOnlyHDHierarchy(const deviceList: TListVElectrDevStruct; const nodeName: string; var hierarchy: string): Boolean;
 var
   i: Integer;
   parentNode: string;
+  device: TVElectrDevStruct;
 begin
   Result := False;
 
-  for i := 0 to FDeviceList.Size - 1 do
+  // Ищем устройство с заданным полным именем
+  for i := 0 to deviceList.Size - 1 do
   begin
-    if FDeviceList[i].headdev = nodeName then
+    device := deviceList[i];
+    if device.fullname = nodeName then
     begin
-      parentNode := FDeviceList[i].parentName;
+      parentNode := device.headdev;
 
-      if parentNode = 'root' then
+      // Если головное устройство пустое или является корневым, начинаем иерархию
+      if (parentNode = '') or (parentNode = 'root') or (parentNode = '???') or (parentNode = '-') then
       begin
         hierarchy := nodeName;
         Result := True;
         Exit;
       end;
 
-      if FindOnlyHDHierarchy(parentNode, hierarchy) then
+      // Рекурсивно ищем иерархию для родительского узла
+      if FindOnlyHDHierarchy(deviceList, parentNode, hierarchy) then
       begin
-        if FDeviceList[i].icanhd = 1 then
+        // Добавляем текущий узел только если он может быть головным устройством
+        if device.canbehead = 1 then
           hierarchy := hierarchy + '~' + nodeName;
         Result := True;
         Exit;
@@ -164,61 +122,30 @@ begin
   end;
 end;
 
-procedure THierarchyBuilder.BuildFullHierarchy;
+procedure THierarchyBuilder.BuildHierarchyPaths(var deviceList: TListVElectrDevStruct);
 var
   i: Integer;
   hierarchy: string;
+  device: PTVElectrDevStruct;
 begin
-  for i := 0 to FDeviceList.Size - 1 do
+  // Построение полного пути и пути только для головных устройств
+  for i := 0 to deviceList.Size - 1 do
   begin
-    if FindFullHierarchy(FDeviceList[i].headdev, hierarchy) then
-      FDeviceList.Mutable[i]^.fullWayHD := hierarchy
+    device := deviceList.Mutable[i];
+
+    // Построение полного пути иерархии
+    hierarchy := '';
+    if FindFullHierarchy(deviceList, device^.fullname, hierarchy) then
+      device^.fullpathHD := hierarchy
     else
-      zcUI.TextMessage(FDeviceList[i].headdev + '~' + FDeviceList[i].parentName + ' -> Иерархия не найдена', TMWOHistoryOut);
-  end;
-end;
+      device^.fullpathHD := '';
 
-procedure THierarchyBuilder.BuildOnlyHDHierarchy;
-var
-  i: Integer;
-  hierarchy: string;
-begin
-  for i := 0 to FDeviceList.Size - 1 do
-  begin
-    if FindOnlyHDHierarchy(FDeviceList[i].headdev, hierarchy) then
-      FDeviceList.Mutable[i]^.wayHD := hierarchy
+    // Построение пути только для головных устройств
+    hierarchy := '';
+    if FindOnlyHDHierarchy(deviceList, device^.fullname, hierarchy) then
+      device^.pathHD := hierarchy
     else
-      zcUI.TextMessage(FDeviceList[i].headdev + '~' + FDeviceList[i].parentName + ' -> Иерархия не найдена', TMWOHistoryOut);
-  end;
-end;
-
-function THierarchyBuilder.GetDeviceWay(const ADeviceName: string): string;
-var
-  i: integer;
-begin
-  Result := '';
-  for i := 0 to FDeviceList.Size - 1 do
-  begin
-    if FDeviceList[i].headdev = ADeviceName then
-    begin
-      Result := FDeviceList[i].wayHD;
-      Exit;
-    end;
-  end;
-end;
-
-function THierarchyBuilder.GetDeviceFullWay(const ADeviceName: string): string;
-var
-  i: integer;
-begin
-  Result := '';
-  for i := 0 to FDeviceList.Size - 1 do
-  begin
-    if FDeviceList[i].headdev = ADeviceName then
-    begin
-      Result := FDeviceList[i].fullWayHD;
-      Exit;
-    end;
+      device^.pathHD := '';
   end;
 end;
 

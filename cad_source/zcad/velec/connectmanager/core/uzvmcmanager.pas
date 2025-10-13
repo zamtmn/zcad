@@ -36,15 +36,12 @@ type
     FHierarchyBuilder: THierarchyBuilder;
     FAccessExporter: TAccessDBExporter;
 
-    procedure PopulateHierarchyFromDevices;
     procedure InsertDevicesToDatabase;
-    procedure UpdateHierarchyPaths;
   public
     constructor Create(const ADrawingPath: string);
     destructor Destroy; override;
 
     procedure CreateTemporaryDatabase;
-    procedure AddHierarchyColumns;
     procedure ExportToAccessDatabase(const AAccessDBPath: string);
     procedure CollectAndExportDevicesToAccess(const AAccessDBPath: string);
 
@@ -69,7 +66,7 @@ begin
 
   //FSQLiteManager := TSQLiteConnectionManager.Create(FDrawingPath);
   //FDeviceCollector := TDeviceDataCollector.Create;
-  //FHierarchyBuilder := THierarchyBuilder.Create;
+  FHierarchyBuilder := THierarchyBuilder.Create;
   FAccessExporter := nil;
 end;
 
@@ -81,28 +78,6 @@ begin
   FDeviceCollector.Free;
   FSQLiteManager.Free;
   inherited Destroy;
-end;
-
-procedure TConnectionManager.PopulateHierarchyFromDevices;
-var
-  devices: specialize TVector<TDeviceData>;
-  i: integer;
-begin
-  devices := FDeviceCollector.getAllCollectDevices;
-
-  for i := 0 to devices.Size - 1 do
-  begin
-    if devices[i].HDName <> '' then
-      FHierarchyBuilder.AddDevice(devices[i].HDName, 'root', devices[i].CanBeHead);
-  end;
-
-  for i := 0 to devices.Size - 1 do
-  begin
-    if devices[i].HDName <> '' then
-      FHierarchyBuilder.AddDevice(devices[i].DevName, devices[i].HDName, devices[i].CanBeHead);
-  end;
-
-  devices.Free;
 end;
 
 procedure TConnectionManager.InsertDevicesToDatabase;
@@ -140,65 +115,12 @@ begin
   end;
 end;
 
-procedure TConnectionManager.UpdateHierarchyPaths;
-var
-  selectQuery, updateQuery: TSQLQuery;
-  hdname, wayHD, fullWayHD: string;
-begin
-  selectQuery := TSQLQuery.Create(nil);
-  updateQuery := TSQLQuery.Create(nil);
-  try
-    selectQuery.Database := FSQLiteManager.Connection;
-    selectQuery.Transaction := FSQLiteManager.Transaction;
-    selectQuery.SQL.Text := 'SELECT DISTINCT hdname FROM dev WHERE hdname <> ''''';
-    selectQuery.Open;
-
-    updateQuery.Database := FSQLiteManager.Connection;
-    updateQuery.Transaction := FSQLiteManager.Transaction;
-    updateQuery.SQL.Text := 'UPDATE dev SET hdway = :hdway, hdfullway = :hdfullway WHERE hdname = :hdname';
-    updateQuery.Prepare;
-
-    while not selectQuery.EOF do
-    begin
-      hdname := selectQuery.FieldByName('hdname').AsString;
-      wayHD := FHierarchyBuilder.GetDeviceWay(hdname);
-      fullWayHD := FHierarchyBuilder.GetDeviceFullWay(hdname);
-
-      updateQuery.Params.ParamByName('hdname').AsString := hdname;
-      updateQuery.Params.ParamByName('hdway').AsString := wayHD;
-      updateQuery.Params.ParamByName('hdfullway').AsString := fullWayHD;
-      updateQuery.ExecSQL;
-
-      selectQuery.Next;
-    end;
-
-    FSQLiteManager.Transaction.Commit;
-    zcUI.TextMessage('Hierarchy paths updated', TMWOHistoryOut);
-  finally
-    selectQuery.Free;
-    updateQuery.Free;
-  end;
-end;
-
 procedure TConnectionManager.CreateTemporaryDatabase;
 begin
   FSQLiteManager.CreateDatabase;
   FSQLiteManager.CreateDevTable;
   InsertDevicesToDatabase;
   zcUI.TextMessage('Temporary database created successfully', TMWOHistoryOut);
-end;
-
-procedure TConnectionManager.AddHierarchyColumns;
-begin
-  PopulateHierarchyFromDevices;
-  FHierarchyBuilder.BuildFullHierarchy;
-  FHierarchyBuilder.BuildOnlyHDHierarchy;
-
-  FSQLiteManager.AddColumnIfNotExists('hdway', 'TEXT');
-  FSQLiteManager.AddColumnIfNotExists('hdfullway', 'TEXT');
-
-  UpdateHierarchyPaths;
-  zcUI.TextMessage('Hierarchy columns added', TMWOHistoryOut);
 end;
 
 procedure TConnectionManager.ExportToAccessDatabase(const AAccessDBPath: string);
@@ -217,10 +139,11 @@ end;
 // На входе: путь к файлу базы данных Access
 // Функция выполняет следующие действия:
 // 1. Собирает список всех устройств с чертежа в виде TListVElectrDevStruct
-// 2. Подключается к базе данных Access
-// 3. Очищает таблицы базы данных
-// 4. Экспортирует каждое устройство из списка в базу данных
-// 5. Фиксирует изменения в базе данных
+// 2. Строит иерархические пути для каждого устройства (pathHD и fullpathHD)
+// 3. Подключается к базе данных Access
+// 4. Очищает таблицы базы данных
+// 5. Экспортирует каждое устройство из списка в базу данных
+// 6. Фиксирует изменения в базе данных
 procedure TConnectionManager.CollectAndExportDevicesToAccess(const AAccessDBPath: string);
 var
   devicesList: TListVElectrDevStruct;
@@ -230,6 +153,9 @@ begin
   devicesList := FDeviceCollector.GetAllDevicesAsStructList;
 
   try
+    // Построение иерархических путей для всех устройств
+    FHierarchyBuilder.BuildHierarchyPaths(devicesList);
+
     if not CheckFileExists(AAccessDBPath) then
       exit;
 

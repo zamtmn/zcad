@@ -21,7 +21,7 @@ unit uzcoiregistermultiproperties;
 
 interface
 uses
-  uzeentwithlocalcs,math,uzcoimultiobjects,uzepalette,sysutils,uzeentityfactory,
+  uzeentwithlocalcs,Math,uzcoimultiobjects,uzepalette,SysUtils,uzeentityfactory,
   uzctranslations,
   uzegeometrytypes,
   varmandef,
@@ -30,7 +30,9 @@ uses
   uzedimensionaltypes,
   Varman,
   uzcoimultipropertiesutil,
-  uzeentcircle,uzeentarc,uzeentline,uzeentblockinsert,uzeenttext,uzeentmtext,uzeentpolyline,uzcentelleader,uzeentdimension,uzeentellipse,
+  uzeentcircle,uzeentarc,uzeentline,uzeentblockinsert,uzeenttext,
+  uzeentmtext,uzeentpolyline,uzcentelleader,uzeentdimension,uzeentellipse,
+  uzeentspline,
   uzegeometry,uzcoimultiproperties,uzcLog,
   uzcExtdrLayerControl,uzcExtdrSmartTextEnt,uzcExtdrSCHConnector,
   uzcutils,uzcdrawing,uzcdrawings,zUndoCmdChgTypes,zUndoCmdChgVariable,
@@ -554,6 +556,7 @@ const
      ptext:PGDBObjText=nil;
      pmtext:PGDBObjMText=nil;
      p3dpoly:PGDBObjPolyline=nil;
+     pspline:PGDBObjSpline=nil;
      pelleader:PGDBObjElLeader=nil;
      pdim:PGDBObjDimension=nil;
      pellipse:PGDBObjEllipse=nil;
@@ -793,6 +796,14 @@ begin
     {--Summary}
     MultiPropertiesManager.RegisterPhysMultiproperty('TotalVertexCount','Total vertex count',sysunit^.TypeName2PTD('TArrayIndex'),MPCSummary,GDBCableID,nil,PtrInt(@p3dpoly^.VertexArrayInOCS.Count),PtrInt(@p3dpoly^.VertexArrayInOCS.Count),OneVarDataMIPD,TEntIterateProcsData.Create(nil,@TArrayIndex2SumEntIterateProc,nil));
     MultiPropertiesManager.RegisterPhysMultiproperty('TotalLength','Total length',sysunit^.TypeName2PTD('Double'),MPCSummary,GDBCableID,nil,0,0,OneVarDataMIPD,TEntIterateProcsData.Create(nil,@GDBPolyLineSumLengthEntIterateProc,nil));
+
+    {Spline uzegeometry}
+    MultiPropertiesManager.RestartMultipropertySortID;
+    MultiPropertiesManager.RegisterPhysMultiproperty('VertexCount','Vertex count',sysunit^.TypeName2PTD('TArrayIndex'),MPCGeometry,GDBSplineID,nil,PtrInt(@pspline^.VertexArrayInOCS.Count),PtrInt(@pspline^.VertexArrayInOCS.Count),OneVarDataMIPD,OneVarRODataEIPD);
+    MultiPropertiesManager.RegisterPhysMultiproperty('Vertex3DControl_','Vertex control',sysunit^.TypeName2PTD('TArrayIndex'),MPCGeometry,GDBSplineID,nil,PtrInt(@pspline^.VertexArrayInWCS),PtrInt(@pspline^.VertexArrayInOCS),TMainIterateProcsData.Create(@GetVertex3DControlData,@FreeVertex3DControlData),TEntIterateProcsData.Create(@PolylineVertex3DControlBeforeEntIterateProc,@PolylineVertex3DControlEntIterateProc,@PolylineVertex3DControlFromVarEntChangeProc));
+    MultiPropertiesManager.RegisterPhysMultiproperty('Degree','Degree',sysunit^.TypeName2PTD('Integer'),MPCGeometry,GDBSplineID,nil,PtrInt(@pspline^.Degree),PtrInt(@pspline^.Degree),OneVarDataMIPD,OneVarDataEIPD);
+    {--Misc}
+    MultiPropertiesManager.RegisterPhysMultiproperty('Closed','Closed',sysunit^.TypeName2PTD('Boolean'),MPCMisc,GDBSplineID,nil,PtrInt(@pspline^.Closed),PtrInt(@pspline^.Closed),OneVarDataMIPD,OneVarDataEIPD);
 
     {ElLeader uzegeometry}
     MultiPropertiesManager.RestartMultipropertySortID;

@@ -41,6 +41,11 @@ type
     voltage: integer; // напряжение
     cosfi: double; // cosfi
     phase: string; // фаза
+    pathHD: string; // путь головного устройства
+    fullpathHD: string; // полный путь головного устройства
+    Sort1: integer; // сортировка 1
+    Sort2: integer; // сортировка 2
+    Sort3: integer; // сортировка 3
   end;
   TListVElectrDevStruct=specialize TVector<TVElectrDevStruct>;
 

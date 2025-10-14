@@ -420,7 +420,7 @@ begin
     while not SelQ.EOF do
     begin
       sortWord:=ProcessStrings(SelQ.FieldByName('hdway').AsString,SelQ.FieldByName('hdfullway').AsString);
-      //zcUI.TextMessage(sortWord.LastWord+ '====' + inttostr(sortWord.res),TMWOHistoryOut);
+      zcUI.TextMessage('sortWord1 ' + sortWord.LastWord+' - NextWord1= ' + sortWord.NextWord1+' -NextWord2= ' + sortWord.NextWord2, TMWOHistoryOut);
       if sortWord.res = 1 then
       begin
           UpdQ.Params.ParamByName('S1').AsString := SelQ.FieldByName('hdgroup').AsString;
@@ -861,7 +861,7 @@ begin
   begin
     if FindFullHierarchy(listDevLevel[i].headdev, hierarchy) then begin
        listDevLevel.Mutable[i]^.fullWayHD:=hierarchy;
-       //zcUI.TextMessage(listDevLevel[i].headdev+'~' + listDevLevel[i].parentName + ' -> ' + hierarchy,TMWOHistoryOut)
+       zcUI.TextMessage(listDevLevel[i].headdev+'~' + listDevLevel[i].parentName + ' -> ' + hierarchy,TMWOHistoryOut)
       end
     else
        zcUI.TextMessage(listDevLevel[i].headdev + '~' + listDevLevel[i].parentName + ' -> Иерархия не найдена',TMWOHistoryOut)

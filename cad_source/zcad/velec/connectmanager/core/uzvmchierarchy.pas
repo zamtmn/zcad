@@ -149,14 +149,14 @@ begin
 
     // Построение полного пути иерархии       fullname
     hierarchy := '';
-    if FindFullHierarchy(deviceList, device^.basename, hierarchy) then
+    if FindFullHierarchy(deviceList, device^.headdev, hierarchy) then
       device^.fullpathHD := hierarchy
     else
       device^.fullpathHD := '';
 
     // Построение пути только для головных устройств
     hierarchy := '';
-    if FindOnlyHDHierarchy(deviceList, device^.basename, hierarchy) then
+    if FindOnlyHDHierarchy(deviceList, device^.headdev, hierarchy) then
       device^.pathHD := hierarchy
     else
       device^.pathHD := '';
@@ -262,11 +262,11 @@ begin
 
     // Анализируем пути иерархии
     sortWord := ProcessStrings(device^.pathHD, device^.fullpathHD);
-
+    zcUI.TextMessage('sortWord1 ' + sortWord.LastWord+' - NextWord1= ' + sortWord.NextWord1+' -NextWord2= ' + sortWord.NextWord2, TMWOHistoryOut);
     if sortWord.res = 1 then
     begin
       // Устройство находится на верхнем уровне иерархии
-      device^.Sort1 := i;
+      device^.Sort1 := deviceList[i].feedernum;
       device^.Sort2 := 0;
       device^.Sort3 := 0;
     end
@@ -274,8 +274,8 @@ begin
     begin
       // Устройство на втором уровне - одно устройство выше в иерархии
       idx1 := GetDeviceIndexByName(deviceList, sortWord.NextWord1);
-      device^.Sort1 := idx1;
-      device^.Sort2 := i;
+      device^.Sort1 := deviceList[idx1].feedernum;
+      device^.Sort2 := deviceList[i].feedernum;
       device^.Sort3 := 0;
     end
     else if sortWord.res >= 3 then
@@ -283,9 +283,9 @@ begin
       // Устройство на третьем или более глубоком уровне
       idx1 := GetDeviceIndexByName(deviceList, sortWord.NextWord2);
       idx2 := GetDeviceIndexByName(deviceList, sortWord.NextWord1);
-      device^.Sort1 := idx1;
-      device^.Sort2 := idx2;
-      device^.Sort3 := i;
+      device^.Sort1 := deviceList[idx2].feedernum;
+      device^.Sort2 := deviceList[idx1].feedernum;
+      device^.Sort3 := deviceList[i].feedernum;
     end
     else
     begin

@@ -159,6 +159,9 @@ begin
     // Затем заполнить поля сортировки
     FHierarchyBuilder.FillSortFields(devicesList);
 
+    // Сортировка списка устройств по pathHD, Sort1, Sort2, Sort3
+    FHierarchyBuilder.SortDeviceList(devicesList);
+
     for i := 0 to devicesList.Size - 1 do
         zcUI.TextMessage('FindOnlyHDHierarchy ' + devicesList[i].pathHD + ' - sort1= ' + inttostr(devicesList[i].Sort1) + ' - sort2= ' + inttostr(devicesList[i].Sort2) + ' - sort3= ' + inttostr(devicesList[i].Sort3), TMWOHistoryOut);
 

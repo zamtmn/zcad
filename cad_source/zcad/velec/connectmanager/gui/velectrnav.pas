@@ -24,7 +24,7 @@ type
   TGridNodeData = record
     DevName: string;
     HDName: string;
-    HDGroup: string;
+    HDGroup: integer;
   end;
 
 
@@ -343,7 +343,7 @@ begin
       with vstDev.Header.Columns.Add do
       begin
         Text := 'hdgroup';
-        Width := 100;
+        Width := 50;
         Options := Options + [coAllowFocus, coEditable];
       end;
 
@@ -388,9 +388,9 @@ begin
           NodeData := vstDev.GetNodeData(Node);
 
           // Заполняем данные ноды из структуры устройства
-          NodeData^.DevName := device.realname;
+          NodeData^.DevName := device.basename;
           NodeData^.HDName := device.headdev;
-          NodeData^.HDGroup := ''; // В TVElectrDevStruct нет поля группы
+          NodeData^.HDGroup := device.feedernum; // В TVElectrDevStruct нет поля группы
         end;
       end;
     finally
@@ -416,7 +416,7 @@ begin
     0: CellText := 'Показать';
     1: CellText := NodeData^.DevName;
     2: CellText := NodeData^.HDName;
-    3: CellText := NodeData^.HDGroup;
+    3: CellText := inttostr(NodeData^.HDGroup);
     4: CellText := 'Ред.';
   end;
 end;
@@ -481,7 +481,7 @@ begin
   case Column of
     1: NodeData^.DevName := NewText;
     2: NodeData^.HDName := NewText;
-    3: NodeData^.HDGroup := NewText;
+    3: NodeData^.HDGroup := strtoint(NewText);
     else
       Exit;
   end;
@@ -497,6 +497,7 @@ begin
           1: device^.realname := NewText;    // Обновление имени устройства
           2: device^.headdev := NewText;     // Обновление головного устройства
           3: begin
+            device^.feedernum := strtoint(NewText);
             // HDGroup не имеет прямого соответствия в TVElectrDevStruct
             // Требуется дополнительная логика для сохранения группы
           end;

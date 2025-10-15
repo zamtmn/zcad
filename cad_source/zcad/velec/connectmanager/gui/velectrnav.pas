@@ -5,9 +5,9 @@ unit VElectrNav;
 interface
 
 uses
-  Classes, SysUtils, Forms, Controls,Graphics,  laz.VirtualTrees, SQLite3Conn, SQLDB, DB,uzcdrawing,uzcdrawings,uzvmcdbconsts,uzcinterface,
-  Dialogs, ExtCtrls, BufDataset,  DBGrids, Grids, ActnList, ComCtrls, Windows,fgl,odbcconn,
-  uzvelaccessdbcontrol,uzvmcmanager,uzvmanagerconnect,uzvelcreatetempdb,uzvmcstruct,gvector,uzccablemanager,uzcentcable,uzeentdevice,gzctnrVectorTypes,uzcvariablesutils,uzccommandsabstract,uzeentity,uzeentblockinsert,varmandef,uzeconsts,uzvelcontroltempdb;
+  Classes, SysUtils, Forms, Controls,Graphics,  laz.VirtualTrees, DB,uzcdrawing,uzcdrawings,uzcinterface,
+  Dialogs, ExtCtrls, BufDataset,  DBGrids, Grids, ActnList, ComCtrls, Windows,fgl,
+  uzvelaccessdbcontrol,uzvmcmanager,uzvmcstruct,gvector,uzccablemanager,uzcentcable,uzeentdevice,gzctnrVectorTypes,uzcvariablesutils,uzccommandsabstract,uzeentity,uzeentblockinsert,varmandef,uzeconsts;
 
 type
 
@@ -39,10 +39,6 @@ type
     PanelNav: TPanel;
     PanelButton: TPanel;
     panelSplitter: TSplitter;
-    SQLite3Connection: TSQLite3Connection;
-    SQLQuery: TSQLQuery;
-
-    SQLTransaction: TSQLTransaction;
     FDeviceTree: TLazVirtualStringTree;
     ToolBar1: TToolBar;
     procedure FrameResize(Sender: TObject);
@@ -61,14 +57,14 @@ type
     //для работы разделителя
     FProportion: Double; // Пропорция ширины PanelSynchDraw / (ClientWidth - Splitter)
     FIsResizing: Boolean; // Флаг для предотвращения рекурсии
+    FDevicesList: TListVElectrDevStruct; // Список устройств из TConnectionManager
     procedure InitializeActionAndButton; //инициализация и настройка кнопок
     procedure InitializePanels;          //инициализация и настройка панелей
 
-    procedure InitializeDatabase;
     procedure InitializeDeviceTree;
     procedure InitializeBufDataset;
     procedure InitializeVstDev;
-    procedure recordingVstDev(qry:string);
+    procedure recordingVstDev(const filterPath: string);
     procedure BuildDeviceHierarchy;
     procedure TreeGetText(Sender: TBaseVirtualTree; Node: PVirtualNode;
       Column: TColumnIndex; TextType: TVSTTextType; var CellText: String);
@@ -77,8 +73,6 @@ type
       var InitialStates: TVirtualNodeInitStates);
     procedure TreeFreeNode(Sender: TBaseVirtualTree; Node: PVirtualNode);
     procedure TreeClick(Sender: TObject);
-    function HasChildren(const DeviceName: string): Boolean;
-    function GetDatabasePath: String;
     procedure AddAction(AName, ACaption: string; AImageIndex: string;
   AHint, AShortCut: string; AEvent: TNotifyEvent);
     procedure AddPathToTree(ParentNode: PVirtualNode; const Path: string);
@@ -99,7 +93,6 @@ type
 
   var
       flagEditBufBeforePost:boolean;
-      flagConnectDB:boolean;
 
 implementation
 
@@ -114,6 +107,9 @@ begin
 
   Name := 'VElectrNav';
   Caption := 'Диспетчер подключений';
+
+  // Инициализация списка устройств
+  FDevicesList := TListVElectrDevStruct.Create;
 
 
 
@@ -143,7 +139,6 @@ begin
     FDeviceTree.Align := alClient;
     FDeviceTree.NodeDataSize := SizeOf(Pointer);
 
-    flagConnectDB:=false;
   // Настройка событий дерева
   //FDeviceTree.OnGetText := @TreeGetText;
   //FDeviceTree.OnGetNodeDataSize := @TreeGetNodeDataSize;
@@ -185,30 +180,6 @@ begin
   //ActionList1.AddAction(act);
 end;
 
-function IsDatabaseLocked(const DatabaseName: string): Boolean;
-var
-  FileHandle: THandle;
-begin
-  Result := False;
-  try
-    // Пытаемся открыть файл для записи (это проверяет блокировку)
-    FileHandle := FileOpen(DatabaseName, fmOpenWrite or fmShareExclusive);
-    if FileHandle <> THandle(-1) then
-    begin
-      FileClose(FileHandle);
-      // Файл не заблокирован
-      Result := False;
-    end
-    else
-    begin
-      // Файл заблокирован
-      Result := True;
-    end;
-  except
-    Result := True;
-  end;
-end;
-
 // Пока это выгрузка в Аксесс
 procedure TVElectrNav.CurrentSelActionExecute(Sender: TObject);
 var
@@ -238,86 +209,56 @@ end;
 procedure TVElectrNav.AllSelActionExecute(Sender: TObject);
 var
   mcManager: TConnectionManager;
-  devicesList: TListVElectrDevStruct;
 begin
-  //Destroy;
-  if flagConnectDB then
-    SQLite3Connection.Close;
-
   // 1. Взаимодействие с uzvmcmanager
   mcManager := TConnectionManager.Create('');
   try
     // 2. Получить список всех устройств GetDevicesFromDrawing
-    devicesList := mcManager.GetDevicesFromDrawing;
-    try
-      // 3. Отсортировать их HierarchyBuilder.SortDeviceList
-      mcManager.HierarchyBuilder.SortDeviceList(devicesList);
+    // Очищаем предыдущий список
+    FDevicesList.Clear;
 
-      uzvelcreatetempdb.createElectricalTempDB;
-      uzvelcontroltempdb.addOnlyWayHDandFullWay;
-      //uzvmanagerconnect.managerconnectexecute;
+    // Получаем новый список устройств
+    FDevicesList := mcManager.GetDevicesFromDrawing;
 
-         // Инициализация компонентов базы данных
-         //ShowMessage('1 ');
-      if not flagConnectDB then
-      begin
-          SQLite3Connection := TSQLite3Connection.Create(Self);
-          SQLTransaction := TSQLTransaction.Create(Self);
-          SQLQuery := TSQLQuery.Create(Self);
-      end;
-       //ShowMessage('2 ');
+    // 3. Отсортировать их HierarchyBuilder.SortDeviceList
+    mcManager.HierarchyBuilder.SortDeviceList(FDevicesList);
 
-      SQLite3Connection.Transaction := SQLTransaction;
-      SQLTransaction.Database := SQLite3Connection;
-      SQLQuery.Database := SQLite3Connection;
+    // Настраиваем дерево устройств
+    FDeviceTree.Parent := PanelNav;
+    FDeviceTree.Align := alClient;
+    FDeviceTree.NodeDataSize := SizeOf(Pointer);
 
-        // Инициализация базы данных
-      InitializeDatabase;
-      flagConnectDB:=true;
+    // Настройка событий дерева
+    FDeviceTree.OnGetText := @TreeGetText;
+    FDeviceTree.OnGetNodeDataSize := @TreeGetNodeDataSize;
+    FDeviceTree.OnInitNode := @TreeInitNode;
+    FDeviceTree.OnFreeNode := @TreeFreeNode;
+    FDeviceTree.OnClick := @TreeClick;
 
-      // Настраиваем дерево устройств
-      FDeviceTree.Parent := PanelNav;
-      FDeviceTree.Align := alClient;
-      FDeviceTree.NodeDataSize := SizeOf(Pointer);
+    // 4. Построение дерева на основе отсортированного списка
+    InitializeDeviceTree;
+    BuildDeviceHierarchy;
 
-      // Настройка событий дерева
-      FDeviceTree.OnGetText := @TreeGetText;
-      FDeviceTree.OnGetNodeDataSize := @TreeGetNodeDataSize;
-      FDeviceTree.OnInitNode := @TreeInitNode;
-      FDeviceTree.OnFreeNode := @TreeFreeNode;
-      FDeviceTree.OnClick := @TreeClick;
+    // Заполнение vstDev
+    flagEditBufBeforePost:=false;
 
-      // 4. Построение дерева на основе отсортированного списка
-      InitializeDeviceTree;
-      BuildDeviceHierarchy;
+    // Настройка BufDataset
+    InitializeBufDataset;
+    //Привязываем к источнику данных
+    dsGridDev.DataSet := bufGridDev;
 
-      // Заполнение vstDev
+    // Настройка vstDev
+    InitializeVstDev;
 
-      flagEditBufBeforePost:=false;
-      // 2. Настройка BufDataset
+    // 5. При выделении ноды в FDeviceTree, должна выгружаться в vstDev
+    // (это обрабатывается в TreeClick, который уже реализован)
+    recordingVstDev('');
 
-      InitializeBufDataset;
-      //Привязываем к источнику данных
-      dsGridDev.DataSet := bufGridDev;
-      //ShowMessage('открыть файл...');
-
-      // 3. Настройка vstDev
-      InitializeVstDev;
-                                        //ShowMessage('открыть файл...');
-      // 5. При выделении ноды в FDeviceTree, должна выгружаться в vstDev
-      // (это обрабатывается в TreeClick, который уже реализован)
-      recordingVstDev('SELECT * FROM dev');
-
-      vstDev.OnGetText := @vstDevGetText;
-      vstDev.OnPaintText := @vstDevPaintText;
-      vstDev.OnClick := @vstDevClick;
-      vstDev.OnEditing := @vstDevEditing;
-      vstDev.OnNewText := @vstDevNewText;
-
-      //ShowMessage('открыть файл...');
-    finally
-      devicesList.Free;
-    end;
+    vstDev.OnGetText := @vstDevGetText;
+    vstDev.OnPaintText := @vstDevPaintText;
+    vstDev.OnClick := @vstDevClick;
+    vstDev.OnEditing := @vstDevEditing;
+    vstDev.OnNewText := @vstDevNewText;
   finally
     mcManager.Free;
   end;
@@ -479,41 +420,40 @@ begin
   end;
 end;
 
-procedure TVElectrNav.recordingVstDev(qry:string);
+procedure TVElectrNav.recordingVstDev(const filterPath: string);
 var
-    i:integer;
-    writeQuery: TSQLQuery;
+    i: integer;
     Node: PVirtualNode;
     NodeData: PGridNodeData;
+    device: TVElectrDevStruct;
 begin
   try
-    writeQuery := TSQLQuery.Create(nil);
-    writeQuery.Database := SQLite3Connection;
-    writeQuery.SQL.Text := qry;
-    writeQuery.Open;
-    writeQuery.First;
-
     vstDev.BeginUpdate;
     try
       vstDev.Clear;
 
-      while not writeQuery.EOF do
+      // Проходим по всем устройствам в FDevicesList
+      for i := 0 to FDevicesList.Size - 1 do
       begin
-        Node := vstDev.AddChild(nil);
-        NodeData := vstDev.GetNodeData(Node);
+        device := FDevicesList[i];
 
-        NodeData^.DevName := writeQuery.FieldByName('devname').AsString;
-        NodeData^.HDName := writeQuery.FieldByName('hdname').AsString;
-        NodeData^.HDGroup := writeQuery.FieldByName('hdgroup').AsString;
+        // Если фильтр задан, проверяем соответствие pathHD
+        if (filterPath = '') or (device.pathHD = filterPath) then
+        begin
+          Node := vstDev.AddChild(nil);
+          NodeData := vstDev.GetNodeData(Node);
 
-        writeQuery.Next;
+          // Заполняем данные ноды из структуры устройства
+          NodeData^.DevName := device.realname;  // или basename
+          NodeData^.HDName := device.headdev;
+          // Для hdgroup нужно найти группу головного устройства
+          // Пока оставим пустым, так как в TVElectrDevStruct нет прямого поля для группы
+          NodeData^.HDGroup := '';
+        end;
       end;
     finally
       vstDev.EndUpdate;
     end;
-
-    writeQuery.Close;
-    writeQuery.Free;
   except
     on E: Exception do
       ShowMessage('Ошибка загрузки данных: ' + E.Message);
@@ -583,61 +523,51 @@ procedure TVElectrNav.vstDevNewText(Sender: TBaseVirtualTree;
   Node: PVirtualNode; Column: TColumnIndex; const NewText: AnsiString);
 var
   NodeData: PGridNodeData;
-  UpdateQuery: TSQLQuery;
-  FieldName: String;
   OldDevName: String;
+  i: Integer;
+  device: PTVElectrDevStruct;
 begin
   NodeData := Sender.GetNodeData(Node);
   if not Assigned(NodeData) then Exit;
 
-  // Сохраняем старое значение devname для WHERE условия
+  // Сохраняем старое значение devname для поиска в списке
   OldDevName := NodeData^.DevName;
 
-  // Определяем какое поле обновляем
+  // Обновляем визуальные данные ноды
   case Column of
-    1: begin
-         FieldName := 'devname';
-         NodeData^.DevName := NewText;
-       end;
-    2: begin
-         FieldName := 'hdname';
-         NodeData^.HDName := NewText;
-       end;
-    3: begin
-         FieldName := 'hdgroup';
-         NodeData^.HDGroup := NewText;
-       end;
+    1: NodeData^.DevName := NewText;
+    2: NodeData^.HDName := NewText;
+    3: NodeData^.HDGroup := NewText;
     else
       Exit;
   end;
 
-  // Обновляем данные в базе
+  // Обновляем данные в FDevicesList
   try
-    UpdateQuery := TSQLQuery.Create(nil);
-    try
-      UpdateQuery.Database := SQLite3Connection;
-      UpdateQuery.Transaction := SQLTransaction;
-      UpdateQuery.SQL.Text := 'UPDATE dev SET ' + FieldName + ' = :newvalue WHERE devname = :devname';
-      UpdateQuery.ParamByName('newvalue').AsString := NewText;
-      UpdateQuery.ParamByName('devname').AsString := OldDevName;
-
-      if not SQLTransaction.Active then
-        SQLTransaction.StartTransaction;
-      UpdateQuery.ExecSQL;
-      SQLTransaction.Commit;
-    finally
-      UpdateQuery.Free;
+    for i := 0 to FDevicesList.Size - 1 do
+    begin
+      device := FDevicesList.Mutable[i];
+      if device^.realname = OldDevName then
+      begin
+        case Column of
+          1: device^.realname := NewText;
+          2: device^.headdev := NewText;
+          3: begin
+            // HDGroup не имеет прямого соответствия в TVElectrDevStruct
+            // Это поле может требовать дополнительной логики
+          end;
+        end;
+        Break;
+      end;
     end;
   except
     on E: Exception do
     begin
-      if SQLTransaction.Active then
-        SQLTransaction.Rollback;
       ShowMessage('Ошибка обновления данных: ' + E.Message);
       // Восстанавливаем старое значение
       case Column of
         1: NodeData^.DevName := OldDevName;
-        // Для hdname и hdgroup нужно перечитать из базы
+        // Для других полей восстановление требует дополнительной логики
       end;
     end;
   end;
@@ -645,10 +575,9 @@ end;
 
 destructor TVElectrNav.Destroy;
 begin
-  // Освобождаем компоненты базы данных
-  SQLQuery.Free;
-  SQLTransaction.Free;
-  SQLite3Connection.Free;
+  // Освобождаем список устройств
+  if Assigned(FDevicesList) then
+    FDevicesList.Free;
 
   inherited Destroy;
 end;
@@ -678,35 +607,6 @@ begin
 end;
 
 ////////////////////////////////
-
-
-function TVElectrNav.GetDatabasePath: String;
-//var
-//  TempPath: array[0..MAX_PATH] of Char;
-begin
-  //GetTempPath(MAX_PATH, TempPath);
-  Result := ExtractFilePath(PTZCADDrawing(drawings.GetCurrentDwg)^.FileName) + vcalctempdbfilename;
-end;
-
-procedure TVElectrNav.InitializeDatabase;
-begin
-  try
-    // Подключаемся к базе данных в папке TEMP
-    //ShowMessage('GetDatabasePath: ' + GetDatabasePath);
-    SQLite3Connection.DatabaseName := GetDatabasePath;
-    SQLite3Connection.Open;
-
-    // Проверяем наличие таблицы dev
-    SQLQuery.SQL.Text := 'SELECT name FROM sqlite_master WHERE type=''table'' AND name=''dev''';
-    SQLQuery.Open;
-    if SQLQuery.EOF then
-      raise Exception.Create('Таблица dev не найдена в базе данных');
-    SQLQuery.Close;
-  except
-    on E: Exception do
-      ShowMessage('Ошибка подключения к базе данных: ' + E.Message);
-  end;
-end;
 
 procedure TVElectrNav.InitializeDeviceTree;
 begin
@@ -738,7 +638,8 @@ procedure TVElectrNav.BuildDeviceHierarchy;
 var
   RootNode: PVirtualNode;
   RootData: PNodeData;
-  TempQuery: TSQLQuery;
+  i: Integer;
+  pathHD: string;
 begin
   FDeviceTree.BeginUpdate;
   try
@@ -753,20 +654,12 @@ begin
     RootData^.DeviceName := 'Все устройства';
     RootData^.fullpath := '';
 
-    // Загружаем все пути устройств
-    TempQuery := TSQLQuery.Create(nil);
-    try
-      TempQuery.Database := SQLite3Connection;
-      TempQuery.SQL.Text := 'SELECT hdway FROM dev WHERE TRIM(hdway) <> ""';
-      TempQuery.Open;
-
-      while not TempQuery.EOF do
-      begin
-        AddPathToTree(RootNode, TempQuery.FieldByName('hdway').AsString);
-        TempQuery.Next;
-      end;
-    finally
-      TempQuery.Free;
+    // Загружаем все пути устройств из FDevicesList
+    for i := 0 to FDevicesList.Size - 1 do
+    begin
+      pathHD := Trim(FDevicesList[i].pathHD);
+      if pathHD <> '' then
+        AddPathToTree(RootNode, pathHD);
     end;
 
     FDeviceTree.FullExpand;
@@ -878,46 +771,27 @@ var
   Data: PNodeData;
 begin
   Node := FDeviceTree.GetFirstSelected;
-  //if not Assigned(Node) then
-  //begin
-  //  ShowMessage('Нет выбранной ноды!');
-  //  Exit;
-  //end;
 
   if Assigned(Node) then
   begin
     Data := FDeviceTree.GetNodeData(Node);
     if Assigned(Data) then
     begin
-      //ShowMessage(
-      //  'Устройство: ' + Data^.DeviceName + #13#10 +
-      //  'Подключено к: '+ GetNodePhysicalPath(Node) + #13#10
-      //  );
+      // Если выбран корневой узел "Все устройства", показываем все
       if Data^.DeviceName <> 'Все устройства' then
-        recordingVstDev('SELECT * FROM dev WHERE hdway = '''+ GetNodePhysicalPath(Node) + '''')
+        recordingVstDev(GetNodePhysicalPath(Node))
       else
-       recordingVstDev('SELECT * FROM dev')
+        recordingVstDev('');
     end
     else
     begin
-      ShowMessage('Все устройства');
-      recordingVstDev('SELECT * FROM dev');
+      // Если данных нет, показываем все устройства
+      recordingVstDev('');
     end;
   end;
 end;
 
 
-function TVElectrNav.HasChildren(const DeviceName: string): Boolean;
-begin
-  SQLQuery.SQL.Text := 'SELECT COUNT(*) FROM dev WHERE hdname = :device_name';
-  SQLQuery.ParamByName('device_name').AsString := DeviceName;
-  SQLQuery.Open;
-  try
-    Result := SQLQuery.Fields[0].AsInteger > 0;
-  finally
-    SQLQuery.Close;
-  end;
-end;
 
 procedure TVElectrNav.TreeGetText(Sender: TBaseVirtualTree;
   Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType;

@@ -323,7 +323,7 @@ begin
       with vstDev.Header.Columns.Add do
       begin
         Text := '';
-        Width := 30;
+        Width := 50;  // Увеличена ширина для надежного отображения индикаторов с учетом отступов
       end;
 
       // Колонка "Показать" (кнопка действия)
@@ -540,6 +540,10 @@ procedure TVElectrNav.vstDevPaintText(Sender: TBaseVirtualTree;
   const TargetCanvas: TCanvas; Node: PVirtualNode; Column: TColumnIndex;
   TextType: TVSTTextType);
 begin
+  // Колонка 0 зарезервирована для индикаторов дерева (+/-), не трогаем её
+  // Column 0 is reserved for tree indicators (+/-), do not touch it
+  if Column = 0 then Exit;
+
   if (Column = 1) or (Column = 7) then
   begin
     TargetCanvas.Font.Color := clBlue;

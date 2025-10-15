@@ -521,8 +521,11 @@ begin
   NodeData := Sender.GetNodeData(Node);
   if not Assigned(NodeData) then Exit;
 
+  // Колонка 0 зарезервирована для индикаторов дерева (+/-), не устанавливаем для неё текст
+  // Column 0 is reserved for tree indicators (+/-), do not set text for it
+  if Column = 0 then Exit;
+
   case Column of
-    0: CellText := ''; // Пустая колонка для индикаторов дерева
     1: CellText := 'Показать';
     2: CellText := NodeData^.DevName;
     3: CellText := NodeData^.HDName;

@@ -36,7 +36,8 @@ uses
   uzclog,
   uzegeometrytypes,
   uzegeometry,
-  uzccommand_selectframe,uzccommand_ondrawinged;
+  uzccommand_selectframe,uzccommand_ondrawinged,
+  UGDBSelectedObjArray;
 
 implementation
 
@@ -46,10 +47,45 @@ type
 var
   StretchComMode:TStretchComMode;
 
-procedure Stretch_com_CommandStart(const Context:TZCADCommandContext;Operands:pansichar);
+function HasSelectedControlPoints:Boolean;
+var
+  i:integer;
+  tdesc:pselectedobjdesc;
 begin
-  StretchComMode:=SM_GetEnts;
-  FrameEdit_com_CommandStart(Context,Operands);
+  Result:=False;
+  if drawings.GetCurrentDWG.GetSelObjArray.Count>0 then begin
+    tdesc:=drawings.GetCurrentDWG.GetSelObjArray.GetParrayAsPointer;
+    for i:=0 to drawings.GetCurrentDWG.GetSelObjArray.Count-1 do begin
+      if tdesc^.pcontrolpoint<>nil then
+        if tdesc^.pcontrolpoint^.SelectedCount<>0 then begin
+          Result:=True;
+          Exit;
+        end;
+      Inc(tdesc);
+    end;
+  end;
+end;
+
+procedure Stretch_com_CommandStart(const Context:TZCADCommandContext;Operands:pansichar);
+var
+  DC:TDrawContext;
+begin
+  // Check if there are already selected control points from a crossing window selection
+  if HasSelectedControlPoints then begin
+    // Skip the selection phase and go directly to the first point mode
+    StretchComMode:=SM_FirstPoint;
+    drawings.GetCurrentDWG.wa.SetMouseMode(MGet3DPoint or MMoveCamera or MRotateCamera);
+    // Remap points to ensure they're properly displayed
+    dc:=drawings.GetCurrentDWG.wa.CreateRC;
+    drawings.GetCurrentDWG.GetSelObjArray.remappoints(
+      drawings.GetCurrentDWG.GetPcamera.POSCOUNT,drawings.GetCurrentDWG.wa.param.scrollmode,
+      drawings.GetCurrentDWG.GetPcamera^,drawings.GetCurrentDWG^.myGluProject2,dc);
+    zcUI.Do_GUIaction(nil,zcMsgUIActionRedrawContent);
+  end else begin
+    // No pre-selected control points, start with normal selection
+    StretchComMode:=SM_GetEnts;
+    FrameEdit_com_CommandStart(Context,Operands);
+  end;
 end;
 
 function Stretch_com_BeforeClick(const Context:TZCADCommandContext;wc:GDBvertex;

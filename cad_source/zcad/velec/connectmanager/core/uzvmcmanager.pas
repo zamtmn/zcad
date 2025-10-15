@@ -37,13 +37,14 @@ type
     FAccessExporter: TAccessDBExporter;
 
     procedure InsertDevicesToDatabase;
+    procedure ExportDevicesListToAccess(devicesList: TListVElectrDevStruct; const AAccessDBPath: string);
   public
     constructor Create(const ADrawingPath: string);
     destructor Destroy; override;
 
     procedure CreateTemporaryDatabase;
     procedure ExportToAccessDatabase(const AAccessDBPath: string);
-    procedure CollectAndExportDevicesToAccess(const AAccessDBPath: string);
+    procedure PrepareDevicesAndExportToAccess(const AAccessDBPath: string);
 
     function CheckFileExists(const AFilePath: string): Boolean;
 
@@ -135,16 +136,56 @@ begin
   zcUI.TextMessage('Export to Access completed', TMWOHistoryOut);
 end;
 
-// Функция сбора всех устройств с чертежа и экспорта их в базу данных Access
+// Функция экспорта подготовленного списка устройств в базу данных Access
+// На входе:
+//   devicesList - подготовленный список устройств с построенными иерархическими путями
+//   AAccessDBPath - путь к файлу базы данных Access
+// Функция выполняет следующие действия:
+// 1. Инициализирует и подключается к базе данных Access
+// 2. Очищает таблицы базы данных
+// 3. Экспортирует каждое устройство из списка в базу данных
+// 4. Фиксирует изменения в базе данных
+procedure TConnectionManager.ExportDevicesListToAccess(devicesList: TListVElectrDevStruct; const AAccessDBPath: string);
+var
+  i: integer;
+begin
+  if not CheckFileExists(AAccessDBPath) then
+    exit;
+
+  // Инициализация экспортера Access, если ещё не создан
+  if not Assigned(FAccessExporter) then
+    FAccessExporter := TAccessDBExporter.Create(AAccessDBPath);
+
+  FAccessExporter.DatabasePath := AAccessDBPath;
+  FAccessExporter.Connect;
+  FAccessExporter.ClearTables;
+
+  // Экспорт каждого устройства из списка в базу данных Access
+  for i := 0 to devicesList.Size - 1 do
+  begin
+    if i>0 then begin
+      if devicesList[i].fullname <> devicesList[i-1].fullname then
+        FAccessExporter.ExportDevice(devicesList[i]);
+    end
+    else
+      FAccessExporter.ExportDevice(devicesList[i]);
+
+    FAccessExporter.ExportConnection(devicesList[i]);
+  end;
+
+  // Фиксация изменений в базе данных
+  FAccessExporter.Commit;
+end;
+
+// Функция подготовки всех устройств с чертежа и экспорта их в базу данных Access
 // На входе: путь к файлу базы данных Access
 // Функция выполняет следующие действия:
 // 1. Собирает список всех устройств с чертежа в виде TListVElectrDevStruct
 // 2. Строит иерархические пути для каждого устройства (pathHD и fullpathHD)
-// 3. Подключается к базе данных Access
-// 4. Очищает таблицы базы данных
-// 5. Экспортирует каждое устройство из списка в базу данных
-// 6. Фиксирует изменения в базе данных
-procedure TConnectionManager.CollectAndExportDevicesToAccess(const AAccessDBPath: string);
+// 3. Заполняет поля сортировки (Sort1, Sort2, Sort3)
+// 4. Сортирует список устройств
+// 5. Вызывает экспорт подготовленного списка в базу данных Access
+procedure TConnectionManager.PrepareDevicesAndExportToAccess(const AAccessDBPath: string);
 var
   devicesList: TListVElectrDevStruct;
   i: integer;
@@ -165,32 +206,8 @@ begin
     for i := 0 to devicesList.Size - 1 do
         zcUI.TextMessage('FindOnlyHDHierarchy ' + devicesList[i].pathHD + ' - sort1= ' + inttostr(devicesList[i].Sort1) + ' - sort2= ' + inttostr(devicesList[i].Sort2) + ' - sort3= ' + inttostr(devicesList[i].Sort3), TMWOHistoryOut);
 
-    if not CheckFileExists(AAccessDBPath) then
-      exit;
-
-    // Инициализация экспортера Access, если ещё не создан
-    if not Assigned(FAccessExporter) then
-      FAccessExporter := TAccessDBExporter.Create(AAccessDBPath);
-
-    FAccessExporter.DatabasePath := AAccessDBPath;
-    FAccessExporter.Connect;
-    FAccessExporter.ClearTables;
-
-    // Экспорт каждого устройства из списка в базу данных Access
-    for i := 0 to devicesList.Size - 1 do
-    begin
-      if i>0 then begin
-        if devicesList[i].fullname <> devicesList[i-1].fullname then
-          FAccessExporter.ExportDevice(devicesList[i]);
-      end
-      else
-        FAccessExporter.ExportDevice(devicesList[i]);
-
-      FAccessExporter.ExportConnection(devicesList[i]);
-    end;
-
-    // Фиксация изменений в базе данных
-    FAccessExporter.Commit;
+    // Экспорт подготовленного списка устройств в базу данных Access
+    ExportDevicesListToAccess(devicesList, AAccessDBPath);
 
     zcUI.TextMessage('Collected and exported ' + IntToStr(devicesList.Size) + ' devices to Access database', TMWOHistoryOut);
   finally

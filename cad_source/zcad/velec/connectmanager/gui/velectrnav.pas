@@ -25,6 +25,8 @@ type
     DevName: string;
     HDName: string;
     HDGroup: integer;
+    PathHD: string;
+    FullPathHD: string;
   end;
 
 
@@ -347,6 +349,20 @@ begin
         Options := Options + [coAllowFocus, coEditable];
       end;
 
+      // Колонка "pathHD" (путь головного устройства)
+      with vstDev.Header.Columns.Add do
+      begin
+        Text := 'pathHD';
+        Width := 120;
+      end;
+
+      // Колонка "fullpathHD" (полный путь головного устройства)
+      with vstDev.Header.Columns.Add do
+      begin
+        Text := 'fullpathHD';
+        Width := 150;
+      end;
+
       // Колонка "Редактировать" (кнопка действия)
       with vstDev.Header.Columns.Add do
       begin
@@ -408,6 +424,8 @@ begin
             NodeData^.DevName := 'ф. ' + IntToStr(currentFeederNum);
             NodeData^.HDName := '';
             NodeData^.HDGroup := 0;
+            NodeData^.PathHD := '';
+            NodeData^.FullPathHD := '';
 
             lastFeederNum := currentFeederNum;
             isFirstDevice := False;
@@ -421,6 +439,8 @@ begin
           NodeData^.DevName := device.basename;
           NodeData^.HDName := device.headdev;
           NodeData^.HDGroup := device.feedernum;
+          NodeData^.PathHD := device.pathHD;
+          NodeData^.FullPathHD := device.fullpathHD;
         end;
       end;
 
@@ -450,7 +470,9 @@ begin
     1: CellText := NodeData^.DevName;
     2: CellText := NodeData^.HDName;
     3: CellText := inttostr(NodeData^.HDGroup);
-    4: CellText := 'Ред.';
+    4: CellText := NodeData^.PathHD;
+    5: CellText := NodeData^.FullPathHD;
+    6: CellText := 'Ред.';
   end;
 end;
 
@@ -458,7 +480,7 @@ procedure TVElectrNav.vstDevPaintText(Sender: TBaseVirtualTree;
   const TargetCanvas: TCanvas; Node: PVirtualNode; Column: TColumnIndex;
   TextType: TVSTTextType);
 begin
-  if (Column = 0) or (Column = 4) then
+  if (Column = 0) or (Column = 6) then
   begin
     TargetCanvas.Font.Color := clBlue;
     TargetCanvas.Font.Style := [fsUnderline];
@@ -483,7 +505,7 @@ begin
 
   if HitInfo.HitColumn = 0 then
     ShowMessage('devname: ' + NodeData^.DevName)
-  else if HitInfo.HitColumn = 4 then
+  else if HitInfo.HitColumn = 6 then
     ShowMessage('Редактировать: ' + NodeData^.HDName);
 end;
 

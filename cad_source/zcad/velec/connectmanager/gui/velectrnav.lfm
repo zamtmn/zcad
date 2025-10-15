@@ -69,7 +69,7 @@ object VElectrNav: TVElectrNav
       DefaultText = 'Node'
       Header.AutoSizeIndex = -1
       Header.Columns = <>
-      Header.MainColumn = -1
+      Header.MainColumn = 0
       TabOrder = 0
     end
   end

@@ -317,6 +317,7 @@ begin
       vstDev.Header.Options :=
         vstDev.Header.Options + [hoVisible, hoColumnResize] - [hoAutoResize];
       vstDev.Header.AutoSizeIndex := -1;
+      vstDev.Header.MainColumn := 0; // Колонка 0 содержит индикаторы дерева (+/-)
 
       // Колонка 0 - пустая (для индикаторов дерева +/-)
       with vstDev.Header.Columns.Add do

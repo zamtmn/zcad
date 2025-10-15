@@ -7,7 +7,7 @@ interface
 uses
   Classes, SysUtils, Forms, Controls,Graphics,  laz.VirtualTrees, SQLite3Conn, SQLDB, DB,uzcdrawing,uzcdrawings,uzvmcdbconsts,uzcinterface,
   Dialogs, ExtCtrls, BufDataset,  DBGrids, Grids, ActnList, ComCtrls, Windows,fgl,odbcconn,
-  uzvelaccessdbcontrol,uzvmcmanager,uzvmanagerconnect,uzvelcreatetempdb,gvector,uzccablemanager,uzcentcable,uzeentdevice,gzctnrVectorTypes,uzcvariablesutils,uzccommandsabstract,uzeentity,uzeentblockinsert,varmandef,uzeconsts,uzvelcontroltempdb;
+  uzvelaccessdbcontrol,uzvmcmanager,uzvmanagerconnect,uzvelcreatetempdb,uzvmcstruct,gvector,uzccablemanager,uzcentcable,uzeentdevice,gzctnrVectorTypes,uzcvariablesutils,uzccommandsabstract,uzeentity,uzeentblockinsert,varmandef,uzeconsts,uzvelcontroltempdb;
 
 type
 
@@ -209,156 +209,12 @@ begin
   end;
 end;
 
+// Пока это выгрузка в Аксесс
 procedure TVElectrNav.CurrentSelActionExecute(Sender: TObject);
-type
-  //** Создания труктуры
-  PTStructCab=^TStructCab;
-  TStructCab=record
-         nameCab:string;
-         nameHeadCab:string;
-         numHeadCab:integer;
-  end;
-  TListStructCab=specialize TVector<TStructCab>;
 var
-  ODBCConnection: TODBCConnection;
-  Query: TSQLQuery;
-  Trans: TSQLTransaction;
-  listSructCab:TListStructCab;
-  i:integer;
   accessexport:TConnectionManager;
   devicesList: TListVElectrDevStruct;
-
-  Function getinfoheadcab(iname:string):string;
-  var
-    Query: TSQLQuery;
-    pobj: pGDBObjEntity;   //выделеные объекты в пространстве листа
-    pdev: PGDBObjBlockInsert;   //выделеные объекты в пространстве листа
-    ir:itrec;  // применяется для обработки списка выделений, но что это понятия не имею :)
-    pvd,pvd2:pvardesk;
-    i,count, count2:integer;
-    errorData:boolean;
-  begin
-    //Query := TSQLQuery.Create(nil);
-    try
-      //Query.Database := SQLite3Connection;
-      //ZCMsgCallBackInterface.TextMessage(' 1',TMWOHistoryOut);
-      // Insert records
-      //Query.SQL.Text := 'INSERT INTO dev (zcadid, devname, hdname, hdgroup, icanhd) VALUES (:zcadid, :devname, :hdname, :hdgroup, :icanhd)';
-      count:=0;
-      pobj:=drawings.GetCurrentROOT^.ObjArray.beginiterate(ir); //зона уже выбрана в перспективе застовлять пользователя ее выбирать
-      if pobj<>nil then
-        repeat
-           //errorData:=true;
-           inc(count);
-           //result:='-1';
-           // Определяем что это устройство
-           if pobj^.GetObjType=GDBDeviceID then
-             begin
-              pdev:=PGDBObjDevice(pobj);
-              //zcUI.TextMessage('Tewerqwrqwrqst data added to "dev" table',TMWOHistoryOut);
-              //Query.Params.ParamByName('zcadid').AsInteger:=count;
-              pvd:=FindVariableInEnt(pdev,'NMO_Name');
-              if (pvd<>nil) then
-                if (iname=pstring(pvd^.data.Addr.Instance)^) then
-                  begin
-
-                    pvd2:=FindVariableInEnt(pdev,'SLCABAGEN1_HeadDeviceName');
-                     if (pvd2<>nil) then begin
-                       zcUI.TextMessage(iname+ '=111111111111111111111111=' + pstring(pvd^.data.Addr.Instance)^,TMWOHistoryOut);
-                       result:= pString(FindVariableInEnt(pdev,'SLCABAGEN1_HeadDeviceName')^.data.Addr.Instance)^ + '.' + pString(FindVariableInEnt(pdev,'SLCABAGEN1_NGHeadDevice')^.data.Addr.Instance)^
-                     end;
-                  end;
-             end;
-          pobj:=drawings.GetCurrentROOT^.ObjArray.iterate(ir); //переход к следующем примитиву в списке выбраных примитивов
-        until pobj=nil;
-
-      //SQLTransaction.Commit;
-      zcUI.TextMessage('Test data added to "dev" table',TMWOHistoryOut);
-    finally
-      //Query.Free;
-    end;
-  end;
-
-  procedure getliststructconnect;
-    var
-    cman:TCableManager;
-    pcabledesk:PTCableDesctiptor;
-    pobj{,pobj2}:PGDBObjCable;
-    pdev:PGDBOBJDevice;
-    pnp:PTNodeProp;
-    ir,ir2,ir3:itrec;
-    iStructCab:TStructCab;
-    i,j:integer;
-    pvd:pvardesk;
-    resres:string;
-    begin
-
-      cman.init;
-      cman.build;
-      pcabledesk:=cman.beginiterate(ir);
-      if pcabledesk<>nil then
-        BEGIN
-         repeat
-           //zcUI.TextMessage('  Найдена групповая линия "'+pcabledesk^.Name+'"',TMWOHistoryOut);
-
-           pobj:= pcabledesk^.Segments.beginiterate(ir2);
-           //if pobj<>nil then
-           //repeat
-             pnp:=pobj^.NodePropArray.beginiterate(ir3);
-             if pnp<>nil then
-                begin
-                  iStructCab.nameCab:=pcabledesk^.Name;
-                  pdev:=pnp^.DevLink;
-                  if pdev<>nil then begin
-                   pvd:=FindVariableInEnt(pdev,'SLCABAGEN1_HeadDeviceName');
-                     if (pvd<>nil) then
-                     iStructCab.nameHeadCab:=pString(FindVariableInEnt(pnp^.DevLink,'SLCABAGEN1_HeadDeviceName')^.data.Addr.Instance)^ + '.' + pString(FindVariableInEnt(pnp^.DevLink,'SLCABAGEN1_NGHeadDevice')^.data.Addr.Instance)^
-                     else begin
-                      resres:=getinfoheadcab(pString(FindVariableInEnt(pnp^.DevLink,'NMO_Name')^.data.Addr.Instance)^);
-                      if resres <> '-1' then
-                         iStructCab.nameHeadCab:=resres;
-                     end
-                     //zcUI.TextMessage('  Найдена групповая лsadsadasdasdasиния "'+iStructCab.nameHeadCab,TMWOHistoryOut);
-                     //zcUI.TextMessage('  Найдена групповая линия "'+pString(FindVariableInEnt(pnp^.DevLink,'SLCABAGEN1_NGHeadDevice')^.data.Addr.Instance)^+'"',TMWOHistoryOut);
-
-                  end;
-                  iStructCab.numHeadCab:=-1;
-                end;
-             listSructCab.PushBack(iStructCab);
-             //if pnp<>nil then
-             // repeat
-             //  zcUI.TextMessage('1',TMWOHistoryOut);
-             //  //testTempDrawLine(pnp^.PrevP,pnp^.NextP);
-             //  pdev:=pnp^.DevLink;
-             //  if pdev<>nil then
-             //     zcUI.TextMessage('  имя устройства подключенного - '+pString(FindVariableInEnt(pnp^.DevLink,'NMO_Name')^.data.Addr.Instance)^,TMWOHistoryOut);
-             //  pnp:=pobj^.NodePropArray.iterate(ir3);
-             // until pnp=nil;
-             //zcUI.TextMessage('  Найдена групповая линия "'+pcabledesk^.Name+'"');
-             //pcabledesk:=cman.iterate(ir);
-           //  pobj:=pcabledesk^.Segments.iterate(ir2);
-           //until pobj=nil;
-           pcabledesk:=cman.iterate(ir);
-         until pcabledesk=nil;
-        END;
-
-      for i:=0 to listSructCab.Size-1 do
-      begin
-
-         for j:=0 to listSructCab.Size-1 do
-         begin
-             if listSructCab[i].nameCab=listSructCab[j].nameHeadCab then
-             begin
-                listSructCab.Mutable[j]^.numHeadCab:=i+1;
-             end;
-
-         end;
-      end;
-
-     //result:=cmd_ok;
-    end;
 begin
-  //ShowMessage('Выбрать только');
   //uzvelaccessdbcontrol.AddStructureinAccessDB;
   accessexport := TConnectionManager.Create('');
   try
@@ -366,7 +222,7 @@ begin
     devicesList := accessexport.GetDevicesFromDrawing;
     try
       // Сортировка списка устройств
-      accessexport.HierarchyBuilder.SortDeviceList(devicesList);
+      //accessexport.HierarchyBuilder.SortDeviceList(devicesList);
 
       // Экспорт подготовленного списка в базу данных Access
       accessexport.ExportDevicesListToAccess(devicesList, 'D:\ZcadDB.accdb');
@@ -376,72 +232,6 @@ begin
   finally
     accessexport.Free;
   end;
-//  ODBCConnection := TODBCConnection.Create(nil);
-//  Query := TSQLQuery.Create(nil);
-//  Trans := TSQLTransaction.Create(nil);
-//  listSructCab:=TListStructCab.Create();
-//
-//
-//  try
-//    // Подключение к Access через ODBC
-//    ODBCConnection.Driver := 'Microsoft Access Driver (*.mdb, *.accdb)';
-//    ODBCConnection.Params.Clear;
-//    ODBCConnection.Params.Add('Dbq=D:\mytest.accdb');
-//
-//    ODBCConnection.LoginPrompt := False;
-//    ODBCConnection.Connected := True;
-//
-//    // Транзакция
-//    Trans.DataBase := ODBCConnection;
-//    Query.DataBase := ODBCConnection;
-//    Query.Transaction := Trans;
-//
-//    // 1. Создать таблицу fider
-//    Query.SQL.Text :=
-//      'CREATE TABLE fider (' +
-//      'ID AUTOINCREMENT PRIMARY KEY, ' +
-//      'nameFid TEXT(50), ' +
-//      'secID INTEGER, ' +
-//      'nameHead TEXT(50)) ';
-//    try
-//      Query.ExecSQL;
-//    except
-//      on E: Exception do
-//        ShowMessage('Пропуск создания таблицы: ' + E.Message);
-//    end;
-//    getliststructconnect;
-//    for i:=0 to listSructCab.Size-1 do
-//    begin
-//      zcUI.TextMessage('  имя устройства подключенного - '+listSructCab[i].nameCab,TMWOHistoryOut);
-//      Query.SQL.Text := 'INSERT INTO fider (nameFid, secID, nameHead) VALUES (:pName, :pSecID, :pnameHead)';
-//      Query.Params.ParamByName('pName').AsString := listSructCab[i].nameCab;
-//      Query.Params.ParamByName('pSecID').AsInteger := listSructCab[i].numHeadCab;
-//      Query.Params.ParamByName('pnameHead').AsString := listSructCab[i].nameHeadCab;
-//      Query.ExecSQL;
-//    end;
-//    // 2. Вставка строк
-//
-////
-////    Query.Params.ParamByName('pName').AsString := 'ВРУ2.3';
-////    Query.Params.ParamByName('pSecID').AsInteger := 23;
-////    Query.ExecSQL;
-////
-////    // 3. Обновление второй строки
-////    Query.SQL.Text := 'UPDATE fider SET nameFid = :newName WHERE nameFid = :oldName';
-////    Query.Params.ParamByName('newName').AsString := 'ЩР2.2';
-////    Query.Params.ParamByName('oldName').AsString := 'ВРУ2.3';
-////    Query.ExecSQL;
-//
-//
-//    // Коммитим транзакцию
-//    Trans.Commit;
-//
-    //ShowMessage('Операция выполнена успешно!');
-//  finally
-//    Query.Free;
-//    Trans.Free;
-//    ODBCConnection.Free;
-//  end;
 end;
 
 

@@ -79,15 +79,6 @@ object VElectrNav: TVElectrNav
     Top = 50
     Width = 5
   end
-  object bufGridDev: TBufDataset
-    FieldDefs = <>
-    Left = 410
-    Top = 161
-  end
-  object dsGridDev: TDataSource
-    Left = 472
-    Top = 161
-  end
   object ActionList1: TActionList
     Left = 416
     Top = 8

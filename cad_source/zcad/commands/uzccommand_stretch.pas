@@ -37,7 +37,8 @@ uses
   uzegeometrytypes,
   uzegeometry,
   uzccommand_selectframe,uzccommand_ondrawinged,
-  UGDBSelectedObjArray;
+  UGDBSelectedObjArray,
+  UGDBControlPointArray;
 
 implementation
 
@@ -52,6 +53,14 @@ type
 
 var
   StretchComMode:TStretchComMode;
+
+// Создание вершины 2D с целочисленными координатами
+// Creating a 2D vertex with integer coordinates
+function CreateVertex2DI(x, y: Integer): GDBvertex2DI;
+begin
+  Result.x := x;
+  Result.y := y;
+end;
 
 // Проверка наличия выбранных контрольных точек в массиве выделенных объектов
 // Checking for the presence of selected control points in the selected objects array

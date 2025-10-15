@@ -236,71 +236,91 @@ end;
 
 
 procedure TVElectrNav.AllSelActionExecute(Sender: TObject);
+var
+  mcManager: TConnectionManager;
+  devicesList: TListVElectrDevStruct;
 begin
   //Destroy;
   if flagConnectDB then
     SQLite3Connection.Close;
 
-  uzvelcreatetempdb.createElectricalTempDB;
-  uzvelcontroltempdb.addOnlyWayHDandFullWay;
-  //uzvmanagerconnect.managerconnectexecute;
+  // 1. Взаимодействие с uzvmcmanager
+  mcManager := TConnectionManager.Create('');
+  try
+    // 2. Получить список всех устройств GetDevicesFromDrawing
+    devicesList := mcManager.GetDevicesFromDrawing;
+    try
+      // 3. Отсортировать их HierarchyBuilder.SortDeviceList
+      mcManager.HierarchyBuilder.SortDeviceList(devicesList);
 
-     // Инициализация компонентов базы данных
-     //ShowMessage('1 ');
-  if not flagConnectDB then
-  begin
-      SQLite3Connection := TSQLite3Connection.Create(Self);
-      SQLTransaction := TSQLTransaction.Create(Self);
-      SQLQuery := TSQLQuery.Create(Self);
+      uzvelcreatetempdb.createElectricalTempDB;
+      uzvelcontroltempdb.addOnlyWayHDandFullWay;
+      //uzvmanagerconnect.managerconnectexecute;
+
+         // Инициализация компонентов базы данных
+         //ShowMessage('1 ');
+      if not flagConnectDB then
+      begin
+          SQLite3Connection := TSQLite3Connection.Create(Self);
+          SQLTransaction := TSQLTransaction.Create(Self);
+          SQLQuery := TSQLQuery.Create(Self);
+      end;
+       //ShowMessage('2 ');
+
+      SQLite3Connection.Transaction := SQLTransaction;
+      SQLTransaction.Database := SQLite3Connection;
+      SQLQuery.Database := SQLite3Connection;
+
+        // Инициализация базы данных
+      InitializeDatabase;
+      flagConnectDB:=true;
+
+      // Настраиваем дерево устройств
+      FDeviceTree.Parent := PanelNav;
+      FDeviceTree.Align := alClient;
+      FDeviceTree.NodeDataSize := SizeOf(Pointer);
+
+      // Настройка событий дерева
+      FDeviceTree.OnGetText := @TreeGetText;
+      FDeviceTree.OnGetNodeDataSize := @TreeGetNodeDataSize;
+      FDeviceTree.OnInitNode := @TreeInitNode;
+      FDeviceTree.OnFreeNode := @TreeFreeNode;
+      FDeviceTree.OnClick := @TreeClick;
+
+      // 4. Построение дерева на основе отсортированного списка
+      InitializeDeviceTree;
+      BuildDeviceHierarchy;
+
+      // Заполнение vstDev
+
+      flagEditBufBeforePost:=false;
+      // 2. Настройка BufDataset
+
+      InitializeBufDataset;
+      //Привязываем к источнику данных
+      dsGridDev.DataSet := bufGridDev;
+      //ShowMessage('открыть файл...');
+
+      // 3. Настройка vstDev
+      InitializeVstDev;
+                                        //ShowMessage('открыть файл...');
+      // 5. При выделении ноды в FDeviceTree, должна выгружаться в vstDev
+      // (это обрабатывается в TreeClick, который уже реализован)
+      recordingVstDev('SELECT * FROM dev');
+
+      vstDev.OnGetText := @vstDevGetText;
+      vstDev.OnPaintText := @vstDevPaintText;
+      vstDev.OnClick := @vstDevClick;
+      vstDev.OnEditing := @vstDevEditing;
+      vstDev.OnNewText := @vstDevNewText;
+
+      //ShowMessage('открыть файл...');
+    finally
+      devicesList.Free;
+    end;
+  finally
+    mcManager.Free;
   end;
-   //ShowMessage('2 ');
-
-  SQLite3Connection.Transaction := SQLTransaction;
-  SQLTransaction.Database := SQLite3Connection;
-  SQLQuery.Database := SQLite3Connection;
-
-    // Инициализация базы данных
-  InitializeDatabase;
-  flagConnectDB:=true;
-
-  // Настраиваем дерево устройств
-  FDeviceTree.Parent := PanelNav;
-  FDeviceTree.Align := alClient;
-  FDeviceTree.NodeDataSize := SizeOf(Pointer);
-
-  // Настройка событий дерева
-  FDeviceTree.OnGetText := @TreeGetText;
-  FDeviceTree.OnGetNodeDataSize := @TreeGetNodeDataSize;
-  FDeviceTree.OnInitNode := @TreeInitNode;
-  FDeviceTree.OnFreeNode := @TreeFreeNode;
-  FDeviceTree.OnClick := @TreeClick;
-
-  // Построение дерева
-  InitializeDeviceTree;
-  BuildDeviceHierarchy;
-
-  // Заполнение vstDev
-
-  flagEditBufBeforePost:=false;
-  // 2. Настройка BufDataset
-
-  InitializeBufDataset;
-  //Привязываем к источнику данных
-  dsGridDev.DataSet := bufGridDev;
-  //ShowMessage('открыть файл...');
-
-  // 3. Настройка vstDev
-  InitializeVstDev;
-                                    //ShowMessage('открыть файл...');
-  recordingVstDev('SELECT * FROM dev');
-
-  vstDev.OnGetText := @vstDevGetText;
-  vstDev.OnPaintText := @vstDevPaintText;
-  vstDev.OnClick := @vstDevClick;
-  vstDev.OnEditing := @vstDevEditing;
-  vstDev.OnNewText := @vstDevNewText;
-
-  //ShowMessage('открыть файл...');
 end;
 procedure TVElectrNav.SaveActionExecute(Sender: TObject);
 begin

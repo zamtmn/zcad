@@ -77,13 +77,35 @@ end;
 function GDBObjComplex.CalcActualVisible(const Actuality:TVisActuality):boolean;
 var
   oldValue:TActuality;
+  p:PGDBObjEntity;
+  ir:itrec;
+  hasVisibleChild:boolean;
 begin
   // For complex entities (blocks), visibility is determined solely by child entities
   // not by the block's own layer state (fixes issue #11)
   oldValue:=Visible;
-  Visible:=0;  // Start with invisible
-  if ConstObjArray.CalcActualVisible(Actuality) then
-    Visible:=Actuality.visibleactualy;
+
+  // Calculate visibility for all children
+  ConstObjArray.CalcActualVisible(Actuality);
+
+  // Check if any child is visible
+  hasVisibleChild:=false;
+  p:=ConstObjArray.beginiterate(ir);
+  if p<>nil then
+    repeat
+      if p^.Visible=Actuality.visibleactualy then begin
+        hasVisibleChild:=true;
+        break;
+      end;
+      p:=ConstObjArray.iterate(ir);
+    until p=nil;
+
+  // Set block visibility based on children
+  if hasVisibleChild then
+    Visible:=Actuality.visibleactualy
+  else
+    Visible:=0;
+
   Result:=oldValue<>Visible;
 end;
 

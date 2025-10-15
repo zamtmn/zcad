@@ -76,11 +76,15 @@ end;
 
 function GDBObjComplex.CalcActualVisible(const Actuality:TVisActuality):boolean;
 var
-  q:boolean;
+  oldValue:TActuality;
 begin
-  Result:=inherited;
-  q:=ConstObjArray.CalcActualVisible(Actuality);
-  Result:=Result or q;
+  // For complex entities (blocks), visibility is determined solely by child entities
+  // not by the block's own layer state (fixes issue #11)
+  oldValue:=Visible;
+  Visible:=0;  // Start with invisible
+  if ConstObjArray.CalcActualVisible(Actuality) then
+    Visible:=Actuality.visibleactualy;
+  Result:=oldValue<>Visible;
 end;
 
 procedure GDBObjComplex.BuildGeometry;

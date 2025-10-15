@@ -37,14 +37,14 @@ type
     FAccessExporter: TAccessDBExporter;
 
     procedure InsertDevicesToDatabase;
-    procedure ExportDevicesListToAccess(devicesList: TListVElectrDevStruct; const AAccessDBPath: string);
   public
     constructor Create(const ADrawingPath: string);
     destructor Destroy; override;
 
     procedure CreateTemporaryDatabase;
     procedure ExportToAccessDatabase(const AAccessDBPath: string);
-    procedure PrepareDevicesAndExportToAccess(const AAccessDBPath: string);
+    function GetDevicesFromDrawing: TListVElectrDevStruct;
+    procedure ExportDevicesListToAccess(devicesList: TListVElectrDevStruct; const AAccessDBPath: string);
 
     function CheckFileExists(const AFilePath: string): Boolean;
 
@@ -177,43 +177,30 @@ begin
   FAccessExporter.Commit;
 end;
 
-// Функция подготовки всех устройств с чертежа и экспорта их в базу данных Access
-// На входе: путь к файлу базы данных Access
+// Функция подготовки списка всех устройств с чертежа
+// На выходе: список устройств TListVElectrDevStruct с построенными иерархическими путями
 // Функция выполняет следующие действия:
 // 1. Собирает список всех устройств с чертежа в виде TListVElectrDevStruct
 // 2. Строит иерархические пути для каждого устройства (pathHD и fullpathHD)
 // 3. Заполняет поля сортировки (Sort1, Sort2, Sort3)
-// 4. Сортирует список устройств
-// 5. Вызывает экспорт подготовленного списка в базу данных Access
-procedure TConnectionManager.PrepareDevicesAndExportToAccess(const AAccessDBPath: string);
+// Примечание: сортировка и экспорт в базу данных выполняются вызывающей стороной
+function TConnectionManager.GetDevicesFromDrawing: TListVElectrDevStruct;
 var
-  devicesList: TListVElectrDevStruct;
   i: integer;
 begin
   // Сбор всех устройств с чертежа в виде списка структур
-  devicesList := FDeviceCollector.GetAllDevicesAsStructList;
+  Result := FDeviceCollector.GetAllDevicesAsStructList;
 
-  try
-    // Построение иерархических путей для всех устройств
-    FHierarchyBuilder.BuildHierarchyPaths(devicesList);
+  // Построение иерархических путей для всех устройств
+  FHierarchyBuilder.BuildHierarchyPaths(Result);
 
-    // Затем заполнить поля сортировки
-    FHierarchyBuilder.FillSortFields(devicesList);
+  // Затем заполнить поля сортировки
+  FHierarchyBuilder.FillSortFields(Result);
 
-    // Сортировка списка устройств по pathHD, Sort1, Sort2, Sort3
-    FHierarchyBuilder.SortDeviceList(devicesList);
+  for i := 0 to Result.Size - 1 do
+      zcUI.TextMessage('FindOnlyHDHierarchy ' + Result[i].pathHD + ' - sort1= ' + inttostr(Result[i].Sort1) + ' - sort2= ' + inttostr(Result[i].Sort2) + ' - sort3= ' + inttostr(Result[i].Sort3), TMWOHistoryOut);
 
-    for i := 0 to devicesList.Size - 1 do
-        zcUI.TextMessage('FindOnlyHDHierarchy ' + devicesList[i].pathHD + ' - sort1= ' + inttostr(devicesList[i].Sort1) + ' - sort2= ' + inttostr(devicesList[i].Sort2) + ' - sort3= ' + inttostr(devicesList[i].Sort3), TMWOHistoryOut);
-
-    // Экспорт подготовленного списка устройств в базу данных Access
-    ExportDevicesListToAccess(devicesList, AAccessDBPath);
-
-    zcUI.TextMessage('Collected and exported ' + IntToStr(devicesList.Size) + ' devices to Access database', TMWOHistoryOut);
-  finally
-    // Освобождение списка устройств
-    devicesList.Free;
-  end;
+  zcUI.TextMessage('Collected ' + IntToStr(Result.Size) + ' devices from drawing', TMWOHistoryOut);
 end;
 
 // Функция проверки существования файла по указанному пути

@@ -47,6 +47,7 @@ type
 
     procedure BuildHierarchyPaths(var deviceList: TListVElectrDevStruct);
     procedure FillSortFields(var deviceList: TListVElectrDevStruct);
+    procedure SortDeviceList(var deviceList: TListVElectrDevStruct);
   end;
 
 implementation
@@ -293,6 +294,58 @@ begin
       device^.Sort1 := 0;
       device^.Sort2 := 0;
       device^.Sort3 := 0;
+    end;
+  end;
+end;
+
+// Функция сортировки списка устройств по заданным критериям
+// Сортировка выполняется по порядку:
+// 1. По полю pathHD (по алфавиту)
+// 2. По полю Sort1 (по возрастанию)
+// 3. По полю Sort2 (по возрастанию)
+// 4. По полю Sort3 (по возрастанию)
+procedure THierarchyBuilder.SortDeviceList(var deviceList: TListVElectrDevStruct);
+var
+  i, j: Integer;
+  temp: TVElectrDevStruct;
+  needSwap: Boolean;
+begin
+  // Реализация пузырьковой сортировки для стабильности результатов
+  for i := 0 to deviceList.Size - 2 do
+  begin
+    for j := 0 to deviceList.Size - i - 2 do
+    begin
+      needSwap := False;
+
+      // Сначала сравниваем по pathHD (по алфавиту)
+      if deviceList[j].pathHD > deviceList[j + 1].pathHD then
+        needSwap := True
+      else if deviceList[j].pathHD = deviceList[j + 1].pathHD then
+      begin
+        // Если pathHD равны, сравниваем по Sort1
+        if deviceList[j].Sort1 > deviceList[j + 1].Sort1 then
+          needSwap := True
+        else if deviceList[j].Sort1 = deviceList[j + 1].Sort1 then
+        begin
+          // Если Sort1 равны, сравниваем по Sort2
+          if deviceList[j].Sort2 > deviceList[j + 1].Sort2 then
+            needSwap := True
+          else if deviceList[j].Sort2 = deviceList[j + 1].Sort2 then
+          begin
+            // Если Sort2 равны, сравниваем по Sort3
+            if deviceList[j].Sort3 > deviceList[j + 1].Sort3 then
+              needSwap := True;
+          end;
+        end;
+      end;
+
+      // Выполняем обмен элементов, если нужно
+      if needSwap then
+      begin
+        temp := deviceList[j];
+        deviceList.Mutable[j]^ := deviceList[j + 1];
+        deviceList.Mutable[j + 1]^ := temp;
+      end;
     end;
   end;
 end;

@@ -5,9 +5,9 @@ unit VElectrNav;
 interface
 
 uses
-  Classes, SysUtils, Forms, Controls,Graphics,  laz.VirtualTrees, DB,uzcdrawing,uzcdrawings,uzcinterface,
-  Dialogs, ExtCtrls, BufDataset,  DBGrids, Grids, ActnList, ComCtrls, Windows,fgl,
-  uzvelaccessdbcontrol,uzvmcmanager,uzvmcstruct,gvector,uzccablemanager,uzcentcable,uzeentdevice,gzctnrVectorTypes,uzcvariablesutils,uzccommandsabstract,uzeentity,uzeentblockinsert,varmandef,uzeconsts;
+  Classes, SysUtils, Forms, Controls, Graphics, laz.VirtualTrees, uzcdrawing, uzcdrawings, uzcinterface,
+  Dialogs, ExtCtrls, ActnList, ComCtrls, Windows, fgl,
+  uzvelaccessdbcontrol, uzvmcmanager, uzvmcstruct, gvector, uzccablemanager, uzcentcable, uzeentdevice, gzctnrVectorTypes, uzcvariablesutils, uzccommandsabstract, uzeentity, uzeentblockinsert, varmandef, uzeconsts;
 
 type
 
@@ -32,8 +32,6 @@ type
 
   TVElectrNav = class(TFrame)
     ActionList1: TActionList;
-    bufGridDev: TBufDataset;
-    dsGridDev: TDataSource;
     vstDev: TLazVirtualStringTree;
     PanelData: TPanel;
     PanelNav: TPanel;
@@ -62,7 +60,6 @@ type
     procedure InitializePanels;          // Инициализация и настройка панелей интерфейса
 
     procedure InitializeDeviceTree;    // Инициализация дерева устройств FDeviceTree
-    procedure InitializeBufDataset;    // Инициализация буферного набора данных
     procedure InitializeVstDev;        // Инициализация виртуальной таблицы устройств
     procedure recordingVstDev(const filterPath: string); // Заполнение vstDev из FDevicesList с фильтрацией по пути
     procedure BuildDeviceHierarchy;    // Построение иерархии дерева на основе FDevicesList
@@ -90,9 +87,6 @@ type
     constructor Create(TheOwner: TComponent); override;
     destructor Destroy; override;
   end;
-
-  var
-      flagEditBufBeforePost:boolean;
 
 implementation
 
@@ -212,15 +206,10 @@ begin
     InitializeDeviceTree;
     BuildDeviceHierarchy;
 
-    // Шаг 6: Настройка буферного набора данных
-    flagEditBufBeforePost:=false;
-    InitializeBufDataset;
-    dsGridDev.DataSet := bufGridDev;
-
-    // Шаг 7: Настройка виртуальной таблицы устройств
+    // Шаг 6: Настройка виртуальной таблицы устройств
     InitializeVstDev;
 
-    // Шаг 8: Заполнение vstDev всеми устройствами (без фильтра)
+    // Шаг 7: Заполнение vstDev всеми устройствами (без фильтра)
     recordingVstDev('');
 
     // Назначение обработчиков событий для vstDev
@@ -307,26 +296,6 @@ begin
   end;
 end;
 
-// Инициализация буферного набора данных для vstDev
-procedure TVElectrNav.InitializeBufDataset;
-begin
-  try
-    with bufGridDev do
-    begin
-      Close;
-      FieldDefs.Clear;
-      FieldDefs.Add('ActionShow', ftString, 10);   // Кнопка "Показать"
-      FieldDefs.Add('devname', ftString, 10);      // Имя устройства
-      FieldDefs.Add('hdname', ftString, 10);       // Имя головного устройства
-      FieldDefs.Add('hdgroup', ftString, 10);      // Группа головного устройства
-      FieldDefs.Add('ActionEdit', ftString, 10);   // Кнопка "Редактировать"
-      CreateDataset;
-    end;
-  except
-    on E: Exception do
-      ShowMessage('Ошибка создания BufDataset: ' + E.Message);
-  end;
-end;
 // Инициализация виртуальной таблицы устройств (vstDev)
 procedure TVElectrNav.InitializeVstDev;
 begin

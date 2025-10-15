@@ -361,7 +361,7 @@ begin
   //uzvelaccessdbcontrol.AddStructureinAccessDB;
   accessexport := TConnectionManager.Create('');
   try
-    accessexport.CollectAndExportDevicesToAccess('D:\ZcadDB.accdb');
+    accessexport.PrepareDevicesAndExportToAccess('D:\ZcadDB.accdb');
   finally
     accessexport.Free;
   end;

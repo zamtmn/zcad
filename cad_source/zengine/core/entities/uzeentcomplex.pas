@@ -64,6 +64,7 @@ type
       var DC:TDrawContext);virtual;
     function CalcActualVisible(
       const Actuality:TVisActuality):boolean;virtual;
+    function IsActualy:boolean;virtual;
     function IsNeedSeparate:boolean;virtual;
   end;
 
@@ -72,6 +73,25 @@ implementation
 function GDBObjComplex.IsNeedSeparate:boolean;
 begin
   Result:=True;
+end;
+
+function GDBObjComplex.IsActualy:boolean;
+var
+  p:PGDBObjEntity;
+  ir:itrec;
+begin
+  // For complex entities (blocks), check if any child primitive is actually visible
+  // This allows blocks on disabled layers to be selectable if they contain visible primitives (fixes issue #11)
+  Result:=false;
+  p:=ConstObjArray.beginiterate(ir);
+  if p<>nil then
+    repeat
+      if p^.IsActualy then begin
+        Result:=true;
+        break;
+      end;
+      p:=ConstObjArray.iterate(ir);
+    until p=nil;
 end;
 
 function GDBObjComplex.CalcActualVisible(const Actuality:TVisActuality):boolean;

@@ -143,11 +143,11 @@ begin
     drawings.GetCurrentDWG.GetSelObjArray.remappoints(
       drawings.GetCurrentDWG.GetPcamera.POSCOUNT,drawings.GetCurrentDWG.wa.param.scrollmode,
       drawings.GetCurrentDWG.GetPcamera^,drawings.GetCurrentDWG^.myGluProject2,dc);
-    // Выбираем все контрольные точки всего экрана (подсвечиваем их красным)
-    // Select all control points on the entire screen (highlight them in red)
+    // Выбираем только контрольные точки, попавшие в секущую рамку (подсвечиваем их красным)
+    // Select only control points that fell within the crossing frame (highlight them in red)
     drawings.GetCurrentDWG.GetSelObjArray.selectcontrolpointinframe(
-      CreateVertex2DI(0,0),
-      CreateVertex2DI(drawings.GetCurrentDWG.wa.param.Width,drawings.GetCurrentDWG.wa.param.Height));
+      drawings.GetCurrentDWG.wa.param.seldesc.Frame1,
+      drawings.GetCurrentDWG.wa.param.seldesc.Frame2);
     // Переходим сразу к режиму первой точки
     // Go directly to the first point mode
     StretchComMode:=SM_FirstPoint;

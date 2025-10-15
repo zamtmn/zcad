@@ -226,6 +226,7 @@ var
   listSructCab:TListStructCab;
   i:integer;
   accessexport:TConnectionManager;
+  devicesList: TListVElectrDevStruct;
 
   Function getinfoheadcab(iname:string):string;
   var
@@ -361,7 +362,17 @@ begin
   //uzvelaccessdbcontrol.AddStructureinAccessDB;
   accessexport := TConnectionManager.Create('');
   try
-    accessexport.PrepareDevicesAndExportToAccess('D:\ZcadDB.accdb');
+    // Получение списка устройств с чертежа
+    devicesList := accessexport.GetDevicesFromDrawing;
+    try
+      // Сортировка списка устройств
+      accessexport.HierarchyBuilder.SortDeviceList(devicesList);
+
+      // Экспорт подготовленного списка в базу данных Access
+      accessexport.ExportDevicesListToAccess(devicesList, 'D:\ZcadDB.accdb');
+    finally
+      devicesList.Free;
+    end;
   finally
     accessexport.Free;
   end;

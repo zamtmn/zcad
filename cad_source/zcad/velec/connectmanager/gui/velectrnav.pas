@@ -390,6 +390,54 @@ var
     currentFeederNum: integer;
     lastFeederNum: integer;
     isFirstDevice: boolean;
+
+    function ProcessStrings(const Str1, Str2: string): boolean;
+      var
+        Parts1, Parts2: TStringList;
+        LastWordFromStr1: string;
+        IndexInStr2, WordsAfter, i: Integer;
+      begin
+        Result := false;
+
+        Parts1 := TStringList.Create;
+        Parts2 := TStringList.Create;
+        try
+          // Разбиваем первую строку на части
+          ExtractStrings(['~'], [], PChar(Str1), Parts1);
+          if Parts1.Count = 0 then Exit;
+
+          // Получаем последнее слово из первой строки
+          LastWordFromStr1 := Parts1[Parts1.Count - 1];
+
+          // Разбиваем вторую строку на части
+          ExtractStrings(['~'], [], PChar(Str2), Parts2);
+          if Parts2.Count = 0 then Exit;
+
+          // Ищем последнее слово из первой строки во второй строке
+          IndexInStr2 := -1;
+          for i := 0 to Parts2.Count - 1 do
+          begin
+            if Parts2[i] = LastWordFromStr1 then
+            begin
+              IndexInStr2 := i;
+              Break;
+            end;
+          end;
+
+          if IndexInStr2 = -1 then Exit;
+
+          // Определяем сколько слов осталось после найденного слова
+          WordsAfter := Parts2.Count - IndexInStr2 - 1;
+
+          // Выбираем вариант в зависимости от количества слов после
+          if WordsAfter = 0 then
+            Result := true;
+
+        finally
+          Parts1.Free;
+          Parts2.Free;
+        end;
+      end;
 begin
   try
     vstDev.BeginUpdate;
@@ -410,7 +458,7 @@ begin
         // Если фильтр задан, проверяем соответствие fullpathHD (не pathHD!)
         if (filterPath = '') or (device.pathHD = filterPath) then
         begin
-          if device.fullpathHD = filterPath then
+          if ProcessStrings(filterPath,device.fullpathHD) then
              currentFeederNum := device.feedernum;
 
           // Если встретили новую группу (новое значение feedernum), создаём родительский узел

@@ -65,6 +65,7 @@ type
     function CalcActualVisible(
       const Actuality:TVisActuality):boolean;virtual;
     function IsActualy:boolean;virtual;
+    function SelectQuik:boolean;virtual;
     function IsNeedSeparate:boolean;virtual;
   end;
 
@@ -94,6 +95,42 @@ begin
       end;
       p:=ConstObjArray.iterate(ir);
     until p=nil;
+end;
+
+function GDBObjComplex.SelectQuik:boolean;
+var
+  p:PGDBObjEntity;
+  ir:itrec;
+  anyChildSelectable:boolean;
+begin
+  // Для сложных объектов (блоков) возможность выделения определяется дочерними примитивами,
+  // а не состоянием собственного слоя блока (исправление issue #11)
+  // Если хотя бы один дочерний примитив может быть выделен (слой включен и не заблокирован),
+  // то блок тоже может быть выделен
+  // For complex entities (blocks), selectability is determined by child primitives,
+  // not by the block's own layer state (fixes issue #11)
+  // If at least one child primitive is selectable (layer on and not locked),
+  // then the block can be selected too
+  anyChildSelectable:=false;
+  p:=ConstObjArray.beginiterate(ir);
+  if p<>nil then
+    repeat
+      // Проверяем, может ли дочерний примитив быть выделен
+      // Check if child primitive can be selected
+      if p^.vp.Layer<>nil then
+        if (p^.vp.Layer^._on) and (not p^.vp.Layer^._lock) then begin
+          anyChildSelectable:=true;
+          break;
+        end;
+      p:=ConstObjArray.iterate(ir);
+    until p=nil;
+
+  if anyChildSelectable then begin
+    Result:=true;
+    selected:=true;
+  end else begin
+    Result:=false;
+  end;
 end;
 
 function GDBObjComplex.CalcActualVisible(const Actuality:TVisActuality):boolean;

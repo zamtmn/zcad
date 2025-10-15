@@ -483,6 +483,9 @@ begin
             NodeData^.PathHD := '';
             NodeData^.FullPathHD := '';
 
+            // Устанавливаем флаг vsHasChildren для отображения индикаторов +/-
+            Include(GroupNode^.States, vsHasChildren);
+
             lastFeederNum := currentFeederNum;
             isFirstDevice := False;
           end;

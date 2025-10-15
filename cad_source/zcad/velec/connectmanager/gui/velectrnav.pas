@@ -305,9 +305,9 @@ begin
       vstDev.Header.Columns.Clear;
       vstDev.Clear;
 
-      // Настройка опций отображения (без дерева, с выделением всей строки)
+      // Настройка опций отображения (с деревом для группировки, с выделением всей строки)
       vstDev.TreeOptions.PaintOptions :=
-        vstDev.TreeOptions.PaintOptions - [toShowRoot, toShowTreeLines, toShowButtons];
+        vstDev.TreeOptions.PaintOptions + [toShowTreeLines, toShowButtons] - [toShowRoot];
       vstDev.TreeOptions.SelectionOptions :=
         vstDev.TreeOptions.SelectionOptions + [toFullRowSelect, toExtendedFocus];
       vstDev.TreeOptions.MiscOptions :=
@@ -364,35 +364,66 @@ end;
 
 // Заполнение vstDev устройствами из FDevicesList с возможностью фильтрации по пути
 // filterPath - путь иерархии для фильтрации (пустая строка = показать все)
+// Группирует устройства по feedernum, создавая родительские узлы для каждой группы
 procedure TVElectrNav.recordingVstDev(const filterPath: string);
 var
     i: integer;
-    Node: PVirtualNode;
+    Node, GroupNode: PVirtualNode;
     NodeData: PGridNodeData;
     device: TVElectrDevStruct;
+    currentFeederNum: integer;
+    lastFeederNum: integer;
+    isFirstDevice: boolean;
 begin
   try
     vstDev.BeginUpdate;
     try
       vstDev.Clear;
 
+      // Инициализация переменных для отслеживания групп
+      lastFeederNum := -1;
+      GroupNode := nil;
+      isFirstDevice := True;
+
       // Проходим по всем устройствам в FDevicesList
       for i := 0 to FDevicesList.Size - 1 do
       begin
         device := FDevicesList[i];
 
-        // Если фильтр задан, проверяем соответствие pathHD
-        if (filterPath = '') or (device.pathHD = filterPath) then
+        // Если фильтр задан, проверяем соответствие fullpathHD (не pathHD!)
+        if (filterPath = '') or (device.fullpathHD = filterPath) then
         begin
-          Node := vstDev.AddChild(nil);
+          currentFeederNum := device.feedernum;
+
+          // Если встретили новую группу (новое значение feedernum), создаём родительский узел
+          if isFirstDevice or (currentFeederNum <> lastFeederNum) then
+          begin
+            // Создаём родительский узел группы
+            GroupNode := vstDev.AddChild(nil);
+            NodeData := vstDev.GetNodeData(GroupNode);
+
+            // Заполняем данные группового узла
+            NodeData^.DevName := 'Группа ' + IntToStr(currentFeederNum);
+            NodeData^.HDName := '';
+            NodeData^.HDGroup := currentFeederNum;
+
+            lastFeederNum := currentFeederNum;
+            isFirstDevice := False;
+          end;
+
+          // Создаём дочерний узел устройства под текущей группой
+          Node := vstDev.AddChild(GroupNode);
           NodeData := vstDev.GetNodeData(Node);
 
           // Заполняем данные ноды из структуры устройства
           NodeData^.DevName := device.basename;
           NodeData^.HDName := device.headdev;
-          NodeData^.HDGroup := device.feedernum; // В TVElectrDevStruct нет поля группы
+          NodeData^.HDGroup := device.feedernum;
         end;
       end;
+
+      // Разворачиваем все группы для удобства просмотра
+      vstDev.FullExpand;
     finally
       vstDev.EndUpdate;
     end;

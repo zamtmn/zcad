@@ -263,7 +263,7 @@ begin
 
     // Анализируем пути иерархии
     sortWord := ProcessStrings(device^.pathHD, device^.fullpathHD);
-    zcUI.TextMessage('sortWord1 ' + sortWord.LastWord+' - NextWord1= ' + sortWord.NextWord1+' -NextWord2= ' + sortWord.NextWord2, TMWOHistoryOut);
+    //zcUI.TextMessage('sortWord1 ' + sortWord.LastWord+' - NextWord1= ' + sortWord.NextWord1+' -NextWord2= ' + sortWord.NextWord2, TMWOHistoryOut);
     if sortWord.res = 1 then
     begin
       // Устройство находится на верхнем уровне иерархии

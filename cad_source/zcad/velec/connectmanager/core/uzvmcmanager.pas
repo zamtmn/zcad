@@ -197,8 +197,8 @@ begin
   // Затем заполнить поля сортировки
   FHierarchyBuilder.FillSortFields(Result);
 
-  for i := 0 to Result.Size - 1 do
-      zcUI.TextMessage('FindOnlyHDHierarchy ' + Result[i].pathHD + ' - sort1= ' + inttostr(Result[i].Sort1) + ' - sort2= ' + inttostr(Result[i].Sort2) + ' - sort3= ' + inttostr(Result[i].Sort3), TMWOHistoryOut);
+  //for i := 0 to Result.Size - 1 do
+  //    zcUI.TextMessage('FindOnlyHDHierarchy ' + Result[i].pathHD + ' - sort1= ' + inttostr(Result[i].Sort1) + ' - sort2= ' + inttostr(Result[i].Sort2) + ' - sort3= ' + inttostr(Result[i].Sort3), TMWOHistoryOut);
 
   zcUI.TextMessage('Collected ' + IntToStr(Result.Size) + ' devices from drawing', TMWOHistoryOut);
 end;

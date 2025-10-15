@@ -390,10 +390,12 @@ begin
       begin
         device := FDevicesList[i];
 
+
         // Если фильтр задан, проверяем соответствие fullpathHD (не pathHD!)
-        if (filterPath = '') or (device.fullpathHD = filterPath) then
+        if (filterPath = '') or (device.pathHD = filterPath) then
         begin
-          currentFeederNum := device.feedernum;
+          if device.fullpathHD = filterPath then
+             currentFeederNum := device.feedernum;
 
           // Если встретили новую группу (новое значение feedernum), создаём родительский узел
           if isFirstDevice or (currentFeederNum <> lastFeederNum) then
@@ -403,9 +405,9 @@ begin
             NodeData := vstDev.GetNodeData(GroupNode);
 
             // Заполняем данные группового узла
-            NodeData^.DevName := 'Группа ' + IntToStr(currentFeederNum);
+            NodeData^.DevName := 'ф. ' + IntToStr(currentFeederNum);
             NodeData^.HDName := '';
-            NodeData^.HDGroup := currentFeederNum;
+            NodeData^.HDGroup := 0;
 
             lastFeederNum := currentFeederNum;
             isFirstDevice := False;

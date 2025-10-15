@@ -80,6 +80,8 @@ var
   p:PGDBObjEntity;
   ir:itrec;
 begin
+  // Для сложных объектов (блоков) проверяем, есть ли хотя бы один видимый дочерний примитив
+  // Это позволяет выделять блоки на выключенных слоях, если внутри них есть примитивы на видимых слоях (исправление issue #11)
   // For complex entities (blocks), check if any child primitive is actually visible
   // This allows blocks on disabled layers to be selectable if they contain visible primitives (fixes issue #11)
   Result:=false;
@@ -101,13 +103,17 @@ var
   ir:itrec;
   hasVisibleChild:boolean;
 begin
+  // Для сложных объектов (блоков) видимость определяется только дочерними примитивами,
+  // а не состоянием собственного слоя блока (исправление issue #11)
   // For complex entities (blocks), visibility is determined solely by child entities
   // not by the block's own layer state (fixes issue #11)
   oldValue:=Visible;
 
+  // Вычисляем видимость для всех дочерних примитивов
   // Calculate visibility for all children
   ConstObjArray.CalcActualVisible(Actuality);
 
+  // Проверяем, есть ли хотя бы один видимый дочерний примитив
   // Check if any child is visible
   hasVisibleChild:=false;
   p:=ConstObjArray.beginiterate(ir);
@@ -120,6 +126,7 @@ begin
       p:=ConstObjArray.iterate(ir);
     until p=nil;
 
+  // Устанавливаем видимость блока на основе видимости дочерних примитивов
   // Set block visibility based on children
   if hasVisibleChild then
     Visible:=Actuality.visibleactualy

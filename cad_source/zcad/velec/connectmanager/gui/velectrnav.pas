@@ -766,11 +766,11 @@ begin
         end;
       end;
 
-      // Вычисляем суммы мощностей и cosF для узлов 1-го уровня (групп по feedernum)
+      // Вычисляем суммы мощностей, cosF, Voltage и Phase для узлов 1-го уровня (групп по feedernum)
       Node := vstDev.GetFirst;
       while Assigned(Node) do
       begin
-        // Для узлов 1-го уровня (групп по feedernum) вычисляем сумму мощностей дочерних узлов и cosF
+        // Для узлов 1-го уровня (групп по feedernum) вычисляем сумму мощностей дочерних узлов, cosF, Voltage и Phase
         if vstDev.GetNodeLevel(Node) = 0 then
         begin
           NodeData := vstDev.GetNodeData(Node);
@@ -778,8 +778,14 @@ begin
           begin
             sumPower := 0.0;
             sumS := 0.0;
+            var firstVoltage: integer := -1;
+            var allVoltagesSame: boolean := true;
+            var firstPhase: string := '';
+            var allPhasesSame: boolean := true;
+            var isFirstChild: boolean := true;
 
             // Суммируем мощности (Power) и полные мощности (S) всех дочерних узлов
+            // Проверяем одинаковость Voltage и Phase
             GroupNode := vstDev.GetFirstChild(Node);
             while Assigned(GroupNode) do
             begin
@@ -795,6 +801,21 @@ begin
                   childS := 0.0;
 
                 sumS := sumS + childS;
+
+                // Проверяем Voltage
+                if isFirstChild then
+                begin
+                  firstVoltage := ChildNodeData^.Voltage;
+                  firstPhase := ChildNodeData^.Phase;
+                  isFirstChild := false;
+                end
+                else
+                begin
+                  if ChildNodeData^.Voltage <> firstVoltage then
+                    allVoltagesSame := false;
+                  if ChildNodeData^.Phase <> firstPhase then
+                    allPhasesSame := false;
+                end;
               end;
               GroupNode := vstDev.GetNextSibling(GroupNode);
             end;
@@ -807,6 +828,18 @@ begin
               NodeData^.CosF := sumPower / sumS
             else
               NodeData^.CosF := 0.0;
+
+            // Устанавливаем Voltage: если все одинаковые - выводим значение, иначе 0 (будет показано как "Different")
+            if allVoltagesSame and (firstVoltage <> -1) then
+              NodeData^.Voltage := firstVoltage
+            else
+              NodeData^.Voltage := 0;
+
+            // Устанавливаем Phase: если все одинаковые - выводим значение, иначе "Different"
+            if allPhasesSame then
+              NodeData^.Phase := firstPhase
+            else
+              NodeData^.Phase := 'Different';
           end;
         end;
         Node := vstDev.GetNext(Node);
@@ -829,16 +862,27 @@ procedure TVElectrNav.vstDevGetText(Sender: TBaseVirtualTree;
   var CellText: String);
 var
   NodeData: PGridNodeData;
+  nodeLevel: integer;
 begin
   NodeData := Sender.GetNodeData(Node);
   if not Assigned(NodeData) then Exit;
+
+  nodeLevel := Sender.GetNodeLevel(Node);
 
   case Column of
     0: CellText := NodeData^.DevName;
     1: CellText := NodeData^.RealName;
     2: if NodeData^.Power <> 0.0 then CellText := FloatToStr(NodeData^.Power) else CellText := '';
     3: if NodeData^.CosF <> 0.0 then CellText := FloatToStr(NodeData^.CosF) else CellText := '';
-    4: if NodeData^.Voltage <> 0 then CellText := IntToStr(NodeData^.Voltage) else CellText := '';
+    4: begin
+         // Для узлов 1-го уровня: если Voltage = 0, показываем "Different"
+         if (nodeLevel = 0) and (NodeData^.Voltage = 0) then
+           CellText := 'Different'
+         else if NodeData^.Voltage <> 0 then
+           CellText := IntToStr(NodeData^.Voltage)
+         else
+           CellText := '';
+       end;
     5: CellText := NodeData^.Phase;
     6: CellText := NodeData^.HDName;
     7: CellText := inttostr(NodeData^.HDGroup);

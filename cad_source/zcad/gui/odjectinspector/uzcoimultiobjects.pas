@@ -411,6 +411,9 @@ begin
       exit;
     end;
   finally
+    {починка https://github.com/zamtmn/zcad/issues/117}
+    CreateMultiPropertys(SavezeUnitsFormat);
+    {конец починки}
     zcPlaceUndoEndMarkerIfNeed(UMPlaced);
   end;
 end;

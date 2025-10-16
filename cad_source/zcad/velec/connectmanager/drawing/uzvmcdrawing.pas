@@ -436,7 +436,7 @@ var
   pvd: pvardesk;
 begin
   Result := 'ERROR';
-  pvd := FindVariableInEnt(pdev, 'NMO_RealName');
+  pvd := FindVariableInEnt(pdev, 'realnamedev');
   if pvd <> nil then
     Result := pstring(pvd^.data.Addr.Instance)^;
 end;

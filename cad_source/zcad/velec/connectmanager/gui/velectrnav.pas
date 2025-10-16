@@ -20,20 +20,6 @@ type
     CanBeNode: Boolean;
   end;
 
-  PGridNodeData = ^TGridNodeData;
-  TGridNodeData = record
-    DevName: string;
-    RealName: string;
-    Power: double;
-    CosF: double;
-    Voltage: integer;
-    Phase: string;
-    HDName: string;
-    HDGroup: integer;
-    PathHD: string;
-    FullPathHD: string;
-  end;
-
 
   { TVElectrNav }
 

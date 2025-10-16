@@ -8,15 +8,27 @@ uses
   Classes, SysUtils, laz.VirtualTrees, uzvmcstruct, gvector;
 
 type
-
   PGridNodeData = ^TGridNodeData;
   TGridNodeData = record
     DevName: string;
+    RealName: string;
+    Power: double;
+    CosF: double;
+    Voltage: integer;
+    Phase: string;
     HDName: string;
     HDGroup: integer;
     PathHD: string;
     FullPathHD: string;
   end;
+  //PGridNodeData = ^TGridNodeData;
+  //TGridNodeData = record
+  //  DevName: string;
+  //  HDName: string;
+  //  HDGroup: integer;
+  //  PathHD: string;
+  //  FullPathHD: string;
+  //end;
 
   { TVstDevPopulator }
   // Класс для заполнения виртуального дерева устройств (vstDev)
@@ -25,19 +37,20 @@ type
   private
     FVstDev: TLazVirtualStringTree;          // Ссылка на виртуальное дерево
     FDevicesList: TListVElectrDevStruct;     // Ссылка на список устройств
+    deepConnectDev:integer;                  // глубина подключения
 
     // Вспомогательная функция для проверки соответствия путей
     // Возвращает true, если последнее слово из Str1 является последним словом в Str2
-    function ProcessStrings(const Str1, Str2: string): boolean;
+    function ProcessStrings(const Str1, Str2: string): integer;
 
     // Создает родительский узел группы для feedernum
-    function CreateGroupNode(const feederNum: integer): PVirtualNode;
+    function CreateGroupNode(const device: TVElectrDevStruct): PVirtualNode;
 
     // Создает дочерний узел устройства под группой
     function CreateDeviceNode(GroupNode: PVirtualNode; const device: TVElectrDevStruct): PVirtualNode;
 
     // Заполняет данные узла группы
-    procedure FillGroupNodeData(Node: PVirtualNode; const feederNum: integer);
+    procedure FillGroupNodeData(Node: PVirtualNode; const device: TVElectrDevStruct);
 
     // Заполняет данные узла устройства
     procedure FillDeviceNodeData(Node: PVirtualNode; const device: TVElectrDevStruct);
@@ -68,13 +81,13 @@ end;
 // Вспомогательная функция для проверки соответствия путей
 // Разбивает строки на части по разделителю '~' и проверяет,
 // является ли последнее слово из Str1 последним словом в Str2
-function TVstDevPopulator.ProcessStrings(const Str1, Str2: string): boolean;
+function TVstDevPopulator.ProcessStrings(const Str1, Str2: string): integer;
 var
   Parts1, Parts2: TStringList;
   LastWordFromStr1: string;
-  IndexInStr2, WordsAfter, i: Integer;
+  IndexInStr2, i: Integer;
 begin
-  Result := false;
+  Result := 0;
 
   Parts1 := TStringList.Create;
   Parts2 := TStringList.Create;
@@ -104,11 +117,8 @@ begin
     if IndexInStr2 = -1 then Exit;
 
     // Определяем сколько слов осталось после найденного слова
-    WordsAfter := Parts2.Count - IndexInStr2 - 1;
+    result := Parts2.Count - IndexInStr2 - 1;
 
-    // Выбираем вариант в зависимости от количества слов после
-    if WordsAfter = 0 then
-      Result := true;
 
   finally
     Parts1.Free;
@@ -117,12 +127,12 @@ begin
 end;
 
 // Создает родительский узел группы для feedernum
-function TVstDevPopulator.CreateGroupNode(const feederNum: integer): PVirtualNode;
+function TVstDevPopulator.CreateGroupNode(const device: TVElectrDevStruct): PVirtualNode;
 begin
   Result := FVstDev.AddChild(nil);
-  FillGroupNodeData(Result, feederNum);
+  FillGroupNodeData(Result, device);
   // Устанавливаем флаг vsHasChildren для отображения индикаторов +/-
-  Include(Result^.States, vsHasChildren);
+  //Include(Result^.States, vsHasChildren);
 end;
 
 // Создает дочерний узел устройства под группой
@@ -133,12 +143,12 @@ begin
 end;
 
 // Заполняет данные узла группы
-procedure TVstDevPopulator.FillGroupNodeData(Node: PVirtualNode; const feederNum: integer);
+procedure TVstDevPopulator.FillGroupNodeData(Node: PVirtualNode; const device: TVElectrDevStruct);
 var
   NodeData: PGridNodeData;
 begin
   NodeData := FVstDev.GetNodeData(Node);
-  NodeData^.DevName := 'ф. ' + IntToStr(feederNum);
+  NodeData^.DevName := device.headdev+'-Гр.' + IntToStr(device.feedernum);
   NodeData^.HDName := '';
   NodeData^.HDGroup := 0;
   NodeData^.PathHD := '';
@@ -149,9 +159,24 @@ end;
 procedure TVstDevPopulator.FillDeviceNodeData(Node: PVirtualNode; const device: TVElectrDevStruct);
 var
   NodeData: PGridNodeData;
+  tempName:string;
+  i:integer;
 begin
+
   NodeData := FVstDev.GetNodeData(Node);
-  NodeData^.DevName := device.basename;
+  tempName := '';
+  for i := 0 to deepConnectDev - 1 do
+    tempName := tempName + ' -';
+  if deepConnectDev > 0 then
+      NodeData^.DevName := tempName + ' ' + device.basename + ' (гр.' + inttostr(device.feedernum) + ')'
+    else
+      NodeData^.DevName := device.basename;
+  //NodeData^.DevName := device.basename;
+  NodeData^.RealName := device.realname;
+  NodeData^.Power := device.power;
+  NodeData^.CosF := device.cosfi;
+  NodeData^.Voltage := device.voltage;
+  NodeData^.Phase := device.phase;
   NodeData^.HDName := device.headdev;
   NodeData^.HDGroup := device.feedernum;
   NodeData^.PathHD := device.pathHD;
@@ -162,10 +187,10 @@ end;
 // Проходит по списку устройств и создает структуру дерева с группировкой по feedernum
 procedure TVstDevPopulator.PopulateTree(const filterPath: string);
 var
-  i: integer;
+  i,deep: integer;
   GroupNode: PVirtualNode;
   device: TVElectrDevStruct;
-  currentFeederNum: integer;
+  groupDev: TVElectrDevStruct;
   lastFeederNum: integer;
   isFirstDevice: boolean;
 begin
@@ -187,14 +212,15 @@ begin
         // Если фильтр задан, проверяем соответствие fullpathHD (не pathHD!)
         if (filterPath = '') or (device.pathHD = filterPath) then
         begin
-          if ProcessStrings(filterPath, device.fullpathHD) then
-            currentFeederNum := device.feedernum;
+          deepConnectDev:=ProcessStrings(filterPath, device.fullpathHD);
+          if (deepConnectDev=0) then
+            groupDev := device;
 
           // Если встретили новую группу (новое значение feedernum), создаём родительский узел
-          if isFirstDevice or (currentFeederNum <> lastFeederNum) then
+          if isFirstDevice or (groupDev.feedernum <> lastFeederNum) then
           begin
-            GroupNode := CreateGroupNode(currentFeederNum);
-            lastFeederNum := currentFeederNum;
+            GroupNode := CreateGroupNode(groupDev);
+            lastFeederNum := groupDev.feedernum;
             isFirstDevice := False;
           end;
 

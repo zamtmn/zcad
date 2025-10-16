@@ -432,14 +432,16 @@ end;
 
 // Заполнение vstDev устройствами из FDevicesList с возможностью фильтрации по пути
 // filterPath - путь иерархии для фильтрации (пустая строка = показать все)
-// Группирует устройства по feedernum (1-й уровень), затем по basename+realname+power+voltage (2-й уровень)
+// Группирует устройства по feedernum (1-й уровень), затем по basename+realname+power+voltage+cosF+phase (2-й уровень)
 procedure TVElectrNav.recordingVstDev(const filterPath: string);
 type
   TDeviceGroup = record
     basename: string;
     realname: string;
     power: double;
+    cosf: double;
     voltage: integer;
+    phase: string;
     devices: array of integer; // индексы устройств в этой группе
   end;
 var
@@ -641,14 +643,16 @@ begin
             groupCount := 0;
           end;
 
-          // Ищем существующую группу с такими же basename, realname, power, voltage
+          // Ищем существующую группу с такими же basename, realname, power, voltage, cosF, phase
           foundGroup := false;
           for groupIndex := 0 to groupCount - 1 do
           begin
             if (deviceGroups[groupIndex].basename = device.basename) and
                (deviceGroups[groupIndex].realname = device.realname) and
                (Abs(deviceGroups[groupIndex].power - device.power) < 0.001) and
-               (deviceGroups[groupIndex].voltage = device.voltage) then
+               (Abs(deviceGroups[groupIndex].cosf - device.cosfi) < 0.001) and
+               (deviceGroups[groupIndex].voltage = device.voltage) and
+               (deviceGroups[groupIndex].phase = device.phase) then
             begin
               // Нашли существующую группу, добавляем устройство в неё
               SetLength(deviceGroups[groupIndex].devices, Length(deviceGroups[groupIndex].devices) + 1);
@@ -665,7 +669,9 @@ begin
             deviceGroups[groupCount].basename := device.basename;
             deviceGroups[groupCount].realname := device.realname;
             deviceGroups[groupCount].power := device.power;
+            deviceGroups[groupCount].cosf := device.cosfi;
             deviceGroups[groupCount].voltage := device.voltage;
+            deviceGroups[groupCount].phase := device.phase;
             SetLength(deviceGroups[groupCount].devices, 1);
             deviceGroups[groupCount].devices[0] := i;
             Inc(groupCount);

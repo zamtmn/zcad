@@ -390,21 +390,22 @@ end;
 // Группирует устройства по feedernum, создавая родительские узлы для каждой группы
 procedure TVElectrNav.recordingVstDev(const filterPath: string);
 var
-    i: integer;
+    i,j,deep: integer;
     Node, GroupNode: PVirtualNode;
     NodeData: PGridNodeData;
     device: TVElectrDevStruct;
     currentFeederNum: integer;
     lastFeederNum: integer;
     isFirstDevice: boolean;
+    tempName:string;
 
-    function ProcessStrings(const Str1, Str2: string): boolean;
+    function ProcessStrings(const Str1, Str2: string): integer;
       var
         Parts1, Parts2: TStringList;
         LastWordFromStr1: string;
-        IndexInStr2, WordsAfter, i: Integer;
+        IndexInStr2, i: Integer;
       begin
-        Result := false;
+        Result := -1;
 
         Parts1 := TStringList.Create;
         Parts2 := TStringList.Create;
@@ -434,11 +435,8 @@ var
           if IndexInStr2 = -1 then Exit;
 
           // Определяем сколько слов осталось после найденного слова
-          WordsAfter := Parts2.Count - IndexInStr2 - 1;
+          Result := Parts2.Count - IndexInStr2 - 1;
 
-          // Выбираем вариант в зависимости от количества слов после
-          if WordsAfter = 0 then
-            Result := true;
 
         finally
           Parts1.Free;
@@ -465,7 +463,8 @@ begin
         // Если фильтр задан, проверяем соответствие fullpathHD (не pathHD!)
         if (filterPath = '') or (device.pathHD = filterPath) then
         begin
-          if ProcessStrings(filterPath,device.fullpathHD) then
+          deep:=ProcessStrings(filterPath,device.fullpathHD);
+          if (deep=0) then
              currentFeederNum := device.feedernum;
 
           // Если встретили новую группу (новое значение feedernum), создаём родительский узел
@@ -493,8 +492,16 @@ begin
           Node := vstDev.AddChild(GroupNode);
           NodeData := vstDev.GetNodeData(Node);
 
+          // Правильное оформление ноды устройства
+          tempName:='';
+          for j:=0 to deep-1 do
+            tempName:=tempName + ' -';
+
           // Заполняем данные ноды из структуры устройства
-          NodeData^.DevName := device.basename;
+          if deep>0 then
+             NodeData^.DevName := tempName+' '+device.basename + ' (Гр.' + inttostr(device.feedernum) + ')'
+          else
+             NodeData^.DevName := tempName+' '+device.basename;
           NodeData^.HDName := device.headdev;
           NodeData^.HDGroup := device.feedernum;
           NodeData^.PathHD := device.pathHD;

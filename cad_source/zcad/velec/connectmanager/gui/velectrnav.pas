@@ -7,7 +7,7 @@ interface
 uses
   Classes, SysUtils, Forms, Controls, Graphics, laz.VirtualTrees, uzcdrawing, uzcdrawings, uzcinterface,
   Dialogs, ExtCtrls, ActnList, ComCtrls, Windows, fgl,
-  uzvelaccessdbcontrol, uzvmcmanager, uzvmcstruct, gvector, uzccablemanager, uzcentcable, uzeentdevice, gzctnrVectorTypes, uzcvariablesutils, uzccommandsabstract, uzeentity, uzeentblockinsert, varmandef, uzeconsts;
+  uzvelaccessdbcontrol, uzvmcmanager, uzvmcstruct, gvector, uzccablemanager, uzcentcable, uzeentdevice, gzctnrVectorTypes, uzcvariablesutils, uzccommandsabstract, uzeentity, uzeentblockinsert, varmandef, uzeconsts, uzvvstdevpopulator;
 
 type
 
@@ -389,124 +389,17 @@ end;
 // Заполнение vstDev устройствами из FDevicesList с возможностью фильтрации по пути
 // filterPath - путь иерархии для фильтрации (пустая строка = показать все)
 // Группирует устройства по feedernum, создавая родительские узлы для каждой группы
+// Использует класс TVstDevPopulator для выполнения операции
 procedure TVElectrNav.recordingVstDev(const filterPath: string);
 var
-    i: integer;
-    Node, GroupNode: PVirtualNode;
-    NodeData: PGridNodeData;
-    device: TVElectrDevStruct;
-    currentFeederNum: integer;
-    lastFeederNum: integer;
-    isFirstDevice: boolean;
-
-    function ProcessStrings(const Str1, Str2: string): boolean;
-      var
-        Parts1, Parts2: TStringList;
-        LastWordFromStr1: string;
-        IndexInStr2, WordsAfter, i: Integer;
-      begin
-        Result := false;
-
-        Parts1 := TStringList.Create;
-        Parts2 := TStringList.Create;
-        try
-          // Разбиваем первую строку на части
-          ExtractStrings(['~'], [], PChar(Str1), Parts1);
-          if Parts1.Count = 0 then Exit;
-
-          // Получаем последнее слово из первой строки
-          LastWordFromStr1 := Parts1[Parts1.Count - 1];
-
-          // Разбиваем вторую строку на части
-          ExtractStrings(['~'], [], PChar(Str2), Parts2);
-          if Parts2.Count = 0 then Exit;
-
-          // Ищем последнее слово из первой строки во второй строке
-          IndexInStr2 := -1;
-          for i := 0 to Parts2.Count - 1 do
-          begin
-            if Parts2[i] = LastWordFromStr1 then
-            begin
-              IndexInStr2 := i;
-              Break;
-            end;
-          end;
-
-          if IndexInStr2 = -1 then Exit;
-
-          // Определяем сколько слов осталось после найденного слова
-          WordsAfter := Parts2.Count - IndexInStr2 - 1;
-
-          // Выбираем вариант в зависимости от количества слов после
-          if WordsAfter = 0 then
-            Result := true;
-
-        finally
-          Parts1.Free;
-          Parts2.Free;
-        end;
-      end;
+  populator: TVstDevPopulator;
 begin
   try
-    vstDev.BeginUpdate;
+    populator := TVstDevPopulator.Create(vstDev, FDevicesList);
     try
-      vstDev.Clear;
-
-      // Инициализация переменных для отслеживания групп
-      lastFeederNum := -1;
-      GroupNode := nil;
-      isFirstDevice := True;
-
-      // Проходим по всем устройствам в FDevicesList
-      for i := 0 to FDevicesList.Size - 1 do
-      begin
-        device := FDevicesList[i];
-
-
-        // Если фильтр задан, проверяем соответствие fullpathHD (не pathHD!)
-        if (filterPath = '') or (device.pathHD = filterPath) then
-        begin
-          if ProcessStrings(filterPath,device.fullpathHD) then
-             currentFeederNum := device.feedernum;
-
-          // Если встретили новую группу (новое значение feedernum), создаём родительский узел
-          if isFirstDevice or (currentFeederNum <> lastFeederNum) then
-          begin
-            // Создаём родительский узел группы
-            GroupNode := vstDev.AddChild(nil);
-            NodeData := vstDev.GetNodeData(GroupNode);
-
-            // Заполняем данные группового узла
-            NodeData^.DevName := 'ф. ' + IntToStr(currentFeederNum);
-            NodeData^.HDName := '';
-            NodeData^.HDGroup := 0;
-            NodeData^.PathHD := '';
-            NodeData^.FullPathHD := '';
-
-            // Устанавливаем флаг vsHasChildren для отображения индикаторов +/-
-            Include(GroupNode^.States, vsHasChildren);
-
-            lastFeederNum := currentFeederNum;
-            isFirstDevice := False;
-          end;
-
-          // Создаём дочерний узел устройства под текущей группой
-          Node := vstDev.AddChild(GroupNode);
-          NodeData := vstDev.GetNodeData(Node);
-
-          // Заполняем данные ноды из структуры устройства
-          NodeData^.DevName := device.basename;
-          NodeData^.HDName := device.headdev;
-          NodeData^.HDGroup := device.feedernum;
-          NodeData^.PathHD := device.pathHD;
-          NodeData^.FullPathHD := device.fullpathHD;
-        end;
-      end;
-
-      // Разворачиваем все группы для удобства просмотра
-      vstDev.FullExpand;
+      populator.PopulateTree(filterPath);
     finally
-      vstDev.EndUpdate;
+      populator.Free;
     end;
   except
     on E: Exception do

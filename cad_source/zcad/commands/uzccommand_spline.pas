@@ -86,39 +86,79 @@ end;
 // Compute basis function N_i,p(u) using Cox-de Boor recursion formula
 function BasisFunction(i,p:integer;u:single;const knots:array of single):single;
 var
-  left,right:array of single;
-  j,r:integer;
+  N:array of single;
+  j,k:integer;
   saved,temp:single;
+  uleft,uright:single;
 begin
-  SetLength(left,p+1);
-  SetLength(right,p+1);
+  // Cox-de Boor recursion formula:
+  // N_i,0(u) = 1 if knots[i] <= u < knots[i+1], else 0
+  // N_i,p(u) = ((u - knots[i]) / (knots[i+p] - knots[i])) * N_i,p-1(u) +
+  //            ((knots[i+p+1] - u) / (knots[i+p+1] - knots[i+1])) * N_i+1,p-1(u)
 
-  // Special case: if u is exactly at a knot
-  if (u>=knots[i]) and (u<knots[i+1]) and (p=0) then begin
-    Result:=1.0;
-    exit;
-  end;
-
+  // Special case for degree 0
   if p=0 then begin
-    Result:=0.0;
+    if (u>=knots[i]) and (u<knots[i+1]) then
+      Result:=1.0
+    else if (u=knots[i+1]) and (i=Length(knots)-2) then
+      // Special case: u is at the last knot
+      Result:=1.0
+    else
+      Result:=0.0;
     exit;
   end;
 
-  // Initialize first order
-  Result:=1.0;
+  // Use triangular table to build up from degree 0 to degree p
+  SetLength(N,p+1);
 
-  for j:=1 to p do begin
-    left[j]:=u-knots[i+1-j];
-    right[j]:=knots[i+j]-u;
-    saved:=0.0;
-
-    for r:=0 to j-1 do begin
-      temp:=Result/(right[r+1]+left[j-r]);
-      Result:=saved+right[r+1]*temp;
-      saved:=left[j-r]*temp;
-    end;
-    Result:=saved;
+  // Initialize degree 0
+  for j:=0 to p do begin
+    if (u>=knots[i+j]) and (u<knots[i+j+1]) then
+      N[j]:=1.0
+    else if (u=knots[i+j+1]) and (i+j=Length(knots)-2) then
+      N[j]:=1.0
+    else
+      N[j]:=0.0;
   end;
+
+  // Build up to degree p
+  for k:=1 to p do begin
+    // Handle left end
+    if N[0]=0.0 then
+      saved:=0.0
+    else begin
+      uright:=knots[i+k];
+      uleft:=knots[i];
+      if abs(uright-uleft)<1e-10 then
+        saved:=0.0
+      else
+        saved:=((u-uleft)/(uright-uleft))*N[0];
+    end;
+
+    // Process middle terms
+    for j:=0 to p-k do begin
+      uleft:=knots[i+j+1];
+      uright:=knots[i+j+k+1];
+
+      if N[j+1]=0.0 then begin
+        N[j]:=saved;
+        saved:=0.0;
+      end else begin
+        if abs(uright-uleft)<1e-10 then
+          temp:=0.0
+        else
+          temp:=((uright-u)/(uright-uleft))*N[j+1];
+        N[j]:=saved+temp;
+
+        if abs(knots[i+j+k+1]-knots[i+j+1])<1e-10 then
+          saved:=0.0
+        else
+          saved:=((u-knots[i+j+1])/(knots[i+j+k+1]-knots[i+j+1]))*N[j+1];
+      end;
+    end;
+  end;
+
+  Result:=N[0];
 end;
 
 // Generate parameter values using chord length parameterization
@@ -176,40 +216,72 @@ begin
     knots[i]:=1.0;
 end;
 
-// Solve tridiagonal system using Thomas algorithm
-procedure SolveTridiagonal(const a,b,c,d:array of single;var x:array of single;n:integer);
+// Solve linear system using Gaussian elimination with partial pivoting
+procedure SolveLinearSystem(var A:array of array of single;const b:array of single;var x:array of single;n:integer);
 var
-  i:integer;
-  cprime:array of single;
-  dprime:array of single;
+  i,j,k,maxRow:integer;
+  maxVal,tmp,factor:single;
+  c:array of single;
 begin
-  SetLength(cprime,n);
-  SetLength(dprime,n);
+  // Create augmented matrix [A|b]
+  SetLength(c,n);
+  for i:=0 to n-1 do
+    c[i]:=b[i];
 
-  cprime[0]:=c[0]/b[0];
-  dprime[0]:=d[0]/b[0];
+  // Forward elimination with partial pivoting
+  for k:=0 to n-2 do begin
+    // Find pivot
+    maxRow:=k;
+    maxVal:=abs(A[k][k]);
+    for i:=k+1 to n-1 do begin
+      if abs(A[i][k])>maxVal then begin
+        maxVal:=abs(A[i][k]);
+        maxRow:=i;
+      end;
+    end;
 
-  for i:=1 to n-1 do begin
-    if i<n-1 then
-      cprime[i]:=c[i]/(b[i]-a[i]*cprime[i-1])
-    else
-      cprime[i]:=0;
-    dprime[i]:=(d[i]-a[i]*dprime[i-1])/(b[i]-a[i]*cprime[i-1]);
+    // Swap rows if needed
+    if maxRow<>k then begin
+      for j:=k to n-1 do begin
+        tmp:=A[k][j];
+        A[k][j]:=A[maxRow][j];
+        A[maxRow][j]:=tmp;
+      end;
+      tmp:=c[k];
+      c[k]:=c[maxRow];
+      c[maxRow]:=tmp;
+    end;
+
+    // Eliminate column
+    for i:=k+1 to n-1 do begin
+      if abs(A[k][k])>1e-10 then begin
+        factor:=A[i][k]/A[k][k];
+        for j:=k to n-1 do
+          A[i][j]:=A[i][j]-factor*A[k][j];
+        c[i]:=c[i]-factor*c[k];
+      end;
+    end;
   end;
 
-  x[n-1]:=dprime[n-1];
-  for i:=n-2 downto 0 do
-    x[i]:=dprime[i]-cprime[i]*x[i+1];
+  // Back substitution
+  for i:=n-1 downto 0 do begin
+    x[i]:=c[i];
+    for j:=i+1 to n-1 do
+      x[i]:=x[i]-A[i][j]*x[j];
+    if abs(A[i][i])>1e-10 then
+      x[i]:=x[i]/A[i][i]
+    else
+      x[i]:=0;
+  end;
 end;
 
 function ConvertOnCurvePointsToControlPointsArray(const ADegree:integer;
   const AOnCurvePoints:array of GDBVertex):TControlPointsArray;
 var
-  n,m,i,j:integer;
+  n,i,j:integer;
   params:array of single;
   knots:array of single;
   N:array of array of single;
-  a,b,c:array of single;
   dx,dy,dz:array of single;
   cx,cy,cz:array of single;
 begin
@@ -237,96 +309,71 @@ begin
     exit;
   end;
 
-  // General case: solve interpolation problem
-  // Number of control points equals number of interpolation points
-  m:=n;
-  SetLength(Result,m);
+  // Special case: only 2 points
+  if n=2 then begin
+    SetLength(Result,2);
+    Result[0]:=AOnCurvePoints[0];
+    Result[1]:=AOnCurvePoints[1];
+    exit;
+  end;
 
-  // Compute parameter values
+  // General case: solve global interpolation problem
+  // Number of control points equals number of interpolation points
+  SetLength(Result,n);
+
+  // Compute parameter values using chord length parameterization
   SetLength(params,n);
   ComputeParameters(AOnCurvePoints,params);
 
-  // Generate knot vector
-  SetLength(knots,m+ADegree+1);
-  GenerateKnotVector(m-1,ADegree,knots);
+  // Generate knot vector for n control points and given degree
+  SetLength(knots,n+ADegree+1);
+  GenerateKnotVector(n-1,ADegree,knots);
 
-  // Build coefficient matrix using basis functions
+  // Build coefficient matrix N where N[i][j] = BasisFunction(j, degree, params[i])
+  // This represents the system: sum(N[i][j] * P[j]) = D[i]
+  // where P[j] are unknown control points and D[i] are given data points
   SetLength(N,n);
   for i:=0 to n-1 do begin
-    SetLength(N[i],m);
-    for j:=0 to m-1 do
+    SetLength(N[i],n);
+    for j:=0 to n-1 do
       N[i][j]:=BasisFunction(j,ADegree,params[i],knots);
   end;
 
-  // For cubic and higher degree splines, we solve a system of equations
-  // For simplicity with boundary conditions, we'll use the first and last points directly
-  if n=2 then begin
-    Result[0]:=AOnCurvePoints[0];
-    Result[1]:=AOnCurvePoints[1];
-  end else if ADegree=2 then begin
-    // Quadratic case: simple interpolation
-    Result[0]:=AOnCurvePoints[0];
-    Result[n-1]:=AOnCurvePoints[n-1];
-    for i:=1 to n-2 do begin
-      // Simple averaging for intermediate points
-      Result[i].x:=AOnCurvePoints[i].x;
-      Result[i].y:=AOnCurvePoints[i].y;
-      Result[i].z:=AOnCurvePoints[i].z;
-    end;
-  end else begin
-    // Cubic (degree 3) and higher: use tridiagonal solver
-    SetLength(a,n);
-    SetLength(b,n);
-    SetLength(c,n);
-    SetLength(dx,n);
-    SetLength(dy,n);
-    SetLength(dz,n);
-    SetLength(cx,n);
-    SetLength(cy,n);
-    SetLength(cz,n);
+  // Set up right-hand side vectors for each coordinate
+  SetLength(dx,n);
+  SetLength(dy,n);
+  SetLength(dz,n);
+  SetLength(cx,n);
+  SetLength(cy,n);
+  SetLength(cz,n);
 
-    // Setup tridiagonal system based on basis functions
-    // First and last control points = first and last data points
-    Result[0]:=AOnCurvePoints[0];
-    Result[n-1]:=AOnCurvePoints[n-1];
+  for i:=0 to n-1 do begin
+    dx[i]:=AOnCurvePoints[i].x;
+    dy[i]:=AOnCurvePoints[i].y;
+    dz[i]:=AOnCurvePoints[i].z;
+  end;
 
-    // For interior control points, set up system
-    for i:=1 to n-2 do begin
-      a[i]:=0.25;
-      b[i]:=1.0;
-      c[i]:=0.25;
-      dx[i]:=AOnCurvePoints[i].x;
-      dy[i]:=AOnCurvePoints[i].y;
-      dz[i]:=AOnCurvePoints[i].z;
-    end;
+  // Solve the linear system N * P = D for each coordinate
+  // Need to copy N for each solve since the solver modifies it
+  SolveLinearSystem(N,dx,cx,n);
 
-    // Boundary conditions
-    b[0]:=1.0;
-    c[0]:=0.0;
-    a[0]:=0.0;
-    dx[0]:=AOnCurvePoints[0].x;
-    dy[0]:=AOnCurvePoints[0].y;
-    dz[0]:=AOnCurvePoints[0].z;
+  // Rebuild N for y coordinate
+  for i:=0 to n-1 do
+    for j:=0 to n-1 do
+      N[i][j]:=BasisFunction(j,ADegree,params[i],knots);
+  SolveLinearSystem(N,dy,cy,n);
 
-    a[n-1]:=0.0;
-    b[n-1]:=1.0;
-    c[n-1]:=0.0;
-    dx[n-1]:=AOnCurvePoints[n-1].x;
-    dy[n-1]:=AOnCurvePoints[n-1].y;
-    dz[n-1]:=AOnCurvePoints[n-1].z;
+  // Rebuild N for z coordinate
+  for i:=0 to n-1 do
+    for j:=0 to n-1 do
+      N[i][j]:=BasisFunction(j,ADegree,params[i],knots);
+  SolveLinearSystem(N,dz,cz,n);
 
-    // Solve for each coordinate
-    if n>2 then begin
-      SolveTridiagonal(a,b,c,dx,cx,n);
-      SolveTridiagonal(a,b,c,dy,cy,n);
-      SolveTridiagonal(a,b,c,dz,cz,n);
-
-      for i:=0 to n-1 do begin
-        Result[i].x:=cx[i];
-        Result[i].y:=cy[i];
-        Result[i].z:=cz[i];
-      end;
-    end;
+  // Store results
+  for i:=0 to n-1 do begin
+    Result[i].x:=cx[i];
+    Result[i].y:=cy[i];
+    Result[i].z:=cz[i];
   end;
 end;
 

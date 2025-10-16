@@ -23,6 +23,9 @@ type
   PGridNodeData = ^TGridNodeData;
   TGridNodeData = record
     DevName: string;
+    RealName: string;
+    Power: double;
+    Voltage: integer;
     HDName: string;
     HDGroup: integer;
     PathHD: string;
@@ -333,6 +336,30 @@ begin
         Options := Options + [coAllowFocus, coEditable];
       end;
 
+      // Колонка "Реальное имя" (редактируемая)
+      with vstDev.Header.Columns.Add do
+      begin
+        Text := 'realname';
+        Width := 100;
+        Options := Options + [coAllowFocus, coEditable];
+      end;
+
+      // Колонка "Мощность" (редактируемая)
+      with vstDev.Header.Columns.Add do
+      begin
+        Text := 'Power';
+        Width := 80;
+        Options := Options + [coAllowFocus, coEditable];
+      end;
+
+      // Колонка "Напряжение" (редактируемая)
+      with vstDev.Header.Columns.Add do
+      begin
+        Text := 'Voltage';
+        Width := 80;
+        Options := Options + [coAllowFocus, coEditable];
+      end;
+
       // Колонка "Головное устройство" (редактируемая)
       with vstDev.Header.Columns.Add do
       begin
@@ -476,6 +503,9 @@ begin
 
             // Заполняем данные группового узла
             NodeData^.DevName := device.headdev + '-Гр.' + IntToStr(currentFeederNum);
+            NodeData^.RealName := '';
+            NodeData^.Power := 0.0;
+            NodeData^.Voltage := 0;
             NodeData^.HDName := '';
             NodeData^.HDGroup := 0;
             NodeData^.PathHD := '';
@@ -502,6 +532,9 @@ begin
              NodeData^.DevName := tempName+' '+device.basename + ' (гр.' + inttostr(device.feedernum) + ')'
           else
              NodeData^.DevName := device.basename;
+          NodeData^.RealName := device.realname;
+          NodeData^.Power := device.power;
+          NodeData^.Voltage := device.voltage;
           NodeData^.HDName := device.headdev;
           NodeData^.HDGroup := device.feedernum;
           NodeData^.PathHD := device.pathHD;
@@ -532,12 +565,15 @@ begin
 
   case Column of
     0: CellText := NodeData^.DevName;
-    1: CellText := NodeData^.HDName;
-    2: CellText := inttostr(NodeData^.HDGroup);
-    3: CellText := NodeData^.PathHD;
-    4: CellText := NodeData^.FullPathHD;
-    5: CellText := 'Ред.';
-    6: CellText := 'Показать';
+    1: CellText := NodeData^.RealName;
+    2: if NodeData^.Power <> 0.0 then CellText := FloatToStr(NodeData^.Power) else CellText := '';
+    3: if NodeData^.Voltage <> 0 then CellText := IntToStr(NodeData^.Voltage) else CellText := '';
+    4: CellText := NodeData^.HDName;
+    5: CellText := inttostr(NodeData^.HDGroup);
+    6: CellText := NodeData^.PathHD;
+    7: CellText := NodeData^.FullPathHD;
+    8: CellText := 'Ред.';
+    9: CellText := 'Показать';
   end;
 end;
 
@@ -545,7 +581,7 @@ procedure TVElectrNav.vstDevPaintText(Sender: TBaseVirtualTree;
   const TargetCanvas: TCanvas; Node: PVirtualNode; Column: TColumnIndex;
   TextType: TVSTTextType);
 begin
-  if (Column = 5) or (Column = 6) then
+  if (Column = 8) or (Column = 9) then
   begin
     TargetCanvas.Font.Color := clBlue;
     TargetCanvas.Font.Style := [fsUnderline];
@@ -568,17 +604,17 @@ begin
   NodeData := vstDev.GetNodeData(Node);
   if not Assigned(NodeData) then Exit;
 
-  if HitInfo.HitColumn = 6 then
+  if HitInfo.HitColumn = 9 then
     ShowMessage('devname: ' + NodeData^.DevName)
-  else if HitInfo.HitColumn = 5 then
+  else if HitInfo.HitColumn = 8 then
     ShowMessage('Редактировать: ' + NodeData^.HDName);
 end;
 
 procedure TVElectrNav.vstDevEditing(Sender: TBaseVirtualTree;
   Node: PVirtualNode; Column: TColumnIndex; var Allowed: Boolean);
 begin
-  // Разрешаем редактирование только для колонок 0, 1, 2 (devname, hdname, hdgroup)
-  Allowed := (Column >= 0) and (Column <= 2);
+  // Разрешаем редактирование для колонок 0-5 (devname, realname, power, voltage, hdname, hdgroup)
+  Allowed := (Column >= 0) and (Column <= 5);
 end;
 
 // Обработчик изменения текста в ячейке vstDev
@@ -600,8 +636,11 @@ begin
   // Обновляем визуальные данные ноды
   case Column of
     0: NodeData^.DevName := NewText;
-    1: NodeData^.HDName := NewText;
-    2: NodeData^.HDGroup := strtoint(NewText);
+    1: NodeData^.RealName := NewText;
+    2: NodeData^.Power := StrToFloatDef(NewText, 0.0);
+    3: NodeData^.Voltage := StrToIntDef(NewText, 0);
+    4: NodeData^.HDName := NewText;
+    5: NodeData^.HDGroup := StrToIntDef(NewText, 0);
     else
       Exit;
   end;
@@ -614,13 +653,12 @@ begin
       if device^.realname = OldDevName then
       begin
         case Column of
-          0: device^.realname := NewText;    // Обновление имени устройства
-          1: device^.headdev := NewText;     // Обновление головного устройства
-          2: begin
-            device^.feedernum := strtoint(NewText);
-            // HDGroup не имеет прямого соответствия в TVElectrDevStruct
-            // Требуется дополнительная логика для сохранения группы
-          end;
+          0: device^.basename := NewText;      // Обновление базового имени устройства
+          1: device^.realname := NewText;      // Обновление реального имени устройства
+          2: device^.power := StrToFloatDef(NewText, 0.0);  // Обновление мощности
+          3: device^.voltage := StrToIntDef(NewText, 0);    // Обновление напряжения
+          4: device^.headdev := NewText;       // Обновление головного устройства
+          5: device^.feedernum := StrToIntDef(NewText, 0);  // Обновление номера фидера
         end;
         Break;
       end;

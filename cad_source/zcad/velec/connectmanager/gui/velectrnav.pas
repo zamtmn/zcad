@@ -414,17 +414,29 @@ end;
 
 // Заполнение vstDev устройствами из FDevicesList с возможностью фильтрации по пути
 // filterPath - путь иерархии для фильтрации (пустая строка = показать все)
-// Группирует устройства по feedernum, создавая родительские узлы для каждой группы
+// Группирует устройства по feedernum (1-й уровень), затем по basename+realname+power+voltage (2-й уровень)
 procedure TVElectrNav.recordingVstDev(const filterPath: string);
+type
+  TDeviceGroup = record
+    basename: string;
+    realname: string;
+    power: double;
+    voltage: integer;
+    devices: array of integer; // индексы устройств в этой группе
+  end;
 var
-    i,j,deep: integer;
-    Node, GroupNode: PVirtualNode;
+    i,j,k,deep: integer;
+    Node, GroupNode, SubGroupNode: PVirtualNode;
     NodeData: PGridNodeData;
     device: TVElectrDevStruct;
     currentFeederNum: integer;
     lastFeederNum: integer;
     isFirstDevice: boolean;
     tempName:string;
+    deviceGroups: array of TDeviceGroup;
+    groupCount: integer;
+    foundGroup: boolean;
+    groupIndex: integer;
 
     function ProcessStrings(const Str1, Str2: string): integer;
       var
@@ -494,10 +506,88 @@ begin
           if (deep=0) then
              currentFeederNum := device.feedernum;
 
-          // Если встретили новую группу (новое значение feedernum), создаём родительский узел
+          // Если встретили новую группу (новое значение feedernum), создаём родительский узел 1-го уровня
           if isFirstDevice or (currentFeederNum <> lastFeederNum) then
           begin
-            // Создаём родительский узел группы
+            // Если были накопленные группы из предыдущего фидера, обрабатываем их
+            if groupCount > 0 then
+            begin
+              // Обработка накопленных групп для предыдущего фидера
+              for groupIndex := 0 to groupCount - 1 do
+              begin
+                // Если в группе больше одного устройства, создаём родительский узел 2-го уровня
+                if Length(deviceGroups[groupIndex].devices) > 1 then
+                begin
+                  SubGroupNode := vstDev.AddChild(GroupNode);
+                  NodeData := vstDev.GetNodeData(SubGroupNode);
+
+                  // Заполняем данные группового узла 2-го уровня
+                  NodeData^.DevName := deviceGroups[groupIndex].basename;
+                  NodeData^.RealName := deviceGroups[groupIndex].realname;
+                  NodeData^.Power := deviceGroups[groupIndex].power;
+                  NodeData^.Voltage := deviceGroups[groupIndex].voltage;
+                  NodeData^.HDName := '';
+                  NodeData^.HDGroup := 0;
+                  NodeData^.PathHD := '';
+                  NodeData^.FullPathHD := '';
+
+                  Include(SubGroupNode^.States, vsHasChildren);
+
+                  // Добавляем все устройства из этой группы как дочерние элементы
+                  for k := 0 to Length(deviceGroups[groupIndex].devices) - 1 do
+                  begin
+                    device := FDevicesList[deviceGroups[groupIndex].devices[k]];
+                    deep := ProcessStrings(filterPath, device.fullpathHD);
+
+                    Node := vstDev.AddChild(SubGroupNode);
+                    NodeData := vstDev.GetNodeData(Node);
+
+                    tempName := '';
+                    for j := 0 to deep - 1 do
+                      tempName := tempName + ' -';
+
+                    if deep > 0 then
+                      NodeData^.DevName := tempName + ' ' + device.basename + ' (гр.' + inttostr(device.feedernum) + ')'
+                    else
+                      NodeData^.DevName := device.basename;
+                    NodeData^.RealName := device.realname;
+                    NodeData^.Power := device.power;
+                    NodeData^.Voltage := device.voltage;
+                    NodeData^.HDName := device.headdev;
+                    NodeData^.HDGroup := device.feedernum;
+                    NodeData^.PathHD := device.pathHD;
+                    NodeData^.FullPathHD := device.fullpathHD;
+                  end;
+                end
+                else
+                begin
+                  // Если в группе только одно устройство, добавляем его напрямую под узел фидера
+                  device := FDevicesList[deviceGroups[groupIndex].devices[0]];
+                  deep := ProcessStrings(filterPath, device.fullpathHD);
+
+                  Node := vstDev.AddChild(GroupNode);
+                  NodeData := vstDev.GetNodeData(Node);
+
+                  tempName := '';
+                  for j := 0 to deep - 1 do
+                    tempName := tempName + ' -';
+
+                  if deep > 0 then
+                    NodeData^.DevName := tempName + ' ' + device.basename + ' (гр.' + inttostr(device.feedernum) + ')'
+                  else
+                    NodeData^.DevName := device.basename;
+                  NodeData^.RealName := device.realname;
+                  NodeData^.Power := device.power;
+                  NodeData^.Voltage := device.voltage;
+                  NodeData^.HDName := device.headdev;
+                  NodeData^.HDGroup := device.feedernum;
+                  NodeData^.PathHD := device.pathHD;
+                  NodeData^.FullPathHD := device.fullpathHD;
+                end;
+              end;
+            end;
+
+            // Создаём родительский узел группы 1-го уровня (по feedernum)
             GroupNode := vstDev.AddChild(nil);
             NodeData := vstDev.GetNodeData(GroupNode);
 
@@ -516,29 +606,118 @@ begin
 
             lastFeederNum := currentFeederNum;
             isFirstDevice := False;
+
+            // Сбрасываем массив групп для нового фидера
+            SetLength(deviceGroups, 0);
+            groupCount := 0;
           end;
 
-          // Создаём дочерний узел устройства под текущей группой
-          Node := vstDev.AddChild(GroupNode);
-          NodeData := vstDev.GetNodeData(Node);
+          // Ищем существующую группу с такими же basename, realname, power, voltage
+          foundGroup := false;
+          for groupIndex := 0 to groupCount - 1 do
+          begin
+            if (deviceGroups[groupIndex].basename = device.basename) and
+               (deviceGroups[groupIndex].realname = device.realname) and
+               (Abs(deviceGroups[groupIndex].power - device.power) < 0.001) and
+               (deviceGroups[groupIndex].voltage = device.voltage) then
+            begin
+              // Нашли существующую группу, добавляем устройство в неё
+              SetLength(deviceGroups[groupIndex].devices, Length(deviceGroups[groupIndex].devices) + 1);
+              deviceGroups[groupIndex].devices[Length(deviceGroups[groupIndex].devices) - 1] := i;
+              foundGroup := true;
+              Break;
+            end;
+          end;
 
-          // Правильное оформление ноды устройства
-          tempName:='';
-          for j:=0 to deep-1 do
-            tempName:=tempName + ' -';
+          // Если группа не найдена, создаём новую
+          if not foundGroup then
+          begin
+            SetLength(deviceGroups, groupCount + 1);
+            deviceGroups[groupCount].basename := device.basename;
+            deviceGroups[groupCount].realname := device.realname;
+            deviceGroups[groupCount].power := device.power;
+            deviceGroups[groupCount].voltage := device.voltage;
+            SetLength(deviceGroups[groupCount].devices, 1);
+            deviceGroups[groupCount].devices[0] := i;
+            Inc(groupCount);
+          end;
+        end;
+      end;
 
-          // Заполняем данные ноды из структуры устройства
-          if deep>0 then
-             NodeData^.DevName := tempName+' '+device.basename + ' (гр.' + inttostr(device.feedernum) + ')'
+      // Обрабатываем последнюю группу фидера после цикла
+      if groupCount > 0 then
+      begin
+        for groupIndex := 0 to groupCount - 1 do
+        begin
+          // Если в группе больше одного устройства, создаём родительский узел 2-го уровня
+          if Length(deviceGroups[groupIndex].devices) > 1 then
+          begin
+            SubGroupNode := vstDev.AddChild(GroupNode);
+            NodeData := vstDev.GetNodeData(SubGroupNode);
+
+            // Заполняем данные группового узла 2-го уровня
+            NodeData^.DevName := deviceGroups[groupIndex].basename;
+            NodeData^.RealName := deviceGroups[groupIndex].realname;
+            NodeData^.Power := deviceGroups[groupIndex].power;
+            NodeData^.Voltage := deviceGroups[groupIndex].voltage;
+            NodeData^.HDName := '';
+            NodeData^.HDGroup := 0;
+            NodeData^.PathHD := '';
+            NodeData^.FullPathHD := '';
+
+            Include(SubGroupNode^.States, vsHasChildren);
+
+            // Добавляем все устройства из этой группы как дочерние элементы
+            for k := 0 to Length(deviceGroups[groupIndex].devices) - 1 do
+            begin
+              device := FDevicesList[deviceGroups[groupIndex].devices[k]];
+              deep := ProcessStrings(filterPath, device.fullpathHD);
+
+              Node := vstDev.AddChild(SubGroupNode);
+              NodeData := vstDev.GetNodeData(Node);
+
+              tempName := '';
+              for j := 0 to deep - 1 do
+                tempName := tempName + ' -';
+
+              if deep > 0 then
+                NodeData^.DevName := tempName + ' ' + device.basename + ' (гр.' + inttostr(device.feedernum) + ')'
+              else
+                NodeData^.DevName := device.basename;
+              NodeData^.RealName := device.realname;
+              NodeData^.Power := device.power;
+              NodeData^.Voltage := device.voltage;
+              NodeData^.HDName := device.headdev;
+              NodeData^.HDGroup := device.feedernum;
+              NodeData^.PathHD := device.pathHD;
+              NodeData^.FullPathHD := device.fullpathHD;
+            end;
+          end
           else
-             NodeData^.DevName := device.basename;
-          NodeData^.RealName := device.realname;
-          NodeData^.Power := device.power;
-          NodeData^.Voltage := device.voltage;
-          NodeData^.HDName := device.headdev;
-          NodeData^.HDGroup := device.feedernum;
-          NodeData^.PathHD := device.pathHD;
-          NodeData^.FullPathHD := device.fullpathHD;
+          begin
+            // Если в группе только одно устройство, добавляем его напрямую под узел фидера
+            device := FDevicesList[deviceGroups[groupIndex].devices[0]];
+            deep := ProcessStrings(filterPath, device.fullpathHD);
+
+            Node := vstDev.AddChild(GroupNode);
+            NodeData := vstDev.GetNodeData(Node);
+
+            tempName := '';
+            for j := 0 to deep - 1 do
+              tempName := tempName + ' -';
+
+            if deep > 0 then
+              NodeData^.DevName := tempName + ' ' + device.basename + ' (гр.' + inttostr(device.feedernum) + ')'
+            else
+              NodeData^.DevName := device.basename;
+            NodeData^.RealName := device.realname;
+            NodeData^.Power := device.power;
+            NodeData^.Voltage := device.voltage;
+            NodeData^.HDName := device.headdev;
+            NodeData^.HDGroup := device.feedernum;
+            NodeData^.PathHD := device.pathHD;
+            NodeData^.FullPathHD := device.fullpathHD;
+          end;
         end;
       end;
 

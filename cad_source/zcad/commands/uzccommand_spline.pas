@@ -280,39 +280,39 @@ end;
 function ConvertOnCurvePointsToControlPointsArray(const ADegree:integer;
   const AOnCurvePoints:array of GDBVertex):TControlPointsArray;
 var
-  n,i,j:integer;
+  numPoints,i,j:integer;
   params:array of single;
   knots:array of single;
-  N:TMatrix;
+  BasisMatrix:TMatrix;
   dx,dy,dz:array of single;
   cx,cy,cz:array of single;
 begin
-  n:=Length(AOnCurvePoints);
+  numPoints:=Length(AOnCurvePoints);
 
   // Handle edge cases
-  if n<2 then begin
+  if numPoints<2 then begin
     SetLength(Result,0);
     exit;
   end;
 
-  // For degree >= n, or simple cases, return the points themselves
-  if (ADegree>=n) or (ADegree<1) then begin
-    SetLength(Result,n);
-    for i:=0 to n-1 do
+  // For degree >= numPoints, or simple cases, return the points themselves
+  if (ADegree>=numPoints) or (ADegree<1) then begin
+    SetLength(Result,numPoints);
+    for i:=0 to numPoints-1 do
       Result[i]:=AOnCurvePoints[i];
     exit;
   end;
 
   // For degree 1 (linear), return the points as-is
   if ADegree=1 then begin
-    SetLength(Result,n);
-    for i:=0 to n-1 do
+    SetLength(Result,numPoints);
+    for i:=0 to numPoints-1 do
       Result[i]:=AOnCurvePoints[i];
     exit;
   end;
 
   // Special case: only 2 points
-  if n=2 then begin
+  if numPoints=2 then begin
     SetLength(Result,2);
     Result[0]:=AOnCurvePoints[0];
     Result[1]:=AOnCurvePoints[1];
@@ -321,58 +321,58 @@ begin
 
   // General case: solve global interpolation problem
   // Number of control points equals number of interpolation points
-  SetLength(Result,n);
+  SetLength(Result,numPoints);
 
   // Compute parameter values using chord length parameterization
-  SetLength(params,n);
+  SetLength(params,numPoints);
   ComputeParameters(AOnCurvePoints,params);
 
-  // Generate knot vector for n control points and given degree
-  SetLength(knots,n+ADegree+1);
-  GenerateKnotVector(n-1,ADegree,knots);
+  // Generate knot vector for numPoints control points and given degree
+  SetLength(knots,numPoints+ADegree+1);
+  GenerateKnotVector(numPoints-1,ADegree,knots);
 
-  // Build coefficient matrix N where N[i][j] = BasisFunction(j, degree, params[i])
-  // This represents the system: sum(N[i][j] * P[j]) = D[i]
+  // Build coefficient matrix BasisMatrix where BasisMatrix[i][j] = BasisFunction(j, degree, params[i])
+  // This represents the system: sum(BasisMatrix[i][j] * P[j]) = D[i]
   // where P[j] are unknown control points and D[i] are given data points
-  SetLength(N,n);
-  for i:=0 to n-1 do begin
-    SetLength(N[i],n);
-    for j:=0 to n-1 do
-      N[i][j]:=BasisFunction(j,ADegree,params[i],knots);
+  SetLength(BasisMatrix,numPoints);
+  for i:=0 to numPoints-1 do begin
+    SetLength(BasisMatrix[i],numPoints);
+    for j:=0 to numPoints-1 do
+      BasisMatrix[i][j]:=BasisFunction(j,ADegree,params[i],knots);
   end;
 
   // Set up right-hand side vectors for each coordinate
-  SetLength(dx,n);
-  SetLength(dy,n);
-  SetLength(dz,n);
-  SetLength(cx,n);
-  SetLength(cy,n);
-  SetLength(cz,n);
+  SetLength(dx,numPoints);
+  SetLength(dy,numPoints);
+  SetLength(dz,numPoints);
+  SetLength(cx,numPoints);
+  SetLength(cy,numPoints);
+  SetLength(cz,numPoints);
 
-  for i:=0 to n-1 do begin
+  for i:=0 to numPoints-1 do begin
     dx[i]:=AOnCurvePoints[i].x;
     dy[i]:=AOnCurvePoints[i].y;
     dz[i]:=AOnCurvePoints[i].z;
   end;
 
-  // Solve the linear system N * P = D for each coordinate
-  // Need to copy N for each solve since the solver modifies it
-  SolveLinearSystem(N,dx,cx,n);
+  // Solve the linear system BasisMatrix * P = D for each coordinate
+  // Need to copy BasisMatrix for each solve since the solver modifies it
+  SolveLinearSystem(BasisMatrix,dx,cx,numPoints);
 
-  // Rebuild N for y coordinate
-  for i:=0 to n-1 do
-    for j:=0 to n-1 do
-      N[i][j]:=BasisFunction(j,ADegree,params[i],knots);
-  SolveLinearSystem(N,dy,cy,n);
+  // Rebuild BasisMatrix for y coordinate
+  for i:=0 to numPoints-1 do
+    for j:=0 to numPoints-1 do
+      BasisMatrix[i][j]:=BasisFunction(j,ADegree,params[i],knots);
+  SolveLinearSystem(BasisMatrix,dy,cy,numPoints);
 
-  // Rebuild N for z coordinate
-  for i:=0 to n-1 do
-    for j:=0 to n-1 do
-      N[i][j]:=BasisFunction(j,ADegree,params[i],knots);
-  SolveLinearSystem(N,dz,cz,n);
+  // Rebuild BasisMatrix for z coordinate
+  for i:=0 to numPoints-1 do
+    for j:=0 to numPoints-1 do
+      BasisMatrix[i][j]:=BasisFunction(j,ADegree,params[i],knots);
+  SolveLinearSystem(BasisMatrix,dz,cz,numPoints);
 
   // Store results
-  for i:=0 to n-1 do begin
+  for i:=0 to numPoints-1 do begin
     Result[i].x:=cx[i];
     Result[i].y:=cy[i];
     Result[i].z:=cz[i];

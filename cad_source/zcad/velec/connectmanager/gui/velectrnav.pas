@@ -34,6 +34,7 @@ type
 
   TVElectrNav = class(TFrame)
     ActionList1: TActionList;
+    newVST: TLazVirtualStringTree;
     vstDev: TLazVirtualStringTree;
     PanelData: TPanel;
     PanelNav: TPanel;

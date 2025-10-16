@@ -43,14 +43,24 @@ type
     // Возвращает true, если последнее слово из Str1 является последним словом в Str2
     function ProcessStrings(const Str1, Str2: string): integer;
 
-    // Создает родительский узел группы для feedernum
+    // Проверяет, имеют ли два устройства одинаковые атрибуты для группировки
+    // (basename, realname, Power, Voltage, cosF, Phase)
+    function DevicesHaveSameAttributes(const dev1, dev2: TVElectrDevStruct): boolean;
+
+    // Создает родительский узел группы для feedernum (уровень 1)
     function CreateGroupNode(const device: TVElectrDevStruct): PVirtualNode;
+
+    // Создает узел подгруппы устройств с одинаковыми атрибутами (уровень 2)
+    function CreateDeviceGroupNode(ParentNode: PVirtualNode; const device: TVElectrDevStruct): PVirtualNode;
 
     // Создает дочерний узел устройства под группой
     function CreateDeviceNode(GroupNode: PVirtualNode; const device: TVElectrDevStruct): PVirtualNode;
 
-    // Заполняет данные узла группы
+    // Заполняет данные узла группы (уровень 1)
     procedure FillGroupNodeData(Node: PVirtualNode; const device: TVElectrDevStruct);
+
+    // Заполняет данные узла подгруппы устройств (уровень 2)
+    procedure FillDeviceGroupNodeData(Node: PVirtualNode; const device: TVElectrDevStruct);
 
     // Заполняет данные узла устройства
     procedure FillDeviceNodeData(Node: PVirtualNode; const device: TVElectrDevStruct);
@@ -126,13 +136,34 @@ begin
   end;
 end;
 
-// Создает родительский узел группы для feedernum
+// Проверяет, имеют ли два устройства одинаковые атрибуты для группировки на уровне 2
+// Сравниваются: basename, realname, Power, Voltage, cosF, Phase
+function TVstDevPopulator.DevicesHaveSameAttributes(const dev1, dev2: TVElectrDevStruct): boolean;
+const
+  EPSILON = 0.0001; // Точность сравнения дробных чисел
+begin
+  Result := (dev1.basename = dev2.basename) and
+            (dev1.realname = dev2.realname) and
+            (Abs(dev1.power - dev2.power) < EPSILON) and
+            (dev1.voltage = dev2.voltage) and
+            (Abs(dev1.cosfi - dev2.cosfi) < EPSILON) and
+            (dev1.phase = dev2.phase);
+end;
+
+// Создает родительский узел группы для feedernum (уровень 1)
 function TVstDevPopulator.CreateGroupNode(const device: TVElectrDevStruct): PVirtualNode;
 begin
   Result := FVstDev.AddChild(nil);
   FillGroupNodeData(Result, device);
   // Устанавливаем флаг vsHasChildren для отображения индикаторов +/-
   //Include(Result^.States, vsHasChildren);
+end;
+
+// Создает узел подгруппы устройств с одинаковыми атрибутами (уровень 2)
+function TVstDevPopulator.CreateDeviceGroupNode(ParentNode: PVirtualNode; const device: TVElectrDevStruct): PVirtualNode;
+begin
+  Result := FVstDev.AddChild(ParentNode);
+  FillDeviceGroupNodeData(Result, device);
 end;
 
 // Создает дочерний узел устройства под группой
@@ -142,13 +173,37 @@ begin
   FillDeviceNodeData(Result, device);
 end;
 
-// Заполняет данные узла группы
+// Заполняет данные узла группы (уровень 1 - по feedernum)
 procedure TVstDevPopulator.FillGroupNodeData(Node: PVirtualNode; const device: TVElectrDevStruct);
 var
   NodeData: PGridNodeData;
 begin
   NodeData := FVstDev.GetNodeData(Node);
   NodeData^.DevName := device.headdev+'-Гр.' + IntToStr(device.feedernum);
+  NodeData^.RealName := '';
+  NodeData^.Power := 0;
+  NodeData^.CosF := 0;
+  NodeData^.Voltage := 0;
+  NodeData^.Phase := '';
+  NodeData^.HDName := '';
+  NodeData^.HDGroup := 0;
+  NodeData^.PathHD := '';
+  NodeData^.FullPathHD := '';
+end;
+
+// Заполняет данные узла подгруппы устройств (уровень 2 - по атрибутам)
+procedure TVstDevPopulator.FillDeviceGroupNodeData(Node: PVirtualNode; const device: TVElectrDevStruct);
+var
+  NodeData: PGridNodeData;
+begin
+  NodeData := FVstDev.GetNodeData(Node);
+  // Для подгруппы отображаем основные атрибуты, по которым группируются устройства
+  NodeData^.DevName := device.basename;
+  NodeData^.RealName := device.realname;
+  NodeData^.Power := device.power;
+  NodeData^.CosF := device.cosfi;
+  NodeData^.Voltage := device.voltage;
+  NodeData^.Phase := device.phase;
   NodeData^.HDName := '';
   NodeData^.HDGroup := 0;
   NodeData^.PathHD := '';
@@ -184,15 +239,21 @@ begin
 end;
 
 // Основной метод для заполнения дерева устройств
-// Проходит по списку устройств и создает структуру дерева с группировкой по feedernum
+// Создает 2-уровневую иерархию:
+// Уровень 1: группы по feedernum
+// Уровень 2: подгруппы по одинаковым basename, realname, Power, Voltage, cosF, Phase
+// Уровень 3: отдельные устройства
 procedure TVstDevPopulator.PopulateTree(const filterPath: string);
 var
-  i,deep: integer;
-  GroupNode: PVirtualNode;
+  i: integer;
+  Level1Node: PVirtualNode;        // Узел уровня 1 (по feedernum)
+  Level2Node: PVirtualNode;        // Узел уровня 2 (по атрибутам)
   device: TVElectrDevStruct;
   groupDev: TVElectrDevStruct;
   lastFeederNum: integer;
+  lastDeviceInLevel2: TVElectrDevStruct;  // Последнее устройство в подгруппе уровня 2
   isFirstDevice: boolean;
+  isNewLevel2Group: boolean;
 begin
   try
     FVstDev.BeginUpdate;
@@ -201,31 +262,47 @@ begin
 
       // Инициализация переменных для отслеживания групп
       lastFeederNum := -1;
-      GroupNode := nil;
+      Level1Node := nil;
+      Level2Node := nil;
       isFirstDevice := True;
+      isNewLevel2Group := True;
 
       // Проходим по всем устройствам в FDevicesList
       for i := 0 to FDevicesList.Size - 1 do
       begin
         device := FDevicesList[i];
 
-        // Если фильтр задан, проверяем соответствие fullpathHD (не pathHD!)
+        // Если фильтр задан, проверяем соответствие pathHD
         if (filterPath = '') or (device.pathHD = filterPath) then
         begin
-          deepConnectDev:=ProcessStrings(filterPath, device.fullpathHD);
-          if (deepConnectDev=0) then
+          deepConnectDev := ProcessStrings(filterPath, device.fullpathHD);
+          if (deepConnectDev = 0) then
             groupDev := device;
 
-          // Если встретили новую группу (новое значение feedernum), создаём родительский узел
+          // Проверяем, нужно ли создать новый узел уровня 1 (по feedernum)
           if isFirstDevice or (groupDev.feedernum <> lastFeederNum) then
           begin
-            GroupNode := CreateGroupNode(groupDev);
+            Level1Node := CreateGroupNode(groupDev);
             lastFeederNum := groupDev.feedernum;
             isFirstDevice := False;
+            isNewLevel2Group := True; // Новая группа уровня 1 = новая подгруппа уровня 2
           end;
 
-          // Создаём дочерний узел устройства под текущей группой
-          CreateDeviceNode(GroupNode, device);
+          // Проверяем, нужно ли создать новый узел уровня 2 (по атрибутам)
+          // Новая подгруппа создается если:
+          // 1. Это первое устройство в группе уровня 1 (isNewLevel2Group = True)
+          // 2. Или текущее устройство имеет другие атрибуты по сравнению с предыдущим
+          if isNewLevel2Group or not DevicesHaveSameAttributes(device, lastDeviceInLevel2) then
+          begin
+            Level2Node := CreateDeviceGroupNode(Level1Node, device);
+            isNewLevel2Group := False;
+          end;
+
+          // Сохраняем текущее устройство как последнее в подгруппе уровня 2
+          lastDeviceInLevel2 := device;
+
+          // Создаём узел отдельного устройства под подгруппой уровня 2
+          CreateDeviceNode(Level2Node, device);
         end;
       end;
 

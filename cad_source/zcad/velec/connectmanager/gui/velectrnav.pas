@@ -522,9 +522,12 @@ begin
                   NodeData := vstDev.GetNodeData(SubGroupNode);
 
                   // Заполняем данные группового узла 2-го уровня
-                  NodeData^.DevName := deviceGroups[groupIndex].basename;
+                  // Добавляем количество устройств к имени
+                  NodeData^.DevName := deviceGroups[groupIndex].basename + ' - ' +
+                                       IntToStr(Length(deviceGroups[groupIndex].devices)) + 'шт';
                   NodeData^.RealName := deviceGroups[groupIndex].realname;
-                  NodeData^.Power := deviceGroups[groupIndex].power;
+                  // Вычисляем сумму мощностей всех дочерних устройств
+                  NodeData^.Power := deviceGroups[groupIndex].power * Length(deviceGroups[groupIndex].devices);
                   NodeData^.Voltage := deviceGroups[groupIndex].voltage;
                   NodeData^.HDName := '';
                   NodeData^.HDGroup := 0;
@@ -656,9 +659,12 @@ begin
             NodeData := vstDev.GetNodeData(SubGroupNode);
 
             // Заполняем данные группового узла 2-го уровня
-            NodeData^.DevName := deviceGroups[groupIndex].basename;
+            // Добавляем количество устройств к имени
+            NodeData^.DevName := deviceGroups[groupIndex].basename + ' - ' +
+                                 IntToStr(Length(deviceGroups[groupIndex].devices)) + 'шт';
             NodeData^.RealName := deviceGroups[groupIndex].realname;
-            NodeData^.Power := deviceGroups[groupIndex].power;
+            // Вычисляем сумму мощностей всех дочерних устройств
+            NodeData^.Power := deviceGroups[groupIndex].power * Length(deviceGroups[groupIndex].devices);
             NodeData^.Voltage := deviceGroups[groupIndex].voltage;
             NodeData^.HDName := '';
             NodeData^.HDGroup := 0;

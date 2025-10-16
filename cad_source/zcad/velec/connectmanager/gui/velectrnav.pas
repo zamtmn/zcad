@@ -325,13 +325,6 @@ begin
       vstDev.Header.AutoSizeIndex := -1;
       vstDev.Header.MainColumn := 0; // Колонка 0 содержит индикаторы дерева (+/-)
 
-      // Колонка "Показать" (кнопка действия)
-      with vstDev.Header.Columns.Add do
-      begin
-        Text := 'show';
-        Width := 80;
-      end;
-
       // Колонка "Имя устройства" (редактируемая)
       with vstDev.Header.Columns.Add do
       begin
@@ -374,6 +367,13 @@ begin
       with vstDev.Header.Columns.Add do
       begin
         Text := 'edit';
+        Width := 80;
+      end;
+
+      // Колонка "Показать" (кнопка действия) - перемещена в конец
+      with vstDev.Header.Columns.Add do
+      begin
+        Text := 'show';
         Width := 80;
       end;
     finally
@@ -531,13 +531,13 @@ begin
   if not Assigned(NodeData) then Exit;
 
   case Column of
-    0: CellText := 'Показать';
-    1: CellText := NodeData^.DevName;
-    2: CellText := NodeData^.HDName;
-    3: CellText := inttostr(NodeData^.HDGroup);
-    4: CellText := NodeData^.PathHD;
-    5: CellText := NodeData^.FullPathHD;
-    6: CellText := 'Ред.';
+    0: CellText := NodeData^.DevName;
+    1: CellText := NodeData^.HDName;
+    2: CellText := inttostr(NodeData^.HDGroup);
+    3: CellText := NodeData^.PathHD;
+    4: CellText := NodeData^.FullPathHD;
+    5: CellText := 'Ред.';
+    6: CellText := 'Показать';
   end;
 end;
 
@@ -545,7 +545,7 @@ procedure TVElectrNav.vstDevPaintText(Sender: TBaseVirtualTree;
   const TargetCanvas: TCanvas; Node: PVirtualNode; Column: TColumnIndex;
   TextType: TVSTTextType);
 begin
-  if (Column = 0) or (Column = 6) then
+  if (Column = 5) or (Column = 6) then
   begin
     TargetCanvas.Font.Color := clBlue;
     TargetCanvas.Font.Style := [fsUnderline];
@@ -568,17 +568,17 @@ begin
   NodeData := vstDev.GetNodeData(Node);
   if not Assigned(NodeData) then Exit;
 
-  if HitInfo.HitColumn = 0 then
+  if HitInfo.HitColumn = 6 then
     ShowMessage('devname: ' + NodeData^.DevName)
-  else if HitInfo.HitColumn = 6 then
+  else if HitInfo.HitColumn = 5 then
     ShowMessage('Редактировать: ' + NodeData^.HDName);
 end;
 
 procedure TVElectrNav.vstDevEditing(Sender: TBaseVirtualTree;
   Node: PVirtualNode; Column: TColumnIndex; var Allowed: Boolean);
 begin
-  // Разрешаем редактирование только для колонок 1, 2, 3 (devname, hdname, hdgroup)
-  Allowed := (Column >= 1) and (Column <= 3);
+  // Разрешаем редактирование только для колонок 0, 1, 2 (devname, hdname, hdgroup)
+  Allowed := (Column >= 0) and (Column <= 2);
 end;
 
 // Обработчик изменения текста в ячейке vstDev
@@ -599,9 +599,9 @@ begin
 
   // Обновляем визуальные данные ноды
   case Column of
-    1: NodeData^.DevName := NewText;
-    2: NodeData^.HDName := NewText;
-    3: NodeData^.HDGroup := strtoint(NewText);
+    0: NodeData^.DevName := NewText;
+    1: NodeData^.HDName := NewText;
+    2: NodeData^.HDGroup := strtoint(NewText);
     else
       Exit;
   end;
@@ -614,9 +614,9 @@ begin
       if device^.realname = OldDevName then
       begin
         case Column of
-          1: device^.realname := NewText;    // Обновление имени устройства
-          2: device^.headdev := NewText;     // Обновление головного устройства
-          3: begin
+          0: device^.realname := NewText;    // Обновление имени устройства
+          1: device^.headdev := NewText;     // Обновление головного устройства
+          2: begin
             device^.feedernum := strtoint(NewText);
             // HDGroup не имеет прямого соответствия в TVElectrDevStruct
             // Требуется дополнительная логика для сохранения группы
@@ -631,7 +631,7 @@ begin
       ShowMessage('Ошибка обновления данных: ' + E.Message);
       // Восстанавливаем старое значение при ошибке
       case Column of
-        2: NodeData^.DevName := OldDevName;
+        1: NodeData^.DevName := OldDevName;
       end;
     end;
   end;

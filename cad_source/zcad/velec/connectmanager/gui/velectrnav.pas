@@ -54,6 +54,8 @@ type
       Column: TColumnIndex; var Allowed: Boolean);
     procedure vstDevNewText(Sender: TBaseVirtualTree; Node: PVirtualNode;
       Column: TColumnIndex; const NewText: AnsiString);
+    procedure newVSTGetText(Sender: TBaseVirtualTree; Node: PVirtualNode;
+      Column: TColumnIndex; TextType: TVSTTextType; var CellText: String);
   private
     // Для работы разделителя панелей
     FProportion: Double; // Пропорция ширины PanelNav относительно общей ширины
@@ -64,7 +66,9 @@ type
 
     procedure InitializeDeviceTree;    // Инициализация дерева устройств FDeviceTree
     procedure InitializeVstDev;        // Инициализация виртуальной таблицы устройств
+    procedure InitializeNewVST;        // Инициализация виртуальной таблицы newVST
     procedure recordingVstDev(const filterPath: string); // Заполнение vstDev из FDevicesList с фильтрацией по пути
+    procedure recordingNewVST(const filterPath: string); // Заполнение newVST из FDevicesList с фильтрацией по пути
     procedure BuildDeviceHierarchy;    // Построение иерархии дерева на основе FDevicesList
     procedure TreeGetText(Sender: TBaseVirtualTree; Node: PVirtualNode;
       Column: TColumnIndex; TextType: TVSTTextType; var CellText: String);
@@ -131,8 +135,13 @@ begin
 
     // Настраиваем виртуальную таблицу устройств
     vstDev.Parent := PanelData;
-    vstDev.Align := alClient;
+    vstDev.Align := alTop;
     vstDev.NodeDataSize := SizeOf(TGridNodeData);
+
+    // Настраиваем виртуальную таблицу newVST
+    newVST.Parent := PanelData;
+    newVST.Align := alBottom;
+    newVST.NodeDataSize := SizeOf(TGridNodeData);
 
     except
       on E: Exception do
@@ -221,6 +230,15 @@ begin
     vstDev.OnClick := @vstDevClick;
     vstDev.OnEditing := @vstDevEditing;
     vstDev.OnNewText := @vstDevNewText;
+
+    // Шаг 8: Настройка виртуальной таблицы newVST
+    InitializeNewVST;
+
+    // Шаг 9: Заполнение newVST всеми устройствами (без фильтра)
+    recordingNewVST('');
+
+    // Назначение обработчика событий для newVST
+    newVST.OnGetText := @newVSTGetText;
   finally
     mcManager.Free;
   end;
@@ -384,6 +402,94 @@ begin
   except
     on E: Exception do
       ShowMessage('Ошибка создания колонок: ' + E.Message);
+  end;
+end;
+
+// Инициализация виртуальной таблицы newVST
+procedure TVElectrNav.InitializeNewVST;
+begin
+  try
+    newVST.BeginUpdate;
+    try
+      newVST.Header.Columns.Clear;
+      newVST.Clear;
+
+      // Настройка опций отображения (с деревом для группировки, с выделением всей строки)
+      newVST.TreeOptions.PaintOptions :=
+        newVST.TreeOptions.PaintOptions + [toShowTreeLines, toShowButtons] - [toShowRoot];
+      newVST.TreeOptions.SelectionOptions :=
+        newVST.TreeOptions.SelectionOptions + [toFullRowSelect, toExtendedFocus];
+      newVST.TreeOptions.MiscOptions :=
+        newVST.TreeOptions.MiscOptions + [toEditable, toEditOnDblClick, toGridExtensions];
+      newVST.Header.Options :=
+        newVST.Header.Options + [hoVisible, hoColumnResize] - [hoAutoResize];
+      newVST.Header.AutoSizeIndex := -1;
+      newVST.Header.MainColumn := 0; // Колонка 0 содержит индикаторы дерева (+/-)
+
+      // Колонка 0 - пустая (для индикаторов дерева +/-)
+      with newVST.Header.Columns.Add do
+      begin
+        Text := '';
+        Width := 50;
+      end;
+
+      // Колонка "Показать" (кнопка действия)
+      with newVST.Header.Columns.Add do
+      begin
+        Text := 'show';
+        Width := 80;
+      end;
+
+      // Колонка "Имя устройства" (редактируемая)
+      with newVST.Header.Columns.Add do
+      begin
+        Text := 'devname';
+        Width := 100;
+        Options := Options + [coAllowFocus, coEditable];
+      end;
+
+      // Колонка "Головное устройство" (редактируемая)
+      with newVST.Header.Columns.Add do
+      begin
+        Text := 'hdname';
+        Width := 100;
+        Options := Options + [coAllowFocus, coEditable];
+      end;
+
+      // Колонка "Группа" (редактируемая)
+      with newVST.Header.Columns.Add do
+      begin
+        Text := 'hdgroup';
+        Width := 50;
+        Options := Options + [coAllowFocus, coEditable];
+      end;
+
+      // Колонка "pathHD" (путь головного устройства)
+      with newVST.Header.Columns.Add do
+      begin
+        Text := 'pathHD';
+        Width := 120;
+      end;
+
+      // Колонка "fullpathHD" (полный путь головного устройства)
+      with newVST.Header.Columns.Add do
+      begin
+        Text := 'fullpathHD';
+        Width := 150;
+      end;
+
+      // Колонка "Редактировать" (кнопка действия)
+      with newVST.Header.Columns.Add do
+      begin
+        Text := 'edit';
+        Width := 80;
+      end;
+    finally
+      newVST.EndUpdate;
+    end;
+  except
+    on E: Exception do
+      ShowMessage('Ошибка создания колонок newVST: ' + E.Message);
   end;
 end;
 
@@ -640,6 +746,158 @@ begin
   end;
 end;
 
+// Заполнение newVST устройствами из FDevicesList с возможностью фильтрации по пути
+// filterPath - путь иерархии для фильтрации (пустая строка = показать все)
+// Группирует устройства по feedernum, создавая родительские узлы для каждой группы
+procedure TVElectrNav.recordingNewVST(const filterPath: string);
+var
+    i: integer;
+    Node, GroupNode: PVirtualNode;
+    NodeData: PGridNodeData;
+    device: TVElectrDevStruct;
+    currentFeederNum: integer;
+    lastFeederNum: integer;
+    isFirstDevice: boolean;
+
+    function ProcessStrings(const Str1, Str2: string): boolean;
+      var
+        Parts1, Parts2: TStringList;
+        LastWordFromStr1: string;
+        IndexInStr2, WordsAfter, i: Integer;
+      begin
+        Result := false;
+
+        Parts1 := TStringList.Create;
+        Parts2 := TStringList.Create;
+        try
+          // Разбиваем первую строку на части
+          ExtractStrings(['~'], [], PChar(Str1), Parts1);
+          if Parts1.Count = 0 then Exit;
+
+          // Получаем последнее слово из первой строки
+          LastWordFromStr1 := Parts1[Parts1.Count - 1];
+
+          // Разбиваем вторую строку на части
+          ExtractStrings(['~'], [], PChar(Str2), Parts2);
+          if Parts2.Count = 0 then Exit;
+
+          // Ищем последнее слово из первой строки во второй строке
+          IndexInStr2 := -1;
+          for i := 0 to Parts2.Count - 1 do
+          begin
+            if Parts2[i] = LastWordFromStr1 then
+            begin
+              IndexInStr2 := i;
+              Break;
+            end;
+          end;
+
+          if IndexInStr2 = -1 then Exit;
+
+          // Определяем сколько слов осталось после найденного слова
+          WordsAfter := Parts2.Count - IndexInStr2 - 1;
+
+          // Выбираем вариант в зависимости от количества слов после
+          if WordsAfter = 0 then
+            Result := true;
+
+        finally
+          Parts1.Free;
+          Parts2.Free;
+        end;
+      end;
+begin
+  try
+    newVST.BeginUpdate;
+    try
+      newVST.Clear;
+
+      // Инициализация переменных для отслеживания групп
+      lastFeederNum := -1;
+      GroupNode := nil;
+      isFirstDevice := True;
+
+      // Проходим по всем устройствам в FDevicesList
+      for i := 0 to FDevicesList.Size - 1 do
+      begin
+        device := FDevicesList[i];
+
+
+        // Если фильтр задан, проверяем соответствие fullpathHD (не pathHD!)
+        if (filterPath = '') or (device.pathHD = filterPath) then
+        begin
+          if ProcessStrings(filterPath,device.fullpathHD) then
+             currentFeederNum := device.feedernum;
+
+          // Если встретили новую группу (новое значение feedernum), создаём родительский узел
+          if isFirstDevice or (currentFeederNum <> lastFeederNum) then
+          begin
+            // Создаём родительский узел группы
+            GroupNode := newVST.AddChild(nil);
+            NodeData := newVST.GetNodeData(GroupNode);
+
+            // Заполняем данные группового узла
+            NodeData^.DevName := 'ф. ' + IntToStr(currentFeederNum);
+            NodeData^.HDName := '';
+            NodeData^.HDGroup := 0;
+            NodeData^.PathHD := '';
+            NodeData^.FullPathHD := '';
+
+            // Устанавливаем флаг vsHasChildren для отображения индикаторов +/-
+            Include(GroupNode^.States, vsHasChildren);
+
+            lastFeederNum := currentFeederNum;
+            isFirstDevice := False;
+          end;
+
+          // Создаём дочерний узел устройства под текущей группой
+          Node := newVST.AddChild(GroupNode);
+          NodeData := newVST.GetNodeData(Node);
+
+          // Заполняем данные ноды из структуры устройства
+          NodeData^.DevName := device.basename;
+          NodeData^.HDName := device.headdev;
+          NodeData^.HDGroup := device.feedernum;
+          NodeData^.PathHD := device.pathHD;
+          NodeData^.FullPathHD := device.fullpathHD;
+        end;
+      end;
+
+      // Разворачиваем все группы для удобства просмотра
+      newVST.FullExpand;
+    finally
+      newVST.EndUpdate;
+    end;
+  except
+    on E: Exception do
+      ShowMessage('Ошибка загрузки данных в newVST: ' + E.Message);
+  end;
+end;
+
+// Обработчик получения текста для ячеек newVST
+procedure TVElectrNav.newVSTGetText(Sender: TBaseVirtualTree;
+  Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType;
+  var CellText: String);
+var
+  NodeData: PGridNodeData;
+begin
+  NodeData := Sender.GetNodeData(Node);
+  if not Assigned(NodeData) then Exit;
+
+  // Колонка 0 зарезервирована для индикаторов дерева (+/-), не устанавливаем для неё текст
+  if Column = 0 then Exit;
+
+  case Column of
+    1: CellText := 'Показать';
+    2: CellText := NodeData^.DevName;
+    3: CellText := NodeData^.HDName;
+    4: CellText := inttostr(NodeData^.HDGroup);
+    5: CellText := NodeData^.PathHD;
+    6: CellText := NodeData^.FullPathHD;
+    7: CellText := 'Ред.';
+  end;
+end;
+
 destructor TVElectrNav.Destroy;
 begin
   // Освобождаем список устройств
@@ -839,11 +1097,12 @@ begin
 end;
 
 // Обработчик клика по узлу дерева
-// Фильтрует таблицу vstDev по выбранному пути иерархии
+// Фильтрует таблицы vstDev и newVST по выбранному пути иерархии
 procedure TVElectrNav.TreeClick(Sender: TObject);
 var
   Node: PVirtualNode;
   Data: PNodeData;
+  filterPath: string;
 begin
   Node := FDeviceTree.GetFirstSelected;
 
@@ -854,14 +1113,19 @@ begin
     begin
       // Если выбран корневой узел "Все устройства", показываем все устройства
       if Data^.DeviceName <> 'Все устройства' then
-        recordingVstDev(GetNodePhysicalPath(Node))
+        filterPath := GetNodePhysicalPath(Node)
       else
-        recordingVstDev('');
+        filterPath := '';
+
+      // Фильтруем обе таблицы
+      recordingVstDev(filterPath);
+      recordingNewVST(filterPath);
     end
     else
     begin
       // Если данных нет, показываем все устройства
       recordingVstDev('');
+      recordingNewVST('');
     end;
   end;
 end;

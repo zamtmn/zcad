@@ -422,6 +422,10 @@ var
   p1,p2,p3:gdbvertex;
   i:integer;
   knotValue:single;
+  controlPoints:TControlPointsArray;
+  params:array of single;
+  knots:array of single;
+  numPoints:integer;
 begin
   Result:=cmd_ok;
   interactiveData.UserPoints.init(100);
@@ -456,48 +460,41 @@ begin
 
         // Создаем финальный сплайн если есть минимум 2 точки
         if interactiveData.UserPoints.Count >= 2 then begin
-          var
-            controlPoints:TControlPointsArray;
-            params:array of single;
-            knots:array of single;
-            numPoints:integer;
-          begin
-            // Очищаем временный сплайн и заполняем финальными данными
-            interactiveData.PSpline^.vertexarrayinocs.clear;
-            interactiveData.PSpline^.ControlArrayInOCS.clear;
-            interactiveData.PSpline^.Knots.Clear;
+          // Очищаем временный сплайн и заполняем финальными данными
+          interactiveData.PSpline^.vertexarrayinocs.clear;
+          interactiveData.PSpline^.ControlArrayInOCS.clear;
+          interactiveData.PSpline^.Knots.Clear;
 
-            numPoints:=interactiveData.UserPoints.Count;
+          numPoints:=interactiveData.UserPoints.Count;
 
-            // Конвертируем точки интерполяции в контрольные точки
-            // чтобы сплайн проходил через указанные пользователем точки
-            controlPoints:=ConvertOnCurvePointsToControlPointsArray(
-              interactiveData.PSpline^.Degree,
-              interactiveData.UserPoints.PTArr(interactiveData.UserPoints.getPFirst)^[0..numPoints-1]
-            );
+          // Конвертируем точки интерполяции в контрольные точки
+          // чтобы сплайн проходил через указанные пользователем точки
+          controlPoints:=ConvertOnCurvePointsToControlPointsArray(
+            interactiveData.PSpline^.Degree,
+            interactiveData.UserPoints.PTArr(interactiveData.UserPoints.getPFirst)^[0..numPoints-1]
+          );
 
-            // Добавляем вычисленные контрольные точки
-            for i:=0 to Length(controlPoints)-1 do
-              interactiveData.PSpline^.AddVertex(controlPoints[i]);
+          // Добавляем вычисленные контрольные точки
+          for i:=0 to Length(controlPoints)-1 do
+            interactiveData.PSpline^.AddVertex(controlPoints[i]);
 
-            // Генерируем узловой вектор используя метод усреднения
-            // для обеспечения корректной интерполяции
-            SetLength(params,numPoints);
-            ComputeParameters(
-              interactiveData.UserPoints.PTArr(interactiveData.UserPoints.getPFirst)^[0..numPoints-1],
-              params
-            );
+          // Генерируем узловой вектор используя метод усреднения
+          // для обеспечения корректной интерполяции
+          SetLength(params,numPoints);
+          ComputeParameters(
+            interactiveData.UserPoints.PTArr(interactiveData.UserPoints.getPFirst)^[0..numPoints-1],
+            params
+          );
 
-            SetLength(knots,numPoints+interactiveData.PSpline^.Degree+1);
-            GenerateKnotVector(numPoints-1,interactiveData.PSpline^.Degree,params,knots);
+          SetLength(knots,numPoints+interactiveData.PSpline^.Degree+1);
+          GenerateKnotVector(numPoints-1,interactiveData.PSpline^.Degree,params,knots);
 
-            // Добавляем узлы в сплайн
-            for i:=0 to Length(knots)-1 do
-              interactiveData.PSpline^.Knots.PushBackData(knots[i]);
+          // Добавляем узлы в сплайн
+          for i:=0 to Length(knots)-1 do
+            interactiveData.PSpline^.Knots.PushBackData(knots[i]);
 
-            // Присваиваем текущие свойства
-            zcSetEntPropFromCurrentDrawingProp(interactiveData.PSpline);
-          end;
+          // Присваиваем текущие свойства
+          zcSetEntPropFromCurrentDrawingProp(interactiveData.PSpline);
 
           // Переносим из конструкторской области в чертеж
           zcAddEntToCurrentDrawingWithUndo(interactiveData.PSpline);

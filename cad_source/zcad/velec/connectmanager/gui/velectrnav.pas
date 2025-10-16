@@ -25,7 +25,9 @@ type
     DevName: string;
     RealName: string;
     Power: double;
+    CosF: double;
     Voltage: integer;
+    Phase: string;
     HDName: string;
     HDGroup: integer;
     PathHD: string;
@@ -352,10 +354,26 @@ begin
         Options := Options + [coAllowFocus, coEditable];
       end;
 
+      // Колонка "cosF" (редактируемая)
+      with vstDev.Header.Columns.Add do
+      begin
+        Text := 'cosF';
+        Width := 80;
+        Options := Options + [coAllowFocus, coEditable];
+      end;
+
       // Колонка "Напряжение" (редактируемая)
       with vstDev.Header.Columns.Add do
       begin
         Text := 'Voltage';
+        Width := 80;
+        Options := Options + [coAllowFocus, coEditable];
+      end;
+
+      // Колонка "Phase" (редактируемая)
+      with vstDev.Header.Columns.Add do
+      begin
+        Text := 'Phase';
         Width := 80;
         Options := Options + [coAllowFocus, coEditable];
       end;
@@ -528,7 +546,9 @@ begin
                   NodeData^.RealName := deviceGroups[groupIndex].realname;
                   // Вычисляем сумму мощностей всех дочерних устройств
                   NodeData^.Power := deviceGroups[groupIndex].power * Length(deviceGroups[groupIndex].devices);
+                  NodeData^.CosF := 0.0;
                   NodeData^.Voltage := deviceGroups[groupIndex].voltage;
+                  NodeData^.Phase := '';
                   NodeData^.HDName := '';
                   NodeData^.HDGroup := 0;
                   NodeData^.PathHD := '';
@@ -555,7 +575,9 @@ begin
                       NodeData^.DevName := device.basename;
                     NodeData^.RealName := device.realname;
                     NodeData^.Power := device.power;
+                    NodeData^.CosF := device.cosfi;
                     NodeData^.Voltage := device.voltage;
+                    NodeData^.Phase := device.phase;
                     NodeData^.HDName := device.headdev;
                     NodeData^.HDGroup := device.feedernum;
                     NodeData^.PathHD := device.pathHD;
@@ -581,7 +603,9 @@ begin
                     NodeData^.DevName := device.basename;
                   NodeData^.RealName := device.realname;
                   NodeData^.Power := device.power;
+                  NodeData^.CosF := device.cosfi;
                   NodeData^.Voltage := device.voltage;
+                  NodeData^.Phase := device.phase;
                   NodeData^.HDName := device.headdev;
                   NodeData^.HDGroup := device.feedernum;
                   NodeData^.PathHD := device.pathHD;
@@ -598,7 +622,9 @@ begin
             NodeData^.DevName := device.headdev + '-Гр.' + IntToStr(currentFeederNum);
             NodeData^.RealName := '';
             NodeData^.Power := 0.0;
+            NodeData^.CosF := 0.0;
             NodeData^.Voltage := 0;
+            NodeData^.Phase := '';
             NodeData^.HDName := '';
             NodeData^.HDGroup := 0;
             NodeData^.PathHD := '';
@@ -665,7 +691,9 @@ begin
             NodeData^.RealName := deviceGroups[groupIndex].realname;
             // Вычисляем сумму мощностей всех дочерних устройств
             NodeData^.Power := deviceGroups[groupIndex].power * Length(deviceGroups[groupIndex].devices);
+            NodeData^.CosF := 0.0;
             NodeData^.Voltage := deviceGroups[groupIndex].voltage;
+            NodeData^.Phase := '';
             NodeData^.HDName := '';
             NodeData^.HDGroup := 0;
             NodeData^.PathHD := '';
@@ -692,7 +720,9 @@ begin
                 NodeData^.DevName := device.basename;
               NodeData^.RealName := device.realname;
               NodeData^.Power := device.power;
+              NodeData^.CosF := device.cosfi;
               NodeData^.Voltage := device.voltage;
+              NodeData^.Phase := device.phase;
               NodeData^.HDName := device.headdev;
               NodeData^.HDGroup := device.feedernum;
               NodeData^.PathHD := device.pathHD;
@@ -718,7 +748,9 @@ begin
               NodeData^.DevName := device.basename;
             NodeData^.RealName := device.realname;
             NodeData^.Power := device.power;
+            NodeData^.CosF := device.cosfi;
             NodeData^.Voltage := device.voltage;
+            NodeData^.Phase := device.phase;
             NodeData^.HDName := device.headdev;
             NodeData^.HDGroup := device.feedernum;
             NodeData^.PathHD := device.pathHD;
@@ -752,13 +784,15 @@ begin
     0: CellText := NodeData^.DevName;
     1: CellText := NodeData^.RealName;
     2: if NodeData^.Power <> 0.0 then CellText := FloatToStr(NodeData^.Power) else CellText := '';
-    3: if NodeData^.Voltage <> 0 then CellText := IntToStr(NodeData^.Voltage) else CellText := '';
-    4: CellText := NodeData^.HDName;
-    5: CellText := inttostr(NodeData^.HDGroup);
-    6: CellText := NodeData^.PathHD;
-    7: CellText := NodeData^.FullPathHD;
-    8: CellText := 'Ред.';
-    9: CellText := 'Показать';
+    3: if NodeData^.CosF <> 0.0 then CellText := FloatToStr(NodeData^.CosF) else CellText := '';
+    4: if NodeData^.Voltage <> 0 then CellText := IntToStr(NodeData^.Voltage) else CellText := '';
+    5: CellText := NodeData^.Phase;
+    6: CellText := NodeData^.HDName;
+    7: CellText := inttostr(NodeData^.HDGroup);
+    8: CellText := NodeData^.PathHD;
+    9: CellText := NodeData^.FullPathHD;
+    10: CellText := 'Ред.';
+    11: CellText := 'Показать';
   end;
 end;
 
@@ -766,7 +800,7 @@ procedure TVElectrNav.vstDevPaintText(Sender: TBaseVirtualTree;
   const TargetCanvas: TCanvas; Node: PVirtualNode; Column: TColumnIndex;
   TextType: TVSTTextType);
 begin
-  if (Column = 8) or (Column = 9) then
+  if (Column = 10) or (Column = 11) then
   begin
     TargetCanvas.Font.Color := clBlue;
     TargetCanvas.Font.Style := [fsUnderline];
@@ -789,17 +823,17 @@ begin
   NodeData := vstDev.GetNodeData(Node);
   if not Assigned(NodeData) then Exit;
 
-  if HitInfo.HitColumn = 9 then
+  if HitInfo.HitColumn = 11 then
     ShowMessage('devname: ' + NodeData^.DevName)
-  else if HitInfo.HitColumn = 8 then
+  else if HitInfo.HitColumn = 10 then
     ShowMessage('Редактировать: ' + NodeData^.HDName);
 end;
 
 procedure TVElectrNav.vstDevEditing(Sender: TBaseVirtualTree;
   Node: PVirtualNode; Column: TColumnIndex; var Allowed: Boolean);
 begin
-  // Разрешаем редактирование для колонок 0-5 (devname, realname, power, voltage, hdname, hdgroup)
-  Allowed := (Column >= 0) and (Column <= 5);
+  // Разрешаем редактирование для колонок 0-7 (devname, realname, power, cosF, voltage, phase, hdname, hdgroup)
+  Allowed := (Column >= 0) and (Column <= 7);
 end;
 
 // Обработчик изменения текста в ячейке vstDev
@@ -823,9 +857,11 @@ begin
     0: NodeData^.DevName := NewText;
     1: NodeData^.RealName := NewText;
     2: NodeData^.Power := StrToFloatDef(NewText, 0.0);
-    3: NodeData^.Voltage := StrToIntDef(NewText, 0);
-    4: NodeData^.HDName := NewText;
-    5: NodeData^.HDGroup := StrToIntDef(NewText, 0);
+    3: NodeData^.CosF := StrToFloatDef(NewText, 0.0);
+    4: NodeData^.Voltage := StrToIntDef(NewText, 0);
+    5: NodeData^.Phase := NewText;
+    6: NodeData^.HDName := NewText;
+    7: NodeData^.HDGroup := StrToIntDef(NewText, 0);
     else
       Exit;
   end;
@@ -841,9 +877,11 @@ begin
           0: device^.basename := NewText;      // Обновление базового имени устройства
           1: device^.realname := NewText;      // Обновление реального имени устройства
           2: device^.power := StrToFloatDef(NewText, 0.0);  // Обновление мощности
-          3: device^.voltage := StrToIntDef(NewText, 0);    // Обновление напряжения
-          4: device^.headdev := NewText;       // Обновление головного устройства
-          5: device^.feedernum := StrToIntDef(NewText, 0);  // Обновление номера фидера
+          3: device^.cosfi := StrToFloatDef(NewText, 0.0);  // Обновление cosfi
+          4: device^.voltage := StrToIntDef(NewText, 0);    // Обновление напряжения
+          5: device^.phase := NewText;         // Обновление фазы
+          6: device^.headdev := NewText;       // Обновление головного устройства
+          7: device^.feedernum := StrToIntDef(NewText, 0);  // Обновление номера фидера
         end;
         Break;
       end;

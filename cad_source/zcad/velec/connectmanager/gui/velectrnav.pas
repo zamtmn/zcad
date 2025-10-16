@@ -499,9 +499,9 @@ begin
 
           // Заполняем данные ноды из структуры устройства
           if deep>0 then
-             NodeData^.DevName := tempName+' '+device.basename + ' (Гр.' + inttostr(device.feedernum) + ')'
+             NodeData^.DevName := tempName+' '+device.basename + ' (гр.' + inttostr(device.feedernum) + ')'
           else
-             NodeData^.DevName := tempName+' '+device.basename;
+             NodeData^.DevName := device.basename;
           NodeData^.HDName := device.headdev;
           NodeData^.HDGroup := device.feedernum;
           NodeData^.PathHD := device.pathHD;

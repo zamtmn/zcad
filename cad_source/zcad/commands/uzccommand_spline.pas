@@ -199,21 +199,31 @@ begin
       params[i]:=i/(Length(points)-1);
 end;
 
-// Generate uniform knot vector
-procedure GenerateKnotVector(n,p:integer;var knots:array of single);
+// Generate knot vector using averaging method for global interpolation
+// Based on standard B-spline interpolation algorithm (Piegl & Tiller, "The NURBS Book")
+procedure GenerateKnotVector(n,p:integer;const params:array of single;var knots:array of single);
 var
-  i:integer;
+  i,j:integer;
   m:integer;
+  sum:single;
 begin
   m:=n+p+1;
 
-  // Clamped knot vector: repeat 0 and 1 (p+1) times
+  // Clamped knot vector: repeat 0 (p+1) times at start
   for i:=0 to p do
     knots[i]:=0.0;
 
-  for i:=p+1 to n do
-    knots[i]:=(i-p)/(n-p+1);
+  // Internal knots: average p consecutive parameter values
+  // Formula: knots[j] = (params[j-p] + params[j-p+1] + ... + params[j-1]) / p
+  // This ensures the matrix system for finding control points is well-conditioned
+  for j:=p+1 to n do begin
+    sum:=0.0;
+    for i:=j-p to j-1 do
+      sum:=sum+params[i];
+    knots[j]:=sum/p;
+  end;
 
+  // Clamped knot vector: repeat 1 (p+1) times at end
   for i:=n+1 to m do
     knots[i]:=1.0;
 end;
@@ -329,7 +339,7 @@ begin
 
   // Generate knot vector for numPoints control points and given degree
   SetLength(knots,numPoints+ADegree+1);
-  GenerateKnotVector(numPoints-1,ADegree,knots);
+  GenerateKnotVector(numPoints-1,ADegree,params,knots);
 
   // Build coefficient matrix BasisMatrix where BasisMatrix[i][j] = BasisFunction(j, degree, params[i])
   // This represents the system: sum(BasisMatrix[i][j] * P[j]) = D[i]

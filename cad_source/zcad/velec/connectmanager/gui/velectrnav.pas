@@ -457,6 +457,7 @@ var
     groupCount: integer;
     foundGroup: boolean;
     groupIndex: integer;
+    sumPower, sumS, childS: double;
 
     function ProcessStrings(const Str1, Str2: string): integer;
       var
@@ -765,26 +766,47 @@ begin
         end;
       end;
 
-      // Вычисляем суммы мощностей для узлов 1-го уровня (групп по feedernum)
+      // Вычисляем суммы мощностей и cosF для узлов 1-го уровня (групп по feedernum)
       Node := vstDev.GetFirst;
       while Assigned(Node) do
       begin
-        // Для узлов 1-го уровня (групп по feedernum) вычисляем сумму мощностей дочерних узлов
+        // Для узлов 1-го уровня (групп по feedernum) вычисляем сумму мощностей дочерних узлов и cosF
         if vstDev.GetNodeLevel(Node) = 0 then
         begin
           NodeData := vstDev.GetNodeData(Node);
           if Assigned(NodeData) then
           begin
-            NodeData^.Power := 0.0;
-            // Суммируем мощности всех дочерних узлов
+            sumPower := 0.0;
+            sumS := 0.0;
+
+            // Суммируем мощности (Power) и полные мощности (S) всех дочерних узлов
             GroupNode := vstDev.GetFirstChild(Node);
             while Assigned(GroupNode) do
             begin
               ChildNodeData := vstDev.GetNodeData(GroupNode);
               if Assigned(ChildNodeData) then
-                NodeData^.Power := NodeData^.Power + ChildNodeData^.Power;
+              begin
+                sumPower := sumPower + ChildNodeData^.Power;
+
+                // Вычисляем S = Power / cosF для дочернего узла
+                if ChildNodeData^.CosF <> 0.0 then
+                  childS := ChildNodeData^.Power / ChildNodeData^.CosF
+                else
+                  childS := 0.0;
+
+                sumS := sumS + childS;
+              end;
               GroupNode := vstDev.GetNextSibling(GroupNode);
             end;
+
+            // Устанавливаем Power как сумму всех дочерних Power
+            NodeData^.Power := sumPower;
+
+            // Вычисляем cosF = (сумма всех дочерних Power) / (сумма всех дочерних S)
+            if sumS <> 0.0 then
+              NodeData^.CosF := sumPower / sumS
+            else
+              NodeData^.CosF := 0.0;
           end;
         end;
         Node := vstDev.GetNext(Node);

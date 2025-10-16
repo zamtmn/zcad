@@ -24,7 +24,6 @@ object VElectrNav: TVElectrNav
       Top = 1
       Width = 248
       Align = alClient
-      DefaultText = ''
       Header.AutoSizeIndex = 0
       Header.Columns = <>
       Header.MainColumn = -1
@@ -66,10 +65,9 @@ object VElectrNav: TVElectrNav
       Top = 1
       Width = 389
       Align = alClient
-      DefaultText = ''
       Header.AutoSizeIndex = -1
       Header.Columns = <>
-      Header.MainColumn = 0
+      Header.MainColumn = -1
       TabOrder = 0
     end
   end

@@ -23,6 +23,11 @@ type
   PGridNodeData = ^TGridNodeData;
   TGridNodeData = record
     DevName: string;
+    RealName: string;
+    Power: double;
+    CosF: double;
+    Voltage: integer;
+    Phase: string;
     HDName: string;
     HDGroup: integer;
     PathHD: string;
@@ -53,6 +58,8 @@ type
       Column: TColumnIndex; var Allowed: Boolean);
     procedure vstDevNewText(Sender: TBaseVirtualTree; Node: PVirtualNode;
       Column: TColumnIndex; const NewText: AnsiString);
+    //procedure newVSTGetText(Sender: TBaseVirtualTree; Node: PVirtualNode;
+    //  Column: TColumnIndex; TextType: TVSTTextType; var CellText: String);
   private
     // Для работы разделителя панелей
     FProportion: Double; // Пропорция ширины PanelNav относительно общей ширины
@@ -63,7 +70,9 @@ type
 
     procedure InitializeDeviceTree;    // Инициализация дерева устройств FDeviceTree
     procedure InitializeVstDev;        // Инициализация виртуальной таблицы устройств
+    //procedure InitializeNewVST;        // Инициализация виртуальной таблицы newVST
     procedure recordingVstDev(const filterPath: string); // Заполнение vstDev из FDevicesList с фильтрацией по пути
+    //procedure recordingNewVST(const filterPath: string); // Заполнение newVST из FDevicesList с фильтрацией по пути
     procedure BuildDeviceHierarchy;    // Построение иерархии дерева на основе FDevicesList
     procedure TreeGetText(Sender: TBaseVirtualTree; Node: PVirtualNode;
       Column: TColumnIndex; TextType: TVSTTextType; var CellText: String);
@@ -130,8 +139,9 @@ begin
 
     // Настраиваем виртуальную таблицу устройств
     vstDev.Parent := PanelData;
-    vstDev.Align := alClient;
+    vstDev.Align := alTop;
     vstDev.NodeDataSize := SizeOf(TGridNodeData);
+
 
     except
       on E: Exception do
@@ -220,6 +230,7 @@ begin
     vstDev.OnClick := @vstDevClick;
     vstDev.OnEditing := @vstDevEditing;
     vstDev.OnNewText := @vstDevNewText;
+
   finally
     mcManager.Free;
   end;
@@ -309,7 +320,7 @@ begin
 
       // Настройка опций отображения (с деревом для группировки, с выделением всей строки)
       vstDev.TreeOptions.PaintOptions :=
-        vstDev.TreeOptions.PaintOptions + [toShowTreeLines, toShowButtons] - [toShowRoot];
+        vstDev.TreeOptions.PaintOptions + [toShowRoot,toShowTreeLines, toShowButtons];
       vstDev.TreeOptions.SelectionOptions :=
         vstDev.TreeOptions.SelectionOptions + [toFullRowSelect, toExtendedFocus];
       vstDev.TreeOptions.MiscOptions :=
@@ -319,25 +330,51 @@ begin
       vstDev.Header.AutoSizeIndex := -1;
       vstDev.Header.MainColumn := 0; // Колонка 0 содержит индикаторы дерева (+/-)
 
-      // Колонка 0 - пустая (для индикаторов дерева +/-)
-      with vstDev.Header.Columns.Add do
-      begin
-        Text := '';
-        Width := 50;  // Увеличена ширина для надежного отображения индикаторов с учетом отступов
-      end;
-
-      // Колонка "Показать" (кнопка действия)
-      with vstDev.Header.Columns.Add do
-      begin
-        Text := 'show';
-        Width := 80;
-      end;
-
       // Колонка "Имя устройства" (редактируемая)
       with vstDev.Header.Columns.Add do
       begin
         Text := 'devname';
         Width := 100;
+        Options := Options + [coAllowFocus, coEditable];
+      end;
+
+      // Колонка "Реальное имя" (редактируемая)
+      with vstDev.Header.Columns.Add do
+      begin
+        Text := 'realname';
+        Width := 100;
+        Options := Options + [coAllowFocus, coEditable];
+      end;
+
+      // Колонка "Мощность" (редактируемая)
+      with vstDev.Header.Columns.Add do
+      begin
+        Text := 'Power';
+        Width := 80;
+        Options := Options + [coAllowFocus, coEditable];
+      end;
+
+      // Колонка "cosF" (редактируемая)
+      with vstDev.Header.Columns.Add do
+      begin
+        Text := 'cosF';
+        Width := 80;
+        Options := Options + [coAllowFocus, coEditable];
+      end;
+
+      // Колонка "Напряжение" (редактируемая)
+      with vstDev.Header.Columns.Add do
+      begin
+        Text := 'Voltage';
+        Width := 80;
+        Options := Options + [coAllowFocus, coEditable];
+      end;
+
+      // Колонка "Phase" (редактируемая)
+      with vstDev.Header.Columns.Add do
+      begin
+        Text := 'Phase';
+        Width := 80;
         Options := Options + [coAllowFocus, coEditable];
       end;
 
@@ -377,6 +414,13 @@ begin
         Text := 'edit';
         Width := 80;
       end;
+
+      // Колонка "Показать" (кнопка действия) - перемещена в конец
+      with vstDev.Header.Columns.Add do
+      begin
+        Text := 'show';
+        Width := 80;
+      end;
     finally
       vstDev.EndUpdate;
     end;
@@ -391,6 +435,16 @@ end;
 // Группирует устройства по feedernum, создавая родительские узлы для каждой группы
 // Использует класс TVstDevPopulator для выполнения операции
 procedure TVElectrNav.recordingVstDev(const filterPath: string);
+type
+  TDeviceGroup = record
+    basename: string;
+    realname: string;
+    power: double;
+    cosf: double;
+    voltage: integer;
+    phase: string;
+    devices: array of integer; // индексы устройств в этой группе
+  end;
 var
   populator: TVstDevPopulator;
 begin
@@ -413,22 +467,34 @@ procedure TVElectrNav.vstDevGetText(Sender: TBaseVirtualTree;
   var CellText: String);
 var
   NodeData: PGridNodeData;
+  nodeLevel: integer;
 begin
   NodeData := Sender.GetNodeData(Node);
   if not Assigned(NodeData) then Exit;
 
-  // Колонка 0 зарезервирована для индикаторов дерева (+/-), не устанавливаем для неё текст
-  // Column 0 is reserved for tree indicators (+/-), do not set text for it
-  if Column = 0 then Exit;
+  nodeLevel := Sender.GetNodeLevel(Node);
 
   case Column of
-    1: CellText := 'Показать';
-    2: CellText := NodeData^.DevName;
-    3: CellText := NodeData^.HDName;
-    4: CellText := inttostr(NodeData^.HDGroup);
-    5: CellText := NodeData^.PathHD;
-    6: CellText := NodeData^.FullPathHD;
-    7: CellText := 'Ред.';
+    0: CellText := NodeData^.DevName;
+    1: CellText := NodeData^.RealName;
+    2: if NodeData^.Power <> 0.0 then CellText := FloatToStr(NodeData^.Power) else CellText := '';
+    3: if NodeData^.CosF <> 0.0 then CellText := FloatToStr(NodeData^.CosF) else CellText := '';
+    4: begin
+         // Для узлов 1-го уровня: если Voltage = 0, показываем "Different"
+         if (nodeLevel = 0) and (NodeData^.Voltage = 0) then
+           CellText := 'Different'
+         else if NodeData^.Voltage <> 0 then
+           CellText := IntToStr(NodeData^.Voltage)
+         else
+           CellText := '';
+       end;
+    5: CellText := NodeData^.Phase;
+    6: CellText := NodeData^.HDName;
+    7: CellText := inttostr(NodeData^.HDGroup);
+    8: CellText := NodeData^.PathHD;
+    9: CellText := NodeData^.FullPathHD;
+    10: CellText := 'Ред.';
+    11: CellText := 'Показать';
   end;
 end;
 
@@ -436,11 +502,7 @@ procedure TVElectrNav.vstDevPaintText(Sender: TBaseVirtualTree;
   const TargetCanvas: TCanvas; Node: PVirtualNode; Column: TColumnIndex;
   TextType: TVSTTextType);
 begin
-  // Колонка 0 зарезервирована для индикаторов дерева (+/-), не трогаем её
-  // Column 0 is reserved for tree indicators (+/-), do not touch it
-  if Column = 0 then Exit;
-
-  if (Column = 1) or (Column = 7) then
+  if (Column = 10) or (Column = 11) then
   begin
     TargetCanvas.Font.Color := clBlue;
     TargetCanvas.Font.Style := [fsUnderline];
@@ -463,17 +525,17 @@ begin
   NodeData := vstDev.GetNodeData(Node);
   if not Assigned(NodeData) then Exit;
 
-  if HitInfo.HitColumn = 1 then
+  if HitInfo.HitColumn = 11 then
     ShowMessage('devname: ' + NodeData^.DevName)
-  else if HitInfo.HitColumn = 7 then
+  else if HitInfo.HitColumn = 10 then
     ShowMessage('Редактировать: ' + NodeData^.HDName);
 end;
 
 procedure TVElectrNav.vstDevEditing(Sender: TBaseVirtualTree;
   Node: PVirtualNode; Column: TColumnIndex; var Allowed: Boolean);
 begin
-  // Разрешаем редактирование только для колонок 2, 3, 4 (devname, hdname, hdgroup)
-  Allowed := (Column >= 2) and (Column <= 4);
+  // Разрешаем редактирование для колонок 0-7 (devname, realname, power, cosF, voltage, phase, hdname, hdgroup)
+  Allowed := (Column >= 0) and (Column <= 7);
 end;
 
 // Обработчик изменения текста в ячейке vstDev
@@ -494,9 +556,14 @@ begin
 
   // Обновляем визуальные данные ноды
   case Column of
-    2: NodeData^.DevName := NewText;
-    3: NodeData^.HDName := NewText;
-    4: NodeData^.HDGroup := strtoint(NewText);
+    0: NodeData^.DevName := NewText;
+    1: NodeData^.RealName := NewText;
+    2: NodeData^.Power := StrToFloatDef(NewText, 0.0);
+    3: NodeData^.CosF := StrToFloatDef(NewText, 0.0);
+    4: NodeData^.Voltage := StrToIntDef(NewText, 0);
+    5: NodeData^.Phase := NewText;
+    6: NodeData^.HDName := NewText;
+    7: NodeData^.HDGroup := StrToIntDef(NewText, 0);
     else
       Exit;
   end;
@@ -509,13 +576,14 @@ begin
       if device^.realname = OldDevName then
       begin
         case Column of
-          2: device^.realname := NewText;    // Обновление имени устройства
-          3: device^.headdev := NewText;     // Обновление головного устройства
-          4: begin
-            device^.feedernum := strtoint(NewText);
-            // HDGroup не имеет прямого соответствия в TVElectrDevStruct
-            // Требуется дополнительная логика для сохранения группы
-          end;
+          0: device^.basename := NewText;      // Обновление базового имени устройства
+          1: device^.realname := NewText;      // Обновление реального имени устройства
+          2: device^.power := StrToFloatDef(NewText, 0.0);  // Обновление мощности
+          3: device^.cosfi := StrToFloatDef(NewText, 0.0);  // Обновление cosfi
+          4: device^.voltage := StrToIntDef(NewText, 0);    // Обновление напряжения
+          5: device^.phase := NewText;         // Обновление фазы
+          6: device^.headdev := NewText;       // Обновление головного устройства
+          7: device^.feedernum := StrToIntDef(NewText, 0);  // Обновление номера фидера
         end;
         Break;
       end;
@@ -526,7 +594,7 @@ begin
       ShowMessage('Ошибка обновления данных: ' + E.Message);
       // Восстанавливаем старое значение при ошибке
       case Column of
-        2: NodeData^.DevName := OldDevName;
+        1: NodeData^.DevName := OldDevName;
       end;
     end;
   end;
@@ -731,11 +799,12 @@ begin
 end;
 
 // Обработчик клика по узлу дерева
-// Фильтрует таблицу vstDev по выбранному пути иерархии
+// Фильтрует таблицы vstDev и newVST по выбранному пути иерархии
 procedure TVElectrNav.TreeClick(Sender: TObject);
 var
   Node: PVirtualNode;
   Data: PNodeData;
+  filterPath: string;
 begin
   Node := FDeviceTree.GetFirstSelected;
 
@@ -746,9 +815,12 @@ begin
     begin
       // Если выбран корневой узел "Все устройства", показываем все устройства
       if Data^.DeviceName <> 'Все устройства' then
-        recordingVstDev(GetNodePhysicalPath(Node))
+        filterPath := GetNodePhysicalPath(Node)
       else
-        recordingVstDev('');
+        filterPath := '';
+
+      // Фильтруем обе таблицы
+      recordingVstDev(filterPath);
     end
     else
     begin

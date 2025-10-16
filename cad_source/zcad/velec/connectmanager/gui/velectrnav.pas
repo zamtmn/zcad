@@ -447,7 +447,7 @@ type
 var
     i,j,k,deep: integer;
     Node, GroupNode, SubGroupNode: PVirtualNode;
-    NodeData: PGridNodeData;
+    NodeData, ChildNodeData: PGridNodeData;
     device: TVElectrDevStruct;
     currentFeederNum: integer;
     lastFeederNum: integer;
@@ -763,6 +763,31 @@ begin
             NodeData^.FullPathHD := device.fullpathHD;
           end;
         end;
+      end;
+
+      // Вычисляем суммы мощностей для узлов 1-го уровня (групп по feedernum)
+      Node := vstDev.GetFirst;
+      while Assigned(Node) do
+      begin
+        // Для узлов 1-го уровня (групп по feedernum) вычисляем сумму мощностей дочерних узлов
+        if vstDev.GetNodeLevel(Node) = 0 then
+        begin
+          NodeData := vstDev.GetNodeData(Node);
+          if Assigned(NodeData) then
+          begin
+            NodeData^.Power := 0.0;
+            // Суммируем мощности всех дочерних узлов
+            GroupNode := vstDev.GetFirstChild(Node);
+            while Assigned(GroupNode) do
+            begin
+              ChildNodeData := vstDev.GetNodeData(GroupNode);
+              if Assigned(ChildNodeData) then
+                NodeData^.Power := NodeData^.Power + ChildNodeData^.Power;
+              GroupNode := vstDev.GetNextSibling(GroupNode);
+            end;
+          end;
+        end;
+        Node := vstDev.GetNext(Node);
       end;
 
       // Разворачиваем все группы для удобства просмотра

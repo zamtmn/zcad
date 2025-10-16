@@ -40,6 +40,8 @@ type
     PSpline:PGDBObjSpline;
     UserPoints:GDBPoint3dArray;
   end;
+  TSingleArray=array of single;
+  TMatrix=array of TSingleArray;
 
 implementation
 
@@ -217,7 +219,7 @@ begin
 end;
 
 // Solve linear system using Gaussian elimination with partial pivoting
-procedure SolveLinearSystem(var A:array of array of single;const b:array of single;var x:array of single;n:integer);
+procedure SolveLinearSystem(var A:TMatrix;const b:array of single;var x:array of single;n:integer);
 var
   i,j,k,maxRow:integer;
   maxVal,tmp,factor:single;
@@ -281,7 +283,7 @@ var
   n,i,j:integer;
   params:array of single;
   knots:array of single;
-  N:array of array of single;
+  N:TMatrix;
   dx,dy,dz:array of single;
   cx,cy,cz:array of single;
 begin

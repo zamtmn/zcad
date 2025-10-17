@@ -51,6 +51,8 @@ type
     function CompareBySort1(const dev1, dev2: TVElectrDevStruct): Integer;
     function CompareBySort2(const dev1, dev2: TVElectrDevStruct): Integer;
     function CompareBySort3(const dev1, dev2: TVElectrDevStruct): Integer;
+    function CompareByPower(const dev1, dev2: TVElectrDevStruct): Integer;
+    function CompareByBasename(const dev1, dev2: TVElectrDevStruct): Integer;
 
     // Цепочка сравнений для гибкой настройки сортировки
     function CompareDevices(const dev1, dev2: TVElectrDevStruct): Integer;
@@ -364,6 +366,30 @@ begin
     Result := 0;
 end;
 
+// Сравнение устройств по полю power (мощность)
+// Сортировка по убыванию (большая мощность выше)
+function THierarchyBuilder.CompareByPower(const dev1, dev2: TVElectrDevStruct): Integer;
+begin
+  if dev1.power > dev2.power then
+    Result := -1
+  else if dev1.power < dev2.power then
+    Result := 1
+  else
+    Result := 0;
+end;
+
+// Сравнение устройств по полю basename (базовое имя устройства)
+// Сортировка по алфавиту (лексикографическая)
+function THierarchyBuilder.CompareByBasename(const dev1, dev2: TVElectrDevStruct): Integer;
+begin
+  if dev1.basename < dev2.basename then
+    Result := -1
+  else if dev1.basename > dev2.basename then
+    Result := 1
+  else
+    Result := 0;
+end;
+
 // ============================================================================
 // Цепочка сравнений устройств
 // ============================================================================
@@ -374,6 +400,8 @@ end;
 // 2. По полю Sort1 (по возрастанию)
 // 3. По полю Sort2 (по возрастанию)
 // 4. По полю Sort3 (по возрастанию)
+// 5. По полю power (по убыванию - большая мощность выше)
+// 6. По полю basename (по алфавиту)
 //
 // Эта функция обеспечивает гибкость для будущих расширений:
 // можно легко добавить новые критерии сортировки или изменить их порядок
@@ -393,6 +421,14 @@ begin
 
   // Если Sort2 равны, сравниваем по Sort3
   Result := CompareBySort3(dev1, dev2);
+  if Result <> 0 then Exit;
+
+  // Если Sort3 равны, сравниваем по power (большая мощность выше)
+  Result := CompareByPower(dev1, dev2);
+  if Result <> 0 then Exit;
+
+  // Если power равны, сравниваем по basename (алфавитная сортировка)
+  Result := CompareByBasename(dev1, dev2);
 end;
 
 // ============================================================================
@@ -405,6 +441,8 @@ end;
 // 2. По полю Sort1 (по возрастанию)
 // 3. По полю Sort2 (по возрастанию)
 // 4. По полю Sort3 (по возрастанию)
+// 5. По полю power (по убыванию - большая мощность выше)
+// 6. По полю basename (по алфавиту)
 //
 // Для добавления новых критериев сортировки:
 // - Добавьте новую функцию сравнения (например, CompareByFieldName)

@@ -68,8 +68,8 @@ begin
   // For n+1 control points with degree p, the knot vector has n+p+2 elements
   // When u equals the last knot value (u=1.0 for normalized knots), only the last basis function should be non-zero
   numCtrlPts:=Length(knots)-p-2;  // Number of control points minus 1
-  if (abs(u-knots[Length(knots)-1])<1e-10) and (abs(knots[Length(knots)-1]-knots[Length(knots)-p-1])<1e-10) then begin
-    // At the last knot with multiplicity p+1
+  if abs(u-knots[Length(knots)-1])<1e-10 then begin
+    // At the last knot value
     if i=numCtrlPts then
       Result:=1.0
     else
@@ -81,7 +81,7 @@ begin
   if p=0 then begin
     if (u>=knots[i]) and (u<knots[i+1]) then
       Result:=1.0
-    else if (u=knots[i+1]) and (i=Length(knots)-2) then
+    else if (abs(u-knots[i+1])<1e-10) and (i+1=Length(knots)-1) then
       // Special case: u is at the last knot
       Result:=1.0
     else
@@ -96,7 +96,7 @@ begin
   for j:=0 to p do begin
     if (u>=knots[i+j]) and (u<knots[i+j+1]) then
       BasisValues[j]:=1.0
-    else if (u=knots[i+j+1]) and (i+j=Length(knots)-2) then
+    else if (abs(u-knots[i+j+1])<1e-10) and (i+j+1=Length(knots)-1) then
       BasisValues[j]:=1.0
     else
       BasisValues[j]:=0.0;

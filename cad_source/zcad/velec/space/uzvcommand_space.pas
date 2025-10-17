@@ -132,8 +132,8 @@ begin
       pathData.init(vertexCount, True);
 
       for i := 0 to vertexCount - 1 do begin
-        v2d.x := PGDBVertex(pline^.VertexArrayInOCS.getData(i))^.x;
-        v2d.y := PGDBVertex(pline^.VertexArrayInOCS.getData(i))^.y;
+        v2d.x := pline^.VertexArrayInOCS.getData(i).x;
+        v2d.y := pline^.VertexArrayInOCS.getData(i).y;
         pathData.PushBackData(v2d);
       end;
 
@@ -238,7 +238,7 @@ begin
     if pointCount >= 3 then begin
       // Удаляем штриховку из конструкторской области (она была только для визуализации)
       // Remove hatch from construct root (it was only for visualization)
-      drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.DeleteElement(phatch, true);
+      drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.RemoveData(phatch);
 
       // Копируем только полилинию из конструкторской области в чертеж с Undo
       // Copy only polyline from construct root to drawing with Undo

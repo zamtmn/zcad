@@ -1,0 +1,55 @@
+
+=== BasisFunction(i=3, p=3, u=1.0) ===
+Knots: [0.0, 0.0, 0.0, 0.0, 1.0, 1.0, 1.0, 1.0]
+Length(knots): 8
+Initializing degree 0:
+  j=0: knots[3]=0.0, knots[4]=1.0
+    Cond1: (1.0 >= 0.0) and (1.0 < 1.0) = False
+    Cond2: (1.0 == 1.0) and (3 == 6) = False
+    N[0] = 0.0
+  j=1: knots[4]=1.0, knots[5]=1.0
+    Cond1: (1.0 >= 1.0) and (1.0 < 1.0) = False
+    Cond2: (1.0 == 1.0) and (4 == 6) = False
+    N[1] = 0.0
+  j=2: knots[5]=1.0, knots[6]=1.0
+    Cond1: (1.0 >= 1.0) and (1.0 < 1.0) = False
+    Cond2: (1.0 == 1.0) and (5 == 6) = False
+    N[2] = 0.0
+  j=3: knots[6]=1.0, knots[7]=1.0
+    Cond1: (1.0 >= 1.0) and (1.0 < 1.0) = False
+    Cond2: (1.0 == 1.0) and (6 == 6) = True
+    N[3] = 1.0
+After degree 0 initialization: N = [0.0, 0.0, 0.0, 1.0]
+
+Building degree 1:
+  Initial saved = 0.0
+  j=0:
+    N[j+1]==0, so N[0]=0.0, saved=0
+  j=1:
+    N[j+1]==0, so N[1]=0.0, saved=0
+  j=2:
+    temp=0*1.0=0.0
+    N[2] = 0.0 + 0.0 = 0.0
+    new saved = 0.0
+  After degree 1: N = [0.0, 0.0, 0.0, 1.0]
+
+Building degree 2:
+  Initial saved = 0.0
+  j=0:
+    N[j+1]==0, so N[0]=0.0, saved=0
+  j=1:
+    N[j+1]==0, so N[1]=0.0, saved=0
+  After degree 2: N = [0.0, 0.0, 0.0, 1.0]
+
+Building degree 3:
+  Initial saved = 0.0
+  j=0:
+    N[j+1]==0, so N[0]=0.0, saved=0
+  After degree 3: N = [0.0, 0.0, 0.0, 1.0]
+
+Final result: N_3,3(1.0) = 0.0
+
+======================================================================
+RESULT: N_3,3(1.0) = 0.0
+EXPECTED: 1.0
+======================================================================

@@ -1,0 +1,4 @@
+Traceback (most recent call last):
+  File "/tmp/gh-issue-solver-1760686830122/experiments/issue-204/test_bspline_4points.py", line 6, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'

@@ -92,11 +92,25 @@ var
   j,k:integer;
   saved,temp:single;
   uleft,uright:single;
+  n:integer;
 begin
   // Cox-de Boor recursion formula:
   // N_i,0(u) = 1 if knots[i] <= u < knots[i+1], else 0
   // N_i,p(u) = ((u - knots[i]) / (knots[i+p] - knots[i])) * N_i,p-1(u) +
   //            ((knots[i+p+1] - u) / (knots[i+p+1] - knots[i+1])) * N_i+1,p-1(u)
+
+  // Special case for clamped B-splines at the endpoint
+  // For n+1 control points with degree p, the knot vector has n+p+2 elements
+  // When u equals the last knot value (u=1.0 for normalized knots), only the last basis function should be non-zero
+  n:=Length(knots)-p-2;  // Number of control points minus 1
+  if (abs(u-knots[Length(knots)-1])<1e-10) and (abs(knots[Length(knots)-1]-knots[Length(knots)-p-1])<1e-10) then begin
+    // At the last knot with multiplicity p+1
+    if i=n then
+      Result:=1.0
+    else
+      Result:=0.0;
+    exit;
+  end;
 
   // Special case for degree 0
   if p=0 then begin
@@ -191,11 +205,14 @@ begin
   end;
 
   // Normalize to [0,1]
+  // Fix: normalize ALL intermediate points including the last one
+  // The last point was already set to totalLength in the loop above (line 190)
+  // and needs to be normalized to 1.0
   if totalLength>0.0001 then
-    for i:=1 to Length(points)-2 do
+    for i:=1 to Length(points)-1 do
       params[i]:=params[i]/totalLength
   else
-    for i:=1 to Length(points)-2 do
+    for i:=1 to Length(points)-1 do
       params[i]:=i/(Length(points)-1);
 end;
 

@@ -103,6 +103,10 @@ type
     // filterPath - путь иерархии для фильтрации (пустая строка = показать все)
     // Группирует устройства по feedernum, создавая родительские узлы для каждой группы
     procedure PopulateTree(const filterPath: string);
+
+    // Заполняет поле Power в нодах контейнеров 1-го и 2-го уровня
+    // суммируя мощность всех устройств внутри каждой ноды
+    procedure FillContainersPower;
   end;
 
 implementation
@@ -458,6 +462,103 @@ begin
   finally
     // Освобождаем отфильтрованный список
     filteredDevices.Free;
+  end;
+end;
+
+// Рекурсивная функция для расчета суммарной мощности всех дочерних устройств узла
+// Возвращает сумму мощности всех дочерних узлов (рекурсивно)
+function CalculateNodePower(ATree: TLazVirtualStringTree; ANode: PVirtualNode): double;
+var
+  ChildNode: PVirtualNode;
+  NodeData: PGridNodeData;
+  TotalPower: double;
+begin
+  TotalPower := 0.0;
+
+  // Получаем первого потомка
+  ChildNode := ATree.GetFirstChild(ANode);
+
+  // Проходим по всем дочерним узлам
+  while Assigned(ChildNode) do
+  begin
+    NodeData := ATree.GetNodeData(ChildNode);
+    if Assigned(NodeData) then
+    begin
+      // Добавляем мощность текущего дочернего узла
+      TotalPower := TotalPower + NodeData^.Power;
+    end;
+
+    // Переходим к следующему потомку
+    ChildNode := ATree.GetNextSibling(ChildNode);
+  end;
+
+  Result := TotalPower;
+end;
+
+// Заполняет поле Power в нодах контейнеров 1-го и 2-го уровня
+// суммируя мощность всех устройств внутри каждой ноды
+procedure TVstDevPopulator.FillContainersPower;
+var
+  Level1Node: PVirtualNode;
+  Level2Node: PVirtualNode;
+  Level1NodeData: PGridNodeData;
+  Level2NodeData: PGridNodeData;
+  Level1Power: double;
+  Level2Power: double;
+begin
+  // Начинаем обход с корневого узла
+  Level1Node := FVstDev.GetFirst;
+
+  // Проходим по всем узлам уровня 1 (группы по feedernum)
+  while Assigned(Level1Node) do
+  begin
+    Level1Power := 0.0;
+
+    // Получаем первый дочерний узел (может быть Level 2 или устройством)
+    Level2Node := FVstDev.GetFirstChild(Level1Node);
+
+    // Проходим по всем дочерним узлам Level1
+    while Assigned(Level2Node) do
+    begin
+      // Проверяем, есть ли у узла дочерние элементы (это узел Level 2)
+      if FVstDev.HasChildren[Level2Node] then
+      begin
+        // Это контейнер уровня 2 - рассчитываем его суммарную мощность
+        Level2Power := CalculateNodePower(FVstDev, Level2Node);
+
+        // Записываем суммарную мощность в узел Level 2
+        Level2NodeData := FVstDev.GetNodeData(Level2Node);
+        if Assigned(Level2NodeData) then
+        begin
+          Level2NodeData^.Power := Level2Power;
+        end;
+
+        // Добавляем к суммарной мощности Level 1
+        Level1Power := Level1Power + Level2Power;
+      end
+      else
+      begin
+        // Это устройство напрямую в Level 1 (без Level 2 группы)
+        Level2NodeData := FVstDev.GetNodeData(Level2Node);
+        if Assigned(Level2NodeData) then
+        begin
+          Level1Power := Level1Power + Level2NodeData^.Power;
+        end;
+      end;
+
+      // Переходим к следующему дочернему узлу Level1
+      Level2Node := FVstDev.GetNextSibling(Level2Node);
+    end;
+
+    // Записываем суммарную мощность в узел Level 1
+    Level1NodeData := FVstDev.GetNodeData(Level1Node);
+    if Assigned(Level1NodeData) then
+    begin
+      Level1NodeData^.Power := Level1Power;
+    end;
+
+    // Переходим к следующему узлу Level 1
+    Level1Node := FVstDev.GetNextSibling(Level1Node);
   end;
 end;
 

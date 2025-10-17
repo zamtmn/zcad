@@ -438,6 +438,8 @@ begin
     populator := TVstDevPopulator.Create(vstDev, FDevicesList);
     try
       populator.PopulateTree(filterPath);
+      // Заполняем суммарную мощность для контейнеров 1-го и 2-го уровня
+      populator.FillContainersPower;
     finally
       populator.Free;
     end;

@@ -330,7 +330,7 @@ begin
 end;
 
 function ConvertOnCurvePointsToControlPointsArray(const ADegree:integer;
-  const AOnCurvePoints:array of GDBVertex):TControlPointsArray;
+  const AOnCurvePoints:array of GDBVertex;var AKnots:TSingleArray):TControlPointsArray;
 var
   numPoints,numControlPoints,numInteriorFit,numInteriorCtrl,i,j,k,fitIdx,ctrlIdx:integer;
   params:array of single;
@@ -346,6 +346,7 @@ begin
   // Handle edge cases
   if numPoints<2 then begin
     SetLength(Result,0);
+    SetLength(AKnots,0);
     exit;
   end;
 
@@ -354,6 +355,7 @@ begin
     SetLength(Result,numPoints);
     for i:=0 to numPoints-1 do
       Result[i]:=AOnCurvePoints[i];
+    SetLength(AKnots,0);  // Will use default knot generation
     exit;
   end;
 
@@ -362,6 +364,7 @@ begin
     SetLength(Result,numPoints);
     for i:=0 to numPoints-1 do
       Result[i]:=AOnCurvePoints[i];
+    SetLength(AKnots,0);  // Will use default knot generation
     exit;
   end;
 
@@ -370,6 +373,7 @@ begin
     SetLength(Result,2);
     Result[0]:=AOnCurvePoints[0];
     Result[1]:=AOnCurvePoints[1];
+    SetLength(AKnots,0);  // Will use default knot generation
     exit;
   end;
 
@@ -426,6 +430,11 @@ begin
   // Generate knot vector for n+2 control points
   SetLength(knots,numPoints+ADegree+3);
   GenerateKnotVectorForNPlus2(numPoints,ADegree,knots);
+
+  // Copy knots to output parameter so caller can use the same knot vector
+  SetLength(AKnots,Length(knots));
+  for i:=0 to Length(knots)-1 do
+    AKnots[i]:=knots[i];
 
   // Solve for interior control points
   // The spline should pass through fit points D[1..numPoints-2] at params[1..numPoints-2]
@@ -517,6 +526,7 @@ var
   i:integer;
   knotValue:single;
   vcp:TControlPointsArray;
+  computedKnots:TSingleArray;
   tp:TControlPointsArray;
 begin
   // Очищаем старые контрольные точки и узлы
@@ -529,30 +539,53 @@ begin
     //Добавляем все точки в сплайн
     for i:=low(APoints) to high(APoints) do
       ASpleneEntity.AddVertex(APoints[i]);
+
+    // Генерируем узловой вектор для текущего количества точек (uniform)
+    if ASpleneEntity.vertexarrayinocs.Count>=2 then begin
+      // Добавляем начальные узлы (повторяем degree+1 раз)
+      for i:=0 to ASpleneEntity.Degree do
+        ASpleneEntity.Knots.PushBackData(0.0);
+
+      // Добавляем внутренние узлы
+      for i:=1 to ASpleneEntity.vertexarrayinocs.Count-ASpleneEntity.Degree-1 do begin
+        knotValue:=i/(ASpleneEntity.vertexarrayinocs.Count-ASpleneEntity.Degree);
+        ASpleneEntity.Knots.PushBackData(knotValue);
+      end;
+
+      // Добавляем конечные узлы (повторяем degree+1 раз)
+      for i:=0 to ASpleneEntity.Degree do
+        ASpleneEntity.Knots.PushBackData(1.0);
+    end;
   end else begin
     //имеем точки на кривой
-    //пересчитываем точки
-    vcp:=ConvertOnCurvePointsToControlPointsArray(ASpleneEntity.Degree,APoints);
-    //Добавляем все точки в сплайн
+    //пересчитываем точки и получаем соответствующий узловой вектор
+    vcp:=ConvertOnCurvePointsToControlPointsArray(ASpleneEntity.Degree,APoints,computedKnots);
+
+    //Добавляем все контрольные точки в сплайн
     for i:=low(vcp) to high(vcp) do
       ASpleneEntity.AddVertex(vcp[i]);
-  end;
 
-  // Генерируем узловой вектор для текущего количества точек
-  if ASpleneEntity.vertexarrayinocs.Count>=2 then begin
-    // Добавляем начальные узлы (повторяем degree+1 раз)
-    for i:=0 to ASpleneEntity.Degree do
-      ASpleneEntity.Knots.PushBackData(0.0);
+    // Используем узловой вектор, вычисленный вместе с контрольными точками
+    // ВАЖНО: Контрольные точки и узловой вектор должны соответствовать друг другу!
+    if Length(computedKnots)>0 then begin
+      // Используем вычисленный узловой вектор
+      for i:=0 to Length(computedKnots)-1 do
+        ASpleneEntity.Knots.PushBackData(computedKnots[i]);
+    end else begin
+      // Fallback: генерируем стандартный узловой вектор для простых случаев
+      if ASpleneEntity.vertexarrayinocs.Count>=2 then begin
+        for i:=0 to ASpleneEntity.Degree do
+          ASpleneEntity.Knots.PushBackData(0.0);
 
-    // Добавляем внутренние узлы
-    for i:=1 to ASpleneEntity.vertexarrayinocs.Count-ASpleneEntity.Degree-1 do begin
-      knotValue:=i/(ASpleneEntity.vertexarrayinocs.Count-ASpleneEntity.Degree);
-      ASpleneEntity.Knots.PushBackData(knotValue);
+        for i:=1 to ASpleneEntity.vertexarrayinocs.Count-ASpleneEntity.Degree-1 do begin
+          knotValue:=i/(ASpleneEntity.vertexarrayinocs.Count-ASpleneEntity.Degree);
+          ASpleneEntity.Knots.PushBackData(knotValue);
+        end;
+
+        for i:=0 to ASpleneEntity.Degree do
+          ASpleneEntity.Knots.PushBackData(1.0);
+      end;
     end;
-
-    // Добавляем конечные узлы (повторяем degree+1 раз)
-    for i:=0 to ASpleneEntity.Degree do
-      ASpleneEntity.Knots.PushBackData(1.0);
   end;
 end;
 

@@ -160,7 +160,7 @@ procedure InteractiveConstructRootManipulator(
   Click:
   boolean {true if lmb presseed});
 procedure InteractivePolyLineNextVertexManipulator(
-  const PInteractiveData:PGDBObjPolyline {pointer to the polyline entity};
+  const PInteractiveData:Pointer {pointer to the polyline entity};
   Point:
   GDBVertex  {new vertex coord};
   Click:
@@ -576,7 +576,7 @@ end;
 {Procedure interactive updates the preview of the next vertex of a polyline}
 {Процедура интерактивного обновления предпросмотра следующей вершины полилинии}
 procedure InteractivePolyLineNextVertexManipulator(
-  const PInteractiveData:PGDBObjPolyline {pointer to the polyline entity};
+  const PInteractiveData:Pointer {pointer to the polyline entity};
   Point:
   GDBVertex  {new vertex coord};
   Click:

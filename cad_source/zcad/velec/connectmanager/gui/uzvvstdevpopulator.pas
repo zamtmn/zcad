@@ -38,7 +38,7 @@ type
     FVstDev: TLazVirtualStringTree;          // Ссылка на виртуальное дерево
     FDevicesList: TListVElectrDevStruct;     // Ссылка на список устройств
     deepConnectDev:integer;                  // глубина подключения
-
+    filteredDevices: TListVElectrDevStruct;  // Отфильтрованный список устройств
     // Вспомогательная функция для проверки соответствия путей
     // Возвращает true, если последнее слово из Str1 является последним словом в Str2
     function ProcessStrings(const Str1, Str2: string): integer;
@@ -282,7 +282,7 @@ var
   lastDeviceInLevel2: TVElectrDevStruct;  // Последнее устройство в подгруппе уровня 2
   isFirstDevice: boolean;
   isNewLevel2Group: boolean;
-  filteredDevices: TListVElectrDevStruct;  // Отфильтрованный список устройств
+
 begin
   // Получаем отфильтрованный список устройств для избежания обработки ненужных данных
   filteredDevices := GetFilteredDevicesList(filterPath);

@@ -1,0 +1,81 @@
+============================================================
+NURBS Interpolation Test: n = m + p - 1 formula
+Strategy: Fix endpoints + tangent points, solve for interior
+============================================================
+Number of fit points: 7
+m (index of last fit point): 6
+degree (p): 3
+n = m + p - 1 = 6 + 3 - 1 = 8
+Number of control points (n+1): 9
+Parameters: [0.         0.17710202 0.40286367 0.54287511 0.68288655 0.82289798
+ 1.        ]
+Knot vector (length 13): [0.         0.         0.         0.         0.37428027 0.54287511
+ 0.68288655 0.83526151 0.91144899 1.         1.         1.
+ 1.        ]
+
+Fixed control points:
+  P0 = D0 = [0. 0.]
+  P1 (tangent) = [0.05903401 0.05903401]
+  P7 (tangent) = [3.94096599 0.05903401]
+  P8 = D6 = [4. 0.]
+
+Solving for interior control points:
+  Interior fit points: 5 (D1..D5)
+  Interior control points: 5 (P2..P6)
+
+Basis matrix A (shape (5, 5)):
+[[2.99661463e-01 4.00336412e-02 0.00000000e+00 0.00000000e+00
+  0.00000000e+00]
+ [4.74734504e-01 4.69052757e-01 9.73665276e-04 0.00000000e+00
+  0.00000000e+00]
+ [9.30194370e-02 7.07178227e-01 1.99802336e-01 0.00000000e+00
+  0.00000000e+00]
+ [0.00000000e+00 1.72260936e-01 6.45833786e-01 1.81905278e-01
+  0.00000000e+00]
+ [0.00000000e+00 9.20180504e-05 1.07536323e-01 6.43853925e-01
+  2.48517734e-01]]
+
+RHS b (shape (5, 2)):
+[[0.9696511  0.9696511 ]
+ [1.99673902 2.49673902]
+ [2.5        1.5       ]
+ [2.         0.5       ]
+ [3.         1.        ]]
+
+Linear system solved successfully!
+Matrix condition number: 1.41e+02
+
+Control points (9):
+  P0: (0.0000, 0.0000)
+  P1: (0.0590, 0.0590)
+  P2: (3.0864, 2.9187)
+  P3: (1.1184, 2.3735)
+  P4: (7.1170, -2.2523)
+  P5: (-15.3326, 8.4974)
+  P6: (48.7149, -17.0173)
+  P7: (3.9410, 0.0590)
+  P8: (4.0000, 0.0000)
+
+============================================================
+Verification: Evaluate curve at fit point parameters
+============================================================
+✅ p1: expected (0.00, 0.00), got (0.0000, 0.0000), error=0.00e+00
+✅ p2: expected (1.00, 1.00), got (1.0000, 1.0000), error=2.22e-16
+✅ p3: expected (2.00, 2.50), got (2.0000, 2.5000), error=4.44e-16
+✅ p4: expected (2.50, 1.50), got (2.5000, 1.5000), error=2.22e-16
+✅ p5: expected (2.00, 0.50), got (2.0000, 0.5000), error=4.44e-16
+✅ p6: expected (3.00, 1.00), got (3.0000, 1.0000), error=0.00e+00
+✅ p7: expected (4.00, 0.00), got (4.0000, 0.0000), error=0.00e+00
+
+Maximum interpolation error: 4.44e-16
+Status: ✅ PASS
+
+Plot saved to: experiments/test_issue253_9controls_v2.png
+
+============================================================
+Summary:
+  Fit points: 7
+  Control points: 9
+  Expected control points: 9 (for degree 3)
+  Max error: 4.44e-16
+============================================================

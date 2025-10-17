@@ -1,1 +1,11 @@
-/bin/bash: line 1: fpc: command not found
+Free Pascal Compiler version 3.2.2+dfsg-32 [2024/01/05] for x86_64
+Copyright (c) 1993-2021 by Florian Klaempfl and others
+Target OS: Linux for x86-64
+Compiling test_spline_interpolation.pas
+test_spline_interpolation.pas(247,21) Warning: function result variable of a managed type does not seem to be initialized
+test_spline_interpolation.pas(230,35) Note: Local variable "j" not used
+test_spline_interpolation.pas(233,3) Note: Local variable "u" not used
+Linking test_spline_interpolation
+411 lines compiled, 0.3 sec
+1 warning(s) issued
+2 note(s) issued

@@ -88,11 +88,11 @@ end;
 // Compute basis function N_i,p(u) using Cox-de Boor recursion formula
 function BasisFunction(i,p:integer;u:single;const knots:array of single):single;
 var
-  N:array of single;
+  BasisValues:array of single;
   j,k:integer;
   saved,temp:single;
   uleft,uright:single;
-  n:integer;
+  numCtrlPts:integer;
 begin
   // Cox-de Boor recursion formula:
   // N_i,0(u) = 1 if knots[i] <= u < knots[i+1], else 0
@@ -102,10 +102,10 @@ begin
   // Special case for clamped B-splines at the endpoint
   // For n+1 control points with degree p, the knot vector has n+p+2 elements
   // When u equals the last knot value (u=1.0 for normalized knots), only the last basis function should be non-zero
-  n:=Length(knots)-p-2;  // Number of control points minus 1
+  numCtrlPts:=Length(knots)-p-2;  // Number of control points minus 1
   if (abs(u-knots[Length(knots)-1])<1e-10) and (abs(knots[Length(knots)-1]-knots[Length(knots)-p-1])<1e-10) then begin
     // At the last knot with multiplicity p+1
-    if i=n then
+    if i=numCtrlPts then
       Result:=1.0
     else
       Result:=0.0;
@@ -125,22 +125,22 @@ begin
   end;
 
   // Use triangular table to build up from degree 0 to degree p
-  SetLength(N,p+1);
+  SetLength(BasisValues,p+1);
 
   // Initialize degree 0
   for j:=0 to p do begin
     if (u>=knots[i+j]) and (u<knots[i+j+1]) then
-      N[j]:=1.0
+      BasisValues[j]:=1.0
     else if (u=knots[i+j+1]) and (i+j=Length(knots)-2) then
-      N[j]:=1.0
+      BasisValues[j]:=1.0
     else
-      N[j]:=0.0;
+      BasisValues[j]:=0.0;
   end;
 
   // Build up to degree p
   for k:=1 to p do begin
     // Handle left end
-    if N[0]=0.0 then
+    if BasisValues[0]=0.0 then
       saved:=0.0
     else begin
       uright:=knots[i+k];
@@ -148,7 +148,7 @@ begin
       if abs(uright-uleft)<1e-10 then
         saved:=0.0
       else
-        saved:=((u-uleft)/(uright-uleft))*N[0];
+        saved:=((u-uleft)/(uright-uleft))*BasisValues[0];
     end;
 
     // Process middle terms
@@ -156,25 +156,25 @@ begin
       uleft:=knots[i+j+1];
       uright:=knots[i+j+k+1];
 
-      if N[j+1]=0.0 then begin
-        N[j]:=saved;
+      if BasisValues[j+1]=0.0 then begin
+        BasisValues[j]:=saved;
         saved:=0.0;
       end else begin
         if abs(uright-uleft)<1e-10 then
           temp:=0.0
         else
-          temp:=((uright-u)/(uright-uleft))*N[j+1];
-        N[j]:=saved+temp;
+          temp:=((uright-u)/(uright-uleft))*BasisValues[j+1];
+        BasisValues[j]:=saved+temp;
 
         if abs(knots[i+j+k+1]-knots[i+j+1])<1e-10 then
           saved:=0.0
         else
-          saved:=((u-knots[i+j+1])/(knots[i+j+k+1]-knots[i+j+1]))*N[j+1];
+          saved:=((u-knots[i+j+1])/(knots[i+j+k+1]-knots[i+j+1]))*BasisValues[j+1];
       end;
     end;
   end;
 
-  Result:=N[0];
+  Result:=BasisValues[0];
 end;
 
 // Generate parameter values using chord length parameterization

@@ -276,7 +276,7 @@ uses
   {$IFDEF WINDOWS}//uzvmodeltoxlsx,
   uzvmodeltoxlsxfps, uzvdevtoxlsx, uzvxlsxtocad,uzvelectricalexcelcom,{$ENDIF}  //запуск экспорта информации из veb модели в xlsx на OLE
 
-  command_zona, //команда addZona для работы с зонами
+  uzvcommand_space, //команда addZona для работы с зонами
   //uzvelectricalexcelcom,
   //**//
   {$ENDIF}

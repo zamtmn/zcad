@@ -52,6 +52,8 @@ type
     function CompareBySort2(const dev1, dev2: TVElectrDevStruct): Integer;
     function CompareBySort3(const dev1, dev2: TVElectrDevStruct): Integer;
     function CompareByPower(const dev1, dev2: TVElectrDevStruct): Integer;
+    function CompareBysort2name(const dev1, dev2: TVElectrDevStruct): Integer;
+    function CompareBysort3name(const dev1, dev2: TVElectrDevStruct): Integer;
     function CompareByBasename(const dev1, dev2: TVElectrDevStruct): Integer;
 
     // Цепочка сравнений для гибкой настройки сортировки
@@ -286,6 +288,8 @@ begin
       device^.Sort1 := deviceList[i].feedernum;
       device^.Sort2 := 0;
       device^.Sort3 := 0;
+      device^.Sort2name := '';
+      device^.Sort3name := '';
     end
     else if sortWord.res = 2 then
     begin
@@ -293,7 +297,10 @@ begin
       idx1 := GetDeviceIndexByName(deviceList, sortWord.NextWord1);
       device^.Sort1 := deviceList[idx1].feedernum;
       device^.Sort2 := deviceList[i].feedernum;
+      device^.Sort2name := sortWord.NextWord1;
+      deviceList.Mutable[idx1]^.Sort2name:=sortWord.NextWord1;
       device^.Sort3 := 0;
+      device^.Sort3name := '';
     end
     else if sortWord.res >= 3 then
     begin
@@ -302,7 +309,11 @@ begin
       idx2 := GetDeviceIndexByName(deviceList, sortWord.NextWord1);
       device^.Sort1 := deviceList[idx2].feedernum;
       device^.Sort2 := deviceList[idx1].feedernum;
+      device^.Sort2name := sortWord.NextWord1;
+      deviceList.Mutable[idx2]^.Sort2name:=sortWord.NextWord1;
       device^.Sort3 := deviceList[i].feedernum;
+      device^.Sort3name := sortWord.NextWord2;
+      deviceList.Mutable[idx1]^.Sort3name:=sortWord.NextWord2;
     end
     else
     begin
@@ -310,6 +321,8 @@ begin
       device^.Sort1 := 0;
       device^.Sort2 := 0;
       device^.Sort3 := 0;
+      device^.Sort2name := '';
+      device^.Sort3name := '';
     end;
   end;
 end;
@@ -390,6 +403,29 @@ begin
     Result := 0;
 end;
 
+// Сравнение устройств по полю sort2name
+// Сортировка по алфавиту (лексикографическая)
+function THierarchyBuilder.CompareBysort2name(const dev1, dev2: TVElectrDevStruct): Integer;
+begin
+  if dev1.sort2name < dev2.sort2name then
+    Result := -1
+  else if dev1.sort2name > dev2.sort2name then
+    Result := 1
+  else
+    Result := 0;
+end;
+// Сравнение устройств по полю sort3name
+// Сортировка по алфавиту (лексикографическая)
+function THierarchyBuilder.CompareBysort3name(const dev1, dev2: TVElectrDevStruct): Integer;
+begin
+  if dev1.sort3name < dev2.sort3name then
+    Result := -1
+  else if dev1.sort3name > dev2.sort3name then
+    Result := 1
+  else
+    Result := 0;
+end;
+
 // ============================================================================
 // Цепочка сравнений устройств
 // ============================================================================
@@ -419,9 +455,16 @@ begin
   Result := CompareBySort2(dev1, dev2);
   if Result <> 0 then Exit;
 
+  Result := CompareBysort2name(dev1, dev2);
+  if Result <> 0 then Exit;
+
   // Если Sort2 равны, сравниваем по Sort3
   Result := CompareBySort3(dev1, dev2);
   if Result <> 0 then Exit;
+
+  Result := CompareBysort3name(dev1, dev2);
+  if Result <> 0 then Exit;
+
 
   // Если Sort3 равны, сравниваем по power (большая мощность выше)
   Result := CompareByPower(dev1, dev2);
@@ -474,3 +517,4 @@ begin
 end;
 
 end.
+

@@ -199,6 +199,7 @@ const
 begin
   Result := (dev1.basename = dev2.basename) and
             (dev1.realname = dev2.realname) and
+            (dev1.feedernum = dev2.feedernum) and
             (Abs(dev1.power - dev2.power) < EPSILON) and
             (dev1.voltage = dev2.voltage) and
             (Abs(dev1.cosfi - dev2.cosfi) < EPSILON) and

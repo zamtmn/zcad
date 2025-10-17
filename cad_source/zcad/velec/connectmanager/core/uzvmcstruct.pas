@@ -45,7 +45,9 @@ type
     fullpathHD: string; // полный путь головного устройства
     Sort1: integer; // сортировка 1
     Sort2: integer; // сортировка 2
+    Sort2name: string; // сортировка 2 именная
     Sort3: integer; // сортировка 3
+    Sort3name: string; // сортировка 3 именная
   end;
   TListVElectrDevStruct=specialize TVector<TVElectrDevStruct>;
 

@@ -43,6 +43,11 @@ type
     // Возвращает true, если последнее слово из Str1 является последним словом в Str2
     function ProcessStrings(const Str1, Str2: string): integer;
 
+    // Получает отфильтрованный список устройств по условию filterPath
+    // filterPath - путь для фильтрации (пустая строка = вернуть все устройства)
+    // Возвращает новый список, содержащий только устройства, удовлетворяющие условию
+    function GetFilteredDevicesList(const filterPath: string): TListVElectrDevStruct;
+
     // Проверяет, имеют ли два устройства одинаковые атрибуты для группировки
     // (basename, realname, Power, Voltage, cosF, Phase)
     function DevicesHaveSameAttributes(const dev1, dev2: TVElectrDevStruct): boolean;
@@ -133,6 +138,29 @@ begin
   finally
     Parts1.Free;
     Parts2.Free;
+  end;
+end;
+
+// Получает отфильтрованный список устройств по условию filterPath
+// Создает новый список, содержащий только те устройства, для которых
+// выполняется условие: (filterPath = '') or (device.pathHD = filterPath)
+function TVstDevPopulator.GetFilteredDevicesList(const filterPath: string): TListVElectrDevStruct;
+var
+  i: integer;
+  device: TVElectrDevStruct;
+begin
+  Result := TListVElectrDevStruct.Create;
+
+  // Проходим по всем устройствам в исходном списке
+  for i := 0 to FDevicesList.Size - 1 do
+  begin
+    device := FDevicesList[i];
+
+    // Если фильтр пустой или pathHD совпадает с filterPath, добавляем устройство
+    if (filterPath = '') or (device.pathHD = filterPath) then
+    begin
+      Result.PushBack(device);
+    end;
   end;
 end;
 
@@ -254,27 +282,28 @@ var
   lastDeviceInLevel2: TVElectrDevStruct;  // Последнее устройство в подгруппе уровня 2
   isFirstDevice: boolean;
   isNewLevel2Group: boolean;
+  filteredDevices: TListVElectrDevStruct;  // Отфильтрованный список устройств
 begin
+  // Получаем отфильтрованный список устройств для избежания обработки ненужных данных
+  filteredDevices := GetFilteredDevicesList(filterPath);
   try
-    FVstDev.BeginUpdate;
     try
-      FVstDev.Clear;
+      FVstDev.BeginUpdate;
+      try
+        FVstDev.Clear;
 
-      // Инициализация переменных для отслеживания групп
-      lastFeederNum := -1;
-      Level1Node := nil;
-      Level2Node := nil;
-      isFirstDevice := True;
-      isNewLevel2Group := True;
+        // Инициализация переменных для отслеживания групп
+        lastFeederNum := -1;
+        Level1Node := nil;
+        Level2Node := nil;
+        isFirstDevice := True;
+        isNewLevel2Group := True;
 
-      // Проходим по всем устройствам в FDevicesList
-      for i := 0 to FDevicesList.Size - 1 do
-      begin
-        device := FDevicesList[i];
-
-        // Если фильтр задан, проверяем соответствие pathHD
-        if (filterPath = '') or (device.pathHD = filterPath) then
+        // Проходим только по отфильтрованным устройствам
+        for i := 0 to filteredDevices.Size - 1 do
         begin
+          device := filteredDevices[i];
+
           deepConnectDev := ProcessStrings(filterPath, device.fullpathHD);
           if (deepConnectDev = 0) then
             groupDev := device;
@@ -304,16 +333,19 @@ begin
           // Создаём узел отдельного устройства под подгруппой уровня 2
           CreateDeviceNode(Level2Node, device);
         end;
-      end;
 
-      // Разворачиваем все группы для удобства просмотра
-      FVstDev.FullExpand;
-    finally
-      FVstDev.EndUpdate;
+        // Разворачиваем все группы для удобства просмотра
+        FVstDev.FullExpand;
+      finally
+        FVstDev.EndUpdate;
+      end;
+    except
+      on E: Exception do
+        raise Exception.Create('Ошибка загрузки данных: ' + E.Message);
     end;
-  except
-    on E: Exception do
-      raise Exception.Create('Ошибка загрузки данных: ' + E.Message);
+  finally
+    // Освобождаем отфильтрованный список
+    filteredDevices.Free;
   end;
 end;
 

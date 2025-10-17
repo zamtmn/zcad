@@ -91,7 +91,7 @@ var
   dc: TDrawContext;
   vertexCount: integer;
   i: integer;
-  pPath: PGDBPolyline2DArray;
+  pathData: GDBPolyline2DArray;
   v2d: GDBVertex2D;
 begin
   if spaceData = nil then
@@ -129,14 +129,15 @@ begin
 
       // Create new path from polyline vertices
       // Создаем новый путь из вершин полилинии
-      pPath := phatch^.Path.AddPolylinePath;
-      pPath^.init(vertexCount);
+      pathData.init(vertexCount, True);
 
       for i := 0 to vertexCount - 1 do begin
         v2d.x := PGDBVertex(pline^.VertexArrayInOCS.getData(i))^.x;
         v2d.y := PGDBVertex(pline^.VertexArrayInOCS.getData(i))^.y;
-        pPath^.PushBackData(v2d);
+        pathData.PushBackData(v2d);
       end;
+
+      phatch^.Path.paths.PushBackData(pathData);
 
       // Set hatch properties: solid fill, light blue color with transparency
       // Устанавливаем свойства штриховки: сплошная заливка, светло-голубой цвет с прозрачностью

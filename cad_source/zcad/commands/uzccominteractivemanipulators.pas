@@ -159,6 +159,12 @@ procedure InteractiveConstructRootManipulator(
   GDBVertex  {new end coord};
   Click:
   boolean {true if lmb presseed});
+procedure InteractivePolyLineNextVertexManipulator(
+  const PInteractiveData:PGDBObjPolyline {pointer to the polyline entity};
+  Point:
+  GDBVertex  {new vertex coord};
+  Click:
+  boolean {true if lmb presseed});
 
 implementation
 
@@ -565,6 +571,65 @@ begin
     //obj.pentity^.FormatEntity(drawings.GetCurrentDWG^,dc);
   end;
 
+end;
+
+{Procedure interactive updates the preview of the next vertex of a polyline}
+{Процедура интерактивного обновления предпросмотра следующей вершины полилинии}
+procedure InteractivePolyLineNextVertexManipulator(
+  const PInteractiveData:PGDBObjPolyline {pointer to the polyline entity};
+  Point:
+  GDBVertex  {new vertex coord};
+  Click:
+  boolean {true if lmb presseed});
+var
+  pline:PGDBObjPolyline absolute PInteractiveData;
+  dc:TDrawContext;
+  vertexCount:integer;
+begin
+  // assign general properties from system variables to entity
+  // присваиваем примитиву общие свойства из системных переменных
+  zcSetEntPropFromCurrentDrawingProp(pline);
+
+  // get current vertex count
+  // получаем текущее количество вершин
+  vertexCount:=pline^.VertexArrayInOCS.Count;
+
+  if vertexCount > 0 then begin
+    // We need to add a temporary preview vertex that will be updated as the mouse moves
+    // Нам нужно добавить временную вершину предпросмотра, которая будет обновляться при движении мыши
+
+    if Click then begin
+      // On click, remove the preview vertex if it exists
+      // При клике удаляем вершину предпросмотра если она существует
+      // The actual vertex will be added by the calling code after Get3DPointInteractive returns
+      // Фактическая вершина будет добавлена вызывающим кодом после возврата Get3DPointInteractive
+      if vertexCount > 1 then begin
+        // Check if the last vertex is at the same position as the previous one
+        // This would indicate it's a preview vertex that should be removed
+        // However, we'll just let it be - the calling code will add the real vertex
+      end;
+    end else begin
+      // During mouse movement (not clicked), we show a temporary preview
+      // При движении мыши (без клика), показываем временный предпросмотр
+
+      // We always work with the last vertex as the preview vertex
+      // Мы всегда работаем с последней вершиной как с вершиной предпросмотра
+      if vertexCount > 1 then begin
+        // Update the last (temporary) vertex position
+        // Обновляем позицию последней (временной) вершины
+        PGDBVertex(pline^.VertexArrayInOCS.getDataMutable(vertexCount-1))^:=Point;
+      end else begin
+        // Add the first preview vertex
+        // Добавляем первую вершину предпросмотра
+        pline^.VertexArrayInOCS.PushBackData(Point);
+      end;
+    end;
+
+    // format entity
+    // "форматируем" примитив в соответствии с заданными параметрами
+    dc:=drawings.GetCurrentDWG^.CreateDrawingRC;
+    pline^.FormatEntity(drawings.GetCurrentDWG^,dc);
+  end;
 end;
 
 

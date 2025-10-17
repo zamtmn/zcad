@@ -27,6 +27,10 @@ uses
   uzcinterface, uzvmcstruct;
 
 type
+  // Тип функции сравнения устройств
+  // Возвращает: -1 если dev1 < dev2, 0 если dev1 = dev2, 1 если dev1 > dev2
+  TDeviceCompareFunc = function(const dev1, dev2: TVElectrDevStruct): Integer;
+
   THierarchyBuilder = class
   private
     type
@@ -41,6 +45,16 @@ type
     function FindOnlyHDHierarchy(const deviceList: TListVElectrDevStruct; const nodeName: string; var hierarchy: string): Boolean;
     function ProcessStrings(const Str1, Str2: string): TSortDev;
     function GetDeviceIndexByName(const deviceList: TListVElectrDevStruct; const ADevName: string): Integer;
+
+    // Функции сравнения для отдельных полей
+    function CompareByPathHD(const dev1, dev2: TVElectrDevStruct): Integer;
+    function CompareBySort1(const dev1, dev2: TVElectrDevStruct): Integer;
+    function CompareBySort2(const dev1, dev2: TVElectrDevStruct): Integer;
+    function CompareBySort3(const dev1, dev2: TVElectrDevStruct): Integer;
+
+    // Цепочка сравнений для гибкой настройки сортировки
+    function CompareDevices(const dev1, dev2: TVElectrDevStruct): Integer;
+
   public
     constructor Create;
     destructor Destroy; override;
@@ -298,49 +312,120 @@ begin
   end;
 end;
 
+// ============================================================================
+// Функции сравнения для отдельных полей устройства
+// ============================================================================
+
+// Сравнение устройств по полю pathHD (путь головного устройства)
+// Сортировка по алфавиту (лексикографическая)
+function THierarchyBuilder.CompareByPathHD(const dev1, dev2: TVElectrDevStruct): Integer;
+begin
+  if dev1.pathHD < dev2.pathHD then
+    Result := -1
+  else if dev1.pathHD > dev2.pathHD then
+    Result := 1
+  else
+    Result := 0;
+end;
+
+// Сравнение устройств по полю Sort1 (первичная сортировка по номеру)
+// Сортировка по возрастанию
+function THierarchyBuilder.CompareBySort1(const dev1, dev2: TVElectrDevStruct): Integer;
+begin
+  if dev1.Sort1 < dev2.Sort1 then
+    Result := -1
+  else if dev1.Sort1 > dev2.Sort1 then
+    Result := 1
+  else
+    Result := 0;
+end;
+
+// Сравнение устройств по полю Sort2 (вторичная сортировка по номеру)
+// Сортировка по возрастанию
+function THierarchyBuilder.CompareBySort2(const dev1, dev2: TVElectrDevStruct): Integer;
+begin
+  if dev1.Sort2 < dev2.Sort2 then
+    Result := -1
+  else if dev1.Sort2 > dev2.Sort2 then
+    Result := 1
+  else
+    Result := 0;
+end;
+
+// Сравнение устройств по полю Sort3 (третичная сортировка по номеру)
+// Сортировка по возрастанию
+function THierarchyBuilder.CompareBySort3(const dev1, dev2: TVElectrDevStruct): Integer;
+begin
+  if dev1.Sort3 < dev2.Sort3 then
+    Result := -1
+  else if dev1.Sort3 > dev2.Sort3 then
+    Result := 1
+  else
+    Result := 0;
+end;
+
+// ============================================================================
+// Цепочка сравнений устройств
+// ============================================================================
+
+// Комплексное сравнение устройств по всем критериям в заданном порядке
+// Порядок сравнения:
+// 1. По полю pathHD (по алфавиту)
+// 2. По полю Sort1 (по возрастанию)
+// 3. По полю Sort2 (по возрастанию)
+// 4. По полю Sort3 (по возрастанию)
+//
+// Эта функция обеспечивает гибкость для будущих расширений:
+// можно легко добавить новые критерии сортировки или изменить их порядок
+function THierarchyBuilder.CompareDevices(const dev1, dev2: TVElectrDevStruct): Integer;
+begin
+  // Сначала сравниваем по pathHD
+  Result := CompareByPathHD(dev1, dev2);
+  if Result <> 0 then Exit;
+
+  // Если pathHD равны, сравниваем по Sort1
+  Result := CompareBySort1(dev1, dev2);
+  if Result <> 0 then Exit;
+
+  // Если Sort1 равны, сравниваем по Sort2
+  Result := CompareBySort2(dev1, dev2);
+  if Result <> 0 then Exit;
+
+  // Если Sort2 равны, сравниваем по Sort3
+  Result := CompareBySort3(dev1, dev2);
+end;
+
+// ============================================================================
+// Процедура сортировки списка устройств
+// ============================================================================
+
 // Функция сортировки списка устройств по заданным критериям
 // Сортировка выполняется по порядку:
 // 1. По полю pathHD (по алфавиту)
 // 2. По полю Sort1 (по возрастанию)
 // 3. По полю Sort2 (по возрастанию)
 // 4. По полю Sort3 (по возрастанию)
+//
+// Для добавления новых критериев сортировки:
+// - Добавьте новую функцию сравнения (например, CompareByFieldName)
+// - Добавьте вызов этой функции в цепочку сравнений в CompareDevices
 procedure THierarchyBuilder.SortDeviceList(var deviceList: TListVElectrDevStruct);
 var
   i, j: Integer;
   temp: TVElectrDevStruct;
-  needSwap: Boolean;
+  compareResult: Integer;
 begin
   // Реализация пузырьковой сортировки для стабильности результатов
   for i := 0 to deviceList.Size - 2 do
   begin
     for j := 0 to deviceList.Size - i - 2 do
     begin
-      needSwap := False;
+      // Используем функцию CompareDevices для комплексного сравнения
+      // Результат: -1 если [j] < [j+1], 0 если равны, 1 если [j] > [j+1]
+      compareResult := CompareDevices(deviceList[j], deviceList[j + 1]);
 
-      // Сначала сравниваем по pathHD (по алфавиту)
-      if deviceList[j].pathHD > deviceList[j + 1].pathHD then
-        needSwap := True
-      else if deviceList[j].pathHD = deviceList[j + 1].pathHD then
-      begin
-        // Если pathHD равны, сравниваем по Sort1
-        if deviceList[j].Sort1 > deviceList[j + 1].Sort1 then
-          needSwap := True
-        else if deviceList[j].Sort1 = deviceList[j + 1].Sort1 then
-        begin
-          // Если Sort1 равны, сравниваем по Sort2
-          if deviceList[j].Sort2 > deviceList[j + 1].Sort2 then
-            needSwap := True
-          else if deviceList[j].Sort2 = deviceList[j + 1].Sort2 then
-          begin
-            // Если Sort2 равны, сравниваем по Sort3
-            if deviceList[j].Sort3 > deviceList[j + 1].Sort3 then
-              needSwap := True;
-          end;
-        end;
-      end;
-
-      // Выполняем обмен элементов, если нужно
-      if needSwap then
+      // Если текущий элемент больше следующего, меняем их местами
+      if compareResult > 0 then
       begin
         temp := deviceList[j];
         deviceList.Mutable[j]^ := deviceList[j + 1];

@@ -125,3 +125,46 @@ The refactored code maintains the same sorting behavior as the original implemen
 4. Sort3 (numerically ascending)
 
 No functional changes were made, only structural improvements.
+
+## Additional Sorting Criteria (Added Later)
+
+Following the initial refactoring, two additional sorting criteria were added as requested:
+
+### 5. CompareByPower - Sort by Power (Descending)
+```pascal
+function THierarchyBuilder.CompareByPower(const dev1, dev2: TVElectrDevStruct): Integer;
+begin
+  if dev1.power > dev2.power then
+    Result := -1  // Higher power comes first
+  else if dev1.power < dev2.power then
+    Result := 1
+  else
+    Result := 0;
+end;
+```
+This comparison sorts devices by power in descending order - devices with higher power values are positioned higher in the list.
+
+### 6. CompareByBasename - Sort by Basename (Alphabetical)
+```pascal
+function THierarchyBuilder.CompareByBasename(const dev1, dev2: TVElectrDevStruct): Integer;
+begin
+  if dev1.basename < dev2.basename then
+    Result := -1
+  else if dev1.basename > dev2.basename then
+    Result := 1
+  else
+    Result := 0;
+end;
+```
+This comparison sorts devices by their basename field in alphabetical (lexicographic) order.
+
+### Updated Sorting Order
+The complete sorting order is now:
+1. pathHD (alphabetically)
+2. Sort1 (numerically ascending)
+3. Sort2 (numerically ascending)
+4. Sort3 (numerically ascending)
+5. power (numerically descending - higher values first)
+6. basename (alphabetically)
+
+These criteria were added to the end of the comparison chain in the `CompareDevices` function, allowing more flexible and detailed sorting of devices.

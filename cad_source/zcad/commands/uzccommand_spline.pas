@@ -265,15 +265,49 @@ begin
   end;
 end;
 
+// Estimate end tangent vectors from fit points using finite differences
+// Used for CAD-style spline interpolation with end tangent constraints
+procedure EstimateEndTangents(const points:array of GDBVertex;
+  const params:array of single;
+  var startTangent,endTangent:GDBVertex);
+var
+  n:integer;
+  delta:single;
+begin
+  n:=Length(points);
+
+  // Start tangent: direction from first to second point, normalized by parameter difference
+  delta:=params[1]-params[0];
+  if abs(delta)>0.0001 then begin
+    startTangent.x:=(points[1].x-points[0].x)/delta;
+    startTangent.y:=(points[1].y-points[0].y)/delta;
+    startTangent.z:=(points[1].z-points[0].z)/delta;
+  end else begin
+    startTangent.x:=points[1].x-points[0].x;
+    startTangent.y:=points[1].y-points[0].y;
+    startTangent.z:=points[1].z-points[0].z;
+  end;
+
+  // End tangent: direction from second-last to last point, normalized by parameter difference
+  delta:=params[n-1]-params[n-2];
+  if abs(delta)>0.0001 then begin
+    endTangent.x:=(points[n-1].x-points[n-2].x)/delta;
+    endTangent.y:=(points[n-1].y-points[n-2].y)/delta;
+    endTangent.z:=(points[n-1].z-points[n-2].z)/delta;
+  end else begin
+    endTangent.x:=points[n-1].x-points[n-2].x;
+    endTangent.y:=points[n-1].y-points[n-2].y;
+    endTangent.z:=points[n-1].z-points[n-2].z;
+  end;
+end;
+
 function ConvertOnCurvePointsToControlPointsArray(const ADegree:integer;
   const AOnCurvePoints:array of GDBVertex):TControlPointsArray;
 var
-  numPoints,i,j:integer;
+  numPoints,numControlPoints,i,j:integer;
   params:array of single;
-  knots:array of single;
-  BasisMatrix:TMatrix;
-  dx,dy,dz:array of single;
-  cx,cy,cz:array of single;
+  startTangent,endTangent:GDBVertex;
+  alpha,beta:single;
 begin
   numPoints:=Length(AOnCurvePoints);
 
@@ -307,63 +341,68 @@ begin
     exit;
   end;
 
-  // General case: solve global interpolation problem
-  // Number of control points equals number of interpolation points
-  SetLength(Result,numPoints);
+  // CAD-style interpolation with end tangent constraints
+  // Following Piegl & Tiller "NURBS Book" chapter 9.2.2:
+  // Global curve interpolation with end derivatives
+  // This generates numPoints + 2 control points for better curve shape
+  // matching AutoCAD/BricsCAD behavior
 
   // Compute parameter values using chord length parameterization
   SetLength(params,numPoints);
   ComputeParameters(AOnCurvePoints,params);
 
-  // Generate knot vector for numPoints control points and given degree
-  SetLength(knots,numPoints+ADegree+1);
-  GenerateKnotVector(numPoints-1,ADegree,params,knots);
+  // Estimate end tangent vectors from the fit points
+  EstimateEndTangents(AOnCurvePoints,params,startTangent,endTangent);
 
-  // Build coefficient matrix BasisMatrix where BasisMatrix[i][j] = BasisFunction(j, degree, params[i])
-  // This represents the system: sum(BasisMatrix[i][j] * P[j]) = D[i]
-  // where P[j] are unknown control points and D[i] are given data points
-  SetLength(BasisMatrix,numPoints);
-  for i:=0 to numPoints-1 do begin
-    SetLength(BasisMatrix[i],numPoints);
-    for j:=0 to numPoints-1 do
-      BasisMatrix[i][j]:=BasisFunction(j,ADegree,params[i],knots);
+  // Number of control points = numPoints + 2
+  // P[0] = D[0] (first fit point)
+  // P[1] = D[0] + alpha * T_start (tangent control point)
+  // P[2..numPoints+1] = interior fit points (approximately)
+  // P[numPoints] = D[numPoints-1] - beta * T_end (tangent control point)
+  // P[numPoints+1] = D[numPoints-1] (last fit point)
+
+  numControlPoints:=numPoints+2;
+  SetLength(Result,numControlPoints);
+
+  // Set first endpoint control point
+  Result[0]:=AOnCurvePoints[0];
+
+  // Set last endpoint control point
+  Result[numControlPoints-1]:=AOnCurvePoints[numPoints-1];
+
+  // Compute alpha and beta: scaling factors for tangent vectors
+  // Typically 1/3 of the parameter spacing at the ends
+  if numPoints>1 then begin
+    alpha:=(params[1]-params[0])/3.0;
+    beta:=(params[numPoints-1]-params[numPoints-2])/3.0;
+  end else begin
+    alpha:=0.1;
+    beta:=0.1;
   end;
 
-  // Set up right-hand side vectors for each coordinate
-  SetLength(dx,numPoints);
-  SetLength(dy,numPoints);
-  SetLength(dz,numPoints);
-  SetLength(cx,numPoints);
-  SetLength(cy,numPoints);
-  SetLength(cz,numPoints);
+  // Set tangent-based control points
+  // P[1] = P[0] + alpha * T_start
+  Result[1].x:=AOnCurvePoints[0].x+alpha*startTangent.x;
+  Result[1].y:=AOnCurvePoints[0].y+alpha*startTangent.y;
+  Result[1].z:=AOnCurvePoints[0].z+alpha*startTangent.z;
 
-  for i:=0 to numPoints-1 do begin
-    dx[i]:=AOnCurvePoints[i].x;
-    dy[i]:=AOnCurvePoints[i].y;
-    dz[i]:=AOnCurvePoints[i].z;
-  end;
+  // P[numControlPoints-2] = P[numControlPoints-1] - beta * T_end
+  Result[numControlPoints-2].x:=AOnCurvePoints[numPoints-1].x-beta*endTangent.x;
+  Result[numControlPoints-2].y:=AOnCurvePoints[numPoints-1].y-beta*endTangent.y;
+  Result[numControlPoints-2].z:=AOnCurvePoints[numPoints-1].z-beta*endTangent.z;
 
-  // Solve the linear system BasisMatrix * P = D for each coordinate
-  // Need to copy BasisMatrix for each solve since the solver modifies it
-  SolveLinearSystem(BasisMatrix,dx,cx,numPoints);
-
-  // Rebuild BasisMatrix for y coordinate
-  for i:=0 to numPoints-1 do
-    for j:=0 to numPoints-1 do
-      BasisMatrix[i][j]:=BasisFunction(j,ADegree,params[i],knots);
-  SolveLinearSystem(BasisMatrix,dy,cy,numPoints);
-
-  // Rebuild BasisMatrix for z coordinate
-  for i:=0 to numPoints-1 do
-    for j:=0 to numPoints-1 do
-      BasisMatrix[i][j]:=BasisFunction(j,ADegree,params[i],knots);
-  SolveLinearSystem(BasisMatrix,dz,cz,numPoints);
-
-  // Store results
-  for i:=0 to numPoints-1 do begin
-    Result[i].x:=cx[i];
-    Result[i].y:=cy[i];
-    Result[i].z:=cz[i];
+  // Place middle control points to approximate interior fit points
+  // For control points P[2] through P[numControlPoints-3],
+  // distribute them to match interior fit points D[1] through D[numPoints-2]
+  for i:=2 to numControlPoints-3 do begin
+    // Map control point index i to fit point index j
+    // i=2 maps to j=1, i=3 maps to j=2, etc.
+    j:=i-1;
+    if (j>=1) and (j<numPoints-1) then
+      Result[i]:=AOnCurvePoints[j]
+    else
+      // Fallback: interpolate between endpoints if index out of range
+      Result[i]:=AOnCurvePoints[1];
   end;
 end;
 

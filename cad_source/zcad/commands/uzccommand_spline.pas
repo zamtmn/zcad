@@ -284,10 +284,11 @@ var
   x_x,x_y,x_z:TSingleArray;
   basis:single;
 begin
-  // STANDARD B-spline Global Interpolation Algorithm
-  // Based on "The NURBS Book" by Piegl & Tiller, Algorithm A9.1
-  // For m+1 fit/data points with degree p: use n=m control points (same number)
-  // This produces a B-spline that passes exactly through all fit points
+  // B-spline Global Interpolation with End Conditions
+  // Based on "The NURBS Book" by Piegl & Tiller
+  // For m+1 fit/data points with degree p:
+  // Number of control points: n = m + p - 1, so n+1 = m + p control points
+  // For 7 fit points (m=6) with degree 3: n = 6 + 3 - 1 = 8, so 9 control points
 
   numPoints:=Length(AOnCurvePoints);
 
@@ -334,12 +335,13 @@ begin
     exit;
   end;
 
-  // STANDARD B-spline interpolation:
-  // For m+1 fit points (indexed 0 to m): generate n+1 = m+1 control points (n = m)
+  // B-spline interpolation with end conditions:
+  // For m+1 fit points (indexed 0 to m): generate n+1 control points
+  // Formula: n = m + p - 1, so n+1 = m + p control points
   // m is the index of the last fit point
   m:=numPoints-1;
-  n:=m;  // STANDARD: n = m (same number of control points as fit points)
-  numControlPoints:=n+1;
+  n:=m+ADegree-1;  // n = m + p - 1
+  numControlPoints:=n+1;  // n+1 = m + p control points
   SetLength(Result,numControlPoints);
 
   // Step 1: Compute parameter values using chord length parameterization
@@ -357,44 +359,106 @@ begin
   for i:=0 to Length(knots)-1 do
     AKnots[i]:=knots[i];
 
-  // Step 3: Build basis matrix N where N[k,i] = BasisFunction(i,ADegree,params[k],knots)
-  // This is a square (m+1) x (n+1) matrix since n=m
-  SetLength(A,numPoints);
-  for k:=0 to numPoints-1 do
-    SetLength(A[k],numControlPoints);
+  // Step 3: Build system with endpoint constraints
+  // For n+1 control points and m+1 fit points where n = m + p - 1:
+  // Strategy: Fix endpoint control points and use interior fit points plus end conditions
+  //
+  // For degree 3 with 7 fit points (m=6):
+  // - 9 control points (n=8): P0, P1, P2, P3, P4, P5, P6, P7, P8
+  // - Fix P0 = D0 and P8 = D6
+  // - Fix P1 and P7 using tangent constraints at endpoints
+  // - Solve for P2..P6 (5 unknowns) using D1..D5 (5 interior fit points)
 
-  for k:=0 to numPoints-1 do begin
-    for i:=0 to numControlPoints-1 do begin
-      A[k][i]:=BasisFunction(i,ADegree,params[k],knots);
+  // Set endpoint control points
+  Result[0]:=AOnCurvePoints[0];
+  Result[numControlPoints-1]:=AOnCurvePoints[numPoints-1];
+
+  // Set P1 and P(n-1) using tangent estimates
+  // Tangent at start: approximate using first two fit points
+  // P1 = P0 + alpha * (D1 - D0) where alpha is based on parameterization
+  if numPoints>1 then begin
+    u:=params[1]/3.0;  // Use 1/3 of the parameter interval
+    Result[1].x:=Result[0].x + u*(AOnCurvePoints[1].x - AOnCurvePoints[0].x);
+    Result[1].y:=Result[0].y + u*(AOnCurvePoints[1].y - AOnCurvePoints[0].y);
+    Result[1].z:=Result[0].z + u*(AOnCurvePoints[1].z - AOnCurvePoints[0].z);
+
+    // Tangent at end: approximate using last two fit points
+    // P(n-1) = Pn - beta * (Dm - D(m-1))
+    u:=(1.0-params[numPoints-2])/3.0;
+    Result[numControlPoints-2].x:=Result[numControlPoints-1].x - u*(AOnCurvePoints[numPoints-1].x - AOnCurvePoints[numPoints-2].x);
+    Result[numControlPoints-2].y:=Result[numControlPoints-1].y - u*(AOnCurvePoints[numPoints-1].y - AOnCurvePoints[numPoints-2].y);
+    Result[numControlPoints-2].z:=Result[numControlPoints-1].z - u*(AOnCurvePoints[numPoints-1].z - AOnCurvePoints[numPoints-2].z);
+  end;
+
+  // Now solve for interior control points P2..P(n-2) using interior fit points D1..D(m-1)
+  // Number of unknowns: numControlPoints - 4 (exclude P0, P1, P(n-1), Pn)
+  // Number of equations: numPoints - 2 (interior fit points D1..D(m-1))
+  // For 7 fit points: 5 equations, 5 unknowns (P2, P3, P4, P5, P6)
+
+  if numPoints>2 then begin
+    SetLength(A,numPoints-2);
+    for k:=0 to numPoints-3 do
+      SetLength(A[k],numControlPoints-4);
+
+    SetLength(b_x,numPoints-2);
+    SetLength(b_y,numPoints-2);
+    SetLength(b_z,numPoints-2);
+    SetLength(x_x,numControlPoints-4);
+    SetLength(x_y,numControlPoints-4);
+    SetLength(x_z,numControlPoints-4);
+
+    // Build system using interior fit points D1..D(m-1)
+    for k:=0 to numPoints-3 do begin
+      // Fit point index: k+1 (interior points)
+      i:=k+1;
+
+      // Right-hand side: fit point minus contributions from fixed control points
+      b_x[k]:=AOnCurvePoints[i].x;
+      b_y[k]:=AOnCurvePoints[i].y;
+      b_z[k]:=AOnCurvePoints[i].z;
+
+      // Subtract contribution from P0
+      basis:=BasisFunction(0,ADegree,params[i],knots);
+      b_x[k]:=b_x[k] - basis*Result[0].x;
+      b_y[k]:=b_y[k] - basis*Result[0].y;
+      b_z[k]:=b_z[k] - basis*Result[0].z;
+
+      // Subtract contribution from P1
+      basis:=BasisFunction(1,ADegree,params[i],knots);
+      b_x[k]:=b_x[k] - basis*Result[1].x;
+      b_y[k]:=b_y[k] - basis*Result[1].y;
+      b_z[k]:=b_z[k] - basis*Result[1].z;
+
+      // Subtract contribution from P(n-1)
+      basis:=BasisFunction(numControlPoints-2,ADegree,params[i],knots);
+      b_x[k]:=b_x[k] - basis*Result[numControlPoints-2].x;
+      b_y[k]:=b_y[k] - basis*Result[numControlPoints-2].y;
+      b_z[k]:=b_z[k] - basis*Result[numControlPoints-2].z;
+
+      // Subtract contribution from Pn
+      basis:=BasisFunction(numControlPoints-1,ADegree,params[i],knots);
+      b_x[k]:=b_x[k] - basis*Result[numControlPoints-1].x;
+      b_y[k]:=b_y[k] - basis*Result[numControlPoints-1].y;
+      b_z[k]:=b_z[k] - basis*Result[numControlPoints-1].z;
+
+      // Matrix for interior control points P2..P(n-2)
+      for j:=0 to numControlPoints-5 do begin
+        // Control point index: j+2 (P2, P3, ..., P(n-2))
+        A[k][j]:=BasisFunction(j+2,ADegree,params[i],knots);
+      end;
     end;
-  end;
 
-  // Step 4: Solve linear system N * P = D for control points P
-  // Solve separately for each coordinate (x, y, z)
-  SetLength(b_x,numPoints);
-  SetLength(b_y,numPoints);
-  SetLength(b_z,numPoints);
-  SetLength(x_x,numControlPoints);
-  SetLength(x_y,numControlPoints);
-  SetLength(x_z,numControlPoints);
+    // Solve the linear system
+    SolveLinearSystem(A,b_x,x_x,numControlPoints-4);
+    SolveLinearSystem(A,b_y,x_y,numControlPoints-4);
+    SolveLinearSystem(A,b_z,x_z,numControlPoints-4);
 
-  // Fill right-hand side with fit point coordinates
-  for i:=0 to numPoints-1 do begin
-    b_x[i]:=AOnCurvePoints[i].x;
-    b_y[i]:=AOnCurvePoints[i].y;
-    b_z[i]:=AOnCurvePoints[i].z;
-  end;
-
-  // Solve the linear system for each dimension
-  SolveLinearSystem(A,b_x,x_x,numControlPoints);
-  SolveLinearSystem(A,b_y,x_y,numControlPoints);
-  SolveLinearSystem(A,b_z,x_z,numControlPoints);
-
-  // Store results in control points array
-  for i:=0 to numControlPoints-1 do begin
-    Result[i].x:=x_x[i];
-    Result[i].y:=x_y[i];
-    Result[i].z:=x_z[i];
+    // Store results in control points array
+    for i:=0 to numControlPoints-5 do begin
+      Result[i+2].x:=x_x[i];
+      Result[i+2].y:=x_y[i];
+      Result[i+2].z:=x_z[i];
+    end;
   end;
 end;
 

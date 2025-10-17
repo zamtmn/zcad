@@ -70,6 +70,29 @@ type
     // Заполняет данные узла устройства
     procedure FillDeviceNodeData(Node: PVirtualNode; const device: TVElectrDevStruct);
 
+    // Определяет groupDev для устройства на основе filterPath
+    // Возвращает само устройство если deepConnectDev = 0, иначе возвращает переданный groupDev
+    function GetGroupDeviceForCurrentDevice(const device: TVElectrDevStruct; const filterPath: string; const currentGroupDev: TVElectrDevStruct): TVElectrDevStruct;
+
+    // Проверяет, нужно ли создать новый узел Level 1 для устройства
+    function ShouldCreateNewLevel1Node(const groupDev: TVElectrDevStruct; lastFeederNum: integer; isFirstDevice: boolean): boolean;
+
+    // Определяет, нужно ли создавать группу Level 2 для текущего устройства
+    // Проверяет совпадение атрибутов с следующим устройством
+    function ShouldCreateLevel2Group(const device: TVElectrDevStruct; const groupDev: TVElectrDevStruct;
+                                      hasNextDevice: boolean; const nextDevice: TVElectrDevStruct;
+                                      const nextGroupDev: TVElectrDevStruct): boolean;
+
+    // Обрабатывает устройство с созданием/использованием группы Level 2
+    procedure ProcessDeviceWithLevel2Group(const device: TVElectrDevStruct; Level1Node: PVirtualNode;
+                                            var Level2Node: PVirtualNode; var inLevel2Group: boolean;
+                                            var lastDeviceInLevel2: TVElectrDevStruct);
+
+    // Обрабатывает устройство без группы Level 2 (добавляет напрямую в Level 1 или завершает Level 2 группу)
+    procedure ProcessDeviceWithoutLevel2Group(const device: TVElectrDevStruct; Level1Node: PVirtualNode;
+                                               Level2Node: PVirtualNode; inLevel2Group: boolean;
+                                               const lastDeviceInLevel2: TVElectrDevStruct);
+
   public
     // Конструктор класса
     // AVstDev - виртуальное дерево для заполнения
@@ -266,6 +289,78 @@ begin
   NodeData^.FullPathHD := device.fullpathHD;
 end;
 
+// Определяет groupDev для устройства на основе filterPath
+// Если deepConnectDev = 0, возвращает само устройство, иначе - currentGroupDev
+function TVstDevPopulator.GetGroupDeviceForCurrentDevice(const device: TVElectrDevStruct;
+  const filterPath: string; const currentGroupDev: TVElectrDevStruct): TVElectrDevStruct;
+begin
+  deepConnectDev := ProcessStrings(filterPath, device.fullpathHD);
+  if deepConnectDev = 0 then
+    Result := device
+  else
+    Result := currentGroupDev;
+end;
+
+// Проверяет, нужно ли создать новый узел Level 1 для устройства
+function TVstDevPopulator.ShouldCreateNewLevel1Node(const groupDev: TVElectrDevStruct;
+  lastFeederNum: integer; isFirstDevice: boolean): boolean;
+begin
+  Result := isFirstDevice or (groupDev.feedernum <> lastFeederNum);
+end;
+
+// Определяет, нужно ли создавать группу Level 2 для текущего устройства
+// Проверяет совпадение атрибутов с следующим устройством
+function TVstDevPopulator.ShouldCreateLevel2Group(const device: TVElectrDevStruct;
+  const groupDev: TVElectrDevStruct; hasNextDevice: boolean; const nextDevice: TVElectrDevStruct;
+  const nextGroupDev: TVElectrDevStruct): boolean;
+begin
+  Result := False;
+
+  if not hasNextDevice then
+    Exit;
+
+  // Проверяем, находятся ли устройства в одной группе Level 1 и имеют одинаковые атрибуты
+  Result := (groupDev.feedernum = nextGroupDev.feedernum) and
+            DevicesHaveSameAttributes(device, nextDevice);
+end;
+
+// Обрабатывает устройство с созданием/использованием группы Level 2
+procedure TVstDevPopulator.ProcessDeviceWithLevel2Group(const device: TVElectrDevStruct;
+  Level1Node: PVirtualNode; var Level2Node: PVirtualNode; var inLevel2Group: boolean;
+  var lastDeviceInLevel2: TVElectrDevStruct);
+begin
+  // Создаем новую группу Level 2, если не находимся в режиме группировки
+  // или если атрибуты изменились с предыдущей группы
+  if not inLevel2Group or not DevicesHaveSameAttributes(device, lastDeviceInLevel2) then
+  begin
+    Level2Node := CreateDeviceGroupNode(Level1Node, device);
+    inLevel2Group := True;
+  end;
+
+  // Добавляем устройство в группу Level 2
+  CreateDeviceNode(Level2Node, device);
+  lastDeviceInLevel2 := device;
+end;
+
+// Обрабатывает устройство без группы Level 2
+// Либо завершает текущую Level 2 группу, либо добавляет устройство напрямую в Level 1
+procedure TVstDevPopulator.ProcessDeviceWithoutLevel2Group(const device: TVElectrDevStruct;
+  Level1Node: PVirtualNode; Level2Node: PVirtualNode; inLevel2Group: boolean;
+  const lastDeviceInLevel2: TVElectrDevStruct);
+begin
+  // Проверяем, находимся ли в режиме группировки с предыдущими устройствами
+  if inLevel2Group and DevicesHaveSameAttributes(device, lastDeviceInLevel2) then
+  begin
+    // Это последнее устройство в текущей группе Level 2
+    CreateDeviceNode(Level2Node, device);
+  end
+  else
+  begin
+    // Одиночное устройство - добавляем напрямую в Level 1
+    CreateDeviceNode(Level1Node, device);
+  end;
+end;
+
 // Основной метод для заполнения дерева устройств
 // Создает 2-уровневую иерархию:
 // Уровень 1: группы по feedernum
@@ -286,7 +381,6 @@ var
   isFirstDevice: boolean;
   inLevel2Group: boolean;          // Флаг: находимся ли в режиме группировки уровня 2
   hasNextDevice: boolean;
-  shouldCreateLevel2: boolean;
 
 begin
   // Получаем отфильтрованный список устройств для избежания обработки ненужных данных
@@ -309,12 +403,11 @@ begin
         begin
           device := filteredDevices[i];
 
-          deepConnectDev := ProcessStrings(filterPath, device.fullpathHD);
-          if (deepConnectDev = 0) then
-            groupDev := device;
+          // Определяем groupDev для текущего устройства
+          groupDev := GetGroupDeviceForCurrentDevice(device, filterPath, groupDev);
 
           // Проверяем, нужно ли создать новый узел уровня 1 (по feedernum)
-          if isFirstDevice or (groupDev.feedernum <> lastFeederNum) then
+          if ShouldCreateNewLevel1Node(groupDev, lastFeederNum, isFirstDevice) then
           begin
             Level1Node := CreateGroupNode(groupDev);
             lastFeederNum := groupDev.feedernum;
@@ -325,52 +418,23 @@ begin
           // Проверяем наличие следующего устройства
           hasNextDevice := (i + 1 < filteredDevices.Size);
 
-          // Определяем, нужно ли создавать группу уровня 2
-          shouldCreateLevel2 := False;
-
           if hasNextDevice then
           begin
             nextDevice := filteredDevices[i + 1];
 
             // Определяем groupDev для следующего устройства
-            if (ProcessStrings(filterPath, nextDevice.fullpathHD) = 0) then
-              nextGroupDev := nextDevice
-            else
-              nextGroupDev := groupDev; // Используем текущий groupDev если deepConnectDev > 0
+            nextGroupDev := GetGroupDeviceForCurrentDevice(nextDevice, filterPath, groupDev);
 
-            // Проверяем, совпадают ли текущее и следующее устройство
-            // Они должны быть в одной группе Level 1 и иметь одинаковые атрибуты
-            if (groupDev.feedernum = nextGroupDev.feedernum) and
-               DevicesHaveSameAttributes(device, nextDevice) then
+            // Проверяем, нужно ли создать группу Level 2
+            if ShouldCreateLevel2Group(device, groupDev, hasNextDevice, nextDevice, nextGroupDev) then
             begin
-              // Есть совпадение со следующим устройством
-              // Создаем новую группу Level 2, если не находимся в режиме группировки
-              // или если атрибуты изменились с предыдущей группы
-              if not inLevel2Group or not DevicesHaveSameAttributes(device, lastDeviceInLevel2) then
-              begin
-                Level2Node := CreateDeviceGroupNode(Level1Node, device);
-                inLevel2Group := True;
-              end;
-
-              // Добавляем устройство в группу Level 2
-              CreateDeviceNode(Level2Node, device);
-              lastDeviceInLevel2 := device;
+              // Обрабатываем устройство с группировкой Level 2
+              ProcessDeviceWithLevel2Group(device, Level1Node, Level2Node, inLevel2Group, lastDeviceInLevel2);
             end
             else
             begin
-              // Нет совпадения со следующим устройством
-              // Проверяем, находимся ли в режиме группировки с предыдущими устройствами
-              if inLevel2Group and DevicesHaveSameAttributes(device, lastDeviceInLevel2) then
-              begin
-                // Это последнее устройство в текущей группе Level 2
-                CreateDeviceNode(Level2Node, device);
-              end
-              else
-              begin
-                // Одиночное устройство - добавляем напрямую в Level 1
-                CreateDeviceNode(Level1Node, device);
-              end;
-
+              // Обрабатываем устройство без группы Level 2
+              ProcessDeviceWithoutLevel2Group(device, Level1Node, Level2Node, inLevel2Group, lastDeviceInLevel2);
               // Выходим из режима группировки
               inLevel2Group := False;
             end;
@@ -378,17 +442,7 @@ begin
           else
           begin
             // Это последнее устройство в списке
-            // Проверяем, находимся ли в режиме группировки
-            if inLevel2Group and DevicesHaveSameAttributes(device, lastDeviceInLevel2) then
-            begin
-              // Добавляем в текущую группу Level 2
-              CreateDeviceNode(Level2Node, device);
-            end
-            else
-            begin
-              // Одиночное устройство - добавляем напрямую в Level 1
-              CreateDeviceNode(Level1Node, device);
-            end;
+            ProcessDeviceWithoutLevel2Group(device, Level1Node, Level2Node, inLevel2Group, lastDeviceInLevel2);
           end;
         end;
 

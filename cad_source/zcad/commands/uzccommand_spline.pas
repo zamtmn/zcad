@@ -179,13 +179,18 @@ begin
 end;
 
 // Generate knot vector using averaging method for global interpolation
-// Based on standard B-spline interpolation algorithm (Piegl & Tiller, "The NURBS Book")
+// Based on STANDARD B-spline interpolation algorithm (Piegl & Tiller, "The NURBS Book", Algorithm A9.1)
+// For m+1 data points with degree p, we have n=m control points
+// Knot vector has n+p+2 elements
 procedure GenerateKnotVector(n,p:integer;const params:array of single;var knots:array of single);
 var
   i,j:integer;
   m:integer;
   sum:single;
 begin
+  // For standard interpolation: m = n (same number of control points as data points)
+  // Knot vector length: m+1 where m = n+p+1
+  // So: length = n+p+1+1 = n+p+2
   m:=n+p+1;
 
   // Clamped knot vector: repeat 0 (p+1) times at start
@@ -193,12 +198,13 @@ begin
     knots[i]:=0.0;
 
   // Internal knots: average p consecutive parameter values
-  // Formula: knots[j] = (params[j-p] + params[j-p+1] + ... + params[j-1]) / p
-  for j:=p+1 to n do begin
+  // Formula: u_{j+p} = (1/p) * sum_{i=j}^{j+p-1} t_i
+  // for j = 1, 2, ..., n-p
+  for j:=1 to n-p do begin
     sum:=0.0;
-    for i:=j-p to j-1 do
+    for i:=j to j+p-1 do
       sum:=sum+params[i];
-    knots[j]:=sum/p;
+    knots[j+p]:=sum/p;
   end;
 
   // Clamped knot vector: repeat 1 (p+1) times at end
@@ -269,20 +275,20 @@ end;
 function ConvertOnCurvePointsToControlPointsArray(const ADegree:integer;
   const AOnCurvePoints:array of GDBVertex;var AKnots:TSingleArray):TControlPointsArray;
 var
-  numPoints,numControlPoints,i,j,n,m,numKnots:integer;
+  numPoints,numControlPoints,i,j,k,n,m,numKnots:integer;
   params:array of single;
   knots:array of single;
-  u,alpha,beta,delta:single;
-  startTangent,endTangent:GDBVertex;
+  u:single;
   A:TMatrix;
   b_x,b_y,b_z:TSingleArray;
   x_x,x_y,x_z:TSingleArray;
-  numInteriorFit,numInteriorCtrl:integer;
-  fitIdx,ctrlIdx,k:integer;
-  contrib_x,contrib_y,contrib_z:single;
   basis:single;
-  numInteriorKnots:integer;
 begin
+  // STANDARD B-spline Global Interpolation Algorithm
+  // Based on "The NURBS Book" by Piegl & Tiller, Algorithm A9.1
+  // For m+1 fit/data points with degree p: use n=m control points (same number)
+  // This produces a B-spline that passes exactly through all fit points
+
   numPoints:=Length(AOnCurvePoints);
 
   // Handle edge cases
@@ -292,12 +298,21 @@ begin
     exit;
   end;
 
-  // For degree >= numPoints, or simple cases, return the points themselves
-  if (ADegree>=numPoints) or (ADegree<1) then begin
+  // For degree >= numPoints, return the points themselves
+  if ADegree>=numPoints then begin
     SetLength(Result,numPoints);
     for i:=0 to numPoints-1 do
       Result[i]:=AOnCurvePoints[i];
     SetLength(AKnots,0);  // Will use default knot generation
+    exit;
+  end;
+
+  // For degree < 1, invalid
+  if ADegree<1 then begin
+    SetLength(Result,numPoints);
+    for i:=0 to numPoints-1 do
+      Result[i]:=AOnCurvePoints[i];
+    SetLength(AKnots,0);
     exit;
   end;
 
@@ -319,170 +334,67 @@ begin
     exit;
   end;
 
-  // CAD-STYLE Interpolation with End Tangent Constraints
-  // For n fit points, generate n+2 control points
-  // This method uses endpoint tangent constraints to add 2 extra control points
-  // Reference: Common approach in CAD systems (AutoCAD, etc.)
+  // STANDARD B-spline interpolation:
+  // For m+1 fit points (indexed 0 to m): generate n+1 = m+1 control points (n = m)
+  // m is the index of the last fit point
+  m:=numPoints-1;
+  n:=m;  // STANDARD: n = m (same number of control points as fit points)
+  numControlPoints:=n+1;
+  SetLength(Result,numControlPoints);
 
-  // Compute parameter values using chord length parameterization
+  // Step 1: Compute parameter values using chord length parameterization
   SetLength(params,numPoints);
   ComputeParameters(AOnCurvePoints,params);
 
-  // Estimate end tangents from fit points
-  // Start tangent
-  delta:=params[1]-params[0];
-  if abs(delta)>0.0001 then begin
-    startTangent.x:=(AOnCurvePoints[1].x-AOnCurvePoints[0].x)/delta;
-    startTangent.y:=(AOnCurvePoints[1].y-AOnCurvePoints[0].y)/delta;
-    startTangent.z:=(AOnCurvePoints[1].z-AOnCurvePoints[0].z)/delta;
-  end else begin
-    startTangent.x:=AOnCurvePoints[1].x-AOnCurvePoints[0].x;
-    startTangent.y:=AOnCurvePoints[1].y-AOnCurvePoints[0].y;
-    startTangent.z:=AOnCurvePoints[1].z-AOnCurvePoints[0].z;
-  end;
-
-  // End tangent
-  delta:=params[numPoints-1]-params[numPoints-2];
-  if abs(delta)>0.0001 then begin
-    endTangent.x:=(AOnCurvePoints[numPoints-1].x-AOnCurvePoints[numPoints-2].x)/delta;
-    endTangent.y:=(AOnCurvePoints[numPoints-1].y-AOnCurvePoints[numPoints-2].y)/delta;
-    endTangent.z:=(AOnCurvePoints[numPoints-1].z-AOnCurvePoints[numPoints-2].z)/delta;
-  end else begin
-    endTangent.x:=AOnCurvePoints[numPoints-1].x-AOnCurvePoints[numPoints-2].x;
-    endTangent.y:=AOnCurvePoints[numPoints-1].y-AOnCurvePoints[numPoints-2].y;
-    endTangent.z:=AOnCurvePoints[numPoints-1].z-AOnCurvePoints[numPoints-2].z;
-  end;
-
-  // Number of control points = numPoints + 2
-  numControlPoints:=numPoints+2;
-  SetLength(Result,numControlPoints);
-
-  // Set first endpoint control point: P[0] = D[0]
-  Result[0]:=AOnCurvePoints[0];
-
-  // Set last endpoint control point: P[numControlPoints-1] = D[numPoints-1]
-  Result[numControlPoints-1]:=AOnCurvePoints[numPoints-1];
-
-  // Compute alpha and beta for tangent control points
-  if numPoints>1 then begin
-    alpha:=(params[1]-params[0])/3.0;
-    beta:=(params[numPoints-1]-params[numPoints-2])/3.0;
-  end else begin
-    alpha:=0.1;
-    beta:=0.1;
-  end;
-
-  // Set tangent-based control points
-  // P[1] = D[0] + alpha * T_start
-  Result[1].x:=AOnCurvePoints[0].x+alpha*startTangent.x;
-  Result[1].y:=AOnCurvePoints[0].y+alpha*startTangent.y;
-  Result[1].z:=AOnCurvePoints[0].z+alpha*startTangent.z;
-
-  // P[numControlPoints-2] = D[numPoints-1] - beta * T_end
-  Result[numControlPoints-2].x:=AOnCurvePoints[numPoints-1].x-beta*endTangent.x;
-  Result[numControlPoints-2].y:=AOnCurvePoints[numPoints-1].y-beta*endTangent.y;
-  Result[numControlPoints-2].z:=AOnCurvePoints[numPoints-1].z-beta*endTangent.z;
-
-  // Generate knot vector for numControlPoints control points with degree ADegree
-  // For numControlPoints control points (indexed 0 to n where n=numControlPoints-1):
-  // Knot vector has m+1 elements where m = n + ADegree + 1
-  n:=numControlPoints-1;
-  m:=n+ADegree+1;
-  numKnots:=m+1;
+  // Step 2: Generate knot vector using averaging method
+  // Knot vector has n+p+2 elements
+  numKnots:=n+ADegree+2;
   SetLength(knots,numKnots);
-
-  // Clamped: repeat 0 (ADegree+1) times at start
-  for i:=0 to ADegree do
-    knots[i]:=0.0;
-
-  // Interior knots: uniform spacing
-  numInteriorKnots:=n-ADegree;
-  if numInteriorKnots>0 then begin
-    for j:=1 to numInteriorKnots do
-      knots[ADegree+j]:=j/(numInteriorKnots+1.0);
-  end;
-
-  // Clamped: repeat 1 (ADegree+1) times at end
-  for i:=n+1 to numKnots-1 do
-    knots[i]:=1.0;
+  GenerateKnotVector(n,ADegree,params,knots);
 
   // Copy knots to output parameter
   SetLength(AKnots,Length(knots));
   for i:=0 to Length(knots)-1 do
     AKnots[i]:=knots[i];
 
-  // Solve for interior control points P[2] to P[numControlPoints-3]
-  // We need to interpolate interior fit points D[1] to D[numPoints-2]
-  numInteriorFit:=numPoints-2;  // D[1] through D[numPoints-2]
-  numInteriorCtrl:=numPoints-2;  // P[2] through P[numControlPoints-3]
+  // Step 3: Build basis matrix N where N[k,i] = BasisFunction(i,ADegree,params[k],knots)
+  // This is a square (m+1) x (n+1) matrix since n=m
+  SetLength(A,numPoints);
+  for k:=0 to numPoints-1 do
+    SetLength(A[k],numControlPoints);
 
-  if (numInteriorFit>0) and (numInteriorCtrl>0) then begin
-    // Build linear system: A * P_interior = b
-    SetLength(A,numInteriorFit);
-    SetLength(b_x,numInteriorFit);
-    SetLength(b_y,numInteriorFit);
-    SetLength(b_z,numInteriorFit);
-    SetLength(x_x,numInteriorCtrl);
-    SetLength(x_y,numInteriorCtrl);
-    SetLength(x_z,numInteriorCtrl);
-
-    for j:=0 to numInteriorFit-1 do begin
-      SetLength(A[j],numInteriorCtrl);
-      fitIdx:=j+1;  // D[1], D[2], ..., D[numPoints-2]
-      u:=params[fitIdx];
-
-      // Contribution from known control points
-      contrib_x:=0.0;
-      contrib_y:=0.0;
-      contrib_z:=0.0;
-
-      // P[0]
-      basis:=BasisFunction(0,ADegree,u,knots);
-      contrib_x:=contrib_x+basis*Result[0].x;
-      contrib_y:=contrib_y+basis*Result[0].y;
-      contrib_z:=contrib_z+basis*Result[0].z;
-
-      // P[1]
-      basis:=BasisFunction(1,ADegree,u,knots);
-      contrib_x:=contrib_x+basis*Result[1].x;
-      contrib_y:=contrib_y+basis*Result[1].y;
-      contrib_z:=contrib_z+basis*Result[1].z;
-
-      // P[numControlPoints-2]
-      basis:=BasisFunction(numControlPoints-2,ADegree,u,knots);
-      contrib_x:=contrib_x+basis*Result[numControlPoints-2].x;
-      contrib_y:=contrib_y+basis*Result[numControlPoints-2].y;
-      contrib_z:=contrib_z+basis*Result[numControlPoints-2].z;
-
-      // P[numControlPoints-1]
-      basis:=BasisFunction(numControlPoints-1,ADegree,u,knots);
-      contrib_x:=contrib_x+basis*Result[numControlPoints-1].x;
-      contrib_y:=contrib_y+basis*Result[numControlPoints-1].y;
-      contrib_z:=contrib_z+basis*Result[numControlPoints-1].z;
-
-      // Right-hand side
-      b_x[j]:=AOnCurvePoints[fitIdx].x-contrib_x;
-      b_y[j]:=AOnCurvePoints[fitIdx].y-contrib_y;
-      b_z[j]:=AOnCurvePoints[fitIdx].z-contrib_z;
-
-      // Coefficients for unknown control points P[2..numControlPoints-3]
-      for k:=0 to numInteriorCtrl-1 do begin
-        ctrlIdx:=k+2;
-        A[j][k]:=BasisFunction(ctrlIdx,ADegree,u,knots);
-      end;
+  for k:=0 to numPoints-1 do begin
+    for i:=0 to numControlPoints-1 do begin
+      A[k][i]:=BasisFunction(i,ADegree,params[k],knots);
     end;
+  end;
 
-    // Solve the linear system for each dimension
-    SolveLinearSystem(A,b_x,x_x,numInteriorCtrl);
-    SolveLinearSystem(A,b_y,x_y,numInteriorCtrl);
-    SolveLinearSystem(A,b_z,x_z,numInteriorCtrl);
+  // Step 4: Solve linear system N * P = D for control points P
+  // Solve separately for each coordinate (x, y, z)
+  SetLength(b_x,numPoints);
+  SetLength(b_y,numPoints);
+  SetLength(b_z,numPoints);
+  SetLength(x_x,numControlPoints);
+  SetLength(x_y,numControlPoints);
+  SetLength(x_z,numControlPoints);
 
-    // Store results
-    for k:=0 to numInteriorCtrl-1 do begin
-      Result[k+2].x:=x_x[k];
-      Result[k+2].y:=x_y[k];
-      Result[k+2].z:=x_z[k];
-    end;
+  // Fill right-hand side with fit point coordinates
+  for i:=0 to numPoints-1 do begin
+    b_x[i]:=AOnCurvePoints[i].x;
+    b_y[i]:=AOnCurvePoints[i].y;
+    b_z[i]:=AOnCurvePoints[i].z;
+  end;
+
+  // Solve the linear system for each dimension
+  SolveLinearSystem(A,b_x,x_x,numControlPoints);
+  SolveLinearSystem(A,b_y,x_y,numControlPoints);
+  SolveLinearSystem(A,b_z,x_z,numControlPoints);
+
+  // Store results in control points array
+  for i:=0 to numControlPoints-1 do begin
+    Result[i].x:=x_x[i];
+    Result[i].y:=x_y[i];
+    Result[i].z:=x_z[i];
   end;
 end;
 

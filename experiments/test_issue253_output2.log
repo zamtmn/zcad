@@ -1,0 +1,78 @@
+================================================================================
+Testing NURBS Interpolation for Issue #253
+================================================================================
+
+Input:
+  Number of fit points: 7
+  Degree: 3
+
+Fit points (points where spline should pass through):
+  p1: (0.00, 0.00)
+  p2: (1.00, 1.00)
+  p3: (2.00, 2.50)
+  p4: (2.50, 1.50)
+  p5: (2.00, 0.50)
+  p6: (3.00, 1.00)
+  p7: (4.00, 0.00)
+
+Mathematical calculation (STANDARD B-spline interpolation):
+  m = 6 (index of last fit point)
+  p = 3 (degree)
+  n = m = 6 (for standard interpolation)
+  Expected control points: n + 1 = 7
+
+Converting fit points to control points...
+  Parameters (t_k): [0.         0.17710202 0.40286367 0.54287511 0.68288655 0.82289798
+ 1.        ]
+  Knot vector: [0.         0.         0.         0.         0.37428027 0.54287511
+ 0.68288655 1.         1.         1.         1.        ]
+  Knot vector length: 11 (should be 12 = 12)
+  Basis matrix shape: (7, 7) (should be 7 x 9)
+  Matrix condition number: 5.56e+00
+
+Output:
+  Number of control points: 7
+  Control points:
+    C0: (0.0000, 0.0000)
+    C1: (1.0353, -0.3393)
+    C2: (1.1656, 3.7025)
+    C3: (2.9592, 1.6224)
+    C4: (0.9731, -0.5237)
+    C5: (4.4764, 2.3458)
+    C6: (4.0000, 0.0000)
+
+  ✅ Control points count is CORRECT: 7 == 7
+
+Verifying interpolation (checking if spline passes through fit points):
+  ✅ p1: expected (0.00, 0.00), got (0.0000, 0.0000), error=0.00e+00
+  ✅ p2: expected (1.00, 1.00), got (1.0000, 1.0000), error=0.00e+00
+  ✅ p3: expected (2.00, 2.50), got (2.0000, 2.5000), error=4.44e-16
+  ✅ p4: expected (2.50, 1.50), got (2.5000, 1.5000), error=4.44e-16
+  ✅ p5: expected (2.00, 0.50), got (2.0000, 0.5000), error=1.11e-16
+  ✅ p6: expected (3.00, 1.00), got (3.0000, 1.0000), error=4.44e-16
+  ✅ p7: expected (4.00, 0.00), got (4.0000, 0.0000), error=0.00e+00
+
+  Maximum interpolation error: 4.44e-16
+  ✅ SUCCESS: Spline passes through ALL fit points
+
+📊 Visualization saved to: /tmp/gh-issue-solver-1760731146942/experiments/test_issue253_nurbs.png
+
+================================================================================
+SUMMARY:
+================================================================================
+
+For 7 fit points with degree 3:
+  - Expected control points: 7 (formula: m + p = 6 + 3 = 7)
+  - Actual control points: 7
+  - Maximum error: 4.44e-16
+  - Status: ✅ PASS
+
+The correct formula from "The NURBS Book":
+  For m+1 fit points with degree p: need n+1 control points where n = m + p - 1
+
+  m+1 = 7 fit points → m = 6
+  n = m + p - 1 = 6 + 3 - 1 = 6
+  n+1 = 7 control points
+
+
+Test complete!

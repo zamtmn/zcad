@@ -5,7 +5,7 @@ unit VElectrNav;
 interface
 
 uses
-  Classes, SysUtils, Forms, Controls, Graphics, laz.VirtualTrees, uzcdrawing, uzcdrawings, uzcinterface,
+  Classes, SysUtils, Forms, Controls, Graphics, Types, laz.VirtualTrees, uzcdrawing, uzcdrawings, uzcinterface,
   Dialogs, ExtCtrls, ActnList, ComCtrls, Windows, fgl, Menus,
   uzvelaccessdbcontrol, uzvmcmanager, uzvmcstruct, gvector, uzccablemanager, uzcentcable, uzeentdevice, gzctnrVectorTypes, uzcvariablesutils, uzccommandsabstract, uzeentity, uzeentblockinsert, varmandef, uzeconsts, uzvvstdevpopulator;
 

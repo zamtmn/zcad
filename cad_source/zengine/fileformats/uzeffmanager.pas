@@ -91,7 +91,7 @@ begin
   vec.Done;
 end;
 
-function TExt2LoadProcMap<GFileProcessProc>.GetLoadProc(const _Wxt:String):TFileLoadProcedure;
+function TExt2LoadProcMap<GFileProcessProc>.GetLoadProc(const _Wxt:String):GFileProcessProc;
 var
   ExtHandle:TFileFormatHandle;
   //_key:String;

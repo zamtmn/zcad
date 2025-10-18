@@ -1,0 +1,104 @@
+/usr/lib/python3/dist-packages/scipy/interpolate/_fitpack_impl.py:194: RuntimeWarning: The maximal number of iterations (20) allowed for finding smoothing
+spline with fp=s has been reached. Probable cause: s too small.
+(abs(fp-s)/s>0.001)
+  warnings.warn(RuntimeWarning(_iermess[ier][0]))
+================================================================================
+Testing different smoothing parameters
+================================================================================
+s=   0.0: 7 control points
+s=   0.1: 7 control points
+s=   1.0: 7 control points
+s=  10.0: 7 control points
+s= 100.0: 7 control points
+s=1000.0: 7 control points
+
+================================================================================
+Observation: Standard interpolation only gives 7 control points
+================================================================================
+
+Analyzing expected control points:
+First CP: [1583.2137  417.8366    0.    ] vs first input: [1583.21365493  417.83663919    0.        ]
+Last CP: [3449.4735 2146.5858    0.    ] vs last input: [3449.47345641 2146.58581493    0.        ]
+
+First and last match exactly!
+
+================================================================================
+Hypothesis: Maybe it's using OPEN uniform knot vector?
+================================================================================
+Open uniform: repeats first/last knot (degree+1) times
+For 9 control points, degree 3:
+Knot vector length should be: n + p + 2 = 8 + 3 + 2 = 13
+Format: [0,0,0,0, k1,k2,k3,k4,k5, 1,1,1,1]
+
+Internal knots needed: 5
+This would give knot vector:
+Uniform: [0.         0.         0.         0.         0.16666667 0.33333333
+ 0.5        0.66666667 0.83333333 1.         1.         1.
+ 1.        ]
+
+================================================================================
+Trying task='lsq' with specified number of control points
+================================================================================
+task=-1, t=9: Error - There must be at least 2*k+2 knots for task=-1
+task=0, t=None: 7 control points
+task=0, t=9: 7 control points
+task=1, t=None: Error - cannot access local variable '_parcur_cache' where it is not
+task=1, t=9: Error - cannot access local variable '_parcur_cache' where it is not
+
+================================================================================
+Next approach: Manually construct the interpolation with 9 CPs
+================================================================================
+Parameters: [0.         0.10860267 0.24890938 0.45285361 0.58096864 0.78223565
+ 1.        ]
+
+Knot vector (13 elements):
+[0.         0.         0.         0.         0.16666667 0.33333333
+ 0.5        0.66666667 0.83333333 1.         1.         1.
+ 1.        ]
+
+================================================================================
+Computing basis functions at parameter values
+================================================================================
+Design matrix shape: (7, 9)
+Rank: 7
+
+================================================================================
+Computed control points:
+================================================================================
+CP 0: (1583.2137, 417.8366, 0.0000)
+CP 1: (2576.9172, 159.0830, 0.0000)
+CP 2: (2337.1141, 2130.1139, 0.0000)
+CP 3: (482.1496, 1535.4542, 0.0000)
+CP 4: (-1031.7496, 1570.0228, 0.0000)
+CP 5: (858.7818, 4112.3028, 0.0000)
+CP 6: (2481.9367, 2620.4611, 0.0000)
+CP 7: (374.0393, 374.4022, 0.0000)
+CP 8: (3449.4735, 2146.5858, 0.0000)
+
+================================================================================
+Comparison with expected:
+================================================================================
+✓ CP 0: diff=0.0001
+✗ CP 1: diff=764.7656
+✗ CP 2: diff=1230.0758
+✗ CP 3: diff=1038.5215
+✗ CP 4: diff=579.2979
+✗ CP 5: diff=1191.8729
+✗ CP 6: diff=724.9042
+✗ CP 7: diff=3275.5203
+✓ CP 8: diff=0.0000
+
+Maximum difference: 3275.5203
+
+✗ Still not matching. Need to investigate further.
+
+================================================================================
+Verify curve passes through data points:
+================================================================================
+✓ Point 0: diff=0.0000
+✓ Point 1: diff=0.0000
+✓ Point 2: diff=0.0000
+✓ Point 3: diff=0.0000
+✓ Point 4: diff=0.0000
+✓ Point 5: diff=0.0000
+✓ Point 6: diff=0.0000

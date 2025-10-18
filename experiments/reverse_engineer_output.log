@@ -1,0 +1,62 @@
+================================================================================
+Reverse Engineering: Find the knot vector
+================================================================================
+Number of control points: 9
+Degree: 3
+Expected knot vector length: 13
+
+================================================================================
+Testing different parameterizations:
+================================================================================
+
+chord_length: [0.         0.10860267 0.24890938 0.45285361 0.58096864 0.78223565
+ 1.        ]
+  uniform_internal: max_error=660.2748
+  param_based_1.0: max_error=683.5188
+  param_based_1.5: max_error=322.6799
+  param_based_2.0: max_error=293.4364
+
+uniform: [0.         0.16666667 0.33333333 0.5        0.66666667 0.83333333
+ 1.        ]
+  uniform_internal: max_error=256.4604
+  param_based_1.0: max_error=515.5533
+  param_based_1.5: max_error=778.9685
+
+================================================================================
+Best result:
+================================================================================
+Parameterization: uniform
+Knot strategy: uniform_internal
+Maximum error: 256.4604
+
+Best knot vector:
+[0.         0.         0.         0.         0.16666667 0.33333333
+ 0.5        0.66666667 0.83333333 1.         1.         1.
+ 1.        ]
+
+Best parameters:
+[0.         0.16666667 0.33333333 0.5        0.66666667 0.83333333
+ 1.        ]
+
+Detailed errors:
+✓ Point 0: error=0.000060
+✗ Point 1: error=113.194769
+✗ Point 2: error=256.460366
+✗ Point 3: error=110.363650
+✗ Point 4: error=227.320072
+✗ Point 5: error=100.326606
+✓ Point 6: error=0.000046
+
+================================================================================
+Trying more knot placements:
+================================================================================
+
+================================================================================
+FINAL BEST RESULT:
+================================================================================
+No satisfactory solution found with current strategies
+
+This suggests the algorithm might be:
+1. Using a different parameterization method
+2. Using a specific knot placement strategy
+3. From a specific CAD software with proprietary algorithm

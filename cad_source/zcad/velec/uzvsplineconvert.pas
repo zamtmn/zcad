@@ -70,30 +70,45 @@ var
   i: Integer;
   OutputStr: string;
 begin
-  // Example data: create some on-curve points for demonstration
-  // In a real implementation, these points would come from user input or selected spline
-  SetLength(OnCurvePoints, 5);
+  // Test data from issue #260
+  // Degree: 3
+  // On-curve points (точки лежащие на сплайне):
+  SetLength(OnCurvePoints, 7);
 
-  // Sample points (you can modify these for testing)
-  OnCurvePoints[0].x := 0.0;
-  OnCurvePoints[0].y := 0.0;
+  // p1 (1583.2136549257,417.836639195,0)
+  OnCurvePoints[0].x := 1583.2136549257;
+  OnCurvePoints[0].y := 417.836639195;
   OnCurvePoints[0].z := 0.0;
 
-  OnCurvePoints[1].x := 1.0;
-  OnCurvePoints[1].y := 2.0;
+  // p2 (2346.3909069169,988.9560396917,0)
+  OnCurvePoints[1].x := 2346.3909069169;
+  OnCurvePoints[1].y := 988.9560396917;
   OnCurvePoints[1].z := 0.0;
 
-  OnCurvePoints[2].x := 3.0;
-  OnCurvePoints[2].y := 3.0;
+  // p3 (1396.2099574179,1772.3499076297,0)
+  OnCurvePoints[2].x := 1396.2099574179;
+  OnCurvePoints[2].y := 1772.3499076297;
   OnCurvePoints[2].z := 0.0;
 
-  OnCurvePoints[3].x := 5.0;
-  OnCurvePoints[3].y := 2.0;
+  // p4 (-392.9605538726,1716.754213776,0)
+  OnCurvePoints[3].x := -392.9605538726;
+  OnCurvePoints[3].y := 1716.754213776;
   OnCurvePoints[3].z := 0.0;
 
-  OnCurvePoints[4].x := 6.0;
-  OnCurvePoints[4].y := 0.0;
+  // p5 (-41.2801529313,2784.8206166348,0)
+  OnCurvePoints[4].x := -41.2801529313;
+  OnCurvePoints[4].y := 2784.8206166348;
   OnCurvePoints[4].z := 0.0;
+
+  // p6 (1717.1218517754,2954.1482170881,0)
+  OnCurvePoints[5].x := 1717.1218517754;
+  OnCurvePoints[5].y := 2954.1482170881;
+  OnCurvePoints[5].z := 0.0;
+
+  // p7 (3449.4734564123,2146.5858149265,0)
+  OnCurvePoints[6].x := 3449.4734564123;
+  OnCurvePoints[6].y := 2146.5858149265;
+  OnCurvePoints[6].z := 0.0;
 
   // Print on-curve points BEFORE conversion
   programlog.LogOutStr('========================================', LM_Info, UnitsInitializeLMId);
@@ -134,6 +149,22 @@ begin
     programlog.LogOutStr(OutputStr, LM_Info, UnitsInitializeLMId);
   end;
 
+  programlog.LogOutStr('========================================', LM_Info, UnitsInitializeLMId);
+
+  // Print expected control points from issue #260 for comparison
+  programlog.LogOutStr('', LM_Info, UnitsInitializeLMId);
+  programlog.LogOutStr('========================================', LM_Info, UnitsInitializeLMId);
+  programlog.LogOutStr('Ожидаемые контрольные точки (из другой программы):', LM_Info, UnitsInitializeLMId);
+  programlog.LogOutStr('========================================', LM_Info, UnitsInitializeLMId);
+  programlog.LogOutStr('Контрольная точка 0: X=1583.213700, Y=417.836600, Z=0.000000', LM_Info, UnitsInitializeLMId);
+  programlog.LogOutStr('Контрольная точка 1: X=1943.961900, Y=588.307800, Z=0.000000', LM_Info, UnitsInitializeLMId);
+  programlog.LogOutStr('Контрольная точка 2: X=2770.770500, Y=979.015100, Z=0.000000', LM_Info, UnitsInitializeLMId);
+  programlog.LogOutStr('Контрольная точка 3: X=1225.722500, Y=2260.455100, Z=0.000000', LM_Info, UnitsInitializeLMId);
+  programlog.LogOutStr('Контрольная точка 4: X=-771.087400, Y=1052.682200, Z=0.000000', LM_Info, UnitsInitializeLMId);
+  programlog.LogOutStr('Контрольная точка 5: X=-50.766200, Y=3342.053800, Z=0.000000', LM_Info, UnitsInitializeLMId);
+  programlog.LogOutStr('Контрольная точка 6: X=1877.210000, Y=3020.200700, Z=0.000000', LM_Info, UnitsInitializeLMId);
+  programlog.LogOutStr('Контрольная точка 7: X=2911.808200, Y=2445.335000, Z=0.000000', LM_Info, UnitsInitializeLMId);
+  programlog.LogOutStr('Контрольная точка 8: X=3449.473500, Y=2146.585800, Z=0.000000', LM_Info, UnitsInitializeLMId);
   programlog.LogOutStr('========================================', LM_Info, UnitsInitializeLMId);
 
   // End command execution

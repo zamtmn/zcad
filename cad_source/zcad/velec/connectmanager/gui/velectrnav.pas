@@ -40,6 +40,7 @@ type
       const TargetCanvas: TCanvas; Node: PVirtualNode; Column: TColumnIndex;
       TextType: TVSTTextType);
     procedure vstDevClick(Sender: TObject);
+    procedure vstDevDblClick(Sender: TObject);
     procedure vstDevEditing(Sender: TBaseVirtualTree; Node: PVirtualNode;
       Column: TColumnIndex; var Allowed: Boolean);
     procedure vstDevNewText(Sender: TBaseVirtualTree; Node: PVirtualNode;
@@ -214,6 +215,7 @@ begin
     vstDev.OnGetText := @vstDevGetText;
     vstDev.OnPaintText := @vstDevPaintText;
     vstDev.OnClick := @vstDevClick;
+    vstDev.OnDblClick := @vstDevDblClick;
     vstDev.OnEditing := @vstDevEditing;
     vstDev.OnNewText := @vstDevNewText;
 
@@ -513,10 +515,40 @@ begin
   NodeData := vstDev.GetNodeData(Node);
   if not Assigned(NodeData) then Exit;
 
+  // Handle existing button columns (10 and 11)
   if HitInfo.HitColumn = 11 then
     ShowMessage('devname: ' + NodeData^.DevName)
   else if HitInfo.HitColumn = 10 then
-    ShowMessage('Редактировать: ' + NodeData^.HDName);
+    ShowMessage('Редактировать: ' + NodeData^.HDName)
+  else
+  begin
+    // For device nodes (nodes without children), show "один щелчок" message
+    // Parent nodes (containers) continue to work as usual (expand/collapse)
+    if not vstDev.HasChildren[Node] then
+      ShowMessage('один щелчок');
+  end;
+end;
+
+procedure TVElectrNav.vstDevDblClick(Sender: TObject);
+var
+  Node: PVirtualNode;
+  NodeData: PGridNodeData;
+  HitInfo: THitInfo;
+  P: TPoint;
+begin
+  P := vstDev.ScreenToClient(Mouse.CursorPos);
+  vstDev.GetHitTestInfoAt(P.X, P.Y, True, HitInfo);
+
+  if not Assigned(HitInfo.HitNode) then Exit;
+
+  Node := HitInfo.HitNode;
+  NodeData := vstDev.GetNodeData(Node);
+  if not Assigned(NodeData) then Exit;
+
+  // For device nodes (nodes without children), show "двойной щелчок" message
+  // Parent nodes (containers) continue to work as usual
+  if not vstDev.HasChildren[Node] then
+    ShowMessage('двойной щелчок');
 end;
 
 procedure TVElectrNav.vstDevEditing(Sender: TBaseVirtualTree;

@@ -35,12 +35,18 @@ uses
   UGDBPoint3DArray,
   Math;
 
+type
+  TControlPointsArray=array of GDBVertex;
+  TSingleArray=array of single;
+
+// Export the conversion function for use in other modules
+function ConvertOnCurvePointsToControlPointsArray(const ADegree:integer;
+  const AOnCurvePoints:array of GDBVertex;var AKnots:TSingleArray):TControlPointsArray;
+
 implementation
 
 type
-  TControlPointsArray=array of GDBVertex;
   TPointsType=(PTControl,PTOnCurve);
-  TSingleArray=array of single;
   TMatrix=array of TSingleArray;
   PSplineInteractiveData=^TSplineInteractiveData;
 

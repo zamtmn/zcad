@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, Forms, Controls, Graphics, laz.VirtualTrees, uzcdrawing, uzcdrawings, uzcinterface,
-  Dialogs, ExtCtrls, ActnList, ComCtrls, Windows, fgl,
+  Dialogs, ExtCtrls, ActnList, ComCtrls, Windows, fgl, Menus,
   uzvelaccessdbcontrol, uzvmcmanager, uzvmcstruct, gvector, uzccablemanager, uzcentcable, uzeentdevice, gzctnrVectorTypes, uzcvariablesutils, uzccommandsabstract, uzeentity, uzeentblockinsert, varmandef, uzeconsts, uzvvstdevpopulator;
 
 type
@@ -41,10 +41,13 @@ type
       TextType: TVSTTextType);
     procedure vstDevClick(Sender: TObject);
     procedure vstDevDblClick(Sender: TObject);
+    procedure vstDevMouseUp(Sender: TObject; Button: TMouseButton;
+      Shift: TShiftState; X, Y: Integer);
     procedure vstDevEditing(Sender: TBaseVirtualTree; Node: PVirtualNode;
       Column: TColumnIndex; var Allowed: Boolean);
     procedure vstDevNewText(Sender: TBaseVirtualTree; Node: PVirtualNode;
       Column: TColumnIndex; const NewText: AnsiString);
+    procedure ContainerMenuItemClick(Sender: TObject);
     //procedure newVSTGetText(Sender: TBaseVirtualTree; Node: PVirtualNode;
     //  Column: TColumnIndex; TextType: TVSTTextType; var CellText: String);
   private
@@ -52,8 +55,10 @@ type
     FProportion: Double; // Пропорция ширины PanelNav относительно общей ширины
     FIsResizing: Boolean; // Флаг для предотвращения рекурсии при изменении размера
     FDevicesList: TListVElectrDevStruct; // Список устройств из TConnectionManager (вместо SQLite)
+    FContainerPopupMenu: TPopupMenu; // Popup menu для родительских нод (контейнеров)
     procedure InitializeActionAndButton; // Инициализация действий и кнопок панели инструментов
     procedure InitializePanels;          // Инициализация и настройка панелей интерфейса
+    procedure InitializeContainerPopupMenu; // Инициализация popup menu для контейнеров
 
     procedure InitializeDeviceTree;    // Инициализация дерева устройств FDeviceTree
     procedure InitializeVstDev;        // Инициализация виртуальной таблицы устройств
@@ -102,7 +107,8 @@ begin
   // Инициализация списка устройств (работа в памяти вместо SQLite)
   FDevicesList := TListVElectrDevStruct.Create;
 
-
+  // Инициализация popup menu для контейнеров
+  InitializeContainerPopupMenu;
 
     try
     // Подписываемся на событие изменения размера фрейма
@@ -216,6 +222,7 @@ begin
     vstDev.OnPaintText := @vstDevPaintText;
     vstDev.OnClick := @vstDevClick;
     vstDev.OnDblClick := @vstDevDblClick;
+    vstDev.OnMouseUp := @vstDevMouseUp;
     vstDev.OnEditing := @vstDevEditing;
     vstDev.OnNewText := @vstDevNewText;
 
@@ -551,6 +558,51 @@ begin
     ShowMessage('двойной щелчок');
 end;
 
+procedure TVElectrNav.vstDevMouseUp(Sender: TObject; Button: TMouseButton;
+  Shift: TShiftState; X, Y: Integer);
+var
+  Node: PVirtualNode;
+  HitInfo: THitInfo;
+  P: TPoint;
+begin
+  // Handle right mouse button click
+  if Button = mbRight then
+  begin
+    vstDev.GetHitTestInfoAt(X, Y, True, HitInfo);
+
+    if not Assigned(HitInfo.HitNode) then Exit;
+
+    Node := HitInfo.HitNode;
+
+    // Show popup menu only for parent nodes (containers)
+    // Parent nodes have children
+    if vstDev.HasChildren[Node] then
+    begin
+      P := vstDev.ClientToScreen(Point(X, Y));
+      FContainerPopupMenu.PopUp(P.X, P.Y);
+    end;
+  end;
+end;
+
+procedure TVElectrNav.InitializeContainerPopupMenu;
+var
+  MenuItem: TMenuItem;
+begin
+  // Create popup menu for container nodes
+  FContainerPopupMenu := TPopupMenu.Create(Self);
+
+  // Add single menu item
+  MenuItem := TMenuItem.Create(FContainerPopupMenu);
+  MenuItem.Caption := 'Команда правый щелчок';
+  MenuItem.OnClick := @ContainerMenuItemClick;
+  FContainerPopupMenu.Items.Add(MenuItem);
+end;
+
+procedure TVElectrNav.ContainerMenuItemClick(Sender: TObject);
+begin
+  ShowMessage('команда правый щелчек');
+end;
+
 procedure TVElectrNav.vstDevEditing(Sender: TBaseVirtualTree;
   Node: PVirtualNode; Column: TColumnIndex; var Allowed: Boolean);
 begin
@@ -622,6 +674,10 @@ end;
 
 destructor TVElectrNav.Destroy;
 begin
+  // Освобождаем popup menu
+  if Assigned(FContainerPopupMenu) then
+    FContainerPopupMenu.Free;
+
   // Освобождаем список устройств
   if Assigned(FDevicesList) then
     FDevicesList.Free;

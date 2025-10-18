@@ -25,6 +25,7 @@ interface
 uses
   SysUtils,
   uzcLog,
+  uzcinterface,
   uzccommandsabstract,
   uzccommandsimpl,
   uzccommandsmanager,
@@ -112,14 +113,18 @@ begin
 
   // Print on-curve points BEFORE conversion
   programlog.LogOutStr('========================================', LM_Info, UnitsInitializeLMId);
+  zcUI.TextMessage('========================================', TMWOHistoryOut);
   programlog.LogOutStr('Точки на сплайне (до преобразования):', LM_Info, UnitsInitializeLMId);
+  zcUI.TextMessage('Точки на сплайне (до преобразования):', TMWOHistoryOut);
   programlog.LogOutStr('========================================', LM_Info, UnitsInitializeLMId);
+  zcUI.TextMessage('========================================', TMWOHistoryOut);
 
   for i := 0 to Length(OnCurvePoints) - 1 do
   begin
     OutputStr := Format('Точка %d: X=%.6f, Y=%.6f, Z=%.6f',
                        [i, OnCurvePoints[i].x, OnCurvePoints[i].y, OnCurvePoints[i].z]);
     programlog.LogOutStr(OutputStr, LM_Info, UnitsInitializeLMId);
+    zcUI.TextMessage(OutputStr, TMWOHistoryOut);
   end;
 
   // Convert on-curve points to control points
@@ -127,45 +132,68 @@ begin
 
   // Print control points AFTER conversion
   programlog.LogOutStr('', LM_Info, UnitsInitializeLMId);
+  zcUI.TextMessage('', TMWOHistoryOut);
   programlog.LogOutStr('========================================', LM_Info, UnitsInitializeLMId);
+  zcUI.TextMessage('========================================', TMWOHistoryOut);
   programlog.LogOutStr('Контрольные точки (после преобразования):', LM_Info, UnitsInitializeLMId);
+  zcUI.TextMessage('Контрольные точки (после преобразования):', TMWOHistoryOut);
   programlog.LogOutStr('========================================', LM_Info, UnitsInitializeLMId);
+  zcUI.TextMessage('========================================', TMWOHistoryOut);
 
   for i := 0 to Length(ControlPoints) - 1 do
   begin
     OutputStr := Format('Контрольная точка %d: X=%.6f, Y=%.6f, Z=%.6f',
                        [i, ControlPoints[i].x, ControlPoints[i].y, ControlPoints[i].z]);
     programlog.LogOutStr(OutputStr, LM_Info, UnitsInitializeLMId);
+    zcUI.TextMessage(OutputStr, TMWOHistoryOut);
   end;
 
   // Print knot vector if available
   if Length(Knots) > 0 then
   begin
     programlog.LogOutStr('', LM_Info, UnitsInitializeLMId);
+    zcUI.TextMessage('', TMWOHistoryOut);
     programlog.LogOutStr('Узловой вектор:', LM_Info, UnitsInitializeLMId);
+    zcUI.TextMessage('Узловой вектор:', TMWOHistoryOut);
     OutputStr := 'Knots: ';
     for i := 0 to Length(Knots) - 1 do
       OutputStr := OutputStr + Format('%.6f ', [Knots[i]]);
     programlog.LogOutStr(OutputStr, LM_Info, UnitsInitializeLMId);
+    zcUI.TextMessage(OutputStr, TMWOHistoryOut);
   end;
 
   programlog.LogOutStr('========================================', LM_Info, UnitsInitializeLMId);
+  zcUI.TextMessage('========================================', TMWOHistoryOut);
 
   // Print expected control points from issue #260 for comparison
   programlog.LogOutStr('', LM_Info, UnitsInitializeLMId);
+  zcUI.TextMessage('', TMWOHistoryOut);
   programlog.LogOutStr('========================================', LM_Info, UnitsInitializeLMId);
+  zcUI.TextMessage('========================================', TMWOHistoryOut);
   programlog.LogOutStr('Ожидаемые контрольные точки (из другой программы):', LM_Info, UnitsInitializeLMId);
+  zcUI.TextMessage('Ожидаемые контрольные точки (из другой программы):', TMWOHistoryOut);
   programlog.LogOutStr('========================================', LM_Info, UnitsInitializeLMId);
+  zcUI.TextMessage('========================================', TMWOHistoryOut);
   programlog.LogOutStr('Контрольная точка 0: X=1583.213700, Y=417.836600, Z=0.000000', LM_Info, UnitsInitializeLMId);
+  zcUI.TextMessage('Контрольная точка 0: X=1583.213700, Y=417.836600, Z=0.000000', TMWOHistoryOut);
   programlog.LogOutStr('Контрольная точка 1: X=1943.961900, Y=588.307800, Z=0.000000', LM_Info, UnitsInitializeLMId);
+  zcUI.TextMessage('Контрольная точка 1: X=1943.961900, Y=588.307800, Z=0.000000', TMWOHistoryOut);
   programlog.LogOutStr('Контрольная точка 2: X=2770.770500, Y=979.015100, Z=0.000000', LM_Info, UnitsInitializeLMId);
+  zcUI.TextMessage('Контрольная точка 2: X=2770.770500, Y=979.015100, Z=0.000000', TMWOHistoryOut);
   programlog.LogOutStr('Контрольная точка 3: X=1225.722500, Y=2260.455100, Z=0.000000', LM_Info, UnitsInitializeLMId);
+  zcUI.TextMessage('Контрольная точка 3: X=1225.722500, Y=2260.455100, Z=0.000000', TMWOHistoryOut);
   programlog.LogOutStr('Контрольная точка 4: X=-771.087400, Y=1052.682200, Z=0.000000', LM_Info, UnitsInitializeLMId);
+  zcUI.TextMessage('Контрольная точка 4: X=-771.087400, Y=1052.682200, Z=0.000000', TMWOHistoryOut);
   programlog.LogOutStr('Контрольная точка 5: X=-50.766200, Y=3342.053800, Z=0.000000', LM_Info, UnitsInitializeLMId);
+  zcUI.TextMessage('Контрольная точка 5: X=-50.766200, Y=3342.053800, Z=0.000000', TMWOHistoryOut);
   programlog.LogOutStr('Контрольная точка 6: X=1877.210000, Y=3020.200700, Z=0.000000', LM_Info, UnitsInitializeLMId);
+  zcUI.TextMessage('Контрольная точка 6: X=1877.210000, Y=3020.200700, Z=0.000000', TMWOHistoryOut);
   programlog.LogOutStr('Контрольная точка 7: X=2911.808200, Y=2445.335000, Z=0.000000', LM_Info, UnitsInitializeLMId);
+  zcUI.TextMessage('Контрольная точка 7: X=2911.808200, Y=2445.335000, Z=0.000000', TMWOHistoryOut);
   programlog.LogOutStr('Контрольная точка 8: X=3449.473500, Y=2146.585800, Z=0.000000', LM_Info, UnitsInitializeLMId);
+  zcUI.TextMessage('Контрольная точка 8: X=3449.473500, Y=2146.585800, Z=0.000000', TMWOHistoryOut);
   programlog.LogOutStr('========================================', LM_Info, UnitsInitializeLMId);
+  zcUI.TextMessage('========================================', TMWOHistoryOut);
 
   // End command execution
   Commandmanager.executecommandend;

@@ -278,21 +278,51 @@ begin
 end;
 
 
+// New implementation of ConvertOnCurvePointsToControlPointsArray
+// with natural boundary conditions
+
+// Helper function to compute second derivative of basis function
+// Uses finite difference approximation
+function BasisFunctionSecondDerivative(i,p:integer;u:single;const knots:array of single):single;
+var
+  h:single;
+  f_plus,f_center,f_minus:single;
+  u_eval:single;
+begin
+  h:=1e-6;
+
+  // Adjust u to avoid boundary issues
+  if u<h then
+    u_eval:=h
+  else if u>1.0-h then
+    u_eval:=1.0-h
+  else
+    u_eval:=u;
+
+  // Evaluate basis function at three points
+  f_plus:=BasisFunction(i,p,Min(u_eval+h,1.0),knots);
+  f_center:=BasisFunction(i,p,u_eval,knots);
+  f_minus:=BasisFunction(i,p,Max(u_eval-h,0.0),knots);
+
+  // Second derivative using central difference
+  Result:=(f_plus - 2.0*f_center + f_minus) / (h*h);
+end;
+
 function ConvertOnCurvePointsToControlPointsArray(const ADegree:integer;
   const AOnCurvePoints:array of GDBVertex;var AKnots:TSingleArray):TControlPointsArray;
 var
-  numPoints,numControlPoints,i,j,k,n,m,numKnots:integer;
+  numPoints,numControlPoints,i,j,k,n,m,numKnots,numEq:integer;
   params:array of single;
   knots:array of single;
   A:TMatrix;
   b_x,b_y,b_z:TSingleArray;
   x_x,x_y,x_z:TSingleArray;
-  basis:single;
+  basis,deriv2:single;
 begin
-  // B-spline Global Interpolation
-  // Based on "The NURBS Book" by Piegl & Tiller, Algorithm A9.1
-  // For m+1 fit/data points with degree p:
-  // Number of control points: n+1 = m+1 (STANDARD interpolation)
+  // B-spline Interpolation with Natural Boundary Conditions
+  // For cubic splines (degree 3), this produces n+1 = m+3 control points
+  // where m+1 is the number of data points
+  // Based on scipy.interpolate.make_interp_spline with bc_type='natural'
 
   numPoints:=Length(AOnCurvePoints);
 
@@ -308,7 +338,7 @@ begin
     SetLength(Result,numPoints);
     for i:=0 to numPoints-1 do
       Result[i]:=AOnCurvePoints[i];
-    SetLength(AKnots,0);  // Will use default knot generation
+    SetLength(AKnots,0);
     exit;
   end;
 
@@ -326,7 +356,7 @@ begin
     SetLength(Result,numPoints);
     for i:=0 to numPoints-1 do
       Result[i]:=AOnCurvePoints[i];
-    SetLength(AKnots,0);  // Will use default knot generation
+    SetLength(AKnots,0);
     exit;
   end;
 
@@ -335,14 +365,15 @@ begin
     SetLength(Result,2);
     Result[0]:=AOnCurvePoints[0];
     Result[1]:=AOnCurvePoints[1];
-    SetLength(AKnots,0);  // Will use default knot generation
+    SetLength(AKnots,0);
     exit;
   end;
 
-  // Standard global interpolation (Piegl & Tiller, Algorithm A9.1):
-  // For m+1 fit points (indexed 0 to m): generate n+1 = m+1 control points
+  // Natural spline interpolation:
+  // For m+1 fit points (indexed 0 to m): generate n+1 = m+3 control points (for degree 3)
+  // This adds 2 extra control points to satisfy natural boundary conditions
   m:=numPoints-1;  // m is index of last fit point
-  n:=m;            // n = m for standard interpolation (n+1 = m+1 control points)
+  n:=m+2;          // n = m+2 for natural spline (n+1 = m+3 control points)
   numControlPoints:=n+1;
   SetLength(Result,numControlPoints);
 
@@ -350,33 +381,48 @@ begin
   SetLength(params,numPoints);
   ComputeParameters(AOnCurvePoints,params);
 
-  // Step 2: Generate knot vector using averaging method
+  // Step 2: Generate knot vector - place internal parameter values as knots
+  // For natural spline with n+1 control points, degree p:
   // Knot vector has n+p+2 elements
+  // Format: [0,0,0,0, param[1], param[2], ..., param[m-1], 1,1,1,1]
+  // Note: we skip param[0]=0 and param[m]=1 in the internal knots
   numKnots:=n+ADegree+2;
   SetLength(knots,numKnots);
-  GenerateKnotVector(n,ADegree,params,knots);
+
+  // Clamped: first p+1 knots are 0
+  for i:=0 to ADegree do
+    knots[i]:=0.0;
+
+  // Internal knots: place at parameter values (skip first and last)
+  for i:=1 to numPoints-2 do
+    knots[ADegree+i]:=params[i];
+
+  // Clamped: last p+1 knots are 1
+  for i:=numKnots-ADegree-1 to numKnots-1 do
+    knots[i]:=1.0;
 
   // Copy knots to output parameter
   SetLength(AKnots,Length(knots));
   for i:=0 to Length(knots)-1 do
     AKnots[i]:=knots[i];
 
-  // Step 3: Build the interpolation matrix system
-  // We solve: sum(N_i,p(t_k) * P_i) = D_k for all k
-  // This is a (m+1) × (m+1) square system
+  // Step 3: Build the augmented matrix system
+  // We have (m+1) interpolation constraints + 2 natural boundary conditions
+  // This gives us (m+3) equations for (m+3) unknowns - a square system
+  numEq:=numPoints+2;
 
-  SetLength(A,numPoints);
-  for k:=0 to numPoints-1 do
+  SetLength(A,numEq);
+  for k:=0 to numEq-1 do
     SetLength(A[k],numControlPoints);
 
-  SetLength(b_x,numPoints);
-  SetLength(b_y,numPoints);
-  SetLength(b_z,numPoints);
+  SetLength(b_x,numEq);
+  SetLength(b_y,numEq);
+  SetLength(b_z,numEq);
   SetLength(x_x,numControlPoints);
   SetLength(x_y,numControlPoints);
   SetLength(x_z,numControlPoints);
 
-  // Build the matrix
+  // Build the interpolation constraint rows (first m+1 rows)
   for k:=0 to numPoints-1 do begin
     // Right-hand side: fit point
     b_x[k]:=AOnCurvePoints[k].x;
@@ -390,10 +436,31 @@ begin
     end;
   end;
 
-  // Solve the linear system
-  SolveLinearSystem(A,b_x,x_x,numControlPoints);
-  SolveLinearSystem(A,b_y,x_y,numControlPoints);
-  SolveLinearSystem(A,b_z,x_z,numControlPoints);
+  // Build the natural boundary condition rows (last 2 rows)
+  // Natural BC: second derivative = 0 at start (u=0) and end (u=1)
+
+  // Row for start boundary (second derivative = 0 at params[0])
+  b_x[numPoints]:=0.0;
+  b_y[numPoints]:=0.0;
+  b_z[numPoints]:=0.0;
+  for i:=0 to numControlPoints-1 do begin
+    deriv2:=BasisFunctionSecondDerivative(i,ADegree,params[0],knots);
+    A[numPoints][i]:=deriv2;
+  end;
+
+  // Row for end boundary (second derivative = 0 at params[m])
+  b_x[numPoints+1]:=0.0;
+  b_y[numPoints+1]:=0.0;
+  b_z[numPoints+1]:=0.0;
+  for i:=0 to numControlPoints-1 do begin
+    deriv2:=BasisFunctionSecondDerivative(i,ADegree,params[m],knots);
+    A[numPoints+1][i]:=deriv2;
+  end;
+
+  // Solve the linear system (now it's a square system: (m+3) × (m+3))
+  SolveLinearSystem(A,b_x,x_x,numEq);
+  SolveLinearSystem(A,b_y,x_y,numEq);
+  SolveLinearSystem(A,b_z,x_z,numEq);
 
   // Store results
   for i:=0 to numControlPoints-1 do begin

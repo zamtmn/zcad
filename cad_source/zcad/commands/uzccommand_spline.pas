@@ -335,7 +335,7 @@ var
   numPoints,numControlPoints,i,j,k,n,m,numKnots,numEq:integer;
   params:array of single;
   knots:array of single;
-  A:TMatrix;
+  A,A_copy:TMatrix;
   b_x,b_y,b_z:TSingleArray;
   x_x,x_y,x_z:TSingleArray;
   basis,deriv2:single;
@@ -479,8 +479,30 @@ begin
   end;
 
   // Solve the linear system (now it's a square system: (m+3) × (m+3))
+  // NOTE: SolveLinearSystem modifies matrix A during Gaussian elimination,
+  // so we need to make a copy before solving for each coordinate
+
+  // Save original matrix A before it gets modified
+  SetLength(A_copy,numEq);
+  for i:=0 to numEq-1 do begin
+    SetLength(A_copy[i],numControlPoints);
+    for j:=0 to numControlPoints-1 do
+      A_copy[i][j]:=A[i][j];
+  end;
+
+  // Solve for X coordinates (this will modify A)
   SolveLinearSystem(A,b_x,x_x,numEq);
+
+  // Solve for Y coordinates - restore A from copy first
+  for i:=0 to numEq-1 do
+    for j:=0 to numControlPoints-1 do
+      A[i][j]:=A_copy[i][j];
   SolveLinearSystem(A,b_y,x_y,numEq);
+
+  // Solve for Z coordinates - restore A from copy first
+  for i:=0 to numEq-1 do
+    for j:=0 to numControlPoints-1 do
+      A[i][j]:=A_copy[i][j];
   SolveLinearSystem(A,b_z,x_z,numEq);
 
   // Store results

@@ -281,31 +281,52 @@ end;
 // New implementation of ConvertOnCurvePointsToControlPointsArray
 // with natural boundary conditions
 
-// Helper function to compute second derivative of basis function
-// Uses finite difference approximation
-function BasisFunctionSecondDerivative(i,p:integer;u:single;const knots:array of single):single;
+// Helper function to compute derivative of basis function
+// Uses analytical recursive formula for B-spline derivatives
+// N'_{i,p}(u) = p/(u_{i+p} - u_i) * N_{i,p-1}(u) - p/(u_{i+p+1} - u_{i+1}) * N_{i+1,p-1}(u)
+function BasisFunctionDerivative(i,p:integer;u:single;const knots:array of single;deriv:integer):single;
 var
-  h:single;
-  f_plus,f_center,f_minus:single;
+  denom1,denom2:single;
+  term1,term2:single;
   u_eval:single;
 begin
-  h:=1e-6;
+  // Base case: no derivative, just return basis function value
+  if deriv=0 then begin
+    Result:=BasisFunction(i,p,u,knots);
+    exit;
+  end;
 
-  // Adjust u to avoid boundary issues
-  if u<h then
-    u_eval:=h
-  else if u>1.0-h then
-    u_eval:=1.0-h
-  else
-    u_eval:=u;
+  // Base case: degree 0 basis functions have zero derivative
+  if p=0 then begin
+    Result:=0.0;
+    exit;
+  end;
 
-  // Evaluate basis function at three points
-  f_plus:=BasisFunction(i,p,Min(u_eval+h,1.0),knots);
-  f_center:=BasisFunction(i,p,u_eval,knots);
-  f_minus:=BasisFunction(i,p,Max(u_eval-h,0.0),knots);
+  // For derivatives at the endpoint u=1.0, use a slight offset to avoid special case issues
+  // This evaluates the left-side limit of the derivative
+  u_eval:=u;
+  if abs(u-1.0)<1e-10 then
+    u_eval:=1.0-1e-6;
 
-  // Second derivative using central difference
-  Result:=(f_plus - 2.0*f_center + f_minus) / (h*h);
+  // Recursive formula for derivative
+  denom1:=knots[i+p]-knots[i];
+  denom2:=knots[i+p+1]-knots[i+1];
+
+  term1:=0.0;
+  if abs(denom1)>1e-10 then
+    term1:=p/denom1*BasisFunctionDerivative(i,p-1,u_eval,knots,deriv-1);
+
+  term2:=0.0;
+  if abs(denom2)>1e-10 then
+    term2:=p/denom2*BasisFunctionDerivative(i+1,p-1,u_eval,knots,deriv-1);
+
+  Result:=term1-term2;
+end;
+
+// Helper function to compute second derivative of basis function
+function BasisFunctionSecondDerivative(i,p:integer;u:single;const knots:array of single):single;
+begin
+  Result:=BasisFunctionDerivative(i,p,u,knots,2);
 end;
 
 function ConvertOnCurvePointsToControlPointsArray(const ADegree:integer;

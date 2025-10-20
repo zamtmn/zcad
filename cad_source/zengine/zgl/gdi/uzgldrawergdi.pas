@@ -623,7 +623,7 @@ begin
 
   //DrawText(TZGLGDIDrawer(drawer).OffScreedDC,'h',1,r,{Flags: Cardinal}0);
   //TextOut(TZGLGDIDrawer(drawer).OffScreedDC, x, y, 'h', 1);
-  ExtTextOut(TZGLGDIDrawer(drawer).OffScreedDC,x,y{+round(gdiDrawYOffset)},{Options: Longint}0,@r,@s[1],-1,nil);
+  ExtTextOut(TZGLGDIDrawer(drawer).OffScreedDC,0,0{+round(gdiDrawYOffset)},{Options: Longint}0,@r,@s[1],-1,nil);
   inc(TZGLGDIDrawer(drawer).CurrentPaintGDIData^.DebugCounter.SystemSymbols);
 
   SetWorldTransform_(TZGLGDIDrawer(drawer).OffScreedDC,OneMatrix);

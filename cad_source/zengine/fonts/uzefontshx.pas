@@ -36,7 +36,7 @@ type
 implementation
 function TZESHXFontImpl.IsCanSystemDraw:Boolean;
 begin
-  result:=false;
+  result:=true;
 end;
 function TZESHXFontImpl.GetOrReplaceSymbolInfo(symbol:Integer):PGDBsymdolinfo;
 begin

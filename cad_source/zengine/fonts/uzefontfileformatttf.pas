@@ -259,14 +259,7 @@ end;
 procedure TZETFFFontImpl.SetupSymbolLineParams(const matr:DMatrix4D; var SymsParam:TSymbolSParam);
 begin
   if SymsParam.IsCanSystemDraw then begin
-    // FIX #290: For GDI system-drawn fonts, we need to invert the font metrics adjustment
-    // Vector geometry normalization uses: k = TTFImplDummyGlobalScale / CapHeight
-    // This scales glyphs DOWN by CapHeight to normalize them
-    // For GDI rendering, we need to scale UP by CapHeight / (Ascent+Descent)
-    // to compensate for the fact that GDI lfHeight represents the full font cell height (Ascent+Descent)
-    // but DXF text height is based on CapHeight
-    SymsParam.NeededFontHeight:=oneVertexlength(PGDBVertex(@matr.mtr[1])^)*
-      (TTFImplementation.CapHeight/(TTFImplementation.Ascent+TTFImplementation.Descent));
+    SymsParam.NeededFontHeight:=oneVertexlength(PGDBVertex(@matr.mtr[1])^)*((TTFImplementation.Ascent+TTFImplementation.Descent)/(TTFImplementation.CapHeight));
   end
 end;
 function TZETFFFontImpl.IsCanSystemDraw:Boolean;

@@ -147,12 +147,8 @@ function TTTFBackendFreeType.TTFImplDummyGlobalScale:Double;
 var
   phead:PTT_Header;
   s1,s2:LongWord;
-const
-  TTFRenderDPI = 600;  // DPI used for rendering TTF glyphs
 begin
-  // FIX #290: Use TTFRenderDPI (600) instead of hardcoded 96 to match FT_Set_Char_Size
-  // This ensures consistent scaling between vector geometry and font metrics
-  s1:=CTTFDefaultSizeInPoints*64*1{width}*TTFRenderDPI div 72;
+  s1:=CTTFDefaultSizeInPoints*64*1{width}*96 div 72;
   phead:=FT_Get_Sfnt_Table(FontMgr.GetFreeTypeFont(FreeTypeTTFImpl.FontID),FT_SFNT_HEAD);
   s2:=phead^.Units_Per_EM*64;
   phead:=FT_Get_Sfnt_Table(FontMgr.GetFreeTypeFont(FreeTypeTTFImpl.FontID),FT_SFNT_HEAD);
@@ -308,12 +304,9 @@ end;
 procedure TTTFBackendFreeType.SetSizeInPoints(const AValue:single);
 //var
 //  err:integer;
-const
-  TTFRenderDPI = 600;  // DPI used for rendering TTF glyphs
 begin
   FPointSize:=AValue;
-  FDPI:=TTFRenderDPI;  // FIX #290: Update FDPI to match the DPI used in FT_Set_Char_Size
-  FT_Set_Char_Size(FontMgr.GetFreeTypeFont(FreeTypeTTFImpl.FontID),round(64*AValue),round(64*AValue),TTFRenderDPI,TTFRenderDPI);
+  FT_Set_Char_Size(FontMgr.GetFreeTypeFont(FreeTypeTTFImpl.FontID),round(64*AValue),round(64*AValue),600,600);
 end;
 
 function TTTFBackendFreeType.GetFullName:String;

@@ -37,7 +37,8 @@ uses
     {$IFNDEF DELPHI}LCLIntf,LCLType,{$ENDIF}
     Classes,Controls,
     uzegeometrytypes,uzegeometry,uzgldrawergeneral,uzgldrawerabstract,
-    Graphics,uzbLogIntf,gzctnrVectorTypes,uzgvertex3sarray;
+    Graphics,uzbLogIntf,gzctnrVectorTypes,uzgvertex3sarray,uzglvectorobject,
+    uzeconsts;
 const
   NeedScreenInvalidrect=true;
 type
@@ -512,6 +513,49 @@ begin
      pointer(pgdisymbol):=pa.getDataMutable(pa.AllocData(sizeof(TLLGDISymbol)));
      pgdisymbol.init;
 end;
+
+procedure RenderSHXPrimitivesWithGDI(DC:HDC;const FontData:PZGLVectorObject;const LLPOffset,LLPCount:TArrayIndex;const Transform:DMatrix4D;const ScreenTransform:TZGLGDIDrawer);
+var
+  i,primIndex:TArrayIndex;
+  PPrimitive:PTLLPrimitive;
+  PLine:PTLLLine;
+  PPolyLine:PTLLPolyLine;
+  PTriangle:PTLLTriangle;
+  pv1,pv2:PGDBVertex3S;
+  v1,v2:GDBVertex3S;
+  pts:array of TPoint;
+  j:integer;
+begin
+  //Iterate through low-level primitives and render using GDI
+  primIndex:=LLPOffset;
+  i:=0;
+  while i<LLPCount do begin
+    PPrimitive:=pointer(FontData^.LLprimitives.getDataMutable(primIndex));
+
+    // Try to cast as TLLLine and check if it has valid data
+    PLine:=PTLLLine(PPrimitive);
+    if (PLine^.P1Index>=0) and (PLine^.P1Index+1<FontData^.GeomData.Vertex3S.Count) then begin
+      pv1:=FontData^.GeomData.Vertex3S.getDataMutable(PLine^.P1Index);
+      pv2:=FontData^.GeomData.Vertex3S.getDataMutable(PLine^.P1Index+1);
+
+      //Transform vertices
+      v1:=VectorTransform3d(pv1^,Transform);
+      v2:=VectorTransform3d(pv2^,Transform);
+
+      //Transform to screen coordinates
+      v1:=ScreenTransform.TranslatePoint(v1);
+      v2:=ScreenTransform.TranslatePoint(v2);
+
+      //Draw line
+      MoveToEx(DC,round(v1.x),round(v1.y),nil);
+      LineTo(DC,round(v2.x),round(v2.y));
+    end;
+
+    primIndex:=primIndex+PPrimitive^.getPrimitiveSize;
+    inc(i);
+  end;
+end;
+
 procedure TLLGDISymbol.drawSymbol(drawer:TZGLAbstractDrawer;var rc:TDrawContext;var GeomData:ZGLGeomData;var LLPArray:TLLPrimitivesArray;var OptData:ZGLOptimizerData;const PSymbolsParam:PTSymbolSParam;const inFrustumState:TInBoundingVolume);
 var
    r:TRect;
@@ -523,6 +567,7 @@ var
    {gdiDrawYOffset,}txtOblique,txtRotate,txtSx,txtSy:single;
 
    lfcp:TLogFont;
+   isSHXFont:Boolean;
 
 const
   deffonth={19}100;
@@ -541,6 +586,9 @@ begin
                                                                                  end;
   if TZGLGDIDrawer(drawer).CurrentPaintGDIData^.RD_TextRendering=TRT_ZGL then
                                                                              exit;
+
+  // Check if this is an SHX font (has external vector data)
+  isSHXFont:=(PExternalVectorObject<>nil) and (ExternalLLPCount>0);
 
   if PGDBfont(PSymbolsParam.pfont)^.DummyDrawerHandle=0
   then
@@ -621,10 +669,26 @@ begin
   SetGraphicsMode_(TZGLGDIDrawer(drawer).OffScreedDC, GM_ADVANCED );
   SetWorldTransform_(TZGLGDIDrawer(drawer).OffScreedDC,_transminusM);
 
-  //DrawText(TZGLGDIDrawer(drawer).OffScreedDC,'h',1,r,{Flags: Cardinal}0);
-  //TextOut(TZGLGDIDrawer(drawer).OffScreedDC, x, y, 'h', 1);
-  ExtTextOut(TZGLGDIDrawer(drawer).OffScreedDC,x,y{+round(gdiDrawYOffset)},{Options: Longint}0,@r,@s[1],-1,nil);
-  inc(TZGLGDIDrawer(drawer).CurrentPaintGDIData^.DebugCounter.SystemSymbols);
+  // Render SHX fonts using GDI primitives, TTF fonts using ExtTextOut
+  if isSHXFont then
+  begin
+    // Render SHX font vector data using GDI
+    RenderSHXPrimitivesWithGDI(TZGLGDIDrawer(drawer).OffScreedDC,
+                               PZGLVectorObject(PExternalVectorObject),
+                               ExternalLLPOffset,
+                               ExternalLLPCount,
+                               SymMatr,
+                               TZGLGDIDrawer(drawer));
+    inc(TZGLGDIDrawer(drawer).CurrentPaintGDIData^.DebugCounter.SystemSymbols);
+  end
+  else
+  begin
+    // Render TTF font using ExtTextOut
+    //DrawText(TZGLGDIDrawer(drawer).OffScreedDC,'h',1,r,{Flags: Cardinal}0);
+    //TextOut(TZGLGDIDrawer(drawer).OffScreedDC, x, y, 'h', 1);
+    ExtTextOut(TZGLGDIDrawer(drawer).OffScreedDC,x,y{+round(gdiDrawYOffset)},{Options: Longint}0,@r,@s[1],-1,nil);
+    inc(TZGLGDIDrawer(drawer).CurrentPaintGDIData^.DebugCounter.SystemSymbols);
+  end;
 
   SetWorldTransform_(TZGLGDIDrawer(drawer).OffScreedDC,OneMatrix);
   SetGraphicsMode_(TZGLGDIDrawer(drawer).OffScreedDC, GM_COMPATIBLE );

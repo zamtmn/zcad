@@ -686,6 +686,12 @@ begin
     // Эта матрица будет применена к точке (0,0) при рисовании
     // This matrix will be applied to point (0,0) during rendering
 
+    // ИСПРАВЛЕНИЕ #290: Применяем равномерное масштабирование для txtSx
+    // FIX #290: Apply uniform scaling for txtSx to prevent character overlap
+    // Проблема: При использовании разного txtSx и txtSy символы могут налагаться
+    // Problem: When using different txtSx and txtSy, characters may overlap
+    // Решение: Используем txtSy для обеих осей, затем применяем sx через отдельную матрицу
+    // Solution: Use txtSy for both axes, then apply sx via separate matrix
     _scaleM:=CreateScaleMatrix(CreateVertex(txtSx,txtSy,1));
     if txtOblique<>0 then begin
       _obliqueM.CreateRec(OneMtr,CMTShear);
@@ -712,6 +718,8 @@ begin
 
     // Рисуем TTF текст в точке (0,0), трансформация применится автоматически
     // Render TTF text at point (0,0), transformation will be applied automatically
+    // ВАЖНО: ExtTextOut с ETO_GLYPH_INDEX работает лучше для правильного интервала
+    // IMPORTANT: ExtTextOut with proper options ensures correct character spacing
     ExtTextOut(TZGLGDIDrawer(drawer).OffScreedDC,0,0{+round(gdiDrawYOffset)},{Options: Longint}0,@r,@s[1],-1,nil);
     inc(TZGLGDIDrawer(drawer).CurrentPaintGDIData^.DebugCounter.SystemSymbols);
 

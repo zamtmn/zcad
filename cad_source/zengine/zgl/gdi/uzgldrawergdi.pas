@@ -514,6 +514,8 @@ begin
      pgdisymbol.init;
 end;
 
+// Отрисовка SHX примитивов через GDI
+// Rendering SHX primitives using GDI
 procedure RenderSHXPrimitivesWithGDI(DC:HDC;const FontData:PZGLVectorObject;const LLPOffset,LLPCount:TArrayIndex;const Transform:DMatrix4D;const ScreenTransform:TZGLGDIDrawer);
 var
   i,primIndex:TArrayIndex;
@@ -526,27 +528,34 @@ var
   pts:array of TPoint;
   j:integer;
 begin
-  //Iterate through low-level primitives and render using GDI
+  // Проходим по низкоуровневым примитивам и рисуем их через GDI
+  // Iterate through low-level primitives and render using GDI
   primIndex:=LLPOffset;
   i:=0;
   while i<LLPCount do begin
     PPrimitive:=pointer(FontData^.LLprimitives.getDataMutable(primIndex));
 
+    // Пытаемся интерпретировать как линию и проверяем валидность данных
     // Try to cast as TLLLine and check if it has valid data
     PLine:=PTLLLine(PPrimitive);
     if (PLine^.P1Index>=0) and (PLine^.P1Index+1<FontData^.GeomData.Vertex3S.Count) then begin
+      // Получаем вершины линии
+      // Get line vertices
       pv1:=FontData^.GeomData.Vertex3S.getDataMutable(PLine^.P1Index);
       pv2:=FontData^.GeomData.Vertex3S.getDataMutable(PLine^.P1Index+1);
 
-      //Transform vertices
+      // Применяем трансформацию символа к вершинам
+      // Transform vertices with symbol transformation
       v1:=VectorTransform3d(pv1^,Transform);
       v2:=VectorTransform3d(pv2^,Transform);
 
-      //Transform to screen coordinates
+      // Преобразуем в экранные координаты
+      // Transform to screen coordinates
       v1:=ScreenTransform.TranslatePoint(v1);
       v2:=ScreenTransform.TranslatePoint(v2);
 
-      //Draw line
+      // Рисуем линию
+      // Draw line
       MoveToEx(DC,round(v1.x),round(v1.y),nil);
       LineTo(DC,round(v2.x),round(v2.y));
     end;
@@ -573,20 +582,25 @@ const
   deffonth={19}100;
   cnvStr:packed array[0..3]of byte=(0,0,0,0);
 begin
+     // Если шрифт не поддерживает системную отрисовку, используем ZGL рендеринг
+     // If font doesn't support system drawing, use ZGL rendering
      if not PSymbolsParam^.IsCanSystemDraw then
                                            begin
                                                 inherited;
                                                 inc(TZGLGDIDrawer(drawer).CurrentPaintGDIData^.DebugCounter.ZGLSymbols);
                                                 exit;
                                            end;
+  // Проверяем режим рендеринга текста
+  // Check text rendering mode
   if TZGLGDIDrawer(drawer).CurrentPaintGDIData^.RD_TextRendering<>TRT_System then
                                                                                  begin
-                                                                                 inherited;//там вывод букв треугольниками
+                                                                                 inherited;//там вывод букв треугольниками / text output using triangles
                                                                                  inc(TZGLGDIDrawer(drawer).CurrentPaintGDIData^.DebugCounter.ZGLSymbols);
                                                                                  end;
   if TZGLGDIDrawer(drawer).CurrentPaintGDIData^.RD_TextRendering=TRT_ZGL then
                                                                              exit;
 
+  // Проверяем, является ли это SHX шрифтом (имеет внешние векторные данные)
   // Check if this is an SHX font (has external vector data)
   isSHXFont:=(PExternalVectorObject<>nil) and (ExternalLLPCount>0);
 
@@ -646,33 +660,15 @@ begin
                                                                                SetTextColor(TZGLGDIDrawer(drawer).OffScreedDC,TZGLGDIDrawer(drawer).ClearColor);
 
   SetTextAlignToBaseLine(TZGLGDIDrawer(drawer).OffScreedDC);
-  {$IF DEFINED(LCLQt) OR DEFINED(LCLQt5)}_transminusM2:=CreateTranslationMatrix(CreateVertex(0,-TQtDeviceContext(TZGLGDIDrawer(drawer).OffScreedDC).Metrics.ascent,0));{$ENDIF}
-  _transminusM:=CreateTranslationMatrix(CreateVertex(-x,-y,0));
-  _scaleM:=CreateScaleMatrix(CreateVertex(txtSx,txtSy,1));
-  if txtOblique<>0 then begin
-    _obliqueM.CreateRec(OneMtr,CMTShear);
-    _obliqueM.mtr[1].v[0]:=-cotan(txtOblique)
-  end
-  else
-    _obliqueM:=OneMatrix;
-  _transplusM:=CreateTranslationMatrix(CreateVertex(x,y,0));
-  _rotateM:=CreateRotationMatrixZ(-txtRotate);
 
-  {$IF DEFINED(LCLQt) OR DEFINED(LCLQt5)}_transminusM:=MatrixMultiply(_transminusM,_transminusM2);{$ENDIF}
-  _transminusM:=MatrixMultiply(_transminusM,_scaleM);
-  _transminusM:=MatrixMultiply(_transminusM,_obliqueM);
-  _transminusM:=MatrixMultiply(_transminusM,_rotateM);
-  _transminusM:=MatrixMultiply(_transminusM,_transplusM);
-
-
-
-  SetGraphicsMode_(TZGLGDIDrawer(drawer).OffScreedDC, GM_ADVANCED );
-  SetWorldTransform_(TZGLGDIDrawer(drawer).OffScreedDC,_transminusM);
-
-  // Render SHX fonts using GDI primitives, TTF fonts using ExtTextOut
+  // Обработка текста SHX и TTF рендрингом GDI происходит по-разному
+  // SHX и TTF fonts require different rendering approaches with GDI
   if isSHXFont then
   begin
-    // Render SHX font vector data using GDI
+    // Для SHX шрифтов: рисуем векторные примитивы без трансформации контекста
+    // For SHX fonts: render vector primitives without context transformation
+    // Трансформация уже применена к примитивам внутри RenderSHXPrimitivesWithGDI
+    // Transformation is already applied to primitives inside RenderSHXPrimitivesWithGDI
     RenderSHXPrimitivesWithGDI(TZGLGDIDrawer(drawer).OffScreedDC,
                                PZGLVectorObject(PExternalVectorObject),
                                ExternalLLPOffset,
@@ -683,15 +679,43 @@ begin
   end
   else
   begin
-    // Render TTF font using ExtTextOut
-    //DrawText(TZGLGDIDrawer(drawer).OffScreedDC,'h',1,r,{Flags: Cardinal}0);
-    //TextOut(TZGLGDIDrawer(drawer).OffScreedDC, x, y, 'h', 1);
+    // Для TTF шрифтов: используем трансформацию контекста GDI
+    // For TTF fonts: use GDI context transformation
+    {$IF DEFINED(LCLQt) OR DEFINED(LCLQt5)}_transminusM2:=CreateTranslationMatrix(CreateVertex(0,-TQtDeviceContext(TZGLGDIDrawer(drawer).OffScreedDC).Metrics.ascent,0));{$ENDIF}
+    _transminusM:=CreateTranslationMatrix(CreateVertex(-x,-y,0));
+    _scaleM:=CreateScaleMatrix(CreateVertex(txtSx,txtSy,1));
+    if txtOblique<>0 then begin
+      _obliqueM.CreateRec(OneMtr,CMTShear);
+      _obliqueM.mtr[1].v[0]:=-cotan(txtOblique)
+    end
+    else
+      _obliqueM:=OneMatrix;
+    _transplusM:=CreateTranslationMatrix(CreateVertex(x,y,0));
+    _rotateM:=CreateRotationMatrixZ(-txtRotate);
+
+    // Применяем трансформации для TTF шрифта
+    // Apply transformations for TTF font
+    {$IF DEFINED(LCLQt) OR DEFINED(LCLQt5)}_transminusM:=MatrixMultiply(_transminusM,_transminusM2);{$ENDIF}
+    _transminusM:=MatrixMultiply(_transminusM,_scaleM);
+    _transminusM:=MatrixMultiply(_transminusM,_obliqueM);
+    _transminusM:=MatrixMultiply(_transminusM,_rotateM);
+    _transminusM:=MatrixMultiply(_transminusM,_transplusM);
+
+    // Устанавливаем трансформацию для TTF текста
+    // Set transformation for TTF text
+    SetGraphicsMode_(TZGLGDIDrawer(drawer).OffScreedDC, GM_ADVANCED );
+    SetWorldTransform_(TZGLGDIDrawer(drawer).OffScreedDC,_transminusM);
+
+    // Рисуем TTF текст через ExtTextOut
+    // Render TTF text using ExtTextOut
     ExtTextOut(TZGLGDIDrawer(drawer).OffScreedDC,x,y{+round(gdiDrawYOffset)},{Options: Longint}0,@r,@s[1],-1,nil);
     inc(TZGLGDIDrawer(drawer).CurrentPaintGDIData^.DebugCounter.SystemSymbols);
-  end;
 
-  SetWorldTransform_(TZGLGDIDrawer(drawer).OffScreedDC,OneMatrix);
-  SetGraphicsMode_(TZGLGDIDrawer(drawer).OffScreedDC, GM_COMPATIBLE );
+    // Возвращаем обычный режим
+    // Restore normal mode
+    SetWorldTransform_(TZGLGDIDrawer(drawer).OffScreedDC,OneMatrix);
+    SetGraphicsMode_(TZGLGDIDrawer(drawer).OffScreedDC, GM_COMPATIBLE );
+  end;
 end;
 
 initialization

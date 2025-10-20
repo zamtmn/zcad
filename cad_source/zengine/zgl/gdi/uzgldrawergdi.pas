@@ -718,9 +718,13 @@ begin
 
     // Рисуем TTF текст в точке (0,0), трансформация применится автоматически
     // Render TTF text at point (0,0), transformation will be applied automatically
-    // ВАЖНО: ExtTextOut с ETO_GLYPH_INDEX работает лучше для правильного интервала
-    // IMPORTANT: ExtTextOut with proper options ensures correct character spacing
-    ExtTextOut(TZGLGDIDrawer(drawer).OffScreedDC,0,0{+round(gdiDrawYOffset)},{Options: Longint}0,@r,@s[1],-1,nil);
+    // ВАЖНО: Используем правильную длину строки вместо -1 для корректного UTF-8
+    // IMPORTANT: Use proper string length instead of -1 for correct UTF-8 handling
+    // FIX #290: Параметр -1 заставляет Windows интерпретировать UTF-8 как ANSI,
+    // что приводит к неправильному расчету ширины символов для многобайтовых последовательностей
+    // FIX #290: Parameter -1 makes Windows interpret UTF-8 as ANSI,
+    // causing incorrect character width calculation for multi-byte sequences
+    ExtTextOut(TZGLGDIDrawer(drawer).OffScreedDC,0,0{+round(gdiDrawYOffset)},{Options: Longint}0,@r,@s[1],length(s),nil);
     inc(TZGLGDIDrawer(drawer).CurrentPaintGDIData^.DebugCounter.SystemSymbols);
 
     // Возвращаем обычный режим

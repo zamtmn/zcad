@@ -251,10 +251,19 @@ end;
 procedure TVstDevPopulator.FillDeviceGroupNodeData(Node: PVirtualNode; const device: TVElectrDevStruct);
 var
   NodeData: PGridNodeData;
+  i:integer;
+  tempName:string;
 begin
   NodeData := FVstDev.GetNodeData(Node);
+  tempName := '';
+  for i := 0 to deepConnectDev - 1 do
+    tempName := tempName + ' -';
+  if deepConnectDev > 0 then
+      NodeData^.DevName := tempName + ' ' + device.basename + ' (гр.' + inttostr(device.feedernum) + ')'
+    else
+      NodeData^.DevName := device.basename;
   // Для подгруппы отображаем основные атрибуты, по которым группируются устройства
-  NodeData^.DevName := device.basename;
+  //NodeData^.DevName := device.basename;
   NodeData^.RealName := device.realname;
   NodeData^.Power := device.power;
   NodeData^.CosF := device.cosfi;

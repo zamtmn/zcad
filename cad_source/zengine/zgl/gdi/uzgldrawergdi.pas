@@ -38,7 +38,7 @@ uses
     Classes,Controls,
     uzegeometrytypes,uzegeometry,uzgldrawergeneral,uzgldrawerabstract,
     Graphics,uzbLogIntf,gzctnrVectorTypes,uzgvertex3sarray,uzglvectorobject,
-    uzeconsts,uzefontshx;
+    uzeconsts,uzefontshx,uzefontfileformatttf;
 const
   NeedScreenInvalidrect=true;
 type
@@ -649,7 +649,34 @@ begin
   {txtSy:=TQtFont(PGDBfont(PSymbolsParam.pfont)^.DummyDrawerHandle).Metrics.ascent;
   txtSy:=TQtFont(PGDBfont(PSymbolsParam.pfont)^.DummyDrawerHandle).Metrics.descent;
   txtSy:=TQtFont(PGDBfont(PSymbolsParam.pfont)^.DummyDrawerHandle).Metrics.height;}
+
+  // FIX #296: Compensate for inverted font metrics ratio in uzefontfileformatttf.pas
+  // The NeededFontHeight is calculated with the wrong formula (was reverted in commit bd8a0cc5b):
+  //   CURRENT (WRONG): NeededFontHeight = height * (Ascent+Descent) / CapHeight
+  //   CORRECT: NeededFontHeight = height * CapHeight / (Ascent+Descent)
+  //
+  // Since the fix in the fonts folder was reverted, we apply a compensating correction here
+  // in the GDI drawer to fix the rendering without modifying the fonts folder.
+  //
+  // For TTF fonts, we need to multiply by (CapHeight / (Ascent+Descent))^2 to compensate:
+  //   - First division cancels the wrong multiplication in fonts folder
+  //   - Second division applies the correct ratio
+  // This results in the formula: txtSy = NeededFontHeight * (CapHeight/(Ascent+Descent))^2 / zoom / deffonth
   txtSy:=PSymbolsParam^.NeededFontHeight/(rc.DrawingContext.zoom)/(deffonth);
+
+  // Apply the compensating correction for TTF fonts only
+  if (PGDBfont(PSymbolsParam.pfont)^.font is TZETFFFontImpl) then begin
+    // Access TTF font metrics to calculate the compensating ratio
+    with TZETFFFontImpl(PGDBfont(PSymbolsParam.pfont)^.font).TTFImpl do begin
+      if (Ascent + Descent) <> 0 then begin
+        // Apply the square of the inverted ratio to compensate for the wrong formula
+        // Ratio = CapHeight / (Ascent+Descent)
+        // We multiply txtSy by Ratio^2 = (CapHeight / (Ascent+Descent))^2
+        txtSy := txtSy * (CapHeight * CapHeight) / ((Ascent + Descent) * (Ascent + Descent));
+      end;
+    end;
+  end;
+
   {$IF DEFINED(LCLQt) OR DEFINED(LCLQt5)}txtSy:=txtSy*(deffonth)/(TQtFont(PGDBfont(PSymbolsParam.pfont)^.DummyDrawerHandle).Metrics.height-1);{$ENDIF}
   txtSx:=txtSy*PSymbolsParam^.sx;
 

@@ -259,7 +259,10 @@ end;
 procedure TZETFFFontImpl.SetupSymbolLineParams(const matr:DMatrix4D; var SymsParam:TSymbolSParam);
 begin
   if SymsParam.IsCanSystemDraw then begin
-    SymsParam.NeededFontHeight:=oneVertexlength(PGDBVertex(@matr.mtr[1])^)*((TTFImplementation.Ascent+TTFImplementation.Descent)/(TTFImplementation.CapHeight));
+    // FIX #290: For GDI system-drawn fonts, use the direct matrix height without font metrics adjustment
+    // GDI handles font metrics internally when rendering with lfHeight
+    // The (Ascent+Descent)/CapHeight adjustment is only needed for vector-rendered fonts (OpenGL/triangles)
+    SymsParam.NeededFontHeight:=oneVertexlength(PGDBVertex(@matr.mtr[1])^);
   end
 end;
 function TZETFFFontImpl.IsCanSystemDraw:Boolean;

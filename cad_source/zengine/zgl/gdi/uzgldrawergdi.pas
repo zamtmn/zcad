@@ -38,7 +38,7 @@ uses
     Classes,Controls,
     uzegeometrytypes,uzegeometry,uzgldrawergeneral,uzgldrawerabstract,
     Graphics,uzbLogIntf,gzctnrVectorTypes,uzgvertex3sarray,uzglvectorobject,
-    uzeconsts;
+    uzeconsts,uzefontshx;
 const
   NeedScreenInvalidrect=true;
 type
@@ -600,9 +600,9 @@ begin
   if TZGLGDIDrawer(drawer).CurrentPaintGDIData^.RD_TextRendering=TRT_ZGL then
                                                                              exit;
 
-  // Проверяем, является ли это SHX шрифтом (имеет внешние векторные данные)
-  // Check if this is an SHX font (has external vector data)
-  isSHXFont:=(PExternalVectorObject<>nil) and (ExternalLLPCount>0);
+  // Проверяем, является ли это SHX шрифтом по типу реализации шрифта
+  // Check if this is an SHX font by checking the font implementation type
+  isSHXFont:=PGDBfont(PSymbolsParam.pfont)^.font is TZESHXFontImpl;
 
   if PGDBfont(PSymbolsParam.pfont)^.DummyDrawerHandle=0
   then
@@ -663,7 +663,7 @@ begin
 
   // Обработка текста SHX и TTF рендрингом GDI происходит по-разному
   // SHX и TTF fonts require different rendering approaches with GDI
-  if isSHXFont then
+  if isSHXFont and (PExternalVectorObject<>nil) and (ExternalLLPCount>0) then
   begin
     // Для SHX шрифтов: рисуем векторные примитивы без трансформации контекста
     // For SHX fonts: render vector primitives without context transformation

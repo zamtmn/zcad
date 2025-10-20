@@ -610,15 +610,11 @@ begin
   _transplusM:=CreateTranslationMatrix(CreateVertex(x,y,0));
   _rotateM:=CreateRotationMatrixZ(-txtRotate);
 
-  // Build transformation matrix: T(x,y) * Rotate * Oblique * Scale * T(-x,-y)
-  // This transforms around point (x,y): move to origin, transform, move back
-  // Start from the rightmost (first applied) operation
-  _transminusM:=CreateTranslationMatrix(CreateVertex(-x,-y,0));
   {$IF DEFINED(LCLQt) OR DEFINED(LCLQt5)}_transminusM:=MatrixMultiply(_transminusM,_transminusM2);{$ENDIF}
-  _transminusM:=MatrixMultiply(_scaleM,_transminusM);        // Scale * T(-x,-y)
-  _transminusM:=MatrixMultiply(_obliqueM,_transminusM);      // Oblique * Scale * T(-x,-y)
-  _transminusM:=MatrixMultiply(_rotateM,_transminusM);       // Rotate * Oblique * Scale * T(-x,-y)
-  _transminusM:=MatrixMultiply(_transplusM,_transminusM);    // T(x,y) * Rotate * Oblique * Scale * T(-x,-y)
+  _transminusM:=MatrixMultiply(_transminusM,_scaleM);
+  _transminusM:=MatrixMultiply(_transminusM,_obliqueM);
+  _transminusM:=MatrixMultiply(_transminusM,_rotateM);
+  _transminusM:=MatrixMultiply(_transminusM,_transplusM);
 
 
 
@@ -627,7 +623,7 @@ begin
 
   //DrawText(TZGLGDIDrawer(drawer).OffScreedDC,'h',1,r,{Flags: Cardinal}0);
   //TextOut(TZGLGDIDrawer(drawer).OffScreedDC, x, y, 'h', 1);
-  ExtTextOut(TZGLGDIDrawer(drawer).OffScreedDC,0,0{+round(gdiDrawYOffset)},{Options: Longint}0,@r,@s[1],-1,nil);
+  ExtTextOut(TZGLGDIDrawer(drawer).OffScreedDC,x,y{+round(gdiDrawYOffset)},{Options: Longint}0,@r,@s[1],-1,nil);
   inc(TZGLGDIDrawer(drawer).CurrentPaintGDIData^.DebugCounter.SystemSymbols);
 
   SetWorldTransform_(TZGLGDIDrawer(drawer).OffScreedDC,OneMatrix);

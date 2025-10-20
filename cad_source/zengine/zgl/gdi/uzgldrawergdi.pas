@@ -708,7 +708,9 @@ begin
 
     // Рисуем TTF текст через ExtTextOut
     // Render TTF text using ExtTextOut
-    ExtTextOut(TZGLGDIDrawer(drawer).OffScreedDC,x,y{+round(gdiDrawYOffset)},{Options: Longint}0,@r,@s[1],-1,nil);
+    // Используем (0,0) так как world transform уже содержит позиционирование
+    // Use (0,0) since world transform already contains positioning
+    ExtTextOut(TZGLGDIDrawer(drawer).OffScreedDC,0,0{x,y}{+round(gdiDrawYOffset)},{Options: Longint}0,@r,@s[1],-1,nil);
     inc(TZGLGDIDrawer(drawer).CurrentPaintGDIData^.DebugCounter.SystemSymbols);
 
     // Возвращаем обычный режим

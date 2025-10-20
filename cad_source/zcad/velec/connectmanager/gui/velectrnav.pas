@@ -578,7 +578,7 @@ begin
     // Parent nodes have children
     if vstDev.HasChildren[Node] then
     begin
-      P := vstDev.ClientToScreen(Point(X, Y));
+      P := vstDev.ClientToScreen(Point.Create(X, Y));
       FContainerPopupMenu.Popup(P.X, P.Y);
     end;
   end;

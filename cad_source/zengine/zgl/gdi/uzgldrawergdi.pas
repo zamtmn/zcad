@@ -679,44 +679,46 @@ begin
   end
   else
   begin
-    // Для TTF шрифтов: используем трансформацию контекста GDI
-    // For TTF fonts: use GDI context transformation
-    {$IF DEFINED(LCLQt) OR DEFINED(LCLQt5)}_transminusM2:=CreateTranslationMatrix(CreateVertex(0,-TQtDeviceContext(TZGLGDIDrawer(drawer).OffScreedDC).Metrics.ascent,0));{$ENDIF}
-    _transminusM:=CreateTranslationMatrix(CreateVertex(-x,-y,0));
+    // Для TTF шрифтов: применяем трансформацию (Scale, Rotate, Oblique) через WorldTransform
+    // For TTF fonts: apply transformation (Scale, Rotate, Oblique) via WorldTransform
+    // Строим матрицу: T(x,y) × Rotate × Oblique × Scale
+    // Build matrix: T(x,y) × Rotate × Oblique × Scale
+    // Эта матрица будет применена к точке (0,0) при рисовании
+    // This matrix will be applied to point (0,0) during rendering
+
     _scaleM:=CreateScaleMatrix(CreateVertex(txtSx,txtSy,1));
     if txtOblique<>0 then begin
       _obliqueM.CreateRec(OneMtr,CMTShear);
-      _obliqueM.mtr[1].v[0]:=-cotan(txtOblique)
+      _obliqueM.mtr[1].v[0]:=-cotan(txtOblique);
     end
     else
       _obliqueM:=OneMatrix;
-    _transplusM:=CreateTranslationMatrix(CreateVertex(x,y,0));
     _rotateM:=CreateRotationMatrixZ(-txtRotate);
+    _transplusM:=CreateTranslationMatrix(CreateVertex(x,y,0));
 
-    // Применяем трансформации для TTF шрифта
-    // Apply transformations for TTF font
-    {$IF DEFINED(LCLQt) OR DEFINED(LCLQt5)}_transminusM:=MatrixMultiply(_transminusM,_transminusM2);{$ENDIF}
-    _transminusM:=MatrixMultiply(_transminusM,_scaleM);
+    // Применяем трансформации для TTF шрифта: T(x,y) × Rotate × Oblique × Scale
+    // Apply transformations for TTF font: T(x,y) × Rotate × Oblique × Scale
+    // Порядок справа налево: сначала Scale, потом Oblique, потом Rotate, потом T(x,y)
+    // Order right to left: first Scale, then Oblique, then Rotate, then T(x,y)
+    _transminusM:=_scaleM;
     _transminusM:=MatrixMultiply(_transminusM,_obliqueM);
     _transminusM:=MatrixMultiply(_transminusM,_rotateM);
     _transminusM:=MatrixMultiply(_transminusM,_transplusM);
 
     // Устанавливаем трансформацию для TTF текста
     // Set transformation for TTF text
-    SetGraphicsMode_(TZGLGDIDrawer(drawer).OffScreedDC, GM_ADVANCED );
+    SetGraphicsMode_(TZGLGDIDrawer(drawer).OffScreedDC, GM_ADVANCED);
     SetWorldTransform_(TZGLGDIDrawer(drawer).OffScreedDC,_transminusM);
 
-    // Рисуем TTF текст через ExtTextOut
-    // Render TTF text using ExtTextOut
-    // Используем (0,0) так как world transform уже содержит позиционирование
-    // Use (0,0) since world transform already contains positioning
-    ExtTextOut(TZGLGDIDrawer(drawer).OffScreedDC,0,0{x,y}{+round(gdiDrawYOffset)},{Options: Longint}0,@r,@s[1],-1,nil);
+    // Рисуем TTF текст в точке (0,0), трансформация применится автоматически
+    // Render TTF text at point (0,0), transformation will be applied automatically
+    ExtTextOut(TZGLGDIDrawer(drawer).OffScreedDC,0,0{+round(gdiDrawYOffset)},{Options: Longint}0,@r,@s[1],-1,nil);
     inc(TZGLGDIDrawer(drawer).CurrentPaintGDIData^.DebugCounter.SystemSymbols);
 
     // Возвращаем обычный режим
     // Restore normal mode
     SetWorldTransform_(TZGLGDIDrawer(drawer).OffScreedDC,OneMatrix);
-    SetGraphicsMode_(TZGLGDIDrawer(drawer).OffScreedDC, GM_COMPATIBLE );
+    SetGraphicsMode_(TZGLGDIDrawer(drawer).OffScreedDC, GM_COMPATIBLE);
   end;
 end;
 

@@ -521,8 +521,8 @@ var
   PLine:PTLLLine;
   PPolyLine:PTLLPolyLine;
   PTriangle:PTLLTriangle;
-  pv1,pv2:PGDBVertex3S;
-  v1,v2:GDBVertex3S;
+  pv1,pv2:PGDBvertex;
+  v1,v2:GDBvertex;
   pts:array of TPoint;
   j:integer;
 begin

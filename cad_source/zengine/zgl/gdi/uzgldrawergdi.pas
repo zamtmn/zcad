@@ -650,18 +650,15 @@ begin
   txtSy:=TQtFont(PGDBfont(PSymbolsParam.pfont)^.DummyDrawerHandle).Metrics.descent;
   txtSy:=TQtFont(PGDBfont(PSymbolsParam.pfont)^.DummyDrawerHandle).Metrics.height;}
 
-  // FIX #296: Compensate for inverted font metrics ratio in uzefontfileformatttf.pas
-  // The NeededFontHeight is calculated with the wrong formula (was reverted in commit bd8a0cc5b):
-  //   CURRENT (WRONG): NeededFontHeight = height * (Ascent+Descent) / CapHeight
-  //   CORRECT: NeededFontHeight = height * CapHeight / (Ascent+Descent)
+  // FIX #310: Simplified font metrics compensation for proportional character spacing
+  // The NeededFontHeight is calculated in uzefontfileformatttf.pas as:
+  //   NeededFontHeight = height * (Ascent+Descent) / CapHeight
   //
-  // Since the fix in the fonts folder was reverted, we apply a compensating correction here
-  // in the GDI drawer to fix the rendering without modifying the fonts folder.
+  // To ensure character spacing scales proportionally with font height, we apply
+  // a single (not squared) compensation factor to maintain linear scaling.
   //
-  // For TTF fonts, we need to multiply by (CapHeight / (Ascent+Descent))^2 to compensate:
-  //   - First division cancels the wrong multiplication in fonts folder
-  //   - Second division applies the correct ratio
-  // This results in the formula: txtSy = NeededFontHeight * (CapHeight/(Ascent+Descent))^2 / zoom / deffonth
+  // Previous approach used (CapHeight/(Ascent+Descent))^2 which caused non-linear
+  // scaling of character spacing when font height changed.
   txtSy:=PSymbolsParam^.NeededFontHeight/(rc.DrawingContext.zoom)/(deffonth);
 
   // Apply the compensating correction for TTF fonts only
@@ -669,10 +666,10 @@ begin
     // Access TTF font metrics to calculate the compensating ratio
     with TZETFFFontImpl(PGDBfont(PSymbolsParam.pfont)^.font).TTFImpl do begin
       if (Ascent + Descent) <> 0 then begin
-        // Apply the square of the inverted ratio to compensate for the wrong formula
-        // Ratio = CapHeight / (Ascent+Descent)
-        // We multiply txtSy by Ratio^2 = (CapHeight / (Ascent+Descent))^2
-        txtSy := txtSy * (CapHeight * CapHeight) / ((Ascent + Descent) * (Ascent + Descent));
+        // FIX #310: Use single compensation factor instead of squared
+        // This ensures txtSy scales linearly with font height
+        // Result: txtSy = height * CapHeight/(Ascent+Descent) / zoom / deffonth
+        txtSy := txtSy * CapHeight / (Ascent + Descent);
       end;
     end;
   end;

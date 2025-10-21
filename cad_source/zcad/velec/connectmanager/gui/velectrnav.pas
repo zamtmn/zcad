@@ -56,9 +56,14 @@ type
     FIsResizing: Boolean; // Флаг для предотвращения рекурсии при изменении размера
     FDevicesList: TListVElectrDevStruct; // Список устройств из TConnectionManager (вместо SQLite)
     FContainerPopupMenu: TPopupMenu; // Popup menu для родительских нод (контейнеров)
+    // Для различения одинарного и двойного щелчка
+    FClickTimer: TTimer; // Таймер для задержки обработки одинарного щелчка
+    FPendingClickNode: PVirtualNode; // Нода, ожидающая обработки одинарного щелчка
+    FPendingClickColumn: TColumnIndex; // Колонка, ожидающая обработки одинарного щелчка
     procedure InitializeActionAndButton; // Инициализация действий и кнопок панели инструментов
     procedure InitializePanels;          // Инициализация и настройка панелей интерфейса
     procedure InitializeContainerPopupMenu; // Инициализация popup menu для контейнеров
+    procedure ClickTimerExecute(Sender: TObject); // Обработчик таймера для отложенного одинарного щелчка
 
     procedure InitializeDeviceTree;    // Инициализация дерева устройств FDeviceTree
     procedure InitializeVstDev;        // Инициализация виртуальной таблицы устройств
@@ -109,6 +114,14 @@ begin
 
   // Инициализация popup menu для контейнеров
   InitializeContainerPopupMenu;
+
+  // Инициализация таймера для различения одинарного и двойного щелчка
+  FClickTimer := TTimer.Create(Self);
+  FClickTimer.Enabled := False;
+  FClickTimer.Interval := 300; // 300 мс задержка для различения кликов
+  FClickTimer.OnTimer := @ClickTimerExecute;
+  FPendingClickNode := nil;
+  FPendingClickColumn := -1;
 
     try
     // Подписываемся на событие изменения размера фрейма
@@ -529,10 +542,21 @@ begin
     ShowMessage('Редактировать: ' + NodeData^.HDName)
   else
   begin
-    // For device nodes (nodes without children), show "один щелчок" message
+    // For device nodes (nodes without children), delay showing "один щелчок" message
+    // to allow double-click detection
     // Parent nodes (containers) continue to work as usual (expand/collapse)
     if not vstDev.HasChildren[Node] then
-      ShowMessage('один щелчок');
+    begin
+      // Stop any pending click timer
+      FClickTimer.Enabled := False;
+
+      // Save click information for delayed processing
+      FPendingClickNode := Node;
+      FPendingClickColumn := HitInfo.HitColumn;
+
+      // Start timer to execute single-click action after delay
+      FClickTimer.Enabled := True;
+    end;
   end;
 end;
 
@@ -543,6 +567,9 @@ var
   HitInfo: THitInfo;
   P: TPoint;
 begin
+  // Stop the single-click timer to prevent it from firing
+  FClickTimer.Enabled := False;
+
   P := vstDev.ScreenToClient(Mouse.CursorPos);
   vstDev.GetHitTestInfoAt(P.X, P.Y, True, HitInfo);
 
@@ -610,6 +637,25 @@ begin
   Allowed := (Column >= 0) and (Column <= 7);
 end;
 
+// Обработчик таймера для выполнения отложенного одинарного щелчка
+// Вызывается через 300мс после клика, если не произошел двойной щелчок
+procedure TVElectrNav.ClickTimerExecute(Sender: TObject);
+begin
+  // Отключаем таймер
+  FClickTimer.Enabled := False;
+
+  // Проверяем, что нода для обработки еще установлена
+  if Assigned(FPendingClickNode) then
+  begin
+    // Выполняем действие одинарного щелчка для устройства
+    ShowMessage('один щелчок');
+
+    // Очищаем состояние
+    FPendingClickNode := nil;
+    FPendingClickColumn := -1;
+  end;
+end;
+
 // Обработчик изменения текста в ячейке vstDev
 // Обновляет данные в FDevicesList при редактировании
 procedure TVElectrNav.vstDevNewText(Sender: TBaseVirtualTree;
@@ -674,6 +720,13 @@ end;
 
 destructor TVElectrNav.Destroy;
 begin
+  // Останавливаем и освобождаем таймер
+  if Assigned(FClickTimer) then
+  begin
+    FClickTimer.Enabled := False;
+    FClickTimer.Free;
+  end;
+
   // Освобождаем popup menu
   if Assigned(FContainerPopupMenu) then
     FContainerPopupMenu.Free;

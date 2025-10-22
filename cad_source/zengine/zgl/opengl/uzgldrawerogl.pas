@@ -330,7 +330,7 @@ begin
 end;
 procedure TZGLOpenGLDrawer.SetColor(const red, green, blue, alpha: byte);
 begin
-     oglsm.glcolor4ub(red, green, blue, alpha);
+     oglsm.glcolor3ub(red, green, blue);
 end;
 procedure TZGLOpenGLDrawer.ClearScreen(stencil:boolean);
 begin
@@ -341,7 +341,7 @@ begin
 end;
 procedure TZGLOpenGLDrawer.SetColor(const color: TRGB);
 begin
-     oglsm.glcolor4ub(color.r, color.g, color.b, color.a);
+     oglsm.glcolor3ubv(color);
 end;
 procedure TZGLOpenGLDrawer.SetClearColor(const red, green, blue, alpha: byte);
 begin

@@ -62,8 +62,6 @@ uses
                        //базовые типы
   uzcstrconsts,        //resource strings
                        //строковые константы
-  uzepalette,          //palette and RGB types
-                       //палитра и типы RGB
   uzccominteractivemanipulators; //interactive manipulators
                                   //интерактивные манипуляторы
 
@@ -171,8 +169,6 @@ var
   firstPoint: GDBVertex;
   getResult: TGetResult;
   pointCount: integer;
-  savedAlpha: Byte; // Save original alpha value for restoration
-                    // Сохраняем оригинальное значение прозрачности для восстановления
 begin
   // Вывод сообщения о запуске команды
   // Output message about command launch
@@ -181,12 +177,6 @@ begin
   // Получаем первую точку
   // Get first point
   if commandmanager.get3dpoint(rscmSpecifyFirstPoint, firstPoint) = GRNormal then begin
-    // Save original alpha value and set 50% transparency for cyan color
-    // Сохраняем оригинальное значение прозрачности и устанавливаем 50% прозрачность для голубого цвета
-    savedAlpha := palette[4].RGB.a;
-    palette[4].RGB.a := 128; // 50% transparency (255 * 0.5 = 127.5 ≈ 128)
-                             // 50% прозрачность (255 * 0.5 = 127.5 ≈ 128)
-
     // Создаем полилинию
     // Create polyline
     ppolyline := GDBObjPolyline.CreateInstance;
@@ -200,8 +190,8 @@ begin
     // Create hatch for visualization of construction process
     phatch := GDBObjHatch.CreateInstance;
     zcSetEntPropFromCurrentDrawingProp(phatch);
-    phatch^.vp.Color := 4; // Light blue color (cyan) with 50% transparency
-                           // Светло-голубой цвет (cyan) с 50% прозрачностью
+    phatch^.vp.Color := 4; // Light blue color (cyan)
+                           // Светло-голубой цвет (cyan)
     phatch^.PPattern := nil; // Solid hatch
                              // Сплошная штриховка
 
@@ -260,10 +250,6 @@ begin
       drawings.GetCurrentDWG^.FreeConstructionObjects;
       zcUI.TextMessage('Отменено: необходимо минимум 3 точки / Cancelled: minimum 3 points required', TMWOHistoryOut);
     end;
-
-    // Restore original alpha value for cyan color
-    // Восстанавливаем оригинальное значение прозрачности для голубого цвета
-    palette[4].RGB.a := savedAlpha;
   end;
 
   result := cmd_ok;

@@ -465,6 +465,8 @@ begin
       populator.PopulateTree(filterPath);
       // Заполняем суммарную мощность для контейнеров 1-го и 2-го уровня
       populator.FillContainersPower;
+      // Заполняем количество устройств в devname для контейнеров 1-го и 2-го уровня
+      populator.FillContainersDeviceCount;
     finally
       populator.Free;
     end;

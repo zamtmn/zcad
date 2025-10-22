@@ -335,7 +335,7 @@ begin
       // Выделяем созданную полилинию для последующего редактирования в инспекторе
       // Select created polyline for subsequent editing in inspector
       ppolyline^.Select(drawings.GetCurrentDWG^.wa.param.SelDesc.Selectedobjcount,
-                        drawings.GetCurrentDWG^.Selector);
+                        @drawings.GetCurrentDWG^.Selector);
 
       zcUI.TextMessage('Пространство создано / Space created', TMWOHistoryOut);
     end else begin

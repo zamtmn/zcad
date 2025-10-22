@@ -107,6 +107,10 @@ type
     // Заполняет поле Power в нодах контейнеров 1-го и 2-го уровня
     // суммируя мощность всех устройств внутри каждой ноды
     procedure FillContainersPower;
+
+    // Заполняет поле DevName в нодах контейнеров 1-го и 2-го уровня
+    // добавляя количество устройств внутри каждой ноды в формате " (Nшт)"
+    procedure FillContainersDeviceCount;
   end;
 
 implementation
@@ -496,6 +500,39 @@ begin
   Result := TotalPower;
 end;
 
+// Рекурсивная функция для подсчета общего количества всех устройств внутри узла
+// Возвращает общее количество конечных устройств (листьев дерева)
+function CalculateNodeDeviceCount(ATree: TLazVirtualStringTree; ANode: PVirtualNode): integer;
+var
+  ChildNode: PVirtualNode;
+  TotalCount: integer;
+begin
+  TotalCount := 0;
+
+  // Получаем первого потомка
+  ChildNode := ATree.GetFirstChild(ANode);
+
+  // Проходим по всем дочерним узлам
+  while Assigned(ChildNode) do
+  begin
+    // Если у узла есть дочерние элементы, это контейнер - считаем рекурсивно
+    if ATree.HasChildren[ChildNode] then
+    begin
+      TotalCount := TotalCount + CalculateNodeDeviceCount(ATree, ChildNode);
+    end
+    else
+    begin
+      // Это конечное устройство (лист), увеличиваем счетчик
+      TotalCount := TotalCount + 1;
+    end;
+
+    // Переходим к следующему потомку
+    ChildNode := ATree.GetNextSibling(ChildNode);
+  end;
+
+  Result := TotalCount;
+end;
+
 // Заполняет поле Power в нодах контейнеров 1-го и 2-го уровня
 // суммируя мощность всех устройств внутри каждой ноды
 procedure TVstDevPopulator.FillContainersPower;
@@ -556,6 +593,64 @@ begin
     if Assigned(Level1NodeData) then
     begin
       Level1NodeData^.Power := Level1Power;
+    end;
+
+    // Переходим к следующему узлу Level 1
+    Level1Node := FVstDev.GetNextSibling(Level1Node);
+  end;
+end;
+
+// Заполняет поле DevName в нодах контейнеров 1-го и 2-го уровня
+// добавляя количество устройств внутри каждой ноды в формате " (Nшт)"
+procedure TVstDevPopulator.FillContainersDeviceCount;
+var
+  Level1Node: PVirtualNode;
+  Level2Node: PVirtualNode;
+  Level1NodeData: PGridNodeData;
+  Level2NodeData: PGridNodeData;
+  Level1DeviceCount: integer;
+  Level2DeviceCount: integer;
+begin
+  // Начинаем обход с корневого узла
+  Level1Node := FVstDev.GetFirst;
+
+  // Проходим по всем узлам уровня 1 (группы по feedernum)
+  while Assigned(Level1Node) do
+  begin
+    // Подсчитываем общее количество устройств в Level 1
+    Level1DeviceCount := CalculateNodeDeviceCount(FVstDev, Level1Node);
+
+    // Получаем первый дочерний узел (может быть Level 2 или устройством)
+    Level2Node := FVstDev.GetFirstChild(Level1Node);
+
+    // Проходим по всем дочерним узлам Level1
+    while Assigned(Level2Node) do
+    begin
+      // Проверяем, есть ли у узла дочерние элементы (это узел Level 2)
+      if FVstDev.HasChildren[Level2Node] then
+      begin
+        // Это контейнер уровня 2 - подсчитываем его устройства
+        Level2DeviceCount := CalculateNodeDeviceCount(FVstDev, Level2Node);
+
+        // Обновляем DevName узла Level 2, добавляя количество устройств
+        Level2NodeData := FVstDev.GetNodeData(Level2Node);
+        if Assigned(Level2NodeData) then
+        begin
+          // Добавляем " (Nшт)" к существующему DevName
+          Level2NodeData^.DevName := Level2NodeData^.DevName + ' (' + IntToStr(Level2DeviceCount) + 'шт)';
+        end;
+      end;
+
+      // Переходим к следующему дочернему узлу Level1
+      Level2Node := FVstDev.GetNextSibling(Level2Node);
+    end;
+
+    // Обновляем DevName узла Level 1, добавляя количество устройств
+    Level1NodeData := FVstDev.GetNodeData(Level1Node);
+    if Assigned(Level1NodeData) then
+    begin
+      // Добавляем " (Nшт)" к существующему DevName
+      Level1NodeData^.DevName := Level1NodeData^.DevName + ' (' + IntToStr(Level1DeviceCount) + 'шт)';
     end;
 
     // Переходим к следующему узлу Level 1

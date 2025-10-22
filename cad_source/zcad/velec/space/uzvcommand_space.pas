@@ -103,7 +103,7 @@ begin
   if Trim(operands) = '' then
     exit;
 
-  VarExt := ppolyline^.GetExtension<TVariablesExtender>;
+  VarExt := ppolyline^.specialize GetExtension<TVariablesExtender>;
   if VarExt = nil then
     exit;
 

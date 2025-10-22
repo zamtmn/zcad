@@ -62,6 +62,10 @@ uses
                        //базовые типы
   uzcstrconsts,        //resource strings
                        //строковые константы
+  uzcenitiesvariablesextender,  //entity variables extender
+                                //расширение переменных примитивов
+  uzcextdrincludingvolume,      //including volume extender
+                                //расширение включающего объема
   uzccominteractivemanipulators; //interactive manipulators
                                   //интерактивные манипуляторы
 
@@ -236,6 +240,19 @@ begin
     // Проверяем что введено минимум 3 точки для создания пространства
     // Check that at least 3 points were entered to create a space
     if pointCount >= 3 then begin
+      // Добавляем расширения к полилинии перед сохранением
+      // Add extensions to polyline before saving
+
+      // Добавляем расширение extdrVariables для хранения переменных
+      // Add extdrVariables extension for storing variables
+      if ppolyline^.GetExtension<TVariablesExtender> = nil then
+        AddVariablesToEntity(ppolyline);
+
+      // Добавляем расширение extdrIncludingVolume для работы с объемом
+      // Add extdrIncludingVolume extension for volume operations
+      if ppolyline^.GetExtension<TIncludingVolumeExtender> = nil then
+        AddVolumeExtenderToEntity(ppolyline);
+
       // Удаляем штриховку из конструкторской области (она была только для визуализации)
       // Remove hatch from construct root (it was only for visualization)
       drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.RemoveData(phatch);

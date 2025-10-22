@@ -245,12 +245,12 @@ begin
 
       // Добавляем расширение extdrVariables для хранения переменных
       // Add extdrVariables extension for storing variables
-      if ppolyline^.GetExtension<TVariablesExtender> = nil then
+      if ppolyline^.specialize GetExtension<TVariablesExtender> = nil then
         AddVariablesToEntity(ppolyline);
 
       // Добавляем расширение extdrIncludingVolume для работы с объемом
       // Add extdrIncludingVolume extension for volume operations
-      if ppolyline^.GetExtension<TIncludingVolumeExtender> = nil then
+      if ppolyline^.specialize GetExtension<TIncludingVolumeExtender> = nil then
         AddVolumeExtenderToEntity(ppolyline);
 
       // Удаляем штриховку из конструкторской области (она была только для визуализации)

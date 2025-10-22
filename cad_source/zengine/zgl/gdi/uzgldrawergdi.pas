@@ -37,7 +37,7 @@ uses
     {$IFNDEF DELPHI}LCLIntf,LCLType,{$ENDIF}
     Classes,Controls,
     uzegeometrytypes,uzegeometry,uzgldrawergeneral,uzgldrawerabstract,
-    Graphics,uzbLogIntf,gzctnrVectorTypes,uzgvertex3sarray;
+    Graphics,uzbLogIntf,gzctnrVectorTypes,uzgvertex3sarray,uzglvectorobject;
 const
   NeedScreenInvalidrect=true;
 type
@@ -513,6 +513,12 @@ begin
      pgdisymbol.init;
 end;
 procedure TLLGDISymbol.drawSymbol(drawer:TZGLAbstractDrawer;var rc:TDrawContext;var GeomData:ZGLGeomData;var LLPArray:TLLPrimitivesArray;var OptData:ZGLOptimizerData;const PSymbolsParam:PTSymbolSParam;const inFrustumState:TInBoundingVolume);
+  procedure drawSymbolWithoutLCS;
+  begin
+    drawer.pushMatrixAndSetTransform(SymMatr{,true});
+    PZGLVectorObject(PExternalVectorObject).DrawCountedLLPrimitives(rc,drawer,OptData,ExternalLLPOffset,ExternalLLPCount,inFrustumState);
+    drawer.popMatrix;
+  end;
 var
    r:TRect;
 
@@ -530,13 +536,13 @@ const
 begin
      if not PSymbolsParam^.IsCanSystemDraw then
                                            begin
-                                                inherited;
+                                                drawSymbolWithoutLCS;
                                                 inc(TZGLGDIDrawer(drawer).CurrentPaintGDIData^.DebugCounter.ZGLSymbols);
                                                 exit;
                                            end;
   if TZGLGDIDrawer(drawer).CurrentPaintGDIData^.RD_TextRendering<>TRT_System then
                                                                                  begin
-                                                                                 inherited;//там вывод букв треугольниками
+                                                                                 drawSymbolWithoutLCS;//там вывод букв треугольниками
                                                                                  inc(TZGLGDIDrawer(drawer).CurrentPaintGDIData^.DebugCounter.ZGLSymbols);
                                                                                  end;
   if TZGLGDIDrawer(drawer).CurrentPaintGDIData^.RD_TextRendering=TRT_ZGL then

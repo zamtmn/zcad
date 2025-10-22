@@ -31,6 +31,8 @@ unit uzvcommand_space;
 interface
 uses
   sysutils,
+  Classes,             //TStringList and related classes
+                       //TStringList и связанные классы
 
   uzccommandsmanager,
   uzccommandsabstract,
@@ -62,8 +64,16 @@ uses
                        //базовые типы
   uzcstrconsts,        //resource strings
                        //строковые константы
-  uzccominteractivemanipulators; //interactive manipulators
+  uzcenitiesvariablesextender,  //entity variables extender
+                                //расширение переменных примитивов
+  uzcextdrincludingvolume,      //including volume extender
+                                //расширение включающего объема
+  uzccominteractivemanipulators, //interactive manipulators
                                   //интерактивные манипуляторы
+  varmandef,                     //variable manager definitions
+                                 //определения менеджера переменных
+  UBaseTypeDescriptor;           //base type descriptors
+                                 //базовые дескрипторы типов
 
 type
   // Structure to hold polyline and hatch for interactive manipulation
@@ -77,6 +87,67 @@ type
 function addSpace_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 
 implementation
+
+// Helper procedure to parse and add variables from operands string
+// Вспомогательная процедура для разбора и добавления переменных из строки операндов
+procedure ParseAndAddVariables(ppolyline: PGDBObjPolyLine; const operands: TCommandOperands);
+var
+  VarExt: TVariablesExtender;
+  params: TStringList;
+  i: integer;
+  varname, username, typename: string;
+  vd: vardesk;
+begin
+  // Check if we have operands
+  // Проверяем наличие операндов
+  if Trim(operands) = '' then
+    exit;
+
+  VarExt := ppolyline^.specialize GetExtension<TVariablesExtender>;
+  if VarExt = nil then
+    exit;
+
+  // Split operands by comma
+  // Разделяем операнды по запятой
+  params := TStringList.Create;
+  try
+    params.Delimiter := ',';
+    params.StrictDelimiter := True;
+    params.DelimitedText := operands;
+
+    // Process variables in triplets: varname, username, typename
+    // Обрабатываем переменные в триплетах: имя_переменной, имя_пользователя, тип
+    i := 0;
+    while i + 2 < params.Count do begin
+      varname := Trim(params[i]);
+      username := Trim(params[i + 1]);
+      typename := Trim(params[i + 2]);
+
+      // Remove quotes if present
+      // Удаляем кавычки если есть
+      if (Length(username) >= 2) and (username[1] = '''') and (username[Length(username)] = '''') then
+        username := Copy(username, 2, Length(username) - 2);
+
+      // Check if variable already exists
+      // Проверяем существует ли уже переменная
+      if VarExt.entityunit.FindVariable(varname) = nil then begin
+        // Create and add the variable
+        // Создаем и добавляем переменную
+        VarExt.entityunit.setvardesc(vd, varname, username, typename);
+        VarExt.entityunit.InterfaceVariables.createvariable(vd.Name, vd);
+
+        zcUI.TextMessage('Добавлена переменная / Variable added: ' + varname +
+                        ' (' + username + ') : ' + typename, TMWOHistoryOut);
+      end;
+
+      // Move to next triplet
+      // Переходим к следующему триплету
+      Inc(i, 3);
+    end;
+  finally
+    params.Free;
+  end;
+end;
 
 // Interactive manipulator for space drawing with hatch visualization
 // Интерактивный манипулятор для черчения пространства с визуализацией штриховки
@@ -236,6 +307,23 @@ begin
     // Проверяем что введено минимум 3 точки для создания пространства
     // Check that at least 3 points were entered to create a space
     if pointCount >= 3 then begin
+      // Добавляем расширения к полилинии перед сохранением
+      // Add extensions to polyline before saving
+
+      // Добавляем расширение extdrVariables для хранения переменных
+      // Add extdrVariables extension for storing variables
+      if ppolyline^.specialize GetExtension<TVariablesExtender> = nil then
+        AddVariablesToEntity(ppolyline);
+
+      // Добавляем расширение extdrIncludingVolume для работы с объемом
+      // Add extdrIncludingVolume extension for volume operations
+      if ppolyline^.specialize GetExtension<TIncludingVolumeExtender> = nil then
+        AddVolumeExtenderToEntity(ppolyline);
+
+      // Парсим операнды и добавляем переменные к полилинии
+      // Parse operands and add variables to polyline
+      ParseAndAddVariables(ppolyline, operands);
+
       // Удаляем штриховку из конструкторской области (она была только для визуализации)
       // Remove hatch from construct root (it was only for visualization)
       drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.RemoveData(phatch);
@@ -243,6 +331,12 @@ begin
       // Копируем только полилинию из конструкторской области в чертеж с Undo
       // Copy only polyline from construct root to drawing with Undo
       zcMoveEntsFromConstructRootToCurrentDrawingWithUndo('addSpace');
+
+      // Выделяем созданную полилинию для последующего редактирования в инспекторе
+      // Select created polyline for subsequent editing in inspector
+      ppolyline^.Select(drawings.GetCurrentDWG^.wa.param.SelDesc.Selectedobjcount,
+                        @drawings.GetCurrentDWG^.Selector);
+
       zcUI.TextMessage('Пространство создано / Space created', TMWOHistoryOut);
     end else begin
       // Если точек меньше 3, очищаем конструкторскую область

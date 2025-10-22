@@ -42,6 +42,9 @@ type
     procedure ClearTables;
     procedure ExportDevice(const ADeviceInfo: TVElectrDevStruct);
     procedure ExportConnection(const ADeviceInfo: TVElectrDevStruct);
+    procedure ExportDeviceVOLODQ(const ADeviceInfo: TVElectrDevStruct);
+    procedure ExportDeviceInputVOLODQ(const ADeviceInfo: TVElectrDevStruct);
+    procedure ExportConnectVOLODQ(const ADeviceInfo: TVElectrDevStruct);
     procedure Commit;
 
     property DatabasePath: string read FDatabasePath write FDatabasePath;
@@ -102,6 +105,9 @@ begin
     FQuery.SQL.Text := 'DELETE * FROM Connect';
     FQuery.ExecSQL;
 
+    FQuery.SQL.Text := 'DELETE * FROM DeviceInput';
+    FQuery.ExecSQL;
+
     zcUI.TextMessage('Access tables cleared', TMWOHistoryOut);
   except
     on E: Exception do
@@ -131,6 +137,72 @@ begin
       zcUI.TextMessage('Ошибка экспорта устройства: ' + E.Message, TMWOHistoryOut);
   end;
 end;
+procedure TAccessDBExporter.ExportDeviceVOLODQ(const ADeviceInfo: TVElectrDevStruct);
+begin
+  try
+    FQuery.SQL.Text := 'INSERT INTO Device (Prim_ID, Type) VALUES (:pPrimID, :pType)';
+    FQuery.Params.ParamByName('pPrimID').AsString := ADeviceInfo.fullname;
+    FQuery.Params.ParamByName('pType').AsString := ADeviceInfo.devtype;
+    FQuery.ExecSQL;
+  except
+    on E: Exception do
+      zcUI.TextMessage('Ошибка экспорта устройства: ' + E.Message, TMWOHistoryOut);
+  end;
+end;
+
+procedure TAccessDBExporter.ExportDeviceInputVOLODQ(const ADeviceInfo: TVElectrDevStruct);
+var
+  phase:integer;
+begin
+  try
+    FQuery.SQL.Text := 'INSERT INTO DeviceInput (Input_ID, Prim_ID, Value) VALUES (:pInputID,:pPrimID, :pValue)';
+    FQuery.Params.ParamByName('pInputID').AsString := 'Cos';
+    FQuery.Params.ParamByName('pPrimID').AsString := ADeviceInfo.fullname;
+    FQuery.Params.ParamByName('pValue').AsFloat := ADeviceInfo.cosfi;
+    FQuery.ExecSQL;
+    FQuery.Params.ParamByName('pInputID').AsString := 'F';
+    FQuery.Params.ParamByName('pPrimID').AsString := ADeviceInfo.fullname;
+    if ADeviceInfo.phase = 'ABC' then
+      phase := 0
+    else if ADeviceInfo.phase = 'A' then
+      phase := 1
+    else if ADeviceInfo.phase = 'B' then
+      phase := 2
+    else if ADeviceInfo.phase = 'C' then
+      phase := 3
+    else
+      phase := -1;
+
+    FQuery.Params.ParamByName('pValue').AsFloat := phase;
+    FQuery.ExecSQL;
+    FQuery.Params.ParamByName('pInputID').AsString := 'Py';
+    FQuery.Params.ParamByName('pPrimID').AsString := ADeviceInfo.fullname;
+    FQuery.Params.ParamByName('pValue').AsFloat := ADeviceInfo.power;
+    FQuery.ExecSQL;
+    FQuery.Params.ParamByName('pInputID').AsString := 'U';
+    FQuery.Params.ParamByName('pPrimID').AsString := ADeviceInfo.fullname;
+    FQuery.Params.ParamByName('pValue').AsFloat := ADeviceInfo.voltage;
+    FQuery.ExecSQL;
+  except
+    on E: Exception do
+      zcUI.TextMessage('Ошибка экспорта устройства: ' + E.Message, TMWOHistoryOut);
+  end;
+end;
+
+procedure TAccessDBExporter.ExportConnectVOLODQ(const ADeviceInfo: TVElectrDevStruct);
+begin
+  try
+    FQuery.SQL.Text := 'INSERT INTO Connect (Prim_ID, Sec_ID, Feeder) VALUES (:pPrimID, :pSecID, :pFeeder)';
+    FQuery.Params.ParamByName('pPrimID').AsString := ADeviceInfo.fullname;
+    FQuery.Params.ParamByName('pSecID').AsString := ADeviceInfo.headdev;
+    FQuery.Params.ParamByName('pFeeder').AsInteger := ADeviceInfo.feedernum;
+    FQuery.ExecSQL;
+  except
+    on E: Exception do
+      zcUI.TextMessage('Ошибка экспорта подключения: ' + E.Message, TMWOHistoryOut);
+  end;
+end;
+
 
 procedure TAccessDBExporter.ExportConnection(const ADeviceInfo: TVElectrDevStruct);
 begin

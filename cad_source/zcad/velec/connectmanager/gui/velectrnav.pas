@@ -43,6 +43,8 @@ type
     procedure vstDevDblClick(Sender: TObject);
     procedure vstDevMouseUp(Sender: TObject; Button: TMouseButton;
       Shift: TShiftState; X, Y: Integer);
+    procedure vstDevContextPopup(Sender: TObject; MousePos: TPoint;
+      var Handled: Boolean);
     procedure vstDevEditing(Sender: TBaseVirtualTree; Node: PVirtualNode;
       Column: TColumnIndex; var Allowed: Boolean);
     procedure vstDevNewText(Sender: TBaseVirtualTree; Node: PVirtualNode;
@@ -236,6 +238,7 @@ begin
     vstDev.OnClick := @vstDevClick;
     vstDev.OnDblClick := @vstDevDblClick;
     vstDev.OnMouseUp := @vstDevMouseUp;
+    vstDev.OnContextPopup := @vstDevContextPopup;
     vstDev.OnEditing := @vstDevEditing;
     vstDev.OnNewText := @vstDevNewText;
 
@@ -462,6 +465,8 @@ begin
       populator.PopulateTree(filterPath);
       // Заполняем суммарную мощность для контейнеров 1-го и 2-го уровня
       populator.FillContainersPower;
+      // Заполняем количество устройств в devname для контейнеров 1-го и 2-го уровня
+      populator.FillContainersDeviceCount;
     finally
       populator.Free;
     end;
@@ -609,6 +614,14 @@ begin
       FContainerPopupMenu.Popup(P.X, P.Y);
     end;
   end;
+end;
+
+procedure TVElectrNav.vstDevContextPopup(Sender: TObject; MousePos: TPoint;
+  var Handled: Boolean);
+begin
+  // Prevent the standard AnchorDocking context menu from appearing
+  // We handle the context menu ourselves in vstDevMouseUp
+  Handled := True;
 end;
 
 procedure TVElectrNav.InitializeContainerPopupMenu;

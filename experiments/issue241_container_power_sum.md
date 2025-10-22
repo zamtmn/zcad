@@ -1,10 +1,16 @@
-# Развитие uzvvstdevpopulator - Суммирование мощности контейнеров - Issue #241
+# Развитие uzvvstdevpopulator - Суммирование мощности и подсчет устройств в контейнерах - Issue #241
 
 ## Описание задачи
 
 **Issue:** https://github.com/veb86/zcadvelecAI/issues/241
 
-**Требование:** В procedure TVElectrNav.recordingVstDev после вызова `populator.PopulateTree(filterPath);` добавить функцию, которая выполняет правильное заполнение нод контейнеров 1-го и 2-го уровня. На первом этапе - записать в поле Power нод контейнеров 1-го и 2-го уровня суммарную мощность Power всех устройств внутри ноды.
+**Требование 1:** В procedure TVElectrNav.recordingVstDev после вызова `populator.PopulateTree(filterPath);` добавить функцию, которая выполняет правильное заполнение нод контейнеров 1-го и 2-го уровня. На первом этапе - записать в поле Power нод контейнеров 1-го и 2-го уровня суммарную мощность Power всех устройств внутри ноды.
+
+**Требование 2 (дополнительное):** Добавить в поле devname нод контейнеров 1-го и 2-го уровня после основного текста суммарное количество всех устройств внутри ноды в формате " (Nшт)", где N - количество устройств внутри ноды.
+
+**Пример:**
+- До: `ВРУ-Гр.1`
+- После: `ВРУ-Гр.1 (5шт)` - где 5 это количество всех устройств внутри этой ноды
 
 ## Архитектура решения
 
@@ -30,14 +36,14 @@ vstDev (VirtualStringTree)
 
 ```
 vstDev (VirtualStringTree)
-├── ВРУ-Гр.1 (Level 1: Power=800) <- 100+100+100+500
-│   ├── ЩО-ЛампаA-P100-V220 (Level 2: Power=300) <- 100+100+100
+├── ВРУ-Гр.1 (4шт) (Level 1: Power=800) <- 100+100+100+500, количество устройств: 3+1=4
+│   ├── ЩО-ЛампаA-P100-V220 (3шт) (Level 2: Power=300) <- 100+100+100, количество устройств: 3
 │   │   ├── ЩО-ЛампаA (Power=100)
 │   │   ├── ЩО-ЛампаA (Power=100)
 │   │   └── ЩО-ЛампаA (Power=100)
 │   └── Розетка-Socket (Power=500)
-└── ВРУ-Гр.2 (Level 1: Power=400) <- 200+200
-    └── ЩО-ЛампаB-P200 (Level 2: Power=400) <- 200+200
+└── ВРУ-Гр.2 (2шт) (Level 1: Power=400) <- 200+200, количество устройств: 2
+    └── ЩО-ЛампаB-P200 (2шт) (Level 2: Power=400) <- 200+200, количество устройств: 2
         ├── ЩО-ЛампаB (Power=200)
         └── ЩО-ЛампаB (Power=200)
 ```
@@ -46,13 +52,17 @@ vstDev (VirtualStringTree)
 
 ### Файл: `uzvvstdevpopulator.pas`
 
-#### 1. Добавлен публичный метод в класс TVstDevPopulator
+#### 1. Добавлены публичные методы в класс TVstDevPopulator
 
 ```pascal
 public
   // Заполняет поле Power в нодах контейнеров 1-го и 2-го уровня
   // суммируя мощность всех устройств внутри каждой ноды
   procedure FillContainersPower;
+
+  // Заполняет поле DevName в нодах контейнеров 1-го и 2-го уровня
+  // добавляя количество устройств внутри каждой ноды в формате " (Nшт)"
+  procedure FillContainersDeviceCount;
 ```
 
 #### 2. Реализована вспомогательная функция CalculateNodePower
@@ -94,6 +104,49 @@ end;
 - Принимает ссылку на дерево и узел для расчета
 - Проходит по всем прямым дочерним узлам и суммирует их мощность
 - Возвращает общую сумму мощности
+
+#### 2b. Реализована вспомогательная функция CalculateNodeDeviceCount
+
+Рекурсивная функция для подсчета общего количества всех устройств внутри узла:
+
+```pascal
+function CalculateNodeDeviceCount(ATree: TLazVirtualStringTree; ANode: PVirtualNode): integer;
+var
+  ChildNode: PVirtualNode;
+  TotalCount: integer;
+begin
+  TotalCount := 0;
+
+  // Получаем первого потомка
+  ChildNode := ATree.GetFirstChild(ANode);
+
+  // Проходим по всем дочерним узлам
+  while Assigned(ChildNode) do
+  begin
+    // Если у узла есть дочерние элементы, это контейнер - считаем рекурсивно
+    if ATree.HasChildren[ChildNode] then
+    begin
+      TotalCount := TotalCount + CalculateNodeDeviceCount(ATree, ChildNode);
+    end
+    else
+    begin
+      // Это конечное устройство (лист), увеличиваем счетчик
+      TotalCount := TotalCount + 1;
+    end;
+
+    // Переходим к следующему потомку
+    ChildNode := ATree.GetNextSibling(ChildNode);
+  end;
+
+  Result := TotalCount;
+end;
+```
+
+**Особенности:**
+- Функция объявлена на уровне implementation (не является методом класса)
+- Рекурсивно обходит всё дерево устройств внутри узла
+- Считает только конечные устройства (листья дерева), игнорируя контейнеры
+- Возвращает общее количество устройств
 
 #### 3. Реализация метода FillContainersPower
 
@@ -186,6 +239,84 @@ end;
 - Использует HasChildren для определения типа узла (контейнер или устройство)
 - Суммирование выполняется снизу вверх: сначала Level 2, затем Level 1
 
+#### 4. Реализация метода FillContainersDeviceCount
+
+Метод для добавления количества устройств в DevName контейнеров:
+
+```pascal
+procedure TVstDevPopulator.FillContainersDeviceCount;
+var
+  Level1Node: PVirtualNode;
+  Level2Node: PVirtualNode;
+  Level1NodeData: PGridNodeData;
+  Level2NodeData: PGridNodeData;
+  Level1DeviceCount: integer;
+  Level2DeviceCount: integer;
+begin
+  // Начинаем обход с корневого узла
+  Level1Node := FVstDev.GetFirst;
+
+  // Проходим по всем узлам уровня 1 (группы по feedernum)
+  while Assigned(Level1Node) do
+  begin
+    // Подсчитываем общее количество устройств в Level 1
+    Level1DeviceCount := CalculateNodeDeviceCount(FVstDev, Level1Node);
+
+    // Получаем первый дочерний узел (может быть Level 2 или устройством)
+    Level2Node := FVstDev.GetFirstChild(Level1Node);
+
+    // Проходим по всем дочерним узлам Level1
+    while Assigned(Level2Node) do
+    begin
+      // Проверяем, есть ли у узла дочерние элементы (это узел Level 2)
+      if FVstDev.HasChildren[Level2Node] then
+      begin
+        // Это контейнер уровня 2 - подсчитываем его устройства
+        Level2DeviceCount := CalculateNodeDeviceCount(FVstDev, Level2Node);
+
+        // Обновляем DevName узла Level 2, добавляя количество устройств
+        Level2NodeData := FVstDev.GetNodeData(Level2Node);
+        if Assigned(Level2NodeData) then
+        begin
+          // Добавляем " (Nшт)" к существующему DevName
+          Level2NodeData^.DevName := Level2NodeData^.DevName + ' (' + IntToStr(Level2DeviceCount) + 'шт)';
+        end;
+      end;
+
+      // Переходим к следующему дочернему узлу Level1
+      Level2Node := FVstDev.GetNextSibling(Level2Node);
+    end;
+
+    // Обновляем DevName узла Level 1, добавляя количество устройств
+    Level1NodeData := FVstDev.GetNodeData(Level1Node);
+    if Assigned(Level1NodeData) then
+    begin
+      // Добавляем " (Nшт)" к существующему DevName
+      Level1NodeData^.DevName := Level1NodeData^.DevName + ' (' + IntToStr(Level1DeviceCount) + 'шт)';
+    end;
+
+    // Переходим к следующему узлу Level 1
+    Level1Node := FVstDev.GetNextSibling(Level1Node);
+  end;
+end;
+```
+
+**Алгоритм:**
+
+1. Проходим по всем узлам Level 1 (корневые узлы дерева - группы по feedernum)
+2. Для каждого узла Level 1:
+   - Вызываем CalculateNodeDeviceCount для подсчета всех устройств внутри Level1
+   - Проходим по всем дочерним узлам
+   - Для каждого узла Level 2 (HasChildren = true):
+     - Подсчитываем количество устройств внутри Level 2
+     - Добавляем " (Nшт)" к DevName узла Level 2
+   - Добавляем " (Nшт)" к DevName узла Level 1
+
+**Особенности реализации:**
+- Использует рекурсивную функцию CalculateNodeDeviceCount для подсчета всех устройств
+- Считает только конечные устройства (листья), не считает контейнеры
+- Корректно обрабатывает вложенную структуру (Level 2 внутри Level 1)
+
 ### Файл: `velectrnav.pas`
 
 #### Обновлена процедура recordingVstDev
@@ -203,6 +334,8 @@ begin
       populator.PopulateTree(filterPath);
       // Заполняем суммарную мощность для контейнеров 1-го и 2-го уровня
       populator.FillContainersPower;
+      // Заполняем количество устройств в devname для контейнеров 1-го и 2-го уровня
+      populator.FillContainersDeviceCount;
     finally
       populator.Free;
     end;
@@ -228,8 +361,8 @@ Level 1: ВРУ-Гр.1
 
 **Ожидаемый результат:**
 ```
-Level 1: ВРУ-Гр.1 (Power=300)
-  Level 2: ЩО (Power=300)
+Level 1: ВРУ-Гр.1 (3шт) (Power=300)
+  Level 2: ЩО (3шт) (Power=300)
     Device1: Power=100
     Device2: Power=100
     Device3: Power=100
@@ -248,8 +381,8 @@ Level 1: ВРУ-Гр.1
 
 **Ожидаемый результат:**
 ```
-Level 1: ВРУ-Гр.1 (Power=700)
-  Level 2: ЩО (Power=200)
+Level 1: ВРУ-Гр.1 (3шт) (Power=700)
+  Level 2: ЩО (2шт) (Power=200)
     Device1: Power=100
     Device2: Power=100
   Device3: Power=500
@@ -270,11 +403,11 @@ Level 1: ВРУ-Гр.1
 
 **Ожидаемый результат:**
 ```
-Level 1: ВРУ-Гр.1 (Power=600)
-  Level 2: ЩО (Power=200)
+Level 1: ВРУ-Гр.1 (4шт) (Power=600)
+  Level 2: ЩО (2шт) (Power=200)
     Device1: Power=100
     Device2: Power=100
-  Level 2: Розетка (Power=400)
+  Level 2: Розетка (2шт) (Power=400)
     Device3: Power=200
     Device4: Power=200
 ```
@@ -315,9 +448,10 @@ Level 1: ВРУ-Гр.1 (Power=600)
 ## Заключение
 
 Реализация полностью соответствует требованиям issue #241:
-- ✅ Добавлена функция после populator.PopulateTree(filterPath)
-- ✅ Функция правильно заполняет ноды контейнеров 1-го уровня
-- ✅ Функция правильно заполняет ноды контейнеров 2-го уровня
+- ✅ Добавлены функции после populator.PopulateTree(filterPath)
+- ✅ Функции правильно заполняют ноды контейнеров 1-го уровня
+- ✅ Функции правильно заполняют ноды контейнеров 2-го уровня
 - ✅ В поле Power записывается суммарная мощность всех устройств внутри ноды
+- ✅ В поле DevName добавляется количество устройств в формате " (Nшт)"
 - ✅ Код хорошо структурирован и прокомментирован
 - ✅ Решение расширяемо для будущих улучшений

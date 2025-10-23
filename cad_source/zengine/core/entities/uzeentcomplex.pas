@@ -13,7 +13,7 @@
 *****************************************************************************
 }
 {
-@author(Andrey Zubarev <zamtmn@yandex.ru>) 
+@author(Andrey Zubarev <zamtmn@yandex.ru>)
 }
 unit uzeentcomplex;
 {$Mode delphi}{$H+}

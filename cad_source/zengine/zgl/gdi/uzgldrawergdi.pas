@@ -37,8 +37,7 @@ uses
     {$IFNDEF DELPHI}LCLIntf,LCLType,{$ENDIF}
     Classes,Controls,
     uzegeometrytypes,uzegeometry,uzgldrawergeneral,uzgldrawerabstract,
-    Graphics,uzbLogIntf,gzctnrVectorTypes,uzgvertex3sarray,uzglvectorobject,
-    uzeconsts,uzefontshx,uzefontfileformatttf;
+    Graphics,uzbLogIntf,gzctnrVectorTypes,uzgvertex3sarray,uzglvectorobject;
 const
   NeedScreenInvalidrect=true;
 type
@@ -513,59 +512,13 @@ begin
      pointer(pgdisymbol):=pa.getDataMutable(pa.AllocData(sizeof(TLLGDISymbol)));
      pgdisymbol.init;
 end;
-
-// Отрисовка SHX примитивов через GDI
-// Rendering SHX primitives using GDI
-procedure RenderSHXPrimitivesWithGDI(DC:HDC;const FontData:PZGLVectorObject;const LLPOffset,LLPCount:TArrayIndex;const Transform:DMatrix4D;const ScreenTransform:TZGLGDIDrawer);
-var
-  i,primIndex:TArrayIndex;
-  PPrimitive:PTLLPrimitive;
-  PLine:PTLLLine;
-  PPolyLine:PTLLPolyLine;
-  PTriangle:PTLLTriangle;
-  pv1,pv2:PGDBvertex;
-  v1,v2:GDBvertex;
-  pts:array of TPoint;
-  j:integer;
-begin
-  // Проходим по низкоуровневым примитивам и рисуем их через GDI
-  // Iterate through low-level primitives and render using GDI
-  primIndex:=LLPOffset;
-  i:=0;
-  while i<LLPCount do begin
-    PPrimitive:=pointer(FontData^.LLprimitives.getDataMutable(primIndex));
-
-    // Пытаемся интерпретировать как линию и проверяем валидность данных
-    // Try to cast as TLLLine and check if it has valid data
-    PLine:=PTLLLine(PPrimitive);
-    if (PLine^.P1Index>=0) and (PLine^.P1Index+1<FontData^.GeomData.Vertex3S.Count) then begin
-      // Получаем вершины линии
-      // Get line vertices
-      pv1:=FontData^.GeomData.Vertex3S.getDataMutable(PLine^.P1Index);
-      pv2:=FontData^.GeomData.Vertex3S.getDataMutable(PLine^.P1Index+1);
-
-      // Применяем трансформацию символа к вершинам
-      // Transform vertices with symbol transformation
-      v1:=VectorTransform3d(pv1^,Transform);
-      v2:=VectorTransform3d(pv2^,Transform);
-
-      // Преобразуем в экранные координаты
-      // Transform to screen coordinates
-      v1:=ScreenTransform.TranslatePoint(v1);
-      v2:=ScreenTransform.TranslatePoint(v2);
-
-      // Рисуем линию
-      // Draw line
-      MoveToEx(DC,round(v1.x),round(v1.y),nil);
-      LineTo(DC,round(v2.x),round(v2.y));
-    end;
-
-    primIndex:=primIndex+PPrimitive^.getPrimitiveSize;
-    inc(i);
-  end;
-end;
-
 procedure TLLGDISymbol.drawSymbol(drawer:TZGLAbstractDrawer;var rc:TDrawContext;var GeomData:ZGLGeomData;var LLPArray:TLLPrimitivesArray;var OptData:ZGLOptimizerData;const PSymbolsParam:PTSymbolSParam;const inFrustumState:TInBoundingVolume);
+  procedure drawSymbolWithoutLCS;
+  begin
+    drawer.pushMatrixAndSetTransform(SymMatr{,true});
+    PZGLVectorObject(PExternalVectorObject).DrawCountedLLPrimitives(rc,drawer,OptData,ExternalLLPOffset,ExternalLLPCount,inFrustumState);
+    drawer.popMatrix;
+  end;
 var
    r:TRect;
 
@@ -576,33 +529,24 @@ var
    {gdiDrawYOffset,}txtOblique,txtRotate,txtSx,txtSy:single;
 
    lfcp:TLogFont;
-   isSHXFont:Boolean;
 
 const
   deffonth={19}100;
   cnvStr:packed array[0..3]of byte=(0,0,0,0);
 begin
-     // Если шрифт не поддерживает системную отрисовку, используем ZGL рендеринг
-     // If font doesn't support system drawing, use ZGL rendering
      if not PSymbolsParam^.IsCanSystemDraw then
                                            begin
-                                                inherited;
+                                                drawSymbolWithoutLCS;
                                                 inc(TZGLGDIDrawer(drawer).CurrentPaintGDIData^.DebugCounter.ZGLSymbols);
                                                 exit;
                                            end;
-  // Проверяем режим рендеринга текста
-  // Check text rendering mode
   if TZGLGDIDrawer(drawer).CurrentPaintGDIData^.RD_TextRendering<>TRT_System then
                                                                                  begin
-                                                                                 inherited;//там вывод букв треугольниками / text output using triangles
+                                                                                 drawSymbolWithoutLCS;//там вывод букв треугольниками
                                                                                  inc(TZGLGDIDrawer(drawer).CurrentPaintGDIData^.DebugCounter.ZGLSymbols);
                                                                                  end;
   if TZGLGDIDrawer(drawer).CurrentPaintGDIData^.RD_TextRendering=TRT_ZGL then
                                                                              exit;
-
-  // Проверяем, является ли это SHX шрифтом по типу реализации шрифта
-  // Check if this is an SHX font by checking the font implementation type
-  isSHXFont:=PGDBfont(PSymbolsParam.pfont)^.font is TZESHXFontImpl;
 
   if PGDBfont(PSymbolsParam.pfont)^.DummyDrawerHandle=0
   then
@@ -649,31 +593,7 @@ begin
   {txtSy:=TQtFont(PGDBfont(PSymbolsParam.pfont)^.DummyDrawerHandle).Metrics.ascent;
   txtSy:=TQtFont(PGDBfont(PSymbolsParam.pfont)^.DummyDrawerHandle).Metrics.descent;
   txtSy:=TQtFont(PGDBfont(PSymbolsParam.pfont)^.DummyDrawerHandle).Metrics.height;}
-
-  // FIX #310: Simplified font metrics compensation for proportional character spacing
-  // The NeededFontHeight is calculated in uzefontfileformatttf.pas as:
-  //   NeededFontHeight = height * (Ascent+Descent) / CapHeight
-  //
-  // To ensure character spacing scales proportionally with font height, we apply
-  // a single (not squared) compensation factor to maintain linear scaling.
-  //
-  // Previous approach used (CapHeight/(Ascent+Descent))^2 which caused non-linear
-  // scaling of character spacing when font height changed.
   txtSy:=PSymbolsParam^.NeededFontHeight/(rc.DrawingContext.zoom)/(deffonth);
-
-  // Apply the compensating correction for TTF fonts only
-  if (PGDBfont(PSymbolsParam.pfont)^.font is TZETFFFontImpl) then begin
-    // Access TTF font metrics to calculate the compensating ratio
-    with TZETFFFontImpl(PGDBfont(PSymbolsParam.pfont)^.font).TTFImpl do begin
-      if (Ascent + Descent) <> 0 then begin
-        // FIX #310: Use single compensation factor instead of squared
-        // This ensures txtSy scales linearly with font height
-        // Result: txtSy = height * CapHeight/(Ascent+Descent) / zoom / deffonth
-        txtSy := txtSy * CapHeight / (Ascent + Descent);
-      end;
-    end;
-  end;
-
   {$IF DEFINED(LCLQt) OR DEFINED(LCLQt5)}txtSy:=txtSy*(deffonth)/(TQtFont(PGDBfont(PSymbolsParam.pfont)^.DummyDrawerHandle).Metrics.height-1);{$ENDIF}
   txtSx:=txtSy*PSymbolsParam^.sx;
 
@@ -684,78 +604,36 @@ begin
                                                                                SetTextColor(TZGLGDIDrawer(drawer).OffScreedDC,TZGLGDIDrawer(drawer).ClearColor);
 
   SetTextAlignToBaseLine(TZGLGDIDrawer(drawer).OffScreedDC);
-
-  // Обработка текста SHX и TTF рендрингом GDI происходит по-разному
-  // SHX и TTF fonts require different rendering approaches with GDI
-  if isSHXFont and (PExternalVectorObject<>nil) and (ExternalLLPCount>0) then
-  begin
-    // Для SHX шрифтов: рисуем векторные примитивы без трансформации контекста
-    // For SHX fonts: render vector primitives without context transformation
-    // Трансформация уже применена к примитивам внутри RenderSHXPrimitivesWithGDI
-    // Transformation is already applied to primitives inside RenderSHXPrimitivesWithGDI
-    RenderSHXPrimitivesWithGDI(TZGLGDIDrawer(drawer).OffScreedDC,
-                               PZGLVectorObject(PExternalVectorObject),
-                               ExternalLLPOffset,
-                               ExternalLLPCount,
-                               SymMatr,
-                               TZGLGDIDrawer(drawer));
-    inc(TZGLGDIDrawer(drawer).CurrentPaintGDIData^.DebugCounter.SystemSymbols);
+  {$IF DEFINED(LCLQt) OR DEFINED(LCLQt5)}_transminusM2:=CreateTranslationMatrix(CreateVertex(0,-TQtDeviceContext(TZGLGDIDrawer(drawer).OffScreedDC).Metrics.ascent,0));{$ENDIF}
+  _transminusM:=CreateTranslationMatrix(CreateVertex(-x,-y,0));
+  _scaleM:=CreateScaleMatrix(CreateVertex(txtSx,txtSy,1));
+  if txtOblique<>0 then begin
+    _obliqueM.CreateRec(OneMtr,CMTShear);
+    _obliqueM.mtr[1].v[0]:=-cotan(txtOblique)
   end
   else
-  begin
-    // Для TTF шрифтов: применяем трансформацию (Scale, Rotate, Oblique) через WorldTransform
-    // For TTF fonts: apply transformation (Scale, Rotate, Oblique) via WorldTransform
-    // Строим матрицу: T(x,y) × Rotate × Oblique × Scale
-    // Build matrix: T(x,y) × Rotate × Oblique × Scale
-    // Эта матрица будет применена к точке (0,0) при рисовании
-    // This matrix will be applied to point (0,0) during rendering
+    _obliqueM:=OneMatrix;
+  _transplusM:=CreateTranslationMatrix(CreateVertex(x,y,0));
+  _rotateM:=CreateRotationMatrixZ(-txtRotate);
 
-    // ИСПРАВЛЕНИЕ #290: Применяем равномерное масштабирование для txtSx
-    // FIX #290: Apply uniform scaling for txtSx to prevent character overlap
-    // Проблема: При использовании разного txtSx и txtSy символы могут налагаться
-    // Problem: When using different txtSx and txtSy, characters may overlap
-    // Решение: Используем txtSy для обеих осей, затем применяем sx через отдельную матрицу
-    // Solution: Use txtSy for both axes, then apply sx via separate matrix
-    _scaleM:=CreateScaleMatrix(CreateVertex(txtSx,txtSy,1));
-    if txtOblique<>0 then begin
-      _obliqueM.CreateRec(OneMtr,CMTShear);
-      _obliqueM.mtr[1].v[0]:=-cotan(txtOblique);
-    end
-    else
-      _obliqueM:=OneMatrix;
-    _rotateM:=CreateRotationMatrixZ(-txtRotate);
-    _transplusM:=CreateTranslationMatrix(CreateVertex(x,y,0));
+  {$IF DEFINED(LCLQt) OR DEFINED(LCLQt5)}_transminusM:=MatrixMultiply(_transminusM,_transminusM2);{$ENDIF}
+  _transminusM:=MatrixMultiply(_transminusM,_scaleM);
+  _transminusM:=MatrixMultiply(_transminusM,_obliqueM);
+  _transminusM:=MatrixMultiply(_transminusM,_rotateM);
+  _transminusM:=MatrixMultiply(_transminusM,_transplusM);
 
-    // Применяем трансформации для TTF шрифта: T(x,y) × Rotate × Oblique × Scale
-    // Apply transformations for TTF font: T(x,y) × Rotate × Oblique × Scale
-    // Порядок справа налево: сначала Scale, потом Oblique, потом Rotate, потом T(x,y)
-    // Order right to left: first Scale, then Oblique, then Rotate, then T(x,y)
-    _transminusM:=_scaleM;
-    _transminusM:=MatrixMultiply(_transminusM,_obliqueM);
-    _transminusM:=MatrixMultiply(_transminusM,_rotateM);
-    _transminusM:=MatrixMultiply(_transminusM,_transplusM);
 
-    // Устанавливаем трансформацию для TTF текста
-    // Set transformation for TTF text
-    SetGraphicsMode_(TZGLGDIDrawer(drawer).OffScreedDC, GM_ADVANCED);
-    SetWorldTransform_(TZGLGDIDrawer(drawer).OffScreedDC,_transminusM);
 
-    // Рисуем TTF текст в точке (0,0), трансформация применится автоматически
-    // Render TTF text at point (0,0), transformation will be applied automatically
-    // ВАЖНО: Используем правильную длину строки вместо -1 для корректного UTF-8
-    // IMPORTANT: Use proper string length instead of -1 for correct UTF-8 handling
-    // FIX #290: Параметр -1 заставляет Windows интерпретировать UTF-8 как ANSI,
-    // что приводит к неправильному расчету ширины символов для многобайтовых последовательностей
-    // FIX #290: Parameter -1 makes Windows interpret UTF-8 as ANSI,
-    // causing incorrect character width calculation for multi-byte sequences
-    ExtTextOut(TZGLGDIDrawer(drawer).OffScreedDC,0,0{+round(gdiDrawYOffset)},{Options: Longint}0,@r,@s[1],length(s),nil);
-    inc(TZGLGDIDrawer(drawer).CurrentPaintGDIData^.DebugCounter.SystemSymbols);
+  SetGraphicsMode_(TZGLGDIDrawer(drawer).OffScreedDC, GM_ADVANCED );
+  SetWorldTransform_(TZGLGDIDrawer(drawer).OffScreedDC,_transminusM);
 
-    // Возвращаем обычный режим
-    // Restore normal mode
-    SetWorldTransform_(TZGLGDIDrawer(drawer).OffScreedDC,OneMatrix);
-    SetGraphicsMode_(TZGLGDIDrawer(drawer).OffScreedDC, GM_COMPATIBLE);
-  end;
+  //DrawText(TZGLGDIDrawer(drawer).OffScreedDC,'h',1,r,{Flags: Cardinal}0);
+  //TextOut(TZGLGDIDrawer(drawer).OffScreedDC, x, y, 'h', 1);
+  ExtTextOut(TZGLGDIDrawer(drawer).OffScreedDC,x,y{+round(gdiDrawYOffset)},{Options: Longint}0,@r,@s[1],-1,nil);
+  inc(TZGLGDIDrawer(drawer).CurrentPaintGDIData^.DebugCounter.SystemSymbols);
+
+  SetWorldTransform_(TZGLGDIDrawer(drawer).OffScreedDC,OneMatrix);
+  SetGraphicsMode_(TZGLGDIDrawer(drawer).OffScreedDC, GM_COMPATIBLE );
 end;
 
 initialization

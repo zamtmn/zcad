@@ -328,7 +328,7 @@ begin
       pdev := devicesListWithNum[i].dev;
 
       // Заполнение структуры данными устройства
-      deviceStruct.zcadid := GetDeviceZcadId(pdev);
+      deviceStruct.zcadid := devicesListWithNum[i].num;
       deviceStruct.fullname := GetDeviceFullName(pdev);
       deviceStruct.basename := GetDeviceBaseName(pdev);
       deviceStruct.realname := GetDeviceRealName(pdev);
@@ -747,7 +747,7 @@ begin
   SelectDeviceByZcadId(AZcadId);
 
   // Приближаем камеру к выделенному устройству
-  drawings.GetCurrentDWG.wa.ZoomSel;
+  drawings.GetCurrentDWG^.wa.ZoomSel;
 end;
 
 // Процедура для сбора длин и типов кабелей

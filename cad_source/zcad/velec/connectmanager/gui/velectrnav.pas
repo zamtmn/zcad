@@ -7,7 +7,7 @@ interface
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Types, laz.VirtualTrees, uzcdrawing, uzcdrawings, uzcinterface,
   Dialogs, ExtCtrls, ActnList, ComCtrls, Windows, fgl, Menus,
-  uzvelaccessdbcontrol, uzvmcmanager, uzvmcstruct, gvector, uzccablemanager, uzcentcable, uzeentdevice, gzctnrVectorTypes, uzcvariablesutils, uzccommandsabstract, uzeentity, uzeentblockinsert, varmandef, uzeconsts, uzvvstdevpopulator;
+  uzvelaccessdbcontrol, uzvmcmanager, uzvmcstruct, uzvmcdrawing, gvector, uzccablemanager, uzcentcable, uzeentdevice, gzctnrVectorTypes, uzcvariablesutils, uzccommandsabstract, uzeentity, uzeentblockinsert, varmandef, uzeconsts, uzvvstdevpopulator;
 
 type
 
@@ -653,6 +653,9 @@ end;
 // Обработчик таймера для выполнения отложенного одинарного щелчка
 // Вызывается через 300мс после клика, если не произошел двойной щелчок
 procedure TVElectrNav.ClickTimerExecute(Sender: TObject);
+var
+  NodeData: PGridNodeData;
+  deviceCollector: TDeviceDataCollector;
 begin
   // Отключаем таймер
   FClickTimer.Enabled := False;
@@ -660,8 +663,19 @@ begin
   // Проверяем, что нода для обработки еще установлена
   if Assigned(FPendingClickNode) then
   begin
-    // Выполняем действие одинарного щелчка для устройства
-    ShowMessage('один щелчок');
+    // Получаем данные узла
+    NodeData := vstDev.GetNodeData(FPendingClickNode);
+    if Assigned(NodeData) and (NodeData^.ZcadId > 0) then
+    begin
+      // Создаем коллектор устройств для выполнения выделения
+      deviceCollector := TDeviceDataCollector.Create;
+      try
+        // Выделяем устройство по его zcadId на чертеже
+        deviceCollector.SelectDeviceByZcadId(NodeData^.ZcadId);
+      finally
+        deviceCollector.Free;
+      end;
+    end;
 
     // Очищаем состояние
     FPendingClickNode := nil;

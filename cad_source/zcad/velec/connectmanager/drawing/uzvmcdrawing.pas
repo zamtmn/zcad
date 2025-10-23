@@ -35,6 +35,15 @@ type
   // Тип для хранения списка устройств (указателей на устройства)
   TListDev = specialize TVector<pGDBObjDevice>;
 
+  // Структура для хранения устройства вместе с его номером в массиве
+  TDevWithNum = record
+    dev: pGDBObjDevice;  // Указатель на устройство
+    num: integer;        // Номер устройства в массиве примитивов
+  end;
+
+  // Тип для хранения списка устройств с номерами
+  TListDevWithNum = specialize TVector<TDevWithNum>;
+
   TDeviceData = record
     DevName: string;
     HDName: string;
@@ -52,7 +61,8 @@ type
     function GetDeviceByName(const ADevName: string): PGDBObjDevice;
 
     // Получение списка всех устройств типа GDBDeviceID с чертежа
-    function GetAllGDBDevices: TListDev;
+    // Возвращает список структур, содержащих устройство и его номер в массиве примитивов
+    function GetAllGDBDevices: TListDevWithNum;
 
     // Получение списка выбранных устройств с чертежа
     function GetSelectedDevices: TListDev;
@@ -207,15 +217,20 @@ begin
 end;
 
 // Получение списка всех устройств типа GDBDeviceID с текущего чертежа
-// На выходе список TListDev, содержащий указатели на все устройства типа GDBDeviceID
-function TDeviceDataCollector.GetAllGDBDevices: TListDev;
+// На выходе список TListDevWithNum, содержащий структуры с указателями на устройства
+// и их номерами в массиве примитивов
+function TDeviceDataCollector.GetAllGDBDevices: TListDevWithNum;
 var
   pobj: pGDBObjEntity;
   pdev: PGDBObjDevice;
   ir: itrec;
+  devWithNum: TDevWithNum;
+  primitiveIndex: integer;
 begin
-  // Создание результирующего списка устройств
-  Result := TListDev.Create;
+  // Создание результирующего списка устройств с номерами
+  Result := TListDevWithNum.Create;
+
+  primitiveIndex := 0;
 
   // Начало итерации по всем объектам в текущем чертеже
   pobj := drawings.GetCurrentROOT^.ObjArray.beginiterate(ir);
@@ -227,9 +242,16 @@ begin
       // Приведение типа к PGDBObjDevice
       pdev := PGDBObjDevice(pobj);
 
-      // Добавление указателя на устройство в результирующий список
-      Result.PushBack(pdev);
+      // Заполнение структуры: указатель на устройство и его номер в массиве примитивов
+      devWithNum.dev := pdev;
+      devWithNum.num := primitiveIndex;
+
+      // Добавление структуры в результирующий список
+      Result.PushBack(devWithNum);
     end;
+
+    // Увеличение индекса примитива (для всех объектов, не только устройств)
+    Inc(primitiveIndex);
 
     // Переход к следующему объекту
     pobj := drawings.GetCurrentROOT^.ObjArray.iterate(ir);
@@ -273,7 +295,7 @@ end;
 // На выходе список TListVElectrDevStruct, содержащий данные всех устройств типа GDBDeviceID
 function TDeviceDataCollector.GetAllDevicesAsStructList: TListVElectrDevStruct;
 var
-  devicesList: TListDev;
+  devicesListWithNum: TListDevWithNum;
   pdev: PGDBObjDevice;
   deviceStruct: TVElectrDevStruct;
   i,count: integer;
@@ -281,14 +303,15 @@ begin
   // Создание результирующего списка структур устройств
   Result := TListVElectrDevStruct.Create;
 
-  // Получение списка всех устройств с чертежа
-  devicesList := GetAllGDBDevices;
+  // Получение списка всех устройств с чертежа (с номерами в массиве примитивов)
+  devicesListWithNum := GetAllGDBDevices;
 
   try
     // Преобразование каждого устройства в структуру TVElectrDevStruct
-    for i := 0 to devicesList.Size - 1 do
+    for i := 0 to devicesListWithNum.Size - 1 do
     begin
-      pdev := devicesList[i];
+      // Получение указателя на устройство из структуры
+      pdev := devicesListWithNum[i].dev;
 
       // Заполнение структуры данными устройства
       deviceStruct.zcadid := GetDeviceZcadId(pdev);
@@ -305,6 +328,7 @@ begin
 
       count:=1;
 
+      // Цикл по всем головным устройствам (подключениям)
       deviceStruct.headdev := GetDeviceHeadDev(pdev,count);
       while (deviceStruct.headdev<>'ERROR') do
         begin
@@ -320,8 +344,8 @@ begin
         end;
     end;
   finally
-    // Освобождение списка указателей на устройства
-    devicesList.Free;
+    // Освобождение списка устройств с номерами
+    devicesListWithNum.Free;
   end;
 end;
 

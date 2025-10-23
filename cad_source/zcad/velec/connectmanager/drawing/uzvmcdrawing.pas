@@ -80,6 +80,11 @@ type
     // Снимает выделение со всех объектов и выделяет устройство с указанным zcadId
     procedure SelectDeviceByZcadId(AZcadId: integer);
 
+    // Выделение множества устройств по их ZcadId
+    // Снимает выделение со всех объектов и выделяет устройства с указанными zcadId
+    // AZcadIds - список идентификаторов устройств для выделения
+    procedure SelectDevicesByZcadIds(const AZcadIds: array of integer);
+
     // Зуммирование (приближение) к устройству по его ZcadId
     // Зная номер объекта в массиве объектов, производит зуммирование на этом объекте
     // Снимает выделение со всех объектов, выделяет устройство с указанным zcadId и приближает к нему
@@ -674,6 +679,54 @@ begin
 
       // Если zcadId совпадает с искомым, выделяем устройство
       if currentZcadId = AZcadId then
+      begin
+        pobj^.selected := true;
+      end;
+    end;
+
+    // Переход к следующему объекту
+    pobj := drawings.GetCurrentROOT^.ObjArray.iterate(ir);
+  until pobj = nil;
+end;
+
+// Выделение множества устройств по их ZcadId
+// Снимает выделение со всех объектов и выделяет устройства с указанными zcadId
+// На входе: AZcadIds - массив идентификаторов устройств в ZCAD
+procedure TDeviceDataCollector.SelectDevicesByZcadIds(const AZcadIds: array of integer);
+var
+  pobj: pGDBObjEntity;
+  pdev: PGDBObjDevice;
+  ir: itrec;
+  currentZcadId: integer;
+  i: integer;
+  shouldSelect: boolean;
+begin
+  // Начало итерации по всем объектам в текущем чертеже
+  pobj := drawings.GetCurrentROOT^.ObjArray.beginiterate(ir);
+  if pobj <> nil then
+  repeat
+    // Снимаем выделение со всех объектов
+    pobj^.selected := false;
+
+    // Проверяем, является ли объект устройством типа GDBDeviceID
+    if pobj^.GetObjType = GDBDeviceID then
+    begin
+      pdev := PGDBObjDevice(pobj);
+      currentZcadId := GetDeviceZcadId(pdev);
+
+      // Проверяем, есть ли текущий zcadId в списке для выделения
+      shouldSelect := false;
+      for i := Low(AZcadIds) to High(AZcadIds) do
+      begin
+        if currentZcadId = AZcadIds[i] then
+        begin
+          shouldSelect := true;
+          Break;
+        end;
+      end;
+
+      // Если zcadId найден в списке, выделяем устройство
+      if shouldSelect then
       begin
         pobj^.selected := true;
       end;

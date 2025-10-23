@@ -10,6 +10,7 @@ uses
 type
   PGridNodeData = ^TGridNodeData;
   TGridNodeData = record
+    ZcadId: integer;
     DevName: string;
     RealName: string;
     Power: double;
@@ -239,6 +240,7 @@ var
   NodeData: PGridNodeData;
 begin
   NodeData := FVstDev.GetNodeData(Node);
+  NodeData^.ZcadId := -1;  // Контейнеры не имеют zcadId
   NodeData^.DevName := device.headdev+'-Гр.' + IntToStr(device.feedernum);
   NodeData^.RealName := '';
   NodeData^.Power := 0;
@@ -259,6 +261,7 @@ var
   tempName:string;
 begin
   NodeData := FVstDev.GetNodeData(Node);
+  NodeData^.ZcadId := -1;  // Контейнеры не имеют zcadId
   tempName := '';
   for i := 0 to deepConnectDev - 1 do
     tempName := tempName + ' -';
@@ -288,6 +291,7 @@ var
 begin
 
   NodeData := FVstDev.GetNodeData(Node);
+  NodeData^.ZcadId := device.zcadid;  // Сохраняем zcadId устройства
   tempName := '';
   for i := 0 to deepConnectDev - 1 do
     tempName := tempName + ' -';

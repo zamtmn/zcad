@@ -76,6 +76,10 @@ type
     // Получение устройства по номеру в списке примитивов
     function GetDeviceByPrimitiveIndex(AIndex: Integer): PGDBObjDevice;
 
+    // Выделение устройства по его ZcadId
+    // Снимает выделение со всех объектов и выделяет устройство с указанным zcadId
+    procedure SelectDeviceByZcadId(AZcadId: integer);
+
     // Функции получения значений переменных устройства
     function GetDeviceZcadId(pdev: PGDBObjDevice): integer;
     function GetDeviceFullName(pdev: PGDBObjDevice): string;
@@ -638,6 +642,41 @@ begin
 
   // Приведение типа к PGDBObjDevice и возврат результата
   Result := PGDBObjDevice(pobj);
+end;
+
+// Выделение устройства по его ZcadId
+// Снимает выделение со всех объектов и выделяет устройство с указанным zcadId
+// На входе: AZcadId - идентификатор устройства в ZCAD
+procedure TDeviceDataCollector.SelectDeviceByZcadId(AZcadId: integer);
+var
+  pobj: pGDBObjEntity;
+  pdev: PGDBObjDevice;
+  ir: itrec;
+  currentZcadId: integer;
+begin
+  // Начало итерации по всем объектам в текущем чертеже
+  pobj := drawings.GetCurrentROOT^.ObjArray.beginiterate(ir);
+  if pobj <> nil then
+  repeat
+    // Снимаем выделение со всех объектов
+    pobj^.selected := false;
+
+    // Проверяем, является ли объект устройством типа GDBDeviceID
+    if pobj^.GetObjType = GDBDeviceID then
+    begin
+      pdev := PGDBObjDevice(pobj);
+      currentZcadId := GetDeviceZcadId(pdev);
+
+      // Если zcadId совпадает с искомым, выделяем устройство
+      if currentZcadId = AZcadId then
+      begin
+        pobj^.selected := true;
+      end;
+    end;
+
+    // Переход к следующему объекту
+    pobj := drawings.GetCurrentROOT^.ObjArray.iterate(ir);
+  until pobj = nil;
 end;
 
 // Процедура для сбора длин и типов кабелей

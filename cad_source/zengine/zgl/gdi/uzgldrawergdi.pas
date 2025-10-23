@@ -529,6 +529,8 @@ var
    {gdiDrawYOffset,}txtOblique,txtRotate,txtSx,txtSy:single;
 
    lfcp:TLogFont;
+   tm:TTextMetric;
+   fontHeightCoefficient:single;
 
 const
   deffonth={19}100;
@@ -575,6 +577,10 @@ begin
            SelectObject(TZGLGDIDrawer(drawer).OffScreedDC,PGDBfont(PSymbolsParam.pfont)^.DummyDrawerHandle);
       end;
 
+  // Calculate font height coefficient based on font metrics
+  GetTextMetrics(TZGLGDIDrawer(drawer).OffScreedDC, tm);
+  fontHeightCoefficient := deffonth / tm.tmHeight;
+
   point.x:=0;
   point.y:=0;
   point.z:=0;
@@ -593,7 +599,7 @@ begin
   {txtSy:=TQtFont(PGDBfont(PSymbolsParam.pfont)^.DummyDrawerHandle).Metrics.ascent;
   txtSy:=TQtFont(PGDBfont(PSymbolsParam.pfont)^.DummyDrawerHandle).Metrics.descent;
   txtSy:=TQtFont(PGDBfont(PSymbolsParam.pfont)^.DummyDrawerHandle).Metrics.height;}
-  txtSy:=PSymbolsParam^.NeededFontHeight/(rc.DrawingContext.zoom)/(deffonth);
+  txtSy:=PSymbolsParam^.NeededFontHeight/(rc.DrawingContext.zoom)/(deffonth)*fontHeightCoefficient;
   {$IF DEFINED(LCLQt) OR DEFINED(LCLQt5)}txtSy:=txtSy*(deffonth)/(TQtFont(PGDBfont(PSymbolsParam.pfont)^.DummyDrawerHandle).Metrics.height-1);{$ENDIF}
   txtSx:=txtSy*PSymbolsParam^.sx;
 

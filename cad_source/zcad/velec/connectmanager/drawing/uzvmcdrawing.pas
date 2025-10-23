@@ -80,6 +80,11 @@ type
     // Снимает выделение со всех объектов и выделяет устройство с указанным zcadId
     procedure SelectDeviceByZcadId(AZcadId: integer);
 
+    // Зуммирование (приближение) к устройству по его ZcadId
+    // Зная номер объекта в массиве объектов, производит зуммирование на этом объекте
+    // Снимает выделение со всех объектов, выделяет устройство с указанным zcadId и приближает к нему
+    procedure ZoomToDeviceByZcadId(AZcadId: integer);
+
     // Функции получения значений переменных устройства
     function GetDeviceZcadId(pdev: PGDBObjDevice): integer;
     function GetDeviceFullName(pdev: PGDBObjDevice): string;
@@ -677,6 +682,19 @@ begin
     // Переход к следующему объекту
     pobj := drawings.GetCurrentROOT^.ObjArray.iterate(ir);
   until pobj = nil;
+end;
+
+// Зуммирование (приближение) к устройству по его ZcadId
+// Зная номер объекта в массиве объектов, производит зуммирование на этом объекте
+// Снимает выделение со всех объектов, выделяет устройство с указанным zcadId и приближает к нему
+// На входе: AZcadId - идентификатор устройства в ZCAD
+procedure TDeviceDataCollector.ZoomToDeviceByZcadId(AZcadId: integer);
+begin
+  // Выделяем устройство по его zcadId
+  SelectDeviceByZcadId(AZcadId);
+
+  // Приближаем камеру к выделенному устройству
+  drawings.GetCurrentDWG.wa.ZoomSel;
 end;
 
 // Процедура для сбора длин и типов кабелей

@@ -571,8 +571,9 @@ var
   NodeData: PGridNodeData;
   HitInfo: THitInfo;
   P: TPoint;
+  deviceCollector: TDeviceDataCollector;
 begin
-  // Stop the single-click timer to prevent it from firing
+  // Останавливаем таймер одинарного щелчка, чтобы он не сработал
   FClickTimer.Enabled := False;
 
   P := vstDev.ScreenToClient(Mouse.CursorPos);
@@ -584,10 +585,23 @@ begin
   NodeData := vstDev.GetNodeData(Node);
   if not Assigned(NodeData) then Exit;
 
-  // For device nodes (nodes without children), show "двойной щелчок" message
-  // Parent nodes (containers) continue to work as usual
+  // Для узлов-устройств (узлов без дочерних элементов) выполняем зуммирование
+  // Родительские узлы (контейнеры) продолжают работать как обычно
   if not vstDev.HasChildren[Node] then
-    ShowMessage('двойной щелчок');
+  begin
+    // Проверяем, что у устройства есть корректный zcadId
+    if NodeData^.ZcadId > 0 then
+    begin
+      // Создаем коллектор устройств для выполнения зуммирования
+      deviceCollector := TDeviceDataCollector.Create;
+      try
+        // Зуммируем на устройство по его zcadId
+        deviceCollector.ZoomToDeviceByZcadId(NodeData^.ZcadId);
+      finally
+        deviceCollector.Free;
+      end;
+    end;
+  end;
 end;
 
 procedure TVElectrNav.vstDevMouseUp(Sender: TObject; Button: TMouseButton;

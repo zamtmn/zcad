@@ -483,6 +483,55 @@ begin
   end;
 end;
 
+// Рекурсивная функция для сбора всех zcadId устройств внутри узла
+// Собирает zcadId всех дочерних устройств (листьев дерева) и возвращает их в виде массива
+// На входе: ATree - виртуальное дерево, ANode - узел для обхода
+// На выходе: массив идентификаторов zcadId всех устройств внутри узла
+function CollectDeviceZcadIdsInNode(ATree: TLazVirtualStringTree; ANode: PVirtualNode): specialize TVector<integer>;
+var
+  ChildNode: PVirtualNode;
+  NodeData: PGridNodeData;
+  ChildIds: specialize TVector<integer>;
+  i: integer;
+begin
+  // Создаем результирующий вектор для хранения zcadId
+  Result := specialize TVector<integer>.Create;
+
+  // Получаем первого потомка
+  ChildNode := ATree.GetFirstChild(ANode);
+
+  // Проходим по всем дочерним узлам
+  while Assigned(ChildNode) do
+  begin
+    // Если у узла есть дочерние элементы, это контейнер - собираем рекурсивно
+    if ATree.HasChildren[ChildNode] then
+    begin
+      ChildIds := CollectDeviceZcadIdsInNode(ATree, ChildNode);
+      try
+        // Добавляем все собранные zcadId из дочернего контейнера
+        for i := 0 to ChildIds.Size - 1 do
+        begin
+          Result.PushBack(ChildIds[i]);
+        end;
+      finally
+        ChildIds.Free;
+      end;
+    end
+    else
+    begin
+      // Это конечное устройство (лист), добавляем его zcadId
+      NodeData := ATree.GetNodeData(ChildNode);
+      if Assigned(NodeData) and (NodeData^.ZcadId > 0) then
+      begin
+        Result.PushBack(NodeData^.ZcadId);
+      end;
+    end;
+
+    // Переходим к следующему потомку
+    ChildNode := ATree.GetNextSibling(ChildNode);
+  end;
+end;
+
 // Рекурсивная функция для расчета суммарной мощности всех дочерних устройств узла
 // Возвращает сумму мощности всех дочерних узлов (рекурсивно)
 function CalculateNodePower(ATree: TLazVirtualStringTree; ANode: PVirtualNode): double;

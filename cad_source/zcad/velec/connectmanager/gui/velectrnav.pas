@@ -58,6 +58,7 @@ type
     FIsResizing: Boolean; // Флаг для предотвращения рекурсии при изменении размера
     FDevicesList: TListVElectrDevStruct; // Список устройств из TConnectionManager (вместо SQLite)
     FContainerPopupMenu: TPopupMenu; // Popup menu для родительских нод (контейнеров)
+    FRightClickedNode: PVirtualNode; // Нода, на которой был вызван контекстное меню (правый клик)
     // Для различения одинарного и двойного щелчка
     FClickTimer: TTimer; // Таймер для задержки обработки одинарного щелчка
     FPendingClickNode: PVirtualNode; // Нода, ожидающая обработки одинарного щелчка
@@ -124,6 +125,9 @@ begin
   FClickTimer.OnTimer := @ClickTimerExecute;
   FPendingClickNode := nil;
   FPendingClickColumn := -1;
+
+  // Инициализация переменной для хранения ноды, на которой был вызван контекстное меню
+  FRightClickedNode := nil;
 
     try
     // Подписываемся на событие изменения размера фрейма
@@ -611,7 +615,7 @@ var
   HitInfo: THitInfo;
   P: TPoint;
 begin
-  // Handle right mouse button click
+  // Обработка правого клика мыши
   if Button = mbRight then
   begin
     vstDev.GetHitTestInfoAt(X, Y, True, HitInfo);
@@ -620,10 +624,13 @@ begin
 
     Node := HitInfo.HitNode;
 
-    // Show popup menu only for parent nodes (containers)
-    // Parent nodes have children
+    // Показываем popup menu только для родительских нод (контейнеров)
+    // Родительские ноды имеют дочерние элементы
     if vstDev.HasChildren[Node] then
     begin
+      // Сохраняем ссылку на ноду, на которой был вызван контекстное меню
+      FRightClickedNode := Node;
+
       P := vstDev.ClientToScreen(Point.Create(X, Y));
       FContainerPopupMenu.Popup(P.X, P.Y);
     end;
@@ -652,9 +659,64 @@ begin
   FContainerPopupMenu.Items.Add(MenuItem);
 end;
 
+// Обработчик команды "Выделить все устройства в ноде"
+// Вызывается при клике на пункт меню контейнера
+// Собирает все zcadId устройств внутри выбранной ноды и выделяет их на чертеже
 procedure TVElectrNav.ContainerMenuItemClick(Sender: TObject);
+var
+  deviceCollector: TDeviceDataCollector;
+  zcadIds: specialize TVector<integer>;
+  zcadIdsArray: array of integer;
+  i: integer;
 begin
-  ShowMessage('команда правый щелчек');
+  // Проверяем, что нода была установлена при вызове контекстного меню
+  if not Assigned(FRightClickedNode) then
+  begin
+    ShowMessage('Ошибка: нода не выбрана');
+    Exit;
+  end;
+
+  // Проверяем, что это действительно контейнер (имеет дочерние элементы)
+  if not vstDev.HasChildren[FRightClickedNode] then
+  begin
+    ShowMessage('Ошибка: выбранная нода не является контейнером');
+    Exit;
+  end;
+
+  try
+    // Собираем все zcadId устройств внутри выбранной ноды
+    zcadIds := CollectDeviceZcadIdsInNode(vstDev, FRightClickedNode);
+    try
+      // Проверяем, что внутри ноды есть устройства
+      if zcadIds.Size = 0 then
+      begin
+        ShowMessage('Внутри выбранной ноды нет устройств');
+        Exit;
+      end;
+
+      // Конвертируем вектор в массив для передачи в процедуру выделения
+      SetLength(zcadIdsArray, zcadIds.Size);
+      for i := 0 to zcadIds.Size - 1 do
+      begin
+        zcadIdsArray[i] := zcadIds[i];
+      end;
+
+      // Создаем коллектор устройств для выполнения выделения на чертеже
+      deviceCollector := TDeviceDataCollector.Create;
+      try
+        // Выделяем все устройства по их zcadId на чертеже
+        deviceCollector.SelectDevicesByZcadIds(zcadIdsArray);
+      finally
+        deviceCollector.Free;
+      end;
+
+    finally
+      zcadIds.Free;
+    end;
+  except
+    on E: Exception do
+      ShowMessage('Ошибка при выделении устройств: ' + E.Message);
+  end;
 end;
 
 procedure TVElectrNav.vstDevEditing(Sender: TBaseVirtualTree;

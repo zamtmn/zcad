@@ -114,6 +114,12 @@ type
     procedure FillContainersDeviceCount;
   end;
 
+// Рекурсивная функция для сбора всех zcadId устройств внутри узла
+// Собирает zcadId всех дочерних устройств (листьев дерева) и возвращает их в виде вектора
+// На входе: ATree - виртуальное дерево, ANode - узел для обхода
+// На выходе: вектор идентификаторов zcadId всех устройств внутри узла
+function CollectDeviceZcadIdsInNode(ATree: TLazVirtualStringTree; ANode: PVirtualNode): specialize TVector<integer>;
+
 implementation
 
 { TVstDevPopulator }

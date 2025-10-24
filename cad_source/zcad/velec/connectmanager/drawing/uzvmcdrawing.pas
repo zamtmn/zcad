@@ -663,27 +663,34 @@ var
   pdev: PGDBObjDevice;
   ir: itrec;
   currentZcadId: integer;
+  DC:TDrawContext;
 begin
+  currentZcadId:=0;
   // Начало итерации по всем объектам в текущем чертеже
   pobj := drawings.GetCurrentROOT^.ObjArray.beginiterate(ir);
   if pobj <> nil then
   repeat
     // Снимаем выделение со всех объектов
-    pobj^.selected := false;
+    //pobj^.selected := false;
 
     // Проверяем, является ли объект устройством типа GDBDeviceID
     if pobj^.GetObjType = GDBDeviceID then
     begin
       pdev := PGDBObjDevice(pobj);
-      currentZcadId := GetDeviceZcadId(pdev);
+      //currentZcadId := GetDeviceZcadId(pdev);
 
       // Если zcadId совпадает с искомым, выделяем устройство
       if currentZcadId = AZcadId then
       begin
-        pobj^.selected := true;
+        //zcUI.TextMessage('currentZcadId: ' + inttostr(currentZcadId),TMWOHistoryOut);
+              pobj^.Select(drawings.GetCurrentDWG^.wa.param.SelDesc.Selectedobjcount,
+                        @drawings.GetCurrentDWG^.Selector);
+
+              zcUI.Do_GUIaction(drawings.GetCurrentDWG^.wa, zcMsgUIActionSelectionChanged);
+        //pobj^.selected := true;
       end;
     end;
-
+    inc(currentZcadId);
     // Переход к следующему объекту
     pobj := drawings.GetCurrentROOT^.ObjArray.iterate(ir);
   until pobj = nil;
@@ -701,18 +708,19 @@ var
   i: integer;
   shouldSelect: boolean;
 begin
+  currentZcadId:=0;
   // Начало итерации по всем объектам в текущем чертеже
   pobj := drawings.GetCurrentROOT^.ObjArray.beginiterate(ir);
   if pobj <> nil then
   repeat
     // Снимаем выделение со всех объектов
-    pobj^.selected := false;
+    //pobj^.selected := false;
 
     // Проверяем, является ли объект устройством типа GDBDeviceID
     if pobj^.GetObjType = GDBDeviceID then
     begin
       pdev := PGDBObjDevice(pobj);
-      currentZcadId := GetDeviceZcadId(pdev);
+      //currentZcadId := GetDeviceZcadId(pdev);
 
       // Проверяем, есть ли текущий zcadId в списке для выделения
       shouldSelect := false;
@@ -728,10 +736,13 @@ begin
       // Если zcadId найден в списке, выделяем устройство
       if shouldSelect then
       begin
-        pobj^.selected := true;
+        pobj^.Select(drawings.GetCurrentDWG^.wa.param.SelDesc.Selectedobjcount,
+          @drawings.GetCurrentDWG^.Selector);
+        zcUI.Do_GUIaction(drawings.GetCurrentDWG^.wa, zcMsgUIActionSelectionChanged);
+        //pobj^.selected := true;
       end;
     end;
-
+    inc(currentZcadId);
     // Переход к следующему объекту
     pobj := drawings.GetCurrentROOT^.ObjArray.iterate(ir);
   until pobj = nil;

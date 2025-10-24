@@ -121,7 +121,7 @@ begin
   // Инициализация таймера для различения одинарного и двойного щелчка
   FClickTimer := TTimer.Create(Self);
   FClickTimer.Enabled := False;
-  FClickTimer.Interval := 300; // 300 мс задержка для различения кликов
+  FClickTimer.Interval := 150; // 300 мс задержка для различения кликов
   FClickTimer.OnTimer := @ClickTimerExecute;
   FPendingClickNode := nil;
   FPendingClickColumn := -1;
@@ -747,6 +747,7 @@ begin
       deviceCollector := TDeviceDataCollector.Create;
       try
         // Выделяем устройство по его zcadId на чертеже
+        //ShowMessage('zcadid: ' + inttostr(NodeData^.ZcadId));
         deviceCollector.SelectDeviceByZcadId(NodeData^.ZcadId);
       finally
         deviceCollector.Free;

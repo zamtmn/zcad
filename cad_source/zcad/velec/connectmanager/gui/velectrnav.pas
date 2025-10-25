@@ -7,7 +7,7 @@ interface
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Types, laz.VirtualTrees, uzcdrawing, uzcdrawings, uzcinterface,
   Dialogs, ExtCtrls, ActnList, ComCtrls, Windows, fgl, Menus,
-  uzvelaccessdbcontrol, uzvmcmanager, uzvmcstruct, uzvmcdrawing, gvector, uzccablemanager, uzcentcable, uzeentdevice, gzctnrVectorTypes, uzcvariablesutils, uzccommandsabstract, uzeentity, uzeentblockinsert, varmandef, uzeconsts, uzvvstdevpopulator;
+  uzvelaccessdbcontrol, uzvmcmanager, uzvmcstruct, uzvmcdrawing, gvector, uzccablemanager, uzcentcable, uzeentdevice, gzctnrVectorTypes, uzcvariablesutils, uzccommandsabstract, uzeentity, uzeentblockinsert, varmandef, uzeconsts, uzvvstdevpopulator, uzvmcdevtoexcel;
 
 type
 
@@ -92,6 +92,7 @@ type
     procedure SaveActionExecute(Sender: TObject);       // Сохранение изменений
     procedure CollapseAllActionExecute(Sender: TObject); // Свернуть все узлы дерева
     procedure ExpandAllActionExecute(Sender: TObject);   // Развернуть все узлы дерева
+    procedure ExportToExcelActionExecute(Sender: TObject); // Экспорт структуры устройств в Excel
 
   public
 
@@ -276,6 +277,7 @@ begin
     AddAction('actSave', 'Cl', '2', 'Сохранить документ', 'Ctrl+S', @SaveActionExecute);
     AddAction('actCollapseAll', '+', '3', 'Свернуть все ноды', '', @CollapseAllActionExecute);
     AddAction('actExpandAll', '-', '4', 'Развернуть все ноды', '', @ExpandAllActionExecute);
+    AddAction('actExportToExcel', 'XLS', '5', 'Экспорт в Excel', '', @ExportToExcelActionExecute);
 
     // Создаем кнопки на панели инструментов
     for i := 0 to ActionList1.ActionCount - 1 do
@@ -819,6 +821,55 @@ begin
         1: NodeData^.DevName := OldDevName;
       end;
     end;
+  end;
+end;
+
+// Экспорт структуры устройств в Excel
+// Использует существующий класс TStandardDeviceExporter для создания файла Excel
+procedure TVElectrNav.ExportToExcelActionExecute(Sender: TObject);
+var
+  SaveDialog: TSaveDialog;
+  exporter: TStandardDeviceExporter;
+  success: Boolean;
+begin
+  // Проверяем, что список устройств загружен
+  if FDevicesList.Size = 0 then
+  begin
+    ShowMessage('Список устройств пуст. Сначала загрузите устройства из чертежа, нажав кнопку "*".');
+    Exit;
+  end;
+
+  // Создаем диалог сохранения файла
+  SaveDialog := TSaveDialog.Create(nil);
+  try
+    SaveDialog.Title := 'Экспорт устройств в Excel';
+    SaveDialog.Filter := 'Файлы Excel (*.xlsx)|*.xlsx|Все файлы (*.*)|*.*';
+    SaveDialog.DefaultExt := 'xlsx';
+    SaveDialog.FileName := 'devices_export.xlsx';
+    SaveDialog.Options := SaveDialog.Options + [ofOverwritePrompt];
+
+    // Показываем диалог выбора файла
+    if SaveDialog.Execute then
+    begin
+      // Создаем экспортер
+      exporter := TStandardDeviceExporter.Create;
+      try
+        // Выполняем экспорт
+        success := exporter.ExportToFile(FDevicesList, SaveDialog.FileName);
+
+        // Показываем результат
+        if success then
+          ShowMessage('Экспорт завершен успешно!' + LineEnding +
+                     'Файл сохранен: ' + SaveDialog.FileName)
+        else
+          ShowMessage('Ошибка при экспорте устройств в Excel.' + LineEnding +
+                     'Проверьте логи для получения дополнительной информации.');
+      finally
+        exporter.Free;
+      end;
+    end;
+  finally
+    SaveDialog.Free;
   end;
 end;
 

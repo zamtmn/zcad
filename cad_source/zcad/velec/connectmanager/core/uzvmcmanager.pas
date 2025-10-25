@@ -148,6 +148,28 @@ end;
 procedure TConnectionManager.ExportDevicesListToAccess(devicesList: TListVElectrDevStruct; const AAccessDBPath: string);
 var
   i: integer;
+  fnhddev:string;
+  function getfullnamebasename(ihd:string):string;
+  const
+    sep='.';
+  var
+    j:integer;
+  begin
+    result:='ERROR';
+    for j := 0 to devicesList.Size - 1 do
+    begin
+      if devicesList[j].basename = ihd then
+        begin
+          result:= devicesList[j].basename + sep
+                  + devicesList[j].headdev + sep
+                  + inttostr(devicesList[j].feedernum) + sep
+                  + inttostr(devicesList[j].numconnect) + sep
+                  + inttostr(devicesList[j].numdevinfeeder);
+          break;
+        end;
+    end;
+  end;
+
 begin
   if not CheckFileExists(AAccessDBPath) then
     exit;
@@ -161,23 +183,33 @@ begin
   FAccessExporter.ClearTables;
 
   // Экспорт каждого устройства из списка в базу данных Access
-  //for i := 0 to devicesList.Size - 1 do
-  //begin
-  //  if i>0 then begin
-  //    if devicesList[i].fullname <> devicesList[i-1].fullname then
-  //      FAccessExporter.ExportDevice(devicesList[i]);
-  //  end
-  //  else
-  //    FAccessExporter.ExportDevice(devicesList[i]);
-  //
-  //  FAccessExporter.ExportConnection(devicesList[i]);
-  //end;
   for i := 0 to devicesList.Size - 1 do
   begin
+    //if i>0 then begin
+    //  if devicesList[i].fullname <> devicesList[i-1].fullname then
+    //    FAccessExporter.ExportDeviceVOLODQ(devicesList[i]);
+    //end
+    //else
     FAccessExporter.ExportDeviceVOLODQ(devicesList[i]);
+  end;
+  for i := 0 to devicesList.Size - 1 do
+  begin
+    //FAccessExporter.ExportDeviceVOLODQ(devicesList[i]);
+    fnhddev:=getfullnamebasename(devicesList[i].headdev);
+    if fnhddev<>'ERROR'then
+    FAccessExporter.ExportConnectVOLODQ(devicesList[i],getfullnamebasename(devicesList[i].headdev));
 
-    //FAccessExporter.ExportConnectVOLODQ(devicesList[i]);
-    //FAccessExporter.ExportDeviceInputVOLODQ(devicesList[i]);
+  end;
+
+  for i := 0 to devicesList.Size - 1 do
+  begin
+    if i>0 then begin
+      if devicesList[i].fullname <> devicesList[i-1].fullname then
+        FAccessExporter.ExportDeviceInputVOLODQ(devicesList[i]);
+        //FAccessExporter.ExportDevice(devicesList[i]);
+    end
+    else
+      FAccessExporter.ExportDeviceInputVOLODQ(devicesList[i]);
   end;
 
   // Фиксация изменений в базе данных
@@ -192,6 +224,8 @@ end;
 // 3. Заполняет поля сортировки (Sort1, Sort2, Sort3)
 // Примечание: сортировка и экспорт в базу данных выполняются вызывающей стороной
 function TConnectionManager.GetDevicesFromDrawing: TListVElectrDevStruct;
+const
+  sep='.';
 var
   i: integer;
 begin
@@ -200,12 +234,60 @@ begin
 
   // Построение иерархических путей для всех устройств
   FHierarchyBuilder.BuildHierarchyPaths(Result);
+//
+  //for i := 0 to Result.Size - 1 do
+  //    zcUI.TextMessage('beforeSort= '
+  //                                    + ' pathHD=' + Result[i].pathHD
+  //                                    + ' Sort1=' + inttostr(Result[i].Sort1)
+  //                                    + ' Sort2=' + inttostr(Result[i].Sort2)
+  //                                    + ' Sort2name=' + Result[i].Sort2name
+  //                                    + ' Sort3=' + inttostr(Result[i].Sort3)
+  //                                    + ' Sort3name=' + Result[i].Sort3name
+  //                                    + ' Power=' + floattostr(Result[i].Power)
+  //                                    + ' basename=' + Result[i].basename
+  //                                    + ' NEWname=' + Result[i].basename + sep
+  //                                    + Result[i].headdev + sep
+  //                                    + inttostr(Result[i].feedernum) + sep
+  //                                    + inttostr(Result[i].numconnect) + sep
+  //                                    , TMWOHistoryOut);
+
 
   // Затем заполнить поля сортировки
   FHierarchyBuilder.FillSortFields(Result);
-
-  for i := 0 to Result.Size - 1 do
-      zcUI.TextMessage('FindOnlyHDHierarchy ' + Result[i].pathHD + ' - sort1= ' + inttostr(Result[i].Sort1) + ' - sort2= ' + inttostr(Result[i].Sort2)+ ' - sort2name= ' + Result[i].Sort2name + ' - sort3= ' + inttostr(Result[i].Sort3)+ ' - sort3name= ' + Result[i].Sort3name, TMWOHistoryOut);
+  //for i := 0 to Result.Size - 1 do
+  //    zcUI.TextMessage('beforeSort= '
+  //                                + ' pathHD=' + Result[i].pathHD
+  //                                + ' Sort1=' + inttostr(Result[i].Sort1)
+  //                                + ' Sort2=' + inttostr(Result[i].Sort2)
+  //                                + ' Sort2name=' + Result[i].Sort2name
+  //                                + ' Sort3=' + inttostr(Result[i].Sort3)
+  //                                + ' Sort3name=' + Result[i].Sort3name
+  //                                + ' Power=' + floattostr(Result[i].Power)
+  //                                + ' basename=' + Result[i].basename
+  //                                + ' NEWname=' + Result[i].basename + sep
+  //                                + Result[i].headdev + sep
+  //                                + inttostr(Result[i].feedernum) + sep
+  //                                + inttostr(Result[i].numconnect) + sep
+  //                                , TMWOHistoryOut);
+  //// Затем заполнить поля номер устройства в фидере
+  //FHierarchyBuilder.SetNumDevinFeeder(Result);
+  //  for i := 0 to Result.Size - 1 do
+  //  zcUI.TextMessage('SetNumDevinFeeder= '
+  //                              + ' pathHD=' + Result[i].pathHD
+  //                              + ' Sort1=' + inttostr(Result[i].Sort1)
+  //                              + ' Sort2name=' + Result[i].Sort2name
+  //                              + ' Sort3=' + inttostr(Result[i].Sort3)
+  //                              + ' Sort3name=' + Result[i].Sort3name
+  //                              + ' Power=' + floattostr(Result[i].Power)
+  //                              + ' basename=' + Result[i].basename
+  //                              + ' NEWname=' + Result[i].basename + sep
+  //                                    + Result[i].headdev + sep
+  //                                    + inttostr(Result[i].feedernum) + sep
+  //                                    + inttostr(Result[i].numconnect) + sep
+  //                                    + inttostr(Result[i].numdevinfeeder), TMWOHistoryOut);
+  //
+  //for i := 0 to Result.Size - 1 do
+  //    zcUI.TextMessage('FindOnlyHDHierarchy ' + Result[i].pathHD + ' - sort1= ' + inttostr(Result[i].Sort1) + ' - sort2= ' + inttostr(Result[i].Sort2)+ ' - sort2name= ' + Result[i].Sort2name + ' - sort3= ' + inttostr(Result[i].Sort3)+ ' - sort3name= ' + Result[i].Sort3name, TMWOHistoryOut);
 
   zcUI.TextMessage('Collected ' + IntToStr(Result.Size) + ' devices from drawing', TMWOHistoryOut);
 end;

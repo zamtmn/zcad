@@ -31,9 +31,11 @@ type
     fullname: string; // полное имя устройства
     basename: string; // базовое имя устройства
     realname: string; // реальное имя устройства
+    numconnect:integer; //номер подключения
     tracename: string; // Имя трассы к которой принадлежит устройство
     headdev: string; // головное устройство
     feedernum: integer; // номер фидера
+    numdevinfeeder:integer; //Номер устройства подключенного внутри фидера
     canbehead: integer; // Я могу быть головным устройством
     devtype: string; // тип устройства
     opmode: string; // режим работы

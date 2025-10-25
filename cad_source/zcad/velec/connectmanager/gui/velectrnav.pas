@@ -177,14 +177,55 @@ end;
 
 // Экспорт текущих устройств в базу данных Access
 procedure TVElectrNav.CurrentSelActionExecute(Sender: TObject);
+const
+  sep='.';
 var
   accessexport:TConnectionManager;
   devicesList: TListVElectrDevStruct;
+  i:integer;
 begin
   accessexport := TConnectionManager.Create('');
   try
     // Получение списка устройств с чертежа
     devicesList := accessexport.GetDevicesFromDrawing;
+
+    for i := 0 to devicesList.Size - 1 do
+      //zcUI.TextMessage('beforeSort= '
+      //                            + ' pathHD=' + devicesList[i].pathHD
+      //                            + ' Sort1=' + inttostr(devicesList[i].Sort1)
+      //                            + ' Sort2=' + inttostr(devicesList[i].Sort2)
+      //                            + ' Sort2name=' + devicesList[i].Sort2name
+      //                            + ' Sort3=' + inttostr(devicesList[i].Sort3)
+      //                            + ' Sort3name=' + devicesList[i].Sort3name
+      //                            + ' Power=' + floattostr(devicesList[i].Power)
+      //                            + ' basename=' + devicesList[i].basename
+      //                            + ' NEWname=' + devicesList[i].basename + sep
+      //                            + devicesList[i].headdev + sep
+      //                            + inttostr(devicesList[i].feedernum) + sep
+      //                            + inttostr(devicesList[i].numconnect) + sep
+      //                            , TMWOHistoryOut);
+    // Шаг 3: Сортируем устройства по иерархии
+    accessexport.HierarchyBuilder.SortDeviceList(devicesList);
+    for i := 0 to devicesList.Size - 1 do
+      //zcUI.TextMessage('afterSort= '
+      //                            + ' pathHD=' + devicesList[i].pathHD
+      //                            + ' Sort1=' + inttostr(devicesList[i].Sort1)
+      //                            + ' Sort2=' + inttostr(devicesList[i].Sort2)
+      //                            + ' Sort2name=' + devicesList[i].Sort2name
+      //                            + ' Sort3=' + inttostr(devicesList[i].Sort3)
+      //                            + ' Sort3name=' + devicesList[i].Sort3name
+      //                            + ' Power=' + floattostr(devicesList[i].Power)
+      //                            + ' basename=' + devicesList[i].basename
+      //                            + ' NEWname=' + devicesList[i].basename + sep
+      //                            + devicesList[i].headdev + sep
+      //                            + inttostr(devicesList[i].feedernum) + sep
+      //                            + inttostr(devicesList[i].numconnect) + sep
+      //                            , TMWOHistoryOut);
+
+
+    // Шаг 4: Затем заполнить поля номер устройства в фидере
+    accessexport.HierarchyBuilder.SetNumDevinFeeder(devicesList);
+
     try
       // Экспорт подготовленного списка в базу данных Access
       accessexport.ExportDevicesListToAccess(devicesList, 'D:\ZcadDB.accdb');

@@ -86,10 +86,10 @@ type
   end;
 
   {**
-   * Команда выгрузки устройств в Excel
-   * Command for exporting devices to Excel
+   * Утилитный класс для выгрузки устройств в Excel
+   * Utility class for exporting devices to Excel
    *}
-  TExportDevicesToExcelCommand = class(TCommandClass)
+  TExportDevicesToExcelCommand = class
   private
     FDeviceList: TListVElectrDevStruct;  // Список устройств / Device list
     FExporter: TDeviceExcelExporterBase;  // Экспортер / Exporter
@@ -97,7 +97,7 @@ type
 
   public
     {** Конструктор команды / Command constructor **}
-    constructor Create; override;
+    constructor Create;
 
     {** Деструктор команды / Command destructor **}
     destructor Destroy; override;
@@ -125,8 +125,6 @@ type
      * Execute export command
      *}
     function Execute: Boolean;
-
-    class function CommandName: string; override;
   end;
 
 implementation
@@ -297,7 +295,6 @@ end;
 
 constructor TExportDevicesToExcelCommand.Create;
 begin
-  inherited Create;
   FDeviceList := TListVElectrDevStruct.Create;
   FExporter := TStandardDeviceExporter.Create;
   FFileName := '';
@@ -358,11 +355,6 @@ begin
   // Выполняем экспорт / Perform export
   zcUI.TextMessage('Начало экспорта устройств в Excel...', TMWOHistoryOut);
   Result := FExporter.ExportToFile(FDeviceList, FFileName);
-end;
-
-class function TExportDevicesToExcelCommand.CommandName: string;
-begin
-  Result := 'ExportDevicesToExcel';
 end;
 
 end.

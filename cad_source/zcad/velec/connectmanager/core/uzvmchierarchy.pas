@@ -66,6 +66,7 @@ type
     procedure BuildHierarchyPaths(var deviceList: TListVElectrDevStruct);
     procedure FillSortFields(var deviceList: TListVElectrDevStruct);
     procedure SortDeviceList(var deviceList: TListVElectrDevStruct);
+    procedure SetNumDevinFeeder(var deviceList: TListVElectrDevStruct);
   end;
 
 implementation
@@ -516,5 +517,42 @@ begin
   end;
 end;
 
+procedure THierarchyBuilder.SetNumDevinFeeder(var deviceList: TListVElectrDevStruct);
+var
+  i, count: Integer;
+  dev1,dev2: TVElectrDevStruct;
+begin
+  count:=1;
+  deviceList.Mutable[0]^.numdevinfeeder := count;
+  for i := 1 to deviceList.Size - 1 do
+  begin
+     dev1:=deviceList[i-1];
+     dev2:=deviceList[i];
+     //zcUI.TextMessage('SetNumDevinFeeder deviceList['+inttostr(i) + '] '
+     //                                    +'basename =' + dev1.basename +  ' = ' + dev2.basename
+     //                                    +'basename =' + dev1.headdev +  ' = ' + dev2.headdev
+     //                                    +'basename =' + inttostr(dev1.feedernum) +  ' = ' + inttostr(dev2.feedernum)
+     //                                    +'basename =' + inttostr(dev1.numconnect) +  ' = ' + inttostr(dev2.numconnect)
+     //                                    , TMWOHistoryOut);
+
+     if (dev1.basename = dev2.basename) and
+        (dev1.headdev = dev2.headdev) and
+        (dev1.feedernum = dev2.feedernum) and
+        (dev1.numconnect = dev2.numconnect) then
+        begin
+          inc(count);
+          deviceList.Mutable[i]^.numdevinfeeder := count;
+        end
+     else
+     begin
+        count:=1;
+        deviceList.Mutable[i]^.numdevinfeeder := count;
+     end;
+
+  end;
+end;
+
+
 end.
+
 

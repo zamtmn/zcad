@@ -348,6 +348,7 @@ begin
         begin
           deviceStruct.tracename := GetDeviceTraceName(pdev,count);
           deviceStruct.feedernum := GetDeviceFeederNum(pdev,count);
+          deviceStruct.numconnect := count;
 
           // Добавление структуры в результирующий список
           Result.PushBack(deviceStruct);
@@ -505,12 +506,16 @@ end;
 function TDeviceDataCollector.GetDeviceFeederNum(pdev: PGDBObjDevice;key:integer): integer;
 var
   pvd: pvardesk;
+  IntValue:integer;
 begin
   Result := -1;
   pvd := FindVariableInEnt(pdev, 'SLCABAGEN'+inttostr(key)+'_NGHeadDevice');
   try
   if pvd <> nil then
-    Result := strtoint(pstring(pvd^.data.Addr.Instance)^);
+    if TryStrToInt(pstring(pvd^.data.Addr.Instance)^, IntValue) then
+       Result := IntValue
+    else
+       Result := -22;
   except
     Result := -22;
   end;

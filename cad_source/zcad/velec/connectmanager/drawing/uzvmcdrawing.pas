@@ -647,7 +647,7 @@ begin
   else
   begin
     // Неверное значение фазы
-    WriteLn('Ошибка: недопустимое значение фазы "', APhaseValue, '". Допустимые значения: ABC, A, B, C');
+    ShowMessage('Ошибка: недопустимое значение фазы "' + APhaseValue + '". Допустимые значения: ABC, A, B, C');
     Exit;
   end;
 
@@ -655,7 +655,7 @@ begin
   pvd := FindVariableInEnt(pdev, 'Phase');
   if pvd = nil then
   begin
-    WriteLn('Ошибка: переменная Phase не найдена в устройстве');
+    ShowMessage('Ошибка: переменная Phase не найдена в устройстве');
     Exit;
   end;
 
@@ -666,7 +666,7 @@ begin
   except
     on E: Exception do
     begin
-      WriteLn('Ошибка при установке значения фазы: ', E.Message);
+      ShowMessage('Ошибка при установке значения фазы: ' + E.Message);
       Result := false;
     end;
   end;
@@ -695,14 +695,14 @@ begin
   // Проверка, что объект существует
   if pobj = nil then
   begin
-    WriteLn('Ошибка: объект по индексу ', AIndex, ' не найден');
+    ShowMessage('Ошибка: объект по индексу ' + IntToStr(AIndex) + ' не найден');
     Exit;
   end;
 
   // Проверка, что объект является устройством типа GDBDeviceID
   if pobj^.GetObjType <> GDBDeviceID then
   begin
-    WriteLn('Ошибка: объект по индексу ', AIndex, ' не является устройством (GDBDeviceID)');
+    ShowMessage('Ошибка: объект по индексу ' + IntToStr(AIndex) + ' не является устройством (GDBDeviceID)');
     Exit;
   end;
 

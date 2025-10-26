@@ -22,7 +22,7 @@ unit uzvmcphaseoptimizer;
 
 interface
 uses
-  Classes, SysUtils, uzvmcstruct, gvector, Math, uzcinterface, uzvmcdrawing;
+  Classes, SysUtils, uzvmcstruct, gvector, Math, uzcinterface,uzeentdevice, uzvmcdrawing;
 
 type
   // Структура для хранения группы устройств (верхний уровень иерархии)

@@ -177,7 +177,7 @@ begin
     FQuery.Prepare;
     FQuery.Params.ParamByName('pInputID').AsString := 'Cos';
     FQuery.Params.ParamByName('pPrimID').AsString := devPrimID;
-    FQuery.Params.ParamByName('pValue').AsFloat := 1;
+    FQuery.Params.ParamByName('pValue').AsFloat := ADeviceInfo.cosfi;
     FQuery.ExecSQL;
     FQuery.Params.ParamByName('pInputID').AsString := 'F';
     FQuery.Params.ParamByName('pPrimID').AsString := devPrimID;
@@ -192,7 +192,7 @@ begin
     else
       phase := -1;
 
-    //FQuery.Params.ParamByName('pValue').AsFloat := phase;
+    FQuery.Params.ParamByName('pValue').AsFloat := phase;
     FQuery.ExecSQL;
     FQuery.Params.ParamByName('pInputID').AsString := 'Py';
     FQuery.Params.ParamByName('pPrimID').AsString := devPrimID;

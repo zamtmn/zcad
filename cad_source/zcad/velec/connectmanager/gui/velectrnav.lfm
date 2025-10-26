@@ -68,6 +68,7 @@ object VElectrNav: TVElectrNav
       Header.AutoSizeIndex = -1
       Header.Columns = <>
       Header.MainColumn = -1
+      ScrollBarOptions.AlwaysVisible = True
       TabOrder = 0
     end
   end

@@ -25,7 +25,7 @@ uses
   sysutils, Classes, gvector,
   uzeentdevice, uzeentblockinsert, uzeentity, uzeconsts,
   uzcdrawing, uzcdrawings, uzcvariablesutils,
-  varmandef, gzctnrVectorTypes,
+  varmandef, gzctnrVectorTypes,Dialogs,
   uzvmcstruct, uzccablemanager, uzcentcable, uzegeometry,
   uzglviewareadata, uzcsysvars, uzeentityfactory, uzcutils,
   uzeroot, uzcenitiesvariablesextender, uzccomelectrical,
@@ -685,8 +685,7 @@ begin
   if (AIndex < 0) or (AIndex >= drawings.GetCurrentROOT^.ObjArray.Count) then
   begin
     // Вывод сообщения об ошибке - индекс выходит за границы массива
-    WriteLn('Ошибка: индекс ', AIndex, ' выходит за границы массива примитивов (0..',
-            drawings.GetCurrentROOT^.ObjArray.Count - 1, ')');
+    ShowMessage('Ошибка: индекс ' + inttostr(AIndex) + ' выходит за границы массива примитивов (0..'+  inttostr(drawings.GetCurrentROOT^.ObjArray.Count - 1) + ')');
     Exit;
   end;
 

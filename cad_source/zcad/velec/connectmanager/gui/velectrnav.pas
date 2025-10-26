@@ -7,7 +7,7 @@ interface
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Types, laz.VirtualTrees, uzcdrawing, uzcdrawings, uzcinterface,
   Dialogs, ExtCtrls, ActnList, ComCtrls, Windows, fgl, Menus,
-  uzvelaccessdbcontrol, uzvmcmanager, uzvmcstruct, uzvmcdrawing, gvector, uzccablemanager, uzcentcable, uzeentdevice, gzctnrVectorTypes, uzcvariablesutils, uzccommandsabstract, uzeentity, uzeentblockinsert, varmandef, uzeconsts, uzvvstdevpopulator, uzvmcdevtoexcel;
+  uzvelaccessdbcontrol, uzvmcmanager, uzvmcstruct, uzvmcdrawing, gvector, uzccablemanager, uzcentcable, uzeentdevice, gzctnrVectorTypes, uzcvariablesutils, uzccommandsabstract, uzeentity, uzeentblockinsert, varmandef, uzeconsts, uzvvstdevpopulator, uzvmcdevtoexcel, uzvmcphaseoptimizer;
 
 type
 
@@ -93,6 +93,7 @@ type
     procedure CollapseAllActionExecute(Sender: TObject); // Свернуть все узлы дерева
     procedure ExpandAllActionExecute(Sender: TObject);   // Развернуть все узлы дерева
     procedure ExportToExcelActionExecute(Sender: TObject); // Экспорт структуры устройств в Excel
+    procedure OptimizePhasesActionExecute(Sender: TObject); // Оптимизация распределения мощности по фазам
 
   public
 
@@ -319,6 +320,7 @@ begin
     AddAction('actCollapseAll', '+', '3', 'Свернуть все ноды', '', @CollapseAllActionExecute);
     AddAction('actExpandAll', '-', '4', 'Развернуть все ноды', '', @ExpandAllActionExecute);
     AddAction('actExportToExcel', 'XLS', '5', 'Экспорт в Excel', '', @ExportToExcelActionExecute);
+    AddAction('actOptimizePhases', 'Φ', '6', 'Оптимизация распределения мощности по фазам', '', @OptimizePhasesActionExecute);
 
     // Создаем кнопки на панели инструментов
     for i := 0 to ActionList1.ActionCount - 1 do
@@ -1205,6 +1207,41 @@ procedure TVElectrNav.ExpandAllActionExecute(Sender: TObject);
 begin
   if Assigned(vstDev) then
     vstDev.FullExpand;
+end;
+
+// Оптимизация распределения мощности по фазам
+// Вызывает класс TPhaseOptimizer для оптимального распределения групп устройств по фазам A, B, C
+procedure TVElectrNav.OptimizePhasesActionExecute(Sender: TObject);
+var
+  optimizer: TPhaseOptimizer;
+begin
+  // Проверяем, что список устройств загружен
+  if FDevicesList.Size = 0 then
+  begin
+    ShowMessage('Список устройств пуст. Сначала загрузите устройства из чертежа, нажав кнопку "*".');
+    Exit;
+  end;
+
+  try
+    // Создаем оптимизатор и запускаем процесс оптимизации
+    optimizer := TPhaseOptimizer.Create(FDevicesList);
+    try
+      // Выполняем оптимизацию распределения по фазам
+      optimizer.OptimizePhases;
+
+      // Обновляем отображение vstDev после оптимизации
+      recordingVstDev('');
+
+      ShowMessage('Оптимизация распределения по фазам завершена!' + LineEnding +
+                 'Результаты выведены в командную строку zcUI.' + LineEnding +
+                 'Таблица устройств обновлена.');
+    finally
+      optimizer.Free;
+    end;
+  except
+    on E: Exception do
+      ShowMessage('Ошибка при оптимизации распределения по фазам: ' + E.Message);
+  end;
 end;
 
 end.

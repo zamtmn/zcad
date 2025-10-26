@@ -105,6 +105,11 @@ type
     function GetDeviceVoltage(pdev: PGDBObjDevice): integer;
     function GetDeviceCosFi(pdev: PGDBObjDevice): double;
     function GetDevicePhase(pdev: PGDBObjDevice): string;
+
+    // Установка фазы устройства
+    // APhaseValue - значение фазы: 'ABC', 'A', 'B', или 'C'
+    // Возвращает true при успешной установке, false при ошибке
+    function SetDevicePhase(pdev: PGDBObjDevice; const APhaseValue: string): boolean;
   end;
 
 implementation
@@ -617,6 +622,53 @@ begin
       Result := 'C'
     else
       Result := 'Error';
+  end;
+end;
+
+// Установка фазы устройства
+// APhaseValue - значение фазы: 'ABC', 'A', 'B', или 'C'
+// Возвращает true при успешной установке, false при ошибке
+function TDeviceDataCollector.SetDevicePhase(pdev: PGDBObjDevice; const APhaseValue: string): boolean;
+var
+  pvd: pvardesk;
+  enumValue: string;
+begin
+  Result := false;
+
+  // Проверка валидности входного значения и преобразование в enum-значение
+  if APhaseValue = 'ABC' then
+    enumValue := '_ABC'
+  else if APhaseValue = 'A' then
+    enumValue := '_A'
+  else if APhaseValue = 'B' then
+    enumValue := '_B'
+  else if APhaseValue = 'C' then
+    enumValue := '_C'
+  else
+  begin
+    // Неверное значение фазы
+    WriteLn('Ошибка: недопустимое значение фазы "', APhaseValue, '". Допустимые значения: ABC, A, B, C');
+    Exit;
+  end;
+
+  // Поиск переменной Phase в устройстве
+  pvd := FindVariableInEnt(pdev, 'Phase');
+  if pvd = nil then
+  begin
+    WriteLn('Ошибка: переменная Phase не найдена в устройстве');
+    Exit;
+  end;
+
+  // Установка нового значения через SetValueFromString
+  try
+    pvd^.data.ptd^.SetValueFromString(pvd^.data.Addr.Instance, enumValue);
+    Result := true;
+  except
+    on E: Exception do
+    begin
+      WriteLn('Ошибка при установке значения фазы: ', E.Message);
+      Result := false;
+    end;
   end;
 end;
 

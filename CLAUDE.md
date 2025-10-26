@@ -15,13 +15,3 @@ Your forked repository: konard/zcadvelecAI
 Original repository (upstream): veb86/zcadvelecAI
 
 Proceed.
-
----
-
-Issue to solve: undefined
-Your prepared branch: issue-348-88dda5fe
-Your prepared working directory: /tmp/gh-issue-solver-1761510860331
-Your forked repository: konard/zcadvelecAI
-Original repository (upstream): veb86/zcadvelecAI
-
-Proceed.

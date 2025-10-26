@@ -1211,9 +1211,11 @@ end;
 
 // Оптимизация распределения мощности по фазам
 // Вызывает класс TPhaseOptimizer для оптимального распределения групп устройств по фазам A, B, C
+// Оптимизирует только устройства, которые сейчас отображаются в vstDev
 procedure TVElectrNav.OptimizePhasesActionExecute(Sender: TObject);
 var
   optimizer: TPhaseOptimizer;
+  vstDevDevices: TListVElectrDevStruct;
 begin
   // Проверяем, что список устройств загружен
   if FDevicesList.Size = 0 then
@@ -1223,20 +1225,34 @@ begin
   end;
 
   try
-    // Создаем оптимизатор и запускаем процесс оптимизации
-    optimizer := TPhaseOptimizer.Create(FDevicesList);
+    // Получаем список устройств, которые сейчас отображаются в vstDev
+    vstDevDevices := CollectDevicesFromVstDev(vstDev, FDevicesList);
     try
-      // Выполняем оптимизацию распределения по фазам
-      optimizer.OptimizePhases;
+      // Проверяем, что в vstDev есть устройства
+      if vstDevDevices.Size = 0 then
+      begin
+        ShowMessage('В таблице устройств нет отображаемых устройств для оптимизации.');
+        Exit;
+      end;
 
-      // Обновляем отображение vstDev после оптимизации
-      recordingVstDev('');
+      // Создаем оптимизатор и запускаем процесс оптимизации
+      // Передаем только устройства из vstDev вместо всего FDevicesList
+      optimizer := TPhaseOptimizer.Create(vstDevDevices);
+      try
+        // Выполняем оптимизацию распределения по фазам
+        optimizer.OptimizePhases;
 
-      ShowMessage('Оптимизация распределения по фазам завершена!' + LineEnding +
-                 'Результаты выведены в командную строку zcUI.' + LineEnding +
-                 'Таблица устройств обновлена.');
+        // Обновляем отображение vstDev после оптимизации
+        recordingVstDev('');
+
+        ShowMessage('Оптимизация распределения по фазам завершена!' + LineEnding +
+                   'Результаты выведены в командную строку zcUI.' + LineEnding +
+                   'Таблица устройств обновлена.');
+      finally
+        optimizer.Free;
+      end;
     finally
-      optimizer.Free;
+      vstDevDevices.Free;
     end;
   except
     on E: Exception do

@@ -63,6 +63,7 @@ type
     FClickTimer: TTimer; // Таймер для задержки обработки одинарного щелчка
     FPendingClickNode: PVirtualNode; // Нода, ожидающая обработки одинарного щелчка
     FPendingClickColumn: TColumnIndex; // Колонка, ожидающая обработки одинарного щелчка
+    FCurrentFilterPath: string; // Текущий путь фильтрации для vstDev (для сохранения состояния после оптимизации)
     procedure InitializeActionAndButton; // Инициализация действий и кнопок панели инструментов
     procedure InitializePanels;          // Инициализация и настройка панелей интерфейса
     procedure InitializeContainerPopupMenu; // Инициализация popup menu для контейнеров
@@ -130,6 +131,9 @@ begin
 
   // Инициализация переменной для хранения ноды, на которой был вызван контекстное меню
   FRightClickedNode := nil;
+
+  // Инициализация текущего пути фильтрации (пустая строка = показать все)
+  FCurrentFilterPath := '';
 
     try
     // Подписываемся на событие изменения размера фрейма
@@ -509,6 +513,9 @@ var
   populator: TVstDevPopulator;
 begin
   try
+    // Сохраняем текущий путь фильтрации для последующего восстановления состояния
+    FCurrentFilterPath := filterPath;
+
     populator := TVstDevPopulator.Create(vstDev, FDevicesList);
     try
       populator.PopulateTree(filterPath);
@@ -1243,7 +1250,9 @@ begin
         optimizer.OptimizePhases;
 
         // Обновляем отображение vstDev после оптимизации
-        recordingVstDev('');
+        // ВАЖНО: Используем FCurrentFilterPath для сохранения текущего состояния дерева
+        // Это предотвращает сброс выбранного фильтра и потерю выгрузки vstDev
+        recordingVstDev(FCurrentFilterPath);
 
         ShowMessage('Оптимизация распределения по фазам завершена!' + LineEnding +
                    'Результаты выведены в командную строку zcUI.' + LineEnding +

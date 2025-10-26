@@ -120,6 +120,12 @@ type
 // На выходе: вектор идентификаторов zcadId всех устройств внутри узла
 function CollectDeviceZcadIdsInNode(ATree: TLazVirtualStringTree; ANode: PVirtualNode): specialize TVector<integer>;
 
+// Функция для сбора списка устройств, отображаемых в vstDev
+// Собирает все устройства из дерева vstDev (только конечные узлы - устройства, не контейнеры)
+// На входе: ATree - виртуальное дерево vstDev, ADevicesList - полный список устройств
+// На выходе: новый список устройств, содержащий только те, что отображаются в vstDev
+function CollectDevicesFromVstDev(ATree: TLazVirtualStringTree; ADevicesList: TListVElectrDevStruct): TListVElectrDevStruct;
+
 implementation
 
 { TVstDevPopulator }
@@ -723,6 +729,73 @@ begin
 
     // Переходим к следующему узлу Level 1
     Level1Node := FVstDev.GetNextSibling(Level1Node);
+  end;
+end;
+
+// Рекурсивная функция для сбора устройств из узла и его дочерних узлов
+// Собирает только конечные устройства (листья дерева), пропуская контейнеры
+procedure CollectDevicesFromNode(ATree: TLazVirtualStringTree; ANode: PVirtualNode;
+  ADevicesList: TListVElectrDevStruct; ResultList: TListVElectrDevStruct);
+var
+  ChildNode: PVirtualNode;
+  NodeData: PGridNodeData;
+  i: integer;
+  device: PTVElectrDevStruct;
+begin
+  // Получаем первого потомка
+  ChildNode := ATree.GetFirstChild(ANode);
+
+  // Проходим по всем дочерним узлам
+  while Assigned(ChildNode) do
+  begin
+    // Если у узла есть дочерние элементы, это контейнер - собираем рекурсивно
+    if ATree.HasChildren[ChildNode] then
+    begin
+      CollectDevicesFromNode(ATree, ChildNode, ADevicesList, ResultList);
+    end
+    else
+    begin
+      // Это конечное устройство (лист), добавляем его в результирующий список
+      NodeData := ATree.GetNodeData(ChildNode);
+      if Assigned(NodeData) and (NodeData^.ZcadId > 0) then
+      begin
+        // Ищем устройство в полном списке по zcadId
+        for i := 0 to ADevicesList.Size - 1 do
+        begin
+          device := ADevicesList.Mutable[i];
+          if device^.zcadid = NodeData^.ZcadId then
+          begin
+            ResultList.PushBack(device^);
+            Break;
+          end;
+        end;
+      end;
+    end;
+
+    // Переходим к следующему потомку
+    ChildNode := ATree.GetNextSibling(ChildNode);
+  end;
+end;
+
+// Функция для сбора списка устройств, отображаемых в vstDev
+// Собирает все устройства из дерева vstDev (только конечные узлы - устройства, не контейнеры)
+// На входе: ATree - виртуальное дерево vstDev, ADevicesList - полный список устройств
+// На выходе: новый список устройств, содержащий только те, что отображаются в vstDev
+function CollectDevicesFromVstDev(ATree: TLazVirtualStringTree; ADevicesList: TListVElectrDevStruct): TListVElectrDevStruct;
+var
+  RootNode: PVirtualNode;
+begin
+  // Создаем новый список для результата
+  Result := TListVElectrDevStruct.Create;
+
+  // Получаем первый корневой узел (Level 1)
+  RootNode := ATree.GetFirst;
+
+  // Проходим по всем корневым узлам и собираем устройства
+  while Assigned(RootNode) do
+  begin
+    CollectDevicesFromNode(ATree, RootNode, ADevicesList, Result);
+    RootNode := ATree.GetNextSibling(RootNode);
   end;
 end;
 

@@ -22,7 +22,7 @@ unit uzvmcphaseoptimizer;
 
 interface
 uses
-  Classes, SysUtils, uzvmcstruct, gvector, Math, uzcinterface;
+  Classes, SysUtils, uzvmcstruct, gvector, Math, uzcinterface, uzvmcdrawing;
 
 type
   // Структура для хранения группы устройств (верхний уровень иерархии)
@@ -237,36 +237,68 @@ begin
 end;
 
 // Вывести результаты оптимизации в командную строку zcUI
+// И обновить фазы устройств на чертеже
 procedure TPhaseOptimizer.OutputResults;
 var
   i, j, deviceIdx: integer;
   device: PTVElectrDevStruct;
+  deviceCollector: TDeviceDataCollector;
+  pdev: PGDBObjDevice;
+  updateSuccess: boolean;
 begin
   zcUI.TextMessage('', TMWOHistoryOut);
   zcUI.TextMessage('=== Результаты оптимизации фаз ===', TMWOHistoryOut);
   zcUI.TextMessage('', TMWOHistoryOut);
 
-  // Выводим информацию по каждой группе
-  for i := 0 to High(FGroups) do
-  begin
-    zcUI.TextMessage('--- Группа (фидер) #' + IntToStr(FGroups[i].feedernum) +
-                     ' | Фаза: ' + FGroups[i].currentPhase +
-                     ' | Суммарная мощность: ' + FloatToStrF(FGroups[i].totalPower, ffFixed, 10, 2) + ' кВт ---',
-                     TMWOHistoryOut);
-
-    // Выводим все устройства группы
-    for j := 0 to High(FGroups[i].deviceIndices) do
+  // Создаем коллектор для работы с устройствами на чертеже
+  deviceCollector := TDeviceDataCollector.Create;
+  try
+    // Выводим информацию по каждой группе
+    for i := 0 to High(FGroups) do
     begin
-      deviceIdx := FGroups[i].deviceIndices[j];
-      device := FDevicesList.Mutable[deviceIdx];
-
-      zcUI.TextMessage('  Устройство: ' + device^.basename +
-                       ' | Мощность: ' + FloatToStrF(device^.power, ffFixed, 10, 2) + ' кВт' +
-                       ' | Фаза: ' + device^.phase,
+      zcUI.TextMessage('--- Группа (фидер) #' + IntToStr(FGroups[i].feedernum) +
+                       ' | Фаза: ' + FGroups[i].currentPhase +
+                       ' | Суммарная мощность: ' + FloatToStrF(FGroups[i].totalPower, ffFixed, 10, 2) + ' кВт ---',
                        TMWOHistoryOut);
-    end;
 
-    zcUI.TextMessage('', TMWOHistoryOut);
+      // Выводим все устройства группы и обновляем фазы на чертеже
+      for j := 0 to High(FGroups[i].deviceIndices) do
+      begin
+        deviceIdx := FGroups[i].deviceIndices[j];
+        device := FDevicesList.Mutable[deviceIdx];
+
+        zcUI.TextMessage('  Устройство: ' + device^.basename +
+                         ' | Мощность: ' + FloatToStrF(device^.power, ffFixed, 10, 2) + ' кВт' +
+                         ' | Фаза: ' + device^.phase,
+                         TMWOHistoryOut);
+
+        // Обновляем фазу устройства на чертеже по его zcadid
+        if device^.zcadid >= 0 then
+        begin
+          // Получаем указатель на устройство по его индексу в массиве примитивов
+          pdev := deviceCollector.GetDeviceByPrimitiveIndex(device^.zcadid);
+          if pdev <> nil then
+          begin
+            // Устанавливаем новую фазу на устройстве чертежа
+            updateSuccess := deviceCollector.SetDevicePhase(pdev, device^.phase);
+            if not updateSuccess then
+            begin
+              zcUI.TextMessage('    ВНИМАНИЕ: Не удалось обновить фазу на чертеже для устройства ' +
+                             device^.basename, TMWOHistoryOut);
+            end;
+          end
+          else
+          begin
+            zcUI.TextMessage('    ВНИМАНИЕ: Устройство не найдено на чертеже (zcadid=' +
+                           IntToStr(device^.zcadid) + ')', TMWOHistoryOut);
+          end;
+        end;
+      end;
+
+      zcUI.TextMessage('', TMWOHistoryOut);
+    end;
+  finally
+    deviceCollector.Free;
   end;
 end;
 

@@ -254,6 +254,8 @@ end;
 
 // Check if hatches exist on the specified layer and delete them
 // Проверяет существуют ли штриховки на указанном слое и удаляет их
+// Returns: number of hatches deleted, or -1 if layer doesn't exist
+// Возвращает: количество удаленных штриховок или -1 если слой не существует
 function DeleteHatchesOnLayer(layerName: string): integer;
 var
   pEntity: PGDBObjEntity;
@@ -263,26 +265,21 @@ var
   pLayer: PGDBLayerProp;
   entitiesToDelete: array of PGDBObjEntity;
   i: integer;
-  pproglayer: PGDBLayerProp;
   domethod, undomethod: tmethod;
 begin
-  Result := 0;
+  Result := -1;  // По умолчанию -1 означает что слой не найден
+                 // Default -1 means layer not found
   deletedCount := 0;
 
   if layerName = '' then
     exit;
 
-    pproglayer:=BlockBaseDWG^.LayerTable.getAddres(layerName);//ищем описание слоя в библиотеке
-                                                                  //возможно оно найдется, а возможно вернется nil
-  // Try to create layer using current layer as template
-  // Пытаемся создать слой используя текущий слой как шаблон
-  pLayer := drawings.GetCurrentDWG^.LayerTable.createlayerifneedbyname(
-    layerName,
-    pproglayer
-  );
-  // Find the layer by name
-  // Находим слой по имени
-  //pLayer := drawings.GetCurrentDWG^.LayerTable^.GetLayerByName(layerName);
+  // Ищем слой по имени БЕЗ создания нового слоя
+  // Find layer by name WITHOUT creating a new one
+  pLayer := drawings.GetCurrentDWG^.LayerTable.getAddres(layerName);
+
+  // Если слой не существует, возвращаем -1
+  // If layer doesn't exist, return -1
   if pLayer = nil then
     exit;
 
@@ -381,8 +378,42 @@ begin
     zcUI.TextMessage('  Слой / Layer: ' + layerName, TMWOHistoryOut);
     zcUI.TextMessage('  Переменные / Variables: ' + varList.CommaText, TMWOHistoryOut);
 
-    // Создаем или получаем слой если указан
-    // Create or get layer if specified
+    foundCount := 0;
+    processedCount := 0;
+    hatchCount := 0;
+    deletedCount := 0;
+
+    // ПЕРВЫЙ ШАГ: Проверяем существование слоя и штриховок на нем (toggle mode)
+    // FIRST STEP: Check layer existence and hatches on it (toggle mode)
+    if layerName <> '' then begin
+      deletedCount := DeleteHatchesOnLayer(layerName);
+
+      // deletedCount = -1: слой не существует, переходим к созданию штриховок
+      // deletedCount = -1: layer doesn't exist, proceed to hatch creation
+      if deletedCount = -1 then begin
+        zcUI.TextMessage('Слой не найден, будет создан / Layer not found, will be created', TMWOHistoryOut);
+      end
+      // deletedCount > 0: нашли и удалили штриховки - режим HIDE
+      // deletedCount > 0: found and deleted hatches - HIDE mode
+      else if deletedCount > 0 then begin
+        zcUI.TextMessage('Режим HIDE: удалено штриховок / HIDE mode: hatches deleted: ' + IntToStr(deletedCount), TMWOHistoryOut);
+
+        // Перерисовываем для отображения изменений
+        // Redraw to show changes
+        zcUI.Do_GUIaction(nil, zcMsgUIActionRedraw);
+
+        Result := cmd_ok;
+        exit;
+      end
+      // deletedCount = 0: слой существует, но штриховок нет - создаем штриховки
+      // deletedCount = 0: layer exists but no hatches - create hatches
+      else begin
+        zcUI.TextMessage('Слой существует, но штриховок нет, создаем / Layer exists but no hatches, creating', TMWOHistoryOut);
+      end;
+    end;
+
+    // ВТОРОЙ ШАГ: Создаем или получаем слой если указан (только если не удалили штриховки)
+    // SECOND STEP: Create or get layer if specified (only if we didn't delete hatches)
     pLayer := nil;
     if layerName <> '' then begin
       // Try to create layer using current layer as template
@@ -410,32 +441,8 @@ begin
       end;
     end;
 
-    foundCount := 0;
-    processedCount := 0;
-    hatchCount := 0;
-    deletedCount := 0;
-
-    // Проверяем есть ли уже штриховки на указанном слое (toggle mode)
-    // Check if hatches already exist on the specified layer (toggle mode)
-    if layerName <> '' then begin
-      deletedCount := DeleteHatchesOnLayer(layerName);
-
-      if deletedCount > 0 then begin
-        // Штриховки были удалены - режим HIDE (скрыть)
-        // Hatches were deleted - HIDE mode
-        zcUI.TextMessage('Режим HIDE: удалено штриховок / HIDE mode: hatches deleted: ' + IntToStr(deletedCount), TMWOHistoryOut);
-
-        // Перерисовываем для отображения изменений
-        // Redraw to show changes
-        zcUI.Do_GUIaction(nil, zcMsgUIActionRedraw);
-
-        Result := cmd_ok;
-        exit;
-      end;
-    end;
-
-    // Если штриховок не было или слой не указан - режим SHOW (показать/создать)
-    // If no hatches were found or layer not specified - SHOW mode (create)
+    // Режим SHOW (показать/создать): создаем штриховки
+    // SHOW mode (show/create): create hatches
     zcUI.TextMessage('Режим SHOW: создание штриховок / SHOW mode: creating hatches', TMWOHistoryOut);
 
     // Снимаем выделение со всех объектов перед началом

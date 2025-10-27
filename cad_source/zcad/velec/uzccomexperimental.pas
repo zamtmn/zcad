@@ -98,8 +98,11 @@ uses
 
   uzcstrconsts,       //resouce strings
 
-  uzclog;                //log system
+  uzclog,                //log system
                       //<**система логирования
+
+  uzvcommand_exportdialux;  //DIALux export command
+                            //команда экспорта в DIALux
 
 type
     PTEntityModifyData_Point_Scale_Rotation=^TEntityModifyData_Point_Scale_Rotation;

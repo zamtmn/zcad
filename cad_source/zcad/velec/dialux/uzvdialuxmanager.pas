@@ -52,6 +52,7 @@ uses
                        //строковые константы
   uzcenitiesvariablesextender,  //entity variables extender
                                 //расширение переменных примитивов
+  gzctnrVectorTypes,uzeconsts,uzegeometrytypes,
   varmandef;                     //variable manager definitions
                                  //определения менеджера переменных
 
@@ -146,7 +147,7 @@ begin
 
   // Перебираем все примитивы в чертеже
   // Iterate through all entities in the drawing
-  pEntity := drawings.GetCurrentROOT.ObjArray.beginiterate(ir);
+  pEntity := drawings.GetCurrentROOT^.ObjArray.beginiterate(ir);
   if pEntity <> nil then
     repeat
       // Проверяем является ли примитив полилинией
@@ -159,7 +160,7 @@ begin
         if ppolyline^.Closed then begin
           // Получаем расширение переменных
           // Get variables extender
-          VarExt := ppolyline^.GetExtension<TVariablesExtender>;
+          VarExt := ppolyline^.specialize GetExtension<TVariablesExtender>;
 
           // Создаем информацию о пространстве
           // Create space information
@@ -183,7 +184,7 @@ begin
         end;
       end;
 
-      pEntity := drawings.GetCurrentROOT.ObjArray.iterate(ir);
+      pEntity := drawings.GetCurrentROOT^.ObjArray.iterate(ir);
     until pEntity = nil;
 
   zcUI.TextMessage('Найдено пространств / Spaces found: ' + IntToStr(spaceCount), TMWOHistoryOut);

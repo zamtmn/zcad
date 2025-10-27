@@ -279,6 +279,7 @@ uses
   uzvcommand_space, //команда addZona для работы с зонами
   uzvcommand_showhidespace, //команда показ спрятать
   uzvsplineconvert,
+  uzvcommand_exportdialux,
   //uzvelectricalexcelcom,
   //**//
   {$ENDIF}

@@ -71,7 +71,9 @@ uses
   uzccominteractivemanipulators, //interactive manipulators
                                   //интерактивные манипуляторы
   varmandef,                     //variable manager definitions
-  uzestyleslayers,                               //определения менеджера переменных
+                                 //определения менеджера переменных
+  uzestyleslayers,
+  uzeconsts,
   UBaseTypeDescriptor;           //base type descriptors
                                  //базовые дескрипторы типов
 
@@ -287,6 +289,7 @@ var
   layerName: string;
   pLayer: PGDBLayerProp;
   params: TStringList;
+  pproglayer:PGDBLayerProp;
 begin
   // Вывод сообщения о запуске команды
   // Output message about command launch
@@ -415,11 +418,13 @@ begin
       // Set layer if specified
       // Устанавливаем слой если указан
       if layerName <> '' then begin
+        pproglayer:=BlockBaseDWG^.LayerTable.getAddres(layerName);//ищем описание слоя в библиотеке
+                                                                        //возможно оно найдется, а возможно вернется nil
         // Try to create layer using current layer as template
         // Пытаемся создать слой используя текущий слой как шаблон
         pLayer := drawings.GetCurrentDWG^.LayerTable.createlayerifneedbyname(
           layerName,
-          drawings.GetCurrentDWG^.GetCurrentLayer
+          pproglayer
         );
 
         // If layer still doesn't exist, create it with default parameters
@@ -427,7 +432,7 @@ begin
         if pLayer = nil then begin
           pLayer := drawings.GetCurrentDWG^.LayerTable.addlayer(
             layerName,           // name / имя
-            ClWhite,            // color / цвет
+            colorIndex,            // color / цвет
             -1,                 // line weight / толщина линии
             True,               // on / включен
             False,              // lock / заблокирован

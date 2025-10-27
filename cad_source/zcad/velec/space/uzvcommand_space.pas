@@ -71,7 +71,7 @@ uses
   uzccominteractivemanipulators, //interactive manipulators
                                   //интерактивные манипуляторы
   varmandef,                     //variable manager definitions
-                                 //определения менеджера переменных
+  uzestyleslayers,                               //определения менеджера переменных
   UBaseTypeDescriptor;           //base type descriptors
                                  //базовые дескрипторы типов
 

@@ -81,6 +81,8 @@ type
   TSpaceDrawData = record
     ppolyline: PGDBObjPolyLine;
     phatch: PGDBObjHatch;
+    hatchColor: Integer;  // Color index for hatch visualization
+                          // Индекс цвета для визуализации штриховки
   end;
   PSpaceDrawData = ^TSpaceDrawData;
 
@@ -88,9 +90,13 @@ function addSpace_com(const Context:TZCADCommandContext;operands:TCommandOperand
 
 implementation
 
-// Helper procedure to parse and add variables from operands string
-// Вспомогательная процедура для разбора и добавления переменных из строки операндов
-procedure ParseAndAddVariables(ppolyline: PGDBObjPolyLine; const operands: TCommandOperands);
+// Helper procedure to parse operands and extract color, layer, and variables
+// Вспомогательная процедура для разбора операндов и извлечения цвета, слоя и переменных
+procedure ParseOperandsAndAddVariables(
+  ppolyline: PGDBObjPolyLine;
+  const operands: TCommandOperands;
+  out colorIndex: Integer;
+  out layerName: string);
 var
   VarExt: TVariablesExtender;
   params: TStringList;
@@ -98,13 +104,16 @@ var
   varname, username, typename: string;
   vd: vardesk;
 begin
+  // Set default values
+  // Устанавливаем значения по умолчанию
+  colorIndex := 4;  // Default: light blue (cyan)
+                    // По умолчанию: светло-голубой (cyan)
+  layerName := '';  // Empty means use current layer
+                    // Пустое значит использовать текущий слой
+
   // Check if we have operands
   // Проверяем наличие операндов
   if Trim(operands) = '' then
-    exit;
-
-  VarExt := ppolyline^.specialize GetExtension<TVariablesExtender>;
-  if VarExt = nil then
     exit;
 
   // Split operands by comma
@@ -115,9 +124,43 @@ begin
     params.StrictDelimiter := True;
     params.DelimitedText := operands;
 
+    // Need at least 2 parameters (color and layer)
+    // Нужно минимум 2 параметра (цвет и слой)
+    if params.Count < 2 then
+      exit;
+
+    // Extract color index (first parameter)
+    // Извлекаем индекс цвета (первый параметр)
+    try
+      colorIndex := StrToInt(Trim(params[0]));
+      // Ensure color is in valid range (1-255)
+      // Проверяем что цвет в допустимом диапазоне (1-255)
+      if (colorIndex < 1) or (colorIndex > 255) then
+        colorIndex := 4;  // Fallback to default
+                          // Возврат к значению по умолчанию
+    except
+      colorIndex := 4;  // Fallback to default on error
+                        // Возврат к значению по умолчанию при ошибке
+    end;
+
+    // Extract layer name (second parameter)
+    // Извлекаем имя слоя (второй параметр)
+    layerName := Trim(params[1]);
+    // Remove quotes if present
+    // Удаляем кавычки если есть
+    if (Length(layerName) >= 2) and (layerName[1] = '''') and (layerName[Length(layerName)] = '''') then
+      layerName := Copy(layerName, 2, Length(layerName) - 2);
+
+    // Now process variables starting from index 2
+    // Теперь обрабатываем переменные начиная с индекса 2
+    VarExt := ppolyline^.specialize GetExtension<TVariablesExtender>;
+    if VarExt = nil then
+      exit;
+
     // Process variables in triplets: varname, username, typename
     // Обрабатываем переменные в триплетах: имя_переменной, имя_пользователя, тип
-    i := 0;
+    i := 2;  // Start after color and layer parameters
+             // Начинаем после параметров цвета и слоя
     while i + 2 < params.Count do begin
       varname := Trim(params[i]);
       username := Trim(params[i + 1]);
@@ -210,11 +253,11 @@ begin
 
       phatch^.Path.paths.PushBackData(pathData);
 
-      // Set hatch properties: solid fill, light blue color with transparency
-      // Устанавливаем свойства штриховки: сплошная заливка, светло-голубой цвет с прозрачностью
+      // Set hatch properties: solid fill with specified color
+      // Устанавливаем свойства штриховки: сплошная заливка с указанным цветом
       zcSetEntPropFromCurrentDrawingProp(phatch);
-      phatch^.vp.Color := 4; // Light blue color index (cyan)
-                             // Индекс светло-голубого цвета (cyan)
+      phatch^.vp.Color := spaceData^.hatchColor; // Use color from data structure
+                                                  // Используем цвет из структуры данных
       phatch^.PPattern := nil; // Solid hatch (no pattern)
                                // Сплошная штриховка (без паттерна)
 
@@ -240,10 +283,50 @@ var
   firstPoint: GDBVertex;
   getResult: TGetResult;
   pointCount: integer;
+  colorIndex: Integer;
+  layerName: string;
+  pLayer: PGDBLayerProp;
+  params: TStringList;
 begin
   // Вывод сообщения о запуске команды
   // Output message about command launch
   zcUI.TextMessage('запущена команда addSpace',TMWOHistoryOut);
+
+  // Early parse of color and layer from operands (before drawing starts)
+  // Ранний разбор цвета и слоя из операндов (до начала черчения)
+  colorIndex := 4;  // Default: light blue (cyan) / По умолчанию: светло-голубой (cyan)
+  layerName := '';  // Empty means use current layer / Пустое значит использовать текущий слой
+
+  if Trim(operands) <> '' then begin
+    params := TStringList.Create;
+    try
+      params.Delimiter := ',';
+      params.StrictDelimiter := True;
+      params.DelimitedText := operands;
+
+      // Extract color if available
+      // Извлекаем цвет если доступен
+      if params.Count >= 1 then begin
+        try
+          colorIndex := StrToInt(Trim(params[0]));
+          if (colorIndex < 1) or (colorIndex > 255) then
+            colorIndex := 4;
+        except
+          colorIndex := 4;
+        end;
+      end;
+
+      // Extract layer name if available
+      // Извлекаем имя слоя если доступно
+      if params.Count >= 2 then begin
+        layerName := Trim(params[1]);
+        if (Length(layerName) >= 2) and (layerName[1] = '''') and (layerName[Length(layerName)] = '''') then
+          layerName := Copy(layerName, 2, Length(layerName) - 2);
+      end;
+    finally
+      params.Free;
+    end;
+  end;
 
   // Получаем первую точку
   // Get first point
@@ -261,8 +344,10 @@ begin
     // Create hatch for visualization of construction process
     phatch := GDBObjHatch.CreateInstance;
     zcSetEntPropFromCurrentDrawingProp(phatch);
-    phatch^.vp.Color := 4; // Light blue color (cyan)
-                           // Светло-голубой цвет (cyan)
+
+    // Use color from operands parsing
+    // Используем цвет из разбора операндов
+    phatch^.vp.Color := colorIndex;
     phatch^.PPattern := nil; // Solid hatch
                              // Сплошная штриховка
 
@@ -280,6 +365,7 @@ begin
     // Подготавливаем данные для интерактивного манипулятора
     spaceData.ppolyline := ppolyline;
     spaceData.phatch := phatch;
+    spaceData.hatchColor := colorIndex;
 
     // Интерактивный ввод остальных точек
     // Interactive input of remaining points
@@ -322,7 +408,25 @@ begin
 
       // Парсим операнды и добавляем переменные к полилинии
       // Parse operands and add variables to polyline
-      ParseAndAddVariables(ppolyline, operands);
+      // Also extracts color and layer from operands
+      // Также извлекает цвет и слой из операндов
+      ParseOperandsAndAddVariables(ppolyline, operands, colorIndex, layerName);
+
+      // Set layer if specified
+      // Устанавливаем слой если указан
+      if layerName <> '' then begin
+        pLayer := drawings.GetCurrentDWG^.LayerTable.getAddres(layerName);
+        if pLayer = nil then begin
+          // Layer doesn't exist, create it using current layer as template
+          // Слой не существует, создаем его используя текущий слой как шаблон
+          pLayer := drawings.GetCurrentDWG^.LayerTable.createlayerifneedbyname(
+            layerName,
+            drawings.GetCurrentDWG^.GetCurrentLayer
+          );
+          zcUI.TextMessage('Создан слой / Layer created: ' + layerName, TMWOHistoryOut);
+        end;
+        ppolyline^.vp.Layer := pLayer;
+      end;
 
       // Удаляем штриховку из конструкторской области (она была только для визуализации)
       // Remove hatch from construct root (it was only for visualization)

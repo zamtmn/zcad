@@ -186,7 +186,7 @@ begin
           // Пропускаем полилинии без переменных
           // Skip polylines without variables
           if VarExt = nil then begin
-            pEntity := drawings.GetCurrentROOT.ObjArray.iterate(ir);
+            pEntity := drawings.GetCurrentROOT^.ObjArray.iterate(ir);
             continue;
           end;
 
@@ -197,15 +197,15 @@ begin
           spaceBuilding := '';
 
           pvd := VarExt.entityunit.FindVariable('Space_Room');
-          if (pvd <> nil) and (pvd^.data.PTD.TypeName = 'GDBString') then
+          if (pvd <> nil) and (pvd^.data.PTD^.TypeName = 'GDBString') then
             spaceRoom := pstring(pvd^.data.Addr.Instance)^;
 
           pvd := VarExt.entityunit.FindVariable('space_Floor');
-          if (pvd <> nil) and (pvd^.data.PTD.TypeName = 'GDBString') then
+          if (pvd <> nil) and (pvd^.data.PTD^.TypeName = 'GDBString') then
             spaceFloor := pstring(pvd^.data.Addr.Instance)^;
 
           pvd := VarExt.entityunit.FindVariable('space_Building');
-          if (pvd <> nil) and (pvd^.data.PTD.TypeName = 'GDBString') then
+          if (pvd <> nil) and (pvd^.data.PTD^.TypeName = 'GDBString') then
             spaceBuilding := pstring(pvd^.data.Addr.Instance)^;
 
           // Обрабатываем только пространства с переменной Space_Room (помещения)
@@ -229,7 +229,7 @@ begin
             if pvd = nil then
               pvd := VarExt.entityunit.FindVariable('Name');
 
-            if (pvd <> nil) and (pvd^.data.PTD.TypeName = 'GDBString') then
+            if (pvd <> nil) and (pvd^.data.PTD^.TypeName = 'GDBString') then
               roomNum := pstring(pvd^.data.Addr.Instance)^
             else
               roomNum := 'Room_' + IntToStr(spaceCount);
@@ -268,13 +268,13 @@ begin
     // Ищем этаж для данного помещения
     // Search for floor for this room
     if pSpaceInfo^.Floor <> '' then begin
-      pEntity := drawings.GetCurrentROOT.ObjArray.beginiterate(ir);
+      pEntity := drawings.GetCurrentROOT^.ObjArray.beginiterate(ir);
       if pEntity <> nil then
         repeat
           if pEntity^.GetObjType = GDBPolyLineID then begin
             pFloor := PGDBObjPolyLine(pEntity);
             if pFloor^.Closed then begin
-              VarExtParent := pFloor^.GetExtension<TVariablesExtender>;
+              VarExtParent := pFloor^.specialize GetExtension<TVariablesExtender>;
               if VarExtParent <> nil then begin
                 // Проверяем что это этаж
                 // Check that this is a floor
@@ -286,7 +286,7 @@ begin
                   if pvdParent = nil then
                     pvdParent := VarExtParent.entityunit.FindVariable('NMO_Name');
 
-                  if (pvdParent <> nil) and (pvdParent^.data.PTD.TypeName = 'GDBString') then begin
+                  if (pvdParent <> nil) and (pvdParent^.data.PTD^.TypeName = 'GDBString') then begin
                     parentFloorName := pstring(pvdParent^.data.Addr.Instance)^;
                     if parentFloorName = pSpaceInfo^.Floor then begin
                       pSpaceInfo^.FloorPolyline := pFloor;
@@ -297,20 +297,20 @@ begin
               end;
             end;
           end;
-          pEntity := drawings.GetCurrentROOT.ObjArray.iterate(ir);
+          pEntity := drawings.GetCurrentROOT^.ObjArray.iterate(ir);
         until pEntity = nil;
     end;
 
     // Ищем здание для данного помещения
     // Search for building for this room
     if pSpaceInfo^.Building <> '' then begin
-      pEntity := drawings.GetCurrentROOT.ObjArray.beginiterate(ir);
+      pEntity := drawings.GetCurrentROOT^.ObjArray.beginiterate(ir);
       if pEntity <> nil then
         repeat
           if pEntity^.GetObjType = GDBPolyLineID then begin
             pBuilding := PGDBObjPolyLine(pEntity);
             if pBuilding^.Closed then begin
-              VarExtParent := pBuilding^.GetExtension<TVariablesExtender>;
+              VarExtParent := pBuilding^.specialize GetExtension<TVariablesExtender>;
               if VarExtParent <> nil then begin
                 // Проверяем что это здание
                 // Check that this is a building
@@ -322,7 +322,7 @@ begin
                   if pvdParent = nil then
                     pvdParent := VarExtParent.entityunit.FindVariable('NMO_Name');
 
-                  if (pvdParent <> nil) and (pvdParent^.data.PTD.TypeName = 'GDBString') then begin
+                  if (pvdParent <> nil) and (pvdParent^.data.PTD^.TypeName = 'GDBString') then begin
                     parentBuildingName := pstring(pvdParent^.data.Addr.Instance)^;
                     if parentBuildingName = pSpaceInfo^.Building then begin
                       pSpaceInfo^.BuildingPolyline := pBuilding;
@@ -333,7 +333,7 @@ begin
               end;
             end;
           end;
-          pEntity := drawings.GetCurrentROOT.ObjArray.iterate(ir);
+          pEntity := drawings.GetCurrentROOT^.ObjArray.iterate(ir);
         until pEntity = nil;
     end;
   end;

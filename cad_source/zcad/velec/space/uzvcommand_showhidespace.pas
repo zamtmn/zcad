@@ -259,6 +259,7 @@ var
   pLayer: PGDBLayerProp;
   entitiesToDelete: array of PGDBObjEntity;
   i: integer;
+  pproglayer:PGDBLayerProp;
 begin
   Result := 0;
   deletedCount := 0;
@@ -266,9 +267,17 @@ begin
   if layerName = '' then
     exit;
 
+    pproglayer:=BlockBaseDWG^.LayerTable.getAddres(layerName);//ищем описание слоя в библиотеке
+                                                                  //возможно оно найдется, а возможно вернется nil
+  // Try to create layer using current layer as template
+  // Пытаемся создать слой используя текущий слой как шаблон
+  pLayer := drawings.GetCurrentDWG^.LayerTable.createlayerifneedbyname(
+    layerName,
+    pproglayer
+  );
   // Find the layer by name
   // Находим слой по имени
-  pLayer := drawings.GetCurrentDWG^.LayerTable.GetLayerByName(layerName);
+  //pLayer := drawings.GetCurrentDWG^.LayerTable^.GetLayerByName(layerName);
   if pLayer = nil then
     exit;
 

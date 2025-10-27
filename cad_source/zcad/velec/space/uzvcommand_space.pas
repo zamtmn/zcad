@@ -415,17 +415,33 @@ begin
       // Set layer if specified
       // Устанавливаем слой если указан
       if layerName <> '' then begin
-        pLayer := drawings.GetCurrentDWG^.LayerTable.getAddres(layerName);
+        // Try to create layer using current layer as template
+        // Пытаемся создать слой используя текущий слой как шаблон
+        pLayer := drawings.GetCurrentDWG^.LayerTable.createlayerifneedbyname(
+          layerName,
+          drawings.GetCurrentDWG^.GetCurrentLayer
+        );
+
+        // If layer still doesn't exist, create it with default parameters
+        // Если слой все еще не существует, создаем его с параметрами по умолчанию
         if pLayer = nil then begin
-          // Layer doesn't exist, create it using current layer as template
-          // Слой не существует, создаем его используя текущий слой как шаблон
-          pLayer := drawings.GetCurrentDWG^.LayerTable.createlayerifneedbyname(
-            layerName,
-            drawings.GetCurrentDWG^.GetCurrentLayer
+          pLayer := drawings.GetCurrentDWG^.LayerTable.addlayer(
+            layerName,           // name / имя
+            ClWhite,            // color / цвет
+            -1,                 // line weight / толщина линии
+            True,               // on / включен
+            False,              // lock / заблокирован
+            True,               // print / печатать
+            'Space layer',      // description / описание
+            TLOLoad             // load mode / режим загрузки
           );
           zcUI.TextMessage('Создан слой / Layer created: ' + layerName, TMWOHistoryOut);
         end;
-        ppolyline^.vp.Layer := pLayer;
+
+        // Set the layer for the polyline
+        // Устанавливаем слой для полилинии
+        if pLayer <> nil then
+          ppolyline^.vp.Layer := pLayer;
       end;
 
       // Удаляем штриховку из конструкторской области (она была только для визуализации)

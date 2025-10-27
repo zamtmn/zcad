@@ -111,6 +111,10 @@ begin
     // First collect information about spaces
     dialuxManager.CollectSpacesFromDrawing;
 
+    // Строим иерархию пространств
+    // Build space hierarchy
+    dialuxManager.BuildSpaceHierarchy;
+
     // Выводим структуру для наглядности
     // Display structure for clarity
     dialuxManager.DisplaySpacesStructure;

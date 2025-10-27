@@ -248,6 +248,62 @@ begin
   end;
 end;
 
+// Check if hatches exist on the specified layer and delete them
+// Проверяет существуют ли штриховки на указанном слое и удаляет их
+function DeleteHatchesOnLayer(layerName: string): integer;
+var
+  pEntity: PGDBObjEntity;
+  phatch: PGDBObjHatch;
+  ir: itrec;
+  deletedCount: integer;
+  pLayer: PGDBLayerProp;
+  entitiesToDelete: array of PGDBObjEntity;
+  i: integer;
+begin
+  Result := 0;
+  deletedCount := 0;
+
+  if layerName = '' then
+    exit;
+
+  // Find the layer by name
+  // Находим слой по имени
+  pLayer := drawings.GetCurrentDWG^.LayerTable.GetLayerByName(layerName);
+  if pLayer = nil then
+    exit;
+
+  // Collect all hatches on the specified layer
+  // Собираем все штриховки на указанном слое
+  SetLength(entitiesToDelete, 0);
+
+  pEntity := drawings.GetCurrentROOT^.ObjArray.beginiterate(ir);
+  if pEntity <> nil then
+    repeat
+      // Check if entity is a hatch and on the target layer
+      // Проверяем является ли примитив штриховкой и на целевом слое
+      if pEntity^.GetObjType = GDBHatchID then begin
+        phatch := PGDBObjHatch(pEntity);
+        if phatch^.vp.Layer = pLayer then begin
+          // Add to deletion list
+          // Добавляем в список удаления
+          SetLength(entitiesToDelete, Length(entitiesToDelete) + 1);
+          entitiesToDelete[High(entitiesToDelete)] := pEntity;
+        end;
+      end;
+
+      pEntity := drawings.GetCurrentROOT^.ObjArray.iterate(ir);
+    until pEntity = nil;
+
+  // Delete collected hatches
+  // Удаляем собранные штриховки
+  for i := 0 to High(entitiesToDelete) do begin
+    zcDeleteEntFromCurrentDrawingWithUndo(entitiesToDelete[i]);
+    inc(deletedCount);
+  end;
+
+  Result := deletedCount;
+end;
+
 function ShowHideSpace_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 var
   pEntity: PGDBObjEntity;
@@ -258,6 +314,7 @@ var
   foundCount: integer;
   processedCount: integer;
   hatchCount: integer;
+  deletedCount: integer;
   colorIndex: Integer;
   layerName: string;
   pLayer: PGDBLayerProp;
@@ -326,6 +383,30 @@ begin
     foundCount := 0;
     processedCount := 0;
     hatchCount := 0;
+    deletedCount := 0;
+
+    // Проверяем есть ли уже штриховки на указанном слое (toggle mode)
+    // Check if hatches already exist on the specified layer (toggle mode)
+    if layerName <> '' then begin
+      deletedCount := DeleteHatchesOnLayer(layerName);
+
+      if deletedCount > 0 then begin
+        // Штриховки были удалены - режим HIDE (скрыть)
+        // Hatches were deleted - HIDE mode
+        zcUI.TextMessage('Режим HIDE: удалено штриховок / HIDE mode: hatches deleted: ' + IntToStr(deletedCount), TMWOHistoryOut);
+
+        // Перерисовываем для отображения изменений
+        // Redraw to show changes
+        zcUI.Do_GUIaction(nil, zcMsgUIActionRedraw);
+
+        Result := cmd_ok;
+        exit;
+      end;
+    end;
+
+    // Если штриховок не было или слой не указан - режим SHOW (показать/создать)
+    // If no hatches were found or layer not specified - SHOW mode (create)
+    zcUI.TextMessage('Режим SHOW: создание штриховок / SHOW mode: creating hatches', TMWOHistoryOut);
 
     // Снимаем выделение со всех объектов перед началом
     // Deselect all objects before starting

@@ -44,6 +44,8 @@ uses
                        //утилиты интерфейса
   uzcdrawings,         //Drawings manager
                        //Менеджер чертежей
+  uzcdrawing,          //Drawing type definition
+                       //определение типа чертежа
   uzcutils,            //utility functions
                        //утилиты
   uzeentity,           //base entity
@@ -70,6 +72,8 @@ uses
                        //стили и управление слоями
   gzctnrVectorTypes,
   uzeconsts,
+  zcmultiobjectcreateundocommand, //undo command for multi object operations
+                                  //команда отмены для множественных операций над объектами
   varmandef;                     //variable manager definitions
                                  //определения менеджера переменных
 
@@ -259,7 +263,8 @@ var
   pLayer: PGDBLayerProp;
   entitiesToDelete: array of PGDBObjEntity;
   i: integer;
-  pproglayer:PGDBLayerProp;
+  pproglayer: PGDBLayerProp;
+  domethod, undomethod: tmethod;
 begin
   Result := 0;
   deletedCount := 0;
@@ -303,11 +308,27 @@ begin
       pEntity := drawings.GetCurrentROOT^.ObjArray.iterate(ir);
     until pEntity = nil;
 
-  // Delete collected hatches
-  // Удаляем собранные штриховки
-  for i := 0 to High(entitiesToDelete) do begin
-    zcDeleteEntFromCurrentDrawingWithUndo(entitiesToDelete[i]);
-    inc(deletedCount);
+  // Delete collected hatches with undo support
+  // Удаляем собранные штриховки с поддержкой отмены
+  if Length(entitiesToDelete) > 0 then begin
+    // For deletion, we swap do/undo methods (like in Erase command)
+    // Для удаления меняем местами методы do/undo (как в команде Erase)
+    SetObjCreateManipulator(undomethod, domethod);
+
+    with PushMultiObjectCreateCommand(
+        PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,
+        tmethod(domethod),
+        tmethod(undomethod),
+        Length(entitiesToDelete)) do begin
+
+      for i := 0 to High(entitiesToDelete) do begin
+        AddObject(entitiesToDelete[i]);
+        inc(deletedCount);
+      end;
+
+      FreeArray := False;
+      comit;
+    end;
   end;
 
   Result := deletedCount;

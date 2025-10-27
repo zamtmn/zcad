@@ -56,6 +56,8 @@ uses
                        //строковые константы
   uzcenitiesvariablesextender,  //entity variables extender
                                 //расширение переменных примитивов
+  gzctnrVectorTypes,
+  uzeconsts,
   varmandef;                     //variable manager definitions
                                  //определения менеджера переменных
 
@@ -102,7 +104,7 @@ begin
 
   // Get variables extender from entity
   // Получаем расширение переменных от примитива
-  VarExt := pEntity^.GetExtension<TVariablesExtender>;
+  VarExt := pEntity^.specialize GetExtension<TVariablesExtender>;
   if VarExt = nil then
     exit;
 
@@ -157,11 +159,11 @@ begin
 
     // Снимаем выделение со всех объектов перед началом
     // Deselect all objects before starting
-    drawings.GetCurrentDWG.DeSelectAll;
+    drawings.GetCurrentDWG^.DeSelectAll;
 
     // Перебираем все примитивы в чертеже
     // Iterate through all entities in the drawing
-    pEntity := drawings.GetCurrentROOT.ObjArray.beginiterate(ir);
+    pEntity := drawings.GetCurrentROOT^.ObjArray.beginiterate(ir);
     if pEntity <> nil then
       repeat
         inc(processedCount);
@@ -180,7 +182,7 @@ begin
           end;
         end;
 
-        pEntity := drawings.GetCurrentROOT.ObjArray.iterate(ir);
+        pEntity := drawings.GetCurrentROOT^.ObjArray.iterate(ir);
       until pEntity = nil;
 
     // Выводим результаты

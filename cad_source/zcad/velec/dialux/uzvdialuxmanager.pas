@@ -83,6 +83,10 @@ type
     {**Clear spaces list}
     procedure ClearSpaces;
 
+    {**Вывод структуры пространств в zcUI}
+    {**Display spaces structure in zcUI}
+    procedure DisplaySpacesStructure;
+
     property FileName: string read FFileName write FFileName;
     property SpacesList: TList read FSpacesList;
   end;
@@ -90,6 +94,15 @@ type
   {**Структура для хранения информации о пространстве}
   {**Structure for storing space information}
   TZVSpaceInfo = record
+    RoomNumber: string;           // Номер помещения / Room number
+    RoomPolyline: PGDBObjPolyLine; // Указатель на полилинию помещения / Pointer to room polyline
+    Floor: string;                 // Этаж / Floor
+    FloorPolyline: PGDBObjPolyLine; // Указатель на полилинию этажа / Pointer to floor polyline
+    Building: string;              // Здание / Building
+    BuildingPolyline: PGDBObjPolyLine; // Указатель на полилинию здания / Pointer to building polyline
+
+    // Сохраняем старые поля для совместимости
+    // Keep old fields for compatibility
     Name: string;
     Height: double;
     Polyline: PGDBObjPolyLine;
@@ -137,6 +150,8 @@ var
   VarExt: TVariablesExtender;
   pSpaceInfo: PZVSpaceInfo;
   spaceCount: integer;
+  pvd: pvardesk;
+  roomNum, floor, building: string;
 begin
   // Очищаем предыдущий список пространств
   // Clear previous spaces list
@@ -165,18 +180,62 @@ begin
           // Create space information
           New(pSpaceInfo);
           pSpaceInfo^.Polyline := ppolyline;
+          pSpaceInfo^.RoomPolyline := ppolyline;
+          pSpaceInfo^.FloorPolyline := nil;
+          pSpaceInfo^.BuildingPolyline := nil;
           pSpaceInfo^.Variables := TStringList.Create;
           pSpaceInfo^.Height := 3.0; // Default height / Высота по умолчанию
 
-          // Пытаемся получить имя из переменных
-          // Try to get name from variables
+          roomNum := '';
+          floor := '';
+          building := '';
+
+          // Пытаемся получить информацию из переменных
+          // Try to get information from variables
           if VarExt <> nil then begin
-            // TODO: извлечь переменные из примитива
-            // TODO: extract variables from entity
-            pSpaceInfo^.Name := 'Space_' + IntToStr(spaceCount);
-          end else begin
-            pSpaceInfo^.Name := 'Space_' + IntToStr(spaceCount);
+            // Ищем переменную номера помещения
+            // Search for room number variable
+            pvd := VarExt.entityunit.FindVariable('RoomNumber');
+            if pvd = nil then
+              pvd := VarExt.entityunit.FindVariable('NMO_Name');
+            if pvd = nil then
+              pvd := VarExt.entityunit.FindVariable('Name');
+
+            if (pvd <> nil) and (pvd^.data.PTD.TypeName = 'GDBString') then
+              roomNum := pstring(pvd^.data.Addr.Instance)^;
+
+            // Ищем переменную этажа
+            // Search for floor variable
+            pvd := VarExt.entityunit.FindVariable('Floor');
+            if pvd = nil then
+              pvd := VarExt.entityunit.FindVariable('Этаж');
+
+            if (pvd <> nil) and (pvd^.data.PTD.TypeName = 'GDBString') then
+              floor := pstring(pvd^.data.Addr.Instance)^;
+
+            // Ищем переменную здания
+            // Search for building variable
+            pvd := VarExt.entityunit.FindVariable('Building');
+            if pvd = nil then
+              pvd := VarExt.entityunit.FindVariable('Здание');
+
+            if (pvd <> nil) and (pvd^.data.PTD.TypeName = 'GDBString') then
+              building := pstring(pvd^.data.Addr.Instance)^;
           end;
+
+          // Устанавливаем значения по умолчанию если не найдены
+          // Set default values if not found
+          if roomNum = '' then
+            roomNum := 'Room_' + IntToStr(spaceCount);
+          if floor = '' then
+            floor := '1';
+          if building = '' then
+            building := 'Building_1';
+
+          pSpaceInfo^.RoomNumber := roomNum;
+          pSpaceInfo^.Floor := floor;
+          pSpaceInfo^.Building := building;
+          pSpaceInfo^.Name := roomNum;
 
           FSpacesList.Add(pSpaceInfo);
           inc(spaceCount);
@@ -200,10 +259,8 @@ begin
   Result := False;
 
   try
-    // Собираем информацию о пространствах
-    // Collect information about spaces
-    CollectSpacesFromDrawing;
-
+    // Проверяем что есть данные для экспорта
+    // Check if there is data to export
     if FSpacesList.Count = 0 then begin
       zcUI.TextMessage('Нет пространств для экспорта / No spaces to export', TMWOHistoryOut);
       Exit;
@@ -266,6 +323,61 @@ begin
   // TODO: Implement import from EVO format
   Result := False;
   zcUI.TextMessage('Импорт из EVO пока не реализован / EVO import not yet implemented', TMWOHistoryOut);
+end;
+
+procedure TZVDIALuxManager.DisplaySpacesStructure;
+var
+  i: integer;
+  pSpaceInfo: PZVSpaceInfo;
+  msg: string;
+begin
+  zcUI.TextMessage('', TMWOHistoryOut);
+  zcUI.TextMessage('=== Структура пространств / Spaces Structure ===', TMWOHistoryOut);
+  zcUI.TextMessage('Всего пространств / Total spaces: ' + IntToStr(FSpacesList.Count), TMWOHistoryOut);
+  zcUI.TextMessage('', TMWOHistoryOut);
+
+  for i := 0 to FSpacesList.Count - 1 do begin
+    pSpaceInfo := PZVSpaceInfo(FSpacesList[i]);
+
+    zcUI.TextMessage('--- Пространство / Space #' + IntToStr(i + 1) + ' ---', TMWOHistoryOut);
+
+    // Номер помещения / Room number
+    msg := '  Номер помещения / Room number: ' + pSpaceInfo^.RoomNumber;
+    zcUI.TextMessage(msg, TMWOHistoryOut);
+
+    // Указатель на полилинию помещения / Pointer to room polyline
+    if pSpaceInfo^.RoomPolyline <> nil then
+      msg := '  Указатель на полилинию помещения / Room polyline: 0x' + IntToHex(PtrUInt(pSpaceInfo^.RoomPolyline), 16)
+    else
+      msg := '  Указатель на полилинию помещения / Room polyline: nil';
+    zcUI.TextMessage(msg, TMWOHistoryOut);
+
+    // Этаж / Floor
+    msg := '  Этаж / Floor: ' + pSpaceInfo^.Floor;
+    zcUI.TextMessage(msg, TMWOHistoryOut);
+
+    // Указатель на полилинию этажа / Pointer to floor polyline
+    if pSpaceInfo^.FloorPolyline <> nil then
+      msg := '  Указатель на полилинию этажа / Floor polyline: 0x' + IntToHex(PtrUInt(pSpaceInfo^.FloorPolyline), 16)
+    else
+      msg := '  Указатель на полилинию этажа / Floor polyline: nil';
+    zcUI.TextMessage(msg, TMWOHistoryOut);
+
+    // Здание / Building
+    msg := '  Здание / Building: ' + pSpaceInfo^.Building;
+    zcUI.TextMessage(msg, TMWOHistoryOut);
+
+    // Указатель на полилинию здания / Pointer to building polyline
+    if pSpaceInfo^.BuildingPolyline <> nil then
+      msg := '  Указатель на полилинию здания / Building polyline: 0x' + IntToHex(PtrUInt(pSpaceInfo^.BuildingPolyline), 16)
+    else
+      msg := '  Указатель на полилинию здания / Building polyline: nil';
+    zcUI.TextMessage(msg, TMWOHistoryOut);
+
+    zcUI.TextMessage('', TMWOHistoryOut);
+  end;
+
+  zcUI.TextMessage('=== Конец структуры / End of Structure ===', TMWOHistoryOut);
 end;
 
 end.

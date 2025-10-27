@@ -107,6 +107,14 @@ begin
   // Create DIALux manager
   dialuxManager := TZVDIALuxManager.Create;
   try
+    // Сначала собираем информацию о пространствах
+    // First collect information about spaces
+    dialuxManager.CollectSpacesFromDrawing;
+
+    // Выводим структуру для наглядности
+    // Display structure for clarity
+    dialuxManager.DisplaySpacesStructure;
+
     // Экспортируем в формат STF
     // Export to STF format
     if dialuxManager.ExportToSTF(fileName) then begin

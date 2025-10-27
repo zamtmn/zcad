@@ -266,6 +266,7 @@ var
   entitiesToDelete: array of PGDBObjEntity;
   i: integer;
   domethod, undomethod: tmethod;
+    pproglayer:PGDBLayerProp;
 begin
   Result := -1;  // По умолчанию -1 означает что слой не найден
                  // Default -1 means layer not found
@@ -276,7 +277,15 @@ begin
 
   // Ищем слой по имени БЕЗ создания нового слоя
   // Find layer by name WITHOUT creating a new one
-  pLayer := drawings.GetCurrentDWG^.LayerTable.getAddres(layerName);
+    pproglayer:=BlockBaseDWG^.LayerTable.getAddres(layerName);//ищем описание слоя в библиотеке
+                                                                  //возможно оно найдется, а возможно вернется nil
+    // Try to create layer using current layer as template
+  // Пытаемся создать слой используя текущий слой как шаблон
+  pLayer := drawings.GetCurrentDWG^.LayerTable.createlayerifneedbyname(
+    layerName,
+    pproglayer
+  );
+
 
   // Если слой не существует, возвращаем -1
   // If layer doesn't exist, return -1
@@ -345,6 +354,7 @@ var
   colorIndex: Integer;
   layerName: string;
   pLayer: PGDBLayerProp;
+  pproglayer:PGDBLayerProp;
 begin
   // Вывод сообщения о запуске команды
   // Output message about command launch
@@ -418,9 +428,16 @@ begin
     if layerName <> '' then begin
       // Try to create layer using current layer as template
       // Пытаемся создать слой используя текущий слой как шаблон
+
+      // Ищем слой по имени БЕЗ создания нового слоя
+      // Find layer by name WITHOUT creating a new one
+      pproglayer:=BlockBaseDWG^.LayerTable.getAddres(layerName);//ищем описание слоя в библиотеке
+                                                                      //возможно оно найдется, а возможно вернется nil
+        // Try to create layer using current layer as template
+      // Пытаемся создать слой используя текущий слой как шаблон
       pLayer := drawings.GetCurrentDWG^.LayerTable.createlayerifneedbyname(
         layerName,
-        drawings.GetCurrentDWG^.GetCurrentLayer
+        pproglayer
       );
 
       // If layer still doesn't exist, create it with default parameters
@@ -428,7 +445,7 @@ begin
       if pLayer = nil then begin
         pLayer := drawings.GetCurrentDWG^.LayerTable.addlayer(
           layerName,           // name / имя
-          ClWhite,            // color / цвет
+          colorIndex,            // color / цвет
           -1,                 // line weight / толщина линии
           True,               // on / включен
           False,              // lock / заблокирован
@@ -464,8 +481,8 @@ begin
           if EntityHasAnyVariable(pEntity, varList) then begin
             // Выделяем полилинию
             // Select the polyline
-            pEntity^.Select(drawings.GetCurrentDWG^.wa.param.SelDesc.Selectedobjcount,
-                           @drawings.GetCurrentDWG^.Selector);
+            //pEntity^.Select(drawings.GetCurrentDWG^.wa.param.SelDesc.Selectedobjcount,
+            //               @drawings.GetCurrentDWG^.Selector);
             inc(foundCount);
 
             // Создаем сплошную штриховку внутри полилинии

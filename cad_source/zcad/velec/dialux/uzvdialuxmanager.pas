@@ -64,6 +64,14 @@ type
     FFileName: string;
     FSpacesList: TList;
 
+    {**Проверка находится ли точка внутри полилинии (ray casting алгоритм)}
+    {**Check if point is inside polyline (ray casting algorithm)}
+    function PointInPolyline(const point: GDBVertex; pPolyline: PGDBObjPolyLine): boolean;
+
+    {**Проверка полностью ли одна полилиния находится внутри другой}
+    {**Check if one polyline is completely inside another}
+    function PolylineInsidePolyline(pInner: PGDBObjPolyLine; pOuter: PGDBObjPolyLine): boolean;
+
   public
     constructor Create;
     destructor Destroy; override;
@@ -79,6 +87,10 @@ type
     {**Сбор информации о пространствах из чертежа}
     {**Collect information about spaces from drawing}
     procedure CollectSpacesFromDrawing;
+
+    {**Построение иерархии пространств математическими методами}
+    {**Build space hierarchy using mathematical methods}
+    procedure BuildSpaceHierarchy;
 
     {**Очистка списка пространств}
     {**Clear spaces list}
@@ -98,6 +110,7 @@ type
     RoomNumber: string;           // Номер помещения / Room number
     RoomPolyline: PGDBObjPolyLine; // Указатель на полилинию помещения / Pointer to room polyline
     Floor: string;                 // Этаж / Floor
+    FloorHeight: double;           // Высота этажа / Floor height
     FloorPolyline: PGDBObjPolyLine; // Указатель на полилинию этажа / Pointer to floor polyline
     Building: string;              // Здание / Building
     BuildingPolyline: PGDBObjPolyLine; // Указатель на полилинию здания / Pointer to building polyline
@@ -152,19 +165,17 @@ var
   pSpaceInfo: PZVSpaceInfo;
   spaceCount: integer;
   pvd: pvardesk;
-  roomNum, floor, building: string;
   spaceRoom, spaceFloor, spaceBuilding: string;
-  i, j: integer;
-  pFloor, pBuilding: PGDBObjPolyLine;
-  VarExtParent: TVariablesExtender;
-  pvdParent: pvardesk;
-  parentFloorName, parentBuildingName: string;
+  floorHeight: double;
 begin
   // Очищаем предыдущий список пространств
   // Clear previous spaces list
   ClearSpaces;
 
   spaceCount := 0;
+
+  zcUI.TextMessage('Сбор всех полилиний с расширениями пространств...', TMWOHistoryOut);
+  zcUI.TextMessage('Collecting all polylines with space extensions...', TMWOHistoryOut);
 
   // Перебираем все примитивы в чертеже
   // Iterate through all entities in the drawing
@@ -208,46 +219,75 @@ begin
           if (pvd <> nil) and (pvd^.data.PTD^.TypeName = 'GDBString') then
             spaceBuilding := pstring(pvd^.data.Addr.Instance)^;
 
-          // Обрабатываем только пространства с переменной Space_Room (помещения)
-          // Process only spaces with Space_Room variable (rooms)
+          // Если полилиния содержит Space_Room (помещение)
+          // If polyline contains Space_Room (room)
           if spaceRoom <> '' then begin
-            // Создаем информацию о пространстве
-            // Create space information
             New(pSpaceInfo);
-            pSpaceInfo^.Polyline := ppolyline;
+            pSpaceInfo^.RoomNumber := spaceRoom;
             pSpaceInfo^.RoomPolyline := ppolyline;
+            pSpaceInfo^.Floor := '-1';           // Временно заполняем -1
+            pSpaceInfo^.FloorHeight := -1;       // Временно заполняем -1
             pSpaceInfo^.FloorPolyline := nil;
+            pSpaceInfo^.Building := '-1';        // Временно заполняем -1
             pSpaceInfo^.BuildingPolyline := nil;
+
+            // Сохраняем для совместимости
+            pSpaceInfo^.Name := spaceRoom;
+            pSpaceInfo^.Height := 3.0;
+            pSpaceInfo^.Polyline := ppolyline;
             pSpaceInfo^.Variables := TStringList.Create;
-            pSpaceInfo^.Height := 3.0; // Default height / Высота по умолчанию
 
-            // Получаем номер помещения
-            // Get room number
-            pvd := VarExt.entityunit.FindVariable('RoomNumber');
-            if pvd = nil then
-              pvd := VarExt.entityunit.FindVariable('NMO_Name');
-            if pvd = nil then
-              pvd := VarExt.entityunit.FindVariable('Name');
+            FSpacesList.Add(pSpaceInfo);
+            inc(spaceCount);
+          end
+          // Если полилиния содержит space_Floor (этаж)
+          // If polyline contains space_Floor (floor)
+          else if spaceFloor <> '' then begin
+            New(pSpaceInfo);
+            pSpaceInfo^.RoomNumber := '';        // Не заполняем
+            pSpaceInfo^.RoomPolyline := nil;
+            pSpaceInfo^.Floor := spaceFloor;
 
-            if (pvd <> nil) and (pvd^.data.PTD^.TypeName = 'GDBString') then
-              roomNum := pstring(pvd^.data.Addr.Instance)^
-            else
-              roomNum := 'Room_' + IntToStr(spaceCount);
+            // Пытаемся получить высоту этажа из переменной FloorHeight
+            // Try to get floor height from FloorHeight variable
+            floorHeight := 3.0; // Значение по умолчанию
+            pvd := VarExt.entityunit.FindVariable('FloorHeight');
+            if (pvd <> nil) and (pvd^.data.PTD^.TypeName = 'GDBDouble') then
+              floorHeight := PDouble(pvd^.data.Addr.Instance)^
+            else if (pvd <> nil) and (pvd^.data.PTD^.TypeName = 'GDBInteger') then
+              floorHeight := PInteger(pvd^.data.Addr.Instance)^;
 
-            pSpaceInfo^.RoomNumber := roomNum;
-            pSpaceInfo^.Name := roomNum;
+            pSpaceInfo^.FloorHeight := floorHeight;
+            pSpaceInfo^.FloorPolyline := ppolyline;
+            pSpaceInfo^.Building := '-1';        // Временно заполняем -1
+            pSpaceInfo^.BuildingPolyline := nil;
 
-            // Устанавливаем значения по умолчанию
-            // Set default values
-            floor := spaceFloor;
-            if floor = '' then
-              floor := '1';
-            building := spaceBuilding;
-            if building = '' then
-              building := 'Building_1';
+            // Сохраняем для совместимости
+            pSpaceInfo^.Name := spaceFloor;
+            pSpaceInfo^.Height := floorHeight;
+            pSpaceInfo^.Polyline := ppolyline;
+            pSpaceInfo^.Variables := TStringList.Create;
 
-            pSpaceInfo^.Floor := floor;
-            pSpaceInfo^.Building := building;
+            FSpacesList.Add(pSpaceInfo);
+            inc(spaceCount);
+          end
+          // Если полилиния содержит space_Building (здание)
+          // If polyline contains space_Building (building)
+          else if spaceBuilding <> '' then begin
+            New(pSpaceInfo);
+            pSpaceInfo^.RoomNumber := '';        // Не заполняем
+            pSpaceInfo^.RoomPolyline := nil;
+            pSpaceInfo^.Floor := '';             // Не заполняем
+            pSpaceInfo^.FloorHeight := -1;       // Не заполняем
+            pSpaceInfo^.FloorPolyline := nil;
+            pSpaceInfo^.Building := spaceBuilding;
+            pSpaceInfo^.BuildingPolyline := ppolyline;
+
+            // Сохраняем для совместимости
+            pSpaceInfo^.Name := spaceBuilding;
+            pSpaceInfo^.Height := 3.0;
+            pSpaceInfo^.Polyline := ppolyline;
+            pSpaceInfo^.Variables := TStringList.Create;
 
             FSpacesList.Add(pSpaceInfo);
             inc(spaceCount);
@@ -258,85 +298,148 @@ begin
       pEntity := drawings.GetCurrentROOT^.ObjArray.iterate(ir);
     until pEntity = nil;
 
-  zcUI.TextMessage('Найдено помещений / Rooms found: ' + IntToStr(spaceCount), TMWOHistoryOut);
+  zcUI.TextMessage('Собрано пространств / Spaces collected: ' + IntToStr(spaceCount), TMWOHistoryOut);
+end;
 
-  // Второй проход: связываем помещения с этажами и зданиями
-  // Second pass: link rooms to floors and buildings
+function TZVDIALuxManager.PointInPolyline(const point: GDBVertex; pPolyline: PGDBObjPolyLine): boolean;
+var
+  i, j: integer;
+  vertexCount: integer;
+  vi, vj: GDBVertex;
+  intersectCount: integer;
+begin
+  Result := False;
+
+  if pPolyline = nil then
+    exit;
+
+  vertexCount := pPolyline^.VertexArrayInOCS.Count;
+
+  if vertexCount < 3 then
+    exit;
+
+  // Алгоритм ray casting: подсчет пересечений горизонтального луча с ребрами полигона
+  // Ray casting algorithm: count intersections of horizontal ray with polygon edges
+  intersectCount := 0;
+  j := vertexCount - 1;
+
+  for i := 0 to vertexCount - 1 do begin
+    vi := pPolyline^.VertexArrayInOCS.getData(i);
+    vj := pPolyline^.VertexArrayInOCS.getData(j);
+
+    // Проверяем пересекает ли горизонтальный луч от точки ребро (vi, vj)
+    // Check if horizontal ray from point intersects edge (vi, vj)
+    if ((vi.y > point.y) <> (vj.y > point.y)) and
+       (point.x < (vj.x - vi.x) * (point.y - vi.y) / (vj.y - vi.y) + vi.x) then
+      inc(intersectCount);
+
+    j := i;
+  end;
+
+  // Точка внутри если количество пересечений нечетное
+  // Point is inside if intersection count is odd
+  Result := (intersectCount mod 2) = 1;
+end;
+
+function TZVDIALuxManager.PolylineInsidePolyline(pInner: PGDBObjPolyLine; pOuter: PGDBObjPolyLine): boolean;
+var
+  i: integer;
+  vertexCount: integer;
+  vertex: GDBVertex;
+  allInside: boolean;
+begin
+  Result := False;
+
+  if (pInner = nil) or (pOuter = nil) then
+    exit;
+
+  if pInner = pOuter then
+    exit;
+
+  vertexCount := pInner^.VertexArrayInOCS.Count;
+
+  if vertexCount < 3 then
+    exit;
+
+  // Проверяем все ли вершины внутренней полилинии находятся внутри внешней
+  // Check if all vertices of inner polyline are inside outer polyline
+  allInside := True;
+
+  for i := 0 to vertexCount - 1 do begin
+    vertex := pInner^.VertexArrayInOCS.getData(i);
+    if not PointInPolyline(vertex, pOuter) then begin
+      allInside := False;
+      break;
+    end;
+  end;
+
+  Result := allInside;
+end;
+
+procedure TZVDIALuxManager.BuildSpaceHierarchy;
+var
+  i, j: integer;
+  pSpaceInfo: PZVSpaceInfo;
+  pOtherSpace: PZVSpaceInfo;
+begin
+  zcUI.TextMessage('Построение иерархии пространств математическими методами...', TMWOHistoryOut);
+  zcUI.TextMessage('Building space hierarchy using mathematical methods...', TMWOHistoryOut);
+
+  // Для каждого пространства определяем родительские пространства
+  // For each space, determine parent spaces
   for i := 0 to FSpacesList.Count - 1 do begin
     pSpaceInfo := PZVSpaceInfo(FSpacesList[i]);
 
-    // Ищем этаж для данного помещения
-    // Search for floor for this room
-    if pSpaceInfo^.Floor <> '' then begin
-      pEntity := drawings.GetCurrentROOT^.ObjArray.beginiterate(ir);
-      if pEntity <> nil then
-        repeat
-          if pEntity^.GetObjType = GDBPolyLineID then begin
-            pFloor := PGDBObjPolyLine(pEntity);
-            if pFloor^.Closed then begin
-              VarExtParent := pFloor^.specialize GetExtension<TVariablesExtender>;
-              if VarExtParent <> nil then begin
-                // Проверяем что это этаж
-                // Check that this is a floor
-                pvdParent := VarExtParent.entityunit.FindVariable('space_Floor');
-                if pvdParent <> nil then begin
-                  // Получаем имя этажа
-                  // Get floor name
-                  pvdParent := VarExtParent.entityunit.FindVariable('Name');
-                  if pvdParent = nil then
-                    pvdParent := VarExtParent.entityunit.FindVariable('NMO_Name');
+    // Если это помещение (RoomPolyline <> nil), ищем этаж и здание
+    // If this is a room (RoomPolyline <> nil), find floor and building
+    if pSpaceInfo^.RoomPolyline <> nil then begin
+      for j := 0 to FSpacesList.Count - 1 do begin
+        if i = j then
+          continue;
 
-                  if (pvdParent <> nil) and (pvdParent^.data.PTD^.TypeName = 'GDBString') then begin
-                    parentFloorName := pstring(pvdParent^.data.Addr.Instance)^;
-                    if parentFloorName = pSpaceInfo^.Floor then begin
-                      pSpaceInfo^.FloorPolyline := pFloor;
-                      break;
-                    end;
-                  end;
-                end;
-              end;
-            end;
-          end;
-          pEntity := drawings.GetCurrentROOT^.ObjArray.iterate(ir);
-        until pEntity = nil;
+        pOtherSpace := PZVSpaceInfo(FSpacesList[j]);
+
+        // Проверяем находится ли помещение внутри этажа
+        // Check if room is inside floor
+        if (pOtherSpace^.FloorPolyline <> nil) and
+           PolylineInsidePolyline(pSpaceInfo^.RoomPolyline, pOtherSpace^.FloorPolyline) then begin
+          pSpaceInfo^.Floor := pOtherSpace^.Floor;
+          pSpaceInfo^.FloorHeight := pOtherSpace^.FloorHeight;
+          pSpaceInfo^.FloorPolyline := pOtherSpace^.FloorPolyline;
+        end;
+
+        // Проверяем находится ли помещение внутри здания
+        // Check if room is inside building
+        if (pOtherSpace^.BuildingPolyline <> nil) and
+           PolylineInsidePolyline(pSpaceInfo^.RoomPolyline, pOtherSpace^.BuildingPolyline) then begin
+          pSpaceInfo^.Building := pOtherSpace^.Building;
+          pSpaceInfo^.BuildingPolyline := pOtherSpace^.BuildingPolyline;
+        end;
+      end;
+    end
+    // Если это этаж (FloorPolyline <> nil), ищем здание
+    // If this is a floor (FloorPolyline <> nil), find building
+    else if pSpaceInfo^.FloorPolyline <> nil then begin
+      for j := 0 to FSpacesList.Count - 1 do begin
+        if i = j then
+          continue;
+
+        pOtherSpace := PZVSpaceInfo(FSpacesList[j]);
+
+        // Проверяем находится ли этаж внутри здания
+        // Check if floor is inside building
+        if (pOtherSpace^.BuildingPolyline <> nil) and
+           PolylineInsidePolyline(pSpaceInfo^.FloorPolyline, pOtherSpace^.BuildingPolyline) then begin
+          pSpaceInfo^.Building := pOtherSpace^.Building;
+          pSpaceInfo^.BuildingPolyline := pOtherSpace^.BuildingPolyline;
+        end;
+      end;
     end;
-
-    // Ищем здание для данного помещения
-    // Search for building for this room
-    if pSpaceInfo^.Building <> '' then begin
-      pEntity := drawings.GetCurrentROOT^.ObjArray.beginiterate(ir);
-      if pEntity <> nil then
-        repeat
-          if pEntity^.GetObjType = GDBPolyLineID then begin
-            pBuilding := PGDBObjPolyLine(pEntity);
-            if pBuilding^.Closed then begin
-              VarExtParent := pBuilding^.specialize GetExtension<TVariablesExtender>;
-              if VarExtParent <> nil then begin
-                // Проверяем что это здание
-                // Check that this is a building
-                pvdParent := VarExtParent.entityunit.FindVariable('space_Building');
-                if pvdParent <> nil then begin
-                  // Получаем имя здания
-                  // Get building name
-                  pvdParent := VarExtParent.entityunit.FindVariable('Name');
-                  if pvdParent = nil then
-                    pvdParent := VarExtParent.entityunit.FindVariable('NMO_Name');
-
-                  if (pvdParent <> nil) and (pvdParent^.data.PTD^.TypeName = 'GDBString') then begin
-                    parentBuildingName := pstring(pvdParent^.data.Addr.Instance)^;
-                    if parentBuildingName = pSpaceInfo^.Building then begin
-                      pSpaceInfo^.BuildingPolyline := pBuilding;
-                      break;
-                    end;
-                  end;
-                end;
-              end;
-            end;
-          end;
-          pEntity := drawings.GetCurrentROOT^.ObjArray.iterate(ir);
-        until pEntity = nil;
-    end;
+    // Для здания (BuildingPolyline <> nil) больше ничего заполнять не нужно
+    // For building (BuildingPolyline <> nil) nothing else needs to be filled
   end;
+
+  zcUI.TextMessage('Иерархия построена / Hierarchy built', TMWOHistoryOut);
 end;
 
 function TZVDIALuxManager.ExportToSTF(const AFileName: string): boolean;
@@ -446,6 +549,12 @@ begin
     // Этаж / Floor
     msg := '  Этаж / Floor: ' + pSpaceInfo^.Floor;
     zcUI.TextMessage(msg, TMWOHistoryOut);
+
+    // Высота этажа / Floor Height
+    if pSpaceInfo^.FloorHeight > 0 then begin
+      msg := '  Высота этажа / Floor Height: ' + FloatToStr(pSpaceInfo^.FloorHeight);
+      zcUI.TextMessage(msg, TMWOHistoryOut);
+    end;
 
     // Указатель на полилинию этажа / Pointer to floor polyline
     if pSpaceInfo^.FloorPolyline <> nil then

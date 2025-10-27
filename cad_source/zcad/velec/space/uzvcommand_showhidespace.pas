@@ -111,9 +111,8 @@ begin
   phatch^.PPattern := nil; // Сплошная штриховка (тип solid)
                            // Solid hatch (solid type)
 
-  // Копируем локальную систему координат от полилинии
-  // Copy local coordinate system from polyline
-  phatch^.Local := ppolyline^.Local;
+  // Локальная система координат штриховки инициализирована по умолчанию
+  // Hatch local coordinate system is initialized by default
 
   // Создаем путь из вершин полилинии
   // Create path from polyline vertices

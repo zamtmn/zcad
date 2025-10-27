@@ -208,15 +208,15 @@ begin
           spaceBuilding := '';
 
           pvd := VarExt.entityunit.FindVariable('Space_Room');
-          if (pvd <> nil) and (pvd^.data.PTD^.TypeName = 'GDBString') then
+          if (pvd <> nil) then
             spaceRoom := pstring(pvd^.data.Addr.Instance)^;
 
           pvd := VarExt.entityunit.FindVariable('space_Floor');
-          if (pvd <> nil) and (pvd^.data.PTD^.TypeName = 'GDBString') then
+          if (pvd <> nil) then
             spaceFloor := pstring(pvd^.data.Addr.Instance)^;
 
           pvd := VarExt.entityunit.FindVariable('space_Building');
-          if (pvd <> nil) and (pvd^.data.PTD^.TypeName = 'GDBString') then
+          if (pvd <> nil) then
             spaceBuilding := pstring(pvd^.data.Addr.Instance)^;
 
           // Если полилиния содержит Space_Room (помещение)

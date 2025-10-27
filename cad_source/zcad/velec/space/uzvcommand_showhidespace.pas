@@ -66,6 +66,8 @@ uses
                        //строковые константы
   uzcenitiesvariablesextender,  //entity variables extender
                                 //расширение переменных примитивов
+  uzestyleslayers,     //layer styles and management
+                       //стили и управление слоями
   gzctnrVectorTypes,
   uzeconsts,
   varmandef;                     //variable manager definitions
@@ -77,7 +79,7 @@ implementation
 
 // Helper function to create solid hatch from polyline
 // Вспомогательная функция для создания сплошной штриховки из полилинии
-function CreateSolidHatchFromPolyline(ppolyline: PGDBObjPolyLine): PGDBObjHatch;
+function CreateSolidHatchFromPolyline(ppolyline: PGDBObjPolyLine; colorIndex: Integer; pLayer: PGDBLayerProp): PGDBObjHatch;
 var
   phatch: PGDBObjHatch;
   pathData: GDBPolyline2DArray;
@@ -102,12 +104,16 @@ begin
   // Create hatch
   phatch := GDBObjHatch.CreateInstance;
 
-  // Устанавливаем свойства штриховки от полилинии
-  // Set hatch properties from polyline
-  phatch^.vp.Layer := ppolyline^.vp.Layer;
+  // Устанавливаем свойства штриховки
+  // Set hatch properties
+  if pLayer <> nil then
+    phatch^.vp.Layer := pLayer
+  else
+    phatch^.vp.Layer := ppolyline^.vp.Layer;
+
   phatch^.vp.LineWeight := ppolyline^.vp.LineWeight;
-  phatch^.vp.Color := 4; // Светло-голубой цвет (cyan) для подсветки
-                         // Light blue color (cyan) for highlighting
+  phatch^.vp.Color := colorIndex; // Цвет штриховки из параметров команды
+                                  // Hatch color from command parameters
   phatch^.PPattern := nil; // Сплошная штриховка (тип solid)
                            // Solid hatch (solid type)
 
@@ -134,30 +140,84 @@ begin
   Result := phatch;
 end;
 
-// Helper procedure to parse variable names from operands string
-// Вспомогательная процедура для разбора имен переменных из строки операндов
-procedure ParseVariableNames(const operands: TCommandOperands; var varList: TStringList);
+// Helper procedure to parse operands: extract color, layer, and variable names
+// Вспомогательная процедура для разбора операндов: извлечение цвета, слоя и имен переменных
+procedure ParseOperands(
+  const operands: TCommandOperands;
+  out colorIndex: Integer;
+  out layerName: string;
+  var varList: TStringList);
 var
   i: integer;
   varname: string;
+  params: TStringList;
 begin
+  // Set default values
+  // Устанавливаем значения по умолчанию
+  colorIndex := 4;  // Default: light blue (cyan)
+                    // По умолчанию: светло-голубой (cyan)
+  layerName := '';  // Empty means use polyline's layer
+                    // Пустое значит использовать слой полилинии
+
+  // Clear variable list
+  // Очищаем список переменных
+  varList.Clear;
+
+  // Check if we have operands
+  // Проверяем наличие операндов
+  if Trim(operands) = '' then
+    exit;
+
   // Split operands by comma
   // Разделяем операнды по запятой
-  varList.Delimiter := ',';
-  varList.StrictDelimiter := True;
-  varList.DelimitedText := operands;
+  params := TStringList.Create;
+  try
+    params.Delimiter := ',';
+    params.StrictDelimiter := True;
+    params.DelimitedText := operands;
 
-  // Trim whitespace from each variable name and remove quotes
-  // Удаляем пробелы из каждого имени переменной и убираем кавычки
-  for i := 0 to varList.Count - 1 do begin
-    varname := Trim(varList[i]);
+    // Need at least 3 parameters (color, layer, and at least one variable)
+    // Нужно минимум 3 параметра (цвет, слой и хотя бы одна переменная)
+    if params.Count < 3 then
+      exit;
 
+    // Extract color index (first parameter)
+    // Извлекаем индекс цвета (первый параметр)
+    try
+      colorIndex := StrToInt(Trim(params[0]));
+      // Ensure color is in valid range (1-255)
+      // Проверяем что цвет в допустимом диапазоне (1-255)
+      if (colorIndex < 1) or (colorIndex > 255) then
+        colorIndex := 4;  // Fallback to default
+                          // Возврат к значению по умолчанию
+    except
+      colorIndex := 4;  // Fallback to default on error
+                        // Возврат к значению по умолчанию при ошибке
+    end;
+
+    // Extract layer name (second parameter)
+    // Извлекаем имя слоя (второй параметр)
+    layerName := Trim(params[1]);
     // Remove quotes if present
     // Удаляем кавычки если есть
-    if (Length(varname) >= 2) and (varname[1] = '''') and (varname[Length(varname)] = '''') then
-      varname := Copy(varname, 2, Length(varname) - 2);
+    if (Length(layerName) >= 2) and (layerName[1] = '''') and (layerName[Length(layerName)] = '''') then
+      layerName := Copy(layerName, 2, Length(layerName) - 2);
 
-    varList[i] := varname;
+    // Extract variable names (starting from third parameter)
+    // Извлекаем имена переменных (начиная с третьего параметра)
+    for i := 2 to params.Count - 1 do begin
+      varname := Trim(params[i]);
+
+      // Remove quotes if present
+      // Удаляем кавычки если есть
+      if (Length(varname) >= 2) and (varname[1] = '''') and (varname[Length(varname)] = '''') then
+        varname := Copy(varname, 2, Length(varname) - 2);
+
+      if varname <> '' then
+        varList.Add(varname);
+    end;
+  finally
+    params.Free;
   end;
 end;
 
@@ -198,6 +258,9 @@ var
   foundCount: integer;
   processedCount: integer;
   hatchCount: integer;
+  colorIndex: Integer;
+  layerName: string;
+  pLayer: PGDBLayerProp;
 begin
   // Вывод сообщения о запуске команды
   // Output message about command launch
@@ -206,25 +269,59 @@ begin
   // Проверяем наличие операндов
   // Check if we have operands
   if Trim(operands) = '' then begin
-    zcUI.TextMessage('Ошибка: не указаны имена переменных / Error: variable names not specified', TMWOHistoryOut);
-    zcUI.TextMessage('Использование / Usage: ShowHideSpace variable1,variable2,...', TMWOHistoryOut);
+    zcUI.TextMessage('Ошибка: не указаны параметры / Error: parameters not specified', TMWOHistoryOut);
+    zcUI.TextMessage('Использование / Usage: ShowHideSpace(colorIndex,''LayerName'',variable1,variable2,...)', TMWOHistoryOut);
+    zcUI.TextMessage('Пример / Example: ShowHideSpace(3,''Space_Highlight'',space_Floor,Space_Room)', TMWOHistoryOut);
     Result := cmd_ok;
     exit;
   end;
 
-  // Парсим имена переменных из операндов
-  // Parse variable names from operands
+  // Парсим операнды: цвет, слой и имена переменных
+  // Parse operands: color, layer and variable names
   varList := TStringList.Create;
   try
-    ParseVariableNames(operands, varList);
+    ParseOperands(operands, colorIndex, layerName, varList);
 
     if varList.Count = 0 then begin
       zcUI.TextMessage('Ошибка: не удалось распознать имена переменных / Error: could not parse variable names', TMWOHistoryOut);
+      zcUI.TextMessage('Использование / Usage: ShowHideSpace(colorIndex,''LayerName'',variable1,variable2,...)', TMWOHistoryOut);
       Result := cmd_ok;
       exit;
     end;
 
-    zcUI.TextMessage('Поиск полилиний с переменными / Searching for polylines with variables: ' + varList.CommaText, TMWOHistoryOut);
+    zcUI.TextMessage('Параметры команды / Command parameters:', TMWOHistoryOut);
+    zcUI.TextMessage('  Цвет штриховки / Hatch color: ' + IntToStr(colorIndex), TMWOHistoryOut);
+    zcUI.TextMessage('  Слой / Layer: ' + layerName, TMWOHistoryOut);
+    zcUI.TextMessage('  Переменные / Variables: ' + varList.CommaText, TMWOHistoryOut);
+
+    // Создаем или получаем слой если указан
+    // Create or get layer if specified
+    pLayer := nil;
+    if layerName <> '' then begin
+      // Try to create layer using current layer as template
+      // Пытаемся создать слой используя текущий слой как шаблон
+      pLayer := drawings.GetCurrentDWG^.LayerTable.createlayerifneedbyname(
+        layerName,
+        drawings.GetCurrentDWG^.GetCurrentLayer
+      );
+
+      // If layer still doesn't exist, create it with default parameters
+      // Если слой все еще не существует, создаем его с параметрами по умолчанию
+      if pLayer = nil then begin
+        pLayer := drawings.GetCurrentDWG^.LayerTable.addlayer(
+          layerName,           // name / имя
+          ClWhite,            // color / цвет
+          -1,                 // line weight / толщина линии
+          True,               // on / включен
+          False,              // lock / заблокирован
+          True,               // print / печатать
+          'Space highlight layer',  // description / описание
+          TLOLoad             // load mode / режим загрузки
+        );
+        if pLayer <> nil then
+          zcUI.TextMessage('Создан слой / Layer created: ' + layerName, TMWOHistoryOut);
+      end;
+    end;
 
     foundCount := 0;
     processedCount := 0;
@@ -256,7 +353,7 @@ begin
             // Создаем сплошную штриховку внутри полилинии
             // Create solid hatch inside polyline
             pPolyline := PGDBObjPolyLine(pEntity);
-            phatch := CreateSolidHatchFromPolyline(pPolyline);
+            phatch := CreateSolidHatchFromPolyline(pPolyline, colorIndex, pLayer);
 
             if phatch <> nil then begin
               // Добавляем штриховку в чертеж

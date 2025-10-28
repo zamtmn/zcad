@@ -75,6 +75,14 @@ const
   VAR_SPACE_BUILDING = 'space_Building'; // Переменная для здания
   VAR_FLOOR_HEIGHT = 'space_FloorHeight';// Переменная для высоты этажа
 
+  // Имена переменных в устройствах (светильниках)
+  // Variable names in devices (luminaires)
+  VAR_LOCATION_FLOORMARK = 'LOCATION_floormark'; // Отметка этажа (высота в мм)
+
+  // Константы конвертации единиц измерения
+  // Unit conversion constants
+  MM_TO_METERS = 0.001;                  // Конвертация миллиметров в метры
+
   // Константы формата STF для DIALux EVO
   // STF format constants for DIALux EVO
   STF_VERSION = '1.0.5';                 // Версия формата STF
@@ -117,6 +125,7 @@ type
     Rotation: double;                // Угол поворота / Rotation angle
     Load: double;                    // Мощность (Вт) / Power load (W)
     NrLamps: integer;                // Количество ламп / Number of lamps
+    MountingHeight: double;          // Высота размещения (м) / Mounting height (m)
     RoomIndex: integer;              // Индекс помещения / Room index (-1 если не найдено)
     Device: PGDBObjDevice;           // Указатель на устройство / Pointer to device
   end;
@@ -146,6 +155,10 @@ type
     {**Get numeric variable value from extension}
     function GetNumericVariable(VarExt: TVariablesExtender; const VarName: string;
       DefaultValue: double): double;
+
+    {**Получить высоту размещения светильника из устройства в метрах}
+    {**Get luminaire mounting height from device in meters}
+    function GetMountingHeightFromDevice(pDevice: PGDBObjDevice): double;
 
     {**Проверить является ли полилиния замкнутой}
     {**Check if polyline is closed}
@@ -360,6 +373,33 @@ begin
     Result := PDouble(pvd^.data.Addr.Instance)^
   else if pvd^.data.PTD^.TypeName = 'GDBInteger' then
     Result := PInteger(pvd^.data.Addr.Instance)^;
+end;
+
+{**Получить высоту размещения светильника из устройства в метрах.
+   Читает LOCATION_floormark (в мм) и конвертирует в метры}
+{**Get luminaire mounting height from device in meters.
+   Reads LOCATION_floormark (in mm) and converts to meters}
+function TZVDIALuxManager.GetMountingHeightFromDevice(pDevice: PGDBObjDevice): double;
+var
+  VarExt: TVariablesExtender;
+  heightMM: double;
+begin
+  Result := 0.0;
+
+  if pDevice = nil then
+    Exit;
+
+  // Получаем расширение переменных устройства
+  // Get device variables extension
+  VarExt := pDevice^.specialize GetExtension<TVariablesExtender>;
+
+  if VarExt = nil then
+    Exit;
+
+  // Читаем высоту в миллиметрах и конвертируем в метры
+  // Read height in millimeters and convert to meters
+  heightMM := GetNumericVariable(VarExt, VAR_LOCATION_FLOORMARK, 0.0);
+  Result := heightMM * MM_TO_METERS;
 end;
 
 {**Проверка является ли полилиния замкнутой}
@@ -764,6 +804,7 @@ begin
         pLumInfo^.Rotation := pDevice^.rotate;
         pLumInfo^.Load := DEFAULT_LUMINAIRE_POWER;
         pLumInfo^.NrLamps := DEFAULT_LAMPS_COUNT;
+        pLumInfo^.MountingHeight := GetMountingHeightFromDevice(pDevice);
         pLumInfo^.RoomIndex := -1; // Пока не определено / Not determined yet
         pLumInfo^.Device := pDevice;
 
@@ -808,6 +849,7 @@ begin
         pLumInfo^.Rotation := pDevice^.rotate;
         pLumInfo^.Load := DEFAULT_LUMINAIRE_POWER;
         pLumInfo^.NrLamps := DEFAULT_LAMPS_COUNT;
+        pLumInfo^.MountingHeight := GetMountingHeightFromDevice(pDevice);
         pLumInfo^.RoomIndex := -1;
         pLumInfo^.Device := pDevice;
 
@@ -912,6 +954,7 @@ begin
                FormatFloat('0.###', pLumInfo^.Position.x) + ', ' +
                FormatFloat('0.###', pLumInfo^.Position.y) + ', ' +
                FormatFloat('0.###', pLumInfo^.Position.z) + ')' +
+               ' Высота установки / Mounting height: ' + FormatFloat('0.###', pLumInfo^.MountingHeight) + ' м' +
                ' Поворот / Rotation: ' + FormatFloat('0.#', pLumInfo^.Rotation) + '°';
 
         zcUI.TextMessage(msg, TMWOHistoryOut);
@@ -1037,10 +1080,12 @@ begin
 
     WriteLn(stfFile, 'Lum' + IntToStr(i + 1) + '=' + pLumInfo^.DeviceType);
 
+    // Используем MountingHeight как Z координату для правильного размещения в DIALux
+    // Use MountingHeight as Z coordinate for correct placement in DIALux
     WriteLn(stfFile, 'Lum' + IntToStr(i + 1) + '.Pos=' +
             FormatFloat('0.###', pLumInfo^.Position.x) + ' ' +
             FormatFloat('0.###', pLumInfo^.Position.y) + ' ' +
-            FormatFloat('0.###', pLumInfo^.Position.z));
+            FormatFloat('0.###', pLumInfo^.MountingHeight));
 
     WriteLn(stfFile, 'Lum' + IntToStr(i + 1) + '.Rot=0 0 ' +
             FormatFloat('0.#', pLumInfo^.Rotation));

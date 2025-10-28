@@ -46,6 +46,8 @@ uses
                        //базовый примитив
   uzeentpolyline,      //polyline entity
                        //примитив полилиния
+  uzeentdevice,        //device entity (luminaires)
+                       //примитив устройство (светильники)
   uzbtypes,            //base types
                        //базовые типы
   uzcstrconsts,        //resource strings
@@ -57,12 +59,27 @@ uses
                                  //определения менеджера переменных
 
 type
+  {**Информация о светильнике}
+  {**Luminaire information}
+  TZVLuminaireInfo = record
+    DeviceName: string;              // Имя устройства / Device name
+    DeviceType: string;              // Тип светильника / Luminaire type
+    Position: GDBVertex;             // Позиция в мировых координатах / Position in WCS
+    Rotation: double;                // Угол поворота / Rotation angle
+    Load: double;                    // Мощность (Вт) / Power load (W)
+    NrLamps: integer;                // Количество ламп / Number of lamps
+    RoomIndex: integer;              // Индекс помещения / Room index (-1 если не найдено)
+    Device: PGDBObjDevice;           // Указатель на устройство / Pointer to device
+  end;
+  PZVLuminaireInfo = ^TZVLuminaireInfo;
+
   {**Класс для управления экспортом/импортом данных DIALux}
   {**Class for managing DIALux data export/import}
   TZVDIALuxManager = class
   private
     FFileName: string;
     FSpacesList: TList;
+    FLuminairesList: TList;
 
     {**Проверка находится ли точка внутри полилинии (ray casting алгоритм)}
     {**Check if point is inside polyline (ray casting algorithm)}
@@ -96,12 +113,29 @@ type
     {**Clear spaces list}
     procedure ClearSpaces;
 
+    {**Сбор информации о светильниках из чертежа}
+    {**Collect luminaires information from drawing}
+    procedure CollectLuminairesFromDrawing;
+
+    {**Определение принадлежности светильников к помещениям}
+    {**Assign luminaires to rooms}
+    procedure AssignLuminairesToRooms;
+
+    {**Очистка списка светильников}
+    {**Clear luminaires list}
+    procedure ClearLuminaires;
+
     {**Вывод структуры пространств в zcUI}
     {**Display spaces structure in zcUI}
     procedure DisplaySpacesStructure;
 
+    {**Вывод списка светильников в zcUI}
+    {**Display luminaires list in zcUI}
+    procedure DisplayLuminairesList;
+
     property FileName: string read FFileName write FFileName;
     property SpacesList: TList read FSpacesList;
+    property LuminairesList: TList read FLuminairesList;
   end;
 
   {**Структура для хранения информации о пространстве}
@@ -114,6 +148,7 @@ type
     FloorPolyline: PGDBObjPolyLine; // Указатель на полилинию этажа / Pointer to floor polyline
     Building: string;              // Здание / Building
     BuildingPolyline: PGDBObjPolyLine; // Указатель на полилинию здания / Pointer to building polyline
+    Luminaires: TList;            // Список светильников в помещении / List of luminaires in room
 
     // Сохраняем старые поля для совместимости
     // Keep old fields for compatibility
@@ -130,13 +165,16 @@ constructor TZVDIALuxManager.Create;
 begin
   inherited Create;
   FSpacesList := TList.Create;
+  FLuminairesList := TList.Create;
   FFileName := '';
 end;
 
 destructor TZVDIALuxManager.Destroy;
 begin
   ClearSpaces;
+  ClearLuminaires;
   FSpacesList.Free;
+  FLuminairesList.Free;
   inherited Destroy;
 end;
 
@@ -150,10 +188,27 @@ begin
     if pSpaceInfo <> nil then begin
       if pSpaceInfo^.Variables <> nil then
         pSpaceInfo^.Variables.Free;
+      if pSpaceInfo^.Luminaires <> nil then
+        pSpaceInfo^.Luminaires.Free;
       Dispose(pSpaceInfo);
     end;
   end;
   FSpacesList.Clear;
+end;
+
+{**Очистка списка светильников}
+{**Clear luminaires list}
+procedure TZVDIALuxManager.ClearLuminaires;
+var
+  i: integer;
+  pLumInfo: PZVLuminaireInfo;
+begin
+  for i := 0 to FLuminairesList.Count - 1 do begin
+    pLumInfo := PZVLuminaireInfo(FLuminairesList[i]);
+    if pLumInfo <> nil then
+      Dispose(pLumInfo);
+  end;
+  FLuminairesList.Clear;
 end;
 
 procedure TZVDIALuxManager.CollectSpacesFromDrawing;
@@ -230,6 +285,7 @@ begin
             pSpaceInfo^.FloorPolyline := nil;
             pSpaceInfo^.Building := '-1';        // Временно заполняем -1
             pSpaceInfo^.BuildingPolyline := nil;
+            pSpaceInfo^.Luminaires := TList.Create; // Создаем список светильников
 
             // Сохраняем для совместимости
             pSpaceInfo^.Name := spaceRoom;
@@ -261,6 +317,7 @@ begin
             pSpaceInfo^.FloorPolyline := ppolyline;
             pSpaceInfo^.Building := '-1';        // Временно заполняем -1
             pSpaceInfo^.BuildingPolyline := nil;
+            pSpaceInfo^.Luminaires := TList.Create; // Создаем список светильников
 
             // Сохраняем для совместимости
             pSpaceInfo^.Name := spaceFloor;
@@ -282,6 +339,7 @@ begin
             pSpaceInfo^.FloorPolyline := nil;
             pSpaceInfo^.Building := spaceBuilding;
             pSpaceInfo^.BuildingPolyline := ppolyline;
+            pSpaceInfo^.Luminaires := TList.Create; // Создаем список светильников
 
             // Сохраняем для совместимости
             pSpaceInfo^.Name := spaceBuilding;
@@ -442,17 +500,175 @@ begin
   zcUI.TextMessage('Иерархия построена / Hierarchy built', TMWOHistoryOut);
 end;
 
+{**Сбор информации о светильниках из чертежа}
+{**Collect luminaires information from drawing}
+procedure TZVDIALuxManager.CollectLuminairesFromDrawing;
+var
+  pEntity: PGDBObjEntity;
+  pDevice: PGDBObjDevice;
+  ir: itrec;
+  pLumInfo: PZVLuminaireInfo;
+  lumCount: integer;
+begin
+  // Очищаем предыдущий список светильников
+  // Clear previous luminaires list
+  ClearLuminaires;
+
+  lumCount := 0;
+
+  zcUI.TextMessage('Сбор всех светильников (устройств) из чертежа...', TMWOHistoryOut);
+  zcUI.TextMessage('Collecting all luminaires (devices) from drawing...', TMWOHistoryOut);
+
+  // Перебираем все примитивы в чертеже
+  // Iterate through all entities in the drawing
+  pEntity := drawings.GetCurrentROOT^.ObjArray.beginiterate(ir);
+  if pEntity <> nil then
+    repeat
+      // Проверяем является ли примитив устройством (светильником)
+      // Check if entity is a device (luminaire)
+      if pEntity^.GetObjType = GDBDeviceID then begin
+        pDevice := PGDBObjDevice(pEntity);
+
+        // Создаем новую запись о светильнике
+        // Create new luminaire record
+        New(pLumInfo);
+        pLumInfo^.DeviceName := pDevice^.Name;
+        pLumInfo^.DeviceType := pDevice^.Name; // Временно используем имя как тип
+        pLumInfo^.Position := pDevice^.P_insert_in_WCS;
+        pLumInfo^.Rotation := pDevice^.rotate;
+        pLumInfo^.Load := 35.0;  // Значение по умолчанию / Default value
+        pLumInfo^.NrLamps := 1;  // Значение по умолчанию / Default value
+        pLumInfo^.RoomIndex := -1; // Пока не определено / Not determined yet
+        pLumInfo^.Device := pDevice;
+
+        FLuminairesList.Add(pLumInfo);
+        inc(lumCount);
+      end;
+
+      pEntity := drawings.GetCurrentROOT^.ObjArray.iterate(ir);
+    until pEntity = nil;
+
+  zcUI.TextMessage('Собрано светильников / Luminaires collected: ' + IntToStr(lumCount), TMWOHistoryOut);
+end;
+
+{**Определение принадлежности светильников к помещениям}
+{**Assign luminaires to rooms}
+procedure TZVDIALuxManager.AssignLuminairesToRooms;
+var
+  i, j: integer;
+  pLumInfo: PZVLuminaireInfo;
+  pSpaceInfo: PZVSpaceInfo;
+  assigned: boolean;
+  assignedCount: integer;
+begin
+  zcUI.TextMessage('Определение принадлежности светильников к помещениям...', TMWOHistoryOut);
+  zcUI.TextMessage('Assigning luminaires to rooms...', TMWOHistoryOut);
+
+  assignedCount := 0;
+
+  // Для каждого светильника определяем в каком помещении он находится
+  // For each luminaire, determine which room it belongs to
+  for i := 0 to FLuminairesList.Count - 1 do begin
+    pLumInfo := PZVLuminaireInfo(FLuminairesList[i]);
+    assigned := false;
+
+    // Проверяем все помещения
+    // Check all rooms
+    for j := 0 to FSpacesList.Count - 1 do begin
+      pSpaceInfo := PZVSpaceInfo(FSpacesList[j]);
+
+      // Проверяем только помещения (Space_Room)
+      // Check only rooms (Space_Room)
+      if pSpaceInfo^.RoomPolyline <> nil then begin
+        // Проверяем находится ли светильник внутри полилинии помещения
+        // Check if luminaire is inside room polyline
+        if PointInPolyline(pLumInfo^.Position, pSpaceInfo^.RoomPolyline) then begin
+          pLumInfo^.RoomIndex := j;
+          pSpaceInfo^.Luminaires.Add(pLumInfo);
+          assigned := true;
+          inc(assignedCount);
+          break;
+        end;
+      end;
+    end;
+
+    if not assigned then begin
+      zcUI.TextMessage('  Светильник не назначен помещению / Luminaire not assigned: ' +
+                      pLumInfo^.DeviceName + ' at (' +
+                      FormatFloat('0.##', pLumInfo^.Position.x) + ', ' +
+                      FormatFloat('0.##', pLumInfo^.Position.y) + ')', TMWOHistoryOut);
+    end;
+  end;
+
+  zcUI.TextMessage('Назначено светильников / Luminaires assigned: ' + IntToStr(assignedCount) +
+                  ' из / of ' + IntToStr(FLuminairesList.Count), TMWOHistoryOut);
+end;
+
+{**Вывод списка светильников в zcUI}
+{**Display luminaires list in zcUI}
+procedure TZVDIALuxManager.DisplayLuminairesList;
+var
+  i, j: integer;
+  pSpaceInfo: PZVSpaceInfo;
+  pLumInfo: PZVLuminaireInfo;
+  msg: string;
+  roomLumCount: integer;
+begin
+  zcUI.TextMessage('', TMWOHistoryOut);
+  zcUI.TextMessage('=== Список светильников по помещениям / Luminaires by Rooms ===', TMWOHistoryOut);
+  zcUI.TextMessage('Всего светильников / Total luminaires: ' + IntToStr(FLuminairesList.Count), TMWOHistoryOut);
+  zcUI.TextMessage('', TMWOHistoryOut);
+
+  // Выводим светильники по помещениям
+  // Display luminaires by rooms
+  for i := 0 to FSpacesList.Count - 1 do begin
+    pSpaceInfo := PZVSpaceInfo(FSpacesList[i]);
+
+    // Показываем только помещения со светильниками
+    // Show only rooms with luminaires
+    if (pSpaceInfo^.RoomPolyline <> nil) and (pSpaceInfo^.Luminaires.Count > 0) then begin
+      roomLumCount := pSpaceInfo^.Luminaires.Count;
+
+      zcUI.TextMessage('--- Помещение / Room: ' + pSpaceInfo^.RoomNumber +
+                      ' (' + IntToStr(roomLumCount) + ' светильников / luminaires) ---', TMWOHistoryOut);
+
+      // Выводим все светильники в помещении
+      // Display all luminaires in the room
+      for j := 0 to pSpaceInfo^.Luminaires.Count - 1 do begin
+        pLumInfo := PZVLuminaireInfo(pSpaceInfo^.Luminaires[j]);
+
+        msg := '  [' + IntToStr(j + 1) + '] ' + pLumInfo^.DeviceName +
+               ' Позиция / Position: (' +
+               FormatFloat('0.###', pLumInfo^.Position.x) + ', ' +
+               FormatFloat('0.###', pLumInfo^.Position.y) + ', ' +
+               FormatFloat('0.###', pLumInfo^.Position.z) + ')' +
+               ' Поворот / Rotation: ' + FormatFloat('0.#', pLumInfo^.Rotation) + '°';
+
+        zcUI.TextMessage(msg, TMWOHistoryOut);
+      end;
+
+      zcUI.TextMessage('', TMWOHistoryOut);
+    end;
+  end;
+
+  zcUI.TextMessage('=== Конец списка / End of List ===', TMWOHistoryOut);
+end;
+
 function TZVDIALuxManager.ExportToSTF(const AFileName: string): boolean;
 var
   stfFile: TextFile;
-  i, j, k: integer;
+  i, j, k, m: integer;
   pSpaceInfo: PZVSpaceInfo;
   ppolyline: PGDBObjPolyLine;
+  pLumInfo: PZVLuminaireInfo;
   vertex: GDBVertex;
   roomCount: integer;
   currentDate: string;
   projectName: string;
   roomHeight: double;
+  lumTypes: TStringList;
+  lumTypeIndex: integer;
+  lumTypeName: string;
 begin
   Result := False;
 
@@ -485,6 +701,12 @@ begin
     // Получаем имя проекта из имени файла
     // Get project name from file name
     projectName := ChangeFileExt(ExtractFileName(AFileName), '');
+
+    // Создаем список уникальных типов светильников
+    // Create list of unique luminaire types
+    lumTypes := TStringList.Create;
+    lumTypes.Sorted := True;
+    lumTypes.Duplicates := dupIgnore;
 
     // Открываем файл для записи
     // Open file for writing
@@ -557,18 +779,73 @@ begin
           // Дополнительные параметры помещения
           // Additional room parameters
           WriteLn(stfFile, 'R_Ceiling=0.75');
-          WriteLn(stfFile, 'NrLums=0');
+
+          // Экспорт светильников в помещении
+          // Export luminaires in the room
+          if pSpaceInfo^.Luminaires.Count > 0 then begin
+            // Записываем информацию о каждом светильнике
+            // Write information about each luminaire
+            for k := 0 to pSpaceInfo^.Luminaires.Count - 1 do begin
+              pLumInfo := PZVLuminaireInfo(pSpaceInfo^.Luminaires[k]);
+              lumTypeName := pLumInfo^.DeviceType;
+
+              // Записываем ссылку на светильник
+              // Write luminaire reference
+              WriteLn(stfFile, 'Lum' + IntToStr(k + 1) + '=' + lumTypeName);
+
+              // Записываем позицию светильника
+              // Write luminaire position
+              WriteLn(stfFile, 'Lum' + IntToStr(k + 1) + '.Pos=' +
+                      FormatFloat('0.###', pLumInfo^.Position.x) + ' ' +
+                      FormatFloat('0.###', pLumInfo^.Position.y) + ' ' +
+                      FormatFloat('0.###', pLumInfo^.Position.z));
+
+              // Записываем поворот светильника (rotation in degrees to 3D angles)
+              // Write luminaire rotation
+              WriteLn(stfFile, 'Lum' + IntToStr(k + 1) + '.Rot=0 0 ' +
+                      FormatFloat('0.#', pLumInfo^.Rotation));
+
+              // Добавляем тип в список уникальных типов
+              // Add type to unique types list
+              if lumTypes.IndexOf(lumTypeName) < 0 then
+                lumTypes.Add(lumTypeName);
+            end;
+
+            WriteLn(stfFile, 'NrLums=' + IntToStr(pSpaceInfo^.Luminaires.Count));
+          end else begin
+            WriteLn(stfFile, 'NrLums=0');
+          end;
+
           WriteLn(stfFile, 'NrStruct=0');
           WriteLn(stfFile, 'NrFurns=0');
         end;
       end;
 
+      // Экспорт определений типов светильников
+      // Export luminaire type definitions
+      for i := 0 to lumTypes.Count - 1 do begin
+        lumTypeName := lumTypes[i];
+
+        WriteLn(stfFile, '[' + lumTypeName + ']');
+        WriteLn(stfFile, 'Manufacturer=');
+        WriteLn(stfFile, 'Name=');
+        WriteLn(stfFile, 'OrderNr=');
+        WriteLn(stfFile, 'Box=1 1 0');
+        WriteLn(stfFile, 'Shape=0');
+        WriteLn(stfFile, 'Load=35');
+        WriteLn(stfFile, 'Flux=0');
+        WriteLn(stfFile, 'NrLamps=1');
+        WriteLn(stfFile, 'MountingType=1');
+      end;
+
       Result := True;
       zcUI.TextMessage('Экспорт в STF завершен / STF export completed: ' + AFileName, TMWOHistoryOut);
       zcUI.TextMessage('Экспортировано помещений / Rooms exported: ' + IntToStr(roomCount), TMWOHistoryOut);
+      zcUI.TextMessage('Экспортировано типов светильников / Luminaire types exported: ' + IntToStr(lumTypes.Count), TMWOHistoryOut);
 
     finally
       CloseFile(stfFile);
+      lumTypes.Free;
     end;
 
   except

@@ -119,11 +119,24 @@ begin
     // Display structure for clarity
     dialuxManager.DisplaySpacesStructure;
 
+    // Собираем информацию о светильниках
+    // Collect luminaires information
+    dialuxManager.CollectLuminairesFromDrawing;
+
+    // Определяем принадлежность светильников к помещениям
+    // Assign luminaires to rooms
+    dialuxManager.AssignLuminairesToRooms;
+
+    // Выводим список светильников для наглядности
+    // Display luminaires list for clarity
+    dialuxManager.DisplayLuminairesList;
+
     // Экспортируем в формат STF
     // Export to STF format
     if dialuxManager.ExportToSTF(fileName) then begin
       zcUI.TextMessage('Экспорт успешно завершен / Export completed successfully', TMWOHistoryOut);
       zcUI.TextMessage('Экспортировано пространств / Spaces exported: ' + IntToStr(dialuxManager.SpacesList.Count), TMWOHistoryOut);
+      zcUI.TextMessage('Экспортировано светильников / Luminaires exported: ' + IntToStr(dialuxManager.LuminairesList.Count), TMWOHistoryOut);
     end else begin
       zcUI.TextMessage('Ошибка при экспорте / Error during export', TMWOHistoryOut);
     end;

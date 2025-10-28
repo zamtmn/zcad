@@ -75,6 +75,17 @@ const
   VAR_SPACE_BUILDING = 'space_Building'; // Переменная для здания
   VAR_FLOOR_HEIGHT = 'FloorHeight';      // Переменная для высоты этажа
 
+  // Константы формата STF для DIALux EVO
+  // STF format constants for DIALux EVO
+  STF_VERSION = '1.0.5';                 // Версия формата STF
+  STF_PROGRAM_NAME = 'ZCAD';             // Имя программы экспортера
+  STF_PROGRAM_VERSION = '1.0';           // Версия программы
+  STF_WORKING_PLANE_HEIGHT = 0.8;        // Высота рабочей плоскости (м)
+  STF_CEILING_REFLECTANCE = 0.75;        // Коэффициент отражения потолка
+  STF_LUMINAIRE_MOUNTING_TYPE = 1;       // Тип монтажа светильника
+  STF_LUMINAIRE_SHAPE = 0;               // Форма светильника
+  STF_LUMINAIRE_DEFAULT_FLUX = 0;        // Световой поток по умолчанию (лм)
+
 type
   {**Структура для хранения информации о пространстве}
   {**Structure for storing space information}
@@ -159,6 +170,41 @@ type
     {**Process polyline as space}
     procedure ProcessPolylineAsSpace(pPolyline: PGDBObjPolyLine;
       var spaceCount: integer);
+
+    {**Подсчитать количество помещений в списке пространств}
+    {**Count number of rooms in spaces list}
+    function CountRooms: integer;
+
+    {**Собрать список уникальных типов светильников}
+    {**Collect list of unique luminaire types}
+    procedure CollectUniqueLuminaireTypes(lumTypes: TStringList);
+
+    {**Записать заголовок STF файла (секция VERSION)}
+    {**Write STF file header (VERSION section)}
+    procedure WriteSTFHeader(var stfFile: TextFile);
+
+    {**Записать секцию PROJECT в STF файл}
+    {**Write PROJECT section to STF file}
+    procedure WriteSTFProjectSection(var stfFile: TextFile; const projectName: string;
+      const currentDate: string; roomCount: integer);
+
+    {**Записать координаты точек полилинии помещения}
+    {**Write room polyline points coordinates}
+    procedure WriteRoomPolylinePoints(var stfFile: TextFile; pPolyline: PGDBObjPolyLine);
+
+    {**Записать информацию о светильниках в помещении}
+    {**Write luminaires information in room}
+    procedure WriteRoomLuminaires(var stfFile: TextFile; pSpaceInfo: PZVSpaceInfo;
+      lumTypes: TStringList);
+
+    {**Записать информацию об одном помещении в STF файл}
+    {**Write single room information to STF file}
+    procedure WriteSTFRoom(var stfFile: TextFile; pSpaceInfo: PZVSpaceInfo;
+      roomIndex: integer; lumTypes: TStringList);
+
+    {**Записать определения типов светильников}
+    {**Write luminaire type definitions}
+    procedure WriteSTFLuminaireTypes(var stfFile: TextFile; lumTypes: TStringList);
 
   public
     constructor Create;
@@ -764,197 +810,280 @@ begin
   zcUI.TextMessage('=== Конец списка / End of List ===', TMWOHistoryOut);
 end;
 
+{**Подсчитать количество помещений в списке пространств.
+   Помещения определяются наличием RoomPolyline}
+{**Count number of rooms in spaces list.
+   Rooms are identified by presence of RoomPolyline}
+function TZVDIALuxManager.CountRooms: integer;
+var
+  i: integer;
+  pSpaceInfo: PZVSpaceInfo;
+begin
+  Result := 0;
+
+  for i := 0 to FSpacesList.Count - 1 do begin
+    pSpaceInfo := PZVSpaceInfo(FSpacesList[i]);
+    if pSpaceInfo^.RoomPolyline <> nil then
+      inc(Result);
+  end;
+end;
+
+{**Собрать список уникальных типов светильников из всех помещений}
+{**Collect list of unique luminaire types from all rooms}
+procedure TZVDIALuxManager.CollectUniqueLuminaireTypes(lumTypes: TStringList);
+var
+  i, j: integer;
+  pSpaceInfo: PZVSpaceInfo;
+  pLumInfo: PZVLuminaireInfo;
+begin
+  for i := 0 to FSpacesList.Count - 1 do begin
+    pSpaceInfo := PZVSpaceInfo(FSpacesList[i]);
+
+    if pSpaceInfo^.Luminaires <> nil then begin
+      for j := 0 to pSpaceInfo^.Luminaires.Count - 1 do begin
+        pLumInfo := PZVLuminaireInfo(pSpaceInfo^.Luminaires[j]);
+
+        if lumTypes.IndexOf(pLumInfo^.DeviceType) < 0 then
+          lumTypes.Add(pLumInfo^.DeviceType);
+      end;
+    end;
+  end;
+end;
+
+{**Записать секцию VERSION в STF файл}
+{**Write VERSION section to STF file}
+procedure TZVDIALuxManager.WriteSTFHeader(var stfFile: TextFile);
+begin
+  WriteLn(stfFile, '[VERSION]');
+  WriteLn(stfFile, 'STFF=' + STF_VERSION);
+  WriteLn(stfFile, 'Progname=' + STF_PROGRAM_NAME);
+  WriteLn(stfFile, 'Progvers=' + STF_PROGRAM_VERSION);
+end;
+
+{**Записать секцию PROJECT в STF файл с информацией о проекте и списком помещений}
+{**Write PROJECT section to STF file with project info and room list}
+procedure TZVDIALuxManager.WriteSTFProjectSection(var stfFile: TextFile;
+  const projectName: string; const currentDate: string; roomCount: integer);
+var
+  i, roomIndex: integer;
+  pSpaceInfo: PZVSpaceInfo;
+begin
+  WriteLn(stfFile, '[PROJECT]');
+  WriteLn(stfFile, 'Name=' + projectName);
+  WriteLn(stfFile, 'Date=' + currentDate);
+  WriteLn(stfFile, 'Operator=' + STF_PROGRAM_NAME);
+  WriteLn(stfFile, 'NrRooms=' + IntToStr(roomCount));
+
+  // Записываем ссылки на все помещения
+  // Write references to all rooms
+  roomIndex := 0;
+  for i := 0 to FSpacesList.Count - 1 do begin
+    pSpaceInfo := PZVSpaceInfo(FSpacesList[i]);
+
+    if pSpaceInfo^.RoomPolyline <> nil then begin
+      inc(roomIndex);
+      WriteLn(stfFile, 'Room' + IntToStr(roomIndex) + '=ROOM.R' + IntToStr(roomIndex));
+    end;
+  end;
+end;
+
+{**Записать координаты всех точек полилинии помещения}
+{**Write coordinates of all polyline points of the room}
+procedure TZVDIALuxManager.WriteRoomPolylinePoints(var stfFile: TextFile;
+  pPolyline: PGDBObjPolyLine);
+var
+  i: integer;
+  vertex: GDBVertex;
+begin
+  for i := 0 to pPolyline^.VertexArrayInOCS.Count - 1 do begin
+    vertex := pPolyline^.VertexArrayInOCS.getData(i);
+    WriteLn(stfFile, 'Point' + IntToStr(i + 1) + '=' +
+            FormatFloat('0.###', vertex.x) + ' ' +
+            FormatFloat('0.###', vertex.y));
+  end;
+end;
+
+{**Записать информацию о всех светильниках в помещении}
+{**Write information about all luminaires in the room}
+procedure TZVDIALuxManager.WriteRoomLuminaires(var stfFile: TextFile;
+  pSpaceInfo: PZVSpaceInfo; lumTypes: TStringList);
+var
+  i: integer;
+  pLumInfo: PZVLuminaireInfo;
+begin
+  if pSpaceInfo^.Luminaires.Count = 0 then begin
+    WriteLn(stfFile, 'NrLums=0');
+    Exit;
+  end;
+
+  // Записываем информацию о каждом светильнике
+  // Write information about each luminaire
+  for i := 0 to pSpaceInfo^.Luminaires.Count - 1 do begin
+    pLumInfo := PZVLuminaireInfo(pSpaceInfo^.Luminaires[i]);
+
+    WriteLn(stfFile, 'Lum' + IntToStr(i + 1) + '=' + pLumInfo^.DeviceType);
+
+    WriteLn(stfFile, 'Lum' + IntToStr(i + 1) + '.Pos=' +
+            FormatFloat('0.###', pLumInfo^.Position.x) + ' ' +
+            FormatFloat('0.###', pLumInfo^.Position.y) + ' ' +
+            FormatFloat('0.###', pLumInfo^.Position.z));
+
+    WriteLn(stfFile, 'Lum' + IntToStr(i + 1) + '.Rot=0 0 ' +
+            FormatFloat('0.#', pLumInfo^.Rotation));
+  end;
+
+  WriteLn(stfFile, 'NrLums=' + IntToStr(pSpaceInfo^.Luminaires.Count));
+end;
+
+{**Записать информацию об одном помещении в STF файл}
+{**Write single room information to STF file}
+procedure TZVDIALuxManager.WriteSTFRoom(var stfFile: TextFile;
+  pSpaceInfo: PZVSpaceInfo; roomIndex: integer; lumTypes: TStringList);
+var
+  roomHeight: double;
+begin
+  // Определяем высоту помещения
+  // Determine room height
+  if pSpaceInfo^.FloorHeight > 0 then
+    roomHeight := pSpaceInfo^.FloorHeight
+  else
+    roomHeight := DEFAULT_ROOM_HEIGHT;
+
+  // Записываем заголовок и основные параметры помещения
+  // Write room header and basic parameters
+  WriteLn(stfFile, '[ROOM.R' + IntToStr(roomIndex) + ']');
+  WriteLn(stfFile, 'Name=' + pSpaceInfo^.RoomNumber);
+  WriteLn(stfFile, 'Height=' + FormatFloat('0.0', roomHeight));
+  WriteLn(stfFile, 'WorkingPlane=' + FormatFloat('0.0', STF_WORKING_PLANE_HEIGHT));
+  WriteLn(stfFile, 'NrPoints=' + IntToStr(pSpaceInfo^.RoomPolyline^.VertexArrayInOCS.Count));
+
+  // Записываем координаты точек
+  // Write point coordinates
+  WriteRoomPolylinePoints(stfFile, pSpaceInfo^.RoomPolyline);
+
+  // Записываем параметры отражения
+  // Write reflection parameters
+  WriteLn(stfFile, 'R_Ceiling=' + FormatFloat('0.00', STF_CEILING_REFLECTANCE));
+
+  // Записываем светильники
+  // Write luminaires
+  WriteRoomLuminaires(stfFile, pSpaceInfo, lumTypes);
+
+  // Завершаем секцию помещения
+  // Finish room section
+  WriteLn(stfFile, 'NrStruct=0');
+  WriteLn(stfFile, 'NrFurns=0');
+end;
+
+{**Записать определения типов светильников в STF файл}
+{**Write luminaire type definitions to STF file}
+procedure TZVDIALuxManager.WriteSTFLuminaireTypes(var stfFile: TextFile;
+  lumTypes: TStringList);
+var
+  i: integer;
+  lumTypeName: string;
+begin
+  for i := 0 to lumTypes.Count - 1 do begin
+    lumTypeName := lumTypes[i];
+
+    WriteLn(stfFile, '[' + lumTypeName + ']');
+    WriteLn(stfFile, 'Manufacturer=');
+    WriteLn(stfFile, 'Name=');
+    WriteLn(stfFile, 'OrderNr=');
+    WriteLn(stfFile, 'Box=1 1 0');
+    WriteLn(stfFile, 'Shape=' + IntToStr(STF_LUMINAIRE_SHAPE));
+    WriteLn(stfFile, 'Load=' + IntToStr(Round(DEFAULT_LUMINAIRE_POWER)));
+    WriteLn(stfFile, 'Flux=' + IntToStr(STF_LUMINAIRE_DEFAULT_FLUX));
+    WriteLn(stfFile, 'NrLamps=' + IntToStr(DEFAULT_LAMPS_COUNT));
+    WriteLn(stfFile, 'MountingType=' + IntToStr(STF_LUMINAIRE_MOUNTING_TYPE));
+  end;
+end;
+
+{**Экспорт данных в формат STF для DIALux EVO.
+   Основная функция координирует процесс экспорта}
+{**Export data to STF format for DIALux EVO.
+   Main function coordinates the export process}
 function TZVDIALuxManager.ExportToSTF(const AFileName: string): boolean;
 var
   stfFile: TextFile;
-  i, j, k, m: integer;
+  i, roomIndex: integer;
   pSpaceInfo: PZVSpaceInfo;
-  ppolyline: PGDBObjPolyLine;
-  pLumInfo: PZVLuminaireInfo;
-  vertex: GDBVertex;
   roomCount: integer;
   currentDate: string;
   projectName: string;
-  roomHeight: double;
   lumTypes: TStringList;
-  lumTypeIndex: integer;
-  lumTypeName: string;
 begin
   Result := False;
 
   try
-    // Проверяем что есть данные для экспорта
+    // Проверка наличия данных для экспорта
     // Check if there is data to export
     if FSpacesList.Count = 0 then begin
       zcUI.TextMessage('Нет пространств для экспорта / No spaces to export', TMWOHistoryOut);
       Exit;
     end;
 
-    // Подсчитываем количество помещений (только Space_Room)
-    // Count number of rooms (only Space_Room)
-    roomCount := 0;
-    for i := 0 to FSpacesList.Count - 1 do begin
-      pSpaceInfo := PZVSpaceInfo(FSpacesList[i]);
-      if pSpaceInfo^.RoomPolyline <> nil then
-        inc(roomCount);
-    end;
+    // Подсчет количества помещений
+    // Count number of rooms
+    roomCount := CountRooms;
 
     if roomCount = 0 then begin
       zcUI.TextMessage('Нет помещений для экспорта / No rooms to export', TMWOHistoryOut);
       Exit;
     end;
 
-    // Получаем текущую дату
-    // Get current date
+    // Подготовка метаданных для экспорта
+    // Prepare metadata for export
     currentDate := FormatDateTime('yyyy-mm-dd', Now);
-
-    // Получаем имя проекта из имени файла
-    // Get project name from file name
     projectName := ChangeFileExt(ExtractFileName(AFileName), '');
 
-    // Создаем список уникальных типов светильников
+    // Создание списка уникальных типов светильников
     // Create list of unique luminaire types
     lumTypes := TStringList.Create;
     lumTypes.Sorted := True;
     lumTypes.Duplicates := dupIgnore;
 
-    // Открываем файл для записи
-    // Open file for writing
-    AssignFile(stfFile, AFileName);
-    Rewrite(stfFile);
-
     try
-      // Секция VERSION
-      // VERSION section
-      WriteLn(stfFile, '[VERSION]');
-      WriteLn(stfFile, 'STFF=1.0.5');
-      WriteLn(stfFile, 'Progname=ZCAD');
-      WriteLn(stfFile, 'Progvers=1.0');
+      CollectUniqueLuminaireTypes(lumTypes);
 
-      // Секция PROJECT
-      // PROJECT section
-      WriteLn(stfFile, '[PROJECT]');
-      WriteLn(stfFile, 'Name=' + projectName);
-      WriteLn(stfFile, 'Date=' + currentDate);
-      WriteLn(stfFile, 'Operator=ZCAD');
-      WriteLn(stfFile, 'NrRooms=' + IntToStr(roomCount));
+      // Открытие файла для записи
+      // Open file for writing
+      AssignFile(stfFile, AFileName);
+      Rewrite(stfFile);
 
-      // Записываем ссылки на все помещения
-      // Write references to all rooms
-      j := 0;
-      for i := 0 to FSpacesList.Count - 1 do begin
-        pSpaceInfo := PZVSpaceInfo(FSpacesList[i]);
-        if pSpaceInfo^.RoomPolyline <> nil then begin
-          inc(j);
-          WriteLn(stfFile, 'Room' + IntToStr(j) + '=ROOM.R' + IntToStr(j));
-        end;
-      end;
+      try
+        // Запись заголовка и секций файла
+        // Write header and file sections
+        WriteSTFHeader(stfFile);
+        WriteSTFProjectSection(stfFile, projectName, currentDate, roomCount);
 
-      // Экспортируем каждое помещение
-      // Export each room
-      j := 0;
-      for i := 0 to FSpacesList.Count - 1 do begin
-        pSpaceInfo := PZVSpaceInfo(FSpacesList[i]);
+        // Экспорт всех помещений
+        // Export all rooms
+        roomIndex := 0;
+        for i := 0 to FSpacesList.Count - 1 do begin
+          pSpaceInfo := PZVSpaceInfo(FSpacesList[i]);
 
-        // Экспортируем только помещения (Space_Room)
-        // Export only rooms (Space_Room)
-        if pSpaceInfo^.RoomPolyline <> nil then begin
-          inc(j);
-          ppolyline := pSpaceInfo^.RoomPolyline;
-
-          // Определяем высоту помещения
-          // Determine room height
-          if pSpaceInfo^.FloorHeight > 0 then
-            roomHeight := pSpaceInfo^.FloorHeight
-          else
-            roomHeight := DEFAULT_ROOM_HEIGHT;
-
-          // Секция помещения
-          // Room section
-          WriteLn(stfFile, '[ROOM.R' + IntToStr(j) + ']');
-          WriteLn(stfFile, 'Name=' + pSpaceInfo^.RoomNumber);
-          WriteLn(stfFile, 'Height=' + FormatFloat('0.0', roomHeight));
-          WriteLn(stfFile, 'WorkingPlane=0.8');
-          WriteLn(stfFile, 'NrPoints=' + IntToStr(ppolyline^.VertexArrayInOCS.Count));
-
-          // Записываем координаты вершин полилинии
-          // Write polyline vertex coordinates
-          for k := 0 to ppolyline^.VertexArrayInOCS.Count - 1 do begin
-            vertex := ppolyline^.VertexArrayInOCS.getData(k);
-            WriteLn(stfFile, 'Point' + IntToStr(k + 1) + '=' +
-                    FormatFloat('0.###', vertex.x) + ' ' +
-                    FormatFloat('0.###', vertex.y));
+          if pSpaceInfo^.RoomPolyline <> nil then begin
+            inc(roomIndex);
+            WriteSTFRoom(stfFile, pSpaceInfo, roomIndex, lumTypes);
           end;
-
-          // Дополнительные параметры помещения
-          // Additional room parameters
-          WriteLn(stfFile, 'R_Ceiling=0.75');
-
-          // Экспорт светильников в помещении
-          // Export luminaires in the room
-          if pSpaceInfo^.Luminaires.Count > 0 then begin
-            // Записываем информацию о каждом светильнике
-            // Write information about each luminaire
-            for k := 0 to pSpaceInfo^.Luminaires.Count - 1 do begin
-              pLumInfo := PZVLuminaireInfo(pSpaceInfo^.Luminaires[k]);
-              lumTypeName := pLumInfo^.DeviceType;
-
-              // Записываем ссылку на светильник
-              // Write luminaire reference
-              WriteLn(stfFile, 'Lum' + IntToStr(k + 1) + '=' + lumTypeName);
-
-              // Записываем позицию светильника
-              // Write luminaire position
-              WriteLn(stfFile, 'Lum' + IntToStr(k + 1) + '.Pos=' +
-                      FormatFloat('0.###', pLumInfo^.Position.x) + ' ' +
-                      FormatFloat('0.###', pLumInfo^.Position.y) + ' ' +
-                      FormatFloat('0.###', pLumInfo^.Position.z));
-
-              // Записываем поворот светильника (rotation in degrees to 3D angles)
-              // Write luminaire rotation
-              WriteLn(stfFile, 'Lum' + IntToStr(k + 1) + '.Rot=0 0 ' +
-                      FormatFloat('0.#', pLumInfo^.Rotation));
-
-              // Добавляем тип в список уникальных типов
-              // Add type to unique types list
-              if lumTypes.IndexOf(lumTypeName) < 0 then
-                lumTypes.Add(lumTypeName);
-            end;
-
-            WriteLn(stfFile, 'NrLums=' + IntToStr(pSpaceInfo^.Luminaires.Count));
-          end else begin
-            WriteLn(stfFile, 'NrLums=0');
-          end;
-
-          WriteLn(stfFile, 'NrStruct=0');
-          WriteLn(stfFile, 'NrFurns=0');
         end;
+
+        // Экспорт определений типов светильников
+        // Export luminaire type definitions
+        WriteSTFLuminaireTypes(stfFile, lumTypes);
+
+        Result := True;
+        zcUI.TextMessage('Экспорт в STF завершен / STF export completed: ' + AFileName, TMWOHistoryOut);
+        zcUI.TextMessage('Экспортировано помещений / Rooms exported: ' + IntToStr(roomCount), TMWOHistoryOut);
+        zcUI.TextMessage('Экспортировано типов светильников / Luminaire types exported: ' +
+                        IntToStr(lumTypes.Count), TMWOHistoryOut);
+
+      finally
+        CloseFile(stfFile);
       end;
-
-      // Экспорт определений типов светильников
-      // Export luminaire type definitions
-      for i := 0 to lumTypes.Count - 1 do begin
-        lumTypeName := lumTypes[i];
-
-        WriteLn(stfFile, '[' + lumTypeName + ']');
-        WriteLn(stfFile, 'Manufacturer=');
-        WriteLn(stfFile, 'Name=');
-        WriteLn(stfFile, 'OrderNr=');
-        WriteLn(stfFile, 'Box=1 1 0');
-        WriteLn(stfFile, 'Shape=0');
-        WriteLn(stfFile, 'Load=35');
-        WriteLn(stfFile, 'Flux=0');
-        WriteLn(stfFile, 'NrLamps=1');
-        WriteLn(stfFile, 'MountingType=1');
-      end;
-
-      Result := True;
-      zcUI.TextMessage('Экспорт в STF завершен / STF export completed: ' + AFileName, TMWOHistoryOut);
-      zcUI.TextMessage('Экспортировано помещений / Rooms exported: ' + IntToStr(roomCount), TMWOHistoryOut);
-      zcUI.TextMessage('Экспортировано типов светильников / Luminaire types exported: ' + IntToStr(lumTypes.Count), TMWOHistoryOut);
 
     finally
-      CloseFile(stfFile);
       lumTypes.Free;
     end;
 

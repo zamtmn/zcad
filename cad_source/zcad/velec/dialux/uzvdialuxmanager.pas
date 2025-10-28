@@ -138,6 +138,10 @@ type
     {**Check if one polyline is completely inside another}
     function PolylineInsidePolyline(pInner: PGDBObjPolyLine; pOuter: PGDBObjPolyLine): boolean;
 
+    {**Подсчет количества выделенных объектов в чертеже}
+    {**Count number of selected objects in drawing}
+    function CountSelectedObjects: integer;
+
     {**Получить строковое значение переменной из расширения}
     {**Get string variable value from extension}
     function GetStringVariable(VarExt: TVariablesExtender; const VarName: string): string;
@@ -222,6 +226,10 @@ type
     {**Collect information about spaces from drawing}
     procedure CollectSpacesFromDrawing;
 
+    {**Сбор информации о пространствах только из выделенных объектов}
+    {**Collect information about spaces from selected objects only}
+    procedure CollectSpacesFromSelection;
+
     {**Построение иерархии пространств математическими методами}
     {**Build space hierarchy using mathematical methods}
     procedure BuildSpaceHierarchy;
@@ -233,6 +241,10 @@ type
     {**Сбор информации о светильниках из чертежа}
     {**Collect luminaires information from drawing}
     procedure CollectLuminairesFromDrawing;
+
+    {**Сбор информации о светильниках только из выделенных объектов}
+    {**Collect luminaires information from selected objects only}
+    procedure CollectLuminairesFromSelection;
 
     {**Определение принадлежности светильников к помещениям}
     {**Assign luminaires to rooms}
@@ -515,6 +527,64 @@ begin
   zcUI.TextMessage('Собрано пространств / Spaces collected: ' + IntToStr(spaceCount), TMWOHistoryOut);
 end;
 
+{**Подсчитать количество выделенных объектов в чертеже.
+   Перебирает все объекты и проверяет свойство selected}
+{**Count number of selected objects in drawing.
+   Iterates through all objects and checks selected property}
+function TZVDIALuxManager.CountSelectedObjects: integer;
+var
+  pEntity: PGDBObjEntity;
+  ir: itrec;
+begin
+  Result := 0;
+
+  pEntity := drawings.GetCurrentROOT^.ObjArray.beginiterate(ir);
+  if pEntity = nil then
+    Exit;
+
+  repeat
+    if pEntity^.selected then
+      inc(Result);
+
+    pEntity := drawings.GetCurrentROOT^.ObjArray.iterate(ir);
+  until pEntity = nil;
+end;
+
+{**Сбор информации о пространствах только из выделенных объектов.
+   Работает аналогично CollectSpacesFromDrawing, но обрабатывает только выделенные полилинии}
+{**Collect information about spaces from selected objects only.
+   Works similar to CollectSpacesFromDrawing but processes only selected polylines}
+procedure TZVDIALuxManager.CollectSpacesFromSelection;
+var
+  pEntity: PGDBObjEntity;
+  ir: itrec;
+  pPolyline: PGDBObjPolyLine;
+  spaceCount: integer;
+begin
+  ClearSpaces;
+  spaceCount := 0;
+
+  zcUI.TextMessage('Сбор пространств из выделенных объектов...', TMWOHistoryOut);
+  zcUI.TextMessage('Collecting spaces from selected objects...', TMWOHistoryOut);
+
+  pEntity := drawings.GetCurrentROOT^.ObjArray.beginiterate(ir);
+  if pEntity = nil then
+    Exit;
+
+  repeat
+    if pEntity^.selected and (pEntity^.GetObjType = GDBPolyLineID) then begin
+      pPolyline := PGDBObjPolyLine(pEntity);
+
+      if IsPolylineClosed(pPolyline) then
+        ProcessPolylineAsSpace(pPolyline, spaceCount);
+    end;
+
+    pEntity := drawings.GetCurrentROOT^.ObjArray.iterate(ir);
+  until pEntity = nil;
+
+  zcUI.TextMessage('Собрано пространств / Spaces collected: ' + IntToStr(spaceCount), TMWOHistoryOut);
+end;
+
 function TZVDIALuxManager.PointInPolyline(const point: GDBVertex; pPolyline: PGDBObjPolyLine): boolean;
 var
   i, j: integer;
@@ -695,6 +765,50 @@ begin
         pLumInfo^.Load := DEFAULT_LUMINAIRE_POWER;
         pLumInfo^.NrLamps := DEFAULT_LAMPS_COUNT;
         pLumInfo^.RoomIndex := -1; // Пока не определено / Not determined yet
+        pLumInfo^.Device := pDevice;
+
+        FLuminairesList.Add(pLumInfo);
+        inc(lumCount);
+      end;
+
+      pEntity := drawings.GetCurrentROOT^.ObjArray.iterate(ir);
+    until pEntity = nil;
+
+  zcUI.TextMessage('Собрано светильников / Luminaires collected: ' + IntToStr(lumCount), TMWOHistoryOut);
+end;
+
+{**Сбор информации о светильниках только из выделенных объектов.
+   Работает аналогично CollectLuminairesFromDrawing, но обрабатывает только выделенные устройства}
+{**Collect luminaires information from selected objects only.
+   Works similar to CollectLuminairesFromDrawing but processes only selected devices}
+procedure TZVDIALuxManager.CollectLuminairesFromSelection;
+var
+  pEntity: PGDBObjEntity;
+  pDevice: PGDBObjDevice;
+  ir: itrec;
+  pLumInfo: PZVLuminaireInfo;
+  lumCount: integer;
+begin
+  ClearLuminaires;
+  lumCount := 0;
+
+  zcUI.TextMessage('Сбор светильников из выделенных объектов...', TMWOHistoryOut);
+  zcUI.TextMessage('Collecting luminaires from selected objects...', TMWOHistoryOut);
+
+  pEntity := drawings.GetCurrentROOT^.ObjArray.beginiterate(ir);
+  if pEntity <> nil then
+    repeat
+      if pEntity^.selected and (pEntity^.GetObjType = GDBDeviceID) then begin
+        pDevice := PGDBObjDevice(pEntity);
+
+        New(pLumInfo);
+        pLumInfo^.DeviceName := pDevice^.Name;
+        pLumInfo^.DeviceType := pDevice^.Name;
+        pLumInfo^.Position := pDevice^.P_insert_in_WCS;
+        pLumInfo^.Rotation := pDevice^.rotate;
+        pLumInfo^.Load := DEFAULT_LUMINAIRE_POWER;
+        pLumInfo^.NrLamps := DEFAULT_LAMPS_COUNT;
+        pLumInfo^.RoomIndex := -1;
         pLumInfo^.Device := pDevice;
 
         FLuminairesList.Add(pLumInfo);

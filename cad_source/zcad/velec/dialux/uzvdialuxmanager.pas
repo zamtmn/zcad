@@ -76,6 +76,27 @@ const
   VAR_FLOOR_HEIGHT = 'FloorHeight';      // Переменная для высоты этажа
 
 type
+  {**Структура для хранения информации о пространстве}
+  {**Structure for storing space information}
+  TZVSpaceInfo = record
+    RoomNumber: string;           // Номер помещения / Room number
+    RoomPolyline: PGDBObjPolyLine; // Указатель на полилинию помещения / Pointer to room polyline
+    Floor: string;                 // Этаж / Floor
+    FloorHeight: double;           // Высота этажа / Floor height
+    FloorPolyline: PGDBObjPolyLine; // Указатель на полилинию этажа / Pointer to floor polyline
+    Building: string;              // Здание / Building
+    BuildingPolyline: PGDBObjPolyLine; // Указатель на полилинию здания / Pointer to building polyline
+    Luminaires: TList;            // Список светильников в помещении / List of luminaires in room
+
+    // Сохраняем старые поля для совместимости
+    // Keep old fields for compatibility
+    Name: string;
+    Height: double;
+    Polyline: PGDBObjPolyLine;
+    Variables: TStringList;
+  end;
+  PZVSpaceInfo = ^TZVSpaceInfo;
+
   {**Информация о светильнике}
   {**Luminaire information}
   TZVLuminaireInfo = record
@@ -187,27 +208,6 @@ type
     property SpacesList: TList read FSpacesList;
     property LuminairesList: TList read FLuminairesList;
   end;
-
-  {**Структура для хранения информации о пространстве}
-  {**Structure for storing space information}
-  TZVSpaceInfo = record
-    RoomNumber: string;           // Номер помещения / Room number
-    RoomPolyline: PGDBObjPolyLine; // Указатель на полилинию помещения / Pointer to room polyline
-    Floor: string;                 // Этаж / Floor
-    FloorHeight: double;           // Высота этажа / Floor height
-    FloorPolyline: PGDBObjPolyLine; // Указатель на полилинию этажа / Pointer to floor polyline
-    Building: string;              // Здание / Building
-    BuildingPolyline: PGDBObjPolyLine; // Указатель на полилинию здания / Pointer to building polyline
-    Luminaires: TList;            // Список светильников в помещении / List of luminaires in room
-
-    // Сохраняем старые поля для совместимости
-    // Keep old fields for compatibility
-    Name: string;
-    Height: double;
-    Polyline: PGDBObjPolyLine;
-    Variables: TStringList;
-  end;
-  PZVSpaceInfo = ^TZVSpaceInfo;
 
 implementation
 

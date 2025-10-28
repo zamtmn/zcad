@@ -73,7 +73,7 @@ const
   VAR_SPACE_ROOM = 'Space_Room';         // Переменная для помещения
   VAR_SPACE_FLOOR = 'space_Floor';       // Переменная для этажа
   VAR_SPACE_BUILDING = 'space_Building'; // Переменная для здания
-  VAR_FLOOR_HEIGHT = 'FloorHeight';      // Переменная для высоты этажа
+  VAR_FLOOR_HEIGHT = 'space_FloorHeight';// Переменная для высоты этажа
 
   // Константы формата STF для DIALux EVO
   // STF format constants for DIALux EVO

@@ -445,10 +445,14 @@ end;
 function TZVDIALuxManager.ExportToSTF(const AFileName: string): boolean;
 var
   stfFile: TextFile;
-  i, j: integer;
+  i, j, k: integer;
   pSpaceInfo: PZVSpaceInfo;
   ppolyline: PGDBObjPolyLine;
   vertex: GDBVertex;
+  roomCount: integer;
+  currentDate: string;
+  projectName: string;
+  roomHeight: double;
 begin
   Result := False;
 
@@ -460,44 +464,108 @@ begin
       Exit;
     end;
 
+    // Подсчитываем количество помещений (только Space_Room)
+    // Count number of rooms (only Space_Room)
+    roomCount := 0;
+    for i := 0 to FSpacesList.Count - 1 do begin
+      pSpaceInfo := PZVSpaceInfo(FSpacesList[i]);
+      if pSpaceInfo^.RoomPolyline <> nil then
+        inc(roomCount);
+    end;
+
+    if roomCount = 0 then begin
+      zcUI.TextMessage('Нет помещений для экспорта / No rooms to export', TMWOHistoryOut);
+      Exit;
+    end;
+
+    // Получаем текущую дату
+    // Get current date
+    currentDate := FormatDateTime('yyyy-mm-dd', Now);
+
+    // Получаем имя проекта из имени файла
+    // Get project name from file name
+    projectName := ChangeFileExt(ExtractFileName(AFileName), '');
+
     // Открываем файл для записи
     // Open file for writing
     AssignFile(stfFile, AFileName);
     Rewrite(stfFile);
 
     try
-      // Заголовок STF файла
-      // STF file header
-      WriteLn(stfFile, 'STFF V02.00.00');
-      WriteLn(stfFile, 'PROJECT "' + ChangeFileExt(ExtractFileName(AFileName), '') + '"');
-      WriteLn(stfFile, '');
+      // Секция VERSION
+      // VERSION section
+      WriteLn(stfFile, '[VERSION]');
+      WriteLn(stfFile, 'STFF=1.0.5');
+      WriteLn(stfFile, 'Progname=ZCAD');
+      WriteLn(stfFile, 'Progvers=1.0');
 
-      // Экспортируем каждое пространство
-      // Export each space
+      // Секция PROJECT
+      // PROJECT section
+      WriteLn(stfFile, '[PROJECT]');
+      WriteLn(stfFile, 'Name=' + projectName);
+      WriteLn(stfFile, 'Date=' + currentDate);
+      WriteLn(stfFile, 'Operator=ZCAD');
+      WriteLn(stfFile, 'NrRooms=' + IntToStr(roomCount));
+
+      // Записываем ссылки на все помещения
+      // Write references to all rooms
+      j := 0;
       for i := 0 to FSpacesList.Count - 1 do begin
         pSpaceInfo := PZVSpaceInfo(FSpacesList[i]);
-        ppolyline := pSpaceInfo^.Polyline;
-
-        WriteLn(stfFile, 'ROOM "' + pSpaceInfo^.Name + '"');
-        WriteLn(stfFile, 'HEIGHT ' + FloatToStr(pSpaceInfo^.Height));
-        WriteLn(stfFile, 'SPACE');
-
-        // Записываем координаты полилинии
-        // Write polyline coordinates
-        for j := 0 to ppolyline^.VertexArrayInOCS.Count - 1 do begin
-          vertex := ppolyline^.VertexArrayInOCS.getData(j);
-          WriteLn(stfFile, Format('VERTEX %.3f %.3f', [vertex.x, vertex.y]));
+        if pSpaceInfo^.RoomPolyline <> nil then begin
+          inc(j);
+          WriteLn(stfFile, 'Room' + IntToStr(j) + '=ROOM.R' + IntToStr(j));
         end;
-
-        WriteLn(stfFile, 'ENDSPACE');
-        WriteLn(stfFile, 'ENDROOM');
-        WriteLn(stfFile, '');
       end;
 
-      WriteLn(stfFile, 'ENDPROJECT');
+      // Экспортируем каждое помещение
+      // Export each room
+      j := 0;
+      for i := 0 to FSpacesList.Count - 1 do begin
+        pSpaceInfo := PZVSpaceInfo(FSpacesList[i]);
+
+        // Экспортируем только помещения (Space_Room)
+        // Export only rooms (Space_Room)
+        if pSpaceInfo^.RoomPolyline <> nil then begin
+          inc(j);
+          ppolyline := pSpaceInfo^.RoomPolyline;
+
+          // Определяем высоту помещения
+          // Determine room height
+          if pSpaceInfo^.FloorHeight > 0 then
+            roomHeight := pSpaceInfo^.FloorHeight
+          else
+            roomHeight := 2.8; // Высота по умолчанию / Default height
+
+          // Секция помещения
+          // Room section
+          WriteLn(stfFile, '[ROOM.R' + IntToStr(j) + ']');
+          WriteLn(stfFile, 'Name=' + pSpaceInfo^.RoomNumber);
+          WriteLn(stfFile, 'Height=' + FormatFloat('0.0', roomHeight));
+          WriteLn(stfFile, 'WorkingPlane=0.8');
+          WriteLn(stfFile, 'NrPoints=' + IntToStr(ppolyline^.VertexArrayInOCS.Count));
+
+          // Записываем координаты вершин полилинии
+          // Write polyline vertex coordinates
+          for k := 0 to ppolyline^.VertexArrayInOCS.Count - 1 do begin
+            vertex := ppolyline^.VertexArrayInOCS.getData(k);
+            WriteLn(stfFile, 'Point' + IntToStr(k + 1) + '=' +
+                    FormatFloat('0.###', vertex.x) + ' ' +
+                    FormatFloat('0.###', vertex.y));
+          end;
+
+          // Дополнительные параметры помещения
+          // Additional room parameters
+          WriteLn(stfFile, 'R_Ceiling=0.75');
+          WriteLn(stfFile, 'NrLums=0');
+          WriteLn(stfFile, 'NrStruct=0');
+          WriteLn(stfFile, 'NrFurns=0');
+        end;
+      end;
 
       Result := True;
       zcUI.TextMessage('Экспорт в STF завершен / STF export completed: ' + AFileName, TMWOHistoryOut);
+      zcUI.TextMessage('Экспортировано помещений / Rooms exported: ' + IntToStr(roomCount), TMWOHistoryOut);
 
     finally
       CloseFile(stfFile);

@@ -63,6 +63,8 @@ var
   fileName: string;
   drawingPath: string;
   drawingName: string;
+  selectedCount: integer;
+  useSelection: boolean;
 begin
   // Вывод сообщения о запуске команды
   // Output message about command launch
@@ -77,6 +79,27 @@ begin
     zcUI.TextMessage('Пожалуйста, сохраните чертеж перед экспортом / Please save drawing before export', TMWOHistoryOut);
     Result := cmd_ok;
     exit;
+  end;
+
+  // Создаем менеджер для проверки выделенных объектов
+  // Create manager to check selected objects
+  dialuxManager := TZVDIALuxManager.Create;
+  try
+    selectedCount := dialuxManager.CountSelectedObjects;
+
+    if selectedCount > 0 then begin
+      zcUI.TextMessage('Обнаружено выделенных объектов / Found selected objects: ' + IntToStr(selectedCount), TMWOHistoryOut);
+      zcUI.TextMessage('Будет выполнен экспорт только выделенных объектов', TMWOHistoryOut);
+      zcUI.TextMessage('Export will be performed only for selected objects', TMWOHistoryOut);
+      useSelection := True;
+    end else begin
+      zcUI.TextMessage('Выделенных объектов не обнаружено / No selected objects found', TMWOHistoryOut);
+      zcUI.TextMessage('Будет выполнен экспорт всех объектов чертежа', TMWOHistoryOut);
+      zcUI.TextMessage('Export will be performed for all drawing objects', TMWOHistoryOut);
+      useSelection := False;
+    end;
+  finally
+    dialuxManager.Free;
   end;
 
   // Проверяем операнды для имени файла
@@ -107,9 +130,12 @@ begin
   // Create DIALux manager
   dialuxManager := TZVDIALuxManager.Create;
   try
-    // Сначала собираем информацию о пространствах
-    // First collect information about spaces
-    dialuxManager.CollectSpacesFromDrawing;
+    // Собираем информацию о пространствах в зависимости от режима
+    // Collect information about spaces depending on mode
+    if useSelection then
+      dialuxManager.CollectSpacesFromSelection
+    else
+      dialuxManager.CollectSpacesFromDrawing;
 
     // Строим иерархию пространств
     // Build space hierarchy
@@ -119,9 +145,12 @@ begin
     // Display structure for clarity
     dialuxManager.DisplaySpacesStructure;
 
-    // Собираем информацию о светильниках
-    // Collect luminaires information
-    dialuxManager.CollectLuminairesFromDrawing;
+    // Собираем информацию о светильниках в зависимости от режима
+    // Collect luminaires information depending on mode
+    if useSelection then
+      dialuxManager.CollectLuminairesFromSelection
+    else
+      dialuxManager.CollectLuminairesFromDrawing;
 
     // Определяем принадлежность светильников к помещениям
     // Assign luminaires to rooms

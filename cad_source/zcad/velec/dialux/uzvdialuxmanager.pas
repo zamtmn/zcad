@@ -138,10 +138,6 @@ type
     {**Check if one polyline is completely inside another}
     function PolylineInsidePolyline(pInner: PGDBObjPolyLine; pOuter: PGDBObjPolyLine): boolean;
 
-    {**Подсчет количества выделенных объектов в чертеже}
-    {**Count number of selected objects in drawing}
-    function CountSelectedObjects: integer;
-
     {**Получить строковое значение переменной из расширения}
     {**Get string variable value from extension}
     function GetStringVariable(VarExt: TVariablesExtender; const VarName: string): string;
@@ -213,6 +209,10 @@ type
   public
     constructor Create;
     destructor Destroy; override;
+
+    {**Подсчет количества выделенных объектов в чертеже}
+    {**Count number of selected objects in drawing}
+    function CountSelectedObjects: integer;
 
     {**Экспорт в формат STF}
     {**Export to STF format}

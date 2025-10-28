@@ -58,6 +58,23 @@ uses
   varmandef;                     //variable manager definitions
                                  //определения менеджера переменных
 
+const
+  // Константы для значений по умолчанию
+  // Default value constants
+  UNDEFINED_VALUE = '-1';                // Неопределенное строковое значение
+  UNDEFINED_NUMERIC_VALUE = -1.0;        // Неопределенное числовое значение
+  DEFAULT_FLOOR_HEIGHT = 3.0;            // Высота этажа по умолчанию (м)
+  DEFAULT_ROOM_HEIGHT = 2.8;             // Высота помещения по умолчанию (м)
+  DEFAULT_LUMINAIRE_POWER = 35.0;        // Мощность светильника по умолчанию (Вт)
+  DEFAULT_LAMPS_COUNT = 1;               // Количество ламп по умолчанию
+
+  // Имена переменных в расширениях полилиний
+  // Variable names in polyline extensions
+  VAR_SPACE_ROOM = 'Space_Room';         // Переменная для помещения
+  VAR_SPACE_FLOOR = 'space_Floor';       // Переменная для этажа
+  VAR_SPACE_BUILDING = 'space_Building'; // Переменная для здания
+  VAR_FLOOR_HEIGHT = 'FloorHeight';      // Переменная для высоты этажа
+
 type
   {**Информация о светильнике}
   {**Luminaire information}
@@ -88,6 +105,39 @@ type
     {**Проверка полностью ли одна полилиния находится внутри другой}
     {**Check if one polyline is completely inside another}
     function PolylineInsidePolyline(pInner: PGDBObjPolyLine; pOuter: PGDBObjPolyLine): boolean;
+
+    {**Получить строковое значение переменной из расширения}
+    {**Get string variable value from extension}
+    function GetStringVariable(VarExt: TVariablesExtender; const VarName: string): string;
+
+    {**Получить числовое значение переменной из расширения}
+    {**Get numeric variable value from extension}
+    function GetNumericVariable(VarExt: TVariablesExtender; const VarName: string;
+      DefaultValue: double): double;
+
+    {**Проверить является ли полилиния замкнутой}
+    {**Check if polyline is closed}
+    function IsPolylineClosed(pPolyline: PGDBObjPolyLine): boolean;
+
+    {**Создать структуру информации о помещении}
+    {**Create room space info structure}
+    function CreateRoomSpaceInfo(pPolyline: PGDBObjPolyLine;
+      const RoomNumber: string): PZVSpaceInfo;
+
+    {**Создать структуру информации об этаже}
+    {**Create floor space info structure}
+    function CreateFloorSpaceInfo(pPolyline: PGDBObjPolyLine;
+      const FloorName: string; FloorHeight: double): PZVSpaceInfo;
+
+    {**Создать структуру информации о здании}
+    {**Create building space info structure}
+    function CreateBuildingSpaceInfo(pPolyline: PGDBObjPolyLine;
+      const BuildingName: string): PZVSpaceInfo;
+
+    {**Обработать полилинию как пространство}
+    {**Process polyline as space}
+    procedure ProcessPolylineAsSpace(pPolyline: PGDBObjPolyLine;
+      var spaceCount: integer);
 
   public
     constructor Create;
@@ -211,150 +261,210 @@ begin
   FLuminairesList.Clear;
 end;
 
+{**Получить строковое значение переменной из расширения полилинии.
+   Возвращает пустую строку если переменная не найдена}
+{**Get string variable value from polyline extension.
+   Returns empty string if variable not found}
+function TZVDIALuxManager.GetStringVariable(VarExt: TVariablesExtender;
+  const VarName: string): string;
+var
+  pvd: pvardesk;
+begin
+  Result := '';
+
+  if VarExt = nil then
+    Exit;
+
+  pvd := VarExt.entityunit.FindVariable(VarName);
+  if pvd <> nil then
+    Result := pstring(pvd^.data.Addr.Instance)^;
+end;
+
+{**Получить числовое значение переменной из расширения полилинии.
+   Возвращает DefaultValue если переменная не найдена или имеет неверный тип}
+{**Get numeric variable value from polyline extension.
+   Returns DefaultValue if variable not found or has wrong type}
+function TZVDIALuxManager.GetNumericVariable(VarExt: TVariablesExtender;
+  const VarName: string; DefaultValue: double): double;
+var
+  pvd: pvardesk;
+begin
+  Result := DefaultValue;
+
+  if VarExt = nil then
+    Exit;
+
+  pvd := VarExt.entityunit.FindVariable(VarName);
+  if pvd = nil then
+    Exit;
+
+  if pvd^.data.PTD^.TypeName = 'GDBDouble' then
+    Result := PDouble(pvd^.data.Addr.Instance)^
+  else if pvd^.data.PTD^.TypeName = 'GDBInteger' then
+    Result := PInteger(pvd^.data.Addr.Instance)^;
+end;
+
+{**Проверка является ли полилиния замкнутой}
+{**Check if polyline is closed}
+function TZVDIALuxManager.IsPolylineClosed(pPolyline: PGDBObjPolyLine): boolean;
+begin
+  Result := (pPolyline <> nil) and (pPolyline^.Closed);
+end;
+
+{**Создать и инициализировать структуру информации о помещении.
+   Помещение — самый нижний уровень иерархии пространств}
+{**Create and initialize room space info structure.
+   Room is the lowest level of space hierarchy}
+function TZVDIALuxManager.CreateRoomSpaceInfo(pPolyline: PGDBObjPolyLine;
+  const RoomNumber: string): PZVSpaceInfo;
+var
+  pSpaceInfo: PZVSpaceInfo;
+begin
+  New(pSpaceInfo);
+
+  pSpaceInfo^.RoomNumber := RoomNumber;
+  pSpaceInfo^.RoomPolyline := pPolyline;
+  pSpaceInfo^.Floor := UNDEFINED_VALUE;
+  pSpaceInfo^.FloorHeight := UNDEFINED_NUMERIC_VALUE;
+  pSpaceInfo^.FloorPolyline := nil;
+  pSpaceInfo^.Building := UNDEFINED_VALUE;
+  pSpaceInfo^.BuildingPolyline := nil;
+  pSpaceInfo^.Luminaires := TList.Create;
+
+  pSpaceInfo^.Name := RoomNumber;
+  pSpaceInfo^.Height := DEFAULT_FLOOR_HEIGHT;
+  pSpaceInfo^.Polyline := pPolyline;
+  pSpaceInfo^.Variables := TStringList.Create;
+
+  Result := pSpaceInfo;
+end;
+
+{**Создать и инициализировать структуру информации об этаже.
+   Этаж — средний уровень иерархии, содержит помещения}
+{**Create and initialize floor space info structure.
+   Floor is the middle level, contains rooms}
+function TZVDIALuxManager.CreateFloorSpaceInfo(pPolyline: PGDBObjPolyLine;
+  const FloorName: string; FloorHeight: double): PZVSpaceInfo;
+var
+  pSpaceInfo: PZVSpaceInfo;
+begin
+  New(pSpaceInfo);
+
+  pSpaceInfo^.RoomNumber := '';
+  pSpaceInfo^.RoomPolyline := nil;
+  pSpaceInfo^.Floor := FloorName;
+  pSpaceInfo^.FloorHeight := FloorHeight;
+  pSpaceInfo^.FloorPolyline := pPolyline;
+  pSpaceInfo^.Building := UNDEFINED_VALUE;
+  pSpaceInfo^.BuildingPolyline := nil;
+  pSpaceInfo^.Luminaires := TList.Create;
+
+  pSpaceInfo^.Name := FloorName;
+  pSpaceInfo^.Height := FloorHeight;
+  pSpaceInfo^.Polyline := pPolyline;
+  pSpaceInfo^.Variables := TStringList.Create;
+
+  Result := pSpaceInfo;
+end;
+
+{**Создать и инициализировать структуру информации о здании.
+   Здание — верхний уровень иерархии, содержит этажи}
+{**Create and initialize building space info structure.
+   Building is the top level, contains floors}
+function TZVDIALuxManager.CreateBuildingSpaceInfo(pPolyline: PGDBObjPolyLine;
+  const BuildingName: string): PZVSpaceInfo;
+var
+  pSpaceInfo: PZVSpaceInfo;
+begin
+  New(pSpaceInfo);
+
+  pSpaceInfo^.RoomNumber := '';
+  pSpaceInfo^.RoomPolyline := nil;
+  pSpaceInfo^.Floor := '';
+  pSpaceInfo^.FloorHeight := UNDEFINED_NUMERIC_VALUE;
+  pSpaceInfo^.FloorPolyline := nil;
+  pSpaceInfo^.Building := BuildingName;
+  pSpaceInfo^.BuildingPolyline := pPolyline;
+  pSpaceInfo^.Luminaires := TList.Create;
+
+  pSpaceInfo^.Name := BuildingName;
+  pSpaceInfo^.Height := DEFAULT_FLOOR_HEIGHT;
+  pSpaceInfo^.Polyline := pPolyline;
+  pSpaceInfo^.Variables := TStringList.Create;
+
+  Result := pSpaceInfo;
+end;
+
+{**Обработать полилинию как пространство.
+   Определяет тип пространства по переменным расширения и создает соответствующую структуру}
+{**Process polyline as space.
+   Determines space type by extension variables and creates appropriate structure}
+procedure TZVDIALuxManager.ProcessPolylineAsSpace(pPolyline: PGDBObjPolyLine;
+  var spaceCount: integer);
+var
+  VarExt: TVariablesExtender;
+  spaceRoom, spaceFloor, spaceBuilding: string;
+  floorHeight: double;
+  pSpaceInfo: PZVSpaceInfo;
+begin
+  VarExt := pPolyline^.specialize GetExtension<TVariablesExtender>;
+
+  if VarExt = nil then
+    Exit;
+
+  spaceRoom := GetStringVariable(VarExt, VAR_SPACE_ROOM);
+  spaceFloor := GetStringVariable(VarExt, VAR_SPACE_FLOOR);
+  spaceBuilding := GetStringVariable(VarExt, VAR_SPACE_BUILDING);
+
+  if spaceRoom <> '' then begin
+    pSpaceInfo := CreateRoomSpaceInfo(pPolyline, spaceRoom);
+    FSpacesList.Add(pSpaceInfo);
+    inc(spaceCount);
+  end
+  else if spaceFloor <> '' then begin
+    floorHeight := GetNumericVariable(VarExt, VAR_FLOOR_HEIGHT, DEFAULT_FLOOR_HEIGHT);
+    pSpaceInfo := CreateFloorSpaceInfo(pPolyline, spaceFloor, floorHeight);
+    FSpacesList.Add(pSpaceInfo);
+    inc(spaceCount);
+  end
+  else if spaceBuilding <> '' then begin
+    pSpaceInfo := CreateBuildingSpaceInfo(pPolyline, spaceBuilding);
+    FSpacesList.Add(pSpaceInfo);
+    inc(spaceCount);
+  end;
+end;
+
+{**Сбор информации о пространствах из чертежа.
+   Основная процедура сбора всех полилиний с расширениями пространств}
+{**Collect information about spaces from drawing.
+   Main procedure to collect all polylines with space extensions}
 procedure TZVDIALuxManager.CollectSpacesFromDrawing;
 var
   pEntity: PGDBObjEntity;
   ir: itrec;
-  ppolyline: PGDBObjPolyLine;
-  VarExt: TVariablesExtender;
-  pSpaceInfo: PZVSpaceInfo;
+  pPolyline: PGDBObjPolyLine;
   spaceCount: integer;
-  pvd: pvardesk;
-  spaceRoom, spaceFloor, spaceBuilding: string;
-  floorHeight: double;
 begin
-  // Очищаем предыдущий список пространств
-  // Clear previous spaces list
   ClearSpaces;
-
   spaceCount := 0;
 
   zcUI.TextMessage('Сбор всех полилиний с расширениями пространств...', TMWOHistoryOut);
   zcUI.TextMessage('Collecting all polylines with space extensions...', TMWOHistoryOut);
 
-  // Перебираем все примитивы в чертеже
-  // Iterate through all entities in the drawing
   pEntity := drawings.GetCurrentROOT^.ObjArray.beginiterate(ir);
-  if pEntity <> nil then
-    repeat
-      // Проверяем является ли примитив полилинией
-      // Check if entity is a polyline
-      if pEntity^.GetObjType = GDBPolyLineID then begin
-        ppolyline := PGDBObjPolyLine(pEntity);
+  if pEntity = nil then
+    Exit;
 
-        // Проверяем что полилиния замкнута
-        // Check if polyline is closed
-        if ppolyline^.Closed then begin
-          // Получаем расширение переменных
-          // Get variables extender
-          VarExt := ppolyline^.specialize GetExtension<TVariablesExtender>;
+  repeat
+    if pEntity^.GetObjType = GDBPolyLineID then begin
+      pPolyline := PGDBObjPolyLine(pEntity);
 
-          // Пропускаем полилинии без переменных
-          // Skip polylines without variables
-          if VarExt = nil then begin
-            pEntity := drawings.GetCurrentROOT^.ObjArray.iterate(ir);
-            continue;
-          end;
+      if IsPolylineClosed(pPolyline) then
+        ProcessPolylineAsSpace(pPolyline, spaceCount);
+    end;
 
-          // Проверяем наличие переменных пространств
-          // Check for space variables
-          spaceRoom := '';
-          spaceFloor := '';
-          spaceBuilding := '';
-
-          pvd := VarExt.entityunit.FindVariable('Space_Room');
-          if (pvd <> nil) then
-            spaceRoom := pstring(pvd^.data.Addr.Instance)^;
-
-          pvd := VarExt.entityunit.FindVariable('space_Floor');
-          if (pvd <> nil) then
-            spaceFloor := pstring(pvd^.data.Addr.Instance)^;
-
-          pvd := VarExt.entityunit.FindVariable('space_Building');
-          if (pvd <> nil) then
-            spaceBuilding := pstring(pvd^.data.Addr.Instance)^;
-
-          // Если полилиния содержит Space_Room (помещение)
-          // If polyline contains Space_Room (room)
-          if spaceRoom <> '' then begin
-            New(pSpaceInfo);
-            pSpaceInfo^.RoomNumber := spaceRoom;
-            pSpaceInfo^.RoomPolyline := ppolyline;
-            pSpaceInfo^.Floor := '-1';           // Временно заполняем -1
-            pSpaceInfo^.FloorHeight := -1;       // Временно заполняем -1
-            pSpaceInfo^.FloorPolyline := nil;
-            pSpaceInfo^.Building := '-1';        // Временно заполняем -1
-            pSpaceInfo^.BuildingPolyline := nil;
-            pSpaceInfo^.Luminaires := TList.Create; // Создаем список светильников
-
-            // Сохраняем для совместимости
-            pSpaceInfo^.Name := spaceRoom;
-            pSpaceInfo^.Height := 3.0;
-            pSpaceInfo^.Polyline := ppolyline;
-            pSpaceInfo^.Variables := TStringList.Create;
-
-            FSpacesList.Add(pSpaceInfo);
-            inc(spaceCount);
-          end
-          // Если полилиния содержит space_Floor (этаж)
-          // If polyline contains space_Floor (floor)
-          else if spaceFloor <> '' then begin
-            New(pSpaceInfo);
-            pSpaceInfo^.RoomNumber := '';        // Не заполняем
-            pSpaceInfo^.RoomPolyline := nil;
-            pSpaceInfo^.Floor := spaceFloor;
-
-            // Пытаемся получить высоту этажа из переменной FloorHeight
-            // Try to get floor height from FloorHeight variable
-            floorHeight := 3.0; // Значение по умолчанию
-            pvd := VarExt.entityunit.FindVariable('FloorHeight');
-            if (pvd <> nil) and (pvd^.data.PTD^.TypeName = 'GDBDouble') then
-              floorHeight := PDouble(pvd^.data.Addr.Instance)^
-            else if (pvd <> nil) and (pvd^.data.PTD^.TypeName = 'GDBInteger') then
-              floorHeight := PInteger(pvd^.data.Addr.Instance)^;
-
-            pSpaceInfo^.FloorHeight := floorHeight;
-            pSpaceInfo^.FloorPolyline := ppolyline;
-            pSpaceInfo^.Building := '-1';        // Временно заполняем -1
-            pSpaceInfo^.BuildingPolyline := nil;
-            pSpaceInfo^.Luminaires := TList.Create; // Создаем список светильников
-
-            // Сохраняем для совместимости
-            pSpaceInfo^.Name := spaceFloor;
-            pSpaceInfo^.Height := floorHeight;
-            pSpaceInfo^.Polyline := ppolyline;
-            pSpaceInfo^.Variables := TStringList.Create;
-
-            FSpacesList.Add(pSpaceInfo);
-            inc(spaceCount);
-          end
-          // Если полилиния содержит space_Building (здание)
-          // If polyline contains space_Building (building)
-          else if spaceBuilding <> '' then begin
-            New(pSpaceInfo);
-            pSpaceInfo^.RoomNumber := '';        // Не заполняем
-            pSpaceInfo^.RoomPolyline := nil;
-            pSpaceInfo^.Floor := '';             // Не заполняем
-            pSpaceInfo^.FloorHeight := -1;       // Не заполняем
-            pSpaceInfo^.FloorPolyline := nil;
-            pSpaceInfo^.Building := spaceBuilding;
-            pSpaceInfo^.BuildingPolyline := ppolyline;
-            pSpaceInfo^.Luminaires := TList.Create; // Создаем список светильников
-
-            // Сохраняем для совместимости
-            pSpaceInfo^.Name := spaceBuilding;
-            pSpaceInfo^.Height := 3.0;
-            pSpaceInfo^.Polyline := ppolyline;
-            pSpaceInfo^.Variables := TStringList.Create;
-
-            FSpacesList.Add(pSpaceInfo);
-            inc(spaceCount);
-          end;
-        end;
-      end;
-
-      pEntity := drawings.GetCurrentROOT^.ObjArray.iterate(ir);
-    until pEntity = nil;
+    pEntity := drawings.GetCurrentROOT^.ObjArray.iterate(ir);
+  until pEntity = nil;
 
   zcUI.TextMessage('Собрано пространств / Spaces collected: ' + IntToStr(spaceCount), TMWOHistoryOut);
 end;
@@ -536,8 +646,8 @@ begin
         pLumInfo^.DeviceType := pDevice^.Name; // Временно используем имя как тип
         pLumInfo^.Position := pDevice^.P_insert_in_WCS;
         pLumInfo^.Rotation := pDevice^.rotate;
-        pLumInfo^.Load := 35.0;  // Значение по умолчанию / Default value
-        pLumInfo^.NrLamps := 1;  // Значение по умолчанию / Default value
+        pLumInfo^.Load := DEFAULT_LUMINAIRE_POWER;
+        pLumInfo^.NrLamps := DEFAULT_LAMPS_COUNT;
         pLumInfo^.RoomIndex := -1; // Пока не определено / Not determined yet
         pLumInfo^.Device := pDevice;
 
@@ -757,7 +867,7 @@ begin
           if pSpaceInfo^.FloorHeight > 0 then
             roomHeight := pSpaceInfo^.FloorHeight
           else
-            roomHeight := 2.8; // Высота по умолчанию / Default height
+            roomHeight := DEFAULT_ROOM_HEIGHT;
 
           // Секция помещения
           // Room section

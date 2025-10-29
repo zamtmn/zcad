@@ -222,6 +222,10 @@ type
     {**Write luminaire type definitions}
     procedure WriteSTFLuminaireTypes(var stfFile: TextFile; lumTypes: TStringList);
 
+    {**Сформировать полное имя помещения с информацией об этаже и здании}
+    {**Format full room name with floor and building information}
+    function FormatRoomName(pSpaceInfo: PZVSpaceInfo): string;
+
   public
     constructor Create;
     destructor Destroy; override;
@@ -1116,12 +1120,30 @@ begin
   WriteLn(stfFile, 'NrLums=' + IntToStr(pSpaceInfo^.Luminaires.Count));
 end;
 
+{**Сформировать полное имя помещения с информацией об этаже и здании}
+{**Format full room name with floor and building information}
+function TZVDIALuxManager.FormatRoomName(pSpaceInfo: PZVSpaceInfo): string;
+begin
+  Result := pSpaceInfo^.RoomNumber;
+
+  // Добавляем информацию об этаже если доступна
+  // Add floor information if available
+  if (pSpaceInfo^.Floor <> '') and (pSpaceInfo^.Floor <> UNDEFINED_VALUE) then
+    Result := pSpaceInfo^.Floor + ' - ' + Result;
+
+  // Добавляем информацию о здании если доступна
+  // Add building information if available
+  if (pSpaceInfo^.Building <> '') and (pSpaceInfo^.Building <> UNDEFINED_VALUE) then
+    Result := pSpaceInfo^.Building + ' - ' + Result;
+end;
+
 {**Записать информацию об одном помещении в STF файл}
 {**Write single room information to STF file}
 procedure TZVDIALuxManager.WriteSTFRoom(var stfFile: TextFile;
   pSpaceInfo: PZVSpaceInfo; roomIndex: integer; lumTypes: TStringList);
 var
   roomHeight: double;
+  roomName: string;
 begin
   // Определяем высоту помещения
   // Determine room height
@@ -1130,10 +1152,14 @@ begin
   else
     roomHeight := DEFAULT_ROOM_HEIGHT;
 
+  // Формируем полное имя помещения с иерархией
+  // Format full room name with hierarchy
+  roomName := FormatRoomName(pSpaceInfo);
+
   // Записываем заголовок и основные параметры помещения
   // Write room header and basic parameters
   WriteLn(stfFile, '[ROOM.R' + IntToStr(roomIndex) + ']');
-  WriteLn(stfFile, 'Name=' + pSpaceInfo^.RoomNumber);
+  WriteLn(stfFile, 'Name=' + roomName);
   WriteLn(stfFile, 'Height=' + FormatFloat('0.0', roomHeight));
   WriteLn(stfFile, 'WorkingPlane=' + FormatFloat('0.0', STF_WORKING_PLANE_HEIGHT));
   WriteLn(stfFile, 'NrPoints=' + IntToStr(pSpaceInfo^.RoomPolyline^.VertexArrayInOCS.Count));
@@ -1288,7 +1314,7 @@ procedure TZVDIALuxManager.DisplaySpacesStructure;
 var
   i: integer;
   pSpaceInfo: PZVSpaceInfo;
-  msg: string;
+  msg, fullName: string;
 begin
   zcUI.TextMessage('', TMWOHistoryOut);
   zcUI.TextMessage('=== Структура пространств / Spaces Structure ===', TMWOHistoryOut);
@@ -1300,9 +1326,18 @@ begin
 
     zcUI.TextMessage('--- Пространство / Space #' + IntToStr(i + 1) + ' ---', TMWOHistoryOut);
 
+    // Полное имя с иерархией / Full name with hierarchy
+    if pSpaceInfo^.RoomPolyline <> nil then begin
+      fullName := FormatRoomName(pSpaceInfo);
+      msg := '  Полное имя / Full name: ' + fullName;
+      zcUI.TextMessage(msg, TMWOHistoryOut);
+    end;
+
     // Номер помещения / Room number
-    msg := '  Номер помещения / Room number: ' + pSpaceInfo^.RoomNumber;
-    zcUI.TextMessage(msg, TMWOHistoryOut);
+    if pSpaceInfo^.RoomNumber <> '' then begin
+      msg := '  Номер помещения / Room number: ' + pSpaceInfo^.RoomNumber;
+      zcUI.TextMessage(msg, TMWOHistoryOut);
+    end;
 
     // Указатель на полилинию помещения / Pointer to room polyline
     if pSpaceInfo^.RoomPolyline <> nil then
@@ -1312,12 +1347,14 @@ begin
     zcUI.TextMessage(msg, TMWOHistoryOut);
 
     // Этаж / Floor
-    msg := '  Этаж / Floor: ' + pSpaceInfo^.Floor;
-    zcUI.TextMessage(msg, TMWOHistoryOut);
+    if pSpaceInfo^.Floor <> '' then begin
+      msg := '  Этаж / Floor: ' + pSpaceInfo^.Floor;
+      zcUI.TextMessage(msg, TMWOHistoryOut);
+    end;
 
     // Высота этажа / Floor Height
     if pSpaceInfo^.FloorHeight > 0 then begin
-      msg := '  Высота этажа / Floor Height: ' + FloatToStr(pSpaceInfo^.FloorHeight);
+      msg := '  Высота этажа / Floor Height: ' + FormatFloat('0.###', pSpaceInfo^.FloorHeight) + ' м';
       zcUI.TextMessage(msg, TMWOHistoryOut);
     end;
 
@@ -1329,8 +1366,10 @@ begin
     zcUI.TextMessage(msg, TMWOHistoryOut);
 
     // Здание / Building
-    msg := '  Здание / Building: ' + pSpaceInfo^.Building;
-    zcUI.TextMessage(msg, TMWOHistoryOut);
+    if pSpaceInfo^.Building <> '' then begin
+      msg := '  Здание / Building: ' + pSpaceInfo^.Building;
+      zcUI.TextMessage(msg, TMWOHistoryOut);
+    end;
 
     // Указатель на полилинию здания / Pointer to building polyline
     if pSpaceInfo^.BuildingPolyline <> nil then

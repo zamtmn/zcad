@@ -216,7 +216,7 @@ type
     {**Записать секцию PROJECT в STF файл}
     {**Write PROJECT section to STF file}
     procedure WriteSTFProjectSection(var stfFile: TextFile; const projectName: string;
-      const currentDate: string; roomCount: integer);
+      const currentDate: string; roomCount: integer; floorCount: integer);
 
     {**Записать координаты точек полилинии помещения}
     {**Write room polyline points coordinates}
@@ -1186,24 +1186,44 @@ end;
 {**Записать секцию PROJECT в STF файл с информацией о проекте и списком помещений}
 {**Write PROJECT section to STF file with project info and room list}
 procedure TZVDIALuxManager.WriteSTFProjectSection(var stfFile: TextFile;
-  const projectName: string; const currentDate: string; roomCount: integer);
+  const projectName: string; const currentDate: string; roomCount: integer;
+  floorCount: integer);
 var
-  i, roomIndex: integer;
+  i, roomIndex, storeyIndex: integer;
   pSpaceInfo: PZVSpaceInfo;
+  floorsList: TStringList;
 begin
   WriteLn(stfFile, '[PROJECT]');
   WriteLn(stfFile, 'Name=' + projectName);
   WriteLn(stfFile, 'Date=' + currentDate);
   WriteLn(stfFile, 'Operator=' + STF_PROGRAM_NAME);
-  WriteLn(stfFile, 'NrRooms=' + IntToStr(roomCount));
 
-  // Записываем ссылки на все помещения
-  // Write references to all rooms
+  // Записываем количество и ссылки на этажи если они есть
+  // Write number of storeys and storey references if they exist
+  if floorCount > 0 then begin
+    floorsList := TStringList.Create;
+    floorsList.Sorted := True;
+    floorsList.Duplicates := dupIgnore;
+    try
+      CollectUniqueFloors(floorsList);
+
+      WriteLn(stfFile, 'NrStoreys=' + IntToStr(floorsList.Count));
+      for storeyIndex := 0 to floorsList.Count - 1 do
+        WriteLn(stfFile, 'Storey' + IntToStr(storeyIndex + 1) +
+                '=STOREY.S' + IntToStr(storeyIndex + 1));
+    finally
+      floorsList.Free;
+    end;
+  end;
+
+  // Записываем количество и ссылки на помещения
+  // Write number of rooms and room references
+  WriteLn(stfFile, 'NrRooms=' + IntToStr(roomCount));
   roomIndex := 0;
   for i := 0 to FSpacesList.Count - 1 do begin
     pSpaceInfo := PZVSpaceInfo(FSpacesList[i]);
 
-    if pSpaceInfo^.RoomPolyline <> nil then begin
+    if (pSpaceInfo^.RoomPolyline <> nil) and RoomBelongsToSelectedFloor(pSpaceInfo) then begin
       inc(roomIndex);
       WriteLn(stfFile, 'Room' + IntToStr(roomIndex) + '=ROOM.R' + IntToStr(roomIndex));
     end;
@@ -1679,6 +1699,7 @@ var
   currentDate: string;
   projectName: string;
   lumTypes: TStringList;
+  tempFloorsList: TStringList;
 begin
   Result := False;
 
@@ -1690,23 +1711,33 @@ begin
       Exit;
     end;
 
-    // Подсчитываем количество выбранных этажей
-    // Count number of selected floors
-    floorCount := 0;
-    for i := 0 to FSpacesList.Count - 1 do begin
-      pSpaceInfo := PZVSpaceInfo(FSpacesList[i]);
-      if pSpaceInfo^.FloorPolyline <> nil then
-        inc(floorCount);
+    // Подсчитываем количество уникальных этажей
+    // Count number of unique floors
+    tempFloorsList := TStringList.Create;
+    tempFloorsList.Sorted := True;
+    tempFloorsList.Duplicates := dupIgnore;
+    try
+      CollectUniqueFloors(tempFloorsList);
+      floorCount := tempFloorsList.Count;
+    finally
+      tempFloorsList.Free;
     end;
 
     // Выводим информацию о выбранных этажах
     // Display information about selected floors
     if floorCount > 0 then begin
-      zcUI.TextMessage('Выбрано этажей / Selected floors: ' + IntToStr(floorCount), TMWOHistoryOut);
-      for i := 0 to FSpacesList.Count - 1 do begin
-        pSpaceInfo := PZVSpaceInfo(FSpacesList[i]);
-        if pSpaceInfo^.FloorPolyline <> nil then
-          zcUI.TextMessage('  - Этаж / Floor: ' + pSpaceInfo^.Floor, TMWOHistoryOut);
+      tempFloorsList := TStringList.Create;
+      tempFloorsList.Sorted := True;
+      tempFloorsList.Duplicates := dupIgnore;
+      try
+        CollectUniqueFloors(tempFloorsList);
+        zcUI.TextMessage('Выбрано этажей / Selected floors: ' + IntToStr(tempFloorsList.Count), TMWOHistoryOut);
+        for i := 0 to tempFloorsList.Count - 1 do begin
+          zcUI.TextMessage('  - Этаж / Floor: ' +
+                          Copy(tempFloorsList[i], 1, Pos('|', tempFloorsList[i]) - 1), TMWOHistoryOut);
+        end;
+      finally
+        tempFloorsList.Free;
       end;
     end else begin
       zcUI.TextMessage('Этажи не выбраны, будут экспортированы все помещения', TMWOHistoryOut);
@@ -1751,7 +1782,11 @@ begin
         // Запись заголовка и секций файла
         // Write header and file sections
         WriteSTFHeader(stfFile);
-        WriteSTFProjectSection(stfFile, projectName, currentDate, roomCount);
+        WriteSTFProjectSection(stfFile, projectName, currentDate, roomCount, floorCount);
+
+        // Экспорт секций этажей ПЕРЕД помещениями
+        // Export floor sections BEFORE rooms
+        WriteSTFFloors(stfFile);
 
         // Экспорт помещений принадлежащих выбранным этажам
         // Export rooms belonging to selected floors
@@ -1766,10 +1801,6 @@ begin
             WriteSTFRoom(stfFile, pSpaceInfo, roomIndex, lumTypes);
           end;
         end;
-
-        // Экспорт секций этажей
-        // Export floor sections
-        WriteSTFFloors(stfFile);
 
         // Экспорт определений типов светильников
         // Export luminaire type definitions

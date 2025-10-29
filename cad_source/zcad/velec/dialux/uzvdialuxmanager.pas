@@ -1390,7 +1390,7 @@ begin
                  Length(floorData)), DEFAULT_FLOOR_HEIGHT);
   floorElevation := floorIndex * floorHeight;
 
-  WriteLn(stfFile, '[FLOOR.F' + IntToStr(floorIndex + 1) + ']');
+  WriteLn(stfFile, '[STOREY.S' + IntToStr(floorIndex + 1) + ']');
   WriteLn(stfFile, 'Name=' + floorName);
   WriteLn(stfFile, 'Height=' + FormatFloat('0.0', floorHeight));
   WriteLn(stfFile, 'Elevation=' + FormatFloat('0.0', floorElevation));

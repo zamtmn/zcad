@@ -189,9 +189,17 @@ type
     procedure ProcessPolylineAsSpace(pPolyline: PGDBObjPolyLine;
       var spaceCount: integer);
 
+    {**Проверить принадлежит ли помещение к одному из выбранных этажей}
+    {**Check if room belongs to one of the selected floors}
+    function RoomBelongsToSelectedFloor(pSpaceInfo: PZVSpaceInfo): boolean;
+
     {**Подсчитать количество помещений в списке пространств}
     {**Count number of rooms in spaces list}
     function CountRooms: integer;
+
+    {**Подсчитать количество помещений принадлежащих выбранным этажам}
+    {**Count number of rooms belonging to selected floors}
+    function CountRoomsInSelectedFloors: integer;
 
     {**Собрать список уникальных типов светильников}
     {**Collect list of unique luminaire types}
@@ -1009,6 +1017,47 @@ begin
   zcUI.TextMessage('=== Конец списка / End of List ===', TMWOHistoryOut);
 end;
 
+{**Проверить принадлежит ли помещение к одному из выбранных этажей.
+   Помещение принадлежит этажу если его FloorPolyline совпадает с одним из выбранных этажей}
+{**Check if room belongs to one of the selected floors.
+   Room belongs to floor if its FloorPolyline matches one of the selected floors}
+function TZVDIALuxManager.RoomBelongsToSelectedFloor(pSpaceInfo: PZVSpaceInfo): boolean;
+var
+  i: integer;
+  pFloorSpace: PZVSpaceInfo;
+begin
+  Result := False;
+
+  // Если нет этажей в списке, принимаем все помещения
+  // If no floors in the list, accept all rooms
+  if FSpacesList.Count = 0 then begin
+    Result := True;
+    Exit;
+  end;
+
+  // Если у помещения не установлен этаж, не экспортируем его
+  // If room has no floor set, don't export it
+  if pSpaceInfo^.FloorPolyline = nil then
+    Exit;
+
+  // Проверяем есть ли этаж этого помещения среди выбранных этажей
+  // Check if this room's floor is among selected floors
+  for i := 0 to FSpacesList.Count - 1 do begin
+    pFloorSpace := PZVSpaceInfo(FSpacesList[i]);
+
+    // Проверяем только пространства типа этаж
+    // Check only floor-type spaces
+    if pFloorSpace^.FloorPolyline <> nil then begin
+      // Сравниваем указатели на полилинии
+      // Compare polyline pointers
+      if pSpaceInfo^.FloorPolyline = pFloorSpace^.FloorPolyline then begin
+        Result := True;
+        Exit;
+      end;
+    end;
+  end;
+end;
+
 {**Подсчитать количество помещений в списке пространств.
    Помещения определяются наличием RoomPolyline}
 {**Count number of rooms in spaces list.
@@ -1027,8 +1076,29 @@ begin
   end;
 end;
 
-{**Собрать список уникальных типов светильников из всех помещений}
-{**Collect list of unique luminaire types from all rooms}
+{**Подсчитать количество помещений принадлежащих выбранным этажам.
+   Учитываются только помещения из выбранных этажей}
+{**Count number of rooms belonging to selected floors.
+   Only rooms from selected floors are counted}
+function TZVDIALuxManager.CountRoomsInSelectedFloors: integer;
+var
+  i: integer;
+  pSpaceInfo: PZVSpaceInfo;
+begin
+  Result := 0;
+
+  for i := 0 to FSpacesList.Count - 1 do begin
+    pSpaceInfo := PZVSpaceInfo(FSpacesList[i]);
+
+    // Подсчитываем только помещения принадлежащие выбранным этажам
+    // Count only rooms belonging to selected floors
+    if (pSpaceInfo^.RoomPolyline <> nil) and RoomBelongsToSelectedFloor(pSpaceInfo) then
+      inc(Result);
+  end;
+end;
+
+{**Собрать список уникальных типов светильников из помещений выбранных этажей}
+{**Collect list of unique luminaire types from rooms in selected floors}
 procedure TZVDIALuxManager.CollectUniqueLuminaireTypes(lumTypes: TStringList);
 var
   i, j: integer;
@@ -1038,7 +1108,10 @@ begin
   for i := 0 to FSpacesList.Count - 1 do begin
     pSpaceInfo := PZVSpaceInfo(FSpacesList[i]);
 
-    if pSpaceInfo^.Luminaires <> nil then begin
+    // Собираем светильники только из помещений выбранных этажей
+    // Collect luminaires only from rooms in selected floors
+    if (pSpaceInfo^.RoomPolyline <> nil) and RoomBelongsToSelectedFloor(pSpaceInfo) and
+       (pSpaceInfo^.Luminaires <> nil) then begin
       for j := 0 to pSpaceInfo^.Luminaires.Count - 1 do begin
         pLumInfo := PZVLuminaireInfo(pSpaceInfo^.Luminaires[j]);
 
@@ -1310,7 +1383,7 @@ end;
 function TZVDIALuxManager.ExportToSTF(const AFileName: string): boolean;
 var
   stfFile: TextFile;
-  i, roomIndex: integer;
+  i, roomIndex, floorCount: integer;
   pSpaceInfo: PZVSpaceInfo;
   roomCount: integer;
   currentDate: string;
@@ -1327,12 +1400,36 @@ begin
       Exit;
     end;
 
-    // Подсчет количества помещений
-    // Count number of rooms
-    roomCount := CountRooms;
+    // Подсчитываем количество выбранных этажей
+    // Count number of selected floors
+    floorCount := 0;
+    for i := 0 to FSpacesList.Count - 1 do begin
+      pSpaceInfo := PZVSpaceInfo(FSpacesList[i]);
+      if pSpaceInfo^.FloorPolyline <> nil then
+        inc(floorCount);
+    end;
+
+    // Выводим информацию о выбранных этажах
+    // Display information about selected floors
+    if floorCount > 0 then begin
+      zcUI.TextMessage('Выбрано этажей / Selected floors: ' + IntToStr(floorCount), TMWOHistoryOut);
+      for i := 0 to FSpacesList.Count - 1 do begin
+        pSpaceInfo := PZVSpaceInfo(FSpacesList[i]);
+        if pSpaceInfo^.FloorPolyline <> nil then
+          zcUI.TextMessage('  - Этаж / Floor: ' + pSpaceInfo^.Floor, TMWOHistoryOut);
+      end;
+    end else begin
+      zcUI.TextMessage('Этажи не выбраны, будут экспортированы все помещения', TMWOHistoryOut);
+      zcUI.TextMessage('No floors selected, all rooms will be exported', TMWOHistoryOut);
+    end;
+
+    // Подсчет количества помещений принадлежащих выбранным этажам
+    // Count number of rooms belonging to selected floors
+    roomCount := CountRoomsInSelectedFloors;
 
     if roomCount = 0 then begin
-      zcUI.TextMessage('Нет помещений для экспорта / No rooms to export', TMWOHistoryOut);
+      zcUI.TextMessage('Нет помещений для экспорта на выбранных этажах', TMWOHistoryOut);
+      zcUI.TextMessage('No rooms to export on selected floors', TMWOHistoryOut);
       Exit;
     end;
 
@@ -1366,13 +1463,15 @@ begin
         WriteSTFHeader(stfFile);
         WriteSTFProjectSection(stfFile, projectName, currentDate, roomCount);
 
-        // Экспорт всех помещений
-        // Export all rooms
+        // Экспорт помещений принадлежащих выбранным этажам
+        // Export rooms belonging to selected floors
         roomIndex := 0;
         for i := 0 to FSpacesList.Count - 1 do begin
           pSpaceInfo := PZVSpaceInfo(FSpacesList[i]);
 
-          if pSpaceInfo^.RoomPolyline <> nil then begin
+          // Экспортируем только помещения принадлежащие выбранным этажам
+          // Export only rooms belonging to selected floors
+          if (pSpaceInfo^.RoomPolyline <> nil) and RoomBelongsToSelectedFloor(pSpaceInfo) then begin
             inc(roomIndex);
             WriteSTFRoom(stfFile, pSpaceInfo, roomIndex, lumTypes);
           end;

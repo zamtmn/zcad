@@ -156,6 +156,9 @@ type
     function GetNumericVariable(VarExt: TVariablesExtender; const VarName: string;
       DefaultValue: double): double;
 
+    function GetDoubleVariable(VarExt: TVariablesExtender;
+  const VarName: string; DefaultValue: double): double;
+
     {**Получить высоту размещения светильника из устройства в метрах}
     {**Get luminaire mounting height from device in meters}
     function GetMountingHeightFromDevice(pDevice: PGDBObjDevice): double;
@@ -369,10 +372,29 @@ begin
   if pvd = nil then
     Exit;
 
-  if pvd^.data.PTD^.TypeName = 'GDBDouble' then
-    Result := PDouble(pvd^.data.Addr.Instance)^
-  else if pvd^.data.PTD^.TypeName = 'GDBInteger' then
     Result := PInteger(pvd^.data.Addr.Instance)^;
+end;
+
+{**Получить числовое значение переменной из расширения полилинии.
+   Возвращает DefaultValue если переменная не найдена или имеет неверный тип}
+{**Get numeric variable value from polyline extension.
+   Returns DefaultValue if variable not found or has wrong type}
+function TZVDIALuxManager.GetDoubleVariable(VarExt: TVariablesExtender;
+  const VarName: string; DefaultValue: double): double;
+var
+  pvd: pvardesk;
+begin
+  Result := DefaultValue;
+
+  if VarExt = nil then
+    Exit;
+
+  pvd := VarExt.entityunit.FindVariable(VarName);
+  if pvd = nil then
+    Exit;
+
+  Result := PDouble(pvd^.data.Addr.Instance)^
+
 end;
 
 {**Получить высоту размещения светильника из устройства в метрах.
@@ -398,7 +420,7 @@ begin
 
   // Читаем высоту в миллиметрах и конвертируем в метры
   // Read height in millimeters and convert to meters
-  heightMM := GetNumericVariable(VarExt, VAR_LOCATION_FLOORMARK, 0.0);
+  heightMM := GetDoubleVariable(VarExt, VAR_LOCATION_FLOORMARK, 0.0);
   Result := heightMM * MM_TO_METERS;
 end;
 
@@ -520,7 +542,7 @@ begin
     inc(spaceCount);
   end
   else if spaceFloor <> '' then begin
-    floorHeight := GetNumericVariable(VarExt, VAR_FLOOR_HEIGHT, DEFAULT_FLOOR_HEIGHT);
+    floorHeight := GetDoubleVariable(VarExt, VAR_FLOOR_HEIGHT, DEFAULT_FLOOR_HEIGHT);
     pSpaceInfo := CreateFloorSpaceInfo(pPolyline, spaceFloor, floorHeight);
     FSpacesList.Add(pSpaceInfo);
     inc(spaceCount);

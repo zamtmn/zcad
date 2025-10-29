@@ -34,7 +34,8 @@ uses
   Classes,
   gtree,
   uzeentpolyline,
-  uzeentdevice;
+  uzeentdevice,
+  uzcinterface;
 
 type
   {**Тип узла в иерархии пространств}
@@ -534,20 +535,22 @@ begin
 
   // Выводим информацию о узле в зависимости от типа
   // Output node information depending on type
-  Write(IndentStr, '- ', Base.Name);
-
   case Base.NodeType of
     ntBuilding:
-      WriteLn(' (Здание)');
+      zcUI.TextMessage(IndentStr + '- ' + Base.Name + ' (Здание)', TMWOHistoryOut);
     ntSection:
-      WriteLn(' (Блок-секция №', (Base as TSectionNode).SectionNumber, ')');
+      zcUI.TextMessage(IndentStr + '- ' + Base.Name + ' (Блок-секция №' +
+        IntToStr((Base as TSectionNode).SectionNumber) + ')', TMWOHistoryOut);
     ntFloor:
-      WriteLn(' (Этаж ', (Base as TFloorNode).FloorNumber,
-              ', высота ', (Base as TFloorNode).CeilingHeight:0:1, ' м)');
+      zcUI.TextMessage(IndentStr + '- ' + Base.Name + ' (Этаж ' +
+        IntToStr((Base as TFloorNode).FloorNumber) + ', высота ' +
+        FloatToStrF((Base as TFloorNode).CeilingHeight, ffFixed, 15, 1) +
+        ' м)', TMWOHistoryOut);
     ntRoom:
-      WriteLn(' (Помещение №', (Base as TRoomNode).RoomNumber, ')');
+      zcUI.TextMessage(IndentStr + '- ' + Base.Name + ' (Помещение №' +
+        (Base as TRoomNode).RoomNumber + ')', TMWOHistoryOut);
     ntDevice:
-      WriteLn(' (Устройство)');
+      zcUI.TextMessage(IndentStr + '- ' + Base.Name + ' (Устройство)', TMWOHistoryOut);
   end;
 
   // Рекурсивно выводим дочерние узлы
@@ -562,12 +565,12 @@ procedure TSpaceHierarchyManager.PrintTree;
 var
   Root: TSpaceTreeNode;
 begin
-  WriteLn('=== Иерархия пространств / Space Hierarchy ===');
+  zcUI.TextMessage('=== Иерархия пространств / Space Hierarchy ===', TMWOHistoryOut);
 
   for Root in FTree.Roots do
     PrintNode(Root, 0);
 
-  WriteLn('=== Конец иерархии / End of Hierarchy ===');
+  zcUI.TextMessage('=== Конец иерархии / End of Hierarchy ===', TMWOHistoryOut);
 end;
 
 {**Получить количество узлов в дереве}

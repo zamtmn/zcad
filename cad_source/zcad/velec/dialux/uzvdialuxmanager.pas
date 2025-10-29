@@ -232,6 +232,23 @@ type
     {**Write luminaire type definitions}
     procedure WriteSTFLuminaireTypes(var stfFile: TextFile; lumTypes: TStringList);
 
+    {**Записать секции этажей в STF файл}
+    {**Write floor sections to STF file}
+    procedure WriteSTFFloors(var stfFile: TextFile);
+
+    {**Собрать список уникальных этажей}
+    {**Collect list of unique floors}
+    procedure CollectUniqueFloors(floorsList: TStringList);
+
+    {**Записать одну секцию этажа в STF файл}
+    {**Write single floor section to STF file}
+    procedure WriteSTFFloorSection(var stfFile: TextFile; const floorData: string;
+      floorIndex: integer);
+
+    {**Получить высоту этажа для помещения в метрах}
+    {**Get floor elevation for room in meters}
+    function GetFloorElevation(pSpaceInfo: PZVSpaceInfo): double;
+
     {**Сформировать полное имя помещения с информацией об этаже и здании}
     {**Format full room name with floor and building information}
     function FormatRoomName(pSpaceInfo: PZVSpaceInfo): string;
@@ -1246,6 +1263,7 @@ procedure TZVDIALuxManager.WriteSTFRoom(var stfFile: TextFile;
 var
   roomHeight: double;
   roomName: string;
+  floorElevation: double;
 begin
   // Определяем высоту помещения
   // Determine room height
@@ -1258,11 +1276,16 @@ begin
   // Format full room name with hierarchy
   roomName := FormatRoomName(pSpaceInfo);
 
+  // Получаем высоту этажа (Z-координату)
+  // Get floor elevation (Z-coordinate)
+  floorElevation := GetFloorElevation(pSpaceInfo);
+
   // Записываем заголовок и основные параметры помещения
   // Write room header and basic parameters
   WriteLn(stfFile, '[ROOM.R' + IntToStr(roomIndex) + ']');
   WriteLn(stfFile, 'Name=' + roomName);
   WriteLn(stfFile, 'Height=' + FormatFloat('0.0', roomHeight));
+  WriteLn(stfFile, 'FloorLevel=' + FormatFloat('0.0', floorElevation));
   WriteLn(stfFile, 'WorkingPlane=' + FormatFloat('0.0', STF_WORKING_PLANE_HEIGHT));
   WriteLn(stfFile, 'NrPoints=' + IntToStr(pSpaceInfo^.RoomPolyline^.VertexArrayInOCS.Count));
 
@@ -1306,6 +1329,113 @@ begin
     WriteLn(stfFile, 'NrLamps=' + IntToStr(DEFAULT_LAMPS_COUNT));
     WriteLn(stfFile, 'MountingType=' + IntToStr(STF_LUMINAIRE_MOUNTING_TYPE));
   end;
+end;
+
+{**Собрать список уникальных этажей из списка пространств.
+   Формат: "ИмяЭтажа|Высота"}
+{**Collect list of unique floors from spaces list.
+   Format: "FloorName|Height"}
+procedure TZVDIALuxManager.CollectUniqueFloors(floorsList: TStringList);
+var
+  i: integer;
+  pSpaceInfo: PZVSpaceInfo;
+  floorData: string;
+begin
+  for i := 0 to FSpacesList.Count - 1 do begin
+    pSpaceInfo := PZVSpaceInfo(FSpacesList[i]);
+
+    if (pSpaceInfo^.FloorPolyline <> nil) and (pSpaceInfo^.Floor <> '') then begin
+      floorData := pSpaceInfo^.Floor + '|' +
+                   FormatFloat('0.###', pSpaceInfo^.FloorHeight);
+      if floorsList.IndexOf(floorData) < 0 then
+        floorsList.Add(floorData);
+    end;
+  end;
+end;
+
+{**Записать одну секцию этажа в STF файл.
+   Парсит строку формата "ИмяЭтажа|Высота"}
+{**Write single floor section to STF file.
+   Parses string in format "FloorName|Height"}
+procedure TZVDIALuxManager.WriteSTFFloorSection(var stfFile: TextFile;
+  const floorData: string; floorIndex: integer);
+var
+  floorName: string;
+  floorHeight: double;
+  floorElevation: double;
+  separatorPos: integer;
+begin
+  separatorPos := Pos('|', floorData);
+
+  floorName := Copy(floorData, 1, separatorPos - 1);
+  floorHeight := StrToFloatDef(Copy(floorData, separatorPos + 1,
+                 Length(floorData)), DEFAULT_FLOOR_HEIGHT);
+  floorElevation := floorIndex * floorHeight;
+
+  WriteLn(stfFile, '[FLOOR.F' + IntToStr(floorIndex + 1) + ']');
+  WriteLn(stfFile, 'Name=' + floorName);
+  WriteLn(stfFile, 'Height=' + FormatFloat('0.0', floorHeight));
+  WriteLn(stfFile, 'Elevation=' + FormatFloat('0.0', floorElevation));
+end;
+
+{**Записать секции этажей в STF файл.
+   Создает секцию [FLOOR.Fx] для каждого уникального этажа}
+{**Write floor sections to STF file.
+   Creates [FLOOR.Fx] section for each unique floor}
+procedure TZVDIALuxManager.WriteSTFFloors(var stfFile: TextFile);
+var
+  floorIndex: integer;
+  floorsList: TStringList;
+begin
+  floorsList := TStringList.Create;
+  floorsList.Sorted := True;
+  floorsList.Duplicates := dupIgnore;
+
+  try
+    CollectUniqueFloors(floorsList);
+
+    for floorIndex := 0 to floorsList.Count - 1 do
+      WriteSTFFloorSection(stfFile, floorsList[floorIndex], floorIndex);
+
+  finally
+    floorsList.Free;
+  end;
+end;
+
+{**Получить высоту этажа (elevation) для помещения в метрах.
+   Рассчитывает Z-координату на основе индекса этажа}
+{**Get floor elevation for room in meters.
+   Calculates Z-coordinate based on floor index}
+function TZVDIALuxManager.GetFloorElevation(pSpaceInfo: PZVSpaceInfo): double;
+var
+  i, floorIndex: integer;
+  pFloorSpace: PZVSpaceInfo;
+begin
+  Result := 0.0;
+  floorIndex := 0;
+
+  // Если у помещения нет этажа, возвращаем 0
+  // If room has no floor, return 0
+  if pSpaceInfo^.FloorPolyline = nil then
+    Exit;
+
+  // Находим индекс этажа помещения в списке этажей
+  // Find index of room's floor in floor list
+  for i := 0 to FSpacesList.Count - 1 do begin
+    pFloorSpace := PZVSpaceInfo(FSpacesList[i]);
+
+    // Считаем только этажи которые идут до текущего
+    // Count only floors that come before current one
+    if (pFloorSpace^.FloorPolyline <> nil) then begin
+      if pFloorSpace^.FloorPolyline = pSpaceInfo^.FloorPolyline then
+        break;
+      inc(floorIndex);
+    end;
+  end;
+
+  // Рассчитываем высоту этажа как сумму высот предыдущих этажей
+  // Calculate floor elevation as sum of previous floor heights
+  Result := floorIndex * pSpaceInfo^.FloorHeight;
 end;
 
 {**Найти левый нижний угол полилинии этажа и установить как начало координат.
@@ -1477,12 +1607,17 @@ begin
           end;
         end;
 
+        // Экспорт секций этажей
+        // Export floor sections
+        WriteSTFFloors(stfFile);
+
         // Экспорт определений типов светильников
         // Export luminaire type definitions
         WriteSTFLuminaireTypes(stfFile, lumTypes);
 
         Result := True;
         zcUI.TextMessage('Экспорт в STF завершен / STF export completed: ' + AFileName, TMWOHistoryOut);
+        zcUI.TextMessage('Экспортировано этажей / Floors exported: ' + IntToStr(floorCount), TMWOHistoryOut);
         zcUI.TextMessage('Экспортировано помещений / Rooms exported: ' + IntToStr(roomCount), TMWOHistoryOut);
         zcUI.TextMessage('Экспортировано типов светильников / Luminaire types exported: ' +
                         IntToStr(lumTypes.Count), TMWOHistoryOut);

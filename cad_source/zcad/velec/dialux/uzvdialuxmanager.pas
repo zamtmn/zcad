@@ -138,6 +138,8 @@ type
     FFileName: string;
     FSpacesList: TList;
     FLuminairesList: TList;
+    FOriginX: double;  // Координата X начала координат / X coordinate of origin
+    FOriginY: double;  // Координата Y начала координат / Y coordinate of origin
 
     {**Проверка находится ли точка внутри полилинии (ray casting алгоритм)}
     {**Check if point is inside polyline (ray casting algorithm)}
@@ -226,6 +228,18 @@ type
     {**Format full room name with floor and building information}
     function FormatRoomName(pSpaceInfo: PZVSpaceInfo): string;
 
+    {**Найти левый нижний угол полилинии этажа для использования как начало координат}
+    {**Find left-bottom corner of floor polyline to use as origin}
+    procedure CalculateOriginFromFloor;
+
+    {**Преобразовать координату X относительно начала координат}
+    {**Transform X coordinate relative to origin}
+    function TransformX(x: double): double;
+
+    {**Преобразовать координату Y относительно начала координат}
+    {**Transform Y coordinate relative to origin}
+    function TransformY(y: double): double;
+
   public
     constructor Create;
     destructor Destroy; override;
@@ -295,6 +309,8 @@ begin
   FSpacesList := TList.Create;
   FLuminairesList := TList.Create;
   FFileName := '';
+  FOriginX := 0.0;
+  FOriginY := 0.0;
 end;
 
 destructor TZVDIALuxManager.Destroy;
@@ -1070,29 +1086,37 @@ begin
   end;
 end;
 
-{**Записать координаты всех точек полилинии помещения}
-{**Write coordinates of all polyline points of the room}
+{**Записать координаты всех точек полилинии помещения с преобразованием координат}
+{**Write coordinates of all polyline points of the room with coordinate transformation}
 procedure TZVDIALuxManager.WriteRoomPolylinePoints(var stfFile: TextFile;
   pPolyline: PGDBObjPolyLine);
 var
   i: integer;
   vertex: GDBVertex;
+  transformedX, transformedY: double;
 begin
   for i := 0 to pPolyline^.VertexArrayInOCS.Count - 1 do begin
     vertex := pPolyline^.VertexArrayInOCS.getData(i);
+
+    // Преобразуем координаты относительно начала координат
+    // Transform coordinates relative to origin
+    transformedX := TransformX(vertex.x);
+    transformedY := TransformY(vertex.y);
+
     WriteLn(stfFile, 'Point' + IntToStr(i + 1) + '=' +
-            FormatFloat('0.###', vertex.x) + ' ' +
-            FormatFloat('0.###', vertex.y));
+            FormatFloat('0.###', transformedX) + ' ' +
+            FormatFloat('0.###', transformedY));
   end;
 end;
 
-{**Записать информацию о всех светильниках в помещении}
-{**Write information about all luminaires in the room}
+{**Записать информацию о всех светильниках в помещении с преобразованием координат}
+{**Write information about all luminaires in the room with coordinate transformation}
 procedure TZVDIALuxManager.WriteRoomLuminaires(var stfFile: TextFile;
   pSpaceInfo: PZVSpaceInfo; lumTypes: TStringList);
 var
   i: integer;
   pLumInfo: PZVLuminaireInfo;
+  transformedX, transformedY: double;
 begin
   if pSpaceInfo^.Luminaires.Count = 0 then begin
     WriteLn(stfFile, 'NrLums=0');
@@ -1106,11 +1130,16 @@ begin
 
     WriteLn(stfFile, 'Lum' + IntToStr(i + 1) + '=' + pLumInfo^.DeviceType);
 
+    // Преобразуем координаты светильника относительно начала координат
+    // Transform luminaire coordinates relative to origin
+    transformedX := TransformX(pLumInfo^.Position.x);
+    transformedY := TransformY(pLumInfo^.Position.y);
+
     // Используем MountingHeight как Z координату для правильного размещения в DIALux
     // Use MountingHeight as Z coordinate for correct placement in DIALux
     WriteLn(stfFile, 'Lum' + IntToStr(i + 1) + '.Pos=' +
-            FormatFloat('0.###', pLumInfo^.Position.x) + ' ' +
-            FormatFloat('0.###', pLumInfo^.Position.y) + ' ' +
+            FormatFloat('0.###', transformedX) + ' ' +
+            FormatFloat('0.###', transformedY) + ' ' +
             FormatFloat('0.###', pLumInfo^.MountingHeight));
 
     WriteLn(stfFile, 'Lum' + IntToStr(i + 1) + '.Rot=0 0 ' +
@@ -1206,6 +1235,74 @@ begin
   end;
 end;
 
+{**Найти левый нижний угол полилинии этажа и установить как начало координат.
+   Ищет минимальные значения X и Y среди всех вершин всех этажей}
+{**Find left-bottom corner of floor polyline and set as origin.
+   Finds minimum X and Y values among all vertices of all floors}
+procedure TZVDIALuxManager.CalculateOriginFromFloor;
+var
+  i, j: integer;
+  pSpaceInfo: PZVSpaceInfo;
+  vertex: GDBVertex;
+  minX, minY: double;
+  firstFloor: boolean;
+begin
+  firstFloor := true;
+  minX := 0.0;
+  minY := 0.0;
+
+  // Ищем все пространства типа этаж (space_Floor)
+  // Search for all floor spaces (space_Floor)
+  for i := 0 to FSpacesList.Count - 1 do begin
+    pSpaceInfo := PZVSpaceInfo(FSpacesList[i]);
+
+    // Обрабатываем только этажи
+    // Process only floors
+    if pSpaceInfo^.FloorPolyline <> nil then begin
+      // Перебираем все вершины полилинии этажа
+      // Iterate through all floor polyline vertices
+      for j := 0 to pSpaceInfo^.FloorPolyline^.VertexArrayInOCS.Count - 1 do begin
+        vertex := pSpaceInfo^.FloorPolyline^.VertexArrayInOCS.getData(j);
+
+        if firstFloor then begin
+          minX := vertex.x;
+          minY := vertex.y;
+          firstFloor := false;
+        end
+        else begin
+          if vertex.x < minX then
+            minX := vertex.x;
+          if vertex.y < minY then
+            minY := vertex.y;
+        end;
+      end;
+    end;
+  end;
+
+  // Устанавливаем найденные координаты как начало координат
+  // Set found coordinates as origin
+  FOriginX := minX;
+  FOriginY := minY;
+
+  zcUI.TextMessage('Начало координат установлено / Origin set: (' +
+                  FormatFloat('0.###', FOriginX) + ', ' +
+                  FormatFloat('0.###', FOriginY) + ')', TMWOHistoryOut);
+end;
+
+{**Преобразовать координату X относительно начала координат}
+{**Transform X coordinate relative to origin}
+function TZVDIALuxManager.TransformX(x: double): double;
+begin
+  Result := x - FOriginX;
+end;
+
+{**Преобразовать координату Y относительно начала координат}
+{**Transform Y coordinate relative to origin}
+function TZVDIALuxManager.TransformY(y: double): double;
+begin
+  Result := y - FOriginY;
+end;
+
 {**Экспорт данных в формат STF для DIALux EVO.
    Основная функция координирует процесс экспорта}
 {**Export data to STF format for DIALux EVO.
@@ -1238,6 +1335,10 @@ begin
       zcUI.TextMessage('Нет помещений для экспорта / No rooms to export', TMWOHistoryOut);
       Exit;
     end;
+
+    // Рассчитываем начало координат из левого нижнего угла этажа
+    // Calculate origin from left-bottom corner of floor
+    CalculateOriginFromFloor;
 
     // Подготовка метаданных для экспорта
     // Prepare metadata for export

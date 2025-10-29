@@ -1253,9 +1253,10 @@ begin
     try
       CollectUniqueLuminaireTypes(lumTypes);
 
-      // Открытие файла для записи
-      // Open file for writing
+      // Открытие файла для записи в кодировке Windows-1251
+      // Open file for writing with Windows-1251 encoding
       AssignFile(stfFile, AFileName);
+      SetTextCodePage(stfFile, 1251); // Windows-1251 кодировка / Windows-1251 encoding
       Rewrite(stfFile);
 
       try

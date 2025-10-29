@@ -189,6 +189,10 @@ type
     procedure ProcessPolylineAsSpace(pPolyline: PGDBObjPolyLine;
       var spaceCount: integer);
 
+    {**Проверить есть ли выбранные этажи в списке пространств}
+    {**Check if there are any selected floors in spaces list}
+    function HasSelectedFloors: boolean;
+
     {**Проверить принадлежит ли помещение к одному из выбранных этажей}
     {**Check if room belongs to one of the selected floors}
     function RoomBelongsToSelectedFloor(pSpaceInfo: PZVSpaceInfo): boolean;
@@ -1034,10 +1038,30 @@ begin
   zcUI.TextMessage('=== Конец списка / End of List ===', TMWOHistoryOut);
 end;
 
+{**Проверить есть ли выбранные этажи в списке пространств.
+   Возвращает True если найден хотя бы один этаж}
+{**Check if there are any selected floors in spaces list.
+   Returns True if at least one floor is found}
+function TZVDIALuxManager.HasSelectedFloors: boolean;
+var
+  i: integer;
+  pSpace: PZVSpaceInfo;
+begin
+  Result := False;
+
+  for i := 0 to FSpacesList.Count - 1 do begin
+    pSpace := PZVSpaceInfo(FSpacesList[i]);
+    if pSpace^.FloorPolyline <> nil then begin
+      Result := True;
+      break;
+    end;
+  end;
+end;
+
 {**Проверить принадлежит ли помещение к одному из выбранных этажей.
-   Помещение принадлежит этажу если его FloorPolyline совпадает с одним из выбранных этажей}
-{**Check if room belongs to one of the selected floors.
-   Room belongs to floor if its FloorPolyline matches one of the selected floors}
+   Помещение принадлежит этажу если его FloorPolyline совпадает с одним из выбранных}
+{**Check if room belongs to one of selected floors.
+   Room belongs to floor if its FloorPolyline matches one of selected ones}
 function TZVDIALuxManager.RoomBelongsToSelectedFloor(pSpaceInfo: PZVSpaceInfo): boolean;
 var
   i: integer;
@@ -1045,32 +1069,26 @@ var
 begin
   Result := False;
 
-  // Если нет этажей в списке, принимаем все помещения
-  // If no floors in the list, accept all rooms
-  if FSpacesList.Count = 0 then begin
+  // Если у помещения не установлен этаж, не экспортируем
+  // If room has no floor set, don't export
+  if pSpaceInfo^.FloorPolyline = nil then
+    Exit;
+
+  // Если нет выбранных этажей, принимаем все помещения
+  // If no floors selected, accept all rooms
+  if not HasSelectedFloors then begin
     Result := True;
     Exit;
   end;
 
-  // Если у помещения не установлен этаж, не экспортируем его
-  // If room has no floor set, don't export it
-  if pSpaceInfo^.FloorPolyline = nil then
-    Exit;
-
-  // Проверяем есть ли этаж этого помещения среди выбранных этажей
-  // Check if this room's floor is among selected floors
+  // Ищем этаж помещения среди выбранных этажей
+  // Search for room's floor among selected floors
   for i := 0 to FSpacesList.Count - 1 do begin
     pFloorSpace := PZVSpaceInfo(FSpacesList[i]);
-
-    // Проверяем только пространства типа этаж
-    // Check only floor-type spaces
-    if pFloorSpace^.FloorPolyline <> nil then begin
-      // Сравниваем указатели на полилинии
-      // Compare polyline pointers
-      if pSpaceInfo^.FloorPolyline = pFloorSpace^.FloorPolyline then begin
-        Result := True;
-        Exit;
-      end;
+    if (pFloorSpace^.FloorPolyline <> nil) and
+       (pSpaceInfo^.FloorPolyline = pFloorSpace^.FloorPolyline) then begin
+      Result := True;
+      Exit;
     end;
   end;
 end;

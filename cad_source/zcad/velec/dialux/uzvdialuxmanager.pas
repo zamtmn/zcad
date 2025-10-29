@@ -249,6 +249,22 @@ type
     procedure WriteSTFFloorSection(var stfFile: TextFile; const floorData: string;
       floorIndex: integer);
 
+    {**Записать координаты вершин полилинии этажа}
+    {**Write floor polyline points coordinates}
+    procedure WriteFloorPolylinePoints(var stfFile: TextFile; pPolyline: PGDBObjPolyLine);
+
+    {**Получить список комнат принадлежащих этажу}
+    {**Get list of rooms belonging to floor}
+    procedure GetFloorRoomsList(pFloorPolyline: PGDBObjPolyLine; roomsList: TList);
+
+    {**Найти структуру этажа по имени}
+    {**Find floor structure by name}
+    function FindFloorByName(const floorName: string): PZVSpaceInfo;
+
+    {**Записать список комнат этажа в STF файл}
+    {**Write floor rooms list to STF file}
+    procedure WriteFloorRoomsList(var stfFile: TextFile; pFloorPolyline: PGDBObjPolyLine);
+
     {**Получить высоту этажа для помещения в метрах}
     {**Get floor elevation for room in meters}
     function GetFloorElevation(pSpaceInfo: PZVSpaceInfo): double;
@@ -1217,6 +1233,31 @@ begin
   end;
 end;
 
+{**Записать координаты всех вершин полилинии этажа с преобразованием координат.
+   Аналогично WriteRoomPolylinePoints, но для этажей}
+{**Write coordinates of all floor polyline vertices with coordinate transformation.
+   Similar to WriteRoomPolylinePoints, but for floors}
+procedure TZVDIALuxManager.WriteFloorPolylinePoints(var stfFile: TextFile;
+  pPolyline: PGDBObjPolyLine);
+var
+  i: integer;
+  vertex: GDBVertex;
+  transformedX, transformedY: double;
+begin
+  for i := 0 to pPolyline^.VertexArrayInOCS.Count - 1 do begin
+    vertex := pPolyline^.VertexArrayInOCS.getData(i);
+
+    // Преобразуем координаты относительно начала координат
+    // Transform coordinates relative to origin
+    transformedX := TransformX(vertex.x);
+    transformedY := TransformY(vertex.y);
+
+    WriteLn(stfFile, 'Point' + IntToStr(i + 1) + '=' +
+            FormatFloat('0.###', transformedX) + ' ' +
+            FormatFloat('0.###', transformedY));
+  end;
+end;
+
 {**Записать информацию о всех светильниках в помещении с преобразованием координат}
 {**Write information about all luminaires in the room with coordinate transformation}
 procedure TZVDIALuxManager.WriteRoomLuminaires(var stfFile: TextFile;
@@ -1371,29 +1412,130 @@ begin
   end;
 end;
 
+{**Получить список комнат принадлежащих указанному этажу.
+   Возвращает TList с PZVSpaceInfo комнат, которые принадлежат этажу}
+{**Get list of rooms belonging to specified floor.
+   Returns TList with PZVSpaceInfo of rooms that belong to the floor}
+procedure TZVDIALuxManager.GetFloorRoomsList(pFloorPolyline: PGDBObjPolyLine;
+  roomsList: TList);
+var
+  i: integer;
+  pSpaceInfo: PZVSpaceInfo;
+begin
+  roomsList.Clear;
+
+  for i := 0 to FSpacesList.Count - 1 do begin
+    pSpaceInfo := PZVSpaceInfo(FSpacesList[i]);
+
+    // Добавляем только помещения принадлежащие этому этажу
+    // Add only rooms belonging to this floor
+    if (pSpaceInfo^.RoomPolyline <> nil) and
+       (pSpaceInfo^.FloorPolyline = pFloorPolyline) then
+      roomsList.Add(pSpaceInfo);
+  end;
+end;
+
+{**Найти структуру этажа в списке пространств по имени этажа}
+{**Find floor structure in spaces list by floor name}
+function TZVDIALuxManager.FindFloorByName(const floorName: string): PZVSpaceInfo;
+var
+  i: integer;
+  pSpace: PZVSpaceInfo;
+begin
+  Result := nil;
+
+  for i := 0 to FSpacesList.Count - 1 do begin
+    pSpace := PZVSpaceInfo(FSpacesList[i]);
+    if (pSpace^.FloorPolyline <> nil) and (pSpace^.Floor = floorName) then begin
+      Result := pSpace;
+      break;
+    end;
+  end;
+end;
+
+{**Записать список комнат принадлежащих этажу в STF файл}
+{**Write list of rooms belonging to floor to STF file}
+procedure TZVDIALuxManager.WriteFloorRoomsList(var stfFile: TextFile;
+  pFloorPolyline: PGDBObjPolyLine);
+var
+  i, roomIndex, globalRoomIndex: integer;
+  roomsList: TList;
+  pRoomSpace, pSpace: PZVSpaceInfo;
+begin
+  roomsList := TList.Create;
+  try
+    GetFloorRoomsList(pFloorPolyline, roomsList);
+    WriteLn(stfFile, 'NrRooms=' + IntToStr(roomsList.Count));
+
+    // Записываем ссылки на комнаты
+    // Write room references
+    roomIndex := 0;
+    globalRoomIndex := 0;
+    for i := 0 to FSpacesList.Count - 1 do begin
+      pSpace := PZVSpaceInfo(FSpacesList[i]);
+
+      // Подсчитываем глобальный индекс всех экспортируемых комнат
+      // Count global index of all exported rooms
+      if (pSpace^.RoomPolyline <> nil) and RoomBelongsToSelectedFloor(pSpace) then
+        inc(globalRoomIndex);
+
+      // Если комната принадлежит текущему этажу, добавляем ссылку
+      // If room belongs to current floor, add reference
+      if roomsList.IndexOf(pSpace) >= 0 then begin
+        inc(roomIndex);
+        WriteLn(stfFile, 'Room' + IntToStr(roomIndex) + '=ROOM.R' +
+                IntToStr(globalRoomIndex));
+      end;
+    end;
+  finally
+    roomsList.Free;
+  end;
+end;
+
 {**Записать одну секцию этажа в STF файл.
+   Включает вершины этажа и список комнат принадлежащих этажу.
    Парсит строку формата "ИмяЭтажа|Высота"}
 {**Write single floor section to STF file.
+   Includes floor vertices and list of rooms belonging to floor.
    Parses string in format "FloorName|Height"}
 procedure TZVDIALuxManager.WriteSTFFloorSection(var stfFile: TextFile;
   const floorData: string; floorIndex: integer);
 var
   floorName: string;
-  floorHeight: double;
-  floorElevation: double;
+  floorHeight, floorElevation: double;
   separatorPos: integer;
+  pFloorSpace: PZVSpaceInfo;
 begin
+  // Парсим данные этажа из строки
+  // Parse floor data from string
   separatorPos := Pos('|', floorData);
-
   floorName := Copy(floorData, 1, separatorPos - 1);
   floorHeight := StrToFloatDef(Copy(floorData, separatorPos + 1,
                  Length(floorData)), DEFAULT_FLOOR_HEIGHT);
   floorElevation := floorIndex * floorHeight;
 
+  // Находим структуру этажа по имени
+  // Find floor structure by name
+  pFloorSpace := FindFloorByName(floorName);
+  if pFloorSpace = nil then
+    Exit;
+
+  // Записываем заголовок секции этажа
+  // Write floor section header
   WriteLn(stfFile, '[STOREY.S' + IntToStr(floorIndex + 1) + ']');
   WriteLn(stfFile, 'Name=' + floorName);
   WriteLn(stfFile, 'Height=' + FormatFloat('0.0', floorHeight));
   WriteLn(stfFile, 'Elevation=' + FormatFloat('0.0', floorElevation));
+
+  // Записываем вершины этажа
+  // Write floor vertices
+  WriteLn(stfFile, 'NrPoints=' +
+          IntToStr(pFloorSpace^.FloorPolyline^.VertexArrayInOCS.Count));
+  WriteFloorPolylinePoints(stfFile, pFloorSpace^.FloorPolyline);
+
+  // Записываем список комнат этажа
+  // Write floor rooms list
+  WriteFloorRoomsList(stfFile, pFloorSpace^.FloorPolyline);
 end;
 
 {**Записать секции этажей в STF файл.

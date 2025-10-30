@@ -180,10 +180,19 @@ uses
 
 // Создать пустую структуру таблицы
 function CreateEmptyTableGrid: TUzvTableGrid;
+var
+  tempRows: TUzvTableRowList;
+  tempColumns: TUzvTableColumnList;
+  tempCells: TUzvTableCellList;
 begin
-  Result.rows.init(10);
-  Result.columns.init(10);
-  Result.cells.init(100);
+  // Инициализация векторов через временные переменные
+  tempRows.init(10);
+  tempColumns.init(10);
+  tempCells.init(100);
+
+  Result.rows := tempRows;
+  Result.columns := tempColumns;
+  Result.cells := tempCells;
   Result.rowCount := 0;
   Result.columnCount := 0;
   Result.tableBounds.LBN := CreateVertex(0, 0, 0);

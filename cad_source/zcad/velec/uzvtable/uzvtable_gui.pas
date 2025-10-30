@@ -123,7 +123,7 @@ begin
   // Заполняем ячейки данными
   for i := 0 to aTable.cells.Size - 1 do
   begin
-    cell := aTable.cells.GetMutable(i);
+    cell := aTable.cells.Mutable[i];
     row := cell^.rowIndex;
     col := cell^.columnIndex;
 
@@ -132,7 +132,7 @@ begin
       worksheet.WriteText(row, col, cell^.textContent);
   end;
 
-  zcLog.LogInfo('Workbook заполнен данными таблицы');
+  zcUI.TextMessage('Workbook заполнен данными таблицы',TMWOHistoryOut);
 end;
 
 { TUzvTableForm }
@@ -232,7 +232,7 @@ begin
     FSpreadsheetGrid.Workbook := FWorkbook;
   end;
 
-  zcLog.LogInfo('Таблица отображена в GUI');
+  //zcLog.LogInfo('Таблица отображена в GUI');
   zcUI.TextMessage('Таблица успешно восстановлена и отображена / Table restored and displayed', TMWOHistoryOut);
 end;
 

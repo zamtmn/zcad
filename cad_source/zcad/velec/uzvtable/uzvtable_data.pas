@@ -186,13 +186,13 @@ var
   tempCells: TUzvTableCellList;
 begin
   // Инициализация векторов через временные переменные
-  tempRows.init(10);
-  tempColumns.init(10);
-  tempCells.init(100);
+  //tempRows.init(10);
+  //tempColumns.init(10);
+  //tempCells.init(100);
 
-  Result.rows := tempRows;
-  Result.columns := tempColumns;
-  Result.cells := tempCells;
+  Result.rows := specialize TVector<TUzvTableRow>.Create;
+  Result.columns := specialize TVector<TUzvTableColumn>.Create;
+  Result.cells := specialize TVector<TUzvTableCell>.Create;
   Result.rowCount := 0;
   Result.columnCount := 0;
   Result.tableBounds.LBN := CreateVertex(0, 0, 0);

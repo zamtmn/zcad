@@ -31,16 +31,18 @@ uses
   Controls,
   StdCtrls,
   ExtCtrls,
+  Grids,
   fpspreadsheet,
   fpsTypes,
   fpspreadsheetgrid,
+  fpspreadsheetctrls,
   uzvtable_data;
 
 type
   // Форма для отображения таблицы
   TUzvTableForm = class(TForm)
   private
-    FWorkbook: TsWorkbook;
+    FWorkbookSource: TsWorkbookSource;
     FWorksheet: TsWorksheet;
     FSpreadsheetGrid: TsWorksheetGrid;
     FTable: PUzvTableGrid;
@@ -141,7 +143,7 @@ constructor TUzvTableForm.Create(AOwner: TComponent);
 begin
   inherited Create(AOwner);
 
-  FWorkbook := nil;
+  FWorkbookSource := nil;
   FWorksheet := nil;
   FTable := nil;
 
@@ -150,8 +152,8 @@ end;
 
 destructor TUzvTableForm.Destroy;
 begin
-  if FWorkbook <> nil then
-    FWorkbook.Free;
+  if FWorkbookSource <> nil then
+    FWorkbookSource.Free;
 
   inherited Destroy;
 end;
@@ -203,11 +205,15 @@ begin
   FCloseButton.Anchors := [akRight, akBottom];
   FCloseButton.OnClick := @CloseButtonClick;
 
+  // Создаем источник данных для workbook
+  FWorkbookSource := TsWorkbookSource.Create(Self);
+
   // Создаем компонент для отображения таблицы
   FSpreadsheetGrid := TsWorksheetGrid.Create(Self);
   FSpreadsheetGrid.Parent := Self;
   FSpreadsheetGrid.Align := alClient;
   FSpreadsheetGrid.Options := FSpreadsheetGrid.Options + [goEditing];
+  FSpreadsheetGrid.WorkbookSource := FWorkbookSource;
 end;
 
 procedure TUzvTableForm.ShowTable(const aTable: TUzvTableGrid);
@@ -216,20 +222,16 @@ begin
   GetMem(FTable, SizeOf(TUzvTableGrid));
   FTable^ := aTable;
 
-  // Создаем workbook
-  if FWorkbook <> nil then
-    FWorkbook.Free;
-
-  FWorkbook := TsWorkbook.Create;
+  // Создаем новый workbook через WorkbookSource
+  FWorkbookSource.CreateNewWorkbook;
 
   // Заполняем workbook данными из таблицы
-  PopulateWorkbookFromTable(FWorkbook, aTable);
+  PopulateWorkbookFromTable(FWorkbookSource.Workbook, aTable);
 
   // Получаем первый лист
-  if FWorkbook.GetWorksheetCount > 0 then
+  if FWorkbookSource.Workbook.GetWorksheetCount > 0 then
   begin
-    FWorksheet := FWorkbook.GetFirstWorksheet;
-    FSpreadsheetGrid.Workbook := FWorkbook;
+    FWorksheet := FWorkbookSource.Workbook.GetFirstWorksheet;
   end;
 
   //zcLog.LogInfo('Таблица отображена в GUI');
@@ -238,21 +240,19 @@ end;
 
 procedure TUzvTableForm.RefreshTable;
 begin
-  if (FWorkbook = nil) or (FTable = nil) then
+  if (FWorkbookSource = nil) or (FTable = nil) then
     Exit;
 
-  // Очищаем текущий workbook
-  FWorkbook.Free;
-  FWorkbook := TsWorkbook.Create;
+  // Создаем новый workbook через WorkbookSource
+  FWorkbookSource.CreateNewWorkbook;
 
   // Заново заполняем данными
-  PopulateWorkbookFromTable(FWorkbook, FTable^);
+  PopulateWorkbookFromTable(FWorkbookSource.Workbook, FTable^);
 
   // Обновляем отображение
-  if FWorkbook.GetWorksheetCount > 0 then
+  if FWorkbookSource.Workbook.GetWorksheetCount > 0 then
   begin
-    FWorksheet := FWorkbook.GetFirstWorksheet;
-    FSpreadsheetGrid.Workbook := FWorkbook;
+    FWorksheet := FWorkbookSource.Workbook.GetFirstWorksheet;
   end;
 
   zcUI.TextMessage('Таблица обновлена / Table refreshed', TMWOHistoryOut);
@@ -272,7 +272,7 @@ procedure TUzvTableForm.ExportButtonClick(Sender: TObject);
 var
   fileName: string;
 begin
-  if FWorkbook = nil then
+  if FWorkbookSource = nil then
   begin
     zcUI.TextMessage('Ошибка: нет данных для экспорта / Error: no data to export', TMWOHistoryOut);
     Exit;
@@ -284,7 +284,7 @@ begin
   // TODO: Добавить диалог выбора файла
 
   try
-    FWorkbook.WriteToFile(fileName, sfOOXML, True);
+    FWorkbookSource.Workbook.WriteToFile(fileName, sfOOXML, True);
     zcUI.TextMessage('Таблица экспортирована в файл: ' + fileName + ' / Table exported to file: ' + fileName, TMWOHistoryOut);
   except
     on E: Exception do

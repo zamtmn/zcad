@@ -280,6 +280,7 @@ uses
   uzvcommand_showhidespace, //команда показ спрятать
   uzvsplineconvert,
   uzvcommand_exportdialux,
+  uzvcommand_recoverytable, //команда восстановления таблиц с чертежа
   //uzvelectricalexcelcom,
   //**//
   {$ENDIF}

@@ -33,6 +33,7 @@ uses
   uzeentmtext,
   uzegeometry,
   uzegeometrytypes,
+  uzeentity,
   uzvtable_data;
 
 // Считать все выделенные примитивы с чертежа

@@ -30,6 +30,7 @@ uses
   gvector,
   uzcinterface,
   uzegeometry,
+  uzeentity,
   uzegeometrytypes,
   uzvtable_data;
 
@@ -40,6 +41,7 @@ type
     startPos: Double;     // Начальная позиция вдоль линии
     endPos: Double;       // Конечная позиция вдоль линии
   end;
+  PLineData = ^TLineData;
   TLineList = specialize TVector<TLineData>;
 
 // Построить структуру таблицы из списка примитивов
@@ -470,8 +472,8 @@ begin
 
   finally
     // Освобождаем временные списки
-    horizontalLines.Done;
-    verticalLines.Done;
+    horizontalLines.Free;
+    verticalLines.Free;
   end;
 end;
 

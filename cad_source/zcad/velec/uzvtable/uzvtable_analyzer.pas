@@ -32,6 +32,15 @@ uses
   uzegeometrytypes,
   uzvtable_data;
 
+type
+  // Вспомогательная структура для хранения линии
+  TLineData = record
+    position: Double;     // Позиция линии (X для вертикальных, Y для горизонтальных)
+    startPos: Double;     // Начальная позиция вдоль линии
+    endPos: Double;       // Конечная позиция вдоль линии
+  end;
+  TLineList = specialize TVector<TLineData>;
+
 // Построить структуру таблицы из списка примитивов
 function BuildTableFromPrimitives(
   const aPrimitives: TUzvPrimitiveList;
@@ -62,15 +71,6 @@ implementation
 
 uses
   uzclog;
-
-type
-  // Вспомогательная структура для хранения линии
-  TLineData = record
-    position: Double;     // Позиция линии (X для вертикальных, Y для горизонтальных)
-    startPos: Double;     // Начальная позиция вдоль линии
-    endPos: Double;       // Конечная позиция вдоль линии
-  end;
-  TLineList = specialize TVector<TLineData>;
 
 // Сравнить два числа с заданным допуском
 function IsNearlyEqual(a, b: Double; tolerance: Double = COORDINATE_TOLERANCE): Boolean;

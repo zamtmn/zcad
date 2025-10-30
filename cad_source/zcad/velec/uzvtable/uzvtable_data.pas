@@ -181,9 +181,9 @@ uses
 // Создать пустую структуру таблицы
 function CreateEmptyTableGrid: TUzvTableGrid;
 begin
-  Result.rows.init;
-  Result.columns.init;
-  Result.cells.init;
+  Result.rows.init(10);
+  Result.columns.init(10);
+  Result.cells.init(100);
   Result.rowCount := 0;
   Result.columnCount := 0;
   Result.tableBounds.LBN := CreateVertex(0, 0, 0);

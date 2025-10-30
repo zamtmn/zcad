@@ -110,7 +110,7 @@ begin
     begin
       zcUI.TextMessage('', TMWOHistoryOut);
       zcUI.TextMessage('Критическая ошибка / Critical error: ' + E.Message, TMWOHistoryOut);
-      zcLog.LogInfo('Исключение в команде recoveryTable_com: ' + E.Message);
+      zcUI.TextMessage('Исключение в команде recoveryTable_com: ' + E.Message, TMWOHistoryOut);
     end;
   end;
 
@@ -126,6 +126,6 @@ initialization
     0
   );
 
-  zcLog.LogInfo('Команда recoveryTable зарегистрирована');
+  zcUI.TextMessage('Команда recoveryTable зарегистрирована', TMWOHistoryOut);
 
 end.

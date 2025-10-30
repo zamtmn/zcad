@@ -34,6 +34,7 @@ uses
   uzegeometry,
   uzegeometrytypes,
   uzeentity,
+  gzctnrVectorTypes,
   uzvtable_data;
 
 // Считать все выделенные примитивы с чертежа
@@ -64,7 +65,7 @@ var
   supportedCount: Integer;
 begin
   Result := False;
-  aPrimitives.init;
+  aPrimitives:=TUzvPrimitiveList.Create;
   supportedCount := 0;
 
   // Проверяем, есть ли выделенные объекты
@@ -76,7 +77,8 @@ begin
     Exit;
   end;
 
-  zcLog.LogInfo('Начало чтения выделенных примитивов. Выбрано объектов: ' + IntToStr(selectedCount));
+  //zcUI.TextMessage('Ошибка: не выбрано ни одного объекта / Error: no objects selected', TMWOHistoryOut);
+  zcUI.TextMessage('Начало чтения выделенных примитивов. Выбрано объектов: ' + IntToStr(selectedCount), TMWOHistoryOut);
 
   // Перебираем все объекты на чертеже и проверяем флаг selected
   pobj := drawings.GetCurrentROOT^.ObjArray.beginiterate(ir);
@@ -102,7 +104,7 @@ begin
     until pobj = nil;
   end;
 
-  zcLog.LogInfo('Чтение завершено. Обработано поддерживаемых примитивов: ' + IntToStr(supportedCount));
+  zcUI.TextMessage('Чтение завершено. Обработано поддерживаемых примитивов: ' + IntToStr(supportedCount), TMWOHistoryOut);
 
   // Успех, если хотя бы один поддерживаемый примитив найден
   Result := supportedCount > 0;
@@ -129,13 +131,13 @@ begin
     Exit;
 
   // Проверяем типы примитивов
-  if aEntity^.GetObjType = 'GDBObjLine' then
+  if aEntity^.GetObjTypeName = 'GDBObjLine' then
     Result := ptLine
-  else if aEntity^.GetObjType = 'GDBObjPolyLine' then
+  else if aEntity^.GetObjTypeName = 'GDBObjPolyLine' then
     Result := ptPolyline
-  else if aEntity^.GetObjType = 'GDBObjText' then
+  else if aEntity^.GetObjTypeName = 'GDBObjText' then
     Result := ptText
-  else if aEntity^.GetObjType = 'GDBObjMText' then
+  else if aEntity^.GetObjTypeName = 'GDBObjMText' then
     Result := ptMText;
 end;
 
@@ -175,10 +177,11 @@ begin
       // Для полилинии берем первую и последнюю точку
       if pPolyline^.VertexArrayInOCS.Count > 0 then
       begin
-        Result.startPoint := pPolyline^.VertexArrayInOCS.getData(0)^;
+        //PGDBVertex(pline^.VertexArrayInOCS.getDataMutable(vertexCount-1))^
+        Result.startPoint := pPolyline^.VertexArrayInOCS.getDataMutable(0)^;
 
         if pPolyline^.VertexArrayInOCS.Count > 1 then
-          Result.endPoint := pPolyline^.VertexArrayInOCS.getData(pPolyline^.VertexArrayInOCS.Count - 1)^
+          Result.endPoint := pPolyline^.VertexArrayInOCS.getDataMutable(pPolyline^.VertexArrayInOCS.Count - 1)^
         else
           Result.endPoint := Result.startPoint;
       end;
@@ -186,7 +189,7 @@ begin
       // Вычисляем габаритный прямоугольник для полилинии
       if pPolyline^.VertexArrayInOCS.Count > 0 then
       begin
-        vertex := pPolyline^.VertexArrayInOCS.getData(0);
+        vertex := pPolyline^.VertexArrayInOCS.getDataMutable(0);
         minX := vertex^.x;
         maxX := vertex^.x;
         minY := vertex^.y;
@@ -194,7 +197,7 @@ begin
 
         for i := 1 to pPolyline^.VertexArrayInOCS.Count - 1 do
         begin
-          vertex := pPolyline^.VertexArrayInOCS.getData(i);
+          vertex := pPolyline^.VertexArrayInOCS.getDataMutable(i);
 
           if vertex^.x < minX then minX := vertex^.x;
           if vertex^.x > maxX then maxX := vertex^.x;
@@ -217,7 +220,7 @@ begin
     ptMText:
     begin
       pMText := PGDBObjMText(aEntity);
-      Result.textContent := pMText^.Content.Text;
+      Result.textContent := pMText^.Content;
       Result.startPoint := pMText^.P_insert_in_WCS;
     end;
   end;

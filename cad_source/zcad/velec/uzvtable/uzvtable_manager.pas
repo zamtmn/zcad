@@ -108,23 +108,23 @@ constructor TUzvTableManager.Create;
 begin
   inherited Create;
 
-  FPrimitives.init;
+  FPrimitives:=TUzvPrimitiveList.Create;
   FTable := CreateEmptyTableGrid;
   FStatus := tsNotStarted;
   ClearError;
 
-  zcLog.LogInfo('Менеджер таблиц создан');
+  zcUI.TextMessage('Менеджер таблиц создан', TMWOHistoryOut);
 end;
 
 destructor TUzvTableManager.Destroy;
 begin
   // Освобождаем ресурсы
-  FPrimitives.Done;
-  FTable.rows.Done;
-  FTable.columns.Done;
-  FTable.cells.Done;
+  FPrimitives.Free;
+  FTable.rows.Free;
+  FTable.columns.Free;
+  FTable.cells.Free;
 
-  zcLog.LogInfo('Менеджер таблиц уничтожен');
+  zcUI.TextMessage('Менеджер таблиц уничтожен', TMWOHistoryOut);
 
   inherited Destroy;
 end;
@@ -135,17 +135,17 @@ begin
 
   case FStatus of
     tsNotStarted:
-      zcLog.LogInfo('Статус: Не начато');
+      zcUI.TextMessage('Статус: Не начато', TMWOHistoryOut);
     tsReading:
-      zcLog.LogInfo('Статус: Чтение примитивов');
+      zcUI.TextMessage('Статус: Чтение примитивов', TMWOHistoryOut);
     tsAnalyzing:
-      zcLog.LogInfo('Статус: Анализ структуры');
+      zcUI.TextMessage('Статус: Анализ структуры', TMWOHistoryOut);
     tsBuilding:
-      zcLog.LogInfo('Статус: Построение таблицы');
+      zcUI.TextMessage('Статус: Построение таблицы', TMWOHistoryOut);
     tsComplete:
-      zcLog.LogInfo('Статус: Завершено');
+      zcUI.TextMessage('Статус: Завершено', TMWOHistoryOut);
     tsError:
-      zcLog.LogInfo('Статус: Ошибка');
+      zcUI.TextMessage('Статус: Ошибка', TMWOHistoryOut);
   end;
 end;
 
@@ -156,7 +156,7 @@ begin
   FError.errorCode := aCode;
   SetStatus(tsError);
 
-  zcLog.LogInfo('Ошибка [' + IntToStr(aCode) + ']: ' + aMessage);
+  zcUI.TextMessage('Ошибка [' + IntToStr(aCode) + ']: ' + aMessage, TMWOHistoryOut);
   zcUI.TextMessage('Ошибка: ' + aMessage + ' / Error: ' + aMessage, TMWOHistoryOut);
 end;
 
@@ -263,34 +263,34 @@ function TUzvTableManager.ProcessTableRestoration: Boolean;
 begin
   Result := False;
 
-  zcLog.LogInfo('=== Начало процесса восстановления таблицы ===');
+  zcUI.TextMessage('=== Начало процесса восстановления таблицы ===', TMWOHistoryOut);
   zcUI.TextMessage('Начало восстановления таблицы / Starting table restoration', TMWOHistoryOut);
 
   try
     // Шаг 1: Чтение примитивов
     if not ReadPrimitivesFromDrawing then
     begin
-      zcLog.LogInfo('Процесс прерван на этапе чтения');
+      zcUI.TextMessage('Процесс прерван на этапе чтения', TMWOHistoryOut);
       Exit;
     end;
 
     // Шаг 2: Построение таблицы
     if not BuildTableStructure then
     begin
-      zcLog.LogInfo('Процесс прерван на этапе построения');
+      zcUI.TextMessage('Процесс прерван на этапе построения', TMWOHistoryOut);
       Exit;
     end;
 
     // Шаг 3: Отображение в GUI
     if not ShowTableGUI then
     begin
-      zcLog.LogInfo('Процесс прерван на этапе отображения');
+      zcUI.TextMessage('Процесс прерван на этапе отображения', TMWOHistoryOut);
       Exit;
     end;
 
     // Успешное завершение
     SetStatus(tsComplete);
-    zcLog.LogInfo('=== Процесс восстановления таблицы завершен успешно ===');
+    zcUI.TextMessage('=== Процесс восстановления таблицы завершен успешно ===', TMWOHistoryOut);
     zcUI.TextMessage('Восстановление таблицы завершено успешно / Table restoration completed successfully', TMWOHistoryOut);
 
     Result := True;
@@ -299,7 +299,7 @@ begin
     on E: Exception do
     begin
       SetError('Неожиданная ошибка: ' + E.Message, 9999);
-      zcLog.LogInfo('=== Процесс прерван из-за исключения ===');
+      zcUI.TextMessage('=== Процесс прерван из-за исключения ===', TMWOHistoryOut);
     end;
   end;
 end;

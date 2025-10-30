@@ -115,6 +115,7 @@ var
   i: Integer;
   cell: PUzvTableCell;
   row, col: Integer;
+  invertedRow: Integer;
 begin
   if aWorkbook = nil then
     Exit;
@@ -126,8 +127,12 @@ begin
   for i := 0 to aTable.cells.Size - 1 do
   begin
     cell := aTable.cells.Mutable[i];
-    row := cell^.rowIndex;
     col := cell^.columnIndex;
+
+    // Инвертируем индекс строки: в CAD Y растет вверх, в таблице - вниз
+    // rowIndex=0 в CAD соответствует нижней строке, должна быть последней в GUI
+    invertedRow := aTable.rowCount - 1 - cell^.rowIndex;
+    row := invertedRow;
 
     // Записываем текстовое содержимое
     if cell^.textContent <> '' then

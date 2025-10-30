@@ -28,6 +28,7 @@ uses
   SysUtils,
   Math,
   gvector,
+  uzcinterface,
   uzegeometry,
   uzegeometrytypes,
   uzvtable_data;
@@ -156,18 +157,20 @@ var
   i: Integer;
   primitive: PUzvPrimitiveItem;
 begin
-  aHorizontalLines.init;
-  aVerticalLines.init;
+  aHorizontalLines:= TLineList.Create;
+  aVerticalLines:= TLineList.Create;;
 
   // Перебираем все примитивы
   for i := 0 to aPrimitives.Size - 1 do
   begin
-    primitive := aPrimitives.GetMutable(i);
+    primitive := aPrimitives.Mutable[i];
     ExtractLinesFromPrimitive(primitive^, aHorizontalLines, aVerticalLines);
   end;
 
-  zcLog.LogInfo('Извлечено горизонтальных линий: ' + IntToStr(aHorizontalLines.Size));
-  zcLog.LogInfo('Извлечено вертикальных линий: ' + IntToStr(aVerticalLines.Size));
+  zcUI.TextMessage('Извлечено горизонтальных линий: ' + IntToStr(aHorizontalLines.Size),TMWOHistoryOut);
+  zcUI.TextMessage('Извлечено вертикальных линий: ' + IntToStr(aVerticalLines.Size),TMWOHistoryOut);
+  //zcLog.LogInfo('Извлечено горизонтальных линий: ' + IntToStr(aHorizontalLines.Size));
+  //zcLog.LogInfo('Извлечено вертикальных линий: ' + IntToStr(aVerticalLines.Size));
 end;
 
 // Сортировка позиций по возрастанию (для строк и столбцов)
@@ -208,14 +211,14 @@ begin
   // Собираем уникальные позиции горизонтальных линий
   for i := 0 to aHorizontalLines.Size - 1 do
   begin
-    line := aHorizontalLines.GetMutable(i);
+    line := aHorizontalLines.Mutable[i];
     FindOrAddPosition(horizontalPositions, hCount, line^.position);
   end;
 
   // Собираем уникальные позиции вертикальных линий
   for i := 0 to aVerticalLines.Size - 1 do
   begin
-    line := aVerticalLines.GetMutable(i);
+    line := aVerticalLines.Mutable[i];
     FindOrAddPosition(verticalPositions, vCount, line^.position);
   end;
 
@@ -224,7 +227,7 @@ begin
   SortPositions(verticalPositions, vCount);
 
   // Создаем строки (между горизонтальными линиями)
-  aTable.rows.init;
+  aTable.rows:=TUzvTableRowList.Create;
   for i := 0 to hCount - 2 do
   begin
     row.rowIndex := i;
@@ -238,7 +241,7 @@ begin
   end;
 
   // Создаем столбцы (между вертикальными линиями)
-  aTable.columns.init;
+  aTable.columns:=TUzvTableColumnList.Create;
   for i := 0 to vCount - 2 do
   begin
     col.columnIndex := i;
@@ -254,8 +257,10 @@ begin
   aTable.rowCount := aTable.rows.Size;
   aTable.columnCount := aTable.columns.Size;
 
-  zcLog.LogInfo('Построено строк: ' + IntToStr(aTable.rowCount));
-  zcLog.LogInfo('Построено столбцов: ' + IntToStr(aTable.columnCount));
+  zcUI.TextMessage('Построено строк: ' + IntToStr(aTable.rowCount),TMWOHistoryOut);
+  zcUI.TextMessage('Построено столбцов: ' + IntToStr(aTable.columnCount),TMWOHistoryOut);
+  //zcLog.LogInfo('Построено строк: ' + IntToStr(aTable.rowCount));
+  //zcLog.LogInfo('Построено столбцов: ' + IntToStr(aTable.columnCount));
 end;
 
 // Создать ячейки таблицы из строк и столбцов
@@ -266,16 +271,16 @@ var
   row: PUzvTableRow;
   col: PUzvTableColumn;
 begin
-  aTable.cells.init;
+  aTable.cells:=TUzvTableCellList.Create;
 
   // Создаем ячейки для каждой комбинации строка/столбец
   for i := 0 to aTable.rows.Size - 1 do
   begin
-    row := aTable.rows.GetMutable(i);
+    row := aTable.rows.Mutable[i];
 
     for j := 0 to aTable.columns.Size - 1 do
     begin
-      col := aTable.columns.GetMutable(j);
+      col := aTable.columns.Mutable[j];
 
       // Создаем пустую ячейку
       cell := CreateEmptyCell(i, j);
@@ -288,7 +293,8 @@ begin
     end;
   end;
 
-  zcLog.LogInfo('Создано ячеек: ' + IntToStr(aTable.cells.Size));
+  zcUI.TextMessage('Создано ячеек: ' + IntToStr(aTable.cells.Size),TMWOHistoryOut);
+  //zcLog.LogInfo('Создано ячеек: ' + IntToStr(aTable.cells.Size));
 end;
 
 // Найти ячейку по координатам точки
@@ -301,7 +307,7 @@ begin
 
   for i := 0 to aTable.cells.Size - 1 do
   begin
-    cell := aTable.cells.GetMutable(i);
+    cell := aTable.cells.Mutable[i];
 
     if IsPointInCell(aPoint, cell^) then
     begin
@@ -325,7 +331,7 @@ begin
   // Перебираем все примитивы
   for i := 0 to aPrimitives.Size - 1 do
   begin
-    primitive := aPrimitives.GetMutable(i);
+    primitive := aPrimitives.Mutable[i];
 
     // Обрабатываем только текстовые примитивы
     if primitive^.primitiveType in [ptText, ptMText] then
@@ -346,7 +352,7 @@ begin
 
       if cellIndex >= 0 then
       begin
-        cell := aTable.cells.GetMutable(cellIndex);
+        cell := aTable.cells.Mutable[cellIndex];
 
         // Добавляем текст к содержимому ячейки
         if cell^.textContent <> '' then
@@ -377,16 +383,16 @@ begin
   end;
 
   // Находим минимальные и максимальные координаты
-  col := aTable.columns.GetMutable(0);
+  col := aTable.columns.Mutable[0];
   minX := col^.leftPosition;
 
-  col := aTable.columns.GetMutable(aTable.columns.Size - 1);
+  col := aTable.columns.Mutable[aTable.columns.Size - 1];
   maxX := col^.rightPosition;
 
-  row := aTable.rows.GetMutable(0);
+  row := aTable.rows.Mutable[0];
   minY := row^.bottomPosition;
 
-  row := aTable.rows.GetMutable(aTable.rows.Size - 1);
+  row := aTable.rows.Mutable[aTable.rows.Size - 1];
   maxY := row^.topPosition;
 
   aTable.tableBounds.LBN := CreateVertex(minX, minY, 0);
@@ -408,11 +414,13 @@ begin
   // Проверяем наличие примитивов
   if aPrimitives.Size = 0 then
   begin
-    zcLog.LogInfo('Ошибка: список примитивов пуст');
+    zcUI.TextMessage('Ошибка: список примитивов пуст',TMWOHistoryOut);
+    //zcLog.LogInfo('Ошибка: список примитивов пуст');
     Exit;
   end;
 
-  zcLog.LogInfo('Начало построения таблицы из ' + IntToStr(aPrimitives.Size) + ' примитивов');
+  zcUI.TextMessage('Начало построения таблицы из ' + IntToStr(aPrimitives.Size) + ' примитивов',TMWOHistoryOut);
+  //zcLog.LogInfo('Начало построения таблицы из ' + IntToStr(aPrimitives.Size) + ' примитивов');
 
   try
     // Шаг 1: Извлекаем линии из примитивов
@@ -421,7 +429,8 @@ begin
     // Проверяем, что найдены линии
     if (horizontalLines.Size < 2) or (verticalLines.Size < 2) then
     begin
-      zcLog.LogInfo('Ошибка: недостаточно линий для построения таблицы');
+      zcUI.TextMessage('Ошибка: недостаточно линий для построения таблицы',TMWOHistoryOut);
+      //zcLog.LogInfo('Ошибка: недостаточно линий для построения таблицы');
       Exit;
     end;
 
@@ -431,7 +440,8 @@ begin
     // Проверяем, что получилась таблица
     if (aTable.rowCount = 0) or (aTable.columnCount = 0) then
     begin
-      zcLog.LogInfo('Ошибка: не удалось построить сетку таблицы');
+      zcUI.TextMessage('Ошибка: не удалось построить сетку таблицы',TMWOHistoryOut);
+      //zcLog.LogInfo('Ошибка: не удалось построить сетку таблицы');
       Exit;
     end;
 
@@ -448,10 +458,15 @@ begin
     aTable.isValid := True;
     Result := True;
 
-    zcLog.LogInfo('Таблица успешно построена: ' +
-      IntToStr(aTable.rowCount) + ' строк, ' +
-      IntToStr(aTable.columnCount) + ' столбцов, ' +
-      IntToStr(aTable.cells.Size) + ' ячеек');
+    zcUI.TextMessage('Таблица успешно построена: ' +
+                      IntToStr(aTable.rowCount) + ' строк, ' +
+                      IntToStr(aTable.columnCount) + ' столбцов, ' +
+                      IntToStr(aTable.cells.Size) + ' ячеек'
+                      ,TMWOHistoryOut);
+    //zcLog.LogInfo('Таблица успешно построена: ' +
+    //  IntToStr(aTable.rowCount) + ' строк, ' +
+    //  IntToStr(aTable.columnCount) + ' столбцов, ' +
+    //  IntToStr(aTable.cells.Size) + ' ячеек');
 
   finally
     // Освобождаем временные списки

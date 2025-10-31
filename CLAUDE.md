@@ -37,12 +37,3 @@
 
 Финальная цель стандарта — обеспечение единообразия оформления, лёгкости понимания и высокой поддерживаемости кода. Результатом применения данных правил должен стать проект, в котором отсутствуют длинные неструктурированные блоки, все элементы разделены по смыслу, функции компактны и читаемы, а комментарии чётко поясняют назначение логики и намерения программиста.
 
----
-
-Issue to solve: undefined
-Your prepared branch: issue-422-5f4a75a0
-Your prepared working directory: /tmp/gh-issue-solver-1761914252835
-Your forked repository: konard/zcadvelecAI
-Original repository (upstream): veb86/zcadvelecAI
-
-Proceed.

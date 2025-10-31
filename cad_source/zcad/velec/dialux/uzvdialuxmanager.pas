@@ -1189,32 +1189,13 @@ procedure TZVDIALuxManager.WriteSTFProjectSection(var stfFile: TextFile;
   const projectName: string; const currentDate: string; roomCount: integer;
   floorCount: integer);
 var
-  i, roomIndex, storeyIndex: integer;
+  i, roomIndex: integer;
   pSpaceInfo: PZVSpaceInfo;
-  floorsList: TStringList;
 begin
   WriteLn(stfFile, '[PROJECT]');
   WriteLn(stfFile, 'Name=' + projectName);
   WriteLn(stfFile, 'Date=' + currentDate);
   WriteLn(stfFile, 'Operator=' + STF_PROGRAM_NAME);
-
-  // Записываем количество и ссылки на этажи если они есть
-  // Write number of storeys and storey references if they exist
-  if floorCount > 0 then begin
-    floorsList := TStringList.Create;
-    floorsList.Sorted := True;
-    floorsList.Duplicates := dupIgnore;
-    try
-      CollectUniqueFloors(floorsList);
-
-      WriteLn(stfFile, 'NrStoreys=' + IntToStr(floorsList.Count));
-      for storeyIndex := 0 to floorsList.Count - 1 do
-        WriteLn(stfFile, 'Storey' + IntToStr(storeyIndex + 1) +
-                '=STOREY.S' + IntToStr(storeyIndex + 1));
-    finally
-      floorsList.Free;
-    end;
-  end;
 
   // Записываем количество и ссылки на помещения
   // Write number of rooms and room references
@@ -1278,8 +1259,10 @@ begin
   end;
 end;
 
-{**Записать информацию о всех светильниках в помещении с преобразованием координат}
-{**Write information about all luminaires in the room with coordinate transformation}
+{**Записать информацию о всех светильниках в помещении с преобразованием координат.
+   Также записывает определения типов светильников сразу после списка светильников}
+{**Write information about all luminaires in the room with coordinate transformation.
+   Also writes luminaire type definitions immediately after luminaire list}
 procedure TZVDIALuxManager.WriteRoomLuminaires(var stfFile: TextFile;
   pSpaceInfo: PZVSpaceInfo; lumTypes: TStringList);
 var
@@ -1316,6 +1299,23 @@ begin
   end;
 
   WriteLn(stfFile, 'NrLums=' + IntToStr(pSpaceInfo^.Luminaires.Count));
+
+  // Записываем определение типа для каждого экземпляра светильника
+  // Write type definition for each luminaire instance
+  for i := 0 to pSpaceInfo^.Luminaires.Count - 1 do begin
+    pLumInfo := PZVLuminaireInfo(pSpaceInfo^.Luminaires[i]);
+
+    WriteLn(stfFile, '[' + pLumInfo^.DeviceType + ']');
+    WriteLn(stfFile, 'Manufacturer=');
+    WriteLn(stfFile, 'Name=');
+    WriteLn(stfFile, 'OrderNr=');
+    WriteLn(stfFile, 'Box=1 1 0');
+    WriteLn(stfFile, 'Shape=' + IntToStr(STF_LUMINAIRE_SHAPE));
+    WriteLn(stfFile, 'Load=' + IntToStr(Round(pLumInfo^.Load)));
+    WriteLn(stfFile, 'Flux=' + IntToStr(STF_LUMINAIRE_DEFAULT_FLUX));
+    WriteLn(stfFile, 'NrLamps=' + IntToStr(pLumInfo^.NrLamps));
+    WriteLn(stfFile, 'MountingType=' + IntToStr(STF_LUMINAIRE_MOUNTING_TYPE));
+  end;
 end;
 
 {**Сформировать полное имя помещения с информацией об этаже и здании}
@@ -1364,7 +1364,6 @@ begin
   WriteLn(stfFile, '[ROOM.R' + IntToStr(roomIndex) + ']');
   WriteLn(stfFile, 'Name=' + roomName);
   WriteLn(stfFile, 'Height=' + FormatFloat('0.0', roomHeight));
-  WriteLn(stfFile, 'FloorLevel=' + FormatFloat('0.0', floorElevation));
   WriteLn(stfFile, 'WorkingPlane=' + FormatFloat('0.0', STF_WORKING_PLANE_HEIGHT));
   WriteLn(stfFile, 'NrPoints=' + IntToStr(pSpaceInfo^.RoomPolyline^.VertexArrayInOCS.Count));
 
@@ -1784,10 +1783,6 @@ begin
         WriteSTFHeader(stfFile);
         WriteSTFProjectSection(stfFile, projectName, currentDate, roomCount, floorCount);
 
-        // Экспорт секций этажей ПЕРЕД помещениями
-        // Export floor sections BEFORE rooms
-        WriteSTFFloors(stfFile);
-
         // Экспорт помещений принадлежащих выбранным этажам
         // Export rooms belonging to selected floors
         roomIndex := 0;
@@ -1801,10 +1796,6 @@ begin
             WriteSTFRoom(stfFile, pSpaceInfo, roomIndex, lumTypes);
           end;
         end;
-
-        // Экспорт определений типов светильников
-        // Export luminaire type definitions
-        WriteSTFLuminaireTypes(stfFile, lumTypes);
 
         Result := True;
         zcUI.TextMessage('Экспорт в STF завершен / STF export completed: ' + AFileName, TMWOHistoryOut);

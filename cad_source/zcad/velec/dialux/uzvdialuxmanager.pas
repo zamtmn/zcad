@@ -1299,23 +1299,6 @@ begin
   end;
 
   WriteLn(stfFile, 'NrLums=' + IntToStr(pSpaceInfo^.Luminaires.Count));
-
-  // Записываем определение типа для каждого экземпляра светильника
-  // Write type definition for each luminaire instance
-  for i := 0 to pSpaceInfo^.Luminaires.Count - 1 do begin
-    pLumInfo := PZVLuminaireInfo(pSpaceInfo^.Luminaires[i]);
-
-    WriteLn(stfFile, '[' + pLumInfo^.DeviceType + ']');
-    WriteLn(stfFile, 'Manufacturer=');
-    WriteLn(stfFile, 'Name=');
-    WriteLn(stfFile, 'OrderNr=');
-    WriteLn(stfFile, 'Box=1 1 0');
-    WriteLn(stfFile, 'Shape=' + IntToStr(STF_LUMINAIRE_SHAPE));
-    WriteLn(stfFile, 'Load=' + IntToStr(Round(pLumInfo^.Load)));
-    WriteLn(stfFile, 'Flux=' + IntToStr(STF_LUMINAIRE_DEFAULT_FLUX));
-    WriteLn(stfFile, 'NrLamps=' + IntToStr(pLumInfo^.NrLamps));
-    WriteLn(stfFile, 'MountingType=' + IntToStr(STF_LUMINAIRE_MOUNTING_TYPE));
-  end;
 end;
 
 {**Сформировать полное имя помещения с информацией об этаже и здании}
@@ -1796,6 +1779,10 @@ begin
             WriteSTFRoom(stfFile, pSpaceInfo, roomIndex, lumTypes);
           end;
         end;
+
+        // Записываем определения типов светильников после всех помещений
+        // Write luminaire type definitions after all rooms
+        WriteSTFLuminaireTypes(stfFile, lumTypes);
 
         Result := True;
         zcUI.TextMessage('Экспорт в STF завершен / STF export completed: ' + AFileName, TMWOHistoryOut);

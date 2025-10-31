@@ -147,23 +147,16 @@ begin
     else if CurrentNode is TFloorNode then
     begin
       FloorNode := TFloorNode(CurrentNode);
-        // если корня ещё нет — присваиваем Root
-      //if Tree.Root = nil then
-        Tree.Root := TSpaceTreeNode.Create(FloorNode);
-      //else
-      //  // если уже есть Root и хочешь несколько "корней",
-      //  // то добавляем в Children текущего Root
-      //  begin
-      //
-      //    Tree.Root.Children.PushBack(FloorTreeNode);
-      //
-      //  end;
-      //Tree.Add(nil, FloorNode);
-      programlog.LogOutFormatStr(
-        'Этаж "%s" добавлен как корневой',
-        [FloorNode.Name],
-        LM_Debug
-      );
+      // Этаж добавляется как дочерний узел корня, а не заменяет его
+      if Tree.Root <> nil then
+      begin
+        Tree.Root.Children.PushBack(TSpaceTreeNode.Create(FloorNode));
+        programlog.LogOutFormatStr(
+          'Этаж "%s" добавлен как дочерний узел корня',
+          [FloorNode.Name],
+          LM_Debug
+        );
+      end;
     end;
   end;
 end;
@@ -177,6 +170,7 @@ var
   i: Integer;
   NodeBase: TSpaceNodeBase;
   BuildingNode: TBuildingNode;
+  DummyRootNode: TBuildingNode;
 begin
   programlog.LogOutFormatStr(
     'Начато построение иерархии пространств',
@@ -188,6 +182,10 @@ begin
   HierarchyRoot.ProjectName := 'STF Export';
   HierarchyRoot.ExportDate := FormatDateTime('yyyy-mm-dd', Now);
 
+  // Создаём корневой узел для всей иерархии
+  DummyRootNode := TBuildingNode.Create('Root');
+  HierarchyRoot.Tree.Root := TSpaceTreeNode.Create(DummyRootNode);
+
   for i := 0 to CollectedData.SpacesList.Count - 1 do
   begin
     NodeBase := TSpaceNodeBase(CollectedData.SpacesList[i]);
@@ -195,10 +193,10 @@ begin
     if NodeBase is TBuildingNode then
     begin
       BuildingNode := TBuildingNode(NodeBase);
-      HierarchyRoot.Tree.Root := TSpaceTreeNode.Create(BuildingNode);
-      //HierarchyRoot.Tree.Add(nil, BuildingNode);
+      // Здание добавляется как дочерний узел корня, а не заменяет его
+      HierarchyRoot.Tree.Root.Children.PushBack(TSpaceTreeNode.Create(BuildingNode));
       programlog.LogOutFormatStr(
-        'Здание "%s" добавлено как корневой узел',
+        'Здание "%s" добавлено как дочерний узел корня',
         [BuildingNode.Name],
         LM_Debug
       );

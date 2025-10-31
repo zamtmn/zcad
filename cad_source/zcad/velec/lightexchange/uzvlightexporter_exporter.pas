@@ -28,6 +28,7 @@ uses
   Classes,
   gtree,
   uzclog,
+  uzegeometrytypes,
   uzvlightexporter_types,
   uzvlightexporter_utils;
 

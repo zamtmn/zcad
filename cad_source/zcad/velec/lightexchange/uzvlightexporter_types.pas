@@ -131,8 +131,8 @@ type
   end;
 
   {**Упрощенные типы для работы с деревом}
-  TSpaceTreeNode = TGTreeNode<TSpaceNodeBase>;
-  TSpaceTree = TGTree<TSpaceNodeBase>;
+  TSpaceTreeNode = specialize TTreeNode<TSpaceNodeBase>;
+  TSpaceTree = specialize TTree<TSpaceNodeBase>;
 
   {**Структура для хранения собранных данных}
   TCollectedData = record

@@ -82,7 +82,7 @@ var
 begin
   Result := nil;
 
-  for Root in Tree.Roots do
+  for Root in Tree.Root.Children do
   begin
     Result := SearchInSubtree(Root);
     if Result <> nil then
@@ -102,6 +102,7 @@ var
   RoomNode: TRoomNode;
   FloorNode: TFloorNode;
   ParentTreeNode: TSpaceTreeNode;
+  RoomTreeNode: TSpaceTreeNode;
 begin
   for i := 0 to SpacesList.Count - 1 do
   begin
@@ -130,7 +131,8 @@ begin
             );
             if ParentTreeNode <> nil then
             begin
-              Tree.Add(ParentTreeNode, RoomNode);
+              RoomTreeNode := TSpaceTreeNode.Create(RoomNode);
+              ParentTreeNode.Children.PushBack(RoomTreeNode);
               programlog.LogOutFormatStr(
                 'Помещение "%s" добавлено к этажу "%s"',
                 [RoomNode.Name, FloorNode.Name],
@@ -145,7 +147,18 @@ begin
     else if CurrentNode is TFloorNode then
     begin
       FloorNode := TFloorNode(CurrentNode);
-      Tree.Add(nil, FloorNode);
+        // если корня ещё нет — присваиваем Root
+      //if Tree.Root = nil then
+        Tree.Root := TSpaceTreeNode.Create(FloorNode);
+      //else
+      //  // если уже есть Root и хочешь несколько "корней",
+      //  // то добавляем в Children текущего Root
+      //  begin
+      //
+      //    Tree.Root.Children.PushBack(FloorTreeNode);
+      //
+      //  end;
+      //Tree.Add(nil, FloorNode);
       programlog.LogOutFormatStr(
         'Этаж "%s" добавлен как корневой',
         [FloorNode.Name],
@@ -182,7 +195,8 @@ begin
     if NodeBase is TBuildingNode then
     begin
       BuildingNode := TBuildingNode(NodeBase);
-      HierarchyRoot.Tree.Add(nil, BuildingNode);
+      HierarchyRoot.Tree.Root := TSpaceTreeNode.Create(BuildingNode);
+      //HierarchyRoot.Tree.Add(nil, BuildingNode);
       programlog.LogOutFormatStr(
         'Здание "%s" добавлено как корневой узел',
         [BuildingNode.Name],
@@ -195,7 +209,7 @@ begin
 
   programlog.LogOutFormatStr(
     'Иерархия построена, узлов в дереве: %d',
-    [HierarchyRoot.Tree.Count],
+    [HierarchyRoot.Tree.Root.Children.Size],
     LM_Info
   );
 end;
@@ -210,6 +224,7 @@ var
   var
     Child: TSpaceTreeNode;
     RoomNode: TRoomNode;
+    DeviceTreeNode: TSpaceTreeNode;
   begin
     if Node = nil then
       Exit;
@@ -219,7 +234,8 @@ var
       RoomNode := TRoomNode(Node.Data);
       if PointInPolyline(Device.Position, RoomNode.RoomPolyline) then
       begin
-        HierarchyRoot.Tree.Add(Node, Device);
+        DeviceTreeNode := TSpaceTreeNode.Create(Device); // TRoomNode -> TTreeNode<T>
+        Node.Children.PushBack(DeviceTreeNode);           // добавляем в Children
         Inc(DeviceCount);
         programlog.LogOutFormatStr(
           'Устройство "%s" добавлено к помещению "%s"',
@@ -248,7 +264,7 @@ begin
   DeviceCount := 0;
   DummyList := TList.Create;
   try
-    for i := 0 to HierarchyRoot.Tree.Count - 1 do
+    for i := 0 to HierarchyRoot.Tree.Root.Children.Size - 1 do
     begin
       if HierarchyRoot.Tree.Items[i].Data is TDeviceNode then
         DummyList.Add(HierarchyRoot.Tree.Items[i].Data);

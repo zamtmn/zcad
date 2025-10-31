@@ -63,7 +63,7 @@ begin
   Origin.Y := 0.0;
   FirstVertex := True;
 
-  for Root in HierarchyRoot.Tree.Roots do
+  for Root in HierarchyRoot.Tree.Root.Children do
   begin
     if (Root.Data <> nil) and (Root.Data is TFloorNode) then
     begin
@@ -131,7 +131,7 @@ var
 begin
   Result := 0;
 
-  for Root in HierarchyRoot.Tree.Roots do
+  for Root in HierarchyRoot.Tree.Root.Children do
     Result := Result + CountInSubtree(Root);
 end;
 
@@ -283,7 +283,7 @@ var
 begin
   RoomIndex := 0;
 
-  for Root in HierarchyRoot.Tree.Roots do
+  for Root in HierarchyRoot.Tree.Root.Children do
     ProcessNode(Root);
 end;
 
@@ -317,7 +317,7 @@ var
 begin
   LumTypes.Clear;
 
-  for Root in HierarchyRoot.Tree.Roots do
+  for Root in HierarchyRoot.Tree.Root.Children do
     ProcessNode(Root);
 end;
 

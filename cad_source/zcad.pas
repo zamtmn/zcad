@@ -282,6 +282,7 @@ uses
   uzvcommand_exportdialux,
   uzvcommand_recoverytable, //команда восстановления таблиц с чертежа
   uzvlightexporter_commandexport,
+  uzvlightexporter_commandprint,
   //uzvelectricalexcelcom,
   //**//
   {$ENDIF}

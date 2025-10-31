@@ -266,15 +266,15 @@ begin
   try
     for i := 0 to HierarchyRoot.Tree.Root.Children.Size - 1 do
     begin
-      if HierarchyRoot.Tree.Items[i].Data is TDeviceNode then
-        DummyList.Add(HierarchyRoot.Tree.Items[i].Data);
+      if HierarchyRoot.Tree.Root.Children[i].Data is TDeviceNode then
+        DummyList.Add(HierarchyRoot.Tree.Root.Children[i].Data);
     end;
 
     for i := 0 to DummyList.Count - 1 do
     begin
       DeviceNode := TDeviceNode(DummyList[i]);
 
-      for Root in HierarchyRoot.Tree.Roots do
+      for Root in HierarchyRoot.Tree.Root.Children do
         ProcessNode(Root, DeviceNode);
     end;
   finally

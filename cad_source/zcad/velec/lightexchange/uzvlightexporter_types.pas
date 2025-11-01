@@ -143,8 +143,10 @@ type
   private
     FRoots: TSpaceTreeNodeList;
     FAllNodes: TList;
+    FVirtualRoot: TSpaceTreeNode;
     function GetCount: Integer;
     function GetItem(Index: Integer): TSpaceTreeNode;
+    function GetRoot: TSpaceTreeNode;
   public
     constructor Create;
     destructor Destroy; override;
@@ -160,6 +162,9 @@ type
 
     {**Получить список корневых узлов}
     property Roots: TSpaceTreeNodeList read FRoots;
+
+    {**Получить виртуальный корень, содержащий все корневые узлы как дочерние}
+    property Root: TSpaceTreeNode read GetRoot;
   end;
 
   {**Структура для хранения собранных данных}
@@ -260,6 +265,10 @@ begin
   inherited Create;
   FRoots := TSpaceTreeNodeList.Create;
   FAllNodes := TList.Create;
+
+  // Создаем виртуальный корневой узел без данных
+  // Он используется для совместимости с кодом, ожидающим единый корень
+  FVirtualRoot := TSpaceTreeNode.Create(nil);
 end;
 
 {**Освободить дерево и все его узлы}
@@ -278,6 +287,16 @@ begin
 
   FRoots.Free;
   FAllNodes.Free;
+
+  // Освобождаем виртуальный корень
+  // Важно: не вызываем Free рекурсивно для детей, так как они уже были освобождены выше
+  // Поэтому сначала очищаем список детей виртуального корня
+  if FVirtualRoot <> nil then
+  begin
+    FVirtualRoot.Children.Clear;
+    FVirtualRoot.Free;
+  end;
+
   inherited Destroy;
 end;
 
@@ -294,7 +313,11 @@ begin
 
   // Если родитель не указан, добавляем как корневой узел
   if ParentNode = nil then
-    FRoots.PushBack(NewNode)
+  begin
+    FRoots.PushBack(NewNode);
+    // Также добавляем в дочерние узлы виртуального корня
+    FVirtualRoot.Children.PushBack(NewNode);
+  end
   else
     // Иначе добавляем как дочерний узел к родителю
     ParentNode.Children.PushBack(NewNode);
@@ -313,6 +336,12 @@ begin
     Result := TSpaceTreeNode(FAllNodes[Index])
   else
     Result := nil;
+end;
+
+{**Получить виртуальный корень дерева}
+function TSpaceTree.GetRoot: TSpaceTreeNode;
+begin
+  Result := FVirtualRoot;
 end;
 
 end.

@@ -203,6 +203,31 @@ begin
     end;
   end;
 
+  // Добавляем устройства как временные дочерние узлы корня
+  // Они будут перемещены в помещения функцией AssignDevicesToRooms
+  if CollectedData.LuminairesList <> nil then
+  begin
+    programlog.LogOutFormatStr(
+      'Добавление %d устройств к корню для последующего назначения',
+      [CollectedData.LuminairesList.Count],
+      LM_Debug
+    );
+
+    for i := 0 to CollectedData.LuminairesList.Count - 1 do
+    begin
+      NodeBase := TSpaceNodeBase(CollectedData.LuminairesList[i]);
+      if NodeBase is TDeviceNode then
+      begin
+        HierarchyRoot.Tree.Root.Children.PushBack(TSpaceTreeNode.Create(NodeBase));
+        programlog.LogOutFormatStr(
+          'Устройство "%s" временно добавлено к корню',
+          [NodeBase.Name],
+          LM_Debug
+        );
+      end;
+    end;
+  end;
+
   EstablishGeometricRelations(CollectedData.SpacesList, HierarchyRoot.Tree);
 
   programlog.LogOutFormatStr(

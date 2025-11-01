@@ -74,10 +74,18 @@ procedure PrintBuildingNode(
 );
 var
   Indent: string;
+  DisplayName: string;
 begin
   Indent := GetIndent(Level);
+
+  // Защита от пустого имени здания
+  if Node.Name = '' then
+    DisplayName := '<имя не задано>'
+  else
+    DisplayName := Node.Name;
+
   zcUI.TextMessage(
-    Indent + '└─ Здание: ' + Node.Name,
+    Indent + '└─ Здание: ' + DisplayName,
     TMWOHistoryOut
   );
 
@@ -128,10 +136,18 @@ procedure PrintFloorNode(
 );
 var
   Indent: string;
+  DisplayName: string;
 begin
   Indent := GetIndent(Level);
+
+  // Защита от пустого имени этажа
+  if Node.Name = '' then
+    DisplayName := '<имя не задано>'
+  else
+    DisplayName := Node.Name;
+
   zcUI.TextMessage(
-    Indent + '└─ Этаж: ' + Node.Name,
+    Indent + '└─ Этаж: ' + DisplayName,
     TMWOHistoryOut
   );
 
@@ -167,10 +183,18 @@ procedure PrintRoomNode(
 );
 var
   Indent: string;
+  DisplayName: string;
 begin
   Indent := GetIndent(Level);
+
+  // Защита от пустого имени помещения
+  if Node.Name = '' then
+    DisplayName := '<имя не задано>'
+  else
+    DisplayName := Node.Name;
+
   zcUI.TextMessage(
-    Indent + '└─ Помещение: ' + Node.Name,
+    Indent + '└─ Помещение: ' + DisplayName,
     TMWOHistoryOut
   );
 

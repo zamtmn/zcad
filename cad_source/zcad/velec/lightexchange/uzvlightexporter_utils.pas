@@ -165,7 +165,14 @@ begin
 
   VarDesc := VarExt.entityunit.FindVariable(VarName);
   if VarDesc <> nil then
-    Result := pstring(VarDesc^.data.Addr.Instance)^;
+  begin
+    try
+      Result := pstring(VarDesc^.data.Addr.Instance)^;
+    except
+      // В случае ошибки чтения возвращаем пустую строку
+      Result := '';
+    end;
+  end;
 end;
 
 {**Получить числовое значение переменной типа Integer из расширения}
@@ -186,7 +193,12 @@ begin
   if VarDesc = nil then
     Exit;
 
-  Result := PInteger(VarDesc^.data.Addr.Instance)^;
+  try
+    Result := PInteger(VarDesc^.data.Addr.Instance)^;
+  except
+    // В случае ошибки возвращаем значение по умолчанию
+    Result := DefaultValue;
+  end;
 end;
 
 {**Получить числовое значение переменной типа Double из расширения}
@@ -207,7 +219,12 @@ begin
   if VarDesc = nil then
     Exit;
 
-  Result := PDouble(VarDesc^.data.Addr.Instance)^;
+  try
+    Result := PDouble(VarDesc^.data.Addr.Instance)^;
+  except
+    // В случае ошибки возвращаем значение по умолчанию
+    Result := DefaultValue;
+  end;
 end;
 
 {**Проверить является ли полилиния замкнутой}

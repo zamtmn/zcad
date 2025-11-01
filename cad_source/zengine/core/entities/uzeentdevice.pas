@@ -237,7 +237,9 @@ var
   ir:itrec;
   m4:DMatrix4D;
   DC:TDrawContext;
+  SaveLocalEntityFlags:TLocalEntityFlags;
 begin
+  SaveLocalEntityFlags:=IODXFContext.LocalEntityFlags;
   inherited;
   m4:=getmatrix^;
   dc:=drawing.createdrawingrc;
@@ -275,7 +277,7 @@ begin
       begin
         pv^.FormatEntity(drawing,dc,EFAllStages-[EFDraw]);
       end;
-
+      IODXFContext.LocalEntityFlags:=DefaultLocalEntityFlags;
       pv^.SaveToDXF(outStream,drawing,IODXFContext);
       pv^.SaveToDXFPostProcess(outStream,IODXFContext);
       pv^.SaveToDXFFollow(outStream,drawing,IODXFContext);
@@ -294,6 +296,7 @@ begin
     until pv=nil;
   objmatrix:=m4;
   VarObjArray.CalcObjMatrix(@drawing);
+  IODXFContext.LocalEntityFlags:=SaveLocalEntityFlags;
 end;
 
 procedure GDBObjDevice.SaveToDXFObjXData(var outStream:TZctnrVectorBytes;

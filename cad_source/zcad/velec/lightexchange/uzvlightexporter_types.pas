@@ -27,6 +27,7 @@ uses
   SysUtils,
   Classes,
   gtree,
+  gvector,
   uzeentpolyline,
   uzeentdevice,
   uzegeometrytypes;
@@ -132,7 +133,34 @@ type
 
   {**Упрощенные типы для работы с деревом}
   TSpaceTreeNode = specialize TTreeNode<TSpaceNodeBase>;
-  TSpaceTree = specialize TTree<TSpaceNodeBase>;
+  TSpaceTreeBase = specialize TTree<TSpaceNodeBase>;
+
+  {**Список корневых узлов}
+  TSpaceTreeNodeList = specialize TVector<TSpaceTreeNode>;
+
+  {**Расширенный класс дерева с поддержкой множественных корней и индексации}
+  TSpaceTree = class
+  private
+    FRoots: TSpaceTreeNodeList;
+    FAllNodes: TList;
+    function GetCount: Integer;
+    function GetItem(Index: Integer): TSpaceTreeNode;
+  public
+    constructor Create;
+    destructor Destroy; override;
+
+    {**Добавить узел в дерево (ParentNode = nil означает корневой узел)}
+    procedure Add(ParentNode: TSpaceTreeNode; NodeData: TSpaceNodeBase);
+
+    {**Получить количество всех узлов в дереве}
+    property Count: Integer read GetCount;
+
+    {**Получить узел по индексу}
+    property Items[Index: Integer]: TSpaceTreeNode read GetItem; default;
+
+    {**Получить список корневых узлов}
+    property Roots: TSpaceTreeNodeList read FRoots;
+  end;
 
   {**Структура для хранения собранных данных}
   TCollectedData = record
@@ -222,6 +250,69 @@ begin
   Rotation := 0.0;
   NrLamps := 0;
   Device := nil;
+end;
+
+{ TSpaceTree }
+
+{**Создать пустое дерево пространств}
+constructor TSpaceTree.Create;
+begin
+  inherited Create;
+  FRoots := TSpaceTreeNodeList.Create;
+  FAllNodes := TList.Create;
+end;
+
+{**Освободить дерево и все его узлы}
+destructor TSpaceTree.Destroy;
+var
+  i: Integer;
+  Node: TSpaceTreeNode;
+begin
+  // Освобождаем только корневые узлы, они сами освободят своих потомков
+  for i := 0 to FRoots.Size - 1 do
+  begin
+    Node := FRoots[i];
+    if Node <> nil then
+      Node.Free;
+  end;
+
+  FRoots.Free;
+  FAllNodes.Free;
+  inherited Destroy;
+end;
+
+{**Добавить узел в дерево}
+procedure TSpaceTree.Add(ParentNode: TSpaceTreeNode; NodeData: TSpaceNodeBase);
+var
+  NewNode: TSpaceTreeNode;
+begin
+  // Создаем новый узел дерева с переданными данными
+  NewNode := TSpaceTreeNode.Create(NodeData);
+
+  // Добавляем узел в общий список всех узлов
+  FAllNodes.Add(NewNode);
+
+  // Если родитель не указан, добавляем как корневой узел
+  if ParentNode = nil then
+    FRoots.PushBack(NewNode)
+  else
+    // Иначе добавляем как дочерний узел к родителю
+    ParentNode.Children.PushBack(NewNode);
+end;
+
+{**Получить общее количество узлов в дереве}
+function TSpaceTree.GetCount: Integer;
+begin
+  Result := FAllNodes.Count;
+end;
+
+{**Получить узел по индексу из общего списка}
+function TSpaceTree.GetItem(Index: Integer): TSpaceTreeNode;
+begin
+  if (Index >= 0) and (Index < FAllNodes.Count) then
+    Result := TSpaceTreeNode(FAllNodes[Index])
+  else
+    Result := nil;
 end;
 
 end.

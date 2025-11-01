@@ -256,7 +256,7 @@ end;
 
 {**Вывести информацию об узле в зависимости от его типа}
 procedure PrintNodeInfo(
-  const Node: TSpaceNodeBase;
+  Node: TSpaceNodeBase;
   Level: Integer
 );
 begin

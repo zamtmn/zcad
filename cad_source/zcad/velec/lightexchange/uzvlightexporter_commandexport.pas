@@ -34,6 +34,8 @@ uses
   uzcutils,
   uzbtypes,
   uzcstrconsts,
+  uzeentity,
+  gzctnrVectorTypes,
   uzvlightexporter_controller;
 
 {**Функция команды экспорта освещения в STF}

@@ -37,6 +37,8 @@ uses
   uzvlightexporter_types,
   uzvlightexporter_spacecollector,
   uzvlightexporter_spacehierarchy,
+  uzeentity,
+  gzctnrVectorTypes,
   uzvlightexporter_printer;
 
 {**Команда вывода структуры пространств и светильников}

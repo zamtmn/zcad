@@ -67,25 +67,11 @@ begin
   VarExt := PolylinePtr^.specialize GetExtension<TVariablesExtender>;
 
   if VarExt = nil then
-  begin
-    programlog.LogOutFormatStr(
-      'Полилиния не имеет расширения переменных, пропускается',
-      [],
-      LM_Debug
-    );
     Exit;
-  end;
 
   SpaceRoom := GetStringVariable(VarExt, VAR_SPACE_ROOM);
   SpaceFloor := GetStringVariable(VarExt, VAR_SPACE_FLOOR);
   SpaceBuilding := GetStringVariable(VarExt, VAR_SPACE_BUILDING);
-
-  // Детальное логирование для диагностики
-  programlog.LogOutFormatStr(
-    'Полилиния: %s="%s", %s="%s", %s="%s"',
-    [VAR_SPACE_ROOM, SpaceRoom, VAR_SPACE_FLOOR, SpaceFloor, VAR_SPACE_BUILDING, SpaceBuilding],
-    LM_Debug
-  );
 
   if SpaceRoom <> '' then
   begin

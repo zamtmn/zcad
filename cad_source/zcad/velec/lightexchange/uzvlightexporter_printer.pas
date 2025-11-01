@@ -260,9 +260,21 @@ procedure PrintNodeInfo(
   Level: Integer
 );
 begin
+  // Проверка на nil
   if Node = nil then
     Exit;
 
+  // Проверка валидности объекта перед использованием оператора is
+  // Защита от обращения к уже освобожденному или поврежденному объекту
+  try
+    if Node.ClassName = '' then
+      Exit;
+  except
+    // Объект поврежден или уже освобожден
+    Exit;
+  end;
+
+  // Определение типа узла и вызов соответствующей процедуры вывода
   if Node is TBuildingNode then
     PrintBuildingNode(TBuildingNode(Node), Level)
   else if Node is TSectionNode then
@@ -301,11 +313,24 @@ var
   procedure CountInNode(Node: TSpaceTreeNode);
   var
     Child: TSpaceTreeNode;
+    IsValidNode: Boolean;
   begin
     if Node = nil then
       Exit;
 
-    if (Node.Data <> nil) and (Node.Data is TDeviceNode) then
+    // Проверка валидности Node.Data перед использованием оператора is
+    IsValidNode := False;
+    if Node.Data <> nil then
+    begin
+      try
+        if Node.Data.ClassName <> '' then
+          IsValidNode := True;
+      except
+        // Объект поврежден, пропускаем его
+      end;
+    end;
+
+    if IsValidNode and (Node.Data is TDeviceNode) then
       Inc(Count);
 
     for Child in Node.Children do
@@ -335,11 +360,24 @@ var
   var
     Child: TSpaceTreeNode;
     DeviceNode: TDeviceNode;
+    IsValidNode: Boolean;
   begin
     if Node = nil then
       Exit;
 
-    if (Node.Data <> nil) and (Node.Data is TDeviceNode) then
+    // Проверка валидности Node.Data перед использованием оператора is
+    IsValidNode := False;
+    if Node.Data <> nil then
+    begin
+      try
+        if Node.Data.ClassName <> '' then
+          IsValidNode := True;
+      except
+        // Объект поврежден, пропускаем его
+      end;
+    end;
+
+    if IsValidNode and (Node.Data is TDeviceNode) then
     begin
       DeviceNode := TDeviceNode(Node.Data);
       Inc(LuminaireNumber);

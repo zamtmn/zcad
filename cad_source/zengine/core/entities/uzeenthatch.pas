@@ -511,8 +511,8 @@ begin
   createpoint;
   calcbb(dc);
   CalcActualVisible(dc.DrawingContext.VActuality);
-  Representation.Clear;
   if not (ESTemp in State)and(DCODrawable in DC.Options) then begin
+    Representation.Clear;
     Representation.Geometry.Lock;
     hatchTess:=Triangulator.NewTesselator;
 

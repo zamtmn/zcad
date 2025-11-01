@@ -133,8 +133,8 @@ begin
   FormatWithoutSnapArray;
   calcbb(dc);
   CalcActualVisible(dc.DrawingContext.VActuality);
-  Representation.Clear;
   if (not (ESTemp in State))and(DCODrawable in DC.Options) then
+    Representation.Clear;
     if VertexArrayInWCS.Count>1 then
       Representation.DrawPolyLineWithLT(dc,VertexArrayInWCS,vp,closed,False);
 

@@ -211,8 +211,8 @@ begin
   end;
   AproxPointInWCS.Shrink;
   CalcActualVisible(dc.DrawingContext.VActuality);
-  Representation.Clear;
   if (not (ESTemp in State))and(DCODrawable in DC.Options) then begin
+    Representation.Clear;
     if SOLinear in Opts then
       Representation.DrawLineWithLT(self,getmatrix^,dc,VertexArrayInOCS.getFirst,
         VertexArrayInOCS.getLast,vp)

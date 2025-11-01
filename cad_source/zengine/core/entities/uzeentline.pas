@@ -292,8 +292,8 @@ begin
   end;
   CalcActualVisible(dc.DrawingContext.VActuality);
   if EFDraw in stage then begin
-    Representation.Clear;
     if (not (ESTemp in State))and(DCODrawable in DC.Options) then begin
+      Representation.Clear;
       if assigned(EntExtensions) then begin
         if EntExtensions.NeedStandardDraw(@self,drawing,DC) then
           Representation.DrawLineByConstRefLinePropWithLT(

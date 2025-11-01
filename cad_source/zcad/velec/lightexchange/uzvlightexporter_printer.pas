@@ -264,27 +264,27 @@ begin
   if Node = nil then
     Exit;
 
-  // Проверка валидности объекта перед использованием оператора is
-  // Защита от обращения к уже освобожденному или поврежденному объекту
+  // Используем поле NodeType вместо оператора is для определения типа узла
+  // Это безопаснее, так как не требует обращения к VMT (Virtual Method Table)
+  // и защищает от Access Violation при работе с поврежденными объектами
   try
-    if Node.ClassName = '' then
-      Exit;
+    case Node.NodeType of
+      ntBuilding:
+        PrintBuildingNode(TBuildingNode(Node), Level);
+      ntSection:
+        PrintSectionNode(TSectionNode(Node), Level);
+      ntFloor:
+        PrintFloorNode(TFloorNode(Node), Level);
+      ntRoom:
+        PrintRoomNode(TRoomNode(Node), Level);
+      ntDevice:
+        PrintDeviceNode(TDeviceNode(Node), Level);
+    end;
   except
-    // Объект поврежден или уже освобожден
+    // Защита от обращения к уже освобожденному или поврежденному объекту
+    // Если возникает исключение, просто выходим из процедуры
     Exit;
   end;
-
-  // Определение типа узла и вызов соответствующей процедуры вывода
-  if Node is TBuildingNode then
-    PrintBuildingNode(TBuildingNode(Node), Level)
-  else if Node is TSectionNode then
-    PrintSectionNode(TSectionNode(Node), Level)
-  else if Node is TFloorNode then
-    PrintFloorNode(TFloorNode(Node), Level)
-  else if Node is TRoomNode then
-    PrintRoomNode(TRoomNode(Node), Level)
-  else if Node is TDeviceNode then
-    PrintDeviceNode(TDeviceNode(Node), Level);
 end;
 
 {**Рекурсивно обойти дерево и вывести информацию о всех узлах}
@@ -313,25 +313,21 @@ var
   procedure CountInNode(Node: TSpaceTreeNode);
   var
     Child: TSpaceTreeNode;
-    IsValidNode: Boolean;
   begin
     if Node = nil then
       Exit;
 
-    // Проверка валидности Node.Data перед использованием оператора is
-    IsValidNode := False;
+    // Проверка валидности Node.Data и подсчет светильников
+    // Используем поле NodeType для безопасной проверки типа
     if Node.Data <> nil then
     begin
       try
-        if Node.Data.ClassName <> '' then
-          IsValidNode := True;
+        if Node.Data.NodeType = ntDevice then
+          Inc(Count);
       except
         // Объект поврежден, пропускаем его
       end;
     end;
-
-    if IsValidNode and (Node.Data is TDeviceNode) then
-      Inc(Count);
 
     for Child in Node.Children do
       CountInNode(Child);
@@ -360,33 +356,29 @@ var
   var
     Child: TSpaceTreeNode;
     DeviceNode: TDeviceNode;
-    IsValidNode: Boolean;
   begin
     if Node = nil then
       Exit;
 
-    // Проверка валидности Node.Data перед использованием оператора is
-    IsValidNode := False;
+    // Проверка валидности Node.Data и вывод информации о светильнике
+    // Используем поле NodeType для безопасной проверки типа
     if Node.Data <> nil then
     begin
       try
-        if Node.Data.ClassName <> '' then
-          IsValidNode := True;
+        if Node.Data.NodeType = ntDevice then
+        begin
+          DeviceNode := TDeviceNode(Node.Data);
+          Inc(LuminaireNumber);
+
+          zcUI.TextMessage(
+            IntToStr(LuminaireNumber) + '. ' + DeviceNode.Name +
+            ' (Тип: ' + DeviceNode.DeviceType + ')',
+            TMWOHistoryOut
+          );
+        end;
       except
         // Объект поврежден, пропускаем его
       end;
-    end;
-
-    if IsValidNode and (Node.Data is TDeviceNode) then
-    begin
-      DeviceNode := TDeviceNode(Node.Data);
-      Inc(LuminaireNumber);
-
-      zcUI.TextMessage(
-        IntToStr(LuminaireNumber) + '. ' + DeviceNode.Name +
-        ' (Тип: ' + DeviceNode.DeviceType + ')',
-        TMWOHistoryOut
-      );
     end;
 
     for Child in Node.Children do

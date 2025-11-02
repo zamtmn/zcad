@@ -51,6 +51,7 @@
 			  <ZTreeCommand Command="Insert(DEVICE_VEL_LIGHT_2x18)" Caption='Светильник 2х18' />
 			  <ZTreeCommand Command="Insert(DEVICE_VEL_LIGHT_R4)" Caption='Светильник R4' />
 			  <ZTreeCommand Command="Insert(DEVICE_VEL_LIGHT_R3)" Caption='Светильник R3' />
+			  <ZTreeCommand Command="Insert(DEVICE_VEL_LIGHT_VYHOD)" Caption='Светильник Выход' />
 			  <ZTreeCommand Command="Insert(DEVICE_VEL_SWITCH_1P31IN)" Caption='Выключатель СП31 1Р' />
 			  <ZTreeCommand Command="Insert(DEVICE_VEL_SWITCH_2P31IN)" Caption='Выключатель СП31 2Р' />
 			  <ZTreeCommand Command="Insert(DEVICE_VEL_SWITCH_1PP31IN)" Caption='Выключатель проходной СП31 1PP' />

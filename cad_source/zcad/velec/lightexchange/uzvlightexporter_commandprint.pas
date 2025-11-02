@@ -107,7 +107,7 @@ begin
     if CollectedData.LuminairesList <> nil then
     begin
       if CollectedData.LuminairesList.Count > 0 then
-        AssignDevicesToRooms(HierarchyRoot);
+        AssignDevicesToRooms(CollectedData, HierarchyRoot);
     end;
 
     Result := True;

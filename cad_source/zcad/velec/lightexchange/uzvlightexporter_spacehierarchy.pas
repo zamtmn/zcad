@@ -38,7 +38,10 @@ procedure BuildHierarchy(
 );
 
 {**Назначить устройства к помещениям на основе координат}
-procedure AssignDevicesToRooms(var HierarchyRoot: TLightHierarchyRoot);
+procedure AssignDevicesToRooms(
+  const CollectedData: TCollectedData;
+  var HierarchyRoot: TLightHierarchyRoot
+);
 
 {**Очистить иерархию и освободить память}
 procedure ClearHierarchy(var HierarchyRoot: TLightHierarchyRoot);
@@ -201,7 +204,10 @@ begin
 end;
 
 {**Назначить устройства к помещениям на основе координат}
-procedure AssignDevicesToRooms(var HierarchyRoot: TLightHierarchyRoot);
+procedure AssignDevicesToRooms(
+  const CollectedData: TCollectedData;
+  var HierarchyRoot: TLightHierarchyRoot
+);
 var
   Root: TSpaceTreeNode;
   DeviceCount: Integer;
@@ -237,7 +243,6 @@ var
 var
   i: Integer;
   DeviceNode: TDeviceNode;
-  DummyList: TList;
 begin
   programlog.LogOutFormatStr(
     'Начато назначение устройств к помещениям',
@@ -246,23 +251,17 @@ begin
   );
 
   DeviceCount := 0;
-  DummyList := TList.Create;
-  try
-    for i := 0 to HierarchyRoot.Tree.Count - 1 do
-    begin
-      if HierarchyRoot.Tree.Items[i].Data is TDeviceNode then
-        DummyList.Add(HierarchyRoot.Tree.Items[i].Data);
-    end;
 
-    for i := 0 to DummyList.Count - 1 do
+  // Обрабатываем устройства из собранных данных
+  if CollectedData.LuminairesList <> nil then
+  begin
+    for i := 0 to CollectedData.LuminairesList.Count - 1 do
     begin
-      DeviceNode := TDeviceNode(DummyList[i]);
+      DeviceNode := TDeviceNode(CollectedData.LuminairesList[i]);
 
       for Root in HierarchyRoot.Tree.Roots do
         ProcessNode(Root, DeviceNode);
     end;
-  finally
-    DummyList.Free;
   end;
 
   programlog.LogOutFormatStr(

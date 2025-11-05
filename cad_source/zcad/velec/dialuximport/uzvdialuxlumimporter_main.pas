@@ -219,4 +219,8 @@ begin
   );
 end;
 
+initialization
+  // Регистрация команды importDialux
+  // Register the importDialux command
+  CreateZCADCommand(@ImportDialuxLuminaires_com, 'importDialux', CADWG, 0);
 end.

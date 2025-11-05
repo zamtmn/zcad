@@ -37,6 +37,7 @@ uses
   uzeconsts,
   gzctnrVectorTypes,
   uzclog,
+  uzcinterface,
   uzvlightexporter_types,
   uzvlightexporter_utils;
 
@@ -44,6 +45,9 @@ uses
 procedure CollectSelectedSpacesAndDevices(
   var CollectedData: TCollectedData
 );
+
+{**Вывести информацию о собранных данных в командную строку}
+procedure PrintCollectedDataInfo(const CollectedData: TCollectedData);
 
 {**Очистить собранные данные и освободить память}
 procedure ClearCollectedData(var CollectedData: TCollectedData);
@@ -249,6 +253,147 @@ begin
     [SpaceCount, LuminaireCount],
     LM_Info
   );
+end;
+
+{**Вывести информацию о здании}
+procedure PrintBuildingInfo(
+  BuildingNode: TBuildingNode;
+  Index: Integer;
+  var Count: Integer
+);
+begin
+  Inc(Count);
+  zcUI.TextMessage(
+    '  [' + IntToStr(Index) + '] Здание: ' + BuildingNode.Name,
+    TMWOHistoryOut
+  );
+end;
+
+{**Вывести информацию об этаже}
+procedure PrintFloorInfo(
+  FloorNode: TFloorNode;
+  Index: Integer;
+  var Count: Integer
+);
+begin
+  Inc(Count);
+  zcUI.TextMessage(
+    '  [' + IntToStr(Index) + '] Этаж: ' + FloorNode.Name +
+    ' (высота потолка: ' +
+    FormatFloat('0.0', FloorNode.CeilingHeight) + ' м)',
+    TMWOHistoryOut
+  );
+end;
+
+{**Вывести информацию о помещении}
+procedure PrintRoomInfo(
+  RoomNode: TRoomNode;
+  Index: Integer;
+  var Count: Integer
+);
+begin
+  Inc(Count);
+  zcUI.TextMessage(
+    '  [' + IntToStr(Index) + '] Помещение: ' + RoomNode.Name +
+    ' (номер: ' + RoomNode.RoomNumber + ')',
+    TMWOHistoryOut
+  );
+end;
+
+{**Вывести информацию о пространствах}
+procedure PrintSpacesInfo(SpacesList: TList);
+var
+  i: Integer;
+  NodeBase: TSpaceNodeBase;
+  BuildingCount, FloorCount, RoomCount: Integer;
+begin
+  BuildingCount := 0;
+  FloorCount := 0;
+  RoomCount := 0;
+
+  if (SpacesList = nil) or (SpacesList.Count = 0) then
+  begin
+    zcUI.TextMessage('Пространства: не найдено', TMWOHistoryOut);
+    Exit;
+  end;
+
+  zcUI.TextMessage(
+    'Пространства (' + IntToStr(SpacesList.Count) + '):',
+    TMWOHistoryOut
+  );
+
+  for i := 0 to SpacesList.Count - 1 do
+  begin
+    NodeBase := TSpaceNodeBase(SpacesList[i]);
+
+    if NodeBase is TBuildingNode then
+      PrintBuildingInfo(TBuildingNode(NodeBase), i + 1, BuildingCount)
+    else if NodeBase is TFloorNode then
+      PrintFloorInfo(TFloorNode(NodeBase), i + 1, FloorCount)
+    else if NodeBase is TRoomNode then
+      PrintRoomInfo(TRoomNode(NodeBase), i + 1, RoomCount);
+  end;
+
+  zcUI.TextMessage('', TMWOHistoryOut);
+  zcUI.TextMessage(
+    'Итого пространств: зданий=' + IntToStr(BuildingCount) +
+    ', этажей=' + IntToStr(FloorCount) +
+    ', помещений=' + IntToStr(RoomCount),
+    TMWOHistoryOut
+  );
+end;
+
+{**Вывести информацию о светильниках}
+procedure PrintLuminairesInfo(LuminairesList: TList);
+var
+  i: Integer;
+  DeviceNode: TDeviceNode;
+begin
+  if (LuminairesList = nil) or (LuminairesList.Count = 0) then
+  begin
+    zcUI.TextMessage('Светильники: не найдено', TMWOHistoryOut);
+    Exit;
+  end;
+
+  zcUI.TextMessage(
+    'Светильники (' + IntToStr(LuminairesList.Count) + '):',
+    TMWOHistoryOut
+  );
+
+  for i := 0 to LuminairesList.Count - 1 do
+  begin
+    DeviceNode := TDeviceNode(LuminairesList[i]);
+    zcUI.TextMessage(
+      '  [' + IntToStr(i + 1) + '] Тип: ' + DeviceNode.DeviceType +
+      ', мощность: ' + FormatFloat('0.0', DeviceNode.Power) + ' Вт' +
+      ', высота: ' + FormatFloat('0.00', DeviceNode.MountingHeight) + ' м',
+      TMWOHistoryOut
+    );
+  end;
+
+  zcUI.TextMessage('', TMWOHistoryOut);
+  zcUI.TextMessage(
+    'Итого светильников: ' + IntToStr(LuminairesList.Count),
+    TMWOHistoryOut
+  );
+end;
+
+{**Вывести информацию о собранных данных в командную строку}
+procedure PrintCollectedDataInfo(const CollectedData: TCollectedData);
+begin
+  zcUI.TextMessage('', TMWOHistoryOut);
+  zcUI.TextMessage('=== Информация о собранных данных ===', TMWOHistoryOut);
+  zcUI.TextMessage('', TMWOHistoryOut);
+
+  PrintSpacesInfo(CollectedData.SpacesList);
+
+  zcUI.TextMessage('', TMWOHistoryOut);
+
+  PrintLuminairesInfo(CollectedData.LuminairesList);
+
+  zcUI.TextMessage('', TMWOHistoryOut);
+  zcUI.TextMessage('=== Конец информации ===', TMWOHistoryOut);
+  zcUI.TextMessage('', TMWOHistoryOut);
 end;
 
 {**Очистить собранные данные и освободить память}

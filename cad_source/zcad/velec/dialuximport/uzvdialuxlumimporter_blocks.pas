@@ -25,6 +25,7 @@ unit uzvdialuxlumimporter_blocks;
 interface
 uses
   SysUtils,
+  Classes,
   uzcdrawings,
   uzbtypes,
   uzclog,

@@ -28,6 +28,8 @@ uses
   uzcdrawings,
   uzbtypes,
   uzclog,
+  uzeblockdef,
+  gzctnrVectorTypes,
   uzvdialuxlumimporter_structs,
   uzvdialuxlumimporter_utils;
 

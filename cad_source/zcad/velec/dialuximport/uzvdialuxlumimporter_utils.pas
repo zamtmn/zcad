@@ -191,7 +191,7 @@ begin
     Exit;
 
   // Получаем полное имя слоя объекта
-  EntityLayerName := Entity^.vp.Layer.GetFullName;
+  EntityLayerName := Entity^.vp.Layer^.GetFullName;
 
   // Сравниваем с искомым именем (без учета регистра)
   Result := AnsiCompareText(EntityLayerName, LayerName) = 0;

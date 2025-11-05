@@ -104,8 +104,183 @@ var
   OtherNode: TSpaceNodeBase;
   RoomNode: TRoomNode;
   FloorNode: TFloorNode;
+  BuildingNode: TBuildingNode;
+  SectionNode: TSectionNode;
   ParentTreeNode: TSpaceTreeNode;
+  FloorParentFound: Boolean;
 begin
+  // Шаг 1: Добавляем здания как корневые узлы
+  for i := 0 to SpacesList.Count - 1 do
+  begin
+    CurrentNode := TSpaceNodeBase(SpacesList[i]);
+
+    if CurrentNode is TBuildingNode then
+    begin
+      BuildingNode := TBuildingNode(CurrentNode);
+      Tree.Add(nil, BuildingNode);
+      programlog.LogOutFormatStr(
+        'Здание "%s" добавлено как корневой узел',
+        [BuildingNode.Name],
+        LM_Debug
+      );
+    end;
+  end;
+
+  // Шаг 2: Добавляем секции как дочерние к зданиям или корневые узлы
+  for i := 0 to SpacesList.Count - 1 do
+  begin
+    CurrentNode := TSpaceNodeBase(SpacesList[i]);
+
+    if CurrentNode is TSectionNode then
+    begin
+      SectionNode := TSectionNode(CurrentNode);
+      FloorParentFound := False;
+
+      // Ищем родительское здание
+      for j := 0 to SpacesList.Count - 1 do
+      begin
+        if i = j then
+          Continue;
+
+        OtherNode := TSpaceNodeBase(SpacesList[j]);
+
+        if OtherNode is TBuildingNode then
+        begin
+          BuildingNode := TBuildingNode(OtherNode);
+          if (SectionNode.SectionPolyline <> nil) and
+             (BuildingNode.BuildingPolyline <> nil) and
+             PolylineInsidePolyline(SectionNode.SectionPolyline, BuildingNode.BuildingPolyline) then
+          begin
+            ParentTreeNode := FindNodeByNameAndType(
+              Tree,
+              BuildingNode.Name,
+              ntBuilding
+            );
+            if ParentTreeNode <> nil then
+            begin
+              Tree.Add(ParentTreeNode, SectionNode);
+              programlog.LogOutFormatStr(
+                'Секция "%s" добавлена к зданию "%s"',
+                [SectionNode.Name, BuildingNode.Name],
+                LM_Debug
+              );
+              FloorParentFound := True;
+              Break;
+            end;
+          end;
+        end;
+      end;
+
+      // Если родитель не найден, добавляем как корневой узел
+      if not FloorParentFound then
+      begin
+        Tree.Add(nil, SectionNode);
+        programlog.LogOutFormatStr(
+          'Секция "%s" добавлена как корневой узел',
+          [SectionNode.Name],
+          LM_Debug
+        );
+      end;
+    end;
+  end;
+
+  // Шаг 3: Добавляем этажи как дочерние к секциям или зданиям
+  for i := 0 to SpacesList.Count - 1 do
+  begin
+    CurrentNode := TSpaceNodeBase(SpacesList[i]);
+
+    if CurrentNode is TFloorNode then
+    begin
+      FloorNode := TFloorNode(CurrentNode);
+      FloorParentFound := False;
+
+      // Сначала ищем родительскую секцию
+      for j := 0 to SpacesList.Count - 1 do
+      begin
+        if i = j then
+          Continue;
+
+        OtherNode := TSpaceNodeBase(SpacesList[j]);
+
+        if OtherNode is TSectionNode then
+        begin
+          SectionNode := TSectionNode(OtherNode);
+          if (FloorNode.FloorPolyline <> nil) and
+             (SectionNode.SectionPolyline <> nil) and
+             PolylineInsidePolyline(FloorNode.FloorPolyline, SectionNode.SectionPolyline) then
+          begin
+            ParentTreeNode := FindNodeByNameAndType(
+              Tree,
+              SectionNode.Name,
+              ntSection
+            );
+            if ParentTreeNode <> nil then
+            begin
+              Tree.Add(ParentTreeNode, FloorNode);
+              programlog.LogOutFormatStr(
+                'Этаж "%s" добавлен к секции "%s"',
+                [FloorNode.Name, SectionNode.Name],
+                LM_Debug
+              );
+              FloorParentFound := True;
+              Break;
+            end;
+          end;
+        end;
+      end;
+
+      // Если секция не найдена, ищем родительское здание
+      if not FloorParentFound then
+      begin
+        for j := 0 to SpacesList.Count - 1 do
+        begin
+          if i = j then
+            Continue;
+
+          OtherNode := TSpaceNodeBase(SpacesList[j]);
+
+          if OtherNode is TBuildingNode then
+          begin
+            BuildingNode := TBuildingNode(OtherNode);
+            if (FloorNode.FloorPolyline <> nil) and
+               (BuildingNode.BuildingPolyline <> nil) and
+               PolylineInsidePolyline(FloorNode.FloorPolyline, BuildingNode.BuildingPolyline) then
+            begin
+              ParentTreeNode := FindNodeByNameAndType(
+                Tree,
+                BuildingNode.Name,
+                ntBuilding
+              );
+              if ParentTreeNode <> nil then
+              begin
+                Tree.Add(ParentTreeNode, FloorNode);
+                programlog.LogOutFormatStr(
+                  'Этаж "%s" добавлен к зданию "%s"',
+                  [FloorNode.Name, BuildingNode.Name],
+                  LM_Debug
+                );
+                FloorParentFound := True;
+                Break;
+              end;
+            end;
+          end;
+        end;
+      end;
+
+      // Если родитель не найден, добавляем как корневой узел
+      if not FloorParentFound then
+      begin
+        Tree.Add(nil, FloorNode);
+        programlog.LogOutFormatStr(
+          'Этаж "%s" добавлен как корневой узел',
+          [FloorNode.Name],
+          LM_Debug
+        );
+      end;
+    end;
+  end;
+
+  // Шаг 4: Добавляем помещения как дочерние к этажам
   for i := 0 to SpacesList.Count - 1 do
   begin
     CurrentNode := TSpaceNodeBase(SpacesList[i]);
@@ -144,16 +319,6 @@ begin
           end;
         end;
       end;
-    end
-    else if CurrentNode is TFloorNode then
-    begin
-      FloorNode := TFloorNode(CurrentNode);
-      Tree.Add(nil, FloorNode);
-      programlog.LogOutFormatStr(
-        'Этаж "%s" добавлен как корневой',
-        [FloorNode.Name],
-        LM_Debug
-      );
     end;
   end;
 end;
@@ -163,10 +328,6 @@ procedure BuildHierarchy(
   const CollectedData: TCollectedData;
   var HierarchyRoot: TLightHierarchyRoot
 );
-var
-  i: Integer;
-  NodeBase: TSpaceNodeBase;
-  BuildingNode: TBuildingNode;
 begin
   programlog.LogOutFormatStr(
     'Начато построение иерархии пространств',
@@ -177,22 +338,6 @@ begin
   HierarchyRoot.Tree := TSpaceTree.Create;
   HierarchyRoot.ProjectName := 'STF Export';
   HierarchyRoot.ExportDate := FormatDateTime('yyyy-mm-dd', Now);
-
-  for i := 0 to CollectedData.SpacesList.Count - 1 do
-  begin
-    NodeBase := TSpaceNodeBase(CollectedData.SpacesList[i]);
-
-    if NodeBase is TBuildingNode then
-    begin
-      BuildingNode := TBuildingNode(NodeBase);
-      HierarchyRoot.Tree.Add(nil, BuildingNode);
-      programlog.LogOutFormatStr(
-        'Здание "%s" добавлено как корневой узел',
-        [BuildingNode.Name],
-        LM_Debug
-      );
-    end;
-  end;
 
   EstablishGeometricRelations(CollectedData.SpacesList, HierarchyRoot.Tree);
 

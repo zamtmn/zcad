@@ -29,10 +29,12 @@ uses
   uzcinterface,
   uzclog,
   uzegeometrytypes,
+  uzegeometry,
   uzeentity,
   uzeentpolyline,
   uzeentline,
-  uzeconsts;
+  uzeconsts,
+  uzestyleslayers;
 
 {**Вывести сообщение в командную строку CAD}
 procedure PrintMessage(const Msg: string);
@@ -108,12 +110,13 @@ begin
   end;
 
   // Суммируем координаты всех вершин
+  Vertex := PGDBVertex(PolyPtr^.VertexArrayInOCS.GetParrayAsPointer);
   for i := 0 to Count - 1 do
   begin
-    Vertex := PolyPtr^.VertexArrayInOCS.GetParrayAsPointer(i);
     SumX := SumX + Vertex^.x;
     SumY := SumY + Vertex^.y;
     SumZ := SumZ + Vertex^.z;
+    Inc(Vertex);
   end;
 
   // Вычисляем среднее значение

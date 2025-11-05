@@ -58,7 +58,8 @@ procedure ProcessPolylineAsSpace(
 );
 var
   VarExt: TVariablesExtender;
-  SpaceRoom, SpaceFloor, SpaceBuilding: string;
+  SpaceRoom, SpaceRoomPos, SpaceRoomName: string;
+  SpaceFloor, SpaceBuilding: string;
   FloorHeight: Double;
   BuildingNode: TBuildingNode;
   FloorNode: TFloorNode;
@@ -70,19 +71,37 @@ begin
     Exit;
 
   SpaceRoom := GetStringVariable(VarExt, VAR_SPACE_ROOM);
+  SpaceRoomPos := GetStringVariable(VarExt, VAR_SPACE_ROOM_POS);
+  SpaceRoomName := GetStringVariable(VarExt, VAR_SPACE_ROOM_NAME);
   SpaceFloor := GetStringVariable(VarExt, VAR_SPACE_FLOOR);
   SpaceBuilding := GetStringVariable(VarExt, VAR_SPACE_BUILDING);
 
-  if SpaceRoom <> '' then
+  // Проверяем наличие переменных, указывающих на помещение
+  // Приоритет: Space_RoomPos или Space_RoomName, затем Space_Room
+  if (SpaceRoomPos <> '') or (SpaceRoomName <> '') or (SpaceRoom <> '') then
   begin
-    RoomNode := TRoomNode.Create(SpaceRoom);
-    RoomNode.RoomNumber := SpaceRoom;
+    // Используем Space_RoomName как имя, если оно задано
+    if SpaceRoomName <> '' then
+      RoomNode := TRoomNode.Create(SpaceRoomName)
+    else if SpaceRoom <> '' then
+      RoomNode := TRoomNode.Create(SpaceRoom)
+    else
+      RoomNode := TRoomNode.Create('');
+
+    // Используем Space_RoomPos как номер помещения, если он задан
+    if SpaceRoomPos <> '' then
+      RoomNode.RoomNumber := SpaceRoomPos
+    else if SpaceRoom <> '' then
+      RoomNode.RoomNumber := SpaceRoom
+    else
+      RoomNode.RoomNumber := '';
+
     RoomNode.RoomPolyline := PolylinePtr;
     SpacesList.Add(RoomNode);
     Inc(SpaceCount);
     programlog.LogOutFormatStr(
-      'Собрано помещение: %s',
-      [SpaceRoom],
+      'Собрано помещение: %s (номер: %s)',
+      [RoomNode.Name, RoomNode.RoomNumber],
       LM_Info
     );
   end
@@ -123,6 +142,8 @@ procedure ProcessDeviceAsLuminaire(
 var
   VarExt: TVariablesExtender;
   HeightMM: Double;
+  DeviceBrand: string;
+  DevicePowerKW: Double;
   DeviceNode: TDeviceNode;
 begin
   DeviceNode := TDeviceNode.Create(DevicePtr^.Name);
@@ -136,8 +157,25 @@ begin
   VarExt := DevicePtr^.specialize GetExtension<TVariablesExtender>;
   if VarExt <> nil then
   begin
+    // Получаем высоту монтажа в миллиметрах и конвертируем в метры
     HeightMM := GetDoubleVariable(VarExt, VAR_LOCATION_FLOORMARK, 0.0);
     DeviceNode.MountingHeight := HeightMM * MM_TO_METERS;
+
+    // Получаем марку (бренд) светильника
+    DeviceBrand := GetStringVariable(VarExt, VAR_VSPECIFICATION_BRAND);
+    if DeviceBrand <> '' then
+      DeviceNode.DeviceType := DeviceBrand;
+
+    // Получаем мощность в киловаттах и конвертируем в ватты
+    DevicePowerKW := GetDoubleVariable(VarExt, VAR_POWER, 0.0);
+    if DevicePowerKW > 0 then
+      DeviceNode.Power := DevicePowerKW * 1000.0;
+
+    programlog.LogOutFormatStr(
+      'Собран светильник: %s (тип: %s, мощность: %.1f Вт)',
+      [DeviceNode.Name, DeviceNode.DeviceType, DeviceNode.Power],
+      LM_Debug
+    );
   end;
 
   LuminairesList.Add(DeviceNode);

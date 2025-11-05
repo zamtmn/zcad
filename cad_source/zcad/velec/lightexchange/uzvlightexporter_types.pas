@@ -43,12 +43,16 @@ const
 
   // Имена переменных в расширениях полилиний
   VAR_SPACE_ROOM = 'Space_Room';
+  VAR_SPACE_ROOM_POS = 'Space_RoomPos';
+  VAR_SPACE_ROOM_NAME = 'Space_RoomName';
   VAR_SPACE_FLOOR = 'space_Floor';
   VAR_SPACE_BUILDING = 'space_Building';
   VAR_FLOOR_HEIGHT = 'space_FloorHeight';
 
   // Имена переменных в устройствах
   VAR_LOCATION_FLOORMARK = 'LOCATION_floormark';
+  VAR_VSPECIFICATION_BRAND = 'VSPECIFICATION_Brand';
+  VAR_POWER = 'Power';
 
   // Константы конвертации единиц измерения
   MM_TO_METERS = 0.001;

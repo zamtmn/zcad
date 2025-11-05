@@ -141,12 +141,18 @@ procedure WriteSTFProject(
   const HierarchyRoot: TLightHierarchyRoot;
   RoomCount: Integer
 );
+var
+  i: Integer;
 begin
   WriteLn(STFFile, '[PROJECT]');
   WriteLn(STFFile, 'Name=' + HierarchyRoot.ProjectName);
   WriteLn(STFFile, 'Date=' + HierarchyRoot.ExportDate);
   WriteLn(STFFile, 'Operator=' + STF_PROGRAM_NAME);
   WriteLn(STFFile, 'NrRooms=' + IntToStr(RoomCount));
+
+  // Записываем ссылки на помещения для совместимости с DIALux EVO
+  for i := 1 to RoomCount do
+    WriteLn(STFFile, 'Room' + IntToStr(i) + '=ROOM.R' + IntToStr(i));
 end;
 
 {**Записать вершины полилинии помещения}
@@ -238,7 +244,6 @@ begin
   WriteLn(STFFile, '[ROOM.R' + IntToStr(RoomIndex) + ']');
   WriteLn(STFFile, 'Name=' + RoomNode.Name);
   WriteLn(STFFile, 'Height=' + FormatFloat('0.0', RoomHeight));
-  WriteLn(STFFile, 'FloorLevel=0.0');
   WriteLn(STFFile, 'WorkingPlane=' +
     FormatFloat('0.0', STF_WORKING_PLANE_HEIGHT));
 

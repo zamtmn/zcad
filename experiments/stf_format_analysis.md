@@ -1,4 +1,33 @@
-# STF Format Analysis - Issue #422
+# STF Format Analysis - Issue #448 (Updated from #422)
+
+## CRITICAL FINDING - MISSING ROOM REFERENCES IN PROJECT SECTION
+
+### Broken File (ZCAD generated):
+```
+[PROJECT]
+Name=STF Export
+Date=2025-11-05
+Operator=ZCAD
+NrRooms=3
+```
+
+### Working File (Reference):
+```
+[PROJECT]
+Name=+++������-���
+Date=2025-10-27
+Operator=Bobrov.V
+NrRooms=20
+Room1=ROOM.R1
+Room2=ROOM.R2
+Room3=ROOM.R3
+...
+Room20=ROOM.R20
+```
+
+**ROOT CAUSE: The [PROJECT] section is missing `RoomN=ROOM.RN` lines after `NrRooms`!**
+
+This is why DIALux EVO cannot open the file - it expects explicit room references.
 
 ## Sample STF File Structure
 
@@ -125,3 +154,26 @@ MountingType=1
 3. Modify `WriteRoomLuminaires()` to write luminaire definitions immediately after room
 4. Remove final `WriteSTFLuminaireTypes()` call
 5. Update `WriteSTFProjectSection()` to NOT write NrStoreys/Storey references
+
+## Issue #448 Fix - IMPLEMENTED
+
+### Changes Made:
+
+1. **Added Room references in WriteSTFProject** (line 154-155):
+   ```pascal
+   // Записываем ссылки на помещения для совместимости с DIALux EVO
+   for i := 1 to RoomCount do
+     WriteLn(STFFile, 'Room' + IntToStr(i) + '=ROOM.R' + IntToStr(i));
+   ```
+
+2. **Removed FloorLevel field** from WriteRoom (line 241):
+   - Before: Had `WriteLn(STFFile, 'FloorLevel=0.0');`
+   - After: This line removed
+
+### Verification:
+Created test program `test_stf_fix.pas` that verifies:
+- [x] PROJECT section contains NrRooms
+- [x] Room1=ROOM.R1, Room2=ROOM.R2, Room3=ROOM.R3 references present
+- [x] FloorLevel field not in room sections
+
+Test result: PASSED ✓

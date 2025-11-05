@@ -121,7 +121,7 @@ begin
       programlog.LogOutFormatStr(
         'Здание "%s" добавлено как корневой узел',
         [BuildingNode.Name],
-        LM_Debug
+        LM_Info
       );
     end;
   end;
@@ -162,7 +162,7 @@ begin
               programlog.LogOutFormatStr(
                 'Секция "%s" добавлена к зданию "%s"',
                 [SectionNode.Name, BuildingNode.Name],
-                LM_Debug
+                LM_Info
               );
               FloorParentFound := True;
               Break;
@@ -178,7 +178,7 @@ begin
         programlog.LogOutFormatStr(
           'Секция "%s" добавлена как корневой узел',
           [SectionNode.Name],
-          LM_Debug
+          LM_Info
         );
       end;
     end;
@@ -220,7 +220,7 @@ begin
               programlog.LogOutFormatStr(
                 'Этаж "%s" добавлен к секции "%s"',
                 [FloorNode.Name, SectionNode.Name],
-                LM_Debug
+                LM_Info
               );
               FloorParentFound := True;
               Break;
@@ -257,7 +257,7 @@ begin
                 programlog.LogOutFormatStr(
                   'Этаж "%s" добавлен к зданию "%s"',
                   [FloorNode.Name, BuildingNode.Name],
-                  LM_Debug
+                  LM_Info
                 );
                 FloorParentFound := True;
                 Break;
@@ -274,7 +274,7 @@ begin
         programlog.LogOutFormatStr(
           'Этаж "%s" добавлен как корневой узел',
           [FloorNode.Name],
-          LM_Debug
+          LM_Info
         );
       end;
     end;
@@ -312,7 +312,7 @@ begin
               programlog.LogOutFormatStr(
                 'Помещение "%s" добавлено к этажу "%s"',
                 [RoomNode.Name, FloorNode.Name],
-                LM_Debug
+                LM_Info
               );
               Break;
             end;
@@ -375,7 +375,7 @@ var
         programlog.LogOutFormatStr(
           'Устройство "%s" добавлено к помещению "%s"',
           [Device.Name, RoomNode.Name],
-          LM_Debug
+          LM_Info
         );
         Exit;
       end;

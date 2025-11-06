@@ -25,6 +25,7 @@ unit uzvdialuxlumimporter_main;
 interface
 uses
   SysUtils,
+  Forms,
   uzccommandsmanager,
   uzccommandsabstract,
   uzccommandsimpl,
@@ -34,7 +35,8 @@ uses
   uzvdialuxlumimporter_utils,
   uzvdialuxlumimporter_parser,
   uzvdialuxlumimporter_recognizer,
-  uzvdialuxlumimporter_blocks;
+  uzvdialuxlumimporter_blocks,
+  uzvdialuxlumimporter_uiform;
 
 {**Функция команды импорта светильников Dialux}
 function ImportDialuxLuminaires_com(
@@ -213,21 +215,77 @@ begin
     LoadedBlocks
   );
 
-  // Освобождение памяти
+  // Освобождение временных данных парсинга
   FreeParsedData(ParsedData);
-  FreeLoadedBlocks(LoadedBlocks);
 
-  // Освобождаем списки геометрии в каждом светильнике
-  for i := 0 to High(RecognizedLights) do
+  // Проверяем, что есть данные для отображения
+  if (Length(RecognizedLights) = 0) or (LoadedBlocks.Count = 0) then
   begin
-    if RecognizedLights[i].GeometryEntities <> nil then
+    PrintMessage(
+      '[Dialux Importer] Недостаточно данных для открытия формы.'
+    );
+
+    // Освобождение памяти
+    FreeLoadedBlocks(LoadedBlocks);
+    for i := 0 to High(RecognizedLights) do
     begin
-      RecognizedLights[i].GeometryEntities.Free;
-      RecognizedLights[i].GeometryEntities := nil;
+      if RecognizedLights[i].GeometryEntities <> nil then
+      begin
+        RecognizedLights[i].GeometryEntities.Free;
+        RecognizedLights[i].GeometryEntities := nil;
+      end;
     end;
+    SetLength(RecognizedLights, 0);
+
+    programlog.LogOutFormatStr(
+      'Команда завершена: недостаточно данных',
+      [],
+      LM_Warning
+    );
+    Exit;
   end;
 
-  SetLength(RecognizedLights, 0);
+  // Открываем форму сопоставления светильников и блоков
+  programlog.LogOutFormatStr(
+    'Открытие формы сопоставления светильников',
+    [],
+    LM_Info
+  );
+
+  try
+    with TfrmDialuxLumImporter.Create(Application) do
+    try
+      // Загружаем данные в форму
+      LoadData(RecognizedLights, LoadedBlocks);
+
+      // Показываем форму модально
+      ShowModal;
+
+      programlog.LogOutFormatStr(
+        'Форма сопоставления закрыта пользователем',
+        [],
+        LM_Info
+      );
+    finally
+      // Освобождаем форму
+      Free;
+    end;
+  finally
+    // Освобождение памяти после закрытия формы
+    FreeLoadedBlocks(LoadedBlocks);
+
+    // Освобождаем списки геометрии в каждом светильнике
+    for i := 0 to High(RecognizedLights) do
+    begin
+      if RecognizedLights[i].GeometryEntities <> nil then
+      begin
+        RecognizedLights[i].GeometryEntities.Free;
+        RecognizedLights[i].GeometryEntities := nil;
+      end;
+    end;
+
+    SetLength(RecognizedLights, 0);
+  end;
 
   programlog.LogOutFormatStr(
     'Команда импорта светильников Dialux завершена успешно',

@@ -41,7 +41,7 @@ const
   GROUPING_TOLERANCE_MM = 0.1;
 
   // Префикс для фильтра блоков
-  BLOCK_FILTER_PREFIX = 'VELEC';
+  BLOCK_FILTER_PREFIX = 'VEL_LIGHT';
 
 type
   {**Список сущностей геометрии}

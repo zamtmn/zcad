@@ -51,7 +51,7 @@ type
   {**Запись о распознанном светильнике}
   TLightItem = record
     LumKey: string;             // Номер светильника (например, "L1")
-    Center: GDBVertex;          // Геометрический центр светильника
+    Center: GDBvertex;          // Геометрический центр светильника
     GeometryEntities: TEntityList;  // Список геометрических примитивов
     TextEntity: PGDBObjEntity;  // Ссылка на текстовый примитив
   end;

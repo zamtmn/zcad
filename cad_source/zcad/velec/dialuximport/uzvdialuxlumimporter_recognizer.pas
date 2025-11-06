@@ -70,7 +70,7 @@ begin
 end;
 
 {**Получить точку вставки текстового объекта}
-function GetTextInsertionPoint(TextEntity: PGDBObjEntity): GDBVertex;
+function GetTextInsertionPoint(TextEntity: PGDBObjEntity): GDBvertex;
 var
   ObjType: Integer;
   TextPtr: PGDBObjText;
@@ -97,7 +97,7 @@ end;
 
 {**Найти ближайший текст к геометрии светильника}
 function FindNearestText(
-  const GeometryCenter: GDBVertex;
+  const GeometryCenter: GDBvertex;
   const ParsedData: TParsedData;
   out TextEntity: PGDBObjEntity;
   out TextContent: string
@@ -105,7 +105,7 @@ function FindNearestText(
 var
   i: Integer;
   CurrentEntity: PGDBObjEntity;
-  CurrentPoint: GDBVertex;
+  CurrentPoint: GDBvertex;
   CurrentDistance: Double;
   MinDistance: Double;
   BestEntity: PGDBObjEntity;
@@ -148,7 +148,7 @@ end;
 
 {**Найти существующий светильник в той же точке}
 function FindLightAtSameLocation(
-  const Center: GDBVertex;
+  const Center: GDBvertex;
   const RecognizedLights: TLightItemArray;
   Count: Integer
 ): Integer;
@@ -189,7 +189,7 @@ procedure RecognizeLuminaires(
 var
   i: Integer;
   GeometryEntity: PGDBObjEntity;
-  GeometryCenter: GDBVertex;
+  GeometryCenter: GDBvertex;
   TextEntity: PGDBObjEntity;
   TextContent: string;
   RecognizedCount: Integer;

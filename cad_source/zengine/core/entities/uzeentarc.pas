@@ -198,7 +198,6 @@ end;
 procedure GDBObjARC.ReCalcFromObjMatrix;
 var
   mX, mY, mZ: GDBVertex;
-  scaleX, scaleY, scaleZ: Double;
   m: DMatrix4D;
 begin
   // Отладочный вывод: состояние ДО ReCalcFromObjMatrix
@@ -217,7 +216,7 @@ begin
   // Вызываем родительский метод для извлечения базиса
   inherited;
 
-  // Извлекаем колонки матрицы (они содержат масштабированные векторы базиса)
+  // Извлекаем колонки матрицы (теперь они уже нормализованные векторы базиса без масштаба)
   mX.x := objmatrix.mtr[0].v[0];
   mX.y := objmatrix.mtr[0].v[1];
   mX.z := objmatrix.mtr[0].v[2];
@@ -230,20 +229,15 @@ begin
   mZ.y := objmatrix.mtr[2].v[1];
   mZ.z := objmatrix.mtr[2].v[2];
 
-  // Вычисляем масштаб как длину вектора первой колонки
-  scaleX := Sqrt(mX.x * mX.x + mX.y * mX.y + mX.z * mX.z);
-  scaleY := Sqrt(mY.x * mY.x + mY.y * mY.y + mY.z * mY.z);
-  scaleZ := Sqrt(mZ.x * mZ.x + mZ.y * mZ.y + mZ.z * mZ.z);
+  // Восстанавливаем нормализованный базис напрямую
+  // Так как теперь objmatrix не содержит масштаб, базисные векторы уже должны быть единичными
+  Local.basis.ox := NormalizeVertex(mX);
+  Local.basis.oy := NormalizeVertex(mY);
+  Local.basis.oz := NormalizeVertex(mZ);
 
-  // Берем среднее значение масштаба (для дуги масштаб должен быть одинаковым по всем осям)
-  R := (scaleX + scaleY + scaleZ) / 3.0;
-
-  // Восстанавливаем нормализованный базис
-  if R > eps then begin
-    Local.basis.ox := NormalizeVertex(mX);
-    Local.basis.oy := NormalizeVertex(mY);
-    Local.basis.oz := NormalizeVertex(mZ);
-  end;
+  // R остается неизменным при трансформациях вращения/перемещения
+  // Он изменяется только при явном масштабировании через команду Scale
+  // (в текущей реализации R не извлекается из матрицы)
 
   // Извлекаем трансляцию из четвертой колонки
   Local.P_insert.x := objmatrix.mtr[3].v[0];
@@ -263,8 +257,6 @@ begin
     zcUI.TextMessage(Format('Local.P_insert: %.4f %.4f %.4f',
       [Local.P_insert.x, Local.P_insert.y, Local.P_insert.z]), TMWOHistoryOut);
     zcUI.TextMessage(Format('R: %.4f', [R]), TMWOHistoryOut);
-    zcUI.TextMessage(Format('scaleX: %.4f, scaleY: %.4f, scaleZ: %.4f',
-      [scaleX, scaleY, scaleZ]), TMWOHistoryOut);
     zcUI.TextMessage(Format('Local.basis.ox: %.4f %.4f %.4f',
       [Local.basis.ox.x, Local.basis.ox.y, Local.basis.ox.z]), TMWOHistoryOut);
     zcUI.TextMessage(Format('Local.basis.oy: %.4f %.4f %.4f',
@@ -279,7 +271,8 @@ var
   i:integer;
   rad:double;
 begin
-  rad:=abs(ObjMatrix.mtr[0].v[0]);
+  // Теперь используем R напрямую, так как objMatrix больше не содержит масштаб
+  rad:=abs(R);
   for i:=0 to 5 do
     if (frustum[i].v[0]*P_insert_in_WCS.x+frustum[i].v[1]*
       P_insert_in_WCS.y+frustum[i].v[2]*P_insert_in_WCS.z+
@@ -357,7 +350,7 @@ end;
 
 procedure GDBObjARC.CalcObjMatrix;
 var
-  mBasis, mTrans, mScale: DMatrix4D;
+  mBasis, mTrans: DMatrix4D;
 begin
   // Отладочный вывод: состояние ДО CalcObjMatrix
   if zcUI <> nil then begin
@@ -373,18 +366,21 @@ begin
       [Local.basis.oz.x, Local.basis.oz.y, Local.basis.oz.z]), TMWOHistoryOut);
   end;
 
-  // Построение матрицы базиса из локальной системы координат
-  mBasis := CreateMatrixFromBasis(Local.basis.ox, Local.basis.oy, Local.basis.oz);
+  // Нормализуем базис перед использованием
+  // Это гарантирует что базисные векторы имеют единичную длину
+  Local.basis.ox := NormalizeVertex(Local.basis.ox);
+  Local.basis.oy := NormalizeVertex(Local.basis.oy);
+  Local.basis.oz := NormalizeVertex(Local.basis.oz);
 
-  // Построение матрицы масштабирования
-  mScale := CreateScaleMatrix(R);
+  // Построение матрицы базиса из нормализованной локальной системы координат
+  mBasis := CreateMatrixFromBasis(Local.basis.ox, Local.basis.oy, Local.basis.oz);
 
   // Построение матрицы трансляции
   mTrans := CreateTranslationMatrix(Local.P_insert);
 
-  // Сборка финальной матрицы: сначала масштабируем, затем поворачиваем, затем переносим
-  objmatrix := MatrixMultiply(mScale, mBasis);
-  objmatrix := MatrixMultiply(objmatrix, mTrans);
+  // Сборка финальной матрицы: сначала поворачиваем (базис), затем переносим
+  // ВАЖНО: масштаб R НЕ встраивается в матрицу, а применяется отдельно в precalc
+  objmatrix := MatrixMultiply(mBasis, mTrans);
 
   // Если есть родитель, умножаем на его матрицу
   if bp.ListPos.owner <> nil then
@@ -412,25 +408,35 @@ end;
 procedure GDBObjARC.precalc;
 var
   v:GDBvertex4D;
+  tempVertex:GDBvertex;
 begin
   angle:=endangle-startangle;
   if angle<0 then
     angle:=2*pi+angle;
+
+  // Вычисляем точку на единичной окружности в локальных координатах
   SinCos(startangle,v.y,v.x);
   v.z:=0;
   v.w:=1;
+  // Применяем трансформацию (без масштаба, т.к. objMatrix больше не содержит R)
   v:=VectorTransform(v,objMatrix);
-  q0:=pgdbvertex(@v)^;
+  tempVertex:=pgdbvertex(@v)^;
+  // Теперь применяем масштаб R отдельно, относительно центра дуги
+  q0:=VertexAdd(P_insert_in_WCS, VertexMulOnSc(VertexSub(tempVertex, P_insert_in_WCS), R));
+
   SinCos(startangle+angle/2,v.y,v.x);
   v.z:=0;
   v.w:=1;
   v:=VectorTransform(v,objMatrix);
-  q1:=pgdbvertex(@v)^;
+  tempVertex:=pgdbvertex(@v)^;
+  q1:=VertexAdd(P_insert_in_WCS, VertexMulOnSc(VertexSub(tempVertex, P_insert_in_WCS), R));
+
   SinCos(endangle,v.y,v.x);
   v.z:=0;
   v.w:=1;
   v:=VectorTransform(v,objMatrix);
-  q2:=pgdbvertex(@v)^;
+  tempVertex:=pgdbvertex(@v)^;
+  q2:=VertexAdd(P_insert_in_WCS, VertexMulOnSc(VertexSub(tempVertex, P_insert_in_WCS), R));
 
   // Отладочный вывод: значения q0, q1, q2 после precalc
   if zcUI <> nil then begin
@@ -505,6 +511,7 @@ procedure GDBObjARC.getoutbound;
 var
   sx,sy,ex,ey,minx,miny,maxx,maxy:double;
   sq,eq,q:integer;
+  pv:GDBVertex;
 begin
   vp.BoundingBox:=CreateBBFrom2Point(q0,q2);
   sq:=getQuadrant(self.StartAngle);
@@ -529,29 +536,37 @@ begin
     maxy:=ey;
   end;
   if (q and 1)>0 then begin
-    concatBBandPoint(vp.BoundingBox,VectorTransform3d(
-      CreateVertex(1,0,0),objMatrix));
+    pv:=VectorTransform3d(CreateVertex(1,0,0),objMatrix);
+    pv:=VertexAdd(P_insert_in_WCS, VertexMulOnSc(VertexSub(pv, P_insert_in_WCS), R));
+    concatBBandPoint(vp.BoundingBox,pv);
     maxx:=1;
   end;
   if (q and 4)>0 then begin
-    concatBBandPoint(vp.BoundingBox,VectorTransform3d(
-      CreateVertex(-1,0,0),objMatrix));
+    pv:=VectorTransform3d(CreateVertex(-1,0,0),objMatrix);
+    pv:=VertexAdd(P_insert_in_WCS, VertexMulOnSc(VertexSub(pv, P_insert_in_WCS), R));
+    concatBBandPoint(vp.BoundingBox,pv);
     minx:=-1;
   end;
   if (q and 2)>0 then begin
-    concatBBandPoint(vp.BoundingBox,VectorTransform3d(
-      CreateVertex(0,1,0),objMatrix));
+    pv:=VectorTransform3d(CreateVertex(0,1,0),objMatrix);
+    pv:=VertexAdd(P_insert_in_WCS, VertexMulOnSc(VertexSub(pv, P_insert_in_WCS), R));
+    concatBBandPoint(vp.BoundingBox,pv);
     maxy:=1;
   end;
   if (q and 8)>0 then begin
-    concatBBandPoint(vp.BoundingBox,VectorTransform3d(
-      CreateVertex(0,-1,0),objMatrix));
+    pv:=VectorTransform3d(CreateVertex(0,-1,0),objMatrix);
+    pv:=VertexAdd(P_insert_in_WCS, VertexMulOnSc(VertexSub(pv, P_insert_in_WCS), R));
+    concatBBandPoint(vp.BoundingBox,pv);
     miny:=-1;
   end;
-   outbound[0]:=VectorTransform3d(CreateVertex(minx,maxy,0),objMatrix);
-  outbound[1]:=VectorTransform3d(CreateVertex(maxx,maxy,0),objMatrix);
-  outbound[2]:=VectorTransform3d(CreateVertex(maxx,miny,0),objMatrix);
-  outbound[3]:=VectorTransform3d(CreateVertex(minx,miny,0),objMatrix);
+  pv:=VectorTransform3d(CreateVertex(minx,maxy,0),objMatrix);
+  outbound[0]:=VertexAdd(P_insert_in_WCS, VertexMulOnSc(VertexSub(pv, P_insert_in_WCS), R));
+  pv:=VectorTransform3d(CreateVertex(maxx,maxy,0),objMatrix);
+  outbound[1]:=VertexAdd(P_insert_in_WCS, VertexMulOnSc(VertexSub(pv, P_insert_in_WCS), R));
+  pv:=VectorTransform3d(CreateVertex(maxx,miny,0),objMatrix);
+  outbound[2]:=VertexAdd(P_insert_in_WCS, VertexMulOnSc(VertexSub(pv, P_insert_in_WCS), R));
+  pv:=VectorTransform3d(CreateVertex(minx,miny,0),objMatrix);
+  outbound[3]:=VertexAdd(P_insert_in_WCS, VertexMulOnSc(VertexSub(pv, P_insert_in_WCS), R));
 end;
 
 procedure GDBObjARC.createpoints(var DC:TDrawContext);
@@ -582,15 +597,20 @@ begin
   Vertex3D_in_WCS_Array.SetSize(lod+1);
 
   Vertex3D_in_WCS_Array.Clear;
+  // Вычисляем точки на единичной окружности и масштабируем их отдельно
   SinCos(startangle,v.y,v.x);
   v.z:=0;
   pv:=VectorTransform3D(v,objmatrix);
+  // Применяем масштаб R относительно центра дуги
+  pv:=VertexAdd(P_insert_in_WCS, VertexMulOnSc(VertexSub(pv, P_insert_in_WCS), R));
   Vertex3D_in_WCS_Array.PushBackData(pv);
 
   for i:=1 to lod do begin
     SinCos(startangle+i/lod*angle,v.y,v.x);
     v.z:=0;
     pv:=VectorTransform3D(v,objmatrix);
+    // Применяем масштаб R относительно центра дуги
+    pv:=VertexAdd(P_insert_in_WCS, VertexMulOnSc(VertexSub(pv, P_insert_in_WCS), R));
     Vertex3D_in_WCS_Array.PushBackData(pv);
   end;
   Vertex3D_in_WCS_Array.Shrink;

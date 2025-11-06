@@ -49,26 +49,26 @@ procedure PrintFormatMessage(
 {**Вычислить геометрический центр полилинии}
 function CalculatePolylineCenter(
   PolyPtr: PGDBObjPolyLine
-): GDBVertex;
+): GDBvertex;
 
 {**Вычислить центр линии}
 function CalculateLineCenter(
   LinePtr: PGDBObjLine
-): GDBVertex;
+): GDBvertex;
 
 {**Получить точку вставки блока}
 function GetBlockInsertPoint(
   BlockPtr: PGDBObjBlockInsert
-): GDBVertex;
+): GDBvertex;
 
 {**Вычислить геометрический центр примитива}
 function CalculateEntityCenter(
   Entity: PGDBObjEntity
-): GDBVertex;
+): GDBvertex;
 
 {**Вычислить расстояние между двумя точками}
 function CalculateDistance(
-  const Point1, Point2: GDBVertex
+  const Point1, Point2: GDBvertex
 ): Double;
 
 {**Проверить, принадлежит ли объект указанному слою}
@@ -97,12 +97,12 @@ end;
 {**Вычислить геометрический центр полилинии}
 function CalculatePolylineCenter(
   PolyPtr: PGDBObjPolyLine
-): GDBVertex;
+): GDBvertex;
 var
   i: Integer;
   SumX, SumY, SumZ: Double;
   Count: Integer;
-  Vertex: PGDBVertex;
+  Vertex: PGDBvertex;
 begin
   SumX := 0.0;
   SumY := 0.0;
@@ -116,7 +116,7 @@ begin
   end;
 
   // Суммируем координаты всех вершин
-  Vertex := PGDBVertex(PolyPtr^.VertexArrayInOCS.GetParrayAsPointer);
+  Vertex := PGDBvertex(PolyPtr^.VertexArrayInOCS.GetParrayAsPointer);
   for i := 0 to Count - 1 do
   begin
     SumX := SumX + Vertex^.x;
@@ -134,7 +134,7 @@ end;
 {**Вычислить центр линии}
 function CalculateLineCenter(
   LinePtr: PGDBObjLine
-): GDBVertex;
+): GDBvertex;
 begin
   // Центр линии - это середина между двумя точками
   Result.x := (LinePtr^.CoordInOCS.lBegin.x + LinePtr^.CoordInOCS.lEnd.x) / 2.0;
@@ -145,7 +145,7 @@ end;
 {**Получить точку вставки блока}
 function GetBlockInsertPoint(
   BlockPtr: PGDBObjBlockInsert
-): GDBVertex;
+): GDBvertex;
 begin
   // Точка вставки блока - это его координата P_insert
   Result := BlockPtr^.Local.P_insert;
@@ -154,7 +154,7 @@ end;
 {**Вычислить геометрический центр примитива}
 function CalculateEntityCenter(
   Entity: PGDBObjEntity
-): GDBVertex;
+): GDBvertex;
 var
   ObjType: Integer;
 begin
@@ -182,7 +182,7 @@ end;
 
 {**Вычислить расстояние между двумя точками}
 function CalculateDistance(
-  const Point1, Point2: GDBVertex
+  const Point1, Point2: GDBvertex
 ): Double;
 var
   dx, dy, dz: Double;

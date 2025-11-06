@@ -29,6 +29,7 @@ uses
   uzeentity,
   uzeconsts,
   uzclog,
+  gzctnrVectorTypes,
   uzvdialuxlumimporter_structs,
   uzvdialuxlumimporter_utils;
 

@@ -73,24 +73,24 @@ begin
     LM_Info
   );
 
-  // Получаем доступ к таблице определений блоков
-  if drawings.GetCurrentDWG = nil then
+  // Проверяем доступность BlockBaseDWG
+  if BlockBaseDWG = nil then
   begin
     programlog.LogOutFormatStr(
-      'Нет активного чертежа',
+      'BlockBaseDWG не инициализирован',
       [],
       LM_Error
     );
     Exit;
   end;
 
-  // Перебираем все определения блоков
-  BlockDefPtr := drawings.GetCurrentDWG^.BlockDefArray.beginiterate(IterRec);
+  // Перебираем все определения блоков из базы блоков
+  BlockDefPtr := BlockBaseDWG^.BlockDefArray.beginiterate(IterRec);
 
   if BlockDefPtr = nil then
   begin
     programlog.LogOutFormatStr(
-      'Нет определений блоков в чертеже',
+      'Нет определений блоков в BlockBaseDWG',
       [],
       LM_Warning
     );
@@ -120,7 +120,7 @@ begin
       );
     end;
 
-    BlockDefPtr := drawings.GetCurrentDWG^.BlockDefArray.iterate(IterRec);
+    BlockDefPtr := BlockBaseDWG^.BlockDefArray.iterate(IterRec);
   until BlockDefPtr = nil;
 
   programlog.LogOutFormatStr(

@@ -33,6 +33,7 @@ uses
   uzeentity,
   uzeentpolyline,
   uzeentline,
+  uzeentblockinsert,
   uzeconsts,
   uzestyleslayers;
 
@@ -53,6 +54,11 @@ function CalculatePolylineCenter(
 {**Вычислить центр линии}
 function CalculateLineCenter(
   LinePtr: PGDBObjLine
+): GDBVertex;
+
+{**Получить точку вставки блока}
+function GetBlockInsertPoint(
+  BlockPtr: PGDBObjBlockInsert
 ): GDBVertex;
 
 {**Вычислить геометрический центр примитива}
@@ -136,6 +142,15 @@ begin
   Result.z := (LinePtr^.CoordInOCS.lBegin.z + LinePtr^.CoordInOCS.lEnd.z) / 2.0;
 end;
 
+{**Получить точку вставки блока}
+function GetBlockInsertPoint(
+  BlockPtr: PGDBObjBlockInsert
+): GDBVertex;
+begin
+  // Точка вставки блока - это его координата P_insert
+  Result := BlockPtr^.Local.P_insert;
+end;
+
 {**Вычислить геометрический центр примитива}
 function CalculateEntityCenter(
   Entity: PGDBObjEntity
@@ -154,6 +169,8 @@ begin
     Result := CalculatePolylineCenter(PGDBObjPolyLine(Entity))
   else if ObjType = GDBLineID then
     Result := CalculateLineCenter(PGDBObjLine(Entity))
+  else if ObjType = GDBBlockInsertID then
+    Result := GetBlockInsertPoint(PGDBObjBlockInsert(Entity))
   else
   begin
     // Для других типов используем центр ограничивающего прямоугольника

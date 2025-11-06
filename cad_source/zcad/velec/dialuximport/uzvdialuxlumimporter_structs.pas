@@ -37,16 +37,23 @@ const
   // Радиус поиска соответствия между текстом и геометрией (мм)
   SEARCH_RADIUS_MM = 600.0;
 
+  // Допуск для группировки блоков в одной точке (мм)
+  GROUPING_TOLERANCE_MM = 0.1;
+
   // Префикс для фильтра блоков
   BLOCK_FILTER_PREFIX = 'VELEC';
 
 type
+  {**Список сущностей геометрии}
+  TEntityList = class(TList)
+  end;
+
   {**Запись о распознанном светильнике}
   TLightItem = record
-    LumKey: string;        // Номер светильника (например, "L1")
-    Center: GDBVertex;     // Геометрический центр светильника
-    GeometryEntity: PGDBObjEntity;  // Ссылка на геометрический примитив
-    TextEntity: PGDBObjEntity;      // Ссылка на текстовый примитив
+    LumKey: string;             // Номер светильника (например, "L1")
+    Center: GDBVertex;          // Геометрический центр светильника
+    GeometryEntities: TEntityList;  // Список геометрических примитивов
+    TextEntity: PGDBObjEntity;  // Ссылка на текстовый примитив
   end;
 
   {**Массив распознанных светильников}

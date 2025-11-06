@@ -29,6 +29,7 @@ uses
   uzeenttext,
   uzeentmtext,
   uzegeometrytypes,
+  uzegeometry,
   uzeconsts,
   uzclog,
   uzvdialuxlumimporter_structs,
@@ -64,7 +65,7 @@ begin
   else if ObjType = GDBMTextID then
   begin
     MTextPtr := PGDBObjMText(TextEntity);
-    Result := MTextPtr^.Content.Text;
+    Result := MTextPtr^.Content;
   end;
 end;
 

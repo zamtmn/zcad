@@ -33,7 +33,9 @@ uses
   Graphics,
   Dialogs,
   ButtonPanel,
+  Messages,
   laz.VirtualTrees,
+  uzegeometrytypes,
   uzvdialuxlumimporter_structs,
   uzclog;
 
@@ -42,7 +44,7 @@ type
   PLightMappingNodeData = ^TLightMappingNodeData;
   TLightMappingNodeData = record
     LumKey: string;             // Идентификатор светильника
-    Center: GDBVertex;          // Координаты центра
+    Center: GDBvertex;          // Координаты центра
     SelectedBlockName: string;  // Выбранное имя блока
   end;
 
@@ -78,7 +80,7 @@ type
     ): Boolean; stdcall;
 
     {**Обработать нажатие клавиши}
-    procedure ProcessMessage(var Message: TLMessage); stdcall;
+    procedure ProcessMessage(var Message: TMessage); stdcall;
 
     {**Установить границы редактора}
     procedure SetBounds(R: TRect); stdcall;
@@ -551,11 +553,11 @@ begin
 end;
 
 {**Обработать нажатие клавиши}
-procedure TComboBoxEditLink.ProcessMessage(var Message: TLMessage);
+procedure TComboBoxEditLink.ProcessMessage(var Message: TMessage);
 begin
   // Передаем сообщения в ComboBox
   if FEdit <> nil then
-    FEdit.Dispatch(Message);
+    FEdit.WindowProc(Message);
 end;
 
 end.

@@ -99,14 +99,11 @@ begin
 end;
 
 procedure GDBObjARC.TransformAt;
-var
-  tv:GDBVertex4D;
 begin
-  objmatrix:=uzegeometry.MatrixMultiply(PGDBObjWithLocalCS(p)^.objmatrix,t_matrix^);
+  // Применяем трансформацию к текущей матрице объекта
+  objmatrix := uzegeometry.MatrixMultiply(t_matrix^, PGDBObjWithLocalCS(p)^.objmatrix);
 
-  tv:=PGDBVertex4D(@t_matrix.mtr[3])^;
-  PGDBVertex4D(@t_matrix.mtr[3])^:=NulVertex4D;
-  PGDBVertex4D(@t_matrix.mtr[3])^:=tv;
+  // После изменения objmatrix пересчитываем локальные параметры
   ReCalcFromObjMatrix;
 end;
 
@@ -168,17 +165,52 @@ end;
 
 procedure GDBObjARC.ReCalcFromObjMatrix;
 var
-  ox,oy:gdbvertex;
-  m:DMatrix4D;
+  mX, mY, mZ: GDBVertex;
+  scaleX, scaleY, scaleZ: Double;
+  m: DMatrix4D;
 begin
+  // Вызываем родительский метод для извлечения базиса
   inherited;
 
-  ox:=GetXfFromZ(Local.basis.oz);
-  oy:=NormalizeVertex(VectorDot(Local.basis.oz,Local.basis.ox));
-  m:=CreateMatrixFromBasis(ox,oy,Local.basis.oz);
+  // Извлекаем колонки матрицы (они содержат масштабированные векторы базиса)
+  mX.x := objmatrix.mtr[0].v[0];
+  mX.y := objmatrix.mtr[0].v[1];
+  mX.z := objmatrix.mtr[0].v[2];
 
-  Local.P_insert:=VectorTransform3D(PGDBVertex(@objmatrix.mtr[3])^,m);
-  self.R:=PGDBVertex(@objmatrix.mtr[0])^.x/local.basis.OX.x;
+  mY.x := objmatrix.mtr[1].v[0];
+  mY.y := objmatrix.mtr[1].v[1];
+  mY.z := objmatrix.mtr[1].v[2];
+
+  mZ.x := objmatrix.mtr[2].v[0];
+  mZ.y := objmatrix.mtr[2].v[1];
+  mZ.z := objmatrix.mtr[2].v[2];
+
+  // Вычисляем масштаб как длину вектора первой колонки
+  scaleX := Sqrt(mX.x * mX.x + mX.y * mX.y + mX.z * mX.z);
+  scaleY := Sqrt(mY.x * mY.x + mY.y * mY.y + mY.z * mY.z);
+  scaleZ := Sqrt(mZ.x * mZ.x + mZ.y * mZ.y + mZ.z * mZ.z);
+
+  // Берем среднее значение масштаба (для дуги масштаб должен быть одинаковым по всем осям)
+  R := (scaleX + scaleY + scaleZ) / 3.0;
+
+  // Восстанавливаем нормализованный базис
+  if R > eps then begin
+    Local.basis.ox := NormalizeVertex(mX);
+    Local.basis.oy := NormalizeVertex(mY);
+    Local.basis.oz := NormalizeVertex(mZ);
+  end;
+
+  // Извлекаем трансляцию из четвертой колонки
+  Local.P_insert.x := objmatrix.mtr[3].v[0];
+  Local.P_insert.y := objmatrix.mtr[3].v[1];
+  Local.P_insert.z := objmatrix.mtr[3].v[2];
+
+  // Если есть родитель, преобразуем P_insert в его локальную систему координат
+  if bp.ListPos.owner <> nil then begin
+    m := bp.ListPos.owner^.GetMatrix^;
+    MatrixInvert(m);
+    Local.P_insert := VectorTransform3D(Local.P_insert, m);
+  end;
 end;
 
 function GDBObjARC.CalcTrueInFrustum;
@@ -264,19 +296,27 @@ end;
 
 procedure GDBObjARC.CalcObjMatrix;
 var
-  m1:DMatrix4D;
-  v:GDBvertex4D;
+  mBasis, mTrans, mScale: DMatrix4D;
 begin
-  inherited CalcObjMatrix;
-  m1:=CreateScaleMatrix(r);
-  objmatrix:=matrixmultiply(m1,objmatrix);
+  // Построение матрицы базиса из локальной системы координат
+  mBasis := CreateMatrixFromBasis(Local.basis.ox, Local.basis.oy, Local.basis.oz);
 
-  pgdbvertex(@v)^:=local.p_insert;
-  v.z:=0;
-  v.w:=1;
-  m1:=objMatrix;
-  MatrixInvert(m1);
-  v:=VectorTransform(v,m1);
+  // Построение матрицы масштабирования
+  mScale := CreateScaleMatrix(R);
+
+  // Построение матрицы трансляции
+  mTrans := CreateTranslationMatrix(Local.P_insert);
+
+  // Сборка финальной матрицы: сначала масштабируем, затем поворачиваем, затем переносим
+  objmatrix := MatrixMultiply(mScale, mBasis);
+  objmatrix := MatrixMultiply(objmatrix, mTrans);
+
+  // Если есть родитель, умножаем на его матрицу
+  if bp.ListPos.owner <> nil then
+    objmatrix := MatrixMultiply(objmatrix, bp.ListPos.owner^.GetMatrix^);
+
+  // Вычисляем мировые координаты точки вставки
+  P_insert_in_WCS := VectorTransform3D(nulvertex, objmatrix);
 end;
 
 procedure GDBObjARC.precalc;

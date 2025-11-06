@@ -84,8 +84,10 @@ var
   ObjType: Integer;
 begin
   ObjType := Entity^.GetObjType;
-  // Геометрия может быть полилинией или линией
-  Result := (ObjType = GDBPolyLineID) or (ObjType = GDBLineID);
+  // Геометрия может быть полилинией, линией или блоком
+  Result := (ObjType = GDBPolyLineID) or
+            (ObjType = GDBLineID) or
+            (ObjType = GDBBlockInsertID);
 end;
 
 {**Получить выделенные элементы и отфильтровать по слоям}

@@ -146,6 +146,41 @@ begin
   end;
 end;
 
+{**Найти существующий светильник в той же точке}
+function FindLightAtSameLocation(
+  const Center: GDBVertex;
+  const RecognizedLights: TLightItemArray;
+  Count: Integer
+): Integer;
+var
+  i: Integer;
+  Distance: Double;
+begin
+  Result := -1;
+
+  for i := 0 to Count - 1 do
+  begin
+    Distance := CalculateDistance(Center, RecognizedLights[i].Center);
+
+    // Если расстояние меньше допуска, считаем это той же точкой
+    if Distance <= GROUPING_TOLERANCE_MM then
+    begin
+      Result := i;
+      Exit;
+    end;
+  end;
+end;
+
+{**Освободить память списка сущностей в светильнике}
+procedure FreeLightItemGeometry(var LightItem: TLightItem);
+begin
+  if LightItem.GeometryEntities <> nil then
+  begin
+    LightItem.GeometryEntities.Free;
+    LightItem.GeometryEntities := nil;
+  end;
+end;
+
 {**Распознать соответствие между геометрией и текстами светильников}
 procedure RecognizeLuminaires(
   const ParsedData: TParsedData;
@@ -159,6 +194,7 @@ var
   TextContent: string;
   RecognizedCount: Integer;
   LightItem: TLightItem;
+  ExistingLightIndex: Integer;
 begin
   programlog.LogOutFormatStr(
     'Начато распознавание светильников',
@@ -183,38 +219,62 @@ begin
       LM_Debug
     );
 
-    // Ищем ближайший текст в радиусе поиска
-    if FindNearestText(
+    // Проверяем, есть ли уже светильник в этой точке
+    ExistingLightIndex := FindLightAtSameLocation(
       GeometryCenter,
-      ParsedData,
-      TextEntity,
-      TextContent
-    ) then
-    begin
-      // Создаем запись о распознанном светильнике
-      LightItem.LumKey := Trim(TextContent);
-      LightItem.Center := GeometryCenter;
-      LightItem.GeometryEntity := GeometryEntity;
-      LightItem.TextEntity := TextEntity;
+      RecognizedLights,
+      RecognizedCount
+    );
 
-      // Добавляем в массив
-      SetLength(RecognizedLights, RecognizedCount + 1);
-      RecognizedLights[RecognizedCount] := LightItem;
-      Inc(RecognizedCount);
+    if ExistingLightIndex >= 0 then
+    begin
+      // Добавляем геометрию к существующему светильнику
+      RecognizedLights[ExistingLightIndex].GeometryEntities.Add(
+        GeometryEntity
+      );
 
       programlog.LogOutFormatStr(
-        'Распознан светильник "%s" в точке (%.1f, %.1f)',
-        [LightItem.LumKey, GeometryCenter.x, GeometryCenter.y],
+        'Геометрия %d добавлена к существующему светильнику "%s"',
+        [i + 1, RecognizedLights[ExistingLightIndex].LumKey],
         LM_Debug
       );
     end
     else
     begin
-      programlog.LogOutFormatStr(
-        'Не найден текст для геометрии %d в радиусе %.1f мм',
-        [i + 1, SEARCH_RADIUS_MM],
-        LM_Warning
-      );
+      // Ищем ближайший текст в радиусе поиска
+      if FindNearestText(
+        GeometryCenter,
+        ParsedData,
+        TextEntity,
+        TextContent
+      ) then
+      begin
+        // Создаем запись о новом светильнике
+        LightItem.LumKey := Trim(TextContent);
+        LightItem.Center := GeometryCenter;
+        LightItem.GeometryEntities := TEntityList.Create;
+        LightItem.GeometryEntities.Add(GeometryEntity);
+        LightItem.TextEntity := TextEntity;
+
+        // Добавляем в массив
+        SetLength(RecognizedLights, RecognizedCount + 1);
+        RecognizedLights[RecognizedCount] := LightItem;
+        Inc(RecognizedCount);
+
+        programlog.LogOutFormatStr(
+          'Распознан светильник "%s" в точке (%.1f, %.1f)',
+          [LightItem.LumKey, GeometryCenter.x, GeometryCenter.y],
+          LM_Debug
+        );
+      end
+      else
+      begin
+        programlog.LogOutFormatStr(
+          'Не найден текст для геометрии %d в радиусе %.1f мм',
+          [i + 1, SEARCH_RADIUS_MM],
+          LM_Warning
+        );
+      end;
     end;
   end;
 

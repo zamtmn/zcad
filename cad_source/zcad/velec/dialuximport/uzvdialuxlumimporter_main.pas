@@ -51,6 +51,7 @@ procedure PrintRecognizedLights(
 var
   i: Integer;
   LightItem: TLightItem;
+  EntityCount: Integer;
 begin
   if Length(RecognizedLights) = 0 then
   begin
@@ -66,9 +67,13 @@ begin
   for i := 0 to High(RecognizedLights) do
   begin
     LightItem := RecognizedLights[i];
+    EntityCount := 0;
+    if LightItem.GeometryEntities <> nil then
+      EntityCount := LightItem.GeometryEntities.Count;
+
     PrintFormatMessage(
-      '  %s → (%.1f, %.1f)',
-      [LightItem.LumKey, LightItem.Center.x, LightItem.Center.y]
+      '  %s → (%.1f, %.1f) [%d элемента(-ов)]',
+      [LightItem.LumKey, LightItem.Center.x, LightItem.Center.y, EntityCount]
     );
   end;
 end;
@@ -136,6 +141,7 @@ function ImportDialuxLuminaires_com(
   operands: TCommandOperands
 ): TCommandResult;
 var
+  i: Integer;
   ParsedData: TParsedData;
   RecognizedLights: TLightItemArray;
   LoadedBlocks: TLoadedBlocksList;
@@ -210,6 +216,17 @@ begin
   // Освобождение памяти
   FreeParsedData(ParsedData);
   FreeLoadedBlocks(LoadedBlocks);
+
+  // Освобождаем списки геометрии в каждом светильнике
+  for i := 0 to High(RecognizedLights) do
+  begin
+    if RecognizedLights[i].GeometryEntities <> nil then
+    begin
+      RecognizedLights[i].GeometryEntities.Free;
+      RecognizedLights[i].GeometryEntities := nil;
+    end;
+  end;
+
   SetLength(RecognizedLights, 0);
 
   programlog.LogOutFormatStr(

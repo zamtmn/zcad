@@ -15,7 +15,18 @@ object frmDialuxLumImporter: TfrmDialuxLumImporter
     Width = 784
     Anchors = [akTop, akLeft, akRight, akBottom]
     Header.AutoSizeIndex = -1
-    Header.Columns = <>
+    Header.Columns = <
+      item
+        Position = 0
+        Text = 'Импортированные светильники'
+        Width = 300
+      end
+      item
+        Position = 1
+        Text = 'Блок для установки'
+        Width = 450
+        Options = [coAllowClick, coEnabled, coParentBidiMode, coParentColor, coResizable, coShowDropMark, coVisible, coSmartResize, coAllowFocus, coEditable]
+      end>
     Header.DefaultHeight = 24
     Header.Height = 24
     Header.Options = [hoColumnResize, hoDblClickResize, hoVisible]

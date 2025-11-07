@@ -205,26 +205,45 @@ procedure TfrmDialuxLumImporter.InitializeTreeColumns;
 var
   Column: TVirtualTreeColumn;
 begin
-  vstLightMapping.Header.Options :=
-    vstLightMapping.Header.Options + [hoVisible, hoColumnResize];
+  // Проверяем, что колонки уже созданы в .lfm файле
+  if vstLightMapping.Header.Columns.Count = 0 then
+  begin
+    // Если колонок нет, создаем их программно
+    vstLightMapping.Header.Options :=
+      vstLightMapping.Header.Options + [hoVisible, hoColumnResize];
 
-  // Колонка 1: Импортированные светильники
-  Column := vstLightMapping.Header.Columns.Add;
-  Column.Text := 'Импортированные светильники';
-  Column.Width := 300;
-  Column.Options := Column.Options - [coEditable];
+    // Колонка 1: Импортированные светильники
+    Column := vstLightMapping.Header.Columns.Add;
+    Column.Text := 'Импортированные светильники';
+    Column.Width := 300;
+    Column.Options := Column.Options - [coEditable];
 
-  // Колонка 2: Блок для установки
-  Column := vstLightMapping.Header.Columns.Add;
-  Column.Text := 'Блок для установки';
-  Column.Width := 450;
-  Column.Options := Column.Options + [coEditable];
+    // Колонка 2: Блок для установки
+    Column := vstLightMapping.Header.Columns.Add;
+    Column.Text := 'Блок для установки';
+    Column.Width := 450;
+    Column.Options := Column.Options + [coEditable];
 
-  // Настройки дерева
-  vstLightMapping.TreeOptions.SelectionOptions :=
-    vstLightMapping.TreeOptions.SelectionOptions + [toFullRowSelect];
-  vstLightMapping.TreeOptions.MiscOptions :=
-    vstLightMapping.TreeOptions.MiscOptions + [toEditable];
+    // Настройки дерева
+    vstLightMapping.TreeOptions.SelectionOptions :=
+      vstLightMapping.TreeOptions.SelectionOptions + [toFullRowSelect];
+    vstLightMapping.TreeOptions.MiscOptions :=
+      vstLightMapping.TreeOptions.MiscOptions + [toEditable];
+  end
+  else
+  begin
+    // Колонки уже определены в .lfm, только настраиваем их параметры
+    if vstLightMapping.Header.Columns.Count >= 2 then
+    begin
+      // Первая колонка - только для чтения
+      vstLightMapping.Header.Columns[0].Options :=
+        vstLightMapping.Header.Columns[0].Options - [coEditable];
+
+      // Вторая колонка - редактируемая
+      vstLightMapping.Header.Columns[1].Options :=
+        vstLightMapping.Header.Columns[1].Options + [coEditable];
+    end;
+  end;
 end;
 
 {**Загрузить данные в форму}

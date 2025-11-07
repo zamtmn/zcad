@@ -474,7 +474,7 @@ function TComboBoxEditLink.PrepareEdit(
   Tree: TBaseVirtualTree;
   Node: PVirtualNode;
   Column: TColumnIndex
-): Boolean;
+): Boolean; stdcall;
 var
   NodeData: PLightMappingNodeData;
 begin
@@ -504,7 +504,7 @@ begin
 end;
 
 {**Начать редактирование}
-function TComboBoxEditLink.BeginEdit: Boolean;
+function TComboBoxEditLink.BeginEdit: Boolean; stdcall;
 begin
   Result := True;
   FEdit.Show;
@@ -513,7 +513,7 @@ begin
 end;
 
 {**Завершить редактирование}
-function TComboBoxEditLink.EndEdit: Boolean;
+function TComboBoxEditLink.EndEdit: Boolean; stdcall;
 var
   NodeData: PLightMappingNodeData;
 begin

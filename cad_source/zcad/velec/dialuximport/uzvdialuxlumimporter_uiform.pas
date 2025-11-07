@@ -532,7 +532,7 @@ begin
 end;
 
 {**Отменить изменения}
-function TComboBoxEditLink.CancelEdit: Boolean;
+function TComboBoxEditLink.CancelEdit: Boolean; stdcall;
 begin
   Result := True;
   FEdit.Hide;
@@ -541,19 +541,19 @@ begin
 end;
 
 {**Получить границы редактора}
-function TComboBoxEditLink.GetBounds: TRect;
+function TComboBoxEditLink.GetBounds: TRect; stdcall;
 begin
   Result := FEdit.BoundsRect;
 end;
 
 {**Установить границы редактора}
-procedure TComboBoxEditLink.SetBounds(R: TRect);
+procedure TComboBoxEditLink.SetBounds(R: TRect); stdcall;
 begin
   FEdit.BoundsRect := R;
 end;
 
 {**Обработать нажатие клавиши}
-procedure TComboBoxEditLink.ProcessMessage(var Message: TMessage);
+procedure TComboBoxEditLink.ProcessMessage(var Message: TMessage); stdcall;
 begin
   // Передаем сообщения в ComboBox
   if FEdit <> nil then

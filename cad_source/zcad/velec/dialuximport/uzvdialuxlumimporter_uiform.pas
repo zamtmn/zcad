@@ -172,9 +172,6 @@ begin
 
   // Настройка дерева
   vstLightMapping.NodeDataSize := SizeOf(TLightMappingNodeData);
-  vstLightMapping.OnGetText := @vstLightMappingGetText;
-  vstLightMapping.OnCreateEditor := @vstLightMappingCreateEditor;
-  vstLightMapping.OnNewText := @vstLightMappingNewText;
 
   InitializeTreeColumns;
 

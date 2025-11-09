@@ -137,6 +137,7 @@ type
       TextType: TVSTTextType
     );
 
+
   private
     FRecognizedLights: TLightItemArray;  // Массив распознанных светильников
     FLoadedBlocks: TLoadedBlocksList;    // Список доступных блоков
@@ -407,7 +408,7 @@ procedure TfrmDialuxLumImporter.vstLightMappingPaintText(
 );
 begin
   // Устанавливаем цвет текста и фон для всех ячеек
-  // По умолчанию используем черный текст на белом фоне
+  // Это необходимо для корректной отрисовки текста в компоненте TLazVirtualStringTree
   TargetCanvas.Font.Color := clBlack;
   TargetCanvas.Brush.Color := clWhite;
 end;

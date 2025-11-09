@@ -37,6 +37,7 @@ object frmDialuxLumImporter: TfrmDialuxLumImporter
     TreeOptions.SelectionOptions = [toFullRowSelect, toRightClickSelect]
     OnGetText = vstLightMappingGetText
     OnPaintText = vstLightMappingPaintText
+    OnInitNode = vstLightMappingInitNode
     OnCreateEditor = vstLightMappingCreateEditor
     OnNewText = vstLightMappingNewText
   end

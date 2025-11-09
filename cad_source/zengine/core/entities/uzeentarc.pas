@@ -25,7 +25,7 @@ uses
   uzeentwithlocalcs,uzecamera,uzestyleslayers,UGDBSelectedObjArray,uzeentity,
   UGDBPoint3DArray,uzctnrVectorBytes,uzbtypes,uzegeometrytypes,uzeconsts,
   uzglviewareadata,uzegeometry,uzeffdxfsupport,uzeentplain,uzeSnap,Math,
-  uzMVReader,uzCtnrVectorpBaseEntity,uzcinterface,sysutils;
+  uzMVReader,uzCtnrVectorpBaseEntity;
 
 type
 
@@ -99,44 +99,15 @@ begin
 end;
 
 procedure GDBObjARC.TransformAt;
+var
+  tv:GDBVertex4D;
 begin
-  // Отладочный вывод: состояние ДО TransformAt
-  if zcUI <> nil then begin
-    zcUI.TextMessage('=== TransformAt ДО ===', TMWOHistoryOut);
-    zcUI.TextMessage(Format('objmatrix[0]: %.4f %.4f %.4f %.4f',
-      [objmatrix.mtr[0].v[0], objmatrix.mtr[0].v[1], objmatrix.mtr[0].v[2], objmatrix.mtr[0].v[3]]), TMWOHistoryOut);
-    zcUI.TextMessage(Format('objmatrix[1]: %.4f %.4f %.4f %.4f',
-      [objmatrix.mtr[1].v[0], objmatrix.mtr[1].v[1], objmatrix.mtr[1].v[2], objmatrix.mtr[1].v[3]]), TMWOHistoryOut);
-    zcUI.TextMessage(Format('objmatrix[2]: %.4f %.4f %.4f %.4f',
-      [objmatrix.mtr[2].v[0], objmatrix.mtr[2].v[1], objmatrix.mtr[2].v[2], objmatrix.mtr[2].v[3]]), TMWOHistoryOut);
-    zcUI.TextMessage(Format('objmatrix[3]: %.4f %.4f %.4f %.4f',
-      [objmatrix.mtr[3].v[0], objmatrix.mtr[3].v[1], objmatrix.mtr[3].v[2], objmatrix.mtr[3].v[3]]), TMWOHistoryOut);
-    zcUI.TextMessage(Format('Local.P_insert: %.4f %.4f %.4f',
-      [Local.P_insert.x, Local.P_insert.y, Local.P_insert.z]), TMWOHistoryOut);
-    zcUI.TextMessage(Format('R: %.4f', [R]), TMWOHistoryOut);
-  end;
+  objmatrix:=uzegeometry.MatrixMultiply(PGDBObjWithLocalCS(p)^.objmatrix,t_matrix^);
 
-  // Применяем трансформацию к текущей матрице объекта
-  objmatrix := uzegeometry.MatrixMultiply(t_matrix^, PGDBObjWithLocalCS(p)^.objmatrix);
-
-  // После изменения objmatrix пересчитываем локальные параметры
+  tv:=PGDBVertex4D(@t_matrix.mtr[3])^;
+  PGDBVertex4D(@t_matrix.mtr[3])^:=NulVertex4D;
+  PGDBVertex4D(@t_matrix.mtr[3])^:=tv;
   ReCalcFromObjMatrix;
-
-  // Отладочный вывод: состояние ПОСЛЕ TransformAt
-  if zcUI <> nil then begin
-    zcUI.TextMessage('=== TransformAt ПОСЛЕ ===', TMWOHistoryOut);
-    zcUI.TextMessage(Format('objmatrix[0]: %.4f %.4f %.4f %.4f',
-      [objmatrix.mtr[0].v[0], objmatrix.mtr[0].v[1], objmatrix.mtr[0].v[2], objmatrix.mtr[0].v[3]]), TMWOHistoryOut);
-    zcUI.TextMessage(Format('objmatrix[1]: %.4f %.4f %.4f %.4f',
-      [objmatrix.mtr[1].v[0], objmatrix.mtr[1].v[1], objmatrix.mtr[1].v[2], objmatrix.mtr[1].v[3]]), TMWOHistoryOut);
-    zcUI.TextMessage(Format('objmatrix[2]: %.4f %.4f %.4f %.4f',
-      [objmatrix.mtr[2].v[0], objmatrix.mtr[2].v[1], objmatrix.mtr[2].v[2], objmatrix.mtr[2].v[3]]), TMWOHistoryOut);
-    zcUI.TextMessage(Format('objmatrix[3]: %.4f %.4f %.4f %.4f',
-      [objmatrix.mtr[3].v[0], objmatrix.mtr[3].v[1], objmatrix.mtr[3].v[2], objmatrix.mtr[3].v[3]]), TMWOHistoryOut);
-    zcUI.TextMessage(Format('Local.P_insert: %.4f %.4f %.4f',
-      [Local.P_insert.x, Local.P_insert.y, Local.P_insert.z]), TMWOHistoryOut);
-    zcUI.TextMessage(Format('R: %.4f', [R]), TMWOHistoryOut);
-  end;
 end;
 
 function GDBObjARC.onpoint(var objects:TZctnrVectorPGDBaseEntity;
@@ -197,73 +168,17 @@ end;
 
 procedure GDBObjARC.ReCalcFromObjMatrix;
 var
-  mX, mY, mZ: GDBVertex;
-  m: DMatrix4D;
+  ox,oy:gdbvertex;
+  m:DMatrix4D;
 begin
-  // Отладочный вывод: состояние ДО ReCalcFromObjMatrix
-  if zcUI <> nil then begin
-    zcUI.TextMessage('=== ReCalcFromObjMatrix ДО ===', TMWOHistoryOut);
-    zcUI.TextMessage(Format('objmatrix[0]: %.4f %.4f %.4f %.4f',
-      [objmatrix.mtr[0].v[0], objmatrix.mtr[0].v[1], objmatrix.mtr[0].v[2], objmatrix.mtr[0].v[3]]), TMWOHistoryOut);
-    zcUI.TextMessage(Format('objmatrix[1]: %.4f %.4f %.4f %.4f',
-      [objmatrix.mtr[1].v[0], objmatrix.mtr[1].v[1], objmatrix.mtr[1].v[2], objmatrix.mtr[1].v[3]]), TMWOHistoryOut);
-    zcUI.TextMessage(Format('objmatrix[2]: %.4f %.4f %.4f %.4f',
-      [objmatrix.mtr[2].v[0], objmatrix.mtr[2].v[1], objmatrix.mtr[2].v[2], objmatrix.mtr[2].v[3]]), TMWOHistoryOut);
-    zcUI.TextMessage(Format('objmatrix[3]: %.4f %.4f %.4f %.4f',
-      [objmatrix.mtr[3].v[0], objmatrix.mtr[3].v[1], objmatrix.mtr[3].v[2], objmatrix.mtr[3].v[3]]), TMWOHistoryOut);
-  end;
-
-  // Вызываем родительский метод для извлечения базиса
   inherited;
 
-  // Извлекаем колонки матрицы (теперь они уже нормализованные векторы базиса без масштаба)
-  mX.x := objmatrix.mtr[0].v[0];
-  mX.y := objmatrix.mtr[0].v[1];
-  mX.z := objmatrix.mtr[0].v[2];
+  ox:=GetXfFromZ(Local.basis.oz);
+  oy:=NormalizeVertex(VectorDot(Local.basis.oz,Local.basis.ox));
+  m:=CreateMatrixFromBasis(ox,oy,Local.basis.oz);
 
-  mY.x := objmatrix.mtr[1].v[0];
-  mY.y := objmatrix.mtr[1].v[1];
-  mY.z := objmatrix.mtr[1].v[2];
-
-  mZ.x := objmatrix.mtr[2].v[0];
-  mZ.y := objmatrix.mtr[2].v[1];
-  mZ.z := objmatrix.mtr[2].v[2];
-
-  // Восстанавливаем нормализованный базис напрямую
-  // Так как теперь objmatrix не содержит масштаб, базисные векторы уже должны быть единичными
-  Local.basis.ox := NormalizeVertex(mX);
-  Local.basis.oy := NormalizeVertex(mY);
-  Local.basis.oz := NormalizeVertex(mZ);
-
-  // R остается неизменным при трансформациях вращения/перемещения
-  // Он изменяется только при явном масштабировании через команду Scale
-  // (в текущей реализации R не извлекается из матрицы)
-
-  // Извлекаем трансляцию из четвертой колонки
-  Local.P_insert.x := objmatrix.mtr[3].v[0];
-  Local.P_insert.y := objmatrix.mtr[3].v[1];
-  Local.P_insert.z := objmatrix.mtr[3].v[2];
-
-  // Если есть родитель, преобразуем P_insert в его локальную систему координат
-  if bp.ListPos.owner <> nil then begin
-    m := bp.ListPos.owner^.GetMatrix^;
-    MatrixInvert(m);
-    Local.P_insert := VectorTransform3D(Local.P_insert, m);
-  end;
-
-  // Отладочный вывод: состояние ПОСЛЕ ReCalcFromObjMatrix
-  if zcUI <> nil then begin
-    zcUI.TextMessage('=== ReCalcFromObjMatrix ПОСЛЕ ===', TMWOHistoryOut);
-    zcUI.TextMessage(Format('Local.P_insert: %.4f %.4f %.4f',
-      [Local.P_insert.x, Local.P_insert.y, Local.P_insert.z]), TMWOHistoryOut);
-    zcUI.TextMessage(Format('R: %.4f', [R]), TMWOHistoryOut);
-    zcUI.TextMessage(Format('Local.basis.ox: %.4f %.4f %.4f',
-      [Local.basis.ox.x, Local.basis.ox.y, Local.basis.ox.z]), TMWOHistoryOut);
-    zcUI.TextMessage(Format('Local.basis.oy: %.4f %.4f %.4f',
-      [Local.basis.oy.x, Local.basis.oy.y, Local.basis.oy.z]), TMWOHistoryOut);
-    zcUI.TextMessage(Format('Local.basis.oz: %.4f %.4f %.4f',
-      [Local.basis.oz.x, Local.basis.oz.y, Local.basis.oz.z]), TMWOHistoryOut);
-  end;
+  Local.P_insert:=VectorTransform3D(PGDBVertex(@objmatrix.mtr[3])^,m);
+  self.R:=PGDBVertex(@objmatrix.mtr[0])^.x/local.basis.OX.x;
 end;
 
 function GDBObjARC.CalcTrueInFrustum;
@@ -271,8 +186,7 @@ var
   i:integer;
   rad:double;
 begin
-  // Теперь используем R напрямую, так как objMatrix больше не содержит масштаб
-  rad:=abs(R);
+  rad:=abs(ObjMatrix.mtr[0].v[0]);
   for i:=0 to 5 do
     if (frustum[i].v[0]*P_insert_in_WCS.x+frustum[i].v[1]*
       P_insert_in_WCS.y+frustum[i].v[2]*P_insert_in_WCS.z+
@@ -350,103 +264,43 @@ end;
 
 procedure GDBObjARC.CalcObjMatrix;
 var
-  mBasis, mTrans: DMatrix4D;
+  m1:DMatrix4D;
+  v:GDBvertex4D;
 begin
-  // Отладочный вывод: состояние ДО CalcObjMatrix
-  if zcUI <> nil then begin
-    zcUI.TextMessage('=== CalcObjMatrix ДО ===', TMWOHistoryOut);
-    zcUI.TextMessage(Format('Local.P_insert: %.4f %.4f %.4f',
-      [Local.P_insert.x, Local.P_insert.y, Local.P_insert.z]), TMWOHistoryOut);
-    zcUI.TextMessage(Format('R: %.4f', [R]), TMWOHistoryOut);
-    zcUI.TextMessage(Format('Local.basis.ox: %.4f %.4f %.4f',
-      [Local.basis.ox.x, Local.basis.ox.y, Local.basis.ox.z]), TMWOHistoryOut);
-    zcUI.TextMessage(Format('Local.basis.oy: %.4f %.4f %.4f',
-      [Local.basis.oy.x, Local.basis.oy.y, Local.basis.oy.z]), TMWOHistoryOut);
-    zcUI.TextMessage(Format('Local.basis.oz: %.4f %.4f %.4f',
-      [Local.basis.oz.x, Local.basis.oz.y, Local.basis.oz.z]), TMWOHistoryOut);
-  end;
+  inherited CalcObjMatrix;
+  m1:=CreateScaleMatrix(r);
+  objmatrix:=matrixmultiply(m1,objmatrix);
 
-  // Нормализуем базис перед использованием
-  // Это гарантирует что базисные векторы имеют единичную длину
-  Local.basis.ox := NormalizeVertex(Local.basis.ox);
-  Local.basis.oy := NormalizeVertex(Local.basis.oy);
-  Local.basis.oz := NormalizeVertex(Local.basis.oz);
-
-  // Построение матрицы базиса из нормализованной локальной системы координат
-  mBasis := CreateMatrixFromBasis(Local.basis.ox, Local.basis.oy, Local.basis.oz);
-
-  // Построение матрицы трансляции
-  mTrans := CreateTranslationMatrix(Local.P_insert);
-
-  // Сборка финальной матрицы: сначала поворачиваем (базис), затем переносим
-  // ВАЖНО: масштаб R НЕ встраивается в матрицу, а применяется отдельно в precalc
-  objmatrix := MatrixMultiply(mBasis, mTrans);
-
-  // Если есть родитель, умножаем на его матрицу
-  if bp.ListPos.owner <> nil then
-    objmatrix := MatrixMultiply(objmatrix, bp.ListPos.owner^.GetMatrix^);
-
-  // Вычисляем мировые координаты точки вставки
-  P_insert_in_WCS := VectorTransform3D(nulvertex, objmatrix);
-
-  // Отладочный вывод: состояние ПОСЛЕ CalcObjMatrix
-  if zcUI <> nil then begin
-    zcUI.TextMessage('=== CalcObjMatrix ПОСЛЕ ===', TMWOHistoryOut);
-    zcUI.TextMessage(Format('objmatrix[0]: %.4f %.4f %.4f %.4f',
-      [objmatrix.mtr[0].v[0], objmatrix.mtr[0].v[1], objmatrix.mtr[0].v[2], objmatrix.mtr[0].v[3]]), TMWOHistoryOut);
-    zcUI.TextMessage(Format('objmatrix[1]: %.4f %.4f %.4f %.4f',
-      [objmatrix.mtr[1].v[0], objmatrix.mtr[1].v[1], objmatrix.mtr[1].v[2], objmatrix.mtr[1].v[3]]), TMWOHistoryOut);
-    zcUI.TextMessage(Format('objmatrix[2]: %.4f %.4f %.4f %.4f',
-      [objmatrix.mtr[2].v[0], objmatrix.mtr[2].v[1], objmatrix.mtr[2].v[2], objmatrix.mtr[2].v[3]]), TMWOHistoryOut);
-    zcUI.TextMessage(Format('objmatrix[3]: %.4f %.4f %.4f %.4f',
-      [objmatrix.mtr[3].v[0], objmatrix.mtr[3].v[1], objmatrix.mtr[3].v[2], objmatrix.mtr[3].v[3]]), TMWOHistoryOut);
-    zcUI.TextMessage(Format('P_insert_in_WCS: %.4f %.4f %.4f',
-      [P_insert_in_WCS.x, P_insert_in_WCS.y, P_insert_in_WCS.z]), TMWOHistoryOut);
-  end;
+  pgdbvertex(@v)^:=local.p_insert;
+  v.z:=0;
+  v.w:=1;
+  m1:=objMatrix;
+  MatrixInvert(m1);
+  v:=VectorTransform(v,m1);
 end;
 
 procedure GDBObjARC.precalc;
 var
   v:GDBvertex4D;
-  tempVertex:GDBvertex;
 begin
   angle:=endangle-startangle;
   if angle<0 then
     angle:=2*pi+angle;
-
-  // Вычисляем точку на единичной окружности в локальных координатах
   SinCos(startangle,v.y,v.x);
   v.z:=0;
   v.w:=1;
-  // Применяем трансформацию (без масштаба, т.к. objMatrix больше не содержит R)
   v:=VectorTransform(v,objMatrix);
-  tempVertex:=pgdbvertex(@v)^;
-  // Теперь применяем масштаб R отдельно, относительно центра дуги
-  q0:=VertexAdd(P_insert_in_WCS, VertexMulOnSc(VertexSub(tempVertex, P_insert_in_WCS), R));
-
+  q0:=pgdbvertex(@v)^;
   SinCos(startangle+angle/2,v.y,v.x);
   v.z:=0;
   v.w:=1;
   v:=VectorTransform(v,objMatrix);
-  tempVertex:=pgdbvertex(@v)^;
-  q1:=VertexAdd(P_insert_in_WCS, VertexMulOnSc(VertexSub(tempVertex, P_insert_in_WCS), R));
-
+  q1:=pgdbvertex(@v)^;
   SinCos(endangle,v.y,v.x);
   v.z:=0;
   v.w:=1;
   v:=VectorTransform(v,objMatrix);
-  tempVertex:=pgdbvertex(@v)^;
-  q2:=VertexAdd(P_insert_in_WCS, VertexMulOnSc(VertexSub(tempVertex, P_insert_in_WCS), R));
-
-  // Отладочный вывод: значения q0, q1, q2 после precalc
-  if zcUI <> nil then begin
-    zcUI.TextMessage('=== precalc ПОСЛЕ ===', TMWOHistoryOut);
-    zcUI.TextMessage(Format('StartAngle: %.4f, EndAngle: %.4f, angle: %.4f',
-      [StartAngle, EndAngle, angle]), TMWOHistoryOut);
-    zcUI.TextMessage(Format('q0: %.4f %.4f %.4f', [q0.x, q0.y, q0.z]), TMWOHistoryOut);
-    zcUI.TextMessage(Format('q1: %.4f %.4f %.4f', [q1.x, q1.y, q1.z]), TMWOHistoryOut);
-    zcUI.TextMessage(Format('q2: %.4f %.4f %.4f', [q2.x, q2.y, q2.z]), TMWOHistoryOut);
-  end;
+  q2:=pgdbvertex(@v)^;
 end;
 
 procedure GDBObjARC.FormatEntity(var drawing:TDrawingDef;
@@ -511,7 +365,6 @@ procedure GDBObjARC.getoutbound;
 var
   sx,sy,ex,ey,minx,miny,maxx,maxy:double;
   sq,eq,q:integer;
-  pv:GDBVertex;
 begin
   vp.BoundingBox:=CreateBBFrom2Point(q0,q2);
   sq:=getQuadrant(self.StartAngle);
@@ -536,37 +389,29 @@ begin
     maxy:=ey;
   end;
   if (q and 1)>0 then begin
-    pv:=VectorTransform3d(CreateVertex(1,0,0),objMatrix);
-    pv:=VertexAdd(P_insert_in_WCS, VertexMulOnSc(VertexSub(pv, P_insert_in_WCS), R));
-    concatBBandPoint(vp.BoundingBox,pv);
+    concatBBandPoint(vp.BoundingBox,VectorTransform3d(
+      CreateVertex(1,0,0),objMatrix));
     maxx:=1;
   end;
   if (q and 4)>0 then begin
-    pv:=VectorTransform3d(CreateVertex(-1,0,0),objMatrix);
-    pv:=VertexAdd(P_insert_in_WCS, VertexMulOnSc(VertexSub(pv, P_insert_in_WCS), R));
-    concatBBandPoint(vp.BoundingBox,pv);
+    concatBBandPoint(vp.BoundingBox,VectorTransform3d(
+      CreateVertex(-1,0,0),objMatrix));
     minx:=-1;
   end;
   if (q and 2)>0 then begin
-    pv:=VectorTransform3d(CreateVertex(0,1,0),objMatrix);
-    pv:=VertexAdd(P_insert_in_WCS, VertexMulOnSc(VertexSub(pv, P_insert_in_WCS), R));
-    concatBBandPoint(vp.BoundingBox,pv);
+    concatBBandPoint(vp.BoundingBox,VectorTransform3d(
+      CreateVertex(0,1,0),objMatrix));
     maxy:=1;
   end;
   if (q and 8)>0 then begin
-    pv:=VectorTransform3d(CreateVertex(0,-1,0),objMatrix);
-    pv:=VertexAdd(P_insert_in_WCS, VertexMulOnSc(VertexSub(pv, P_insert_in_WCS), R));
-    concatBBandPoint(vp.BoundingBox,pv);
+    concatBBandPoint(vp.BoundingBox,VectorTransform3d(
+      CreateVertex(0,-1,0),objMatrix));
     miny:=-1;
   end;
-  pv:=VectorTransform3d(CreateVertex(minx,maxy,0),objMatrix);
-  outbound[0]:=VertexAdd(P_insert_in_WCS, VertexMulOnSc(VertexSub(pv, P_insert_in_WCS), R));
-  pv:=VectorTransform3d(CreateVertex(maxx,maxy,0),objMatrix);
-  outbound[1]:=VertexAdd(P_insert_in_WCS, VertexMulOnSc(VertexSub(pv, P_insert_in_WCS), R));
-  pv:=VectorTransform3d(CreateVertex(maxx,miny,0),objMatrix);
-  outbound[2]:=VertexAdd(P_insert_in_WCS, VertexMulOnSc(VertexSub(pv, P_insert_in_WCS), R));
-  pv:=VectorTransform3d(CreateVertex(minx,miny,0),objMatrix);
-  outbound[3]:=VertexAdd(P_insert_in_WCS, VertexMulOnSc(VertexSub(pv, P_insert_in_WCS), R));
+   outbound[0]:=VectorTransform3d(CreateVertex(minx,maxy,0),objMatrix);
+  outbound[1]:=VectorTransform3d(CreateVertex(maxx,maxy,0),objMatrix);
+  outbound[2]:=VectorTransform3d(CreateVertex(maxx,miny,0),objMatrix);
+  outbound[3]:=VectorTransform3d(CreateVertex(minx,miny,0),objMatrix);
 end;
 
 procedure GDBObjARC.createpoints(var DC:TDrawContext);
@@ -597,41 +442,18 @@ begin
   Vertex3D_in_WCS_Array.SetSize(lod+1);
 
   Vertex3D_in_WCS_Array.Clear;
-  // Вычисляем точки на единичной окружности и масштабируем их отдельно
   SinCos(startangle,v.y,v.x);
   v.z:=0;
   pv:=VectorTransform3D(v,objmatrix);
-  // Применяем масштаб R относительно центра дуги
-  pv:=VertexAdd(P_insert_in_WCS, VertexMulOnSc(VertexSub(pv, P_insert_in_WCS), R));
   Vertex3D_in_WCS_Array.PushBackData(pv);
 
   for i:=1 to lod do begin
     SinCos(startangle+i/lod*angle,v.y,v.x);
     v.z:=0;
     pv:=VectorTransform3D(v,objmatrix);
-    // Применяем масштаб R относительно центра дуги
-    pv:=VertexAdd(P_insert_in_WCS, VertexMulOnSc(VertexSub(pv, P_insert_in_WCS), R));
     Vertex3D_in_WCS_Array.PushBackData(pv);
   end;
   Vertex3D_in_WCS_Array.Shrink;
-
-  // Отладочный вывод: массив точек после createpoints
-  if zcUI <> nil then begin
-    zcUI.TextMessage('=== createpoints ПОСЛЕ ===', TMWOHistoryOut);
-    zcUI.TextMessage(Format('lod: %d, Vertex3D_in_WCS_Array.Count: %d',
-      [lod, Vertex3D_in_WCS_Array.Count]), TMWOHistoryOut);
-    if Vertex3D_in_WCS_Array.Count > 0 then begin
-      zcUI.TextMessage(Format('Vertex3D_in_WCS_Array[0]: %.4f %.4f %.4f',
-        [Vertex3D_in_WCS_Array.getDataMutable(0)^.x,
-         Vertex3D_in_WCS_Array.getDataMutable(0)^.y,
-         Vertex3D_in_WCS_Array.getDataMutable(0)^.z]), TMWOHistoryOut);
-      if Vertex3D_in_WCS_Array.Count > 1 then
-        zcUI.TextMessage(Format('Vertex3D_in_WCS_Array[last]: %.4f %.4f %.4f',
-          [Vertex3D_in_WCS_Array.getDataMutable(Vertex3D_in_WCS_Array.Count-1)^.x,
-           Vertex3D_in_WCS_Array.getDataMutable(Vertex3D_in_WCS_Array.Count-1)^.y,
-           Vertex3D_in_WCS_Array.getDataMutable(Vertex3D_in_WCS_Array.Count-1)^.z]), TMWOHistoryOut);
-    end;
-  end;
 end;
 
 procedure GDBObjARC.DrawGeometry;

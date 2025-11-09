@@ -128,6 +128,15 @@ type
       const NewText: string
     );
 
+    {**Обработчик отрисовки текста в ячейке дерева}
+    procedure vstLightMappingPaintText(
+      Sender: TBaseVirtualTree;
+      const TargetCanvas: TCanvas;
+      Node: PVirtualNode;
+      Column: TColumnIndex;
+      TextType: TVSTTextType
+    );
+
   private
     FRecognizedLights: TLightItemArray;  // Массив распознанных светильников
     FLoadedBlocks: TLoadedBlocksList;    // Список доступных блоков
@@ -386,6 +395,21 @@ begin
       LM_Debug
     );
   end;
+end;
+
+{**Обработчик отрисовки текста в ячейке дерева}
+procedure TfrmDialuxLumImporter.vstLightMappingPaintText(
+  Sender: TBaseVirtualTree;
+  const TargetCanvas: TCanvas;
+  Node: PVirtualNode;
+  Column: TColumnIndex;
+  TextType: TVSTTextType
+);
+begin
+  // Устанавливаем цвет текста и фон для всех ячеек
+  // По умолчанию используем черный текст на белом фоне
+  TargetCanvas.Font.Color := clBlack;
+  TargetCanvas.Brush.Color := clWhite;
 end;
 
 {**Обработчик нажатия кнопки выполнения установки}

@@ -14,7 +14,9 @@ object frmDialuxLumImporter: TfrmDialuxLumImporter
     Top = 8
     Width = 784
     Anchors = [akTop, akLeft, akRight, akBottom]
+    DefaultText = 'Node'
     Header.AutoSizeIndex = -1
+    Header.MainColumn = -1
     Header.Columns = <
       item
         Position = 0

@@ -137,6 +137,14 @@ type
       TextType: TVSTTextType
     );
 
+    {**Обработчик инициализации узла дерева}
+    procedure vstLightMappingInitNode(
+      Sender: TBaseVirtualTree;
+      ParentNode: PVirtualNode;
+      Node: PVirtualNode;
+      var InitialStates: TVirtualNodeInitStates
+    );
+
 
   private
     FRecognizedLights: TLightItemArray;  // Массив распознанных светильников
@@ -336,9 +344,11 @@ procedure TfrmDialuxLumImporter.vstLightMappingGetText(
 var
   NodeData: PLightMappingNodeData;
 begin
-  NodeData := GetNodeData(Node);
+  // Получаем указатель на данные узла напрямую из Sender
+  NodeData := Sender.GetNodeData(Node);
 
-  if NodeData = nil then
+  // Проверяем валидность указателя
+  if not Assigned(NodeData) then
     Exit;
 
   case Column of
@@ -411,6 +421,30 @@ begin
   // Это необходимо для корректной отрисовки текста в компоненте TLazVirtualStringTree
   TargetCanvas.Font.Color := clBlack;
   TargetCanvas.Brush.Color := clWhite;
+end;
+
+{**Обработчик инициализации узла дерева}
+procedure TfrmDialuxLumImporter.vstLightMappingInitNode(
+  Sender: TBaseVirtualTree;
+  ParentNode: PVirtualNode;
+  Node: PVirtualNode;
+  var InitialStates: TVirtualNodeInitStates
+);
+var
+  NodeData: PLightMappingNodeData;
+begin
+  // Получаем указатель на данные узла
+  NodeData := Sender.GetNodeData(Node);
+
+  // Инициализируем память узла нулевыми значениями
+  if Assigned(NodeData) then
+  begin
+    NodeData^.LumKey := '';
+    NodeData^.Center.x := 0;
+    NodeData^.Center.y := 0;
+    NodeData^.Center.z := 0;
+    NodeData^.SelectedBlockName := '';
+  end;
 end;
 
 {**Обработчик нажатия кнопки выполнения установки}

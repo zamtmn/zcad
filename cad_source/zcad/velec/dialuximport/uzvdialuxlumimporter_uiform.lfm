@@ -17,6 +17,7 @@ object frmDialuxLumImporter: TfrmDialuxLumImporter
     DefaultText = 'Node'
     Header.AutoSizeIndex = -1
     Header.MainColumn = -1
+    NodeDataSize = 48
     Header.Columns = <
       item
         Position = 0

@@ -316,12 +316,19 @@ begin
 
   if NodeData <> nil then
   begin
+    // Явная инициализация управляемых типов для защиты от ошибок
+    NodeData^.LumKey := '';
+    NodeData^.SelectedBlockName := '';
+    NodeData^.Center.x := 0;
+    NodeData^.Center.y := 0;
+    NodeData^.Center.z := 0;
+
+    // Заполняем корректными значениями
     NodeData^.LumKey := LightItem.LumKey;
     NodeData^.Center := LightItem.Center;
-    NodeData^.SelectedBlockName := '';
 
     // Устанавливаем первый блок по умолчанию, если есть
-    if FLoadedBlocks.Count > 0 then
+    if (FLoadedBlocks <> nil) and (FLoadedBlocks.Count > 0) then
       NodeData^.SelectedBlockName := FLoadedBlocks[0];
   end;
 end;
@@ -348,22 +355,42 @@ procedure TfrmDialuxLumImporter.vstLightMappingGetText(
 var
   NodeData: PLightMappingNodeData;
 begin
-  // Получаем указатель на данные узла напрямую из Sender
+  // Инициализируем результат пустой строкой
+  CellText := '';
+
+  // Проверяем валидность узла
+  if Node = nil then
+    Exit;
+
+  // Получаем указатель на данные узла
   NodeData := Sender.GetNodeData(Node);
 
-  // Проверяем валидность указателя
+  // Проверяем валидность указателя на данные
   if not Assigned(NodeData) then
     Exit;
 
-  case Column of
-    0: // Колонка: Импортированные светильники
-      CellText := Format(
-        '%s (%.1f, %.1f)',
-        [NodeData^.LumKey, NodeData^.Center.x, NodeData^.Center.y]
-      );
+  // Защита от исключений при чтении данных
+  try
+    case Column of
+      0: // Колонка: Импортированные светильники
+        CellText := Format(
+          '%s (%.1f, %.1f)',
+          [NodeData^.LumKey, NodeData^.Center.x, NodeData^.Center.y]
+        );
 
-    1: // Колонка: Блок для установки
-      CellText := NodeData^.SelectedBlockName;
+      1: // Колонка: Блок для установки
+        CellText := NodeData^.SelectedBlockName;
+    end;
+  except
+    on E: Exception do
+    begin
+      programlog.LogOutFormatStr(
+        'Ошибка чтения NodeData в GetText: %s',
+        [E.Message],
+        LM_Error
+      );
+      CellText := '';
+    end;
   end;
 end;
 
@@ -436,17 +463,23 @@ procedure TfrmDialuxLumImporter.vstLightMappingInitNode(
   Node: PVirtualNode;
   var InitialStates: TVirtualNodeInitStates
 );
+var
+  NodeData: PLightMappingNodeData;
 begin
-  // VirtualStringTree автоматически инициализирует память узла нулями.
-  // Ручная инициализация управляемых типов (строк) в OnInitNode может
-  // вызвать ошибки доступа к памяти, так как узел еще не полностью
-  // инициализирован. Все поля записи TLightMappingNodeData будут
-  // автоматически установлены в значения по умолчанию (пустые строки,
-  // нулевые координаты) самим компонентом.
-  //
-  // ВАЖНО: Не выполнять здесь никаких операций с NodeData, так как
-  // это может привести к ошибкам при работе со строками и другими
-  // управляемыми типами данных.
+  // Получаем указатель на данные узла
+  NodeData := Sender.GetNodeData(Node);
+
+  // Инициализируем управляемые типы (строки) пустыми значениями
+  // Это необходимо для корректной работы с памятью и предотвращения
+  // ошибок при чтении неинициализированных строковых полей
+  if Assigned(NodeData) then
+  begin
+    NodeData^.LumKey := '';
+    NodeData^.SelectedBlockName := '';
+    NodeData^.Center.x := 0;
+    NodeData^.Center.y := 0;
+    NodeData^.Center.z := 0;
+  end;
 end;
 
 {**Обработчик освобождения узла дерева}

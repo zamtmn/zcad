@@ -430,21 +430,17 @@ procedure TfrmDialuxLumImporter.vstLightMappingInitNode(
   Node: PVirtualNode;
   var InitialStates: TVirtualNodeInitStates
 );
-var
-  NodeData: PLightMappingNodeData;
 begin
-  // Получаем указатель на данные узла
-  NodeData := Sender.GetNodeData(Node);
-
-  // Инициализируем память узла нулевыми значениями
-  if Assigned(NodeData) then
-  begin
-    NodeData^.LumKey := '';
-    NodeData^.Center.x := 0;
-    NodeData^.Center.y := 0;
-    NodeData^.Center.z := 0;
-    NodeData^.SelectedBlockName := '';
-  end;
+  // VirtualStringTree автоматически инициализирует память узла нулями.
+  // Ручная инициализация управляемых типов (строк) в OnInitNode может
+  // вызвать ошибки доступа к памяти, так как узел еще не полностью
+  // инициализирован. Все поля записи TLightMappingNodeData будут
+  // автоматически установлены в значения по умолчанию (пустые строки,
+  // нулевые координаты) самим компонентом.
+  //
+  // ВАЖНО: Не выполнять здесь никаких операций с NodeData, так как
+  // это может привести к ошибкам при работе со строками и другими
+  // управляемыми типами данных.
 end;
 
 {**Обработчик нажатия кнопки выполнения установки}

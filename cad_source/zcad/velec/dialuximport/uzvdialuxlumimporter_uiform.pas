@@ -145,11 +145,15 @@ type
       var InitialStates: TVirtualNodeInitStates
     );
 
+    {**Обработчик освобождения узла дерева}
+    procedure vstLightMappingFreeNode(
+      Sender: TBaseVirtualTree;
+      Node: PVirtualNode
+    );
 
   private
     FRecognizedLights: TLightItemArray;  // Массив распознанных светильников
     FLoadedBlocks: TLoadedBlocksList;    // Список доступных блоков
-    FEditLink: TComboBoxEditLink;        // Ссылка на редактор
 
     {**Инициализировать колонки дерева}
     procedure InitializeTreeColumns;
@@ -370,13 +374,15 @@ procedure TfrmDialuxLumImporter.vstLightMappingCreateEditor(
   Column: TColumnIndex;
   out EditLink: IVTEditLink
 );
+var
+  ComboEditLink: TComboBoxEditLink;
 begin
   // Для второй колонки создаем редактор с выпадающим списком
   if Column = 1 then
   begin
-    FEditLink := TComboBoxEditLink.Create;
-    FEditLink.SetBlocksList(FLoadedBlocks);
-    EditLink := FEditLink;
+    ComboEditLink := TComboBoxEditLink.Create;
+    ComboEditLink.SetBlocksList(FLoadedBlocks);
+    EditLink := ComboEditLink;
   end
   else
     EditLink := nil;
@@ -441,6 +447,25 @@ begin
   // ВАЖНО: Не выполнять здесь никаких операций с NodeData, так как
   // это может привести к ошибкам при работе со строками и другими
   // управляемыми типами данных.
+end;
+
+{**Обработчик освобождения узла дерева}
+procedure TfrmDialuxLumImporter.vstLightMappingFreeNode(
+  Sender: TBaseVirtualTree;
+  Node: PVirtualNode
+);
+var
+  NodeData: PLightMappingNodeData;
+begin
+  // Получаем указатель на данные узла
+  NodeData := Sender.GetNodeData(Node);
+
+  // Очищаем строковые поля для корректного освобождения памяти
+  if Assigned(NodeData) then
+  begin
+    NodeData^.LumKey := '';
+    NodeData^.SelectedBlockName := '';
+  end;
 end;
 
 {**Обработчик нажатия кнопки выполнения установки}

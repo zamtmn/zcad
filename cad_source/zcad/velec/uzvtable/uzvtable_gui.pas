@@ -329,10 +329,10 @@ var
 begin
   Result := 0;
 
-  if Grid = nil then
+  if (Grid = nil) or (Grid.Worksheet = nil) then
     Exit;
 
-  Selection := Grid.Selection;
+  Selection := Grid.Worksheet.GetSelection;
   if Length(Selection) > 0 then
     Result := Selection[0].Col2 - Selection[0].Col1 + 1;
 end;
@@ -350,10 +350,10 @@ begin
   StartCol := 0;
   EndCol := 0;
 
-  if Grid = nil then
+  if (Grid = nil) or (Grid.Worksheet = nil) then
     Exit;
 
-  Selection := Grid.Selection;
+  Selection := Grid.Worksheet.GetSelection;
   if Length(Selection) > 0 then
   begin
     StartRow := Selection[0].Row1;

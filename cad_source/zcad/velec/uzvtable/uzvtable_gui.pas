@@ -32,6 +32,7 @@ uses
   StdCtrls,
   ExtCtrls,
   Grids,
+  Dialogs,
   fpspreadsheet,
   fpsTypes,
   fpspreadsheetgrid,
@@ -50,6 +51,7 @@ type
     FCloseButton: TButton;
     FRefreshButton: TButton;
     FExportButton: TButton;
+    FSaveDialog: TSaveDialog;
 
     procedure CreateComponents;
     procedure CloseButtonClick(Sender: TObject);
@@ -219,6 +221,14 @@ begin
   FSpreadsheetGrid.Align := alClient;
   FSpreadsheetGrid.Options := FSpreadsheetGrid.Options + [goEditing];
   FSpreadsheetGrid.WorkbookSource := FWorkbookSource;
+
+  // Создаем диалог сохранения файла
+  FSaveDialog := TSaveDialog.Create(Self);
+  FSaveDialog.Title := 'Сохранить таблицу / Save Table';
+  FSaveDialog.Filter := 'Файлы Excel (*.xlsx)|*.xlsx|Все файлы (*.*)|*.*';
+  FSaveDialog.DefaultExt := 'xlsx';
+  FSaveDialog.FilterIndex := 1;
+  FSaveDialog.FileName := 'table_export.xlsx';
 end;
 
 procedure TUzvTableForm.ShowTable(const aTable: TUzvTableGrid);
@@ -283,17 +293,18 @@ begin
     Exit;
   end;
 
-  // Запрашиваем имя файла у пользователя
-  fileName := 'table_export.xlsx';
+  // Показываем стандартный диалог выбора места сохранения и имени файла
+  if FSaveDialog.Execute then
+  begin
+    fileName := FSaveDialog.FileName;
 
-  // TODO: Добавить диалог выбора файла
-
-  try
-    FWorkbookSource.Workbook.WriteToFile(fileName, sfOOXML, True);
-    zcUI.TextMessage('Таблица экспортирована в файл: ' + fileName + ' / Table exported to file: ' + fileName, TMWOHistoryOut);
-  except
-    on E: Exception do
-      zcUI.TextMessage('Ошибка экспорта: ' + E.Message + ' / Export error: ' + E.Message, TMWOHistoryOut);
+    try
+      FWorkbookSource.Workbook.WriteToFile(fileName, sfOOXML, True);
+      zcUI.TextMessage('Таблица экспортирована в файл: ' + fileName + ' / Table exported to file: ' + fileName, TMWOHistoryOut);
+    except
+      on E: Exception do
+        zcUI.TextMessage('Ошибка экспорта: ' + E.Message + ' / Export error: ' + E.Message, TMWOHistoryOut);
+    end;
   end;
 end;
 

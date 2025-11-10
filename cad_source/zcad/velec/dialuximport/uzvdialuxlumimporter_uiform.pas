@@ -34,6 +34,7 @@ uses
   Dialogs,
   ButtonPanel,
   Messages,
+  uzcinterface,
   laz.VirtualTrees,
   uzegeometrytypes,
   uzvdialuxlumimporter_structs,
@@ -137,13 +138,13 @@ type
       TextType: TVSTTextType
     );
 
-    {**Обработчик инициализации узла дерева}
-    procedure vstLightMappingInitNode(
-      Sender: TBaseVirtualTree;
-      ParentNode: PVirtualNode;
-      Node: PVirtualNode;
-      var InitialStates: TVirtualNodeInitStates
-    );
+    //{**Обработчик инициализации узла дерева}
+    //procedure vstLightMappingInitNode(
+    //  Sender: TBaseVirtualTree;
+    //  ParentNode: PVirtualNode;
+    //  Node: PVirtualNode;
+    //  var InitialStates: TVirtualNodeInitStates
+    //);
 
     {**Обработчик освобождения узла дерева}
     procedure vstLightMappingFreeNode(
@@ -248,6 +249,9 @@ begin
       vstLightMapping.TreeOptions.SelectionOptions + [toFullRowSelect];
     vstLightMapping.TreeOptions.MiscOptions :=
       vstLightMapping.TreeOptions.MiscOptions + [toEditable];
+    vstLightMapping.TreeOptions.MiscOptions :=
+      vstLightMapping.TreeOptions.MiscOptions + [toEditOnClick];
+
   end
   else
   begin
@@ -296,6 +300,7 @@ begin
     for i := 0 to High(FRecognizedLights) do
     begin
       LightItem := FRecognizedLights[i];
+
       CreateLightNode(LightItem);
     end;
 
@@ -326,6 +331,9 @@ begin
     // Заполняем корректными значениями
     NodeData^.LumKey := LightItem.LumKey;
     NodeData^.Center := LightItem.Center;
+
+    //zcUI.TextMessage('======='+LightItem.LumKey,TMWOHistoryOut);
+    //zcUI.TextMessage('+++++++'+FLoadedBlocks[0],TMWOHistoryOut);
 
     // Устанавливаем первый блок по умолчанию, если есть
     if (FLoadedBlocks <> nil) and (FLoadedBlocks.Count > 0) then
@@ -457,30 +465,30 @@ begin
 end;
 
 {**Обработчик инициализации узла дерева}
-procedure TfrmDialuxLumImporter.vstLightMappingInitNode(
-  Sender: TBaseVirtualTree;
-  ParentNode: PVirtualNode;
-  Node: PVirtualNode;
-  var InitialStates: TVirtualNodeInitStates
-);
-var
-  NodeData: PLightMappingNodeData;
-begin
-  // Получаем указатель на данные узла
-  NodeData := Sender.GetNodeData(Node);
-
-  // Инициализируем управляемые типы (строки) пустыми значениями
-  // Это необходимо для корректной работы с памятью и предотвращения
-  // ошибок при чтении неинициализированных строковых полей
-  if Assigned(NodeData) then
-  begin
-    NodeData^.LumKey := '';
-    NodeData^.SelectedBlockName := '';
-    NodeData^.Center.x := 0;
-    NodeData^.Center.y := 0;
-    NodeData^.Center.z := 0;
-  end;
-end;
+//procedure TfrmDialuxLumImporter.vstLightMappingInitNode(
+//  Sender: TBaseVirtualTree;
+//  ParentNode: PVirtualNode;
+//  Node: PVirtualNode;
+//  var InitialStates: TVirtualNodeInitStates
+//);
+//var
+//  NodeData: PLightMappingNodeData;
+//begin
+//  // Получаем указатель на данные узла
+//  NodeData := Sender.GetNodeData(Node);
+//
+//  // Инициализируем управляемые типы (строки) пустыми значениями
+//  // Это необходимо для корректной работы с памятью и предотвращения
+//  // ошибок при чтении неинициализированных строковых полей
+//  if Assigned(NodeData) then
+//  begin
+//    NodeData^.LumKey := '';
+//    NodeData^.SelectedBlockName := '';
+//    NodeData^.Center.x := 0;
+//    NodeData^.Center.y := 0;
+//    NodeData^.Center.z := 0;
+//  end;
+//end;
 
 {**Обработчик освобождения узла дерева}
 procedure TfrmDialuxLumImporter.vstLightMappingFreeNode(

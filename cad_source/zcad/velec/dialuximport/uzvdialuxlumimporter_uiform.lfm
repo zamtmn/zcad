@@ -7,7 +7,6 @@ object frmDialuxLumImporter: TfrmDialuxLumImporter
   ClientHeight = 600
   ClientWidth = 800
   Position = poScreenCenter
-  LCLVersion = '3.0.0.0'
   object vstLightMapping: TLazVirtualStringTree
     Left = 8
     Height = 536
@@ -16,31 +15,29 @@ object frmDialuxLumImporter: TfrmDialuxLumImporter
     Anchors = [akTop, akLeft, akRight, akBottom]
     DefaultText = 'Node'
     Header.AutoSizeIndex = -1
-    Header.MainColumn = -1
-    NodeDataSize = 48
-    Header.Columns = <
+    Header.Columns = <    
       item
         Position = 0
         Text = 'Импортированные светильники'
         Width = 300
-      end
+      end    
       item
+        Options = [coAllowClick, coEnabled, coParentBidiMode, coParentColor, coResizable, coShowDropMark, coVisible, coSmartResize, coAllowFocus, coEditable]
         Position = 1
         Text = 'Блок для установки'
         Width = 450
-        Options = [coAllowClick, coEnabled, coParentBidiMode, coParentColor, coResizable, coShowDropMark, coVisible, coSmartResize, coAllowFocus, coEditable]
       end>
     Header.DefaultHeight = 24
     Header.Height = 24
     Header.Options = [hoColumnResize, hoDblClickResize, hoVisible]
+    NodeDataSize = 48
     TabOrder = 0
-    TreeOptions.MiscOptions = [toEditable, toFullRepaintOnResize, toInitOnSave, toToggleOnDblClick, toWheelPanning]
+    TreeOptions.MiscOptions = [toEditable, toFullRepaintOnResize, toInitOnSave, toToggleOnDblClick, toWheelPanning, toEditOnClick]
     TreeOptions.SelectionOptions = [toFullRowSelect, toRightClickSelect]
+    OnCreateEditor = vstLightMappingCreateEditor
+    OnFreeNode = vstLightMappingFreeNode
     OnGetText = vstLightMappingGetText
     OnPaintText = vstLightMappingPaintText
-    OnInitNode = vstLightMappingInitNode
-    OnFreeNode = vstLightMappingFreeNode
-    OnCreateEditor = vstLightMappingCreateEditor
     OnNewText = vstLightMappingNewText
   end
   object btnApplyInstallation: TButton

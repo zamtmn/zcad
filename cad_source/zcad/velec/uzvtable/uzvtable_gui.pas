@@ -37,7 +37,9 @@ uses
   fpsTypes,
   fpspreadsheetgrid,
   fpspreadsheetctrls,
-  uzvtable_data;
+  Generics.Collections,
+  uzvtable_data,
+  uzvtable_space;
 
 type
   // Форма для отображения таблицы
@@ -51,12 +53,14 @@ type
     FCloseButton: TButton;
     FRefreshButton: TButton;
     FExportButton: TButton;
+    FFillSpacesButton: TButton;
     FSaveDialog: TSaveDialog;
 
     procedure CreateComponents;
     procedure CloseButtonClick(Sender: TObject);
     procedure RefreshButtonClick(Sender: TObject);
     procedure ExportButtonClick(Sender: TObject);
+    procedure FillSpacesButtonClick(Sender: TObject);
   public
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
@@ -201,6 +205,16 @@ begin
   FExportButton.Top := (BUTTON_PANEL_HEIGHT - BUTTON_HEIGHT) div 2;
   FExportButton.OnClick := @ExportButtonClick;
 
+  // Кнопка "Заполнить пространства"
+  FFillSpacesButton := TButton.Create(FButtonPanel);
+  FFillSpacesButton.Parent := FButtonPanel;
+  FFillSpacesButton.Caption := 'Заполнить пространства';
+  FFillSpacesButton.Width := BUTTON_WIDTH + 50;
+  FFillSpacesButton.Height := BUTTON_HEIGHT;
+  FFillSpacesButton.Left := BUTTON_SPACING * 3 + BUTTON_WIDTH * 2;
+  FFillSpacesButton.Top := (BUTTON_PANEL_HEIGHT - BUTTON_HEIGHT) div 2;
+  FFillSpacesButton.OnClick := @FillSpacesButtonClick;
+
   // Кнопка "Закрыть"
   FCloseButton := TButton.Create(FButtonPanel);
   FCloseButton.Parent := FButtonPanel;
@@ -305,6 +319,142 @@ begin
       on E: Exception do
         zcUI.TextMessage('Ошибка экспорта: ' + E.Message + ' / Export error: ' + E.Message, TMWOHistoryOut);
     end;
+  end;
+end;
+
+// Получить количество выделенных колонок в таблице
+function GetSelectedColumnsCount(Grid: TsWorksheetGrid): Integer;
+var
+  Selection: TsCellRangeArray;
+begin
+  Result := 0;
+
+  if Grid = nil then
+    Exit;
+
+  Selection := Grid.Selection;
+  if Length(Selection) > 0 then
+    Result := Selection[0].Col2 - Selection[0].Col1 + 1;
+end;
+
+// Получить выделенную область таблицы
+procedure GetSelectedRange(
+  Grid: TsWorksheetGrid;
+  out StartRow, EndRow, StartCol, EndCol: Integer
+);
+var
+  Selection: TsCellRangeArray;
+begin
+  StartRow := 0;
+  EndRow := 0;
+  StartCol := 0;
+  EndCol := 0;
+
+  if Grid = nil then
+    Exit;
+
+  Selection := Grid.Selection;
+  if Length(Selection) > 0 then
+  begin
+    StartRow := Selection[0].Row1;
+    EndRow := Selection[0].Row2;
+    StartCol := Selection[0].Col1;
+    EndCol := Selection[0].Col2;
+  end;
+end;
+
+// Обработчик нажатия кнопки "Заполнить пространства"
+procedure TUzvTableForm.FillSpacesButtonClick(Sender: TObject);
+var
+  RoomList: TRoomInfoList;
+  RoomInfo: TRoomInfo;
+  StartRow, EndRow, StartCol, EndCol: Integer;
+  ColCount: Integer;
+  Row, Col: Integer;
+  CellValue: string;
+  Worksheet: TsWorksheet;
+begin
+  if (FWorkbookSource = nil) or (FWorksheet = nil) then
+  begin
+    zcUI.TextMessage(
+      'Ошибка: таблица не инициализирована',
+      TMWOHistoryOut
+    );
+    Exit;
+  end;
+
+  // Получаем количество выделенных колонок
+  ColCount := GetSelectedColumnsCount(FSpreadsheetGrid);
+
+  // Проверяем минимальное количество колонок
+  if ColCount < 2 then
+  begin
+    zcUI.TextMessage(
+      'Минимум должно быть выделено 2-е колонки',
+      TMWOHistoryOut
+    );
+    Exit;
+  end;
+
+  // Получаем диапазон выделенных ячеек
+  GetSelectedRange(FSpreadsheetGrid, StartRow, EndRow, StartCol, EndCol);
+
+  if (StartRow < 0) or (EndRow < 0) then
+  begin
+    zcUI.TextMessage(
+      'Ошибка: не удалось определить выделенную область',
+      TMWOHistoryOut
+    );
+    Exit;
+  end;
+
+  // Создаем список помещений
+  RoomList := TRoomInfoList.Create;
+  try
+    Worksheet := FWorkbookSource.Workbook.GetFirstWorksheet;
+
+    // Проходим по всем выделенным строкам
+    for Row := StartRow to EndRow do
+    begin
+      // Инициализируем структуру помещения
+      RoomInfo.RoomPos := '';
+      RoomInfo.RoomName := '';
+      RoomInfo.RoomArea := '';
+      RoomInfo.RoomCategory := '';
+
+      // Считываем значения из колонок в зависимости от их количества
+      for Col := 0 to ColCount - 1 do
+      begin
+        CellValue := Worksheet.ReadAsText(Row, StartCol + Col);
+
+        case Col of
+          0: RoomInfo.RoomPos := CellValue;
+          1: RoomInfo.RoomName := CellValue;
+          2: RoomInfo.RoomArea := CellValue;
+          3: RoomInfo.RoomCategory := CellValue;
+        end;
+      end;
+
+      // Добавляем помещение в список только если задана позиция
+      if RoomInfo.RoomPos <> '' then
+        RoomList.Add(RoomInfo);
+    end;
+
+    // Проверяем что список не пуст
+    if RoomList.Count = 0 then
+    begin
+      zcUI.TextMessage(
+        'Нет данных для заполнения пространств',
+        TMWOHistoryOut
+      );
+      Exit;
+    end;
+
+    // Вызываем процедуру заполнения пространств
+    FillSpacesFromTable(RoomList);
+
+  finally
+    RoomList.Free;
   end;
 end;
 

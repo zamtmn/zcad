@@ -38,6 +38,7 @@ uses
   laz.VirtualTrees,
   uzegeometrytypes,
   uzvdialuxlumimporter_structs,
+  uzvdialuxlumimporter_utils,
   uzclog;
 
 type
@@ -531,10 +532,17 @@ var
   NodeData: PLightMappingNodeData;
   InstalledCount: Integer;
   ErrorCount: Integer;
+  InsertedBlock: PGDBObjBlockInsert;
+const
+  // Угол поворота и масштаб по умолчанию
+  DEFAULT_ROTATION = 0.0;
+  DEFAULT_SCALE_X = 1.0;
+  DEFAULT_SCALE_Y = 1.0;
 begin
   InstalledCount := 0;
   ErrorCount := 0;
 
+  // Проходим по всем узлам дерева
   Node := vstLightMapping.GetFirst;
   while Node <> nil do
   begin
@@ -554,18 +562,50 @@ begin
       end
       else
       begin
-        // TODO: Здесь будет вызов функции установки блока на чертеж
-        programlog.LogOutFormatStr(
-          'Светильник "%s" → Блок "%s" (%.1f, %.1f)',
-          [
-            NodeData^.LumKey,
-            NodeData^.SelectedBlockName,
-            NodeData^.Center.x,
-            NodeData^.Center.y
-          ],
-          LM_Info
-        );
-        Inc(InstalledCount);
+        try
+          // Вызываем функцию вставки блока на чертеж
+          InsertedBlock := drawInsertBlock(
+            NodeData^.Center,
+            DEFAULT_SCALE_X,
+            DEFAULT_SCALE_Y,
+            DEFAULT_ROTATION,
+            NodeData^.SelectedBlockName
+          );
+
+          if InsertedBlock <> nil then
+          begin
+            programlog.LogOutFormatStr(
+              'Светильник "%s" → Блок "%s" установлен в (%.1f, %.1f)',
+              [
+                NodeData^.LumKey,
+                NodeData^.SelectedBlockName,
+                NodeData^.Center.x,
+                NodeData^.Center.y
+              ],
+              LM_Info
+            );
+            Inc(InstalledCount);
+          end
+          else
+          begin
+            programlog.LogOutFormatStr(
+              'Светильник "%s": ошибка вставки блока "%s"',
+              [NodeData^.LumKey, NodeData^.SelectedBlockName],
+              LM_Error
+            );
+            Inc(ErrorCount);
+          end;
+        except
+          on E: Exception do
+          begin
+            programlog.LogOutFormatStr(
+              'Светильник "%s": исключение при вставке блока "%s": %s',
+              [NodeData^.LumKey, NodeData^.SelectedBlockName, E.Message],
+              LM_Error
+            );
+            Inc(ErrorCount);
+          end;
+        end;
       end;
     end;
 

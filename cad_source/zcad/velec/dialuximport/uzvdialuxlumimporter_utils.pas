@@ -34,8 +34,16 @@ uses
   uzeentpolyline,
   uzeentline,
   uzeentblockinsert,
+  uzeentdevice,
   uzeconsts,
-  uzestyleslayers;
+  uzestyleslayers,
+  uzcdrawings,
+  uzcenitiesvariablesextender,
+  uzgldrawcontext,
+  UUnitManager,
+  uzbPaths,
+  uzcTranslations,
+  uzvconsts;
 
 {**Вывести сообщение в командную строку CAD}
 procedure PrintMessage(const Msg: string);
@@ -76,6 +84,13 @@ function IsEntityOnLayer(
   Entity: PGDBObjEntity;
   const LayerName: string
 ): Boolean;
+
+{**Вставить устройство или блок на чертеж}
+function drawInsertBlock(
+  pt: GDBVertex;
+  scalex, scaley, iRotate: double;
+  InsertionName: string
+): PGDBObjBlockInsert;
 
 implementation
 
@@ -212,6 +227,76 @@ begin
 
   // Сравниваем с искомым именем (без учета регистра)
   Result := AnsiCompareText(EntityLayerName, LayerName) = 0;
+end;
+
+{**Вставить устройство или блок на чертеж}
+function drawInsertBlock(
+  pt: GDBVertex;
+  scalex, scaley, iRotate: double;
+  InsertionName: string
+): PGDBObjBlockInsert;
+var
+  rc: TDrawContext;
+  entvarext: TVariablesExtender;
+  psu: ptunit;
+  itDevice: boolean;
+  blockName: string;
+begin
+  // Проверяем на входе устройство или блок
+  itDevice := AnsiPos(velec_beforeNameGlobalSchemaBlock, InsertionName) = 1;
+
+  // Добавляем в чертеж то что на входе
+  drawings.AddBlockFromDBIfNeed(drawings.GetCurrentDWG, InsertionName);
+
+  if itDevice then
+  begin
+    // Если устройство добавляем т блок
+    blockName := Copy(
+      InsertionName,
+      length(velec_beforeNameGlobalSchemaBlock) + 1,
+      length(InsertionName) - length(velec_beforeNameGlobalSchemaBlock)
+    );
+    drawings.AddBlockFromDBIfNeed(drawings.GetCurrentDWG, blockName);
+
+    // Создаем примитив
+    result := GDBObjDevice.CreateInstance;
+  end
+  else
+  begin
+    blockName := InsertionName;
+    result := GDBObjBlockInsert.CreateInstance;
+  end;
+
+  // Настраивает
+  result^.Name := blockName;
+  result^.Local.P_insert := pt;
+  result^.scale := uzegeometry.CreateVertex(scalex, scaley, 1);
+  result^.rotate := iRotate;
+
+  // Строим переменную часть примитива (та что может редактироваться)
+  result^.BuildVarGeometry(drawings.GetCurrentDWG^);
+
+  // Строим постоянную часть примитива
+  result^.BuildGeometry(drawings.GetCurrentDWG^);
+
+  // "Форматируем"
+  rc := drawings.GetCurrentDWG^.CreateDrawingRC;
+  result^.FormatEntity(drawings.GetCurrentDWG^, rc);
+
+  // Добавляем свойства
+  if itDevice then
+  begin
+    entvarext := result^.GetExtension<TVariablesExtender>;
+    if entvarext <> nil then
+    begin
+      psu := units.findunit(GetSupportPaths, @InterfaceTranslate, InsertionName);
+      if psu <> nil then
+        entvarext.entityunit.copyfrom(psu);
+    end;
+  end;
+
+  // Дальше как обычно
+  zcAddEntToCurrentDrawingConstructRoot(result);
 end;
 
 end.

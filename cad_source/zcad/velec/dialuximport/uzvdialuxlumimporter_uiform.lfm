@@ -48,5 +48,6 @@ object frmDialuxLumImporter: TfrmDialuxLumImporter
     Anchors = [akLeft, akRight, akBottom]
     Caption = 'Выполнить установку'
     TabOrder = 1
+    OnClick = btnApplyInstallationClick
   end
 end

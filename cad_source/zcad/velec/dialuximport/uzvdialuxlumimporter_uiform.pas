@@ -39,6 +39,7 @@ uses
   uzegeometrytypes,
   uzvdialuxlumimporter_structs,
   uzvdialuxlumimporter_utils,
+  uzeentblockinsert,
   uzclog;
 
 type
@@ -92,6 +93,9 @@ type
   end;
 
   {**Форма сопоставления светильников и блоков}
+
+  { TfrmDialuxLumImporter }
+
   TfrmDialuxLumImporter = class(TForm)
     btnApplyInstallation: TButton;
     vstLightMapping: TLazVirtualStringTree;
@@ -518,7 +522,7 @@ begin
     [],
     LM_Info
   );
-
+  zcUI.TextMessage('кнопку нажал',TMWOHistoryOut);
   ExecuteInstallation;
 
   // Закрываем форму после установки
@@ -563,6 +567,7 @@ begin
       else
       begin
         try
+          zcUI.TextMessage('SelectedBlockName='+NodeData^.SelectedBlockName,TMWOHistoryOut);
           // Вызываем функцию вставки блока на чертеж
           InsertedBlock := drawInsertBlock(
             NodeData^.Center,

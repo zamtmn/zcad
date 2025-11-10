@@ -43,6 +43,8 @@ uses
   UUnitManager,
   uzbPaths,
   uzcTranslations,
+  Varman,
+  uzcutils,
   uzvconsts;
 
 {**Вывести сообщение в командную строку CAD}
@@ -286,7 +288,7 @@ begin
   // Добавляем свойства
   if itDevice then
   begin
-    entvarext := result^.GetExtension<TVariablesExtender>;
+    entvarext := result^.specialize GetExtension<TVariablesExtender>;
     if entvarext <> nil then
     begin
       psu := units.findunit(GetSupportPaths, @InterfaceTranslate, InsertionName);

@@ -34,6 +34,8 @@ uses
   uzeentity,
   uzeentpolyline,
   uzcenitiesvariablesextender,
+  gzctnrVectorTypes,
+  uzeconsts,
   varmandef;
 
 const

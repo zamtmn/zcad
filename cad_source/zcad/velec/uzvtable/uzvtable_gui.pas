@@ -408,10 +408,15 @@ begin
     Exit;
   end;
 
+  // Логирование выделенной области для отладки (можно включить при необходимости)
+  //zcLog.LogInfo(Format('Выделена область: строки %d-%d, колонки %d-%d',
+  //  [StartRow, EndRow, StartCol, EndCol]));
+
   // Создаем список помещений
   RoomList := TRoomInfoList.Create;
   try
-    Worksheet := FWorkbookSource.Workbook.GetFirstWorksheet;
+    // Используем worksheet из grid для чтения выделенных ячеек
+    Worksheet := FSpreadsheetGrid.Worksheet;
 
     // Проходим по всем выделенным строкам
     for Row := StartRow to EndRow do
@@ -426,6 +431,9 @@ begin
       for Col := 0 to ColCount - 1 do
       begin
         CellValue := Worksheet.ReadAsText(Row, StartCol + Col);
+
+        // Логирование прочитанных значений для отладки (можно включить при необходимости)
+        //zcLog.LogInfo(Format('Ячейка [%d, %d]: "%s"', [Row, StartCol + Col, CellValue]));
 
         case Col of
           0: RoomInfo.RoomPos := CellValue;

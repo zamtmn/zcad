@@ -98,6 +98,10 @@ type
 
   TfrmDialuxLumImporter = class(TForm)
     btnApplyInstallation: TButton;
+    lblRotation: TLabel;
+    edtRotation: TEdit;
+    lblScale: TLabel;
+    edtScale: TEdit;
     vstLightMapping: TLazVirtualStringTree;
 
     {**Обработчик создания формы}
@@ -173,6 +177,12 @@ type
     {**Получить данные узла}
     function GetNodeData(Node: PVirtualNode): PLightMappingNodeData;
 
+    {**Получить значение угла поворота из поля ввода}
+    function GetRotationAngle: Double;
+
+    {**Получить значение масштаба из поля ввода}
+    function GetScaleFactor: Double;
+
     {**Выполнить установку светильников на чертеж}
     procedure ExecuteInstallation;
 
@@ -195,13 +205,20 @@ begin
   // Установка базовых свойств формы
   Caption := 'Импорт светильников Dialux';
   Width := 800;
-  Height := 600;
+  Height := 624;
   Position := poScreenCenter;
 
   // Настройка дерева
   vstLightMapping.NodeDataSize := SizeOf(TLightMappingNodeData);
 
   InitializeTreeColumns;
+
+  // Настройка полей ввода поворота и масштаба
+  lblRotation.Caption := 'Поворот:';
+  edtRotation.Text := '0';
+
+  lblScale.Caption := 'Масштаб:';
+  edtScale.Text := '1';
 
   // Настройка кнопки
   btnApplyInstallation.Caption := 'Выполнить установку';
@@ -514,6 +531,65 @@ begin
   end;
 end;
 
+{**Получить значение угла поворота из поля ввода}
+function TfrmDialuxLumImporter.GetRotationAngle: Double;
+var
+  TempValue: Double;
+begin
+  // Значение по умолчанию
+  Result := 0.0;
+
+  // Попытка преобразовать текст в число
+  if TryStrToFloat(edtRotation.Text, TempValue) then
+    Result := TempValue
+  else
+  begin
+    programlog.LogOutFormatStr(
+      'Некорректное значение угла поворота "%s", используется 0',
+      [edtRotation.Text],
+      LM_Warning
+    );
+    // Восстанавливаем корректное значение в поле
+    edtRotation.Text := '0';
+  end;
+end;
+
+{**Получить значение масштаба из поля ввода}
+function TfrmDialuxLumImporter.GetScaleFactor: Double;
+var
+  TempValue: Double;
+begin
+  // Значение по умолчанию
+  Result := 1.0;
+
+  // Попытка преобразовать текст в число
+  if TryStrToFloat(edtScale.Text, TempValue) then
+  begin
+    // Проверка на корректность значения (масштаб не должен быть нулевым)
+    if TempValue <> 0.0 then
+      Result := TempValue
+    else
+    begin
+      programlog.LogOutFormatStr(
+        'Масштаб не может быть равен нулю, используется 1',
+        [],
+        LM_Warning
+      );
+      edtScale.Text := '1';
+    end;
+  end
+  else
+  begin
+    programlog.LogOutFormatStr(
+      'Некорректное значение масштаба "%s", используется 1',
+      [edtScale.Text],
+      LM_Warning
+    );
+    // Восстанавливаем корректное значение в поле
+    edtScale.Text := '1';
+  end;
+end;
+
 {**Обработчик нажатия кнопки выполнения установки}
 procedure TfrmDialuxLumImporter.btnApplyInstallationClick(Sender: TObject);
 begin
@@ -537,14 +613,21 @@ var
   InstalledCount: Integer;
   ErrorCount: Integer;
   InsertedBlock: PGDBObjBlockInsert;
-const
-  // Угол поворота и масштаб по умолчанию
-  DEFAULT_ROTATION = 0.0;
-  DEFAULT_SCALE_X = 1.0;
-  DEFAULT_SCALE_Y = 1.0;
+  RotationAngle: Double;
+  ScaleFactor: Double;
 begin
   InstalledCount := 0;
   ErrorCount := 0;
+
+  // Получаем значения поворота и масштаба из полей ввода
+  RotationAngle := GetRotationAngle;
+  ScaleFactor := GetScaleFactor;
+
+  programlog.LogOutFormatStr(
+    'Установка с параметрами: поворот=%.2f, масштаб=%.2f',
+    [RotationAngle, ScaleFactor],
+    LM_Info
+  );
 
   // Проходим по всем узлам дерева
   Node := vstLightMapping.GetFirst;
@@ -569,23 +652,27 @@ begin
         try
           zcUI.TextMessage('SelectedBlockName='+NodeData^.SelectedBlockName,TMWOHistoryOut);
           // Вызываем функцию вставки блока на чертеж
+          // Масштаб применяется одинаково по всем трем осям (X, Y, Z)
           InsertedBlock := drawInsertBlock(
             NodeData^.Center,
-            DEFAULT_SCALE_X,
-            DEFAULT_SCALE_Y,
-            DEFAULT_ROTATION,
+            ScaleFactor,
+            ScaleFactor,
+            RotationAngle,
             NodeData^.SelectedBlockName
           );
 
           if InsertedBlock <> nil then
           begin
             programlog.LogOutFormatStr(
-              'Светильник "%s" → Блок "%s" установлен в (%.1f, %.1f)',
+              'Светильник "%s" → Блок "%s" установлен в (%.1f, %.1f) ' +
+              'с поворотом %.2f° и масштабом %.2f',
               [
                 NodeData^.LumKey,
                 NodeData^.SelectedBlockName,
                 NodeData^.Center.x,
-                NodeData^.Center.y
+                NodeData^.Center.y,
+                RotationAngle,
+                ScaleFactor
               ],
               LM_Info
             );

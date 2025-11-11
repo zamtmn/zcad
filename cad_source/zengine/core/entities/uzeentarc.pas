@@ -190,16 +190,16 @@ begin
     ,TMWOHistoryOut);
 
     precalc;
-     if t_matrix.mtr[0].v[0]*t_matrix.mtr[1].v[1]*t_matrix.mtr[2].v[2] <= 0 then begin
-       // Для трансформаций с неположительным определителем (поворот, зеркалирование) меняем порядок точек
+     if t_matrix.mtr[0].v[0]*t_matrix.mtr[1].v[1]*t_matrix.mtr[2].v[2] < 0 then begin
+       // Для трансформаций с отрицательным определителем (зеркалирование) меняем порядок точек
        zcUI.TextMessage(
-         'Определитель <= 0: меняем местами начальную и конечную точки'
+         'Определитель < 0: меняем местами начальную и конечную точки'
        ,TMWOHistoryOut);
        sav:=CreateVertex(cos(EndAngle), sin(EndAngle), 0);
        eav:=CreateVertex(cos(StartAngle), sin(StartAngle), 0);
      end else begin
        zcUI.TextMessage(
-         'Определитель > 0: используем обычный порядок точек'
+         'Определитель >= 0: используем обычный порядок точек'
        ,TMWOHistoryOut);
        sav:=CreateVertex(cos(StartAngle), sin(StartAngle), 0);
        eav:=CreateVertex(cos(EndAngle), sin(EndAngle), 0);
@@ -212,24 +212,14 @@ begin
    sav:=NormalizeVertex(sav);
    eav:=NormalizeVertex(eav);
 
-    // Преобразуем векторы в локальные координаты
-    StartAngle:=ArcTan2(scalardot(sav, Local.basis.oy), scalardot(sav, Local.basis.ox));
-    if StartAngle < 0 then
-      StartAngle := StartAngle + 2*pi;
+     // Преобразуем векторы в локальные координаты
+     StartAngle:=ArcTan2(scalardot(sav, Local.basis.oy), scalardot(sav, Local.basis.ox));
+     if StartAngle < 0 then
+       StartAngle := StartAngle + 2*pi;
 
-    EndAngle:=ArcTan2(scalardot(eav, Local.basis.oy), scalardot(eav, Local.basis.ox));
-    if EndAngle < 0 then
-      EndAngle := EndAngle + 2*pi;
-
-     // Для трансформаций с положительным определителем (масштабирование) меняем порядок углов
-     if t_matrix.mtr[0].v[0]*t_matrix.mtr[1].v[1]*t_matrix.mtr[2].v[2] > 0 then begin
-       temp := StartAngle;
-       StartAngle := EndAngle;
-       EndAngle := temp;
-     end;
-
-     // Трансформируем центр дуги в WCS
-     P_insert_in_WCS := VectorTransform3D(P_insert_in_WCS, t_matrix);
+     EndAngle:=ArcTan2(scalardot(eav, Local.basis.oy), scalardot(eav, Local.basis.ox));
+     if EndAngle < 0 then
+       EndAngle := EndAngle + 2*pi;
 
    { Диагностика: вывод параметров дуги после трансформации }
   //zDebugLn('=== Трансформация дуги: ПОСЛЕ ===');

@@ -140,9 +140,6 @@ end;
 procedure GDBObjARC.transform;
 var
   sav,eav,pins:gdbvertex;
-  m:DMatrix4D;
-  sav_local,eav_local:gdbvertex;
-  old_basis_ox, old_basis_oy, old_basis_oz: gdbvertex;
 begin
   { Диагностика: вывод параметров дуги до трансформации }
   zcUI.TextMessage('=== Трансформация дуги: ДО ===',TMWOHistoryOut);
@@ -189,11 +186,6 @@ begin
     [t_matrix.mtr[0].v[0]*t_matrix.mtr[1].v[1]*t_matrix.mtr[2].v[2]])
     ,TMWOHistoryOut);
 
-  { Сохранить исходную локальную СК до трансформации }
-  old_basis_ox := Local.basis.ox;
-  old_basis_oy := Local.basis.oy;
-  old_basis_oz := Local.basis.oz;
-
   precalc;
   if t_matrix.mtr[0].v[0]*t_matrix.mtr[1].v[1]*t_matrix.mtr[2].v[2]<eps then begin
     sav:=q2;
@@ -215,28 +207,15 @@ begin
   eav:=VectorTransform3D(eav,t_matrix);
   pins:=VectorTransform3D(pins,t_matrix);
   inherited;
+  sav:=NormalizeVertex(VertexSub(sav,pins));
+  eav:=NormalizeVertex(VertexSub(eav,pins));
 
-  { Преобразовать трансформированные точки в ИСХОДНУЮ локальную систему координат }
-  { (которая была ДО трансформации) для правильного расчета углов }
-  m:=CreateMatrixFromBasis(old_basis_ox, old_basis_oy, old_basis_oz);
-  MatrixInvert(m);
-
-  { Вычесть центр и преобразовать в исходную ЛСК }
-  sav_local:=VectorTransform3D(VertexSub(sav,P_insert_in_WCS),m);
-  eav_local:=VectorTransform3D(VertexSub(eav,P_insert_in_WCS),m);
-
-  { Нормализовать векторы }
-  sav_local:=NormalizeVertex(sav_local);
-  eav_local:=NormalizeVertex(eav_local);
-
-  { Рассчитать углы в исходной локальной системе координат }
-  { (относительно оси X, которая была ДО трансформации) }
-  StartAngle:=TwoVectorAngle(_X_yzVertex,sav_local);
-  if sav_local.y<eps then
+  StartAngle:=TwoVectorAngle(_X_yzVertex,sav);
+  if sav.y<eps then
     StartAngle:=2*pi-StartAngle;
 
-  EndAngle:=TwoVectorAngle(_X_yzVertex,eav_local);
-  if eav_local.y<eps then
+  EndAngle:=TwoVectorAngle(_X_yzVertex,eav);
+  if eav.y<eps then
     EndAngle:=2*pi-EndAngle;
 
   { Диагностика: вывод параметров дуги после трансформации }

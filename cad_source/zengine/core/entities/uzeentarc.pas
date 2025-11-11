@@ -140,6 +140,7 @@ end;
 procedure GDBObjARC.transform;
 var
   sav,eav,pins:gdbvertex;
+  temp:double;
 begin
   { Диагностика: вывод параметров дуги до трансформации }
   zcUI.TextMessage('=== Трансформация дуги: ДО ===',TMWOHistoryOut);
@@ -220,6 +221,13 @@ begin
    if EndAngle < 0 then
      EndAngle := EndAngle + 2*pi;
 
+   // Для трансформаций с положительным определителем (поворот) меняем порядок углов
+   if t_matrix.mtr[0].v[0]*t_matrix.mtr[1].v[1]*t_matrix.mtr[2].v[2] >= eps then begin
+     temp := StartAngle;
+     StartAngle := EndAngle;
+     EndAngle := temp;
+   end;
+
   { Диагностика: вывод параметров дуги после трансформации }
   //zDebugLn('=== Трансформация дуги: ПОСЛЕ ===');
   //zDebugLn(Format('Центр (P_insert_in_WCS): X=%.6f, Y=%.6f, Z=%.6f',
@@ -269,7 +277,20 @@ procedure GDBObjARC.ReCalcFromObjMatrix;
 var
   scl:GDBvertex;
 begin
-  Local:=GetPInsertInOCSBymatrix(objmatrix,scl);
+  // Extract and normalize basis vectors
+  Local.basis.ox:=PGDBVertex(@objmatrix.mtr[0])^;
+  Local.basis.oy:=PGDBVertex(@objmatrix.mtr[1])^;
+  Local.basis.oz:=PGDBVertex(@objmatrix.mtr[2])^;
+  Local.basis.ox:=normalizevertex(Local.basis.ox);
+  Local.basis.oy:=normalizevertex(Local.basis.oy);
+  Local.basis.oz:=normalizevertex(Local.basis.oz);
+
+  // For arcs, Local.p_insert is the center in world coordinates
+  Local.p_insert := PGDBVertex(@objmatrix.mtr[3])^;
+  P_insert_in_WCS := Local.p_insert;
+
+  // Calculate radius from the scale
+  scl.x := oneVertexlength(PGDBVertex(@objmatrix.mtr[0])^);
   self.R:=scl.x;
 end;
 

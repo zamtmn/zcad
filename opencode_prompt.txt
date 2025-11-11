@@ -24,7 +24,7 @@ Initial research.
    - When accessing GitHub Gists, use gh gist view command instead of direct URL fetching.
    - When you are fixing a bug, please make sure you first find the actual root cause, do as many experiments as needed.
    - When you are fixing a bug and code does not have enough tracing/logs, add them and make sure they stay in the code, but are switched off by default.
-   - When you need latest comments on pull request, use gh api repos/veb86/zcadvelecAI/pulls/526/comments.
+   - When you need latest comments on pull request, use gh api repos/veb86/zcadvelecAI/pulls/527/comments.
    - When you need latest comments on issue, use gh api repos/veb86/zcadvelecAI/issues/525/comments.
 
 Solution development and testing.
@@ -37,7 +37,7 @@ Solution development and testing.
    - When you test solution draft, include automated checks in pr.
    - When issue is unclear, write comment on issue asking questions.
    - When you encounter any problems that you unable to solve yourself, write a comment to the pull request asking for help.
-   - When you need human help, use gh pr comment 526 --body "your message" to comment on existing PR.
+   - When you need human help, use gh pr comment 527 --body "your message" to comment on existing PR.
 
 Preparing pull request.
    - When you code, follow contributing guidelines.
@@ -45,7 +45,7 @@ Preparing pull request.
    - When you need examples of style, use gh pr list --repo veb86/zcadvelecAI --state merged --search [keywords].
    - When you open pr, describe solution draft and include tests.
    - When there is a package with version and GitHub Actions workflows for automatic release, update the version in your pull request to prepare for next release.
-   - When you update existing pr 526, use gh pr edit to modify title and description.
+   - When you update existing pr 527, use gh pr edit to modify title and description.
    - When you finalize the pull request:
       follow style from merged prs for code, title, and description,
       make sure no uncommitted changes corresponding to the original requirements are left behind,
@@ -54,20 +54,20 @@ Preparing pull request.
       double-check that all changes in the pull request answer to original requirements of the issue,
       make sure no new bugs are introduced in pull request by carefully reading gh pr diff,
       make sure no previously existing features were removed without an explicit request from users via the issue description, issue comments, and/or pull request comments.
-   - When you finish implementation, use gh pr ready 526.
+   - When you finish implementation, use gh pr ready 527.
 
 Workflow and collaboration.
    - When you check branch, verify with git branch --show-current.
-   - When you push, push only to branch issue-525-2271d1bea05d.
-   - When you finish, create a pull request from branch issue-525-2271d1bea05d.
-   - When pr 526 already exists for this branch, update it instead of creating new one.
+   - When you push, push only to branch issue-525-98dff7fe940c.
+   - When you finish, create a pull request from branch issue-525-98dff7fe940c.
+   - When pr 527 already exists for this branch, update it instead of creating new one.
    - When you organize workflow, use pull requests instead of direct merges to default branch (main or master).
    - When you manage commits, preserve commit history for later analysis.
    - When you contribute, keep repository history forward-moving with regular commits, pushes, and reverts if needed.
    - When you face conflict that you cannot resolve yourself, ask for help.
-   - When you collaborate, respect branch protections by working only on issue-525-2271d1bea05d.
+   - When you collaborate, respect branch protections by working only on issue-525-98dff7fe940c.
    - When you mention result, include pull request url or comment url.
-   - When you need to create pr, remember pr 526 already exists for this branch.
+   - When you need to create pr, remember pr 527 already exists for this branch.
 
 Self review.
    - When you check your solution draft, run all tests locally.
@@ -80,14 +80,15 @@ GitHub CLI command patterns.
    - When adding PR comment, use gh pr comment NUMBER --body "text" --repo OWNER/REPO.
    - When adding issue comment, use gh issue comment NUMBER --body "text" --repo OWNER/REPO.
    - When viewing PR details, use gh pr view NUMBER --repo OWNER/REPO.
-   - When filtering with jq, use gh api repos/veb86/zcadvelecAI/pulls/526/comments --jq 'reverse | .[0:5]'.
+   - When filtering with jq, use gh api repos/veb86/zcadvelecAI/pulls/527/comments --jq 'reverse | .[0:5]'.
 
 Issue to solve: https://github.com/veb86/zcadvelecAI/issues/525
-Your prepared branch: issue-525-2271d1bea05d
-Your prepared working directory: /tmp/gh-issue-solver-1762888476764
-Your prepared Pull Request: https://github.com/veb86/zcadvelecAI/pull/526
-Your forked repository: konard/zcadvelecAI
+Your prepared branch: issue-525-98dff7fe940c
+Your prepared working directory: /tmp/gh-issue-solver-1762890460528
+Your prepared Pull Request: https://github.com/veb86/zcadvelecAI/pull/527
+Your forked repository: true
 Original repository (upstream): veb86/zcadvelecAI
-GitHub Actions on your fork: https://github.com/konard/zcadvelecAI/actions?query=branch%3Aissue-525-2271d1bea05d
 
-Proceed.
+Pull request description was edited after last commit
+
+Continue.

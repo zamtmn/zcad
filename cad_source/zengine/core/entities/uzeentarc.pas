@@ -25,7 +25,7 @@ uses
   uzeentwithlocalcs,uzecamera,uzestyleslayers,UGDBSelectedObjArray,uzeentity,
   UGDBPoint3DArray,uzctnrVectorBytes,uzbtypes,uzegeometrytypes,uzeconsts,
   uzglviewareadata,uzegeometry,uzeffdxfsupport,uzeentplain,uzeSnap,Math,
-  uzMVReader,uzCtnrVectorpBaseEntity;
+  uzMVReader,uzCtnrVectorpBaseEntity,uzbLogIntf,SysUtils;
 
 type
 
@@ -141,13 +141,31 @@ procedure GDBObjARC.transform;
 var
   sav,eav,pins:gdbvertex;
 begin
+  { Диагностика: вывод параметров дуги до трансформации }
+  zDebugLn('=== Трансформация дуги: ДО ===');
+  zDebugLn(Format('Центр (P_insert_in_WCS): X=%.6f, Y=%.6f, Z=%.6f',
+    [P_insert_in_WCS.x, P_insert_in_WCS.y, P_insert_in_WCS.z]));
+  zDebugLn(Format('Центр локальный (Local.p_insert): X=%.6f, Y=%.6f, Z=%.6f',
+    [Local.p_insert.x, Local.p_insert.y, Local.p_insert.z]));
+  zDebugLn(Format('Радиус: %.6f', [R]));
+  zDebugLn(Format('Начальный угол (StartAngle): %.6f рад (%.2f°)',
+    [StartAngle, StartAngle*180/pi]));
+  zDebugLn(Format('Конечный угол (EndAngle): %.6f рад (%.2f°)',
+    [EndAngle, EndAngle*180/pi]));
+  zDebugLn(Format('Нормаль (Local.basis.oz): X=%.6f, Y=%.6f, Z=%.6f',
+    [Local.basis.oz.x, Local.basis.oz.y, Local.basis.oz.z]));
+  zDebugLn(Format('Матрица трансформации: det=%.6f',
+    [t_matrix.mtr[0].v[0]*t_matrix.mtr[1].v[1]*t_matrix.mtr[2].v[2]]));
+
   precalc;
   if t_matrix.mtr[0].v[0]*t_matrix.mtr[1].v[1]*t_matrix.mtr[2].v[2]<eps then begin
     sav:=q2;
     eav:=q0;
+    zDebugLn('Определитель < eps: меняем местами начальную и конечную точки');
   end else begin
     sav:=q0;
     eav:=q2;
+    zDebugLn('Определитель >= eps: используем обычный порядок точек');
   end;
   pins:=P_insert_in_WCS;
   sav:=VectorTransform3D(sav,t_matrix);
@@ -164,6 +182,21 @@ begin
   EndAngle:=TwoVectorAngle(_X_yzVertex,eav);
   if eav.y<eps then
     EndAngle:=2*pi-EndAngle;
+
+  { Диагностика: вывод параметров дуги после трансформации }
+  zDebugLn('=== Трансформация дуги: ПОСЛЕ ===');
+  zDebugLn(Format('Центр (P_insert_in_WCS): X=%.6f, Y=%.6f, Z=%.6f',
+    [P_insert_in_WCS.x, P_insert_in_WCS.y, P_insert_in_WCS.z]));
+  zDebugLn(Format('Центр локальный (Local.p_insert): X=%.6f, Y=%.6f, Z=%.6f',
+    [Local.p_insert.x, Local.p_insert.y, Local.p_insert.z]));
+  zDebugLn(Format('Радиус: %.6f', [R]));
+  zDebugLn(Format('Начальный угол (StartAngle): %.6f рад (%.2f°)',
+    [StartAngle, StartAngle*180/pi]));
+  zDebugLn(Format('Конечный угол (EndAngle): %.6f рад (%.2f°)',
+    [EndAngle, EndAngle*180/pi]));
+  zDebugLn(Format('Нормаль (Local.basis.oz): X=%.6f, Y=%.6f, Z=%.6f',
+    [Local.basis.oz.x, Local.basis.oz.y, Local.basis.oz.z]));
+  zDebugLn('=======================================');
 end;
 
 procedure GDBObjARC.ReCalcFromObjMatrix;

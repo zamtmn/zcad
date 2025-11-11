@@ -165,10 +165,10 @@ begin
      [t_matrix.mtr[0].v[0]*t_matrix.mtr[1].v[1]*t_matrix.mtr[2].v[2]])
      ,TMWOHistoryOut);
 
-  zcUI.TextMessage(
-     Format('Центр локальный (Local.p_insert): X=%.6f, Y=%.6f, Z=%.6f',
-    [Local.p_insert.x, Local.p_insert.y, Local.p_insert.z])
-    ,TMWOHistoryOut);
+       zcUI.TextMessage(
+      Format('Центр в OCS (Local.p_insert): X=%.6f, Y=%.6f, Z=%.6f',
+     [Local.p_insert.x, Local.p_insert.y, Local.p_insert.z])
+     ,TMWOHistoryOut);
   zcUI.TextMessage(
      Format('Радиус: %.6f', [R])
     ,TMWOHistoryOut);
@@ -204,10 +204,13 @@ begin
        sav:=CreateVertex(cos(StartAngle), sin(StartAngle), 0);
        eav:=CreateVertex(cos(EndAngle), sin(EndAngle), 0);
      end;
-   // Трансформируем локальные векторы
-   sav:=VectorTransform3D(sav,t_matrix);
-   eav:=VectorTransform3D(eav,t_matrix);
-   inherited;
+    // Конвертируем векторы из OCS в WCS
+    sav:=VectorTransform3D(sav, objmatrix);
+    eav:=VectorTransform3D(eav, objmatrix);
+    // Трансформируем векторы в WCS
+    sav:=VectorTransform3D(sav,t_matrix);
+    eav:=VectorTransform3D(eav,t_matrix);
+    inherited;
    // Нормализуем векторы для расчета углов
    sav:=NormalizeVertex(sav);
    eav:=NormalizeVertex(eav);
@@ -242,10 +245,10 @@ begin
      Format('Центр (P_insert_in_WCS): X=%.6f, Y=%.6f, Z=%.6f',
     [P_insert_in_WCS.x, P_insert_in_WCS.y, P_insert_in_WCS.z])
     ,TMWOHistoryOut);
-      zcUI.TextMessage(
-     Format('Центр локальный (Local.p_insert): X=%.6f, Y=%.6f, Z=%.6f',
-    [Local.p_insert.x, Local.p_insert.y, Local.p_insert.z])
-    ,TMWOHistoryOut);
+   zcUI.TextMessage(
+      Format('Центр в OCS (Local.p_insert): X=%.6f, Y=%.6f, Z=%.6f',
+     [Local.p_insert.x, Local.p_insert.y, Local.p_insert.z])
+     ,TMWOHistoryOut);
       zcUI.TextMessage(
      Format('Радиус: %.6f', [R])
     ,TMWOHistoryOut);
@@ -267,21 +270,15 @@ begin
 end;
 
 procedure GDBObjARC.ReCalcFromObjMatrix;
+var
+   scl:GDBvertex;
 begin
-  // Extract and normalize basis vectors
-  Local.basis.ox:=PGDBVertex(@objmatrix.mtr[0])^;
-  Local.basis.oy:=PGDBVertex(@objmatrix.mtr[1])^;
-  Local.basis.oz:=PGDBVertex(@objmatrix.mtr[2])^;
-  Local.basis.ox:=normalizevertex(Local.basis.ox);
-  Local.basis.oy:=normalizevertex(Local.basis.oy);
-  Local.basis.oz:=normalizevertex(Local.basis.oz);
+   Local:=GetPInsertInOCSBymatrix(objmatrix,scl);
+   // For arcs, P_insert_in_WCS is the center in WCS coordinates
+   P_insert_in_WCS := PGDBVertex(@objmatrix.mtr[3])^;
 
-  // For arcs, Local.p_insert is the center in WCS coordinates
-  P_insert_in_WCS := PGDBVertex(@objmatrix.mtr[3])^;
-  Local.p_insert := P_insert_in_WCS;
-
-  // Calculate radius from the scale
-  self.R:=oneVertexlength(Local.basis.ox);
+   // Calculate radius from the scale
+   self.R:=oneVertexlength(Local.basis.ox);
 end;
 
 function GDBObjARC.CalcTrueInFrustum;

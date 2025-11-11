@@ -190,20 +190,20 @@ begin
     ,TMWOHistoryOut);
 
    precalc;
-   if t_matrix.mtr[0].v[0]*t_matrix.mtr[1].v[1]*t_matrix.mtr[2].v[2]<eps then begin
-     // Для трансформаций с отрицательным определителем меняем порядок точек
-     zcUI.TextMessage(
-       'Определитель < eps: меняем местами начальную и конечную точки'
-     ,TMWOHistoryOut);
-     sav:=CreateVertex(cos(EndAngle), sin(EndAngle), 0);
-     eav:=CreateVertex(cos(StartAngle), sin(StartAngle), 0);
-   end else begin
-     zcUI.TextMessage(
-       'Определитель >= eps: используем обычный порядок точек'
-     ,TMWOHistoryOut);
-     sav:=CreateVertex(cos(StartAngle), sin(StartAngle), 0);
-     eav:=CreateVertex(cos(EndAngle), sin(EndAngle), 0);
-   end;
+    if t_matrix.mtr[0].v[0]*t_matrix.mtr[1].v[1]*t_matrix.mtr[2].v[2] < -eps then begin
+      // Для трансформаций с отрицательным определителем (зеркалирование) меняем порядок точек
+      zcUI.TextMessage(
+        'Определитель < -eps: меняем местами начальную и конечную точки'
+      ,TMWOHistoryOut);
+      sav:=CreateVertex(cos(EndAngle), sin(EndAngle), 0);
+      eav:=CreateVertex(cos(StartAngle), sin(StartAngle), 0);
+    end else begin
+      zcUI.TextMessage(
+        'Определитель >= -eps: используем обычный порядок точек'
+      ,TMWOHistoryOut);
+      sav:=CreateVertex(cos(StartAngle), sin(StartAngle), 0);
+      eav:=CreateVertex(cos(EndAngle), sin(EndAngle), 0);
+    end;
    // Трансформируем локальные векторы
    sav:=VectorTransform3D(sav,t_matrix);
    eav:=VectorTransform3D(eav,t_matrix);
@@ -221,12 +221,12 @@ begin
    if EndAngle < 0 then
      EndAngle := EndAngle + 2*pi;
 
-   // Для трансформаций с положительным определителем (поворот) меняем порядок углов
-   if t_matrix.mtr[0].v[0]*t_matrix.mtr[1].v[1]*t_matrix.mtr[2].v[2] >= eps then begin
-     temp := StartAngle;
-     StartAngle := EndAngle;
-     EndAngle := temp;
-   end;
+    // Для трансформаций с положительным определителем (масштабирование) меняем порядок углов
+    if t_matrix.mtr[0].v[0]*t_matrix.mtr[1].v[1]*t_matrix.mtr[2].v[2] >= eps then begin
+      temp := StartAngle;
+      StartAngle := EndAngle;
+      EndAngle := temp;
+    end;
 
   { Диагностика: вывод параметров дуги после трансформации }
   //zDebugLn('=== Трансформация дуги: ПОСЛЕ ===');
@@ -285,12 +285,11 @@ begin
   Local.basis.oy:=normalizevertex(Local.basis.oy);
   Local.basis.oz:=normalizevertex(Local.basis.oz);
 
-  // For arcs, Local.p_insert is the center in world coordinates
-  Local.p_insert := PGDBVertex(@objmatrix.mtr[3])^;
-  P_insert_in_WCS := Local.p_insert;
+  // For arcs, Local.p_insert is the center in OCS coordinates
+  Local:=GetPInsertInOCSBymatrix(objmatrix,scl);
+  P_insert_in_WCS := PGDBVertex(@objmatrix.mtr[3])^;
 
   // Calculate radius from the scale
-  scl.x := oneVertexlength(PGDBVertex(@objmatrix.mtr[0])^);
   self.R:=scl.x;
 end;
 

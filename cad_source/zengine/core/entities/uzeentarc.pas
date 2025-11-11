@@ -159,8 +159,10 @@ begin
   //  [EndAngle, EndAngle*180/pi]));
   //zDebugLn(Format('Нормаль (Local.basis.oz): X=%.6f, Y=%.6f, Z=%.6f',
   //  [Local.basis.oz.x, Local.basis.oz.y, Local.basis.oz.z]));
-  //zDebugLn(Format('Матрица трансформации: det=%.6f',
-  //  [t_matrix.mtr[0].v[0]*t_matrix.mtr[1].v[1]*t_matrix.mtr[2].v[2]]));
+   zcUI.TextMessage(
+      Format('Матрица трансформации: det=%.6f',
+     [t_matrix.mtr[0].v[0]*t_matrix.mtr[1].v[1]*t_matrix.mtr[2].v[2]])
+     ,TMWOHistoryOut);
 
   zcUI.TextMessage(
      Format('Центр локальный (Local.p_insert): X=%.6f, Y=%.6f, Z=%.6f',
@@ -186,29 +188,28 @@ begin
     [t_matrix.mtr[0].v[0]*t_matrix.mtr[1].v[1]*t_matrix.mtr[2].v[2]])
     ,TMWOHistoryOut);
 
-  precalc;
-  if t_matrix.mtr[0].v[0]*t_matrix.mtr[1].v[1]*t_matrix.mtr[2].v[2]<eps then begin
-    sav:=q2;
-    eav:=q0;
-    //zDebugLn('Определитель < eps: меняем местами начальную и конечную точки');
-      zcUI.TextMessage(
-      'Определитель < eps: меняем местами начальную и конечную точки'
-    ,TMWOHistoryOut);
-  end else begin
-    sav:=q0;
-    eav:=q2;
-    //zDebugLn('Определитель >= eps: используем обычный порядок точек');
-    zcUI.TextMessage(
-      'Определитель >= eps: используем обычный порядок точек'
-    ,TMWOHistoryOut);
-  end;
-  pins:=P_insert_in_WCS;
-  sav:=VectorTransform3D(sav,t_matrix);
-  eav:=VectorTransform3D(eav,t_matrix);
-  pins:=VectorTransform3D(pins,t_matrix);
-  inherited;
-  sav:=NormalizeVertex(VertexSub(sav,pins));
-  eav:=NormalizeVertex(VertexSub(eav,pins));
+   precalc;
+   if t_matrix.mtr[0].v[0]*t_matrix.mtr[1].v[1]*t_matrix.mtr[2].v[2]<eps then begin
+     // Для трансформаций с отрицательным определителем меняем порядок точек
+     zcUI.TextMessage(
+       'Определитель < eps: меняем местами начальную и конечную точки'
+     ,TMWOHistoryOut);
+     sav:=CreateVertex(cos(EndAngle), sin(EndAngle), 0);
+     eav:=CreateVertex(cos(StartAngle), sin(StartAngle), 0);
+   end else begin
+     zcUI.TextMessage(
+       'Определитель >= eps: используем обычный порядок точек'
+     ,TMWOHistoryOut);
+     sav:=CreateVertex(cos(StartAngle), sin(StartAngle), 0);
+     eav:=CreateVertex(cos(EndAngle), sin(EndAngle), 0);
+   end;
+   // Трансформируем локальные векторы
+   sav:=VectorTransform3D(sav,t_matrix);
+   eav:=VectorTransform3D(eav,t_matrix);
+   inherited;
+   // Нормализуем векторы для расчета углов
+   sav:=NormalizeVertex(sav);
+   eav:=NormalizeVertex(eav);
 
   StartAngle:=TwoVectorAngle(_X_yzVertex,sav);
   if sav.y<eps then

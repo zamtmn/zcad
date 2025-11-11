@@ -211,13 +211,14 @@ begin
    sav:=NormalizeVertex(sav);
    eav:=NormalizeVertex(eav);
 
-  StartAngle:=TwoVectorAngle(_X_yzVertex,sav);
-  if sav.y<eps then
-    StartAngle:=2*pi-StartAngle;
+   // Преобразуем векторы в локальные координаты
+   StartAngle:=ArcTan2(scalardot(sav, Local.basis.oy), scalardot(sav, Local.basis.ox));
+   if StartAngle < 0 then
+     StartAngle := StartAngle + 2*pi;
 
-  EndAngle:=TwoVectorAngle(_X_yzVertex,eav);
-  if eav.y<eps then
-    EndAngle:=2*pi-EndAngle;
+   EndAngle:=ArcTan2(scalardot(eav, Local.basis.oy), scalardot(eav, Local.basis.ox));
+   if EndAngle < 0 then
+     EndAngle := EndAngle + 2*pi;
 
   { Диагностика: вывод параметров дуги после трансформации }
   //zDebugLn('=== Трансформация дуги: ПОСЛЕ ===');
@@ -266,17 +267,10 @@ end;
 
 procedure GDBObjARC.ReCalcFromObjMatrix;
 var
-  ox,oy:gdbvertex;
-  m:DMatrix4D;
+  scl:GDBvertex;
 begin
-  inherited;
-
-  ox:=GetXfFromZ(Local.basis.oz);
-  oy:=NormalizeVertex(VectorDot(Local.basis.oz,Local.basis.ox));
-  m:=CreateMatrixFromBasis(ox,oy,Local.basis.oz);
-
-  Local.P_insert:=VectorTransform3D(PGDBVertex(@objmatrix.mtr[3])^,m);
-  self.R:=PGDBVertex(@objmatrix.mtr[0])^.x/local.basis.OX.x;
+  Local:=GetPInsertInOCSBymatrix(objmatrix,scl);
+  self.R:=scl.x;
 end;
 
 function GDBObjARC.CalcTrueInFrustum;

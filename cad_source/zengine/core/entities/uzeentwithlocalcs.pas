@@ -93,6 +93,9 @@ begin
   Local.basis.ox:=normalizevertex(Local.basis.ox);
   Local.basis.oy:=normalizevertex(Local.basis.oy);
   Local.basis.oz:=normalizevertex(Local.basis.oz);
+
+  { Пересчитать позицию центра в мировых координатах после трансформации }
+  P_insert_in_WCS:=VectorTransform3D(nulvertex,objmatrix);
 end;
 
 procedure GDBObjWithLocalCS.higlight;

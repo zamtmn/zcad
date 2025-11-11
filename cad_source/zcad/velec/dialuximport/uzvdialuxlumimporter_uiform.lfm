@@ -32,7 +32,7 @@ object frmDialuxLumImporter: TfrmDialuxLumImporter
     Header.Options = [hoColumnResize, hoDblClickResize, hoVisible]
     NodeDataSize = 48
     TabOrder = 0
-    TreeOptions.MiscOptions = [toEditable, toFullRepaintOnResize, toInitOnSave, toToggleOnDblClick, toWheelPanning, toEditOnClick]
+    TreeOptions.MiscOptions = [toEditable, toFullRepaintOnResize, toGridExtensions, toInitOnSave, toToggleOnDblClick, toWheelPanning, toEditOnClick]
     TreeOptions.SelectionOptions = [toFullRowSelect, toRightClickSelect]
     OnCreateEditor = vstLightMappingCreateEditor
     OnFreeNode = vstLightMappingFreeNode

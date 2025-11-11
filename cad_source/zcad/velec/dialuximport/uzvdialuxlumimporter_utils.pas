@@ -298,7 +298,8 @@ begin
   end;
 
   // Дальше как обычно
-  zcAddEntToCurrentDrawingConstructRoot(result);
+  zcAddEntToCurrentDrawingWithUndo(result);   //добавляем в чертеж
+  //zcAddEntToCurrentDrawingConstructRoot(result);
 end;
 
 end.

@@ -88,8 +88,9 @@ type
     function FindOrCreateChild(ParentNode: PVirtualNode; const HDWay,NodeName: string): PVirtualNode; // Поиск или создание дочернего узла
     function GetNodePhysicalPath(Node: PVirtualNode): string; // Получение полного пути узла от корня
 
-    procedure CurrentSelActionExecute(Sender: TObject); // Экспорт выбранных устройств в Access
-    procedure AllSelActionExecute(Sender: TObject);     // Загрузка всех устройств из чертежа в память
+     procedure CurrentSelActionExecute(Sender: TObject); // Экспорт выбранных устройств в Access
+     procedure CurrentSelSQLiteActionExecute(Sender: TObject); // Экспорт выбранных устройств в SQLite
+     procedure AllSelActionExecute(Sender: TObject);     // Загрузка всех устройств из чертежа в память
     procedure SaveActionExecute(Sender: TObject);       // Сохранение изменений
     procedure CollapseAllActionExecute(Sender: TObject); // Свернуть все узлы дерева
     procedure ExpandAllActionExecute(Sender: TObject);   // Развернуть все узлы дерева
@@ -238,10 +239,72 @@ begin
     finally
       devicesList.Free;
     end;
-  finally
-    accessexport.Free;
-  end;
-end;
+   finally
+     accessexport.Free;
+   end;
+ end;
+
+ // Экспорт текущих устройств в базу данных SQLite
+ procedure TVElectrNav.CurrentSelSQLiteActionExecute(Sender: TObject);
+ const
+   sep='.';
+ var
+   sqliteexport:TConnectionManager;
+   devicesList: TListVElectrDevStruct;
+   i:integer;
+ begin
+   sqliteexport := TConnectionManager.Create('');
+   try
+     // Получение списка устройств с чертежа
+     devicesList := sqliteexport.GetDevicesFromDrawing;
+
+     for i := 0 to devicesList.Size - 1 do
+       //zcUI.TextMessage('beforeSort= '
+       //                            + ' pathHD=' + devicesList[i].pathHD
+       //                            + ' Sort1=' + inttostr(devicesList[i].Sort1)
+       //                            + ' Sort2=' + inttostr(devicesList[i].Sort2)
+       //                            + ' Sort2name=' + devicesList[i].Sort2name
+       //                            + ' Sort3=' + inttostr(devicesList[i].Sort3)
+       //                            + ' Sort3name=' + devicesList[i].Sort3name
+       //                            + ' Power=' + floattostr(devicesList[i].Power)
+       //                            + ' basename=' + devicesList[i].basename
+       //                            + ' NEWname=' + devicesList[i].basename + sep
+       //                            + devicesList[i].headdev + sep
+       //                            + inttostr(devicesList[i].feedernum) + sep
+       //                            + inttostr(devicesList[i].numconnect) + sep
+       //                            , TMWOHistoryOut);
+     // Шаг 3: Сортируем устройства по иерархии
+     sqliteexport.HierarchyBuilder.SortDeviceList(devicesList);
+     for i := 0 to devicesList.Size - 1 do
+       //zcUI.TextMessage('afterSort= '
+       //                            + ' pathHD=' + devicesList[i].pathHD
+       //                            + ' Sort1=' + inttostr(devicesList[i].Sort1)
+       //                            + ' Sort2=' + inttostr(devicesList[i].Sort2)
+       //                            + ' Sort2name=' + devicesList[i].Sort2name
+       //                            + ' Sort3=' + inttostr(devicesList[i].Sort3)
+       //                            + ' Sort3name=' + devicesList[i].Sort3name
+       //                            + ' Power=' + floattostr(devicesList[i].Power)
+       //                            + ' basename=' + devicesList[i].basename
+       //                            + ' NEWname=' + devicesList[i].basename + sep
+       //                            + devicesList[i].headdev + sep
+       //                            + inttostr(devicesList[i].feedernum) + sep
+       //                            + inttostr(devicesList[i].numconnect) + sep
+       //                            , TMWOHistoryOut);
+
+
+     // Шаг 4: Затем заполнить поля номер устройства в фидере
+     sqliteexport.HierarchyBuilder.SetNumDevinFeeder(devicesList);
+
+     try
+       // Экспорт подготовленного списка в базу данных SQLite
+       sqliteexport.ExportDevicesListToSQLite(devicesList);
+     finally
+       devicesList.Free;
+     end;
+   finally
+     sqliteexport.Free;
+   end;
+ end;
 
 
 // Загрузка всех устройств с чертежа в память и построение иерархии
@@ -317,9 +380,10 @@ begin
     ToolBar1.ButtonHeight := 40;
     ToolBar1.Images := nil; // Без изображений
 
-    // Создаем действия для кнопок
-    AddAction('actNew', '1', '0', 'Создать новый документ', 'Ctrl+N', @CurrentSelActionExecute);
-    AddAction('actOpen', '*', '1', 'Открыть документ', 'Ctrl+O', @AllSelActionExecute);
+     // Создаем действия для кнопок
+     AddAction('actNew', '1', '0', 'Создать новый документ', 'Ctrl+N', @CurrentSelActionExecute);
+     AddAction('actSQLiteExport', 'SQL', '0.5', 'Экспорт в SQLite', 'Ctrl+Shift+S', @CurrentSelSQLiteActionExecute);
+     AddAction('actOpen', '*', '1', 'Открыть документ', 'Ctrl+O', @AllSelActionExecute);
     AddAction('actSave', 'Cl', '2', 'Сохранить документ', 'Ctrl+S', @SaveActionExecute);
     AddAction('actCollapseAll', '+', '3', 'Свернуть все ноды', '', @CollapseAllActionExecute);
     AddAction('actExpandAll', '-', '4', 'Развернуть все ноды', '', @ExpandAllActionExecute);

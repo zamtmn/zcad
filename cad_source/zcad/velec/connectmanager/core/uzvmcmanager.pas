@@ -42,9 +42,10 @@ type
     destructor Destroy; override;
 
     procedure CreateTemporaryDatabase;
-    procedure ExportToAccessDatabase(const AAccessDBPath: string);
-    function GetDevicesFromDrawing: TListVElectrDevStruct;
-    procedure ExportDevicesListToAccess(devicesList: TListVElectrDevStruct; const AAccessDBPath: string);
+     procedure ExportToAccessDatabase(const AAccessDBPath: string);
+     function GetDevicesFromDrawing: TListVElectrDevStruct;
+     procedure ExportDevicesListToAccess(devicesList: TListVElectrDevStruct; const AAccessDBPath: string);
+     procedure ExportDevicesListToSQLite(devicesList: TListVElectrDevStruct);
 
     function CheckFileExists(const AFilePath: string): Boolean;
 
@@ -212,9 +213,81 @@ begin
       FAccessExporter.ExportDeviceInputVOLODQ(devicesList[i]);
   end;
 
-  // Фиксация изменений в базе данных
-  FAccessExporter.Commit;
-end;
+   // Фиксация изменений в базе данных
+   FAccessExporter.Commit;
+ end;
+
+ // Функция экспорта подготовленного списка устройств в базу данных SQLite
+ // На входе:
+ //   devicesList - подготовленный список устройств с построенными иерархическими путями
+ // Функция выполняет следующие действия:
+ // 1. Инициализирует и подключается к базе данных SQLite
+ // 2. Создает необходимые таблицы
+ // 3. Очищает таблицы базы данных
+ // 4. Экспортирует каждое устройство из списка в базу данных
+ // 5. Фиксирует изменения в базе данных
+ procedure TConnectionManager.ExportDevicesListToSQLite(devicesList: TListVElectrDevStruct);
+ var
+   i: integer;
+   fnhddev:string;
+   function getfullnamebasename(ihd:string):string;
+   const
+     sep='.';
+   var
+     j:integer;
+   begin
+     result:='ERROR';
+     for j := 0 to devicesList.Size - 1 do
+     begin
+       if devicesList[j].basename = ihd then
+         begin
+           result:= devicesList[j].basename + sep
+                   + devicesList[j].headdev + sep
+                   + inttostr(devicesList[j].feedernum) + sep
+                   + inttostr(devicesList[j].numconnect) + sep
+                   + inttostr(devicesList[j].numdevinfeeder);
+           break;
+         end;
+     end;
+   end;
+
+ begin
+   // Инициализация SQLite менеджера, если ещё не создан
+   if not Assigned(FSQLiteManager) then
+     FSQLiteManager := TSQLiteConnectionManager.Create(FDrawingPath);
+
+   FSQLiteManager.OpenConnection;
+   FSQLiteManager.CreateDeviceTable;
+   FSQLiteManager.CreateConnectTable;
+   FSQLiteManager.CreateDeviceInputTable;
+   FSQLiteManager.ClearTables;
+
+   // Экспорт каждого устройства из списка в базу данных SQLite
+   for i := 0 to devicesList.Size - 1 do
+   begin
+     FSQLiteManager.ExportDeviceVOLODQ(devicesList[i]);
+   end;
+
+   for i := 0 to devicesList.Size - 1 do
+   begin
+     fnhddev:=getfullnamebasename(devicesList[i].headdev);
+     if fnhddev<>'ERROR' then
+       FSQLiteManager.ExportConnectVOLODQ(devicesList[i], getfullnamebasename(devicesList[i].headdev));
+   end;
+
+   for i := 0 to devicesList.Size - 1 do
+   begin
+     if i>0 then begin
+       if devicesList[i].fullname <> devicesList[i-1].fullname then
+         FSQLiteManager.ExportDeviceInputVOLODQ(devicesList[i]);
+     end
+     else
+       FSQLiteManager.ExportDeviceInputVOLODQ(devicesList[i]);
+   end;
+
+   // Фиксация изменений в базе данных
+   FSQLiteManager.Commit;
+ end;
 
 // Функция подготовки списка всех устройств с чертежа
 // На выходе: список устройств TListVElectrDevStruct с построенными иерархическими путями

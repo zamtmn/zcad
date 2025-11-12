@@ -160,7 +160,7 @@ type
     //function MyGetMutableValue(key:TKey; out PValue:PTValue):boolean;inline;
     {$IFDEF USETDICTIONARY}function IsEmpty:boolean;inline;{$ENDIF}
     {$IFNDEF USETDICTIONARY}property count:SizeUInt read {$IFDEF FPC}Size{$ELSE}FCount{$ENDIF};{$ENDIF}
-    {$If FPC_FULLVERSION <= 30203}
+    {$If FPC_FULLVERSION <= 30205}
     function GetMutableValue(const AKey: TKey): PValue; inline;
     function TryGetMutableValue(const AKey: TKey; out APValue: PValue): Boolean;
     {$EndIf}
@@ -757,7 +757,7 @@ function TmyMap<TKey, TValue{$IFNDEF USETDICTIONARY},TCompare{$ENDIF}>.IsEmpty:b
 begin
   result:= count=0;
 end;
-{$If FPC_FULLVERSION <= 30203}
+{$If FPC_FULLVERSION <= 30205}
 function TmyMap<TKey, TValue{$IFNDEF USETDICTIONARY},TCompare{$ENDIF}>.GetMutableValue(const AKey: TKey): PValue;
 var
   LIndex: SizeInt;

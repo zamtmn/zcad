@@ -23,7 +23,7 @@ unit contolelschema_main;
 interface
 
 uses
-  Classes, SysUtils, Forms, Controls, ExtCtrls, Graphics, Types,
+  Classes, SysUtils, Forms, Controls, ExtCtrls, Graphics, Types,uzcguimanager,
   contolelschema_listshields,
   contolelschema_controldevprotect,
   contolelschema_infodata,
@@ -245,5 +245,14 @@ procedure TFormContolelSchemaMain.Splitter4Moved(Sender: TObject);
 begin
   StoreBoundsToSavedUnit(PANEL5_PARAM_NAME, Panel5.BoundsRect);
 end;
+
+procedure fControlELSchemaSetupProc(Form:TControl);
+begin
+ //тут можно чтото настроить
+end;
+
+initialization
+  ZCADGUIManager.RegisterZCADFormInfo('fControlELSchema','fControlELSchema',TFormContolelSchemaMain,rect(0,100,200,600),fControlELSchemaSetupProc,nil,@formContolelSchemaMain,true);
+finalization
 
 end.

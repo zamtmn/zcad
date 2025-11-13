@@ -287,6 +287,7 @@ uses
   //uzvelectricalexcelcom,
   //**//
   {$ENDIF}
+  contolelschema_main,
   uzcregconnectmanager,
   {$ENDIF}
 

@@ -38,6 +38,7 @@ object frmDialuxLumImporter: TfrmDialuxLumImporter
     OnEditing = vstLightMappingEditing
     OnFreeNode = vstLightMappingFreeNode
     OnGetText = vstLightMappingGetText
+    OnMouseDown = vstLightMappingMouseDown
     OnPaintText = vstLightMappingPaintText
     OnNewText = vstLightMappingNewText
   end

@@ -1,0 +1,100 @@
+object FormContolelSchemaMain: TFormContolelSchemaMain
+  Left = 300
+  Height = 600
+  Top = 150
+  Width = 900
+  Caption = 'Управление электрическими однолинейными схемами'
+  ClientHeight = 600
+  ClientWidth = 900
+  OnCreate = FormCreate
+  OnDestroy = FormDestroy
+  LCLVersion = '2.0.12.0'
+  object Panel1: TPanel
+    Left = 0
+    Height = 50
+    Top = 0
+    Width = 900
+    Align = alTop
+    BevelOuter = bvNone
+    Caption = 'Верхняя панель'
+    ClientHeight = 50
+    ClientWidth = 900
+    TabOrder = 0
+  end
+  object Panel5: TPanel
+    Left = 0
+    Height = 200
+    Top = 400
+    Width = 900
+    Align = alBottom
+    BevelOuter = bvNone
+    ClientHeight = 200
+    ClientWidth = 900
+    TabOrder = 1
+  end
+  object Splitter4: TSplitter
+    Cursor = crVSplit
+    Left = 0
+    Height = 5
+    Top = 395
+    Width = 900
+    Align = alBottom
+    ResizeAnchor = akBottom
+  end
+  object Panel2: TPanel
+    Left = 0
+    Height = 345
+    Top = 50
+    Width = 250
+    Align = alLeft
+    BevelOuter = bvNone
+    ClientHeight = 345
+    ClientWidth = 250
+    TabOrder = 3
+  end
+  object Splitter1: TSplitter
+    Left = 250
+    Height = 345
+    Top = 50
+    Width = 5
+    Align = alLeft
+    ResizeAnchor = akLeft
+  end
+  object Panel4: TPanel
+    Left = 650
+    Height = 345
+    Top = 50
+    Width = 250
+    Align = alRight
+    BevelOuter = bvNone
+    ClientHeight = 345
+    ClientWidth = 250
+    TabOrder = 5
+  end
+  object Splitter3: TSplitter
+    Left = 645
+    Height = 345
+    Top = 50
+    Width = 5
+    Align = alRight
+    ResizeAnchor = akRight
+  end
+  object Panel3: TPanel
+    Left = 255
+    Height = 345
+    Top = 50
+    Width = 390
+    Align = alClient
+    BevelOuter = bvNone
+    ClientHeight = 345
+    ClientWidth = 390
+    TabOrder = 7
+  end
+  object Splitter2: TSplitter
+    Left = 328
+    Height = 240
+    Top = 104
+    Width = 5
+    Visible = False
+  end
+end

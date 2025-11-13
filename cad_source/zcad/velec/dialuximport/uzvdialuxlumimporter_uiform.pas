@@ -60,6 +60,9 @@ type
     FColumn: TColumnIndex;      // Колонка редактирования
     FBlocksList: TStrings;      // Список блоков
 
+    {**Обработчик закрытия выпадающего списка}
+    procedure OnComboCloseUp(Sender: TObject);
+
   public
     destructor Destroy; override;
 
@@ -509,11 +512,38 @@ procedure TfrmDialuxLumImporter.vstLightMappingPaintText(
   Column: TColumnIndex;
   TextType: TVSTTextType
 );
+var
+  CellRect: TRect;
+  ArrowSize: Integer;
+  ArrowX, ArrowY: Integer;
 begin
   // Устанавливаем цвет текста и фон для всех ячеек
   // Это необходимо для корректной отрисовки текста в компоненте TLazVirtualStringTree
   TargetCanvas.Font.Color := clBlack;
   TargetCanvas.Brush.Color := clWhite;
+
+  // Для второй колонки (редактируемая с combobox) рисуем индикатор выпадающего списка
+  if Column = 1 then
+  begin
+    // Получаем прямоугольник ячейки
+    CellRect := Sender.GetDisplayRect(Node, Column, False);
+
+    // Размер стрелки
+    ArrowSize := 7;
+
+    // Позиция стрелки (справа в ячейке, с отступом)
+    ArrowX := CellRect.Right - ArrowSize - 8;
+    ArrowY := CellRect.Top + (CellRect.Bottom - CellRect.Top - ArrowSize) div 2;
+
+    // Рисуем треугольную стрелку вниз
+    TargetCanvas.Brush.Color := clGray;
+    TargetCanvas.Pen.Color := clGray;
+    TargetCanvas.Polygon([
+      Point(ArrowX, ArrowY),
+      Point(ArrowX + ArrowSize, ArrowY),
+      Point(ArrowX + ArrowSize div 2, ArrowY + ArrowSize)
+    ]);
+  end;
 end;
 
 {**Обработчик начала редактирования ячейки}
@@ -830,6 +860,9 @@ begin
   FEdit.Parent := Tree;
   FEdit.Style := csDropDownList;
 
+  // Подключаем обработчик закрытия списка
+  FEdit.OnCloseUp := @OnComboCloseUp;
+
   // Заполняем список блоков
   if FBlocksList <> nil then
     FEdit.Items.Assign(FBlocksList);
@@ -844,12 +877,29 @@ begin
   end;
 end;
 
+{**Обработчик закрытия выпадающего списка}
+procedure TComboBoxEditLink.OnComboCloseUp(Sender: TObject);
+begin
+  // После закрытия списка завершаем редактирование
+  if FTree <> nil then
+    FTree.EndEditNode;
+end;
+
 {**Начать редактирование}
 function TComboBoxEditLink.BeginEdit: Boolean; stdcall;
 begin
   Result := True;
+
+  // Показываем ComboBox
   FEdit.Show;
+
+  // Устанавливаем фокус на ComboBox
   FEdit.SetFocus;
+
+  // Обрабатываем сообщения для завершения операций фокуса
+  Application.ProcessMessages;
+
+  // Теперь разворачиваем список после того, как фокус установлен
   FEdit.DroppedDown := True;
 end;
 

@@ -147,6 +147,14 @@ type
       TextType: TVSTTextType
     );
 
+    {**Обработчик начала редактирования ячейки}
+    procedure vstLightMappingEditing(
+      Sender: TBaseVirtualTree;
+      Node: PVirtualNode;
+      Column: TColumnIndex;
+      var Allowed: Boolean
+    );
+
     //{**Обработчик инициализации узла дерева}
     //procedure vstLightMappingInitNode(
     //  Sender: TBaseVirtualTree;
@@ -484,6 +492,19 @@ begin
   // Это необходимо для корректной отрисовки текста в компоненте TLazVirtualStringTree
   TargetCanvas.Font.Color := clBlack;
   TargetCanvas.Brush.Color := clWhite;
+end;
+
+{**Обработчик начала редактирования ячейки}
+procedure TfrmDialuxLumImporter.vstLightMappingEditing(
+  Sender: TBaseVirtualTree;
+  Node: PVirtualNode;
+  Column: TColumnIndex;
+  var Allowed: Boolean
+);
+begin
+  // Разрешаем редактирование только для второй колонки (индекс 1)
+  // Первая колонка (индекс 0) - только для чтения
+  Allowed := (Column = 1);
 end;
 
 {**Обработчик инициализации узла дерева}

@@ -241,9 +241,9 @@ begin
   // Настройка дерева
   vstLightMapping.NodeDataSize := SizeOf(TLightMappingNodeData);
 
-  // Включаем редактирование по двойному клику
-  vstLightMapping.TreeOptions.MiscOptions :=
-    vstLightMapping.TreeOptions.MiscOptions + [toEditOnDblClick];
+   // Включаем редактирование по клику
+   vstLightMapping.TreeOptions.MiscOptions :=
+     vstLightMapping.TreeOptions.MiscOptions + [toEditOnClick];
 
   InitializeTreeColumns;
 
@@ -300,13 +300,9 @@ begin
     Column.Width := 450;
     Column.Options := Column.Options + [coEditable];
 
-    // Настройки дерева
-    vstLightMapping.TreeOptions.SelectionOptions :=
-      vstLightMapping.TreeOptions.SelectionOptions + [toFullRowSelect];
-    vstLightMapping.TreeOptions.MiscOptions :=
-      vstLightMapping.TreeOptions.MiscOptions + [toEditable];
-    vstLightMapping.TreeOptions.MiscOptions :=
-      vstLightMapping.TreeOptions.MiscOptions + [toEditOnClick];
+     // Настройки дерева
+     vstLightMapping.TreeOptions.SelectionOptions :=
+       vstLightMapping.TreeOptions.SelectionOptions + [toFullRowSelect];
 
   end
   else

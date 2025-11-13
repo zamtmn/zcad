@@ -143,34 +143,34 @@ end;
 { Загрузка сохранённых размеров панелей }
 procedure TFormContolelSchemaMain.LoadPanelSizes;
 var
-  BoundsRect: TRect;
+  SavedBounds: TRect;
 begin
   // Загружаем размеры панели 2
-  BoundsRect := GetBoundsFromSavedUnit(PANEL2_PARAM_NAME,
-                                       Screen.Width,
-                                       Screen.Height);
-  if BoundsRect.Right > BoundsRect.Left then
-    Panel2.Width := BoundsRect.Right - BoundsRect.Left;
+  SavedBounds := GetBoundsFromSavedUnit(PANEL2_PARAM_NAME,
+                                        Screen.Width,
+                                        Screen.Height);
+  if SavedBounds.Right > SavedBounds.Left then
+    Panel2.Width := SavedBounds.Right - SavedBounds.Left;
 
   // Загружаем размеры панели 3
-  BoundsRect := GetBoundsFromSavedUnit(PANEL3_PARAM_NAME,
-                                       Screen.Width,
-                                       Screen.Height);
+  SavedBounds := GetBoundsFromSavedUnit(PANEL3_PARAM_NAME,
+                                        Screen.Width,
+                                        Screen.Height);
   // Панель 3 имеет Align = alClient, размеры применяются автоматически
 
   // Загружаем размеры панели 4
-  BoundsRect := GetBoundsFromSavedUnit(PANEL4_PARAM_NAME,
-                                       Screen.Width,
-                                       Screen.Height);
-  if BoundsRect.Right > BoundsRect.Left then
-    Panel4.Width := BoundsRect.Right - BoundsRect.Left;
+  SavedBounds := GetBoundsFromSavedUnit(PANEL4_PARAM_NAME,
+                                        Screen.Width,
+                                        Screen.Height);
+  if SavedBounds.Right > SavedBounds.Left then
+    Panel4.Width := SavedBounds.Right - SavedBounds.Left;
 
   // Загружаем размеры панели 5
-  BoundsRect := GetBoundsFromSavedUnit(PANEL5_PARAM_NAME,
-                                       Screen.Width,
-                                       Screen.Height);
-  if BoundsRect.Bottom > BoundsRect.Top then
-    Panel5.Height := BoundsRect.Bottom - BoundsRect.Top;
+  SavedBounds := GetBoundsFromSavedUnit(PANEL5_PARAM_NAME,
+                                        Screen.Width,
+                                        Screen.Height);
+  if SavedBounds.Bottom > SavedBounds.Top then
+    Panel5.Height := SavedBounds.Bottom - SavedBounds.Top;
 end;
 
 { Сохранение текущих размеров панелей }

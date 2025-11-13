@@ -155,6 +155,28 @@ type
       var Allowed: Boolean
     );
 
+    {**Обработчик нажатия мыши на дереве}
+    procedure vstLightMappingMouseDown(
+      Sender: TObject;
+      Button: TMouseButton;
+      Shift: TShiftState;
+      X, Y: Integer
+    );
+
+    {**Обработчик инициализации узла дерева}
+    //procedure vstLightMappingInitNode(
+    //  Sender: TBaseVirtualTree;
+    //  ParentNode: PVirtualNode;
+    //  Node: PVirtualNode;
+    //  var InitialStates: TVirtualNodeInitStates
+    //);
+
+    {**Обработчик освобождения узла дерева}
+    procedure vstLightMappingFreeNode(
+      Sender: TBaseVirtualTree;
+      Node: PVirtualNode
+    );
+
     //{**Обработчик инициализации узла дерева}
     //procedure vstLightMappingInitNode(
     //  Sender: TBaseVirtualTree;
@@ -218,6 +240,10 @@ begin
 
   // Настройка дерева
   vstLightMapping.NodeDataSize := SizeOf(TLightMappingNodeData);
+
+  // Включаем редактирование по двойному клику
+  vstLightMapping.TreeOptions.MiscOptions :=
+    vstLightMapping.TreeOptions.MiscOptions + [toEditOnDblClick];
 
   InitializeTreeColumns;
 
@@ -505,6 +531,35 @@ begin
   // Разрешаем редактирование только для второй колонки (индекс 1)
   // Первая колонка (индекс 0) - только для чтения
   Allowed := (Column = 1);
+end;
+
+{**Обработчик нажатия мыши на дереве}
+procedure TfrmDialuxLumImporter.vstLightMappingMouseDown(
+  Sender: TObject;
+  Button: TMouseButton;
+  Shift: TShiftState;
+  X, Y: Integer
+);
+var
+  HitInfo: THitInfo;
+  Node: PVirtualNode;
+begin
+  // Получаем информацию о том, на что нажали
+  vstLightMapping.GetHitTestInfoAt(X, Y, True, HitInfo);
+  Node := HitInfo.HitNode;
+
+  // Проверяем, что нажали на валидный узел
+  if Node = nil then
+    Exit;
+
+  // Если нажали левой кнопкой на редактируемую колонку (индекс 1),
+  // устанавливаем фокус и начинаем редактирование
+  if (Button = mbLeft) and (HitInfo.HitColumn = 1) then
+  begin
+    vstLightMapping.FocusedNode := Node;
+    vstLightMapping.FocusedColumn := HitInfo.HitColumn;
+    vstLightMapping.EditNode(Node, HitInfo.HitColumn);
+  end;
 end;
 
 {**Обработчик инициализации узла дерева}

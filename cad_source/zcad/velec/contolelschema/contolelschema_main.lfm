@@ -6,6 +6,7 @@ object FormContolelSchemaMain: TFormContolelSchemaMain
   Caption = 'Управление электрическими однолинейными схемами'
   ClientHeight = 600
   ClientWidth = 900
+  LCLVersion = '4.99.0.0'
   OnCreate = FormCreate
   OnDestroy = FormDestroy
   object Panel1: TPanel

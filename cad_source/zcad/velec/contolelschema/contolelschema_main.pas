@@ -252,7 +252,7 @@ begin
 end;
 
 initialization
-  ZCADGUIManager.RegisterZCADFormInfo('fControlELSchema','fControlELSchema',TFormContolelSchemaMain,rect(0,100,200,600),fControlELSchemaSetupProc,nil,@formContolelSchemaMain,true);
+  ZCADGUIManager.RegisterZCADFormInfo('fControlELSchema','fControlELSchema',TFormContolelSchemaMain,rect(0,100,200,600),@fControlELSchemaSetupProc,nil,@formContolelSchemaMain,true);
 finalization
 
 end.

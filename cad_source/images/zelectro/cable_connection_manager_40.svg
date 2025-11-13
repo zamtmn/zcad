@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns="http://www.w3.org/2000/svg"
+   width="48"
+   height="48"
+   viewBox="0 0 48 48"
+   version="1.1">
+  <defs />
+
+  <!-- Кабель в виде змейки (U-образная форма) -->
+  <path
+     style="fill:none;stroke:#20A8FF;stroke-width:5;stroke-linecap:round;stroke-linejoin:round"
+     d="M 7,8 L 7,28 Q 7,41 20,41 L 28,41 Q 41,41 41,28 L 41,16" />
+
+  <!-- Символ ячейки (квадратик) -->
+  <g transform="translate(31, 8)">
+    <rect
+       style="fill:none;stroke:#20A8FF;stroke-width:3.5;stroke-linecap:round;stroke-linejoin:round"
+       x="-8" y="-8" width="16" height="16" />
+  </g>
+</svg>

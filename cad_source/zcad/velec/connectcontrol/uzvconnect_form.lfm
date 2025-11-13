@@ -1,0 +1,102 @@
+object frmConnectControl: TfrmConnectControl
+  Left = 400
+  Height = 600
+  Top = 200
+  Width = 900
+  Caption = 'Управление подключениями устройств'
+  ClientHeight = 600
+  ClientWidth = 900
+  Position = poScreenCenter
+  OnCreate = FormCreate
+  OnDestroy = FormDestroy
+  object TopPanel: TPanel
+    Left = 0
+    Height = 50
+    Top = 0
+    Width = 900
+    Align = alTop
+    ClientHeight = 50
+    ClientWidth = 900
+    TabOrder = 0
+    object ToolBar1: TToolBar
+      Left = 1
+      Height = 48
+      Top = 1
+      Width = 898
+      Align = alClient
+      EdgeBorders = []
+      TabOrder = 0
+      object ToolButton1: TToolButton
+        Left = 1
+        Top = 2
+        Action = actButton1
+        Caption = 'Кнопка 1'
+      end
+      object ToolButton2: TToolButton
+        Left = 73
+        Top = 2
+        Action = actButton2
+        Caption = 'Кнопка 2'
+      end
+      object ToolButton3: TToolButton
+        Left = 145
+        Top = 2
+        Action = actButton3
+        Caption = 'Кнопка 3'
+      end
+      object ToolButton4: TToolButton
+        Left = 217
+        Top = 2
+        Action = actButton4
+        Caption = 'Кнопка 4'
+      end
+    end
+  end
+  object MainPanel: TPanel
+    Left = 0
+    Height = 550
+    Top = 50
+    Width = 900
+    Align = alClient
+    ClientHeight = 550
+    ClientWidth = 900
+    TabOrder = 1
+    object vstConnections: TLazVirtualStringTree
+      Left = 1
+      Height = 548
+      Top = 1
+      Width = 898
+      Align = alClient
+      DefaultText = 'Node'
+      Header.AutoSizeIndex = -1
+      Header.DefaultHeight = 24
+      Header.Height = 24
+      Header.Options = [hoColumnResize, hoDblClickResize, hoVisible]
+      NodeDataSize = 8
+      TabOrder = 0
+      TreeOptions.MiscOptions = [toFullRepaintOnResize, toGridExtensions, toInitOnSave, toToggleOnDblClick, toWheelPanning]
+      TreeOptions.SelectionOptions = [toFullRowSelect, toRightClickSelect]
+      OnGetText = vstConnectionsGetText
+    end
+  end
+  object ActionList1: TActionList
+    Left = 800
+    Top = 16
+    object actButton1: TAction
+      Caption = 'Кнопка 1'
+      OnExecute = actButton1Execute
+    end
+    object actButton2: TAction
+      Caption = 'Кнопка 2'
+      OnExecute = actButton2Execute
+    end
+    object actButton3: TAction
+      Caption = 'Кнопка 3'
+      OnExecute = actButton3Execute
+    end
+    object actButton4: TAction
+      Caption = 'Кнопка 4'
+      OnExecute = actButton4Execute
+    end
+  end
+end

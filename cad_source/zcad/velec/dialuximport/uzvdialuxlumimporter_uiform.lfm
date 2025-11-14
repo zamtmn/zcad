@@ -7,6 +7,7 @@ object frmDialuxLumImporter: TfrmDialuxLumImporter
   ClientHeight = 624
   ClientWidth = 800
   Position = poScreenCenter
+  LCLVersion = '4.99.0.0'
   object vstLightMapping: TLazVirtualStringTree
     Left = 8
     Height = 536
@@ -38,8 +39,8 @@ object frmDialuxLumImporter: TfrmDialuxLumImporter
     OnEditing = vstLightMappingEditing
     OnFreeNode = vstLightMappingFreeNode
     OnGetText = vstLightMappingGetText
-    OnMouseDown = vstLightMappingMouseDown
     OnPaintText = vstLightMappingPaintText
+    OnMouseDown = vstLightMappingMouseDown
     OnNewText = vstLightMappingNewText
   end
   object lblRotation: TLabel

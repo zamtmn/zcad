@@ -188,11 +188,11 @@ type
     //  var InitialStates: TVirtualNodeInitStates
     //);
 
-    {**Обработчик освобождения узла дерева}
-    procedure vstLightMappingFreeNode(
-      Sender: TBaseVirtualTree;
-      Node: PVirtualNode
-    );
+    //{**Обработчик освобождения узла дерева}
+    //procedure vstLightMappingFreeNode(
+    //  Sender: TBaseVirtualTree;
+    //  Node: PVirtualNode
+    //);
 
   private
     FRecognizedLights: TLightItemArray;  // Массив распознанных светильников

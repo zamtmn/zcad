@@ -28,6 +28,7 @@ uses
   SysUtils,
   Forms,
   Controls,
+  ExtCtrls,
   ComCtrls,
   ActnList,
   Dialogs,

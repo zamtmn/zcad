@@ -31,6 +31,7 @@ uses
   uzccommandsimpl,
   uzbtypes,
   uzclog,
+  uzcdrawings,
   uzcinterface,
   uzvconnect_struct,
   uzvconnect_dwginteraction,
@@ -59,7 +60,7 @@ end;
 {**Проверить наличие выделенных объектов}
 function HasSelectedObjects: Boolean;
 begin
-  Result := drawings.GetCurrentDWG.SelObjArray.Count > 0;
+  Result := drawings.GetCurrentDWG^.SelObjArray.Count > 0;
 end;
 
 {**Функция команды управления подключениями устройств}

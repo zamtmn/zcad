@@ -7,6 +7,7 @@ object frmDialuxLumImporter: TfrmDialuxLumImporter
   ClientHeight = 624
   ClientWidth = 800
   Position = poScreenCenter
+  LCLVersion = '4.99.0.0'
   object vstLightMapping: TLazVirtualStringTree
     Left = 8
     Height = 536
@@ -35,6 +36,7 @@ object frmDialuxLumImporter: TfrmDialuxLumImporter
     TreeOptions.MiscOptions = [toEditable, toFullRepaintOnResize, toGridExtensions, toInitOnSave, toToggleOnDblClick, toWheelPanning, toEditOnClick]
     TreeOptions.SelectionOptions = [toFullRowSelect, toRightClickSelect]
     OnCreateEditor = vstLightMappingCreateEditor
+    OnEditing = vstLightMappingEditing
     OnFreeNode = vstLightMappingFreeNode
     OnGetText = vstLightMappingGetText
     OnPaintText = vstLightMappingPaintText
@@ -43,16 +45,16 @@ object frmDialuxLumImporter: TfrmDialuxLumImporter
   end
   object lblRotation: TLabel
     Left = 8
-    Height = 15
-    Top = 554
-    Width = 51
+    Height = 17
+    Top = 552
+    Width = 60
     Anchors = [akLeft, akBottom]
     Caption = 'Поворот:'
   end
   object edtRotation: TEdit
     Left = 75
-    Height = 23
-    Top = 552
+    Height = 27
+    Top = 548
     Width = 100
     Anchors = [akLeft, akBottom]
     TabOrder = 1
@@ -60,16 +62,16 @@ object frmDialuxLumImporter: TfrmDialuxLumImporter
   end
   object lblScale: TLabel
     Left = 190
-    Height = 15
-    Top = 554
-    Width = 55
+    Height = 17
+    Top = 552
+    Width = 62
     Anchors = [akLeft, akBottom]
     Caption = 'Масштаб:'
   end
   object edtScale: TEdit
     Left = 260
-    Height = 23
-    Top = 552
+    Height = 27
+    Top = 548
     Width = 100
     Anchors = [akLeft, akBottom]
     TabOrder = 2

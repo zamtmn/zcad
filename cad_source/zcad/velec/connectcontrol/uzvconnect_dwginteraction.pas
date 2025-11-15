@@ -30,6 +30,10 @@ uses
   uzcdrawings,
   uzcvariablesutils,
   varmandef,
+  uzeentsubordinated,
+  gzctnrVectorTypes,
+  uzeconsts,
+  UGDBSelectedObjArray,
   uzvconnect_struct;
 
 {**Собрать устройства с чертежа и извлечь их параметры подключений}
@@ -139,7 +143,7 @@ end;
 {**Собрать устройства с чертежа и извлечь их параметры подключений}
 procedure CollectDevicesFromDWG;
 var
-  psd: PGDBObjSubordinated;
+  psd:PSelectedObjDesc;
   pEntity: PGDBObjEntity;
   pDevice: PGDBObjDevice;
   ir: itrec;
@@ -148,7 +152,7 @@ begin
   ConnectList.Clear;
 
   // Получаем первый выбранный объект с чертежа
-  psd := drawings.GetCurrentDWG.SelObjArray.beginiterate(ir);
+  psd := drawings.GetCurrentDWG^.SelObjArray.beginiterate(ir);
 
   if psd = nil then
     Exit;
@@ -163,7 +167,7 @@ begin
       ProcessDevice(pDevice);
     end;
 
-    psd := drawings.GetCurrentDWG.SelObjArray.iterate(ir);
+    psd := drawings.GetCurrentDWG^.SelObjArray.iterate(ir);
   until psd = nil;
 end;
 

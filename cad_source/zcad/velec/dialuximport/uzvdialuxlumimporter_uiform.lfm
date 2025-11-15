@@ -2,89 +2,65 @@ object frmDialuxLumImporter: TfrmDialuxLumImporter
   Left = 355
   Height = 624
   Top = 197
-  Width = 800
+  Width = 764
   Caption = 'Импорт светильников Dialux'
   ClientHeight = 624
-  ClientWidth = 800
+  ClientWidth = 764
   Position = poScreenCenter
-  LCLVersion = '4.99.0.0'
-  object vstLightMapping: TLazVirtualStringTree
-    Left = 8
-    Height = 536
-    Top = 8
-    Width = 784
-    Anchors = [akTop, akLeft, akRight, akBottom]
-    DefaultText = 'Node'
-    Header.AutoSizeIndex = -1
-    Header.Columns = <    
-      item
-        Position = 0
-        Text = 'Импортированные светильники'
-        Width = 300
-      end    
-      item
-        Options = [coAllowClick, coEnabled, coParentBidiMode, coParentColor, coResizable, coShowDropMark, coVisible, coSmartResize, coAllowFocus, coEditable]
-        Position = 1
-        Text = 'Блок для установки'
-        Width = 450
-      end>
-    Header.DefaultHeight = 24
-    Header.Height = 24
-    Header.Options = [hoColumnResize, hoDblClickResize, hoVisible]
-    NodeDataSize = 48
-    TabOrder = 0
-    TreeOptions.MiscOptions = [toEditable, toFullRepaintOnResize, toGridExtensions, toInitOnSave, toToggleOnDblClick, toWheelPanning, toEditOnClick]
-    TreeOptions.SelectionOptions = [toFullRowSelect, toRightClickSelect]
-    OnCreateEditor = vstLightMappingCreateEditor
-    OnEditing = vstLightMappingEditing
-    OnFreeNode = vstLightMappingFreeNode
-    OnGetText = vstLightMappingGetText
-    OnPaintText = vstLightMappingPaintText
-    OnMouseDown = vstLightMappingMouseDown
-    OnNewText = vstLightMappingNewText
-  end
+  OnCreate = FormCreate
   object lblRotation: TLabel
     Left = 8
-    Height = 17
-    Top = 552
-    Width = 60
+    Height = 15
+    Top = 554
+    Width = 51
     Anchors = [akLeft, akBottom]
     Caption = 'Поворот:'
   end
   object edtRotation: TEdit
     Left = 75
-    Height = 27
-    Top = 548
+    Height = 23
+    Top = 552
     Width = 100
     Anchors = [akLeft, akBottom]
-    TabOrder = 1
+    TabOrder = 0
     Text = '0'
   end
   object lblScale: TLabel
     Left = 190
-    Height = 17
-    Top = 552
-    Width = 62
+    Height = 15
+    Top = 554
+    Width = 55
     Anchors = [akLeft, akBottom]
     Caption = 'Масштаб:'
   end
   object edtScale: TEdit
     Left = 260
-    Height = 27
-    Top = 548
+    Height = 23
+    Top = 552
     Width = 100
     Anchors = [akLeft, akBottom]
-    TabOrder = 2
+    TabOrder = 1
     Text = '1'
   end
   object btnApplyInstallation: TButton
     Left = 8
     Height = 32
     Top = 584
-    Width = 784
+    Width = 748
     Anchors = [akLeft, akRight, akBottom]
     Caption = 'Выполнить установку'
-    TabOrder = 3
+    TabOrder = 2
     OnClick = btnApplyInstallationClick
+  end
+  object vstLightMapping: TLazVirtualStringTree
+    Left = 16
+    Height = 524
+    Top = 8
+    Width = 728
+    DefaultText = 'Node'
+    Header.AutoSizeIndex = 0
+    Header.Columns = <>
+    Header.MainColumn = -1
+    TabOrder = 3
   end
 end

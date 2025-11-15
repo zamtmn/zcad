@@ -55,15 +55,14 @@ type
   TComboBoxEditLink = class(TInterfacedObject, IVTEditLink)
   private
     FEdit: TComboBox;           // Выпадающий список
-    FTree: TLazVirtualStringTree; // Дерево
+    FTree: TBaseVirtualTree; // Дерево
     FNode: PVirtualNode;        // Узел редактирования
     FColumn: TColumnIndex;      // Колонка редактирования
     FBlocksList: TStrings;      // Список блоков
 
-    {**Обработчик закрытия выпадающего списка}
-    procedure OnComboCloseUp(Sender: TObject);
 
   public
+    constructor Create;
     destructor Destroy; override;
 
     {**Начать редактирование}
@@ -91,8 +90,6 @@ type
     {**Установить границы редактора}
     procedure SetBounds(R: TRect); stdcall;
 
-    {**Установить список блоков}
-    procedure SetBlocksList(BlocksList: TStrings);
   end;
 
   {**Форма сопоставления светильников и блоков}
@@ -109,7 +106,6 @@ type
 
     {**Обработчик создания формы}
     procedure FormCreate(Sender: TObject);
-
     {**Обработчик уничтожения формы}
     procedure FormDestroy(Sender: TObject);
 
@@ -141,15 +137,6 @@ type
       const NewText: string
     );
 
-    {**Обработчик отрисовки текста в ячейке дерева}
-    procedure vstLightMappingPaintText(
-      Sender: TBaseVirtualTree;
-      const TargetCanvas: TCanvas;
-      Node: PVirtualNode;
-      Column: TColumnIndex;
-      TextType: TVSTTextType
-    );
-
     {**Обработчик начала редактирования ячейки}
     procedure vstLightMappingEditing(
       Sender: TBaseVirtualTree;
@@ -166,34 +153,6 @@ type
       X, Y: Integer
     );
 
-    {**Обработчик инициализации узла дерева}
-    //procedure vstLightMappingInitNode(
-    //  Sender: TBaseVirtualTree;
-    //  ParentNode: PVirtualNode;
-    //  Node: PVirtualNode;
-    //  var InitialStates: TVirtualNodeInitStates
-    //);
-
-    {**Обработчик освобождения узла дерева}
-    procedure vstLightMappingFreeNode(
-      Sender: TBaseVirtualTree;
-      Node: PVirtualNode
-    );
-
-    //{**Обработчик инициализации узла дерева}
-    //procedure vstLightMappingInitNode(
-    //  Sender: TBaseVirtualTree;
-    //  ParentNode: PVirtualNode;
-    //  Node: PVirtualNode;
-    //  var InitialStates: TVirtualNodeInitStates
-    //);
-
-    //{**Обработчик освобождения узла дерева}
-    //procedure vstLightMappingFreeNode(
-    //  Sender: TBaseVirtualTree;
-    //  Node: PVirtualNode
-    //);
-
   private
     FRecognizedLights: TLightItemArray;  // Массив распознанных светильников
     FLoadedBlocks: TLoadedBlocksList;    // Список доступных блоков
@@ -206,9 +165,6 @@ type
 
     {**Создать узел для одного светильника}
     function CreateLightNode(const LightItem: TLightItem): PVirtualNode;
-
-    {**Получить данные узла}
-    function GetNodeData(Node: PVirtualNode): PLightMappingNodeData;
 
     {**Получить значение угла поворота из поля ввода}
     function GetRotationAngle: Double;
@@ -246,9 +202,23 @@ begin
 
    // Включаем редактирование по клику
    vstLightMapping.TreeOptions.MiscOptions :=
-     vstLightMapping.TreeOptions.MiscOptions + [toEditOnClick];
+     vstLightMapping.TreeOptions.MiscOptions + [toEditable, toEditOnDblClick];
 
-  InitializeTreeColumns;
+   vstLightMapping.TreeOptions.PaintOptions:= vstLightMapping.TreeOptions.PaintOptions + [
+          toShowBackground,
+          toThemeAware,
+          toShowButtons,
+          toShowTreeLines
+        ];
+
+  vstLightMapping.OnGetText := @vstLightMappingGetText;
+  vstLightMapping.OnNewText := @vstLightMappingNewText;
+  vstLightMapping.OnEditing := @vstLightMappingEditing;
+  vstLightMapping.OnMouseDown := @vstLightMappingMouseDown;
+  vstLightMapping.OnCreateEditor := @vstLightMappingCreateEditor; // Новое событие для создания редактора
+
+    InitializeTreeColumns;
+
 
   // Настройка полей ввода поворота и масштаба
   lblRotation.Caption := 'Поворот:';
@@ -269,6 +239,7 @@ begin
   );
 end;
 
+
 {**Обработчик уничтожения формы}
 procedure TfrmDialuxLumImporter.FormDestroy(Sender: TObject);
 begin
@@ -281,48 +252,29 @@ end;
 
 {**Инициализировать колонки дерева}
 procedure TfrmDialuxLumImporter.InitializeTreeColumns;
-var
-  Column: TVirtualTreeColumn;
 begin
-  // Проверяем, что колонки уже созданы в .lfm файле
-  if vstLightMapping.Header.Columns.Count = 0 then
+  // Заголовок должен быть включён
+  with vstLightMapping.Header do
   begin
-    // Если колонок нет, создаем их программно
-    vstLightMapping.Header.Options :=
-      vstLightMapping.Header.Options + [hoVisible, hoColumnResize];
-
-    // Колонка 1: Импортированные светильники
-    Column := vstLightMapping.Header.Columns.Add;
-    Column.Text := 'Импортированные светильники';
-    Column.Width := 300;
-    Column.Options := Column.Options - [coEditable];
-
-    // Колонка 2: Блок для установки
-    Column := vstLightMapping.Header.Columns.Add;
-    Column.Text := 'Блок для установки';
-    Column.Width := 450;
-    Column.Options := Column.Options + [coEditable];
-
-     // Настройки дерева
-     vstLightMapping.TreeOptions.SelectionOptions :=
-       vstLightMapping.TreeOptions.SelectionOptions + [toFullRowSelect];
-
-  end
-  else
+    Options := Options + [hoVisible, hoColumnResize, hoAutoResize];
+    Columns.Clear;             // обязательно, иначе LFM перетрёт
+    AutoSizeIndex := 0;
+  end;
+  // Колонка 1
+  with vstLightMapping.Header.Columns.Add do
   begin
-    // Колонки уже определены в .lfm, только настраиваем их параметры
-    if vstLightMapping.Header.Columns.Count >= 2 then
-    begin
-      // Первая колонка - только для чтения
-      vstLightMapping.Header.Columns[0].Options :=
-        vstLightMapping.Header.Columns[0].Options - [coEditable];
+    Text := 'Импортированные светильники';
+    Width := 300;
+  end;
 
-      // Вторая колонка - редактируемая
-      vstLightMapping.Header.Columns[1].Options :=
-        vstLightMapping.Header.Columns[1].Options + [coEditable];
-    end;
+  // Колонка 2
+  with vstLightMapping.Header.Columns.Add do
+  begin
+    Text := 'Блок для установки';
+    Width := 450;
   end;
 end;
+
 
 {**Загрузить данные в форму}
 procedure TfrmDialuxLumImporter.LoadData(
@@ -334,6 +286,10 @@ begin
   FLoadedBlocks := LoadedBlocks;
 
   PopulateTree;
+  //
+  vstLightMapping.Invalidate;
+  vstLightMapping.ReinitNode(nil, True);
+vstLightMapping.Refresh;
 
   programlog.LogOutFormatStr(
     'Загружено %d светильника(-ов) и %d блока(-ов)',
@@ -372,89 +328,48 @@ var
   NodeData: PLightMappingNodeData;
 begin
   Result := vstLightMapping.AddChild(nil);
-  NodeData := GetNodeData(Result);
+  NodeData := vstLightMapping.GetNodeData(Result);
 
-  if NodeData <> nil then
+  if Assigned(NodeData) then
   begin
-    // Явная инициализация управляемых типов для защиты от ошибок
-    NodeData^.LumKey := '';
-    NodeData^.SelectedBlockName := '';
-    NodeData^.Center.x := 0;
-    NodeData^.Center.y := 0;
-    NodeData^.Center.z := 0;
-
-    // Заполняем корректными значениями
+    FillChar(NodeData^, SizeOf(TLightMappingNodeData), 0);
     NodeData^.LumKey := LightItem.LumKey;
     NodeData^.Center := LightItem.Center;
 
-    //zcUI.TextMessage('======='+LightItem.LumKey,TMWOHistoryOut);
-    //zcUI.TextMessage('+++++++'+FLoadedBlocks[0],TMWOHistoryOut);
-
-    // Устанавливаем первый блок по умолчанию, если есть
-    if (FLoadedBlocks <> nil) and (FLoadedBlocks.Count > 0) then
+    if FLoadedBlocks.Count > 0 then
       NodeData^.SelectedBlockName := FLoadedBlocks[0];
   end;
-end;
 
-{**Получить данные узла}
-function TfrmDialuxLumImporter.GetNodeData(
-  Node: PVirtualNode
-): PLightMappingNodeData;
-begin
-  if Node <> nil then
-    Result := vstLightMapping.GetNodeData(Node)
-  else
-    Result := nil;
 end;
 
 {**Обработчик получения текста для ячейки дерева}
 procedure TfrmDialuxLumImporter.vstLightMappingGetText(
-  Sender: TBaseVirtualTree;
-  Node: PVirtualNode;
-  Column: TColumnIndex;
-  TextType: TVSTTextType;
-  var CellText: string
-);
+  Sender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex;
+  TextType: TVSTTextType; var CellText: string);
 var
   NodeData: PLightMappingNodeData;
 begin
-  // Инициализируем результат пустой строкой
   CellText := '';
+    programlog.LogOutFormatStr('OnGetText called: Col=%d, NodeAssigned=%s',
+    [Column, BoolToStr(Node <> nil, True)],
+    LM_Info);
 
-  // Проверяем валидность узла
-  if Node = nil then
-    Exit;
+  if Node = nil then exit;
 
-  // Получаем указатель на данные узла
   NodeData := Sender.GetNodeData(Node);
+  programlog.LogOutFormatStr('  NodeData assigned=%s', [BoolToStr(Assigned(NodeData), True)], LM_Info);
 
-  // Проверяем валидность указателя на данные
-  if not Assigned(NodeData) then
-    Exit;
+  if not Assigned(NodeData) then exit;
 
-  // Защита от исключений при чтении данных
-  try
-    case Column of
-      0: // Колонка: Импортированные светильники
-        CellText := Format(
-          '%s (%.1f, %.1f)',
-          [NodeData^.LumKey, NodeData^.Center.x, NodeData^.Center.y]
-        );
+  case Column of
+    0:
+      CellText := Format('%s (%.1f, %.1f)',
+        [NodeData^.LumKey, NodeData^.Center.x, NodeData^.Center.y]);
 
-      1: // Колонка: Блок для установки
-        CellText := NodeData^.SelectedBlockName;
-    end;
-  except
-    on E: Exception do
-    begin
-      programlog.LogOutFormatStr(
-        'Ошибка чтения NodeData в GetText: %s',
-        [E.Message],
-        LM_Error
-      );
-      CellText := '';
-    end;
+    1:
+      CellText := NodeData^.SelectedBlockName;
   end;
+  programlog.LogOutFormatStr('  -> CellText="%s"', [CellText], LM_Info);
 end;
 
 {**Обработчик создания редактора для ячейки}
@@ -470,8 +385,10 @@ begin
   // Для второй колонки создаем редактор с выпадающим списком
   if Column = 1 then
   begin
+    //FBlocksList := BlocksList;
+    //ComboEditLink.SetBlocksList(FLoadedBlocks);
     ComboEditLink := TComboBoxEditLink.Create;
-    ComboEditLink.SetBlocksList(FLoadedBlocks);
+    ComboEditLink.FBlocksList := FLoadedBlocks;  // ВАЖНО
     EditLink := ComboEditLink;
   end
   else
@@ -488,62 +405,18 @@ procedure TfrmDialuxLumImporter.vstLightMappingNewText(
 var
   NodeData: PLightMappingNodeData;
 begin
-  if Column <> 1 then
-    Exit;
 
-  NodeData := GetNodeData(Node);
-  if NodeData <> nil then
-  begin
+  NodeData := Sender.GetNodeData(Node);
+  if not Assigned(NodeData) then Exit;
+
     NodeData^.SelectedBlockName := NewText;
 
     programlog.LogOutFormatStr(
       'Для светильника "%s" выбран блок "%s"',
       [NodeData^.LumKey, NewText],
-      LM_Debug
+      LM_Info
     );
-  end;
-end;
-
-{**Обработчик отрисовки текста в ячейке дерева}
-procedure TfrmDialuxLumImporter.vstLightMappingPaintText(
-  Sender: TBaseVirtualTree;
-  const TargetCanvas: TCanvas;
-  Node: PVirtualNode;
-  Column: TColumnIndex;
-  TextType: TVSTTextType
-);
-var
-  CellRect: TRect;
-  ArrowSize: Integer;
-  ArrowX, ArrowY: Integer;
-begin
-  // Устанавливаем цвет текста и фон для всех ячеек
-  // Это необходимо для корректной отрисовки текста в компоненте TLazVirtualStringTree
-  TargetCanvas.Font.Color := clBlack;
-  TargetCanvas.Brush.Color := clWhite;
-
-  // Для второй колонки (редактируемая с combobox) рисуем индикатор выпадающего списка
-  if Column = 1 then
-  begin
-    // Получаем прямоугольник ячейки
-    CellRect := Sender.GetDisplayRect(Node, Column, False);
-
-    // Размер стрелки
-    ArrowSize := 7;
-
-    // Позиция стрелки (справа в ячейке, с отступом)
-    ArrowX := CellRect.Right - ArrowSize - 8;
-    ArrowY := CellRect.Top + (CellRect.Bottom - CellRect.Top - ArrowSize) div 2;
-
-    // Рисуем треугольную стрелку вниз
-    TargetCanvas.Brush.Color := clGray;
-    TargetCanvas.Pen.Color := clGray;
-    TargetCanvas.Polygon([
-      Point(ArrowX, ArrowY),
-      Point(ArrowX + ArrowSize, ArrowY),
-      Point(ArrowX + ArrowSize div 2, ArrowY + ArrowSize)
-    ]);
-  end;
+  //end;
 end;
 
 {**Обработчик начала редактирования ячейки}
@@ -573,10 +446,7 @@ begin
   // Получаем информацию о том, на что нажали
   vstLightMapping.GetHitTestInfoAt(X, Y, True, HitInfo);
   Node := HitInfo.HitNode;
-
-  // Проверяем, что нажали на валидный узел
-  if Node = nil then
-    Exit;
+  if not Assigned(Node) then Exit;
 
   // Если нажали левой кнопкой на редактируемую колонку (индекс 1),
   // устанавливаем фокус и начинаем редактирование
@@ -585,51 +455,6 @@ begin
     vstLightMapping.FocusedNode := Node;
     vstLightMapping.FocusedColumn := HitInfo.HitColumn;
     vstLightMapping.EditNode(Node, HitInfo.HitColumn);
-  end;
-end;
-
-{**Обработчик инициализации узла дерева}
-//procedure TfrmDialuxLumImporter.vstLightMappingInitNode(
-//  Sender: TBaseVirtualTree;
-//  ParentNode: PVirtualNode;
-//  Node: PVirtualNode;
-//  var InitialStates: TVirtualNodeInitStates
-//);
-//var
-//  NodeData: PLightMappingNodeData;
-//begin
-//  // Получаем указатель на данные узла
-//  NodeData := Sender.GetNodeData(Node);
-//
-//  // Инициализируем управляемые типы (строки) пустыми значениями
-//  // Это необходимо для корректной работы с памятью и предотвращения
-//  // ошибок при чтении неинициализированных строковых полей
-//  if Assigned(NodeData) then
-//  begin
-//    NodeData^.LumKey := '';
-//    NodeData^.SelectedBlockName := '';
-//    NodeData^.Center.x := 0;
-//    NodeData^.Center.y := 0;
-//    NodeData^.Center.z := 0;
-//  end;
-//end;
-
-{**Обработчик освобождения узла дерева}
-procedure TfrmDialuxLumImporter.vstLightMappingFreeNode(
-  Sender: TBaseVirtualTree;
-  Node: PVirtualNode
-);
-var
-  NodeData: PLightMappingNodeData;
-begin
-  // Получаем указатель на данные узла
-  NodeData := Sender.GetNodeData(Node);
-
-  // Очищаем строковые поля для корректного освобождения памяти
-  if Assigned(NodeData) then
-  begin
-    NodeData^.LumKey := '';
-    NodeData^.SelectedBlockName := '';
   end;
 end;
 
@@ -735,7 +560,7 @@ begin
   Node := vstLightMapping.GetFirst;
   while Node <> nil do
   begin
-    NodeData := GetNodeData(Node);
+    NodeData := vstLightMapping.GetNodeData(Node);
 
     if NodeData <> nil then
     begin
@@ -824,7 +649,14 @@ begin
     );
 end;
 
-{ TComboBoxEditLink }
+
+constructor TComboBoxEditLink.Create;
+begin
+  inherited;
+  FEdit := TComboBox.Create(nil);
+  FEdit.Style := csDropDownList;
+end;
+
 
 {**Деструктор}
 destructor TComboBoxEditLink.Destroy;
@@ -834,12 +666,6 @@ begin
   inherited Destroy;
 end;
 
-{**Установить список блоков}
-procedure TComboBoxEditLink.SetBlocksList(BlocksList: TStrings);
-begin
-  FBlocksList := BlocksList;
-end;
-
 {**Подготовить редактор}
 function TComboBoxEditLink.PrepareEdit(
   Tree: TBaseVirtualTree;
@@ -847,42 +673,32 @@ function TComboBoxEditLink.PrepareEdit(
   Column: TColumnIndex
 ): Boolean; stdcall;
 var
+  R: TRect;
   NodeData: PLightMappingNodeData;
 begin
-  Result := True;
-  FTree := Tree as TLazVirtualStringTree;
+  FTree := Tree;
   FNode := Node;
   FColumn := Column;
 
-  // Создаем ComboBox
-  FEdit := TComboBox.Create(nil);
-  FEdit.Visible := False;
-  FEdit.Parent := Tree;
-  FEdit.Style := csDropDownList;
+  FEdit.Parent := Tree as TWinControl;
+  FEdit.Items.Assign(FBlocksList);
 
-  // Подключаем обработчик закрытия списка
-  FEdit.OnCloseUp := @OnComboCloseUp;
+  // Получаем прямоугольник ячейки
+  R := Tree.GetDisplayRect(Node, Column, True);
 
-  // Заполняем список блоков
-  if FBlocksList <> nil then
-    FEdit.Items.Assign(FBlocksList);
+  // Увеличиваем высоту для комбобокса
+  R.Bottom := R.Top + FEdit.Height;
+
+  FEdit.BoundsRect := R;
 
   // Устанавливаем текущее значение
-  NodeData := FTree.GetNodeData(Node);
-  if NodeData <> nil then
-  begin
-    FEdit.ItemIndex := FEdit.Items.IndexOf(NodeData^.SelectedBlockName);
-    if FEdit.ItemIndex < 0 then
-      FEdit.ItemIndex := 0;
-  end;
-end;
+  NodeData := Tree.GetNodeData(Node);
+  if Assigned(NodeData) then
+    FEdit.ItemIndex := FEdit.Items.IndexOf(NodeData^.SelectedBlockName)
+  else
+    FEdit.ItemIndex := 0;
 
-{**Обработчик закрытия выпадающего списка}
-procedure TComboBoxEditLink.OnComboCloseUp(Sender: TObject);
-begin
-  // После закрытия списка завершаем редактирование
-  if FTree <> nil then
-    FTree.EndEditNode;
+  Result := True;
 end;
 
 {**Начать редактирование}
@@ -897,10 +713,10 @@ begin
   FEdit.SetFocus;
 
   // Обрабатываем сообщения для завершения операций фокуса
-  Application.ProcessMessages;
+  //Application.ProcessMessages;
 
   // Теперь разворачиваем список после того, как фокус установлен
-  FEdit.DroppedDown := True;
+  //FEdit.DroppedDown := True;
 end;
 
 {**Завершить редактирование}
@@ -909,17 +725,16 @@ var
   NodeData: PLightMappingNodeData;
 begin
   Result := True;
-
-  if FEdit.ItemIndex >= 0 then
+  if Assigned(FTree) and Assigned(FNode) then
   begin
     NodeData := FTree.GetNodeData(FNode);
-    if NodeData <> nil then
+    if Assigned(NodeData) and (FEdit.ItemIndex >= 0) then
+    begin
       NodeData^.SelectedBlockName := FEdit.Items[FEdit.ItemIndex];
+      FTree.InvalidateNode(FNode);
+    end;
   end;
-
   FEdit.Hide;
-  FEdit.Free;
-  FEdit := nil;
 end;
 
 {**Отменить изменения}
@@ -927,8 +742,7 @@ function TComboBoxEditLink.CancelEdit: Boolean; stdcall;
 begin
   Result := True;
   FEdit.Hide;
-  FEdit.Free;
-  FEdit := nil;
+
 end;
 
 {**Получить границы редактора}

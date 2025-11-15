@@ -257,7 +257,7 @@ begin
     try
       // Загружаем данные в форму
       LoadData(RecognizedLights, LoadedBlocks);
-
+      //Invalidate;
       // Показываем форму модально
       ShowModal;
 

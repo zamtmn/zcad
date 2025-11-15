@@ -151,12 +151,12 @@ type
     );
 
     {**Обработчик начала редактирования ячейки}
-    procedure vstLightMappingEditing(
-      Sender: TBaseVirtualTree;
-      Node: PVirtualNode;
-      Column: TColumnIndex;
-      var Allowed: Boolean
-    );
+    //procedure vstLightMappingEditing(
+    //  Sender: TBaseVirtualTree;
+    //  Node: PVirtualNode;
+    //  Column: TColumnIndex;
+    //  var Allowed: Boolean
+    //);
 
     {**Обработчик нажатия мыши на дереве}
     procedure vstLightMappingMouseDown(
@@ -188,11 +188,6 @@ type
     //  var InitialStates: TVirtualNodeInitStates
     //);
 
-    {**Обработчик освобождения узла дерева}
-    procedure vstLightMappingFreeNode(
-      Sender: TBaseVirtualTree;
-      Node: PVirtualNode
-    );
 
   private
     FRecognizedLights: TLightItemArray;  // Массив распознанных светильников
@@ -547,17 +542,17 @@ begin
 end;
 
 {**Обработчик начала редактирования ячейки}
-procedure TfrmDialuxLumImporter.vstLightMappingEditing(
-  Sender: TBaseVirtualTree;
-  Node: PVirtualNode;
-  Column: TColumnIndex;
-  var Allowed: Boolean
-);
-begin
-  // Разрешаем редактирование только для второй колонки (индекс 1)
-  // Первая колонка (индекс 0) - только для чтения
-  Allowed := (Column = 1);
-end;
+//procedure TfrmDialuxLumImporter.vstLightMappingEditing(
+//  Sender: TBaseVirtualTree;
+//  Node: PVirtualNode;
+//  Column: TColumnIndex;
+//  var Allowed: Boolean
+//);
+//begin
+//  // Разрешаем редактирование только для второй колонки (индекс 1)
+//  // Первая колонка (индекс 0) - только для чтения
+//  Allowed := (Column = 1);
+//end;
 
 {**Обработчик нажатия мыши на дереве}
 procedure TfrmDialuxLumImporter.vstLightMappingMouseDown(
@@ -896,8 +891,8 @@ begin
   // Устанавливаем фокус на ComboBox
   FEdit.SetFocus;
 
-  // Обрабатываем сообщения для завершения операций фокуса
-  Application.ProcessMessages;
+  //// Обрабатываем сообщения для завершения операций фокуса
+  //Application.ProcessMessages;
 
   // Теперь разворачиваем список после того, как фокус установлен
   FEdit.DroppedDown := True;

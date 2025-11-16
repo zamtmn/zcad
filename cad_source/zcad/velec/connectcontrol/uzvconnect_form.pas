@@ -33,7 +33,10 @@ uses
   ActnList,
   Dialogs,
   laz.VirtualTrees,
-  uzvconnect_struct;
+  uzvconnect_struct,
+  uzvconnect_logic,
+  uzvconnect_dwginteraction,
+  uzeentdevice;
 
 type
   {**Данные узла дерева подключений}
@@ -88,6 +91,13 @@ type
   private
     {**Инициализировать дерево подключений}
     procedure InitializeTree;
+
+    {**Добавить новое подключение к выбранному устройству}
+    procedure AddNewConnection;
+
+    {**Обновить дерево с сохранением позиций устройств
+       @param APreviousDeviceIndex - индекс устройства, к которому добавлено подключение}
+    procedure UpdateTreePreservingPositions(APreviousDeviceIndex: Integer);
 
   public
     {**Загрузить данные из списка подключений}
@@ -216,10 +226,10 @@ begin
   end;
 end;
 
-{**Обработчик нажатия кнопки 1}
+{**Обработчик нажатия кнопки 1 - добавление нового подключения}
 procedure TfrmConnectControl.actButton1Execute(Sender: TObject);
 begin
-  ShowMessage('1');
+  AddNewConnection;
 end;
 
 {**Обработчик нажатия кнопки 2}
@@ -238,6 +248,135 @@ end;
 procedure TfrmConnectControl.actButton4Execute(Sender: TObject);
 begin
   ShowMessage('4');
+end;
+
+{**Добавить новое подключение к выбранному устройству}
+procedure TfrmConnectControl.AddNewConnection;
+var
+  selectedNode: PVirtualNode;
+  nodeData: PConnectNodeData;
+  connectItem: TConnectItem;
+  device: PGDBObjDevice;
+  previousDeviceIndex: Integer;
+begin
+  // Получаем выбранный узел в дереве
+  selectedNode := vstConnections.GetFirstSelected;
+
+  if selectedNode = nil then
+  begin
+    ShowMessage('Выберите устройство в списке');
+    Exit;
+  end;
+
+  // Получаем данные узла
+  nodeData := vstConnections.GetNodeData(selectedNode);
+
+  if nodeData = nil then
+    Exit;
+
+  // Проверяем корректность индекса
+  if (nodeData^.ConnectIndex < 0) or
+     (nodeData^.ConnectIndex >= ConnectList.Size) then
+    Exit;
+
+  // Получаем устройство из выбранного подключения
+  connectItem := ConnectList[nodeData^.ConnectIndex];
+  device := connectItem.Device;
+
+  if device = nil then
+  begin
+    ShowMessage('Ошибка: устройство не найдено');
+    Exit;
+  end;
+
+  // Запоминаем индекс для последующего обновления дерева
+  previousDeviceIndex := nodeData^.ConnectIndex;
+
+  // Добавляем новое подключение к устройству
+  if not AddConnectionToDevice(device) then
+  begin
+    ShowMessage('Ошибка при добавлении подключения');
+    Exit;
+  end;
+
+  // Перезагружаем данные с чертежа
+  CollectDevicesFromDWG;
+
+  // Обновляем дерево с сохранением позиций
+  UpdateTreePreservingPositions(previousDeviceIndex);
+
+  ShowMessage('Подключение успешно добавлено');
+end;
+
+{**Обновить дерево с сохранением позиций устройств}
+procedure TfrmConnectControl.UpdateTreePreservingPositions(
+  APreviousDeviceIndex: Integer
+);
+var
+  i: Integer;
+  node: PVirtualNode;
+  nodeData: PConnectNodeData;
+  currentIndex: Integer;
+  deviceToInsertAfter: PGDBObjDevice;
+  insertionMade: Boolean;
+begin
+  // Определяем устройство, после которого нужно вставить новое подключение
+  if (APreviousDeviceIndex >= 0) and
+     (APreviousDeviceIndex < ConnectList.Size) then
+    deviceToInsertAfter := ConnectList[APreviousDeviceIndex].Device
+  else
+    deviceToInsertAfter := nil;
+
+  // Очищаем дерево
+  vstConnections.Clear;
+
+  // Добавляем узлы в дерево с учетом порядка
+  currentIndex := 0;
+  insertionMade := False;
+
+  for i := 0 to ConnectList.Size - 1 do
+  begin
+    // Если это устройство, к которому добавили подключение,
+    // добавляем его старые подключения
+    if (not insertionMade) and
+       (deviceToInsertAfter <> nil) and
+       (ConnectList[i].Device = deviceToInsertAfter) then
+    begin
+      // Добавляем текущее подключение
+      node := vstConnections.AddChild(nil);
+      nodeData := vstConnections.GetNodeData(node);
+
+      if nodeData <> nil then
+        nodeData^.ConnectIndex := i;
+
+      // Проверяем, есть ли следующее подключение того же устройства
+      if (i + 1 < ConnectList.Size) and
+         (ConnectList[i + 1].Device = deviceToInsertAfter) then
+      begin
+        // Это новое подключение - добавляем его
+        node := vstConnections.AddChild(nil);
+        nodeData := vstConnections.GetNodeData(node);
+
+        if nodeData <> nil then
+          nodeData^.ConnectIndex := i + 1;
+
+        insertionMade := True;
+        Inc(i); // Пропускаем следующий элемент, так как уже добавили
+      end;
+    end
+    else
+    begin
+      // Обычное добавление узла
+      node := vstConnections.AddChild(nil);
+      nodeData := vstConnections.GetNodeData(node);
+
+      if nodeData <> nil then
+        nodeData^.ConnectIndex := i;
+    end;
+  end;
+
+  // Обновляем отображение
+  vstConnections.Invalidate;
 end;
 
 end.

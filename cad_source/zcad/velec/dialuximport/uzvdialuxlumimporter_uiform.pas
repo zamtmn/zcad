@@ -43,12 +43,17 @@ uses
   uzclog;
 
 type
+  {**Список индексов светильников}
+  TIntegerList = class(TList)
+  end;
+
   {**Данные узла дерева сопоставления}
   PLightMappingNodeData = ^TLightMappingNodeData;
   TLightMappingNodeData = record
     LumKey: string;             // Идентификатор светильника
-    Center: GDBvertex;          // Координаты центра
+    Center: GDBvertex;          // Координаты центра (первого светильника)
     SelectedBlockName: string;  // Выбранное имя блока
+    LightIndices: TIntegerList; // Индексы всех светильников с этим LumKey
   end;
 
   {**Реализация редактора с выпадающим списком для ячейки дерева}
@@ -163,9 +168,6 @@ type
     {**Заполнить дерево данными о светильниках}
     procedure PopulateTree;
 
-    {**Создать узел для одного светильника}
-    function CreateLightNode(const LightItem: TLightItem): PVirtualNode;
-
     {**Получить значение угла поворота из поля ввода}
     function GetRotationAngle: Double;
 
@@ -242,7 +244,23 @@ end;
 
 {**Обработчик уничтожения формы}
 procedure TfrmDialuxLumImporter.FormDestroy(Sender: TObject);
+var
+  Node: PVirtualNode;
+  NodeData: PLightMappingNodeData;
 begin
+  // Освобождаем списки индексов для каждого узла
+  Node := vstLightMapping.GetFirst;
+  while Node <> nil do
+  begin
+    NodeData := vstLightMapping.GetNodeData(Node);
+    if Assigned(NodeData) and Assigned(NodeData^.LightIndices) then
+    begin
+      NodeData^.LightIndices.Free;
+      NodeData^.LightIndices := nil;
+    end;
+    Node := vstLightMapping.GetNext(Node);
+  end;
+
   programlog.LogOutFormatStr(
     'Форма импорта светильников Dialux закрыта',
     [],
@@ -303,43 +321,71 @@ procedure TfrmDialuxLumImporter.PopulateTree;
 var
   i: Integer;
   LightItem: TLightItem;
+  NodeData: PLightMappingNodeData;
+  Node: PVirtualNode;
+  UniqueKeys: TStringList;
+  LumKey: string;
 begin
   vstLightMapping.BeginUpdate;
   try
     vstLightMapping.Clear;
 
-    for i := 0 to High(FRecognizedLights) do
-    begin
-      LightItem := FRecognizedLights[i];
+    // Создаём список для отслеживания уникальных LumKey
+    UniqueKeys := TStringList.Create;
+    try
+      UniqueKeys.Sorted := True;
+      UniqueKeys.Duplicates := dupIgnore;
 
-      CreateLightNode(LightItem);
+      // Проходим по всем светильникам и группируем их по LumKey
+      for i := 0 to High(FRecognizedLights) do
+      begin
+        LightItem := FRecognizedLights[i];
+        LumKey := LightItem.LumKey;
+
+        // Проверяем, встречался ли уже такой LumKey
+        if UniqueKeys.IndexOf(LumKey) = -1 then
+        begin
+          // Первая встреча этого LumKey - создаём новый узел
+          UniqueKeys.Add(LumKey);
+          Node := vstLightMapping.AddChild(nil);
+          NodeData := vstLightMapping.GetNodeData(Node);
+
+          if Assigned(NodeData) then
+          begin
+            FillChar(NodeData^, SizeOf(TLightMappingNodeData), 0);
+            NodeData^.LumKey := LumKey;
+            NodeData^.Center := LightItem.Center;
+            NodeData^.LightIndices := TIntegerList.Create;
+            NodeData^.LightIndices.Add(Pointer(PtrInt(i)));
+
+            if FLoadedBlocks.Count > 0 then
+              NodeData^.SelectedBlockName := FLoadedBlocks[0];
+          end;
+        end
+        else
+        begin
+          // LumKey уже существует - добавляем индекс к существующему узлу
+          Node := vstLightMapping.GetFirst;
+          while Node <> nil do
+          begin
+            NodeData := vstLightMapping.GetNodeData(Node);
+            if Assigned(NodeData) and (NodeData^.LumKey = LumKey) then
+            begin
+              NodeData^.LightIndices.Add(Pointer(PtrInt(i)));
+              Break;
+            end;
+            Node := vstLightMapping.GetNext(Node);
+          end;
+        end;
+      end;
+
+    finally
+      UniqueKeys.Free;
     end;
 
   finally
     vstLightMapping.EndUpdate;
   end;
-end;
-
-{**Создать узел для одного светильника}
-function TfrmDialuxLumImporter.CreateLightNode(
-  const LightItem: TLightItem
-): PVirtualNode;
-var
-  NodeData: PLightMappingNodeData;
-begin
-  Result := vstLightMapping.AddChild(nil);
-  NodeData := vstLightMapping.GetNodeData(Result);
-
-  if Assigned(NodeData) then
-  begin
-    FillChar(NodeData^, SizeOf(TLightMappingNodeData), 0);
-    NodeData^.LumKey := LightItem.LumKey;
-    NodeData^.Center := LightItem.Center;
-
-    if FLoadedBlocks.Count > 0 then
-      NodeData^.SelectedBlockName := FLoadedBlocks[0];
-  end;
-
 end;
 
 {**Обработчик получения текста для ячейки дерева}
@@ -363,8 +409,12 @@ begin
 
   case Column of
     0:
-      CellText := Format('%s (%.1f, %.1f)',
-        [NodeData^.LumKey, NodeData^.Center.x, NodeData^.Center.y]);
+      // Показываем LumKey и количество светильников с этим номером
+      if Assigned(NodeData^.LightIndices) then
+        CellText := Format('%s [%d шт.]',
+          [NodeData^.LumKey, NodeData^.LightIndices.Count])
+      else
+        CellText := NodeData^.LumKey;
 
     1:
       CellText := NodeData^.SelectedBlockName;
@@ -542,6 +592,9 @@ var
   InsertedBlock: PGDBObjBlockInsert;
   RotationAngle: Double;
   ScaleFactor: Double;
+  i: Integer;
+  LightIndex: Integer;
+  LightItem: TLightItem;
 begin
   InstalledCount := 0;
   ErrorCount := 0;
@@ -556,7 +609,7 @@ begin
     LM_Info
   );
 
-  // Проходим по всем узлам дерева
+  // Проходим по всем узлам дерева (каждый узел = уникальный LumKey)
   Node := vstLightMapping.GetFirst;
   while Node <> nil do
   begin
@@ -574,55 +627,74 @@ begin
         );
         Inc(ErrorCount);
       end
-      else
+      else if Assigned(NodeData^.LightIndices) then
       begin
-        try
-          zcUI.TextMessage('SelectedBlockName='+NodeData^.SelectedBlockName,TMWOHistoryOut);
-          // Вызываем функцию вставки блока на чертеж
-          // Масштаб применяется одинаково по всем трем осям (X, Y, Z)
-          InsertedBlock := drawInsertBlock(
-            NodeData^.Center,
-            ScaleFactor,
-            ScaleFactor,
-            RotationAngle,
-            NodeData^.SelectedBlockName
-          );
+        // Устанавливаем блоки для всех светильников с этим LumKey
+        for i := 0 to NodeData^.LightIndices.Count - 1 do
+        begin
+          LightIndex := PtrInt(NodeData^.LightIndices[i]);
 
-          if InsertedBlock <> nil then
+          // Проверяем корректность индекса
+          if (LightIndex < 0) or (LightIndex > High(FRecognizedLights)) then
           begin
             programlog.LogOutFormatStr(
-              'Светильник "%s" → Блок "%s" установлен в (%.1f, %.1f) ' +
-              'с поворотом %.2f° и масштабом %.2f',
-              [
-                NodeData^.LumKey,
-                NodeData^.SelectedBlockName,
-                NodeData^.Center.x,
-                NodeData^.Center.y,
-                RotationAngle,
-                ScaleFactor
-              ],
-              LM_Info
-            );
-            Inc(InstalledCount);
-          end
-          else
-          begin
-            programlog.LogOutFormatStr(
-              'Светильник "%s": ошибка вставки блока "%s"',
-              [NodeData^.LumKey, NodeData^.SelectedBlockName],
+              'Светильник "%s": некорректный индекс %d',
+              [NodeData^.LumKey, LightIndex],
               LM_Error
             );
             Inc(ErrorCount);
+            Continue;
           end;
-        except
-          on E: Exception do
-          begin
-            programlog.LogOutFormatStr(
-              'Светильник "%s": исключение при вставке блока "%s": %s',
-              [NodeData^.LumKey, NodeData^.SelectedBlockName, E.Message],
-              LM_Error
+
+          LightItem := FRecognizedLights[LightIndex];
+
+          try
+            // Вызываем функцию вставки блока на чертеж
+            // Масштаб применяется одинаково по всем трем осям (X, Y, Z)
+            InsertedBlock := drawInsertBlock(
+              LightItem.Center,
+              ScaleFactor,
+              ScaleFactor,
+              RotationAngle,
+              NodeData^.SelectedBlockName
             );
-            Inc(ErrorCount);
+
+            if InsertedBlock <> nil then
+            begin
+              programlog.LogOutFormatStr(
+                'Светильник "%s" → Блок "%s" установлен в (%.1f, %.1f) ' +
+                'с поворотом %.2f° и масштабом %.2f',
+                [
+                  LightItem.LumKey,
+                  NodeData^.SelectedBlockName,
+                  LightItem.Center.x,
+                  LightItem.Center.y,
+                  RotationAngle,
+                  ScaleFactor
+                ],
+                LM_Info
+              );
+              Inc(InstalledCount);
+            end
+            else
+            begin
+              programlog.LogOutFormatStr(
+                'Светильник "%s": ошибка вставки блока "%s"',
+                [LightItem.LumKey, NodeData^.SelectedBlockName],
+                LM_Error
+              );
+              Inc(ErrorCount);
+            end;
+          except
+            on E: Exception do
+            begin
+              programlog.LogOutFormatStr(
+                'Светильник "%s": исключение при вставке блока "%s": %s',
+                [LightItem.LumKey, NodeData^.SelectedBlockName, E.Message],
+                LM_Error
+              );
+              Inc(ErrorCount);
+            end;
           end;
         end;
       end;

@@ -319,6 +319,7 @@ var
   currentIndex: Integer;
   deviceToInsertAfter: PGDBObjDevice;
   insertionMade: Boolean;
+  skipNext: Boolean;
 begin
   // Определяем устройство, после которого нужно вставить новое подключение
   if (APreviousDeviceIndex >= 0) and
@@ -333,9 +334,17 @@ begin
   // Добавляем узлы в дерево с учетом порядка
   currentIndex := 0;
   insertionMade := False;
+  skipNext := False;
 
   for i := 0 to ConnectList.Size - 1 do
   begin
+    // Пропускаем элемент, если он был обработан на предыдущей итерации
+    if skipNext then
+    begin
+      skipNext := False;
+      Continue;
+    end;
+
     // Если это устройство, к которому добавили подключение,
     // добавляем его старые подключения
     if (not insertionMade) and
@@ -361,7 +370,7 @@ begin
           nodeData^.ConnectIndex := i + 1;
 
         insertionMade := True;
-        Inc(i); // Пропускаем следующий элемент, так как уже добавили
+        skipNext := True; // Отмечаем, что следующий элемент уже обработан
       end;
     end
     else

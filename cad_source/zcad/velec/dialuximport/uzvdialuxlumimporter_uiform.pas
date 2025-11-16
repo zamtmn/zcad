@@ -40,7 +40,9 @@ uses
   uzvdialuxlumimporter_structs,
   uzvdialuxlumimporter_utils,
   uzeentblockinsert,
-  uzclog;
+  uzclog,
+  uzcenitiesvariablesextender,
+  varmandef;
 
 type
   {**Список индексов светильников}
@@ -595,6 +597,9 @@ var
   i: Integer;
   LightIndex: Integer;
   LightItem: TLightItem;
+  VarExt: TVariablesExtender;
+  VarDesc: pvardesk;
+  BaseNameValue: string;
 begin
   InstalledCount := 0;
   ErrorCount := 0;
@@ -674,6 +679,27 @@ begin
                 ],
                 LM_Info
               );
+
+              // Присваиваем NMO_BaseName значение 'EL' + уникальный номер
+              VarExt := InsertedBlock^.GetExtension<TVariablesExtender>;
+              if VarExt <> nil then
+              begin
+                VarDesc := VarExt.entityunit.FindVariable('NMO_BaseName');
+                if VarDesc <> nil then
+                begin
+                  BaseNameValue := 'EL' + LightItem.LumKey;
+                  VarDesc^.Data.PTD.SetValueFromString(
+                    VarDesc^.Data.Addr.Instance,
+                    BaseNameValue
+                  );
+                  programlog.LogOutFormatStr(
+                    'Светильник "%s": установлено NMO_BaseName = "%s"',
+                    [LightItem.LumKey, BaseNameValue],
+                    LM_Info
+                  );
+                end;
+              end;
+
               Inc(InstalledCount);
             end
             else

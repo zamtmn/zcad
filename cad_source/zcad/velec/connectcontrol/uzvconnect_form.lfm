@@ -74,9 +74,11 @@ object frmConnectControl: TfrmConnectControl
       Header.Options = [hoColumnResize, hoDblClickResize, hoVisible]
       NodeDataSize = 8
       TabOrder = 0
-      TreeOptions.MiscOptions = [toFullRepaintOnResize, toGridExtensions, toInitOnSave, toToggleOnDblClick, toWheelPanning]
+      TreeOptions.MiscOptions = [toFullRepaintOnResize, toGridExtensions, toInitOnSave, toToggleOnDblClick, toWheelPanning, toEditable, toEditOnDblClick]
       TreeOptions.SelectionOptions = [toFullRowSelect, toRightClickSelect]
+      OnEditing = vstConnectionsEditing
       OnGetText = vstConnectionsGetText
+      OnNewText = vstConnectionsNewText
     end
   end
   object ActionList1: TActionList

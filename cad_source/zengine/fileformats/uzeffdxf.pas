@@ -184,9 +184,12 @@ var
   procedure storevariable;
   begin
     case currentindex of
-      0:fileCtx.DWGVarsDict.Add(varname,valuesarray[0]);
-      1:fileCtx.DWGVarsDict.Add(varname,valuesarray[0]+'|'+valuesarray[1]);
-      else fileCtx.DWGVarsDict.Add(varname,valuesarray[0]+'|'+valuesarray[1]+'|'+valuesarray[2]);
+      //https://github.com/zamtmn/zcad/issues/207
+      //$DIMASSOC почемуто дублируется в in.dxf
+      //поэтому add->AddOrSetValue
+      0:fileCtx.DWGVarsDict.AddOrSetValue(varname,valuesarray[0]);
+      1:fileCtx.DWGVarsDict.AddOrSetValue(varname,valuesarray[0]+'|'+valuesarray[1]);
+      else fileCtx.DWGVarsDict.AddOrSetValue(varname,valuesarray[0]+'|'+valuesarray[1]+'|'+valuesarray[2]);
     end;
 
     if not ACVERSION then

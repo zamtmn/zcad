@@ -873,6 +873,7 @@
       <Unit78>
         <Filename Value="zengine/fonts/uzeffttf.pas"/>
         <IsPartOfProject Value="True"/>
+        <UnitName Value="uzeFFTTF"/>
       </Unit78>
       <Unit79>
         <Filename Value="zengine/fileformats/uzeffdxf.pas"/>
@@ -1006,6 +1007,7 @@
       <Unit111>
         <Filename Value="zengine/core/entities/uzeentspline.pas"/>
         <IsPartOfProject Value="True"/>
+        <UnitName Value="uzeEntSpline"/>
       </Unit111>
       <Unit112>
         <Filename Value="zengine/core/entities/uzeentsubordinated.pas"/>

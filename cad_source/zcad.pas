@@ -99,7 +99,7 @@ uses
   uzeenttext,uzeentmtext,
   uzeentpoint,
   uzeentpolyline,
-  uzeentspline,
+  uzeEntSpline,
   uzeenttable,
 
   {$IFDEF ELECTROTECH}

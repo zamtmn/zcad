@@ -34,6 +34,7 @@ uses
   uzcinterface,
   uzvconsts,
   Varman,
+  gzctnrVectorTypes,
   uzvconnect_struct;
 
 {**Добавить новое подключение к устройству
@@ -157,7 +158,7 @@ begin
   pvd^.username := pvdTemplate^.username;
 
   // Копируем значение из шаблона
-  pvdTemplate^.data.PTD.CopyValueToInstance(
+  pvdTemplate^.data.PTD^.CopyValueToInstance(
     pvdTemplate^.data.Addr.Instance,
     pvd^.data.Addr.Instance
   );
@@ -192,7 +193,7 @@ begin
   end;
 
   // Получаем расширение с переменными у устройства
-  Varext := ADevice^.GetExtension<TVariablesExtender>;
+  Varext := ADevice^.specialize GetExtension<TVariablesExtender>;
 
   if Varext = nil then
   begin

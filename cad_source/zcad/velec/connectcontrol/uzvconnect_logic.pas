@@ -62,7 +62,7 @@ begin
   // Ищем модуль и загружаем его
   Result := units.findunit(
     GetSupportPaths,      // пути по которым будет искаться юнит
-    InterfaceTranslate,   // процедура локализации
+    @InterfaceTranslate,  // процедура локализации
     CONNECTION_MODULE_NAME
   );
 end;
@@ -128,8 +128,7 @@ begin
   Result := False;
 
   // Находим переменную в шаблоне
-  pvdTemplate := ATemplateUnit^.InterfaceVariables.vardescarray.
-                 FindVariable(ATemplateName);
+  pvdTemplate := ATemplateUnit^.FindVariable(ATemplateName, True);
 
   if pvdTemplate = nil then
     Exit;
@@ -160,7 +159,7 @@ begin
   // Копируем значение из шаблона
   pvdTemplate^.data.PTD.CopyValueToInstance(
     pvdTemplate^.data.Addr.Instance,
-    pvd.data.Addr.Instance
+    pvd^.data.Addr.Instance
   );
 
   Result := True;

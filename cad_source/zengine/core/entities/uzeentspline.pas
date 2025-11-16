@@ -368,6 +368,7 @@ var
   pt:TPointsType;
   startTangent,endTangent:TNulableVetrex;
   vcp:TControlPointsArray;
+  i:integer;
 begin
   Closed:=False;
   tmpVertex:=NulVertex;
@@ -409,10 +410,11 @@ begin
     vertexarrayinocs.SetSize(context.GDBVertexLoadCache.Count);
     context.GDBVertexLoadCache.copyto(vertexarrayinocs);
   end else begin
-    //vcp:=ConvertOnCurvePointsToControlPointsArray(Degree,context.GDBVertexLoadCache,Knots.);
-
-    //for i:=low(vcp) to high(vcp) do
-    //  ASpleneEntity.AddVertex(vcp[i]);
+    vcp:=ConvertOnCurvePointsToControlPointsArray(Degree,context.GDBVertexLoadCache.PArray^[0..context.GDBVertexLoadCache.count-1],Knots);
+    vertexarrayinocs.SetSize(high(vcp)-low(vcp)+1);
+    vertexarrayinocs.Clear;
+    for i:=low(vcp) to high(vcp) do
+      AddVertex(vcp[i]);
   end;
   context.GDBVertexLoadCache.Clear;
 

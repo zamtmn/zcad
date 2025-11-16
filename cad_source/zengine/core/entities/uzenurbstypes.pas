@@ -29,6 +29,8 @@ type
   end;
   TCPVector=object(GZVector<GDBvertex4S>)
   end;
+  TSingleArray=array of single;
+  TControlPointsArray=array of GDBVertex;
 
 implementation
 end.

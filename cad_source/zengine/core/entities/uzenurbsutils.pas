@@ -25,19 +25,11 @@ interface
 uses
   SysUtils,
   uzegeometrytypes,uzegeometry,
-  gzctnrVector;
-
-type
-  TSingleArray=array of single;
-  TControlPointsArray=array of GDBVertex;
-
-  TKnotsVector=object(GZVector<single>)
-  end;
-  TCPVector=object(GZVector<GDBvertex4S>)
-  end;
+  gzctnrVector,
+  uzeNURBSTypes;
 
 function ConvertOnCurvePointsToControlPointsArray(const ADegree:integer;
-  const AOnCurvePoints:array of GDBVertex;var AKnots:TSingleArray):TControlPointsArray;
+  const AOnCurvePoints:array of GDBVertex;var AKnots:TKnotsVector):TControlPointsArray;
 
 implementation
 
@@ -318,7 +310,7 @@ begin
 end;
 
 function ConvertOnCurvePointsToControlPointsArray(const ADegree:integer;
-  const AOnCurvePoints:array of GDBVertex;var AKnots:TSingleArray):TControlPointsArray;
+  const AOnCurvePoints:array of GDBVertex;var AKnots:TKnotsVector):TControlPointsArray;
 var
   numPoints,numControlPoints,i,j,k,n,m,numKnots,numEq:integer;
   params:array of single;
@@ -338,7 +330,8 @@ begin
   // Handle edge cases
   if numPoints<2 then begin
     SetLength(Result,0);
-    SetLength(AKnots,0);
+    AKnots.Clear;
+    //SetLength(AKnots,0);
     exit;
   end;
 
@@ -347,7 +340,8 @@ begin
     SetLength(Result,numPoints);
     for i:=0 to numPoints-1 do
       Result[i]:=AOnCurvePoints[i];
-    SetLength(AKnots,0);
+    AKnots.Clear;
+    //SetLength(AKnots,0);
     exit;
   end;
 
@@ -356,7 +350,8 @@ begin
     SetLength(Result,numPoints);
     for i:=0 to numPoints-1 do
       Result[i]:=AOnCurvePoints[i];
-    SetLength(AKnots,0);
+    AKnots.Clear;
+    //SetLength(AKnots,0);
     exit;
   end;
 
@@ -365,7 +360,8 @@ begin
     SetLength(Result,numPoints);
     for i:=0 to numPoints-1 do
       Result[i]:=AOnCurvePoints[i];
-    SetLength(AKnots,0);
+    AKnots.Clear;
+    //SetLength(AKnots,0);
     exit;
   end;
 
@@ -374,7 +370,8 @@ begin
     SetLength(Result,2);
     Result[0]:=AOnCurvePoints[0];
     Result[1]:=AOnCurvePoints[1];
-    SetLength(AKnots,0);
+    AKnots.Clear;
+    //SetLength(AKnots,0);
     exit;
   end;
 
@@ -411,9 +408,11 @@ begin
     knots[i]:=1.0;
 
   // Copy knots to output parameter
-  SetLength(AKnots,Length(knots));
+  AKnots.SetSize(Length(knots));
+  AKnots.Clear;
+  //SetLength(AKnots,Length(knots));
   for i:=0 to Length(knots)-1 do
-    AKnots[i]:=knots[i];
+    AKnots.PushBackData(knots[i]);//AKnots[i]:=knots[i];
 
   // Step 3: Build the augmented matrix system
   // We have (m+1) interpolation constraints + 2 natural boundary conditions

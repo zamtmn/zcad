@@ -33,7 +33,7 @@ uses
   uzcutils,
   uzcdrawings,
   UGDBPoint3DArray,
-  uzeNURBSUtils;
+  uzeNURBSTypes,uzeNURBSUtils;
 
 implementation
 
@@ -86,7 +86,7 @@ begin
   end else begin
     //имеем точки на кривой
     //пересчитываем точки и получаем соответствующий узловой вектор
-    vcp:=ConvertOnCurvePointsToControlPointsArray(ASpleneEntity.Degree,APoints,computedKnots);
+    vcp:=ConvertOnCurvePointsToControlPointsArray(ASpleneEntity.Degree,APoints,ASpleneEntity.Knots{computedKnots});
 
     //Добавляем все контрольные точки в сплайн
     for i:=low(vcp) to high(vcp) do
@@ -94,11 +94,7 @@ begin
 
     // Используем узловой вектор, вычисленный вместе с контрольными точками
     // ВАЖНО: Контрольные точки и узловой вектор должны соответствовать друг другу!
-    if Length(computedKnots)>0 then begin
-      // Используем вычисленный узловой вектор
-      for i:=0 to Length(computedKnots)-1 do
-        ASpleneEntity.Knots.PushBackData(computedKnots[i]);
-    end else begin
+    if  ASpleneEntity.Knots.Count=0 then begin
       // Fallback: генерируем стандартный узловой вектор для простых случаев
       if ASpleneEntity.vertexarrayinocs.Count>=2 then begin
         for i:=0 to ASpleneEntity.Degree do

@@ -24,11 +24,17 @@ interface
 
 uses
   SysUtils,
-  uzegeometrytypes,uzegeometry;
+  uzegeometrytypes,uzegeometry,
+  gzctnrVector;
 
 type
   TSingleArray=array of single;
   TControlPointsArray=array of GDBVertex;
+
+  TKnotsVector=object(GZVector<single>)
+  end;
+  TCPVector=object(GZVector<GDBvertex4S>)
+  end;
 
 function ConvertOnCurvePointsToControlPointsArray(const ADegree:integer;
   const AOnCurvePoints:array of GDBVertex;var AKnots:TSingleArray):TControlPointsArray;

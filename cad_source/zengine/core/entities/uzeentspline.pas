@@ -27,7 +27,8 @@ uses
   uzestyleslayers,uzeentsubordinated,uzeentcurve,
   uzeentity,uzctnrVectorBytes,uzbtypes,uzeconsts,uzglviewareadata,
   gzctnrVectorTypes,uzegeometrytypes,uzegeometry,uzeffdxfsupport,SysUtils,
-  uzMVReader,uzCtnrVectorpBaseEntity,uzeSplineUtils,uzbLogIntf,Math;
+  uzMVReader,uzCtnrVectorpBaseEntity,uzeNURBSTypes,uzbLogIntf,Math,
+  uzeNURBSUtils;
 
 type
   TSplineOpt=(SOClosed,SOPeriodic,SORational,SOPlanar,SOLinear);
@@ -366,6 +367,7 @@ var
   tmpKnot:single;
   pt:TPointsType;
   startTangent,endTangent:TNulableVetrex;
+  vcp:TControlPointsArray;
 begin
   Closed:=False;
   tmpVertex:=NulVertex;
@@ -403,8 +405,15 @@ begin
   end;
 
   //vertexarrayinocs.Shrink;
-  vertexarrayinocs.SetSize(context.GDBVertexLoadCache.Count);
-  context.GDBVertexLoadCache.copyto(vertexarrayinocs);
+  if pt=TPointsType.PTControl then begin
+    vertexarrayinocs.SetSize(context.GDBVertexLoadCache.Count);
+    context.GDBVertexLoadCache.copyto(vertexarrayinocs);
+  end else begin
+    //vcp:=ConvertOnCurvePointsToControlPointsArray(Degree,context.GDBVertexLoadCache,Knots.);
+
+    //for i:=low(vcp) to high(vcp) do
+    //  ASpleneEntity.AddVertex(vcp[i]);
+  end;
   context.GDBVertexLoadCache.Clear;
 
   Knots.Shrink;

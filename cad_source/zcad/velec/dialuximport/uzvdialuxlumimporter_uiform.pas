@@ -681,14 +681,14 @@ begin
               );
 
               // Присваиваем NMO_BaseName значение 'EL' + уникальный номер
-              VarExt := InsertedBlock^.GetExtension<TVariablesExtender>;
+              VarExt := InsertedBlock^.specialize GetExtension<TVariablesExtender>;
               if VarExt <> nil then
               begin
                 VarDesc := VarExt.entityunit.FindVariable('NMO_BaseName');
                 if VarDesc <> nil then
                 begin
                   BaseNameValue := 'EL' + LightItem.LumKey;
-                  VarDesc^.Data.PTD.SetValueFromString(
+                  VarDesc^.Data.PTD^.SetValueFromString(
                     VarDesc^.Data.Addr.Instance,
                     BaseNameValue
                   );

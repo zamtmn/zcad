@@ -33,6 +33,7 @@ uses
   uzctranslations,
   uzcinterface,
   uzvconsts,
+  Varman,
   uzvconnect_struct;
 
 {**Добавить новое подключение к устройству
@@ -80,7 +81,7 @@ begin
     Exit;
 
   // Получаем расширение с переменными у устройства
-  Varext := ADevice^.GetExtension<TVariablesExtender>;
+  Varext := ADevice^.specialize GetExtension<TVariablesExtender>;
 
   if Varext = nil then
     Exit;
@@ -144,7 +145,7 @@ begin
   // Создаем новую переменную
   vd := AVarext.entityunit.CreateVariable(
     newVarName,
-    pvdTemplate^.data.PTD.TypeName
+    pvdTemplate^.data.PTD^.TypeName
   );
 
   // Находим созданную переменную

@@ -284,6 +284,7 @@ uses
   uzvlightexporter_commandexport,
   uzvlightexporter_commandprint,
   uzvdialuxlumimporter_main,
+  uzvconnect_main,
   //uzvelectricalexcelcom,
   //**//
   {$ENDIF}

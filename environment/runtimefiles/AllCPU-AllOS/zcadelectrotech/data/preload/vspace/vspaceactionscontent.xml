@@ -10,7 +10,7 @@
       <ZAction Name="ACN_vspaceSectiononoff" Command="ShowHideSpace(6,'spaceSectiononoff',space_Section)" Img="space_sectiononoff.png" Caption="Вкл/выкл пространство блок секции"/>
       <ZAction Name="ACN_vspaceFlooronoff" Command="ShowHideSpace(4,'spaceFlooronoff',space_Floor,space_FloorHeight)" Img="space_flooronoff.png" Caption="Вкл/выкл пространство этажа"/>
       <ZAction Name="ACN_vspaceRoomonoff" Command="ShowHideSpace(5,'spaceRoomonoff',Space_RoomPos,Space_RoomName,Space_RoomArea,Space_RoomCategory,Space_RoomIllumination)" Img="space_roomonoff.png" Caption="Вкл/выкл пространство помещения"/>
-	  <ZAction Name="ACN_vtablerecognition" Command="UzvRebuildTable" Img="table_recognition.png" Caption="Восстановить таблицу"/>
+	  <ZAction Name="ACN_vtablerecognition" Command="recoveryTable" Img="table_recognition.png" Caption="Восстановить таблицу"/>
     </Group>
   </ActionsContent>
 </CONFIG>

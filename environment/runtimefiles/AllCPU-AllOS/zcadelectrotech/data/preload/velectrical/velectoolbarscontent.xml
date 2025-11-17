@@ -25,6 +25,9 @@
       <Action Name="ACN_exportDevtoExcell"/>
       <Action Name="ACN_XLSXtoCADinsertblock"/>
       <Action Name="ACN_exportDevtoExcelTOCAD"/>
+	  <Separator/>
+	  <Action Name="ACN_uzvexportspacetoSTF"/>
+      <Action Name="ACN_uzvimportlightinDXF"/>
     </ElectrotechVelec>
   </ToolBarsContent>
 </CONFIG>

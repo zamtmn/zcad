@@ -113,13 +113,50 @@ type
     procedure AddNewConnection;
 
     {**Обновить дерево с сохранением позиций устройств
-       @param APreviousDeviceIndex - индекс устройства, к которому добавлено подключение}
+       @param APreviousDeviceIndex - индекс устройства, к которому добавлено}
     procedure UpdateTreePreservingPositions(APreviousDeviceIndex: Integer);
 
-    {**Установить значение выделенной ячейки для всех ячеек ниже в том же столбце}
+    {**Получить значение выделенной ячейки
+       @param AColumn - номер колонки
+       @param AIndex - индекс в списке подключений
+       @return значение ячейки или пустая строка}
+    function GetCellValue(AColumn: TColumnIndex; AIndex: Integer): String;
+
+    {**Получить имя параметра для заданной колонки и номера подключения
+       @param AColumn - номер колонки
+       @param AConnectionIndex - номер подключения устройства
+       @return имя параметра или пустая строка}
+    function GetParameterNameForColumn(
+      AColumn: TColumnIndex;
+      AConnectionIndex: Integer
+    ): String;
+
+    {**Обновить значение параметра для подключения в списке
+       @param AListIndex - индекс в списке подключений
+       @param AColumn - номер колонки
+       @param AValue - новое значение}
+    procedure UpdateConnectionParameter(
+      AListIndex: Integer;
+      AColumn: TColumnIndex;
+      const AValue: String
+    );
+
+    {**Применить значения ко всем ячейкам ниже выделенной
+       @param AStartIndex - индекс начальной ячейки
+       @param AColumn - номер колонки
+       @param ABaseValue - базовое значение
+       @param AIncrement - признак использования инкремента}
+    procedure ApplyValuesToRowsBelow(
+      AStartIndex: Integer;
+      AColumn: TColumnIndex;
+      const ABaseValue: String;
+      AIncrement: Boolean
+    );
+
+    {**Установить значение выделенной ячейки для всех ячеек ниже}
     procedure SetValueToAllBelow;
 
-    {**Установить значение с инкрементом +1 для всех ячеек ниже в том же столбце}
+    {**Установить значение с инкрементом +1 для всех ячеек ниже}
     procedure SetValueWithIncrement;
 
   public
@@ -440,10 +477,6 @@ procedure TfrmConnectControl.vstConnectionsNewText(
 );
 var
   nodeData: PConnectNodeData;
-  connectItem: TConnectItem;
-  device: PGDBObjDevice;
-  connectionIndex: Integer;
-  paramName: String;
 begin
   // Получаем данные узла
   nodeData := vstConnections.GetNodeData(Node);
@@ -451,76 +484,150 @@ begin
   if nodeData = nil then
     Exit;
 
-  // Проверка корректности индекса
-  if (nodeData^.ConnectIndex < 0) or
-     (nodeData^.ConnectIndex >= ConnectList.Size) then
-    Exit;
-
-  // Получаем данные подключения
-  connectItem := ConnectList[nodeData^.ConnectIndex];
-  device := connectItem.Device;
-
-  if device = nil then
-    Exit;
-
-  // Определяем номер подключения для данного устройства
-  connectionIndex := FindConnectionIndexForDevice(device, nodeData^.ConnectIndex);
-
-  if connectionIndex < 1 then
-    Exit;
-
-  // Обновляем параметр в зависимости от колонки
-  case Column of
-    1: // Имя суперлинии
-    begin
-      paramName := velec_VarNameForConnectBefore +
-                   IntToStr(connectionIndex) +
-                   '_' +
-                   velec_VarNameForConnectAfter_SLTypeagen;
-      SetDeviceParameterAsString(device, paramName, NewText);
-    end;
-
-    2: // Имя головного устройства
-    begin
-      paramName := velec_VarNameForConnectBefore +
-                   IntToStr(connectionIndex) +
-                   '_' +
-                   velec_VarNameForConnectAfter_HeadDeviceName;
-      SetDeviceParameterAsString(device, paramName, NewText);
-    end;
-
-    3: // Номер фидера
-    begin
-      paramName := velec_VarNameForConnectBefore +
-                   IntToStr(connectionIndex) +
-                   '_' +
-                   velec_VarNameForConnectAfter_NGHeadDevice;
-      SetDeviceParameterAsString(device, paramName, NewText);
-    end;
-  end;
-
-  // Обновляем данные в списке
-  ConnectList.Mutable[nodeData^.ConnectIndex]^ := connectItem;
+  // Обновляем параметр подключения
+  UpdateConnectionParameter(nodeData^.ConnectIndex, Column, NewText);
 
   // Перезагружаем данные с чертежа для отображения изменений
   CollectDevicesFromDWG;
   LoadConnectionsData;
 end;
 
-{**Установить значение выделенной ячейки для всех ячеек ниже в том же столбце}
+{**Получить значение выделенной ячейки}
+function TfrmConnectControl.GetCellValue(
+  AColumn: TColumnIndex;
+  AIndex: Integer
+): String;
+begin
+  Result := '';
+
+  if (AIndex < 0) or (AIndex >= ConnectList.Size) then
+    Exit;
+
+  case AColumn of
+    1: Result := ConnectList[AIndex].SLTypeagen;
+    2: Result := ConnectList[AIndex].HeadDeviceName;
+    3: Result := ConnectList[AIndex].NGHeadDevice;
+  end;
+end;
+
+{**Получить имя параметра для заданной колонки и номера подключения}
+function TfrmConnectControl.GetParameterNameForColumn(
+  AColumn: TColumnIndex;
+  AConnectionIndex: Integer
+): String;
+var
+  suffix: String;
+begin
+  Result := '';
+
+  // Определяем суффикс в зависимости от колонки
+  case AColumn of
+    1: suffix := velec_VarNameForConnectAfter_SLTypeagen;
+    2: suffix := velec_VarNameForConnectAfter_HeadDeviceName;
+    3: suffix := velec_VarNameForConnectAfter_NGHeadDevice;
+    else
+      Exit;
+  end;
+
+  // Формируем полное имя параметра
+  Result := velec_VarNameForConnectBefore +
+            IntToStr(AConnectionIndex) +
+            '_' +
+            suffix;
+end;
+
+{**Обновить значение параметра для подключения в списке}
+procedure TfrmConnectControl.UpdateConnectionParameter(
+  AListIndex: Integer;
+  AColumn: TColumnIndex;
+  const AValue: String
+);
+var
+  device: PGDBObjDevice;
+  connectionIndex: Integer;
+  paramName: String;
+begin
+  if (AListIndex < 0) or (AListIndex >= ConnectList.Size) then
+    Exit;
+
+  device := ConnectList[AListIndex].Device;
+
+  if device = nil then
+    Exit;
+
+  // Определяем номер подключения для данного устройства
+  connectionIndex := FindConnectionIndexForDevice(device, AListIndex);
+
+  if connectionIndex < 1 then
+    Exit;
+
+  // Получаем имя параметра
+  paramName := GetParameterNameForColumn(AColumn, connectionIndex);
+
+  if paramName = '' then
+    Exit;
+
+  // Устанавливаем значение параметра
+  SetDeviceParameterAsString(device, paramName, AValue);
+end;
+
+{**Применить значения ко всем ячейкам ниже выделенной}
+procedure TfrmConnectControl.ApplyValuesToRowsBelow(
+  AStartIndex: Integer;
+  AColumn: TColumnIndex;
+  const ABaseValue: String;
+  AIncrement: Boolean
+);
+var
+  i: Integer;
+  currentValue: Integer;
+  valueToSet: String;
+  updatedCount: Integer;
+begin
+  updatedCount := 0;
+
+  // Инициализируем начальное значение для инкремента
+  if AIncrement then
+  begin
+    if not TryStrToInt(ABaseValue, currentValue) then
+      Exit;
+
+    Inc(currentValue); // Начинаем с baseValue + 1
+  end;
+
+  // Применяем значение ко всем ячейкам ниже
+  for i := AStartIndex + 1 to ConnectList.Size - 1 do
+  begin
+    // Определяем значение для установки
+    if AIncrement then
+    begin
+      valueToSet := IntToStr(currentValue);
+      Inc(currentValue);
+    end
+    else
+      valueToSet := ABaseValue;
+
+    // Обновляем параметр
+    UpdateConnectionParameter(i, AColumn, valueToSet);
+    Inc(updatedCount);
+  end;
+
+  // Перезагружаем данные для отображения изменений
+  CollectDevicesFromDWG;
+  LoadConnectionsData;
+
+  // Информируем пользователя о результате
+  ShowMessage(Format('Обновлено ячеек: %d', [updatedCount]));
+end;
+
+{**Установить значение выделенной ячейки для всех ячеек ниже}
 procedure TfrmConnectControl.SetValueToAllBelow;
 var
   selectedNode: PVirtualNode;
-  currentNode: PVirtualNode;
   nodeData: PConnectNodeData;
   selectedColumn: TColumnIndex;
   selectedValue: String;
   selectedIndex: Integer;
-  i: Integer;
-  device: PGDBObjDevice;
-  connectionIndex: Integer;
-  paramName: String;
-  updatedCount: Integer;
 begin
   // Получаем выделенную ячейку
   selectedNode := vstConnections.GetFirstSelected;
@@ -534,10 +641,10 @@ begin
   // Получаем выбранную колонку
   selectedColumn := vstConnections.FocusedColumn;
 
-  // Проверяем, что выбрана редактируемая колонка (1, 2 или 3)
+  // Проверяем, что выбрана редактируемая колонка
   if (selectedColumn < 1) or (selectedColumn > 3) then
   begin
-    ShowMessage('Выберите редактируемое поле (Имя суперлинии, Имя головного устройства или Номер фидера)');
+    ShowMessage('Выберите редактируемое поле');
     Exit;
   end;
 
@@ -549,70 +656,14 @@ begin
 
   selectedIndex := nodeData^.ConnectIndex;
 
-  // Проверка корректности индекса
-  if (selectedIndex < 0) or (selectedIndex >= ConnectList.Size) then
-    Exit;
-
   // Получаем значение из выделенной ячейки
-  case selectedColumn of
-    1: selectedValue := ConnectList[selectedIndex].SLTypeagen;
-    2: selectedValue := ConnectList[selectedIndex].HeadDeviceName;
-    3: selectedValue := ConnectList[selectedIndex].NGHeadDevice;
-    else
-      Exit;
-  end;
+  selectedValue := GetCellValue(selectedColumn, selectedIndex);
 
-  updatedCount := 0;
-
-  // Применяем значение ко всем ячейкам ниже в том же столбце
-  for i := selectedIndex + 1 to ConnectList.Size - 1 do
-  begin
-    device := ConnectList[i].Device;
-
-    if device = nil then
-      Continue;
-
-    // Определяем номер подключения для данного устройства
-    connectionIndex := FindConnectionIndexForDevice(device, i);
-
-    if connectionIndex < 1 then
-      Continue;
-
-    // Формируем имя параметра в зависимости от колонки
-    case selectedColumn of
-      1: // Имя суперлинии
-        paramName := velec_VarNameForConnectBefore +
-                     IntToStr(connectionIndex) +
-                     '_' +
-                     velec_VarNameForConnectAfter_SLTypeagen;
-      2: // Имя головного устройства
-        paramName := velec_VarNameForConnectBefore +
-                     IntToStr(connectionIndex) +
-                     '_' +
-                     velec_VarNameForConnectAfter_HeadDeviceName;
-      3: // Номер фидера
-        paramName := velec_VarNameForConnectBefore +
-                     IntToStr(connectionIndex) +
-                     '_' +
-                     velec_VarNameForConnectAfter_NGHeadDevice;
-      else
-        Continue;
-    end;
-
-    // Устанавливаем значение параметра
-    SetDeviceParameterAsString(device, paramName, selectedValue);
-    Inc(updatedCount);
-  end;
-
-  // Перезагружаем данные для отображения изменений
-  CollectDevicesFromDWG;
-  LoadConnectionsData;
-
-  // Информируем пользователя о результате
-  ShowMessage(Format('Обновлено ячеек: %d', [updatedCount]));
+  // Применяем значение ко всем ячейкам ниже
+  ApplyValuesToRowsBelow(selectedIndex, selectedColumn, selectedValue, False);
 end;
 
-{**Установить значение с инкрементом +1 для всех ячеек ниже в том же столбце}
+{**Установить значение с инкрементом +1 для всех ячеек ниже}
 procedure TfrmConnectControl.SetValueWithIncrement;
 var
   selectedNode: PVirtualNode;
@@ -620,13 +671,7 @@ var
   selectedColumn: TColumnIndex;
   selectedValue: String;
   selectedIndex: Integer;
-  i: Integer;
-  device: PGDBObjDevice;
-  connectionIndex: Integer;
-  paramName: String;
   baseValue: Integer;
-  currentValue: Integer;
-  updatedCount: Integer;
 begin
   // Получаем выделенную ячейку
   selectedNode := vstConnections.GetFirstSelected;
@@ -640,10 +685,10 @@ begin
   // Получаем выбранную колонку
   selectedColumn := vstConnections.FocusedColumn;
 
-  // Проверяем, что выбрана редактируемая колонка (1, 2 или 3)
+  // Проверяем, что выбрана редактируемая колонка
   if (selectedColumn < 1) or (selectedColumn > 3) then
   begin
-    ShowMessage('Выберите редактируемое поле (Имя суперлинии, Имя головного устройства или Номер фидера)');
+    ShowMessage('Выберите редактируемое поле');
     Exit;
   end;
 
@@ -655,76 +700,18 @@ begin
 
   selectedIndex := nodeData^.ConnectIndex;
 
-  // Проверка корректности индекса
-  if (selectedIndex < 0) or (selectedIndex >= ConnectList.Size) then
-    Exit;
-
   // Получаем значение из выделенной ячейки
-  case selectedColumn of
-    1: selectedValue := ConnectList[selectedIndex].SLTypeagen;
-    2: selectedValue := ConnectList[selectedIndex].HeadDeviceName;
-    3: selectedValue := ConnectList[selectedIndex].NGHeadDevice;
-    else
-      Exit;
-  end;
+  selectedValue := GetCellValue(selectedColumn, selectedIndex);
 
-  // Пытаемся преобразовать значение в число
+  // Проверяем, что значение является числом
   if not TryStrToInt(selectedValue, baseValue) then
   begin
     ShowMessage('Значение выбранной ячейки должно быть числом');
     Exit;
   end;
 
-  updatedCount := 0;
-  currentValue := baseValue + 1;
-
-  // Применяем значение с инкрементом ко всем ячейкам ниже в том же столбце
-  for i := selectedIndex + 1 to ConnectList.Size - 1 do
-  begin
-    device := ConnectList[i].Device;
-
-    if device = nil then
-      Continue;
-
-    // Определяем номер подключения для данного устройства
-    connectionIndex := FindConnectionIndexForDevice(device, i);
-
-    if connectionIndex < 1 then
-      Continue;
-
-    // Формируем имя параметра в зависимости от колонки
-    case selectedColumn of
-      1: // Имя суперлинии
-        paramName := velec_VarNameForConnectBefore +
-                     IntToStr(connectionIndex) +
-                     '_' +
-                     velec_VarNameForConnectAfter_SLTypeagen;
-      2: // Имя головного устройства
-        paramName := velec_VarNameForConnectBefore +
-                     IntToStr(connectionIndex) +
-                     '_' +
-                     velec_VarNameForConnectAfter_HeadDeviceName;
-      3: // Номер фидера
-        paramName := velec_VarNameForConnectBefore +
-                     IntToStr(connectionIndex) +
-                     '_' +
-                     velec_VarNameForConnectAfter_NGHeadDevice;
-      else
-        Continue;
-    end;
-
-    // Устанавливаем значение параметра с текущим инкрементом
-    SetDeviceParameterAsString(device, paramName, IntToStr(currentValue));
-    Inc(currentValue);
-    Inc(updatedCount);
-  end;
-
-  // Перезагружаем данные для отображения изменений
-  CollectDevicesFromDWG;
-  LoadConnectionsData;
-
-  // Информируем пользователя о результате
-  ShowMessage(Format('Обновлено ячеек: %d', [updatedCount]));
+  // Применяем значение с инкрементом ко всем ячейкам ниже
+  ApplyValuesToRowsBelow(selectedIndex, selectedColumn, selectedValue, True);
 end;
 
 end.

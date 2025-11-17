@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CONFIG>
   <ToolBarsContent>
-      <VSPACE Type="ToolBar">
+      <VSPACE Type="ToolBar" Caption="Пространства/Зоны">
 		<Action Name="ACN_vspaceBuild"/>				
 		<Action Name="ACN_vspaceSection"/>
 		<Action Name="ACN_vspaceFloor"/>	

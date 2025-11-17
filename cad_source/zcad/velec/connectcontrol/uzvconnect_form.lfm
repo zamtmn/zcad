@@ -69,6 +69,7 @@ object frmConnectControl: TfrmConnectControl
       Align = alClient
       DefaultText = 'Node'
       Header.AutoSizeIndex = -1
+      Header.Columns = <>
       Header.DefaultHeight = 24
       Header.Height = 24
       Header.Options = [hoColumnResize, hoDblClickResize, hoVisible]

@@ -162,7 +162,7 @@ begin
     Position := 1;
     Text := 'Имя суперлинии';
     Width := 150;
-    Options := Options + [coAllowFocus, coEditable];
+    Options := [coAllowFocus, coEditable, coEnabled, coVisible];
   end;
 
   with vstConnections.Header.Columns.Add do
@@ -170,7 +170,7 @@ begin
     Position := 2;
     Text := 'Имя головного устройства';
     Width := 200;
-    Options := Options + [coAllowFocus, coEditable];
+    Options := [coAllowFocus, coEditable, coEnabled, coVisible];
   end;
 
   with vstConnections.Header.Columns.Add do
@@ -178,7 +178,7 @@ begin
     Position := 3;
     Text := 'Номер фидера';
     Width := 150;
-    Options := Options + [coAllowFocus, coEditable];
+    Options := [coAllowFocus, coEditable, coEnabled, coVisible];
   end;
 
   // Настройка опций дерева

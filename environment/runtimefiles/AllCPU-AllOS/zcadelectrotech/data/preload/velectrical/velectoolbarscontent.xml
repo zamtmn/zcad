@@ -14,6 +14,7 @@
       <Separator/>
       <Action Name="ACN_uzvaddconnection"/>
       <Action Name="ACN_uzvremoveconnection"/>
+	  <Action Name="ACN_uzvconnectcontrol"/>		  
       <Separator/>
       <Action Name="ACN_CreateLL"/>
       <Separator/>
@@ -24,6 +25,9 @@
       <Action Name="ACN_exportDevtoExcell"/>
       <Action Name="ACN_XLSXtoCADinsertblock"/>
       <Action Name="ACN_exportDevtoExcelTOCAD"/>
+	  <Separator/>
+	  <Action Name="ACN_uzvexportspacetoSTF"/>
+      <Action Name="ACN_uzvimportlightinDXF"/>
     </ElectrotechVelec>
   </ToolBarsContent>
 </CONFIG>

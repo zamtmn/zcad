@@ -44,6 +44,26 @@ procedure RecognizeLuminaires(
 
 implementation
 
+type
+  {**Вершина полилинии с координатами X и Y (Z игнорируется)}
+  TVertex2D = record
+    x: Double;
+    y: Double;
+  end;
+
+  {**Массив двумерных вершин}
+  TVertex2DArray = array of TVertex2D;
+
+  {**Информация о полилинии для группировки}
+  TPolylineInfo = record
+    Entity: PGDBObjEntity;        // Указатель на сущность
+    Vertices: TVertex2DArray;     // Массив вершин (x,y)
+    GroupIndex: Integer;          // Индекс группы (-1 если не назначен)
+  end;
+
+  {**Массив информации о полилиниях}
+  TPolylineInfoArray = array of TPolylineInfo;
+
 {**Получить текстовое содержимое из текстового объекта}
 function GetTextContent(TextEntity: PGDBObjEntity): string;
 var
@@ -93,6 +113,112 @@ begin
   begin
     MTextPtr := PGDBObjMText(TextEntity);
     Result := MTextPtr^.P_insert_in_WCS;
+  end;
+end;
+
+{**Проверить, совпадают ли две вершины по координатам x,y с заданным допуском}
+function AreVerticesEqual(
+  const V1, V2: TVertex2D;
+  const Tolerance: Double
+): Boolean;
+var
+  dx, dy: Double;
+begin
+  dx := Abs(V1.x - V2.x);
+  dy := Abs(V1.y - V2.y);
+  Result := (dx <= Tolerance) and (dy <= Tolerance);
+end;
+
+{**Извлечь вершины из полилинии в формате 2D (только x,y)}
+function ExtractPolylineVertices2D(
+  Entity: PGDBObjEntity
+): TVertex2DArray;
+var
+  i: Integer;
+  PolyPtr: PGDBObjPolyLine;
+  LinePtr: PGDBObjLine;
+  Count: Integer;
+  Vertex: PGDBvertex;
+  ObjType: Integer;
+begin
+  SetLength(Result, 0);
+
+  if Entity = nil then
+    Exit;
+
+  ObjType := Entity^.GetObjType;
+
+  if ObjType = GDBPolyLineID then
+  begin
+    PolyPtr := PGDBObjPolyLine(Entity);
+    Count := PolyPtr^.VertexArrayInOCS.Count;
+
+    if Count > 0 then
+    begin
+      SetLength(Result, Count);
+      Vertex := PGDBvertex(PolyPtr^.VertexArrayInOCS.GetParrayAsPointer);
+
+      for i := 0 to Count - 1 do
+      begin
+        Result[i].x := Vertex^.x;
+        Result[i].y := Vertex^.y;
+        Inc(Vertex);
+      end;
+    end;
+  end
+  else if ObjType = GDBLineID then
+  begin
+    // Линия имеет только 2 вершины
+    LinePtr := PGDBObjLine(Entity);
+    SetLength(Result, 2);
+    Result[0].x := LinePtr^.CoordInOCS.lBegin.x;
+    Result[0].y := LinePtr^.CoordInOCS.lBegin.y;
+    Result[1].x := LinePtr^.CoordInOCS.lEnd.x;
+    Result[1].y := LinePtr^.CoordInOCS.lEnd.y;
+  end;
+end;
+
+{**Проверить, имеют ли две полилинии общие вершины}
+function DoPolylinesShareVertices(
+  const Poly1, Poly2: TPolylineInfo;
+  const Tolerance: Double
+): Boolean;
+var
+  i, j: Integer;
+begin
+  Result := False;
+
+  // Проверяем все пары вершин из двух полилиний
+  for i := 0 to High(Poly1.Vertices) do
+  begin
+    for j := 0 to High(Poly2.Vertices) do
+    begin
+      if AreVerticesEqual(Poly1.Vertices[i], Poly2.Vertices[j], Tolerance) then
+      begin
+        Result := True;
+        Exit;
+      end;
+    end;
+  end;
+end;
+
+{**Извлечь информацию о всех полилиниях из списка геометрии}
+procedure ExtractPolylineInfoArray(
+  const GeometryList: TLuminairesGeometryList;
+  out PolyInfoArray: TPolylineInfoArray
+);
+var
+  i: Integer;
+  Entity: PGDBObjEntity;
+begin
+  SetLength(PolyInfoArray, GeometryList.Count);
+
+  for i := 0 to GeometryList.Count - 1 do
+  begin
+    Entity := PGDBObjEntity(GeometryList[i]);
+    PolyInfoArray[i].Entity := Entity;
+    PolyInfoArray[i].Vertices := ExtractPolylineVertices2D(Entity);
+    PolyInfoArray[i].GroupIndex := -1; // Изначально не принадлежит ни одной группе
   end;
 end;
 
@@ -222,100 +348,138 @@ begin
   end;
 end;
 
-{**Проверить, принадлежат ли две сущности одной группе по близости центров}
-function AreEntitiesNearby(
-  Entity1, Entity2: PGDBObjEntity;
-  const Radius: Double
-): Boolean;
+{**Объединить две группы полилиний (алгоритм Union-Find)}
+procedure MergePolylineGroups(
+  var PolyInfoArray: TPolylineInfoArray;
+  Index1, Index2: Integer
+);
 var
-  Center1, Center2: GDBvertex;
-  Distance: Double;
-  dx, dy: Double;
+  i: Integer;
+  OldGroupIndex, NewGroupIndex: Integer;
 begin
-  Center1 := CalculateEntityCenter(Entity1);
-  Center2 := CalculateEntityCenter(Entity2);
+  // Определяем, какую группу заменяем
+  OldGroupIndex := PolyInfoArray[Index2].GroupIndex;
+  NewGroupIndex := PolyInfoArray[Index1].GroupIndex;
 
-  // Вычисляем расстояние только по X и Y (игнорируем Z)
-  dx := Center2.x - Center1.x;
-  dy := Center2.y - Center1.y;
-  Distance := Sqrt(dx * dx + dy * dy);
-
-  Result := Distance <= Radius;
+  // Объединяем группы: все элементы с OldGroupIndex получают NewGroupIndex
+  for i := 0 to High(PolyInfoArray) do
+  begin
+    if PolyInfoArray[i].GroupIndex = OldGroupIndex then
+      PolyInfoArray[i].GroupIndex := NewGroupIndex;
+  end;
 end;
 
-{**Сгруппировать полилинии по близости}
-procedure GroupPolylinesByProximity(
+{**Сгруппировать полилинии по совпадению вершин (алгоритм связных компонент)}
+procedure GroupPolylinesByVertexMatching(
   const GeometryList: TLuminairesGeometryList;
   out Groups: TPolylineGroupArray
 );
 var
   i, j, k: Integer;
-  CurrentEntity: PGDBObjEntity;
-  GroupIndex: Integer;
+  PolyInfoArray: TPolylineInfoArray;
+  NextGroupIndex: Integer;
   GroupCount: Integer;
-  FoundGroup: Boolean;
+  GroupIndices: array of Integer;
+  GroupIndex: Integer;
 begin
   SetLength(Groups, 0);
-  GroupCount := 0;
+
+  if GeometryList.Count = 0 then
+    Exit;
 
   programlog.LogOutFormatStr(
-    'Начата группировка %d полилиний по близости',
+    'Начата группировка %d полилиний по совпадению вершин',
     [GeometryList.Count],
-    LM_Debug
+    LM_Info
   );
 
-  // Перебираем все геометрические сущности
-  for i := 0 to GeometryList.Count - 1 do
-  begin
-    CurrentEntity := PGDBObjEntity(GeometryList[i]);
-    FoundGroup := False;
+  // Этап 1: Извлекаем информацию о вершинах всех полилиний
+  ExtractPolylineInfoArray(GeometryList, PolyInfoArray);
 
-    // Ищем существующую группу, к которой принадлежит текущая сущность
-    for j := 0 to GroupCount - 1 do
+  // Этап 2: Применяем алгоритм поиска связных компонент
+  NextGroupIndex := 0;
+
+  for i := 0 to High(PolyInfoArray) do
+  begin
+    // Если полилиния еще не в группе, создаем новую группу
+    if PolyInfoArray[i].GroupIndex = -1 then
     begin
-      // Проверяем близость к любой сущности в группе
-      for k := 0 to Groups[j].Entities.Count - 1 do
+      PolyInfoArray[i].GroupIndex := NextGroupIndex;
+      Inc(NextGroupIndex);
+    end;
+
+    // Проверяем все последующие полилинии на совпадение вершин
+    for j := i + 1 to High(PolyInfoArray) do
+    begin
+      if DoPolylinesShareVertices(
+        PolyInfoArray[i],
+        PolyInfoArray[j],
+        VERTEX_MATCH_TOLERANCE_MM
+      ) then
       begin
-        if AreEntitiesNearby(
-          CurrentEntity,
-          PGDBObjEntity(Groups[j].Entities[k]),
-          POLYLINE_GROUPING_RADIUS_MM
-        ) then
+        // Если j-я полилиния еще не в группе, добавляем в группу i-й
+        if PolyInfoArray[j].GroupIndex = -1 then
         begin
-          // Добавляем к существующей группе
-          Groups[j].Entities.Add(CurrentEntity);
-          FoundGroup := True;
+          PolyInfoArray[j].GroupIndex := PolyInfoArray[i].GroupIndex;
 
           programlog.LogOutFormatStr(
-            'Полилиния %d добавлена в группу %d (всего в группе: %d)',
-            [i + 1, j + 1, Groups[j].Entities.Count],
+            'Полилинии %d и %d имеют общие вершины, объединены в группу %d',
+            [i + 1, j + 1, PolyInfoArray[i].GroupIndex + 1],
+            LM_Debug
+          );
+        end
+        // Если обе в разных группах, объединяем группы
+        else if PolyInfoArray[j].GroupIndex <> PolyInfoArray[i].GroupIndex then
+        begin
+          programlog.LogOutFormatStr(
+            'Объединение групп %d и %d через полилинии %d и %d',
+            [PolyInfoArray[i].GroupIndex + 1, PolyInfoArray[j].GroupIndex + 1,
+             i + 1, j + 1],
             LM_Debug
           );
 
-          Break;
+          MergePolylineGroups(PolyInfoArray, i, j);
         end;
       end;
-
-      if FoundGroup then
-        Break;
     end;
+  end;
 
-    // Если не нашли подходящую группу, создаем новую
-    if not FoundGroup then
+  // Этап 3: Подсчитываем количество уникальных групп и нормализуем индексы
+  SetLength(GroupIndices, NextGroupIndex);
+  for i := 0 to High(GroupIndices) do
+    GroupIndices[i] := -1;
+
+  GroupCount := 0;
+  for i := 0 to High(PolyInfoArray) do
+  begin
+    GroupIndex := PolyInfoArray[i].GroupIndex;
+    if GroupIndices[GroupIndex] = -1 then
     begin
-      SetLength(Groups, GroupCount + 1);
-      Groups[GroupCount].Entities := TEntityList.Create;
-      Groups[GroupCount].Entities.Add(CurrentEntity);
-      Groups[GroupCount].Processed := False;
-
-      programlog.LogOutFormatStr(
-        'Создана новая группа %d для полилинии %d',
-        [GroupCount + 1, i + 1],
-        LM_Debug
-      );
-
+      GroupIndices[GroupIndex] := GroupCount;
       Inc(GroupCount);
     end;
+    PolyInfoArray[i].GroupIndex := GroupIndices[GroupIndex];
+  end;
+
+  programlog.LogOutFormatStr(
+    'Найдено %d уникальных групп',
+    [GroupCount],
+    LM_Info
+  );
+
+  // Этап 4: Создаем массив групп и заполняем его
+  SetLength(Groups, GroupCount);
+  for i := 0 to GroupCount - 1 do
+  begin
+    Groups[i].Entities := TEntityList.Create;
+    Groups[i].Processed := False;
+  end;
+
+  // Распределяем полилинии по группам
+  for i := 0 to High(PolyInfoArray) do
+  begin
+    GroupIndex := PolyInfoArray[i].GroupIndex;
+    Groups[GroupIndex].Entities.Add(PolyInfoArray[i].Entity);
   end;
 
   // Вычисляем центры для всех групп
@@ -377,9 +541,9 @@ begin
   SetLength(RecognizedLights, 0);
   RecognizedCount := 0;
 
-  // Этап 1: Группировка полилиний по близости
-  // Полилинии одного светильника находятся рядом друг с другом
-  GroupPolylinesByProximity(ParsedData.LuminairesGeometry, PolylineGroups);
+  // Этап 1: Группировка полилиний по совпадению вершин
+  // Полилинии одного светильника имеют общие вершины (по координатам x,y)
+  GroupPolylinesByVertexMatching(ParsedData.LuminairesGeometry, PolylineGroups);
 
   try
     // Этап 2: Распознавание светильников на основе групп

@@ -2,10 +2,15 @@
 <CONFIG>
   <ActionsContent>
     <Group Category="VSPACE">
-      <ZAction Name="ACN_vspaceBuild" Command="slagcab" Img="#A1" Caption="Создать пространство здания"/>
-      <ZAction Name="ACN_vspaceSection" Command="vBuildSSSchema" Img="#A2" Caption="Создать пространство блок секции"/>
-      <ZAction Name="ACN_vspaceFloor" Command="vBuildELSchema" Img="#A3" Caption="Создать пространство этажа"/>
-      <ZAction Name="ACN_vspaceRoom" Command="AGSLROOM" Img="#A4" Caption="Создать пространство помещения"/>
+      <ZAction Name="ACN_vspaceBuild" Command="addSpace(3,'spaceBuild',space_Building, 'Build', string)" Img="space_building.png" Caption="Создать пространство здания"/>
+      <ZAction Name="ACN_vspaceSection" Command="addSpace(6,'spaceSection',space_Section, 'Section', string)" Img="space_section.png" Caption="Создать пространство блок секции"/>
+      <ZAction Name="ACN_vspaceFloor" Command="addSpace(4,'spaceFloor',space_Floor, 'FloorNum', integer,space_FloorHeight, 'HeightFloor', Double)" Img="space_floor.png" Caption="Создать пространство этажа"/>
+      <ZAction Name="ACN_vspaceRoom" Command="addSpace(5,'spaceRoom',Space_RoomPos, 'RoomPos', String, Space_RoomName, 'RoomName', String, Space_RoomArea, 'RoomArea', String, Space_RoomCategory, 'RoomCategory', String, Space_RoomIllumination, 'RoomIllumination Лк', Integer)" Img="space_room.png" Caption="Создать пространство помещения"/>
+	  <ZAction Name="ACN_vspaceBuildonoff" Command="ShowHideSpace(3,'spaceBuildonoff',space_Building)" Img="space_buildingonoff.png" Caption="Вкл/выкл пространство здания"/>
+      <ZAction Name="ACN_vspaceSectiononoff" Command="ShowHideSpace(6,'spaceSectiononoff',space_Section)" Img="space_sectiononoff.png" Caption="Вкл/выкл пространство блок секции"/>
+      <ZAction Name="ACN_vspaceFlooronoff" Command="ShowHideSpace(4,'spaceFlooronoff',space_Floor,space_FloorHeight)" Img="space_flooronoff.png" Caption="Вкл/выкл пространство этажа"/>
+      <ZAction Name="ACN_vspaceRoomonoff" Command="ShowHideSpace(5,'spaceRoomonoff',Space_RoomPos,Space_RoomName,Space_RoomArea,Space_RoomCategory,Space_RoomIllumination)" Img="space_roomonoff.png" Caption="Вкл/выкл пространство помещения"/>
+	  <ZAction Name="ACN_vtablerecognition" Command="UzvRebuildTable" Img="table_recognition.png" Caption="Восстановить таблицу"/>
     </Group>
   </ActionsContent>
 </CONFIG>

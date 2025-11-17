@@ -5,7 +5,14 @@
 		<Action Name="ACN_vspaceBuild"/>				
 		<Action Name="ACN_vspaceSection"/>
 		<Action Name="ACN_vspaceFloor"/>	
-		<Action Name="ACN_vspaceRoom"/>		
+		<Action Name="ACN_vspaceRoom"/>	
+		<Separator/>
+		<Action Name="ACN_vspaceBuildonoff"/>				
+		<Action Name="ACN_vspaceSectiononoff"/>
+		<Action Name="ACN_vspaceFlooronoff"/>	
+		<Action Name="ACN_vspaceRoomonoff"/>		
+		<Separator/>
+		<Action Name="ACN_vtablerecognition"/>		
     </VSPACE>
   </ToolBarsContent>
 </CONFIG>

@@ -25,6 +25,7 @@ unit uzvdialuxlumimporter_recognizer;
 interface
 uses
   SysUtils,
+  Math,
   uzeentity,
   uzeenttext,
   uzeentmtext,
@@ -181,20 +182,191 @@ begin
   end;
 end;
 
+{**Вычислить центр группы полилиний (с игнорированием Z координаты)}
+function CalculateGroupCenter(
+  const Entities: TEntityList
+): GDBvertex;
+var
+  i: Integer;
+  Entity: PGDBObjEntity;
+  EntityCenter: GDBvertex;
+  SumX, SumY: Double;
+  Count: Integer;
+begin
+  Result := NulVertex;
+
+  if (Entities = nil) or (Entities.Count = 0) then
+    Exit;
+
+  SumX := 0.0;
+  SumY := 0.0;
+  Count := 0;
+
+  // Суммируем координаты центров всех сущностей в группе
+  for i := 0 to Entities.Count - 1 do
+  begin
+    Entity := PGDBObjEntity(Entities[i]);
+    EntityCenter := CalculateEntityCenter(Entity);
+
+    SumX := SumX + EntityCenter.x;
+    SumY := SumY + EntityCenter.y;
+    // Z координату игнорируем согласно требованию
+    Inc(Count);
+  end;
+
+  if Count > 0 then
+  begin
+    Result.x := SumX / Count;
+    Result.y := SumY / Count;
+    Result.z := 0.0; // Z всегда 0, так как мы его игнорируем
+  end;
+end;
+
+{**Проверить, принадлежат ли две сущности одной группе по близости центров}
+function AreEntitiesNearby(
+  Entity1, Entity2: PGDBObjEntity;
+  const Radius: Double
+): Boolean;
+var
+  Center1, Center2: GDBvertex;
+  Distance: Double;
+  dx, dy: Double;
+begin
+  Center1 := CalculateEntityCenter(Entity1);
+  Center2 := CalculateEntityCenter(Entity2);
+
+  // Вычисляем расстояние только по X и Y (игнорируем Z)
+  dx := Center2.x - Center1.x;
+  dy := Center2.y - Center1.y;
+  Distance := Sqrt(dx * dx + dy * dy);
+
+  Result := Distance <= Radius;
+end;
+
+{**Сгруппировать полилинии по близости}
+procedure GroupPolylinesByProximity(
+  const GeometryList: TLuminairesGeometryList;
+  out Groups: TPolylineGroupArray
+);
+var
+  i, j, k: Integer;
+  CurrentEntity: PGDBObjEntity;
+  GroupIndex: Integer;
+  GroupCount: Integer;
+  FoundGroup: Boolean;
+begin
+  SetLength(Groups, 0);
+  GroupCount := 0;
+
+  programlog.LogOutFormatStr(
+    'Начата группировка %d полилиний по близости',
+    [GeometryList.Count],
+    LM_Debug
+  );
+
+  // Перебираем все геометрические сущности
+  for i := 0 to GeometryList.Count - 1 do
+  begin
+    CurrentEntity := PGDBObjEntity(GeometryList[i]);
+    FoundGroup := False;
+
+    // Ищем существующую группу, к которой принадлежит текущая сущность
+    for j := 0 to GroupCount - 1 do
+    begin
+      // Проверяем близость к любой сущности в группе
+      for k := 0 to Groups[j].Entities.Count - 1 do
+      begin
+        if AreEntitiesNearby(
+          CurrentEntity,
+          PGDBObjEntity(Groups[j].Entities[k]),
+          POLYLINE_GROUPING_RADIUS_MM
+        ) then
+        begin
+          // Добавляем к существующей группе
+          Groups[j].Entities.Add(CurrentEntity);
+          FoundGroup := True;
+
+          programlog.LogOutFormatStr(
+            'Полилиния %d добавлена в группу %d (всего в группе: %d)',
+            [i + 1, j + 1, Groups[j].Entities.Count],
+            LM_Debug
+          );
+
+          Break;
+        end;
+      end;
+
+      if FoundGroup then
+        Break;
+    end;
+
+    // Если не нашли подходящую группу, создаем новую
+    if not FoundGroup then
+    begin
+      SetLength(Groups, GroupCount + 1);
+      Groups[GroupCount].Entities := TEntityList.Create;
+      Groups[GroupCount].Entities.Add(CurrentEntity);
+      Groups[GroupCount].Processed := False;
+
+      programlog.LogOutFormatStr(
+        'Создана новая группа %d для полилинии %d',
+        [GroupCount + 1, i + 1],
+        LM_Debug
+      );
+
+      Inc(GroupCount);
+    end;
+  end;
+
+  // Вычисляем центры для всех групп
+  for i := 0 to GroupCount - 1 do
+  begin
+    Groups[i].Center := CalculateGroupCenter(Groups[i].Entities);
+
+    programlog.LogOutFormatStr(
+      'Группа %d: %d полилиний, центр=(%.1f, %.1f)',
+      [i + 1, Groups[i].Entities.Count, Groups[i].Center.x, Groups[i].Center.y],
+      LM_Info
+    );
+  end;
+
+  programlog.LogOutFormatStr(
+    'Группировка завершена: создано %d групп',
+    [GroupCount],
+    LM_Info
+  );
+end;
+
+{**Освободить память массива групп полилиний}
+procedure FreePolylineGroups(var Groups: TPolylineGroupArray);
+var
+  i: Integer;
+begin
+  for i := 0 to High(Groups) do
+  begin
+    if Groups[i].Entities <> nil then
+    begin
+      Groups[i].Entities.Free;
+      Groups[i].Entities := nil;
+    end;
+  end;
+
+  SetLength(Groups, 0);
+end;
+
 {**Распознать соответствие между геометрией и текстами светильников}
 procedure RecognizeLuminaires(
   const ParsedData: TParsedData;
   out RecognizedLights: TLightItemArray
 );
 var
-  i: Integer;
-  GeometryEntity: PGDBObjEntity;
-  GeometryCenter: GDBvertex;
+  i, j: Integer;
+  PolylineGroups: TPolylineGroupArray;
+  GroupCenter: GDBvertex;
   TextEntity: PGDBObjEntity;
   TextContent: string;
   RecognizedCount: Integer;
   LightItem: TLightItem;
-  ExistingLightIndex: Integer;
 begin
   programlog.LogOutFormatStr(
     'Начато распознавание светильников',
@@ -205,45 +377,26 @@ begin
   SetLength(RecognizedLights, 0);
   RecognizedCount := 0;
 
-  // Перебираем всю геометрию светильников
-  for i := 0 to ParsedData.LuminairesGeometry.Count - 1 do
-  begin
-    GeometryEntity := PGDBObjEntity(ParsedData.LuminairesGeometry[i]);
+  // Этап 1: Группировка полилиний по близости
+  // Полилинии одного светильника находятся рядом друг с другом
+  GroupPolylinesByProximity(ParsedData.LuminairesGeometry, PolylineGroups);
 
-    // Вычисляем геометрический центр
-    GeometryCenter := CalculateEntityCenter(GeometryEntity);
-
-    programlog.LogOutFormatStr(
-      'Обработка геометрии %d: центр=(%.1f, %.1f)',
-      [i + 1, GeometryCenter.x, GeometryCenter.y],
-      LM_Debug
-    );
-
-    // Проверяем, есть ли уже светильник в этой точке
-    ExistingLightIndex := FindLightAtSameLocation(
-      GeometryCenter,
-      RecognizedLights,
-      RecognizedCount
-    );
-
-    if ExistingLightIndex >= 0 then
+  try
+    // Этап 2: Распознавание светильников на основе групп
+    for i := 0 to High(PolylineGroups) do
     begin
-      // Добавляем геометрию к существующему светильнику
-      RecognizedLights[ExistingLightIndex].GeometryEntities.Add(
-        GeometryEntity
-      );
+      GroupCenter := PolylineGroups[i].Center;
 
       programlog.LogOutFormatStr(
-        'Геометрия %d добавлена к существующему светильнику "%s"',
-        [i + 1, RecognizedLights[ExistingLightIndex].LumKey],
+        'Обработка группы %d: %d полилиний, центр=(%.1f, %.1f)',
+        [i + 1, PolylineGroups[i].Entities.Count,
+         GroupCenter.x, GroupCenter.y],
         LM_Debug
       );
-    end
-    else
-    begin
+
       // Ищем ближайший текст в радиусе поиска
       if FindNearestText(
-        GeometryCenter,
+        GroupCenter,
         ParsedData,
         TextEntity,
         TextContent
@@ -251,9 +404,17 @@ begin
       begin
         // Создаем запись о новом светильнике
         LightItem.LumKey := Trim(TextContent);
-        LightItem.Center := GeometryCenter;
+        LightItem.Center := GroupCenter;
         LightItem.GeometryEntities := TEntityList.Create;
-        LightItem.GeometryEntities.Add(GeometryEntity);
+
+        // Добавляем все полилинии группы в список геометрии светильника
+        for j := 0 to PolylineGroups[i].Entities.Count - 1 do
+        begin
+          LightItem.GeometryEntities.Add(
+            PolylineGroups[i].Entities[j]
+          );
+        end;
+
         LightItem.TextEntity := TextEntity;
 
         // Добавляем в массив
@@ -262,27 +423,32 @@ begin
         Inc(RecognizedCount);
 
         programlog.LogOutFormatStr(
-          'Распознан светильник "%s" в точке (%.1f, %.1f)',
-          [LightItem.LumKey, GeometryCenter.x, GeometryCenter.y],
-          LM_Debug
+          'Распознан светильник "%s" в точке (%.1f, %.1f) ' +
+          '(%d полилиний в составе)',
+          [LightItem.LumKey, GroupCenter.x, GroupCenter.y,
+           PolylineGroups[i].Entities.Count],
+          LM_Info
         );
       end
       else
       begin
         programlog.LogOutFormatStr(
-          'Не найден текст для геометрии %d в радиусе %.1f мм',
+          'Не найден текст для группы %d в радиусе %.1f мм',
           [i + 1, SEARCH_RADIUS_MM],
           LM_Warning
         );
       end;
     end;
-  end;
 
-  programlog.LogOutFormatStr(
-    'Распознавание завершено: найдено %d светильников',
-    [RecognizedCount],
-    LM_Info
-  );
+    programlog.LogOutFormatStr(
+      'Распознавание завершено: найдено %d светильников из %d групп',
+      [RecognizedCount, Length(PolylineGroups)],
+      LM_Info
+    );
+  finally
+    // Освобождаем память групп
+    FreePolylineGroups(PolylineGroups);
+  end;
 end;
 
 end.

@@ -14,6 +14,7 @@
       <Separator/>
       <Action Name="ACN_uzvaddconnection"/>
       <Action Name="ACN_uzvremoveconnection"/>
+	  <Action Name="ACN_uzvconnectcontrol"/>		  
       <Separator/>
       <Action Name="ACN_CreateLL"/>
       <Separator/>

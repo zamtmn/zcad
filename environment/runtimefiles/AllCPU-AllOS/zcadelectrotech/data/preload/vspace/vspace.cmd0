@@ -1,0 +1,4 @@
+;Комментарий
+LoadActions($(CurrentMacrosPath)$(DirectorySeparator)vspaceactionscontent.xml)
+LoadToolBars($(CurrentMacrosPath)$(DirectorySeparator)vspacetoolbarscontent.xml)
+LoadMenus($(CurrentMacrosPath)$(DirectorySeparator)vspacemenuscontent.xml)

@@ -4,4 +4,7 @@ cfgAddSupportPath($(CurrentMacrosPath)$(DirectorySeparator)plan$(DirectorySepara
 cfgAddSupportPath($(CurrentMacrosPath)$(DirectorySeparator)plan$(DirectorySeparator)shields)
 cfgAddSupportPath($(CurrentMacrosPath)$(DirectorySeparator)plan$(DirectorySeparator)elreceiver)
 cfgAddSupportPath($(CurrentMacrosPath)$(DirectorySeparator)plan$(DirectorySeparator)lighting)
+LoadActions($(CurrentMacrosPath)$(DirectorySeparator)velecactionscontent.xml)
+LoadToolBars($(CurrentMacrosPath)$(DirectorySeparator)velectoolbarscontent.xml)
+LoadMenus($(CurrentMacrosPath)$(DirectorySeparator)velecmenuscontent.xml)
 LoadPalettes($(CurrentMacrosPath)$(DirectorySeparator)velectrical.xml)

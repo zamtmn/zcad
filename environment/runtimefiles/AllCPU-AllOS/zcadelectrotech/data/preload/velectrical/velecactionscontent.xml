@@ -12,6 +12,7 @@
       <ZAction Name="ACN_SupeLineHT3" Command="DrawSuperLine(3)" Img="#3" Caption="SuperLine3" SecondaryShortCuts="3"/>
       <ZAction Name="ACN_uzvaddconnection" Command="uzvaddconnection" Img="#C+" Caption="Add connection"/>
       <ZAction Name="ACN_uzvremoveconnection" Command="uzvremoveconnection" Img="#С-" Caption="Remove connection"/>
+	  <ZAction Name="ACN_uzvconnectcontrol" Command="connectcontrol" Img="#СC" Caption="connection control"/>
       <ZAction Name="ACN_managerEM" Command="manem" Img="#MEM" Caption="Manager electrical model"/>
       <ZAction Name="ACN_generatorOneDiagram" Command="vGeneratorOneLine" Img="#GD1" Caption="Generator one-level diagram"/>
       <ZAction Name="ACN_exportModeltoExcell" Command="vExportToXLSXFPS" Img="#M>X" Caption="Export model to excel"/>

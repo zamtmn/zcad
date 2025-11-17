@@ -28,27 +28,25 @@ object frmConnectControl: TfrmConnectControl
       TabOrder = 0
       object ToolButton1: TToolButton
         Left = 1
-        Top = 2
+        Top = 0
         Action = actButton1
-        Caption = 'Кнопка 1'
       end
       object ToolButton2: TToolButton
-        Left = 73
-        Top = 2
+        Left = 24
+        Top = 0
         Action = actButton2
         Caption = 'Кнопка 2'
       end
       object ToolButton3: TToolButton
-        Left = 145
-        Top = 2
+        Left = 47
+        Top = 0
         Action = actButton3
         Caption = 'Кнопка 3'
       end
       object ToolButton4: TToolButton
-        Left = 217
-        Top = 2
+        Left = 70
+        Top = 0
         Action = actButton4
-        Caption = 'Кнопка 4'
       end
     end
   end
@@ -72,11 +70,12 @@ object frmConnectControl: TfrmConnectControl
       Header.Columns = <>
       Header.DefaultHeight = 24
       Header.Height = 24
+      Header.MainColumn = -1
       Header.Options = [hoColumnResize, hoDblClickResize, hoVisible]
       NodeDataSize = 8
       TabOrder = 0
-      TreeOptions.MiscOptions = [toFullRepaintOnResize, toGridExtensions, toInitOnSave, toToggleOnDblClick, toWheelPanning, toEditable, toEditOnDblClick]
-      TreeOptions.SelectionOptions = [toFullRowSelect, toRightClickSelect]
+      TreeOptions.MiscOptions = [toCheckSupport, toEditable, toFullRepaintOnResize, toGridExtensions, toInitOnSave, toToggleOnDblClick, toWheelPanning, toEditOnClick, toEditOnDblClick]
+      TreeOptions.SelectionOptions = [toFullRowSelect, toMultiSelect, toRightClickSelect, toAlwaysSelectNode]
       OnEditing = vstConnectionsEditing
       OnGetText = vstConnectionsGetText
       OnNewText = vstConnectionsNewText

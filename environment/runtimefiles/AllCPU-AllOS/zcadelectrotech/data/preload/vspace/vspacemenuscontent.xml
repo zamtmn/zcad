@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<CONFIG>
+  <MenusContent>
+    <Menu Name="Engineering">
+  	  <SubMenu Name="Space">
+		<Action Name="ACN_vspaceBuild"/>				
+		<Action Name="ACN_vspaceSection"/>
+		<Action Name="ACN_vspaceFloor"/>	
+		<Action Name="ACN_vspaceRoom"/>			
+      </SubMenu>
+    </Menu>
+  </MenusContent>
+</CONFIG>

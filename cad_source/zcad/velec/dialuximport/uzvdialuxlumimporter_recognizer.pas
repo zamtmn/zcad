@@ -33,6 +33,8 @@ uses
   uzegeometry,
   uzeconsts,
   uzclog,
+  uzeentpolyline,
+  uzeentline,
   uzvdialuxlumimporter_structs,
   uzvdialuxlumimporter_utils;
 

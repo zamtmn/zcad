@@ -40,6 +40,11 @@ const
   // Допуск для группировки блоков в одной точке (мм)
   GROUPING_TOLERANCE_MM = 0.1;
 
+  // Радиус группировки полилиний в один светильник (мм)
+  // Полилинии, находящиеся на расстоянии меньше этого радиуса друг от друга,
+  // считаются частью одного светильника
+  POLYLINE_GROUPING_RADIUS_MM = 300.0;
+
   // Префикс для фильтра блоков
   BLOCK_FILTER_PREFIX = 'DEVICE_VEL_LIGHT';
 
@@ -47,6 +52,16 @@ type
   {**Список сущностей геометрии}
   TEntityList = class(TList)
   end;
+
+  {**Группа полилиний, образующих один светильник}
+  TPolylineGroup = record
+    Entities: TEntityList;      // Список полилиний в группе
+    Center: GDBvertex;          // Геометрический центр группы
+    Processed: Boolean;         // Флаг обработки группы
+  end;
+
+  {**Массив групп полилиний}
+  TPolylineGroupArray = array of TPolylineGroup;
 
   {**Запись о распознанном светильнике}
   TLightItem = record

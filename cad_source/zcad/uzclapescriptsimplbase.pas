@@ -16,6 +16,7 @@
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
 unit uzcLapeScriptsImplBase;
+{$Codepage UTF8}
 {$INCLUDE zengineconfig.inc}
 
 interface
@@ -28,7 +29,7 @@ uses
   uzeentity,uzeExtdrAbstractEntityExtender,
   uzedrawingsimple,uzcdrawings,
   uzeentline,uzeentityfactory,uzeconsts,uzcutils,
-  uzegeometry;
+  uzegeometry,uzegeometrytypes;
 
 type
   TLapeScriptContextMode=(LSCMCompilerSetup,LSCMContextSetup);
@@ -94,12 +95,59 @@ begin
   zcRedrawCurrentDrawing;
 end;
 
+procedure line2(const Params: PParamArray{p1,p2: TVertex}); cdecl;
+var
+  p1,p2:GDBvertex;
+  ctx:TCurrentDrawingContext;
+  pline:PGDBObjLine;
+begin
+  ctx:=TCurrentDrawingContext(Params^[0]);
+  p1:=PGDBvertex(Params^[1])^;
+  p2:=PGDBvertex(Params^[2])^;
+
+  pline:=AllocEnt(GDBLineID);
+  pline^.init(nil,nil,LnWtByLayer,p1,p2);
+
+  //присваиваем текущие цвет, толщину, и т.д. от настроек чертежа
+  zcSetEntPropFromCurrentDrawingProp(pline);
+
+  //добавляем в чертеж
+  zcAddEntToCurrentDrawingWithUndo(pline);
+
+  //перерисовываем
+  zcRedrawCurrentDrawing;
+end;
+
+procedure StartUndoCommand(const Params: PParamArray{CommandName:String;PushStone:boolean=false}); cdecl;
+var
+  ctx:TCurrentDrawingContext;
+  CommandName:String;
+  PushStone:boolean;
+begin
+  ctx:=TCurrentDrawingContext(Params^[0]);
+  CommandName:=PString(Params^[1])^;
+  PushStone:=Pboolean(Params^[2])^;
+  zcStartUndoCommand(CommandName,PushStone);
+end;
+
+procedure EndUndoCommand(const Params: PParamArray); cdecl;
+var
+  ctx:TCurrentDrawingContext;
+begin
+  ctx:=TCurrentDrawingContext(Params^[0]);
+  zcEndUndoCommand;
+end;
+
 class procedure ttest.testadder(mode:TLapeScriptContextModes;ctx:TBaseScriptContext;cplr:TLapeCompiler);
 begin
   if LSCMCompilerSetup in mode then begin
     cplr.StartImporting;
     cplr.addBaseDefine('LAPE');
+    cplr.addGlobalType('record x,y,z:double;end','TzgPoint');
     cplr.addGlobalMethod('procedure line(x1,y1,z1,x2,y2,z2: double);',@line,ctx);
+    cplr.addGlobalMethod('procedure line2(p1,p2: TzgPoint);',@line2,ctx);
+    cplr.addGlobalMethod('procedure zcStartUndoCommand(CommandName:String;PushStone:boolean=false);',@StartUndoCommand,ctx);
+    cplr.addGlobalMethod('procedure zcEndUndoCommand;',@EndUndoCommand,ctx);
     cplr.EndImporting;
   end;
 end;

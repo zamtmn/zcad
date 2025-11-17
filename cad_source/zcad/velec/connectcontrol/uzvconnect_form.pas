@@ -116,6 +116,12 @@ type
        @param APreviousDeviceIndex - индекс устройства, к которому добавлено подключение}
     procedure UpdateTreePreservingPositions(APreviousDeviceIndex: Integer);
 
+    {**Установить значение выделенной ячейки для всех ячеек ниже в том же столбце}
+    procedure SetValueToAllBelow;
+
+    {**Установить значение с инкрементом +1 для всех ячеек ниже в том же столбце}
+    procedure SetValueWithIncrement;
+
   public
     {**Загрузить данные из списка подключений}
     procedure LoadConnectionsData;
@@ -255,16 +261,16 @@ begin
   AddNewConnection;
 end;
 
-{**Обработчик нажатия кнопки 2}
+{**Обработчик нажатия кнопки 2 - установить значение для всех ниже}
 procedure TfrmConnectControl.actButton2Execute(Sender: TObject);
 begin
-  ShowMessage('2');
+  SetValueToAllBelow;
 end;
 
-{**Обработчик нажатия кнопки 3}
+{**Обработчик нажатия кнопки 3 - установить значение с инкрементом +1}
 procedure TfrmConnectControl.actButton3Execute(Sender: TObject);
 begin
-  ShowMessage('3');
+  SetValueWithIncrement;
 end;
 
 {**Обработчик нажатия кнопки 4}
@@ -499,6 +505,226 @@ begin
   // Перезагружаем данные с чертежа для отображения изменений
   CollectDevicesFromDWG;
   LoadConnectionsData;
+end;
+
+{**Установить значение выделенной ячейки для всех ячеек ниже в том же столбце}
+procedure TfrmConnectControl.SetValueToAllBelow;
+var
+  selectedNode: PVirtualNode;
+  currentNode: PVirtualNode;
+  nodeData: PConnectNodeData;
+  selectedColumn: TColumnIndex;
+  selectedValue: String;
+  selectedIndex: Integer;
+  i: Integer;
+  device: PGDBObjDevice;
+  connectionIndex: Integer;
+  paramName: String;
+  updatedCount: Integer;
+begin
+  // Получаем выделенную ячейку
+  selectedNode := vstConnections.GetFirstSelected;
+
+  if selectedNode = nil then
+  begin
+    ShowMessage('Выберите ячейку в списке');
+    Exit;
+  end;
+
+  // Получаем выбранную колонку
+  selectedColumn := vstConnections.FocusedColumn;
+
+  // Проверяем, что выбрана редактируемая колонка (1, 2 или 3)
+  if (selectedColumn < 1) or (selectedColumn > 3) then
+  begin
+    ShowMessage('Выберите редактируемое поле (Имя суперлинии, Имя головного устройства или Номер фидера)');
+    Exit;
+  end;
+
+  // Получаем данные выбранного узла
+  nodeData := vstConnections.GetNodeData(selectedNode);
+
+  if nodeData = nil then
+    Exit;
+
+  selectedIndex := nodeData^.ConnectIndex;
+
+  // Проверка корректности индекса
+  if (selectedIndex < 0) or (selectedIndex >= ConnectList.Size) then
+    Exit;
+
+  // Получаем значение из выделенной ячейки
+  case selectedColumn of
+    1: selectedValue := ConnectList[selectedIndex].SLTypeagen;
+    2: selectedValue := ConnectList[selectedIndex].HeadDeviceName;
+    3: selectedValue := ConnectList[selectedIndex].NGHeadDevice;
+    else
+      Exit;
+  end;
+
+  updatedCount := 0;
+
+  // Применяем значение ко всем ячейкам ниже в том же столбце
+  for i := selectedIndex + 1 to ConnectList.Size - 1 do
+  begin
+    device := ConnectList[i].Device;
+
+    if device = nil then
+      Continue;
+
+    // Определяем номер подключения для данного устройства
+    connectionIndex := FindConnectionIndexForDevice(device, i);
+
+    if connectionIndex < 1 then
+      Continue;
+
+    // Формируем имя параметра в зависимости от колонки
+    case selectedColumn of
+      1: // Имя суперлинии
+        paramName := velec_VarNameForConnectBefore +
+                     IntToStr(connectionIndex) +
+                     '_' +
+                     velec_VarNameForConnectAfter_SLTypeagen;
+      2: // Имя головного устройства
+        paramName := velec_VarNameForConnectBefore +
+                     IntToStr(connectionIndex) +
+                     '_' +
+                     velec_VarNameForConnectAfter_HeadDeviceName;
+      3: // Номер фидера
+        paramName := velec_VarNameForConnectBefore +
+                     IntToStr(connectionIndex) +
+                     '_' +
+                     velec_VarNameForConnectAfter_NGHeadDevice;
+      else
+        Continue;
+    end;
+
+    // Устанавливаем значение параметра
+    SetDeviceParameterAsString(device, paramName, selectedValue);
+    Inc(updatedCount);
+  end;
+
+  // Перезагружаем данные для отображения изменений
+  CollectDevicesFromDWG;
+  LoadConnectionsData;
+
+  // Информируем пользователя о результате
+  ShowMessage(Format('Обновлено ячеек: %d', [updatedCount]));
+end;
+
+{**Установить значение с инкрементом +1 для всех ячеек ниже в том же столбце}
+procedure TfrmConnectControl.SetValueWithIncrement;
+var
+  selectedNode: PVirtualNode;
+  nodeData: PConnectNodeData;
+  selectedColumn: TColumnIndex;
+  selectedValue: String;
+  selectedIndex: Integer;
+  i: Integer;
+  device: PGDBObjDevice;
+  connectionIndex: Integer;
+  paramName: String;
+  baseValue: Integer;
+  currentValue: Integer;
+  updatedCount: Integer;
+begin
+  // Получаем выделенную ячейку
+  selectedNode := vstConnections.GetFirstSelected;
+
+  if selectedNode = nil then
+  begin
+    ShowMessage('Выберите ячейку в списке');
+    Exit;
+  end;
+
+  // Получаем выбранную колонку
+  selectedColumn := vstConnections.FocusedColumn;
+
+  // Проверяем, что выбрана редактируемая колонка (1, 2 или 3)
+  if (selectedColumn < 1) or (selectedColumn > 3) then
+  begin
+    ShowMessage('Выберите редактируемое поле (Имя суперлинии, Имя головного устройства или Номер фидера)');
+    Exit;
+  end;
+
+  // Получаем данные выбранного узла
+  nodeData := vstConnections.GetNodeData(selectedNode);
+
+  if nodeData = nil then
+    Exit;
+
+  selectedIndex := nodeData^.ConnectIndex;
+
+  // Проверка корректности индекса
+  if (selectedIndex < 0) or (selectedIndex >= ConnectList.Size) then
+    Exit;
+
+  // Получаем значение из выделенной ячейки
+  case selectedColumn of
+    1: selectedValue := ConnectList[selectedIndex].SLTypeagen;
+    2: selectedValue := ConnectList[selectedIndex].HeadDeviceName;
+    3: selectedValue := ConnectList[selectedIndex].NGHeadDevice;
+    else
+      Exit;
+  end;
+
+  // Пытаемся преобразовать значение в число
+  if not TryStrToInt(selectedValue, baseValue) then
+  begin
+    ShowMessage('Значение выбранной ячейки должно быть числом');
+    Exit;
+  end;
+
+  updatedCount := 0;
+  currentValue := baseValue + 1;
+
+  // Применяем значение с инкрементом ко всем ячейкам ниже в том же столбце
+  for i := selectedIndex + 1 to ConnectList.Size - 1 do
+  begin
+    device := ConnectList[i].Device;
+
+    if device = nil then
+      Continue;
+
+    // Определяем номер подключения для данного устройства
+    connectionIndex := FindConnectionIndexForDevice(device, i);
+
+    if connectionIndex < 1 then
+      Continue;
+
+    // Формируем имя параметра в зависимости от колонки
+    case selectedColumn of
+      1: // Имя суперлинии
+        paramName := velec_VarNameForConnectBefore +
+                     IntToStr(connectionIndex) +
+                     '_' +
+                     velec_VarNameForConnectAfter_SLTypeagen;
+      2: // Имя головного устройства
+        paramName := velec_VarNameForConnectBefore +
+                     IntToStr(connectionIndex) +
+                     '_' +
+                     velec_VarNameForConnectAfter_HeadDeviceName;
+      3: // Номер фидера
+        paramName := velec_VarNameForConnectBefore +
+                     IntToStr(connectionIndex) +
+                     '_' +
+                     velec_VarNameForConnectAfter_NGHeadDevice;
+      else
+        Continue;
+    end;
+
+    // Устанавливаем значение параметра с текущим инкрементом
+    SetDeviceParameterAsString(device, paramName, IntToStr(currentValue));
+    Inc(currentValue);
+    Inc(updatedCount);
+  end;
+
+  // Перезагружаем данные для отображения изменений
+  CollectDevicesFromDWG;
+  LoadConnectionsData;
+
+  // Информируем пользователя о результате
+  ShowMessage(Format('Обновлено ячеек: %d', [updatedCount]));
 end;
 
 end.

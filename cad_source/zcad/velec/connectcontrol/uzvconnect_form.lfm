@@ -90,11 +90,11 @@ object frmConnectControl: TfrmConnectControl
       OnExecute = actButton1Execute
     end
     object actButton2: TAction
-      Caption = 'Кнопка 2'
+      Caption = 'Сделать следующие как выделенную'
       OnExecute = actButton2Execute
     end
     object actButton3: TAction
-      Caption = 'Кнопка 3'
+      Caption = 'Прибавить +1'
       OnExecute = actButton3Execute
     end
     object actButton4: TAction

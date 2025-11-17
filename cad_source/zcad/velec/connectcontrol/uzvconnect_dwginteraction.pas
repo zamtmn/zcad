@@ -45,6 +45,13 @@ function GetDeviceParameterAsString(
   const AParamName: String
 ): String;
 
+{**Установить строковое значение параметра устройства}
+procedure SetDeviceParameterAsString(
+  ADevice: PGDBObjDevice;
+  const AParamName: String;
+  const AValue: String
+);
+
 implementation
 
 {**Получить строковое значение параметра устройства}
@@ -65,6 +72,25 @@ begin
 
   if pvd <> nil then
     Result := pString(pvd^.data.Addr.Instance)^;
+end;
+
+{**Установить строковое значение параметра устройства}
+procedure SetDeviceParameterAsString(
+  ADevice: PGDBObjDevice;
+  const AParamName: String;
+  const AValue: String
+);
+var
+  pvd: pvardesk;
+begin
+  if ADevice = nil then
+    Exit;
+
+  // Поиск параметра в объекте устройства
+  pvd := FindVariableInEnt(ADevice, AParamName);
+
+  if pvd <> nil then
+    pString(pvd^.data.Addr.Instance)^ := AValue;
 end;
 
 {**Проверить существование параметра с заданным индексом}

@@ -36,7 +36,8 @@ uses
   uzvconnect_struct,
   uzvconnect_logic,
   uzvconnect_dwginteraction,
-  uzeentdevice;
+  uzeentdevice,
+  uzvconsts;
 
 type
   {**Данные узла дерева подключений}
@@ -86,6 +87,22 @@ type
       Column: TColumnIndex;
       TextType: TVSTTextType;
       var CellText: string
+    );
+
+    {**Обработчик начала редактирования ячейки}
+    procedure vstConnectionsEditing(
+      Sender: TBaseVirtualTree;
+      Node: PVirtualNode;
+      Column: TColumnIndex;
+      var Allowed: Boolean
+    );
+
+    {**Обработчик изменения текста в ячейке}
+    procedure vstConnectionsNewText(
+      Sender: TBaseVirtualTree;
+      Node: PVirtualNode;
+      Column: TColumnIndex;
+      const NewText: string
     );
 
   private
@@ -145,6 +162,7 @@ begin
     Position := 1;
     Text := 'Имя суперлинии';
     Width := 150;
+    Options := Options + [coAllowFocus, coEditable];
   end;
 
   with vstConnections.Header.Columns.Add do
@@ -152,6 +170,7 @@ begin
     Position := 2;
     Text := 'Имя головного устройства';
     Width := 200;
+    Options := Options + [coAllowFocus, coEditable];
   end;
 
   with vstConnections.Header.Columns.Add do
@@ -159,11 +178,15 @@ begin
     Position := 3;
     Text := 'Номер фидера';
     Width := 150;
+    Options := Options + [coAllowFocus, coEditable];
   end;
 
   // Настройка опций дерева
   vstConnections.TreeOptions.SelectionOptions :=
     [toFullRowSelect, toRightClickSelect];
+  vstConnections.TreeOptions.MiscOptions :=
+    vstConnections.TreeOptions.MiscOptions +
+    [toEditable, toEditOnDblClick];
   vstConnections.Header.Options :=
     [hoColumnResize, hoDblClickResize, hoVisible];
 end;
@@ -386,6 +409,96 @@ begin
 
   // Обновляем отображение
   vstConnections.Invalidate;
+end;
+
+{**Обработчик начала редактирования ячейки}
+procedure TfrmConnectControl.vstConnectionsEditing(
+  Sender: TBaseVirtualTree;
+  Node: PVirtualNode;
+  Column: TColumnIndex;
+  var Allowed: Boolean
+);
+begin
+  // Разрешаем редактирование для всех колонок кроме первой (имя устройства)
+  // Колонка 0 - имя устройства (только для чтения)
+  // Колонки 1-3 - редактируемые параметры подключения
+  Allowed := (Column >= 1) and (Column <= 3);
+end;
+
+{**Обработчик изменения текста в ячейке}
+procedure TfrmConnectControl.vstConnectionsNewText(
+  Sender: TBaseVirtualTree;
+  Node: PVirtualNode;
+  Column: TColumnIndex;
+  const NewText: string
+);
+var
+  nodeData: PConnectNodeData;
+  connectItem: TConnectItem;
+  device: PGDBObjDevice;
+  connectionIndex: Integer;
+  paramName: String;
+begin
+  // Получаем данные узла
+  nodeData := vstConnections.GetNodeData(Node);
+
+  if nodeData = nil then
+    Exit;
+
+  // Проверка корректности индекса
+  if (nodeData^.ConnectIndex < 0) or
+     (nodeData^.ConnectIndex >= ConnectList.Size) then
+    Exit;
+
+  // Получаем данные подключения
+  connectItem := ConnectList[nodeData^.ConnectIndex];
+  device := connectItem.Device;
+
+  if device = nil then
+    Exit;
+
+  // Определяем номер подключения для данного устройства
+  connectionIndex := FindConnectionIndexForDevice(device, nodeData^.ConnectIndex);
+
+  if connectionIndex < 1 then
+    Exit;
+
+  // Обновляем параметр в зависимости от колонки
+  case Column of
+    1: // Имя суперлинии
+    begin
+      paramName := velec_VarNameForConnectBefore +
+                   IntToStr(connectionIndex) +
+                   '_' +
+                   velec_VarNameForConnectAfter_SLTypeagen;
+      SetDeviceParameterAsString(device, paramName, NewText);
+    end;
+
+    2: // Имя головного устройства
+    begin
+      paramName := velec_VarNameForConnectBefore +
+                   IntToStr(connectionIndex) +
+                   '_' +
+                   velec_VarNameForConnectAfter_HeadDeviceName;
+      SetDeviceParameterAsString(device, paramName, NewText);
+    end;
+
+    3: // Номер фидера
+    begin
+      paramName := velec_VarNameForConnectBefore +
+                   IntToStr(connectionIndex) +
+                   '_' +
+                   velec_VarNameForConnectAfter_NGHeadDevice;
+      SetDeviceParameterAsString(device, paramName, NewText);
+    end;
+  end;
+
+  // Обновляем данные в списке
+  ConnectList.Mutable[nodeData^.ConnectIndex]^ := connectItem;
+
+  // Перезагружаем данные с чертежа для отображения изменений
+  CollectDevicesFromDWG;
+  LoadConnectionsData;
 end;
 
 end.

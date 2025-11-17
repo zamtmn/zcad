@@ -47,6 +47,15 @@ function AddConnectionToDevice(ADevice: PGDBObjDevice): Boolean;
    @return номер следующего доступного подключения}
 function FindNextConnectionNumber(ADevice: PGDBObjDevice): Integer;
 
+{**Найти номер подключения для устройства по индексу в ConnectList
+   @param ADevice - устройство
+   @param AConnectListIndex - индекс в глобальном списке подключений
+   @return номер подключения (1, 2, 3...) или 0 если не найдено}
+function FindConnectionIndexForDevice(
+  ADevice: PGDBObjDevice;
+  AConnectListIndex: Integer
+): Integer;
+
 {**Загрузить модуль переменных подключения
    @return указатель на загруженный модуль или nil в случае ошибки}
 function LoadConnectionModule: PTSimpleUnit;
@@ -106,6 +115,35 @@ begin
 
     Inc(connectionNumber);
   until False;
+end;
+
+{**Найти номер подключения для устройства по индексу в ConnectList}
+function FindConnectionIndexForDevice(
+  ADevice: PGDBObjDevice;
+  AConnectListIndex: Integer
+): Integer;
+var
+  i: Integer;
+  currentConnectionNum: Integer;
+begin
+  Result := 0;
+
+  if ADevice = nil then
+    Exit;
+
+  if (AConnectListIndex < 0) or (AConnectListIndex >= ConnectList.Size) then
+    Exit;
+
+  // Подсчитываем, какой по счету номер подключения у данного устройства
+  currentConnectionNum := 0;
+
+  for i := 0 to AConnectListIndex do
+  begin
+    if ConnectList[i].Device = ADevice then
+      Inc(currentConnectionNum);
+  end;
+
+  Result := currentConnectionNum;
 end;
 
 {**Создать переменную подключения в устройстве

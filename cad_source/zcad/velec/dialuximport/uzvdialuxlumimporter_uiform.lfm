@@ -1,0 +1,67 @@
+object frmDialuxLumImporter: TfrmDialuxLumImporter
+  Left = 355
+  Height = 624
+  Top = 197
+  Width = 764
+  Caption = 'Импорт светильников Dialux'
+  ClientHeight = 624
+  ClientWidth = 764
+  Position = poScreenCenter
+  LCLVersion = '4.99.0.0'
+  OnCreate = FormCreate
+  object lblRotation: TLabel
+    Left = 8
+    Height = 15
+    Top = 554
+    Width = 51
+    Anchors = [akLeft, akBottom]
+    Caption = 'Поворот:'
+  end
+  object edtRotation: TEdit
+    Left = 75
+    Height = 23
+    Top = 552
+    Width = 100
+    Anchors = [akLeft, akBottom]
+    TabOrder = 0
+    Text = '0'
+  end
+  object lblScale: TLabel
+    Left = 190
+    Height = 15
+    Top = 554
+    Width = 55
+    Anchors = [akLeft, akBottom]
+    Caption = 'Масштаб:'
+  end
+  object edtScale: TEdit
+    Left = 260
+    Height = 23
+    Top = 552
+    Width = 100
+    Anchors = [akLeft, akBottom]
+    TabOrder = 1
+    Text = '1'
+  end
+  object btnApplyInstallation: TButton
+    Left = 8
+    Height = 32
+    Top = 584
+    Width = 748
+    Anchors = [akLeft, akRight, akBottom]
+    Caption = 'Выполнить установку'
+    TabOrder = 2
+    OnClick = btnApplyInstallationClick
+  end
+  object vstLightMapping: TLazVirtualStringTree
+    Left = 16
+    Height = 524
+    Top = 8
+    Width = 728
+    DefaultText = 'Node'
+    Header.AutoSizeIndex = 0
+    Header.Columns = <>
+    Header.MainColumn = -1
+    TabOrder = 3
+  end
+end

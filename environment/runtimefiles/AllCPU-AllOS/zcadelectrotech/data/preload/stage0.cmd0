@@ -2,11 +2,8 @@
 ;$(RoCfgs)-путь к программе
 LoadActions($(RoCfgs)/menu/actionscontent.xml)
 LoadActions($(RoCfgs)/menu/electrotechactionscontent.xml)
-LoadActions($(RoCfgs)/menu/velecactionscontent.xml)
 LoadToolBars($(RoCfgs)/menu/toolbarscontent.xml)
 LoadToolBars($(RoCfgs)/menu/electrotechtoolbarscontent.xml)
-LoadToolBars($(RoCfgs)/menu/velectoolbarscontent.xml)
 LoadPalettes($(RoCfgs)/menu/palettescontent.xml)
 LoadMenus($(RoCfgs)/menu/menuscontent.xml)
 LoadMenus($(RoCfgs)/menu/electrotechmenuscontent.xml)
-LoadMenus($(RoCfgs)/menu/velecmenuscontent.xml)

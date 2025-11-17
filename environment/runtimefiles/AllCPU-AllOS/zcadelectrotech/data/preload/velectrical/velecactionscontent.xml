@@ -10,8 +10,9 @@
       <ZAction Name="ACN_SupeLineHT1" Command="DrawSuperLine(1)" Img="#1" Caption="SuperLine1" SecondaryShortCuts="1"/>
       <ZAction Name="ACN_SupeLineHT2" Command="DrawSuperLine(2)" Img="#2" Caption="SuperLine2" SecondaryShortCuts="2"/>
       <ZAction Name="ACN_SupeLineHT3" Command="DrawSuperLine(3)" Img="#3" Caption="SuperLine3" SecondaryShortCuts="3"/>
-      <ZAction Name="ACN_uzvaddconnection" Command="uzvaddconnection" Img="#C+" Caption="Add connection"/>
-      <ZAction Name="ACN_uzvremoveconnection" Command="uzvremoveconnection" Img="#С-" Caption="Remove connection"/>
+      <ZAction Name="ACN_uzvaddconnection" Command="uzvaddconnection" Img="cable_addconnection.png" Caption="Add connection"/>
+      <ZAction Name="ACN_uzvremoveconnection" Command="uzvremoveconnection" Img="cable_removeconnection.png" Caption="Remove connection"/>
+	  <ZAction Name="ACN_uzvconnectcontrol" Command="connectcontrol" Img="cable_connectionmanager.png" Caption="connection control"/>
       <ZAction Name="ACN_managerEM" Command="manem" Img="#MEM" Caption="Manager electrical model"/>
       <ZAction Name="ACN_generatorOneDiagram" Command="vGeneratorOneLine" Img="#GD1" Caption="Generator one-level diagram"/>
       <ZAction Name="ACN_exportModeltoExcell" Command="vExportToXLSXFPS" Img="#M>X" Caption="Export model to excel"/>
@@ -21,6 +22,8 @@
       <ZAction Name="ACN_CreateLL" Command="extdrAdd(extdrSmartTextEnt)" Img="#CLL" Caption="Creating Leader Lines"/>
       <ZAction Name="ACN_vVarsLink" Command="VarsLink" Img="#VL" Caption="Creating master/slave device"/>
 	  <ZAction Name="ACN_L2SL" Command="L2SL" Caption="Lines to superlines"/>
+	  <ZAction Name="ACN_uzvexportspacetoSTF" Command="exportLighttoSTF" Img="dataexportstf.png" Caption="Экспортировать пространства в STF файл"/>
+	  <ZAction Name="ACN_uzvimportlightinDXF" Command="importDialux" Img="dataimportdxf.png" Caption="Распознать светильники в файле DXF"/>
     </Group>
   </ActionsContent>
 </CONFIG>

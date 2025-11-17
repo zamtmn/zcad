@@ -17,7 +17,8 @@
         </SubMenu>	
 	    <SubMenu Name="Connection">
 		    <Action Name="ACN_uzvaddconnection"/>
-		    <Action Name="ACN_uzvremoveconnection"/>			
+		    <Action Name="ACN_uzvremoveconnection"/>
+			<Action Name="ACN_uzvconnectcontrol"/>			
         </SubMenu>
 		<Separator/>
 		<Action Name="ACN_L2SL"/>		

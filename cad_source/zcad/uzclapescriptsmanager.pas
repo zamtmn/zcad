@@ -204,7 +204,7 @@ begin
   Ctx:=nil;
 end;
 
-constructor TScriptsmanager.Create(const AScriptsType:String;ACtxClass:TMetaScriptContext;ACDA:TCompilerDefAdders);
+constructor TScriptsManager.Create(const AScriptsType:String;ACtxClass:TMetaScriptContext;ACDA:TCompilerDefAdders);
 begin
   FScriptType:=AScriptsType;
   FScriptFileMask:=format('*.%s',[AScriptsType]);
@@ -213,13 +213,13 @@ begin
   FCDA:=ACDA;
 end;
 
-destructor TScriptsmanager.Destroy;
+destructor TScriptsManager.Destroy;
 begin
   SN2SD.Destroy;
 end;
 
 
-procedure TScriptsmanager.FoundScriptFile(const FileName:String;PData:Pointer);
+procedure TScriptsManager.FoundScriptFile(const FileName:String;PData:Pointer);
 var
   scrname:string;
   PSD:PTScriptData;
@@ -230,7 +230,7 @@ begin
   end;
 end;
 
-procedure TScriptsmanager.CheckScriptActuality(var SD:TScriptData);
+procedure TScriptsManager.CheckScriptActuality(var SD:TScriptData);
 var
   cda:TCompilerDefAdder;
   fa:Int64;
@@ -257,13 +257,13 @@ begin
   except
     on E: Exception do
       begin
-        ProgramLog.LogOutFormatStr('TScriptsmanager.CheckScriptActuality "%s"',[E.Message],LM_Error,LapeLMId);
+        ProgramLog.LogOutFormatStr('TScriptsManager.CheckScriptActuality "%s"',[E.Message],LM_Error,LapeLMId,MO_SM or MO_SH);
         FreeAndNil(SD.LAPEData.FCompiler);
       end;
   end;
 end;
 
-procedure TScriptsmanager.RunScript(const AScriptName:string);
+procedure TScriptsManager.RunScript(const AScriptName:string);
 var
   scrname:string;
   PSD:PTScriptData;
@@ -274,7 +274,7 @@ begin
   else
     raise Exception.CreateFmt('Script "%s" (type "%s", file mask "%s") not found',[AScriptName,FScriptType,FScriptFileMask]);
 end;
-procedure TScriptsmanager.RunScript(var SD:TScriptData);
+procedure TScriptsManager.RunScript(var SD:TScriptData);
 var
   lpsh:TLPSHandle;
 begin
@@ -299,13 +299,13 @@ begin
   except
     on E: Exception do
     begin
-      ProgramLog.LogOutFormatStr('TScriptsmanager.RunScript "%s"',[E.Message],LM_Error,LapeLMId,MO_SM);
+      ProgramLog.LogOutFormatStr('TScriptsManager.RunScript "%s"',[E.Message],LM_Error,LapeLMId,MO_SM or MO_SH);
       FreeAndNil(SD.LAPEData.FCompiler);
     end;
   end;
 end;
 
-function TScriptsmanager.CreateExternalScriptData(const AScriptName:string;AICtxClass:TMetaScriptContext;AICDA:TCompilerDefAdders):TScriptData;
+function TScriptsManager.CreateExternalScriptData(const AScriptName:string;AICtxClass:TMetaScriptContext;AICDA:TCompilerDefAdders):TScriptData;
 var
   scrname:string;
   PSD:PTScriptData;
@@ -329,17 +329,17 @@ begin
       result.Ctx:=nil;
   end;
 end;
-class procedure TScriptsmanager.FreeExternalScriptData(var ESD:TScriptData);
+class procedure TScriptsManager.FreeExternalScriptData(var ESD:TScriptData);
 begin
   FreeAndNil(ESD.LAPEData.FCompiler);
   FreeAndNil(ESD.Ctx);
 end;
 
-procedure TScriptsmanager.ScanDir(const DirPath:string);
+procedure TScriptsManager.ScanDir(const DirPath:string);
 begin
   FromDirIterator(utf8tosys(DirPath),FScriptFileMask,'',nil,FoundScriptFile);
 end;
-procedure TScriptsmanager.ScanDirs(const DirPaths:string);
+procedure TScriptsManager.ScanDirs(const DirPaths:string);
 begin
   FromDirsIterator(utf8tosys(DirPaths),FScriptFileMask,'',nil,FoundScriptFile);
 end;

@@ -29,7 +29,8 @@ uses
   uzeentity,uzeExtdrAbstractEntityExtender,
   uzedrawingsimple,uzcdrawings,
   uzeentline,uzeentityfactory,uzeconsts,uzcutils,
-  uzegeometry,uzegeometrytypes;
+  uzegeometry,uzegeometrytypes,
+  uzelongprocesssupport;
 
 type
   TLapeScriptContextMode=(LSCMCompilerSetup,LSCMContextSetup);
@@ -92,7 +93,7 @@ begin
   zcAddEntToCurrentDrawingWithUndo(pline);
 
   //перерисовываем
-  //zcRedrawCurrentDrawing;
+  zcRedrawCurrentDrawing;
 end;
 
 procedure line2(const Params: PParamArray{p1,p2: TVertex}); cdecl;
@@ -115,7 +116,7 @@ begin
   zcAddEntToCurrentDrawingWithUndo(pline);
 
   //перерисовываем
-  //zcRedrawCurrentDrawing;
+  zcRedrawCurrentDrawing;
 end;
 
 procedure StartUndoCommand(const Params: PParamArray{CommandName:String;PushStone:boolean=false}); cdecl;
@@ -138,14 +139,52 @@ begin
   zcEndUndoCommand;
 end;
 
+procedure slp(const Params: PParamArray; const Result: Pointer); cdecl;
+type
+  PLPSHandle=^TLPSHandle;
+  PLPSCounter=^TLPSCounter;
+var
+  ctx:TCurrentDrawingContext;
+begin
+  ctx:=TCurrentDrawingContext(Params^[0]);
+  PLPSHandle(Result)^:=LPS.StartLongProcess(PString(Params^[1])^,Result,PLPSCounter(Params^[2])^);
+end;
+
+procedure plp(const Params: PParamArray); cdecl;
+type
+  PLPSHandle=^TLPSHandle;
+  PLPSCounter=^TLPSCounter;
+var
+  ctx:TCurrentDrawingContext;
+begin
+  ctx:=TCurrentDrawingContext(Params^[0]);
+  LPS.ProgressLongProcess(PLPSHandle(Params^[1])^,PLPSCounter(Params^[2])^);
+end;
+
+procedure elp(const Params: PParamArray); cdecl;
+type
+  PLPSHandle=^TLPSHandle;
+var
+  ctx:TCurrentDrawingContext;
+begin
+  ctx:=TCurrentDrawingContext(Params^[0]);
+  LPS.EndLongProcess(PLPSHandle(Params^[1])^);
+end;
+
 class procedure ttest.testadder(mode:TLapeScriptContextModes;ctx:TBaseScriptContext;cplr:TLapeCompiler);
 begin
   if LSCMCompilerSetup in mode then begin
     cplr.StartImporting;
     cplr.addBaseDefine('LAPE');
+
+    cplr.addGlobalType('int32','TLPSHandle');
+    cplr.addGlobalMethod('function StartLongProcess(LPName:string;Total:int32=0):TLPSHandle;',@slp,ctx);
+    cplr.addGlobalMethod('procedure ProgressLongProcess(LPHandle:TLPSHandle;Current:int32);',@plp,ctx);
+    cplr.addGlobalMethod('procedure EndLongProcess(LPHandle:TLPSHandle);',@elp,ctx);
+
     cplr.addGlobalType('record x,y,z:double;end','TzePoint3d');
-    cplr.addGlobalMethod('procedure line(x1,y1,z1,x2,y2,z2: double);',@line,ctx);
-    cplr.addGlobalMethod('procedure line2(p1,p2: TzePoint3d);',@line2,ctx);
+    cplr.addGlobalMethod('procedure zcEntLine(x1,y1,z1,x2,y2,z2:double);overload;',@line,ctx);
+    cplr.addGlobalMethod('procedure zcEntLine(p1,p2:TzePoint3d);overload;',@line2,ctx);
     cplr.addGlobalMethod('procedure zcStartUndoCommand(CommandName:String;PushStone:boolean=false);',@StartUndoCommand,ctx);
     cplr.addGlobalMethod('procedure zcEndUndoCommand;',@EndUndoCommand,ctx);
     cplr.EndImporting;

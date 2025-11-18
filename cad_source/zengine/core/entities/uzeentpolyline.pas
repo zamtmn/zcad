@@ -133,8 +133,8 @@ begin
   FormatWithoutSnapArray;
   calcbb(dc);
   CalcActualVisible(dc.DrawingContext.VActuality);
-  Representation.Clear;
   if (not (ESTemp in State))and(DCODrawable in DC.Options) then
+    Representation.Clear;
     if VertexArrayInWCS.Count>1 then
       Representation.DrawPolyLineWithLT(dc,VertexArrayInWCS,vp,closed,False);
 
@@ -208,7 +208,7 @@ begin
       if dxfLoadGroupCodeVertex(rdr,10,byt,tv) then begin
         if byt=30 then
           if vertexgo then
-            FastAddVertex(tv);
+            context.GDBVertexLoadCache.PushBackData(tv);
       end
       else if dxfLoadGroupCodeInteger(rdr,70,byt,hlGDBWord) then begin
         if (hlGDBWord and 1)=1 then
@@ -224,9 +224,9 @@ begin
     byt:=rdr.ParseInteger;
   end;
 
-  vertexarrayinocs.SetSize(curveVertexArrayInWCS.Count);
-  curveVertexArrayInWCS.copyto(vertexarrayinocs);
-  curveVertexArrayInWCS.Clear;
+  vertexarrayinocs.SetSize(context.GDBVertexLoadCache.Count);
+  context.GDBVertexLoadCache.copyto(vertexarrayinocs);
+  context.GDBVertexLoadCache.Clear;
 end;
 
 function AllocPolyline:PGDBObjPolyline;

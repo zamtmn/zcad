@@ -22,8 +22,9 @@ unit uzeffdxfsupport;
 {$Include zengineconfig.inc}
 
 interface
-uses uzegeometrytypes,uzbtypes,sysutils,uzctnrVectorBytes,usimplegenerics,
-  uzMVReader;
+uses
+  uzegeometrytypes,uzbtypes,sysutils,uzctnrVectorBytes,usimplegenerics,
+  uzMVReader,UGDBPoint3DArray;
 
 const
   cDXFError_WrogGroupCode='DXF group code "%d" expected but "%d" found';
@@ -117,6 +118,8 @@ type
     DWGVarsDict:TString2StringDictionary;
 
     Header:TDXFHeaderInfo;
+
+    GDBVertexLoadCache:GDBPoint3dArray;
 
     procedure InitRec;
     procedure Done;
@@ -321,6 +324,8 @@ begin
   DWGVarsDict:=TString2StringDictionary.Create;
 
   Header.InitRec;
+
+  GDBVertexLoadCache.init(1000);
 end;
 
 procedure TDXFHeaderInfo.InitRec;
@@ -335,6 +340,7 @@ procedure TIODXFLoadContext.Done;
 begin
   h2p.Free;
   DWGVarsDict.Free;
+  GDBVertexLoadCache.Done;
 end;
 
 function DXFHandle(const sh:string):TDWGHandle;

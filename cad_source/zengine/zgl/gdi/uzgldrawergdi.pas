@@ -37,7 +37,8 @@ uses
     {$IFNDEF DELPHI}LCLIntf,LCLType,{$ENDIF}
     Classes,Controls,
     uzegeometrytypes,uzegeometry,uzgldrawergeneral,uzgldrawerabstract,
-    Graphics,uzbLogIntf,gzctnrVectorTypes,uzgvertex3sarray,uzglvectorobject;
+    Graphics,uzbLogIntf,gzctnrVectorTypes,uzgvertex3sarray,uzglvectorobject,
+    uzeFontFileFormatTTF;
 const
   NeedScreenInvalidrect=true;
 type
@@ -599,7 +600,9 @@ begin
   {txtSy:=TQtFont(PGDBfont(PSymbolsParam.pfont)^.DummyDrawerHandle).Metrics.ascent;
   txtSy:=TQtFont(PGDBfont(PSymbolsParam.pfont)^.DummyDrawerHandle).Metrics.descent;
   txtSy:=TQtFont(PGDBfont(PSymbolsParam.pfont)^.DummyDrawerHandle).Metrics.height;}
-  txtSy:=PSymbolsParam^.NeededFontHeight/(rc.DrawingContext.zoom)/(deffonth)*fontHeightCoefficient;
+
+  txtSy:=TZETFFFontImpl(PGDBfont(PSymbolsParam.pfont)^.font).TTFImpl.kForGDISystemRender
+         /(rc.DrawingContext.zoom)/(deffonth);
   {$IF DEFINED(LCLQt) OR DEFINED(LCLQt5)}txtSy:=txtSy*(deffonth)/(TQtFont(PGDBfont(PSymbolsParam.pfont)^.DummyDrawerHandle).Metrics.height-1);{$ENDIF}
   txtSx:=txtSy*PSymbolsParam^.sx;
 

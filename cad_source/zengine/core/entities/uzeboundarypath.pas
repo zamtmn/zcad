@@ -23,7 +23,7 @@ interface
 
 uses
   Math,uzegeometrytypes,UGDBPolyline2DArray,gzctnrVector,uzctnrVectorBytes,
-  gzctnrVectorTypes,uzegeometry,uzeffdxfsupport,uzMVReader,uzeSplineUtils,
+  gzctnrVectorTypes,uzegeometry,uzeffdxfsupport,uzMVReader,uzeNURBSTypes,
   uzegluinterface,uzbLogIntf;
 
 type

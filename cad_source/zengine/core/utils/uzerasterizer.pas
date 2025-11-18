@@ -22,6 +22,7 @@ interface
 uses
   uzegeometrytypes,
   uzedrawingsimple,uzgldrawcontext,uzgldrawergeneral2d,uzgldrawerabstract,
+  uzeroot,
   uzegeometry,uzeconsts,
   uzeiopalette,uzepalette,uzcutils,
   uzbLogIntf,Graphics,Classes,
@@ -172,7 +173,9 @@ begin
   Actlt.InfrustumActualy:=cdwg^.pcamera^.POSCOUNT;
   Actlt.VisibleActualy:=cdwg^.pcamera^.VISCOUNT;
   cdwg^.GetCurrentROOT^.CalcVisibleByTree(_frustum,Actlt,cdwg^.GetCurrentROOT^.ObjArray.ObjTree,cdwg^.pcamera^.Counters,@cdwg^.myGluProject2,cdwg^.pcamera^.prop.zoom,0);
-  cdwg^.GetCurrentROOT^.FormatEntity(cdwg^,dc);
+  //cdwg^.GetCurrentROOT^.FormatEntity(cdwg^,dc);
+  DoFormat(cdwg^.GetCurrentROOT^,cdwg^.GetCurrentROOT^.ObjArray,
+    cdwg^.GetCurrentROOT^.ObjToConnectedArray,cdwg^,DC,0,[]);
   //drawings.GetCurrentDWG^.OGLwindow1.draw;
   //prn.startrender;
 

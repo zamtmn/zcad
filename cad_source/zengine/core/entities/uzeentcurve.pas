@@ -88,17 +88,8 @@ procedure GDBPoint3dArrayAddOnTrackAxis(const VertexArrayInWCS:GDBPoint3dArray;
   var posr:os_record;const processaxis:taddotrac;const closed:boolean);
 function GetDirInPoint(const VertexArrayInWCS:GDBPoint3dArray;
   point:GDBVertex;closed:boolean):GDBVertex;
-procedure FastAddVertex(const Vertex:GDBVertex);
-
-var
-  curveVertexArrayInWCS:GDBPoint3dArray;
 
 implementation
-
-procedure FastAddVertex(const Vertex:GDBVertex);
-begin
-  curveVertexArrayInWCS.PushBackData(vertex);
-end;
 
 procedure GDBObjCurve.InsertVertex(const PolyData:TPolyData);
 begin
@@ -626,8 +617,7 @@ begin
 end;
 
 initialization
-  curveVertexArrayInWCS.init(200);
 
 finalization
-  curveVertexArrayInWCS.done;
+
 end.

@@ -99,7 +99,7 @@ uses
   uzeenttext,uzeentmtext,
   uzeentpoint,
   uzeentpolyline,
-  uzeentspline,
+  uzeEntSpline,
   uzeenttable,
 
   {$IFDEF ELECTROTECH}
@@ -252,6 +252,7 @@ uses
   uzcCommand_Duplicate,
 
   uzcCommand_PlaceDelegate,
+  uzccommand_ReportsUpdate,
 
   uzcenitiesvariablesextender,uzcExtdrLayerControl,uzcExtdrSmartTextEnt,
   uzcExtdrIncludingVolume,uzcExtdrSCHConnection,uzcExtdrSCHConnector,
@@ -278,11 +279,8 @@ uses
 
   uzvcommand_space, //команда addZona для работы с зонами
   uzvcommand_showhidespace, //команда показ спрятать
-  uzvsplineconvert,
-  uzvcommand_exportdialux,
   uzvcommand_recoverytable, //команда восстановления таблиц с чертежа
   uzvlightexporter_commandexport,
-  uzvlightexporter_commandprint,
   uzvdialuxlumimporter_main,
   uzvconnect_main,
   //uzvelectricalexcelcom,

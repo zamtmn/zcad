@@ -15,7 +15,7 @@
 {
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
-unit uzeSplineUtils;
+unit uzeNURBSTypes;
 {$Mode delphi}{$H+}
 {$Include zengineconfig.inc}
 
@@ -27,9 +27,10 @@ uses
 type
   TKnotsVector=object(GZVector<single>)
   end;
-
   TCPVector=object(GZVector<GDBvertex4S>)
   end;
+  TSingleArray=array of single;
+  TControlPointsArray=array of GDBVertex;
 
 implementation
 end.

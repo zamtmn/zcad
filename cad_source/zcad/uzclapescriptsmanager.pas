@@ -26,7 +26,7 @@ uses
   lptypes,lpvartypes,lpparser,lpcompiler,{lputils,}lpeval,lpinterpreter,lpmessages,
   gzctnrSTL,
   LazUTF8,
-  uzbLogTypes,uzcLog,
+  uzbLogTypes,uzcLog,uzcreglog,
   uzelongprocesssupport,
   uzcLapeScriptsImplBase;
 
@@ -282,18 +282,24 @@ begin
   try
     if not SD.LAPEData.FCompiled then begin
       lpsh:=LPS.StartLongProcess('Compile script',self);
-      SD.LAPEData.FCompiled:=SD.LAPEData.FCompiler.Compile;
-      LPS.EndLongProcess(lpsh);
+      try
+        SD.LAPEData.FCompiled:=SD.LAPEData.FCompiler.Compile;
+      finally
+        LPS.EndLongProcess(lpsh);
+      end;
     end;
     if not SD.LAPEData.FCompiled then
       LapeExceptionFmt('Error compiling file "%s"',[SD.FileData.Name]);
     lpsh:=LPS.StartLongProcess('Run script',self);
-    RunCode(SD.LAPEData.FCompiler.Emitter);
-    LPS.EndLongProcess(lpsh);
+    try
+      RunCode(SD.LAPEData.FCompiler.Emitter);
+    finally
+      LPS.EndLongProcess(lpsh);
+    end;
   except
     on E: Exception do
     begin
-      ProgramLog.LogOutFormatStr('TScriptsmanager.RunScript "%s"',[E.Message],LM_Error,LapeLMId);
+      ProgramLog.LogOutFormatStr('TScriptsmanager.RunScript "%s"',[E.Message],LM_Error,LapeLMId,MO_SM);
       FreeAndNil(SD.LAPEData.FCompiler);
     end;
   end;

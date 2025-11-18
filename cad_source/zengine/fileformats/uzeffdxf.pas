@@ -184,9 +184,12 @@ var
   procedure storevariable;
   begin
     case currentindex of
-      0:fileCtx.DWGVarsDict.Add(varname,valuesarray[0]);
-      1:fileCtx.DWGVarsDict.Add(varname,valuesarray[0]+'|'+valuesarray[1]);
-      else fileCtx.DWGVarsDict.Add(varname,valuesarray[0]+'|'+valuesarray[1]+'|'+valuesarray[2]);
+      //https://github.com/zamtmn/zcad/issues/207
+      //$DIMASSOC почемуто дублируется в in.dxf
+      //поэтому add->AddOrSetValue
+      0:fileCtx.DWGVarsDict.AddOrSetValue(varname,valuesarray[0]);
+      1:fileCtx.DWGVarsDict.AddOrSetValue(varname,valuesarray[0]+'|'+valuesarray[1]);
+      else fileCtx.DWGVarsDict.AddOrSetValue(varname,valuesarray[0]+'|'+valuesarray[1]+'|'+valuesarray[2]);
     end;
 
     if not ACVERSION then
@@ -2190,36 +2193,34 @@ begin
                                  DTMnothung:outstream.TXTAddStringEOL('2');
                        end;{case}
 
-                       if pdsp^.Lines.DIMLWD<>LnWtByLayer then
+                       if pdsp^.Lines.DIMLWD<>DIMLWDDefaultValue then
                        begin
                         //dxfIntegerout(outhandle,371,pdsp^.Lines.DIMLWD);
                         outstream.TXTAddStringEOL(dxfGroupCode(371));
                         outstream.TXTAddStringEOL(inttostr(pdsp^.Lines.DIMLWD));
                        end;
-                       if pdsp^.Lines.DIMLWE<>LnWtByLayer then
+                       if pdsp^.Lines.DIMLWE<>DIMLWEDefaultValue then
                        begin
                         //dxfIntegerout(outhandle,372,pdsp^.Lines.DIMLWE);
                         outstream.TXTAddStringEOL(dxfGroupCode(372));
                         outstream.TXTAddStringEOL(inttostr(pdsp^.Lines.DIMLWE));
                        end;
 
-                       if pdsp^.Lines.DIMCLRD<>ClByLayer then
+                       if pdsp^.Lines.DIMCLRD<>DIMCLRDDefaultValue then
                        begin
                         outstream.TXTAddStringEOL(dxfGroupCode(176));
                         outstream.TXTAddStringEOL(inttostr(pdsp^.Lines.DIMCLRD));
                        end;
-                       if pdsp^.Lines.DIMCLRE<>ClByLayer then
+                       if pdsp^.Lines.DIMCLRE<>DIMCLREDefaultValue then
                        begin
                         outstream.TXTAddStringEOL(dxfGroupCode(177));
                         outstream.TXTAddStringEOL(inttostr(pdsp^.Lines.DIMCLRE));
                        end;
-                       if pdsp^.Text.DIMCLRT<>ClByLayer then
+                       if pdsp^.Text.DIMCLRT<>DIMCLRTDefaultValue then
                        begin
                         outstream.TXTAddStringEOL(dxfGroupCode(178));
                         outstream.TXTAddStringEOL(inttostr(pdsp^.Text.DIMCLRT));
                        end;
-
-
 
                       outstream.TXTAddStringEOL(dxfGroupCode(340));
                       p:=pdsp^.Text.DIMTXSTY{drawing.TextStyleTable.FindStyle('Standard',false)};

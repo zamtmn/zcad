@@ -50,6 +50,7 @@ type
       function GetCapHeight: single; virtual;
       function InternalGetCapHeight: single; virtual; abstract;
       function GetGlyph(Index: integer): TGlyphData; virtual; abstract;
+      function GetkForGDISystemRender: single; virtual; abstract;
 
     public
       constructor Create;virtual;abstract;
@@ -75,6 +76,7 @@ type
       property Descent: single read GetDescent;
       property CapHeight: single read GetCapHeight;
       property Glyph[Index: integer]: TGlyphData read GetGlyph;
+      property kForGDISystemRender: single read GetkForGDIsystemRender;
   end;
 const
   CTTFDefaultSizeInPoints=10000;

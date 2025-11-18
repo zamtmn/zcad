@@ -1,13 +1,21 @@
 //LPCSRun(randomlines)
-var i:int32;
+var
+  i:int32;
+  p1,p2:TzgPoint;
 begin
   randomize;
-  for i:=1 to 100 do begin
-    line(1000*random,
-         1000*random,
-         0,
-         1000*random,
-         1000*random,
-         0);
+  p1.z:=0
+  p2.z:=0;
+  zcStartUndoCommand('Скрипт про 1000 линий');
+  for i:=1 to 500 do begin
+    //вариант1
+    line(1000*random,1000*random,0,1000*random,1000*random,0);
+    //вариант2
+    p1.x:=1000*random;
+    p1.y:=1000*random;
+    p2.x:=1000*random;
+    p2.y:=1000*random;
+    line2(p1,p2);
   end;
+  zcEndUndoCommand;
 end.

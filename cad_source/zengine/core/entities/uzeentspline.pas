@@ -15,7 +15,7 @@
 {
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
-unit uzeentspline;
+unit uzeEntSpline;
 {$Mode delphi}{$H+}
 {$INCLUDE zengineconfig.inc}
 
@@ -27,11 +27,14 @@ uses
   uzestyleslayers,uzeentsubordinated,uzeentcurve,
   uzeentity,uzctnrVectorBytes,uzbtypes,uzeconsts,uzglviewareadata,
   gzctnrVectorTypes,uzegeometrytypes,uzegeometry,uzeffdxfsupport,SysUtils,
-  uzMVReader,uzCtnrVectorpBaseEntity,uzeSplineUtils,uzbLogIntf,Math;
+  uzMVReader,uzCtnrVectorpBaseEntity,uzeNURBSTypes,uzbLogIntf,Math,
+  uzeNURBSUtils;
 
 type
   TSplineOpt=(SOClosed,SOPeriodic,SORational,SOPlanar,SOLinear);
   TSplineOpts=set of TSplineOpt;
+  TPointsType=(PTControl,PTOnCurve);
+
   PGDBObjSpline=^GDBObjSpline;
 
   GDBObjSpline=object(GDBObjCurve)
@@ -168,9 +171,8 @@ begin
   begin
     CP.init(VertexArrayInWCS.Count);
     ptv:=VertexArrayInWCS.beginiterate(ir);
-    TSD.tv0:=ptv^;
-
-    if ptv<>nil then
+    if ptv<>nil then begin
+      TSD.tv0:=ptv^;
       repeat
 
         tfvs.x:=ptv.x-TSD.tv0.x;
@@ -182,6 +184,7 @@ begin
 
         ptv:=VertexArrayInWCS.iterate(ir);
       until ptv=nil;
+    end;
 
     AproxPointInWCS.Clear;
     TSD.PAproxPointInWCS:=@AproxPointInWCS;
@@ -211,8 +214,8 @@ begin
   end;
   AproxPointInWCS.Shrink;
   CalcActualVisible(dc.DrawingContext.VActuality);
-  Representation.Clear;
   if (not (ESTemp in State))and(DCODrawable in DC.Options) then begin
+    Representation.Clear;
     if SOLinear in Opts then
       Representation.DrawLineWithLT(self,getmatrix^,dc,VertexArrayInOCS.getFirst,
         VertexArrayInOCS.getLast,vp)
@@ -362,18 +365,34 @@ var
   tmpFlag:integer;
   tmpVertex:GDBvertex;
   tmpKnot:single;
+  pt:TPointsType;
+  startTangent,endTangent:TNulableVetrex;
+  vcp:TControlPointsArray;
+  i:integer;
 begin
   Closed:=False;
   tmpVertex:=NulVertex;
   tmpKnot:=0;
   tmpFlag:=0;
+  pt:=TPointsType.PTControl;
 
   DXFGroupCode:=rdr.ParseInteger;
   while DXFGroupCode<>0 do begin
     if not LoadFromDXFObjShared(rdr,DXFGroupCode,ptu,drawing,context) then
       if dxfLoadGroupCodeVertex(rdr,10,DXFGroupCode,tmpVertex) then begin
         if DXFGroupCode=30 then
-          addvertex(tmpVertex);
+          context.GDBVertexLoadCache.PushBackData(tmpVertex);
+      end else if dxfLoadGroupCodeVertex(rdr,11,DXFGroupCode,tmpVertex) then begin
+          if DXFGroupCode=31 then begin
+            context.GDBVertexLoadCache.PushBackData(tmpVertex);
+            pt:=TPointsType.PTOnCurve;
+          end;
+      end else if dxfLoadGroupCodeVertex(rdr,12,DXFGroupCode,tmpVertex) then begin
+          if DXFGroupCode=32 then
+            startTangent:=tmpVertex;
+      end else if dxfLoadGroupCodeVertex(rdr,13,DXFGroupCode,tmpVertex) then begin
+          if DXFGroupCode=33 then
+            ENDTangent:=tmpVertex;
       end else if dxfLoadGroupCodeFloat(rdr,40,DXFGroupCode,tmpKnot) then
         Knots.PushBackData(tmpKnot)
       else if dxfLoadGroupCodeInteger(rdr,70,DXFGroupCode,tmpFlag) then begin
@@ -386,7 +405,19 @@ begin
     DXFGroupCode:=rdr.ParseInteger;
   end;
 
-  vertexarrayinocs.Shrink;
+  //vertexarrayinocs.Shrink;
+  if pt=TPointsType.PTControl then begin
+    vertexarrayinocs.SetSize(context.GDBVertexLoadCache.Count);
+    context.GDBVertexLoadCache.copyto(vertexarrayinocs);
+  end else begin
+    vcp:=ConvertOnCurvePointsToControlPointsArray(Degree,context.GDBVertexLoadCache.PArray^[0..context.GDBVertexLoadCache.count-1],Knots);
+    vertexarrayinocs.SetSize(high(vcp)-low(vcp)+1);
+    vertexarrayinocs.Clear;
+    for i:=low(vcp) to high(vcp) do
+      AddVertex(vcp[i]);
+  end;
+  context.GDBVertexLoadCache.Clear;
+
   Knots.Shrink;
 end;
 

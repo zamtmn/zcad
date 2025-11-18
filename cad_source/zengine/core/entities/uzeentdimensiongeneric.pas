@@ -148,12 +148,14 @@ begin
                         if not dxfLoadGroupCodeDouble(rdr,52,byt,a52) then
                           if dxfLoadGroupCodeString(rdr,3,byt,style) then begin
                             PDimStyle:=drawing.GetDimStyleTable^.getAddres(Style);
-                            if PDimStyle=nil then
-                              PDimStyle:=pointer(drawing.GetDimStyleTable^.getDataMutable(0));
+                            {if PDimStyle=nil then
+                              PDimStyle:=pointer(drawing.GetDimStyleTable^.getDataMutable(0));}
                           end else
                             rdr.SkipString;
     byt:=rdr.ParseInteger;
   end;
+  if PDimStyle=nil then
+    PDimStyle:=pointer(drawing.GetDimStyleTable^.getDataMutable(0));
   if dtype<>-1 then begin
     case dtype and 15 of
       0:DimType:=DTRotated;

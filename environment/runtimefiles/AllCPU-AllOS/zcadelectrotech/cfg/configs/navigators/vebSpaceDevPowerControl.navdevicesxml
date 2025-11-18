@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CONFIG>
+  <NavigatorParams TreeBuildMap="+space_Building|+space_Section|+space_Floor|+Space_RoomPos|+realnamedev|+NMO_BaseName|-NMO_Suffix|-@@[NMO_Name]" CreateRootNode="True" NodeNameFormat="%0:s(%1:d,%2:d)" TreeProperties="SetColumnsCount(4,0);&#xD;&#xA;SetColumnParams(0,'Tree','@@[NMO_Name]','tmpGUIParamSave_NavDev_C0',1);&#xD;&#xA;SetColumnParams(1,'Power','@@[Power]','tmpGUIParamSave_NavDev_C1',1)&#xD;&#xA;SetColumnParams(2,'Voltage','@@[Voltage]','tmpGUIParamSave_NavDev_C2',1)&#xD;&#xA;SetColumnParams(3,'Phase','@@[Phase]','tmpGUIParamSave_NavDev_C3',1)" IncludeEntities="IncludeEntityName('Device')" UseMainFunctions="True"/>
+</CONFIG>

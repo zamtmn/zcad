@@ -69,10 +69,6 @@ begin
   if (Length(name) >= 2) and (name[1] = '"') and (name[Length(name)] = '"') then
     name := Copy(name, 2, Length(name) - 2);
 
-  // Дополнительная обработка для случая обычных двойных кавычек
-  if (Length(name) >= 2) and (name[1] = '"') and (name[Length(name)] = '"') then
-    name := Copy(name, 2, Length(name) - 2);
-
   Result := Trim(name);
 end;
 
@@ -80,7 +76,7 @@ function layerWeightBigSmall_com(const Context:TZCADCommandContext;operands:TCom
 var
   layerName: string;
   pLayer: PGDBLayerProp;
-  newLW: TGDBLineWeight;
+  newLW: SmallInt;
 begin
   // Получаем имя слоя из операндов
   layerName := NormalizeLayerName(operands);
@@ -121,3 +117,4 @@ initialization
   CreateZCADCommand(@layerWeightBigSmall_com,'layerWeightBigSmall',CADWG,0);
 
 end.
+

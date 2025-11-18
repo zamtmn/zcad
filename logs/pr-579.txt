@@ -1,0 +1,32 @@
+Создать новую команду layerWeightBigSmall [OPEN]
+
+## Создание команды layerWeightBigSmall
+
+Fixes veb86/zcadvelecAI#578
+
+Добавлена команда `layerWeightBigSmall(<LayerName>)`, переключающая вес указанного слоя между «большой» и «маленький» величинами.
+
+Основные детали:
+- Путь: `cad_source/zcad/velec/space/uzvcommand_layerWeightBigSmall.pas`
+- Регистрация команды: через `CreateZCADCommand(@layerWeightBigSmall_com,'layerWeightBigSmall',CADWG,0)` и подключение модуля в `cad_source/zcad.pas` (только для ELECTROTECH)
+- Формат вызова: `layerWeightBigSmall(<ИмяСлоя>)`
+- Поведение:
+  - Если слой не найден — выводится сообщение: «Слой <ИмяСлоя> не существует» (через `zcUI.TextMessage`), команда завершается без ошибки
+  - Если текущий вес слоя не равен «большому», устанавливается «большой»; иначе — «маленький»
+- Константы веса вынесены в секцию `const` и соответствуют внутренним единицам ZCAD (сотые доли мм):
+  - `CONST_LAYER_WEIGHT_BIG = LnWt200`  // 2.00 мм
+  - `CONST_LAYER_WEIGHT_SMALL = LnWt000` // 0.00 мм
+
+Парсинг аргументов:
+- Поддерживается ввод в виде `layerWeightBigSmall(Name)`, а также с кавычками/скобками — имя нормализуется функцией `NormalizeLayerName`.
+
+Мини-план проверки вручную:
+1) Создайте/выберите слой `TestLayer`.
+2) Выполните `layerWeightBigSmall(TestLayer)` — вес станет 2.00 мм; повторный вызов переключит на 0.00 мм.
+3) Для несуществующего слоя — появится сообщение об ошибке и без изменений.
+
+Технические заметки:
+- Использованы типы и хелперы из `uzccommandsimpl`, `uzcdrawings`, `uzestyleslayers`, `uzeconsts` — в стиле уже существующих команд в `velec/space`.
+- Константы заданы через `uzeconsts` (`LnWt200/LnWt000`) для корректного соответствия внутреннему типу LineWeight.
+— editing PR via gh
+

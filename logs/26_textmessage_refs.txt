@@ -1,0 +1,18 @@
+361:  zcUI.TextMessage('запущена команда ShowHideSpace',TMWOHistoryOut);
+366:    zcUI.TextMessage('Ошибка: не указаны параметры / Error: parameters not specified', TMWOHistoryOut);
+367:    zcUI.TextMessage('Использование / Usage: ShowHideSpace(colorIndex,''LayerName'',variable1,variable2,...)', TMWOHistoryOut);
+368:    zcUI.TextMessage('Пример / Example: ShowHideSpace(3,''Space_Highlight'',space_Floor,Space_Room)', TMWOHistoryOut);
+380:      zcUI.TextMessage('Ошибка: не удалось распознать имена переменных / Error: could not parse variable names', TMWOHistoryOut);
+381:      zcUI.TextMessage('Использование / Usage: ShowHideSpace(colorIndex,''LayerName'',variable1,variable2,...)', TMWOHistoryOut);
+386:    zcUI.TextMessage('Параметры команды / Command parameters:', TMWOHistoryOut);
+387:    zcUI.TextMessage('  Цвет штриховки / Hatch color: ' + IntToStr(colorIndex), TMWOHistoryOut);
+388:    zcUI.TextMessage('  Слой / Layer: ' + layerName, TMWOHistoryOut);
+389:    zcUI.TextMessage('  Переменные / Variables: ' + varList.CommaText, TMWOHistoryOut);
+404:        zcUI.TextMessage('Слой не найден, будет создан / Layer not found, will be created', TMWOHistoryOut);
+409:        zcUI.TextMessage('Режим HIDE: удалено штриховок / HIDE mode: hatches deleted: ' + IntToStr(deletedCount), TMWOHistoryOut);
+421:        zcUI.TextMessage('Слой существует, но штриховок нет, создаем / Layer exists but no hatches, creating', TMWOHistoryOut);
+457:          zcUI.TextMessage('Создан слой / Layer created: ' + layerName, TMWOHistoryOut);
+463:    zcUI.TextMessage('Режим SHOW: создание штриховок / SHOW mode: creating hatches', TMWOHistoryOut);
+507:    zcUI.TextMessage('Обработано примитивов / Entities processed: ' + IntToStr(processedCount), TMWOHistoryOut);
+508:    zcUI.TextMessage('Найдено и выделено полилиний / Polylines found and selected: ' + IntToStr(foundCount), TMWOHistoryOut);
+509:    zcUI.TextMessage('Создано штриховок / Hatches created: ' + IntToStr(hatchCount), TMWOHistoryOut);

@@ -1,0 +1,6 @@
+cad_source/zcad/velec/space/uzvcommand_space.pas:477:initialization
+cad_source/zcad/velec/space/uzvcommand_space.pas:480:  CreateZCADCommand(@addSpace_com,'addSpace',CADWG,0);
+cad_source/zcad/velec/space/uzvcommand_layerWeightBigSmall.pas:115:initialization
+cad_source/zcad/velec/space/uzvcommand_layerWeightBigSmall.pas:117:  CreateZCADCommand(@layerWeightBigSmall_com,'layerWeightBigSmall',CADWG,0);
+cad_source/zcad/velec/space/uzvcommand_showhidespace.pas:523:initialization
+cad_source/zcad/velec/space/uzvcommand_showhidespace.pas:526:  CreateZCADCommand(@ShowHideSpace_com,'ShowHideSpace',CADWG,0);

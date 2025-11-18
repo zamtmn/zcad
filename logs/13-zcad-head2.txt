@@ -1,0 +1,221 @@
+  uzccommand_dbgClipboard,
+  uzccommand_dbgCmdList,uzccommand_dbgBlocksList,
+  uzccommand_entslist,
+  uzccommand_saveoptions,
+  uzccommand_showpage,
+  uzccommand_options,
+  uzccommand_about,uzccommand_help,
+  uzccommand_get3dpoint,uzccommand_get3dpoint_drawrect,uzccommand_getrect,
+  uzccommand_dist,
+
+  uzccommand_line,uzccommand_circle,uzccommand_arc,uzccommand_spline,
+
+  uzccommand_line2,uzccommand_circle2,//old commands
+
+  uzccommand_scale,uzccommand_rotate,uzccommand_rotateents,uzccommand_erase,
+  uzccommand_inverseselected,uzccommand_cutclip,
+
+  uzccommand_polyed,
+
+  uzccommand_polygon,uzccommand_rectangle,
+  uzccommand_matchprop,
+  uzccommand_dimlinear,uzccommand_dimaligned,uzccommand_dimdiameter,
+  uzccommand_dimradius,
+
+  uzccommand_exampleinsertdevice,uzccommand_examplecreatelayer,
+  uzccommand_ExampleVarManipulation,
+  uzccommand_exampleconstructtomodalspace,
+
+  uzccommand_VarsLink,
+
+  uzccommand_text,
+  uzccommand_exporttexttocsv,
+  uzccommand_dataexport,uzccommand_dataimport,
+  uzccommand_extdrentslist,uzccommand_extdralllist,uzccommand_extdrAdd,uzccommand_extdrRemove,
+  uzccommand_DevDefSync,
+  uzccommand_VariablesAdd,uzccommand_VarValueCopy,
+
+  uzccommand_dbgRaiseException,uzccommand_dbgGetAV,uzccommand_dbgGetOutOfMem,uzccommand_dbgGetStackOverflow,
+  uzccommand_dbgPlaceAllBlocks,uzcCommand_dbgSelectEnts,
+  uzccommand_Insert,uzccommand_BlockReplace,
+
+  uzccommand_NumDevices,
+
+  uzccommand_tstCmdLinePrompt,
+  uzccommand_explDbCheck,
+
+  uzccommand_cfgAddSupportPath,uzccommand_cfgSetRendererBackEnd,
+  uzccommand_DockingOptions,
+  uzcCommand_MoveEntsByMouse,
+  uzcCommand_LPCSRun,
+  uzcCommand_Find,
+  uzcCommand_SpellCheck,
+  uzcCommand_Duplicate,
+
+  uzcCommand_PlaceDelegate,
+
+  uzcenitiesvariablesextender,uzcExtdrLayerControl,uzcExtdrSmartTextEnt,
+  uzcExtdrIncludingVolume,uzcExtdrSCHConnection,uzcExtdrSCHConnector,
+  uzcExtdrReport,
+  uzcfhistorywindow,
+
+  {$IFNDEF DARWIN}
+  {$IFDEF ELECTROTECH}
+  //**for velec func**//
+  uzccommand_drawsuperline,uzccommand_l2sl,
+  uzvslagcab, //автопрокладка кабелей по именным суперлиниям
+  uzvagslcom, //создания именных суперлиний в комнате между извещателями
+  uzvstripmtext, //очистка мтекста, сделано плохо, в будущем надо переделывать мтекст и механизм.
+  uzvcabmountmethod,
+  uzvelscheme, //создание электрической схемы
+  uzvaddconnection, //добавить подключение к устройству
+  uzvremoveconnection, //удаление подключения к устройству
+  uzvmanemcom, //управления и обработка полученой электрической модели
+  uzvmanemschemalevelone, //создание одноуровневой схемы
+  uzvmanemdialogcom,//запуск генератора схемы через диалоговое окно
+  uzvmanagerconnect, // менеджер подключений
+  {$IFDEF WINDOWS}//uzvmodeltoxlsx,
+  uzvmodeltoxlsxfps, uzvdevtoxlsx, uzvxlsxtocad,uzvelectricalexcelcom,{$ENDIF}  //запуск экспорта информации из veb модели в xlsx на OLE
+
+  uzvcommand_space, //команда addZona для работы с зонами
+  uzvcommand_showhidespace, //команда показ спрятать
+  uzvcommand_layerWeightBigSmall, //переключение веса слоя большой/маленький
+  uzvsplineconvert,
+  uzvcommand_exportdialux,
+  uzvcommand_recoverytable, //команда восстановления таблиц с чертежа
+  uzvlightexporter_commandexport,
+  uzvlightexporter_commandprint,
+  uzvdialuxlumimporter_main,
+  uzvconnect_main,
+  //uzvelectricalexcelcom,
+  //**//
+  {$ENDIF}
+  contolelschema_main,
+  uzcregconnectmanager,
+  {$ENDIF}
+
+  //uzccomexample2,
+  uzventsuperline,
+  //uzccomobjectinspector,
+  //uzccomexperimental,
+
+  {$IFDEF ELECTROTECH}
+  uzcregelectrotechfeatures,
+  uzccomelectrical,
+  uzccomops,
+  //uzccommaps,
+  uzceCommand_SCHConnection,
+  {$ENDIF}
+  uzcMainForm,
+  uzcuidialogs,
+  uzcstrconsts,
+  uzeiopalette,
+  uzctextpreprocessorimpl,
+  uzcregisterenitiesfeatures,
+  uzcregisterenitiesextenders,
+  uzcoiregistermultiproperties,
+  uzclibraryblocksregister,
+  {$IF not((DEFINED(WINDOWS))and(DEFINED(LCLQT5)))}uzglviewareaogl,uzglviewareaoglmodern,{$ENDIF}
+  uzglviewareagdi,uzglviewareacanvas,
+  {$IFDEF WINDOWS}{uzglviewareadx,}{$ENDIF}
+
+  uzctbexttoolbars, uzctbextmenus, uzctbextpalettes,
+
+  uzcinterface,
+  uzccommand_dbgappexplorer,
+  uzelongprocesssupport;
+
+var
+  lpsh:TLPSHandle;
+  i:integer;
+  scrfile:string;
+
+{$R *.res}
+
+begin
+  programlog.logoutstr('<<<<<<<<<<<<<<<End units initialization',0,LM_Debug);
+
+  {$IFDEF REPORTMMEMORYLEAKS}
+  printleakedblock:=true;
+  SetHeapTraceOutput(ConcatPaths([GetTempPath,'memory-heaptrace.txt']));
+  keepreleased:=true;
+  {$ENDIF}
+
+  if not ZCSysParams.notsaved.otherinstancerun then begin
+    //оформляем "процесс" процесс запуска приложения, дря замера времени
+    //хотя он не учтет время потраченое в секции инициализации
+    lpsh:=LPS.StartLongProcess('Start program',@lpsh,0);
+
+    //смотрим доступные шрифты
+    FontManager.EnumerateFontFiles;
+
+    //инициализация drawings
+    uzcdrawings.startup('$(DistribPath)/rtl/dwg/DrawingVars.pas', '');
+    uzcdevicebase.startup;
+
+    {$IF DEFINED(MSWINDOWS)}
+    //применение цветоыой схемы
+    LoadLResources;
+    if SysVar.INTF.INTF_ColorScheme<>nil then
+      ApplyMetaDarkStyle(GetScheme(SysVar.INTF.INTF_ColorScheme^));
+    {$ENDIF}
+
+    //создание окна программы
+    //Application.Initialize;//перемещен в инициализацию uzcfsplash
+                             //чтоб показать сплэш пораньше
+    Application.MainFormOnTaskBar:=True;
+    Application.CreateForm(TzcMainForm,zcMainForm);
+    zcMainForm.Show;
+    zcMainForm.Repaint;
+    zcUI.TextMessage(format(rsZCADStarted,
+      [programname,sysvar.SYS.SYS_Version^]),TMWOHistoryOut);
+
+    //показываем процессбар в статусбаре,
+    //чтоб небыло лишних переключений на текст
+    zcMainForm.SwithToProcessBar;
+
+    //шаримся в preload и выполняем скрипты оттуда
+    FromDirsIterator(sysvar.PATH.Preload_Paths^,'*.cmd','autorun.cmd',
+      RunCmdFile,nil);
+
+    //выполняем скрипты переданые в командной строке
+    if CommandLineParser.HasOption(RunScript)then
+      for i:=0 to CommandLineParser.OptionOperandsCount(RunScript)-1 do begin
+        scrfile:=CommandLineParser.OptionOperand(RunScript,i);
+        commandmanager.executefile(scrfile,drawings.GetCurrentDWG,nil);
+      end;
+
+    //загружаем файлы переданые в командной строке
+    if ZCSysParams.notsaved.preloadedfile<>'' then begin
+      commandmanager.executecommand('Load('+ZCSysParams.notsaved.preloadedfile+
+        ')',drawings.GetCurrentDWG,drawings.GetCurrentOGLWParam);
+      ZCSysParams.notsaved.preloadedfile:='';
+    end;
+
+    //возвращаем текст в статусбаре,
+    zcMainForm.SwithToHintText;
+
+    //убираем сплэш
+    removesplash;
+
+    //ставим фокус куда надо
+    zcUI.Do_SetNormalFocus;
+
+    //в uzbexceptionsgui обработка исключений в Application запрещена,
+    //разрешаем
+    TZGuiExceptionsHandler.EnableLCLCaptureExceptions;
+
+    //"процесс" запуска приложения закончен
+    LPS.EndLongProcess(lpsh);
+
+    //работаем
+    Application.run;
+
+    //отработали))
+    sysvar.SYS.SYS_RunTime:=nil;
+    programlog.logoutstr('END.',0,LM_Necessarily);
+  end;
+  programlog.logoutstr('<<<<<<<<<<<<<<<Start units finalization',0,LM_Debug);
+end.
+
+

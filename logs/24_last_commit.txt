@@ -1,0 +1,2 @@
+ae700d758ec68794d754e513ae4755449957ff3d Revert "Initial commit with task details for issue #578"
+CLAUDE.md

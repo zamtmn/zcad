@@ -1,0 +1,8 @@
+Remotes:
+origin	https://github.com/konard/zcadvelecAI.git (fetch)
+origin	https://github.com/konard/zcadvelecAI.git (push)
+upstream	https://github.com/veb86/zcadvelecAI.git (fetch)
+upstream	https://github.com/veb86/zcadvelecAI.git (push)
+
+Current branch:
+issue-578-5408550377d7

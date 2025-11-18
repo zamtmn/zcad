@@ -1,0 +1,120 @@
+     1	{
+     2	*****************************************************************************
+     3	*                                                                           *
+     4	*  This file is part of the ZCAD                                            *
+     5	*                                                                           *
+     6	*  See the file COPYING.txt, included in this distribution,                 *
+     7	*  for details about the copyright.                                         *
+     8	*                                                                           *
+     9	*  This program is distributed in the hope that it will be useful,          *
+    10	*  but WITHOUT ANY WARRANTY; without even the implied warranty of           *
+    11	*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.                     *
+    12	*                                                                           *
+    13	*****************************************************************************
+    14	}
+    15	{
+    16	@author(Vladimir Bobrov)
+    17	}
+    18	{$mode objfpc}{$H+}
+    19	
+    20	{**Команда layerWeightBigSmall(<LayerName>)
+    21	   Переключает вес указанного слоя между "большой" и "маленький".}
+    22	unit uzvcommand_layerWeightBigSmall;
+    23	
+    24	{$INCLUDE zengineconfig.inc}
+    25	
+    26	interface
+    27	
+    28	uses
+    29	  sysutils,
+    30	  uzccommandsmanager,
+    31	  uzccommandsabstract,
+    32	  uzccommandsimpl,     // менеджер команд и связанные объекты
+    33	  uzcinterface,        // утилиты интерфейса
+    34	  uzcdrawings,         // менеджер чертежей
+    35	  uzestyleslayers,     // стили и таблица слоёв
+    36	  uzeconsts;           // константы (в т.ч. для LineWeight)
+    37	
+    38	// Основная команда
+    39	function layerWeightBigSmall_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
+    40	
+    41	implementation
+    42	
+    43	const
+    44	  // Константы веса слоя (внутренние единицы: сотые доли мм)
+    45	  // 2.00 мм = 200, 0.00 мм = 0
+    46	  CONST_LAYER_WEIGHT_BIG   = LnWt200;
+    47	  CONST_LAYER_WEIGHT_SMALL = LnWt000;
+    48	
+    49	// Нормализация имени слоя из операндов:
+    50	// - обрезаем пробелы
+    51	// - убираем скобки и одинарные/двойные кавычки, если присутствуют
+    52	function NormalizeLayerName(const s: string): string;
+    53	var
+    54	  name: string;
+    55	begin
+    56	  name := Trim(s);
+    57	
+    58	  // Удалим внешние скобки вида (LayerName)
+    59	  if (Length(name) >= 2) and (name[1] = '(') and (name[Length(name)] = ')') then
+    60	    name := Copy(name, 2, Length(name) - 2);
+    61	
+    62	  name := Trim(name);
+    63	
+    64	  // Удалим одинарные кавычки
+    65	  if (Length(name) >= 2) and (name[1] = '''') and (name[Length(name)] = '''') then
+    66	    name := Copy(name, 2, Length(name) - 2);
+    67	
+    68	  // Удалим двойные кавычки
+    69	  if (Length(name) >= 2) and (name[1] = '"') and (name[Length(name)] = '"') then
+    70	    name := Copy(name, 2, Length(name) - 2);
+    71	
+    72	  Result := Trim(name);
+    73	end;
+    74	
+    75	function layerWeightBigSmall_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
+    76	var
+    77	  layerName: string;
+    78	  pLayer: PGDBLayerProp;
+    79	  newLW: SmallInt;
+    80	begin
+    81	  // Получаем имя слоя из операндов
+    82	  layerName := NormalizeLayerName(operands);
+    83	
+    84	  if layerName = '' then
+    85	  begin
+    86	    zcUI.TextMessage('Укажите имя слоя: layerWeightBigSmall(<LayerName>)', TMWOHistoryOut);
+    87	    exit(cmd_error);
+    88	  end;
+    89	
+    90	  // Ищем слой в текущем чертеже
+    91	  pLayer := drawings.GetCurrentDWG^.LayerTable.getAddres(layerName);
+    92	  if pLayer = nil then
+    93	  begin
+    94	    zcUI.TextMessage('Слой ' + layerName + ' не существует', TMWOHistoryOut);
+    95	    exit(cmd_ok);
+    96	  end;
+    97	
+    98	  // Переключаем вес: если текущий НЕ big -> ставим big, иначе -> small
+    99	  if pLayer^.lineweight <> CONST_LAYER_WEIGHT_BIG then
+   100	    newLW := CONST_LAYER_WEIGHT_BIG
+   101	  else
+   102	    newLW := CONST_LAYER_WEIGHT_SMALL;
+   103	
+   104	  pLayer^.lineweight := newLW;
+   105	
+   106	  // Информируем пользователя
+   107	  if newLW = CONST_LAYER_WEIGHT_BIG then
+   108	    zcUI.TextMessage('Вес слоя ' + layerName + ' установлен: 2.00 мм', TMWOHistoryOut)
+   109	  else
+   110	    zcUI.TextMessage('Вес слоя ' + layerName + ' установлен: 0.00 мм', TMWOHistoryOut);
+   111	
+   112	  Result := cmd_ok;
+   113	end;
+   114	
+   115	initialization
+   116	  // Регистрация команды
+   117	  CreateZCADCommand(@layerWeightBigSmall_com,'layerWeightBigSmall',CADWG,0);
+   118	
+   119	end.
+   120	

@@ -1,0 +1,120 @@
+{
+*****************************************************************************
+*                                                                           *
+*  This file is part of the ZCAD                                            *
+*                                                                           *
+*  See the file COPYING.txt, included in this distribution,                 *
+*  for details about the copyright.                                         *
+*                                                                           *
+*  This program is distributed in the hope that it will be useful,          *
+*  but WITHOUT ANY WARRANTY; without even the implied warranty of           *
+*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.                     *
+*                                                                           *
+*****************************************************************************
+}
+{
+@author(Vladimir Bobrov)
+}
+{$mode objfpc}{$H+}
+
+{**Модуль реализации команды addZona для работы с зонами}
+unit uzvcommand_space;
+
+{ file def.inc is necessary to include at the beginning of each module zcad
+  it contains a centralized compilation parameters settings }
+
+{ файл def.inc необходимо включать в начале каждого модуля zcad
+  он содержит в себе централизованные настройки параметров компиляции  }
+
+{$INCLUDE zengineconfig.inc}
+
+interface
+uses
+  sysutils,
+  Classes,             //TStringList and related classes
+                       //TStringList и связанные классы
+
+  uzccommandsmanager,
+  uzccommandsabstract,
+  uzccommandsimpl,     //Commands manager and related objects
+                       //менеджер команд и объекты связанные с ним
+  uzclog,              //log system
+                       //система логирования
+  uzcinterface,        //interface utilities
+                       //утилиты интерфейса
+  uzcdrawings,         //Drawings manager
+                       //Менеджер чертежей
+  uzcutils,            //utility functions
+                       //утилиты
+  uzeentpolyline,      //polyline entity
+                       //примитив полилиния
+  uzeenthatch,         //hatch entity
+                       //примитив штриховка
+  uzeBoundaryPath,     //boundary path for hatch
+                       //граничный путь для штриховки
+  UGDBPolyLine2DArray, //2D polyline array
+                       //массив 2D полилиний
+  uzgldrawcontext,     //drawing context
+                       //контекст рисования
+  uzegeometrytypes,    //geometry types
+                       //геометрические типы
+  uzegeometry,         //geometry functions
+                       //геометрические функции
+  uzbtypes,            //base types
+                       //базовые типы
+  uzcstrconsts,        //resource strings
+                       //строковые константы
+  uzcenitiesvariablesextender,  //entity variables extender
+                                //расширение переменных примитивов
+  uzcextdrincludingvolume,      //including volume extender
+                                //расширение включающего объема
+  uzccominteractivemanipulators, //interactive manipulators
+                                  //интерактивные манипуляторы
+  varmandef,                     //variable manager definitions
+                                 //определения менеджера переменных
+  uzestyleslayers,
+  uzeconsts,
+  UBaseTypeDescriptor;           //base type descriptors
+                                 //базовые дескрипторы типов
+
+type
+  // Structure to hold polyline and hatch for interactive manipulation
+  // Структура для хранения полилинии и штриховки для интерактивного манипулирования
+  TSpaceDrawData = record
+    ppolyline: PGDBObjPolyLine;
+    phatch: PGDBObjHatch;
+    hatchColor: Integer;  // Color index for hatch visualization
+                          // Индекс цвета для визуализации штриховки
+  end;
+  PSpaceDrawData = ^TSpaceDrawData;
+
+function addSpace_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
+
+implementation
+
+// Helper procedure to parse operands and extract color, layer, and variables
+// Вспомогательная процедура для разбора операндов и извлечения цвета, слоя и переменных
+procedure ParseOperandsAndAddVariables(
+  ppolyline: PGDBObjPolyLine;
+  const operands: TCommandOperands;
+  out colorIndex: Integer;
+  out layerName: string);
+var
+  VarExt: TVariablesExtender;
+  params: TStringList;
+  i: integer;
+  varname, username, typename: string;
+  vd: vardesk;
+begin
+  // Set default values
+  // Устанавливаем значения по умолчанию
+  colorIndex := 4;  // Default: light blue (cyan)
+                    // По умолчанию: светло-голубой (cyan)
+  layerName := '';  // Empty means use current layer
+                    // Пустое значит использовать текущий слой
+
+  // Check if we have operands
+  // Проверяем наличие операндов
+  if Trim(operands) = '' then
+    exit;
+

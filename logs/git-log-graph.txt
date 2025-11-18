@@ -1,0 +1,5 @@
+* ae700d758 (HEAD -> issue-578-5408550377d7, origin/issue-578-5408550377d7) Revert "Initial commit with task details for issue #578"
+* 53810b010 velec/space: add layerWeightBigSmall command to toggle layer lineweight (2.00mm/0.00mm); register in main uses
+* 5a4281bd1 Initial commit with task details for issue #578
+* 2e4101a41 (upstream/master, origin/master, origin/HEAD, master) правки меню
+* e9299af32 Иконки развитие правки

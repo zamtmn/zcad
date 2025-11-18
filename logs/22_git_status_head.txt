@@ -37,6 +37,7 @@
 ?? logs/20_ci_runs.json
 ?? logs/20_ci_runs.json.txt
 ?? logs/21-git-commit.txt
+?? logs/21-search-layerWeight.txt
 ?? logs/21-workflow-heads.txt
 ?? logs/22-gh-pages.yml
 ?? logs/22-git-push.txt

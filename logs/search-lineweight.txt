@@ -1,0 +1,10 @@
+cad_source/zcad/core/utils/uzcutils.pas:338:  pvo^.vp.lineweight := sysvar.dwg.DWG_CLinew^;
+cad_source/zcad/velec/space/uzvcommand_layerWeightBigSmall.pas:104:  pLayer^.lineweight := newLW;
+cad_source/zcad/gui/forms/uzcflayers.pas:401:                      PGDBLayerProp(Item.Data)^.lineweight:=LineWeightSelectForm.SelectedLW;
+cad_source/zcad/gui/forms/uzcflineweights.pas:28:  lwarray:array [1..24] of TGDBLineWeight=(LnWt000,LnWt005,LnWt009,LnWt013,LnWt015,LnWt018,LnWt020,LnWt025,LnWt030,LnWt035,LnWt040,LnWt050,LnWt053,LnWt060,LnWt070,LnWt080,LnWt090,
+cad_source/zcad/commands/uzccommand_line2.pas:92:  PCreatedGDBLine^.vp.lineweight := sysvar.dwg.DWG_CLinew^;}
+cad_source/zcad/commands/uzccommand_polydiv.pas:242:    p3dpl^.vp.lineweight:=sysvar.dwg.DWG_CLinew^;
+cad_source/zcad/commands/uzccommand_3dpoly.pas:130:  p3dpl^.vp.lineweight:=sysvar.dwg.DWG_CLinew^;
+cad_source/zcad/electrotech/uzccomelectrical.pas:1379:  New_line^.vp.lineweight := sysvar.dwg.DWG_CLinew^;
+cad_source/zcad/electrotech/uzccomelectrical.pas:1828:  p3dpl^.vp.lineweight := sysvar.dwg.DWG_CLinew^;
+cad_source/zcad/electrotech/uzccomelectrical.pas:2778:  PCreatedGDBLine^.vp.lineweight := sysvar.dwg.DWG_CLinew^;

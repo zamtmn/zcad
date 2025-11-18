@@ -1,0 +1,120 @@
+cad_source/simplecad/umainformgdi.pas:665:   plp:PGDBLayerProp;
+cad_source/simplecad/umainform.pas:737:   plp:PGDBLayerProp;
+cad_source/zcad/core/utils/uzcutils.pas:103:                                layeraddres:PGDBLayerProp;LTAddres:PGDBLtypeProp;LW:TGDBLineWeight;color:TGDBPaletteColor;
+cad_source/zcad/core/utils/uzcutils.pas:108:                                layeraddres:PGDBLayerProp;LTAddres:PGDBLtypeProp;LW:TGDBLineWeight;color:TGDBPaletteColor;
+cad_source/zcad/core/drawings/uzcdrawing.pas:237:  pdwgwarsunit^.CreateFixedVariable('DWG_CLayer','PGDBLayerProp',@CurrentLayer);
+cad_source/zcad/core/drawings/uzcdrawings.pas:268:    pproglayer:PGDBLayerProp;
+cad_source/zcad/core/drawings/uzcdrawings.pas:269:    pnevlayer:PGDBLayerProp;
+cad_source/zcad/core/drawings/uzcdrawings.pas:661:   //pl:PGDBLayerProp;
+cad_source/zcad/core/drawings/uzcdrawings.pas:682:   //pl:PGDBLayerProp;
+cad_source/zcad/core/drawings/uzcdrawings.pas:709:   //pl:PGDBLayerProp;
+cad_source/zcad/core/drawings/uzcdrawings.pas:758:{function createlayerifneed(_from,_to:PTZCADDrawing;_source:PGDBLayerProp):PGDBLayerProp;
+cad_source/zcad/gui/uzcinterfacedata.pas:30:    CLayer:PGDBLayerProp;
+cad_source/zcad/gui/uzctbexttoolbars.pas:110:procedure setlayerstate(PLayer:PGDBLayerProp;out lp:TLayerPropRecord);
+cad_source/zcad/gui/uzctbexttoolbars.pas:133:  tcl:PGDBLayerProp;
+cad_source/zcad/gui/uzctbexttoolbars.pas:141:                                                       TChangedBoolean.CreateRec(PGDBLayerProp(PLayer)^._on),
+cad_source/zcad/gui/uzctbexttoolbars.pas:144:          PGDBLayerProp(PLayer)^._on:=not(PGDBLayerProp(PLayer)^._on);
+cad_source/zcad/gui/uzctbexttoolbars.pas:147:          if not PGDBLayerProp(PLayer)^._on then
+cad_source/zcad/gui/uzctbexttoolbars.pas:153:                                                       TChangedBoolean.CreateRec(PGDBLayerProp(PLayer)^._lock),
+cad_source/zcad/gui/uzctbexttoolbars.pas:157:          PGDBLayerProp(PLayer)^._lock:=not(PGDBLayerProp(PLayer)^._lock);
+cad_source/zcad/gui/uzctbexttoolbars.pas:172:          if not PGDBLayerProp(PLayer)^._on then
+cad_source/zcad/gui/uzctbexttoolbars.pas:195:  pcl:PGDBLayerProp;
+cad_source/zcad/uzcsysvars.pas:143:             DWG_CLayer:{-}PPointer{/PPGDBLayerPropObjInsp/};(*'Current layer'*)
+cad_source/zengine/core/uzedimblocksregister.pas:49:  SystemLayer:PGDBLayerProp;
+cad_source/zengine/core/uzedimblocksregister.pas:77:  SystemLayer:PGDBLayerProp;
+cad_source/zengine/core/uzedimblocksregister.pas:108:  SystemLayer:PGDBLayerProp;
+cad_source/zengine/core/uzedimblocksregister.pas:160:  SystemLayer:PGDBLayerProp;
+cad_source/zengine/core/uzedimblocksregister.pas:188:  SystemLayer:PGDBLayerProp;
+cad_source/zengine/core/uzedimblocksregister.pas:210:  SystemLayer:PGDBLayerProp;
+cad_source/zengine/core/uzedimblocksregister.pas:235:  SystemLayer:PGDBLayerProp;
+cad_source/zengine/core/uzedimblocksregister.pas:260:  SystemLayer:PGDBLayerProp;
+cad_source/zengine/core/uzedimblocksregister.pas:299:  SystemLayer:PGDBLayerProp;
+cad_source/zengine/core/uzedimblocksregister.pas:332:  SystemLayer:PGDBLayerProp;
+cad_source/zengine/core/uzedimblocksregister.pas:368:  SystemLayer:PGDBLayerProp;
+cad_source/zengine/core/uzedimblocksregister.pas:393:  SystemLayer:PGDBLayerProp;
+cad_source/zengine/core/uzedimblocksregister.pas:435:  SystemLayer:PGDBLayerProp;
+cad_source/zcad/gui/forms/uzcflayers.pas:74:    procedure countlayer(player:PGDBLayerProp;out e,b:Integer);
+cad_source/zcad/gui/forms/uzcflayers.pas:156:  //createeditor(Item,r,@PGDBLayerProp(Item.Data)^.Name);
+cad_source/zcad/gui/forms/uzcflayers.pas:157:  result:=SupportTypedEditors.createeditor(ListView1,Item,r,PGDBLayerProp(Item.Data)^.Name,'AnsiString',@CreateUndoStartMarkerNeeded,r.Bottom-r.Top,drawings.GetUnitsFormat);
+cad_source/zcad/gui/forms/uzcflayers.pas:162:  result:=PGDBLayerProp(Item.Data)^.Name;
+cad_source/zcad/gui/forms/uzcflayers.pas:167:     result:=PGDBLayerProp(Item.Data)^._lock;
+cad_source/zcad/gui/forms/uzcflayers.pas:176:                                                 TChangedBoolean.CreateRec(PGDBLayerProp(Item.Data)^._lock),
+cad_source/zcad/gui/forms/uzcflayers.pas:180:    PGDBLayerProp(Item.Data)^._lock:=not PGDBLayerProp(Item.Data)^._lock;
+cad_source/zcad/gui/forms/uzcflayers.pas:190:     result:=PGDBLayerProp(Item.Data)^._on;
+cad_source/zcad/gui/forms/uzcflayers.pas:199:                                                 TChangedBoolean.CreateRec(PGDBLayerProp(Item.Data)^._on),
+cad_source/zcad/gui/forms/uzcflayers.pas:203:    PGDBLayerProp(Item.Data)^._on:=not PGDBLayerProp(Item.Data)^._on;
+cad_source/zcad/gui/forms/uzcflayers.pas:218:     result:=PGDBLayerProp(Item.Data)^._print;
+cad_source/zcad/gui/forms/uzcflayers.pas:225:                                                    TChangedBoolean.CreateRec(PGDBLayerProp(Item.Data)^._print),
+cad_source/zcad/gui/forms/uzcflayers.pas:229:       PGDBLayerProp(Item.Data)^._print:=not PGDBLayerProp(Item.Data)^._print;
+cad_source/zcad/gui/forms/uzcflayers.pas:246:  colorIndex:=PGDBLayerProp(Item.Data)^.color;
+cad_source/zcad/gui/forms/uzcflayers.pas:277:     result:=GetColorNameFromIndex(PGDBLayerProp(Item.Data)^.color);
+cad_source/zcad/gui/forms/uzcflayers.pas:287:  mr:=ColorSelectForm.run(PGDBLayerProp(Item.Data)^.color,false);
+cad_source/zcad/gui/forms/uzcflayers.pas:291:      if PGDBLayerProp(Item.Data)^.color<>ColorSelectForm.ColorInfex then
+cad_source/zcad/gui/forms/uzcflayers.pas:295:                                                             TChangedByte.CreateRec(PGDBLayerProp(Item.Data)^.color),
+cad_source/zcad/gui/forms/uzcflayers.pas:299:             PGDBLayerProp(Item.Data)^.color:=ColorSelectForm.ColorInfex;
+cad_source/zcad/gui/forms/uzcflayers.pas:320:s:={Tria_AnsiToUtf8}(GetLTName(PGDBLayerProp(Item.Data)^.LT));
+cad_source/zcad/gui/forms/uzcflayers.pas:321:drawLT(aCanvas,ARect,s,PGDBLayerProp(Item.Data)^.LT);
+cad_source/zcad/gui/forms/uzcflayers.pas:346:     result:={Tria_AnsiToUtf8}(GetLTName(PGDBLayerProp(Item.Data)^.LT));
+cad_source/zcad/gui/forms/uzcflayers.pas:361:                      PGDBLayerProp(Item.Data)^.LT:=SelectorForm.data;
+cad_source/zcad/gui/forms/uzcflayers.pas:377:  colorindex:=PGDBLayerProp(Item.Data)^.lineweight;
+cad_source/zcad/gui/forms/uzcflayers.pas:387:     result:=GetLWNameFromLW(PGDBLayerProp(Item.Data)^.lineweight);
+cad_source/zcad/gui/forms/uzcflayers.pas:397:  mr:=LineWeightSelectForm.run(PGDBLayerProp(Item.Data)^.lineweight,false);
+cad_source/zcad/gui/forms/uzcflayers.pas:401:                      PGDBLayerProp(Item.Data)^.lineweight:=LineWeightSelectForm.SelectedLW;
+cad_source/zcad/gui/forms/uzcflayers.pas:410:  result:=SupportTypedEditors.createeditor(ListView1,Item,r,PGDBLayerProp(Item.Data)^.desk,'AnsiString',@CreateUndoStartMarkerNeeded,r.Bottom-r.Top,drawings.GetUnitsFormat);
+cad_source/zcad/gui/forms/uzcflayers.pas:414:     result:=PGDBLayerProp(Item.Data)^.desk;
+cad_source/zcad/gui/forms/uzcflayers.pas:511:     if not PGDBLayerProp(ListItem.Data)^._on then
+cad_source/zcad/gui/forms/uzcflayers.pas:534:   plp:PGDBLayerProp;
+cad_source/zcad/gui/forms/uzcflayers.pas:558:procedure TLayersForm.countlayer(player:PGDBLayerProp;out e,b:Integer);
+cad_source/zcad/gui/forms/uzcflayers.pas:571:   player:PGDBLayerProp;
+cad_source/zcad/gui/forms/uzcflayers.pas:586:   player,pcreatedlayer:PGDBLayerProp;
+cad_source/zcad/gui/forms/uzcflayers.pas:611:     with specialize GUCmdChgMethods<PGDBLayerProp>.CreateAndPush(pcreatedlayer,domethod,undomethod,PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,nil) do
+cad_source/zcad/gui/forms/uzcflayers.pas:622:   player:PGDBLayerProp;
+cad_source/zcad/gui/forms/uzcflayers.pas:630:  with specialize GUCmdChgMethods<PGDBLayerProp>.CreateAndPush(player,domethod,undomethod,PTZCADDrawing(pdwg)^.UndoStack,nil) do
+cad_source/zcad/gui/forms/uzcflayers.pas:642:   PCurrentLayer:PGDBLayerProp;
+cad_source/zcad/gui/forms/uzcflayers.pas:666:   player:PGDBLayerProp;
+cad_source/zengine/core/utils/uzeutils.pas:67:  procedure zeSetEntityProp(const PEnt:PGDBObjEntity;const PLayer:PGDBLayerProp;const PLT:PGDBLtypeProp;const LW:TGDBLineWeight;const Color:TGDBPaletteColor);
+cad_source/zengine/core/utils/uzeutils.pas:124:procedure zeSetEntityProp(const PEnt:PGDBObjEntity;const PLayer:PGDBLayerProp;const PLT:PGDBLtypeProp;const LW:TGDBLineWeight;const Color:TGDBPaletteColor);
+cad_source/zengine/core/drawings/uzedrawingsimple.pas:110:                       function GetCurrentLayer:PGDBLayerProp;
+cad_source/zengine/core/drawings/uzedrawingabstract.pas:38:                       CurrentLayer:PGDBLayerProp;
+cad_source/zengine/core/uzeentitiesmanager.pas:28:                         ALayer:PGDBLayerProp;ALT:PGDBLtypeProp;ALW:TGDBLineWeight;AColor:TGDBPaletteColor;
+cad_source/zengine/core/uzeentitiesmanager.pas:31:                           ALayer:PGDBLayerProp;ALT:PGDBLtypeProp;ALW:TGDBLineWeight;AColor:TGDBPaletteColor;
+cad_source/zengine/core/uzeentitiesmanager.pas:34:                              ALayer:PGDBLayerProp;ALT:PGDBLtypeProp;ALW:TGDBLineWeight;AColor:TGDBPaletteColor;
+cad_source/zengine/core/uzeentitiesmanager.pas:37:                          ALayer:PGDBLayerProp;ALT:PGDBLtypeProp;ALW:TGDBLineWeight;AColor:TGDBPaletteColor;
+cad_source/zengine/core/uzeentitiesmanager.pas:40:                          ALayer:PGDBLayerProp;ALT:PGDBLtypeProp;ALW:TGDBLineWeight;AColor:TGDBPaletteColor;
+cad_source/zengine/core/uzeentitiesmanager.pas:43:                                ALayer:PGDBLayerProp;ALT:PGDBLtypeProp;ALW:TGDBLineWeight;AColor:TGDBPaletteColor;
+cad_source/zengine/core/uzeentitiesmanager.pas:46:                               ALayer:PGDBLayerProp;ALT:PGDBLtypeProp;ALW:TGDBLineWeight;AColor:TGDBPaletteColor;
+cad_source/zengine/core/uzeentitiesmanager.pas:50:                                ALayer:PGDBLayerProp;ALT:PGDBLtypeProp;ALW:TGDBLineWeight;AColor:TGDBPaletteColor;
+cad_source/zengine/core/uzeentitiesmanager.pas:86:                          ALayer:PGDBLayerProp;ALT:PGDBLtypeProp;ALW:TGDBLineWeight;AColor:TGDBPaletteColor;
+cad_source/zengine/core/uzeentitiesmanager.pas:102:                          ALayer:PGDBLayerProp;ALT:PGDBLtypeProp;ALW:TGDBLineWeight;AColor:TGDBPaletteColor;
+cad_source/zengine/core/uzeentitiesmanager.pas:119:                         ALayer:PGDBLayerProp;ALT:PGDBLtypeProp;ALW:TGDBLineWeight;AColor:TGDBPaletteColor;
+cad_source/zengine/core/uzeentitiesmanager.pas:137:                           ALayer:PGDBLayerProp;ALT:PGDBLtypeProp;ALW:TGDBLineWeight;AColor:TGDBPaletteColor;
+cad_source/zengine/core/uzeentitiesmanager.pas:154:                              ALayer:PGDBLayerProp;ALT:PGDBLtypeProp;ALW:TGDBLineWeight;AColor:TGDBPaletteColor;
+cad_source/zengine/core/uzeentitiesmanager.pas:171:                               ALayer:PGDBLayerProp;ALT:PGDBLtypeProp;ALW:TGDBLineWeight;AColor:TGDBPaletteColor;
+cad_source/zcad/gui/odjectinspector/uzcoiregistermultiproperties.pas:604:    MultiPropertiesManager.RegisterPhysMultiproperty('Layer','Layer',sysunit^.TypeName2PTD('PGDBLayerPropObjInsp'),MPCGeneral,0,nil,PtrInt(@pent^.vp.Layer),PtrInt(@pent^.vp.Layer),OneVarDataMIPD,OneVarDataEIPD);
+cad_source/zcad/gui/odjectinspector/uzcoidecorations.pas:56:     if PGDBLayerProp(PInstance^)<>nil then
+cad_source/zcad/gui/odjectinspector/uzcoidecorations.pas:109:    p,pcurrent:PGDBLayerProp;
+cad_source/zcad/gui/odjectinspector/uzcoidecorations.pas:113:     pcurrent:=PGDBLayerProp(ppointer(pinstance)^);
+cad_source/zcad/gui/odjectinspector/uzcoidecorations.pas:599:    DecorateType(SysUnit.TypeName2PTD('PGDBLayerPropObjInsp'),NamedObjectsDecorator,LayersDecoratorCreateEditor,nil);
+cad_source/zcad/gui/odjectinspector/uzcoidecorations.pas:628:    AddFastEditorToType(SysUnit.TypeName2PTD('PGDBLayerPropObjInsp'),@OIUI_FE_ButtonGetPrefferedSize,@OIUI_FE_ButtonDraw,@runlayerswnd);
+cad_source/zengine/core/entities/uzeent3dface.pas:40:    constructor init(own:Pointer;layeraddres:PGDBLayerProp;
+cad_source/zengine/core/entities/uzeentspline.pas:45:    constructor init(own:Pointer;layeraddres:PGDBLayerProp;LW:smallint;c:boolean);
+cad_source/zengine/core/entities/uzeentdimdiametric.pas:43:    constructor init(own:Pointer;layeraddres:PGDBLayerProp;
+cad_source/zengine/core/entities/uzeentsubordinated.pas:74:    function GetLayer:PGDBLayerProp;virtual;abstract;
+cad_source/zengine/core/entities/uzeentitiesprop.pas:32:    Layer:PGDBLayerProp;
+cad_source/zengine/core/entities/uzeentdimaligned.pas:45:    constructor init(own:Pointer;layeraddres:PGDBLayerProp;
+cad_source/zengine/core/entities/uzeentcomplex.pas:43:    constructor init(own:Pointer;layeraddres:PGDBLayerProp;LW:smallint);
+cad_source/zengine/core/entities/uzeentity.pas:71:    constructor init(own:Pointer;layeraddres:PGDBLayerProp;LW:smallint);
+cad_source/zengine/core/entities/uzeentity.pas:184:    function GetLayer:PGDBLayerProp;virtual;
+cad_source/zengine/core/entities/uzeentline.pas:39:    constructor init(own:Pointer;layeraddres:PGDBLayerProp;
+cad_source/zengine/core/entities/uzeenttext.pas:45:    constructor init(own:Pointer;layeraddres:PGDBLayerProp;LW:smallint;
+cad_source/zengine/core/entities/uzeentpoint.pas:36:    constructor init(own:Pointer;layeraddres:PGDBLayerProp;
+cad_source/zengine/core/entities/uzeentwithlocalcs.pas:39:    constructor init(own:Pointer;layeraddres:PGDBLayerProp;LW:smallint);
+cad_source/zengine/core/entities/uzeenthatch.pas:61:    constructor init(own:Pointer;layeraddres:PGDBLayerProp;
+cad_source/zengine/core/entities/uzeentdevice.pas:41:    constructor init(own:Pointer;layeraddres:PGDBLayerProp;LW:smallint);
+cad_source/zengine/core/entities/uzeentdevice.pas:562:constructor GDBObjDevice.init(own:Pointer;layeraddres:PGDBLayerProp;LW:smallint);
+cad_source/zcad/commands/uzccommand_insertlayersfrombase.pas:39:  pl:PGDBLayerProp;
+cad_source/zengine/core/entities/uzeentcurve.pas:38:    constructor init(own:Pointer;layeraddres:PGDBLayerProp;LW:smallint);
+cad_source/zengine/core/entities/uzeentcircle.pas:47:    constructor init(own:Pointer;layeraddres:PGDBLayerProp;
+cad_source/zengine/core/entities/uzeentarc.pas:43:    constructor init(own:Pointer;layeraddres:PGDBLayerProp;
+cad_source/zengine/core/entities/uzeentdimensiongeneric.pas:40:    constructor init(own:Pointer;layeraddres:PGDBLayerProp;
+cad_source/zengine/core/entities/uzeentblockinsert.pas:47:    constructor init(own:Pointer;layeraddres:PGDBLayerProp;LW:smallint);

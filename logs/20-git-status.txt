@@ -1,0 +1,4 @@
+ M cad_source/zcad.pas
+?? cad_source/zcad/velec/space/uzvcommand_layerWeightBigSmall.pas
+?? logs/
+issue-578-5408550377d7

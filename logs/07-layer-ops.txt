@@ -1,0 +1,31 @@
+cad_source/zcad/core/drawings/uzcdrawings.pas:278:                              pnevlayer:=GetCurrentDWG.LayerTable.createlayerifneedbyname(sysvar.DSGN.DSGN_LayerControls.DSGN_LC_Net^.LayerName,pproglayer);
+cad_source/zcad/core/drawings/uzcdrawings.pas:280:                                                   pnevlayer:=GetCurrentDWG.LayerTable.addlayer(sysvar.DSGN.DSGN_LayerControls.DSGN_LC_Net^.LayerName,7,-1,true,false,true,'???',TLOLoad);
+cad_source/zcad/core/drawings/uzcdrawings.pas:290:                              pnevlayer:=GetCurrentDWG.LayerTable.createlayerifneedbyname(sysvar.DSGN.DSGN_LayerControls.DSGN_LC_Cable^.LayerName,pproglayer);
+cad_source/zcad/core/drawings/uzcdrawings.pas:292:                                                   pnevlayer:=GetCurrentDWG.LayerTable.addlayer(sysvar.DSGN.DSGN_LayerControls.DSGN_LC_Cable^.LayerName,7,-1,true,false,true,'???',TLOLoad);
+cad_source/zcad/core/drawings/uzcdrawings.pas:302:                              pnevlayer:=GetCurrentDWG.LayerTable.createlayerifneedbyname(sysvar.DSGN.DSGN_LayerControls.DSGN_LC_Leader^.LayerName,pproglayer);
+cad_source/zcad/core/drawings/uzcdrawings.pas:304:                                                   pnevlayer:=GetCurrentDWG.LayerTable.addlayer(sysvar.DSGN.DSGN_LayerControls.DSGN_LC_Leader^.LayerName,7,-1,true,false,true,'???',TLOLoad);
+cad_source/zcad/core/drawings/uzcdrawings.pas:763:                result:=_to.LayerTable.addlayer(_source.Name,
+cad_source/simplecad/umainformgdi.pas:160:          pdrawing1^.LayerTable.addlayer(inttostr(i),{name}
+cad_source/simplecad/umainformgdi.pas:191:          pdrawing2^.LayerTable.addlayer(inttostr(i),random(255),0,true,false,true,'',TLOMerge);
+cad_source/simplecad/umainform.pas:176:          pdrawing1^.LayerTable.addlayer(inttostr(i),{name}
+cad_source/simplecad/umainform.pas:207:          pdrawing2^.LayerTable.addlayer(inttostr(i),random(255),0,true,false,true,'',TLOMerge);
+cad_source/zcad/commands/uzccommand_examplecreatelayer.pas:46:    pnevlayer:=drawings.GetCurrentDWG.LayerTable.createlayerifneedbyname(
+cad_source/zcad/commands/uzccommand_examplecreatelayer.pas:54:      pnevlayer:=drawings.GetCurrentDWG.LayerTable.addlayer(
+cad_source/zengine/styles/uzestyleslinetypes.pas:122:                    {function addlayer(name:String;color:Integer;lw:Integer;oo,ll,pp:Boolean;d:String;lm:TLoadOpt):PGDBLayerProp;virtual;
+cad_source/zengine/styles/uzestylestexts.pas:92:  //addlayer('0',cgdbwhile,lwgdbdefault);
+cad_source/zcad/velec/uzvtreedevice.pas:1223:    //      result:=drawings.GetCurrentDWG^.LayerTable.createlayerifneedbyname(createdlayername,pproglayer);//эта процедура сначала ищет описание слоя в чертеже
+cad_source/zcad/velec/uzvtreedevice.pas:1228:    //        result:=drawings.GetCurrentDWG^.LayerTable.addlayer(createdlayername{имя},ClWhite{цвет},-1{вес},true{on},false{lock},true{print},'???'{описание},TLOLoad{режим создания - в данном случае неважен});
+cad_source/zengine/styles/uzestyleslayers.pas:57:      function addlayer(const name:String;color:Integer;lw:Integer;oo,ll,pp:Boolean;const d:String;lm:TLoadOpt):PGDBLayerProp;virtual;
+cad_source/zengine/styles/uzestyleslayers.pas:92:                result:=addlayer(_source.Name,
+cad_source/zengine/styles/uzestyleslayers.pas:109:                result:=addlayer(_source.Name,
+cad_source/zengine/styles/uzestyleslayers.pas:122:  addlayer(LNSysLayerName,CGDBWhile,lwgdbdefault,true,false,true,'',TLOLoad).LT:=psyslt;
+cad_source/zengine/styles/uzestyleslayers.pas:123:  addlayer(LNMetricLayerName,CGDBWhile,lwgdbdefault,false,false,false,'',TLOLoad).LT:=psyslt;
+cad_source/zengine/styles/uzestylestables.pas:64:  //addlayer(LNSysLayerName,CGDBWhile,lwgdbdefault,true,false,true);
+cad_source/zengine/fileformats/uzeffdxf.pas:469:        ZCDCtx.pdrawing^.LayerTable.addlayer(LayerName,LayerColor,-3,true,false,true,'',TLOLoad);
+cad_source/zcad/velec/space/uzvcommand_showhidespace.pas:284:  pLayer := drawings.GetCurrentDWG^.LayerTable.createlayerifneedbyname(
+cad_source/zcad/velec/space/uzvcommand_showhidespace.pas:438:      pLayer := drawings.GetCurrentDWG^.LayerTable.createlayerifneedbyname(
+cad_source/zcad/velec/space/uzvcommand_showhidespace.pas:446:        pLayer := drawings.GetCurrentDWG^.LayerTable.addlayer(
+cad_source/zcad/velec/space/uzvcommand_space.pas:425:        pLayer := drawings.GetCurrentDWG^.LayerTable.createlayerifneedbyname(
+cad_source/zcad/velec/space/uzvcommand_space.pas:433:          pLayer := drawings.GetCurrentDWG^.LayerTable.addlayer(
+cad_source/zcad/velec/uzvtestdraw.pas:138:        result:=drawings.GetCurrentDWG^.LayerTable.createlayerifneedbyname(createdlayername,pproglayer);//эта процедура сначала ищет описание слоя в чертеже
+cad_source/zcad/velec/uzvtestdraw.pas:143:          result:=drawings.GetCurrentDWG^.LayerTable.addlayer(createdlayername{имя},ClWhite{цвет},-1{вес},true{on},false{lock},true{print},'???'{описание},TLOLoad{режим создания - в данном случае неважен});

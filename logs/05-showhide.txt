@@ -1,0 +1,200 @@
+{
+*****************************************************************************
+*                                                                           *
+*  This file is part of the ZCAD                                            *
+*                                                                           *
+*  See the file COPYING.txt, included in this distribution,                 *
+*  for details about the copyright.                                         *
+*                                                                           *
+*  This program is distributed in the hope that it will be useful,          *
+*  but WITHOUT ANY WARRANTY; without even the implied warranty of           *
+*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.                     *
+*                                                                           *
+*****************************************************************************
+}
+{
+@author(Vladimir Bobrov)
+}
+{$mode objfpc}{$H+}
+
+{**Модуль реализации команды ShowHideSpace для подсветки зон по переменным}
+unit uzvcommand_showhidespace;
+
+{ file def.inc is necessary to include at the beginning of each module zcad
+  it contains a centralized compilation parameters settings }
+
+{ файл def.inc необходимо включать в начале каждого модуля zcad
+  он содержит в себе централизованные настройки параметров компиляции  }
+
+{$INCLUDE zengineconfig.inc}
+
+interface
+uses
+  sysutils,
+  Classes,             //TStringList and related classes
+                       //TStringList и связанные классы
+
+  uzccommandsmanager,
+  uzccommandsabstract,
+  uzccommandsimpl,     //Commands manager and related objects
+                       //менеджер команд и объекты связанные с ним
+  uzclog,              //log system
+                       //система логирования
+  uzcinterface,        //interface utilities
+                       //утилиты интерфейса
+  uzcdrawings,         //Drawings manager
+                       //Менеджер чертежей
+  uzcdrawing,          //Drawing type definition
+                       //определение типа чертежа
+  uzcutils,            //utility functions
+                       //утилиты
+  uzeentity,           //base entity
+                       //базовый примитив
+  uzeentpolyline,      //polyline entity
+                       //примитив полилиния
+  uzeenthatch,         //hatch entity
+                       //примитив штриховка
+  uzeBoundaryPath,     //boundary path for hatch
+                       //граничный путь для штриховки
+  UGDBPolyLine2DArray, //2D polyline array
+                       //массив 2D полилиний
+  uzgldrawcontext,     //drawing context
+                       //контекст рисования
+  uzegeometrytypes,    //geometry types
+                       //геометрические типы
+  uzbtypes,            //base types
+                       //базовые типы
+  uzcstrconsts,        //resource strings
+                       //строковые константы
+  uzcenitiesvariablesextender,  //entity variables extender
+                                //расширение переменных примитивов
+  uzestyleslayers,     //layer styles and management
+                       //стили и управление слоями
+  gzctnrVectorTypes,
+  uzeconsts,
+  zcmultiobjectcreateundocommand, //undo command for multi object operations
+                                  //команда отмены для множественных операций над объектами
+  varmandef;                     //variable manager definitions
+                                 //определения менеджера переменных
+
+function ShowHideSpace_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
+
+implementation
+
+// Helper function to create solid hatch from polyline
+// Вспомогательная функция для создания сплошной штриховки из полилинии
+function CreateSolidHatchFromPolyline(ppolyline: PGDBObjPolyLine; colorIndex: Integer; pLayer: PGDBLayerProp): PGDBObjHatch;
+var
+  phatch: PGDBObjHatch;
+  pathData: GDBPolyline2DArray;
+  v2d: GDBVertex2D;
+  i: integer;
+  vertexCount: integer;
+  dc: TDrawContext;
+begin
+  Result := nil;
+
+  if ppolyline = nil then
+    exit;
+
+  vertexCount := ppolyline^.VertexArrayInOCS.Count;
+
+  // Проверяем что у полилинии достаточно вершин для создания штриховки
+  // Check that polyline has enough vertices to create hatch
+  if vertexCount < 3 then
+    exit;
+
+  // Создаем штриховку
+  // Create hatch
+  phatch := GDBObjHatch.CreateInstance;
+
+  // Устанавливаем свойства штриховки
+  // Set hatch properties
+  if pLayer <> nil then
+    phatch^.vp.Layer := pLayer
+  else
+    phatch^.vp.Layer := ppolyline^.vp.Layer;
+
+  phatch^.vp.LineWeight := ppolyline^.vp.LineWeight;
+  phatch^.vp.Color := colorIndex; // Цвет штриховки из параметров команды
+                                  // Hatch color from command parameters
+  phatch^.PPattern := nil; // Сплошная штриховка (тип solid)
+                           // Solid hatch (solid type)
+
+  // Локальная система координат штриховки инициализирована по умолчанию
+  // Hatch local coordinate system is initialized by default
+
+  // Создаем путь из вершин полилинии
+  // Create path from polyline vertices
+  pathData.init(vertexCount, True);
+
+  for i := 0 to vertexCount - 1 do begin
+    v2d.x := ppolyline^.VertexArrayInOCS.getData(i).x;
+    v2d.y := ppolyline^.VertexArrayInOCS.getData(i).y;
+    pathData.PushBackData(v2d);
+  end;
+
+  phatch^.Path.paths.PushBackData(pathData);
+
+  // Форматируем примитив штриховки
+  // Format hatch entity
+  dc := drawings.GetCurrentDWG^.CreateDrawingRC;
+  phatch^.FormatEntity(drawings.GetCurrentDWG^, dc);
+
+  Result := phatch;
+end;
+
+// Helper procedure to parse operands: extract color, layer, and variable names
+// Вспомогательная процедура для разбора операндов: извлечение цвета, слоя и имен переменных
+procedure ParseOperands(
+  const operands: TCommandOperands;
+  out colorIndex: Integer;
+  out layerName: string;
+  var varList: TStringList);
+var
+  i: integer;
+  varname: string;
+  params: TStringList;
+begin
+  // Set default values
+  // Устанавливаем значения по умолчанию
+  colorIndex := 4;  // Default: light blue (cyan)
+                    // По умолчанию: светло-голубой (cyan)
+  layerName := '';  // Empty means use polyline's layer
+                    // Пустое значит использовать слой полилинии
+
+  // Clear variable list
+  // Очищаем список переменных
+  varList.Clear;
+
+  // Check if we have operands
+  // Проверяем наличие операндов
+  if Trim(operands) = '' then
+    exit;
+
+  // Split operands by comma
+  // Разделяем операнды по запятой
+  params := TStringList.Create;
+  try
+    params.Delimiter := ',';
+    params.StrictDelimiter := True;
+    params.DelimitedText := operands;
+
+    // Need at least 3 parameters (color, layer, and at least one variable)
+    // Нужно минимум 3 параметра (цвет, слой и хотя бы одна переменная)
+    if params.Count < 3 then
+      exit;
+
+    // Extract color index (first parameter)
+    // Извлекаем индекс цвета (первый параметр)
+    try
+      colorIndex := StrToInt(Trim(params[0]));
+      // Ensure color is in valid range (1-255)
+      // Проверяем что цвет в допустимом диапазоне (1-255)
+      if (colorIndex < 1) or (colorIndex > 255) then
+        colorIndex := 4;  // Fallback to default
+                          // Возврат к значению по умолчанию
+    except
+      colorIndex := 4;  // Fallback to default on error
+                        // Возврат к значению по умолчанию при ошибке
+    end;

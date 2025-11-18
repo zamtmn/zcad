@@ -278,6 +278,7 @@ uses
 
   uzvcommand_space, //команда addZona для работы с зонами
   uzvcommand_showhidespace, //команда показ спрятать
+  uzvcommand_layerWeightBigSmall, //переключение веса слоя большой/маленький
   uzvsplineconvert,
   uzvcommand_exportdialux,
   uzvcommand_recoverytable, //команда восстановления таблиц с чертежа
@@ -415,6 +416,5 @@ begin
   end;
   programlog.logoutstr('<<<<<<<<<<<<<<<Start units finalization',0,LM_Debug);
 end.
-
 
 

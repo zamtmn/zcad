@@ -31,3 +31,7 @@ cad_source/docs/userguide/*.html
 cad_source/zcadversion.inc
 cad_source/utils/typeexporter.res
 cad_source/zcad.res
+
+# Local logs and CI logs (do not commit)
+logs/
+ci-logs/

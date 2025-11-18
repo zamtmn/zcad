@@ -43,8 +43,9 @@ implementation
 const
   // Константы веса слоя (внутренние единицы: сотые доли мм)
   // 2.00 мм = 200, 0.00 мм = 0
-  CONST_LAYER_WEIGHT_BIG   = LnWt200;
-  CONST_LAYER_WEIGHT_SMALL = LnWt000;
+  // Храним как числа, чтобы их было проще редактировать по ТЗ
+  CONST_LAYER_WEIGHT_BIG   = 200;
+  CONST_LAYER_WEIGHT_SMALL = 0;
 
 // Нормализация имени слоя из операндов:
 // - обрезаем пробелы
@@ -66,10 +67,6 @@ begin
     name := Copy(name, 2, Length(name) - 2);
 
   // Удалим двойные кавычки
-  if (Length(name) >= 2) and (name[1] = '"') and (name[Length(name)] = '"') then
-    name := Copy(name, 2, Length(name) - 2);
-
-  // Дополнительная обработка для случая обычных двойных кавычек
   if (Length(name) >= 2) and (name[1] = '"') and (name[Length(name)] = '"') then
     name := Copy(name, 2, Length(name) - 2);
 

@@ -1,7 +1,0 @@
-?? logs/00-steps.log
-?? logs/01-pwd.txt
-?? logs/02-branch.txt
-?? logs/03-git-status.txt
-?? logs/21-git-commit.txt
-?? logs/22-git-push.txt
-?? logs/30-gh-runs.json

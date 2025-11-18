@@ -1,7 +1,0 @@
-.github/workflows/gh-pages.yml:1:name: build
-.github/workflows/gh-pages.yml:2:on: 
-.github/workflows/gh-pages.yml:7:jobs:
-.github/workflows/gh-pages.yml:9:    runs-on: ubuntu-latest
-.github/workflows/gh-pages.yml:11:      - name: Checkout
-.github/workflows/gh-pages.yml:17:      - name: build
-.github/workflows/gh-pages.yml:34:      - name: GitHub Pages

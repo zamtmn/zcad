@@ -1,9 +1,0 @@
-cad_source/zcad/commands/uzccommand_polyed.pas:180:        lwgdbdefault,ClByLayer,
-cad_source/zcad/commands/uzccommand_polyed.pas:271:        lwgdbdefault,ClByLayer,
-cad_source/zcad/commands/uzccommand_polyed.pas:299:        lwgdbdefault,ClByLayer,
-cad_source/zengine/core/uzeconsts.pas:115:  lwgdbdefault = -3;
-cad_source/zcad/commands/uzccommand_circle2.pas:66:      drawings.GetCurrentDWG^.GetCurrentLType,lwgdbdefault,ClByLayer,
-cad_source/zengine/styles/uzestylestexts.pas:92:  //addlayer('0',cgdbwhile,lwgdbdefault);
-cad_source/zengine/styles/uzestyleslayers.pas:122:  addlayer(LNSysLayerName,CGDBWhile,lwgdbdefault,true,false,true,'',TLOLoad).LT:=psyslt;
-cad_source/zengine/styles/uzestyleslayers.pas:123:  addlayer(LNMetricLayerName,CGDBWhile,lwgdbdefault,false,false,false,'',TLOLoad).LT:=psyslt;
-cad_source/zengine/styles/uzestylestables.pas:64:  //addlayer(LNSysLayerName,CGDBWhile,lwgdbdefault,true,false,true);

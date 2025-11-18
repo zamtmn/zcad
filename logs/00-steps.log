@@ -1,9 +1,0 @@
-Step: verify repo state
-Step: fetch issue and PR context
-Step: open implementation files
-Step: check workflows and CI status
-Step: list recent CI runs
-Step: pr checks
-Step: inspect velec/space commands for style
-Step: update PR title and body
-Step: mark PR ready

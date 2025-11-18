@@ -1,4 +1,0 @@
-total 12
-drwxrwxr-x 2 hive hive 4096 Nov 18 07:36 .
-drwxrwxr-x 3 hive hive 4096 Nov 18 07:36 ..
--rw-rw-r-- 1 hive hive 2292 Nov 18 07:36 gh-pages.yml

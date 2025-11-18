@@ -1,2 +1,0 @@
-Current dir: /tmp/gh-issue-solver-1763451362100
-Git branch: issue-578-5408550377d7

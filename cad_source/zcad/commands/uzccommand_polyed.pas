@@ -64,15 +64,15 @@ type
     nearestline:integer;(*hidden_in_objinsp*)
     dir:integer;(*hidden_in_objinsp*)
     setpoint:boolean;(*hidden_in_objinsp*)
-    vvertex:gdbvertex;(*hidden_in_objinsp*)
-    lvertex1:gdbvertex;(*hidden_in_objinsp*)
-    lvertex2:gdbvertex;(*hidden_in_objinsp*)
+    vvertex:TzePoint3d;(*hidden_in_objinsp*)
+    lvertex1:TzePoint3d;(*hidden_in_objinsp*)
+    lvertex2:TzePoint3d;(*hidden_in_objinsp*)
   end;
 
 var
   p3dpl:pgdbobjpolyline;
   PCreatedGDBLine:pgdbobjline;
-  pworkvertex:pgdbvertex;
+  pworkvertex:PzePoint3d;
   PEProp:TPolyEdit;
 
 implementation
@@ -116,15 +116,15 @@ begin
 end;
 
 
-function _3DPolyEd_com_BeforeClick(const Context:TZCADCommandContext;wc:GDBvertex;
-  mc:GDBvertex2DI;var button:byte;osp:pos_record;mclick:integer):integer;
+function _3DPolyEd_com_BeforeClick(const Context:TZCADCommandContext;wc:TzePoint3d;
+  mc:TzePoint2i;var button:byte;osp:pos_record;mclick:integer):integer;
 var
-  ptv,ptvprev:pgdbvertex;
+  ptv,ptvprev:PzePoint3d;
   ir:itrec;
   v,l:double;
   domethod,undomethod:tmethod;
   polydata:tpolydata;
-  _tv:gdbvertex;
+  _tv:TzePoint3d;
   p3dpl2:pgdbobjpolyline;
   i:integer;
   dc:TDrawContext;

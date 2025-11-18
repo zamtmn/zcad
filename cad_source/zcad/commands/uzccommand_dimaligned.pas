@@ -46,7 +46,7 @@ var
   // pointer to the created dimensional entity
   pline:PGDBObjLine;         // указатель на "временную" линию
   // pointer to temporary line
-  p1,p2,p3:gdbvertex;        // 3 points to be obtained from the user
+  p1,p2,p3:TzePoint3d;        // 3 points to be obtained from the user
   // 3 точки которые будут получены от пользователя
   dc:TDrawContext;
 begin

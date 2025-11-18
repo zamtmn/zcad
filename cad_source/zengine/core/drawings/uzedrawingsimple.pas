@@ -63,8 +63,8 @@ type
                        function GetLastSelected:PGDBObjEntity;virtual;
                        constructor init(pcam:PGDBObjCamera);
                        destructor done;virtual;
-                       procedure myGluProject2(objcoord:GDBVertex; out wincoord:GDBVertex);virtual;
-                       procedure myGluUnProject(const win:GDBVertex;out obj:GDBvertex);virtual;
+                       procedure myGluProject2(objcoord:TzePoint3d; out wincoord:TzePoint3d);virtual;
+                       procedure myGluUnProject(const win:TzePoint3d;out obj:TzePoint3d);virtual;
                        function GetPcamera:PGDBObjCamera;virtual;
                        function GetCurrentROOT:PGDBObjGenericSubEntry;virtual;
                        function GetCurrentRootSimple:Pointer;virtual;
@@ -80,12 +80,12 @@ type
                        function GetDimStyleTable:PGDBDimStyleArray;virtual;
                        function GetOnMouseObj:PGDBObjOpenArrayOfPV;virtual;
                        procedure RotateCameraInLocalCSXY(ux,uy:Double);virtual;
-                       procedure MoveCameraInLocalCSXY(oldx,oldy:Double;ax:gdbvertex);virtual;
+                       procedure MoveCameraInLocalCSXY(oldx,oldy:Double;ax:TzePoint3d);virtual;
                        procedure SetCurrentDWG;virtual;
                        function StoreOldCamerapPos:Pointer;virtual;
                        procedure StoreNewCamerapPos(command:Pointer);virtual;
-                       procedure rtmodify(obj:PGDBObjEntity;md:Pointer;dist,wc:gdbvertex;save:Boolean);virtual;
-                       procedure rtmodifyonepoint(obj:PGDBObjEntity;rtmod:TRTModifyData;wc:gdbvertex);virtual;
+                       procedure rtmodify(obj:PGDBObjEntity;md:Pointer;dist,wc:TzePoint3d;save:Boolean);virtual;
+                       procedure rtmodifyonepoint(obj:PGDBObjEntity;rtmod:TRTModifyData;wc:TzePoint3d);virtual;
                        procedure PushStartMarker(CommandName:String);virtual;
                        procedure PushEndMarker;virtual;
                        procedure SetFileName(NewName:String);virtual;
@@ -481,18 +481,18 @@ begin
 
 end;
 
-procedure TSimpleDrawing.rtmodifyonepoint(obj:PGDBObjEntity;rtmod:TRTModifyData;wc:gdbvertex);
+procedure TSimpleDrawing.rtmodifyonepoint(obj:PGDBObjEntity;rtmod:TRTModifyData;wc:TzePoint3d);
 begin
      obj^.rtmodifyonepoint(rtmod);
      obj^.YouChanged(self);
 end;
-procedure TSimpleDrawing.rtmodify(obj:PGDBObjEntity;md:Pointer;dist,wc:gdbvertex;save:Boolean);
+procedure TSimpleDrawing.rtmodify(obj:PGDBObjEntity;md:Pointer;dist,wc:TzePoint3d;save:Boolean);
 var i:Integer;
     point:pcontrolpointdesc;
     p:Pointer;
-    m,{m2,}mt:DMatrix4D;
-    t:gdbvertex;
-    //tt:dvector4d;
+    m,{m2,}mt:DMatrix4d;
+    t:TzePoint3d;
+    //tt:DVector4d;
     rtmod:TRTModifyData;
     //tum:TUndableMethod;
     dc:TDrawContext;
@@ -526,7 +526,7 @@ begin
                if PSelectedObjDesc(md).objaddr^.IsHaveLCS then
                begin
                m2:=PGDBObjWithLocalCS(PSelectedObjDesc(md).objaddr)^.CalcObjMatrixWithoutOwner;
-               //PGDBVertex(@m)^:=uzegeometry.NulVertex;
+               //PzePoint3d(@m)^:=uzegeometry.NulVertex;
                MatrixInvert(m2);
                t:=VectorTransform3D({dist}t,m2);
 
@@ -657,7 +657,7 @@ begin
 
 end;
 
-procedure TSimpleDrawing.MoveCameraInLocalCSXY(oldx,oldy:Double;ax:gdbvertex);
+procedure TSimpleDrawing.MoveCameraInLocalCSXY(oldx,oldy:Double;ax:TzePoint3d);
 var
     uc:pointer;
 begin
@@ -730,7 +730,7 @@ begin
       objcoord:=vertexadd(objcoord,pcamera^.CamCSOffset);
      _myGluProject(objcoord.x,objcoord.y,objcoord.z,@pcamera^.modelMatrixLCS,@pcamera^.projMatrixLCS,@pcamera^.viewport,wincoord.x,wincoord.y,wincoord.z);
 end;
-procedure TSimpleDrawing.myGluUnProject(const win:GDBVertex;out obj:GDBvertex);
+procedure TSimpleDrawing.myGluUnProject(const win:TzePoint3d;out obj:TzePoint3d);
 begin
      _myGluUnProject(win.x,win.y,win.z,@pcamera^.modelMatrixLCS,@pcamera^.projMatrixLCS,@pcamera^.viewport, obj.x,obj.y,obj.z);
      OBJ:=vertexsub(OBJ,pcamera^.CamCSOffset);

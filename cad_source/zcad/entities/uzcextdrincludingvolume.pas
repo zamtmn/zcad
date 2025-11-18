@@ -49,7 +49,7 @@ type
 
 
 TIncludingVolumeExtender=class(TBaseEntityExtender)
-    toBoundMatrix:DMatrix4D;
+    toBoundMatrix:DMatrix4d;
     InsideEnts:GDBObjOpenArrayOfPV;
     class function getExtenderName:string;override;
     constructor Create(pEntity:Pointer);override;
@@ -282,8 +282,8 @@ begin
 end;
 procedure TIncludingVolumeExtender.CheckEnt(p:PGDBObjEntity;var VolumeVExtdr:TVariablesExtender;const drawing:TDrawingDef;var DC:TDrawContext);
 var
-  testp:GDBvertex;
-  testp2d:GDBVertex2D;
+  testp:TzePoint3d;
+  testp2d:TzePoint2d;
 begin
   if pThisEntity<>nil then begin
     if p<>pThisEntity then begin

@@ -65,13 +65,13 @@ type
                            procedure ZoomToVolume(Volume:TBoundingBox);override;
                            procedure ZoomAll;override;
                            procedure ZoomSel;override;
-                           procedure RotTo(x0,y0,z0:GDBVertex);override;
+                           procedure RotTo(x0,y0,z0:TzePoint3d);override;
                            procedure PanScreen(oldX,oldY,X,Y:Integer);override;
                            procedure RestoreMouse;override;
                            procedure myKeyPress(var Key: Word; Shift: TShiftState);override;
-                           function ProjectPoint(pntx,pnty,pntz:Double;var wcsLBN,wcsRTF,dcsLBN,dcsRTF: GDBVertex):gdbvertex;override;
+                           function ProjectPoint(pntx,pnty,pntz:Double;var wcsLBN,wcsRTF,dcsLBN,dcsRTF: TzePoint3d):TzePoint3d;override;
                            procedure mouseunproject(X, Y: integer);override;
-                           procedure addaxistootrack(var posr:os_record;const axis:GDBVertex);virtual;
+                           procedure addaxistootrack(var posr:os_record;const axis:TzePoint3d);virtual;
                            procedure projectaxis;override;
                            procedure CalcOptimalMatrix;override;
                            procedure SetOGLMatrix;virtual;
@@ -88,7 +88,7 @@ type
                            procedure AddOntrackpoint;override;
                            procedure CorrectMouseAfterOS;override;
                            function CreateRC(_maxdetail:Boolean=false):TDrawContext;override;
-                           //procedure sendcoordtocommand(coord:GDBVertex;key: Byte);virtual;
+                           //procedure sendcoordtocommand(coord:TzePoint3d;key: Byte);virtual;
                            //procedure sendmousecoordwop(key: Byte);override;
                            //procedure sendmousecoord(key: Byte);override;
                            procedure asynczoomsel(Data: PtrInt);override;
@@ -96,7 +96,7 @@ type
                            procedure asyncupdatemouse(Data: PtrInt);override;
                            procedure asyncsendmouse(Data: PtrInt);override;
                            procedure set3dmouse;override;
-                           procedure SetCameraPosZoom(const _pos:gdbvertex;_zoom:Double;finalcalk:Boolean);override;
+                           procedure SetCameraPosZoom(const _pos:TzePoint3d;_zoom:Double;finalcalk:Boolean);override;
                            procedure DISP_ZoomFactor(x: double{; MousePos: TPoint});
                            procedure showmousecursor;override;
                            procedure hidemousecursor;override;
@@ -230,8 +230,8 @@ begin
 end;
 procedure drawfrustustum(frustum:ClipArray;var DC:TDrawContext);
 var
-tv1,tv2,tv3,tv4{,sv1,sv2,sv3,sv4,d1PProjPoint,d2,d3,d4}:gdbvertex;
-Tempplane:DVector4D;
+tv1,tv2,tv3,tv4{,sv1,sv2,sv3,sv4,d1PProjPoint,d2,d3,d4}:TzePoint3d;
+Tempplane:DVector4d;
 
 begin
   Tempplane:=frustum[5];
@@ -252,8 +252,8 @@ procedure TGeneralViewArea.showcursor(var DC:TDrawContext);
 var
   i, j: Integer;
   pt:ptraceprop;
-  mvertex,dvertex,tv1,tv2,sv1,d1:gdbvertex;
-  Tempplane,plx,ply,plz:DVector4D;
+  mvertex,dvertex,tv1,tv2,sv1,d1:TzePoint3d;
+  Tempplane,plx,ply,plz:DVector4d;
   a: Integer;
   i2d,i2dresult:intercept2dprop;
   //_NotUseLCS:boolean;
@@ -451,9 +451,9 @@ begin
             //|       |
             //|---4---|
             {1}
-            i2dresult:=intercept2dmy(CreateVertex2D(0,0),CreateVertex2D(0,getviewcontrol.clientheight),PGDBVertex2D(@param.ontrackarray.otrackarray[i].dispcoord)^,PGDBVertex2D(@pt.dispraycoord)^);
+            i2dresult:=intercept2dmy(CreateVertex2D(0,0),CreateVertex2D(0,getviewcontrol.clientheight),PzePoint2d(@param.ontrackarray.otrackarray[i].dispcoord)^,PzePoint2d(@pt.dispraycoord)^);
             {2}
-            i2d:=intercept2dmy(CreateVertex2D(0,getviewcontrol.clientheight),CreateVertex2D(getviewcontrol.clientwidth,getviewcontrol.clientheight),PGDBVertex2D(@param.ontrackarray.otrackarray[i].dispcoord)^,PGDBVertex2D(@pt.dispraycoord)^);
+            i2d:=intercept2dmy(CreateVertex2D(0,getviewcontrol.clientheight),CreateVertex2D(getviewcontrol.clientwidth,getviewcontrol.clientheight),PzePoint2d(@param.ontrackarray.otrackarray[i].dispcoord)^,PzePoint2d(@pt.dispraycoord)^);
             if not i2dresult.isintercept then
                                              i2dresult:=i2d;
             if i2d.isintercept then
@@ -461,7 +461,7 @@ begin
             if (i2d.t2>i2dresult.t2)or(i2dresult.t2<0) then
                                             i2dresult:=i2d;
             {3}
-            i2d:=intercept2dmy(CreateVertex2D(getviewcontrol.clientwidth,getviewcontrol.clientheight),CreateVertex2D(getviewcontrol.clientwidth,0),PGDBVertex2D(@param.ontrackarray.otrackarray[i].dispcoord)^,PGDBVertex2D(@pt.dispraycoord)^);
+            i2d:=intercept2dmy(CreateVertex2D(getviewcontrol.clientwidth,getviewcontrol.clientheight),CreateVertex2D(getviewcontrol.clientwidth,0),PzePoint2d(@param.ontrackarray.otrackarray[i].dispcoord)^,PzePoint2d(@pt.dispraycoord)^);
             if not i2dresult.isintercept then
                                              i2dresult:=i2d;
             if i2d.isintercept then
@@ -469,7 +469,7 @@ begin
             if (i2d.t2>i2dresult.t2)or(i2dresult.t2<0) then
                                             i2dresult:=i2d;
             {4}
-            i2d:=intercept2dmy(CreateVertex2D(getviewcontrol.clientwidth,0),CreateVertex2D(0,0),PGDBVertex2D(@param.ontrackarray.otrackarray[i].dispcoord)^,PGDBVertex2D(@pt.dispraycoord)^);
+            i2d:=intercept2dmy(CreateVertex2D(getviewcontrol.clientwidth,0),CreateVertex2D(0,0),PzePoint2d(@param.ontrackarray.otrackarray[i].dispcoord)^,PzePoint2d(@pt.dispraycoord)^);
             if not i2dresult.isintercept then
                                              i2dresult:=i2d;
             if i2d.isintercept then
@@ -528,7 +528,7 @@ end;
 procedure TGeneralViewArea.DrawCSAxis(var DC:TDrawContext);
 var
   td,td2,td22:Double;
-  //d2dx,d2dy,d2d:GDBvertex2D;
+  //d2dx,d2dy,d2d:TzePoint2d;
 begin
   dc.drawer.SetDrawMode(TDM_Normal);
 
@@ -641,7 +641,7 @@ const
 var
   currtime:TDateTime;
   Hour,Minute,Second,MilliSecond:word;
-  v:gdbvertex;
+  v:TzePoint3d;
   LODSave:TLOD;
 begin
   if (sysvarRDMaxRenderTime<>0) then begin
@@ -975,7 +975,7 @@ begin
 end;
 procedure TGeneralViewArea.RestoreMouse;
 var
-  fv1: GDBVertex;
+  fv1: TzePoint3d;
   Actlt:TVisActuality;
 begin
   CalcOptimalMatrix;
@@ -1021,16 +1021,16 @@ begin
 
 end;
 
-procedure TGeneralViewArea.RotTo(x0,y0,z0:GDBVertex);
+procedure TGeneralViewArea.RotTo(x0,y0,z0:TzePoint3d);
 const
      steps=10;
 var
-  fv1: GDBVertex;
+  fv1: TzePoint3d;
   i:integer;
   pucommand:pointer;
   q1,q2,q:GDBQuaternion;
   pcam:PGDBBaseCamera;
-  mat1,mat2,mat : DMatrix4D;
+  mat1,mat2,mat : DMatrix4d;
   Actlt:TVisActuality;
 begin
   pcam:=PDWG.Getpcamera;
@@ -1120,8 +1120,8 @@ procedure TGeneralViewArea.ZoomToVolume(Volume:TBoundingBox);
        steps=10;
   var
     tpz,tzoom: Double;
-    {fv1,tp,}wcsLBN,wcsRTF,dcsLBN,dcsRTF: GDBVertex;
-    camerapos,target:GDBVertex;
+    {fv1,tp,}wcsLBN,wcsRTF,dcsLBN,dcsRTF: TzePoint3d;
+    camerapos,target:TzePoint3d;
     i:integer;
     pucommand:pointer;
   begin
@@ -1216,7 +1216,7 @@ procedure TGeneralViewArea.DISP_ZoomFactor;
 var
   glx1, gly1: Double;
   pucommand:pointer;
-//  fv1: GDBVertex;
+//  fv1: TzePoint3d;
 begin
   //gdb.GetCurrentDWG.UndoStack.PushChangeCommand(@gdb.GetCurrentDWG.pcamera^.prop,sizeof(GDBCameraBaseProp));
   //with gdb.GetCurrentDWG.UndoStack.PushCreateTGChangeCommand(gdb.GetCurrentDWG.pcamera^.prop)^ do
@@ -1255,9 +1255,9 @@ begin
   doCameraChanged;
 end;
 
-procedure TGeneralViewArea.SetCameraPosZoom(const _pos:gdbvertex;_zoom:Double;finalcalk:Boolean);
+procedure TGeneralViewArea.SetCameraPosZoom(const _pos:TzePoint3d;_zoom:Double;finalcalk:Boolean);
 var
-  fv1: GDBVertex;
+  fv1: TzePoint3d;
   Actlt:TVisActuality;
 begin
     PDWG.Getpcamera^.prop.point:=_pos;
@@ -1349,7 +1349,7 @@ var
 //  mpoint: tpoint;
   smallwheel:Double;
 //    glx1, gly1: Double;
-  //fv1: GDBVertex;
+  //fv1: TzePoint3d;
 
 //  msg : TMsg;
 
@@ -1663,7 +1663,7 @@ end;
 constructor TGeneralViewArea.Create(TheOwner: TComponent);
 var
   i:integer;
-  v:gdbvertex;
+  v:TzePoint3d;
 begin
      inherited;
      InsidePaintMessage:=0;
@@ -1872,7 +1872,7 @@ begin
   result.Options:=result.Options+[DCODrawable];
 end;
 procedure TGeneralViewArea.CorrectMouseAfterOS;
-var d,tv1,tv2:GDBVertex;
+var d,tv1,tv2:TzePoint3d;
     b1,b2:Boolean;
 begin
      param.md.mouseraywithoutos:=param.md.mouseray;
@@ -2266,7 +2266,7 @@ begin
 end;
 procedure TGeneralViewArea.CalcMouseFrustum;
 var
-  tm: DMatrix4D;
+  tm: DMatrix4d;
   td:Double;
 begin
   td:=sysvarDISPCursorSize*2;
@@ -2302,7 +2302,7 @@ begin
   //--oglsm.myglMatrixMode(GL_MODELVIEW);
 end;
 
-function ProjectPoint2(pntx,pnty,pntz:Double; var m:DMatrix4D; var ccsLBN,ccsRTF:GDBVertex):gdbvertex;
+function ProjectPoint2(pntx,pnty,pntz:Double; var m:DMatrix4d; var ccsLBN,ccsRTF:TzePoint3d):TzePoint3d;
 begin
      result.x:=pntx;
      result.y:=pnty;
@@ -2341,10 +2341,10 @@ begin
 end;
 
 procedure TGeneralViewArea.CalcOptimalMatrix;
-var ccsLBN,ccsRTF:GDBVertex;
-    tm:DMatrix4D;
-    LBN:GDBvertex;
-    RTF:GDBvertex;
+var ccsLBN,ccsRTF:TzePoint3d;
+    tm:DMatrix4d;
+    LBN:TzePoint3d;
+    RTF:TzePoint3d;
     tbb,tbb2:TBoundingBox;
     //wa.pdwg:PTDrawing;
     proot:PGDBObjGenericSubEntry;
@@ -2687,7 +2687,7 @@ procedure TGeneralViewArea.PanScreen(oldX,oldY,X,Y:Integer);
 var
   glmcoord1: gdbpiece;
   tv2:gdbvertex4d;
-  ax:gdbvertex;
+  ax:TzePoint3d;
   Actlt:TVisActuality;
 begin
   mouseunproject(oldX, getviewcontrol.clientheight-oldY);
@@ -2727,8 +2727,8 @@ end;
 procedure TGeneralViewArea.projectaxis;
 var
   i: Integer;
-  temp: gdbvertex;
-  pv:pgdbvertex;
+  temp: TzePoint3d;
+  pv:PzePoint3d;
   tp:traceprop;
 
   Objects:GDBObjOpenArrayOfPV;
@@ -2781,8 +2781,8 @@ begin
   end;
   end;
   project0axis;
-  {Getmem(param.ospoint.arrayworldaxis, sizeof(Word) + param.ppolaraxis^.count * sizeof(gdbvertex));
-  Move(param.ppolaraxis^, param.ospoint.arrayworldaxis^, sizeof(Word) + param.ppolaraxis^.count * sizeof(gdbvertex));}
+  {Getmem(param.ospoint.arrayworldaxis, sizeof(Word) + param.ppolaraxis^.count * sizeof(TzePoint3d));
+  Move(param.ppolaraxis^, param.ospoint.arrayworldaxis^, sizeof(Word) + param.ppolaraxis^.count * sizeof(TzePoint3d));}
   PDWG.myGluProject2(param.ospoint.worldcoord,
              param.ospoint.dispcoord);
   //param.ospoint.arraydispaxis.init(param.ospoint.arrayworldaxis.count);
@@ -2805,7 +2805,7 @@ begin
   end
 end;
 
-procedure TGeneralViewArea.addaxistootrack(var posr:os_record;const axis:GDBVertex);
+procedure TGeneralViewArea.addaxistootrack(var posr:os_record;const axis:TzePoint3d);
 begin
      posr.arrayworldaxis.PushBackData(axis);
 
@@ -2819,7 +2819,7 @@ end;
 procedure TGeneralViewArea.create0axis;
 var
   i: Integer;
-  pv:pgdbvertex;
+  pv:PzePoint3d;
   Objects:GDBObjOpenArrayOfPV;
   pobj:pGDBObjEntity;
   ir:itrec;
@@ -2875,14 +2875,14 @@ end;
 procedure TGeneralViewArea.Project0Axis;
 var
   tp: traceprop;
-  temp: gdbvertex;
-  pv: pgdbvertex;
+  temp: TzePoint3d;
+  pv: PzePoint3d;
   i: Integer;
 begin
   {Getmem(param.ospoint.arrayworldaxis, sizeof(Word) + param.ppolaraxis
-    ^.count * sizeof(gdbvertex));
+    ^.count * sizeof(TzePoint3d));
   Move(param.ppolaraxis^, param.ospoint.arrayworldaxis^, sizeof(Word) +
-    param.ppolaraxis^.count * sizeof(gdbvertex)); }
+    param.ppolaraxis^.count * sizeof(TzePoint3d)); }
   {gdb.GetCurrentDWG^}pdwg.myGluProject2(param.ontrackarray.otrackarray[0
     ].worldcoord,
              param.ontrackarray.otrackarray[0].dispcoord);
@@ -2914,8 +2914,8 @@ end;
 procedure TGeneralViewArea.reprojectaxis;
 var
   i, j, a: Integer;
-  temp: gdbvertex;
-  pv:pgdbvertex;
+  temp: TzePoint3d;
+  pv:PzePoint3d;
   pt,pt2:ptraceprop;
   ir,ir2:itrec;
   ip:intercept3dprop;
@@ -3159,7 +3159,7 @@ begin
                exit;
 end;
 
-function TGeneralViewArea.ProjectPoint(pntx,pnty,pntz:Double;var wcsLBN,wcsRTF,dcsLBN,dcsRTF: GDBVertex):gdbvertex;
+function TGeneralViewArea.ProjectPoint(pntx,pnty,pntz:Double;var wcsLBN,wcsRTF,dcsLBN,dcsRTF: TzePoint3d):TzePoint3d;
 begin
      PDWG.myGluProject2(CreateVertex(pntx,pnty,pntz),
      result);
@@ -3252,7 +3252,7 @@ begin
 end;
 procedure TGeneralViewArea.calcgrid;
 var
-    tempv,cav: gdbvertex;
+    tempv,cav: TzePoint3d;
     l,u,r,b,maxh,maxv,ph,pv:Double;
 begin
      if pdwg=NIL then exit;

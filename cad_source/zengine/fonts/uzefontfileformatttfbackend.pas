@@ -65,7 +65,7 @@ type
       function GetGlyphAdvance(GD:TGlyphData):Single;virtual;abstract;
       function GetGlyphContoursCount(GD:TGlyphData):Integer;virtual;abstract;
       function GetGlyphPointsCount(GD:TGlyphData):Integer;virtual;abstract;
-      function GetGlyphPoint(GD:TGlyphData;np:integer):GDBvertex2D;virtual;abstract;
+      function GetGlyphPoint(GD:TGlyphData;np:integer):TzePoint2d;virtual;abstract;
       function GetGlyphPointFlag(GD:TGlyphData;np:integer):TTTFPointFlags;virtual;abstract;
       function GetGlyphConEnd(GD:TGlyphData;np:integer):Integer;virtual;abstract;
       procedure DoneGlyph(var GD:TGlyphData); virtual; abstract;

@@ -1523,7 +1523,7 @@ procedure TzcMainForm._scroll(Sender:TObject;ScrollCode:TScrollCode;
   var ScrollPos:integer);
 var
   pdwg:PTSimpleDrawing;
-  nevpos:gdbvertex;
+  nevpos:TzePoint3d;
 begin
   pdwg:=drawings.GetCurrentDWG;
   if pdwg<>nil then

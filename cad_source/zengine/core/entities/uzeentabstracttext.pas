@@ -42,8 +42,8 @@ type
 
   GDBObjAbstractText=object(GDBObjPlainWithOX)
     textprop:GDBTextProp;
-    P_drawInOCS:GDBvertex;
-    DrawMatrix:DMatrix4D;
+    P_drawInOCS:TzePoint3d;
+    DrawMatrix:DMatrix4d;
     procedure CalcObjMatrix(pdrawing:PTDrawingDef=nil);virtual;
     procedure DrawGeometry(lw:integer;var DC:TDrawContext;
       const inFrustumState:TInBoundingVolume);virtual;
@@ -60,7 +60,7 @@ type
     procedure ReCalcFromObjMatrix;virtual;
     function CalcRotate:double;virtual;
     procedure setrot(r:double);
-    procedure transform(const t_matrix:DMatrix4D);virtual;
+    procedure transform(const t_matrix:DMatrix4d);virtual;
     procedure rtsave(refp:Pointer);virtual;
   end;
 
@@ -78,12 +78,12 @@ end;
 
 procedure GDBObjAbstractText.transform;
 var
-  tv:GDBVertex;
-  m:DMatrix4D;
+  tv:TzePoint3d;
+  m:DMatrix4d;
 begin
   tv:=CreateVertex(0,textprop.size,0);
   m:=t_matrix;
-  PGDBVertex(@m.mtr[3])^:=NulVertex;
+  PzePoint3d(@m.mtr[3])^:=NulVertex;
 
   tv:=VectorTransform3d(tv,m);
   textprop.size:=oneVertexlength(tv);
@@ -92,7 +92,7 @@ end;
 
 procedure GDBObjAbstractText.setrot(r:double);
 var
-  m1:DMatrix4D;
+  m1:DMatrix4d;
 begin
   m1:=CreateRotationMatrixZ(r);
   objMatrix:=MatrixMultiply(m1,objMatrix);
@@ -102,24 +102,24 @@ end;
 procedure GDBObjAbstractText.ReCalcFromObjMatrix;
 begin
   inherited;
-  Local.basis.ox:=PGDBVertex(@objmatrix.mtr[0])^;
-  Local.basis.oy:=PGDBVertex(@objmatrix.mtr[1])^;
+  Local.basis.ox:=PzePoint3d(@objmatrix.mtr[0])^;
+  Local.basis.oy:=PzePoint3d(@objmatrix.mtr[1])^;
 
   Local.basis.ox:=normalizevertex(Local.basis.ox);
   Local.basis.oy:=normalizevertex(Local.basis.oy);
   Local.basis.oz:=normalizevertex(Local.basis.oz);
 
-  Local.P_insert:=PGDBVertex(@objmatrix.mtr[3])^;
+  Local.P_insert:=PzePoint3d(@objmatrix.mtr[3])^;
 end;
 
 function GDBObjAbstractText.CalcRotate:double;
 var
-  v1,v2:GDBVertex;
+  v1,v2:TzePoint3d;
   l1,l0:double;
 begin
 
   if bp.ListPos.owner<>nil then begin
-    V1:=PGDBvertex(@bp.ListPos.owner^.GetMatrix^.mtr[0])^;
+    V1:=PzePoint3d(@bp.ListPos.owner^.GetMatrix^.mtr[0])^;
     l0:=scalardot(NormalizeVertex(V1),_X_yzVertex);
     l0:=arccos(l0);
     if v1.y<-eps then
@@ -142,7 +142,7 @@ end;
 procedure GDBObjAbstractText.remaponecontrolpoint(pdesc:pcontrolpointdesc;
   ProjectProc:GDBProjectProc);
 var
-  tv:GDBvertex;
+  tv:TzePoint3d;
 begin
   if pdesc^.pointtype=os_point then begin
     pdesc.worldcoord:=P_insert_in_WCS;
@@ -214,19 +214,19 @@ end;
 
 procedure GDBObjAbstractText.CalcObjMatrix;
 var
-  m1,m2,m3:DMatrix4D;
+  m1,m2,m3:DMatrix4d;
   angle:double;
 begin
   inherited CalcObjMatrix;
   if textprop.upsidedown then begin
-    PGDBVertex(@objmatrix.mtr[1])^.x:=-Local.basis.oy.x;
-    PGDBVertex(@objmatrix.mtr[1])^.y:=-Local.basis.oy.y;
-    PGDBVertex(@objmatrix.mtr[1])^.z:=-Local.basis.oy.z;
+    PzePoint3d(@objmatrix.mtr[1])^.x:=-Local.basis.oy.x;
+    PzePoint3d(@objmatrix.mtr[1])^.y:=-Local.basis.oy.y;
+    PzePoint3d(@objmatrix.mtr[1])^.z:=-Local.basis.oy.z;
   end;
   if textprop.backward then begin
-    PGDBVertex(@objmatrix.mtr[0])^.x:=-Local.basis.ox.x;
-    PGDBVertex(@objmatrix.mtr[0])^.y:=-Local.basis.ox.y;
-    PGDBVertex(@objmatrix.mtr[0])^.z:=-Local.basis.ox.z;
+    PzePoint3d(@objmatrix.mtr[0])^.x:=-Local.basis.ox.x;
+    PzePoint3d(@objmatrix.mtr[0])^.y:=-Local.basis.ox.y;
+    PzePoint3d(@objmatrix.mtr[0])^.z:=-Local.basis.ox.z;
   end;
   m1:=OneMatrix;
   objMatrix:=MatrixMultiply(m1,objMatrix);

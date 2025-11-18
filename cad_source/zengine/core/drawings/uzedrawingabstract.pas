@@ -33,7 +33,7 @@ TAbstractDrawing= object(TDrawingDef)
                        LWDisplay:Boolean;
                        SnapGrid:Boolean;
                        DrawGrid:Boolean;
-                       GridSpacing:GDBvertex2D;
+                       GridSpacing:TzePoint2d;
                        Snap:GDBSnap2D;
                        CurrentLayer:PGDBLayerProp;
                        CurrentLType:PGDBLtypeProp;
@@ -54,21 +54,21 @@ TAbstractDrawing= object(TDrawingDef)
                        InsUnits:TInsUnits;
                        TextSize:Double;
 
-                       procedure myGluProject2(objcoord:GDBVertex; out wincoord:GDBVertex);virtual;abstract;
-                       procedure myGluUnProject(const win:GDBVertex;out obj:GDBvertex);virtual;abstract;
+                       procedure myGluProject2(objcoord:TzePoint3d; out wincoord:TzePoint3d);virtual;abstract;
+                       procedure myGluUnProject(const win:TzePoint3d;out obj:TzePoint3d);virtual;abstract;
                        function GetPcamera:PGDBObjCamera;virtual;abstract;
                        function GetCurrentROOT:PGDBObjGenericSubEntry;virtual;abstract;
                        function GetConstructObjRoot:PGDBObjRoot;virtual;abstract;
                        function GetSelObjArray:PGDBSelectedObjArray;virtual;abstract;
                        function GetOnMouseObj:PGDBObjOpenArrayOfPV;virtual;abstract;
                        procedure RotateCameraInLocalCSXY(ux,uy:Double);virtual;abstract;
-                       procedure MoveCameraInLocalCSXY(oldx,oldy:Double;ax:gdbvertex);virtual;abstract;
+                       procedure MoveCameraInLocalCSXY(oldx,oldy:Double;ax:TzePoint3d);virtual;abstract;
                        procedure SetCurrentDWG;virtual;abstract;
                        function GetChangeStampt:Boolean;virtual;abstract;
                        function StoreOldCamerapPos:Pointer;virtual;abstract;
                        procedure StoreNewCamerapPos(command:Pointer);virtual;abstract;
                        procedure SetUnitsFormat(f:TzeUnitsFormat);virtual;abstract;
-                       procedure rtmodify(obj:PGDBObjEntity;md:Pointer;dist,wc:gdbvertex;save:Boolean);virtual;abstract;
+                       procedure rtmodify(obj:PGDBObjEntity;md:Pointer;dist,wc:TzePoint3d;save:Boolean);virtual;abstract;
                        procedure FillDrawingPartRC(var dc:TDrawContext);virtual;abstract;
                        procedure DeSelectAll;virtual;abstract;
                  end;

@@ -131,7 +131,7 @@ TLLPoint= object(TLLPrimitive)
 PTSymbolSParam=^TSymbolSParam;
 {REGISTERRECORDTYPE TSymbolSParam}
 TSymbolSParam=record
-                   FirstSymMatr:DMatrix4D;
+                   FirstSymMatr:DMatrix4d;
                    sx,Rotate,Oblique,NeededFontHeight{,offsety}:Single;
                    pfont:pointer;
                    IsCanSystemDraw:Boolean;
@@ -146,7 +146,7 @@ TLLSymbol= object(TLLPrimitive)
               PExternalVectorObject:pointer;
               ExternalLLPOffset:TArrayIndex;
               ExternalLLPCount:TArrayIndex;
-              SymMatr:DMatrix4D;
+              SymMatr:DMatrix4d;
               SymCode:Integer;//unicode symbol code
               function draw(drawer:TZGLAbstractDrawer;var rc:TDrawContext;var GeomData:ZGLGeomData;var LLPArray:TLLPrimitivesArray;var OptData:ZGLOptimizerData;inFrustumState:TInBoundingVolume):Integer;virtual;
               procedure drawSymbol(drawer:TZGLAbstractDrawer;var rc:TDrawContext;var GeomData:ZGLGeomData;var LLPArray:TLLPrimitivesArray;var OptData:ZGLOptimizerData;const PSymbolsParam:PTSymbolSParam;const inFrustumState:TInBoundingVolume);virtual;
@@ -178,7 +178,7 @@ TLLProxyLine= object(TLLPrimitive)
               function PatternCount2IntervalCount(const APatternCount:integer):integer;inline;
               procedure MakeReadyIndexsVector(const APatternCount:integer);
               function NextPatternCountToStore(const APatternCount:integer):integer;
-              procedure Process(var GeomData:ZGLGeomData;const ACurrentPoint:GDBvertex;ACPrimitiveIndex:TArrayIndex;At:Double);
+              procedure Process(var GeomData:ZGLGeomData;const ACurrentPoint:TzePoint3d;ACPrimitiveIndex:TArrayIndex;At:Double);
         end;
 PTLLSymbolEnd=^TLLSymbolEnd;
 {---REGISTEROBJECTTYPE TLLSymbolEnd}
@@ -632,7 +632,7 @@ function TLLProxyLine.draw(drawer:TZGLAbstractDrawer;var rc:TDrawContext;var Geo
     TStack=array[Low(ClipArray)..high(ClipArray)]of Double;
   var
     p:TStoredCoordType;
-    dir:GDBvertex;
+    dir:TzePoint3d;
     i:integer;
     t:double;
     Stack:tstack;
@@ -843,7 +843,7 @@ begin
   result:=((APatternCount div PatternsInSegment)+1)*PatternsInSegment;
 end;
 
-procedure TLLProxyLine.Process(var GeomData:ZGLGeomData;const ACurrentPoint:GDBvertex;ACPrimitiveIndex:TArrayIndex;At:Double);
+procedure TLLProxyLine.Process(var GeomData:ZGLGeomData;const ACurrentPoint:TzePoint3d;ACPrimitiveIndex:TArrayIndex;At:Double);
 begin
   IndexsVector.getDataMutable(IndexsVector.AllocData(1))^.CreateRec(GeomData.Vertex3S.AddGDBVertex(ACurrentPoint),ACPrimitiveIndex,At);
 end;
@@ -984,7 +984,7 @@ end;
 
 
 
-function CalcLCS(const m:DMatrix4D):GDBvertex;
+function CalcLCS(const m:DMatrix4d):TzePoint3d;
 {lcsx:= -((-m12 m21 m30 + m11 m22 m30 + m12 m20 m31 - m10 m22 m31 - m11 m20 m32 + m10 m21 m32)/(m02 m11 m20 - m01 m12 m20 - m02 m10 m21 + m00 m12 m21 + m01 m10 m22 - m00 m11 m22)),
  lcsy:= -(( m02 m21 m30 - m01 m22 m30 - m02 m20 m31 + m00 m22 m31 + m01 m20 m32 - m00 m21 m32)/(m02 m11 m20 - m01 m12 m20 - m02 m10 m21 + m00 m12 m21 + m01 m10 m22 - m00 m11 m22)),
  lcsz:= -((-m02 m11 m30 + m01 m12 m30 + m02 m10 m31 - m00 m12 m31 - m01 m10 m32 + m00 m11 m32)/(m02 m11 m20 - m01 m12 m20 - m02 m10 m21 + m00 m12 m21 + m01 m10 m22 - m00 m11 m22))}
@@ -1023,7 +1023,7 @@ begin
     Result:=NulVertex;
 end;
 
-function CorrectLCS(const m:DMatrix4D;LCS:GDBvertex):GDBvertex;
+function CorrectLCS(const m:DMatrix4d;LCS:TzePoint3d):TzePoint3d;
 {lcsx -> -((-lcs0z m11 m20 + lcs0y m12 m20 + lcs0z m10 m21 -
    lcs0x m12 m21 - lcs0y m10 m22 + lcs0x m11 m22)/(
   m02 m11 m20 - m01 m12 m20 - m02 m10 m21 + m00 m12 m21 +
@@ -1072,10 +1072,10 @@ end;
 
 procedure TLLSymbol.drawSymbol(drawer:TZGLAbstractDrawer;var rc:TDrawContext;var GeomData:ZGLGeomData;var LLPArray:TLLPrimitivesArray;var OptData:ZGLOptimizerData;const PSymbolsParam:PTSymbolSParam;const inFrustumState:TInBoundingVolume);
 var
-  tv,tv2:GDBvertex;
-  sm:DMatrix4D;
+  tv,tv2:TzePoint3d;
+  sm:DMatrix4d;
   notuselcs:boolean;
-  oldLCS,newLCS:GDBvertex;
+  oldLCS,newLCS:TzePoint3d;
 begin
   sm:=SymMatr;
   tv:=CalcLCS(SymMatr);

@@ -128,9 +128,9 @@ type
 var
   sysvarSysDWG_CodePage:TZCCodePage=ZCCP1252;
 
-procedure dxfvertexout(var f:TZctnrVectorBytes;dxfcode:Integer;const v:GDBvertex);
-procedure dxfvertexout1(var f:TZctnrVectorBytes;dxfcode:Integer;const v:GDBvertex);
-procedure dxfvertex2dout(var f:TZctnrVectorBytes;dxfcode:Integer;const v:gdbvertex2d);
+procedure dxfvertexout(var f:TZctnrVectorBytes;dxfcode:Integer;const v:TzePoint3d);
+procedure dxfvertexout1(var f:TZctnrVectorBytes;dxfcode:Integer;const v:TzePoint3d);
+procedure dxfvertex2dout(var f:TZctnrVectorBytes;dxfcode:Integer;const v:TzePoint2d);
 procedure dxfDoubleout(var f:TZctnrVectorBytes;dxfcode:Integer;const v:Double);
 procedure dxfIntegerout(var f:TZctnrVectorBytes;dxfcode:Integer;const v:Integer);
 procedure dxfStringout(var f:TZctnrVectorBytes;dxfcode:Integer;const v:String);overload;
@@ -139,8 +139,8 @@ procedure dxfStringout(var f:TZctnrVectorBytes;dxfcode:Integer;const v1,v2:Strin
 
 function dxfEnCodeString(const v:String; const FileHdrInfo:TDXFHeaderInfo):string;
 
-function dxfLoadGroupCodeVertex(var rdr:TZMemReader;const DXFCode,CurrentDXFCode:Integer; var v:GDBvertex):Boolean;
-function dxfLoadGroupCodeVertex1(var rdr:TZMemReader;const DXFCode,CurrentDXFCode:Integer; var v:GDBvertex):Boolean;
+function dxfLoadGroupCodeVertex(var rdr:TZMemReader;const DXFCode,CurrentDXFCode:Integer; var v:TzePoint3d):Boolean;
+function dxfLoadGroupCodeVertex1(var rdr:TZMemReader;const DXFCode,CurrentDXFCode:Integer; var v:TzePoint3d):Boolean;
 function dxfLoadGroupCodeDouble(var rdr:TZMemReader;DXFCode,CurrentDXFCode:Integer; var v:Double):Boolean;
 function dxfLoadGroupCodeFloat(var rdr:TZMemReader;DXFCode,CurrentDXFCode:Integer; var v:Single):Boolean;
 function dxfLoadGroupCodeInteger(var rdr:TZMemReader;DXFCode,CurrentDXFCode:Integer; var v:Integer):Boolean;
@@ -156,7 +156,7 @@ procedure dxfLoadAddString(var rdr:TZMemReader;var v:String;const FileHdrInfo:TD
 function dxfGroupCode(const DXFCode:Integer):String;
 function DXFHandle(const sh:string):TDWGHandle;
 
-function dxfRequiredVertex2D(var rdr:TZMemReader;const RequiredDXFGroupCode:Integer;var CurrentDXFGroupCode:Integer):GDBvertex2D;
+function dxfRequiredVertex2D(var rdr:TZMemReader;const RequiredDXFGroupCode:Integer;var CurrentDXFGroupCode:Integer):TzePoint2d;
 function dxfRequiredDouble(var rdr:TZMemReader;const RequiredDXFGroupCode:Integer;var CurrentDXFGroupCode:Integer):Double;
 function dxfRequiredInteger(var rdr:TZMemReader;const RequiredDXFGroupCode:Integer;var CurrentDXFGroupCode:Integer):Integer;
 
@@ -352,7 +352,7 @@ begin
      result:=inttostr(DXFCode);
 end;
 
-procedure dxfvertexout(var f:TZctnrVectorBytes;dxfcode:Integer;const v:GDBvertex);
+procedure dxfvertexout(var f:TZctnrVectorBytes;dxfcode:Integer;const v:TzePoint3d);
 var s:String;
 begin
      s:=inttostr(dxfcode);
@@ -376,7 +376,7 @@ begin
      f.TXTAddStringEOL(s);
      //WriteString_EOL(outfile,s);
 end;
-procedure dxfvertexout1(var f:TZctnrVectorBytes;dxfcode:Integer;const v:GDBvertex);
+procedure dxfvertexout1(var f:TZctnrVectorBytes;dxfcode:Integer;const v:TzePoint3d);
 var s:String;
 begin
      s:=inttostr(dxfcode);
@@ -400,7 +400,7 @@ begin
      f.TXTAddStringEOL(s);
      //WriteString_EOL(outfile,s);
 end;
-procedure dxfvertex2dout(var f:TZctnrVectorBytes;dxfcode:Integer;const v:gdbvertex2d);
+procedure dxfvertex2dout(var f:TZctnrVectorBytes;dxfcode:Integer;const v:TzePoint2d);
 var s:String;
 begin
      s:=inttostr(dxfcode);
@@ -475,14 +475,14 @@ begin
      f.TXTAddStringEOL(v2);
 end;
 
-function dxfLoadGroupCodeVertex(var rdr:TZMemReader;const DXFCode,CurrentDXFCode:Integer; var v:GDBvertex):Boolean;
+function dxfLoadGroupCodeVertex(var rdr:TZMemReader;const DXFCode,CurrentDXFCode:Integer; var v:TzePoint3d):Boolean;
 begin
      result:=false;
      if CurrentDXFCode=DXFCode then begin v.x:=rdr.ParseDouble; result:=true end
 else if CurrentDXFCode=DXFCode+10 then begin v.y:=rdr.ParseDouble; result:=true end
 else if CurrentDXFCode=DXFCode+20 then begin v.z:=rdr.ParseDouble; result:=true end;
 end;
-function dxfRequiredVertex2d(var rdr:TZMemReader;const RequiredDXFGroupCode:Integer;var CurrentDXFGroupCode:Integer):GDBvertex2d;
+function dxfRequiredVertex2d(var rdr:TZMemReader;const RequiredDXFGroupCode:Integer;var CurrentDXFGroupCode:Integer):TzePoint2d;
 begin
   if CurrentDXFGroupCode=RequiredDXFGroupCode then begin
     result.x:=rdr.ParseDouble;
@@ -511,7 +511,7 @@ begin
   end else
     raise EDXFReadException.CreateFmt(cDXFError_WrogGroupCode,[RequiredDXFGroupCode,CurrentDXFGroupCode]);
 end;
-function dxfLoadGroupCodeVertex1(var rdr:TZMemReader;const DXFCode,CurrentDXFCode:Integer; var v:GDBvertex):Boolean;
+function dxfLoadGroupCodeVertex1(var rdr:TZMemReader;const DXFCode,CurrentDXFCode:Integer; var v:TzePoint3d):Boolean;
 //var s:String;
 begin
      result:=false;

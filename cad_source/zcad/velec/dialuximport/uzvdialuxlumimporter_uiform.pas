@@ -53,7 +53,7 @@ type
   PLightMappingNodeData = ^TLightMappingNodeData;
   TLightMappingNodeData = record
     LumKey: string;             // Идентификатор светильника
-    Center: GDBvertex;          // Координаты центра (первого светильника)
+    Center: TzePoint3d;          // Координаты центра (первого светильника)
     SelectedBlockName: string;  // Выбранное имя блока
     LightIndices: TIntegerList; // Индексы всех светильников с этим LumKey
   end;

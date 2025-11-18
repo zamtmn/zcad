@@ -40,9 +40,9 @@ type
   duplicade_com=object(copy_com)
     procedure CommandStart(const Context:TZCADCommandContext;
       Operands:TCommandOperands);virtual;
-    //function CalcTransformMatrix(p1,p2: GDBvertex):DMatrix4D; virtual;
-    function AfterClick(const Context:TZCADCommandContext;wc:GDBvertex;
-      mc:GDBvertex2DI;var button:byte;osp:pos_record):integer;virtual;
+    //function CalcTransformMatrix(p1,p2: GDBvertex):DMatrix4d; virtual;
+    function AfterClick(const Context:TZCADCommandContext;wc:TzePoint3d;
+      mc:TzePoint2i;var button:byte;osp:pos_record):integer;virtual;
     constructor init(cn:string;SA,DA:TCStartAttr);
   end;
 
@@ -100,8 +100,8 @@ begin
   end;
 end;
 
-function duplicade_com.AfterClick(const Context:TZCADCommandContext;wc:GDBvertex;
-  mc:GDBvertex2DI;var button:byte;osp:pos_record):integer;
+function duplicade_com.AfterClick(const Context:TZCADCommandContext;wc:TzePoint3d;
+  mc:TzePoint2i;var button:byte;osp:pos_record):integer;
 begin
   Result:=inherited;
   if (button and MZW_LBUTTON)<>0 then

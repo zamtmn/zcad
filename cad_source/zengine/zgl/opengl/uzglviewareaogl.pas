@@ -63,7 +63,7 @@ type
 const
   maxgrid=100;
 var
-  gridarray:array [0..maxgrid,0..maxgrid] of GDBvertex2S;
+  gridarray:array [0..maxgrid,0..maxgrid] of TzePoint2s;
 implementation
 //uses mainwindow;
 function TOpenGLViewArea.CreateRC(_maxdetail:Boolean=false):TDrawContext;
@@ -182,9 +182,9 @@ begin
 end;
 procedure TOpenGLViewArea.DrawGrid;
 var
-  pg:PGDBvertex2S;
+  pg:PzePoint2s;
   i,j: Integer;
-  v,v1:gdbvertex;
+  v,v1:TzePoint3d;
 begin
   //if sysvar.DWG.DWG_DrawGrid<>nil then
   if (pdwg^.DrawGrid)and(param.md.WPPointUR.z=1) then

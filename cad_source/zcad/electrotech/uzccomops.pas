@@ -101,7 +101,7 @@ type
                      end;
   {REGISTERRECORDTYPE GDBLineOps}
      GDBLineOps=record
-                  lBegin,lEnd:GDBvertex;
+                  lBegin,lEnd:TzePoint3d;
               end;
    {REGISTEROBJECTTYPE OPS_SPBuild}
   OPS_SPBuild= object(FloatInsert_com)
@@ -111,7 +111,7 @@ type
 var
    pco,pco2:pCommandRTEdObjectPlugin;
    //pwnd:POGLWndtype;
-   t3dp: gdbvertex;
+   t3dp: TzePoint3d;
    //pgdbinplugin: PTZCADDrawingsManager;
    //psysvarinplugin: pgdbsysvariable;
    pvarman:pvarmanagerdef;
@@ -130,17 +130,17 @@ var
 //function getprogramlog:pointer; external 'cad.exe';
 //function getcommandmanager:pointer;external 'cad.exe';
 //function getgdb: pointer; external 'cad.exe';
-//procedure addblockinsert(pva: PGDBObjEntityOpenArray; point: gdbvertex; scale, angle: gldouble; s: pchar);external 'cad.exe';
-//function Vertexmorph(Vector1, Vector2: GDBVertex; a: gldouble): GDBVertex; external 'cad.exe';
-//function VertexDmorph(Vector1, Vector2: GDBVertex; a: gldouble): GDBVertex; external 'cad.exe';
-//function Vertexlength(Vector1, Vector2: GDBVertex): gldouble; external 'cad.exe';
-//function Vertexangle(Vector1, Vector2: GDBVertex): gldouble; external 'cad.exe';
-//function Vertexdmorphabs(Vector1, Vector2: GDBVertex; a: gldouble): GDBVertex; external 'cad.exe';
-//function Vertexmorphabs(Vector1, Vector2: GDBVertex; a: gldouble): GDBVertex; external 'cad.exe';
+//procedure addblockinsert(pva: PGDBObjEntityOpenArray; point: TzePoint3d; scale, angle: gldouble; s: pchar);external 'cad.exe';
+//function Vertexmorph(Vector1, Vector2: TzePoint3d; a: gldouble): TzePoint3d; external 'cad.exe';
+//function VertexDmorph(Vector1, Vector2: TzePoint3d; a: gldouble): TzePoint3d; external 'cad.exe';
+//function Vertexlength(Vector1, Vector2: TzePoint3d): gldouble; external 'cad.exe';
+//function Vertexangle(Vector1, Vector2: TzePoint3d): gldouble; external 'cad.exe';
+//function Vertexdmorphabs(Vector1, Vector2: TzePoint3d; a: gldouble): TzePoint3d; external 'cad.exe';
+//function Vertexmorphabs(Vector1, Vector2: TzePoint3d; a: gldouble): TzePoint3d; external 'cad.exe';
 //function redrawoglwnd: integer; external 'cad.exe';
 //function getpsysvar: pointer; external 'cad.exe';
 //function GetPZWinManager:PTZWinManager; external 'cad.exe';
-//procedure GDBObjLineInit(own:PGDBObjGenericSubEntry;var pobjline: PGDBObjLine; layerindex, LW: smallint; p1, p2: GDBvertex); external 'cad.exe';
+//procedure GDBObjLineInit(own:PGDBObjGenericSubEntry;var pobjline: PGDBObjLine; layerindex, LW: smallint; p1, p2: TzePoint3d); external 'cad.exe';
 
 //function GetPVarMan: pointer; external 'cad.exe';
 
@@ -154,7 +154,7 @@ var
 procedure finalize;}
 
 implementation
-function docorrecttogrid(const point:GDBVertex;need:Boolean):GDBVertex;
+function docorrecttogrid(const point:TzePoint3d;need:Boolean):TzePoint3d;
 var
    gr:Boolean;
 begin
@@ -217,7 +217,7 @@ begin
             end;
      end;
 end;
-procedure place2(pva:PGDBObjEntityTreeArray;basepoint, dir: gdbvertex; count: integer; length,sd,dd: Double; name: pansichar;angle:Double;norm:Boolean;scaleblock:Double;ps:TPlaceSensorsStrategy);
+procedure place2(pva:PGDBObjEntityTreeArray;basepoint, dir: TzePoint3d; count: integer; length,sd,dd: Double; name: pansichar;angle:Double;norm:Boolean;scaleblock:Double;ps:TPlaceSensorsStrategy);
 var //line2: GDBLineOps;
     i: integer;
     d: TPlaceParam;
@@ -248,11 +248,11 @@ begin
          end;
      end;
 end;
-procedure placedatcic(pva:PGDBObjEntityTreeArray;p1, p2: gdbvertex; InitialSD, InitialDD: Double; name: pansichar;norm:Boolean;scaleblock: Double;ps:TPlaceSensorsStrategy);
+procedure placedatcic(pva:PGDBObjEntityTreeArray;p1, p2: TzePoint3d; InitialSD, InitialDD: Double; name: pansichar;norm:Boolean;scaleblock: Double;ps:TPlaceSensorsStrategy);
 var dx, dy: Double;
   FirstLine, SecondLine: GDBLineOps;
   FirstCount, SecondCount, i: integer;
-  dir: gdbvertex;
+  dir: TzePoint3d;
   mincount:integer;
   FirstLineLength,SecondLineLength:double;
   d: TPlaceParam;
@@ -397,7 +397,7 @@ begin
   zcShowCommandParams(SysUnit.TypeName2PTD('CommandRTEdObject'),pco);
   result:=cmd_ok;
 end;
-function BeforeClick(const Context:TZCADCommandContext;wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record;mclick:Integer): integer;
+function BeforeClick(const Context:TZCADCommandContext;wc: TzePoint3d; mc: TzePoint2i; var button: Byte;osp:pos_record;mclick:Integer): integer;
 begin
   result:=mclick;
   if (button and MZW_LBUTTON)<>0 then
@@ -407,7 +407,7 @@ begin
       t3dp:=wc;
     end;
 end;
-function AfterClick(const Context:TZCADCommandContext;wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record;mclick:Integer):Integer;
+function AfterClick(const Context:TZCADCommandContext;wc: TzePoint3d; mc: TzePoint2i; var button: Byte;osp:pos_record;mclick:Integer):Integer;
 var
 pl:pgdbobjline;
 //debug:string;
@@ -867,12 +867,12 @@ begin
   zcRedrawCurrentDrawing;
   result:=cmd_ok;
 end;
-procedure InsertDat2(datname,name:String;var currentcoord:GDBVertex; var root:GDBObjRoot);
+procedure InsertDat2(datname,name:String;var currentcoord:TzePoint3d; var root:GDBObjRoot);
 var
    pv:pGDBObjDevice;
    pt:pGDBObjMText;
    lx,{rx,}uy,dy:Double;
-   tv:gdbvertex;
+   tv:TzePoint3d;
    DC:TDrawContext;
 begin
      //name:=uzbstrproc.Tria_Utf8ToAnsi(name);
@@ -911,12 +911,12 @@ begin
 
      currentcoord.y:=currentcoord.y+dy+uy;
 end;
-function InsertDat(datname,sname,ename:String;datcount:Integer;var currentcoord:GDBVertex; var root:GDBObjRoot):pgdbobjline;
+function InsertDat(datname,sname,ename:String;datcount:Integer;var currentcoord:TzePoint3d; var root:GDBObjRoot):pgdbobjline;
 var
 //   pv:pGDBObjDevice;
 //   lx,rx,uy,dy:Double;
    pl:pgdbobjline;
-   oldcoord,oldcoord2:gdbvertex;
+   oldcoord,oldcoord2:TzePoint3d;
    DC:TDrawContext;
 begin
      dc:=drawings.GetCurrentDWG^.CreateDrawingRC;
@@ -980,7 +980,7 @@ var count: Integer;
     cman:TCableManager;
     pv:pGDBObjDevice;
 
-    coord,currentcoord:GDBVertex;
+    coord,currentcoord:TzePoint3d;
 //    pbd:PGDBObjBlockdef;
     {pvn,pvm,}pvmc{,pvl}:pvardesk;
 
@@ -1194,7 +1194,7 @@ else if (sd.PFirstSelectedEnt^.GetObjType=GDBDeviceID) then
   zcShowCommandParams(SysUnit.TypeName2PTD('CommandRTEdObject'),pco2);
   OPSPlaceSmokeDetectorOrtoParam.DMC:=TOPSMDC_1_2;
 end;
-function PlBeforeClick(const Context:TZCADCommandContext;wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record;mclick:Integer): integer;
+function PlBeforeClick(const Context:TZCADCommandContext;wc: TzePoint3d; mc: TzePoint2i; var button: Byte;osp:pos_record;mclick:Integer): integer;
 begin
   result:=mclick;
   if (button and MZW_LBUTTON)<>0 then
@@ -1203,11 +1203,11 @@ begin
       t3dp:=wc;
     end
 end;
-procedure placedev(pva:PGDBObjEntityTreeArray;p1, p2: gdbvertex; nmax, nmin: Integer; name: pansichar;a:Double;aa:Boolean;Norm:Boolean);
+procedure placedev(pva:PGDBObjEntityTreeArray;p1, p2: TzePoint3d; nmax, nmin: Integer; name: pansichar;a:Double;aa:Boolean;Norm:Boolean);
 var dx, dy: Double;
   line1, line2: GDBLineOps;
   l1, l2, i: integer;
-  dir: gdbvertex;
+  dir: TzePoint3d;
 //  mincount:integer;
   sd,{dd,}sdd,{ddd,}angle:double;
   linelength:double;
@@ -1282,7 +1282,7 @@ begin
        end
   end;
 end;
-function PlAfterClick(const Context:TZCADCommandContext;wc: GDBvertex; mc: GDBvertex2DI; var button: Byte;osp:pos_record;mclick:Integer): integer;
+function PlAfterClick(const Context:TZCADCommandContext;wc: TzePoint3d; mc: TzePoint2i; var button: Byte;osp:pos_record;mclick:Integer): integer;
 var
 pl:pgdbobjline;
 //debug:string;

@@ -58,7 +58,7 @@ type
       const Actuality:TVisActuality;var Counters:TCameraCounters;ProjectProc:GDBProjectProc;
       const zoom,currentdegradationfactor:double);virtual;
     function onpoint(var objects:TZctnrVectorPGDBaseEntity;
-      const point:GDBVertex):boolean;virtual;
+      const point:TzePoint3d):boolean;virtual;
     procedure BuildGeometry(var drawing:TDrawingDef);virtual;
     procedure FormatAfterDXFLoad(var drawing:TDrawingDef;
       var DC:TDrawContext);virtual;
@@ -90,7 +90,7 @@ begin
 end;
 
 function GDBObjComplex.onpoint(var objects:TZctnrVectorPGDBaseEntity;
-  const point:GDBVertex):boolean;
+  const point:TzePoint3d):boolean;
 begin
   Result:=ConstObjArray.onpoint(objects,point);
 end;
@@ -108,7 +108,7 @@ end;
 
 procedure GDBObjComplex.rtmodifyonepoint;
 var
-  m:DMatrix4D;
+  m:DMatrix4d;
 begin
   m:=onematrix;
   if rtmod.point.pointtype=os_point then begin
@@ -124,7 +124,7 @@ end;
 procedure GDBObjComplex.remaponecontrolpoint(pdesc:pcontrolpointdesc;
   ProjectProc:GDBProjectProc);
 var
-  tv:GDBvertex;
+  tv:TzePoint3d;
 begin
   if pdesc^.pointtype=os_point then begin
     if pdesc.PDrawable=nil then begin

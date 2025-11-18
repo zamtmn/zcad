@@ -35,7 +35,7 @@ const
 
 function AddFontResourceFile(const FontResourceFileName:string):integer;
 function SetGraphicsMode_(hdc:HDC; iMode:longint):longint;
-function SetWorldTransform_(hdc:HDC; const tm:DMatrix4D):WINBOOL;
+function SetWorldTransform_(hdc:HDC; const tm:DMatrix4d):WINBOOL;
 function SetTextAlignToBaseLine(hdc:HDC):UINT;
 implementation
 {$IFDEF WINDOWS}
@@ -68,7 +68,7 @@ begin
     result:=1;
   {$ENDIF}
 end;
-function SetWorldTransform_(hdc:HDC; const tm:DMatrix4D):WINBOOL;
+function SetWorldTransform_(hdc:HDC; const tm:DMatrix4d):WINBOOL;
 {$IFDEF WINDOWS}
   var
     _m:XFORM;

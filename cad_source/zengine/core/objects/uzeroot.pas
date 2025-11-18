@@ -33,10 +33,10 @@ type
   GDBObjRoot= object(GDBObjGenericSubEntry)
     private
       fInfrustum:TActuality;
-      fFrustumPosition:GDBvertex;
+      fFrustumPosition:TzePoint3d;
     protected
       function GetInfrustumFromTree:TActuality;virtual;
-      procedure SetObjMatrix(const AObjMatrix:DMatrix4D);virtual;
+      procedure SetObjMatrix(const AObjMatrix:DMatrix4d);virtual;
     public
       constructor initnul;
       destructor done;virtual;
@@ -45,7 +45,7 @@ type
       procedure getoutbound(var DC:TDrawContext);virtual;
       function GetHandle:PtrInt;virtual;
       procedure EraseMi(pobj:pGDBObjEntity;pobjinarray:Integer;var drawing:TDrawingDef);virtual;
-      function GetMatrix:PDMatrix4D;virtual;
+      function GetMatrix:PDMatrix4d;virtual;
       procedure DrawWithAttrib(var DC:TDrawContext;const inFrustumState:TInBoundingVolume);virtual;
       function CalcInFrustum(const frustum:ClipArray;const Actuality:TVisActuality;var Counters:TCameraCounters; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double):Boolean;virtual;
       procedure CalcInFrustumByTree(const frustum:ClipArray;const Actuality:TVisActuality;var enttree:TEntTreeNode;var Counters:TCameraCounters; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double);virtual;
@@ -56,14 +56,14 @@ type
       procedure SetInFrustum(infrustumactualy:TActuality;var Counters:TCameraCounters);virtual;
       procedure SetNotInFrustum(infrustumactualy:TActuality;var Counters:TCameraCounters);virtual;
 
-      property FrustumPosition:GDBvertex read fFrustumPosition write fFrustumPosition;
+      property FrustumPosition:TzePoint3d read fFrustumPosition write fFrustumPosition;
   end;
 
 procedure DoFormat(var ConnectedArea:GDBObjGenericSubEntry;var ents,ents2Connected:GDBObjOpenArrayOfPV;var drawing:TDrawingDef;var DC:TDrawContext;lpsh:TLPSHandle;Stage:TEFStages{=EFAllStages});
 
 implementation
 
-procedure GDBObjRoot.SetObjMatrix(const AObjMatrix:DMatrix4D);
+procedure GDBObjRoot.SetObjMatrix(const AObjMatrix:DMatrix4d);
 begin
   inherited;
   fFrustumPosition.x:=AObjMatrix.mtr[3].v[0];
@@ -97,9 +97,9 @@ begin
   InFrustumAABB:=enttree.NodeData.InFrustumBoundingBox;
 end;
 
-function correctFrustum(const frustum:ClipArray;const objmatrix:DMatrix4D;frustumpos:GDBvertex):ClipArray;
+function correctFrustum(const frustum:ClipArray;const objmatrix:DMatrix4d;frustumpos:TzePoint3d):ClipArray;
 var
-  im:DMatrix4D;
+  im:DMatrix4d;
 begin
   im:=ObjMatrix;
   im.mtr[3].v[0]:=frustumpos.x;

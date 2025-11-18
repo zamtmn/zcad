@@ -40,7 +40,7 @@ GDBfont= object(GDBNamedObject)
     destructor done;virtual;
     function GetOrCreateSymbolInfo(symbol:Integer):PGDBsymdolinfo;
     function GetOrReplaceSymbolInfo(symbol:Integer):PGDBsymdolinfo;
-    procedure CreateSymbol(drawer:TZGLAbstractDrawer;TxtHeight:double;var geom:ZGLVectorObject;_symbol:Integer;const objmatrix:DMatrix4D;matr:DMatrix4D;var Bound:TBoundingRect;var LLSymbolLineIndex:TArrayIndex);
+    procedure CreateSymbol(drawer:TZGLAbstractDrawer;TxtHeight:double;var geom:ZGLVectorObject;_symbol:Integer;const objmatrix:DMatrix4d;matr:DMatrix4d;var Bound:TBoundingRect;var LLSymbolLineIndex:TArrayIndex);
   end;
 {EXPORT-}
 var
@@ -54,9 +54,9 @@ begin
   pf^.init(name);
 end;
 
-procedure GDBfont.CreateSymbol(drawer:TZGLAbstractDrawer;TxtHeight:double;var geom:ZGLVectorObject;_symbol:Integer;const objmatrix:DMatrix4D;matr:DMatrix4D;var Bound:TBoundingRect;var LLSymbolLineIndex:TArrayIndex);
+procedure GDBfont.CreateSymbol(drawer:TZGLAbstractDrawer;TxtHeight:double;var geom:ZGLVectorObject;_symbol:Integer;const objmatrix:DMatrix4d;matr:DMatrix4d;var Bound:TBoundingRect;var LLSymbolLineIndex:TArrayIndex);
 var
-  v,v0,true0Y,fact0y:GDBvertex;
+  v,v0,true0Y,fact0y:TzePoint3d;
   sqrsymh:Double;
   psyminfo:PGDBsymdolinfo;
   LLSymbolIndex:TArrayIndex;
@@ -139,11 +139,11 @@ begin
         PLLSymbolLine^.FirstOutBoundIndex:=PLLPsymbol^.OutBoundIndex;
         PLLSymbolLine^.SymbolsParam.FirstSymMatr:=uzegeometry.MatrixMultiply(matr,objmatrix);
         PLLSymbolLine^.SymbolsParam.Rotate:=Vertexangle(CreateVertex2D(0,0),CreateVertex2D(PLLSymbolLine^.SymbolsParam.FirstSymMatr.mtr[0].v[0],PLLSymbolLine^.SymbolsParam.FirstSymMatr.mtr[0].v[1]));
-        PLLSymbolLine^.SymbolsParam.sx:=oneVertexlength(PGDBVertex(@PLLSymbolLine^.SymbolsParam.FirstSymMatr.mtr[0])^)/oneVertexlength(PGDBVertex(@PLLSymbolLine^.SymbolsParam.FirstSymMatr.mtr[1])^);
-        true0Y:=VectorDot(PGDBVertex(@PLLSymbolLine^.SymbolsParam.FirstSymMatr.mtr[2])^,PGDBVertex(@PLLSymbolLine^.SymbolsParam.FirstSymMatr.mtr[0])^);
+        PLLSymbolLine^.SymbolsParam.sx:=oneVertexlength(PzePoint3d(@PLLSymbolLine^.SymbolsParam.FirstSymMatr.mtr[0])^)/oneVertexlength(PzePoint3d(@PLLSymbolLine^.SymbolsParam.FirstSymMatr.mtr[1])^);
+        true0Y:=VectorDot(PzePoint3d(@PLLSymbolLine^.SymbolsParam.FirstSymMatr.mtr[2])^,PzePoint3d(@PLLSymbolLine^.SymbolsParam.FirstSymMatr.mtr[0])^);
         if not IsVectorNul(true0Y) then
           true0Y:=NormalizeVertex(true0Y);
-        fact0y:=PGDBVertex(@PLLSymbolLine^.SymbolsParam.FirstSymMatr.mtr[1])^;
+        fact0y:=PzePoint3d(@PLLSymbolLine^.SymbolsParam.FirstSymMatr.mtr[1])^;
         if not IsVectorNul(fact0y) then
           fact0y:=NormalizeVertex(fact0y);
         PLLSymbolLine^.SymbolsParam.Oblique:=arccos(scalardot(true0Y,fact0y));

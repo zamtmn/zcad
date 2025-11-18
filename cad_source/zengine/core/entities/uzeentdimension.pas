@@ -33,31 +33,31 @@ type
   PTDXFDimData=^TDXFDimData;
 
   TDXFDimData=record
-    P10InWCS:GDBVertex;
-    P11InOCS:GDBVertex;
-    P12InOCS:GDBVertex;
-    P13InWCS:GDBVertex;
-    P14InWCS:GDBVertex;
-    P15InWCS:GDBVertex;
-    P16InOCS:GDBVertex;
+    P10InWCS:TzePoint3d;
+    P11InOCS:TzePoint3d;
+    P12InOCS:TzePoint3d;
+    P13InWCS:TzePoint3d;
+    P14InWCS:TzePoint3d;
+    P15InWCS:TzePoint3d;
+    P16InOCS:TzePoint3d;
     TextMoved:boolean;
     NeedTextLeader:boolean;
-    MidPoint:GDBVertex;
+    MidPoint:TzePoint3d;
   end;
   PGDBObjDimension=^GDBObjDimension;
 
   GDBObjDimension=object(GDBObjComplex)
     DimData:TDXFDimData;
     PDimStyle:PGDBDimStyle;
-    vectorD,vectorN,vectorT:GDBVertex;
+    vectorD,vectorN,vectorT:TzePoint3d;
     TextTParam,TextAngle,DimAngle:double;
     TextInside:boolean;
-    TextOffset:GDBVertex;
+    TextOffset:TzePoint3d;
     dimtextw,dimtexth:double;
     dimtext:TDXFEntsInternalStringType;
-    function DrawDimensionLineLinePart(p1,p2:GDBVertex;
+    function DrawDimensionLineLinePart(p1,p2:TzePoint3d;
       var drawing:TDrawingDef):pgdbobjline;
-    function DrawExtensionLineLinePart(p1,p2:GDBVertex;
+    function DrawExtensionLineLinePart(p1,p2:TzePoint3d;
       var drawing:TDrawingDef;part:integer):pgdbobjline;
     procedure remaponecontrolpoint(pdesc:pcontrolpointdesc;
       ProjectProc:GDBProjectProc);virtual;
@@ -68,25 +68,25 @@ type
     function GetDimStr(
       var drawing:TDrawingDef):TDXFEntsInternalStringType;virtual;
     procedure rtmodifyonepoint(const rtmod:TRTModifyData);virtual;
-    function P10ChangeTo(const tv:GDBVertex):GDBVertex;virtual;
-    function P11ChangeTo(const tv:GDBVertex):GDBVertex;virtual;
-    function P12ChangeTo(const tv:GDBVertex):GDBVertex;virtual;
-    function P13ChangeTo(const tv:GDBVertex):GDBVertex;virtual;
-    function P14ChangeTo(const tv:GDBVertex):GDBVertex;virtual;
-    function P15ChangeTo(const tv:GDBVertex):GDBVertex;virtual;
-    function P16ChangeTo(const tv:GDBVertex):GDBVertex;virtual;
-    procedure transform(const t_matrix:DMatrix4D);virtual;
-    procedure TransformAt(p:PGDBObjEntity;t_matrix:PDMatrix4D);virtual;
-    procedure DrawDimensionText(p:GDBVertex;var drawing:TDrawingDef;
+    function P10ChangeTo(const tv:TzePoint3d):TzePoint3d;virtual;
+    function P11ChangeTo(const tv:TzePoint3d):TzePoint3d;virtual;
+    function P12ChangeTo(const tv:TzePoint3d):TzePoint3d;virtual;
+    function P13ChangeTo(const tv:TzePoint3d):TzePoint3d;virtual;
+    function P14ChangeTo(const tv:TzePoint3d):TzePoint3d;virtual;
+    function P15ChangeTo(const tv:TzePoint3d):TzePoint3d;virtual;
+    function P16ChangeTo(const tv:TzePoint3d):TzePoint3d;virtual;
+    procedure transform(const t_matrix:DMatrix4d);virtual;
+    procedure TransformAt(p:PGDBObjEntity;t_matrix:PDMatrix4d);virtual;
+    procedure DrawDimensionText(p:TzePoint3d;var drawing:TDrawingDef;
       var DC:TDrawContext);virtual;
-    function GetTextOffset(var drawing:TDrawingDef):GDBVertex;virtual;
-    function TextNeedOffset(const dimdir:gdbvertex):boolean;virtual;
+    function GetTextOffset(var drawing:TDrawingDef):TzePoint3d;virtual;
+    function TextNeedOffset(const dimdir:TzePoint3d):boolean;virtual;
     function TextAlwaysMoved:boolean;virtual;
     function GetPSize:double;virtual;
     procedure CalcTextAngle;virtual;
-    procedure CalcTextParam(dlStart,dlEnd:Gdbvertex);virtual;
+    procedure CalcTextParam(dlStart,dlEnd:TzePoint3d);virtual;
     procedure CalcTextInside;virtual;
-    procedure DrawDimensionLine(p1,p2:GDBVertex;
+    procedure DrawDimensionLine(p1,p2:TzePoint3d;
       supress1,supress2,drawlinetotext:boolean;var drawing:TDrawingDef;var DC:TDrawContext);
     function GetDIMTMOVE:TDimTextMove;virtual;
     function GetDIMSCALE:double;virtual;
@@ -103,7 +103,7 @@ begin
     Result:=1;
 end;
 
-procedure GDBObjDimension.DrawDimensionLine(p1,p2:GDBVertex;
+procedure GDBObjDimension.DrawDimensionLine(p1,p2:TzePoint3d;
   supress1,supress2,drawlinetotext:boolean;var drawing:TDrawingDef;var DC:TDrawContext);
 var
   l:double;
@@ -111,7 +111,7 @@ var
   tbp0,tbp1:TDimArrowBlockParam;
   pv:pGDBObjBlockInsert;
   p0inside,p1inside:boolean;
-  pp1,pp2:GDBVertex;
+  pp1,pp2:TzePoint3d;
   zangle:double;
 begin
   l:=uzegeometry.Vertexlength(p1,p2);
@@ -286,7 +286,7 @@ begin
     Result:=-Result;
 end;
 
-function GDBObjDimension.TextNeedOffset(const dimdir:gdbvertex):boolean;
+function GDBObjDimension.TextNeedOffset(const dimdir:TzePoint3d):boolean;
 begin
   Result:=(((textangle<>0)or(PDimStyle.Text.DIMTAD=DTVPCenters))and
     (TextInside and not PDimStyle.Text.DIMTIH))or(abs(dimdir.x)<eps)or(DimData.TextMoved);
@@ -297,10 +297,10 @@ begin
   Result:=False;
 end;
 
-function GDBObjDimension.GetTextOffset(var drawing:TDrawingDef):GDBVertex;
+function GDBObjDimension.GetTextOffset(var drawing:TDrawingDef):TzePoint3d;
 var
   l,h:double;
-  dimdir:gdbvertex;
+  dimdir:TzePoint3d;
   dimtxtstyle:PGDBTextStyle;
   txtlines:XYZWStringArray;
 begin
@@ -365,12 +365,12 @@ begin
   Result:=PDimStyle.Placing.DIMTMOVE;
 end;
 
-procedure GDBObjDimension.DrawDimensionText(p:GDBVertex;var drawing:TDrawingDef;
+procedure GDBObjDimension.DrawDimensionText(p:TzePoint3d;var drawing:TDrawingDef;
   var DC:TDrawContext);
 var
   ptext:PGDBObjMText;
   dimtxtstyle:PGDBTextStyle;
-  p2:GDBVertex;
+  p2:TzePoint3d;
   textsize:double;
 begin
   dimtext:=GetDimStr(drawing);
@@ -451,37 +451,37 @@ begin
   DimData.P16InOCS:=VectorTransform3D(PGDBObjDimension(p)^.DimData.P16InOCS,t_matrix^);
 end;
 
-function GDBObjDimension.P10ChangeTo(const tv:GDBVertex):GDBVertex;
+function GDBObjDimension.P10ChangeTo(const tv:TzePoint3d):TzePoint3d;
 begin
   Result:=tv;
 end;
 
-function GDBObjDimension.P11ChangeTo(const tv:GDBVertex):GDBVertex;
+function GDBObjDimension.P11ChangeTo(const tv:TzePoint3d):TzePoint3d;
 begin
   Result:=tv;
 end;
 
-function GDBObjDimension.P12ChangeTo(const tv:GDBVertex):GDBVertex;
+function GDBObjDimension.P12ChangeTo(const tv:TzePoint3d):TzePoint3d;
 begin
   Result:=tv;
 end;
 
-function GDBObjDimension.P13ChangeTo(const tv:GDBVertex):GDBVertex;
+function GDBObjDimension.P13ChangeTo(const tv:TzePoint3d):TzePoint3d;
 begin
   Result:=tv;
 end;
 
-function GDBObjDimension.P14ChangeTo(const tv:GDBVertex):GDBVertex;
+function GDBObjDimension.P14ChangeTo(const tv:TzePoint3d):TzePoint3d;
 begin
   Result:=tv;
 end;
 
-function GDBObjDimension.P15ChangeTo(const tv:GDBVertex):GDBVertex;
+function GDBObjDimension.P15ChangeTo(const tv:TzePoint3d):TzePoint3d;
 begin
   Result:=tv;
 end;
 
-function GDBObjDimension.P16ChangeTo(const tv:GDBVertex):GDBVertex;
+function GDBObjDimension.P16ChangeTo(const tv:TzePoint3d):TzePoint3d;
 begin
   Result:=tv;
 end;
@@ -556,7 +556,7 @@ end;
 procedure GDBObjDimension.remaponecontrolpoint(pdesc:pcontrolpointdesc;
   ProjectProc:GDBProjectProc);
 var
-  tv:GDBvertex;
+  tv:TzePoint3d;
 begin
   if pdesc^.pointtype=os_p10 then begin
     pdesc.worldcoord:=DimData.P10InWCS;
@@ -589,7 +589,7 @@ begin
   end;
 end;
 
-function GDBObjDimension.DrawDimensionLineLinePart(p1,p2:GDBVertex;
+function GDBObjDimension.DrawDimensionLineLinePart(p1,p2:TzePoint3d;
   var drawing:TDrawingDef):pgdbobjline;
 begin
   Result:=pointer(ConstObjArray.CreateInitObj(GDBlineID,@self));
@@ -601,7 +601,7 @@ begin
   Result.CoordInOCS.lEnd:=p2;
 end;
 
-function GDBObjDimension.DrawExtensionLineLinePart(p1,p2:GDBVertex;
+function GDBObjDimension.DrawExtensionLineLinePart(p1,p2:TzePoint3d;
   var drawing:TDrawingDef;part:integer):pgdbobjline;
 begin
   Result:=pointer(ConstObjArray.CreateInitObj(GDBlineID,@self));

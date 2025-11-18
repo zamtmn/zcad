@@ -57,11 +57,11 @@ TZGLGeneralDrawer=class(TZGLAbstractDrawer)
                         procedure DrawLine2DInDCS(const x1,y1,x2,y2:integer);override;
                         procedure DrawLine2DInDCS(const x1,y1,x2,y2:TStoredType);override;
                         procedure DrawClosedPolyLine2DInDCS(const coords:array of TStoredType);overload;override;
-                        procedure DrawLine3DInModelSpace(const p1,p2:gdbvertex;var matrixs:tmatrixs);override;
-                        procedure DrawPoint3DInModelSpace(const p:gdbvertex;var matrixs:tmatrixs);override;
-                        procedure DrawTriangle3DInModelSpace(const normal,p1,p2,p3:gdbvertex;var matrixs:tmatrixs);override;
-                        procedure DrawQuad3DInModelSpace(const normal,p1,p2,p3,p4:gdbvertex;var matrixs:tmatrixs);override;
-                        procedure DrawQuad3DInModelSpace(const p1,p2,p3,p4:gdbvertex;var matrixs:tmatrixs);override;
+                        procedure DrawLine3DInModelSpace(const p1,p2:TzePoint3d;var matrixs:tmatrixs);override;
+                        procedure DrawPoint3DInModelSpace(const p:TzePoint3d;var matrixs:tmatrixs);override;
+                        procedure DrawTriangle3DInModelSpace(const normal,p1,p2,p3:TzePoint3d;var matrixs:tmatrixs);override;
+                        procedure DrawQuad3DInModelSpace(const normal,p1,p2,p3,p4:TzePoint3d;var matrixs:tmatrixs);override;
+                        procedure DrawQuad3DInModelSpace(const p1,p2,p3,p4:TzePoint3d;var matrixs:tmatrixs);override;
                         procedure DrawAABB3DInModelSpace(const BoundingBox:TBoundingBox;var matrixs:tmatrixs);override;
                         procedure DrawContour3DInModelSpace(const pa:GDBPoint3dArray;var matrixs:tmatrixs;Closed:boolean=true);override;
                         procedure WorkAreaResize(rect:trect);override;
@@ -76,17 +76,17 @@ TZGLGeneralDrawer=class(TZGLAbstractDrawer)
                         procedure SetOGLMatrix(const cam:GDBObjCamera;const w,h:integer);override;
                         procedure PostRenderDraw;override;
 
-                        procedure pushMatrixAndSetTransform(const Transform:DMatrix4D;FromOneMatrix:Boolean=False);overload;override;
-                        procedure pushMatrixAndSetTransform(const Transform:DMatrix4F;FromOneMatrix:Boolean=False);overload;override;
+                        procedure pushMatrixAndSetTransform(const Transform:DMatrix4d;FromOneMatrix:Boolean=False);overload;override;
+                        procedure pushMatrixAndSetTransform(const Transform:DMatrix4f;FromOneMatrix:Boolean=False);overload;override;
                         procedure popMatrix;override;
-                        procedure AddToLCS(const v:GDBvertex);override;
+                        procedure AddToLCS(const v:TzePoint3d);override;
                         function SetLCSState(State:boolean):boolean;override;
-                        function SetLCS(const newLCS:GDBvertex):GDBvertex;override;
-                        function GetLCS:GDBvertex;override;
+                        function SetLCS(const newLCS:TzePoint3d):TzePoint3d;override;
+                        function GetLCS:TzePoint3d;override;
                    end;
    TLCSProp=record
-     CurrentCamCSOffset:GDBvertex;
-     CurrentCamCSOffsetS:GDBvertex3S;
+     CurrentCamCSOffset:TzePoint3d;
+     CurrentCamCSOffsetS:TzePoint3s;
      notuseLCS:Boolean;
    end;
 
@@ -102,7 +102,7 @@ begin
   Result:=LCS.notuseLCS;
   LCS.notuseLCS:=State;
 end;
-function TZGLGeneralDrawer.SetLCS(const newLCS:GDBvertex):GDBvertex;
+function TZGLGeneralDrawer.SetLCS(const newLCS:TzePoint3d):TzePoint3d;
 begin
   Result:=LCS.CurrentCamCSOffset;
   LCS.CurrentCamCSOffset:=newLCS;
@@ -110,12 +110,12 @@ begin
   LCS.CurrentCamCSOffsetS.y:=newLCS.y;
   LCS.CurrentCamCSOffsetS.z:=newLCS.z
 end;
-function TZGLGeneralDrawer.GetLCS:GDBvertex;
+function TZGLGeneralDrawer.GetLCS:TzePoint3d;
 begin
   Result:=LCS.CurrentCamCSOffset;
 end;
 
-procedure TZGLGeneralDrawer.AddToLCS(const v:GDBvertex);
+procedure TZGLGeneralDrawer.AddToLCS(const v:TzePoint3d);
 begin
   LCS.CurrentCamCSOffset:=LCS.CurrentCamCSOffset+v;
   LCS.CurrentCamCSOffsetS.x:=LCS.CurrentCamCSOffsetS.x+v.x;
@@ -125,10 +125,10 @@ end;
 procedure TZGLGeneralDrawer.popMatrix;
 begin
 end;
-procedure TZGLGeneralDrawer.pushMatrixAndSetTransform(const Transform:DMatrix4D;FromOneMatrix:Boolean=False);
+procedure TZGLGeneralDrawer.pushMatrixAndSetTransform(const Transform:DMatrix4d;FromOneMatrix:Boolean=False);
 begin
 end;
-procedure TZGLGeneralDrawer.pushMatrixAndSetTransform(const Transform:DMatrix4F;FromOneMatrix:Boolean=False);
+procedure TZGLGeneralDrawer.pushMatrixAndSetTransform(const Transform:DMatrix4f;FromOneMatrix:Boolean=False);
 begin
 end;
 function TZGLGeneralDrawer.GetLLPrimitivesCreator:TLLPrimitivesCreatorAbstract;
@@ -212,19 +212,19 @@ end;
 procedure TZGLGeneralDrawer.DrawClosedPolyLine2DInDCS(const coords:array of TStoredType);
 begin
 end;
-procedure TZGLGeneralDrawer.DrawLine3DInModelSpace(const p1,p2:gdbvertex;var matrixs:tmatrixs);
+procedure TZGLGeneralDrawer.DrawLine3DInModelSpace(const p1,p2:TzePoint3d;var matrixs:tmatrixs);
 begin
 end;
-procedure TZGLGeneralDrawer.DrawPoint3DInModelSpace(const p:gdbvertex;var matrixs:tmatrixs);
+procedure TZGLGeneralDrawer.DrawPoint3DInModelSpace(const p:TzePoint3d;var matrixs:tmatrixs);
 begin
 end;
-procedure TZGLGeneralDrawer.DrawTriangle3DInModelSpace(const normal,p1,p2,p3:gdbvertex;var matrixs:tmatrixs);
+procedure TZGLGeneralDrawer.DrawTriangle3DInModelSpace(const normal,p1,p2,p3:TzePoint3d;var matrixs:tmatrixs);
 begin
 end;
-procedure TZGLGeneralDrawer.DrawQuad3DInModelSpace(const normal,p1,p2,p3,p4:gdbvertex;var matrixs:tmatrixs);
+procedure TZGLGeneralDrawer.DrawQuad3DInModelSpace(const normal,p1,p2,p3,p4:TzePoint3d;var matrixs:tmatrixs);
 begin
 end;
-procedure TZGLGeneralDrawer.DrawQuad3DInModelSpace(const p1,p2,p3,p4:gdbvertex;var matrixs:tmatrixs);
+procedure TZGLGeneralDrawer.DrawQuad3DInModelSpace(const p1,p2,p3,p4:TzePoint3d;var matrixs:tmatrixs);
 begin
 end;
 procedure TZGLGeneralDrawer.DrawAABB3DInModelSpace(const BoundingBox:TBoundingBox;var matrixs:tmatrixs);
@@ -255,7 +255,7 @@ begin
                                createvertex(BoundingBox.LBN.x,BoundingBox.RTF.y,BoundingBox.RTF.Z),matrixs);
 end;
 procedure TZGLGeneralDrawer.DrawContour3DInModelSpace(const pa:GDBPoint3dArray;var matrixs:tmatrixs;Closed:boolean=true);
-var p,pold,pstart:PGDBVertex;
+var p,pold,pstart:PzePoint3d;
     i:Integer;
 begin
   if pa.count<2 then exit;

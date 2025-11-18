@@ -52,8 +52,8 @@ procedure Circle_com_CommandEnd(_self:pointer);
 begin
 end;
 
-function Circle_com_BeforeClick(const Context:TZCADCommandContext;wc:GDBvertex;
-  mc:GDBvertex2DI;var button:byte;osp:pos_record;mclick:integer):integer;
+function Circle_com_BeforeClick(const Context:TZCADCommandContext;wc:TzePoint3d;
+  mc:TzePoint2i;var button:byte;osp:pos_record;mclick:integer):integer;
 var
   dc:TDrawContext;
 begin
@@ -76,8 +76,8 @@ begin
   Result:=0;
 end;
 
-function Circle_com_AfterClick(const Context:TZCADCommandContext;wc:GDBvertex;
-  mc:GDBvertex2DI;var button:byte;osp:pos_record;mclick:integer):integer;
+function Circle_com_AfterClick(const Context:TZCADCommandContext;wc:TzePoint3d;
+  mc:TzePoint2i;var button:byte;osp:pos_record;mclick:integer):integer;
 var
   domethod,undomethod:tmethod;
   dc:TDrawContext;

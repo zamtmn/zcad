@@ -43,7 +43,7 @@ type
     obj_width:double;
     obj_y:double;
     constructor init(own:Pointer;layeraddres:PGDBLayerProp;LW:smallint;
-      c:TDXFEntsInternalStringType;p:GDBvertex;s,o,w,a:double;j:TTextJustify);
+      c:TDXFEntsInternalStringType;p:TzePoint3d;s,o,w,a:double;j:TTextJustify);
     constructor initnul(owner:PGDBObjGenericWithSubordinated);
     procedure LoadFromDXF(var rdr:TZMemReader;ptu:PExtensionData;
       var drawing:TDrawingDef;var context:TIODXFLoadContext);virtual;
@@ -371,7 +371,7 @@ procedure GDBObjText.SaveToDXF(var outStream:TZctnrVectorBytes;
   var drawing:TDrawingDef;var IODXFContext:TIODXFSaveContext);
 var
   hv,vv,bw:byte;
-  tv:gdbvertex;
+  tv:TzePoint3d;
   s:string;
   ASourcesCounter:TSPFSourceSet;
   quotedcontent:TDXFEntsInternalStringType;

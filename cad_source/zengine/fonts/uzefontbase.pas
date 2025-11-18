@@ -38,7 +38,7 @@ type
 
     public
       FontData:ZGLVectorObject;
-      procedure SetupSymbolLineParams(const matr:DMatrix4D; var SymsParam:TSymbolSParam);virtual;
+      procedure SetupSymbolLineParams(const matr:DMatrix4d; var SymsParam:TSymbolSParam);virtual;
       function GetOrReplaceSymbolInfo(symbol:Integer):PGDBsymdolinfo;virtual;abstract;
       function GetOrCreateSymbolInfo(symbol:Integer):PGDBsymdolinfo;virtual;
       function findunisymbolinfos(symbolname:String):PGDBsymdolinfo;
@@ -50,7 +50,7 @@ type
       function IsCanSystemDraw:Boolean;virtual;abstract;
   end;
 implementation
-procedure TZEBaseFontImpl.SetupSymbolLineParams(const matr:DMatrix4D; var SymsParam:TSymbolSParam);
+procedure TZEBaseFontImpl.SetupSymbolLineParams(const matr:DMatrix4d; var SymsParam:TSymbolSParam);
 begin
 end;
 constructor TZEBaseFontImpl.Create;

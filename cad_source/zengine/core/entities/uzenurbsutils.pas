@@ -29,7 +29,7 @@ uses
   uzeNURBSTypes;
 
 function ConvertOnCurvePointsToControlPointsArray(const ADegree:integer;
-  const AOnCurvePoints:array of GDBVertex;var AKnots:TKnotsVector):TControlPointsArray;
+  const AOnCurvePoints:array of TzePoint3d;var AKnots:TKnotsVector):TControlPointsArray;
 
 implementation
 
@@ -129,7 +129,7 @@ begin
 end;
 
 // Generate parameter values using chord length parameterization
-procedure ComputeParameters(const points:array of GDBVertex;var params:array of single);
+procedure ComputeParameters(const points:array of TzePoint3d;var params:array of single);
 var
   i:integer;
   totalLength,chordLength:single;
@@ -310,7 +310,7 @@ begin
 end;
 
 function ConvertOnCurvePointsToControlPointsArray(const ADegree:integer;
-  const AOnCurvePoints:array of GDBVertex;var AKnots:TKnotsVector):TControlPointsArray;
+  const AOnCurvePoints:array of TzePoint3d;var AKnots:TKnotsVector):TControlPointsArray;
 var
   numPoints,numControlPoints,i,j,k,n,m,numKnots,numEq:integer;
   params:array of single;

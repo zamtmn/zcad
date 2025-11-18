@@ -34,11 +34,11 @@ type
   GDBObj3DFace=object(GDBObj3d)
     PInOCS:OutBound4V;
     PInWCS:OutBound4V;
-    normal:GDBVertex;
+    normal:TzePoint3d;
     triangle:boolean;
-    n,p1,p2,p3:GDBVertex3S;
+    n,p1,p2,p3:TzePoint3s;
     constructor init(own:Pointer;layeraddres:PGDBLayerProp;
-      LW:smallint;p:GDBvertex);
+      LW:smallint;p:TzePoint3d);
     constructor initnul(owner:PGDBObjGenericWithSubordinated);
     procedure LoadFromDXF(var rdr:TZMemReader;ptu:PExtensionData;
       var drawing:TDrawingDef;var context:TIODXFLoadContext);virtual;
@@ -64,8 +64,8 @@ type
     procedure rtsave(refp:Pointer);virtual;
     function GetObjTypeName:string;virtual;
     procedure getoutbound(var DC:TDrawContext);virtual;
-    procedure TransformAt(p:PGDBObjEntity;t_matrix:PDMatrix4D);virtual;
-    procedure transform(const t_matrix:DMatrix4D);virtual;
+    procedure TransformAt(p:PGDBObjEntity;t_matrix:PDMatrix4d);virtual;
+    procedure transform(const t_matrix:DMatrix4d);virtual;
     class function CreateInstance:PGDBObj3DFace;static;
     function GetObjType:TObjID;virtual;
   end;
@@ -80,7 +80,7 @@ begin
     PInOCS[I]:=VectorTransform3D(PGDBObj3DFace(p)^.PInOCS[I],t_matrix^);
 end;
 
-procedure GDBObj3DFace.transform(const t_matrix:DMatrix4D);
+procedure GDBObj3DFace.transform(const t_matrix:DMatrix4d);
 var
   i:integer;
 begin
@@ -102,7 +102,7 @@ procedure GDBObj3DFace.FormatEntity(var drawing:TDrawingDef;
   var DC:TDrawContext;Stage:TEFStages=EFAllStages);
 var
   i:integer;
-  v:GDBVertex;
+  v:TzePoint3d;
 begin
   if assigned(EntExtensions) then
     EntExtensions.RunOnBeforeEntityFormat(@self,drawing,DC);
@@ -300,7 +300,7 @@ procedure GDBObj3DFace.remaponecontrolpoint(pdesc:pcontrolpointdesc;
   ProjectProc:GDBProjectProc);
 var
   vertexnumber:integer;
-  tv:GDBvertex;
+  tv:TzePoint3d;
 begin
   vertexnumber:=pdesc^.vertexnum;
   pdesc.worldcoord:=PInWCS[vertexnumber];

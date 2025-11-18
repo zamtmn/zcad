@@ -56,9 +56,9 @@ ZGLVectorObject= object(GDBaseObject)
                                  function GetCopyParam(LLPStartIndex,LLPCount:Integer):TZGLVectorDataCopyParam;virtual;
                                  function CopyTo(var dest:ZGLVectorObject;CopyParam:TZGLVectorDataCopyParam):TZGLVectorDataCopyParam;virtual;
                                  procedure CorrectIndexes(LLPrimitivesStartIndex:Integer;LLPCount:Integer;IndexesStartIndex:Integer;IndexesCount:Integer;offset:TEntIndexesOffsetData);virtual;
-                                 procedure MulOnMatrix(GeomDataIndexMin,GeomDataIndexMax:Integer;const matrix:DMatrix4D);virtual;
+                                 procedure MulOnMatrix(GeomDataIndexMin,GeomDataIndexMax:Integer;const matrix:DMatrix4d);virtual;
                                  function GetBoundingBbox(GeomDataIndexMin,GeomDataIndexMax:Integer):TBoundingBox;virtual;
-                                 function GetTransformedBoundingBbox(GeomDataIndexMin,GeomDataIndexMax:Integer;const matrix:DMatrix4D):TBoundingBox;virtual;
+                                 function GetTransformedBoundingBbox(GeomDataIndexMin,GeomDataIndexMax:Integer;const matrix:DMatrix4d):TBoundingBox;virtual;
                                  procedure DrawLLPrimitives(var rc:TDrawContext;var drawer:TZGLAbstractDrawer;const inFrustumState:TInBoundingVolume;simplydraw:boolean);virtual;
                                  procedure DrawCountedLLPrimitives(var rc:TDrawContext;var drawer:TZGLAbstractDrawer;var OptData:ZGLOptimizerData;StartOffset,Count:Integer;const inFrustumState:TInBoundingVolume);virtual;
                                end;
@@ -251,7 +251,7 @@ begin
           result.EID.IndexsIndexMax:=-1;
        end;
 end;
-procedure ZGLVectorObject.MulOnMatrix(GeomDataIndexMin,GeomDataIndexMax:Integer;const matrix:DMatrix4D);
+procedure ZGLVectorObject.MulOnMatrix(GeomDataIndexMin,GeomDataIndexMax:Integer;const matrix:DMatrix4d);
 var
    i:integer;
    p:ZGLVertex3Sarray.PT;
@@ -288,7 +288,7 @@ begin
        inc(p);
      end;
 end;
-function ZGLVectorObject.GetTransformedBoundingBbox(GeomDataIndexMin,GeomDataIndexMax:Integer;const matrix:DMatrix4D):TBoundingBox;
+function ZGLVectorObject.GetTransformedBoundingBbox(GeomDataIndexMin,GeomDataIndexMax:Integer;const matrix:DMatrix4d):TBoundingBox;
 var
    i:integer;
    p:ZGLVertex3Sarray.PT;

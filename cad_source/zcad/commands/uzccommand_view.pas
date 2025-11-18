@@ -35,8 +35,8 @@ function view_com(const Context:TZCADCommandContext;
   operands:TCommandOperands):TCommandResult;
 var
   s:string;
-  ox,oy,oz:gdbvertex;
-  m:DMatrix4D;
+  ox,oy,oz:TzePoint3d;
+  m:DMatrix4d;
   recognized:boolean;
 begin
   s:=uppercase(operands);

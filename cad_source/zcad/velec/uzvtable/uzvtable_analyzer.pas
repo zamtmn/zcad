@@ -300,7 +300,7 @@ begin
 end;
 
 // Найти ячейку по координатам точки
-function FindCellByPoint(const aTable: TUzvTableGrid; const aPoint: GDBVertex): Integer;
+function FindCellByPoint(const aTable: TUzvTableGrid; const aPoint: TzePoint3d): Integer;
 var
   i: Integer;
   cell: PUzvTableCell;
@@ -328,7 +328,7 @@ var
   i, cellIndex: Integer;
   primitive: PUzvPrimitiveItem;
   cell: PUzvTableCell;
-  textCenter: GDBVertex;
+  textCenter: TzePoint3d;
 begin
   // Перебираем все примитивы
   for i := 0 to aPrimitives.Size - 1 do

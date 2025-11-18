@@ -68,7 +68,7 @@ type
       var DC:TDrawContext;Stage:TEFStages=EFAllStages);virtual;
     function CalcSquare:double;virtual;
     //**попадаетли данная координата внутрь контура
-    function isPointInside(const point:GDBVertex):boolean;virtual;
+    function isPointInside(const point:TzePoint3d):boolean;virtual;
     procedure createpoint;virtual;
     procedure CalcWidthSegment;virtual;
     destructor done;virtual;
@@ -85,16 +85,16 @@ type
     function onmouse(var popa:TZctnrVectorPGDBaseEntity;
       const MF:ClipArray;InSubEntry:boolean):boolean;virtual;
     function onpoint(var objects:TZctnrVectorPGDBaseEntity;
-      const point:GDBVertex):boolean;virtual;
+      const point:TzePoint3d):boolean;virtual;
     function getsnap(var osp:os_record;var pdata:Pointer;
       const param:OGLWndtype;ProjectProc:GDBProjectProc;SnapMode:TGDBOSMode):boolean;virtual;
     procedure startsnap(out osp:os_record;out pdata:Pointer);virtual;
     procedure endsnap(out osp:os_record;var pdata:Pointer);virtual;
     procedure AddOnTrackAxis(var posr:os_record;
       const processaxis:taddotrac);virtual;
-    procedure transform(const t_matrix:DMatrix4D);virtual;
-    procedure TransformAt(p:PGDBObjEntity;t_matrix:PDMatrix4D);virtual;
-    function GetTangentInPoint(const point:GDBVertex):GDBVertex;virtual;
+    procedure transform(const t_matrix:DMatrix4d);virtual;
+    procedure TransformAt(p:PGDBObjEntity;t_matrix:PDMatrix4d);virtual;
+    function GetTangentInPoint(const point:TzePoint3d):TzePoint3d;virtual;
     procedure higlight(var DC:TDrawContext);virtual;
     class function CreateInstance:PGDBObjLWPolyline;static;
     function GetObjType:TObjID;virtual;
@@ -109,9 +109,9 @@ procedure GDBObjLWpolyline.higlight(var DC:TDrawContext);
 begin
 end;
 
-function GDBObjLWpolyline.GetTangentInPoint(const point:GDBVertex):GDBVertex;
+function GDBObjLWpolyline.GetTangentInPoint(const point:TzePoint3d):TzePoint3d;
 var
-  ptv,ppredtv:pgdbvertex;
+  ptv,ppredtv:PzePoint3d;
   ir:itrec;
   found:integer;
 begin
@@ -192,7 +192,7 @@ begin
 end;
 
 function GDBObjLWpolyline.onpoint(var objects:TZctnrVectorPGDBaseEntity;
-  const point:GDBVertex):boolean;
+  const point:TzePoint3d):boolean;
 begin
   if Vertex3D_in_WCS_Array.onpoint(point,closed) then begin
     Result:=True;
@@ -205,7 +205,7 @@ function GDBObjLWpolyline.onmouse;
 var
   ie,i:integer;
   q3d:PGDBQuad3d;
-  p3d,p3dold:PGDBVertex;
+  p3d,p3dold:PzePoint3d;
   subresult:TInBoundingVolume;
 begin
 
@@ -275,7 +275,7 @@ end;
 procedure GDBObjLWpolyline.getoutbound;
 var
   t,b,l,r,n,f:double;
-  ptv:pgdbvertex;
+  ptv:PzePoint3d;
   ir:itrec;
 begin
   l:=Infinity;
@@ -312,7 +312,7 @@ end;
 
 procedure GDBObjLWpolyline.rtsave;
 var
-  p,pold:pgdbvertex2d;
+  p,pold:pzePoint2d;
   i:integer;
 begin
   inherited;
@@ -328,9 +328,9 @@ end;
 procedure GDBObjLWpolyline.rtmodifyonepoint(const rtmod:TRTModifyData);
 var
   vertexnumber:integer;
-  tv,wwc:gdbvertex;
+  tv,wwc:TzePoint3d;
 
-  M:DMatrix4D;
+  M:DMatrix4d;
 begin
   vertexnumber:=rtmod.point.vertexnum;
 
@@ -352,7 +352,7 @@ procedure GDBObjLWpolyline.remaponecontrolpoint(pdesc:pcontrolpointdesc;
   ProjectProc:GDBProjectProc);
 var
   vertexnumber:integer;
-  tv:GDBvertex;
+  tv:TzePoint3d;
 begin
   vertexnumber:=pdesc^.vertexnum;
   pdesc.worldcoord:=GDBPoint3dArray.PTArr(Vertex3D_in_WCS_Array.parray)^
@@ -365,7 +365,7 @@ procedure GDBObjLWpolyline.AddControlpoints;
 var
   pdesc:controlpointdesc;
   i:integer;
-  pv:pGDBvertex;
+  pv:PzePoint3d;
 begin
   PSelectedObjDesc(tdesc)^.pcontrolpoint^.init(Vertex3D_in_WCS_Array.Count);
   pv:=Vertex3D_in_WCS_Array.GetParrayAsPointer;
@@ -440,7 +440,7 @@ var
   i,ie:integer;
   q3d:PGDBQuad3d;
   plw:PGLlwwidth;
-  v:gdbvertex;
+  v:TzePoint3d;
   simplydraw:boolean;
 begin
 
@@ -507,7 +507,7 @@ end;
 
 procedure GDBObjLWpolyline.LoadFromDXF;
 var
-  p:gdbvertex2d;
+  p:TzePoint2d;
   byt,i:integer;
   hlGDBWord:longword;
   numv:integer;
@@ -520,7 +520,7 @@ begin
   widthload:=False;
   closed:=False;
   if bp.ListPos.owner<>nil then
-    local.p_insert:=PGDBVertex(@bp.ListPos.owner^.GetMatrix^.mtr[3])^
+    local.p_insert:=PzePoint3d(@bp.ListPos.owner^.GetMatrix^.mtr[3])^
   else
     local.P_insert:=nulvertex;
 
@@ -581,7 +581,7 @@ end;
 procedure GDBObjLWpolyline.SaveToDXF;
 var
   j:integer;
-  tv:gdbvertex;
+  tv:TzePoint3d;
 begin
   SaveToDXFObjPrefix(outStream,'LWPOLYLINE','AcDbPolyline',IODXFContext);
   dxfStringout(outStream,90,IntToStr(Vertex2D_in_OCS_Array.Count));
@@ -601,17 +601,17 @@ begin
     tv.x:=GDBPolyline2DArray.PTArr(Vertex2D_in_OCS_Array.PArray)^[j].x;
     tv.y:=GDBPolyline2DArray.PTArr(Vertex2D_in_OCS_Array.PArray)^[j].y;
     tv.z:=0;
-    dxfvertex2dout(outStream,10,PGDBVertex2D(@tv)^);
+    dxfvertex2dout(outStream,10,PzePoint2d(@tv)^);
     dxfDoubleout(outStream,40,PGLLWWidth(Width2D_in_OCS_Array.getDataMutable(j)).startw);
     dxfDoubleout(outStream,41,PGLLWWidth(Width2D_in_OCS_Array.getDataMutable(j)).endw);
   end;
   SaveToDXFObjPostfix(outStream);
 end;
 
-function GDBObjLWpolyline.isPointInside(const point:GDBVertex):boolean;
+function GDBObjLWpolyline.isPointInside(const point:TzePoint3d):boolean;
 var
-  m:DMatrix4D;
-  p:GDBVertex2D;
+  m:DMatrix4d;
+  p:TzePoint2d;
 begin
   m:=self.getmatrix^;
   uzegeometry.MatrixInvert(m);
@@ -624,7 +624,7 @@ end;
 
 function GDBObjLWpolyline.CalcSquare:double;
 var
-  pv,pvnext:PGDBVertex2D;
+  pv,pvnext:PzePoint2d;
   i:integer;
 begin
   Result:=0;
@@ -665,8 +665,8 @@ procedure GDBObjLWpolyline.createpoint;
 var
   i:integer;
   v:GDBvertex4D;
-  v3d:GDBVertex;
-  pv:PGDBVertex2D;
+  v3d:TzePoint3d;
+  pv:PzePoint2d;
 begin
   Vertex3D_in_WCS_Array.Clear;
   pv:=Vertex2D_in_OCS_Array.GetParrayAsPointer;
@@ -676,7 +676,7 @@ begin
     v.z:=0;
     v.w:=1;
     v:=VectorTransform(v,objMatrix);
-    v3d:=PGDBvertex(@v)^;
+    v3d:=PzePoint3d(@v)^;
     Vertex3D_in_WCS_Array.PushBackData(v3d);
     Inc(pv);
   end;
@@ -687,12 +687,12 @@ procedure GDBObjLWpolyline.CalcWidthSegment;
 var
   i,j,k:integer;
   dx,dy,nx,ny,l:double;
-  v2di,v2dj:PGDBVertex2D;
+  v2di,v2dj:PzePoint2d;
   plw,plw2:PGLlwwidth;
   q3d:GDBQuad3d;
   pq3d,pq3dnext:pGDBQuad3d;
   v:GDBvertex4D;
-  v2:PGDBvertex;
+  v2:PzePoint3d;
   ip,ip2:Intercept3DProp;
 begin
   Width3D_in_WCS_Array.Clear;
@@ -740,7 +740,7 @@ begin
       v.z:=0;
       v.w:=1;
       v:=VectorTransform(v,objMatrix);
-      q3d[k]:=PGDBvertex(@v)^;
+      q3d[k]:=PzePoint3d(@v)^;
     end;
     Width3D_in_WCS_Array.PushBackData(q3d);
   end;
@@ -773,7 +773,7 @@ begin
         if ip.isintercept and ip2.isintercept then
           if (ip.t1>0) and (ip.t2>0) then
             if (ip2.t1>0) and (ip2.t2>0) then begin
-              v2:=Pgdbvertex(Vertex3D_in_WCS_Array.getDataMutable(j));
+              v2:=PzePoint3d(Vertex3D_in_WCS_Array.getDataMutable(j));
               if SqrVertexlength(v2^,ip.interceptcoord)<l then
                 if SqrVertexlength(v2^,ip2.interceptcoord)<l then begin
                   pq3d^[1]:=ip.interceptcoord;
@@ -810,7 +810,7 @@ var
   counter:integer;
   i,c:integer;
   pw:PGLLWWidth;
-  pp:PGDBvertex2D;
+  pp:PzePoint2d;
 begin
   counter:=low(args);
   ALWpolyLine.Closed:=CreateBooleanFromArray(counter,args);

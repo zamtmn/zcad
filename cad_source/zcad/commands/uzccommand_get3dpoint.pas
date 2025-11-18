@@ -43,11 +43,11 @@ begin
   Result:=cmd_ok;
 end;
 
-function Line_com_BeforeClick(const Context:TZCADCommandContext;wc:GDBvertex;
-  mc:GDBvertex2DI;var button:byte;osp:pos_record;mclick:integer):integer;
+function Line_com_BeforeClick(const Context:TZCADCommandContext;wc:TzePoint3d;
+  mc:TzePoint2i;var button:byte;osp:pos_record;mclick:integer):integer;
 begin
   if (button and MZW_LBUTTON)<>0 then begin
-    commandmanager.PushValue('','GDBVertex',@wc);
+    commandmanager.PushValue('','TzePoint3d',@wc);
     commandmanager.executecommandend;
     Result:=1;
   end;

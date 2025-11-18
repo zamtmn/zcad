@@ -177,7 +177,7 @@ type
 
  function getListDevInGroupHDALL(graphDev:TGraphDev):TListDev;
 
- procedure visualGraphTree(G: TGraph; var startPt:GDBVertex;height:double; var depth:double);
+ procedure visualGraphTree(G: TGraph; var startPt:TzePoint3d;height:double; var depth:double);
 
 implementation
 var
@@ -1407,7 +1407,7 @@ var
    pvd:pvardesk;
 
     //** Получение области выделения по полученным точкам, левая-нижняя-ближняя точка и правая-верхняя-дальняя точка
-    function getTBoundingBox(VT1,VT2:GDBVertex):TBoundingBox;
+    function getTBoundingBox(VT1,VT2:TzePoint3d):TBoundingBox;
     begin
       result.LBN:=VT1;
       result.RTF:=VT2;
@@ -1416,7 +1416,7 @@ var
     end;
 
     //**Получаем координаты стартовой и конечной точки электрической модели
-    function getStEdEMVertex(var VTst,VTed:GDBVertex):boolean;
+    function getStEdEMVertex(var VTst,VTed:TzePoint3d):boolean;
     var
         stVertexSum,edVertexSum:integer;
         pobj: pGDBObjEntity;   //выделеные объекты в пространстве листа
@@ -1462,7 +1462,7 @@ var
         areaEMBoundingBox:TBoundingBox;        //Ограничивающий объем, обычно в графике его называют AABB - axis aligned bounding box
                                         //куб со сторонами паралелльными осям, определяется 2мя диагональными точками
                                         //левая-нижняя-ближняя и правая-верхняя-дальня
-        VTst,VTed:GDBVertex;
+        VTst,VTed:TzePoint3d;
 
         pobj: pGDBObjEntity;   //выделеные объекты в пространстве листа
         pvd:pvardesk; //для работы со свойствами устройств
@@ -1470,7 +1470,7 @@ var
         //i,num:integer;
         //
         //polyLWObj:pgdbobjlwpolyline;
-        //pt:gdbvertex;
+        //pt:TzePoint3d;
         //vertexLWObj:GDBvertex2D; //для двух серной полилинии
         //widthObj:GLLWWidth;      //переменная для добавления веса линии в начале и конце пути
         //
@@ -1516,7 +1516,7 @@ var
       end;
 
     //*** поиск точки координаты коннектора в устройстве
-    function getDevVertexConnector(pobj:pGDBObjEntity; out pConnect:GDBVertex):Boolean;
+    function getDevVertexConnector(pobj:pGDBObjEntity; out pConnect:TzePoint3d):Boolean;
     var
        pObjDevice,currentSubObj:PGDBObjDevice;
        ir_inDevice:itrec;  // применяется для обработки списка выделений, но что это понятия не имею :)
@@ -1543,7 +1543,7 @@ var
     function getListTreeRoots(lDevice:TListDevice;lCable:TListCable):TListDevice;
     var
       dev:pGDBObjDevice;
-      devVertex:GDBVertex;
+      devVertex:TzePoint3d;
       cab:PGDBObjPolyLine;
       devFound:boolean;
     begin
@@ -1568,8 +1568,8 @@ var
     var
 
       dev:pGDBObjDevice;
-      devVertex:GDBVertex;
-      lastDevVertex:GDBVertex;
+      devVertex:TzePoint3d;
+      lastDevVertex:TzePoint3d;
       cab:PGDBObjPolyLine;
       newVertex:TVertex;
       //devFound:boolean;
@@ -1677,7 +1677,7 @@ end;
 
 
 ////Визуализация графа
-procedure visualGraphTree(G: TGraph; var startPt:GDBVertex;height:double; var depth:double);
+procedure visualGraphTree(G: TGraph; var startPt:TzePoint3d;height:double; var depth:double);
 const
   size=5;
   indent=30;
@@ -1685,7 +1685,7 @@ type
    //PTInfoVertex=^TInfoVertex;
    TInfoVertex=record
        num,kol,childs:Integer;
-       poz:GDBVertex2D;
+       poz:TzePoint2d;
        vertex:TVertex;
    end;
 
@@ -1698,7 +1698,7 @@ var
   //iNum:integer;
   listVertex:TListVertex;
   infoVertex:TInfoVertex;
-  pt1,pt2{,pt3,ptext},ptSt,ptEd:GDBVertex;
+  pt1,pt2{,pt3,ptext},ptSt,ptEd:TzePoint3d;
   VertexPath: TClassList;
   //pv:pGDBObjDevice;
   //ppvvarext,pvarv:TVariablesExtender;
@@ -1715,7 +1715,7 @@ var
                result:=c;
   end;
 
-  procedure addBlockonDraw(dev:pGDBObjDevice;var currentcoord:GDBVertex; var root:GDBObjRoot);
+  procedure addBlockonDraw(dev:pGDBObjDevice;var currentcoord:TzePoint3d; var root:GDBObjRoot);
   var
       //datname:String;
       //pv:pGDBObjDevice;
@@ -1728,7 +1728,7 @@ var
         pnevdev:PGDBObjDevice;
         //entvarext,delvarext:TVariablesExtender;
         PBH:PGDBObjBlockdef;
-        //t_matrix:DMatrix4D;
+        //t_matrix:DMatrix4d;
         //ir2:itrec;
         //pobj,pcobj:PGDBObjEntity;
   begin
@@ -1767,7 +1767,7 @@ var
       //zcUI.TextMessage('DEVICE-' + dev^.Name,TMWOHistoryOut);
   end;
 
-  //procedure addBlockNodeonDraw(var currentcoord:GDBVertex; var root:GDBObjRoot);
+  //procedure addBlockNodeonDraw(var currentcoord:TzePoint3d; var root:GDBObjRoot);
   //var
   //    datname:String;
   //    pv:pGDBObjDevice;
@@ -1790,7 +1790,7 @@ var
   //end;
 
       //рисуем прямоугольник с цветом  зная номера вершин, координат возьмем из графа по номерам
-      procedure drawConnectLineDev(pSt,p1,p2,pEd:GDBVertex;VT1,VT2:TVertex; var root:GDBObjRoot);
+      procedure drawConnectLineDev(pSt,p1,p2,pEd:TzePoint3d;VT1,VT2:TVertex; var root:GDBObjRoot);
       var
           //pDev1,pDev2:pGDBObjDevice;
           cableLine:PGDBObjPolyLine;

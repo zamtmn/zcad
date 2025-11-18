@@ -109,7 +109,7 @@ var
   DrawSuperlineParams:TDrawSuperlineParams;
   method2lt:TScriptData;
 
-function createSuperLine(p1,p2:GDBVertex;nameSL:string;changeLayer:boolean;
+function createSuperLine(p1,p2:TzePoint3d;nameSL:string;changeLayer:boolean;
   LayerNamePrefix:string):TCommandResult;
 
 implementation
@@ -144,7 +144,7 @@ begin
   end;
 end;
 
-function GetInteractiveLine(prompt1,prompt2:string;out p1,p2:GDBVertex):boolean;
+function GetInteractiveLine(prompt1,prompt2:string;out p1,p2:TzePoint3d):boolean;
 var
   pline:PGDBObjLine;
 begin
@@ -164,7 +164,7 @@ begin
 end;
 
 function GetInteractiveLineFrom1to2(prompt2:string;
-  const p1:GDBVertex;out p2:GDBVertex):tgetresult;
+  const p1:TzePoint3d;out p2:TzePoint3d):tgetresult;
 var
   pline:PGDBObjLine;
 begin
@@ -177,7 +177,7 @@ begin
   drawings.GetCurrentDWG^.FreeConstructionObjects;
 end;
 
-function createSuperLine(p1,p2:GDBVertex;nameSL:string;changeLayer:boolean;
+function createSuperLine(p1,p2:TzePoint3d;nameSL:string;changeLayer:boolean;
   LayerNamePrefix:string):TCommandResult;
 var
   psuperline:PGDBObjSuperLine;
@@ -232,7 +232,7 @@ function DrawSuperLine_com(const Context:TZCADCommandContext;
   operands:TCommandOperands):TCommandResult;
 var
   psuperline:PGDBObjSuperLine;
-  p1,p2:gdbvertex;
+  p1,p2:TzePoint3d;
   pvarext:TVariablesExtender;
   psu:ptunit;
   UndoMarcerIsPlazed:boolean;

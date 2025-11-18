@@ -44,9 +44,9 @@ controlpointdesc=record
 
                        attr:TControlPointAttrs;
                        PDrawable:PGDBObjDrawable;
-                       worldcoord:GDBvertex;
-                       dcoord:GDBvertex;
-                       dispcoord:GDBvertex2DI;
+                       worldcoord:TzePoint3d;
+                       dcoord:TzePoint3d;
+                       dispcoord:TzePoint2i;
                        selected:Boolean;
                    {-}function gvnum:Integer;{//}
                    {-}procedure svnum(AVertexNum:Integer);{//}
@@ -56,7 +56,7 @@ controlpointdesc=record
 {REGISTERRECORDTYPE TRTModifyData}
 TRTModifyData=record
                    point:controlpointdesc;
-                   dist,wc:gdbvertex;
+                   dist,wc:TzePoint3d;
              end;
 {REGISTERRECORDTYPE tcontrolpointdist}
 tcontrolpointdist=record
@@ -68,14 +68,14 @@ end;
   {REGISTERRECORDTYPE mousedesc}
   mousedesc = record
     mode: Byte;
-    mouse, mouseglue: GDBvertex2DI;
-    glmouse:GDBvertex2DI;
-    workplane: {GDBplane}DVector4D;
-    WPPointLU,WPPointUR,WPPointRB,WPPointBL:GDBvertex;
+    mouse, mouseglue: TzePoint2i;
+    glmouse:TzePoint2i;
+    workplane: {GDBplane}DVector4d;
+    WPPointLU,WPPointUR,WPPointRB,WPPointBL:TzePoint3d;
     mouseraywithoutOS: GDBPiece;
     mouseray: GDBPiece;
-    mouseonworkplanecoord: GDBvertex;
-    mouse3dcoord: GDBvertex;
+    mouseonworkplanecoord: TzePoint3d;
+    mouse3dcoord: TzePoint3d;
     mouseonworkplan: Boolean;
     mousein: Boolean;
   end;
@@ -87,8 +87,8 @@ end;
     Selectedobjcount:Integer;
     MouseFrameON: Boolean;
     MouseFrameInverse:Boolean;
-    Frame1, Frame2: GDBvertex2DI;
-    Frame13d, Frame23d: GDBVertex;
+    Frame1, Frame2: TzePoint2i;
+    Frame13d, Frame23d: TzePoint3d;
     BigMouseFrustum:ClipArray;
   end;
   {REGISTERRECORDTYPE tcpdist}
@@ -101,16 +101,16 @@ end;
     objnum: Integer;
     newobjnum: Integer;
     ostype: real;
-    worldcoord: gdbvertex;
-    dispcoord: GDBvertex2DI;
+    worldcoord: TzePoint3d;
+    dispcoord: TzePoint2i;
     selected: Boolean;
   end;
   pos_record=^os_record;
   {REGISTERRECORDTYPE os_record}
   os_record = record
-    worldcoord: GDBVertex;
-    dispcoord: GDBVertex;
-    dmousecoord: GDBVertex;
+    worldcoord: TzePoint3d;
+    dispcoord: TzePoint3d;
+    dmousecoord: TzePoint3d;
     tmouse: Double;
     arrayworldaxis:GDBPoint3DArray;
     arraydispaxis:GDBtracepropArray;
@@ -125,10 +125,10 @@ end;
   end;
   {REGISTERRECORDTYPE TCSIcon}
   TCSIcon=record
-               CSIconCoord: GDBvertex;
-               CSIconX,CSIconY,CSIconZ: GDBvertex;
-               CS0: GDBvertex2D;
-               CSX, CSY, CSZ: GDBvertex2D;
+               CSIconCoord: TzePoint3d;
+               CSIconX,CSIconY,CSIconZ: TzePoint3d;
+               CS0: TzePoint2d;
+               CSX, CSY, CSZ: TzePoint2d;
                AxisLen:Double;
          end;
   TForceRedrawVolume=record
@@ -141,7 +141,7 @@ end;
     polarlinetrace: Integer;
     pointnum, axisnum: Integer;
     CSIcon:TCSIcon;
-    BLPoint,CPoint,TRPoint:GDBvertex2D;
+    BLPoint,CPoint,TRPoint:TzePoint2d;
     ViewHeight:Double;
     projtype: Integer;
     firstdraw: Boolean;
@@ -152,12 +152,12 @@ end;
     height, width: Integer;
     SelDesc: Selectiondesc;
     scrollmode:Boolean;
-    lastcp3dpoint,lastpoint: GDBVertex;
+    lastcp3dpoint,lastpoint: TzePoint3d;
     lastonmouseobject:Pointer;
     nearesttcontrolpoint:tcontrolpointdist;
     startgluepoint:pcontrolpointdesc;
     ontrackarray: totrackarray;
-    mouseclipmatrix:Dmatrix4D;
+    mouseclipmatrix:DMatrix4d;
     mousefrustum,mousefrustumLCS:ClipArray;
     ShowDebugFrustum:Boolean;
     debugfrustum:ClipArray;

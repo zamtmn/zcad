@@ -36,7 +36,7 @@ implementation
 var
   c1,c2:integer;
   distlen:double;
-  oldpoint,point:gdbvertex;
+  oldpoint,point:TzePoint3d;
 
 function Dist_com_CommandStart(const Context:TZCADCommandContext;
   operands:TCommandOperands):TCommandResult;
@@ -61,7 +61,7 @@ begin
     exit;
   end;
   vd:=commandmanager.PopValue;
-  point:=pgdbvertex(vd.Data.Addr.Instance)^;
+  point:=PzePoint3d(vd.Data.Addr.Instance)^;
   //c1:=cs;
   c1:=commandmanager.GetValueHeap;
   if c2<>-1 then begin

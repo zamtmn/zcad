@@ -67,9 +67,9 @@ var
 function DrawPolygon_com(const Context:TZCADCommandContext;
   operands:TCommandOperands):TCommandResult;
 var
-  vertexLWObj:GDBvertex2D;
+  vertexLWObj:TzePoint2d;
   //переменная для добавления вершин в полилинию
-  vertexObj:GDBvertex;
+  vertexObj:TzePoint3d;
   widthObj:GLLWWidth;
   //переменная для добавления веса линии в начале и конце пути
   //polyLWObj:PGDBObjLWPolyline;

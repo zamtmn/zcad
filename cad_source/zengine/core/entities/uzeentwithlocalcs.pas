@@ -34,7 +34,7 @@ type
     Local:GDBObj2dprop;
 
     //**получить на чтение координаты в мировой системе координат
-    P_insert_in_WCS:GDBvertex;
+    P_insert_in_WCS:TzePoint3d;
     lod:byte;
     constructor init(own:Pointer;layeraddres:PGDBLayerProp;LW:smallint);
     constructor initnul(owner:PGDBObjGenericWithSubordinated);
@@ -47,13 +47,13 @@ type
     procedure FormatEntity(var drawing:TDrawingDef;
       var DC:TDrawContext;Stage:TEFStages=EFAllStages);virtual;
     procedure CalcObjMatrix(pdrawing:PTDrawingDef=nil);virtual;
-    function CalcObjMatrixWithoutOwner:DMatrix4D;virtual;
-    procedure transform(const t_matrix:DMatrix4D);virtual;
-    function GetCenterPoint:GDBVertex;virtual;
+    function CalcObjMatrixWithoutOwner:DMatrix4d;virtual;
+    procedure transform(const t_matrix:DMatrix4d);virtual;
+    function GetCenterPoint:TzePoint3d;virtual;
     procedure createfield;virtual;
 
     procedure rtsave(refp:Pointer);virtual;
-    procedure TransformAt(p:PGDBObjEntity;t_matrix:PDMatrix4D);virtual;
+    procedure TransformAt(p:PGDBObjEntity;t_matrix:PDMatrix4d);virtual;
     procedure higlight(var DC:TDrawContext);virtual;
     procedure ReCalcFromObjMatrix;virtual;
     function IsHaveLCS:boolean;virtual;
@@ -86,9 +86,9 @@ end;
 
 procedure GDBObjWithLocalCS.ReCalcFromObjMatrix;
 begin
-  Local.basis.ox:=PGDBVertex(@objmatrix.mtr[0])^;
-  Local.basis.oy:=PGDBVertex(@objmatrix.mtr[1])^;
-  Local.basis.oz:=PGDBVertex(@objmatrix.mtr[2])^;
+  Local.basis.ox:=PzePoint3d(@objmatrix.mtr[0])^;
+  Local.basis.oy:=PzePoint3d(@objmatrix.mtr[1])^;
+  Local.basis.oz:=PzePoint3d(@objmatrix.mtr[2])^;
 
   Local.basis.ox:=normalizevertex(Local.basis.ox);
   Local.basis.oy:=normalizevertex(Local.basis.oy);
@@ -143,9 +143,9 @@ begin
   inherited init(own,layeraddres,LW);
   powner:=bp.ListPos.owner;
   if powner<>nil then begin
-    Local.basis.ox:=PGDBVertex(@powner^.GetMatrix^.mtr[0])^;
-    Local.basis.oy:=PGDBVertex(@powner^.GetMatrix^.mtr[1])^;
-    Local.basis.oz:=PGDBVertex(@powner^.GetMatrix^.mtr[2])^;
+    Local.basis.ox:=PzePoint3d(@powner^.GetMatrix^.mtr[0])^;
+    Local.basis.oy:=PzePoint3d(@powner^.GetMatrix^.mtr[1])^;
+    Local.basis.oz:=PzePoint3d(@powner^.GetMatrix^.mtr[2])^;
   end else begin
     Local.basis.ox:=XWCS;
     Local.basis.oy:=YWCS;
@@ -169,7 +169,7 @@ function GDBObjWithLocalCS.CalcObjMatrixWithoutOwner;
   end;
 
 var
-  rotmatr,dispmatr:DMatrix4D;
+  rotmatr,dispmatr:DMatrix4d;
 begin
   if IsVectorNul(Local.basis.oz) then begin
     ReportLocalOZIsNul;

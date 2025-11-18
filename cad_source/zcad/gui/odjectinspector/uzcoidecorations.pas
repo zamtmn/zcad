@@ -431,7 +431,7 @@ begin
                     end
                 else
                     begin
-                         commandmanager.PushValue('','PGDBVertex',@PInstance);
+                         commandmanager.PushValue('','PzePoint3d',@PInstance);
                          if {GDBobjinsp.GDBobj}true then
                                                   commandmanager.PushValue('','PGDBObjEntity',@GDBobjinsp.CurrData.PObj)
                                               else
@@ -443,7 +443,7 @@ begin
                          GDBobjinsp.UpdateObjectInInsp;
                     end;
 end;
-procedure GetVertexFromDrawing(PInstance:PGDBVertex);
+procedure GetVertexFromDrawing(PInstance:PzePoint3d);
 begin
      commandmanager.executecommandtotalend;
      count:=1;
@@ -541,25 +541,25 @@ begin
                          GDBobjinsp.UpdateObjectInInsp;
                     end;
 end;
-procedure GetLengthFromDrawing(PInstance:PGDBVertex);
+procedure GetLengthFromDrawing(PInstance:PzePoint3d);
 begin
      commandmanager.executecommandtotalend;
      count:=1;
      Application.QueueAsyncCall(AsyncCommHelper.GetLength,PtrInt(PInstance));
 end;
-procedure GetXFromDrawing(PInstance:PGDBVertex);
+procedure GetXFromDrawing(PInstance:PzePoint3d);
 begin
      commandmanager.executecommandtotalend;
      count:=1;
      Application.QueueAsyncCall(AsyncCommHelper.GetVertexX,PtrInt(PInstance));
 end;
-procedure GetYFromDrawing(PInstance:PGDBVertex);
+procedure GetYFromDrawing(PInstance:PzePoint3d);
 begin
      commandmanager.executecommandtotalend;
      count:=1;
      Application.QueueAsyncCall(AsyncCommHelper.GetVertexY,PtrInt(PInstance));
 end;
-procedure GetZFromDrawing(PInstance:PGDBVertex);
+procedure GetZFromDrawing(PInstance:PzePoint3d);
 begin
      commandmanager.executecommandtotalend;
      count:=1;

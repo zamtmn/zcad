@@ -99,19 +99,19 @@ type
                            procedure ZoomAll;virtual;abstract;
                            procedure ZoomSel;virtual;abstract;
                            function DoMouseWheel(Shift: TShiftState; WheelDelta: Integer;MousePos: TPoint): Boolean;virtual;abstract;
-                           procedure RotTo(x0,y0,z0:GDBVertex);virtual;abstract;
+                           procedure RotTo(x0,y0,z0:TzePoint3d);virtual;abstract;
                            procedure PanScreen(oldX,oldY,X,Y:Integer);virtual;abstract;
                            procedure RestoreMouse;virtual;abstract;
                            procedure myKeyPress(var Key: Word; Shift: TShiftState);virtual;abstract;
                            procedure finishdraw(var RC:TDrawContext);virtual;abstract;
-                            procedure SetCameraPosZoom(const _pos:gdbvertex;_zoom:Double;finalcalk:Boolean);virtual;abstract;
+                            procedure SetCameraPosZoom(const _pos:TzePoint3d;_zoom:Double;finalcalk:Boolean);virtual;abstract;
 
                            procedure showmousecursor;virtual;abstract;
                            procedure hidemousecursor;virtual;abstract;
                            Procedure Paint; virtual;abstract;
                            function CreateRC(_maxdetail:Boolean=false):TDrawContext;virtual;abstract;
                            function CreateFaceRC:TDrawContext;virtual;abstract;
-                           function ProjectPoint(pntx,pnty,pntz:Double;var wcsLBN,wcsRTF,dcsLBN,dcsRTF: GDBVertex):gdbvertex;virtual;abstract;
+                           function ProjectPoint(pntx,pnty,pntz:Double;var wcsLBN,wcsRTF,dcsLBN,dcsRTF: TzePoint3d):TzePoint3d;virtual;abstract;
                            procedure mouseunproject(X, Y: integer);virtual;abstract;
                            procedure CalcMouseFrustum;virtual;abstract;
                            procedure ClearOntrackpoint;virtual;abstract;
@@ -151,7 +151,7 @@ type
                            procedure asynczoomall(Data: PtrInt); virtual;abstract;
                       end;
 procedure copyospoint(var dest:os_record; source:os_record);
-function correcttogrid(const point:GDBVertex;const grid:GDBSnap2D):GDBVertex;
+function correcttogrid(const point:TzePoint3d;const grid:GDBSnap2D):TzePoint3d;
 function CreateFaceRC:TDrawContext;
 var
   sysvarDISPOSSize:double=10;
@@ -234,7 +234,7 @@ begin
                                inherited;
 end;
 {$ENDIF}
-function correcttogrid(const point:GDBVertex;const grid:GDBSnap2D):GDBVertex;
+function correcttogrid(const point:TzePoint3d;const grid:GDBSnap2D):TzePoint3d;
 begin
   result.x:=round((point.x-grid.Base.x)/grid.Spacing.x)*grid.Spacing.x+grid.Base.x;
   result.y:=round((point.y-grid.Base.y)/grid.Spacing.y)*grid.Spacing.y+grid.Base.y;

@@ -92,18 +92,18 @@ begin
   zcAddEntToCurrentDrawingWithUndo(pline);
 
   //перерисовываем
-  zcRedrawCurrentDrawing;
+  //zcRedrawCurrentDrawing;
 end;
 
 procedure line2(const Params: PParamArray{p1,p2: TVertex}); cdecl;
 var
-  p1,p2:GDBvertex;
+  p1,p2:TzePoint3d;
   ctx:TCurrentDrawingContext;
   pline:PGDBObjLine;
 begin
   ctx:=TCurrentDrawingContext(Params^[0]);
-  p1:=PGDBvertex(Params^[1])^;
-  p2:=PGDBvertex(Params^[2])^;
+  p1:=PzePoint3d(Params^[1])^;
+  p2:=PzePoint3d(Params^[2])^;
 
   pline:=AllocEnt(GDBLineID);
   pline^.init(nil,nil,LnWtByLayer,p1,p2);
@@ -115,7 +115,7 @@ begin
   zcAddEntToCurrentDrawingWithUndo(pline);
 
   //перерисовываем
-  zcRedrawCurrentDrawing;
+  //zcRedrawCurrentDrawing;
 end;
 
 procedure StartUndoCommand(const Params: PParamArray{CommandName:String;PushStone:boolean=false}); cdecl;
@@ -143,9 +143,9 @@ begin
   if LSCMCompilerSetup in mode then begin
     cplr.StartImporting;
     cplr.addBaseDefine('LAPE');
-    cplr.addGlobalType('record x,y,z:double;end','TzgPoint');
+    cplr.addGlobalType('record x,y,z:double;end','TzePoint3d');
     cplr.addGlobalMethod('procedure line(x1,y1,z1,x2,y2,z2: double);',@line,ctx);
-    cplr.addGlobalMethod('procedure line2(p1,p2: TzgPoint);',@line2,ctx);
+    cplr.addGlobalMethod('procedure line2(p1,p2: TzePoint3d);',@line2,ctx);
     cplr.addGlobalMethod('procedure zcStartUndoCommand(CommandName:String;PushStone:boolean=false);',@StartUndoCommand,ctx);
     cplr.addGlobalMethod('procedure zcEndUndoCommand;',@EndUndoCommand,ctx);
     cplr.EndImporting;

@@ -57,7 +57,7 @@ type
     TGLUIntf_GLenum=GLenum;
 
     TBeginCB=procedure(const v: TGLUIntf_GLenum;const Data: Pointer);{$IFDEF Windows}stdcall{$ELSE}cdecl{$ENDIF};
-    TVertexCB=procedure(const v: PGDBvertex3S;const Data: Pointer);{$IFDEF Windows}stdcall{$ELSE}cdecl{$ENDIF};
+    TVertexCB=procedure(const v: PzePoint3s;const Data: Pointer);{$IFDEF Windows}stdcall{$ELSE}cdecl{$ENDIF};
     TEndCB=procedure (const Data: Pointer);{$IFDEF Windows}stdcall{$ELSE}cdecl{$ENDIF};
     TErrorCB=procedure(const v: GLenum);{$IFDEF Windows}stdcall{$ELSE}cdecl{$ENDIF};
 
@@ -73,14 +73,14 @@ type
                            procedure TessEndPolygon(tess:TessObj);
                            procedure TessBeginContour(tess:TessObj);
                            procedure TessEndContour(tess:TessObj);
-                           procedure TessVertex(tess:TessObj; location:PGDBVertex; data:PtrInt);
+                           procedure TessVertex(tess:TessObj; location:PzePoint3d; data:PtrInt);
                            procedure TessCallback(tess:TessObj; which:TGLUIntf_GLenum; CallBackFunc:_GLUfuncptr);
 
                            function NewNurbsRenderer:GLUnurbsObj;
                            procedure SetupNurbsRenderer(const renderer:GLUnurbsObj;
                                                         const tolerance:GLfloat;
-                                                        constref model,perspective:DMatrix4D;
-                                                        constref view:IMatrix4;
+                                                        constref model,perspective:DMatrix4d;
+                                                        constref view:Matrix4i;
                                                         const BeginCB:TBeginCB;const EndCB:TVertexCB;const VertexCB:TVertexCB;const ErrorCB:TErrorCB;
                                                         const Data: Pointer);overload;
                            procedure SetupNurbsRenderer(const renderer:GLUnurbsObj;
@@ -123,15 +123,15 @@ begin
 end;
 procedure TGLUInterface.SetupNurbsRenderer(const renderer:GLUnurbsObj;
                                            const tolerance:GLfloat;
-                                           constref model,perspective:DMatrix4D;
-                                           constref view:IMatrix4;
+                                           constref model,perspective:DMatrix4d;
+                                           constref view:Matrix4i;
                                            const BeginCB:TBeginCB;const EndCB:TVertexCB;const VertexCB:TVertexCB;const ErrorCB:TErrorCB;
                                            const Data: Pointer);
 var
-  fm,fp:DMatrix4F;
+  fm,fp:DMatrix4f;
 begin
-  fm:=ToDMatrix4F(model);
-  fp:=ToDMatrix4F(perspective);
+  fm:=ToDMatrix4f(model);
+  fp:=ToDMatrix4f(perspective);
 
   NurbsProperty(renderer,GLU_NURBS_MODE_EXT,GLU_NURBS_TESSELLATOR_EXT);
   NurbsProperty(renderer,GLU_SAMPLING_TOLERANCE,tolerance);
@@ -223,7 +223,7 @@ begin
      gluTessCallback(tess,which,CallBackFunc);
 end;
 
-procedure TGLUInterface.TessVertex(tess:TessObj; location:PGDBVertex; data:PtrInt);
+procedure TGLUInterface.TessVertex(tess:TessObj; location:PzePoint3d; data:PtrInt);
 {type
     PT3darray=^T3darray;}
 //var

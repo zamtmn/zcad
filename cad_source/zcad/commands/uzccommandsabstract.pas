@@ -48,7 +48,7 @@ const
 
 type
   TInteractiveProcObjBuild=procedure(const PInteractiveData:Pointer;
-    Point:GDBVertex;Click:boolean);
+    Point:TzePoint3d;Click:boolean);
   TGetInputPossible=(IPEmpty,//возможность пустого ввода
     IPShortCuts//разрешение перехвата шорткатов
     );
@@ -82,7 +82,7 @@ type
   {REGISTERRECORDTYPE TInteractiveData}
   TInteractiveData=record
     GetPointMode:TGetPointMode;(*hidden_in_objinsp*)
-    BasePoint,currentPointValue,GetPointValue:GDBVertex;
+    BasePoint,currentPointValue,GetPointValue:TzePoint3d;
     (*hidden_in_objinsp*)
     DrawFromBasePoint:boolean;(*hidden_in_objinsp*)
     PInteractiveData:Pointer;
@@ -139,12 +139,12 @@ type
     procedure CommandCancel(const Context:TZCADCommandContext);virtual;abstract;
     procedure CommandInit;virtual;abstract;
     procedure CommandContinue(const Context:TZCADCommandContext);virtual;
-    function MouseMoveCallback(const Context:TZCADCommandContext;wc:GDBvertex;
-      mc:GDBvertex2DI;var button:byte;osp:pos_record):integer;virtual;
-    function BeforeClick(const Context:TZCADCommandContext;wc:GDBvertex;
-      mc:GDBvertex2DI;var button:byte;osp:pos_record):integer;virtual;
-    function AfterClick(const Context:TZCADCommandContext;wc:GDBvertex;
-      mc:GDBvertex2DI;var button:byte;osp:pos_record):integer;virtual;
+    function MouseMoveCallback(const Context:TZCADCommandContext;wc:TzePoint3d;
+      mc:TzePoint2i;var button:byte;osp:pos_record):integer;virtual;
+    function BeforeClick(const Context:TZCADCommandContext;wc:TzePoint3d;
+      mc:TzePoint2i;var button:byte;osp:pos_record):integer;virtual;
+    function AfterClick(const Context:TZCADCommandContext;wc:TzePoint3d;
+      mc:TzePoint2i;var button:byte;osp:pos_record):integer;virtual;
     function IsRTECommand:boolean;virtual;
   end;
   {Export-}
@@ -196,13 +196,13 @@ begin
 end;
 
 function CommandRTEdObjectDef.BeforeClick(const Context:TZCADCommandContext;
-  wc:GDBvertex;mc:GDBvertex2DI;var button:byte;osp:pos_record):integer;
+  wc:TzePoint3d;mc:TzePoint2i;var button:byte;osp:pos_record):integer;
 begin
   Result:=0;
 end;
 
-function CommandRTEdObjectDef.AfterClick(const Context:TZCADCommandContext;wc:GDBvertex;
-  mc:GDBvertex2DI;var button:byte;osp:pos_record):integer;
+function CommandRTEdObjectDef.AfterClick(const Context:TZCADCommandContext;wc:TzePoint3d;
+  mc:TzePoint2i;var button:byte;osp:pos_record):integer;
 begin
   if self.mouseclic=1 then
     Result:=0
@@ -220,7 +220,7 @@ begin
 end;
 
 function CommandRTEdObjectDef.MouseMoveCallback(
-  const Context:TZCADCommandContext;wc:GDBvertex;mc:GDBvertex2DI;
+  const Context:TZCADCommandContext;wc:TzePoint3d;mc:TzePoint2i;
   var button:byte;osp:pos_record):integer;
 begin
   //result:=0;

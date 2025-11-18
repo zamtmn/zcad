@@ -37,11 +37,11 @@ type
     EndAngle:double;
     angle:double;
     Vertex3D_in_WCS_Array:GDBPoint3DArray;
-    q0:GDBvertex;
-    q1:GDBvertex;
-    q2:GDBvertex;
+    q0:TzePoint3d;
+    q1:TzePoint3d;
+    q2:TzePoint3d;
     constructor init(own:Pointer;layeraddres:PGDBLayerProp;
-      LW:smallint;p:GDBvertex;RR,S,E:double);
+      LW:smallint;p:TzePoint3d;RR,S,E:double);
     constructor initnul;
     procedure LoadFromDXF(var rdr:TZMemReader;ptu:PExtensionData;
       var drawing:TDrawingDef;var context:TIODXFLoadContext);virtual;
@@ -79,13 +79,13 @@ type
     function CalcTrueInFrustum(
       const frustum:ClipArray):TInBoundingVolume;virtual;
     procedure ReCalcFromObjMatrix;virtual;
-    procedure transform(const t_matrix:DMatrix4D);virtual;
-    //function GetTangentInPoint(point:GDBVertex):GDBVertex;virtual;
+    procedure transform(const t_matrix:DMatrix4d);virtual;
+    //function GetTangentInPoint(point:TzePoint3d):TzePoint3d;virtual;
     procedure AddOnTrackAxis(var posr:os_record;
       const processaxis:taddotrac);virtual;
     function onpoint(var objects:TZctnrVectorPGDBaseEntity;
-      const point:GDBVertex):boolean;virtual;
-    procedure TransformAt(p:PGDBObjEntity;t_matrix:PDMatrix4D);virtual;
+      const point:TzePoint3d):boolean;virtual;
+    procedure TransformAt(p:PGDBObjEntity;t_matrix:PDMatrix4d);virtual;
     class function CreateInstance:PGDBObjArc;static;
     function GetObjType:TObjID;virtual;
     function IsStagedFormatEntity:boolean;virtual;
@@ -111,7 +111,7 @@ begin
 end;
 
 function GDBObjARC.onpoint(var objects:TZctnrVectorPGDBaseEntity;
-  const point:GDBVertex):boolean;
+  const point:TzePoint3d):boolean;
 begin
   if Vertex3D_in_WCS_Array.onpoint(point,False) then begin
     Result:=
@@ -125,8 +125,8 @@ end;
 
 procedure GDBObjARC.AddOnTrackAxis(var posr:os_record;const processaxis:taddotrac);
 var
-  m1:DMatrix4D;
-  dir,tv:gdbvertex;
+  m1:DMatrix4d;
+  dir,tv:TzePoint3d;
 begin
   m1:=GetMatrix^;
   MatrixInvert(m1);
@@ -139,7 +139,7 @@ end;
 
 procedure GDBObjARC.transform;
 var
-  sav,eav,pins:gdbvertex;
+  sav,eav,pins:TzePoint3d;
 begin
   precalc;
   if t_matrix.mtr[0].v[0]*t_matrix.mtr[1].v[1]*t_matrix.mtr[2].v[2]<eps then begin
@@ -168,8 +168,8 @@ end;
 
 procedure GDBObjARC.ReCalcFromObjMatrix;
 var
-  ox,oy:gdbvertex;
-  m:DMatrix4D;
+  ox,oy:TzePoint3d;
+  m:DMatrix4d;
 begin
   inherited;
 
@@ -177,8 +177,8 @@ begin
   oy:=NormalizeVertex(VectorDot(Local.basis.oz,Local.basis.ox));
   m:=CreateMatrixFromBasis(ox,oy,Local.basis.oz);
 
-  Local.P_insert:=VectorTransform3D(PGDBVertex(@objmatrix.mtr[3])^,m);
-  self.R:=PGDBVertex(@objmatrix.mtr[0])^.x/local.basis.OX.x;
+  Local.P_insert:=VectorTransform3D(PzePoint3d(@objmatrix.mtr[3])^,m);
+  self.R:=PzePoint3d(@objmatrix.mtr[0])^.x/local.basis.OX.x;
 end;
 
 function GDBObjARC.CalcTrueInFrustum;
@@ -264,14 +264,14 @@ end;
 
 procedure GDBObjARC.CalcObjMatrix;
 var
-  m1:DMatrix4D;
+  m1:DMatrix4d;
   v:GDBvertex4D;
 begin
   inherited CalcObjMatrix;
   m1:=CreateScaleMatrix(r);
   objmatrix:=matrixmultiply(m1,objmatrix);
 
-  pgdbvertex(@v)^:=local.p_insert;
+  PzePoint3d(@v)^:=local.p_insert;
   v.z:=0;
   v.w:=1;
   m1:=objMatrix;
@@ -290,17 +290,17 @@ begin
   v.z:=0;
   v.w:=1;
   v:=VectorTransform(v,objMatrix);
-  q0:=pgdbvertex(@v)^;
+  q0:=PzePoint3d(@v)^;
   SinCos(startangle+angle/2,v.y,v.x);
   v.z:=0;
   v.w:=1;
   v:=VectorTransform(v,objMatrix);
-  q1:=pgdbvertex(@v)^;
+  q1:=PzePoint3d(@v)^;
   SinCos(endangle,v.y,v.x);
   v.z:=0;
   v.w:=1;
   v:=VectorTransform(v,objMatrix);
-  q2:=pgdbvertex(@v)^;
+  q2:=PzePoint3d(@v)^;
 end;
 
 procedure GDBObjARC.FormatEntity(var drawing:TDrawingDef;
@@ -418,8 +418,8 @@ procedure GDBObjARC.createpoints(var DC:TDrawContext);
 var
   i:integer;
   l:double;
-  v:GDBvertex;
-  pv:GDBVertex;
+  v:TzePoint3d;
+  pv:TzePoint3d;
   maxlod:integer;
 begin
   angle:=endangle-startangle;
@@ -510,7 +510,7 @@ end;
 procedure GDBObjARC.remaponecontrolpoint(pdesc:pcontrolpointdesc;
   ProjectProc:GDBProjectProc);
 var
-  tv:GDBvertex;
+  tv:TzePoint3d;
 begin
   if pdesc^.pointtype=os_begin then begin
     pdesc.worldcoord:=q0;
@@ -620,11 +620,11 @@ end;
 
 procedure GDBObjARC.rtmodifyonepoint(const rtmod:TRTModifyData);
 var
-  tv3d:gdbvertex;
-  tq0,tq1,tq2:gdbvertex;
+  tv3d:TzePoint3d;
+  tq0,tq1,tq2:TzePoint3d;
   ptdata:tarcrtmodify;
   ad:TArcData;
-  m:DMatrix4D;
+  m:DMatrix4d;
 begin
   m:=ObjMatrix;
   MatrixInvert(m);

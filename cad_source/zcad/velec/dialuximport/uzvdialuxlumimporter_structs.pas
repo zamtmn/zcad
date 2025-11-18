@@ -56,7 +56,7 @@ type
   {**Группа полилиний, образующих один светильник}
   TPolylineGroup = record
     Entities: TEntityList;      // Список полилиний в группе
-    Center: GDBvertex;          // Геометрический центр группы
+    Center: TzePoint3d;          // Геометрический центр группы
     Processed: Boolean;         // Флаг обработки группы
   end;
 
@@ -66,7 +66,7 @@ type
   {**Запись о распознанном светильнике}
   TLightItem = record
     LumKey: string;             // Номер светильника (например, "L1")
-    Center: GDBvertex;          // Геометрический центр светильника
+    Center: TzePoint3d;          // Геометрический центр светильника
     GeometryEntities: TEntityList;  // Список геометрических примитивов
     TextEntity: PGDBObjEntity;  // Ссылка на текстовый примитив
   end;

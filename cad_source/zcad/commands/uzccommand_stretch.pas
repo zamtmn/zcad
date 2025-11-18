@@ -56,7 +56,7 @@ var
 
 // Создание вершины 2D с целочисленными координатами
 // Creating a 2D vertex with integer coordinates
-function CreateVertex2DI(x, y: Integer): GDBvertex2DI;
+function CreateVertex2DI(x, y: Integer): TzePoint2i;
 begin
   Result.x := x;
   Result.y := y;
@@ -161,8 +161,8 @@ begin
   end;
 end;
 
-function Stretch_com_BeforeClick(const Context:TZCADCommandContext;wc:GDBvertex;
-  mc:GDBvertex2DI;var button:byte;osp:pos_record;mclick:integer):integer;
+function Stretch_com_BeforeClick(const Context:TZCADCommandContext;wc:TzePoint3d;
+  mc:TzePoint2i;var button:byte;osp:pos_record;mclick:integer):integer;
 begin
   case StretchComMode of
     SM_GetEnts:
@@ -206,8 +206,8 @@ begin
     drawings.GetCurrentDWG.wa.param.seldesc.Frame2);
 end;
 
-function Stretch_com_AfterClick(const Context:TZCADCommandContext;wc:GDBvertex;
-  mc:GDBvertex2DI;var button:byte;osp:pos_record;mclick:integer):integer;
+function Stretch_com_AfterClick(const Context:TZCADCommandContext;wc:TzePoint3d;
+  mc:TzePoint2i;var button:byte;osp:pos_record;mclick:integer):integer;
 begin
   Result:=0;
   if StretchComMode=SM_GetEnts then begin

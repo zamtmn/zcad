@@ -31,10 +31,10 @@ type
   PGDBObjPoint=^GDBObjPoint;
 
   GDBObjPoint=object(GDBObj3d)
-    P_insertInOCS:GDBvertex;
-    P_insertInWCS:GDBvertex;
+    P_insertInOCS:TzePoint3d;
+    P_insertInWCS:TzePoint3d;
     constructor init(own:Pointer;layeraddres:PGDBLayerProp;
-      LW:smallint;p:GDBvertex);
+      LW:smallint;p:TzePoint3d);
     constructor initnul(owner:PGDBObjGenericWithSubordinated);
     procedure LoadFromDXF(var rdr:TZMemReader;ptu:PExtensionData;
       var drawing:TDrawingDef;var context:TIODXFLoadContext);virtual;
@@ -63,7 +63,7 @@ type
     function GetObjTypeName:string;virtual;
     procedure getoutbound(var DC:TDrawContext);virtual;
 
-    procedure TransformAt(p:PGDBObjEntity;t_matrix:PDMatrix4D);virtual;
+    procedure TransformAt(p:PGDBObjEntity;t_matrix:PDMatrix4d);virtual;
 
     function CreateInstance:PGDBObjPoint;static;
     function GetObjType:TObjID;virtual;
@@ -225,7 +225,7 @@ end;
 procedure GDBObjPoint.remaponecontrolpoint(pdesc:pcontrolpointdesc;
   ProjectProc:GDBProjectProc);
 var
-  tv:GDBvertex;
+  tv:TzePoint3d;
 begin
   if pdesc^.pointtype=os_point then begin
     pdesc.worldcoord:=P_insertInOCS;

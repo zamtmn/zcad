@@ -71,7 +71,7 @@ type
       function GetGlyphAdvance(GD:TGlyphData):Single;override;
       function GetGlyphContoursCount(GD:TGlyphData):Integer;override;
       function GetGlyphPointsCount(GD:TGlyphData):Integer;override;
-      function GetGlyphPoint(GD:TGlyphData;np:integer):GDBvertex2D;override;
+      function GetGlyphPoint(GD:TGlyphData;np:integer):TzePoint2d;override;
       function GetGlyphPointFlag(GD:TGlyphData;np:integer):TTTFPointFlags;override;
       function GetGlyphConEnd(GD:TGlyphData;np:integer):Integer;override;
   end;
@@ -205,7 +205,7 @@ begin
   GetGlyph(PtrInt(GD.PG));
   result:=FontMgr.GetFreeTypeFont(FreeTypeTTFImpl.FontID).glyph^.outline.n_points;
 end;
-function TTTFBackendFreeType.GetGlyphPoint(GD:TGlyphData;np:integer):GDBvertex2D;
+function TTTFBackendFreeType.GetGlyphPoint(GD:TGlyphData;np:integer):TzePoint2d;
 //var
 //  sm:FT_Size_Metrics;
 begin

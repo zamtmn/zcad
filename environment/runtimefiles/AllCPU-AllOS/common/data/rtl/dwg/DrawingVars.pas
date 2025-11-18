@@ -18,7 +18,7 @@ var
    DWG_DrawMode:Boolean;{определена в коде}
 
    DWG_Snap:GDBSnap2D;
-   DWG_GridSpacing:GDBvertex2D;
+   DWG_GridSpacing:TzePoint2d;
 
    DWG_LTScale:Double;
 

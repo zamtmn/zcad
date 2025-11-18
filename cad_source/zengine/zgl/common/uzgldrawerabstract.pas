@@ -72,25 +72,25 @@ TZGLAbstractDrawer=class
                         procedure DrawLine2DInDCS(const x1,y1,x2,y2:TStoredType);overload;virtual;abstract;
                         procedure DrawQuad2DInDCS(const x1,y1,x2,y2:TStoredType);virtual;abstract;
                         procedure DrawClosedPolyLine2DInDCS(const coords:array of TStoredType);overload;virtual;abstract;
-                        procedure DrawLine3DInModelSpace(const p1,p2:gdbvertex;var matrixs:tmatrixs);virtual;abstract;
-                        procedure DrawPoint3DInModelSpace(const p:gdbvertex;var matrixs:tmatrixs);virtual;abstract;
-                        procedure DrawTriangle3DInModelSpace(const normal,p1,p2,p3:gdbvertex;var matrixs:tmatrixs);virtual;abstract;
-                        procedure DrawQuad3DInModelSpace(const normal,p1,p2,p3,p4:gdbvertex;var matrixs:tmatrixs);overload;virtual;abstract;
-                        procedure DrawQuad3DInModelSpace(const p1,p2,p3,p4:gdbvertex;var matrixs:tmatrixs);overload;virtual;abstract;
+                        procedure DrawLine3DInModelSpace(const p1,p2:TzePoint3d;var matrixs:tmatrixs);virtual;abstract;
+                        procedure DrawPoint3DInModelSpace(const p:TzePoint3d;var matrixs:tmatrixs);virtual;abstract;
+                        procedure DrawTriangle3DInModelSpace(const normal,p1,p2,p3:TzePoint3d;var matrixs:tmatrixs);virtual;abstract;
+                        procedure DrawQuad3DInModelSpace(const normal,p1,p2,p3,p4:TzePoint3d;var matrixs:tmatrixs);overload;virtual;abstract;
+                        procedure DrawQuad3DInModelSpace(const p1,p2,p3,p4:TzePoint3d;var matrixs:tmatrixs);overload;virtual;abstract;
                         procedure DrawAABB3DInModelSpace(const BoundingBox:TBoundingBox;var matrixs:tmatrixs);virtual;abstract;
                         procedure DrawContour3DInModelSpace(const pa:GDBPoint3dArray;var matrixs:tmatrixs;Closed:boolean=true);virtual;abstract;
                         procedure SetOGLMatrix(const cam:GDBObjCamera;const w,h:integer);virtual;abstract;
                         procedure PostRenderDraw;virtual;abstract;
 
-                        function ProjectPoint3DInModelSpace(const p:gdbvertex;var matrixs:tmatrixs):GDBvertex2D;virtual;abstract;
+                        function ProjectPoint3DInModelSpace(const p:TzePoint3d;var matrixs:tmatrixs):TzePoint2d;virtual;abstract;
 
-                        procedure pushMatrixAndSetTransform(const Transform:DMatrix4D;ResetLCS:Boolean=False);overload;virtual;abstract;
-                        procedure pushMatrixAndSetTransform(const Transform:DMatrix4F;ResetLCS:Boolean=False);overload;virtual;abstract;
+                        procedure pushMatrixAndSetTransform(const Transform:DMatrix4d;ResetLCS:Boolean=False);overload;virtual;abstract;
+                        procedure pushMatrixAndSetTransform(const Transform:DMatrix4f;ResetLCS:Boolean=False);overload;virtual;abstract;
                         procedure DisableLCS(var matrixs:tmatrixs);overload;virtual;abstract;
-                        procedure AddToLCS(const v:GDBvertex);virtual;abstract;
+                        procedure AddToLCS(const v:TzePoint3d);virtual;abstract;
                         function SetLCSState(State:boolean):boolean;virtual;abstract;
-                        function SetLCS(const newLCS:GDBvertex):GDBvertex;virtual;abstract;
-                        function GetLCS:GDBvertex;virtual;abstract;
+                        function SetLCS(const newLCS:TzePoint3d):TzePoint3d;virtual;abstract;
+                        function GetLCS:TzePoint3d;virtual;abstract;
                         procedure EnableLCS(var matrixs:tmatrixs);overload;virtual;abstract;
                         procedure popMatrix;virtual;abstract;
                    end;

@@ -49,22 +49,22 @@ type
     {Команды которыми примитив рисует сам себя}
     procedure DrawTextContent(drawer:TZGLAbstractDrawer;
       content:TDXFEntsInternalStringType;_pfont:PGDBfont;
-      const DrawMatrix,objmatrix:DMatrix4D;const textprop_size:double;var Outbound:OutBound4V);
+      const DrawMatrix,objmatrix:DMatrix4d;const textprop_size:double;var Outbound:OutBound4V);
     procedure DrawLineWithLT(var Entity:GDBObjDrawable;
-      var ObjMatrix:DMatrix4D;var rc:TDrawContext;
-      const StartPointOCS,EndPointOCS:GDBVertex;const vp:GDBObjVisualProp;
+      var ObjMatrix:DMatrix4d;var rc:TDrawContext;
+      const StartPointOCS,EndPointOCS:TzePoint3d;const vp:GDBObjVisualProp;
       OnlyOne:boolean=False);
     procedure DrawLineByConstRefLinePropWithLT(
-      var Entity:GDBObjDrawable;var ObjMatrix:DMatrix4D;
+      var Entity:GDBObjDrawable;var ObjMatrix:DMatrix4d;
       var rc:TDrawContext;constref LP:GDBLineProp;
       const vp:GDBObjVisualProp;OnlyOne:boolean=False);
     procedure DrawLineWithoutLT(var rc:TDrawContext;
-      const startpoint,endpoint:GDBVertex);
+      const startpoint,endpoint:TzePoint3d);
     procedure DrawPolyLineWithLT(var rc:TDrawContext;
       const points:GDBPoint3dArray;const vp:GDBObjVisualProp;
       const closed,ltgen:boolean);virtual;
     procedure DrawPoint(var rc:TDrawContext;
-      const point:GDBVertex;const vp:GDBObjVisualProp);
+      const point:TzePoint3d;const vp:GDBObjVisualProp);
     procedure StartSurface;
     procedure EndSurface;
   end;
@@ -107,7 +107,7 @@ end;
 procedure TZEntityRepresentation.DrawGeometry(var rc:TDrawContext;
   const aabb:TBoundingBox;const inFrustumState:TInBoundingVolume);
 var
-  v:gdbvertex;
+  v:TzePoint3d;
   simplydraw:boolean;
 begin
   if rc.lod=LODCalculatedDetail then begin
@@ -138,21 +138,21 @@ end;
 
 procedure TZEntityRepresentation.DrawTextContent(drawer:TZGLAbstractDrawer;
   content:TDXFEntsInternalStringType;_pfont:PGDBfont;
-  const DrawMatrix,objmatrix:DMatrix4D;const textprop_size:double;var Outbound:OutBound4V);
+  const DrawMatrix,objmatrix:DMatrix4d;const textprop_size:double;var Outbound:OutBound4V);
 begin
   Graphix.DrawTextContent(drawer,content,_pfont,DrawMatrix,objmatrix,
     textprop_size,Outbound);
 end;
 
 procedure TZEntityRepresentation.DrawLineWithLT(var Entity:GDBObjDrawable;
-  var ObjMatrix:DMatrix4D;var rc:TDrawContext;
-  const StartPointOCS,EndPointOCS:GDBVertex;const vp:GDBObjVisualProp;
+  var ObjMatrix:DMatrix4d;var rc:TDrawContext;
+  const StartPointOCS,EndPointOCS:TzePoint3d;const vp:GDBObjVisualProp;
   OnlyOne:boolean=False);
 var
   gl:TGeomLine3D;
   gp:TGeomProxy;
   dr:TLLDrawResult;
-  StartPointWCS,EndPointWCS:GDBVertex;
+  StartPointWCS,EndPointWCS:TzePoint3d;
 begin
   StartPointWCS:=VectorTransform3D(StartPointOCS,ObjMatrix);
   EndPointWCS:=VectorTransform3D(EndPointOCS,ObjMatrix);
@@ -168,7 +168,7 @@ begin
 end;
 
 procedure TZEntityRepresentation.DrawLineByConstRefLinePropWithLT(
-  var Entity:GDBObjDrawable;var ObjMatrix:DMatrix4D;
+  var Entity:GDBObjDrawable;var ObjMatrix:DMatrix4d;
   var rc:TDrawContext;constref LP:GDBLineProp;
   const vp:GDBObjVisualProp;OnlyOne:boolean=False);
 var
@@ -191,7 +191,7 @@ begin
 end;
 
 procedure TZEntityRepresentation.DrawLineWithoutLT(var rc:TDrawContext;
-  const startpoint,endpoint:GDBVertex);
+  const startpoint,endpoint:TzePoint3d);
 var
   gl:TGeomLine3D;
   gp:TGeomProxy;
@@ -209,7 +209,7 @@ begin
 end;
 
 procedure TZEntityRepresentation.DrawPoint(var rc:TDrawContext;
-  const point:GDBVertex;const vp:GDBObjVisualProp);
+  const point:TzePoint3d;const vp:GDBObjVisualProp);
 var
   //gl:TGeomLine3D;
   gp:TGeomProxy;
@@ -229,7 +229,7 @@ end;
 procedure TZEntityRepresentation.DrawPolyLineWithLT(var rc:TDrawContext;
   const points:GDBPoint3dArray;const vp:GDBObjVisualProp;const closed,ltgen:boolean);
 var
-  ptv,ptvprev,ptvfisrt:pgdbvertex;
+  ptv,ptvprev,ptvfisrt:PzePoint3d;
   ir:itrec;
   gl:TGeomLine3D;
   segcounter:integer;

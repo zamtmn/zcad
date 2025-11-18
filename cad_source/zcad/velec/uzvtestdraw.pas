@@ -110,14 +110,14 @@ uses
 
 
 
-  function testTempDrawText(p1:GDBVertex;mText:String):TCommandResult;
-  function testTempDrawLine(p1:GDBVertex;p2:GDBVertex):TCommandResult;
+  function testTempDrawText(p1:TzePoint3d;mText:String):TCommandResult;
+  function testTempDrawLine(p1:TzePoint3d;p2:TzePoint3d):TCommandResult;
 
-  function testTempDrawLineColor(p1:GDBVertex;p2:GDBVertex;color:integer):TCommandResult;
-  function testTempDraw2dLineColor(pt1:GDBVertex2D;pt2:GDBVertex2D;color:integer):TCommandResult;
+  function testTempDrawLineColor(p1:TzePoint3d;p2:TzePoint3d;color:integer):TCommandResult;
+  function testTempDraw2dLineColor(pt1:TzePoint2d;pt2:TzePoint2d;color:integer):TCommandResult;
 
-  function testTempDrawPLCross(point:GDBVertex;rr:double;color:Integer):TCommandResult;
-  function testDrawCircle(p1:GDBVertex;rr:Double;color:integer):TCommandResult;
+  function testTempDrawPLCross(point:TzePoint3d;rr:double;color:Integer):TCommandResult;
+  function testDrawCircle(p1:TzePoint3d;rr:Double;color:integer):TCommandResult;
 
   function getTestLayer(createdlayername:string):PGDBLayerProp;
 implementation
@@ -146,7 +146,7 @@ implementation
   end;
 
   //Визуализация круга его p1-координата, rr-радиус, color-цвет
-  function testDrawCircle(p1:GDBVertex;rr:Double;color:integer):TCommandResult;
+  function testDrawCircle(p1:TzePoint3d;rr:Double;color:integer):TCommandResult;
   var
       pcircle:PGDBObjCircle;
   begin
@@ -163,7 +163,7 @@ implementation
       result:=cmd_ok;
   end;
   //быстрое написание текста
-  function testTempDrawText(p1:GDBVertex;mText:String):TCommandResult;
+  function testTempDrawText(p1:TzePoint3d;mText:String):TCommandResult;
   var
       ptext:PGDBObjText;
   begin
@@ -177,7 +177,7 @@ implementation
         result:=cmd_ok;
   end;
   //быстрое рисование линии
-  function testTempDrawLine(p1:GDBVertex;p2:GDBVertex):TCommandResult;
+  function testTempDrawLine(p1:TzePoint3d;p2:TzePoint3d):TCommandResult;
   var
       pline:PGDBObjLine;
   begin
@@ -194,7 +194,7 @@ implementation
       result:=cmd_ok;
   end;
   //быстрое рисование линии с цветом
-  function testTempDrawLineColor(p1:GDBVertex;p2:GDBVertex;color:integer):TCommandResult;
+  function testTempDrawLineColor(p1:TzePoint3d;p2:TzePoint3d;color:integer):TCommandResult;
   var
       pline:PGDBObjLine;
   begin
@@ -212,10 +212,10 @@ implementation
   end;
 
   //быстрое рисование 2d point линии с цветом
-  function testTempDraw2dLineColor(pt1:GDBVertex2D;pt2:GDBVertex2D;color:integer):TCommandResult;
+  function testTempDraw2dLineColor(pt1:TzePoint2d;pt2:TzePoint2d;color:integer):TCommandResult;
   var
       pline:PGDBObjLine;
-      p1,p2:gdbvertex;
+      p1,p2:TzePoint3d;
   begin
       begin
         p1.x:=pt1.x;
@@ -237,14 +237,14 @@ implementation
       end;
       result:=cmd_ok;
   end;
-  function testTempDrawPLCross(point:GDBVertex;rr:double;color:Integer):TCommandResult;
+  function testTempDrawPLCross(point:TzePoint3d;rr:double;color:Integer):TCommandResult;
   var
       polyObj:PGDBObjPolyLine;
-      tempPoint:GDBVertex;
+      tempPoint:TzePoint3d;
       //i:integer;
-      //vertexObj:GDBvertex;
+      //vertexObj:TzePoint3d;
      // pe:T3PointCircleModePentity;
-     // p1,p2:gdbvertex;
+     // p1,p2:TzePoint3d;
   begin
        polyObj:=GDBObjPolyline.CreateInstance;
        zcSetEntPropFromCurrentDrawingProp(polyObj);
@@ -274,11 +274,11 @@ implementation
   end;
 
 
-  procedure DrawInOutPoly(pt:GDBVertex; radius: double; sides, color, where, alpha: Integer);
+  procedure DrawInOutPoly(pt:TzePoint3d; radius: double; sides, color, where, alpha: Integer);
  var
     //x, y: Integer;
     i   : Integer;
-    tempPt:GDBVertex;
+    tempPt:TzePoint3d;
     sine,cosine:double;
  begin
    //SetColor(color);
@@ -349,7 +349,7 @@ function TestModul_com(const Context:TZCADCommandContext;operands:TCommandOperan
      var
     //x, y: Integer;
     //i   : Integer;
-    tempPoint:GDBVertex;
+    tempPoint:TzePoint3d;
  begin
 
        tempPoint.x:=0;

@@ -26,29 +26,29 @@ uses uzbLogIntf,uzeconsts,uzepalette,uzestyleslinetypes,uzeentityfactory,
      uzegeometrytypes,uzeentgenericsubentry,uzeentity;
 function ENTF_CreateLine(owner:PGDBObjGenericSubEntry;ownerarray:PGDBObjEntityOpenArray;
                          ALayer:PGDBLayerProp;ALT:PGDBLtypeProp;ALW:TGDBLineWeight;AColor:TGDBPaletteColor;
-                         const AP1,AP2:GDBvertex): PGDBObjEntity;
+                         const AP1,AP2:TzePoint3d): PGDBObjEntity;
 function ENTF_CreateCircle(owner:PGDBObjGenericSubEntry;ownerarray:PGDBObjEntityOpenArray;
                            ALayer:PGDBLayerProp;ALT:PGDBLtypeProp;ALW:TGDBLineWeight;AColor:TGDBPaletteColor;
-                           const ACenter:GDBvertex;const ARadius:Double): PGDBObjEntity;
+                           const ACenter:TzePoint3d;const ARadius:Double): PGDBObjEntity;
 function ENTF_CreateArc(AOwner:PGDBObjGenericSubEntry;AArrayInOwner: PGDBObjEntityOpenArray;
                               ALayer:PGDBLayerProp;ALT:PGDBLtypeProp;ALW:TGDBLineWeight;AColor:TGDBPaletteColor;
-                              const ACenter:GDBvertex;const ARadius,AStartAngle,AEndAngle:Double):PGDBObjEntity;
+                              const ACenter:TzePoint3d;const ARadius,AStartAngle,AEndAngle:Double):PGDBObjEntity;
 function ENTF_CreateSolid(owner:PGDBObjGenericSubEntry;ownerarray:PGDBObjEntityOpenArray;
                           ALayer:PGDBLayerProp;ALT:PGDBLtypeProp;ALW:TGDBLineWeight;AColor:TGDBPaletteColor;
-                          const AP1,AP2,AP3:GDBvertex): PGDBObjEntity;overload;
+                          const AP1,AP2,AP3:TzePoint3d): PGDBObjEntity;overload;
 function ENTF_CreateSolid(owner:PGDBObjGenericSubEntry;ownerarray:PGDBObjEntityOpenArray;
                           ALayer:PGDBLayerProp;ALT:PGDBLtypeProp;ALW:TGDBLineWeight;AColor:TGDBPaletteColor;
-                          const AP1,AP2,AP3,AP4:GDBvertex): PGDBObjEntity;overload;
+                          const AP1,AP2,AP3,AP4:TzePoint3d): PGDBObjEntity;overload;
 function ENTF_CreateBlockInsert(AOwner:PGDBObjGenericSubEntry;AArrayInOwner: PGDBObjEntityOpenArray;
                                 ALayer:PGDBLayerProp;ALT:PGDBLtypeProp;ALW:TGDBLineWeight;AColor:TGDBPaletteColor;
-                                AName:String;const APInsert:GDBvertex;const AScale,AAngle:Double):PGDBObjEntity;
+                                AName:String;const APInsert:TzePoint3d;const AScale,AAngle:Double):PGDBObjEntity;
 function ENTF_CreateLWPolyLine(AOwner:PGDBObjGenericSubEntry;AArrayInOwner: PGDBObjEntityOpenArray;
                                ALayer:PGDBLayerProp;ALT:PGDBLtypeProp;ALW:TGDBLineWeight;AColor:TGDBPaletteColor;
                                const args:array of const):PGDBObjEntity;
 implementation
 function ENTF_CreateBlockInsert(AOwner:PGDBObjGenericSubEntry;AArrayInOwner: PGDBObjEntityOpenArray;
                                 ALayer:PGDBLayerProp;ALT:PGDBLtypeProp;ALW:TGDBLineWeight;AColor:TGDBPaletteColor;
-                                AName:String;const APInsert:GDBvertex;const AScale,AAngle:Double):PGDBObjEntity;
+                                AName:String;const APInsert:TzePoint3d;const AScale,AAngle:Double):PGDBObjEntity;
 var
   pb:PGDBObjEntity;
   nam:String;
@@ -84,7 +84,7 @@ end;
 
 function ENTF_CreateSolid(owner:PGDBObjGenericSubEntry;ownerarray:PGDBObjEntityOpenArray;
                           ALayer:PGDBLayerProp;ALT:PGDBLtypeProp;ALW:TGDBLineWeight;AColor:TGDBPaletteColor;
-                          const AP1,AP2,AP3:GDBvertex): PGDBObjEntity;
+                          const AP1,AP2,AP3:TzePoint3d): PGDBObjEntity;
 begin
   if assigned(_StandartSolidCreateProcedure)then begin
     result:=_StandartSolidCreateProcedure(owner,[AP1.x,AP1.y,AP1.z,AP2.x,AP2.y,AP2.z,AP3.x,AP3.y,AP3.z]);
@@ -100,7 +100,7 @@ begin
 end;
 function ENTF_CreateSolid(owner:PGDBObjGenericSubEntry;ownerarray:PGDBObjEntityOpenArray;
                           ALayer:PGDBLayerProp;ALT:PGDBLtypeProp;ALW:TGDBLineWeight;AColor:TGDBPaletteColor;
-                          const AP1,AP2,AP3,AP4:GDBvertex): PGDBObjEntity;
+                          const AP1,AP2,AP3,AP4:TzePoint3d): PGDBObjEntity;
 begin
   if assigned(_StandartSolidCreateProcedure)then begin
     result:=_StandartSolidCreateProcedure(owner,[AP1.x,AP1.y,AP1.z,AP2.x,AP2.y,AP2.z,AP3.x,AP3.y,AP3.z,AP4.x,AP4.y,AP4.z]);
@@ -117,7 +117,7 @@ end;
 
 function ENTF_CreateLine(owner:PGDBObjGenericSubEntry;ownerarray:PGDBObjEntityOpenArray;
                          ALayer:PGDBLayerProp;ALT:PGDBLtypeProp;ALW:TGDBLineWeight;AColor:TGDBPaletteColor;
-                         const AP1,AP2:GDBvertex): PGDBObjEntity;
+                         const AP1,AP2:TzePoint3d): PGDBObjEntity;
 begin
   if assigned(_StandartLineCreateProcedure)then
                                                begin
@@ -135,7 +135,7 @@ begin
 end;
 function ENTF_CreateCircle(owner:PGDBObjGenericSubEntry;ownerarray:PGDBObjEntityOpenArray;
                            ALayer:PGDBLayerProp;ALT:PGDBLtypeProp;ALW:TGDBLineWeight;AColor:TGDBPaletteColor;
-                           const ACenter:GDBvertex;const ARadius:Double): PGDBObjEntity;
+                           const ACenter:TzePoint3d;const ARadius:Double): PGDBObjEntity;
 begin
   if assigned(_StandartCircleCreateProcedure)then begin
     result:=_StandartCircleCreateProcedure(owner,[ACenter.x,ACenter.y,ACenter.z,ARadius]);
@@ -152,7 +152,7 @@ begin
 end;
 function ENTF_CreateArc(AOwner:PGDBObjGenericSubEntry;AArrayInOwner: PGDBObjEntityOpenArray;
                               ALayer:PGDBLayerProp;ALT:PGDBLtypeProp;ALW:TGDBLineWeight;AColor:TGDBPaletteColor;
-                              const ACenter:GDBvertex;const ARadius,AStartAngle,AEndAngle:Double):PGDBObjEntity;
+                              const ACenter:TzePoint3d;const ARadius,AStartAngle,AEndAngle:Double):PGDBObjEntity;
 begin
   if assigned(_StandartArcCreateProcedure)then begin
     result:=_StandartArcCreateProcedure(AOwner,[ACenter.x,ACenter.y,ACenter.z,ARadius,AStartAngle,AEndAngle]);

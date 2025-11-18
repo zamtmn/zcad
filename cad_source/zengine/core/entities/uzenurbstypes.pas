@@ -30,7 +30,7 @@ type
   TCPVector=object(GZVector<GDBvertex4S>)
   end;
   TSingleArray=array of single;
-  TControlPointsArray=array of GDBVertex;
+  TControlPointsArray=array of TzePoint3d;
 
 implementation
 end.

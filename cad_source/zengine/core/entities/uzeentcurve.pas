@@ -47,7 +47,7 @@ type
     function onmouse(var popa:TZctnrVectorPGDBaseEntity;
       const MF:ClipArray;InSubEntry:boolean):boolean;virtual;
     function onpoint(var objects:TZctnrVectorPGDBaseEntity;
-      const point:GDBVertex):boolean;virtual;
+      const point:TzePoint3d):boolean;virtual;
     procedure rtmodifyonepoint(const rtmod:TRTModifyData);virtual;
     procedure remaponecontrolpoint(pdesc:pcontrolpointdesc;
       ProjectProc:GDBProjectProc);virtual;
@@ -61,12 +61,12 @@ type
     function GetObjTypeName:string;virtual;
     procedure getoutbound(var DC:TDrawContext);virtual;
 
-    procedure AddVertex(const Vertex:GDBVertex);virtual;
+    procedure AddVertex(const Vertex:TzePoint3d);virtual;
 
     procedure SaveToDXFfollow(var outStream:TZctnrVectorBytes;
       var drawing:TDrawingDef;var IODXFContext:TIODXFSaveContext);virtual;
-    procedure TransformAt(p:PGDBObjEntity;t_matrix:PDMatrix4D);virtual;
-    procedure transform(const t_matrix:DMatrix4D);virtual;
+    procedure TransformAt(p:PGDBObjEntity;t_matrix:PDMatrix4d);virtual;
+    procedure transform(const t_matrix:DMatrix4d);virtual;
 
     function CalcTrueInFrustum(
       const frustum:ClipArray):TInBoundingVolume;virtual;
@@ -87,7 +87,7 @@ function GDBPoint3dArraygetsnapWOPProjPoint(const VertexArrayInWCS:GDBPoint3dArr
 procedure GDBPoint3dArrayAddOnTrackAxis(const VertexArrayInWCS:GDBPoint3dArray;
   var posr:os_record;const processaxis:taddotrac;const closed:boolean);
 function GetDirInPoint(const VertexArrayInWCS:GDBPoint3dArray;
-  point:GDBVertex;closed:boolean):GDBVertex;
+  point:TzePoint3d;closed:boolean):TzePoint3d;
 
 implementation
 
@@ -102,9 +102,9 @@ begin
 end;
 
 function GetDirInPoint(const VertexArrayInWCS:GDBPoint3dArray;
-  point:GDBVertex;closed:boolean):GDBVertex;
+  point:TzePoint3d;closed:boolean):TzePoint3d;
 var
-  ptv,ppredtv:pgdbvertex;
+  ptv,ppredtv:PzePoint3d;
   ir:itrec;
   found:integer;
 begin
@@ -142,8 +142,8 @@ end;
 procedure GDBPoint3dArrayAddOnTrackAxis(const VertexArrayInWCS:GDBPoint3dArray;
   var posr:os_record;const processaxis:taddotrac;const closed:boolean);
 var
-  tv:gdbvertex;
-  ptv,ppredtv:pgdbvertex;
+  tv:TzePoint3d;
+  ptv,ppredtv:PzePoint3d;
   ir:itrec;
   found:integer;
 begin
@@ -196,7 +196,7 @@ end;
 
 procedure GDBObjCurve.SaveToDXFFollow;
 var
-  ptv:pgdbvertex;
+  ptv:PzePoint3d;
   ir:itrec;
 begin
   ptv:=vertexarrayinocs.beginiterate(ir);
@@ -211,7 +211,7 @@ begin
   SaveToDXFObjPrefix(outStream,'SEQEND','',IODXFContext,True);
 end;
 
-procedure GDBObjCurve.AddVertex(const Vertex:GDBVertex);
+procedure GDBObjCurve.AddVertex(const Vertex:TzePoint3d);
 begin
   vertexarrayinocs.PushBackData(vertex);
 end;
@@ -257,7 +257,7 @@ end;
 procedure BuildSnapArray(const VertexArrayInWCS:GDBPoint3dArray;
   var snaparray:GDBVectorSnapArray;const closed:boolean);
 var
-  ptv,ptvprev:pgdbvertex;
+  ptv,ptvprev:PzePoint3d;
   vs:VectorSnap;
   ir:itrec;
 begin
@@ -289,7 +289,7 @@ end;
 
 function GDBObjCurve.GetLength:double;
 var
-  ptv,ptvprev:pgdbvertex;
+  ptv,ptvprev:PzePoint3d;
   ir:itrec;
 begin
   Result:=0;
@@ -305,8 +305,8 @@ end;
 
 procedure GDBObjCurve.FormatWithoutSnapArray;
 var
-  ptv:pgdbvertex;
-  tv:gdbvertex;
+  ptv:PzePoint3d;
+  tv:TzePoint3d;
   ir:itrec;
 begin
   VertexArrayInWCS.Clear;
@@ -332,9 +332,9 @@ begin
   CalcActualVisible(dc.DrawingContext.VActuality);
 end;
 
-procedure GDBObjCurve.TransformAt(p:PGDBObjEntity;t_matrix:PDMatrix4D);
+procedure GDBObjCurve.TransformAt(p:PGDBObjEntity;t_matrix:PDMatrix4d);
 var
-  ptv,ptv2:pgdbvertex;
+  ptv,ptv2:PzePoint3d;
   ir,ir2:itrec;
 begin
   ptv:=VertexArrayInOCS.beginiterate(ir);
@@ -347,9 +347,9 @@ begin
     until (ptv=nil)or(ptv2=nil);
 end;
 
-procedure GDBObjCurve.transform(const t_matrix:DMatrix4D);
+procedure GDBObjCurve.transform(const t_matrix:DMatrix4d);
 var
-  ptv:pgdbvertex;
+  ptv:PzePoint3d;
   ir:itrec;
 begin
   ptv:=VertexArrayInOCS.beginiterate(ir);
@@ -363,7 +363,7 @@ end;
 function GDBObjCurve.Clone;
 var
   tpo:PGDBObjCurve;
-  p:pgdbvertex;
+  p:PzePoint3d;
   i:integer;
 begin
   Getmem(Pointer(tpo),sizeof(GDBObjCurve));
@@ -379,7 +379,7 @@ end;
 
 procedure GDBObjCurve.rtsave;
 var
-  p,pold:pgdbvertex;
+  p,pold:PzePoint3d;
   i:integer;
 begin
   p:=vertexarrayinocs.GetParrayAsPointer;
@@ -401,7 +401,7 @@ begin
 end;
 
 function GDBObjCurve.onpoint(var objects:TZctnrVectorPGDBaseEntity;
-  const point:GDBVertex):boolean;
+  const point:TzePoint3d):boolean;
 begin
   if VertexArrayInWCS.onpoint(point,False) then begin
     Result:=True;
@@ -423,7 +423,7 @@ procedure GDBObjCurve.remaponecontrolpoint(pdesc:pcontrolpointdesc;
   ProjectProc:GDBProjectProc);
 var
   vertexnumber:integer;
-  tv:GDBvertex;
+  tv:TzePoint3d;
 begin
   vertexnumber:=pdesc^.vertexnum;
   pdesc.worldcoord:=GDBPoint3dArray.PTArr(VertexArrayInWCS.parray)^[vertexnumber];
@@ -435,7 +435,7 @@ procedure GDBObjCurve.addcontrolpoints;
 var
   pdesc:controlpointdesc;
   i:integer;
-  pv:pGDBvertex;
+  pv:PzePoint3d;
 begin
   PSelectedObjDesc(tdesc)^.pcontrolpoint^.init(VertexArrayInWCS.Count);
   pv:=VertexArrayInWCS.GetParrayAsPointer;
@@ -459,10 +459,10 @@ const
   pnum=8;
 var
   t,d,e:double;
-  tv,n,v,dir:gdbvertex;
+  tv,n,v,dir:TzePoint3d;
   mode,vertexnum,tc:integer;
-  pv1:PGDBVertex;
-  pv2:PGDBVertex;
+  pv1:PzePoint3d;
+  pv2:PzePoint3d;
 begin
   vertexnum:=(VertexArrayInWCS.Count)*pnum;
   if onlygetsnapcount>vertexnum then begin

@@ -44,7 +44,7 @@ type
 const
   maxgrid=100;
 var
-  gridarray:array [0..maxgrid,0..maxgrid] of GDBvertex2S;
+  gridarray:array [0..maxgrid,0..maxgrid] of TzePoint2s;
 implementation
 //uses mainwindow;
 procedure TGDIViewArea.CreateDrawer;

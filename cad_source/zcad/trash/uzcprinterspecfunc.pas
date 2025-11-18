@@ -27,20 +27,20 @@ uses uzegeometrytypes,uzepalette,uzbtypes,LCLType,Printers,
 type
     PTPrinterRasterizer=^TPrinterRasterizer;
     TPrinterRasterizer=object(TOGLStateManager)
-                           model,project,RM:DMatrix4D;
+                           model,project,RM:DMatrix4d;
                            prevpoint:gdbvertex;
                            w,h:Integer;
                            wmm,hmm,scalex,scaley:Double;
                            procedure myglVertex3d(const V:GDBVertex);virtual;//inline;
                            procedure myglVertex(const x,y,z:Double);virtual;//inline;
-                           procedure myglVertex3dV(const V:PGDBVertex);virtual;//inline;
+                           procedure myglVertex3dV(const V:PzePoint3d);virtual;//inline;
                            procedure startrender;virtual;//inline;
                            procedure myglPushMatrix;virtual;//inline;
                            procedure myglPopMatrix;virtual;//inline;
 
                            procedure glcolor3ub(const red, green, blue: GLubyte);virtual;//inline;
                            procedure glColor3ubv(const v: TRGB);virtual;//inline;
-                           Function translate(const V:GDBVertex):GDBVertex2DI;
+                           Function translate(const V:GDBVertex):TzePoint2i;
                            procedure myglPointSize(const size: GLfloat);virtual;//inline;
                            procedure myglLineWidth(const width: GLfloat);virtual;//inline;
     end;
@@ -93,7 +93,7 @@ procedure TPrinterRasterizer.myglPopMatrix;
 begin
      inherited;
 end;
-Function TPrinterRasterizer.translate(const V:GDBVertex):GDBVertex2DI;
+Function TPrinterRasterizer.translate(const V:GDBVertex):TzePoint2i;
 begin
      //result.x:=round(((v.x+1)/2)*w{mm});
      //result.y:=round(h{mm}-((v.y+1)/2)*h{mm});
@@ -113,7 +113,7 @@ begin
 end;
 procedure TPrinterRasterizer.myglVertex3dV;
 var t:gdbvertex;
-    p1,p2:GDBVertex2DI;
+    p1,p2:TzePoint2i;
 begin
      (*{$IFDEF DEBUGCOUNTGEOMETRY}
      processpoint(v^);
@@ -146,7 +146,7 @@ begin
 end;
 procedure TPrinterRasterizer.myglVertex3d;
 var t:gdbvertex;
-    p1,p2:GDBVertex2DI;
+    p1,p2:TzePoint2i;
 begin
      (*{$IFDEF DEBUGCOUNTGEOMETRY}
      processpoint(v);
@@ -179,7 +179,7 @@ begin
 end;
 procedure TPrinterRasterizer.myglVertex;
 var t{,t1}:gdbvertex;
-    p1,p2:GDBVertex2DI;
+    p1,p2:TzePoint2i;
 begin
      (*
      t1:=createvertex(x,y,z);

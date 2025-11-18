@@ -31,7 +31,7 @@ type
   PTDrawingPreCalcData=^TDrawingPreCalcData;
 
   TDrawingPreCalcData=record
-    InverseObjMatrix:DMatrix4D;
+    InverseObjMatrix:DMatrix4d;
   end;
   PGDBObjGenericSubEntry=^GDBObjGenericSubEntry;
 
@@ -97,17 +97,17 @@ type
       const zoom,currentdegradationfactor:double);virtual;
     function FindObjectsInVolume(const Volume:TBoundingBox;
       var Objects:GDBObjOpenArrayOfPV):boolean;virtual;
-    function FindObjectsInPoint(const point:GDBVertex;
+    function FindObjectsInPoint(const point:TzePoint3d;
       var Objects:GDBObjOpenArrayOfPV):boolean;virtual;
-    function FindObjectsInPointSlow(const point:GDBVertex;
+    function FindObjectsInPointSlow(const point:TzePoint3d;
       var Objects:GDBObjOpenArrayOfPV):boolean;
-    function FindObjectsInPointInNode(const point:GDBVertex;
+    function FindObjectsInPointInNode(const point:TzePoint3d;
       const Node:TEntTreeNode;var Objects:GDBObjOpenArrayOfPV):boolean;
     function FindObjectsInVolumeInNode(
       const Volume:TBoundingBox;const Node:TEntTreeNode;
       var Objects:GDBObjOpenArrayOfPV):boolean;
     function onpoint(var objects:TZctnrVectorPGDBaseEntity;
-      const point:GDBVertex):boolean;virtual;
+      const point:TzePoint3d):boolean;virtual;
     procedure correctsublayers(var la:GDBLayerArray);virtual;
     function CalcTrueInFrustum(
       const frustum:ClipArray):TInBoundingVolume;virtual;
@@ -185,7 +185,7 @@ begin
     until p=nil;
 end;
 
-function GDBObjGenericSubEntry.FindObjectsInPointSlow(const point:GDBVertex;
+function GDBObjGenericSubEntry.FindObjectsInPointSlow(const point:TzePoint3d;
   var Objects:GDBObjOpenArrayOfPV):boolean;
 var
   pobj:PGDBObjEntity;
@@ -202,7 +202,7 @@ begin
     until pobj=nil;
 end;
 
-function GDBObjGenericSubEntry.FindObjectsInPointInNode(const point:GDBVertex;
+function GDBObjGenericSubEntry.FindObjectsInPointInNode(const point:TzePoint3d;
   const Node:TEntTreeNode;var Objects:GDBObjOpenArrayOfPV):boolean;
 var
   minus:boolean{$IFNDEF DELPHI}=False{$ENDIF};
@@ -272,7 +272,7 @@ begin
   Result:=Result or (plus or minus);
 end;
 
-function GDBObjGenericSubEntry.FindObjectsInPoint(const point:GDBVertex;
+function GDBObjGenericSubEntry.FindObjectsInPoint(const point:TzePoint3d;
   var Objects:GDBObjOpenArrayOfPV):boolean;
 begin
   if uzegeometry.IsPointInBB(point,self.ObjArray.ObjTree.BoundingBox) then begin
@@ -542,7 +542,7 @@ begin
 end;
 
 function GDBObjGenericSubEntry.onpoint(var objects:TZctnrVectorPGDBaseEntity;
-  const point:GDBVertex):boolean;
+  const point:TzePoint3d):boolean;
 var
   i:integer;
   p:pGDBObjEntity;

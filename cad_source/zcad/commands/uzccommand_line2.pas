@@ -36,10 +36,10 @@ uses
 function Line_com_CommandStart(const Context:TZCADCommandContext;
   operands:TCommandOperands):TCommandResult;
 procedure Line_com_CommandEnd(const Context:TZCADCommandContext;_self:pointer);
-function Line_com_BeforeClick(const Context:TZCADCommandContext;wc:GDBvertex;
-  mc:GDBvertex2DI;var button:byte;osp:pos_record;mclick:integer):integer;
-function Line_com_AfterClick(const Context:TZCADCommandContext;wc:GDBvertex;
-  mc:GDBvertex2DI;var button:byte;osp:pos_record;mclick:integer):integer;
+function Line_com_BeforeClick(const Context:TZCADCommandContext;wc:TzePoint3d;
+  mc:TzePoint2i;var button:byte;osp:pos_record;mclick:integer):integer;
+function Line_com_AfterClick(const Context:TZCADCommandContext;wc:TzePoint3d;
+  mc:TzePoint2i;var button:byte;osp:pos_record;mclick:integer):integer;
 
 var
   PCreatedGDBLine:pgdbobjline;
@@ -63,8 +63,8 @@ procedure Line_com_CommandEnd(const Context:TZCADCommandContext;_self:pointer);
 begin
 end;
 
-function Line_com_BeforeClick(const Context:TZCADCommandContext;wc:GDBvertex;
-  mc:GDBvertex2DI;var button:byte;osp:pos_record;mclick:integer):integer;
+function Line_com_BeforeClick(const Context:TZCADCommandContext;wc:TzePoint3d;
+  mc:TzePoint2i;var button:byte;osp:pos_record;mclick:integer):integer;
 var
   dc:TDrawContext;
 begin
@@ -80,8 +80,8 @@ begin
   end;
 end;
 
-function Line_com_AfterClick(const Context:TZCADCommandContext;wc:GDBvertex;
-  mc:GDBvertex2DI;var button:byte;osp:pos_record;mclick:integer):integer;
+function Line_com_AfterClick(const Context:TZCADCommandContext;wc:TzePoint3d;
+  mc:TzePoint2i;var button:byte;osp:pos_record;mclick:integer):integer;
 var
   po:PGDBObjSubordinated;
   domethod,undomethod:tmethod;

@@ -172,8 +172,8 @@ type
                            procedure myglLogicOp(const opcode: GLenum);inline;
                            procedure myglPushMatrix;virtual;//inline;
                            procedure myglPopMatrix;virtual;//inline;
-                           procedure myglMultMatrixD(const matrix:DMatrix4D);virtual;//inline;
-                           procedure myglMultMatrixF(const matrix:DMatrix4F);virtual;//inline;
+                           procedure myglMultMatrixD(const matrix:DMatrix4d);virtual;//inline;
+                           procedure myglMultMatrixF(const matrix:DMatrix4f);virtual;//inline;
                            procedure myglMatrixMode(const mode: GLenum);inline;
                            procedure myglLineStipple(const factor: GLint; const pattern: GLushort);inline;
                            procedure myglPolygonStipple(const ppattern:pointer);inline;
@@ -183,23 +183,23 @@ type
                            procedure glcolor4ub(const red, green, blue,alpha: GLubyte);virtual;//inline;
                            procedure glColor3ubv(const v: TRGB);virtual;//inline;
 
-                           procedure myglNormal3dV(const V:PGDBVertex);inline;
+                           procedure myglNormal3dV(const V:PzePoint3d);inline;
                            //procedure myglColor3ub(const red, green, blue: GLubyte);inline;
-                           procedure myglVertex3d(const V:GDBVertex);virtual;//inline;
+                           procedure myglVertex3d(const V:TzePoint3d);virtual;//inline;
                            procedure myglVertex2d(const x,y:Double);virtual;//inline;
                            procedure myglVertex2f(const x,y:GLFloat);virtual;//inline;
                            procedure myglvertex2dv(const V:Pointer);virtual;//inline;
                            procedure myglvertex2iv(const V:Pointer);virtual;//inline;
                            procedure myglVertex2i(x, y: GLint);virtual;//inline;
                            procedure myglVertex(const x,y,z:Double);virtual;overload;//inline;
-                           procedure myglVertex3dV(const V:PGDBVertex);virtual;//inline;
-                           procedure myglVertex3fV(const V:PGDBVertex3S);virtual;//inline;
-                           procedure myglVertex(constref V:GDBVertex);virtual;overload;//inline;
-                           procedure myglVertex(constref V:GDBVertex3S);virtual;overload;//inline;
+                           procedure myglVertex3dV(const V:PzePoint3d);virtual;//inline;
+                           procedure myglVertex3fV(const V:PzePoint3s);virtual;//inline;
+                           procedure myglVertex(constref V:TzePoint3d);virtual;overload;//inline;
+                           procedure myglVertex(constref V:TzePoint3s);virtual;overload;//inline;
                            procedure startrender;virtual;//inline;
                            procedure endrender;virtual;//inline;
                            {$IFDEF SINGLEPRECISIONGEOMETRY}
-                           procedure glVertex3dv(const v: PGDBVertex);inline;
+                           procedure glVertex3dv(const v: PzePoint3d);inline;
                            {$ENDIF}
                            procedure myglViewport(const x,y,width,height:Integer);inline;
                            procedure myglGetIntegerv(pname: GLenum; params: PGLint);inline;
@@ -244,7 +244,7 @@ const
 procedure SetDCPixelFormat(oglc:TOGLContextDesk);
 function isOpenGLError:GLenum;
 //(const v: PGLdouble); stdcall;
-//procedure myglVertex3dV(V:PGDBVertex);
+//procedure myglVertex3dV(V:PzePoint3d);
 procedure MyglMakeCurrent(oglc:TOGLContextDesk);
 procedure MySwapBuffers(oglc:TOGLContextDesk);
 procedure MywglDeleteContext(oglc:TOGLContextDesk);
@@ -258,7 +258,7 @@ Procedure DrawAABB(const BoundingBox:TBoundingBox);
 var
    bcount:integer;
    primcount,pointcount,bathcount:Integer;
-   middlepoint:GDBVertex;
+   middlepoint:TzePoint3d;
 implementation
 procedure MywglCreateContext(var oglc:TOGLContextDesk);
 begin
@@ -279,7 +279,7 @@ procedure MyglMakeCurrent(oglc:TOGLContextDesk);
 begin
     //wglMakeCurrent(oglc.DC, oglc.hrc);
 end;
-procedure processpoint(const point:gdbvertex3s);
+procedure processpoint(const point:TzePoint3s);
 begin
      //inc(pointcount);
      //middlepoint:=uzegeometry.VertexAdd(middlepoint,point);
@@ -342,9 +342,9 @@ begin
     }
 end;
 {$IFDEF SINGLEPRECISIONGEOMETRY}
-procedure TOGLStateManager.glVertex3dv(const v: PGDBVertex);
+procedure TOGLStateManager.glVertex3dv(const v: PzePoint3d);
 var
-   t:GDBvertex3S;
+   t:TzePoint3s;
 begin
      t.x:=v.x;
      t.y:=v.y;
@@ -353,7 +353,7 @@ begin
 end;
 {$ENDIF}
 procedure TOGLStateManager.myglvertex2iv(const V:Pointer);
-var t:gdbvertex;
+var t:TzePoint3d;
 begin
      {$IFDEF DEBUGCOUNTGEOMETRY}
      //processpoint(v^);
@@ -363,12 +363,12 @@ begin
                       glVertex2iV(pointer(v))
                   else
                       begin
-                           t:=vertexadd(createvertex(pGDBvertex2DI(v)^.x,pGDBvertex2DI(v)^.y,0),LCS.CurrentCamCSOffset);
+                           t:=vertexadd(createvertex(pTzePoint2i(v)^.x,pTzePoint2i(v)^.y,0),LCS.CurrentCamCSOffset);
                            glVertex3dV(@t);
                       end;
 end;
 procedure TOGLStateManager.myglVertex2i(x, y: GLint);
-var t:gdbvertex;
+var t:TzePoint3d;
 begin
      {$IFDEF DEBUGCOUNTGEOMETRY}
      //processpoint(v^);
@@ -383,7 +383,7 @@ begin
                       end;
 end;
 procedure TOGLStateManager.myglvertex2dv(const V:Pointer);
-var t:gdbvertex;
+var t:TzePoint3d;
 begin
      {$IFDEF DEBUGCOUNTGEOMETRY}
      //processpoint(v^);
@@ -393,13 +393,13 @@ begin
                       glVertex2dV(pointer(v))
                   else
                       begin
-                           t:=vertexadd(createvertex(pgdbvertex2d(v)^.x,pgdbvertex2d(v)^.y,0),LCS.CurrentCamCSOffset);
+                           t:=vertexadd(createvertex(PzePoint2d(v)^.x,PzePoint2d(v)^.y,0),LCS.CurrentCamCSOffset);
                            glVertex3dV(@t);
                       end;
 end;
 
 procedure TOGLStateManager.myglVertex3dV;
-var t:gdbvertex;
+var t:TzePoint3d;
 begin
      {$IFDEF DEBUGCOUNTGEOMETRY}
      //processpoint(v^);
@@ -414,7 +414,7 @@ begin
                       end;
 end;
 procedure TOGLStateManager.myglVertex3fV;
-var t:gdbvertex3s;
+var t:TzePoint3s;
 begin
      {$IFDEF DEBUGCOUNTGEOMETRY}
      processpoint(v^);
@@ -428,20 +428,20 @@ begin
                            glVertex3fV(@t);
                       end;
 end;
-procedure TOGLStateManager.myglVertex(constref V:GDBVertex);
+procedure TOGLStateManager.myglVertex(constref V:TzePoint3d);
 begin
   myglVertex3dV(@v);
 end;
-procedure TOGLStateManager.myglVertex(constref V:GDBVertex3S);
+procedure TOGLStateManager.myglVertex(constref V:TzePoint3s);
 begin
   myglVertex3fV(@v);
 end;
-procedure TOGLStateManager.myglNormal3dV(const V:PGDBVertex);{$IFNDEF DELPHI}inline;{$ENDIF}
+procedure TOGLStateManager.myglNormal3dV(const V:PzePoint3d);{$IFNDEF DELPHI}inline;{$ENDIF}
 begin
      glNormal3dV(pointer(v))
 end;
 procedure TOGLStateManager.myglVertex2f(const x,y:GLFloat);
-var t:gdbvertex;
+var t:TzePoint3d;
 begin
      {$IFDEF DEBUGCOUNTGEOMETRY}
      inc(pointcount);
@@ -456,7 +456,7 @@ begin
 end;
 
 procedure TOGLStateManager.myglVertex2d(const x,y:Double);
-var t:gdbvertex;
+var t:TzePoint3d;
 begin
      {$IFDEF DEBUGCOUNTGEOMETRY}
      inc(pointcount);
@@ -471,7 +471,7 @@ begin
 end;
 
 procedure TOGLStateManager.myglVertex3d;
-var t:gdbvertex;
+var t:TzePoint3d;
 begin
      {$IFDEF DEBUGCOUNTGEOMETRY}
      //processpoint(v);
@@ -486,7 +486,7 @@ begin
                       end;
 end;
 procedure TOGLStateManager.myglVertex(const x,y,z:Double);
-var t,t1:gdbvertex;
+var t,t1:TzePoint3d;
 begin
      t1:=createvertex(x,y,z);
      {$IFDEF DEBUGCOUNTGEOMETRY}
@@ -687,11 +687,11 @@ begin
      mytotalglend;
      glPopMatrix;
 end;
-procedure TOGLStateManager.myglMultMatrixD(const matrix:DMatrix4D);
+procedure TOGLStateManager.myglMultMatrixD(const matrix:DMatrix4d);
 begin
      glmultmatrixd(@matrix);
 end;
-procedure TOGLStateManager.myglMultMatrixF(const matrix:DMatrix4F);
+procedure TOGLStateManager.myglMultMatrixF(const matrix:DMatrix4f);
 begin
      glmultmatrixf(@matrix);
 end;

@@ -50,7 +50,7 @@ TZCADDrawing= object(TSimpleDrawing)
            function StoreOldCamerapPos:Pointer;virtual;
            procedure StoreNewCamerapPos(command:Pointer);virtual;
            //procedure SetEntFromOriginal(_dest,_source:PGDBObjEntity;PCD_dest,PCD_source:PTDrawingPreCalcData);
-           procedure rtmodifyonepoint(obj:PGDBObjEntity;rtmod:TRTModifyData;wc:gdbvertex);virtual;
+           procedure rtmodifyonepoint(obj:PGDBObjEntity;rtmod:TRTModifyData;wc:TzePoint3d);virtual;
            procedure PushStartMarker(CommandName:String);virtual;
            procedure PushEndMarker;virtual;
            procedure SetFileName(NewName:String);virtual;
@@ -141,7 +141,7 @@ function TZCADDrawing.StoreOldCamerapPos:Pointer;
 begin
      result:=TGDBCameraBasePropChangeCommand.CreateAndPushIfNeed(UndoStack,GetPcamera^.prop,nil,nil)
 end;
-procedure TZCADDrawing.rtmodifyonepoint(obj:PGDBObjEntity;rtmod:TRTModifyData;wc:gdbvertex);
+procedure TZCADDrawing.rtmodifyonepoint(obj:PGDBObjEntity;rtmod:TRTModifyData;wc:TzePoint3d);
 var
     tum:TUndableMethod;
 begin
@@ -232,7 +232,7 @@ begin
   pdwgwarsunit^.CreateFixedVariable('DWG_DrawMode','Boolean',@LWDisplay);
   pdwgwarsunit^.CreateFixedVariable('DWG_SnapGrid','Boolean',@SnapGrid);
   pdwgwarsunit^.CreateFixedVariable('DWG_DrawGrid','Boolean',@DrawGrid);
-  pdwgwarsunit^.CreateFixedVariable('DWG_GridSpacing','GDBvertex2D',@GridSpacing);
+  pdwgwarsunit^.CreateFixedVariable('DWG_GridSpacing','TzePoint2d',@GridSpacing);
   pdwgwarsunit^.CreateFixedVariable('DWG_Snap','GDBSnap2D',@Snap);
   pdwgwarsunit^.CreateFixedVariable('DWG_CLayer','PGDBLayerProp',@CurrentLayer);
   pdwgwarsunit^.CreateFixedVariable('DWG_CLType','PGDBLtypeProp',@CurrentLType);

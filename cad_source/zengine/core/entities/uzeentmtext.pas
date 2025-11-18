@@ -41,7 +41,7 @@ type
     linespacef:double;
     Text:XYZWStringArray;
     constructor init(own:Pointer;ALayer:PGDBLayerProp;LW:smallint;
-      c:TDXFEntsInternalStringType;p:GDBvertex;s,o,w,a:double;j:TTextJustify;
+      c:TDXFEntsInternalStringType;p:TzePoint3d;s,o,w,a:double;j:TTextJustify;
       wi,l:double);
     constructor initnul(owner:PGDBObjGenericWithSubordinated);
     procedure LoadFromDXF(var rdr:TZMemReader;ptu:PExtensionData;
@@ -60,7 +60,7 @@ type
     procedure FormatAfterDXFLoad(var drawing:TDrawingDef;var DC:TDrawContext);virtual;
     function CreateInstance:PGDBObjMText;static;
     function GetObjType:TObjID;virtual;
-    procedure transform(const t_matrix:DMatrix4D);virtual;
+    procedure transform(const t_matrix:DMatrix4d);virtual;
     function GetLineSpace:double;
     procedure rtsave(refp:Pointer);virtual;
     property LineSpace:double read GetLineSpace;
@@ -89,12 +89,12 @@ end;
 
 procedure GDBObjMText.transform;
 var
-  tv:GDBVertex;
-  m:DMatrix4D;
+  tv:TzePoint3d;
+  m:DMatrix4d;
 begin
   tv:=CreateVertex(Width,0,0);
   m:=t_matrix;
-  PGDBVertex(@m.mtr[3])^:=NulVertex;
+  PzePoint3d(@m.mtr[3])^:=NulVertex;
   tv:=VectorTransform3d(tv,m);
   Width:=oneVertexlength(tv);
   inherited;
@@ -561,10 +561,10 @@ end;
 procedure GDBObjMText.createpoint;
 var
   i:integer;
-  matr,m1:DMatrix4D;
+  matr,m1:DMatrix4d;
   v:GDBvertex4D;
   Bound:TBoundingRect;
-  lp:gdbvertex;
+  lp:TzePoint3d;
   pswp:pGDBStrWithPoint;
   ir:itrec;
   pl:GDBPoint3DArray;
@@ -596,7 +596,7 @@ begin
 
       i:=1;
       if ispl then begin
-        lp:=pgdbvertex(@matr.mtr[3].v[0])^;
+        lp:=PzePoint3d(@matr.mtr[3].v[0])^;
         lp.y:=lp.y-0.2*textprop.size;
         lp:=VectorTransform3d(lp,objmatrix);
         pl.PushBackData(lp);
@@ -608,12 +608,12 @@ begin
         if sym=1 then begin
           ispl:=not(ispl);
           if ispl then begin
-            lp:=pgdbvertex(@matr.mtr[3].v[0])^;
+            lp:=PzePoint3d(@matr.mtr[3].v[0])^;
             lp.y:=lp.y-0.2*textprop.size;
             lp:=VectorTransform3d(lp,objmatrix);
             pl.PushBackData(lp);
           end else begin
-            lp:=pgdbvertex(@matr.mtr[3].v[0])^;
+            lp:=PzePoint3d(@matr.mtr[3].v[0])^;
             lp.y:=lp.y-0.2*textprop.size;
             lp:=VectorTransform3d(lp,objmatrix);
             pl.PushBackData(lp);
@@ -629,7 +629,7 @@ begin
       end;
 
       if ispl then begin
-        lp:=pgdbvertex(@matr.mtr[3].v[0])^;
+        lp:=PzePoint3d(@matr.mtr[3].v[0])^;
         lp.y:=lp.y-0.2*textprop.size;
         lp:=VectorTransform3d(lp,objmatrix);
         pl.PushBackData(lp);
@@ -651,25 +651,25 @@ begin
   v.z:=0;
   v.w:=1;
   v:=VectorTransform(v,objMatrix);
-  outbound[0]:=pgdbvertex(@v)^;
+  outbound[0]:=PzePoint3d(@v)^;
   v.x:=Bound.RT.x;
   v.y:=Bound.RT.y;
   v.z:=0;
   v.w:=1;
   v:=VectorTransform(v,objMatrix);
-  outbound[1]:=pgdbvertex(@v)^;
+  outbound[1]:=PzePoint3d(@v)^;
   v.x:=Bound.RT.x;
   v.y:=Bound.LB.y;
   v.z:=0;
   v.w:=1;
   v:=VectorTransform(v,objMatrix);
-  outbound[2]:=pgdbvertex(@v)^;
+  outbound[2]:=PzePoint3d(@v)^;
   v.x:=Bound.LB.x;
   v.y:=Bound.LB.y;
   v.z:=0;
   v.w:=1;
   v:=VectorTransform(v,objMatrix);
-  outbound[3]:=pgdbvertex(@v)^;
+  outbound[3]:=PzePoint3d(@v)^;
 
   pl.done;
   Representation.Shrink;
@@ -697,7 +697,7 @@ end;
 procedure GDBObjMText.LoadFromDXF;
 var
   byt:integer;
-  ux:gdbvertex;
+  ux:TzePoint3d;
   j:integer;
   style,ttemplate:string;
 begin

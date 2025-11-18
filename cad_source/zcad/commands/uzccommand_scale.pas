@@ -36,8 +36,8 @@ uses
 type
   {REGISTEROBJECTTYPE scale_com}
   scale_com=object(move_com)
-    function AfterClick(const Context:TZCADCommandContext;wc:GDBvertex;
-      mc:GDBvertex2DI;var button:byte;osp:pos_record):integer;virtual;
+    function AfterClick(const Context:TZCADCommandContext;wc:TzePoint3d;
+      mc:TzePoint2i;var button:byte;osp:pos_record):integer;virtual;
     procedure scale(a:double;button:byte);
     procedure showprompt(mklick:integer);virtual;
     procedure CommandContinue(const Context:TZCADCommandContext);virtual;
@@ -70,10 +70,10 @@ end;
 
 procedure scale_com.scale(a:double;button:byte);
 var
-  dispmatr,im,rotmatr:DMatrix4D;
+  dispmatr,im,rotmatr:DMatrix4d;
   ir:itrec;
   pcd:PTCopyObjectDesc;
-  //v:GDBVertex;
+  //v:TzePoint3d;
   m:tmethod;
   dc:TDrawContext;
 begin
@@ -146,14 +146,14 @@ until pcd=nil;}
   end;
 end;
 
-function scale_com.AfterClick(const Context:TZCADCommandContext;wc:GDBvertex;
-  mc:GDBvertex2DI;var button:byte;osp:pos_record):integer;
+function scale_com.AfterClick(const Context:TZCADCommandContext;wc:TzePoint3d;
+  mc:TzePoint2i;var button:byte;osp:pos_record):integer;
 var
-  //dispmatr,im,rotmatr:DMatrix4D;
+  //dispmatr,im,rotmatr:DMatrix4d;
   //ir:itrec;
   //pcd:PTCopyObjectDesc;
   a:double;
-  //v:GDBVertex;
+  //v:TzePoint3d;
   //m:tmethod;
 begin
   //v:=uzegeometry.VertexSub(t3dp,wc);

@@ -61,14 +61,14 @@ implementation
 procedure GDBObjTable.ReCalcFromObjMatrix;
 begin
   inherited;
-  Local.basis.ox:=PGDBVertex(@objmatrix.mtr[0])^;
-  Local.basis.oy:=PGDBVertex(@objmatrix.mtr[1])^;
+  Local.basis.ox:=PzePoint3d(@objmatrix.mtr[0])^;
+  Local.basis.oy:=PzePoint3d(@objmatrix.mtr[1])^;
 
   Local.basis.ox:=normalizevertex(Local.basis.ox);
   Local.basis.oy:=normalizevertex(Local.basis.oy);
   Local.basis.oz:=normalizevertex(Local.basis.oz);
 
-  Local.P_insert:=PGDBVertex(@objmatrix.mtr[3])^;
+  Local.P_insert:=PzePoint3d(@objmatrix.mtr[3])^;
 end;
 
 procedure GDBObjTable.SaveToDXFFollow;
@@ -76,7 +76,7 @@ var
   p:pointer;
   pv,pvc,pvc2:pgdbobjEntity;
   ir:itrec;
-  m4:DMatrix4D;
+  m4:DMatrix4d;
   DC:TDrawContext;
 begin
   inherited;

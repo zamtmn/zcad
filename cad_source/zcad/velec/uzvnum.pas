@@ -358,7 +358,7 @@ PTDeviceInfoSubGraph=^TDeviceInfoSubGraph;
  //procedure errorSearchSLAGCAB(ourGraph:TGraphBuilder;Epsilon:double; var listError:TListError);
  //procedure errorSearchAllParam(ourGraph:TGraphBuilder;Epsilon:double;var listError:TListError;listSLname:TGDBlistSLname);
  //procedure errorSearchSLAGCAB(ourGraph:TGraphBuilder;Epsilon:double; var listError:TListError;listSLname:TGDBlistSLname);
- procedure visualGraph(G: TGraph; var startPt:GDBVertex;height:double);
+ procedure visualGraph(G: TGraph; var startPt:TzePoint3d;height:double);
  procedure metricNumeric(metric:boolean;dev:PGDBObjDevice);
  //function buildListAllConnectDevice(listVertexEdge:TGraphBuilder;Epsilon:double; var listError:TListError):TListHeadDevice;
 
@@ -525,7 +525,7 @@ begin
         end;
      // HistoryOutStr(IntToStr(result));
 end;
-function VertexCenter(const Vertex1, Vertex2: GDBVertex): GDBVertex;
+function VertexCenter(const Vertex1, Vertex2: TzePoint3d): TzePoint3d;
 begin
   Result.X := (Vertex1.x + Vertex2.x)/2;
   Result.Y := (Vertex1.y + Vertex2.y)/2;
@@ -836,9 +836,9 @@ function testTempDrawPolyLineNeed(myVertex:TListVertexWayOnlyVertex;ourGraph:TGr
 var
     polyObj:PGDBObjPolyLine;
     i:integer;
-    //vertexObj:GDBvertex;
+    //vertexObj:TzePoint3d;
    // pe:T3PointCircleModePentity;
-   // p1,p2:gdbvertex;
+   // p1,p2:TzePoint3d;
 begin
      polyObj:=GDBObjPolyline.CreateInstance;
      zcSetEntPropFromCurrentDrawingProp(polyObj);
@@ -858,7 +858,7 @@ end;
 
 
 //Визуализация текста его p1-координата, mText-текст, color-цвет, размер
-function visualDrawText(p1:GDBVertex;mText:String;color:integer;heightText:double):TCommandResult;
+function visualDrawText(p1:TzePoint3d;mText:String;color:integer;heightText:double):TCommandResult;
 var
     ptext:PGDBObjText;
 begin
@@ -876,7 +876,7 @@ begin
 end;
 
 //Визуализация круга его p1-координата, rr-радиус, color-цвет
-function visualDrawCircle(p1:GDBVertex;rr:Double;color:integer):TCommandResult;
+function visualDrawCircle(p1:TzePoint3d;rr:Double;color:integer):TCommandResult;
 var
     pcircle:PGDBObjCircle;
 begin
@@ -1116,9 +1116,9 @@ function autoNumberEquip(lVertex:TListVertexWayOnlyVertex;ourGraph:TGraphBuilder
 var
     //polyObj:PGDBObjPolyLine;
     i:integer;
-    //vertexObj:GDBvertex;
+    //vertexObj:TzePoint3d;
    // pe:T3PointCircleModePentity;
-   // p1,p2:gdbvertex;
+   // p1,p2:TzePoint3d;
 begin
      //polyObj:=GDBObjPolyline.CreateInstance;
      //zcSetEntPropFromCurrentDrawingProp(polyObj);
@@ -1252,7 +1252,7 @@ end;
 //      counter,counter2,counterColor:integer; //счетчики
 //    i,j,k,l,m,numnum: Integer;
 //    T: Float;
-//    pCenter,gg:GDBVertex;
+//    pCenter,gg:TzePoint3d;
 //    ttt:TInfoVertexSubGraph;
 //
 //
@@ -2132,7 +2132,7 @@ end;
      tempString:string;
      //sumWeightPath: Float;
      tempLVertex:TvectorOfInteger;
-     //gg:GDBVertex;
+     //gg:TzePoint3d;
 
      function isVertexAdded(tempLVertex:tvectorofinteger;index:integer):boolean;
      var
@@ -2349,7 +2349,7 @@ end;
 //      counter,counter2,counterColor:integer; //счетчики
 //    i,j,k,l,m,tnum: Integer;
 //
-//    pCenter,gg:GDBVertex;
+//    pCenter,gg:TzePoint3d;
 //    ttt:TInfoVertexSubGraph;
 //
 //
@@ -2366,7 +2366,7 @@ end;
 //    sumWeightPath: Float;
 //    listMasterDevice:TVectorOfMasterDevice;
 //
-//    //gg:GDBVertex;
+//    //gg:TzePoint3d;
 //  begin
 //
 //    //listSubDevice := TListSubDevice.Create;
@@ -2941,7 +2941,7 @@ procedure addErrorinList(nowDev:PGDBObjDevice;var listError:TListError;textError
   end;
 
   //Визуализация графа
-procedure visualGraph(G: TGraph; var startPt:GDBVertex;height:double);
+procedure visualGraph(G: TGraph; var startPt:TzePoint3d;height:double);
 const
   size=5;
   indent=30;
@@ -2950,7 +2950,7 @@ type
     //PTInfoVertex=^TInfoVertex;
     TInfoVertex=record
         num,kol,childs:Integer;
-        poz:GDBVertex2D;
+        poz:TzePoint2d;
     end;
 
     TListVertex=specialize TVector<TInfoVertex>;
@@ -2960,11 +2960,11 @@ var
     x,y,i,tParent:integer;
     listVertex:TListVertex;
     infoVertex:TInfoVertex;
-    pt1,pt2,pt3,ptext:GDBVertex;
+    pt1,pt2,pt3,ptext:TzePoint3d;
     VertexPath: TClassList;
 
       //рисуем прямоугольник с цветом  зная номера вершин, координат возьмем из графа по номерам
-      procedure drawVertex(pt:GDBVertex;color:integer);
+      procedure drawVertex(pt:TzePoint3d;color:integer);
       var
           polyObj:PGDBObjPolyLine;
       begin
@@ -2983,7 +2983,7 @@ var
       end;
 
       //рисуем прямоугольник с цветом  зная номера вершин, координат возьмем из графа по номерам
-      procedure drawConnectLine(pt1,pt2:GDBVertex;color:integer);
+      procedure drawConnectLine(pt1,pt2:TzePoint3d;color:integer);
       var
           polyObj:PGDBObjPolyLine;
       begin
@@ -2999,7 +2999,7 @@ var
            zcAddEntToCurrentDrawingWithUndo(polyObj);
       end;
       //Визуализация текста
-      procedure drawText(pt:GDBVertex;mText:String;color:integer);
+      procedure drawText(pt:TzePoint3d;mText:String;color:integer);
       var
           ptext:PGDBObjText;
       begin
@@ -3019,7 +3019,7 @@ var
 
       ////
       //Визуализация многострочный текст
-      procedure drawMText(pt:GDBVertex;mText:String;color:integer;rotate:double);
+      procedure drawMText(pt:TzePoint3d;mText:String;color:integer;rotate:double);
       var
           pmtext:PGDBObjMText;
       begin
@@ -3137,7 +3137,7 @@ end;
     G: TGraph;
     EdgePath, VertexPath: TClassList;
     i: Integer;
-    gg:GDBVertex;
+    gg:TzePoint3d;
     //user:TCompareEvent;
   begin
 

@@ -38,15 +38,15 @@ uses
 
 type
   OnDrawingEd_com=object(CommandRTEdObject)
-    t3dp:gdbvertex;
+    t3dp:TzePoint3d;
     constructor init(cn:string;SA,DA:TCStartAttr);
     procedure CommandStart(const Context:TZCADCommandContext;Operands:TCommandOperands);
       virtual;
     procedure CommandCancel(const Context:TZCADCommandContext);virtual;
-    function BeforeClick(const Context:TZCADCommandContext;wc:GDBvertex;
-      mc:GDBvertex2DI;var button:byte;osp:pos_record):integer;virtual;
-    function AfterClick(const Context:TZCADCommandContext;wc:GDBvertex;
-      mc:GDBvertex2DI;var button:byte;osp:pos_record):integer;virtual;
+    function BeforeClick(const Context:TZCADCommandContext;wc:TzePoint3d;
+      mc:TzePoint2i;var button:byte;osp:pos_record):integer;virtual;
+    function AfterClick(const Context:TZCADCommandContext;wc:TzePoint3d;
+      mc:TzePoint2i;var button:byte;osp:pos_record):integer;virtual;
   end;
 
 var
@@ -82,15 +82,15 @@ begin
   fixentities:=False;
 end;
 
-function OnDrawingEd_com.BeforeClick(const Context:TZCADCommandContext;wc:GDBvertex;
-  mc:GDBvertex2DI;var button:byte;osp:pos_record):integer;
+function OnDrawingEd_com.BeforeClick(const Context:TZCADCommandContext;wc:TzePoint3d;
+  mc:TzePoint2i;var button:byte;osp:pos_record):integer;
 begin
   if (button and MZW_LBUTTON)<>0 then
     t3dp:=wc;
   Result:=0;
 end;
 
-procedure modifyobj(dist,wc:gdbvertex;save:boolean;pconobj:pgdbobjEntity;
+procedure modifyobj(dist,wc:TzePoint3d;save:boolean;pconobj:pgdbobjEntity;
   var drawing:TDrawingDef;psa:PGDBSelectedObjArray);
 var
   i:integer;
@@ -113,13 +113,13 @@ begin
   end;
 end;
 
-function OnDrawingEd_com.AfterClick(const Context:TZCADCommandContext;wc:GDBvertex;
-  mc:GDBvertex2DI;var button:byte;osp:pos_record):integer;
+function OnDrawingEd_com.AfterClick(const Context:TZCADCommandContext;wc:TzePoint3d;
+  mc:TzePoint2i;var button:byte;osp:pos_record):integer;
 var //oldi, newi, i: Integer;
-  dist:gdbvertex;
+  dist:TzePoint3d;
   pobj:Pointer;
-  xdir,ydir,tv:GDBVertex;
-  rotmatr,dispmatr,dispmatr2:DMatrix4D;
+  xdir,ydir,tv:TzePoint3d;
+  rotmatr,dispmatr,dispmatr2:DMatrix4d;
   DC:TDrawContext;
 begin
   if fixentities then
@@ -167,8 +167,8 @@ begin
             createvertex(-tv.x,-tv.y,-tv.z));
 
           //rotmatr:=onematrix;
-          //PGDBVertex(@rotmatr.mtr[0])^:=xdir;
-          //PGDBVertex(@rotmatr.mtr[1])^:=ydir;
+          //PzePoint3d(@rotmatr.mtr[0])^:=xdir;
+          //PzePoint3d(@rotmatr.mtr[1])^:=ydir;
           if pgdbobjentity(osp^.PGDBObject)^.IsHaveLCS then
             rotmatr:=CreateMatrixFromBasis(xdir,ydir,PGDBObjWithLocalCS(
               osp^.PGDBObject)^.Local.basis.OZ)
@@ -182,7 +182,7 @@ begin
 
           //drawings.GetCurrentDWG^.SelObjArray.TransformObj(dispmatr);
           drawings.GetCurrentDWG^.SelObjArray.SetRotateObj(
-            dispmatr,dispmatr2,rotmatr,PGDBVertex(@rotmatr.mtr[0])^,PGDBVertex(@rotmatr.mtr[1])^,PGDBVertex(@rotmatr.mtr[2])^);
+            dispmatr,dispmatr2,rotmatr,PzePoint3d(@rotmatr.mtr[0])^,PzePoint3d(@rotmatr.mtr[1])^,PzePoint3d(@rotmatr.mtr[2])^);
         end;
 
         fixentities:=True;
@@ -217,8 +217,8 @@ begin
             createvertex(-tv.x,-tv.y,-tv.z));
 
           //rotmatr:=onematrix;
-          //PGDBVertex(@rotmatr.mtr[0])^:=xdir;
-          //PGDBVertex(@rotmatr.mtr[1])^:=ydir;
+          //PzePoint3d(@rotmatr.mtr[0])^:=xdir;
+          //PzePoint3d(@rotmatr.mtr[1])^:=ydir;
           if pgdbobjentity(osp^.PGDBObject)^.IsHaveLCS then
             rotmatr:=CreateMatrixFromBasis(xdir,ydir,PGDBObjWithLocalCS(
               osp^.PGDBObject)^.Local.basis.OZ)
@@ -232,9 +232,9 @@ begin
            dispmatr:=uzegeometry.CreateTranslationMatrix(createvertex(-wc.x,-wc.y,-wc.z));
 
            rotmatr:=onematrix;
-           PGDBVertex(@rotmatr[0])^:=xdir;
-           PGDBVertex(@rotmatr[1])^:=ydir;
-           PGDBVertex(@rotmatr[2])^:=pgdbobjlwPolyline(osp^.PGDBObject).Local.OZ;}
+           PzePoint3d(@rotmatr[0])^:=xdir;
+           PzePoint3d(@rotmatr[1])^:=ydir;
+           PzePoint3d(@rotmatr[2])^:=pgdbobjlwPolyline(osp^.PGDBObject).Local.OZ;}
 
           //rotmatr:=uzegeometry.MatrixMultiply(dispmatr,rotmatr);
           dispmatr2:=uzegeometry.CreateTranslationMatrix(createvertex(tv.x,tv.y,tv.z));
@@ -243,7 +243,7 @@ begin
 
           //drawings.GetCurrentDWG^.SelObjArray.Transform(dispmatr);
           drawings.GetCurrentDWG^.SelObjArray.SetRotate(
-            dispmatr,dispmatr2,rotmatr,PGDBVertex(@rotmatr.mtr[0])^,PGDBVertex(@rotmatr.mtr[1])^,PGDBVertex(@rotmatr.mtr[2])^);
+            dispmatr,dispmatr2,rotmatr,PzePoint3d(@rotmatr.mtr[0])^,PzePoint3d(@rotmatr.mtr[1])^,PzePoint3d(@rotmatr.mtr[2])^);
 
           fixentities:=True;
         end;

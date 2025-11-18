@@ -150,7 +150,7 @@ var
   pMText: PGDBObjMText;
   i: Integer;
   minX, minY, maxX, maxY: Double;
-  vertex: PGDBVertex;
+  vertex: PzePoint3d;
 begin
   // Инициализация результата
   Result.primitiveType := GetPrimitiveType(aEntity);
@@ -177,7 +177,7 @@ begin
       // Для полилинии берем первую и последнюю точку
       if pPolyline^.VertexArrayInOCS.Count > 0 then
       begin
-        //PGDBVertex(pline^.VertexArrayInOCS.getDataMutable(vertexCount-1))^
+        //PzePoint3d(pline^.VertexArrayInOCS.getDataMutable(vertexCount-1))^
         Result.startPoint := pPolyline^.VertexArrayInOCS.getDataMutable(0)^;
 
         if pPolyline^.VertexArrayInOCS.Count > 1 then

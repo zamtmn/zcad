@@ -93,15 +93,15 @@ TEntUpgradeInfo=LongWord;
 PGDBBaseCamera=^GDBBaseCamera;
 {REGISTEROBJECTTYPE GDBBaseCamera}
 GDBBaseCamera=object(GDBaseObject)
-                modelMatrix:DMatrix4D;
+                modelMatrix:DMatrix4d;
                 fovy:Double;
                 Counters:TCameraCounters;
                 //totalobj:Integer;
                 prop:GDBCameraBaseProp;
                 anglx,angly,zmin,zmax:Double;
-                projMatrix:DMatrix4D;
-                viewport:IMatrix4;
-                clip:DMatrix4D;
+                projMatrix:DMatrix4d;
+                viewport:Matrix4i;
+                clip:DMatrix4d;
                 frustum:ClipArray;
                 //infrustum:Integer;
                 obj_zmax,obj_zmin:Double;
@@ -109,7 +109,7 @@ GDBBaseCamera=object(GDBaseObject)
                 DRAWCOUNT:TActuality;
                 POSCOUNT:TActuality;
                 VISCOUNT:TActuality;
-                CamCSOffset:GDBvertex;
+                CamCSOffset:TzePoint3d;
                 procedure NextPosition;virtual; abstract;
           end;
 TDXFEntsInternalStringType=UnicodeString;
@@ -126,7 +126,7 @@ GDBStrWithPoint=record
                   //nearestline:integer;
                   //dir:integer;
                   index:integer;
-                  wc:GDBVertex;
+                  wc:TzePoint3d;
             end;
   TLoadOpt=(TLOLoad,TLOMerge);
   PTLayerControl=^TLayerControl;

@@ -58,8 +58,8 @@ type
     primitiveType: TPrimitiveType;      // Тип примитива
     objectPointer: Pointer;             // Указатель на объект в ZCAD
     boundingBox: TBoundingBox;          // Габаритный прямоугольник
-    startPoint: GDBVertex;              // Начальная точка (для линий)
-    endPoint: GDBVertex;                // Конечная точка (для линий)
+    startPoint: TzePoint3d;              // Начальная точка (для линий)
+    endPoint: TzePoint3d;                // Конечная точка (для линий)
     textContent: string;                // Текстовое содержимое (для текста)
     processed: Boolean;                 // Флаг обработки
   end;
@@ -168,10 +168,10 @@ function CreateEmptyCell(aRow, aCol: Integer): TUzvTableCell;
 function CreateCellBorders(aTop, aBottom, aLeft, aRight: Boolean): TUzvCellBorders;
 
 // Проверить, находится ли точка внутри ячейки
-function IsPointInCell(const aPoint: GDBVertex; const aCell: TUzvTableCell): Boolean;
+function IsPointInCell(const aPoint: TzePoint3d; const aCell: TUzvTableCell): Boolean;
 
 // Получить центр ячейки
-function GetCellCenter(const aCell: TUzvTableCell): GDBVertex;
+function GetCellCenter(const aCell: TUzvTableCell): TzePoint3d;
 
 implementation
 
@@ -226,7 +226,7 @@ begin
 end;
 
 // Проверить, находится ли точка внутри ячейки
-function IsPointInCell(const aPoint: GDBVertex; const aCell: TUzvTableCell): Boolean;
+function IsPointInCell(const aPoint: TzePoint3d; const aCell: TUzvTableCell): Boolean;
 begin
   Result := (aPoint.x >= aCell.bounds.LBN.x) and
             (aPoint.x <= aCell.bounds.RTF.x) and
@@ -235,7 +235,7 @@ begin
 end;
 
 // Получить центр ячейки
-function GetCellCenter(const aCell: TUzvTableCell): GDBVertex;
+function GetCellCenter(const aCell: TUzvTableCell): TzePoint3d;
 begin
   Result.x := (aCell.bounds.LBN.x + aCell.bounds.RTF.x) / 2.0;
   Result.y := (aCell.bounds.LBN.y + aCell.bounds.RTF.y) / 2.0;

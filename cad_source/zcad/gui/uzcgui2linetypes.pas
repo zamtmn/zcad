@@ -82,7 +82,7 @@ var
   n:double;
   geom:ZGLGraphix;
   vp:GDBObjVisualProp;
-  p1,p2:Gdbvertex;
+  p1,p2:TzePoint3d;
   ll: Integer;
   DC:TDrawContext;
 const

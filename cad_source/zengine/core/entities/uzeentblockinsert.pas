@@ -36,7 +36,7 @@ type
   PGDBObjBlockInsert=^GDBObjBlockInsert;
 
   GDBObjBlockInsert=object(GDBObjComplex)
-    scale:GDBvertex;
+    scale:TzePoint3d;
     rotate:double;
     index:integer;
     Name:ansistring;
@@ -60,7 +60,7 @@ type
     procedure BuildGeometry(var drawing:TDrawingDef);virtual;
     procedure BuildVarGeometry(var drawing:TDrawingDef);virtual;
 
-    procedure TransformAt(p:PGDBObjEntity;t_matrix:PDMatrix4D);virtual;
+    procedure TransformAt(p:PGDBObjEntity;t_matrix:PDMatrix4d);virtual;
     procedure ReCalcFromObjMatrix;virtual;
     procedure decomposite;
     procedure rtsave(refp:Pointer);virtual;
@@ -103,18 +103,18 @@ end;
 
 procedure GDBObjBlockInsert.rtmodifyonepoint(const rtmod:TRTModifyData);
 var
-  m:DMatrix4D;
-  scl:GDBvertex;
+  m:DMatrix4d;
+  scl:TzePoint3d;
 begin
   m:=onematrix;
   if rtmod.point.pointtype=os_point then begin
     if rtmod.point.PDrawable=nil then
-      Local:=GetPointInOCSByBasis(PGDBVertex(@objmatrix.mtr[0])^,
-        PGDBVertex(@objmatrix.mtr[1])^,PGDBVertex(@objmatrix.mtr[2])^,VertexAdd(
+      Local:=GetPointInOCSByBasis(PzePoint3d(@objmatrix.mtr[0])^,
+        PzePoint3d(@objmatrix.mtr[1])^,PzePoint3d(@objmatrix.mtr[2])^,VertexAdd(
         rtmod.point.worldcoord,rtmod.dist),scl)
     else
-      Local:=GetPointInOCSByBasis(PGDBVertex(@objmatrix.mtr[0])^,
-        PGDBVertex(@objmatrix.mtr[1])^,PGDBVertex(@objmatrix.mtr[2])^,VertexSub(
+      Local:=GetPointInOCSByBasis(PzePoint3d(@objmatrix.mtr[0])^,
+        PzePoint3d(@objmatrix.mtr[1])^,PzePoint3d(@objmatrix.mtr[2])^,VertexSub(
         VertexAdd(rtmod.point.worldcoord,rtmod.dist),rtmod.point.dcoord),scl);
   end;
 end;
@@ -122,25 +122,25 @@ end;
 
 procedure GDBObjBlockInsert.decomposite;
 var
-  BX,BY,BZ,T:GDBvertex;
-  mtr:DMatrix4D;
+  BX,BY,BZ,T:TzePoint3d;
+  mtr:DMatrix4d;
 begin
   if PDef<>nil then begin
     Mtr:=MatrixMultiply(CreateTranslationMatrix(PDef.Base),objMatrix);
   end else
     Mtr:=objMatrix;
 
-  BX:=PGDBVertex(@Mtr.mtr[0])^;
-  BY:=PGDBVertex(@Mtr.mtr[1])^;
-  BZ:=PGDBVertex(@Mtr.mtr[2])^;
-  T:=PGDBVertex(@Mtr.mtr[3])^;
+  BX:=PzePoint3d(@Mtr.mtr[0])^;
+  BY:=PzePoint3d(@Mtr.mtr[1])^;
+  BZ:=PzePoint3d(@Mtr.mtr[2])^;
+  T:=PzePoint3d(@Mtr.mtr[3])^;
   Local:=GetPointInOCSByBasis(BX,BY,BZ,T,scale);
 end;
 
 procedure GDBObjBlockInsert.ReCalcFromObjMatrix;
 var
-  ox:gdbvertex;
-  tv:gdbvertex;
+  ox:TzePoint3d;
+  tv:TzePoint3d;
 begin
   inherited;
   decomposite;
@@ -156,7 +156,7 @@ end;
 
 procedure GDBObjBlockInsert.setrot(r:double);
 var
-  m1:DMatrix4D;
+  m1:DMatrix4d;
   sine,cosine:double;
 begin
   m1:=CreateRotationMatrixZ(r);
@@ -166,7 +166,7 @@ end;
 function GDBObjBlockInsert.getrot:double;
 begin
   Result:=arccos((objmatrix.mtr[0].v[0])/oneVertexlength(
-    PGDBVertex(@objmatrix.mtr[0])^));
+    PzePoint3d(@objmatrix.mtr[0])^));
 end;
 
 procedure GDBObjBlockInsert.FormatEntity(var drawing:TDrawingDef;
@@ -200,7 +200,7 @@ end;
 
 procedure GDBObjBlockInsert.CalcObjMatrix;
 var
-  m1:DMatrix4D;
+  m1:DMatrix4d;
 begin
   inherited CalcObjMatrix;
 

@@ -35,11 +35,11 @@ type
   GDBObjSolid=object(GDBObjWithLocalCS)
     PInOCS:OutBound4V;
     PInWCS:OutBound4V;
-    normal:GDBVertex;
+    normal:TzePoint3d;
     triangle:boolean;
-    n,p1,p2,p3:GDBVertex3S;
+    n,p1,p2,p3:TzePoint3s;
     constructor init(own:Pointer;layeraddres:PGDBLayerProp;
-      LW:smallint;p:GDBvertex);
+      LW:smallint;p:TzePoint3d);
     constructor initnul(owner:PGDBObjGenericWithSubordinated);
     procedure LoadFromDXF(var rdr:TZMemReader;ptu:PExtensionData;
       var drawing:TDrawingDef;var context:TIODXFLoadContext);virtual;
@@ -67,8 +67,8 @@ type
     procedure getoutbound(var DC:TDrawContext);virtual;
     function CreateInstance:PGDBObjSolid;static;
     function GetObjType:TObjID;virtual;
-    procedure TransformAt(p:PGDBObjEntity;t_matrix:PDMatrix4D);virtual;
-    procedure transform(const t_matrix:DMatrix4D);virtual;
+    procedure TransformAt(p:PGDBObjEntity;t_matrix:PDMatrix4d);virtual;
+    procedure transform(const t_matrix:DMatrix4d);virtual;
   end;
 
 implementation
@@ -235,7 +235,7 @@ procedure GDBObjSolid.remaponecontrolpoint(pdesc:pcontrolpointdesc;
   ProjectProc:GDBProjectProc);
 var
   vertexnumber:integer;
-  tv:GDBvertex;
+  tv:TzePoint3d;
 begin
   vertexnumber:=pdesc^.vertexnum;
   pdesc.worldcoord:=PInWCS[vertexnumber];
@@ -263,8 +263,8 @@ end;
 procedure GDBObjSolid.rtmodifyonepoint(const rtmod:TRTModifyData);
 var
   vertexnumber:integer;
-  tv,wwc:gdbvertex;
-  M:DMatrix4D;
+  tv,wwc:TzePoint3d;
+  M:DMatrix4d;
 begin
   vertexnumber:=rtmod.point.vertexnum;
 

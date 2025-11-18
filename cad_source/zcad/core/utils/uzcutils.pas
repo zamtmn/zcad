@@ -37,7 +37,7 @@ uses uzeutils,LCLProc,zcmultiobjectcreateundocommand,uzepalette,
 
   procedure zcMoveEntsFromConstructRootToCurrentDrawingWithUndo(CommandName:String);
 
-  procedure zcTransformSelectedEntsInDrawingWithUndo(CommandName:String;Transform:DMatrix4D);
+  procedure zcTransformSelectedEntsInDrawingWithUndo(CommandName:String;Transform:DMatrix4d);
 
   {**Добавление в текущий чертеж примитива с обвязкой undo
     @param(PEnt Указатель на добавляемый примитив)}
@@ -95,18 +95,18 @@ uses uzeutils,LCLProc,zcmultiobjectcreateundocommand,uzepalette,
   {**Выбрать примитив}
   procedure zcSelectEntity(pp:PGDBObjEntity);
 
-function GDBInsertBlock(own:PGDBObjGenericSubEntry;BlockName:String;p_insert:GDBVertex;
-                        scale:GDBVertex;rotate:Double;needundo:Boolean=false
+function GDBInsertBlock(own:PGDBObjGenericSubEntry;BlockName:String;p_insert:TzePoint3d;
+                        scale:TzePoint3d;rotate:Double;needundo:Boolean=false
                         ):PGDBObjBlockInsert;
 
 function old_ENTF_CreateBlockInsert(owner:PGDBObjGenericSubEntry;ownerarray: PGDBObjEntityTreeArray;
                                 layeraddres:PGDBLayerProp;LTAddres:PGDBLtypeProp;LW:TGDBLineWeight;color:TGDBPaletteColor;
-                                point: gdbvertex; scale, angle: Double; AName: String):PGDBObjBlockInsert;
+                                point: TzePoint3d; scale, angle: Double; AName: String):PGDBObjBlockInsert;
 function zcGetRealSelEntsCount:integer;
 implementation
 function old_ENTF_CreateBlockInsert(owner:PGDBObjGenericSubEntry;ownerarray: PGDBObjEntityTreeArray;
                                 layeraddres:PGDBLayerProp;LTAddres:PGDBLtypeProp;LW:TGDBLineWeight;color:TGDBPaletteColor;
-                                point: gdbvertex; scale, angle: Double; AName: String):PGDBObjBlockInsert;
+                                point: TzePoint3d; scale, angle: Double; AName: String):PGDBObjBlockInsert;
 var
   DC:TDrawContext;
 begin
@@ -171,13 +171,13 @@ begin
   pcd^.ConstructObjRoot.ObjArray.Clear;
 end;
 
-procedure zcTransformSelectedEntsInDrawingWithUndo(CommandName:String;Transform:DMatrix4D);
+procedure zcTransformSelectedEntsInDrawingWithUndo(CommandName:String;Transform:DMatrix4d);
 var
   pcd:PTZCADDrawing;
   pobj: pGDBObjEntity;
   ir:itrec;
   dc:TDrawContext;
-  im:DMatrix4D;
+  im:DMatrix4d;
   count:integer;
   m:tmethod;
 begin
@@ -272,8 +272,8 @@ begin
 end;
 function GDBInsertBlock(own:PGDBObjGenericSubEntry;//владелец
                         BlockName:String;       //имя блока
-                        p_insert:GDBVertex;        //точка вставки
-                        scale:GDBVertex;           //масштаб
+                        p_insert:TzePoint3d;        //точка вставки
+                        scale:TzePoint3d;           //масштаб
                         rotate:Double;          //поворот
                         needundo:Boolean=false  //завернуть в ундо
                         ):PGDBObjBlockInsert;

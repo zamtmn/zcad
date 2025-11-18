@@ -93,7 +93,7 @@ begin
 end;
 
 {**Получить точку вставки текстового объекта}
-function GetTextInsertionPoint(TextEntity: PGDBObjEntity): GDBvertex;
+function GetTextInsertionPoint(TextEntity: PGDBObjEntity): TzePoint3d;
 var
   ObjType: Integer;
   TextPtr: PGDBObjText;
@@ -140,7 +140,7 @@ var
   PolyPtr: PGDBObjPolyLine;
   LinePtr: PGDBObjLine;
   Count: Integer;
-  Vertex: PGDBvertex;
+  Vertex: PzePoint3d;
   ObjType: Integer;
 begin
   SetLength(Result, 0);
@@ -158,7 +158,7 @@ begin
     if Count > 0 then
     begin
       SetLength(Result, Count);
-      Vertex := PGDBvertex(PolyPtr^.VertexArrayInOCS.GetParrayAsPointer);
+      Vertex := PzePoint3d(PolyPtr^.VertexArrayInOCS.GetParrayAsPointer);
 
       for i := 0 to Count - 1 do
       begin
@@ -226,7 +226,7 @@ end;
 
 {**Найти ближайший текст к геометрии светильника}
 function FindNearestText(
-  const GeometryCenter: GDBvertex;
+  const GeometryCenter: TzePoint3d;
   const ParsedData: TParsedData;
   out TextEntity: PGDBObjEntity;
   out TextContent: string
@@ -234,7 +234,7 @@ function FindNearestText(
 var
   i: Integer;
   CurrentEntity: PGDBObjEntity;
-  CurrentPoint: GDBvertex;
+  CurrentPoint: TzePoint3d;
   CurrentDistance: Double;
   MinDistance: Double;
   BestEntity: PGDBObjEntity;
@@ -277,7 +277,7 @@ end;
 
 {**Найти существующий светильник в той же точке}
 function FindLightAtSameLocation(
-  const Center: GDBvertex;
+  const Center: TzePoint3d;
   const RecognizedLights: TLightItemArray;
   Count: Integer
 ): Integer;
@@ -313,11 +313,11 @@ end;
 {**Вычислить центр группы полилиний (с игнорированием Z координаты)}
 function CalculateGroupCenter(
   const Entities: TEntityList
-): GDBvertex;
+): TzePoint3d;
 var
   i: Integer;
   Entity: PGDBObjEntity;
-  EntityCenter: GDBvertex;
+  EntityCenter: TzePoint3d;
   SumX, SumY: Double;
   Count: Integer;
 begin
@@ -528,7 +528,7 @@ procedure RecognizeLuminaires(
 var
   i, j: Integer;
   PolylineGroups: TPolylineGroupArray;
-  GroupCenter: GDBvertex;
+  GroupCenter: TzePoint3d;
   TextEntity: PGDBObjEntity;
   TextContent: string;
   RecognizedCount: Integer;

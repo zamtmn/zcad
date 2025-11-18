@@ -67,8 +67,8 @@ GDBObjElLeader= object(GDBObjComplex)
 
             destructor done;virtual;
 
-            procedure transform(const t_matrix:DMatrix4D);virtual;
-            procedure TransformAt(p:PGDBObjEntity;t_matrix:PDMatrix4D);virtual;
+            procedure transform(const t_matrix:DMatrix4d);virtual;
+            procedure TransformAt(p:PGDBObjEntity;t_matrix:PDMatrix4d);virtual;
             procedure SetInFrustumFromTree(const frustum:ClipArray;const Actuality:TVisActuality;var Counters:TCameraCounters; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double);virtual;
             function CalcActualVisible(const Actuality:TVisActuality):Boolean;virtual;
             function calcvisible(const frustum:ClipArray;const Actuality:TVisActuality;var Counters:TCameraCounters; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double):Boolean;virtual;
@@ -91,7 +91,7 @@ end;
 function GDBObjElLeader.calcvisible;
 //var i:Integer;
 //    tv,tv1:gdbvertex4d;
-//    m:DMatrix4D;
+//    m:DMatrix4d;
 begin
       visible:=Actuality.visibleactualy;
       result:=false;
@@ -139,15 +139,15 @@ end;
 procedure GDBObjElLeader.transform;
 var tv:GDBVertex4D;
 begin
-  pgdbvertex(@tv)^:=MainLine.CoordInOCS.lbegin;
+  PzePoint3d(@tv)^:=MainLine.CoordInOCS.lbegin;
   tv.w:=1;
   tv:=vectortransform(tv,t_matrix);
-  MainLine.CoordInOCS.lbegin:=pgdbvertex(@tv)^;
+  MainLine.CoordInOCS.lbegin:=PzePoint3d(@tv)^;
 
-  pgdbvertex(@tv)^:=MainLine.CoordInOCS.lend;
+  PzePoint3d(@tv)^:=MainLine.CoordInOCS.lend;
   tv.w:=1;
   tv:=vectortransform(tv,t_matrix);
-  MainLine.CoordInOCS.lend:=pgdbvertex(@tv)^;
+  MainLine.CoordInOCS.lend:=PzePoint3d(@tv)^;
 end;
 {function GDBObjElLeader.InRect;
 var
@@ -223,7 +223,7 @@ var
   p:pointer;
   pv,pvc,pvc2:pgdbobjEntity;
   ir:itrec;
-  m4:DMatrix4D;
+  m4:DMatrix4d;
   DC:TDrawContext;
 begin
      //historyoutstr('ElLeader DXFOut self='+inttohex(LongWord(@self),10)+' owner'+inttohex(bp.owner.gethandle,10));
@@ -311,7 +311,7 @@ const
   textoffset=0.5;
 var
   pl:pgdbobjline;
-  tv,tv2,textpoint:gdbvertex;
+  tv,tv2,textpoint:TzePoint3d;
   pobj,pcable:PGDBObjCable;
   ir,ir2:itrec;
   s:String;
@@ -870,7 +870,7 @@ end;
 constructor GDBObjElLeader.initnul;
 var
    //pl:pgdbobjline;
-   tv:gdbvertex;
+   tv:TzePoint3d;
    //a:TGDBTableCellStyle;
 begin
      inherited;

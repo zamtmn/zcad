@@ -31,7 +31,7 @@ PGDBObjBlockdef=^GDBObjBlockdef;
 GDBObjBlockdef= object(GDBObjGenericSubEntry)
                      Name:String;
                      VarFromFile:String;
-                     Base:GDBvertex;
+                     Base:TzePoint3d;
                      Formated:Boolean;
                      BlockDesc:TBlockDesc;(*'Block params'*)(*oi_readonly*)
                      constructor initnul(owner:PGDBObjGenericWithSubordinated);
@@ -41,7 +41,7 @@ GDBObjBlockdef= object(GDBObjGenericSubEntry)
                      procedure LoadFromDXF(var f:TZMemReader;ptu:PExtensionData;var drawing:TDrawingDef;var context:TIODXFLoadContext);virtual;
                      function ProcessFromDXFObjXData(const _Name,_Value:String;ptu:PExtensionData;const drawing:TDrawingDef):Boolean;virtual;
                      destructor done;virtual;
-                     function GetMatrix:PDMatrix4D;virtual;
+                     function GetMatrix:PDMatrix4d;virtual;
                      function GetHandle:PtrInt;virtual;
                      function GetMainOwner:PGDBObjSubordinated;virtual;
                      function GetType:PtrInt;virtual;

@@ -50,7 +50,7 @@ GDBObjOpenArrayOfPV= object({TZctnrVectorPGDBaseObjects}TZctnrVectorPGDBaseEntit
                       procedure CalcObjMatrix(pdrawing:PTDrawingDef=nil);virtual;
                       procedure FormatAfterEdit(var drawing:TDrawingDef;var DC:TDrawContext);virtual;
                       //function InRect:TInRect;virtual;
-                      function onpoint(var objects:TZctnrVectorPGDBaseEntity;const point:GDBVertex):Boolean;virtual;
+                      function onpoint(var objects:TZctnrVectorPGDBaseEntity;const point:TzePoint3d):Boolean;virtual;
                       //function FindEntityByVar(objID:Word;vname,vvalue:String):PGDBObjSubordinated;virtual;
                 end;
 {Export-}
@@ -60,7 +60,7 @@ function EqualFuncPGDBaseEntity(const a, b: PGDBObjBaseEntity):Boolean;
 begin
   result:=(a=b);
 end;
-function GDBObjOpenArrayOfPV.onpoint(var objects:TZctnrVectorPGDBaseEntity;const point:GDBVertex):Boolean;
+function GDBObjOpenArrayOfPV.onpoint(var objects:TZctnrVectorPGDBaseEntity;const point:TzePoint3d):Boolean;
 var pobj:pGDBObjEntity;
     ir:itrec;
     //fr:TInRect;

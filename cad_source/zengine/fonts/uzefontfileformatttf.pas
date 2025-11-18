@@ -46,7 +46,7 @@ type
       procedure ProcessTriangleData(si:PGDBsymdolinfo);
       constructor Create;
       destructor Destroy;override;
-      procedure SetupSymbolLineParams(const matr:DMatrix4D; var SymsParam:TSymbolSParam);override;
+      procedure SetupSymbolLineParams(const matr:DMatrix4d; var SymsParam:TSymbolSParam);override;
 
     public
       function IsUnicode:Boolean;override;
@@ -71,7 +71,7 @@ procedure TessErrorCallBack(error: Cardinal;v2: Pdouble);{$IFDEF Windows}stdcall
 begin
      error:=error;
 end;
-procedure CombineCallback(const coords:GDBvertex;const vertex_data:TV4P;const weight:TArray4F;var dataout:Pointer);{$IFDEF Windows}stdcall{$ELSE}cdecl{$ENDIF};
+procedure CombineCallback(const coords:TzePoint3d;const vertex_data:TV4P;const weight:TArray4F;var dataout:Pointer);{$IFDEF Windows}stdcall{$ELSE}cdecl{$ENDIF};
 begin
    ptruint(dataout):=ptrdata^.GeomData.Vertex3S.AddGDBVertex(coords);
 end;
@@ -153,8 +153,8 @@ var
    tesselator:TessObj;
    lastv:GDBFontVertex2D;
    tparrayindex:integer;
-   tv:gdbvertex;
-   p:GDBvertex2D;
+   tv:TzePoint3d;
+   p:TzePoint2d;
    glyphBounds:TRect;
 procedure CompareAndTess(const v:GDBFontVertex2D);
 begin
@@ -256,10 +256,10 @@ function TZETFFFontImpl.IsUnicode:Boolean;
 begin
   result:=true;
 end;
-procedure TZETFFFontImpl.SetupSymbolLineParams(const matr:DMatrix4D; var SymsParam:TSymbolSParam);
+procedure TZETFFFontImpl.SetupSymbolLineParams(const matr:DMatrix4d; var SymsParam:TSymbolSParam);
 begin
   if SymsParam.IsCanSystemDraw then begin
-    SymsParam.NeededFontHeight:=oneVertexlength(PGDBVertex(@matr.mtr[1])^)*((TTFImplementation.Ascent+TTFImplementation.Descent)/(TTFImplementation.CapHeight));
+    SymsParam.NeededFontHeight:=oneVertexlength(PzePoint3d(@matr.mtr[1])^)*((TTFImplementation.Ascent+TTFImplementation.Descent)/(TTFImplementation.CapHeight));
   end
 end;
 function TZETFFFontImpl.IsCanSystemDraw:Boolean;

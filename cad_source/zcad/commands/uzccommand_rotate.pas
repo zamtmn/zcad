@@ -36,20 +36,20 @@ uses
 
 type
   TRotate_com=object(move_com)
-    function AfterClick(const Context:TZCADCommandContext;wc:GDBvertex;
-      mc:GDBvertex2DI;var button:byte;osp:pos_record):integer;virtual;
-    function CreateRotmatr(AAngle:double):DMatrix4D;virtual;
+    function AfterClick(const Context:TZCADCommandContext;wc:TzePoint3d;
+      mc:TzePoint2i;var button:byte;osp:pos_record):integer;virtual;
+    function CreateRotmatr(AAngle:double):DMatrix4d;virtual;
     procedure CommandContinue(const Context:TZCADCommandContext);virtual;
-    procedure rotate(const rotmatr:DMatrix4D;button:byte);
+    procedure rotate(const rotmatr:DMatrix4d;button:byte);
     procedure showprompt(mklick:integer);virtual;
   end;
 
   TRotateX_com=object(TRotate_com)
-    function CreateRotmatr(AAngle:double):DMatrix4D;virtual;
+    function CreateRotmatr(AAngle:double):DMatrix4d;virtual;
   end;
 
   TRotateY_com=object(TRotate_com)
-    function CreateRotmatr(AAngle:double):DMatrix4D;virtual;
+    function CreateRotmatr(AAngle:double):DMatrix4d;virtual;
   end;
 
 var
@@ -79,16 +79,16 @@ begin
   end;
 end;
 
-procedure TRotate_com.rotate(const rotmatr:DMatrix4D;button:byte);
+procedure TRotate_com.rotate(const rotmatr:DMatrix4d;button:byte);
 var
-  tmatr,dispmatr,tempmatr:DMatrix4D;
+  tmatr,dispmatr,tempmatr:DMatrix4d;
   ir:itrec;
   pcd:PTCopyObjectDesc;
   m:tmethod;
   dc:TDrawContext;
-  tr:GDBvertex;
+  tr:TzePoint3d;
   RC:TDrawContext;
-  FrPos:GDBvertex;
+  FrPos:TzePoint3d;
 begin
   //rotmatr:=uzegeometry.CreateRotationMatrixZ(a);
   if (button and MZW_LBUTTON)=0 then begin
@@ -141,16 +141,16 @@ begin
   end;
 end;
 
-function TRotate_com.CreateRotmatr(AAngle:double):DMatrix4D;
+function TRotate_com.CreateRotmatr(AAngle:double):DMatrix4d;
 begin
   Result:=uzegeometry.CreateRotationMatrixZ(AAngle);
 end;
 
-function TRotate_com.AfterClick(const Context:TZCADCommandContext;wc:GDBvertex;
-  mc:GDBvertex2DI;var button:byte;osp:pos_record):integer;
+function TRotate_com.AfterClick(const Context:TZCADCommandContext;wc:TzePoint3d;
+  mc:TzePoint2i;var button:byte;osp:pos_record):integer;
 var
   a:double;
-  v1,v2:GDBVertex2d;
+  v1,v2:TzePoint2d;
 begin
   v2.x:=wc.x;
   v2.y:=wc.y;
@@ -163,12 +163,12 @@ begin
   Result:=cmd_ok;
 end;
 
-function TRotateX_com.CreateRotmatr(AAngle:double):DMatrix4D;
+function TRotateX_com.CreateRotmatr(AAngle:double):DMatrix4d;
 begin
   Result:=uzegeometry.CreateRotationMatrixX(AAngle);
 end;
 
-function TRotateY_com.CreateRotmatr(AAngle:double):DMatrix4D;
+function TRotateY_com.CreateRotmatr(AAngle:double):DMatrix4d;
 begin
   Result:=uzegeometry.CreateRotationMatrixY(AAngle);
 end;

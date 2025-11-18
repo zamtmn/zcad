@@ -53,7 +53,7 @@ type
     function onmouse(var popa:TZctnrVectorPGDBaseEntity;
       const MF:ClipArray;InSubEntry:boolean):boolean;virtual;
     function onpoint(var objects:TZctnrVectorPGDBaseEntity;
-      const point:GDBVertex):boolean;virtual;
+      const point:TzePoint3d):boolean;virtual;
     procedure AddOnTrackAxis(var posr:os_record;
       const processaxis:taddotrac);virtual;
     function GetLength:double;virtual;
@@ -77,7 +77,7 @@ end;
 
 function GDBObjPolyline.GetLength:double;
 var
-  ptpv0,ptpv1:PGDBVertex;
+  ptpv0,ptpv1:PzePoint3d;
 begin
   Result:=inherited;
   if closed then begin
@@ -102,7 +102,7 @@ begin
 end;
 
 function GDBObjPolyline.onpoint(var objects:TZctnrVectorPGDBaseEntity;
-  const point:GDBVertex):boolean;
+  const point:TzePoint3d):boolean;
 begin
   if VertexArrayInWCS.onpoint(point,closed) then begin
     Result:=True;
@@ -195,7 +195,7 @@ var
   byt:integer;
   hlGDBWord:integer;
   vertexgo:boolean;
-  tv:gdbvertex;
+  tv:TzePoint3d;
 begin
   closed:=False;
   vertexgo:=False;
@@ -250,7 +250,7 @@ procedure GDBObjPolyline.addcontrolpoints(tdesc:Pointer);
 var
   pdesc:controlpointdesc;
   i:integer;
-  pv,pvnext:pGDBvertex;
+  pv,pvnext:PzePoint3d;
   segmentCount:integer;
 begin
   if closed then
@@ -291,9 +291,9 @@ end;
 procedure GDBObjPolyline.rtmodifyonepoint(const rtmod:TRTModifyData);
 var
   segmentIndex:integer;
-  v1,v2:PGDBVertex;
-  offset:GDBVertex;
-  halfVector,newCenter:GDBVertex;
+  v1,v2:PzePoint3d;
+  offset:TzePoint3d;
+  halfVector,newCenter:TzePoint3d;
 begin
   if rtmod.point.vertexnum>=0 then begin
     inherited rtmodifyonepoint(rtmod);
@@ -324,8 +324,8 @@ procedure GDBObjPolyline.remaponecontrolpoint(pdesc:pcontrolpointdesc;
   ProjectProc:GDBProjectProc);
 var
   segmentIndex:integer;
-  v1,v2:PGDBVertex;
-  tv:GDBvertex;
+  v1,v2:PzePoint3d;
+  tv:TzePoint3d;
 begin
   if pdesc^.vertexnum>=0 then begin
     inherited remaponecontrolpoint(pdesc,ProjectProc);

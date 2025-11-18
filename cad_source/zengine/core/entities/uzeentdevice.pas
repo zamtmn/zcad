@@ -235,7 +235,7 @@ procedure GDBObjDevice.SaveToDXFFollow;
 var
   pv,pvc,pvc2:pgdbobjEntity;
   ir:itrec;
-  m4:DMatrix4D;
+  m4:DMatrix4d;
   DC:TDrawContext;
   SaveLocalEntityFlags:TLocalEntityFlags;
 begin
@@ -434,7 +434,7 @@ end;
 procedure GDBObjDevice.DrawGeometry;
 var
   p:pgdbobjEntity;
-  v:gdbvertex;
+  v:TzePoint3d;
   ir:itrec;
   oldlw:smallint;
 begin

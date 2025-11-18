@@ -17,7 +17,7 @@
 }
 
 unit uzegeometrytypes;
-{$Mode delphi}{$ModeSwitch advancedrecords}{$H+}
+{$Mode delphi}{$ModeSwitch advancedrecords}{$ModeSwitch typehelpers}{$H+}
 {$Macro on}
 
 interface
@@ -123,59 +123,67 @@ type
   PGDBZCoordinate=^GDBZCoordinate;
   GDBZCoordinate=Double;
 
-
-  PGDBvertex=^GDBvertex;
-  {REGISTERRECORDTYPE GDBvertex}
-  {-}GDBvertex=GVector3<Double,Double>;{//}
-  {-}{/GDBvertex=record/}
+  PzeVector3d=^TzeVector3d;
+  {REGISTERRECORDTYPE TzeVector3d}
+  {-}TzeVector3d=GVector3<Double,Double>;{//}
+  {-}{/TzeVector3d=record/}
     {-}{/x:GDBXCoordinate;/}
     {-}{/y:GDBYCoordinate;/}
     {-}{/z:GDBZCoordinate;/}
   {-}{/end;/}
 
-  PGDBvertex3S=^GDBvertex3S;
-  {REGISTERRECORDTYPE GDBvertex3S}
-  {-}GDBvertex3S=GVector3<Single,Single>;{//}
-  {-}{/GDBvertex3S=record/}
+  PzePoint3d=^TzePoint3d;
+  {REGISTERRECORDTYPE TzePoint3d}
+  {-}TzePoint3d=GVector3<Double,Double>;{//}
+  {-}{/TzePoint3d=record/}
+    {-}{/x:GDBXCoordinate;/}
+    {-}{/y:GDBYCoordinate;/}
+    {-}{/z:GDBZCoordinate;/}
+  {-}{/end;/}
+
+  PzePoint3s=^TzePoint3s;
+  {REGISTERRECORDTYPE TzePoint3s}
+  {-}TzePoint3s=GVector3<Single,Single>;{//}
+  {-}{/TzePoint3s=record/}
     {-}{/x:Single;/}
     {-}{/y:Single;/}
     {-}{/z:Single;/}
   {-}{/end;/}
 
-  PGDBvertex2D=^GDBvertex2D;
-  {REGISTERRECORDTYPE GDBvertex2D}
-  {-}GDBvertex2D=GVector2<Double,Double>;{//}
-  {-}{/GDBvertex2D=record/}
+  PzePoint2d=^TzePoint2d;
+  {REGISTERRECORDTYPE TzePoint2d}
+  {-}TzePoint2d=GVector2<Double,Double>;{//}
+  {-}{/TzePoint2d=record/}
     {-}{/x:Double;/}
     {-}{/y:Double;/}
   {-}{/end;/}
 
-  //DVector4F=packed array[0..3]of Single;
-  PDVector4F=^DVector4F;
-  {REGISTERRECORDTYPE DVector4F}
-  {-}DVector4F=GVector4<Single,Single>;{//}
-  {-}{/DVector4F=record/}
+  //DVector4s=packed array[0..3]of Single;
+  PDVector4s=^DVector4s;
+  {REGISTERRECORDTYPE DVector4s}
+  {-}DVector4s=GVector4<Single,Single>;{//}
+  {-}{/DVector4s=record/}
     {-}{/x:Single;/}
     {-}{/y:Single;/}
     {-}{/z:Single;/}
     {-}{/w:Single;/}
   {-}{/end;/}
 
-  PIMatrix4=^IMatrix4;
-  //IMatrix4=packed array[0..3]of Integer;
-  {REGISTERRECORDTYPE IMatrix4}
-  {-}IMatrix4=GVector4i<Integer,Integer>;{//}
-  {-}{/IMatrix4=record/}
+  PMatrix4i=^Matrix4i;
+  //Matrix4i=packed array[0..3]of Integer;
+  {REGISTERRECORDTYPE Matrix4i}
+  {-}Matrix4i=GVector4i<Integer,Integer>;{//}
+  {-}{/Matrix4i=record/}
     {-}{/x:Integer;/}
     {-}{/y:Integer;/}
     {-}{/z:Integer;/}
     {-}{/w:Integer;/}
   {-}{/end;/}
 
-  //DVector4D=packed array[0..3]of Double;
-  {REGISTERRECORDTYPE DVector4D}
-  {-}DVector4D=GVector4<Double,Double>;{//}
-  {-}{/DVector4D=record/}
+  //DVector4d=packed array[0..3]of Double;
+  {REGISTERRECORDTYPE DVector4d}
+  {-}DVector4d=GVector4<Double,Double>;{//}
+  {-}{/DVector4d=record/}
     {-}{/x:Double;/}
     {-}{/y:Double;/}
     {-}{/z:Double;/}
@@ -190,42 +198,42 @@ type
     {-}{/y:Double;/}
     {-}{/z:Double;/}
   {-}{/end;/}
-  PMatrix4D=^TMatrix4D;
-  TMatrix4D=packed array[0..3]of DVector4D;
-  PDMatrix4D=^DMatrix4D;
-  {-}DMatrix4D=GMatrix4<TMatrix4D>;{//}
-  {-}{/DMatrix4D=record/}
-  {-}{/  mtr:TMatrix4D;/}
+  PMatrix4d=^TMatrix4d;
+  TMatrix4d=packed array[0..3]of DVector4d;
+  PDMatrix4d=^DMatrix4d;
+  {-}DMatrix4d=GMatrix4<TMatrix4d>;{//}
+  {-}{/DMatrix4d=record/}
+  {-}{/  mtr:TMatrix4d;/}
   {-}{/  t:TMatrixType;/}
   {-}{/end;            /}
 
-  TMatrix4F=packed array[0..3]of DVector4F;
-  PDMatrix4F=^DMatrix4F;
-  {-}DMatrix4F=GMatrix4<TMatrix4F>;{//}
-  {-}{/DMatrix4F=record/}
-  {-}{/  mtr:TMatrix4F;/}
+  TMatrix4f=packed array[0..3]of DVector4s;
+  PDMatrix4f=^DMatrix4f;
+  {-}DMatrix4f=GMatrix4<TMatrix4f>;{//}
+  {-}{/DMatrix4f=record/}
+  {-}{/  mtr:TMatrix4f;/}
   {-}{/  t:TMatrixType;/}
   {-}{/end;            /}
 
   DMatrix3D=packed array[0..2]of DVector3D;
-  ClipArray=packed array[0..5]of DVector4D;
+  ClipArray=packed array[0..5]of DVector4d;
 
   PGDBCoordinates3D=^GDBCoordinates3D;
-  GDBCoordinates3D=GDBvertex;
+  GDBCoordinates3D=TzePoint3d;
   PGDBLength=^GDBLength;
   GDBLength=Double;
   PGDBQuaternion=^GDBQuaternion;
 
   {REGISTERRECORDTYPE GDBQuaternion}
   GDBQuaternion=record
-     ImagPart: GDBvertex;
+     ImagPart: TzePoint3d;
      RealPart: Double;
                 end;
   {REGISTERRECORDTYPE GDBBasis}
   GDBBasis=record
-                  ox:GDBvertex;(*'OX Axis'*)
-                  oy:GDBvertex;(*'OY Axis'*)
-                  oz:GDBvertex;(*'OZ Axis'*)
+                  ox:TzePoint3d;(*'OX Axis'*)
+                  oy:TzePoint3d;(*'OY Axis'*)
+                  oz:TzePoint3d;(*'OZ Axis'*)
             end;
 
   PGDBObj2dprop=^GDBObj2dprop;
@@ -261,8 +269,8 @@ type
   PGDBSnap2D=^GDBSnap2D;
   {REGISTERRECORDTYPE GDBSnap2D}
   GDBSnap2D=record
-                  Base:GDBvertex2D;(*'Base'*)
-                  Spacing:GDBvertex2D;(*'Spacing'*)
+                  Base:TzePoint2d;(*'Base'*)
+                  Spacing:TzePoint2d;(*'Spacing'*)
               end;
   PGDBFontVertex2D=^GDBFontVertex2D;
   {REGISTERRECORDTYPE GDBFontVertex2D}
@@ -274,89 +282,96 @@ type
   PGDBPolyVertex2D=^GDBPolyVertex2D;
   {REGISTERRECORDTYPE GDBPolyVertex2D}
   GDBPolyVertex2D=record
-                        coord:GDBvertex2D;
+                        coord:TzePoint2d;
                         count:Integer;
                   end;
   PGDBPolyVertex3D=^GDBPolyVertex3D;
   {REGISTERRECORDTYPE GDBPolyVertex3D}
   GDBPolyVertex3D=record
-                        coord:GDBvertex;
+                        coord:TzePoint3d;
                         count:Integer;
                         LineNumber:Integer;
                   end;
-  PGDBvertex2S=^GDBvertex2S;
-  {REGISTERRECORDTYPE GDBvertex2S}
-  {-}GDBvertex2S=GVector2<Single,Single>;{//}
-  {-}{/GDBvertex2S=record/}
+  PzePoint2s=^TzePoint2s;
+  {REGISTERRECORDTYPE TzePoint2s}
+  {-}TzePoint2s=GVector2<Single,Single>;{//}
+  {-}{/TzePoint2s=record/}
     {-}{/x:Single;/}
     {-}{/y:Single;/}
   {-}{/end;/}
-  {REGISTERRECORDTYPE GDBvertex2DI}
-  {-}GDBvertex2DI=GVector2i<Integer,Integer>;{//}
-  {-}{/GDBvertex2DI=record/}
+  {REGISTERRECORDTYPE TzePoint2i}
+  {-}TzePoint2i=GVector2i<Integer,Integer>;{//}
+  {-}{/TzePoint2i=record/}
     {-}{/x:Integer;/}
     {-}{/y:Integer;/}
   {-}{/end;/}
   {REGISTERRECORDTYPE GDBCameraBaseProp}
   GDBCameraBaseProp=record
-                          point:GDBvertex;
-                          look:GDBvertex;
-                          ydir:GDBvertex;
-                          xdir:GDBvertex;
+                          point:TzePoint3d;
+                          look:TzePoint3d;
+                          ydir:TzePoint3d;
+                          xdir:TzePoint3d;
                           zoom: Double;
                     end;
   {REGISTERRECORDTYPE tmatrixs}
   tmatrixs=record
-                     pmodelMatrix:PDMatrix4D;
-                     pprojMatrix:PDMatrix4D;
-                     pviewport:PIMatrix4;
+                     pmodelMatrix:PDMatrix4d;
+                     pprojMatrix:PDMatrix4d;
+                     pviewport:PMatrix4i;
   end;
 
   {Bounding volume}
   {REGISTERRECORDTYPE TBoundingBox}
   TBoundingBox=record
-                        LBN:GDBvertex;(*'Near'*)
-                        RTF:GDBvertex;(*'Far'*)
+                        LBN:TzePoint3d;(*'Near'*)
+                        RTF:TzePoint3d;(*'Far'*)
                   end;
   {REGISTERRECORDTYPE TBoundingRect}
   TBoundingRect=record
-                        LB:GDBvertex2D;(*'Near'*)
-                        RT:GDBvertex2D;(*'Far'*)
+                        LB:TzePoint2d;(*'Near'*)
+                        RT:TzePoint2d;(*'Far'*)
                   end;
   TInBoundingVolume=(IRFully,IRPartially,IREmpty,IRNotAplicable);
 
-  PGDBvertex2DI=^GDBvertex2DI;
-  GDBvertex2DIArray=packed array [0..0] of GDBvertex2DI;
-  OutBound4V=packed array [0..3]of GDBvertex;
+  PTzePoint2i=^TzePoint2i;
+  TzePoint2iArray=packed array [0..0] of TzePoint2i;
+  OutBound4V=packed array [0..3]of TzePoint3d;
   PGDBQuad3d=^GDBQuad3d;
-  GDBQuad2d=packed array[0..3] of GDBvertex2D;
+  GDBQuad2d=packed array[0..3] of TzePoint2d;
   GDBQuad3d=OutBound4V;
   PGDBLineProj=^GDBLineProj;
-  GDBLineProj=packed array[0..6] of GDBvertex2D;
+  GDBLineProj=packed array[0..6] of TzePoint2d;
   {REGISTERRECORDTYPE GDBplane}
   GDBplane=record
-                 normal:GDBvertex;
+                 normal:TzePoint3d;
                  d:Double;
            end;
   {REGISTERRECORDTYPE GDBray}
   GDBray=record
-               start,dir:GDBvertex;
+               start,dir:TzePoint3d;
          end;
   {REGISTERRECORDTYPE GDBPiece}
   GDBPiece=record
-               lbegin,dir,lend:GDBvertex;
+               lbegin,dir,lend:TzePoint3d;
          end;
   ptarcrtmodify=^tarcrtmodify;
   {REGISTERRECORDTYPE tarcrtmodify}
   tarcrtmodify=record
-                        p1,p2,p3:GDBVertex2d;
+                        p1,p2,p3:TzePoint2d;
                   end;
   {REGISTERRECORDTYPE TArcData}
   TArcData=record
                  r,startangle,endangle:Double;
-                 p:GDBvertex2D;
+                 p:TzePoint2d;
   end;
 {EXPORT-}
+  TzeVector3dHlpr=type helper for TzeVector3d
+    function asPoint:TzePoint3d;inline;
+  end;
+  TzePointHlpr=type helper for TzePoint3d
+    function asVector3d:TzeVector3d;inline;
+  end;
+
 const
  CMTScale=[MTIdentity,MTScale];
  CMTTranslate=[MTIdentity,MTTranslate];
@@ -394,6 +409,17 @@ implementation
 {$Include gvectorimpl.inc}
 {$UnDef IntParam}
 {$UnDef VectorTypeName}
+
+function TzeVector3dHlpr.asPoint:TzePoint3d;
+begin
+  result:=PzePoint3d(@self)^;
+end;
+
+function TzePointHlpr.asVector3d:TzeVector3d;
+begin
+  result:=PzeVector3d(@self)^;
+end;
+
 constructor GMatrix4<TMtr>.CreateRec(AMtr:TMtr;At:TMatrixType);
 begin
   mtr:=AMtr;

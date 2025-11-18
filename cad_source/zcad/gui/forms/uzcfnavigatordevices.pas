@@ -1161,7 +1161,7 @@ procedure TNavigatorDevices.TVDblClick(Sender: TObject);
 var
   pnode:PVirtualNode;
   pnd:PTNodeData;
-  pc:gdbvertex;
+  pc:TzePoint3d;
   bb:TBoundingBox;
 const
   scale=10;

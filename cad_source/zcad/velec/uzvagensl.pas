@@ -142,20 +142,20 @@ uses
 type
 
       //**создаем список в списке вершин координат
-      TListVertex=specialize TVector<GDBVertex>;
+      TListVertex=specialize TVector<TzePoint3d>;
 
       //**создаем список номеров
       TListNum=specialize TVector<integer>;
 
       TVertexDevice=record
-               point:GDBVertex;
+               point:TzePoint3d;
                num:integer;
       end;
       TListVertexDevice=specialize TVector<TVertexDevice>;
 
       //**создаем список в списке вершин координат и стороны
       TInfoVertexinLine=record
-                   point:GDBVertex;
+                   point:TzePoint3d;
                    //0-слева,1-сверху,2-справа,3-снизу
                    wall:integer;
                    end;
@@ -174,20 +174,20 @@ type
       //** Создания списка ребер графа
       PTInfoBuildLine=^TInfoBuildLine;
       TInfoBuildLine=record
-                         p1:GDBVertex;
-                         p2:GDBVertex;
-                         p3:GDBVertex;
-                         p4:GDBVertex;
+                         p1:TzePoint3d;
+                         p2:TzePoint3d;
+                         p3:TzePoint3d;
+                         p4:TzePoint3d;
       end;
 
       //** Создания списка вершин графа
       PTVertexGraph=^TVertexGraph;
       TVertexGraph=record
                          deviceEnt:PGDBObjDevice;
-                         centerPoint:GDBVertex;
+                         centerPoint:TzePoint3d;
                          //break:boolean;
                          //breakName:string;
-                         //lPoint:GDBVertex;
+                         //lPoint:TzePoint3d;
       end;
       TListVertexGraph=specialize TVector<TVertexGraph>;
 
@@ -196,8 +196,8 @@ type
       TEdgeGraph=record
                          VIndex1:Integer; //номер 1-й вершниы по списку
                          VIndex2:Integer; //номер 2-й вершниы по списку
-                         VPoint1:GDBVertex;  //координаты 1й вершниы
-                         VPoint2:GDBVertex;  //координаты 2й вершниы
+                         VPoint1:TzePoint3d;  //координаты 1й вершниы
+                         VPoint2:TzePoint3d;  //координаты 2й вершниы
                          edgeLength:Double; // длина ребра
       end;
       TListEdgeGraph=specialize TVector<TEdgeGraph>;
@@ -214,7 +214,7 @@ implementation
   end;
 
 
-  function InsertDevice(p1:GDBVertex):TCommandResult;
+  function InsertDevice(p1:TzePoint3d):TCommandResult;
   var
       pdev:PGDBObjDevice;
       rc:TDrawContext;
@@ -295,7 +295,7 @@ implementation
 
 
   //*** Сортировка списка вершин, внутри списка, так что бы вершины распологались по отдаленности от начальной точки линии которую в данный момент расматриваем
-procedure listSortVertexAt(var listNumVertex:TListNum;listDevice:TListVertexGraph;stVertLine:GDBVertex);
+procedure listSortVertexAt(var listNumVertex:TListNum;listDevice:TListVertexGraph;stVertLine:TzePoint3d);
 var
    tempNumVertex:integer;
    IsExchange:boolean;
@@ -318,7 +318,7 @@ end;
   //*** все плохо пока ничего не ясно все временно
   //** Получение ребер между вершинами, которые попадают в прямоугольную 2d область вокруг линии (определение выполнено методом площадей треуголникров (по герону))
 
-  procedure getListEdge(var listVertexGraph:TListVertexGraph;var listEdgeGraph:TListEdgeGraph; stpoint,edpoint:GDBVertex;accuracy:double);
+  procedure getListEdge(var listVertexGraph:TListVertexGraph;var listEdgeGraph:TListEdgeGraph; stpoint,edpoint:TzePoint3d;accuracy:double);
   var
      {i,}j,k:integer;
      areaLine, areaVertex:TBoundingBox;
@@ -381,10 +381,10 @@ var
  listVertexperpend:TListVertexinLine;
  infoVertexinLine:TInfoVertexinLine;
 
- tempVertex,mainVertexPerpend,stPoint:GDBVertex;
+ tempVertex,mainVertexPerpend,stPoint:TzePoint3d;
  pointBuildLine:TInfoBuildLine;
 
- //p1new,p2new,p3new,p4new:GDBVertex;
+ //p1new,p2new,p3new,p4new:TzePoint3d;
  i,j,tNum,orient,counter:integer;
  tempLength{,templen2}:double;
  //isLine:boolean;

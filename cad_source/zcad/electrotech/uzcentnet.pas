@@ -39,10 +39,10 @@ GDBObjNet= object(GDBObjConnected)
                  procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext;Stage:TEFStages=EFAllStages);virtual;
                  procedure DelSelectedSubitem(var drawing:TDrawingDef);virtual;
                  function Clone(own:Pointer):PGDBObjEntity;virtual;
-                 procedure TransformAt(p:PGDBObjEntity;t_matrix:PDMatrix4D);virtual;
-                 procedure transform(const t_matrix:DMatrix4D);virtual;
+                 procedure TransformAt(p:PGDBObjEntity;t_matrix:PDMatrix4d);virtual;
+                 procedure transform(const t_matrix:DMatrix4d);virtual;
 
-                 function GetNearestLine(const point:GDBVertex):PGDBObjEntity;
+                 function GetNearestLine(const point:TzePoint3d):PGDBObjEntity;
 
                  procedure SaveToDXF(var outStream:TZctnrVectorBytes;var drawing:TDrawingDef;var IODXFContext:TIODXFSaveContext);virtual;
                  procedure SaveToDXFObjXData(var outStream:TZctnrVectorBytes;var IODXFContext:TIODXFSaveContext);virtual;
@@ -68,7 +68,7 @@ begin
 end;
 procedure GDBObjNet.TransformAt;
 var //xs,ys,zs:double;
-//    ox:gdbvertex;
+//    ox:TzePoint3d;
     pv,pvold:pGDBObjEntity;
     ir,ir2:itrec;
 begin
@@ -239,7 +239,7 @@ end;
 procedure GDBObjNet.DrawGeometry;
 var i{,j}:Integer;
     tgf: pgrafelement;
-    //wcoord:gdbvertex;
+    //wcoord:TzePoint3d;
 begin
      inc(dc.subrender);
      if graf.Count=0 then exit;
@@ -428,7 +428,7 @@ var pl,pl2:pgdbobjline;
     tpl:pgdbobjline;
     i,j:Integer;
     ip:intercept3dprop;
-    tv:gdbvertex;
+    tv:TzePoint3d;
 //    q:Boolean;
     TempNet:PGDBObjNet;
     tgf: pgrafelement;

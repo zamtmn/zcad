@@ -127,7 +127,7 @@ type
 
      //** Для возврата пересечения прямой с кругом
       Intercept2DProp2Point=record
-                           point1,point2:gdbvertex; //**< Точка пересечения X,Y реализовано 2D пересечение
+                           point1,point2:TzePoint3d; //**< Точка пересечения X,Y реализовано 2D пересечение
                            isinterceptCol:Integer;  //**< количество пересечений
                      end;
 
@@ -139,8 +139,8 @@ type
                          //cableEnt:PGDBObjCable;
                          cableEnt:PGDBObjSuperLine;
                          typeMount:string;
-                         stPoint:GDBVertex;
-                         edPoint:GDBVertex;
+                         stPoint:TzePoint3d;
+                         edPoint:TzePoint3d;
                          stIndex:Integer; //незнаю нужне ли он будет ну пускай пока будет
                          edIndex:Integer; //незнаю нужне ли он будет ну пускай пока будет
       end;
@@ -150,10 +150,10 @@ type
       PTStructDeviceLine=^TStructDeviceLine;
       TStructDeviceLine=record
                          deviceEnt:PGDBObjDevice;
-                         centerPoint:GDBVertex;
+                         centerPoint:TzePoint3d;
                          break:boolean;
                          breakName:string;
-                         //lPoint:GDBVertex;
+                         //lPoint:TzePoint3d;
       end;
       TListDeviceLine=specialize TVector<TStructDeviceLine>;
 
@@ -162,8 +162,8 @@ type
       TInfoEdgeGraph=record
                          VIndex1:Integer; //номер 1-й вершниы по списку
                          VIndex2:Integer; //номер 2-й вершниы по списку
-                         VPoint1:GDBVertex;  //координаты 1й вершниы
-                         VPoint2:GDBVertex;  //координаты 2й вершниы
+                         VPoint1:TzePoint3d;  //координаты 1й вершниы
+                         VPoint2:TzePoint3d;  //координаты 2й вершниы
                          cableEnt:PGDBObjSuperLine;
                          edgeLength:Double; // длина ребра
       end;
@@ -173,14 +173,14 @@ type
       //Применяется для функции возврата удлиненной линии
       PTextendedLine=^TextendedLine;
       TextendedLine=record
-                         stPoint:GDBVertex;
-                         edPoint:GDBVertex;
+                         stPoint:TzePoint3d;
+                         edPoint:TzePoint3d;
       end;
 
       //Применяется для функции возврата прямоугольника построенного по линии
       //PTRectangleLine=^TRectangleLine;
       //TRectangleLine=record
-      //                   Pt1,Pt2,Pt3,Pt4:GDBVertex;
+      //                   Pt1,Pt2,Pt3,Pt4:TzePoint3d;
       //end;
 
       //** Создания списка номеров вершин для построение ребер (временный список  )
@@ -227,10 +227,10 @@ type
       //** Создания списка  вершин для построение прямоугольника
       //PTListVertexPoint=^TListVertexPoint;
       //TListVertexPoint=record
-      //                   p:GDBVertex;
+      //                   p:TzePoint3d;
       //                   color:integer;
       //end;
-      GListVertexPoint=specialize TVector<GDBVertex>;
+      GListVertexPoint=specialize TVector<TzePoint3d>;
 
       //Список номеров
       TInfoListNumVertex=record
@@ -259,18 +259,18 @@ type
 
 
       function graphBulderFunc(Epsilon:double;nameCable:string):TGraphBuilder;
-      function visualGraphEdge(p1:GDBVertex;p2:GDBVertex;color:integer;nameLayer:string):TCommandResult;
-      function visualGraphVertex(p1:GDBVertex;rr:Double;color:integer;nameLayer:string):TCommandResult;
-      function visualGraphError(point:GDBVertex;rr:Double;color:integer;nameLayer:string):TCommandResult;
-      function getPointConnector(pobj:pGDBObjEntity; out pConnect:GDBVertex):Boolean;
+      function visualGraphEdge(p1:TzePoint3d;p2:TzePoint3d;color:integer;nameLayer:string):TCommandResult;
+      function visualGraphVertex(p1:TzePoint3d;rr:Double;color:integer;nameLayer:string):TCommandResult;
+      function visualGraphError(point:TzePoint3d;rr:Double;color:integer;nameLayer:string):TCommandResult;
+      function getPointConnector(pobj:pGDBObjEntity; out pConnect:TzePoint3d):Boolean;
 
       function testTempDrawPolyLine(listVertex:GListVertexPoint;color:Integer):TCommandResult;
-      function testTempDrawText(p1:GDBVertex;mText:String):TCommandResult;
-      function convertLineInRectangleWithAccuracy(point1:GDBVertex;point2:GDBVertex;accuracy:double):TRectangleLine;
-      procedure listSortVertexAtStPtLine(var listNumVertex:TListTempNumVertex;listDevice:TListDeviceLine;stVertLine:GDBVertex);
-      function getAreaLine(point1:GDBVertex;point2:GDBVertex;accuracy:double):TBoundingBox;
-      function getAreaVertex(vertexPoint:GDBVertex;accuracy:double):TBoundingBox;
-      function vertexPointInAreaRectangle(rectLine:TRectangleLine;vertexPt:GDBVertex):boolean;
+      function testTempDrawText(p1:TzePoint3d;mText:String):TCommandResult;
+      function convertLineInRectangleWithAccuracy(point1:TzePoint3d;point2:TzePoint3d;accuracy:double):TRectangleLine;
+      procedure listSortVertexAtStPtLine(var listNumVertex:TListTempNumVertex;listDevice:TListDeviceLine;stVertLine:TzePoint3d);
+      function getAreaLine(point1:TzePoint3d;point2:TzePoint3d;accuracy:double):TBoundingBox;
+      function getAreaVertex(vertexPoint:TzePoint3d;accuracy:double):TBoundingBox;
+      function vertexPointInAreaRectangle(rectLine:TRectangleLine;vertexPt:TzePoint3d):boolean;
       procedure clearVisualGraph(nameLayer:string);
       procedure getListSuperline(var listSLname:TGDBlistSLname);
 
@@ -311,7 +311,7 @@ const
      MyEPSILON=0.05;//погрешность с которой ищем - половина стороны куба в котором будет осуществлен поиск
 var
     pc2:PGDBObjCable;               //указатель на найденый кабель
-    LastPoint,FirstPoint:GDBVertex; //точки в конце кабеля PC и начале кабеля PC2
+    LastPoint,FirstPoint:TzePoint3d; //точки в конце кабеля PC и начале кабеля PC2
     Volume:TBoundingBox;            //Ограничивающий объем, обычно в графике его называют AABB - axis aligned bounding box
                                     //куб со сторонами паралелльными осям, определяется 2мя диагональными точками
                                     //левая-нижняя-ближняя и правая-верхняя-дальняя
@@ -344,7 +344,7 @@ begin
                     end;
    setlength(DataOpenArray2,0);
    //////////////////////////////////////////////////        }
-  LastPoint:=PGDBVertex(pc^.VertexArrayInWCS.getDataMutable(pc^.VertexArrayInWCS.Count-1))^;//получаем точку в конце кабеля
+  LastPoint:=PzePoint3d(pc^.VertexArrayInWCS.getDataMutable(pc^.VertexArrayInWCS.Count-1))^;//получаем точку в конце кабеля
 
   volume.LBN:=createvertex(LastPoint.x-MyEPSILON,LastPoint.y-MyEPSILON,LastPoint.z-MyEPSILON);//считаем левую\нижнюю\ближнюю точку объема
   volume.RTF:=createvertex(LastPoint.x+MyEPSILON,LastPoint.y+MyEPSILON,LastPoint.z+MyEPSILON);//считаем правую\верхнюю\дальнюю точку объема
@@ -359,7 +359,7 @@ begin
        repeat
              if pc2^.GetObjType=GDBCableID then//если он кабель то
              begin
-                  FirstPoint:=PGDBVertex(pc2^.VertexArrayInWCS.getDataMutable(0))^;//получаем точку в начале найденного кабеля
+                  FirstPoint:=PzePoint3d(pc2^.VertexArrayInWCS.getDataMutable(0))^;//получаем точку в начале найденного кабеля
                   if uzegeometry.Vertexlength(LastPoint,FirstPoint)<MyEPSILON then//если конец кабеля совпадает с началом с погрешностью, то
                   begin
                        pc2^.SelectQuik;            //выделяем
@@ -374,14 +374,14 @@ begin
   NearObjects.Done;//убиваем список
 end;
 //Сравнение 2-х вершин одинаковые они или нет, с учетом погрешности
-function compareVertex(p1:GDBVertex;p2:GDBVertex;inaccuracy:Double):Boolean;
+function compareVertex(p1:TzePoint3d;p2:TzePoint3d;inaccuracy:Double):Boolean;
 begin
     result:=false;
     if ((p1.x >= p2.x-inaccuracy) and (p1.x <= p2.x+inaccuracy) and (p2.y >= p2.y-inaccuracy) and (p2.y <= p2.y+inaccuracy)) then
        result:=true;
 end;
 //Проверка списка на дубликаты, при добавлении новой вершины, с учетом погрешности
-function dublicateVertex(listVertex:TListDeviceLine;addVertex:GDBVertex;inaccuracy:Double):Boolean;
+function dublicateVertex(listVertex:TListDeviceLine;addVertex:TzePoint3d;inaccuracy:Double):Boolean;
 var
     i:integer;
 begin
@@ -402,9 +402,9 @@ end;
 function TemplateForVeb_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 var
     pc{,pc2}:PGDBObjCable;                //указатель на кабель
-    //LastPoint:GDBVertex;            //точка в конце кабеля
+    //LastPoint:TzePoint3d;            //точка в конце кабеля
     //NearObjects:GDBObjOpenArrayOfPV;//список примитивов рядом с точкой
-    l1begin,l1end,l2begin,l2end{,l222}:GDBVertex;
+    l1begin,l1end,l2begin,l2end{,l222}:TzePoint3d;
 
     //ir:itrec;
 
@@ -445,7 +445,7 @@ begin
 end;
 
 //Визуализация линий графа для наглядности того что получилось построить в графе
-function visualGraphEdge(p1:GDBVertex;p2:GDBVertex;color:integer;nameLayer:string):TCommandResult;
+function visualGraphEdge(p1:TzePoint3d;p2:TzePoint3d;color:integer;nameLayer:string):TCommandResult;
 var
     pline:PGDBObjLine;
 begin
@@ -461,7 +461,7 @@ begin
 end;
 
 //Визуализация круга его p1-координата, rr-радиус, color-цвет
-function visualGraphVertex(p1:GDBVertex;rr:Double;color:integer;nameLayer:string):TCommandResult;
+function visualGraphVertex(p1:TzePoint3d;rr:Double;color:integer;nameLayer:string):TCommandResult;
 var
     pcircle:PGDBObjCircle;
 begin
@@ -479,14 +479,14 @@ begin
 end;
 
 //Визуализация ошибки его p1-координата, rr-радиус, color-цвет
-function visualGraphError(point:GDBVertex;rr:Double;color:integer;nameLayer:string):TCommandResult;
+function visualGraphError(point:TzePoint3d;rr:Double;color:integer;nameLayer:string):TCommandResult;
 var
     polyObj:PGDBObjPolyLine;
-    tempPoint:GDBVertex;
+    tempPoint:TzePoint3d;
     //i:integer;
-    //vertexObj:GDBvertex;
+    //vertexObj:TzePoint3d;
    // pe:T3PointCircleModePentity;
-   // p1,p2:gdbvertex;
+   // p1,p2:TzePoint3d;
 begin
      polyObj:=GDBObjPolyline.CreateInstance;
      zcSetEntPropFromCurrentDrawingProp(polyObj);
@@ -521,9 +521,9 @@ function testTempDrawPolyLine(listVertex:GListVertexPoint;color:Integer):TComman
 var
     polyObj:PGDBObjPolyLine;
     i:integer;
-    //vertexObj:GDBvertex;
+    //vertexObj:TzePoint3d;
    // pe:T3PointCircleModePentity;
-   // p1,p2:gdbvertex;
+   // p1,p2:TzePoint3d;
 begin
      polyObj:=GDBObjPolyline.CreateInstance;
      zcSetEntPropFromCurrentDrawingProp(polyObj);
@@ -540,7 +540,7 @@ begin
      result:=cmd_ok;
 end;
 //быстрое написание текста
-function testTempDrawText(p1:GDBVertex;mText:String):TCommandResult;
+function testTempDrawText(p1:TzePoint3d;mText:String):TCommandResult;
 var
     ptext:PGDBObjText;
 begin
@@ -555,11 +555,11 @@ end;
 
 
 
-//function testTempDrawCircle(p1:GDBVertex;rr:Double):TCommandResult;
+//function testTempDrawCircle(p1:TzePoint3d;rr:Double):TCommandResult;
 //var
 //    pcircle:PGDBObjCircle;
 //   // pe:T3PointCircleModePentity;
-//   // p1,p2:gdbvertex;
+//   // p1,p2:TzePoint3d;
 //   rc:TDrawContext;
 //begin
 //    begin
@@ -588,10 +588,10 @@ end;
 //end;
 
 //**Удлинение линии по ее направлению**//
-function extendedLineFunc(point1:GDBVertex;point2:GDBVertex;extendedAbsolut:double):TextendedLine;
+function extendedLineFunc(point1:TzePoint3d;point2:TzePoint3d;extendedAbsolut:double):TextendedLine;
 var
    xline,yline,xyline,xylinenew,xlinenew,ylinenew,xdiffline,ydiffline:double;
-   pt1new,pt2new:GDBVertex;
+   pt1new,pt2new:TzePoint3d;
    newextendedLine:TextendedLine;
 begin
      xline:=abs(point2.x - point1.x);
@@ -633,7 +633,7 @@ begin
 end;
 
 //** Получение области поиска около вершины, левая-нижняя-ближняя точка и правая-верхняя-дальняя точка
-function getAreaVertex(vertexPoint:GDBVertex;accuracy:double):TBoundingBox;
+function getAreaVertex(vertexPoint:TzePoint3d;accuracy:double):TBoundingBox;
 begin
     result.LBN.x:=vertexPoint.x - accuracy;
     result.LBN.y:=vertexPoint.y - accuracy;
@@ -646,7 +646,7 @@ begin
 end;
 
 //** Получение области поиска по всей линии, левая-нижняя-ближняя точка и правая-верхняя-дальняя точка
-function getAreaLine(point1:GDBVertex;point2:GDBVertex;accuracy:double):TBoundingBox;
+function getAreaLine(point1:TzePoint3d;point2:TzePoint3d;accuracy:double):TBoundingBox;
 begin
      if point1.x <= point2.x  then
        begin
@@ -707,7 +707,7 @@ begin
 end;
 
 //*** Площадь прямоугольника
-function areaOfRectangle(pt1,pt2,pt3,pt4:GDBVertex):double;
+function areaOfRectangle(pt1,pt2,pt3,pt4:TzePoint3d):double;
 var
    p,a,b,c,d:double;
 begin
@@ -720,7 +720,7 @@ begin
 end;
 
 //*** Площадь треугольника по формуле Герона
-function areaOfTriangle(pt1,pt2,pt3:GDBVertex):double;
+function areaOfTriangle(pt1,pt2,pt3:TzePoint3d):double;
 var
    p,a,b,c:double;
 begin
@@ -733,7 +733,7 @@ end;
 
 //** МЕТОД площадей триугольников и прямоугольников
 //** Определение попадает ли точка внутрь прямоугольника полученого линиией с учетом погрешности
-function vertexPointInAreaRectangle(rectLine:TRectangleLine;vertexPt:GDBVertex):boolean;
+function vertexPointInAreaRectangle(rectLine:TRectangleLine;vertexPt:TzePoint3d):boolean;
 var
    //areaLine:TBoundingBox;
    areaRect{,areaTriangle},sumAreaTriangle:double; //площадь прямоугольника
@@ -760,11 +760,11 @@ end;
 
 //**Новый метод путем поворота и линии и пространства, более точный чем герон, но дольше
 //** Определение попадает ли точка внутрь прямоугольника полученого линиией с учетом погрешности
-function vertexPtInAreaAngleMt(cableLine:TStructCableLine;vertexPt:GDBVertex;accuracy:double):boolean;
+function vertexPtInAreaAngleMt(cableLine:TStructCableLine;vertexPt:TzePoint3d;accuracy:double):boolean;
 var
    //areaLine:TBoundingBox;
    //areaRect,areaTriangle,sumAreaTriangle:double; //площадь прямоугольника
-   tempvert,tempVertex,newEdPtLine:GDBVertex;
+   tempvert,tempVertex,newEdPtLine:TzePoint3d;
    xline,{yline,}xyline,angle,anglePerpendCos:double;
    vertexRectangleLine:TRectangleLine;
    sine,cosine:double;
@@ -858,10 +858,10 @@ end;
 
 
 //**преобразование линии в прямоугольник (4 точки) с учетом ее направления и погрешности попадания. Т.е. если погрешность равна нулю то получится прямоугольник в виде линии :) **//
-function convertLineInRectangleWithAccuracy(point1:GDBVertex;point2:GDBVertex;accuracy:double):TRectangleLine;
+function convertLineInRectangleWithAccuracy(point1:TzePoint3d;point2:TzePoint3d;accuracy:double):TRectangleLine;
 var
    xline,yline,xyline,xylinenew,xlinenew,ylinenew,xdiffline,ydiffline:double;
-   pt1new,pt2new,pt3new,pt4new:GDBVertex;
+   pt1new,pt2new,pt3new,pt4new:TzePoint3d;
 
 begin
      xline:=abs(point2.x - point1.x);
@@ -934,7 +934,7 @@ begin
 
 end;
 //*** Сортировка списка вершин, внутри списка, так что бы вершины распологались по отдаленности от начальной точки линии которую в данный момент расматриваем
-procedure listSortVertexAtStPtLine(var listNumVertex:TListTempNumVertex;listDevice:TListDeviceLine;stVertLine:GDBVertex);
+procedure listSortVertexAtStPtLine(var listNumVertex:TListTempNumVertex;listDevice:TListDeviceLine;stVertLine:TzePoint3d);
 var
    tempNumVertex:TInfoTempNumVertex;
    IsExchange:boolean;
@@ -1090,7 +1090,7 @@ var
    infoEdge:TInfoEdgeGraph;
    infoDevice:TStructDeviceLine; //инфо по объекта списка
    inAddEdge:boolean;
-   vertexLine:GDBVertex;
+   vertexLine:TzePoint3d;
    colDevice,numVertDevice:integer;
    //pc:PGDBObjCable;
     pobj: pGDBObjEntity;   //выделеные объекты в пространстве листа
@@ -1133,7 +1133,7 @@ begin
               //if (pobj^.GetObjType=GDBSuperLineID) then //если он кабель то
               //  begin
               //   pSuperLine:= PGDBObjSuperLine(pobj);
-              //   //testTempDrawLine(PGDBVertex(pc^.VertexArrayInOCS.getDataMutable(0))^,PGDBVertex(pc^.VertexArrayInOCS.getDataMutable(1))^);
+              //   //testTempDrawLine(PzePoint3d(pc^.VertexArrayInOCS.getDataMutable(0))^,PzePoint3d(pc^.VertexArrayInOCS.getDataMutable(1))^);
               //   if pSuperLine <> listCable[i].cableEnt then //если это не тот же кабель который мв сейчас изучаем
               //     begin
               //      //*** после починки системы выделения объектов, разкоментировать
@@ -1341,7 +1341,7 @@ Else
 end;  //AtOtres
 
 //*** Сортировка списка вершин, внутри списка, так что бы вершины распологались по отдаленности от начальной точки (нашей точки)
-function Intercept2DCircleLine(linePt1:GDBVertex;linePt2:GDBVertex;circlePt:GDBVertex;r:double):Intercept2DProp2Point;
+function Intercept2DCircleLine(linePt1:TzePoint3d;linePt2:TzePoint3d;circlePt:TzePoint3d;r:double):Intercept2DProp2Point;
 var
     k,b,d:double;
 begin
@@ -1491,7 +1491,7 @@ begin
 end;
 
 //*** поиск точки координаты коннектора в устройстве
-function getPointConnector(pobj:pGDBObjEntity; out pConnect:GDBVertex):Boolean;
+function getPointConnector(pobj:pGDBObjEntity; out pConnect:TzePoint3d):Boolean;
 var
    {pd,}pObjDevice,{pObjDevice2,}currentSubObj{,currentSubObj2}:PGDBObjDevice;
    {ir,}ir_inDevice{,ir_inDevice2}:itrec;  // применяется для обработки списка выделений, но что это понятия не имею :)
@@ -1558,8 +1558,8 @@ var
     areaLine:TBoundingBox;            //Ограничивающий объем, обычно в графике его называют AABB - axis aligned bounding box
                                     //куб со сторонами паралелльными осям, определяется 2мя диагональными точками
                                     //левая-нижняя-ближняя и правая-верхняя-дальня
-    interceptVertex{,devpoint}:GDBVertex;
-    {tempPoint1,tempPoint2,}pConnect:GDBVertex;
+    interceptVertex{,devpoint}:TzePoint3d;
+    {tempPoint1,tempPoint2,}pConnect:TzePoint3d;
 
     //psldb:pointer;
 
@@ -1570,9 +1570,9 @@ var
 
 
     //указатель на кабель
-   // LastPoint,FirstPoint:GDBVertex; //точки в конце кабеля PC и начале кабеля PC2
+   // LastPoint,FirstPoint:TzePoint3d; //точки в конце кабеля PC и начале кабеля PC2
    // NearObjects:GDBObjOpenArrayOfPV;//список примитивов рядом с точкой
-  //  l1begin,l1end,l2begin,l2end,l222:GDBVertex;
+  //  l1begin,l1end,l2begin,l2end,l222:TzePoint3d;
 
 
 
@@ -1615,7 +1615,7 @@ begin
 
                  //testTempDrawCircle(infoCable.stPoint,2.5);
                  //testTempDrawCircle(infoCable.edPoint,2.5);
-                // PGDBVertex(pc^.VertexArrayInOCS.getDataMutable(i-1))^;
+                // PzePoint3d(pc^.VertexArrayInOCS.getDataMutable(i-1))^;
                end;
 
            end;

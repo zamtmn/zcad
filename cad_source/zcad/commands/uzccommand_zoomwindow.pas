@@ -38,8 +38,8 @@ implementation
 var
   zoomwindowcommand:PCommandObjectDef;
 
-function ShowWindow_com_AfterClick(const Context:TZCADCommandContext;wc:GDBvertex;
-  mc:GDBvertex2DI;var button:byte;osp:pos_record;mclick:integer):integer;
+function ShowWindow_com_AfterClick(const Context:TZCADCommandContext;wc:TzePoint3d;
+  mc:TzePoint2i;var button:byte;osp:pos_record;mclick:integer):integer;
 begin
   Result:=mclick;
   drawings.GetCurrentDWG.wa.param.seldesc.Frame2:=mc;

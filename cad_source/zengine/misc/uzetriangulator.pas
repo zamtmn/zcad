@@ -47,12 +47,12 @@ type
     procedure EndPolygon(TS:TTesselator);
     procedure BeginContour(TS:TTesselator);
     procedure EndContour(TS:TTesselator);
-    procedure TessVertex(TS:TTesselator; const V:GDBVertex);
+    procedure TessVertex(TS:TTesselator; const V:TzePoint3d);
 
     procedure ErrorCallBack(error: Cardinal);
     procedure BeginCallBack(gmode: Cardinal);
     procedure VertexCallBack(const VertexData: Pointer);
-    procedure CombineCallback(const coords:GDBvertex;const vertex_data:TV4P;const weight:TArray4F;var dataout:Pointer);{$IFDEF Windows}stdcall{$ELSE}cdecl{$ENDIF};
+    procedure CombineCallback(const coords:TzePoint3d;const vertex_data:TV4P;const weight:TArray4F;var dataout:Pointer);{$IFDEF Windows}stdcall{$ELSE}cdecl{$ENDIF};
 
     //constructor create;
     //destructor Destroy;override;
@@ -73,7 +73,7 @@ procedure TessVertexCallBackData(const v: Pdouble;const Data: Pointer);{$IFDEF W
 begin
   TTriangulator.GetTriangulatorInstance(Data).VertexCallBack(v);
 end;
-procedure TessCombineCallbackData(const coords:GDBvertex;const vertex_data:TV4P;const weight:TArray4F;var dataout:Pointer;const Data: Pointer);{$IFDEF Windows}stdcall{$ELSE}cdecl{$ENDIF};
+procedure TessCombineCallbackData(const coords:TzePoint3d;const vertex_data:TV4P;const weight:TArray4F;var dataout:Pointer;const Data: Pointer);{$IFDEF Windows}stdcall{$ELSE}cdecl{$ENDIF};
 begin
   TTriangulator.GetTriangulatorInstance(Data).CombineCallback(coords,vertex_data,weight,dataout);
 end;
@@ -119,7 +119,7 @@ procedure TTriangulator.EndContour(TS:TTesselator);
 begin
   GLUIntrf.TessEndContour(TS);
 end;
-procedure TTriangulator.TessVertex(TS:TTesselator; const V:GDBVertex);
+procedure TTriangulator.TessVertex(TS:TTesselator; const V:TzePoint3d);
 var
   i:TArrayIndex;
 begin
@@ -202,7 +202,7 @@ begin
                               end;
                          end;
 end;
-procedure TTriangulator.CombineCallback(const coords:GDBvertex;const vertex_data:TV4P;const weight:TArray4F;var dataout:Pointer);{$IFDEF Windows}stdcall{$ELSE}cdecl{$ENDIF};
+procedure TTriangulator.CombineCallback(const coords:TzePoint3d;const vertex_data:TV4P;const weight:TArray4F;var dataout:Pointer);{$IFDEF Windows}stdcall{$ELSE}cdecl{$ENDIF};
 begin
   ptruint(dataout):=pzr.Graphix.GeomData.Vertex3S.AddGDBVertex(coords);
   dataout:=dataout;

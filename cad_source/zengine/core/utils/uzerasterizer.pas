@@ -36,19 +36,19 @@ type
     Scale:Double;
     Palette:TRasterizeColor;
   end;
-procedure rasterize(cdwg:PTSimpleDrawing;pw,ph:integer;point1,point2:GDBVertex;PrintParam:TRasterizeParams;Canvas: TCanvas;PrinterDrawer:TZGLGeneral2DDrawer);
+procedure rasterize(cdwg:PTSimpleDrawing;pw,ph:integer;point1,point2:TzePoint3d;PrintParam:TRasterizeParams;Canvas: TCanvas;PrinterDrawer:TZGLGeneral2DDrawer);
 implementation
-procedure rasterize(cdwg:PTSimpleDrawing;pw,ph:integer;point1,point2:GDBVertex;PrintParam:TRasterizeParams;Canvas: TCanvas;PrinterDrawer:TZGLGeneral2DDrawer);
+procedure rasterize(cdwg:PTSimpleDrawing;pw,ph:integer;point1,point2:TzePoint3d;PrintParam:TRasterizeParams;Canvas: TCanvas;PrinterDrawer:TZGLGeneral2DDrawer);
  var
   dx,dy,sx,sy,scale:Double;
-  tmatrix,_clip:DMatrix4D;
+  tmatrix,_clip:DMatrix4d;
   _frustum:ClipArray;
   DC:TDrawContext;
 
-  modelMatrix:DMatrix4D;
-  projMatrix:DMatrix4D;
-  viewport:IMatrix4;
-  pd1,pd2:GDBvertex2D;
+  modelMatrix:DMatrix4d;
+  projMatrix:DMatrix4d;
+  viewport:Matrix4i;
+  pd1,pd2:TzePoint2d;
 
   oldforegroundindex:integer;
   Actlt:TVisActuality;
@@ -150,7 +150,7 @@ begin
 
 
   //modelMatrix:=onematrix;
-  //projMatrix:DMatrix4D;
+  //projMatrix:DMatrix4d;
   viewport.v[0]:=0;
   viewport.v[1]:=0;
   viewport.v[2]:=pw;

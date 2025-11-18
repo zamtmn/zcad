@@ -533,7 +533,7 @@ var
 
 const
   deffonth={19}100;
-  cnvStr:packed array[0..3]of byte=(0,0,0,0);
+  //cnvStr:packed array[0..3]of byte=(0,0,0,0);
 begin
      if not PSymbolsParam^.IsCanSystemDraw then
                                            begin
@@ -584,9 +584,10 @@ begin
   x:=round(spoint.x);
   y:=round(spoint.y);
   {$IFNDEF DELPHI}
-  cnvStr[0]:=lo(word(SymCode));
-  cnvStr[1]:=hi(word(SymCode));
-  s:=UTF16ToUTF8(@cnvStr,1);
+  //cnvStr[0]:=lo(word(SymCode));
+  //cnvStr[1]:=hi(word(SymCode));
+  //s:=UTF16ToUTF8(@cnvStr,1);
+  s:=UTF16ToUTF8(@SymCode,1);
   {$ENDIF}
 
   txtOblique:=pi/2-PSymbolsParam^.Oblique;

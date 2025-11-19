@@ -31,7 +31,7 @@ var
   drawing:TSimpleDrawing;
   arc:PGDBObjArc;
   dc:TDrawContext;
-  center:GDBVertex;
+  center:TzePoint3d;
   verror:string;
 begin
   //Создание нового чертежа

@@ -99,15 +99,10 @@ type
                                         NormalizePoint:Boolean;(*'Normalize to grid (if enabled)'*)
 
                      end;
-  {REGISTERRECORDTYPE GDBLineOps}
-     GDBLineOps=record
-                  lBegin,lEnd:TzePoint3d;
-              end;
-   {REGISTEROBJECTTYPE OPS_SPBuild}
-  OPS_SPBuild= object(FloatInsert_com)
-    procedure Command(Operands:TCommandOperands); virtual;
-  end;
 {Export-}
+OPS_SPBuild= object(FloatInsert_com)
+ procedure Command(Operands:TCommandOperands); virtual;
+end;
 var
    pco,pco2:pCommandRTEdObjectPlugin;
    //pwnd:POGLWndtype;
@@ -250,7 +245,7 @@ begin
 end;
 procedure placedatcic(pva:PGDBObjEntityTreeArray;p1, p2: TzePoint3d; InitialSD, InitialDD: Double; name: pansichar;norm:Boolean;scaleblock: Double;ps:TPlaceSensorsStrategy);
 var dx, dy: Double;
-  FirstLine, SecondLine: GDBLineOps;
+  FirstLine, SecondLine: GDBLineProp;
   FirstCount, SecondCount, i: integer;
   dir: TzePoint3d;
   mincount:integer;
@@ -1205,7 +1200,7 @@ begin
 end;
 procedure placedev(pva:PGDBObjEntityTreeArray;p1, p2: TzePoint3d; nmax, nmin: Integer; name: pansichar;a:Double;aa:Boolean;Norm:Boolean);
 var dx, dy: Double;
-  line1, line2: GDBLineOps;
+  line1, line2: GDBLineProp;
   l1, l2, i: integer;
   dir: TzePoint3d;
 //  mincount:integer;

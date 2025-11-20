@@ -22,7 +22,7 @@ unit uzcoimultiobjects;
 interface
 uses
   uzeenttext,uzctnrVectorPointers,uzeentblockinsert,uzeconsts,uzcinterface,
-  uzbLog,uzcLog,uzcoimultiproperties,uzcoiwrapper,uzctranslations,uzepalette,
+  uzbLog,uzcLog,uzcoimultiproperties,uzctranslations,uzepalette,
   uzedimensionaltypes,uzcstrconsts,sysutils,uzeentityfactory,
   uzcenitiesvariablesextender,uzgldrawcontext,usimplegenerics,gzctnrSTL,
   gzctnrVectorTypes,uzbtypes,uzcdrawings,varmandef,uzeentity,
@@ -57,7 +57,7 @@ type
   {REGISTERRECORDTYPE TMSEntsExtendersDetector}
   TMSEntsExtendersDetector=TEnumDataWithOtherPointers;
   {REGISTEROBJECTTYPE TMSEditor}
-  TMSEditor= object(TWrapper2ObjInsp)
+  TMSEditor= object(GDBaseObject)
                 TxtEntType:TMSPrimitiveDetector;(*'Process primitives'*)
                 VariableProcessSelector:TVariableProcessSelector;(*'Process variables'*)
                 RelatedVariablesUnit:TEntityUnit;(*'Related variables'*)

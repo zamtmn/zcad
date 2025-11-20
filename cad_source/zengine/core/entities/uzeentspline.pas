@@ -159,8 +159,8 @@ var
   ir:itrec;
   nurbsobj:GLUnurbsObj;
   CP:TCPVector;
-  tfv:GDBvertex4D;
-  tfvs:GDBvertex4S;
+  tfv:TzeVector4d;
+  tfvs:TzeVector4s;
   TSD:TTempSplineData;
   tv:TzePoint3d;
 begin

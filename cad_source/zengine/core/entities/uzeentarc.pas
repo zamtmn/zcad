@@ -100,13 +100,13 @@ end;
 
 procedure GDBObjARC.TransformAt;
 var
-  tv:GDBVertex4D;
+  tv:TzeVector4d;
 begin
   objmatrix:=uzegeometry.MatrixMultiply(PGDBObjWithLocalCS(p)^.objmatrix,t_matrix^);
 
-  tv:=PGDBVertex4D(@t_matrix.mtr[3])^;
-  PGDBVertex4D(@t_matrix.mtr[3])^:=NulVertex4D;
-  PGDBVertex4D(@t_matrix.mtr[3])^:=tv;
+  tv:=PTzeVector4d(@t_matrix.mtr[3])^;
+  PTzeVector4d(@t_matrix.mtr[3])^:=NulVertex4D;
+  PTzeVector4d(@t_matrix.mtr[3])^:=tv;
   ReCalcFromObjMatrix;
 end;
 
@@ -265,7 +265,7 @@ end;
 procedure GDBObjARC.CalcObjMatrix;
 var
   m1:DMatrix4d;
-  v:GDBvertex4D;
+  v:TzeVector4d;
 begin
   inherited CalcObjMatrix;
   m1:=CreateScaleMatrix(r);
@@ -281,7 +281,7 @@ end;
 
 procedure GDBObjARC.precalc;
 var
-  v:GDBvertex4D;
+  v:TzeVector4d;
 begin
   angle:=endangle-startangle;
   if angle<0 then

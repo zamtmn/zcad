@@ -87,7 +87,7 @@ end;
 procedure GDBObjCamera.MoveInLocalCSXY(oldx,oldy:Double;ax:TzePoint3d);
 var
   tempmatr,rotmatr:DMatrix4d;
-  tv,tv2:gdbvertex4d;
+  tv,tv2:TzeVector4d;
   len,d:Double;
 begin
   rotmatr:=CreateMatrixFromBasis(prop.xdir,prop.ydir,prop.look);

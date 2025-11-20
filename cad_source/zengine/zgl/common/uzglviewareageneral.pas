@@ -1028,7 +1028,7 @@ var
   fv1: TzePoint3d;
   i:integer;
   pucommand:pointer;
-  q1,q2,q:GDBQuaternion;
+  q1,q2,q:TzeQuaternion;
   pcam:PGDBBaseCamera;
   mat1,mat2,mat : DMatrix4d;
   Actlt:TVisActuality;
@@ -2686,7 +2686,7 @@ end;
 procedure TGeneralViewArea.PanScreen(oldX,oldY,X,Y:Integer);
 var
   glmcoord1: gdbpiece;
-  tv2:gdbvertex4d;
+  tv2:TzeVector4d;
   ax:TzePoint3d;
   Actlt:TVisActuality;
 begin

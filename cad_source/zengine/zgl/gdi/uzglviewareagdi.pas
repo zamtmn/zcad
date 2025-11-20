@@ -41,12 +41,8 @@ type
                       function getParamTypeName:String; override;
                       procedure setdeicevariable; override;
                   end;
-const
-  maxgrid=100;
-var
-  gridarray:array [0..maxgrid,0..maxgrid] of TzePoint2s;
 implementation
-//uses mainwindow;
+
 procedure TGDIViewArea.CreateDrawer;
 begin
      drawer:=TZGLGDIDrawer.Create;

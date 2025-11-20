@@ -562,7 +562,7 @@ procedure GDBObjMText.createpoint;
 var
   i:integer;
   matr,m1:DMatrix4d;
-  v:GDBvertex4D;
+  v:TzeVector4d;
   Bound:TBoundingRect;
   lp:TzePoint3d;
   pswp:pGDBStrWithPoint;

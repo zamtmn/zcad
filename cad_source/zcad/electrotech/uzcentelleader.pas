@@ -90,7 +90,7 @@ begin
 end;
 function GDBObjElLeader.calcvisible;
 //var i:Integer;
-//    tv,tv1:gdbvertex4d;
+//    tv,tv1:TzeVector4d;
 //    m:DMatrix4d;
 begin
       visible:=Actuality.visibleactualy;
@@ -137,7 +137,7 @@ begin
   MainLine.CoordInOCS.lend:=VectorTransform3D(PGDBObjElLeader(p)^.mainline.CoordInOCS.lend,t_matrix^);
 end;
 procedure GDBObjElLeader.transform;
-var tv:GDBVertex4D;
+var tv:TzeVector4d;
 begin
   PzePoint3d(@tv)^:=MainLine.CoordInOCS.lbegin;
   tv.w:=1;

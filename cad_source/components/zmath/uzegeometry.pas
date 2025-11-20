@@ -44,7 +44,7 @@ const
                        t:CMTIdentity);
   RightAngle=pi/2;
   DefaultVP:Matrix4i=(x:2;y:0;z:100;w:100);
-  IdentityQuaternion: GDBQuaternion = (ImagPart:(x:0;y:0;z:0); RealPart: 1);
+  IdentityQuaternion: TzeQuaternion = (ImagPart:(x:0;y:0;z:0); RealPart: 1);
   xAxisIndex=0;yAxisIndex=1;zAxisIndex=2;wAxisIndex=3;
   ScaleOne:TzePoint3d=(x:1;y:1;z:1);
   OneVertex:TzePoint3d=(x:1;y:1;z:1);
@@ -57,7 +57,7 @@ const
   MinusOneVertex:TzePoint3d=(x:-1;y:-1;z:-1);
   MinusInfinityVertex:TzePoint3d=(x:NegInfinity;y:NegInfinity;z:NegInfinity);
   InfinityVertex:TzePoint3d=(x:Infinity;y:Infinity;z:Infinity);
-  NulVertex4D:GDBVertex4d=(x:0;y:0;z:0;w:1);
+  NulVertex4D:TzeVector4d=(x:0;y:0;z:0;w:1);
   NulVector4D:DVector4D=(v:(0,0,0,0));
   NulVector4D2:DVector4D=(v:(0,0,0,1));
   NulVertex:TzePoint3d=(x:0;y:0;z:0);
@@ -148,11 +148,11 @@ function Vertexmorphabs2(const Vector1, Vector2: TzePoint3d;a: Double): TzePoint
 function MatrixMultiply(const M1, M2: DMatrix4D):DMatrix4D;overload;inline;
 function MatrixMultiply(const M1: DMatrix4D; const M2: DMatrix4f):DMatrix4D;overload;inline;
 function MatrixMultiplyF(const M1, M2: DMatrix4D):DMatrix4f;inline;
-function VectorTransform(const V:GDBVertex4D;const M:DMatrix4D):GDBVertex4D;overload;inline;
-function VectorTransform(const V:GDBVertex4D;const M:DMatrix4f):GDBVertex4D;overload;inline;
-function VectorTransform(const V:GDBVertex4F;const M:DMatrix4f):GDBVertex4F;overload;inline;
-procedure normalize4d(var tv:GDBVertex4d);overload;inline;
-procedure normalize4F(var tv:GDBVertex4F);overload;inline;
+function VectorTransform(const V:TzeVector4d;const M:DMatrix4D):TzeVector4d;overload;inline;
+function VectorTransform(const V:TzeVector4d;const M:DMatrix4f):TzeVector4d;overload;inline;
+function VectorTransform(const V:TzeVector4s;const M:DMatrix4f):TzeVector4s;overload;inline;
+procedure normalize4d(var tv:TzeVector4d);overload;inline;
+procedure normalize4F(var tv:TzeVector4s);overload;inline;
 function VectorTransform3D(const V:TzePoint3d;const M:DMatrix4D):TzePoint3d;overload;inline;
 function VectorTransform3D(const V:TzePoint3d;const M:DMatrix4f):TzePoint3d;overload;inline;
 function VectorTransform3D(const V:TzePoint3s;const M:DMatrix4D):TzePoint3s;overload;inline;
@@ -252,9 +252,9 @@ function MatrixDeterminant(const M: DMatrix4D):Double;
 function CreateMatrixFromBasis(const ox,oy,oz:TzePoint3d):DMatrix4D; inline;
 procedure CreateBasisFromMatrix(const m:DMatrix4D;out ox,oy,oz:TzePoint3d); inline;
 
-function QuaternionFromMatrix(const mat : DMatrix4D) : GDBQuaternion;
-function QuaternionSlerp(const source, dest: GDBQuaternion; const t: Double): GDBQuaternion;
-function QuaternionToMatrix(quat : GDBQuaternion) :  DMatrix4D;
+function QuaternionFromMatrix(const mat : DMatrix4D) : TzeQuaternion;
+function QuaternionSlerp(const source, dest: TzeQuaternion; const t: Double): TzeQuaternion;
+function QuaternionToMatrix(quat : TzeQuaternion) :  DMatrix4D;
 
 function GetArcParamFrom3Point2D(Const PointData:tarcrtmodify;out ad:TArcData):Boolean;
 
@@ -1183,12 +1183,12 @@ begin
   end;
 end;
 
-function VectorTransform(const V:GDBVertex4D;const M:DMatrix4D):GDBVertex4D;
+function VectorTransform(const V:TzeVector4d;const M:DMatrix4D):TzeVector4d;
 begin
   if M.t=CMTIdentity then
     Result:=V
   else
-    with GDBVertex4D((@V)^) do
+    with TzeVector4d((@V)^) do
     begin
       Result.X := X * M.mtr[0].v[0] + y * M.mtr[1].v[0] + z * M.mtr[2].v[0] + w * M.mtr[3].v[0];
       Result.Y := X * M.mtr[0].v[1] + y * M.mtr[1].v[1] + z * M.mtr[2].v[1] + w * M.mtr[3].v[1];
@@ -1196,12 +1196,12 @@ begin
       Result.W := x * M.mtr[0].v[3] + y * M.mtr[1].v[3] + z * M.mtr[2].v[3] + w * M.mtr[3].v[3];
     end;
 end;
-function VectorTransform(const V:GDBVertex4D;const M:DMatrix4f):GDBVertex4D;
+function VectorTransform(const V:TzeVector4d;const M:DMatrix4f):TzeVector4d;
 begin
   if M.t=CMTIdentity then
     Result:=V
   else
-    with GDBVertex4D((@V)^) do
+    with TzeVector4d((@V)^) do
     begin
       Result.X := X * M.mtr[0].v[0] + y * M.mtr[1].v[0] + z * M.mtr[2].v[0] + w * M.mtr[3].v[0];
       Result.Y := X * M.mtr[0].v[1] + y * M.mtr[1].v[1] + z * M.mtr[2].v[1] + w * M.mtr[3].v[1];
@@ -1209,12 +1209,12 @@ begin
       Result.W := x * M.mtr[0].v[3] + y * M.mtr[1].v[3] + z * M.mtr[2].v[3] + w * M.mtr[3].v[3];
     end;
 end;
-function VectorTransform(const V:GDBVertex4F;const M:DMatrix4f):GDBVertex4F;
+function VectorTransform(const V:TzeVector4s;const M:DMatrix4f):TzeVector4s;
 begin
   if M.t=CMTIdentity then
     Result:=V
   else
-    with GDBVertex4F((@V)^) do
+    with TzeVector4s((@V)^) do
     begin
       Result.X := X * M.mtr[0].v[0] + y * M.mtr[1].v[0] + z * M.mtr[2].v[0] + w * M.mtr[3].v[0];
       Result.Y := X * M.mtr[0].v[1] + y * M.mtr[1].v[1] + z * M.mtr[2].v[1] + w * M.mtr[3].v[1];
@@ -1222,12 +1222,12 @@ begin
       Result.W := x * M.mtr[0].v[3] + y * M.mtr[1].v[3] + z * M.mtr[2].v[3] + w * M.mtr[3].v[3];
     end;
 end;
-procedure normalize4F(var tv:GDBVertex4F); inline;
+procedure normalize4F(var tv:TzeVector4s); inline;
 begin
   if abs(tv.w)>eps then
   if abs(abs(tv.w)-1)>eps then
   begin
-    with GDBVertex4F((@tv)^) do
+    with TzeVector4s((@tv)^) do
     begin
       x:=x/w;
       y:=y/w;
@@ -1235,12 +1235,12 @@ begin
     end;
   end;
 end;
-procedure normalize4d(var tv:GDBVertex4d); inline;
+procedure normalize4d(var tv:TzeVector4d); inline;
 begin
   if abs(tv.w)>eps then
   if abs(abs(tv.w)-1)>eps then
   begin
-    with GDBVertex4d((@tv)^) do
+    with TzeVector4d((@tv)^) do
     begin
       x:=x/w;
       y:=y/w;
@@ -1249,7 +1249,7 @@ begin
   end;
 end;
 function VectorTransform3D(const V:TzePoint3d;const M:DMatrix4D):TzePoint3d;
-var TV: GDBVertex4D;
+var TV: TzeVector4d;
 begin
   if M.t=CMTIdentity then
     Result:=V
@@ -1264,7 +1264,7 @@ begin
   end;
 end;
 function VectorTransform3D(const V:TzePoint3d;const M:DMatrix4f):TzePoint3d;
-var TV: GDBVertex4D;
+var TV: TzeVector4d;
 begin
   if M.t=CMTIdentity then
     Result:=V
@@ -1279,7 +1279,7 @@ begin
   end;
 end;
 function VectorTransform3D(const V:TzePoint3s;const M:DMatrix4D):TzePoint3s;
-var tv: GDBVertex4D;
+var tv: TzeVector4d;
 begin
   if M.t=CMTIdentity then
     Result:=V
@@ -1296,7 +1296,7 @@ begin
   end;
 end;
 function VectorTransform3D(const V:TzePoint3s;const M:DMatrix4f):TzePoint3s;
-var tv: GDBVertex4F;
+var tv: TzeVector4s;
 begin
   tv.x:=v.x;
   tv.y:=v.y;
@@ -1315,23 +1315,23 @@ begin
      if MatrixAlreadyTransposed
       then
         begin
-          PGDBVertex4D(@result[0])^:=VectorTransform(PGDBVertex4D(@frustum[0])^,M);
-          PGDBVertex4D(@result[1])^:=VectorTransform(PGDBVertex4D(@frustum[1])^,M);
-          PGDBVertex4D(@result[2])^:=VectorTransform(PGDBVertex4D(@frustum[2])^,M);
-          PGDBVertex4D(@result[3])^:=VectorTransform(PGDBVertex4D(@frustum[3])^,M);
-          PGDBVertex4D(@result[4])^:=VectorTransform(PGDBVertex4D(@frustum[4])^,M);
-          PGDBVertex4D(@result[5])^:=VectorTransform(PGDBVertex4D(@frustum[5])^,M);
+          PTzeVector4d(@result[0])^:=VectorTransform(PTzeVector4d(@frustum[0])^,M);
+          PTzeVector4d(@result[1])^:=VectorTransform(PTzeVector4d(@frustum[1])^,M);
+          PTzeVector4d(@result[2])^:=VectorTransform(PTzeVector4d(@frustum[2])^,M);
+          PTzeVector4d(@result[3])^:=VectorTransform(PTzeVector4d(@frustum[3])^,M);
+          PTzeVector4d(@result[4])^:=VectorTransform(PTzeVector4d(@frustum[4])^,M);
+          PTzeVector4d(@result[5])^:=VectorTransform(PTzeVector4d(@frustum[5])^,M);
         end
       else
         begin
           m1:=M;
           MatrixTranspose(m1);
-          PGDBVertex4D(@result[0])^:=VectorTransform(PGDBVertex4D(@frustum[0])^,m1);
-          PGDBVertex4D(@result[1])^:=VectorTransform(PGDBVertex4D(@frustum[1])^,m1);
-          PGDBVertex4D(@result[2])^:=VectorTransform(PGDBVertex4D(@frustum[2])^,m1);
-          PGDBVertex4D(@result[3])^:=VectorTransform(PGDBVertex4D(@frustum[3])^,m1);
-          PGDBVertex4D(@result[4])^:=VectorTransform(PGDBVertex4D(@frustum[4])^,m1);
-          PGDBVertex4D(@result[5])^:=VectorTransform(PGDBVertex4D(@frustum[5])^,m1);
+          PTzeVector4d(@result[0])^:=VectorTransform(PTzeVector4d(@frustum[0])^,m1);
+          PTzeVector4d(@result[1])^:=VectorTransform(PTzeVector4d(@frustum[1])^,m1);
+          PTzeVector4d(@result[2])^:=VectorTransform(PTzeVector4d(@frustum[2])^,m1);
+          PTzeVector4d(@result[3])^:=VectorTransform(PTzeVector4d(@frustum[3])^,m1);
+          PTzeVector4d(@result[4])^:=VectorTransform(PTzeVector4d(@frustum[4])^,m1);
+          PTzeVector4d(@result[5])^:=VectorTransform(PTzeVector4d(@frustum[5])^,m1);
         end;
 end;
 function FrustumTransform(const frustum:ClipArray;const M:DMatrix4f; MatrixAlreadyTransposed:Boolean=false):ClipArray;
@@ -1341,23 +1341,23 @@ begin
      if MatrixAlreadyTransposed
       then
         begin
-          PGDBVertex4D(@result[0])^:=VectorTransform(PGDBVertex4D(@frustum[0])^,M);
-          PGDBVertex4D(@result[1])^:=VectorTransform(PGDBVertex4D(@frustum[1])^,M);
-          PGDBVertex4D(@result[2])^:=VectorTransform(PGDBVertex4D(@frustum[2])^,M);
-          PGDBVertex4D(@result[3])^:=VectorTransform(PGDBVertex4D(@frustum[3])^,M);
-          PGDBVertex4D(@result[4])^:=VectorTransform(PGDBVertex4D(@frustum[4])^,M);
-          PGDBVertex4D(@result[5])^:=VectorTransform(PGDBVertex4D(@frustum[5])^,M);
+          PTzeVector4d(@result[0])^:=VectorTransform(PTzeVector4d(@frustum[0])^,M);
+          PTzeVector4d(@result[1])^:=VectorTransform(PTzeVector4d(@frustum[1])^,M);
+          PTzeVector4d(@result[2])^:=VectorTransform(PTzeVector4d(@frustum[2])^,M);
+          PTzeVector4d(@result[3])^:=VectorTransform(PTzeVector4d(@frustum[3])^,M);
+          PTzeVector4d(@result[4])^:=VectorTransform(PTzeVector4d(@frustum[4])^,M);
+          PTzeVector4d(@result[5])^:=VectorTransform(PTzeVector4d(@frustum[5])^,M);
         end
       else
         begin
           m1:=M;
           MatrixTranspose(m1);
-          PGDBVertex4D(@result[0])^:=VectorTransform(PGDBVertex4D(@frustum[0])^,m1);
-          PGDBVertex4D(@result[1])^:=VectorTransform(PGDBVertex4D(@frustum[1])^,m1);
-          PGDBVertex4D(@result[2])^:=VectorTransform(PGDBVertex4D(@frustum[2])^,m1);
-          PGDBVertex4D(@result[3])^:=VectorTransform(PGDBVertex4D(@frustum[3])^,m1);
-          PGDBVertex4D(@result[4])^:=VectorTransform(PGDBVertex4D(@frustum[4])^,m1);
-          PGDBVertex4D(@result[5])^:=VectorTransform(PGDBVertex4D(@frustum[5])^,m1);
+          PTzeVector4d(@result[0])^:=VectorTransform(PTzeVector4d(@frustum[0])^,m1);
+          PTzeVector4d(@result[1])^:=VectorTransform(PTzeVector4d(@frustum[1])^,m1);
+          PTzeVector4d(@result[2])^:=VectorTransform(PTzeVector4d(@frustum[2])^,m1);
+          PTzeVector4d(@result[3])^:=VectorTransform(PTzeVector4d(@frustum[3])^,m1);
+          PTzeVector4d(@result[4])^:=VectorTransform(PTzeVector4d(@frustum[4])^,m1);
+          PTzeVector4d(@result[5])^:=VectorTransform(PTzeVector4d(@frustum[5])^,m1);
         end;
 end;
 function Vertexlength(const Vector1, Vector2: TzePoint3d): Double;
@@ -1938,11 +1938,11 @@ begin
   oy:=PzePoint3d(@m.mtr[1])^;
   oz:=PzePoint3d(@m.mtr[2])^;
 end;
-function QuaternionMagnitude(const q : GDBQuaternion) : Double;
+function QuaternionMagnitude(const q : TzeQuaternion) : Double;
 begin
   Result:=Sqrt(SqrOneVertexlength(q.ImagPart)+Sqr(q.RealPart));
 end;
-procedure NormalizeQuaternion(var q : GDBQuaternion);
+procedure NormalizeQuaternion(var q : TzeQuaternion);
 var
    m,f:Double;
 begin
@@ -1954,7 +1954,7 @@ begin
   end else
     q:=IdentityQuaternion;
 end;
-function QuaternionFromMatrix(const mat : DMatrix4D) : GDBQuaternion;
+function QuaternionFromMatrix(const mat : DMatrix4D) : TzeQuaternion;
 // the matrix must be a rotation matrix!
 var
    traceMat, s, invS : Double;
@@ -1991,7 +1991,7 @@ begin
   end;
   NormalizeQuaternion(Result);
 end;
-function QuaternionSlerp(const source, dest: GDBQuaternion; const t: Double): GDBQuaternion;
+function QuaternionSlerp(const source, dest: TzeQuaternion; const t: Double): TzeQuaternion;
 var
   to1:array[0..4]of Single;
   omega,cosom,sinom,scale0,scale1:Extended;
@@ -2032,7 +2032,7 @@ begin
   Result.RealPart := scale0 * source.RealPart + scale1 * to1[3];
   NormalizeQuaternion(Result);
 end;
-function QuaternionToMatrix(quat : GDBQuaternion) :  DMatrix4D;
+function QuaternionToMatrix(quat : TzeQuaternion) :  DMatrix4D;
 var
   w,x,y,z,xx,xy,xz,xw,yy,yz,yw,zz,zw:Double;
 begin
@@ -2509,7 +2509,7 @@ end;
 
 procedure _myGluUnProject(const winx,winy,winz:Double;const modelMatrix,projMatrix:PDMatrix4D;const viewport:PMatrix4i;out objx,objy,objz:Double);
 var
-  _in,_out:GDBVertex4D;
+  _in,_out:TzeVector4d;
   finalMatrix:DMatrix4D;
 begin
   finalMatrix:=MatrixMultiply(modelMatrix^,projMatrix^);
@@ -2537,7 +2537,7 @@ end;
 
 procedure _myGluProject(const objx,objy,objz:Double;const modelMatrix,projMatrix:PDMatrix4D;const viewport:PMatrix4i; out winx,winy,winz:Double);
 var
-  _in:GDBVertex4D;
+  _in:TzeVector4d;
 begin
   _in.x:=objx;
   _in.y:=objy;

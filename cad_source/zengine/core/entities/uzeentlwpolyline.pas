@@ -664,7 +664,7 @@ end;
 procedure GDBObjLWpolyline.createpoint;
 var
   i:integer;
-  v:GDBvertex4D;
+  v:TzeVector4d;
   v3d:TzePoint3d;
   pv:PzePoint2d;
 begin
@@ -691,7 +691,7 @@ var
   plw,plw2:PGLlwwidth;
   q3d:GDBQuad3d;
   pq3d,pq3dnext:pGDBQuad3d;
-  v:GDBvertex4D;
+  v:TzeVector4d;
   v2:PzePoint3d;
   ip,ip2:Intercept3DProp;
 begin

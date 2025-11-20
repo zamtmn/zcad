@@ -696,7 +696,7 @@ end;
 
 procedure GDBObjLine.transform;
 var
-  tv:GDBVertex4D;
+  tv:TzeVector4d;
 begin
   PzePoint3d(@tv)^:=CoordInOCS.lbegin;
   tv.w:=1;

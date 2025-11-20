@@ -92,26 +92,26 @@ implementation
 
 procedure GDBObjEllipse.TransformAt;
 var
-  tv:GDBVertex4D;
+  tv:TzeVector4d;
 begin
   objmatrix:=uzegeometry.MatrixMultiply(PGDBObjWithLocalCS(p)^.objmatrix,t_matrix^);
 
-  tv:=PGDBVertex4D(@t_matrix.mtr[3])^;
-  PGDBVertex4D(@t_matrix.mtr[3])^:=NulVertex4D;
+  tv:=PTzeVector4d(@t_matrix.mtr[3])^;
+  PTzeVector4d(@t_matrix.mtr[3])^:=NulVertex4D;
   MajorAxis:=VectorTransform3D(PGDBObjEllipse(p)^.MajorAxis,t_matrix^);
-  PGDBVertex4D(@t_matrix.mtr[3])^:=tv;
+  PTzeVector4d(@t_matrix.mtr[3])^:=tv;
   ReCalcFromObjMatrix;
 end;
 
 procedure GDBObjEllipse.transform;
 var
-  tv2:GDBVertex4D;
+  tv2:TzeVector4d;
 begin
   inherited;
-  tv2:=PGDBVertex4D(@t_matrix.mtr[3])^;
-  PGDBVertex4D(@t_matrix.mtr[3])^:=NulVertex4D;
+  tv2:=PTzeVector4d(@t_matrix.mtr[3])^;
+  PTzeVector4d(@t_matrix.mtr[3])^:=NulVertex4D;
   MajorAxis:=VectorTransform3D(MajorAxis,t_matrix);
-  PGDBVertex4D(@t_matrix.mtr[3])^:=tv2;
+  PTzeVector4d(@t_matrix.mtr[3])^:=tv2;
   ReCalcFromObjMatrix;
 end;
 
@@ -210,7 +210,7 @@ end;
 procedure GDBObjEllipse.CalcObjMatrix;
 var
   m1:DMatrix4d;
-  v:GDBvertex4D;
+  v:TzeVector4d;
   l:double;
 begin
   inherited CalcObjMatrix;
@@ -228,7 +228,7 @@ end;
 procedure GDBObjEllipse.FormatEntity(var drawing:TDrawingDef;
   var DC:TDrawContext;Stage:TEFStages=EFAllStages);
 var
-  v:GDBvertex4D;
+  v:TzeVector4d;
 begin
   if assigned(EntExtensions) then
     EntExtensions.RunOnBeforeEntityFormat(@self,drawing,DC);

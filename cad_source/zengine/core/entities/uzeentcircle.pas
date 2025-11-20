@@ -37,7 +37,7 @@ type
   PGDBObjCircle=^GDBObjCircle;
 
   GDBObjCircle=object(GDBObjWithLocalCS)
-    Radius:GDBLength;(*'Radius'*)
+    Radius:Double;
     q0:TzePoint3d;
     q1:TzePoint3d;
     q2:TzePoint3d;

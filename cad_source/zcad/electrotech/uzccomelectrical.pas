@@ -18,14 +18,14 @@ uses
   uzcenitiesvariablesextender,uzgldrawcontext,uzcdrawing,uzcvariablesutils,
   uzcstrconsts,UGDBSelectedObjArray,uzeentityfactory,uzcsysvars,
   csvdocument,
-  UGDBOpenArrayOfPV,uzeentblockinsert,{devices,}{UGDBTree,}uzcdrawings,
+  UGDBOpenArrayOfPV,uzeentblockinsert,uzcdrawings,
   uzccommandsmanager,uzccomdraw,uzcentelleader,
   uzccommandsabstract,
   uzccommandsimpl,
   uzegeometrytypes,uzbtypes,
   uzcutils,
-  sysutils,
-  {fileutil}LazUTF8,
+  SysUtils,
+  LazUTF8,
   varmandef,
   uzglviewareadata,uzglviewareaabstract,uzglviewareageneral,
   uzcinterface,
@@ -37,47 +37,25 @@ uses
   uzcentnet,
   uzeentsubordinated,uzcentcable,varman,uzcdialogsfiles,uunitmanager,
   uzcbillofmaterial,uzccablemanager,uzeentdevice,uzeenttable,
-  uzbpaths,uzctnrvectorstrings,math,Masks,uzbstrproc,
-  {uzeentabstracttext,}uzeentmtext,uzeblockdef,UGDBPoint3DArray,uzcdevicebaseabstract,
+  uzbpaths,uzctnrvectorstrings,Math,Masks,uzbstrproc,
+  uzeentmtext,uzeblockdef,UGDBPoint3DArray,uzcdevicebaseabstract,
   uzelongprocesssupport,uzcLog,
   generics.Collections,
   uzccommand_treestat,uzccommand_line2,uzccmdfloatinsert,uzcregother,uzcfcommandline,
-  uzeparsercmdprompt{,uzctnrvectorpgdbaseobjects},uzeSnap,uzCtnrVectorpBaseEntity,
+  uzeparsercmdprompt,uzeSnap,uzCtnrVectorpBaseEntity,
   uzeEntBase;
 type
-{Export+}
-  TFindType=(
-               TFT_Obozn(*'**обозначении'*),
-               TFT_DBLink(*'**материале'*),
-               TFT_DESC_MountingDrawing(*'**сокращенноммонтажномчертеже'*),
-               TFT_variable(*'??указанной переменной'*)
-             );
-PTBasicFinter=^TBasicFinter;
-{REGISTERRECORDTYPE TBasicFinter}
-TBasicFinter=record
-                   IncludeCable:Boolean;(*'Include filter'*)
-                   IncludeCableMask:String;(*'Include mask'*)
-                   ExcludeCable:Boolean;(*'Exclude filter'*)
-                   ExcludeCableMask:String;(*'Exclude mask'*)
-             end;
-  {REGISTERRECORDTYPE GDBLine}
-     GDBLine=record
-                  lBegin,lEnd:TzePoint3d;
-              end;
-  PTELCableComParam=^TELCableComParam;
-  {REGISTERRECORDTYPE TELCableComParam}
   TELCableComParam=record
-                        Traces:TEnumData;(*'Trace'*)
-                        PCable:{PGDBObjCable}Pointer;(*'Cabel'*)
-                        PTrace:{PGDBObjNet}Pointer;(*'Trace (pointer)'*)
-                   end;
-  {REGISTERRECORDTYPE TELLeaderComParam}
+    Traces:TEnumData;(*'Trace'*)
+    PCable:Pointer;(*'Cabel (pointer)'*)
+    PTrace:Pointer;(*'Trace (pointer)'*)
+  end;
+  PTELCableComParam=^TELCableComParam;
   TELLeaderComParam=record
-                        Scale:Double;(*'Scale'*)
-                        Size:Integer;(*'Size'*)
-                        twidth:Double;(*'Width'*)
-                   end;
-{Export-}
+    Scale:double;(*'Scale'*)
+    Size:integer;(*'Size'*)
+    twidth:double;(*'Width'*)
+  end;
   El_Wire_com = object(CommandRTEdObject)
     New_line: PGDBObjLine;
     FirstOwner,SecondOwner,OldFirstOwner:PGDBObjNet;
@@ -127,7 +105,7 @@ var
 
    //EM_SRBUILD:EM_SRBUILD_com;
    //EM_SEPBUILD:EM_SEPBUILD_com;
-   em_sepbuild_params:TBasicFinter;
+   //em_sepbuild_params:TBasicFinter;
    KIP_CDBuild:KIP_CDBuild_com;
    KIP_LugTableBuild:KIP_LugTableBuild_com;
 
@@ -3487,6 +3465,21 @@ procedure startup;
 begin
   if SysUnit<>nil then
     SysUnit^.RegisterType(TypeInfo(TLinkType));
+
+  if SysUnit<>nil then begin
+    SysUnit.RegisterType(TypeInfo(TELLeaderComParam));
+    SysUnit.SetTypeDesk(TypeInfo(TELLeaderComParam),['Scale',
+      'Size','Width'],[FNProgram,FNUser]);
+  end;
+
+  if SysUnit<>nil then begin
+    SysUnit.RegisterType(TypeInfo(TELCableComParam));
+    SysUnit.SetTypeDesk(TypeInfo(TELCableComParam),['Traces',
+      'PCable','PTrace'],[FNProgram]);
+    SysUnit.SetTypeDesk(TypeInfo(TELCableComParam),['Traces',
+      'Cabel (pointer)','Trace (pointer)'],[FNUser]);
+    SysUnit.RegisterType(TypeInfo(PTELCableComParam));
+  end;
 
   MainSpecContentFormat.init(100);
   MainSpecContentFormat.loadfromfile(FindInPaths(GetSupportPaths,'main.sf'));

@@ -41,13 +41,13 @@ begin
                                result:=false;
 end;
 procedure GDBOOutbound2DIArray.drawgeometry;
-var oldp,p:PTzePoint2i;
+var oldp,p:PzePoint2i;
     i:Integer;
 begin
   case count of
                1:begin
                       //oglsm.myglbegin(GL_POINTS);
-                      //oglsm.myglvertex2iv(@PTzePoint2iArray(parray)^[0]);
+                      //oglsm.myglvertex2iv(@PzePoint2iArray(parray)^[0]);
                       //oglsm.myglend;
                  end;
                else
@@ -64,20 +64,20 @@ begin
                       oldp:=p;
                       inc(p);
                     end;
-                    dc.drawer.DrawLine2DInDCS(PTzePoint2i(parray)^.x,PTzePoint2i(parray)^.y,oldp^.x,oldp^.y);
+                    dc.drawer.DrawLine2DInDCS(PzePoint2i(parray)^.x,PzePoint2i(parray)^.y,oldp^.x,oldp^.y);
                     //oglsm.myglend;
                end;
   end;
 end;
 function GDBOOutbound2DIArray.inrect;
 var i:Integer;
-    p:PTzePoint2i;
+    p:PzePoint2i;
 begin
      result:=IREmpty;
      if Count=0 then exit
      else
      begin
-          p:=PTzePoint2i(parray);
+          p:=PzePoint2i(parray);
           if count=1 then
           begin
                if pointinquad2d(Frame1.x,

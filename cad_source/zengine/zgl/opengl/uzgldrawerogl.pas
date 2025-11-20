@@ -36,14 +36,6 @@ TGLVersion=(GLV_1_0,GLV_1_2,GLV_1_3,GLV_1_4,
             GLV_1_5,GLV_2_0,GLV_2_1,GLV_3_0,
             GLV_3_1,GLV_3_2,GLV_3_3,GLV_4_0,
             GLV_4_3);
-ptrestoremode=^trestoremode;
-TRestoreMode=(
-              WND_AuxBuffer(*'AUX buffer'*),
-              WND_AccumBuffer(*'ACCUM buffer'*),
-              WND_DrawPixels(*'Memory'*),
-              WND_NewDraw(*'Redraw'*),
-              WND_Texture(*'Texture'*)
-             );
 PTOpenglData=^TOpenglData;
 {REGISTERRECORDTYPE TOpenglData}
 TOpenglData=record
@@ -52,7 +44,6 @@ TOpenglData=record
           RD_DriverVersion:String;(*'Driver version'*)(*oi_readonly*)
           RD_Extensions:String;(*'Extensions'*)(*oi_readonly*)
           RD_Vendor:String;(*'Vendor'*)(*oi_readonly*)
-          RD_Restore_Mode:trestoremode;(*'Restore mode'*)
           RD_UseStencil:PBoolean;(*'Use STENCIL buffer'*)
           RD_Light:PBoolean;(*'Light'*)
           RD_LineSmooth:PBoolean;(*'Line smoothing'*)

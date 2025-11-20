@@ -363,7 +363,7 @@ begin
                       glVertex2iV(pointer(v))
                   else
                       begin
-                           t:=vertexadd(createvertex(pTzePoint2i(v)^.x,pTzePoint2i(v)^.y,0),LCS.CurrentCamCSOffset);
+                           t:=vertexadd(createvertex(PzePoint2i(v)^.x,PzePoint2i(v)^.y,0),LCS.CurrentCamCSOffset);
                            glVertex3dV(@t);
                       end;
 end;

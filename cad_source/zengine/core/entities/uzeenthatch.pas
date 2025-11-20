@@ -544,7 +544,7 @@ end;
 procedure GDBObjHatch.createpoint;
 var
   i,j,vc:integer;
-  v:GDBvertex4D;
+  v:TzeVector4d;
   v3d:TzePoint3d;
   ppolyarr:pGDBPolyline2DArray;
 begin

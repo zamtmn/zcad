@@ -36,7 +36,7 @@ uses
 type
     AsyncCommHelper=class
                          class procedure GetVertex(Pinstance:PtrInt);
-                         class procedure GetLength(Pinstance:PtrInt);
+                         //class procedure GetLength(Pinstance:PtrInt);
                          class procedure GetVertexX(Pinstance:PtrInt);
                          class procedure GetVertexY(Pinstance:PtrInt);
                          class procedure GetVertexZ(Pinstance:PtrInt);
@@ -443,13 +443,8 @@ begin
                          GDBobjinsp.UpdateObjectInInsp;
                     end;
 end;
-procedure GetVertexFromDrawing(PInstance:PzePoint3d);
-begin
-     commandmanager.executecommandtotalend;
-     count:=1;
-     Application.QueueAsyncCall(AsyncCommHelper.GetVertex,PtrInt(PInstance));
-end;
-class procedure AsyncCommHelper.GetLength(Pinstance:PtrInt);
+
+(*class procedure AsyncCommHelper.GetLength(Pinstance:PtrInt);
 var
    p:pointer;
 begin
@@ -471,7 +466,7 @@ begin
                          commandmanager.executecommand('GetLength',drawings.GetCurrentDWG,drawings.GetCurrentOGLWParam);
                          GDBobjinsp.UpdateObjectInInsp;
                     end;
-end;
+end;*)
 class procedure AsyncCommHelper.GetVertexX(Pinstance:PtrInt);
 var
    p:pointer;
@@ -541,12 +536,12 @@ begin
                          GDBobjinsp.UpdateObjectInInsp;
                     end;
 end;
-procedure GetLengthFromDrawing(PInstance:PzePoint3d);
+{procedure GetLengthFromDrawing(PInstance:PzePoint3d);
 begin
      commandmanager.executecommandtotalend;
      count:=1;
      Application.QueueAsyncCall(AsyncCommHelper.GetLength,PtrInt(PInstance));
-end;
+end;}
 procedure GetXFromDrawing(PInstance:PzePoint3d);
 begin
      commandmanager.executecommandtotalend;
@@ -628,8 +623,8 @@ begin
     AddFastEditorToType(SysUnit.TypeName2PTD('PGDBLayerPropObjInsp'),@OIUI_FE_ButtonGetPrefferedSize,@OIUI_FE_ButtonDraw,@runlayerswnd);
     AddFastEditorToType(SysUnit.TypeName2PTD('String'),@OIUI_FE_ButtonGetPrefferedSize,@ButtonTxtDrawFastEditor,@RunStringEditor);
     AddFastEditorToType(SysUnit.TypeName2PTD('AnsiString'),@OIUI_FE_ButtonGetPrefferedSize,@ButtonTxtDrawFastEditor,@RunAnsiStringEditor);
-    AddFastEditorToType(SysUnit.TypeName2PTD('GDBCoordinates3D'),@OIUI_FE_ButtonGetPrefferedSize,@OIUI_FE_ButtonCrossDraw,@GetVertexFromDrawing,true);
-    AddFastEditorToType(SysUnit.TypeName2PTD('GDBLength'),@OIUI_FE_ButtonGetPrefferedSize,@OIUI_FE_ButtonHLineDraw,@GetLengthFromDrawing,true);
+    //AddFastEditorToType(SysUnit.TypeName2PTD('GDBCoordinates3D'),@OIUI_FE_ButtonGetPrefferedSize,@OIUI_FE_ButtonCrossDraw,@GetVertexFromDrawing,true);
+    //AddFastEditorToType(SysUnit.TypeName2PTD('GDBLength'),@OIUI_FE_ButtonGetPrefferedSize,@OIUI_FE_ButtonHLineDraw,@GetLengthFromDrawing,true);
     AddFastEditorToType(SysUnit.TypeName2PTD('GDBXCoordinate'),@OIUI_FE_ButtonGetPrefferedSize,@ButtonXDrawFastEditor,@GetXFromDrawing,true);
     AddFastEditorToType(SysUnit.TypeName2PTD('GDBYCoordinate'),@OIUI_FE_ButtonGetPrefferedSize,@ButtonYDrawFastEditor,@GetYFromDrawing,true);
     AddFastEditorToType(SysUnit.TypeName2PTD('GDBZCoordinate'),@OIUI_FE_ButtonGetPrefferedSize,@ButtonZDrawFastEditor,@GetZFromDrawing,true);

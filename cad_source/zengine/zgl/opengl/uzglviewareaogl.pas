@@ -210,7 +210,7 @@ end;
 
 procedure TOpenGLViewArea.LightOn;
 var
-   p:GDBvertex4F;
+   p:TzeVector4s;
 begin
     if sysvarRDLight
     then

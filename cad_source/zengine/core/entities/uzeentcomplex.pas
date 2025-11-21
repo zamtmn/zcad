@@ -130,11 +130,11 @@ begin
     if pdesc.PDrawable=nil then begin
       pdesc.worldcoord:=self.P_insert_in_WCS;
       ProjectProc(pdesc.worldcoord,tv);
-      pdesc.dispcoord:=ToVertex2DI(tv);
+      pdesc.dispcoord:=ToTzePoint2i(tv);
     end else begin
       pdesc.worldcoord:=PGDBObjComplex(pdesc.PDrawable).P_insert_in_WCS;
       ProjectProc(pdesc.worldcoord,tv);
-      pdesc.dispcoord:=ToVertex2DI(tv);
+      pdesc.dispcoord:=ToTzePoint2i(tv);
       pdesc.dcoord:=vertexsub(PGDBObjComplex(pdesc.PDrawable).P_insert_in_WCS,
         P_insert_in_WCS);
     end;

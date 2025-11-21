@@ -21,7 +21,7 @@ unit uzepalette;
 {$ModeSwitch advancedrecords}
 interface
 uses
-  uzeconsts;
+  uzbtypes,uzeconsts;
 
 type
 {EXPORT+}

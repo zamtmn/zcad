@@ -492,7 +492,7 @@ var i:Integer;
     p:Pointer;
     m,{m2,}mt:DMatrix4d;
     t:TzePoint3d;
-    //tt:DVector4d;
+    //tt:TzeVector4d;
     rtmod:TRTModifyData;
     //tum:TUndableMethod;
     dc:TDrawContext;

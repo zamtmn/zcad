@@ -339,7 +339,7 @@ begin
 
     pdesc.worldcoord:=Vertexmorph(v1^,v2^,0.5);
     ProjectProc(pdesc.worldcoord,tv);
-    pdesc.dispcoord:=ToVertex2DI(tv);
+    pdesc.dispcoord:=ToTzePoint2i(tv);
   end;
 end;
 

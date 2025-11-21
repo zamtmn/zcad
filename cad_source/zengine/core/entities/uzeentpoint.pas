@@ -230,7 +230,7 @@ begin
   if pdesc^.pointtype=os_point then begin
     pdesc.worldcoord:=P_insertInOCS;
     ProjectProc(pdesc.worldcoord,tv);
-    pdesc.dispcoord:=ToVertex2DI(tv);
+    pdesc.dispcoord:=ToTzePoint2i(tv);
   end;
 end;
 

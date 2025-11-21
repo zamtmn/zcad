@@ -561,31 +561,31 @@ begin
   if pdesc^.pointtype=os_p10 then begin
     pdesc.worldcoord:=DimData.P10InWCS;
     ProjectProc(pdesc.worldcoord,tv);
-    pdesc.dispcoord:=ToVertex2DI(tv);
+    pdesc.dispcoord:=ToTzePoint2i(tv);
   end else if pdesc^.pointtype=os_p11 then begin
     pdesc.worldcoord:=DimData.P11InOCS;
     ProjectProc(pdesc.worldcoord,tv);
-    pdesc.dispcoord:=ToVertex2DI(tv);
+    pdesc.dispcoord:=ToTzePoint2i(tv);
   end else if pdesc^.pointtype=os_p12 then begin
     pdesc.worldcoord:=DimData.P12InOCS;
     ProjectProc(pdesc.worldcoord,tv);
-    pdesc.dispcoord:=ToVertex2DI(tv);
+    pdesc.dispcoord:=ToTzePoint2i(tv);
   end else if pdesc^.pointtype=os_p13 then begin
     pdesc.worldcoord:=DimData.P13InWCS;
     ProjectProc(pdesc.worldcoord,tv);
-    pdesc.dispcoord:=ToVertex2DI(tv);
+    pdesc.dispcoord:=ToTzePoint2i(tv);
   end else if pdesc^.pointtype=os_p14 then begin
     pdesc.worldcoord:=DimData.P14InWCS;
     ProjectProc(pdesc.worldcoord,tv);
-    pdesc.dispcoord:=ToVertex2DI(tv);
+    pdesc.dispcoord:=ToTzePoint2i(tv);
   end else if pdesc^.pointtype=os_p15 then begin
     pdesc.worldcoord:=DimData.P15InWCS;
     ProjectProc(pdesc.worldcoord,tv);
-    pdesc.dispcoord:=ToVertex2DI(tv);
+    pdesc.dispcoord:=ToTzePoint2i(tv);
   end else if pdesc^.pointtype=os_p16 then begin
     pdesc.worldcoord:=DimData.P16InOCS;
     ProjectProc(pdesc.worldcoord,tv);
-    pdesc.dispcoord:=ToVertex2DI(tv);
+    pdesc.dispcoord:=ToTzePoint2i(tv);
   end;
 end;
 

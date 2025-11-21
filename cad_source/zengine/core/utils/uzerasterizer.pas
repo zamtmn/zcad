@@ -47,7 +47,7 @@ procedure rasterize(cdwg:PTSimpleDrawing;pw,ph:integer;point1,point2:TzePoint3d;
 
   modelMatrix:DMatrix4d;
   projMatrix:DMatrix4d;
-  viewport:Matrix4i;
+  viewport:TzeVector4i;
   pd1,pd2:TzePoint2d;
 
   oldforegroundindex:integer;

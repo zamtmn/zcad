@@ -358,7 +358,7 @@ begin
   pdesc.worldcoord:=GDBPoint3dArray.PTArr(Vertex3D_in_WCS_Array.parray)^
     [vertexnumber];
   ProjectProc(pdesc.worldcoord,tv);
-  pdesc.dispcoord:=ToVertex2DI(tv);
+  pdesc.dispcoord:=ToTzePoint2i(tv);
 end;
 
 procedure GDBObjLWpolyline.AddControlpoints;

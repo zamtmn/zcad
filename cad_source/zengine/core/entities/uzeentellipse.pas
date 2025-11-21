@@ -96,10 +96,10 @@ var
 begin
   objmatrix:=uzegeometry.MatrixMultiply(PGDBObjWithLocalCS(p)^.objmatrix,t_matrix^);
 
-  tv:=PTzeVector4d(@t_matrix.mtr[3])^;
-  PTzeVector4d(@t_matrix.mtr[3])^:=NulVertex4D;
+  tv:=PzeVector4d(@t_matrix.mtr[3])^;
+  PzeVector4d(@t_matrix.mtr[3])^:=NulVertex4D;
   MajorAxis:=VectorTransform3D(PGDBObjEllipse(p)^.MajorAxis,t_matrix^);
-  PTzeVector4d(@t_matrix.mtr[3])^:=tv;
+  PzeVector4d(@t_matrix.mtr[3])^:=tv;
   ReCalcFromObjMatrix;
 end;
 
@@ -108,10 +108,10 @@ var
   tv2:TzeVector4d;
 begin
   inherited;
-  tv2:=PTzeVector4d(@t_matrix.mtr[3])^;
-  PTzeVector4d(@t_matrix.mtr[3])^:=NulVertex4D;
+  tv2:=PzeVector4d(@t_matrix.mtr[3])^;
+  PzeVector4d(@t_matrix.mtr[3])^:=NulVertex4D;
   MajorAxis:=VectorTransform3D(MajorAxis,t_matrix);
-  PTzeVector4d(@t_matrix.mtr[3])^:=tv2;
+  PzeVector4d(@t_matrix.mtr[3])^:=tv2;
   ReCalcFromObjMatrix;
 end;
 
@@ -394,15 +394,15 @@ begin
   if pdesc^.pointtype=os_begin then begin
     pdesc.worldcoord:=q0;
     ProjectProc(pdesc.worldcoord,tv);
-    pdesc.dispcoord:=ToVertex2DI(tv);
+    pdesc.dispcoord:=ToTzePoint2i(tv);
   end else if pdesc^.pointtype=os_midle then begin
     pdesc.worldcoord:=q1;
     ProjectProc(pdesc.worldcoord,tv);
-    pdesc.dispcoord:=ToVertex2DI(tv);
+    pdesc.dispcoord:=ToTzePoint2i(tv);
   end else if pdesc^.pointtype=os_end then begin
     pdesc.worldcoord:=q2;
     ProjectProc(pdesc.worldcoord,tv);
-    pdesc.dispcoord:=ToVertex2DI(tv);
+    pdesc.dispcoord:=ToTzePoint2i(tv);
   end;
 end;
 

@@ -57,7 +57,7 @@ function Mirror_com.CalcTransformMatrix(p1,p2:TzePoint3d):DMatrix4d;
 var
   dist,p3:TzePoint3d;
   d:double;
-  plane:DVector4d;
+  plane:TzeVector4d;
 begin
   dist:=uzegeometry.VertexSub(p2,p1);
   d:=uzegeometry.oneVertexlength(dist);

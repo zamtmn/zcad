@@ -19,8 +19,10 @@
 unit uzcregzscript;
 {$INCLUDE zengineconfig.inc}
 interface
-uses SysUtils,uzcsysvars,uzbpaths,uzctranslations,UUnitManager,TypeDescriptors,varman,
-     UBaseTypeDescriptor,uzedimensionaltypes,uzemathutils,uzcLog,uzcreglog;
+uses
+  SysUtils,uzcsysvars,uzbpaths,uzctranslations,UUnitManager,TypeDescriptors,
+  varman,USinonimDescriptor,UBaseTypeDescriptor,uzedimensionaltypes,
+  uzemathutils,uzcLog,uzcreglog;
 type
   GDBNonDimensionDoubleDescriptor=object(DoubleDescriptor)
                             function GetFormattedValueAsString(PInstance:Pointer; const f:TzeUnitsFormat):String;virtual;
@@ -36,6 +38,9 @@ var
   GDBNonDimensionDoubleDescriptorObj:GDBNonDimensionDoubleDescriptor;
   GDBAngleDegDoubleDescriptorObj:GDBAngleDegDoubleDescriptor;
   GDBAngleDoubleDescriptorObj:GDBAngleDoubleDescriptor;
+  AliasTzeXUnitsDescriptorOdj:GDBSinonimDescriptor;
+  AliasTzeYUnitsDescriptorOdj:GDBSinonimDescriptor;
+  AliasTzeZUnitsDescriptorOdj:GDBSinonimDescriptor;
 implementation
 function GDBNonDimensionDoubleDescriptor.GetFormattedValueAsString(PInstance:Pointer; const f:TzeUnitsFormat):String;
 begin
@@ -67,7 +72,18 @@ begin
   ptsu^.InterfaceTypes.AddTypeByRef(GDBNonDimensionDoubleDescriptorObj);
   ptsu^.InterfaceTypes.AddTypeByRef(GDBAngleDegDoubleDescriptorObj);
   ptsu^.InterfaceTypes.AddTypeByRef(GDBAngleDoubleDescriptorObj);
+
+  AliasTzeXUnitsDescriptorOdj.init2(@FundamentalDoubleDescriptorObj,'TzeXUnits',nil);
+  AliasTzeYUnitsDescriptorOdj.init2(@FundamentalDoubleDescriptorObj,'TzeYUnits',nil);
+  AliasTzeZUnitsDescriptorOdj.init2(@FundamentalDoubleDescriptorObj,'TzeZUnits',nil);
+  ptsu^.InterfaceTypes.AddTypeByRef(AliasTzeXUnitsDescriptorOdj);
+  ptsu^.InterfaceTypes.AddTypeByRef(AliasTzeYUnitsDescriptorOdj);
+  ptsu^.InterfaceTypes.AddTypeByRef(AliasTzeZUnitsDescriptorOdj);
+
   BaseTypesEndIndex:=ptsu^.InterfaceTypes.exttype.Count;
+
+  //if SysUnit<>nil then
+  //  SysUnit^.RegisterType({TypeInfo(TLinkType)}nil);
 end;
 initialization
   OnCreateSystemUnit:=_OnCreateSystemUnit;

@@ -50,7 +50,7 @@ TFirstStageData=record
   end;
          PTEntTreeNode=^TEntTreeNode;
          {---REGISTEROBJECTTYPE TEntTreeNode}
-         TEntTreeNode=object(GZBInarySeparatedGeometry{-}<TBoundingBox,DVector4d,TEntTreeNodeData,TZEntsManipulator,GDBObjEntity,PGDBObjEntity,TEntityArray>{//})
+         TEntTreeNode=object(GZBInarySeparatedGeometry{-}<TBoundingBox,TzeVector4d,TEntTreeNodeData,TZEntsManipulator,GDBObjEntity,PGDBObjEntity,TEntityArray>{//})
                             procedure MakeTreeFrom(var entitys:GDBObjEntityOpenArray;AABB:TBoundingBox;const RN:Pointer);
                             procedure DrawVolume(var DC:TDrawContext);
                             procedure DrawNodeVolume(var DC:TDrawContext);
@@ -59,10 +59,10 @@ TFirstStageData=record
                       end;
 {EXPORT-}
 TZEntsManipulator=class
-                   class procedure StoreTreeAdressInOnject(var Entity:GDBObjEntity;var Node:GZBInarySeparatedGeometry<TBoundingBox,DVector4d,TEntTreeNodeData,TZEntsManipulator,GDBObjEntity,PGDBObjEntity,TEntityArray>;const index:Integer);
+                   class procedure StoreTreeAdressInOnject(var Entity:GDBObjEntity;var Node:GZBInarySeparatedGeometry<TBoundingBox,TzeVector4d,TEntTreeNodeData,TZEntsManipulator,GDBObjEntity,PGDBObjEntity,TEntityArray>;const index:Integer);
                    class procedure CorrectNodeBoundingBox(var NodeBB:TBoundingBox;var Entity:GDBObjEntity);
                    class function GetEntityBoundingBox(var Entity:GDBObjEntity):TBoundingBox;
-                   class function GetBBPosition(const sep:DVector4d;const BB:TBoundingBox):TElemPosition;
+                   class function GetBBPosition(const sep:TzeVector4d;const BB:TBoundingBox):TElemPosition;
                    class function isUnneedSeparate(const count,depth:integer):boolean;
                    class function GetTestNodesCount:integer;
                    class procedure FirstStageCalcSeparatirs(var NodeBB:TBoundingBox;var Entity:GDBObjEntity;var PFirstStageData:pointer;TSM:TStageMode);
@@ -73,7 +73,7 @@ TZEntsManipulator=class
                    class procedure SetSizeInArray(ns:integer;var arr:TEntityArray);
 
                    {not used in generic, for external use}
-                   class procedure treerender(var Node:GZBInarySeparatedGeometry<TBoundingBox,DVector4d,TEntTreeNodeData,TZEntsManipulator,GDBObjEntity,PGDBObjEntity,TEntityArray>;var DC:TDrawContext;LODDeep:integer=0);
+                   class procedure treerender(var Node:GZBInarySeparatedGeometry<TBoundingBox,TzeVector4d,TEntTreeNodeData,TZEntsManipulator,GDBObjEntity,PGDBObjEntity,TEntityArray>;var DC:TDrawContext;LODDeep:integer=0);
                   end;
 TTestTreeArray=array [0..2] of TEntTreeNode.TTestNode;
 var
@@ -174,7 +174,7 @@ begin
                             exit(false);
 end;
 
-class procedure TZEntsManipulator.treerender(var Node:GZBInarySeparatedGeometry<TBoundingBox,DVector4d,TEntTreeNodeData,TZEntsManipulator,GDBObjEntity,PGDBObjEntity,TEntityArray>;var DC:TDrawContext;LODDeep:integer=0);
+class procedure TZEntsManipulator.treerender(var Node:GZBInarySeparatedGeometry<TBoundingBox,TzeVector4d,TEntTreeNodeData,TZEntsManipulator,GDBObjEntity,PGDBObjEntity,TEntityArray>;var DC:TDrawContext;LODDeep:integer=0);
 const
   MaxLODDeepDrtaw=2;
 var
@@ -275,7 +275,7 @@ case NodeNum of
                                           );
 end;
 end;
-class procedure TZEntsManipulator.StoreTreeAdressInOnject(var Entity:GDBObjEntity;var Node:GZBInarySeparatedGeometry{-}<TBoundingBox,DVector4d,TEntTreeNodeData,TZEntsManipulator,GDBObjEntity,PGDBObjEntity,TEntityArray>;const index:Integer);
+class procedure TZEntsManipulator.StoreTreeAdressInOnject(var Entity:GDBObjEntity;var Node:GZBInarySeparatedGeometry{-}<TBoundingBox,TzeVector4d,TEntTreeNodeData,TZEntsManipulator,GDBObjEntity,PGDBObjEntity,TEntityArray>;const index:Integer);
 begin
   Entity.bp.TreePos.Owner:=@Node;
   Entity.bp.TreePos.SelfIndexInNode:=index;
@@ -291,7 +291,7 @@ begin
      result:=Entity.vp.BoundingBox;
 end;
 
-class function TZEntsManipulator.GetBBPosition(const sep:DVector4d;const BB:TBoundingBox):TElemPosition;
+class function TZEntsManipulator.GetBBPosition(const sep:TzeVector4d;const BB:TBoundingBox):TElemPosition;
 var
     d,d1,d2:double;
 begin

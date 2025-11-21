@@ -43,7 +43,7 @@ const
                             (v:(0,0,0,1)));
                        t:CMTIdentity);
   RightAngle=pi/2;
-  DefaultVP:Matrix4i=(x:2;y:0;z:100;w:100);
+  DefaultVP:TzeVector4i=(x:2;y:0;z:100;w:100);
   IdentityQuaternion: TzeQuaternion = (ImagPart:(x:0;y:0;z:0); RealPart: 1);
   xAxisIndex=0;yAxisIndex=1;zAxisIndex=2;wAxisIndex=3;
   ScaleOne:TzePoint3d=(x:1;y:1;z:1);
@@ -58,16 +58,16 @@ const
   MinusInfinityVertex:TzePoint3d=(x:NegInfinity;y:NegInfinity;z:NegInfinity);
   InfinityVertex:TzePoint3d=(x:Infinity;y:Infinity;z:Infinity);
   NulVertex4D:TzeVector4d=(x:0;y:0;z:0;w:1);
-  NulVector4D:DVector4D=(v:(0,0,0,0));
-  NulVector4D2:DVector4D=(v:(0,0,0,1));
+  NulVector4D:TzeVector4d=(v:(0,0,0,0));
+  NulVector4D2:TzeVector4d=(v:(0,0,0,1));
   NulVertex:TzePoint3d=(x:0;y:0;z:0);
   NulVertex3S:TzePoint3s=(x:0;y:0;z:0);
   XWCS:TzePoint3d=(x:1;y:0;z:0);
   YWCS:TzePoint3d=(x:0;y:1;z:0);
   ZWCS:TzePoint3d=(x:0;y:0;z:1);
-  XWCS4D:DVector4D=(v:(1,0,0,1));
-  YWCS4D:DVector4D=(v:(0,1,0,1));
-  ZWCS4D:DVector4D=(v:(0,0,1,1));
+  XWCS4D:TzeVector4d=(v:(1,0,0,1));
+  YWCS4D:TzeVector4d=(v:(0,1,0,1));
+  ZWCS4D:TzeVector4d=(v:(0,0,1,1));
   NulVertex2D:TzePoint2d=(x:0;y:0);
   XWCS2D:TzePoint2d=(x:1;y:0);
   YWCS2D:TzePoint2d=(x:0;y:1);
@@ -91,9 +91,9 @@ type
     t,d:Double;
   end;
   TCSDir=(TCSDLeft,TCSDRight);
-function ToDVector4s(const m:DVector4D):DVector4s; inline;
+function ToTzeVector4s(const m:TzeVector4d):TzeVector4s; inline;
 function ToDMatrix4f(const m:DMatrix4D):DMatrix4f; inline;
-function ToVertex2DI(const _V:TzePoint3d):TzePoint2i; inline;
+function ToTzePoint2i(const _V:TzePoint3d):TzePoint2i; inline;
 function VertexD2S(const Vector1:TzePoint3d): TzePoint3s;inline;
 function intercept2d(const x1, y1, x2, y2, x3, y3, x4, y4: Double): Boolean;inline;
 function intercept2d2(const x11, y11, x12, y12, x21, y21, x22, y22: Single): Boolean;inline;
@@ -186,7 +186,7 @@ function CreateTranslationMatrix(const tx,ty,tz:Double):DMatrix4D;inline;overloa
 function CreateScaleMatrix(const V:TzePoint3d): DMatrix4D;inline;overload;
 function CreateScaleMatrix(const s:Double): DMatrix4D;inline;overload;
 function CreateScaleMatrix(const sx,sy,sz:Double): DMatrix4D;inline;overload;
-function CreateReflectionMatrix(const plane:DVector4D): DMatrix4D;
+function CreateReflectionMatrix(const plane:TzeVector4d): DMatrix4D;
 //**Создать 3D вершину
 function CreateVertex(const _x,_y,_z:Double):TzePoint3d;inline;
 function CreateVertexFromArray(var counter:integer;const args:array of const):TzePoint3d;
@@ -225,20 +225,20 @@ function IsNotZero(const d:Double;const _eps:Double=eps):boolean;inline;
 //TODO: заменить в коде все проверки на функцию
 function IsNearToZ(const v:TzePoint3d):boolean;inline;
 
-procedure _myGluProject(const objx,objy,objz:Double;const modelMatrix,projMatrix:PDMatrix4D;const viewport:PMatrix4i; out winx,winy,winz:Double);inline;
-procedure _myGluProject2(const objcoord:TzePoint3d;const modelMatrix,projMatrix:PDMatrix4D;const viewport:PMatrix4i; out wincoord:TzePoint3d);inline;
-procedure _myGluUnProject(const winx,winy,winz:Double;const modelMatrix,projMatrix:PDMatrix4D;const viewport:PMatrix4i;out objx,objy,objz:Double);inline;
+procedure _myGluProject(const objx,objy,objz:Double;const modelMatrix,projMatrix:PDMatrix4D;const viewport:PzeVector4i; out winx,winy,winz:Double);inline;
+procedure _myGluProject2(const objcoord:TzePoint3d;const modelMatrix,projMatrix:PDMatrix4D;const viewport:PzeVector4i; out wincoord:TzePoint3d);inline;
+procedure _myGluUnProject(const winx,winy,winz:Double;const modelMatrix,projMatrix:PDMatrix4D;const viewport:PzeVector4i;out objx,objy,objz:Double);inline;
 
 function ortho(const xmin,xmax,ymin,ymax,zmin,zmax:Double;const matrix:PDMatrix4D):DMatrix4D;{inline;}
 function Perspective(const fovy,W_H,zmin,zmax:Double;const matrix:PDMatrix4D):DMatrix4D;inline;
 function LookAt(point,ex,ey,ez:TzePoint3d;const matrix:PDMatrix4D):DMatrix4D;inline;
 
 function calcfrustum(const clip:PDMatrix4D):cliparray;inline;
-function PointOf3PlaneIntersect(const P1,P2,P3:DVector4D):TzePoint3d;inline;
-function PointOfRayPlaneIntersect(const p1,d:TzePoint3d;const plane:DVector4D;out point :TzePoint3d):Boolean;overload;inline;
-function PointOfRayPlaneIntersect(const p1,d:TzePoint3d;const plane:DVector4D;out t :double):Boolean;overload;inline;
-function PlaneFrom3Pont(const P1,P2,P3:TzePoint3d):DVector4D;inline;
-procedure NormalizePlane(var plane:DVector4D);inline;
+function PointOf3PlaneIntersect(const P1,P2,P3:TzeVector4d):TzePoint3d;inline;
+function PointOfRayPlaneIntersect(const p1,d:TzePoint3d;const plane:TzeVector4d;out point :TzePoint3d):Boolean;overload;inline;
+function PointOfRayPlaneIntersect(const p1,d:TzePoint3d;const plane:TzeVector4d;out t :double):Boolean;overload;inline;
+function PlaneFrom3Pont(const P1,P2,P3:TzePoint3d):TzeVector4d;inline;
+procedure NormalizePlane(var plane:TzeVector4d);inline;
 
 function CalcTrueInFrustum (const lbegin,lend:TzePoint3d; const frustum:ClipArray):TInBoundingVolume;overload;inline;
 function CalcTrueInFrustum (const lbegin,lend:TzePoint3s; const frustum:ClipArray):TInBoundingVolume;overload;
@@ -263,8 +263,8 @@ function CorrectAngleIfNotReadable(Angle:Double):Double; inline;
 
 function GetCSDirFrom0x0y2D(const ox,oy:TzePoint3d):TCSDir;
 
-function CalcDisplaySubFrustum(const x,y,w,h:Double;const mm,pm:DMatrix4D;const vp:Matrix4i):ClipArray;
-function myPickMatrix(const x,y,deltax,deltay:Double;const vp:Matrix4i): DMatrix4D;
+function CalcDisplaySubFrustum(const x,y,w,h:Double;const mm,pm:DMatrix4D;const vp:TzeVector4i):ClipArray;
+function myPickMatrix(const x,y,deltax,deltay:Double;const vp:TzeVector4i): DMatrix4D;
 
 function GetPointInOCSByBasis(const ScaledBX,ScaledBY,ScaledBZ:TzePoint3d; const PointInWCS:TzePoint3d; out scale:TzePoint3d):GDBObj2dprop;
 function GetPInsertInOCSBymatrix(constref matrix:DMatrix4D;out scale:TzePoint3d):GDBObj2dprop;
@@ -378,9 +378,9 @@ begin
   end;
 end;
 
-function ToDVector4s(const m:DVector4D):DVector4s; inline;
+function ToTzeVector4s(const m:TzeVector4d):TzeVector4s; inline;
 begin
-  with DVector4s((@result)^) do // Этот хак убирает по одной лишней инструкции с каждого присвоения
+  with TzeVector4s((@result)^) do // Этот хак убирает по одной лишней инструкции с каждого присвоения
   begin                         // возможно в будущем, это можно будет убрать, когда компилятор
                                 // сможет сам это оптимизировать
     v[0]:=m.v[0];
@@ -396,14 +396,14 @@ begin
 end;
 function ToDMatrix4f(const m:DMatrix4D):DMatrix4f;
 begin
-  result.mtr[0]:=ToDVector4s(m.mtr[0]);
-  result.mtr[1]:=ToDVector4s(m.mtr[1]);
-  result.mtr[2]:=ToDVector4s(m.mtr[2]);
-  result.mtr[3]:=ToDVector4s(m.mtr[3]);
+  result.mtr[0]:=ToTzeVector4s(m.mtr[0]);
+  result.mtr[1]:=ToTzeVector4s(m.mtr[1]);
+  result.mtr[2]:=ToTzeVector4s(m.mtr[2]);
+  result.mtr[3]:=ToTzeVector4s(m.mtr[3]);
   result.t:=m.t;
 end;
 
-function ToVertex2DI(const _V:TzePoint3d):TzePoint2i;
+function ToTzePoint2i(const _V:TzePoint3d):TzePoint2i;
 begin
   result.x:=round(_V.x);
   result.y:=round(_V.y);
@@ -557,10 +557,10 @@ begin
       result:=IRFully;
 end;
 
-procedure NormalizePlane(var plane:DVector4D);{inline;}
+procedure NormalizePlane(var plane:TzeVector4d);{inline;}
 var t:Double;
 begin
-  with DVector4D((@plane)^) do
+  with TzeVector4d((@plane)^) do
   begin
     t := sqrt(v[0] * v[0] + v[1] * v[1] + v[2] * v[2]);
     v[0] := v[0]/t;
@@ -570,7 +570,7 @@ begin
   end;
 end;
 
-function PlaneFrom3Pont(const P1,P2,P3:TzePoint3d):DVector4D;
+function PlaneFrom3Pont(const P1,P2,P3:TzePoint3d):TzeVector4d;
 //var
 //   N1,N2,N3,N12,N23,N31,a1,a2,a3:TzePoint3d;
 //   a4:Double;
@@ -589,7 +589,7 @@ function calcfrustum(const clip:PDMatrix4D):cliparray;
 var t:Double;
 begin
    //* Находим A, B, C, D для ПРАВОЙ плоскости */
-   with DVector4D((@result[0])^) do
+   with TzeVector4d((@result[0])^) do
    begin
      v[0] := clip.mtr[0].v[3] - clip.mtr[0].v[0];
      v[1] := clip.mtr[1].v[3] - clip.mtr[1].v[0];
@@ -604,7 +604,7 @@ begin
    end;
 
    //* Находим A, B, C, D для ЛЕВОЙ плоскости */
-   with DVector4D((@result[1])^) do
+   with TzeVector4d((@result[1])^) do
    begin
      v[0] := clip.mtr[0].v[3] + clip.mtr[0].v[0];
      v[1] := clip.mtr[1].v[3] + clip.mtr[1].v[0];
@@ -618,7 +618,7 @@ begin
    end;
 
    //* Находим A, B, C, D для НИЖНЕЙ плоскости */
-   with DVector4D((@result[2])^) do
+   with TzeVector4d((@result[2])^) do
    begin
      v[0] := clip.mtr[0].v[3] + clip.mtr[0].v[1];
      v[1] := clip.mtr[1].v[3] + clip.mtr[1].v[1];
@@ -632,7 +632,7 @@ begin
    end;
 
    //* ВЕРХНЯЯ плоскость */
-   with DVector4D((@result[3])^) do
+   with TzeVector4d((@result[3])^) do
    begin
      v[0] := clip.mtr[0].v[3] - clip.mtr[0].v[1];
      v[1] := clip.mtr[1].v[3] - clip.mtr[1].v[1];
@@ -646,7 +646,7 @@ begin
    end;
 
    //* ПЕРЕДНЯЯ плоскость */
-   with DVector4D((@result[4])^) do
+   with TzeVector4d((@result[4])^) do
    begin
      v[0] := clip.mtr[0].v[3] + clip.mtr[0].v[2];
      v[1] := clip.mtr[1].v[3] + clip.mtr[1].v[2];
@@ -660,7 +660,7 @@ begin
    end;
 
    //* ?? плоскость */
-   with DVector4D((@result[5])^) do
+   with TzeVector4d((@result[5])^) do
    begin
      v[0] := clip.mtr[0].v[3] - clip.mtr[0].v[2];
      v[1] := clip.mtr[1].v[3] - clip.mtr[1].v[2];
@@ -701,16 +701,16 @@ var a1, a2, a3, a4,
     c1, c2, c3, c4,
     d1, d2, d3, d4: Double;
 begin
-  with DVector4D((@M.mtr[0])^) do begin
+  with TzeVector4d((@M.mtr[0])^) do begin
     a1 := v[0];  b1 := v[1];  c1 := v[2];  d1 := v[3];
   end;
-  with DVector4D((@M.mtr[1])^) do begin
+  with TzeVector4d((@M.mtr[1])^) do begin
     a2 := v[0];  b2 := v[1];  c2 := v[2];  d2 := v[3];
   end;
-  with DVector4D((@M.mtr[2])^) do begin
+  with TzeVector4d((@M.mtr[2])^) do begin
     a3 := v[0];  b3 := v[1];  c3 := v[2];  d3 := v[3];
   end;
-  with DVector4D((@M.mtr[3])^) do begin
+  with TzeVector4d((@M.mtr[3])^) do begin
     a4 := v[0];  b4 := v[1];  c4 := v[2];  d4 := v[3];
   end;
     //a1 :=  M[0].v[0]; b1 :=  M[0].v[1];
@@ -749,16 +749,16 @@ var a1, a2, a3, a4,
     c1, c2, c3, c4,
     d1, d2, d3, d4  : Double;
 begin
-  with DVector4D((@M.mtr[0])^) do begin
+  with TzeVector4d((@M.mtr[0])^) do begin
     a1 := v[0];  b1 := v[1];  c1 := v[2];  d1 := v[3];
   end;
-  with DVector4D((@M.mtr[1])^) do begin
+  with TzeVector4d((@M.mtr[1])^) do begin
     a2 := v[0];  b2 := v[1];  c2 := v[2];  d2 := v[3];
   end;
-  with DVector4D((@M.mtr[2])^) do begin
+  with TzeVector4d((@M.mtr[2])^) do begin
     a3 := v[0];  b3 := v[1];  c3 := v[2];  d3 := v[3];
   end;
-  with DVector4D((@M.mtr[3])^) do begin
+  with TzeVector4d((@M.mtr[3])^) do begin
     a4 := v[0];  b4 := v[1];  c4 := v[2];  d4 := v[3];
   end;
   //a1 := M[0].v[0];  b1 := M[0].v[1];  c1 := M[0].v[2];  d1 := M[0].v[3];
@@ -774,25 +774,25 @@ end;
 procedure MatrixScale(var M: DMatrix4D; const Factor: Double);
 //var I, J: Integer;
 begin
-  with DVector4D((@M.mtr[0])^) do begin
+  with TzeVector4d((@M.mtr[0])^) do begin
     v[0] := v[0] * Factor;
     v[1] := v[1] * Factor;
     v[2] := v[2] * Factor;
     v[3] := v[3] * Factor;
   end;
-  with DVector4D((@M.mtr[1])^) do begin
+  with TzeVector4d((@M.mtr[1])^) do begin
     v[0] := v[0] * Factor;
     v[1] := v[1] * Factor;
     v[2] := v[2] * Factor;
     v[3] := v[3] * Factor;
   end;
-  with DVector4D((@M.mtr[2])^) do begin
+  with TzeVector4d((@M.mtr[2])^) do begin
     v[0] := v[0] * Factor;
     v[1] := v[1] * Factor;
     v[2] := v[2] * Factor;
     v[3] := v[3] * Factor;
   end;
-  with DVector4D((@M.mtr[3])^) do begin
+  with TzeVector4d((@M.mtr[3])^) do begin
     v[0] := v[0] * Factor;
     v[1] := v[1] * Factor;
     v[2] := v[2] * Factor;
@@ -959,7 +959,7 @@ end;
 function CreateTranslationMatrix(const _V:TzePoint3d): DMatrix4D;
 begin
   Result.CreateRec(onemtr,CMTTranslate);
-  with DVector4D((@Result.mtr[3])^) do
+  with TzeVector4d((@Result.mtr[3])^) do
   begin
     v[0] := _V.x;
     v[1] := _V.y;
@@ -970,18 +970,18 @@ end;
 function CreateTranslationMatrix(const tx,ty,tz:Double):DMatrix4D;
 begin
   Result.CreateRec(onemtr,CMTTranslate);
-  with DVector4D((@Result.mtr[3])^) do begin
+  with TzeVector4d((@Result.mtr[3])^) do begin
     v[0]:=tx;
     v[1]:=ty;
     v[2]:=tz;
     v[3]:=1;
   end;
 end;
-function CreateReflectionMatrix(const plane:DVector4D): DMatrix4D;
+function CreateReflectionMatrix(const plane:TzeVector4d): DMatrix4D;
 var
   d: double;
 begin
-  with DVector4D((@plane)^) do
+  with TzeVector4d((@plane)^) do
   begin
     d:=v[0];
     result.mtr[0].v[0] :=-2 * d * v[0] + 1;
@@ -1315,23 +1315,23 @@ begin
      if MatrixAlreadyTransposed
       then
         begin
-          PTzeVector4d(@result[0])^:=VectorTransform(PTzeVector4d(@frustum[0])^,M);
-          PTzeVector4d(@result[1])^:=VectorTransform(PTzeVector4d(@frustum[1])^,M);
-          PTzeVector4d(@result[2])^:=VectorTransform(PTzeVector4d(@frustum[2])^,M);
-          PTzeVector4d(@result[3])^:=VectorTransform(PTzeVector4d(@frustum[3])^,M);
-          PTzeVector4d(@result[4])^:=VectorTransform(PTzeVector4d(@frustum[4])^,M);
-          PTzeVector4d(@result[5])^:=VectorTransform(PTzeVector4d(@frustum[5])^,M);
+          PzeVector4d(@result[0])^:=VectorTransform(PzeVector4d(@frustum[0])^,M);
+          PzeVector4d(@result[1])^:=VectorTransform(PzeVector4d(@frustum[1])^,M);
+          PzeVector4d(@result[2])^:=VectorTransform(PzeVector4d(@frustum[2])^,M);
+          PzeVector4d(@result[3])^:=VectorTransform(PzeVector4d(@frustum[3])^,M);
+          PzeVector4d(@result[4])^:=VectorTransform(PzeVector4d(@frustum[4])^,M);
+          PzeVector4d(@result[5])^:=VectorTransform(PzeVector4d(@frustum[5])^,M);
         end
       else
         begin
           m1:=M;
           MatrixTranspose(m1);
-          PTzeVector4d(@result[0])^:=VectorTransform(PTzeVector4d(@frustum[0])^,m1);
-          PTzeVector4d(@result[1])^:=VectorTransform(PTzeVector4d(@frustum[1])^,m1);
-          PTzeVector4d(@result[2])^:=VectorTransform(PTzeVector4d(@frustum[2])^,m1);
-          PTzeVector4d(@result[3])^:=VectorTransform(PTzeVector4d(@frustum[3])^,m1);
-          PTzeVector4d(@result[4])^:=VectorTransform(PTzeVector4d(@frustum[4])^,m1);
-          PTzeVector4d(@result[5])^:=VectorTransform(PTzeVector4d(@frustum[5])^,m1);
+          PzeVector4d(@result[0])^:=VectorTransform(PzeVector4d(@frustum[0])^,m1);
+          PzeVector4d(@result[1])^:=VectorTransform(PzeVector4d(@frustum[1])^,m1);
+          PzeVector4d(@result[2])^:=VectorTransform(PzeVector4d(@frustum[2])^,m1);
+          PzeVector4d(@result[3])^:=VectorTransform(PzeVector4d(@frustum[3])^,m1);
+          PzeVector4d(@result[4])^:=VectorTransform(PzeVector4d(@frustum[4])^,m1);
+          PzeVector4d(@result[5])^:=VectorTransform(PzeVector4d(@frustum[5])^,m1);
         end;
 end;
 function FrustumTransform(const frustum:ClipArray;const M:DMatrix4f; MatrixAlreadyTransposed:Boolean=false):ClipArray;
@@ -1341,23 +1341,23 @@ begin
      if MatrixAlreadyTransposed
       then
         begin
-          PTzeVector4d(@result[0])^:=VectorTransform(PTzeVector4d(@frustum[0])^,M);
-          PTzeVector4d(@result[1])^:=VectorTransform(PTzeVector4d(@frustum[1])^,M);
-          PTzeVector4d(@result[2])^:=VectorTransform(PTzeVector4d(@frustum[2])^,M);
-          PTzeVector4d(@result[3])^:=VectorTransform(PTzeVector4d(@frustum[3])^,M);
-          PTzeVector4d(@result[4])^:=VectorTransform(PTzeVector4d(@frustum[4])^,M);
-          PTzeVector4d(@result[5])^:=VectorTransform(PTzeVector4d(@frustum[5])^,M);
+          PzeVector4d(@result[0])^:=VectorTransform(PzeVector4d(@frustum[0])^,M);
+          PzeVector4d(@result[1])^:=VectorTransform(PzeVector4d(@frustum[1])^,M);
+          PzeVector4d(@result[2])^:=VectorTransform(PzeVector4d(@frustum[2])^,M);
+          PzeVector4d(@result[3])^:=VectorTransform(PzeVector4d(@frustum[3])^,M);
+          PzeVector4d(@result[4])^:=VectorTransform(PzeVector4d(@frustum[4])^,M);
+          PzeVector4d(@result[5])^:=VectorTransform(PzeVector4d(@frustum[5])^,M);
         end
       else
         begin
           m1:=M;
           MatrixTranspose(m1);
-          PTzeVector4d(@result[0])^:=VectorTransform(PTzeVector4d(@frustum[0])^,m1);
-          PTzeVector4d(@result[1])^:=VectorTransform(PTzeVector4d(@frustum[1])^,m1);
-          PTzeVector4d(@result[2])^:=VectorTransform(PTzeVector4d(@frustum[2])^,m1);
-          PTzeVector4d(@result[3])^:=VectorTransform(PTzeVector4d(@frustum[3])^,m1);
-          PTzeVector4d(@result[4])^:=VectorTransform(PTzeVector4d(@frustum[4])^,m1);
-          PTzeVector4d(@result[5])^:=VectorTransform(PTzeVector4d(@frustum[5])^,m1);
+          PzeVector4d(@result[0])^:=VectorTransform(PzeVector4d(@frustum[0])^,m1);
+          PzeVector4d(@result[1])^:=VectorTransform(PzeVector4d(@frustum[1])^,m1);
+          PzeVector4d(@result[2])^:=VectorTransform(PzeVector4d(@frustum[2])^,m1);
+          PzeVector4d(@result[3])^:=VectorTransform(PzeVector4d(@frustum[3])^,m1);
+          PzeVector4d(@result[4])^:=VectorTransform(PzeVector4d(@frustum[4])^,m1);
+          PzeVector4d(@result[5])^:=VectorTransform(PzeVector4d(@frustum[5])^,m1);
         end;
 end;
 function Vertexlength(const Vector1, Vector2: TzePoint3d): Double;
@@ -2116,7 +2116,7 @@ begin
     result:=false;
 end;
 
-function myPickMatrix(const x,y,deltax,deltay:Double;const vp:Matrix4i): DMatrix4D;
+function myPickMatrix(const x,y,deltax,deltay:Double;const vp:TzeVector4i): DMatrix4D;
 var
   tm,sm: DMatrix4D;
 begin
@@ -2127,7 +2127,7 @@ begin
   result.t:=CMTTransform;
 end;
 
-function CalcDisplaySubFrustum(const x,y,w,h:Double;const mm,pm:DMatrix4D;const vp:Matrix4i):ClipArray;
+function CalcDisplaySubFrustum(const x,y,w,h:Double;const mm,pm:DMatrix4D;const vp:TzeVector4i):ClipArray;
 var
   tm: DMatrix4D;
 begin
@@ -2383,7 +2383,7 @@ begin
   end;
   //Result:=IRPartially;
 end;
-function PointOf3PlaneIntersect(const P1,P2,P3:DVector4D):TzePoint3d;
+function PointOf3PlaneIntersect(const P1,P2,P3:TzeVector4d):TzePoint3d;
 var
   N1,N2,N3,N12,N23,N31,a1,a2,a3:TzePoint3d;
   a4:Double;
@@ -2410,34 +2410,34 @@ begin
   result:=VertexMulOnSc(a1,-a4);
 end;
 
-function PointOfRayPlaneIntersect(const p1,d:TzePoint3d;const plane:DVector4D;out point :TzePoint3d):Boolean;
+function PointOfRayPlaneIntersect(const p1,d:TzePoint3d;const plane:TzeVector4d;out point :TzePoint3d):Boolean;
 var
   td:Double;
 begin
-  with DVector4D((@plane)^) do
+  with TzeVector4d((@plane)^) do
      td:=-v[0]*d.x-v[1]*d.y-v[2]*d.z;
 
   if abs(td)<eps then
     exit(false);
 
-  with DVector4D((@plane)^) do
+  with TzeVector4d((@plane)^) do
     td:=(v[0]*p1.x+v[1]*p1.y+v[2]*p1.z+v[3])/td;
 
   point:=VertexDmorph(p1,d,td);
   result:=true;
 end;
 
-function PointOfRayPlaneIntersect(const p1,d:TzePoint3d;const plane:DVector4D;out t :double):Boolean;
+function PointOfRayPlaneIntersect(const p1,d:TzePoint3d;const plane:TzeVector4d;out t :double):Boolean;
 var
   td:Double;
 begin
-  with DVector4D((@plane)^) do
+  with TzeVector4d((@plane)^) do
      td:=-v[0]*d.x-v[1]*d.y-v[2]*d.z;
 
   if abs(td)<eps then
     exit(false);
 
-  with DVector4D((@plane)^) do
+  with TzeVector4d((@plane)^) do
     t:=(v[0]*p1.x+v[1]*p1.y+v[2]*p1.z+v[3])/td;
   if (t>=0)and(t<=1)then
     result:=true
@@ -2507,7 +2507,7 @@ begin
   result:=MatrixMultiply(m,matrix^);
 end;
 
-procedure _myGluUnProject(const winx,winy,winz:Double;const modelMatrix,projMatrix:PDMatrix4D;const viewport:PMatrix4i;out objx,objy,objz:Double);
+procedure _myGluUnProject(const winx,winy,winz:Double;const modelMatrix,projMatrix:PDMatrix4D;const viewport:PzeVector4i;out objx,objy,objz:Double);
 var
   _in,_out:TzeVector4d;
   finalMatrix:DMatrix4D;
@@ -2535,7 +2535,7 @@ begin
   objz:=_out.z/_out.w;
 end;
 
-procedure _myGluProject(const objx,objy,objz:Double;const modelMatrix,projMatrix:PDMatrix4D;const viewport:PMatrix4i; out winx,winy,winz:Double);
+procedure _myGluProject(const objx,objy,objz:Double;const modelMatrix,projMatrix:PDMatrix4D;const viewport:PzeVector4i; out winx,winy,winz:Double);
 var
   _in:TzeVector4d;
 begin
@@ -2561,7 +2561,7 @@ begin
   //return(GL_TRUE);
 end;
 
-procedure _myGluProject2(const objcoord:TzePoint3d;const modelMatrix,projMatrix:PDMatrix4D;const viewport:PMatrix4i; out wincoord:TzePoint3d);
+procedure _myGluProject2(const objcoord:TzePoint3d;const modelMatrix,projMatrix:PDMatrix4D;const viewport:PzeVector4i; out wincoord:TzePoint3d);
 begin
   _myGluProject(objcoord.x,objcoord.y,objcoord.z,modelMatrix,projMatrix,viewport,wincoord.x,wincoord.y,wincoord.z);
 end;

@@ -40,14 +40,14 @@ type
     procedure AfterSeparateNode(var nul:TEntityArray);
   end;
   PTEntTreeNode=^TGeomEntTreeNode;
-  TGeomEntTreeNode=object(GZBInarySeparatedGeometry{-}<TBoundingBox,DVector4d,TGeomTreeNodeData,TZEntsManipulator,TGeomEntity,PTGeomEntity,TEntityArray>{//})
+  TGeomEntTreeNode=object(GZBInarySeparatedGeometry{-}<TBoundingBox,TzeVector4d,TGeomTreeNodeData,TZEntsManipulator,TGeomEntity,PTGeomEntity,TEntityArray>{//})
   end;
 
   TZEntsManipulator=class
-    class procedure StoreTreeAdressInOnject(var Entity:TGeomEntity;var Node:GZBInarySeparatedGeometry<TBoundingBox,DVector4d,TGeomTreeNodeData,TZEntsManipulator,TGeomEntity,PTGeomEntity,TEntityArray>;const index:Integer); static;
+    class procedure StoreTreeAdressInOnject(var Entity:TGeomEntity;var Node:GZBInarySeparatedGeometry<TBoundingBox,TzeVector4d,TGeomTreeNodeData,TZEntsManipulator,TGeomEntity,PTGeomEntity,TEntityArray>;const index:Integer); static;
     class procedure CorrectNodeBoundingBox(var NodeBB:TBoundingBox;var Entity:TGeomEntity); static; inline;
     class function GetEntityBoundingBox(var Entity:TGeomEntity):TBoundingBox; static; inline;
-    class function GetBBPosition(const sep:DVector4d;const BB:TBoundingBox):TElemPosition; static;
+    class function GetBBPosition(const sep:TzeVector4d;const BB:TBoundingBox):TElemPosition; static;
     class function isUnneedSeparate(const count,depth:integer):boolean; static; inline;
     class function GetTestNodesCount:integer; static; inline;
     class procedure FirstStageCalcSeparatirs(var NodeBB:TBoundingBox;var Entity:TGeomEntity;var PFirstStageData:pointer;TSM:TStageMode); static;
@@ -158,7 +158,7 @@ case axis of
                                           );
 end;
 end;
-class procedure TZEntsManipulator.StoreTreeAdressInOnject(var Entity:TGeomEntity;var Node:GZBInarySeparatedGeometry{-}<TBoundingBox,DVector4d,TgeomTreeNodeData,TZEntsManipulator,TGeomEntity,PTGeomEntity,TEntityArray>;const index:Integer);
+class procedure TZEntsManipulator.StoreTreeAdressInOnject(var Entity:TGeomEntity;var Node:GZBInarySeparatedGeometry{-}<TBoundingBox,TzeVector4d,TgeomTreeNodeData,TZEntsManipulator,TGeomEntity,PTGeomEntity,TEntityArray>;const index:Integer);
 begin
   {Entity.bp.TreePos.Owner:=@Node;
   Entity.bp.TreePos.SelfIndex:=index;}
@@ -172,7 +172,7 @@ begin
      result:=Entity.GetBB;
 end;
 
-class function TZEntsManipulator.GetBBPosition(const sep:DVector4d;const BB:TBoundingBox):TElemPosition;
+class function TZEntsManipulator.GetBBPosition(const sep:TzeVector4d;const BB:TBoundingBox):TElemPosition;
 var
     d,d1,d2:double;
 begin

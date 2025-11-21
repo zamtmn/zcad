@@ -80,7 +80,7 @@ type
                            procedure SetupNurbsRenderer(const renderer:GLUnurbsObj;
                                                         const tolerance:GLfloat;
                                                         constref model,perspective:DMatrix4d;
-                                                        constref view:Matrix4i;
+                                                        constref view:TzeVector4i;
                                                         const BeginCB:TBeginCB;const EndCB:TVertexCB;const VertexCB:TVertexCB;const ErrorCB:TErrorCB;
                                                         const Data: Pointer);overload;
                            procedure SetupNurbsRenderer(const renderer:GLUnurbsObj;
@@ -124,7 +124,7 @@ end;
 procedure TGLUInterface.SetupNurbsRenderer(const renderer:GLUnurbsObj;
                                            const tolerance:GLfloat;
                                            constref model,perspective:DMatrix4d;
-                                           constref view:Matrix4i;
+                                           constref view:TzeVector4i;
                                            const BeginCB:TBeginCB;const EndCB:TVertexCB;const VertexCB:TVertexCB;const ErrorCB:TErrorCB;
                                            const Data: Pointer);
 var

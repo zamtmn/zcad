@@ -231,7 +231,7 @@ end;
 procedure drawfrustustum(frustum:ClipArray;var DC:TDrawContext);
 var
 tv1,tv2,tv3,tv4{,sv1,sv2,sv3,sv4,d1PProjPoint,d2,d3,d4}:TzePoint3d;
-Tempplane:DVector4d;
+Tempplane:TzeVector4d;
 
 begin
   Tempplane:=frustum[5];
@@ -253,7 +253,7 @@ var
   i, j: Integer;
   pt:ptraceprop;
   mvertex,dvertex,tv1,tv2,sv1,d1:TzePoint3d;
-  Tempplane,plx,ply,plz:DVector4d;
+  Tempplane,plx,ply,plz:TzeVector4d;
   a: Integer;
   i2d,i2dresult:intercept2dprop;
   //_NotUseLCS:boolean;

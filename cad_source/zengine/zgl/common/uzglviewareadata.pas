@@ -70,7 +70,7 @@ end;
     mode: Byte;
     mouse, mouseglue: TzePoint2i;
     glmouse:TzePoint2i;
-    workplane: {GDBplane}DVector4d;
+    workplane:TzeVector4d;
     WPPointLU,WPPointUR,WPPointRB,WPPointBL:TzePoint3d;
     mouseraywithoutOS: GDBPiece;
     mouseray: GDBPiece;

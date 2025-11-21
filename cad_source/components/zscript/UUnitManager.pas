@@ -486,7 +486,7 @@ begin
                                             end;
                                   identtype:begin
                                                   typename:=parseresult^.getData(0);
-//                                                  if typename='GDBXCoordinate' then
+//                                                  if typename='TzeXUnits' then
 //                                                                                  typename:=typename;
                                                   Getmem(Pointer(etd),sizeof(GDBSinonimDescriptor));
                                                   PGDBSinonimDescriptor(etd)^.init(parseresult^.getData(1),typename,currentunit);

@@ -112,7 +112,7 @@ GDBBaseCamera=object(GDBaseObject)
                 projMatrix:DMatrix4d;
                 viewport:TzeVector4i;
                 clip:DMatrix4d;
-                frustum:ClipArray;
+                frustum:TzeFrustum;
                 //infrustum:Integer;
                 obj_zmax,obj_zmin:Double;
                 DRAWNOTEND:Boolean;

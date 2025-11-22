@@ -87,7 +87,7 @@ type
     procedure createpoint;virtual;
     procedure getoutbound(var DC:TDrawContext);virtual;
     function CalcTrueInFrustum(
-      const frustum:ClipArray):TInBoundingVolume;virtual;
+      const frustum:TzeFrustum):TInBoundingVolume;virtual;
     procedure remaponecontrolpoint(pdesc:pcontrolpointdesc;
       ProjectProc:GDBProjectProc);virtual;
     procedure addcontrolpoints(tdesc:Pointer);virtual;

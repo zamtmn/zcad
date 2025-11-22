@@ -613,7 +613,7 @@ begin
   _scaleM:=CreateScaleMatrix(CreateVertex(txtSx,txtSy,1));
   if txtOblique<>0 then begin
     _obliqueM.CreateRec(OneMtr,CMTShear);
-    _obliqueM.mtr[1].v[0]:=-cotan(txtOblique)
+    _obliqueM.mtr.v[1].v[0]:=-cotan(txtOblique)
   end
   else
     _obliqueM:=OneMatrix;

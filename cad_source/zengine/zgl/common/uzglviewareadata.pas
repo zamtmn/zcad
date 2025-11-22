@@ -89,7 +89,7 @@ end;
     MouseFrameInverse:Boolean;
     Frame1, Frame2: TzePoint2i;
     Frame13d, Frame23d: TzePoint3d;
-    BigMouseFrustum:ClipArray;
+    BigMouseFrustum:TzeFrustum;
   end;
   {REGISTERRECORDTYPE tcpdist}
   tcpdist = record
@@ -158,9 +158,9 @@ end;
     startgluepoint:pcontrolpointdesc;
     ontrackarray: totrackarray;
     mouseclipmatrix:DMatrix4d;
-    mousefrustum,mousefrustumLCS:ClipArray;
+    mousefrustum,mousefrustumLCS:TzeFrustum;
     ShowDebugFrustum:Boolean;
-    debugfrustum:ClipArray;
+    debugfrustum:TzeFrustum;
     ShowDebugBoundingBbox:Boolean;
     DebugBoundingBbox:TBoundingBox;
     processObjConstruct:Boolean;

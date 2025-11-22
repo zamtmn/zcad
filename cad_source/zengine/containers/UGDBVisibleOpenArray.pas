@@ -28,7 +28,7 @@ PGDBObjEntityOpenArray=^GDBObjEntityOpenArray;
 GDBObjEntityOpenArray= object(GDBObjOpenArrayOfPV)
                       function AddPEntity(var entity:GDBObjEntity):TArrayIndex;virtual;
                       procedure CloneEntityTo(PEA:PGDBObjEntityOpenArray;own:Pointer);virtual;
-                      procedure SetInFrustumFromTree(const frustum:ClipArray;const Actuality:TVisActuality;var Counters:TCameraCounters;ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double);virtual;
+                      procedure SetInFrustumFromTree(const frustum:TzeFrustum;const Actuality:TVisActuality;var Counters:TCameraCounters;ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double);virtual;
                 end;
 {Export-}
 implementation

@@ -43,9 +43,9 @@ GDBObjElLeader= object(GDBObjComplex)
 
             procedure DrawGeometry(lw:Integer;var DC:TDrawContext;const inFrustumState:TInBoundingVolume);virtual;
              procedure getoutbound(var DC:TDrawContext);virtual;
-            function CalcInFrustum(const frustum:ClipArray;const Actuality:TVisActuality;var Counters:TCameraCounters; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double):Boolean;virtual;
-            function CalcTrueInFrustum(const frustum:ClipArray):TInBoundingVolume;virtual;
-            function onmouse(var popa:TZctnrVectorPGDBaseEntity;const MF:ClipArray;InSubEntry:Boolean):Boolean;virtual;
+            function CalcInFrustum(const frustum:TzeFrustum;const Actuality:TVisActuality;var Counters:TCameraCounters; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double):Boolean;virtual;
+            function CalcTrueInFrustum(const frustum:TzeFrustum):TInBoundingVolume;virtual;
+            function onmouse(var popa:TZctnrVectorPGDBaseEntity;const MF:TzeFrustum;InSubEntry:Boolean):Boolean;virtual;
             procedure addcontrolpoints(tdesc:Pointer);virtual;
             procedure rtmodifyonepoint(const rtmod:TRTModifyData);virtual;
             procedure remaponecontrolpoint(pdesc:pcontrolpointdesc;ProjectProc:GDBProjectProc);virtual;
@@ -69,9 +69,9 @@ GDBObjElLeader= object(GDBObjComplex)
 
             procedure transform(const t_matrix:DMatrix4d);virtual;
             procedure TransformAt(p:PGDBObjEntity;t_matrix:PDMatrix4d);virtual;
-            procedure SetInFrustumFromTree(const frustum:ClipArray;const Actuality:TVisActuality;var Counters:TCameraCounters; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double);virtual;
+            procedure SetInFrustumFromTree(const frustum:TzeFrustum;const Actuality:TVisActuality;var Counters:TCameraCounters; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double);virtual;
             function CalcActualVisible(const Actuality:TVisActuality):Boolean;virtual;
-            function calcvisible(const frustum:ClipArray;const Actuality:TVisActuality;var Counters:TCameraCounters; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double):Boolean;virtual;
+            function calcvisible(const frustum:TzeFrustum;const Actuality:TVisActuality;var Counters:TCameraCounters; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double):Boolean;virtual;
             function GetObjType:TObjID;virtual;
             class function GetDXFIOFeatures:TDXFEntIODataManager;static;
             procedure SaveToDXFObjXData(var outStream:TZctnrVectorBytes;var IODXFContext:TIODXFSaveContext);virtual;

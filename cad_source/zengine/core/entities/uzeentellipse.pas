@@ -64,7 +64,7 @@ type
     procedure getoutbound(var DC:TDrawContext);virtual;
     procedure projectpoint;virtual;
     function onmouse(var popa:TZctnrVectorPGDBaseEntity;
-      const MF:ClipArray;InSubEntry:boolean):boolean;virtual;
+      const MF:TzeFrustum;InSubEntry:boolean):boolean;virtual;
     function getsnap(var osp:os_record;var pdata:Pointer;
       const param:OGLWndtype;ProjectProc:GDBProjectProc;SnapMode:TGDBOSMode):boolean;virtual;
     function beforertmodify:Pointer;virtual;
@@ -75,11 +75,11 @@ type
     procedure rtsave(refp:Pointer);virtual;
     destructor done;virtual;
     function GetObjTypeName:string;virtual;
-    function calcinfrustum(const frustum:ClipArray;
+    function calcinfrustum(const frustum:TzeFrustum;
       const Actuality:TVisActuality;var Counters:TCameraCounters;ProjectProc:GDBProjectProc;
       const zoom,currentdegradationfactor:double):boolean;virtual;
     function CalcTrueInFrustum(
-      const frustum:ClipArray):TInBoundingVolume;virtual;
+      const frustum:TzeFrustum):TInBoundingVolume;virtual;
     function CalcObjMatrixWithoutOwner:DMatrix4d;virtual;
     procedure transform(const t_matrix:DMatrix4d);virtual;
     procedure TransformAt(p:PGDBObjEntity;t_matrix:PDMatrix4d);virtual;
@@ -96,10 +96,10 @@ var
 begin
   objmatrix:=uzegeometry.MatrixMultiply(PGDBObjWithLocalCS(p)^.objmatrix,t_matrix^);
 
-  tv:=PzeVector4d(@t_matrix.mtr[3])^;
-  PzeVector4d(@t_matrix.mtr[3])^:=NulVertex4D;
+  tv:=PzeVector4d(@t_matrix.mtr.v[3])^;
+  PzeVector4d(@t_matrix.mtr.v[3])^:=NulVertex4D;
   MajorAxis:=VectorTransform3D(PGDBObjEllipse(p)^.MajorAxis,t_matrix^);
-  PzeVector4d(@t_matrix.mtr[3])^:=tv;
+  PzeVector4d(@t_matrix.mtr.v[3])^:=tv;
   ReCalcFromObjMatrix;
 end;
 
@@ -108,17 +108,17 @@ var
   tv2:TzeVector4d;
 begin
   inherited;
-  tv2:=PzeVector4d(@t_matrix.mtr[3])^;
-  PzeVector4d(@t_matrix.mtr[3])^:=NulVertex4D;
+  tv2:=PzeVector4d(@t_matrix.mtr.v[3])^;
+  PzeVector4d(@t_matrix.mtr.v[3])^:=NulVertex4D;
   MajorAxis:=VectorTransform3D(MajorAxis,t_matrix);
-  PzeVector4d(@t_matrix.mtr[3])^:=tv2;
+  PzeVector4d(@t_matrix.mtr.v[3])^:=tv2;
   ReCalcFromObjMatrix;
 end;
 
 procedure GDBObjEllipse.ReCalcFromObjMatrix;
 begin
   inherited;
-  Local.P_insert:=PzePoint3d(@objmatrix.mtr[3])^;
+  Local.P_insert:=PzePoint3d(@objmatrix.mtr.v[3])^;
 end;
 
 function GDBObjEllipse.CalcObjMatrixWithoutOwner;
@@ -142,8 +142,8 @@ var
   i:integer;
 begin
   for i:=0 to 5 do begin
-    if (frustum[i].v[0]*P_insert_in_WCS.x+frustum[i].v[1]*
-      P_insert_in_WCS.y+frustum[i].v[2]*P_insert_in_WCS.z+frustum[i].v[3]+rr<0)
+    if (frustum.v[i].v[0]*P_insert_in_WCS.x+frustum.v[i].v[1]*
+      P_insert_in_WCS.y+frustum.v[i].v[2]*P_insert_in_WCS.z+frustum.v[i].v[3]+rr<0)
     then begin
       Result:=IREmpty;
       exit;
@@ -158,14 +158,14 @@ var
 begin
   Result:=True;
   for i:=0 to 4 do begin
-    if (frustum[i].v[0]*outbound[0].x+frustum[i].v[1]*outbound[0].y+
-      frustum[i].v[2]*outbound[0].z+frustum[i].v[3]<0)  and
-      (frustum[i].v[0]*outbound[1].x+frustum[i].v[1]*outbound[1].y+
-      frustum[i].v[2]*outbound[1].z+frustum[i].v[3]<0)  and
-      (frustum[i].v[0]*outbound[2].x+frustum[i].v[1]*outbound[2].y+
-      frustum[i].v[2]*outbound[2].z+frustum[i].v[3]<0)  and
-      (frustum[i].v[0]*outbound[3].x+frustum[i].v[1]*outbound[3].y+
-      frustum[i].v[2]*outbound[3].z+frustum[i].v[3]<0) then begin
+    if (frustum.v[i].v[0]*outbound[0].x+frustum.v[i].v[1]*outbound[0].y+
+      frustum.v[i].v[2]*outbound[0].z+frustum.v[i].v[3]<0)  and
+      (frustum.v[i].v[0]*outbound[1].x+frustum.v[i].v[1]*outbound[1].y+
+      frustum.v[i].v[2]*outbound[1].z+frustum.v[i].v[3]<0)  and
+      (frustum.v[i].v[0]*outbound[2].x+frustum.v[i].v[1]*outbound[2].y+
+      frustum.v[i].v[2]*outbound[2].z+frustum.v[i].v[3]<0)  and
+      (frustum.v[i].v[0]*outbound[3].x+frustum.v[i].v[1]*outbound[3].y+
+      frustum.v[i].v[2]*outbound[3].z+frustum.v[i].v[3]<0) then begin
       Result:=False;
       system.break;
     end;
@@ -377,8 +377,8 @@ var
   i:integer;
 begin
   for i:=0 to 5 do begin
-    if (mf[i].v[0]*P_insert_in_WCS.x+mf[i].v[1]*P_insert_in_WCS.y+
-        mf[i].v[2]*P_insert_in_WCS.z+mf[i].v[3]+RR<0) then begin
+    if (mf.v[i].v[0]*P_insert_in_WCS.x+mf.v[i].v[1]*P_insert_in_WCS.y+
+        mf.v[i].v[2]*P_insert_in_WCS.z+mf.v[i].v[3]+RR<0) then begin
       Result:=False;
       exit;
     end;

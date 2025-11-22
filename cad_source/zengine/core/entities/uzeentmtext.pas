@@ -94,7 +94,7 @@ var
 begin
   tv:=CreateVertex(Width,0,0);
   m:=t_matrix;
-  PzePoint3d(@m.mtr[3])^:=NulVertex;
+  PzePoint3d(@m.mtr.v[3])^:=NulVertex;
   tv:=VectorTransform3d(tv,m);
   Width:=oneVertexlength(tv);
   inherited;
@@ -590,13 +590,13 @@ begin
       matr:=DrawMatrix;
 
       m1.CreateRec(OneMtr,CMTShear);
-      m1.mtr[3].v[0]:=pswp^.x-(pswp^.y)*cotan(pi/2-textprop.oblique)/textprop.wfactor;
-      m1.mtr[3].v[1]:=pswp^.y;
+      m1.mtr.v[3].v[0]:=pswp^.x-(pswp^.y)*cotan(pi/2-textprop.oblique)/textprop.wfactor;
+      m1.mtr.v[3].v[1]:=pswp^.y;
       matr:=MatrixMultiply(m1,matr);
 
       i:=1;
       if ispl then begin
-        lp:=PzePoint3d(@matr.mtr[3].v[0])^;
+        lp:=PzePoint3d(@matr.mtr.v[3].v[0])^;
         lp.y:=lp.y-0.2*textprop.size;
         lp:=VectorTransform3d(lp,objmatrix);
         pl.PushBackData(lp);
@@ -608,12 +608,12 @@ begin
         if sym=1 then begin
           ispl:=not(ispl);
           if ispl then begin
-            lp:=PzePoint3d(@matr.mtr[3].v[0])^;
+            lp:=PzePoint3d(@matr.mtr.v[3].v[0])^;
             lp.y:=lp.y-0.2*textprop.size;
             lp:=VectorTransform3d(lp,objmatrix);
             pl.PushBackData(lp);
           end else begin
-            lp:=PzePoint3d(@matr.mtr[3].v[0])^;
+            lp:=PzePoint3d(@matr.mtr.v[3].v[0])^;
             lp.y:=lp.y-0.2*textprop.size;
             lp:=VectorTransform3d(lp,objmatrix);
             pl.PushBackData(lp);
@@ -629,7 +629,7 @@ begin
       end;
 
       if ispl then begin
-        lp:=PzePoint3d(@matr.mtr[3].v[0])^;
+        lp:=PzePoint3d(@matr.mtr.v[3].v[0])^;
         lp.y:=lp.y-0.2*textprop.size;
         lp:=VectorTransform3d(lp,objmatrix);
         pl.PushBackData(lp);

@@ -228,19 +228,19 @@ begin
       wc.invalidate;
     if assigned(OnActivateProc) then OnActivateProc;
 end;
-procedure drawfrustustum(frustum:ClipArray;var DC:TDrawContext);
+procedure drawfrustustum(frustum:TzeFrustum;var DC:TDrawContext);
 var
 tv1,tv2,tv3,tv4{,sv1,sv2,sv3,sv4,d1PProjPoint,d2,d3,d4}:TzePoint3d;
 Tempplane:TzeVector4d;
 
 begin
-  Tempplane:=frustum[5];
-  tempplane.v[3]:=(tempplane.v[3]-frustum[4].v[3])/2;
+  Tempplane:=frustum.v[5];
+  tempplane.v[3]:=(tempplane.v[3]-frustum.v[4].v[3])/2;
   begin
-  tv1:=PointOf3PlaneIntersect(frustum[0],frustum[3],Tempplane);
-  tv2:=PointOf3PlaneIntersect(frustum[1],frustum[3],Tempplane);
-  tv3:=PointOf3PlaneIntersect(frustum[1],frustum[2],Tempplane);
-  tv4:=PointOf3PlaneIntersect(frustum[0],frustum[2],Tempplane);
+  tv1:=PointOf3PlaneIntersect(frustum.v[0],frustum.v[3],Tempplane);
+  tv2:=PointOf3PlaneIntersect(frustum.v[1],frustum.v[3],Tempplane);
+  tv3:=PointOf3PlaneIntersect(frustum.v[1],frustum.v[2],Tempplane);
+  tv4:=PointOf3PlaneIntersect(frustum.v[0],frustum.v[2],Tempplane);
 
   dc.drawer.DrawLine3DInModelSpace(tv1,tv2,dc.DrawingContext.matrixs);
   dc.drawer.DrawLine3DInModelSpace(tv2,tv3,dc.DrawingContext.matrixs);
@@ -280,8 +280,8 @@ begin
   dc.drawer.SetDrawMode(TDM_Normal);
   if param.ShowDebugFrustum then
                           drawfrustustum(param.debugfrustum,dc);
-  Tempplane:=param.mousefrustumLCS[5];
-  tempplane.v[3]:=(tempplane.v[3]-param.mousefrustumLCS[4].v[3])/2;
+  Tempplane:=param.mousefrustumLCS.v[5];
+  tempplane.v[3]:=(tempplane.v[3]-param.mousefrustumLCS.v[4].v[3])/2;
   {курсор фрустума выделения}
   if param.md.mousein then
   if (param.md.mode and MGetSelectObject) <> 0 then begin
@@ -304,8 +304,8 @@ begin
                       vertexadd(VertexAdd(param.md.mouse3dcoord,xWCS{VertexMulOnSc(xWCS,oneVertexlength(wa.param.md.mouse3dcoord))}),PDWG.Getpcamera^.CamCSOffset));
   //if assigned(sysvar.DISP.DISP_ColorAxis)then
   if sysvarDISPColorAxis then dc.drawer.SetColor(255, 0, 0,255);
-  tv1:=PointOf3PlaneIntersect(PDWG.Getpcamera.frustumLCS[0],plx,Tempplane);
-  tv2:=PointOf3PlaneIntersect(PDWG.Getpcamera.frustumLCS[1],plx,Tempplane);
+  tv1:=PointOf3PlaneIntersect(PDWG.Getpcamera.frustumLCS.v[0],plx,Tempplane);
+  tv2:=PointOf3PlaneIntersect(PDWG.Getpcamera.frustumLCS.v[1],plx,Tempplane);
   dvertex:=uzegeometry.VertexSub(tv2,tv1);
   dvertex:=uzegeometry.VertexMulOnSc(dvertex,SysVarDISPCrosshairSize);
   tv1:=VertexSub(mvertex,dvertex);
@@ -316,8 +316,8 @@ begin
                       vertexadd(VertexAdd(param.md.mouse3dcoord,yWCS{VertexMulOnSc(xWCS,oneVertexlength(wa.param.md.mouse3dcoord))}),PDWG.Getpcamera^.CamCSOffset));
   //if assigned(sysvar.DISP.DISP_ColorAxis)then
   if sysvarDISPColorAxis then dc.drawer.SetColor(0, 255, 0,255);
-  tv1:=PointOf3PlaneIntersect(PDWG.Getpcamera.frustumLCS[2],ply,Tempplane);
-  tv2:=PointOf3PlaneIntersect(PDWG.Getpcamera.frustumLCS[3],ply,Tempplane);
+  tv1:=PointOf3PlaneIntersect(PDWG.Getpcamera.frustumLCS.v[2],ply,Tempplane);
+  tv2:=PointOf3PlaneIntersect(PDWG.Getpcamera.frustumLCS.v[3],ply,Tempplane);
   dvertex:=uzegeometry.VertexSub(tv2,tv1);
   dvertex:=uzegeometry.VertexMulOnSc(dvertex,SysVarDISPCrosshairSize*{gdb.GetCurrentDWG.OGLwindow1.}getviewcontrol.ClientWidth/{gdb.GetCurrentDWG.OGLwindow1.}getviewcontrol.ClientHeight);
   tv1:=VertexSub(mvertex,dvertex);
@@ -331,8 +331,8 @@ begin
                       vertexadd(VertexAdd(param.md.mouse3dcoord,zWCS{VertexMulOnSc(xWCS,oneVertexlength(wa.param.md.mouse3dcoord))}),PDWG.Getpcamera^.CamCSOffset));
   //if assigned(sysvar.DISP.DISP_ColorAxis)then
   if sysvarDISPColorAxis then dc.drawer.SetColor(0, 0, 255,255);
-  tv1:=PointOf3PlaneIntersect(PDWG.Getpcamera.frustumLCS[0],plz,Tempplane);
-  tv2:=PointOf3PlaneIntersect(PDWG.Getpcamera.frustumLCS[1],plz,Tempplane);
+  tv1:=PointOf3PlaneIntersect(PDWG.Getpcamera.frustumLCS.v[0],plz,Tempplane);
+  tv2:=PointOf3PlaneIntersect(PDWG.Getpcamera.frustumLCS.v[1],plz,Tempplane);
   dvertex:=uzegeometry.VertexSub(tv2,tv1);
   dvertex:=uzegeometry.VertexMulOnSc(dvertex,SysVarDISPCrosshairSize);
   tv1:=VertexSub(mvertex,dvertex);
@@ -1882,8 +1882,8 @@ begin
      if param.projtype = ProjParallel then
      begin
           d:=pdwg.getpcamera^.prop.look;
-          b1:=PointOfRayPlaneIntersect(param.ospoint.worldcoord,d,pdwg.getpcamera^.frustum[4],tv1);
-          b2:=PointOfRayPlaneIntersect(param.ospoint.worldcoord,d,pdwg.getpcamera^.frustum[5],tv2);
+          b1:=PointOfRayPlaneIntersect(param.ospoint.worldcoord,d,pdwg.getpcamera^.frustum.v[4],tv1);
+          b2:=PointOfRayPlaneIntersect(param.ospoint.worldcoord,d,pdwg.getpcamera^.frustum.v[5],tv2);
           if (b1 and b2) then
                              begin
                                   param.md.mouseray.lbegin:=tv1;
@@ -1895,8 +1895,8 @@ begin
      begin
          d:=VertexSub(param.ospoint.worldcoord,pdwg.getpcamera^.prop.point);
          //d:=gdb.GetCurrentDWG.pcamera^.prop.look;
-         b1:=PointOfRayPlaneIntersect(param.ospoint.worldcoord,d,pdwg.getpcamera^.frustum[4],tv1);
-         b2:=PointOfRayPlaneIntersect(param.ospoint.worldcoord,d,pdwg.getpcamera^.frustum[5],tv2);
+         b1:=PointOfRayPlaneIntersect(param.ospoint.worldcoord,d,pdwg.getpcamera^.frustum.v[4],tv1);
+         b2:=PointOfRayPlaneIntersect(param.ospoint.worldcoord,d,pdwg.getpcamera^.frustum.v[5],tv2);
          if (b1 and b2) then
                             begin
                                  param.md.mouseray.lbegin:=tv1;
@@ -3340,10 +3340,10 @@ begin
      param.CSIcon.csz.x := round(cav.x);
      param.CSIcon.csz.y := round(cav.y);
 
-     param.md.WPPointLU:=PointOf3PlaneIntersect(pdwg.getpcamera.frustum[0],pdwg.getpcamera.frustum[3],param.md.workplane);
-     param.md.WPPointUR:=PointOf3PlaneIntersect(pdwg.getpcamera.frustum[3],pdwg.getpcamera.frustum[1],param.md.workplane);
-     param.md.WPPointRB:=PointOf3PlaneIntersect(pdwg.getpcamera.frustum[1],pdwg.getpcamera.frustum[2],param.md.workplane);
-     param.md.WPPointBL:=PointOf3PlaneIntersect(pdwg.getpcamera.frustum[2],pdwg.getpcamera.frustum[0],param.md.workplane);
+     param.md.WPPointLU:=PointOf3PlaneIntersect(pdwg.getpcamera.frustum.v[0],pdwg.getpcamera.frustum.v[3],param.md.workplane);
+     param.md.WPPointUR:=PointOf3PlaneIntersect(pdwg.getpcamera.frustum.v[3],pdwg.getpcamera.frustum.v[1],param.md.workplane);
+     param.md.WPPointRB:=PointOf3PlaneIntersect(pdwg.getpcamera.frustum.v[1],pdwg.getpcamera.frustum.v[2],param.md.workplane);
+     param.md.WPPointBL:=PointOf3PlaneIntersect(pdwg.getpcamera.frustum.v[2],pdwg.getpcamera.frustum.v[0],param.md.workplane);
      l:=Vertexlength(param.md.WPPointLU,param.md.WPPointBL);
      r:=Vertexlength(param.md.WPPointUR,param.md.WPPointRB);
      u:=Vertexlength(param.md.WPPointLU,param.md.WPPointUR);

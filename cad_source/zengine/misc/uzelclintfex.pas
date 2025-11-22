@@ -80,17 +80,17 @@ function SetWorldTransform_(hdc:HDC; const tm:DMatrix4d):WINBOOL;
 {$ENDIF}
 begin
   {$IFDEF WINDOWS}
-  _m.eM11:=tm.mtr[0].v[0];
-  _m.eM12:=tm.mtr[0].v[1];
-  _m.eM21:=tm.mtr[1].v[0];
-  _m.eM22:=tm.mtr[1].v[1];
-  _m.eDx:=tm.mtr[3].v[0];
-  _m.eDy:=tm.mtr[3].v[1];
+  _m.eM11:=tm.mtr.v[0].v[0];
+  _m.eM12:=tm.mtr.v[0].v[1];
+  _m.eM21:=tm.mtr.v[1].v[0];
+  _m.eM22:=tm.mtr.v[1].v[1];
+  _m.eDx:=tm.mtr.v[3].v[0];
+  _m.eDy:=tm.mtr.v[3].v[1];
   result:=SetWorldTransform(hdc,_m);
   {$ENDIF}
   {$if DEFINED(LCLQt) OR DEFINED(LCLQt5)}
     //QtDC.pa;
-    matr:=QMatrix_create(tm.mtr[0].v[0],tm.mtr[0].v[1],tm.mtr[1].v[0],tm.mtr[1].v[1],tm.mtr[3].v[0],tm.mtr[3].v[1]);
+    matr:=QMatrix_create(tm.mtr.v[0].v[0],tm.mtr.v[0].v[1],tm.mtr.v[1].v[0],tm.mtr.v[1].v[1],tm.mtr.v[3].v[0],tm.mtr.v[3].v[1]);
     QPainter_setWorldMatrix(TQtDeviceContext(hdc).Widget,matr,false);
     //setWorldTransform
   {$ENDIF}

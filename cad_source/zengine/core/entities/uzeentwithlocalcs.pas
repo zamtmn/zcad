@@ -70,8 +70,8 @@ var
 begin
   if dc.maxdetail then
     exit(True);
-  templod:=sqrt(objmatrix.mtr[0].v[0]*objmatrix.mtr[0].v[0]+
-    objmatrix.mtr[1].v[1]*objmatrix.mtr[1].v[1]+objmatrix.mtr[2].v[2]*objmatrix.mtr[2].v[2]);
+  templod:=sqrt(objmatrix.mtr.v[0].v[0]*objmatrix.mtr.v[0].v[0]+
+    objmatrix.mtr.v[1].v[1]*objmatrix.mtr.v[1].v[1]+objmatrix.mtr.v[2].v[2]*objmatrix.mtr.v[2].v[2]);
   templod:=(templod*ParamSize)/(dc.DrawingContext.zoom);
   if templod>TargetSize then
     exit(True)
@@ -86,9 +86,9 @@ end;
 
 procedure GDBObjWithLocalCS.ReCalcFromObjMatrix;
 begin
-  Local.basis.ox:=PzePoint3d(@objmatrix.mtr[0])^;
-  Local.basis.oy:=PzePoint3d(@objmatrix.mtr[1])^;
-  Local.basis.oz:=PzePoint3d(@objmatrix.mtr[2])^;
+  Local.basis.ox:=PzePoint3d(@objmatrix.mtr.v[0])^;
+  Local.basis.oy:=PzePoint3d(@objmatrix.mtr.v[1])^;
+  Local.basis.oz:=PzePoint3d(@objmatrix.mtr.v[2])^;
 
   Local.basis.ox:=normalizevertex(Local.basis.ox);
   Local.basis.oy:=normalizevertex(Local.basis.oy);
@@ -143,9 +143,9 @@ begin
   inherited init(own,layeraddres,LW);
   powner:=bp.ListPos.owner;
   if powner<>nil then begin
-    Local.basis.ox:=PzePoint3d(@powner^.GetMatrix^.mtr[0])^;
-    Local.basis.oy:=PzePoint3d(@powner^.GetMatrix^.mtr[1])^;
-    Local.basis.oz:=PzePoint3d(@powner^.GetMatrix^.mtr[2])^;
+    Local.basis.ox:=PzePoint3d(@powner^.GetMatrix^.mtr.v[0])^;
+    Local.basis.oy:=PzePoint3d(@powner^.GetMatrix^.mtr.v[1])^;
+    Local.basis.oz:=PzePoint3d(@powner^.GetMatrix^.mtr.v[2])^;
   end else begin
     Local.basis.ox:=XWCS;
     Local.basis.oy:=YWCS;

@@ -91,7 +91,7 @@ var
   tm:DMatrix4d;
 begin
   tm:=t_matrix;
-  tm.mtr[3]:=NulVector4D2;
+  tm.mtr.v[3]:=NulVector4D2;
   vectorD:=VectorTransform3D(vectorD,tm);
   vectorN:=VectorTransform3D(vectorN,tm);
   vectorD:=normalizevertex(vectorD);
@@ -104,7 +104,7 @@ var
   tm:DMatrix4d;
 begin
   tm:=t_matrix^;
-  tm.mtr[3]:=NulVector4D2;
+  tm.mtr.v[3]:=NulVector4D2;
   vectorD:=VectorTransform3D(PGDBObjRotatedDimension(p)^.vectorD,tm);
   vectorN:=VectorTransform3D(PGDBObjRotatedDimension(p)^.vectorN,tm);
   vectorD:=normalizevertex(vectorD);

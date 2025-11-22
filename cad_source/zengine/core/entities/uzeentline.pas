@@ -54,7 +54,7 @@ type
     procedure rtsave(refp:Pointer);virtual;
     procedure TransformAt(p:PGDBObjEntity;t_matrix:PDMatrix4d);virtual;
     function onmouse(var popa:TZctnrVectorPGDBaseEntity;
-      const MF:ClipArray;InSubEntry:boolean):boolean;virtual;
+      const MF:TzeFrustum;InSubEntry:boolean):boolean;virtual;
     function onpoint(var objects:TZctnrVectorPGDBaseEntity;
       const point:TzePoint3d):boolean;virtual;
     function getsnap(var osp:os_record;var pdata:Pointer;
@@ -77,11 +77,11 @@ type
     function GetObjTypeName:string;virtual;
     function GetCenterPoint:TzePoint3d;virtual;
     procedure getoutbound(var DC:TDrawContext);virtual;
-    function CalcInFrustum(const frustum:ClipArray;
+    function CalcInFrustum(const frustum:TzeFrustum;
       const Actuality:TVisActuality;var Counters:TCameraCounters;ProjectProc:GDBProjectProc;
       const zoom,currentdegradationfactor:double):boolean;virtual;
     function CalcTrueInFrustum(
-      const frustum:ClipArray):TInBoundingVolume;virtual;
+      const frustum:TzeFrustum):TInBoundingVolume;virtual;
 
     function IsIntersect_Line(lbegin,lend:TzePoint3d):Intercept3DProp;
       virtual;
@@ -321,11 +321,11 @@ begin
   exit;
   Result:=True;
   for i:=0 to 5 do begin
-    if (frustum[i].v[0]*CoordInWCS.lbegin.x+frustum[i].v[1]*
-      CoordInWCS.lbegin.y+frustum[i].v[2]*CoordInWCS.lbegin.z+
-      frustum[i].v[3]<0)  and(frustum[i].v[0]*CoordInWCS.lend.x+
-      frustum[i].v[1]*CoordInWCS.lend.y+frustum[i].v[2]*
-      CoordInWCS.lend.z+frustum[i].v[3]<0) then begin
+    if (frustum.v[i].v[0]*CoordInWCS.lbegin.x+frustum.v[i].v[1]*
+      CoordInWCS.lbegin.y+frustum.v[i].v[2]*CoordInWCS.lbegin.z+
+      frustum.v[i].v[3]<0)  and(frustum.v[i].v[0]*CoordInWCS.lend.x+
+      frustum.v[i].v[1]*CoordInWCS.lend.y+frustum.v[i].v[2]*
+      CoordInWCS.lend.z+frustum.v[i].v[3]<0) then begin
       Result:=False;
       system.break;
     end;

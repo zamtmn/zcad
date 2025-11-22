@@ -55,7 +55,7 @@ GDBSelectedObjArray= object(GZVector{-}<selectedobjdesc>{//})
 
                           procedure drawobj(var DC:TDrawContext);virtual;
                           procedure freeelement(PItem:PT);virtual;
-                          procedure calcvisible(const frustum:cliparray;const Actuality:TVisActuality;var Counters:TCameraCounters; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double);virtual;
+                          procedure calcvisible(const frustum:TzeFrustum;const Actuality:TVisActuality;var Counters:TCameraCounters; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double);virtual;
                           //procedure resprojparam(pcount:TActuality;var camera:GDBObjCamera; ProjectProc:GDBProjectProc;var DC:TDrawContext);
                     end;
 {EXPORT-}
@@ -296,8 +296,8 @@ begin
   pobj^.Transform(minusd);
 
   m:=PGDBObjWithMatrix(pobj)^.ObjMatrix;
-  P_insert_in_OCS:=PzePoint3d(@m.mtr[3])^;
-  PzePoint3d(@m.mtr[3])^:=nulvertex;
+  P_insert_in_OCS:=PzePoint3d(@m.mtr.v[3])^;
+  PzePoint3d(@m.mtr.v[3])^:=nulvertex;
   matrixinvert(m);
   P_insert_in_WCS:=VectorTransform3D(P_insert_in_OCS,m);
   //m:=onematrix;

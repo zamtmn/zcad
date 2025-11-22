@@ -441,7 +441,7 @@ begin
     //PzePoint3d(@rotmatr.mtr[2])^:=tp3*l;
     rotmatr:=CreateMatrixFromBasis(onel,tp2*l,tp3*l);
     m:=onematrix;
-    PzePoint3d(@m.mtr[3])^:=l1;
+    PzePoint3d(@m.mtr.v[3])^:=l1;
     m:=MatrixMultiply(rotmatr,m);
 
     p1:=VectorTransform3D(uzegeometry.CreateVertex(-1,0,0),m);

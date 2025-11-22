@@ -28,8 +28,8 @@ type
 PGDBPoint3dArray=^GDBPoint3dArray;
 GDBPoint3dArray= object(GZVector{-}<TzePoint3d>{//})
                 function onpoint(const p:TzePoint3d;closed:Boolean):Boolean;
-                function onmouse(const mf:ClipArray;const closed:Boolean):Boolean;virtual;
-                function CalcTrueInFrustum(const frustum:ClipArray; const closed:boolean):TInBoundingVolume;virtual;
+                function onmouse(const mf:TzeFrustum;const closed:Boolean):Boolean;virtual;
+                function CalcTrueInFrustum(const frustum:TzeFrustum; const closed:boolean):TInBoundingVolume;virtual;
                 {procedure DrawGeometry;virtual;
                 procedure DrawGeometry2;virtual;
                 procedure DrawGeometryWClosed(closed:Boolean);virtual;}

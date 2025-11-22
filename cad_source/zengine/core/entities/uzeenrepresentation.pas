@@ -37,7 +37,7 @@ type
     constructor init();
     destructor done;virtual;
 
-    function CalcTrueInFrustum(const frustum:ClipArray;
+    function CalcTrueInFrustum(const frustum:TzeFrustum;
       FullCheck:boolean):TInBoundingVolume;
     procedure DrawGeometry(var rc:TDrawContext;
       const aabb:TBoundingBox;const inFrustumState:TInBoundingVolume);virtual;
@@ -118,7 +118,7 @@ begin
   Graphix.DrawGeometry(rc,inFrustumState,simplydraw);
 end;
 
-function TZEntityRepresentation.CalcTrueInFrustum(const frustum:ClipArray;
+function TZEntityRepresentation.CalcTrueInFrustum(const frustum:TzeFrustum;
   FullCheck:boolean):TInBoundingVolume;
 begin
   Result:=Graphix.CalcTrueInFrustum(frustum,FullCheck);

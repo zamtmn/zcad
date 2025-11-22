@@ -89,9 +89,9 @@ begin
       with drawings.GetCurrentDWG^.ConstructObjRoot do begin
 
         tempmatr:=uzegeometry.MatrixMultiply(OneMatrix,MirrMatr);
-        FrPos.x:=tempmatr.mtr[3].x;
-        FrPos.y:=tempmatr.mtr[3].y;
-        FrPos.z:=tempmatr.mtr[3].z;
+        FrPos.x:=tempmatr.mtr.v[3].x;
+        FrPos.y:=tempmatr.mtr.v[3].y;
+        FrPos.z:=tempmatr.mtr.v[3].z;
 
         ObjMatrix:=uzegeometry.CreateTranslationMatrix(-drawings.GetCurrentDWG^.GetPcamera^.CamCSOffset);
         ObjMatrix:=uzegeometry.MatrixMultiply(ObjMatrix,MirrMatr);

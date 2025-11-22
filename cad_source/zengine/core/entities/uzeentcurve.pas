@@ -45,7 +45,7 @@ type
     function Clone(own:Pointer):PGDBObjEntity;virtual;
     procedure rtsave(refp:Pointer);virtual;
     function onmouse(var popa:TZctnrVectorPGDBaseEntity;
-      const MF:ClipArray;InSubEntry:boolean):boolean;virtual;
+      const MF:TzeFrustum;InSubEntry:boolean):boolean;virtual;
     function onpoint(var objects:TZctnrVectorPGDBaseEntity;
       const point:TzePoint3d):boolean;virtual;
     procedure rtmodifyonepoint(const rtmod:TRTModifyData);virtual;
@@ -69,7 +69,7 @@ type
     procedure transform(const t_matrix:DMatrix4d);virtual;
 
     function CalcTrueInFrustum(
-      const frustum:ClipArray):TInBoundingVolume;virtual;
+      const frustum:TzeFrustum):TInBoundingVolume;virtual;
     procedure AddOnTrackAxis(var posr:os_record;
       const processaxis:taddotrac);virtual;
     procedure InsertVertex(const PolyData:TPolyData);

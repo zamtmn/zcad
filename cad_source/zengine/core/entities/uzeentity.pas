@@ -129,15 +129,15 @@ type
     function GetLTCorrectL(GlobalLTScale:double):double;virtual;
     procedure calcbb(var DC:TDrawContext);virtual;
     procedure DrawBB(var DC:TDrawContext);
-    function calcvisible(const frustum:ClipArray;
+    function calcvisible(const frustum:TzeFrustum;
       const Actuality:TVisActuality;var Counters:TCameraCounters;ProjectProc:GDBProjectProc;
       const zoom,currentdegradationfactor:double):boolean;virtual;
     function onmouse(var popa:TZctnrVectorPGDBaseEntity;
-      const MF:ClipArray;InSubEntry:boolean):boolean;virtual;
+      const MF:TzeFrustum;InSubEntry:boolean):boolean;virtual;
     function onpoint(var objects:TZctnrVectorPGDBaseEntity;
       const point:TzePoint3d):boolean;virtual;
     function isonmouse(var popa:TZctnrVectorPGDBaseEntity;
-      const mousefrustum:ClipArray;InSubEntry:boolean):boolean;virtual;
+      const mousefrustum:TzeFrustum;InSubEntry:boolean):boolean;virtual;
     procedure startsnap(out osp:os_record;out pdata:Pointer);virtual;
     function getsnap(var osp:os_record;var pdata:Pointer;
       const param:OGLWndtype;ProjectProc:GDBProjectProc;SnapMode:TGDBOSMode):boolean;virtual;
@@ -185,18 +185,18 @@ type
     function GetCenterPoint:TzePoint3d;virtual;
     procedure SetInFrustum(infrustumactualy:TActuality;
       var Counters:TCameraCounters);virtual;
-    procedure SetInFrustumFromTree(const frustum:ClipArray;
+    procedure SetInFrustumFromTree(const frustum:TzeFrustum;
       const Actuality:TVisActuality;var Counters:TCameraCounters;ProjectProc:GDBProjectProc;
       const zoom,currentdegradationfactor:double);virtual;
     function CalcActualVisible(
       const Actuality:TVisActuality):boolean;virtual;
     procedure SetNotInFrustum(infrustumactualy:TActuality;
       var Counters:TCameraCounters);virtual;
-    function CalcInFrustum(const frustum:ClipArray;
+    function CalcInFrustum(const frustum:TzeFrustum;
       const Actuality:TVisActuality;var Counters:TCameraCounters;ProjectProc:GDBProjectProc;
       const zoom,currentdegradationfactor:double):boolean;virtual;
     function CalcTrueInFrustum(
-      const frustum:ClipArray):TInBoundingVolume;virtual;
+      const frustum:TzeFrustum):TInBoundingVolume;virtual;
     function IsIntersect_Line(lbegin,lend:TzePoint3d):Intercept3DProp;
       virtual;
     procedure BuildGeometry(var drawing:TDrawingDef);virtual;

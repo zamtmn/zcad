@@ -47,13 +47,13 @@ type
     procedure CalcObjMatrix(pdrawing:PTDrawingDef=nil);virtual;
     procedure DrawGeometry(lw:integer;var DC:TDrawContext;
       const inFrustumState:TInBoundingVolume);virtual;
-    function CalcInFrustum(const frustum:ClipArray;
+    function CalcInFrustum(const frustum:TzeFrustum;
       const Actuality:TVisActuality;var Counters:TCameraCounters;ProjectProc:GDBProjectProc;
       const zoom,currentdegradationfactor:double):boolean;virtual;
     function CalcTrueInFrustum(
-      const frustum:ClipArray):TInBoundingVolume;virtual;
+      const frustum:TzeFrustum):TInBoundingVolume;virtual;
     function onmouse(var popa:TZctnrVectorPGDBaseEntity;
-      const MF:ClipArray;InSubEntry:boolean):boolean;virtual;
+      const MF:TzeFrustum;InSubEntry:boolean):boolean;virtual;
     procedure addcontrolpoints(tdesc:Pointer);virtual;
     procedure remaponecontrolpoint(pdesc:pcontrolpointdesc;
       ProjectProc:GDBProjectProc);virtual;
@@ -83,7 +83,7 @@ var
 begin
   tv:=CreateVertex(0,textprop.size,0);
   m:=t_matrix;
-  PzePoint3d(@m.mtr[3])^:=NulVertex;
+  PzePoint3d(@m.mtr.v[3])^:=NulVertex;
 
   tv:=VectorTransform3d(tv,m);
   textprop.size:=oneVertexlength(tv);
@@ -102,14 +102,14 @@ end;
 procedure GDBObjAbstractText.ReCalcFromObjMatrix;
 begin
   inherited;
-  Local.basis.ox:=PzePoint3d(@objmatrix.mtr[0])^;
-  Local.basis.oy:=PzePoint3d(@objmatrix.mtr[1])^;
+  Local.basis.ox:=PzePoint3d(@objmatrix.mtr.v[0])^;
+  Local.basis.oy:=PzePoint3d(@objmatrix.mtr.v[1])^;
 
   Local.basis.ox:=normalizevertex(Local.basis.ox);
   Local.basis.oy:=normalizevertex(Local.basis.oy);
   Local.basis.oz:=normalizevertex(Local.basis.oz);
 
-  Local.P_insert:=PzePoint3d(@objmatrix.mtr[3])^;
+  Local.P_insert:=PzePoint3d(@objmatrix.mtr.v[3])^;
 end;
 
 function GDBObjAbstractText.CalcRotate:double;
@@ -119,7 +119,7 @@ var
 begin
 
   if bp.ListPos.owner<>nil then begin
-    V1:=PzePoint3d(@bp.ListPos.owner^.GetMatrix^.mtr[0])^;
+    V1:=PzePoint3d(@bp.ListPos.owner^.GetMatrix^.mtr.v[0])^;
     l0:=scalardot(NormalizeVertex(V1),_X_yzVertex);
     l0:=arccos(l0);
     if v1.y<-eps then
@@ -190,14 +190,14 @@ var
 begin
   Result:=True;
   for i:=0 to 4 do begin
-    if (frustum[i].v[0]*outbound[0].x+frustum[i].v[1]*outbound[0].y+
-        frustum[i].v[2]*outbound[0].z+frustum[i].v[3]<0)  and
-       (frustum[i].v[0]*outbound[1].x+frustum[i].v[1]*outbound[1].y+
-        frustum[i].v[2]*outbound[1].z+frustum[i].v[3]<0)  and
-       (frustum[i].v[0]*outbound[2].x+frustum[i].v[1]*outbound[2].y+
-        frustum[i].v[2]*outbound[2].z+frustum[i].v[3]<0)  and
-       (frustum[i].v[0]*outbound[3].x+frustum[i].v[1]*outbound[3].y+
-        frustum[i].v[2]*outbound[3].z+frustum[i].v[3]<0) then begin
+    if (frustum.v[i].v[0]*outbound[0].x+frustum.v[i].v[1]*outbound[0].y+
+        frustum.v[i].v[2]*outbound[0].z+frustum.v[i].v[3]<0)  and
+       (frustum.v[i].v[0]*outbound[1].x+frustum.v[i].v[1]*outbound[1].y+
+        frustum.v[i].v[2]*outbound[1].z+frustum.v[i].v[3]<0)  and
+       (frustum.v[i].v[0]*outbound[2].x+frustum.v[i].v[1]*outbound[2].y+
+        frustum.v[i].v[2]*outbound[2].z+frustum.v[i].v[3]<0)  and
+       (frustum.v[i].v[0]*outbound[3].x+frustum.v[i].v[1]*outbound[3].y+
+        frustum.v[i].v[2]*outbound[3].z+frustum.v[i].v[3]<0) then begin
       Result:=False;
       system.break;
     end;
@@ -219,14 +219,14 @@ var
 begin
   inherited CalcObjMatrix;
   if textprop.upsidedown then begin
-    PzePoint3d(@objmatrix.mtr[1])^.x:=-Local.basis.oy.x;
-    PzePoint3d(@objmatrix.mtr[1])^.y:=-Local.basis.oy.y;
-    PzePoint3d(@objmatrix.mtr[1])^.z:=-Local.basis.oy.z;
+    PzePoint3d(@objmatrix.mtr.v[1])^.x:=-Local.basis.oy.x;
+    PzePoint3d(@objmatrix.mtr.v[1])^.y:=-Local.basis.oy.y;
+    PzePoint3d(@objmatrix.mtr.v[1])^.z:=-Local.basis.oy.z;
   end;
   if textprop.backward then begin
-    PzePoint3d(@objmatrix.mtr[0])^.x:=-Local.basis.ox.x;
-    PzePoint3d(@objmatrix.mtr[0])^.y:=-Local.basis.ox.y;
-    PzePoint3d(@objmatrix.mtr[0])^.z:=-Local.basis.ox.z;
+    PzePoint3d(@objmatrix.mtr.v[0])^.x:=-Local.basis.ox.x;
+    PzePoint3d(@objmatrix.mtr.v[0])^.y:=-Local.basis.ox.y;
+    PzePoint3d(@objmatrix.mtr.v[0])^.z:=-Local.basis.ox.z;
   end;
   m1:=OneMatrix;
   objMatrix:=MatrixMultiply(m1,objMatrix);
@@ -234,7 +234,7 @@ begin
   angle:=(pi/2-textprop.oblique);
   if abs(angle-pi/2)>eps then begin
     m1.CreateRec(OneMtr,CMTShear);
-    m1.mtr[1].v[0]:=cotan(angle);
+    m1.mtr.v[1].v[0]:=cotan(angle);
   end else
     m1:=OneMatrix;
 

@@ -43,13 +43,13 @@ type
     function getDataMutableByPlainIndex(index:TArrayIndex):PzePoint2d;
 
     function DummyCalcTrueInFrustum(pv1:PzePoint3d;
-      const frustum:ClipArray):TInBoundingVolume;virtual;
+      const frustum:TzeFrustum):TInBoundingVolume;virtual;
   end;
 
 implementation
 
 function TBoundaryPath.DummyCalcTrueInFrustum(pv1:PzePoint3d;
-  const frustum:ClipArray):TInBoundingVolume;
+  const frustum:TzeFrustum):TInBoundingVolume;
 var
   i,j:integer;
   ppla:PGDBPolyline2DArray;

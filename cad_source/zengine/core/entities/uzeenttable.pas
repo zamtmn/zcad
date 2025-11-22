@@ -61,14 +61,14 @@ implementation
 procedure GDBObjTable.ReCalcFromObjMatrix;
 begin
   inherited;
-  Local.basis.ox:=PzePoint3d(@objmatrix.mtr[0])^;
-  Local.basis.oy:=PzePoint3d(@objmatrix.mtr[1])^;
+  Local.basis.ox:=PzePoint3d(@objmatrix.mtr.v[0])^;
+  Local.basis.oy:=PzePoint3d(@objmatrix.mtr.v[1])^;
 
   Local.basis.ox:=normalizevertex(Local.basis.ox);
   Local.basis.oy:=normalizevertex(Local.basis.oy);
   Local.basis.oz:=normalizevertex(Local.basis.oz);
 
-  Local.P_insert:=PzePoint3d(@objmatrix.mtr[3])^;
+  Local.P_insert:=PzePoint3d(@objmatrix.mtr.v[3])^;
 end;
 
 procedure GDBObjTable.SaveToDXFFollow;

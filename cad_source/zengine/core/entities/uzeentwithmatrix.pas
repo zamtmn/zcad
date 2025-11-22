@@ -40,11 +40,11 @@ type
     procedure createfield;virtual;
     procedure transform(const t_matrix:DMatrix4d);virtual;
     procedure ReCalcFromObjMatrix;virtual;abstract;
-    procedure CalcInFrustumByTree(const frustum:ClipArray;
+    procedure CalcInFrustumByTree(const frustum:TzeFrustum;
       const Actuality:TVisActuality;
       var enttree:TEntTreeNode;var Counters:TCameraCounters;ProjectProc:GDBProjectProc;
       const zoom,currentdegradationfactor:double);virtual;
-    procedure ProcessTree(const frustum:ClipArray;
+    procedure ProcessTree(const frustum:TzeFrustum;
       const Actuality:TVisActuality;var enttree:TEntTreeNode;
       OwnerInFrustum:TInBoundingVolume;OwnerFuldraw:TDrawType;
       var Counters:TCameraCounters;ProjectProc:GDBProjectProc;
@@ -60,7 +60,7 @@ begin
   fObjMatrix:=AObjMatrix;
 end;
 
-procedure GDBObjWithMatrix.ProcessTree(const frustum:ClipArray;
+procedure GDBObjWithMatrix.ProcessTree(const frustum:TzeFrustum;
   const Actuality:TVisActuality;var enttree:TEntTreeNode;
   OwnerInFrustum:TInBoundingVolume;OwnerFuldraw:TDrawType;
   var Counters:TCameraCounters;ProjectProc:GDBProjectProc;
@@ -282,7 +282,7 @@ begin
   end;
 end;
 
-procedure GDBObjWithMatrix.CalcInFrustumByTree(const frustum:ClipArray;
+procedure GDBObjWithMatrix.CalcInFrustumByTree(const frustum:TzeFrustum;
   const Actuality:TVisActuality;
   var enttree:TEntTreeNode;var Counters:TCameraCounters;ProjectProc:GDBProjectProc;
   const zoom,currentdegradationfactor:double);

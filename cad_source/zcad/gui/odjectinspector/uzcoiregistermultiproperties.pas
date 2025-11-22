@@ -126,7 +126,7 @@ var
 begin
 
      if PGDBObjEntity(ChangedData.PGetDataInEtity)^.bp.ListPos.owner<>nil then begin
-       V1:=PzePoint3d(@PGDBObjEntity(ChangedData.PGetDataInEtity)^.bp.ListPos.owner^.GetMatrix^.mtr[0])^;
+       V1:=PzePoint3d(@PGDBObjEntity(ChangedData.PGetDataInEtity)^.bp.ListPos.owner^.GetMatrix^.mtr.v[0])^;
        l0:=scalardot(NormalizeVertex(V1),_X_yzVertex);
        l0:=arccos(l0);
        if v1.y<-eps then l0:=2*pi-l0;

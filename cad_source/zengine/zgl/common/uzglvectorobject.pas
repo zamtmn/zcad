@@ -51,8 +51,8 @@ ZGLVectorObject= object(GDBaseObject)
                                  destructor done;virtual;
                                  procedure Clear;virtual;
                                  procedure Shrink;virtual;
-                                 function CalcTrueInFrustum(const frustum:ClipArray; FullCheck:boolean):TInBoundingVolume;virtual;
-                                 function CalcCountedTrueInFrustum(const frustum:ClipArray; FullCheck:boolean;StartOffset,Count:Integer):TInBoundingVolume;virtual;
+                                 function CalcTrueInFrustum(const frustum:TzeFrustum; FullCheck:boolean):TInBoundingVolume;virtual;
+                                 function CalcCountedTrueInFrustum(const frustum:TzeFrustum; FullCheck:boolean;StartOffset,Count:Integer):TInBoundingVolume;virtual;
                                  function GetCopyParam(LLPStartIndex,LLPCount:Integer):TZGLVectorDataCopyParam;virtual;
                                  function CopyTo(var dest:ZGLVectorObject;CopyParam:TZGLVectorDataCopyParam):TZGLVectorDataCopyParam;virtual;
                                  procedure CorrectIndexes(LLPrimitivesStartIndex:Integer;LLPCount:Integer;IndexesStartIndex:Integer;IndexesCount:Integer;offset:TEntIndexesOffsetData);virtual;
@@ -315,7 +315,7 @@ begin
        inc(p);
      end;
 end;
-function ZGLVectorObject.CalcCountedTrueInFrustum(const frustum:ClipArray; FullCheck:boolean;StartOffset,Count:Integer):TInBoundingVolume;
+function ZGLVectorObject.CalcCountedTrueInFrustum(const frustum:TzeFrustum; FullCheck:boolean;StartOffset,Count:Integer):TInBoundingVolume;
 var
   //subresult:TInBoundingVolume;
   PPrimitive:PTLLPrimitive;
@@ -365,7 +365,7 @@ begin
   end;
 end;
 
-function ZGLVectorObject.CalcTrueInFrustum(const frustum:ClipArray; FullCheck:boolean):TInBoundingVolume;
+function ZGLVectorObject.CalcTrueInFrustum(const frustum:TzeFrustum; FullCheck:boolean):TInBoundingVolume;
 var
   //subresult:TInBoundingVolume;
   PPrimitive:PTLLPrimitive;

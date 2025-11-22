@@ -22,7 +22,7 @@ interface
 uses
   SysUtils,uzcsysvars,uzbpaths,uzctranslations,UUnitManager,TypeDescriptors,
   varman,USinonimDescriptor,UBaseTypeDescriptor,uzedimensionaltypes,
-  uzemathutils,uzcLog,uzcreglog;
+  uzemathutils,uzcLog,uzcreglog,uzegeometrytypes,varmandef;
 type
   GDBNonDimensionDoubleDescriptor=object(DoubleDescriptor)
                             function GetFormattedValueAsString(PInstance:Pointer; const f:TzeUnitsFormat):String;virtual;
@@ -63,6 +63,8 @@ begin
   end;
 end;
 procedure _OnCreateSystemUnit(ptsu:PTUnit);
+var
+  utd:PUserTypeDescriptor;
 begin
 
   GDBNonDimensionDoubleDescriptorObj.init('GDBNonDimensionDouble',nil);
@@ -82,8 +84,46 @@ begin
 
   BaseTypesEndIndex:=ptsu^.InterfaceTypes.exttype.Count;
 
-  //if SysUnit<>nil then
-  //  SysUnit^.RegisterType({TypeInfo(TLinkType)}nil);
+  utd:=ptsu^.RegisterType(TypeInfo(TzePoint2d),'TzePoint2d');
+  if utd<>nil then
+    ptsu^.SetTypeDesk2(utd,['x','y'],[FNProgram,FNUser]);
+  ptsu^.RegisterType(TypeInfo(PzePoint2d),'PzePoint2d');
+
+  utd:=ptsu^.RegisterType(TypeInfo(TzePoint2i),'TzePoint2i');
+  if utd<>nil then
+    ptsu^.SetTypeDesk2(utd,['x','y'],[FNProgram,FNUser]);
+  ptsu^.RegisterType(TypeInfo(PzePoint2i),'PzePoint2i');
+
+  utd:=ptsu^.RegisterType(TypeInfo(TzeVector3d),'TzeVector3d');
+  if utd<>nil then
+    ptsu^.SetTypeDesk2(utd,['x','y','z'],[FNProgram,FNUser]);
+  ptsu^.RegisterType(TypeInfo(PzeVector3d),'PzeVector3d');
+
+  utd:=ptsu^.RegisterType(TypeInfo(TzePoint3d),'TzePoint3d');
+  ptsu^.SetTypeDesk2(utd,['x','y','z'],[FNProgram,FNUser]);
+  ptsu^.RegisterType(TypeInfo(PzePoint3d),'PzePoint3d');
+
+
+  utd:=ptsu^.RegisterType(TypeInfo(TzeVector4d),'TzeVector4d');
+  if utd<>nil then
+    ptsu^.SetTypeDesk2(utd,['x','y','z','w'],[FNProgram,FNUser]);
+  ptsu^.RegisterType(TypeInfo(PzePoint3d),'PzeVector4d');
+
+
+  utd:=ptsu^.RegisterType(TypeInfo(TzeVector4s),'TzeVector4s');
+  if utd<>nil then
+    ptsu^.SetTypeDesk2(utd,['x','y','z','w'],[FNProgram,FNUser]);
+  ptsu^.RegisterType(TypeInfo(PzePoint3d),'PzeVector4s');
+
+  utd:=ptsu^.RegisterType(TypeInfo(TzeVector4i),'TzeVector4i');
+  if utd<>nil then
+    ptsu^.SetTypeDesk2(utd,['x','y','z','w'],[FNProgram,FNUser]);
+  ptsu^.RegisterType(TypeInfo(PzePoint3d),'PzeVector4i');
+
+  utd:=ptsu^.RegisterType(TypeInfo(TzeFrustum),'TzeFrustum');
+  if utd<>nil then
+    ptsu^.SetTypeDesk2(utd,['Right','Left','Down','Up','Near','Far'],[FNProgram,FNUser]);
+
 end;
 initialization
   OnCreateSystemUnit:=_OnCreateSystemUnit;

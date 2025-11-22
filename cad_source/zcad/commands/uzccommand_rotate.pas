@@ -99,9 +99,9 @@ begin
 
     tempmatr:=uzegeometry.CreateTranslationMatrix(-t3dp);
     tempmatr:=uzegeometry.MatrixMultiply(tempmatr,rotmatr);
-    FrPos.x:=t3dp.x+tempmatr.mtr[3].x;
-    FrPos.y:=t3dp.y+tempmatr.mtr[3].y;
-    FrPos.z:=t3dp.z+tempmatr.mtr[3].z;
+    FrPos.x:=t3dp.x+tempmatr.mtr.v[3].x;
+    FrPos.y:=t3dp.y+tempmatr.mtr.v[3].y;
+    FrPos.z:=t3dp.z+tempmatr.mtr.v[3].z;
 
     dispmatr:=uzegeometry.CreateTranslationMatrix(-tr);
     tmatr:=uzegeometry.MatrixMultiply(dispmatr,rotmatr);

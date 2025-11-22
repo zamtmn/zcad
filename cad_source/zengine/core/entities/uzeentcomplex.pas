@@ -41,20 +41,20 @@ type
     destructor done;virtual;
     constructor initnul;
     constructor init(own:Pointer;layeraddres:PGDBLayerProp;LW:smallint);
-    function CalcInFrustum(const frustum:ClipArray;
+    function CalcInFrustum(const frustum:TzeFrustum;
       const Actuality:TVisActuality;var Counters:TCameraCounters;ProjectProc:GDBProjectProc;
       const zoom,currentdegradationfactor:double):boolean;virtual;
     function CalcTrueInFrustum(
-      const frustum:ClipArray):TInBoundingVolume;virtual;
+      const frustum:TzeFrustum):TInBoundingVolume;virtual;
     function onmouse(var popa:TZctnrVectorPGDBaseEntity;
-      const MF:ClipArray;InSubEntry:boolean):boolean;virtual;
+      const MF:TzeFrustum;InSubEntry:boolean):boolean;virtual;
     procedure addcontrolpoints(tdesc:Pointer);virtual;
     procedure remaponecontrolpoint(pdesc:pcontrolpointdesc;
       ProjectProc:GDBProjectProc);virtual;
     procedure rtmodifyonepoint(const rtmod:TRTModifyData);virtual;
     procedure FormatEntity(var drawing:TDrawingDef;
       var DC:TDrawContext;Stage:TEFStages=EFAllStages);virtual;
-    procedure SetInFrustumFromTree(const frustum:ClipArray;
+    procedure SetInFrustumFromTree(const frustum:TzeFrustum;
       const Actuality:TVisActuality;var Counters:TCameraCounters;ProjectProc:GDBProjectProc;
       const zoom,currentdegradationfactor:double);virtual;
     function onpoint(var objects:TZctnrVectorPGDBaseEntity;
@@ -213,7 +213,7 @@ begin
   inherited done;
 end;
 
-function GDBObjComplex.CalcInFrustum(const frustum:ClipArray;
+function GDBObjComplex.CalcInFrustum(const frustum:TzeFrustum;
   const Actuality:TVisActuality;var Counters:TCameraCounters;ProjectProc:GDBProjectProc;
   const zoom,currentdegradationfactor:double):boolean;
 begin

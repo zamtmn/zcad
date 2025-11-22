@@ -24,23 +24,23 @@ uses uzbLogIntf,uzegeometrytypes,math;
 resourcestring
   rsDivByZero='Divide by zero';
 const
-  EmptyMtr:TMatrix4D=((v:(0,0,0,0)),
+  EmptyMtr:TMatrix4D=(v:((v:(0,0,0,0)),
                       (v:(0,0,0,0)),
                       (v:(0,0,0,0)),
-                      (v:(0,0,0,0)));
-  OneMtr:TMatrix4D=((v:(1,0,0,0)),
+                      (v:(0,0,0,0))));
+  OneMtr:TMatrix4D=(v:((v:(1,0,0,0)),
                     (v:(0,1,0,0)),
                     (v:(0,0,1,0)),
-                    (v:(0,0,0,1)));
-  EmptyMatrix:DMatrix4D=(mtr:((v:(0,0,0,0)),
+                    (v:(0,0,0,1))));
+  EmptyMatrix:DMatrix4D=(mtr:(v:((v:(0,0,0,0)),
                               (v:(0,0,0,0)),
                               (v:(0,0,0,0)),
-                              (v:(0,0,0,0)));
+                              (v:(0,0,0,0))));
                          t:[]);
-  OneMatrix:DMatrix4D=(mtr:((v:(1,0,0,0)),
+  OneMatrix:DMatrix4D=(mtr:(v:((v:(1,0,0,0)),
                             (v:(0,1,0,0)),
                             (v:(0,0,1,0)),
-                            (v:(0,0,0,1)));
+                            (v:(0,0,0,1))));
                        t:CMTIdentity);
   RightAngle=pi/2;
   DefaultVP:TzeVector4i=(x:2;y:0;z:100;w:100);
@@ -158,8 +158,8 @@ function VectorTransform3D(const V:TzePoint3d;const M:DMatrix4f):TzePoint3d;over
 function VectorTransform3D(const V:TzePoint3s;const M:DMatrix4D):TzePoint3s;overload;inline;
 function VectorTransform3D(const V:TzePoint3s;const M:DMatrix4f):TzePoint3s;overload;inline;
 
-function FrustumTransform(const frustum:ClipArray;const M:DMatrix4D; MatrixAlreadyTransposed:Boolean=false):ClipArray;overload;inline;
-function FrustumTransform(const frustum:ClipArray;const M:DMatrix4f; MatrixAlreadyTransposed:Boolean=false):ClipArray;overload;inline;
+function FrustumTransform(const frustum:TzeFrustum;const M:DMatrix4D; MatrixAlreadyTransposed:Boolean=false):TzeFrustum;overload;inline;
+function FrustumTransform(const frustum:TzeFrustum;const M:DMatrix4f; MatrixAlreadyTransposed:Boolean=false):TzeFrustum;overload;inline;
 
 procedure MatrixTranspose(var M: DMatrix4D);overload;inline;
 procedure MatrixTranspose(var M: DMatrix4f);overload;inline;
@@ -233,18 +233,18 @@ function ortho(const xmin,xmax,ymin,ymax,zmin,zmax:Double;const matrix:PDMatrix4
 function Perspective(const fovy,W_H,zmin,zmax:Double;const matrix:PDMatrix4D):DMatrix4D;inline;
 function LookAt(point,ex,ey,ez:TzePoint3d;const matrix:PDMatrix4D):DMatrix4D;inline;
 
-function calcfrustum(const clip:PDMatrix4D):cliparray;inline;
+function calcfrustum(const clip:PDMatrix4D):TzeFrustum;inline;
 function PointOf3PlaneIntersect(const P1,P2,P3:TzeVector4d):TzePoint3d;inline;
 function PointOfRayPlaneIntersect(const p1,d:TzePoint3d;const plane:TzeVector4d;out point :TzePoint3d):Boolean;overload;inline;
 function PointOfRayPlaneIntersect(const p1,d:TzePoint3d;const plane:TzeVector4d;out t :double):Boolean;overload;inline;
 function PlaneFrom3Pont(const P1,P2,P3:TzePoint3d):TzeVector4d;inline;
 procedure NormalizePlane(var plane:TzeVector4d);inline;
 
-function CalcTrueInFrustum (const lbegin,lend:TzePoint3d; const frustum:ClipArray):TInBoundingVolume;overload;inline;
-function CalcTrueInFrustum (const lbegin,lend:TzePoint3s; const frustum:ClipArray):TInBoundingVolume;overload;
-function CalcPointTrueInFrustum (const lbegin:TzePoint3d; const frustum:ClipArray):TInBoundingVolume; inline;
-function CalcOutBound4VInFrustum (const OutBound:OutBound4V; const frustum:ClipArray):TInBoundingVolume;inline;
-function CalcAABBInFrustum (const AABB:TBoundingBox; const frustum:ClipArray):TInBoundingVolume;inline;
+function CalcTrueInFrustum (const lbegin,lend:TzePoint3d; const frustum:TzeFrustum):TInBoundingVolume;overload;inline;
+function CalcTrueInFrustum (const lbegin,lend:TzePoint3s; const frustum:TzeFrustum):TInBoundingVolume;overload;
+function CalcPointTrueInFrustum (const lbegin:TzePoint3d; const frustum:TzeFrustum):TInBoundingVolume; inline;
+function CalcOutBound4VInFrustum (const OutBound:OutBound4V; const frustum:TzeFrustum):TInBoundingVolume;inline;
+function CalcAABBInFrustum (const AABB:TBoundingBox; const frustum:TzeFrustum):TInBoundingVolume;inline;
 
 function GetXfFromZ(const oz:TzePoint3d):TzePoint3d;inline;
 
@@ -263,7 +263,7 @@ function CorrectAngleIfNotReadable(Angle:Double):Double; inline;
 
 function GetCSDirFrom0x0y2D(const ox,oy:TzePoint3d):TCSDir;
 
-function CalcDisplaySubFrustum(const x,y,w,h:Double;const mm,pm:DMatrix4D;const vp:TzeVector4i):ClipArray;
+function CalcDisplaySubFrustum(const x,y,w,h:Double;const mm,pm:DMatrix4D;const vp:TzeVector4i):TzeFrustum;
 function myPickMatrix(const x,y,deltax,deltay:Double;const vp:TzeVector4i): DMatrix4D;
 
 function GetPointInOCSByBasis(const ScaledBX,ScaledBY,ScaledBZ:TzePoint3d; const PointInWCS:TzePoint3d; out scale:TzePoint3d):GDBObj2dprop;
@@ -342,10 +342,10 @@ function GetPInsertInOCSBymatrix(constref matrix:DMatrix4D;out scale:TzePoint3d)
 var
   BX,BY,BZ,T:TzePoint3d;
 begin
-  BX:=PzePoint3d(@matrix.mtr[0])^;
-  BY:=PzePoint3d(@matrix.mtr[1])^;
-  BZ:=PzePoint3d(@matrix.mtr[2])^;
-  T:=PzePoint3d(@matrix.mtr[3])^;
+  BX:=PzePoint3d(@matrix.mtr.v[0])^;
+  BY:=PzePoint3d(@matrix.mtr.v[1])^;
+  BZ:=PzePoint3d(@matrix.mtr.v[2])^;
+  T:=PzePoint3d(@matrix.mtr.v[3])^;
   result:=GetPointInOCSByBasis(BX,BY,BZ,T,scale);
 end;
 
@@ -396,10 +396,10 @@ begin
 end;
 function ToDMatrix4f(const m:DMatrix4D):DMatrix4f;
 begin
-  result.mtr[0]:=ToTzeVector4s(m.mtr[0]);
-  result.mtr[1]:=ToTzeVector4s(m.mtr[1]);
-  result.mtr[2]:=ToTzeVector4s(m.mtr[2]);
-  result.mtr[3]:=ToTzeVector4s(m.mtr[3]);
+  result.mtr.v[0]:=ToTzeVector4s(m.mtr.v[0]);
+  result.mtr.v[1]:=ToTzeVector4s(m.mtr.v[1]);
+  result.mtr.v[2]:=ToTzeVector4s(m.mtr.v[2]);
+  result.mtr.v[3]:=ToTzeVector4s(m.mtr.v[3]);
   result.t:=m.t;
 end;
 
@@ -509,14 +509,14 @@ begin
        result:=ca[position];
        inc(position);
 end;
-function CalcOutBound4VInFrustum (const OutBound:OutBound4V; const frustum:ClipArray):TInBoundingVolume;
+function CalcOutBound4VInFrustum (const OutBound:OutBound4V; const frustum:TzeFrustum):TInBoundingVolume;
 var i,count:Integer;
     d1,d2,d3,d4:Double;
 begin
       count:=0;
       for i:=0 to 5 do
       begin
-        with frustum[i] do
+        with frustum.v[i] do
         begin
           d1:=v[0] * outbound[0].x + v[1] * outbound[0].y + v[2] * outbound[0].z + v[3];
           d2:=v[0] * outbound[1].x + v[1] * outbound[1].y + v[2] * outbound[1].z + v[3];
@@ -542,7 +542,7 @@ begin
 
       result:=IRPartially;
 end;
-function CalcPointTrueInFrustum (const lbegin:TzePoint3d; const frustum:ClipArray):TInBoundingVolume;
+function CalcPointTrueInFrustum (const lbegin:TzePoint3d; const frustum:TzeFrustum):TInBoundingVolume;
 var i{,j}:Integer;
     //d1{,d2}:Double;
     //bytebegin,byteend,bit:integer;
@@ -552,7 +552,7 @@ var i{,j}:Integer;
 begin
       for i:=0 to 5 do
       begin
-        with frustum[i] do if (v[0] * lbegin.x + v[1] * lbegin.y + v[2] * lbegin.z + v[3]) < 0 then exit(IREmpty);
+        with frustum.v[i] do if (v[0] * lbegin.x + v[1] * lbegin.y + v[2] * lbegin.z + v[3]) < 0 then exit(IREmpty);
       end;
       result:=IRFully;
 end;
@@ -585,16 +585,16 @@ begin
 end;
 
 
-function calcfrustum(const clip:PDMatrix4D):cliparray;
+function calcfrustum(const clip:PDMatrix4D):TzeFrustum;
 var t:Double;
 begin
    //* Находим A, B, C, D для ПРАВОЙ плоскости */
-   with TzeVector4d((@result[0])^) do
+   with TzeVector4d((@result.v[0])^) do
    begin
-     v[0] := clip.mtr[0].v[3] - clip.mtr[0].v[0];
-     v[1] := clip.mtr[1].v[3] - clip.mtr[1].v[0];
-     v[2] := clip.mtr[2].v[3] - clip.mtr[2].v[0];
-     v[3] := clip.mtr[3].v[3] - clip.mtr[3].v[0];
+     v[0] := clip.mtr.v[0].v[3] - clip.mtr.v[0].v[0];
+     v[1] := clip.mtr.v[1].v[3] - clip.mtr.v[1].v[0];
+     v[2] := clip.mtr.v[2].v[3] - clip.mtr.v[2].v[0];
+     v[3] := clip.mtr.v[3].v[3] - clip.mtr.v[3].v[0];
 
      t := sqrt( v[0] * v[0] + v[1] * v[1] + v[2] * v[2] );
      v[0] := v[0]/t;
@@ -604,12 +604,12 @@ begin
    end;
 
    //* Находим A, B, C, D для ЛЕВОЙ плоскости */
-   with TzeVector4d((@result[1])^) do
+   with TzeVector4d((@result.v[1])^) do
    begin
-     v[0] := clip.mtr[0].v[3] + clip.mtr[0].v[0];
-     v[1] := clip.mtr[1].v[3] + clip.mtr[1].v[0];
-     v[2] := clip.mtr[2].v[3] + clip.mtr[2].v[0];
-     v[3] := clip.mtr[3].v[3] + clip.mtr[3].v[0];
+     v[0] := clip.mtr.v[0].v[3] + clip.mtr.v[0].v[0];
+     v[1] := clip.mtr.v[1].v[3] + clip.mtr.v[1].v[0];
+     v[2] := clip.mtr.v[2].v[3] + clip.mtr.v[2].v[0];
+     v[3] := clip.mtr.v[3].v[3] + clip.mtr.v[3].v[0];
      t := sqrt( v[0] * v[0] + v[1] * v[1] + v[2] * v[2] );
      v[0] := v[0]/t;
      v[1] := v[1]/t;
@@ -618,12 +618,12 @@ begin
    end;
 
    //* Находим A, B, C, D для НИЖНЕЙ плоскости */
-   with TzeVector4d((@result[2])^) do
+   with TzeVector4d((@result.v[2])^) do
    begin
-     v[0] := clip.mtr[0].v[3] + clip.mtr[0].v[1];
-     v[1] := clip.mtr[1].v[3] + clip.mtr[1].v[1];
-     v[2] := clip.mtr[2].v[3] + clip.mtr[2].v[1];
-     v[3] := clip.mtr[3].v[3] + clip.mtr[3].v[1];
+     v[0] := clip.mtr.v[0].v[3] + clip.mtr.v[0].v[1];
+     v[1] := clip.mtr.v[1].v[3] + clip.mtr.v[1].v[1];
+     v[2] := clip.mtr.v[2].v[3] + clip.mtr.v[2].v[1];
+     v[3] := clip.mtr.v[3].v[3] + clip.mtr.v[3].v[1];
      t := sqrt( v[0] * v[0] + v[1] * v[1] + v[2] * v[2] );
      v[0] := v[0]/t;
      v[1] := v[1]/t;
@@ -632,12 +632,12 @@ begin
    end;
 
    //* ВЕРХНЯЯ плоскость */
-   with TzeVector4d((@result[3])^) do
+   with TzeVector4d((@result.v[3])^) do
    begin
-     v[0] := clip.mtr[0].v[3] - clip.mtr[0].v[1];
-     v[1] := clip.mtr[1].v[3] - clip.mtr[1].v[1];
-     v[2] := clip.mtr[2].v[3] - clip.mtr[2].v[1];
-     v[3] := clip.mtr[3].v[3] - clip.mtr[3].v[1];
+     v[0] := clip.mtr.v[0].v[3] - clip.mtr.v[0].v[1];
+     v[1] := clip.mtr.v[1].v[3] - clip.mtr.v[1].v[1];
+     v[2] := clip.mtr.v[2].v[3] - clip.mtr.v[2].v[1];
+     v[3] := clip.mtr.v[3].v[3] - clip.mtr.v[3].v[1];
      t := sqrt( v[0] * v[0] + v[1] * v[1] + v[2] * v[2] );
      v[0] := v[0]/t;
      v[1] := v[1]/t;
@@ -646,12 +646,12 @@ begin
    end;
 
    //* ПЕРЕДНЯЯ плоскость */
-   with TzeVector4d((@result[4])^) do
+   with TzeVector4d((@result.v[4])^) do
    begin
-     v[0] := clip.mtr[0].v[3] + clip.mtr[0].v[2];
-     v[1] := clip.mtr[1].v[3] + clip.mtr[1].v[2];
-     v[2] := clip.mtr[2].v[3] + clip.mtr[2].v[2];
-     v[3] := clip.mtr[3].v[3] + clip.mtr[3].v[2];
+     v[0] := clip.mtr.v[0].v[3] + clip.mtr.v[0].v[2];
+     v[1] := clip.mtr.v[1].v[3] + clip.mtr.v[1].v[2];
+     v[2] := clip.mtr.v[2].v[3] + clip.mtr.v[2].v[2];
+     v[3] := clip.mtr.v[3].v[3] + clip.mtr.v[3].v[2];
      t := sqrt( v[0] * v[0] + v[1] * v[1] + v[2] * v[2] );
      v[0] := v[0]/t;
      v[1] := v[1]/t;
@@ -660,12 +660,12 @@ begin
    end;
 
    //* ?? плоскость */
-   with TzeVector4d((@result[5])^) do
+   with TzeVector4d((@result.v[5])^) do
    begin
-     v[0] := clip.mtr[0].v[3] - clip.mtr[0].v[2];
-     v[1] := clip.mtr[1].v[3] - clip.mtr[1].v[2];
-     v[2] := clip.mtr[2].v[3] - clip.mtr[2].v[2];
-     v[3] := clip.mtr[3].v[3] - clip.mtr[3].v[2];
+     v[0] := clip.mtr.v[0].v[3] - clip.mtr.v[0].v[2];
+     v[1] := clip.mtr.v[1].v[3] - clip.mtr.v[1].v[2];
+     v[2] := clip.mtr.v[2].v[3] - clip.mtr.v[2].v[2];
+     v[3] := clip.mtr.v[3].v[3] - clip.mtr.v[3].v[2];
      t := sqrt( v[0] * v[0] + v[1] * v[1] + v[2] * v[2] );
      v[0] := v[0]/t;
      v[1] := v[1]/t;
@@ -701,16 +701,16 @@ var a1, a2, a3, a4,
     c1, c2, c3, c4,
     d1, d2, d3, d4: Double;
 begin
-  with TzeVector4d((@M.mtr[0])^) do begin
+  with TzeVector4d((@M.mtr.v[0])^) do begin
     a1 := v[0];  b1 := v[1];  c1 := v[2];  d1 := v[3];
   end;
-  with TzeVector4d((@M.mtr[1])^) do begin
+  with TzeVector4d((@M.mtr.v[1])^) do begin
     a2 := v[0];  b2 := v[1];  c2 := v[2];  d2 := v[3];
   end;
-  with TzeVector4d((@M.mtr[2])^) do begin
+  with TzeVector4d((@M.mtr.v[2])^) do begin
     a3 := v[0];  b3 := v[1];  c3 := v[2];  d3 := v[3];
   end;
-  with TzeVector4d((@M.mtr[3])^) do begin
+  with TzeVector4d((@M.mtr.v[3])^) do begin
     a4 := v[0];  b4 := v[1];  c4 := v[2];  d4 := v[3];
   end;
     //a1 :=  M[0].v[0]; b1 :=  M[0].v[1];
@@ -723,25 +723,25 @@ begin
     //c4 :=  M[3].v[2]; d4 :=  M[3].v[3];
 
     // row column labeling reversed since we transpose rows & columns
-    M.mtr[XAxisIndex].v[XAxisIndex] :=  MatrixDetInternal(b2, b3, b4, c2, c3, c4, d2, d3, d4);
-    M.mtr[XAxisIndex].v[YAxisIndex] := -MatrixDetInternal(b1, b3, b4, c1, c3, c4, d1, d3, d4);
-    M.mtr[XAxisIndex].v[ZAxisIndex] :=  MatrixDetInternal(b1, b2, b4, c1, c2, c4, d1, d2, d4);
-    M.mtr[XAxisIndex].v[WAxisIndex] := -MatrixDetInternal(b1, b2, b3, c1, c2, c3, d1, d2, d3);
+    M.mtr.v[XAxisIndex].v[XAxisIndex] :=  MatrixDetInternal(b2, b3, b4, c2, c3, c4, d2, d3, d4);
+    M.mtr.v[XAxisIndex].v[YAxisIndex] := -MatrixDetInternal(b1, b3, b4, c1, c3, c4, d1, d3, d4);
+    M.mtr.v[XAxisIndex].v[ZAxisIndex] :=  MatrixDetInternal(b1, b2, b4, c1, c2, c4, d1, d2, d4);
+    M.mtr.v[XAxisIndex].v[WAxisIndex] := -MatrixDetInternal(b1, b2, b3, c1, c2, c3, d1, d2, d3);
 
-    M.mtr[YAxisIndex].v[XAxisIndex] := -MatrixDetInternal(a2, a3, a4, c2, c3, c4, d2, d3, d4);
-    M.mtr[YAxisIndex].v[YAxisIndex] :=  MatrixDetInternal(a1, a3, a4, c1, c3, c4, d1, d3, d4);
-    M.mtr[YAxisIndex].v[ZAxisIndex] := -MatrixDetInternal(a1, a2, a4, c1, c2, c4, d1, d2, d4);
-    M.mtr[YAxisIndex].v[WAxisIndex] :=  MatrixDetInternal(a1, a2, a3, c1, c2, c3, d1, d2, d3);
+    M.mtr.v[YAxisIndex].v[XAxisIndex] := -MatrixDetInternal(a2, a3, a4, c2, c3, c4, d2, d3, d4);
+    M.mtr.v[YAxisIndex].v[YAxisIndex] :=  MatrixDetInternal(a1, a3, a4, c1, c3, c4, d1, d3, d4);
+    M.mtr.v[YAxisIndex].v[ZAxisIndex] := -MatrixDetInternal(a1, a2, a4, c1, c2, c4, d1, d2, d4);
+    M.mtr.v[YAxisIndex].v[WAxisIndex] :=  MatrixDetInternal(a1, a2, a3, c1, c2, c3, d1, d2, d3);
 
-    M.mtr[ZAxisIndex].v[XAxisIndex] :=  MatrixDetInternal(a2, a3, a4, b2, b3, b4, d2, d3, d4);
-    M.mtr[ZAxisIndex].v[YAxisIndex] := -MatrixDetInternal(a1, a3, a4, b1, b3, b4, d1, d3, d4);
-    M.mtr[ZAxisIndex].v[ZAxisIndex] :=  MatrixDetInternal(a1, a2, a4, b1, b2, b4, d1, d2, d4);
-    M.mtr[ZAxisIndex].v[WAxisIndex] := -MatrixDetInternal(a1, a2, a3, b1, b2, b3, d1, d2, d3);
+    M.mtr.v[ZAxisIndex].v[XAxisIndex] :=  MatrixDetInternal(a2, a3, a4, b2, b3, b4, d2, d3, d4);
+    M.mtr.v[ZAxisIndex].v[YAxisIndex] := -MatrixDetInternal(a1, a3, a4, b1, b3, b4, d1, d3, d4);
+    M.mtr.v[ZAxisIndex].v[ZAxisIndex] :=  MatrixDetInternal(a1, a2, a4, b1, b2, b4, d1, d2, d4);
+    M.mtr.v[ZAxisIndex].v[WAxisIndex] := -MatrixDetInternal(a1, a2, a3, b1, b2, b3, d1, d2, d3);
 
-    M.mtr[WAxisIndex].v[XAxisIndex] := -MatrixDetInternal(a2, a3, a4, b2, b3, b4, c2, c3, c4);
-    M.mtr[WAxisIndex].v[YAxisIndex] :=  MatrixDetInternal(a1, a3, a4, b1, b3, b4, c1, c3, c4);
-    M.mtr[WAxisIndex].v[ZAxisIndex] := -MatrixDetInternal(a1, a2, a4, b1, b2, b4, c1, c2, c4);
-    M.mtr[WAxisIndex].v[WAxisIndex] :=  MatrixDetInternal(a1, a2, a3, b1, b2, b3, c1, c2, c3);
+    M.mtr.v[WAxisIndex].v[XAxisIndex] := -MatrixDetInternal(a2, a3, a4, b2, b3, b4, c2, c3, c4);
+    M.mtr.v[WAxisIndex].v[YAxisIndex] :=  MatrixDetInternal(a1, a3, a4, b1, b3, b4, c1, c3, c4);
+    M.mtr.v[WAxisIndex].v[ZAxisIndex] := -MatrixDetInternal(a1, a2, a4, b1, b2, b4, c1, c2, c4);
+    M.mtr.v[WAxisIndex].v[WAxisIndex] :=  MatrixDetInternal(a1, a2, a3, b1, b2, b3, c1, c2, c3);
 end;
 function MatrixDeterminant(const M: DMatrix4D): Double;
 var a1, a2, a3, a4,
@@ -749,16 +749,16 @@ var a1, a2, a3, a4,
     c1, c2, c3, c4,
     d1, d2, d3, d4  : Double;
 begin
-  with TzeVector4d((@M.mtr[0])^) do begin
+  with TzeVector4d((@M.mtr.v[0])^) do begin
     a1 := v[0];  b1 := v[1];  c1 := v[2];  d1 := v[3];
   end;
-  with TzeVector4d((@M.mtr[1])^) do begin
+  with TzeVector4d((@M.mtr.v[1])^) do begin
     a2 := v[0];  b2 := v[1];  c2 := v[2];  d2 := v[3];
   end;
-  with TzeVector4d((@M.mtr[2])^) do begin
+  with TzeVector4d((@M.mtr.v[2])^) do begin
     a3 := v[0];  b3 := v[1];  c3 := v[2];  d3 := v[3];
   end;
-  with TzeVector4d((@M.mtr[3])^) do begin
+  with TzeVector4d((@M.mtr.v[3])^) do begin
     a4 := v[0];  b4 := v[1];  c4 := v[2];  d4 := v[3];
   end;
   //a1 := M[0].v[0];  b1 := M[0].v[1];  c1 := M[0].v[2];  d1 := M[0].v[3];
@@ -774,25 +774,25 @@ end;
 procedure MatrixScale(var M: DMatrix4D; const Factor: Double);
 //var I, J: Integer;
 begin
-  with TzeVector4d((@M.mtr[0])^) do begin
+  with TzeVector4d((@M.mtr.v[0])^) do begin
     v[0] := v[0] * Factor;
     v[1] := v[1] * Factor;
     v[2] := v[2] * Factor;
     v[3] := v[3] * Factor;
   end;
-  with TzeVector4d((@M.mtr[1])^) do begin
+  with TzeVector4d((@M.mtr.v[1])^) do begin
     v[0] := v[0] * Factor;
     v[1] := v[1] * Factor;
     v[2] := v[2] * Factor;
     v[3] := v[3] * Factor;
   end;
-  with TzeVector4d((@M.mtr[2])^) do begin
+  with TzeVector4d((@M.mtr.v[2])^) do begin
     v[0] := v[0] * Factor;
     v[1] := v[1] * Factor;
     v[2] := v[2] * Factor;
     v[3] := v[3] * Factor;
   end;
-  with TzeVector4d((@M.mtr[3])^) do begin
+  with TzeVector4d((@M.mtr.v[3])^) do begin
     v[0] := v[0] * Factor;
     v[1] := v[1] * Factor;
     v[2] := v[2] * Factor;
@@ -959,7 +959,7 @@ end;
 function CreateTranslationMatrix(const _V:TzePoint3d): DMatrix4D;
 begin
   Result.CreateRec(onemtr,CMTTranslate);
-  with TzeVector4d((@Result.mtr[3])^) do
+  with TzeVector4d((@Result.mtr.v[3])^) do
   begin
     v[0] := _V.x;
     v[1] := _V.y;
@@ -970,7 +970,7 @@ end;
 function CreateTranslationMatrix(const tx,ty,tz:Double):DMatrix4D;
 begin
   Result.CreateRec(onemtr,CMTTranslate);
-  with TzeVector4d((@Result.mtr[3])^) do begin
+  with TzeVector4d((@Result.mtr.v[3])^) do begin
     v[0]:=tx;
     v[1]:=ty;
     v[2]:=tz;
@@ -984,58 +984,58 @@ begin
   with TzeVector4d((@plane)^) do
   begin
     d:=v[0];
-    result.mtr[0].v[0] :=-2 * d * v[0] + 1;
-    result.mtr[1].v[0] :=-2 * d * v[1];
-    result.mtr[2].v[0] :=-2 * d * v[2];
-    result.mtr[3].v[0] :=-2 * d * v[3];
+    result.mtr.v[0].v[0] :=-2 * d * v[0] + 1;
+    result.mtr.v[1].v[0] :=-2 * d * v[1];
+    result.mtr.v[2].v[0] :=-2 * d * v[2];
+    result.mtr.v[3].v[0] :=-2 * d * v[3];
 
     d:=v[1];
-    result.mtr[0].v[1] :=-2 * d * v[0];
-    result.mtr[1].v[1] :=-2 * d * v[1] + 1;
-    result.mtr[2].v[1] :=-2 * d * v[2];
-    result.mtr[3].v[1] :=-2 * d * v[3];
+    result.mtr.v[0].v[1] :=-2 * d * v[0];
+    result.mtr.v[1].v[1] :=-2 * d * v[1] + 1;
+    result.mtr.v[2].v[1] :=-2 * d * v[2];
+    result.mtr.v[3].v[1] :=-2 * d * v[3];
 
     d:=v[2];
-    result.mtr[0].v[2] :=-2 * d * v[0];
-    result.mtr[1].v[2] :=-2 * d * v[1];
-    result.mtr[2].v[2] :=-2 * d * v[2] + 1;
-    result.mtr[3].v[2] :=-2 * d * v[3];
+    result.mtr.v[0].v[2] :=-2 * d * v[0];
+    result.mtr.v[1].v[2] :=-2 * d * v[1];
+    result.mtr.v[2].v[2] :=-2 * d * v[2] + 1;
+    result.mtr.v[3].v[2] :=-2 * d * v[3];
   end;
 
-  result.mtr[0].v[3]:=0;
-  result.mtr[1].v[3]:=0;
-  result.mtr[2].v[3]:=0;
-  result.mtr[3].v[3]:=1;
+  result.mtr.v[0].v[3]:=0;
+  result.mtr.v[1].v[3]:=0;
+  result.mtr.v[2].v[3]:=0;
+  result.mtr.v[3].v[3]:=1;
   Result.t:=CMTTransform;
 end;
 
 function CreateScaleMatrix(const V:TzePoint3d): DMatrix4D;
 begin
-  Result.mtr:=onemtr;
-  Result.mtr[0].v[0]:=V.x;
-  Result.mtr[1].v[1]:=V.y;
-  Result.mtr[2].v[2]:=V.z;
-  Result.mtr[3].v[3]:=1;
+  Result.mtr.v:=onemtr.v;
+  Result.mtr.v[0].v[0]:=V.x;
+  Result.mtr.v[1].v[1]:=V.y;
+  Result.mtr.v[2].v[2]:=V.z;
+  Result.mtr.v[3].v[3]:=1;
   Result.t:=CMTScale;
 end;
 
 function CreateScaleMatrix(const s:Double): DMatrix4D;
 begin
-  Result.mtr:=onemtr;
-  Result.mtr[0].v[0]:=S;
-  Result.mtr[1].v[1]:=S;
-  Result.mtr[2].v[2]:=S;
-  Result.mtr[3].v[3]:=1;
+  Result.mtr.v:=onemtr.v;
+  Result.mtr.v[0].v[0]:=S;
+  Result.mtr.v[1].v[1]:=S;
+  Result.mtr.v[2].v[2]:=S;
+  Result.mtr.v[3].v[3]:=1;
   Result.t:=CMTScale;
 end;
 
 function CreateScaleMatrix(const sx,sy,sz:Double): DMatrix4D;inline;overload;
 begin
-  Result.mtr:=onemtr;
-  Result.mtr[0].v[0]:=sx;
-  Result.mtr[1].v[1]:=sy;
-  Result.mtr[2].v[2]:=sz;
-  Result.mtr[3].v[3]:=1;
+  Result.mtr.v:=onemtr.v;
+  Result.mtr.v[0].v[0]:=sx;
+  Result.mtr.v[1].v[1]:=sy;
+  Result.mtr.v[2].v[2]:=sz;
+  Result.mtr.v[3].v[3]:=1;
   Result.t:=CMTScale;
 end;
 
@@ -1045,12 +1045,12 @@ var
 begin
   SinCos(angle, Sine, Cosine);
   Result := EmptyMatrix;
-  Result.mtr[0].v[0] := 1;
-  Result.mtr[1].v[1] := Cosine;
-  Result.mtr[1].v[2] := Sine;
-  Result.mtr[2].v[1] := -Sine;
-  Result.mtr[2].v[2] := Cosine;
-  Result.mtr[3].v[3] := 1;
+  Result.mtr.v[0].v[0] := 1;
+  Result.mtr.v[1].v[1] := Cosine;
+  Result.mtr.v[1].v[2] := Sine;
+  Result.mtr.v[2].v[1] := -Sine;
+  Result.mtr.v[2].v[2] := Cosine;
+  Result.mtr.v[3].v[3] := 1;
   Result.t:=CMTRotate;
 end;
 function CreateRotationMatrixY(const angle: Double): DMatrix4D;
@@ -1059,12 +1059,12 @@ var
 begin
   SinCos(angle, Sine, Cosine);
   Result := EmptyMatrix;
-  Result.mtr[0].v[0] := Cosine;
-  Result.mtr[0].v[2] := -Sine;
-  Result.mtr[1].v[1] := 1;
-  Result.mtr[2].v[0] := Sine;
-  Result.mtr[2].v[2] := Cosine;
-  Result.mtr[3].v[3] := 1;
+  Result.mtr.v[0].v[0] := Cosine;
+  Result.mtr.v[0].v[2] := -Sine;
+  Result.mtr.v[1].v[1] := 1;
+  Result.mtr.v[2].v[0] := Sine;
+  Result.mtr.v[2].v[2] := Cosine;
+  Result.mtr.v[3].v[3] := 1;
   Result.t:=CMTRotate;
 end;
 function CreateRotatedXVector(const angle: Double):TzePoint3d;
@@ -1082,10 +1082,10 @@ var
 begin
   SinCos(angle, Sine, Cosine);
   Result := Onematrix;
-  Result.mtr[0].v[0] := Cosine;
-  Result.mtr[0].v[1] := Sine;
-  Result.mtr[1].v[1] := Cosine;
-  Result.mtr[1].v[0] := -Sine;
+  Result.mtr.v[0].v[0] := Cosine;
+  Result.mtr.v[0].v[1] := Sine;
+  Result.mtr.v[1].v[1] := Cosine;
+  Result.mtr.v[1].v[0] := -Sine;
   Result.t:=CMTRotate;
 end;
 
@@ -1094,12 +1094,12 @@ var I: Integer;
 begin
   for I := 3 downto 0 do
   begin
-    with M1.mtr[I] do
+    with M1.mtr.v[I] do
     begin
-      Result.mtr[I].v[0] := v[0]*M2.mtr[0].v[0] + v[1]*M2.mtr[1].v[0] + v[2]*M2.mtr[2].v[0] + v[3]*M2.mtr[3].v[0];
-      Result.mtr[I].v[1] := v[0]*M2.mtr[0].v[1] + v[1]*M2.mtr[1].v[1] + v[2]*M2.mtr[2].v[1] + v[3]*M2.mtr[3].v[1];
-      Result.mtr[I].v[2] := v[0]*M2.mtr[0].v[2] + v[1]*M2.mtr[1].v[2] + v[2]*M2.mtr[2].v[2] + v[3]*M2.mtr[3].v[2];
-      Result.mtr[I].v[3] := v[0]*M2.mtr[0].v[3] + v[1]*M2.mtr[1].v[3] + v[2]*M2.mtr[2].v[3] + v[3]*M2.mtr[3].v[3];
+      Result.mtr.v[I].v[0] := v[0]*M2.mtr.v[0].v[0] + v[1]*M2.mtr.v[1].v[0] + v[2]*M2.mtr.v[2].v[0] + v[3]*M2.mtr.v[3].v[0];
+      Result.mtr.v[I].v[1] := v[0]*M2.mtr.v[0].v[1] + v[1]*M2.mtr.v[1].v[1] + v[2]*M2.mtr.v[2].v[1] + v[3]*M2.mtr.v[3].v[1];
+      Result.mtr.v[I].v[2] := v[0]*M2.mtr.v[0].v[2] + v[1]*M2.mtr.v[1].v[2] + v[2]*M2.mtr.v[2].v[2] + v[3]*M2.mtr.v[3].v[2];
+      Result.mtr.v[I].v[3] := v[0]*M2.mtr.v[0].v[3] + v[1]*M2.mtr.v[1].v[3] + v[2]*M2.mtr.v[2].v[3] + v[3]*M2.mtr.v[3].v[3];
     end;
   end;
   Result.t:=M1.t+M2.t;
@@ -1109,12 +1109,12 @@ var I: Integer;
 begin
   for I := 3 downto 0 do
   begin
-    with M1.mtr[I] do
+    with M1.mtr.v[I] do
     begin
-      Result.mtr[I].v[0] := v[0]*M2.mtr[0].v[0] + v[1]*M2.mtr[1].v[0] + v[2]*M2.mtr[2].v[0] + v[3]*M2.mtr[3].v[0];
-      Result.mtr[I].v[1] := v[0]*M2.mtr[0].v[1] + v[1]*M2.mtr[1].v[1] + v[2]*M2.mtr[2].v[1] + v[3]*M2.mtr[3].v[1];
-      Result.mtr[I].v[2] := v[0]*M2.mtr[0].v[2] + v[1]*M2.mtr[1].v[2] + v[2]*M2.mtr[2].v[2] + v[3]*M2.mtr[3].v[2];
-      Result.mtr[I].v[3] := v[0]*M2.mtr[0].v[3] + v[1]*M2.mtr[1].v[3] + v[2]*M2.mtr[2].v[3] + v[3]*M2.mtr[3].v[3];
+      Result.mtr.v[I].v[0] := v[0]*M2.mtr.v[0].v[0] + v[1]*M2.mtr.v[1].v[0] + v[2]*M2.mtr.v[2].v[0] + v[3]*M2.mtr.v[3].v[0];
+      Result.mtr.v[I].v[1] := v[0]*M2.mtr.v[0].v[1] + v[1]*M2.mtr.v[1].v[1] + v[2]*M2.mtr.v[2].v[1] + v[3]*M2.mtr.v[3].v[1];
+      Result.mtr.v[I].v[2] := v[0]*M2.mtr.v[0].v[2] + v[1]*M2.mtr.v[1].v[2] + v[2]*M2.mtr.v[2].v[2] + v[3]*M2.mtr.v[3].v[2];
+      Result.mtr.v[I].v[3] := v[0]*M2.mtr.v[0].v[3] + v[1]*M2.mtr.v[1].v[3] + v[2]*M2.mtr.v[2].v[3] + v[3]*M2.mtr.v[3].v[3];
     end;
   end;
   Result.t:=M1.t+M2.t;
@@ -1124,12 +1124,12 @@ var I: Integer;
 begin
   for I := 3 downto 0 do
   begin
-    with M1.mtr[I] do
+    with M1.mtr.v[I] do
     begin
-      Result.mtr[I].v[0] := v[0]*M2.mtr[0].v[0] + v[1]*M2.mtr[1].v[0] + v[2]*M2.mtr[2].v[0] + v[3]*M2.mtr[3].v[0];
-      Result.mtr[I].v[1] := v[0]*M2.mtr[0].v[1] + v[1]*M2.mtr[1].v[1] + v[2]*M2.mtr[2].v[1] + v[3]*M2.mtr[3].v[1];
-      Result.mtr[I].v[2] := v[0]*M2.mtr[0].v[2] + v[1]*M2.mtr[1].v[2] + v[2]*M2.mtr[2].v[2] + v[3]*M2.mtr[3].v[2];
-      Result.mtr[I].v[3] := v[0]*M2.mtr[0].v[3] + v[1]*M2.mtr[1].v[3] + v[2]*M2.mtr[2].v[3] + v[3]*M2.mtr[3].v[3];
+      Result.mtr.v[I].v[0] := v[0]*M2.mtr.v[0].v[0] + v[1]*M2.mtr.v[1].v[0] + v[2]*M2.mtr.v[2].v[0] + v[3]*M2.mtr.v[3].v[0];
+      Result.mtr.v[I].v[1] := v[0]*M2.mtr.v[0].v[1] + v[1]*M2.mtr.v[1].v[1] + v[2]*M2.mtr.v[2].v[1] + v[3]*M2.mtr.v[3].v[1];
+      Result.mtr.v[I].v[2] := v[0]*M2.mtr.v[0].v[2] + v[1]*M2.mtr.v[1].v[2] + v[2]*M2.mtr.v[2].v[2] + v[3]*M2.mtr.v[3].v[2];
+      Result.mtr.v[I].v[3] := v[0]*M2.mtr.v[0].v[3] + v[1]*M2.mtr.v[1].v[3] + v[2]*M2.mtr.v[2].v[3] + v[3]*M2.mtr.v[3].v[3];
     end;
   end;
   Result.t:=M1.t+M2.t;
@@ -1140,12 +1140,12 @@ var I: Integer;
 begin
   for I := 3 downto 0 do
   begin
-    with M.mtr[I] do
+    with M.mtr.v[I] do
     begin
-      TM.mtr[0].v[I] := v[0];
-      TM.mtr[1].v[I] := v[1];
-      TM.mtr[2].v[I] := v[2];
-      TM.mtr[3].v[I] := v[3];
+      TM.mtr.v[0].v[I] := v[0];
+      TM.mtr.v[1].v[I] := v[1];
+      TM.mtr.v[2].v[I] := v[2];
+      TM.mtr.v[3].v[I] := v[3];
     end;
   end;
   M.mtr:=TM.mtr;
@@ -1156,12 +1156,12 @@ var I: Integer;
 begin
   for I := 3 downto 0 do
   begin
-    with M.mtr[I] do
+    with M.mtr.v[I] do
     begin
-      TM.mtr[0].v[I] := v[0];
-      TM.mtr[1].v[I] := v[1];
-      TM.mtr[2].v[I] := v[2];
-      TM.mtr[3].v[I] := v[3];
+      TM.mtr.v[0].v[I] := v[0];
+      TM.mtr.v[1].v[I] := v[1];
+      TM.mtr.v[2].v[I] := v[2];
+      TM.mtr.v[3].v[I] := v[3];
     end;
   end;
   M.mtr:=TM.mtr;
@@ -1170,10 +1170,10 @@ procedure MatrixNormalize(var M: DMatrix4D);
 var I{, J}: Integer;
     D: Double;
 begin
-  D:=M.mtr[3].v[3];
+  D:=M.mtr.v[3].v[3];
   for I := 3 downto 0 do
   begin
-    with M.mtr[I] do
+    with M.mtr.v[I] do
     begin
       v[0]:=v[0]/D;
       v[1]:=v[1]/D;
@@ -1190,10 +1190,10 @@ begin
   else
     with TzeVector4d((@V)^) do
     begin
-      Result.X := X * M.mtr[0].v[0] + y * M.mtr[1].v[0] + z * M.mtr[2].v[0] + w * M.mtr[3].v[0];
-      Result.Y := X * M.mtr[0].v[1] + y * M.mtr[1].v[1] + z * M.mtr[2].v[1] + w * M.mtr[3].v[1];
-      Result.z := x * M.mtr[0].v[2] + y * M.mtr[1].v[2] + z * M.mtr[2].v[2] + w * M.mtr[3].v[2];
-      Result.W := x * M.mtr[0].v[3] + y * M.mtr[1].v[3] + z * M.mtr[2].v[3] + w * M.mtr[3].v[3];
+      Result.X := X * M.mtr.v[0].v[0] + y * M.mtr.v[1].v[0] + z * M.mtr.v[2].v[0] + w * M.mtr.v[3].v[0];
+      Result.Y := X * M.mtr.v[0].v[1] + y * M.mtr.v[1].v[1] + z * M.mtr.v[2].v[1] + w * M.mtr.v[3].v[1];
+      Result.z := x * M.mtr.v[0].v[2] + y * M.mtr.v[1].v[2] + z * M.mtr.v[2].v[2] + w * M.mtr.v[3].v[2];
+      Result.W := x * M.mtr.v[0].v[3] + y * M.mtr.v[1].v[3] + z * M.mtr.v[2].v[3] + w * M.mtr.v[3].v[3];
     end;
 end;
 function VectorTransform(const V:TzeVector4d;const M:DMatrix4f):TzeVector4d;
@@ -1203,10 +1203,10 @@ begin
   else
     with TzeVector4d((@V)^) do
     begin
-      Result.X := X * M.mtr[0].v[0] + y * M.mtr[1].v[0] + z * M.mtr[2].v[0] + w * M.mtr[3].v[0];
-      Result.Y := X * M.mtr[0].v[1] + y * M.mtr[1].v[1] + z * M.mtr[2].v[1] + w * M.mtr[3].v[1];
-      Result.z := x * M.mtr[0].v[2] + y * M.mtr[1].v[2] + z * M.mtr[2].v[2] + w * M.mtr[3].v[2];
-      Result.W := x * M.mtr[0].v[3] + y * M.mtr[1].v[3] + z * M.mtr[2].v[3] + w * M.mtr[3].v[3];
+      Result.X := X * M.mtr.v[0].v[0] + y * M.mtr.v[1].v[0] + z * M.mtr.v[2].v[0] + w * M.mtr.v[3].v[0];
+      Result.Y := X * M.mtr.v[0].v[1] + y * M.mtr.v[1].v[1] + z * M.mtr.v[2].v[1] + w * M.mtr.v[3].v[1];
+      Result.z := x * M.mtr.v[0].v[2] + y * M.mtr.v[1].v[2] + z * M.mtr.v[2].v[2] + w * M.mtr.v[3].v[2];
+      Result.W := x * M.mtr.v[0].v[3] + y * M.mtr.v[1].v[3] + z * M.mtr.v[2].v[3] + w * M.mtr.v[3].v[3];
     end;
 end;
 function VectorTransform(const V:TzeVector4s;const M:DMatrix4f):TzeVector4s;
@@ -1216,10 +1216,10 @@ begin
   else
     with TzeVector4s((@V)^) do
     begin
-      Result.X := X * M.mtr[0].v[0] + y * M.mtr[1].v[0] + z * M.mtr[2].v[0] + w * M.mtr[3].v[0];
-      Result.Y := X * M.mtr[0].v[1] + y * M.mtr[1].v[1] + z * M.mtr[2].v[1] + w * M.mtr[3].v[1];
-      Result.z := x * M.mtr[0].v[2] + y * M.mtr[1].v[2] + z * M.mtr[2].v[2] + w * M.mtr[3].v[2];
-      Result.W := x * M.mtr[0].v[3] + y * M.mtr[1].v[3] + z * M.mtr[2].v[3] + w * M.mtr[3].v[3];
+      Result.X := X * M.mtr.v[0].v[0] + y * M.mtr.v[1].v[0] + z * M.mtr.v[2].v[0] + w * M.mtr.v[3].v[0];
+      Result.Y := X * M.mtr.v[0].v[1] + y * M.mtr.v[1].v[1] + z * M.mtr.v[2].v[1] + w * M.mtr.v[3].v[1];
+      Result.z := x * M.mtr.v[0].v[2] + y * M.mtr.v[1].v[2] + z * M.mtr.v[2].v[2] + w * M.mtr.v[3].v[2];
+      Result.W := x * M.mtr.v[0].v[3] + y * M.mtr.v[1].v[3] + z * M.mtr.v[2].v[3] + w * M.mtr.v[3].v[3];
     end;
 end;
 procedure normalize4F(var tv:TzeVector4s); inline;
@@ -1308,56 +1308,56 @@ begin
   result.y:=tv.y;
   result.z:=tv.z;
 end;
-function FrustumTransform(const frustum:ClipArray;const M:DMatrix4D; MatrixAlreadyTransposed:Boolean=false):ClipArray;
+function FrustumTransform(const frustum:TzeFrustum;const M:DMatrix4D; MatrixAlreadyTransposed:Boolean=false):TzeFrustum;
 var
    m1:DMatrix4D;
 begin
      if MatrixAlreadyTransposed
       then
         begin
-          PzeVector4d(@result[0])^:=VectorTransform(PzeVector4d(@frustum[0])^,M);
-          PzeVector4d(@result[1])^:=VectorTransform(PzeVector4d(@frustum[1])^,M);
-          PzeVector4d(@result[2])^:=VectorTransform(PzeVector4d(@frustum[2])^,M);
-          PzeVector4d(@result[3])^:=VectorTransform(PzeVector4d(@frustum[3])^,M);
-          PzeVector4d(@result[4])^:=VectorTransform(PzeVector4d(@frustum[4])^,M);
-          PzeVector4d(@result[5])^:=VectorTransform(PzeVector4d(@frustum[5])^,M);
+          PzeVector4d(@result.v[0])^:=VectorTransform(PzeVector4d(@frustum.v[0])^,M);
+          PzeVector4d(@result.v[1])^:=VectorTransform(PzeVector4d(@frustum.v[1])^,M);
+          PzeVector4d(@result.v[2])^:=VectorTransform(PzeVector4d(@frustum.v[2])^,M);
+          PzeVector4d(@result.v[3])^:=VectorTransform(PzeVector4d(@frustum.v[3])^,M);
+          PzeVector4d(@result.v[4])^:=VectorTransform(PzeVector4d(@frustum.v[4])^,M);
+          PzeVector4d(@result.v[5])^:=VectorTransform(PzeVector4d(@frustum.v[5])^,M);
         end
       else
         begin
           m1:=M;
           MatrixTranspose(m1);
-          PzeVector4d(@result[0])^:=VectorTransform(PzeVector4d(@frustum[0])^,m1);
-          PzeVector4d(@result[1])^:=VectorTransform(PzeVector4d(@frustum[1])^,m1);
-          PzeVector4d(@result[2])^:=VectorTransform(PzeVector4d(@frustum[2])^,m1);
-          PzeVector4d(@result[3])^:=VectorTransform(PzeVector4d(@frustum[3])^,m1);
-          PzeVector4d(@result[4])^:=VectorTransform(PzeVector4d(@frustum[4])^,m1);
-          PzeVector4d(@result[5])^:=VectorTransform(PzeVector4d(@frustum[5])^,m1);
+          PzeVector4d(@result.v[0])^:=VectorTransform(PzeVector4d(@frustum.v[0])^,m1);
+          PzeVector4d(@result.v[1])^:=VectorTransform(PzeVector4d(@frustum.v[1])^,m1);
+          PzeVector4d(@result.v[2])^:=VectorTransform(PzeVector4d(@frustum.v[2])^,m1);
+          PzeVector4d(@result.v[3])^:=VectorTransform(PzeVector4d(@frustum.v[3])^,m1);
+          PzeVector4d(@result.v[4])^:=VectorTransform(PzeVector4d(@frustum.v[4])^,m1);
+          PzeVector4d(@result.v[5])^:=VectorTransform(PzeVector4d(@frustum.v[5])^,m1);
         end;
 end;
-function FrustumTransform(const frustum:ClipArray;const M:DMatrix4f; MatrixAlreadyTransposed:Boolean=false):ClipArray;
+function FrustumTransform(const frustum:TzeFrustum;const M:DMatrix4f; MatrixAlreadyTransposed:Boolean=false):TzeFrustum;
 var
    m1:DMatrix4f;
 begin
      if MatrixAlreadyTransposed
       then
         begin
-          PzeVector4d(@result[0])^:=VectorTransform(PzeVector4d(@frustum[0])^,M);
-          PzeVector4d(@result[1])^:=VectorTransform(PzeVector4d(@frustum[1])^,M);
-          PzeVector4d(@result[2])^:=VectorTransform(PzeVector4d(@frustum[2])^,M);
-          PzeVector4d(@result[3])^:=VectorTransform(PzeVector4d(@frustum[3])^,M);
-          PzeVector4d(@result[4])^:=VectorTransform(PzeVector4d(@frustum[4])^,M);
-          PzeVector4d(@result[5])^:=VectorTransform(PzeVector4d(@frustum[5])^,M);
+          PzeVector4d(@result.v[0])^:=VectorTransform(PzeVector4d(@frustum.v[0])^,M);
+          PzeVector4d(@result.v[1])^:=VectorTransform(PzeVector4d(@frustum.v[1])^,M);
+          PzeVector4d(@result.v[2])^:=VectorTransform(PzeVector4d(@frustum.v[2])^,M);
+          PzeVector4d(@result.v[3])^:=VectorTransform(PzeVector4d(@frustum.v[3])^,M);
+          PzeVector4d(@result.v[4])^:=VectorTransform(PzeVector4d(@frustum.v[4])^,M);
+          PzeVector4d(@result.v[5])^:=VectorTransform(PzeVector4d(@frustum.v[5])^,M);
         end
       else
         begin
           m1:=M;
           MatrixTranspose(m1);
-          PzeVector4d(@result[0])^:=VectorTransform(PzeVector4d(@frustum[0])^,m1);
-          PzeVector4d(@result[1])^:=VectorTransform(PzeVector4d(@frustum[1])^,m1);
-          PzeVector4d(@result[2])^:=VectorTransform(PzeVector4d(@frustum[2])^,m1);
-          PzeVector4d(@result[3])^:=VectorTransform(PzeVector4d(@frustum[3])^,m1);
-          PzeVector4d(@result[4])^:=VectorTransform(PzeVector4d(@frustum[4])^,m1);
-          PzeVector4d(@result[5])^:=VectorTransform(PzeVector4d(@frustum[5])^,m1);
+          PzeVector4d(@result.v[0])^:=VectorTransform(PzeVector4d(@frustum.v[0])^,m1);
+          PzeVector4d(@result.v[1])^:=VectorTransform(PzeVector4d(@frustum.v[1])^,m1);
+          PzeVector4d(@result.v[2])^:=VectorTransform(PzeVector4d(@frustum.v[2])^,m1);
+          PzeVector4d(@result.v[3])^:=VectorTransform(PzeVector4d(@frustum.v[3])^,m1);
+          PzeVector4d(@result.v[4])^:=VectorTransform(PzeVector4d(@frustum.v[4])^,m1);
+          PzeVector4d(@result.v[5])^:=VectorTransform(PzeVector4d(@frustum.v[5])^,m1);
         end;
 end;
 function Vertexlength(const Vector1, Vector2: TzePoint3d): Double;
@@ -1927,16 +1927,16 @@ function CreateMatrixFromBasis(const ox,oy,oz:TzePoint3d):DMatrix4D;
 begin
   Result.CreateRec(OneMtr,CMTRotate);
   //result:=onematrix;
-  PzePoint3d(@result.mtr[0])^:=ox;
-  PzePoint3d(@result.mtr[1])^:=oy;
-  PzePoint3d(@result.mtr[2])^:=oz;
+  PzePoint3d(@result.mtr.v[0])^:=ox;
+  PzePoint3d(@result.mtr.v[1])^:=oy;
+  PzePoint3d(@result.mtr.v[2])^:=oz;
   //result.t:=CMTRotate;
 end;
 procedure CreateBasisFromMatrix(const m:DMatrix4D;out ox,oy,oz:TzePoint3d);
 begin
-  ox:=PzePoint3d(@m.mtr[0])^;
-  oy:=PzePoint3d(@m.mtr[1])^;
-  oz:=PzePoint3d(@m.mtr[2])^;
+  ox:=PzePoint3d(@m.mtr.v[0])^;
+  oy:=PzePoint3d(@m.mtr.v[1])^;
+  oz:=PzePoint3d(@m.mtr.v[2])^;
 end;
 function QuaternionMagnitude(const q : TzeQuaternion) : Double;
 begin
@@ -1959,35 +1959,35 @@ function QuaternionFromMatrix(const mat : DMatrix4D) : TzeQuaternion;
 var
    traceMat, s, invS : Double;
 begin
-  traceMat := 1 + mat.mtr[0].v[0] + mat.mtr[1].v[1] + mat.mtr[2].v[2];
+  traceMat := 1 + mat.mtr.v[0].v[0] + mat.mtr.v[1].v[1] + mat.mtr.v[2].v[2];
   if traceMat>EPSILON2 then begin
     s:=Sqrt(traceMat)*2;
     invS:=1/s;
-    Result.ImagPart.x:=(mat.mtr[1].v[2]-mat.mtr[2].v[1])*invS;
-    Result.ImagPart.y:=(mat.mtr[2].v[0]-mat.mtr[0].v[2])*invS;
-    Result.ImagPart.z:=(mat.mtr[0].v[1]-mat.mtr[1].v[0])*invS;
+    Result.ImagPart.x:=(mat.mtr.v[1].v[2]-mat.mtr.v[2].v[1])*invS;
+    Result.ImagPart.y:=(mat.mtr.v[2].v[0]-mat.mtr.v[0].v[2])*invS;
+    Result.ImagPart.z:=(mat.mtr.v[0].v[1]-mat.mtr.v[1].v[0])*invS;
     Result.RealPart  :=0.25*s;
-  end else if (mat.mtr[0].v[0]>mat.mtr[1].v[1]) and (mat.mtr[0].v[0]>mat.mtr[2].v[2]) then begin  // Row 0:
-    s:=Sqrt(Max{Float}(EPSILON2, {cOne}1+mat.mtr[0].v[0]-mat.mtr[1].v[1]-mat.mtr[2].v[2]))*2;
+  end else if (mat.mtr.v[0].v[0]>mat.mtr.v[1].v[1]) and (mat.mtr.v[0].v[0]>mat.mtr.v[2].v[2]) then begin  // Row 0:
+    s:=Sqrt(Max{Float}(EPSILON2, {cOne}1+mat.mtr.v[0].v[0]-mat.mtr.v[1].v[1]-mat.mtr.v[2].v[2]))*2;
     invS:=1/s;
     Result.ImagPart.x:=0.25*s;
-    Result.ImagPart.y:=(mat.mtr[0].v[1]+mat.mtr[1].v[0])*invS;
-    Result.ImagPart.z:=(mat.mtr[2].v[0]+mat.mtr[0].v[2])*invS;
-    Result.RealPart  :=(mat.mtr[1].v[2]-mat.mtr[2].v[1])*invS;
-  end else if (mat.mtr[1].v[1]>mat.mtr[2].v[2]) then begin  // Row 1:
-    s:=Sqrt(Max{Float}(EPSILON2, {cOne}1+mat.mtr[1].v[1]-mat.mtr[0].v[0]-mat.mtr[2].v[2]))*2;
+    Result.ImagPart.y:=(mat.mtr.v[0].v[1]+mat.mtr.v[1].v[0])*invS;
+    Result.ImagPart.z:=(mat.mtr.v[2].v[0]+mat.mtr.v[0].v[2])*invS;
+    Result.RealPart  :=(mat.mtr.v[1].v[2]-mat.mtr.v[2].v[1])*invS;
+  end else if (mat.mtr.v[1].v[1]>mat.mtr.v[2].v[2]) then begin  // Row 1:
+    s:=Sqrt(Max{Float}(EPSILON2, {cOne}1+mat.mtr.v[1].v[1]-mat.mtr.v[0].v[0]-mat.mtr.v[2].v[2]))*2;
     invS:=1/s;
-    Result.ImagPart.x:=(mat.mtr[0].v[1]+mat.mtr[1].v[0])*invS;
+    Result.ImagPart.x:=(mat.mtr.v[0].v[1]+mat.mtr.v[1].v[0])*invS;
     Result.ImagPart.y:=0.25*s;
-    Result.ImagPart.z:=(mat.mtr[1].v[2]+mat.mtr[2].v[1])*invS;
-    Result.RealPart  :=(mat.mtr[2].v[0]-mat.mtr[0].v[2])*invS;
+    Result.ImagPart.z:=(mat.mtr.v[1].v[2]+mat.mtr.v[2].v[1])*invS;
+    Result.RealPart  :=(mat.mtr.v[2].v[0]-mat.mtr.v[0].v[2])*invS;
   end else begin  // Row 2:
-    s:=Sqrt(Max{Float}(EPSILON2, {cOne}1+mat.mtr[2].v[2]-mat.mtr[0].v[0]-mat.mtr[1].v[1]))*2;
+    s:=Sqrt(Max{Float}(EPSILON2, {cOne}1+mat.mtr.v[2].v[2]-mat.mtr.v[0].v[0]-mat.mtr.v[1].v[1]))*2;
     invS:=1/s;
-    Result.ImagPart.x:=(mat.mtr[2].v[0]+mat.mtr[0].v[2])*invS;
-    Result.ImagPart.y:=(mat.mtr[1].v[2]+mat.mtr[2].v[1])*invS;
+    Result.ImagPart.x:=(mat.mtr.v[2].v[0]+mat.mtr.v[0].v[2])*invS;
+    Result.ImagPart.y:=(mat.mtr.v[1].v[2]+mat.mtr.v[2].v[1])*invS;
     Result.ImagPart.z:=0.25*s;
-    Result.RealPart  :=(mat.mtr[0].v[1]-mat.mtr[1].v[0])*invS;
+    Result.RealPart  :=(mat.mtr.v[0].v[1]-mat.mtr.v[1].v[0])*invS;
   end;
   NormalizeQuaternion(Result);
 end;
@@ -2052,22 +2052,22 @@ begin
   yw := y * w;
   zz := z * z;
   zw := z * w;
-  Result.mtr[0].v[0] := 1 - 2 * ( yy + zz );
-  Result.mtr[1].v[0] :=     2 * ( xy - zw );
-  Result.mtr[2].v[0] :=     2 * ( xz + yw );
-  Result.mtr[3].v[0] := 0;
-  Result.mtr[0].v[1] :=     2 * ( xy + zw );
-  Result.mtr[1].v[1] := 1 - 2 * ( xx + zz );
-  Result.mtr[2].v[1] :=     2 * ( yz - xw );
-  Result.mtr[3].v[1] := 0;
-  Result.mtr[0].v[2] :=     2 * ( xz - yw );
-  Result.mtr[1].v[2] :=     2 * ( yz + xw );
-  Result.mtr[2].v[2] := 1 - 2 * ( xx + yy );
-  Result.mtr[3].v[2] := 0;
-  Result.mtr[0].v[3] := 0;
-  Result.mtr[1].v[3] := 0;
-  Result.mtr[2].v[3] := 0;
-  Result.mtr[3].v[3] := 1;
+  Result.mtr.v[0].v[0] := 1 - 2 * ( yy + zz );
+  Result.mtr.v[1].v[0] :=     2 * ( xy - zw );
+  Result.mtr.v[2].v[0] :=     2 * ( xz + yw );
+  Result.mtr.v[3].v[0] := 0;
+  Result.mtr.v[0].v[1] :=     2 * ( xy + zw );
+  Result.mtr.v[1].v[1] := 1 - 2 * ( xx + zz );
+  Result.mtr.v[2].v[1] :=     2 * ( yz - xw );
+  Result.mtr.v[3].v[1] := 0;
+  Result.mtr.v[0].v[2] :=     2 * ( xz - yw );
+  Result.mtr.v[1].v[2] :=     2 * ( yz + xw );
+  Result.mtr.v[2].v[2] := 1 - 2 * ( xx + yy );
+  Result.mtr.v[3].v[2] := 0;
+  Result.mtr.v[0].v[3] := 0;
+  Result.mtr.v[1].v[3] := 0;
+  Result.mtr.v[2].v[3] := 0;
+  Result.mtr.v[3].v[3] := 1;
   //Result.t:=CMTRotate;
 end;
 function GetArcParamFrom3Point2D(Const PointData:tarcrtmodify;out ad:TArcData):Boolean;
@@ -2127,7 +2127,7 @@ begin
   result.t:=CMTTransform;
 end;
 
-function CalcDisplaySubFrustum(const x,y,w,h:Double;const mm,pm:DMatrix4D;const vp:TzeVector4i):ClipArray;
+function CalcDisplaySubFrustum(const x,y,w,h:Double;const mm,pm:DMatrix4D;const vp:TzeVector4i):TzeFrustum;
 var
   tm: DMatrix4D;
 begin
@@ -2178,7 +2178,7 @@ begin
   else
     result:=TCSDRight;
 end;
-function CalcTrueInFrustum (const lbegin,lend:TzePoint3d; const frustum:ClipArray):TInBoundingVolume;
+function CalcTrueInFrustum (const lbegin,lend:TzePoint3d; const frustum:TzeFrustum):TInBoundingVolume;
 var
   i,j:Integer;
   d1,d2:Double;
@@ -2194,7 +2194,7 @@ begin
   byteend:=0;
   cacount:=0;
   for i:=0 to 5 do begin
-    with frustum[i] do
+    with frustum.v[i] do
     begin
       d1:=v[0] * lbegin.x + v[1] * lbegin.y + v[2] * lbegin.z + v[3];
       d2:=v[0] * lend.x +   v[1] * lend.y +   v[2] * lend.z +   v[3];
@@ -2241,7 +2241,7 @@ begin
     bit:=0;
     p:=VertexDmorph(lbegin,d,d1);
     for i:=0 to 5 do begin
-      with frustum[i] do
+      with frustum.v[i] do
         if (v[0] * p.x + v[1] * p.y + v[2] * p.z + v[3])>=0 then
           inc(bit);
     end;
@@ -2252,7 +2252,7 @@ begin
     d1:=d2;
   end;
 end;
-function CalcTrueInFrustum (const lbegin,lend:TzePoint3s; const frustum:ClipArray):TInBoundingVolume;
+function CalcTrueInFrustum (const lbegin,lend:TzePoint3s; const frustum:TzeFrustum):TInBoundingVolume;
 var
   i,j:Integer;
   d1,d2:Double;
@@ -2268,7 +2268,7 @@ begin
   byteend:=0;
   cacount:=0;
   for i:=0 to 5 do begin
-    with frustum[i] do begin
+    with frustum.v[i] do begin
       d1:=v[0] * lbegin.x + v[1] * lbegin.y + v[2] * lbegin.z + v[3];
       d2:=v[0] * lend.x +   v[1] * lend.y +   v[2] * lend.z +   v[3];
     end;
@@ -2314,7 +2314,7 @@ begin
     bit:=0;
     p:=VertexDmorph(lbegin,d,d1);
     for i:=0 to 5 do begin
-      with frustum[i] do
+      with frustum.v[i] do
         if (v[0] * p.x + v[1] * p.y + v[2] * p.z + v[3])>=0
         then
           inc(bit);
@@ -2327,7 +2327,7 @@ begin
   end;
 end;
 
-function CalcAABBInFrustum (const AABB:TBoundingBox;const frustum:ClipArray):TInBoundingVolume;
+function CalcAABBInFrustum (const AABB:TBoundingBox;const frustum:TzeFrustum):TInBoundingVolume;
 var
   i,Count:integer;
   p1,p2,p3,p4,p5,p6,p7,p8:TzePoint3d;
@@ -2344,7 +2344,7 @@ begin
 
   Count:=0;
   for i:=0 to 5 do begin
-    with frustum[i] do begin
+    with frustum.v[i] do begin
       d1:=v[0] * p1.x + v[1] * p1.y + v[2] * p1.z + v[3];
       d2:=v[0] * p2.x + v[1] * p2.y + v[2] * p2.z + v[3];
       d3:=v[0] * p3.x + v[1] * p3.y + v[2] * p3.z + v[3];
@@ -2464,13 +2464,13 @@ begin
 
   m.CreateRec(OneMtr,CMTTransform);
   {Все коэффициенты домножены на xmaxminusxmin, воччтановить оригинал - соответственно всё разделить}
-  m.mtr[0].v[0]:=2{/xmaxminusxmin};
-  m.mtr[1].v[1]:=(2/ymaxminusymin)*xmaxminusxmin;
-  m.mtr[2].v[2]:=(2/zmaxminuszmin)*xmaxminusxmin;
-  m.mtr[3].v[0]:=(-xmaxplusxmin/xmaxminusxmin)*xmaxminusxmin;
-  m.mtr[3].v[1]:=(-ymaxplusymin/ymaxminusymin)*xmaxminusxmin;
-  m.mtr[3].v[2]:=(zmaxpluszmin/zmaxminuszmin)*xmaxminusxmin;
-  m.mtr[3].v[3]:=xmaxminusxmin;
+  m.mtr.v[0].v[0]:=2{/xmaxminusxmin};
+  m.mtr.v[1].v[1]:=(2/ymaxminusymin)*xmaxminusxmin;
+  m.mtr.v[2].v[2]:=(2/zmaxminuszmin)*xmaxminusxmin;
+  m.mtr.v[3].v[0]:=(-xmaxplusxmin/xmaxminusxmin)*xmaxminusxmin;
+  m.mtr.v[3].v[1]:=(-ymaxplusymin/ymaxminusymin)*xmaxminusxmin;
+  m.mtr.v[3].v[2]:=(zmaxpluszmin/zmaxminuszmin)*xmaxminusxmin;
+  m.mtr.v[3].v[3]:=xmaxminusxmin;
 
   result:=MatrixMultiply(m,matrix^);
   //glMultMatrixd(@m);
@@ -2486,12 +2486,12 @@ begin
   SinCos(radians, sine, cosine);
   cotangent:= cosine / sine;
   m.CreateRec(OneMtr,CMTTransform);
-  m.mtr[0].v[0] := cotangent / w_h;
-  m.mtr[1].v[1] := cotangent;
-  m.mtr[2].v[2] := -(zmax + zmin) / deltaZ;
-  m.mtr[2].v[3] := -1;
-  m.mtr[3].v[2] := -2 * zmin * zmax / deltaZ;
-  m.mtr[3].v[3] := 0;
+  m.mtr.v[0].v[0] := cotangent / w_h;
+  m.mtr.v[1].v[1] := cotangent;
+  m.mtr.v[2].v[2] := -(zmax + zmin) / deltaZ;
+  m.mtr.v[2].v[3] := -1;
+  m.mtr.v[3].v[2] := -2 * zmin * zmax / deltaZ;
+  m.mtr.v[3].v[3] := 0;
   result:=MatrixMultiply(m,matrix^);
 end;
 
@@ -2638,17 +2638,17 @@ begin
 
   Result.CreateRec(OneMtr,CMTRotate);
   //result:=onematrix;
-  Result.mtr[XAxisIndex].v[XAxisIndex]:=(one_minus_cosine * Sqr(Axis.x)) + Cosine;
-  Result.mtr[XAxisIndex].v[YAxisIndex]:=(one_minus_cosine * Axis.x * Axis.y) - (Axis.z * Sine);
-  Result.mtr[XAxisIndex].v[ZAxisIndex]:=(one_minus_cosine * Axis.z * Axis.x) + (Axis.y * Sine);
+  Result.mtr.v[XAxisIndex].v[XAxisIndex]:=(one_minus_cosine * Sqr(Axis.x)) + Cosine;
+  Result.mtr.v[XAxisIndex].v[YAxisIndex]:=(one_minus_cosine * Axis.x * Axis.y) - (Axis.z * Sine);
+  Result.mtr.v[XAxisIndex].v[ZAxisIndex]:=(one_minus_cosine * Axis.z * Axis.x) + (Axis.y * Sine);
 
-  Result.mtr[YAxisIndex].v[XAxisIndex]:=(one_minus_cosine * Axis.x * Axis.y) + (Axis.z * Sine);
-  Result.mtr[YAxisIndex].v[YAxisIndex]:=(one_minus_cosine * Sqr(Axis.y)) + Cosine;
-  Result.mtr[YAxisIndex].v[ZAxisIndex]:=(one_minus_cosine * Axis.y * Axis.z) - (Axis.x * Sine);
+  Result.mtr.v[YAxisIndex].v[XAxisIndex]:=(one_minus_cosine * Axis.x * Axis.y) + (Axis.z * Sine);
+  Result.mtr.v[YAxisIndex].v[YAxisIndex]:=(one_minus_cosine * Sqr(Axis.y)) + Cosine;
+  Result.mtr.v[YAxisIndex].v[ZAxisIndex]:=(one_minus_cosine * Axis.y * Axis.z) - (Axis.x * Sine);
 
-  Result.mtr[ZAxisIndex].v[XAxisIndex]:=(one_minus_cosine * Axis.z * Axis.x) - (Axis.y * Sine);
-  Result.mtr[ZAxisIndex].v[YAxisIndex]:=(one_minus_cosine * Axis.y * Axis.z) + (Axis.x * Sine);
-  Result.mtr[ZAxisIndex].v[ZAxisIndex]:=(one_minus_cosine * Sqr(Axis.z)) + Cosine;
+  Result.mtr.v[ZAxisIndex].v[XAxisIndex]:=(one_minus_cosine * Axis.z * Axis.x) - (Axis.y * Sine);
+  Result.mtr.v[ZAxisIndex].v[YAxisIndex]:=(one_minus_cosine * Axis.y * Axis.z) + (Axis.x * Sine);
+  Result.mtr.v[ZAxisIndex].v[ZAxisIndex]:=(one_minus_cosine * Sqr(Axis.z)) + Cosine;
   //Result.t:=CMTRotate;
 end;
 

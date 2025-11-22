@@ -32,11 +32,11 @@ type
   GDBObjCamera= object(GDBBaseCamera)
     modelMatrixLCS:DMatrix4d;
     zminLCS,zmaxLCS:Double;
-    frustumLCS:ClipArray;
+    frustumLCS:TzeFrustum;
     clipLCS:DMatrix4d;
     projMatrixLCS:DMatrix4d;
     notuseLCS:Boolean;
-    procedure getfrustum(mm,pm:PDMatrix4d;var _clip:DMatrix4d;var _frustum:ClipArray);
+    procedure getfrustum(mm,pm:PDMatrix4d;var _clip:DMatrix4d;var _frustum:TzeFrustum);
     procedure RotateInLocalCSXY(ux,uy:Double);
     procedure MoveInLocalCSXY(oldx,oldy:Double;ax:TzePoint3d);
     function GetObjTypeName:String;virtual;
@@ -75,9 +75,9 @@ begin
   rotmatr:=MatrixMultiply(CreateRotationMatrixY(uy),CreateRotationMatrixX(ux));
   tempmatr:=MatrixMultiply(rotmatr,tempmatr);
 
-  prop.xdir:=PzePoint3d(@tempmatr.mtr[0])^;
-  prop.ydir:=PzePoint3d(@tempmatr.mtr[1])^;
-  prop.look:=PzePoint3d(@tempmatr.mtr[2])^;
+  prop.xdir:=PzePoint3d(@tempmatr.mtr.v[0])^;
+  prop.ydir:=PzePoint3d(@tempmatr.mtr.v[1])^;
+  prop.look:=PzePoint3d(@tempmatr.mtr.v[2])^;
 
   prop.look:=NormalizeVertex(prop.look);
   prop.xdir := VectorDot(prop.ydir,prop.look);
@@ -108,10 +108,10 @@ begin
     tempmatr:=rotmatr;
     tv:=vectortransform(tv,tempmatr);
     tv.x:=tv.x;
-    PzePoint3d(@rotmatr.mtr[3])^:=prop.point;
+    PzePoint3d(@rotmatr.mtr.v[3])^:=prop.point;
     tempmatr:=CreateTranslationMatrix(PzePoint3d(@tv)^);
     tempmatr:=MatrixMultiply(rotmatr,tempmatr);
-    prop.point:=PzePoint3d(@tempmatr.mtr[3])^;
+    prop.point:=PzePoint3d(@tempmatr.mtr.v[3])^;
   end;
   end else
     zDebugln('GDBObjCamera.MoveInLocalCSXY:'+rsDivByZero);

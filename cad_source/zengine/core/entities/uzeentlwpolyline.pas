@@ -81,9 +81,9 @@ type
     procedure rtsave(refp:Pointer);virtual;
     procedure getoutbound(var DC:TDrawContext);virtual;
     function CalcTrueInFrustum(
-      const frustum:ClipArray):TInBoundingVolume;virtual;
+      const frustum:TzeFrustum):TInBoundingVolume;virtual;
     function onmouse(var popa:TZctnrVectorPGDBaseEntity;
-      const MF:ClipArray;InSubEntry:boolean):boolean;virtual;
+      const MF:TzeFrustum;InSubEntry:boolean):boolean;virtual;
     function onpoint(var objects:TZctnrVectorPGDBaseEntity;
       const point:TzePoint3d):boolean;virtual;
     function getsnap(var osp:os_record;var pdata:Pointer;
@@ -520,7 +520,7 @@ begin
   widthload:=False;
   closed:=False;
   if bp.ListPos.owner<>nil then
-    local.p_insert:=PzePoint3d(@bp.ListPos.owner^.GetMatrix^.mtr[3])^
+    local.p_insert:=PzePoint3d(@bp.ListPos.owner^.GetMatrix^.mtr.v[3])^
   else
     local.P_insert:=nulvertex;
 

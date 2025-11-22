@@ -42,7 +42,7 @@ procedure rasterize(cdwg:PTSimpleDrawing;pw,ph:integer;point1,point2:TzePoint3d;
  var
   dx,dy,sx,sy,scale:Double;
   tmatrix,_clip:DMatrix4d;
-  _frustum:ClipArray;
+  _frustum:TzeFrustum;
   DC:TDrawContext;
 
   modelMatrix:DMatrix4d;

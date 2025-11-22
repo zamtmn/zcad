@@ -34,6 +34,17 @@ type
   TMatrixComponents=(MTIdentity,MTScale,MTTranslate,MTRotate,MTShear);
   TMatrixType={-}set of TMatrixComponents{/Byte/};
 {EXPORT-}
+  GRawMatrix4<GRow>=record
+    case Integer of
+      0:(l0,l1,l2,l3:GRow);
+      1:(v:array [0..3] of GRow);
+  end;
+  GRawMatrix6<GRow>=record
+    case Integer of
+      0:(right,left,down,up,near,far:GRow);
+      1:(v:array [0..5] of GRow);
+  end;
+
   GMatrix4<TMtr>=record
     mtr:TMtr;
     t:TMatrixType;
@@ -115,89 +126,61 @@ type
   TzeXUnits=Double;
   TzeYUnits=Double;
   TzeZUnits=Double;
-{EXPORT+}
 
-  {REGISTERRECORDTYPE TzePoint2d}
-  {-}TzePoint2d=GVector2<double,double>;{//}
-  {-}{/TzePoint2d=record/}
-    {-}{/x:Double;/}
-    {-}{/y:Double;/}
-  {-}{/end;/}
+
+  TzePoint2d=GVector2<double,double>;
   PzePoint2d=^TzePoint2d;
-
-  {REGISTERRECORDTYPE TzePoint2i}
-  {-}TzePoint2i=GVector2i<integer,integer>;{//}
-  {-}{/TzePoint2i=record/}
-    {-}{/x:Integer;/}
-    {-}{/y:Integer;/}
-  {-}{/end;/}
+  TzePoint2i=GVector2i<integer,integer>;
   PzePoint2i=^TzePoint2i;
-
-  {REGISTERRECORDTYPE TzeVector3d}
-  {-}TzeVector3d=GVector3<Double,Double>;{//}
-  {-}{/TzeVector3d=record/}
-    {-}{/x:TzeXUnits;/}
-    {-}{/y:TzeYUnits;/}
-    {-}{/z:TzeZUnits;/}
-  {-}{/end;/}
+  TzeVector3d=GVector3<Double,Double>;
   PzeVector3d=^TzeVector3d;
-
-  {REGISTERRECORDTYPE TzePoint3d}
-  {-}TzePoint3d=GVector3<Double,Double>;{//}
-  {-}{/TzePoint3d=record/}
-    {-}{/x:TzeXUnits;/}
-    {-}{/y:TzeYUnits;/}
-    {-}{/z:TzeZUnits;/}
-  {-}{/end;/}
+  TzePoint3d=GVector3<Double,Double>;
   PzePoint3d=^TzePoint3d;
 
-  {REGISTERRECORDTYPE TzeVector4d}
-  {-}TzeVector4d=GVector4<Double,Double>;{//}
-  {-}{/TzeVector4d=record/}
-    {-}{/x:Double;/}
-    {-}{/y:Double;/}
-    {-}{/z:Double;/}
-    {-}{/w:Double;/}
-  {-}{/end;/}
+  TzeVector4d=GVector4<Double,Double>;
+  PzeVector4d=^TzeVector4d;
 
-  {REGISTERRECORDTYPE TzeVector4s}
-  {-}TzeVector4s=GVector4<Single,Single>;{//}
-  {-}{/TzeVector4s=record/}
-    {-}{/x:Single;/}
-    {-}{/y:Single;/}
-    {-}{/z:Single;/}
-    {-}{/w:Single;/}
-  {-}{/end;/}
+  TzeVector4s=GVector4<Single,Single>;
   PzeVector4s=^TzeVector4s;
 
-  {REGISTERRECORDTYPE TzeVector4i}
-  {-}TzeVector4i=GVector4i<Integer,Integer>;{//}
-  {-}{/TzeVector4i=record/}
-    {-}{/x:Integer;/}
-    {-}{/y:Integer;/}
-    {-}{/z:Integer;/}
-    {-}{/w:Integer;/}
-  {-}{/end;/}
+  TzeVector4i=GVector4i<Integer,Integer>;
   PzeVector4i=^TzeVector4i;
 
-  TMatrix4d=packed array[0..3]of TzeVector4d;
-  PDMatrix4d=^DMatrix4d;
+  TzeFrustum=GRawMatrix6<TzeVector4d>;
+
+{EXPORT+}
+
+  {REGISTERRECORDTYPE TMatrix4d}
+  {-}TMatrix4d=GRawMatrix4<TzeVector4d>;{//}
+  {-}{/TMatrix4d=record/}
+    {-}{/l0:TzeVector4d;/}
+    {-}{/l1:TzeVector4d;/}
+    {-}{/l2:TzeVector4d;/}
+    {-}{/l3:TzeVector4d;/}
+  {-}{/end;/}
+
   {-}DMatrix4d=GMatrix4<TMatrix4d>;{//}
   {-}{/DMatrix4d=record/}
   {-}{/  mtr:TMatrix4d;/}
   {-}{/  t:TMatrixType;/}
   {-}{/end;            /}
-  PzeVector4d=^TzeVector4d;
+  PDMatrix4d=^DMatrix4d;
 
-  TMatrix4f=packed array[0..3]of TzeVector4s;
-  PDMatrix4f=^DMatrix4f;
+  {REGISTERRECORDTYPE TMatrix4f}
+  {-}TMatrix4f=GRawMatrix4<TzeVector4s>;{//}
+  {-}{/TMatrix4f=record/}
+    {-}{/l0:TzeVector4s;/}
+    {-}{/l1:TzeVector4s;/}
+    {-}{/l2:TzeVector4s;/}
+    {-}{/l3:TzeVector4s;/}
+  {-}{/end;/}
+
   {-}DMatrix4f=GMatrix4<TMatrix4f>;{//}
   {-}{/DMatrix4f=record/}
   {-}{/  mtr:TMatrix4f;/}
   {-}{/  t:TMatrixType;/}
   {-}{/end;            /}
-
-  ClipArray=packed array[0..5]of TzeVector4d;
+  PDMatrix4f=^DMatrix4f;
 
 {EXPORT-}
 

@@ -213,14 +213,14 @@ begin
     begin
          ispl:=not(ispl);
          if ispl then begin
-                             lp:=PzePoint3d(@matr.mtr[3].v[0])^;
+                             lp:=PzePoint3d(@matr.mtr.v[3].v[0])^;
                              lp.y:=lp.y-0.2*textprop_size;
                              lp.x:=lp.x-0.1*textprop_size;
                              lp:=VectorTransform3d(lp,objmatrix);
                              pl.PushBackData(lp);
                         end
                    else begin
-                             lp:=PzePoint3d(@matr.mtr[3].v[0])^;
+                             lp:=PzePoint3d(@matr.mtr.v[3].v[0])^;
                              lp.y:=lp.y-0.2*textprop_size;
                              lp.x:=lp.x-0.1*textprop_size;
                              lp:=VectorTransform3d(lp,objmatrix);
@@ -235,7 +235,7 @@ begin
     if sym<>1 then
     begin
       m1.CreateRec(OneMtr,CMTTranslate);
-      m1.mtr[3].v[0] := pgdbfont(pfont)^.GetOrReplaceSymbolInfo({ach2uch}{(ord(content[i]))}sym{//-ttf-//,tdinfo}).NextSymX;
+      m1.mtr.v[3].v[0] := pgdbfont(pfont)^.GetOrReplaceSymbolInfo({ach2uch}{(ord(content[i]))}sym{//-ttf-//,tdinfo}).NextSymX;
       matr:=MatrixMultiply(m1,matr);
     end;
   inc(i,symlen);
@@ -243,7 +243,7 @@ begin
                        if ispl then
 
                      begin
-                             lp:=PzePoint3d(@matr.mtr[3].v[0])^;
+                             lp:=PzePoint3d(@matr.mtr.v[3].v[0])^;
                              lp.y:=lp.y-0.2*textprop_size;
                              lp.x:=lp.x-0.1*textprop_size;
                              lp:=VectorTransform3d(lp,objmatrix);
@@ -558,7 +558,7 @@ begin
           if ptp.param.PStyle.pfont.font.IsUnicode then
                                                      sym:=ach2uch(sym);
 PTP^.param.PStyle.pfont.CreateSymbol(drawer,PTP.txtH,self,sym,objmatrix,matr,Bound,sli);
-matr.mtr[3].v[0]:=matr.mtr[3].v[0]+PTP^.param.PStyle.pfont^.GetOrReplaceSymbolInfo(byte(PTP^.Text[j]){//-ttf-//,tdinfo}).NextSymX;
+matr.mtr.v[3].v[0]:=matr.mtr.v[3].v[0]+PTP^.param.PStyle.pfont^.GetOrReplaceSymbolInfo(byte(PTP^.Text[j]){//-ttf-//,tdinfo}).NextSymX;
 matr.t:=matr.t+CMTTranslate;
 end;
 end;

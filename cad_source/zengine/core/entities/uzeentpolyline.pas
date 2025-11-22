@@ -51,7 +51,7 @@ type
     function Clone(own:Pointer):PGDBObjEntity;virtual;
     function GetObjTypeName:string;virtual;
     function onmouse(var popa:TZctnrVectorPGDBaseEntity;
-      const MF:ClipArray;InSubEntry:boolean):boolean;virtual;
+      const MF:TzeFrustum;InSubEntry:boolean):boolean;virtual;
     function onpoint(var objects:TZctnrVectorPGDBaseEntity;
       const point:TzePoint3d):boolean;virtual;
     procedure AddOnTrackAxis(var posr:os_record;
@@ -60,7 +60,7 @@ type
     class function CreateInstance:PGDBObjPolyline;static;
     function GetObjType:TObjID;virtual;
     function CalcTrueInFrustum(
-      const frustum:ClipArray):TInBoundingVolume;virtual;
+      const frustum:TzeFrustum):TInBoundingVolume;virtual;
     procedure addcontrolpoints(tdesc:Pointer);virtual;
     procedure rtmodifyonepoint(const rtmod:TRTModifyData);virtual;
     procedure remaponecontrolpoint(pdesc:pcontrolpointdesc;

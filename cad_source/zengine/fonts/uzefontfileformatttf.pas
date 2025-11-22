@@ -259,7 +259,7 @@ end;
 procedure TZETFFFontImpl.SetupSymbolLineParams(const matr:DMatrix4d; var SymsParam:TSymbolSParam);
 begin
   if SymsParam.IsCanSystemDraw then begin
-    SymsParam.NeededFontHeight:=oneVertexlength(PzePoint3d(@matr.mtr[1])^)*((TTFImplementation.Ascent+TTFImplementation.Descent)/(TTFImplementation.CapHeight));
+    SymsParam.NeededFontHeight:=oneVertexlength(PzePoint3d(@matr.mtr.v[1])^)*((TTFImplementation.Ascent+TTFImplementation.Descent)/(TTFImplementation.CapHeight));
   end
 end;
 function TZETFFFontImpl.IsCanSystemDraw:Boolean;

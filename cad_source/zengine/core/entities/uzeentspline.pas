@@ -68,7 +68,7 @@ type
     function FromDXFPostProcessBeforeAdd(ptu:PExtensionData;
       const drawing:TDrawingDef):PGDBObjSubordinated;virtual;
     function onmouse(var popa:TZctnrVectorPGDBaseEntity;
-      const MF:ClipArray;InSubEntry:boolean):boolean;virtual;
+      const MF:TzeFrustum;InSubEntry:boolean):boolean;virtual;
     function onpoint(var objects:TZctnrVectorPGDBaseEntity;
       const point:TzePoint3d):boolean;virtual;
     procedure AddOnTrackAxis(var posr:os_record;const processaxis:taddotrac);virtual;

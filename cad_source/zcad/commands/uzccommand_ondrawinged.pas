@@ -182,7 +182,7 @@ begin
 
           //drawings.GetCurrentDWG^.SelObjArray.TransformObj(dispmatr);
           drawings.GetCurrentDWG^.SelObjArray.SetRotateObj(
-            dispmatr,dispmatr2,rotmatr,PzePoint3d(@rotmatr.mtr[0])^,PzePoint3d(@rotmatr.mtr[1])^,PzePoint3d(@rotmatr.mtr[2])^);
+            dispmatr,dispmatr2,rotmatr,PzePoint3d(@rotmatr.mtr.v[0])^,PzePoint3d(@rotmatr.mtr.v[1])^,PzePoint3d(@rotmatr.mtr.v[2])^);
         end;
 
         fixentities:=True;
@@ -243,7 +243,7 @@ begin
 
           //drawings.GetCurrentDWG^.SelObjArray.Transform(dispmatr);
           drawings.GetCurrentDWG^.SelObjArray.SetRotate(
-            dispmatr,dispmatr2,rotmatr,PzePoint3d(@rotmatr.mtr[0])^,PzePoint3d(@rotmatr.mtr[1])^,PzePoint3d(@rotmatr.mtr[2])^);
+            dispmatr,dispmatr2,rotmatr,PzePoint3d(@rotmatr.mtr.v[0])^,PzePoint3d(@rotmatr.mtr.v[1])^,PzePoint3d(@rotmatr.mtr.v[2])^);
 
           fixentities:=True;
         end;

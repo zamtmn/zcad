@@ -51,11 +51,11 @@ type
       var drawing:TDrawingDef;var context:TIODXFLoadContext);virtual;
 
     procedure CalcObjMatrix(pdrawing:PTDrawingDef=nil);virtual;
-    function calcinfrustum(const frustum:ClipArray;
+    function calcinfrustum(const frustum:TzeFrustum;
       const Actuality:TVisActuality;var Counters:TCameraCounters;ProjectProc:GDBProjectProc;
       const zoom,currentdegradationfactor:double):boolean;virtual;
     function CalcTrueInFrustum(
-      const frustum:ClipArray):TInBoundingVolume;virtual;
+      const frustum:TzeFrustum):TInBoundingVolume;virtual;
     procedure getoutbound(var DC:TDrawContext);virtual;
     procedure SaveToDXF(var outStream:TZctnrVectorBytes;
       var drawing:TDrawingDef;var IODXFContext:TIODXFSaveContext);virtual;
@@ -68,7 +68,7 @@ type
     procedure createpoint(var DC:TDrawContext);virtual;
     procedure projectpoint;virtual;
     function onmouse(var popa:TZctnrVectorPGDBaseEntity;
-      const MF:ClipArray;InSubEntry:boolean):boolean;virtual;
+      const MF:TzeFrustum;InSubEntry:boolean):boolean;virtual;
     function getsnap(var osp:os_record;var pdata:Pointer;
       const param:OGLWndtype;ProjectProc:GDBProjectProc;SnapMode:TGDBOSMode):boolean;virtual;
     procedure addcontrolpoints(tdesc:Pointer);virtual;
@@ -388,11 +388,11 @@ var
   i:integer;
   r:double;
 begin
-  r:=sqrt(ObjMatrix.mtr[0].v[0]*ObjMatrix.mtr[0].v[0]+ObjMatrix.mtr[0].v[1]*
-    ObjMatrix.mtr[0].v[1]+ObjMatrix.mtr[0].v[2]*ObjMatrix.mtr[0].v[2]);
+  r:=sqrt(ObjMatrix.mtr.v[0].v[0]*ObjMatrix.mtr.v[0].v[0]+ObjMatrix.mtr.v[0].v[1]*
+    ObjMatrix.mtr.v[0].v[1]+ObjMatrix.mtr.v[0].v[2]*ObjMatrix.mtr.v[0].v[2]);
   for i:=0 to 5 do begin
-    if (mf[i].v[0]*P_insert_in_WCS.x+mf[i].v[1]*P_insert_in_WCS.y+
-      mf[i].v[2]*P_insert_in_WCS.z+mf[i].v[3]+r<0) then
+    if (mf.v[i].v[0]*P_insert_in_WCS.x+mf.v[i].v[1]*P_insert_in_WCS.y+
+      mf.v[i].v[2]*P_insert_in_WCS.z+mf.v[i].v[3]+r<0) then
       exit(False);
   end;
   Result:=Vertex3D_in_WCS_Array.onmouse(mf,False);
@@ -412,12 +412,12 @@ var
   i:integer;
   r:double;
 begin
-  r:=sqrt(ObjMatrix.mtr[0].v[0]*ObjMatrix.mtr[0].v[0]+ObjMatrix.mtr[0].v[1]*
-    ObjMatrix.mtr[0].v[1]+ObjMatrix.mtr[0].v[2]*ObjMatrix.mtr[0].v[2]);
+  r:=sqrt(ObjMatrix.mtr.v[0].v[0]*ObjMatrix.mtr.v[0].v[0]+ObjMatrix.mtr.v[0].v[1]*
+    ObjMatrix.mtr.v[0].v[1]+ObjMatrix.mtr.v[0].v[2]*ObjMatrix.mtr.v[0].v[2]);
   for i:=0 to 5 do
-    if (frustum[i].v[0]*P_insert_in_WCS.x+frustum[i].v[1]*
-      P_insert_in_WCS.y+frustum[i].v[2]*P_insert_in_WCS.z+
-      frustum[i].v[3]+r{+GetLTCorrectH}<0) then
+    if (frustum.v[i].v[0]*P_insert_in_WCS.x+frustum.v[i].v[1]*
+      P_insert_in_WCS.y+frustum.v[i].v[2]*P_insert_in_WCS.z+
+      frustum.v[i].v[3]+r{+GetLTCorrectH}<0) then
       exit(False);
   Result:=True;
 end;
@@ -427,12 +427,12 @@ var
   i:integer;
   r:double;
 begin
-  r:=sqrt(ObjMatrix.mtr[0].v[0]*ObjMatrix.mtr[0].v[0]+ObjMatrix.mtr[0].v[1]*
-    ObjMatrix.mtr[0].v[1]+ObjMatrix.mtr[0].v[2]*ObjMatrix.mtr[0].v[2]);
+  r:=sqrt(ObjMatrix.mtr.v[0].v[0]*ObjMatrix.mtr.v[0].v[0]+ObjMatrix.mtr.v[0].v[1]*
+    ObjMatrix.mtr.v[0].v[1]+ObjMatrix.mtr.v[0].v[2]*ObjMatrix.mtr.v[0].v[2]);
   for i:=0 to 5 do
-    if (frustum[i].v[0]*P_insert_in_WCS.x+frustum[i].v[1]*
-      P_insert_in_WCS.y+frustum[i].v[2]*P_insert_in_WCS.z+
-      frustum[i].v[3]+r{+GetLTCorrectH}<0) then
+    if (frustum.v[i].v[0]*P_insert_in_WCS.x+frustum.v[i].v[1]*
+      P_insert_in_WCS.y+frustum.v[i].v[2]*P_insert_in_WCS.z+
+      frustum.v[i].v[3]+r{+GetLTCorrectH}<0) then
       exit(IREmpty);
   Result:=Vertex3D_in_WCS_Array.CalcTrueInFrustum(frustum,False);
 end;
@@ -598,7 +598,7 @@ var
 begin
   m:=ObjMatrix;
   MatrixInvert(m);
-  m.mtr[3]:=NulVector4D;
+  m.mtr.v[3]:=NulVector4D;
   if rtmod.point.pointtype=os_center then begin
     Local.p_insert:=VectorTransform3D(rtmod.wc*Radius,m);
   end else if (rtmod.point.pointtype=os_q0)or(rtmod.point.pointtype=os_q1)or

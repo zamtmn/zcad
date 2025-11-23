@@ -80,9 +80,9 @@ type
       const zoom,currentdegradationfactor:double):boolean;virtual;
     function CalcTrueInFrustum(
       const frustum:TzeFrustum):TInBoundingVolume;virtual;
-    function CalcObjMatrixWithoutOwner:DMatrix4d;virtual;
-    procedure transform(const t_matrix:DMatrix4d);virtual;
-    procedure TransformAt(p:PGDBObjEntity;t_matrix:PDMatrix4d);virtual;
+    function CalcObjMatrixWithoutOwner:TzeTypedMatrix4d;virtual;
+    procedure transform(const t_matrix:TzeTypedMatrix4d);virtual;
+    procedure TransformAt(p:PGDBObjEntity;t_matrix:PzeTypedMatrix4d);virtual;
     procedure ReCalcFromObjMatrix;virtual;
     function CreateInstance:PGDBObjEllipse;static;
     function GetObjType:TObjID;virtual;
@@ -123,7 +123,7 @@ end;
 
 function GDBObjEllipse.CalcObjMatrixWithoutOwner;
 var
-  rotmatr,dispmatr:DMatrix4d;
+  rotmatr,dispmatr:TzeTypedMatrix4d;
 begin
   Local.basis.ox:=MajorAxis;
   Local.basis.oy:=VectorDot(Local.basis.oz,Local.basis.ox);
@@ -209,7 +209,7 @@ end;
 
 procedure GDBObjEllipse.CalcObjMatrix;
 var
-  m1:DMatrix4d;
+  m1:TzeTypedMatrix4d;
   v:TzeVector4d;
   l:double;
 begin

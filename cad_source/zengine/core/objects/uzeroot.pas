@@ -36,7 +36,7 @@ type
       fFrustumPosition:TzePoint3d;
     protected
       function GetInfrustumFromTree:TActuality;virtual;
-      procedure SetObjMatrix(const AObjMatrix:DMatrix4d);virtual;
+      procedure SetObjMatrix(const AObjMatrix:TzeTypedMatrix4d);virtual;
     public
       constructor initnul;
       destructor done;virtual;
@@ -45,7 +45,7 @@ type
       procedure getoutbound(var DC:TDrawContext);virtual;
       function GetHandle:PtrInt;virtual;
       procedure EraseMi(pobj:pGDBObjEntity;pobjinarray:Integer;var drawing:TDrawingDef);virtual;
-      function GetMatrix:PDMatrix4d;virtual;
+      function GetMatrix:PzeTypedMatrix4d;virtual;
       procedure DrawWithAttrib(var DC:TDrawContext;const inFrustumState:TInBoundingVolume);virtual;
       function CalcInFrustum(const frustum:TzeFrustum;const Actuality:TVisActuality;var Counters:TCameraCounters; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double):Boolean;virtual;
       procedure CalcInFrustumByTree(const frustum:TzeFrustum;const Actuality:TVisActuality;var enttree:TEntTreeNode;var Counters:TCameraCounters; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double);virtual;
@@ -63,7 +63,7 @@ procedure DoFormat(var ConnectedArea:GDBObjGenericSubEntry;var ents,ents2Connect
 
 implementation
 
-procedure GDBObjRoot.SetObjMatrix(const AObjMatrix:DMatrix4d);
+procedure GDBObjRoot.SetObjMatrix(const AObjMatrix:TzeTypedMatrix4d);
 begin
   inherited;
   fFrustumPosition.x:=AObjMatrix.mtr.v[3].v[0];
@@ -97,9 +97,9 @@ begin
   InFrustumAABB:=enttree.NodeData.InFrustumBoundingBox;
 end;
 
-function correctFrustum(const frustum:TzeFrustum;const objmatrix:DMatrix4d;frustumpos:TzePoint3d):TzeFrustum;
+function correctFrustum(const frustum:TzeFrustum;const objmatrix:TzeTypedMatrix4d;frustumpos:TzePoint3d):TzeFrustum;
 var
-  im:DMatrix4d;
+  im:TzeTypedMatrix4d;
 begin
   im:=ObjMatrix;
   im.mtr.v[3].v[0]:=frustumpos.x;

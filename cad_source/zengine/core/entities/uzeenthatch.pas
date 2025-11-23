@@ -93,8 +93,8 @@ type
     procedure addcontrolpoints(tdesc:Pointer);virtual;
     procedure rtmodifyonepoint(const rtmod:TRTModifyData);virtual;
     function Clone(own:Pointer):PGDBObjEntity;virtual;
-    procedure transform(const t_matrix:DMatrix4d);virtual;
-    procedure TransformAt(p:PGDBObjEntity;t_matrix:PDMatrix4d);virtual;
+    procedure transform(const t_matrix:TzeTypedMatrix4d);virtual;
+    procedure TransformAt(p:PGDBObjEntity;t_matrix:PzeTypedMatrix4d);virtual;
   end;
 
 const
@@ -720,7 +720,7 @@ var
   vertexnumber:integer;
   tv,wwc:TzePoint3d;
   pv:PzePoint2d;
-  M:DMatrix4d;
+  M:TzeTypedMatrix4d;
 begin
   vertexnumber:=rtmod.point.vertexnum;
   m:=self.ObjMatrix;

@@ -36,7 +36,7 @@ GDBPolyline2DArray= object(GZVector{-}<TzePoint2d>{//})
                       function inrect(Frame1, Frame2: TzePoint2i;inv:Boolean):Boolean;virtual;
                       function inrectd(Frame1, Frame2: TzePoint2d;inv:Boolean):Boolean;virtual;
                       function ispointinside(const point:TzePoint2d):Boolean;virtual;
-                      procedure transform(const t_matrix:DMatrix4d);virtual;
+                      procedure transform(const t_matrix:TzeTypedMatrix4d);virtual;
                       function getoutbound:TBoundingBox;virtual;
                 end;
 {Export-}
@@ -77,7 +77,7 @@ begin
   end;
 end;
 
-procedure GDBPolyline2DArray.transform(const t_matrix:DMatrix4d);
+procedure GDBPolyline2DArray.transform(const t_matrix:TzeTypedMatrix4d);
 var
     pv:PzePoint2d;
     tv:TzePoint3d;

@@ -445,7 +445,7 @@ procedure InteractiveConstructRootManipulator(
 var
   ir:itrec;
   p:PGDBObjEntity;
-  t_matrix:DMatrix4d;
+  t_matrix:TzeTypedMatrix4d;
   RC:TDrawContext;
 begin
   if click then begin

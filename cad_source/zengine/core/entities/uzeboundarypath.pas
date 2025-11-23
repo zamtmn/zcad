@@ -39,7 +39,7 @@ type
     procedure CloneTo(var Dest:TBoundaryPath);
     procedure Clear;virtual;
 
-    procedure transform(const t_matrix:DMatrix4d);virtual;
+    procedure transform(const t_matrix:TzeTypedMatrix4d);virtual;
     function getDataMutableByPlainIndex(index:TArrayIndex):PzePoint2d;
 
     function DummyCalcTrueInFrustum(pv1:PzePoint3d;
@@ -82,7 +82,7 @@ begin
   end;
 end;
 
-procedure TBoundaryPath.transform(const t_matrix:DMatrix4d);
+procedure TBoundaryPath.transform(const t_matrix:TzeTypedMatrix4d);
 var
   i,j:integer;
   ppla:PGDBPolyline2DArray;

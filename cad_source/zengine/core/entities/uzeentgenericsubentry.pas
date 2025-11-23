@@ -31,7 +31,7 @@ type
   PTDrawingPreCalcData=^TDrawingPreCalcData;
 
   TDrawingPreCalcData=record
-    InverseObjMatrix:DMatrix4d;
+    InverseObjMatrix:TzeTypedMatrix4d;
   end;
   PGDBObjGenericSubEntry=^GDBObjGenericSubEntry;
 

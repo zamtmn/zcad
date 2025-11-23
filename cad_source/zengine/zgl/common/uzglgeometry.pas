@@ -69,7 +69,7 @@ type
     procedure PlaceShape(drawer:TZGLAbstractDrawer;const StartPatternPoint:TzePoint3d; PSP:PShapeProp;scale,angle:Double);
     procedure PlaceText(drawer:TZGLAbstractDrawer;const StartPatternPoint:TzePoint3d;PTP:PTextProp;scale,angle:Double);
 
-    procedure DrawTextContent(drawer:TZGLAbstractDrawer;content:TDXFEntsInternalStringType;_pfont: PGDBfont;const DrawMatrix,objmatrix:DMatrix4d;const textprop_size:Double;var Outbound:OutBound4V);
+    procedure DrawTextContent(drawer:TZGLAbstractDrawer;content:TDXFEntsInternalStringType;_pfont: PGDBfont;const DrawMatrix,objmatrix:TzeTypedMatrix4d;const textprop_size:Double;var Outbound:OutBound4V);
     //function CanSimplyDrawInOCS(const DC:TDrawContext;const SqrParamSize,TargetSize:Double):Boolean;
   end;
 {Export-}
@@ -173,10 +173,10 @@ begin
                         result:=uch2ach(ord(s[i]));
 end;
 
-procedure ZGLGraphix.DrawTextContent(drawer:TZGLAbstractDrawer;content:TDXFEntsInternalStringType;_pfont: PGDBfont;const DrawMatrix,objmatrix:DMatrix4d;const textprop_size:Double;var Outbound:OutBound4V);
+procedure ZGLGraphix.DrawTextContent(drawer:TZGLAbstractDrawer;content:TDXFEntsInternalStringType;_pfont: PGDBfont;const DrawMatrix,objmatrix:TzeTypedMatrix4d;const textprop_size:Double;var Outbound:OutBound4V);
 var
   i: Integer;
-  matr,m1: DMatrix4d;
+  matr,m1: TzeTypedMatrix4d;
 
   Bound:TBoundingRect;
 
@@ -460,9 +460,9 @@ function creatematrix(const PInsert:TzePoint3d; //Точка вставки
                       param:shxprop;     //Параметры текста
                       LineAngle,         //Угол линии
                       Scale:Double)   //Масштаб линии
-                      :dMatrix4d;        //Выходная матрица
+                      :TzeTypedMatrix4d;        //Выходная матрица
 var
-    mrot,mentrot,madd,mtrans,mscale:dMatrix4d;
+    mrot,mentrot,madd,mtrans,mscale:TzeTypedMatrix4d;
 begin
 {case PSP.param.AD of
                     TACAbs:a:=PSP^.param.Angle*pi/180;
@@ -489,9 +489,9 @@ function CreateReadableMatrix(const PInsert:TzePoint3d; //Точка встав�
                       LineAngle,         //Угол линии
                       Scale:Double;
                       dx,dy:Double)   //Масштаб линии
-                      :dMatrix4d;        //Выходная матрица
+                      :TzeTypedMatrix4d;        //Выходная матрица
 var
-    mrot,mrot2,mentrot,madd,madd2,madd3,mtrans,mscale:dMatrix4d;
+    mrot,mrot2,mentrot,madd,madd2,madd3,mtrans,mscale:TzeTypedMatrix4d;
 begin
     mrot:=CreateRotationMatrixZ(param.Angle*pi/180);
     if (param.AD<>TACAbs) then
@@ -524,7 +524,7 @@ begin
 end;
 procedure ZGLGraphix.PlaceShape(drawer:TZGLAbstractDrawer;const StartPatternPoint:TzePoint3d;PSP:PShapeProp;scale,angle:Double);
 var
-    objmatrix,matr:dMatrix4d;
+    objmatrix,matr:TzeTypedMatrix4d;
     Bound:TBoundingRect;
     sli:integer;
 begin
@@ -539,7 +539,7 @@ if PSP.Psymbol<> nil then
 end;
 procedure ZGLGraphix.PlaceText(drawer:TZGLAbstractDrawer;const StartPatternPoint:TzePoint3d;PTP:PTextProp;scale,angle:Double);
 var
-    objmatrix,matr:dMatrix4d;
+    objmatrix,matr:TzeTypedMatrix4d;
     Bound:TBoundingRect;
     j:integer;
     //-ttf-//TDInfo:TTrianglesDataInfo;

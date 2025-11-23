@@ -60,8 +60,8 @@ type
       mc:TzePoint2i;var button:byte;osp:pos_record):integer;virtual;
     function AfterClick(const Context:TZCADCommandContext;wc:TzePoint3d;
       mc:TzePoint2i;var button:byte;osp:pos_record):integer;virtual;
-    function CalcTransformMatrix(p1,p2:TzePoint3d):DMatrix4d;virtual;
-    function Move(const dispmatr:DMatrix4d;UndoMaker:string):integer;
+    function CalcTransformMatrix(p1,p2:TzePoint3d):TzeTypedMatrix4d;virtual;
+    function Move(const dispmatr:TzeTypedMatrix4d;UndoMaker:string):integer;
     procedure showprompt(mklick:integer);virtual;
   end;
   {EXPORT-}
@@ -173,7 +173,7 @@ begin
     showprompt(1);
 end;
 
-function Move_com.CalcTransformMatrix(p1,p2:TzePoint3d):DMatrix4d;
+function Move_com.CalcTransformMatrix(p1,p2:TzePoint3d):TzeTypedMatrix4d;
 var
   dist:TzePoint3d;
 begin
@@ -181,10 +181,10 @@ begin
   Result:=uzegeometry.CreateTranslationMatrix(dist);
 end;
 
-function Move_com.Move(const dispmatr:DMatrix4d;UndoMaker:string):integer;
+function Move_com.Move(const dispmatr:TzeTypedMatrix4d;UndoMaker:string):integer;
 var
   //dist:TzePoint3d;
-  im:DMatrix4d;
+  im:TzeTypedMatrix4d;
   ir:itrec;
   pcd:PTCopyObjectDesc;
   m:tmethod;
@@ -217,7 +217,7 @@ end;
 function Move_com.AfterClick(const Context:TZCADCommandContext;wc:TzePoint3d;
   mc:TzePoint2i;var button:byte;osp:pos_record):integer;
 var
-  dispmatr:DMatrix4d;
+  dispmatr:TzeTypedMatrix4d;
   dc:TDrawContext;
 begin
   dispmatr:=CalcTransformMatrix(t3dp,wc);

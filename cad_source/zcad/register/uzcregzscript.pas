@@ -124,6 +124,30 @@ begin
   if utd<>nil then
     ptsu^.SetTypeDesk2(utd,['Right','Left','Down','Up','Near','Far'],[FNProgram,FNUser]);
 
+  utd:=ptsu^.RegisterType(TypeInfo(TzeMatrix4s),'TzeMatrix4s');
+  if utd<>nil then
+    ptsu^.SetTypeDesk2(utd,['l0','l1','l2','l3'],[FNProgram,FNUser]);
+
+  utd:=ptsu^.RegisterType(TypeInfo(TzeMatrix4d),'TzeMatrix4d');
+  if utd<>nil then
+    ptsu^.SetTypeDesk2(utd,['l0','l1','l2','l3'],[FNProgram,FNUser]);
+
+  utd:=ptsu^.RegisterType(TypeInfo(TzeMatrixType),'TzeMatrixType');
+
+  Getmem(utd,sizeof(GDBSinonimDescriptor));
+  PGDBSinonimDescriptor(utd).init('byte','TzeMatrixTypes',ptsu);
+  ptsu^.InterfaceTypes.AddTypeByRef(utd^);
+
+  utd:=ptsu^.RegisterType(TypeInfo(TzeTypedMatrix4d),'TzeTypedMatrix4d');
+  if utd<>nil then
+    ptsu^.SetTypeDesk2(utd,['mtr','t'],[FNProgram,FNUser]);
+  ptsu^.RegisterType(TypeInfo(PzeTypedMatrix4d),'PzeTypedMatrix4d');
+
+  utd:=ptsu^.RegisterType(TypeInfo(TzeTypedMatrix4s),'TzeTypedMatrix4s');
+  if utd<>nil then
+    ptsu^.SetTypeDesk2(utd,['mtr','t'],[FNProgram,FNUser]);
+  ptsu^.RegisterType(TypeInfo(PzeTypedMatrix4s),'PzeTypedMatrix4s');
+
 end;
 initialization
   OnCreateSystemUnit:=_OnCreateSystemUnit;

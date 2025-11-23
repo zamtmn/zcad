@@ -60,7 +60,7 @@ type
     procedure FormatAfterDXFLoad(var drawing:TDrawingDef;var DC:TDrawContext);virtual;
     function CreateInstance:PGDBObjMText;static;
     function GetObjType:TObjID;virtual;
-    procedure transform(const t_matrix:DMatrix4d);virtual;
+    procedure transform(const t_matrix:TzeTypedMatrix4d);virtual;
     function GetLineSpace:double;
     procedure rtsave(refp:Pointer);virtual;
     property LineSpace:double read GetLineSpace;
@@ -90,7 +90,7 @@ end;
 procedure GDBObjMText.transform;
 var
   tv:TzePoint3d;
-  m:DMatrix4d;
+  m:TzeTypedMatrix4d;
 begin
   tv:=CreateVertex(Width,0,0);
   m:=t_matrix;
@@ -561,7 +561,7 @@ end;
 procedure GDBObjMText.createpoint;
 var
   i:integer;
-  matr,m1:DMatrix4d;
+  matr,m1:TzeTypedMatrix4d;
   v:TzeVector4d;
   Bound:TBoundingRect;
   lp:TzePoint3d;

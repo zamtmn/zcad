@@ -67,8 +67,8 @@ GDBObjElLeader= object(GDBObjComplex)
 
             destructor done;virtual;
 
-            procedure transform(const t_matrix:DMatrix4d);virtual;
-            procedure TransformAt(p:PGDBObjEntity;t_matrix:PDMatrix4d);virtual;
+            procedure transform(const t_matrix:TzeTypedMatrix4d);virtual;
+            procedure TransformAt(p:PGDBObjEntity;t_matrix:PzeTypedMatrix4d);virtual;
             procedure SetInFrustumFromTree(const frustum:TzeFrustum;const Actuality:TVisActuality;var Counters:TCameraCounters; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double);virtual;
             function CalcActualVisible(const Actuality:TVisActuality):Boolean;virtual;
             function calcvisible(const frustum:TzeFrustum;const Actuality:TVisActuality;var Counters:TCameraCounters; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double):Boolean;virtual;
@@ -91,7 +91,7 @@ end;
 function GDBObjElLeader.calcvisible;
 //var i:Integer;
 //    tv,tv1:TzeVector4d;
-//    m:DMatrix4d;
+//    m:TzeTypedMatrix4d;
 begin
       visible:=Actuality.visibleactualy;
       result:=false;
@@ -223,7 +223,7 @@ var
   p:pointer;
   pv,pvc,pvc2:pgdbobjEntity;
   ir:itrec;
-  m4:DMatrix4d;
+  m4:TzeTypedMatrix4d;
   DC:TDrawContext;
 begin
      //historyoutstr('ElLeader DXFOut self='+inttohex(LongWord(@self),10)+' owner'+inttohex(bp.owner.gethandle,10));

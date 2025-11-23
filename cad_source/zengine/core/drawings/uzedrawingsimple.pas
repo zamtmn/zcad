@@ -490,7 +490,7 @@ procedure TSimpleDrawing.rtmodify(obj:PGDBObjEntity;md:Pointer;dist,wc:TzePoint3
 var i:Integer;
     point:pcontrolpointdesc;
     p:Pointer;
-    m,{m2,}mt:DMatrix4d;
+    m,{m2,}mt:TzeTypedMatrix4d;
     t:TzePoint3d;
     //tt:TzeVector4d;
     rtmod:TRTModifyData;

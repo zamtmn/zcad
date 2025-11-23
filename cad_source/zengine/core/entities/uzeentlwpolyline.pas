@@ -92,8 +92,8 @@ type
     procedure endsnap(out osp:os_record;var pdata:Pointer);virtual;
     procedure AddOnTrackAxis(var posr:os_record;
       const processaxis:taddotrac);virtual;
-    procedure transform(const t_matrix:DMatrix4d);virtual;
-    procedure TransformAt(p:PGDBObjEntity;t_matrix:PDMatrix4d);virtual;
+    procedure transform(const t_matrix:TzeTypedMatrix4d);virtual;
+    procedure TransformAt(p:PGDBObjEntity;t_matrix:PzeTypedMatrix4d);virtual;
     function GetTangentInPoint(const point:TzePoint3d):TzePoint3d;virtual;
     procedure higlight(var DC:TDrawContext);virtual;
     class function CreateInstance:PGDBObjLWPolyline;static;
@@ -330,7 +330,7 @@ var
   vertexnumber:integer;
   tv,wwc:TzePoint3d;
 
-  M:DMatrix4d;
+  M:TzeTypedMatrix4d;
 begin
   vertexnumber:=rtmod.point.vertexnum;
 
@@ -610,7 +610,7 @@ end;
 
 function GDBObjLWpolyline.isPointInside(const point:TzePoint3d):boolean;
 var
-  m:DMatrix4d;
+  m:TzeTypedMatrix4d;
   p:TzePoint2d;
 begin
   m:=self.getmatrix^;

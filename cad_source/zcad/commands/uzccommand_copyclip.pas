@@ -95,7 +95,7 @@ var
   ir:itrec;
   DC:TDrawContext;
   SelectedAABB:TBoundingBox;
-  m:DMatrix4d;
+  m:TzeTypedMatrix4d;
 begin
   ClipboardDWG.pObjRoot.ObjArray.Free;
   dc:=drawings.GetCurrentDwg^.CreateDrawingRC(False,[DCODrawable]);

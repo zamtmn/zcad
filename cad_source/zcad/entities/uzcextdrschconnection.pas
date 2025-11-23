@@ -319,7 +319,7 @@ procedure drawArrow(l1,l2:TzePoint3d;pThisEntity:PGDBObjEntity;var DC:TDrawConte
 var
   onel,p1,p2:TzePoint3d;
   tp2,tp3:TzePoint3d;
-  m,rotmatr:DMatrix4d;
+  m,rotmatr:TzeTypedMatrix4d;
 begin
   onel:=l2-l1;
   if onel.SqrLength>sqreps then begin
@@ -408,7 +408,7 @@ procedure drawIntersectArc(l1,l2:TzePoint3d;pThisEntity:PGDBObjEntity;var DC:TDr
 var
   v,onel,p1,p2:TzePoint3d;
   tp2,tp3:TzePoint3d;
-  m,rotmatr:DMatrix4d;
+  m,rotmatr:TzeTypedMatrix4d;
   l{,x,y,z}:double;
   sine,cosine:Double;
   chg:boolean;

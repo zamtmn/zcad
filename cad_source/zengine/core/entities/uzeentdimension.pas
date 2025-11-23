@@ -75,8 +75,8 @@ type
     function P14ChangeTo(const tv:TzePoint3d):TzePoint3d;virtual;
     function P15ChangeTo(const tv:TzePoint3d):TzePoint3d;virtual;
     function P16ChangeTo(const tv:TzePoint3d):TzePoint3d;virtual;
-    procedure transform(const t_matrix:DMatrix4d);virtual;
-    procedure TransformAt(p:PGDBObjEntity;t_matrix:PDMatrix4d);virtual;
+    procedure transform(const t_matrix:TzeTypedMatrix4d);virtual;
+    procedure TransformAt(p:PGDBObjEntity;t_matrix:PzeTypedMatrix4d);virtual;
     procedure DrawDimensionText(p:TzePoint3d;var drawing:TDrawingDef;
       var DC:TDrawContext);virtual;
     function GetTextOffset(var drawing:TDrawingDef):TzePoint3d;virtual;

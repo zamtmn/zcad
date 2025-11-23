@@ -119,7 +119,7 @@ var //oldi, newi, i: Integer;
   dist:TzePoint3d;
   pobj:Pointer;
   xdir,ydir,tv:TzePoint3d;
-  rotmatr,dispmatr,dispmatr2:DMatrix4d;
+  rotmatr,dispmatr,dispmatr2:TzeTypedMatrix4d;
   DC:TDrawContext;
 begin
   if fixentities then

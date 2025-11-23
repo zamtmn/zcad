@@ -30,15 +30,15 @@ type
 
   GDBObjWithMatrix=object(GDBObjEntity)
     {-}protected{//}
-    fObjMatrix:DMatrix4d;
-    procedure SetObjMatrix(const AObjMatrix:DMatrix4d);virtual;
+    fObjMatrix:TzeTypedMatrix4d;
+    procedure SetObjMatrix(const AObjMatrix:TzeTypedMatrix4d);virtual;
     {-}public{//}
     constructor initnul(owner:PGDBObjGenericWithSubordinated);
-    function GetMatrix:PDMatrix4d;virtual;
+    function GetMatrix:PzeTypedMatrix4d;virtual;
     procedure FormatEntity(var drawing:TDrawingDef;
       var DC:TDrawContext;Stage:TEFStages=EFAllStages);virtual;
     procedure createfield;virtual;
-    procedure transform(const t_matrix:DMatrix4d);virtual;
+    procedure transform(const t_matrix:TzeTypedMatrix4d);virtual;
     procedure ReCalcFromObjMatrix;virtual;abstract;
     procedure CalcInFrustumByTree(const frustum:TzeFrustum;
       const Actuality:TVisActuality;
@@ -50,12 +50,12 @@ type
       var Counters:TCameraCounters;ProjectProc:GDBProjectProc;
       const zoom,currentdegradationfactor:double);virtual;
 
-    {-} property ObjMatrix:DMatrix4d read fObjMatrix write SetObjMatrix;{//}
+    {-} property ObjMatrix:TzeTypedMatrix4d read fObjMatrix write SetObjMatrix;{//}
   end;
 
 implementation
 
-procedure GDBObjWithMatrix.SetObjMatrix(const AObjMatrix:DMatrix4d);
+procedure GDBObjWithMatrix.SetObjMatrix(const AObjMatrix:TzeTypedMatrix4d);
 begin
   fObjMatrix:=AObjMatrix;
 end;
@@ -291,7 +291,7 @@ begin
     Counters,ProjectProc,zoom,currentdegradationfactor);
 end;
 
-procedure GDBObjWithMatrix.transform(const t_matrix:DMatrix4d);
+procedure GDBObjWithMatrix.transform(const t_matrix:TzeTypedMatrix4d);
 begin
   ObjMatrix:=uzegeometry.MatrixMultiply(ObjMatrix,t_matrix);
 end;

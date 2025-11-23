@@ -48,10 +48,10 @@ GDBSelectedObjArray= object(GZVector{-}<selectedobjdesc>{//})
                           procedure selectcontrolpointinframe(f1,f2: TzePoint2i);virtual;
                           //destructor done;virtual;
                           procedure freeclones;
-                          procedure Transform(const dispmatr:DMatrix4d);
-                          procedure SetRotate(const minusd,plusd,rm:DMatrix4d;const x,y,z:TzePoint3d);
-                          procedure SetRotateObj(const minusd,plusd,rm:DMatrix4d;const x,y,z:TzePoint3d);
-                          procedure TransformObj(const dispmatr:DMatrix4d);
+                          procedure Transform(const dispmatr:TzeTypedMatrix4d);
+                          procedure SetRotate(const minusd,plusd,rm:TzeTypedMatrix4d;const x,y,z:TzePoint3d);
+                          procedure SetRotateObj(const minusd,plusd,rm:TzeTypedMatrix4d;const x,y,z:TzePoint3d);
+                          procedure TransformObj(const dispmatr:TzeTypedMatrix4d);
 
                           procedure drawobj(var DC:TDrawContext);virtual;
                           procedure freeelement(PItem:PT);virtual;
@@ -240,9 +240,9 @@ begin
   result:=td;
 end;
 
-(*procedure processobject(pobj:PGDBObjEntity;minusd,plusd,rm:DMatrix4d;x,y,z:TzePoint3d);
+(*procedure processobject(pobj:PGDBObjEntity;minusd,plusd,rm:TzeTypedMatrix4d;x,y,z:TzePoint3d);
 var i: Integer;
-  m,m2,oplus,ominus:DMatrix4d;
+  m,m2,oplus,ominus:TzeTypedMatrix4d;
   tv,P_insert_in_OCS,P_insert_in_WCS:TzePoint3d;
 begin
   pobj^.Transform(minusd);
@@ -288,9 +288,9 @@ begin
 end;
 
 *)
-procedure processobject(pobj:PGDBObjEntity;const minusd,plusd,rm:DMatrix4d;const x,y,z:TzePoint3d);
+procedure processobject(pobj:PGDBObjEntity;const minusd,plusd,rm:TzeTypedMatrix4d;const x,y,z:TzePoint3d);
 var //i: Integer;
-  m{,oplus,ominus}:DMatrix4d;
+  m{,oplus,ominus}:TzeTypedMatrix4d;
   {tv,}P_insert_in_OCS,P_insert_in_WCS:TzePoint3d;
 begin
   pobj^.Transform(minusd);
@@ -311,11 +311,11 @@ begin
   //PGDBObjWithMatrix(pobj)^.FormatEntity(gdb.GetCurrentDWG^);
 end;
 
-(*procedure processobject(pobj:PGDBObjEntity;minusd,plusd,rm:DMatrix4d;x,y,z:TzePoint3d);
+(*procedure processobject(pobj:PGDBObjEntity;minusd,plusd,rm:TzeTypedMatrix4d;x,y,z:TzePoint3d);
 var i: Integer;
 //  d: Double;
 //  td:tcontrolpointdist;
-  m,m2,oplus,ominus:DMatrix4d;
+  m,m2,oplus,ominus:TzeTypedMatrix4d;
   tv:TzePoint3d;
   l1,l2:GDBObj2dprop;
 {
@@ -362,12 +362,12 @@ begin
   PGDBObjWithMatrix(pobj)^.Format;}
 end;
 *)
-procedure GDBSelectedObjArray.SetRotate(const minusd,plusd,rm:DMatrix4d;const x,y,z:TzePoint3d);
+procedure GDBSelectedObjArray.SetRotate(const minusd,plusd,rm:TzeTypedMatrix4d;const x,y,z:TzePoint3d);
 var i: Integer;
 //  d: Double;
 //  td:tcontrolpointdist;
   tdesc:pselectedobjdesc;
-  //m,oplus:DMatrix4d;
+  //m,oplus:TzeTypedMatrix4d;
   //tv:TzePoint3d;
 begin
   if count > 0 then
@@ -386,12 +386,12 @@ begin
   {if save then
               gdb.GetCurrentROOT.FormatAfterEdit;}
 end;
-procedure GDBSelectedObjArray.SetRotateObj(const minusd,plusd,rm:DMatrix4d;const x,y,z:TzePoint3d);
+procedure GDBSelectedObjArray.SetRotateObj(const minusd,plusd,rm:TzeTypedMatrix4d;const x,y,z:TzePoint3d);
 var i: Integer;
 //  d: Double;
 //  td:tcontrolpointdist;
   tdesc:pselectedobjdesc;
-  //m,tempm,oplus,ominus:DMatrix4d;
+  //m,tempm,oplus,ominus:TzeTypedMatrix4d;
   //tv:TzePoint3d;
 begin
   if count > 0 then
@@ -420,7 +420,7 @@ begin
               gdb.GetCurrentROOT.FormatAfterEdit;}
 end;
 
-procedure GDBSelectedObjArray.Transform(const dispmatr:DMatrix4d);
+procedure GDBSelectedObjArray.Transform(const dispmatr:TzeTypedMatrix4d);
 var i: Integer;
 //  d: Double;
 //  td:tcontrolpointdist;
@@ -447,7 +447,7 @@ begin
   {if save then
               gdb.GetCurrentROOT.FormatAfterEdit;}
 end;
-procedure GDBSelectedObjArray.TransformObj(const dispmatr:DMatrix4d);
+procedure GDBSelectedObjArray.TransformObj(const dispmatr:TzeTypedMatrix4d);
 var i: Integer;
   tdesc:pselectedobjdesc;
 begin

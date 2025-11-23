@@ -67,8 +67,8 @@ type
     procedure getoutbound(var DC:TDrawContext);virtual;
     function CreateInstance:PGDBObjSolid;static;
     function GetObjType:TObjID;virtual;
-    procedure TransformAt(p:PGDBObjEntity;t_matrix:PDMatrix4d);virtual;
-    procedure transform(const t_matrix:DMatrix4d);virtual;
+    procedure TransformAt(p:PGDBObjEntity;t_matrix:PzeTypedMatrix4d);virtual;
+    procedure transform(const t_matrix:TzeTypedMatrix4d);virtual;
   end;
 
 implementation
@@ -264,7 +264,7 @@ procedure GDBObjSolid.rtmodifyonepoint(const rtmod:TRTModifyData);
 var
   vertexnumber:integer;
   tv,wwc:TzePoint3d;
-  M:DMatrix4d;
+  M:TzeTypedMatrix4d;
 begin
   vertexnumber:=rtmod.point.vertexnum;
 

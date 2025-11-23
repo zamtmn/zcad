@@ -76,7 +76,7 @@ var
   p:pointer;
   pv,pvc,pvc2:pgdbobjEntity;
   ir:itrec;
-  m4:DMatrix4d;
+  m4:TzeTypedMatrix4d;
   DC:TDrawContext;
 begin
   inherited;

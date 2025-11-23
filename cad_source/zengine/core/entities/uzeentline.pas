@@ -52,7 +52,7 @@ type
       const inFrustumState:TInBoundingVolume);virtual;
     function Clone(own:Pointer):PGDBObjEntity;virtual;
     procedure rtsave(refp:Pointer);virtual;
-    procedure TransformAt(p:PGDBObjEntity;t_matrix:PDMatrix4d);virtual;
+    procedure TransformAt(p:PGDBObjEntity;t_matrix:PzeTypedMatrix4d);virtual;
     function onmouse(var popa:TZctnrVectorPGDBaseEntity;
       const MF:TzeFrustum;InSubEntry:boolean):boolean;virtual;
     function onpoint(var objects:TZctnrVectorPGDBaseEntity;
@@ -69,7 +69,7 @@ type
       p:Pointer):boolean;virtual;
     procedure remaponecontrolpoint(pdesc:pcontrolpointdesc;
       ProjectProc:GDBProjectProc);virtual;
-    procedure transform(const t_matrix:DMatrix4d);virtual;
+    procedure transform(const t_matrix:TzeTypedMatrix4d);virtual;
     function jointoline(pl:pgdbobjline;
       var drawing:TDrawingDef):boolean;virtual;
 
@@ -238,7 +238,7 @@ end;
 
 function GDBObjLine.getCoordInWCS:GDBLineProp;
 var
-  m:DMatrix4d;
+  m:TzeTypedMatrix4d;
 begin
   if bp.ListPos.owner<>nil then begin
     if bp.ListPos.owner^.GetHandle=H_Root then begin
@@ -257,7 +257,7 @@ end;
 
 procedure GDBObjLine.CalcGeometry;
 var
-  m:DMatrix4d;
+  m:TzeTypedMatrix4d;
   tlp:GDBLineProp;
 begin
   if bp.ListPos.owner<>nil then begin

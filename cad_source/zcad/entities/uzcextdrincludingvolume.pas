@@ -49,7 +49,7 @@ type
 
 
 TIncludingVolumeExtender=class(TBaseEntityExtender)
-    toBoundMatrix:DMatrix4d;
+    toBoundMatrix:TzeTypedMatrix4d;
     InsideEnts:GDBObjOpenArrayOfPV;
     class function getExtenderName:string;override;
     constructor Create(pEntity:Pointer);override;

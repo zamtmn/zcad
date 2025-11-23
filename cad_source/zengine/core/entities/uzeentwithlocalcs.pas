@@ -47,13 +47,13 @@ type
     procedure FormatEntity(var drawing:TDrawingDef;
       var DC:TDrawContext;Stage:TEFStages=EFAllStages);virtual;
     procedure CalcObjMatrix(pdrawing:PTDrawingDef=nil);virtual;
-    function CalcObjMatrixWithoutOwner:DMatrix4d;virtual;
-    procedure transform(const t_matrix:DMatrix4d);virtual;
+    function CalcObjMatrixWithoutOwner:TzeTypedMatrix4d;virtual;
+    procedure transform(const t_matrix:TzeTypedMatrix4d);virtual;
     function GetCenterPoint:TzePoint3d;virtual;
     procedure createfield;virtual;
 
     procedure rtsave(refp:Pointer);virtual;
-    procedure TransformAt(p:PGDBObjEntity;t_matrix:PDMatrix4d);virtual;
+    procedure TransformAt(p:PGDBObjEntity;t_matrix:PzeTypedMatrix4d);virtual;
     procedure higlight(var DC:TDrawContext);virtual;
     procedure ReCalcFromObjMatrix;virtual;
     function IsHaveLCS:boolean;virtual;
@@ -169,7 +169,7 @@ function GDBObjWithLocalCS.CalcObjMatrixWithoutOwner;
   end;
 
 var
-  rotmatr,dispmatr:DMatrix4d;
+  rotmatr,dispmatr:TzeTypedMatrix4d;
 begin
   if IsVectorNul(Local.basis.oz) then begin
     ReportLocalOZIsNul;

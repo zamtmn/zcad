@@ -85,7 +85,7 @@ function FloatInsert_com.BeforeClick(const Context:TZCADCommandContext;wc:TzePoi
   mc:TzePoint2i;var button:byte;osp:pos_record):integer;
 var
   dist:TzePoint3d;
-  dispmatr:DMatrix4d;
+  dispmatr:TzeTypedMatrix4d;
   ir:itrec;
   tv,pobj:pGDBObjEntity;
   domethod,undomethod:tmethod;

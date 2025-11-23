@@ -157,7 +157,7 @@ end;
     nearesttcontrolpoint:tcontrolpointdist;
     startgluepoint:pcontrolpointdesc;
     ontrackarray: totrackarray;
-    mouseclipmatrix:DMatrix4d;
+    mouseclipmatrix:TzeTypedMatrix4d;
     mousefrustum,mousefrustumLCS:TzeFrustum;
     ShowDebugFrustum:Boolean;
     debugfrustum:TzeFrustum;

@@ -64,8 +64,8 @@ type
     procedure rtsave(refp:Pointer);virtual;
     function GetObjTypeName:string;virtual;
     procedure getoutbound(var DC:TDrawContext);virtual;
-    procedure TransformAt(p:PGDBObjEntity;t_matrix:PDMatrix4d);virtual;
-    procedure transform(const t_matrix:DMatrix4d);virtual;
+    procedure TransformAt(p:PGDBObjEntity;t_matrix:PzeTypedMatrix4d);virtual;
+    procedure transform(const t_matrix:TzeTypedMatrix4d);virtual;
     class function CreateInstance:PGDBObj3DFace;static;
     function GetObjType:TObjID;virtual;
   end;
@@ -80,7 +80,7 @@ begin
     PInOCS[I]:=VectorTransform3D(PGDBObj3DFace(p)^.PInOCS[I],t_matrix^);
 end;
 
-procedure GDBObj3DFace.transform(const t_matrix:DMatrix4d);
+procedure GDBObj3DFace.transform(const t_matrix:TzeTypedMatrix4d);
 var
   i:integer;
 begin

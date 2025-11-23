@@ -36,7 +36,7 @@ implementation
 
 procedure GDBObjPlainWithOX.CalcObjMatrix;
 var
-  rotmatr,dispmatr:DMatrix4d;
+  rotmatr,dispmatr:TzeTypedMatrix4d;
 begin
   Local.basis.ox:=NormalizeVertex(Local.basis.ox);
   Local.basis.oy:=VectorDot(Local.basis.oz,Local.basis.ox);

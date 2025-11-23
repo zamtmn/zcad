@@ -76,8 +76,8 @@ TZGLGeneralDrawer=class(TZGLAbstractDrawer)
                         procedure SetOGLMatrix(const cam:GDBObjCamera;const w,h:integer);override;
                         procedure PostRenderDraw;override;
 
-                        procedure pushMatrixAndSetTransform(const Transform:DMatrix4d;FromOneMatrix:Boolean=False);overload;override;
-                        procedure pushMatrixAndSetTransform(const Transform:DMatrix4f;FromOneMatrix:Boolean=False);overload;override;
+                        procedure pushMatrixAndSetTransform(const Transform:TzeTypedMatrix4d;FromOneMatrix:Boolean=False);overload;override;
+                        procedure pushMatrixAndSetTransform(const Transform:TzeTypedMatrix4s;FromOneMatrix:Boolean=False);overload;override;
                         procedure popMatrix;override;
                         procedure AddToLCS(const v:TzePoint3d);override;
                         function SetLCSState(State:boolean):boolean;override;
@@ -125,10 +125,10 @@ end;
 procedure TZGLGeneralDrawer.popMatrix;
 begin
 end;
-procedure TZGLGeneralDrawer.pushMatrixAndSetTransform(const Transform:DMatrix4d;FromOneMatrix:Boolean=False);
+procedure TZGLGeneralDrawer.pushMatrixAndSetTransform(const Transform:TzeTypedMatrix4d;FromOneMatrix:Boolean=False);
 begin
 end;
-procedure TZGLGeneralDrawer.pushMatrixAndSetTransform(const Transform:DMatrix4f;FromOneMatrix:Boolean=False);
+procedure TZGLGeneralDrawer.pushMatrixAndSetTransform(const Transform:TzeTypedMatrix4s;FromOneMatrix:Boolean=False);
 begin
 end;
 function TZGLGeneralDrawer.GetLLPrimitivesCreator:TLLPrimitivesCreatorAbstract;

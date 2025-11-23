@@ -623,7 +623,7 @@ var
   pnevdev:PGDBObjDevice;
   PBH:PGDBObjBlockdef;
   currentcoord:TzePoint3d;
-  t_matrix:DMatrix4d;
+  t_matrix:TzeTypedMatrix4d;
   pobj,pcobj:PGDBObjEntity;
   ir2:itrec;
   pvd:pvardesk;
@@ -763,7 +763,7 @@ var
     {pdev,}pnevdev:PGDBObjDevice;
     PBH:PGDBObjBlockdef;
     currentcoord:TzePoint3d;
-    t_matrix:DMatrix4d;
+    t_matrix:TzeTypedMatrix4d;
     pobj,pcobj:PGDBObjEntity;
     ir2:itrec;
     pvd:pvardesk;

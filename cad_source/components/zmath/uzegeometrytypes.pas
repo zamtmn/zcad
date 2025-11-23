@@ -29,11 +29,8 @@ const
   sqreps=1e-7;
   bigeps=1e-10;
 type
-
-{EXPORT+}
-  TMatrixComponents=(MTIdentity,MTScale,MTTranslate,MTRotate,MTShear);
-  TMatrixType={-}set of TMatrixComponents{/Byte/};
-{EXPORT-}
+  TzeMatrixType=(MTIdentity,MTScale,MTTranslate,MTRotate,MTShear);
+  TzeMatrixTypes=set of TzeMatrixType;
   GRawMatrix4<GRow>=record
     case Integer of
       0:(l0,l1,l2,l3:GRow);
@@ -47,8 +44,8 @@ type
 
   GMatrix4<TMtr>=record
     mtr:TMtr;
-    t:TMatrixType;
-    constructor CreateRec(AMtr:TMtr;At:TMatrixType);
+    t:TzeMatrixTypes;
+    constructor CreateRec(AMtr:TMtr;At:TzeMatrixTypes);
     function IsIdentity:Boolean;inline;
   end;
   GVector4<T;TT:record>=record
@@ -148,41 +145,14 @@ type
 
   TzeFrustum=GRawMatrix6<TzeVector4d>;
 
-{EXPORT+}
+  TzeMatrix4s=GRawMatrix4<TzeVector4s>;
+  TzeMatrix4d=GRawMatrix4<TzeVector4d>;
 
-  {REGISTERRECORDTYPE TMatrix4d}
-  {-}TMatrix4d=GRawMatrix4<TzeVector4d>;{//}
-  {-}{/TMatrix4d=record/}
-    {-}{/l0:TzeVector4d;/}
-    {-}{/l1:TzeVector4d;/}
-    {-}{/l2:TzeVector4d;/}
-    {-}{/l3:TzeVector4d;/}
-  {-}{/end;/}
+  TzeTypedMatrix4d=GMatrix4<TzeMatrix4d>;
+  PzeTypedMatrix4d=^TzeTypedMatrix4d;
 
-  {-}DMatrix4d=GMatrix4<TMatrix4d>;{//}
-  {-}{/DMatrix4d=record/}
-  {-}{/  mtr:TMatrix4d;/}
-  {-}{/  t:TMatrixType;/}
-  {-}{/end;            /}
-  PDMatrix4d=^DMatrix4d;
-
-  {REGISTERRECORDTYPE TMatrix4f}
-  {-}TMatrix4f=GRawMatrix4<TzeVector4s>;{//}
-  {-}{/TMatrix4f=record/}
-    {-}{/l0:TzeVector4s;/}
-    {-}{/l1:TzeVector4s;/}
-    {-}{/l2:TzeVector4s;/}
-    {-}{/l3:TzeVector4s;/}
-  {-}{/end;/}
-
-  {-}DMatrix4f=GMatrix4<TMatrix4f>;{//}
-  {-}{/DMatrix4f=record/}
-  {-}{/  mtr:TMatrix4f;/}
-  {-}{/  t:TMatrixType;/}
-  {-}{/end;            /}
-  PDMatrix4f=^DMatrix4f;
-
-{EXPORT-}
+  TzeTypedMatrix4s=GMatrix4<TzeMatrix4s>;
+  PzeTypedMatrix4s=^TzeTypedMatrix4s;
 
   TzePoint3s=GVector3<Single,Single>;
   PzePoint3s=^TzePoint3s;
@@ -226,8 +196,8 @@ type
   TzePoint2s=GVector2<Single,Single>;
   PzePoint2s=^TzePoint2s;
   tmatrixs=record
-    pmodelMatrix:PDMatrix4d;
-    pprojMatrix:PDMatrix4d;
+    pmodelMatrix:PzeTypedMatrix4d;
+    pprojMatrix:PzeTypedMatrix4d;
     pviewport:PzeVector4i;
   end;
 {Bounding volume}
@@ -308,7 +278,7 @@ begin
   result:=TzeVector3d(self);
 end;
 
-constructor GMatrix4<TMtr>.CreateRec(AMtr:TMtr;At:TMatrixType);
+constructor GMatrix4<TMtr>.CreateRec(AMtr:TMtr;At:TzeMatrixTypes);
 begin
   mtr:=AMtr;
   t:=At;

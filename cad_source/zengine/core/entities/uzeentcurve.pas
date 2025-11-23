@@ -65,8 +65,8 @@ type
 
     procedure SaveToDXFfollow(var outStream:TZctnrVectorBytes;
       var drawing:TDrawingDef;var IODXFContext:TIODXFSaveContext);virtual;
-    procedure TransformAt(p:PGDBObjEntity;t_matrix:PDMatrix4d);virtual;
-    procedure transform(const t_matrix:DMatrix4d);virtual;
+    procedure TransformAt(p:PGDBObjEntity;t_matrix:PzeTypedMatrix4d);virtual;
+    procedure transform(const t_matrix:TzeTypedMatrix4d);virtual;
 
     function CalcTrueInFrustum(
       const frustum:TzeFrustum):TInBoundingVolume;virtual;
@@ -332,7 +332,7 @@ begin
   CalcActualVisible(dc.DrawingContext.VActuality);
 end;
 
-procedure GDBObjCurve.TransformAt(p:PGDBObjEntity;t_matrix:PDMatrix4d);
+procedure GDBObjCurve.TransformAt(p:PGDBObjEntity;t_matrix:PzeTypedMatrix4d);
 var
   ptv,ptv2:PzePoint3d;
   ir,ir2:itrec;
@@ -347,7 +347,7 @@ begin
     until (ptv=nil)or(ptv2=nil);
 end;
 
-procedure GDBObjCurve.transform(const t_matrix:DMatrix4d);
+procedure GDBObjCurve.transform(const t_matrix:TzeTypedMatrix4d);
 var
   ptv:PzePoint3d;
   ir:itrec;

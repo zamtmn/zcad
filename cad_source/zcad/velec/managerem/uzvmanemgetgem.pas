@@ -1728,7 +1728,7 @@ var
         pnevdev:PGDBObjDevice;
         //entvarext,delvarext:TVariablesExtender;
         PBH:PGDBObjBlockdef;
-        //t_matrix:DMatrix4d;
+        //t_matrix:TzeTypedMatrix4d;
         //ir2:itrec;
         //pobj,pcobj:PGDBObjEntity;
   begin

@@ -39,8 +39,8 @@ GDBObjNet= object(GDBObjConnected)
                  procedure FormatEntity(var drawing:TDrawingDef;var DC:TDrawContext;Stage:TEFStages=EFAllStages);virtual;
                  procedure DelSelectedSubitem(var drawing:TDrawingDef);virtual;
                  function Clone(own:Pointer):PGDBObjEntity;virtual;
-                 procedure TransformAt(p:PGDBObjEntity;t_matrix:PDMatrix4d);virtual;
-                 procedure transform(const t_matrix:DMatrix4d);virtual;
+                 procedure TransformAt(p:PGDBObjEntity;t_matrix:PzeTypedMatrix4d);virtual;
+                 procedure transform(const t_matrix:TzeTypedMatrix4d);virtual;
 
                  function GetNearestLine(const point:TzePoint3d):PGDBObjEntity;
 

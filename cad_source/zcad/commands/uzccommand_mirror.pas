@@ -42,7 +42,7 @@ type
   end;
 
   mirror_com=object(copy_com)
-    function CalcTransformMatrix(p1,p2:TzePoint3d):DMatrix4d;virtual;
+    function CalcTransformMatrix(p1,p2:TzePoint3d):TzeTypedMatrix4d;virtual;
     function AfterClick(const Context:TZCADCommandContext;wc:TzePoint3d;
       mc:TzePoint2i;var button:byte;osp:pos_record):integer;virtual;
   end;
@@ -53,7 +53,7 @@ var
 
 implementation
 
-function Mirror_com.CalcTransformMatrix(p1,p2:TzePoint3d):DMatrix4d;
+function Mirror_com.CalcTransformMatrix(p1,p2:TzePoint3d):TzeTypedMatrix4d;
 var
   dist,p3:TzePoint3d;
   d:double;
@@ -72,7 +72,7 @@ end;
 function Mirror_com.AfterClick(const Context:TZCADCommandContext;wc:TzePoint3d;
   mc:TzePoint2i;var button:byte;osp:pos_record):integer;
 var
-  tempmatr,MirrMatr:DMatrix4d;
+  tempmatr,MirrMatr:TzeTypedMatrix4d;
   FrPos:TzePoint3d;
 begin
   MirrMatr:=CalcTransformMatrix(t3dp,wc);

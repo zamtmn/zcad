@@ -526,7 +526,7 @@ var
    point,spoint:TzePoint3s;
    x,y:integer;
    s:AnsiString;
-   {$IF DEFINED(LCLQt) OR DEFINED(LCLQt5)}_transminusM2,{$ENDIF}_transminusM,_obliqueM,_transplusM,_scaleM,_rotateM:DMatrix4d;
+   {$IF DEFINED(LCLQt) OR DEFINED(LCLQt5)}_transminusM2,{$ENDIF}_transminusM,_obliqueM,_transplusM,_scaleM,_rotateM:TzeTypedMatrix4d;
    {gdiDrawYOffset,}txtOblique,txtRotate,txtSx,txtSy:single;
 
    lfcp:TLogFont;

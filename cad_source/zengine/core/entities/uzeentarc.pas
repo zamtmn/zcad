@@ -79,13 +79,13 @@ type
     function CalcTrueInFrustum(
       const frustum:TzeFrustum):TInBoundingVolume;virtual;
     procedure ReCalcFromObjMatrix;virtual;
-    procedure transform(const t_matrix:DMatrix4d);virtual;
+    procedure transform(const t_matrix:TzeTypedMatrix4d);virtual;
     //function GetTangentInPoint(point:TzePoint3d):TzePoint3d;virtual;
     procedure AddOnTrackAxis(var posr:os_record;
       const processaxis:taddotrac);virtual;
     function onpoint(var objects:TZctnrVectorPGDBaseEntity;
       const point:TzePoint3d):boolean;virtual;
-    procedure TransformAt(p:PGDBObjEntity;t_matrix:PDMatrix4d);virtual;
+    procedure TransformAt(p:PGDBObjEntity;t_matrix:PzeTypedMatrix4d);virtual;
     class function CreateInstance:PGDBObjArc;static;
     function GetObjType:TObjID;virtual;
     function IsStagedFormatEntity:boolean;virtual;
@@ -125,7 +125,7 @@ end;
 
 procedure GDBObjARC.AddOnTrackAxis(var posr:os_record;const processaxis:taddotrac);
 var
-  m1:DMatrix4d;
+  m1:TzeTypedMatrix4d;
   dir,tv:TzePoint3d;
 begin
   m1:=GetMatrix^;
@@ -169,7 +169,7 @@ end;
 procedure GDBObjARC.ReCalcFromObjMatrix;
 var
   ox,oy:TzePoint3d;
-  m:DMatrix4d;
+  m:TzeTypedMatrix4d;
 begin
   inherited;
 
@@ -264,7 +264,7 @@ end;
 
 procedure GDBObjARC.CalcObjMatrix;
 var
-  m1:DMatrix4d;
+  m1:TzeTypedMatrix4d;
   v:TzeVector4d;
 begin
   inherited CalcObjMatrix;
@@ -624,7 +624,7 @@ var
   tq0,tq1,tq2:TzePoint3d;
   ptdata:tarcrtmodify;
   ad:TArcData;
-  m:DMatrix4d;
+  m:TzeTypedMatrix4d;
 begin
   m:=ObjMatrix;
   MatrixInvert(m);

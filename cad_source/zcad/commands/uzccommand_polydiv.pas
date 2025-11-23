@@ -205,7 +205,7 @@ begin
   end;
 end;
 
-procedure polydiv(var pva,pvr:GDBPolyline2DArray;m:DMatrix4d);
+procedure polydiv(var pva,pvr:GDBPolyline2DArray;m:TzeTypedMatrix4d);
 var
   nstep,i:integer;
   p3dpl:PGDBObjPolyline;

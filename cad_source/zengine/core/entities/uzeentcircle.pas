@@ -109,7 +109,7 @@ end;
 function GDBObjCircle.onpoint(var objects:TZctnrVectorPGDBaseEntity;
   const point:TzePoint3d):boolean;
 var
-  m1:DMatrix4d;
+  m1:TzeTypedMatrix4d;
   ppoint:TzePoint3d;
 begin
   m1:=GetMatrix^;
@@ -150,7 +150,7 @@ end;
 
 function GDBObjCircle.IsIntersect_Line(lbegin,lend:TzePoint3d):Intercept3DProp;
 var
-  m1:DMatrix4d;
+  m1:TzeTypedMatrix4d;
   td,td2,td3,t1,t2,llbegin_x2,llbegin_y2,llend_x2,llend_y2:double;
   llbegin,llend:TzePoint3d;
 begin
@@ -340,7 +340,7 @@ end;
 
 procedure GDBObjCircle.CalcObjMatrix;
 var
-  m1:DMatrix4d;
+  m1:TzeTypedMatrix4d;
 begin
   inherited CalcObjMatrix;
   m1:=CreateScaleMatrix(Radius);
@@ -594,7 +594,7 @@ end;
 
 procedure GDBObjCircle.rtmodifyonepoint(const rtmod:TRTModifyData);
 var
-  m:DMatrix4d;
+  m:TzeTypedMatrix4d;
 begin
   m:=ObjMatrix;
   MatrixInvert(m);

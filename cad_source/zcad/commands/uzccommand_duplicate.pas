@@ -40,7 +40,7 @@ type
   duplicade_com=object(copy_com)
     procedure CommandStart(const Context:TZCADCommandContext;
       Operands:TCommandOperands);virtual;
-    //function CalcTransformMatrix(p1,p2: GDBvertex):DMatrix4d; virtual;
+    //function CalcTransformMatrix(p1,p2: GDBvertex):TzeTypedMatrix4d; virtual;
     function AfterClick(const Context:TZCADCommandContext;wc:TzePoint3d;
       mc:TzePoint2i;var button:byte;osp:pos_record):integer;virtual;
     constructor init(cn:string;SA,DA:TCStartAttr);

@@ -172,8 +172,8 @@ type
                            procedure myglLogicOp(const opcode: GLenum);inline;
                            procedure myglPushMatrix;virtual;//inline;
                            procedure myglPopMatrix;virtual;//inline;
-                           procedure myglMultMatrixD(const matrix:DMatrix4d);virtual;//inline;
-                           procedure myglMultMatrixF(const matrix:DMatrix4f);virtual;//inline;
+                           procedure myglMultMatrixD(const matrix:TzeTypedMatrix4d);virtual;//inline;
+                           procedure myglMultMatrixF(const matrix:TzeTypedMatrix4s);virtual;//inline;
                            procedure myglMatrixMode(const mode: GLenum);inline;
                            procedure myglLineStipple(const factor: GLint; const pattern: GLushort);inline;
                            procedure myglPolygonStipple(const ppattern:pointer);inline;
@@ -687,11 +687,11 @@ begin
      mytotalglend;
      glPopMatrix;
 end;
-procedure TOGLStateManager.myglMultMatrixD(const matrix:DMatrix4d);
+procedure TOGLStateManager.myglMultMatrixD(const matrix:TzeTypedMatrix4d);
 begin
      glmultmatrixd(@matrix);
 end;
-procedure TOGLStateManager.myglMultMatrixF(const matrix:DMatrix4f);
+procedure TOGLStateManager.myglMultMatrixF(const matrix:TzeTypedMatrix4s);
 begin
      glmultmatrixf(@matrix);
 end;

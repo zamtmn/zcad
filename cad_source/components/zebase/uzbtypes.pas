@@ -103,15 +103,15 @@ end;
 PGDBBaseCamera=^GDBBaseCamera;
 {REGISTEROBJECTTYPE GDBBaseCamera}
 GDBBaseCamera=object(GDBaseObject)
-                modelMatrix:DMatrix4d;
+                modelMatrix:TzeTypedMatrix4d;
                 fovy:Double;
                 Counters:TCameraCounters;
                 //totalobj:Integer;
                 prop:GDBCameraBaseProp;
                 anglx,angly,zmin,zmax:Double;
-                projMatrix:DMatrix4d;
+                projMatrix:TzeTypedMatrix4d;
                 viewport:TzeVector4i;
-                clip:DMatrix4d;
+                clip:TzeTypedMatrix4d;
                 frustum:TzeFrustum;
                 //infrustum:Integer;
                 obj_zmax,obj_zmin:Double;

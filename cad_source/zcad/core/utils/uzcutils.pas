@@ -37,7 +37,7 @@ uses uzeutils,LCLProc,zcmultiobjectcreateundocommand,uzepalette,
 
   procedure zcMoveEntsFromConstructRootToCurrentDrawingWithUndo(CommandName:String);
 
-  procedure zcTransformSelectedEntsInDrawingWithUndo(CommandName:String;Transform:DMatrix4d);
+  procedure zcTransformSelectedEntsInDrawingWithUndo(CommandName:String;Transform:TzeTypedMatrix4d);
 
   {**Добавление в текущий чертеж примитива с обвязкой undo
     @param(PEnt Указатель на добавляемый примитив)}
@@ -171,13 +171,13 @@ begin
   pcd^.ConstructObjRoot.ObjArray.Clear;
 end;
 
-procedure zcTransformSelectedEntsInDrawingWithUndo(CommandName:String;Transform:DMatrix4d);
+procedure zcTransformSelectedEntsInDrawingWithUndo(CommandName:String;Transform:TzeTypedMatrix4d);
 var
   pcd:PTZCADDrawing;
   pobj: pGDBObjEntity;
   ir:itrec;
   dc:TDrawContext;
-  im:DMatrix4d;
+  im:TzeTypedMatrix4d;
   count:integer;
   m:tmethod;
 begin

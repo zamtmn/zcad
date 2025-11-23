@@ -49,13 +49,13 @@ type
     {Команды которыми примитив рисует сам себя}
     procedure DrawTextContent(drawer:TZGLAbstractDrawer;
       content:TDXFEntsInternalStringType;_pfont:PGDBfont;
-      const DrawMatrix,objmatrix:DMatrix4d;const textprop_size:double;var Outbound:OutBound4V);
+      const DrawMatrix,objmatrix:TzeTypedMatrix4d;const textprop_size:double;var Outbound:OutBound4V);
     procedure DrawLineWithLT(var Entity:GDBObjDrawable;
-      var ObjMatrix:DMatrix4d;var rc:TDrawContext;
+      var ObjMatrix:TzeTypedMatrix4d;var rc:TDrawContext;
       const StartPointOCS,EndPointOCS:TzePoint3d;const vp:GDBObjVisualProp;
       OnlyOne:boolean=False);
     procedure DrawLineByConstRefLinePropWithLT(
-      var Entity:GDBObjDrawable;var ObjMatrix:DMatrix4d;
+      var Entity:GDBObjDrawable;var ObjMatrix:TzeTypedMatrix4d;
       var rc:TDrawContext;constref LP:GDBLineProp;
       const vp:GDBObjVisualProp;OnlyOne:boolean=False);
     procedure DrawLineWithoutLT(var rc:TDrawContext;
@@ -138,14 +138,14 @@ end;
 
 procedure TZEntityRepresentation.DrawTextContent(drawer:TZGLAbstractDrawer;
   content:TDXFEntsInternalStringType;_pfont:PGDBfont;
-  const DrawMatrix,objmatrix:DMatrix4d;const textprop_size:double;var Outbound:OutBound4V);
+  const DrawMatrix,objmatrix:TzeTypedMatrix4d;const textprop_size:double;var Outbound:OutBound4V);
 begin
   Graphix.DrawTextContent(drawer,content,_pfont,DrawMatrix,objmatrix,
     textprop_size,Outbound);
 end;
 
 procedure TZEntityRepresentation.DrawLineWithLT(var Entity:GDBObjDrawable;
-  var ObjMatrix:DMatrix4d;var rc:TDrawContext;
+  var ObjMatrix:TzeTypedMatrix4d;var rc:TDrawContext;
   const StartPointOCS,EndPointOCS:TzePoint3d;const vp:GDBObjVisualProp;
   OnlyOne:boolean=False);
 var
@@ -168,7 +168,7 @@ begin
 end;
 
 procedure TZEntityRepresentation.DrawLineByConstRefLinePropWithLT(
-  var Entity:GDBObjDrawable;var ObjMatrix:DMatrix4d;
+  var Entity:GDBObjDrawable;var ObjMatrix:TzeTypedMatrix4d;
   var rc:TDrawContext;constref LP:GDBLineProp;
   const vp:GDBObjVisualProp;OnlyOne:boolean=False);
 var

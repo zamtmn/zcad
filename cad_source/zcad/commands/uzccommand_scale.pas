@@ -70,7 +70,7 @@ end;
 
 procedure scale_com.scale(a:double;button:byte);
 var
-  dispmatr,im,rotmatr:DMatrix4d;
+  dispmatr,im,rotmatr:TzeTypedMatrix4d;
   ir:itrec;
   pcd:PTCopyObjectDesc;
   //v:TzePoint3d;
@@ -149,7 +149,7 @@ end;
 function scale_com.AfterClick(const Context:TZCADCommandContext;wc:TzePoint3d;
   mc:TzePoint2i;var button:byte;osp:pos_record):integer;
 var
-  //dispmatr,im,rotmatr:DMatrix4d;
+  //dispmatr,im,rotmatr:TzeTypedMatrix4d;
   //ir:itrec;
   //pcd:PTCopyObjectDesc;
   a:double;

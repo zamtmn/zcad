@@ -63,7 +63,7 @@ type
     function GetObjTypeName:string;virtual;
     procedure getoutbound(var DC:TDrawContext);virtual;
 
-    procedure TransformAt(p:PGDBObjEntity;t_matrix:PDMatrix4d);virtual;
+    procedure TransformAt(p:PGDBObjEntity;t_matrix:PzeTypedMatrix4d);virtual;
 
     function CreateInstance:PGDBObjPoint;static;
     function GetObjType:TObjID;virtual;

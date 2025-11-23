@@ -41,12 +41,12 @@ implementation
 procedure rasterize(cdwg:PTSimpleDrawing;pw,ph:integer;point1,point2:TzePoint3d;PrintParam:TRasterizeParams;Canvas: TCanvas;PrinterDrawer:TZGLGeneral2DDrawer);
  var
   dx,dy,sx,sy,scale:Double;
-  tmatrix,_clip:DMatrix4d;
+  tmatrix,_clip:TzeTypedMatrix4d;
   _frustum:TzeFrustum;
   DC:TDrawContext;
 
-  modelMatrix:DMatrix4d;
-  projMatrix:DMatrix4d;
+  modelMatrix:TzeTypedMatrix4d;
+  projMatrix:TzeTypedMatrix4d;
   viewport:TzeVector4i;
   pd1,pd2:TzePoint2d;
 
@@ -150,7 +150,7 @@ begin
 
 
   //modelMatrix:=onematrix;
-  //projMatrix:DMatrix4d;
+  //projMatrix:TzeTypedMatrix4d;
   viewport.v[0]:=0;
   viewport.v[1]:=0;
   viewport.v[2]:=pw;

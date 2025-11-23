@@ -24,20 +24,20 @@ uses uzbLogIntf,uzegeometrytypes,math;
 resourcestring
   rsDivByZero='Divide by zero';
 const
-  EmptyMtr:TMatrix4D=(v:((v:(0,0,0,0)),
+  EmptyMtr:TzeMatrix4d=(v:((v:(0,0,0,0)),
                       (v:(0,0,0,0)),
                       (v:(0,0,0,0)),
                       (v:(0,0,0,0))));
-  OneMtr:TMatrix4D=(v:((v:(1,0,0,0)),
+  OneMtr:TzeMatrix4d=(v:((v:(1,0,0,0)),
                     (v:(0,1,0,0)),
                     (v:(0,0,1,0)),
                     (v:(0,0,0,1))));
-  EmptyMatrix:DMatrix4D=(mtr:(v:((v:(0,0,0,0)),
+  EmptyMatrix:TzeTypedMatrix4d=(mtr:(v:((v:(0,0,0,0)),
                               (v:(0,0,0,0)),
                               (v:(0,0,0,0)),
                               (v:(0,0,0,0))));
                          t:[]);
-  OneMatrix:DMatrix4D=(mtr:(v:((v:(1,0,0,0)),
+  OneMatrix:TzeTypedMatrix4d=(mtr:(v:((v:(1,0,0,0)),
                             (v:(0,1,0,0)),
                             (v:(0,0,1,0)),
                             (v:(0,0,0,1))));
@@ -92,7 +92,7 @@ type
   end;
   TCSDir=(TCSDLeft,TCSDRight);
 function ToTzeVector4s(const m:TzeVector4d):TzeVector4s; inline;
-function ToDMatrix4f(const m:DMatrix4D):DMatrix4f; inline;
+function ToDMatrix4f(const m:TzeTypedMatrix4d):TzeTypedMatrix4s; inline;
 function ToTzePoint2i(const _V:TzePoint3d):TzePoint2i; inline;
 function VertexD2S(const Vector1:TzePoint3d): TzePoint3s;inline;
 function intercept2d(const x1, y1, x2, y2, x3, y3, x4, y4: Double): Boolean;inline;
@@ -145,31 +145,31 @@ function vertexlen2id(const x1, y1, x2, y2: Integer): Double;inline;
 function Vertexdmorphabs(const Vector1, Vector2: TzePoint3d;a: Double): TzePoint3d;inline;
 function Vertexmorphabs(const Vector1, Vector2: TzePoint3d;a: Double): TzePoint3d;inline;
 function Vertexmorphabs2(const Vector1, Vector2: TzePoint3d;a: Double): TzePoint3d;inline;
-function MatrixMultiply(const M1, M2: DMatrix4D):DMatrix4D;overload;inline;
-function MatrixMultiply(const M1: DMatrix4D; const M2: DMatrix4f):DMatrix4D;overload;inline;
-function MatrixMultiplyF(const M1, M2: DMatrix4D):DMatrix4f;inline;
-function VectorTransform(const V:TzeVector4d;const M:DMatrix4D):TzeVector4d;overload;inline;
-function VectorTransform(const V:TzeVector4d;const M:DMatrix4f):TzeVector4d;overload;inline;
-function VectorTransform(const V:TzeVector4s;const M:DMatrix4f):TzeVector4s;overload;inline;
+function MatrixMultiply(const M1, M2: TzeTypedMatrix4d):TzeTypedMatrix4d;overload;inline;
+function MatrixMultiply(const M1: TzeTypedMatrix4d; const M2: TzeTypedMatrix4s):TzeTypedMatrix4d;overload;inline;
+function MatrixMultiplyF(const M1, M2: TzeTypedMatrix4d):TzeTypedMatrix4s;inline;
+function VectorTransform(const V:TzeVector4d;const M:TzeTypedMatrix4d):TzeVector4d;overload;inline;
+function VectorTransform(const V:TzeVector4d;const M:TzeTypedMatrix4s):TzeVector4d;overload;inline;
+function VectorTransform(const V:TzeVector4s;const M:TzeTypedMatrix4s):TzeVector4s;overload;inline;
 procedure normalize4d(var tv:TzeVector4d);overload;inline;
 procedure normalize4F(var tv:TzeVector4s);overload;inline;
-function VectorTransform3D(const V:TzePoint3d;const M:DMatrix4D):TzePoint3d;overload;inline;
-function VectorTransform3D(const V:TzePoint3d;const M:DMatrix4f):TzePoint3d;overload;inline;
-function VectorTransform3D(const V:TzePoint3s;const M:DMatrix4D):TzePoint3s;overload;inline;
-function VectorTransform3D(const V:TzePoint3s;const M:DMatrix4f):TzePoint3s;overload;inline;
+function VectorTransform3D(const V:TzePoint3d;const M:TzeTypedMatrix4d):TzePoint3d;overload;inline;
+function VectorTransform3D(const V:TzePoint3d;const M:TzeTypedMatrix4s):TzePoint3d;overload;inline;
+function VectorTransform3D(const V:TzePoint3s;const M:TzeTypedMatrix4d):TzePoint3s;overload;inline;
+function VectorTransform3D(const V:TzePoint3s;const M:TzeTypedMatrix4s):TzePoint3s;overload;inline;
 
-function FrustumTransform(const frustum:TzeFrustum;const M:DMatrix4D; MatrixAlreadyTransposed:Boolean=false):TzeFrustum;overload;inline;
-function FrustumTransform(const frustum:TzeFrustum;const M:DMatrix4f; MatrixAlreadyTransposed:Boolean=false):TzeFrustum;overload;inline;
+function FrustumTransform(const frustum:TzeFrustum;const M:TzeTypedMatrix4d; MatrixAlreadyTransposed:Boolean=false):TzeFrustum;overload;inline;
+function FrustumTransform(const frustum:TzeFrustum;const M:TzeTypedMatrix4s; MatrixAlreadyTransposed:Boolean=false):TzeFrustum;overload;inline;
 
-procedure MatrixTranspose(var M: DMatrix4D);overload;inline;
-procedure MatrixTranspose(var M: DMatrix4f);overload;inline;
-procedure MatrixNormalize(var M: DMatrix4D);inline;
-function CreateRotationMatrixX(const angle: Double): DMatrix4D;inline;
-function CreateRotationMatrixY(const angle: Double): DMatrix4D;inline;
-function CreateRotationMatrixZ(const angle: Double): DMatrix4D;inline;
+procedure MatrixTranspose(var M: TzeTypedMatrix4d);overload;inline;
+procedure MatrixTranspose(var M: TzeTypedMatrix4s);overload;inline;
+procedure MatrixNormalize(var M: TzeTypedMatrix4d);inline;
+function CreateRotationMatrixX(const angle: Double): TzeTypedMatrix4d;inline;
+function CreateRotationMatrixY(const angle: Double): TzeTypedMatrix4d;inline;
+function CreateRotationMatrixZ(const angle: Double): TzeTypedMatrix4d;inline;
 function CreateRotatedXVector(const angle: Double):TzePoint3d;inline;
 function CreateRotatedYVector(const angle: Double):TzePoint3d;inline;
-function CreateAffineRotationMatrix(const anAxis: TzePoint3d; angle: double):DMatrix4D;inline;
+function CreateAffineRotationMatrix(const anAxis: TzePoint3d; angle: double):TzeTypedMatrix4d;inline;
 function distance2piece(const q:TzePoint2i;const p1,p2:TzePoint2d): double;overload;inline;
 function distance2piece(const q,p1,p2:TzePoint3d): {DistAndPoint}double;overload;inline;
 
@@ -181,12 +181,12 @@ function distance2piece_2_xy(const q:TzePoint2i;const p1,p2:TzePoint2d):TzePoint
 
 function distance2point_2(const p1,p2:TzePoint2i):Integer;inline;
 function distance2ray(const q:TzePoint3d;const p1,p2:TzePoint3d):DistAndt;
-function CreateTranslationMatrix(const _V:TzePoint3d):DMatrix4D;inline;overload;
-function CreateTranslationMatrix(const tx,ty,tz:Double):DMatrix4D;inline;overload;
-function CreateScaleMatrix(const V:TzePoint3d): DMatrix4D;inline;overload;
-function CreateScaleMatrix(const s:Double): DMatrix4D;inline;overload;
-function CreateScaleMatrix(const sx,sy,sz:Double): DMatrix4D;inline;overload;
-function CreateReflectionMatrix(const plane:TzeVector4d): DMatrix4D;
+function CreateTranslationMatrix(const _V:TzePoint3d):TzeTypedMatrix4d;inline;overload;
+function CreateTranslationMatrix(const tx,ty,tz:Double):TzeTypedMatrix4d;inline;overload;
+function CreateScaleMatrix(const V:TzePoint3d): TzeTypedMatrix4d;inline;overload;
+function CreateScaleMatrix(const s:Double): TzeTypedMatrix4d;inline;overload;
+function CreateScaleMatrix(const sx,sy,sz:Double): TzeTypedMatrix4d;inline;overload;
+function CreateReflectionMatrix(const plane:TzeVector4d): TzeTypedMatrix4d;
 //**Создать 3D вершину
 function CreateVertex(const _x,_y,_z:Double):TzePoint3d;inline;
 function CreateVertexFromArray(var counter:integer;const args:array of const):TzePoint3d;
@@ -206,7 +206,7 @@ function IsBBNul(const v1, v2: TzePoint3d): Boolean; overload; inline;
 function IsBBNul(const bb:TBoundingBox):boolean; overload; inline;
 function boundingintersect(const bb1,bb2:TBoundingBox):Boolean;inline;
 function ScaleBB(const bb:TBoundingBox;const k:Double):TBoundingBox;
-procedure MatrixInvert(var M: DMatrix4D);inline;
+procedure MatrixInvert(var M: TzeTypedMatrix4d);inline;
 function VectorDot(const v1,v2:TzePoint3d):TzePoint3d;inline;
 function scalardot(const v1,v2:TzePoint3d):Double;inline;
 function vertexeq(const v1,v2:TzePoint3d):Boolean;inline;
@@ -225,15 +225,15 @@ function IsNotZero(const d:Double;const _eps:Double=eps):boolean;inline;
 //TODO: заменить в коде все проверки на функцию
 function IsNearToZ(const v:TzePoint3d):boolean;inline;
 
-procedure _myGluProject(const objx,objy,objz:Double;const modelMatrix,projMatrix:PDMatrix4D;const viewport:PzeVector4i; out winx,winy,winz:Double);inline;
-procedure _myGluProject2(const objcoord:TzePoint3d;const modelMatrix,projMatrix:PDMatrix4D;const viewport:PzeVector4i; out wincoord:TzePoint3d);inline;
-procedure _myGluUnProject(const winx,winy,winz:Double;const modelMatrix,projMatrix:PDMatrix4D;const viewport:PzeVector4i;out objx,objy,objz:Double);inline;
+procedure _myGluProject(const objx,objy,objz:Double;const modelMatrix,projMatrix:PzeTypedMatrix4d;const viewport:PzeVector4i; out winx,winy,winz:Double);inline;
+procedure _myGluProject2(const objcoord:TzePoint3d;const modelMatrix,projMatrix:PzeTypedMatrix4d;const viewport:PzeVector4i; out wincoord:TzePoint3d);inline;
+procedure _myGluUnProject(const winx,winy,winz:Double;const modelMatrix,projMatrix:PzeTypedMatrix4d;const viewport:PzeVector4i;out objx,objy,objz:Double);inline;
 
-function ortho(const xmin,xmax,ymin,ymax,zmin,zmax:Double;const matrix:PDMatrix4D):DMatrix4D;{inline;}
-function Perspective(const fovy,W_H,zmin,zmax:Double;const matrix:PDMatrix4D):DMatrix4D;inline;
-function LookAt(point,ex,ey,ez:TzePoint3d;const matrix:PDMatrix4D):DMatrix4D;inline;
+function ortho(const xmin,xmax,ymin,ymax,zmin,zmax:Double;const matrix:PzeTypedMatrix4d):TzeTypedMatrix4d;{inline;}
+function Perspective(const fovy,W_H,zmin,zmax:Double;const matrix:PzeTypedMatrix4d):TzeTypedMatrix4d;inline;
+function LookAt(point,ex,ey,ez:TzePoint3d;const matrix:PzeTypedMatrix4d):TzeTypedMatrix4d;inline;
 
-function calcfrustum(const clip:PDMatrix4D):TzeFrustum;inline;
+function calcfrustum(const clip:PzeTypedMatrix4d):TzeFrustum;inline;
 function PointOf3PlaneIntersect(const P1,P2,P3:TzeVector4d):TzePoint3d;inline;
 function PointOfRayPlaneIntersect(const p1,d:TzePoint3d;const plane:TzeVector4d;out point :TzePoint3d):Boolean;overload;inline;
 function PointOfRayPlaneIntersect(const p1,d:TzePoint3d;const plane:TzeVector4d;out t :double):Boolean;overload;inline;
@@ -248,13 +248,13 @@ function CalcAABBInFrustum (const AABB:TBoundingBox; const frustum:TzeFrustum):T
 
 function GetXfFromZ(const oz:TzePoint3d):TzePoint3d;inline;
 
-function MatrixDeterminant(const M: DMatrix4D):Double;
-function CreateMatrixFromBasis(const ox,oy,oz:TzePoint3d):DMatrix4D; inline;
-procedure CreateBasisFromMatrix(const m:DMatrix4D;out ox,oy,oz:TzePoint3d); inline;
+function MatrixDeterminant(const M: TzeTypedMatrix4d):Double;
+function CreateMatrixFromBasis(const ox,oy,oz:TzePoint3d):TzeTypedMatrix4d; inline;
+procedure CreateBasisFromMatrix(const m:TzeTypedMatrix4d;out ox,oy,oz:TzePoint3d); inline;
 
-function QuaternionFromMatrix(const mat : DMatrix4D) : TzeQuaternion;
+function QuaternionFromMatrix(const mat : TzeTypedMatrix4d) : TzeQuaternion;
 function QuaternionSlerp(const source, dest: TzeQuaternion; const t: Double): TzeQuaternion;
-function QuaternionToMatrix(quat : TzeQuaternion) :  DMatrix4D;
+function QuaternionToMatrix(quat : TzeQuaternion) :  TzeTypedMatrix4d;
 
 function GetArcParamFrom3Point2D(Const PointData:tarcrtmodify;out ad:TArcData):Boolean;
 
@@ -263,14 +263,14 @@ function CorrectAngleIfNotReadable(Angle:Double):Double; inline;
 
 function GetCSDirFrom0x0y2D(const ox,oy:TzePoint3d):TCSDir;
 
-function CalcDisplaySubFrustum(const x,y,w,h:Double;const mm,pm:DMatrix4D;const vp:TzeVector4i):TzeFrustum;
-function myPickMatrix(const x,y,deltax,deltay:Double;const vp:TzeVector4i): DMatrix4D;
+function CalcDisplaySubFrustum(const x,y,w,h:Double;const mm,pm:TzeTypedMatrix4d;const vp:TzeVector4i):TzeFrustum;
+function myPickMatrix(const x,y,deltax,deltay:Double;const vp:TzeVector4i): TzeTypedMatrix4d;
 
 function GetPointInOCSByBasis(const ScaledBX,ScaledBY,ScaledBZ:TzePoint3d; const PointInWCS:TzePoint3d; out scale:TzePoint3d):GDBObj2dprop;
-function GetPInsertInOCSBymatrix(constref matrix:DMatrix4D;out scale:TzePoint3d):GDBObj2dprop;
+function GetPInsertInOCSBymatrix(constref matrix:TzeTypedMatrix4d;out scale:TzePoint3d):GDBObj2dprop;
 
 var
-  WorldMatrix{,CurrentCS}:DMatrix4D;
+  WorldMatrix{,CurrentCS}:TzeTypedMatrix4d;
   wx:PzePoint3d;
   wy:PzePoint3d;
   wz:PzePoint3d;
@@ -338,7 +338,7 @@ begin
   end;
 end;
 
-function GetPInsertInOCSBymatrix(constref matrix:DMatrix4D;out scale:TzePoint3d):GDBObj2dprop;
+function GetPInsertInOCSBymatrix(constref matrix:TzeTypedMatrix4d;out scale:TzePoint3d):GDBObj2dprop;
 var
   BX,BY,BZ,T:TzePoint3d;
 begin
@@ -394,7 +394,7 @@ begin
   //result.v[2]:=m.v[2];
   //result.v[3]:=m.v[3];
 end;
-function ToDMatrix4f(const m:DMatrix4D):DMatrix4f;
+function ToDMatrix4f(const m:TzeTypedMatrix4d):TzeTypedMatrix4s;
 begin
   result.mtr.v[0]:=ToTzeVector4s(m.mtr.v[0]);
   result.mtr.v[1]:=ToTzeVector4s(m.mtr.v[1]);
@@ -585,7 +585,7 @@ begin
 end;
 
 
-function calcfrustum(const clip:PDMatrix4D):TzeFrustum;
+function calcfrustum(const clip:PzeTypedMatrix4d):TzeFrustum;
 var t:Double;
 begin
    //* Находим A, B, C, D для ПРАВОЙ плоскости */
@@ -695,7 +695,7 @@ begin
             b1 * (a2 * c3 - a3 * c2) +
             c1 * (a2 * b3 - a3 * b2);
 end;
-procedure MatrixAdjoint(var M: DMatrix4D);
+procedure MatrixAdjoint(var M: TzeTypedMatrix4d);
 var a1, a2, a3, a4,
     b1, b2, b3, b4,
     c1, c2, c3, c4,
@@ -743,7 +743,7 @@ begin
     M.mtr.v[WAxisIndex].v[ZAxisIndex] := -MatrixDetInternal(a1, a2, a4, b1, b2, b4, c1, c2, c4);
     M.mtr.v[WAxisIndex].v[WAxisIndex] :=  MatrixDetInternal(a1, a2, a3, b1, b2, b3, c1, c2, c3);
 end;
-function MatrixDeterminant(const M: DMatrix4D): Double;
+function MatrixDeterminant(const M: TzeTypedMatrix4d): Double;
 var a1, a2, a3, a4,
     b1, b2, b3, b4,
     c1, c2, c3, c4,
@@ -771,7 +771,7 @@ begin
             c1 * MatrixDetInternal(a2, a3, a4, b2, b3, b4, d2, d3, d4) -
             d1 * MatrixDetInternal(a2, a3, a4, b2, b3, b4, c2, c3, c4);
 end;
-procedure MatrixScale(var M: DMatrix4D; const Factor: Double);
+procedure MatrixScale(var M: TzeTypedMatrix4d; const Factor: Double);
 //var I, J: Integer;
 begin
   with TzeVector4d((@M.mtr.v[0])^) do begin
@@ -802,7 +802,7 @@ begin
   //  for J := 0 to 3 do M[I].v[J] := M[I].v[J] * Factor;
 end;
 
-procedure MatrixInvert(var M: DMatrix4D);
+procedure MatrixInvert(var M: TzeTypedMatrix4d);
 var Det: Double;
 begin
   Det := MatrixDeterminant(M);
@@ -956,7 +956,7 @@ begin
       end;
 end;
 
-function CreateTranslationMatrix(const _V:TzePoint3d): DMatrix4D;
+function CreateTranslationMatrix(const _V:TzePoint3d): TzeTypedMatrix4d;
 begin
   Result.CreateRec(onemtr,CMTTranslate);
   with TzeVector4d((@Result.mtr.v[3])^) do
@@ -967,7 +967,7 @@ begin
     v[3] := 1;
   end;
 end;
-function CreateTranslationMatrix(const tx,ty,tz:Double):DMatrix4D;
+function CreateTranslationMatrix(const tx,ty,tz:Double):TzeTypedMatrix4d;
 begin
   Result.CreateRec(onemtr,CMTTranslate);
   with TzeVector4d((@Result.mtr.v[3])^) do begin
@@ -977,7 +977,7 @@ begin
     v[3]:=1;
   end;
 end;
-function CreateReflectionMatrix(const plane:TzeVector4d): DMatrix4D;
+function CreateReflectionMatrix(const plane:TzeVector4d): TzeTypedMatrix4d;
 var
   d: double;
 begin
@@ -1009,7 +1009,7 @@ begin
   Result.t:=CMTTransform;
 end;
 
-function CreateScaleMatrix(const V:TzePoint3d): DMatrix4D;
+function CreateScaleMatrix(const V:TzePoint3d): TzeTypedMatrix4d;
 begin
   Result.mtr.v:=onemtr.v;
   Result.mtr.v[0].v[0]:=V.x;
@@ -1019,7 +1019,7 @@ begin
   Result.t:=CMTScale;
 end;
 
-function CreateScaleMatrix(const s:Double): DMatrix4D;
+function CreateScaleMatrix(const s:Double): TzeTypedMatrix4d;
 begin
   Result.mtr.v:=onemtr.v;
   Result.mtr.v[0].v[0]:=S;
@@ -1029,7 +1029,7 @@ begin
   Result.t:=CMTScale;
 end;
 
-function CreateScaleMatrix(const sx,sy,sz:Double): DMatrix4D;inline;overload;
+function CreateScaleMatrix(const sx,sy,sz:Double): TzeTypedMatrix4d;inline;overload;
 begin
   Result.mtr.v:=onemtr.v;
   Result.mtr.v[0].v[0]:=sx;
@@ -1039,7 +1039,7 @@ begin
   Result.t:=CMTScale;
 end;
 
-function CreateRotationMatrixX(const angle: Double): DMatrix4D;
+function CreateRotationMatrixX(const angle: Double): TzeTypedMatrix4d;
 var
   Sine, Cosine: Double;
 begin
@@ -1053,7 +1053,7 @@ begin
   Result.mtr.v[3].v[3] := 1;
   Result.t:=CMTRotate;
 end;
-function CreateRotationMatrixY(const angle: Double): DMatrix4D;
+function CreateRotationMatrixY(const angle: Double): TzeTypedMatrix4d;
 var
   Sine, Cosine: Double;
 begin
@@ -1076,7 +1076,7 @@ function CreateRotatedYVector(const angle: Double):TzePoint3d;
 begin
   Result:=CreateRotatedXVector(angle+pi/2);
 end;
-function CreateRotationMatrixZ(const angle: Double): DMatrix4D;
+function CreateRotationMatrixZ(const angle: Double): TzeTypedMatrix4d;
 var
   Sine, Cosine: Double;
 begin
@@ -1089,7 +1089,7 @@ begin
   Result.t:=CMTRotate;
 end;
 
-function MatrixMultiply(const M1, M2: DMatrix4D): DMatrix4D;
+function MatrixMultiply(const M1, M2: TzeTypedMatrix4d): TzeTypedMatrix4d;
 var I: Integer;
 begin
   for I := 3 downto 0 do
@@ -1104,7 +1104,7 @@ begin
   end;
   Result.t:=M1.t+M2.t;
 end;
-function MatrixMultiply(const M1: DMatrix4D; const M2: DMatrix4f):DMatrix4D;
+function MatrixMultiply(const M1: TzeTypedMatrix4d; const M2: TzeTypedMatrix4s):TzeTypedMatrix4d;
 var I: Integer;
 begin
   for I := 3 downto 0 do
@@ -1119,7 +1119,7 @@ begin
   end;
   Result.t:=M1.t+M2.t;
 end;
-function MatrixMultiplyF(const M1, M2: DMatrix4D):DMatrix4f;
+function MatrixMultiplyF(const M1, M2: TzeTypedMatrix4d):TzeTypedMatrix4s;
 var I: Integer;
 begin
   for I := 3 downto 0 do
@@ -1134,9 +1134,9 @@ begin
   end;
   Result.t:=M1.t+M2.t;
 end;
-procedure MatrixTranspose(var M: DMatrix4D);
+procedure MatrixTranspose(var M: TzeTypedMatrix4d);
 var I: Integer;
-    TM: DMatrix4D;
+    TM: TzeTypedMatrix4d;
 begin
   for I := 3 downto 0 do
   begin
@@ -1150,9 +1150,9 @@ begin
   end;
   M.mtr:=TM.mtr;
 end;
-procedure MatrixTranspose(var M: DMatrix4f);
+procedure MatrixTranspose(var M: TzeTypedMatrix4s);
 var I: Integer;
-    TM: DMatrix4f;
+    TM: TzeTypedMatrix4s;
 begin
   for I := 3 downto 0 do
   begin
@@ -1166,7 +1166,7 @@ begin
   end;
   M.mtr:=TM.mtr;
 end;
-procedure MatrixNormalize(var M: DMatrix4D);
+procedure MatrixNormalize(var M: TzeTypedMatrix4d);
 var I{, J}: Integer;
     D: Double;
 begin
@@ -1183,7 +1183,7 @@ begin
   end;
 end;
 
-function VectorTransform(const V:TzeVector4d;const M:DMatrix4D):TzeVector4d;
+function VectorTransform(const V:TzeVector4d;const M:TzeTypedMatrix4d):TzeVector4d;
 begin
   if M.t=CMTIdentity then
     Result:=V
@@ -1196,7 +1196,7 @@ begin
       Result.W := x * M.mtr.v[0].v[3] + y * M.mtr.v[1].v[3] + z * M.mtr.v[2].v[3] + w * M.mtr.v[3].v[3];
     end;
 end;
-function VectorTransform(const V:TzeVector4d;const M:DMatrix4f):TzeVector4d;
+function VectorTransform(const V:TzeVector4d;const M:TzeTypedMatrix4s):TzeVector4d;
 begin
   if M.t=CMTIdentity then
     Result:=V
@@ -1209,7 +1209,7 @@ begin
       Result.W := x * M.mtr.v[0].v[3] + y * M.mtr.v[1].v[3] + z * M.mtr.v[2].v[3] + w * M.mtr.v[3].v[3];
     end;
 end;
-function VectorTransform(const V:TzeVector4s;const M:DMatrix4f):TzeVector4s;
+function VectorTransform(const V:TzeVector4s;const M:TzeTypedMatrix4s):TzeVector4s;
 begin
   if M.t=CMTIdentity then
     Result:=V
@@ -1248,7 +1248,7 @@ begin
     end;
   end;
 end;
-function VectorTransform3D(const V:TzePoint3d;const M:DMatrix4D):TzePoint3d;
+function VectorTransform3D(const V:TzePoint3d;const M:TzeTypedMatrix4d):TzePoint3d;
 var TV: TzeVector4d;
 begin
   if M.t=CMTIdentity then
@@ -1263,7 +1263,7 @@ begin
     Result := PzePoint3d(@tv)^
   end;
 end;
-function VectorTransform3D(const V:TzePoint3d;const M:DMatrix4f):TzePoint3d;
+function VectorTransform3D(const V:TzePoint3d;const M:TzeTypedMatrix4s):TzePoint3d;
 var TV: TzeVector4d;
 begin
   if M.t=CMTIdentity then
@@ -1278,7 +1278,7 @@ begin
     Result := PzePoint3d(@tv)^
   end;
 end;
-function VectorTransform3D(const V:TzePoint3s;const M:DMatrix4D):TzePoint3s;
+function VectorTransform3D(const V:TzePoint3s;const M:TzeTypedMatrix4d):TzePoint3s;
 var tv: TzeVector4d;
 begin
   if M.t=CMTIdentity then
@@ -1295,7 +1295,7 @@ begin
   result.z:=tv.z;
   end;
 end;
-function VectorTransform3D(const V:TzePoint3s;const M:DMatrix4f):TzePoint3s;
+function VectorTransform3D(const V:TzePoint3s;const M:TzeTypedMatrix4s):TzePoint3s;
 var tv: TzeVector4s;
 begin
   tv.x:=v.x;
@@ -1308,9 +1308,9 @@ begin
   result.y:=tv.y;
   result.z:=tv.z;
 end;
-function FrustumTransform(const frustum:TzeFrustum;const M:DMatrix4D; MatrixAlreadyTransposed:Boolean=false):TzeFrustum;
+function FrustumTransform(const frustum:TzeFrustum;const M:TzeTypedMatrix4d; MatrixAlreadyTransposed:Boolean=false):TzeFrustum;
 var
-   m1:DMatrix4D;
+   m1:TzeTypedMatrix4d;
 begin
      if MatrixAlreadyTransposed
       then
@@ -1334,9 +1334,9 @@ begin
           PzeVector4d(@result.v[5])^:=VectorTransform(PzeVector4d(@frustum.v[5])^,m1);
         end;
 end;
-function FrustumTransform(const frustum:TzeFrustum;const M:DMatrix4f; MatrixAlreadyTransposed:Boolean=false):TzeFrustum;
+function FrustumTransform(const frustum:TzeFrustum;const M:TzeTypedMatrix4s; MatrixAlreadyTransposed:Boolean=false):TzeFrustum;
 var
-   m1:DMatrix4f;
+   m1:TzeTypedMatrix4s;
 begin
      if MatrixAlreadyTransposed
       then
@@ -1923,7 +1923,7 @@ begin
      and(((b1.z+b2.z)-dist.z)>-bigeps) then
     result:=true
 end;
-function CreateMatrixFromBasis(const ox,oy,oz:TzePoint3d):DMatrix4D;
+function CreateMatrixFromBasis(const ox,oy,oz:TzePoint3d):TzeTypedMatrix4d;
 begin
   Result.CreateRec(OneMtr,CMTRotate);
   //result:=onematrix;
@@ -1932,7 +1932,7 @@ begin
   PzePoint3d(@result.mtr.v[2])^:=oz;
   //result.t:=CMTRotate;
 end;
-procedure CreateBasisFromMatrix(const m:DMatrix4D;out ox,oy,oz:TzePoint3d);
+procedure CreateBasisFromMatrix(const m:TzeTypedMatrix4d;out ox,oy,oz:TzePoint3d);
 begin
   ox:=PzePoint3d(@m.mtr.v[0])^;
   oy:=PzePoint3d(@m.mtr.v[1])^;
@@ -1954,7 +1954,7 @@ begin
   end else
     q:=IdentityQuaternion;
 end;
-function QuaternionFromMatrix(const mat : DMatrix4D) : TzeQuaternion;
+function QuaternionFromMatrix(const mat : TzeTypedMatrix4d) : TzeQuaternion;
 // the matrix must be a rotation matrix!
 var
    traceMat, s, invS : Double;
@@ -2032,7 +2032,7 @@ begin
   Result.RealPart := scale0 * source.RealPart + scale1 * to1[3];
   NormalizeQuaternion(Result);
 end;
-function QuaternionToMatrix(quat : TzeQuaternion) :  DMatrix4D;
+function QuaternionToMatrix(quat : TzeQuaternion) :  TzeTypedMatrix4d;
 var
   w,x,y,z,xx,xy,xz,xw,yy,yz,yw,zz,zw:Double;
 begin
@@ -2116,9 +2116,9 @@ begin
     result:=false;
 end;
 
-function myPickMatrix(const x,y,deltax,deltay:Double;const vp:TzeVector4i): DMatrix4D;
+function myPickMatrix(const x,y,deltax,deltay:Double;const vp:TzeVector4i): TzeTypedMatrix4d;
 var
-  tm,sm: DMatrix4D;
+  tm,sm: TzeTypedMatrix4d;
 begin
   tm:=CreateTranslationMatrix(createvertex((vp.v[2]-2*(x-vp.v[0]))/deltax,
                                            (vp.v[3]-2*(y-vp.v[1]))/deltay, 0));
@@ -2127,9 +2127,9 @@ begin
   result.t:=CMTTransform;
 end;
 
-function CalcDisplaySubFrustum(const x,y,w,h:Double;const mm,pm:DMatrix4D;const vp:TzeVector4i):TzeFrustum;
+function CalcDisplaySubFrustum(const x,y,w,h:Double;const mm,pm:TzeTypedMatrix4d;const vp:TzeVector4i):TzeFrustum;
 var
-  tm: DMatrix4D;
+  tm: TzeTypedMatrix4d;
 begin
   (*//use glu.gluPickMatrix
   oglsm.myglMatrixMode(GL_Projection);
@@ -2449,7 +2449,7 @@ function ortho;
 var
   xmaxminusxmin,ymaxminusymin,zmaxminuszmin,
   xmaxplusxmin,ymaxplusymin,zmaxpluszmin:Double;
-  m:DMatrix4D;
+  m:TzeTypedMatrix4d;
 begin
   xmaxminusxmin:=xmax-xmin;
   ymaxminusymin:=ymax-ymin;
@@ -2479,7 +2479,7 @@ end;
 function Perspective;
 var
   sine,cosine,cotangent,deltaZ,radians:Double;
-  m:DMatrix4D;
+  m:TzeTypedMatrix4d;
 begin
   radians:= fovy/2*Pi/180;
   deltaZ:=zmax - zmin;
@@ -2497,8 +2497,8 @@ end;
 
 function lookat;
 var
-  m:DMatrix4D;
-  m2:DMatrix4D;
+  m:TzeTypedMatrix4d;
+  m2:TzeTypedMatrix4d;
 begin
   m:=CreateMatrixFromBasis(-ex,ey,-ez);
   MatrixTranspose(m);
@@ -2507,10 +2507,10 @@ begin
   result:=MatrixMultiply(m,matrix^);
 end;
 
-procedure _myGluUnProject(const winx,winy,winz:Double;const modelMatrix,projMatrix:PDMatrix4D;const viewport:PzeVector4i;out objx,objy,objz:Double);
+procedure _myGluUnProject(const winx,winy,winz:Double;const modelMatrix,projMatrix:PzeTypedMatrix4d;const viewport:PzeVector4i;out objx,objy,objz:Double);
 var
   _in,_out:TzeVector4d;
-  finalMatrix:DMatrix4D;
+  finalMatrix:TzeTypedMatrix4d;
 begin
   finalMatrix:=MatrixMultiply(modelMatrix^,projMatrix^);
   MatrixInvert(finalMatrix);
@@ -2535,7 +2535,7 @@ begin
   objz:=_out.z/_out.w;
 end;
 
-procedure _myGluProject(const objx,objy,objz:Double;const modelMatrix,projMatrix:PDMatrix4D;const viewport:PzeVector4i; out winx,winy,winz:Double);
+procedure _myGluProject(const objx,objy,objz:Double;const modelMatrix,projMatrix:PzeTypedMatrix4d;const viewport:PzeVector4i; out winx,winy,winz:Double);
 var
   _in:TzeVector4d;
 begin
@@ -2561,7 +2561,7 @@ begin
   //return(GL_TRUE);
 end;
 
-procedure _myGluProject2(const objcoord:TzePoint3d;const modelMatrix,projMatrix:PDMatrix4D;const viewport:PzeVector4i; out wincoord:TzePoint3d);
+procedure _myGluProject2(const objcoord:TzePoint3d;const modelMatrix,projMatrix:PzeTypedMatrix4d;const viewport:PzeVector4i; out wincoord:TzePoint3d);
 begin
   _myGluProject(objcoord.x,objcoord.y,objcoord.z,modelMatrix,projMatrix,viewport,wincoord.x,wincoord.y,wincoord.z);
 end;
@@ -2627,7 +2627,7 @@ begin
   end;
 end;
 
-function CreateAffineRotationMatrix(const anAxis: TzePoint3d; angle: double):DMatrix4D;
+function CreateAffineRotationMatrix(const anAxis: TzePoint3d; angle: double):TzeTypedMatrix4d;
 var
   axis : TzePoint3d;
   cosine, sine, one_minus_cosine :double;

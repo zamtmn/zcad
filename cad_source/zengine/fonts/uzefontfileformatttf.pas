@@ -46,7 +46,7 @@ type
       procedure ProcessTriangleData(si:PGDBsymdolinfo);
       constructor Create;
       destructor Destroy;override;
-      procedure SetupSymbolLineParams(const matr:DMatrix4d; var SymsParam:TSymbolSParam);override;
+      procedure SetupSymbolLineParams(const matr:TzeTypedMatrix4d; var SymsParam:TSymbolSParam);override;
 
     public
       function IsUnicode:Boolean;override;
@@ -256,7 +256,7 @@ function TZETFFFontImpl.IsUnicode:Boolean;
 begin
   result:=true;
 end;
-procedure TZETFFFontImpl.SetupSymbolLineParams(const matr:DMatrix4d; var SymsParam:TSymbolSParam);
+procedure TZETFFFontImpl.SetupSymbolLineParams(const matr:TzeTypedMatrix4d; var SymsParam:TSymbolSParam);
 begin
   if SymsParam.IsCanSystemDraw then begin
     SymsParam.NeededFontHeight:=oneVertexlength(PzePoint3d(@matr.mtr.v[1])^)*((TTFImplementation.Ascent+TTFImplementation.Descent)/(TTFImplementation.CapHeight));

@@ -60,7 +60,7 @@ type
     procedure BuildGeometry(var drawing:TDrawingDef);virtual;
     procedure BuildVarGeometry(var drawing:TDrawingDef);virtual;
 
-    procedure TransformAt(p:PGDBObjEntity;t_matrix:PDMatrix4d);virtual;
+    procedure TransformAt(p:PGDBObjEntity;t_matrix:PzeTypedMatrix4d);virtual;
     procedure ReCalcFromObjMatrix;virtual;
     procedure decomposite;
     procedure rtsave(refp:Pointer);virtual;
@@ -103,7 +103,7 @@ end;
 
 procedure GDBObjBlockInsert.rtmodifyonepoint(const rtmod:TRTModifyData);
 var
-  m:DMatrix4d;
+  m:TzeTypedMatrix4d;
   scl:TzePoint3d;
 begin
   m:=onematrix;
@@ -123,7 +123,7 @@ end;
 procedure GDBObjBlockInsert.decomposite;
 var
   BX,BY,BZ,T:TzePoint3d;
-  mtr:DMatrix4d;
+  mtr:TzeTypedMatrix4d;
 begin
   if PDef<>nil then begin
     Mtr:=MatrixMultiply(CreateTranslationMatrix(PDef.Base),objMatrix);
@@ -156,7 +156,7 @@ end;
 
 procedure GDBObjBlockInsert.setrot(r:double);
 var
-  m1:DMatrix4d;
+  m1:TzeTypedMatrix4d;
   sine,cosine:double;
 begin
   m1:=CreateRotationMatrixZ(r);
@@ -200,7 +200,7 @@ end;
 
 procedure GDBObjBlockInsert.CalcObjMatrix;
 var
-  m1:DMatrix4d;
+  m1:TzeTypedMatrix4d;
 begin
   inherited CalcObjMatrix;
 

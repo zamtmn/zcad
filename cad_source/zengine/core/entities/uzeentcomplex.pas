@@ -108,7 +108,7 @@ end;
 
 procedure GDBObjComplex.rtmodifyonepoint;
 var
-  m:DMatrix4d;
+  m:TzeTypedMatrix4d;
 begin
   m:=onematrix;
   if rtmod.point.pointtype=os_point then begin

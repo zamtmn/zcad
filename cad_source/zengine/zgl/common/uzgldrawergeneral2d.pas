@@ -24,13 +24,13 @@ uses uzgindexsarray,{$IFNDEF DELPHI}LCLIntf,{$ENDIF}{$IFDEF DELPHI}windows,Types
      uzgvertex3sarray,uzgldrawerabstract,uzepalette,Classes,Graphics,uzbtypes,
      uzegeometry,uzecamera;
 type
-DMatrix4dStackArray=array[0..10] of DMatrix4d;
+DMatrix4dStackArray=array[0..10] of TzeTypedMatrix4d;
 
 TZGLGeneral2DDrawer=class(TZGLGeneralDrawer)
-                          matr:DMatrix4d;
-                          {matrwoLCS,}matrwithLCS:DMatrix4d;
-                          mm,pm:DMatrix4d;
-                          {ProjMatrwoLCS,}ProjMatrwithLCS:DMatrix4d;
+                          matr:TzeTypedMatrix4d;
+                          {matrwoLCS,}matrwithLCS:TzeTypedMatrix4d;
+                          mm,pm:TzeTypedMatrix4d;
+                          {ProjMatrwoLCS,}ProjMatrwithLCS:TzeTypedMatrix4d;
                           mstack:DMatrix4dStackArray;
                           mstackindex:integer;
                           sx,sy,tx,ty:Double;
@@ -62,8 +62,8 @@ TZGLGeneral2DDrawer=class(TZGLGeneralDrawer)
                           procedure TranslateCoord2D(const tx,ty:single);override;
                           procedure ScaleCoord2D(const sx,sy:single);override;
 
-                          procedure pushMatrixAndSetTransform(const Transform:DMatrix4d;FromOneMatrix:Boolean=False);overload;override;
-                          procedure pushMatrixAndSetTransform(const Transform:DMatrix4f;FromOneMatrix:Boolean=False);overload;override;
+                          procedure pushMatrixAndSetTransform(const Transform:TzeTypedMatrix4d;FromOneMatrix:Boolean=False);overload;override;
+                          procedure pushMatrixAndSetTransform(const Transform:TzeTypedMatrix4s;FromOneMatrix:Boolean=False);overload;override;
                           procedure DisableLCS(var matrixs:tmatrixs);overload;override;
                           procedure EnableLCS(var matrixs:tmatrixs);overload;override;
 
@@ -552,7 +552,7 @@ begin
 end;
 procedure TZGLGeneral2DDrawer.startrender;
 var
-   m:DMatrix4d;
+   m:TzeTypedMatrix4d;
 begin
      case mode of
                  TRM_ModelSpace:
@@ -591,7 +591,7 @@ begin
      mstackindex:=-1;
 end;
 
-procedure TZGLGeneral2DDrawer.pushMatrixAndSetTransform(const Transform:DMatrix4d;FromOneMatrix:Boolean=False);
+procedure TZGLGeneral2DDrawer.pushMatrixAndSetTransform(const Transform:TzeTypedMatrix4d;FromOneMatrix:Boolean=False);
 begin
   inc(mstackindex);
   mstack[mstackindex]:=matr;
@@ -599,7 +599,7 @@ begin
     matr:=OneMatrix;
   matr:=MatrixMultiply(matr,Transform);
 end;
-procedure TZGLGeneral2DDrawer.pushMatrixAndSetTransform(const Transform:DMatrix4f;FromOneMatrix:Boolean=False);
+procedure TZGLGeneral2DDrawer.pushMatrixAndSetTransform(const Transform:TzeTypedMatrix4s;FromOneMatrix:Boolean=False);
 begin
   inc(mstackindex);
   mstack[mstackindex]:=matr;
@@ -617,7 +617,7 @@ begin
 end;
 procedure TZGLGeneral2DDrawer.DisableLCS(var matrixs:tmatrixs);
 //var
-//  m:DMatrix4d;
+//  m:TzeTypedMatrix4d;
 begin
   {m:=uzegeometry.MatrixMultiply(matrwoLCS,ProjMatrwoLCS);
   sx:=(m[0].v[0]/m[3].v[3]*0.5)*matrixs.pviewport.v[2] ;
@@ -634,7 +634,7 @@ begin
 end;
 procedure TZGLGeneral2DDrawer.EnableLCS(var matrixs:tmatrixs);
 //var
-  //m:DMatrix4d;
+  //m:TzeTypedMatrix4d;
 begin
   (*m:=uzegeometry.MatrixMultiply({matrWithLCS,ProjMatrWithLCS}matrixs.pmodelMatrix^,matrixs.pprojMatrix^);
   sx:=(m[0].v[0]/m[3].v[3]*0.5)*matrixs.pviewport.v[2] ;

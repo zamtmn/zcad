@@ -30,13 +30,13 @@ type
   PGDBObjCamera=^GDBObjCamera;
 {REGISTEROBJECTTYPE GDBObjCamera}
   GDBObjCamera= object(GDBBaseCamera)
-    modelMatrixLCS:DMatrix4d;
+    modelMatrixLCS:TzeTypedMatrix4d;
     zminLCS,zmaxLCS:Double;
     frustumLCS:TzeFrustum;
-    clipLCS:DMatrix4d;
-    projMatrixLCS:DMatrix4d;
+    clipLCS:TzeTypedMatrix4d;
+    projMatrixLCS:TzeTypedMatrix4d;
     notuseLCS:Boolean;
-    procedure getfrustum(mm,pm:PDMatrix4d;var _clip:DMatrix4d;var _frustum:TzeFrustum);
+    procedure getfrustum(mm,pm:PzeTypedMatrix4d;var _clip:TzeTypedMatrix4d;var _frustum:TzeFrustum);
     procedure RotateInLocalCSXY(ux,uy:Double);
     procedure MoveInLocalCSXY(oldx,oldy:Double;ax:TzePoint3d);
     function GetObjTypeName:String;virtual;
@@ -69,7 +69,7 @@ begin
 end;
 procedure GDBObjCamera.RotateInLocalCSXY(ux,uy:Double);
 var
-  tempmatr,rotmatr:DMatrix4d;
+  tempmatr,rotmatr:TzeTypedMatrix4d;
 begin
   tempmatr:=CreateMatrixFromBasis(prop.xdir,prop.ydir,prop.look);
   rotmatr:=MatrixMultiply(CreateRotationMatrixY(uy),CreateRotationMatrixX(ux));
@@ -86,7 +86,7 @@ begin
 end;
 procedure GDBObjCamera.MoveInLocalCSXY(oldx,oldy:Double;ax:TzePoint3d);
 var
-  tempmatr,rotmatr:DMatrix4d;
+  tempmatr,rotmatr:TzeTypedMatrix4d;
   tv,tv2:TzeVector4d;
   len,d:Double;
 begin

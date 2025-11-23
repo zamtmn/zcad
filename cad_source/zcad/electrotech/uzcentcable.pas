@@ -191,7 +191,7 @@ var ir_inGDB,ir_inVertexArray,ir_inNodeArray,ir_inDevice,ir_inDevice2:itrec;
     tn:TNodeProp;
     psldb:pointer;
     I3DPPrev,I3DPNext,I3DP:Intercept3DProp;
-    m,rotmatr:DMatrix4d;
+    m,rotmatr:TzeTypedMatrix4d;
     pvd,{pvd2,}pvds,pvdal,pvdrt:pvardesk;
     {group,pribor,}count:Integer;
     l:Double;

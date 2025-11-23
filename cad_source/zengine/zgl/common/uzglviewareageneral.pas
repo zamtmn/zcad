@@ -1030,7 +1030,7 @@ var
   pucommand:pointer;
   q1,q2,q:TzeQuaternion;
   pcam:PGDBBaseCamera;
-  mat1,mat2,mat : DMatrix4d;
+  mat1,mat2,mat : TzeTypedMatrix4d;
   Actlt:TVisActuality;
 begin
   pcam:=PDWG.Getpcamera;
@@ -2266,7 +2266,7 @@ begin
 end;
 procedure TGeneralViewArea.CalcMouseFrustum;
 var
-  tm: DMatrix4d;
+  tm: TzeTypedMatrix4d;
   td:Double;
 begin
   td:=sysvarDISPCursorSize*2;
@@ -2302,7 +2302,7 @@ begin
   //--oglsm.myglMatrixMode(GL_MODELVIEW);
 end;
 
-function ProjectPoint2(pntx,pnty,pntz:Double; var m:DMatrix4d; var ccsLBN,ccsRTF:TzePoint3d):TzePoint3d;
+function ProjectPoint2(pntx,pnty,pntz:Double; var m:TzeTypedMatrix4d; var ccsLBN,ccsRTF:TzePoint3d):TzePoint3d;
 begin
      result.x:=pntx;
      result.y:=pnty;
@@ -2342,7 +2342,7 @@ end;
 
 procedure TGeneralViewArea.CalcOptimalMatrix;
 var ccsLBN,ccsRTF:TzePoint3d;
-    tm:DMatrix4d;
+    tm:TzeTypedMatrix4d;
     LBN:TzePoint3d;
     RTF:TzePoint3d;
     tbb,tbb2:TBoundingBox;

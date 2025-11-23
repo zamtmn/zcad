@@ -43,7 +43,7 @@ type
   GDBObjAbstractText=object(GDBObjPlainWithOX)
     textprop:GDBTextProp;
     P_drawInOCS:TzePoint3d;
-    DrawMatrix:DMatrix4d;
+    DrawMatrix:TzeTypedMatrix4d;
     procedure CalcObjMatrix(pdrawing:PTDrawingDef=nil);virtual;
     procedure DrawGeometry(lw:integer;var DC:TDrawContext;
       const inFrustumState:TInBoundingVolume);virtual;
@@ -60,7 +60,7 @@ type
     procedure ReCalcFromObjMatrix;virtual;
     function CalcRotate:double;virtual;
     procedure setrot(r:double);
-    procedure transform(const t_matrix:DMatrix4d);virtual;
+    procedure transform(const t_matrix:TzeTypedMatrix4d);virtual;
     procedure rtsave(refp:Pointer);virtual;
   end;
 
@@ -79,7 +79,7 @@ end;
 procedure GDBObjAbstractText.transform;
 var
   tv:TzePoint3d;
-  m:DMatrix4d;
+  m:TzeTypedMatrix4d;
 begin
   tv:=CreateVertex(0,textprop.size,0);
   m:=t_matrix;
@@ -92,7 +92,7 @@ end;
 
 procedure GDBObjAbstractText.setrot(r:double);
 var
-  m1:DMatrix4d;
+  m1:TzeTypedMatrix4d;
 begin
   m1:=CreateRotationMatrixZ(r);
   objMatrix:=MatrixMultiply(m1,objMatrix);
@@ -214,7 +214,7 @@ end;
 
 procedure GDBObjAbstractText.CalcObjMatrix;
 var
-  m1,m2,m3:DMatrix4d;
+  m1,m2,m3:TzeTypedMatrix4d;
   angle:double;
 begin
   inherited CalcObjMatrix;

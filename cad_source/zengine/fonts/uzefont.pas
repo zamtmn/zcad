@@ -40,7 +40,7 @@ GDBfont= object(GDBNamedObject)
     destructor done;virtual;
     function GetOrCreateSymbolInfo(symbol:Integer):PGDBsymdolinfo;
     function GetOrReplaceSymbolInfo(symbol:Integer):PGDBsymdolinfo;
-    procedure CreateSymbol(drawer:TZGLAbstractDrawer;TxtHeight:double;var geom:ZGLVectorObject;_symbol:Integer;const objmatrix:DMatrix4d;matr:DMatrix4d;var Bound:TBoundingRect;var LLSymbolLineIndex:TArrayIndex);
+    procedure CreateSymbol(drawer:TZGLAbstractDrawer;TxtHeight:double;var geom:ZGLVectorObject;_symbol:Integer;const objmatrix:TzeTypedMatrix4d;matr:TzeTypedMatrix4d;var Bound:TBoundingRect;var LLSymbolLineIndex:TArrayIndex);
   end;
 {EXPORT-}
 var
@@ -54,7 +54,7 @@ begin
   pf^.init(name);
 end;
 
-procedure GDBfont.CreateSymbol(drawer:TZGLAbstractDrawer;TxtHeight:double;var geom:ZGLVectorObject;_symbol:Integer;const objmatrix:DMatrix4d;matr:DMatrix4d;var Bound:TBoundingRect;var LLSymbolLineIndex:TArrayIndex);
+procedure GDBfont.CreateSymbol(drawer:TZGLAbstractDrawer;TxtHeight:double;var geom:ZGLVectorObject;_symbol:Integer;const objmatrix:TzeTypedMatrix4d;matr:TzeTypedMatrix4d;var Bound:TBoundingRect;var LLSymbolLineIndex:TArrayIndex);
 var
   v,v0,true0Y,fact0y:TzePoint3d;
   sqrsymh:Double;

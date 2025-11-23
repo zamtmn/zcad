@@ -36,7 +36,7 @@ function view_com(const Context:TZCADCommandContext;
 var
   s:string;
   ox,oy,oz:TzePoint3d;
-  m:DMatrix4d;
+  m:TzeTypedMatrix4d;
   recognized:boolean;
 begin
   s:=uppercase(operands);

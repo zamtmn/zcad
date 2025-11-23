@@ -36,9 +36,9 @@ type
     function Clone(own:Pointer):PGDBObjEntity;virtual;
     function P13ChangeTo(const tv:TzePoint3d):TzePoint3d;virtual;
     function P14ChangeTo(const tv:TzePoint3d):TzePoint3d;virtual;
-    procedure transform(const t_matrix:DMatrix4d);virtual;
+    procedure transform(const t_matrix:TzeTypedMatrix4d);virtual;
     procedure TransformAt(p:PGDBObjEntity;
-      t_matrix:PDMatrix4d);virtual;
+      t_matrix:PzeTypedMatrix4d);virtual;
     procedure SaveToDXF(var outStream:TZctnrVectorBytes;
       var drawing:TDrawingDef;var IODXFContext:TIODXFSaveContext);virtual;
     constructor init(own:Pointer;layeraddres:PGDBLayerProp;
@@ -88,7 +88,7 @@ end;
 
 procedure GDBObjRotatedDimension.transform;
 var
-  tm:DMatrix4d;
+  tm:TzeTypedMatrix4d;
 begin
   tm:=t_matrix;
   tm.mtr.v[3]:=NulVector4D2;
@@ -101,7 +101,7 @@ end;
 
 procedure GDBObjRotatedDimension.TransformAt;
 var
-  tm:DMatrix4d;
+  tm:TzeTypedMatrix4d;
 begin
   tm:=t_matrix^;
   tm.mtr.v[3]:=NulVector4D2;

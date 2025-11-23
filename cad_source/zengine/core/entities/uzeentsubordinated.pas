@@ -70,7 +70,7 @@ type
     procedure RemoveInArray(pobjinarray:integer);
       virtual;abstract;
     procedure createfield;virtual;
-    function GetMatrix:PDMatrix4d;virtual;abstract;
+    function GetMatrix:PzeTypedMatrix4d;virtual;abstract;
     function GetLayer:PGDBLayerProp;virtual;abstract;
     function GetHandle:PtrInt;virtual;
     function GetType:PtrInt;virtual;

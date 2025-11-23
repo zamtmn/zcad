@@ -38,18 +38,18 @@ type
   TRotate_com=object(move_com)
     function AfterClick(const Context:TZCADCommandContext;wc:TzePoint3d;
       mc:TzePoint2i;var button:byte;osp:pos_record):integer;virtual;
-    function CreateRotmatr(AAngle:double):DMatrix4d;virtual;
+    function CreateRotmatr(AAngle:double):TzeTypedMatrix4d;virtual;
     procedure CommandContinue(const Context:TZCADCommandContext);virtual;
-    procedure rotate(const rotmatr:DMatrix4d;button:byte);
+    procedure rotate(const rotmatr:TzeTypedMatrix4d;button:byte);
     procedure showprompt(mklick:integer);virtual;
   end;
 
   TRotateX_com=object(TRotate_com)
-    function CreateRotmatr(AAngle:double):DMatrix4d;virtual;
+    function CreateRotmatr(AAngle:double):TzeTypedMatrix4d;virtual;
   end;
 
   TRotateY_com=object(TRotate_com)
-    function CreateRotmatr(AAngle:double):DMatrix4d;virtual;
+    function CreateRotmatr(AAngle:double):TzeTypedMatrix4d;virtual;
   end;
 
 var
@@ -79,9 +79,9 @@ begin
   end;
 end;
 
-procedure TRotate_com.rotate(const rotmatr:DMatrix4d;button:byte);
+procedure TRotate_com.rotate(const rotmatr:TzeTypedMatrix4d;button:byte);
 var
-  tmatr,dispmatr,tempmatr:DMatrix4d;
+  tmatr,dispmatr,tempmatr:TzeTypedMatrix4d;
   ir:itrec;
   pcd:PTCopyObjectDesc;
   m:tmethod;
@@ -141,7 +141,7 @@ begin
   end;
 end;
 
-function TRotate_com.CreateRotmatr(AAngle:double):DMatrix4d;
+function TRotate_com.CreateRotmatr(AAngle:double):TzeTypedMatrix4d;
 begin
   Result:=uzegeometry.CreateRotationMatrixZ(AAngle);
 end;
@@ -163,12 +163,12 @@ begin
   Result:=cmd_ok;
 end;
 
-function TRotateX_com.CreateRotmatr(AAngle:double):DMatrix4d;
+function TRotateX_com.CreateRotmatr(AAngle:double):TzeTypedMatrix4d;
 begin
   Result:=uzegeometry.CreateRotationMatrixX(AAngle);
 end;
 
-function TRotateY_com.CreateRotmatr(AAngle:double):DMatrix4d;
+function TRotateY_com.CreateRotmatr(AAngle:double):TzeTypedMatrix4d;
 begin
   Result:=uzegeometry.CreateRotationMatrixY(AAngle);
 end;

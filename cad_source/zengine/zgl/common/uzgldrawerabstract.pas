@@ -84,8 +84,8 @@ TZGLAbstractDrawer=class
 
                         function ProjectPoint3DInModelSpace(const p:TzePoint3d;var matrixs:tmatrixs):TzePoint2d;virtual;abstract;
 
-                        procedure pushMatrixAndSetTransform(const Transform:DMatrix4d;ResetLCS:Boolean=False);overload;virtual;abstract;
-                        procedure pushMatrixAndSetTransform(const Transform:DMatrix4f;ResetLCS:Boolean=False);overload;virtual;abstract;
+                        procedure pushMatrixAndSetTransform(const Transform:TzeTypedMatrix4d;ResetLCS:Boolean=False);overload;virtual;abstract;
+                        procedure pushMatrixAndSetTransform(const Transform:TzeTypedMatrix4s;ResetLCS:Boolean=False);overload;virtual;abstract;
                         procedure DisableLCS(var matrixs:tmatrixs);overload;virtual;abstract;
                         procedure AddToLCS(const v:TzePoint3d);virtual;abstract;
                         function SetLCSState(State:boolean):boolean;virtual;abstract;

@@ -449,7 +449,7 @@ var
    psubobj:PGDBObjEntity;
    ir,ir2:itrec;
    //tp:Pointer;
-   m,m2:DMatrix4d;
+   m,m2:TzeTypedMatrix4d;
    DC:TDrawContext;
 begin
      m:=powner^.objmatrix;
@@ -743,7 +743,7 @@ var
    pobj,pvisible: pGDBObjEntity;
    ir:itrec;
    //tp:Pointer;
-   m,m2:DMatrix4d;
+   m,m2:TzeTypedMatrix4d;
    DC:TDrawContext;
 begin
      m:=powner^.objmatrix;

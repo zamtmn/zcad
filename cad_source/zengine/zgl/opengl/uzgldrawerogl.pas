@@ -55,7 +55,7 @@ TOpenglData=record
 {EXPORT-}
 TZGLOpenGLDrawer=class(TZGLGeneralDrawer)
                         myscrbuf:tmyscrbuf;
-                        mm:DMatrix4d;
+                        mm:TzeTypedMatrix4d;
                         public
                         procedure SetPenStyle(const style:TZGLPenStyle);override;
                         procedure SetDrawMode(const mode:TZGLDrawMode);override;
@@ -104,8 +104,8 @@ TZGLOpenGLDrawer=class(TZGLGeneralDrawer)
                         procedure SetOGLMatrix(const cam:GDBObjCamera;const w,h:integer);override;
 
                         {}
-                        procedure pushMatrixAndSetTransform(const Transform:DMatrix4d;FromOneMatrix:Boolean=False);overload;override;
-                        procedure pushMatrixAndSetTransform(const Transform:DMatrix4f;FromOneMatrix:Boolean=False);overload;override;
+                        procedure pushMatrixAndSetTransform(const Transform:TzeTypedMatrix4d;FromOneMatrix:Boolean=False);overload;override;
+                        procedure pushMatrixAndSetTransform(const Transform:TzeTypedMatrix4s;FromOneMatrix:Boolean=False);overload;override;
                         procedure DisableLCS(var matrixs:tmatrixs);overload;override;
                         procedure EnableLCS(var matrixs:tmatrixs);overload;override;
                         procedure popMatrix;override;
@@ -114,7 +114,7 @@ var
    code:integer;
 implementation
 //uses log;
-procedure TZGLOpenGLDrawer.pushMatrixAndSetTransform(const Transform:DMatrix4d;FromOneMatrix:Boolean=False);
+procedure TZGLOpenGLDrawer.pushMatrixAndSetTransform(const Transform:TzeTypedMatrix4d;FromOneMatrix:Boolean=False);
 begin
   oglsm.myglPushMatrix;
   if FromOneMatrix {and (not LCS.notuseLCS)} then begin
@@ -125,7 +125,7 @@ begin
   end;
   oglsm.myglMultMatrixD(Transform)
 end;
-procedure TZGLOpenGLDrawer.pushMatrixAndSetTransform(const Transform:DMatrix4f;FromOneMatrix:Boolean=False);
+procedure TZGLOpenGLDrawer.pushMatrixAndSetTransform(const Transform:TzeTypedMatrix4s;FromOneMatrix:Boolean=False);
 begin
   oglsm.myglPushMatrix;
   if FromOneMatrix and (not LCS.notuseLCS) then begin

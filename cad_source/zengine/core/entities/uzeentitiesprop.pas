@@ -32,7 +32,7 @@ type
     Layer:PGDBLayerProp;
     LineWeight:TGDBLineWeight;
     LineType:PGDBLtypeProp;
-    LineTypeScale:GDBNonDimensionDouble;
+    LineTypeScale:TZeDimLess;
     BoundingBox:TBoundingBox;
     LastCameraPos:TActuality;
     Color:TGDBPaletteColor;

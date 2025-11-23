@@ -250,7 +250,7 @@ function TTextStylesForm.GetOblique(Item: TListItem):string;
 begin
   if PAngleDoubleTD=nil then begin
     if SysUnit<>nil then
-      PAngleDoubleTD:=SysUnit^.TypeName2PTD('GDBAngleDouble');
+      PAngleDoubleTD:=SysUnit^.TypeName2PTD('TZeAngle');
   end;
   if PAngleDoubleTD=nil then
     result:=floattostr(PGDBTextStyle(Item.Data)^.prop.oblique)
@@ -259,7 +259,7 @@ begin
 end;
 function TTextStylesForm.CreateObliqueEditor(Item: TListItem;r: TRect):boolean;
 begin
-  result:=SupportTypedEditors.createeditor(ListView1,Item,r,PGDBTextStyle(Item.Data)^.prop.oblique,'GDBAngleDouble',@CreateUndoStartMarkerNeeded,r.Bottom-r.Top,drawings.GetUnitsFormat)
+  result:=SupportTypedEditors.createeditor(ListView1,Item,r,PGDBTextStyle(Item.Data)^.prop.oblique,'TZeAngle',@CreateUndoStartMarkerNeeded,r.Bottom-r.Top,drawings.GetUnitsFormat)
 end;
 procedure TTextStylesForm.FillFontsSelector(currentitem:string;currentitempfont:PGDBfont);
 var i:integer;

@@ -24,40 +24,40 @@ uses
   varman,USinonimDescriptor,UBaseTypeDescriptor,uzedimensionaltypes,
   uzemathutils,uzcLog,uzcreglog,uzegeometrytypes,varmandef;
 type
-  GDBNonDimensionDoubleDescriptor=object(DoubleDescriptor)
+  TZeDimLessDescriptor=object(DoubleDescriptor)
                             function GetFormattedValueAsString(PInstance:Pointer; const f:TzeUnitsFormat):String;virtual;
                       end;
-  GDBAngleDegDoubleDescriptor=object(DoubleDescriptor)
+  TZeAngleDegDescriptor=object(DoubleDescriptor)
                                          function GetFormattedValueAsString(PInstance:Pointer; const f:TzeUnitsFormat):String;virtual;
                                    end;
-  GDBAngleDoubleDescriptor=object(DoubleDescriptor)
+  TZeAngleDescriptor=object(DoubleDescriptor)
                                  function GetFormattedValueAsString(PInstance:Pointer; const f:TzeUnitsFormat):String;virtual;
                                  procedure SetFormattedValueFromString(PInstance:Pointer;const f:TzeUnitsFormat;const Value:String);virtual;
                            end;
 var
-  GDBNonDimensionDoubleDescriptorObj:GDBNonDimensionDoubleDescriptor;
-  GDBAngleDegDoubleDescriptorObj:GDBAngleDegDoubleDescriptor;
-  GDBAngleDoubleDescriptorObj:GDBAngleDoubleDescriptor;
+  TZeDimLessDescriptorObj:TZeDimLessDescriptor;
+  TZeAngleDegDescriptorObj:TZeAngleDegDescriptor;
+  TZeAngleDescriptorObj:TZeAngleDescriptor;
   AliasTzeXUnitsDescriptorOdj:GDBSinonimDescriptor;
   AliasTzeYUnitsDescriptorOdj:GDBSinonimDescriptor;
   AliasTzeZUnitsDescriptorOdj:GDBSinonimDescriptor;
 implementation
-function GDBNonDimensionDoubleDescriptor.GetFormattedValueAsString(PInstance:Pointer; const f:TzeUnitsFormat):String;
+function TZeDimLessDescriptor.GetFormattedValueAsString(PInstance:Pointer; const f:TzeUnitsFormat):String;
 begin
-    result:=zeNonDimensionToString(PGDBNonDimensionDouble(PInstance)^,f);
+    result:=zeNonDimensionToString(PTZeDimLess(PInstance)^,f);
 end;
-function GDBAngleDegDoubleDescriptor.GetFormattedValueAsString(PInstance:Pointer; const f:TzeUnitsFormat):String;
+function TZeAngleDegDescriptor.GetFormattedValueAsString(PInstance:Pointer; const f:TzeUnitsFormat):String;
 begin
-    result:=zeAngleDegToString(PGDBNonDimensionDouble(PInstance)^,f);
+    result:=zeAngleDegToString(PTZeDimLess(PInstance)^,f);
 end;
-function GDBAngleDoubleDescriptor.GetFormattedValueAsString(PInstance:Pointer; const f:TzeUnitsFormat):String;
+function TZeAngleDescriptor.GetFormattedValueAsString(PInstance:Pointer; const f:TzeUnitsFormat):String;
 begin
-    result:=zeAngleToString(PGDBNonDimensionDouble(PInstance)^,f);
+    result:=zeAngleToString(PTZeDimLess(PInstance)^,f);
 end;
-procedure GDBAngleDoubleDescriptor.SetFormattedValueFromString(PInstance:Pointer;const f:TzeUnitsFormat; const Value:String);
+procedure TZeAngleDescriptor.SetFormattedValueFromString(PInstance:Pointer;const f:TzeUnitsFormat; const Value:String);
 begin
   try
-    PGDBNonDimensionDouble(PInstance)^:=zeStringToAngle(Value,f);
+    PTZeDimLess(PInstance)^:=zeStringToAngle(Value,f);
   except
     ProgramLog.LogOutFormatStr('Input with error "%s"',[Value],LM_Error,0,MO_SM);
   end;
@@ -67,13 +67,13 @@ var
   utd:PUserTypeDescriptor;
 begin
 
-  GDBNonDimensionDoubleDescriptorObj.init('GDBNonDimensionDouble',nil);
-  GDBAngleDegDoubleDescriptorObj.init('GDBAngleDegDouble',nil);
-  GDBAngleDoubleDescriptorObj.init('GDBAngleDouble',nil);
+  TZeDimLessDescriptorObj.init('TZeDimLess',nil);
+  TZeAngleDegDescriptorObj.init('TZeAngleDeg',nil);
+  TZeAngleDescriptorObj.init('TZeAngle',nil);
 
-  ptsu^.InterfaceTypes.AddTypeByRef(GDBNonDimensionDoubleDescriptorObj);
-  ptsu^.InterfaceTypes.AddTypeByRef(GDBAngleDegDoubleDescriptorObj);
-  ptsu^.InterfaceTypes.AddTypeByRef(GDBAngleDoubleDescriptorObj);
+  ptsu^.InterfaceTypes.AddTypeByRef(TZeDimLessDescriptorObj);
+  ptsu^.InterfaceTypes.AddTypeByRef(TZeAngleDegDescriptorObj);
+  ptsu^.InterfaceTypes.AddTypeByRef(TZeAngleDescriptorObj);
 
   AliasTzeXUnitsDescriptorOdj.init2(@FundamentalDoubleDescriptorObj,'TzeXUnits',nil);
   AliasTzeYUnitsDescriptorOdj.init2(@FundamentalDoubleDescriptorObj,'TzeYUnits',nil);
@@ -148,6 +148,10 @@ begin
     ptsu^.SetTypeDesk2(utd,['mtr','t'],[FNProgram,FNUser]);
   ptsu^.RegisterType(TypeInfo(PzeTypedMatrix4s),'PzeTypedMatrix4s');
 
+
+  ptsu^.RegisterType(TypeInfo(PTZeDimLess),'PTZeDimLess');
+  ptsu^.RegisterType(TypeInfo(PTZeAngleDeg),'PTZeAngleDeg');
+  ptsu^.RegisterType(TypeInfo(PTZeAngle),'PTZeAngle');
 end;
 initialization
   OnCreateSystemUnit:=_OnCreateSystemUnit;

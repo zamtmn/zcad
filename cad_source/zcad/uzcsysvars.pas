@@ -155,7 +155,7 @@ type
              DWG_AUnits:PTAUnits;(*'AUnits (angular units format)'*)
              DWG_AUPrec:PTUPrec;(*'AUPrec (angular units precision)'*)
              DWG_AngDir:PTAngDir;(*'AngDir (direction of positive angles)'*)
-             DWG_AngBase:PGDBAngleDegDouble;(*'AngBase (zero base angle)'*)
+             DWG_AngBase:PTZeAngleDeg;(*'AngBase (zero base angle)'*)
              DWG_UnitMode:PTUnitMode;(*'UnitMode (display format for units)'*)
              DWG_InsUnits:PTInsUnits;(*'InsUnits (value for automatic scaling of blocks)'*)
              DWG_TextSize:PDouble;(*'TextSize (size of new crreated text ents)'*)

@@ -248,7 +248,7 @@ begin
   pdwgwarsunit^.CreateFixedVariable('DWG_AUnits','TAUnits',@AUnits);
   pdwgwarsunit^.CreateFixedVariable('DWG_AUPrec','TUPrec',@AUPrec);
   pdwgwarsunit^.CreateFixedVariable('DWG_AngDir','TAngDir',@AngDir);
-  pdwgwarsunit^.CreateFixedVariable('DWG_AngBase','GDBAngleDegDouble',@AngBase);
+  pdwgwarsunit^.CreateFixedVariable('DWG_AngBase','TZeAngleDeg',@AngBase);
   pdwgwarsunit^.CreateFixedVariable('DWG_UnitMode','TUnitMode',@UnitMode);
   pdwgwarsunit^.CreateFixedVariable('DWG_InsUnits','TInsUnits',@InsUnits);
   pdwgwarsunit^.CreateFixedVariable('DWG_TextSize','Double',@TextSize);

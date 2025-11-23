@@ -49,7 +49,7 @@ TAbstractDrawing= object(TDrawingDef)
                        AUnits:TAUnits;
                        AUPrec:TUPrec;
                        AngDir:TAngDir;
-                       AngBase:GDBAngleDegDouble;
+                       AngBase:TZeAngleDeg;
                        UnitMode:TUnitMode;
                        InsUnits:TInsUnits;
                        TextSize:Double;

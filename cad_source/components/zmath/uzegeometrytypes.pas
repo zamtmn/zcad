@@ -120,6 +120,17 @@ type
         0:(x,y:TT);
         1:(v:TCoordArray);
   end;
+
+  PTZeDimLess=^TZeDimLess;
+  TZeDimLess=type Double;
+
+  PTZeAngleDeg=^TZeAngleDeg;
+  TZeAngleDeg=type Double;
+
+  PTZeAngle=^TZeAngle;
+  TZeAngle=type Double;
+
+
   TzeXUnits=Double;
   TzeYUnits=Double;
   TzeZUnits=Double;

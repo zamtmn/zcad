@@ -43,24 +43,20 @@ const
 type
   TBaseScriptContext=class
     constructor Create;virtual;//abstract;
+    destructor Destroy; override;
   end;
   TMetaScriptContext=class of TBaseScriptContext;
 
-  TCurrentDrawingContext=class(TBaseScriptContext)
-    FCurrentDrawing:PTSimpleDrawing;
-  end;
+  TScriptContextCreateMode=(
+    LSCMCreateOnce{создается один раз, используется всеми скриптами},
+    LSCMRecreate{создается заново, для каждого запуска каждого скрипта});
 
-  TEntityExtentionContext=class(TBaseScriptContext)
-    FThisEntity:PGDBObjEntity;
-    FThisEntityExtender:TAbstractEntityExtender;
-  end;
 
   TCompilerDefAdder=procedure(mode:TLapeScriptContextModes;ctx:TBaseScriptContext;cplr:TLapeCompiler) of object;
   TCompilerDefAdders=array of TCompilerDefAdder;
 
-  ttest=class
-    class procedure testadder(mode:TLapeScriptContextModes;ctx:TBaseScriptContext;cplr:TLapeCompiler);
-    class procedure setCurrentDrawing(mode:TLapeScriptContextModes;ctx:TBaseScriptContext;cplr:TLapeCompiler);
+  TLPCSBase=class
+    class procedure cplrSetup(mode:TLapeScriptContextModes;ctx:TBaseScriptContext;cplr:TLapeCompiler);
   end;
 
 implementation
@@ -69,74 +65,8 @@ constructor TBaseScriptContext.Create;
 begin
 end;
 
-procedure line(const Params: PParamArray{x1,y1,z1,x2,y2,z2: double}); cdecl;
-var
-  x1,y1,z1,x2,y2,z2: double;
-  ctx:TCurrentDrawingContext;
-  pline:PGDBObjLine;
+destructor TBaseScriptContext.Destroy;
 begin
-  ctx:=TCurrentDrawingContext(Params^[0]);
-  x1:=PDouble(Params^[1])^;
-  y1:=PDouble(Params^[2])^;
-  z1:=PDouble(Params^[3])^;
-  x2:=PDouble(Params^[4])^;
-  y2:=PDouble(Params^[5])^;
-  z2:=PDouble(Params^[6])^;
-
-  pline:=AllocEnt(GDBLineID);
-  pline^.init(nil,nil,LnWtByLayer,CreateVertex(x1,y1,z1),CreateVertex(x2,y2,z2));
-
-  //присваиваем текущие цвет, толщину, и т.д. от настроек чертежа
-  zcSetEntPropFromCurrentDrawingProp(pline);
-
-  //добавляем в чертеж
-  zcAddEntToCurrentDrawingWithUndo(pline);
-
-  //перерисовываем
-  zcRedrawCurrentDrawing;
-end;
-
-procedure line2(const Params: PParamArray{p1,p2: TVertex}); cdecl;
-var
-  p1,p2:TzePoint3d;
-  ctx:TCurrentDrawingContext;
-  pline:PGDBObjLine;
-begin
-  ctx:=TCurrentDrawingContext(Params^[0]);
-  p1:=PzePoint3d(Params^[1])^;
-  p2:=PzePoint3d(Params^[2])^;
-
-  pline:=AllocEnt(GDBLineID);
-  pline^.init(nil,nil,LnWtByLayer,p1,p2);
-
-  //присваиваем текущие цвет, толщину, и т.д. от настроек чертежа
-  zcSetEntPropFromCurrentDrawingProp(pline);
-
-  //добавляем в чертеж
-  zcAddEntToCurrentDrawingWithUndo(pline);
-
-  //перерисовываем
-  zcRedrawCurrentDrawing;
-end;
-
-procedure StartUndoCommand(const Params: PParamArray{CommandName:String;PushStone:boolean=false}); cdecl;
-var
-  ctx:TCurrentDrawingContext;
-  CommandName:String;
-  PushStone:boolean;
-begin
-  ctx:=TCurrentDrawingContext(Params^[0]);
-  CommandName:=PString(Params^[1])^;
-  PushStone:=Pboolean(Params^[2])^;
-  zcStartUndoCommand(CommandName,PushStone);
-end;
-
-procedure EndUndoCommand(const Params: PParamArray); cdecl;
-var
-  ctx:TCurrentDrawingContext;
-begin
-  ctx:=TCurrentDrawingContext(Params^[0]);
-  zcEndUndoCommand;
 end;
 
 procedure slp(const Params: PParamArray; const Result: Pointer); cdecl;
@@ -144,10 +74,10 @@ type
   PLPSHandle=^TLPSHandle;
   PLPSCounter=^TLPSCounter;
 var
-  ctx:TCurrentDrawingContext;
+  ctx:TBaseScriptContext;
 begin
-  ctx:=TCurrentDrawingContext(Params^[0]);
-  PLPSHandle(Result)^:=LPS.StartLongProcess(PString(Params^[1])^,Result,PLPSCounter(Params^[2])^);
+  ctx:=TBaseScriptContext(Params^[0]);
+  PLPSHandle(Result)^:=LPS.StartLongProcess(PString(Params^[1])^,{Result}nil,PLPSCounter(Params^[2])^);
 end;
 
 procedure plp(const Params: PParamArray); cdecl;
@@ -155,9 +85,9 @@ type
   PLPSHandle=^TLPSHandle;
   PLPSCounter=^TLPSCounter;
 var
-  ctx:TCurrentDrawingContext;
+  ctx:TBaseScriptContext;
 begin
-  ctx:=TCurrentDrawingContext(Params^[0]);
+  ctx:=TBaseScriptContext(Params^[0]);
   LPS.ProgressLongProcess(PLPSHandle(Params^[1])^,PLPSCounter(Params^[2])^);
 end;
 
@@ -165,13 +95,13 @@ procedure elp(const Params: PParamArray); cdecl;
 type
   PLPSHandle=^TLPSHandle;
 var
-  ctx:TCurrentDrawingContext;
+  ctx:TBaseScriptContext;
 begin
-  ctx:=TCurrentDrawingContext(Params^[0]);
+  ctx:=TBaseScriptContext(Params^[0]);
   LPS.EndLongProcess(PLPSHandle(Params^[1])^);
 end;
 
-class procedure ttest.testadder(mode:TLapeScriptContextModes;ctx:TBaseScriptContext;cplr:TLapeCompiler);
+class procedure TLPCSBase.cplrSetup(mode:TLapeScriptContextModes;ctx:TBaseScriptContext;cplr:TLapeCompiler);
 begin
   if LSCMCompilerSetup in mode then begin
     cplr.StartImporting;
@@ -182,22 +112,9 @@ begin
     cplr.addGlobalMethod('procedure ProgressLongProcess(LPHandle:TLPSHandle;Current:int32);',@plp,ctx);
     cplr.addGlobalMethod('procedure EndLongProcess(LPHandle:TLPSHandle);',@elp,ctx);
 
-    cplr.addGlobalType('record x,y,z:double;end','TzePoint3d');
-    cplr.addGlobalMethod('procedure zcEntLine(x1,y1,z1,x2,y2,z2:double);overload;',@line,ctx);
-    cplr.addGlobalMethod('procedure zcEntLine(p1,p2:TzePoint3d);overload;',@line2,ctx);
-    cplr.addGlobalMethod('procedure zcStartUndoCommand(CommandName:String;PushStone:boolean=false);',@StartUndoCommand,ctx);
-    cplr.addGlobalMethod('procedure zcEndUndoCommand;',@EndUndoCommand,ctx);
     cplr.EndImporting;
   end;
 end;
-class procedure ttest.setCurrentDrawing(mode:TLapeScriptContextModes;ctx:TBaseScriptContext;cplr:TLapeCompiler);
-begin
-  if LSCMContextSetup in mode then begin
-    if ctx is TCurrentDrawingContext then
-      (ctx as TCurrentDrawingContext).FCurrentDrawing:=drawings.GetCurrentDWG;
-  end;
-end;
-
 
 initialization
 finalization

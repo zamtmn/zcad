@@ -68,10 +68,11 @@ type
     SN2SD:TScriptName2ScriptDataMap;
     FCDA:TCompilerDefAdders;
     CtxClass:TMetaScriptContext;
+    CtxCreateMode:TScriptContextCreateMode;
 
     procedure FoundScriptFile(const FileName:String;PData:Pointer);
 
-    constructor Create(const AScriptsType:String;ACtxClass:TMetaScriptContext;ACDA:TCompilerDefAdders);
+    constructor Create(const AScriptsType:String;ACtxClass:TMetaScriptContext;ACtxCreateMode:TScriptContextCreateMode;ACDA:TCompilerDefAdders);
     destructor Destroy;override;
 
     procedure ScanDir(const DirPath:string);
@@ -91,8 +92,9 @@ type
           ScriptsType:TScriptsType;
           Description:string;
           CtxClass:TMetaScriptContext;
+          CtxCreateMode:TScriptContextCreateMode;
           FCDA:TCompilerDefAdders;
-          constructor CreateRec(const AScriptsType:TScriptsType;ADescription:string;ACtxClass:TMetaScriptContext;AFCDA:TCompilerDefAdders);
+          constructor CreateRec(const AScriptsType:TScriptsType;ADescription:string;ACtxClass:TMetaScriptContext;ACtxCreateMode:TScriptContextCreateMode;AFCDA:TCompilerDefAdders);
         end;
         PTScriptTypeData=^TScriptTypeData;
         TScriptTypeData=record
@@ -111,8 +113,8 @@ type
       constructor Create;
       destructor Destroy;override;
       function CreateType(const AScriptsType:TScriptsType;ADescription:string;
-                          ACtxClass:TMetaScriptContext;AFCDA:TCompilerDefAdders)
-:TScriptsManager;
+        ACtxClass:TMetaScriptContext;ACtxCreateMode:TScriptContextCreateMode;
+        AFCDA:TCompilerDefAdders):TScriptsManager;
   end;
 
 var
@@ -121,11 +123,12 @@ var
 
 implementation
 
-constructor TScriptsTypeManager.TScriptTypeDesc.CreateRec(const AScriptsType:TScriptsType;ADescription:string;ACtxClass:TMetaScriptContext;AFCDA:TCompilerDefAdders);
+constructor TScriptsTypeManager.TScriptTypeDesc.CreateRec(const AScriptsType:TScriptsType;ADescription:string;ACtxClass:TMetaScriptContext;ACtxCreateMode:TScriptContextCreateMode;AFCDA:TCompilerDefAdders);
 begin
   ScriptsType:=AScriptsType;
   Description:=ADescription;
   CtxClass:=ACtxClass;
+  CtxCreateMode:=ACtxCreateMode;
   FCDA:=AFCDA;
 end;
 constructor TScriptsTypeManager.TScriptTypeData.CreateRec(ADesc:TScriptTypeDesc;AManager:TScriptsManager=nil);
@@ -175,11 +178,11 @@ begin
   inherited;
 end;
 
-function TScriptsTypeManager.CreateType(const AScriptsType:TScriptsType;ADescription:string;ACtxClass:TMetaScriptContext;AFCDA:TCompilerDefAdders):TScriptsManager;
+function TScriptsTypeManager.CreateType(const AScriptsType:TScriptsType;ADescription:string;ACtxClass:TMetaScriptContext;ACtxCreateMode:TScriptContextCreateMode;AFCDA:TCompilerDefAdders):TScriptsManager;
   function addScriptsType:TScriptsManager;
   begin
-    result:=TScriptsManager.Create(AScriptsType,ACtxClass,AFCDA);
-    STN2SND.Add(AScriptsType,TScriptTypeData.CreateRec(TScriptTypeDesc.CreateRec(AScriptsType,ADescription,ACtxClass,AFCDA),result));
+    result:=TScriptsManager.Create(AScriptsType,ACtxClass,ACtxCreateMode,AFCDA);
+    STN2SND.Add(AScriptsType,TScriptTypeData.CreateRec(TScriptTypeDesc.CreateRec(AScriptsType,ADescription,ACtxClass,ACtxCreateMode,AFCDA),result));
   end;
 var
   PSTD:PTScriptTypeData;
@@ -204,12 +207,13 @@ begin
   Ctx:=nil;
 end;
 
-constructor TScriptsManager.Create(const AScriptsType:String;ACtxClass:TMetaScriptContext;ACDA:TCompilerDefAdders);
+constructor TScriptsManager.Create(const AScriptsType:String;ACtxClass:TMetaScriptContext;ACtxCreateMode:TScriptContextCreateMode;ACDA:TCompilerDefAdders);
 begin
   FScriptType:=AScriptsType;
   FScriptFileMask:=format('*.%s',[AScriptsType]);
   SN2SD:=TScriptName2ScriptDataMap.Create;
   CtxClass:=ACtxClass;
+  CtxCreateMode:=ACtxCreateMode;
   FCDA:=ACDA;
 end;
 
@@ -248,6 +252,8 @@ begin
       ctxmode:=DoAll;
     end else
       ctxmode:=DoCtx;
+    if SD.Ctx=nil then
+      SD.Ctx:=CtxClass.Create;
     if length(SD.FIndividualCDA)=0 then
       CDAS:=FCDA
     else
@@ -280,28 +286,33 @@ var
 begin
   CheckScriptActuality(SD);
   try
-    if not SD.LAPEData.FCompiled then begin
-      lpsh:=LPS.StartLongProcess('Compile script',self);
+    try
+      if not SD.LAPEData.FCompiled then begin
+        lpsh:=LPS.StartLongProcess('Compile script',self);
+        try
+          SD.LAPEData.FCompiled:=SD.LAPEData.FCompiler.Compile;
+        finally
+          LPS.EndLongProcess(lpsh);
+        end;
+      end;
+      if not SD.LAPEData.FCompiled then
+        LapeExceptionFmt('Error compiling file "%s"',[SD.FileData.Name]);
+      lpsh:=LPS.StartLongProcess('Run script',self);
       try
-        SD.LAPEData.FCompiled:=SD.LAPEData.FCompiler.Compile;
+        RunCode(SD.LAPEData.FCompiler.Emitter);
       finally
         LPS.EndLongProcess(lpsh);
       end;
+    except
+      on E: Exception do
+      begin
+        ProgramLog.LogOutFormatStr('TScriptsManager.RunScript "%s"',[E.Message],LM_Error,LapeLMId,MO_SM or MO_SH);
+        FreeAndNil(SD.LAPEData.FCompiler);
+      end;
     end;
-    if not SD.LAPEData.FCompiled then
-      LapeExceptionFmt('Error compiling file "%s"',[SD.FileData.Name]);
-    lpsh:=LPS.StartLongProcess('Run script',self);
-    try
-      RunCode(SD.LAPEData.FCompiler.Emitter);
-    finally
-      LPS.EndLongProcess(lpsh);
-    end;
-  except
-    on E: Exception do
-    begin
-      ProgramLog.LogOutFormatStr('TScriptsManager.RunScript "%s"',[E.Message],LM_Error,LapeLMId,MO_SM or MO_SH);
-      FreeAndNil(SD.LAPEData.FCompiler);
-    end;
+  finally
+    if CtxCreateMode=LSCMCreateOnce then
+      FreeAndNil(SD.Ctx);
   end;
 end;
 

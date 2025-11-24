@@ -25,7 +25,7 @@ uses
   SysUtils,
   uzcLog,uzcreglog,
   uzbpaths,uzccommandsabstract,uzccommandsimpl,uzmenusmanager,
-  uzcLapeScriptsManager,uzcLapeScriptsImplBase,
+  uzcLapeScriptsManager,uzcLapeScriptsImplBase,uzcLapeScriptsImplDrawing,
   uzcsysvars;
 
 var
@@ -51,7 +51,8 @@ initialization
   programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],
     LM_Info,UnitsInitializeLMId);
   CommandScriptsManager:=STManager.CreateType('lpcs','Command script',
-    TCurrentDrawingContext,[ttest.testadder,ttest.setCurrentDrawing]);
+    TCurrentDrawingContext,LSCMCreateOnce,
+    [TLPCSBase.cplrSetup,TLPCSDrawing.cplrSetup,TLPCSDrawing.ctxSetup]);
   if sysvar.PATH.Preload_Paths<>nil then
     CommandScriptsManager.ScanDirs(ExpandPath(sysvar.PATH.Preload_Paths^));
   CreateZCADCommand(@LPCSRun_com,'LPCSRun',0,0);

@@ -18,7 +18,7 @@ begin
   randomize;
   p1.z:=0;
   p2.z:=0;
-  zcStartUndoCommand(s);
+  zcUndoStartCommand(s);
   for i:=1 to ALinesCount do begin
     if (i and 1) then
       //вариант1
@@ -33,7 +33,7 @@ begin
     end;
     ProgressLongProcess(lpsh,i);
   end;
-  zcEndUndoCommand;
+  zcUndoEndCommand;
   EndLongProcess(lpsh);
 end;
 

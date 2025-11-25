@@ -51,7 +51,7 @@ type
 implementation
 
 
-procedure line(const Params: PParamArray{x1,y1,z1,x2,y2,z2: double}); cdecl;
+procedure line(const Params: PParamArray;const Result: Pointer{(x1,y1,z1,x2,y2,z2:double):PzeEntity}); cdecl;
 var
   x1,y1,z1,x2,y2,z2: double;
   ctx:TCurrentDrawingContext;
@@ -67,6 +67,7 @@ begin
 
   pline:=AllocEnt(GDBLineID);
   pline^.init(nil,nil,LnWtByLayer,CreateVertex(x1,y1,z1),CreateVertex(x2,y2,z2));
+  PGDBObjLine(Result^):=pline;
 
   //присваиваем текущие цвет, толщину, и т.д. от настроек чертежа
   zcSetEntPropFromCurrentDrawingProp(pline);
@@ -78,7 +79,7 @@ begin
   zcRedrawCurrentDrawing;
 end;
 
-procedure line2(const Params: PParamArray{p1,p2: TVertex}); cdecl;
+procedure line2(const Params: PParamArray;const Result: Pointer{(p1,p2:TzePoint3d):PzeEntity}); cdecl;
 var
   p1,p2:TzePoint3d;
   ctx:TCurrentDrawingContext;
@@ -90,6 +91,7 @@ begin
 
   pline:=AllocEnt(GDBLineID);
   pline^.init(nil,nil,LnWtByLayer,p1,p2);
+  PGDBObjLine(Result^):=pline;
 
   //присваиваем текущие цвет, толщину, и т.д. от настроек чертежа
   zcSetEntPropFromCurrentDrawingProp(pline);
@@ -101,7 +103,7 @@ begin
   zcRedrawCurrentDrawing;
 end;
 
-procedure StartUndoCommand(const Params: PParamArray{CommandName:String;PushStone:boolean=false}); cdecl;
+procedure UndoStartCommand(const Params: PParamArray{CommandName:String;PushStone:boolean=false}); cdecl;
 var
   ctx:TCurrentDrawingContext;
   CommandName:String;
@@ -113,7 +115,7 @@ begin
   zcStartUndoCommand(CommandName,PushStone);
 end;
 
-procedure EndUndoCommand(const Params: PParamArray); cdecl;
+procedure UndoEndCommand(const Params: PParamArray); cdecl;
 var
   ctx:TCurrentDrawingContext;
 begin
@@ -128,10 +130,11 @@ begin
     cplr.addBaseDefine('LAPE');
 
     cplr.addGlobalType('record x,y,z:double;end','TzePoint3d');
-    cplr.addGlobalMethod('procedure zcEntLine(x1,y1,z1,x2,y2,z2:double);overload;',@line,ctx);
-    cplr.addGlobalMethod('procedure zcEntLine(p1,p2:TzePoint3d);overload;',@line2,ctx);
-    cplr.addGlobalMethod('procedure zcStartUndoCommand(CommandName:String;PushStone:boolean=false);',@StartUndoCommand,ctx);
-    cplr.addGlobalMethod('procedure zcEndUndoCommand;',@EndUndoCommand,ctx);
+    cplr.addGlobalType('pointer','PzeEntity');
+    cplr.addGlobalMethod('function zcEntLine(x1,y1,z1,x2,y2,z2:double):PzeEntity;overload;',@line,ctx);
+    cplr.addGlobalMethod('function zcEntLine(p1,p2:TzePoint3d):PzeEntity;overload;',@line2,ctx);
+    cplr.addGlobalMethod('procedure zcUndoStartCommand(CommandName:String;PushStone:boolean=false);',@UndoStartCommand,ctx);
+    cplr.addGlobalMethod('procedure zcUndoEndCommand;',@UndoEndCommand,ctx);
     cplr.EndImporting;
   end;
 end;

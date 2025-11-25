@@ -94,6 +94,7 @@ type
     function getLPName(LPHandle:TLPSHandle):TLPName;
     function hasOptions(LPHandle:TLPSHandle;Options:TLPOpt):boolean;
     function CreateOption:TLPOpt;
+    function Clone:TZELongProcessSupport;
   end;
 
 var
@@ -101,6 +102,17 @@ var
   LPSOSilent,LPSONoProgressBar:TLPOpt;
 
 implementation
+
+function TZELongProcessSupport.Clone:TZELongProcessSupport;
+begin
+  result:=TZELongProcessSupport.Create;
+  // OptionsGenerator:TMsgOptions;
+  //result.ActiveProcessCount:=ActiveProcessCount;
+  //LPInfoVector.CopyTo(result.LPInfoVector);
+  OnLPStartProcVector.CopyTo(result.OnLPStartProcVector);
+  OnLPProgressProcVector.CopyTo(result.OnLPProgressProcVector);
+  OnLPEndProcVector.CopyTo(result.OnLPEndProcVector);
+end;
 
 function TZELongProcessSupport.CreateOption:TLPOpt;
 begin

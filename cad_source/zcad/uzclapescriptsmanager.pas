@@ -243,17 +243,17 @@ var
 begin
   try
     fa:=FileAge(SD.FileData.Name);
-    if (SD.LAPEData.FCompiler=nil)or(SD.FileData.Age=-1)or(SD.FileData.Age<>fa)then begin
+    if (SD.LAPEData.FCompiler=nil)or(SD.FileData.Age=-1)or(SD.FileData.Age<>fa)or(CtxCreateMode=LSCMRecreate)then begin
       if SD.LAPEData.FCompiler<>nil then
         SD.LAPEData.FCompiler.Destroy;
-      SD.LAPEData.FCompiler:=TLapeCompiler.Create(TLapeTokenizerFile.Create(SD.FileData.Name));
+      SD.LAPEData.FCompiler:=TLapeCompiler.Create(TLapeTokenizerFile.Create(SD.FileData.Name{,TEncoding.UTF8}));
       SD.LAPEData.FCompiled:=False;
       SD.FileData.Age:=fa;
       ctxmode:=DoAll;
     end else
       ctxmode:=DoCtx;
     if SD.Ctx=nil then
-      SD.Ctx:=CtxClass.Create;
+      SD.Ctx:=CtxClass.CreateContext;
     if length(SD.FIndividualCDA)=0 then
       CDAS:=FCDA
     else
@@ -311,7 +311,7 @@ begin
       end;
     end;
   finally
-    if CtxCreateMode=LSCMCreateOnce then
+    if CtxCreateMode=LSCMRecreate then
       FreeAndNil(SD.Ctx);
   end;
 end;

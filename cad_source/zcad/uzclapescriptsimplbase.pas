@@ -42,8 +42,14 @@ const
 
 type
   TBaseScriptContext=class
-    constructor Create;virtual;//abstract;
-    destructor Destroy; override;
+  private
+    fLPS:TZELongProcessSupport;
+    function getLPS:TZELongProcessSupport;
+  public
+    constructor CreateContext;virtual;
+    destructor Destroy;override;
+
+    property LongProcessSupport:TZELongProcessSupport read getLPS;
   end;
   TMetaScriptContext=class of TBaseScriptContext;
 
@@ -61,12 +67,23 @@ type
 
 implementation
 
-constructor TBaseScriptContext.Create;
+function TBaseScriptContext.getLPS:TZELongProcessSupport;
 begin
+  if fLPS=nil then begin
+    fLPS:=lps.Clone;
+  end;
+  result:=fLPS;
+end;
+constructor TBaseScriptContext.CreateContext;
+begin
+  fLPS:=nil;
+  inherited;
 end;
 
 destructor TBaseScriptContext.Destroy;
 begin
+  FreeAndNil(fLPS);
+  inherited;
 end;
 
 procedure slp(const Params: PParamArray; const Result: Pointer); cdecl;
@@ -77,7 +94,7 @@ var
   ctx:TBaseScriptContext;
 begin
   ctx:=TBaseScriptContext(Params^[0]);
-  PLPSHandle(Result)^:=LPS.StartLongProcess(PString(Params^[1])^,{Result}nil,PLPSCounter(Params^[2])^);
+  PLPSHandle(Result)^:=ctx.LongProcessSupport.StartLongProcess(PString(Params^[1])^,{Result}nil,PLPSCounter(Params^[2])^);
 end;
 
 procedure plp(const Params: PParamArray); cdecl;
@@ -88,7 +105,7 @@ var
   ctx:TBaseScriptContext;
 begin
   ctx:=TBaseScriptContext(Params^[0]);
-  LPS.ProgressLongProcess(PLPSHandle(Params^[1])^,PLPSCounter(Params^[2])^);
+  ctx.LongProcessSupport.ProgressLongProcess(PLPSHandle(Params^[1])^,PLPSCounter(Params^[2])^);
 end;
 
 procedure elp(const Params: PParamArray); cdecl;
@@ -98,7 +115,7 @@ var
   ctx:TBaseScriptContext;
 begin
   ctx:=TBaseScriptContext(Params^[0]);
-  LPS.EndLongProcess(PLPSHandle(Params^[1])^);
+  ctx.LongProcessSupport.EndLongProcess(PLPSHandle(Params^[1])^);
 end;
 
 class procedure TLPCSBase.cplrSetup(mode:TLapeScriptContextModes;ctx:TBaseScriptContext;cplr:TLapeCompiler);

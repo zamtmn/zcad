@@ -51,7 +51,7 @@ initialization
   programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],
     LM_Info,UnitsInitializeLMId);
   CommandScriptsManager:=STManager.CreateType('lpcs','Command script',
-    TCurrentDrawingContext,LSCMCreateOnce,
+    TCurrentDrawingContext,LSCMRecreate,
     [TLPCSBase.cplrSetup,TLPCSDrawing.cplrSetup,TLPCSDrawing.ctxSetup]);
   if sysvar.PATH.Preload_Paths<>nil then
     CommandScriptsManager.ScanDirs(ExpandPath(sysvar.PATH.Preload_Paths^));

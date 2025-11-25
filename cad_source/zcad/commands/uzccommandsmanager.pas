@@ -31,7 +31,7 @@ uses
   uzcsysparams,uzedrawingsimple,uzcdrawings,uzctnrvectorstrings,Forms,
   uzcctrlcommandlineprompt,uzeparsercmdprompt,uzeSnap,
   uzeentity,uzgldrawcontext,Classes,
-  uzglviewareageneral,
+  uzglviewareageneral,uzcdrawing,
   MacroDefIntf,uzmacros;
 
 const
@@ -922,7 +922,7 @@ begin
     end;
   end;
   CurrCmd.pcommandrunning:=pointer(pc);
-  CurrCmd.context:=TZCADCommandContext.CreateRec;
+  CurrCmd.context:=TZCADCommandContext.CreateRec(PTZCADDrawing(pdrawing));
   CurrCmd.pcommandrunning^.pdwg:=pd;
   CurrCmd.pcommandrunning^.pcontext:=@CurrCmd.context;
   CurrCmd.pcommandrunning^.CommandStart(CurrCmd.context,operands);

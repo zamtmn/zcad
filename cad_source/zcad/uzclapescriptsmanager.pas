@@ -28,7 +28,7 @@ uses
   LazUTF8,
   uzbLogTypes,uzcLog,uzcreglog,
   uzelongprocesssupport,
-  uzcLapeScriptsImplBase;
+  uzcLapeScriptsImplBase,uzccommandsabstract;
 
 type
   TScriptsType=string;
@@ -78,11 +78,11 @@ type
     procedure ScanDir(const DirPath:string);
     procedure ScanDirs(const DirPaths:string);
 
-    procedure RunScript(const AScriptName:string);overload;
+    procedure RunScript(const ACommandContext:TZCADCommandContext;const AScriptName:string);overload;
     function CreateExternalScriptData(const AScriptName:string;AICtxClass:TMetaScriptContext;AICDA:TCompilerDefAdders):TScriptData;
     class procedure FreeExternalScriptData(var ESD:TScriptData);
-    procedure RunScript(var SD:TScriptData);overload;
-    procedure CheckScriptActuality(var SD:TScriptData);
+    procedure RunScript(const ACommandContext:TZCADCommandContext;var SD:TScriptData);overload;
+    procedure CheckScriptActuality(const ACommandContext:TZCADCommandContext;var SD:TScriptData);
   end;
 
   TScriptsTypeManager=class
@@ -234,7 +234,7 @@ begin
   end;
 end;
 
-procedure TScriptsManager.CheckScriptActuality(var SD:TScriptData);
+procedure TScriptsManager.CheckScriptActuality(const ACommandContext:TZCADCommandContext;var SD:TScriptData);
 var
   cda:TCompilerDefAdder;
   fa:Int64;
@@ -259,7 +259,7 @@ begin
     else
       CDAS:=SD.FIndividualCDA;
     for cda in CDAS do
-      cda(ctxmode,SD.Ctx,SD.LAPEData.FCompiler);
+      cda(ACommandContext,ctxmode,SD.Ctx,SD.LAPEData.FCompiler);
   except
     on E: Exception do
       begin
@@ -269,22 +269,22 @@ begin
   end;
 end;
 
-procedure TScriptsManager.RunScript(const AScriptName:string);
+procedure TScriptsManager.RunScript(const ACommandContext:TZCADCommandContext;const AScriptName:string);
 var
   scrname:string;
   PSD:PTScriptData;
 begin
   scrname:=UpperCase(AScriptName);
   if SN2SD.tryGetMutableValue(scrname,PSD) then
-    RunScript(PSD^)
+    RunScript(ACommandContext,PSD^)
   else
     raise Exception.CreateFmt('Script "%s" (type "%s", file mask "%s") not found',[AScriptName,FScriptType,FScriptFileMask]);
 end;
-procedure TScriptsManager.RunScript(var SD:TScriptData);
+procedure TScriptsManager.RunScript(const ACommandContext:TZCADCommandContext;var SD:TScriptData);
 var
   lpsh:TLPSHandle;
 begin
-  CheckScriptActuality(SD);
+  CheckScriptActuality(ACommandContext,SD);
   try
     try
       if not SD.LAPEData.FCompiled then begin

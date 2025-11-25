@@ -853,7 +853,7 @@ begin
       HardcodedButtonSize:=21;
       {Грузим раскладку окон}
       if not ZCSysParams.saved.noloadlayout then
-        LoadLayout_com(TZCADCommandContext.CreateRec,EmptyCommandOperands);
+        LoadLayout_com(TZCADCommandContext.CreateRec(PTZCADDrawing(drawings.GetCurrentDWG)),EmptyCommandOperands);
 
       if ZCSysParams.saved.noloadlayout then begin
         DockMaster.ShowControl('CommandLine',True);
@@ -1927,7 +1927,7 @@ begin
   if sender_wa.param.SelDesc.Selectedobjcount>objcount then begin
     if drawings.GetCurrentDWG.SelObjArray.Count>0 then begin
       //commandmanager.ExecuteCommandSilent('MultiSelect2ObjIbsp',sender_wa.pdwg,@sender_wa.param)
-      MultiSelect2ObjIbsp_com(TZCADCommandContext.CreateRec,'');
+      MultiSelect2ObjIbsp_com(TZCADCommandContext.CreateRec(PTZCADDrawing(drawings.GetCurrentDWG)),'');
     end else
       zcUI.Do_GUIaction(nil,zcMsgUIReturnToDefaultObject);
   end else begin

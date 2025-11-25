@@ -78,7 +78,7 @@ type
   end;
 
   TMethod2ltContextSetter=class
-    class procedure SetCtx(mode:TLapeScriptContextModes;ctx:TBaseScriptContext;
+    class procedure SetCtx(const ACommandContext:TZCADCommandContext;mode:TLapeScriptContextModes;ctx:TBaseScriptContext;
       cplr:TLapeCompiler);
   end;
 
@@ -115,7 +115,7 @@ function createSuperLine(p1,p2:TzePoint3d;nameSL:string;changeLayer:boolean;
 implementation
 
 
-class procedure TMethod2ltContextSetter.SetCtx(mode:TLapeScriptContextModes;
+class procedure TMethod2ltContextSetter.SetCtx(const ACommandContext:TZCADCommandContext;mode:TLapeScriptContextModes;
   ctx:TBaseScriptContext;cplr:TLapeCompiler);
 var
   pvd:pvardesk;
@@ -268,7 +268,7 @@ var
       //заводим в контекст скрипта в переменную Input наше значение
       (method2lt.Ctx as TMethod2ltContext).FInput:=pvd.GetValueAsString;
       //выполняем скрипт
-      CommandScriptsManager.RunScript(method2lt);
+      CommandScriptsManager.RunScript(context,method2lt);
       //выводим из контекста скрипта выходное значение из переменной Output
       ltname:=(method2lt.Ctx as TMethod2ltContext).FOutput;
       zcUI.TextMessage('ltname:'+ltname,TMWOHistoryOut);

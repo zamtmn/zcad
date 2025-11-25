@@ -30,7 +30,6 @@ uses
     UGDBSelectedObjArray,uzestylestexts,uzefontmanager,uzestyleslinetypes,
     UGDBOpenArrayOfPV,uzefont,UGDBVisibleOpenArray,
     gzctnrVectorTypes,uzedimensionaltypes,uzetrash,uzctnrVectorBytes,uzglviewareadata,
-    uzccommandsabstract,
     uzeentitiestypefilter,uzctnrvectorpgdbaseobjects,uzCtnrVectorpBaseEntity,
     uzcLog,uzcreglog;
 type

@@ -30,7 +30,7 @@ uses
   uzedrawingsimple,uzcdrawings,
   uzeentline,uzeentityfactory,uzeconsts,uzcutils,
   uzegeometry,uzegeometrytypes,
-  uzelongprocesssupport;
+  uzelongprocesssupport,uzccommandsabstract;
 
 type
   TLapeScriptContextMode=(LSCMCompilerSetup,LSCMContextSetup);
@@ -58,11 +58,11 @@ type
     LSCMRecreate{создается заново, для каждого запуска каждого скрипта});
 
 
-  TCompilerDefAdder=procedure(mode:TLapeScriptContextModes;ctx:TBaseScriptContext;cplr:TLapeCompiler) of object;
+  TCompilerDefAdder=procedure(const ACommandContext:TZCADCommandContext;mode:TLapeScriptContextModes;ctx:TBaseScriptContext;cplr:TLapeCompiler) of object;
   TCompilerDefAdders=array of TCompilerDefAdder;
 
   TLPCSBase=class
-    class procedure cplrSetup(mode:TLapeScriptContextModes;ctx:TBaseScriptContext;cplr:TLapeCompiler);
+    class procedure cplrSetup(const ACommandContext:TZCADCommandContext;mode:TLapeScriptContextModes;ctx:TBaseScriptContext;cplr:TLapeCompiler);
   end;
 
 implementation
@@ -118,7 +118,7 @@ begin
   ctx.LongProcessSupport.EndLongProcess(PLPSHandle(Params^[1])^);
 end;
 
-class procedure TLPCSBase.cplrSetup(mode:TLapeScriptContextModes;ctx:TBaseScriptContext;cplr:TLapeCompiler);
+class procedure TLPCSBase.cplrSetup(const ACommandContext:TZCADCommandContext;mode:TLapeScriptContextModes;ctx:TBaseScriptContext;cplr:TLapeCompiler);
 begin
   if LSCMCompilerSetup in mode then begin
     cplr.StartImporting;

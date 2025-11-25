@@ -23,6 +23,7 @@ interface
 
 uses
   uzegeometrytypes,uzbtypes,uzglviewareadata,uzclog,gzctnrVectorTypes,
+  uzcdrawing,
   SysUtils;
 
 const
@@ -62,7 +63,8 @@ type
   TGetPossibleResult=set of TGetPossible;
   PTZCADCommandContext=^TZCADCommandContext;
   TZCADCommandContext=record
-    class function CreateRec:TZCADCommandContext;static;
+    PCurrentDWG:PTZCADDrawing;
+    constructor CreateRec(ACDWG:PTZCADDrawing);
   end;
   {Export+}
   TCommandEndAction=(CEGUIRePrepare,CEGUIReturnToDefaultObject,
@@ -153,9 +155,9 @@ const
 
 implementation
 
-class function TZCADCommandContext.CreateRec;
+constructor TZCADCommandContext.CreateRec;
 begin
-  Result:=default(TZCADCommandContext);
+  PCurrentDWG:=ACDWG;
 end;
 
 function CommandObjectDef.IsRTECommand:boolean;

@@ -37,7 +37,7 @@ function LPCSRun_com(const Context:TZCADCommandContext;
   operands:TCommandOperands):TCommandResult;
 begin
   try
-    CommandScriptsManager.RunScript(operands);
+    CommandScriptsManager.RunScript(Context,operands);
   except
     on E:Exception do begin
       ProgramLog.LogOutFormatStr('LPCSRun: %s',[E.Message],LM_Error,LapeLMId,MO_SM);

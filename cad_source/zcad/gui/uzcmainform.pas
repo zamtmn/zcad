@@ -320,9 +320,9 @@ var
   LongProcessPos:integer;
 begin
   LongProcessPos:=round(clientwidth*(single(current)/single(ProcessBar.max)));
-  if LongProcessPos>NextLongProcessPos then begin
+  if abs(LongProcessPos-NextLongProcessPos)>20 then begin
     ProcessBar.position:=Current;
-    NextLongProcessPos:=LongProcessPos+20;
+    NextLongProcessPos:=LongProcessPos;
     ProcessBar.repaint;
   end;
 end;

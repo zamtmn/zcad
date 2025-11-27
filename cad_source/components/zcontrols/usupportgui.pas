@@ -97,15 +97,24 @@ end;
 
 function GetCurrentShortCutContext(const ActiveControl,DefaultControl:TWinControl):TShortCutContext;
 begin
-   result.EditableInFocus:=isEditable(ActiveControl);
-   result.DefaultInFocus:=(ActiveControl=DefaultControl)and(ActiveControl<>nil);
-   result.NotEmptyInFocus:=isNotEmpty(ActiveControl);
-   result.WithSelectionInFocus:=WithSelection(ActiveControl);
-   result.ClassNameInFocus:=ActiveControl.ClassName;
-   result.ControlNameInFocus:=ActiveControl.Name;
+  if ActiveControl<>nil then begin
+    result.EditableInFocus:=isEditable(ActiveControl);
+    result.DefaultInFocus:=(ActiveControl=DefaultControl)and(ActiveControl<>nil);
+    result.NotEmptyInFocus:=isNotEmpty(ActiveControl);
+    result.WithSelectionInFocus:=WithSelection(ActiveControl);
+    result.ClassNameInFocus:=ActiveControl.ClassName;
+    result.ControlNameInFocus:=ActiveControl.Name;
+  end else begin
+    result.EditableInFocus:=false;
+    result.DefaultInFocus:=true;
+    result.NotEmptyInFocus:=false;
+    result.WithSelectionInFocus:=false;
+    result.ClassNameInFocus:='';
+    result.ControlNameInFocus:='';
+  end;
 end;
 
-//эти две getAttrValue есть в uztoolbarsmanager, надо выкинуть в какоето одно место
+//TODO: эти две getAttrValue есть в uztoolbarsmanager, надо выкинуть в какоето одно место
 function getAttrValue(const aNode:TDomNode;const AttrName,DefValue:string):string;overload;
 var
   aNodeAttr:TDomNode;

@@ -33,6 +33,7 @@ uses
   uzeentcircle,uzeentarc,uzeentline,uzeentblockinsert,uzeenttext,
   uzeentmtext,uzeentpolyline,uzcentelleader,uzeentdimension,uzeentellipse,
   uzeEntSpline,
+  uzeenthatch,
   uzegeometry,uzcoimultiproperties,uzcLog,
   uzcExtdrLayerControl,uzcExtdrSmartTextEnt,uzcExtdrSCHConnector,
   uzcutils,uzcdrawing,uzcdrawings,zUndoCmdChgTypes,zUndoCmdChgVariable,
@@ -557,6 +558,7 @@ const
      pmtext:PGDBObjMText=nil;
      p3dpoly:PGDBObjPolyline=nil;
      pspline:PGDBObjSpline=nil;
+     phatch:PGDBObjHatch=nil;
      pelleader:PGDBObjElLeader=nil;
      pdim:PGDBObjDimension=nil;
      pellipse:PGDBObjEllipse=nil;
@@ -804,6 +806,14 @@ begin
     MultiPropertiesManager.RegisterPhysMultiproperty('Degree','Degree',sysunit^.TypeName2PTD('Integer'),MPCGeometry,GDBSplineID,nil,PtrInt(@pspline^.Degree),PtrInt(@pspline^.Degree),OneVarDataMIPD,OneVarDataEIPD);
     {--Misc}
     MultiPropertiesManager.RegisterPhysMultiproperty('Closed','Closed',sysunit^.TypeName2PTD('Boolean'),MPCMisc,GDBSplineID,nil,PtrInt(@pspline^.Closed),PtrInt(@pspline^.Closed),OneVarDataMIPD,OneVarDataEIPD);
+
+    {Hatch}
+    MultiPropertiesManager.RestartMultipropertySortID;
+    {--Misc}
+    MultiPropertiesManager.RegisterPhysMultiproperty('PATTERNANGLE','Pattern angle',sysunit^.TypeName2PTD('TZeAngle'),MPCMisc,GDBHatchID,nil,PtrInt(@phatch^.Angle),PtrInt(@phatch^.Angle),OneVarDataMIPD,OneVarDataEIPD);
+    MultiPropertiesManager.RegisterPhysMultiproperty('PATTERNSCALE','Pattern scale',sysunit^.TypeName2PTD('TZeDimLess'),MPCMisc,GDBHatchID,nil,PtrInt(@phatch^.Scale),PtrInt(@phatch^.Scale),OneVarDataMIPD,OneVarDataEIPD);
+    MultiPropertiesManager.RegisterPhysMultiproperty('PATTERNORIGIN_X','Pattern origin X',sysunit^.TypeName2PTD('TzeXUnits'),MPCMisc,GDBHatchID,nil,PtrInt(@phatch^.Origin.x),PtrInt(@phatch^.Origin.x),OneVarDataMIPD,OneVarDataEIPD);
+    MultiPropertiesManager.RegisterPhysMultiproperty('PATTERNORIGIN_Y','Pattern origin Y',sysunit^.TypeName2PTD('TzeXUnits'),MPCMisc,GDBHatchID,nil,PtrInt(@phatch^.Origin.y),PtrInt(@phatch^.Origin.y),OneVarDataMIPD,OneVarDataEIPD);
 
     {ElLeader uzegeometry}
     MultiPropertiesManager.RestartMultipropertySortID;

@@ -810,7 +810,7 @@ begin
     {Hatch}
     MultiPropertiesManager.RestartMultipropertySortID;
     {--Misc}
-    MultiPropertiesManager.RegisterPhysMultiproperty('PATTERNANGLE','Pattern angle',sysunit^.TypeName2PTD('TZeAngle'),MPCMisc,GDBHatchID,nil,PtrInt(@phatch^.Angle),PtrInt(@phatch^.Angle),OneVarDataMIPD,OneVarDataEIPD);
+    MultiPropertiesManager.RegisterPhysMultiproperty('PATTERNANGLE','Pattern angle',sysunit^.TypeName2PTD('TZeAngleDeg'),MPCMisc,GDBHatchID,nil,PtrInt(@phatch^.Angle),PtrInt(@phatch^.Angle),OneVarDataMIPD,OneVarDataEIPD);
     MultiPropertiesManager.RegisterPhysMultiproperty('PATTERNSCALE','Pattern scale',sysunit^.TypeName2PTD('TZeDimLess'),MPCMisc,GDBHatchID,nil,PtrInt(@phatch^.Scale),PtrInt(@phatch^.Scale),OneVarDataMIPD,OneVarDataEIPD);
     MultiPropertiesManager.RegisterPhysMultiproperty('PATTERNORIGIN_X','Pattern origin X',sysunit^.TypeName2PTD('TzeXUnits'),MPCMisc,GDBHatchID,nil,PtrInt(@phatch^.Origin.x),PtrInt(@phatch^.Origin.x),OneVarDataMIPD,OneVarDataEIPD);
     MultiPropertiesManager.RegisterPhysMultiproperty('PATTERNORIGIN_Y','Pattern origin Y',sysunit^.TypeName2PTD('TzeXUnits'),MPCMisc,GDBHatchID,nil,PtrInt(@phatch^.Origin.y),PtrInt(@phatch^.Origin.y),OneVarDataMIPD,OneVarDataEIPD);

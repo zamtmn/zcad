@@ -15,7 +15,7 @@
 {
 @author(Andrey Zubarev <zamtmn@yandex.ru>) 
 }
-unit uzeenthatch;
+unit uzeEntHatch;
 {$Mode delphi}{$H+}
 {$INCLUDE zengineconfig.inc}
 interface
@@ -57,7 +57,7 @@ type
     PatternName:string;
     IslandDetection:THatchIslandDetection;
     Angle,Scale:double;
-    Origin:TzePoint2d;
+    Origin:TzePoint3d;//по идее должно быть TzePoint2d, но в автокаде 3d
     constructor init(own:Pointer;layeraddres:PGDBLayerProp;
       LW:smallint;p:TzePoint3d);
     constructor initnul;
@@ -65,6 +65,8 @@ type
       var drawing:TDrawingDef;var context:TIODXFLoadContext);virtual;
     procedure SaveToDXF(var outStream:TZctnrVectorBytes;
       var drawing:TDrawingDef;var IODXFContext:TIODXFSaveContext);virtual;
+    procedure SaveToDXFPostProcess(var handle:TZctnrVectorBytes;
+      var IODXFContext:TIODXFSaveContext);virtual;
     procedure FormatEntity(var drawing:TDrawingDef;
       var DC:TDrawContext;Stage:TEFStages=EFAllStages);virtual;
     procedure ProcessLine(const c:integer;const l1,l2,c1,c2:TzePoint2d;
@@ -168,7 +170,7 @@ begin
   IslandDetection:=HID_Normal;
   Angle:=0;
   Scale:=1;
-  Origin:=NulVertex2D;
+  Origin:=NulVertex;
 end;
 
 constructor GDBObjHatch.init;
@@ -184,7 +186,7 @@ begin
   IslandDetection:=HID_Normal;
   Angle:=0;
   Scale:=1;
-  Origin:=NulVertex2D;
+  Origin:=NulVertex;
 end;
 
 function GDBObjHatch.GetObjType;
@@ -218,9 +220,18 @@ begin
 
   dxfDoubleout(outStream,47,1.25);
   dxfIntegerout(outStream,98,0);
+
   //убрал потому что повторная запись нормали
   //если она не 0,0,1
   //SaveToDXFObjPostfix(outStream);
+end;
+
+procedure GDBObjHatch.SaveToDXFPostProcess(var handle:TZctnrVectorBytes;
+  var IODXFContext:TIODXFSaveContext);
+begin
+  inherited;
+  if not IsVectorNul(Origin) then
+    dxfvertexout(handle,1010,Origin);
 end;
 
 procedure GDBObjHatch.ProcessLine(const c:integer;const l1,l2,c1,c2:TzePoint2d;
@@ -461,7 +472,8 @@ begin
   dirx.y:=(Strokes.Offset.y*cosA+Strokes.Offset.x*sinA)*Scale;
 
   offs:=Vertex2dMulOnSc(Strokes.Base,Scale);
-  offs:=VertexAdd(offs,Vertex2dMulOnSc(Origin,Scale));
+  //Origin надо учитывать при копировании паттерна из шаблона
+  //offs:=VertexAdd(offs,Vertex2dMulOnSc(Origin,Scale));
   offs2:=VertexAdd(offs,dirx);
 
   First:=True;
@@ -630,7 +642,9 @@ begin
             if not dxfLoadGroupCodeDouble(rdr,52,byt,Angle) then
               if not dxfLoadGroupCodeDouble(rdr,41,byt,Scale) then
                 if not dxfLoadGroupCodeString(rdr,2,byt,PatternName) then
-                  rdr.SkipString;
+                  if not dxfLoadGroupCodeString(rdr,2,byt,PatternName) then
+                    if not dxfLoadGroupCodeVertex(rdr,1010,byt,Origin) then
+                      rdr.SkipString;
     byt:=rdr.ParseInteger;
   end;
   case hstyle of

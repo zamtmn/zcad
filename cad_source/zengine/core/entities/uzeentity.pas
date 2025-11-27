@@ -94,7 +94,7 @@ type
     procedure SaveToDXFfollow(var outStream:TZctnrVectorBytes;
       var drawing:TDrawingDef;var IODXFContext:TIODXFSaveContext);virtual;
     procedure SaveToDXFPostProcess(var handle:TZctnrVectorBytes;
-      var IODXFContext:TIODXFSaveContext);
+      var IODXFContext:TIODXFSaveContext);virtual;
     procedure SaveToDXFObjXData(var outStream:TZctnrVectorBytes;
       var IODXFContext:TIODXFSaveContext);virtual;
     function IsStagedFormatEntity:boolean;virtual;

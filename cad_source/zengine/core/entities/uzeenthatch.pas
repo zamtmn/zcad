@@ -65,7 +65,7 @@ type
       var drawing:TDrawingDef;var context:TIODXFLoadContext);virtual;
     procedure SaveToDXF(var outStream:TZctnrVectorBytes;
       var drawing:TDrawingDef;var IODXFContext:TIODXFSaveContext);virtual;
-    procedure SaveToDXFPostProcess(var handle:TZctnrVectorBytes;
+    procedure SaveToDXFPostProcess(var outStream:TZctnrVectorBytes;
       var IODXFContext:TIODXFSaveContext);virtual;
     procedure FormatEntity(var drawing:TDrawingDef;
       var DC:TDrawContext;Stage:TEFStages=EFAllStages);virtual;
@@ -226,12 +226,12 @@ begin
   //SaveToDXFObjPostfix(outStream);
 end;
 
-procedure GDBObjHatch.SaveToDXFPostProcess(var handle:TZctnrVectorBytes;
+procedure GDBObjHatch.SaveToDXFPostProcess(var outStream:TZctnrVectorBytes;
   var IODXFContext:TIODXFSaveContext);
 begin
   inherited;
   if not IsVectorNul(Origin) then
-    dxfvertexout(handle,1010,Origin);
+    dxfvertexout(outStream,1010,Origin);
 end;
 
 procedure GDBObjHatch.ProcessLine(const c:integer;const l1,l2,c1,c2:TzePoint2d;

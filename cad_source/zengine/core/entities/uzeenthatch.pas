@@ -474,8 +474,8 @@ begin
   offs:=Vertex2dMulOnSc(Strokes.Base,Scale);
   //Origin надо учитывать при копировании паттерна из шаблона
   //offs:=VertexAdd(offs,Vertex2dMulOnSc(Origin,Scale));
-  if (abs(offs.x/dirx.x)>tenEdbl_dig/10)
-  and(abs(offs.y/dirx.y)>tenEdbl_dig/10)then begin
+  if (abs(offs.x/dirx.x)<tenEdbl_dig/10)
+  and(abs(offs.y/dirx.y)<tenEdbl_dig/10)then begin
     offs2:=VertexAdd(offs,dirx);
 
     First:=True;

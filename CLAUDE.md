@@ -60,3 +60,15 @@ Original repository (upstream): veb86/zcadvelecAI
 Proceed.
 
 Run timestamp: 2025-11-06T10:13:26.916Z
+
+---
+
+Issue to solve: https://github.com/veb86/zcadvelecAI/issues/581
+Your prepared branch: issue-581-c3a8e81bfa04
+Your prepared working directory: /tmp/gh-issue-solver-1764326263133
+Your forked repository: konard/zcadvelecAI
+Original repository (upstream): veb86/zcadvelecAI
+
+Proceed.
+
+Run timestamp: 2025-11-28T10:38:00.410Z

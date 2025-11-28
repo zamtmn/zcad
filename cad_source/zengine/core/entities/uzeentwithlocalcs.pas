@@ -34,7 +34,7 @@ type
     Local:GDBObj2dprop;
 
     //**получить на чтение координаты в мировой системе координат
-    P_insert_in_WCS:GDBvertex;
+    P_insert_in_WCS:TzePoint3d;
     lod:byte;
     constructor init(own:Pointer;layeraddres:PGDBLayerProp;LW:smallint);
     constructor initnul(owner:PGDBObjGenericWithSubordinated);
@@ -47,13 +47,13 @@ type
     procedure FormatEntity(var drawing:TDrawingDef;
       var DC:TDrawContext;Stage:TEFStages=EFAllStages);virtual;
     procedure CalcObjMatrix(pdrawing:PTDrawingDef=nil);virtual;
-    function CalcObjMatrixWithoutOwner:DMatrix4D;virtual;
-    procedure transform(const t_matrix:DMatrix4D);virtual;
-    function GetCenterPoint:GDBVertex;virtual;
+    function CalcObjMatrixWithoutOwner:TzeTypedMatrix4d;virtual;
+    procedure transform(const t_matrix:TzeTypedMatrix4d);virtual;
+    function GetCenterPoint:TzePoint3d;virtual;
     procedure createfield;virtual;
 
     procedure rtsave(refp:Pointer);virtual;
-    procedure TransformAt(p:PGDBObjEntity;t_matrix:PDMatrix4D);virtual;
+    procedure TransformAt(p:PGDBObjEntity;t_matrix:PzeTypedMatrix4d);virtual;
     procedure higlight(var DC:TDrawContext);virtual;
     procedure ReCalcFromObjMatrix;virtual;
     function IsHaveLCS:boolean;virtual;
@@ -70,8 +70,8 @@ var
 begin
   if dc.maxdetail then
     exit(True);
-  templod:=sqrt(objmatrix.mtr[0].v[0]*objmatrix.mtr[0].v[0]+
-    objmatrix.mtr[1].v[1]*objmatrix.mtr[1].v[1]+objmatrix.mtr[2].v[2]*objmatrix.mtr[2].v[2]);
+  templod:=sqrt(objmatrix.mtr.v[0].v[0]*objmatrix.mtr.v[0].v[0]+
+    objmatrix.mtr.v[1].v[1]*objmatrix.mtr.v[1].v[1]+objmatrix.mtr.v[2].v[2]*objmatrix.mtr.v[2].v[2]);
   templod:=(templod*ParamSize)/(dc.DrawingContext.zoom);
   if templod>TargetSize then
     exit(True)
@@ -86,9 +86,9 @@ end;
 
 procedure GDBObjWithLocalCS.ReCalcFromObjMatrix;
 begin
-  Local.basis.ox:=PGDBVertex(@objmatrix.mtr[0])^;
-  Local.basis.oy:=PGDBVertex(@objmatrix.mtr[1])^;
-  Local.basis.oz:=PGDBVertex(@objmatrix.mtr[2])^;
+  Local.basis.ox:=PzePoint3d(@objmatrix.mtr.v[0])^;
+  Local.basis.oy:=PzePoint3d(@objmatrix.mtr.v[1])^;
+  Local.basis.oz:=PzePoint3d(@objmatrix.mtr.v[2])^;
 
   Local.basis.ox:=normalizevertex(Local.basis.ox);
   Local.basis.oy:=normalizevertex(Local.basis.oy);
@@ -143,9 +143,9 @@ begin
   inherited init(own,layeraddres,LW);
   powner:=bp.ListPos.owner;
   if powner<>nil then begin
-    Local.basis.ox:=PGDBVertex(@powner^.GetMatrix^.mtr[0])^;
-    Local.basis.oy:=PGDBVertex(@powner^.GetMatrix^.mtr[1])^;
-    Local.basis.oz:=PGDBVertex(@powner^.GetMatrix^.mtr[2])^;
+    Local.basis.ox:=PzePoint3d(@powner^.GetMatrix^.mtr.v[0])^;
+    Local.basis.oy:=PzePoint3d(@powner^.GetMatrix^.mtr.v[1])^;
+    Local.basis.oz:=PzePoint3d(@powner^.GetMatrix^.mtr.v[2])^;
   end else begin
     Local.basis.ox:=XWCS;
     Local.basis.oy:=YWCS;
@@ -169,7 +169,7 @@ function GDBObjWithLocalCS.CalcObjMatrixWithoutOwner;
   end;
 
 var
-  rotmatr,dispmatr:DMatrix4D;
+  rotmatr,dispmatr:TzeTypedMatrix4d;
 begin
   if IsVectorNul(Local.basis.oz) then begin
     ReportLocalOZIsNul;

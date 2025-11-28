@@ -33,7 +33,7 @@ uses
   {gzctnrSTL,}uzcsysvars,
   LazUTF8,
   {uzbLogTypes,}uzcLog,
-  uzcLapeScriptsManager,uzcLapeScriptsImplBase;
+  uzcLapeScriptsManager,uzcLapeScriptsImplBase,uzcLapeScriptsImplDrawing;
 
 const
   ReportExtenderName='extdrReport';
@@ -160,10 +160,11 @@ end;
 
 initialization
   //extdrAdd(extdrReport)
-  ReportScriptsManager:=STManager.CreateType('lpr','Script test',TEntityExtentionContext,[ttest.testadder]);
+  ReportScriptsManager:=STManager.CreateType('lpr','Script test',
+  TEntityExtentionContext,LSCMCreateOnce,[TLPCSDrawing.cplrSetup]);
   if sysvar.PATH.Preload_Paths<>nil then
     ReportScriptsManager.ScanDirs(sysvar.PATH.Preload_Paths^);
-  temp:=ReportScriptsManager.CreateExternalScriptData('test',TEntityExtentionContext,[ttest.testadder]);
+  temp:=ReportScriptsManager.CreateExternalScriptData('test',TEntityExtentionContext,[TLPCSDrawing.cplrSetup]);
   //ReportScriptsManager.RunScript(temp);
   //ReportScriptsManager.RunScript('test');
   EntityExtenders.RegisterKey(uppercase(ReportExtenderName),TReportExtender);

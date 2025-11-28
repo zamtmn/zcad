@@ -31,7 +31,7 @@ uses
   uzcsysparams,uzedrawingsimple,uzcdrawings,uzctnrvectorstrings,Forms,
   uzcctrlcommandlineprompt,uzeparsercmdprompt,uzeSnap,
   uzeentity,uzgldrawcontext,Classes,
-  uzglviewareageneral,
+  uzglviewareageneral,uzcdrawing,
   MacroDefIntf,uzmacros;
 
 const
@@ -104,8 +104,8 @@ type
       POGLWndParam:POGLWndtype);virtual;
     procedure executelastcommad(pdrawing:PTDrawingDef;
       POGLWndParam:POGLWndtype);virtual;
-    procedure sendpoint2command(const p3d:gdbvertex;
-      const p2d:gdbvertex2di;var mode:byte;osp:pos_record;const drawing:TDrawingDef);virtual;
+    procedure sendpoint2command(const p3d:TzePoint3d;
+      const p2d:TzePoint2i;var mode:byte;osp:pos_record;const drawing:TDrawingDef);virtual;
     procedure CommandRegister(pc:PCommandObjectDef);virtual;
     procedure run(pc:PCommandObjectDef;
       operands:string;pdrawing:PTDrawingDef);virtual;
@@ -128,21 +128,21 @@ type
     function CurrentCommandNotUseCommandLine:boolean;
     procedure PrepairVarStack;
 
-    function Get3DPoint(prompt:string;out p:GDBVertex):TGetResult;
+    function Get3DPoint(prompt:string;out p:TzePoint3d):TGetResult;
     function Get3DPointWithLineFromBase(prompt:string;
-      const base:GDBVertex;out p:GDBVertex):TGetResult;
+      const base:TzePoint3d;out p:TzePoint3d):TGetResult;
     function GetEntity(prompt:string;out p:Pointer):boolean;
     function Get3DPointInteractive(prompt:string;
-      out p:GDBVertex;const InteractiveProc:TInteractiveProcObjBuild;
+      out p:TzePoint3d;const InteractiveProc:TInteractiveProcObjBuild;
       const PInteractiveData:Pointer):TGetResult;
     function Get3DAndMoveConstructRootTo(prompt:string;
-      out p:GDBVertex):TGetResult;
+      out p:TzePoint3d):TGetResult;
     function MoveConstructRootTo(prompt:string):TGetResult;
     function GetInput(Prompt:string;out Input:string):TGetResult;
 
     function GetLastId:TTag;
     function GetLastInput:ansistring;
-    function GetLastPoint:GDBVertex;
+    function GetLastPoint:TzePoint3d;
 
     function ChangeInputMode(
       incl,excl:TGetInputMode):TGetInputMode;
@@ -154,9 +154,9 @@ type
     procedure sendmousecoordwop(Sender:TAbstractViewArea;
       key:byte);
     procedure sendcoordtocommand(Sender:TAbstractViewArea;
-      coord:GDBVertex;key:byte);
+      coord:TzePoint3d;key:byte);
     procedure sendcoordtocommandTraceOn(Sender:TAbstractViewArea;
-      coord:GDBVertex;key:byte;pos:pos_record);
+      coord:TzePoint3d;key:byte;pos:pos_record);
 
     procedure PromptTagNotufy(Tag:TTag);
 
@@ -270,7 +270,7 @@ begin
 end;
 
 procedure GDBcommandmanager.sendcoordtocommandTraceOn(Sender:TAbstractViewArea;
-  coord:GDBVertex;key:byte;pos:pos_record);
+  coord:TzePoint3d;key:byte;pos:pos_record);
 var
   cs:integer;
 begin
@@ -291,7 +291,7 @@ begin
 end;
 
 procedure GDBcommandmanager.sendcoordtocommand(Sender:TAbstractViewArea;
-  coord:GDBVertex;key:byte);
+  coord:TzePoint3d;key:byte);
 begin
   if key=MZW_LBUTTON then
     Sender.param.lastpoint:=coord;
@@ -315,7 +315,7 @@ end;
 
 procedure GDBcommandmanager.sendmousecoordwop(Sender:TAbstractViewArea;key:byte);
 var
-  tv:gdbvertex;
+  tv:TzePoint3d;
 begin
   if CurrCmd.pcommandrunning<>nil then
     if Sender.param.ospoint.ostype<>os_none then begin
@@ -386,7 +386,7 @@ begin
 end;
 
 function GDBcommandmanager.Get3DPointInteractive(prompt:string;
-  out p:GDBVertex;const InteractiveProc:TInteractiveProcObjBuild;
+  out p:TzePoint3d;const InteractiveProc:TInteractiveProcObjBuild;
   const PInteractiveData:Pointer):TGetResult;
 var
   savemode:byte;//variable to store the current mode of the editor
@@ -439,13 +439,13 @@ end;
 procedure InteractiveConstructRootManipulator(
   const PInteractiveData:Pointer {must be nil, no additional data needed};
   Point:
-  GDBVertex  {new end coord};
+  TzePoint3d  {new end coord};
   Click:
   boolean {true if lmb presseed});
 var
   ir:itrec;
   p:PGDBObjEntity;
-  t_matrix:DMatrix4D;
+  t_matrix:TzeTypedMatrix4d;
   RC:TDrawContext;
 begin
   if click then begin
@@ -466,14 +466,14 @@ begin
 end;
 
 function GDBcommandmanager.Get3DAndMoveConstructRootTo(prompt:string;
-  out p:GDBVertex):TGetResult;
+  out p:TzePoint3d):TGetResult;
 begin
   Result:=Get3DPointInteractive(prompt,p,@InteractiveConstructRootManipulator,nil);
 end;
 
 function GDBcommandmanager.MoveConstructRootTo(prompt:string):TGetResult;
 var
-  p:GDBVertex;
+  p:TzePoint3d;
 begin
   Result:=Get3DPointInteractive(prompt,p,@InteractiveConstructRootManipulator,nil);
 end;
@@ -494,7 +494,7 @@ begin
     Result:='';
 end;
 
-function GDBcommandmanager.GetLastPoint:GDBVertex;
+function GDBcommandmanager.GetLastPoint:TzePoint3d;
 begin
   if CurrCmd.pcommandrunning<>nil then
     Result:=CurrCmd.pcommandrunning^.IData.GetPointValue
@@ -566,13 +566,13 @@ begin
   //восстанавливаем сохраненный режим редактора
 end;
 
-function GDBcommandmanager.Get3DPoint(prompt:string;out p:GDBVertex):TGetResult;
+function GDBcommandmanager.Get3DPoint(prompt:string;out p:TzePoint3d):TGetResult;
 begin
   Result:=Get3DPointInteractive(prompt,p,nil,nil);
 end;
 
 function GDBcommandmanager.Get3DPointWithLineFromBase(prompt:string;
-  const base:GDBVertex;out p:GDBVertex):TGetResult;
+  const base:TzePoint3d;out p:TzePoint3d):TGetResult;
 begin
   CurrCmd.pcommandrunning^.IData.BasePoint:=base;
   CurrCmd.pcommandrunning^.IData.DrawFromBasePoint:=True;
@@ -922,7 +922,7 @@ begin
     end;
   end;
   CurrCmd.pcommandrunning:=pointer(pc);
-  CurrCmd.context:=TZCADCommandContext.CreateRec;
+  CurrCmd.context:=TZCADCommandContext.CreateRec(PTZCADDrawing(pdrawing));
   CurrCmd.pcommandrunning^.pdwg:=pd;
   CurrCmd.pcommandrunning^.pcontext:=@CurrCmd.context;
   CurrCmd.pcommandrunning^.CommandStart(CurrCmd.context,operands);

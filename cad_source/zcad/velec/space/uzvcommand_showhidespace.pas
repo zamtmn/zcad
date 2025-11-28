@@ -87,7 +87,7 @@ function CreateSolidHatchFromPolyline(ppolyline: PGDBObjPolyLine; colorIndex: In
 var
   phatch: PGDBObjHatch;
   pathData: GDBPolyline2DArray;
-  v2d: GDBVertex2D;
+  v2d: TzePoint2d;
   i: integer;
   vertexCount: integer;
   dc: TDrawContext;

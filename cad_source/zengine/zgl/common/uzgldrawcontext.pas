@@ -23,7 +23,7 @@ uses
   SysUtils,Nullable,
   uzepalette,uzbtypes,uzgldrawerabstract,uzeconsts,uzegeometry,uzegeometrytypes;
 type
-TNulableVetrex=TNullable<GDBvertex>;
+TNulableVetrex=TNullable<TzePoint3d>;
 TDrawHeplGeometry=procedure  of object;
 TDrawingContext=record
                    VActuality:TVisActuality;

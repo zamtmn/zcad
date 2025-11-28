@@ -27,7 +27,7 @@ type
   TGeomLine3D=object(TGeomEntity3D)
     LineData:GDBLineProp;
     StartParam:Double;
-    constructor init(const p1,p2:GDBvertex;const sp:Double);
+    constructor init(const p1,p2:TzePoint3d;const sp:Double);
     function GetBB:TBoundingBox;virtual;
   end;
   {REGISTEROBJECTTYPE TGeomPLine3D}
@@ -39,7 +39,7 @@ type
   end;
 {Export-}
 implementation
-constructor TGeomLine3D.init(const p1,p2:GDBvertex;const sp:Double);
+constructor TGeomLine3D.init(const p1,p2:TzePoint3d;const sp:Double);
 begin
   LineData.lBegin:=p1;
   LineData.lEnd:=p2;

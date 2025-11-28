@@ -40,11 +40,11 @@ type
     constructor initnul;
     constructor init(own:Pointer;layeraddres:PGDBLayerProp;LW:smallint);
     destructor done;virtual;
-    function CalcInFrustum(const frustum:ClipArray;
+    function CalcInFrustum(const frustum:TzeFrustum;
       const Actuality:TVisActuality;var Counters:TCameraCounters;ProjectProc:GDBProjectProc;
       const zoom,currentdegradationfactor:double):boolean;virtual;
     function CalcTrueInFrustum(
-      const frustum:ClipArray):TInBoundingVolume;virtual;
+      const frustum:TzeFrustum):TInBoundingVolume;virtual;
     procedure FormatEntity(var drawing:TDrawingDef;
       var DC:TDrawContext;Stage:TEFStages=EFAllStages);virtual;
     function IsStagedFormatEntity:boolean;virtual;
@@ -52,7 +52,7 @@ type
     procedure DrawGeometry(lw:integer;var DC:TDrawContext;
       const inFrustumState:TInBoundingVolume);virtual;
     function onmouse(var popa:TZctnrVectorPGDBaseEntity;
-      const MF:ClipArray;InSubEntry:boolean):boolean;virtual;
+      const MF:TzeFrustum;InSubEntry:boolean):boolean;virtual;
     function ReturnLastOnMouse(InSubEntry:boolean):PGDBObjEntity;virtual;
     procedure ImEdited(pobj:PGDBObjSubordinated;pobjinarray:integer;
       var drawing:TDrawingDef);virtual;
@@ -70,7 +70,7 @@ type
     procedure SaveToDXFObjXData(var outStream:TZctnrVectorBytes;
       var IODXFContext:TIODXFSaveContext);virtual;
     procedure AddMi(pobj:PGDBObjSubordinated);virtual;
-    procedure SetInFrustumFromTree(const frustum:ClipArray;
+    procedure SetInFrustumFromTree(const frustum:TzeFrustum;
       const Actuality:TVisActuality;var Counters:TCameraCounters;ProjectProc:GDBProjectProc;
       const zoom,currentdegradationfactor:double);virtual;
     function CalcActualVisible(
@@ -235,7 +235,7 @@ procedure GDBObjDevice.SaveToDXFFollow;
 var
   pv,pvc,pvc2:pgdbobjEntity;
   ir:itrec;
-  m4:DMatrix4D;
+  m4:TzeTypedMatrix4d;
   DC:TDrawContext;
   SaveLocalEntityFlags:TLocalEntityFlags;
 begin
@@ -434,7 +434,7 @@ end;
 procedure GDBObjDevice.DrawGeometry;
 var
   p:pgdbobjEntity;
-  v:gdbvertex;
+  v:TzePoint3d;
   ir:itrec;
   oldlw:smallint;
 begin

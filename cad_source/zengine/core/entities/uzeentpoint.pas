@@ -31,10 +31,10 @@ type
   PGDBObjPoint=^GDBObjPoint;
 
   GDBObjPoint=object(GDBObj3d)
-    P_insertInOCS:GDBvertex;
-    P_insertInWCS:GDBvertex;
+    P_insertInOCS:TzePoint3d;
+    P_insertInWCS:TzePoint3d;
     constructor init(own:Pointer;layeraddres:PGDBLayerProp;
-      LW:smallint;p:GDBvertex);
+      LW:smallint;p:TzePoint3d);
     constructor initnul(owner:PGDBObjGenericWithSubordinated);
     procedure LoadFromDXF(var rdr:TZMemReader;ptu:PExtensionData;
       var drawing:TDrawingDef;var context:TIODXFLoadContext);virtual;
@@ -45,15 +45,15 @@ type
 
     procedure DrawGeometry(lw:integer;
       var DC:TDrawContext;const inFrustumState:TInBoundingVolume);virtual;
-    function calcinfrustum(const frustum:ClipArray;const Actuality:TVisActuality;
+    function calcinfrustum(const frustum:TzeFrustum;const Actuality:TVisActuality;
       var Counters:TCameraCounters;ProjectProc:GDBProjectProc;
       const zoom,currentdegradationfactor:double):boolean;virtual;
     function getsnap(var osp:os_record;
       var pdata:Pointer;const param:OGLWndtype;ProjectProc:GDBProjectProc;
       SnapMode:TGDBOSMode):boolean;virtual;
     function onmouse(var popa:TZctnrVectorPGDBaseEntity;
-      const MF:ClipArray;InSubEntry:boolean):boolean;virtual;
-    function CalcTrueInFrustum(const frustum:ClipArray):TInBoundingVolume;virtual;
+      const MF:TzeFrustum;InSubEntry:boolean):boolean;virtual;
+    function CalcTrueInFrustum(const frustum:TzeFrustum):TInBoundingVolume;virtual;
     procedure addcontrolpoints(tdesc:Pointer);virtual;
     procedure remaponecontrolpoint(pdesc:pcontrolpointdesc;
       ProjectProc:GDBProjectProc);virtual;
@@ -63,7 +63,7 @@ type
     function GetObjTypeName:string;virtual;
     procedure getoutbound(var DC:TDrawContext);virtual;
 
-    procedure TransformAt(p:PGDBObjEntity;t_matrix:PDMatrix4D);virtual;
+    procedure TransformAt(p:PGDBObjEntity;t_matrix:PzeTypedMatrix4d);virtual;
 
     function CreateInstance:PGDBObjPoint;static;
     function GetObjType:TObjID;virtual;
@@ -162,8 +162,8 @@ var
 begin
   Result:=True;
   for i:=0 to 4 do begin
-    if (frustum[i].v[0]*P_insertInWCS.x+frustum[i].v[1]*
-      P_insertInWCS.y+frustum[i].v[2]*P_insertInWCS.z+frustum[i].v[3]<0) then begin
+    if (frustum.v[i].v[0]*P_insertInWCS.x+frustum.v[i].v[1]*
+      P_insertInWCS.y+frustum.v[i].v[2]*P_insertInWCS.z+frustum.v[i].v[3]<0) then begin
       Result:=False;
       system.break;
     end;
@@ -196,8 +196,8 @@ var
   i:integer;
 begin
   for i:=0 to 5 do begin
-    d1:=MF[i].v[0]*P_insertInWCS.x+MF[i].v[1]*P_insertInWCS.y+
-      MF[i].v[2]*P_insertInWCS.z+MF[i].v[3];
+    d1:=MF.v[i].v[0]*P_insertInWCS.x+MF.v[i].v[1]*P_insertInWCS.y+
+      MF.v[i].v[2]*P_insertInWCS.z+MF.v[i].v[3];
     if d1<0 then begin
       Result:=False;
       exit;
@@ -212,8 +212,8 @@ var
   i:integer;
 begin
   for i:=0 to 5 do begin
-    d1:=frustum[i].v[0]*P_insertInWCS.x+frustum[i].v[1]*
-      P_insertInWCS.y+frustum[i].v[2]*P_insertInWCS.z+frustum[i].v[3];
+    d1:=frustum.v[i].v[0]*P_insertInWCS.x+frustum.v[i].v[1]*
+      P_insertInWCS.y+frustum.v[i].v[2]*P_insertInWCS.z+frustum.v[i].v[3];
     if d1<0 then begin
       Result:=IREmpty;
       exit;
@@ -225,12 +225,12 @@ end;
 procedure GDBObjPoint.remaponecontrolpoint(pdesc:pcontrolpointdesc;
   ProjectProc:GDBProjectProc);
 var
-  tv:GDBvertex;
+  tv:TzePoint3d;
 begin
   if pdesc^.pointtype=os_point then begin
     pdesc.worldcoord:=P_insertInOCS;
     ProjectProc(pdesc.worldcoord,tv);
-    pdesc.dispcoord:=ToVertex2DI(tv);
+    pdesc.dispcoord:=ToTzePoint2i(tv);
   end;
 end;
 

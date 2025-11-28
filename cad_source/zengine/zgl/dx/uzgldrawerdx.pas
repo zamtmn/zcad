@@ -88,8 +88,8 @@ TZGLDXDrawer=class(TZGLGeneralDrawer)
                         procedure SetOGLMatrix(const cam:GDBObjCamera;const w,h:integer);override;
 
                         {}
-                        procedure pushMatrixAndSetTransform(const Transform:DMatrix4D);overload;override;
-                        procedure pushMatrixAndSetTransform(const Transform:DMatrix4F);overload;override;
+                        procedure pushMatrixAndSetTransform(const Transform:DMatrix4d);overload;override;
+                        procedure pushMatrixAndSetTransform(const Transform:DMatrix4f);overload;override;
                         procedure popMatrix;override;
                    end;
 var
@@ -97,12 +97,12 @@ var
    code:integer;
 implementation
 //uses log;
-procedure TZGLDXDrawer.pushMatrixAndSetTransform(const Transform:DMatrix4D);
+procedure TZGLDXDrawer.pushMatrixAndSetTransform(const Transform:DMatrix4d);
 begin
   oglsm.myglPushMatrix;
   oglsm.myglMultMatrixD(Transform);
 end;
-procedure TZGLDXDrawer.pushMatrixAndSetTransform(const Transform:DMatrix4F);
+procedure TZGLDXDrawer.pushMatrixAndSetTransform(const Transform:DMatrix4f);
 begin
   oglsm.myglPushMatrix;
   oglsm.myglMultMatrixF(Transform);

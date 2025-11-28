@@ -33,6 +33,7 @@ uses
   uzeentcircle,uzeentarc,uzeentline,uzeentblockinsert,uzeenttext,
   uzeentmtext,uzeentpolyline,uzcentelleader,uzeentdimension,uzeentellipse,
   uzeEntSpline,
+  uzeenthatch,
   uzegeometry,uzcoimultiproperties,uzcLog,
   uzcExtdrLayerControl,uzcExtdrSmartTextEnt,uzcExtdrSCHConnector,
   uzcutils,uzcdrawing,uzcdrawings,zUndoCmdChgTypes,zUndoCmdChgVariable,
@@ -47,7 +48,7 @@ var
     l1,l2:Double;
 begin
      l1:=PDouble(ChangedData.PGetDataInEtity)^;
-     inc(ChangedData.PGetDataInEtity,sizeof(GDBVertex));
+     inc(ChangedData.PGetDataInEtity,sizeof(TzePoint3d));
      l2:=PDouble(ChangedData.PGetDataInEtity)^;
      l1:=l2-l1;
      ChangedData.PGetDataInEtity:=@l1;
@@ -56,12 +57,12 @@ end;
 
 procedure DoubleLengthEntIterateProc(pdata:Pointer;ChangedData:TChangedData;mp:TMultiProperty;fistrun:boolean;ecp:TEntChangeProc; const f:TzeUnitsFormat);
 var
-    v1,v2:GDBVertex;
+    v1,v2:TzePoint3d;
     l1:Double;
 begin
-     V1:=PGDBVertex(ChangedData.PGetDataInEtity)^;
-     inc(ChangedData.PGetDataInEtity,sizeof(GDBVertex));
-     V2:=PGDBVertex(ChangedData.PGetDataInEtity)^;
+     V1:=PzePoint3d(ChangedData.PGetDataInEtity)^;
+     inc(ChangedData.PGetDataInEtity,sizeof(TzePoint3d));
+     V2:=PzePoint3d(ChangedData.PGetDataInEtity)^;
      l1:=Vertexlength(v1,v2);
      ChangedData.PGetDataInEtity:=@l1;
      GeneralEntIterateProc(pdata,ChangedData,mp,fistrun,ecp,f);
@@ -69,16 +70,16 @@ end;
 
 procedure DoubleSumLengthEntIterateProc(pdata:Pointer;ChangedData:TChangedData;mp:TMultiProperty;fistrun:boolean;ecp:TEntChangeProc; const f:TzeUnitsFormat);
 var
-    v1,v2:GDBVertex;
+    v1,v2:TzePoint3d;
     l1:Double;
     pvd:pvardesk;
     pvdata:PDouble;
 begin
   pvd:=PTOneVarData(mp.PIiterateData)^.VDAddr.Instance;
   pvdata:=pvd^.data.Addr.Instance;
-     V1:=PGDBVertex(ChangedData.PGetDataInEtity)^;
-     inc(ChangedData.PGetDataInEtity,sizeof(GDBVertex));
-     V2:=PGDBVertex(ChangedData.PGetDataInEtity)^;
+     V1:=PzePoint3d(ChangedData.PGetDataInEtity)^;
+     inc(ChangedData.PGetDataInEtity,sizeof(TzePoint3d));
+     V2:=PzePoint3d(ChangedData.PGetDataInEtity)^;
      l1:=Vertexlength(v1,v2);
      if @ecp=nil then pvd^.attrib:=pvd^.attrib or vda_RO;
      if fistrun then
@@ -89,12 +90,12 @@ end;
 
 procedure DoubleAngleEntIterateProc(pdata:Pointer;ChangedData:TChangedData;mp:TMultiProperty;fistrun:boolean;ecp:TEntChangeProc; const f:TzeUnitsFormat);
 var
-    v1,v2:GDBVertex;
+    v1,v2:TzePoint3d;
     l1:Double;
 begin
-     V1:=PGDBVertex(ChangedData.PGetDataInEtity)^;
-     inc(ChangedData.PGetDataInEtity,sizeof(GDBVertex));
-     V2:=PGDBVertex(ChangedData.PGetDataInEtity)^;
+     V1:=PzePoint3d(ChangedData.PGetDataInEtity)^;
+     inc(ChangedData.PGetDataInEtity,sizeof(TzePoint3d));
+     V2:=PzePoint3d(ChangedData.PGetDataInEtity)^;
      v1:=VertexSub(v2,v1);
      v1:=NormalizeVertex(v1);
      l1:=scalardot(v1,_X_yzVertex);
@@ -106,7 +107,7 @@ end;
 
 procedure DoubleAngleTextIterateProc(pdata:Pointer;ChangedData:TChangedData;mp:TMultiProperty;fistrun:boolean;ecp:TEntChangeProc; const f:TzeUnitsFormat);
 var
-    v1,v2:GDBVertex;
+    v1,v2:TzePoint3d;
     l1:Double;
 begin
      V1:=PGDBObjWithLocalCS(ChangedData.PGetDataInEtity)^.Local.basis.ox;
@@ -120,13 +121,13 @@ end;
 
 procedure DoubleWCSAngleTextIterateProc(pdata:Pointer;ChangedData:TChangedData;mp:TMultiProperty;fistrun:boolean;ecp:TEntChangeProc; const f:TzeUnitsFormat);
 var
-    v1,v2:GDBVertex;
+    v1,v2:TzePoint3d;
     l1,l0:Double;
     //a0,a1,a:double;
 begin
 
      if PGDBObjEntity(ChangedData.PGetDataInEtity)^.bp.ListPos.owner<>nil then begin
-       V1:=PGDBvertex(@PGDBObjEntity(ChangedData.PGetDataInEtity)^.bp.ListPos.owner^.GetMatrix^.mtr[0])^;
+       V1:=PzePoint3d(@PGDBObjEntity(ChangedData.PGetDataInEtity)^.bp.ListPos.owner^.GetMatrix^.mtr.v[0])^;
        l0:=scalardot(NormalizeVertex(V1),_X_yzVertex);
        l0:=arccos(l0);
        if v1.y<-eps then l0:=2*pi-l0;
@@ -321,7 +322,7 @@ var
 begin
   oldValue:=PDouble(pvardesk(pdata)^.data.Addr.Instance)^;
   delta:=PDouble(ChangedData.PSetDataInEtity)^;
-  inc(ChangedData.PSetDataInEtity,sizeof(GDBVertex));
+  inc(ChangedData.PSetDataInEtity,sizeof(TzePoint3d));
   PDouble(pvardesk(pdata)^.data.Addr.Instance)^:=delta+PDouble(pvardesk(pdata)^.data.Addr.Instance)^;
   ProcessVariableAttributes(pvardesk(pdata)^.attrib,0,vda_approximately or vda_different);
   GeneralFromPtrEntChangeProc(UMPlaced,pu,pdata,ChangedData,mp);
@@ -329,13 +330,13 @@ begin
 end;
 procedure DoubleLengthEntChangeProc(var UMPlaced:boolean;pu:PTEntityUnit;pdata:PVarDesk;ChangedData:TChangedData;mp:TMultiProperty);
 var
-  v1,v2:GDBVertex;
+  v1,v2:TzePoint3d;
   l1:Double;
   cp:UCmdChgField;
 begin
-  V1:=PGDBVertex(ChangedData.PSetDataInEtity)^;
-  inc(ChangedData.PSetDataInEtity,sizeof(GDBVertex));
-  V2:=PGDBVertex(ChangedData.PSetDataInEtity)^;
+  V1:=PzePoint3d(ChangedData.PSetDataInEtity)^;
+  inc(ChangedData.PSetDataInEtity,sizeof(TzePoint3d));
+  V2:=PzePoint3d(ChangedData.PSetDataInEtity)^;
   l1:=PDouble(pvardesk(pdata)^.data.Addr.Instance)^;
   V2:=VertexSub(V2,V1);
   V2:=normalizevertex(V2);
@@ -344,22 +345,22 @@ begin
 
   PlaceUndoStartMarkerPropertyChangedIfNeed(UMPlaced);
   cp:=UCmdChgField.CreateAndPush(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,
-                                 TChangedFieldDesc.CreateRec(SysUnit^.TypeName2PTD('GDBvertex'),ChangedData.PSetDataInEtity,ChangedData.PSetDataInEtity),
+                                 TChangedFieldDesc.CreateRec(SysUnit^.TypeName2PTD('TzePoint3d'),ChangedData.PSetDataInEtity,ChangedData.PSetDataInEtity),
                                  TSharedPEntityData.CreateRec(ChangedData.PEntity),
                                  TAfterChangePDrawing.CreateRec(drawings.GetCurrentDWG));
 
-  PGDBVertex(ChangedData.PSetDataInEtity)^:=VertexAdd(v1,v2);
+  PzePoint3d(ChangedData.PSetDataInEtity)^:=VertexAdd(v1,v2);
 end;
 procedure DoubleAngleEntChangeProc(var UMPlaced:boolean;pu:PTEntityUnit;pdata:PVarDesk;ChangedData:TChangedData;mp:TMultiProperty);
 var
-  v1,v2:GDBVertex;
+  v1,v2:TzePoint3d;
   l1,d:Double;
   cp:UCmdChgField;
 begin
   {TODO: Надо пересчитать из текущих едениц чертежа в градусы}
-  V1:=PGDBVertex(ChangedData.PSetDataInEtity)^;
-  inc(ChangedData.PSetDataInEtity,sizeof(GDBVertex));
-  V2:=PGDBVertex(ChangedData.PSetDataInEtity)^;
+  V1:=PzePoint3d(ChangedData.PSetDataInEtity)^;
+  inc(ChangedData.PSetDataInEtity,sizeof(TzePoint3d));
+  V2:=PzePoint3d(ChangedData.PSetDataInEtity)^;
   d:=vertexlength(v2,v1);
   l1:=PDouble(pvardesk(pdata)^.data.Addr.Instance)^;
   SinCos(l1,V2.y,V2.x);
@@ -369,11 +370,11 @@ begin
 
   PlaceUndoStartMarkerPropertyChangedIfNeed(UMPlaced);
   cp:=UCmdChgField.CreateAndPush(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,
-                                 TChangedFieldDesc.CreateRec(SysUnit^.TypeName2PTD('GDBvertex'),ChangedData.PSetDataInEtity,ChangedData.PSetDataInEtity),
+                                 TChangedFieldDesc.CreateRec(SysUnit^.TypeName2PTD('TzePoint3d'),ChangedData.PSetDataInEtity,ChangedData.PSetDataInEtity),
                                  TSharedPEntityData.CreateRec(ChangedData.PEntity),
                                  TAfterChangePDrawing.CreateRec(drawings.GetCurrentDWG));
 
-  PGDBVertex(ChangedData.PSetDataInEtity)^:=VertexAdd(v1,v2);
+  PzePoint3d(ChangedData.PSetDataInEtity)^:=VertexAdd(v1,v2);
 end;
 procedure CurrentAngleFormat2DegEntChangeProc(var UMPlaced:boolean;pu:PTEntityUnit;pdata:PVarDesk;ChangedData:TChangedData;mp:TMultiProperty);
 var
@@ -514,7 +515,7 @@ begin
 
   PlaceUndoStartMarkerPropertyChangedIfNeed(UMPlaced);
   cp:=UCmdChgField.CreateAndPush(PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack,
-                                 TChangedFieldDesc.CreateRec(SysUnit^.TypeName2PTD('GDBvertex'),@PGDBObjText(ChangedData.PEntity)^.local.basis.OX,@PGDBObjText(ChangedData.PEntity)^.local.basis.OX),
+                                 TChangedFieldDesc.CreateRec(SysUnit^.TypeName2PTD('TzePoint3d'),@PGDBObjText(ChangedData.PEntity)^.local.basis.OX,@PGDBObjText(ChangedData.PEntity)^.local.basis.OX),
                                  TSharedPEntityData.CreateRec(ChangedData.PEntity),
                                  TAfterChangePDrawing.CreateRec(drawings.GetCurrentDWG));
 
@@ -557,6 +558,7 @@ const
      pmtext:PGDBObjMText=nil;
      p3dpoly:PGDBObjPolyline=nil;
      pspline:PGDBObjSpline=nil;
+     phatch:PGDBObjHatch=nil;
      pelleader:PGDBObjElLeader=nil;
      pdim:PGDBObjDimension=nil;
      pellipse:PGDBObjEllipse=nil;
@@ -603,7 +605,7 @@ begin
     MultiPropertiesManager.RegisterPhysMultiproperty('Color','Color',sysunit^.TypeName2PTD('TGDBPaletteColor'),MPCGeneral,0,nil,PtrInt(@pent^.vp.Color),PtrInt(@pent^.vp.Color),OneVarDataMIPD,OneVarDataEIPD);
     MultiPropertiesManager.RegisterPhysMultiproperty('Layer','Layer',sysunit^.TypeName2PTD('PGDBLayerPropObjInsp'),MPCGeneral,0,nil,PtrInt(@pent^.vp.Layer),PtrInt(@pent^.vp.Layer),OneVarDataMIPD,OneVarDataEIPD);
     MultiPropertiesManager.RegisterPhysMultiproperty('LineType','Linetype',sysunit^.TypeName2PTD('PGDBLtypePropObjInsp'),MPCGeneral,0,nil,PtrInt(@pent^.vp.LineType),PtrInt(@pent^.vp.LineType),OneVarDataMIPD,OneVarDataEIPD);
-    MultiPropertiesManager.RegisterPhysMultiproperty('LineTypeScale','Linetype scale',sysunit^.TypeName2PTD('GDBNonDimensionDouble'),MPCGeneral,0,nil,PtrInt(@pent^.vp.LineTypeScale),PtrInt(@pent^.vp.LineTypeScale),OneVarDataMIPD,OneVarDataEIPD);
+    MultiPropertiesManager.RegisterPhysMultiproperty('LineTypeScale','Linetype scale',sysunit^.TypeName2PTD('TZeDimLess'),MPCGeneral,0,nil,PtrInt(@pent^.vp.LineTypeScale),PtrInt(@pent^.vp.LineTypeScale),OneVarDataMIPD,OneVarDataEIPD);
     MultiPropertiesManager.RegisterPhysMultiproperty('LineWeight','Lineweight',sysunit^.TypeName2PTD('TGDBLineWeight'),MPCGeneral,0,nil,PtrInt(@pent^.vp.LineWeight),PtrInt(@pent^.vp.LineWeight),OneVarDataMIPD,OneVarDataEIPD);
     MultiPropertiesManager.RegisterPhysMultiproperty('FILTER_EntsByLayers','Ents by layers',sysunit^.TypeName2PTD('TMSEntsLayersDetector'),MPCSummary,0,nil,PtrInt(@pent^.vp.Layer),PtrInt(@pent^.vp.Layer),TMainIterateProcsData.Create(@GetPointerCounterData,@FreePNamedObjectCounterDataUTF8),TEntIterateProcsData.Create(nil,@PStyle2PStyleCounterIterateProc,nil),MPUM_AtLeastOneEntMatched);
     MultiPropertiesManager.RegisterPhysMultiproperty('FILTER_EntsByLinesTypes','Ents by linetypes',sysunit^.TypeName2PTD('TMSEntsLinetypesDetector'),MPCSummary,0,nil,PtrInt(@pent^.vp.LineType),PtrInt(@pent^.vp.LineType),TMainIterateProcsData.Create(@GetPointerCounterData,@FreePNamedObjectCounterData),TEntIterateProcsData.Create(nil,@PStyle2PStyleCounterIterateProc,nil),MPUM_AtLeastOneEntMatched);
@@ -613,9 +615,9 @@ begin
 
     {Circle uzegeometry}
     MultiPropertiesManager.RestartMultipropertySortID;
-    MultiPropertiesManager.RegisterPhysMultiproperty('CENTER_X','Center X',sysunit^.TypeName2PTD('GDBXCoordinate'),MPCGeometry,GDBCircleID,nil,PtrInt(@pcircle^.P_insert_in_WCS.x),PtrInt(@pcircle^.Local.P_insert.x),OneVarDataMIPD,OneVarDataEIPD);
-    MultiPropertiesManager.RegisterPhysMultiproperty('CENTER_Y','Center Y',sysunit^.TypeName2PTD('GDBYCoordinate'),MPCGeometry,GDBCircleID,nil,PtrInt(@pcircle^.P_insert_in_WCS.y),PtrInt(@pcircle^.Local.P_insert.y),OneVarDataMIPD,OneVarDataEIPD);
-    MultiPropertiesManager.RegisterPhysMultiproperty('CENTER_Z','Center Z',sysunit^.TypeName2PTD('GDBZCoordinate'),MPCGeometry,GDBCircleID,nil,PtrInt(@pcircle^.P_insert_in_WCS.z),PtrInt(@pcircle^.Local.P_insert.z),OneVarDataMIPD,OneVarDataEIPD);
+    MultiPropertiesManager.RegisterPhysMultiproperty('CENTER_X','Center X',sysunit^.TypeName2PTD('TzeXUnits'),MPCGeometry,GDBCircleID,nil,PtrInt(@pcircle^.P_insert_in_WCS.x),PtrInt(@pcircle^.Local.P_insert.x),OneVarDataMIPD,OneVarDataEIPD);
+    MultiPropertiesManager.RegisterPhysMultiproperty('CENTER_Y','Center Y',sysunit^.TypeName2PTD('TzeYUnits'),MPCGeometry,GDBCircleID,nil,PtrInt(@pcircle^.P_insert_in_WCS.y),PtrInt(@pcircle^.Local.P_insert.y),OneVarDataMIPD,OneVarDataEIPD);
+    MultiPropertiesManager.RegisterPhysMultiproperty('CENTER_Z','Center Z',sysunit^.TypeName2PTD('TzeZUnits'),MPCGeometry,GDBCircleID,nil,PtrInt(@pcircle^.P_insert_in_WCS.z),PtrInt(@pcircle^.Local.P_insert.z),OneVarDataMIPD,OneVarDataEIPD);
     MultiPropertiesManager.RegisterPhysMultiproperty('Radius','Radius',sysunit^.TypeName2PTD('Double'),MPCGeometry,GDBCircleID,nil,PtrInt(@pcircle^.Radius),PtrInt(@pcircle^.Radius),OneVarDataMIPD,TEntIterateProcsData.Create(nil,@GeneralEntIterateProc,@GeneralFromVarEntChangeProc,@DoubleCheckGreater0));
     MultiPropertiesManager.RegisterPhysMultiproperty('Diameter','Diameter',sysunit^.TypeName2PTD('Double'),MPCGeometry,GDBCircleID,nil,PtrInt(@pcircle^.Radius),PtrInt(@pcircle^.Radius),OneVarDataMIPD,TEntIterateProcsData.Create(nil,@DoubleMul2EntIterateProc,@DoubleDiv2EntChangeProc,@DoubleCheckGreater0));
     MultiPropertiesManager.RegisterPhysMultiproperty('Circumference','Circumference',sysunit^.TypeName2PTD('Double'),MPCGeometry,GDBCircleID,nil,PtrInt(@pcircle^.Radius),PtrInt(@pcircle^.Radius),OneVarDataMIPD,TEntIterateProcsData.Create(nil,@DoubleR2CircumferenceEntIterateProc,@DoubleCircumference2REntChangeProc));
@@ -629,13 +631,13 @@ begin
 
     {Arc uzegeometry}
     MultiPropertiesManager.RestartMultipropertySortID;
-    MultiPropertiesManager.RegisterPhysMultiproperty('CENTER_X','Center X',sysunit^.TypeName2PTD('GDBXCoordinate'),MPCGeometry,GDBArcID,nil,PtrInt(@parc^.P_insert_in_WCS.x),PtrInt(@parc^.Local.P_insert.x),OneVarDataMIPD,OneVarDataEIPD);
-    MultiPropertiesManager.RegisterPhysMultiproperty('CENTER_Y','Center Y',sysunit^.TypeName2PTD('GDBYCoordinate'),MPCGeometry,GDBArcID,nil,PtrInt(@parc^.P_insert_in_WCS.y),PtrInt(@parc^.Local.P_insert.y),OneVarDataMIPD,OneVarDataEIPD);
-    MultiPropertiesManager.RegisterPhysMultiproperty('CENTER_Z','Center Z',sysunit^.TypeName2PTD('GDBZCoordinate'),MPCGeometry,GDBArcID,nil,PtrInt(@parc^.P_insert_in_WCS.z),PtrInt(@parc^.Local.P_insert.z),OneVarDataMIPD,OneVarDataEIPD);
+    MultiPropertiesManager.RegisterPhysMultiproperty('CENTER_X','Center X',sysunit^.TypeName2PTD('TzeXUnits'),MPCGeometry,GDBArcID,nil,PtrInt(@parc^.P_insert_in_WCS.x),PtrInt(@parc^.Local.P_insert.x),OneVarDataMIPD,OneVarDataEIPD);
+    MultiPropertiesManager.RegisterPhysMultiproperty('CENTER_Y','Center Y',sysunit^.TypeName2PTD('TzeYUnits'),MPCGeometry,GDBArcID,nil,PtrInt(@parc^.P_insert_in_WCS.y),PtrInt(@parc^.Local.P_insert.y),OneVarDataMIPD,OneVarDataEIPD);
+    MultiPropertiesManager.RegisterPhysMultiproperty('CENTER_Z','Center Z',sysunit^.TypeName2PTD('TzeZUnits'),MPCGeometry,GDBArcID,nil,PtrInt(@parc^.P_insert_in_WCS.z),PtrInt(@parc^.Local.P_insert.z),OneVarDataMIPD,OneVarDataEIPD);
     MultiPropertiesManager.RegisterPhysMultiproperty('Radius','Radius',sysunit^.TypeName2PTD('Double'),MPCGeometry,GDBArcID,nil,PtrInt(@parc^.R),PtrInt(@parc^.R),OneVarDataMIPD,TEntIterateProcsData.Create(nil,@GeneralEntIterateProc,@GeneralFromVarEntChangeProc,@DoubleCheckGreater0));
     MultiPropertiesManager.RegisterPhysMultiproperty('Diameter','Diameter',sysunit^.TypeName2PTD('Double'),MPCGeometry,GDBArcID,nil,PtrInt(@parc^.R),PtrInt(@parc^.R),OneVarDataMIPD,TEntIterateProcsData.Create(nil,@DoubleMul2EntIterateProc,@DoubleDiv2EntChangeProc,@DoubleCheckGreater0));
-    MultiPropertiesManager.RegisterPhysMultiproperty('StartAngle','Start angle',sysunit^.TypeName2PTD('GDBAngleDouble'),MPCGeometry,GDBArcID,nil,PtrInt(@parc^.StartAngle),PtrInt(@parc^.StartAngle),OneVarDataMIPD,TEntIterateProcsData.Create(nil,{@DoubleRad2DegEntIterateProc}@GeneralEntIterateProc,@CurrentAngleFormat2DegEntChangeProc));
-    MultiPropertiesManager.RegisterPhysMultiproperty('EndAngle','End angle',sysunit^.TypeName2PTD('GDBAngleDouble'),MPCGeometry,GDBArcID,nil,PtrInt(@parc^.EndAngle),PtrInt(@parc^.EndAngle),OneVarDataMIPD,TEntIterateProcsData.Create(nil,{@DoubleRad2DegEntIterateProc}@GeneralEntIterateProc,@CurrentAngleFormat2DegEntChangeProc));
+    MultiPropertiesManager.RegisterPhysMultiproperty('StartAngle','Start angle',sysunit^.TypeName2PTD('TZeAngle'),MPCGeometry,GDBArcID,nil,PtrInt(@parc^.StartAngle),PtrInt(@parc^.StartAngle),OneVarDataMIPD,TEntIterateProcsData.Create(nil,{@DoubleRad2DegEntIterateProc}@GeneralEntIterateProc,@CurrentAngleFormat2DegEntChangeProc));
+    MultiPropertiesManager.RegisterPhysMultiproperty('EndAngle','End angle',sysunit^.TypeName2PTD('TZeAngle'),MPCGeometry,GDBArcID,nil,PtrInt(@parc^.EndAngle),PtrInt(@parc^.EndAngle),OneVarDataMIPD,TEntIterateProcsData.Create(nil,{@DoubleRad2DegEntIterateProc}@GeneralEntIterateProc,@CurrentAngleFormat2DegEntChangeProc));
     MultiPropertiesManager.RegisterPhysMultiproperty('Circumference','Circumference',sysunit^.TypeName2PTD('Double'),MPCGeometry,GDBArcID,nil,0,PtrInt(@parc^.R),OneVarDataMIPD,TEntIterateProcsData.Create(nil,@DoubleArcCircumferenceEntIterateProc,@DoubleArcCircumferenceEntChangeProc));
     MultiPropertiesManager.RegisterPhysMultiproperty('Area','Area',sysunit^.TypeName2PTD('Double'),MPCGeometry,GDBArcID,nil,0,0,OneVarDataMIPD,TEntIterateProcsData.Create(nil,@DoubleArcAreaEntIterateProc,@DoubleArcArea2REntChangeProc));
     MultiPropertiesManager.RegisterPhysMultiproperty('NORMAL_X','Normal X',sysunit^.TypeName2PTD('Double'),MPCGeometry,GDBArcID,nil,PtrInt(@parc^.Local.Basis.oz.x),0,OneVarDataMIPD,OneVarRODataEIPD);
@@ -648,9 +650,9 @@ begin
 
     {Ellipse uzegeometry}
     MultiPropertiesManager.RestartMultipropertySortID;
-    MultiPropertiesManager.RegisterPhysMultiproperty('CENTER_X','Center X',sysunit^.TypeName2PTD('GDBXCoordinate'),MPCGeometry,GDBEllipseID,nil,PtrInt(@pellipse^.P_insert_in_WCS.x),PtrInt(@pellipse^.Local.P_insert.x),OneVarDataMIPD,OneVarDataEIPD);
-    MultiPropertiesManager.RegisterPhysMultiproperty('CENTER_Y','Center Y',sysunit^.TypeName2PTD('GDBYCoordinate'),MPCGeometry,GDBEllipseID,nil,PtrInt(@pellipse^.P_insert_in_WCS.y),PtrInt(@pellipse^.Local.P_insert.y),OneVarDataMIPD,OneVarDataEIPD);
-    MultiPropertiesManager.RegisterPhysMultiproperty('CENTER_Z','Center Z',sysunit^.TypeName2PTD('GDBZCoordinate'),MPCGeometry,GDBEllipseID,nil,PtrInt(@pellipse^.P_insert_in_WCS.z),PtrInt(@pellipse^.Local.P_insert.z),OneVarDataMIPD,OneVarDataEIPD);
+    MultiPropertiesManager.RegisterPhysMultiproperty('CENTER_X','Center X',sysunit^.TypeName2PTD('TzeXUnits'),MPCGeometry,GDBEllipseID,nil,PtrInt(@pellipse^.P_insert_in_WCS.x),PtrInt(@pellipse^.Local.P_insert.x),OneVarDataMIPD,OneVarDataEIPD);
+    MultiPropertiesManager.RegisterPhysMultiproperty('CENTER_Y','Center Y',sysunit^.TypeName2PTD('TzeYUnits'),MPCGeometry,GDBEllipseID,nil,PtrInt(@pellipse^.P_insert_in_WCS.y),PtrInt(@pellipse^.Local.P_insert.y),OneVarDataMIPD,OneVarDataEIPD);
+    MultiPropertiesManager.RegisterPhysMultiproperty('CENTER_Z','Center Z',sysunit^.TypeName2PTD('TzeZUnits'),MPCGeometry,GDBEllipseID,nil,PtrInt(@pellipse^.P_insert_in_WCS.z),PtrInt(@pellipse^.Local.P_insert.z),OneVarDataMIPD,OneVarDataEIPD);
     MultiPropertiesManager.RegisterPhysMultiproperty('MajorRadius','Major radius',sysunit^.TypeName2PTD('Double'),MPCGeometry,GDBEllipseID,nil,PtrInt(@pellipse^.RR),PtrInt(@pellipse^.RR),OneVarDataMIPD,TEntIterateProcsData.Create(nil,@GeneralEntIterateProc,@GeneralFromVarEntChangeProc,@DoubleCheckGreater0));
     MultiPropertiesManager.RegisterPhysMultiproperty('RadiusRatio','Radius ratio',sysunit^.TypeName2PTD('Double'),MPCGeometry,GDBEllipseID,nil,PtrInt(@pellipse^.Ratio),PtrInt(@pellipse^.Ratio),OneVarDataMIPD,TEntIterateProcsData.Create(nil,@GeneralEntIterateProc,@GeneralFromVarEntChangeProc,@DoubleCheck0Exclude1Include));
     //MultiPropertiesManager.RegisterPhysMultiproperty('Diameter','Diameter',sysunit^.TypeName2PTD('Double'),MPCGeometry,GDBEllipseID,PtrInt(@pellipse^.RR),PtrInt(@pellipse^.RR),@GetOneVarData,@FreeOneVarData,@DoubleMul2EntIterateProc,@DoubleDiv2EntChangeProc);
@@ -668,43 +670,43 @@ begin
 
     {Line uzegeometry}
     MultiPropertiesManager.RestartMultipropertySortID;
-    MultiPropertiesManager.RegisterPhysMultiproperty('START_X','Start X',sysunit^.TypeName2PTD('GDBXCoordinate'),MPCGeometry,GDBLineID,nil,PtrInt(@pline^.CoordInOCS.lBegin),PtrInt(@pline^.CoordInOCS.lBegin.x),OneVarDataMIPD,TEntIterateProcsData.create(nil,@VertexXOCSEntIterateProc,@GeneralFromVarEntChangeProc));
-    MultiPropertiesManager.RegisterPhysMultiproperty('START_Y','Start Y',sysunit^.TypeName2PTD('GDBYCoordinate'),MPCGeometry,GDBLineID,nil,PtrInt(@pline^.CoordInOCS.lBegin),PtrInt(@pline^.CoordInOCS.lBegin.y),OneVarDataMIPD,TEntIterateProcsData.create(nil,@VertexYOCSEntIterateProc,@GeneralFromVarEntChangeProc));
-    MultiPropertiesManager.RegisterPhysMultiproperty('START_Z','Start Z',sysunit^.TypeName2PTD('GDBZCoordinate'),MPCGeometry,GDBLineID,nil,PtrInt(@pline^.CoordInOCS.lBegin),PtrInt(@pline^.CoordInOCS.lBegin.z),OneVarDataMIPD,TEntIterateProcsData.create(nil,@VertexZOCSEntIterateProc,@GeneralFromVarEntChangeProc));
-    MultiPropertiesManager.RegisterPhysMultiproperty('END_X','End X',sysunit^.TypeName2PTD('GDBXCoordinate'),MPCGeometry,GDBLineID,nil,PtrInt(@pline^.CoordInWCS.lEnd.x),PtrInt(@pline^.CoordInOCS.lEnd.x),OneVarDataMIPD,OneVarDataEIPD);
-    MultiPropertiesManager.RegisterPhysMultiproperty('END_Y','End Y',sysunit^.TypeName2PTD('GDBYCoordinate'),MPCGeometry,GDBLineID,nil,PtrInt(@pline^.CoordInWCS.lEnd.y),PtrInt(@pline^.CoordInOCS.lEnd.y),OneVarDataMIPD,OneVarDataEIPD);
-    MultiPropertiesManager.RegisterPhysMultiproperty('END_Z','End Z',sysunit^.TypeName2PTD('GDBZCoordinate'),MPCGeometry,GDBLineID,nil,PtrInt(@pline^.CoordInWCS.lEnd.z),PtrInt(@pline^.CoordInOCS.lEnd.z),OneVarDataMIPD,OneVarDataEIPD);
+    MultiPropertiesManager.RegisterPhysMultiproperty('START_X','Start X',sysunit^.TypeName2PTD('TzeXUnits'),MPCGeometry,GDBLineID,nil,PtrInt(@pline^.CoordInOCS.lBegin),PtrInt(@pline^.CoordInOCS.lBegin.x),OneVarDataMIPD,TEntIterateProcsData.create(nil,@VertexXOCSEntIterateProc,@GeneralFromVarEntChangeProc));
+    MultiPropertiesManager.RegisterPhysMultiproperty('START_Y','Start Y',sysunit^.TypeName2PTD('TzeYUnits'),MPCGeometry,GDBLineID,nil,PtrInt(@pline^.CoordInOCS.lBegin),PtrInt(@pline^.CoordInOCS.lBegin.y),OneVarDataMIPD,TEntIterateProcsData.create(nil,@VertexYOCSEntIterateProc,@GeneralFromVarEntChangeProc));
+    MultiPropertiesManager.RegisterPhysMultiproperty('START_Z','Start Z',sysunit^.TypeName2PTD('TzeZUnits'),MPCGeometry,GDBLineID,nil,PtrInt(@pline^.CoordInOCS.lBegin),PtrInt(@pline^.CoordInOCS.lBegin.z),OneVarDataMIPD,TEntIterateProcsData.create(nil,@VertexZOCSEntIterateProc,@GeneralFromVarEntChangeProc));
+    MultiPropertiesManager.RegisterPhysMultiproperty('END_X','End X',sysunit^.TypeName2PTD('TzeXUnits'),MPCGeometry,GDBLineID,nil,PtrInt(@pline^.CoordInWCS.lEnd.x),PtrInt(@pline^.CoordInOCS.lEnd.x),OneVarDataMIPD,OneVarDataEIPD);
+    MultiPropertiesManager.RegisterPhysMultiproperty('END_Y','End Y',sysunit^.TypeName2PTD('TzeYUnits'),MPCGeometry,GDBLineID,nil,PtrInt(@pline^.CoordInWCS.lEnd.y),PtrInt(@pline^.CoordInOCS.lEnd.y),OneVarDataMIPD,OneVarDataEIPD);
+    MultiPropertiesManager.RegisterPhysMultiproperty('END_Z','End Z',sysunit^.TypeName2PTD('TzeZUnits'),MPCGeometry,GDBLineID,nil,PtrInt(@pline^.CoordInWCS.lEnd.z),PtrInt(@pline^.CoordInOCS.lEnd.z),OneVarDataMIPD,OneVarDataEIPD);
     MultiPropertiesManager.RegisterPhysMultiproperty('DELTA_X','Delta X',sysunit^.TypeName2PTD('Double'),MPCGeometry,GDBLineID,nil,PtrInt(@pline^.CoordInWCS.lBegin.x),PtrInt(@pline^.CoordInOCS.lBegin.x),OneVarDataMIPD,TEntIterateProcsData.Create(nil,@DoubleDeltaEntIterateProc,@DoubleDeltaEntChangeProc));
     MultiPropertiesManager.RegisterPhysMultiproperty('DELTA_Y','Delta Y',sysunit^.TypeName2PTD('Double'),MPCGeometry,GDBLineID,nil,PtrInt(@pline^.CoordInWCS.lBegin.y),PtrInt(@pline^.CoordInOCS.lBegin.y),OneVarDataMIPD,TEntIterateProcsData.Create(nil,@DoubleDeltaEntIterateProc,@DoubleDeltaEntChangeProc));
     MultiPropertiesManager.RegisterPhysMultiproperty('DELTA_Z','Delta Z',sysunit^.TypeName2PTD('Double'),MPCGeometry,GDBLineID,nil,PtrInt(@pline^.CoordInWCS.lBegin.z),PtrInt(@pline^.CoordInOCS.lBegin.z),OneVarDataMIPD,TEntIterateProcsData.Create(nil,@DoubleDeltaEntIterateProc,@DoubleDeltaEntChangeProc));
     MultiPropertiesManager.RegisterPhysMultiproperty('Length','Length',sysunit^.TypeName2PTD('Double'),MPCGeometry,GDBLineID,nil,PtrInt(@pline^.CoordInWCS.lBegin),PtrInt(@pline^.CoordInOCS.lBegin),OneVarDataMIPD,TEntIterateProcsData.Create(nil,@DoubleLengthEntIterateProc,@DoubleLengthEntChangeProc));
-    MultiPropertiesManager.RegisterPhysMultiproperty('Angle','Angle',sysunit^.TypeName2PTD('GDBAngleDouble'),MPCGeometry,GDBLineID,nil,PtrInt(@pline^.CoordInWCS.lBegin),PtrInt(@pline^.CoordInOCS.lBegin),OneVarDataMIPD,TEntIterateProcsData.Create(nil,@DoubleAngleEntIterateProc,@DoubleAngleEntChangeProc));
+    MultiPropertiesManager.RegisterPhysMultiproperty('Angle','Angle',sysunit^.TypeName2PTD('TZeAngle'),MPCGeometry,GDBLineID,nil,PtrInt(@pline^.CoordInWCS.lBegin),PtrInt(@pline^.CoordInOCS.lBegin),OneVarDataMIPD,TEntIterateProcsData.Create(nil,@DoubleAngleEntIterateProc,@DoubleAngleEntChangeProc));
     {--Summary}
     MultiPropertiesManager.RegisterPhysMultiproperty('TotalLength','Total length',sysunit^.TypeName2PTD('Double'),MPCSummary,GDBLineID,nil,PtrInt(@pline^.CoordInWCS.lBegin),PtrInt(@pline^.CoordInWCS.lBegin),OneVarDataMIPD,TEntIterateProcsData.Create(nil,@DoubleSumLengthEntIterateProc,nil));
 
 
     {SuperLine uzegeometry}
     MultiPropertiesManager.RestartMultipropertySortID;
-    MultiPropertiesManager.RegisterPhysMultiproperty('START_X','Start X',sysunit^.TypeName2PTD('GDBXCoordinate'),MPCGeometry,GDBSuperLineID,nil,PtrInt(@pline^.CoordInWCS.lBegin.x),PtrInt(@pline^.CoordInOCS.lBegin.x),OneVarDataMIPD,OneVarDataEIPD);
-    MultiPropertiesManager.RegisterPhysMultiproperty('START_Y','Start Y',sysunit^.TypeName2PTD('GDBYCoordinate'),MPCGeometry,GDBSuperLineID,nil,PtrInt(@pline^.CoordInWCS.lBegin.y),PtrInt(@pline^.CoordInOCS.lBegin.y),OneVarDataMIPD,OneVarDataEIPD);
-    MultiPropertiesManager.RegisterPhysMultiproperty('START_Z','Start Z',sysunit^.TypeName2PTD('GDBZCoordinate'),MPCGeometry,GDBSuperLineID,nil,PtrInt(@pline^.CoordInWCS.lBegin.z),PtrInt(@pline^.CoordInOCS.lBegin.z),OneVarDataMIPD,OneVarDataEIPD);
-    MultiPropertiesManager.RegisterPhysMultiproperty('END_X','End X',sysunit^.TypeName2PTD('GDBXCoordinate'),MPCGeometry,GDBSuperLineID,nil,PtrInt(@pline^.CoordInWCS.lEnd.x),PtrInt(@pline^.CoordInOCS.lEnd.x),OneVarDataMIPD,OneVarDataEIPD);
-    MultiPropertiesManager.RegisterPhysMultiproperty('END_Y','End Y',sysunit^.TypeName2PTD('GDBYCoordinate'),MPCGeometry,GDBSuperLineID,nil,PtrInt(@pline^.CoordInWCS.lEnd.y),PtrInt(@pline^.CoordInOCS.lEnd.y),OneVarDataMIPD,OneVarDataEIPD);
-    MultiPropertiesManager.RegisterPhysMultiproperty('END_Z','End Z',sysunit^.TypeName2PTD('GDBZCoordinate'),MPCGeometry,GDBSuperLineID,nil,PtrInt(@pline^.CoordInWCS.lEnd.z),PtrInt(@pline^.CoordInOCS.lEnd.z),OneVarDataMIPD,OneVarDataEIPD);
+    MultiPropertiesManager.RegisterPhysMultiproperty('START_X','Start X',sysunit^.TypeName2PTD('TzeXUnits'),MPCGeometry,GDBSuperLineID,nil,PtrInt(@pline^.CoordInWCS.lBegin.x),PtrInt(@pline^.CoordInOCS.lBegin.x),OneVarDataMIPD,OneVarDataEIPD);
+    MultiPropertiesManager.RegisterPhysMultiproperty('START_Y','Start Y',sysunit^.TypeName2PTD('TzeYUnits'),MPCGeometry,GDBSuperLineID,nil,PtrInt(@pline^.CoordInWCS.lBegin.y),PtrInt(@pline^.CoordInOCS.lBegin.y),OneVarDataMIPD,OneVarDataEIPD);
+    MultiPropertiesManager.RegisterPhysMultiproperty('START_Z','Start Z',sysunit^.TypeName2PTD('TzeZUnits'),MPCGeometry,GDBSuperLineID,nil,PtrInt(@pline^.CoordInWCS.lBegin.z),PtrInt(@pline^.CoordInOCS.lBegin.z),OneVarDataMIPD,OneVarDataEIPD);
+    MultiPropertiesManager.RegisterPhysMultiproperty('END_X','End X',sysunit^.TypeName2PTD('TzeXUnits'),MPCGeometry,GDBSuperLineID,nil,PtrInt(@pline^.CoordInWCS.lEnd.x),PtrInt(@pline^.CoordInOCS.lEnd.x),OneVarDataMIPD,OneVarDataEIPD);
+    MultiPropertiesManager.RegisterPhysMultiproperty('END_Y','End Y',sysunit^.TypeName2PTD('TzeYUnits'),MPCGeometry,GDBSuperLineID,nil,PtrInt(@pline^.CoordInWCS.lEnd.y),PtrInt(@pline^.CoordInOCS.lEnd.y),OneVarDataMIPD,OneVarDataEIPD);
+    MultiPropertiesManager.RegisterPhysMultiproperty('END_Z','End Z',sysunit^.TypeName2PTD('TzeZUnits'),MPCGeometry,GDBSuperLineID,nil,PtrInt(@pline^.CoordInWCS.lEnd.z),PtrInt(@pline^.CoordInOCS.lEnd.z),OneVarDataMIPD,OneVarDataEIPD);
     MultiPropertiesManager.RegisterPhysMultiproperty('DELTA_X','Delta X',sysunit^.TypeName2PTD('Double'),MPCGeometry,GDBSuperLineID,nil,PtrInt(@pline^.CoordInWCS.lBegin.x),PtrInt(@pline^.CoordInOCS.lBegin.x),OneVarDataMIPD,TEntIterateProcsData.Create(nil,@DoubleDeltaEntIterateProc,@DoubleDeltaEntChangeProc));
     MultiPropertiesManager.RegisterPhysMultiproperty('DELTA_Y','Delta Y',sysunit^.TypeName2PTD('Double'),MPCGeometry,GDBSuperLineID,nil,PtrInt(@pline^.CoordInWCS.lBegin.y),PtrInt(@pline^.CoordInOCS.lBegin.y),OneVarDataMIPD,TEntIterateProcsData.Create(nil,@DoubleDeltaEntIterateProc,@DoubleDeltaEntChangeProc));
     MultiPropertiesManager.RegisterPhysMultiproperty('DELTA_Z','Delta Z',sysunit^.TypeName2PTD('Double'),MPCGeometry,GDBSuperLineID,nil,PtrInt(@pline^.CoordInWCS.lBegin.z),PtrInt(@pline^.CoordInOCS.lBegin.z),OneVarDataMIPD,TEntIterateProcsData.Create(nil,@DoubleDeltaEntIterateProc,@DoubleDeltaEntChangeProc));
     MultiPropertiesManager.RegisterPhysMultiproperty('Length','Length',sysunit^.TypeName2PTD('Double'),MPCGeometry,GDBSuperLineID,nil,PtrInt(@pline^.CoordInWCS.lBegin),PtrInt(@pline^.CoordInOCS.lBegin),OneVarDataMIPD,TEntIterateProcsData.Create(nil,@DoubleLengthEntIterateProc,@DoubleLengthEntChangeProc));
-    MultiPropertiesManager.RegisterPhysMultiproperty('Angle','Angle',sysunit^.TypeName2PTD('GDBAngleDouble'),MPCGeometry,GDBSuperLineID,nil,PtrInt(@pline^.CoordInWCS.lBegin),PtrInt(@pline^.CoordInOCS.lBegin),OneVarDataMIPD,TEntIterateProcsData.Create(nil,@DoubleAngleEntIterateProc,@DoubleAngleEntChangeProc));
+    MultiPropertiesManager.RegisterPhysMultiproperty('Angle','Angle',sysunit^.TypeName2PTD('TZeAngle'),MPCGeometry,GDBSuperLineID,nil,PtrInt(@pline^.CoordInWCS.lBegin),PtrInt(@pline^.CoordInOCS.lBegin),OneVarDataMIPD,TEntIterateProcsData.Create(nil,@DoubleAngleEntIterateProc,@DoubleAngleEntChangeProc));
     {--Summary}
     MultiPropertiesManager.RegisterPhysMultiproperty('TotalLength','Total length',sysunit^.TypeName2PTD('Double'),MPCSummary,GDBSuperLineID,nil,PtrInt(@pline^.CoordInWCS.lBegin),PtrInt(@pline^.CoordInWCS.lBegin),OneVarDataMIPD,TEntIterateProcsData.Create(nil,@DoubleSumLengthEntIterateProc,nil));
 
 
     {BlockInsert uzegeometry}
     MultiPropertiesManager.RestartMultipropertySortID;
-    MultiPropertiesManager.RegisterPhysMultiproperty('INSERT_X','Insert X',sysunit^.TypeName2PTD('GDBXCoordinate'),MPCGeometry,GDBBlockInsertID,nil,PtrInt(@pblockinsert^.P_insert_in_WCS.x),PtrInt(@pcircle^.Local.P_insert.x),OneVarDataMIPD,OneVarDataEIPD);
-    MultiPropertiesManager.RegisterPhysMultiproperty('INSERT_Y','Insert Y',sysunit^.TypeName2PTD('GDBYCoordinate'),MPCGeometry,GDBBlockInsertID,nil,PtrInt(@pblockinsert^.P_insert_in_WCS.y),PtrInt(@pcircle^.Local.P_insert.y),OneVarDataMIPD,OneVarDataEIPD);
-    MultiPropertiesManager.RegisterPhysMultiproperty('INSERT_Z','Insert Z',sysunit^.TypeName2PTD('GDBZCoordinate'),MPCGeometry,GDBBlockInsertID,nil,PtrInt(@pblockinsert^.P_insert_in_WCS.z),PtrInt(@pcircle^.Local.P_insert.z),OneVarDataMIPD,OneVarDataEIPD);
+    MultiPropertiesManager.RegisterPhysMultiproperty('INSERT_X','Insert X',sysunit^.TypeName2PTD('TzeXUnits'),MPCGeometry,GDBBlockInsertID,nil,PtrInt(@pblockinsert^.P_insert_in_WCS.x),PtrInt(@pcircle^.Local.P_insert.x),OneVarDataMIPD,OneVarDataEIPD);
+    MultiPropertiesManager.RegisterPhysMultiproperty('INSERT_Y','Insert Y',sysunit^.TypeName2PTD('TzeYUnits'),MPCGeometry,GDBBlockInsertID,nil,PtrInt(@pblockinsert^.P_insert_in_WCS.y),PtrInt(@pcircle^.Local.P_insert.y),OneVarDataMIPD,OneVarDataEIPD);
+    MultiPropertiesManager.RegisterPhysMultiproperty('INSERT_Z','Insert Z',sysunit^.TypeName2PTD('TzeZUnits'),MPCGeometry,GDBBlockInsertID,nil,PtrInt(@pblockinsert^.P_insert_in_WCS.z),PtrInt(@pcircle^.Local.P_insert.z),OneVarDataMIPD,OneVarDataEIPD);
     MultiPropertiesManager.RegisterPhysMultiproperty('SCALE_X','Scale X',sysunit^.TypeName2PTD('Double'),MPCGeometry,GDBBlockInsertID,nil,PtrInt(@pblockinsert^.scale.x),PtrInt(@pblockinsert^.scale.x),OneVarDataMIPD,OneVarDataEIPD);
     MultiPropertiesManager.RegisterPhysMultiproperty('SCALE_Y','Scale Y',sysunit^.TypeName2PTD('Double'),MPCGeometry,GDBBlockInsertID,nil,PtrInt(@pblockinsert^.scale.y),PtrInt(@pblockinsert^.scale.y),OneVarDataMIPD,OneVarDataEIPD);
     MultiPropertiesManager.RegisterPhysMultiproperty('SCALE_Z','Scale Z',sysunit^.TypeName2PTD('Double'),MPCGeometry,GDBBlockInsertID,nil,PtrInt(@pblockinsert^.scale.z),PtrInt(@pblockinsert^.scale.z),OneVarDataMIPD,OneVarDataEIPD);
@@ -713,14 +715,14 @@ begin
     MultiPropertiesManager.RegisterPhysMultiproperty('NORMAL_Z','Normal Z',sysunit^.TypeName2PTD('Double'),MPCGeometry,GDBBlockInsertID,nil,PtrInt(@pblockinsert^.Local.Basis.oz.z),0,OneVarDataMIPD,OneVarRODataEIPD);
     {--Misc}
     MultiPropertiesManager.RegisterPhysMultiproperty('Name','Name',sysunit^.TypeName2PTD('AnsiString'),MPCMisc,GDBBlockInsertID,nil,PtrInt(@pblockinsert^.Name),PtrInt(@pblockinsert^.Name),OneVarDataMIPD,OneVarRODataEIPD);
-    MultiPropertiesManager.RegisterPhysMultiproperty('Rotation','Rotation',sysunit^.TypeName2PTD('GDBAngleDouble'),MPCMisc,GDBBlockInsertID,nil,PtrInt(@pblockinsert^.rotate),PtrInt(@pblockinsert^.rotate),OneVarDataMIPD,OneVarDataEIPD);
+    MultiPropertiesManager.RegisterPhysMultiproperty('Rotation','Rotation',sysunit^.TypeName2PTD('TZeAngle'),MPCMisc,GDBBlockInsertID,nil,PtrInt(@pblockinsert^.rotate),PtrInt(@pblockinsert^.rotate),OneVarDataMIPD,OneVarDataEIPD);
     MultiPropertiesManager.RegisterPhysMultiproperty('FILTER_BlocksByNames','Blocks by names',sysunit^.TypeName2PTD('TMSBlockNamesDetector'),MPCSummary,GDBBlockInsertID,nil,PtrInt(@pblockinsert^.Name),PtrInt(@pblockinsert^.Name),TMainIterateProcsData.Create(@GetStringCounterData,@FreeStringCounterData),TEntIterateProcsData.Create(nil,@Blockname2BlockNameCounterIterateProc,nil),MPUM_AtLeastOneEntMatched);
 
     {Device uzegeometry}
     MultiPropertiesManager.RestartMultipropertySortID;
-    MultiPropertiesManager.RegisterPhysMultiproperty('INSERT_X','Insert X',sysunit^.TypeName2PTD('GDBXCoordinate'),MPCGeometry,GDBDeviceID,nil,PtrInt(@pblockinsert^.P_insert_in_WCS.x),PtrInt(@pblockinsert^.Local.P_insert.x),OneVarDataMIPD,OneVarDataEIPD);
-    MultiPropertiesManager.RegisterPhysMultiproperty('INSERT_Y','Insert Y',sysunit^.TypeName2PTD('GDBYCoordinate'),MPCGeometry,GDBDeviceID,nil,PtrInt(@pblockinsert^.P_insert_in_WCS.y),PtrInt(@pblockinsert^.Local.P_insert.y),OneVarDataMIPD,OneVarDataEIPD);
-    MultiPropertiesManager.RegisterPhysMultiproperty('INSERT_Z','Insert Z',sysunit^.TypeName2PTD('GDBZCoordinate'),MPCGeometry,GDBDeviceID,nil,PtrInt(@pblockinsert^.P_insert_in_WCS.z),PtrInt(@pblockinsert^.Local.P_insert.z),OneVarDataMIPD,OneVarDataEIPD);
+    MultiPropertiesManager.RegisterPhysMultiproperty('INSERT_X','Insert X',sysunit^.TypeName2PTD('TzeXUnits'),MPCGeometry,GDBDeviceID,nil,PtrInt(@pblockinsert^.P_insert_in_WCS.x),PtrInt(@pblockinsert^.Local.P_insert.x),OneVarDataMIPD,OneVarDataEIPD);
+    MultiPropertiesManager.RegisterPhysMultiproperty('INSERT_Y','Insert Y',sysunit^.TypeName2PTD('TzeYUnits'),MPCGeometry,GDBDeviceID,nil,PtrInt(@pblockinsert^.P_insert_in_WCS.y),PtrInt(@pblockinsert^.Local.P_insert.y),OneVarDataMIPD,OneVarDataEIPD);
+    MultiPropertiesManager.RegisterPhysMultiproperty('INSERT_Z','Insert Z',sysunit^.TypeName2PTD('TzeZUnits'),MPCGeometry,GDBDeviceID,nil,PtrInt(@pblockinsert^.P_insert_in_WCS.z),PtrInt(@pblockinsert^.Local.P_insert.z),OneVarDataMIPD,OneVarDataEIPD);
     MultiPropertiesManager.RegisterPhysMultiproperty('SCALE_X','Scale X',sysunit^.TypeName2PTD('Double'),MPCGeometry,GDBDeviceID,nil,PtrInt(@pblockinsert^.scale.x),PtrInt(@pblockinsert^.scale.x),OneVarDataMIPD,OneVarDataEIPD);
     MultiPropertiesManager.RegisterPhysMultiproperty('SCALE_Y','Scale Y',sysunit^.TypeName2PTD('Double'),MPCGeometry,GDBDeviceID,nil,PtrInt(@pblockinsert^.scale.y),PtrInt(@pblockinsert^.scale.y),OneVarDataMIPD,OneVarDataEIPD);
     MultiPropertiesManager.RegisterPhysMultiproperty('SCALE_Z','Scale Z',sysunit^.TypeName2PTD('Double'),MPCGeometry,GDBDeviceID,nil,PtrInt(@pblockinsert^.scale.z),PtrInt(@pblockinsert^.scale.z),OneVarDataMIPD,OneVarDataEIPD);
@@ -729,15 +731,15 @@ begin
     MultiPropertiesManager.RegisterPhysMultiproperty('NORMAL_Z','Normal Z',sysunit^.TypeName2PTD('Double'),MPCGeometry,GDBDeviceID,nil,PtrInt(@pblockinsert^.Local.Basis.oz.z),0,OneVarDataMIPD,OneVarRODataEIPD);
     {--Misc}
     MultiPropertiesManager.RegisterPhysMultiproperty('Name','Name',sysunit^.TypeName2PTD('AnsiString'),MPCMisc,GDBDeviceID,nil,PtrInt(@pblockinsert^.Name),PtrInt(@pent^.vp.Color),OneVarDataMIPD,OneVarRODataEIPD);
-    MultiPropertiesManager.RegisterPhysMultiproperty('Rotation','Rotation',sysunit^.TypeName2PTD('GDBAngleDouble'),MPCMisc,GDBDeviceID,nil,PtrInt(@pblockinsert^.rotate),PtrInt(@pblockinsert^.rotate),OneVarDataMIPD,OneVarDataEIPD);
+    MultiPropertiesManager.RegisterPhysMultiproperty('Rotation','Rotation',sysunit^.TypeName2PTD('TZeAngle'),MPCMisc,GDBDeviceID,nil,PtrInt(@pblockinsert^.rotate),PtrInt(@pblockinsert^.rotate),OneVarDataMIPD,OneVarDataEIPD);
     MultiPropertiesManager.RegisterPhysMultiproperty('FILTER_BlocksByNames','Blocks by names',sysunit^.TypeName2PTD('TMSBlockNamesDetector'),MPCSummary,GDBDeviceID,nil,PtrInt(@pblockinsert^.Name),PtrInt(@pblockinsert^.Name),TMainIterateProcsData.Create(@GetStringCounterData,@FreeStringCounterData),TEntIterateProcsData.Create(nil,@Blockname2BlockNameCounterIterateProc,nil),MPUM_AtLeastOneEntMatched);
     MultiPropertiesManager.sort;
 
     {Text uzegeometry}
     MultiPropertiesManager.RestartMultipropertySortID;
-    MultiPropertiesManager.RegisterPhysMultiproperty('INSERT_X','Insert X',sysunit^.TypeName2PTD('GDBXCoordinate'),MPCGeometry,GDBTextID,nil,PtrInt(@ptext^.P_insert_in_WCS.x),PtrInt(@pblockinsert^.Local.P_insert.x),OneVarDataMIPD,OneVarDataEIPD);
-    MultiPropertiesManager.RegisterPhysMultiproperty('INSERT_Y','Insert Y',sysunit^.TypeName2PTD('GDBYCoordinate'),MPCGeometry,GDBTextID,nil,PtrInt(@ptext^.P_insert_in_WCS.y),PtrInt(@pblockinsert^.Local.P_insert.y),OneVarDataMIPD,OneVarDataEIPD);
-    MultiPropertiesManager.RegisterPhysMultiproperty('INSERT_Z','Insert Z',sysunit^.TypeName2PTD('GDBZCoordinate'),MPCGeometry,GDBTextID,nil,PtrInt(@ptext^.P_insert_in_WCS.z),PtrInt(@pblockinsert^.Local.P_insert.z),OneVarDataMIPD,OneVarDataEIPD);
+    MultiPropertiesManager.RegisterPhysMultiproperty('INSERT_X','Insert X',sysunit^.TypeName2PTD('TzeXUnits'),MPCGeometry,GDBTextID,nil,PtrInt(@ptext^.P_insert_in_WCS.x),PtrInt(@pblockinsert^.Local.P_insert.x),OneVarDataMIPD,OneVarDataEIPD);
+    MultiPropertiesManager.RegisterPhysMultiproperty('INSERT_Y','Insert Y',sysunit^.TypeName2PTD('TzeYUnits'),MPCGeometry,GDBTextID,nil,PtrInt(@ptext^.P_insert_in_WCS.y),PtrInt(@pblockinsert^.Local.P_insert.y),OneVarDataMIPD,OneVarDataEIPD);
+    MultiPropertiesManager.RegisterPhysMultiproperty('INSERT_Z','Insert Z',sysunit^.TypeName2PTD('TzeZUnits'),MPCGeometry,GDBTextID,nil,PtrInt(@ptext^.P_insert_in_WCS.z),PtrInt(@pblockinsert^.Local.P_insert.z),OneVarDataMIPD,OneVarDataEIPD);
     MultiPropertiesManager.RegisterPhysMultiproperty('NORMAL_X','Normal X',sysunit^.TypeName2PTD('Double'),MPCGeometry,GDBTextID,nil,PtrInt(@ptext^.Local.Basis.oz.x),0,OneVarDataMIPD,OneVarRODataEIPD);
     MultiPropertiesManager.RegisterPhysMultiproperty('NORMAL_Y','Normal Y',sysunit^.TypeName2PTD('Double'),MPCGeometry,GDBTextID,nil,PtrInt(@ptext^.Local.Basis.oz.y),0,OneVarDataMIPD,OneVarRODataEIPD);
     MultiPropertiesManager.RegisterPhysMultiproperty('NORMAL_Z','Normal Z',sysunit^.TypeName2PTD('Double'),MPCGeometry,GDBTextID,nil,PtrInt(@ptext^.Local.Basis.oz.z),0,OneVarDataMIPD,OneVarRODataEIPD);
@@ -746,10 +748,10 @@ begin
     MultiPropertiesManager.RegisterPhysMultiproperty('TxtTemplate','Template',sysunit^.TypeName2PTD('TDXFEntsInternalStringType'),MPCMisc,GDBTextID,nil,PtrInt(@ptext^.Template),PtrInt(@ptext^.Template),OneVarDataMIPD,OneVarDataEIPD);
     MultiPropertiesManager.RegisterPhysMultiproperty('TxtStyle','Style',sysunit^.TypeName2PTD('PGDBTextStyleObjInsp'),MPCMisc,GDBTextID,nil,PtrInt(@ptext^.TXTStyle),PtrInt(@ptext^.TXTStyle),OneVarDataMIPD,OneVarDataEIPD);
     MultiPropertiesManager.RegisterPhysMultiproperty('TxtJustify','Justify',sysunit^.TypeName2PTD('TTextJustify'),MPCMisc,GDBTextID,nil,PtrInt(@ptext^.textprop.justify),PtrInt(@ptext^.textprop.justify),OneVarDataMIPD,OneVarDataEIPD);
-    MultiPropertiesManager.RegisterPhysMultiproperty('Rotation','Rotation',sysunit^.TypeName2PTD('GDBAngleDouble'),MPCMisc,GDBTextID,nil,0,0,OneVarDataMIPD,TEntIterateProcsData.Create(nil,@DoubleAngleTextIterateProc,@GeneralTextRotateEntChangeProc));
-    MultiPropertiesManager.RegisterPhysMultiproperty('RotationWCS','RotationWCS',sysunit^.TypeName2PTD('GDBAngleDouble'),MPCMisc,GDBTextID,nil,0,0,OneVarDataMIPD,TEntIterateProcsData.Create(nil,@DoubleWCSAngleTextIterateProc,nil{@GeneralTextRotateEntChangeProc}));
+    MultiPropertiesManager.RegisterPhysMultiproperty('Rotation','Rotation',sysunit^.TypeName2PTD('TZeAngle'),MPCMisc,GDBTextID,nil,0,0,OneVarDataMIPD,TEntIterateProcsData.Create(nil,@DoubleAngleTextIterateProc,@GeneralTextRotateEntChangeProc));
+    MultiPropertiesManager.RegisterPhysMultiproperty('RotationWCS','RotationWCS',sysunit^.TypeName2PTD('TZeAngle'),MPCMisc,GDBTextID,nil,0,0,OneVarDataMIPD,TEntIterateProcsData.Create(nil,@DoubleWCSAngleTextIterateProc,nil{@GeneralTextRotateEntChangeProc}));
     MultiPropertiesManager.RegisterPhysMultiproperty('Height','Height',sysunit^.TypeName2PTD('Double'),MPCMisc,GDBTextID,nil,PtrInt(@ptext^.textprop.size),PtrInt(@ptext^.textprop.size),OneVarDataMIPD,TEntIterateProcsData.Create(nil,@GeneralEntIterateProc,@GeneralFromVarEntChangeProc,@DoubleCheckGreater0));
-    MultiPropertiesManager.RegisterPhysMultiproperty('Oblique','Oblique',sysunit^.TypeName2PTD('GDBAngleDouble'),MPCMisc,GDBTextID,nil,PtrInt(@ptext^.textprop.oblique),PtrInt(@ptext^.textprop.oblique),OneVarDataMIPD,TEntIterateProcsData.Create(nil,@GeneralEntIterateProc,@GeneralFromVarEntChangeProc,@DoubleCheckMinus85to85));
+    MultiPropertiesManager.RegisterPhysMultiproperty('Oblique','Oblique',sysunit^.TypeName2PTD('TZeAngle'),MPCMisc,GDBTextID,nil,PtrInt(@ptext^.textprop.oblique),PtrInt(@ptext^.textprop.oblique),OneVarDataMIPD,TEntIterateProcsData.Create(nil,@GeneralEntIterateProc,@GeneralFromVarEntChangeProc,@DoubleCheckMinus85to85));
     MultiPropertiesManager.RegisterPhysMultiproperty('WidthFactor','Width factor',sysunit^.TypeName2PTD('Double'),MPCMisc,GDBTextID,nil,PtrInt(@ptext^.textprop.wfactor),PtrInt(@ptext^.textprop.wfactor),OneVarDataMIPD,OneVarDataEIPD);
     MultiPropertiesManager.RegisterPhysMultiproperty('UpsideDown','Upside down',sysunit^.TypeName2PTD('Boolean'),MPCMisc,GDBTextID,nil,PtrInt(@ptext^.textprop.upsidedown),PtrInt(@ptext^.textprop.upsidedown),OneVarDataMIPD,OneVarDataEIPD);
     MultiPropertiesManager.RegisterPhysMultiproperty('Backward','Backward',sysunit^.TypeName2PTD('Boolean'),MPCMisc,GDBTextID,nil,PtrInt(@ptext^.textprop.backward),PtrInt(@ptext^.textprop.backward),OneVarDataMIPD,OneVarDataEIPD);
@@ -758,9 +760,9 @@ begin
 
     {MText uzegeometry}
     MultiPropertiesManager.RestartMultipropertySortID;
-    MultiPropertiesManager.RegisterPhysMultiproperty('INSERT_X','Insert X',sysunit^.TypeName2PTD('GDBXCoordinate'),MPCGeometry,GDBMTextID,nil,PtrInt(@pmtext^.P_insert_in_WCS.x),PtrInt(@pblockinsert^.Local.P_insert.x),OneVarDataMIPD,OneVarDataEIPD);
-    MultiPropertiesManager.RegisterPhysMultiproperty('INSERT_Y','Insert Y',sysunit^.TypeName2PTD('GDBYCoordinate'),MPCGeometry,GDBMTextID,nil,PtrInt(@pmtext^.P_insert_in_WCS.y),PtrInt(@pblockinsert^.Local.P_insert.y),OneVarDataMIPD,OneVarDataEIPD);
-    MultiPropertiesManager.RegisterPhysMultiproperty('INSERT_Z','Insert Z',sysunit^.TypeName2PTD('GDBZCoordinate'),MPCGeometry,GDBMTextID,nil,PtrInt(@pmtext^.P_insert_in_WCS.z),PtrInt(@pblockinsert^.Local.P_insert.z),OneVarDataMIPD,OneVarDataEIPD);
+    MultiPropertiesManager.RegisterPhysMultiproperty('INSERT_X','Insert X',sysunit^.TypeName2PTD('TzeXUnits'),MPCGeometry,GDBMTextID,nil,PtrInt(@pmtext^.P_insert_in_WCS.x),PtrInt(@pblockinsert^.Local.P_insert.x),OneVarDataMIPD,OneVarDataEIPD);
+    MultiPropertiesManager.RegisterPhysMultiproperty('INSERT_Y','Insert Y',sysunit^.TypeName2PTD('TzeYUnits'),MPCGeometry,GDBMTextID,nil,PtrInt(@pmtext^.P_insert_in_WCS.y),PtrInt(@pblockinsert^.Local.P_insert.y),OneVarDataMIPD,OneVarDataEIPD);
+    MultiPropertiesManager.RegisterPhysMultiproperty('INSERT_Z','Insert Z',sysunit^.TypeName2PTD('TzeZUnits'),MPCGeometry,GDBMTextID,nil,PtrInt(@pmtext^.P_insert_in_WCS.z),PtrInt(@pblockinsert^.Local.P_insert.z),OneVarDataMIPD,OneVarDataEIPD);
     MultiPropertiesManager.RegisterPhysMultiproperty('NORMAL_X','Normal X',sysunit^.TypeName2PTD('Double'),MPCGeometry,GDBMTextID,nil,PtrInt(@pmtext^.Local.Basis.oz.x),0,OneVarDataMIPD,OneVarRODataEIPD);
     MultiPropertiesManager.RegisterPhysMultiproperty('NORMAL_Y','Normal Y',sysunit^.TypeName2PTD('Double'),MPCGeometry,GDBMTextID,nil,PtrInt(@pmtext^.Local.Basis.oz.y),0,OneVarDataMIPD,OneVarRODataEIPD);
     MultiPropertiesManager.RegisterPhysMultiproperty('NORMAL_Z','Normal Z',sysunit^.TypeName2PTD('Double'),MPCGeometry,GDBMTextID,nil,PtrInt(@pmtext^.Local.Basis.oz.z),0,OneVarDataMIPD,OneVarRODataEIPD);
@@ -769,8 +771,8 @@ begin
     MultiPropertiesManager.RegisterPhysMultiproperty('TxtTemplate','Template',sysunit^.TypeName2PTD('TDXFEntsInternalStringType'),MPCMisc,GDBMTextID,nil,PtrInt(@pmtext^.Template),PtrInt(@pmtext^.Template),OneVarDataMIPD,OneVarDataEIPD);
     MultiPropertiesManager.RegisterPhysMultiproperty('TxtStyle','Style',sysunit^.TypeName2PTD('PGDBTextStyleObjInsp'),MPCMisc,GDBMTextID,nil,PtrInt(@pmtext^.TXTStyle),PtrInt(@pmtext^.TXTStyle),OneVarDataMIPD,OneVarDataEIPD);
     MultiPropertiesManager.RegisterPhysMultiproperty('TxtJustify','Justify',sysunit^.TypeName2PTD('TTextJustify'),MPCMisc,GDBMTextID,nil,PtrInt(@pmtext^.textprop.justify),PtrInt(@pmtext^.textprop.justify),OneVarDataMIPD,OneVarDataEIPD);
-    MultiPropertiesManager.RegisterPhysMultiproperty('Rotation','Rotation',sysunit^.TypeName2PTD('GDBAngleDouble'),MPCMisc,GDBMTextID,nil,0,0,OneVarDataMIPD,TEntIterateProcsData.Create(nil,@DoubleAngleTextIterateProc,@GeneralTextRotateEntChangeProc));
-    MultiPropertiesManager.RegisterPhysMultiproperty('RotationWCS','RotationWCS',sysunit^.TypeName2PTD('GDBAngleDouble'),MPCMisc,GDBMTextID,nil,0,0,OneVarDataMIPD,TEntIterateProcsData.Create(nil,@DoubleWCSAngleTextIterateProc,nil{@GeneralTextRotateEntChangeProc}));
+    MultiPropertiesManager.RegisterPhysMultiproperty('Rotation','Rotation',sysunit^.TypeName2PTD('TZeAngle'),MPCMisc,GDBMTextID,nil,0,0,OneVarDataMIPD,TEntIterateProcsData.Create(nil,@DoubleAngleTextIterateProc,@GeneralTextRotateEntChangeProc));
+    MultiPropertiesManager.RegisterPhysMultiproperty('RotationWCS','RotationWCS',sysunit^.TypeName2PTD('TZeAngle'),MPCMisc,GDBMTextID,nil,0,0,OneVarDataMIPD,TEntIterateProcsData.Create(nil,@DoubleWCSAngleTextIterateProc,nil{@GeneralTextRotateEntChangeProc}));
     MultiPropertiesManager.RegisterPhysMultiproperty('Height','Height',sysunit^.TypeName2PTD('Double'),MPCMisc,GDBMTextID,nil,PtrInt(@pmtext^.textprop.size),PtrInt(@pmtext^.textprop.size),OneVarDataMIPD,TEntIterateProcsData.Create(nil,@GeneralEntIterateProc,@GeneralFromVarEntChangeProc,@DoubleCheckGreater0));
     MultiPropertiesManager.RegisterPhysMultiproperty('Width','Width',sysunit^.TypeName2PTD('Double'),MPCMisc,GDBMTextID,nil,PtrInt(@pmtext^.width),PtrInt(@pmtext^.width),OneVarDataMIPD,OneVarDataEIPD);
     MultiPropertiesManager.RegisterPhysMultiproperty('LinespaceFactor','Linespace factor',sysunit^.TypeName2PTD('Double'),MPCMisc,GDBMTextID,nil,PtrInt(@pmtext^.linespacef),PtrInt(@pmtext^.linespacef),OneVarDataMIPD,OneVarDataEIPD);
@@ -805,19 +807,27 @@ begin
     {--Misc}
     MultiPropertiesManager.RegisterPhysMultiproperty('Closed','Closed',sysunit^.TypeName2PTD('Boolean'),MPCMisc,GDBSplineID,nil,PtrInt(@pspline^.Closed),PtrInt(@pspline^.Closed),OneVarDataMIPD,OneVarDataEIPD);
 
+    {Hatch}
+    MultiPropertiesManager.RestartMultipropertySortID;
+    {--Misc}
+    MultiPropertiesManager.RegisterPhysMultiproperty('PATTERNANGLE','Pattern angle',sysunit^.TypeName2PTD('TZeAngle'),MPCMisc,GDBHatchID,nil,PtrInt(@phatch^.Angle),PtrInt(@phatch^.Angle),OneVarDataMIPD,OneVarDataEIPD);
+    MultiPropertiesManager.RegisterPhysMultiproperty('PATTERNSCALE','Pattern scale',sysunit^.TypeName2PTD('TZeDimLess'),MPCMisc,GDBHatchID,nil,PtrInt(@phatch^.Scale),PtrInt(@phatch^.Scale),OneVarDataMIPD,OneVarDataEIPD);
+    MultiPropertiesManager.RegisterPhysMultiproperty('PATTERNORIGIN_X','Pattern origin X',sysunit^.TypeName2PTD('TzeXUnits'),MPCMisc,GDBHatchID,nil,PtrInt(@phatch^.Origin.x),PtrInt(@phatch^.Origin.x),OneVarDataMIPD,OneVarDataEIPD);
+    MultiPropertiesManager.RegisterPhysMultiproperty('PATTERNORIGIN_Y','Pattern origin Y',sysunit^.TypeName2PTD('TzeXUnits'),MPCMisc,GDBHatchID,nil,PtrInt(@phatch^.Origin.y),PtrInt(@phatch^.Origin.y),OneVarDataMIPD,OneVarDataEIPD);
+
     {ElLeader uzegeometry}
     MultiPropertiesManager.RestartMultipropertySortID;
-    MultiPropertiesManager.RegisterPhysMultiproperty('START_X','Start X',sysunit^.TypeName2PTD('GDBXCoordinate'),MPCGeometry,GDBElLeaderID,nil,PtrInt(@pelleader^.MainLine.CoordInWCS.lBegin.x),PtrInt(@pelleader^.MainLine.CoordInOCS.lBegin.x),OneVarDataMIPD,OneVarDataEIPD);
-    MultiPropertiesManager.RegisterPhysMultiproperty('START_Y','Start Y',sysunit^.TypeName2PTD('GDBYCoordinate'),MPCGeometry,GDBElLeaderID,nil,PtrInt(@pelleader^.MainLine.CoordInWCS.lBegin.y),PtrInt(@pelleader^.MainLine.CoordInOCS.lBegin.y),OneVarDataMIPD,OneVarDataEIPD);
-    MultiPropertiesManager.RegisterPhysMultiproperty('START_Z','Start Z',sysunit^.TypeName2PTD('GDBZCoordinate'),MPCGeometry,GDBElLeaderID,nil,PtrInt(@pelleader^.MainLine.CoordInWCS.lBegin.z),PtrInt(@pelleader^.MainLine.CoordInOCS.lBegin.z),OneVarDataMIPD,OneVarDataEIPD);
-    MultiPropertiesManager.RegisterPhysMultiproperty('END_X','End X',sysunit^.TypeName2PTD('GDBXCoordinate'),MPCGeometry,GDBElLeaderID,nil,PtrInt(@pelleader^.MainLine.CoordInWCS.lEnd.x),PtrInt(@pelleader^.MainLine.CoordInOCS.lEnd.x),OneVarDataMIPD,OneVarDataEIPD);
-    MultiPropertiesManager.RegisterPhysMultiproperty('END_Y','End Y',sysunit^.TypeName2PTD('GDBYCoordinate'),MPCGeometry,GDBElLeaderID,nil,PtrInt(@pelleader^.MainLine.CoordInWCS.lEnd.y),PtrInt(@pelleader^.MainLine.CoordInOCS.lEnd.y),OneVarDataMIPD,OneVarDataEIPD);
-    MultiPropertiesManager.RegisterPhysMultiproperty('END_Z','End Z',sysunit^.TypeName2PTD('GDBZCoordinate'),MPCGeometry,GDBElLeaderID,nil,PtrInt(@pelleader^.MainLine.CoordInWCS.lEnd.z),PtrInt(@pelleader^.MainLine.CoordInOCS.lEnd.z),OneVarDataMIPD,OneVarDataEIPD);
+    MultiPropertiesManager.RegisterPhysMultiproperty('START_X','Start X',sysunit^.TypeName2PTD('TzeXUnits'),MPCGeometry,GDBElLeaderID,nil,PtrInt(@pelleader^.MainLine.CoordInWCS.lBegin.x),PtrInt(@pelleader^.MainLine.CoordInOCS.lBegin.x),OneVarDataMIPD,OneVarDataEIPD);
+    MultiPropertiesManager.RegisterPhysMultiproperty('START_Y','Start Y',sysunit^.TypeName2PTD('TzeYUnits'),MPCGeometry,GDBElLeaderID,nil,PtrInt(@pelleader^.MainLine.CoordInWCS.lBegin.y),PtrInt(@pelleader^.MainLine.CoordInOCS.lBegin.y),OneVarDataMIPD,OneVarDataEIPD);
+    MultiPropertiesManager.RegisterPhysMultiproperty('START_Z','Start Z',sysunit^.TypeName2PTD('TzeZUnits'),MPCGeometry,GDBElLeaderID,nil,PtrInt(@pelleader^.MainLine.CoordInWCS.lBegin.z),PtrInt(@pelleader^.MainLine.CoordInOCS.lBegin.z),OneVarDataMIPD,OneVarDataEIPD);
+    MultiPropertiesManager.RegisterPhysMultiproperty('END_X','End X',sysunit^.TypeName2PTD('TzeXUnits'),MPCGeometry,GDBElLeaderID,nil,PtrInt(@pelleader^.MainLine.CoordInWCS.lEnd.x),PtrInt(@pelleader^.MainLine.CoordInOCS.lEnd.x),OneVarDataMIPD,OneVarDataEIPD);
+    MultiPropertiesManager.RegisterPhysMultiproperty('END_Y','End Y',sysunit^.TypeName2PTD('TzeYUnits'),MPCGeometry,GDBElLeaderID,nil,PtrInt(@pelleader^.MainLine.CoordInWCS.lEnd.y),PtrInt(@pelleader^.MainLine.CoordInOCS.lEnd.y),OneVarDataMIPD,OneVarDataEIPD);
+    MultiPropertiesManager.RegisterPhysMultiproperty('END_Z','End Z',sysunit^.TypeName2PTD('TzeZUnits'),MPCGeometry,GDBElLeaderID,nil,PtrInt(@pelleader^.MainLine.CoordInWCS.lEnd.z),PtrInt(@pelleader^.MainLine.CoordInOCS.lEnd.z),OneVarDataMIPD,OneVarDataEIPD);
     MultiPropertiesManager.RegisterPhysMultiproperty('DELTA_X','Delta X',sysunit^.TypeName2PTD('Double'),MPCGeometry,GDBElLeaderID,nil,PtrInt(@pelleader^.MainLine.CoordInWCS.lBegin.x),PtrInt(@pelleader^.MainLine.CoordInOCS.lBegin.x),OneVarDataMIPD,TEntIterateProcsData.Create(nil,@DoubleDeltaEntIterateProc,@DoubleDeltaEntChangeProc));
     MultiPropertiesManager.RegisterPhysMultiproperty('DELTA_Y','Delta Y',sysunit^.TypeName2PTD('Double'),MPCGeometry,GDBElLeaderID,nil,PtrInt(@pelleader^.MainLine.CoordInWCS.lBegin.y),PtrInt(@pelleader^.MainLine.CoordInOCS.lBegin.y),OneVarDataMIPD,TEntIterateProcsData.Create(nil,@DoubleDeltaEntIterateProc,@DoubleDeltaEntChangeProc));
     MultiPropertiesManager.RegisterPhysMultiproperty('DELTA_Z','Delta Z',sysunit^.TypeName2PTD('Double'),MPCGeometry,GDBElLeaderID,nil,PtrInt(@pelleader^.MainLine.CoordInWCS.lBegin.z),PtrInt(@pelleader^.MainLine.CoordInOCS.lBegin.z),OneVarDataMIPD,TEntIterateProcsData.Create(nil,@DoubleDeltaEntIterateProc,@DoubleDeltaEntChangeProc));
     MultiPropertiesManager.RegisterPhysMultiproperty('Length','Length',sysunit^.TypeName2PTD('Double'),MPCGeometry,GDBElLeaderID,nil,PtrInt(@pelleader^.MainLine.CoordInWCS.lBegin),PtrInt(@pelleader^.MainLine.CoordInOCS.lBegin),OneVarDataMIPD,TEntIterateProcsData.Create(nil,@DoubleLengthEntIterateProc,@DoubleLengthEntChangeProc));
-    MultiPropertiesManager.RegisterPhysMultiproperty('Angle','Angle',sysunit^.TypeName2PTD('GDBAngleDouble'),MPCGeometry,GDBElLeaderID,nil,PtrInt(@pelleader^.MainLine.CoordInWCS.lBegin),PtrInt(@pelleader^.MainLine.CoordInOCS.lBegin),OneVarDataMIPD,TEntIterateProcsData.Create(nil,@DoubleAngleEntIterateProc,@DoubleAngleEntChangeProc));
+    MultiPropertiesManager.RegisterPhysMultiproperty('Angle','Angle',sysunit^.TypeName2PTD('TZeAngle'),MPCGeometry,GDBElLeaderID,nil,PtrInt(@pelleader^.MainLine.CoordInWCS.lBegin),PtrInt(@pelleader^.MainLine.CoordInOCS.lBegin),OneVarDataMIPD,TEntIterateProcsData.Create(nil,@DoubleAngleEntIterateProc,@DoubleAngleEntChangeProc));
     {ElLeader misc}
     MultiPropertiesManager.RegisterPhysMultiproperty('TextContent','TextContent',sysunit^.TypeName2PTD('String'),MPCMisc,GDBElLeaderID,nil,PtrInt(@pelleader^.TextContent),PtrInt(@pelleader^.TextContent),OneVarDataMIPD,OneVarRODataEIPD);
     MultiPropertiesManager.RegisterPhysMultiproperty('MaterialContent','MaterialContent',sysunit^.TypeName2PTD('String'),MPCMisc,GDBElLeaderID,nil,PtrInt(@pelleader^.MaterialContent),PtrInt(@pelleader^.MaterialContent),OneVarDataMIPD,OneVarRODataEIPD);

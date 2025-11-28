@@ -29,7 +29,7 @@ uses
   uzeenrepresentation,uzbLogIntf,uzMVReader,uzCtnrVectorpBaseEntity;
 
 type
-  taddotrac=procedure(var posr:os_record;const axis:GDBVertex) of object;
+  taddotrac=procedure(var posr:os_record;const axis:TzePoint3d) of object;
   TEFStage=(EFCalcEntityCS,EFDraw);
   TEFStages=set of TEFStage;
 
@@ -118,7 +118,7 @@ type
     procedure SetFromClone(_clone:PGDBObjEntity);virtual;
     function CalcOwner(own:Pointer):Pointer;virtual;
     procedure rtsave(refp:Pointer);virtual;
-    procedure TransformAt(p:PGDBObjEntity;t_matrix:PDMatrix4D);
+    procedure TransformAt(p:PGDBObjEntity;t_matrix:PzeTypedMatrix4d);
       virtual;abstract;
     procedure getoutbound(var DC:TDrawContext);virtual;
     procedure getonlyoutbound(var DC:TDrawContext);virtual;
@@ -129,15 +129,15 @@ type
     function GetLTCorrectL(GlobalLTScale:double):double;virtual;
     procedure calcbb(var DC:TDrawContext);virtual;
     procedure DrawBB(var DC:TDrawContext);
-    function calcvisible(const frustum:ClipArray;
+    function calcvisible(const frustum:TzeFrustum;
       const Actuality:TVisActuality;var Counters:TCameraCounters;ProjectProc:GDBProjectProc;
       const zoom,currentdegradationfactor:double):boolean;virtual;
     function onmouse(var popa:TZctnrVectorPGDBaseEntity;
-      const MF:ClipArray;InSubEntry:boolean):boolean;virtual;
+      const MF:TzeFrustum;InSubEntry:boolean):boolean;virtual;
     function onpoint(var objects:TZctnrVectorPGDBaseEntity;
-      const point:GDBVertex):boolean;virtual;
+      const point:TzePoint3d):boolean;virtual;
     function isonmouse(var popa:TZctnrVectorPGDBaseEntity;
-      const mousefrustum:ClipArray;InSubEntry:boolean):boolean;virtual;
+      const mousefrustum:TzeFrustum;InSubEntry:boolean):boolean;virtual;
     procedure startsnap(out osp:os_record;out pdata:Pointer);virtual;
     function getsnap(var osp:os_record;var pdata:Pointer;
       const param:OGLWndtype;ProjectProc:GDBProjectProc;SnapMode:TGDBOSMode):boolean;virtual;
@@ -156,7 +156,7 @@ type
       var DC:TDrawContext);virtual;
     procedure rtmodifyonepoint(const rtmod:TRTModifyData);
       virtual;abstract;
-    procedure transform(const t_matrix:DMatrix4D);virtual;
+    procedure transform(const t_matrix:TzeTypedMatrix4d);virtual;
     procedure remaponecontrolpoint(pdesc:PControlPointDesc;
       ProjectProc:GDBProjectProc);virtual;abstract;
     function beforertmodify:Pointer;virtual;
@@ -166,8 +166,8 @@ type
     procedure clearrtmodify(p:Pointer);virtual;
     function getowner:PGDBObjSubordinated;virtual;
     function GetMainOwner:PGDBObjSubordinated;virtual;
-    function getmatrix:PDMatrix4D;virtual;
-    function getownermatrix:PDMatrix4D;virtual;
+    function getmatrix:PzeTypedMatrix4d;virtual;
+    function getownermatrix:PzeTypedMatrix4d;virtual;
     function ObjToString(const prefix,sufix:string):string;virtual;
     function ReturnLastOnMouse(InSubEntry:boolean):PGDBObjEntity;virtual;
     procedure YouDeleted(var drawing:TDrawingDef);virtual;
@@ -182,30 +182,30 @@ type
     function IsHaveLCS:boolean;virtual;
     function IsHaveGRIPS:boolean;virtual;
     function GetLayer:PGDBLayerProp;virtual;
-    function GetCenterPoint:GDBVertex;virtual;
+    function GetCenterPoint:TzePoint3d;virtual;
     procedure SetInFrustum(infrustumactualy:TActuality;
       var Counters:TCameraCounters);virtual;
-    procedure SetInFrustumFromTree(const frustum:ClipArray;
+    procedure SetInFrustumFromTree(const frustum:TzeFrustum;
       const Actuality:TVisActuality;var Counters:TCameraCounters;ProjectProc:GDBProjectProc;
       const zoom,currentdegradationfactor:double);virtual;
     function CalcActualVisible(
       const Actuality:TVisActuality):boolean;virtual;
     procedure SetNotInFrustum(infrustumactualy:TActuality;
       var Counters:TCameraCounters);virtual;
-    function CalcInFrustum(const frustum:ClipArray;
+    function CalcInFrustum(const frustum:TzeFrustum;
       const Actuality:TVisActuality;var Counters:TCameraCounters;ProjectProc:GDBProjectProc;
       const zoom,currentdegradationfactor:double):boolean;virtual;
     function CalcTrueInFrustum(
-      const frustum:ClipArray):TInBoundingVolume;virtual;
-    function IsIntersect_Line(lbegin,lend:gdbvertex):Intercept3DProp;
+      const frustum:TzeFrustum):TInBoundingVolume;virtual;
+    function IsIntersect_Line(lbegin,lend:TzePoint3d):Intercept3DProp;
       virtual;
     procedure BuildGeometry(var drawing:TDrawingDef);virtual;
     procedure AddOnTrackAxis(var posr:os_record;
       const processaxis:taddotrac);virtual;
-    function CalcObjMatrixWithoutOwner:DMatrix4D;virtual;
+    function CalcObjMatrixWithoutOwner:TzeTypedMatrix4d;virtual;
     procedure EraseMi(pobj:pGDBObjEntity;pobjinarray:integer;
       var drawing:TDrawingDef);virtual;
-    function GetTangentInPoint(const point:GDBVertex):GDBVertex;virtual;
+    function GetTangentInPoint(const point:TzePoint3d):TzePoint3d;virtual;
     procedure CalcObjMatrix(pdrawing:PTDrawingDef=nil);virtual;
     procedure ReCalcFromObjMatrix;virtual;
     procedure correctsublayers(var la:GDBLayerArray);virtual;
@@ -351,7 +351,7 @@ begin
 
 end;
 
-function GDBObjEntity.GetTangentInPoint(const point:GDBVertex):GDBVertex;
+function GDBObjEntity.GetTangentInPoint(const point:TzePoint3d):TzePoint3d;
 begin
   Result:=nulvertex;
 end;
@@ -361,7 +361,7 @@ begin
   Result:=False;
 end;
 
-function GDBObjEntity.CalcObjMatrixWithoutOwner:DMatrix4D;
+function GDBObjEntity.CalcObjMatrixWithoutOwner:TzeTypedMatrix4d;
 begin
   Result:=onematrix;
 end;
@@ -392,7 +392,7 @@ begin
 
 end;
 
-function GDBObjEntity.IsIntersect_Line(lbegin,lend:gdbvertex):Intercept3DProp;
+function GDBObjEntity.IsIntersect_Line(lbegin,lend:TzePoint3d):Intercept3DProp;
 begin
   Result.isintercept:=False;
 end;
@@ -845,7 +845,7 @@ end;
 
 procedure GDBObjEntity.correctbb;
 var
-  cv:gdbvertex;
+  cv:TzePoint3d;
   d:double;
 begin
   d:=GetLTCorrectL(dc.DrawingContext.globalltscale);
@@ -896,7 +896,7 @@ begin
 end;
 
 function GDBObjEntity.onpoint(var objects:TZctnrVectorPGDBaseEntity;
-  const point:GDBVertex):boolean;
+  const point:TzePoint3d):boolean;
 begin
   Result:=False;
 end;

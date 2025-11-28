@@ -138,7 +138,7 @@ type
  //procedure errorList(allGraph:TListAllGraph;Epsilon:double;var listError:TListError;listSLname,listAllSLname:TGDBlistSLname);
 
  procedure visualMasterGroupLine(listVertexEdge:TGraphBuilder;listMasterDevice:TVectorOfMasterDevice;isMetricNumeric:boolean;heightText:double;numDevice:boolean);
- procedure visualGraphConnection(GGraph:TGraphBuilder;listMasterDevice:TVectorOfMasterDevice;graphFull,graphEasy:boolean;var fTreeVertex:GDBVertex;var eTreeVertex:GDBVertex);
+ procedure visualGraphConnection(GGraph:TGraphBuilder;listMasterDevice:TVectorOfMasterDevice;graphFull,graphEasy:boolean;var fTreeVertex:TzePoint3d;var eTreeVertex:TzePoint3d);
  procedure cleanSuperlineCablelist;
  //procedure cabelingMasterGroupLine(listVertexEdge:TGraphBuilder;listMasterDevice:TVectorOfMasterDevice;isMetricNumeric:boolean);
  procedure cabelingMasterGroupLineNew(listVertexEdge:TGraphBuilder;listMasterDevice:TVectorOfMasterDevice;isMetricNumeric:boolean);
@@ -604,7 +604,7 @@ end;
 //      end;
 //  end;
 
-procedure visualGraphConnection(GGraph:TGraphBuilder;listMasterDevice:TVectorOfMasterDevice;graphFull,graphEasy:boolean;var fTreeVertex:GDBVertex;var eTreeVertex:GDBVertex);
+procedure visualGraphConnection(GGraph:TGraphBuilder;listMasterDevice:TVectorOfMasterDevice;graphFull,graphEasy:boolean;var fTreeVertex:TzePoint3d;var eTreeVertex:TzePoint3d);
 var
     //globalGraph: TGraph;
     //sumWeightPath: Float;
@@ -615,7 +615,7 @@ var
     //counter,counter2,counterColor:integer; //счетчики
 
     //listAllTree:tvectorofGraph;
-    //inVertex:GDBVertex;
+    //inVertex:TzePoint3d;
 
   begin
     //визуализация номеров точек на плане для совмещения их с деревом
@@ -731,7 +731,7 @@ var
     end;
 
     //Визуализация текста его p1-координата, mText-текст, color-цвет, размер
-    function visualDrawText(p1:GDBVertex;mText:String;color:integer;heightText:double):TCommandResult;
+    function visualDrawText(p1:TzePoint3d;mText:String;color:integer;heightText:double):TCommandResult;
     var
         ptext:PGDBObjText;
     begin
@@ -749,7 +749,7 @@ var
     end;
 
     //Визуализация круга его p1-координата, rr-радиус, color-цвет
-    function visualDrawCircle(p1:GDBVertex;rr:Double;color:integer):TCommandResult;
+    function visualDrawCircle(p1:TzePoint3d;rr:Double;color:integer):TCommandResult;
     var
         pcircle:PGDBObjCircle;
     begin
@@ -1968,7 +1968,7 @@ end;
      tempString:string;
      //sumWeightPath,tempFloat: Float;
      tempLVertex:TvectorOfInteger;
-     //gg:GDBVertex;
+     //gg:TzePoint3d;
 
      function isVertexAdded(tempLVertex:tvectorofinteger;index:integer):boolean;
      var
@@ -2274,7 +2274,7 @@ end;
 //
 //    i,j,k: Integer;
 //
-//    gg:GDBVertex;
+//    gg:TzePoint3d;
 //
 //
 //    //** Поиск существует ли устройства с нужным именем
@@ -2687,7 +2687,7 @@ function getListMasterDevNew(listVertexEdge:TGraphBuilder;globalGraph: TGraph;li
      tempString:string;
      sumWeightPath{,tempFloat}: Float;
      tempLVertex:TvectorOfInteger;
-     //gg:GDBVertex;
+     //gg:TzePoint3d;
 
      function isVertexAdded(tempLVertex:tvectorofinteger;index:integer):boolean;
      var
@@ -2977,7 +2977,7 @@ function getListMasterDevNew(listVertexEdge:TGraphBuilder;globalGraph: TGraph;li
      tempString:string;
      sumWeightPath{,tempFloat}: Float;
      tempLVertex:TvectorOfInteger;
-     //gg:GDBVertex;
+     //gg:TzePoint3d;
 
      function isVertexAdded(tempLVertex:tvectorofinteger;index:integer):boolean;
      var
@@ -3324,7 +3324,7 @@ function getListMasterDevNew(listVertexEdge:TGraphBuilder;globalGraph: TGraph;li
              pvd:pvardesk;
              cableNameinGraph:string;
      //tempLVertex:TvectorOfInteger;
-     //gg:GDBVertex;
+     //gg:TzePoint3d;
      listVertexSNCU, listVertexDevUnit:TVertexofString;
      subMasterDeviceSpecName,subCUDeviceSpecName,nodeCUSpecName,saveSpecNameNode,saveSpecNameNodeEdge:string;
 
@@ -4400,7 +4400,7 @@ var
 
     i,j{,k}: Integer;
     pvd:pvardesk;
-    gg:GDBVertex;
+    gg:TzePoint3d;
     //mastDev:TVectorOfMasterDevice;
 
 
@@ -4422,7 +4422,7 @@ var
     end;
 
         //** Поиск существует ли устройства с нужным именем
-    procedure visualGraphTreeNew222(G: TGraph; var startPt:GDBVertex;height:double);
+    procedure visualGraphTreeNew222(G: TGraph; var startPt:TzePoint3d;height:double);
     //var
     //   i: Integer;
     //   pvd:pvardesk; //для работы со свойствами устройств

@@ -77,7 +77,7 @@ end;
 procedure Tuzvmanem_com.repeatEMShema(pdata:PtrInt);
 var
  depthVisual:double;
- insertCoordination:GDBVertex;
+ insertCoordination:TzePoint3d;
  graphDev:TGraphDev;
  listStructurGraphEM:TListGraphDev; //граф без разрывов, переходов методов прокладки. Только устройства подключения и разветвительные коробки
 begin

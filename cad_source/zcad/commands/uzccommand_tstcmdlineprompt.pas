@@ -47,7 +47,7 @@ var
   //inpt:String;
   gr:TGetResult;
   filename:string='';
-  p:GDBVertex;
+  p:TzePoint3d;
 begin
   if clFileParam=nil then
     clFileParam:=CMDLinePromptParser.GetTokens(RSCLParam);

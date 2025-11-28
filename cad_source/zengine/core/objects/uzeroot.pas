@@ -33,10 +33,10 @@ type
   GDBObjRoot= object(GDBObjGenericSubEntry)
     private
       fInfrustum:TActuality;
-      fFrustumPosition:GDBvertex;
+      fFrustumPosition:TzePoint3d;
     protected
       function GetInfrustumFromTree:TActuality;virtual;
-      procedure SetObjMatrix(const AObjMatrix:DMatrix4D);virtual;
+      procedure SetObjMatrix(const AObjMatrix:TzeTypedMatrix4d);virtual;
     public
       constructor initnul;
       destructor done;virtual;
@@ -45,30 +45,30 @@ type
       procedure getoutbound(var DC:TDrawContext);virtual;
       function GetHandle:PtrInt;virtual;
       procedure EraseMi(pobj:pGDBObjEntity;pobjinarray:Integer;var drawing:TDrawingDef);virtual;
-      function GetMatrix:PDMatrix4D;virtual;
+      function GetMatrix:PzeTypedMatrix4d;virtual;
       procedure DrawWithAttrib(var DC:TDrawContext;const inFrustumState:TInBoundingVolume);virtual;
-      function CalcInFrustum(const frustum:ClipArray;const Actuality:TVisActuality;var Counters:TCameraCounters; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double):Boolean;virtual;
-      procedure CalcInFrustumByTree(const frustum:ClipArray;const Actuality:TVisActuality;var enttree:TEntTreeNode;var Counters:TCameraCounters; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double);virtual;
+      function CalcInFrustum(const frustum:TzeFrustum;const Actuality:TVisActuality;var Counters:TCameraCounters; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double):Boolean;virtual;
+      procedure CalcInFrustumByTree(const frustum:TzeFrustum;const Actuality:TVisActuality;var enttree:TEntTreeNode;var Counters:TCameraCounters; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double);virtual;
       procedure CalcVisibleBBByTree(const Actuality:TVisActuality;var enttree:TEntTreeNode);virtual;
-      function calcvisible(const frustum:ClipArray;const Actuality:TVisActuality;var Counters:TCameraCounters;ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double):Boolean;virtual;
+      function calcvisible(const frustum:TzeFrustum;const Actuality:TVisActuality;var Counters:TCameraCounters;ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double):Boolean;virtual;
       procedure calcbb(var DC:TDrawContext);virtual;
       function GetObjType:TObjID;virtual;
       procedure SetInFrustum(infrustumactualy:TActuality;var Counters:TCameraCounters);virtual;
       procedure SetNotInFrustum(infrustumactualy:TActuality;var Counters:TCameraCounters);virtual;
 
-      property FrustumPosition:GDBvertex read fFrustumPosition write fFrustumPosition;
+      property FrustumPosition:TzePoint3d read fFrustumPosition write fFrustumPosition;
   end;
 
 procedure DoFormat(var ConnectedArea:GDBObjGenericSubEntry;var ents,ents2Connected:GDBObjOpenArrayOfPV;var drawing:TDrawingDef;var DC:TDrawContext;lpsh:TLPSHandle;Stage:TEFStages{=EFAllStages});
 
 implementation
 
-procedure GDBObjRoot.SetObjMatrix(const AObjMatrix:DMatrix4D);
+procedure GDBObjRoot.SetObjMatrix(const AObjMatrix:TzeTypedMatrix4d);
 begin
   inherited;
-  fFrustumPosition.x:=AObjMatrix.mtr[3].v[0];
-  fFrustumPosition.y:=AObjMatrix.mtr[3].v[1];
-  fFrustumPosition.z:=AObjMatrix.mtr[3].v[2];
+  fFrustumPosition.x:=AObjMatrix.mtr.v[3].v[0];
+  fFrustumPosition.y:=AObjMatrix.mtr.v[3].v[1];
+  fFrustumPosition.z:=AObjMatrix.mtr.v[3].v[2];
 end;
 
 function GDBObjRoot.GetInfrustumFromTree:TActuality;
@@ -97,28 +97,28 @@ begin
   InFrustumAABB:=enttree.NodeData.InFrustumBoundingBox;
 end;
 
-function correctFrustum(const frustum:ClipArray;const objmatrix:DMatrix4D;frustumpos:GDBvertex):ClipArray;
+function correctFrustum(const frustum:TzeFrustum;const objmatrix:TzeTypedMatrix4d;frustumpos:TzePoint3d):TzeFrustum;
 var
-  im:DMatrix4D;
+  im:TzeTypedMatrix4d;
 begin
   im:=ObjMatrix;
-  im.mtr[3].v[0]:=frustumpos.x;
-  im.mtr[3].v[1]:=frustumpos.y;
-  im.mtr[3].v[2]:=frustumpos.z;
+  im.mtr.v[3].v[0]:=frustumpos.x;
+  im.mtr.v[3].v[1]:=frustumpos.y;
+  im.mtr.v[3].v[2]:=frustumpos.z;
   result:=FrustumTransform(frustum,im);
 end;
 
-function GDBObjRoot.calcvisible(const frustum:ClipArray;const Actuality:TVisActuality;var Counters:TCameraCounters;ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double):Boolean;
+function GDBObjRoot.calcvisible(const frustum:TzeFrustum;const Actuality:TVisActuality;var Counters:TCameraCounters;ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double):Boolean;
 var
-  tfrustum:ClipArray;
+  tfrustum:TzeFrustum;
 begin
   tfrustum:=correctFrustum(frustum,ObjMatrix,FrustumPosition);
   result:=inherited calcvisible(tfrustum,Actuality,Counters,ProjectProc,zoom,currentdegradationfactor);
 end;
 
-procedure GDBObjRoot.CalcInFrustumByTree(const frustum:ClipArray;const Actuality:TVisActuality;var enttree:TEntTreeNode;var Counters:TCameraCounters; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double);
+procedure GDBObjRoot.CalcInFrustumByTree(const frustum:TzeFrustum;const Actuality:TVisActuality;var enttree:TEntTreeNode;var Counters:TCameraCounters; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double);
 var
-   tfrustum:ClipArray;
+   tfrustum:TzeFrustum;
 begin
   fInfrustum:=Actuality.InfrustumActualy;
   tfrustum:=correctFrustum(frustum,ObjMatrix,FrustumPosition);
@@ -127,7 +127,7 @@ begin
 end;
 function GDBObjRoot.CalcInFrustum;
 var
-  tfrustum:ClipArray;
+  tfrustum:TzeFrustum;
 begin
   fInfrustum:=Actuality.InfrustumActualy;
   tfrustum:=correctFrustum(frustum,ObjMatrix,FrustumPosition);

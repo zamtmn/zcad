@@ -29,7 +29,8 @@ uses
   uzeentity,uzeExtdrAbstractEntityExtender,
   uzedrawingsimple,uzcdrawings,
   uzeentline,uzeentityfactory,uzeconsts,uzcutils,
-  uzegeometry,uzegeometrytypes;
+  uzegeometry,uzegeometrytypes,
+  uzelongprocesssupport,uzccommandsabstract;
 
 type
   TLapeScriptContextMode=(LSCMCompilerSetup,LSCMContextSetup);
@@ -41,124 +42,96 @@ const
 
 type
   TBaseScriptContext=class
-    constructor Create;virtual;//abstract;
+  private
+    fLPS:TZELongProcessSupport;
+    function getLPS:TZELongProcessSupport;
+  public
+    constructor CreateContext;virtual;
+    destructor Destroy;override;
+
+    property LongProcessSupport:TZELongProcessSupport read getLPS;
   end;
   TMetaScriptContext=class of TBaseScriptContext;
 
-  TCurrentDrawingContext=class(TBaseScriptContext)
-    FCurrentDrawing:PTSimpleDrawing;
-  end;
+  TScriptContextCreateMode=(
+    LSCMCreateOnce{создается один раз, используется всеми скриптами},
+    LSCMRecreate{создается заново, для каждого запуска каждого скрипта});
 
-  TEntityExtentionContext=class(TBaseScriptContext)
-    FThisEntity:PGDBObjEntity;
-    FThisEntityExtender:TAbstractEntityExtender;
-  end;
 
-  TCompilerDefAdder=procedure(mode:TLapeScriptContextModes;ctx:TBaseScriptContext;cplr:TLapeCompiler) of object;
+  TCompilerDefAdder=procedure(const ACommandContext:TZCADCommandContext;mode:TLapeScriptContextModes;ctx:TBaseScriptContext;cplr:TLapeCompiler) of object;
   TCompilerDefAdders=array of TCompilerDefAdder;
 
-  ttest=class
-    class procedure testadder(mode:TLapeScriptContextModes;ctx:TBaseScriptContext;cplr:TLapeCompiler);
-    class procedure setCurrentDrawing(mode:TLapeScriptContextModes;ctx:TBaseScriptContext;cplr:TLapeCompiler);
+  TLPCSBase=class
+    class procedure cplrSetup(const ACommandContext:TZCADCommandContext;mode:TLapeScriptContextModes;ctx:TBaseScriptContext;cplr:TLapeCompiler);
   end;
 
 implementation
 
-constructor TBaseScriptContext.Create;
+function TBaseScriptContext.getLPS:TZELongProcessSupport;
 begin
+  if fLPS=nil then begin
+    fLPS:=lps.Clone;
+  end;
+  result:=fLPS;
+end;
+constructor TBaseScriptContext.CreateContext;
+begin
+  fLPS:=nil;
+  inherited;
 end;
 
-procedure line(const Params: PParamArray{x1,y1,z1,x2,y2,z2: double}); cdecl;
+destructor TBaseScriptContext.Destroy;
+begin
+  FreeAndNil(fLPS);
+  inherited;
+end;
+
+procedure slp(const Params: PParamArray; const Result: Pointer); cdecl;
+type
+  PLPSHandle=^TLPSHandle;
+  PLPSCounter=^TLPSCounter;
 var
-  x1,y1,z1,x2,y2,z2: double;
-  ctx:TCurrentDrawingContext;
-  pline:PGDBObjLine;
+  ctx:TBaseScriptContext;
 begin
-  ctx:=TCurrentDrawingContext(Params^[0]);
-  x1:=PDouble(Params^[1])^;
-  y1:=PDouble(Params^[2])^;
-  z1:=PDouble(Params^[3])^;
-  x2:=PDouble(Params^[4])^;
-  y2:=PDouble(Params^[5])^;
-  z2:=PDouble(Params^[6])^;
-
-  pline:=AllocEnt(GDBLineID);
-  pline^.init(nil,nil,LnWtByLayer,CreateVertex(x1,y1,z1),CreateVertex(x2,y2,z2));
-
-  //присваиваем текущие цвет, толщину, и т.д. от настроек чертежа
-  zcSetEntPropFromCurrentDrawingProp(pline);
-
-  //добавляем в чертеж
-  zcAddEntToCurrentDrawingWithUndo(pline);
-
-  //перерисовываем
-  zcRedrawCurrentDrawing;
+  ctx:=TBaseScriptContext(Params^[0]);
+  PLPSHandle(Result)^:=ctx.LongProcessSupport.StartLongProcess(PString(Params^[1])^,{Result}nil,PLPSCounter(Params^[2])^);
 end;
 
-procedure line2(const Params: PParamArray{p1,p2: TVertex}); cdecl;
+procedure plp(const Params: PParamArray); cdecl;
+type
+  PLPSHandle=^TLPSHandle;
+  PLPSCounter=^TLPSCounter;
 var
-  p1,p2:GDBvertex;
-  ctx:TCurrentDrawingContext;
-  pline:PGDBObjLine;
+  ctx:TBaseScriptContext;
 begin
-  ctx:=TCurrentDrawingContext(Params^[0]);
-  p1:=PGDBvertex(Params^[1])^;
-  p2:=PGDBvertex(Params^[2])^;
-
-  pline:=AllocEnt(GDBLineID);
-  pline^.init(nil,nil,LnWtByLayer,p1,p2);
-
-  //присваиваем текущие цвет, толщину, и т.д. от настроек чертежа
-  zcSetEntPropFromCurrentDrawingProp(pline);
-
-  //добавляем в чертеж
-  zcAddEntToCurrentDrawingWithUndo(pline);
-
-  //перерисовываем
-  zcRedrawCurrentDrawing;
+  ctx:=TBaseScriptContext(Params^[0]);
+  ctx.LongProcessSupport.ProgressLongProcess(PLPSHandle(Params^[1])^,PLPSCounter(Params^[2])^);
 end;
 
-procedure StartUndoCommand(const Params: PParamArray{CommandName:String;PushStone:boolean=false}); cdecl;
+procedure elp(const Params: PParamArray); cdecl;
+type
+  PLPSHandle=^TLPSHandle;
 var
-  ctx:TCurrentDrawingContext;
-  CommandName:String;
-  PushStone:boolean;
+  ctx:TBaseScriptContext;
 begin
-  ctx:=TCurrentDrawingContext(Params^[0]);
-  CommandName:=PString(Params^[1])^;
-  PushStone:=Pboolean(Params^[2])^;
-  zcStartUndoCommand(CommandName,PushStone);
+  ctx:=TBaseScriptContext(Params^[0]);
+  ctx.LongProcessSupport.EndLongProcess(PLPSHandle(Params^[1])^);
 end;
 
-procedure EndUndoCommand(const Params: PParamArray); cdecl;
-var
-  ctx:TCurrentDrawingContext;
-begin
-  ctx:=TCurrentDrawingContext(Params^[0]);
-  zcEndUndoCommand;
-end;
-
-class procedure ttest.testadder(mode:TLapeScriptContextModes;ctx:TBaseScriptContext;cplr:TLapeCompiler);
+class procedure TLPCSBase.cplrSetup(const ACommandContext:TZCADCommandContext;mode:TLapeScriptContextModes;ctx:TBaseScriptContext;cplr:TLapeCompiler);
 begin
   if LSCMCompilerSetup in mode then begin
     cplr.StartImporting;
     cplr.addBaseDefine('LAPE');
-    cplr.addGlobalType('record x,y,z:double;end','TzgPoint');
-    cplr.addGlobalMethod('procedure line(x1,y1,z1,x2,y2,z2: double);',@line,ctx);
-    cplr.addGlobalMethod('procedure line2(p1,p2: TzgPoint);',@line2,ctx);
-    cplr.addGlobalMethod('procedure zcStartUndoCommand(CommandName:String;PushStone:boolean=false);',@StartUndoCommand,ctx);
-    cplr.addGlobalMethod('procedure zcEndUndoCommand;',@EndUndoCommand,ctx);
+
+    cplr.addGlobalType('int32','TLPSHandle');
+    cplr.addGlobalMethod('function StartLongProcess(LPName:string;Total:int32=0):TLPSHandle;',@slp,ctx);
+    cplr.addGlobalMethod('procedure ProgressLongProcess(LPHandle:TLPSHandle;Current:int32);',@plp,ctx);
+    cplr.addGlobalMethod('procedure EndLongProcess(LPHandle:TLPSHandle);',@elp,ctx);
+
     cplr.EndImporting;
   end;
 end;
-class procedure ttest.setCurrentDrawing(mode:TLapeScriptContextModes;ctx:TBaseScriptContext;cplr:TLapeCompiler);
-begin
-  if LSCMContextSetup in mode then begin
-    if ctx is TCurrentDrawingContext then
-      (ctx as TCurrentDrawingContext).FCurrentDrawing:=drawings.GetCurrentDWG;
-  end;
-end;
-
 
 initialization
 finalization

@@ -37,9 +37,9 @@ type
   {EXPORT+}
   {REGISTEROBJECTTYPE copy_com}
   copy_com=object(move_com)
-    function AfterClick(const Context:TZCADCommandContext;wc:GDBvertex;
-      mc:GDBvertex2DI;var button:byte;osp:pos_record):integer;virtual;
-    function Copy(const dispmatr:DMatrix4D;UndoMaker:string):integer;
+    function AfterClick(const Context:TZCADCommandContext;wc:TzePoint3d;
+      mc:TzePoint2i;var button:byte;osp:pos_record):integer;virtual;
+    function Copy(const dispmatr:TzeTypedMatrix4d;UndoMaker:string):integer;
   end;
   {EXPORT-}
 var
@@ -47,7 +47,7 @@ var
 
 implementation
 
-function Copy_com.Copy(const dispmatr:DMatrix4D;UndoMaker:string):integer;
+function Copy_com.Copy(const dispmatr:TzeTypedMatrix4d;UndoMaker:string):integer;
 var
   ir:itrec;
   pcd:PTCopyObjectDesc;
@@ -96,10 +96,10 @@ begin
   Result:=cmd_ok;
 end;
 
-function Copy_com.AfterClick(const Context:TZCADCommandContext;wc:GDBvertex;
-  mc:GDBvertex2DI;var button:byte;osp:pos_record):integer;
+function Copy_com.AfterClick(const Context:TZCADCommandContext;wc:TzePoint3d;
+  mc:TzePoint2i;var button:byte;osp:pos_record):integer;
 var
-  dispmatr:DMatrix4D;
+  dispmatr:TzeTypedMatrix4d;
 begin
   dispmatr:=CalcTransformMatrix(t3dp,wc);
   drawings.GetCurrentDWG^.ConstructObjRoot.ObjMatrix:=dispmatr;

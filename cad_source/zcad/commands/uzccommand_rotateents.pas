@@ -41,8 +41,8 @@ var
   pv:pGDBObjEntity;
   ir:itrec;
   Count:integer;
-  dispmatr,im,rotmatr:DMatrix4D;
-  pc:GDBvertex;
+  dispmatr,im,rotmatr:TzeTypedMatrix4d;
+  pc:TzePoint3d;
   m:TMethod;
   a:double;
 begin

@@ -43,7 +43,7 @@ function InteractiveDrawLines(const Context:TZCADCommandContext;
   APrompt1,APromptNext:string;ESP:TEntitySetupProc):TCommandResult;
 var
   pline:PGDBObjLine;
-  p1,p2:gdbvertex;
+  p1,p2:TzePoint3d;
 begin
   {запрос первой координаты}
   if commandmanager.get3dpoint(APrompt1,p1)=GRNormal then

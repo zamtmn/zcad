@@ -25,7 +25,7 @@ uses uzgprimitivescreator,uzgprimitives,uzglvectorobject,uzegluinterface,gvector
 type
 TPointAttr=(TPA_OnCurve,TPA_NotOnCurve);
 TSolverMode=(TSM_WaitStartCountur,TSM_WaitStartPoint,TSM_WaitPoint);
-TVector2D={specialize }TVector<GDBVertex2D>;
+TVector2D={specialize }TVector<TzePoint2d>;
 TDummyData=record
                  v:GDBFontVertex2D;
                  attr:TPointAttr;
@@ -39,21 +39,21 @@ TBezierSolver2D=class
                      BOrder:integer;
                      VectorData:PZGLVectorObject;
                      shxsize:PWord;
-                     scontur,truescontur,truessegment:GDBvertex2D;
+                     scontur,truescontur,truessegment:TzePoint2d;
                      sconturpa,lastpa:TPointAttr;
                      Conturs:TMyVectorArrayGDBFontVertex2D;
                      truesconturAdded,LastOncurveLineAdded:boolean;
                      constructor create;
                      destructor Destroy;override;
                      procedure AddPoint(x,y:double;pa:TPointAttr);overload;
-                     procedure AddPoint(const p:GDBvertex2D;pa:TPointAttr);overload;
+                     procedure AddPoint(const p:TzePoint2d;pa:TPointAttr);overload;
                      procedure ChangeMode(Mode:TSolverMode);
                      procedure EndCountur;
                      procedure StartCountur;
                      procedure DrawCountur;
                      procedure ClearConturs;
                      procedure solve;
-                     function getpoint(t:Double):GDBvertex2D;
+                     function getpoint(t:Double):TzePoint2d;
                      procedure AddPointToContur(x,y:fontfloat;attr:TPointAttr);
                 end;
 var
@@ -87,14 +87,14 @@ end;
 
 procedure TBezierSolver2D.AddPoint(x,y:double;pa:TPointAttr);
 var
-   p:GDBvertex2D;
+   p:TzePoint2d;
 begin
      p.x:=x;
      p.y:=y;
      AddPoint(p,pa);
 end;
-procedure TBezierSolver2D.AddPoint(const p:GDBvertex2D;pa:TPointAttr);
-  procedure checktruescontur(const p:GDBvertex2D);
+procedure TBezierSolver2D.AddPoint(const p:TzePoint2d;pa:TPointAttr);
+  procedure checktruescontur(const p:TzePoint2d);
   begin
     if not truesconturAdded then begin
       truesconturAdded:=true;
@@ -203,7 +203,7 @@ begin
      end;
 end;
 
-function TBezierSolver2D.getpoint(t:Double):GDBvertex2D;
+function TBezierSolver2D.getpoint(t:Double):TzePoint2d;
 var
    i,j,k,rindex:integer;
 begin
@@ -229,7 +229,7 @@ end;
 procedure TBezierSolver2D.solve;
 var
    size,j,n:integer;
-   p,prevp:GDBvertex2D;
+   p,prevp:TzePoint2d;
 begin
      BOrder:=FArray.Size;
      if border<3 then

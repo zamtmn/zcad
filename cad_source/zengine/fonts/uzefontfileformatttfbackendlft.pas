@@ -53,7 +53,7 @@ type
       function GetGlyphAdvance(GD:TGlyphData):Single;override;
       function GetGlyphContoursCount(GD:TGlyphData):Integer;override;
       function GetGlyphPointsCount(GD:TGlyphData):Integer;override;
-      function GetGlyphPoint(GD:TGlyphData;np:integer):GDBvertex2D;override;
+      function GetGlyphPoint(GD:TGlyphData;np:integer):TzePoint2d;override;
       function GetGlyphPointFlag(GD:TGlyphData;np:integer):TTTFPointFlags;override;
       function GetGlyphConEnd(GD:TGlyphData;np:integer):Integer;override;
   end;
@@ -74,7 +74,7 @@ function TTTFBackendLazFreeType.GetGlyphPointsCount(GD:TGlyphData):Integer;
 begin
   result:=PGlyph(TFreeTypeGlyph(GD.PG).Data.z)^.outline.n_points-2;
 end;
-function TTTFBackendLazFreeType.GetGlyphPoint(GD:TGlyphData;np:integer):GDBvertex2D;
+function TTTFBackendLazFreeType.GetGlyphPoint(GD:TGlyphData;np:integer):TzePoint2d;
 begin
   with PGlyph(TFreeTypeGlyph(GD.PG).Data.z)^.outline.points^[np] do begin
     result.x:=x;

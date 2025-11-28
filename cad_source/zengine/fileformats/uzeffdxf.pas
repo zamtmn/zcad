@@ -313,7 +313,7 @@ var
   objid: Integer;
   pobj,postobj: PGDBObjEntity;
   newowner:PGDBObjSubordinated;
-  m4:DMatrix4D;
+  m4:TzeTypedMatrix4d;
   trash:boolean;
   PExtLoadData:Pointer;
   EntInfoData:TEntInfoData;

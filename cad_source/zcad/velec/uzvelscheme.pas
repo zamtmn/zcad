@@ -152,7 +152,7 @@ type
       TVertexTree=record
                          dev:PGDBObjDevice;
                          connector:PGDBObjDevice;
-                         vertex:GDBVertex; // Координаты вершины
+                         vertex:TzePoint3d; // Координаты вершины
                          isDev:boolean;
                          isRiser:boolean;
       end;
@@ -193,23 +193,23 @@ type
 
 
       //function graphBulderFunc(Epsilon:double;nameCable:string):TGraphBuilder;
-      //function visualGraphEdge(p1:GDBVertex;p2:GDBVertex;color:integer;nameLayer:string):TCommandResult;
-      //function visualGraphVertex(p1:GDBVertex;rr:Double;color:integer;nameLayer:string):TCommandResult;
-      //function visualGraphError(point:GDBVertex;rr:Double;color:integer;nameLayer:string):TCommandResult;
-      //function getPointConnector(pobj:pGDBObjEntity; out pConnect:GDBVertex):Boolean;
+      //function visualGraphEdge(p1:TzePoint3d;p2:TzePoint3d;color:integer;nameLayer:string):TCommandResult;
+      //function visualGraphVertex(p1:TzePoint3d;rr:Double;color:integer;nameLayer:string):TCommandResult;
+      //function visualGraphError(point:TzePoint3d;rr:Double;color:integer;nameLayer:string):TCommandResult;
+      //function getPointConnector(pobj:pGDBObjEntity; out pConnect:TzePoint3d):Boolean;
       //
       //function testTempDrawPolyLine(listVertex:GListVertexPoint;color:Integer):TCommandResult;
-      //function testTempDrawText(p1:GDBVertex;mText:String):TCommandResult;
-      //function convertLineInRectangleWithAccuracy(point1:GDBVertex;point2:GDBVertex;accuracy:double):TRectangleLine;
-      //procedure listSortVertexAtStPtLine(var listNumVertex:TListTempNumVertex;listDevice:TListDeviceLine;stVertLine:GDBVertex);
-      //function getAreaLine(point1:GDBVertex;point2:GDBVertex;accuracy:double):TBoundingBox;
-      //function getAreaVertex(vertexPoint:GDBVertex;accuracy:double):TBoundingBox;
-      //function vertexPointInAreaRectangle(rectLine:TRectangleLine;vertexPt:GDBVertex):boolean;
+      //function testTempDrawText(p1:TzePoint3d;mText:String):TCommandResult;
+      //function convertLineInRectangleWithAccuracy(point1:TzePoint3d;point2:TzePoint3d;accuracy:double):TRectangleLine;
+      //procedure listSortVertexAtStPtLine(var listNumVertex:TListTempNumVertex;listDevice:TListDeviceLine;stVertLine:TzePoint3d);
+      //function getAreaLine(point1:TzePoint3d;point2:TzePoint3d;accuracy:double):TBoundingBox;
+      //function getAreaVertex(vertexPoint:TzePoint3d;accuracy:double):TBoundingBox;
+      //function vertexPointInAreaRectangle(rectLine:TRectangleLine;vertexPt:TzePoint3d):boolean;
       //procedure clearVisualGraph(nameLayer:string);
       //procedure getListSuperline(var listSLname:TGDBlistSLname);
       function getListGroupGraph():TListGraph;
-      procedure buildSSScheme(listGraph:TListGraph;insertPoint:GDBVertex);
-      procedure visualCentralCabelTree(G: TGraph; var startPt:GDBVertex;height:double; var depth:double);
+      procedure buildSSScheme(listGraph:TListGraph;insertPoint:TzePoint3d);
+      procedure visualCentralCabelTree(G: TGraph; var startPt:TzePoint3d;height:double; var depth:double);
       //function allStructGraph(oGraph:TListGraph):TListInteger;
       function getFullGraphConnect(oGraph:TListGraph):TListGraph;
       procedure graphMerge(var mainG:TGraph;vertexStNum:integer;absorbedG:TGraph;absorbedGVert:TVertex);
@@ -232,7 +232,7 @@ function TestModul_com(operands:TCommandOperands):TCommandResult;
  var
     //x, y: Integer;
     //i   : Integer;
-    //tempPoint:GDBVertex;
+    //tempPoint:TzePoint3d;
 
     //listGraph:TListGraph;
     //edgeGraph:PTEdgeTree;
@@ -258,7 +258,7 @@ function TestModul_com(operands:TCommandOperands):TCommandResult;
     cman:TCableManager;
     //pv:pGDBObjDevice;
 
-    //coord,currentcoord:GDBVertex;
+    //coord,currentcoord:TzePoint3d;
 //    pbd:PGDBObjBlockdef;
     {pvn,pvm,}pvSegm{,pvSegmLength, pvd}{,pvl}:pvardesk;
 
@@ -349,12 +349,12 @@ function TestModul_com(operands:TCommandOperands):TCommandResult;
   zcRedrawCurrentDrawing;
   result:=cmd_ok;
  end;
-  procedure InsertDat2(datname,name:String;var currentcoord:GDBVertex; var root:GDBObjRoot);
+  procedure InsertDat2(datname,name:String;var currentcoord:TzePoint3d; var root:GDBObjRoot);
 var
    pv:pGDBObjDevice;
    pt:pGDBObjMText;
    lx,{rx,}uy,dy:Double;
-   tv:gdbvertex;
+   tv:TzePoint3d;
    DC:TDrawContext;
 begin
           name:=uzbstrproc.Tria_Utf8ToAnsi(name);
@@ -394,12 +394,12 @@ begin
      currentcoord.y:=currentcoord.y+dy+uy;
 end;
 
-function InsertDat(datname,sname,ename:String;datcount:Integer;var currentcoord:GDBVertex; var root:GDBObjRoot):pgdbobjline;
+function InsertDat(datname,sname,ename:String;datcount:Integer;var currentcoord:TzePoint3d; var root:GDBObjRoot):pgdbobjline;
 var
 //   pv:pGDBObjDevice;
 //   lx,rx,uy,dy:Double;
    pl:pgdbobjline;
-   oldcoord,oldcoord2:gdbvertex;
+   oldcoord,oldcoord2:TzePoint3d;
    DC:TDrawContext;
 begin
      dc:=drawings.GetCurrentDWG^.CreateDrawingRC;
@@ -573,11 +573,11 @@ function createELSchema_com(const Context:TZCADCommandContext;operands:TCommandO
 var
    listGraph:TListGraph;
    listFullGraph:TListGraph;
-   insertPoint:gdbvertex;
-   //a,gg:GDBVertex;
+   insertPoint:TzePoint3d;
+   //a,gg:TzePoint3d;
    depth:double;
    i:integer;
-    procedure addBlockonDraw(datname:String;currentcoord:GDBVertex; var root:GDBObjRoot);
+    procedure addBlockonDraw(datname:String;currentcoord:TzePoint3d; var root:GDBObjRoot);
     var
         //datname:String;
         pv:pGDBObjDevice;
@@ -681,7 +681,7 @@ var
     //iNum:integer;
     //listVertex:TListVertex;
     //infoVertex:TInfoVertex;
-    //pt1,pt2,pt3,ptext,ptSt,ptEd:GDBVertex;
+    //pt1,pt2,pt3,ptext,ptSt,ptEd:TzePoint3d;
 
     //pv:pGDBObjDevice;
     //ppvvarext,pvarv:TVariablesExtender;
@@ -856,7 +856,7 @@ end;
 //end;
 
 ////Визуализация графа
-procedure visualCentralCabelTree(G: TGraph; var startPt:GDBVertex;height:double; var depth:double);
+procedure visualCentralCabelTree(G: TGraph; var startPt:TzePoint3d;height:double; var depth:double);
 const
   size=5;
   indent=30;
@@ -864,7 +864,7 @@ type
    //PTInfoVertex=^TInfoVertex;
    TInfoVertex=record
        num,kol,childs:Integer;
-       poz:GDBVertex2D;
+       poz:TzePoint2d;
        vertex:TVertex;
    end;
 
@@ -877,7 +877,7 @@ var
   //iNum:integer;
   listVertex:TListVertex;
   infoVertex:TInfoVertex;
-  pt1,pt2,{pt3,ptext,}ptSt,ptEd:GDBVertex;
+  pt1,pt2,{pt3,ptext,}ptSt,ptEd:TzePoint3d;
   VertexPath: TClassList;
   pv:pGDBObjDevice;
   newdevname:string;
@@ -897,7 +897,7 @@ var
 
 
 
-  procedure addBlockonDraw(G:TGraph;vertexGraph:TVertex;var dev:pGDBObjDevice;var currentcoord:GDBVertex; var root:GDBObjRoot);
+  procedure addBlockonDraw(G:TGraph;vertexGraph:TVertex;var dev:pGDBObjDevice;var currentcoord:TzePoint3d; var root:GDBObjRoot);
   var
       //datname:String;
       //pv:pGDBObjDevice;
@@ -910,7 +910,7 @@ var
         pnevdev:PGDBObjDevice;
         entvarext,delvarext:TVariablesExtender;
         PBH:PGDBObjBlockdef;
-        //t_matrix:DMatrix4D;
+        //t_matrix:TzeTypedMatrix4d;
         ir2:itrec;
         pobj,pcobj:PGDBObjEntity;
         pcable:PGDBObjCable;
@@ -1129,7 +1129,7 @@ var
        }
   end;
 
-  procedure addBlockNodeonDraw(G:TGraph;vertexGraph:TVertex;var currentcoord:GDBVertex; var root:GDBObjRoot;datname:String);
+  procedure addBlockNodeonDraw(G:TGraph;vertexGraph:TVertex;var currentcoord:TzePoint3d; var root:GDBObjRoot;datname:String);
   var
       //datname:String;
       //pv:pGDBObjDevice;
@@ -1142,7 +1142,7 @@ var
         pnevdev:PGDBObjDevice;
         entvarext{,delvarext}:TVariablesExtender;
         //PBH:PGDBObjBlockdef;
-        //t_matrix:DMatrix4D;
+        //t_matrix:TzeTypedMatrix4d;
         //ir2:itrec;
         //pobj,pcobj:PGDBObjEntity;
         pcable:PGDBObjCable;
@@ -1249,7 +1249,7 @@ var
 
   //end;
     //рисуем прямоугольник с цветом  зная номера вершин, координат возьмем из графа по номерам
-      procedure drawConnectLine(pt1,pt2:GDBVertex;color:integer);
+      procedure drawConnectLine(pt1,pt2:TzePoint3d;color:integer);
       var
           polyObj:PGDBObjPolyLine;
       begin
@@ -1266,7 +1266,7 @@ var
       end;
 
       //рисуем прямоугольник с цветом  зная номера вершин, координат возьмем из графа по номерам
-      procedure drawConnectLineDev(pSt,p1,p2,pEd:GDBVertex;VT1,VT2:TVertex; var root:GDBObjRoot);
+      procedure drawConnectLineDev(pSt,p1,p2,pEd:TzePoint3d;VT1,VT2:TVertex; var root:GDBObjRoot);
       var
           cabl,cabl2:TEdgeTree;
           //pDev1,pDev2:pGDBObjDevice;
@@ -1414,7 +1414,7 @@ var
       end;
 
 
-      //procedure drawConnectLineDev(pSt,p1,p2,pEd:GDBVertex;cabl:TEdgeTree; var root:GDBObjRoot);
+      //procedure drawConnectLineDev(pSt,p1,p2,pEd:TzePoint3d;cabl:TEdgeTree; var root:GDBObjRoot);
       //var
       //    cableLine:PGDBObjCable;
       //    //pnevdev:PGDBObjCable;
@@ -1670,7 +1670,7 @@ begin
 
 end;
 
-procedure buildSSScheme(listGraph:TListGraph;insertPoint:GDBVertex);
+procedure buildSSScheme(listGraph:TListGraph;insertPoint:TzePoint3d);
 type
 
  //** Характеристики типов кабелей
@@ -1696,7 +1696,7 @@ type
 var
    //pv:pGDBObjDevice;
    i:integer;
-   //pt:GDBVertex;
+   //pt:TzePoint3d;
    coord_x,coord_y:double;
 
    //**Получаем общую длину кабельной группы
@@ -1847,7 +1847,7 @@ var
 
 
    //** Добавляем блок с кабелем
-   procedure AddGroupCable(gGroup:TGraph;var insertPoint:GDBVertex);
+   procedure AddGroupCable(gGroup:TGraph;var insertPoint:TzePoint3d);
     var
        pv:pGDBObjDevice;
        ppvvarext,pvaredge:TVariablesExtender;
@@ -1914,7 +1914,7 @@ var
 
     end;
 
-   procedure AddDeviceCable(gGroup:TGraph;var insertPoint:GDBVertex);
+   procedure AddDeviceCable(gGroup:TGraph;var insertPoint:TzePoint3d);
       type
    //** Создание информации для списка устройств и их количества
       //PTinfoDev=^TinfoDev;
@@ -2056,7 +2056,7 @@ var
     //isStartVertex:boolean;
     startVertexDevIndex:integer;
 
-    graphVizPt:GDBVertex;
+    graphVizPt:TzePoint3d;
 
     //count: Integer;
     pcabledesk:PTCableDesctiptor;
@@ -2070,7 +2070,7 @@ var
     cman:TCableManager;
     //pv:pGDBObjDevice;
 
-    //coord,currentcoord:GDBVertex;
+    //coord,currentcoord:TzePoint3d;
 //    pbd:PGDBObjBlockdef;
     {pvn,pvm,}pvSegm,pvSegmLength, pvd{,pvl}:pvardesk;
 
@@ -2102,12 +2102,12 @@ var
            end;
     end;
 
-    function getVertexGraphIndexCoo(oGraph:TGraph;vertex:GDBVertex):integer;
+    function getVertexGraphIndexCoo(oGraph:TGraph;vertex:TzePoint3d):integer;
     var
         i:integer;
     begin
          result:=-1;
-         //zcUI.TextMessage('getVertexGraphIndexCoo(oGraph:TGraph;vertex:GDBVertex):integer  oGraph.VertexCount=' + inttostr(oGraph.VertexCount),TMWOHistoryOut);
+         //zcUI.TextMessage('getVertexGraphIndexCoo(oGraph:TGraph;vertex:TzePoint3d):integer  oGraph.VertexCount=' + inttostr(oGraph.VertexCount),TMWOHistoryOut);
          for i:= 0 to oGraph.VertexCount-1 do begin
            //zcUI.TextMessage('i='+inttostr(i)+'   dev = '+booltostr(TVertexTree(oGraph.Vertices[i].AsPointer[vpTVertexTree]^).isDev)+ 'ccor oGraph.Vertices[i].AsPointer[vpTVertexTree]^).vertex x=' + floattostr(TVertexTree(oGraph.Vertices[i].AsPointer[vpTVertexTree]^).vertex.x),TMWOHistoryOut);
            if vertexeq(TVertexTree(oGraph.Vertices[i].AsPointer[vpTVertexTree]^).vertex,vertex) then begin

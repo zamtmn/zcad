@@ -25,15 +25,15 @@ type
 {Export+}
 PGDBOOutbound2DIArray=^GDBOOutbound2DIArray;
 {REGISTEROBJECTTYPE GDBOOutbound2DIArray}
-GDBOOutbound2DIArray= object(GZVector{-}<GDBvertex2DI>{//})
+GDBOOutbound2DIArray= object(GZVector{-}<TzePoint2i>{//})
                       procedure DrawGeometry(var DC:TDrawContext);virtual;
-                      function InRect(Frame1, Frame2: GDBvertex2DI):TInBoundingVolume;virtual;
+                      function InRect(Frame1, Frame2: TzePoint2i):TInBoundingVolume;virtual;
                       function perimetr:Double;virtual;
                 end;
 {Export-}
-function EqualVertex2DI(const a, b: GDBvertex2DI):Boolean;
+function EqualVertex2DI(const a, b: TzePoint2i):Boolean;
 implementation
-function EqualVertex2DI(const a, b: GDBvertex2DI):Boolean;
+function EqualVertex2DI(const a, b: TzePoint2i):Boolean;
 begin
   if (a.x=b.x)and(a.y=b.y) then
                                result:=true
@@ -41,13 +41,13 @@ begin
                                result:=false;
 end;
 procedure GDBOOutbound2DIArray.drawgeometry;
-var oldp,p:PGDBvertex2DI;
+var oldp,p:PzePoint2i;
     i:Integer;
 begin
   case count of
                1:begin
                       //oglsm.myglbegin(GL_POINTS);
-                      //oglsm.myglvertex2iv(@PGDBvertex2DIArray(parray)^[0]);
+                      //oglsm.myglvertex2iv(@PzePoint2iArray(parray)^[0]);
                       //oglsm.myglend;
                  end;
                else
@@ -64,20 +64,20 @@ begin
                       oldp:=p;
                       inc(p);
                     end;
-                    dc.drawer.DrawLine2DInDCS(PGDBvertex2DI(parray)^.x,PGDBvertex2DI(parray)^.y,oldp^.x,oldp^.y);
+                    dc.drawer.DrawLine2DInDCS(PzePoint2i(parray)^.x,PzePoint2i(parray)^.y,oldp^.x,oldp^.y);
                     //oglsm.myglend;
                end;
   end;
 end;
 function GDBOOutbound2DIArray.inrect;
 var i:Integer;
-    p:PGDBVertex2DI;
+    p:PzePoint2i;
 begin
      result:=IREmpty;
      if Count=0 then exit
      else
      begin
-          p:=PGDBVertex2DI(parray);
+          p:=PzePoint2i(parray);
           if count=1 then
           begin
                if pointinquad2d(Frame1.x,

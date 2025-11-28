@@ -523,10 +523,10 @@ procedure TLLGDISymbol.drawSymbol(drawer:TZGLAbstractDrawer;var rc:TDrawContext;
 var
    r:TRect;
 
-   point,spoint:GDBVertex3S;
+   point,spoint:TzePoint3s;
    x,y:integer;
    s:AnsiString;
-   {$IF DEFINED(LCLQt) OR DEFINED(LCLQt5)}_transminusM2,{$ENDIF}_transminusM,_obliqueM,_transplusM,_scaleM,_rotateM:DMatrix4D;
+   {$IF DEFINED(LCLQt) OR DEFINED(LCLQt5)}_transminusM2,{$ENDIF}_transminusM,_obliqueM,_transplusM,_scaleM,_rotateM:TzeTypedMatrix4d;
    {gdiDrawYOffset,}txtOblique,txtRotate,txtSx,txtSy:single;
 
    lfcp:TLogFont;
@@ -535,7 +535,7 @@ var
 
 const
   deffonth={19}100;
-  cnvStr:packed array[0..3]of byte=(0,0,0,0);
+  //cnvStr:packed array[0..3]of byte=(0,0,0,0);
 begin
      if not PSymbolsParam^.IsCanSystemDraw then
                                            begin
@@ -590,9 +590,10 @@ begin
   x:=round(spoint.x);
   y:=round(spoint.y);
   {$IFNDEF DELPHI}
-  cnvStr[0]:=lo(word(SymCode));
-  cnvStr[1]:=hi(word(SymCode));
-  s:=UTF16ToUTF8(@cnvStr,1);
+  //cnvStr[0]:=lo(word(SymCode));
+  //cnvStr[1]:=hi(word(SymCode));
+  //s:=UTF16ToUTF8(@cnvStr,1);
+  s:=UTF16ToUTF8(@SymCode,1);
   {$ENDIF}
 
   txtOblique:=pi/2-PSymbolsParam^.Oblique;
@@ -618,7 +619,7 @@ begin
   _scaleM:=CreateScaleMatrix(CreateVertex(txtSx,txtSy,1));
   if txtOblique<>0 then begin
     _obliqueM.CreateRec(OneMtr,CMTShear);
-    _obliqueM.mtr[1].v[0]:=-cotan(txtOblique)
+    _obliqueM.mtr.v[1].v[0]:=-cotan(txtOblique)
   end
   else
     _obliqueM:=OneMatrix;

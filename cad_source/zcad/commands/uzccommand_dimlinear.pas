@@ -32,11 +32,11 @@ uses
   uzcutils,uzeentdimrotated,uzgldrawcontext,uzcdrawings,
   uzccominteractivemanipulators,uzcsysvars;
 
-function GetInteractiveLine(prompt1,prompt2:string;out p1,p2:GDBVertex):boolean;
+function GetInteractiveLine(prompt1,prompt2:string;out p1,p2:TzePoint3d):boolean;
 
 implementation
 
-function GetInteractiveLine(prompt1,prompt2:string;out p1,p2:GDBVertex):boolean;
+function GetInteractiveLine(prompt1,prompt2:string;out p1,p2:TzePoint3d):boolean;
 var
   pline:PGDBObjLine;
 begin
@@ -59,7 +59,7 @@ function DrawRotatedDim_com(const Context:TZCADCommandContext;
   operands:TCommandOperands):TCommandResult;
 var
   pd:PGDBObjRotatedDimension;
-  p1,p2,p3,vd,vn:gdbvertex;
+  p1,p2,p3,vd,vn:TzePoint3d;
   dc:TDrawContext;
 begin
   dc:=drawings.GetCurrentDWG^.CreateDrawingRC;

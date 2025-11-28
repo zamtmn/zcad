@@ -59,26 +59,26 @@ procedure PrintFormatMessage(
 {**Вычислить геометрический центр полилинии}
 function CalculatePolylineCenter(
   PolyPtr: PGDBObjPolyLine
-): GDBvertex;
+): TzePoint3d;
 
 {**Вычислить центр линии}
 function CalculateLineCenter(
   LinePtr: PGDBObjLine
-): GDBvertex;
+): TzePoint3d;
 
 {**Получить точку вставки блока}
 function GetBlockInsertPoint(
   BlockPtr: PGDBObjBlockInsert
-): GDBvertex;
+): TzePoint3d;
 
 {**Вычислить геометрический центр примитива}
 function CalculateEntityCenter(
   Entity: PGDBObjEntity
-): GDBvertex;
+): TzePoint3d;
 
 {**Вычислить расстояние между двумя точками}
 function CalculateDistance(
-  const Point1, Point2: GDBvertex
+  const Point1, Point2: TzePoint3d
 ): Double;
 
 {**Проверить, принадлежит ли объект указанному слою}
@@ -89,7 +89,7 @@ function IsEntityOnLayer(
 
 {**Вставить устройство или блок на чертеж}
 function drawInsertBlock(
-  pt: GDBVertex;
+  pt: TzePoint3d;
   scalex, scaley, iRotate: double;
   InsertionName: string
 ): PGDBObjBlockInsert;
@@ -114,12 +114,12 @@ end;
 {**Вычислить геометрический центр полилинии}
 function CalculatePolylineCenter(
   PolyPtr: PGDBObjPolyLine
-): GDBvertex;
+): TzePoint3d;
 var
   i: Integer;
   SumX, SumY, SumZ: Double;
   Count: Integer;
-  Vertex: PGDBvertex;
+  Vertex: PzePoint3d;
 begin
   SumX := 0.0;
   SumY := 0.0;
@@ -133,7 +133,7 @@ begin
   end;
 
   // Суммируем координаты всех вершин
-  Vertex := PGDBvertex(PolyPtr^.VertexArrayInOCS.GetParrayAsPointer);
+  Vertex := PzePoint3d(PolyPtr^.VertexArrayInOCS.GetParrayAsPointer);
   for i := 0 to Count - 1 do
   begin
     SumX := SumX + Vertex^.x;
@@ -151,7 +151,7 @@ end;
 {**Вычислить центр линии}
 function CalculateLineCenter(
   LinePtr: PGDBObjLine
-): GDBvertex;
+): TzePoint3d;
 begin
   // Центр линии - это середина между двумя точками
   Result.x := (LinePtr^.CoordInOCS.lBegin.x + LinePtr^.CoordInOCS.lEnd.x) / 2.0;
@@ -162,7 +162,7 @@ end;
 {**Получить точку вставки блока}
 function GetBlockInsertPoint(
   BlockPtr: PGDBObjBlockInsert
-): GDBvertex;
+): TzePoint3d;
 begin
   // Точка вставки блока - это его координата P_insert
   Result := BlockPtr^.Local.P_insert;
@@ -171,7 +171,7 @@ end;
 {**Вычислить геометрический центр примитива}
 function CalculateEntityCenter(
   Entity: PGDBObjEntity
-): GDBvertex;
+): TzePoint3d;
 var
   ObjType: Integer;
 begin
@@ -199,7 +199,7 @@ end;
 
 {**Вычислить расстояние между двумя точками}
 function CalculateDistance(
-  const Point1, Point2: GDBvertex
+  const Point1, Point2: TzePoint3d
 ): Double;
 var
   dx, dy, dz: Double;
@@ -233,7 +233,7 @@ end;
 
 {**Вставить устройство или блок на чертеж}
 function drawInsertBlock(
-  pt: GDBVertex;
+  pt: TzePoint3d;
   scalex, scaley, iRotate: double;
   InsertionName: string
 ): PGDBObjBlockInsert;

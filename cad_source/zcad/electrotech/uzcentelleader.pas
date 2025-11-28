@@ -43,9 +43,9 @@ GDBObjElLeader= object(GDBObjComplex)
 
             procedure DrawGeometry(lw:Integer;var DC:TDrawContext;const inFrustumState:TInBoundingVolume);virtual;
              procedure getoutbound(var DC:TDrawContext);virtual;
-            function CalcInFrustum(const frustum:ClipArray;const Actuality:TVisActuality;var Counters:TCameraCounters; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double):Boolean;virtual;
-            function CalcTrueInFrustum(const frustum:ClipArray):TInBoundingVolume;virtual;
-            function onmouse(var popa:TZctnrVectorPGDBaseEntity;const MF:ClipArray;InSubEntry:Boolean):Boolean;virtual;
+            function CalcInFrustum(const frustum:TzeFrustum;const Actuality:TVisActuality;var Counters:TCameraCounters; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double):Boolean;virtual;
+            function CalcTrueInFrustum(const frustum:TzeFrustum):TInBoundingVolume;virtual;
+            function onmouse(var popa:TZctnrVectorPGDBaseEntity;const MF:TzeFrustum;InSubEntry:Boolean):Boolean;virtual;
             procedure addcontrolpoints(tdesc:Pointer);virtual;
             procedure rtmodifyonepoint(const rtmod:TRTModifyData);virtual;
             procedure remaponecontrolpoint(pdesc:pcontrolpointdesc;ProjectProc:GDBProjectProc);virtual;
@@ -67,11 +67,11 @@ GDBObjElLeader= object(GDBObjComplex)
 
             destructor done;virtual;
 
-            procedure transform(const t_matrix:DMatrix4D);virtual;
-            procedure TransformAt(p:PGDBObjEntity;t_matrix:PDMatrix4D);virtual;
-            procedure SetInFrustumFromTree(const frustum:ClipArray;const Actuality:TVisActuality;var Counters:TCameraCounters; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double);virtual;
+            procedure transform(const t_matrix:TzeTypedMatrix4d);virtual;
+            procedure TransformAt(p:PGDBObjEntity;t_matrix:PzeTypedMatrix4d);virtual;
+            procedure SetInFrustumFromTree(const frustum:TzeFrustum;const Actuality:TVisActuality;var Counters:TCameraCounters; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double);virtual;
             function CalcActualVisible(const Actuality:TVisActuality):Boolean;virtual;
-            function calcvisible(const frustum:ClipArray;const Actuality:TVisActuality;var Counters:TCameraCounters; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double):Boolean;virtual;
+            function calcvisible(const frustum:TzeFrustum;const Actuality:TVisActuality;var Counters:TCameraCounters; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double):Boolean;virtual;
             function GetObjType:TObjID;virtual;
             class function GetDXFIOFeatures:TDXFEntIODataManager;static;
             procedure SaveToDXFObjXData(var outStream:TZctnrVectorBytes;var IODXFContext:TIODXFSaveContext);virtual;
@@ -90,8 +90,8 @@ begin
 end;
 function GDBObjElLeader.calcvisible;
 //var i:Integer;
-//    tv,tv1:gdbvertex4d;
-//    m:DMatrix4D;
+//    tv,tv1:TzeVector4d;
+//    m:TzeTypedMatrix4d;
 begin
       visible:=Actuality.visibleactualy;
       result:=false;
@@ -137,17 +137,17 @@ begin
   MainLine.CoordInOCS.lend:=VectorTransform3D(PGDBObjElLeader(p)^.mainline.CoordInOCS.lend,t_matrix^);
 end;
 procedure GDBObjElLeader.transform;
-var tv:GDBVertex4D;
+var tv:TzeVector4d;
 begin
-  pgdbvertex(@tv)^:=MainLine.CoordInOCS.lbegin;
+  PzePoint3d(@tv)^:=MainLine.CoordInOCS.lbegin;
   tv.w:=1;
   tv:=vectortransform(tv,t_matrix);
-  MainLine.CoordInOCS.lbegin:=pgdbvertex(@tv)^;
+  MainLine.CoordInOCS.lbegin:=PzePoint3d(@tv)^;
 
-  pgdbvertex(@tv)^:=MainLine.CoordInOCS.lend;
+  PzePoint3d(@tv)^:=MainLine.CoordInOCS.lend;
   tv.w:=1;
   tv:=vectortransform(tv,t_matrix);
-  MainLine.CoordInOCS.lend:=pgdbvertex(@tv)^;
+  MainLine.CoordInOCS.lend:=PzePoint3d(@tv)^;
 end;
 {function GDBObjElLeader.InRect;
 var
@@ -223,7 +223,7 @@ var
   p:pointer;
   pv,pvc,pvc2:pgdbobjEntity;
   ir:itrec;
-  m4:DMatrix4D;
+  m4:TzeTypedMatrix4d;
   DC:TDrawContext;
 begin
      //historyoutstr('ElLeader DXFOut self='+inttohex(LongWord(@self),10)+' owner'+inttohex(bp.owner.gethandle,10));
@@ -311,7 +311,7 @@ const
   textoffset=0.5;
 var
   pl:pgdbobjline;
-  tv,tv2,textpoint:gdbvertex;
+  tv,tv2,textpoint:TzePoint3d;
   pobj,pcable:PGDBObjCable;
   ir,ir2:itrec;
   s:String;
@@ -870,7 +870,7 @@ end;
 constructor GDBObjElLeader.initnul;
 var
    //pl:pgdbobjline;
-   tv:gdbvertex;
+   tv:TzePoint3d;
    //a:TGDBTableCellStyle;
 begin
      inherited;

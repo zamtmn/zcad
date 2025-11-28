@@ -36,7 +36,7 @@ implementation
 
 procedure GDBObjPlain.DrawGeometry;
 var
-  p:GDBVertex;
+  p:TzePoint3d;
 begin
   if DC.SystmGeometryDraw then begin
     dc.drawer.SetColor(255,0,0,0);

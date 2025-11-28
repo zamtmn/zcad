@@ -31,22 +31,22 @@ type
   ptEllipsertmodify=^tEllipsertmodify;
 
   tEllipsertmodify=record
-    p1,p2,p3:GDBVertex2d;
+    p1,p2,p3:TzePoint2d;
   end;
   PGDBObjEllipse=^GDBObjEllipse;
 
   GDBObjEllipse=object(GDBObjPlain)
     RR:double;
-    MajorAxis:GDBvertex;
+    MajorAxis:TzePoint3d;
     Ratio:double;
     StartAngle:double;
     EndAngle:double;
     angle:double;
     Vertex3D_in_WCS_Array:GDBPoint3DArray;
     length:double;
-    q0,q1,q2:GDBvertex;
+    q0,q1,q2:TzePoint3d;
     constructor init(own:Pointer;layeraddres:PGDBLayerProp;
-      LW:smallint;p:GDBvertex;{RR,}S,E:double;majaxis:GDBVertex);
+      LW:smallint;p:TzePoint3d;{RR,}S,E:double;majaxis:TzePoint3d);
     constructor initnul;
     procedure LoadFromDXF(var rdr:TZMemReader;ptu:PExtensionData;
       var drawing:TDrawingDef;var context:TIODXFLoadContext);virtual;
@@ -64,7 +64,7 @@ type
     procedure getoutbound(var DC:TDrawContext);virtual;
     procedure projectpoint;virtual;
     function onmouse(var popa:TZctnrVectorPGDBaseEntity;
-      const MF:ClipArray;InSubEntry:boolean):boolean;virtual;
+      const MF:TzeFrustum;InSubEntry:boolean):boolean;virtual;
     function getsnap(var osp:os_record;var pdata:Pointer;
       const param:OGLWndtype;ProjectProc:GDBProjectProc;SnapMode:TGDBOSMode):boolean;virtual;
     function beforertmodify:Pointer;virtual;
@@ -75,14 +75,14 @@ type
     procedure rtsave(refp:Pointer);virtual;
     destructor done;virtual;
     function GetObjTypeName:string;virtual;
-    function calcinfrustum(const frustum:ClipArray;
+    function calcinfrustum(const frustum:TzeFrustum;
       const Actuality:TVisActuality;var Counters:TCameraCounters;ProjectProc:GDBProjectProc;
       const zoom,currentdegradationfactor:double):boolean;virtual;
     function CalcTrueInFrustum(
-      const frustum:ClipArray):TInBoundingVolume;virtual;
-    function CalcObjMatrixWithoutOwner:DMatrix4D;virtual;
-    procedure transform(const t_matrix:DMatrix4D);virtual;
-    procedure TransformAt(p:PGDBObjEntity;t_matrix:PDMatrix4D);virtual;
+      const frustum:TzeFrustum):TInBoundingVolume;virtual;
+    function CalcObjMatrixWithoutOwner:TzeTypedMatrix4d;virtual;
+    procedure transform(const t_matrix:TzeTypedMatrix4d);virtual;
+    procedure TransformAt(p:PGDBObjEntity;t_matrix:PzeTypedMatrix4d);virtual;
     procedure ReCalcFromObjMatrix;virtual;
     function CreateInstance:PGDBObjEllipse;static;
     function GetObjType:TObjID;virtual;
@@ -92,38 +92,38 @@ implementation
 
 procedure GDBObjEllipse.TransformAt;
 var
-  tv:GDBVertex4D;
+  tv:TzeVector4d;
 begin
   objmatrix:=uzegeometry.MatrixMultiply(PGDBObjWithLocalCS(p)^.objmatrix,t_matrix^);
 
-  tv:=PGDBVertex4D(@t_matrix.mtr[3])^;
-  PGDBVertex4D(@t_matrix.mtr[3])^:=NulVertex4D;
+  tv:=PzeVector4d(@t_matrix.mtr.v[3])^;
+  PzeVector4d(@t_matrix.mtr.v[3])^:=NulVertex4D;
   MajorAxis:=VectorTransform3D(PGDBObjEllipse(p)^.MajorAxis,t_matrix^);
-  PGDBVertex4D(@t_matrix.mtr[3])^:=tv;
+  PzeVector4d(@t_matrix.mtr.v[3])^:=tv;
   ReCalcFromObjMatrix;
 end;
 
 procedure GDBObjEllipse.transform;
 var
-  tv2:GDBVertex4D;
+  tv2:TzeVector4d;
 begin
   inherited;
-  tv2:=PGDBVertex4D(@t_matrix.mtr[3])^;
-  PGDBVertex4D(@t_matrix.mtr[3])^:=NulVertex4D;
+  tv2:=PzeVector4d(@t_matrix.mtr.v[3])^;
+  PzeVector4d(@t_matrix.mtr.v[3])^:=NulVertex4D;
   MajorAxis:=VectorTransform3D(MajorAxis,t_matrix);
-  PGDBVertex4D(@t_matrix.mtr[3])^:=tv2;
+  PzeVector4d(@t_matrix.mtr.v[3])^:=tv2;
   ReCalcFromObjMatrix;
 end;
 
 procedure GDBObjEllipse.ReCalcFromObjMatrix;
 begin
   inherited;
-  Local.P_insert:=PGDBVertex(@objmatrix.mtr[3])^;
+  Local.P_insert:=PzePoint3d(@objmatrix.mtr.v[3])^;
 end;
 
 function GDBObjEllipse.CalcObjMatrixWithoutOwner;
 var
-  rotmatr,dispmatr:DMatrix4D;
+  rotmatr,dispmatr:TzeTypedMatrix4d;
 begin
   Local.basis.ox:=MajorAxis;
   Local.basis.oy:=VectorDot(Local.basis.oz,Local.basis.ox);
@@ -142,8 +142,8 @@ var
   i:integer;
 begin
   for i:=0 to 5 do begin
-    if (frustum[i].v[0]*P_insert_in_WCS.x+frustum[i].v[1]*
-      P_insert_in_WCS.y+frustum[i].v[2]*P_insert_in_WCS.z+frustum[i].v[3]+rr<0)
+    if (frustum.v[i].v[0]*P_insert_in_WCS.x+frustum.v[i].v[1]*
+      P_insert_in_WCS.y+frustum.v[i].v[2]*P_insert_in_WCS.z+frustum.v[i].v[3]+rr<0)
     then begin
       Result:=IREmpty;
       exit;
@@ -158,14 +158,14 @@ var
 begin
   Result:=True;
   for i:=0 to 4 do begin
-    if (frustum[i].v[0]*outbound[0].x+frustum[i].v[1]*outbound[0].y+
-      frustum[i].v[2]*outbound[0].z+frustum[i].v[3]<0)  and
-      (frustum[i].v[0]*outbound[1].x+frustum[i].v[1]*outbound[1].y+
-      frustum[i].v[2]*outbound[1].z+frustum[i].v[3]<0)  and
-      (frustum[i].v[0]*outbound[2].x+frustum[i].v[1]*outbound[2].y+
-      frustum[i].v[2]*outbound[2].z+frustum[i].v[3]<0)  and
-      (frustum[i].v[0]*outbound[3].x+frustum[i].v[1]*outbound[3].y+
-      frustum[i].v[2]*outbound[3].z+frustum[i].v[3]<0) then begin
+    if (frustum.v[i].v[0]*outbound[0].x+frustum.v[i].v[1]*outbound[0].y+
+      frustum.v[i].v[2]*outbound[0].z+frustum.v[i].v[3]<0)  and
+      (frustum.v[i].v[0]*outbound[1].x+frustum.v[i].v[1]*outbound[1].y+
+      frustum.v[i].v[2]*outbound[1].z+frustum.v[i].v[3]<0)  and
+      (frustum.v[i].v[0]*outbound[2].x+frustum.v[i].v[1]*outbound[2].y+
+      frustum.v[i].v[2]*outbound[2].z+frustum.v[i].v[3]<0)  and
+      (frustum.v[i].v[0]*outbound[3].x+frustum.v[i].v[1]*outbound[3].y+
+      frustum.v[i].v[2]*outbound[3].z+frustum.v[i].v[3]<0) then begin
       Result:=False;
       system.break;
     end;
@@ -209,15 +209,15 @@ end;
 
 procedure GDBObjEllipse.CalcObjMatrix;
 var
-  m1:DMatrix4D;
-  v:GDBvertex4D;
+  m1:TzeTypedMatrix4d;
+  v:TzeVector4d;
   l:double;
 begin
   inherited CalcObjMatrix;
   l:=onevertexlength(majoraxis);
   m1:=CreateScaleMatrix(l,ratio*l,1);
   objmatrix:=matrixmultiply(m1,objmatrix);
-  pgdbvertex(@v)^:=local.p_insert;
+  PzePoint3d(@v)^:=local.p_insert;
   v.z:=0;
   v.w:=1;
   m1:=objMatrix;
@@ -228,7 +228,7 @@ end;
 procedure GDBObjEllipse.FormatEntity(var drawing:TDrawingDef;
   var DC:TDrawContext;Stage:TEFStages=EFAllStages);
 var
-  v:GDBvertex4D;
+  v:TzeVector4d;
 begin
   if assigned(EntExtensions) then
     EntExtensions.RunOnBeforeEntityFormat(@self,drawing,DC);
@@ -248,17 +248,17 @@ begin
   v.z:=0;
   v.w:=1;
   v:=VectorTransform(v,objMatrix);
-  q0:=pgdbvertex(@v)^;
+  q0:=PzePoint3d(@v)^;
   SinCos(startangle+angle/2,v.y,v.x);
   v.z:=0;
   v.w:=1;
   v:=VectorTransform(v,objMatrix);
-  q1:=pgdbvertex(@v)^;
+  q1:=PzePoint3d(@v)^;
   SinCos(endangle,v.y,v.x);
   v.z:=0;
   v.w:=1;
   v:=VectorTransform(v,objMatrix);
-  q2:=pgdbvertex(@v)^;
+  q2:=PzePoint3d(@v)^;
 
   calcbb(dc);
   createpoint;
@@ -304,8 +304,8 @@ end;
 procedure GDBObjEllipse.createpoint;
 var
   i:integer;
-  v:GDBvertex;
-  pv:GDBVertex;
+  v:TzePoint3d;
+  pv:TzePoint3d;
 begin
   angle:=endangle-startangle;
   if angle<0 then
@@ -377,8 +377,8 @@ var
   i:integer;
 begin
   for i:=0 to 5 do begin
-    if (mf[i].v[0]*P_insert_in_WCS.x+mf[i].v[1]*P_insert_in_WCS.y+
-        mf[i].v[2]*P_insert_in_WCS.z+mf[i].v[3]+RR<0) then begin
+    if (mf.v[i].v[0]*P_insert_in_WCS.x+mf.v[i].v[1]*P_insert_in_WCS.y+
+        mf.v[i].v[2]*P_insert_in_WCS.z+mf.v[i].v[3]+RR<0) then begin
       Result:=False;
       exit;
     end;
@@ -389,20 +389,20 @@ end;
 procedure GDBObjEllipse.remaponecontrolpoint(pdesc:pcontrolpointdesc;
   ProjectProc:GDBProjectProc);
 var
-  tv:GDBvertex;
+  tv:TzePoint3d;
 begin
   if pdesc^.pointtype=os_begin then begin
     pdesc.worldcoord:=q0;
     ProjectProc(pdesc.worldcoord,tv);
-    pdesc.dispcoord:=ToVertex2DI(tv);
+    pdesc.dispcoord:=ToTzePoint2i(tv);
   end else if pdesc^.pointtype=os_midle then begin
     pdesc.worldcoord:=q1;
     ProjectProc(pdesc.worldcoord,tv);
-    pdesc.dispcoord:=ToVertex2DI(tv);
+    pdesc.dispcoord:=ToTzePoint2i(tv);
   end else if pdesc^.pointtype=os_end then begin
     pdesc.worldcoord:=q2;
     ProjectProc(pdesc.worldcoord,tv);
-    pdesc.dispcoord:=ToVertex2DI(tv);
+    pdesc.dispcoord:=ToTzePoint2i(tv);
   end;
 end;
 
@@ -485,7 +485,7 @@ end;
 procedure GDBObjEllipse.rtmodifyonepoint(const rtmod:TRTModifyData);
 var
   a,b,c,d,e,f,g,p_x,p_y,rrr:double;
-  tv:gdbvertex2d;
+  tv:TzePoint2d;
   ptdata:tellipsertmodify;
 begin
   ptdata.p1.x:=q0.x;

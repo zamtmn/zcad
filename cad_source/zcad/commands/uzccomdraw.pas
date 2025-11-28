@@ -66,7 +66,7 @@ end;
          PTBlockScaleParams=^TBlockScaleParams;
          {REGISTERRECORDTYPE TBlockScaleParams}
          TBlockScaleParams=record
-                             Scale:GDBVertex;(*'New scale'*)
+                             Scale:TzePoint3d;(*'New scale'*)
                              Absolutely:Boolean;(*'Absolutely'*)
                            end;
          PTBlockRotateParams=^TBlockRotateParams;
@@ -78,7 +78,7 @@ end;
          {TSetVarStyle=packed record
                             ent:TMSType;(*'Entity'*)
                             CurrentFindBlock:String;(*'**CurrentFind'*)
-                             Scale:GDBVertex;(*'New scale'*)
+                             Scale:TzePoint3d;(*'New scale'*)
                              Absolutely:Boolean;(*'Absolutely'*)
                            end;}
          PTExportDevWithAxisParams=^TExportDevWithAxisParams;
@@ -132,14 +132,14 @@ end;
   end;
 {EXPORT-}
 taxisdesc=record
-              p1,p2:GDBVertex;
+              p1,p2:TzePoint3d;
               d0:double;
               Name:String;
         end;
   tdevcoord=record
-    coord:GDBVertex;
+    coord:TzePoint3d;
     pdev:PGDBObjDevice;
-    constructor CreateRec(const ACoord:GDBVertex;const APDev:PGDBObjDevice);
+    constructor CreateRec(const ACoord:TzePoint3d;const APDev:PGDBObjDevice);
   end;
 tdevname=record
               name:String;
@@ -171,7 +171,7 @@ function GetBlockDefNames(var BDefNames:TZctnrVectorStrings;selname:String;filte
 function GetSelectedBlockNames(var BDefNames:TZctnrVectorStrings;selname:String;mode:BRMode):Integer;
 
 var
-   pworkvertex:pgdbvertex;
+   pworkvertex:PzePoint3d;
    pold:PGDBObjEntity;
    p3dpl:pgdbobjpolyline;
    p3dplold:PGDBObjEntity;
@@ -195,7 +195,7 @@ var
 implementation
 
 
-constructor tdevcoord.CreateRec(const ACoord:GDBVertex;const APDev:PGDBObjDevice);
+constructor tdevcoord.CreateRec(const ACoord:TzePoint3d;const APDev:PGDBObjDevice);
 begin
   coord:=ACoord;
   pdev:=APDev;
@@ -449,7 +449,7 @@ var
    psubobj:PGDBObjEntity;
    ir,ir2:itrec;
    //tp:Pointer;
-   m,m2:DMatrix4D;
+   m,m2:TzeTypedMatrix4d;
    DC:TDrawContext;
 begin
      m:=powner^.objmatrix;
@@ -512,13 +512,13 @@ begin
   commandmanager.DMAddMethod(rscmExport,'Export selected devices with axis',@run);
   commandmanager.DMShow;
 end;
-procedure GetNearestAxis(axisarray:taxisdescarray;coord:gdbvertex;out nearestaxis,secondaxis:integer);
+procedure GetNearestAxis(axisarray:taxisdescarray;coord:TzePoint3d;out nearestaxis,secondaxis:integer);
 var
    i:integer;
    nearestd,{nearestd0,}secondd{,secondd0}:double;
-   tp1,tp2:gdbvertex;
+   tp1,tp2:TzePoint3d;
    dit,pdit:DistAndt;
-   Vertex0:GDBVertex;
+   Vertex0:TzePoint3d;
 begin
   nearestaxis:=-1;
   secondaxis:=-1;
@@ -588,13 +588,13 @@ var
    ALLayer:pointer;
    pdevvarext:TVariablesExtender;
    pvd,pvdv:pvardesk;
-   dv:gdbvertex;
+   dv:TzePoint3d;
    axisdesc:taxisdesc;
    psd:PSelectedObjDesc;
    hi,hi2,vi,vi2,{ti,}i:integer;
    hname,vname:String;
    dit:DistAndt;
-   Vertex0:GDBVertex;
+   Vertex0:TzePoint3d;
    isAxisVerical:TGDB3StateBool;
    isVertical:boolean;
 begin
@@ -743,7 +743,7 @@ var
    pobj,pvisible: pGDBObjEntity;
    ir:itrec;
    //tp:Pointer;
-   m,m2:DMatrix4D;
+   m,m2:TzeTypedMatrix4d;
    DC:TDrawContext;
 begin
      m:=powner^.objmatrix;
@@ -942,7 +942,7 @@ begin
   zcRedrawCurrentDrawing;}
 end;
 
-procedure PlacePoint(const point:GDBVertex);inline;
+procedure PlacePoint(const point:TzePoint3d);inline;
 var
     PCreatedGDBPoint:PGDBobjPoint;
     dc:TDrawContext;
@@ -1044,7 +1044,7 @@ var
     pl,PCreatedGDBLine:PGDBObjLine;
     LC:GDBLineProp;
     arr:PointOnCurve3DPropArray;
-    point,point2:gdbvertex;
+    point,point2:TzePoint3d;
     i:integer;
     dc:TDrawContext;
 begin
@@ -1097,7 +1097,7 @@ function FindAllIntersections_com(const Context:TZCADCommandContext;operands:TCo
 var
     lineAABBtests,linelinetests,intersectcount,lm,lc:integer;
     parray:GDBPoint3dArray;
-    pv:PGDBVertex;
+    pv:PzePoint3d;
     ir:itrec;
     LinesMap:MapPointOnCurve3DPropArray;
     lph:TLPSHandle;

@@ -29,9 +29,9 @@ type
     trace:Boolean;
     tmouse: Double;
     dmouse: Integer;
-    dir: GDBVertex;
-    dispraycoord: GDBVertex;
-    worldraycoord: GDBVertex;
+    dir: TzePoint3d;
+    dispraycoord: TzePoint3d;
+    worldraycoord: TzePoint3d;
   end;
   {REGISTEROBJECTTYPE GDBtracepropArray}
 GDBtracepropArray= object(GZVector{-}<traceprop>{//})

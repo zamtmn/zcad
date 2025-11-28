@@ -56,7 +56,7 @@ var
   Root: TSpaceTreeNode;
   FloorNode: TFloorNode;
   i: Integer;
-  Vertex: GDBVertex;
+  Vertex: TzePoint3d;
   FirstVertex: Boolean;
 begin
   Origin.X := 0.0;
@@ -163,7 +163,7 @@ procedure WriteRoomPolyline(
 );
 var
   i: Integer;
-  Vertex: GDBVertex;
+  Vertex: TzePoint3d;
   TransX, TransY: Double;
 begin
   WriteLn(STFFile, 'NrPoints=' +

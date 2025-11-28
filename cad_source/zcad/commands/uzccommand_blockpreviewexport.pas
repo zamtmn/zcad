@@ -59,7 +59,7 @@ var
   PrintParam:TRasterizeParams;
   BlockName,imgsize:ansistring;
   sx,bmpw:integer;
-  tv:GDBvertex;
+  tv:TzePoint3d;
   SAVEsysvarDISPLWDisplayScale,SAVEsysvarDISPmaxLWDisplayScale:integer;
   SAVELWDisplay:boolean;
   //plp:PGDBLayerProp;

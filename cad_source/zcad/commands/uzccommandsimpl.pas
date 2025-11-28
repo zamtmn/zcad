@@ -30,8 +30,8 @@ uses
 
 type
   comproc=procedure(const Context:TZCADCommandContext;_self:pointer);
-  commousefunc=function(const Context:TZCADCommandContext;wc:GDBvertex;
-    mc:GDBvertex2DI;var button:byte;osp:pos_record;mclick:integer):integer;
+  commousefunc=function(const Context:TZCADCommandContext;wc:TzePoint3d;
+    mc:TzePoint2i;var button:byte;osp:pos_record;mclick:integer):integer;
   comdrawfunc=function(mclick:integer):TCommandResult;
   comfuncwithoper=function(const Context:TZCADCommandContext;
     operands:TCommandOperands):TCommandResult;
@@ -66,8 +66,8 @@ type
       AShowParams:boolean=True);
     constructor init(cn:string;SA,DA:TCStartAttr);
     function SimulateMouseMove(const Context:TZCADCommandContext):integer;virtual;
-    //function BeforeClick(wc: GDBvertex; mc: GDBvertex2DI; button: Byte;osp:pos_record): Integer; virtual; abstract;
-    //function AfterClick(wc: GDBvertex; mc: GDBvertex2DI; button: Byte;osp:pos_record): Integer; virtual; abstract;
+    //function BeforeClick(wc: TzePoint3d; mc: TzePoint2i; button: Byte;osp:pos_record): Integer; virtual; abstract;
+    //function AfterClick(wc: TzePoint3d; mc: TzePoint2i; button: Byte;osp:pos_record): Integer; virtual; abstract;
   end;
   pCommandRTEdObjectPlugin=^CommandRTEdObjectPlugin;
   {REGISTEROBJECTTYPE CommandRTEdObjectPlugin}
@@ -86,10 +86,10 @@ type
     procedure Format;virtual;
     procedure FormatAfterFielfmod(PField,PTypeDescriptor:Pointer);virtual;
     procedure CommandContinue(const Context:TZCADCommandContext);virtual;
-    function BeforeClick(const Context:TZCADCommandContext;wc:GDBvertex;
-      mc:GDBvertex2DI;var button:byte;osp:pos_record):integer;virtual;
-    function AfterClick(const Context:TZCADCommandContext;wc:GDBvertex;
-      mc:GDBvertex2DI;var button:byte;osp:pos_record):integer;virtual;
+    function BeforeClick(const Context:TZCADCommandContext;wc:TzePoint3d;
+      mc:TzePoint2i;var button:byte;osp:pos_record):integer;virtual;
+    function AfterClick(const Context:TZCADCommandContext;wc:TzePoint3d;
+      mc:TzePoint2i;var button:byte;osp:pos_record):integer;virtual;
     procedure DrawHeplGeometry;virtual;
   end;
   {REGISTEROBJECTTYPE TOSModeEditor}
@@ -114,7 +114,7 @@ implementation
 procedure TOSModeEditor.FormatAfterFielfmod(PField,PTypeDescriptor:Pointer);
 var
   i,c:integer;
-  v:gdbvertex;
+  v:TzePoint3d;
 begin
   sysvarDWGOSMode:=0;
   if osm.kosm_inspoint then

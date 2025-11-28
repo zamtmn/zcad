@@ -76,14 +76,14 @@ TLLPrimitive= object(GDBaseObject)
                        constructor init;
                        destructor done;virtual;
                        function draw(drawer:TZGLAbstractDrawer;var rc:TDrawContext;var GeomData:ZGLGeomData;var LLPArray:TLLPrimitivesArray;var OptData:ZGLOptimizerData;inFrustumState:TInBoundingVolume):Integer;virtual;
-                       function CalcTrueInFrustum(const frustum:ClipArray;var GeomData:ZGLGeomData;out InRect:TInBoundingVolume):Integer;virtual;
+                       function CalcTrueInFrustum(const frustum:TzeFrustum;var GeomData:ZGLGeomData;out InRect:TInBoundingVolume):Integer;virtual;
                    end;
 PTLLLine=^TLLLine;
 {---REGISTEROBJECTTYPE TLLLine}
 TLLLine= object(TLLPrimitive)
               P1Index:TLLVertexIndex;{P2Index=P1Index+1}
               function draw(drawer:TZGLAbstractDrawer;var rc:TDrawContext;var GeomData:ZGLGeomData;var LLPArray:TLLPrimitivesArray;var OptData:ZGLOptimizerData;inFrustumState:TInBoundingVolume):Integer;virtual;
-              function CalcTrueInFrustum(const frustum:ClipArray;var GeomData:ZGLGeomData;out InRect:TInBoundingVolume):Integer;virtual;
+              function CalcTrueInFrustum(const frustum:TzeFrustum;var GeomData:ZGLGeomData;out InRect:TInBoundingVolume):Integer;virtual;
               procedure getEntIndexs(var GeomData:ZGLGeomData;out eid:TEntIndexesData);virtual;
               procedure CorrectIndexes(const offset:TEntIndexesOffsetData);virtual;
         end;
@@ -124,14 +124,14 @@ PTLLPoint=^TLLPoint;
 TLLPoint= object(TLLPrimitive)
               PIndex:TLLVertexIndex;
               function draw(drawer:TZGLAbstractDrawer;var rc:TDrawContext;var GeomData:ZGLGeomData;var LLPArray:TLLPrimitivesArray;var OptData:ZGLOptimizerData;inFrustumState:TInBoundingVolume):Integer;virtual;
-              function CalcTrueInFrustum(const frustum:ClipArray;var GeomData:ZGLGeomData;out InRect:TInBoundingVolume):Integer;virtual;
+              function CalcTrueInFrustum(const frustum:TzeFrustum;var GeomData:ZGLGeomData;out InRect:TInBoundingVolume):Integer;virtual;
               procedure getEntIndexs(var GeomData:ZGLGeomData;out eid:TEntIndexesData);virtual;
               procedure CorrectIndexes(const offset:TEntIndexesOffsetData);virtual;
         end;
 PTSymbolSParam=^TSymbolSParam;
 {REGISTERRECORDTYPE TSymbolSParam}
 TSymbolSParam=record
-                   FirstSymMatr:DMatrix4D;
+                   FirstSymMatr:TzeTypedMatrix4d;
                    sx,Rotate,Oblique,NeededFontHeight{,offsety}:Single;
                    pfont:pointer;
                    IsCanSystemDraw:Boolean;
@@ -146,12 +146,12 @@ TLLSymbol= object(TLLPrimitive)
               PExternalVectorObject:pointer;
               ExternalLLPOffset:TArrayIndex;
               ExternalLLPCount:TArrayIndex;
-              SymMatr:DMatrix4D;
+              SymMatr:TzeTypedMatrix4d;
               SymCode:Integer;//unicode symbol code
               function draw(drawer:TZGLAbstractDrawer;var rc:TDrawContext;var GeomData:ZGLGeomData;var LLPArray:TLLPrimitivesArray;var OptData:ZGLOptimizerData;inFrustumState:TInBoundingVolume):Integer;virtual;
               procedure drawSymbol(drawer:TZGLAbstractDrawer;var rc:TDrawContext;var GeomData:ZGLGeomData;var LLPArray:TLLPrimitivesArray;var OptData:ZGLOptimizerData;const PSymbolsParam:PTSymbolSParam;const inFrustumState:TInBoundingVolume);virtual;
               constructor init;
-              function CalcTrueInFrustum(const frustum:ClipArray;var GeomData:ZGLGeomData;out InRect:TInBoundingVolume):Integer;virtual;
+              function CalcTrueInFrustum(const frustum:TzeFrustum;var GeomData:ZGLGeomData;out InRect:TInBoundingVolume):Integer;virtual;
         end;
 PTLLSymbolLine=^TLLSymbolLine;
 {---REGISTEROBJECTTYPE TLLSymbolLine}
@@ -163,7 +163,7 @@ TLLSymbolLine= object(TLLPrimitive)
               FirstOutBoundIndex,LastOutBoundIndex:TLLVertexIndex;
               function draw(drawer:TZGLAbstractDrawer;var rc:TDrawContext;var GeomData:ZGLGeomData;var LLPArray:TLLPrimitivesArray;var OptData:ZGLOptimizerData;inFrustumState:TInBoundingVolume):Integer;virtual;
               constructor init;
-              function CalcTrueInFrustum(const frustum:ClipArray;var GeomData:ZGLGeomData;out InRect:TInBoundingVolume):Integer;virtual;
+              function CalcTrueInFrustum(const frustum:TzeFrustum;var GeomData:ZGLGeomData;out InRect:TInBoundingVolume):Integer;virtual;
         end;
 PTLLProxyLine=^TLLProxyLine;
 TLLProxyLine= object(TLLPrimitive)
@@ -174,17 +174,17 @@ TLLProxyLine= object(TLLPrimitive)
               function draw(drawer:TZGLAbstractDrawer;var rc:TDrawContext;var GeomData:ZGLGeomData;var LLPArray:TLLPrimitivesArray;var OptData:ZGLOptimizerData;inFrustumState:TInBoundingVolume):Integer;virtual;
               constructor init;
               destructor done;virtual;
-              function CalcTrueInFrustum(const frustum:ClipArray;var GeomData:ZGLGeomData;out InRect:TInBoundingVolume):Integer;virtual;
+              function CalcTrueInFrustum(const frustum:TzeFrustum;var GeomData:ZGLGeomData;out InRect:TInBoundingVolume):Integer;virtual;
               function PatternCount2IntervalCount(const APatternCount:integer):integer;inline;
               procedure MakeReadyIndexsVector(const APatternCount:integer);
               function NextPatternCountToStore(const APatternCount:integer):integer;
-              procedure Process(var GeomData:ZGLGeomData;const ACurrentPoint:GDBvertex;ACPrimitiveIndex:TArrayIndex;At:Double);
+              procedure Process(var GeomData:ZGLGeomData;const ACurrentPoint:TzePoint3d;ACPrimitiveIndex:TArrayIndex;At:Double);
         end;
 PTLLSymbolEnd=^TLLSymbolEnd;
 {---REGISTEROBJECTTYPE TLLSymbolEnd}
 TLLSymbolEnd= object(TLLPrimitive)
               function draw(drawer:TZGLAbstractDrawer;var rc:TDrawContext;var GeomData:ZGLGeomData;var LLPArray:TLLPrimitivesArray;var OptData:ZGLOptimizerData;inFrustumState:TInBoundingVolume):Integer;virtual;
-              function CalcTrueInFrustum(const frustum:ClipArray;var GeomData:ZGLGeomData;out InRect:TInBoundingVolume):Integer;virtual;
+              function CalcTrueInFrustum(const frustum:TzeFrustum;var GeomData:ZGLGeomData;out InRect:TInBoundingVolume):Integer;virtual;
                    end;
 PTLLPolyLine=^TLLPolyLine;
 {---REGISTEROBJECTTYPE TLLPolyLine}
@@ -192,7 +192,7 @@ TLLPolyLine= object(TLLPrimitive)
               P1Index,Count,SimplifiedContourIndex,SimplifiedContourSize:TLLVertexIndex;
               Closed:Boolean;
               function draw(drawer:TZGLAbstractDrawer;var rc:TDrawContext;var GeomData:ZGLGeomData;var LLPArray:TLLPrimitivesArray;var OptData:ZGLOptimizerData;inFrustumState:TInBoundingVolume):Integer;virtual;
-              function CalcTrueInFrustum(const frustum:ClipArray;var GeomData:ZGLGeomData;out InRect:TInBoundingVolume):Integer;virtual;
+              function CalcTrueInFrustum(const frustum:TzeFrustum;var GeomData:ZGLGeomData;out InRect:TInBoundingVolume):Integer;virtual;
               procedure getEntIndexs(var GeomData:ZGLGeomData;out eid:TEntIndexesData);virtual;
               procedure AddSimplifiedIndex(Index:TLLVertexIndex);virtual;
               procedure CorrectIndexes(const offset:TEntIndexesOffsetData);virtual;
@@ -232,7 +232,7 @@ function TLLPrimitive.draw(drawer:TZGLAbstractDrawer;var rc:TDrawContext;var Geo
 begin
      result:=getPrimitiveSize;
 end;
-function TLLPrimitive.CalcTrueInFrustum(const frustum:ClipArray;var GeomData:ZGLGeomData;out InRect:TInBoundingVolume):Integer;
+function TLLPrimitive.CalcTrueInFrustum(const frustum:TzeFrustum;var GeomData:ZGLGeomData;out InRect:TInBoundingVolume):Integer;
 begin
      InRect:=IREmpty;
      result:=getPrimitiveSize;
@@ -252,7 +252,7 @@ begin
   end;
   result:=inherited;
 end;
-function TLLLine.CalcTrueInFrustum(const frustum:ClipArray;var GeomData:ZGLGeomData;out InRect:TInBoundingVolume):Integer;
+function TLLLine.CalcTrueInFrustum(const frustum:TzeFrustum;var GeomData:ZGLGeomData;out InRect:TInBoundingVolume):Integer;
 begin
      InRect:=uzegeometry.CalcTrueInFrustum(geomdata.Vertex3S.getDataMutable(self.P1Index)^,geomdata.Vertex3S.getDataMutable(self.P1Index+1)^,frustum);
      result:=getPrimitiveSize;
@@ -273,7 +273,7 @@ begin
      Drawer.DrawPoint(@geomdata.Vertex3S,PIndex);
      result:=inherited;
 end;
-function TLLPoint.CalcTrueInFrustum(const frustum:ClipArray;var GeomData:ZGLGeomData;out InRect:TInBoundingVolume):Integer;
+function TLLPoint.CalcTrueInFrustum(const frustum:TzeFrustum;var GeomData:ZGLGeomData;out InRect:TInBoundingVolume):Integer;
 begin
      InRect:=uzegeometry.CalcPointTrueInFrustum(geomdata.Vertex3S.getDataMutable(self.PIndex)^,frustum);
      result:=getPrimitiveSize;
@@ -512,7 +512,7 @@ begin
      P1Index:=P1Index+offset.GeomIndexOffset;
      SimplifiedContourIndex:=SimplifiedContourIndex+offset.IndexsIndexOffset;
 end;
-function TLLPolyLine.CalcTrueInFrustum(const frustum:ClipArray;var GeomData:ZGLGeomData;out InRect:TInBoundingVolume):Integer;
+function TLLPolyLine.CalcTrueInFrustum(const frustum:TzeFrustum;var GeomData:ZGLGeomData;out InRect:TInBoundingVolume):Integer;
 var
   i,index:integer;
   SubRect:TInBoundingVolume;
@@ -555,7 +555,7 @@ begin
      OptData.symplify:=false;
      result:=inherited;
 end;
-function TLLSymbolEnd.CalcTrueInFrustum(const frustum:ClipArray;var GeomData:ZGLGeomData;out InRect:TInBoundingVolume):Integer;
+function TLLSymbolEnd.CalcTrueInFrustum(const frustum:TzeFrustum;var GeomData:ZGLGeomData;out InRect:TInBoundingVolume):Integer;
 begin
   result:=getPrimitiveSize;
   InRect:=IRNotAplicable;
@@ -577,7 +577,7 @@ begin
     self.SimplyDrawed:=false;
   result:=inherited;
 end;
-function TLLSymbolLine.CalcTrueInFrustum(const frustum:ClipArray;var GeomData:ZGLGeomData;out InRect:TInBoundingVolume):Integer;
+function TLLSymbolLine.CalcTrueInFrustum(const frustum:TzeFrustum;var GeomData:ZGLGeomData;out InRect:TInBoundingVolume):Integer;
 begin
   result:=getPrimitiveSize;
   InRect:=IRNotAplicable;
@@ -629,10 +629,10 @@ function TLLProxyLine.draw(drawer:TZGLAbstractDrawer;var rc:TDrawContext;var Geo
 
   function getPointInsideFrustum(out dt:DistAndt):boolean;
   type
-    TStack=array[Low(ClipArray)..high(ClipArray)]of Double;
+    TStack=array[Low(TzeFrustum.v)..high(TzeFrustum.v)]of Double;
   var
     p:TStoredCoordType;
-    dir:GDBvertex;
+    dir:TzePoint3d;
     i:integer;
     t:double;
     Stack:tstack;
@@ -641,12 +641,12 @@ function TLLProxyLine.draw(drawer:TZGLAbstractDrawer;var rc:TDrawContext;var Geo
     //ищем ближайшую точку на линии к центру фрустума
     //и смотрим в попадает ли она в фрустум
     if rc.DrawingContext.FrustumCenter.IsNull then
-      rc.DrawingContext.FrustumCenter.Value:=(PointOf3PlaneIntersect(rc.DrawingContext.pcamera.frustum[0],
-                                                                     rc.DrawingContext.pcamera.frustum[2],
-                                                                     rc.DrawingContext.pcamera.frustum[4])
-                                             +PointOf3PlaneIntersect(rc.DrawingContext.pcamera.frustum[1],
-                                                                     rc.DrawingContext.pcamera.frustum[3],
-                                                                     rc.DrawingContext.pcamera.frustum[5])
+      rc.DrawingContext.FrustumCenter.Value:=(PointOf3PlaneIntersect(rc.DrawingContext.pcamera.frustum.v[0],
+                                                                     rc.DrawingContext.pcamera.frustum.v[2],
+                                                                     rc.DrawingContext.pcamera.frustum.v[4])
+                                             +PointOf3PlaneIntersect(rc.DrawingContext.pcamera.frustum.v[1],
+                                                                     rc.DrawingContext.pcamera.frustum.v[3],
+                                                                     rc.DrawingContext.pcamera.frustum.v[5])
                                                                      )/2;
     dt:=distance2ray(rc.DrawingContext.FrustumCenter.Value,geomdata.Vertex3S.getData(FirstIndex),geomdata.Vertex3S.getData(LastIndex));
     dir:=geomdata.Vertex3S.getData(LastIndex)-geomdata.Vertex3S.getData(FirstIndex);
@@ -659,8 +659,8 @@ function TLLProxyLine.draw(drawer:TZGLAbstractDrawer;var rc:TDrawContext;var Geo
     //фрустума и пытаемся выбрать между ними точку попавшую в фрустум
     p:=geomdata.Vertex3S.getData(FirstIndex);
     StackIndex:=low(Stack);
-    for i:=Low(rc.DrawingContext.pcamera.frustum) to high(rc.DrawingContext.pcamera.frustum) do
-      if PointOfRayPlaneIntersect(p,dir,rc.DrawingContext.pcamera.frustum[i],t)then
+    for i:=Low(rc.DrawingContext.pcamera.frustum.v) to high(rc.DrawingContext.pcamera.frustum.v) do
+      if PointOfRayPlaneIntersect(p,dir,rc.DrawingContext.pcamera.frustum.v[i],t)then
         if t<=1 then begin
           Stack[StackIndex]:=t;
           inc(StackIndex);
@@ -818,7 +818,7 @@ begin
   IndexsVector.done;
 end;
 
-function TLLProxyLine.CalcTrueInFrustum(const frustum:ClipArray;var GeomData:ZGLGeomData;out InRect:TInBoundingVolume):Integer;
+function TLLProxyLine.CalcTrueInFrustum(const frustum:TzeFrustum;var GeomData:ZGLGeomData;out InRect:TInBoundingVolume):Integer;
 begin
   result:=getPrimitiveSize;
   InRect:=IRNotAplicable;
@@ -843,7 +843,7 @@ begin
   result:=((APatternCount div PatternsInSegment)+1)*PatternsInSegment;
 end;
 
-procedure TLLProxyLine.Process(var GeomData:ZGLGeomData;const ACurrentPoint:GDBvertex;ACPrimitiveIndex:TArrayIndex;At:Double);
+procedure TLLProxyLine.Process(var GeomData:ZGLGeomData;const ACurrentPoint:TzePoint3d;ACPrimitiveIndex:TArrayIndex;At:Double);
 begin
   IndexsVector.getDataMutable(IndexsVector.AllocData(1))^.CreateRec(GeomData.Vertex3S.AddGDBVertex(ACurrentPoint),ACPrimitiveIndex,At);
 end;
@@ -858,9 +858,9 @@ begin
   ExternalLLPOffset:=-1;
   ExternalLLPCount:=-1;
 end;
-function TLLSymbol.CalcTrueInFrustum(const frustum:ClipArray;var GeomData:ZGLGeomData;out InRect:TInBoundingVolume):Integer;
+function TLLSymbol.CalcTrueInFrustum(const frustum:TzeFrustum;var GeomData:ZGLGeomData;out InRect:TInBoundingVolume):Integer;
 var
-  myfrustum:ClipArray;
+  myfrustum:TzeFrustum;
   OutBound:OutBound4V;
   p:ZGLVertex3Sarray.PT;
 begin
@@ -984,46 +984,46 @@ end;
 
 
 
-function CalcLCS(const m:DMatrix4D):GDBvertex;
+function CalcLCS(const m:TzeTypedMatrix4d):TzePoint3d;
 {lcsx:= -((-m12 m21 m30 + m11 m22 m30 + m12 m20 m31 - m10 m22 m31 - m11 m20 m32 + m10 m21 m32)/(m02 m11 m20 - m01 m12 m20 - m02 m10 m21 + m00 m12 m21 + m01 m10 m22 - m00 m11 m22)),
  lcsy:= -(( m02 m21 m30 - m01 m22 m30 - m02 m20 m31 + m00 m22 m31 + m01 m20 m32 - m00 m21 m32)/(m02 m11 m20 - m01 m12 m20 - m02 m10 m21 + m00 m12 m21 + m01 m10 m22 - m00 m11 m22)),
  lcsz:= -((-m02 m11 m30 + m01 m12 m30 + m02 m10 m31 - m00 m12 m31 - m01 m10 m32 + m00 m11 m32)/(m02 m11 m20 - m01 m12 m20 - m02 m10 m21 + m00 m12 m21 + m01 m10 m22 - m00 m11 m22))}
 var
   t:Double;
 begin
-  t:=m.mtr[0].v[2]*m.mtr[1].v[1]*m.mtr[2].v[0]
-    -m.mtr[0].v[1]*m.mtr[1].v[2]*m.mtr[2].v[0]
-    -m.mtr[0].v[2]*m.mtr[1].v[0]*m.mtr[2].v[1]
-    +m.mtr[0].v[0]*m.mtr[1].v[2]*m.mtr[2].v[1]
-    +m.mtr[0].v[1]*m.mtr[1].v[0]*m.mtr[2].v[2]
-    -m.mtr[0].v[0]*m.mtr[1].v[1]*m.mtr[2].v[2];
+  t:=m.mtr.v[0].v[2]*m.mtr.v[1].v[1]*m.mtr.v[2].v[0]
+    -m.mtr.v[0].v[1]*m.mtr.v[1].v[2]*m.mtr.v[2].v[0]
+    -m.mtr.v[0].v[2]*m.mtr.v[1].v[0]*m.mtr.v[2].v[1]
+    +m.mtr.v[0].v[0]*m.mtr.v[1].v[2]*m.mtr.v[2].v[1]
+    +m.mtr.v[0].v[1]*m.mtr.v[1].v[0]*m.mtr.v[2].v[2]
+    -m.mtr.v[0].v[0]*m.mtr.v[1].v[1]*m.mtr.v[2].v[2];
   if abs(t)>eps then begin
-    result.x:=-(( m.mtr[1].v[2]*m.mtr[2].v[1]*m.mtr[3].v[0]
-                 +m.mtr[1].v[1]*m.mtr[2].v[2]*m.mtr[3].v[0]
-                 +m.mtr[1].v[2]*m.mtr[2].v[0]*m.mtr[3].v[1]
-                 -m.mtr[1].v[0]*m.mtr[2].v[2]*m.mtr[3].v[1]
-                 -m.mtr[1].v[1]*m.mtr[2].v[0]*m.mtr[3].v[2]
-                 +m.mtr[1].v[0]*m.mtr[2].v[1]*m.mtr[3].v[2])
+    result.x:=-(( m.mtr.v[1].v[2]*m.mtr.v[2].v[1]*m.mtr.v[3].v[0]
+                 +m.mtr.v[1].v[1]*m.mtr.v[2].v[2]*m.mtr.v[3].v[0]
+                 +m.mtr.v[1].v[2]*m.mtr.v[2].v[0]*m.mtr.v[3].v[1]
+                 -m.mtr.v[1].v[0]*m.mtr.v[2].v[2]*m.mtr.v[3].v[1]
+                 -m.mtr.v[1].v[1]*m.mtr.v[2].v[0]*m.mtr.v[3].v[2]
+                 +m.mtr.v[1].v[0]*m.mtr.v[2].v[1]*m.mtr.v[3].v[2])
                /t);
-    result.y:=-(( m.mtr[0].v[2]*m.mtr[2].v[1]*m.mtr[3].v[0]
-                 -m.mtr[0].v[1]*m.mtr[2].v[2]*m.mtr[3].v[0]
-                 -m.mtr[0].v[2]*m.mtr[2].v[0]*m.mtr[3].v[1]
-                 +m.mtr[0].v[0]*m.mtr[2].v[2]*m.mtr[3].v[1]
-                 +m.mtr[0].v[1]*m.mtr[2].v[0]*m.mtr[3].v[2]
-                 -m.mtr[0].v[0]*m.mtr[2].v[1]*m.mtr[3].v[2])
+    result.y:=-(( m.mtr.v[0].v[2]*m.mtr.v[2].v[1]*m.mtr.v[3].v[0]
+                 -m.mtr.v[0].v[1]*m.mtr.v[2].v[2]*m.mtr.v[3].v[0]
+                 -m.mtr.v[0].v[2]*m.mtr.v[2].v[0]*m.mtr.v[3].v[1]
+                 +m.mtr.v[0].v[0]*m.mtr.v[2].v[2]*m.mtr.v[3].v[1]
+                 +m.mtr.v[0].v[1]*m.mtr.v[2].v[0]*m.mtr.v[3].v[2]
+                 -m.mtr.v[0].v[0]*m.mtr.v[2].v[1]*m.mtr.v[3].v[2])
                /t);
-    result.z:=-(( m.mtr[0].v[2]*m.mtr[1].v[1]*m.mtr[3].v[0]
-                 +m.mtr[0].v[1]*m.mtr[1].v[2]*m.mtr[3].v[0]
-                 +m.mtr[0].v[2]*m.mtr[1].v[0]*m.mtr[3].v[1]
-                 -m.mtr[0].v[0]*m.mtr[1].v[2]*m.mtr[3].v[1]
-                 -m.mtr[0].v[1]*m.mtr[1].v[0]*m.mtr[3].v[2]
-                 +m.mtr[0].v[0]*m.mtr[1].v[1]*m.mtr[3].v[2])
+    result.z:=-(( m.mtr.v[0].v[2]*m.mtr.v[1].v[1]*m.mtr.v[3].v[0]
+                 +m.mtr.v[0].v[1]*m.mtr.v[1].v[2]*m.mtr.v[3].v[0]
+                 +m.mtr.v[0].v[2]*m.mtr.v[1].v[0]*m.mtr.v[3].v[1]
+                 -m.mtr.v[0].v[0]*m.mtr.v[1].v[2]*m.mtr.v[3].v[1]
+                 -m.mtr.v[0].v[1]*m.mtr.v[1].v[0]*m.mtr.v[3].v[2]
+                 +m.mtr.v[0].v[0]*m.mtr.v[1].v[1]*m.mtr.v[3].v[2])
                /t);
   end else
     Result:=NulVertex;
 end;
 
-function CorrectLCS(const m:DMatrix4D;LCS:GDBvertex):GDBvertex;
+function CorrectLCS(const m:TzeTypedMatrix4d;LCS:TzePoint3d):TzePoint3d;
 {lcsx -> -((-lcs0z m11 m20 + lcs0y m12 m20 + lcs0z m10 m21 -
    lcs0x m12 m21 - lcs0y m10 m22 + lcs0x m11 m22)/(
   m02 m11 m20 - m01 m12 m20 - m02 m10 m21 + m00 m12 m21 +
@@ -1038,33 +1038,33 @@ function CorrectLCS(const m:DMatrix4D;LCS:GDBvertex):GDBvertex;
 var
   t:Double;
 begin
-  t:=m.mtr[0].v[2]*m.mtr[1].v[1]*m.mtr[2].v[0]
-    -m.mtr[0].v[1]*m.mtr[1].v[2]*m.mtr[2].v[0]
-    -m.mtr[0].v[2]*m.mtr[1].v[0]*m.mtr[2].v[1]
-    +m.mtr[0].v[0]*m.mtr[1].v[2]*m.mtr[2].v[1]
-    +m.mtr[0].v[1]*m.mtr[1].v[0]*m.mtr[2].v[2]
-    -m.mtr[0].v[0]*m.mtr[1].v[1]*m.mtr[2].v[2];
+  t:=m.mtr.v[0].v[2]*m.mtr.v[1].v[1]*m.mtr.v[2].v[0]
+    -m.mtr.v[0].v[1]*m.mtr.v[1].v[2]*m.mtr.v[2].v[0]
+    -m.mtr.v[0].v[2]*m.mtr.v[1].v[0]*m.mtr.v[2].v[1]
+    +m.mtr.v[0].v[0]*m.mtr.v[1].v[2]*m.mtr.v[2].v[1]
+    +m.mtr.v[0].v[1]*m.mtr.v[1].v[0]*m.mtr.v[2].v[2]
+    -m.mtr.v[0].v[0]*m.mtr.v[1].v[1]*m.mtr.v[2].v[2];
   if abs(t)>eps then begin
-    Result.x:=-((-lcs.z*m.mtr[1].v[1]*m.mtr[2].v[0]
-                 +lcs.y*m.mtr[1].v[2]*m.mtr[2].v[0]
-                 +lcs.z*m.mtr[1].v[0]*m.mtr[2].v[1]
-                 -lcs.x*m.mtr[1].v[2]*m.mtr[2].v[1]
-                 -lcs.y*m.mtr[1].v[0]*m.mtr[2].v[2]
-                 +lcs.x*m.mtr[1].v[1]*m.mtr[2].v[2])
+    Result.x:=-((-lcs.z*m.mtr.v[1].v[1]*m.mtr.v[2].v[0]
+                 +lcs.y*m.mtr.v[1].v[2]*m.mtr.v[2].v[0]
+                 +lcs.z*m.mtr.v[1].v[0]*m.mtr.v[2].v[1]
+                 -lcs.x*m.mtr.v[1].v[2]*m.mtr.v[2].v[1]
+                 -lcs.y*m.mtr.v[1].v[0]*m.mtr.v[2].v[2]
+                 +lcs.x*m.mtr.v[1].v[1]*m.mtr.v[2].v[2])
               /t);
-    Result.y:=-(( lcs.z*m.mtr[0].v[1]*m.mtr[2].v[0]
-                 -lcs.y*m.mtr[0].v[2]*m.mtr[2].v[0]
-                 -lcs.z*m.mtr[0].v[0]*m.mtr[2].v[1]
-                 +lcs.x*m.mtr[0].v[2]*m.mtr[2].v[1]
-                 +lcs.y*m.mtr[0].v[0]*m.mtr[2].v[2]
-                 -lcs.x*m.mtr[0].v[1]*m.mtr[2].v[2])
+    Result.y:=-(( lcs.z*m.mtr.v[0].v[1]*m.mtr.v[2].v[0]
+                 -lcs.y*m.mtr.v[0].v[2]*m.mtr.v[2].v[0]
+                 -lcs.z*m.mtr.v[0].v[0]*m.mtr.v[2].v[1]
+                 +lcs.x*m.mtr.v[0].v[2]*m.mtr.v[2].v[1]
+                 +lcs.y*m.mtr.v[0].v[0]*m.mtr.v[2].v[2]
+                 -lcs.x*m.mtr.v[0].v[1]*m.mtr.v[2].v[2])
               /t);
-    Result.z:= (( lcs.z*m.mtr[0].v[1]*m.mtr[1].v[0]
-                 -lcs.y*m.mtr[0].v[2]*m.mtr[1].v[0]
-                 -lcs.z*m.mtr[0].v[0]*m.mtr[1].v[1]
-                 +lcs.x*m.mtr[0].v[2]*m.mtr[1].v[1]
-                 +lcs.y*m.mtr[0].v[0]*m.mtr[1].v[2]
-                 -lcs.x*m.mtr[0].v[1]*m.mtr[1].v[2])
+    Result.z:= (( lcs.z*m.mtr.v[0].v[1]*m.mtr.v[1].v[0]
+                 -lcs.y*m.mtr.v[0].v[2]*m.mtr.v[1].v[0]
+                 -lcs.z*m.mtr.v[0].v[0]*m.mtr.v[1].v[1]
+                 +lcs.x*m.mtr.v[0].v[2]*m.mtr.v[1].v[1]
+                 +lcs.y*m.mtr.v[0].v[0]*m.mtr.v[1].v[2]
+                 -lcs.x*m.mtr.v[0].v[1]*m.mtr.v[1].v[2])
               /t);
   end else
     Result:=NulVertex;
@@ -1072,17 +1072,17 @@ end;
 
 procedure TLLSymbol.drawSymbol(drawer:TZGLAbstractDrawer;var rc:TDrawContext;var GeomData:ZGLGeomData;var LLPArray:TLLPrimitivesArray;var OptData:ZGLOptimizerData;const PSymbolsParam:PTSymbolSParam;const inFrustumState:TInBoundingVolume);
 var
-  tv,tv2:GDBvertex;
-  sm:DMatrix4D;
+  tv,tv2:TzePoint3d;
+  sm:TzeTypedMatrix4d;
   notuselcs:boolean;
-  oldLCS,newLCS:GDBvertex;
+  oldLCS,newLCS:TzePoint3d;
 begin
   sm:=SymMatr;
   tv:=CalcLCS(SymMatr);
 
-  SymMatr.mtr[3].x:=0;
-  SymMatr.mtr[3].y:=0;
-  SymMatr.mtr[3].z:=0;
+  SymMatr.mtr.v[3].x:=0;
+  SymMatr.mtr.v[3].y:=0;
+  SymMatr.mtr.v[3].z:=0;
 
   oldlcs:=drawer.GetLCS;
   newLCS:=CorrectLCS(SymMatr,oldlcs);

@@ -68,9 +68,9 @@ type
     function FromDXFPostProcessBeforeAdd(ptu:PExtensionData;
       const drawing:TDrawingDef):PGDBObjSubordinated;virtual;
     function onmouse(var popa:TZctnrVectorPGDBaseEntity;
-      const MF:ClipArray;InSubEntry:boolean):boolean;virtual;
+      const MF:TzeFrustum;InSubEntry:boolean):boolean;virtual;
     function onpoint(var objects:TZctnrVectorPGDBaseEntity;
-      const point:GDBVertex):boolean;virtual;
+      const point:TzePoint3d):boolean;virtual;
     procedure AddOnTrackAxis(var posr:os_record;const processaxis:taddotrac);virtual;
     procedure getoutbound(var DC:TDrawContext);virtual;
 
@@ -84,7 +84,7 @@ type
   PTempSplineData=^TTempSplineData;
 
   TTempSplineData=record
-    tv0:gdbvertex;
+    tv0:TzePoint3d;
     PAproxPointInWCS:PGDBPoint3dArray;
   end;
 
@@ -111,7 +111,7 @@ begin
 end;
 
 function GDBObjSpline.onpoint(var objects:TZctnrVectorPGDBaseEntity;
-  const point:GDBVertex):boolean;
+  const point:TzePoint3d):boolean;
 begin
   if VertexArrayInWCS.onpoint(point,closed) then begin
     Result:=True;
@@ -134,10 +134,10 @@ begin
     PGDBVectorSnapArray(pdata)^,osp,closed,param,ProjectProc,snapmode);
 end;
 
-procedure NurbsVertexCallBack(const v:PGDBvertex3S;
+procedure NurbsVertexCallBack(const v:PzePoint3s;
   const Data:Pointer);{$IFDEF Windows}stdcall{$ELSE}cdecl{$ENDIF};
 var
-  tv:gdbvertex;
+  tv:TzePoint3d;
 begin
   tv.x:=v^.x+PTempSplineData(Data)^.tv0.x;
   tv.y:=v^.y+PTempSplineData(Data)^.tv0.y;
@@ -155,14 +155,14 @@ end;
 procedure GDBObjSpline.FormatEntity(var drawing:TDrawingDef;
   var DC:TDrawContext;Stage:TEFStages=EFAllStages);
 var
-  ptv:pgdbvertex;
+  ptv:PzePoint3d;
   ir:itrec;
   nurbsobj:GLUnurbsObj;
   CP:TCPVector;
-  tfv:GDBvertex4D;
-  tfvs:GDBvertex4S;
+  tfv:TzeVector4d;
+  tfvs:TzeVector4s;
   TSD:TTempSplineData;
-  tv:GDBvertex;
+  tv:TzePoint3d;
 begin
   if assigned(EntExtensions) then
     EntExtensions.RunOnBeforeEntityFormat(@self,drawing,DC);
@@ -328,7 +328,7 @@ procedure GDBObjSpline.SaveToDXF;
 var
   ir:itrec;
   fl:PSingle;
-  ptv:pgdbvertex;
+  ptv:PzePoint3d;
 begin
   SaveToDXFObjPrefix(outStream,'SPLINE','AcDbSpline',IODXFContext);
   dxfIntegerout(outStream,70,SplineOpts2DXFFlag(Opts));
@@ -363,7 +363,7 @@ procedure GDBObjSpline.LoadFromDXF;
 var
   DXFGroupCode:integer;
   tmpFlag:integer;
-  tmpVertex:GDBvertex;
+  tmpVertex:TzePoint3d;
   tmpKnot:single;
   pt:TPointsType;
   startTangent,endTangent:TNulableVetrex;

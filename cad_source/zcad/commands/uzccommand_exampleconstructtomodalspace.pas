@@ -54,7 +54,7 @@ var
 function ExampleConstructToModalSpace_com(const Context:TZCADCommandContext;
   operands:TCommandOperands):TCommandResult;
   //Визуализация многострочный текст
-  function drawMText(const pt:GDBVertex;color:integer;rotate:double):PGDBObjMText;
+  function drawMText(const pt:TzePoint3d;color:integer;rotate:double):PGDBObjMText;
   begin
     Result:=GDBObjMText.CreateInstance;
     zcSetEntPropFromCurrentDrawingProp(Result);
@@ -81,7 +81,7 @@ function ExampleConstructToModalSpace_com(const Context:TZCADCommandContext;
     //zcAddEntToCurrentDrawingWithUndo(Result);                        //добавляем текст с ундо в пространство модели
   end;
 
-  function drawPolyline(pt1,pt2:GDBVertex;color:integer):PGDBObjPolyLine;
+  function drawPolyline(pt1,pt2:TzePoint3d;color:integer):PGDBObjPolyLine;
   begin
     Result:=GDBObjPolyline.CreateInstance;
     zcSetEntPropFromCurrentDrawingProp(Result);

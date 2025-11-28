@@ -30,7 +30,7 @@ pgrafelement=^grafelement;
 {REGISTEROBJECTTYPE grafelement}
 grafelement= object(GDBaseObject)
                   linkcount:Integer;
-                  point:gdbvertex;
+                  point:TzePoint3d;
                   link:GDBObjOpenArrayOfPV;
                   workedlink:PGDBObjEntity;
                   connected:Integer;
@@ -38,14 +38,14 @@ grafelement= object(GDBaseObject)
                   pathlength:Double;
 
                   constructor initnul;
-                  constructor init(const v:gdbvertex);
+                  constructor init(const v:TzePoint3d);
                   procedure addline(pv:pgdbobjEntity);
                   function IsConnectedTo(node:pgrafelement):pgdbobjEntity;
             end;
 {REGISTEROBJECTTYPE GDBGraf}
 GDBGraf= object(GZVector{-}<grafelement>{//})
                 constructor init(m:Integer);
-                function addge(const v:gdbvertex):pgrafelement;
+                function addge(const v:TzePoint3d):pgrafelement;
                 procedure clear;virtual;
                 function minimalize(var drawing:TDrawingDef):Boolean;
                 function divide:Boolean;
@@ -53,7 +53,7 @@ GDBGraf= object(GZVector{-}<grafelement>{//})
                 procedure freeelement(PItem:PT);virtual;
 
                 procedure BeginFindPath;
-                procedure FindPath(point1,point2:gdbvertex;l1,l2:pgdbobjEntity;var pa:GDBPoint3dArray);
+                procedure FindPath(point1,point2:TzePoint3d;l1,l2:pgdbobjEntity;var pa:GDBPoint3dArray);
              end;
 {EXPORT-}
 function getlinktype(pv:PGDBObjEntity):TLinktype;
@@ -253,7 +253,7 @@ begin
      linkcount:=0;
      connected:=0;
 end;
-constructor grafelement.init(const v:gdbvertex);
+constructor grafelement.init(const v:TzePoint3d);
 begin
      point:=v;
      link.init(100);

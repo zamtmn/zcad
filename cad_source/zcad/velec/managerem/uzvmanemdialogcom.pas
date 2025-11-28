@@ -239,7 +239,7 @@ var
   headDev:pGDBObjDevice;
   graphView:TGraphDev;
   depthVisual:double;
-  insertCoordination:GDBVertex;
+  insertCoordination:TzePoint3d;
   listAllHeadDev:TListDev;
 begin
   depthVisual:=15;

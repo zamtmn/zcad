@@ -144,6 +144,7 @@ type
 TNameToIndex=TMyAnsiStringDictionary<TArrayIndex>;
 TFieldName=(FNUser,FNProgram);
 TFieldNames=set of TFieldName;
+TTypeAliases=TMyMapGen<TInternalScriptString,TInternalScriptString>;
 {EXPORT+}
 TZctnrVectorPUserTypeDescriptors=object(GZVectorPData{-}<PUserTypeDescriptor>{//})
                            end;
@@ -152,6 +153,7 @@ ptypemanager=^typemanager;
 typemanager=object(typemanagerdef)
                   {-}protected{/Pointer;/}
                   n2i:{-}TNameToIndex;{/Pointer;/}
+                  {-}aliases:TTypeAliases;{/Pointer;/}
                   {-}public{/Pointer;/}
                   exttype:TZctnrVectorPUserTypeDescriptors;
                   constructor init;
@@ -167,6 +169,8 @@ typemanager=object(typemanagerdef)
                   function getcount:TArrayIndex;virtual;
                   function AddTypeByPP(p:Pointer):TArrayIndex;virtual;
                   function AddTypeByRef(var _type:UserTypeDescriptor):TArrayIndex;virtual;
+                  procedure AddTypealias(const typename,fpcalias: TInternalScriptString);
+                  function GetTypealias(const fpcalias:TInternalScriptString):TInternalScriptString;
             end;
 Tvardescarray=GZVector{-}<vardesk>{//};
 {REGISTEROBJECTWITHOUTCONSTRUCTORTYPE varmanager}
@@ -233,16 +237,20 @@ TUnit=object(TSimpleUnit)
             constructor init(const nam:TInternalScriptString);
             function TypeIndex2PTD(ind:Integer):PUserTypeDescriptor;virtual;
             function TypeName2PTD(const n: TInternalScriptString):PUserTypeDescriptor;virtual;
+            procedure AddTypealias(const typename,fpcalias: TInternalScriptString);
+            function GetTypealias(const fpcalias:TInternalScriptString):TInternalScriptString;
             function ObjectTypeName2PTD(const n: TInternalScriptString):PObjectDescriptor;virtual;
             function AssignToSymbol(var psymbol;const symbolname:TInternalScriptString):Integer;
             function SavePasToMem(var membuf:TZctnrVectorBytes):PUserTypeDescriptor;virtual;
             destructor done;virtual;
             procedure free;virtual;
-            function RegisterType(ti:PTypeInfo):PUserTypeDescriptor;
-            function SetTypeDesk(ti:PTypeInfo; const fieldnames:array of const;SetNames:TFieldNames=[FNUser,FNProgram]):PUserTypeDescriptor;
-            function RegisterRecordType(ti:PTypeInfo):PUserTypeDescriptor;
-            function RegisterPointerType(ti:PTypeInfo):PUserTypeDescriptor;
-            function RegisterEnumType(ti:PTypeInfo):PUserTypeDescriptor;
+            function RegisterType(ti:PTypeInfo;ATypeName:string=''):PUserTypeDescriptor;
+            procedure SetTypeDesk2(putd:PUserTypeDescriptor; const fieldnames:array of const;SetNames:TFieldNames=[FNUser,FNProgram]);
+            procedure SetTypeDesk(tn:string; const fieldnames:array of const;SetNames:TFieldNames=[FNUser,FNProgram]);overload;
+            function SetTypeDesk(ti:PTypeInfo; const fieldnames:array of const;SetNames:TFieldNames=[FNUser,FNProgram]):PUserTypeDescriptor;overload;
+            function RegisterRecordType(ti:PTypeInfo;ATypeName:string=''):PUserTypeDescriptor;
+            function RegisterPointerType(ti:PTypeInfo;ATypeName:string=''):PUserTypeDescriptor;
+            function RegisterEnumType(ti:PTypeInfo;ATypeName:string=''):PUserTypeDescriptor;
       end;
 {EXPORT-}
 TOnCreateSystemUnit=procedure (ptsu:PTUnit);
@@ -519,16 +527,28 @@ begin
           pv:=source.InterfaceVariables.vardescarray.iterate(ir);
         until pv=nil;
 end;
-function TUnit.RegisterRecordType(ti:PTypeInfo):PUserTypeDescriptor;
+function TUnit.RegisterRecordType(ti:PTypeInfo;ATypeName:string=''):PUserTypeDescriptor;
 var
    td:PTypeData;
    mf: PManagedField;
    i:integer;
    etd:PRecordDescriptor;
    fd:FieldDescriptor;
+   tname:TInternalScriptString;
 begin
+      if ATypeName='' then begin
+        tname:=GetTypealias(ti^.Name);
+        if tname='' then
+          tname:=ti^.Name
+      end else begin
+        if ATypeName<>ti^.Name then begin
+          AddTypealias(ATypeName,ti^.Name);
+        end;
+        tname:=ATypeName;
+      end;
+
      Getmem(Pointer(etd),sizeof(RecordDescriptor));
-     PRecordDescriptor(etd)^.init(ti^.Name,@self);
+     PRecordDescriptor(etd)^.init(tname,@self);
      td:=GetTypeData(ti);
      mf:=@td.ManagedFldCount;
      inc(pointer(mf),sizeof(td.ManagedFldCount));
@@ -538,7 +558,7 @@ begin
 
 
           fd.base.ProgramName:=ti.Name;
-          fd.base.PFT:=RegisterType(ti);;
+          fd.base.PFT:=RegisterType(ti);
           fd.base.Attributes:=[];
           fd.base.Saved:=0;
           fd.Collapsed:=true;
@@ -555,26 +575,38 @@ begin
      InterfaceTypes.AddTypeByPP(@etd);
      result:=etd;
 end;
-function TUnit.RegisterPointerType(ti:PTypeInfo):PUserTypeDescriptor;
+function TUnit.RegisterPointerType(ti:PTypeInfo;ATypeName:string=''):PUserTypeDescriptor;
 var
    td:PTypeData;
    //mf: PManagedField;
    //i:integer;
    etd:PGDBPointerDescriptor;
    //fd:FieldDescriptor;
+   tname:TInternalScriptString;
 begin
+  if ATypeName='' then begin
+    tname:=GetTypealias(ti^.Name);
+    if tname='' then
+      tname:=ti^.Name
+  end else begin
+    if ATypeName<>ti^.Name then begin
+      AddTypealias(ATypeName,ti^.Name);
+    end;
+    tname:=ATypeName;
+  end;
      td:=GetTypeData(ti);
      Getmem(Pointer(etd),sizeof(GDBPointerDescriptor));
-     etd^.init(td.RefType^.Name,ti^.Name,@self);
+     etd^.init(td.RefType^.Name,ATypeName,@self);
      etd^.TypeOf:=RegisterType(td.RefType);
      InterfaceTypes.AddTypeByPP(@etd);
      result:=etd;
 end;
-function TUnit.RegisterEnumType(ti:PTypeInfo):PUserTypeDescriptor;
+function TUnit.RegisterEnumType(ti:PTypeInfo;ATypeName:string=''):PUserTypeDescriptor;
 var
    td:PTypeData;
    etd:PEnumDescriptor;
    bytessize:integer;
+   tname:TInternalScriptString;
 
   procedure SetEnumData(TypeInfo : PTypeInfo);
   var PS : PShortString;
@@ -596,6 +628,16 @@ var
   end;
 
 begin
+     if ATypeName='' then begin
+       tname:=GetTypealias(ti^.Name);
+       if tname='' then
+         tname:=ti^.Name
+     end else begin
+       if ATypeName<>ti^.Name then begin
+         AddTypealias(ATypeName,ti^.Name);
+       end;
+       tname:=ATypeName;
+     end;
      td:=GetTypeData(ti);
      Getmem(Pointer(etd),sizeof(EnumDescriptor));
      case td.OrdType of
@@ -606,22 +648,34 @@ begin
         otSLong:bytessize:=4;
         otULong:bytessize:=4;
      end;
-     etd^.init(bytessize,ti^.Name,@self);
+     etd^.init(bytessize,tname,@self);
      SetEnumData(ti);
      InterfaceTypes.AddTypeByPP(@etd);
      result:=etd;
 end;
-function TUnit.RegisterType(ti:PTypeInfo):PUserTypeDescriptor;
+function TUnit.RegisterType(ti:PTypeInfo;ATypeName:string=''):PUserTypeDescriptor;
+var
+  tname:string;
 begin
-   result:=TypeName2PTD(ti^.Name);
+   if ATypeName='' then begin
+     tname:=GetTypealias(ti^.Name);
+     if tname='' then
+       tname:=ti^.Name
+   end else begin
+     if ATypeName<>ti^.Name then begin
+       AddTypealias(ATypeName,ti^.Name);
+     end;
+     tname:=ATypeName;
+   end;
+   result:=TypeName2PTD(tname);
    if result=nil then
      case ti^.Kind of
-       tkRecord:result:=RegisterRecordType(ti);
-       tkPointer:result:=RegisterPointerType(ti);
-       tkEnumeration:result:=RegisterEnumType(ti);
+       tkRecord:result:=RegisterRecordType(ti,ATypeName);
+       tkPointer:result:=RegisterPointerType(ti,ATypeName);
+       tkEnumeration:result:=RegisterEnumType(ti,ATypeName);
      end;
 end;
-function TUnit.SetTypeDesk(ti:PTypeInfo; const fieldnames:array of const;SetNames:TFieldNames=[FNUser,FNProgram]):PUserTypeDescriptor;
+procedure TUnit.SetTypeDesk2(putd:PUserTypeDescriptor; const fieldnames:array of const;SetNames:TFieldNames=[FNUser,FNProgram]);
 function GetFieldName(index:integer;const oldname:string):string;
 begin
   if index>high(fieldnames) then
@@ -640,28 +694,39 @@ end;
 var
     i:integer;
 begin
-  result:=TypeName2PTD(ti^.Name);
-  if result<>nil then
-    case ti^.Kind of
-      tkRecord:
-      begin
-        for i:=0 to PRecordDescriptor(result)^.Fields.Count-1 do begin
+  if putd<>nil then begin
+    if IsIt(typeof(putd^),typeof(RecordDescriptor)) then begin
+        for i:=0 to PRecordDescriptor(putd)^.Fields.Count-1 do begin
           if FNUser in SetNames then
-            PRecordDescriptor(result)^.Fields.PArray^[i].base.UserName:=GetFieldName(i,PRecordDescriptor(result)^.Fields.PArray^[i].base.UserName);
+            PRecordDescriptor(putd)^.Fields.PArray^[i].base.UserName:=GetFieldName(i,PRecordDescriptor(putd)^.Fields.PArray^[i].base.UserName);
           if FNProgram in SetNames then
-            PRecordDescriptor(result)^.Fields.PArray^[i].base.ProgramName:=GetFieldName(i,PRecordDescriptor(result)^.Fields.PArray^[i].base.UserName);
+            PRecordDescriptor(putd)^.Fields.PArray^[i].base.ProgramName:=GetFieldName(i,PRecordDescriptor(putd)^.Fields.PArray^[i].base.UserName);
         end;
-      end;
-      tkEnumeration:
-      begin
-        for i:=0 to PEnumDescriptor(result)^.UserValue.Count-1 do begin
+    end else if IsIt(typeof(putd^),typeof(EnumDescriptor)) then begin
+        for i:=0 to PEnumDescriptor(putd)^.UserValue.Count-1 do begin
           if FNUser in SetNames then
-            PEnumDescriptor(result)^.UserValue.PArray^[i]:=GetFieldName(i,PEnumDescriptor(result)^.UserValue.PArray^[i]);
+            PEnumDescriptor(putd)^.UserValue.PArray^[i]:=GetFieldName(i,PEnumDescriptor(putd)^.UserValue.PArray^[i]);
           if FNProgram in SetNames then
-            PEnumDescriptor(result)^.SourceValue.PArray^[i]:=GetFieldName(i,PEnumDescriptor(result)^.SourceValue.PArray^[i]);
+            PEnumDescriptor(putd)^.SourceValue.PArray^[i]:=GetFieldName(i,PEnumDescriptor(putd)^.SourceValue.PArray^[i]);
         end;
-      end;
     end;
+  end;
+end;
+
+function TUnit.SetTypeDesk(ti:PTypeInfo; const fieldnames:array of const;SetNames:TFieldNames=[FNUser,FNProgram]):PUserTypeDescriptor;
+var
+  putd:PUserTypeDescriptor;
+begin
+  putd:=TypeName2PTD(ti.Name);
+  SetTypeDesk2(putd,fieldnames,SetNames);
+end;
+
+procedure TUnit.SetTypeDesk(tn:string; const fieldnames:array of const;SetNames:TFieldNames=[FNUser,FNProgram]);
+var
+  putd:PUserTypeDescriptor;
+begin
+  putd:=TypeName2PTD(tn);
+  SetTypeDesk2(putd,fieldnames,SetNames);
 end;
 
 procedure TEntityUnit.free;
@@ -823,6 +888,7 @@ begin
      exttype.free;
      exttype.done;
      n2i.destroy;
+     aliases.destroy;
      zTraceLn('{T-}[ZSCRIPT]TypeManager.done;//end');
      //programlog.LogOutStr('end;',lp_DecPos,LM_Trace);
 end;
@@ -833,6 +899,7 @@ begin
      exttype.cleareraseobjfrom(BaseTypesEndIndex-1);
      exttype.done;
      n2i.destroy;
+     aliases.destroy;
      zTraceLn('{T-}[ZSCRIPT]TypeManager.systemdone;//end');
      //programlog.LogOutStr('end;',lp_DecPos,LM_Trace);
 end;
@@ -868,6 +935,16 @@ begin
      p:=@_type;
      result:=AddTypeByPP(@p);
 end;
+procedure typemanager.AddTypealias(const typename,fpcalias: TInternalScriptString);
+begin
+  aliases.TryAdd(fpcalias,typename);
+end;
+function typemanager.GetTypealias(const fpcalias:TInternalScriptString):TInternalScriptString;
+begin
+  if not aliases.TryGetValue(fpcalias,result) then
+    result:='';
+end;
+
 function typemanager._TypeName2PTD;
 var
   {tp:PUserTypeDescriptor;
@@ -907,6 +984,7 @@ constructor typemanager.init;
 begin
      exttype.init(1000);
      n2i:=TNameToIndex.create;
+     aliases:=TTypeAliases.create;
      //CreateBaseTypes;
 end;
 procedure typemanager.CreateBaseTypes;
@@ -1904,6 +1982,15 @@ begin
 
       //programlog.LogOutStr(sysutils.format('In unit "%s" not found type "%s"',[name,n]),0,LM_Warning);
 end;
+procedure tunit.AddTypealias(const typename,fpcalias: TInternalScriptString);
+begin
+  InterfaceTypes.AddTypealias(typename,fpcalias);
+end;
+function tunit.GetTypealias(const fpcalias:TInternalScriptString):TInternalScriptString;
+begin
+  result:=InterfaceTypes.GetTypealias(fpcalias);
+end;
+
 function tunit.ObjectTypeName2PTD;
 begin
      result:=InterfaceTypes._ObjectTypeName2PTD(n);

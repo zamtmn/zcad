@@ -166,7 +166,7 @@ end;
 
 
 
-function drawStartGroupSchema(pt:GDBVertex):PGDBObjDevice;
+function drawStartGroupSchema(pt:TzePoint3d):PGDBObjDevice;
 var
     rc:TDrawContext;
 begin
@@ -196,15 +196,15 @@ begin
     //result:=cmd_ok;
 end;
 
-function drawConnectDevice(stDev,edDev:TVertex;stPoint,edPoint:GDBVertex;lColumnSchemaOneLevel:TVectorOfColumnSchemaOneLevel;countColumn:integer;newGroup:boolean):PGDBObjPolyLine;
+function drawConnectDevice(stDev,edDev:TVertex;stPoint,edPoint:TzePoint3d;lColumnSchemaOneLevel:TVectorOfColumnSchemaOneLevel;countColumn:integer;newGroup:boolean):PGDBObjPolyLine;
 type
    //TVectorOfInteger=specialize TVector<integer>;
-   TVectorOfGDBVertex=specialize TVector<GDBVertex>;
+   TVectorOfGDBVertex=specialize TVector<TzePoint3d>;
 var
     stPtNumColumn,edPtNumColumn:integer;
     //listCountCablesGone:TVectorOfInteger;
     listPoints:TVectorOfGDBVertex;
-    ptVertex:GDBVertex;
+    ptVertex:TzePoint3d;
 
 function getNumWay(isHead:boolean;columninfo:TColumnSchemaOneLevel;contColumn:integer):integer;
 begin
@@ -231,11 +231,11 @@ begin
 end;
 
 //Получить номер колонки
-function getDotsBetweenColumns(stNumColumn,edNumColumn:integer;beforePt:GDBVertex):TVectorOfGDBVertex;
+function getDotsBetweenColumns(stNumColumn,edNumColumn:integer;beforePt:TzePoint3d):TVectorOfGDBVertex;
 var
   i,numWay:integer;
   ptX,ptY:double;
-  //vertexWay:GDBVertex;
+  //vertexWay:TzePoint3d;
   //stDev:PGDBObjDevice;
 begin
    result:=TVectorOfGDBVertex.Create;
@@ -253,11 +253,11 @@ begin
 end;
 
 //Получить точки выхода от устройства
-function getDotsStartDevice(stNumColumn:integer;stDev:TVertex;beforePt:GDBVertex):TVectorOfGDBVertex;
+function getDotsStartDevice(stNumColumn:integer;stDev:TVertex;beforePt:TzePoint3d):TVectorOfGDBVertex;
 var
   {i,}numWay:integer;
-  pt1,pt2,newPt:GDBVertex;
-  //vertexWay:GDBVertex;
+  pt1,pt2,newPt:TzePoint3d;
+  //vertexWay:TzePoint3d;
 begin
    result:=TVectorOfGDBVertex.Create;
    pt1:=uzegeometry.CreateVertex((stNumColumn*zonaWidthColumn)+(zonaWidthColumn/2)-1,-zonaHeightHead-zonaHeightConnect-zonaHeightDev,0);
@@ -273,11 +273,11 @@ begin
 end;
 
 //Получить точки подключения устройства
-function getDotsEndDevice(edPtNumColumn:integer;edDev:TVertex;beforePt:GDBVertex):TVectorOfGDBVertex;
+function getDotsEndDevice(edPtNumColumn:integer;edDev:TVertex;beforePt:TzePoint3d):TVectorOfGDBVertex;
 //var
 //  i,numWay:integer;
-//  pt1,pt2,newPt:GDBVertex;
-  //vertexWay:GDBVertex;
+//  pt1,pt2,newPt:TzePoint3d;
+  //vertexWay:TzePoint3d;
 begin
    result:=TVectorOfGDBVertex.Create;
    result.pushback(uzegeometry.CreateVertex((edPtNumColumn*zonaWidthColumn)-1,beforePt.y,0));
@@ -352,7 +352,7 @@ begin
   //zcAddEntToCurrentDrawingWithUndo(Result);                      //добавляем полилинию с ундо в пространство модели
 end;
 
-function drawCloneDevice(dev:pGDBObjDevice;pt:GDBVertex):pGDBObjDevice;
+function drawCloneDevice(dev:pGDBObjDevice;pt:TzePoint3d):pGDBObjDevice;
 var
     rc:TDrawContext;
 begin
@@ -407,7 +407,7 @@ function createSchemaLevelOne_com(const Context:TZCADCommandContext;operands:TCo
    end;
 
    ////** получаем координату точки нового устройства
-   function getchildVertexPoint(vDev:TVertex;int:integer;lColumnSchemaOneLevel:TVectorOfColumnSchemaOneLevel;countColumn:integer):GDBVertex;
+   function getchildVertexPoint(vDev:TVertex;int:integer;lColumnSchemaOneLevel:TVectorOfColumnSchemaOneLevel;countColumn:integer):TzePoint3d;
    var
      i:integer;
      y:double;
@@ -472,10 +472,10 @@ function createSchemaLevelOne_com(const Context:TZCADCommandContext;operands:TCo
 
 
    ////** Рекурсия рисуем одноуровневую схему
-   procedure drawSchemaOneLevel(vertexDev:TVertex;vertexPoint:GDBVertex;lColumnSchemaOneLevel:TVectorOfColumnSchemaOneLevel;var countColumn:integer;startNewGroup:boolean);
+   procedure drawSchemaOneLevel(vertexDev:TVertex;vertexPoint:TzePoint3d;lColumnSchemaOneLevel:TVectorOfColumnSchemaOneLevel;var countColumn:integer;startNewGroup:boolean);
    var
      i:integer;
-     childVertexPoint:GDBVertex;
+     childVertexPoint:TzePoint3d;
    begin
      if startNewGroup then
        begin
@@ -524,7 +524,7 @@ function createSchemaLevelOne_com(const Context:TZCADCommandContext;operands:TCo
        zcUI.TextMessage('5',TMWOHistoryOut);
        childVertexPoint:=getchildVertexPoint(vertexDev.Childs[i],i,lColumnSchemaOneLevel,countColumn);
 
-       //function drawConnectDevice(stDev,edDev:TVertex;stPoint,edPoint:GDBVertex;lColumnSchemaOneLevel:TVectorOfColumnSchemaOneLevel;countColumn:integer;newGroup:boolean):PGDBObjPolyLine;
+       //function drawConnectDevice(stDev,edDev:TVertex;stPoint,edPoint:TzePoint3d;lColumnSchemaOneLevel:TVectorOfColumnSchemaOneLevel;countColumn:integer;newGroup:boolean):PGDBObjPolyLine;
        drawConnectDevice(vertexDev,vertexDev.Childs[i],vertexPoint,childVertexPoint,lColumnSchemaOneLevel,countColumn,startNewGroup);
 
 

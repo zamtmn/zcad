@@ -125,15 +125,15 @@ type
  //** Вектор графов деревьев
  tvectorofGraph=specialize TVector<TGraph>;
 
- procedure visualGraph(GGraph:TGraphBuilder;G: TGraph; var startPt:GDBVertex;height:double);
+ procedure visualGraph(GGraph:TGraphBuilder;G: TGraph; var startPt:TzePoint3d;height:double);
  procedure visualPtNameSL(GGraph:TGraphBuilder; height:double);
- procedure visualGraphTest(G: TGraph; height:double; var startPt:GDBVertex);
+ procedure visualGraphTest(G: TGraph; height:double; var startPt:TzePoint3d);
  procedure visualGraphPlan(G: TGraph; height:double);
- procedure visualGraphTreeNew(G: TGraph; var startPt:GDBVertex;height:double);
- procedure visualGraphTreeNewUGO(G: TGraph; var startPt:GDBVertex;height:double);
- procedure visualCabelTree(G: TGraph; var startPt:GDBVertex;height:double);
- procedure drawMText(pt:GDBVertex;mText:String;color:integer;rotate,height:double);
- //procedure visualAllTreesLMD(listMasterDevice:TVectorOfMasterDevice;startPt:GDBVertex;height:double);
+ procedure visualGraphTreeNew(G: TGraph; var startPt:TzePoint3d;height:double);
+ procedure visualGraphTreeNewUGO(G: TGraph; var startPt:TzePoint3d;height:double);
+ procedure visualCabelTree(G: TGraph; var startPt:TzePoint3d;height:double);
+ procedure drawMText(pt:TzePoint3d;mText:String;color:integer;rotate,height:double);
+ //procedure visualAllTreesLMD(listMasterDevice:TVectorOfMasterDevice;startPt:TzePoint3d;height:double);
 
 implementation
 uses
@@ -145,13 +145,13 @@ type
     //PTInfoVertex=^TInfoVertex;
     TInfoVertex=record
         num,kol,childs:Integer;
-        poz:GDBVertex2D;
+        poz:TzePoint2d;
     end;
 
     TListVertex=specialize TVector<TInfoVertex>;
 
   //рисуем прямоугольник с цветом  зная номера верши, координат возьмем из графа по номерам
-      procedure drawVertex(pt:GDBVertex;color:integer;height:double);
+      procedure drawVertex(pt:TzePoint3d;color:integer;height:double);
       var
           polyObj:PGDBObjPolyLine;
       begin
@@ -170,7 +170,7 @@ type
       end;
 
       //рисуем прямоугольник с цветом  зная номера вершин, координат возьмем из графа по номерам
-      procedure drawConnectLine(pt1,pt2:GDBVertex;color:integer);
+      procedure drawConnectLine(pt1,pt2:TzePoint3d;color:integer);
       var
           polyObj:PGDBObjPolyLine;
       begin
@@ -186,7 +186,7 @@ type
            zcAddEntToCurrentDrawingWithUndo(polyObj);
       end;
       //Визуализация текста
-      procedure drawText(pt:GDBVertex;mText:String;color:integer;height:double);
+      procedure drawText(pt:TzePoint3d;mText:String;color:integer;height:double);
       var
           ptext:PGDBObjText;
       begin
@@ -206,7 +206,7 @@ type
 
       ////
       //Визуализация многострочный текст
-      procedure drawMText(pt:GDBVertex;mText:String;color:integer;rotate,height:double);
+      procedure drawMText(pt:TzePoint3d;mText:String;color:integer;rotate,height:double);
       var
           pmtext:PGDBObjMText;
       begin
@@ -274,7 +274,7 @@ type
 
 
   //Визуализация графа
-procedure visualGraph(GGraph:TGraphBuilder;G: TGraph; var startPt:GDBVertex;height:double);
+procedure visualGraph(GGraph:TGraphBuilder;G: TGraph; var startPt:TzePoint3d;height:double);
 
 
 var
@@ -283,7 +283,7 @@ var
     x,y,i,tParent:integer;
     listVertex:TListVertex;
     infoVertex:TInfoVertex;
-    pt1,pt2,pt3,ptext:GDBVertex;
+    pt1,pt2,pt3,ptext:TzePoint3d;
     VertexPath: TClassList;
 
 
@@ -367,7 +367,7 @@ begin
 end;
 
 //Визуализация графа
-procedure visualGraphTreeNew(G: TGraph; var startPt:GDBVertex;height:double);
+procedure visualGraphTreeNew(G: TGraph; var startPt:TzePoint3d;height:double);
 
 
 var
@@ -376,7 +376,7 @@ var
   x,y,i,tParent:integer;
   listVertex:TListVertex;
   infoVertex:TInfoVertex;
-  pt1,pt2,pt3,ptext:GDBVertex;
+  pt1,pt2,pt3,ptext:TzePoint3d;
   VertexPath: TClassList;
 
 
@@ -478,7 +478,7 @@ begin
 end;
 
 //Визуализация графа
-procedure visualCabelTree(G: TGraph; var startPt:GDBVertex;height:double);
+procedure visualCabelTree(G: TGraph; var startPt:TzePoint3d;height:double);
 
 
 var
@@ -488,7 +488,7 @@ var
   iNum:integer;
   listVertex:TListVertex;
   infoVertex:TInfoVertex;
-  pt1,pt2,pt3,ptext:GDBVertex;
+  pt1,pt2,pt3,ptext:TzePoint3d;
   VertexPath: TClassList;
 
 
@@ -588,7 +588,7 @@ begin
 end;
 
 ////Визуализация графа
-procedure visualGraphTreeNewUGO(G: TGraph; var startPt:GDBVertex;height:double);
+procedure visualGraphTreeNewUGO(G: TGraph; var startPt:TzePoint3d;height:double);
 const
   size=5;
   indent=30;
@@ -596,7 +596,7 @@ type
    //PTInfoVertex=^TInfoVertex;
    TInfoVertex=record
        num,kol,childs:Integer;
-       poz:GDBVertex2D;
+       poz:TzePoint2d;
        vertex:TVertex;
    end;
 
@@ -609,7 +609,7 @@ var
   //iNum:integer;
   listVertex:TListVertex;
   infoVertex:TInfoVertex;
-  pt1,pt2{,pt3,ptext},ptSt,ptEd:GDBVertex;
+  pt1,pt2{,pt3,ptext},ptSt,ptEd:TzePoint3d;
   VertexPath: TClassList;
   //pv:pGDBObjDevice;
   //ppvvarext,pvarv:TVariablesExtender;
@@ -626,9 +626,9 @@ var
                result:=c;
   end;
 
-//  (datname,name:String;var currentcoord:GDBVertex; var root:GDBObjRoot);
-   //procedure addBlockonDraw(datname:String;var currentcoord:GDBVertex; var root:GDBObjRoot);
-  procedure addBlockonDraw(dev:pGDBObjDevice;var currentcoord:GDBVertex; var root:GDBObjRoot);
+//  (datname,name:String;var currentcoord:TzePoint3d; var root:GDBObjRoot);
+   //procedure addBlockonDraw(datname:String;var currentcoord:TzePoint3d; var root:GDBObjRoot);
+  procedure addBlockonDraw(dev:pGDBObjDevice;var currentcoord:TzePoint3d; var root:GDBObjRoot);
   var
       datname:String;
       pv:pGDBObjDevice;
@@ -664,7 +664,7 @@ var
 
   end;
 
-  procedure addBlockNodeonDraw(var currentcoord:GDBVertex; var root:GDBObjRoot);
+  procedure addBlockNodeonDraw(var currentcoord:TzePoint3d; var root:GDBObjRoot);
   var
       datname:String;
       pv:pGDBObjDevice;
@@ -700,7 +700,7 @@ var
 
   end;
     //рисуем прямоугольник с цветом  зная номера вершин, координат возьмем из графа по номерам
-      procedure drawConnectLine(pt1,pt2:GDBVertex;color:integer);
+      procedure drawConnectLine(pt1,pt2:TzePoint3d;color:integer);
       var
           polyObj:PGDBObjPolyLine;
       begin
@@ -717,11 +717,11 @@ var
       end;
 
       //рисуем прямоугольник с цветом  зная номера вершин, координат возьмем из графа по номерам
-      procedure drawConnectLineDev(pSt,p1,p2,pEd:GDBVertex);
+      procedure drawConnectLineDev(pSt,p1,p2,pEd:TzePoint3d);
       var
           //polyObj:PGDBObjPolyLine;
           cableLine:PGDBObjCable;
-          //p3:GDBVertex;
+          //p3:TzePoint3d;
       begin
            cableLine := AllocEnt(GDBCableID);
            cableLine^.init(nil,nil,0);
@@ -903,7 +903,7 @@ begin
 end;
 
    //Визуализация графа
-procedure visualGraphTest(G: TGraph; height:double; var startPt:GDBVertex);
+procedure visualGraphTest(G: TGraph; height:double; var startPt:TzePoint3d);
 
 
 var
@@ -912,10 +912,10 @@ var
     x,y,i,tParent:integer;
     listVertex:TListVertex;
     infoVertex:TInfoVertex;
-    pt1,pt2,pt3,ptext:GDBVertex;
+    pt1,pt2,pt3,ptext:TzePoint3d;
     VertexPath: TClassList;
 
-    //startPt:GDBVertex;
+    //startPt:TzePoint3d;
 
 begin
       x:=0;
@@ -1007,10 +1007,10 @@ var
     {x,y,}i{,tParent}:integer;
     //listVertex:TListVertex;
     //infoVertex:TInfoVertex;
-    //pt1,pt2,pt3,ptext:GDBVertex;
+    //pt1,pt2,pt3,ptext:TzePoint3d;
     //VertexPath: TClassList;
     text:string;
-    startPt,endPt,CentrPt:GDBVertex;
+    startPt,endPt,CentrPt:TzePoint3d;
 
 begin
 
@@ -1147,7 +1147,7 @@ end;
   //  G: TGraph;
   //  EdgePath, VertexPath: TClassList;
   //  i: Integer;
-  //  gg:GDBVertex;
+  //  gg:  ;
   //  //user:TCompareEvent;
   //begin
   //

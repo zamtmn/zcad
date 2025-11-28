@@ -48,7 +48,7 @@ type
 
 procedure UpdateSplineFromPoints(var ASpleneEntity:GDBObjSpline;
   APointsType:TPointsType;
-  const APoints:array of GDBVertex);
+  const APoints:array of TzePoint3d);
 var
   i:integer;
   knotValue:single;
@@ -113,7 +113,7 @@ begin
 end;
 
 procedure InteractiveSplineManipulator(const PInteractiveData:PSplineInteractiveData;
-  Point:GDBVertex;Click:boolean);
+  Point:TzePoint3d;Click:boolean);
 begin
   if PInteractiveData^.PSpline=nil then
     exit;
@@ -136,7 +136,7 @@ function InteractiveDrawSpline(APointType:TPointsType;
   const Context:TZCADCommandContext):TCommandResult;
 var
   interactiveData:TSplineInteractiveData;
-  p1,p2,p3:gdbvertex;
+  p1,p2,p3:TzePoint3d;
   i:integer;
   knotValue:single;
 begin

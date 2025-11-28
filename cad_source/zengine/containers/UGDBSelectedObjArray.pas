@@ -45,17 +45,17 @@ GDBSelectedObjArray= object(GZVector{-}<selectedobjdesc>{//})
                           function getnearesttomouse(mx,my:integer):tcontrolpointdist;virtual;
                           function getonlyoutbound(var DC:TDrawContext):TBoundingBox;
                           procedure selectcurrentcontrolpoint(key:Byte;mx,my,h:integer);virtual;
-                          procedure selectcontrolpointinframe(f1,f2: GDBvertex2DI);virtual;
+                          procedure selectcontrolpointinframe(f1,f2: TzePoint2i);virtual;
                           //destructor done;virtual;
                           procedure freeclones;
-                          procedure Transform(const dispmatr:DMatrix4D);
-                          procedure SetRotate(const minusd,plusd,rm:DMatrix4D;const x,y,z:GDBVertex);
-                          procedure SetRotateObj(const minusd,plusd,rm:DMatrix4D;const x,y,z:GDBVertex);
-                          procedure TransformObj(const dispmatr:DMatrix4D);
+                          procedure Transform(const dispmatr:TzeTypedMatrix4d);
+                          procedure SetRotate(const minusd,plusd,rm:TzeTypedMatrix4d;const x,y,z:TzePoint3d);
+                          procedure SetRotateObj(const minusd,plusd,rm:TzeTypedMatrix4d;const x,y,z:TzePoint3d);
+                          procedure TransformObj(const dispmatr:TzeTypedMatrix4d);
 
                           procedure drawobj(var DC:TDrawContext);virtual;
                           procedure freeelement(PItem:PT);virtual;
-                          procedure calcvisible(const frustum:cliparray;const Actuality:TVisActuality;var Counters:TCameraCounters; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double);virtual;
+                          procedure calcvisible(const frustum:TzeFrustum;const Actuality:TVisActuality;var Counters:TCameraCounters; ProjectProc:GDBProjectProc;const zoom,currentdegradationfactor:Double);virtual;
                           //procedure resprojparam(pcount:TActuality;var camera:GDBObjCamera; ProjectProc:GDBProjectProc;var DC:TDrawContext);
                     end;
 {EXPORT-}
@@ -240,10 +240,10 @@ begin
   result:=td;
 end;
 
-(*procedure processobject(pobj:PGDBObjEntity;minusd,plusd,rm:DMatrix4D;x,y,z:GDBVertex);
+(*procedure processobject(pobj:PGDBObjEntity;minusd,plusd,rm:TzeTypedMatrix4d;x,y,z:TzePoint3d);
 var i: Integer;
-  m,m2,oplus,ominus:DMatrix4D;
-  tv,P_insert_in_OCS,P_insert_in_WCS:gdbvertex;
+  m,m2,oplus,ominus:TzeTypedMatrix4d;
+  tv,P_insert_in_OCS,P_insert_in_WCS:TzePoint3d;
 begin
   pobj^.Transform(minusd);
 
@@ -253,7 +253,7 @@ begin
   //отвечающие за смещение, и строим на них матрицу сдвига в начало координат - minus
   //и вторую, для сдвига обратно - plus.Умножаем М на матрицу сдвига в начало системы
   m:=PGDBObjWithMatrix(pobj)^.ObjMatrix;
-  P_insert_in_OCS:=PGDBVertex(@m[3])^;
+  P_insert_in_OCS:=PzePoint3d(@m[3])^;
   ominus:=uzegeometry.CreateTranslationMatrix(uzegeometry.MinusVertex(P_insert_in_OCS));
   oplus:=uzegeometry.CreateTranslationMatrix(P_insert_in_OCS);
   m:=uzegeometry.MatrixMultiply(m,ominus);
@@ -262,7 +262,7 @@ begin
   //у нее элементы сдвига, потом инвертируем (или транспонируем, для матриц
   //вращения это одно и то же). M = M*Mobj_inv
   m2:=PGDBObjWithMatrix(pobj)^.ObjMatrix;
-  PGDBVertex(@m2[3])^:=nulvertex;
+  PzePoint3d(@m2[3])^:=nulvertex;
   matrixinvert(m2);
   m:=uzegeometry.MatrixMultiply(m,m2);
 
@@ -288,20 +288,20 @@ begin
 end;
 
 *)
-procedure processobject(pobj:PGDBObjEntity;const minusd,plusd,rm:DMatrix4D;const x,y,z:GDBVertex);
+procedure processobject(pobj:PGDBObjEntity;const minusd,plusd,rm:TzeTypedMatrix4d;const x,y,z:TzePoint3d);
 var //i: Integer;
-  m{,oplus,ominus}:DMatrix4D;
-  {tv,}P_insert_in_OCS,P_insert_in_WCS:gdbvertex;
+  m{,oplus,ominus}:TzeTypedMatrix4d;
+  {tv,}P_insert_in_OCS,P_insert_in_WCS:TzePoint3d;
 begin
   pobj^.Transform(minusd);
 
   m:=PGDBObjWithMatrix(pobj)^.ObjMatrix;
-  P_insert_in_OCS:=PGDBVertex(@m.mtr[3])^;
-  PGDBVertex(@m.mtr[3])^:=nulvertex;
+  P_insert_in_OCS:=PzePoint3d(@m.mtr.v[3])^;
+  PzePoint3d(@m.mtr.v[3])^:=nulvertex;
   matrixinvert(m);
   P_insert_in_WCS:=VectorTransform3D(P_insert_in_OCS,m);
   //m:=onematrix;
-  //PGDBVertex(@m.mtr[3])^:=P_insert_in_wCS;
+  //PzePoint3d(@m.mtr[3])^:=P_insert_in_wCS;
   m:=CreateTranslationMatrix(P_insert_in_wCS);
   PGDBObjWithMatrix(pobj)^.ObjMatrix:=m;
   pobj^.Transform(rm);
@@ -311,17 +311,17 @@ begin
   //PGDBObjWithMatrix(pobj)^.FormatEntity(gdb.GetCurrentDWG^);
 end;
 
-(*procedure processobject(pobj:PGDBObjEntity;minusd,plusd,rm:DMatrix4D;x,y,z:GDBVertex);
+(*procedure processobject(pobj:PGDBObjEntity;minusd,plusd,rm:TzeTypedMatrix4d;x,y,z:TzePoint3d);
 var i: Integer;
 //  d: Double;
 //  td:tcontrolpointdist;
-  m,m2,oplus,ominus:DMatrix4D;
-  tv:gdbvertex;
+  m,m2,oplus,ominus:TzeTypedMatrix4d;
+  tv:TzePoint3d;
   l1,l2:GDBObj2dprop;
 {
 pobj^.Transform(minusd);
 m:=PGDBObjWithMatrix(pobj)^.ObjMatrix;
-PGDBVertex(@m[3])^:=nulvertex;
+PzePoint3d(@m[3])^:=nulvertex;
 matrixinvert(m);
 pobj^.Transform(m);
 pobj^.Transform(rm);
@@ -335,7 +335,7 @@ begin
   pobj^.Transform({minusd}onematrix);
   l2:=PGDBObjWithLocalCS(pobj)^.Local;
   //m:=PGDBObjWithMatrix(pobj)^.ObjMatrix;
-  //PGDBVertex(@m[3])^:=nulvertex;
+  //PzePoint3d(@m[3])^:=nulvertex;
   //matrixinvert(m);
   //pobj^.Transform(m);
   //pobj^.Transform(rm);
@@ -351,7 +351,7 @@ begin
   tv:=vectortransform3d(nulvertex,m);
   oplus:=uzegeometry.CreateTranslationMatrix(tv);
   ominus:=uzegeometry.CreateTranslationMatrix(createvertex(-tv.x,-tv.y,-tv.z));
-  PGDBVertex(@m[3])^:=nulvertex;
+  PzePoint3d(@m[3])^:=nulvertex;
   matrixinvert(m);
   PGDBObjWithMatrix(pobj)^.ObjMatrix:=onematrix;
   //pobj^.Transform(m);
@@ -362,13 +362,13 @@ begin
   PGDBObjWithMatrix(pobj)^.Format;}
 end;
 *)
-procedure GDBSelectedObjArray.SetRotate(const minusd,plusd,rm:DMatrix4D;const x,y,z:GDBVertex);
+procedure GDBSelectedObjArray.SetRotate(const minusd,plusd,rm:TzeTypedMatrix4d;const x,y,z:TzePoint3d);
 var i: Integer;
 //  d: Double;
 //  td:tcontrolpointdist;
   tdesc:pselectedobjdesc;
-  //m,oplus:DMatrix4D;
-  //tv:gdbvertex;
+  //m,oplus:TzeTypedMatrix4d;
+  //tv:TzePoint3d;
 begin
   if count > 0 then
   begin
@@ -386,13 +386,13 @@ begin
   {if save then
               gdb.GetCurrentROOT.FormatAfterEdit;}
 end;
-procedure GDBSelectedObjArray.SetRotateObj(const minusd,plusd,rm:DMatrix4D;const x,y,z:GDBVertex);
+procedure GDBSelectedObjArray.SetRotateObj(const minusd,plusd,rm:TzeTypedMatrix4d;const x,y,z:TzePoint3d);
 var i: Integer;
 //  d: Double;
 //  td:tcontrolpointdist;
   tdesc:pselectedobjdesc;
-  //m,tempm,oplus,ominus:DMatrix4D;
-  //tv:gdbvertex;
+  //m,tempm,oplus,ominus:TzeTypedMatrix4d;
+  //tv:TzePoint3d;
 begin
   if count > 0 then
   begin
@@ -405,7 +405,7 @@ begin
           processobject(tdesc^.objaddr,minusd,plusd,rm,x,y,z);
           {tdesc^.objaddr^.Transform(minusd);
           m:=PGDBObjWithMatrix(tdesc^.objaddr)^.ObjMatrix;
-          PGDBVertex(@m[3])^:=nulvertex;
+          PzePoint3d(@m[3])^:=nulvertex;
           matrixinvert(m);
           tdesc^.objaddr^.Transform(m);
           tdesc^.objaddr^.Transform(rm);
@@ -420,7 +420,7 @@ begin
               gdb.GetCurrentROOT.FormatAfterEdit;}
 end;
 
-procedure GDBSelectedObjArray.Transform(const dispmatr:DMatrix4D);
+procedure GDBSelectedObjArray.Transform(const dispmatr:TzeTypedMatrix4d);
 var i: Integer;
 //  d: Double;
 //  td:tcontrolpointdist;
@@ -447,7 +447,7 @@ begin
   {if save then
               gdb.GetCurrentROOT.FormatAfterEdit;}
 end;
-procedure GDBSelectedObjArray.TransformObj(const dispmatr:DMatrix4D);
+procedure GDBSelectedObjArray.TransformObj(const dispmatr:TzeTypedMatrix4d);
 var i: Integer;
   tdesc:pselectedobjdesc;
 begin
@@ -572,7 +572,7 @@ begin
   end;
 
 end;
-procedure GDBSelectedObjArray.selectcontrolpointinframe(f1,f2: GDBvertex2DI);
+procedure GDBSelectedObjArray.selectcontrolpointinframe(f1,f2: TzePoint2i);
 var i: Integer;
   tdesc:pselectedobjdesc;
 begin

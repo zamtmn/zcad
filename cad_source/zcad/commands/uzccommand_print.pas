@@ -48,7 +48,7 @@ uses
 type
   Print_com=object(CommandRTEdObject)
     VS:integer;
-    p1,p2:GDBVertex;
+    p1,p2:TzePoint3d;
     procedure CommandContinue(const Context:TZCADCommandContext);virtual;
     procedure CommandStart(const Context:TZCADCommandContext;Operands:TCommandOperands);
       virtual;
@@ -79,14 +79,14 @@ end;
 procedure Print_com.CommandContinue(const Context:TZCADCommandContext);
 var
   v1,v2:vardesk;
-  tp1,tp2:gdbvertex;
+  tp1,tp2:TzePoint3d;
 begin
   if (commandmanager.GetValueHeap-vs)=2 then begin
     v2:=commandmanager.PopValue;
     v1:=commandmanager.PopValue;
     vs:=commandmanager.GetValueHeap;
-    tp1:=Pgdbvertex(v1.Data.Addr.Instance)^;
-    tp2:=Pgdbvertex(v2.Data.Addr.Instance)^;
+    tp1:=PzePoint3d(v1.Data.Addr.Instance)^;
+    tp2:=PzePoint3d(v2.Data.Addr.Instance)^;
 
     p1.x:=min(tp1.x,tp2.x);
     p1.y:=min(tp1.y,tp2.y);

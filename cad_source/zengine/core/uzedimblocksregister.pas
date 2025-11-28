@@ -48,7 +48,7 @@ var
   lttable:PGDBLtypeArray;
   SystemLayer:PGDBLayerProp;
   SystemLT:PGDBLtypeProp;
-  p1,p2:GDBvertex;
+  p1,p2:TzePoint3d;
 begin
   layertable:=dwg^.GetLayerTable;
   lttable:=dwg^.GetLTypeTable;
@@ -76,7 +76,7 @@ var
   lttable:PGDBLtypeArray;
   SystemLayer:PGDBLayerProp;
   SystemLT:PGDBLtypeProp;
-  p1,p2:GDBvertex;
+  p1,p2:TzePoint3d;
 begin
   layertable:=dwg^.GetLayerTable;
   lttable:=dwg^.GetLTypeTable;
@@ -159,7 +159,7 @@ var
   lttable:PGDBLtypeArray;
   SystemLayer:PGDBLayerProp;
   SystemLT:PGDBLtypeProp;
-  p1,p2:GDBvertex;
+  p1,p2:TzePoint3d;
 begin
   layertable:=dwg^.GetLayerTable;
   lttable:=dwg^.GetLTypeTable;
@@ -331,7 +331,7 @@ var
   lttable:PGDBLtypeArray;
   SystemLayer:PGDBLayerProp;
   SystemLT:PGDBLtypeProp;
-  p1,p2,p3,p4:GDBvertex;
+  p1,p2,p3,p4:TzePoint3d;
 begin
   layertable:=dwg^.GetLayerTable;
   lttable:=dwg^.GetLTypeTable;
@@ -392,7 +392,7 @@ var
   lttable:PGDBLtypeArray;
   SystemLayer:PGDBLayerProp;
   SystemLT:PGDBLtypeProp;
-  p1,p2,p3:GDBvertex;
+  p1,p2,p3:TzePoint3d;
 begin
   layertable:=dwg^.GetLayerTable;
   lttable:=dwg^.GetLTypeTable;

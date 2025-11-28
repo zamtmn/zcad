@@ -694,10 +694,10 @@ begin
                            end;
   begin
   if rez.data.ptd<>nil then
-  if rez.data.ptd.TypeName='GDBXCoordinate' then
+  if rez.data.ptd.TypeName='TzeXUnits' then
                                                 rez.data.ptd:=rez.data.ptd;
   if hrez.data.ptd<>nil then
-  if hrez.data.ptd.TypeName='GDBXCoordinate' then
+  if hrez.data.ptd.TypeName='TzeXUnits' then
                                                   rez.data.ptd:=rez.data.ptd;
   if rez.data.ptd<>nil then
                            rezptd:=rez.data.ptd^.GetFactTypedef

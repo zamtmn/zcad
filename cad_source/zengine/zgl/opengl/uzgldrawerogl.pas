@@ -36,14 +36,6 @@ TGLVersion=(GLV_1_0,GLV_1_2,GLV_1_3,GLV_1_4,
             GLV_1_5,GLV_2_0,GLV_2_1,GLV_3_0,
             GLV_3_1,GLV_3_2,GLV_3_3,GLV_4_0,
             GLV_4_3);
-ptrestoremode=^trestoremode;
-TRestoreMode=(
-              WND_AuxBuffer(*'AUX buffer'*),
-              WND_AccumBuffer(*'ACCUM buffer'*),
-              WND_DrawPixels(*'Memory'*),
-              WND_NewDraw(*'Redraw'*),
-              WND_Texture(*'Texture'*)
-             );
 PTOpenglData=^TOpenglData;
 {REGISTERRECORDTYPE TOpenglData}
 TOpenglData=record
@@ -52,7 +44,6 @@ TOpenglData=record
           RD_DriverVersion:String;(*'Driver version'*)(*oi_readonly*)
           RD_Extensions:String;(*'Extensions'*)(*oi_readonly*)
           RD_Vendor:String;(*'Vendor'*)(*oi_readonly*)
-          RD_Restore_Mode:trestoremode;(*'Restore mode'*)
           RD_UseStencil:PBoolean;(*'Use STENCIL buffer'*)
           RD_Light:PBoolean;(*'Light'*)
           RD_LineSmooth:PBoolean;(*'Line smoothing'*)
@@ -64,7 +55,7 @@ TOpenglData=record
 {EXPORT-}
 TZGLOpenGLDrawer=class(TZGLGeneralDrawer)
                         myscrbuf:tmyscrbuf;
-                        mm:DMatrix4D;
+                        mm:TzeTypedMatrix4d;
                         public
                         procedure SetPenStyle(const style:TZGLPenStyle);override;
                         procedure SetDrawMode(const mode:TZGLDrawMode);override;
@@ -100,11 +91,11 @@ TZGLOpenGLDrawer=class(TZGLGeneralDrawer)
                         procedure DrawQuad2DInDCS(const x1,y1,x2,y2:TStoredType);override;
                         procedure DrawClosedPolyLine2DInDCS(const coords:array of TStoredType);override;
                         {в координатах модели}
-                        procedure DrawLine3DInModelSpace(const p1,p2:gdbvertex;var matrixs:tmatrixs);override;
-                        procedure DrawPoint3DInModelSpace(const p:gdbvertex;var matrixs:tmatrixs);override;
-                        procedure DrawTriangle3DInModelSpace(const normal,p1,p2,p3:gdbvertex;var matrixs:tmatrixs);override;
-                        procedure DrawQuad3DInModelSpace(const normal,p1,p2,p3,p4:gdbvertex;var matrixs:tmatrixs);override;
-                        procedure DrawQuad3DInModelSpace(const p1,p2,p3,p4:gdbvertex;var matrixs:tmatrixs);override;
+                        procedure DrawLine3DInModelSpace(const p1,p2:TzePoint3d;var matrixs:tmatrixs);override;
+                        procedure DrawPoint3DInModelSpace(const p:TzePoint3d;var matrixs:tmatrixs);override;
+                        procedure DrawTriangle3DInModelSpace(const normal,p1,p2,p3:TzePoint3d;var matrixs:tmatrixs);override;
+                        procedure DrawQuad3DInModelSpace(const normal,p1,p2,p3,p4:TzePoint3d;var matrixs:tmatrixs);override;
+                        procedure DrawQuad3DInModelSpace(const p1,p2,p3,p4:TzePoint3d;var matrixs:tmatrixs);override;
 
                         procedure SaveBuffers;override;
                         procedure RestoreBuffers;override;
@@ -113,8 +104,8 @@ TZGLOpenGLDrawer=class(TZGLGeneralDrawer)
                         procedure SetOGLMatrix(const cam:GDBObjCamera;const w,h:integer);override;
 
                         {}
-                        procedure pushMatrixAndSetTransform(const Transform:DMatrix4D;FromOneMatrix:Boolean=False);overload;override;
-                        procedure pushMatrixAndSetTransform(const Transform:DMatrix4F;FromOneMatrix:Boolean=False);overload;override;
+                        procedure pushMatrixAndSetTransform(const Transform:TzeTypedMatrix4d;FromOneMatrix:Boolean=False);overload;override;
+                        procedure pushMatrixAndSetTransform(const Transform:TzeTypedMatrix4s;FromOneMatrix:Boolean=False);overload;override;
                         procedure DisableLCS(var matrixs:tmatrixs);overload;override;
                         procedure EnableLCS(var matrixs:tmatrixs);overload;override;
                         procedure popMatrix;override;
@@ -123,7 +114,7 @@ var
    code:integer;
 implementation
 //uses log;
-procedure TZGLOpenGLDrawer.pushMatrixAndSetTransform(const Transform:DMatrix4D;FromOneMatrix:Boolean=False);
+procedure TZGLOpenGLDrawer.pushMatrixAndSetTransform(const Transform:TzeTypedMatrix4d;FromOneMatrix:Boolean=False);
 begin
   oglsm.myglPushMatrix;
   if FromOneMatrix {and (not LCS.notuseLCS)} then begin
@@ -134,7 +125,7 @@ begin
   end;
   oglsm.myglMultMatrixD(Transform)
 end;
-procedure TZGLOpenGLDrawer.pushMatrixAndSetTransform(const Transform:DMatrix4F;FromOneMatrix:Boolean=False);
+procedure TZGLOpenGLDrawer.pushMatrixAndSetTransform(const Transform:TzeTypedMatrix4s;FromOneMatrix:Boolean=False);
 begin
   oglsm.myglPushMatrix;
   if FromOneMatrix and (not LCS.notuseLCS) then begin
@@ -592,20 +583,20 @@ begin
                      end;
      end;
 end;
-procedure TZGLOpenGLDrawer.DrawLine3DInModelSpace(const p1,p2:gdbvertex;var matrixs:tmatrixs);
+procedure TZGLOpenGLDrawer.DrawLine3DInModelSpace(const p1,p2:TzePoint3d;var matrixs:tmatrixs);
 begin
      oglsm.myglbegin(GL_LINES);
       oglsm.myglVertex3dv(@p1);
       oglsm.myglVertex3dv(@p2);
      oglsm.myglend;
 end;
-procedure TZGLOpenGLDrawer.DrawPoint3DInModelSpace(const p:gdbvertex;var matrixs:tmatrixs);
+procedure TZGLOpenGLDrawer.DrawPoint3DInModelSpace(const p:TzePoint3d;var matrixs:tmatrixs);
 begin
      oglsm.myglbegin(GL_Points);
       oglsm.myglVertex3dv(@p);
      oglsm.myglend;
 end;
-procedure TZGLOpenGLDrawer.DrawTriangle3DInModelSpace(const normal,p1,p2,p3:gdbvertex;var matrixs:tmatrixs);
+procedure TZGLOpenGLDrawer.DrawTriangle3DInModelSpace(const normal,p1,p2,p3:TzePoint3d;var matrixs:tmatrixs);
 begin
   oglsm.myglbegin(GL_TRIANGLES);
   oglsm.myglNormal3dV(@normal);
@@ -614,7 +605,7 @@ begin
   oglsm.myglVertex3dV(@p3);
   oglsm.myglend;
 end;
-procedure TZGLOpenGLDrawer.DrawQuad3DInModelSpace(const normal,p1,p2,p3,p4:gdbvertex;var matrixs:tmatrixs);
+procedure TZGLOpenGLDrawer.DrawQuad3DInModelSpace(const normal,p1,p2,p3,p4:TzePoint3d;var matrixs:tmatrixs);
 begin
   oglsm.myglbegin({GL_TRIANGLE_STRIP}GL_QUADS);
   oglsm.myglNormal3dV(@normal);
@@ -624,7 +615,7 @@ begin
   oglsm.myglVertex3dV(@p3);
   oglsm.myglend;
 end;
-procedure TZGLOpenGLDrawer.DrawQuad3DInModelSpace(const p1,p2,p3,p4:gdbvertex;var matrixs:tmatrixs);
+procedure TZGLOpenGLDrawer.DrawQuad3DInModelSpace(const p1,p2,p3,p4:TzePoint3d;var matrixs:tmatrixs);
 begin
   oglsm.myglbegin(GL_QUADS);
   oglsm.myglVertex3dV(@p1);

@@ -24,14 +24,14 @@ uses uzgindexsarray,{$IFNDEF DELPHI}LCLIntf,{$ENDIF}{$IFDEF DELPHI}windows,Types
      uzgvertex3sarray,uzgldrawerabstract,uzepalette,Classes,Graphics,uzbtypes,
      uzegeometry,uzecamera;
 type
-DMatrix4DStackArray=array[0..10] of DMatrix4D;
+DMatrix4dStackArray=array[0..10] of TzeTypedMatrix4d;
 
 TZGLGeneral2DDrawer=class(TZGLGeneralDrawer)
-                          matr:DMatrix4D;
-                          {matrwoLCS,}matrwithLCS:DMatrix4D;
-                          mm,pm:DMatrix4D;
-                          {ProjMatrwoLCS,}ProjMatrwithLCS:DMatrix4D;
-                          mstack:DMatrix4DStackArray;
+                          matr:TzeTypedMatrix4d;
+                          {matrwoLCS,}matrwithLCS:TzeTypedMatrix4d;
+                          mm,pm:TzeTypedMatrix4d;
+                          {ProjMatrwoLCS,}ProjMatrwithLCS:TzeTypedMatrix4d;
+                          mstack:DMatrix4dStackArray;
                           mstackindex:integer;
                           sx,sy,tx,ty:Double;
                           wa:TAbstractViewArea;
@@ -62,16 +62,16 @@ TZGLGeneral2DDrawer=class(TZGLGeneralDrawer)
                           procedure TranslateCoord2D(const tx,ty:single);override;
                           procedure ScaleCoord2D(const sx,sy:single);override;
 
-                          procedure pushMatrixAndSetTransform(const Transform:DMatrix4D;FromOneMatrix:Boolean=False);overload;override;
-                          procedure pushMatrixAndSetTransform(const Transform:DMatrix4F;FromOneMatrix:Boolean=False);overload;override;
+                          procedure pushMatrixAndSetTransform(const Transform:TzeTypedMatrix4d;FromOneMatrix:Boolean=False);overload;override;
+                          procedure pushMatrixAndSetTransform(const Transform:TzeTypedMatrix4s;FromOneMatrix:Boolean=False);overload;override;
                           procedure DisableLCS(var matrixs:tmatrixs);overload;override;
                           procedure EnableLCS(var matrixs:tmatrixs);overload;override;
 
                           procedure popMatrix;override;
-                          function TranslatePointWithLocalCS(const p:GDBVertex3S):GDBVertex3S;overload;
-                          function TranslatePointWithLocalCS(const p:GDBVertex):GDBVertex;overload;
-                          function TranslatePoint(const p:GDBVertex3S):GDBVertex3S;overload;
-                          function TranslatePoint(const p:GDBVertex):GDBVertex;overload;
+                          function TranslatePointWithLocalCS(const p:TzePoint3s):TzePoint3s;overload;
+                          function TranslatePointWithLocalCS(const p:TzePoint3d):TzePoint3d;overload;
+                          function TranslatePoint(const p:TzePoint3s):TzePoint3s;overload;
+                          function TranslatePoint(const p:TzePoint3d):TzePoint3d;overload;
 
                           procedure InitScreenInvalidrect(w,h:integer);
                           procedure CorrectScreenInvalidrect(w,h:integer);
@@ -93,13 +93,13 @@ TZGLGeneral2DDrawer=class(TZGLGeneralDrawer)
                           procedure DrawLine2DInDCS(const x1,y1,x2,y2:TStoredType);override;
                           procedure DrawClosedPolyLine2DInDCS(const coords:array of TStoredType);override;
 
-                          procedure DrawLine3DInModelSpace(const p1,p2:gdbvertex;var matrixs:tmatrixs);override;
-                          procedure DrawPoint3DInModelSpace(const p:gdbvertex;var matrixs:tmatrixs);override;
-                          procedure DrawTriangle3DInModelSpace(const normal,p1,p2,p3:gdbvertex;var matrixs:tmatrixs);override;
-                          procedure DrawQuad3DInModelSpace(const normal,p1,p2,p3,p4:gdbvertex;var matrixs:tmatrixs);override;
-                          procedure DrawQuad3DInModelSpace(const p1,p2,p3,p4:gdbvertex;var matrixs:tmatrixs);override;
+                          procedure DrawLine3DInModelSpace(const p1,p2:TzePoint3d;var matrixs:tmatrixs);override;
+                          procedure DrawPoint3DInModelSpace(const p:TzePoint3d;var matrixs:tmatrixs);override;
+                          procedure DrawTriangle3DInModelSpace(const normal,p1,p2,p3:TzePoint3d;var matrixs:tmatrixs);override;
+                          procedure DrawQuad3DInModelSpace(const normal,p1,p2,p3,p4:TzePoint3d;var matrixs:tmatrixs);override;
+                          procedure DrawQuad3DInModelSpace(const p1,p2,p3,p4:TzePoint3d;var matrixs:tmatrixs);override;
 
-                          function ProjectPoint3DInModelSpace(const p:gdbvertex;var matrixs:tmatrixs):GDBvertex2D;override;
+                          function ProjectPoint3DInModelSpace(const p:TzePoint3d;var matrixs:tmatrixs):TzePoint2d;override;
 
                           function CheckOutboundInDisplay(const PVertexBuffer:PZGLVertex3Sarray;const i1:TLLVertexIndex):boolean;override;
 
@@ -114,9 +114,9 @@ begin
   ProjMatrwithLCS:=cam.projMatrixLCS;
 end;
 
-procedure TZGLGeneral2DDrawer.DrawQuad3DInModelSpace(const p1,p2,p3,p4:gdbvertex;var matrixs:tmatrixs);
+procedure TZGLGeneral2DDrawer.DrawQuad3DInModelSpace(const p1,p2,p3,p4:TzePoint3d;var matrixs:tmatrixs);
 var
-   pp1,pp2,pp3,pp4:GDBVertex;
+   pp1,pp2,pp3,pp4:TzePoint3d;
    //sp:array [1..4]of TPoint;
 begin
     _myGluProject2(p1,matrixs.pmodelMatrix,matrixs.pprojMatrix,matrixs.pviewport,pp1);
@@ -143,13 +143,13 @@ begin
      ProcessScreenInvalidrect(sp[3].x,sp[3].y);
      ProcessScreenInvalidrect(sp[4].x,sp[4].y);}
 end;
-procedure TZGLGeneral2DDrawer.DrawQuad3DInModelSpace(const normal,p1,p2,p3,p4:gdbvertex;var matrixs:tmatrixs);
+procedure TZGLGeneral2DDrawer.DrawQuad3DInModelSpace(const normal,p1,p2,p3,p4:TzePoint3d;var matrixs:tmatrixs);
 begin
      DrawQuad3DInModelSpace(p1,p2,p3,p4,matrixs);
 end;
-procedure TZGLGeneral2DDrawer.DrawTriangle3DInModelSpace(const normal,p1,p2,p3:gdbvertex;var matrixs:tmatrixs);
+procedure TZGLGeneral2DDrawer.DrawTriangle3DInModelSpace(const normal,p1,p2,p3:TzePoint3d;var matrixs:tmatrixs);
 var
-   pp1,pp2,pp3:GDBVertex;
+   pp1,pp2,pp3:TzePoint3d;
    //sp:array [1..3]of TPoint;
 begin
     _myGluProject2(p1,matrixs.pmodelMatrix,matrixs.pprojMatrix,matrixs.pviewport,pp1);
@@ -169,9 +169,9 @@ begin
      ProcessScreenInvalidrect(sp[2].x,sp[2].y);
      ProcessScreenInvalidrect(sp[3].x,sp[3].y);}
 end;
-procedure TZGLGeneral2DDrawer.DrawPoint3DInModelSpace(const p:gdbvertex;var matrixs:tmatrixs);
+procedure TZGLGeneral2DDrawer.DrawPoint3DInModelSpace(const p:TzePoint3d;var matrixs:tmatrixs);
 var
-   pp:GDBVertex;
+   pp:TzePoint3d;
    ps:integer;
    x,y:integer;
 begin
@@ -186,18 +186,18 @@ begin
      InternalDrawQuad(x-ps, y-ps, x-ps, y+ps, x+ps, y+ps, x+ps, y-ps);
      //Rectangle(OffScreedDC, x-ps, y-ps, x+ps,y+ps);
 end;
-function TZGLGeneral2DDrawer.ProjectPoint3DInModelSpace(const p:gdbvertex;var matrixs:tmatrixs):GDBvertex2D;
+function TZGLGeneral2DDrawer.ProjectPoint3DInModelSpace(const p:TzePoint3d;var matrixs:tmatrixs):TzePoint2d;
 var
-   pp:GDBVertex;
+   pp:TzePoint3d;
 begin
     _myGluProject2(p,matrixs.pmodelMatrix,matrixs.pprojMatrix,matrixs.pviewport,pp);
 
      result.x:=round(pp.x);
      result.y:=round(wh.cy-pp.y);
 end;
-procedure TZGLGeneral2DDrawer.DrawLine3DInModelSpace(const p1,p2:gdbvertex;var matrixs:tmatrixs);
+procedure TZGLGeneral2DDrawer.DrawLine3DInModelSpace(const p1,p2:TzePoint3d;var matrixs:tmatrixs);
 var
-   pp1,pp2:GDBVertex;
+   pp1,pp2:TzePoint3d;
    x1,y1,x2,y2:Double;
 begin
     _myGluProject2(p1,matrixs.pmodelMatrix,matrixs.pprojMatrix,matrixs.pviewport,pp1);
@@ -506,7 +506,7 @@ begin
      end;
 end;
 
-function TZGLGeneral2DDrawer.TranslatePointWithLocalCS(const p:GDBVertex3S):GDBVertex3S;
+function TZGLGeneral2DDrawer.TranslatePointWithLocalCS(const p:TzePoint3s):TzePoint3s;
 begin
      if mstackindex>-1 then
                            begin
@@ -522,7 +522,7 @@ begin
                            result.z:=p.z;
                        end;
 end;
-function TZGLGeneral2DDrawer.TranslatePointWithLocalCS(const p:GDBVertex):GDBVertex;
+function TZGLGeneral2DDrawer.TranslatePointWithLocalCS(const p:TzePoint3d):TzePoint3d;
 begin
      if mstackindex>-1 then
                            begin
@@ -538,13 +538,13 @@ begin
                            result.z:=p.z;
                        end;
 end;
-function TZGLGeneral2DDrawer.TranslatePoint(const p:GDBVertex3S):GDBVertex3S;
+function TZGLGeneral2DDrawer.TranslatePoint(const p:TzePoint3s):TzePoint3s;
 begin
      result.x:=p.x*sx+tx;
      result.y:=p.y*sy+ty;
      result.z:=p.z;
 end;
-function TZGLGeneral2DDrawer.TranslatePoint(const p:GDBVertex):GDBVertex;overload;
+function TZGLGeneral2DDrawer.TranslatePoint(const p:TzePoint3d):TzePoint3d;overload;
 begin
      result.x:=p.x*sx+tx;
      result.y:=p.y*sy+ty;
@@ -552,16 +552,16 @@ begin
 end;
 procedure TZGLGeneral2DDrawer.startrender;
 var
-   m:DMatrix4D;
+   m:TzeTypedMatrix4d;
 begin
      case mode of
                  TRM_ModelSpace:
                  begin
                       m:=uzegeometry.MatrixMultiply(matrixs.pmodelMatrix^,matrixs.pprojMatrix^);
-                      sx:=(m.mtr[0].v[0]/m.mtr[3].v[3]*0.5)*matrixs.pviewport.v[2] ;
-                      sy:=-(m.mtr[1].v[1]/m.mtr[3].v[3]*0.5)*matrixs.pviewport.v[3] ;
-                      tx:=(m.mtr[3].v[0]/m.mtr[3].v[3]*0.5+0.5)*matrixs.pviewport.v[2];
-                      ty:=matrixs.pviewport.v[3]-(m.mtr[3].v[1]/m.mtr[3].v[3]*0.5+0.5)*matrixs.pviewport.v[3];
+                      sx:=(m.mtr.v[0].v[0]/m.mtr.v[3].v[3]*0.5)*matrixs.pviewport.v[2] ;
+                      sy:=-(m.mtr.v[1].v[1]/m.mtr.v[3].v[3]*0.5)*matrixs.pviewport.v[3] ;
+                      tx:=(m.mtr.v[3].v[0]/m.mtr.v[3].v[3]*0.5+0.5)*matrixs.pviewport.v[2];
+                      ty:=matrixs.pviewport.v[3]-(m.mtr.v[3].v[1]/m.mtr.v[3].v[3]*0.5+0.5)*matrixs.pviewport.v[3];
                  end;
                  TRM_DisplaySpace:
                  begin
@@ -591,7 +591,7 @@ begin
      mstackindex:=-1;
 end;
 
-procedure TZGLGeneral2DDrawer.pushMatrixAndSetTransform(const Transform:DMatrix4D;FromOneMatrix:Boolean=False);
+procedure TZGLGeneral2DDrawer.pushMatrixAndSetTransform(const Transform:TzeTypedMatrix4d;FromOneMatrix:Boolean=False);
 begin
   inc(mstackindex);
   mstack[mstackindex]:=matr;
@@ -599,7 +599,7 @@ begin
     matr:=OneMatrix;
   matr:=MatrixMultiply(matr,Transform);
 end;
-procedure TZGLGeneral2DDrawer.pushMatrixAndSetTransform(const Transform:DMatrix4F;FromOneMatrix:Boolean=False);
+procedure TZGLGeneral2DDrawer.pushMatrixAndSetTransform(const Transform:TzeTypedMatrix4s;FromOneMatrix:Boolean=False);
 begin
   inc(mstackindex);
   mstack[mstackindex]:=matr;
@@ -617,7 +617,7 @@ begin
 end;
 procedure TZGLGeneral2DDrawer.DisableLCS(var matrixs:tmatrixs);
 //var
-//  m:DMatrix4D;
+//  m:TzeTypedMatrix4d;
 begin
   {m:=uzegeometry.MatrixMultiply(matrwoLCS,ProjMatrwoLCS);
   sx:=(m[0].v[0]/m[3].v[3]*0.5)*matrixs.pviewport.v[2] ;
@@ -634,7 +634,7 @@ begin
 end;
 procedure TZGLGeneral2DDrawer.EnableLCS(var matrixs:tmatrixs);
 //var
-  //m:DMatrix4D;
+  //m:TzeTypedMatrix4d;
 begin
   (*m:=uzegeometry.MatrixMultiply({matrWithLCS,ProjMatrWithLCS}matrixs.pmodelMatrix^,matrixs.pprojMatrix^);
   sx:=(m[0].v[0]/m[3].v[3]*0.5)*matrixs.pviewport.v[2] ;

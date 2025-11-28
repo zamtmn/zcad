@@ -34,7 +34,7 @@ function ExampleInsertDevice_com(const Context:TZCADCommandContext;
   operands:TCommandOperands):TCommandResult;
 var
   pdev:PGDBObjDevice;
-  p1:gdbvertex;
+  p1:TzePoint3d;
   rc:TDrawContext;
 begin
   if commandmanager.get3dpoint('Specify insert point:',p1)=GRNormal then begin

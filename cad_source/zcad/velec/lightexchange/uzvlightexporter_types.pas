@@ -128,7 +128,7 @@ type
     DeviceType: string;
     Power: Double;
     MountingHeight: Double;
-    Position: GDBVertex;
+    Position: TzePoint3d;
     Rotation: Double;
     NrLamps: Integer;
     Device: PGDBObjDevice;

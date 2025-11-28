@@ -39,7 +39,7 @@ function DrawRadialDim_com(const Context:TZCADCommandContext;
 var
   pd:PGDBObjRadialDimension;
   pcircle:PGDBObjCircle;
-  p1,p2,p3:gdbvertex;
+  p1,p2,p3:TzePoint3d;
   dc:TDrawContext;
 
   procedure FinalCreateRDim;

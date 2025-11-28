@@ -27,10 +27,10 @@ uses
 type
   TKnotsVector=object(GZVector<single>)
   end;
-  TCPVector=object(GZVector<GDBvertex4S>)
+  TCPVector=object(GZVector<TzeVector4s>)
   end;
   TSingleArray=array of single;
-  TControlPointsArray=array of GDBVertex;
+  TControlPointsArray=array of TzePoint3d;
 
 implementation
 end.

@@ -34,11 +34,11 @@ type
     function GetObjTypeName:string;virtual;
     procedure CalcDNVectors;virtual;
     function Clone(own:Pointer):PGDBObjEntity;virtual;
-    function P13ChangeTo(const tv:GDBVertex):GDBVertex;virtual;
-    function P14ChangeTo(const tv:GDBVertex):GDBVertex;virtual;
-    procedure transform(const t_matrix:DMatrix4D);virtual;
+    function P13ChangeTo(const tv:TzePoint3d):TzePoint3d;virtual;
+    function P14ChangeTo(const tv:TzePoint3d):TzePoint3d;virtual;
+    procedure transform(const t_matrix:TzeTypedMatrix4d);virtual;
     procedure TransformAt(p:PGDBObjEntity;
-      t_matrix:PDMatrix4D);virtual;
+      t_matrix:PzeTypedMatrix4d);virtual;
     procedure SaveToDXF(var outStream:TZctnrVectorBytes;
       var drawing:TDrawingDef;var IODXFContext:TIODXFSaveContext);virtual;
     constructor init(own:Pointer;layeraddres:PGDBLayerProp;
@@ -88,10 +88,10 @@ end;
 
 procedure GDBObjRotatedDimension.transform;
 var
-  tm:DMatrix4D;
+  tm:TzeTypedMatrix4d;
 begin
   tm:=t_matrix;
-  tm.mtr[3]:=NulVector4D2;
+  tm.mtr.v[3]:=NulVector4D2;
   vectorD:=VectorTransform3D(vectorD,tm);
   vectorN:=VectorTransform3D(vectorN,tm);
   vectorD:=normalizevertex(vectorD);
@@ -101,10 +101,10 @@ end;
 
 procedure GDBObjRotatedDimension.TransformAt;
 var
-  tm:DMatrix4D;
+  tm:TzeTypedMatrix4d;
 begin
   tm:=t_matrix^;
-  tm.mtr[3]:=NulVector4D2;
+  tm.mtr.v[3]:=NulVector4D2;
   vectorD:=VectorTransform3D(PGDBObjRotatedDimension(p)^.vectorD,tm);
   vectorN:=VectorTransform3D(PGDBObjRotatedDimension(p)^.vectorN,tm);
   vectorD:=normalizevertex(vectorD);
@@ -112,12 +112,12 @@ begin
   inherited;
 end;
 
-function GDBObjRotatedDimension.P13ChangeTo(const tv:GDBVertex):GDBVertex;
+function GDBObjRotatedDimension.P13ChangeTo(const tv:TzePoint3d):TzePoint3d;
 begin
   Result:=tv;
 end;
 
-function GDBObjRotatedDimension.P14ChangeTo(const tv:GDBVertex):GDBVertex;
+function GDBObjRotatedDimension.P14ChangeTo(const tv:TzePoint3d):TzePoint3d;
 var
   tl:double;
 begin

@@ -39,8 +39,8 @@ type
 
 procedure Internal_Insert_com_CommandEnd(const Context:TZCADCommandContext;
   _self:pointer);
-function Internal_Insert_com_BeforeClick(const Context:TZCADCommandContext;wc:GDBvertex;
-  mc:GDBvertex2DI;var button:byte;osp:pos_record;mclick:integer;
+function Internal_Insert_com_BeforeClick(const Context:TZCADCommandContext;wc:TzePoint3d;
+  mc:TzePoint2i;var button:byte;osp:pos_record;mclick:integer;
   const AIP:TAfterInsertProc):integer;
 function Internal_Insert_com_CommandStart(const Context:TZCADCommandContext;
   operands:TCommandOperands):integer;
@@ -50,7 +50,7 @@ implementation
 type
   TBlockInsert=record
     Blocks:TEnumData;(*'Block'*)
-    Scale:GDBvertex;(*'Scale'*)
+    Scale:TzePoint3d;(*'Scale'*)
     Rotation:double;(*'Rotation'*)
   end;
 
@@ -108,8 +108,8 @@ begin
   Result:=cmd_ok;
 end;
 
-function Internal_Insert_com_BeforeClick(const Context:TZCADCommandContext;wc:GDBvertex;
-  mc:GDBvertex2DI;var button:byte;osp:pos_record;mclick:integer;
+function Internal_Insert_com_BeforeClick(const Context:TZCADCommandContext;wc:TzePoint3d;
+  mc:TzePoint2i;var button:byte;osp:pos_record;mclick:integer;
   const AIP:TAfterInsertProc):integer;
 var
   tb:PGDBObjSubordinated;
@@ -227,8 +227,8 @@ begin
 end;
 
 
-function Insert_com_BeforeClick(const Context:TZCADCommandContext;wc:GDBvertex;
-  mc:GDBvertex2DI;var button:byte;osp:pos_record;mclick:integer):integer;
+function Insert_com_BeforeClick(const Context:TZCADCommandContext;wc:TzePoint3d;
+  mc:TzePoint2i;var button:byte;osp:pos_record;mclick:integer):integer;
 begin
   Result:=Internal_Insert_com_BeforeClick(Context,wc,mc,button,osp,mclick,nil);
 end;

@@ -37,7 +37,7 @@ uses uzeutils,LCLProc,zcmultiobjectcreateundocommand,uzepalette,
 
   procedure zcMoveEntsFromConstructRootToCurrentDrawingWithUndo(CommandName:String);
 
-  procedure zcTransformSelectedEntsInDrawingWithUndo(CommandName:String;Transform:DMatrix4D);
+  procedure zcTransformSelectedEntsInDrawingWithUndo(CommandName:String;Transform:TzeTypedMatrix4d);
 
   {**Добавление в текущий чертеж примитива с обвязкой undo
     @param(PEnt Указатель на добавляемый примитив)}
@@ -63,12 +63,14 @@ uses uzeutils,LCLProc,zcmultiobjectcreateundocommand,uzepalette,
      конца должно совпадать
     @param(CommandName Имя команды. Будет показано в окне истории при отмене\повторе)
     @param(PushStone Поместить в стек ундо "камень". Ундо не сможет пройти через него пока не завершена текущая команда)}
-  procedure zcStartUndoCommand(CommandName:String;PushStone:boolean=false);
+  procedure zcStartUndoCommand(CommandName:String;PushStone:boolean=false);overload;
+  procedure zcStartUndoCommand(var Drawing:TZCADDrawing;CommandName:String;PushStone:boolean=false);overload;
 
   {**Помещение в стек undo маркера конца команды. Используется для группировки
      операций отмены. Допускаются вложеные команды. Количество маркеров начала и
      конца должно совпадать}
-  procedure zcEndUndoCommand;
+  procedure zcEndUndoCommand;overload;
+  procedure zcEndUndoCommand(var Drawing:TZCADDrawing);overload;
 
   {**Добавление в стек undo маркера начала команды при необходимости
     @param(UndoStartMarkerPlaced Флаг установки маркера: false - маркер еще не поставлен, ставим маркер, поднимаем флаг. true - ничего не делаем)
@@ -95,18 +97,18 @@ uses uzeutils,LCLProc,zcmultiobjectcreateundocommand,uzepalette,
   {**Выбрать примитив}
   procedure zcSelectEntity(pp:PGDBObjEntity);
 
-function GDBInsertBlock(own:PGDBObjGenericSubEntry;BlockName:String;p_insert:GDBVertex;
-                        scale:GDBVertex;rotate:Double;needundo:Boolean=false
+function GDBInsertBlock(own:PGDBObjGenericSubEntry;BlockName:String;p_insert:TzePoint3d;
+                        scale:TzePoint3d;rotate:Double;needundo:Boolean=false
                         ):PGDBObjBlockInsert;
 
 function old_ENTF_CreateBlockInsert(owner:PGDBObjGenericSubEntry;ownerarray: PGDBObjEntityTreeArray;
                                 layeraddres:PGDBLayerProp;LTAddres:PGDBLtypeProp;LW:TGDBLineWeight;color:TGDBPaletteColor;
-                                point: gdbvertex; scale, angle: Double; AName: String):PGDBObjBlockInsert;
+                                point: TzePoint3d; scale, angle: Double; AName: String):PGDBObjBlockInsert;
 function zcGetRealSelEntsCount:integer;
 implementation
 function old_ENTF_CreateBlockInsert(owner:PGDBObjGenericSubEntry;ownerarray: PGDBObjEntityTreeArray;
                                 layeraddres:PGDBLayerProp;LTAddres:PGDBLtypeProp;LW:TGDBLineWeight;color:TGDBPaletteColor;
-                                point: gdbvertex; scale, angle: Double; AName: String):PGDBObjBlockInsert;
+                                point: TzePoint3d; scale, angle: Double; AName: String):PGDBObjBlockInsert;
 var
   DC:TDrawContext;
 begin
@@ -171,13 +173,13 @@ begin
   pcd^.ConstructObjRoot.ObjArray.Clear;
 end;
 
-procedure zcTransformSelectedEntsInDrawingWithUndo(CommandName:String;Transform:DMatrix4D);
+procedure zcTransformSelectedEntsInDrawingWithUndo(CommandName:String;Transform:TzeTypedMatrix4d);
 var
   pcd:PTZCADDrawing;
   pobj: pGDBObjEntity;
   ir:itrec;
   dc:TDrawContext;
-  im:DMatrix4D;
+  im:TzeTypedMatrix4d;
   count:integer;
   m:tmethod;
 begin
@@ -214,11 +216,16 @@ begin
   end;
 end;
 
+procedure zcStartUndoCommand(var Drawing:TZCADDrawing; CommandName:String;PushStone:boolean=false);
+begin
+  Drawing.UndoStack.PushStartMarker(CommandName);
+  if PushStone then
+    Drawing.UndoStack.PushStone;
+end;
+
 procedure zcStartUndoCommand(CommandName:String;PushStone:boolean=false);
 begin
-     PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack.PushStartMarker(CommandName);
-     if PushStone then
-       PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack.PushStone;
+  zcStartUndoCommand(PTZCADDrawing(drawings.GetCurrentDWG)^,CommandName,PushStone);
 end;
 procedure zcAddEntToCurrentDrawingConstructRoot(const PEnt: PGDBObjEntity);
 begin
@@ -233,9 +240,13 @@ begin
   drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.free;
   drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.Clear;
 end;
+procedure zcEndUndoCommand(var Drawing:TZCADDrawing);
+begin
+  Drawing.UndoStack.PushEndMarker;
+end;
 procedure zcEndUndoCommand;
 begin
-     PTZCADDrawing(drawings.GetCurrentDWG)^.UndoStack.PushEndMarker;
+  zcEndUndoCommand(PTZCADDrawing(drawings.GetCurrentDWG)^);
 end;
 procedure zcPlaceUndoStartMarkerIfNeed(var UndoStartMarkerPlaced:boolean;const CommandName:String;PushStone:boolean=false);
 begin
@@ -272,8 +283,8 @@ begin
 end;
 function GDBInsertBlock(own:PGDBObjGenericSubEntry;//владелец
                         BlockName:String;       //имя блока
-                        p_insert:GDBVertex;        //точка вставки
-                        scale:GDBVertex;           //масштаб
+                        p_insert:TzePoint3d;        //точка вставки
+                        scale:TzePoint3d;           //масштаб
                         rotate:Double;          //поворот
                         needundo:Boolean=false  //завернуть в ундо
                         ):PGDBObjBlockInsert;

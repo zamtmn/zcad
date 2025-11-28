@@ -814,6 +814,7 @@ begin
     MultiPropertiesManager.RegisterPhysMultiproperty('PATTERNSCALE','Pattern scale',sysunit^.TypeName2PTD('TZeDimLess'),MPCMisc,GDBHatchID,nil,PtrInt(@phatch^.Scale),PtrInt(@phatch^.Scale),OneVarDataMIPD,OneVarDataEIPD);
     MultiPropertiesManager.RegisterPhysMultiproperty('PATTERNORIGIN_X','Pattern origin X',sysunit^.TypeName2PTD('TzeXUnits'),MPCMisc,GDBHatchID,nil,PtrInt(@phatch^.Origin.x),PtrInt(@phatch^.Origin.x),OneVarDataMIPD,OneVarDataEIPD);
     MultiPropertiesManager.RegisterPhysMultiproperty('PATTERNORIGIN_Y','Pattern origin Y',sysunit^.TypeName2PTD('TzeXUnits'),MPCMisc,GDBHatchID,nil,PtrInt(@phatch^.Origin.y),PtrInt(@phatch^.Origin.y),OneVarDataMIPD,OneVarDataEIPD);
+    MultiPropertiesManager.RegisterPhysMultiproperty('PATTERNORIGIN_Z','Pattern origin Z',sysunit^.TypeName2PTD('TzeXUnits'),MPCMisc,GDBHatchID,nil,PtrInt(@phatch^.Origin.z),PtrInt(@phatch^.Origin.z),OneVarDataMIPD,OneVarDataEIPD);
 
     {ElLeader uzegeometry}
     MultiPropertiesManager.RestartMultipropertySortID;

@@ -93,8 +93,8 @@ type
       var drawing:TDrawingDef;var IODXFContext:TIODXFSaveContext);virtual;
     procedure SaveToDXFfollow(var outStream:TZctnrVectorBytes;
       var drawing:TDrawingDef;var IODXFContext:TIODXFSaveContext);virtual;
-    procedure SaveToDXFPostProcess(var handle:TZctnrVectorBytes;
-      var IODXFContext:TIODXFSaveContext);
+    procedure SaveToDXFPostProcess(var outStream:TZctnrVectorBytes;
+      var IODXFContext:TIODXFSaveContext);virtual;
     procedure SaveToDXFObjXData(var outStream:TZctnrVectorBytes;
       var IODXFContext:TIODXFSaveContext);virtual;
     function IsStagedFormatEntity:boolean;virtual;
@@ -784,10 +784,10 @@ end;
 
 procedure GDBObjEntity.SaveToDXFPostProcess;
 begin
-  dxfStringout(handle,1001,ZCADAppNameInDXF);
-  dxfStringout(handle,1002,'{');
-  self.SaveToDXFObjXData(handle,IODXFContext);
-  dxfStringout(handle,1002,'}');
+  dxfStringout(outStream,1001,ZCADAppNameInDXF);
+  dxfStringout(outStream,1002,'{');
+  self.SaveToDXFObjXData(outStream,IODXFContext);
+  dxfStringout(outStream,1002,'}');
 end;
 
 function GDBObjEntity.CalcInFrustum;

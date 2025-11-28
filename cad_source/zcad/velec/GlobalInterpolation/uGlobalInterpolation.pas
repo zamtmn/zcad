@@ -693,6 +693,9 @@ begin
   // Step 6: Fill output structure
   ACurve.Degree := ADegree;
 
+  // Инициализация вектора узлов перед использованием
+  // Initialize knot vector before use
+  ACurve.KnotVector.initnul;
   ACurve.KnotVector.Clear;
   for i := 0 to Length(knotVector) - 1 do
     ACurve.KnotVector.PushBackData(knotVector[i]);
@@ -899,6 +902,9 @@ begin
   // Fill output structure
   ACurve.Degree := ADegree;
 
+  // Инициализация вектора узлов перед использованием
+  // Initialize knot vector before use
+  ACurve.KnotVector.initnul;
   ACurve.KnotVector.Clear;
   for i := 0 to Length(knotVector) - 1 do
     ACurve.KnotVector.PushBackData(knotVector[i]);

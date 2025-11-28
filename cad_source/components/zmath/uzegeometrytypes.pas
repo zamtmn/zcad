@@ -28,6 +28,8 @@ const
   floateps=1e-6;
   sqreps=1e-7;
   bigeps=1e-10;
+  dbl_dig=15;
+  tenEdbl_dig=1000000000000000;
 type
   TzeMatrixType=(MTIdentity,MTScale,MTTranslate,MTRotate,MTShear);
   TzeMatrixTypes=set of TzeMatrixType;

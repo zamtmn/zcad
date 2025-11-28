@@ -474,36 +474,39 @@ begin
   offs:=Vertex2dMulOnSc(Strokes.Base,Scale);
   //Origin надо учитывать при копировании паттерна из шаблона
   //offs:=VertexAdd(offs,Vertex2dMulOnSc(Origin,Scale));
-  offs2:=VertexAdd(offs,dirx);
+  if (abs(offs.x/dirx.x)>tenEdbl_dig/10)
+  and(abs(offs.y/dirx.y)>tenEdbl_dig/10)then begin
+    offs2:=VertexAdd(offs,dirx);
 
-  First:=True;
-  for i:=0 to Path.paths.Count-1 do
-    for j:=0 to Path.paths.getDataMutable(i)^.Count-1 do begin
-      pp:=Path.paths.getDataMutable(i)^.getDataMutable(j);
-      p2:=VertexAdd(pp^,diry);
-      iprop:=intercept2dmy(offs,offs2,pp^,p2);
-      if iprop.isintercept then
-        if First then begin
-          First:=False;
-          tmin:=iprop.t1;
-          tmax:=iprop.t1;
-        end else begin
-          if tmin>iprop.t1 then
+    First:=True;
+    for i:=0 to Path.paths.Count-1 do
+      for j:=0 to Path.paths.getDataMutable(i)^.Count-1 do begin
+        pp:=Path.paths.getDataMutable(i)^.getDataMutable(j);
+        p2:=VertexAdd(pp^,diry);
+        iprop:=intercept2dmy(offs,offs2,pp^,p2);
+        if iprop.isintercept then
+          if First then begin
+            First:=False;
             tmin:=iprop.t1;
-          if tmax<iprop.t1 then
             tmax:=iprop.t1;
-        end;
-    end;
-  if not First then begin
-    tmin:=int(tmin{+0.5});
-    tmax:=int(tmax);
-    ls:=VertexAdd(offs,Vertex2dMulOnSc(dirx,tmin));
-    while tmin<=tmax do begin
-      IV.Clear;
-      ProcessLines(ls,VertexAdd(ls,diry),IV);
-      ProcessStroke(Strokes,IV,DC);
-      ls:=VertexAdd(ls,dirx);
-      tmin:=tmin+1;
+          end else begin
+            if tmin>iprop.t1 then
+              tmin:=iprop.t1;
+            if tmax<iprop.t1 then
+              tmax:=iprop.t1;
+          end;
+      end;
+    if not First then begin
+      tmin:=int(tmin{+0.5});
+      tmax:=int(tmax);
+      ls:=VertexAdd(offs,Vertex2dMulOnSc(dirx,tmin));
+      while tmin<=tmax do begin
+        IV.Clear;
+        ProcessLines(ls,VertexAdd(ls,diry),IV);
+        ProcessStroke(Strokes,IV,DC);
+        ls:=VertexAdd(ls,dirx);
+        tmin:=tmin+1;
+      end;
     end;
   end;
   IV.Free;

@@ -25,7 +25,7 @@ uses
   uzeentwithlocalcs,uzecamera,uzestyleslayers,UGDBSelectedObjArray,uzeentity,
   UGDBPoint3DArray,uzctnrVectorBytes,uzbtypes,uzegeometrytypes,uzeconsts,
   uzglviewareadata,uzegeometry,uzeffdxfsupport,uzeentplain,uzeSnap,Math,
-  uzMVReader,uzCtnrVectorpBaseEntity,uzbLogIntf,uzcinterface,SysUtils;
+  uzMVReader,uzCtnrVectorpBaseEntity;
 
 type
 
@@ -157,108 +157,13 @@ begin
   sav:=NormalizeVertex(VertexSub(sav,pins));
   eav:=NormalizeVertex(VertexSub(eav,pins));
 
-       zcUI.TextMessage(
-      Format('Центр в OCS (Local.p_insert): X=%.6f, Y=%.6f, Z=%.6f',
-     [Local.p_insert.x, Local.p_insert.y, Local.p_insert.z])
-     ,TMWOHistoryOut);
-  zcUI.TextMessage(
-     Format('Радиус: %.6f', [R])
-    ,TMWOHistoryOut);
-  zcUI.TextMessage(
-     Format('Начальный угол (StartAngle): %.6f рад (%.2f°)',
-    [StartAngle, StartAngle*180/pi])
-    ,TMWOHistoryOut);
-  zcUI.TextMessage(
-     Format('Конечный угол (EndAngle): %.6f рад (%.2f°)',
-    [EndAngle, EndAngle*180/pi])
-    ,TMWOHistoryOut);
-  zcUI.TextMessage(
-     Format('Нормаль (Local.basis.oz): X=%.6f, Y=%.6f, Z=%.6f',
-    [Local.basis.oz.x, Local.basis.oz.y, Local.basis.oz.z])
-    ,TMWOHistoryOut);
-  zcUI.TextMessage(
-     Format('Матрица трансформации: det=%.6f',
-    [t_matrix.mtr[0].v[0]*t_matrix.mtr[1].v[1]*t_matrix.mtr[2].v[2]])
-    ,TMWOHistoryOut);
+  StartAngle:=TwoVectorAngle(_X_yzVertex,sav);
+  if sav.y<eps then
+    StartAngle:=2*pi-StartAngle;
 
-    precalc;
-     if t_matrix.mtr[0].v[0]*t_matrix.mtr[1].v[1]*t_matrix.mtr[2].v[2] < 0 then begin
-       // Для трансформаций с отрицательным определителем (зеркалирование) меняем порядок точек
-       zcUI.TextMessage(
-         'Определитель < 0: меняем местами начальную и конечную точки'
-       ,TMWOHistoryOut);
-       sav:=CreateVertex(cos(EndAngle), sin(EndAngle), 0);
-       eav:=CreateVertex(cos(StartAngle), sin(StartAngle), 0);
-     end else begin
-       zcUI.TextMessage(
-         'Определитель >= 0: используем обычный порядок точек'
-       ,TMWOHistoryOut);
-       sav:=CreateVertex(cos(StartAngle), sin(StartAngle), 0);
-       eav:=CreateVertex(cos(EndAngle), sin(EndAngle), 0);
-     end;
-    // Конвертируем векторы из OCS в WCS
-    sav:=VectorTransform3D(sav, objmatrix);
-    eav:=VectorTransform3D(eav, objmatrix);
-    // Трансформируем векторы в WCS
-    sav:=VectorTransform3D(sav,t_matrix);
-    eav:=VectorTransform3D(eav,t_matrix);
-    inherited;
-   // Нормализуем векторы для расчета углов
-   sav:=NormalizeVertex(sav);
-   eav:=NormalizeVertex(eav);
-
-     // Преобразуем векторы в локальные координаты
-     StartAngle:=ArcTan2(scalardot(sav, Local.basis.oy), scalardot(sav, Local.basis.ox));
-     if StartAngle < 0 then
-       StartAngle := StartAngle + 2*pi;
-
-     EndAngle:=ArcTan2(scalardot(eav, Local.basis.oy), scalardot(eav, Local.basis.ox));
-     if EndAngle < 0 then
-       EndAngle := EndAngle + 2*pi;
-
-   { Диагностика: вывод параметров дуги после трансформации }
-  //zDebugLn('=== Трансформация дуги: ПОСЛЕ ===');
-  //zDebugLn(Format('Центр (P_insert_in_WCS): X=%.6f, Y=%.6f, Z=%.6f',
-  //  [P_insert_in_WCS.x, P_insert_in_WCS.y, P_insert_in_WCS.z]));
-  //zDebugLn(Format('Центр локальный (Local.p_insert): X=%.6f, Y=%.6f, Z=%.6f',
-  //  [Local.p_insert.x, Local.p_insert.y, Local.p_insert.z]));
-  //zDebugLn(Format('Радиус: %.6f', [R]));
-  //zDebugLn(Format('Начальный угол (StartAngle): %.6f рад (%.2f°)',
-  //  [StartAngle, StartAngle*180/pi]));
-  //zDebugLn(Format('Конечный угол (EndAngle): %.6f рад (%.2f°)',
-  //  [EndAngle, EndAngle*180/pi]));
-  //zDebugLn(Format('Нормаль (Local.basis.oz): X=%.6f, Y=%.6f, Z=%.6f',
-  //  [Local.basis.oz.x, Local.basis.oz.y, Local.basis.oz.z]));
-  //zDebugLn('=======================================');
-    zcUI.TextMessage(
-     '=== Трансформация дуги: ПОСЛЕ ==='
-    ,TMWOHistoryOut);
-      zcUI.TextMessage(
-     Format('Центр (P_insert_in_WCS): X=%.6f, Y=%.6f, Z=%.6f',
-    [P_insert_in_WCS.x, P_insert_in_WCS.y, P_insert_in_WCS.z])
-    ,TMWOHistoryOut);
-   zcUI.TextMessage(
-      Format('Центр в OCS (Local.p_insert): X=%.6f, Y=%.6f, Z=%.6f',
-     [Local.p_insert.x, Local.p_insert.y, Local.p_insert.z])
-     ,TMWOHistoryOut);
-      zcUI.TextMessage(
-     Format('Радиус: %.6f', [R])
-    ,TMWOHistoryOut);
-      zcUI.TextMessage(
-     Format('Начальный угол (StartAngle): %.6f рад (%.2f°)',
-    [StartAngle, StartAngle*180/pi])
-    ,TMWOHistoryOut);
-      zcUI.TextMessage(
-     Format('Конечный угол (EndAngle): %.6f рад (%.2f°)',
-    [EndAngle, EndAngle*180/pi])
-    ,TMWOHistoryOut);
-      zcUI.TextMessage(
-     Format('Нормаль (Local.basis.oz): X=%.6f, Y=%.6f, Z=%.6f',
-    [Local.basis.oz.x, Local.basis.oz.y, Local.basis.oz.z])
-    ,TMWOHistoryOut);
-      zcUI.TextMessage(
-     '======================================='
-    ,TMWOHistoryOut);
+  EndAngle:=TwoVectorAngle(_X_yzVertex,eav);
+  if eav.y<eps then
+    EndAngle:=2*pi-EndAngle;
 end;
 
 procedure GDBObjARC.ReCalcFromObjMatrix;

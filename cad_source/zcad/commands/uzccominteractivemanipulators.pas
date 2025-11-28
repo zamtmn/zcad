@@ -162,7 +162,7 @@ procedure InteractiveConstructRootManipulator(
 procedure InteractivePolyLineNextVertexManipulator(
   const PInteractiveData:Pointer {pointer to the polyline entity};
   Point:
-  GDBVertex  {new vertex coord};
+  TzePoint3d  {new vertex coord};
   Click:
   boolean {true if lmb presseed});
 
@@ -578,7 +578,7 @@ end;
 procedure InteractivePolyLineNextVertexManipulator(
   const PInteractiveData:Pointer {pointer to the polyline entity};
   Point:
-  GDBVertex  {new vertex coord};
+  TzePoint3d  {new vertex coord};
   Click:
   boolean {true if lmb presseed});
 var
@@ -617,7 +617,7 @@ begin
       if vertexCount > 1 then begin
         // Update the last (temporary) vertex position
         // Обновляем позицию последней (временной) вершины
-        PGDBVertex(pline^.VertexArrayInOCS.getDataMutable(vertexCount-1))^:=Point;
+        PzePoint3d(pline^.VertexArrayInOCS.getDataMutable(vertexCount-1))^:=Point;
       end else begin
         // Add the first preview vertex
         // Добавляем первую вершину предпросмотра

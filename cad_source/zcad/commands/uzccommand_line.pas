@@ -31,9 +31,6 @@ uses
   uzeentline,uzeentity,uzeentityfactory,
   uzcutils;
 
-type
-  TEntitySetupProc=procedure(const PEnt:PGDBObjEntity);
-
 function InteractiveDrawLines(const Context:TZCADCommandContext;
   APrompt1,APromptNext:string;ESP:TEntitySetupProc):TCommandResult;
 
@@ -45,6 +42,9 @@ var
   pline:PGDBObjLine;
   p1,p2:TzePoint3d;
 begin
+  if not (assigned(ESP) and ESP(ESSSuppressCommandParams,nil))then
+    {тут можно настроить параметры команды};
+
   {запрос первой координаты}
   if commandmanager.get3dpoint(APrompt1,p1)=GRNormal then
     while True do
@@ -59,9 +59,9 @@ begin
         //присваиваем текущие цвет, толщину, и т.д. от настроек чертежа
         zcSetEntPropFromCurrentDrawingProp(pline);
 
-        //дополнительная настройка
+        //дополнительная настройка примитива
         if assigned(ESP) then
-          ESP(pline);
+          ESP(ESSSetEntity,pline);
 
         //добавляем в чертеж
         zcAddEntToCurrentDrawingWithUndo(pline);
@@ -72,6 +72,8 @@ begin
         p1:=p2;
       end else
         break;
+  if assigned(ESP) then
+    ESP(ESSCommandEnd,nil);
   Result:=cmd_ok;
 end;
 

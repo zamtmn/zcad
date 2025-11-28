@@ -39,6 +39,11 @@ const
   nullmethod:{tmethod}TButtonMethod=nil;
 
 type
+
+  TEntitySetupStage=(ESSSuppressCommandParams,ESSSetEntity,ESSCommandEnd);
+
+  TEntitySetupProc=function(const AStage:TEntitySetupStage;const APEnt:PGDBObjEntity):boolean;
+
   ICommandLinePrompt=interface
     procedure SetPrompt(APrompt:string);overload;
     procedure SetPrompt(APrompt:TParserCommandLinePrompt.TGeneralParsedText);overload;

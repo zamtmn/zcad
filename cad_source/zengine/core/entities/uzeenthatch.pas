@@ -21,7 +21,8 @@ unit uzeEntHatch;
 interface
 
 uses
-  Math,uzeentityfactory,uzeentsubordinated,uzgldrawcontext,uzedrawingdef,
+  SysUtils,Math,
+  uzeentityfactory,uzeentsubordinated,uzgldrawcontext,uzedrawingdef,
   gzctnrVectorTypes,uzestyleslayers,uzehelpobj,UGDBSelectedObjArray,
   uzegeometrytypes,uzeentity,UGDBPoint3DArray,uzctnrVectorBytes,
   uzbtypes,uzeentwithlocalcs,uzeconsts,uzegeometry,uzeffdxfsupport,uzecamera,
@@ -474,10 +475,9 @@ begin
   offs:=Vertex2dMulOnSc(Strokes.Base,Scale);
   //Origin надо учитывать при копировании паттерна из шаблона
   //offs:=VertexAdd(offs,Vertex2dMulOnSc(Origin,Scale));
-  if (abs(offs.x/dirx.x)<tenEdbl_dig/10)
-  and(abs(offs.y/dirx.y)<tenEdbl_dig/10)then begin
-    offs2:=VertexAdd(offs,dirx);
 
+  if IsValidRange(offs.x,dirx.x) and IsValidRange(offs.y,dirx.y)then begin
+    offs2:=VertexAdd(offs,dirx);
     First:=True;
     for i:=0 to Path.paths.Count-1 do
       for j:=0 to Path.paths.getDataMutable(i)^.Count-1 do begin

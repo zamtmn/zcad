@@ -20,7 +20,9 @@ unit uzegeometry;
 {Inline off}
 
 interface
-uses uzbLogIntf,uzegeometrytypes,math;
+uses
+  SysUtils,math,
+  uzegeometrytypes,uzbLogIntf;
 resourcestring
   rsDivByZero='Divide by zero';
 const
@@ -224,6 +226,7 @@ function IsNotZero(const d:Double;const _eps:Double=eps):boolean;inline;
 //используется для Arbitrary Axis Algorithm (DXF)
 //TODO: заменить в коде все проверки на функцию
 function IsNearToZ(const v:TzePoint3d):boolean;inline;
+function IsValidRange(const d1,d2:Double):boolean;inline;
 
 procedure _myGluProject(const objx,objy,objz:Double;const modelMatrix,projMatrix:PzeTypedMatrix4d;const viewport:PzeVector4i; out winx,winy,winz:Double);inline;
 procedure _myGluProject2(const objcoord:TzePoint3d;const modelMatrix,projMatrix:PzeTypedMatrix4d;const viewport:PzeVector4i; out wincoord:TzePoint3d);inline;
@@ -464,6 +467,11 @@ begin
   //  result:=true
   //else
   //  result:=false;
+end;
+
+function IsValidRange(const d1,d2:Double):boolean;inline;
+begin
+  result:=abs(d2.Exponent-d1.Exponent)<45;
 end;
 
 function GetXfFromZ(const oz:TzePoint3d):TzePoint3d;

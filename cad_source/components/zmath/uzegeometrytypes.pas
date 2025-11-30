@@ -33,16 +33,6 @@ const
 type
   TzeMatrixType=(MTIdentity,MTScale,MTTranslate,MTRotate,MTShear);
   TzeMatrixTypes=set of TzeMatrixType;
-  GRawMatrix4<GRow>=record
-    case Integer of
-      0:(l0,l1,l2,l3:GRow);
-      1:(v:array [0..3] of GRow);
-  end;
-  GRawMatrix6<GRow>=record
-    case Integer of
-      0:(right,left,down,up,near,far:GRow);
-      1:(v:array [0..5] of GRow);
-  end;
 
   GMatrix4<TMtr>=record
     mtr:TMtr;
@@ -156,19 +146,46 @@ type
   TzeVector4i=GVector4i<Integer,Integer>;
   PzeVector4i=^TzeVector4i;
 
-  TzeFrustum=GRawMatrix6<TzeVector4d>;
-
-  TzeMatrix4s=GRawMatrix4<TzeVector4s>;
-  TzeMatrix4d=GRawMatrix4<TzeVector4d>;
-
-  TzeTypedMatrix4d=GMatrix4<TzeMatrix4d>;
-  PzeTypedMatrix4d=^TzeTypedMatrix4d;
-
-  TzeTypedMatrix4s=GMatrix4<TzeMatrix4s>;
-  PzeTypedMatrix4s=^TzeTypedMatrix4s;
-
   TzePoint3s=GVector3<Single,Single>;
   PzePoint3s=^TzePoint3s;
+
+  {$if FPC_FULLVERSION >=30205}
+  GRawMatrix4<GRow>=record
+    case Integer of
+      0:(l0,l1,l2,l3:GRow);
+      1:(v:array [0..3] of GRow);
+  end;
+  GRawMatrix6<GRow>=record
+    case Integer of
+      0:(right,left,down,up,near,far:GRow);
+      1:(v:array [0..5] of GRow);
+  end;
+  TzeFrustum=GRawMatrix6<TzeVector4d>;
+  TzeMatrix4s=GRawMatrix4<TzeVector4s>;
+  TzeMatrix4d=GRawMatrix4<TzeVector4d>;
+  {$else}
+  TzeFrustum=record
+    case Integer of
+      0:(right,left,down,up,near,far:TzeVector4d);
+      1:(v:array [0..5] of TzeVector4d);
+  end;
+  TzeMatrix4s=record
+    case Integer of
+      0:(l0,l1,l2,l3:TzeVector4s);
+      1:(v:array [0..3] of TzeVector4s);
+  end;
+  TzeMatrix4d=record
+    case Integer of
+      0:(l0,l1,l2,l3:TzeVector4d);
+      1:(v:array [0..3] of TzeVector4d);
+  end;
+  {$endif}
+
+  TzeTypedMatrix4d=GMatrix4<TzeMatrix4d>;
+  TzeTypedMatrix4s=GMatrix4<TzeMatrix4s>;
+
+  PzeTypedMatrix4d=^TzeTypedMatrix4d;
+  PzeTypedMatrix4s=^TzeTypedMatrix4s;
 
   TzeQuaternion=record
     ImagPart:TzeVector3d;

@@ -250,7 +250,7 @@ var
        if result = nil then
        begin
           zcUI.TextMessage(RSCLPuzvmanemDedicatedPrimitiveNotHost,TMWOHistoryOut);
-            if commandmanager.getentity(RSCLPuzvmanemChooseYourHeadUnit,selEnt) then
+            if commandmanager.getentity(RSCLPuzvmanemChooseYourHeadUnit,selEnt)=GRNormal then
             begin
              //Если выделенный устройство GDBDeviceID тогда
             if selEnt^.GetObjType=GDBDeviceID then

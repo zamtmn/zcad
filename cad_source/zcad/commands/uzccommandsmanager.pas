@@ -136,7 +136,7 @@ type
     function Get3DPoint(prompt:string;out p:TzePoint3d):TGetResult;
     function Get3DPointWithLineFromBase(prompt:string;
       const base:TzePoint3d;out p:TzePoint3d):TGetResult;
-    function GetEntity(prompt:string;out p:Pointer):boolean;
+    function GetEntity(prompt:string;out p:Pointer):TGetResult;
     function Get3DPointInteractive(prompt:string;
       out p:TzePoint3d;const InteractiveProc:TInteractiveProcObjBuild;
       const PInteractiveData:Pointer):TGetResult;
@@ -585,33 +585,29 @@ begin
   CurrCmd.pcommandrunning^.IData.DrawFromBasePoint:=False;
 end;
 
-function GDBcommandmanager.GetEntity(prompt:string;out p:Pointer):boolean;
+function GDBcommandmanager.GetEntity(prompt:string;out p:Pointer):TGetResult;
 var
   savemode:byte;
 begin
   savemode:=PTSimpleDrawing(CurrCmd.pcommandrunning.pdwg)^.DefMouseEditorMode(
-    MGetSelectObject,MGet3DPoint
-    or MGet3DPointWoOP or MGetSelectionFrame or MGetControlpoint);
+    MGetSelectObject,MGet3DPoint or MGet3DPointWoOP or MGetSelectionFrame or
+                     MGetControlpoint);
   zcUI.TextMessage(prompt,TMWOHistoryOut);
   CurrCmd.pcommandrunning^.IData.GetPointMode:=TGPMWaitEnt;
   CurrCmd.pcommandrunning^.IData.PInteractiveData:=nil;
   CurrCmd.pcommandrunning^.IData.PInteractiveProc:=nil;
   while (CurrCmd.pcommandrunning^.IData.GetPointMode=TGPMWaitEnt)and
-    (not Application.Terminated) do begin
+        (not Application.Terminated) do begin
     Application.HandleMessage;
     //Application.ProcessMessages;
   end;
   if (CurrCmd.pcommandrunning<>nil)and
-    (CurrCmd.pcommandrunning^.IData.GetPointMode=TGPMEnt)and(not Application.Terminated) then
-  begin
-    p:=
-      PTSimpleDrawing(CurrCmd.pcommandrunning.pdwg)^.wa.param.SelDesc.LastSelectedObject;
-    Result:=
-      True;
-  end
-  else begin
-    Result:=
-      False;
+     (CurrCmd.pcommandrunning^.IData.GetPointMode=TGPMEnt)and
+     (not Application.Terminated) then begin
+    p:=PTSimpleDrawing(CurrCmd.pcommandrunning.pdwg)^.wa.param.SelDesc.LastSelectedObject;
+    Result:={True}GRNormal;
+  end else begin
+    Result:={False}GRCancel;
     //HistoryOutStr('cancel');
   end;
   PTSimpleDrawing(CurrCmd.pcommandrunning.pdwg)^.SetMouseEditorMode(savemode);

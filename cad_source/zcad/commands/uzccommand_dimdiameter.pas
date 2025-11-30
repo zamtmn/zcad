@@ -72,7 +72,7 @@ begin
       FinalCreateDDim;
     end;
   end else begin
-    if commandmanager.GetEntity('Select circle or arc',pcircle) then begin
+    if commandmanager.GetEntity('Select circle or arc',pcircle)=GRNormal then begin
       dc:=drawings.GetCurrentDWG^.CreateDrawingRC;
       case pcircle^.GetObjType of
         GDBCircleID:begin

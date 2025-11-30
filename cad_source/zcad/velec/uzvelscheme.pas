@@ -541,7 +541,7 @@ function testArrayDelegate_com(const Context:TZCADCommandContext;operands:TComma
    devExtens:TVariablesExtender;
    pvd:pvardesk;
    begin
-      if commandmanager.GetEntity('Выберите приметив что бы посмотреть всех его делегатов:',pobj) = true then
+      if commandmanager.GetEntity('Выберите приметив что бы посмотреть всех его делегатов:',pobj)=GRNormal then
       begin
         devExtens:=pobj^.specialize GetExtension<TVariablesExtender>;
         pdelegateobj:=devExtens.DelegatesArray.beginiterate(ir);

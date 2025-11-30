@@ -73,7 +73,7 @@ begin
       FinalCreateRDim;
     end;
   end else begin
-    if commandmanager.GetEntity('Select circle or arc',pcircle) then begin
+    if commandmanager.GetEntity('Select circle or arc',pcircle)=GRNormal then begin
       case pcircle^.GetObjType of
         GDBCircleID:begin
           p1:=pcircle^.Local.P_insert;

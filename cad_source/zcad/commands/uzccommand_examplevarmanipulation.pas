@@ -49,7 +49,7 @@ const
   VarType='String';
 begin
   //выбираем примитив
-  if commandmanager.getentity(rscmSelectSourceEntity,pe)=GRNormal then begin
+  if commandmanager.getentity(rscmSelectSourceEntity,pe)=IRNormal then begin
     //получаем расширение с переменными у выбранного примитива
     Varext:=pe^.GetExtension<TVariablesExtender>;
     //ищем в нем переменную

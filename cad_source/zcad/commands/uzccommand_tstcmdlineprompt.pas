@@ -45,7 +45,7 @@ function CmdLinePrompt_com(const Context:TZCADCommandContext;
   operands:TCommandOperands):TCommandResult;
 var
   //inpt:String;
-  gr:TGetResult;
+  gr:TzcInteractiveResult;
   filename:string='';
   p:TzePoint3d;
 begin
@@ -57,7 +57,7 @@ begin
     //gr:=commandmanager.GetInput('',inpt);
     gr:=commandmanager.Get3DPoint('',p);
     case gr of
-      GRId:case commandmanager.GetLastId of
+      IRId:case commandmanager.GetLastId of
           CLPIdUser1:zcUI.TextMessage('GRId: CLPIdUser1',TMWOHistoryOut);
           CLPIdFileDialog:begin
             zcUI.TextMessage('GRId: CLPIdFileDialog',TMWOHistoryOut);
@@ -69,13 +69,13 @@ begin
           else
             zcUI.TextMessage(format('GRId: %d',[commandmanager.GetLastId]),TMWOHistoryOut);
         end;
-      GRNormal:zcUI.TextMessage(format('GRNormal: %g,%g,%g',[p.x,p.y,p.z]),
+      IRNormal:zcUI.TextMessage(format('GRNormal: %g,%g,%g',[p.x,p.y,p.z]),
           TMWOHistoryOut);
-      GRInput:zcUI.TextMessage(format('You enter: %s',[commandmanager.GetLastInput]),
+      IRInput:zcUI.TextMessage(format('You enter: %s',[commandmanager.GetLastInput]),
           TMWOHistoryOut);
-      GRCancel:zcUI.TextMessage('You cancel',TMWOHistoryOut);
+      IRCancel:zcUI.TextMessage('You cancel',TMWOHistoryOut);
     end;
-  until gr=GRCancel;
+  until gr=IRCancel;
   Result:=cmd_ok;
 end;
 

@@ -108,7 +108,7 @@ var
  //stPoint:gdbvertex;
 begin
   //stPoint:=uzegeometry.CreateVertex(0,0,0);
-  //if commandmanager.get3dpoint('Specify insert point:',stPoint)= GRNormal then
+  //if commandmanager.get3dpoint('Specify insert point:',stPoint)= IRNormal then
   //     zcUI.TextMessage('координата введена',TMWOHistoryOut)
   //   else
   //     zcUI.TextMessage('координаты НЕТ',TMWOHistoryOut);

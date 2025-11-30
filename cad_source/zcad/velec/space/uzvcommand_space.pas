@@ -283,7 +283,7 @@ var
   spaceData: TSpaceDrawData;
   point: TzePoint3d;
   firstPoint: TzePoint3d;
-  getResult: TGetResult;
+  getResult: TzcInteractiveResult;
   pointCount: integer;
   colorIndex: Integer;
   layerName: string;
@@ -333,7 +333,7 @@ begin
 
   // Получаем первую точку
   // Get first point
-  if commandmanager.get3dpoint(rscmSpecifyFirstPoint, firstPoint) = GRNormal then begin
+  if commandmanager.get3dpoint(rscmSpecifyFirstPoint, firstPoint) = IRNormal then begin
     // Создаем полилинию
     // Create polyline
     ppolyline := GDBObjPolyline.CreateInstance;
@@ -385,13 +385,13 @@ begin
         @spaceData
       );
 
-      if getResult = GRNormal then begin
+      if getResult = IRNormal then begin
         // Добавляем следующую точку
         // Add next point
         ppolyline^.VertexArrayInOCS.PushBackData(point);
         inc(pointCount);
       end;
-    until getResult <> GRNormal;
+    until getResult <> IRNormal;
 
     // Проверяем что введено минимум 3 точки для создания пространства
     // Check that at least 3 points were entered to create a space

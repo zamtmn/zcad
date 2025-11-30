@@ -63,7 +63,7 @@ begin
     pe.cdm:=TCDM_CR;
 
   pe.npoint:=0;
-  if commandmanager.get3dpoint(rscmSpecifyFirstPoint,pe.p1)=GRNormal then begin
+  if commandmanager.get3dpoint(rscmSpecifyFirstPoint,pe.p1)=IRNormal then begin
     Inc(pe.npoint);
     pe.pentity:=Pointer(
       drawings.GetCurrentDWG^.ConstructObjRoot.ObjArray.CreateInitObj(
@@ -72,11 +72,11 @@ begin
     if commandmanager.Get3DPointInteractive(rscmSpecifySecondPoint,
       pe.p2,
       @InteractiveSmartCircleManipulator,
-      @pe)=GRNormal then begin
+      @pe)=IRNormal then begin
       if pe.cdm=TCDM_3P then begin
         Inc(pe.npoint);
         if commandmanager.Get3DPointInteractive(
-          rscmSpecifySecondPoint,pe.p3,@InteractiveSmartCircleManipulator,@pe)=GRNormal then begin
+          rscmSpecifySecondPoint,pe.p3,@InteractiveSmartCircleManipulator,@pe)=IRNormal then begin
           drawings.GetCurrentDWG^.FreeConstructionObjects;
           pcircle:=AllocEnt(GDBCircleID);
           pe.pentity:=pcircle;

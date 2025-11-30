@@ -50,7 +50,7 @@ type
   end;
 
   TICommandLinePromptVector=TMyVector<ICommandLinePrompt>;
-  TGetResult=(GRCancel,GRNormal,GRId,GRInput);
+  TzcInteractiveResult=(IRCancel,IRNormal,IRId,IRInput);
 
   tvarstack=object({varmanagerdef}varmanager)
   end;
@@ -133,17 +133,17 @@ type
     function CurrentCommandNotUseCommandLine:boolean;
     procedure PrepairVarStack;
 
-    function Get3DPoint(prompt:string;out p:TzePoint3d):TGetResult;
+    function Get3DPoint(prompt:string;out p:TzePoint3d):TzcInteractiveResult;
     function Get3DPointWithLineFromBase(prompt:string;
-      const base:TzePoint3d;out p:TzePoint3d):TGetResult;
-    function GetEntity(prompt:string;out p:Pointer):TGetResult;
+      const base:TzePoint3d;out p:TzePoint3d):TzcInteractiveResult;
+    function GetEntity(prompt:string;out p:Pointer):TzcInteractiveResult;
     function Get3DPointInteractive(prompt:string;
       out p:TzePoint3d;const InteractiveProc:TInteractiveProcObjBuild;
-      const PInteractiveData:Pointer):TGetResult;
+      const PInteractiveData:Pointer):TzcInteractiveResult;
     function Get3DAndMoveConstructRootTo(prompt:string;
-      out p:TzePoint3d):TGetResult;
-    function MoveConstructRootTo(prompt:string):TGetResult;
-    function GetInput(Prompt:string;out Input:string):TGetResult;
+      out p:TzePoint3d):TzcInteractiveResult;
+    function MoveConstructRootTo(prompt:string):TzcInteractiveResult;
+    function GetInput(Prompt:string;out Input:string):TzcInteractiveResult;
 
     function GetLastId:TTag;
     function GetLastInput:ansistring;
@@ -392,7 +392,7 @@ end;
 
 function GDBcommandmanager.Get3DPointInteractive(prompt:string;
   out p:TzePoint3d;const InteractiveProc:TInteractiveProcObjBuild;
-  const PInteractiveData:Pointer):TGetResult;
+  const PInteractiveData:Pointer):TzcInteractiveResult;
 var
   savemode:byte;//variable to store the current mode of the editor
   //переменная для сохранения текущего режима редактора
@@ -417,23 +417,23 @@ begin
     Application.HandleMessage;
     //Application.ProcessMessages;
     if CurrCmd.pcommandrunning=nil then
-      exit(GRCancel);
+      exit(IRCancel);
   end;
 
   if (CurrCmd.pcommandrunning^.IData.GetPointMode=TGPMPoint)and
     (not Application.Terminated) then begin
     p:=CurrCmd.pcommandrunning^.IData.GetPointValue;
-    Result:=GRNormal;
+    Result:=IRNormal;
   end else if (CurrCmd.pcommandrunning^.IData.GetPointMode=TGPMId)and
     (not Application.Terminated) then begin
     p:=InfinityVertex;
-    Result:=GRId;
+    Result:=IRId;
   end else if (CurrCmd.pcommandrunning^.IData.GetPointMode=TGPMInput)and
     (not Application.Terminated) then begin
     p:=InfinityVertex;
-    Result:=GRInput;
+    Result:=IRInput;
   end else
-    Result:=GRCancel;
+    Result:=IRCancel;
 
   if (CurrCmd.pcommandrunning^.IData.GetPointMode<>TGPMCloseDWG) then
     PTSimpleDrawing(CurrCmd.pcommandrunning.pdwg)^.SetMouseEditorMode(savemode);
@@ -471,12 +471,12 @@ begin
 end;
 
 function GDBcommandmanager.Get3DAndMoveConstructRootTo(prompt:string;
-  out p:TzePoint3d):TGetResult;
+  out p:TzePoint3d):TzcInteractiveResult;
 begin
   Result:=Get3DPointInteractive(prompt,p,@InteractiveConstructRootManipulator,nil);
 end;
 
-function GDBcommandmanager.MoveConstructRootTo(prompt:string):TGetResult;
+function GDBcommandmanager.MoveConstructRootTo(prompt:string):TzcInteractiveResult;
 var
   p:TzePoint3d;
 begin
@@ -528,7 +528,7 @@ begin
     Result:=[];
 end;
 
-function GDBcommandmanager.GetInput(Prompt:string;out Input:string):TGetResult;
+function GDBcommandmanager.GetInput(Prompt:string;out Input:string):TzcInteractiveResult;
 var
   savemode:byte;//variable to store the current mode of the editor
   //переменная для сохранения текущего режима редактора
@@ -550,19 +550,19 @@ begin
     Application.HandleMessage;
     //Application.ProcessMessages;
     if CurrCmd.pcommandrunning=nil then
-      exit(GRCancel);
+      exit(IRCancel);
   end;
   if (CurrCmd.pcommandrunning^.IData.GetPointMode=TGPMInput)and
     (not Application.Terminated) then begin
     Input:=CurrCmd.pcommandrunning^.IData.Input;
-    Result:=GRNormal;
+    Result:=IRNormal;
   end else if (CurrCmd.pcommandrunning^.IData.GetPointMode=TGPMId)and
     (not Application.Terminated) then begin
     Input:='';
-    Result:=GRId;
+    Result:=IRId;
   end else begin
     Input:='';
-    Result:=GRCancel;
+    Result:=IRCancel;
   end;
   if (CurrCmd.pcommandrunning^.IData.GetPointMode<>TGPMCloseDWG) then
     if CurrCmd.pcommandrunning.pdwg<>nil then
@@ -571,13 +571,13 @@ begin
   //восстанавливаем сохраненный режим редактора
 end;
 
-function GDBcommandmanager.Get3DPoint(prompt:string;out p:TzePoint3d):TGetResult;
+function GDBcommandmanager.Get3DPoint(prompt:string;out p:TzePoint3d):TzcInteractiveResult;
 begin
   Result:=Get3DPointInteractive(prompt,p,nil,nil);
 end;
 
 function GDBcommandmanager.Get3DPointWithLineFromBase(prompt:string;
-  const base:TzePoint3d;out p:TzePoint3d):TGetResult;
+  const base:TzePoint3d;out p:TzePoint3d):TzcInteractiveResult;
 begin
   CurrCmd.pcommandrunning^.IData.BasePoint:=base;
   CurrCmd.pcommandrunning^.IData.DrawFromBasePoint:=True;
@@ -585,7 +585,7 @@ begin
   CurrCmd.pcommandrunning^.IData.DrawFromBasePoint:=False;
 end;
 
-function GDBcommandmanager.GetEntity(prompt:string;out p:Pointer):TGetResult;
+function GDBcommandmanager.GetEntity(prompt:string;out p:Pointer):TzcInteractiveResult;
 var
   savemode:byte;
 begin
@@ -605,9 +605,9 @@ begin
      (CurrCmd.pcommandrunning^.IData.GetPointMode=TGPMEnt)and
      (not Application.Terminated) then begin
     p:=PTSimpleDrawing(CurrCmd.pcommandrunning.pdwg)^.wa.param.SelDesc.LastSelectedObject;
-    Result:={True}GRNormal;
+    Result:={True}IRNormal;
   end else begin
-    Result:={False}GRCancel;
+    Result:={False}IRCancel;
     //HistoryOutStr('cancel');
   end;
   PTSimpleDrawing(CurrCmd.pcommandrunning.pdwg)^.SetMouseEditorMode(savemode);

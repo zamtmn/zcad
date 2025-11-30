@@ -4640,7 +4640,7 @@ var
      //****Запуск функции полной визуализации
      if (uzvslagcabComParams.settingVizCab.vizFullTreeCab = true) then begin
          //** Получаем точку вставки отработанной функции, в этот момент пользователь настраивает поведения алгоритма
-         //if commandmanager.get3dpoint('Specify insert point:',gg) = GRNormal then begin
+         //if commandmanager.get3dpoint('Specify insert point:',gg) = IRNormal then begin
            zcUI.TextMessage('***Визуализация отладочного графа! ВКЛЮЧЕНА***',TMWOHistoryOut);
 
            gg:=uzegeometry.CreateVertex(0,0,0);

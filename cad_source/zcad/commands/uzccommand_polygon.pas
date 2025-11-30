@@ -109,7 +109,7 @@ begin
   //pf^.base.Attributes:=pf^.base.Attributes or fldaHidden;//устанавливаем ему флаг cкрытности
   zcShowCommandParams(PInternalRTTITypeDesk,@PolygonParam);
 
-  if commandmanager.get3dpoint(rscmSpecifyFirstPoint,pe.p1)=GRNormal then begin
+  if commandmanager.get3dpoint(rscmSpecifyFirstPoint,pe.p1)=IRNormal then begin
     pf:=PInternalRTTITypeDesk^.FindField('ET');
     //находим описание поля ET
     pf^.base.Attributes:=pf^.base.Attributes+[fldaReadOnly];
@@ -149,7 +149,7 @@ begin
       InteractivePolygonManipulator(polygonDrawModePentity,pe.p1,False);
       if commandmanager.Get3DPointInteractive(
         rscmSpecifySecondPoint,pe.p2,@InteractivePolygonManipulator,@polygonDrawModePentity)=
-        GRNormal then begin
+        IRNormal then begin
         zcAddEntToCurrentDrawingWithUndo(polygonDrawModePentity.plwentity);
         //Добавить объект из конструкторской области в чертеж через ундо//
                 {так как сейчас у нас объект находится и в чертеже и в конструируемой области,
@@ -173,7 +173,7 @@ begin
       InteractivePolygonManipulator(polygonDrawModePentity,pe.p1,False);
       if commandmanager.Get3DPointInteractive(
         rscmSpecifySecondPoint,pe.p2,@InteractivePolygonManipulator,@polygonDrawModePentity)=
-        GRNormal then begin
+        IRNormal then begin
         zcAddEntToCurrentDrawingWithUndo(polygonDrawModePentity.pentity);
         //Добавить объект из конструкторской области в чертеж через ундо//
                 {так как сейчас у нас объект находится и в чертеже и в конструируемой области,

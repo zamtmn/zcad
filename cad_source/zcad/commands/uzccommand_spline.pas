@@ -146,11 +146,11 @@ begin
   interactiveData.PSpline:=nil;
 
   // Запрос первыч двух контрольных точек
-  if commandmanager.get3dpoint(rscmSpecifyFirstPoint,p1)=GRNormal then
+  if commandmanager.get3dpoint(rscmSpecifyFirstPoint,p1)=IRNormal then
     if commandmanager.Get3DPointWithLineFromBase(rscmSpecifyNextPoint,p1,p2)=
-      GRNormal then
+      IRNormal then
       if commandmanager.Get3DPointWithLineFromBase(rscmSpecifyNextPoint,p2,p3)=
-        GRNormal then begin
+        IRNormal then begin
         interactiveData.PSpline:=AllocEnt(GDBSplineID);
         interactiveData.PSpline^.init(nil,nil,LnWtByLayer,False);
         interactiveData.PSpline^.Degree:=3;
@@ -167,7 +167,7 @@ begin
           InteractiveSplineManipulator(@interactiveData,p1,False);
 
           if commandmanager.Get3DPointInteractive(rscmSpecifyNextPoint,p2,
-            @InteractiveSplineManipulator,@interactiveData)=GRNormal then begin
+            @InteractiveSplineManipulator,@interactiveData)=IRNormal then begin
             interactiveData.UserPoints.PushBackData(p2);
             p1:=p2;
           end else

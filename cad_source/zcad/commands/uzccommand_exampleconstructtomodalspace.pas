@@ -122,7 +122,7 @@ begin
   //Рисуем текст, и полилинию
   {pp:=}drawPolyline(uzegeometry.CreateVertex(-20,+5,0),
     uzegeometry.CreateVertex(+20,-5,0),3);
-  if commandmanager.MoveConstructRootTo(rscmSpecifyFirstPoint)=GRNormal then
+  if commandmanager.MoveConstructRootTo(rscmSpecifyFirstPoint)=IRNormal then
     //двигаем их
     zcMoveEntsFromConstructRootToCurrentDrawingWithUndo('ExampleConstructToModalSpace');
   //если все ок, копируем в чертеж

@@ -39,7 +39,7 @@ var
 const
   createdlayername='hohoho';
 begin
-  if commandmanager.getentity(rscmSelectSourceEntity,pe)=GRNormal then begin
+  if commandmanager.getentity(rscmSelectSourceEntity,pe)=IRNormal then begin
     pproglayer:=BlockBaseDWG.LayerTable.getAddres(createdlayername);
     //ищем описание слоя в библиотеке
     //возможно оно найдется, а возможно вернется nil

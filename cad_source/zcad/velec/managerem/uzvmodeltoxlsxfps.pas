@@ -717,7 +717,7 @@ const
        if result = nil then
        begin
           zcUI.TextMessage(RSCLPuzvmanemDedicatedPrimitiveNotHost,TMWOHistoryOut);
-            if commandmanager.getentity(RSCLPuzvmanemChooseYourHeadUnit,selEnt)=GRNormal then
+            if commandmanager.getentity(RSCLPuzvmanemChooseYourHeadUnit,selEnt)=IRNormal then
             begin
              //Если выделенный устройство GDBDeviceID тогда
             if selEnt^.GetObjType=GDBDeviceID then
@@ -2472,7 +2472,7 @@ procedure generatorSheetAllDev(listGraphEM:TListGraphDev);
 function vExportModelToXLSXFPS_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 var
   fileTemplate:ansiString;
-  //gr:TGetResult;
+  //gr:TzcInteractiveResult;
   {filename,}newfilexlsx:string;
   pvd:pvardesk;
   //i,j:integer;

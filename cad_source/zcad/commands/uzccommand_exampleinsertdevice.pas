@@ -37,7 +37,7 @@ var
   p1:TzePoint3d;
   rc:TDrawContext;
 begin
-  if commandmanager.get3dpoint('Specify insert point:',p1)=GRNormal then begin
+  if commandmanager.get3dpoint('Specify insert point:',p1)=IRNormal then begin
     //проверяем наличие блока PS_DAT_SMOKE и устройства DEVICE_PS_DAT_SMOKE в чертеже и копируем при необходимости
     //этот момент кривой - AddBlockFromDBIfNeed должна быть функцией чтоб было понятно - есть блок или нет, хотя это можно проверить отдельно
     drawings.AddBlockFromDBIfNeed(drawings.GetCurrentDWG,'DEVICE_PS_DAT_SMOKE');

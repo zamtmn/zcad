@@ -243,7 +243,7 @@ implementation
 function vImportXLSXToCAD_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 var
   //inpt:String;
-  //gr:TGetResult;
+  //gr:TzcInteractiveResult;
   //filename:string;
   //pvd:pvardesk;
   //p:TzePoint3d;
@@ -304,7 +304,7 @@ begin
 
      zcUI.TextMessage('Количество добавленных блоков = ' + xlsxInsertBlockST + ' = ' + inttostr(i),TMWOHistoryOut);
 
-     if commandmanager.MoveConstructRootTo(rscmSpecifyFirstPoint)=GRNormal then //двигаем их
+     if commandmanager.MoveConstructRootTo(rscmSpecifyFirstPoint)=IRNormal then //двигаем их
        zcMoveEntsFromConstructRootToCurrentDrawingWithUndo('ExampleConstructToModalSpace'); //если все ок, копируем в чертеж
 
      //Очищаем ссылки
@@ -316,7 +316,7 @@ end;
 function importXLSXToCAD(nameSheet:string):boolean;
 var
 //  //inpt:String;
-//  gr:TGetResult;
+//  gr:TzcInteractiveResult;
 //  filename:string;
 //  pvd:pvardesk;
 //  p:TzePoint3d;
@@ -368,7 +368,7 @@ begin
 
      zcUI.TextMessage('Количество добавленных блоков = ' + xlsxInsertBlockST + ' = ' + inttostr(i),TMWOHistoryOut);
 
-     if commandmanager.MoveConstructRootTo(rscmSpecifyFirstPoint)=GRNormal then //двигаем их
+     if commandmanager.MoveConstructRootTo(rscmSpecifyFirstPoint)=IRNormal then //двигаем их
        zcMoveEntsFromConstructRootToCurrentDrawingWithUndo('ExampleConstructToModalSpace'); //если все ок, копируем в чертеж
 
      //Очищаем ссылки

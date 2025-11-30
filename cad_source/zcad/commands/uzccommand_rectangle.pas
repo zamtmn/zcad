@@ -93,7 +93,7 @@ begin
   end else
     CommandParamsShowed:=false;
 
-  if commandmanager.get3dpoint(APrompt1,pe.p1)=GRNormal then begin
+  if commandmanager.get3dpoint(APrompt1,pe.p1)=IRNormal then begin
     pf:=PInternalRTTITypeDesk^.FindField('ET');
     //находим описание поля ET
     pf^.base.Attributes:=pf^.base.Attributes+[fldaReadOnly];
@@ -127,7 +127,7 @@ begin
 
       InteractiveLWRectangleManipulator(polyLWObj,pe.p1,False);
       if commandmanager.Get3DPointInteractive(
-        APrompt2,pe.p2,@InteractiveLWRectangleManipulator,polyLWObj)=GRNormal then
+        APrompt2,pe.p2,@InteractiveLWRectangleManipulator,polyLWObj)=IRNormal then
       begin
         if assigned(ESP) then
           ESP(ESSSetEntity,polyLWObj);
@@ -150,7 +150,7 @@ begin
       polyObj^.VertexArrayInOCS.PushBackData(vertexObj);
       InteractiveRectangleManipulator(polyObj,pe.p1,False);
       if commandmanager.Get3DPointInteractive(
-        rscmSpecifySecondPoint,pe.p2,@InteractiveRectangleManipulator,polyObj)=GRNormal then
+        rscmSpecifySecondPoint,pe.p2,@InteractiveRectangleManipulator,polyObj)=IRNormal then
       begin
         zcAddEntToCurrentDrawingWithUndo(polyObj);
         //Добавить объект из конструкторской области в чертеж через ундо//

@@ -46,7 +46,7 @@ begin
   pmainobj:=nil;
   repeat
     if pmainobj=nil then
-      if commandmanager.getentity(rscmSelectEntityWithMainFunction,pmainobj)<>GRNormal then
+      if commandmanager.getentity(rscmSelectEntityWithMainFunction,pmainobj)<>IRNormal then
         exit(cmd_ok);
     pCentralVarext:=pmainobj^.GetExtension<TVariablesExtender>;
     if pCentralVarext=nil then begin
@@ -56,7 +56,7 @@ begin
   until pCentralVarext<>nil;
 
   repeat
-    if commandmanager.getentity(rscmSelectLinkedEntity,pobj)<>GRNormal then
+    if commandmanager.getentity(rscmSelectLinkedEntity,pobj)<>IRNormal then
       exit(cmd_ok);
     pVarext:=pobj^.GetExtension<TVariablesExtender>;
     if pVarext=nil then begin

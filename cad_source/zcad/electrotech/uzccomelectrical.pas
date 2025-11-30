@@ -3320,7 +3320,7 @@ var
     p:TzePoint3d;
     pet:CMDLinePromptParser.TGeneralParsedText;
     //ts:utf8string;
-    gr:TGetResult;
+    gr:TzcInteractiveResult;
 begin
      zcUI.TextMessage('Тест производительности. запасаемя терпением',TMWOHistoryOut);
      //ts:='$<"йцу",Keys[1],Id[1]> Let $<"&[S]ave (&[v])",Keys[S,V],Id[100]> or $<"&[Q]uit",Keys[Q],Id[101]>';
@@ -3334,12 +3334,12 @@ begin
      repeat
        gr:=commandmanager.Get3DPoint('ага',p);
        case gr of
-             GRId:zcUI.TextMessage('Id:'+inttostr(commandmanager.GetLastId),TMWOHistoryOut);
-         GRNormal:zcUI.TextMessage('Normal',TMWOHistoryOut);
-          GRInput:zcUI.TextMessage('Input:'+commandmanager.GetLastInput,TMWOHistoryOut);
-          GRCancel:zcUI.TextMessage('Cancel',TMWOHistoryOut);
+             IRId:zcUI.TextMessage('Id:'+inttostr(commandmanager.GetLastId),TMWOHistoryOut);
+         IRNormal:zcUI.TextMessage('Normal',TMWOHistoryOut);
+          IRInput:zcUI.TextMessage('Input:'+commandmanager.GetLastInput,TMWOHistoryOut);
+          IRCancel:zcUI.TextMessage('Cancel',TMWOHistoryOut);
        end;
-     until gr=GRCancel;
+     until gr=IRCancel;
      //for i:=0 to 10000 do
      //       drawings.GetCurrentDWG.wa.getonmouseobject(@drawings.GetCurrentROOT.ObjArray);
      zcUI.TextMessage('Конец теста. выходим, смотрим результаты в конце лога.',TMWOHistoryOut);

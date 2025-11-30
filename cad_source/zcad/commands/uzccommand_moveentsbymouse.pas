@@ -91,7 +91,7 @@ var
   RC:TDrawContext;
 begin
   if CloneEnts>0 then begin
-    if commandmanager.Get3DPoint('',p1)=GRNormal then begin
+    if commandmanager.Get3DPoint('',p1)=IRNormal then begin
       RC:=drawings.GetCurrentDWG^.CreateDrawingRC;
       t_matrix:=CreateTranslationMatrix(-p1);
       drawings.GetCurrentDWG^.ConstructObjRoot.ObjMatrix:=OneMatrix;
@@ -111,7 +111,7 @@ begin
       if sysvarDSGNEntityMoveByMouseUp then
         InverseMouseClick:=True;
 
-      if commandmanager.MoveConstructRootTo('')=GRNormal then
+      if commandmanager.MoveConstructRootTo('')=IRNormal then
         if (GetKeyState(VK_CONTROL) and $8000<>0) then
           zcMoveEntsFromConstructRootToCurrentDrawingWithUndo('MoveEntsByMouse[Copy]')
         else begin

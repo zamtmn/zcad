@@ -39,7 +39,7 @@ var
   UndoStartMarkerPlaced:boolean;
 begin
   UndoStartMarkerPlaced:=False;
-  while commandmanager.getentity(rscmSelectEntity,_PEntity)=GRNormal do begin
+  while commandmanager.getentity(rscmSelectEntity,_PEntity)=IRNormal do begin
     if _PEntity^.vp.Layer._on then begin
       zcPlaceUndoStartMarkerIfNeed(UndoStartMarkerPlaced,LayOffCommandName,True);
       with TBooleanChangeCommand.CreateAndPushIfNeed(

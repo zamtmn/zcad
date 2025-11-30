@@ -466,7 +466,7 @@ var
   lpsh:TLPSHandle;
   Data:TDataExport;
   inpt:string;
-  gr:TGetResult;
+  gr:TzcInteractiveResult;
   CmdMode:TCmdMode;
   filename:string;
 
@@ -526,7 +526,7 @@ begin
   repeat
     gr:=commandmanager.GetInput('',inpt);
     case gr of
-      GRId:
+      IRId:
         case commandmanager.GetLastId of
           CLPIdOptions:
             SetCmdMode(CMOptions);
@@ -551,7 +551,7 @@ begin
             end;
           end;
         end;
-      GRNormal,GRInput:
+      IRNormal,IRInput:
         case CmdMode of
           CMWaitFile:begin
             if inpt<>'' then
@@ -580,9 +580,9 @@ begin
           end;
           CMExport:;//заглушка на варнинг
         end;
-      GRCancel:;//заглушка на варнинг
+      IRCancel:;//заглушка на варнинг
     end;
-  until gr=GRCancel;
+  until gr=IRCancel;
 
   if CmdMode=CMExport then begin
     EntsTypeFilter:=TEntsTypeFilter.Create;

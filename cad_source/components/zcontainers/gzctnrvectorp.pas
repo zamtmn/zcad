@@ -36,7 +36,7 @@ GZVectorP{-}<T>{//}=object
                                        constructor init(m:TArrayIndex);
                                        constructor initnul;
                                        procedure Clear;virtual;
-                                       function GetCount:Integer;
+                                       //function GetCount:Integer;
                                  end;
 {Export-}
 function EqualFuncPointer(const a, b: pointer):Boolean;
@@ -54,10 +54,10 @@ begin
   result:=parray;
 end;
 
-function GZVectorP<T>.GetCount:Integer;
+{function GZVectorP<T>.GetCount:Integer;
 begin
   result:=count-deleted;
-end;
+end;}
 procedure GZVectorP<T>.clear;
 begin
   inherited;

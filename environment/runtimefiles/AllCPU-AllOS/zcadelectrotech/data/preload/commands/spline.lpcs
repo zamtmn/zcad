@@ -1,0 +1,13 @@
+//запускаем скрипт командой:
+//LPCSRun(spline)
+
+procedure DoSplineTest;
+begin
+  zcUndoStartCommand('Add spline');
+  zcEntSpline(2,false,[zePt3d(0.0,0.0,0.0),zePt3d(1.0,1.0,0.0),zePt3d(2.0,0.0,0.0)],[0.0,0.0,0.0,1.0,1.0,1.0]);
+  zcUndoEndCommand;
+end;
+
+begin
+  DoSplineTest;
+end.

@@ -1,0 +1,26 @@
+//запускаем скрипт командой:
+//LPCSRun(line_script)
+
+procedure DoSplineTest;
+var
+  pe:PzeEntity;
+  p1,p2:TzePoint3d;
+  NeedStone:boolean;
+begin
+  NeedStone:=true;
+  if zcGetPoint('First point:',p1)=IRNormal then
+    while True do
+      if zcGetPointWithLineFromBase('Next point:',p1,p2)=IRNormal then begin
+        if NeedStone then begin
+          zcUndoPushStone;
+          NeedStone:=false; 
+        end;
+        pe:=zcEntLine(p1,p2);
+        p1:=p2;
+      end else
+        break;
+end;
+
+begin
+  DoSplineTest;
+end.

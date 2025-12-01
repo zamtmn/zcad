@@ -32,7 +32,8 @@ uses
   uzcutils,uzeutils,uzcdrawing,
   uzegeometry,uzegeometrytypes,
   uzelongprocesssupport,uzcLapeScriptsImplBase,uzccommandsabstract,
-  uzestyleslayers,uzcinterface;
+  uzestyleslayers,uzcinterface,uzcuitypes,
+  uzccommandsmanager;
 
 type
 
@@ -142,6 +143,16 @@ begin
     zcEndUndoCommand(ctx.DWG^);
 end;
 
+procedure UndoPushStone(const Params: PParamArray); cdecl;
+var
+  ctx:TCurrentDrawingContext;
+begin
+  ctx:=TCurrentDrawingContext(Params^[0]);
+  if ctx.DWG<>nil then
+    zcUndoPushStone(ctx.DWG^);
+end;
+
+
 procedure zcDwgGetLayersCount(const Params: PParamArray;const Result: Pointer);cdecl;
 var
   ctx:TCurrentDrawingContext;
@@ -191,18 +202,26 @@ begin
 end;
 
 procedure zcUIHistoryOut(const Params: PParamArray{(AMsg:string)}); cdecl;
-var
-  ctx:TCurrentDrawingContext;
+//var
+//  ctx:TCurrentDrawingContext;
 begin
   zcUI.TextMessage(PString(Params^[1])^,TMWOHistoryOut);
 end;
 
 procedure zcUIMessageBox(const Params: PParamArray{(AMsg:string)}); cdecl;
-var
-  ctx:TCurrentDrawingContext;
+//var
+//  ctx:TCurrentDrawingContext;
 begin
   zcUI.TextMessage(PString(Params^[1])^,TMWOMessageBox);
 end;
+
+procedure zcUITextQuestion(const Params:PParamArray;const Result:Pointer{(ACaption,AQuestion:string)}); cdecl;
+//var
+//  ctx:TCurrentDrawingContext;
+begin
+  PBoolean(Result)^:=zcUI.TextQuestion(PString(Params^[1])^,PString(Params^[2])^)=zccbYes;
+end;
+
 
 procedure zcLayerName(const Params: PParamArray;const Result: Pointer{(ALayer:PzeLayer):string});cdecl;
 var
@@ -218,14 +237,25 @@ begin
 end;
 
 procedure zePt3d(const Params: PParamArray;const Result: Pointer{(x,y,z:double):TzePoint3d});cdecl;
-var
-  ctx:TCurrentDrawingContext;
+//var
+//  ctx:TCurrentDrawingContext;
 begin
-  ctx:=TCurrentDrawingContext(Params^[0]);
+//  ctx:=TCurrentDrawingContext(Params^[0]);
   PzePoint3d(Result)^.x:=PDouble(Params^[1])^;
   PzePoint3d(Result)^.y:=PDouble(Params^[2])^;
   PzePoint3d(Result)^.z:=PDouble(Params^[3])^;
 end;
+
+procedure zePt3d2(const Params: PParamArray;const Result: Pointer{(x,y:double):TzePoint3d});cdecl;
+//var
+//  ctx:TCurrentDrawingContext;
+begin
+//  ctx:=TCurrentDrawingContext(Params^[0]);
+  PzePoint3d(Result)^.x:=PDouble(Params^[1])^;
+  PzePoint3d(Result)^.y:=PDouble(Params^[2])^;
+  PzePoint3d(Result)^.z:=0;
+end;
+
 
 procedure zcEntSpline(const Params:PParamArray;const Result:Pointer); cdecl;
                     {(const Degree:integer;const Closed:boolean;ts:TzePoints3d;
@@ -266,6 +296,39 @@ begin
   end;
 end;
 
+procedure zcGetEntity(const Params:PParamArray;const Result:Pointer); cdecl;
+                  {(APrompt:string;out APEntity:PzeEntity):TzcInteractiveResult}
+var
+  ctx:TCurrentDrawingContext;
+begin
+  ctx:=TCurrentDrawingContext(Params^[0]);
+  if ctx.DWG<>nil then begin
+    PzcInteractiveResult(Result)^:=commandmanager.GetEntity(PString(Params^[1])^,PGDBObjEntity(Params^[2]^));
+  end;
+end;
+
+procedure zcGetPoint(const Params:PParamArray;const Result:Pointer); cdecl;
+                   {(APrompt:string;out APt:TzePoint3d):TzcInteractiveResult}
+var
+  ctx:TCurrentDrawingContext;
+begin
+  ctx:=TCurrentDrawingContext(Params^[0]);
+  if ctx.DWG<>nil then begin
+    PzcInteractiveResult(Result)^:=commandmanager.Get3DPoint(PString(Params^[1])^,PzePoint3d(Params^[2])^);
+  end;
+end;
+
+procedure zcGetPointWithLineFromBase(const Params:PParamArray;const Result:Pointer);cdecl;
+{(APrompt:string;const ABase:TzePoint3d;out APt:TzePoint3d):TzcInteractiveResult}
+var
+  ctx:TCurrentDrawingContext;
+begin
+  ctx:=TCurrentDrawingContext(Params^[0]);
+  if ctx.DWG<>nil then begin
+    PzcInteractiveResult(Result)^:=commandmanager.Get3DPointWithLineFromBase(PString(Params^[1])^,PzePoint3d(Params^[2])^,PzePoint3d(Params^[3])^);
+  end;
+end;
+
 class procedure TLPCSDrawing.cplrSetup(const ACommandContext:TZCADCommandContext;mode:TLapeScriptContextModes;ctx:TBaseScriptContext;cplr:TLapeCompiler);
 begin
   if LSCMCompilerSetup in mode then begin
@@ -276,15 +339,22 @@ begin
     cplr.addGlobalType('Pointer','PzeEntity');
     cplr.addGlobalType('Pointer','PzeLayer');
 
+    cplr.addGlobalType('(IRCancel,IRNormal,IRId,IRInput)','TzcInteractiveResult');
+
     cplr.addGlobalType('array of TzePoint3d','TzePoints3d');
     cplr.addGlobalType('array of single','TSingles');
 
-    cplr.addGlobalMethod('function zePt3d(x,y,z:double):TzePoint3d;',@zePt3d,ctx);
+    cplr.addGlobalMethod('function zePt3d(x,y,z:double):TzePoint3d;overload;',@zePt3d,ctx);
+    cplr.addGlobalMethod('function zePt3d(x,y:double):TzePoint3d;overload;',@zePt3d2,ctx);
 
     cplr.addGlobalMethod('function zcDwgGetLayersCount:int32;',@zcDwgGetLayersCount,ctx);
     cplr.addGlobalMethod('function zcDwgGetLayer(ALayerIndex:int32):PzeLayer;overload;',@zcDwgGetLayer,ctx);
     cplr.addGlobalMethod('function zcDWGGetLayer(ALayerName:string):PzeLayer;overload;',@zcDwgGetLayer2,ctx);
     cplr.addGlobalMethod('function zcLayerName(ALayer:PzeLayer):string;',@zcLayerName,ctx);
+
+    cplr.addGlobalMethod('function zcGetEntity(APrompt:string;out APEntity:PzeEntity):TzcInteractiveResult;',@zcGetEntity,ctx);
+    cplr.addGlobalMethod('function zcGetPoint(APrompt:string;out APt:TzePoint3d):TzcInteractiveResult;',@zcGetPoint,ctx);
+    cplr.addGlobalMethod('function zcGetPointWithLineFromBase(APrompt:string;const ABase:TzePoint3d;out APt:TzePoint3d):TzcInteractiveResult;',@zcGetPointWithLineFromBase,ctx);
 
     cplr.addGlobalMethod('function zcEntLine(x1,y1,z1,x2,y2,z2:double):PzeEntity;overload;',@zcEntLine,ctx);
     cplr.addGlobalMethod('function zcEntLine(p1,p2:TzePoint3d):PzeEntity;overload;',@zcEntLine2,ctx);
@@ -293,9 +363,11 @@ begin
 
     cplr.addGlobalMethod('procedure zcUndoStartCommand(CommandName:String;PushStone:boolean=false);',@UndoStartCommand,ctx);
     cplr.addGlobalMethod('procedure zcUndoEndCommand;',@UndoEndCommand,ctx);
+    cplr.addGlobalMethod('procedure zcUndoPushStone;',@UndoPushStone,ctx);
 
     cplr.addGlobalMethod('procedure zcUIHistoryOut(AMsg:string);',@zcUIHistoryOut,ctx);
     cplr.addGlobalMethod('procedure zcUIMessageBox(AMsg:string);',@zcUIMessageBox,ctx);
+    cplr.addGlobalMethod('function zcUITextQuestion(ACaption,AQuestion:string):boolean;',@zcUITextQuestion,ctx);
 
     cplr.EndImporting;
   end;

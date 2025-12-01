@@ -72,6 +72,8 @@ uses uzeutils,LCLProc,zcmultiobjectcreateundocommand,uzepalette,
   procedure zcEndUndoCommand;overload;
   procedure zcEndUndoCommand(var Drawing:TZCADDrawing);overload;
 
+  procedure zcUndoPushStone(var Drawing:TZCADDrawing);
+
   {**Добавление в стек undo маркера начала команды при необходимости
     @param(UndoStartMarkerPlaced Флаг установки маркера: false - маркер еще не поставлен, ставим маркер, поднимаем флаг. true - ничего не делаем)
     @param(CommandName Имя команды. Будет показано в окне истории при отмене\повторе)
@@ -243,6 +245,10 @@ end;
 procedure zcEndUndoCommand(var Drawing:TZCADDrawing);
 begin
   Drawing.UndoStack.PushEndMarker;
+end;
+procedure zcUndoPushStone(var Drawing:TZCADDrawing);
+begin
+  Drawing.UndoStack.PushStone;
 end;
 procedure zcEndUndoCommand;
 begin

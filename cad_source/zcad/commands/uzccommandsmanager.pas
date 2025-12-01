@@ -51,6 +51,7 @@ type
 
   TICommandLinePromptVector=TMyVector<ICommandLinePrompt>;
   TzcInteractiveResult=(IRCancel,IRNormal,IRId,IRInput);
+  PzcInteractiveResult=^TzcInteractiveResult;
 
   tvarstack=object({varmanagerdef}varmanager)
   end;

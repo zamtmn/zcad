@@ -152,6 +152,8 @@ begin
       if commandmanager.Get3DPointInteractive(
         rscmSpecifySecondPoint,pe.p2,@InteractiveRectangleManipulator,polyObj)=GRNormal then
       begin
+        if assigned(ESP) then
+          ESP(ESSSetEntity,polyObj);
         zcAddEntToCurrentDrawingWithUndo(polyObj);
         //Добавить объект из конструкторской области в чертеж через ундо//
                   {так как сейчас у нас объект находится и в чертеже и в конструируемой области,

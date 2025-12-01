@@ -45,7 +45,7 @@ function AddExtdrToRectangle(const AStage:TEntitySetupStage;
 begin
   case AStage of
     ESSSuppressCommandParams:
-      result:=true;
+      result:=false;
     ESSSetEntity:begin
       if APEnt<>nil then begin
         // Добавляем расширение extdrVariables первым

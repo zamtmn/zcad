@@ -1,4 +1,4 @@
-//запускаем скрипт командой:
+//command to run:
 //LPCSRun(line_script)
 
 procedure DoInteractiveTest;
@@ -8,14 +8,20 @@ var
   NeedStone:boolean;
 begin
   NeedStone:=true;
+  //get first point
   if zcGetPoint('First point:',p1)=IRNormal then
     while True do
+      //get next point
       if zcGetPointWithLineFromBase('Next point:',p1,p2)=IRNormal then begin
         if NeedStone then begin
+          //"transparent" UNDO command do not working
+          //with primitives created before running the script
           zcUndoPushStone;
           NeedStone:=false; 
         end;
+        //add line to drawing
         pe:=zcEntLine(p1,p2);
+        //continue from last point
         p1:=p2;
       end else
         break;

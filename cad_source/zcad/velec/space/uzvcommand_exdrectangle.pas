@@ -40,203 +40,290 @@ uses
   uzestyleslayers,        // Layer management / Управление слоями
   varmandef;              // Variable manager definitions / Определения менеджера переменных
 
+type
+  // Структура для хранения одного параметра команды
+  // Structure for storing one command parameter
+  TParamInfo = record
+    varname: string;      // Имя переменной / Variable name
+    username: string;     // Описание для пользователя / User description
+    typename: string;     // Тип переменной / Variable type
+  end;
+
+  // Структура для хранения всех операндов команды
+  // Structure for storing all command operands
+  TOperandsStruct = record
+    indexColor: Integer;              // Индекс цвета / Color index
+    namelayer: string;                // Имя слоя / Layer name
+    listParam: array of TParamInfo;   // Список параметров / Parameters list
+  end;
+
 implementation
 
 var
-  // Module-level variable to store command operands
-  // Переменная уровня модуля для хранения операндов команды
-  gCommandOperands: TCommandOperands;
+  // Структура уровня модуля для хранения разобранных операндов команды
+  // Module-level structure to store parsed command operands
+  gOperandsStruct: TOperandsStruct;
 
-// Helper procedure to parse operands and extract color, layer, and variables
-// Вспомогательная процедура для разбора операндов и извлечения цвета, слоя и переменных
-procedure ParseOperandsAndAddVariables(
-  APEnt: PGDBObjEntity;
+{**Процедура разбора операндов и заполнения структуры TOperandsStruct
+   Разбирает строку операндов и заполняет структуру с цветом, слоем и параметрами.
+   Если операнды не указаны, устанавливаются значения "поСлою".
+   @param(operands - строка операндов команды)
+   @param(outStruct - выходная структура для заполнения)}
+procedure ParseOperandsToStruct(
   const operands: TCommandOperands;
-  out colorIndex: Integer;
-  out layerName: string);
+  out outStruct: TOperandsStruct);
 var
-  VarExt: TVariablesExtender;
   params: TStringList;
-  i: integer;
+  i, paramIdx: integer;
   varname, username, typename: string;
-  vd: vardesk;
 begin
-  // Set default values
-  // Устанавливаем значения по умолчанию
-  colorIndex := 3;  // Default: green / По умолчанию: зеленый
-  layerName := '';  // Empty means use current layer / Пустое значит использовать текущий слой
+  // Устанавливаем значения по умолчанию (поСлою)
+  // Set default values (by layer)
+  outStruct.indexColor := 256;  // 256 = ByLayer / 256 = поСлою
+  outStruct.namelayer := '';    // Empty means use current layer / Пустое значит текущий слой
+  SetLength(outStruct.listParam, 0);
 
-  // Check if we have operands
   // Проверяем наличие операндов
+  // Check if we have operands
   if Trim(operands) = '' then
     exit;
 
-  // Split operands by comma
   // Разделяем операнды по запятой
+  // Split operands by comma
   params := TStringList.Create;
   try
     params.Delimiter := ',';
     params.StrictDelimiter := True;
     params.DelimitedText := operands;
 
-    // Need at least 2 parameters (color and layer)
-    // Нужно минимум 2 параметра (цвет и слой)
-    if params.Count < 2 then
-      exit;
-
-    // Extract color index (first parameter)
     // Извлекаем индекс цвета (первый параметр)
-    try
-      colorIndex := StrToInt(Trim(params[0]));
-      // Ensure color is in valid range (1-255)
-      // Проверяем что цвет в допустимом диапазоне (1-255)
-      if (colorIndex < 1) or (colorIndex > 255) then
-        colorIndex := 3;  // Fallback to default / Возврат к значению по умолчанию
-    except
-      colorIndex := 3;  // Fallback to default on error / Возврат к значению по умолчанию при ошибке
+    // Extract color index (first parameter)
+    if params.Count >= 1 then begin
+      try
+        outStruct.indexColor := StrToInt(Trim(params[0]));
+        // Проверяем что цвет в допустимом диапазоне (0-256)
+        // Ensure color is in valid range (0-256)
+        if (outStruct.indexColor < 0) or (outStruct.indexColor > 256) then
+          outStruct.indexColor := 256;  // ByLayer / поСлою
+      except
+        outStruct.indexColor := 256;  // ByLayer on error / поСлою при ошибке
+      end;
     end;
 
-    // Extract layer name (second parameter)
     // Извлекаем имя слоя (второй параметр)
-    layerName := Trim(params[1]);
-    // Remove quotes if present
-    // Удаляем кавычки если есть
-    if (Length(layerName) >= 2) and (layerName[1] = '''') and (layerName[Length(layerName)] = '''') then
-      layerName := Copy(layerName, 2, Length(layerName) - 2);
+    // Extract layer name (second parameter)
+    if params.Count >= 2 then begin
+      outStruct.namelayer := Trim(params[1]);
+      // Удаляем кавычки если есть
+      // Remove quotes if present
+      if (Length(outStruct.namelayer) >= 2) and
+         (outStruct.namelayer[1] = '''') and
+         (outStruct.namelayer[Length(outStruct.namelayer)] = '''') then
+        outStruct.namelayer := Copy(outStruct.namelayer, 2, Length(outStruct.namelayer) - 2);
+    end;
 
-    // Now process variables starting from index 2
-    // Теперь обрабатываем переменные начиная с индекса 2
-    VarExt := APEnt^.specialize GetExtension<TVariablesExtender>;
-    if VarExt = nil then
-      exit;
-
-    // Process variables in triplets: varname, username, typename
-    // Обрабатываем переменные в триплетах: имя_переменной, имя_пользователя, тип
-    i := 2;  // Start after color and layer parameters / Начинаем после параметров цвета и слоя
+    // Обрабатываем переменные в триплетах начиная с индекса 2
+    // Process variables in triplets starting from index 2
+    i := 2;  // Начинаем после параметров цвета и слоя
+             // Start after color and layer parameters
+    paramIdx := 0;
     while i + 2 < params.Count do begin
+      // Увеличиваем размер массива параметров
+      // Increase parameters array size
+      SetLength(outStruct.listParam, paramIdx + 1);
+
       varname := Trim(params[i]);
       username := Trim(params[i + 1]);
       typename := Trim(params[i + 2]);
 
-      // Remove quotes if present
       // Удаляем кавычки если есть
+      // Remove quotes if present
       if (Length(username) >= 2) and (username[1] = '''') and (username[Length(username)] = '''') then
         username := Copy(username, 2, Length(username) - 2);
 
-      // Check if variable already exists
-      // Проверяем существует ли уже переменная
-      if VarExt.entityunit.FindVariable(varname) = nil then begin
-        // Create and add the variable
-        // Создаем и добавляем переменную
-        VarExt.entityunit.setvardesc(vd, varname, username, typename);
-        VarExt.entityunit.InterfaceVariables.createvariable(vd.Name, vd);
+      // Сохраняем параметр в структуру
+      // Save parameter to structure
+      outStruct.listParam[paramIdx].varname := varname;
+      outStruct.listParam[paramIdx].username := username;
+      outStruct.listParam[paramIdx].typename := typename;
 
-        zcUI.TextMessage('Добавлена переменная / Variable added: ' + varname +
-                        ' (' + username + ') : ' + typename, TMWOHistoryOut);
-      end;
-
-      // Move to next triplet
-      // Переходим к следующему триплету
-      Inc(i, 3);
+      Inc(paramIdx);
+      Inc(i, 3);  // Переходим к следующему триплету / Move to next triplet
     end;
   finally
     params.Free;
   end;
 end;
 
+{**Процедура добавления переменных к примитиву из структуры операндов
+   @param(APEnt - указатель на примитив)
+   @param(operandsStruct - структура с разобранными операндами)}
+procedure AddVariablesFromStruct(
+  APEnt: PGDBObjEntity;
+  const operandsStruct: TOperandsStruct);
+var
+  VarExt: TVariablesExtender;
+  i: integer;
+  vd: vardesk;
+begin
+  // Получаем расширение переменных
+  // Get variables extension
+  VarExt := APEnt^.specialize GetExtension<TVariablesExtender>;
+  if VarExt = nil then
+    exit;
+
+  // Добавляем все переменные из структуры
+  // Add all variables from structure
+  for i := 0 to High(operandsStruct.listParam) do begin
+    // Проверяем существует ли уже переменная
+    // Check if variable already exists
+    if VarExt.entityunit.FindVariable(operandsStruct.listParam[i].varname) = nil then begin
+      // Создаем и добавляем переменную
+      // Create and add the variable
+      VarExt.entityunit.setvardesc(
+        vd,
+        operandsStruct.listParam[i].varname,
+        operandsStruct.listParam[i].username,
+        operandsStruct.listParam[i].typename
+      );
+      VarExt.entityunit.InterfaceVariables.createvariable(vd.Name, vd);
+
+      zcUI.TextMessage(
+        'Добавлена переменная / Variable added: ' +
+        operandsStruct.listParam[i].varname +
+        ' (' + operandsStruct.listParam[i].username + ') : ' +
+        operandsStruct.listParam[i].typename,
+        TMWOHistoryOut
+      );
+    end;
+  end;
+end;
+
+{**Процедура создания или получения слоя по имени
+   Создает слой если он не существует, используя слой из библиотеки как шаблон.
+   @param(layerName - имя слоя)
+   @param(colorIndex - индекс цвета для нового слоя)
+   @return(указатель на свойства слоя)}
+function GetOrCreateLayer(
+  const layerName: string;
+  colorIndex: Integer): PGDBLayerProp;
+var
+  pproglayer: PGDBLayerProp;
+begin
+  Result := nil;
+
+  if layerName = '' then
+    exit;
+
+  // Ищем описание слоя в библиотеке
+  // Search for layer description in library
+  pproglayer := BlockBaseDWG^.LayerTable.getAddres(layerName);
+
+  // Пытаемся создать слой используя слой из библиотеки как шаблон
+  // Try to create layer using library layer as template
+  Result := drawings.GetCurrentDWG^.LayerTable.createlayerifneedbyname(
+    layerName,
+    pproglayer
+  );
+
+  // Если слой все еще не существует, создаем его с параметрами по умолчанию
+  // If layer still doesn't exist, create it with default parameters
+  if Result = nil then begin
+    Result := drawings.GetCurrentDWG^.LayerTable.addlayer(
+      layerName,           // name / имя
+      colorIndex,          // color / цвет
+      -1,                  // line weight / толщина линии
+      True,                // on / включен
+      False,               // lock / заблокирован
+      True,                // print / печатать
+      'Rectangle layer',   // description / описание
+      TLOLoad              // load mode / режим загрузки
+    );
+    zcUI.TextMessage('Создан слой / Layer created: ' + layerName, TMWOHistoryOut);
+  end;
+end;
+
 {**Функция добавления расширений к прямоугольнику на разных стадиях настройки
+   Использует глобальную структуру gOperandsStruct для получения параметров.
    @param(AStage - стадия настройки примитива)
    @param(APEnt - указатель на примитив)
    @return(true если обработка успешна)}
-function AddExtdrToRectangle(const AStage:TEntitySetupStage;
-  const APEnt:PGDBObjEntity):boolean;
+function AddExtdrToRectangle(
+  const AStage: TEntitySetupStage;
+  const APEnt: PGDBObjEntity): boolean;
 var
-  colorIndex: Integer;
-  layerName: string;
   pLayer: PGDBLayerProp;
-  pproglayer: PGDBLayerProp;
 begin
   case AStage of
     ESSSuppressCommandParams:
-      result:=false;
-    ESSSetEntity:begin
-      if APEnt<>nil then begin
-        // Добавляем расширение extdrVariables первым
-        // Add extdrVariables extension first
+      result := false;
+
+    ESSSetEntity: begin
+      if APEnt <> nil then begin
+        // Добавляем расширение extdrVariables для хранения переменных
+        // Add extdrVariables extension for storing variables
         AddVariablesToEntity(APEnt);
 
-        // Затем добавляем расширение extdrIncludingVolume
-        // Then add extdrIncludingVolume extension
+        // Добавляем расширение extdrIncludingVolume для работы с объемом
+        // Add extdrIncludingVolume extension for volume operations
         AddVolumeExtenderToEntity(APEnt);
 
-        // Парсим операнды и добавляем переменные к примитиву
-        // Parse operands and add variables to entity
-        // Also extracts color and layer from operands
-        // Также извлекает цвет и слой из операндов
-        ParseOperandsAndAddVariables(APEnt, gCommandOperands, colorIndex, layerName);
+        // Добавляем переменные из структуры операндов
+        // Add variables from operands structure
+        AddVariablesFromStruct(APEnt, gOperandsStruct);
 
-        // Set layer if specified
-        // Устанавливаем слой если указан
-        if layerName <> '' then begin
-          pproglayer:=BlockBaseDWG^.LayerTable.getAddres(layerName);
-          // Try to create layer using library layer as template
-          // Пытаемся создать слой используя слой из библиотеки как шаблон
-          pLayer := drawings.GetCurrentDWG^.LayerTable.createlayerifneedbyname(
-            layerName,
-            pproglayer
+        // Устанавливаем слой если указан в структуре
+        // Set layer if specified in structure
+        if gOperandsStruct.namelayer <> '' then begin
+          pLayer := GetOrCreateLayer(
+            gOperandsStruct.namelayer,
+            gOperandsStruct.indexColor
           );
 
-          // If layer still doesn't exist, create it with default parameters
-          // Если слой все еще не существует, создаем его с параметрами по умолчанию
-          if pLayer = nil then begin
-            pLayer := drawings.GetCurrentDWG^.LayerTable.addlayer(
-              layerName,           // name / имя
-              colorIndex,          // color / цвет
-              -1,                  // line weight / толщина линии
-              True,                // on / включен
-              False,               // lock / заблокирован
-              True,                // print / печатать
-              'Rectangle layer',   // description / описание
-              TLOLoad              // load mode / режим загрузки
-            );
-            zcUI.TextMessage('Создан слой / Layer created: ' + layerName, TMWOHistoryOut);
-          end;
-
-          // Set the layer for the entity
-          // Устанавливаем слой для примитива
           if pLayer <> nil then
             APEnt^.vp.Layer := pLayer;
         end;
 
-        result:=true;
+        // Устанавливаем цвет примитива из структуры
+        // Set entity color from structure
+        APEnt^.vp.Color := gOperandsStruct.indexColor;
+
+        result := true;
       end else
-        result:=False;
-      end;
-    ESSCommandEnd:begin
-      // Clear operands after command ends
-      // Очищаем операнды после завершения команды
-      gCommandOperands := '';
-      result:=False;
+        result := False;
+    end;
+
+    ESSCommandEnd: begin
+      // Очищаем структуру операндов после завершения команды
+      // Clear operands structure after command ends
+      SetLength(gOperandsStruct.listParam, 0);
+      gOperandsStruct.indexColor := 256;  // ByLayer
+      gOperandsStruct.namelayer := '';
+      result := False;
     end;
   end;
 end;
 
 {**Команда черчения прямоугольника с расширениями
+   Разбирает операнды в структуру и вызывает интерактивное черчение.
    @param(Context - контекст команды ZCAD)
    @param(operands - операнды команды)
    @return(результат выполнения команды)}
-function ExdRectangle_com(const Context:TZCADCommandContext;
-  operands:TCommandOperands):TCommandResult;
+function ExdRectangle_com(
+  const Context: TZCADCommandContext;
+  operands: TCommandOperands): TCommandResult;
 begin
-  // Store operands in module-level variable for access by AddExtdrToRectangle
-  // Сохраняем операнды в переменной уровня модуля для доступа из AddExtdrToRectangle
-  gCommandOperands := operands;
-
-  // Output message about command launch
   // Вывод сообщения о запуске команды
+  // Output message about command launch
   zcUI.TextMessage('запущена команда exdRectangle', TMWOHistoryOut);
 
-  Result:=InteractiveDrawRectangle(
+  // Разбираем операнды и заполняем структуру
+  // Parse operands and fill structure
+  ParseOperandsToStruct(operands, gOperandsStruct);
+
+  // Вызываем интерактивное черчение прямоугольника
+  // Call interactive rectangle drawing
+  Result := InteractiveDrawRectangle(
     Context,
     rscmSpecifyFirstPoint,
     rscmSpecifySecondPoint,

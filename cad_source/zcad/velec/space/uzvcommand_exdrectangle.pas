@@ -26,6 +26,7 @@ interface
 uses
   SysUtils,               // String utilities / Утилиты для работы со строками
   Classes,                // TStringList / TStringList
+  fgl,                    // Free Pascal Generic Library / Библиотека обобщённых контейнеров
   uzcLog,
   uzccommandsabstract,
   uzccommandsimpl,
@@ -49,12 +50,16 @@ type
     typename: string;     // Тип переменной / Variable type
   end;
 
+  // Список параметров на основе обобщённого списка
+  // Parameters list based on generic list
+  TParamInfoList = specialize TFPGList<TParamInfo>;
+
   // Структура для хранения всех операндов команды
   // Structure for storing all command operands
   TOperandsStruct = record
     indexColor: Integer;              // Индекс цвета / Color index
     namelayer: string;                // Имя слоя / Layer name
-    listParam: array of TParamInfo;   // Список параметров / Parameters list
+    listParam: TParamInfoList;        // Список параметров / Parameters list
   end;
 
 implementation
@@ -74,14 +79,21 @@ procedure ParseOperandsToStruct(
   out outStruct: TOperandsStruct);
 var
   params: TStringList;
-  i, paramIdx: integer;
+  i: integer;
   varname, username, typename: string;
+  paramInfo: TParamInfo;
 begin
   // Устанавливаем значения по умолчанию (поСлою)
   // Set default values (by layer)
   outStruct.indexColor := 256;  // 256 = ByLayer / 256 = поСлою
   outStruct.namelayer := '';    // Empty means use current layer / Пустое значит текущий слой
-  SetLength(outStruct.listParam, 0);
+
+  // Создаём список параметров если его ещё нет
+  // Create parameters list if it doesn't exist yet
+  if outStruct.listParam = nil then
+    outStruct.listParam := TParamInfoList.Create
+  else
+    outStruct.listParam.Clear;
 
   // Проверяем наличие операндов
   // Check if we have operands
@@ -126,12 +138,7 @@ begin
     // Process variables in triplets starting from index 2
     i := 2;  // Начинаем после параметров цвета и слоя
              // Start after color and layer parameters
-    paramIdx := 0;
     while i + 2 < params.Count do begin
-      // Увеличиваем размер массива параметров
-      // Increase parameters array size
-      SetLength(outStruct.listParam, paramIdx + 1);
-
       varname := Trim(params[i]);
       username := Trim(params[i + 1]);
       typename := Trim(params[i + 2]);
@@ -141,13 +148,16 @@ begin
       if (Length(username) >= 2) and (username[1] = '''') and (username[Length(username)] = '''') then
         username := Copy(username, 2, Length(username) - 2);
 
-      // Сохраняем параметр в структуру
-      // Save parameter to structure
-      outStruct.listParam[paramIdx].varname := varname;
-      outStruct.listParam[paramIdx].username := username;
-      outStruct.listParam[paramIdx].typename := typename;
+      // Заполняем структуру параметра
+      // Fill parameter structure
+      paramInfo.varname := varname;
+      paramInfo.username := username;
+      paramInfo.typename := typename;
 
-      Inc(paramIdx);
+      // Добавляем параметр в список
+      // Add parameter to list
+      outStruct.listParam.Add(paramInfo);
+
       Inc(i, 3);  // Переходим к следующему триплету / Move to next triplet
     end;
   finally
@@ -165,34 +175,42 @@ var
   VarExt: TVariablesExtender;
   i: integer;
   vd: vardesk;
+  paramInfo: TParamInfo;
 begin
   // Получаем расширение переменных
   // Get variables extension
-  VarExt := APEnt^.specialize GetExtension<TVariablesExtender>;
+  VarExt := APEnt^.GetExtension<TVariablesExtender>;
   if VarExt = nil then
+    exit;
+
+  // Проверяем что список параметров существует
+  // Check that parameters list exists
+  if operandsStruct.listParam = nil then
     exit;
 
   // Добавляем все переменные из структуры
   // Add all variables from structure
-  for i := 0 to High(operandsStruct.listParam) do begin
+  for i := 0 to operandsStruct.listParam.Count - 1 do begin
+    paramInfo := operandsStruct.listParam[i];
+
     // Проверяем существует ли уже переменная
     // Check if variable already exists
-    if VarExt.entityunit.FindVariable(operandsStruct.listParam[i].varname) = nil then begin
+    if VarExt.entityunit.FindVariable(paramInfo.varname) = nil then begin
       // Создаем и добавляем переменную
       // Create and add the variable
       VarExt.entityunit.setvardesc(
         vd,
-        operandsStruct.listParam[i].varname,
-        operandsStruct.listParam[i].username,
-        operandsStruct.listParam[i].typename
+        paramInfo.varname,
+        paramInfo.username,
+        paramInfo.typename
       );
       VarExt.entityunit.InterfaceVariables.createvariable(vd.Name, vd);
 
       zcUI.TextMessage(
         'Добавлена переменная / Variable added: ' +
-        operandsStruct.listParam[i].varname +
-        ' (' + operandsStruct.listParam[i].username + ') : ' +
-        operandsStruct.listParam[i].typename,
+        paramInfo.varname +
+        ' (' + paramInfo.username + ') : ' +
+        paramInfo.typename,
         TMWOHistoryOut
       );
     end;
@@ -296,7 +314,8 @@ begin
     ESSCommandEnd: begin
       // Очищаем структуру операндов после завершения команды
       // Clear operands structure after command ends
-      SetLength(gOperandsStruct.listParam, 0);
+      if gOperandsStruct.listParam <> nil then
+        gOperandsStruct.listParam.Clear;
       gOperandsStruct.indexColor := 256;  // ByLayer
       gOperandsStruct.namelayer := '';
       result := False;
@@ -334,8 +353,21 @@ end;
 initialization
   programlog.LogOutFormatStr('Unit "%s" initialization',[{$INCLUDE %FILE%}],
     LM_Info,UnitsInitializeLMId);
+
+  // Инициализируем структуру операндов
+  // Initialize operands structure
+  gOperandsStruct.listParam := TParamInfoList.Create;
+  gOperandsStruct.indexColor := 256;  // ByLayer
+  gOperandsStruct.namelayer := '';
+
   CreateZCADCommand(@ExdRectangle_com,'exdRectangle',CADWG,0);
+
 finalization
   ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],
     LM_Info,UnitsFinalizeLMId);
+
+  // Освобождаем список параметров
+  // Free parameters list
+  if gOperandsStruct.listParam <> nil then
+    gOperandsStruct.listParam.Free;
 end.

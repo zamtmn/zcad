@@ -1,7 +1,7 @@
 //запускаем скрипт командой:
 //LPCSRun(line_script)
 
-procedure DoSplineTest;
+procedure DoInteractiveTest;
 var
   pe:PzeEntity;
   p1,p2:TzePoint3d;
@@ -22,5 +22,5 @@ begin
 end;
 
 begin
-  DoSplineTest;
+  DoInteractiveTest;
 end.

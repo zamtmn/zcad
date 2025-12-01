@@ -60,3 +60,15 @@ Original repository (upstream): veb86/zcadvelecAI
 Proceed.
 
 Run timestamp: 2025-11-06T10:13:26.916Z
+
+---
+
+Issue to solve: https://github.com/veb86/zcadvelecAI/issues/590
+Your prepared branch: issue-590-74e9ce72dcc1
+Your prepared working directory: /tmp/gh-issue-solver-1764612732258
+Your forked repository: konard/zcadvelecAI
+Original repository (upstream): veb86/zcadvelecAI
+
+Proceed.
+
+Run timestamp: 2025-12-01T18:12:33.184Z

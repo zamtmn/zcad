@@ -40,7 +40,19 @@ uses
   uzvshxtopdfapprogeomsettings,
   uzvshxtopdfapprogeom,
   uzvshxtopdfapprogeomtestarc,
-  uzvshxtopdfapprogeomtesterror;
+  uzvshxtopdfapprogeomtesterror,
+  // Модули Этапа 3: трансформации
+  // Stage 3 modules: transformations
+  uzvshxtopdftransformtypes,
+  uzvshxtopdftransform,
+  // Модули Этапа 4: CharProcs (PDF path streams)
+  // Stage 4 modules: CharProcs (PDF path streams)
+  uzvshxtopdfcharprocstypes,
+  uzvshxtopdfcharprocs,
+  uzvshxtopdfcharprocstestcount,
+  uzvshxtopdfcharprocstestfont,
+  uzvshxtopdfcharprocstestwidths,
+  uzvshxtopdfcharprocstestpdf;
 
 // Команда для чтения и тестирования SHX шрифтов
 // Использование: SHX_TO_PDF_READ [путь_к_shx_файлу]
@@ -56,6 +68,15 @@ function SHX_TO_PDF_READ_com(
 // Command for running Stage 2 tests (geometry approximation)
 // Usage: SHX_TO_PDF_TEST
 function SHX_TO_PDF_TEST_com(
+  const Context: TZCADCommandContext;
+  operands: TCommandOperands
+): TCommandResult;
+
+// Команда для запуска тестов Этапа 4 (CharProcs PDF)
+// Использование: SHX_TO_PDF_TEST4
+// Command for running Stage 4 tests (CharProcs PDF)
+// Usage: SHX_TO_PDF_TEST4
+function SHX_TO_PDF_TEST4_com(
   const Context: TZCADCommandContext;
   operands: TCommandOperands
 ): TCommandResult;
@@ -576,6 +597,110 @@ begin
   Result := cmd_ok;
 end;
 
+// Команда для запуска тестов Этапа 4 (CharProcs PDF)
+// Command for running Stage 4 tests (CharProcs PDF)
+function SHX_TO_PDF_TEST4_com(
+  const Context: TZCADCommandContext;
+  operands: TCommandOperands
+): TCommandResult;
+var
+  TotalPassed, TotalTests: Integer;
+  CountResult, FontResult, WidthsResult, PdfResult: Boolean;
+begin
+  programlog.LogOutFormatStr(
+    'Запуск команды SHX_TO_PDF_TEST4',
+    [],
+    LM_Info
+  );
+
+  zcUI.TextMessage('Запущено тестирование Этапа 4 (CharProcs)', TMWOHistoryOut);
+  zcUI.TextMessage('Stage 4 testing started (CharProcs)', TMWOHistoryOut);
+
+  TotalPassed := 0;
+  TotalTests := 4;
+
+  // Тест 1: количество CharProcs
+  // Test 1: CharProcs count
+  zcUI.TextMessage('--- Тест 1: количество CharProcs ---', TMWOHistoryOut);
+  CountResult := RunCharProcsCountTest;
+  if CountResult then
+  begin
+    Inc(TotalPassed);
+    zcUI.TextMessage('[PASS] Тест количества CharProcs', TMWOHistoryOut);
+  end
+  else
+    zcUI.TextMessage('[FAIL] Тест количества CharProcs', TMWOHistoryOut);
+
+  // Тест 2: структура Font объекта
+  // Test 2: Font object structure
+  zcUI.TextMessage('--- Тест 2: структура Font объекта ---', TMWOHistoryOut);
+  FontResult := RunFontStructureTest;
+  if FontResult then
+  begin
+    Inc(TotalPassed);
+    zcUI.TextMessage('[PASS] Тест структуры Font', TMWOHistoryOut);
+  end
+  else
+    zcUI.TextMessage('[FAIL] Тест структуры Font', TMWOHistoryOut);
+
+  // Тест 3: корректность ширин
+  // Test 3: widths correctness
+  zcUI.TextMessage('--- Тест 3: корректность ширин ---', TMWOHistoryOut);
+  WidthsResult := RunWidthsTest;
+  if WidthsResult then
+  begin
+    Inc(TotalPassed);
+    zcUI.TextMessage('[PASS] Тест ширин', TMWOHistoryOut);
+  end
+  else
+    zcUI.TextMessage('[FAIL] Тест ширин', TMWOHistoryOut);
+
+  // Тест 4: интеграционный тест PDF
+  // Test 4: PDF integration test
+  zcUI.TextMessage('--- Тест 4: интеграционный тест PDF ---', TMWOHistoryOut);
+  PdfResult := RunPdfIntegrationTest;
+  if PdfResult then
+  begin
+    Inc(TotalPassed);
+    zcUI.TextMessage('[PASS] Интеграционный тест PDF', TMWOHistoryOut);
+  end
+  else
+    zcUI.TextMessage('[FAIL] Интеграционный тест PDF', TMWOHistoryOut);
+
+  // Итоги
+  // Summary
+  zcUI.TextMessage('', TMWOHistoryOut);
+  zcUI.TextMessage(
+    Format('===== ЭТАП 4: %d/%d тестов пройдено =====', [TotalPassed, TotalTests]),
+    TMWOHistoryOut
+  );
+  zcUI.TextMessage(
+    Format('===== STAGE 4: %d/%d tests passed =====', [TotalPassed, TotalTests]),
+    TMWOHistoryOut
+  );
+
+  if TotalPassed = TotalTests then
+  begin
+    zcUI.TextMessage('Все тесты Этапа 4 пройдены успешно!', TMWOHistoryOut);
+    zcUI.TextMessage('All Stage 4 tests passed successfully!', TMWOHistoryOut);
+  end
+  else
+  begin
+    zcUI.TextMessage(
+      Format('ВНИМАНИЕ: %d тестов не пройдено', [TotalTests - TotalPassed]),
+      TMWOHistoryOut
+    );
+  end;
+
+  programlog.LogOutFormatStr(
+    'Команда SHX_TO_PDF_TEST4 завершена: %d/%d тестов пройдено',
+    [TotalPassed, TotalTests],
+    LM_Info
+  );
+
+  Result := cmd_ok;
+end;
+
 initialization
   programlog.LogOutFormatStr(
     'Unit "%s" initialization',
@@ -610,6 +735,21 @@ initialization
 
   programlog.LogOutFormatStr(
     'Команда SHX_TO_PDF_TEST зарегистрирована',
+    [],
+    LM_Info
+  );
+
+  // Регистрация команды тестирования Этапа 4 (CharProcs)
+  // Register Stage 4 testing command (CharProcs)
+  CreateZCADCommand(
+    @SHX_TO_PDF_TEST4_com,
+    'SHX_TO_PDF_TEST4',
+    CADWG,
+    0
+  );
+
+  programlog.LogOutFormatStr(
+    'Команда SHX_TO_PDF_TEST4 зарегистрирована',
     [],
     LM_Info
   );

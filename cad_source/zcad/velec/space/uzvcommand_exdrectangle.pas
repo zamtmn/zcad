@@ -26,7 +26,7 @@ interface
 uses
   SysUtils,               // String utilities / Утилиты для работы со строками
   Classes,                // TStringList / TStringList
-  fgl,                    // Free Pascal Generic Library / Библиотека обобщённых контейнеров
+  gzctnrVector,           // Generic vector container / Обобщённый контейнер вектор
   uzcLog,
   uzccommandsabstract,
   uzccommandsimpl,
@@ -50,9 +50,9 @@ type
     typename: string;     // Тип переменной / Variable type
   end;
 
-  // Список параметров на основе обобщённого списка
-  // Parameters list based on generic list
-  TParamInfoList = specialize TFPGList<TParamInfo>;
+  // Список параметров на основе обобщённого вектора
+  // Parameters list based on generic vector
+  TParamInfoList = {-}GZVector{-}<TParamInfo>{//};
 
   // Структура для хранения всех операндов команды
   // Structure for storing all command operands
@@ -88,12 +88,9 @@ begin
   outStruct.indexColor := 256;  // 256 = ByLayer / 256 = поСлою
   outStruct.namelayer := '';    // Empty means use current layer / Пустое значит текущий слой
 
-  // Создаём список параметров если его ещё нет
-  // Create parameters list if it doesn't exist yet
-  if outStruct.listParam = nil then
-    outStruct.listParam := TParamInfoList.Create
-  else
-    outStruct.listParam.Clear;
+  // Очищаем список параметров
+  // Clear parameters list
+  outStruct.listParam.Clear;
 
   // Проверяем наличие операндов
   // Check if we have operands
@@ -156,7 +153,7 @@ begin
 
       // Добавляем параметр в список
       // Add parameter to list
-      outStruct.listParam.Add(paramInfo);
+      outStruct.listParam.PushBackData(paramInfo);
 
       Inc(i, 3);  // Переходим к следующему триплету / Move to next triplet
     end;
@@ -183,15 +180,10 @@ begin
   if VarExt = nil then
     exit;
 
-  // Проверяем что список параметров существует
-  // Check that parameters list exists
-  if operandsStruct.listParam = nil then
-    exit;
-
   // Добавляем все переменные из структуры
   // Add all variables from structure
   for i := 0 to operandsStruct.listParam.Count - 1 do begin
-    paramInfo := operandsStruct.listParam[i];
+    paramInfo := operandsStruct.listParam.getData(i);
 
     // Проверяем существует ли уже переменная
     // Check if variable already exists
@@ -314,8 +306,7 @@ begin
     ESSCommandEnd: begin
       // Очищаем структуру операндов после завершения команды
       // Clear operands structure after command ends
-      if gOperandsStruct.listParam <> nil then
-        gOperandsStruct.listParam.Clear;
+      gOperandsStruct.listParam.Clear;
       gOperandsStruct.indexColor := 256;  // ByLayer
       gOperandsStruct.namelayer := '';
       result := False;
@@ -356,7 +347,7 @@ initialization
 
   // Инициализируем структуру операндов
   // Initialize operands structure
-  gOperandsStruct.listParam := TParamInfoList.Create;
+  gOperandsStruct.listParam.init(10);  // Инициализируем вектор с начальной емкостью / Initialize vector with initial capacity
   gOperandsStruct.indexColor := 256;  // ByLayer
   gOperandsStruct.namelayer := '';
 
@@ -368,6 +359,5 @@ finalization
 
   // Освобождаем список параметров
   // Free parameters list
-  if gOperandsStruct.listParam <> nil then
-    gOperandsStruct.listParam.Free;
+  gOperandsStruct.listParam.done;
 end.

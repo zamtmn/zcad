@@ -37,6 +37,8 @@ uses
 
 type
 
+  EScriptAbort=class(Exception);
+
   TCurrentDrawingContext=class(TBaseScriptContext)
     DWG:PTZCADDrawing;
   end;
@@ -46,12 +48,19 @@ type
     FThisEntityExtender:TAbstractEntityExtender;
   end;
 
-  TLPCSDrawing=class
-    class procedure cplrSetup(const ACommandContext:TZCADCommandContext;mode:TLapeScriptContextModes;ctx:TBaseScriptContext;cplr:TLapeCompiler);
+  TLapeDwg=class
+    class procedure ze2cplr(const ACommandContext:TZCADCommandContext;mode:TLapeScriptContextModes;ctx:TBaseScriptContext;cplr:TLapeCompiler);
+    class procedure zcEnt2cplr(const ACommandContext:TZCADCommandContext;mode:TLapeScriptContextModes;ctx:TBaseScriptContext;cplr:TLapeCompiler);
+    class procedure zcUndo2cplr(const ACommandContext:TZCADCommandContext;mode:TLapeScriptContextModes;ctx:TBaseScriptContext;cplr:TLapeCompiler);
+    class procedure zcInteractive2cplr(const ACommandContext:TZCADCommandContext;mode:TLapeScriptContextModes;ctx:TBaseScriptContext;cplr:TLapeCompiler);
+    class procedure zcStyles2cplr(const ACommandContext:TZCADCommandContext;mode:TLapeScriptContextModes;ctx:TBaseScriptContext;cplr:TLapeCompiler);
     class procedure ctxSetup(const ACommandContext:TZCADCommandContext;mode:TLapeScriptContextModes;ctx:TBaseScriptContext;cplr:TLapeCompiler);
   end;
 
 implementation
+
+const
+  CScriptAbort='Abort in interactive proc';
 
 type
 
@@ -304,6 +313,8 @@ begin
   ctx:=TCurrentDrawingContext(Params^[0]);
   if ctx.DWG<>nil then begin
     PzcInteractiveResult(Result)^:=commandmanager.GetEntity(PString(Params^[1])^,PGDBObjEntity(Params^[2]^));
+    if PzcInteractiveResult(Result)^=IRAbort then
+      raise EScriptAbort.Create(CScriptAbort);
   end;
 end;
 
@@ -315,6 +326,8 @@ begin
   ctx:=TCurrentDrawingContext(Params^[0]);
   if ctx.DWG<>nil then begin
     PzcInteractiveResult(Result)^:=commandmanager.Get3DPoint(PString(Params^[1])^,PzePoint3d(Params^[2])^);
+    if PzcInteractiveResult(Result)^=IRAbort then
+      raise EScriptAbort.Create(CScriptAbort);
   end;
 end;
 
@@ -326,10 +339,12 @@ begin
   ctx:=TCurrentDrawingContext(Params^[0]);
   if ctx.DWG<>nil then begin
     PzcInteractiveResult(Result)^:=commandmanager.Get3DPointWithLineFromBase(PString(Params^[1])^,PzePoint3d(Params^[2])^,PzePoint3d(Params^[3])^);
+    if PzcInteractiveResult(Result)^=IRAbort then
+      raise EScriptAbort.Create(CScriptAbort);
   end;
 end;
 
-class procedure TLPCSDrawing.cplrSetup(const ACommandContext:TZCADCommandContext;mode:TLapeScriptContextModes;ctx:TBaseScriptContext;cplr:TLapeCompiler);
+class procedure TLapeDwg.ze2cplr(const ACommandContext:TZCADCommandContext;mode:TLapeScriptContextModes;ctx:TBaseScriptContext;cplr:TLapeCompiler);
 begin
   if LSCMCompilerSetup in mode then begin
     cplr.StartImporting;
@@ -339,31 +354,11 @@ begin
     cplr.addGlobalType('Pointer','PzeEntity');
     cplr.addGlobalType('Pointer','PzeLayer');
 
-    cplr.addGlobalType('(IRCancel,IRNormal,IRId,IRInput)','TzcInteractiveResult');
-
     cplr.addGlobalType('array of TzePoint3d','TzePoints3d');
     cplr.addGlobalType('array of single','TSingles');
 
     cplr.addGlobalMethod('function zePt3d(x,y,z:double):TzePoint3d;overload;',@zePt3d,ctx);
     cplr.addGlobalMethod('function zePt3d(x,y:double):TzePoint3d;overload;',@zePt3d2,ctx);
-
-    cplr.addGlobalMethod('function zcDwgGetLayersCount:int32;',@zcDwgGetLayersCount,ctx);
-    cplr.addGlobalMethod('function zcDwgGetLayer(ALayerIndex:int32):PzeLayer;overload;',@zcDwgGetLayer,ctx);
-    cplr.addGlobalMethod('function zcDWGGetLayer(ALayerName:string):PzeLayer;overload;',@zcDwgGetLayer2,ctx);
-    cplr.addGlobalMethod('function zcLayerName(ALayer:PzeLayer):string;',@zcLayerName,ctx);
-
-    cplr.addGlobalMethod('function zcGetEntity(APrompt:string;out APEntity:PzeEntity):TzcInteractiveResult;',@zcGetEntity,ctx);
-    cplr.addGlobalMethod('function zcGetPoint(APrompt:string;out APt:TzePoint3d):TzcInteractiveResult;',@zcGetPoint,ctx);
-    cplr.addGlobalMethod('function zcGetPointWithLineFromBase(APrompt:string;const ABase:TzePoint3d;out APt:TzePoint3d):TzcInteractiveResult;',@zcGetPointWithLineFromBase,ctx);
-
-    cplr.addGlobalMethod('function zcEntLine(x1,y1,z1,x2,y2,z2:double):PzeEntity;overload;',@zcEntLine,ctx);
-    cplr.addGlobalMethod('function zcEntLine(p1,p2:TzePoint3d):PzeEntity;overload;',@zcEntLine2,ctx);
-
-    cplr.addGlobalMethod('function zcEntSpline(const Degree:int32;const Closed:boolean;pts:TzePoints3d;kts:TSingles):PzeEntity;',@zcEntSpline,ctx);
-
-    cplr.addGlobalMethod('procedure zcUndoStartCommand(CommandName:String;PushStone:boolean=false);',@UndoStartCommand,ctx);
-    cplr.addGlobalMethod('procedure zcUndoEndCommand;',@UndoEndCommand,ctx);
-    cplr.addGlobalMethod('procedure zcUndoPushStone;',@UndoPushStone,ctx);
 
     cplr.addGlobalMethod('procedure zcUIHistoryOut(AMsg:string);',@zcUIHistoryOut,ctx);
     cplr.addGlobalMethod('procedure zcUIMessageBox(AMsg:string);',@zcUIMessageBox,ctx);
@@ -372,7 +367,68 @@ begin
     cplr.EndImporting;
   end;
 end;
-class procedure TLPCSDrawing.ctxSetup(const ACommandContext:TZCADCommandContext;mode:TLapeScriptContextModes;ctx:TBaseScriptContext;cplr:TLapeCompiler);
+class procedure TLapeDwg.zcEnt2cplr(const ACommandContext:TZCADCommandContext;mode:TLapeScriptContextModes;ctx:TBaseScriptContext;cplr:TLapeCompiler);
+begin
+  if LSCMCompilerSetup in mode then begin
+    cplr.StartImporting;
+    cplr.addBaseDefine('zcEnt');
+
+    cplr.addGlobalMethod('function zcEntLine(x1,y1,z1,x2,y2,z2:double):PzeEntity;overload;',@zcEntLine,ctx);
+    cplr.addGlobalMethod('function zcEntLine(p1,p2:TzePoint3d):PzeEntity;overload;',@zcEntLine2,ctx);
+    cplr.addGlobalMethod('function zcEntSpline(const Degree:int32;const Closed:boolean;pts:TzePoints3d;kts:TSingles):PzeEntity;',@zcEntSpline,ctx);
+
+    cplr.EndImporting;
+  end;
+end;
+class procedure TLapeDwg.zcUndo2cplr(const ACommandContext:TZCADCommandContext;mode:TLapeScriptContextModes;ctx:TBaseScriptContext;cplr:TLapeCompiler);
+begin
+  if LSCMCompilerSetup in mode then begin
+    cplr.StartImporting;
+    cplr.addBaseDefine('zcUndo');
+
+    cplr.addGlobalMethod('procedure zcUndoStartCommand(CommandName:String;PushStone:boolean=false);',@UndoStartCommand,ctx);
+    cplr.addGlobalMethod('procedure zcUndoEndCommand;',@UndoEndCommand,ctx);
+    cplr.addGlobalMethod('procedure zcUndoPushStone;',@UndoPushStone,ctx);
+
+    cplr.EndImporting;
+  end;
+end;
+
+
+class procedure TLapeDwg.zcInteractive2cplr(const ACommandContext:TZCADCommandContext;mode:TLapeScriptContextModes;ctx:TBaseScriptContext;cplr:TLapeCompiler);
+begin
+  if LSCMCompilerSetup in mode then begin
+    cplr.StartImporting;
+    cplr.addBaseDefine('zcInteractive');
+
+    cplr.addGlobalType('(IRAbort,IRCancel,IRNormal,IRId,IRInput)','TzcInteractiveResult');
+
+    cplr.addGlobalMethod('function zcGetEntity(APrompt:string;out APEntity:PzeEntity):TzcInteractiveResult;',@zcGetEntity,ctx);
+    cplr.addGlobalMethod('function zcGetPoint(APrompt:string;out APt:TzePoint3d):TzcInteractiveResult;',@zcGetPoint,ctx);
+    cplr.addGlobalMethod('function zcGetPointWithLineFromBase(APrompt:string;const ABase:TzePoint3d;out APt:TzePoint3d):TzcInteractiveResult;',@zcGetPointWithLineFromBase,ctx);
+
+    cplr.EndImporting;
+  end;
+end;
+
+class procedure TLapeDwg.zcStyles2cplr(const ACommandContext:TZCADCommandContext;mode:TLapeScriptContextModes;ctx:TBaseScriptContext;cplr:TLapeCompiler);
+begin
+  if LSCMCompilerSetup in mode then begin
+    cplr.StartImporting;
+    cplr.addBaseDefine('zcStyles');
+
+    cplr.addGlobalMethod('function zcDwgGetLayersCount:int32;',@zcDwgGetLayersCount,ctx);
+    cplr.addGlobalMethod('function zcDwgGetLayer(ALayerIndex:int32):PzeLayer;overload;',@zcDwgGetLayer,ctx);
+    cplr.addGlobalMethod('function zcDWGGetLayer(ALayerName:string):PzeLayer;overload;',@zcDwgGetLayer2,ctx);
+    cplr.addGlobalMethod('function zcLayerName(ALayer:PzeLayer):string;',@zcLayerName,ctx);
+
+    cplr.EndImporting;
+  end;
+end;
+
+
+
+class procedure TLapeDwg.ctxSetup(const ACommandContext:TZCADCommandContext;mode:TLapeScriptContextModes;ctx:TBaseScriptContext;cplr:TLapeCompiler);
 begin
   if LSCMContextSetup in mode then begin
     if ctx is TCurrentDrawingContext then

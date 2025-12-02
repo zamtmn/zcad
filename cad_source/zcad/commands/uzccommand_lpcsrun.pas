@@ -52,7 +52,10 @@ initialization
     LM_Info,UnitsInitializeLMId);
   CommandScriptsManager:=STManager.CreateType('lpcs','Command script',
     TCurrentDrawingContext,LSCMRecreate,
-    [TLPCSBase.cplrSetup,TLPCSDrawing.cplrSetup,TLPCSDrawing.ctxSetup]);
+    [TLapeBase.zcBase2cplr,
+     TLapeDwg.ze2cplr,TLapeDwg.zcEnt2cplr,TLapeDwg.zcUndo2cplr,
+     TLapeDwg.zcInteractive2cplr,TLapeDwg.zcStyles2cplr,
+     TLapeDwg.ctxSetup]);
   if sysvar.PATH.Preload_Paths<>nil then
     CommandScriptsManager.ScanDirs(ExpandPath(sysvar.PATH.Preload_Paths^));
   CreateZCADCommand(@LPCSRun_com,'LPCSRun',0,0);

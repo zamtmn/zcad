@@ -161,10 +161,10 @@ end;
 initialization
   //extdrAdd(extdrReport)
   ReportScriptsManager:=STManager.CreateType('lpr','Script test',
-  TEntityExtentionContext,LSCMCreateOnce,[TLPCSDrawing.cplrSetup]);
+  TEntityExtentionContext,LSCMCreateOnce,[TLapeDwg.ze2cplr]);
   if sysvar.PATH.Preload_Paths<>nil then
     ReportScriptsManager.ScanDirs(sysvar.PATH.Preload_Paths^);
-  temp:=ReportScriptsManager.CreateExternalScriptData('test',TEntityExtentionContext,[TLPCSDrawing.cplrSetup]);
+  temp:=ReportScriptsManager.CreateExternalScriptData('test',TEntityExtentionContext,[TLapeDwg.ze2cplr]);
   //ReportScriptsManager.RunScript(temp);
   //ReportScriptsManager.RunScript('test');
   EntityExtenders.RegisterKey(uppercase(ReportExtenderName),TReportExtender);

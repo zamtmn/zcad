@@ -306,13 +306,15 @@ begin
     except
       on E: Exception do
       begin
-        ProgramLog.LogOutFormatStr('TScriptsManager.RunScript "%s"',[E.Message],LM_Error,LapeLMId,MO_SM or MO_SH);
+        ProgramLog.LogOutFormatStr('TScriptsManager.RunScript "%s"',[E.Message],LM_Error,LapeLMId,{MO_SM or} MO_SH);
         FreeAndNil(SD.LAPEData.FCompiler);
       end;
     end;
   finally
     if CtxCreateMode=LSCMRecreate then
-      FreeAndNil(SD.Ctx);
+      FreeAndNil(SD.Ctx)
+    else
+      SD.Ctx.CleanUp;
   end;
 end;
 

@@ -49,6 +49,8 @@ type
     constructor CreateContext;virtual;
     destructor Destroy;override;
 
+    procedure CleanUp;virtual;
+
     property LongProcessSupport:TZELongProcessSupport read getLPS;
   end;
   TMetaScriptContext=class of TBaseScriptContext;
@@ -61,8 +63,8 @@ type
   TCompilerDefAdder=procedure(const ACommandContext:TZCADCommandContext;mode:TLapeScriptContextModes;ctx:TBaseScriptContext;cplr:TLapeCompiler) of object;
   TCompilerDefAdders=array of TCompilerDefAdder;
 
-  TLPCSBase=class
-    class procedure cplrSetup(const ACommandContext:TZCADCommandContext;mode:TLapeScriptContextModes;ctx:TBaseScriptContext;cplr:TLapeCompiler);
+  TLapeBase=class
+    class procedure zcBase2cplr(const ACommandContext:TZCADCommandContext;mode:TLapeScriptContextModes;ctx:TBaseScriptContext;cplr:TLapeCompiler);
   end;
 
 implementation
@@ -82,8 +84,13 @@ end;
 
 destructor TBaseScriptContext.Destroy;
 begin
-  FreeAndNil(fLPS);
+  CleanUp;
   inherited;
+end;
+
+procedure TBaseScriptContext.CleanUp;
+begin
+  FreeAndNil(fLPS);
 end;
 
 procedure slp(const Params: PParamArray; const Result: Pointer); cdecl;
@@ -118,7 +125,7 @@ begin
   ctx.LongProcessSupport.EndLongProcess(PLPSHandle(Params^[1])^);
 end;
 
-class procedure TLPCSBase.cplrSetup(const ACommandContext:TZCADCommandContext;mode:TLapeScriptContextModes;ctx:TBaseScriptContext;cplr:TLapeCompiler);
+class procedure TLapeBase.zcBase2cplr(const ACommandContext:TZCADCommandContext;mode:TLapeScriptContextModes;ctx:TBaseScriptContext;cplr:TLapeCompiler);
 begin
   if LSCMCompilerSetup in mode then begin
     cplr.StartImporting;

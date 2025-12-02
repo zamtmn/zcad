@@ -39,6 +39,7 @@ uses
   uzcinterface,           // Interface utilities / Утилиты интерфейса
   uzcdrawings,            // Drawings manager / Менеджер чертежей
   uzestyleslayers,        // Layer management / Управление слоями
+  uzbtypes,
   varmandef;              // Variable manager definitions / Определения менеджера переменных
 
 type

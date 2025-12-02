@@ -23,7 +23,7 @@ interface
 
 uses
   uzegeometrytypes,uzbtypes,uzglviewareadata,uzclog,gzctnrVectorTypes,
-  uzcdrawing,
+  uzcdrawing,uzeentity,
   SysUtils;
 
 const
@@ -48,8 +48,15 @@ const
   EmptyCommandOperands='';
 
 type
+
+  TEntitySetupStage=(ESSSuppressCommandParams,ESSSetConstructEntity,
+                     ESSSetEntity,ESSCommandEnd);
+
+  TEntitySetupProc=function(const AStage:TEntitySetupStage;const APEnt:PGDBObjEntity):boolean;
+
   TInteractiveProcObjBuild=procedure(const PInteractiveData:Pointer;
-    Point:TzePoint3d;Click:boolean);
+                                     Point:TzePoint3d;Click:boolean;
+                                     ESP:TEntitySetupProc=nil);
   TGetInputPossible=(IPEmpty,//возможность пустого ввода
     IPShortCuts//разрешение перехвата шорткатов
     );
@@ -89,6 +96,7 @@ type
     DrawFromBasePoint:boolean;(*hidden_in_objinsp*)
     PInteractiveData:Pointer;
     PInteractiveProc:{-}TInteractiveProcObjBuild{/Pointer/};
+    PInteractiveESP:{-}TEntitySetupProc{/Pointer/};
     Input:ansistring;
     Id:integer;
     {-}PossibleResult:TGetPossibleResult;{//}

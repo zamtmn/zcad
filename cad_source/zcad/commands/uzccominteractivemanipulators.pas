@@ -39,6 +39,7 @@ uses
 
   SysUtils,Math,
   URecordDescriptor,TypeDescriptors,
+  uzccommandsabstract,
   Forms,
   uzeutils,
   uzegeometrytypes,
@@ -113,52 +114,26 @@ type
     plwentity:PGDBObjLWPolyline;
   end;
 
-procedure InteractiveLineEndManipulator(
-  const PInteractiveData:PGDBObjLine {pointer to the line entity};
-  Point:
-  TzePoint3d  {new end coord};
-  Click:
-  boolean {true if lmb presseed});
+procedure InteractiveLineEndManipulator(const PInteractiveData:PGDBObjLine;
+  Point:TzePoint3d;Click:boolean;ESP:TEntitySetupProc=nil);
 procedure InteractiveADimManipulator(const PInteractiveData:PGDBObjAlignedDimension;
-  Point:TzePoint3d;
-  Click:boolean);
+  Point:TzePoint3d;Click:boolean;ESP:TEntitySetupProc=nil);
 procedure InteractiveRDimManipulator(const PInteractiveData:PGDBObjRotatedDimension;
-  Point:TzePoint3d;
-  Click:boolean);
+  Point:TzePoint3d;Click:boolean;ESP:TEntitySetupProc=nil);
 procedure InteractiveDDimManipulator(const PInteractiveData:pgdbObjDiametricDimension;
-  Point:TzePoint3d;
-  Click:boolean);
+  Point:TzePoint3d;Click:boolean;ESP:TEntitySetupProc=nil);
 procedure InteractiveArcManipulator(const PInteractiveData:PT3PointPentity;
-  Point:TzePoint3d;
-  Click:boolean);
-procedure InteractiveSmartCircleManipulator(
-  const PInteractiveData:PT3PointCircleModePentity;
-  Point:TzePoint3d;
-  Click:boolean);
-procedure InteractiveLWRectangleManipulator(
-  const PInteractiveData:PGDBObjLWPolyline {pointer to the line entity};
-  Point:
-  TzePoint3d  {new end coord};
-  Click:
-  boolean {true if lmb presseed});
-procedure InteractiveRectangleManipulator(
-  const PInteractiveData:PGDBObjPolyline {pointer to the line entity};
-  Point:
-  TzePoint3d  {new end coord};
-  Click:
-  boolean {true if lmb presseed});
-procedure InteractivePolygonManipulator(
-  const PInteractiveData:TPointPolygonDrawModePentity {pointer to the line entity};
-  Point:
-  TzePoint3d  {new end coord};
-  Click:
-  boolean {true if lmb presseed});
-procedure InteractiveConstructRootManipulator(
-  const PInteractiveData:Pointer {must be nil, no additional data needed};
-  Point:
-  TzePoint3d  {new end coord};
-  Click:
-  boolean {true if lmb presseed});
+  Point:TzePoint3d;Click:boolean;ESP:TEntitySetupProc=nil);
+procedure InteractiveSmartCircleManipulator(const PInteractiveData:PT3PointCircleModePentity;
+  Point:TzePoint3d;Click:boolean;ESP:TEntitySetupProc=nil);
+procedure InteractiveLWRectangleManipulator(const PInteractiveData:PGDBObjLWPolyline;
+  Point:TzePoint3d;Click:boolean;ESP:TEntitySetupProc=nil);
+procedure InteractiveRectangleManipulator(const PInteractiveData:PGDBObjPolyline;
+  Point:TzePoint3d;Click:boolean;ESP:TEntitySetupProc=nil);
+procedure InteractivePolygonManipulator(const PInteractiveData:TPointPolygonDrawModePentity;
+  Point:TzePoint3d;Click:boolean;ESP:TEntitySetupProc=nil);
+procedure InteractiveConstructRootManipulator(const PInteractiveData:Pointer;
+  Point:TzePoint3d;Click:boolean;ESP:TEntitySetupProc=nil);
 
 implementation
 
@@ -168,12 +143,8 @@ implementation
   later to be moved to a separate unit }
 
 {Процедура интерактивного "перемещения" конструкторской области}
-procedure InteractiveConstructRootManipulator(
-  const PInteractiveData:Pointer {must be nil, no additional data needed};
-  Point:
-  TzePoint3d  {new end coord};
-  Click:
-  boolean {true if lmb presseed});
+procedure InteractiveConstructRootManipulator(const PInteractiveData:Pointer;
+  Point:TzePoint3d;Click:boolean;ESP:TEntitySetupProc=nil);
 var
   ir:itrec;
   p:PGDBObjEntity;
@@ -199,12 +170,8 @@ end;
 
 {Procedure interactive changes end of the line}
 {Процедура интерактивного изменения конца линии}
-procedure InteractiveLineEndManipulator(
-  const PInteractiveData:PGDBObjLine {pointer to the line entity};
-  Point:
-  TzePoint3d  {new end coord};
-  Click:
-  boolean {true if lmb presseed});
+procedure InteractiveLineEndManipulator(const PInteractiveData:PGDBObjLine;
+  Point:TzePoint3d;Click:boolean;ESP:TEntitySetupProc=nil);
 var
   ln:PGDBObjLine absolute PInteractiveData;
   dc:TDrawContext;
@@ -227,8 +194,7 @@ end;
 {Procedure interactive changes third point of aligned dimensions}
 {Процедура интерактивного изменения третьей точки выровненного размера}
 procedure InteractiveADimManipulator(const PInteractiveData:PGDBObjAlignedDimension;
-  Point:TzePoint3d;
-  Click:boolean);
+  Point:TzePoint3d;Click:boolean;ESP:TEntitySetupProc=nil);
 var
   ad:PGDBObjAlignedDimension absolute PInteractiveData;
   dc:TDrawContext;
@@ -287,10 +253,9 @@ begin
   end else
     Result:=0;
 end;
-{Процедура}
+
 procedure InteractiveRDimManipulator(const PInteractiveData:PGDBObjRotatedDimension;
-  Point:TzePoint3d;
-  Click:boolean);
+  Point:TzePoint3d;Click:boolean;ESP:TEntitySetupProc=nil);
 var
   rd:PGDBObjRotatedDimension absolute PInteractiveData;
   dc:TDrawContext;
@@ -319,8 +284,7 @@ begin
 end;
 
 procedure InteractiveDDimManipulator(const PInteractiveData:pgdbObjDiametricDimension;
-  Point:TzePoint3d;
-  Click:boolean);
+  Point:TzePoint3d;Click:boolean;ESP:TEntitySetupProc=nil);
 var
   dd:pgdbObjDiametricDimension absolute PInteractiveData;
   dc:TDrawContext;
@@ -336,8 +300,7 @@ begin
 end;
 
 procedure InteractiveArcManipulator(const PInteractiveData:PT3PointPentity;
-  Point:TzePoint3d;
-  Click:boolean);
+  Point:TzePoint3d;Click:boolean;ESP:TEntitySetupProc=nil);
 var
   PointData:TArcrtModify;
   ad:TArcData;
@@ -369,9 +332,8 @@ begin
 end;
 
 procedure InteractiveSmartCircleManipulator(
-  const PInteractiveData:PT3PointCircleModePentity;
-  Point:TzePoint3d;
-  Click:boolean);
+  const PInteractiveData:PT3PointCircleModePentity;Point:TzePoint3d;
+  Click:boolean;ESP:TEntitySetupProc=nil);
 var
   PointData:tarcrtmodify;
   ad:TArcData;
@@ -439,12 +401,8 @@ begin
     drawings.GetCurrentDWG^,dc);
 end;
 
-procedure InteractiveLWRectangleManipulator(
-  const PInteractiveData:PGDBObjLWPolyline {pointer to the line entity};
-  Point:
-  TzePoint3d  {new end coord};
-  Click:
-  boolean {true if lmb presseed});
+procedure InteractiveLWRectangleManipulator(const PInteractiveData:PGDBObjLWPolyline;
+  Point:TzePoint3d;Click:boolean;ESP:TEntitySetupProc=nil);
 var
   polyLWObj:PGDBObjLWPolyline absolute PInteractiveData;
   stPoint:TzePoint2d;
@@ -468,12 +426,8 @@ begin
 end;
 
 
-procedure InteractiveRectangleManipulator(
-  const PInteractiveData:PGDBObjPolyline {pointer to the line entity};
-  Point:
-  TzePoint3d  {new end coord};
-  Click:
-  boolean {true if lmb presseed});
+procedure InteractiveRectangleManipulator(const PInteractiveData:PGDBObjPolyline;
+  Point:TzePoint3d;Click:boolean;ESP:TEntitySetupProc=nil);
 var
   polyObj:PGDBObjPolyline absolute PInteractiveData;
   stPoint:TzePoint3d;
@@ -492,15 +446,15 @@ begin
   PzePoint2d(polyObj^.VertexArrayInOCS.getDataMutable(3))^.x:=stPoint.x;
   PzePoint2d(polyObj^.VertexArrayInOCS.getDataMutable(3))^.y:=Point.y;
 
+  if ESP<>nil then
+    ESP(ESSSetConstructEntity,polyObj);
+
   polyObj^.YouChanged(drawings.GetCurrentDWG^);
 end;
 
 procedure InteractivePolygonManipulator(
-  const PInteractiveData:TPointPolygonDrawModePentity {pointer to the line entity};
-  Point:
-  TzePoint3d  {new end coord};
-  Click:
-  boolean {true if lmb presseed});
+  const PInteractiveData:TPointPolygonDrawModePentity;Point:TzePoint3d;
+  Click:boolean;ESP:TEntitySetupProc=nil);
 var
   obj:TPointPolygonDrawModePentity absolute PInteractiveData;
   stPoint:TzePoint3d;

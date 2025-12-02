@@ -196,10 +196,9 @@ end;
 
 // Interactive manipulator for space drawing with hatch visualization
 // Интерактивный манипулятор для черчения пространства с визуализацией штриховки
-procedure InteractiveSpaceManipulator(
-  const PInteractiveData: Pointer;
-  Point: TzePoint3d;
-  Click: boolean);
+procedure InteractiveSpaceManipulator(const PInteractiveData:Pointer;
+                                      Point: TzePoint3d;Click:boolean;
+                                      ESP:TEntitySetupProc=nil);
 var
   spaceData: PSpaceDrawData absolute PInteractiveData;
   pline: PGDBObjPolyline;

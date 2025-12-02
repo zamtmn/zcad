@@ -39,11 +39,6 @@ const
   nullmethod:{tmethod}TButtonMethod=nil;
 
 type
-
-  TEntitySetupStage=(ESSSuppressCommandParams,ESSSetEntity,ESSCommandEnd);
-
-  TEntitySetupProc=function(const AStage:TEntitySetupStage;const APEnt:PGDBObjEntity):boolean;
-
   ICommandLinePrompt=interface
     procedure SetPrompt(APrompt:string);overload;
     procedure SetPrompt(APrompt:TParserCommandLinePrompt.TGeneralParsedText);overload;
@@ -140,7 +135,7 @@ type
     function GetEntity(prompt:string;out p:Pointer):TzcInteractiveResult;
     function Get3DPointInteractive(prompt:string;
       out p:TzePoint3d;const InteractiveProc:TInteractiveProcObjBuild;
-      const PInteractiveData:Pointer):TzcInteractiveResult;
+      const PInteractiveData:Pointer;ESP:TEntitySetupProc=nil):TzcInteractiveResult;
     function Get3DAndMoveConstructRootTo(prompt:string;
       out p:TzePoint3d):TzcInteractiveResult;
     function MoveConstructRootTo(prompt:string):TzcInteractiveResult;
@@ -393,7 +388,7 @@ end;
 
 function GDBcommandmanager.Get3DPointInteractive(prompt:string;
   out p:TzePoint3d;const InteractiveProc:TInteractiveProcObjBuild;
-  const PInteractiveData:Pointer):TzcInteractiveResult;
+  const PInteractiveData:Pointer;ESP:TEntitySetupProc):TzcInteractiveResult;
 var
   savemode:byte;//variable to store the current mode of the editor
   //переменная для сохранения текущего режима редактора
@@ -412,6 +407,7 @@ begin
   CurrCmd.pcommandrunning^.IData.GetPointMode:=TGPMWait;
   CurrCmd.pcommandrunning^.IData.PInteractiveData:=PInteractiveData;
   CurrCmd.pcommandrunning^.IData.PInteractiveProc:=InteractiveProc;
+  CurrCmd.pcommandrunning^.IData.PInteractiveESP:=ESP;
 
   while (CurrCmd.pcommandrunning^.IData.GetPointMode=TGPMWait)and
     (not Application.Terminated) do begin
@@ -478,14 +474,14 @@ end;
 function GDBcommandmanager.Get3DAndMoveConstructRootTo(prompt:string;
   out p:TzePoint3d):TzcInteractiveResult;
 begin
-  Result:=Get3DPointInteractive(prompt,p,@InteractiveConstructRootManipulator,nil);
+  Result:=Get3DPointInteractive(prompt,p,@InteractiveConstructRootManipulator,nil,nil);
 end;
 
 function GDBcommandmanager.MoveConstructRootTo(prompt:string):TzcInteractiveResult;
 var
   p:TzePoint3d;
 begin
-  Result:=Get3DPointInteractive(prompt,p,@InteractiveConstructRootManipulator,nil);
+  Result:=Get3DPointInteractive(prompt,p,@InteractiveConstructRootManipulator,nil,nil);
 end;
 
 function GDBcommandmanager.GetLastId:TTag;
@@ -550,6 +546,7 @@ begin
   CurrCmd.pcommandrunning^.IData.GetPointMode:=TGPMWaitInput;
   CurrCmd.pcommandrunning^.IData.PInteractiveData:=nil;
   CurrCmd.pcommandrunning^.IData.PInteractiveProc:=nil;
+  CurrCmd.pcommandrunning^.IData.PInteractiveESP:=nil;
   while (CurrCmd.pcommandrunning^.IData.GetPointMode=TGPMWaitInput)and
     (not Application.Terminated) do begin
     Application.HandleMessage;
@@ -582,7 +579,7 @@ end;
 
 function GDBcommandmanager.Get3DPoint(prompt:string;out p:TzePoint3d):TzcInteractiveResult;
 begin
-  Result:=Get3DPointInteractive(prompt,p,nil,nil);
+  Result:=Get3DPointInteractive(prompt,p,nil,nil,nil);
 end;
 
 function GDBcommandmanager.Get3DPointWithLineFromBase(prompt:string;
@@ -590,7 +587,7 @@ function GDBcommandmanager.Get3DPointWithLineFromBase(prompt:string;
 begin
   CurrCmd.pcommandrunning^.IData.BasePoint:=base;
   CurrCmd.pcommandrunning^.IData.DrawFromBasePoint:=True;
-  Result:=Get3DPointInteractive(prompt,p,nil,nil);
+  Result:=Get3DPointInteractive(prompt,p,nil,nil,nil);
   CurrCmd.pcommandrunning^.IData.DrawFromBasePoint:=False;
 end;
 
@@ -605,6 +602,7 @@ begin
   CurrCmd.pcommandrunning^.IData.GetPointMode:=TGPMWaitEnt;
   CurrCmd.pcommandrunning^.IData.PInteractiveData:=nil;
   CurrCmd.pcommandrunning^.IData.PInteractiveProc:=nil;
+  CurrCmd.pcommandrunning^.IData.PInteractiveESP:=nil;
   while (CurrCmd.pcommandrunning^.IData.GetPointMode=TGPMWaitEnt)and
         (not Application.Terminated) do begin
     Application.HandleMessage;
@@ -790,7 +788,8 @@ begin
           if assigned(
             CurrCmd.pcommandrunning^.IData.PInteractiveProc) then
             CurrCmd.pcommandrunning^.
-              IData.PInteractiveProc(CurrCmd.pcommandrunning^.IData.PInteractiveData,p3d,True);
+              IData.PInteractiveProc(CurrCmd.pcommandrunning^.IData.PInteractiveData,p3d,True,
+                                     CurrCmd.pcommandrunning^.IData.PInteractiveESP);
           CurrCmd.pcommandrunning^.
             IData.GetPointMode:=TGPMpoint;
           CurrCmd.pcommandrunning^.
@@ -801,7 +800,8 @@ begin
           if assigned(
             CurrCmd.pcommandrunning^.IData.PInteractiveProc) then
             CurrCmd.pcommandrunning^.
-              IData.PInteractiveProc(CurrCmd.pcommandrunning^.IData.PInteractiveData,p3d,False);
+              IData.PInteractiveProc(CurrCmd.pcommandrunning^.IData.PInteractiveData,p3d,False,
+                                     CurrCmd.pcommandrunning^.IData.PInteractiveESP);
         end;
       end;
   //clearotrack;

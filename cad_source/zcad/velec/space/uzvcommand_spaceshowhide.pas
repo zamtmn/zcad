@@ -34,6 +34,7 @@ uses
   uzcdrawings,         // менеджер чертежей
   uzestyleslayers,     // стили и таблица слоёв
   uzeconsts,           // константы (в т.ч. для LineWeight)
+  uzbtypes,
   uzvcommand_spaceutils; // общие утилиты для команд space
 
 // Основная команда

@@ -277,12 +277,14 @@ uses
   {$IFDEF WINDOWS}//uzvmodeltoxlsx,
   uzvmodeltoxlsxfps, uzvdevtoxlsx, uzvxlsxtocad,uzvelectricalexcelcom,{$ENDIF}  //запуск экспорта информации из veb модели в xlsx на OLE
 
-  uzvcommand_space, //команда addZona для работы с зонами
-  uzvcommand_showhidespace, //команда показ спрятать
+  //Работа с пространствами/зонами
+  uzvcommand_spaceadd, //команда addZona для работы с зонами
+  uzvcommand_spaceshowhide, //команда показ спрятать
+  //****//
+
   uzvcommand_recoverytable, //команда восстановления таблиц с чертежа
   uzvlightexporter_commandexport,
   uzvdialuxlumimporter_main,
-  uzvcommand_spaceadd,
   uzvconnect_main,
   //uzvelectricalexcelcom,
   //**//

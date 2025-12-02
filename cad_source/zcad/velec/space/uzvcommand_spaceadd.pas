@@ -31,6 +31,7 @@ uses
   uzcstrconsts,
   uzccommandsmanager,
   uzeentity,
+  uzcdrawings,
   uzcEnitiesVariablesExtender,
   uzcExtdrIncludingVolume,
   uzccommand_rectangle,
@@ -154,6 +155,13 @@ begin
         gOperandsStruct.listParam.Clear;
       gOperandsStruct.indexColor := 256;  // ByLayer
       gOperandsStruct.namelayer := '';
+
+
+      // Выделяем созданную полилинию для последующего редактирования в инспекторе
+      // Select created polyline for subsequent editing in inspector
+      //if APEnt <> nil then
+      //   APEnt^.Select(drawings.GetCurrentDWG^.wa.param.SelDesc.Selectedobjcount, drawings.GetCurrentDWG^.Selector);
+
       result := False;
     end;
   end;
@@ -196,7 +204,7 @@ initialization
   gOperandsStruct.indexColor := 256;  // ByLayer
   gOperandsStruct.namelayer := '';
 
-  CreateZCADCommand(@SpaceAdd_com,'spaceadd',CADWG,0);
+  CreateZCADCommand(@SpaceAdd_com,'spaceadd',CADWG,0)^.CEndActionAttr:=[CEGUIRePrepare];
 
 finalization
   ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],

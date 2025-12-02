@@ -46,7 +46,7 @@ type
 
   {** Список параметров на основе обобщённого вектора
       Использует TVector из библиотеки gvector (FCL-STL) для хранения параметров}
-  TParamInfoList = specialize TVector<TParamInfo>;
+  TParamInfoList = TVector<TParamInfo>;
 
   {** Структура для хранения всех операндов команды
       Содержит индекс цвета, имя слоя и список параметров}

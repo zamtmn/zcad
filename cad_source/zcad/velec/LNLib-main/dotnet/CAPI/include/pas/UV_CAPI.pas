@@ -22,18 +22,18 @@
   с двумерными параметрическими координатами, используемыми при работе
   с NURBS-поверхностями.
 
+  Функции загружаются динамически через модуль LNLibLoader.
+  Перед использованием функций необходимо проверить IsLNLibLoaded.
+
   Оригинальный C-заголовок: UV_CAPI.h
   Дата создания: 2025-12-02
-  Зависимости: LNLibDefinitions
+  Зависимости: нет
 }
 unit UV_CAPI;
 
 {$mode delphi}{$H+}
 
 interface
-
-uses
-  LNLibDefinitions;
 
 type
   {**
@@ -51,69 +51,12 @@ type
   end;
   PUV = ^TUV;
 
-{** Создание UV-координаты из двух значений **}
-function uv_create(u, v: Double): TUV; cdecl; external LNLIB_DLL;
-
-{** Получение компоненты U из UV-координаты **}
-function uv_get_u(uv: TUV): Double; cdecl; external LNLIB_DLL;
-
-{** Получение компоненты V из UV-координаты **}
-function uv_get_v(uv: TUV): Double; cdecl; external LNLIB_DLL;
-
-{** Сложение двух UV-координат (покомпонентное) **}
-function uv_add(a, b: TUV): TUV; cdecl; external LNLIB_DLL;
-
-{** Вычитание UV-координат (a - b) **}
-function uv_subtract(a, b: TUV): TUV; cdecl; external LNLIB_DLL;
-
-{** Инверсия UV-координаты (изменение знака компонент) **}
-function uv_negative(uv: TUV): TUV; cdecl; external LNLIB_DLL;
-
-{** Нормализация UV-вектора (приведение к единичной длине) **}
-function uv_normalize(uv: TUV): TUV; cdecl; external LNLIB_DLL;
-
-{** Масштабирование UV-координаты на заданный множитель **}
-function uv_scale(uv: TUV; factor: Double): TUV; cdecl; external LNLIB_DLL;
-
-{** Деление UV-координаты на делитель **}
-function uv_divide(uv: TUV; divisor: Double): TUV; cdecl; external LNLIB_DLL;
-
-{** Вычисление длины UV-вектора (евклидова норма) **}
-function uv_length(uv: TUV): Double; cdecl; external LNLIB_DLL;
-
-{** Вычисление квадрата длины UV-вектора (без извлечения корня) **}
-function uv_sqr_length(uv: TUV): Double; cdecl; external LNLIB_DLL;
-
-{** Вычисление расстояния между двумя UV-координатами **}
-function uv_distance(a, b: TUV): Double; cdecl; external LNLIB_DLL;
-
-{**
-  Проверка, является ли UV-вектор нулевым с заданной точностью.
-  @return 1 если вектор нулевой, 0 в противном случае
-}
-function uv_is_zero(uv: TUV; epsilon: Double): Integer; cdecl; external LNLIB_DLL;
-
-{**
-  Проверка, является ли UV-вектор единичным с заданной точностью.
-  @return 1 если вектор единичный, 0 в противном случае
-}
-function uv_is_unit(uv: TUV; epsilon: Double): Integer; cdecl; external LNLIB_DLL;
-
-{**
-  Проверка приблизительного равенства двух UV-координат.
-  @return 1 если координаты равны с точностью epsilon, 0 в противном случае
-}
-function uv_is_almost_equal(a, b: TUV; epsilon: Double): Integer;
-  cdecl; external LNLIB_DLL;
-
-{** Скалярное произведение двух UV-векторов **}
-function uv_dot(a, b: TUV): Double; cdecl; external LNLIB_DLL;
-
-{**
-  Псевдовекторное произведение двух UV-векторов (2D аналог).
-  Возвращает z-компоненту векторного произведения при расширении до 3D.
-}
-function uv_cross(a, b: TUV): Double; cdecl; external LNLIB_DLL;
+{ Функции загружаются динамически через LNLibLoader }
+{ Используйте переменные-указатели из LNLibLoader:
+  uv_create, uv_get_u, uv_get_v, uv_add, uv_subtract,
+  uv_negative, uv_normalize, uv_scale, uv_divide, uv_length,
+  uv_sqr_length, uv_distance, uv_is_zero, uv_is_unit,
+  uv_is_almost_equal, uv_dot, uv_cross }
 
 implementation
 

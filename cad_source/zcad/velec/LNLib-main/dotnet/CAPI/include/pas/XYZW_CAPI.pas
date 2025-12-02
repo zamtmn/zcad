@@ -22,9 +22,12 @@
   с четырёхмерными однородными координатами, используемыми для представления
   взвешенных контрольных точек NURBS-кривых и поверхностей.
 
+  Функции загружаются динамически через модуль LNLibLoader.
+  Перед использованием функций необходимо проверить IsLNLibLoaded.
+
   Оригинальный C-заголовок: XYZW_CAPI.h
   Дата создания: 2025-12-02
-  Зависимости: LNLibDefinitions, XYZ_CAPI
+  Зависимости: XYZ_CAPI
 }
 unit XYZW_CAPI;
 
@@ -33,7 +36,6 @@ unit XYZW_CAPI;
 interface
 
 uses
-  LNLibDefinitions,
   XYZ_CAPI;
 
 type
@@ -57,48 +59,11 @@ type
   end;
   PXYZW = ^TXYZW;
 
-{** Создание XYZW-координаты из четырёх значений **}
-function xyzw_create(wx, wy, wz, w: Double): TXYZW; cdecl; external LNLIB_DLL;
-
-{** Создание XYZW-координаты из XYZ-координаты и веса **}
-function xyzw_create_from_xyz(xyz: TXYZ; w: Double): TXYZW;
-  cdecl; external LNLIB_DLL;
-
-{**
-  Преобразование XYZW в XYZ координаты.
-  @param v Однородная координата
-  @param divideWeight 1 - делить на вес (получить декартовы координаты),
-                      0 - не делить (получить предумноженные координаты)
-  @return Трёхмерная координата
-}
-function xyzw_to_xyz(v: TXYZW; divideWeight: Integer): TXYZ;
-  cdecl; external LNLIB_DLL;
-
-{** Сложение двух XYZW-координат (покомпонентное) **}
-function xyzw_add(a, b: TXYZW): TXYZW; cdecl; external LNLIB_DLL;
-
-{** Умножение XYZW-координаты на скаляр **}
-function xyzw_multiply(a: TXYZW; scalar: Double): TXYZW;
-  cdecl; external LNLIB_DLL;
-
-{** Деление XYZW-координаты на скаляр **}
-function xyzw_divide(a: TXYZW; scalar: Double): TXYZW;
-  cdecl; external LNLIB_DLL;
-
-{** Вычисление расстояния между двумя XYZW-координатами **}
-function xyzw_distance(a, b: TXYZW): Double; cdecl; external LNLIB_DLL;
-
-{** Получение компоненты wx **}
-function xyzw_get_wx(v: TXYZW): Double; cdecl; external LNLIB_DLL;
-
-{** Получение компоненты wy **}
-function xyzw_get_wy(v: TXYZW): Double; cdecl; external LNLIB_DLL;
-
-{** Получение компоненты wz **}
-function xyzw_get_wz(v: TXYZW): Double; cdecl; external LNLIB_DLL;
-
-{** Получение веса w **}
-function xyzw_get_w(v: TXYZW): Double; cdecl; external LNLIB_DLL;
+{ Функции загружаются динамически через LNLibLoader }
+{ Используйте переменные-указатели из LNLibLoader:
+  xyzw_create, xyzw_create_from_xyz, xyzw_to_xyz, xyzw_add,
+  xyzw_multiply, xyzw_divide, xyzw_distance, xyzw_get_wx,
+  xyzw_get_wy, xyzw_get_wz, xyzw_get_w }
 
 implementation
 

@@ -65,6 +65,25 @@ procedure ParseOperandsToStruct(
   const operands: TCommandOperands;
   out outStruct: TOperandsStruct);
 
+{** Функция удаления внешних кавычек из строки
+    Удаляет одинарные или двойные кавычки, обрамляющие строку.
+    @param(s - исходная строка)
+    @return(строка без внешних кавычек)}
+function RemoveQuotes(const s: string): string;
+
+{** Функция нормализации имени слоя
+    Удаляет пробелы, скобки и кавычки из имени слоя.
+    Используется для обработки имен слоев из операндов команд.
+    @param(s - исходное имя слоя)
+    @return(нормализованное имя слоя)}
+function NormalizeLayerName(const s: string): string;
+
+{** Функция поиска слоя по имени
+    Ищет слой в текущем чертеже по имени БЕЗ создания нового.
+    @param(layerName - имя слоя)
+    @return(указатель на свойства слоя или nil если не найден)}
+function FindLayerByName(const layerName: string): PGDBLayerProp;
+
 {** Функция создания или получения слоя по имени
     Создает слой если он не существует, используя слой из библиотеки как шаблон.
     @param(layerName - имя слоя)
@@ -75,6 +94,64 @@ function GetOrCreateLayer(
   colorIndex: Integer): PGDBLayerProp;
 
 implementation
+
+{** Функция удаления внешних кавычек из строки}
+function RemoveQuotes(const s: string): string;
+begin
+  Result := s;
+
+  // Удаляем одинарные кавычки
+  // Remove single quotes
+  if (Length(Result) >= 2) and
+     (Result[1] = '''') and
+     (Result[Length(Result)] = '''') then
+    Result := Copy(Result, 2, Length(Result) - 2);
+
+  // Удаляем двойные кавычки
+  // Remove double quotes
+  if (Length(Result) >= 2) and
+     (Result[1] = '"') and
+     (Result[Length(Result)] = '"') then
+    Result := Copy(Result, 2, Length(Result) - 2);
+end;
+
+{** Функция нормализации имени слоя}
+function NormalizeLayerName(const s: string): string;
+var
+  name: string;
+begin
+  // Обрезаем пробелы
+  // Trim spaces
+  name := Trim(s);
+
+  // Удаляем внешние скобки вида (LayerName)
+  // Remove outer parentheses like (LayerName)
+  if (Length(name) >= 2) and
+     (name[1] = '(') and
+     (name[Length(name)] = ')') then
+    name := Copy(name, 2, Length(name) - 2);
+
+  name := Trim(name);
+
+  // Удаляем кавычки используя общую функцию
+  // Remove quotes using common function
+  name := RemoveQuotes(name);
+
+  Result := Trim(name);
+end;
+
+{** Функция поиска слоя по имени}
+function FindLayerByName(const layerName: string): PGDBLayerProp;
+begin
+  Result := nil;
+
+  if layerName = '' then
+    exit;
+
+  // Ищем слой в текущем чертеже
+  // Search for layer in current drawing
+  Result := drawings.GetCurrentDWG^.LayerTable.getAddres(layerName);
+end;
 
 {** Процедура разбора операндов и заполнения структуры TOperandsStruct}
 procedure ParseOperandsToStruct(
@@ -125,13 +202,7 @@ begin
     // Извлекаем имя слоя (второй параметр)
     // Extract layer name (second parameter)
     if params.Count >= 2 then begin
-      outStruct.namelayer := Trim(params[1]);
-      // Удаляем кавычки если есть
-      // Remove quotes if present
-      if (Length(outStruct.namelayer) >= 2) and
-         (outStruct.namelayer[1] = '''') and
-         (outStruct.namelayer[Length(outStruct.namelayer)] = '''') then
-        outStruct.namelayer := Copy(outStruct.namelayer, 2, Length(outStruct.namelayer) - 2);
+      outStruct.namelayer := RemoveQuotes(Trim(params[1]));
     end;
 
     // Обрабатываем переменные в триплетах начиная с индекса 2
@@ -140,13 +211,8 @@ begin
              // Start after color and layer parameters
     while i + 2 < params.Count do begin
       varname := Trim(params[i]);
-      username := Trim(params[i + 1]);
+      username := RemoveQuotes(Trim(params[i + 1]));
       typename := Trim(params[i + 2]);
-
-      // Удаляем кавычки если есть
-      // Remove quotes if present
-      if (Length(username) >= 2) and (username[1] = '''') and (username[Length(username)] = '''') then
-        username := Copy(username, 2, Length(username) - 2);
 
       // Заполняем структуру параметра
       // Fill parameter structure

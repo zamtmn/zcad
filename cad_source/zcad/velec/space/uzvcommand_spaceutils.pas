@@ -194,7 +194,7 @@ begin
     Result := drawings.GetCurrentDWG^.LayerTable.addlayer(
       layerName,           // name / имя
       colorIndex,          // color / цвет
-      -1,                  // line weight / толщина линии
+      200,                  // line weight / толщина линии
       True,                // on / включен
       False,               // lock / заблокирован
       True,                // print / печатать

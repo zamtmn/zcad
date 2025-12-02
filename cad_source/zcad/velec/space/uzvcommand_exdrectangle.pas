@@ -37,6 +37,8 @@ uses
   uzcinterface,           // Interface utilities / Утилиты интерфейса
   uzbtypes,
   varmandef,              // Variable manager definitions / Определения менеджера переменных
+  uzestyleslayers,
+  uzeconsts,
   uzvcommand_spaceutils;  // Space utilities with shared structures / Утилиты для команд пространств
 
 implementation
@@ -137,6 +139,7 @@ begin
         // Устанавливаем цвет примитива из структуры
         // Set entity color from structure
         APEnt^.vp.Color := gOperandsStruct.indexColor;
+        APEnt^.vp.LineWeight := LnWtByLayer;
 
         result := true;
       end else

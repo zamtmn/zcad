@@ -282,7 +282,7 @@ uses
   uzvcommand_recoverytable, //команда восстановления таблиц с чертежа
   uzvlightexporter_commandexport,
   uzvdialuxlumimporter_main,
-  uzvcommand_exdRectangle,
+  uzvcommand_spaceadd,
   uzvconnect_main,
   //uzvelectricalexcelcom,
   //**//

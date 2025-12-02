@@ -17,8 +17,8 @@
 }
 {$mode delphi}
 
-{**Модуль реализации команды exdRectangle для черчения прямоугольника с расширениями}
-unit uzvcommand_exdRectangle;
+{**Модуль реализации команды spaceadd для добавления пространств с расширениями}
+unit uzvcommand_spaceadd;
 
 {$INCLUDE zengineconfig.inc}
 
@@ -159,18 +159,18 @@ begin
   end;
 end;
 
-{**Команда черчения прямоугольника с расширениями
+{**Команда добавления пространства с расширениями
    Разбирает операнды в структуру и вызывает интерактивное черчение.
    @param(Context - контекст команды ZCAD)
    @param(operands - операнды команды)
    @return(результат выполнения команды)}
-function ExdRectangle_com(
+function SpaceAdd_com(
   const Context: TZCADCommandContext;
   operands: TCommandOperands): TCommandResult;
 begin
   // Вывод сообщения о запуске команды
   // Output message about command launch
-  zcUI.TextMessage('запущена команда exdRectangle', TMWOHistoryOut);
+  zcUI.TextMessage('запущена команда spaceadd', TMWOHistoryOut);
 
   // Разбираем операнды и заполняем структуру
   // Parse operands and fill structure
@@ -196,7 +196,7 @@ initialization
   gOperandsStruct.indexColor := 256;  // ByLayer
   gOperandsStruct.namelayer := '';
 
-  CreateZCADCommand(@ExdRectangle_com,'exdRectangle',CADWG,0);
+  CreateZCADCommand(@SpaceAdd_com,'spaceadd',CADWG,0);
 
 finalization
   ProgramLog.LogOutFormatStr('Unit "%s" finalization',[{$INCLUDE %FILE%}],

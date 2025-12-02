@@ -17,9 +17,9 @@
 }
 {$mode objfpc}{$H+}
 
-{**Команда layerWeightBigSmall(<LayerName>)
+{**Команда spaceshowhide(<LayerName>)
    Переключает вес указанного слоя между "большой" и "маленький".}
-unit uzvcommand_layerWeightBigSmall;
+unit uzvcommand_spaceshowhide;
 
 {$INCLUDE zengineconfig.inc}
 
@@ -37,7 +37,7 @@ uses
   uzvcommand_spaceutils; // общие утилиты для команд space
 
 // Основная команда
-function layerWeightBigSmall_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
+function SpaceShowHide_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 
 implementation
 
@@ -50,12 +50,12 @@ const
   CONST_LAYER_WEIGHT_BIG   = 200;
   CONST_LAYER_WEIGHT_SMALL = 0;
 
-{** Основная функция команды layerWeightBigSmall
+{** Основная функция команды spaceshowhide
     Переключает вес указанного слоя между большим и малым значениями.
     @param(Context - контекст выполнения команды)
     @param(operands - операнды команды, содержащие имя слоя)
     @return(результат выполнения команды)}
-function layerWeightBigSmall_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
+function SpaceShowHide_com(const Context:TZCADCommandContext;operands:TCommandOperands):TCommandResult;
 var
   layerName: string;
   pLayer: PGDBLayerProp;
@@ -69,7 +69,7 @@ begin
   // Check that layer name is specified
   if layerName = '' then
   begin
-    zcUI.TextMessage('Укажите имя слоя: layerWeightBigSmall(<LayerName>)', TMWOHistoryOut);
+    zcUI.TextMessage('Укажите имя слоя: spaceshowhide(<LayerName>)', TMWOHistoryOut);
     exit(cmd_error);
   end;
 
@@ -106,6 +106,6 @@ end;
 initialization
   // Регистрация команды в системе
   // Register command in system
-  CreateZCADCommand(@layerWeightBigSmall_com,'layerWeightBigSmall',CADWG,0);
+  CreateZCADCommand(@SpaceShowHide_com,'spaceshowhide',CADWG,0);
 
 end.

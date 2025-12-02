@@ -50,7 +50,7 @@ type
   end;
 
   TICommandLinePromptVector=TMyVector<ICommandLinePrompt>;
-  TzcInteractiveResult=(IRCancel,IRNormal,IRId,IRInput);
+  TzcInteractiveResult=(IRAbort,IRCancel,IRNormal,IRId,IRInput);
   PzcInteractiveResult=^TzcInteractiveResult;
 
   tvarstack=object({varmanagerdef}varmanager)
@@ -433,8 +433,12 @@ begin
     (not Application.Terminated) then begin
     p:=InfinityVertex;
     Result:=IRInput;
-  end else
+  end else if (CurrCmd.pcommandrunning^.IData.GetPointMode=TGPMCancel)and
+    (not Application.Terminated) then begin
+    p:=InfinityVertex;
     Result:=IRCancel;
+  end else
+    Result:=IRAbort;
 
   if (CurrCmd.pcommandrunning^.IData.GetPointMode<>TGPMCloseDWG) then
     PTSimpleDrawing(CurrCmd.pcommandrunning.pdwg)^.SetMouseEditorMode(savemode);
@@ -561,9 +565,13 @@ begin
     (not Application.Terminated) then begin
     Input:='';
     Result:=IRId;
-  end else begin
+  end else if (CurrCmd.pcommandrunning^.IData.GetPointMode=TGPMCancel)and
+    (not Application.Terminated) then begin
     Input:='';
     Result:=IRCancel;
+  end else begin
+    Input:='';
+    Result:=IRAbort;
   end;
   if (CurrCmd.pcommandrunning^.IData.GetPointMode<>TGPMCloseDWG) then
     if CurrCmd.pcommandrunning.pdwg<>nil then

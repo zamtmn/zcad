@@ -68,8 +68,9 @@ begin
 
   // Добавляем все переменные из структуры
   // Add all variables from structure
-  for i := 0 to operandsStruct.listParam.Count - 1 do begin
-    paramInfo := operandsStruct.listParam.getData(i);
+  if operandsStruct.listParam <> nil then
+  for i := 0 to operandsStruct.listParam.Size - 1 do begin
+    paramInfo := operandsStruct.listParam[i];
 
     // Проверяем существует ли уже переменная
     // Check if variable already exists
@@ -149,7 +150,8 @@ begin
     ESSCommandEnd: begin
       // Очищаем структуру операндов после завершения команды
       // Clear operands structure after command ends
-      gOperandsStruct.listParam.Clear;
+      if gOperandsStruct.listParam <> nil then
+        gOperandsStruct.listParam.Clear;
       gOperandsStruct.indexColor := 256;  // ByLayer
       gOperandsStruct.namelayer := '';
       result := False;
@@ -190,7 +192,7 @@ initialization
 
   // Инициализируем структуру операндов
   // Initialize operands structure
-  gOperandsStruct.listParam.init(10);  // Инициализируем вектор с начальной емкостью / Initialize vector with initial capacity
+  gOperandsStruct.listParam := TParamInfoList.Create;  // Создаем экземпляр TVector / Create TVector instance
   gOperandsStruct.indexColor := 256;  // ByLayer
   gOperandsStruct.namelayer := '';
 
@@ -202,5 +204,6 @@ finalization
 
   // Освобождаем список параметров
   // Free parameters list
-  gOperandsStruct.listParam.done;
+  if gOperandsStruct.listParam <> nil then
+    FreeAndNil(gOperandsStruct.listParam);
 end.

@@ -21,6 +21,9 @@
   Предоставляет интерфейс к функциям C-библиотеки LNLib для работы
   с трёхмерными декартовыми координатами и векторами.
 
+  Функции загружаются динамически через модуль LNLibLoader.
+  Перед использованием функций необходимо проверить IsLNLibLoaded.
+
   Оригинальный C-заголовок: XYZ_CAPI.h
   Дата создания: 2025-12-02
   Зависимости: LNLibDefinitions
@@ -30,9 +33,6 @@ unit XYZ_CAPI;
 {$mode delphi}{$H+}
 
 interface
-
-uses
-  LNLibDefinitions;
 
 type
   {**
@@ -52,62 +52,12 @@ type
   end;
   PXYZ = ^TXYZ;
 
-{** Создание XYZ-координаты из трёх значений **}
-function xyz_create(x, y, z: Double): TXYZ; cdecl; external LNLIB_DLL;
-
-{** Создание нулевого вектора (0, 0, 0) **}
-function xyz_zero: TXYZ; cdecl; external LNLIB_DLL;
-
-{** Сложение двух XYZ-координат (покомпонентное) **}
-function xyz_add(a, b: TXYZ): TXYZ; cdecl; external LNLIB_DLL;
-
-{** Вычитание XYZ-координат (a - b) **}
-function xyz_subtract(a, b: TXYZ): TXYZ; cdecl; external LNLIB_DLL;
-
-{** Инверсия XYZ-вектора (изменение знака всех компонент) **}
-function xyz_negative(a: TXYZ): TXYZ; cdecl; external LNLIB_DLL;
-
-{** Умножение XYZ-вектора на скаляр **}
-function xyz_multiply(a: TXYZ; scalar: Double): TXYZ; cdecl; external LNLIB_DLL;
-
-{** Деление XYZ-вектора на скаляр **}
-function xyz_divide(a: TXYZ; scalar: Double): TXYZ; cdecl; external LNLIB_DLL;
-
-{** Вычисление длины XYZ-вектора (евклидова норма) **}
-function xyz_length(v: TXYZ): Double; cdecl; external LNLIB_DLL;
-
-{** Вычисление квадрата длины XYZ-вектора (без извлечения корня) **}
-function xyz_sqr_length(v: TXYZ): Double; cdecl; external LNLIB_DLL;
-
-{**
-  Проверка, является ли XYZ-вектор нулевым с заданной точностью.
-  @return 1 если вектор нулевой, 0 в противном случае
-}
-function xyz_is_zero(v: TXYZ; epsilon: Double): Integer; cdecl; external LNLIB_DLL;
-
-{**
-  Проверка, является ли XYZ-вектор единичным с заданной точностью.
-  @return 1 если вектор единичный, 0 в противном случае
-}
-function xyz_is_unit(v: TXYZ; epsilon: Double): Integer; cdecl; external LNLIB_DLL;
-
-{** Нормализация XYZ-вектора (приведение к единичной длине) **}
-function xyz_normalize(v: TXYZ): TXYZ; cdecl; external LNLIB_DLL;
-
-{** Скалярное произведение двух XYZ-векторов **}
-function xyz_dot(a, b: TXYZ): Double; cdecl; external LNLIB_DLL;
-
-{** Векторное произведение двух XYZ-векторов **}
-function xyz_cross(a, b: TXYZ): TXYZ; cdecl; external LNLIB_DLL;
-
-{** Вычисление расстояния между двумя точками **}
-function xyz_distance(a, b: TXYZ): Double; cdecl; external LNLIB_DLL;
-
-{**
-  Проверка точного равенства двух XYZ-координат.
-  @return 1 если координаты равны, 0 в противном случае
-}
-function xyz_equals(a, b: TXYZ): Integer; cdecl; external LNLIB_DLL;
+{ Функции загружаются динамически через LNLibLoader }
+{ Используйте переменные-указатели из LNLibLoader:
+  xyz_create, xyz_zero, xyz_add, xyz_subtract, xyz_negative,
+  xyz_multiply, xyz_divide, xyz_length, xyz_sqr_length,
+  xyz_is_zero, xyz_is_unit, xyz_normalize, xyz_dot, xyz_cross,
+  xyz_distance, xyz_equals }
 
 implementation
 

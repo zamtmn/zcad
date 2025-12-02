@@ -27,7 +27,7 @@ interface
 uses
   SysUtils,               // String utilities / Утилиты для работы со строками
   Classes,                // TStringList / TStringList
-  gzctnrVector,           // Generic vector container / Обобщённый контейнер вектор
+  gvector,                // Generic vector container from FCL-STL / Обобщённый контейнер вектор из FCL-STL
   uzcLog,
   uzccommandsabstract,
   uzcinterface,           // Interface utilities / Утилиты интерфейса
@@ -45,8 +45,8 @@ type
   end;
 
   {** Список параметров на основе обобщённого вектора
-      Использует GZVector для хранения параметров}
-  TParamInfoList = {-}GZVector{-}<TParamInfo>{//};
+      Использует TVector из библиотеки gvector (FCL-STL) для хранения параметров}
+  TParamInfoList = specialize TVector<TParamInfo>;
 
   {** Структура для хранения всех операндов команды
       Содержит индекс цвета, имя слоя и список параметров}
@@ -168,9 +168,12 @@ begin
   outStruct.indexColor := 256;  // 256 = ByLayer / 256 = поСлою
   outStruct.namelayer := '';    // Empty means use current layer / Пустое значит текущий слой
 
-  // Очищаем список параметров
-  // Clear parameters list
-  outStruct.listParam.Clear;
+  // Создаем или очищаем список параметров
+  // Create or clear parameters list
+  if outStruct.listParam = nil then
+    outStruct.listParam := TParamInfoList.Create
+  else
+    outStruct.listParam.Clear;
 
   // Проверяем наличие операндов
   // Check if we have operands
@@ -222,7 +225,7 @@ begin
 
       // Добавляем параметр в список
       // Add parameter to list
-      outStruct.listParam.PushBackData(paramInfo);
+      outStruct.listParam.PushBack(paramInfo);
 
       Inc(i, 3);  // Переходим к следующему триплету / Move to next triplet
     end;
